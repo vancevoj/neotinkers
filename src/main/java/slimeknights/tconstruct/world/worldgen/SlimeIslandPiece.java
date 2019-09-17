@@ -1,6 +1,5 @@
 package slimeknights.tconstruct.world.worldgen;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.nbt.CompoundNBT;
@@ -19,9 +18,8 @@ import net.minecraft.world.gen.feature.template.BlockIgnoreStructureProcessor;
 import net.minecraft.world.gen.feature.template.PlacementSettings;
 import net.minecraft.world.gen.feature.template.Template;
 import net.minecraft.world.gen.feature.template.TemplateManager;
-import slimeknights.tconstruct.fluids.TinkerFluids;
-import slimeknights.tconstruct.shared.TinkerCommons;
 import slimeknights.tconstruct.world.TinkerWorld;
+import slimeknights.tconstruct.world.block.SlimeTallGrassBlock;
 import slimeknights.tconstruct.world.block.SlimeVineBlock;
 
 import java.util.Random;
@@ -29,7 +27,7 @@ import java.util.Random;
 public class SlimeIslandPiece extends TemplateStructurePiece {
 
   private final String templateName;
-  private final String color;
+  private final SlimeIslandVariant variant;
   private final Rotation rotation;
   private final Mirror mirror;
   private int numberOfTreesPlaced;
@@ -37,14 +35,14 @@ public class SlimeIslandPiece extends TemplateStructurePiece {
   private static final BlueSlimeTree blueSlimeTree = new BlueSlimeTree(true);
   private static final PurpleSlimeTree purpleSlimeTree = new PurpleSlimeTree(true);
 
-  public SlimeIslandPiece(TemplateManager templateManager, String color, String templateName, BlockPos templatePosition, Rotation rotation) {
-    this(templateManager, color, templateName, templatePosition, rotation, Mirror.NONE);
+  public SlimeIslandPiece(TemplateManager templateManager, SlimeIslandVariant variant, String templateName, BlockPos templatePosition, Rotation rotation) {
+    this(templateManager, variant, templateName, templatePosition, rotation, Mirror.NONE);
   }
 
-  public SlimeIslandPiece(TemplateManager templateManager, String color, String templateName, BlockPos templatePosition, Rotation rotation, Mirror mirror) {
+  public SlimeIslandPiece(TemplateManager templateManager, SlimeIslandVariant variant, String templateName, BlockPos templatePosition, Rotation rotation, Mirror mirror) {
     super(TinkerWorld.SLIME_ISLAND_PIECE, 0);
     this.templateName = templateName;
-    this.color = color;
+    this.variant = variant;
     this.templatePosition = templatePosition;
     this.rotation = rotation;
     this.mirror = mirror;
@@ -55,7 +53,7 @@ public class SlimeIslandPiece extends TemplateStructurePiece {
   public SlimeIslandPiece(TemplateManager templateManager, CompoundNBT nbt) {
     super(TinkerWorld.SLIME_ISLAND_PIECE, nbt);
     this.templateName = nbt.getString("Template");
-    this.color = nbt.getString("Color");
+    this.variant = SlimeIslandVariant.getVariantFromIndex(nbt.getInt("Variant"));
     this.rotation = Rotation.valueOf(nbt.getString("Rot"));
     this.mirror = Mirror.valueOf(nbt.getString("Mi"));
     this.numberOfTreesPlaced = nbt.getInt("NumberOfTreesPlaced");
@@ -63,7 +61,7 @@ public class SlimeIslandPiece extends TemplateStructurePiece {
   }
 
   private void loadTemplate(TemplateManager templateManager) {
-    Template template = templateManager.getTemplateDefaulted(new ResourceLocation("tconstruct:slime_islands/" + this.color + "/" + this.templateName));
+    Template template = templateManager.getTemplateDefaulted(new ResourceLocation("tconstruct:slime_islands/" + this.variant.getName() + "/" + this.templateName));
     PlacementSettings placementsettings = (new PlacementSettings()).setIgnoreEntities(true).setRotation(this.rotation).setMirror(this.mirror).addProcessor(BlockIgnoreStructureProcessor.STRUCTURE_BLOCK);
     this.setup(template, this.templatePosition, placementsettings);
   }
@@ -75,7 +73,7 @@ public class SlimeIslandPiece extends TemplateStructurePiece {
   protected void readAdditional(CompoundNBT tagCompound) {
     super.readAdditional(tagCompound);
     tagCompound.putString("Template", this.templateName);
-    tagCompound.putString("Color", this.color);
+    tagCompound.putInt("Variant", this.variant.getIndex());
     tagCompound.putString("Rot", this.placeSettings.getRotation().name());
     tagCompound.putString("Mi", this.placeSettings.getMirror().name());
     tagCompound.putInt("NumberOfTreesPlaced", this.numberOfTreesPlaced);
@@ -83,157 +81,76 @@ public class SlimeIslandPiece extends TemplateStructurePiece {
 
   @Override
   protected void handleDataMarker(String function, BlockPos pos, IWorld worldIn, Random rand, MutableBoundingBox sbb) {
-    switch (this.color) {
-      case "blue":
-        this.handleBlueIsland(function, pos, worldIn, rand);
-        return;
-      case "green":
-        this.handleGreenIsland(function, pos, worldIn, rand);
+    switch (function) {
+      case "tconstruct:lake_bottom":
+        worldIn.setBlockState(pos, this.variant.getLakeBottom(), 2);
         break;
-      case "purple":
-        this.handlePurpleIsland(function, pos, worldIn, rand);
+      case "tconstruct:slime_fluid":
+        worldIn.setBlockState(pos, this.variant.getLakeFluid(), 2);
         break;
-    }
-  }
-
-  private void handleBlueIsland(String function, BlockPos pos, IWorld worldIn, Random random) {
-    this.handleCommonIsland(function, pos, worldIn, random);
-
-    if ("tconstruct:lake_bottom".equals(function)) {
-      worldIn.setBlockState(pos, TinkerWorld.blue_blue_slime_grass.getDefaultState(), 2);
-    }
-  }
-
-  private void handleGreenIsland(String function, BlockPos pos, IWorld worldIn, Random random) {
-    this.handleCommonIsland(function, pos, worldIn, random);
-
-    if ("tconstruct:lake_bottom".equals(function)) {
-      worldIn.setBlockState(pos, TinkerWorld.blue_green_slime_grass.getDefaultState(), 2);
-    }
-  }
-
-  private void handlePurpleIsland(String function, BlockPos pos, IWorld worldIn, Random random) {
-    if ("tconstruct:lake_bottom".equals(function)) {
-      worldIn.setBlockState(pos, TinkerWorld.purple_purple_slime_grass.getDefaultState(), 2);
-    }
-    else if ("tconstruct:slime_fluid".equals(function)) {
-      if (TinkerFluids.purple_slime_fluid_block.get() != null) {
-        worldIn.setBlockState(pos, TinkerFluids.purple_slime_fluid_block.get().getDefaultState(), 2);
-      }
-      else {
-        worldIn.setBlockState(pos, Blocks.WATER.getDefaultState(), 2);
-      }
-    }
-    else if ("tconstruct:congealed_slime".equals(function)) {
-      worldIn.setBlockState(pos, TinkerCommons.congealed_purple_slime.getDefaultState(), 2);
-    }
-    else if ("tconstruct:slime_vine".equals(function)) {
-      if (random.nextBoolean()) {
-        this.placeVine(worldIn, pos, random, TinkerWorld.purple_slime_vine);
-      }
-      else {
-        worldIn.setBlockState(pos, Blocks.AIR.getDefaultState(), 2);
-      }
-    }
-    else if ("tconstruct:slime_tree".equals(function)) {
-      worldIn.setBlockState(pos, Blocks.AIR.getDefaultState(), 2);
-
-      if (random.nextBoolean() && this.numberOfTreesPlaced < 3) {
-        AbstractTreeFeature<NoFeatureConfig> treeFeature = blueSlimeTree.getTreeFeature(random);
-        if (treeFeature != null) {
-          treeFeature.place(worldIn, worldIn.getChunkProvider().getChunkGenerator(), random, pos, IFeatureConfig.NO_FEATURE_CONFIG);
-        }
-      }
-
-      this.numberOfTreesPlaced++;
-    }
-    else if ("tconstruct:slime_tall_grass".equals(function)) {
-      worldIn.setBlockState(pos, Blocks.AIR.getDefaultState(), 2);
-
-      if (random.nextBoolean()) {
-        if (random.nextBoolean()) {
-          BlockState state = TinkerWorld.blue_slime_fern.getDefaultState();
-
-          if (TinkerWorld.blue_slime_fern.isValidPosition(state, worldIn, pos)) {
-            worldIn.setBlockState(pos, state, 2);
+      case "tconstruct:congealed_slime":
+        int congealed_slime_random = rand.nextInt(this.variant.getCongealedSlime().length);
+        worldIn.setBlockState(pos, this.variant.getCongealedSlime()[congealed_slime_random], 2);
+        break;
+      case "tconstruct:slime_vine":
+        if (this.variant.getVine() != null) {
+          if (rand.nextBoolean()) {
+            this.placeVine(worldIn, pos, rand, this.variant.getVine());
+          }
+          else {
+            worldIn.setBlockState(pos, Blocks.AIR.getDefaultState(), 2);
           }
         }
         else {
-          BlockState state = TinkerWorld.blue_slime_tall_grass.getDefaultState();
-
-          if (TinkerWorld.blue_slime_tall_grass.isValidPosition(state, worldIn, pos)) {
-            worldIn.setBlockState(pos, state, 2);
-          }
+          worldIn.setBlockState(pos, Blocks.AIR.getDefaultState(), 2);
         }
-      }
-    }
-  }
-
-  private void handleCommonIsland(String function, BlockPos pos, IWorld worldIn, Random random) {
-    if ("tconstruct:slime_fluid".equals(function)) {
-      if (TinkerFluids.blue_slime_fluid_block.get() != null) {
-        worldIn.setBlockState(pos, TinkerFluids.blue_slime_fluid_block.get().getDefaultState(), 2);
-      }
-      else {
-        worldIn.setBlockState(pos, Blocks.WATER.getDefaultState(), 2);
-      }
-    }
-    else if ("tconstruct:congealed_slime".equals(function)) {
-      if (random.nextBoolean()) {
-        worldIn.setBlockState(pos, TinkerCommons.congealed_blue_slime.getDefaultState(), 2);
-      }
-      else {
-        worldIn.setBlockState(pos, TinkerCommons.congealed_green_slime.getDefaultState(), 2);
-      }
-    }
-    else if ("tconstruct:slime_vine".equals(function)) {
-      if (random.nextBoolean()) {
-        this.placeVine(worldIn, pos, random, TinkerWorld.blue_slime_vine);
-      }
-      else {
+        break;
+      case "tconstruct:slime_tree":
         worldIn.setBlockState(pos, Blocks.AIR.getDefaultState(), 2);
-      }
-    }
-    else if ("tconstruct:slime_tree".equals(function)) {
-      worldIn.setBlockState(pos, Blocks.AIR.getDefaultState(), 2);
 
-      if (random.nextBoolean() && this.numberOfTreesPlaced < 3) {
-        AbstractTreeFeature<NoFeatureConfig> treeFeature = purpleSlimeTree.getTreeFeature(random);
-        if (treeFeature != null) {
-          treeFeature.place(worldIn, worldIn.getChunkProvider().getChunkGenerator(), random, pos, IFeatureConfig.NO_FEATURE_CONFIG);
-        }
-      }
+        AbstractTreeFeature<NoFeatureConfig> treeFeature = null;
 
-      this.numberOfTreesPlaced++;
-    }
-    else if ("tconstruct:slime_tall_grass".equals(function)) {
-      worldIn.setBlockState(pos, Blocks.AIR.getDefaultState(), 2);
+        if (rand.nextBoolean() && this.numberOfTreesPlaced < 3) {
+          switch (this.variant) {
+            case BLUE:
+            case GREEN:
+              treeFeature = purpleSlimeTree.getTreeFeature(rand);
+              break;
+            case PURPLE:
+              treeFeature = blueSlimeTree.getTreeFeature(rand);
+              break;
+            default:
+              throw new IllegalStateException("Unexpected variant: " + this.variant);
+          }
 
-      if (random.nextBoolean()) {
-        if (random.nextBoolean()) {
-          BlockState state = TinkerWorld.purple_slime_fern.getDefaultState();
-
-          if (TinkerWorld.purple_slime_fern.isValidPosition(state, worldIn, pos)) {
-            worldIn.setBlockState(pos, state, 2);
+          if (treeFeature != null) {
+            treeFeature.place(worldIn, worldIn.getChunkProvider().getChunkGenerator(), rand, pos, IFeatureConfig.NO_FEATURE_CONFIG);
           }
         }
-        else {
-          BlockState state = TinkerWorld.purple_slime_tall_grass.getDefaultState();
 
-          if (TinkerWorld.purple_slime_tall_grass.isValidPosition(state, worldIn, pos)) {
-            worldIn.setBlockState(pos, state, 2);
+        this.numberOfTreesPlaced++;
+        break;
+      case "tconstruct:slime_tall_grass":
+        worldIn.setBlockState(pos, Blocks.AIR.getDefaultState(), 2);
+
+        if (rand.nextBoolean()) {
+          int slime_grass_random = rand.nextInt(this.variant.getTallGrass().length);
+          BlockState state = this.variant.getTallGrass()[slime_grass_random];
+
+          if (state.getBlock() instanceof SlimeTallGrassBlock) {
+            if (((SlimeTallGrassBlock) state.getBlock()).isValidPosition(state, worldIn, pos)) {
+              worldIn.setBlockState(pos, state, 2);
+            }
           }
         }
-      }
+        break;
     }
   }
 
-  private void placeVine(IWorld worldIn, BlockPos pos, Random random, Block vineToPlace) {
+  private void placeVine(IWorld worldIn, BlockPos pos, Random random, BlockState vineToPlace) {
     for (Direction direction : Direction.values()) {
-      System.out.println("try place vine at pos: " + pos + " direction: " + direction + " can attach to: " + SlimeVineBlock.canAttachTo(worldIn, pos, direction) + " state: " + worldIn.getBlockState(pos));
       if (direction != Direction.DOWN && SlimeVineBlock.canAttachTo(worldIn, pos.offset(direction), direction)) {
-        System.out.println("place vine at pos: " + pos);
-        worldIn.setBlockState(pos, vineToPlace.getDefaultState().with(SlimeVineBlock.getPropertyFor(direction), Boolean.valueOf(true)), 2);
+        worldIn.setBlockState(pos, vineToPlace.with(SlimeVineBlock.getPropertyFor(direction), Boolean.TRUE), 2);
       }
     }
 
