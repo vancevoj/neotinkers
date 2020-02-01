@@ -1,0 +1,27 @@
+{
+  "materialId": {
+    "namespace": "tconstruct",
+    "path": "knightslime"
+  },
+  "stats": [
+    {
+      "id": "tconstruct:common",
+      "durability": 850,
+      "attack": 5.1
+    },
+    {
+      "id": "tconstruct:harvest",
+      "miningSpeed": 5.8,
+      "harvestLevel": 3
+    },
+    {
+      "id": "tconstruct:handle",
+      "modifier": 0.5,
+      "durability": 500
+    },
+    {
+      "id": "tconstruct:extra",
+      "durability": 125
+    }
+  ]
+}

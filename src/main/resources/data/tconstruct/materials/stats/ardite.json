@@ -1,0 +1,27 @@
+{
+  "materialId": {
+    "namespace": "tconstruct",
+    "path": "ardite"
+  },
+  "stats": [
+    {
+      "id": "tconstruct:common",
+      "durability": 990,
+      "attack": 3.6
+    },
+    {
+      "id": "tconstruct:harvest",
+      "miningSpeed": 3.5,
+      "harvestLevel": 4
+    },
+    {
+      "id": "tconstruct:handle",
+      "modifier": 1.4,
+      "durability": -200
+    },
+    {
+      "id": "tconstruct:extra",
+      "durability": 450
+    }
+  ]
+}

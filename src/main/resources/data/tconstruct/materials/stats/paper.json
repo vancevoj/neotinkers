@@ -1,0 +1,27 @@
+{
+  "materialId": {
+    "namespace": "tconstruct",
+    "path": "paper"
+  },
+  "stats": [
+    {
+      "id": "tconstruct:common",
+      "durability": 12,
+      "attack": 0.05
+    },
+    {
+      "id": "tconstruct:harvest",
+      "miningSpeed": 0.51,
+      "harvestLevel": 0
+    },
+    {
+      "id": "tconstruct:handle",
+      "modifier": 0.1,
+      "durability": 5
+    },
+    {
+      "id": "tconstruct:extra",
+      "durability": 15
+    }
+  ]
+}

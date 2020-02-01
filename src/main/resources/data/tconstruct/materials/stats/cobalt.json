@@ -1,0 +1,27 @@
+{
+  "materialId": {
+    "namespace": "tconstruct",
+    "path": "cobalt"
+  },
+  "stats": [
+    {
+      "id": "tconstruct:common",
+      "durability": 780,
+      "attack": 4.1
+    },
+    {
+      "id": "tconstruct:harvest",
+      "miningSpeed": 12.0,
+      "harvestLevel": 4
+    },
+    {
+      "id": "tconstruct:handle",
+      "modifier": 0.9,
+      "durability": 100
+    },
+    {
+      "id": "tconstruct:extra",
+      "durability": 300
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "materialId": {
+    "namespace": "tconstruct",
+    "path": "blueslime"
+  },
+  "stats": [
+    {
+      "id": "tconstruct:common",
+      "durability": 780,
+      "attack": 1.8
+    },
+    {
+      "id": "tconstruct:harvest",
+      "miningSpeed": 4.03,
+      "harvestLevel": 0
+    },
+    {
+      "id": "tconstruct:handle",
+      "modifier": 1.3,
+      "durability": -50
+    },
+    {
+      "id": "tconstruct:extra",
+      "durability": 200
+    }
+  ]
+}

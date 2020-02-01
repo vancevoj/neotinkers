@@ -1,0 +1,27 @@
+{
+  "materialId": {
+    "namespace": "tconstruct",
+    "path": "sponge"
+  },
+  "stats": [
+    {
+      "id": "tconstruct:common",
+      "durability": 1050,
+      "attack": 0.0
+    },
+    {
+      "id": "tconstruct:harvest",
+      "miningSpeed": 3.02,
+      "harvestLevel": 0
+    },
+    {
+      "id": "tconstruct:handle",
+      "modifier": 1.2,
+      "durability": 250
+    },
+    {
+      "id": "tconstruct:extra",
+      "durability": 250
+    }
+  ]
+}

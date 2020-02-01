@@ -1,0 +1,27 @@
+{
+  "materialId": {
+    "namespace": "tconstruct",
+    "path": "lead"
+  },
+  "stats": [
+    {
+      "id": "tconstruct:common",
+      "durability": 434,
+      "attack": 3.5
+    },
+    {
+      "id": "tconstruct:harvest",
+      "miningSpeed": 5.25,
+      "harvestLevel": 1
+    },
+    {
+      "id": "tconstruct:handle",
+      "modifier": 0.7,
+      "durability": -50
+    },
+    {
+      "id": "tconstruct:extra",
+      "durability": 100
+    }
+  ]
+}

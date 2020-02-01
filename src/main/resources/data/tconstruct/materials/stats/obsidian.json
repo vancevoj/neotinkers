@@ -1,0 +1,27 @@
+{
+  "materialId": {
+    "namespace": "tconstruct",
+    "path": "obsidian"
+  },
+  "stats": [
+    {
+      "id": "tconstruct:common",
+      "durability": 139,
+      "attack": 4.2
+    },
+    {
+      "id": "tconstruct:harvest",
+      "miningSpeed": 7.07,
+      "harvestLevel": 4
+    },
+    {
+      "id": "tconstruct:handle",
+      "modifier": 0.9,
+      "durability": -100
+    },
+    {
+      "id": "tconstruct:extra",
+      "durability": 90
+    }
+  ]
+}

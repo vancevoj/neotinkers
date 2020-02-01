@@ -1,0 +1,27 @@
+{
+  "materialId": {
+    "namespace": "tconstruct",
+    "path": "manyullyn"
+  },
+  "stats": [
+    {
+      "id": "tconstruct:common",
+      "durability": 820,
+      "attack": 8.72
+    },
+    {
+      "id": "tconstruct:harvest",
+      "miningSpeed": 7.02,
+      "harvestLevel": 4
+    },
+    {
+      "id": "tconstruct:handle",
+      "modifier": 0.5,
+      "durability": 250
+    },
+    {
+      "id": "tconstruct:extra",
+      "durability": 50
+    }
+  ]
+}

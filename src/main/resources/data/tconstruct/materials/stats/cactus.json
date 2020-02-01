@@ -1,0 +1,27 @@
+{
+  "materialId": {
+    "namespace": "tconstruct",
+    "path": "cactus"
+  },
+  "stats": [
+    {
+      "id": "tconstruct:common",
+      "durability": 210,
+      "attack": 3.4
+    },
+    {
+      "id": "tconstruct:harvest",
+      "miningSpeed": 4.0,
+      "harvestLevel": 1
+    },
+    {
+      "id": "tconstruct:handle",
+      "modifier": 0.85,
+      "durability": 20
+    },
+    {
+      "id": "tconstruct:extra",
+      "durability": 50
+    }
+  ]
+}

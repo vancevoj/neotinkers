@@ -1,0 +1,27 @@
+{
+  "materialId": {
+    "namespace": "tconstruct",
+    "path": "pigiron"
+  },
+  "stats": [
+    {
+      "id": "tconstruct:common",
+      "durability": 380,
+      "attack": 4.5
+    },
+    {
+      "id": "tconstruct:harvest",
+      "miningSpeed": 6.2,
+      "harvestLevel": 2
+    },
+    {
+      "id": "tconstruct:handle",
+      "modifier": 1.2,
+      "durability": 0
+    },
+    {
+      "id": "tconstruct:extra",
+      "durability": 170
+    }
+  ]
+}
