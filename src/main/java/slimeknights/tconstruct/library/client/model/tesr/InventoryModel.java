@@ -29,8 +29,8 @@ import java.util.function.Function;
 
 @AllArgsConstructor
 public class InventoryModel implements IModelGeometry<InventoryModel> {
-  private final BlockModel model;
-  private final List<ModelItem> items;
+  protected final BlockModel model;
+  protected final List<ModelItem> items;
 
   @Override
   public Collection<Material> getTextures(IModelConfiguration owner, Function<ResourceLocation,IUnbakedModel> modelGetter, Set<Pair<String,String>> missingTextureErrors) {
@@ -47,7 +47,7 @@ public class InventoryModel implements IModelGeometry<InventoryModel> {
   public static class BakedModel extends BakedModelWrapper<IBakedModel> {
     @Getter
     private final List<ModelItem> items;
-    private BakedModel(IBakedModel originalModel, List<ModelItem> items) {
+    protected BakedModel(IBakedModel originalModel, List<ModelItem> items) {
       super(originalModel);
       this.items = items;
     }
