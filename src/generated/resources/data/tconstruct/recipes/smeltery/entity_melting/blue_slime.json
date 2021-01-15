@@ -5,7 +5,7 @@
   },
   "output": {
     "fluid": "tconstruct:blue_slime",
-    "amount": 50
+    "amount": 25
   },
   "damage": 2
 }
