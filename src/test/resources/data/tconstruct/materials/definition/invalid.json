@@ -2,6 +2,5 @@
     "craftable": "blue",
     "fluid": "in:valid",
     "textColor": "theBestColor",
-    "temperature": -100,
-    "trait": { "name": "in:valid" }
+    "temperature": -100
 }
