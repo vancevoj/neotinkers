@@ -25,11 +25,12 @@ import slimeknights.tconstruct.library.materials.MaterialValues;
 import slimeknights.tconstruct.library.utils.NBTTags;
 import slimeknights.tconstruct.smeltery.tileentity.ITankTileEntity;
 import slimeknights.tconstruct.smeltery.tileentity.TankTileEntity;
+import slimeknights.tconstruct.smeltery.tileentity.TankTileEntity.ITankBlock;
 
 import javax.annotation.Nullable;
 import java.util.Locale;
 
-public class SearedTankBlock extends SearedBlock {
+public class SearedTankBlock extends SearedBlock implements ITankBlock {
   @Getter
   private final int capacity;
   public SearedTankBlock(Properties properties, int capacity) {
