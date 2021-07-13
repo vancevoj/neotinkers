@@ -7,10 +7,10 @@
   ],
   "key": {
     "M": {
-      "item": "tconstruct:magma_bucket"
+      "item": "tconstruct:blood_bucket"
     },
     "S": {
-      "item": "minecraft:sugar"
+      "tag": "forge:dusts/glowstone"
     },
     "E": {
       "item": "minecraft:egg"
