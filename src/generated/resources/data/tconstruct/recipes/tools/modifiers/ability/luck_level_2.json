@@ -17,14 +17,9 @@
       "tag": "forge:ender_pearls"
     }
   ],
-  "tools": [
-    {
-      "tag": "tconstruct:modifiable/melee_or_harvest"
-    },
-    {
-      "tag": "tconstruct:modifiable/armor/chestplate"
-    }
-  ],
+  "tools": {
+    "tag": "tconstruct:modifiable/melee_or_harvest"
+  },
   "requirements": {
     "name": "tconstruct:luck",
     "level": 1,

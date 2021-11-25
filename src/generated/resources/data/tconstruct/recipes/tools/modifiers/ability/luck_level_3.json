@@ -17,14 +17,9 @@
       "item": "minecraft:name_tag"
     }
   ],
-  "tools": [
-    {
-      "tag": "tconstruct:modifiable/melee_or_harvest"
-    },
-    {
-      "tag": "tconstruct:modifiable/armor/chestplate"
-    }
-  ],
+  "tools": {
+    "tag": "tconstruct:modifiable/melee_or_harvest"
+  },
   "requirements": {
     "name": "tconstruct:luck",
     "level": 2,
