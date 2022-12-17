@@ -1,6 +1,6 @@
 {
   "replace": false,
   "values": [
-    "tconstruct:longbow"
+    "#tconstruct:modifiable/ranged/bows"
   ]
 }
