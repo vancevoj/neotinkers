@@ -1,0 +1,25 @@
+{
+  "type": "tconstruct:extract_modifier",
+  "inputs": [
+    {
+      "item": "tconstruct:ender_slime_crystal"
+    },
+    {
+      "item": "minecraft:wet_sponge"
+    }
+  ],
+  "tools": {
+    "item": "tconstruct:dagger",
+    "amount_needed": 2
+  },
+  "leftovers": [
+    "minecraft:sponge"
+  ],
+  "modifier_predicate": {
+    "type": "tconstruct:inverted",
+    "predicate": {
+      "type": "tconstruct:tag",
+      "tag": "tconstruct:extract_blacklist/tools"
+    }
+  }
+}
