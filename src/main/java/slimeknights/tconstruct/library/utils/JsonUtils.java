@@ -123,16 +123,18 @@ public class JsonUtils {
    * Parses a color as a string
    * @param color  Color to parse
    * @return  Parsed string
+   * @deprecated use {@link ColorLoadable#parseString(String, String)}
    */
+  @Deprecated(forRemoval = true)
   public static int parseColor(@Nullable String color) {
     if (color == null || color.isEmpty()) {
       return -1;
     }
-    return ColorLoadable.NO_ALPHA.parseColor(color);
+    return ColorLoadable.NO_ALPHA.parseString(color, "[unknown]");
   }
 
   /** Writes the color as a 6 character string */
   public static String colorToString(int color) {
-    return ColorLoadable.NO_ALPHA.colorString(color);
+    return ColorLoadable.NO_ALPHA.getString(color);
   }
 }

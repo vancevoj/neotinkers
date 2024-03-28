@@ -1,20 +1,17 @@
 package slimeknights.tconstruct.library.utils;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSyntaxException;
 import io.netty.handler.codec.EncoderException;
 import net.minecraft.ResourceLocationException;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.GsonHelper;
-import slimeknights.mantle.data.loadable.Loadable;
+import slimeknights.mantle.data.loadable.primitive.StringLoadable;
 
 import javax.annotation.Nullable;
 import java.util.function.Function;
 
 /** Helper to parse variants of resource locations, doubles as a loadable. */
-public record IdParser<T extends ResourceLocation>(Function<String, T> constructor, String name) implements Loadable<T> {
+public record IdParser<T extends ResourceLocation>(Function<String, T> constructor, String name) implements StringLoadable<T> {
   /**
    * Creates a new ID from the given string
    * @param string  String
@@ -30,8 +27,7 @@ public record IdParser<T extends ResourceLocation>(Function<String, T> construct
   }
 
   @Override
-  public T convert(JsonElement json, String key) {
-    String text = GsonHelper.convertToString(json, key);
+  public T parseString(String text, String key) {
     T location = tryParse(text);
     if (location == null) {
       throw new JsonSyntaxException("Expected " + key + " to be a " + name + " ID, was '" + text + "'");
@@ -40,8 +36,8 @@ public record IdParser<T extends ResourceLocation>(Function<String, T> construct
   }
 
   @Override
-  public JsonElement serialize(T object) throws RuntimeException {
-    return new JsonPrimitive(object.toString());
+  public String getString(T object) {
+    return object.toString();
   }
 
   @Override
