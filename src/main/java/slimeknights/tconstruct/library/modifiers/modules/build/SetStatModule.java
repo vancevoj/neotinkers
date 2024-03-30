@@ -4,8 +4,9 @@ import com.google.gson.JsonObject;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import net.minecraft.network.FriendlyByteBuf;
-import slimeknights.mantle.data.registry.GenericLoaderRegistry.IGenericLoader;
+import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.util.JsonHelper;
+import slimeknights.mantle.util.typed.TypedMap;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHook;
 import slimeknights.tconstruct.library.modifiers.TinkerHooks;
@@ -39,13 +40,14 @@ public record SetStatModule<T>(IToolStat<T> stat, T value, ModifierModuleConditi
   }
 
   @Override
-  public IGenericLoader<? extends ModifierModule> getLoader() {
+  public RecordLoadable<SetStatModule<?>> getLoader() {
     return LOADER;
   }
 
-  public static final IGenericLoader<SetStatModule<?>> LOADER = new IGenericLoader<>() {
+  /** Loader instance, manually created as the value parsing another value is difficult with the builder */
+  public static final RecordLoadable<SetStatModule<?>> LOADER = new RecordLoadable<>() {
     @Override
-    public SetStatModule<?> deserialize(JsonObject json) {
+    public SetStatModule<?> deserialize(JsonObject json, TypedMap<Object> context) {
       return deserialize(json, ToolStats.LOADER.getIfPresent(json, "stat"));
     }
 
@@ -69,19 +71,19 @@ public record SetStatModule<T>(IToolStat<T> stat, T value, ModifierModuleConditi
     }
 
     @Override
-    public SetStatModule<?> fromNetwork(FriendlyByteBuf buffer) {
-      return fromNetwork(buffer, ToolStats.LOADER.decode(buffer));
+    public SetStatModule<?> decode(FriendlyByteBuf buffer, TypedMap<Object> context) {
+      return decode(buffer, ToolStats.LOADER.decode(buffer));
     }
 
     /** Handles generics for reading the value from network */
-    private static <T> SetStatModule<T> fromNetwork(FriendlyByteBuf buffer, IToolStat<T> stat) {
+    private static <T> SetStatModule<T> decode(FriendlyByteBuf buffer, IToolStat<T> stat) {
       T value = stat.fromNetwork(buffer);
       ModifierModuleCondition condition = ModifierModuleCondition.fromNetwork(buffer);
       return new SetStatModule<>(stat, value, condition);
     }
 
     @Override
-    public void toNetwork(SetStatModule<?> object, FriendlyByteBuf buffer) {
+    public void encode(FriendlyByteBuf buffer, SetStatModule<?> object) {
       ToolStats.LOADER.encode(buffer, object.stat);
       writeValue(object, buffer);
       object.condition.toNetwork(buffer);

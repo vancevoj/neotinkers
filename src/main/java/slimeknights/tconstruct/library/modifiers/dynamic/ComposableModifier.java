@@ -116,6 +116,7 @@ public class ComposableModifier extends BasicModifier {
       }
 
       // convert illegal argument to json syntax, bit more expected in this context
+      // TODO: figure out the best way to do this in loadables
       try {
         return new ComposableModifier(level_display, tooltipDisplay, priority, modules);
       } catch (IllegalArgumentException e) {

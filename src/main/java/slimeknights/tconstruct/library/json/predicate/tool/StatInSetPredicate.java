@@ -5,7 +5,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import net.minecraft.network.FriendlyByteBuf;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
-import slimeknights.mantle.data.registry.GenericLoaderRegistry.IGenericLoader;
 import slimeknights.mantle.util.JsonHelper;
 import slimeknights.mantle.util.typed.TypedMap;
 import slimeknights.tconstruct.library.tools.nbt.IToolContext;
@@ -32,10 +31,11 @@ public record StatInSetPredicate<T>(IToolStat<T> stat, Set<T> values) implements
   }
 
   @Override
-  public IGenericLoader<? extends ToolContextPredicate> getLoader() {
+  public RecordLoadable<StatInSetPredicate<?>> getLoader() {
     return LOADER;
   }
 
+  /** Loader instance, manually created as the value parsing another value is difficult with the builder */
   public static final RecordLoadable<StatInSetPredicate<?>> LOADER = new RecordLoadable<>() {
     @Override
     public StatInSetPredicate<?> deserialize(JsonObject json, TypedMap<Object> context) {

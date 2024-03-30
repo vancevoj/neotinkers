@@ -1,45 +1,40 @@
 package slimeknights.tconstruct.library.tools.definition.aoe;
 
 import com.google.common.collect.AbstractIterator;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import lombok.AccessLevel;
+import com.google.common.collect.ImmutableList;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.BlockPos.MutableBlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.util.GsonHelper;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import slimeknights.mantle.data.registry.GenericLoaderRegistry.IGenericLoader;
-import slimeknights.mantle.util.JsonHelper;
+import slimeknights.mantle.data.loadable.primitive.IntLoadable;
+import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.tconstruct.library.tools.definition.aoe.IBoxExpansion.ExpansionDirections;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
-import slimeknights.tconstruct.library.utils.JsonUtils;
 import slimeknights.tconstruct.tools.TinkerModifiers;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Predicate;
 
-/** AOE harvest logic that mines blocks in a rectangle */
-@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
-public class BoxAOEIterator implements IAreaOfEffectIterator {
-  public static final Loader LOADER = new Loader();
-
-  /** Base size of the AOE */
-  private final BoxSize base;
-  /** Values to boost the size by for each expansion */
-  private final BoxSize[] expansions;
-  /** Direction for expanding */
-  private final IBoxExpansion direction;
+/**
+ * AOE harvest logic that mines blocks in a rectangle
+ * @param base        Base size of the AOE
+ * @param expansions  Values to boost the size by for each expansion
+ * @param direction   Direction for expanding
+ */
+public record BoxAOEIterator(BoxSize base, List<BoxSize> expansions, IBoxExpansion direction) implements IAreaOfEffectIterator {
+  public static final RecordLoadable<BoxAOEIterator> LOADER = RecordLoadable.create(
+    BoxSize.LOADER.defaultField("bonus", BoxSize.ZERO, BoxAOEIterator::base),
+    BoxSize.LOADER.list(0).defaultField("expansions", List.of(), BoxAOEIterator::expansions),
+    IBoxExpansion.REGISTRY.requiredField("expansion_direction", BoxAOEIterator::direction),
+    BoxAOEIterator::new);
 
   /** Creates a builder for this iterator */
   public static BoxAOEIterator.Builder builder(int width, int height, int depth) {
@@ -47,21 +42,22 @@ public class BoxAOEIterator implements IAreaOfEffectIterator {
   }
 
   @Override
-  public IGenericLoader<? extends IAreaOfEffectIterator> getLoader() {
+  public RecordLoadable<BoxAOEIterator> getLoader() {
     return LOADER;
   }
 
   /** Gets the size for a given level of expanded */
   private BoxSize sizeFor(int level) {
-    if (level == 0 || expansions.length == 0) {
+    int size = expansions.size();
+    if (level == 0 || size == 0) {
       return base;
     }
     int width = base.width;
     int height = base.height;
     int depth = base.depth;
     // if we have the number of expansions or more, add in all expansions as many times as needed
-    if (level >= expansions.length) {
-      int cycles = level / expansions.length;
+    if (level >= size) {
+      int cycles = level / size;
       for (BoxSize expansion : expansions) {
         width  += expansion.width  * cycles;
         height += expansion.height * cycles;
@@ -69,9 +65,9 @@ public class BoxAOEIterator implements IAreaOfEffectIterator {
       }
     }
     // partial iteration through the list for the remaining expansions
-    int remainder = level % expansions.length;
+    int remainder = level % size;
     for (int i = 0; i < remainder; i++) {
-      BoxSize expansion = expansions[i];
+      BoxSize expansion = expansions.get(i);
       width  += expansion.width;
       height += expansion.height;
       depth  += expansion.depth;
@@ -236,39 +232,17 @@ public class BoxAOEIterator implements IAreaOfEffectIterator {
 
   /** Record encoding how AOE expands with each level */
   private record BoxSize(int width, int height, int depth) {
+    public static final BoxSize ZERO = new BoxSize(0, 0, 0);
+
+    public static final RecordLoadable<BoxSize> LOADER = RecordLoadable.create(
+      IntLoadable.FROM_ZERO.defaultField("width", 0, BoxSize::width),
+      IntLoadable.FROM_ZERO.defaultField("height", 0, BoxSize::height),
+      IntLoadable.FROM_ZERO.defaultField("depth", 0, BoxSize::depth),
+      BoxSize::new);
+
     /** If true, the box is 0 in all dimensions */
     public boolean isZero() {
       return width == 0 && height == 0 && depth == 0;
-    }
-
-    /** Serializes this record to JSON */
-    public JsonObject toJson() {
-      JsonObject object = new JsonObject();
-      if (width > 0)  object.addProperty("width", width);
-      if (height > 0) object.addProperty("height", height);
-      if (depth > 0)  object.addProperty("depth", depth);
-      return object;
-    }
-
-    /** Writes this record to the network */
-    public void toNetwork(FriendlyByteBuf buf) {
-      buf.writeVarInt(width);
-      buf.writeVarInt(height);
-      buf.writeVarInt(depth);
-    }
-
-    /** Parses the box from json */
-    public static BoxSize fromJson(JsonObject json) {
-      return new BoxSize(
-        JsonUtils.getIntMin(json, "width", 0),
-        JsonUtils.getIntMin(json, "height", 0),
-        JsonUtils.getIntMin(json, "depth", 0)
-      );
-    }
-
-    /** Parses the box from the network */
-    public static BoxSize fromNetwork(FriendlyByteBuf buffer) {
-      return new BoxSize(buffer.readVarInt(), buffer.readVarInt(), buffer.readVarInt());
     }
   }
 
@@ -279,7 +253,7 @@ public class BoxAOEIterator implements IAreaOfEffectIterator {
     /** Direction to expand the AOE */
     @Nonnull @Setter @Accessors(fluent = true)
     private IBoxExpansion direction = IBoxExpansion.SIDE_HIT;
-    private final List<BoxSize> expansions = new ArrayList<>();
+    private final ImmutableList.Builder<BoxSize> expansions = ImmutableList.builder();
 
     /** Adds an expansion to the AOE logic */
     public Builder addExpansion(int width, int height, int depth) {
@@ -304,58 +278,7 @@ public class BoxAOEIterator implements IAreaOfEffectIterator {
 
     /** Builds the AOE iterator */
     public BoxAOEIterator build() {
-      return new BoxAOEIterator(base, expansions.toArray(new BoxSize[0]), direction);
-    }
-  }
-
-  /** Loads the configuration from JSON */
-  private static class Loader implements IGenericLoader<BoxAOEIterator> {
-    @Override
-    public BoxAOEIterator deserialize(JsonObject json) {
-      BoxSize base = BoxSize.fromJson(GsonHelper.getAsJsonObject(json, "bonus"));
-      BoxSize[] expansions;
-      if (json.has("expansions")) {
-        expansions = JsonHelper.parseList(json, "expansions", BoxSize::fromJson).toArray(new BoxSize[0]);
-      } else {
-        expansions = new BoxSize[0];
-      }
-      IBoxExpansion direction = IBoxExpansion.REGISTRY.getIfPresent(json, "expansion_direction");
-      return new BoxAOEIterator(base, expansions, direction);
-    }
-
-    @Override
-    public BoxAOEIterator fromNetwork(FriendlyByteBuf buffer) {
-      BoxSize base = BoxSize.fromNetwork(buffer);
-      int count = buffer.readVarInt();
-      BoxSize[] expansions = new BoxSize[count];
-      for (int i = 0; i < count; i++) {
-        expansions[i] = BoxSize.fromNetwork(buffer);
-      }
-      IBoxExpansion direction = IBoxExpansion.REGISTRY.decode(buffer);
-      return new BoxAOEIterator(base, expansions, direction);
-    }
-
-    @Override
-    public void serialize(BoxAOEIterator object, JsonObject json) {
-      json.add("bonus", object.base.toJson());
-      if (object.expansions.length > 0) {
-        JsonArray expansions = new JsonArray();
-        for (BoxSize box : object.expansions) {
-          expansions.add(box.toJson());
-        }
-        json.add("expansions", expansions);
-        json.addProperty("expansion_direction", IBoxExpansion.REGISTRY.getKey(object.direction).toString());
-      }
-    }
-
-    @Override
-    public void toNetwork(BoxAOEIterator object, FriendlyByteBuf buffer) {
-      object.base.toNetwork(buffer);
-      buffer.writeVarInt(object.expansions.length);
-      for (BoxSize box : object.expansions) {
-        box.toNetwork(buffer);
-      }
-      IBoxExpansion.REGISTRY.encode(buffer, object.direction);
+      return new BoxAOEIterator(base, expansions.build(), direction);
     }
   }
 }

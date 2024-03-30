@@ -6,6 +6,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.TierSortingRegistry;
 import slimeknights.mantle.data.loadable.Loadables;
+import slimeknights.mantle.data.loadable.field.LoadableField;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.data.registry.GenericLoaderRegistry.IGenericLoader;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
@@ -15,7 +16,8 @@ import slimeknights.tconstruct.library.tools.stat.ToolStats;
 // TODO: block predicate
 @RequiredArgsConstructor
 public class TagHarvestLogic implements IHarvestLogic {
-  public static final RecordLoadable<TagHarvestLogic> LOADER = RecordLoadable.create(Loadables.BLOCK_TAG.requiredField("effective", h -> h.tag), TagHarvestLogic::new);
+  protected static final LoadableField<TagKey<Block>,TagHarvestLogic> TAG_FIELD = Loadables.BLOCK_TAG.requiredField("effective", h -> h.tag);
+  public static final RecordLoadable<TagHarvestLogic> LOADER = RecordLoadable.create(TAG_FIELD, TagHarvestLogic::new);
 
   protected final TagKey<Block> tag;
 

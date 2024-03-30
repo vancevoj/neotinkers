@@ -1,30 +1,27 @@
 package slimeknights.tconstruct.library.tools.definition.harvest;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
+import com.google.common.collect.ImmutableList;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import net.minecraft.core.Registry;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.tags.TagKey;
-import net.minecraft.util.GsonHelper;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import slimeknights.mantle.data.loadable.primitive.FloatLoadable;
+import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.data.predicate.IJsonPredicate;
 import slimeknights.mantle.data.predicate.block.BlockPredicate;
-import slimeknights.mantle.data.registry.GenericLoaderRegistry.IGenericLoader;
-import slimeknights.mantle.util.JsonHelper;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /** Same as tag harvest, but applies additional modifiers to the break speed */
 public class ModifiedHarvestLogic extends TagHarvestLogic {
+  public static final RecordLoadable<ModifiedHarvestLogic> LOADER = RecordLoadable.create(
+    TAG_FIELD, SpeedModifier.LOADABLE.list(1).requiredField("modifiers", l -> l.speedModifiers),
+    ModifiedHarvestLogic::new);
 
-  public static final Loader LOADER = new Loader();
-  private final SpeedModifier[] speedModifiers;
-  protected ModifiedHarvestLogic(TagKey<Block> tag, SpeedModifier[] speedModifiers) {
+  private final List<SpeedModifier> speedModifiers;
+  protected ModifiedHarvestLogic(TagKey<Block> tag, List<SpeedModifier> speedModifiers) {
     super(tag);
     this.speedModifiers = speedModifiers;
   }
@@ -35,7 +32,7 @@ public class ModifiedHarvestLogic extends TagHarvestLogic {
   }
 
   @Override
-  public IGenericLoader<? extends IHarvestLogic> getLoader() {
+  public RecordLoadable<ModifiedHarvestLogic> getLoader() {
     return LOADER;
   }
 
@@ -55,7 +52,7 @@ public class ModifiedHarvestLogic extends TagHarvestLogic {
   @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
   public static class Builder {
     private final TagKey<Block> tag;
-    private final List<SpeedModifier> speedModifiers = new ArrayList<>();
+    private final ImmutableList.Builder<SpeedModifier> speedModifiers = ImmutableList.builder();
 
     /** Base method to add a modifier */
     public Builder addModifier(float modifier, IJsonPredicate<BlockState> predicate) {
@@ -85,80 +82,15 @@ public class ModifiedHarvestLogic extends TagHarvestLogic {
 
     /** Builds the modifier */
     public ModifiedHarvestLogic build() {
-      return new ModifiedHarvestLogic(tag, speedModifiers.toArray(new SpeedModifier[0]));
-    }
-  }
-
-  private static class Loader implements IGenericLoader<ModifiedHarvestLogic> {
-    @Override
-    public ModifiedHarvestLogic deserialize(JsonObject json) {
-      TagKey<Block> tag = TagKey.create(Registry.BLOCK_REGISTRY, JsonHelper.getResourceLocation(json, "effective"));
-      SpeedModifier[] modifiers = JsonHelper.parseList(json, "modifiers", SpeedModifier::fromJson).toArray(new SpeedModifier[0]);
-      return new ModifiedHarvestLogic(tag, modifiers);
-    }
-
-    @Override
-    public ModifiedHarvestLogic fromNetwork(FriendlyByteBuf buffer) {
-      TagKey<Block> tag = TagKey.create(Registry.BLOCK_REGISTRY, buffer.readResourceLocation());
-      SpeedModifier[] modifiers = new SpeedModifier[buffer.readVarInt()];
-      for (int i = 0; i < modifiers.length; i++) {
-        modifiers[i] = SpeedModifier.fromNetwork(buffer);
-      }
-      return new ModifiedHarvestLogic(tag, modifiers);
-    }
-
-    @Override
-    public void serialize(ModifiedHarvestLogic object, JsonObject json) {
-      json.addProperty("effective", object.tag.location().toString());
-      JsonArray modifiers = new JsonArray();
-      for (SpeedModifier modifier : object.speedModifiers) {
-        modifiers.add(modifier.toJson());
-      }
-      json.add("modifiers", modifiers);
-    }
-
-    @Override
-    public void toNetwork(ModifiedHarvestLogic object, FriendlyByteBuf buffer) {
-      buffer.writeResourceLocation(object.tag.location());
-      buffer.writeVarInt(object.speedModifiers.length);
-      for (SpeedModifier modifier : object.speedModifiers) {
-        modifier.toNetwork(buffer);
-      }
+      return new ModifiedHarvestLogic(tag, speedModifiers.build());
     }
   }
 
   /** Speed modifier to apply to a block */
-  @RequiredArgsConstructor
-  private static class SpeedModifier {
-    protected final float modifier;
-    protected final IJsonPredicate<BlockState> predicate;
-
-    /** Writes this object to JSON */
-    public JsonObject toJson() {
-      JsonObject json = new JsonObject();
-      json.addProperty("modifier", modifier);
-      json.add("predicate", BlockPredicate.LOADER.serialize(predicate));
-      return json;
-    }
-
-    /** Writes this object to the network */
-    public void toNetwork(FriendlyByteBuf buffer) {
-      buffer.writeFloat(modifier);
-      BlockPredicate.LOADER.encode(buffer, predicate);
-    }
-
-    /** Parses a speed modifier from JSON */
-    private static SpeedModifier fromJson(JsonObject json) {
-      float modifier = GsonHelper.getAsFloat(json, "modifier");
-      IJsonPredicate<BlockState> predicate = BlockPredicate.LOADER.getIfPresent(json, "predicate");
-      return new SpeedModifier(modifier, predicate);
-    }
-
-    /** Parses a speed modifier from the packet buffer */
-    private static SpeedModifier fromNetwork(FriendlyByteBuf buffer) {
-      float modifier = buffer.readFloat();
-      IJsonPredicate<BlockState> predicate = BlockPredicate.LOADER.decode(buffer);
-      return new SpeedModifier(modifier, predicate);
-    }
+  private record SpeedModifier(float modifier, IJsonPredicate<BlockState> predicate) {
+    public static final RecordLoadable<SpeedModifier> LOADABLE = RecordLoadable.create(
+      FloatLoadable.ANY.requiredField("modifier", SpeedModifier::modifier),
+      BlockPredicate.LOADER.requiredField("predicate", SpeedModifier::predicate),
+      SpeedModifier::new);
   }
 }

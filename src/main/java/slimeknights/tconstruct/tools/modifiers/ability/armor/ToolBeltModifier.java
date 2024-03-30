@@ -49,6 +49,7 @@ public class ToolBeltModifier extends InventoryMenuModifier implements VolatileD
     public ToolBeltModifier deserialize(JsonObject json) {
       JsonArray slotJson = GsonHelper.getAsJsonArray(json, "level_slots");
       int[] slots = new int[slotJson.size()];
+      // TODO: can this sort of thing be generalized?
       for (int i = 0; i < slots.length; i++) {
         slots[i] = GsonHelper.convertToInt(slotJson.get(i), "level_slots["+i+"]");
         if (i > 0 && slots[i] <= slots[i-1]) {
