@@ -35,7 +35,6 @@ import slimeknights.mantle.block.entity.NameableBlockEntity;
 import slimeknights.mantle.util.BlockEntityHelper;
 import slimeknights.mantle.util.RetexturedHelper;
 import slimeknights.tconstruct.common.multiblock.IMasterLogic;
-import slimeknights.tconstruct.common.multiblock.IServantLogic;
 import slimeknights.tconstruct.common.network.TinkerNetwork;
 import slimeknights.tconstruct.smeltery.block.controller.ControllerBlock;
 import slimeknights.tconstruct.smeltery.block.controller.SmelteryControllerBlock;
@@ -364,7 +363,7 @@ public abstract class HeatingStructureBlockEntity extends NameableBlockEntity im
   }
 
   @Override
-  public void notifyChange(IServantLogic servant, BlockPos pos, BlockState state) {
+  public void notifyChange(BlockPos pos, BlockState state) {
     // structure invalid? can ignore this, will automatically check later
     if (structure == null) {
       return;

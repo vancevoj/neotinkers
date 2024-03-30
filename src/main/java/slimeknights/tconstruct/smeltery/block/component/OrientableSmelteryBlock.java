@@ -22,20 +22,24 @@ public class OrientableSmelteryBlock extends SearedBlock implements EntityBlock 
   public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
 
   private final BlockEntitySupplier<? extends SmelteryComponentBlockEntity> blockEntity;
-  public OrientableSmelteryBlock(Properties properties, BlockEntitySupplier<? extends SmelteryComponentBlockEntity> blockEntity) {
-    super(properties);
+  public OrientableSmelteryBlock(Properties properties, boolean requiredBlockEntity, BlockEntitySupplier<? extends SmelteryComponentBlockEntity> blockEntity) {
+    super(properties, requiredBlockEntity);
     this.blockEntity = blockEntity;
   }
 
   @Override
   @Nullable
-  public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
-    return blockEntity.create(pPos, pState);
+  public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+    if (requiredBlockEntity || state.getValue(IN_STRUCTURE)) {
+      return blockEntity.create(pos, state);
+    }
+    return null;
   }
 
   @Override
   protected void createBlockStateDefinition(StateDefinition.Builder<Block,BlockState> builder) {
-    builder.add(FACING, IN_STRUCTURE);
+    super.createBlockStateDefinition(builder);
+    builder.add(FACING);
   }
 
   @Nullable

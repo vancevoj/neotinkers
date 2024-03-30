@@ -79,7 +79,7 @@ public class ServantTileEntity extends MantleBlockEntity implements IServantLogi
   public void notifyMasterOfChange(BlockPos pos, BlockState state) {
     if (validateMaster()) {
       assert masterPos != null;
-      BlockEntityHelper.get(IMasterLogic.class, level, masterPos).ifPresent(te -> te.notifyChange(this, pos, state));
+      BlockEntityHelper.get(IMasterLogic.class, level, masterPos).ifPresent(te -> te.notifyChange(pos, state));
     }
   }
 

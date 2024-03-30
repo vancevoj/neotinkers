@@ -21,8 +21,10 @@ import javax.annotation.Nullable;
 public class SearedBlock extends Block implements EntityBlock {
   public static final BooleanProperty IN_STRUCTURE = BooleanProperty.create("in_structure");
 
-  public SearedBlock(Properties properties) {
+  protected final boolean requiredBlockEntity;
+  public SearedBlock(Properties properties, boolean requiredBlockEntity) {
     super(properties);
+    this.requiredBlockEntity = requiredBlockEntity;
     this.registerDefaultState(this.defaultBlockState().setValue(IN_STRUCTURE, false));
   }
 
@@ -34,16 +36,27 @@ public class SearedBlock extends Block implements EntityBlock {
   @Nullable
   @Override
   public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-    return new SmelteryComponentBlockEntity(pos, state);
+    if (requiredBlockEntity || state.getValue(IN_STRUCTURE)) {
+      return new SmelteryComponentBlockEntity(pos, state);
+    }
+    return null;
   }
 
   @Override
   @Deprecated
-  public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
-    if (!newState.is(this)) {
-      BlockEntityHelper.get(SmelteryComponentBlockEntity.class, worldIn, pos).ifPresent(te -> te.notifyMasterOfChange(pos, newState));
+  public void onRemove(BlockState oldState, Level world, BlockPos pos, BlockState newState, boolean isMoving) {
+    if (requiredBlockEntity || oldState.getValue(IN_STRUCTURE)) {
+      // if the block is unchanged, remove the block entity if we no longer have one
+      if (newState.is(this)) {
+        if (!requiredBlockEntity && !newState.getValue(IN_STRUCTURE)) {
+          world.removeBlockEntity(pos);
+        }
+      } else {
+        // block changed, tell the master then ditch the block entity
+        BlockEntityHelper.get(SmelteryComponentBlockEntity.class, world, pos).ifPresent(te -> te.notifyMasterOfChange(pos, newState));
+        world.removeBlockEntity(pos);
+      }
     }
-    super.onRemove(state, worldIn, pos, newState, isMoving);
   }
 
   @Override

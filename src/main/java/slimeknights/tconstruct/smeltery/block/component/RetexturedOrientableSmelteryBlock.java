@@ -16,7 +16,7 @@ import javax.annotation.Nullable;
 
 public class RetexturedOrientableSmelteryBlock extends OrientableSmelteryBlock {
   public RetexturedOrientableSmelteryBlock(Properties properties, BlockEntitySupplier<? extends SmelteryComponentBlockEntity> blockEntity) {
-    super(properties, blockEntity);
+    super(properties, true, blockEntity);
   }
 
   @Override

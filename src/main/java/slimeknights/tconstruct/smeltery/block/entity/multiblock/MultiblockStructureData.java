@@ -5,12 +5,15 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import slimeknights.mantle.block.entity.MantleBlockEntity;
 import slimeknights.mantle.util.BlockEntityHelper;
 import slimeknights.tconstruct.common.multiblock.IMasterLogic;
 import slimeknights.tconstruct.common.multiblock.IServantLogic;
 import slimeknights.tconstruct.library.utils.TagUtil;
+import slimeknights.tconstruct.smeltery.block.component.SearedBlock;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
@@ -173,6 +176,18 @@ public class MultiblockStructureData {
     }
   }
 
+  /** Updates the master at the given position */
+  private static void updateMaster(Level world, BlockPos pos, IMasterLogic master, boolean add) {
+    // update the structure property first, this may add or remove the block entity
+    BlockState state = world.getBlockState(pos);
+    if (state.hasProperty(SearedBlock.IN_STRUCTURE) && state.getValue(SearedBlock.IN_STRUCTURE) != add) {
+      world.setBlock(pos, state.setValue(SearedBlock.IN_STRUCTURE, add), Block.UPDATE_CLIENTS);
+    }
+    // if the BE is there, set its property
+    BlockEntityHelper.get(IServantLogic.class, world, pos).ifPresent(
+      add ? te -> te.setPotentialMaster(master) : te -> te.removeMaster(master));
+  }
+
   /**
    * Assigns the master to all servants in this structure
    * @param master        Master to assign
@@ -193,7 +208,7 @@ public class MultiblockStructureData {
     // assign master to each servant
     forEachContained(pos -> {
       if (shouldUpdate.test(pos) && world.hasChunkAt(pos)) {
-        BlockEntityHelper.get(IServantLogic.class, world, pos).ifPresent(te -> te.setPotentialMaster(master));
+        updateMaster(world, pos, master, true);
       }
     });
 
@@ -201,7 +216,7 @@ public class MultiblockStructureData {
     if (oldStructure != null) {
       oldStructure.forEachContained(pos -> {
         if (!contains(pos) && world.hasChunkAt(pos)) {
-          BlockEntityHelper.get(IServantLogic.class, world, pos).ifPresent(te -> te.removeMaster(master));
+          updateMaster(world, pos, master, false);
         }
       });
     }
@@ -216,7 +231,7 @@ public class MultiblockStructureData {
     assert world != null;
     forEachContained(pos -> {
       if (world.hasChunkAt(pos)) {
-        BlockEntityHelper.get(IServantLogic.class, world, pos).ifPresent(te -> te.removeMaster(master));
+        updateMaster(world, pos, master, false);
       }
     });
   }

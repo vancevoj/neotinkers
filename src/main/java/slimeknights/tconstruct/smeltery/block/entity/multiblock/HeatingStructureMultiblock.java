@@ -13,6 +13,7 @@ import slimeknights.mantle.block.entity.MantleBlockEntity;
 import slimeknights.tconstruct.common.multiblock.IMasterLogic;
 import slimeknights.tconstruct.common.multiblock.IServantLogic;
 import slimeknights.tconstruct.library.utils.TagUtil;
+import slimeknights.tconstruct.smeltery.block.component.SearedBlock;
 import slimeknights.tconstruct.smeltery.block.entity.multiblock.HeatingStructureMultiblock.StructureData;
 
 import javax.annotation.Nullable;
@@ -92,10 +93,10 @@ public abstract class HeatingStructureMultiblock<T extends MantleBlockEntity & I
     BlockEntity te = world.getBlockEntity(pos);
 
     // slave-blocks are only allowed if they already belong to this smeltery
-    if (te instanceof IServantLogic) {
-      return ((IServantLogic)te).isValidMaster(parent);
+    if (te instanceof IServantLogic servant) {
+      return servant.isValidMaster(parent);
     }
-
+    // this is notably reached for structure blocks with conditional block entities
     return true;
   }
 
@@ -143,12 +144,18 @@ public abstract class HeatingStructureMultiblock<T extends MantleBlockEntity & I
     if (pos.equals(parent.getBlockPos())) {
       return true;
     }
-    if (!isValidSlave(world, pos)) {
+    // blocks need to have an in structure property, else we don't believe they support multiblocks
+    // if they have one, make sure its not true (already in a smeltery)
+    BlockState state = world.getBlockState(pos);
+    if (!state.hasProperty(SearedBlock.IN_STRUCTURE)) {
+      return false;
+    }
+    // if its currently in a structure, make sure its in our structure
+    if (state.getValue(SearedBlock.IN_STRUCTURE) && !isValidSlave(world, pos)) {
       return false;
     }
 
     // floor has a smaller list
-    BlockState state = world.getBlockState(pos);
     // treat frame blocks as walls, its more natural
     if (side == CuboidSide.FLOOR && !isFrame) {
       return isValidFloor(state.getBlock());

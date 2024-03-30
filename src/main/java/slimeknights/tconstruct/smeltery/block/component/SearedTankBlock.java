@@ -35,7 +35,7 @@ public class SearedTankBlock extends SearedBlock implements ITankBlock, EntityBl
   private final int capacity;
   private final PushReaction pushReaction;
   public SearedTankBlock(Properties properties, int capacity, PushReaction pushReaction) {
-    super(properties);
+    super(properties, true);
     this.capacity = capacity;
     this.pushReaction = pushReaction;
   }

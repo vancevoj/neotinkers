@@ -84,8 +84,9 @@ public class SearedLadderBlock extends OrientableSmelteryBlock {
   public static final BooleanProperty BOTTOM = BlockStateProperties.BOTTOM;
 
   public SearedLadderBlock(Properties properties) {
-    super(properties, SmelteryComponentBlockEntity::new);
+    super(properties, false, SmelteryComponentBlockEntity::new);
   }
+
 
   /** Bottom connections */
 
