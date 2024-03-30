@@ -26,7 +26,7 @@ public class MaterialFluidRecipe implements ICustomOutputRecipe<ICastingContaine
   public static final RecordLoadable<MaterialFluidRecipe> LOADER = RecordLoadable.create(
     ContextKey.ID.requiredField(),
     FluidIngredient.LOADABLE.requiredField("fluid", r -> r.fluid),
-    IntLoadable.FROM_ONE.requiredField("temperature", r -> r.temperature),
+    IntLoadable.FROM_ZERO.requiredField("temperature", r -> r.temperature),
     MaterialVariantId.LOADABLE.nullableField("input", r -> r.input != null ? r.input.getVariant() : null),
     MaterialVariantId.LOADABLE.nullableField("output", r -> r.output.getVariant()),
     MaterialFluidRecipe::new);

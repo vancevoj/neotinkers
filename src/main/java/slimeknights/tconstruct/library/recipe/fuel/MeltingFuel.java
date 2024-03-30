@@ -29,7 +29,7 @@ public class MeltingFuel implements ICustomOutputRecipe<IFluidContainer> {
     LoadableRecipeSerializer.RECIPE_GROUP,
     FluidIngredient.LOADABLE.requiredField("fluid", r -> r.input),
     IntLoadable.FROM_ONE.requiredField("duration", MeltingFuel::getDuration),
-    IntLoadable.ANY_SHORT.requiredField("temperature", MeltingFuel::getTemperature),
+    IntLoadable.FROM_ONE.requiredField("temperature", MeltingFuel::getTemperature), // TODO: negative temperatures with int range
     MeltingFuel::new);
 
   @Getter
