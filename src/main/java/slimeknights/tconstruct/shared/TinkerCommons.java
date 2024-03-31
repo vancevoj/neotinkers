@@ -34,6 +34,7 @@ import slimeknights.mantle.registration.object.BuildingBlockObject;
 import slimeknights.mantle.registration.object.EnumObject;
 import slimeknights.mantle.registration.object.ItemObject;
 import slimeknights.tconstruct.common.TinkerModule;
+import slimeknights.tconstruct.common.data.model.TinkerBlockStateProvider;
 import slimeknights.tconstruct.common.json.BlockOrEntityCondition;
 import slimeknights.tconstruct.common.json.ConfigEnabledCondition;
 import slimeknights.tconstruct.common.recipe.RecipeCacheInvalidator;
@@ -172,7 +173,8 @@ public final class TinkerCommons extends TinkerModule {
 
   @SubscribeEvent
   void gatherData(final GatherDataEvent event) {
-    DataGenerator datagenerator = event.getGenerator();
-    datagenerator.addProvider(event.includeServer(), new CommonRecipeProvider(datagenerator));
+    DataGenerator generator = event.getGenerator();
+    generator.addProvider(event.includeClient(), new TinkerBlockStateProvider(generator, event.getExistingFileHelper()));
+    generator.addProvider(event.includeServer(), new CommonRecipeProvider(generator));
   }
 }

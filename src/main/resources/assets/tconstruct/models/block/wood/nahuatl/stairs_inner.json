@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/inner_stairs",
-  "textures": {
-    "bottom": "tconstruct:block/wood/nahuatl",
-    "top": "tconstruct:block/wood/nahuatl",
-    "side": "tconstruct:block/wood/nahuatl"
-  }
-}
