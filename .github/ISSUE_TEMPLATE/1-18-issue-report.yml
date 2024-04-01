@@ -1,11 +1,11 @@
 name: 1.18 Issue Report
-description: Report an issue with the 1.18 alphas of Minecraft
+description: Report an issue with 1.18, currently long term support
 labels: [1.18, Bug, Unreviewed]
 body:
   - type: markdown
     attributes:
       value: |
-        Please note that 1.18 versions of the mod are in alpha, so are subject to change. Before submitting an issue, please search the following links to make sure your issue is not covered:
+        Please note that 1.18 versions are no longer receiving significant new features. Before submitting an issue, please search the following links to make sure your issue is not covered:
         
         * **[Pinned Issues](/SlimeKnights/TinkersConstruct/issues)**: Some commonly reported issues are pinned
         * **[Roadmap](/SlimeKnights/TinkersConstruct/wiki/Tinkers%27-Construct-3-Roadmap)**: Discusses unimplemented features and planned new changes
