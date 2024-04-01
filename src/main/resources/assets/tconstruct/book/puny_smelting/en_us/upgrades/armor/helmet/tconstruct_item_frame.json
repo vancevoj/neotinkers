@@ -8,6 +8,6 @@
   "effects": [
     "Adds slots to the helmet, interact to access",
     "Helmet will render items when worn",
-    "Requires 1 Upgrade Slot per level"
+    "Requires 1 upgrade slot per level"
   ]
 }

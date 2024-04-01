@@ -111,4 +111,13 @@ public abstract class TableBlockEntity extends InventoryBlockEntity {
       TinkerNetwork.getInstance().sendTo(UpdateStationScreenPacket.INSTANCE, serverPlayer);
     }
   }
+
+  /**
+   * Update the screen for all players using this UI
+   */
+  protected void syncScreenToRelevantPlayers() {
+    if (this.level != null && !this.level.isClientSide) {
+      syncToRelevantPlayers(this::syncScreen);
+    }
+  }
 }

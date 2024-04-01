@@ -9,9 +9,9 @@
     }
   ],
   "effects": [
-    "Adds an modifier slot",
+    "Adds a modifier slot",
     "Slot type is determined by the recipe",
     "Greedy are penalized",
-    "Single Use"
+    "Single level"
   ]
 }

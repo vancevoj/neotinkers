@@ -9,6 +9,6 @@
   "effects": [
     "Knocks back enemies on hit with any weapon",
     "Multiple levels, increases force of knockback per level",
-    "Requires 1 Upgrade Slot per level"
+    "Requires 1 upgrade slot per level"
   ]
 }
