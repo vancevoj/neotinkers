@@ -1,12 +1,27 @@
 package slimeknights.tconstruct.world;
 
+import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.util.valueproviders.ConstantInt;
+import net.minecraft.util.valueproviders.UniformInt;
+import net.minecraft.world.level.block.MangrovePropaguleBlock;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.HugeFungusConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration.TreeConfigurationBuilder;
+import net.minecraft.world.level.levelgen.feature.featuresize.TwoLayersFeatureSize;
+import net.minecraft.world.level.levelgen.feature.foliageplacers.RandomSpreadFoliagePlacer;
+import net.minecraft.world.level.levelgen.feature.rootplacers.RootPlacerType;
+import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProviderType;
+import net.minecraft.world.level.levelgen.feature.stateproviders.RandomizedIntStateProvider;
+import net.minecraft.world.level.levelgen.feature.treedecorators.AttachedToLeavesDecorator;
+import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecoratorType;
+import net.minecraft.world.level.levelgen.feature.trunkplacers.UpwardsBranchingTrunkPlacer;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureType;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
@@ -31,11 +46,15 @@ import slimeknights.tconstruct.world.data.StructureRepalleter;
 import slimeknights.tconstruct.world.data.WorldgenDatapackRegistryProvider;
 import slimeknights.tconstruct.world.worldgen.islands.IslandPiece;
 import slimeknights.tconstruct.world.worldgen.islands.IslandStructure;
+import slimeknights.tconstruct.world.worldgen.trees.ExtraRootVariantPlacer;
+import slimeknights.tconstruct.world.worldgen.trees.LeaveVineDecorator;
 import slimeknights.tconstruct.world.worldgen.trees.SupplierBlockStateProvider;
 import slimeknights.tconstruct.world.worldgen.trees.config.SlimeFungusConfig;
 import slimeknights.tconstruct.world.worldgen.trees.config.SlimeTreeConfig;
 import slimeknights.tconstruct.world.worldgen.trees.feature.SlimeFungusFeature;
 import slimeknights.tconstruct.world.worldgen.trees.feature.SlimeTreeFeature;
+
+import java.util.List;
 
 import static slimeknights.tconstruct.TConstruct.getResource;
 
@@ -49,6 +68,9 @@ public final class TinkerStructures extends TinkerModule {
     private static final DeferredRegister<StructureType<?>> STRUCTURE_TYPE = DeferredRegister.create(Registry.STRUCTURE_TYPE_REGISTRY, TConstruct.MOD_ID);
   private static final DeferredRegister<StructurePieceType> STRUCTURE_PIECE = DeferredRegister.create(Registry.STRUCTURE_PIECE_REGISTRY, TConstruct.MOD_ID);
   private static final DeferredRegister<BlockStateProviderType<?>> BLOCK_STATE_PROVIDER_TYPES = DeferredRegister.create(ForgeRegistries.BLOCK_STATE_PROVIDER_TYPES, TConstruct.MOD_ID);
+  private static final DeferredRegister<TreeDecoratorType<?>> TREE_DECORATORS = DeferredRegister.create(Registry.TREE_DECORATOR_TYPE_REGISTRY, TConstruct.MOD_ID);
+  private static final DeferredRegister<RootPlacerType<?>> ROOT_PLACERS = DeferredRegister.create(Registry.ROOT_PLACER_TYPE_REGISTRY, TConstruct.MOD_ID);
+
 
   public TinkerStructures() {
     IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -56,6 +78,8 @@ public final class TinkerStructures extends TinkerModule {
     STRUCTURE_TYPE.register(bus);
     STRUCTURE_PIECE.register(bus);
     BLOCK_STATE_PROVIDER_TYPES.register(bus);
+    TREE_DECORATORS.register(bus);
+    ROOT_PLACERS.register(bus);
   }
 
 
@@ -63,6 +87,8 @@ public final class TinkerStructures extends TinkerModule {
    * Misc
    */
   public static final RegistryObject<BlockStateProviderType<SupplierBlockStateProvider>> supplierBlockstateProvider = BLOCK_STATE_PROVIDER_TYPES.register("supplier_state_provider", () -> new BlockStateProviderType<>(SupplierBlockStateProvider.CODEC));
+  public static final RegistryObject<TreeDecoratorType<LeaveVineDecorator>> leaveVineDecorator = TREE_DECORATORS.register("leave_vines", () -> new TreeDecoratorType<>(LeaveVineDecorator.CODEC));
+  public static final RegistryObject<RootPlacerType<ExtraRootVariantPlacer>> extraRootVariantPlacer = ROOT_PLACERS.register("extra_root_variants", () -> new RootPlacerType<>(ExtraRootVariantPlacer.CODEC));
 
   /*
    * Features
@@ -108,23 +134,40 @@ public final class TinkerStructures extends TinkerModule {
       .vines(() -> TinkerWorld.skySlimeVine.get().defaultBlockState().setValue(SlimeVineBlock.STAGE, VineStage.MIDDLE))
       .build());
 
-  /** Enderslime island tree variant */
-  public static final RegistryObject<ConfiguredFeature<SlimeTreeConfig,SlimeTreeFeature>> enderSlimeTree = CONFIGURED_FEATURES.registerStatic(
-    "ender_slime_tree", slimeTree,
-    new SlimeTreeConfig.Builder()
-      .planted()
-      .trunk(() -> TinkerWorld.greenheart.getLog().defaultBlockState()) // TODO: temporary until we have proper green trees and ender shrooms
-      .leaves(() -> TinkerWorld.slimeLeaves.get(FoliageType.ENDER).defaultBlockState())
+  /** Enderslime short tree variant */
+  public static final RegistryObject<ConfiguredFeature<TreeConfiguration,Feature<TreeConfiguration>>> enderSlimeTree = CONFIGURED_FEATURES.registerSupplier(
+    "ender_slime_tree", () -> Feature.TREE,
+    () -> new TreeConfigurationBuilder(BlockStateProvider.simple(TinkerWorld.enderbark.getLog()),
+                                 new UpwardsBranchingTrunkPlacer(2, 1, 4, UniformInt.of(1, 4), 0.5F, UniformInt.of(0, 1), Registry.BLOCK.getOrCreateTag(TinkerTags.Blocks.ENDERBARK_LOGS_CAN_GROW_THROUGH)),
+                                 BlockStateProvider.simple(TinkerWorld.slimeLeaves.get(FoliageType.ENDER)),
+                                 new RandomSpreadFoliagePlacer(ConstantInt.of(3), ConstantInt.of(0), ConstantInt.of(2), 70),
+                                 ExtraRootVariantPlacer.builder()
+                                                       .trunkOffset(UniformInt.of(1, 3))
+                                                       .rootBlock(TinkerWorld.enderbarkRoots.get())
+                                                       .canGrowThroughTag(TinkerTags.Blocks.ENDERBARK_ROOTS_CAN_GROW_THROUGH)
+                                                       .slimyRoots(TinkerWorld.slimyEnderbarkRoots)
+                                                       .buildOptional(),
+                                 new TwoLayersFeatureSize(2, 0, 2))
+      .decorators(List.of(new LeaveVineDecorator(TinkerWorld.enderSlimeVine.get(), 0.125F), new AttachedToLeavesDecorator(0.14F, 1, 0, new RandomizedIntStateProvider(BlockStateProvider.simple(TinkerWorld.slimeSapling.get(FoliageType.ENDER).defaultBlockState().setValue(BlockStateProperties.HANGING, true)), MangrovePropaguleBlock.AGE, UniformInt.of(0, 4)), 2, List.of(Direction.DOWN))))
+      .ignoreVines()
       .build());
-  /** Enderslime island tree variant on islands */
-  public static final RegistryObject<ConfiguredFeature<SlimeTreeConfig,SlimeTreeFeature>> enderSlimeIslandTree = CONFIGURED_FEATURES.registerStatic(
-    "ender_slime_island_tree", slimeTree,
-    new SlimeTreeConfig.Builder()
-      .trunk(() -> TinkerWorld.greenheart.getLog().defaultBlockState()) // TODO: temporary until we have proper green trees and ender shrooms
-      .leaves(() -> TinkerWorld.slimeLeaves.get(FoliageType.ENDER).defaultBlockState())
-      .vines(() -> TinkerWorld.enderSlimeVine.get().defaultBlockState().setValue(SlimeVineBlock.STAGE, VineStage.MIDDLE))
+  /** Enderslime tall tree variant */
+  public static final RegistryObject<ConfiguredFeature<TreeConfiguration,Feature<TreeConfiguration>>> enderSlimeTreeTall = CONFIGURED_FEATURES.registerSupplier(
+    "ender_slime_tree_tall", () -> Feature.TREE,
+    () -> new TreeConfigurationBuilder(BlockStateProvider.simple(TinkerWorld.enderbark.getLog()),
+                                       new UpwardsBranchingTrunkPlacer(4, 1, 9, UniformInt.of(1, 6), 0.5F, UniformInt.of(0, 1), Registry.BLOCK.getOrCreateTag(TinkerTags.Blocks.ENDERBARK_LOGS_CAN_GROW_THROUGH)),
+                                       BlockStateProvider.simple(TinkerWorld.slimeLeaves.get(FoliageType.ENDER)),
+                                       new RandomSpreadFoliagePlacer(ConstantInt.of(3), ConstantInt.of(0), ConstantInt.of(2), 70),
+                                       ExtraRootVariantPlacer.builder()
+                                                             .trunkOffset(UniformInt.of(3, 7))
+                                                             .rootBlock(TinkerWorld.enderbarkRoots.get())
+                                                             .canGrowThroughTag(TinkerTags.Blocks.ENDERBARK_ROOTS_CAN_GROW_THROUGH)
+                                                             .slimyRoots(TinkerWorld.slimyEnderbarkRoots)
+                                                             .buildOptional(),
+                                       new TwoLayersFeatureSize(3, 0, 2))
+      .decorators(List.of(new LeaveVineDecorator(TinkerWorld.enderSlimeVine.get(), 0.125F), new AttachedToLeavesDecorator(0.14F, 1, 0, new RandomizedIntStateProvider(BlockStateProvider.simple(TinkerWorld.slimeSapling.get(FoliageType.ENDER).defaultBlockState().setValue(BlockStateProperties.HANGING, true)), MangrovePropaguleBlock.AGE, UniformInt.of(0, 4)), 2, List.of(Direction.DOWN))))
+      .ignoreVines()
       .build());
-
   /** Bloodshroom tree variant */
   public static final RegistryObject<ConfiguredFeature<HugeFungusConfiguration,SlimeFungusFeature>> bloodSlimeFungus = CONFIGURED_FEATURES.registerSupplier(
     "blood_slime_fungus", slimeFungus,

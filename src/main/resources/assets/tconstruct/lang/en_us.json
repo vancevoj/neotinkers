@@ -1312,14 +1312,14 @@
   "block.tconstruct.blood_slime_sapling.tooltip": "Only grows on slimy nylium",
   "block.tconstruct.ichor_slime_sapling": "Ichor Sapling",
   "block.tconstruct.ichor_slime_sapling.tooltip": "Only grows on slimy nylium",
-  "block.tconstruct.ender_slime_sapling": "Enderslime Sapling",
+  "block.tconstruct.ender_slime_sapling": "Enderbark Propagule",
   "block.tconstruct.ender_slime_sapling.tooltip": "Only grows on slimy dirt or grass",
 
   "block.tconstruct.potted_earth_slime_sapling": "Potted Greenheart Sapling",
   "block.tconstruct.potted_sky_slime_sapling":   "Potted Skyroot Sapling",
   "block.tconstruct.potted_blood_slime_sapling": "Potted Bloodshroom",
   "block.tconstruct.potted_ichor_slime_sapling": "Potted Ichor Sapling",
-  "block.tconstruct.potted_ender_slime_sapling": "Potted Enderslime Sapling",
+  "block.tconstruct.potted_ender_slime_sapling": "Potted Enderbark Propagule",
 
   "block.tconstruct.ender_slime_vine": "Slimy Vine",
   "block.tconstruct.sky_slime_vine": "Slimy Vine",
@@ -1377,6 +1377,29 @@
   "block.tconstruct.bloodshroom_button":         "Bloodshroom Button",
   "block.tconstruct.bloodshroom_sign":           "Bloodshroom Sign",
   "block.tconstruct.bloodshroom_wall_sign":      "Bloodshroom Sign",
+
+  "block.tconstruct.enderbark_planks":        "Enderbark Planks",
+  "block.tconstruct.enderbark_planks_slab":   "Enderbark Slab",
+  "block.tconstruct.enderbark_planks_stairs": "Enderbark Stairs",
+  "block.tconstruct.enderbark_log":           "Enderbark Log",
+  "block.tconstruct.stripped_enderbark_log":  "Stripped Enderbark Log",
+  "block.tconstruct.enderbark_wood":          "Enderbark Wood",
+  "block.tconstruct.stripped_enderbark_wood": "Stripped Enderbark Wood",
+
+  "block.tconstruct.enderbark_roots": "Enderbark Roots",
+  "block.tconstruct.earth_enderbark_roots": "Slimy Enderbark Roots",
+  "block.tconstruct.sky_enderbark_roots": "Slimy Enderbark Roots",
+  "block.tconstruct.ichor_enderbark_roots": "Slimy Enderbark Roots",
+  "block.tconstruct.ender_enderbark_roots": "Slimy Enderbark Roots",
+
+  "block.tconstruct.enderbark_fence":          "Enderbark Fence",
+  "block.tconstruct.enderbark_fence_gate":     "Enderbark Fence Gate",
+  "block.tconstruct.enderbark_door":           "Enderbark Door",
+  "block.tconstruct.enderbark_trapdoor":       "Enderbark Trapdoor",
+  "block.tconstruct.enderbark_pressure_plate": "Enderbark Pressure Plate",
+  "block.tconstruct.enderbark_button":         "Enderbark Button",
+  "block.tconstruct.enderbark_sign":           "Enderbark Sign",
+  "block.tconstruct.enderbark_wall_sign":      "Enderbark Sign",
 
 
   "material.tconstruct.unknown": "Unknown",
@@ -1476,6 +1499,7 @@
   "material.tconstruct.slimewood.greenheart":  "Greenheart",
   "material.tconstruct.slimewood.skyroot":     "Skyroot",
   "material.tconstruct.slimewood.bloodshroom": "Bloodshroom",
+  "material.tconstruct.slimewood.enderbark":  "Enderbark",
   "material.tconstruct.slimewood.flavor": "Is this the wood of a slime or slime that's been infused with wood?",
   "material.tconstruct.slimewood.encyclopedia": "Gives a 5% chance per level of regenerating overslime each second",
 

@@ -106,6 +106,7 @@ public class WorldRecipeProvider extends BaseRecipeProvider implements ICommonRe
     woodCrafting(consumer, TinkerWorld.greenheart, woodFolder + "greenheart/");
     woodCrafting(consumer, TinkerWorld.skyroot, woodFolder + "skyroot/");
     woodCrafting(consumer, TinkerWorld.bloodshroom, woodFolder + "bloodshroom/");
+    woodCrafting(consumer, TinkerWorld.enderbark, woodFolder + "enderbark/");
 
     // geodes
     geodeRecipes(consumer, TinkerWorld.earthGeode, SlimeType.EARTH, "common/slime/earth/");

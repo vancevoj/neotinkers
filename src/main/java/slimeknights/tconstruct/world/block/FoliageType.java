@@ -22,7 +22,7 @@ public enum FoliageType implements StringRepresentable {
   BLOOD(0xb80000, Tiers.WOOD,    MaterialColor.COLOR_RED, true);
 
   /** Foliage types using overworld style (grass, wood) */
-  public static final FoliageType[] OVERWORLD = {EARTH, SKY, ENDER};
+  public static final FoliageType[] OVERWORLD = {EARTH, SKY};
   /** Folage types using nether style (nylium, fungus) */
   public static final FoliageType[] NETHER = {ICHOR, BLOOD};
 

@@ -50,8 +50,12 @@
   ],
   "trees": [
     {
-      "data": "tconstruct:ender_slime_island_tree",
-      "weight": 1
+      "data": "tconstruct:ender_slime_tree",
+      "weight": 3
+    },
+    {
+      "data": "tconstruct:ender_slime_tree_tall",
+      "weight": 17
     }
   ],
   "vines": "tconstruct:ender_slime_vine"

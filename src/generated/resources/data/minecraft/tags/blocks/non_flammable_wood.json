@@ -29,6 +29,16 @@
     "tconstruct:bloodshroom_trapdoor",
     "tconstruct:bloodshroom_pressure_plate",
     "tconstruct:bloodshroom_button",
-    "#tconstruct:bloodshroom_logs"
+    "#tconstruct:bloodshroom_logs",
+    "tconstruct:enderbark_planks",
+    "tconstruct:enderbark_planks_slab",
+    "tconstruct:enderbark_planks_stairs",
+    "tconstruct:enderbark_fence",
+    "tconstruct:enderbark_fence_gate",
+    "tconstruct:enderbark_door",
+    "tconstruct:enderbark_trapdoor",
+    "tconstruct:enderbark_pressure_plate",
+    "tconstruct:enderbark_button",
+    "#tconstruct:enderbark_logs"
   ]
 }

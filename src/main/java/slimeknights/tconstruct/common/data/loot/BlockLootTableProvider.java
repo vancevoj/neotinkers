@@ -3,6 +3,7 @@ package slimeknights.tconstruct.common.data.loot;
 import net.minecraft.advancements.critereon.EnchantmentPredicate;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.advancements.critereon.MinMaxBounds;
+import net.minecraft.advancements.critereon.StatePropertiesPredicate;
 import net.minecraft.core.Registry;
 import net.minecraft.data.loot.BlockLoot;
 import net.minecraft.tags.ItemTags;
@@ -10,6 +11,7 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.MangrovePropaguleBlock;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
@@ -19,10 +21,12 @@ import net.minecraft.world.level.storage.loot.functions.CopyNameFunction;
 import net.minecraft.world.level.storage.loot.functions.CopyNbtFunction;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.predicates.BonusLevelTableCondition;
+import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.MatchTool;
 import net.minecraft.world.level.storage.loot.providers.nbt.ContextNbtProvider;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
+import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import net.minecraftforge.common.ToolActions;
 import net.minecraftforge.common.loot.CanToolPerformAction;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -163,7 +167,15 @@ public class BlockLootTableProvider extends BlockLoot {
     TinkerWorld.ichorSlimeGrass.forEach(block -> this.add(block, createSingleItemTableWithSilkTouch(block, TinkerWorld.slimeDirt.get(DirtType.ICHOR))));
 
     // saplings
-    TinkerWorld.slimeSapling.forEach(this::dropSelf);
+    TinkerWorld.slimeSapling.forEach((type, block) -> {
+      if (type != FoliageType.ENDER) {
+        this.dropSelf(block);
+      }
+    });
+    this.add(TinkerWorld.slimeSapling.get(FoliageType.ENDER), sapling -> applyExplosionDecay(
+      sapling, LootTable.lootTable().withPool(LootPool.lootPool()
+                                                           .when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(sapling).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(MangrovePropaguleBlock.AGE, 4)))
+                                                           .add(LootItem.lootTableItem(sapling)))));
     TinkerWorld.pottedSlimeSapling.forEach(this::dropPottedContents);
     TinkerWorld.pottedSlimeFern.forEach(this::dropPottedContents);
 
@@ -179,6 +191,12 @@ public class BlockLootTableProvider extends BlockLoot {
       this.dropSelf(TinkerWorld.slimeLeaves.get(type));
       this.dropSelf(TinkerWorld.slimeFern.get(type));
     }
+    // mangrove leaves do not drop saplings, they just drop sticks. We do slimeballs instead
+    this.add(TinkerWorld.slimeLeaves.get(FoliageType.ENDER), leaves -> createSelfDropDispatchTable(leaves, SILK_TOUCH_OR_SHEARS,
+      applyExplosionDecay(leaves, LootItem.lootTableItem(TinkerCommons.slimeball.get(SlimeType.ENDER)).apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 2.0F))))
+        .when(BonusLevelTableCondition.bonusLevelFlatChance(Enchantments.BLOCK_FORTUNE, NORMAL_LEAVES_STICK_CHANCES))));
+    this.add(TinkerWorld.slimeFern.get(FoliageType.ENDER), BlockLootTableProvider::onlyShears);
+
 
     // vines
     this.add(TinkerWorld.skySlimeVine.get(), BlockLootTableProvider::onlyShears);
@@ -188,6 +206,9 @@ public class BlockLootTableProvider extends BlockLoot {
     this.registerWoodLootTables(TinkerWorld.greenheart);
     this.registerWoodLootTables(TinkerWorld.skyroot);
     this.registerWoodLootTables(TinkerWorld.bloodshroom);
+    this.registerWoodLootTables(TinkerWorld.enderbark);
+    this.dropSelf(TinkerWorld.enderbarkRoots.get());
+    TinkerWorld.slimyEnderbarkRoots.forEach(this::dropSelf);
 
     // geode
     this.registerGeode(TinkerWorld.earthGeode);

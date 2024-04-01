@@ -22,6 +22,7 @@ import net.minecraft.world.level.storage.loot.entries.LootPoolEntryType;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.crafting.CraftingHelper;
+import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -34,6 +35,7 @@ import slimeknights.mantle.registration.object.BuildingBlockObject;
 import slimeknights.mantle.registration.object.EnumObject;
 import slimeknights.mantle.registration.object.ItemObject;
 import slimeknights.tconstruct.common.TinkerModule;
+import slimeknights.tconstruct.common.data.model.ModelSpriteProvider;
 import slimeknights.tconstruct.common.data.model.TinkerBlockStateProvider;
 import slimeknights.tconstruct.common.json.BlockOrEntityCondition;
 import slimeknights.tconstruct.common.json.ConfigEnabledCondition;
@@ -174,7 +176,10 @@ public final class TinkerCommons extends TinkerModule {
   @SubscribeEvent
   void gatherData(final GatherDataEvent event) {
     DataGenerator generator = event.getGenerator();
-    generator.addProvider(event.includeClient(), new TinkerBlockStateProvider(generator, event.getExistingFileHelper()));
+    ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
+    boolean client = event.includeClient();
+    generator.addProvider(client, new ModelSpriteProvider(generator, existingFileHelper));
+    generator.addProvider(client, new TinkerBlockStateProvider(generator, existingFileHelper));
     generator.addProvider(event.includeServer(), new CommonRecipeProvider(generator));
   }
 }

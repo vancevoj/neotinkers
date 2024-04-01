@@ -187,7 +187,9 @@ public class ItemTagProvider extends ItemTagsProvider {
     this.copy(TinkerTags.Blocks.SLIMY_LOGS, TinkerTags.Items.SLIMY_LOGS);
     this.copy(TinkerTags.Blocks.SLIMY_PLANKS, TinkerTags.Items.SLIMY_PLANKS);
     this.copy(TinkerTags.Blocks.SLIMY_LEAVES, TinkerTags.Items.SLIMY_LEAVES);
+    this.copy(TinkerTags.Blocks.SLIMY_VINES, TinkerTags.Items.SLIMY_VINES);
     this.copy(TinkerTags.Blocks.SLIMY_SAPLINGS, TinkerTags.Items.SLIMY_SAPLINGS);
+    this.copy(TinkerTags.Blocks.ENDERBARK_ROOTS, TinkerTags.Items.ENDERBARK_ROOTS);
     this.copy(BlockTags.LEAVES, ItemTags.LEAVES);
     this.copy(BlockTags.SAPLINGS, ItemTags.SAPLINGS);
 
@@ -209,6 +211,7 @@ public class ItemTagProvider extends ItemTagsProvider {
     this.copy(TinkerWorld.greenheart.getLogBlockTag(), TinkerWorld.greenheart.getLogItemTag());
     this.copy(TinkerWorld.skyroot.getLogBlockTag(), TinkerWorld.skyroot.getLogItemTag());
     this.copy(TinkerWorld.bloodshroom.getLogBlockTag(), TinkerWorld.bloodshroom.getLogItemTag());
+    this.copy(TinkerWorld.enderbark.getLogBlockTag(), TinkerWorld.enderbark.getLogItemTag());
     this.copy(BlockTags.LOGS, ItemTags.LOGS);
     this.copy(BlockTags.LOGS_THAT_BURN, ItemTags.LOGS_THAT_BURN);
     // doors

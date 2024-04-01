@@ -57,6 +57,7 @@ public class MaterialRenderInfoProvider extends AbstractMaterialRenderInfoProvid
     buildRenderInfo(MaterialIds.greenheart);
     buildRenderInfo(MaterialIds.skyroot);
     buildRenderInfo(MaterialIds.bloodshroom);
+    buildRenderInfo(MaterialIds.enderbark);
 
     // tier 3
     buildRenderInfo(MaterialIds.slimesteel).color(0x46ECE7).fallbacks("slime_metal", "metal");

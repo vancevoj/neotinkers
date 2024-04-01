@@ -20,6 +20,7 @@ import net.minecraftforge.network.NetworkHooks;
 import slimeknights.mantle.inventory.BaseContainerMenu;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.Sounds;
+import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.world.TinkerWorld;
 
 @SuppressWarnings("unused")
@@ -44,7 +45,7 @@ public class CommonsEvents {
 
     if (TinkerWorld.congealedSlime.contains(block)) {
       bounce(event.getEntity(), 0.25f);
-    } else if (TinkerWorld.slimeDirt.contains(block) || TinkerWorld.vanillaSlimeGrass.contains(block) || TinkerWorld.earthSlimeGrass.contains(block) || TinkerWorld.skySlimeGrass.contains(block) || TinkerWorld.enderSlimeGrass.contains(block) || TinkerWorld.ichorSlimeGrass.contains(block)) {
+    } else if (state.is(TinkerTags.Blocks.SLIMY_SOIL)) {
       bounce(event.getEntity(), 0.06f);
     }
   }

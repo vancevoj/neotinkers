@@ -67,7 +67,8 @@ import static slimeknights.tconstruct.world.TinkerStructures.clayIsland;
 import static slimeknights.tconstruct.world.TinkerStructures.earthSlimeIsland;
 import static slimeknights.tconstruct.world.TinkerStructures.earthSlimeIslandTree;
 import static slimeknights.tconstruct.world.TinkerStructures.endSlimeIsland;
-import static slimeknights.tconstruct.world.TinkerStructures.enderSlimeIslandTree;
+import static slimeknights.tconstruct.world.TinkerStructures.enderSlimeTree;
+import static slimeknights.tconstruct.world.TinkerStructures.enderSlimeTreeTall;
 import static slimeknights.tconstruct.world.TinkerStructures.skySlimeIsland;
 import static slimeknights.tconstruct.world.TinkerStructures.skySlimeIslandTree;
 
@@ -113,7 +114,8 @@ public class WorldgenDatapackRegistryProvider implements DataProvider {
       .build(new StructureSettings(tag(TinkerTags.Biomes.BLOOD_ISLANDS), monsterOverride(EntityType.MAGMA_CUBE, 4, 6), Decoration.UNDERGROUND_DECORATION, TerrainAdjustment.NONE)));
     // enderslime
     structures.put(endSlimeIsland, IslandStructure.skyBuilder().addDefaultTemplates(getResource("islands/ender/"))
-      .addTree(reference(enderSlimeIslandTree), 1)
+      .addTree(reference(enderSlimeTree), 3)
+      .addTree(reference(enderSlimeTreeTall), 17)
       .addSlimyGrass(FoliageType.ENDER)
       .vines(TinkerWorld.enderSlimeVine.get())
       .build(new StructureSettings(tag(TinkerTags.Biomes.ENDERSLIME_ISLANDS), monsterOverride(TinkerWorld.enderSlimeEntity.get(), 4, 4), Decoration.SURFACE_STRUCTURES, TerrainAdjustment.NONE)));

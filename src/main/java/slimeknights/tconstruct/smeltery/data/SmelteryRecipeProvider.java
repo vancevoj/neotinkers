@@ -2334,6 +2334,10 @@ public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelt
     ItemCastingRecipeBuilder.basinRecipe(TinkerWorld.congealedSlime.get(slimeType))
                             .setFluidAndTime(fluid, commonTag, FluidValues.SLIME_CONGEALED)
                             .save(consumer, location(colorFolder + "congealed"));
+    ItemCastingRecipeBuilder.basinRecipe(TinkerWorld.slimyEnderbarkRoots.get(slimeType))
+                            .setFluidAndTime(fluid, commonTag, FluidValues.SLIME_CONGEALED)
+                            .setCast(TinkerWorld.enderbarkRoots, true)
+                            .save(consumer, location(colorFolder + "roots"));
     ItemCastingRecipeBuilder.basinRecipe(TinkerWorld.slime.get(slimeType))
                             .setFluidAndTime(fluid, commonTag, FluidValues.SLIME_BLOCK - FluidValues.SLIME_CONGEALED)
                             .setCast(TinkerWorld.congealedSlime.get(slimeType), true)

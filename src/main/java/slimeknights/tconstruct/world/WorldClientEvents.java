@@ -121,6 +121,7 @@ public class WorldClientEvents extends ClientEventBase {
     }
     ItemBlockRenderTypes.setRenderLayer(TinkerWorld.enderSlimeVine.get(), cutout);
     ItemBlockRenderTypes.setRenderLayer(TinkerWorld.skySlimeVine.get(), cutout);
+    ItemBlockRenderTypes.setRenderLayer(TinkerWorld.enderbarkRoots.get(), cutout);
 
     // render types - slime blocks
     RenderType translucent = RenderType.translucent();
@@ -135,6 +136,7 @@ public class WorldClientEvents extends ClientEventBase {
     ItemBlockRenderTypes.setRenderLayer(TinkerWorld.skyroot.getTrapdoor(), cutout);
     ItemBlockRenderTypes.setRenderLayer(TinkerWorld.bloodshroom.getDoor(), cutout);
     ItemBlockRenderTypes.setRenderLayer(TinkerWorld.bloodshroom.getTrapdoor(), cutout);
+    ItemBlockRenderTypes.setRenderLayer(TinkerWorld.enderbark.getTrapdoor(), cutout);
 
     // geodes
     for (BudSize size : BudSize.values()) {

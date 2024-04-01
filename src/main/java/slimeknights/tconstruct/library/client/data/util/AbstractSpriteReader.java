@@ -1,7 +1,8 @@
 package slimeknights.tconstruct.library.client.data.util;
 
-import lombok.RequiredArgsConstructor;
+import com.google.gson.JsonObject;
 import com.mojang.blaze3d.platform.NativeImage;
+import lombok.RequiredArgsConstructor;
 import net.minecraft.resources.ResourceLocation;
 
 import javax.annotation.Nullable;
@@ -16,6 +17,9 @@ public abstract class AbstractSpriteReader {
 
   /** Checks if an image exists in the given location */
   public abstract boolean exists(ResourceLocation path);
+
+  /** Checks if metadata exists at the given location */
+  public abstract boolean metadataExists(ResourceLocation path);
 
   /**
    * Reads an image at the given path, relative to the folder
@@ -36,6 +40,16 @@ public abstract class AbstractSpriteReader {
       }
     }
     return null;
+  }
+
+  /** Reads metadata from the given path */
+  public abstract JsonObject readMetadata(ResourceLocation path) throws IOException;
+
+  /** Creates a new image with the given dimensions */
+  public NativeImage create(int width, int height) {
+    NativeImage image = new NativeImage(width, height, true);
+    openedImages.add(image);
+    return image;
   }
 
   /** Tracks the given image so when this reader is closed, that image is closed */

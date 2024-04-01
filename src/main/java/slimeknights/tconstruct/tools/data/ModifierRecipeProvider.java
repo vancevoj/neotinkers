@@ -1649,6 +1649,7 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
     slimyWoodTexture(consumer, MaterialIds.earthslime, TinkerWorld.greenheart,  FoliageType.EARTH, folder);
     slimyWoodTexture(consumer, MaterialIds.skyslime,   TinkerWorld.skyroot,     FoliageType.SKY,   folder);
     slimyWoodTexture(consumer, MaterialIds.blood,      TinkerWorld.bloodshroom, FoliageType.BLOOD, folder);
+    slimyWoodTexture(consumer, MaterialIds.enderslime, TinkerWorld.enderbark,   FoliageType.ENDER, folder);
     // weird slime
     SwappableModifierRecipeBuilder.modifier(TinkerModifiers.embellishment, MaterialIds.clay.toString())
                                   .setTools(TinkerTags.Items.EMBELLISHMENT_SLIME)

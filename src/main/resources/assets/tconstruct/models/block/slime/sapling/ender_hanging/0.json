@@ -1,0 +1,7 @@
+{
+  "parent": "block/mangrove_propagule_hanging_0",
+  "textures": {
+    "propagule": "tconstruct:block/slime/sapling/ender_hanging",
+    "particle": "tconstruct:block/slime/sapling/ender_hanging"
+  }
+}

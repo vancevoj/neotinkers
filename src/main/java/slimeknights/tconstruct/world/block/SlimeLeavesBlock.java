@@ -22,12 +22,6 @@ public class SlimeLeavesBlock extends LeavesBlock {
     this.foliageType = foliageType;
   }
 
-  /**
-   * Update the provided state given the provided neighbor facing and neighbor state, returning a new state.
-   * For example, fences make their connections to the passed in state if possible, and wet concrete powder immediately
-   * returns its solidified counterpart.
-   * Note that this method should ideally consider only the specific face passed in.
-   */
   @Override
   public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, LevelAccessor worldIn, BlockPos currentPos, BlockPos facingPos) {
     int i = getDistance(facingState) + 1;

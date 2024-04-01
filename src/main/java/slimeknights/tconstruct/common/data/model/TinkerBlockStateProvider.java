@@ -45,6 +45,14 @@ public class TinkerBlockStateProvider extends BlockStateProvider {
     addWood(TinkerWorld.greenheart, false);
     addWood(TinkerWorld.skyroot, true);
     addWood(TinkerWorld.bloodshroom, true);
+    addWood(TinkerWorld.enderbark, true);
+    basicBlock(TinkerWorld.enderbarkRoots.get(), models().withExistingParent("block/wood/enderbark/roots/empty", "block/mangrove_roots")
+                                                         .texture("side", blockTexture("wood/enderbark/roots"))
+                                                         .texture("top", blockTexture("wood/enderbark/roots_top")));
+    TinkerWorld.slimyEnderbarkRoots.forEach((type, block) -> {
+      String name = type.getSerializedName();
+      cubeColumn(block, "block/wood/enderbark/roots/" + name, blockTexture("wood/enderbark/roots/" + name), blockTexture("wood/enderbark/roots/" + name + "_top"));
+    });
   }
 
 
@@ -138,6 +146,18 @@ public class TinkerBlockStateProvider extends BlockStateProvider {
   }
 
   /**
+   * Creates a model for a block with a simple model
+   * @param block   Block
+   * @param model   Model to use for the block and item
+   * @return model file for the basic block
+   */
+  public ModelFile basicBlock(Block block, ModelFile model) {
+    simpleBlock(block, model);
+    simpleBlockItem(block, model);
+    return model;
+  }
+
+  /**
    * Creates a model for a cube with the same texture on all sides and an item form
    * @param block     Block
    * @param location  Location for the block model
@@ -145,10 +165,19 @@ public class TinkerBlockStateProvider extends BlockStateProvider {
    * @return model file for the basic block
    */
   public ModelFile basicBlock(Block block, String location, ResourceLocation texture) {
-    ModelFile model = models().cubeAll(location, texture);
-    simpleBlock(block, model);
-    simpleBlockItem(block, model);
-    return model;
+    return basicBlock(block, models().cubeAll(location, texture));
+  }
+
+  /**
+   * Creates a model for a cube with the same texture on all sides and an item form
+   * @param block     Block
+   * @param location  Location for the block model
+   * @param side      Texture for sides
+   * @param top       Texture for top
+   * @return model file for the basic block
+   */
+  public ModelFile cubeColumn(Block block, String location, ResourceLocation side, ResourceLocation top) {
+    return basicBlock(block, models().cubeColumn(location, side, top));
   }
 
   /**

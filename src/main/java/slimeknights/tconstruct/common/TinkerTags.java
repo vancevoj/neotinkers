@@ -88,13 +88,20 @@ public class TinkerTags {
     public static final TagKey<Block> SLIMY_LOGS = tag("slimy_logs");
     public static final TagKey<Block> SLIMY_PLANKS = tag("slimy_planks");
     public static final TagKey<Block> SLIMY_LEAVES = tag("slimy_leaves");
+    public static final TagKey<Block> SLIMY_VINES = tag("slimy_vines");
     public static final TagKey<Block> SLIMY_SAPLINGS = tag("slimy_saplings");
-    /** Blocks that are slime gr on top of dirt */
+    /** All variants of enderbark roots */
+    public static final TagKey<Block> ENDERBARK_ROOTS = tag("enderbark/roots");
+    /** Blocks that are slime grass on top of dirt */
     public static final TagKey<Block> SLIMY_GRASS = tag("slimy_grass");
     /** Blocks that are slime fungus on top of dirt */
     public static final TagKey<Block> SLIMY_NYLIUM = tag("slimy_nylium");
     /** Slime grass, slime fungus, or slime dirt */
     public static final TagKey<Block> SLIMY_SOIL = tag("slimy_soil");
+    /** Blocks enderbark logs can replace */
+    public static final TagKey<Block> ENDERBARK_LOGS_CAN_GROW_THROUGH = tag("enderbark/logs_can_grow_through");
+    /** Blocks enderbark roots can replace */
+    public static final TagKey<Block> ENDERBARK_ROOTS_CAN_GROW_THROUGH = tag("enderbark/roots_can_grow_through");
 
     public static final TagKey<Block> ORES_COBALT = forgeTag("ores/cobalt");
     public static final TagKey<Block> RAW_BLOCK_COBALT = forgeTag("storage_blocks/raw_cobalt");
@@ -219,7 +226,10 @@ public class TinkerTags {
     public static final TagKey<Item> SLIMY_LOGS = tag("slimy_logs");
     public static final TagKey<Item> SLIMY_PLANKS = tag("slimy_planks");
     public static final TagKey<Item> SLIMY_LEAVES = tag("slimy_leaves");
+    public static final TagKey<Item> SLIMY_VINES = tag("slimy_vines");
     public static final TagKey<Item> SLIMY_SAPLINGS = tag("slimy_saplings");
+    /** All variants of enderbark roots */
+    public static final TagKey<Item> ENDERBARK_ROOTS = tag("enderbark/roots");
 
     public static final TagKey<Item> SEARED_BLOCKS = tag("seared_blocks");
     public static final TagKey<Item> SEARED_BRICKS = tag("seared_bricks");

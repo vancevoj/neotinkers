@@ -194,15 +194,14 @@ public class BlockTagProvider extends BlockTagsProvider {
 
     // wood
     this.tag(TinkerTags.Blocks.SLIMY_LOGS)
-        .addTag(TinkerWorld.greenheart.getLogBlockTag())
-        .addTag(TinkerWorld.skyroot.getLogBlockTag())
-        .addTag(TinkerWorld.bloodshroom.getLogBlockTag());
-    this.tag(TinkerTags.Blocks.SLIMY_PLANKS).add(TinkerWorld.greenheart.get(), TinkerWorld.skyroot.get(), TinkerWorld.bloodshroom.get());
+        .addTags(TinkerWorld.greenheart.getLogBlockTag(), TinkerWorld.skyroot.getLogBlockTag(), TinkerWorld.bloodshroom.getLogBlockTag(), TinkerWorld.enderbark.getLogBlockTag());
+    this.tag(TinkerTags.Blocks.SLIMY_PLANKS).add(TinkerWorld.greenheart.get(), TinkerWorld.skyroot.get(), TinkerWorld.bloodshroom.get(), TinkerWorld.enderbark.get());
     this.tag(BlockTags.PLANKS).addTag(TinkerTags.Blocks.SLIMY_PLANKS);
     this.tag(BlockTags.LOGS).addTag(TinkerTags.Blocks.SLIMY_LOGS);
     this.addWoodTags(TinkerWorld.greenheart, false);
     this.addWoodTags(TinkerWorld.skyroot, false);
     this.addWoodTags(TinkerWorld.bloodshroom, false);
+    this.addWoodTags(TinkerWorld.enderbark, false);
 
     // slime blocks
     TagsProvider.TagAppender<Block> slimeBlockTagAppender = this.tag(TinkerTags.Blocks.SLIME_BLOCK);
@@ -213,6 +212,7 @@ public class BlockTagProvider extends BlockTagsProvider {
     }
 
     // foliage
+    this.tag(TinkerTags.Blocks.SLIMY_VINES).add(TinkerWorld.skySlimeVine.get(), TinkerWorld.enderSlimeVine.get());
     TagsProvider.TagAppender<Block> leavesTagAppender = this.tag(TinkerTags.Blocks.SLIMY_LEAVES);
     TagsProvider.TagAppender<Block> wartTagAppender = this.tag(BlockTags.WART_BLOCKS);
     TagsProvider.TagAppender<Block> saplingTagAppender = this.tag(TinkerTags.Blocks.SLIMY_SAPLINGS);
@@ -242,12 +242,24 @@ public class BlockTagProvider extends BlockTagsProvider {
       this.tag(dirtType.getBlockTag()).add(block);
     }));
     TinkerWorld.slimeDirt.forEach((type, block) -> this.tag(type.getBlockTag()).add(block));
+    TagAppender<Block> enderBarkRoots = this.tag(TinkerTags.Blocks.ENDERBARK_ROOTS).add(TinkerWorld.enderbarkRoots.get());
+    TinkerWorld.slimyEnderbarkRoots.forEach((type, block) -> {
+      this.tag(type.getDirtType().getBlockTag()).add(block);
+      enderBarkRoots.add(block);
+    });
     endermanHoldable.addTag(TinkerTags.Blocks.SLIMY_SOIL);
     tagBlocks(BlockTags.REPLACEABLE_PLANTS, TinkerWorld.slimeTallGrass, TinkerWorld.slimeFern);
 
     Consumer<Block> flowerPotAppender = this.tag(BlockTags.FLOWER_POTS)::add;
     TinkerWorld.pottedSlimeFern.forEach(flowerPotAppender);
     TinkerWorld.pottedSlimeSapling.forEach(flowerPotAppender);
+
+    this.tag(TinkerTags.Blocks.ENDERBARK_LOGS_CAN_GROW_THROUGH)
+        .addTags(TinkerTags.Blocks.SLIMY_VINES, TinkerTags.Blocks.SLIMY_SAPLINGS, TinkerTags.Blocks.CONGEALED_SLIME, TinkerTags.Blocks.ENDERBARK_ROOTS, TinkerTags.Blocks.SLIMY_LEAVES, TinkerTags.Blocks.SLIMY_LOGS);
+    this.tag(TinkerTags.Blocks.ENDERBARK_ROOTS_CAN_GROW_THROUGH)
+        .addTags(TinkerTags.Blocks.SLIMY_VINES, TinkerTags.Blocks.SLIMY_SAPLINGS, TinkerTags.Blocks.CONGEALED_SLIME, TinkerTags.Blocks.ENDERBARK_ROOTS)
+        .add(Blocks.SNOW);
+
 
     // slime spawns
     this.tag(TinkerTags.Blocks.SKY_SLIME_SPAWN).add(TinkerWorld.earthGeode.getBlock(), TinkerWorld.earthGeode.getBudding()).addTag(FoliageType.SKY.getGrassBlockTag());
@@ -405,10 +417,15 @@ public class BlockTagProvider extends BlockTagsProvider {
     tagLogs(MINEABLE_WITH_AXE, NEEDS_GOLD_TOOL, TinkerWorld.skyroot);
     tagLogs(MINEABLE_WITH_AXE, NEEDS_STONE_TOOL, TinkerWorld.greenheart);
     tagLogs(MINEABLE_WITH_AXE, NEEDS_IRON_TOOL, TinkerWorld.bloodshroom);
-    tagPlanks(MINEABLE_WITH_SHOVEL, TinkerWorld.greenheart, TinkerWorld.skyroot, TinkerWorld.bloodshroom);
-    tagBlocks(MINEABLE_WITH_AXE, TinkerWorld.skySlimeVine, TinkerWorld.enderSlimeVine);
+    tagLogs(MINEABLE_WITH_AXE, NEEDS_DIAMOND_TOOL, TinkerWorld.enderbark);
+    tagPlanks(MINEABLE_WITH_SHOVEL, TinkerWorld.greenheart, TinkerWorld.skyroot, TinkerWorld.bloodshroom, TinkerWorld.enderbark);
+    tagBlocks(MINEABLE_WITH_SHOVEL, TinkerWorld.slimyEnderbarkRoots);
+    tagBlocks(MINEABLE_WITH_AXE, TinkerWorld.skySlimeVine, TinkerWorld.enderSlimeVine, TinkerWorld.enderbarkRoots);
     tagBlocks(MINEABLE_WITH_AXE, TinkerWorld.slimeTallGrass, TinkerWorld.slimeFern);
     tagBlocks(MINEABLE_WITH_PICKAXE, TinkerWorld.earthGeode, TinkerWorld.skyGeode, TinkerWorld.ichorGeode, TinkerWorld.enderGeode);
+    tagBlocks(NEEDS_DIAMOND_TOOL, TinkerWorld.enderbarkRoots);
+    tagBlocks(NEEDS_DIAMOND_TOOL, TinkerWorld.slimyEnderbarkRoots);
+
 
     // smeltery
     tagBlocks(MINEABLE_WITH_SHOVEL, TinkerSmeltery.grout, TinkerSmeltery.netherGrout);

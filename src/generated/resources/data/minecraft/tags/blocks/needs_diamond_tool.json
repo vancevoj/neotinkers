@@ -20,6 +20,13 @@
     "tconstruct:ender_ender_slime_grass",
     "tconstruct:blood_ender_slime_grass",
     "tconstruct:ender_vanilla_slime_grass",
+    "tconstruct:enderbark_log",
+    "tconstruct:enderbark_wood",
+    "tconstruct:enderbark_roots",
+    "tconstruct:earth_enderbark_roots",
+    "tconstruct:sky_enderbark_roots",
+    "tconstruct:ichor_enderbark_roots",
+    "tconstruct:ender_enderbark_roots",
     "tconstruct:scorched_drain",
     "tconstruct:scorched_chute",
     "tconstruct:foundry_controller"

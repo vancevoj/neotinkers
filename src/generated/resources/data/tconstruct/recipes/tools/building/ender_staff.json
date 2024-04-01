@@ -8,7 +8,7 @@
       "tag": "forge:ingots/netherite"
     },
     "W": {
-      "item": "tconstruct:nahuatl"
+      "tag": "tconstruct:enderbark_logs"
     }
   },
   "pattern": [
