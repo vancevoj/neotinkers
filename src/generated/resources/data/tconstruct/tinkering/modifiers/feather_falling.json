@@ -4,6 +4,9 @@
   "tooltip_display": "always",
   "modules": [
     {
+      "type": "tconstruct:incremental"
+    },
+    {
       "type": "tconstruct:protection",
       "damage_source": "mantle:fall",
       "wearing_entity": "mantle:any",

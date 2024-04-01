@@ -342,7 +342,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
     buildModifier(ModifierIds.speedy).addModule(AttributeModule.builder(Attributes.MOVEMENT_SPEED, Operation.MULTIPLY_TOTAL).uniqueFrom(ModifierIds.speedy).slots(armorMainHand).eachLevel(0.1f));
     // boots
     buildModifier(ModifierIds.depthStrider).addModule(EnchantmentModule.constant(Enchantments.DEPTH_STRIDER).build());
-    buildModifier(ModifierIds.featherFalling).addModule(ProtectionModule.source(DamageSourcePredicate.FALL).eachLevel(3.75f));
+    buildModifier(ModifierIds.featherFalling).addModule(IncrementalModule.RECIPE_CONTROLLED).addModule(ProtectionModule.source(DamageSourcePredicate.FALL).eachLevel(3.75f));
     buildModifier(ModifierIds.longFall).levelDisplay(ModifierLevelDisplay.NO_LEVELS).addModule(BlockDamageSourceModule.source(DamageSourcePredicate.FALL).build());
     buildModifier(ModifierIds.frostWalker)
       .levelDisplay(ModifierLevelDisplay.NO_LEVELS)
