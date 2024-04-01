@@ -67,6 +67,7 @@ import slimeknights.tconstruct.shared.TinkerCommons;
 import slimeknights.tconstruct.shared.TinkerMaterials;
 import slimeknights.tconstruct.shared.block.SlimeType;
 import slimeknights.tconstruct.smeltery.TinkerSmeltery;
+import slimeknights.tconstruct.tables.TinkerTables;
 import slimeknights.tconstruct.tools.TinkerModifiers;
 import slimeknights.tconstruct.tools.TinkerToolParts;
 import slimeknights.tconstruct.tools.TinkerTools;
@@ -1585,6 +1586,27 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
   private void addTextureRecipes(Consumer<FinishedRecipe> consumer) {
     String folder = "tools/modifiers/slotless/";
 
+    // slime staff
+    // overworld
+    woodTexture(consumer, MaterialIds.oak, Blocks.OAK_PLANKS, folder);
+    woodTexture(consumer, MaterialIds.birch, Blocks.BIRCH_PLANKS, folder);
+    woodTexture(consumer, MaterialIds.spruce, Blocks.SPRUCE_PLANKS, folder);
+    woodTexture(consumer, MaterialIds.jungle, Blocks.JUNGLE_PLANKS, folder);
+    woodTexture(consumer, MaterialIds.acacia, Blocks.ACACIA_PLANKS, folder);
+    woodTexture(consumer, MaterialIds.darkOak, Blocks.DARK_OAK_PLANKS, folder);
+    woodTexture(consumer, MaterialIds.mangrove, Blocks.MANGROVE_PLANKS, folder);
+    // nether
+    woodTexture(consumer, MaterialIds.crimson, Blocks.CRIMSON_PLANKS, folder);
+    woodTexture(consumer, MaterialIds.warped, Blocks.WARPED_PLANKS, folder);
+    // slimewood
+    woodTexture(consumer, MaterialIds.greenheart, TinkerWorld.greenheart, folder);
+    woodTexture(consumer, MaterialIds.skyroot, TinkerWorld.skyroot, folder);
+    woodTexture(consumer, MaterialIds.bloodshroom, TinkerWorld.bloodshroom, folder);
+    woodTexture(consumer, MaterialIds.enderbark, TinkerWorld.enderbark, folder);
+    // special
+    woodTexture(consumer, MaterialIds.nahuatl, TinkerMaterials.nahuatl, folder);
+    woodTexture(consumer, MaterialIds.bamboo, Blocks.BAMBOO, folder);
+
     // travelers gear //
     consumer.accept(new ArmorDyeingRecipe.Finished(location(folder + "travelers_dyeing"), Ingredient.of(TinkerTags.Items.DYEABLE)));
 
@@ -1594,16 +1616,16 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
     SwappableModifierRecipeBuilder.modifier(TinkerModifiers.embellishment, MaterialIds.oxidizedIron.toString())
                                   .setTools(TinkerTags.Items.EMBELLISHMENT_METAL)
                                   .addInput(Tags.Items.RAW_MATERIALS_IRON).addInput(Tags.Items.RAW_MATERIALS_IRON).addInput(Tags.Items.RAW_MATERIALS_IRON)
-                                  .save(consumer, wrap(TinkerModifiers.embellishment, folder, "_iron_oxidized"));
+                                  .save(consumer, wrap(TinkerModifiers.embellishment, folder, "/metal/iron_oxidized"));
     plateTexture(consumer, MaterialIds.copper, false, folder);
     SwappableModifierRecipeBuilder.modifier(TinkerModifiers.embellishment, MaterialIds.oxidizedCopper.toString())
                                   .setTools(TinkerTags.Items.EMBELLISHMENT_METAL)
                                   .addInput(Tags.Items.RAW_MATERIALS_COPPER).addInput(Tags.Items.RAW_MATERIALS_COPPER).addInput(Tags.Items.RAW_MATERIALS_COPPER)
-                                  .save(consumer, wrap(TinkerModifiers.embellishment, folder, "_copper_oxidized"));
+                                  .save(consumer, wrap(TinkerModifiers.embellishment, folder, "/metal/copper_oxidized"));
     SwappableModifierRecipeBuilder.modifier(TinkerModifiers.embellishment, MaterialIds.gold.toString())
                                   .setTools(DifferenceIngredient.of(Ingredient.of(TinkerTags.Items.EMBELLISHMENT_METAL), Ingredient.of(TinkerTags.Items.WORN_ARMOR)))
                                   .addInput(Tags.Items.INGOTS_GOLD).addInput(Tags.Items.INGOTS_GOLD).addInput(Tags.Items.INGOTS_GOLD)
-                                  .save(consumer, wrap(TinkerModifiers.embellishment, folder, "_gold"));
+                                  .save(consumer, wrap(TinkerModifiers.embellishment, folder, "/metal/gold"));
     // tier 3
     plateTexture(consumer, MaterialIds.slimesteel,    false, folder);
     plateTexture(consumer, MaterialIds.amethystBronze, false, folder);
@@ -1747,6 +1769,14 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
   }
 
   /** Adds recipes for a plate armor texture with a custom tag */
+  private void woodTexture(Consumer<FinishedRecipe> consumer, MaterialVariantId material, ItemLike planks, String folder) {
+    SwappableModifierRecipeBuilder.modifier(TinkerModifiers.embellishment, material.toString())
+                                  .setTools(TinkerTags.Items.EMBELLISHMENT_WOOD)
+                                  .addInput(planks).addInput(TinkerTables.pattern).addInput(planks)
+                                  .save(consumer, wrap(TinkerModifiers.embellishment, folder, "/wood/" + material.getLocation('_').getPath()));
+  }
+
+  /** Adds recipes for a plate armor texture with a custom tag */
   private void plateTexture(Consumer<FinishedRecipe> consumer, MaterialVariantId material, String tag, boolean optional, String folder) {
     Ingredient ingot = Ingredient.of(getItemTag("forge", tag));
     if (optional) {
@@ -1755,7 +1785,7 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
     SwappableModifierRecipeBuilder.modifier(TinkerModifiers.embellishment, material.toString())
                                   .setTools(TinkerTags.Items.EMBELLISHMENT_METAL)
                                   .addInput(ingot).addInput(ingot).addInput(ingot)
-                                  .save(consumer, wrap(TinkerModifiers.embellishment, folder, "_" + material.getLocation('_').getPath()));
+                                  .save(consumer, wrap(TinkerModifiers.embellishment, folder, "/metal/" + material.getLocation('_').getPath()));
   }
 
   /** Adds recipes for a slime armor texture */
@@ -1764,7 +1794,7 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
     SwappableModifierRecipeBuilder.modifier(TinkerModifiers.embellishment, material.toString())
                                   .setTools(TinkerTags.Items.EMBELLISHMENT_SLIME)
                                   .addInput(congealed).addInput(TinkerCommons.slimeball.get(slime)).addInput(congealed)
-                                  .save(consumer, wrap(TinkerModifiers.embellishment, folder, "_" + slime.getSerializedName()));
+                                  .save(consumer, wrap(TinkerModifiers.embellishment, folder, "/slime/" + slime.getSerializedName()));
   }
 
   /** Adds recipes for a slime armor texture */

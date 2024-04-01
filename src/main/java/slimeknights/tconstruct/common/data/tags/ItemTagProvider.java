@@ -50,6 +50,7 @@ import static slimeknights.tconstruct.common.TinkerTags.Items.DURABILITY;
 import static slimeknights.tconstruct.common.TinkerTags.Items.DYEABLE;
 import static slimeknights.tconstruct.common.TinkerTags.Items.EMBELLISHMENT_METAL;
 import static slimeknights.tconstruct.common.TinkerTags.Items.EMBELLISHMENT_SLIME;
+import static slimeknights.tconstruct.common.TinkerTags.Items.EMBELLISHMENT_WOOD;
 import static slimeknights.tconstruct.common.TinkerTags.Items.FANTASTIC_ARMOR;
 import static slimeknights.tconstruct.common.TinkerTags.Items.GADGETRY_ARMOR;
 import static slimeknights.tconstruct.common.TinkerTags.Items.HARVEST;
@@ -251,10 +252,10 @@ public class ItemTagProvider extends ItemTagsProvider {
     addToolTags(TinkerTools.longbow,  MULTIPART_TOOL, DURABILITY, MELEE_WEAPON, LONGBOWS,  INTERACTABLE_LEFT, BROAD_TOOLS);
     // specialized
     addToolTags(TinkerTools.flintAndBrick, DURABILITY, MELEE_WEAPON, INTERACTABLE_RIGHT, AOE, SMALL_TOOLS);
-    addToolTags(TinkerTools.skyStaff,      DURABILITY, STAFFS, SPECIAL_TOOLS, HELD_ARMOR, INTERACTABLE_DUAL, AOE, DYEABLE, EMBELLISHMENT_METAL);
-    addToolTags(TinkerTools.earthStaff,    DURABILITY, STAFFS, SPECIAL_TOOLS, HELD_ARMOR, INTERACTABLE_DUAL, AOE, DYEABLE, EMBELLISHMENT_METAL);
-    addToolTags(TinkerTools.ichorStaff,    DURABILITY, STAFFS, SPECIAL_TOOLS, HELD_ARMOR, INTERACTABLE_DUAL, AOE, DYEABLE, EMBELLISHMENT_METAL);
-    addToolTags(TinkerTools.enderStaff,    DURABILITY, STAFFS, SPECIAL_TOOLS, HELD_ARMOR, INTERACTABLE_DUAL, AOE, DYEABLE, EMBELLISHMENT_METAL);
+    addToolTags(TinkerTools.skyStaff,      DURABILITY, STAFFS, SPECIAL_TOOLS, HELD_ARMOR, INTERACTABLE_DUAL, AOE, DYEABLE, EMBELLISHMENT_WOOD);
+    addToolTags(TinkerTools.earthStaff,    DURABILITY, STAFFS, SPECIAL_TOOLS, HELD_ARMOR, INTERACTABLE_DUAL, AOE, DYEABLE, EMBELLISHMENT_WOOD);
+    addToolTags(TinkerTools.ichorStaff,    DURABILITY, STAFFS, SPECIAL_TOOLS, HELD_ARMOR, INTERACTABLE_DUAL, AOE, DYEABLE, EMBELLISHMENT_WOOD);
+    addToolTags(TinkerTools.enderStaff,    DURABILITY, STAFFS, SPECIAL_TOOLS, HELD_ARMOR, INTERACTABLE_DUAL, AOE, DYEABLE, EMBELLISHMENT_WOOD);
 
     // armor
     addArmorTags(TinkerTools.travelersGear, DURABILITY, DYEABLE, ItemTags.FREEZE_IMMUNE_WEARABLES);

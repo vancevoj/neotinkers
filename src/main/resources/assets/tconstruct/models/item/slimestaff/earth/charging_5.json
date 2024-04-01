@@ -9,8 +9,8 @@
   },
   "large": true,
   "modifier_roots": {
-    "small": [ "tconstruct:item/tool/staff/modifiers/" ],
-    "large": [ "tconstruct:item/tool/staff/large_modifiers/earth/", "tconstruct:item/tool/staff/large_modifiers/" ]
+    "small": [ "tconstruct:item/tool/staff/modifiers/earth/5/", "tconstruct:item/tool/staff/modifiers/earth/", "tconstruct:item/tool/staff/modifiers/" ],
+    "large": [ "tconstruct:item/tool/staff/large_modifiers/earth/5/", "tconstruct:item/tool/staff/large_modifiers/earth/", "tconstruct:item/tool/staff/large_modifiers/" ]
   },
   "first_modifiers": [ "tconstruct:dyed", "tconstruct:embellishment" ]
 }

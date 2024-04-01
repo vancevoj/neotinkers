@@ -10,7 +10,8 @@
     "supportedStats": [
       "tconstruct:limb",
       "tconstruct:grip",
-      "tconstruct:repair_kit"
+      "tconstruct:repair_kit",
+      "tconstruct:wood"
     ],
     "transformer": {
       "type": "tconstruct:recolor_sprite",

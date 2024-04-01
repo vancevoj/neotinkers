@@ -402,6 +402,8 @@ public class TinkerTags {
     /** Modifiable items support special staff modifiers, is a subtag of ranged. */
     public static final TagKey<Item> STAFFS = tag("modifiable/staffs");
 
+    /** Tools that can receive wood based embellishments */
+    public static final TagKey<Item> EMBELLISHMENT_WOOD = tag("modifiable/embellishment/wood");
     /** Tools that can receive metal based embellishments */
     public static final TagKey<Item> EMBELLISHMENT_METAL = tag("modifiable/embellishment/metal");
     /** Tools that can receive slime based embellishments */

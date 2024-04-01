@@ -10,6 +10,7 @@ import slimeknights.tconstruct.tools.stats.RepairKitStats;
  * Do not use both this and {@link TinkerMaterialSpriteProvider} in a single generator for an addon, if you need to use both make two instances of {@link slimeknights.tconstruct.library.client.data.material.MaterialPartTextureGenerator}
  */
 public class TinkerPartSpriteProvider extends AbstractPartSpriteProvider {
+  public static final MaterialStatsId WOOD = new MaterialStatsId(TConstruct.MOD_ID, "wood");
   public static final MaterialStatsId PLATE = new MaterialStatsId(TConstruct.MOD_ID, "plate");
   public static final MaterialStatsId SLIMESUIT = new MaterialStatsId(TConstruct.MOD_ID, "slimesuit");
 
@@ -58,12 +59,8 @@ public class TinkerPartSpriteProvider extends AbstractPartSpriteProvider {
     addSprite("armor/plate/shield_large_modifiers/tconstruct_embellishment_broken", PLATE);
 
     // staff
-    addSprite("staff/modifiers/tconstruct_embellishment", PLATE);
-    addSprite("staff/large_modifiers/tconstruct_embellishment", PLATE);
-    addSprite("staff/large_modifiers/sky/tconstruct_embellishment", PLATE);
-    addSprite("staff/large_modifiers/earth/tconstruct_embellishment", PLATE);
-    addSprite("staff/large_modifiers/ichor/tconstruct_embellishment", PLATE);
-    addSprite("staff/large_modifiers/ender/tconstruct_embellishment", PLATE);
+    addSprite("staff/modifiers/tconstruct_embellishment", WOOD);
+    addSprite("staff/large_modifiers/tconstruct_embellishment", WOOD);
 
     // slimesuit textures
     addSprite("armor/slime/skull_modifiers/tconstruct_embellishment", SLIMESUIT);

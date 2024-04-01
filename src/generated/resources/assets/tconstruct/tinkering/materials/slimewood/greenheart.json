@@ -12,7 +12,8 @@
       "tconstruct:extra",
       "tconstruct:repair_kit",
       "tconstruct:limb",
-      "tconstruct:grip"
+      "tconstruct:grip",
+      "tconstruct:wood"
     ],
     "transformer": {
       "type": "tconstruct:recolor_sprite",
