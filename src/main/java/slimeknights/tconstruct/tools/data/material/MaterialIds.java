@@ -105,14 +105,15 @@ public final class MaterialIds {
    */
   public static final MaterialVariantId basalt  = create(flint, "basalt");
   // wood
-  public static final MaterialVariantId oak     = create(wood, "oak");
-  public static final MaterialVariantId spruce  = create(wood, "spruce");
-  public static final MaterialVariantId birch   = create(wood, "birch");
-  public static final MaterialVariantId jungle  = create(wood, "jungle");
-  public static final MaterialVariantId acacia  = create(wood, "acacia");
-  public static final MaterialVariantId darkOak = create(wood, "dark_oak");
-  public static final MaterialVariantId crimson = create(wood, "crimson");
-  public static final MaterialVariantId warped  = create(wood, "warped");
+  public static final MaterialVariantId oak      = create(wood, "oak");
+  public static final MaterialVariantId spruce   = create(wood, "spruce");
+  public static final MaterialVariantId birch    = create(wood, "birch");
+  public static final MaterialVariantId jungle   = create(wood, "jungle");
+  public static final MaterialVariantId acacia   = create(wood, "acacia");
+  public static final MaterialVariantId darkOak  = create(wood, "dark_oak");
+  public static final MaterialVariantId mangrove = create(wood, "mangrove");
+  public static final MaterialVariantId crimson  = create(wood, "crimson");
+  public static final MaterialVariantId warped   = create(wood, "warped");
   // stone
   public static final MaterialVariantId stone      = create(rock, "stone");
   public static final MaterialVariantId andesite   = create(rock, "andesite");

@@ -1412,6 +1412,7 @@
   "material.tconstruct.wood.jungle":   "Jungle Wood",
   "material.tconstruct.wood.acacia":   "Acacia Wood",
   "material.tconstruct.wood.dark_oak": "Dark Oak Wood",
+  "material.tconstruct.wood.mangrove": "Mangrove Wood",
   "material.tconstruct.wood.crimson":  "Crimson Hyphae",
   "material.tconstruct.wood.warped":   "Warped Hyphae",
   "material.tconstruct.wood.format": "Wooden %s",

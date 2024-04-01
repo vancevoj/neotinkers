@@ -88,6 +88,10 @@ public class TinkerMaterialSpriteProvider extends AbstractMaterialSpriteProvider
       .meleeHarvest().ranged()
       .fallbacks("wood", "stick", "primitive")
       .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF504B40).addARGB(102, 0xFF585349).addARGB(140, 0xFF696259).addARGB(178, 0xFF7B7368).addARGB(216, 0xFF8D8477).addARGB(255, 0xFF998F82).build());
+    buildMaterial(MaterialIds.mangrove)
+      .meleeHarvest().ranged()
+      .fallbacks("wood", "stick", "primitive")
+      .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF5D1C1E).addARGB(102, 0xFF642423).addARGB(140, 0xFF6F2A2D).addARGB(178, 0xFF773934).addARGB(216, 0xFF7F4234).addARGB(255, 0xFF8B4D3A).build());
     buildMaterial(MaterialIds.crimson)
       .meleeHarvest().ranged()
       .fallbacks("wood", "stick", "primitive")
