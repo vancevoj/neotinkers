@@ -165,18 +165,18 @@ public abstract class AbstractMaterialContent extends PageContent {
     int left = rightSide ? 0 : col_margin;
 
     int y = top;
-    int x = left + 5;
-    int w = BookScreen.PAGE_WIDTH / 2 - 5;
+    int x = left + 2;
+    int w = BookScreen.PAGE_WIDTH / 2 - 10;
 
     // first two types, typically longer
     MaterialId material = materialVariant.getId();
     y = Math.max(
       this.addStatsDisplay(x - 3,          y, w, list, material, getStatType(0)),
-      this.addStatsDisplay(x + w - 3, y, w, list, material, getStatType(1)));
+      this.addStatsDisplay(x + w, y, w, list, material, getStatType(1)));
     // next two, shorter
     y = Math.max(
-      this.addStatsDisplay(x - 3,          y, w, list, material, getStatType(2)),
-      this.addStatsDisplay(x + w - 3, y, w, list, material, getStatType(3)));
+      this.addStatsDisplay(x,          y, w, list, material, getStatType(2)),
+      this.addStatsDisplay(x + w, y, w, list, material, getStatType(3)));
 
     // inspirational quote, or boring description text
     String textKey = getTextKey(material);
