@@ -34,7 +34,7 @@ public class PartBuilderContainerMenu extends TabbedContainerMenu<PartBuilderBlo
       this.addSlot(this.outputSlot = new LazyResultSlot(tile.getCraftingResult(), 148, 33));
       // inputs
       this.addSlot(this.patternSlot = new PatternSlot(tile, 8, 34));
-      this.addSlot(this.inputSlot = new PartBuilderSlot(tile, PartBuilderBlockEntity.MATERIAL_SLOT, 29, 34));
+      this.addSlot(this.inputSlot = new MaterialSlot(tile, PartBuilderBlockEntity.MATERIAL_SLOT, 29, 34));
 
       // other inventories
       this.addChestSideInventory();
@@ -93,6 +93,19 @@ public class PartBuilderContainerMenu extends TabbedContainerMenu<PartBuilderBlo
     public void setChanged() {
       craftResult.clearContent();
       super.setChanged();
+    }
+  }
+
+  /** Slot for the material, which wants to force a screen update */
+  private class MaterialSlot extends PartBuilderSlot {
+    public MaterialSlot(PartBuilderBlockEntity tile, int index, int xPosition, int yPosition) {
+      super(tile, index, xPosition, yPosition);
+    }
+
+    @Override
+    public void setChanged() {
+      super.setChanged();
+      updateScreen(); // no other good way to detect stack size decreasing, e.g. on right click
     }
   }
 

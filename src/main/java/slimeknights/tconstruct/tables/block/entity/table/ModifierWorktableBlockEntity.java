@@ -114,12 +114,6 @@ public class ModifierWorktableBlockEntity extends RetexturedTableBlockEntity imp
     return selectedModifierIndex;
   }
 
-  private void syncRecipe() {
-    if (level != null && !level.isClientSide) {
-      syncToRelevantPlayers(this::syncScreen);
-    }
-  }
-
   /** Updates the current recipe */
   public IModifierWorktableRecipe updateRecipe(IModifierWorktableRecipe recipe) {
     lastRecipe = recipe;

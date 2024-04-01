@@ -141,7 +141,7 @@ public class TinkerStationBlockEntity extends RetexturedTableBlockEntity impleme
       }
       // recipe will sync screen, so only need to call it when not syncing the recipe
       if (needsSync) {
-        this.syncToRelevantPlayers(this::syncScreen);
+        syncScreenToRelevantPlayers();
       }
     }
     // client side only needs to update result, server syncs message elsewhere

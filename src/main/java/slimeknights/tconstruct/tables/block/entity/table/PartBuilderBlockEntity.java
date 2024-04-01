@@ -164,8 +164,8 @@ public class PartBuilderBlockEntity extends RetexturedTableBlockEntity implement
     this.selectedPatternIndex = -2;
     this.craftingResult.clearContent();
     // update screen display
-    if (refreshRecipeList && level != null && !level.isClientSide) {
-      syncToRelevantPlayers(this::syncScreen);
+    if (refreshRecipeList) {
+      syncScreenToRelevantPlayers();
     }
   }
 
@@ -210,8 +210,10 @@ public class PartBuilderBlockEntity extends RetexturedTableBlockEntity implement
         this.inventoryWrapper.refreshMaterial();
         refresh(true);
         // if size changed, we are still the same material but might no longer have enough
-      } else if (original.getCount() != stack.getCount()) {
+        // same stack calling this method typically indicates a size change, stacks being mutable is annoying
+      } else if (original.getCount() != stack.getCount() || original == stack) {
         this.craftingResult.clearContent();
+        syncScreenToRelevantPlayers();
       }
       // any other slot, only an item change means update
     } else if (original.getItem() != stack.getItem()) {
@@ -288,8 +290,6 @@ public class PartBuilderBlockEntity extends RetexturedTableBlockEntity implement
     }
 
     // sync display, mainly for the material value
-    if (level != null && !level.isClientSide) {
-      syncToRelevantPlayers(this::syncScreen);
-    }
+    syncScreenToRelevantPlayers();
   }
 }
