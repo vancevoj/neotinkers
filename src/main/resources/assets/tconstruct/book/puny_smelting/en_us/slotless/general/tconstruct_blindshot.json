@@ -7,7 +7,7 @@
   ],
   "effects": [
     "Decreases accuracy of fired projectiles",
-	"Multiple levels, each level decreases drawspeed further",
-	"Slotless"
+    "Multiple levels, each level decreases accuracy further",
+    "Slotless"
   ]
 }
