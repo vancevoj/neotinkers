@@ -1,5 +1,5 @@
 name: 1.16 Issue Report
-description: Report an issue with the 1.16 beta of Minecraft
+description: Report an issue with 1.16, currently nearing end of support.
 labels: [1.16, Bug, Unreviewed]
 body:
   - type: markdown
