@@ -19,10 +19,7 @@
     }
   ],
   "level": 1,
-  "result": {
-    "level": 1,
-    "name": "tconstruct:flinging"
-  },
+  "result": "tconstruct:flinging",
   "slots": {
     "abilities": 1
   },

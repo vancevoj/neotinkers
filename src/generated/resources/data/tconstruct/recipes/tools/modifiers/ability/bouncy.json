@@ -24,10 +24,7 @@
     }
   ],
   "level": 1,
-  "result": {
-    "level": 1,
-    "name": "tconstruct:bouncy"
-  },
+  "result": "tconstruct:bouncy",
   "slots": {
     "abilities": 1
   },

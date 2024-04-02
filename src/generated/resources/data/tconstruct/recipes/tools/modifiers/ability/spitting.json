@@ -20,10 +20,7 @@
       "tag": "forge:ingots/copper"
     }
   ],
-  "result": {
-    "level": 1,
-    "name": "tconstruct:spitting"
-  },
+  "result": "tconstruct:spitting",
   "slots": {
     "abilities": 1
   },

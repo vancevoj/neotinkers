@@ -19,10 +19,7 @@
     }
   ],
   "level": 3,
-  "result": {
-    "level": 1,
-    "name": "tconstruct:luck"
-  },
+  "result": "tconstruct:luck",
   "tools": [
     {
       "tag": "tconstruct:modifiable/melee/weapon"

@@ -18,10 +18,7 @@
       "tag": "forge:slimeball/ichor"
     }
   ],
-  "result": {
-    "level": 1,
-    "name": "tconstruct:multishot"
-  },
+  "result": "tconstruct:multishot",
   "slots": {
     "abilities": 1
   },

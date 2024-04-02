@@ -33,10 +33,7 @@
       "tag": "forge:ingots/copper"
     }
   ],
-  "result": {
-    "level": 1,
-    "name": "tconstruct:spilling"
-  },
+  "result": "tconstruct:spilling",
   "slots": {
     "abilities": 1
   },

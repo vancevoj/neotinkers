@@ -15,10 +15,7 @@
   "level": {
     "max": 4
   },
-  "result": {
-    "level": 1,
-    "name": "tconstruct:impaling"
-  },
+  "result": "tconstruct:impaling",
   "slots": {
     "upgrades": 1
   },

@@ -23,10 +23,7 @@
     }
   ],
   "level": 1,
-  "result": {
-    "level": 1,
-    "name": "tconstruct:plowing"
-  },
+  "result": "tconstruct:plowing",
   "slots": {
     "abilities": 1
   },

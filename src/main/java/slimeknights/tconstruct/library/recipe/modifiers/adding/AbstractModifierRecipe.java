@@ -15,6 +15,7 @@ import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.json.IntRange;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierId;
+import slimeknights.tconstruct.library.modifiers.util.LazyModifier;
 import slimeknights.tconstruct.library.recipe.RecipeResult;
 import slimeknights.tconstruct.library.recipe.modifiers.ModifierRecipeLookup;
 import slimeknights.tconstruct.library.recipe.tinkerstation.ITinkerStationContainer;
@@ -48,7 +49,7 @@ public abstract class AbstractModifierRecipe implements ITinkerStationRecipe, ID
   /* Fields */
   protected static final LoadableField<Ingredient,AbstractModifierRecipe> TOOLS_FIELD = IngredientLoadable.DISALLOW_EMPTY.requiredField("tools", r -> r.toolRequirement);
   protected static final LoadableField<Integer,AbstractModifierRecipe> MAX_TOOL_SIZE_FIELD = IntLoadable.FROM_ONE.defaultField("max_tool_size", ITinkerStationRecipe.DEFAULT_TOOL_STACK_SIZE, r -> r.maxToolSize);
-  protected static final LoadableField<ModifierEntry,AbstractModifierRecipe> RESULT_FIELD = ModifierEntry.LOADABLE.requiredField("result", r -> r.result);
+  protected static final LoadableField<ModifierId,AbstractModifierRecipe> RESULT_FIELD = ModifierId.PARSER.requiredField("result", r -> r.result.getId());
   protected static final LoadableField<IntRange,AbstractModifierRecipe> LEVEL_FIELD = ModifierEntry.VALID_LEVEL.defaultField("level", r -> r.level);
   protected static final LoadableField<SlotCount,AbstractModifierRecipe> SLOTS_FIELD = SlotCount.LOADABLE.nullableField("slots", r -> r.slots);
   protected static final LoadableField<Boolean,AbstractModifierRecipe> ALLOW_CRYSTAL_FIELD = BooleanLoadable.INSTANCE.defaultField("allow_crystal", true, r -> r.allowCrystal);
@@ -61,7 +62,7 @@ public abstract class AbstractModifierRecipe implements ITinkerStationRecipe, ID
   /** Max size of the tool for this modifier. If the tool size is smaller, the stack will reduce by less */
   protected final int maxToolSize;
   /** Modifier this recipe is adding */
-  protected final ModifierEntry result;
+  protected final LazyModifier result;
   /** Range of result levels that is valid on the tool */
   @Getter
   private final IntRange level;
@@ -73,15 +74,15 @@ public abstract class AbstractModifierRecipe implements ITinkerStationRecipe, ID
   protected final boolean allowCrystal;
 
   protected AbstractModifierRecipe(ResourceLocation id, Ingredient toolRequirement, int maxToolSize,
-                                   ModifierEntry result, IntRange level, @Nullable SlotCount slots, boolean allowCrystal) {
+                                   ModifierId result, IntRange level, @Nullable SlotCount slots, boolean allowCrystal) {
     this.id = id;
     this.toolRequirement = toolRequirement;
     this.maxToolSize = maxToolSize;
-    this.result = result;
+    this.result = new LazyModifier(result);
     this.level = level;
     this.slots = slots;
     this.allowCrystal = allowCrystal;
-    ModifierRecipeLookup.addRecipeModifier(SlotCount.type(slots), result.getLazyModifier());
+    ModifierRecipeLookup.addRecipeModifier(SlotCount.type(slots), this.result);
   }
 
   @Override
@@ -128,13 +129,8 @@ public abstract class AbstractModifierRecipe implements ITinkerStationRecipe, ID
   @Override
   public ModifierEntry getDisplayResult() {
     if (displayResult == null) {
-      // if the recipe has a minimum level of this modifier, add that min level to the display result
-      int min = this.level.min();
-      if (min > 1) {
-        displayResult = new ModifierEntry(result.getId(), result.getLevel() + min - 1);
-      } else {
-        displayResult = result;
-      }
+      // display result is just the min level result, means when a recipe is for Luck II, it displays as Luck II
+      displayResult = new ModifierEntry(result, this.level.min());
     }
     return displayResult;
   }
@@ -142,8 +138,8 @@ public abstract class AbstractModifierRecipe implements ITinkerStationRecipe, ID
   @Override
   public List<ItemStack> getToolWithoutModifier() {
     if (displayInputs == null) {
-      int min = level.min() - result.getLevel();
-      ModifierEntry existing = min > 0 ? new ModifierEntry(result.getId(), min) : null;
+      int min = level.min() - 1;
+      ModifierEntry existing = min > 0 ? new ModifierEntry(result, min) : null;
       ModifierEntry displayResult = getDisplayResult();
       displayInputs = getToolInputs().stream().map(stack -> withModifiers(stack, modifiersForResult(displayResult, existing))).collect(Collectors.toList());
     }
@@ -163,7 +159,7 @@ public abstract class AbstractModifierRecipe implements ITinkerStationRecipe, ID
   /* Helpers */
 
   /** Checks if the inventory contains a crystal */
-  public static boolean matchesCrystal(ITinkerStationContainer container, ModifierEntry match) {
+  public static boolean matchesCrystal(ITinkerStationContainer container, ModifierId match) {
     boolean found = false;
     for (int i = 0; i < container.getInputCount(); i++) {
       ItemStack stack = container.getInput(i);
@@ -175,8 +171,8 @@ public abstract class AbstractModifierRecipe implements ITinkerStationRecipe, ID
         }
         // found a crystal, make sure we have enough and the ID matches
         ModifierId modifier = ModifierCrystalItem.getModifier(stack);
-        if (!match.getId().equals(modifier) || stack.getCount() < match.getLevel()) {
-          return found;
+        if (!match.equals(modifier)) {
+          return false;
         }
         found = true;
       }
@@ -186,7 +182,7 @@ public abstract class AbstractModifierRecipe implements ITinkerStationRecipe, ID
 
   /** Checks if the inventory contains a crystal */
   protected boolean matchesCrystal(ITinkerStationContainer container) {
-    return allowCrystal && matchesCrystal(container, result);
+    return allowCrystal && matchesCrystal(container, result.getId());
   }
 
 
@@ -218,11 +214,11 @@ public abstract class AbstractModifierRecipe implements ITinkerStationRecipe, ID
   @Nullable
   protected Component validateLevel(int resultLevel) {
     if (resultLevel < this.level.min()) {
-      return Component.translatable(KEY_MIN_LEVEL, result.getModifier().getDisplayName(this.level.min() - result.getLevel()));
+      return Component.translatable(KEY_MIN_LEVEL, result.get().getDisplayName(this.level.min() - 1));
     }
     // max level of modifier
     if (resultLevel > this.level.max()) {
-      return Component.translatable(KEY_MAX_LEVEL, result.getModifier().getDisplayName(), this.level.max());
+      return Component.translatable(KEY_MAX_LEVEL, result.get().getDisplayName(), this.level.max());
     }
     return null;
   }
@@ -270,7 +266,7 @@ public abstract class AbstractModifierRecipe implements ITinkerStationRecipe, ID
    */
   @Nullable
   protected Component validatePrerequisites(IToolStackView tool) {
-    return validatePrerequisites(tool, tool.getModifierLevel(result.getId()) + result.getLevel());
+    return validatePrerequisites(tool, tool.getModifierLevel(result.getId()) + 1);
   }
 
   @Override

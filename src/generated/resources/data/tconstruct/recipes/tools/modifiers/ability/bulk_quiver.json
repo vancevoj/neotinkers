@@ -18,10 +18,7 @@
       "item": "tconstruct:sky_slime_vine"
     }
   ],
-  "result": {
-    "level": 1,
-    "name": "tconstruct:bulk_quiver"
-  },
+  "result": "tconstruct:bulk_quiver",
   "slots": {
     "abilities": 1
   },

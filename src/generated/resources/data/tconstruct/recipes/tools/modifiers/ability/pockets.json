@@ -18,10 +18,7 @@
       "item": "minecraft:leather"
     }
   ],
-  "result": {
-    "level": 1,
-    "name": "tconstruct:pockets"
-  },
+  "result": "tconstruct:pockets",
   "slots": {
     "abilities": 1
   },

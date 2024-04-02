@@ -10,10 +10,7 @@
     }
   ],
   "level": 1,
-  "result": {
-    "level": 1,
-    "name": "tconstruct:firestarter"
-  },
+  "result": "tconstruct:firestarter",
   "slots": {
     "abilities": 1
   },

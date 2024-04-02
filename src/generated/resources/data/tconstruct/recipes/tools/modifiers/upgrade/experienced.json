@@ -15,10 +15,7 @@
   "level": {
     "max": 5
   },
-  "result": {
-    "level": 1,
-    "name": "tconstruct:experienced"
-  },
+  "result": "tconstruct:experienced",
   "slots": {
     "upgrades": 1
   },

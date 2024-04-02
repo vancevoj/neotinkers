@@ -18,17 +18,8 @@ import java.util.function.Consumer;
 @SuppressWarnings("unused")
 public class ModifierRecipeBuilder extends AbstractModifierRecipeBuilder<ModifierRecipeBuilder> {
   protected final List<SizedIngredient> inputs = new ArrayList<>();
-  protected ModifierRecipeBuilder(ModifierEntry result) {
+  protected ModifierRecipeBuilder(ModifierId result) {
     super(result);
-  }
-
-  /**
-   * Creates a new recipe for multiple levels of a modifier
-   * @param modifier  Modifier
-   * @return  Recipe for multiple levels of the modifier
-   */
-  public static ModifierRecipeBuilder modifier(ModifierEntry modifier) {
-    return new ModifierRecipeBuilder(modifier);
   }
 
   /**
@@ -37,7 +28,7 @@ public class ModifierRecipeBuilder extends AbstractModifierRecipeBuilder<Modifie
    * @return  Recipe for 1 level of the modifier
    */
   public static ModifierRecipeBuilder modifier(ModifierId modifier) {
-    return modifier(new ModifierEntry(modifier, 1));
+    return new ModifierRecipeBuilder(modifier);
   }
 
   /**

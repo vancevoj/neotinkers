@@ -13,10 +13,7 @@
     }
   ],
   "level": 1,
-  "result": {
-    "level": 1,
-    "name": "tconstruct:the_one_probe"
-  },
+  "result": "tconstruct:the_one_probe",
   "slots": {
     "upgrades": 1
   },

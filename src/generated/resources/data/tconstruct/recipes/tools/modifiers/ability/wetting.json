@@ -19,10 +19,7 @@
       "tag": "forge:ingots/copper"
     }
   ],
-  "result": {
-    "level": 1,
-    "name": "tconstruct:wetting"
-  },
+  "result": "tconstruct:wetting",
   "slots": {
     "abilities": 1
   },

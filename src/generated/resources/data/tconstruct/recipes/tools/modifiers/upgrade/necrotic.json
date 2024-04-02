@@ -15,10 +15,7 @@
   "level": {
     "max": 5
   },
-  "result": {
-    "level": 1,
-    "name": "tconstruct:necrotic"
-  },
+  "result": "tconstruct:necrotic",
   "slots": {
     "upgrades": 1
   },

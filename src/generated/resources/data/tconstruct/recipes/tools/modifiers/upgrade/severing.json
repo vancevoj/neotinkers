@@ -18,10 +18,7 @@
   "level": {
     "max": 3
   },
-  "result": {
-    "level": 1,
-    "name": "tconstruct:severing"
-  },
+  "result": "tconstruct:severing",
   "slots": {
     "upgrades": 1
   },

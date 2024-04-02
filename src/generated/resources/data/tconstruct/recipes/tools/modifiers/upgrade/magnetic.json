@@ -9,10 +9,7 @@
   "level": {
     "max": 5
   },
-  "result": {
-    "level": 1,
-    "name": "tconstruct:magnetic"
-  },
+  "result": "tconstruct:magnetic",
   "slots": {
     "upgrades": 1
   },

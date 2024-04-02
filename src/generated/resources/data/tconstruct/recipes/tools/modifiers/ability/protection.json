@@ -24,10 +24,7 @@
     }
   ],
   "level": 1,
-  "result": {
-    "level": 1,
-    "name": "tconstruct:protection"
-  },
+  "result": "tconstruct:protection",
   "slots": {
     "abilities": 1
   },

@@ -9,10 +9,7 @@
     "max": 5
   },
   "needed_per_level": 20,
-  "result": {
-    "level": 1,
-    "name": "tconstruct:reinforced"
-  },
+  "result": "tconstruct:reinforced",
   "slots": {
     "upgrades": 1
   },

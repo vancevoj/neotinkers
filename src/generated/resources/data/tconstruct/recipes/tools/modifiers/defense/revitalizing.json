@@ -9,10 +9,7 @@
     "max": 5
   },
   "needed_per_level": 2,
-  "result": {
-    "level": 1,
-    "name": "tconstruct:revitalizing"
-  },
+  "result": "tconstruct:revitalizing",
   "slots": {
     "defense": 1
   },

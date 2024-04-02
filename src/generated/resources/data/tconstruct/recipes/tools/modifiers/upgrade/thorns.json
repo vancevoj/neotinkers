@@ -9,10 +9,7 @@
     "max": 3
   },
   "needed_per_level": 25,
-  "result": {
-    "level": 1,
-    "name": "tconstruct:thorns"
-  },
+  "result": "tconstruct:thorns",
   "slots": {
     "upgrades": 1
   },

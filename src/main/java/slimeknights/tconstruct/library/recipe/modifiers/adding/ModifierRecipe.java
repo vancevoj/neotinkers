@@ -12,7 +12,7 @@ import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.recipe.ingredient.SizedIngredient;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.json.IntRange;
-import slimeknights.tconstruct.library.modifiers.ModifierEntry;
+import slimeknights.tconstruct.library.modifiers.ModifierId;
 import slimeknights.tconstruct.library.recipe.ITinkerableContainer;
 import slimeknights.tconstruct.library.recipe.RecipeResult;
 import slimeknights.tconstruct.library.recipe.tinkerstation.IMutableTinkerStationContainer;
@@ -41,7 +41,7 @@ public class ModifierRecipe extends AbstractModifierRecipe {
    */
   protected final List<SizedIngredient> inputs;
 
-  public ModifierRecipe(ResourceLocation id, List<SizedIngredient> inputs, Ingredient toolRequirement, int maxToolSize, ModifierEntry result, IntRange level, @Nullable SlotCount slots, boolean allowCrystal) {
+  public ModifierRecipe(ResourceLocation id, List<SizedIngredient> inputs, Ingredient toolRequirement, int maxToolSize, ModifierId result, IntRange level, @Nullable SlotCount slots, boolean allowCrystal) {
     super(id, toolRequirement, maxToolSize, result, level, slots, allowCrystal);
     this.inputs = inputs;
   }
@@ -147,7 +147,7 @@ public class ModifierRecipe extends AbstractModifierRecipe {
     }
 
     // add modifier
-    tool.addModifier(result.getId(), result.getLevel());
+    tool.addModifier(result.getId(), 1);
 
     // ensure no modifier problems
     Component toolValidation = tool.tryValidate();

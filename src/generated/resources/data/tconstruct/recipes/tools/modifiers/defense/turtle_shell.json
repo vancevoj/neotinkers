@@ -6,10 +6,7 @@
     "item": "minecraft:scute"
   },
   "needed_per_level": 5,
-  "result": {
-    "level": 1,
-    "name": "tconstruct:turtle_shell"
-  },
+  "result": "tconstruct:turtle_shell",
   "slots": {
     "defense": 1
   },

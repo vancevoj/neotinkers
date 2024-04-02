@@ -15,10 +15,7 @@
     }
   ],
   "level": 1,
-  "result": {
-    "level": 1,
-    "name": "tconstruct:pathing"
-  },
+  "result": "tconstruct:pathing",
   "slots": {
     "abilities": 1
   },

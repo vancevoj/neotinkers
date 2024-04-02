@@ -12,10 +12,7 @@
   "level": {
     "max": 2
   },
-  "result": {
-    "level": 1,
-    "name": "tconstruct:ricochet"
-  },
+  "result": "tconstruct:ricochet",
   "slots": {
     "upgrades": 1
   },

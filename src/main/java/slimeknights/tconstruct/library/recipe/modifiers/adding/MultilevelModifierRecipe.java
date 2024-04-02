@@ -40,15 +40,13 @@ public class MultilevelModifierRecipe extends ModifierRecipe implements IMultiRe
   public static final RecordLoadable<MultilevelModifierRecipe> LOADER = RecordLoadable.create(
     ContextKey.ID.requiredField(),
     SizedIngredient.LOADABLE.list(0).defaultField("inputs", List.of(), r -> r.inputs),
-    TOOLS_FIELD, MAX_TOOL_SIZE_FIELD,
-    ModifierId.PARSER.requiredField("result", r -> r.result.getId()),
-    ALLOW_CRYSTAL_FIELD,
+    TOOLS_FIELD, MAX_TOOL_SIZE_FIELD, RESULT_FIELD, ALLOW_CRYSTAL_FIELD,
     LevelEntry.LOADABLE.list(1).requiredField("levels", r -> r.levels),
     MultilevelModifierRecipe::new).xmap(VALIDATOR, VALIDATOR);
 
   private final List<LevelEntry> levels;
   protected MultilevelModifierRecipe(ResourceLocation id, List<SizedIngredient> inputs, Ingredient toolRequirement, int maxToolSize, ModifierId result, boolean allowCrystal, List<LevelEntry> levels) {
-    super(id, inputs, toolRequirement, maxToolSize, new ModifierEntry(result, 1), levels.get(0).level, levels.get(0).slots(), allowCrystal);
+    super(id, inputs, toolRequirement, maxToolSize, result, levels.get(0).level, levels.get(0).slots(), allowCrystal);
     this.levels = levels;
   }
 
@@ -58,7 +56,7 @@ public class MultilevelModifierRecipe extends ModifierRecipe implements IMultiRe
     ToolStack tool = ToolStack.from(tinkerable);
 
     // next few checks depend on the current level to decide
-    int newLevel = tool.getModifierLevel(result.getModifier()) + 1;
+    int newLevel = tool.getModifierLevel(result.getId()) + 1;
     LevelEntry levelEntry = null;
     for (LevelEntry check : levels) {
       if (check.matches(newLevel)) {
@@ -71,9 +69,9 @@ public class MultilevelModifierRecipe extends ModifierRecipe implements IMultiRe
       // if the level is below the minimum, then display a different error
       int min = levels.get(0).level.min();
       if (newLevel < min) {
-        return RecipeResult.failure(KEY_MIN_LEVEL, result.getModifier().getDisplayName(min - 1));
+        return RecipeResult.failure(KEY_MIN_LEVEL, result.get().getDisplayName(min - 1));
       }
-      return RecipeResult.failure(KEY_MAX_LEVEL, result.getModifier().getDisplayName(), levels.get(levels.size() - 1).level.max());
+      return RecipeResult.failure(KEY_MAX_LEVEL, result.get().getDisplayName(), levels.get(levels.size() - 1).level.max());
     }
 
     // found our level entry, time to validate slots
@@ -91,7 +89,7 @@ public class MultilevelModifierRecipe extends ModifierRecipe implements IMultiRe
     }
 
     // add modifier
-    tool.addModifier(result.getId(), result.getLevel());
+    tool.addModifier(result.getId(), 1);
 
     // ensure no modifier problems
     Component toolValidation = tool.tryValidate();
@@ -123,6 +121,7 @@ public class MultilevelModifierRecipe extends ModifierRecipe implements IMultiRe
       // this instance is a proper display recipe for the first level entry, for the rest build display instances with unique requirements keys
       List<ItemStack> toolWithoutModifier = getToolWithoutModifier();
       List<ItemStack> toolWithModifier = getToolWithModifier();
+      ModifierEntry result = getDisplayResult();
       displayRecipes = Streams.concat(
         Stream.of(this),
         levels.stream().skip(1).map(levelEntry -> new DisplayModifierRecipe(inputs, toolWithoutModifier, toolWithModifier, result, levelEntry.level, levelEntry.slots))

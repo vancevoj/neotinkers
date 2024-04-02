@@ -21,10 +21,7 @@
   "level": {
     "max": 2
   },
-  "result": {
-    "level": 1,
-    "name": "tconstruct:trick_quiver"
-  },
+  "result": "tconstruct:trick_quiver",
   "slots": {
     "abilities": 1
   },

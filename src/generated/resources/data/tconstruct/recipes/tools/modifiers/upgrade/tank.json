@@ -7,10 +7,7 @@
       "tag": "tconstruct:tanks"
     }
   ],
-  "result": {
-    "level": 1,
-    "name": "tconstruct:tank"
-  },
+  "result": "tconstruct:tank",
   "slots": {
     "upgrades": 1
   },

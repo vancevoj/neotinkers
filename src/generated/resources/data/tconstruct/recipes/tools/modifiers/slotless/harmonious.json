@@ -7,10 +7,7 @@
     }
   ],
   "level": 1,
-  "result": {
-    "level": 1,
-    "name": "tconstruct:harmonious"
-  },
+  "result": "tconstruct:harmonious",
   "tools": {
     "tag": "tconstruct:modifiable"
   }

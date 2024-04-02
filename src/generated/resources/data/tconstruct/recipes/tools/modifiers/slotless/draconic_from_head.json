@@ -7,10 +7,7 @@
     }
   ],
   "level": 1,
-  "result": {
-    "level": 1,
-    "name": "tconstruct:draconic"
-  },
+  "result": "tconstruct:draconic",
   "tools": {
     "tag": "tconstruct:modifiable"
   }

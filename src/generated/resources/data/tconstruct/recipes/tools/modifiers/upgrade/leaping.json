@@ -9,10 +9,7 @@
     "max": 2
   },
   "needed_per_level": 36,
-  "result": {
-    "level": 1,
-    "name": "tconstruct:leaping"
-  },
+  "result": "tconstruct:leaping",
   "slots": {
     "upgrades": 1
   },

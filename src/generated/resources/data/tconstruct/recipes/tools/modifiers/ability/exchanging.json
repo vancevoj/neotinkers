@@ -19,10 +19,7 @@
     }
   ],
   "level": 1,
-  "result": {
-    "level": 1,
-    "name": "tconstruct:exchanging"
-  },
+  "result": "tconstruct:exchanging",
   "slots": {
     "abilities": 1
   },

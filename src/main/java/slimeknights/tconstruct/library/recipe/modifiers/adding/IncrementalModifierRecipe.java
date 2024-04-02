@@ -16,7 +16,6 @@ import slimeknights.mantle.data.loadable.primitive.IntLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.recipe.helper.ItemOutput;
 import slimeknights.tconstruct.library.json.IntRange;
-import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierId;
 import slimeknights.tconstruct.library.modifiers.impl.IncrementalModifier;
 import slimeknights.tconstruct.library.recipe.ITinkerableContainer;
@@ -58,13 +57,13 @@ public class IncrementalModifierRecipe extends AbstractModifierRecipe {
   /** Item stack to use when a partial amount is leftover */
   private final ItemOutput leftover;
 
-  public IncrementalModifierRecipe(ResourceLocation id, Ingredient input, int amountPerInput, int neededPerLevel, Ingredient toolRequirement, int maxToolSize, ModifierEntry result, IntRange level, @Nullable SlotCount slots, ItemOutput leftover, boolean allowCrystal) {
+  public IncrementalModifierRecipe(ResourceLocation id, Ingredient input, int amountPerInput, int neededPerLevel, Ingredient toolRequirement, int maxToolSize, ModifierId result, IntRange level, @Nullable SlotCount slots, ItemOutput leftover, boolean allowCrystal) {
     super(id, toolRequirement, maxToolSize, result, level, slots, allowCrystal);
     this.input = input;
     this.amountPerInput = amountPerInput;
     this.neededPerLevel = neededPerLevel;
     this.leftover = leftover;
-    ModifierRecipeLookup.setNeededPerLevel(result.getId(), neededPerLevel);
+    ModifierRecipeLookup.setNeededPerLevel(result, neededPerLevel);
   }
 
   @Override
@@ -121,7 +120,7 @@ public class IncrementalModifierRecipe extends AbstractModifierRecipe {
         amount = Math.min(available + current - neededPerLevel, neededPerLevel);
       }
       IncrementalModifier.setAmount(persistentData, modifier, amount);
-      tool.addModifier(result.getId(), result.getLevel());
+      tool.addModifier(result.getId(), 1);
     } else {
       // boost original based on the new level, and rebuild data so stats adjust
       IncrementalModifier.setAmount(persistentData, modifier, Math.min(current + available, neededPerLevel));
@@ -161,7 +160,7 @@ public class IncrementalModifierRecipe extends AbstractModifierRecipe {
     // add in extra need if we increased levels
     int levelChange = resultTool.getModifierLevel(modifier) - originalLevel;
     if (levelChange > 0) {
-      needed += levelChange * neededPerLevel / this.result.getLevel();
+      needed += levelChange * neededPerLevel;
     }
     // subtract the inputs
     if (needed > 0) {

@@ -15,10 +15,7 @@
     }
   ],
   "level": 1,
-  "result": {
-    "level": 1,
-    "name": "tconstruct:tilling"
-  },
+  "result": "tconstruct:tilling",
   "slots": {
     "abilities": 1
   },

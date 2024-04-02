@@ -10,10 +10,7 @@
     }
   ],
   "level": 1,
-  "result": {
-    "level": 1,
-    "name": "tconstruct:fireprimer"
-  },
+  "result": "tconstruct:fireprimer",
   "slots": {
     "upgrades": 1
   },

@@ -9,10 +9,7 @@
     "max": 4
   },
   "needed_per_level": 45,
-  "result": {
-    "level": 1,
-    "name": "tconstruct:quick_charge"
-  },
+  "result": "tconstruct:quick_charge",
   "slots": {
     "upgrades": 1
   },

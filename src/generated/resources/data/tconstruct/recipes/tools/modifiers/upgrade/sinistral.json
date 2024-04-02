@@ -19,10 +19,7 @@
     }
   ],
   "level": 1,
-  "result": {
-    "level": 1,
-    "name": "tconstruct:sinistral"
-  },
+  "result": "tconstruct:sinistral",
   "slots": {
     "upgrades": 1
   },

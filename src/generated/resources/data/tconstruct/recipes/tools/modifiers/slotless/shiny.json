@@ -7,10 +7,7 @@
     }
   ],
   "level": 1,
-  "result": {
-    "level": 1,
-    "name": "tconstruct:shiny"
-  },
+  "result": "tconstruct:shiny",
   "tools": {
     "tag": "tconstruct:modifiable"
   }

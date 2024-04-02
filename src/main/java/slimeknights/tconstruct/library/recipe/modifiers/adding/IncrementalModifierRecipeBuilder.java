@@ -22,17 +22,8 @@ public class IncrementalModifierRecipeBuilder extends AbstractModifierRecipeBuil
   private int neededPerLevel;
   private ItemOutput leftover = ItemOutput.EMPTY;
 
-  protected IncrementalModifierRecipeBuilder(ModifierEntry result) {
+  protected IncrementalModifierRecipeBuilder(ModifierId result) {
     super(result);
-  }
-
-  /**
-   * Creates a new recipe for multiple levels of a modifier
-   * @param modifier  Modifier
-   * @return  Recipe for multiple levels of the modifier
-   */
-  public static IncrementalModifierRecipeBuilder modifier(ModifierEntry modifier) {
-    return new IncrementalModifierRecipeBuilder(modifier);
   }
 
   /**
@@ -41,7 +32,7 @@ public class IncrementalModifierRecipeBuilder extends AbstractModifierRecipeBuil
    * @return  Recipe for 1 level of the modifier
    */
   public static IncrementalModifierRecipeBuilder modifier(ModifierId modifier) {
-    return modifier(new ModifierEntry(modifier, 1));
+    return new IncrementalModifierRecipeBuilder(modifier);
   }
 
   /**

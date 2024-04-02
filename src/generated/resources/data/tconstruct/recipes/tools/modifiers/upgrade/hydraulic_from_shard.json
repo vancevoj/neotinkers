@@ -9,10 +9,7 @@
     "max": 5
   },
   "needed_per_level": 36,
-  "result": {
-    "level": 1,
-    "name": "tconstruct:hydraulic"
-  },
+  "result": "tconstruct:hydraulic",
   "slots": {
     "upgrades": 1
   },

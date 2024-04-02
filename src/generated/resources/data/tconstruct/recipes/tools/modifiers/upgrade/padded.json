@@ -15,10 +15,7 @@
   "level": {
     "max": 3
   },
-  "result": {
-    "level": 1,
-    "name": "tconstruct:padded"
-  },
+  "result": "tconstruct:padded",
   "slots": {
     "upgrades": 1
   },

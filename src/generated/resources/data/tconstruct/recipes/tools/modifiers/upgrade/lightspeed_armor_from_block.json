@@ -10,10 +10,7 @@
     "max": 3
   },
   "needed_per_level": 64,
-  "result": {
-    "level": 1,
-    "name": "tconstruct:lightspeed_armor"
-  },
+  "result": "tconstruct:lightspeed_armor",
   "slots": {
     "upgrades": 1
   },

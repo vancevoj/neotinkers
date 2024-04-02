@@ -9,10 +9,7 @@
     "max": 5
   },
   "needed_per_level": 25,
-  "result": {
-    "level": 1,
-    "name": "tconstruct:fiery"
-  },
+  "result": "tconstruct:fiery",
   "slots": {
     "upgrades": 1
   },

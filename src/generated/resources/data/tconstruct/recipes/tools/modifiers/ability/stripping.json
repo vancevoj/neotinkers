@@ -15,10 +15,7 @@
     }
   ],
   "level": 1,
-  "result": {
-    "level": 1,
-    "name": "tconstruct:stripping"
-  },
+  "result": "tconstruct:stripping",
   "slots": {
     "abilities": 1
   },

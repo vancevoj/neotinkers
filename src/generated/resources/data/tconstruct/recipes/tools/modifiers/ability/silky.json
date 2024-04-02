@@ -19,10 +19,7 @@
     }
   ],
   "level": 1,
-  "result": {
-    "level": 1,
-    "name": "tconstruct:silky"
-  },
+  "result": "tconstruct:silky",
   "slots": {
     "abilities": 1
   },

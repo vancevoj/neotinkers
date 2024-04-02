@@ -19,10 +19,7 @@
     }
   ],
   "level": 1,
-  "result": {
-    "level": 1,
-    "name": "tconstruct:bonking"
-  },
+  "result": "tconstruct:bonking",
   "slots": {
     "abilities": 1
   },

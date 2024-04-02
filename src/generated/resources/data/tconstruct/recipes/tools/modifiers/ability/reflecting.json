@@ -23,10 +23,7 @@
       "item": "tconstruct:earth_congealed_slime"
     }
   ],
-  "result": {
-    "level": 1,
-    "name": "tconstruct:reflecting"
-  },
+  "result": "tconstruct:reflecting",
   "slots": {
     "abilities": 1
   },

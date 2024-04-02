@@ -9,10 +9,7 @@
   "level": {
     "max": 3
   },
-  "result": {
-    "level": 1,
-    "name": "tconstruct:freezing"
-  },
+  "result": "tconstruct:freezing",
   "slots": {
     "upgrades": 1
   },

@@ -6,10 +6,7 @@
     "item": "minecraft:dirt"
   },
   "needed_per_level": 10,
-  "result": {
-    "level": 1,
-    "name": "tconstruct:blindshot"
-  },
+  "result": "tconstruct:blindshot",
   "tools": {
     "tag": "tconstruct:modifiable/ranged"
   }

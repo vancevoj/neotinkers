@@ -19,10 +19,7 @@
     }
   ],
   "level": 1,
-  "result": {
-    "level": 1,
-    "name": "tconstruct:dual_wielding"
-  },
+  "result": "tconstruct:dual_wielding",
   "slots": {
     "abilities": 1
   },

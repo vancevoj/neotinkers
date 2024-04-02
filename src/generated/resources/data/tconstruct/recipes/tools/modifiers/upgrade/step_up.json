@@ -21,10 +21,7 @@
   "level": {
     "max": 2
   },
-  "result": {
-    "level": 1,
-    "name": "tconstruct:step_up"
-  },
+  "result": "tconstruct:step_up",
   "slots": {
     "upgrades": 1
   },

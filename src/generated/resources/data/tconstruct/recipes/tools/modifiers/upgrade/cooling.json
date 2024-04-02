@@ -9,10 +9,7 @@
     "max": 5
   },
   "needed_per_level": 25,
-  "result": {
-    "level": 1,
-    "name": "tconstruct:cooling"
-  },
+  "result": "tconstruct:cooling",
   "slots": {
     "upgrades": 1
   },

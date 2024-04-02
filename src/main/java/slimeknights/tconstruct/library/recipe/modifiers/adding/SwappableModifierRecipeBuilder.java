@@ -2,7 +2,6 @@ package slimeknights.tconstruct.library.recipe.modifiers.adding;
 
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.resources.ResourceLocation;
-import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierId;
 import slimeknights.tconstruct.library.modifiers.util.LazyModifier;
 
@@ -12,7 +11,7 @@ import java.util.function.Consumer;
 public class SwappableModifierRecipeBuilder extends ModifierRecipeBuilder {
   private final String value;
   protected SwappableModifierRecipeBuilder(ModifierId modifier, String value) {
-    super(new ModifierEntry(modifier, 1));
+    super(modifier);
     this.value = value;
     // most variants do not want this as that will conflict, explicitly set it on the default if desired
     this.allowCrystal = false;
@@ -48,6 +47,6 @@ public class SwappableModifierRecipeBuilder extends ModifierRecipeBuilder {
       throw new IllegalStateException("Must have at least 1 input");
     }
     ResourceLocation advancementId = buildOptionalAdvancement(id, "modifiers");
-    consumer.accept(new LoadableFinishedRecipe<>(new SwappableModifierRecipe(id, inputs, tools, maxToolSize, result.getId(), value, slots, allowCrystal), SwappableModifierRecipe.LOADER, advancementId));
+    consumer.accept(new LoadableFinishedRecipe<>(new SwappableModifierRecipe(id, inputs, tools, maxToolSize, result, value, slots, allowCrystal), SwappableModifierRecipe.LOADER, advancementId));
   }
 }

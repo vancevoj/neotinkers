@@ -19,10 +19,7 @@
     }
   ],
   "level": 1,
-  "result": {
-    "level": 1,
-    "name": "tconstruct:autosmelt"
-  },
+  "result": "tconstruct:autosmelt",
   "slots": {
     "abilities": 1
   },

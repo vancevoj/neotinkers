@@ -6,10 +6,7 @@
     "item": "tconstruct:emerald_reinforcement"
   },
   "needed_per_level": 20,
-  "result": {
-    "level": 1,
-    "name": "tconstruct:blast_protection"
-  },
+  "result": "tconstruct:blast_protection",
   "slots": {
     "defense": 1
   },

@@ -13,10 +13,7 @@
     }
   ],
   "level": 1,
-  "result": {
-    "level": 1,
-    "name": "tconstruct:tool_belt"
-  },
+  "result": "tconstruct:tool_belt",
   "slots": {
     "abilities": 1
   },

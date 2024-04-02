@@ -10,7 +10,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
 import slimeknights.mantle.recipe.data.AbstractRecipeBuilder;
 import slimeknights.tconstruct.common.TinkerTags;
-import slimeknights.tconstruct.library.modifiers.ModifierEntry;
+import slimeknights.tconstruct.library.modifiers.ModifierId;
 import slimeknights.tconstruct.library.recipe.modifiers.ModifierSalvage;
 import slimeknights.tconstruct.library.recipe.tinkerstation.ITinkerStationRecipe;
 import slimeknights.tconstruct.library.tools.SlotType;
@@ -26,7 +26,7 @@ import static slimeknights.tconstruct.library.modifiers.ModifierEntry.VALID_LEVE
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class AbstractModifierRecipeBuilder<T extends AbstractModifierRecipeBuilder<T>> extends AbstractRecipeBuilder<T> {
   // shared
-  protected final ModifierEntry result;
+  protected final ModifierId result;
   protected Ingredient tools = Ingredient.of(TinkerTags.Items.MODIFIABLE);
   protected int maxToolSize = ITinkerStationRecipe.DEFAULT_TOOL_STACK_SIZE;
   @Nullable
@@ -153,7 +153,7 @@ public abstract class AbstractModifierRecipeBuilder<T extends AbstractModifierRe
 
   @Override
   public void save(Consumer<FinishedRecipe> consumer) {
-    save(consumer, result.getId());
+    save(consumer, result);
   }
 
   /**
@@ -172,6 +172,6 @@ public abstract class AbstractModifierRecipeBuilder<T extends AbstractModifierRe
 
   /** Makes the salvage recipe to save in {@link #saveSalvage(Consumer, ResourceLocation)} */
   protected ModifierSalvage makeSalvage(ResourceLocation id) {
-    return new ModifierSalvage(id, tools, maxToolSize, result.getId(), VALID_LEVEL.range(minLevel, useSalvageMax ? maxLevel : VALID_LEVEL.max()), slots);
+    return new ModifierSalvage(id, tools, maxToolSize, result, VALID_LEVEL.range(minLevel, useSalvageMax ? maxLevel : VALID_LEVEL.max()), slots);
   }
 }

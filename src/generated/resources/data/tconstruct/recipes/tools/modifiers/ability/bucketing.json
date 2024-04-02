@@ -33,10 +33,7 @@
     }
   ],
   "level": 1,
-  "result": {
-    "level": 1,
-    "name": "tconstruct:bucketing"
-  },
+  "result": "tconstruct:bucketing",
   "slots": {
     "abilities": 1
   },

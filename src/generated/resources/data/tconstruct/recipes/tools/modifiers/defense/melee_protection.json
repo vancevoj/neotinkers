@@ -6,10 +6,7 @@
     "item": "tconstruct:cobalt_reinforcement"
   },
   "needed_per_level": 20,
-  "result": {
-    "level": 1,
-    "name": "tconstruct:melee_protection"
-  },
+  "result": "tconstruct:melee_protection",
   "slots": {
     "defense": 1
   },

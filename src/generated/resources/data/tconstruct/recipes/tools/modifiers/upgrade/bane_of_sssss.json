@@ -9,10 +9,7 @@
     "max": 5
   },
   "needed_per_level": 15,
-  "result": {
-    "level": 1,
-    "name": "tconstruct:bane_of_sssss"
-  },
+  "result": "tconstruct:bane_of_sssss",
   "slots": {
     "upgrades": 1
   },

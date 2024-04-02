@@ -6,10 +6,7 @@
       "item": "minecraft:golden_apple"
     }
   ],
-  "result": {
-    "level": 1,
-    "name": "tconstruct:gilded"
-  },
+  "result": "tconstruct:gilded",
   "slots": {
     "abilities": 1
   },

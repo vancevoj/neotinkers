@@ -15,10 +15,7 @@
   "level": {
     "max": 3
   },
-  "result": {
-    "level": 1,
-    "name": "tconstruct:soulspeed"
-  },
+  "result": "tconstruct:soulspeed",
   "slots": {
     "upgrades": 1
   },

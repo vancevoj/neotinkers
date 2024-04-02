@@ -18,10 +18,7 @@
       "tag": "forge:slimeball/ichor"
     }
   ],
-  "result": {
-    "level": 1,
-    "name": "tconstruct:expanded"
-  },
+  "result": "tconstruct:expanded",
   "slots": {
     "abilities": 1
   },

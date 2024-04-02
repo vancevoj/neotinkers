@@ -12,10 +12,7 @@
   "level": {
     "max": 5
   },
-  "result": {
-    "level": 1,
-    "name": "tconstruct:punch"
-  },
+  "result": "tconstruct:punch",
   "slots": {
     "upgrades": 1
   },

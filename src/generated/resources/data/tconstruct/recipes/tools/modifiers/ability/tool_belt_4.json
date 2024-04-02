@@ -13,10 +13,7 @@
     }
   ],
   "level": 4,
-  "result": {
-    "level": 1,
-    "name": "tconstruct:tool_belt"
-  },
+  "result": "tconstruct:tool_belt",
   "tools": {
     "tag": "tconstruct:modifiable/armor/leggings"
   }

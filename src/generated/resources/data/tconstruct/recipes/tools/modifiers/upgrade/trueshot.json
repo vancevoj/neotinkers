@@ -9,10 +9,7 @@
     "max": 3
   },
   "needed_per_level": 10,
-  "result": {
-    "level": 1,
-    "name": "tconstruct:trueshot"
-  },
+  "result": "tconstruct:trueshot",
   "slots": {
     "upgrades": 1
   },

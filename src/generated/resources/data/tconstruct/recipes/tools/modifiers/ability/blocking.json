@@ -19,10 +19,7 @@
     }
   ],
   "level": 1,
-  "result": {
-    "level": 1,
-    "name": "tconstruct:blocking"
-  },
+  "result": "tconstruct:blocking",
   "slots": {
     "abilities": 1
   },

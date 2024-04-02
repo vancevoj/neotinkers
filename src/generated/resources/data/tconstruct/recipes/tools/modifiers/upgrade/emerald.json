@@ -7,10 +7,7 @@
     }
   ],
   "level": 1,
-  "result": {
-    "level": 1,
-    "name": "tconstruct:emerald"
-  },
+  "result": "tconstruct:emerald",
   "slots": {
     "upgrades": 1
   },

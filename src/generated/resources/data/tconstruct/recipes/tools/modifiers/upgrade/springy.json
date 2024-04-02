@@ -12,10 +12,7 @@
   "level": {
     "max": 3
   },
-  "result": {
-    "level": 1,
-    "name": "tconstruct:springy"
-  },
+  "result": "tconstruct:springy",
   "slots": {
     "upgrades": 1
   },

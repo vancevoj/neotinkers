@@ -13,10 +13,7 @@
     }
   ],
   "level": 1,
-  "result": {
-    "level": 1,
-    "name": "tconstruct:zoom"
-  },
+  "result": "tconstruct:zoom",
   "slots": {
     "upgrades": 1
   },

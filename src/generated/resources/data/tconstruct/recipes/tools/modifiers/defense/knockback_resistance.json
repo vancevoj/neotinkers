@@ -17,10 +17,7 @@
     }
   ],
   "level": 1,
-  "result": {
-    "level": 1,
-    "name": "tconstruct:knockback_resistance"
-  },
+  "result": "tconstruct:knockback_resistance",
   "slots": {
     "defense": 1
   },

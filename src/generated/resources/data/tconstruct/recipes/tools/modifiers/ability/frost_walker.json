@@ -19,10 +19,7 @@
     }
   ],
   "level": 1,
-  "result": {
-    "level": 1,
-    "name": "tconstruct:frost_walker"
-  },
+  "result": "tconstruct:frost_walker",
   "slots": {
     "abilities": 1
   },

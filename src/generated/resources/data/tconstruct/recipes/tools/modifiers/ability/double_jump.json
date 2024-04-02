@@ -18,10 +18,7 @@
       "item": "minecraft:phantom_membrane"
     }
   ],
-  "result": {
-    "level": 1,
-    "name": "tconstruct:double_jump"
-  },
+  "result": "tconstruct:double_jump",
   "slots": {
     "abilities": 1
   },

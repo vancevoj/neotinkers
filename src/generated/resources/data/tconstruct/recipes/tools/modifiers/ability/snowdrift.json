@@ -19,10 +19,7 @@
     }
   ],
   "level": 1,
-  "result": {
-    "level": 1,
-    "name": "tconstruct:snowdrift"
-  },
+  "result": "tconstruct:snowdrift",
   "slots": {
     "abilities": 1
   },

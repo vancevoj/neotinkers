@@ -19,10 +19,7 @@
     }
   ],
   "level": 1,
-  "result": {
-    "level": 1,
-    "name": "tconstruct:aqua_affinity"
-  },
+  "result": "tconstruct:aqua_affinity",
   "slots": {
     "abilities": 1
   },

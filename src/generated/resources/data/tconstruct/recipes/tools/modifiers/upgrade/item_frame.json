@@ -22,10 +22,7 @@
       ]
     }
   ],
-  "result": {
-    "level": 1,
-    "name": "tconstruct:item_frame"
-  },
+  "result": "tconstruct:item_frame",
   "slots": {
     "upgrades": 1
   },

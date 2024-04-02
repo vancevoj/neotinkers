@@ -10,10 +10,7 @@
     "max": 3
   },
   "needed_per_level": 45,
-  "result": {
-    "level": 1,
-    "name": "tconstruct:speedy"
-  },
+  "result": "tconstruct:speedy",
   "slots": {
     "upgrades": 1
   },

@@ -14,10 +14,7 @@
     }
   ],
   "level": 1,
-  "result": {
-    "level": 1,
-    "name": "tconstruct:soulbound"
-  },
+  "result": "tconstruct:soulbound",
   "slots": {
     "upgrades": 1
   },

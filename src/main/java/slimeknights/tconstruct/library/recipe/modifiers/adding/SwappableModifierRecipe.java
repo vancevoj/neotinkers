@@ -45,7 +45,7 @@ public class SwappableModifierRecipe extends ModifierRecipe {
   /** Value of the modifier being swapped, distinguishing this recipe from others for the same modifier */
   private final String value;
   public SwappableModifierRecipe(ResourceLocation id, List<SizedIngredient> inputs, Ingredient toolRequirement, int maxToolSize, ModifierId result, String value, @Nullable SlotCount slots, boolean allowCrystal) {
-    super(id, inputs, toolRequirement, maxToolSize, new ModifierEntry(result, 1), new IntRange(1, 1), slots, allowCrystal);
+    super(id, inputs, toolRequirement, maxToolSize, result, new IntRange(1, 1), slots, allowCrystal);
     this.value = value;
   }
 
@@ -71,7 +71,7 @@ public class SwappableModifierRecipe extends ModifierRecipe {
     // do not allow adding the modifier if this variant is already present
     // TODO: include variant in name? need variant to be translatable for that probably
     if (tool.getPersistentData().getString(modifier).equals(value)) {
-      return RecipeResult.failure(ALREADY_PRESENT, result.getModifier().getDisplayName());
+      return RecipeResult.failure(ALREADY_PRESENT, result.get().getDisplayName());
     }
 
     // consume slots
@@ -114,6 +114,7 @@ public class SwappableModifierRecipe extends ModifierRecipe {
   public List<ItemStack> getToolWithModifier() {
     if (toolWithModifier == null) {
       ResourceLocation id = result.getId();
+      ModifierEntry result = getDisplayResult();
       toolWithModifier = getToolInputs().stream().map(stack -> withModifiers(stack, modifiersForResult(result, result), data -> data.putString(id, value))).collect(Collectors.toList());
     }
     return toolWithModifier;

@@ -12,10 +12,7 @@
       "item": "tconstruct:sky_slime_vine"
     }
   ],
-  "result": {
-    "level": 1,
-    "name": "tconstruct:shield_strap"
-  },
+  "result": "tconstruct:shield_strap",
   "slots": {
     "upgrades": 1
   },
