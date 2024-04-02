@@ -8,6 +8,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.tags.TagKey;
 import slimeknights.mantle.data.loadable.primitive.IntLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
+import slimeknights.tconstruct.library.json.IntRange;
 import slimeknights.tconstruct.library.modifiers.util.LazyModifier;
 import slimeknights.tconstruct.library.tools.nbt.IToolContext;
 
@@ -23,6 +24,10 @@ public class ModifierEntry implements Comparable<ModifierEntry> {
     ModifierId.PARSER.requiredField("name", ModifierEntry::getId),
     IntLoadable.FROM_ONE.defaultField("level", 1, true, ModifierEntry::getLevel),
     ModifierEntry::new);
+  /** Range of levels for a modifier including 0 (not on the tool) */
+  public static final IntRange ANY_LEVEL = new IntRange(0, Short.MAX_VALUE);
+  /** Range of levels for a modifier on a tool */
+  public static final IntRange VALID_LEVEL = new IntRange(1, Short.MAX_VALUE);
 
   /** Modifier instance */
   private final LazyModifier modifier;

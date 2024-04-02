@@ -47,7 +47,6 @@ import slimeknights.tconstruct.fluids.TinkerFluids;
 import slimeknights.tconstruct.gadgets.TinkerGadgets;
 import slimeknights.tconstruct.library.json.predicate.tool.HasMaterialPredicate;
 import slimeknights.tconstruct.library.json.predicate.tool.HasModifierPredicate;
-import slimeknights.tconstruct.library.json.predicate.tool.HasModifierPredicate.ModifierCheck;
 import slimeknights.tconstruct.library.json.predicate.tool.StatInRangePredicate;
 import slimeknights.tconstruct.library.json.predicate.tool.StatInSetPredicate;
 import slimeknights.tconstruct.library.json.predicate.tool.ToolContextPredicate;
@@ -181,11 +180,11 @@ public class AdvancementsProvider extends GenericDataProvider {
     builder(Items.WRITABLE_BOOK, resource("tools/upgrade_slots"), modified, FrameType.CHALLENGE, builder ->
       builder.addCriterion("has_modified", InventoryChangeTrigger.TriggerInstance.hasItems(new ToolStackItemPredicate(
         ToolContextPredicate.and(
-          new HasModifierPredicate(ModifierIds.writable, ModifierCheck.UPGRADES),
-          new HasModifierPredicate(ModifierIds.recapitated, ModifierCheck.UPGRADES),
-          new HasModifierPredicate(ModifierIds.harmonious, ModifierCheck.UPGRADES),
-          new HasModifierPredicate(ModifierIds.resurrected, ModifierCheck.UPGRADES),
-          new HasModifierPredicate(ModifierIds.gilded, ModifierCheck.UPGRADES)))))
+          HasModifierPredicate.hasUpgrade(ModifierIds.writable, 1),
+          HasModifierPredicate.hasUpgrade(ModifierIds.recapitated, 1),
+          HasModifierPredicate.hasUpgrade(ModifierIds.harmonious, 1),
+          HasModifierPredicate.hasUpgrade(ModifierIds.resurrected, 1),
+          HasModifierPredicate.hasUpgrade(ModifierIds.gilded, 1)))))
     );
 
     // smeltery path
@@ -248,7 +247,7 @@ public class AdvancementsProvider extends GenericDataProvider {
       with.accept(TinkerTools.longbow.get());
     });
     builder(TinkerModifiers.silkyCloth, resource("smeltery/abilities"), anvil, FrameType.CHALLENGE, builder -> {
-      Consumer<ModifierId> with = modifier -> builder.addCriterion(modifier.getPath(), InventoryChangeTrigger.TriggerInstance.hasItems(new ToolStackItemPredicate(new HasModifierPredicate(modifier, ModifierCheck.UPGRADES))));
+      Consumer<ModifierId> with = modifier -> builder.addCriterion(modifier.getPath(), InventoryChangeTrigger.TriggerInstance.hasItems(new ToolStackItemPredicate(HasModifierPredicate.hasUpgrade(modifier, 1))));
       Consumer<LazyModifier> withL = modifier -> with.accept(modifier.getId());
 
       // general

@@ -17,15 +17,12 @@ import java.util.function.Function;
  * Represents conditions for a modifier module, since this is reused across several modules
  */
 public record ModifierModuleCondition(IJsonPredicate<IToolContext> tool, IntRange modifierLevel) {
-  /** Range of values used for a modifier level, used to parse modifier levels in their conditions */
-  public static final IntRange MODIFIER_LEVEL = new IntRange(1, Short.MAX_VALUE);
   /** Instance matching any tool context predicate and any modifier level */
-  public static final ModifierModuleCondition ANY = new ModifierModuleCondition(ToolContextPredicate.ANY, MODIFIER_LEVEL);
-
+  public static final ModifierModuleCondition ANY = new ModifierModuleCondition(ToolContextPredicate.ANY, ModifierEntry.VALID_LEVEL);
   /** Loadable for modifier module conditions, typically used with {@link RecordLoadable#directField(Function)} */
   public static final RecordLoadable<ModifierModuleCondition> LOADABLE = RecordLoadable.create(
     ToolContextPredicate.LOADER.defaultField("tool", ModifierModuleCondition::tool),
-    MODIFIER_LEVEL.defaultField("modifier_level", ModifierModuleCondition::modifierLevel),
+    ModifierEntry.VALID_LEVEL.defaultField("modifier_level", ModifierModuleCondition::modifierLevel),
     ModifierModuleCondition::new);
   /** Generic field instance used for most modules with conditions */
   public static final LoadableField<ModifierModuleCondition,ConditionalModifierModule> FIELD = LOADABLE.directField(ConditionalModifierModule::condition);
@@ -53,13 +50,13 @@ public record ModifierModuleCondition(IJsonPredicate<IToolContext> tool, IntRang
     if (this.tool != ToolContextPredicate.ANY) {
       parent.add("tool", ToolContextPredicate.LOADER.serialize(this.tool));
     }
-    MODIFIER_LEVEL.serializeInto(parent, "modifier_level", modifierLevel);
+    ModifierEntry.VALID_LEVEL.serializeInto(parent, "modifier_level", modifierLevel);
   }
 
   /** Deserializes these objects from the given parent object */
   public static ModifierModuleCondition deserializeFrom(JsonObject parent) {
     IJsonPredicate<IToolContext> tool = ToolContextPredicate.LOADER.getOrDefault(parent, "tool");
-    IntRange modifierLevel = MODIFIER_LEVEL.getOrDefault(parent, "modifier_level");
+    IntRange modifierLevel = ModifierEntry.VALID_LEVEL.getOrDefault(parent, "modifier_level");
     return new ModifierModuleCondition(tool, modifierLevel);
   }
 
@@ -122,22 +119,22 @@ public record ModifierModuleCondition(IJsonPredicate<IToolContext> tool, IntRang
 
     /** Sets the modifier level range for this module */
     public T levelRange(int min, int max) {
-      return setLevels(MODIFIER_LEVEL.range(min, max));
+      return setLevels(ModifierEntry.VALID_LEVEL.range(min, max));
     }
 
     /** Sets the modifier level range for this module */
     public T minLevel(int min) {
-      return setLevels(MODIFIER_LEVEL.min(min));
+      return setLevels(ModifierEntry.VALID_LEVEL.min(min));
     }
 
     /** Sets the modifier level range for this module */
     public T maxLevel(int max) {
-      return setLevels(MODIFIER_LEVEL.max(max));
+      return setLevels(ModifierEntry.VALID_LEVEL.max(max));
     }
 
     /** Sets the modifier level range for this module */
     public T exactLevel(int value) {
-      return setLevels(MODIFIER_LEVEL.exactly(value));
+      return setLevels(ModifierEntry.VALID_LEVEL.exactly(value));
     }
   }
 }

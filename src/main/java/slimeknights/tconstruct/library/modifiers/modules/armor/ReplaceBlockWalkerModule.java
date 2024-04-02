@@ -29,7 +29,7 @@ import slimeknights.tconstruct.tools.TinkerModifiers;
 
 import java.util.List;
 
-import static slimeknights.tconstruct.library.modifiers.modules.ModifierModuleCondition.MODIFIER_LEVEL;
+import static slimeknights.tconstruct.library.modifiers.ModifierEntry.VALID_LEVEL;
 
 /**
  * Module to replace blocks with another block while walking.
@@ -84,7 +84,7 @@ public record ReplaceBlockWalkerModule(List<BlockReplacement> replacements, Leve
     public static final RecordLoadable<BlockReplacement> LOADABLE = RecordLoadable.create(
       BlockPredicate.LOADER.defaultField("target", BlockReplacement::target),
       BlockStateLoadable.DIFFERENCE.directField(BlockReplacement::state), // pulling from this object directly means the keys used are block and properties
-      MODIFIER_LEVEL.defaultField("modifier_level", BlockReplacement::level),
+      VALID_LEVEL.defaultField("modifier_level", BlockReplacement::level),
       BlockReplacement::new);
   }
 
@@ -117,22 +117,22 @@ public record ReplaceBlockWalkerModule(List<BlockReplacement> replacements, Leve
 
     /** Adds the given replacement only at the given level range */
     public Builder replaceLevelRange(IJsonPredicate<BlockState> target, BlockState replacement, int min, int max) {
-      return replaceLevelRange(target, replacement, MODIFIER_LEVEL.range(min, max));
+      return replaceLevelRange(target, replacement, VALID_LEVEL.range(min, max));
     }
 
     /** Adds the given replacement only at the given level range */
     public Builder replaceMinLevel(IJsonPredicate<BlockState> target, BlockState replacement, int max) {
-      return replaceLevelRange(target, replacement, MODIFIER_LEVEL.max(max));
+      return replaceLevelRange(target, replacement, VALID_LEVEL.max(max));
     }
 
     /** Adds the given replacement only at the given level range */
     public Builder replaceMaxLevel(IJsonPredicate<BlockState> target, BlockState replacement, int min) {
-      return replaceLevelRange(target, replacement, MODIFIER_LEVEL.min(min));
+      return replaceLevelRange(target, replacement, VALID_LEVEL.min(min));
     }
 
     /** Adds the given replacement only at the given level range */
     public Builder replaceAlways(IJsonPredicate<BlockState> target, BlockState replacement) {
-      return replaceLevelRange(target, replacement, MODIFIER_LEVEL);
+      return replaceLevelRange(target, replacement, VALID_LEVEL);
     }
 
     @Override

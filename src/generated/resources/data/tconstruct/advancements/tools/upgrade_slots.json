@@ -12,42 +12,42 @@
                 {
                   "type": "tconstruct:has_modifier",
                   "check": "upgrades",
-                  "level": {
-                    "min": 1
-                  },
-                  "modifier": "tconstruct:writable"
+                  "modifier": {
+                    "type": "tconstruct:single",
+                    "modifier": "tconstruct:writable"
+                  }
                 },
                 {
                   "type": "tconstruct:has_modifier",
                   "check": "upgrades",
-                  "level": {
-                    "min": 1
-                  },
-                  "modifier": "tconstruct:recapitated"
+                  "modifier": {
+                    "type": "tconstruct:single",
+                    "modifier": "tconstruct:recapitated"
+                  }
                 },
                 {
                   "type": "tconstruct:has_modifier",
                   "check": "upgrades",
-                  "level": {
-                    "min": 1
-                  },
-                  "modifier": "tconstruct:harmonious"
+                  "modifier": {
+                    "type": "tconstruct:single",
+                    "modifier": "tconstruct:harmonious"
+                  }
                 },
                 {
                   "type": "tconstruct:has_modifier",
                   "check": "upgrades",
-                  "level": {
-                    "min": 1
-                  },
-                  "modifier": "tconstruct:resurrected"
+                  "modifier": {
+                    "type": "tconstruct:single",
+                    "modifier": "tconstruct:resurrected"
+                  }
                 },
                 {
                   "type": "tconstruct:has_modifier",
                   "check": "upgrades",
-                  "level": {
-                    "min": 1
-                  },
-                  "modifier": "tconstruct:gilded"
+                  "modifier": {
+                    "type": "tconstruct:single",
+                    "modifier": "tconstruct:gilded"
+                  }
                 }
               ]
             }

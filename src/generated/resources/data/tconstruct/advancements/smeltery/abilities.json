@@ -9,10 +9,10 @@
             "predicate": {
               "type": "tconstruct:has_modifier",
               "check": "upgrades",
-              "level": {
-                "min": 1
-              },
-              "modifier": "tconstruct:ambidextrous"
+              "modifier": {
+                "type": "tconstruct:single",
+                "modifier": "tconstruct:ambidextrous"
+              }
             }
           }
         ]
@@ -27,10 +27,10 @@
             "predicate": {
               "type": "tconstruct:has_modifier",
               "check": "upgrades",
-              "level": {
-                "min": 1
-              },
-              "modifier": "tconstruct:aqua_affinity"
+              "modifier": {
+                "type": "tconstruct:single",
+                "modifier": "tconstruct:aqua_affinity"
+              }
             }
           }
         ]
@@ -45,10 +45,10 @@
             "predicate": {
               "type": "tconstruct:has_modifier",
               "check": "upgrades",
-              "level": {
-                "min": 1
-              },
-              "modifier": "tconstruct:autosmelt"
+              "modifier": {
+                "type": "tconstruct:single",
+                "modifier": "tconstruct:autosmelt"
+              }
             }
           }
         ]
@@ -63,10 +63,10 @@
             "predicate": {
               "type": "tconstruct:has_modifier",
               "check": "upgrades",
-              "level": {
-                "min": 1
-              },
-              "modifier": "tconstruct:blocking"
+              "modifier": {
+                "type": "tconstruct:single",
+                "modifier": "tconstruct:blocking"
+              }
             }
           }
         ]
@@ -81,10 +81,10 @@
             "predicate": {
               "type": "tconstruct:has_modifier",
               "check": "upgrades",
-              "level": {
-                "min": 1
-              },
-              "modifier": "tconstruct:bonking"
+              "modifier": {
+                "type": "tconstruct:single",
+                "modifier": "tconstruct:bonking"
+              }
             }
           }
         ]
@@ -99,10 +99,10 @@
             "predicate": {
               "type": "tconstruct:has_modifier",
               "check": "upgrades",
-              "level": {
-                "min": 1
-              },
-              "modifier": "tconstruct:bouncy"
+              "modifier": {
+                "type": "tconstruct:single",
+                "modifier": "tconstruct:bouncy"
+              }
             }
           }
         ]
@@ -117,10 +117,10 @@
             "predicate": {
               "type": "tconstruct:has_modifier",
               "check": "upgrades",
-              "level": {
-                "min": 1
-              },
-              "modifier": "tconstruct:boundless"
+              "modifier": {
+                "type": "tconstruct:single",
+                "modifier": "tconstruct:boundless"
+              }
             }
           }
         ]
@@ -135,10 +135,10 @@
             "predicate": {
               "type": "tconstruct:has_modifier",
               "check": "upgrades",
-              "level": {
-                "min": 1
-              },
-              "modifier": "tconstruct:bucketing"
+              "modifier": {
+                "type": "tconstruct:single",
+                "modifier": "tconstruct:bucketing"
+              }
             }
           }
         ]
@@ -153,10 +153,10 @@
             "predicate": {
               "type": "tconstruct:has_modifier",
               "check": "upgrades",
-              "level": {
-                "min": 1
-              },
-              "modifier": "tconstruct:bulk_quiver"
+              "modifier": {
+                "type": "tconstruct:single",
+                "modifier": "tconstruct:bulk_quiver"
+              }
             }
           }
         ]
@@ -171,10 +171,10 @@
             "predicate": {
               "type": "tconstruct:has_modifier",
               "check": "upgrades",
-              "level": {
-                "min": 1
-              },
-              "modifier": "tconstruct:crystalshot"
+              "modifier": {
+                "type": "tconstruct:single",
+                "modifier": "tconstruct:crystalshot"
+              }
             }
           }
         ]
@@ -189,10 +189,10 @@
             "predicate": {
               "type": "tconstruct:has_modifier",
               "check": "upgrades",
-              "level": {
-                "min": 1
-              },
-              "modifier": "tconstruct:double_jump"
+              "modifier": {
+                "type": "tconstruct:single",
+                "modifier": "tconstruct:double_jump"
+              }
             }
           }
         ]
@@ -207,10 +207,10 @@
             "predicate": {
               "type": "tconstruct:has_modifier",
               "check": "upgrades",
-              "level": {
-                "min": 1
-              },
-              "modifier": "tconstruct:dual_wielding"
+              "modifier": {
+                "type": "tconstruct:single",
+                "modifier": "tconstruct:dual_wielding"
+              }
             }
           }
         ]
@@ -225,10 +225,10 @@
             "predicate": {
               "type": "tconstruct:has_modifier",
               "check": "upgrades",
-              "level": {
-                "min": 1
-              },
-              "modifier": "tconstruct:exchanging"
+              "modifier": {
+                "type": "tconstruct:single",
+                "modifier": "tconstruct:exchanging"
+              }
             }
           }
         ]
@@ -243,10 +243,10 @@
             "predicate": {
               "type": "tconstruct:has_modifier",
               "check": "upgrades",
-              "level": {
-                "min": 1
-              },
-              "modifier": "tconstruct:expanded"
+              "modifier": {
+                "type": "tconstruct:single",
+                "modifier": "tconstruct:expanded"
+              }
             }
           }
         ]
@@ -261,10 +261,10 @@
             "predicate": {
               "type": "tconstruct:has_modifier",
               "check": "upgrades",
-              "level": {
-                "min": 1
-              },
-              "modifier": "tconstruct:firestarter"
+              "modifier": {
+                "type": "tconstruct:single",
+                "modifier": "tconstruct:firestarter"
+              }
             }
           }
         ]
@@ -279,10 +279,10 @@
             "predicate": {
               "type": "tconstruct:has_modifier",
               "check": "upgrades",
-              "level": {
-                "min": 1
-              },
-              "modifier": "tconstruct:flamewake"
+              "modifier": {
+                "type": "tconstruct:single",
+                "modifier": "tconstruct:flamewake"
+              }
             }
           }
         ]
@@ -297,10 +297,10 @@
             "predicate": {
               "type": "tconstruct:has_modifier",
               "check": "upgrades",
-              "level": {
-                "min": 1
-              },
-              "modifier": "tconstruct:flinging"
+              "modifier": {
+                "type": "tconstruct:single",
+                "modifier": "tconstruct:flinging"
+              }
             }
           }
         ]
@@ -315,10 +315,10 @@
             "predicate": {
               "type": "tconstruct:has_modifier",
               "check": "upgrades",
-              "level": {
-                "min": 1
-              },
-              "modifier": "tconstruct:frost_walker"
+              "modifier": {
+                "type": "tconstruct:single",
+                "modifier": "tconstruct:frost_walker"
+              }
             }
           }
         ]
@@ -333,10 +333,10 @@
             "predicate": {
               "type": "tconstruct:has_modifier",
               "check": "upgrades",
-              "level": {
-                "min": 1
-              },
-              "modifier": "tconstruct:gilded"
+              "modifier": {
+                "type": "tconstruct:single",
+                "modifier": "tconstruct:gilded"
+              }
             }
           }
         ]
@@ -351,10 +351,10 @@
             "predicate": {
               "type": "tconstruct:has_modifier",
               "check": "upgrades",
-              "level": {
-                "min": 1
-              },
-              "modifier": "tconstruct:glowing"
+              "modifier": {
+                "type": "tconstruct:single",
+                "modifier": "tconstruct:glowing"
+              }
             }
           }
         ]
@@ -369,10 +369,10 @@
             "predicate": {
               "type": "tconstruct:has_modifier",
               "check": "upgrades",
-              "level": {
-                "min": 1
-              },
-              "modifier": "tconstruct:long_fall"
+              "modifier": {
+                "type": "tconstruct:single",
+                "modifier": "tconstruct:long_fall"
+              }
             }
           }
         ]
@@ -387,10 +387,10 @@
             "predicate": {
               "type": "tconstruct:has_modifier",
               "check": "upgrades",
-              "level": {
-                "min": 1
-              },
-              "modifier": "tconstruct:luck"
+              "modifier": {
+                "type": "tconstruct:single",
+                "modifier": "tconstruct:luck"
+              }
             }
           }
         ]
@@ -405,10 +405,10 @@
             "predicate": {
               "type": "tconstruct:has_modifier",
               "check": "upgrades",
-              "level": {
-                "min": 1
-              },
-              "modifier": "tconstruct:melting"
+              "modifier": {
+                "type": "tconstruct:single",
+                "modifier": "tconstruct:melting"
+              }
             }
           }
         ]
@@ -423,10 +423,10 @@
             "predicate": {
               "type": "tconstruct:has_modifier",
               "check": "upgrades",
-              "level": {
-                "min": 1
-              },
-              "modifier": "tconstruct:multishot"
+              "modifier": {
+                "type": "tconstruct:single",
+                "modifier": "tconstruct:multishot"
+              }
             }
           }
         ]
@@ -441,10 +441,10 @@
             "predicate": {
               "type": "tconstruct:has_modifier",
               "check": "upgrades",
-              "level": {
-                "min": 1
-              },
-              "modifier": "tconstruct:parrying"
+              "modifier": {
+                "type": "tconstruct:single",
+                "modifier": "tconstruct:parrying"
+              }
             }
           }
         ]
@@ -459,10 +459,10 @@
             "predicate": {
               "type": "tconstruct:has_modifier",
               "check": "upgrades",
-              "level": {
-                "min": 1
-              },
-              "modifier": "tconstruct:path_maker"
+              "modifier": {
+                "type": "tconstruct:single",
+                "modifier": "tconstruct:path_maker"
+              }
             }
           }
         ]
@@ -477,10 +477,10 @@
             "predicate": {
               "type": "tconstruct:has_modifier",
               "check": "upgrades",
-              "level": {
-                "min": 1
-              },
-              "modifier": "tconstruct:pathing"
+              "modifier": {
+                "type": "tconstruct:single",
+                "modifier": "tconstruct:pathing"
+              }
             }
           }
         ]
@@ -495,10 +495,10 @@
             "predicate": {
               "type": "tconstruct:has_modifier",
               "check": "upgrades",
-              "level": {
-                "min": 1
-              },
-              "modifier": "tconstruct:plowing"
+              "modifier": {
+                "type": "tconstruct:single",
+                "modifier": "tconstruct:plowing"
+              }
             }
           }
         ]
@@ -513,10 +513,10 @@
             "predicate": {
               "type": "tconstruct:has_modifier",
               "check": "upgrades",
-              "level": {
-                "min": 1
-              },
-              "modifier": "tconstruct:pockets"
+              "modifier": {
+                "type": "tconstruct:single",
+                "modifier": "tconstruct:pockets"
+              }
             }
           }
         ]
@@ -531,10 +531,10 @@
             "predicate": {
               "type": "tconstruct:has_modifier",
               "check": "upgrades",
-              "level": {
-                "min": 1
-              },
-              "modifier": "tconstruct:protection"
+              "modifier": {
+                "type": "tconstruct:single",
+                "modifier": "tconstruct:protection"
+              }
             }
           }
         ]
@@ -549,10 +549,10 @@
             "predicate": {
               "type": "tconstruct:has_modifier",
               "check": "upgrades",
-              "level": {
-                "min": 1
-              },
-              "modifier": "tconstruct:reach"
+              "modifier": {
+                "type": "tconstruct:single",
+                "modifier": "tconstruct:reach"
+              }
             }
           }
         ]
@@ -567,10 +567,10 @@
             "predicate": {
               "type": "tconstruct:has_modifier",
               "check": "upgrades",
-              "level": {
-                "min": 1
-              },
-              "modifier": "tconstruct:reflecting"
+              "modifier": {
+                "type": "tconstruct:single",
+                "modifier": "tconstruct:reflecting"
+              }
             }
           }
         ]
@@ -585,10 +585,10 @@
             "predicate": {
               "type": "tconstruct:has_modifier",
               "check": "upgrades",
-              "level": {
-                "min": 1
-              },
-              "modifier": "tconstruct:silky"
+              "modifier": {
+                "type": "tconstruct:single",
+                "modifier": "tconstruct:silky"
+              }
             }
           }
         ]
@@ -603,10 +603,10 @@
             "predicate": {
               "type": "tconstruct:has_modifier",
               "check": "upgrades",
-              "level": {
-                "min": 1
-              },
-              "modifier": "tconstruct:slurping"
+              "modifier": {
+                "type": "tconstruct:single",
+                "modifier": "tconstruct:slurping"
+              }
             }
           }
         ]
@@ -621,10 +621,10 @@
             "predicate": {
               "type": "tconstruct:has_modifier",
               "check": "upgrades",
-              "level": {
-                "min": 1
-              },
-              "modifier": "tconstruct:snowdrift"
+              "modifier": {
+                "type": "tconstruct:single",
+                "modifier": "tconstruct:snowdrift"
+              }
             }
           }
         ]
@@ -639,10 +639,10 @@
             "predicate": {
               "type": "tconstruct:has_modifier",
               "check": "upgrades",
-              "level": {
-                "min": 1
-              },
-              "modifier": "tconstruct:spilling"
+              "modifier": {
+                "type": "tconstruct:single",
+                "modifier": "tconstruct:spilling"
+              }
             }
           }
         ]
@@ -657,10 +657,10 @@
             "predicate": {
               "type": "tconstruct:has_modifier",
               "check": "upgrades",
-              "level": {
-                "min": 1
-              },
-              "modifier": "tconstruct:spitting"
+              "modifier": {
+                "type": "tconstruct:single",
+                "modifier": "tconstruct:spitting"
+              }
             }
           }
         ]
@@ -675,10 +675,10 @@
             "predicate": {
               "type": "tconstruct:has_modifier",
               "check": "upgrades",
-              "level": {
-                "min": 1
-              },
-              "modifier": "tconstruct:springing"
+              "modifier": {
+                "type": "tconstruct:single",
+                "modifier": "tconstruct:springing"
+              }
             }
           }
         ]
@@ -693,10 +693,10 @@
             "predicate": {
               "type": "tconstruct:has_modifier",
               "check": "upgrades",
-              "level": {
-                "min": 1
-              },
-              "modifier": "tconstruct:strength"
+              "modifier": {
+                "type": "tconstruct:single",
+                "modifier": "tconstruct:strength"
+              }
             }
           }
         ]
@@ -711,10 +711,10 @@
             "predicate": {
               "type": "tconstruct:has_modifier",
               "check": "upgrades",
-              "level": {
-                "min": 1
-              },
-              "modifier": "tconstruct:stripping"
+              "modifier": {
+                "type": "tconstruct:single",
+                "modifier": "tconstruct:stripping"
+              }
             }
           }
         ]
@@ -729,10 +729,10 @@
             "predicate": {
               "type": "tconstruct:has_modifier",
               "check": "upgrades",
-              "level": {
-                "min": 1
-              },
-              "modifier": "tconstruct:tilling"
+              "modifier": {
+                "type": "tconstruct:single",
+                "modifier": "tconstruct:tilling"
+              }
             }
           }
         ]
@@ -747,10 +747,10 @@
             "predicate": {
               "type": "tconstruct:has_modifier",
               "check": "upgrades",
-              "level": {
-                "min": 1
-              },
-              "modifier": "tconstruct:tool_belt"
+              "modifier": {
+                "type": "tconstruct:single",
+                "modifier": "tconstruct:tool_belt"
+              }
             }
           }
         ]
@@ -765,10 +765,10 @@
             "predicate": {
               "type": "tconstruct:has_modifier",
               "check": "upgrades",
-              "level": {
-                "min": 1
-              },
-              "modifier": "tconstruct:trick_quiver"
+              "modifier": {
+                "type": "tconstruct:single",
+                "modifier": "tconstruct:trick_quiver"
+              }
             }
           }
         ]
@@ -783,10 +783,10 @@
             "predicate": {
               "type": "tconstruct:has_modifier",
               "check": "upgrades",
-              "level": {
-                "min": 1
-              },
-              "modifier": "tconstruct:unbreakable"
+              "modifier": {
+                "type": "tconstruct:single",
+                "modifier": "tconstruct:unbreakable"
+              }
             }
           }
         ]
@@ -801,10 +801,10 @@
             "predicate": {
               "type": "tconstruct:has_modifier",
               "check": "upgrades",
-              "level": {
-                "min": 1
-              },
-              "modifier": "tconstruct:warping"
+              "modifier": {
+                "type": "tconstruct:single",
+                "modifier": "tconstruct:warping"
+              }
             }
           }
         ]
@@ -819,10 +819,10 @@
             "predicate": {
               "type": "tconstruct:has_modifier",
               "check": "upgrades",
-              "level": {
-                "min": 1
-              },
-              "modifier": "tconstruct:wetting"
+              "modifier": {
+                "type": "tconstruct:single",
+                "modifier": "tconstruct:wetting"
+              }
             }
           }
         ]
@@ -837,10 +837,10 @@
             "predicate": {
               "type": "tconstruct:has_modifier",
               "check": "upgrades",
-              "level": {
-                "min": 1
-              },
-              "modifier": "tconstruct:zoom"
+              "modifier": {
+                "type": "tconstruct:single",
+                "modifier": "tconstruct:zoom"
+              }
             }
           }
         ]
