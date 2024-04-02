@@ -6,7 +6,6 @@
       "modid": "theoneprobe"
     }
   ],
-  "min_level": 1,
   "modifier": "tconstruct:the_one_probe",
   "slots": {
     "upgrades": 1

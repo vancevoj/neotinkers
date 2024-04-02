@@ -22,7 +22,6 @@ import slimeknights.tconstruct.library.modifiers.TinkerHooks;
 import slimeknights.tconstruct.library.recipe.RecipeResult;
 import slimeknights.tconstruct.library.recipe.casting.material.MaterialCastingLookup;
 import slimeknights.tconstruct.library.recipe.material.MaterialRecipe;
-import slimeknights.tconstruct.library.recipe.modifiers.ModifierRecipeLookup;
 import slimeknights.tconstruct.library.recipe.tinkerstation.ITinkerStationContainer;
 import slimeknights.tconstruct.library.recipe.tinkerstation.ITinkerStationRecipe;
 import slimeknights.tconstruct.library.tools.definition.PartRequirement;
@@ -199,14 +198,8 @@ public class TinkerStationPartSwapping implements ITinkerStationRecipe {
         }
 
         // ensure no modifier problems after removing
-        // first check tool requirements
-        ItemStack result = tool.createStack(Math.min(tinkerable.getCount(), shrinkToolSlotBy()));
-        Component error = ModifierRecipeLookup.checkRequirements(result, tool);
-        if (error != null) {
-          return RecipeResult.failure(error);
-        }
-        // next, modifier validation
-        error = tool.tryValidate();
+        // modifier validation, handles modifier requirements
+        Component error = tool.tryValidate();
         if (error != null) {
           return RecipeResult.failure(error);
         }
@@ -218,7 +211,7 @@ public class TinkerStationPartSwapping implements ITinkerStationRecipe {
           }
         }
         // everything worked, so good to go
-        return RecipeResult.success(result);
+        return RecipeResult.success(tool.createStack(Math.min(tinkerable.getCount(), shrinkToolSlotBy())));
       }
     }
     // no item found, should never happen

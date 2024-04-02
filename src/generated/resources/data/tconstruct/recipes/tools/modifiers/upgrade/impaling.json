@@ -12,7 +12,9 @@
       "item": "minecraft:end_rod"
     }
   ],
-  "max_level": 4,
+  "level": {
+    "max": 4
+  },
   "result": {
     "level": 1,
     "name": "tconstruct:impaling"

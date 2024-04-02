@@ -137,13 +137,6 @@ public class ModifierRemovalRecipe extends AbstractWorktableRecipe {
         return RecipeResult.failure(error);
       }
     }
-
-    // check the modifier requirements
-    Component validated = ModifierRecipeLookup.checkRequirements(inv.getTinkerableStack(), tool);
-    if (validated != null) {
-      return RecipeResult.failure(validated);
-    }
-
     // successfully removed
     return RecipeResult.success(tool);
   }

@@ -1,13 +1,14 @@
 package slimeknights.tconstruct.library.recipe.modifiers.adding;
 
+import com.google.common.collect.Streams;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import slimeknights.tconstruct.library.json.IntRange;
 import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.TinkerHooks;
-import slimeknights.tconstruct.library.recipe.modifiers.ModifierMatch;
 import slimeknights.tconstruct.library.tools.SlotType;
 import slimeknights.tconstruct.library.tools.SlotType.SlotCount;
 import slimeknights.tconstruct.library.tools.context.ToolRebuildContext;
@@ -23,6 +24,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 /** Common interface for modifier recipes that can show in JEI */
 public interface IDisplayModifierRecipe extends IModifierRecipe {
@@ -51,11 +53,11 @@ public interface IDisplayModifierRecipe extends IModifierRecipe {
   }
 
   /**
-   * Gets the max level of this modifier
-   * @return modifier max level, 0 if no max level
+   * Gets the range this modifier is valid for
+   * @return  level range, defaults to {@link ModifierEntry#VALID_LEVEL}
    */
-  default int getMaxLevel() {
-    return 0;
+  default IntRange getLevel() {
+    return ModifierEntry.VALID_LEVEL;
   }
 
   /** Gets the slot type used by this modifier */
@@ -74,16 +76,6 @@ public interface IDisplayModifierRecipe extends IModifierRecipe {
     return count.type();
   }
 
-  /** If true, this recipe has additional requirements */
-  default boolean hasRequirements() {
-    return false;
-  }
-
-  /** Gets the message to display when requirements do not match, or empty if no requirements */
-  default String getRequirementsError() {
-    return "";
-  }
-
   /** If true, this recipe can be applied incrementally */
   default boolean isIncremental() {
     return false;
@@ -95,25 +87,33 @@ public interface IDisplayModifierRecipe extends IModifierRecipe {
   /** Maps the stream from tool items to applicable tool stacks */
   Function<Item,ItemStack> MAP_TOOL_FOR_RENDERING = IModifiableDisplay::getDisplayStack;
 
-  /* Gets a copy of the stack with the given modifiers */
-  static ItemStack withModifiers(ItemStack stack, @Nullable ModifierMatch match, @Nullable ModifierEntry newModifier) {
-    return withModifiers(stack, match, newModifier, data -> {});
+  /**
+   * Gets the list of modifiers to display for the given result
+   * @param result  Resulting modifier
+   * @param self    Current modifier to display, will typically be result or a lower level of result
+   * @return  List of modifiers
+   */
+  static List<ModifierEntry> modifiersForResult(ModifierEntry result, @Nullable ModifierEntry self) {
+    List<ModifierEntry> requirements = result.getHook(TinkerHooks.REQUIREMENTS).displayModifiers(result);
+    if (self != null) {
+      return Streams.concat(requirements.stream(), Stream.of(self)).toList();
+    }
+    return requirements;
   }
 
   /* Gets a copy of the stack with the given modifiers */
-  static ItemStack withModifiers(ItemStack stack, @Nullable ModifierMatch match, @Nullable ModifierEntry newModifier, Consumer<ModDataNBT> persistentDataConsumer) {
+  static ItemStack withModifiers(ItemStack stack, List<ModifierEntry> modifiers) {
+    return withModifiers(stack, modifiers, data -> {});
+  }
+
+  /* Gets a copy of the stack with the given modifiers */
+  static ItemStack withModifiers(ItemStack stack, List<ModifierEntry> modifierList, Consumer<ModDataNBT> persistentDataConsumer) {
     ItemStack output = stack.copy();
     CompoundTag nbt = output.getOrCreateTag();
 
     // build modifiers list
-    ModifierNBT.Builder builder = ModifierNBT.builder();
-    if (match != null) {
-      match.apply(builder);
-    }
-    if (newModifier != null) {
-      builder.add(newModifier);
-    }
-    ModifierNBT modifiers = builder.build();
+    // go through the builder to ensure they are merged properly
+    ModifierNBT modifiers = ModifierNBT.builder().add(modifierList).build();
     ListTag list = modifiers.serializeToNBT();
     nbt.put(ToolStack.TAG_UPGRADES, list);
     nbt.put(ToolStack.TAG_MODIFIERS, list);

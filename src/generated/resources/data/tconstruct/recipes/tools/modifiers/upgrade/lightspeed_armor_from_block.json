@@ -6,7 +6,9 @@
     "item": "minecraft:glowstone"
   },
   "leftover": "minecraft:glowstone_dust",
-  "max_level": 3,
+  "level": {
+    "max": 3
+  },
   "needed_per_level": 64,
   "result": {
     "level": 1,

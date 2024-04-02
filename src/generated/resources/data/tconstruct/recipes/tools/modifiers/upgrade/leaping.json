@@ -5,7 +5,9 @@
   "input": {
     "item": "tconstruct:sky_slime_crystal"
   },
-  "max_level": 2,
+  "level": {
+    "max": 2
+  },
   "needed_per_level": 36,
   "result": {
     "level": 1,

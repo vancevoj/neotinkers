@@ -1,21 +1,21 @@
 package slimeknights.tconstruct.library.recipe.modifiers.adding;
 
-import com.google.common.collect.ImmutableList;
-import com.google.gson.JsonObject;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
+import slimeknights.mantle.data.loadable.field.ContextKey;
+import slimeknights.mantle.data.loadable.primitive.StringLoadable;
+import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.recipe.ingredient.SizedIngredient;
-import slimeknights.mantle.util.JsonHelper;
 import slimeknights.tconstruct.TConstruct;
+import slimeknights.tconstruct.library.json.IntRange;
+import slimeknights.tconstruct.library.json.field.MergingField;
+import slimeknights.tconstruct.library.json.field.MergingField.MissingMode;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierId;
 import slimeknights.tconstruct.library.recipe.RecipeResult;
-import slimeknights.tconstruct.library.recipe.modifiers.ModifierMatch;
 import slimeknights.tconstruct.library.recipe.tinkerstation.ITinkerStationContainer;
 import slimeknights.tconstruct.library.tools.SlotType.SlotCount;
 import slimeknights.tconstruct.library.tools.nbt.ModDataNBT;
@@ -26,23 +26,27 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static slimeknights.tconstruct.library.recipe.modifiers.adding.IDisplayModifierRecipe.modifiersForResult;
+import static slimeknights.tconstruct.library.recipe.modifiers.adding.IDisplayModifierRecipe.withModifiers;
+
 /**
  * Standard recipe to add a modifier
  */
 public class SwappableModifierRecipe extends ModifierRecipe {
   private static final String ALREADY_PRESENT = TConstruct.makeTranslationKey("recipe", "swappable.already_present");
+  public static final RecordLoadable<SwappableModifierRecipe> LOADER = RecordLoadable.create(
+    ContextKey.ID.requiredField(),
+    INPUTS_FIELD, TOOLS_FIELD, MAX_TOOL_SIZE_FIELD,
+    new MergingField<>(ModifierId.PARSER.requiredField("name", r -> r.result.getId()), "result", MissingMode.DISALLOWED),
+    new MergingField<>(StringLoadable.DEFAULT.requiredField("value", r -> r.value), "result", MissingMode.DISALLOWED),
+    SLOTS_FIELD, ALLOW_CRYSTAL_FIELD,
+    SwappableModifierRecipe::new);
 
   /** Value of the modifier being swapped, distinguishing this recipe from others for the same modifier */
   private final String value;
-  public SwappableModifierRecipe(ResourceLocation id, List<SizedIngredient> inputs, Ingredient toolRequirement, int maxToolSize, ModifierMatch requirements, String requirementsError, ModifierId result, String value, @Nullable SlotCount slots, boolean allowCrystal) {
-    super(id, inputs, toolRequirement, maxToolSize, requirements, requirementsError, new ModifierEntry(result, 1), 1, slots, allowCrystal);
+  public SwappableModifierRecipe(ResourceLocation id, List<SizedIngredient> inputs, Ingredient toolRequirement, int maxToolSize, ModifierId result, String value, @Nullable SlotCount slots, boolean allowCrystal) {
+    super(id, inputs, toolRequirement, maxToolSize, new ModifierEntry(result, 1), new IntRange(1, 1), slots, allowCrystal);
     this.value = value;
-  }
-
-  /** @deprecated use {@link SwappableModifierRecipe(ResourceLocation, List, Ingredient, int, ModifierMatch, String, ModifierId, String, SlotCount, boolean)} */
-  @Deprecated
-  public SwappableModifierRecipe(ResourceLocation id, List<SizedIngredient> inputs, Ingredient toolRequirement, int maxToolSize, ModifierMatch requirements, String requirementsError, ModifierId result, String value, @Nullable SlotCount slots) {
-    this(id, inputs, toolRequirement, maxToolSize, requirements, requirementsError, result, value, slots, false);
   }
 
   @Override
@@ -53,17 +57,15 @@ public class SwappableModifierRecipe extends ModifierRecipe {
     // if the tool has the modifier already, can skip most requirements
     ModifierId modifier = result.getId();
 
-    Component commonError;
     boolean needsModifier;
     if (tool.getUpgrades().getLevel(modifier) == 0) {
       needsModifier = true;
-      commonError = validatePrerequisites(tool);
+      Component commonError = validatePrerequisites(tool);
+      if (commonError != null) {
+        return RecipeResult.failure(commonError);
+      }
     } else {
       needsModifier = false;
-      commonError = validateRequirements(tool);
-    }
-    if (commonError != null) {
-      return RecipeResult.failure(commonError);
     }
 
     // do not allow adding the modifier if this variant is already present
@@ -112,48 +114,8 @@ public class SwappableModifierRecipe extends ModifierRecipe {
   public List<ItemStack> getToolWithModifier() {
     if (toolWithModifier == null) {
       ResourceLocation id = result.getId();
-      toolWithModifier = getToolInputs().stream().map(stack -> IDisplayModifierRecipe.withModifiers(stack, requirements, result, data -> data.putString(id, value))).collect(Collectors.toList());
-      toolWithModifier = getToolInputs().stream().map(stack -> IDisplayModifierRecipe.withModifiers(stack, requirements, result, data -> data.putString(id, value))).collect(Collectors.toList());
+      toolWithModifier = getToolInputs().stream().map(stack -> withModifiers(stack, modifiersForResult(result, result), data -> data.putString(id, value))).collect(Collectors.toList());
     }
     return toolWithModifier;
-  }
-
-  public static class Serializer extends AbstractModifierRecipe.Serializer<SwappableModifierRecipe> {
-
-    @Override
-    protected ModifierEntry readResult(JsonObject json) {
-      JsonObject result = GsonHelper.getAsJsonObject(json, "result");
-      return new ModifierEntry(ModifierId.PARSER.getIfPresent(result, "name"), 1);
-    }
-
-    @Override
-    public SwappableModifierRecipe fromJson(ResourceLocation id, JsonObject json, Ingredient toolRequirement, int maxToolSize, ModifierMatch requirements,
-																				String requirementsError, ModifierEntry result, int maxLevel, @Nullable SlotCount slots, boolean allowCrystal) {
-      List<SizedIngredient> ingredients = JsonHelper.parseList(json, "inputs", SizedIngredient::deserialize);
-      String value = GsonHelper.getAsString(GsonHelper.getAsJsonObject(json, "result"), "value");
-      return new SwappableModifierRecipe(id, ingredients, toolRequirement, maxToolSize, requirements, requirementsError, result.getId(), value, slots, allowCrystal);
-    }
-
-    @Override
-    public SwappableModifierRecipe fromNetwork(ResourceLocation id, FriendlyByteBuf buffer, Ingredient toolRequirement, int maxToolSize, ModifierMatch requirements,
-																				String requirementsError, ModifierEntry result, int maxLevel, @Nullable SlotCount slots, boolean allowCrystal) {
-      int size = buffer.readVarInt();
-      ImmutableList.Builder<SizedIngredient> builder = ImmutableList.builder();
-      for (int i = 0; i < size; i++) {
-        builder.add(SizedIngredient.read(buffer));
-      }
-      String value = buffer.readUtf();
-      return new SwappableModifierRecipe(id, builder.build(), toolRequirement, maxToolSize, requirements, requirementsError, result.getId(), value, slots, allowCrystal);
-    }
-
-    @Override
-    public void toNetworkSafe(FriendlyByteBuf buffer, SwappableModifierRecipe recipe) {
-      super.toNetworkSafe(buffer, recipe);
-      buffer.writeVarInt(recipe.inputs.size());
-      for (SizedIngredient ingredient : recipe.inputs) {
-        ingredient.write(buffer);
-      }
-      buffer.writeUtf(recipe.value);
-    }
   }
 }

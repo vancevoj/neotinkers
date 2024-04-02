@@ -18,12 +18,7 @@
       "tag": "forge:ender_pearls"
     }
   ],
-  "max_level": 2,
-  "requirements": {
-    "error": "recipe.tconstruct.modifier.luck.level_2",
-    "level": 1,
-    "name": "tconstruct:luck"
-  },
+  "level": 2,
   "result": {
     "level": 1,
     "name": "tconstruct:luck"

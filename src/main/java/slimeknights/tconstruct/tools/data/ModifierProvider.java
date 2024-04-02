@@ -37,7 +37,6 @@ import slimeknights.tconstruct.library.data.tinkering.AbstractModifierProvider;
 import slimeknights.tconstruct.library.json.RandomLevelingValue;
 import slimeknights.tconstruct.library.json.predicate.TinkerPredicate;
 import slimeknights.tconstruct.library.json.predicate.tool.HasModifierPredicate;
-import slimeknights.tconstruct.library.json.predicate.tool.HasModifierPredicate.ModifierCheck;
 import slimeknights.tconstruct.library.json.variable.block.BlockVariable;
 import slimeknights.tconstruct.library.json.variable.entity.AttributeEntityVariable;
 import slimeknights.tconstruct.library.json.variable.entity.ConditionalEntityVariable;
@@ -70,6 +69,7 @@ import slimeknights.tconstruct.library.modifiers.modules.behavior.RepairModule;
 import slimeknights.tconstruct.library.modifiers.modules.behavior.ShowOffhandModule;
 import slimeknights.tconstruct.library.modifiers.modules.behavior.ToolActionTransformModule;
 import slimeknights.tconstruct.library.modifiers.modules.build.EnchantmentModule;
+import slimeknights.tconstruct.library.modifiers.modules.build.ModifierRequirementsModule;
 import slimeknights.tconstruct.library.modifiers.modules.build.ModifierSlotModule;
 import slimeknights.tconstruct.library.modifiers.modules.build.RarityModule;
 import slimeknights.tconstruct.library.modifiers.modules.build.SetStatModule;
@@ -161,6 +161,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
     // netherite
     buildModifier(ModifierIds.netherite)
       .levelDisplay(ModifierLevelDisplay.NO_LEVELS)
+      .addModule(ModifierRequirementsModule.builder().modifierKey(ModifierIds.netherite).requireModifier(TinkerTags.Modifiers.GEMS, 1).displayModifier(ModifierIds.diamond, 1).build())
       .addModule(new RarityModule(Rarity.RARE))
       .addModule(new VolatileFlagModule(IModifiable.INDESTRUCTIBLE_ENTITY))
       .addModule(StatBoostModule.multiplyBase(ToolStats.DURABILITY).flat(0.2f))
@@ -182,7 +183,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .addModule(IncrementalModule.RECIPE_CONTROLLED)
       .addModule(AttributeModule.builder(ForgeMod.REACH_DISTANCE.get(), Operation.ADDITION).uniqueFrom(ModifierIds.reach).eachLevel(1))
       .addModule(AttributeModule.builder(ForgeMod.ATTACK_RANGE.get(), Operation.ADDITION).uniqueFrom(ModifierIds.reach).eachLevel(1));
-    IJsonPredicate<IToolContext> noUnbreakable = new HasModifierPredicate(TinkerModifiers.unbreakable.getId(), ModifierCheck.ALL).inverted();
+    IJsonPredicate<IToolContext> noUnbreakable = HasModifierPredicate.hasModifier(TinkerModifiers.unbreakable.getId(), 1).inverted();
     buildModifier(ModifierIds.reinforced)
       .addModule(IncrementalModule.RECIPE_CONTROLLED)
       // level 0 to 5: 0.025 * LEVEL * (11 - LEVEL)
@@ -193,7 +194,11 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       // level 6+: 0.5 + level * 0.05
       .addModule(ReduceToolDamageModule.builder().tool(noUnbreakable).minLevel(6).amount(0.5f, 0.05f));
     // unbreakable priority is after overslime but before standard modifiers like dense
-    buildModifier(TinkerModifiers.unbreakable).levelDisplay(ModifierLevelDisplay.NO_LEVELS).priority(125).addModule(new DurabilityBarColorModule(0xffffff)).addModule(ReduceToolDamageModule.builder().flat(1.0f));
+    buildModifier(TinkerModifiers.unbreakable)
+      .levelDisplay(ModifierLevelDisplay.NO_LEVELS).priority(125)
+      .addModule(ModifierRequirementsModule.builder().requireModifier(ModifierIds.netherite, 1).requireModifier(ModifierIds.reinforced, 5).modifierKey(TinkerModifiers.unbreakable).build())
+      .addModule(new DurabilityBarColorModule(0xffffff))
+      .addModule(ReduceToolDamageModule.builder().flat(1.0f));
     buildModifier(ModifierIds.tank).addModule(new TankModule(FluidType.BUCKET_VOLUME, true));
     buildModifier(ModifierIds.theOneProbe, modLoaded("theoneprobe")).levelDisplay(ModifierLevelDisplay.NO_LEVELS).addModule(TheOneProbeModule.INSTANCE);
 
@@ -335,7 +340,10 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
     // boots
     buildModifier(ModifierIds.depthStrider).addModule(EnchantmentModule.builder(Enchantments.DEPTH_STRIDER).constant());
     buildModifier(ModifierIds.featherFalling).addModule(IncrementalModule.RECIPE_CONTROLLED).addModule(ProtectionModule.source(DamageSourcePredicate.FALL).eachLevel(3.75f));
-    buildModifier(ModifierIds.longFall).levelDisplay(ModifierLevelDisplay.NO_LEVELS).addModule(BlockDamageSourceModule.source(DamageSourcePredicate.FALL).build());
+    buildModifier(ModifierIds.longFall)
+      .levelDisplay(ModifierLevelDisplay.NO_LEVELS)
+      .addModule(ModifierRequirementsModule.builder().requireModifier(ModifierIds.featherFalling, 4).modifierKey(ModifierIds.longFall).build())
+      .addModule(BlockDamageSourceModule.source(DamageSourcePredicate.FALL).build());
     buildModifier(ModifierIds.frostWalker)
       .levelDisplay(ModifierLevelDisplay.NO_LEVELS)
       .addModule(BlockDamageSourceModule.source(new SourceMessagePredicate(DamageSource.HOT_FLOOR)).build())
@@ -385,7 +393,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
         // finally, add in base damage
         .variable(VALUE).add().build())
       .addModule(ConditionalStatModule.stat(ToolStats.DRAW_SPEED)
-        .customVariable("poison", new slimeknights.tconstruct.library.json.variable.stat.EntityConditionalStatVariable(new EntityEffectLevelVariable(MobEffects.POISON), 0))
+        .customVariable("poison", new EntityConditionalStatVariable(new EntityEffectLevelVariable(MobEffects.POISON), 0))
         .formula()
         // gives 0.15 bonus per level at poison 1, .25 at poison 2
         .customVariable("poison").constant(0.5f).add().constant(0.1f).multiply().variable(LEVEL).multiply().variable(MULTIPLIER).multiply()
@@ -406,8 +414,8 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
         // finally, add in base damage
         .variable(VALUE).add().build())
       .addModule(ConditionalStatModule.stat(ToolStats.DRAW_SPEED)
-        .customVariable("health", new slimeknights.tconstruct.library.json.variable.stat.EntityConditionalStatVariable(EntityVariable.HEALTH, 0))
-        .customVariable("max", new slimeknights.tconstruct.library.json.variable.stat.EntityConditionalStatVariable(new AttributeEntityVariable(Attributes.MAX_HEALTH), 20))
+        .customVariable("health", new EntityConditionalStatVariable(EntityVariable.HEALTH, 0))
+        .customVariable("max", new EntityConditionalStatVariable(new AttributeEntityVariable(Attributes.MAX_HEALTH), 20))
         .formula()
         .customVariable("health")
         // add (10 - max_health) to health, at minimum 0, to account for low max health

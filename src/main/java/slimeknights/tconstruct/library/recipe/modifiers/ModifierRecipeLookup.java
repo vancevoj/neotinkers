@@ -4,10 +4,8 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.recipe.RecipeCacheInvalidator;
 import slimeknights.tconstruct.common.recipe.RecipeCacheInvalidator.DuelSidedListener;
@@ -19,7 +17,6 @@ import slimeknights.tconstruct.library.tools.SlotType;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 
 import javax.annotation.Nullable;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -27,13 +24,6 @@ import java.util.stream.Stream;
 
 /** Logic to check various modifier recipe based properties */
 public class ModifierRecipeLookup {
-  /** Key of default error message, in case an error message for a modifier requirement is missing */
-  public static final String DEFAULT_ERROR_KEY = TConstruct.makeTranslationKey("recipe", "modifier.requirements_error");
-  /** Default requirements error, for if a proper error is missing */
-  public static final Component DEFAULT_ERROR = Component.translatable(ModifierRecipeLookup.DEFAULT_ERROR_KEY);
-
-  /** Map of requirements for each modifier */
-  private static final Multimap<ModifierId,ModifierRequirements> REQUIREMENTS = HashMultimap.create();
   /** Map of the number needed for each incremental modifier */
   private static final Object2IntMap<ResourceLocation> INCREMENTAL_PER_LEVEL = new Object2IntOpenHashMap<>();
   /** Map of salvage recipes for each modifier */
@@ -48,72 +38,12 @@ public class ModifierRecipeLookup {
 
   /** Listener for clearing the caches on recipe reload */
   private static final DuelSidedListener LISTENER = RecipeCacheInvalidator.addDuelSidedListener(() -> {
-    REQUIREMENTS.clear();
     INCREMENTAL_PER_LEVEL.clear();
     SALVAGE.clear();
     RECIPE_MODIFIERS.clear();
     RECIPE_MODIFIER_IDS.clear();
     RECIPE_MODIFIER_LIST = null;
   });
-
-
-  /* Requirements */
-
-  /**
-   * Adds a modifier requirement, typically called by the recipe
-   * @param requirements  Requirements object
-   */
-  public static void addRequirements(ModifierRequirements requirements) {
-    LISTENER.checkClear();
-    REQUIREMENTS.put(requirements.getModifier(), requirements);
-  }
-
-  /**
-   * Adds a modifier requirement, typically called by the recipe
-   * @param ingredient    Ingredient that must match the tool for this to be attempted
-   * @param entry         Modifier to check, level determines amount added per level
-   * @param requirements  Actual requirements to attempt
-   * @param errorMessage  Error to display if the requirements fail
-   */
-  public static void addRequirements(Ingredient ingredient, ModifierEntry entry, ModifierMatch requirements, String errorMessage) {
-    if (requirements != ModifierMatch.ALWAYS) {
-      // if the key is empty, use the default
-      Component error;
-      if (errorMessage.isEmpty()) {
-        error = DEFAULT_ERROR;
-      } else {
-        error = Component.translatable(errorMessage);
-      }
-      ModifierId modifier = entry.getId();
-      addRequirements(new ModifierRequirements(ingredient, modifier, requirements.getMinLevel(modifier) + entry.getLevel(), requirements, error));
-    }
-  }
-
-  /** Gets the requirements for the given modifier */
-  public static Collection<ModifierRequirements> getRequirements(ModifierId modifier) {
-    return REQUIREMENTS.get(modifier);
-  }
-
-  /**
-   * Validates that the tool meets all requirements. Typically called when modifiers are removed, but should be able to be called at any time after modifiers change.
-   * @param stack  ItemStack containing the tool. Most of the time its just a tag check, so the correct item with any NBT is valid.
-   *               However, if addons do really hacky things the actual stack corresponding to {@code tool} might matter.
-   * @param tool   Tool instance to check
-   * @return  Error message if validation failed, null if it passes
-   */
-  @Nullable
-  public static Component checkRequirements(ItemStack stack, IToolStackView tool) {
-    List<ModifierEntry> modifiers = tool.getModifierList();
-    for (ModifierEntry entry : tool.getUpgrades().getModifiers()) {
-      for (ModifierRequirements requirements : getRequirements(entry.getId())) {
-        Component result = requirements.check(stack, entry.getLevel(), modifiers);
-        if (result != null) {
-          return result;
-        }
-      }
-    }
-    return null;
-  }
 
 
   /* Incremental modifiers */

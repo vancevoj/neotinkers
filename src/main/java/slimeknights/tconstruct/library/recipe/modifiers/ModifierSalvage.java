@@ -1,26 +1,25 @@
 package slimeknights.tconstruct.library.recipe.modifiers;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSyntaxException;
 import lombok.Getter;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.GsonHelper;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
+import slimeknights.mantle.data.loadable.common.IngredientLoadable;
+import slimeknights.mantle.data.loadable.field.ContextKey;
+import slimeknights.mantle.data.loadable.primitive.IntLoadable;
+import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.recipe.ICustomOutputRecipe;
-import slimeknights.mantle.recipe.helper.LoggingRecipeSerializer;
-import slimeknights.mantle.util.JsonHelper;
+import slimeknights.tconstruct.library.json.IntRange;
+import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierId;
 import slimeknights.tconstruct.library.recipe.TinkerRecipeTypes;
 import slimeknights.tconstruct.library.recipe.tinkerstation.ITinkerStationRecipe;
 import slimeknights.tconstruct.library.tools.SlotType.SlotCount;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
-import slimeknights.tconstruct.library.utils.JsonUtils;
 import slimeknights.tconstruct.tools.TinkerModifiers;
 
 import javax.annotation.Nullable;
@@ -29,6 +28,15 @@ import javax.annotation.Nullable;
  * Shared logic for main types of salvage recipes
  */
 public class ModifierSalvage implements ICustomOutputRecipe<Container> {
+  public static final RecordLoadable<ModifierSalvage> LOADER = RecordLoadable.create(
+    ContextKey.ID.requiredField(),
+    IngredientLoadable.DISALLOW_EMPTY.requiredField("tools", r -> r.toolIngredient),
+    IntLoadable.FROM_ONE.defaultField("max_tool_size", ITinkerStationRecipe.DEFAULT_TOOL_STACK_SIZE, r -> r.maxToolSize),
+    ModifierId.PARSER.requiredField("modifier", r -> r.modifier),
+    ModifierEntry.VALID_LEVEL.defaultField("level", r -> r.level),
+    SlotCount.LOADABLE.nullableField("slots", r -> r.slots),
+    ModifierSalvage::new);
+
   @Getter
   protected final ResourceLocation id;
   /** Ingredient determining tools matched by this */
@@ -39,21 +47,18 @@ public class ModifierSalvage implements ICustomOutputRecipe<Container> {
   /** Modifier represented by this recipe */
   @Getter
   protected final ModifierId modifier;
-  /** Minimum level of the modifier for this to be applicable */
-  protected final int minLevel;
-  /** Maximum level of the modifier for this to be applicable */
-  protected final int maxLevel;
+  /** Level for this to be applicable */
+  protected final IntRange level;
   /** Slots restored by this recipe, if null no slots are restored */
   @Nullable
   protected final SlotCount slots;
 
-  public ModifierSalvage(ResourceLocation id, Ingredient toolIngredient, int maxToolSize, ModifierId modifier, int minLevel, int maxLevel, @Nullable SlotCount slots) {
+  public ModifierSalvage(ResourceLocation id, Ingredient toolIngredient, int maxToolSize, ModifierId modifier, IntRange level, @Nullable SlotCount slots) {
     this.id = id;
     this.toolIngredient = toolIngredient;
     this.maxToolSize = maxToolSize;
     this.modifier = modifier;
-    this.minLevel = minLevel;
-    this.maxLevel = maxLevel;
+    this.level = level;
     this.slots = slots;
     ModifierRecipeLookup.addSalvage(this);
   }
@@ -67,7 +72,7 @@ public class ModifierSalvage implements ICustomOutputRecipe<Container> {
    */
   @SuppressWarnings("unused")
   public boolean matches(ItemStack stack, IToolStackView tool, int originalLevel) {
-    return originalLevel >= minLevel && originalLevel <= maxLevel && toolIngredient.test(stack);
+    return this.level.test(originalLevel) && toolIngredient.test(stack);
   }
 
   /**
@@ -95,49 +100,5 @@ public class ModifierSalvage implements ICustomOutputRecipe<Container> {
   @Override
   public RecipeSerializer<?> getSerializer() {
     return TinkerModifiers.modifierSalvageSerializer.get();
-  }
-
-  /**
-   * Serializer instance
-   */
-  public static class Serializer implements LoggingRecipeSerializer<ModifierSalvage> {
-    @Override
-    public ModifierSalvage fromJson(ResourceLocation id, JsonObject json) {
-      Ingredient toolIngredient = Ingredient.fromJson(JsonHelper.getElement(json, "tools"));
-      int maxToolSize = GsonHelper.getAsInt(json, "max_tool_size", ITinkerStationRecipe.DEFAULT_TOOL_STACK_SIZE);
-      ModifierId modifier = ModifierId.PARSER.getIfPresent(json, "modifier");
-      int minLevel = JsonUtils.getIntMin(json, "min_level", 1);
-      int maxLevel = GsonHelper.getAsInt(json, "max_level", Integer.MAX_VALUE);
-      if (maxLevel < minLevel) {
-        throw new JsonSyntaxException("Max level must be greater than or equal to min level");
-      }
-      SlotCount slots = null;
-      if (json.has("slots")) {
-        slots = SlotCount.fromJson(GsonHelper.getAsJsonObject(json, "slots"));
-      }
-      return new ModifierSalvage(id, toolIngredient, maxToolSize, modifier, minLevel, maxLevel, slots);
-    }
-
-    @Nullable
-    @Override
-    public ModifierSalvage fromNetworkSafe(ResourceLocation id, FriendlyByteBuf buffer) {
-      Ingredient toolIngredient = Ingredient.fromNetwork(buffer);
-      int maxToolSize = buffer.readVarInt();
-      ModifierId modifier = ModifierId.PARSER.decode(buffer);
-      int minLevel = buffer.readVarInt();
-      int maxLevel = buffer.readVarInt();
-      SlotCount slots = SlotCount.read(buffer);
-      return new ModifierSalvage(id, toolIngredient, maxToolSize, modifier, minLevel, maxLevel, slots);
-    }
-
-    @Override
-    public void toNetworkSafe(FriendlyByteBuf buffer, ModifierSalvage recipe) {
-      recipe.toolIngredient.toNetwork(buffer);
-      buffer.writeVarInt(recipe.getMaxToolSize());
-      buffer.writeResourceLocation(recipe.modifier);
-      buffer.writeVarInt(recipe.minLevel);
-      buffer.writeVarInt(recipe.maxLevel);
-      SlotCount.write(recipe.slots, buffer);
-    }
   }
 }

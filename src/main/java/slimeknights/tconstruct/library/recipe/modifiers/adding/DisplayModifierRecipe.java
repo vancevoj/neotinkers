@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.minecraft.world.item.ItemStack;
 import slimeknights.mantle.recipe.ingredient.SizedIngredient;
+import slimeknights.tconstruct.library.json.IntRange;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.tools.SlotType.SlotCount;
 
@@ -21,11 +22,9 @@ public class DisplayModifierRecipe implements IDisplayModifierRecipe {
   private final List<ItemStack> toolWithModifier;
   /** Error message to display if the requirements do not match */
   @Getter
-  protected final String requirementsError;
-  @Getter
   private final ModifierEntry displayResult;
   @Getter
-  private final int maxLevel;
+  private final IntRange level;
   @Nullable
   @Getter
   private final SlotCount slots;
@@ -41,10 +40,5 @@ public class DisplayModifierRecipe implements IDisplayModifierRecipe {
       return inputs.get(slot).getMatchingStacks();
     }
     return Collections.emptyList();
-  }
-
-  @Override
-  public boolean hasRequirements() {
-    return !requirementsError.isEmpty();
   }
 }

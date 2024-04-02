@@ -5,7 +5,6 @@
   "harvest": {
     "aoe": {
       "type": "tconstruct:box",
-      "bonus": {},
       "expansion_direction": "tconstruct:pitch",
       "expansions": [
         {

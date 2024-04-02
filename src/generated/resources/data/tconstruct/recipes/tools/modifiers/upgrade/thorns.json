@@ -5,7 +5,9 @@
   "input": {
     "item": "minecraft:cactus"
   },
-  "max_level": 3,
+  "level": {
+    "max": 3
+  },
   "needed_per_level": 25,
   "result": {
     "level": 1,

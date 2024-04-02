@@ -5,7 +5,9 @@
   "input": {
     "tag": "forge:dusts/prismarine"
   },
-  "max_level": 5,
+  "level": {
+    "max": 5
+  },
   "needed_per_level": 36,
   "result": {
     "level": 1,

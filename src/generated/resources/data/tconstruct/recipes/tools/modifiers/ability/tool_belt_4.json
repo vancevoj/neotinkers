@@ -12,12 +12,7 @@
       "item": "minecraft:leather"
     }
   ],
-  "max_level": 4,
-  "requirements": {
-    "error": "recipe.tconstruct.modifier.tool_belt",
-    "level": 3,
-    "name": "tconstruct:tool_belt"
-  },
+  "level": 4,
   "result": {
     "level": 1,
     "name": "tconstruct:tool_belt"

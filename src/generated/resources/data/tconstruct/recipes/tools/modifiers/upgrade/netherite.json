@@ -6,12 +6,7 @@
       "tag": "forge:ingots/netherite"
     }
   ],
-  "max_level": 1,
-  "requirements": {
-    "error": "recipe.tconstruct.modifier.netherite_requirements",
-    "level": 1,
-    "tag": "tconstruct:gems"
-  },
+  "level": 1,
   "result": {
     "level": 1,
     "name": "tconstruct:netherite"

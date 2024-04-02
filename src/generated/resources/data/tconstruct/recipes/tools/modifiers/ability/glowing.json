@@ -12,7 +12,7 @@
       "item": "minecraft:shroomlight"
     }
   ],
-  "max_level": 1,
+  "level": 1,
   "result": {
     "level": 1,
     "name": "tconstruct:glowing"

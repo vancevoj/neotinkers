@@ -9,7 +9,9 @@
       "item": "minecraft:slime_block"
     }
   ],
-  "max_level": 3,
+  "level": {
+    "max": 3
+  },
   "result": {
     "level": 1,
     "name": "tconstruct:knockback"

@@ -12,7 +12,9 @@
       "tag": "forge:slimeball/ichor"
     }
   ],
-  "max_level": 2,
+  "level": {
+    "max": 2
+  },
   "result": {
     "level": 1,
     "name": "tconstruct:offhanded"

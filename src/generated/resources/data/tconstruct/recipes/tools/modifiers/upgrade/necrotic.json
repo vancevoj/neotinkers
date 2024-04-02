@@ -12,7 +12,9 @@
       "item": "minecraft:ghast_tear"
     }
   ],
-  "max_level": 5,
+  "level": {
+    "max": 5
+  },
   "result": {
     "level": 1,
     "name": "tconstruct:necrotic"

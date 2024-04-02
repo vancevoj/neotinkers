@@ -5,7 +5,9 @@
   "input": {
     "item": "minecraft:feather"
   },
-  "max_level": 4,
+  "level": {
+    "max": 4
+  },
   "needed_per_level": 40,
   "result": {
     "level": 1,

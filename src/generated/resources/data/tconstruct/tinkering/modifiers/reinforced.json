@@ -23,7 +23,10 @@
         "type": "tconstruct:has_modifier",
         "check": "all",
         "level": 0,
-        "modifier": "tconstruct:unbreakable"
+        "modifier": {
+          "type": "tconstruct:single",
+          "modifier": "tconstruct:unbreakable"
+        }
       }
     },
     {
@@ -37,7 +40,10 @@
         "type": "tconstruct:has_modifier",
         "check": "all",
         "level": 0,
-        "modifier": "tconstruct:unbreakable"
+        "modifier": {
+          "type": "tconstruct:single",
+          "modifier": "tconstruct:unbreakable"
+        }
       }
     }
   ],

@@ -20,7 +20,7 @@ import slimeknights.tconstruct.library.tools.nbt.ModifierNBT;
 public record HasModifierPredicate(IJsonPredicate<ModifierId> modifier, IntRange level, ModifierCheck check) implements ToolContextPredicate {
   public static final RecordLoadable<HasModifierPredicate> LOADER = RecordLoadable.create(
     ModifierPredicate.LOADER.requiredField("modifier", HasModifierPredicate::modifier),
-    ModifierEntry.ANY_LEVEL.defaultField("level", ModifierEntry.VALID_LEVEL, true, HasModifierPredicate::level),
+    ModifierEntry.ANY_LEVEL.defaultField("level", ModifierEntry.VALID_LEVEL, HasModifierPredicate::level),
     new EnumLoadable<>(ModifierCheck.class).requiredField("check", HasModifierPredicate::check),
     HasModifierPredicate::new);
 

@@ -22,7 +22,7 @@
       "item": "tconstruct:tool_binding"
     }
   ],
-  "max_level": 1,
+  "level": 1,
   "result": {
     "level": 1,
     "name": "tconstruct:plowing"

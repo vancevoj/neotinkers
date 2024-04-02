@@ -6,7 +6,9 @@
     "tag": "forge:storage_blocks/redstone"
   },
   "leftover": "minecraft:redstone",
-  "max_level": 4,
+  "level": {
+    "max": 4
+  },
   "needed_per_level": 45,
   "result": {
     "level": 1,

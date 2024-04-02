@@ -29,6 +29,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import static slimeknights.tconstruct.library.recipe.modifiers.adding.IDisplayModifierRecipe.withModifiers;
+
 /**
  * Recipe to add overslime to a tool
  */
@@ -155,9 +157,10 @@ public class OverslimeModifierRecipe implements ITinkerStationRecipe, IDisplayMo
   public List<ItemStack> getToolWithModifier() {
     if (toolWithModifier == null) {
       OverslimeModifier overslime = TinkerModifiers.overslime.get();
+      List<ModifierEntry> result = List.of(RESULT);
       toolWithModifier = RegistryHelper.getTagValueStream(Registry.ITEM, TinkerTags.Items.DURABILITY)
                                        .map(MAP_TOOL_FOR_RENDERING)
-                                       .map(stack -> IDisplayModifierRecipe.withModifiers(stack, null, RESULT, data -> overslime.setShield(data, restoreAmount)))
+                                       .map(stack -> withModifiers(stack, result, data -> overslime.setShield(data, restoreAmount)))
                                        .toList();
     }
     return toolWithModifier;

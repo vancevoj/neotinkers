@@ -18,21 +18,7 @@
       "tag": "forge:ingots/netherite"
     }
   ],
-  "max_level": 1,
-  "requirements": {
-    "error": "recipe.tconstruct.modifier.unbreakable_requirements",
-    "matches_needed": 2,
-    "options": [
-      {
-        "level": 1,
-        "name": "tconstruct:netherite"
-      },
-      {
-        "level": 5,
-        "name": "tconstruct:reinforced"
-      }
-    ]
-  },
+  "level": 1,
   "result": {
     "level": 1,
     "name": "tconstruct:unbreakable"

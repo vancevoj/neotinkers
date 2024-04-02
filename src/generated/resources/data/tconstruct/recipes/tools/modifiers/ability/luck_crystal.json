@@ -9,8 +9,10 @@
       }
     },
     {
-      "max_level": 3,
-      "min_level": 2
+      "level": {
+        "max": 3,
+        "min": 2
+      }
     }
   ],
   "result": "tconstruct:luck",

@@ -1,6 +1,5 @@
 {
   "type": "tconstruct:modifier_salvage",
-  "min_level": 1,
   "modifier": "tconstruct:path_maker",
   "slots": {
     "abilities": 1

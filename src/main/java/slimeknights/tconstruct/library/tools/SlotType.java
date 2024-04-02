@@ -10,7 +10,9 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.GsonHelper;
 import slimeknights.mantle.data.loadable.Loadable;
+import slimeknights.mantle.data.loadable.field.LoadableField;
 import slimeknights.mantle.data.loadable.primitive.StringLoadable;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.utils.JsonUtils;
@@ -22,6 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.function.Function;
 import java.util.regex.Pattern;
 
 /**
@@ -152,6 +155,85 @@ public final class SlotType {
 
   /** Data object representing a slot type and count */
   public record SlotCount(SlotType type, int count) {
+    public static final Loadable<SlotCount> LOADABLE = new Loadable<>() {
+      @Override
+      public SlotCount convert(JsonElement element, String key) {
+        JsonObject json = GsonHelper.convertToJsonObject(element, key);
+        if (json.entrySet().size() != 1) {
+          throw new JsonSyntaxException("Cannot set multiple slot types");
+        }
+        Entry<String,JsonElement> entry = json.entrySet().iterator().next();
+        String typeString = entry.getKey();
+        if (!SlotType.isValidName(typeString)) {
+          throw new JsonSyntaxException("Invalid slot type name '" + typeString + "'");
+        }
+        SlotType slotType = SlotType.getOrCreate(typeString);
+        int slots = JsonUtils.convertToIntMin(entry.getValue(), "count", 1);
+        return new SlotCount(slotType, slots);
+      }
+
+      @Override
+      public JsonElement serialize(SlotCount slots) {
+        JsonObject json = new JsonObject();
+        json.addProperty(slots.type.getName(), slots.count);
+        return json;
+      }
+
+      @Override
+      public SlotCount decode(FriendlyByteBuf buffer) {
+        return new SlotCount(SlotType.read(buffer), buffer.readVarInt());
+      }
+
+      @Override
+      public void encode(FriendlyByteBuf buffer, SlotCount slots) {
+        buffer.writeVarInt(slots.count());
+        slots.type().write(buffer);
+      }
+
+      @Override
+      public <P> LoadableField<SlotCount,P> nullableField(String key, Function<P,SlotCount> getter) {
+        return new NullableSlotCountField<>(key, getter);
+      }
+    };
+
+    /** Nullable field which compacts slot counts in the buffer */
+    private record NullableSlotCountField<P>(String key, Function<P,SlotCount> getter) implements LoadableField<SlotCount,P> {
+      @Nullable
+      @Override
+      public SlotCount get(JsonObject json) {
+        return LOADABLE.getOrDefault(json, key, null);
+      }
+
+      @Override
+      public void serialize(P parent, JsonObject json) {
+        SlotCount count = getter.apply(parent);
+        if (count != null) {
+          json.add(key, LOADABLE.serialize(count));
+        }
+      }
+
+      @Nullable
+      @Override
+      public SlotCount decode(FriendlyByteBuf buffer) {
+        int count = buffer.readVarInt();
+        if (count == 0) {
+          return null;
+        }
+        return new SlotCount(SlotType.read(buffer), count);
+      }
+
+      @Override
+      public void encode(FriendlyByteBuf buffer, P parent) {
+        SlotCount slotCount = getter.apply(parent);
+        if (slotCount == null) {
+          buffer.writeVarInt(0);
+        } else {
+          buffer.writeVarInt(slotCount.count);
+          slotCount.type.write(buffer);
+        }
+      }
+    }
+
     /**
      * Gets the type for the given slot count
      */
@@ -163,52 +245,12 @@ public final class SlotType {
       return count.type();
     }
 
-    /**
-     * Parses the slot data from the given JSON
-     * @param json JSON
-     * @return Slot count data
-     */
-    public static SlotCount fromJson(JsonObject json) {
-      if (json.entrySet().size() != 1) {
-        throw new JsonSyntaxException("Cannot set multiple slot types");
-      }
-      Entry<String,JsonElement> entry = json.entrySet().iterator().next();
-      String typeString = entry.getKey();
-      if (!SlotType.isValidName(typeString)) {
-        throw new JsonSyntaxException("Invalid slot type name '" + typeString + "'");
-      }
-      SlotType slotType = SlotType.getOrCreate(typeString);
-      int slots = JsonUtils.convertToIntMin(entry.getValue(), "count", 1);
-      return new SlotCount(slotType, slots);
-    }
-
-    /** Reads a slot count from the packet buffer */
-    @Nullable
-    public static SlotCount read(FriendlyByteBuf buffer) {
-      int count = buffer.readVarInt();
-      if (count > 0) {
-        SlotType type = SlotType.read(buffer);
-        return new SlotCount(type, count);
-      }
-      return null;
-    }
-
     /** Gets the given type of slots from the given slot count object */
     public static int get(@Nullable SlotCount slots, SlotType type) {
       if (slots != null && slots.type() == type) {
         return slots.count();
       }
       return 0;
-    }
-
-    /** Writes this to the packet buffer */
-    public static void write(@Nullable SlotCount slots, FriendlyByteBuf buffer) {
-      if (slots == null) {
-        buffer.writeVarInt(0);
-      } else {
-        buffer.writeVarInt(slots.count());
-        slots.type().write(buffer);
-      }
     }
 
     @Override

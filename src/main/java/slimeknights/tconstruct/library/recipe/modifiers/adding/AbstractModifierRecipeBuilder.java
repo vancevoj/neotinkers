@@ -1,6 +1,6 @@
 package slimeknights.tconstruct.library.recipe.modifiers.adding;
 
-import com.google.gson.JsonObject;
+import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import net.minecraft.data.recipes.FinishedRecipe;
@@ -8,55 +8,34 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraftforge.common.crafting.CompoundIngredient;
-import net.minecraftforge.common.util.Lazy;
 import slimeknights.mantle.recipe.data.AbstractRecipeBuilder;
-import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
-import slimeknights.tconstruct.library.recipe.modifiers.ModifierMatch;
+import slimeknights.tconstruct.library.recipe.modifiers.ModifierSalvage;
 import slimeknights.tconstruct.library.recipe.tinkerstation.ITinkerStationRecipe;
 import slimeknights.tconstruct.library.tools.SlotType;
-import slimeknights.tconstruct.tools.TinkerModifiers;
+import slimeknights.tconstruct.library.tools.SlotType.SlotCount;
 
 import javax.annotation.Nullable;
 import java.util.function.Consumer;
+
+import static slimeknights.tconstruct.library.modifiers.ModifierEntry.VALID_LEVEL;
 
 /** Shared logic between normal and incremental modifier recipe builders */
 @SuppressWarnings("unchecked")
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class AbstractModifierRecipeBuilder<T extends AbstractModifierRecipeBuilder<T>> extends AbstractRecipeBuilder<T> {
-  protected static final Lazy<Ingredient> DEFAULT_TOOL = Lazy.of(() -> Ingredient.of(TinkerTags.Items.MODIFIABLE));
-  /** @deprecated use {@link TinkerTags.Items#UNARMED} */
-  @Deprecated
-  protected static final Lazy<ModifierMatch> UNARMED_MODIFIER = Lazy.of(() -> ModifierMatch.entry(TinkerModifiers.ambidextrous));
-  /** @deprecated use {@link TinkerTags.Items#UNARMED} */
-  @Deprecated
-  protected static final String UNARMED_ERROR = TConstruct.makeTranslationKey("recipe", "modifier.unarmed");
   // shared
   protected final ModifierEntry result;
-  protected Ingredient tools = Ingredient.EMPTY;
+  protected Ingredient tools = Ingredient.of(TinkerTags.Items.MODIFIABLE);
   protected int maxToolSize = ITinkerStationRecipe.DEFAULT_TOOL_STACK_SIZE;
-  protected SlotType slotType;
-  protected int slots;
-  protected int maxLevel = 0;
+  @Nullable
+  protected SlotCount slots;
+  protected int minLevel = 1;
+  protected int maxLevel = VALID_LEVEL.max();
+  protected boolean useSalvageMax = false;
   // modifier recipe
-  protected ModifierMatch requirements = ModifierMatch.ALWAYS;
-  protected String requirementsError = null;
   protected boolean allowCrystal = true;
-  // salvage recipe
-  protected int salvageMinLevel = 1;
-  protected int salvageMaxLevel = 0;
-  protected boolean includeUnarmed = false;
-
-  /** Generates a second copy of this recipe for the sake of the unarmed modifier */
-  @Deprecated
-  public T includeUnarmed() {
-    TConstruct.LOG.warn("Unarmed has been reworked for Tinkers 1.18. Instead of having two recipes, just include the unarmed tag as a valid input for your recipe. This method will be removed in 1.19");
-    this.includeUnarmed = true;
-    return (T) this;
-  }
 
   /**
    * Sets the list of tools this modifier can be applied to
@@ -89,50 +68,16 @@ public abstract class AbstractModifierRecipeBuilder<T extends AbstractModifierRe
   }
 
   /**
-   * Sets the modifier requirements for this recipe
-   * @param requirements  Modifier requirements
+   * Sets the max level for this modifier, affects both the recipe and the salvage
+   * @param level  Max level
    * @return  Builder instance
    */
-  public T setRequirements(ModifierMatch requirements) {
-    this.requirements = requirements;
-    return (T) this;
-  }
-
-  /**
-   * Sets the modifier requirements error for when it does not matcH
-   * @param requirementsError  Requirements error lang key
-   * @return  Builder instance
-   */
-  public T setRequirementsError(String requirementsError) {
-    this.requirementsError = requirementsError;
-    return (T) this;
-  }
-
-  /**
-   * Sets the min level for the salvage recipe
-   * @param level  Min level
-   * @return  Builder instance
-   */
-  public T setMinSalvageLevel(int level) {
+  @CanIgnoreReturnValue
+  public T setMinLevel(int level) {
     if (level < 1) {
       throw new IllegalArgumentException("Min level must be greater than 0");
     }
-    this.salvageMinLevel = level;
-    return (T) this;
-  }
-
-  /**
-   * Sets the min level for the salvage recipe
-   * @param minLevel  Min level for salvage
-   * @param maxLevel  Max level for salvage
-   * @return  Builder instance
-   */
-  public T setSalvageLevelRange(int minLevel, int maxLevel) {
-    setMinSalvageLevel(minLevel);
-    if (maxLevel < minLevel) {
-      throw new IllegalArgumentException("Max level must be grater than or equal to min level");
-    }
-    this.salvageMaxLevel = maxLevel;
+    this.minLevel = level;
     return (T) this;
   }
 
@@ -146,6 +91,28 @@ public abstract class AbstractModifierRecipeBuilder<T extends AbstractModifierRe
       throw new IllegalArgumentException("Max level must be greater than 0");
     }
     this.maxLevel = level;
+    return (T) this;
+  }
+
+  /**
+   * Tells the builder to set the max level for salvage recipes.
+   * Normally we leave it off for flexability, but it sometimes needs to be forced as a higher level has another meaning.
+   * @return  Builder instance
+   */
+  public T useSalvageMax() {
+    this.useSalvageMax = true;
+    return (T) this;
+  }
+
+  /** Sets this modifier to only work at a single level */
+  public T exactLevel(int level) {
+    return setLevelRange(level, level);
+  }
+
+  /** Sets this modifier to work on the given range of levels */
+  public T setLevelRange(int min, int max) {
+    setMinLevel(min);
+    setMaxLevel(max);
     return (T) this;
   }
 
@@ -180,8 +147,7 @@ public abstract class AbstractModifierRecipeBuilder<T extends AbstractModifierRe
     if (slots < 0) {
       throw new IllegalArgumentException("Slots must be positive");
     }
-    this.slotType = slotType;
-    this.slots = slots;
+    this.slots = new SlotCount(slotType, slots);
     return (T) this;
   }
 
@@ -195,76 +161,17 @@ public abstract class AbstractModifierRecipeBuilder<T extends AbstractModifierRe
    * @param consumer  Consumer instance
    * @param id        Recipe ID
    */
-  public abstract T saveSalvage(Consumer<FinishedRecipe> consumer, ResourceLocation id);
-
-  /** Writes common JSON components between the two types */
-  private void writeCommon(JsonObject json, boolean unarmed) {
-    Ingredient ingredient = tools;
-    if (tools == Ingredient.EMPTY) {
-      ingredient = DEFAULT_TOOL.get();
+  public T saveSalvage(Consumer<FinishedRecipe> consumer, ResourceLocation id) {
+    if (maxLevel < minLevel) {
+      throw new IllegalStateException("Max level must be greater than min level");
     }
-    // if true, only chestplates
-    if (unarmed) {
-      ingredient = CompoundIngredient.of(ingredient, Ingredient.of(TinkerTags.Items.UNARMED));
-    }
-    json.add("tools", ingredient.toJson());
-    if (maxToolSize != ITinkerStationRecipe.DEFAULT_TOOL_STACK_SIZE) {
-      json.addProperty("max_tool_size", maxToolSize);
-    }
-    if (slotType != null && slots > 0) {
-      JsonObject slotJson = new JsonObject();
-      slotJson.addProperty(slotType.getName(), slots);
-      json.add("slots", slotJson);
-    }
+    ResourceLocation advancementId = buildOptionalAdvancement(id, "modifiers");
+    consumer.accept(new LoadableFinishedRecipe<>(makeSalvage(id), ModifierSalvage.LOADER, advancementId));
+    return (T) this;
   }
 
-  /** Base logic to write all relevant builder fields to JSON */
-  protected abstract class ModifierFinishedRecipe extends AbstractFinishedRecipe {
-    private final boolean withUnarmed;
-    public ModifierFinishedRecipe(ResourceLocation ID, @Nullable ResourceLocation advancementID, boolean withUnarmed) {
-      super(ID, advancementID);
-      this.withUnarmed = withUnarmed;
-    }
-
-    public ModifierFinishedRecipe(ResourceLocation ID, @Nullable ResourceLocation advancementID) {
-      this(ID, advancementID, false);
-    }
-
-    @Override
-    public void serializeRecipeData(JsonObject json) {
-      writeCommon(json, withUnarmed);
-      if (requirements != ModifierMatch.ALWAYS) {
-        JsonObject reqJson = requirements.serialize();
-        reqJson.addProperty("error", requirementsError);
-        json.add("requirements", reqJson);
-      }
-      json.addProperty("allow_crystal", allowCrystal);
-      json.add("result", result.toJson());
-      if (maxLevel != 0) {
-        json.addProperty("max_level", maxLevel);
-      }
-    }
-  }
-
-  /** Base logic to write all relevant builder fields to JSON */
-  protected class SalvageFinishedRecipe extends AbstractFinishedRecipe {
-    public SalvageFinishedRecipe(ResourceLocation ID, @Nullable ResourceLocation advancementID) {
-      super(ID, advancementID);
-    }
-
-    @Override
-    public void serializeRecipeData(JsonObject json) {
-      writeCommon(json, includeUnarmed);
-      json.addProperty("modifier", result.getId().toString());
-      json.addProperty("min_level", salvageMinLevel);
-      if (salvageMaxLevel != 0) {
-        json.addProperty("max_level", salvageMaxLevel);
-      }
-    }
-
-    @Override
-    public RecipeSerializer<?> getType() {
-      return TinkerModifiers.modifierSalvageSerializer.get();
-    }
+  /** Makes the salvage recipe to save in {@link #saveSalvage(Consumer, ResourceLocation)} */
+  protected ModifierSalvage makeSalvage(ResourceLocation id) {
+    return new ModifierSalvage(id, tools, maxToolSize, result.getId(), VALID_LEVEL.range(minLevel, useSalvageMax ? maxLevel : VALID_LEVEL.max()), slots);
   }
 }

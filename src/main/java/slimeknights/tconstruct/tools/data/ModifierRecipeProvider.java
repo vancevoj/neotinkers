@@ -51,7 +51,6 @@ import slimeknights.tconstruct.library.recipe.FluidValues;
 import slimeknights.tconstruct.library.recipe.casting.ItemCastingRecipeBuilder;
 import slimeknights.tconstruct.library.recipe.ingredient.MaterialIngredient;
 import slimeknights.tconstruct.library.recipe.ingredient.NoContainerIngredient;
-import slimeknights.tconstruct.library.recipe.modifiers.ModifierMatch;
 import slimeknights.tconstruct.library.recipe.modifiers.adding.IncrementalModifierRecipeBuilder;
 import slimeknights.tconstruct.library.recipe.modifiers.adding.ModifierRecipeBuilder;
 import slimeknights.tconstruct.library.recipe.modifiers.adding.MultilevelModifierRecipeBuilder;
@@ -234,8 +233,6 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .addInput(Tags.Items.INGOTS_NETHERITE)
                          .setMaxLevel(1)
                          .setSlots(SlotType.UPGRADE, 1)
-                         .setRequirements(ModifierMatch.tag(TinkerTags.Modifiers.GEMS))
-                         .setRequirementsError(makeRequirementsError("netherite_requirements"))
                          .saveSalvage(consumer, prefix(ModifierIds.netherite, upgradeSalvage))
                          .save(consumer, prefix(ModifierIds.netherite, upgradeFolder));
 
@@ -335,7 +332,7 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
     IncrementalModifierRecipeBuilder.modifier(ModifierIds.hydraulic)
                                     .setTools(TinkerTags.Items.HARVEST)
                                     .setInput(Blocks.PRISMARINE, 4, 36)
-                                    .setLeftover(new ItemStack(Items.PRISMARINE_SHARD))
+                                    .setLeftover(Items.PRISMARINE_SHARD)
                                     .setMaxLevel(5)
                                     .disallowCrystal()
                                     .setSlots(SlotType.UPGRADE, 1)
@@ -343,7 +340,7 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
     IncrementalModifierRecipeBuilder.modifier(ModifierIds.hydraulic)
                                     .setTools(TinkerTags.Items.HARVEST)
                                     .setInput(Blocks.PRISMARINE_BRICKS, 9, 36)
-                                    .setLeftover(new ItemStack(Items.PRISMARINE_SHARD))
+                                    .setLeftover(Items.PRISMARINE_SHARD)
                                     .setMaxLevel(5)
                                     .disallowCrystal()
                                     .setSlots(SlotType.UPGRADE, 1)
@@ -358,7 +355,7 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
     IncrementalModifierRecipeBuilder.modifier(ModifierIds.lightspeed)
                                     .setTools(TinkerTags.Items.HARVEST)
                                     .setInput(Blocks.GLOWSTONE, 4, 64)
-                                    .setLeftover(new ItemStack(Items.GLOWSTONE_DUST))
+                                    .setLeftover(Items.GLOWSTONE_DUST)
                                     .setMaxLevel(5)
                                     .disallowCrystal()
                                     .setSlots(SlotType.UPGRADE, 1)
@@ -840,7 +837,7 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
     IncrementalModifierRecipeBuilder.modifier(TinkerModifiers.lightspeedArmor)
                                     .setTools(TinkerTags.Items.BOOTS)
                                     .setInput(Blocks.GLOWSTONE, 4, 64)
-                                    .setLeftover(new ItemStack(Items.GLOWSTONE_DUST))
+                                    .setLeftover(Items.GLOWSTONE_DUST)
                                     .setMaxLevel(3)
                                     .setSlots(SlotType.UPGRADE, 1)
                                     .disallowCrystal()
@@ -933,14 +930,11 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
         .addInput(ingot)
         .addInput(Items.LEATHER)
         .setTools(TinkerTags.Items.LEGGINGS)
-        .setMaxLevel(level);
+        .exactLevel(level)
+        .useSalvageMax();
       if (level == 1) {
         builder.setSlots(SlotType.ABILITY, 1);
-        builder.setSalvageLevelRange(1, 1);
         builder.saveSalvage(consumer, prefix(ModifierIds.toolBelt, abilitySalvage));
-      } else {
-        builder.setRequirements(ModifierMatch.entry(ModifierIds.toolBelt, level - 1));
-        builder.setRequirementsError(TConstruct.makeTranslationKey("recipe", "modifier.tool_belt"));
       }
       builder.disallowCrystal(); // handled below
       builder.save(consumer, wrap(ModifierIds.toolBelt, abilityFolder, "_" + level));
@@ -1020,8 +1014,6 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .addInput(TinkerWorld.slime.get(SlimeType.SKY))
                          .setSlots(SlotType.ABILITY, 1)
                          .setMaxLevel(1)
-                         .setRequirements(ModifierMatch.entry(ModifierIds.featherFalling, 4))
-                         .setRequirementsError(makeRequirementsError("long_fall"))
                          .saveSalvage(consumer, prefix(ModifierIds.longFall, abilitySalvage))
                          .save(consumer, prefix(ModifierIds.longFall, abilityFolder));
 
@@ -1082,7 +1074,6 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .addInput(Tags.Items.INGOTS_COPPER)
                          .addInput(Tags.Items.STORAGE_BLOCKS_LAPIS)
                          .addInput(Tags.Items.STORAGE_BLOCKS_LAPIS)
-                         .setSalvageLevelRange(1, 1)
                          .setMaxLevel(1)
                          .setSlots(SlotType.ABILITY, 1)
                          .disallowCrystal() // handled below
@@ -1094,10 +1085,8 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                           .addInput(Tags.Items.INGOTS_GOLD)
                           .addInput(Tags.Items.ENDER_PEARLS)
                           .addInput(Tags.Items.ENDER_PEARLS)
-                          .setRequirements(ModifierMatch.entry(ModifierIds.luck, 1))
-                          .setRequirementsError(makeRequirementsError("luck.level_2"))
                           .disallowCrystal() // handled below
-                          .setMaxLevel(2)
+                          .exactLevel(2)
                           .save(consumer, wrap(ModifierIds.luck, abilityFolder, "_level_2"));
     ModifierRecipeBuilder.modifier(ModifierIds.luck)
                          .setTools(luckSupporting)
@@ -1106,10 +1095,8 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .addInput(TinkerMaterials.roseGold.getIngotTag())
                          .addInput(Tags.Items.GEMS_DIAMOND)
                          .addInput(Items.NAME_TAG)
-                         .setRequirements(ModifierMatch.entry(ModifierIds.luck, 2))
-                         .setRequirementsError(makeRequirementsError("luck.level_3"))
                          .disallowCrystal() // handled below
-                         .setMaxLevel(3)
+                         .exactLevel(3)
                          .save(consumer, wrap(ModifierIds.luck, abilityFolder, "_level_3"));
     // pants have just one level
     ModifierRecipeBuilder.modifier(ModifierIds.luck)
@@ -1132,7 +1119,8 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
     // salvage lets you salvage from chestplates
     ModifierRecipeBuilder.modifier(ModifierIds.luck)
                          .setTools(ingredientFromTags(TinkerTags.Items.MELEE, TinkerTags.Items.HARVEST, TinkerTags.Items.BOWS))
-                         .setSalvageLevelRange(1, 1)
+                         .exactLevel(1)
+                         .useSalvageMax()
                          .setSlots(SlotType.ABILITY, 1)
                          .saveSalvage(consumer, prefix(ModifierIds.luck, abilitySalvage));
 
@@ -1362,8 +1350,6 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .addInput(Tags.Items.INGOTS_NETHERITE)
                          .setMaxLevel(1)
                          .setSlots(SlotType.ABILITY, 1)
-                         .setRequirements(ModifierMatch.list(2, ModifierMatch.entry(ModifierIds.netherite, 1), ModifierMatch.entry(ModifierIds.reinforced, 5)))
-                         .setRequirementsError(makeRequirementsError("unbreakable_requirements"))
                          .saveSalvage(consumer, prefix(TinkerModifiers.unbreakable, abilitySalvage))
                          .save(consumer, prefix(TinkerModifiers.unbreakable, abilityFolder));
     // weapon
@@ -1838,11 +1824,6 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
   /** Prefixes the modifier ID with the given prefix and suffix */
   public ResourceLocation wrap(LazyModifier modifier, String prefix, String suffix) {
     return wrap(modifier.getId(), prefix, suffix);
-  }
-
-  /** Just a helper for consistency of requirements errors */
-  private static String makeRequirementsError(String recipe) {
-    return TConstruct.makeTranslationKey("recipe", "modifier." + recipe);
   }
 
   /**

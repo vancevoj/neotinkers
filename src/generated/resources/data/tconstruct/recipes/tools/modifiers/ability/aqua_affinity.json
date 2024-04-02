@@ -18,7 +18,7 @@
       "item": "minecraft:dark_prismarine"
     }
   ],
-  "max_level": 1,
+  "level": 1,
   "result": {
     "level": 1,
     "name": "tconstruct:aqua_affinity"

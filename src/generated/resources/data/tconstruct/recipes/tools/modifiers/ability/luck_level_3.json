@@ -18,12 +18,7 @@
       "item": "minecraft:name_tag"
     }
   ],
-  "max_level": 3,
-  "requirements": {
-    "error": "recipe.tconstruct.modifier.luck.level_3",
-    "level": 2,
-    "name": "tconstruct:luck"
-  },
+  "level": 3,
   "result": {
     "level": 1,
     "name": "tconstruct:luck"

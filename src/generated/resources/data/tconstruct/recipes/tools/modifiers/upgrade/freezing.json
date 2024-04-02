@@ -6,7 +6,9 @@
       "item": "minecraft:powder_snow_bucket"
     }
   ],
-  "max_level": 3,
+  "level": {
+    "max": 3
+  },
   "result": {
     "level": 1,
     "name": "tconstruct:freezing"

@@ -12,15 +12,11 @@ import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.ItemStack;
 import org.apache.commons.lang3.mutable.MutableInt;
 import slimeknights.mantle.command.MantleCommand;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.modifiers.Modifier;
-import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.TinkerHooks;
-import slimeknights.tconstruct.library.recipe.modifiers.ModifierRecipeLookup;
-import slimeknights.tconstruct.library.recipe.modifiers.ModifierRequirements;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.shared.command.HeldModifiableItemIterator;
 import slimeknights.tconstruct.shared.command.argument.ModifierArgument;
@@ -62,20 +58,9 @@ public class ModifiersCommand {
     Modifier modifier = ModifierArgument.getModifier(context, "modifier");
     List<LivingEntity> successes = HeldModifiableItemIterator.apply(context, (living, stack) -> {
       // add modifier
-      ToolStack tool = ToolStack.from(stack);
-
-      // first, see if we can add the modifier
-      int currentLevel = tool.getModifierLevel(modifier);
-      List<ModifierEntry> modifiers = tool.getModifierList();
-      for (ModifierRequirements requirements : ModifierRecipeLookup.getRequirements(modifier.getId())) {
-        Component result = requirements.check(stack, level + currentLevel, modifiers);
-        if (result != null) {
-          throw MODIFIER_ERROR.create(result);
-        }
-      }
-      tool = tool.copy();
+      ToolStack tool = ToolStack.from(stack).copy();
+      // add the modifier
       tool.addModifier(modifier.getId(), level);
-
       // ensure no modifier problems after adding
       Component toolValidation = tool.tryValidate();
       if (toolValidation != null) {
@@ -139,13 +124,6 @@ public class ModifiersCommand {
           throw MODIFIER_ERROR.create(validated);
         }
       }
-      // check the modifier requirements
-      ItemStack resultStack = tool.createStack(stack.getCount()); // creating a stack to make it as accurate as possible, though the old stack should be sufficient
-      Component result = ModifierRecipeLookup.checkRequirements(resultStack, tool);
-      if (result != null) {
-        throw MODIFIER_ERROR.create(result);
-      }
-
       // if successful, update held item
       living.setItemInHand(InteractionHand.MAIN_HAND, tool.createStack(stack.getCount()));
       return true;

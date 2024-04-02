@@ -1,35 +1,26 @@
 package slimeknights.tconstruct.library.recipe.modifiers.adding;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import lombok.Setter;
-import lombok.experimental.Accessors;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.ItemLike;
+import slimeknights.mantle.recipe.helper.ItemOutput;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierId;
 import slimeknights.tconstruct.library.modifiers.util.LazyModifier;
-import slimeknights.tconstruct.library.utils.JsonUtils;
-import slimeknights.tconstruct.tools.TinkerModifiers;
 
-import javax.annotation.Nullable;
 import java.util.function.Consumer;
 
 /** Recipe that supports not just adding multiple of an item, but also adding a partial amount */
 @SuppressWarnings({"unused", "UnusedReturnValue"})
-@Accessors(chain = true)
 public class IncrementalModifierRecipeBuilder extends AbstractModifierRecipeBuilder<IncrementalModifierRecipeBuilder> {
   private Ingredient input = Ingredient.EMPTY;
   private int amountPerItem;
   private int neededPerLevel;
-  @Setter
-  private ItemStack leftover = ItemStack.EMPTY;
+  private ItemOutput leftover = ItemOutput.EMPTY;
 
   protected IncrementalModifierRecipeBuilder(ModifierEntry result) {
     super(result);
@@ -108,6 +99,25 @@ public class IncrementalModifierRecipeBuilder extends AbstractModifierRecipeBuil
   }
 
 
+  /* Leftover */
+
+  /** Sets the leftover to the given output */
+  public IncrementalModifierRecipeBuilder setLeftover(ItemOutput leftover) {
+    this.leftover = leftover;
+    return this;
+  }
+
+  /** Sets the leftover to the given stack */
+  public IncrementalModifierRecipeBuilder setLeftover(ItemStack stack) {
+    return setLeftover(ItemOutput.fromStack(stack));
+  }
+
+  /** Sets the leftover to the given item */
+  public IncrementalModifierRecipeBuilder setLeftover(ItemLike item) {
+    return setLeftover(ItemOutput.fromItem(item));
+  }
+
+
   /* Building */
 
   @Override
@@ -116,44 +126,6 @@ public class IncrementalModifierRecipeBuilder extends AbstractModifierRecipeBuil
       throw new IllegalStateException("Must set input");
     }
     ResourceLocation advancementId = buildOptionalAdvancement(id, "modifiers");
-    consumer.accept(new FinishedAdding(id, advancementId, includeUnarmed));
-  }
-
-  @Override
-  public IncrementalModifierRecipeBuilder saveSalvage(Consumer<FinishedRecipe> consumer, ResourceLocation id) {
-    if (salvageMaxLevel != 0 && salvageMaxLevel < salvageMinLevel) {
-      throw new IllegalStateException("Max level must be greater than min level");
-    }
-    ResourceLocation advancementId = buildOptionalAdvancement(id, "modifiers");
-    consumer.accept(new SalvageFinishedRecipe(id, advancementId));
-    return this;
-  }
-
-  /** @deprecated use {@link JsonUtils#serializeItemStack(ItemStack)} */
-  @Deprecated
-  public static JsonElement serializeResult(ItemStack result) {
-    return JsonUtils.serializeItemStack(result);
-  }
-
-  private class FinishedAdding extends ModifierFinishedRecipe {
-    public FinishedAdding(ResourceLocation ID, @Nullable ResourceLocation advancementID, boolean withUnarmed) {
-      super(ID, advancementID, withUnarmed);
-    }
-
-    @Override
-    public void serializeRecipeData(JsonObject json) {
-      json.add("input", input.toJson());
-      json.addProperty("amount_per_item", amountPerItem);
-      json.addProperty("needed_per_level", neededPerLevel);
-      if (leftover != ItemStack.EMPTY) {
-        json.add("leftover", serializeResult(leftover));
-      }
-      super.serializeRecipeData(json);
-    }
-
-    @Override
-    public RecipeSerializer<?> getType() {
-      return TinkerModifiers.incrementalModifierSerializer.get();
-    }
+    consumer.accept(new LoadableFinishedRecipe<>(new IncrementalModifierRecipe(id, input, amountPerItem, neededPerLevel, tools, maxToolSize, result, ModifierEntry.VALID_LEVEL.range(minLevel, maxLevel), slots, leftover, allowCrystal), IncrementalModifierRecipe.LOADER, advancementId));
   }
 }

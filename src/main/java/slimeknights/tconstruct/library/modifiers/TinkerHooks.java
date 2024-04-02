@@ -33,6 +33,7 @@ import slimeknights.tconstruct.library.modifiers.hook.combat.MeleeDamageModifier
 import slimeknights.tconstruct.library.modifiers.hook.combat.MeleeHitModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.display.DisplayNameModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.display.DurabilityDisplayModifierHook;
+import slimeknights.tconstruct.library.modifiers.hook.display.RequirementsModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.display.TooltipModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.interaction.BlockInteractionModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.interaction.EntityInteractionModifierHook;
@@ -118,6 +119,9 @@ public class TinkerHooks {
       return -1;
     }
   });
+
+  /** Hook for displaying a list of requirements on teh tool and a hint for the requirements in recipe viewers */
+  public static final ModifierHook<RequirementsModifierHook> REQUIREMENTS = register("requirements", RequirementsModifierHook.class, RequirementsModifierHook.FirstMerger::new, new RequirementsModifierHook() {});
 
 
   /* Tool Building */

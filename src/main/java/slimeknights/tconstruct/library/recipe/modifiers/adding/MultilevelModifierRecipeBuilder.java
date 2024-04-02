@@ -1,6 +1,5 @@
 package slimeknights.tconstruct.library.recipe.modifiers.adding;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import lombok.RequiredArgsConstructor;
@@ -13,9 +12,11 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.ItemLike;
 import slimeknights.mantle.recipe.data.AbstractRecipeBuilder;
 import slimeknights.mantle.recipe.ingredient.SizedIngredient;
+import slimeknights.mantle.util.IdExtender.LocationExtender;
 import slimeknights.tconstruct.common.TinkerTags;
+import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierId;
-import slimeknights.tconstruct.library.recipe.modifiers.ModifierMatch;
+import slimeknights.tconstruct.library.recipe.modifiers.ModifierSalvage;
 import slimeknights.tconstruct.library.recipe.modifiers.adding.MultilevelModifierRecipe.LevelEntry;
 import slimeknights.tconstruct.library.recipe.tinkerstation.ITinkerStationRecipe;
 import slimeknights.tconstruct.library.tools.SlotType;
@@ -39,9 +40,6 @@ public class MultilevelModifierRecipeBuilder extends AbstractRecipeBuilder<Multi
   private boolean allowCrystal = true;
   private Ingredient tools = Ingredient.EMPTY;
   private int maxToolSize = ITinkerStationRecipe.DEFAULT_TOOL_STACK_SIZE;
-  // requirements
-  private ModifierMatch requirements = ModifierMatch.ALWAYS;
-  private String requirementsError = "";
 
 
   /* Inputs */
@@ -155,35 +153,15 @@ public class MultilevelModifierRecipeBuilder extends AbstractRecipeBuilder<Multi
 
   /* Requirements */
 
-  /**
-   * Sets the modifier requirements for this recipe
-   * @param requirements  Modifier requirements
-   * @return  Builder instance
-   */
-  public MultilevelModifierRecipeBuilder setRequirements(ModifierMatch requirements) {
-    this.requirements = requirements;
-    return this;
-  }
-
-  /**
-   * Sets the modifier requirements error for when it does not matcH
-   * @param requirementsError  Requirements error lang key
-   * @return  Builder instance
-   */
-  public MultilevelModifierRecipeBuilder setRequirementsError(String requirementsError) {
-    this.requirementsError = requirementsError;
-    return this;
-  }
-
   /** Base logic for adding a level */
   private MultilevelModifierRecipeBuilder addLevelRange(@Nullable SlotCount slots, int minLevel, int maxLevel) {
     if (minLevel > maxLevel) {
       throw new JsonSyntaxException("minLevel must be less than or equal to maxLevel");
     }
-    if (!levels.isEmpty() && minLevel <= levels.get(levels.size() - 1).maxLevel()) {
+    if (!levels.isEmpty() && minLevel <= levels.get(levels.size() - 1).level().max()) {
       throw new JsonSyntaxException("Level range must be greater than previous range");
     }
-    this.levels.add(new LevelEntry(slots, minLevel, maxLevel));
+    this.levels.add(new LevelEntry(slots, ModifierEntry.VALID_LEVEL.range(minLevel, maxLevel)));
     return this;
   }
 
@@ -227,9 +205,9 @@ public class MultilevelModifierRecipeBuilder extends AbstractRecipeBuilder<Multi
     }
     for (LevelEntry levelEntry : levels) {
       if (levelEntry.slots() != null) {
-        consumer.accept(new FinishedSalvage(
-          new ResourceLocation(id.getNamespace(), id.getPath() + "_level_" + levelEntry.minLevel()),
-          levelEntry.slots(), levelEntry.minLevel(), levelEntry.maxLevel()));
+        consumer.accept(new LoadableFinishedRecipe<>(new ModifierSalvage(
+          LocationExtender.INSTANCE.suffix(id, "_level_" + levelEntry.level().min()),
+          tools, maxToolSize, result, levelEntry.level(), levelEntry.slots()), ModifierSalvage.LOADER, null));
       }
     }
     return this;
@@ -248,11 +226,8 @@ public class MultilevelModifierRecipeBuilder extends AbstractRecipeBuilder<Multi
     if (levels.isEmpty()) {
       throw new IllegalStateException("Must have at least 1 level");
     }
-    if (!inputs.isEmpty() && requirementsError.isEmpty() && levels.size() > 1) {
-      throw new IllegalStateException("Must set requirements error if inputs are set");
-    }
     ResourceLocation advancementId = buildOptionalAdvancement(id, "modifiers");
-    consumer.accept(new FinishedAdding(id, advancementId));
+    consumer.accept(new LoadableFinishedRecipe<>(new MultilevelModifierRecipe(id, inputs, tools, maxToolSize, result, allowCrystal, levels), MultilevelModifierRecipe.LOADER, advancementId));
   }
 
   /** Writes common JSON elements */
@@ -266,45 +241,6 @@ public class MultilevelModifierRecipeBuilder extends AbstractRecipeBuilder<Multi
       json.addProperty("max_tool_size", maxToolSize);
     }
   }
-
-  /** Recipe for modifier adding */
-  private class FinishedAdding extends AbstractFinishedRecipe {
-    public FinishedAdding(ResourceLocation id, @Nullable ResourceLocation advancementId) {
-      super(id, advancementId);
-    }
-
-    @Override
-    public void serializeRecipeData(JsonObject json) {
-      if (!inputs.isEmpty()) {
-        JsonArray array = new JsonArray();
-        for (SizedIngredient ingredient : inputs) {
-          array.add(ingredient.serialize());
-        }
-        json.add("inputs", array);
-      }
-      json.addProperty("allow_crystal", allowCrystal);
-      writeCommon(json);
-      if (requirements != ModifierMatch.ALWAYS) {
-        JsonObject reqJson = requirements.serialize();
-        reqJson.addProperty("error", requirementsError);
-        json.add("requirements", reqJson);
-      } else if (!requirementsError.isEmpty()) {
-        json.addProperty("level_error", requirementsError);
-      }
-      JsonArray levelArray = new JsonArray();
-      for (LevelEntry levelEntry : levels) {
-        levelArray.add(levelEntry.serialize());
-      }
-      json.add("levels", levelArray);
-      json.addProperty("result", result.toString());
-    }
-
-    @Override
-    public RecipeSerializer<?> getType() {
-      return TinkerModifiers.multilevelModifierSerializer.get();
-    }
-  }
-
   /** Recipe for modifier salvage */
   private class FinishedSalvage extends AbstractFinishedRecipe {
     private final SlotCount slots;

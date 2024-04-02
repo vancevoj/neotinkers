@@ -27,12 +27,14 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.ForgeI18n;
 import slimeknights.mantle.client.model.NBTKeyModel;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.client.GuiUtil;
+import slimeknights.tconstruct.library.json.IntRange;
 import slimeknights.tconstruct.library.materials.IMaterialRegistry;
 import slimeknights.tconstruct.library.materials.MaterialRegistry;
+import slimeknights.tconstruct.library.modifiers.ModifierEntry;
+import slimeknights.tconstruct.library.modifiers.TinkerHooks;
 import slimeknights.tconstruct.library.recipe.modifiers.adding.IDisplayModifierRecipe;
 import slimeknights.tconstruct.library.tools.SlotType;
 import slimeknights.tconstruct.library.tools.SlotType.SlotCount;
@@ -62,7 +64,10 @@ public class ModifierRecipeCategory implements IRecipeCategory<IDisplayModifierR
   private static final List<Component> TEXT_INCREMENTAL = Collections.singletonList(TConstruct.makeTranslation("jei", "modifiers.incremental"));
   private static final String KEY_SLOT = TConstruct.makeTranslationKey("jei", "modifiers.slot");
   private static final String KEY_SLOTS = TConstruct.makeTranslationKey("jei", "modifiers.slots");
-  private static final String KEY_MAX = TConstruct.makeTranslationKey("jei", "modifiers.max");
+  private static final String KEY_MIN = TConstruct.makeTranslationKey("jei", "modifiers.level.min");
+  private static final String KEY_MAX = TConstruct.makeTranslationKey("jei", "modifiers.level.max");
+  private static final String KEY_RANGE = TConstruct.makeTranslationKey("jei", "modifiers.level.range");
+  private static final String KEY_EXACT = TConstruct.makeTranslationKey("jei", "modifiers.level.exact");
 
   private final ModifierIngredientRenderer modifierRenderer = new ModifierIngredientRenderer(124, 10);
 
@@ -70,12 +75,10 @@ public class ModifierRecipeCategory implements IRecipeCategory<IDisplayModifierR
   private final IDrawable background;
   @Getter
   private final IDrawable icon;
-  private final String maxPrefix;
   private final IDrawable requirements, incremental;
   private final IDrawable[] slotIcons;
   private final Map<SlotType,TextureAtlasSprite> slotTypeSprites = new HashMap<>();
   public ModifierRecipeCategory(IGuiHelper helper) {
-    this.maxPrefix = ForgeI18n.getPattern(KEY_MAX);
     this.background = helper.createDrawable(BACKGROUND_LOC, 0, 0, 128, 77);
     this.icon = helper.createDrawableIngredient(VanillaTypes.ITEM_STACK, CreativeSlotItem.withSlot(new ItemStack(TinkerModifiers.creativeSlotItem), SlotType.UPGRADE));
     this.slotIcons = new IDrawable[6];
@@ -139,18 +142,34 @@ public class ModifierRecipeCategory implements IRecipeCategory<IDisplayModifierR
     drawSlot(matrices, recipe, 4,  6, 57);
 
     // draw info icons
-    if (recipe.hasRequirements()) {
+    ModifierEntry result = recipe.getDisplayResult();
+    if (result.getHook(TinkerHooks.REQUIREMENTS).requirementsError(result) != null) {
       requirements.draw(matrices, 66, 58);
     }
     if (recipe.isIncremental()) {
       incremental.draw(matrices, 83, 59);
     }
 
-    // draw max count
+    // draw level requirements
     Font fontRenderer = Minecraft.getInstance().font;
-    int max = recipe.getMaxLevel();
-    if (max > 0) {
-      fontRenderer.draw(matrices, maxPrefix + max, 66, 16, Color.GRAY.getRGB());
+    IntRange level = recipe.getLevel();
+    int min = level.min();
+    int max = level.max();
+    // min being 1 means we only have a max level, we check this first as Max Level is better than exact typiclly
+    Component levelText = null;
+    if (min == 1) {
+      if (max < ModifierEntry.VALID_LEVEL.max()) {
+        levelText = Component.translatable(KEY_MAX, max);
+      }
+    } else if (min == max) {
+      levelText = Component.translatable(KEY_EXACT, min);
+    } else if (max == ModifierEntry.VALID_LEVEL.max()) {
+      levelText = Component.translatable(KEY_MIN, min);
+    } else {
+      levelText = Component.translatable(KEY_RANGE, min, max);
+    }
+    if (levelText != null) {
+      fontRenderer.draw(matrices, levelText, 60, 16, Color.GRAY.getRGB());
     }
 
     // draw slot cost
@@ -169,11 +188,17 @@ public class ModifierRecipeCategory implements IRecipeCategory<IDisplayModifierR
   public List<Component> getTooltipStrings(IDisplayModifierRecipe recipe, IRecipeSlotsView recipeSlotsView, double mouseX, double mouseY) {
     int checkX = (int) mouseX;
     int checkY = (int) mouseY;
-    if (recipe.hasRequirements() && GuiUtil.isHovered(checkX, checkY, 66, 58, 16, 16)) {
-      return Collections.singletonList(Component.translatable(recipe.getRequirementsError()));
-    } else if (recipe.isIncremental() && GuiUtil.isHovered(checkX, checkY, 83, 59, 16, 16)) {
+    ModifierEntry result = recipe.getDisplayResult();
+    if (GuiUtil.isHovered(checkX, checkY, 66, 58, 16, 16)) {
+      Component requirements = result.getHook(TinkerHooks.REQUIREMENTS).requirementsError(result);
+      if (requirements != null) {
+        return Collections.singletonList(requirements);
+      }
+    }
+    if (recipe.isIncremental() && GuiUtil.isHovered(checkX, checkY, 83, 59, 16, 16)) {
       return TEXT_INCREMENTAL;
-    } else if (GuiUtil.isHovered(checkX, checkY, 98, 58, 24, 16)) {
+    }
+    if (GuiUtil.isHovered(checkX, checkY, 98, 58, 24, 16)) {
       // slot tooltip over icon
       SlotCount slots = recipe.getSlots();
       if (slots != null) {

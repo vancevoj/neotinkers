@@ -5,7 +5,9 @@
   "input": {
     "item": "minecraft:glistering_melon_slice"
   },
-  "max_level": 5,
+  "level": {
+    "max": 5
+  },
   "needed_per_level": 5,
   "result": {
     "level": 1,
