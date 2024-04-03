@@ -77,8 +77,11 @@ public final class TinkerFluids extends TinkerModule {
   public static final FlowingFluidObject<SlimeFluid> magma      = FLUIDS.register("magma"      ).type(slime("magma"      ).temperature(600).lightLevel(3)).bucket().block(Material.WATER, 3).flowing(SlimeFluid.Source::new, SlimeFluid.Flowing::new);
   public static final EnumObject<SlimeType, SlimeFluid> slime = new EnumObject.Builder<SlimeType, SlimeFluid>(SlimeType.class).put(SlimeType.EARTH, earthSlime).put(SlimeType.SKY, skySlime).put(SlimeType.ENDER, enderSlime).build();
   // bottles of slime
-  public static final EnumObject<SlimeType, Item> slimeBottle = ITEMS.registerEnum(SlimeType.values(), "slime_bottle", type -> new FluidContainerFoodItem(
-    new Item.Properties().food(TinkerFood.getBottle(type)).tab(TAB_GENERAL).stacksTo(1).craftRemainder(Items.GLASS_BOTTLE), () -> new FluidStack(slime.get(type), FluidValues.BOTTLE)));
+  public static final EnumObject<SlimeType, Item> slimeBottle = new EnumObject.Builder<SlimeType, Item>(SlimeType.class)
+    .putAll(ITEMS.registerEnum(SlimeType.LIQUID, "slime_bottle", type -> new FluidContainerFoodItem(
+      new Item.Properties().food(TinkerFood.getBottle(type)).tab(TAB_GENERAL).stacksTo(1).craftRemainder(Items.GLASS_BOTTLE), () -> new FluidStack(slime.get(type), FluidValues.BOTTLE))))
+    .put(SlimeType.ICHOR, ITEMS.register("ichor_slime_bottle", () -> new ContainerFoodItem(new Item.Properties().food(TinkerFood.ICHOR_BOTTLE).tab(TAB_GENERAL).stacksTo(1).craftRemainder(Items.GLASS_BOTTLE))))
+    .build();
   public static final ItemObject<Item> magmaBottle = ITEMS.register("magma_bottle", () -> new FluidContainerFoodItem(
     new Item.Properties().food(TinkerFood.MAGMA_BOTTLE).tab(TAB_GENERAL).stacksTo(1).craftRemainder(Items.GLASS_BOTTLE),
     () -> new FluidStack(magma.get(), FluidValues.BOTTLE)));
