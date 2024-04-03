@@ -1,5 +1,5 @@
 name: 1.19 Issue Report
-description: Report an issue with  1.18, currently Alpha builds.
+description: Report an issue with 1.19, currently Alpha builds.
 labels: [1.19, Bug, Unreviewed]
 body:
   - type: markdown
@@ -22,7 +22,7 @@ body:
     id: minecraft-version
     attributes:
       label: Minecraft Version
-      value: 1.19
+      value: 1.19.2
     validations:
       required: true
   - type: input
