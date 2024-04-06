@@ -1,6 +1,7 @@
 package slimeknights.tconstruct.library.recipe.modifiers.adding;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.math.IntMath;
 import com.google.gson.JsonObject;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -267,7 +268,9 @@ public class IncrementalModifierRecipe extends AbstractModifierRecipe {
     if (leftoverAmount > 0) {
       itemsNeeded++;
       if (!leftover.isEmpty()) {
-        inv.giveItem(ItemHandlerHelper.copyStackWithSize(leftover, leftoverAmount * leftover.getCount()));
+        // leftoverAmount refers to how many we need to that is does not fit cleanly into amountPerInput
+        // but we want to return the amount we did not use, hence the subtraction
+        inv.giveItem(ItemHandlerHelper.copyStackWithSize(leftover, (amountPerInput - leftoverAmount) * leftover.getCount()));
       }
     }
     for (int i = 0; i < inv.getInputCount(); i++) {
