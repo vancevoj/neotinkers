@@ -22,6 +22,7 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import slimeknights.mantle.client.ResourceColorManager;
 import slimeknights.mantle.data.registry.GenericLoaderRegistry.IGenericLoader;
 import slimeknights.mantle.data.registry.GenericLoaderRegistry.IHaveLoader;
+import slimeknights.mantle.registration.object.IdAwareObject;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.modifiers.ModifierManager.ModifierRegistrationEvent;
 import slimeknights.tconstruct.library.modifiers.util.ModifierHookMap;
@@ -44,7 +45,7 @@ import java.util.Random;
  * @see #registerHooks(Builder)
  */
 @SuppressWarnings("unused")
-public class Modifier implements IHaveLoader {
+public class Modifier implements IHaveLoader, IdAwareObject {
   /** Default loader instance for a modifier with no properties */
   public static final IGenericLoader<Modifier> DEFAULT_LOADER = new IGenericLoader<>() {
     @Override
@@ -137,10 +138,7 @@ public class Modifier implements IHaveLoader {
     this.id = name;
   }
 
-  /**
-   * Gets the modifier ID
-   * @return  Modifier ID
-   */
+  @Override
   public ModifierId getId() {
     return Objects.requireNonNull(id, "Modifier has null registry name");
   }
