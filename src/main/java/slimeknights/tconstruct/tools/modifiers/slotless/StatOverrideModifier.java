@@ -139,8 +139,8 @@ public class StatOverrideModifier extends NoLevelsModifier implements ToolStatsM
   }
 
   @Override
-  public List<Component> getDescriptionList(IToolStackView tool, int level) {
-    List<Component> defaultList = getDescriptionList(level);
+  public List<Component> getDescriptionList(IToolStackView tool, ModifierEntry entry) {
+    List<Component> defaultList = getDescriptionList(entry.getLevel());
 
     // create the list when we first try to add text
     MutableObject<List<Component>> resultList = new MutableObject<>();

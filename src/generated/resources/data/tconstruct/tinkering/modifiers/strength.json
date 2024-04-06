@@ -3,9 +3,6 @@
   "level_display": "tconstruct:default",
   "modules": [
     {
-      "type": "tconstruct:incremental"
-    },
-    {
       "type": "tconstruct:attribute",
       "attribute": "minecraft:generic.attack_damage",
       "each_level": 0.1,

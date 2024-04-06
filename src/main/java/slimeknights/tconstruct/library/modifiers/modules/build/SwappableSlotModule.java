@@ -43,8 +43,8 @@ public record SwappableSlotModule(@Nullable ResourceLocation key, int slotCount)
   }
 
   @Override
-  public Component getDisplayName(IToolStackView tool, Modifier modifier, int level, Component name) {
-    String slotName = tool.getPersistentData().getString(getKey(modifier));
+  public Component getDisplayName(IToolStackView tool, ModifierEntry entry, Component name) {
+    String slotName = tool.getPersistentData().getString(getKey(entry.getModifier()));
     if (!slotName.isEmpty()) {
       SlotType type = SlotType.getIfPresent(slotName);
       if (type != null) {

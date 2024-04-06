@@ -209,7 +209,7 @@ public class TooltipBuilder {
   public TooltipBuilder addModifierInfo(boolean advanced) {
     for (ModifierEntry entry : tool.getModifierList()) {
       if (entry.getModifier().shouldDisplay(advanced)) {
-        this.tooltips.add(entry.getModifier().getDisplayName(tool, entry.getLevel()));
+        this.tooltips.add(entry.getModifier().getDisplayName(tool, entry));
       }
     }
     return this;

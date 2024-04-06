@@ -6,9 +6,6 @@
   },
   "modules": [
     {
-      "type": "tconstruct:incremental"
-    },
-    {
       "type": "tconstruct:stat_boost",
       "each_level": 0.75,
       "operation": "add",

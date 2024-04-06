@@ -273,8 +273,9 @@ public class TinkerStationScreen extends BaseTabbedScreen<TinkerStationBlockEnti
         if (mod.shouldDisplay(true)) {
           int level = entry.getLevel() - upgrades.getOrDefault(mod, 0);
           if (level > 0) {
-            modifierNames.add(mod.getDisplayName(tool, level));
-            modifierTooltip.add(mod.getDescription(tool, level));
+            ModifierEntry trait = new ModifierEntry(entry.getModifier(), level);
+            modifierNames.add(mod.getDisplayName(tool, trait));
+            modifierTooltip.add(mod.getDescription(tool, trait));
           }
         }
       }
@@ -291,9 +292,8 @@ public class TinkerStationScreen extends BaseTabbedScreen<TinkerStationBlockEnti
       for (ModifierEntry entry : modifiers) {
         Modifier mod = entry.getModifier();
         if (mod.shouldDisplay(true)) {
-          int level = entry.getLevel();
-          modifierNames.add(mod.getDisplayName(tool, level));
-          modifierTooltip.add(mod.getDescription(tool, level));
+          modifierNames.add(mod.getDisplayName(tool, entry));
+          modifierTooltip.add(mod.getDescription(tool, entry));
         }
       }
     }

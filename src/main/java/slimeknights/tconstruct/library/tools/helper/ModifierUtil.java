@@ -21,7 +21,6 @@ import slimeknights.tconstruct.library.modifiers.ModifierId;
 import slimeknights.tconstruct.library.modifiers.TinkerHooks;
 import slimeknights.tconstruct.library.modifiers.hook.build.ConditionalStatModifierHook;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
-import slimeknights.tconstruct.library.tools.nbt.ModifierNBT;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
 
@@ -59,8 +58,8 @@ public final class ModifierUtil {
           String key = modifier.toString();
           for (int i = 0; i < size; i++) {
             CompoundTag entry = list.getCompound(i);
-            if (key.equals(entry.getString(ModifierNBT.TAG_MODIFIER))) {
-              return entry.getInt(ModifierNBT.TAG_LEVEL);
+            if (key.equals(entry.getString(ModifierEntry.TAG_MODIFIER))) {
+              return entry.getInt(ModifierEntry.TAG_LEVEL);
             }
           }
         }

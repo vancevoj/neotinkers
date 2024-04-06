@@ -19,7 +19,7 @@ public class ModifierIngredientHelper implements IIngredientHelper<ModifierEntry
 
   @Override
   public String getDisplayName(ModifierEntry entry) {
-    return entry.getModifier().getDisplayName(entry.getLevel()).getString();
+    return entry.getDisplayName().getString();
   }
 
   @Override

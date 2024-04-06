@@ -5,6 +5,7 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierFixture;
 import slimeknights.tconstruct.test.BaseMcTest;
 
@@ -73,24 +74,24 @@ class ModifierNBTest extends BaseMcTest {
     ListTag list = builder.build().serializeToNBT();
     assertThat(list.size()).isEqualTo(2);
     CompoundTag tag = list.getCompound(0);
-    assertThat(tag.getString(ModifierNBT.TAG_MODIFIER)).isEqualTo(ModifierFixture.TEST_1.toString());
-    assertThat(tag.getInt(ModifierNBT.TAG_LEVEL)).isEqualTo(2);
+    assertThat(tag.getString(ModifierEntry.TAG_MODIFIER)).isEqualTo(ModifierFixture.TEST_1.toString());
+    assertThat(tag.getInt(ModifierEntry.TAG_LEVEL)).isEqualTo(2);
 
     tag = list.getCompound(1);
-    assertThat(tag.getString(ModifierNBT.TAG_MODIFIER)).isEqualTo(ModifierFixture.TEST_2.toString());
-    assertThat(tag.getInt(ModifierNBT.TAG_LEVEL)).isEqualTo(3);
+    assertThat(tag.getString(ModifierEntry.TAG_MODIFIER)).isEqualTo(ModifierFixture.TEST_2.toString());
+    assertThat(tag.getInt(ModifierEntry.TAG_LEVEL)).isEqualTo(3);
   }
 
   @Test
   void deserialize() {
     ListTag list = new ListTag();
     CompoundTag tag = new CompoundTag();
-    tag.putString(ModifierNBT.TAG_MODIFIER, ModifierFixture.TEST_1.toString());
-    tag.putInt(ModifierNBT.TAG_LEVEL, 2);
+    tag.putString(ModifierEntry.TAG_MODIFIER, ModifierFixture.TEST_1.toString());
+    tag.putInt(ModifierEntry.TAG_LEVEL, 2);
     list.add(tag);
     tag = new CompoundTag();
-    tag.putString(ModifierNBT.TAG_MODIFIER, ModifierFixture.TEST_2.toString());
-    tag.putInt(ModifierNBT.TAG_LEVEL, 3);
+    tag.putString(ModifierEntry.TAG_MODIFIER, ModifierFixture.TEST_2.toString());
+    tag.putInt(ModifierEntry.TAG_LEVEL, 3);
     list.add(tag);
 
     ModifierNBT modifierNBT = ModifierNBT.readFromNBT(list);

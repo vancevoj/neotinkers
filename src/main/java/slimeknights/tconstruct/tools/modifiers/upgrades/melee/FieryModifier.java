@@ -8,13 +8,13 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.phys.EntityHitResult;
+import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.TinkerHooks;
 import slimeknights.tconstruct.library.modifiers.hook.armor.OnAttackedModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.combat.MeleeHitModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.ranged.ProjectileHitModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.ranged.ProjectileLaunchModifierHook;
-import slimeknights.tconstruct.library.modifiers.impl.IncrementalModifier;
 import slimeknights.tconstruct.library.modifiers.util.ModifierHookMap.Builder;
 import slimeknights.tconstruct.library.tools.context.EquipmentContext;
 import slimeknights.tconstruct.library.tools.context.ToolAttackContext;
@@ -25,7 +25,7 @@ import slimeknights.tconstruct.library.tools.nbt.NamespacedNBT;
 
 import javax.annotation.Nullable;
 
-public class FieryModifier extends IncrementalModifier implements ProjectileLaunchModifierHook, ProjectileHitModifierHook, OnAttackedModifierHook, MeleeHitModifierHook {
+public class FieryModifier extends Modifier implements ProjectileLaunchModifierHook, ProjectileHitModifierHook, OnAttackedModifierHook, MeleeHitModifierHook {
   @Override
   protected void registerHooks(Builder hookBuilder) {
     hookBuilder.addHook(this, TinkerHooks.PROJECTILE_LAUNCH, TinkerHooks.PROJECTILE_HIT, TinkerHooks.ON_ATTACKED, TinkerHooks.MELEE_HIT);
@@ -54,19 +54,18 @@ public class FieryModifier extends IncrementalModifier implements ProjectileLaun
   public void afterMeleeHit(IToolStackView tool, ModifierEntry modifier, ToolAttackContext context, float damageDealt) {
     LivingEntity target = context.getLivingTarget();
     if (target != null) {
-      target.setSecondsOnFire(Math.round(getEffectiveLevel(tool, modifier.getLevel()) * 5));
+      target.setSecondsOnFire(Math.round(modifier.getEffectiveLevel() * 5));
     }
   }
 
   @Override
   public void onProjectileLaunch(IToolStackView tool, ModifierEntry modifier, LivingEntity shooter, Projectile projectile, @Nullable AbstractArrow arrow, NamespacedNBT persistentData, boolean primary) {
-    projectile.setSecondsOnFire(Math.round(modifier.getEffectiveLevel(tool) * 20));
-    persistentData.putFloat(getId(), modifier.getEffectiveLevel(tool));
+    projectile.setSecondsOnFire(Math.round(modifier.getEffectiveLevel() * 20));
   }
 
   @Override
   public boolean onProjectileHitEntity(ModifierNBT modifiers, NamespacedNBT persistentData, ModifierEntry modifier, Projectile projectile, EntityHitResult hit, @Nullable LivingEntity attacker, @Nullable LivingEntity target) {
-    hit.getEntity().setSecondsOnFire(Math.round(persistentData.getFloat(getId()) * 5));
+    hit.getEntity().setSecondsOnFire(Math.round(modifier.getEffectiveLevel() * 5));
     return false;
   }
 
@@ -81,7 +80,7 @@ public class FieryModifier extends IncrementalModifier implements ProjectileLaun
         level *= 2;
       }
       if (RANDOM.nextFloat() < (level * 0.15f)) {
-        attacker.setSecondsOnFire(Math.round(getEffectiveLevel(tool, level) * 5));
+        attacker.setSecondsOnFire(Math.round(modifier.getEffectiveLevel() * 5));
         ToolDamageUtil.damageAnimated(tool, 1, context.getEntity(), slotType);
       }
     }

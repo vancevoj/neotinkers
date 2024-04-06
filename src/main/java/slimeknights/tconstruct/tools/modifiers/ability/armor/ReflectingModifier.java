@@ -54,7 +54,7 @@ public class ReflectingModifier extends Modifier {
           int reflectingLevel = tool.getModifierLevel(this);
           if (reflectingLevel > 0) {
             ModifierEntry activeModifier = GeneralInteractionModifierHook.getActiveModifier(tool);
-            if (activeModifier != null) {
+            if (activeModifier != ModifierEntry.EMPTY) {
               GeneralInteractionModifierHook hook = activeModifier.getHook(TinkerHooks.GENERAL_INTERACT);
               int time = hook.getUseDuration(tool, activeModifier) - living.getUseItemRemainingTicks();
               // must be blocking, started blocking within the last 2*level seconds, and be within the block angle

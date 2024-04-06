@@ -12,7 +12,6 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.util.GsonHelper;
 import slimeknights.mantle.util.JsonHelper;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
-import slimeknights.tconstruct.library.tools.nbt.IToolContext;
 
 import java.util.List;
 
@@ -35,8 +34,8 @@ public record PostFixFormula(List<StackOperation> operations, int numArguments) 
   }
 
   @Override
-  public float computeLevel(IToolContext tool, ModifierEntry modifier) {
-    return modifier.getEffectiveLevel(tool);
+  public float processLevel(ModifierEntry modifier) {
+    return modifier.getEffectiveLevel();
   }
 
   /**

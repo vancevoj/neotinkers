@@ -364,7 +364,7 @@ public class ModifiableItem extends Item implements IModifiableDisplay {
   public void onUseTick(Level pLevel, LivingEntity entityLiving, ItemStack stack, int timeLeft) {
     ToolStack tool = ToolStack.from(stack);
     ModifierEntry activeModifier = GeneralInteractionModifierHook.getActiveModifier(tool);
-    if (activeModifier != null) {
+    if (activeModifier != ModifierEntry.EMPTY) {
       activeModifier.getHook(TinkerHooks.GENERAL_INTERACT).onUsingTick(tool, activeModifier, entityLiving, timeLeft);
     }
   }
@@ -383,7 +383,7 @@ public class ModifiableItem extends Item implements IModifiableDisplay {
   public ItemStack finishUsingItem(ItemStack stack, Level worldIn, LivingEntity entityLiving) {
     ToolStack tool = ToolStack.from(stack);
     ModifierEntry activeModifier = GeneralInteractionModifierHook.getActiveModifier(tool);
-    if (activeModifier != null) {
+    if (activeModifier != ModifierEntry.EMPTY) {
       activeModifier.getHook(TinkerHooks.GENERAL_INTERACT).onFinishUsing(tool, activeModifier, entityLiving);
     }
     GeneralInteractionModifierHook.finishUsing(tool);
@@ -394,7 +394,7 @@ public class ModifiableItem extends Item implements IModifiableDisplay {
   public void releaseUsing(ItemStack stack, Level worldIn, LivingEntity entityLiving, int timeLeft) {
     ToolStack tool = ToolStack.from(stack);
     ModifierEntry activeModifier = GeneralInteractionModifierHook.getActiveModifier(tool);
-    if (activeModifier != null) {
+    if (activeModifier != ModifierEntry.EMPTY) {
       activeModifier.getHook(TinkerHooks.GENERAL_INTERACT).onStoppedUsing(tool, activeModifier, entityLiving, timeLeft);
     }
     GeneralInteractionModifierHook.finishUsing(tool);
@@ -404,7 +404,7 @@ public class ModifiableItem extends Item implements IModifiableDisplay {
   public int getUseDuration(ItemStack stack) {
     ToolStack tool = ToolStack.from(stack);
     ModifierEntry activeModifier = GeneralInteractionModifierHook.getActiveModifier(tool);
-    if (activeModifier != null) {
+    if (activeModifier != ModifierEntry.EMPTY) {
       return activeModifier.getHook(TinkerHooks.GENERAL_INTERACT).getUseDuration(tool, activeModifier);
     }
     return 0;
@@ -414,7 +414,7 @@ public class ModifiableItem extends Item implements IModifiableDisplay {
   public UseAnim getUseAnimation(ItemStack stack) {
     ToolStack tool = ToolStack.from(stack);
     ModifierEntry activeModifier = GeneralInteractionModifierHook.getActiveModifier(tool);
-    if (activeModifier != null) {
+    if (activeModifier != ModifierEntry.EMPTY) {
       return activeModifier.getHook(TinkerHooks.GENERAL_INTERACT).getUseAction(tool, activeModifier);
     }
     return UseAnim.NONE;

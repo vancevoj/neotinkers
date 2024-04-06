@@ -3,6 +3,7 @@ package slimeknights.tconstruct.library.modifiers.impl;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
+import slimeknights.tconstruct.library.modifiers.IncrementalModifierEntry;
 import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.TinkerHooks;
@@ -24,9 +25,8 @@ public abstract class DurabilityShieldModifier extends Modifier implements ToolD
   }
 
   @Override
-  public Component getDisplayName(IToolStackView tool, int level) {
-    return getDisplayName(level).copy()
-                                .append(": " + getShield(tool) + " / " + getShieldCapacity(tool, level));
+  public Component getDisplayName(IToolStackView tool, ModifierEntry entry) {
+    return IncrementalModifierEntry.addAmountToName(getDisplayName(entry.getLevel()), getShield(tool), getShieldCapacity(tool, entry.getLevel()));
   }
 
 

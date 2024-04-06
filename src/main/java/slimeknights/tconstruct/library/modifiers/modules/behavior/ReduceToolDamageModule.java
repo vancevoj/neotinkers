@@ -51,7 +51,7 @@ public record ReduceToolDamageModule(ModifierFormula formula, ModifierModuleCond
 
   /** Gets the percentage to reduce tool damage */
   private float getPercent(IToolContext tool, ModifierEntry modifier) {
-    return formula.apply(formula.computeLevel(tool, modifier));
+    return formula.apply(formula.processLevel(modifier));
   }
 
   /**

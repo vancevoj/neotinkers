@@ -494,6 +494,21 @@ public class ToolStack implements IToolStackView {
   }
 
   /**
+   * Adds a single modifier to this tool
+   * @param modifier  Modifier to add
+   * @param amount    Amount to add
+   * @param needed    Amount needed for a full level
+   */
+  public void addModifierAmount(ModifierId modifier, int amount, int needed) {
+    if (needed <= 0) {
+      throw new IllegalArgumentException("Invalid needed, must be above 0");
+    }
+    if (amount > 0) {
+      setUpgrades(getUpgrades().addAmount(modifier, amount, needed));
+    }
+  }
+
+  /**
    * Removes a single modifier to this tool
    * @param modifier  Modifier to remove
    * @param level     Level to remove

@@ -4,7 +4,6 @@ import com.google.gson.JsonObject;
 import net.minecraft.network.FriendlyByteBuf;
 import slimeknights.tconstruct.library.json.LevelingValue;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
-import slimeknights.tconstruct.library.tools.nbt.IToolContext;
 
 /** Implementation of {@link ModifierFormula} that uses a simpler formula for more efficiency, since not everything needs the flexibility of post fix */
 record SimpleLevelingFormula(LevelingValue leveling, FallbackFormula formula) implements ModifierFormula {
@@ -14,8 +13,8 @@ record SimpleLevelingFormula(LevelingValue leveling, FallbackFormula formula) im
   }
 
   @Override
-  public float computeLevel(IToolContext tool, ModifierEntry modifier) {
-    return leveling.compute(tool, modifier);
+  public float processLevel(ModifierEntry modifier) {
+    return leveling.compute(modifier.getEffectiveLevel());
   }
 
   @Override

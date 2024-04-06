@@ -17,7 +17,6 @@ import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.ModDataNBT;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
 
-import javax.annotation.Nullable;
 import java.util.Collection;
 
 /**
@@ -154,8 +153,7 @@ public interface GeneralInteractionModifierHook {
     return charge;
   }
 
-  /** Gets the currently active modifier, or null if none is active. Generally does not need to be called in modifiers as we call it in internal logic. */
-  @Nullable
+  /** Gets the currently active modifier, or {@link ModifierEntry#EMPTY} if none is active. Generally does not need to be called in modifiers as we call it in internal logic. */
   static ModifierEntry getActiveModifier(IToolStackView tool) {
     IModDataView persistentData = tool.getPersistentData();
     if (persistentData.contains(KEY_ACTIVE_MODIFIER, Tag.TAG_STRING)) {
@@ -164,7 +162,7 @@ public interface GeneralInteractionModifierHook {
         return tool.getModifiers().getEntry(modifier);
       }
     }
-    return null;
+    return ModifierEntry.EMPTY;
   }
 
   /** Called to clear any data modifiers set when usage starts. Generally does not need to be called in modifiers as we call it in internal logic. */

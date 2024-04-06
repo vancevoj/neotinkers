@@ -31,7 +31,7 @@ public record ConditionalStatFormula(ModifierFormula formula, List<ConditionalSt
   private float[] getArguments(IToolStackView tool, ModifierEntry modifier, @Nullable LivingEntity entity, float value, float multiplier) {
     int size = variables.size();
     float[] arguments = new float[3 + size];
-    arguments[LEVEL] = formula.computeLevel(tool, modifier);
+    arguments[LEVEL] = formula.processLevel(modifier);
     arguments[VALUE] = value;
     arguments[MULTIPLIER] = multiplier;
     for (int i = 0; i < size; i++) {

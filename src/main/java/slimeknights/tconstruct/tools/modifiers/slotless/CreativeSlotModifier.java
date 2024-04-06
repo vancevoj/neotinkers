@@ -60,8 +60,8 @@ public class CreativeSlotModifier extends NoLevelsModifier implements VolatileDa
   }
 
   @Override
-  public List<Component> getDescriptionList(IToolStackView tool, int level) {
-    List<Component> tooltip = getDescriptionList(level);
+  public List<Component> getDescriptionList(IToolStackView tool, ModifierEntry entry) {
+    List<Component> tooltip = getDescriptionList(entry.getLevel());
     IModDataView persistentData = tool.getPersistentData();
     if (persistentData.contains(KEY_SLOTS, Tag.TAG_COMPOUND)) {
       CompoundTag slots = persistentData.getCompound(KEY_SLOTS);

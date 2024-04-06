@@ -31,12 +31,12 @@ public record ArmorLevelModule(TinkerDataKey<Integer> key, boolean allowBroken) 
 
   @Override
   public void onEquip(IToolStackView tool, ModifierEntry modifier, EquipmentChangeContext context) {
-    addLevelsIfArmor(tool, context, key, modifier.getLevel(), allowBroken);
+    addLevelsIfArmor(tool, context, key, modifier.intEffectiveLevel(), allowBroken);
   }
 
   @Override
   public void onUnequip(IToolStackView tool, ModifierEntry modifier, EquipmentChangeContext context) {
-    addLevelsIfArmor(tool, context, key, -modifier.getLevel(), allowBroken);
+    addLevelsIfArmor(tool, context, key, -modifier.intEffectiveLevel(), allowBroken);
   }
 
 

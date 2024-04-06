@@ -3,9 +3,6 @@
   "level_display": "tconstruct:default",
   "modules": [
     {
-      "type": "tconstruct:incremental"
-    },
-    {
       "type": "tconstruct:protection",
       "damage_source": "mantle:fall",
       "each_level": 3.75

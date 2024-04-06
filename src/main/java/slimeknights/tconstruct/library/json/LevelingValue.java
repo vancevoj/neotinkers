@@ -4,8 +4,6 @@ import com.google.gson.JsonObject;
 import net.minecraft.network.FriendlyByteBuf;
 import slimeknights.mantle.data.loadable.primitive.FloatLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
-import slimeknights.tconstruct.library.modifiers.ModifierEntry;
-import slimeknights.tconstruct.library.tools.nbt.IToolContext;
 
 /**
  * Represents a float value that has a part that scales with level and a part that does not scale.
@@ -23,15 +21,6 @@ public record LevelingValue(float flat, float eachLevel) {
   /** Computes the value for the given level */
   public float compute(float level) {
     return this.flat + this.eachLevel * level;
-  }
-
-  /** Computes the value for the given tool and modifier entry */
-  public float compute(IToolContext tool, ModifierEntry modifier) {
-    // small optimization: if strictly flat, skip computing the effective level
-    if (this.eachLevel != 0) {
-      return this.flat + this.eachLevel * modifier.getEffectiveLevel(tool);
-    }
-    return this.flat;
   }
 
 

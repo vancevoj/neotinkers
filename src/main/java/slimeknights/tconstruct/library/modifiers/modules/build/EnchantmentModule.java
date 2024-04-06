@@ -128,7 +128,7 @@ public interface EnchantmentModule extends ModifierModule, IntLevelModule, Condi
     @Override
     public int updateEnchantmentLevel(IToolStackView tool, ModifierEntry modifier, Enchantment enchantment, int level) {
       if (enchantment == this.enchantment() && condition().matches(tool, modifier)) {
-        level += getLevel(tool, modifier);
+        level += getLevel(modifier);
       }
       return level;
     }
@@ -136,7 +136,7 @@ public interface EnchantmentModule extends ModifierModule, IntLevelModule, Condi
     @Override
     public void updateEnchantments(IToolStackView tool, ModifierEntry modifier, Map<Enchantment,Integer> map) {
       if (condition().matches(tool, modifier)) {
-        EnchantmentModifierHook.addEnchantment(map, this.enchantment(), getLevel(tool, modifier));
+        EnchantmentModifierHook.addEnchantment(map, this.enchantment(), getLevel(modifier));
       }
     }
 
@@ -172,7 +172,7 @@ public interface EnchantmentModule extends ModifierModule, IntLevelModule, Condi
     @Override
     public int updateEnchantmentLevel(IToolStackView tool, ModifierEntry modifier, Enchantment enchantment, int level) {
       if (enchantment == this.enchantment() && tool.getPersistentData().getBoolean(conditionFlag)) {
-        level += getLevel(tool, modifier);
+        level += getLevel(modifier);
       }
       return level;
     }
@@ -180,7 +180,7 @@ public interface EnchantmentModule extends ModifierModule, IntLevelModule, Condi
     @Override
     public void updateEnchantments(IToolStackView tool, ModifierEntry modifier, Map<Enchantment,Integer> map) {
       if (tool.getPersistentData().getBoolean(conditionFlag)) {
-        EnchantmentModifierHook.addEnchantment(map, this.enchantment(), getLevel(tool, modifier));
+        EnchantmentModifierHook.addEnchantment(map, this.enchantment(), getLevel(modifier));
       }
     }
 
@@ -203,7 +203,7 @@ public interface EnchantmentModule extends ModifierModule, IntLevelModule, Condi
     @Override
     public void updateHarvestEnchantments(IToolStackView tool, ModifierEntry modifier, ToolHarvestContext context, EquipmentContext equipment, EquipmentSlot slot, Map<Enchantment,Integer> map) {
       if (slots.contains(slot) && condition.matches(tool, modifier) && block.matches(context.getState()) && holder.matches(context.getLiving())) {
-        EnchantmentModifierHook.addEnchantment(map, enchantment, getLevel(tool, modifier));
+        EnchantmentModifierHook.addEnchantment(map, enchantment, getLevel(modifier));
       }
     }
 

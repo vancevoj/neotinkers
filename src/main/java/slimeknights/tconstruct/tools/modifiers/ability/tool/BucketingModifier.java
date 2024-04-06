@@ -66,8 +66,8 @@ public class BucketingModifier extends Modifier implements BlockInteractionModif
   }
 
   @Override
-  public Component getDisplayName(IToolStackView tool, int level) {
-    return DualOptionInteraction.formatModifierName(tool, this, super.getDisplayName(tool, level));
+  public Component getDisplayName(IToolStackView tool, ModifierEntry entry) {
+    return DualOptionInteraction.formatModifierName(tool, this, super.getDisplayName(tool, entry));
   }
 
   /**

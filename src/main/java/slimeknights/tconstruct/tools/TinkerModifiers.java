@@ -67,7 +67,6 @@ import slimeknights.tconstruct.library.modifiers.modules.armor.ToolActionWalkerT
 import slimeknights.tconstruct.library.modifiers.modules.behavior.AttributeModule;
 import slimeknights.tconstruct.library.modifiers.modules.behavior.ConditionalStatModule;
 import slimeknights.tconstruct.library.modifiers.modules.behavior.ExtinguishCampfireModule;
-import slimeknights.tconstruct.library.modifiers.modules.behavior.IncrementalModule;
 import slimeknights.tconstruct.library.modifiers.modules.behavior.ReduceToolDamageModule;
 import slimeknights.tconstruct.library.modifiers.modules.behavior.RepairModule;
 import slimeknights.tconstruct.library.modifiers.modules.behavior.ShowOffhandModule;
@@ -589,7 +588,6 @@ public final class TinkerModifiers extends TinkerModule {
       // behavior
       ModifierModule.LOADER.register(getResource("attribute"), AttributeModule.LOADER);
       ModifierModule.LOADER.register(getResource("campfire_extinguish"), ExtinguishCampfireModule.LOADER);
-      ModifierModule.LOADER.register(getResource("incremental"), IncrementalModule.LOADER);
       ModifierModule.LOADER.register(getResource("reduce_tool_damage"), ReduceToolDamageModule.LOADER);
       ModifierModule.LOADER.register(getResource("repair"), RepairModule.LOADER);
       ModifierModule.LOADER.register(getResource("show_offhand"), ShowOffhandModule.LOADER);

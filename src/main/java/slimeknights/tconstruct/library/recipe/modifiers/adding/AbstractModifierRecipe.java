@@ -1,8 +1,6 @@
 package slimeknights.tconstruct.library.recipe.modifiers.adding;
 
-import com.google.common.collect.ImmutableList;
 import lombok.Getter;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -22,7 +20,6 @@ import slimeknights.tconstruct.library.recipe.tinkerstation.ITinkerStationContai
 import slimeknights.tconstruct.library.recipe.tinkerstation.ITinkerStationRecipe;
 import slimeknights.tconstruct.library.tools.SlotType.SlotCount;
 import slimeknights.tconstruct.library.tools.item.IModifiableDisplay;
-import slimeknights.tconstruct.library.tools.nbt.IModDataView;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.tools.TinkerModifiers;
 import slimeknights.tconstruct.tools.item.ModifierCrystalItem;
@@ -183,31 +180,6 @@ public abstract class AbstractModifierRecipe implements ITinkerStationRecipe, ID
   /** Checks if the inventory contains a crystal */
   protected boolean matchesCrystal(ITinkerStationContainer container) {
     return allowCrystal && matchesCrystal(container, result.getId());
-  }
-
-
-  /** Gets the modifiers list for a tool, ignoring partial levels from incremental modifiers */
-  public static List<ModifierEntry> getModifiersIgnoringPartial(IToolStackView toolStack) {
-    ImmutableList.Builder<ModifierEntry> finalList = ImmutableList.builder();
-    IModDataView persistentData = toolStack.getPersistentData();
-    for (ModifierEntry entry : toolStack.getModifierList()) {
-      ModifierId modifier = entry.getId();
-      // if the modifier is not incremental, or does not has the key set, nothing to do
-      int needed = ModifierRecipeLookup.getNeededPerLevel(modifier);
-      if (needed == 0 || !persistentData.contains(modifier, Tag.TAG_ANY_NUMERIC)) {
-        finalList.add(entry);
-      } else {
-        // if the modifier has enough, nothing to do
-        // if not enough, decrease level by 1, skipping if now at 0
-        int has = persistentData.getInt(modifier);
-        if (has >= needed) {
-          finalList.add(entry);
-        } else if (entry.getLevel() > 1) {
-          finalList.add(new ModifierEntry(modifier, entry.getLevel() - 1));
-        }
-      }
-    }
-    return finalList.build();
   }
 
   /** Validates that the given level is a valid result */

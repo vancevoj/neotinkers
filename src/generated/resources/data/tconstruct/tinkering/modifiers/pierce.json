@@ -19,7 +19,6 @@
       "type": "tconstruct:mob_effect",
       "effect": "tconstruct:pierce",
       "hooks": [
-        "tconstruct:projectile_launch",
         "tconstruct:projectile_hit"
       ],
       "level": {

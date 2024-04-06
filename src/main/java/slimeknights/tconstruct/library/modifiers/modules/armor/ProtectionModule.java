@@ -68,10 +68,10 @@ public record ProtectionModule(IJsonPredicate<DamageSource> source, IJsonPredica
       // if this modifier also has an enchantment, subtract out that enchantment value
       // used for fire protection to subtract out the 2 protection from vanilla
       if (subtract != null && LogicHelper.isInList(subtract.slots, slotType)) {
-        float scaledLevel = modifier.getEffectiveLevel(tool);
+        float scaledLevel = modifier.getEffectiveLevel();
         modifierValue += amount.compute(scaledLevel) - subtract.getDamageProtection(Mth.floor(scaledLevel), source);
       } else {
-        modifierValue += amount.compute(tool, modifier);
+        modifierValue += amount.compute(modifier.getEffectiveLevel());
       }
     }
     return modifierValue;
@@ -93,7 +93,7 @@ public record ProtectionModule(IJsonPredicate<DamageSource> source, IJsonPredica
   @Override
   public void addTooltip(IToolStackView tool, ModifierEntry modifier, @Nullable Player player, List<Component> tooltip, TooltipKey tooltipKey, TooltipFlag tooltipFlag) {
     if (condition.matches(tool, modifier)) {
-      addResistanceTooltip(tool, modifier.getModifier(), amount.compute(tool, modifier), player, tooltip);
+      addResistanceTooltip(tool, modifier.getModifier(), amount.compute(modifier.getEffectiveLevel()), player, tooltip);
     }
   }
 

@@ -3,11 +3,11 @@ package slimeknights.tconstruct.tools.modifiers.defense;
 import lombok.RequiredArgsConstructor;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.TinkerHooks;
 import slimeknights.tconstruct.library.modifiers.data.ModifierMaxLevel;
 import slimeknights.tconstruct.library.modifiers.hook.armor.EquipmentChangeModifierHook;
-import slimeknights.tconstruct.library.modifiers.impl.IncrementalModifier;
 import slimeknights.tconstruct.library.modifiers.util.ModifierHookMap.Builder;
 import slimeknights.tconstruct.library.tools.capability.TinkerDataCapability.TinkerDataKey;
 import slimeknights.tconstruct.library.tools.context.EquipmentChangeContext;
@@ -16,7 +16,7 @@ import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 
 /** Base class for protection modifiers that want to keep track of the largest level for a bonus */
 @RequiredArgsConstructor
-public abstract class AbstractProtectionModifier<T extends ModifierMaxLevel> extends IncrementalModifier implements EquipmentChangeModifierHook {
+public abstract class AbstractProtectionModifier<T extends ModifierMaxLevel> extends Modifier implements EquipmentChangeModifierHook {
   private final TinkerDataKey<T> key;
 
   @Override
@@ -58,7 +58,7 @@ public abstract class AbstractProtectionModifier<T extends ModifierMaxLevel> ext
     LivingEntity entity = context.getEntity();
     EquipmentSlot slot = context.getChangedSlot();
     if (!entity.level.isClientSide && ModifierUtil.validArmorSlot(tool, slot) && !tool.isBroken()) {
-      float scaledLevel = modifier.getEffectiveLevel(tool);
+      float scaledLevel = modifier.getEffectiveLevel();
       context.getTinkerData().ifPresent(data -> {
         T modData = data.get(key);
         if (modData == null) {

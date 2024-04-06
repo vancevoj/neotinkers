@@ -16,13 +16,13 @@ import slimeknights.mantle.data.registry.GenericLoaderRegistry.IGenericLoader;
 import slimeknights.mantle.util.JsonHelper;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.modifiers.Modifier;
+import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHook;
 import slimeknights.tconstruct.library.modifiers.TinkerHooks;
 import slimeknights.tconstruct.library.modifiers.impl.BasicModifier;
 import slimeknights.tconstruct.library.modifiers.modules.ModifierModule;
 import slimeknights.tconstruct.library.modifiers.modules.ModifierModule.ModuleWithHooks;
 import slimeknights.tconstruct.library.modifiers.util.ModifierLevelDisplay;
-import slimeknights.tconstruct.library.tools.nbt.IToolContext;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 
 import java.util.ArrayList;
@@ -58,13 +58,8 @@ public class ComposableModifier extends BasicModifier {
   }
 
   @Override
-  public Component getDisplayName(IToolStackView tool, int level) {
-    return getHook(TinkerHooks.DISPLAY_NAME).getDisplayName(tool, this, level, getDisplayName(level));
-  }
-
-  @Override
-  public float getEffectiveLevel(IToolContext tool, int level) {
-    return getHook(TinkerHooks.EFFECTIVE_LEVEL).getEffectiveLevel(tool, this, level);
+  public Component getDisplayName(IToolStackView tool, ModifierEntry entry) {
+    return getHook(TinkerHooks.DISPLAY_NAME).getDisplayName(tool, entry, entry.getDisplayName());
   }
 
   /** Determines when this modifier shows in tooltips */

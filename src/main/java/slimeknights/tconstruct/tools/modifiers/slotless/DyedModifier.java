@@ -5,6 +5,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.modifiers.Modifier;
+import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.TinkerHooks;
 import slimeknights.tconstruct.library.modifiers.hook.build.ModifierRemovalHook;
 import slimeknights.tconstruct.library.modifiers.impl.NoLevelsModifier;
@@ -24,7 +25,7 @@ public class DyedModifier extends NoLevelsModifier implements ModifierRemovalHoo
   }
 
   @Override
-  public Component getDisplayName(IToolStackView tool, int level) {
+  public Component getDisplayName(IToolStackView tool, ModifierEntry entry) {
     ModDataNBT persistentData = tool.getPersistentData();
     ResourceLocation key = getId();
     if (persistentData.contains(key, Tag.TAG_INT)) {

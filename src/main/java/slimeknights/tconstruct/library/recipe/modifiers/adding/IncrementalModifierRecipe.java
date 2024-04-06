@@ -16,15 +16,13 @@ import slimeknights.mantle.data.loadable.primitive.IntLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.recipe.helper.ItemOutput;
 import slimeknights.tconstruct.library.json.IntRange;
+import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierId;
-import slimeknights.tconstruct.library.modifiers.impl.IncrementalModifier;
 import slimeknights.tconstruct.library.recipe.ITinkerableContainer;
 import slimeknights.tconstruct.library.recipe.RecipeResult;
-import slimeknights.tconstruct.library.recipe.modifiers.ModifierRecipeLookup;
 import slimeknights.tconstruct.library.recipe.tinkerstation.IMutableTinkerStationContainer;
 import slimeknights.tconstruct.library.recipe.tinkerstation.ITinkerStationContainer;
 import slimeknights.tconstruct.library.tools.SlotType.SlotCount;
-import slimeknights.tconstruct.library.tools.nbt.ModDataNBT;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.library.utils.JsonUtils;
 import slimeknights.tconstruct.tools.TinkerModifiers;
@@ -63,7 +61,6 @@ public class IncrementalModifierRecipe extends AbstractModifierRecipe {
     this.amountPerInput = amountPerInput;
     this.neededPerLevel = neededPerLevel;
     this.leftover = leftover;
-    ModifierRecipeLookup.setNeededPerLevel(result, neededPerLevel);
   }
 
   @Override
@@ -80,18 +77,13 @@ public class IncrementalModifierRecipe extends AbstractModifierRecipe {
     ItemStack tinkerable = inv.getTinkerableStack();
     ToolStack tool = ToolStack.from(tinkerable);
 
-    // if the tool lacks the modifier, treat current as maxLevel, means we will add a new level
+    // fetch the amount from the modifier, will be 0 if we have a full level
     ModifierId modifier = result.getId();
-    int current;
-    if (tool.getUpgrades().getLevel(modifier) == 0) {
-      current = neededPerLevel;
-    } else {
-      current = IncrementalModifier.getAmount(tool, modifier);
-    }
+    boolean newLevel = tool.getUpgrades().getEntry(modifier).getAmount(0) <= 0;
 
     // can skip validations if we are not adding a new level, crystals always add one
     boolean crystal = matchesCrystal(inv);
-    if (crystal || current >= neededPerLevel) {
+    if (crystal || newLevel) {
       Component commonError = validatePrerequisites(tool);
       if (commonError != null) {
         return RecipeResult.failure(commonError);
@@ -100,31 +92,21 @@ public class IncrementalModifierRecipe extends AbstractModifierRecipe {
 
     // if at the max, add a new level
     tool = tool.copy();
-    ModDataNBT persistentData = tool.getPersistentData();
 
-    // see how much value is available
-    int available = getAvailableAmount(inv, input, amountPerInput);
-    if (crystal || current >= neededPerLevel) {
-      // consume slots as we are adding a new level
+    // if a new level, consume slots now that we copied
+    if (crystal || newLevel) {
       SlotCount slots = getSlots();
       if (slots != null) {
-        persistentData.addSlots(slots.type(), -slots.count());
+        tool.getPersistentData().addSlots(slots.type(), -slots.count());
       }
+    }
 
-      int amount;
-      if (crystal) {
-        // crystal just adds 1 level on top of what we had before
-        amount = current;
-      } else {
-        // add up to 1 level of this to the tool
-        amount = Math.min(available + current - neededPerLevel, neededPerLevel);
-      }
-      IncrementalModifier.setAmount(persistentData, modifier, amount);
-      tool.addModifier(result.getId(), 1);
+    // crystal adds 1 level, does not care about amount
+    if (crystal) {
+      tool.addModifier(modifier, 1);
     } else {
-      // boost original based on the new level, and rebuild data so stats adjust
-      IncrementalModifier.setAmount(persistentData, modifier, Math.min(current + available, neededPerLevel));
-      tool.rebuildStats();
+      // for adding amount, we just use the convenient helper method, which will automatically stop at max
+      tool.addModifierAmount(modifier, getAvailableAmount(inv, input, amountPerInput), neededPerLevel);
     }
 
     // successfully added the modifier
@@ -144,27 +126,27 @@ public class IncrementalModifierRecipe extends AbstractModifierRecipe {
       return;
     }
 
+    // fetch the differences
     ToolStack inputTool = ToolStack.from(inv.getTinkerableStack());
     ToolStack resultTool = ToolStack.from(result);
-
-    // start by checking amount
     ModifierId modifier = this.result.getId();
-    int needed = IncrementalModifier.getAmount(resultTool, modifier);
-    // if we had this modifier before, we can exclude what the original tool had
-    int originalLevel = inputTool.getModifierLevel(modifier);
-    if (originalLevel > 0) {
-      needed -= IncrementalModifier.getAmount(inputTool, modifier);
+    ModifierEntry inputEntry = inputTool.getUpgrades().getEntry(modifier);
+    ModifierEntry resultEntry = resultTool.getUpgrades().getEntry(modifier);
+
+    // if we had no partial level before, we just need to consume what we saw on the result
+    int inputNeed = inputEntry.getNeeded();
+    // if the input had no incremental or it matched the result, life is easy
+    if (inputNeed == 0 || inputNeed == neededPerLevel) {
+      // just directly consume based on the difference
+      updateInputs(inv, input, resultEntry.getAmount(neededPerLevel) - inputEntry.getAmount(0), amountPerInput, leftover.get());
     } else {
-      needed -= neededPerLevel; // correction factor as adding a level counts as an extra neededPerLevel
-    }
-    // add in extra need if we increased levels
-    int levelChange = resultTool.getModifierLevel(modifier) - originalLevel;
-    if (levelChange > 0) {
-      needed += levelChange * neededPerLevel;
-    }
-    // subtract the inputs
-    if (needed > 0) {
-      updateInputs(inv, input, needed, amountPerInput, leftover.get());
+      // so the sizes mismatch, need to rescale the input, the result, and the amount consumed per item
+      int gcd = IntMath.gcd(inputNeed, neededPerLevel);
+      int recipeScale = inputNeed / gcd;
+      int used = (resultEntry.getAmount(neededPerLevel) * recipeScale) - (inputEntry.getAmount(0) * neededPerLevel / gcd);
+      // we need the final result to be in terms of the input sizes. We could scale amountPerInput, but that will lead to many leftovers
+      // instead what we do is a ceiling divide by adding the divisor-1, ensures we consume a bit too much instead of a bit too little with mismatching needs
+      updateInputs(inv, input, (used + recipeScale - 1) / recipeScale, amountPerInput, leftover.get());
     }
   }
 

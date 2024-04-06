@@ -101,7 +101,7 @@ public interface LootingModule extends ModifierModule, IntLevelModule, Condition
     @Override
     public int updateLooting(IToolStackView tool, ModifierEntry modifier, LootingContext context, int looting) {
       if (matchesConditions(tool, modifier, context)) {
-        looting += getLevel(tool, modifier);
+        looting += getLevel(modifier);
       }
       return looting;
     }
@@ -125,7 +125,7 @@ public interface LootingModule extends ModifierModule, IntLevelModule, Condition
     @Override
     public int updateArmorLooting(IToolStackView tool, ModifierEntry modifier, LootingContext context, EquipmentContext equipment, EquipmentSlot slot, int looting) {
       if (slots.contains(slot) && matchesConditions(tool, modifier, context)) {
-        looting += getLevel(tool, modifier);
+        looting += getLevel(modifier);
       }
       return looting;
     }

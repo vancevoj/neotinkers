@@ -13,12 +13,12 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.phys.Vec3;
 import slimeknights.mantle.client.TooltipKey;
+import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.TinkerHooks;
 import slimeknights.tconstruct.library.modifiers.hook.armor.ArmorWalkModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.armor.EquipmentChangeModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.display.TooltipModifierHook;
-import slimeknights.tconstruct.library.modifiers.impl.IncrementalModifier;
 import slimeknights.tconstruct.library.modifiers.util.ModifierHookMap.Builder;
 import slimeknights.tconstruct.library.tools.context.EquipmentChangeContext;
 import slimeknights.tconstruct.library.tools.helper.ToolDamageUtil;
@@ -28,7 +28,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.UUID;
 
-public class LightspeedArmorModifier extends IncrementalModifier implements ArmorWalkModifierHook, EquipmentChangeModifierHook, TooltipModifierHook {
+public class LightspeedArmorModifier extends Modifier implements ArmorWalkModifierHook, EquipmentChangeModifierHook, TooltipModifierHook {
   /** UUID for speed boost */
   private static final UUID ATTRIBUTE_BONUS = UUID.fromString("8790747b-6654-4bd8-83c7-dbe9ae04c0ca");
 
@@ -60,7 +60,7 @@ public class LightspeedArmorModifier extends IncrementalModifier implements Armo
     int light = living.level.getBrightness(LightLayer.BLOCK, pos);
     if (light > 5) {
       int scaledLight = light - 5;
-      attribute.addTransientModifier(new AttributeModifier(ATTRIBUTE_BONUS, "tconstruct.modifier.lightspeed", scaledLight * 0.0015f * modifier.getEffectiveLevel(tool), Operation.ADDITION));
+      attribute.addTransientModifier(new AttributeModifier(ATTRIBUTE_BONUS, "tconstruct.modifier.lightspeed", scaledLight * 0.0015f * modifier.getEffectiveLevel(), Operation.ADDITION));
 
       // damage boots
       if (RANDOM.nextFloat() < (0.005f * scaledLight)) {
@@ -76,7 +76,7 @@ public class LightspeedArmorModifier extends IncrementalModifier implements Armo
     if (context.getChangedSlot() == EquipmentSlot.FEET) {
       IToolStackView newTool = context.getReplacementTool();
       // damaging the tool will trigger this hook, so ensure the new tool has the same level
-      if (newTool == null || newTool.isBroken() || getEffectiveLevel(newTool, newTool.getModifierLevel(this)) != modifier.getEffectiveLevel(tool)) {
+      if (newTool == null || newTool.isBroken() || newTool.getModifier(this).getEffectiveLevel() != modifier.getEffectiveLevel()) {
         AttributeInstance attribute = livingEntity.getAttribute(Attributes.MOVEMENT_SPEED);
         if (attribute != null && attribute.getModifier(ATTRIBUTE_BONUS) != null) {
           attribute.removeModifier(ATTRIBUTE_BONUS);
@@ -90,7 +90,7 @@ public class LightspeedArmorModifier extends IncrementalModifier implements Armo
     // multiplies boost by 10 and displays as a percent as the players base movement speed is 0.1 and is in unknown units
     // percentages make sense
     float boost;
-    float level = modifier.getEffectiveLevel(tool);
+    float level = modifier.getEffectiveLevel();
     if (player != null && key == TooltipKey.SHIFT) {
       int light = player.level.getBrightness(LightLayer.BLOCK, player.blockPosition());
       boost = 0.015f * (light - 5) * level;

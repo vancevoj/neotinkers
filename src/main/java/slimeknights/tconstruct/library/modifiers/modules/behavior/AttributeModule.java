@@ -71,7 +71,7 @@ public record AttributeModule(String unique, Attribute attribute, Operation oper
     if (condition.matches(tool, modifier)) {
       UUID uuid = slotUUIDs[slot.getFilterFlag()];
       if (uuid != null) {
-        consumer.accept(attribute, new AttributeModifier(uuid, unique + "." + slot.getName(), amount.compute(tool, modifier), operation));
+        consumer.accept(attribute, new AttributeModifier(uuid, unique + "." + slot.getName(), amount.compute(modifier.getEffectiveLevel()), operation));
       }
     }
   }

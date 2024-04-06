@@ -49,7 +49,7 @@ public record KnockbackModule(IJsonPredicate<LivingEntity> entity, ModifierFormu
     if (this.condition.matches(tool, modifier)) {
       // might want to consider an entity predicate here, this special casing is a bit odd
       if (TinkerPredicate.matches(entity, context.getLivingTarget())) {
-        return formula.apply(formula.computeLevel(tool, modifier), knockback);
+        return formula.apply(formula.processLevel(modifier), knockback);
       }
     }
     return knockback;

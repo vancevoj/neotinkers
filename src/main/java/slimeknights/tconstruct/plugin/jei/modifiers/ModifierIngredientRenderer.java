@@ -27,7 +27,7 @@ public record ModifierIngredientRenderer(int width, int height) implements IIngr
   @Override
   public void render(PoseStack matrices, @Nullable ModifierEntry entry) {
     if (entry != null) {
-      Component name = entry.getModifier().getDisplayName(entry.getLevel());
+      Component name = entry.getDisplayName();
       Font fontRenderer = getFontRenderer(Minecraft.getInstance(), entry);
       int x = (width - fontRenderer.width(name)) / 2;
       fontRenderer.drawShadow(matrices, name, x, 1, -1);

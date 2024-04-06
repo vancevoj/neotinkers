@@ -5,16 +5,16 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.EquipmentSlot.Type;
 import net.minecraft.world.entity.LivingEntity;
+import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.TinkerHooks;
 import slimeknights.tconstruct.library.modifiers.hook.armor.OnAttackedModifierHook;
-import slimeknights.tconstruct.library.modifiers.impl.IncrementalModifier;
 import slimeknights.tconstruct.library.modifiers.util.ModifierHookMap.Builder;
 import slimeknights.tconstruct.library.tools.context.EquipmentContext;
 import slimeknights.tconstruct.library.tools.helper.ToolDamageUtil;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 
-public class ThornsModifier extends IncrementalModifier implements OnAttackedModifierHook {
+public class ThornsModifier extends Modifier implements OnAttackedModifierHook {
   @Override
   protected void registerHooks(Builder hookBuilder) {
     super.registerHooks(hookBuilder);
@@ -27,7 +27,7 @@ public class ThornsModifier extends IncrementalModifier implements OnAttackedMod
     Entity attacker = source.getEntity();
     if (attacker != null && isDirectDamage) {
       // 15% chance of working per level, doubled bonus on shields
-      float scaledLevel = modifier.getEffectiveLevel(tool);
+      float scaledLevel = modifier.getEffectiveLevel();
       if (slotType.getType() == Type.HAND) {
         scaledLevel *= 2;
       }

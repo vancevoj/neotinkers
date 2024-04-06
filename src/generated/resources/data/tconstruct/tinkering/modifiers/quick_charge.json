@@ -3,9 +3,6 @@
   "level_display": "tconstruct:default",
   "modules": [
     {
-      "type": "tconstruct:incremental"
-    },
-    {
       "type": "tconstruct:stat_boost",
       "each_level": 0.25,
       "operation": "multiply_base",

@@ -3,9 +3,6 @@
   "level_display": "tconstruct:default",
   "modules": [
     {
-      "type": "tconstruct:incremental"
-    },
-    {
       "type": "tconstruct:reduce_tool_damage",
       "formula": [
         0.025,

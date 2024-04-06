@@ -28,7 +28,7 @@ public class CrystalshotModifier extends NoLevelsModifier implements BowAmmoModi
   }
 
   @Override
-  public Component getDisplayName(IToolStackView tool, int level) {
+  public Component getDisplayName(IToolStackView tool, ModifierEntry entry) {
     // color the display name for the variant
     String variant = tool.getPersistentData().getString(getId());
     if (!variant.isEmpty()) {

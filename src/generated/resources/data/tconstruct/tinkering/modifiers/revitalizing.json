@@ -3,9 +3,6 @@
   "level_display": "tconstruct:default",
   "modules": [
     {
-      "type": "tconstruct:incremental"
-    },
-    {
       "type": "tconstruct:attribute",
       "attribute": "minecraft:generic.max_health",
       "each_level": 2.0,

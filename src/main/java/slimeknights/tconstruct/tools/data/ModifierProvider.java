@@ -63,7 +63,6 @@ import slimeknights.tconstruct.library.modifiers.modules.armor.ToolActionWalkerT
 import slimeknights.tconstruct.library.modifiers.modules.behavior.AttributeModule;
 import slimeknights.tconstruct.library.modifiers.modules.behavior.ConditionalStatModule;
 import slimeknights.tconstruct.library.modifiers.modules.behavior.ExtinguishCampfireModule;
-import slimeknights.tconstruct.library.modifiers.modules.behavior.IncrementalModule;
 import slimeknights.tconstruct.library.modifiers.modules.behavior.ReduceToolDamageModule;
 import slimeknights.tconstruct.library.modifiers.modules.behavior.RepairModule;
 import slimeknights.tconstruct.library.modifiers.modules.behavior.ShowOffhandModule;
@@ -180,12 +179,10 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
     buildModifier(ModifierIds.shiny).addModule(new VolatileFlagModule(IModifiable.SHINY)).addModule(new RarityModule(Rarity.EPIC)).levelDisplay(ModifierLevelDisplay.NO_LEVELS);
     // general abilities
     buildModifier(ModifierIds.reach)
-      .addModule(IncrementalModule.RECIPE_CONTROLLED)
       .addModule(AttributeModule.builder(ForgeMod.REACH_DISTANCE.get(), Operation.ADDITION).uniqueFrom(ModifierIds.reach).eachLevel(1))
       .addModule(AttributeModule.builder(ForgeMod.ATTACK_RANGE.get(), Operation.ADDITION).uniqueFrom(ModifierIds.reach).eachLevel(1));
     IJsonPredicate<IToolContext> noUnbreakable = HasModifierPredicate.hasModifier(TinkerModifiers.unbreakable.getId(), 1).inverted();
     buildModifier(ModifierIds.reinforced)
-      .addModule(IncrementalModule.RECIPE_CONTROLLED)
       // level 0 to 5: 0.025 * LEVEL * (11 - LEVEL)
       .addModule(ReduceToolDamageModule.builder().tool(noUnbreakable).maxLevel(5).formula()
                                        .constant(0.025f).variable(LEVEL).multiply() // 0.025 * level
@@ -271,24 +268,22 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
         .constant(2).variable(LEVEL).power() // 2^LEVEL
         .divide().build()); // KNOCKBACK / 2^LEVEL
     buildModifier(ModifierIds.sticky)
-      .addModule(IncrementalModule.RECIPE_CONTROLLED)
       .addModule(MobEffectModule.builder(MobEffects.MOVEMENT_SLOWDOWN).level(RandomLevelingValue.perLevel(0, 0.5f)).time(RandomLevelingValue.random(20, 10)).build());
 
     // damage boost
     // vanilla give +1, 1.5, 2, 2.5, 3, but that is low
     // we instead do +0.75, +1.5, +2.25, +3, +3.75
     UniqueForLevels uniqueForFive = new UniqueForLevels(5);
-    buildModifier(ModifierIds.sharpness).addModule(IncrementalModule.RECIPE_CONTROLLED).addModule(StatBoostModule.add(ToolStats.ATTACK_DAMAGE).eachLevel(0.75f)).levelDisplay(uniqueForFive);
-    buildModifier(ModifierIds.swiftstrike).addModule(IncrementalModule.RECIPE_CONTROLLED).addModule(StatBoostModule.multiplyBase(ToolStats.ATTACK_SPEED).eachLevel(0.05f)).levelDisplay(uniqueForFive);
-    buildModifier(ModifierIds.smite).addModule(IncrementalModule.RECIPE_CONTROLLED).addModule(ConditionalMeleeDamageModule.builder().target(new MobTypePredicate(MobType.UNDEAD)).eachLevel(2.0f));
-    buildModifier(ModifierIds.antiaquatic).addModule(IncrementalModule.RECIPE_CONTROLLED).addModule(ConditionalMeleeDamageModule.builder().target(new MobTypePredicate(MobType.WATER)).eachLevel(2.0f));
-    buildModifier(ModifierIds.cooling).addModule(IncrementalModule.RECIPE_CONTROLLED).addModule(ConditionalMeleeDamageModule.builder().target(LivingEntityPredicate.FIRE_IMMUNE).eachLevel(1.6f));
+    buildModifier(ModifierIds.sharpness).addModule(StatBoostModule.add(ToolStats.ATTACK_DAMAGE).eachLevel(0.75f)).levelDisplay(uniqueForFive);
+    buildModifier(ModifierIds.swiftstrike).addModule(StatBoostModule.multiplyBase(ToolStats.ATTACK_SPEED).eachLevel(0.05f)).levelDisplay(uniqueForFive);
+    buildModifier(ModifierIds.smite).addModule(ConditionalMeleeDamageModule.builder().target(new MobTypePredicate(MobType.UNDEAD)).eachLevel(2.0f));
+    buildModifier(ModifierIds.antiaquatic).addModule(ConditionalMeleeDamageModule.builder().target(new MobTypePredicate(MobType.WATER)).eachLevel(2.0f));
+    buildModifier(ModifierIds.cooling).addModule(ConditionalMeleeDamageModule.builder().target(LivingEntityPredicate.FIRE_IMMUNE).eachLevel(1.6f));
     IJsonPredicate<LivingEntity> baneSssssPredicate = LivingEntityPredicate.or(new MobTypePredicate(MobType.ARTHROPOD), LivingEntityPredicate.tag(TinkerTags.EntityTypes.CREEPERS));
     buildModifier(ModifierIds.baneOfSssss)
-      .addModule(IncrementalModule.RECIPE_CONTROLLED)
       .addModule(ConditionalMeleeDamageModule.builder().target(baneSssssPredicate).eachLevel(2.0f))
       .addModule(MobEffectModule.builder(MobEffects.MOVEMENT_SLOWDOWN).level(RandomLevelingValue.flat(4)).time(RandomLevelingValue.random(20, 10)).target(baneSssssPredicate).build(), TinkerHooks.MELEE_HIT);
-    buildModifier(ModifierIds.killager).addModule(IncrementalModule.RECIPE_CONTROLLED).addModule(ConditionalMeleeDamageModule.builder().target(LivingEntityPredicate.or(
+    buildModifier(ModifierIds.killager).addModule(ConditionalMeleeDamageModule.builder().target(LivingEntityPredicate.or(
       new MobTypePredicate(MobType.ILLAGER),
       LivingEntityPredicate.LOADER.tag(TinkerTags.EntityTypes.VILLAGERS))).eachLevel(2.0f));
     buildModifier(ModifierIds.pierce)
@@ -296,22 +291,22 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .addModule(StatBoostModule.add(ToolStats.ATTACK_DAMAGE).eachLevel(0.5f))
       .addModule(MeleeAttributeModule.builder(Attributes.ARMOR, Operation.ADDITION).uniqueFrom(ModifierIds.pierce).eachLevel(-1))
       // use a mob effect to make this work on ranged, to ensure it automatically cancels
-      .addModule(MobEffectModule.builder(TinkerModifiers.pierceEffect.get()).level(RandomLevelingValue.perLevel(0, 1)).time(RandomLevelingValue.flat(2)).build(), TinkerHooks.PROJECTILE_LAUNCH, TinkerHooks.PROJECTILE_HIT);
+      .addModule(MobEffectModule.builder(TinkerModifiers.pierceEffect.get()).level(RandomLevelingValue.perLevel(0, 1)).time(RandomLevelingValue.flat(2)).build(), TinkerHooks.PROJECTILE_HIT);
 
     // ranged
-    buildModifier(ModifierIds.power).addModule(IncrementalModule.RECIPE_CONTROLLED).addModule(StatBoostModule.add(ToolStats.PROJECTILE_DAMAGE).eachLevel(0.5f));
-    buildModifier(ModifierIds.quickCharge).addModule(IncrementalModule.RECIPE_CONTROLLED).addModule(StatBoostModule.multiplyBase(ToolStats.DRAW_SPEED).eachLevel(0.25f));
-    buildModifier(ModifierIds.trueshot).addModule(IncrementalModule.RECIPE_CONTROLLED).addModule(StatBoostModule.add(ToolStats.ACCURACY).eachLevel(0.1f));
-    buildModifier(ModifierIds.blindshot).addModule(IncrementalModule.RECIPE_CONTROLLED).addModule(StatBoostModule.add(ToolStats.ACCURACY).eachLevel(-0.1f));
+    buildModifier(ModifierIds.power).addModule(StatBoostModule.add(ToolStats.PROJECTILE_DAMAGE).eachLevel(0.5f));
+    buildModifier(ModifierIds.quickCharge).addModule(StatBoostModule.multiplyBase(ToolStats.DRAW_SPEED).eachLevel(0.25f));
+    buildModifier(ModifierIds.trueshot).addModule(StatBoostModule.add(ToolStats.ACCURACY).eachLevel(0.1f));
+    buildModifier(ModifierIds.blindshot).addModule(StatBoostModule.add(ToolStats.ACCURACY).eachLevel(-0.1f));
 
     // armor
     buildModifier(TinkerModifiers.golden).addModule(new VolatileFlagModule(ModifiableArmorItem.PIGLIN_NEUTRAL)).levelDisplay(ModifierLevelDisplay.NO_LEVELS);
     buildModifier(ModifierIds.wings).addModule(new VolatileFlagModule(ModifiableArmorItem.ELYTRA)).levelDisplay(ModifierLevelDisplay.NO_LEVELS);
-    buildModifier(ModifierIds.knockbackResistance).addModule(IncrementalModule.RECIPE_CONTROLLED).addModule(StatBoostModule.add(ToolStats.KNOCKBACK_RESISTANCE).eachLevel(0.1f));
+    buildModifier(ModifierIds.knockbackResistance).addModule(StatBoostModule.add(ToolStats.KNOCKBACK_RESISTANCE).eachLevel(0.1f));
 
     // defense
     // TODO: floor?
-    buildModifier(ModifierIds.revitalizing).addModule(IncrementalModule.RECIPE_CONTROLLED).addModule(AttributeModule.builder(Attributes.MAX_HEALTH, Operation.ADDITION).uniqueFrom(ModifierIds.revitalizing).slots(armorSlots).eachLevel(2));
+    buildModifier(ModifierIds.revitalizing).addModule(AttributeModule.builder(Attributes.MAX_HEALTH, Operation.ADDITION).uniqueFrom(ModifierIds.revitalizing).slots(armorSlots).eachLevel(2));
     // protection
     buildModifier(ModifierIds.protection).addModule(ProtectionModule.source(DamageSourcePredicate.CAN_PROTECT).eachLevel(1.25f));
     buildModifier(ModifierIds.fireProtection)
@@ -329,9 +324,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
     buildModifier(ModifierIds.respiration).addModule(EnchantmentModule.builder(Enchantments.RESPIRATION).constant());
     buildModifier(ModifierIds.aquaAffinity).addModule(EnchantmentModule.builder(Enchantments.AQUA_AFFINITY).constant()).levelDisplay(ModifierLevelDisplay.NO_LEVELS);
     // chestplate
-    buildModifier(ModifierIds.strength)
-      .addModule(IncrementalModule.RECIPE_CONTROLLED)
-      .addModule(AttributeModule.builder(Attributes.ATTACK_DAMAGE, Operation.MULTIPLY_TOTAL).uniqueFrom(ModifierIds.strength).slots(armorSlots).eachLevel(0.1f));
+    buildModifier(ModifierIds.strength).addModule(AttributeModule.builder(Attributes.ATTACK_DAMAGE, Operation.MULTIPLY_TOTAL).uniqueFrom(ModifierIds.strength).slots(armorSlots).eachLevel(0.1f));
     // leggings
     addModifier(ModifierIds.pockets, new InventoryMenuModifier(18));
     addModifier(ModifierIds.toolBelt, new ToolBeltModifier(new int[] {4, 5, 6, 7, 8, 9}));
@@ -339,7 +332,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
     buildModifier(ModifierIds.speedy).addModule(AttributeModule.builder(Attributes.MOVEMENT_SPEED, Operation.MULTIPLY_TOTAL).uniqueFrom(ModifierIds.speedy).slots(armorMainHand).eachLevel(0.1f));
     // boots
     buildModifier(ModifierIds.depthStrider).addModule(EnchantmentModule.builder(Enchantments.DEPTH_STRIDER).constant());
-    buildModifier(ModifierIds.featherFalling).addModule(IncrementalModule.RECIPE_CONTROLLED).addModule(ProtectionModule.source(DamageSourcePredicate.FALL).eachLevel(3.75f));
+    buildModifier(ModifierIds.featherFalling).addModule(ProtectionModule.source(DamageSourcePredicate.FALL).eachLevel(3.75f));
     buildModifier(ModifierIds.longFall)
       .levelDisplay(ModifierLevelDisplay.NO_LEVELS)
       .addModule(ModifierRequirementsModule.builder().requireModifier(ModifierIds.featherFalling, 4).modifierKey(ModifierIds.longFall).build())

@@ -32,7 +32,7 @@ public record RepairModule(ModifierFormula formula, ModifierModuleCondition cond
 
   @Override
   public float getRepairFactor(IToolStackView tool, ModifierEntry entry, float factor) {
-    return formula.apply(formula.computeLevel(tool, entry), factor);
+    return formula.apply(formula.processLevel(entry), factor);
   }
 
   @Override

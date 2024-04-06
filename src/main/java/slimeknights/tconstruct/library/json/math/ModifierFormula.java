@@ -6,7 +6,6 @@ import net.minecraft.network.FriendlyByteBuf;
 import slimeknights.tconstruct.library.json.LevelingValue;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.modules.ModifierModuleCondition;
-import slimeknights.tconstruct.library.tools.nbt.IToolContext;
 
 /**
  * Represents a modifier formula that may be either simple or complex.
@@ -22,8 +21,8 @@ public sealed interface ModifierFormula permits PostFixFormula, SimpleLevelingFo
   /** Variable index for the base value before modifiers changed anything */
   int BASE_VALUE = 3;
 
-  /** Computes the level value for this formula, allows some optimizations to not compute level when not needed */
-  float computeLevel(IToolContext tool, ModifierEntry modifier);
+  /** Computes the scaled level for this formula, allows deciding which index gets the simple formula's scale. For post fix this is equivelent to just calling {@link ModifierEntry#getEffectiveLevel()} */
+  float processLevel(ModifierEntry modifier);
 
   /** Applies this formula to the given arguments */
   float apply(float... arguments);

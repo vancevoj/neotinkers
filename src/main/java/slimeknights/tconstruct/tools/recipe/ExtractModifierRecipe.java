@@ -11,10 +11,8 @@ import slimeknights.mantle.recipe.ingredient.SizedIngredient;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierId;
-import slimeknights.tconstruct.library.modifiers.impl.IncrementalModifier;
 import slimeknights.tconstruct.library.recipe.ITinkerableContainer;
 import slimeknights.tconstruct.library.recipe.ITinkerableContainer.Mutable;
-import slimeknights.tconstruct.library.recipe.modifiers.ModifierRecipeLookup;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.tools.TinkerModifiers;
 import slimeknights.tconstruct.tools.item.ModifierCrystalItem;
@@ -55,13 +53,7 @@ public class ExtractModifierRecipe extends ModifierRemovalRecipe {
   protected List<ModifierEntry> filter(@Nullable IToolStackView tool, List<ModifierEntry> modifiers) {
     if (tool != null) {
       // filter out incremental modifiers at level 1 with only a partial level to prevent exploiting the recipe to get a lot of crystals
-      return modifiers.stream().filter(entryPredicate).filter(entry -> {
-        if (entry.getLevel() == 1) {
-          int neededPerLevel = ModifierRecipeLookup.getNeededPerLevel(entry.getId());
-          return neededPerLevel <= 0 || IncrementalModifier.getAmount(tool, entry.getId()) >= neededPerLevel;
-        }
-        return true;
-      }).toList();
+      return modifiers.stream().filter(entryPredicate).filter(entry -> entry.intEffectiveLevel() > 0).toList();
     }
     return super.filter(tool, modifiers);
   }

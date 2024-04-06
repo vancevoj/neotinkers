@@ -35,7 +35,7 @@ public record StatBoostModule(INumericToolStat<?> stat, StatOperation operation,
   @Override
   public void addToolStats(ToolRebuildContext context, ModifierEntry modifier, ModifierStatsBuilder builder) {
     if (condition.matches(context, modifier)) {
-      operation.apply(builder, stat, amount.compute(context, modifier));
+      operation.apply(builder, stat, amount.compute(modifier.getEffectiveLevel()));
     }
   }
 

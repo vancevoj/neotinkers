@@ -27,7 +27,6 @@ import slimeknights.tconstruct.library.modifiers.ModifierManager.ModifierRegistr
 import slimeknights.tconstruct.library.modifiers.util.ModifierHookMap;
 import slimeknights.tconstruct.library.modifiers.util.ModifierHookMap.Builder;
 import slimeknights.tconstruct.library.modifiers.util.ModifierLevelDisplay;
-import slimeknights.tconstruct.library.tools.nbt.IToolContext;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.library.utils.Util;
@@ -234,11 +233,11 @@ public class Modifier implements IHaveLoader {
   /**
    * Stack sensitive version of {@link #getDisplayName(int)}. Useful for displaying persistent data such as overslime or redstone amount
    * @param tool   Tool instance
-   * @param level  Tool level
+   * @param entry  Tool level
    * @return  Stack sensitive display name
    */
-  public Component getDisplayName(IToolStackView tool, int level) {
-    return getDisplayName(level);
+  public Component getDisplayName(IToolStackView tool, ModifierEntry entry) {
+    return entry.getDisplayName();
   }
 
   /**
@@ -266,11 +265,11 @@ public class Modifier implements IHaveLoader {
   /**
    * Gets the description for this modifier, sensitive to the tool
    * @param tool  Tool containing this modifier
-   * @param level Modifier level
+   * @param entry Modifier level
    * @return  Description for this modifier
    */
-  public List<Component> getDescriptionList(IToolStackView tool, int level) {
-    return getDescriptionList(level);
+  public List<Component> getDescriptionList(IToolStackView tool, ModifierEntry entry) {
+    return getDescriptionList(entry.getLevel());
   }
 
   /** Converts a list of text components to a single text component, newline separated */
@@ -316,9 +315,9 @@ public class Modifier implements IHaveLoader {
    * Gets the description for this modifier
    * @return  Description for this modifier
    */
-  public final Component getDescription(IToolStackView tool, int level) {
+  public final Component getDescription(IToolStackView tool, ModifierEntry entry) {
     // if the method is not overridden, use the cached description component
-    List<Component> extendedDescription = getDescriptionList(tool, level);
+    List<Component> extendedDescription = getDescriptionList(tool, entry);
     if (extendedDescription == getDescriptionList()) {
       return getDescription();
     }
@@ -327,16 +326,6 @@ public class Modifier implements IHaveLoader {
 
 
   /* General hooks */
-
-  /**
-   * Gets the level scaled based on attributes of modifier data. Used mainly for incremental modifiers.
-   * @param tool  Tool context
-   * @param level  Modifier level
-   * @return  Modifier level, possibly adjusted by tool properties
-   */
-  public float getEffectiveLevel(IToolContext tool, int level) {
-    return level;
-  }
 
   /**
    * Determines if the modifier should display

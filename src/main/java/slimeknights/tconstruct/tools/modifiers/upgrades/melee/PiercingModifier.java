@@ -7,13 +7,13 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.TooltipFlag;
 import slimeknights.mantle.client.TooltipKey;
 import slimeknights.tconstruct.TConstruct;
+import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.TinkerHooks;
 import slimeknights.tconstruct.library.modifiers.hook.build.ToolStatsModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.build.VolatileDataModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.combat.MeleeHitModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.display.TooltipModifierHook;
-import slimeknights.tconstruct.library.modifiers.impl.IncrementalModifier;
 import slimeknights.tconstruct.library.modifiers.util.ModifierHookMap.Builder;
 import slimeknights.tconstruct.library.tools.context.ToolAttackContext;
 import slimeknights.tconstruct.library.tools.context.ToolRebuildContext;
@@ -26,7 +26,7 @@ import slimeknights.tconstruct.library.tools.stat.ToolStats;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class PiercingModifier extends IncrementalModifier implements ToolStatsModifierHook, VolatileDataModifierHook, MeleeHitModifierHook, TooltipModifierHook {
+public class PiercingModifier extends Modifier implements ToolStatsModifierHook, VolatileDataModifierHook, MeleeHitModifierHook, TooltipModifierHook {
   private static final ResourceLocation PIERCING_DEBUFF = TConstruct.getResource("piercing_debuff");
 
   @Override
@@ -37,7 +37,7 @@ public class PiercingModifier extends IncrementalModifier implements ToolStatsMo
 
   @Override
   public void addVolatileData(ToolRebuildContext context, ModifierEntry modifier, ModDataNBT volatileData) {
-    float toRemove = 0.5f * modifier.getEffectiveLevel(context);
+    float toRemove = 0.5f * modifier.getEffectiveLevel();
     float baseDamage = context.getBaseStats().get(ToolStats.ATTACK_DAMAGE);
     if (baseDamage < toRemove) {
       volatileData.putFloat(PIERCING_DEBUFF, toRemove - baseDamage);
@@ -46,7 +46,7 @@ public class PiercingModifier extends IncrementalModifier implements ToolStatsMo
 
   @Override
   public void addToolStats(ToolRebuildContext context, ModifierEntry modifier, ModifierStatsBuilder builder) {
-    float toRemove = 0.5f * modifier.getEffectiveLevel(context) - context.getVolatileData().getFloat(PIERCING_DEBUFF);
+    float toRemove = 0.5f * modifier.getEffectiveLevel() - context.getVolatileData().getFloat(PIERCING_DEBUFF);
     ToolStats.ATTACK_DAMAGE.add(builder, -toRemove);
   }
 
@@ -61,7 +61,7 @@ public class PiercingModifier extends IncrementalModifier implements ToolStatsMo
       source = DamageSource.mobAttack(context.getAttacker());
     }
     source.bypassArmor();
-    float secondaryDamage = (modifier.getEffectiveLevel(tool) * tool.getMultiplier(ToolStats.ATTACK_DAMAGE) - tool.getVolatileData().getFloat(PIERCING_DEBUFF)) * context.getCooldown();
+    float secondaryDamage = (modifier.getEffectiveLevel() * tool.getMultiplier(ToolStats.ATTACK_DAMAGE) - tool.getVolatileData().getFloat(PIERCING_DEBUFF)) * context.getCooldown();
     if (context.isCritical()) {
       secondaryDamage *= 1.5f;
     }
@@ -70,6 +70,6 @@ public class PiercingModifier extends IncrementalModifier implements ToolStatsMo
 
   @Override
   public void addTooltip(IToolStackView tool, ModifierEntry modifier, @Nullable Player player, List<Component> tooltip, TooltipKey tooltipKey, TooltipFlag tooltipFlag) {
-    TooltipModifierHook.addDamageBoost(tool, this, modifier.getEffectiveLevel(tool) - tool.getVolatileData().getFloat(PIERCING_DEBUFF), tooltip);
+    TooltipModifierHook.addDamageBoost(tool, this, modifier.getEffectiveLevel() - tool.getVolatileData().getFloat(PIERCING_DEBUFF), tooltip);
   }
 }

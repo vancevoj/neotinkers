@@ -138,7 +138,7 @@ public class ModifierClientEvents {
         if (tool != null) {
           ShieldStrapModifier modifier = TinkerModifiers.shieldStrap.get();
           ModifierEntry entry = tool.getModifiers().getEntry(modifier.getId());
-          if (entry != null) {
+          if (entry != ModifierEntry.EMPTY) {
             nextOffhand = modifier.getStack(tool, entry, 0);
             return;
           }

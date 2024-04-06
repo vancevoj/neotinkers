@@ -14,7 +14,6 @@ import slimeknights.tconstruct.library.modifiers.hook.armor.ModifyDamageModifier
 import slimeknights.tconstruct.library.modifiers.hook.armor.OnAttackedModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.armor.ProtectionModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.behavior.AttributesModifierHook;
-import slimeknights.tconstruct.library.modifiers.hook.behavior.EffectiveLevelModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.behavior.EnchantmentModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.behavior.RepairFactorModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.behavior.ToolActionModifierHook;
@@ -89,11 +88,8 @@ public class TinkerHooks {
 
   /* Composable only  */
 
-  /** Hook for supporting modifiers to change the effective level */
-  public static final ModifierHook<EffectiveLevelModifierHook> EFFECTIVE_LEVEL = register("effective_level", EffectiveLevelModifierHook.class, EffectiveLevelModifierHook.ComposeMerger::new, (tool, modifier, level) -> level);
-
   /** Hook for supporting modifiers to change the modifier display name */
-  public static final ModifierHook<DisplayNameModifierHook> DISPLAY_NAME = register("display_name", DisplayNameModifierHook.class, DisplayNameModifierHook.ComposeMerger::new, (tool, modifier, level, name) -> name);
+  public static final ModifierHook<DisplayNameModifierHook> DISPLAY_NAME = register("display_name", DisplayNameModifierHook.class, DisplayNameModifierHook.ComposeMerger::new, (tool, entry, name) -> name);
 
 
   /* Display */

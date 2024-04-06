@@ -5,12 +5,12 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
 import slimeknights.tconstruct.TConstruct;
-import slimeknights.tconstruct.library.modifiers.impl.IncrementalModifier;
+import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.modules.unserializable.ArmorStatModule;
 import slimeknights.tconstruct.library.modifiers.util.ModifierHookMap.Builder;
 import slimeknights.tconstruct.library.tools.capability.TinkerDataCapability.TinkerDataKey;
 
-public class LeapingModifier extends IncrementalModifier {
+public class LeapingModifier extends Modifier {
   private static final TinkerDataKey<Float> LEAPING = TConstruct.createKey("leaping");
   public LeapingModifier() {
     // TODO: move this out of constructor to generalized logic

@@ -68,6 +68,24 @@ public interface IToolContext {
   }
 
   /**
+   * Gets the modifier entry for the given modifier ID
+   * @param modifier  Modifier
+   * @return  Modifier entry, or {@link ModifierEntry#EMPTY} if missing.
+   */
+  default ModifierEntry getModifier(ModifierId modifier) {
+    return getModifiers().getEntry(modifier);
+  }
+
+  /**
+   * Gets the modifier entry for the given modifier ID
+   * @param modifier  Modifier
+   * @return  Modifier entry, or {@link ModifierEntry#EMPTY} if missing.
+   */
+  default ModifierEntry getModifier(Modifier modifier) {
+    return getModifiers().getEntry(modifier.getId());
+  }
+
+  /**
    * Gets the level of a modifier on this tool. Will consider both raw modifiers and material traits
    * @param modifier  Modifier
    * @return  Level of modifier, 0 if the modifier is not on the tool

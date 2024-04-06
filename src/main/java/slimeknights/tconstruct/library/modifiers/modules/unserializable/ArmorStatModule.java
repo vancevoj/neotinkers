@@ -30,12 +30,12 @@ public record ArmorStatModule(TinkerDataKey<Float> key, float scale, boolean all
 
   @Override
   public void onEquip(IToolStackView tool, ModifierEntry modifier, EquipmentChangeContext context) {
-    ArmorStatModule.addStatIfArmor(tool, context, key, modifier.getEffectiveLevel(tool) * scale, allowBroken);
+    ArmorStatModule.addStatIfArmor(tool, context, key, modifier.getEffectiveLevel() * scale, allowBroken);
   }
 
   @Override
   public void onUnequip(IToolStackView tool, ModifierEntry modifier, EquipmentChangeContext context) {
-    ArmorStatModule.addStatIfArmor(tool, context, key, -modifier.getEffectiveLevel(tool) * scale, allowBroken);
+    ArmorStatModule.addStatIfArmor(tool, context, key, -modifier.getEffectiveLevel() * scale, allowBroken);
   }
 
 

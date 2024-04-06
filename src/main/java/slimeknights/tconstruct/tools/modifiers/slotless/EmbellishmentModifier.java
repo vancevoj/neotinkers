@@ -30,7 +30,7 @@ public class EmbellishmentModifier extends NoLevelsModifier implements ModifierR
   }
 
   @Override
-  public Component getDisplayName(IToolStackView tool, int level) {
+  public Component getDisplayName(IToolStackView tool, ModifierEntry entry) {
     MaterialVariantId materialVariant = MaterialVariantId.tryParse(tool.getPersistentData().getString(getId()));
     if (materialVariant != null) {
       return Component.translatable(FORMAT_KEY, MaterialTooltipCache.getDisplayName(materialVariant)).withStyle(style -> style.withColor(MaterialTooltipCache.getColor(materialVariant)));

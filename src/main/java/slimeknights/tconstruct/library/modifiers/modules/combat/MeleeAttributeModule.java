@@ -61,7 +61,7 @@ public record MeleeAttributeModule(String unique, Attribute attribute, UUID uuid
       if (target != null) {
         AttributeInstance instance = target.getAttribute(attribute);
         if (instance != null) {
-          instance.addTransientModifier(new AttributeModifier(uuid, unique, amount.compute(tool, modifier), operation));
+          instance.addTransientModifier(new AttributeModifier(uuid, unique, amount.compute(modifier.getEffectiveLevel()), operation));
         }
       }
     }

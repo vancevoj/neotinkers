@@ -45,14 +45,14 @@ public class MagicProtectionModifier extends AbstractProtectionModifier<Modifier
   @Override
   public float getProtectionModifier(IToolStackView tool, ModifierEntry modifier, EquipmentContext context, EquipmentSlot slotType, DamageSource source, float modifierValue) {
     if (!source.isBypassMagic() && !source.isBypassInvul() && source.isMagic()) {
-      modifierValue += modifier.getEffectiveLevel(tool) * 2.5f;
+      modifierValue += modifier.getEffectiveLevel() * 2.5f;
     }
     return modifierValue;
   }
 
   @Override
   public void addTooltip(IToolStackView tool, ModifierEntry modifier, @Nullable Player player, List<Component> tooltip, TooltipKey tooltipKey, TooltipFlag tooltipFlag) {
-    ProtectionModule.addResistanceTooltip(tool, this, modifier.getEffectiveLevel(tool) * 2.5f, player, tooltip);
+    ProtectionModule.addResistanceTooltip(tool, this, modifier.getEffectiveLevel() * 2.5f, player, tooltip);
   }
 
   @Override

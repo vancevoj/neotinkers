@@ -129,8 +129,7 @@ public class ModifierWorktableScreen extends BaseTabbedScreen<ModifierWorktableB
       if (!buttons.isEmpty()) {
         int index = getButtonAt(mouseX, mouseY);
         if (index >= 0) {
-          ModifierEntry modifier = buttons.get(index);
-          renderTooltip(matrixStack, modifier.getModifier().getDisplayName(modifier.getLevel()), mouseX, mouseY);
+          renderTooltip(matrixStack, buttons.get(index).getDisplayName(), mouseX, mouseY);
         }
       }
     }

@@ -96,6 +96,6 @@ public interface TooltipModifierHook {
    * @param tooltip      Tooltip
    */
   static void addDamageBoost(IToolStackView tool, ModifierEntry modifier, float levelAmount, List<Component> tooltip) {
-    addDamageBoost(tool, modifier.getModifier(), modifier.getEffectiveLevel(tool) * levelAmount, tooltip);
+    addDamageBoost(tool, modifier.getModifier(), modifier.getEffectiveLevel() * levelAmount, tooltip);
   }
 }

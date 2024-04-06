@@ -303,7 +303,7 @@ public class TooltipUtil {
   public static void addModifierNames(ItemStack stack, IToolStackView tool, List<Component> tooltips, TooltipFlag flag) {
     for (ModifierEntry entry : tool.getModifierList()) {
       if (entry.getModifier().shouldDisplay(false)) {
-        Component name = entry.getModifier().getDisplayName(tool, entry.getLevel());
+        Component name = entry.getModifier().getDisplayName(tool, entry);
         if (flag.isAdvanced() && Config.CLIENT.modifiersIDsInAdvancedTooltips.get()) {
           tooltips.add(Component.translatable(KEY_ID_FORMAT, name, Component.literal(entry.getModifier().getId().toString())).withStyle(ChatFormatting.DARK_GRAY));
         } else {
