@@ -25,6 +25,7 @@ import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /** Generic modifier hooks that don't quite fit elsewhere */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -40,6 +41,24 @@ public final class ModifierUtil {
                                                       (rand.nextFloat() - rand.nextFloat()) * 0.1F));
       target.level.addFreshEntity(ent);
     }
+  }
+
+  /** Gets the entity as a living entity, or null if they are not a living entity */
+  @Nullable
+  public static LivingEntity asLiving(@Nullable Entity entity) {
+    if (entity instanceof LivingEntity living) {
+      return living;
+    }
+    return null;
+  }
+
+  /** Gets the entity as a player, or null if they are not a player */
+  @Nullable
+  public static Player asPlayer(@Nullable Entity entity) {
+    if (entity instanceof Player player) {
+      return player;
+    }
+    return null;
   }
 
   /**

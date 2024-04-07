@@ -1,0 +1,18 @@
+{
+  "entity_effects": [
+    {
+      "type": "tconstruct:damage",
+      "damage": 1.0,
+      "modifier": [
+        "tconstruct:magic"
+      ]
+    },
+    {
+      "type": "tconstruct:teleport"
+    }
+  ],
+  "fluid": {
+    "amount": 50,
+    "tag": "forge:ender"
+  }
+}

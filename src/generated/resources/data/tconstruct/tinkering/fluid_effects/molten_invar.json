@@ -1,0 +1,29 @@
+{
+  "entity_effects": [
+    {
+      "type": "tconstruct:conditional",
+      "effect": {
+        "type": "tconstruct:damage",
+        "damage": 2.0,
+        "modifier": [
+          "tconstruct:fire"
+        ]
+      },
+      "target": {
+        "type": "mantle:inverted",
+        "inverted_type": "mantle:fire_immune"
+      }
+    },
+    {
+      "type": "tconstruct:mob_effect",
+      "action": "set",
+      "effect": "minecraft:hunger",
+      "level": 1,
+      "time": 200
+    }
+  ],
+  "fluid": {
+    "amount": 10,
+    "tag": "forge:molten_invar"
+  }
+}

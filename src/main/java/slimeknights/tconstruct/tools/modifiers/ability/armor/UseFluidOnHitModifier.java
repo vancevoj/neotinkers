@@ -9,14 +9,15 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidType;
+import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
 import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
+import slimeknights.tconstruct.library.modifiers.fluid.FluidEffectContext;
+import slimeknights.tconstruct.library.modifiers.fluid.FluidEffectManager;
+import slimeknights.tconstruct.library.modifiers.fluid.FluidEffects;
 import slimeknights.tconstruct.library.modifiers.modules.fluid.TankModule;
-import slimeknights.tconstruct.library.modifiers.spilling.SpillingFluid;
-import slimeknights.tconstruct.library.modifiers.spilling.SpillingFluidManager;
 import slimeknights.tconstruct.library.modifiers.util.ModifierHookMap.Builder;
 import slimeknights.tconstruct.library.tools.context.EquipmentContext;
-import slimeknights.tconstruct.library.tools.context.ToolAttackContext;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.shared.TinkerCommons;
 import slimeknights.tconstruct.shared.particle.FluidParticleData;
@@ -42,7 +43,7 @@ public abstract class UseFluidOnHitModifier extends Modifier {
   }
 
   /** Overridable method to create the attack context and spawn particles */
-  public abstract ToolAttackContext createContext(LivingEntity self, @Nullable Player player, @Nullable Entity attacker, FluidStack fluid);
+  public abstract FluidEffectContext.Entity createContext(LivingEntity self, @Nullable Player player, @Nullable Entity attacker);
 
   /**
    * Checks if the modifier triggers
@@ -54,17 +55,20 @@ public abstract class UseFluidOnHitModifier extends Modifier {
   protected void useFluid(IToolStackView tool, ModifierEntry modifier, EquipmentContext context, EquipmentSlot slotType, DamageSource source, boolean isDirectDamage) {
     if (doesTrigger(source, isDirectDamage)) {
       // 25% chance of working per level, 50% per level on shields
-      int level = modifier.getLevel();
+      float level = modifier.getEffectiveLevel();
       if (RANDOM.nextInt(slotType.getType() == Type.HAND ? 2 : 4) < level) {
         FluidStack fluid = tank.getFluid(tool);
         if (!fluid.isEmpty()) {
           LivingEntity self = context.getEntity();
           Player player = self instanceof Player p ? p : null;
-          SpillingFluid recipe = SpillingFluidManager.INSTANCE.find(fluid.getFluid());
+          FluidEffects recipe = FluidEffectManager.INSTANCE.find(fluid.getFluid());
           if (recipe.hasEffects()) {
-            FluidStack remaining = recipe.applyEffects(fluid, level, createContext(self, player, source.getEntity(), fluid));
-            if (player == null || !player.isCreative()) {
-              tank.setFluid(tool, remaining);
+            FluidEffectContext.Entity fluidContext = createContext(self, player, source.getEntity());
+            int consumed = recipe.applyToEntity(fluid, level, fluidContext, FluidAction.EXECUTE);
+            if (consumed > 0 && (player == null || !player.isCreative())) {
+              spawnParticles(fluidContext.getTarget(), fluid);
+              fluid.shrink(consumed);
+              tank.setFluid(tool, fluid);
             }
           }
         }

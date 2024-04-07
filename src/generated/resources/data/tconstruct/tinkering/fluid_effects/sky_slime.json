@@ -1,0 +1,22 @@
+{
+  "entity_effects": [
+    {
+      "type": "tconstruct:mob_effect",
+      "action": "set",
+      "effect": "minecraft:jump_boost",
+      "level": 1,
+      "time": 400
+    },
+    {
+      "type": "tconstruct:mob_effect",
+      "action": "set",
+      "effect": "minecraft:slowness",
+      "level": 1,
+      "time": 300
+    }
+  ],
+  "fluid": {
+    "amount": 50,
+    "tag": "tconstruct:sky_slime"
+  }
+}

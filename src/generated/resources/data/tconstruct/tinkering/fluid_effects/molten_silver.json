@@ -1,0 +1,26 @@
+{
+  "entity_effects": [
+    {
+      "type": "tconstruct:conditional",
+      "effect": {
+        "type": "tconstruct:damage",
+        "damage": 2.0,
+        "modifier": [
+          "tconstruct:magic"
+        ]
+      },
+      "target": {
+        "type": "mantle:mob_type",
+        "mobs": "minecraft:undead"
+      }
+    },
+    {
+      "type": "tconstruct:remove_effect",
+      "effect": "minecraft:wither"
+    }
+  ],
+  "fluid": {
+    "amount": 10,
+    "tag": "forge:molten_silver"
+  }
+}

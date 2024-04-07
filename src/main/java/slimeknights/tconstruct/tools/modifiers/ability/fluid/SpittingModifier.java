@@ -18,26 +18,27 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.LlamaSpit;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidType;
+import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
 import slimeknights.tconstruct.fluids.TinkerFluids;
 import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.TinkerHooks;
+import slimeknights.tconstruct.library.modifiers.fluid.FluidEffectContext;
+import slimeknights.tconstruct.library.modifiers.fluid.FluidEffectManager;
+import slimeknights.tconstruct.library.modifiers.fluid.FluidEffects;
 import slimeknights.tconstruct.library.modifiers.hook.build.ConditionalStatModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.interaction.GeneralInteractionModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.interaction.InteractionSource;
 import slimeknights.tconstruct.library.modifiers.modules.fluid.TankModule;
-import slimeknights.tconstruct.library.modifiers.spilling.SpillingFluid;
-import slimeknights.tconstruct.library.modifiers.spilling.SpillingFluidManager;
 import slimeknights.tconstruct.library.modifiers.util.ModifierHookMap.Builder;
 import slimeknights.tconstruct.library.tools.capability.EntityModifierCapability;
 import slimeknights.tconstruct.library.tools.capability.PersistentDataCapability;
-import slimeknights.tconstruct.library.tools.context.ToolAttackContext;
 import slimeknights.tconstruct.library.tools.helper.ModifierUtil;
-import slimeknights.tconstruct.library.tools.helper.ToolAttackUtil;
 import slimeknights.tconstruct.library.tools.helper.ToolDamageUtil;
 import slimeknights.tconstruct.library.tools.item.ModifiableLauncherItem;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
@@ -46,6 +47,8 @@ import slimeknights.tconstruct.library.tools.stat.ToolStats;
 import slimeknights.tconstruct.tools.TinkerModifiers;
 import slimeknights.tconstruct.tools.modifiers.ability.interaction.BlockingModifier;
 import slimeknights.tconstruct.tools.modifiers.upgrades.ranged.ScopeModifier;
+
+import static slimeknights.tconstruct.library.tools.helper.ModifierUtil.asLiving;
 
 /** Modifier that fires fluid as a projectile */
 public class SpittingModifier extends Modifier implements GeneralInteractionModifierHook {
@@ -71,8 +74,9 @@ public class SpittingModifier extends Modifier implements GeneralInteractionModi
   @Override
   public InteractionResult onToolUse(IToolStackView tool, ModifierEntry modifier, Player player, InteractionHand hand, InteractionSource source) {
     if (!tool.isBroken() && source == InteractionSource.RIGHT_CLICK) {
+      // launch if the fluid has effects, cannot simulate as we don't know the target yet
       FluidStack fluid = tank.getFluid(tool);
-      if (fluid.getAmount() >= (1 + 2 * (modifier.getLevel() - 1)) && SpillingFluidManager.INSTANCE.contains(fluid.getFluid())) {
+      if (fluid.getAmount() >= (1 + 2 * (modifier.getLevel() - 1)) && FluidEffectManager.INSTANCE.find(fluid.getFluid()).hasEffects()) {
         GeneralInteractionModifierHook.startUsingWithDrawtime(tool, modifier.getId(), player, hand, 1.5f);
         return InteractionResult.SUCCESS;
       }
@@ -94,17 +98,17 @@ public class SpittingModifier extends Modifier implements GeneralInteractionModi
         // find the fluid to spit
         FluidStack fluid = tank.getFluid(tool);
         if (!fluid.isEmpty()) {
-          SpillingFluid recipe = SpillingFluidManager.INSTANCE.find(fluid.getFluid());
+          FluidEffects recipe = FluidEffectManager.INSTANCE.find(fluid.getFluid());
           if (recipe.hasEffects()) {
             // projectile stats
             float charge = GeneralInteractionModifierHook.getToolCharge(tool, chargeTime);
             // power - size of each individual projectile
             float power = charge * ConditionalStatModifierHook.getModifiedStat(tool, entity, ToolStats.PROJECTILE_DAMAGE);
             // level acts like multishot level, meaning higher produces more projectiles
-            int level = modifier.getLevel();
+            int level = modifier.intEffectiveLevel();
             // amount is the amount per projectile, total cost is amount times level (every other shot is free)
             // if its 0, that means we have only a couple mb left
-            int amount = Math.min(fluid.getAmount(), (int)(recipe.getAmount(fluid) * power) * level) / level;
+            int amount = Math.min(fluid.getAmount(), (int)(recipe.getAmount(fluid.getFluid()) * power) * level) / level;
             if (amount > 0) {
               // other stats now that we know we are shooting
               // velocity determines how far it goes, does not impact damage unlike bows
@@ -116,7 +120,7 @@ public class SpittingModifier extends Modifier implements GeneralInteractionModi
               float startAngle = ModifiableLauncherItem.getAngleStart(shots);
               int primaryIndex = shots / 2;
               for (int shotIndex = 0; shotIndex < shots; shotIndex++) {
-                FluidSpitEntity spit = new FluidSpitEntity(entity.level, entity, new FluidStack(fluid, amount), (int)Math.ceil(power));
+                FluidSpitEntity spit = new FluidSpitEntity(entity.level, entity, new FluidStack(fluid, amount), power);
 
                 // setup projectile target
                 Vector3f targetVector = new Vector3f(entity.getViewVector(1.0f));
@@ -156,14 +160,14 @@ public class SpittingModifier extends Modifier implements GeneralInteractionModi
     private static final EntityDataAccessor<FluidStack> FLUID = SynchedEntityData.defineId(FluidSpitEntity.class, TinkerFluids.FLUID_DATA_SERIALIZER);
 
     @Setter
-    private int power = 1;
+    private float power = 1;
     @Setter @Getter
     private int knockback = 1;
     public FluidSpitEntity(EntityType<? extends FluidSpitEntity> type, Level level) {
       super(type, level);
     }
 
-    public FluidSpitEntity(Level level, LivingEntity owner, FluidStack fluid, int power) {
+    public FluidSpitEntity(Level level, LivingEntity owner, FluidStack fluid, float power) {
       this(TinkerModifiers.fluidSpitEntity.get(), level);
       this.setPos(owner.getX(), owner.getEyeY() - 0.1, owner.getZ());
       this.setOwner(owner);
@@ -184,24 +188,35 @@ public class SpittingModifier extends Modifier implements GeneralInteractionModi
     @Override
     protected void onHitEntity(EntityHitResult result) {
       FluidStack fluid = getFluid();
-      if (!level.isClientSide && !fluid.isEmpty() && getOwner() instanceof LivingEntity living) {
-        SpillingFluid recipe = SpillingFluidManager.INSTANCE.find(fluid.getFluid());
-        Entity target = result.getEntity();
-        if (recipe.hasEffects()) {
-          recipe.applyEffects(fluid.copy(), power, new ToolAttackContext(
-            living, living instanceof Player p ? p : null, InteractionHand.MAIN_HAND,
-            target, ToolAttackUtil.getLivingEntity(target), false, 1.0f, false));
+      Entity target = result.getEntity();
+      if (!level.isClientSide && !fluid.isEmpty()) {
+        FluidEffects recipe = FluidEffectManager.INSTANCE.find(fluid.getFluid());
+        if (recipe.hasEntityEffects()) {
+          // ignoring the return, we don't need to handle shrinking
+          recipe.applyToEntity(fluid, power, new FluidEffectContext.Entity(level, asLiving(getOwner()), this, target), FluidAction.EXECUTE);
         }
-        // apply knockback to the entity regardless of fluid type
-        if (knockback > 0) {
-          Vec3 vec3 = this.getDeltaMovement().multiply(1, 0, 1).normalize().scale(knockback * 0.6);
-          if (vec3.lengthSqr() > 0) {
-            target.push(vec3.x, 0.1, vec3.z);
-          }
+      }
+      // apply knockback to the entity regardless of fluid type
+      if (knockback > 0) {
+        Vec3 vec3 = this.getDeltaMovement().multiply(1, 0, 1).normalize().scale(knockback * 0.6);
+        if (vec3.lengthSqr() > 0) {
+          target.push(vec3.x, 0.1, vec3.z);
         }
       }
     }
 
+    @Override
+    protected void onHitBlock(BlockHitResult hitResult) {
+      FluidStack fluid = getFluid();
+      if (!level.isClientSide && !fluid.isEmpty()) {
+        FluidEffects recipe = FluidEffectManager.INSTANCE.find(fluid.getFluid());
+        if (recipe.hasEntityEffects()) {
+          // ignoring the return, we don't need to handle shrinking
+          recipe.applyToBlock(fluid, power, new FluidEffectContext.Block(level, asLiving(getOwner()), this, hitResult), FluidAction.EXECUTE);
+        }
+      }
+      super.onHitBlock(hitResult);
+    }
 
     /* Network */
 
@@ -214,7 +229,7 @@ public class SpittingModifier extends Modifier implements GeneralInteractionModi
     @Override
     protected void addAdditionalSaveData(CompoundTag nbt) {
       super.addAdditionalSaveData(nbt);
-      nbt.putInt("power", power);
+      nbt.putFloat("power", power);
       nbt.putInt("knockback", knockback);
       FluidStack fluid = getFluid();
       if (!fluid.isEmpty()) {
@@ -225,7 +240,7 @@ public class SpittingModifier extends Modifier implements GeneralInteractionModi
     @Override
     protected void readAdditionalSaveData(CompoundTag nbt) {
       super.readAdditionalSaveData(nbt);
-      this.power = nbt.getInt("power");
+      this.power = nbt.getFloat("power");
       this.knockback = nbt.getInt("knockback");
       setFluid(FluidStack.loadFluidStackFromNBT(nbt.getCompound("fluid")));
     }

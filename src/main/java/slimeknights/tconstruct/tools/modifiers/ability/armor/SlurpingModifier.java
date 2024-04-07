@@ -14,21 +14,22 @@ import net.minecraftforge.event.TickEvent.PlayerTickEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidType;
+import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
 import slimeknights.mantle.client.TooltipKey;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.TinkerHooks;
+import slimeknights.tconstruct.library.modifiers.fluid.FluidEffectContext;
+import slimeknights.tconstruct.library.modifiers.fluid.FluidEffectManager;
+import slimeknights.tconstruct.library.modifiers.fluid.FluidEffects;
 import slimeknights.tconstruct.library.modifiers.hook.interaction.GeneralInteractionModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.interaction.InteractionSource;
 import slimeknights.tconstruct.library.modifiers.hook.interaction.KeybindInteractModifierHook;
 import slimeknights.tconstruct.library.modifiers.modules.fluid.TankModule;
-import slimeknights.tconstruct.library.modifiers.spilling.SpillingFluid;
-import slimeknights.tconstruct.library.modifiers.spilling.SpillingFluidManager;
 import slimeknights.tconstruct.library.modifiers.util.ModifierHookMap.Builder;
 import slimeknights.tconstruct.library.tools.capability.TinkerDataCapability;
 import slimeknights.tconstruct.library.tools.capability.TinkerDataCapability.TinkerDataKey;
-import slimeknights.tconstruct.library.tools.context.ToolAttackContext;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.shared.TinkerCommons;
@@ -53,12 +54,20 @@ public class SlurpingModifier extends Modifier implements KeybindInteractModifie
     hookBuilder.addHook(this, TinkerHooks.ARMOR_INTERACT, TinkerHooks.GENERAL_INTERACT);
   }
 
+  /** Checks if we can slurp the given fluid */
+  private int slurp(FluidStack fluid, float level, Player player, FluidAction action) {
+    if (!fluid.isEmpty()) {
+      FluidEffects recipe = FluidEffectManager.INSTANCE.find(fluid.getFluid());
+      return recipe.hasEntityEffects() ? recipe.applyToEntity(fluid, level, new FluidEffectContext.Entity(player.level, player, null, player), action) : 0;
+    }
+    return 0;
+  }
+
   @Override
   public boolean startInteract(IToolStackView tool, ModifierEntry modifier, Player player, EquipmentSlot slot, TooltipKey keyModifier) {
     if (!player.isShiftKeyDown()) {
       FluidStack fluid = tank.getFluid(tool);
-      // if we have a recipe, start drinking
-      if (!fluid.isEmpty() && SpillingFluidManager.INSTANCE.contains(fluid.getFluid())) {
+      if (slurp(fluid, modifier.getEffectiveLevel(), player, FluidAction.SIMULATE) > 0) {
         player.getCapability(TinkerDataCapability.CAPABILITY).ifPresent(data -> data.put(SLURP_FINISH_TIME, new SlurpingInfo(fluid, player.tickCount + 20)));
         return true;
       }
@@ -86,20 +95,14 @@ public class SlurpingModifier extends Modifier implements KeybindInteractModifie
   }
 
   /** Drinks some of the fluid in the tank, reducing its value */
-  private void finishDrinking(IToolStackView tool, Player player, InteractionHand hand) {
+  private void finishDrinking(IToolStackView tool, Player player) {
     // only server needs to drink
     if (!player.level.isClientSide) {
       FluidStack fluid = tank.getFluid(tool);
-      if (!fluid.isEmpty()) {
-        // find the recipe
-        SpillingFluid recipe = SpillingFluidManager.INSTANCE.find(fluid.getFluid());
-        if (recipe.hasEffects()) {
-          ToolAttackContext context = new ToolAttackContext(player, player, hand, player, player, false, 1.0f, false);
-          FluidStack remaining = recipe.applyEffects(fluid, tool.getModifierLevel(this), context);
-          if (!player.isCreative()) {
-            tank.setFluid(tool, remaining);
-          }
-        }
+      int consumed = slurp(fluid, tool.getModifier(this).getEffectiveLevel(), player, FluidAction.EXECUTE);
+      if (!player.isCreative() && consumed > 0) {
+        fluid.shrink(consumed);
+        tank.setFluid(tool, fluid);
       }
     }
   }
@@ -120,9 +123,7 @@ public class SlurpingModifier extends Modifier implements KeybindInteractModifie
           // particles a bit stronger
           player.playSound(SoundEvents.GENERIC_DRINK, 0.5F, RANDOM.nextFloat() * 0.1f + 0.9f);
           addFluidParticles(player, info.fluid, 16);
-
-          ToolStack tool = ToolStack.from(player.getItemBySlot(EquipmentSlot.HEAD));
-          finishDrinking(tool, player, InteractionHand.MAIN_HAND);
+          finishDrinking(ToolStack.from(player.getItemBySlot(EquipmentSlot.HEAD)), player);
 
           // stop drinking
           data.remove(SLURP_FINISH_TIME);
@@ -144,8 +145,7 @@ public class SlurpingModifier extends Modifier implements KeybindInteractModifie
   @Override
   public InteractionResult onToolUse(IToolStackView tool, ModifierEntry modifier, Player player, InteractionHand hand, InteractionSource source) {
     if (source == InteractionSource.RIGHT_CLICK) {
-      FluidStack fluid = tank.getFluid(tool);
-      if (!fluid.isEmpty() && SpillingFluidManager.INSTANCE.contains(fluid.getFluid())) {
+      if (slurp(tank.getFluid(tool), modifier.getEffectiveLevel(), player, FluidAction.SIMULATE) > 0) {
         GeneralInteractionModifierHook.startUsing(tool, modifier.getId(), player, hand);
         return InteractionResult.CONSUME;
       }
@@ -176,7 +176,7 @@ public class SlurpingModifier extends Modifier implements KeybindInteractModifie
   @Override
   public void onFinishUsing(IToolStackView tool, ModifierEntry modifier, LivingEntity entity) {
     if (entity instanceof Player player) {
-      finishDrinking(tool, player, entity.getUsedItemHand());
+      finishDrinking(tool, player);
     }
   }
 

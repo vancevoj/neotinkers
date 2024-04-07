@@ -1,0 +1,27 @@
+{
+  "entity_effects": [
+    {
+      "type": "tconstruct:conditional",
+      "effect": {
+        "type": "tconstruct:damage",
+        "damage": 3.0,
+        "modifier": [
+          "tconstruct:fire"
+        ]
+      },
+      "target": {
+        "type": "mantle:inverted",
+        "inverted_type": "mantle:fire_immune"
+      }
+    },
+    {
+      "type": "tconstruct:fire",
+      "action": "set",
+      "time": 5
+    }
+  ],
+  "fluid": {
+    "amount": 50,
+    "tag": "tconstruct:blazing_blood"
+  }
+}

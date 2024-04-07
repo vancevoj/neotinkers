@@ -1,5 +1,6 @@
 package slimeknights.tconstruct.tools.modifiers.ability.tool;
 
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
@@ -9,16 +10,18 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.TinkerHooks;
+import slimeknights.tconstruct.library.modifiers.fluid.FluidEffectContext;
+import slimeknights.tconstruct.library.modifiers.fluid.FluidEffectManager;
+import slimeknights.tconstruct.library.modifiers.fluid.FluidEffects;
 import slimeknights.tconstruct.library.modifiers.hook.armor.OnAttackedModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.build.ConditionalStatModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.combat.MeleeHitModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.interaction.EntityInteractionModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.interaction.InteractionSource;
-import slimeknights.tconstruct.library.modifiers.spilling.SpillingFluid;
-import slimeknights.tconstruct.library.modifiers.spilling.SpillingFluidManager;
 import slimeknights.tconstruct.library.modifiers.util.ModifierHookMap.Builder;
 import slimeknights.tconstruct.library.tools.context.EquipmentContext;
 import slimeknights.tconstruct.library.tools.context.ToolAttackContext;
@@ -30,6 +33,8 @@ import slimeknights.tconstruct.tools.TinkerModifiers;
 import slimeknights.tconstruct.tools.modifiers.ability.armor.UseFluidOnHitModifier;
 
 import javax.annotation.Nullable;
+
+import static slimeknights.tconstruct.library.tools.helper.ModifierUtil.asLiving;
 
 /** Modifier to handle spilling recipes */
 public class SpillingModifier extends UseFluidOnHitModifier implements EntityInteractionModifierHook, OnAttackedModifierHook, MeleeHitModifierHook {
@@ -44,13 +49,15 @@ public class SpillingModifier extends UseFluidOnHitModifier implements EntityInt
     if (damageDealt > 0 && context.isFullyCharged()) {
       FluidStack fluid = tank.getFluid(tool);
       if (!fluid.isEmpty()) {
-        SpillingFluid recipe = SpillingFluidManager.INSTANCE.find(fluid.getFluid());
-        if (recipe.hasEffects()) {
-          FluidStack remaining = recipe.applyEffects(fluid, modifier.getLevel(), context);
-          spawnParticles(context.getTarget(), fluid);
+        FluidEffects recipe = FluidEffectManager.INSTANCE.find(fluid.getFluid());
+        if (recipe.hasEntityEffects()) {
+          LivingEntity living = context.getAttacker();
           Player player = context.getPlayerAttacker();
-          if (player == null || !player.isCreative()) {
-            tank.setFluid(tool, remaining);
+          int consumed = recipe.applyToEntity(fluid, modifier.getEffectiveLevel(), new FluidEffectContext.Entity(living.level, living, player, null, context.getTarget(), context.getLivingTarget()), FluidAction.EXECUTE);
+          if (consumed > 0 && (player == null || !player.isCreative())) {
+            spawnParticles(context.getTarget(), fluid);
+            fluid.shrink(consumed);
+            tank.setFluid(tool, fluid);
           }
         }
       }
@@ -64,34 +71,43 @@ public class SpillingModifier extends UseFluidOnHitModifier implements EntityInt
     if (source != InteractionSource.ARMOR && !tool.hasTag(TinkerTags.Items.MELEE) && tool.getDefinitionData().getModule(ToolModuleHooks.INTERACTION).canInteract(tool, modifier.getId(), source)) {
       FluidStack fluid = tank.getFluid(tool);
       if (!fluid.isEmpty()) {
-        SpillingFluid recipe = SpillingFluidManager.INSTANCE.find(fluid.getFluid());
-        if (recipe.hasEffects()) {
+        FluidEffects recipe = FluidEffectManager.INSTANCE.find(fluid.getFluid());
+        if (recipe.hasEntityEffects()) {
           if (!player.level.isClientSide) {
             // for the main target, consume fluids
-            int level = modifier.getLevel();
-            ToolAttackContext context = new ToolAttackContext(player, player, hand, target, target instanceof LivingEntity l ? l : null, false, 1.0f, false);
-            FluidStack remaining = recipe.applyEffects(fluid.copy(), level, context);
-            spawnParticles(target, fluid);
-            if (!player.isCreative()) {
-              tank.setFluid(tool, remaining);
+            float level = modifier.getEffectiveLevel();
+            int numTargets = 0;
+            int consumed = recipe.applyToEntity(fluid, level, new FluidEffectContext.Entity(player.level, player, player, null, target, asLiving(target)), FluidAction.EXECUTE);
+            if (consumed > 0) {
+              numTargets++;
+              spawnParticles(target, fluid);
             }
 
             // expanded logic, they do not consume fluid, you get some splash for free
-            int numTargets = 1;
             float range = 1 + tool.getModifierLevel(TinkerModifiers.expanded.get());
             float rangeSq = range * range;
             for (Entity aoeTarget : player.level.getEntitiesOfClass(Entity.class, target.getBoundingBox().inflate(range, 0.25, range))) {
               if (aoeTarget != player && aoeTarget != target && !(aoeTarget instanceof ArmorStand stand && stand.isMarker()) && target.distanceToSqr(aoeTarget) < rangeSq) {
-                numTargets++;
-                context = new ToolAttackContext(player, player, hand, aoeTarget, aoeTarget instanceof LivingEntity l ? l : null, false, 1.0f, true);
-
-                recipe.applyEffects(fluid.copy(), level, context);
-                spawnParticles(aoeTarget, fluid);
+                int aoeConsumed = recipe.applyToEntity(fluid, level, new FluidEffectContext.Entity(player.level, player, player, null, aoeTarget, asLiving(aoeTarget)), FluidAction.EXECUTE);
+                if (aoeConsumed > 0) {
+                  numTargets++;
+                  spawnParticles(aoeTarget, fluid);
+                  // consume the largest amount requested from any entity
+                  if (aoeConsumed > consumed) {
+                    consumed = aoeConsumed;
+                  }
+                }
               }
             }
 
+            // consume the fluid last, if any target used fluid
+            if (!player.isCreative() && consumed > 0) {
+              fluid.shrink(consumed);
+              tank.setFluid(tool, fluid);
+            }
+
             // damage the tool, we charge for the multiplier and for the number of targets hit
-            ToolDamageUtil.damageAnimated(tool, numTargets * level, player, hand);
+            ToolDamageUtil.damageAnimated(tool, Mth.ceil(numTargets * level), player, hand);
           }
 
           // cooldown based on attack speed/draw speed. both are on the same scale and default to 1, we don't care which one the tool uses
@@ -104,10 +120,9 @@ public class SpillingModifier extends UseFluidOnHitModifier implements EntityInt
   }
 
   @Override
-  public ToolAttackContext createContext(LivingEntity self, @Nullable Player player, @Nullable Entity attacker, FluidStack fluid) {
+  public FluidEffectContext.Entity createContext(LivingEntity self, @Nullable Player player, @Nullable Entity attacker) {
     assert attacker != null;
-    spawnParticles(attacker, fluid);
-    return new ToolAttackContext(self, player, InteractionHand.MAIN_HAND, attacker, attacker instanceof LivingEntity living ? living : null, false, 1.0f, false);
+    return new FluidEffectContext.Entity(self.level, self, player, null, attacker, asLiving(attacker));
   }
 
   @Override

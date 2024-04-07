@@ -1,0 +1,27 @@
+{
+  "entity_effects": [
+    {
+      "type": "tconstruct:conditional",
+      "effect": {
+        "type": "tconstruct:damage",
+        "damage": 2.0,
+        "modifier": [
+          "tconstruct:fire"
+        ]
+      },
+      "target": {
+        "type": "mantle:inverted",
+        "inverted_type": "mantle:fire_immune"
+      }
+    },
+    {
+      "type": "tconstruct:fire",
+      "action": "set",
+      "time": 10
+    }
+  ],
+  "fluid": {
+    "amount": 50,
+    "fluid": "minecraft:lava"
+  }
+}

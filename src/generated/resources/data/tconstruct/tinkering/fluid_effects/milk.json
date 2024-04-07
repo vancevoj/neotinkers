@@ -1,0 +1,15 @@
+{
+  "entity_effects": [
+    {
+      "type": "tconstruct:cure_effects",
+      "item": "minecraft:milk_bucket"
+    },
+    {
+      "type": "tconstruct:calcified"
+    }
+  ],
+  "fluid": {
+    "amount": 100,
+    "tag": "forge:milk"
+  }
+}

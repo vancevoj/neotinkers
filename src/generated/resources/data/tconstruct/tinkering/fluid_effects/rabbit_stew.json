@@ -1,0 +1,15 @@
+{
+  "entity_effects": [
+    {
+      "type": "tconstruct:restore_hunger",
+      "can_always_eat": false,
+      "hunger": 2,
+      "representative_item": "minecraft:rabbit_stew",
+      "saturation": 0.6
+    }
+  ],
+  "fluid": {
+    "amount": 50,
+    "tag": "forge:rabbit_stew"
+  }
+}

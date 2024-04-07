@@ -1,0 +1,22 @@
+{
+  "entity_effects": [
+    {
+      "type": "tconstruct:conditional",
+      "effect": {
+        "type": "tconstruct:damage",
+        "damage": 2.0,
+        "modifier": [
+          "tconstruct:bypass_armor"
+        ]
+      },
+      "target": "mantle:water_sensitive"
+    },
+    {
+      "type": "tconstruct:extinguish"
+    }
+  ],
+  "fluid": {
+    "amount": 50,
+    "fluid": "minecraft:water"
+  }
+}

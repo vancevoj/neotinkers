@@ -1,0 +1,15 @@
+{
+  "entity_effects": [
+    {
+      "type": "tconstruct:restore_hunger",
+      "can_always_eat": false,
+      "hunger": 2,
+      "representative_item": "tconstruct:meat_soup",
+      "saturation": 0.48
+    }
+  ],
+  "fluid": {
+    "amount": 50,
+    "tag": "tconstruct:meat_soup"
+  }
+}

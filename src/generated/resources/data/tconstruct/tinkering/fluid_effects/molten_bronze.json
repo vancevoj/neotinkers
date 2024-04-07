@@ -1,0 +1,27 @@
+{
+  "entity_effects": [
+    {
+      "type": "tconstruct:conditional",
+      "effect": {
+        "type": "tconstruct:damage",
+        "damage": 2.0,
+        "modifier": [
+          "tconstruct:fire"
+        ]
+      },
+      "target": {
+        "type": "mantle:inverted",
+        "inverted_type": "mantle:fire_immune"
+      }
+    },
+    {
+      "type": "tconstruct:award_stat",
+      "amount": -2000,
+      "stat": "minecraft:time_since_rest"
+    }
+  ],
+  "fluid": {
+    "amount": 10,
+    "tag": "forge:molten_bronze"
+  }
+}

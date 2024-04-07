@@ -1,0 +1,15 @@
+{
+  "entity_effects": [
+    {
+      "type": "tconstruct:restore_hunger",
+      "can_always_eat": false,
+      "hunger": 1,
+      "representative_item": "minecraft:beetroot_soup",
+      "saturation": 0.72
+    }
+  ],
+  "fluid": {
+    "amount": 50,
+    "tag": "forge:beetroot_soup"
+  }
+}

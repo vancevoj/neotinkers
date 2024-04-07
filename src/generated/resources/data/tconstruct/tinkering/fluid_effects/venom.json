@@ -1,0 +1,22 @@
+{
+  "entity_effects": [
+    {
+      "type": "tconstruct:mob_effect",
+      "action": "set",
+      "effect": "minecraft:poison",
+      "level": 1,
+      "time": 100
+    },
+    {
+      "type": "tconstruct:mob_effect",
+      "action": "set",
+      "effect": "minecraft:strength",
+      "level": 1,
+      "time": 200
+    }
+  ],
+  "fluid": {
+    "amount": 50,
+    "tag": "tconstruct:venom"
+  }
+}

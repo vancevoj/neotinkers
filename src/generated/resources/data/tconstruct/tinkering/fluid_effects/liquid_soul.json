@@ -1,0 +1,22 @@
+{
+  "entity_effects": [
+    {
+      "type": "tconstruct:mob_effect",
+      "action": "set",
+      "effect": "minecraft:slowness",
+      "level": 2,
+      "time": 500
+    },
+    {
+      "type": "tconstruct:mob_effect",
+      "action": "set",
+      "effect": "minecraft:blindness",
+      "level": 1,
+      "time": 100
+    }
+  ],
+  "fluid": {
+    "amount": 50,
+    "tag": "tconstruct:liquid_soul"
+  }
+}

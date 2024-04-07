@@ -55,6 +55,19 @@ import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierManager;
 import slimeknights.tconstruct.library.modifiers.dynamic.ComposableModifier;
 import slimeknights.tconstruct.library.modifiers.dynamic.InventoryMenuModifier;
+import slimeknights.tconstruct.library.modifiers.fluid.ConditionalFluidEffect;
+import slimeknights.tconstruct.library.modifiers.fluid.FluidEffect;
+import slimeknights.tconstruct.library.modifiers.fluid.FluidEffectManager;
+import slimeknights.tconstruct.library.modifiers.fluid.entity.AddBreathFluidEffect;
+import slimeknights.tconstruct.library.modifiers.fluid.entity.AwardStatFluidEffect;
+import slimeknights.tconstruct.library.modifiers.fluid.entity.CureEffectsFluidEffect;
+import slimeknights.tconstruct.library.modifiers.fluid.entity.DamageFluidEffect;
+import slimeknights.tconstruct.library.modifiers.fluid.entity.FireFluidEffect;
+import slimeknights.tconstruct.library.modifiers.fluid.entity.FreezeFluidEffect;
+import slimeknights.tconstruct.library.modifiers.fluid.entity.MobEffectFluidEffect;
+import slimeknights.tconstruct.library.modifiers.fluid.entity.PotionFluidEffect;
+import slimeknights.tconstruct.library.modifiers.fluid.entity.RemoveEffectFluidEffect;
+import slimeknights.tconstruct.library.modifiers.fluid.entity.RestoreHungerFluidEffect;
 import slimeknights.tconstruct.library.modifiers.impl.BasicModifier;
 import slimeknights.tconstruct.library.modifiers.impl.SingleLevelModifier;
 import slimeknights.tconstruct.library.modifiers.modules.ModifierModule;
@@ -91,21 +104,6 @@ import slimeknights.tconstruct.library.modifiers.modules.fluid.TankCapacityModul
 import slimeknights.tconstruct.library.modifiers.modules.fluid.TankModule;
 import slimeknights.tconstruct.library.modifiers.modules.mining.ConditionalMiningSpeedModule;
 import slimeknights.tconstruct.library.modifiers.modules.unserializable.ArmorStatModule;
-import slimeknights.tconstruct.library.modifiers.spilling.ISpillingEffect;
-import slimeknights.tconstruct.library.modifiers.spilling.SpillingFluidManager;
-import slimeknights.tconstruct.library.modifiers.spilling.effects.AddBreathSpillingEffect;
-import slimeknights.tconstruct.library.modifiers.spilling.effects.AddInsomniaSpillingEffect;
-import slimeknights.tconstruct.library.modifiers.spilling.effects.ConditionalSpillingEffect;
-import slimeknights.tconstruct.library.modifiers.spilling.effects.CureEffectsSpillingEffect;
-import slimeknights.tconstruct.library.modifiers.spilling.effects.DamageSpillingEffect;
-import slimeknights.tconstruct.library.modifiers.spilling.effects.EffectSpillingEffect;
-import slimeknights.tconstruct.library.modifiers.spilling.effects.ExtinguishSpillingEffect;
-import slimeknights.tconstruct.library.modifiers.spilling.effects.PotionFluidEffect;
-import slimeknights.tconstruct.library.modifiers.spilling.effects.RemoveEffectSpillingEffect;
-import slimeknights.tconstruct.library.modifiers.spilling.effects.RestoreHungerSpillingEffect;
-import slimeknights.tconstruct.library.modifiers.spilling.effects.SetFireSpillingEffect;
-import slimeknights.tconstruct.library.modifiers.spilling.effects.SetFreezeSpillingEffect;
-import slimeknights.tconstruct.library.modifiers.spilling.effects.TeleportSpillingEffect;
 import slimeknights.tconstruct.library.modifiers.util.DynamicModifier;
 import slimeknights.tconstruct.library.modifiers.util.ModifierDeferredRegister;
 import slimeknights.tconstruct.library.modifiers.util.ModifierHookMap;
@@ -130,9 +128,9 @@ import slimeknights.tconstruct.library.tools.capability.PersistentDataCapability
 import slimeknights.tconstruct.library.tools.capability.TinkerDataCapability;
 import slimeknights.tconstruct.library.tools.capability.TinkerDataKeys;
 import slimeknights.tconstruct.tools.data.EnchantmentToModifierProvider;
+import slimeknights.tconstruct.tools.data.FluidEffectProvider;
 import slimeknights.tconstruct.tools.data.ModifierProvider;
 import slimeknights.tconstruct.tools.data.ModifierRecipeProvider;
-import slimeknights.tconstruct.tools.data.SpillingFluidProvider;
 import slimeknights.tconstruct.tools.item.CreativeSlotItem;
 import slimeknights.tconstruct.tools.item.DragonScaleItem;
 import slimeknights.tconstruct.tools.item.ModifierCrystalItem;
@@ -277,11 +275,10 @@ import static slimeknights.tconstruct.tools.TinkerTools.TAB_TOOLS;
 public final class TinkerModifiers extends TinkerModule {
   private static final ModifierDeferredRegister MODIFIERS = ModifierDeferredRegister.create(TConstruct.MOD_ID);
 
-  @SuppressWarnings("deprecation")
   public TinkerModifiers() {
     ModifierManager.INSTANCE.init();
     DynamicModifier.init();
-    SpillingFluidManager.INSTANCE.init();
+    FluidEffectManager.INSTANCE.init();
     MODIFIERS.register(FMLJavaModLoadingContext.get().getModEventBus());
   }
 
@@ -550,20 +547,27 @@ public final class TinkerModifiers extends TinkerModule {
   @SubscribeEvent
   void registerSerializers(RegisterEvent event) {
     if (event.getRegistryKey() == Registry.RECIPE_SERIALIZER_REGISTRY) {
-      ISpillingEffect.LOADER.registerDeserializer(ConditionalSpillingEffect.ID, ConditionalSpillingEffect.LOADER);
-      ISpillingEffect.LOADER.registerDeserializer(CureEffectsSpillingEffect.ID, CureEffectsSpillingEffect.LOADER);
-      ISpillingEffect.LOADER.registerDeserializer(RemoveEffectSpillingEffect.ID, RemoveEffectSpillingEffect.LOADER);
-      ISpillingEffect.LOADER.registerDeserializer(DamageSpillingEffect.ID, DamageSpillingEffect.LOADER);
-      ISpillingEffect.LOADER.registerDeserializer(EffectSpillingEffect.ID, EffectSpillingEffect.LOADER);
-      ISpillingEffect.LOADER.registerDeserializer(ExtinguishSpillingEffect.ID, ExtinguishSpillingEffect.LOADER);
-      ISpillingEffect.LOADER.registerDeserializer(PotionFluidEffect.ID, PotionFluidEffect.LOADER);
-      ISpillingEffect.LOADER.registerDeserializer(RestoreHungerSpillingEffect.ID, RestoreHungerSpillingEffect.LOADER);
-      ISpillingEffect.LOADER.registerDeserializer(SetFireSpillingEffect.ID, SetFireSpillingEffect.LOADER);
-      ISpillingEffect.LOADER.registerDeserializer(SetFreezeSpillingEffect.ID, SetFreezeSpillingEffect.LOADER);
-      ISpillingEffect.LOADER.registerDeserializer(TeleportSpillingEffect.ID, TeleportSpillingEffect.LOADER);
-      ISpillingEffect.LOADER.registerDeserializer(AddInsomniaSpillingEffect.ID, AddInsomniaSpillingEffect.LOADER);
-      ISpillingEffect.LOADER.registerDeserializer(AddBreathSpillingEffect.ID, AddBreathSpillingEffect.LOADER);
-      ISpillingEffect.LOADER.registerDeserializer(StrongBonesModifier.SPILLING_EFFECT_ID, StrongBonesModifier.SPILLING_EFFECT_LOADER);
+      // conditional
+      FluidEffect.BLOCK_EFFECTS.register(getResource("conditional"), ConditionalFluidEffect.Block.LOADER);
+      FluidEffect.ENTITY_EFFECTS.register(getResource("conditional"), ConditionalFluidEffect.Entity.LOADER);
+      // simple
+      FluidEffect.ENTITY_EFFECTS.register(getResource("calcified"), StrongBonesModifier.FLUID_EFFECT.getLoader());
+      FluidEffect.ENTITY_EFFECTS.register(getResource("extinguish"), FluidEffect.EXTINGUISH_FIRE.getLoader());
+      FluidEffect.ENTITY_EFFECTS.register(getResource("teleport"), FluidEffect.TELEPORT.getLoader());
+      // potions
+      FluidEffect.ENTITY_EFFECTS.register(getResource("cure_effects"), CureEffectsFluidEffect.LOADER);
+      FluidEffect.ENTITY_EFFECTS.register(getResource("remove_effect"), RemoveEffectFluidEffect.LOADER);
+      FluidEffect.ENTITY_EFFECTS.register(getResource("mob_effect"), MobEffectFluidEffect.LOADER);
+      FluidEffect.ENTITY_EFFECTS.register(getResource("potion"), PotionFluidEffect.LOADER);
+      // misc
+      FluidEffect.ENTITY_EFFECTS.register(getResource("damage"), DamageFluidEffect.LOADER);
+      FluidEffect.ENTITY_EFFECTS.register(getResource("restore_hunger"), RestoreHungerFluidEffect.LOADER);
+      FluidEffect.ENTITY_EFFECTS.register(getResource("fire"), FireFluidEffect.LOADER);
+      FluidEffect.ENTITY_EFFECTS.register(getResource("freeze"), FreezeFluidEffect.LOADER);
+      FluidEffect.ENTITY_EFFECTS.register(getResource("award_stat"), AwardStatFluidEffect.LOADER);
+      FluidEffect.ENTITY_EFFECTS.register(getResource("add_breath"), AddBreathFluidEffect.LOADER);
+
+
       // modifier loaders
       ModifierManager.MODIFIER_LOADERS.register(getResource("default"), Modifier.DEFAULT_LOADER);
       ModifierManager.MODIFIER_LOADERS.register(getResource("inventory_with_menu"), InventoryMenuModifier.LOADER);
@@ -679,7 +683,7 @@ public final class TinkerModifiers extends TinkerModule {
     boolean server = event.includeServer();
     generator.addProvider(server, new ModifierProvider(generator));
     generator.addProvider(server, new ModifierRecipeProvider(generator));
-    generator.addProvider(server, new SpillingFluidProvider(generator));
+    generator.addProvider(server, new FluidEffectProvider(generator));
     generator.addProvider(server, new ModifierTagProvider(generator, event.getExistingFileHelper()));
     generator.addProvider(server, new EnchantmentToModifierProvider(generator));
   }

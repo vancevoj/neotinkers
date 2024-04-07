@@ -1,0 +1,19 @@
+{
+  "entity_effects": [
+    {
+      "type": "tconstruct:restore_hunger",
+      "can_always_eat": false,
+      "hunger": 1,
+      "representative_item": "minecraft:honey_bottle",
+      "saturation": 0.12
+    },
+    {
+      "type": "tconstruct:remove_effect",
+      "effect": "minecraft:poison"
+    }
+  ],
+  "fluid": {
+    "amount": 50,
+    "tag": "forge:honey"
+  }
+}
