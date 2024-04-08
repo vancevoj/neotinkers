@@ -1,4 +1,16 @@
 {
+  "block_effects": [
+    {
+      "type": "tconstruct:mob_effect_cloud",
+      "effects": [
+        {
+          "effect": "minecraft:slow_falling",
+          "level": 1,
+          "time": 100
+        }
+      ]
+    }
+  ],
   "entity_effects": [
     {
       "type": "tconstruct:conditional",

@@ -58,6 +58,9 @@ import slimeknights.tconstruct.library.modifiers.dynamic.InventoryMenuModifier;
 import slimeknights.tconstruct.library.modifiers.fluid.ConditionalFluidEffect;
 import slimeknights.tconstruct.library.modifiers.fluid.FluidEffect;
 import slimeknights.tconstruct.library.modifiers.fluid.FluidEffectManager;
+import slimeknights.tconstruct.library.modifiers.fluid.block.MobEffectCloudFluidEffect;
+import slimeknights.tconstruct.library.modifiers.fluid.block.PlaceBlockFluidEffect;
+import slimeknights.tconstruct.library.modifiers.fluid.block.PotionCloudFluidEffect;
 import slimeknights.tconstruct.library.modifiers.fluid.entity.AddBreathFluidEffect;
 import slimeknights.tconstruct.library.modifiers.fluid.entity.AwardStatFluidEffect;
 import slimeknights.tconstruct.library.modifiers.fluid.entity.CureEffectsFluidEffect;
@@ -566,6 +569,10 @@ public final class TinkerModifiers extends TinkerModule {
       FluidEffect.ENTITY_EFFECTS.register(getResource("freeze"), FreezeFluidEffect.LOADER);
       FluidEffect.ENTITY_EFFECTS.register(getResource("award_stat"), AwardStatFluidEffect.LOADER);
       FluidEffect.ENTITY_EFFECTS.register(getResource("add_breath"), AddBreathFluidEffect.LOADER);
+      // block
+      FluidEffect.BLOCK_EFFECTS.register(getResource("place_block"), PlaceBlockFluidEffect.LOADER);
+      FluidEffect.BLOCK_EFFECTS.register(getResource("mob_effect_cloud"), MobEffectCloudFluidEffect.LOADER);
+      FluidEffect.BLOCK_EFFECTS.register(getResource("potion_cloud"), PotionCloudFluidEffect.LOADER);
 
 
       // modifier loaders

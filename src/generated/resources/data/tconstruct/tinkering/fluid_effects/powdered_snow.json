@@ -1,4 +1,10 @@
 {
+  "block_effects": [
+    {
+      "type": "tconstruct:place_block",
+      "block": "minecraft:snow"
+    }
+  ],
   "entity_effects": [
     {
       "type": "tconstruct:freeze",

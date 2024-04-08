@@ -1,4 +1,21 @@
 {
+  "block_effects": [
+    {
+      "type": "tconstruct:mob_effect_cloud",
+      "effects": [
+        {
+          "effect": "minecraft:slowness",
+          "level": 2,
+          "time": 500
+        },
+        {
+          "effect": "minecraft:blindness",
+          "level": 1,
+          "time": 100
+        }
+      ]
+    }
+  ],
   "entity_effects": [
     {
       "type": "tconstruct:mob_effect",

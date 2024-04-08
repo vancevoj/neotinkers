@@ -80,7 +80,7 @@ public abstract class FluidEffectContext {
       this(level, holder, asPlayer(holder), projectile, hitResult);
     }
 
-    public Block(Level level, Player player, @Nullable Projectile projectile, BlockHitResult hitResult) {
+    public Block(Level level, @Nullable Player player, @Nullable Projectile projectile, BlockHitResult hitResult) {
       this(level, player, player, projectile, hitResult);
     }
 
@@ -90,6 +90,11 @@ public abstract class FluidEffectContext {
         state = level.getBlockState(hitResult.getBlockPos());
       }
       return state;
+    }
+
+    /** Checks if the block in front of the hit block is replaceable */
+    public boolean isOffsetReplaceable() {
+      return level.getBlockState(hitResult.getBlockPos().relative(hitResult.getDirection())).getMaterial().isReplaceable();
     }
   }
 }

@@ -1,4 +1,20 @@
 {
+  "block_effects": [
+    {
+      "type": "tconstruct:place_block",
+      "block": "minecraft:fire"
+    },
+    {
+      "type": "tconstruct:mob_effect_cloud",
+      "effects": [
+        {
+          "effect": "minecraft:blindness",
+          "level": 1,
+          "time": 300
+        }
+      ]
+    }
+  ],
   "entity_effects": [
     {
       "type": "tconstruct:conditional",

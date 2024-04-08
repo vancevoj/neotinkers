@@ -1,4 +1,16 @@
 {
+  "block_effects": [
+    {
+      "type": "tconstruct:mob_effect_cloud",
+      "effects": [
+        {
+          "effect": "tconstruct:repulsive",
+          "level": 2,
+          "time": 80
+        }
+      ]
+    }
+  ],
   "entity_effects": [
     {
       "type": "tconstruct:conditional",

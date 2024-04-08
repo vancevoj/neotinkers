@@ -10,6 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.common.crafting.CraftingHelper;
@@ -25,9 +26,12 @@ import slimeknights.tconstruct.library.modifiers.fluid.FluidEffect;
 import slimeknights.tconstruct.library.modifiers.fluid.FluidEffectContext;
 import slimeknights.tconstruct.library.modifiers.fluid.FluidEffectManager;
 import slimeknights.tconstruct.library.modifiers.fluid.FluidEffects;
+import slimeknights.tconstruct.library.modifiers.fluid.FluidMobEffect;
 import slimeknights.tconstruct.library.modifiers.fluid.TimeAction;
+import slimeknights.tconstruct.library.modifiers.fluid.block.PlaceBlockFluidEffect;
 import slimeknights.tconstruct.library.modifiers.fluid.entity.DamageFluidEffect;
 import slimeknights.tconstruct.library.modifiers.fluid.entity.FireFluidEffect;
+import slimeknights.tconstruct.library.modifiers.fluid.entity.MobEffectFluidEffect;
 import slimeknights.tconstruct.library.recipe.FluidValues;
 
 import java.io.IOException;
@@ -104,10 +108,9 @@ public abstract class AbstractFluidEffectProvider extends GenericDataProvider {
 
   /** Adds a builder for burning */
   protected Builder burningFluid(String name, TagKey<Fluid> tag, int amount, float damage, int time) {
-    Builder builder = addFluid(name, tag, amount)
-      .addEntityEffect(LivingEntityPredicate.FIRE_IMMUNE.inverted(), new DamageFluidEffect(damage, DamageFluidEffect.FIRE));
+    Builder builder = addFluid(name, tag, amount).addEntityEffect(LivingEntityPredicate.FIRE_IMMUNE.inverted(), new DamageFluidEffect(damage, DamageFluidEffect.FIRE));
     if (time > 0) {
-      builder.addEntityEffect(new FireFluidEffect(TimeAction.SET, time));
+      builder.addEntityEffect(new FireFluidEffect(TimeAction.SET, time)).addBlockEffect(new PlaceBlockFluidEffect(Blocks.FIRE));
     }
     return builder;
   }
@@ -137,6 +140,15 @@ public abstract class AbstractFluidEffectProvider extends GenericDataProvider {
     @CanIgnoreReturnValue
     public Builder addEntityEffect(FluidEffect<? super FluidEffectContext.Entity> effect) {
       entityEffects.add(effect);
+      return this;
+    }
+
+    /** Adds an effect to the given fluid */
+    public Builder addEffect(TimeAction action, FluidMobEffect.Builder builder) {
+      addBlockEffect(builder.buildCloud());
+      for (MobEffectFluidEffect effect : builder.buildEntity(action)) {
+        addEntityEffect(effect);
+      }
       return this;
     }
 

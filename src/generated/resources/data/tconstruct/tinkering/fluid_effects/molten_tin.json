@@ -1,4 +1,16 @@
 {
+  "block_effects": [
+    {
+      "type": "tconstruct:mob_effect_cloud",
+      "effects": [
+        {
+          "effect": "minecraft:night_vision",
+          "level": 1,
+          "time": 160
+        }
+      ]
+    }
+  ],
   "entity_effects": [
     {
       "type": "tconstruct:conditional",
