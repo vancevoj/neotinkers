@@ -88,21 +88,6 @@ public class ModifiableArmorItem extends ArmorItem implements IModifiableDisplay
   }
 
   @Override
-  public boolean isEnchantable(ItemStack stack) {
-    return false;
-  }
-
-  @Override
-  public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
-    return false;
-  }
-
-  @Override
-  public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
-    return enchantment.isCurse() && super.canApplyAtEnchantingTable(stack, enchantment);
-  }
-
-  @Override
   public boolean makesPiglinsNeutral(ItemStack stack, LivingEntity wearer) {
     return ModifierUtil.checkVolatileFlag(stack, PIGLIN_NEUTRAL);
   }
@@ -115,6 +100,29 @@ public class ModifiableArmorItem extends ArmorItem implements IModifiableDisplay
   @Override
   public boolean canPerformAction(ItemStack stack, ToolAction toolAction) {
     return ModifierUtil.canPerformAction(ToolStack.from(stack), toolAction);
+  }
+
+  @Override
+  public boolean isNotReplaceableByPickAction(ItemStack stack, Player player, int inventorySlot) {
+    return true;
+  }
+
+
+  /* Enchantments */
+
+  @Override
+  public boolean isEnchantable(ItemStack stack) {
+    return false;
+  }
+
+  @Override
+  public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
+    return false;
+  }
+
+  @Override
+  public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
+    return enchantment.isCurse() && super.canApplyAtEnchantingTable(stack, enchantment);
   }
 
   @Override

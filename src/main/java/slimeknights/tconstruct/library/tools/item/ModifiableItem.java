@@ -90,6 +90,14 @@ public class ModifiableItem extends Item implements IModifiableDisplay {
   }
 
   @Override
+  public boolean isNotReplaceableByPickAction(ItemStack stack, Player player, int inventorySlot) {
+    return true;
+  }
+
+
+  /* Enchanting */
+
+  @Override
   public boolean isEnchantable(ItemStack stack) {
     return false;
   }

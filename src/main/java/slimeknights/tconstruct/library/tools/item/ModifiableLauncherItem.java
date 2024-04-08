@@ -82,6 +82,14 @@ public abstract class ModifiableLauncherItem extends ProjectileWeaponItem implem
   }
 
   @Override
+  public boolean isNotReplaceableByPickAction(ItemStack stack, Player player, int inventorySlot) {
+    return true;
+  }
+
+
+  /* Enchanting */
+
+  @Override
   public boolean isEnchantable(ItemStack stack) {
     return false;
   }
