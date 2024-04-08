@@ -17,13 +17,11 @@ import slimeknights.tconstruct.library.recipe.molding.MoldingRecipe;
 import slimeknights.tconstruct.library.recipe.partbuilder.IDisplayPartBuilderRecipe;
 import slimeknights.tconstruct.library.recipe.partbuilder.Pattern;
 import slimeknights.tconstruct.library.recipe.worktable.IModifierWorktableRecipe;
-import slimeknights.tconstruct.plugin.jei.entity.EntityInput;
 
 public class TConstructJEIConstants {
   public static final ResourceLocation PLUGIN = TConstruct.getResource("jei_plugin");
 
   // ingredient types
-  public static final IIngredientType<EntityInput> ENTITY_TYPE = () -> EntityInput.class;
   public static final IIngredientTypeWithSubtypes<Modifier,ModifierEntry> MODIFIER_TYPE = new IIngredientTypeWithSubtypes<>() {
     @Override
     public Class<? extends ModifierEntry> getIngredientClass() {

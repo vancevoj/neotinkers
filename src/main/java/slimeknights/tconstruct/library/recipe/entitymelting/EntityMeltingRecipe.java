@@ -1,17 +1,13 @@
 package slimeknights.tconstruct.library.recipe.entitymelting;
 
-import com.google.common.collect.ImmutableList;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.fluids.FluidStack;
 import slimeknights.mantle.data.loadable.common.FluidStackLoadable;
 import slimeknights.mantle.data.loadable.field.ContextKey;
@@ -24,8 +20,6 @@ import slimeknights.tconstruct.library.recipe.TinkerRecipeTypes;
 import slimeknights.tconstruct.smeltery.TinkerSmeltery;
 
 import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
 
 /**
  * Recipe to melt an entity into a fluid
@@ -41,15 +35,12 @@ public class EntityMeltingRecipe implements ICustomOutputRecipe<IEmptyContainer>
 
   @Getter
   private final ResourceLocation id;
+  @Getter
   private final EntityIngredient ingredient;
   @Getter
   private final FluidStack output;
   @Getter
   private final int damage;
-
-  @SuppressWarnings("rawtypes")
-  private List<EntityType> entityInputs;
-  private List<ItemStack> itemInputs;
 
   /**
    * Checks if the recipe matches the given type
@@ -67,29 +58,6 @@ public class EntityMeltingRecipe implements ICustomOutputRecipe<IEmptyContainer>
    */
   public FluidStack getOutput(LivingEntity entity) {
     return output.copy();
-  }
-
-  /**
-   * Gets a list of inputs for display in JEI
-   * @return  Entity type inputs
-   */
-  @SuppressWarnings("rawtypes")
-  public List<EntityType> getEntityInputs() {
-    if (entityInputs == null) {
-      entityInputs = ImmutableList.copyOf(ingredient.getTypes());
-    }
-    return entityInputs;
-  }
-
-  /**
-   * Gets a list of item inputs for recipe lookup in JEI
-   * @return  Item inputs
-   */
-  public List<ItemStack> getItemInputs() {
-    if (itemInputs == null) {
-      itemInputs = getEntityInputs().stream().map(type -> new ItemStack(Objects.requireNonNullElse(ForgeSpawnEggItem.fromEntityType(type), Items.AIR))).toList();
-    }
-    return itemInputs;
   }
 
   /**

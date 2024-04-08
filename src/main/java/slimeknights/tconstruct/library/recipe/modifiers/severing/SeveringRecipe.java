@@ -1,17 +1,14 @@
 package slimeknights.tconstruct.library.recipe.modifiers.severing;
 
-import com.google.common.collect.ImmutableList;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.ForgeSpawnEggItem;
 import slimeknights.mantle.data.loadable.field.ContextKey;
 import slimeknights.mantle.data.loadable.field.LoadableField;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
@@ -21,9 +18,6 @@ import slimeknights.mantle.recipe.helper.ItemOutput;
 import slimeknights.mantle.recipe.ingredient.EntityIngredient;
 import slimeknights.tconstruct.library.recipe.TinkerRecipeTypes;
 import slimeknights.tconstruct.tools.TinkerModifiers;
-
-import java.util.List;
-import java.util.Objects;
 
 /**
  * Recipe to convert an entity into a head or other item for the severing modifier
@@ -39,12 +33,9 @@ public class SeveringRecipe implements ICustomOutputRecipe<IEmptyContainer> {
 
   @Getter
   private final ResourceLocation id;
+  @Getter
   protected final EntityIngredient ingredient;
   protected final ItemOutput output;
-
-  @SuppressWarnings("rawtypes")
-  private List<EntityType> entityInputs;
-  private List<ItemStack> itemInputs;
 
   /**
    * Checks if the recipe matches the given type
@@ -70,29 +61,6 @@ public class SeveringRecipe implements ICustomOutputRecipe<IEmptyContainer> {
    */
   public ItemStack getOutput(Entity entity) {
     return getOutput().copy();
-  }
-
-  /**
-   * Gets a list of inputs for display in JEI
-   * @return  Entity type inputs
-   */
-  @SuppressWarnings("rawtypes")
-  public List<EntityType> getEntityInputs() {
-    if (entityInputs == null) {
-      entityInputs = ImmutableList.copyOf(ingredient.getTypes());
-    }
-    return entityInputs;
-  }
-
-  /**
-   * Gets a list of item inputs for recipe lookup in JEI
-   * @return  Item inputs
-   */
-  public List<ItemStack> getItemInputs() {
-    if (itemInputs == null) {
-      itemInputs = getEntityInputs().stream().map(type -> new ItemStack(Objects.requireNonNullElse(ForgeSpawnEggItem.fromEntityType(type), Items.AIR))).toList();
-    }
-    return itemInputs;
   }
 
   @Override
