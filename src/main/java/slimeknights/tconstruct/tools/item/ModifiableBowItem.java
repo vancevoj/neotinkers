@@ -107,8 +107,8 @@ public class ModifiableBowItem extends ModifiableLauncherItem {
     }
     // no broken
     ToolStack tool = ToolStack.from(bow);
-    tool.getPersistentData().remove(KEY_DRAWTIME);
     if (tool.isBroken()) {
+      tool.getPersistentData().remove(KEY_DRAWTIME);
       return;
     }
 
@@ -124,11 +124,13 @@ public class ModifiableBowItem extends ModifiableLauncherItem {
 
     // no ammo? no charge? nothing to do
     if (!hasAmmo || chargeTime < 0) {
+      tool.getPersistentData().remove(KEY_DRAWTIME);
       return;
     }
 
     // calculate arrow power
     float charge = GeneralInteractionModifierHook.getToolCharge(tool, chargeTime);
+    tool.getPersistentData().remove(KEY_DRAWTIME);
     float velocity = ConditionalStatModifierHook.getModifiedStat(tool, living, ToolStats.VELOCITY);
     float power = charge * velocity;
     if (power < 0.1f) {
