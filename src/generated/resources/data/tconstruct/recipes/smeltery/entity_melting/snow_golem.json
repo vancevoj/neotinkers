@@ -2,9 +2,7 @@
   "type": "tconstruct:entity_melting",
   "damage": 2,
   "entity": {
-    "types": [
-      "minecraft:snow_golem"
-    ]
+    "type": "minecraft:snow_golem"
   },
   "result": {
     "amount": 100,

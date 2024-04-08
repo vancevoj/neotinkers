@@ -6,7 +6,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import slimeknights.mantle.data.loadable.ErrorFactory;
 import slimeknights.mantle.data.loadable.field.ContextKey;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.recipe.IMultiRecipe;
@@ -24,25 +23,23 @@ import slimeknights.tconstruct.tools.TinkerModifiers;
 import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
-import java.util.function.BiFunction;
 import java.util.stream.Stream;
 
 /**
  * Modifier recipe that changes max level and slot behavior each level. Used for a single input recipe that has multiple slot requirements
  */
 public class MultilevelModifierRecipe extends ModifierRecipe implements IMultiRecipe<IDisplayModifierRecipe> {
-  private static final BiFunction<MultilevelModifierRecipe,ErrorFactory,MultilevelModifierRecipe> VALIDATOR = (recipe, error) -> {
-    if (recipe.inputs.isEmpty() && !recipe.allowCrystal) {
-      throw error.create("Must either have inputs or allow crystal");
-    }
-    return recipe;
-  };
   public static final RecordLoadable<MultilevelModifierRecipe> LOADER = RecordLoadable.create(
     ContextKey.ID.requiredField(),
     SizedIngredient.LOADABLE.list(0).defaultField("inputs", List.of(), r -> r.inputs),
     TOOLS_FIELD, MAX_TOOL_SIZE_FIELD, RESULT_FIELD, ALLOW_CRYSTAL_FIELD,
     LevelEntry.LOADABLE.list(1).requiredField("levels", r -> r.levels),
-    MultilevelModifierRecipe::new).xmap(VALIDATOR, VALIDATOR);
+    MultilevelModifierRecipe::new).validate((recipe, error) -> {
+    if (recipe.inputs.isEmpty() && !recipe.allowCrystal) {
+      throw error.create("Must either have inputs or allow crystal");
+    }
+    return recipe;
+  });
 
   private final List<LevelEntry> levels;
   protected MultilevelModifierRecipe(ResourceLocation id, List<SizedIngredient> inputs, Ingredient toolRequirement, int maxToolSize, ModifierId result, boolean allowCrystal, List<LevelEntry> levels) {

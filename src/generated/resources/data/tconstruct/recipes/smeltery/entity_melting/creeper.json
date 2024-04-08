@@ -2,9 +2,7 @@
   "type": "tconstruct:entity_melting",
   "damage": 2,
   "entity": {
-    "types": [
-      "minecraft:creeper"
-    ]
+    "type": "minecraft:creeper"
   },
   "result": {
     "amount": 50,

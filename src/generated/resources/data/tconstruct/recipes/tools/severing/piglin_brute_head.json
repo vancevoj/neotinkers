@@ -1,9 +1,7 @@
 {
   "type": "tconstruct:severing",
   "entity": {
-    "types": [
-      "minecraft:piglin_brute"
-    ]
+    "type": "minecraft:piglin_brute"
   },
   "result": "tconstruct:piglin_brute_head"
 }

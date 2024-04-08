@@ -1,9 +1,7 @@
 {
   "type": "tconstruct:severing",
   "entity": {
-    "types": [
-      "minecraft:wither_skeleton"
-    ]
+    "type": "minecraft:wither_skeleton"
   },
   "result": {
     "count": 2,

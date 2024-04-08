@@ -1,9 +1,7 @@
 {
   "type": "tconstruct:severing",
   "entity": {
-    "types": [
-      "tconstruct:sky_slime"
-    ]
+    "type": "tconstruct:sky_slime"
   },
   "result": "tconstruct:sky_slime_ball"
 }

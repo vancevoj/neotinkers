@@ -3,8 +3,6 @@
   "adult_result": "minecraft:turtle_helmet",
   "child_result": "minecraft:scute",
   "entity": {
-    "types": [
-      "minecraft:turtle"
-    ]
+    "type": "minecraft:turtle"
   }
 }

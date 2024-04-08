@@ -6,9 +6,7 @@
       "tag": "minecraft:skeletons"
     },
     {
-      "types": [
-        "minecraft:skeleton_horse"
-      ]
+      "type": "minecraft:skeleton_horse"
     }
   ],
   "result": {

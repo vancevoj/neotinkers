@@ -370,7 +370,6 @@ task("uploadJars", dependsOn: "build") {
 publishing {
     publications {
         mavenJava(MavenPublication) {
-            // todo: remove deobf and sources jar in 1.13
             artifact jar
             artifact sourcesJar
         }

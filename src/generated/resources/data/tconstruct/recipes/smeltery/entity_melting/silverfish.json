@@ -2,9 +2,7 @@
   "type": "tconstruct:entity_melting",
   "damage": 2,
   "entity": {
-    "types": [
-      "minecraft:silverfish"
-    ]
+    "type": "minecraft:silverfish"
   },
   "result": {
     "amount": 50,

@@ -1,9 +1,7 @@
 {
   "type": "tconstruct:severing",
   "entity": {
-    "types": [
-      "minecraft:slime"
-    ]
+    "type": "minecraft:slime"
   },
   "result": "minecraft:slime_ball"
 }

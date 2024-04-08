@@ -5,8 +5,6 @@
     "item": "minecraft:feather"
   },
   "entity": {
-    "types": [
-      "minecraft:chicken"
-    ]
+    "type": "minecraft:chicken"
   }
 }

@@ -1,9 +1,7 @@
 {
   "type": "tconstruct:severing",
   "entity": {
-    "types": [
-      "minecraft:piglin"
-    ]
+    "type": "minecraft:piglin"
   },
   "result": "tconstruct:piglin_head"
 }
