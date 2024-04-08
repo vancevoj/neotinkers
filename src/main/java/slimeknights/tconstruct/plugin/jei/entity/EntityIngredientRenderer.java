@@ -31,7 +31,7 @@ import java.util.Set;
  */
 @SuppressWarnings("rawtypes")
 @RequiredArgsConstructor
-public class EntityIngredientRenderer implements IIngredientRenderer<EntityType> {
+public class EntityIngredientRenderer implements IIngredientRenderer<EntityInput> {
   /** Entity types that will not render, as they either errored or are the wrong type */
   private static final Set<EntityType<?>> IGNORED_ENTITIES = new HashSet<>();
 
@@ -52,9 +52,10 @@ public class EntityIngredientRenderer implements IIngredientRenderer<EntityType>
   }
 
   @Override
-  public void render(PoseStack matrixStack, @Nullable EntityType type) {
-    if (type != null) {
+  public void render(PoseStack matrixStack, @Nullable EntityInput input) {
+    if (input != null) {
       Level world = Minecraft.getInstance().level;
+      EntityType<?> type = input.type();
       if (world != null && !IGNORED_ENTITIES.contains(type)) {
         Entity entity;
         // players cannot be created using the type, but we can use the client player
@@ -103,11 +104,11 @@ public class EntityIngredientRenderer implements IIngredientRenderer<EntityType>
   }
 
   @Override
-  public List<Component> getTooltip(EntityType type, TooltipFlag flag) {
+  public List<Component> getTooltip(EntityInput type, TooltipFlag flag) {
     List<Component> tooltip = new ArrayList<>();
-    tooltip.add(type.getDescription());
+    tooltip.add(type.type().getDescription());
     if (flag.isAdvanced()) {
-      tooltip.add((Component.literal(Registry.ENTITY_TYPE.getKey(type).toString())).withStyle(ChatFormatting.DARK_GRAY));
+      tooltip.add((Component.literal(Registry.ENTITY_TYPE.getKey(type.type()).toString())).withStyle(ChatFormatting.DARK_GRAY));
     }
     return tooltip;
   }

@@ -2,6 +2,7 @@ package slimeknights.tconstruct.plugin.jei.entity;
 
 import lombok.Getter;
 import mezz.jei.api.constants.VanillaTypes;
+import mezz.jei.api.gui.builder.IIngredientAcceptor;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.helpers.IGuiHelper;
@@ -44,10 +45,11 @@ public class SeveringCategory implements IRecipeCategory<SeveringRecipe> {
 
   @Override
   public void setRecipe(IRecipeLayoutBuilder builder, SeveringRecipe recipe, IFocusGroup focuses) {
-    builder.addSlot(RecipeIngredientRole.INPUT, 3, 3)
+    IIngredientAcceptor<?> entities = builder.addSlot(RecipeIngredientRole.INPUT, 3, 3)
            .setCustomRenderer(TConstructJEIConstants.ENTITY_TYPE, entityRenderer)
-           .addIngredients(TConstructJEIConstants.ENTITY_TYPE, EntityIngredientHelper.applyFocus(RecipeIngredientRole.INPUT, recipe.getEntityInputs(), focuses));
-    builder.addInvisibleIngredients(RecipeIngredientRole.INPUT).addItemStacks(recipe.getItemInputs());
+           .addIngredients(TConstructJEIConstants.ENTITY_TYPE, EntityInput.wrapRaw(recipe.getEntityInputs()));
+    IIngredientAcceptor<?> eggs = builder.addInvisibleIngredients(RecipeIngredientRole.INPUT).addItemStacks(recipe.getItemInputs());
+    builder.createFocusLink(entities, eggs);
 
     // output
     builder.addSlot(RecipeIngredientRole.OUTPUT, 76, 11).addItemStack(recipe.getOutput());

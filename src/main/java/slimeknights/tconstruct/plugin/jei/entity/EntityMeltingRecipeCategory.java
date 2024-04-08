@@ -5,6 +5,7 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.Getter;
 import mezz.jei.api.forge.ForgeTypes;
+import mezz.jei.api.gui.builder.IIngredientAcceptor;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.drawable.IDrawableAnimated.StartDirection;
@@ -21,7 +22,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.EntityType;
 import slimeknights.mantle.fluid.tooltip.FluidTooltipHandler;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.recipe.FluidValues;
@@ -87,12 +87,13 @@ public class EntityMeltingRecipeCategory implements IRecipeCategory<EntityMeltin
   @Override
   public void setRecipe(IRecipeLayoutBuilder builder, EntityMeltingRecipe recipe, IFocusGroup focuses) {
     // inputs, filtered by spawn egg item
-    List<EntityType> displayTypes = EntityIngredientHelper.applyFocus(RecipeIngredientRole.INPUT, recipe.getEntityInputs(), focuses);
-    builder.addSlot(RecipeIngredientRole.INPUT, 19, 11)
-           .setCustomRenderer(TConstructJEIConstants.ENTITY_TYPE, entityRenderer)
-           .addIngredients(TConstructJEIConstants.ENTITY_TYPE, displayTypes);
+    // TODO: can we use a linked focus slot for this?
+    IIngredientAcceptor<?> entities = builder.addSlot(RecipeIngredientRole.INPUT, 19, 11)
+                                             .setCustomRenderer(TConstructJEIConstants.ENTITY_TYPE, entityRenderer)
+                                             .addIngredients(TConstructJEIConstants.ENTITY_TYPE, EntityInput.wrapRaw(recipe.getEntityInputs()));
     // add spawn eggs as hidden inputs
-    builder.addInvisibleIngredients(RecipeIngredientRole.INPUT).addItemStacks(recipe.getItemInputs());
+    IIngredientAcceptor<?> eggs = builder.addInvisibleIngredients(RecipeIngredientRole.INPUT).addItemStacks(recipe.getItemInputs());
+    builder.createFocusLink(entities, eggs);
 
     // output
     builder.addSlot(RecipeIngredientRole.OUTPUT, 115, 11)
