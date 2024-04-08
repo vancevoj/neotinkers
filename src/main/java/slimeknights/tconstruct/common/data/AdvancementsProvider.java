@@ -295,13 +295,11 @@ public class AdvancementsProvider extends GenericDataProvider {
       // staff
       withL.accept(TinkerModifiers.bonking);
       withL.accept(TinkerModifiers.flinging);
-      withL.accept(TinkerModifiers.spitting);
       withL.accept(TinkerModifiers.springing);
       withL.accept(TinkerModifiers.warping);
       // weapon
       withL.accept(TinkerModifiers.dualWielding);
       withL.accept(TinkerModifiers.melting);
-      withL.accept(TinkerModifiers.spilling);
       withL.accept(TinkerModifiers.blocking);
       withL.accept(TinkerModifiers.parrying);
       // ranged
@@ -309,6 +307,11 @@ public class AdvancementsProvider extends GenericDataProvider {
       withL.accept(TinkerModifiers.multishot);
       withL.accept(TinkerModifiers.bulkQuiver);
       withL.accept(TinkerModifiers.trickQuiver);
+      // fluid
+      withL.accept(TinkerModifiers.spitting);
+      withL.accept(TinkerModifiers.spilling);
+      withL.accept(TinkerModifiers.splashing);
+      withL.accept(TinkerModifiers.bursting);
     });
 
     // foundry path

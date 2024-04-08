@@ -163,6 +163,24 @@
       },
       "trigger": "minecraft:inventory_changed"
     },
+    "bursting": {
+      "conditions": {
+        "items": [
+          {
+            "type": "tconstruct:tool_stack",
+            "predicate": {
+              "type": "tconstruct:has_modifier",
+              "check": "upgrades",
+              "modifier": {
+                "type": "tconstruct:single",
+                "modifier": "tconstruct:bursting"
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
     "crystalshot": {
       "conditions": {
         "items": [
@@ -667,6 +685,24 @@
       },
       "trigger": "minecraft:inventory_changed"
     },
+    "splashing": {
+      "conditions": {
+        "items": [
+          {
+            "type": "tconstruct:tool_stack",
+            "predicate": {
+              "type": "tconstruct:has_modifier",
+              "check": "upgrades",
+              "modifier": {
+                "type": "tconstruct:single",
+                "modifier": "tconstruct:splashing"
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
     "springing": {
       "conditions": {
         "items": [
@@ -970,9 +1006,6 @@
       "flinging"
     ],
     [
-      "spitting"
-    ],
-    [
       "springing"
     ],
     [
@@ -983,9 +1016,6 @@
     ],
     [
       "melting"
-    ],
-    [
-      "spilling"
     ],
     [
       "blocking"
@@ -1004,6 +1034,18 @@
     ],
     [
       "trick_quiver"
+    ],
+    [
+      "spitting"
+    ],
+    [
+      "spilling"
+    ],
+    [
+      "splashing"
+    ],
+    [
+      "bursting"
     ]
   ]
 }

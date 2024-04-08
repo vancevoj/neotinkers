@@ -1,7 +1,7 @@
 {
   "values": [
     "tconstruct:bucketing",
-    "tconstruct:spilling",
+    "tconstruct:splashing",
     "tconstruct:glowing",
     "tconstruct:firestarter",
     "tconstruct:stripping",

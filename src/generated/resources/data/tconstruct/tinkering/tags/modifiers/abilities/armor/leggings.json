@@ -1,7 +1,6 @@
 {
   "values": [
     "tconstruct:pockets",
-    "tconstruct:tool_belt",
-    "tconstruct:wetting"
+    "tconstruct:tool_belt"
   ]
 }

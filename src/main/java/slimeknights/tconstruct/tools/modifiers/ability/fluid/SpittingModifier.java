@@ -2,33 +2,18 @@ package slimeknights.tconstruct.tools.modifiers.ability.fluid;
 
 import com.mojang.math.Quaternion;
 import com.mojang.math.Vector3f;
-import lombok.Getter;
-import lombok.Setter;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.LlamaSpit;
 import net.minecraft.world.item.UseAnim;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.EntityHitResult;
-import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidType;
-import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
-import slimeknights.tconstruct.fluids.TinkerFluids;
 import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.TinkerHooks;
-import slimeknights.tconstruct.library.modifiers.fluid.FluidEffectContext;
 import slimeknights.tconstruct.library.modifiers.fluid.FluidEffectManager;
 import slimeknights.tconstruct.library.modifiers.fluid.FluidEffects;
 import slimeknights.tconstruct.library.modifiers.hook.build.ConditionalStatModifierHook;
@@ -44,11 +29,9 @@ import slimeknights.tconstruct.library.tools.item.ModifiableLauncherItem;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.NamespacedNBT;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
-import slimeknights.tconstruct.tools.TinkerModifiers;
+import slimeknights.tconstruct.tools.entity.FluidEffectProjectile;
 import slimeknights.tconstruct.tools.modifiers.ability.interaction.BlockingModifier;
 import slimeknights.tconstruct.tools.modifiers.upgrades.ranged.ScopeModifier;
-
-import static slimeknights.tconstruct.library.tools.helper.ModifierUtil.asLiving;
 
 /** Modifier that fires fluid as a projectile */
 public class SpittingModifier extends Modifier implements GeneralInteractionModifierHook {
@@ -120,7 +103,7 @@ public class SpittingModifier extends Modifier implements GeneralInteractionModi
               float startAngle = ModifiableLauncherItem.getAngleStart(shots);
               int primaryIndex = shots / 2;
               for (int shotIndex = 0; shotIndex < shots; shotIndex++) {
-                FluidSpitEntity spit = new FluidSpitEntity(entity.level, entity, new FluidStack(fluid, amount), power);
+                FluidEffectProjectile spit = new FluidEffectProjectile(entity.level, entity, new FluidStack(fluid, amount), power);
 
                 // setup projectile target
                 Vector3f targetVector = new Vector3f(entity.getViewVector(1.0f));
@@ -155,94 +138,4 @@ public class SpittingModifier extends Modifier implements GeneralInteractionModi
     }
   }
 
-  /** Projectile entity for spitting */
-  public static class FluidSpitEntity extends LlamaSpit {
-    private static final EntityDataAccessor<FluidStack> FLUID = SynchedEntityData.defineId(FluidSpitEntity.class, TinkerFluids.FLUID_DATA_SERIALIZER);
-
-    @Setter
-    private float power = 1;
-    @Setter @Getter
-    private int knockback = 1;
-    public FluidSpitEntity(EntityType<? extends FluidSpitEntity> type, Level level) {
-      super(type, level);
-    }
-
-    public FluidSpitEntity(Level level, LivingEntity owner, FluidStack fluid, float power) {
-      this(TinkerModifiers.fluidSpitEntity.get(), level);
-      this.setPos(owner.getX(), owner.getEyeY() - 0.1, owner.getZ());
-      this.setOwner(owner);
-      this.setFluid(fluid);
-      this.setPower(power);
-    }
-
-    /** Gets the fluid for this spit */
-    public FluidStack getFluid() {
-      return this.entityData.get(FLUID);
-    }
-
-    /** Sets the fluid for this spit */
-    public void setFluid(FluidStack fluid) {
-      this.entityData.set(FLUID, fluid);
-    }
-
-    @Override
-    protected void onHitEntity(EntityHitResult result) {
-      FluidStack fluid = getFluid();
-      Entity target = result.getEntity();
-      if (!level.isClientSide && !fluid.isEmpty()) {
-        FluidEffects recipe = FluidEffectManager.INSTANCE.find(fluid.getFluid());
-        if (recipe.hasEntityEffects()) {
-          // ignoring the return, we don't need to handle shrinking
-          recipe.applyToEntity(fluid, power, new FluidEffectContext.Entity(level, asLiving(getOwner()), this, target), FluidAction.EXECUTE);
-        }
-      }
-      // apply knockback to the entity regardless of fluid type
-      if (knockback > 0) {
-        Vec3 vec3 = this.getDeltaMovement().multiply(1, 0, 1).normalize().scale(knockback * 0.6);
-        if (vec3.lengthSqr() > 0) {
-          target.push(vec3.x, 0.1, vec3.z);
-        }
-      }
-    }
-
-    @Override
-    protected void onHitBlock(BlockHitResult hitResult) {
-      FluidStack fluid = getFluid();
-      if (!level.isClientSide && !fluid.isEmpty()) {
-        FluidEffects recipe = FluidEffectManager.INSTANCE.find(fluid.getFluid());
-        if (recipe.hasEntityEffects()) {
-          // ignoring the return, we don't need to handle shrinking
-          recipe.applyToBlock(fluid, power, new FluidEffectContext.Block(level, asLiving(getOwner()), this, hitResult), FluidAction.EXECUTE);
-        }
-      }
-      super.onHitBlock(hitResult);
-    }
-
-    /* Network */
-
-    @Override
-    protected void defineSynchedData() {
-      super.defineSynchedData();
-      this.entityData.define(FLUID, FluidStack.EMPTY);
-    }
-
-    @Override
-    protected void addAdditionalSaveData(CompoundTag nbt) {
-      super.addAdditionalSaveData(nbt);
-      nbt.putFloat("power", power);
-      nbt.putInt("knockback", knockback);
-      FluidStack fluid = getFluid();
-      if (!fluid.isEmpty()) {
-        nbt.put("fluid", fluid.writeToNBT(new CompoundTag()));
-      }
-    }
-
-    @Override
-    protected void readAdditionalSaveData(CompoundTag nbt) {
-      super.readAdditionalSaveData(nbt);
-      this.power = nbt.getFloat("power");
-      this.knockback = nbt.getInt("knockback");
-      setFluid(FluidStack.loadFluidStackFromNBT(nbt.getCompound("fluid")));
-    }
-  }
 }

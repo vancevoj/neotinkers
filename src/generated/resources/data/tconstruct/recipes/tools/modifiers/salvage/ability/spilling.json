@@ -4,18 +4,7 @@
   "slots": {
     "abilities": 1
   },
-  "tools": [
-    {
-      "tag": "tconstruct:modifiable/melee"
-    },
-    {
-      "tag": "tconstruct:modifiable/armor/chestplate"
-    },
-    {
-      "tag": "tconstruct:modifiable/staffs"
-    },
-    {
-      "tag": "tconstruct:modifiable/shields"
-    }
-  ]
+  "tools": {
+    "tag": "tconstruct:modifiable/melee"
+  }
 }

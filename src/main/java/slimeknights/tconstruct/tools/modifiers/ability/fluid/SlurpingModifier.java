@@ -1,4 +1,4 @@
-package slimeknights.tconstruct.tools.modifiers.ability.armor;
+package slimeknights.tconstruct.tools.modifiers.ability.fluid;
 
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;

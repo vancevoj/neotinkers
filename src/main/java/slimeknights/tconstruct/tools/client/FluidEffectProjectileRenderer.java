@@ -13,13 +13,13 @@ import slimeknights.mantle.client.model.fluid.FluidCuboid;
 import slimeknights.mantle.client.model.fluid.FluidCuboid.FluidFace;
 import slimeknights.mantle.client.render.FluidRenderer;
 import slimeknights.mantle.client.render.MantleRenderTypes;
-import slimeknights.tconstruct.tools.modifiers.ability.fluid.SpittingModifier.FluidSpitEntity;
+import slimeknights.tconstruct.tools.entity.FluidEffectProjectile;
 
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
-public class FluidSpitRenderer extends EntityRenderer<FluidSpitEntity> {
+public class FluidEffectProjectileRenderer extends EntityRenderer<FluidEffectProjectile> {
   // TODO: make public in mantle
   private static final Map<Direction,FluidFace> FACES;
   static {
@@ -30,7 +30,7 @@ public class FluidSpitRenderer extends EntityRenderer<FluidSpitEntity> {
   }
 
   private final List<FluidCuboid> fluids;
-  public FluidSpitRenderer(Context context) {
+  public FluidEffectProjectileRenderer(Context context) {
     super(context);
     this.fluids = List.of(
       new FluidCuboid(new Vector3f(-4,  0,  0), new Vector3f(-2,  2,  2), FACES),
@@ -42,7 +42,7 @@ public class FluidSpitRenderer extends EntityRenderer<FluidSpitEntity> {
   }
 
   @Override
-  public void render(FluidSpitEntity pEntity, float pEntityYaw, float pPartialTicks, PoseStack pMatrixStack, MultiBufferSource pBuffer, int pPackedLight) {
+  public void render(FluidEffectProjectile pEntity, float pEntityYaw, float pPartialTicks, PoseStack pMatrixStack, MultiBufferSource pBuffer, int pPackedLight) {
     pMatrixStack.pushPose();
     pMatrixStack.translate(0.0D, 0.15F, 0.0D);
     pMatrixStack.mulPose(Vector3f.YP.rotationDegrees(Mth.lerp(pPartialTicks, pEntity.yRotO, pEntity.getYRot()) - 90.0F));
@@ -53,7 +53,7 @@ public class FluidSpitRenderer extends EntityRenderer<FluidSpitEntity> {
   }
 
   @Override
-  public ResourceLocation getTextureLocation(FluidSpitEntity pEntity) {
+  public ResourceLocation getTextureLocation(FluidEffectProjectile pEntity) {
     return InventoryMenu.BLOCK_ATLAS;
   }
 }

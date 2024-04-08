@@ -1,4 +1,4 @@
-package slimeknights.tconstruct.tools.modifiers.ability.armor;
+package slimeknights.tconstruct.tools.modifiers.ability.fluid;
 
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -8,34 +8,33 @@ import net.minecraft.world.entity.player.Player;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.TinkerHooks;
 import slimeknights.tconstruct.library.modifiers.fluid.FluidEffectContext;
-import slimeknights.tconstruct.library.modifiers.hook.armor.ModifyDamageModifierHook;
+import slimeknights.tconstruct.library.modifiers.hook.armor.OnAttackedModifierHook;
 import slimeknights.tconstruct.library.modifiers.util.ModifierHookMap.Builder;
 import slimeknights.tconstruct.library.tools.context.EquipmentContext;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 
 import javax.annotation.Nullable;
 
-/** Modifier to handle spilling recipes onto self when attacked */
-public class WettingModifier extends UseFluidOnHitModifier implements ModifyDamageModifierHook {
+import static slimeknights.tconstruct.library.tools.helper.ModifierUtil.asLiving;
+
+/** Modifier to handle spilling recipes */
+public class BurstingModifier extends UseFluidOnHitModifier implements OnAttackedModifierHook {
   @Override
   protected void registerHooks(Builder hookBuilder) {
     super.registerHooks(hookBuilder);
-    hookBuilder.addHook(this, TinkerHooks.MODIFY_DAMAGE);
+    hookBuilder.addHook(this, TinkerHooks.ON_ATTACKED);
   }
 
   @Override
   public FluidEffectContext.Entity createContext(LivingEntity self, @Nullable Player player, @Nullable Entity attacker) {
-    return new FluidEffectContext.Entity(self.level, self, player, null, self, self);
+    assert attacker != null;
+    return new FluidEffectContext.Entity(self.level, self, player, null, attacker, asLiving(attacker));
   }
 
   @Override
-  protected boolean doesTrigger(DamageSource source, boolean isDirectDamage) {
-    return !source.isBypassMagic() && !source.isBypassInvul();
-  }
-
-  @Override
-  public float modifyDamageTaken(IToolStackView tool, ModifierEntry modifier, EquipmentContext context, EquipmentSlot slotType, DamageSource source, float amount, boolean isDirectDamage) {
-    useFluid(tool, modifier, context, slotType, source, isDirectDamage);
-    return amount;
+  public void onAttacked(IToolStackView tool, ModifierEntry modifier, EquipmentContext context, EquipmentSlot slotType, DamageSource source, float amount, boolean isDirectDamage) {
+    if (source.getEntity() != null && isDirectDamage) {
+      useFluid(tool, modifier, context, slotType, source);
+    }
   }
 }

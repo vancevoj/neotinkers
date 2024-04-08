@@ -23,6 +23,7 @@
   "tconstruct:fireprimer":  ["minecraft:item/fire_charge", "tconstruct:gui/modifiers/book"],
   "tconstruct:glowing":     "tconstruct:gui/modifiers/glowing",
   "tconstruct:pathing":     "tconstruct:gui/modifiers/held/pathing",
+  "tconstruct:splashing":   "tconstruct:gui/modifiers/held/splashing",
   "tconstruct:spitting":    "tconstruct:gui/modifiers/held/spitting",
   "tconstruct:stripping":   "tconstruct:gui/modifiers/held/stripping",
   "tconstruct:tilling":     "tconstruct:gui/modifiers/held/tilling",
@@ -106,6 +107,7 @@
   "tconstruct:reach":    "tconstruct:gui/modifiers/armor/reach",
   "tconstruct:strength": "tconstruct:gui/modifiers/armor/strength",
 
+  "tconstruct:bursting":      "tconstruct:gui/modifiers/armor/bursting",
   "tconstruct:depth_strider": "tconstruct:gui/modifiers/armor/depth_strider",
   "tconstruct:leaping":       "tconstruct:gui/modifiers/armor/leaping",
   "tconstruct:pockets":       "tconstruct:gui/modifiers/armor/pockets",

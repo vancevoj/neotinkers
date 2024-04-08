@@ -10,7 +10,7 @@ import slimeknights.tconstruct.library.modifiers.hook.ranged.ProjectileLaunchMod
 import slimeknights.tconstruct.library.modifiers.util.ModifierHookMap.Builder;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.NamespacedNBT;
-import slimeknights.tconstruct.tools.modifiers.ability.fluid.SpittingModifier.FluidSpitEntity;
+import slimeknights.tconstruct.tools.entity.FluidEffectProjectile;
 
 import javax.annotation.Nullable;
 
@@ -24,7 +24,7 @@ public class PunchModifier extends Modifier implements ProjectileLaunchModifierH
   public void onProjectileLaunch(IToolStackView tool, ModifierEntry modifier, LivingEntity shooter, Projectile projectile, @Nullable AbstractArrow arrow, NamespacedNBT persistentData, boolean primary) {
     if (arrow != null) {
       arrow.setKnockback(modifier.getLevel());
-    } else if (projectile instanceof FluidSpitEntity spit) {
+    } else if (projectile instanceof FluidEffectProjectile spit) {
       spit.setKnockback(spit.getKnockback() + modifier.getLevel());
     }
   }

@@ -23,7 +23,8 @@
     "firestarter": "#5D342C",
     "parrying":    "#755A30",
     "pathing":     "#8a361e",
-    "spitting":    "#B0B0B0",
+    "splashing":   "#F98648",
+    "spitting":    "#F98648",
     "stripping":   "#ab7a55",
     "tilling":     "#633c1e",
 
@@ -56,6 +57,7 @@
     "__armor_abilities__": null,
     "ambidextrous": "#AA7D66",
     "boundless":    "#3B2754",
+    "bursting":     "#F98648",
     "double_jump":  "#01cbcd",
     "bouncy":       "#27C6C6",
     "pockets":      "#976997",

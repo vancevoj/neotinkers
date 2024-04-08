@@ -1,4 +1,4 @@
-package slimeknights.tconstruct.tools.modifiers.ability.armor;
+package slimeknights.tconstruct.tools.modifiers.ability.fluid;
 
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
@@ -45,31 +45,23 @@ public abstract class UseFluidOnHitModifier extends Modifier {
   /** Overridable method to create the attack context and spawn particles */
   public abstract FluidEffectContext.Entity createContext(LivingEntity self, @Nullable Player player, @Nullable Entity attacker);
 
-  /**
-   * Checks if the modifier triggers
-   * TODO 1.19: can ditch this method in favor of just moving the logic to where calls {@link #useFluid(IToolStackView, ModifierEntry, EquipmentContext, EquipmentSlot, DamageSource, boolean)}, keeping just in case an addon uses.
-   */
-  protected abstract boolean doesTrigger(DamageSource source, boolean isDirectDamage);
-
   /** Logic for using the fluid */
-  protected void useFluid(IToolStackView tool, ModifierEntry modifier, EquipmentContext context, EquipmentSlot slotType, DamageSource source, boolean isDirectDamage) {
-    if (doesTrigger(source, isDirectDamage)) {
-      // 25% chance of working per level, 50% per level on shields
-      float level = modifier.getEffectiveLevel();
-      if (RANDOM.nextInt(slotType.getType() == Type.HAND ? 2 : 4) < level) {
-        FluidStack fluid = tank.getFluid(tool);
-        if (!fluid.isEmpty()) {
-          LivingEntity self = context.getEntity();
-          Player player = self instanceof Player p ? p : null;
-          FluidEffects recipe = FluidEffectManager.INSTANCE.find(fluid.getFluid());
-          if (recipe.hasEffects()) {
-            FluidEffectContext.Entity fluidContext = createContext(self, player, source.getEntity());
-            int consumed = recipe.applyToEntity(fluid, level, fluidContext, FluidAction.EXECUTE);
-            if (consumed > 0 && (player == null || !player.isCreative())) {
-              spawnParticles(fluidContext.getTarget(), fluid);
-              fluid.shrink(consumed);
-              tank.setFluid(tool, fluid);
-            }
+  protected void useFluid(IToolStackView tool, ModifierEntry modifier, EquipmentContext context, EquipmentSlot slotType, DamageSource source) {
+    // 25% chance of working per level, 50% per level on shields
+    float level = modifier.getEffectiveLevel();
+    if (RANDOM.nextInt(slotType.getType() == Type.HAND ? 2 : 4) < level) {
+      FluidStack fluid = tank.getFluid(tool);
+      if (!fluid.isEmpty()) {
+        LivingEntity self = context.getEntity();
+        Player player = self instanceof Player p ? p : null;
+        FluidEffects recipe = FluidEffectManager.INSTANCE.find(fluid.getFluid());
+        if (recipe.hasEffects()) {
+          FluidEffectContext.Entity fluidContext = createContext(self, player, source.getEntity());
+          int consumed = recipe.applyToEntity(fluid, level, fluidContext, FluidAction.EXECUTE);
+          if (consumed > 0 && (player == null || !player.isCreative())) {
+            spawnParticles(fluidContext.getTarget(), fluid);
+            fluid.shrink(consumed);
+            tank.setFluid(tool, fluid);
           }
         }
       }

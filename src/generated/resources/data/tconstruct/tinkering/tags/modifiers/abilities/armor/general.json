@@ -1,6 +1,7 @@
 {
   "values": [
     "tconstruct:protection",
-    "tconstruct:spilling"
+    "tconstruct:bursting",
+    "tconstruct:wetting"
   ]
 }

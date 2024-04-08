@@ -63,7 +63,7 @@ public class ModifierTagProvider extends AbstractModifierTagProvider {
 
     // modifiers in this tag support both left click and right click interaction
     tag(DUAL_INTERACTION)
-      .add(TinkerModifiers.bucketing.getId(), TinkerModifiers.spilling.getId(),
+      .add(TinkerModifiers.bucketing.getId(), TinkerModifiers.splashing.getId(),
            TinkerModifiers.glowing.getId(), TinkerModifiers.firestarter.getId(),
            ModifierIds.stripping, ModifierIds.tilling, ModifierIds.pathing,
            TinkerModifiers.shears.getId(), TinkerModifiers.harvest.getId())
@@ -127,13 +127,13 @@ public class ModifierTagProvider extends AbstractModifierTagProvider {
     this.tag(INTERACTION_ABILITIES).add(
       TinkerModifiers.bucketing.getId(), TinkerModifiers.firestarter.getId(), TinkerModifiers.glowing.getId(),
       ModifierIds.pathing, ModifierIds.stripping, ModifierIds.tilling,
-      TinkerModifiers.spitting.getId(),
+      TinkerModifiers.spitting.getId(), TinkerModifiers.splashing.getId(),
       TinkerModifiers.bonking.getId(), TinkerModifiers.flinging.getId(), TinkerModifiers.springing.getId(), TinkerModifiers.warping.getId());
     // armor
-    this.tag(GENERAL_ARMOR_ABILITIES).add(ModifierIds.protection, TinkerModifiers.spilling.getId());
+    this.tag(GENERAL_ARMOR_ABILITIES).add(ModifierIds.protection, TinkerModifiers.bursting.getId(), TinkerModifiers.wetting.getId());
     this.tag(HELMET_ABILITIES).add(ModifierIds.aquaAffinity, TinkerModifiers.slurping.getId());
     this.tag(CHESTPLATE_ABILITIES).add(TinkerModifiers.ambidextrous.getId(), ModifierIds.reach, ModifierIds.strength);
-    this.tag(LEGGING_ABILITIES).add(ModifierIds.pockets, ModifierIds.toolBelt, TinkerModifiers.wetting.getId());
+    this.tag(LEGGING_ABILITIES).add(ModifierIds.pockets, ModifierIds.toolBelt);
     this.tag(BOOT_ABILITIES).add(
       TinkerModifiers.bouncy.getId(), TinkerModifiers.doubleJump.getId(), ModifierIds.longFall,
       TinkerModifiers.flamewake.getId(), ModifierIds.snowdrift, ModifierIds.plowing, ModifierIds.pathMaker, ModifierIds.frostWalker);
