@@ -1,0 +1,116 @@
+package slimeknights.tconstruct.common.data.model;
+
+import net.minecraft.core.Registry;
+import net.minecraft.data.DataGenerator;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.ItemLike;
+import net.minecraftforge.client.model.generators.ItemModelBuilder;
+import net.minecraftforge.client.model.generators.ItemModelProvider;
+import net.minecraftforge.client.model.generators.ModelFile;
+import net.minecraftforge.common.data.ExistingFileHelper;
+import slimeknights.mantle.registration.object.ItemObject;
+import slimeknights.tconstruct.TConstruct;
+import slimeknights.tconstruct.common.registration.CastItemObject;
+import slimeknights.tconstruct.library.tools.part.MaterialItem;
+import slimeknights.tconstruct.smeltery.TinkerSmeltery;
+import slimeknights.tconstruct.tools.TinkerToolParts;
+
+import static slimeknights.tconstruct.TConstruct.getResource;
+
+@SuppressWarnings("UnusedReturnValue")
+public class TinkerItemModelProvider extends ItemModelProvider {
+  public TinkerItemModelProvider(DataGenerator generator, ExistingFileHelper existingFileHelper) {
+    super(generator, TConstruct.MOD_ID, existingFileHelper);
+  }
+
+  @Override
+  protected void registerModels() {
+    // tool parts //
+    // rock
+    part(TinkerToolParts.pickHead, "pickaxe/head").offset(-2, 1);
+    part(TinkerToolParts.hammerHead, "sledge_hammer/head").offset(-3, 3);
+    // axe
+    part(TinkerToolParts.smallAxeHead, "hand_axe/head").offset(-2, 3);
+    part(TinkerToolParts.broadAxeHead, "broad_axe/blade").offset(0, 3);
+    // blades
+    part(TinkerToolParts.smallBlade);
+    part(TinkerToolParts.broadBlade, "cleaver/head").offset(-1, 1);
+    // plates
+    part(TinkerToolParts.roundPlate);
+    part(TinkerToolParts.largePlate);
+    // bows
+    part(TinkerToolParts.bowLimb, "longbow/limb_bottom").offset(5, -2);
+    part(TinkerToolParts.bowGrip, "crossbow/body").offset(-2, -2);
+    part(TinkerToolParts.bowstring);
+    // other
+    part(TinkerToolParts.toolBinding);
+    part(TinkerToolParts.toolHandle);
+    part(TinkerToolParts.toughHandle);
+    part(TinkerToolParts.repairKit);
+
+    // casts //
+    // basic
+    basicItem(TinkerSmeltery.blankSandCast, "sand_cast/blank");
+    basicItem(TinkerSmeltery.blankRedSandCast, "red_sand_cast/blank");
+    cast(TinkerSmeltery.ingotCast);
+    cast(TinkerSmeltery.nuggetCast);
+    cast(TinkerSmeltery.gemCast);
+    cast(TinkerSmeltery.rodCast);
+    cast(TinkerSmeltery.repairKitCast);
+    // compat
+    cast(TinkerSmeltery.plateCast);
+    cast(TinkerSmeltery.gearCast);
+    cast(TinkerSmeltery.coinCast);
+    cast(TinkerSmeltery.wireCast);
+    // small heads
+    cast(TinkerSmeltery.pickHeadCast);
+    cast(TinkerSmeltery.smallAxeHeadCast);
+    cast(TinkerSmeltery.smallBladeCast);
+    // large heads
+    cast(TinkerSmeltery.hammerHeadCast);
+    cast(TinkerSmeltery.broadBladeCast);
+    cast(TinkerSmeltery.broadAxeHeadCast);
+    // bindings
+    cast(TinkerSmeltery.toolBindingCast);
+    cast(TinkerSmeltery.roundPlateCast);
+    cast(TinkerSmeltery.largePlateCast);
+    // tool rods
+    cast(TinkerSmeltery.toolHandleCast);
+    cast(TinkerSmeltery.toughHandleCast);
+    // bow
+    cast(TinkerSmeltery.bowLimbCast);
+    cast(TinkerSmeltery.bowGripCast);
+  }
+
+  /** Generated item with a texture */
+  private ItemModelBuilder basicItem(ResourceLocation item, String texture) {
+    return getBuilder(item.toString())
+      .parent(new ModelFile.UncheckedModelFile("item/generated"))
+      .texture("layer0", new ResourceLocation(item.getNamespace(), "item/" + texture));
+  }
+
+  /** Generated item with a texture */
+  private ItemModelBuilder basicItem(ItemLike item, String texture) {
+    return basicItem(Registry.ITEM.getKey(item.asItem()), texture);
+  }
+
+  /** Creates a part model with the given texture */
+  private MaterialModelBuilder<ItemModelBuilder> part(ItemObject<? extends MaterialItem> part, String texture) {
+    return withExistingParent(part.getId().getPath(), "forge:item/default")
+      .texture("texture", getResource("item/tool/" + texture))
+      .customLoader(MaterialModelBuilder::new);
+  }
+
+  /** Creates a part model in the parts folder */
+  private void part(ItemObject<? extends MaterialItem> part) {
+    part(part, "parts/" + part.getId().getPath());
+  }
+
+  /** Creates models for the given cast object */
+  private void cast(CastItemObject cast) {
+    String name = cast.getName().getPath();
+    basicItem(cast.getId(), "cast/" + name);
+    basicItem(cast.getSand(), "sand_cast/" + name);
+    basicItem(cast.getRedSand(), "red_sand_cast/" + name);
+  }
+}

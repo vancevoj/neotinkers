@@ -1,0 +1,11 @@
+{
+  "parent": "forge:item/default",
+  "loader": "tconstruct:material",
+  "offset": [
+    5,
+    -2
+  ],
+  "textures": {
+    "texture": "tconstruct:item/tool/longbow/limb_bottom"
+  }
+}

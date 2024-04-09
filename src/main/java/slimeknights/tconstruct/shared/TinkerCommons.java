@@ -37,6 +37,7 @@ import slimeknights.mantle.registration.object.ItemObject;
 import slimeknights.tconstruct.common.TinkerModule;
 import slimeknights.tconstruct.common.data.model.ModelSpriteProvider;
 import slimeknights.tconstruct.common.data.model.TinkerBlockStateProvider;
+import slimeknights.tconstruct.common.data.model.TinkerItemModelProvider;
 import slimeknights.tconstruct.common.json.BlockOrEntityCondition;
 import slimeknights.tconstruct.common.json.ConfigEnabledCondition;
 import slimeknights.tconstruct.common.recipe.RecipeCacheInvalidator;
@@ -179,6 +180,7 @@ public final class TinkerCommons extends TinkerModule {
     ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
     boolean client = event.includeClient();
     generator.addProvider(client, new ModelSpriteProvider(generator, existingFileHelper));
+    generator.addProvider(client, new TinkerItemModelProvider(generator, existingFileHelper));
     generator.addProvider(client, new TinkerBlockStateProvider(generator, existingFileHelper));
     generator.addProvider(event.includeServer(), new CommonRecipeProvider(generator));
   }
