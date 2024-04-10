@@ -184,10 +184,14 @@ public abstract class AbstractPartSpriteProvider {
       return this;
     }
 
-    /** Adds a part to the tool with a broken texture */
+    /**
+     * Adds a part to the tool with a broken texture
+     * 1.19 note: to simplify model generators, we changed from a broken prefix to a broken suffix for the part.
+     * If you are not generating models and prefer less effort, just override this method.
+     */
     public ToolSpriteBuilder addBreakablePart(String name, MaterialStatsId statTypes) {
       addPart(name, statTypes);
-      addPart("broken_" + name, statTypes);
+      addPart(name + "_broken", statTypes);
       return this;
     }
 

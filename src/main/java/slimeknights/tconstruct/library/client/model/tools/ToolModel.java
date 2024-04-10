@@ -49,7 +49,6 @@ import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierId;
 import slimeknights.tconstruct.library.recipe.worktable.ModifierSetWorktableRecipe;
-import slimeknights.tconstruct.library.tools.helper.ToolDamageUtil;
 import slimeknights.tconstruct.library.tools.item.IModifiable;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.MaterialIdNBT;
@@ -69,7 +68,6 @@ import java.util.function.Supplier;
 
 /**
  * Model handling all tools, both multipart and non.
- * TODO: migrate broken to an override
  */
 public class ToolModel implements IUnbakedGeometry<ToolModel> {
   /** Shared loader instance */
@@ -177,41 +175,24 @@ public class ToolModel implements IUnbakedGeometry<ToolModel> {
   @Override
   public Collection<Material> getMaterials(IGeometryBakingContext owner, Function<ResourceLocation,UnbakedModel> modelGetter, Set<Pair<String,String>> missingTextureErrors) {
     Set<Material> allTextures = Sets.newHashSet();
+    // default is just a single part named tool, no material
     if (toolParts.isEmpty()) {
-      // we assume if you provide small broken, you also want large broken to simplify things
-      if (owner.hasMaterial(ToolPart.DEFAULT.broken)) {
-        toolParts = ToolPart.DEFAULT_PARTS;
-      } else {
-        toolParts = ToolPart.NO_BROKEN_PARTS;
-      }
+      toolParts = ToolPart.DEFAULT_PARTS;
     }
 
     // after the above condition, we always have parts, so just iterate them
     for (ToolPart part : toolParts) {
       // if material variants, fetch textures from the material model
       if (part.hasMaterials()) {
-        MaterialModel.getMaterialTextures(allTextures, owner, part.getName(false, false), null);
-        // TODO: move broken to an override instead of all this special casing
-        if (part.hasBroken()) {
-          MaterialModel.getMaterialTextures(allTextures, owner, part.getName(true, false), null);
-        }
+        MaterialModel.getMaterialTextures(allTextures, owner, part.getName(false), null);
         if (isLarge) {
-          MaterialModel.getMaterialTextures(allTextures, owner, part.getName(false, true), null);
-          if (part.hasBroken()) {
-            MaterialModel.getMaterialTextures(allTextures, owner, part.getName(true, true), null);
-          }
+          MaterialModel.getMaterialTextures(allTextures, owner, part.getName(true), null);
         }
       } else {
         // static texture
-        allTextures.add(owner.getMaterial(part.getName(false, false)));
-        if (part.hasBroken()) {
-          allTextures.add(owner.getMaterial(part.getName(true, false)));
-        }
+        allTextures.add(owner.getMaterial(part.getName(false)));
         if (isLarge) {
-          allTextures.add(owner.getMaterial(part.getName(false, true)));
-          if (part.hasBroken()) {
-            allTextures.add(owner.getMaterial(part.getName(true, true)));
-          }
+          allTextures.add(owner.getMaterial(part.getName(true)));
         }
       }
     }
@@ -324,7 +305,6 @@ public class ToolModel implements IUnbakedGeometry<ToolModel> {
     }
 
     // add quads for all parts
-    boolean isBroken = tool != null && tool.isBroken();
     TextureAtlasSprite particle = null;
     for (int i = parts.size() - 1; i >= 0; i--) {
       ToolPart part = parts.get(i);
@@ -334,13 +314,13 @@ public class ToolModel implements IUnbakedGeometry<ToolModel> {
         // start by fetching the material we are rendering at this position, should only be null on invalid tools or during the initial bake
         int index = part.index();
         MaterialVariantId material = index < materials.size() ? materials.get(index) : null;
-        TintedSprite materialSprite = MaterialModel.getMaterialSprite(spriteGetter, owner.getMaterial(part.getName(isBroken, false)), material);
+        TintedSprite materialSprite = MaterialModel.getMaterialSprite(spriteGetter, owner.getMaterial(part.getName(false)), material);
         particle = materialSprite.sprite();
 
         // same drill as above, large means more quad fetching but we can use a simplier variant for small
         if (largeTransforms != null) {
           guiQuads.add(List.of(MantleItemLayerModel.getQuadForGui(materialSprite.color(), -1, particle, smallTransforms, materialSprite.emissivity())));
-          fullQuads.add(MaterialModel.getQuadsForMaterial(spriteGetter, owner.getMaterial(part.getName(isBroken, true)), material, -1, largeTransforms, pixels));
+          fullQuads.add(MaterialModel.getQuadsForMaterial(spriteGetter, owner.getMaterial(part.getName(true)), material, -1, largeTransforms, pixels));
         } else {
           List<BakedQuad> quads = MantleItemLayerModel.getQuadsForSprite(materialSprite.color(), -1, particle, smallTransforms, 0, pixels);
           guiQuads.add(filterToGuiQuads(quads));
@@ -348,11 +328,11 @@ public class ToolModel implements IUnbakedGeometry<ToolModel> {
         }
       } else {
         // part without materials
-        particle = spriteGetter.apply(owner.getMaterial(part.getName(isBroken, false)));
+        particle = spriteGetter.apply(owner.getMaterial(part.getName(false)));
         // same drill as above, large means more quad fetching but we can use a simplier variant for small
         if (largeTransforms != null) {
           guiQuads.add(List.of(MantleItemLayerModel.getQuadForGui(-1, -1, particle, smallTransforms, 0)));
-          fullQuads.add(MantleItemLayerModel.getQuadsForSprite(-1, -1, spriteGetter.apply(owner.getMaterial(part.getName(isBroken, true))), largeTransforms, 0, pixels));
+          fullQuads.add(MantleItemLayerModel.getQuadsForSprite(-1, -1, spriteGetter.apply(owner.getMaterial(part.getName(true))), largeTransforms, 0, pixels));
         } else {
           List<BakedQuad> quads = MantleItemLayerModel.getQuadsForSprite(-1, -1, particle, smallTransforms, 0, pixels);
           guiQuads.add(filterToGuiQuads(quads));
@@ -385,20 +365,11 @@ public class ToolModel implements IUnbakedGeometry<ToolModel> {
   /**
    * Data class for a single tool part
    */
-  private record ToolPart(String name, int index, @Nullable String broken) {
+  private record ToolPart(String name, int index) {
     /** Default tool part instance for breakable textures */
-    public static final ToolPart DEFAULT = new ToolPart("tool", -1, "broken");
+    public static final ToolPart DEFAULT = new ToolPart("tool", -1);
     /** Default tool part list if one is not defined */
     public static final List<ToolPart> DEFAULT_PARTS = List.of(DEFAULT);
-    /** Default parts list for when no broken texture is provided */
-    public static final List<ToolPart> NO_BROKEN_PARTS = List.of(new ToolPart(DEFAULT.name, -1, null));
-
-    /**
-     * If true, this part has a broken texture
-     */
-    public boolean hasBroken() {
-      return broken != null;
-    }
 
     /**
      * If true, this part has material variants
@@ -409,17 +380,12 @@ public class ToolModel implements IUnbakedGeometry<ToolModel> {
 
     /**
      * Gets the name for this part
-     * @param isBroken If true, this part is broken
      * @param isLarge  If true, rendering a large tool
      * @return Texture name for this part
      */
-    public String getName(boolean isBroken, boolean isLarge) {
-      String name = this.name;
-      if (isBroken && broken != null) {
-        name = broken;
-      }
+    public String getName(boolean isLarge) {
       if (isLarge) {
-        name = "large_" + name;
+        return "large_" + name;
       }
       return name;
     }
@@ -430,11 +396,7 @@ public class ToolModel implements IUnbakedGeometry<ToolModel> {
     public static ToolPart read(JsonObject json) {
       String name = GsonHelper.getAsString(json, "name");
       int index = GsonHelper.getAsInt(json, "index", -1);
-      String broken = null;
-      if (json.has("broken")) {
-        broken = GsonHelper.getAsString(json, "broken");
-      }
-      return new ToolPart(name, index, broken);
+      return new ToolPart(name, index);
     }
   }
 
@@ -508,10 +470,9 @@ public class ToolModel implements IUnbakedGeometry<ToolModel> {
       // use material IDs for the sake of internal rendering materials
       List<MaterialVariantId> materialIds = MaterialIdNBT.from(stack).getMaterials();
       IToolStackView tool = ToolStack.from(stack);
-      boolean broken = ToolDamageUtil.isBroken(stack);
 
       // if nothing unique, render original
-      if (!broken && materialIds.isEmpty() && tool.getUpgrades().isEmpty()) {
+      if (materialIds.isEmpty() && tool.getUpgrades().isEmpty()) {
         return originalModel;
       }
 
@@ -533,7 +494,7 @@ public class ToolModel implements IUnbakedGeometry<ToolModel> {
 
       // render special model
       try {
-        return cache.get(new ToolCacheKey(materialIds, builder.build(), broken), () -> bakeDynamic(materialIds, tool));
+        return cache.get(new ToolCacheKey(materialIds, builder.build()), () -> bakeDynamic(materialIds, tool));
       } catch (ExecutionException e) {
         TConstruct.LOG.error("Failed to get tool model from cache", e);
         return originalModel;
@@ -542,5 +503,5 @@ public class ToolModel implements IUnbakedGeometry<ToolModel> {
   }
 
   /** Simple data class to cache built tool modifiers, contains everything unique in the textures */
-  private record ToolCacheKey(List<MaterialVariantId> materials, List<Object> modifierData, boolean broken) {}
+  private record ToolCacheKey(List<MaterialVariantId> materials, List<Object> modifierData) {}
 }

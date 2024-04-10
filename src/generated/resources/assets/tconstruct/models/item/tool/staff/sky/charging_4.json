@@ -1,0 +1,25 @@
+{
+  "loader": "tconstruct:tool",
+  "parent": "tconstruct:item/base/staff_charging",
+  "textures": {
+    "tool": "tconstruct:item/tool/staff/sky_4",
+    "large_tool": "tconstruct:item/tool/staff/sky_large_4"
+  },
+  "large": true,
+  "modifier_roots": {
+    "small": [
+      "tconstruct:item/tool/staff/modifiers/sky/4/",
+      "tconstruct:item/tool/staff/modifiers/sky/",
+      "tconstruct:item/tool/staff/modifiers/"
+    ],
+    "large": [
+      "tconstruct:item/tool/staff/large_modifiers/sky/4/",
+      "tconstruct:item/tool/staff/large_modifiers/sky/",
+      "tconstruct:item/tool/staff/large_modifiers/"
+    ]
+  },
+  "first_modifiers": [
+    "tconstruct:dyed",
+    "tconstruct:embellishment"
+  ]
+}

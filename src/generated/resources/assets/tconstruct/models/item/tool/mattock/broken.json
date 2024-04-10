@@ -1,0 +1,27 @@
+{
+  "loader": "tconstruct:tool",
+  "parent": "forge:item/default-tool",
+  "textures": {
+    "axe": "tconstruct:item/tool/mattock/axe_broken",
+    "pick": "tconstruct:item/tool/mattock/pick_broken",
+    "handle": "tconstruct:item/tool/pickaxe/handle"
+  },
+  "modifier_roots": [
+    "tconstruct:item/tool/mattock/modifiers/broken/",
+    "tconstruct:item/tool/mattock/modifiers/"
+  ],
+  "parts": [
+    {
+      "name": "handle",
+      "index": 1
+    },
+    {
+      "name": "axe",
+      "index": 0
+    },
+    {
+      "name": "pick",
+      "index": 2
+    }
+  ]
+}

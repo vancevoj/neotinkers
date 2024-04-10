@@ -2,19 +2,24 @@
   "loader": "tconstruct:tool",
   "parent": "forge:item/default-tool",
   "textures": {
-    "head":        "tconstruct:item/tool/sword/blade",
-    "broken_head": "tconstruct:item/tool/sword/broken_blade",
-    "handle":      "tconstruct:item/tool/sword/handle",
-    "guard":       "tconstruct:item/tool/sword/guard"
+    "head":   "tconstruct:item/tool/sword/blade",
+    "handle": "tconstruct:item/tool/sword/handle",
+    "guard":  "tconstruct:item/tool/sword/guard"
   },
   "modifier_roots": [ "tconstruct:item/tool/sword/modifiers/" ],
   "parts": [
-    { "name": "handle",  "index": 1 },
-    { "name": "head",    "index": 0, "broken": "broken_head" },
-    { "name": "guard", "index": 2 }
+    { "name": "handle", "index": 1 },
+    { "name": "head",   "index": 0 },
+    { "name": "guard",  "index": 2 }
   ],
-  "overrides": [{
-    "predicate": { "tconstruct:charging": 2 },
-    "model": "tconstruct:item/blocking/sword"
-  }]
+  "overrides": [
+    {
+      "predicate": { "tconstruct:charging": 2 },
+      "model": "tconstruct:item/tool/sword/blocking"
+    },
+    {
+      "predicate": { "tconstruct:broken": 1 },
+      "model": "tconstruct:item/tool/sword/broken"
+    }
+  ]
 }

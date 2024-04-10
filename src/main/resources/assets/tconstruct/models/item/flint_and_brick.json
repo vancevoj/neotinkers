@@ -2,12 +2,17 @@
   "loader": "tconstruct:tool",
   "parent": "forge:item/default",
   "textures": {
-    "tool":   "tconstruct:item/tool/flint_and_brick/tool",
-    "broken": "tconstruct:item/tool/flint_and_brick/broken"
+    "tool": "tconstruct:item/tool/flint_and_brick/tool"
   },
   "modifier_roots": [ "tconstruct:item/tool/flint_and_bronze/modifiers/" ],
-  "overrides": [{
-    "predicate": { "tconstruct:charging": 2 },
-    "model": "tconstruct:item/blocking/flint_and_brick"
-  }]
+  "overrides": [
+    {
+      "predicate": { "tconstruct:charging": 2 },
+      "model": "tconstruct:item/tool/flint_and_brick/blocking"
+    },
+    {
+      "predicate": { "tconstruct:broken": 1 },
+      "model": "tconstruct:item/tool/flint_and_brick/broken"
+    }
+  ]
 }

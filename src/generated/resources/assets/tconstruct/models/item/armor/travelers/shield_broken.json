@@ -1,0 +1,15 @@
+{
+  "loader": "tconstruct:tool",
+  "parent": "tconstruct:item/base/shield",
+  "textures": {
+    "tool": "tconstruct:item/tool/armor/travelers/shield_broken"
+  },
+  "modifier_roots": [
+    "tconstruct:item/tool/armor/travelers/shield_modifiers/broken/",
+    "tconstruct:item/tool/armor/travelers/shield_modifiers/"
+  ],
+  "first_modifiers": [
+    "tconstruct:dyed",
+    "tconstruct:embellishment"
+  ]
+}

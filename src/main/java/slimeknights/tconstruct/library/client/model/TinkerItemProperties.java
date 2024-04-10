@@ -11,11 +11,19 @@ import net.minecraft.world.item.UseAnim;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.modifiers.hook.interaction.GeneralInteractionModifierHook;
 import slimeknights.tconstruct.library.tools.helper.ModifierUtil;
+import slimeknights.tconstruct.library.tools.helper.ToolDamageUtil;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.tools.item.ModifiableCrossbowItem;
 
 /** Properties for tinker tools */
 public class TinkerItemProperties {
+  /** ID for broken property */
+  private static final ResourceLocation BROKEN_ID = TConstruct.getResource("broken");
+  /** Property declaring broken */
+  private static final ItemPropertyFunction BROKEN = (stack, level, entity, seed) -> {
+    return ToolDamageUtil.isBroken(stack) ? 1 : 0;
+  };
+
   /** ID for ammo property */
   private static final ResourceLocation AMMO_ID = TConstruct.getResource("ammo");
   /** Int declaring ammo type */
@@ -60,7 +68,13 @@ public class TinkerItemProperties {
   };
 
   /** Registers properties for a tool, including the option to have charge/block animations */
+  public static void registerBrokenProperty(Item item) {
+    ItemProperties.register(item, BROKEN_ID, BROKEN);
+  }
+
+  /** Registers properties for a tool, including the option to have charge/block animations */
   public static void registerToolProperties(Item item) {
+    registerBrokenProperty(item);
     ItemProperties.register(item, CHARGING_ID, CHARGING);
     ItemProperties.register(item, CHARGE_ID, CHARGE);
   }

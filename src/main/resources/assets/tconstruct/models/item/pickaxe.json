@@ -2,19 +2,24 @@
   "loader": "tconstruct:tool",
   "parent": "forge:item/default-tool",
   "textures": {
-    "head":        "tconstruct:item/tool/pickaxe/head",
-    "broken_head": "tconstruct:item/tool/pickaxe/broken_head",
-    "handle":      "tconstruct:item/tool/pickaxe/handle",
-    "binding":     "tconstruct:item/tool/pickaxe/binding"
+    "head":    "tconstruct:item/tool/pickaxe/head",
+    "handle":  "tconstruct:item/tool/pickaxe/handle",
+    "binding": "tconstruct:item/tool/pickaxe/binding"
   },
   "modifier_roots": [ "tconstruct:item/tool/pickaxe/modifiers/" ],
   "parts": [
     { "name": "handle",  "index": 1 },
-    { "name": "head",    "index": 0, "broken": "broken_head" },
+    { "name": "head",    "index": 0 },
     { "name": "binding", "index": 2 }
   ],
-  "overrides": [{
-    "predicate": { "tconstruct:charging": 2 },
-    "model": "tconstruct:item/blocking/pickaxe"
-  }]
+  "overrides": [
+    {
+      "predicate": { "tconstruct:charging": 2 },
+      "model": "tconstruct:item/tool/pickaxe/blocking"
+    },
+    {
+      "predicate": { "tconstruct:broken": 1 },
+      "model": "tconstruct:item/tool/pickaxe/broken"
+    }
+  ]
 }

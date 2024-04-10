@@ -1,0 +1,47 @@
+{
+  "loader": "tconstruct:tool",
+  "parent": "forge:item/default-tool",
+  "textures": {
+    "head": "tconstruct:item/tool/broad_axe/blade_broken",
+    "handle": "tconstruct:item/tool/broad_axe/handle",
+    "back": "tconstruct:item/tool/broad_axe/back_broken",
+    "binding": "tconstruct:item/tool/broad_axe/binding",
+    "large_head": "tconstruct:item/tool/broad_axe/large/blade_broken",
+    "large_handle": "tconstruct:item/tool/broad_axe/large/handle",
+    "large_back": "tconstruct:item/tool/broad_axe/large/back_broken",
+    "large_binding": "tconstruct:item/tool/broad_axe/large/binding"
+  },
+  "modifier_roots": {
+    "small": [
+      "tconstruct:item/tool/broad_axe/modifiers/broken/",
+      "tconstruct:item/tool/broad_axe/modifiers/"
+    ],
+    "large": [
+      "tconstruct:item/tool/broad_axe/large/modifiers/broken/",
+      "tconstruct:item/tool/broad_axe/large/modifiers/"
+    ]
+  },
+  "large": true,
+  "large_offset": [
+    -2,
+    2
+  ],
+  "parts": [
+    {
+      "name": "handle",
+      "index": 1
+    },
+    {
+      "name": "head",
+      "index": 0
+    },
+    {
+      "name": "back",
+      "index": 2
+    },
+    {
+      "name": "binding",
+      "index": 3
+    }
+  ]
+}

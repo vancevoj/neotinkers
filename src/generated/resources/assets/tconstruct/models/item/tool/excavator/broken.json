@@ -1,0 +1,47 @@
+{
+  "loader": "tconstruct:tool",
+  "parent": "forge:item/default-tool",
+  "textures": {
+    "head": "tconstruct:item/tool/excavator/head_broken",
+    "handle": "tconstruct:item/tool/excavator/handle",
+    "grip": "tconstruct:item/tool/excavator/grip",
+    "binding": "tconstruct:item/tool/excavator/binding",
+    "large_head": "tconstruct:item/tool/excavator/large/head_broken",
+    "large_handle": "tconstruct:item/tool/excavator/large/handle",
+    "large_grip": "tconstruct:item/tool/excavator/large/grip",
+    "large_binding": "tconstruct:item/tool/excavator/large/binding"
+  },
+  "modifier_roots": {
+    "small": [
+      "tconstruct:item/tool/excavator/modifiers/broken/",
+      "tconstruct:item/tool/excavator/modifiers/"
+    ],
+    "large": [
+      "tconstruct:item/tool/excavator/large/modifiers/broken/",
+      "tconstruct:item/tool/excavator/large/modifiers/"
+    ]
+  },
+  "large": true,
+  "large_offset": [
+    -2,
+    2
+  ],
+  "parts": [
+    {
+      "name": "handle",
+      "index": 1
+    },
+    {
+      "name": "head",
+      "index": 0
+    },
+    {
+      "name": "grip",
+      "index": 3
+    },
+    {
+      "name": "binding",
+      "index": 2
+    }
+  ]
+}

@@ -2,19 +2,15 @@
   "loader": "tconstruct:tool",
   "parent": "forge:item/default-tool",
   "textures": {
-    "head":          "tconstruct:item/tool/cleaver/head",
-    "broken_head":   "tconstruct:item/tool/cleaver/broken_head",
-    "handle":        "tconstruct:item/tool/cleaver/handle",
-    "guard":         "tconstruct:item/tool/cleaver/guard",
-    "shield":        "tconstruct:item/tool/cleaver/shield",
-    "broken_shield": "tconstruct:item/tool/cleaver/broken_shield",
-    
-    "large_head":          "tconstruct:item/tool/cleaver/large/head",
-    "large_broken_head":   "tconstruct:item/tool/cleaver/large/broken_head",
-    "large_handle":        "tconstruct:item/tool/cleaver/large/handle",
-    "large_guard":         "tconstruct:item/tool/cleaver/large/guard",
-    "large_shield":        "tconstruct:item/tool/cleaver/large/shield",
-    "large_broken_shield": "tconstruct:item/tool/cleaver/large/broken_shield"
+    "head":   "tconstruct:item/tool/cleaver/head",
+    "handle": "tconstruct:item/tool/cleaver/handle",
+    "guard":  "tconstruct:item/tool/cleaver/guard",
+    "shield": "tconstruct:item/tool/cleaver/shield",
+
+    "large_head":   "tconstruct:item/tool/cleaver/large/head",
+    "large_handle": "tconstruct:item/tool/cleaver/large/handle",
+    "large_guard":  "tconstruct:item/tool/cleaver/large/guard",
+    "large_shield": "tconstruct:item/tool/cleaver/large/shield"
   },
   "modifier_roots": {
     "small": [ "tconstruct:item/tool/cleaver/modifiers/" ],
@@ -24,12 +20,18 @@
   "large_offset": [-2, 2],
   "parts": [
     { "name": "handle", "index": 1 },
-    { "name": "head",   "index": 0, "broken": "broken_head" },
-    { "name": "shield", "index": 3, "broken": "broken_shield" },
+    { "name": "head",   "index": 0 },
+    { "name": "shield", "index": 3 },
     { "name": "guard",  "index": 2 }
   ],
-  "overrides": [{
-    "predicate": { "tconstruct:charging": 2 },
-    "model": "tconstruct:item/blocking/cleaver"
-  }]
+  "overrides": [
+    {
+      "predicate": { "tconstruct:charging": 2 },
+      "model": "tconstruct:item/tool/cleaver/blocking"
+    },
+    {
+      "predicate": { "tconstruct:broken": 1 },
+      "model": "tconstruct:item/tool/cleaver/broken"
+    }
+  ]
 }

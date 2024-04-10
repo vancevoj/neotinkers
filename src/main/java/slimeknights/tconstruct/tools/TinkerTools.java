@@ -69,6 +69,7 @@ import slimeknights.tconstruct.library.tools.item.ModifiableStaffItem;
 import slimeknights.tconstruct.library.utils.BlockSideHitListener;
 import slimeknights.tconstruct.tools.data.StationSlotLayoutProvider;
 import slimeknights.tconstruct.tools.data.ToolDefinitionDataProvider;
+import slimeknights.tconstruct.tools.data.ToolItemModelProvider;
 import slimeknights.tconstruct.tools.data.ToolsRecipeProvider;
 import slimeknights.tconstruct.tools.data.material.MaterialDataProvider;
 import slimeknights.tconstruct.tools.data.material.MaterialRecipeProvider;
@@ -241,6 +242,7 @@ public final class TinkerTools extends TinkerModule {
     generator.addProvider(server, new ToolDefinitionDataProvider(generator));
     generator.addProvider(server, new StationSlotLayoutProvider(generator));
     generator.addProvider(server, new MaterialTagProvider(generator, existingFileHelper));
+    generator.addProvider(client, new ToolItemModelProvider(generator, existingFileHelper));
     TinkerMaterialSpriteProvider materialSprites = new TinkerMaterialSpriteProvider();
     TinkerPartSpriteProvider partSprites = new TinkerPartSpriteProvider();
     generator.addProvider(client, new MaterialRenderInfoProvider(generator, materialSprites));

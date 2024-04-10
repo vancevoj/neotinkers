@@ -2,10 +2,8 @@
   "loader": "tconstruct:tool",
   "parent": "tconstruct:item/base/staff",
   "textures": {
-    "tool":         "tconstruct:item/tool/staff/ichor",
-    "broken":       "tconstruct:item/tool/staff/ichor_broken",
-    "large_tool":   "tconstruct:item/tool/staff/ichor_large",
-    "large_broken": "tconstruct:item/tool/staff/ichor_large_broken"
+    "tool":       "tconstruct:item/tool/staff/ichor",
+    "large_tool": "tconstruct:item/tool/staff/ichor_large"
   },
   "large": true,
   "modifier_roots": {
@@ -16,47 +14,51 @@
   "overrides": [
     {
       "predicate": { "tconstruct:charging": 1 },
-      "model": "tconstruct:item/slimestaff/ichor/charging_1"
+      "model": "tconstruct:item/tool/staff/ichor/charging_1"
     },
     {
       "predicate": { "tconstruct:charging": 1, "tconstruct:charge": 0.4 },
-      "model": "tconstruct:item/slimestaff/ichor/charging_2"
+      "model": "tconstruct:item/tool/staff/ichor/charging_2"
     },
     {
       "predicate": { "tconstruct:charging": 1, "tconstruct:charge": 0.7 },
-      "model": "tconstruct:item/slimestaff/ichor/charging_3"
+      "model": "tconstruct:item/tool/staff/ichor/charging_3"
     },
     {
       "predicate": { "tconstruct:charging": 1, "tconstruct:charge": 0.9 },
-      "model": "tconstruct:item/slimestaff/ichor/charging_4"
+      "model": "tconstruct:item/tool/staff/ichor/charging_4"
     },
     {
       "predicate": { "tconstruct:charging": 1, "tconstruct:charge": 1.0 },
-      "model": "tconstruct:item/slimestaff/ichor/charging_5"
+      "model": "tconstruct:item/tool/staff/ichor/charging_5"
     },
     {
       "predicate": { "tconstruct:charging": 2 },
-      "model": "tconstruct:item/slimestaff/ichor/blocking"
+      "model": "tconstruct:item/tool/staff/ichor/blocking"
     },
     {
       "predicate": { "tconstruct:charging": 2, "tconstruct:charge": 0.05 },
-      "model": "tconstruct:item/slimestaff/ichor/blocking_1"
+      "model": "tconstruct:item/tool/staff/ichor/blocking_1"
     },
     {
       "predicate": { "tconstruct:charging": 2, "tconstruct:charge": 0.4 },
-      "model": "tconstruct:item/slimestaff/ichor/blocking_2"
+      "model": "tconstruct:item/tool/staff/ichor/blocking_2"
     },
     {
       "predicate": { "tconstruct:charging": 2, "tconstruct:charge": 0.7 },
-      "model": "tconstruct:item/slimestaff/ichor/blocking_3"
+      "model": "tconstruct:item/tool/staff/ichor/blocking_3"
     },
     {
       "predicate": { "tconstruct:charging": 2, "tconstruct:charge": 0.9 },
-      "model": "tconstruct:item/slimestaff/ichor/blocking_4"
+      "model": "tconstruct:item/tool/staff/ichor/blocking_4"
     },
     {
       "predicate": { "tconstruct:charging": 2, "tconstruct:charge": 1.0 },
-      "model": "tconstruct:item/slimestaff/ichor/blocking_5"
+      "model": "tconstruct:item/tool/staff/ichor/blocking_5"
+    },
+    {
+      "predicate": { "tconstruct:broken": 1 },
+      "model": "tconstruct:item/tool/staff/ichor/broken"
     }
   ]
 }

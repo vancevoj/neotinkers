@@ -2,9 +2,14 @@
   "loader": "tconstruct:tool",
   "parent": "forge:item/default",
   "textures": {
-    "tool":   "tconstruct:item/tool/armor/plate/leggings",
-    "broken": "tconstruct:item/tool/armor/plate/leggings_broken"
+    "tool": "tconstruct:item/tool/armor/plate/leggings"
   },
   "modifier_roots": [ "tconstruct:item/tool/armor/plate/leggings_modifiers/" ],
-  "first_modifiers": [ "tconstruct:embellishment", "tconstruct:golden" ]
+  "first_modifiers": [ "tconstruct:embellishment", "tconstruct:golden" ],
+  "overrides": [
+    {
+      "predicate": { "tconstruct:broken": 1 },
+      "model": "tconstruct:item/armor/plate/leggings_broken"
+    }
+  ]
 }

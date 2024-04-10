@@ -1,0 +1,47 @@
+{
+  "loader": "tconstruct:tool",
+  "parent": "forge:item/default-tool",
+  "textures": {
+    "head": "tconstruct:item/tool/cleaver/head_broken",
+    "handle": "tconstruct:item/tool/cleaver/handle",
+    "guard": "tconstruct:item/tool/cleaver/guard",
+    "shield": "tconstruct:item/tool/cleaver/shield_broken",
+    "large_head": "tconstruct:item/tool/cleaver/large/head_broken",
+    "large_handle": "tconstruct:item/tool/cleaver/large/handle",
+    "large_guard": "tconstruct:item/tool/cleaver/large/guard",
+    "large_shield": "tconstruct:item/tool/cleaver/large/shield_broken"
+  },
+  "modifier_roots": {
+    "small": [
+      "tconstruct:item/tool/cleaver/modifiers/broken/",
+      "tconstruct:item/tool/cleaver/modifiers/"
+    ],
+    "large": [
+      "tconstruct:item/tool/cleaver/large/modifiers/broken/",
+      "tconstruct:item/tool/cleaver/large/modifiers/"
+    ]
+  },
+  "large": true,
+  "large_offset": [
+    -2,
+    2
+  ],
+  "parts": [
+    {
+      "name": "handle",
+      "index": 1
+    },
+    {
+      "name": "head",
+      "index": 0
+    },
+    {
+      "name": "shield",
+      "index": 3
+    },
+    {
+      "name": "guard",
+      "index": 2
+    }
+  ]
+}

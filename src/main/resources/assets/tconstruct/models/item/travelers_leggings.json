@@ -2,9 +2,14 @@
   "loader": "tconstruct:tool",
   "parent": "forge:item/default",
   "textures": {
-    "tool":   "tconstruct:item/tool/armor/travelers/pants",
-    "broken": "tconstruct:item/tool/armor/travelers/pants_broken"
+    "tool": "tconstruct:item/tool/armor/travelers/pants"
   },
   "modifier_roots": [ "tconstruct:item/tool/armor/travelers/pants_modifiers/" ],
-  "first_modifiers": [ "tconstruct:dyed", "tconstruct:golden" ]
+  "first_modifiers": [ "tconstruct:dyed", "tconstruct:golden" ],
+  "overrides": [
+    {
+      "predicate": { "tconstruct:broken": 1 },
+      "model": "tconstruct:item/armor/travelers/leggings_broken"
+    }
+  ]
 }

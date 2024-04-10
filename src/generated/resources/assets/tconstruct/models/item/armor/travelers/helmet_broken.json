@@ -1,0 +1,15 @@
+{
+  "loader": "tconstruct:tool",
+  "parent": "forge:item/default",
+  "textures": {
+    "tool": "tconstruct:item/tool/armor/travelers/goggles_broken"
+  },
+  "modifier_roots": [
+    "tconstruct:item/tool/armor/travelers/goggle_modifiers/broken/",
+    "tconstruct:item/tool/armor/travelers/goggle_modifiers/"
+  ],
+  "first_modifiers": [
+    "tconstruct:dyed",
+    "tconstruct:golden"
+  ]
+}

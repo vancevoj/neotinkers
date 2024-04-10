@@ -1,0 +1,27 @@
+{
+  "loader": "tconstruct:tool",
+  "parent": "tconstruct:item/base/staff",
+  "textures": {
+    "tool": "tconstruct:item/tool/staff/ichor_broken",
+    "large_tool": "tconstruct:item/tool/staff/ichor_large_broken"
+  },
+  "large": true,
+  "modifier_roots": {
+    "small": [
+      "tconstruct:item/tool/staff/modifiers/ichor/broken/",
+      "tconstruct:item/tool/staff/modifiers/ichor/",
+      "tconstruct:item/tool/staff/modifiers/broken/",
+      "tconstruct:item/tool/staff/modifiers/"
+    ],
+    "large": [
+      "tconstruct:item/tool/staff/large_modifiers/ichor/broken/",
+      "tconstruct:item/tool/staff/large_modifiers/ichor/",
+      "tconstruct:item/tool/staff/large_modifiers/broken/",
+      "tconstruct:item/tool/staff/large_modifiers/"
+    ]
+  },
+  "first_modifiers": [
+    "tconstruct:dyed",
+    "tconstruct:embellishment"
+  ]
+}

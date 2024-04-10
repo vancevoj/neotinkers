@@ -1,0 +1,25 @@
+{
+  "loader": "tconstruct:tool",
+  "parent": "forge:item/default",
+  "textures": {
+    "tool": "tconstruct:item/tool/armor/slime/helmet_broken",
+    "skull": "tconstruct:item/tool/armor/slime/helmet_skull"
+  },
+  "modifier_roots": [
+    "tconstruct:item/tool/armor/slime/skull_modifiers/broken/",
+    "tconstruct:item/tool/armor/slime/skull_modifiers/"
+  ],
+  "parts": [
+    {
+      "name": "skull",
+      "index": 0
+    },
+    {
+      "name": "tool"
+    }
+  ],
+  "first_modifiers": [
+    "tconstruct:embellishment",
+    "tconstruct:golden"
+  ]
+}

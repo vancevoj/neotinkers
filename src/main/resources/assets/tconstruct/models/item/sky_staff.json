@@ -2,10 +2,8 @@
   "loader": "tconstruct:tool",
   "parent": "tconstruct:item/base/staff",
   "textures": {
-    "tool":         "tconstruct:item/tool/staff/sky",
-    "broken":       "tconstruct:item/tool/staff/sky_broken",
-    "large_tool":   "tconstruct:item/tool/staff/sky_large",
-    "large_broken": "tconstruct:item/tool/staff/sky_large_broken"
+    "tool":       "tconstruct:item/tool/staff/sky",
+    "large_tool": "tconstruct:item/tool/staff/sky_large"
   },
   "large": true,
   "modifier_roots": {
@@ -16,47 +14,51 @@
   "overrides": [
     {
       "predicate": { "tconstruct:charging": 1 },
-      "model": "tconstruct:item/slimestaff/sky/charging_1"
+      "model": "tconstruct:item/tool/staff/sky/charging_1"
     },
     {
       "predicate": { "tconstruct:charging": 1, "tconstruct:charge": 0.4 },
-      "model": "tconstruct:item/slimestaff/sky/charging_2"
+      "model": "tconstruct:item/tool/staff/sky/charging_2"
     },
     {
       "predicate": { "tconstruct:charging": 1, "tconstruct:charge": 0.7 },
-      "model": "tconstruct:item/slimestaff/sky/charging_3"
+      "model": "tconstruct:item/tool/staff/sky/charging_3"
     },
     {
       "predicate": { "tconstruct:charging": 1, "tconstruct:charge": 0.9 },
-      "model": "tconstruct:item/slimestaff/sky/charging_4"
+      "model": "tconstruct:item/tool/staff/sky/charging_4"
     },
     {
       "predicate": { "tconstruct:charging": 1, "tconstruct:charge": 1.0 },
-      "model": "tconstruct:item/slimestaff/sky/charging_5"
+      "model": "tconstruct:item/tool/staff/sky/charging_5"
     },
     {
       "predicate": { "tconstruct:charging": 2 },
-      "model": "tconstruct:item/slimestaff/sky/blocking"
+      "model": "tconstruct:item/tool/staff/sky/blocking"
     },
     {
       "predicate": { "tconstruct:charging": 2, "tconstruct:charge": 0.05 },
-      "model": "tconstruct:item/slimestaff/sky/blocking_1"
+      "model": "tconstruct:item/tool/staff/sky/blocking_1"
     },
     {
       "predicate": { "tconstruct:charging": 2, "tconstruct:charge": 0.4 },
-      "model": "tconstruct:item/slimestaff/sky/blocking_2"
+      "model": "tconstruct:item/tool/staff/sky/blocking_2"
     },
     {
       "predicate": { "tconstruct:charging": 2, "tconstruct:charge": 0.7 },
-      "model": "tconstruct:item/slimestaff/sky/blocking_3"
+      "model": "tconstruct:item/tool/staff/sky/blocking_3"
     },
     {
       "predicate": { "tconstruct:charging": 2, "tconstruct:charge": 0.9 },
-      "model": "tconstruct:item/slimestaff/sky/blocking_4"
+      "model": "tconstruct:item/tool/staff/sky/blocking_4"
     },
     {
       "predicate": { "tconstruct:charging": 2, "tconstruct:charge": 1.0 },
-      "model": "tconstruct:item/slimestaff/sky/blocking_5"
+      "model": "tconstruct:item/tool/staff/sky/blocking_5"
+    },
+    {
+      "predicate": { "tconstruct:broken": 1 },
+      "model": "tconstruct:item/tool/staff/sky/broken"
     }
   ]
 }
