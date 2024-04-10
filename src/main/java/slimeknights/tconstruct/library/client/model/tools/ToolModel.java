@@ -300,7 +300,7 @@ public class ToolModel implements IUnbakedGeometry<ToolModel> {
         addModifierQuads(spriteGetter, modifierModels, firstModifiers, tool, quads -> {
           guiConsumer.accept(quads);
           fullQuads.add(quads);
-        }, null, Transformation.identity(), false);
+        }, pixels, Transformation.identity(), false);
       }
     }
 
@@ -322,7 +322,7 @@ public class ToolModel implements IUnbakedGeometry<ToolModel> {
           guiQuads.add(List.of(MantleItemLayerModel.getQuadForGui(materialSprite.color(), -1, particle, smallTransforms, materialSprite.emissivity())));
           fullQuads.add(MaterialModel.getQuadsForMaterial(spriteGetter, owner.getMaterial(part.getName(true)), material, -1, largeTransforms, pixels));
         } else {
-          List<BakedQuad> quads = MantleItemLayerModel.getQuadsForSprite(materialSprite.color(), -1, particle, smallTransforms, 0, pixels);
+          List<BakedQuad> quads = MantleItemLayerModel.getQuadsForSprite(materialSprite.color(), -1, particle, smallTransforms, materialSprite.emissivity(), pixels);
           guiQuads.add(filterToGuiQuads(quads));
           fullQuads.add(quads);
         }
