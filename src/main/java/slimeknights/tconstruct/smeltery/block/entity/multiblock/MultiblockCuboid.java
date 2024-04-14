@@ -12,6 +12,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Plane;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.Level;
@@ -395,19 +396,19 @@ public abstract class MultiblockCuboid<T extends MultiblockStructureData> {
 
   /**
    * Reads the structure data from Tag
-   * @param  nbt  Tag tag
+   * @param nbt  Tag tag
+   * @param controllerPos  Position of the controller block entity, to store them relatively. If you wish to store absolutely, use {@link BlockPos#ZERO}.
    * @return Structure data, or null if invalid
    */
   @Nullable
-  public T readFromTag(CompoundTag nbt) {
-    BlockPos minPos = TagUtil.readPos(nbt, MultiblockStructureData.TAG_MIN);
-    BlockPos maxPos = TagUtil.readPos(nbt, MultiblockStructureData.TAG_MAX);
+  public T readFromTag(CompoundTag nbt, BlockPos controllerPos) {
+    BlockPos minPos = TagUtil.readOptionalPos(nbt, MultiblockStructureData.TAG_MIN, controllerPos);
+    BlockPos maxPos = TagUtil.readOptionalPos(nbt, MultiblockStructureData.TAG_MAX, controllerPos);
     if (minPos == null || maxPos == null) {
       return null;
     }
-    // will be empty client side
-    Set<BlockPos> extra = ImmutableSet.copyOf(readPosList(nbt, MultiblockStructureData.TAG_EXTRA_POS));
-    return create(minPos, maxPos, extra);
+    // extra positions will be empty client side
+    return create(minPos, maxPos, ImmutableSet.copyOf(readPosList(nbt, MultiblockStructureData.TAG_EXTRA_POS, controllerPos)));
   }
 
   /**
@@ -423,21 +424,20 @@ public abstract class MultiblockCuboid<T extends MultiblockStructureData> {
    * Reads a set of positions from a Tag position list
    * @param rootTag  Root Tag tag
    * @param key      Key to read
+   * @param offset   Offset position, for saving relatively. Use {@link BlockPos#ZERO} for absolute
    * @return  Set of positions
    */
-  protected static Collection<BlockPos> readPosList(CompoundTag rootTag, String key) {
-    List<BlockPos> collection;
-    if (rootTag.contains(key, Tag.TAG_LIST)) {
-      ListTag list = rootTag.getList(key, Tag.TAG_COMPOUND);
-      collection = new ArrayList<>(list.size());
-      for (int i = 0; i < list.size(); i++) {
-        BlockPos pos = TagUtil.readPos(list.getCompound(i));
-        if (pos != null) {
-          collection.add(pos);
-        }
+  protected static Collection<BlockPos> readPosList(CompoundTag rootTag, String key, BlockPos offset) {
+    if (!rootTag.contains(key, Tag.TAG_LIST)) {
+      return Collections.emptyList();
+    }
+    ListTag list = rootTag.getList(key, Tag.TAG_COMPOUND);
+    List<BlockPos> collection = new ArrayList<>(list.size());
+    for (int i = 0; i < list.size(); i++) {
+      BlockPos pos = NbtUtils.readBlockPos(list.getCompound(i));
+      if (!pos.equals(BlockPos.ZERO)) {
+        collection.add(pos.offset(offset));
       }
-    } else {
-      collection = Collections.emptyList();
     }
     return collection;
   }

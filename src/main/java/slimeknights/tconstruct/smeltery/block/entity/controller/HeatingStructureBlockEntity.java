@@ -64,10 +64,10 @@ import java.util.function.Consumer;
 import static slimeknights.mantle.util.RetexturedHelper.TAG_TEXTURE;
 
 public abstract class HeatingStructureBlockEntity extends NameableBlockEntity implements IMasterLogic, ISmelteryTankHandler, IRetexturedBlockEntity {
-  private static final String TAG_STRUCTURE = "structure";
+  private static final String TAG_STRUCTURE = "multiblock";
   private static final String TAG_TANK = "tank";
   private static final String TAG_INVENTORY = "inventory";
-  private static final String TAG_ERROR_POS = "errorPos";
+  private static final String TAG_ERROR_POS = "lastError";
 
   /** Ticker instance for the serverside */
   public static final BlockEntityTicker<HeatingStructureBlockEntity> SERVER_TICKER = (level, pos, state, self) -> self.serverTick(level, pos, state);
@@ -570,14 +570,14 @@ public abstract class HeatingStructureBlockEntity extends NameableBlockEntity im
       meltingInventory.readFromTag(nbt.getCompound(TAG_INVENTORY));
     }
     if (nbt.contains(TAG_STRUCTURE, Tag.TAG_COMPOUND)) {
-      setStructure(multiblock.readFromTag(nbt.getCompound(TAG_STRUCTURE)));
+      setStructure(multiblock.readFromTag(nbt.getCompound(TAG_STRUCTURE), this.worldPosition));
       if (structure != null) {
         fluidCapability = LazyOptional.of(() -> tank);
       }
     }
     // only exists to be sent server to client in update packets
     if (nbt.contains(TAG_ERROR_POS, Tag.TAG_COMPOUND)) {
-      this.errorPos = NbtUtils.readBlockPos(nbt.getCompound(TAG_ERROR_POS));
+      this.errorPos = NbtUtils.readBlockPos(nbt.getCompound(TAG_ERROR_POS)).offset(this.worldPosition);
     }
     fuelModule.readFromTag(nbt);
     if (nbt.contains(TAG_TEXTURE, Tag.TAG_STRING)) {
@@ -591,7 +591,7 @@ public abstract class HeatingStructureBlockEntity extends NameableBlockEntity im
     // Tag that just writes to disk
     super.saveAdditional(compound);
     if (structure != null) {
-      compound.put(TAG_STRUCTURE, structure.writeToTag());
+      compound.put(TAG_STRUCTURE, structure.writeToTag(this.worldPosition));
     }
     fuelModule.writeToTag(compound);
   }
@@ -612,11 +612,11 @@ public abstract class HeatingStructureBlockEntity extends NameableBlockEntity im
     // Tag that just syncs to client
     CompoundTag nbt = super.getUpdateTag();
     if (structure != null) {
-      nbt.put(TAG_STRUCTURE, structure.writeClientTag());
+      nbt.put(TAG_STRUCTURE, structure.writeClientTag(this.worldPosition));
     }
     // sync error position, not actually saved in Tag
     if (errorPos != null) {
-      nbt.put(TAG_ERROR_POS, NbtUtils.writeBlockPos(errorPos));
+      nbt.put(TAG_ERROR_POS, NbtUtils.writeBlockPos(errorPos.subtract(this.worldPosition)));
     }
     return nbt;
   }

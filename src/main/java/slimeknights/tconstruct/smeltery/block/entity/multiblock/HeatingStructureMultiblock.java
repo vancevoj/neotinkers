@@ -5,6 +5,7 @@ import lombok.Getter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtUtils;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -12,7 +13,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import slimeknights.mantle.block.entity.MantleBlockEntity;
 import slimeknights.tconstruct.common.multiblock.IMasterLogic;
 import slimeknights.tconstruct.common.multiblock.IServantLogic;
-import slimeknights.tconstruct.library.utils.TagUtil;
 import slimeknights.tconstruct.smeltery.block.component.SearedBlock;
 import slimeknights.tconstruct.smeltery.block.entity.multiblock.HeatingStructureMultiblock.StructureData;
 
@@ -69,18 +69,13 @@ public abstract class HeatingStructureMultiblock<T extends MantleBlockEntity & I
     return super.detectMultiblock(world, master, facing);
   }
 
-  /**
-   * Reads the structure data from Tag
-   * @param  nbt  Tag tag
-   * @return Structure data, or null if invalid
-   */
   @Override
   @Nullable
-  public StructureData readFromTag(CompoundTag nbt) {
+  public StructureData readFromTag(CompoundTag nbt, BlockPos controllerPos) {
     // add all tanks from Tag, will be picked up in the create call
     tanks.clear();
-    tanks.addAll(readPosList(nbt, TAG_TANKS));
-    return super.readFromTag(nbt);
+    tanks.addAll(readPosList(nbt, TAG_TANKS, controllerPos));
+    return super.readFromTag(nbt, controllerPos);
   }
 
   /**
@@ -265,21 +260,22 @@ public abstract class HeatingStructureMultiblock<T extends MantleBlockEntity & I
     }
 
     @Override
-    public CompoundTag writeClientTag() {
-      CompoundTag nbt = super.writeClientTag();
-      nbt.put(TAG_TANKS, writePosList(tanks));
+    public CompoundTag writeClientTag(BlockPos controllerPos) {
+      CompoundTag nbt = super.writeClientTag(controllerPos);
+      nbt.put(TAG_TANKS, writePosList(tanks, controllerPos));
       return nbt;
     }
 
     /**
      * Writes this structure to Tag
      * @return  structure as Tag
+     * @param controllerPos  Position of the controller for relative saving, use {@link BlockPos#ZERO} for absolute.
      */
     @Override
-    public CompoundTag writeToTag() {
-      CompoundTag nbt = super.writeToTag();
+    public CompoundTag writeToTag(BlockPos controllerPos) {
+      CompoundTag nbt = super.writeToTag(controllerPos);
       if (insideCheck != null) {
-        nbt.put(TAG_INSIDE_CHECK, TagUtil.writePos(insideCheck));
+        nbt.put(TAG_INSIDE_CHECK, NbtUtils.writeBlockPos(insideCheck.subtract(controllerPos)));
       }
       return nbt;
     }

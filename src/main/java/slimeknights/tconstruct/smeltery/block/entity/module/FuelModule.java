@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.inventory.ContainerData;
@@ -19,7 +20,6 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.common.util.NonNullConsumer;
 import net.minecraftforge.common.util.NonNullFunction;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
 import net.minecraftforge.items.IItemHandler;
@@ -30,7 +30,6 @@ import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.recipe.TinkerRecipeTypes;
 import slimeknights.tconstruct.library.recipe.fuel.MeltingFuel;
 import slimeknights.tconstruct.library.recipe.fuel.MeltingFuelLookup;
-import slimeknights.tconstruct.library.utils.TagUtil;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -324,7 +323,7 @@ public class FuelModule implements ContainerData {
   /* Tag */
   private static final String TAG_FUEL = "fuel";
   private static final String TAG_TEMPERATURE = "temperature";
-  private static final String TAG_LAST_FUEL = "last_fuel_tank";
+  private static final String TAG_LAST_FUEL = "last_fuel";
 
   /**
    * Reads the fuel from NBT
@@ -337,8 +336,8 @@ public class FuelModule implements ContainerData {
     if (nbt.contains(TAG_TEMPERATURE, Tag.TAG_ANY_NUMERIC)) {
       temperature = nbt.getInt(TAG_TEMPERATURE);
     }
-    if (nbt.contains(TAG_LAST_FUEL, Tag.TAG_ANY_NUMERIC)) {
-      lastPos = TagUtil.readPos(nbt, TAG_LAST_FUEL);
+    if (nbt.contains(TAG_LAST_FUEL, Tag.TAG_COMPOUND)) {
+      lastPos = NbtUtils.readBlockPos(nbt.getCompound(TAG_LAST_FUEL)).offset(parent.getBlockPos());
     }
   }
 
@@ -352,7 +351,7 @@ public class FuelModule implements ContainerData {
     nbt.putInt(TAG_TEMPERATURE, temperature);
     // technically unneeded for melters, but does not hurt to add
     if (lastPos != NULL_POS) {
-      nbt.put(TAG_LAST_FUEL, TagUtil.writePos(lastPos));
+      nbt.put(TAG_LAST_FUEL, NbtUtils.writeBlockPos(lastPos.subtract(parent.getBlockPos())));
     }
     return nbt;
   }
@@ -488,7 +487,7 @@ public class FuelModule implements ContainerData {
           if (!pos.equals(mainTank)) {
             BlockEntity te = world.getBlockEntity(pos);
             if (te != null) {
-              LazyOptional<IFluidHandler> handler = te.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY);
+              LazyOptional<IFluidHandler> handler = te.getCapability(ForgeCapabilities.FLUID_HANDLER);
               if (handler.isPresent()) {
                 handler.addListener(displayListener);
                 tankDisplayHandlers.add(handler);

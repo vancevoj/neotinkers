@@ -4,6 +4,7 @@ import lombok.Getter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
@@ -17,7 +18,7 @@ import slimeknights.tconstruct.library.utils.TagUtil;
 import javax.annotation.Nullable;
 
 public class ServantTileEntity extends MantleBlockEntity implements IServantLogic {
-  private static final String TAG_MASTER_POS = "masterPos";
+  private static final String TAG_MASTER_POS = "masterOffset";
   private static final String TAG_MASTER_BLOCK = "masterBlock";
 
   @Getter
@@ -111,7 +112,7 @@ public class ServantTileEntity extends MantleBlockEntity implements IServantLogi
    * @param tags  NBT to read
    */
   protected void readMaster(CompoundTag tags) {
-    BlockPos masterPos = TagUtil.readPos(tags, TAG_MASTER_POS);
+    BlockPos masterPos = TagUtil.readOptionalPos(tags, TAG_MASTER_POS, this.worldPosition);
     Block masterBlock = null;
     // if the master position is valid, get the master block
     if (masterPos != null && tags.contains(TAG_MASTER_BLOCK, Tag.TAG_STRING)) {
@@ -139,7 +140,7 @@ public class ServantTileEntity extends MantleBlockEntity implements IServantLogi
    */
   protected CompoundTag writeMaster(CompoundTag tags) {
     if (masterPos != null && masterBlock != null) {
-      tags.put(TAG_MASTER_POS, TagUtil.writePos(masterPos));
+      tags.put(TAG_MASTER_POS, NbtUtils.writeBlockPos(masterPos.subtract(this.worldPosition)));
       tags.putString(TAG_MASTER_BLOCK, Registry.BLOCK.getKey(masterBlock).toString());
     }
     return tags;
