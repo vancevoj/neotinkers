@@ -37,7 +37,7 @@
       "statType": "tconstruct:plate"
     },
     {
-      "path": "tconstruct:item/tool/armor/plate/helmet_modifiers/tconstruct_embellishment_broken",
+      "path": "tconstruct:item/tool/armor/plate/helmet_modifiers/broken/tconstruct_embellishment",
       "statType": "tconstruct:plate"
     },
     {
@@ -45,7 +45,7 @@
       "statType": "tconstruct:plate"
     },
     {
-      "path": "tconstruct:item/tool/armor/plate/chestplate_modifiers/tconstruct_embellishment_broken",
+      "path": "tconstruct:item/tool/armor/plate/chestplate_modifiers/broken/tconstruct_embellishment",
       "statType": "tconstruct:plate"
     },
     {
@@ -53,7 +53,7 @@
       "statType": "tconstruct:plate"
     },
     {
-      "path": "tconstruct:item/tool/armor/plate/leggings_modifiers/tconstruct_embellishment_broken",
+      "path": "tconstruct:item/tool/armor/plate/leggings_modifiers/broken/tconstruct_embellishment",
       "statType": "tconstruct:plate"
     },
     {
@@ -61,7 +61,7 @@
       "statType": "tconstruct:plate"
     },
     {
-      "path": "tconstruct:item/tool/armor/plate/boot_modifiers/tconstruct_embellishment_broken",
+      "path": "tconstruct:item/tool/armor/plate/boot_modifiers/broken/tconstruct_embellishment",
       "statType": "tconstruct:plate"
     },
     {
@@ -77,7 +77,7 @@
       "statType": "tconstruct:plate"
     },
     {
-      "path": "tconstruct:item/tool/armor/travelers/shield_modifiers/tconstruct_embellishment_broken",
+      "path": "tconstruct:item/tool/armor/travelers/shield_modifiers/broken/tconstruct_embellishment",
       "statType": "tconstruct:plate"
     },
     {
@@ -85,7 +85,7 @@
       "statType": "tconstruct:plate"
     },
     {
-      "path": "tconstruct:item/tool/armor/plate/shield_modifiers/tconstruct_embellishment_broken",
+      "path": "tconstruct:item/tool/armor/plate/shield_modifiers/broken/tconstruct_embellishment",
       "statType": "tconstruct:plate"
     },
     {
@@ -93,7 +93,7 @@
       "statType": "tconstruct:plate"
     },
     {
-      "path": "tconstruct:item/tool/armor/plate/shield_large_modifiers/tconstruct_embellishment_broken",
+      "path": "tconstruct:item/tool/armor/plate/shield_large_modifiers/broken/tconstruct_embellishment",
       "statType": "tconstruct:plate"
     },
     {
@@ -109,7 +109,7 @@
       "statType": "tconstruct:slimesuit"
     },
     {
-      "path": "tconstruct:item/tool/armor/slime/skull_modifiers/tconstruct_embellishment_broken",
+      "path": "tconstruct:item/tool/armor/slime/skull_modifiers/broken/tconstruct_embellishment",
       "statType": "tconstruct:slimesuit"
     },
     {
@@ -117,7 +117,7 @@
       "statType": "tconstruct:slimesuit"
     },
     {
-      "path": "tconstruct:item/tool/armor/slime/wings_modifiers/tconstruct_embellishment_broken",
+      "path": "tconstruct:item/tool/armor/slime/wings_modifiers/broken/tconstruct_embellishment",
       "statType": "tconstruct:slimesuit"
     },
     {
@@ -125,7 +125,7 @@
       "statType": "tconstruct:slimesuit"
     },
     {
-      "path": "tconstruct:item/tool/armor/slime/shell_modifiers/tconstruct_embellishment_broken",
+      "path": "tconstruct:item/tool/armor/slime/shell_modifiers/broken/tconstruct_embellishment",
       "statType": "tconstruct:slimesuit"
     },
     {
@@ -133,7 +133,7 @@
       "statType": "tconstruct:slimesuit"
     },
     {
-      "path": "tconstruct:item/tool/armor/slime/boot_modifiers/tconstruct_embellishment_broken",
+      "path": "tconstruct:item/tool/armor/slime/boot_modifiers/broken/tconstruct_embellishment",
       "statType": "tconstruct:slimesuit"
     },
     {

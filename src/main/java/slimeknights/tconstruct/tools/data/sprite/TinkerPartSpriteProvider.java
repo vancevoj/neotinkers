@@ -40,23 +40,23 @@ public class TinkerPartSpriteProvider extends AbstractPartSpriteProvider {
 
     // plate textures
     addSprite("armor/plate/helmet_modifiers/tconstruct_embellishment", PLATE);
-    addSprite("armor/plate/helmet_modifiers/tconstruct_embellishment_broken", PLATE);
+    addSprite("armor/plate/helmet_modifiers/broken/tconstruct_embellishment", PLATE);
     addSprite("armor/plate/chestplate_modifiers/tconstruct_embellishment", PLATE);
-    addSprite("armor/plate/chestplate_modifiers/tconstruct_embellishment_broken", PLATE);
+    addSprite("armor/plate/chestplate_modifiers/broken/tconstruct_embellishment", PLATE);
     addSprite("armor/plate/leggings_modifiers/tconstruct_embellishment", PLATE);
-    addSprite("armor/plate/leggings_modifiers/tconstruct_embellishment_broken", PLATE);
+    addSprite("armor/plate/leggings_modifiers/broken/tconstruct_embellishment", PLATE);
     addSprite("armor/plate/boot_modifiers/tconstruct_embellishment", PLATE);
-    addSprite("armor/plate/boot_modifiers/tconstruct_embellishment_broken", PLATE);
+    addSprite("armor/plate/boot_modifiers/broken/tconstruct_embellishment", PLATE);
     addTexture("models/armor/plate/layer_1", PLATE);
     addTexture("models/armor/plate/layer_2", PLATE);
 
     // shield textures
     addSprite("armor/travelers/shield_modifiers/tconstruct_embellishment", PLATE);
-    addSprite("armor/travelers/shield_modifiers/tconstruct_embellishment_broken", PLATE);
+    addSprite("armor/travelers/shield_modifiers/broken/tconstruct_embellishment", PLATE);
     addSprite("armor/plate/shield_modifiers/tconstruct_embellishment", PLATE);
-    addSprite("armor/plate/shield_modifiers/tconstruct_embellishment_broken", PLATE);
+    addSprite("armor/plate/shield_modifiers/broken/tconstruct_embellishment", PLATE);
     addSprite("armor/plate/shield_large_modifiers/tconstruct_embellishment", PLATE);
-    addSprite("armor/plate/shield_large_modifiers/tconstruct_embellishment_broken", PLATE);
+    addSprite("armor/plate/shield_large_modifiers/broken/tconstruct_embellishment", PLATE);
 
     // staff
     addSprite("staff/modifiers/tconstruct_embellishment", WOOD);
@@ -64,13 +64,13 @@ public class TinkerPartSpriteProvider extends AbstractPartSpriteProvider {
 
     // slimesuit textures
     addSprite("armor/slime/skull_modifiers/tconstruct_embellishment", SLIMESUIT);
-    addSprite("armor/slime/skull_modifiers/tconstruct_embellishment_broken", SLIMESUIT);
+    addSprite("armor/slime/skull_modifiers/broken/tconstruct_embellishment", SLIMESUIT);
     addSprite("armor/slime/wings_modifiers/tconstruct_embellishment", SLIMESUIT);
-    addSprite("armor/slime/wings_modifiers/tconstruct_embellishment_broken", SLIMESUIT);
+    addSprite("armor/slime/wings_modifiers/broken/tconstruct_embellishment", SLIMESUIT);
     addSprite("armor/slime/shell_modifiers/tconstruct_embellishment", SLIMESUIT);
-    addSprite("armor/slime/shell_modifiers/tconstruct_embellishment_broken", SLIMESUIT);
+    addSprite("armor/slime/shell_modifiers/broken/tconstruct_embellishment", SLIMESUIT);
     addSprite("armor/slime/boot_modifiers/tconstruct_embellishment", SLIMESUIT);
-    addSprite("armor/slime/boot_modifiers/tconstruct_embellishment_broken", SLIMESUIT);
+    addSprite("armor/slime/boot_modifiers/broken/tconstruct_embellishment", SLIMESUIT);
     addTexture("models/armor/slime/layer_1", SLIMESUIT);
     addTexture("models/armor/slime/layer_2", SLIMESUIT);
     addTexture("models/armor/slime/wings", SLIMESUIT);
