@@ -6,7 +6,6 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 import net.minecraft.network.chat.Component;
 import slimeknights.tconstruct.library.modifiers.Modifier;
-import slimeknights.tconstruct.library.modifiers.dynamic.ComposableModifier.TooltipDisplay;
 import slimeknights.tconstruct.library.modifiers.util.ModifierHookMap;
 import slimeknights.tconstruct.library.modifiers.util.ModifierLevelDisplay;
 
@@ -44,6 +43,9 @@ public class BasicModifier extends Modifier {
     return advanced ? tooltipDisplay != TooltipDisplay.NEVER
                     : tooltipDisplay == TooltipDisplay.ALWAYS;
   }
+
+  /** Determines when this modifier shows in tooltips */
+  public enum TooltipDisplay { ALWAYS, TINKER_STATION, NEVER }
 
   /**
    * Builder to create simple static modifiers. Similar to {@link slimeknights.tconstruct.library.modifiers.dynamic.ComposableModifier.Builder}, except more efficient as we don't require it be JSON serializable.

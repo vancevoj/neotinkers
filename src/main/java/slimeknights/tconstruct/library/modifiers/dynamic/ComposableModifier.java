@@ -62,9 +62,6 @@ public class ComposableModifier extends BasicModifier {
     return getHook(TinkerHooks.DISPLAY_NAME).getDisplayName(tool, entry, entry.getDisplayName());
   }
 
-  /** Determines when this modifier shows in tooltips */
-  public enum TooltipDisplay { ALWAYS, TINKER_STATION, NEVER }
-
   /** Computes the recommended priority for a set of modifier modules */
   private static int computePriority(List<ModuleWithHooks> modules) {
     // poll all modules to find who has a priority preference
