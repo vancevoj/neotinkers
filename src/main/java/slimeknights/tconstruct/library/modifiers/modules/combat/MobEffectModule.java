@@ -24,6 +24,7 @@ import slimeknights.tconstruct.library.modifiers.TinkerHooks;
 import slimeknights.tconstruct.library.modifiers.hook.armor.OnAttackedModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.combat.MeleeHitModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.ranged.ProjectileHitModifierHook;
+import slimeknights.tconstruct.library.modifiers.modules.ModifierHookProvider;
 import slimeknights.tconstruct.library.modifiers.modules.ModifierModule;
 import slimeknights.tconstruct.library.modifiers.modules.ModifierModuleCondition;
 import slimeknights.tconstruct.library.modifiers.modules.ModifierModuleCondition.ConditionalModifierModule;
@@ -49,7 +50,7 @@ public record MobEffectModule(
   RandomLevelingValue time,
   ModifierModuleCondition condition
 ) implements OnAttackedModifierHook, MeleeHitModifierHook, ProjectileHitModifierHook, ModifierModule, ConditionalModifierModule {
-  private static final List<ModifierHook<?>> DEFAULT_HOOKS = ModifierModule.<MobEffectModule>defaultHooks(TinkerHooks.ON_ATTACKED, TinkerHooks.MELEE_HIT, TinkerHooks.PROJECTILE_HIT);
+  private static final List<ModifierHook<?>> DEFAULT_HOOKS = ModifierHookProvider.<MobEffectModule>defaultHooks(TinkerHooks.ON_ATTACKED, TinkerHooks.MELEE_HIT, TinkerHooks.PROJECTILE_HIT);
   public static final RecordLoadable<MobEffectModule> LOADER = RecordLoadable.create(
     LivingEntityPredicate.LOADER.defaultField("target", MobEffectModule::target),
     Loadables.MOB_EFFECT.requiredField("effect", MobEffectModule::effect),

@@ -8,6 +8,7 @@ import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHook;
 import slimeknights.tconstruct.library.modifiers.TinkerHooks;
 import slimeknights.tconstruct.library.modifiers.hook.build.RawDataModifierHook;
+import slimeknights.tconstruct.library.modifiers.modules.ModifierHookProvider;
 import slimeknights.tconstruct.library.modifiers.modules.ModifierModule;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.utils.RestrictedCompoundTag;
@@ -18,7 +19,7 @@ import java.util.List;
 public enum TheOneProbeModule implements ModifierModule, RawDataModifierHook {
   INSTANCE;
 
-  private static final List<ModifierHook<?>> DEFAULT_HOOKS = ModifierModule.<TheOneProbeModule>defaultHooks(TinkerHooks.RAW_DATA);
+  private static final List<ModifierHook<?>> DEFAULT_HOOKS = ModifierHookProvider.<TheOneProbeModule>defaultHooks(TinkerHooks.RAW_DATA);
   public static final IGenericLoader<TheOneProbeModule> LOADER = new SingletonLoader<>(INSTANCE);
   public static final String TOP_NBT_HELMET = "theoneprobe";
   public static final String TOP_NBT_HAND = "theoneprobe_hand";

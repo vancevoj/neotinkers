@@ -20,6 +20,7 @@ import slimeknights.tconstruct.library.modifiers.ModifierId;
 import slimeknights.tconstruct.library.modifiers.TinkerHooks;
 import slimeknights.tconstruct.library.modifiers.hook.build.ValidateModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.display.RequirementsModifierHook;
+import slimeknights.tconstruct.library.modifiers.modules.ModifierHookProvider;
 import slimeknights.tconstruct.library.modifiers.modules.ModifierModule;
 import slimeknights.tconstruct.library.modifiers.util.LazyModifier;
 import slimeknights.tconstruct.library.tools.nbt.IToolContext;
@@ -43,7 +44,7 @@ public class ModifierRequirementsModule implements ValidateModifierHook, Modifie
     ModifierEntry.LOADABLE.list(0).defaultField("display_modifiers", List.of(), m -> m.display),
     ModifierRequirementsModule::new);
 
-  private static final List<ModifierHook<?>> DEFAULT_HOOKS = ModifierModule.<ModifierRequirementsModule>defaultHooks(TinkerHooks.VALIDATE, TinkerHooks.REQUIREMENTS);
+  private static final List<ModifierHook<?>> DEFAULT_HOOKS = ModifierHookProvider.<ModifierRequirementsModule>defaultHooks(TinkerHooks.VALIDATE, TinkerHooks.REQUIREMENTS);
 
   /** Requirements to check, if they fail, the error will be displayed */
   private final IJsonPredicate<IToolContext> requirement;

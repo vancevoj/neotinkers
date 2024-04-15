@@ -126,12 +126,4 @@ public interface ModifierModule extends IHaveLoader, ModifierHookProvider {
     }
     return builder.build();
   }
-
-  /**
-   * Helper method to validate generics on the hooks when building a default hooks list. To use, make sure you set the generics instead of leaving it automatic.
-   */
-  @SafeVarargs
-  static <T> List<ModifierHook<?>> defaultHooks(ModifierHook<? super T>... hooks) {
-    return List.of(hooks);
-  }
 }

@@ -6,7 +6,6 @@ import slimeknights.tconstruct.library.modifiers.ModifierHook;
 import slimeknights.tconstruct.library.modifiers.TinkerHooks;
 import slimeknights.tconstruct.library.modifiers.hook.armor.EquipmentChangeModifierHook;
 import slimeknights.tconstruct.library.modifiers.modules.ModifierHookProvider;
-import slimeknights.tconstruct.library.modifiers.modules.ModifierModule;
 import slimeknights.tconstruct.library.tools.capability.TinkerDataCapability;
 import slimeknights.tconstruct.library.tools.capability.TinkerDataCapability.TinkerDataKey;
 import slimeknights.tconstruct.library.tools.context.EquipmentChangeContext;
@@ -21,7 +20,7 @@ import java.util.List;
  * @see TinkerDataKey
  */
 public record ArmorStatModule(TinkerDataKey<Float> key, float scale, boolean allowBroken) implements ModifierHookProvider, EquipmentChangeModifierHook {
-  private static final List<ModifierHook<?>> DEFAULT_HOOKS = ModifierModule.<ArmorStatModule>defaultHooks(TinkerHooks.EQUIPMENT_CHANGE);
+  private static final List<ModifierHook<?>> DEFAULT_HOOKS = ModifierHookProvider.<ArmorStatModule>defaultHooks(TinkerHooks.EQUIPMENT_CHANGE);
 
   @Override
   public List<ModifierHook<?>> getDefaultHooks() {

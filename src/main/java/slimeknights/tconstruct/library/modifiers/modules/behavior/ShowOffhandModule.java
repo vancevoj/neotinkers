@@ -8,6 +8,7 @@ import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHook;
 import slimeknights.tconstruct.library.modifiers.TinkerHooks;
 import slimeknights.tconstruct.library.modifiers.hook.armor.EquipmentChangeModifierHook;
+import slimeknights.tconstruct.library.modifiers.modules.ModifierHookProvider;
 import slimeknights.tconstruct.library.modifiers.modules.ModifierModule;
 import slimeknights.tconstruct.library.modifiers.modules.unserializable.ArmorLevelModule;
 import slimeknights.tconstruct.library.tools.capability.TinkerDataKeys;
@@ -24,7 +25,7 @@ public enum ShowOffhandModule implements ModifierModule, EquipmentChangeModifier
   /** Mode which will only show the offhand when the tool is not broken */
   DISALLOW_BROKEN;
 
-  private static final List<ModifierHook<?>> DEFAULT_HOOKS = ModifierModule.<ShowOffhandModule>defaultHooks(TinkerHooks.EQUIPMENT_CHANGE);
+  private static final List<ModifierHook<?>> DEFAULT_HOOKS = ModifierHookProvider.<ShowOffhandModule>defaultHooks(TinkerHooks.EQUIPMENT_CHANGE);
   public static final RecordLoadable<ShowOffhandModule> LOADER = RecordLoadable.create(new EnumLoadable<>(ShowOffhandModule.class).requiredField("mode", Function.identity()), Function.identity());
 
   @Override

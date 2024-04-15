@@ -25,6 +25,7 @@ import slimeknights.tconstruct.library.modifiers.hook.behavior.EnchantmentModifi
 import slimeknights.tconstruct.library.modifiers.hook.mining.BlockHarvestModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.mining.HarvestEnchantmentsModifierHook;
 import slimeknights.tconstruct.library.modifiers.modules.IntLevelModule;
+import slimeknights.tconstruct.library.modifiers.modules.ModifierHookProvider;
 import slimeknights.tconstruct.library.modifiers.modules.ModifierModule;
 import slimeknights.tconstruct.library.modifiers.modules.ModifierModuleCondition;
 import slimeknights.tconstruct.library.modifiers.modules.ModifierModuleCondition.ConditionalModifierModule;
@@ -118,7 +119,7 @@ public interface EnchantmentModule extends ModifierModule, IntLevelModule, Condi
 
   /** Implementation of a simple constant enchantment for the current tool */
   record Constant(Enchantment enchantment, int level, ModifierModuleCondition condition) implements EnchantmentModule, EnchantmentModifierHook {
-    private static final List<ModifierHook<?>> DEFAULT_HOOKS = ModifierModule.<Constant>defaultHooks(TinkerHooks.ENCHANTMENTS);
+    private static final List<ModifierHook<?>> DEFAULT_HOOKS = ModifierHookProvider.<Constant>defaultHooks(TinkerHooks.ENCHANTMENTS);
     public static final RecordLoadable<Constant> LOADER = RecordLoadable.create(ENCHANTMENT, IntLevelModule.FIELD, ModifierModuleCondition.FIELD, Constant::new);
 
     public Constant(Enchantment enchantment, int level) {
@@ -153,7 +154,7 @@ public interface EnchantmentModule extends ModifierModule, IntLevelModule, Condi
 
   /** Enchantment module that can condition on the block mined or the entity mining. */
   record MainHandHarvest(Enchantment enchantment, int level, ModifierModuleCondition condition, ResourceLocation conditionFlag, IJsonPredicate<BlockState> block, IJsonPredicate<LivingEntity> holder) implements EnchantmentModule, EnchantmentModifierHook, BlockHarvestModifierHook {
-    private static final List<ModifierHook<?>> DEFAULT_HOOKS = ModifierModule.<MainHandHarvest>defaultHooks(TinkerHooks.ENCHANTMENTS, TinkerHooks.BLOCK_HARVEST);
+    private static final List<ModifierHook<?>> DEFAULT_HOOKS = ModifierHookProvider.<MainHandHarvest>defaultHooks(TinkerHooks.ENCHANTMENTS, TinkerHooks.BLOCK_HARVEST);
     public static final RecordLoadable<MainHandHarvest> LOADER = RecordLoadable.create(ENCHANTMENT, IntLevelModule.FIELD, ModifierModuleCondition.FIELD, Loadables.RESOURCE_LOCATION.requiredField("condition_flag", MainHandHarvest::conditionFlag), BLOCK, HOLDER, MainHandHarvest::new);
 
     @Override
@@ -197,7 +198,7 @@ public interface EnchantmentModule extends ModifierModule, IntLevelModule, Condi
 
   /** Enchantment module that can condition on the block mined or the entity mining on armor. Requires the harvesting be done with a tinker tool. */
   record ArmorHarvest(Enchantment enchantment, int level, ModifierModuleCondition condition, Set<EquipmentSlot> slots, IJsonPredicate<BlockState> block, IJsonPredicate<LivingEntity> holder) implements EnchantmentModule, HarvestEnchantmentsModifierHook {
-    private static final List<ModifierHook<?>> DEFAULT_HOOKS = ModifierModule.<ArmorHarvest>defaultHooks(TinkerHooks.HARVEST_ENCHANTMENTS);
+    private static final List<ModifierHook<?>> DEFAULT_HOOKS = ModifierHookProvider.<ArmorHarvest>defaultHooks(TinkerHooks.HARVEST_ENCHANTMENTS);
     public static final RecordLoadable<ArmorHarvest> LOADER = RecordLoadable.create(ENCHANTMENT, IntLevelModule.FIELD, ModifierModuleCondition.FIELD, TinkerLoadables.EQUIPMENT_SLOT_SET.requiredField("slots", ArmorHarvest::slots), BLOCK, HOLDER, ArmorHarvest::new);
 
     @Override

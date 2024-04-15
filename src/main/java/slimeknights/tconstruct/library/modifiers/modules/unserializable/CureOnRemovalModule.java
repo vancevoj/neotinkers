@@ -8,7 +8,6 @@ import slimeknights.tconstruct.library.modifiers.ModifierHook;
 import slimeknights.tconstruct.library.modifiers.TinkerHooks;
 import slimeknights.tconstruct.library.modifiers.hook.armor.EquipmentChangeModifierHook;
 import slimeknights.tconstruct.library.modifiers.modules.ModifierHookProvider;
-import slimeknights.tconstruct.library.modifiers.modules.ModifierModule;
 import slimeknights.tconstruct.library.tools.context.EquipmentChangeContext;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 
@@ -22,7 +21,7 @@ public enum CureOnRemovalModule implements ModifierHookProvider, EquipmentChange
   LEGGINGS(EquipmentSlot.LEGS),
   BOOT(EquipmentSlot.FEET);
 
-  private static final List<ModifierHook<?>> DEFAULT_HOOKS = ModifierModule.<CureOnRemovalModule>defaultHooks(TinkerHooks.EQUIPMENT_CHANGE);
+  private static final List<ModifierHook<?>> DEFAULT_HOOKS = ModifierHookProvider.<CureOnRemovalModule>defaultHooks(TinkerHooks.EQUIPMENT_CHANGE);
 
   private final EquipmentSlot slot;
 

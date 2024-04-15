@@ -14,6 +14,7 @@ import slimeknights.tconstruct.library.modifiers.ModifierHook;
 import slimeknights.tconstruct.library.modifiers.TinkerHooks;
 import slimeknights.tconstruct.library.modifiers.hook.interaction.BlockInteractionModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.interaction.InteractionSource;
+import slimeknights.tconstruct.library.modifiers.modules.ModifierHookProvider;
 import slimeknights.tconstruct.library.modifiers.modules.ModifierModule;
 import slimeknights.tconstruct.library.tools.definition.aoe.IAreaOfEffectIterator;
 import slimeknights.tconstruct.library.tools.definition.module.ToolModuleHooks;
@@ -28,7 +29,7 @@ import java.util.List;
  * Shared logic for interaction actions which transform blocks
  */
 public interface BlockTransformModule extends ModifierModule, BlockInteractionModifierHook {
-  List<ModifierHook<?>> DEFAULT_HOOKS = List.of(TinkerHooks.BLOCK_INTERACT);
+  List<ModifierHook<?>> DEFAULT_HOOKS = ModifierHookProvider.<BlockTransformModule>defaultHooks(TinkerHooks.BLOCK_INTERACT);
 
   /** If true, disallows targeting the bottom face of the block to transform */
   boolean requireGround();

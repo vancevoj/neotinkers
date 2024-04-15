@@ -20,6 +20,7 @@ import slimeknights.tconstruct.library.modifiers.TinkerHooks;
 import slimeknights.tconstruct.library.modifiers.hook.combat.ArmorLootingModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.combat.LootingModifierHook;
 import slimeknights.tconstruct.library.modifiers.modules.IntLevelModule;
+import slimeknights.tconstruct.library.modifiers.modules.ModifierHookProvider;
 import slimeknights.tconstruct.library.modifiers.modules.ModifierModule;
 import slimeknights.tconstruct.library.modifiers.modules.ModifierModuleCondition;
 import slimeknights.tconstruct.library.modifiers.modules.ModifierModuleCondition.ConditionalModifierModule;
@@ -95,7 +96,7 @@ public interface LootingModule extends ModifierModule, IntLevelModule, Condition
 
   /** Implementation for weapon looting */
   record Weapon(int level, IJsonPredicate<LivingEntity> holder, IJsonPredicate<LivingEntity> target, IJsonPredicate<DamageSource> damageSource, ModifierModuleCondition condition) implements LootingModule, LootingModifierHook {
-    private static final List<ModifierHook<?>> DEFAULT_HOOKS = ModifierModule.<Weapon>defaultHooks(TinkerHooks.WEAPON_LOOTING);
+    private static final List<ModifierHook<?>> DEFAULT_HOOKS = ModifierHookProvider.<Weapon>defaultHooks(TinkerHooks.WEAPON_LOOTING);
     public static final RecordLoadable<Weapon> LOADER = RecordLoadable.create(IntLevelModule.FIELD, HOLDER, TARGET, DAMAGE_SOURCE, ModifierModuleCondition.FIELD, Weapon::new);
 
     @Override
@@ -119,7 +120,7 @@ public interface LootingModule extends ModifierModule, IntLevelModule, Condition
 
   /** Implementation for armor looting */
   record Armor(int level, IJsonPredicate<LivingEntity> holder, IJsonPredicate<LivingEntity> target, IJsonPredicate<DamageSource> damageSource, ModifierModuleCondition condition, Set<EquipmentSlot> slots) implements LootingModule, ArmorLootingModifierHook {
-    private static final List<ModifierHook<?>> DEFAULT_HOOKS = ModifierModule.<Armor>defaultHooks(TinkerHooks.ARMOR_LOOTING);
+    private static final List<ModifierHook<?>> DEFAULT_HOOKS = ModifierHookProvider.<Armor>defaultHooks(TinkerHooks.ARMOR_LOOTING);
     public static final RecordLoadable<Armor> LOADER = RecordLoadable.create(IntLevelModule.FIELD, HOLDER, TARGET, DAMAGE_SOURCE, ModifierModuleCondition.FIELD, TinkerLoadables.EQUIPMENT_SLOT_SET.requiredField("slots", Armor::slots), Armor::new);
 
     @Override
