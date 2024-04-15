@@ -1,6 +1,15 @@
 {
   "modules": [
     {
+      "type": "test:part_stats",
+      "parts": [
+        { "item": "test:test_extra",  "weight": 2 },
+        { "item": "test:test_head",   "weight": 1 },
+        { "item": "test:test_handle", "weight": 3 }
+      ],
+      "stat_provider": "tconstruct:melee_harvest"
+    },
+    {
       "type": "test:modifier_slots",
       "slots": {
         "upgrades": 3,
@@ -33,11 +42,6 @@
       "type": "test:sweep",
       "range": 5.0
     }
-  ],
-  "parts": [
-    { "item": "test:test_extra", "weight": 2 },
-    { "item": "test:test_head", "weight": 1 },
-    { "item": "test:test_handle", "weight": 3 }
   ],
   "stats": {
     "base": {

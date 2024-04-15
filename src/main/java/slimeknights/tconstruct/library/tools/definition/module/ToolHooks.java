@@ -10,11 +10,16 @@ import slimeknights.tconstruct.library.tools.definition.module.build.ToolActionT
 import slimeknights.tconstruct.library.tools.definition.module.build.ToolTraitHook;
 import slimeknights.tconstruct.library.tools.definition.module.build.VolatileDataToolHook;
 import slimeknights.tconstruct.library.tools.definition.module.interaction.InteractionToolModule;
+import slimeknights.tconstruct.library.tools.definition.module.material.MaterialStatsToolHook;
+import slimeknights.tconstruct.library.tools.definition.module.material.ToolPartsHook;
 import slimeknights.tconstruct.library.tools.definition.module.mining.IsEffectiveToolHook;
 import slimeknights.tconstruct.library.tools.definition.module.mining.MiningSpeedToolHook;
 import slimeknights.tconstruct.library.tools.definition.module.mining.MiningTierToolHook;
 import slimeknights.tconstruct.library.tools.definition.module.weapon.MeleeHitToolHook;
+import slimeknights.tconstruct.library.tools.nbt.MaterialNBT;
 import slimeknights.tconstruct.library.tools.nbt.ModifierNBT.Builder;
+import slimeknights.tconstruct.library.tools.nbt.StatsNBT;
+import slimeknights.tconstruct.library.tools.stat.ToolStatsBuilder;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
@@ -30,6 +35,21 @@ public class ToolHooks {
 
 
   /* Build */
+  /** Hook for checking if a tool can perform a given action. */
+  public static final ModifierHook<MaterialStatsToolHook> MATERIAL_STATS = register("material_stats", MaterialStatsToolHook.class, new MaterialStatsToolHook() {
+    @Override
+    public List<WeightedStatType> getStatTypes(ToolDefinition definition) {
+      return List.of();
+    }
+
+    @Override
+    public StatsNBT buildStats(ToolDefinition definition, MaterialNBT materials) {
+      return ToolStatsBuilder.noParts(definition).buildStats();
+    }
+  });
+  /** Hook for checking if a tool can perform a given action. TODO: rename to {@code volatile_data} */
+  public static final ModifierHook<ToolPartsHook> TOOL_PARTS = register("tool_parts", ToolPartsHook.class, definition -> List.of());
+
   /** Hook for checking if a tool can perform a given action. TODO: rename to {@code volatile_data} */
   public static final ModifierHook<VolatileDataToolHook> VOLATILE_DATA = register("tool_volatile_data", VolatileDataToolHook.class, VolatileDataToolHook.AllMerger::new, (context, data) -> {});
   /** Hook for fetching tool traits */

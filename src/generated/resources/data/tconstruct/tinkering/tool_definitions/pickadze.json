@@ -1,6 +1,15 @@
 {
   "modules": [
     {
+      "type": "tconstruct:part_stats",
+      "parts": [
+        "tconstruct:pick_head",
+        "tconstruct:tool_handle",
+        "tconstruct:round_plate"
+      ],
+      "stat_provider": "tconstruct:melee_harvest"
+    },
+    {
       "type": "tconstruct:modifier_slots",
       "slots": {
         "abilities": 1,
@@ -40,17 +49,6 @@
           "height": 1
         }
       ]
-    }
-  ],
-  "parts": [
-    {
-      "item": "tconstruct:pick_head"
-    },
-    {
-      "item": "tconstruct:tool_handle"
-    },
-    {
-      "item": "tconstruct:round_plate"
     }
   ],
   "stats": {

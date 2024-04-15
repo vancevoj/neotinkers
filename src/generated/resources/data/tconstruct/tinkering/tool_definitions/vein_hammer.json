@@ -1,6 +1,19 @@
 {
   "modules": [
     {
+      "type": "tconstruct:part_stats",
+      "parts": [
+        {
+          "item": "tconstruct:hammer_head",
+          "weight": 2
+        },
+        "tconstruct:tough_handle",
+        "tconstruct:pick_head",
+        "tconstruct:large_plate"
+      ],
+      "stat_provider": "tconstruct:melee_harvest"
+    },
+    {
       "type": "tconstruct:modifier_slots",
       "slots": {
         "abilities": 1,
@@ -34,21 +47,6 @@
     {
       "type": "tconstruct:melee_particle",
       "particle": "tconstruct:hammer_attack"
-    }
-  ],
-  "parts": [
-    {
-      "item": "tconstruct:hammer_head",
-      "weight": 2
-    },
-    {
-      "item": "tconstruct:tough_handle"
-    },
-    {
-      "item": "tconstruct:pick_head"
-    },
-    {
-      "item": "tconstruct:large_plate"
     }
   ],
   "stats": {

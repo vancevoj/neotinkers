@@ -8,6 +8,13 @@
       }
     },
     {
+      "type": "tconstruct:material_stats",
+      "stat_provider": "tconstruct:skull",
+      "stat_types": [
+        "tconstruct:skull"
+      ]
+    },
+    {
       "type": "tconstruct:traits",
       "traits": [
         {
@@ -15,11 +22,6 @@
           "name": "tconstruct:overslime_friend"
         }
       ]
-    }
-  ],
-  "parts": [
-    {
-      "stat": "tconstruct:skull"
     }
   ],
   "stats": {

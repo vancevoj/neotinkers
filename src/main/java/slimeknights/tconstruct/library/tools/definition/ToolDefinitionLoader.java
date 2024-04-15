@@ -59,7 +59,7 @@ public class ToolDefinitionLoader extends SimpleJsonResourceReloadListener {
       if (data != null) {
         definition.setData(data);
       } else {
-        definition.setDefaultData();
+        definition.clearData();
       }
     }
   }
@@ -75,17 +75,16 @@ public class ToolDefinitionLoader extends SimpleJsonResourceReloadListener {
       JsonElement element = splashList.get(key);
       if (element == null) {
         log.error("Missing tool definition for tool {}", key);
-        definition.setDefaultData();
+        definition.clearData();
         continue;
       }
       try {
         ToolDefinitionData data = ToolDefinitionData.LOADABLE.convert(element, key.toString());
-        definition.validate(data);
         builder.put(key, data);
         definition.setData(data);
       } catch (Exception e) {
         log.error("Failed to load tool definition for tool {}", key, e);
-        definition.setDefaultData();
+        definition.clearData();
       }
     }
     this.dataMap = builder.build();

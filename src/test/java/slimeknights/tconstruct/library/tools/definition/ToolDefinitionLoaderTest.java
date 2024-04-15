@@ -4,7 +4,6 @@ import com.google.gson.JsonElement;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.profiling.ProfilerFiller;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.ToolAction;
 import net.minecraftforge.common.ToolActions;
@@ -26,6 +25,9 @@ import slimeknights.tconstruct.library.tools.definition.module.build.ToolActions
 import slimeknights.tconstruct.library.tools.definition.module.build.ToolSlotsModule;
 import slimeknights.tconstruct.library.tools.definition.module.build.ToolTraitsModule;
 import slimeknights.tconstruct.library.tools.definition.module.build.VolatileDataToolHook;
+import slimeknights.tconstruct.library.tools.definition.module.material.PartStatsModule;
+import slimeknights.tconstruct.library.tools.definition.module.material.PartStatsModule.WeightedPart;
+import slimeknights.tconstruct.library.tools.definition.module.material.ToolPartsHook;
 import slimeknights.tconstruct.library.tools.definition.module.mining.IsEffectiveModule;
 import slimeknights.tconstruct.library.tools.definition.module.mining.IsEffectiveToolHook;
 import slimeknights.tconstruct.library.tools.definition.module.weapon.MeleeHitToolHook;
@@ -44,16 +46,17 @@ import static org.mockito.Mockito.mock;
 class ToolDefinitionLoaderTest extends BaseMcTest {
   private static final ToolDefinitionData WRONG_DATA = ToolDefinitionDataBuilder.builder().stat(ToolStats.DURABILITY, 100).build();
   private static final JsonFileLoader fileLoader = new JsonFileLoader(JsonHelper.DEFAULT_GSON, ToolDefinitionLoader.FOLDER);
-  private static final ToolDefinition NO_PARTS_MINIMAL = ToolDefinition.builder(TConstruct.getResource("minimal_no_parts")).noParts().build();
-  private static final ToolDefinition NO_PARTS_FULL = ToolDefinition.builder(TConstruct.getResource("full_no_parts")).noParts().build();
-  private static final ToolDefinition MELEE_HARVEST_MINIMAL = ToolDefinition.builder(TConstruct.getResource("minimal_with_parts")).meleeHarvest().build();
-  private static final ToolDefinition MELEE_HARVEST_FULL = ToolDefinition.builder(TConstruct.getResource("full_with_parts")).meleeHarvest().build();
-  private static final ToolDefinition HAS_PARTS_NO_NEED = ToolDefinition.builder(TConstruct.getResource("has_parts_no_need")).noParts().build();
-  private static final ToolDefinition NEED_PARTS_HAS_NONE = ToolDefinition.builder(TConstruct.getResource("need_parts_has_none")).meleeHarvest().build();
-  private static final ToolDefinition WRONG_PART_TYPE = ToolDefinition.builder(TConstruct.getResource("wrong_part_type")).meleeHarvest().build();
+  private static final ToolDefinition NO_PARTS_MINIMAL = ToolDefinition.builder(TConstruct.getResource("minimal_no_parts")).build();
+  private static final ToolDefinition NO_PARTS_FULL = ToolDefinition.builder(TConstruct.getResource("full_no_parts")).build();
+  private static final ToolDefinition MELEE_HARVEST_MINIMAL = ToolDefinition.builder(TConstruct.getResource("minimal_with_parts")).build();
+  private static final ToolDefinition MELEE_HARVEST_FULL = ToolDefinition.builder(TConstruct.getResource("full_with_parts")).build();
+  private static final ToolDefinition NEED_PARTS_HAS_NONE = ToolDefinition.builder(TConstruct.getResource("need_parts_has_none")).build();
+  private static final ToolDefinition WRONG_PART_TYPE = ToolDefinition.builder(TConstruct.getResource("wrong_part_type")).build();
 
   @BeforeAll
   static void beforeAll() {
+    MaterialItemFixture.init();
+    RegistrationFixture.register(ToolModule.LOADER, "part_stats", PartStatsModule.LOADER);
     RegistrationFixture.register(ToolModule.LOADER, "modifier_slots", ToolSlotsModule.LOADER);
     RegistrationFixture.register(ToolModule.LOADER, "traits", ToolTraitsModule.LOADER);
     RegistrationFixture.register(ToolModule.LOADER, "actions", ToolActionsModule.LOADER);
@@ -91,7 +94,7 @@ class ToolDefinitionLoaderTest extends BaseMcTest {
     assertThat(slots).containsEntry(SlotType.DEFENSE, 2);
     assertThat(slots).containsEntry(SlotType.ABILITY, 1);
     // traits
-    List<ModifierEntry> traits = data.getHook(ToolHooks.TOOL_TRAITS).getTraits(Items.DIAMOND_PICKAXE, ToolDefinition.EMPTY);
+    List<ModifierEntry> traits = data.getHook(ToolHooks.TOOL_TRAITS).getTraits(ToolDefinition.EMPTY);
     assertThat(traits).hasSize(2);
     assertThat(traits.get(0).getId()).isEqualTo(ModifierFixture.TEST_1);
     assertThat(traits.get(0).getLevel()).isEqualTo(1);
@@ -134,7 +137,7 @@ class ToolDefinitionLoaderTest extends BaseMcTest {
     ToolDefinitionData data = NO_PARTS_MINIMAL.getData();
     assertThat(data).isNotNull();
     // will not be the empty instance, but will be filled with empty data
-    assertThat(data).isNotSameAs(NO_PARTS_MINIMAL.getStatProvider().getDefaultData());
+    assertThat(data).isNotSameAs(ToolDefinitionData.EMPTY);
     ToolDefinitionDataTest.checkToolDataEmpty(data);
   }
 
@@ -145,25 +148,18 @@ class ToolDefinitionLoaderTest extends BaseMcTest {
 
     ToolDefinitionData data = NO_PARTS_FULL.getData();
     assertThat(data).isNotNull();
-    assertThat(data).isNotSameAs(NO_PARTS_FULL.getStatProvider().getDefaultData());
-    assertThat(data.getParts()).isEmpty();
+    assertThat(data).isNotSameAs(ToolDefinitionData.EMPTY);
+    assertThat(data.getHook(ToolHooks.TOOL_PARTS).getParts(ToolDefinition.EMPTY)).isEmpty();
     checkFullNonParts(data);
-  }
-
-  @Test
-  void noParts_hasUnneededParts_defaults() {
-    HAS_PARTS_NO_NEED.setData(WRONG_DATA); // set to wrong data to ensure something changes
-    Map<ResourceLocation,JsonElement> splashList = fileLoader.loadFilesAsSplashlist(HAS_PARTS_NO_NEED.getId().getPath());
-    ToolDefinitionLoader.getInstance().apply(splashList, mock(ResourceManager.class), mock(ProfilerFiller.class));
-    assertThat(HAS_PARTS_NO_NEED.getData()).isSameAs(HAS_PARTS_NO_NEED.getStatProvider().getDefaultData());
   }
 
   @Test
   void missingStats_defaults() {
     NO_PARTS_FULL.setData(WRONG_DATA); // set to wrong data to ensure something changes
-    Map<ResourceLocation,JsonElement> splashList = fileLoader.loadFilesAsSplashlist(HAS_PARTS_NO_NEED.getId().getPath());
+    // next line is intentionally loading a different file, to make it missing
+    Map<ResourceLocation,JsonElement> splashList = fileLoader.loadFilesAsSplashlist(MELEE_HARVEST_MINIMAL.getId().getPath());
     ToolDefinitionLoader.getInstance().apply(splashList, mock(ResourceManager.class), mock(ProfilerFiller.class));
-    assertThat(NO_PARTS_FULL.getData()).isSameAs(NO_PARTS_FULL.getStatProvider().getDefaultData());
+    assertThat(NO_PARTS_FULL.getData()).isSameAs(ToolDefinitionData.EMPTY);
   }
 
   @Test
@@ -174,11 +170,14 @@ class ToolDefinitionLoaderTest extends BaseMcTest {
     ToolDefinitionData data = MELEE_HARVEST_MINIMAL.getData();
     assertThat(data).isNotNull();
     // will not be the empty instance, but will be filled with empty data
-    assertThat(data).isNotSameAs(MELEE_HARVEST_MINIMAL.getStatProvider().getDefaultData());
-    assertThat(data.getParts()).isNotNull();
-    assertThat(data.getParts()).hasSize(1);
-    assertThat(data.getParts().get(0).getPart()).isEqualTo(MaterialItemFixture.MATERIAL_ITEM_HEAD);
-    assertThat(data.getParts().get(0).getWeight()).isEqualTo(1);
+    assertThat(data).isNotSameAs(ToolDefinitionData.EMPTY);
+    ToolPartsHook toolPartsHook = data.getHook(ToolHooks.TOOL_PARTS);
+    assertThat(toolPartsHook).isInstanceOf(PartStatsModule.class);
+    List<WeightedPart> parts = ((PartStatsModule)toolPartsHook).getParts();
+    assertThat(parts).isNotNull();
+    assertThat(parts).hasSize(1);
+    assertThat(parts.get(0).part()).isEqualTo(MaterialItemFixture.MATERIAL_ITEM_HEAD);
+    assertThat(parts.get(0).weight()).isEqualTo(1);
     ToolDefinitionDataTest.checkToolDataNonPartsEmpty(data);
   }
 
@@ -189,14 +188,17 @@ class ToolDefinitionLoaderTest extends BaseMcTest {
 
     ToolDefinitionData data = MELEE_HARVEST_FULL.getData();
     assertThat(data).isNotNull();
-    assertThat(data).isNotSameAs(MELEE_HARVEST_FULL.getStatProvider().getDefaultData());
-    assertThat(data.getParts()).hasSize(3);
-    assertThat(data.getParts().get(0).getPart()).isEqualTo(MaterialItemFixture.MATERIAL_ITEM_EXTRA);
-    assertThat(data.getParts().get(0).getWeight()).isEqualTo(2);
-    assertThat(data.getParts().get(1).getPart()).isEqualTo(MaterialItemFixture.MATERIAL_ITEM_HEAD);
-    assertThat(data.getParts().get(1).getWeight()).isEqualTo(1);
-    assertThat(data.getParts().get(2).getPart()).isEqualTo(MaterialItemFixture.MATERIAL_ITEM_HANDLE);
-    assertThat(data.getParts().get(2).getWeight()).isEqualTo(3);
+    assertThat(data).isNotSameAs(ToolDefinitionData.EMPTY);
+    ToolPartsHook toolPartsHook = data.getHook(ToolHooks.TOOL_PARTS);
+    assertThat(toolPartsHook).isInstanceOf(PartStatsModule.class);
+    List<WeightedPart> parts = ((PartStatsModule)toolPartsHook).getParts();
+    assertThat(parts).hasSize(3);
+    assertThat(parts.get(0).part()).isEqualTo(MaterialItemFixture.MATERIAL_ITEM_EXTRA);
+    assertThat(parts.get(0).weight()).isEqualTo(2);
+    assertThat(parts.get(1).part()).isEqualTo(MaterialItemFixture.MATERIAL_ITEM_HEAD);
+    assertThat(parts.get(1).weight()).isEqualTo(1);
+    assertThat(parts.get(2).part()).isEqualTo(MaterialItemFixture.MATERIAL_ITEM_HANDLE);
+    assertThat(parts.get(2).weight()).isEqualTo(3);
     checkFullNonParts(data);
   }
 
@@ -205,7 +207,7 @@ class ToolDefinitionLoaderTest extends BaseMcTest {
     NEED_PARTS_HAS_NONE.setData(WRONG_DATA); // set to wrong data to ensure something changes
     Map<ResourceLocation,JsonElement> splashList = fileLoader.loadFilesAsSplashlist(NEED_PARTS_HAS_NONE.getId().getPath());
     ToolDefinitionLoader.getInstance().apply(splashList, mock(ResourceManager.class), mock(ProfilerFiller.class));
-    assertThat(NEED_PARTS_HAS_NONE.getData()).isSameAs(NEED_PARTS_HAS_NONE.getStatProvider().getDefaultData());
+    assertThat(NEED_PARTS_HAS_NONE.getData()).isSameAs(ToolDefinitionData.EMPTY);
   }
 
   @Test
@@ -213,6 +215,6 @@ class ToolDefinitionLoaderTest extends BaseMcTest {
     WRONG_PART_TYPE.setData(WRONG_DATA); // set to wrong data to ensure something changes
     Map<ResourceLocation,JsonElement> splashList = fileLoader.loadFilesAsSplashlist(WRONG_PART_TYPE.getId().getPath());
     ToolDefinitionLoader.getInstance().apply(splashList, mock(ResourceManager.class), mock(ProfilerFiller.class));
-    assertThat(WRONG_PART_TYPE.getData()).isSameAs(WRONG_PART_TYPE.getStatProvider().getDefaultData());
+    assertThat(WRONG_PART_TYPE.getData()).isSameAs(ToolDefinitionData.EMPTY);
   }
 }

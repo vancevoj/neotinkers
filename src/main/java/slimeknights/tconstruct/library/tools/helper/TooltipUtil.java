@@ -33,14 +33,17 @@ import slimeknights.tconstruct.library.materials.definition.IMaterial;
 import slimeknights.tconstruct.library.materials.definition.MaterialVariantId;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.TinkerHooks;
-import slimeknights.tconstruct.library.tools.definition.PartRequirement;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinition;
+import slimeknights.tconstruct.library.tools.definition.module.material.MaterialStatsToolHook;
+import slimeknights.tconstruct.library.tools.definition.module.material.MaterialStatsToolHook.WeightedStatType;
+import slimeknights.tconstruct.library.tools.definition.module.material.ToolPartsHook;
 import slimeknights.tconstruct.library.tools.item.IModifiable;
 import slimeknights.tconstruct.library.tools.item.IModifiableDisplay;
 import slimeknights.tconstruct.library.tools.item.ITinkerStationDisplay;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.MaterialNBT;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
+import slimeknights.tconstruct.library.tools.part.IToolPart;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
 import slimeknights.tconstruct.library.utils.Util;
 import slimeknights.tconstruct.tools.TinkerModifiers;
@@ -208,7 +211,7 @@ public class TooltipUtil {
     if (!name.isEmpty()) {
       return Component.literal(name);
     }
-    List<PartRequirement> components = toolDefinition.getData().getParts();
+    List<WeightedStatType> components = MaterialStatsToolHook.stats(toolDefinition);
     Component baseName = Component.translatable(stack.getDescriptionId());
     if (components.isEmpty()) {
       return baseName;
@@ -227,7 +230,7 @@ public class TooltipUtil {
     MaterialVariantId firstMaterial = null;
     IMaterialRegistry registry = MaterialRegistry.getInstance();
     for (int i = 0; i < components.size(); i++) {
-      if (i < materials.size() && registry.canRepair(components.get(i).getStatType())) {
+      if (i < materials.size() && registry.canRepair(components.get(i).stat())) {
         MaterialVariantId material = materials.get(i).getVariant();
         if (!IMaterial.UNKNOWN_ID.equals(material)) {
           if (firstMaterial == null) {
@@ -267,7 +270,7 @@ public class TooltipUtil {
       // if not initialized, show no data tooltip on non-standard items
     } else if (!ToolStack.isInitialized(stack)) {
       tooltip.add(UNINITIALIZED);
-      if (definition.isMultipart()) {
+      if (definition.hasMaterials()) {
         CompoundTag nbt = stack.getTag();
         if (nbt == null || !nbt.contains(ToolStack.TAG_MATERIALS, Tag.TAG_LIST)) {
           tooltip.add(RANDOM_MATERIALS);
@@ -279,7 +282,7 @@ public class TooltipUtil {
           item.getStatInformation(ToolStack.from(stack), player, tooltip, tooltipKey, tooltipFlag);
           break;
         case CONTROL:
-          if (definition.isMultipart()) {
+          if (definition.hasMaterials()) {
             getComponents(item, stack, tooltip, tooltipFlag);
             break;
           }
@@ -340,7 +343,7 @@ public class TooltipUtil {
     addModifierNames(stack, tool, tooltips, flag);
     tooltips.add(Component.empty());
     tooltips.add(TOOLTIP_HOLD_SHIFT);
-    if (tool.getDefinition().isMultipart()) {
+    if (tool.getDefinition().hasMaterials()) {
       tooltips.add(TOOLTIP_HOLD_CTRL);
     }
   }
@@ -432,7 +435,7 @@ public class TooltipUtil {
    */
   public static void getComponents(IModifiable item, ItemStack stack, List<Component> tooltips, TooltipFlag flag) {
     // no components, nothing to do
-    List<PartRequirement> components = item.getToolDefinition().getData().getParts();
+    List<WeightedStatType> components = MaterialStatsToolHook.stats(item.getToolDefinition());
     if (components.isEmpty()) {
       return;
     }
@@ -446,16 +449,27 @@ public class TooltipUtil {
     if (materials.size() < components.size()) {
       return;
     }
-    // finally, display them all
+    // start by displaying all tool parts
     int max = components.size() - 1;
+    List<IToolPart> parts = ToolPartsHook.parts(item.getToolDefinition());
+    int partCount = parts.size();
     for (int i = 0; i <= max; i++) {
-      PartRequirement requirement = components.get(i);
       MaterialVariantId material = materials.get(i).getVariant();
-      tooltips.add(requirement.nameForMaterial(material).copy().withStyle(ChatFormatting.UNDERLINE).withStyle(style -> style.withColor(MaterialTooltipCache.getColor(material))));
+      // display tool parts as the tool part name, nicer to work with
+      Component componentName;
+      if (i < partCount) {
+        componentName = parts.get(i).withMaterial(material).getHoverName();
+      } else {
+        componentName = MaterialTooltipCache.getDisplayName(material);
+      }
+      // underline it and color it with the material name
+      tooltips.add(componentName.copy().withStyle(ChatFormatting.UNDERLINE).withStyle(style -> style.withColor(MaterialTooltipCache.getColor(material))));
+      // material IDs on advanced
       if (flag.isAdvanced()) {
         tooltips.add((Component.literal(material.toString())).withStyle(ChatFormatting.DARK_GRAY));
       }
-      MaterialRegistry.getInstance().getMaterialStats(material.getId(), requirement.getStatType()).ifPresent(stat -> tooltips.addAll(stat.getLocalizedInfo()));
+      // material stats
+      MaterialRegistry.getInstance().getMaterialStats(material.getId(), components.get(i).stat()).ifPresent(stat -> tooltips.addAll(stat.getLocalizedInfo()));
       if (i != max) {
         tooltips.add(Component.empty());
       }
@@ -533,7 +547,7 @@ public class TooltipUtil {
   /** Gets the tooltip flags for the current ctrl+shift combination, used to hide enchantments and modifiers from the tooltip as needed */
   public static int getModifierHideFlags(ToolDefinition definition) {
     TooltipKey key = SafeClientAccess.getTooltipKey();
-    if (key == TooltipKey.SHIFT || (key == TooltipKey.CONTROL && definition.isMultipart())) {
+    if (key == TooltipKey.SHIFT || (key == TooltipKey.CONTROL && definition.hasMaterials())) {
       return MODIFIER_HIDE_FLAGS;
     }
     return DEFAULT_HIDE_FLAGS;

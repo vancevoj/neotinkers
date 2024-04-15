@@ -24,7 +24,7 @@ import slimeknights.tconstruct.library.recipe.casting.material.MaterialCastingLo
 import slimeknights.tconstruct.library.recipe.material.MaterialRecipe;
 import slimeknights.tconstruct.library.recipe.tinkerstation.ITinkerStationContainer;
 import slimeknights.tconstruct.library.recipe.tinkerstation.ITinkerStationRecipe;
-import slimeknights.tconstruct.library.tools.definition.PartRequirement;
+import slimeknights.tconstruct.library.tools.definition.module.material.ToolPartsHook;
 import slimeknights.tconstruct.library.tools.helper.ToolDamageUtil;
 import slimeknights.tconstruct.library.tools.item.IModifiable;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
@@ -52,11 +52,11 @@ public class TinkerStationPartSwapping implements ITinkerStationRecipe {
   @Override
   public boolean matches(ITinkerStationContainer inv, Level world) {
     ItemStack tinkerable = inv.getTinkerableStack();
-    if (tinkerable.isEmpty() || !tinkerable.is(TinkerTags.Items.MULTIPART_TOOL)|| !(tinkerable.getItem() instanceof IModifiable)) {
+    if (tinkerable.isEmpty() || !tinkerable.is(TinkerTags.Items.MULTIPART_TOOL)|| !(tinkerable.getItem() instanceof IModifiable modifiable)) {
       return false;
     }
     // get the list of parts, empty means its not multipart
-    List<PartRequirement> parts = ((IModifiable)tinkerable.getItem()).getToolDefinition().getData().getParts();
+    List<IToolPart> parts = ToolPartsHook.parts(modifiable.getToolDefinition());
     if (parts.isEmpty()) {
       return false;
     }
@@ -73,7 +73,7 @@ public class TinkerStationPartSwapping implements ITinkerStationRecipe {
         }
         // part not in list
         Item item = stack.getItem();
-        if (!(item instanceof IToolPart) || parts.stream().noneMatch(p -> p.matches(item))) {
+        if (!(item instanceof IToolPart) || parts.stream().noneMatch(p -> p.asItem() == item)) {
           return false;
         }
         foundItem = true;
@@ -94,7 +94,7 @@ public class TinkerStationPartSwapping implements ITinkerStationRecipe {
     // copy the tool NBT to ensure the original tool is intact
     ItemStack tinkerable = inv.getTinkerableStack();
     ToolStack tool = ToolStack.from(tinkerable);
-    List<PartRequirement> parts = tool.getDefinition().getData().getParts();
+    List<IToolPart> parts = ToolPartsHook.parts(tool.getDefinition());
 
     // prevent part swapping on large tools in small tables
     if (parts.size() > inv.getInputCount()) {
@@ -120,9 +120,9 @@ public class TinkerStationPartSwapping implements ITinkerStationRecipe {
         // we have a part and its not at this index, find the first copy of this part
         // means slot only matters if a tool uses a part twice
         int index = i;
-        if (i >= parts.size() || !parts.get(i).matches(item)) {
+        if (i >= parts.size() || parts.get(i).asItem() != item) {
           index = IntStream.range(0, parts.size())
-                           .filter(pi -> parts.get(pi).matches(item))
+                           .filter(pi -> parts.get(pi).asItem() == item)
                            .findFirst().orElse(-1);
           if (index == -1) {
             return RecipeResult.pass();

@@ -1,5 +1,11 @@
 {
-	"parts": [
-		{ "item": "test:test_head" }
-	]
+  "modules": [
+    {
+      "type": "test:part_stats",
+      "parts": [
+        "test:test_head"
+      ],
+      "stat_provider": "tconstruct:melee_harvest"
+    }
+  ]
 }

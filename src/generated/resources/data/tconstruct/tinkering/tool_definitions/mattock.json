@@ -1,6 +1,15 @@
 {
   "modules": [
     {
+      "type": "tconstruct:part_stats",
+      "parts": [
+        "tconstruct:small_axe_head",
+        "tconstruct:tool_handle",
+        "tconstruct:round_plate"
+      ],
+      "stat_provider": "tconstruct:melee_harvest"
+    },
+    {
       "type": "tconstruct:modifier_slots",
       "slots": {
         "abilities": 1,
@@ -47,17 +56,6 @@
     {
       "type": "tconstruct:vein_aoe",
       "max_distance": 0
-    }
-  ],
-  "parts": [
-    {
-      "item": "tconstruct:small_axe_head"
-    },
-    {
-      "item": "tconstruct:tool_handle"
-    },
-    {
-      "item": "tconstruct:round_plate"
     }
   ],
   "stats": {

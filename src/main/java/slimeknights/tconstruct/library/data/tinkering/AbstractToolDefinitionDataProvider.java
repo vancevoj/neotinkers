@@ -8,7 +8,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.world.level.ItemLike;
 import slimeknights.mantle.data.GenericDataProvider;
-import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
 import slimeknights.tconstruct.library.modifiers.ModifierHook;
 import slimeknights.tconstruct.library.tools.definition.ModifiableArmorMaterial;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinition;
@@ -16,7 +15,6 @@ import slimeknights.tconstruct.library.tools.definition.ToolDefinitionData;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinitionDataBuilder;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinitionLoader;
 import slimeknights.tconstruct.library.tools.definition.module.ToolModule;
-import slimeknights.tconstruct.library.tools.part.IToolPart;
 import slimeknights.tconstruct.library.tools.stat.FloatToolStat;
 import slimeknights.tconstruct.library.tools.stat.IToolStat;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
@@ -89,9 +87,7 @@ public abstract class AbstractToolDefinitionDataProvider extends GenericDataProv
       if (definition == null) {
         throw new IllegalStateException("Unknown tool definition with ID " + id);
       }
-      ToolDefinitionData data = entry.getValue().build();
-      definition.validate(data);
-      saveJson(cache, id, ToolDefinitionData.LOADABLE.serialize(data));
+      saveJson(cache, id, ToolDefinitionData.LOADABLE.serialize(entry.getValue().build()));
     }
   }
 
@@ -122,21 +118,6 @@ public abstract class AbstractToolDefinitionDataProvider extends GenericDataProv
         throw new IllegalArgumentException("Unsupported slot type " + slotType + " for material " + name);
       }
       return builder;
-    }
-
-
-    /* Parts */
-
-    /** Adds a part to the builder */
-    public ArmorDataBuilder part(ArmorSlotType slotType, IToolPart part, int weight) {
-      getBuilder(slotType).part(part, weight);
-      return this;
-    }
-
-    /** Adds a part to the builder */
-    public ArmorDataBuilder part(ArmorSlotType slotType, MaterialStatsId statsId, int weight) {
-      getBuilder(slotType).part(statsId, weight);
-      return this;
     }
 
 

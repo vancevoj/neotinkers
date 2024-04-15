@@ -3,50 +3,30 @@ package slimeknights.tconstruct.fixture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.ToolActions;
-import net.minecraftforge.common.util.Lazy;
 import slimeknights.mantle.data.predicate.block.BlockPredicate;
-import slimeknights.tconstruct.library.tools.definition.IToolStatProvider;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinition;
-import slimeknights.tconstruct.library.tools.definition.ToolDefinitionData;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinitionDataBuilder;
 import slimeknights.tconstruct.library.tools.definition.module.build.ToolActionsModule;
+import slimeknights.tconstruct.library.tools.definition.module.material.PartStatsModule;
 import slimeknights.tconstruct.library.tools.definition.module.mining.IsEffectiveModule;
-import slimeknights.tconstruct.library.tools.nbt.MaterialNBT;
-import slimeknights.tconstruct.library.tools.nbt.StatsNBT;
-import slimeknights.tconstruct.tools.MeleeHarvestToolStatsBuilder;
 
 public final class ToolDefinitionFixture {
   private static final ResourceLocation DEFINITION_ID = new ResourceLocation("test", "test_tool");
 
-  /** Stat provider with pickaxe mining and tool parts */
-  private static final IToolStatProvider TEST_STATS_PROVIDER = new IToolStatProvider() {
-    private final Lazy<ToolDefinitionData> DATA = Lazy.of(
-      () -> ToolDefinitionDataBuilder.builder()
-                                     .part(MaterialItemFixture.MATERIAL_ITEM_HEAD)
-                                     .part(MaterialItemFixture.MATERIAL_ITEM_HANDLE)
-                                     .part(MaterialItemFixture.MATERIAL_ITEM_EXTRA)
-                                     .module(ToolActionsModule.of(ToolActions.PICKAXE_DIG))
-                                     .module(new IsEffectiveModule(BlockPredicate.set(Blocks.STONE)))
-                                     .smallToolStartingSlots()
-                                     .build());
-    @Override
-    public StatsNBT buildStats(ToolDefinition definition, MaterialNBT materials) {
-      return MeleeHarvestToolStatsBuilder.from(definition, materials).buildStats();
-    }
-
-    @Override
-    public boolean isMultipart() {
-      return true;
-    }
-
-    @Override
-    public ToolDefinitionData getDefaultData() {
-      return DATA.get();
-    }
-  };
-
   /** Standard tool definition for testing */
-  private static final ToolDefinition STANDARD_TOOL_DEFINITION = ToolDefinition.builder(DEFINITION_ID).setStatsProvider(TEST_STATS_PROVIDER).skipRegister().build();
+  private static final ToolDefinition STANDARD_TOOL_DEFINITION = ToolDefinition.builder(DEFINITION_ID).skipRegister().build();
+  static {
+    STANDARD_TOOL_DEFINITION.setData(
+      ToolDefinitionDataBuilder.builder()
+                               .module(PartStatsModule.meleeHarvest()
+                                                      .part(MaterialItemFixture.MATERIAL_ITEM_HEAD)
+                                                      .part(MaterialItemFixture.MATERIAL_ITEM_HANDLE)
+                                                      .part(MaterialItemFixture.MATERIAL_ITEM_EXTRA).build())
+                               .module(ToolActionsModule.of(ToolActions.PICKAXE_DIG))
+                               .module(new IsEffectiveModule(BlockPredicate.set(Blocks.STONE)))
+                               .smallToolStartingSlots()
+                               .build());
+  }
   public static ToolDefinition getStandardToolDefinition() {
     return STANDARD_TOOL_DEFINITION;
   }

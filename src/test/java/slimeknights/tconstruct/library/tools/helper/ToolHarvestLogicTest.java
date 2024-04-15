@@ -13,6 +13,7 @@ import slimeknights.tconstruct.fixture.MaterialStatsFixture;
 import slimeknights.tconstruct.fixture.ToolDefinitionFixture;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinition;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinitionDataBuilder;
+import slimeknights.tconstruct.library.tools.definition.module.material.PartStatsModule;
 import slimeknights.tconstruct.library.tools.definition.module.mining.IsEffectiveModule;
 import slimeknights.tconstruct.library.tools.definition.module.mining.MiningSpeedToolHook;
 import slimeknights.tconstruct.library.tools.item.ModifiableItem;
@@ -75,13 +76,14 @@ class ToolHarvestLogicTest extends ToolItemTest {
   void calcSpeed_effective_withMiningModifier() {
     float modifier = 2f;
 
-    ToolDefinition definition = ToolDefinition.builder(new ResourceLocation("test", "mining_tool")).meleeHarvest().skipRegister().build();
+    ToolDefinition definition = ToolDefinition.builder(new ResourceLocation("test", "mining_tool")).skipRegister().build();
     definition.setData(ToolDefinitionDataBuilder
                          .builder()
                          .module(new IsEffectiveModule(BlockPredicate.set(Blocks.COBBLESTONE)))
-                         .part(MaterialItemFixture.MATERIAL_ITEM_HEAD)
-                         .part(MaterialItemFixture.MATERIAL_ITEM_HANDLE)
-                         .part(MaterialItemFixture.MATERIAL_ITEM_EXTRA)
+                         .module(PartStatsModule.meleeHarvest()
+                                                .part(MaterialItemFixture.MATERIAL_ITEM_HEAD)
+                                                .part(MaterialItemFixture.MATERIAL_ITEM_HANDLE)
+                                                .part(MaterialItemFixture.MATERIAL_ITEM_EXTRA).build())
                          .multiplier(ToolStats.MINING_SPEED, modifier)
                          .build());
 

@@ -13,7 +13,6 @@ import slimeknights.tconstruct.library.materials.definition.MaterialId;
 import slimeknights.tconstruct.library.modifiers.ModifierId;
 import slimeknights.tconstruct.library.recipe.tinkerstation.ITinkerStationContainer;
 import slimeknights.tconstruct.library.tools.helper.ModifierUtil;
-import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.tables.recipe.TinkerStationRepairRecipe;
 import slimeknights.tconstruct.tools.TinkerModifiers;
@@ -37,11 +36,6 @@ public class ModifierMaterialRepairRecipe extends TinkerStationRepairRecipe impl
 
   @Override
   public MaterialId getRepairMaterial() {
-    return repairMaterial.getId();
-  }
-
-  @Override
-  protected MaterialId getPrimaryMaterial(IToolStackView tool) {
     return repairMaterial.getId();
   }
 

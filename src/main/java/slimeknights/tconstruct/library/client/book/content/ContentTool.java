@@ -33,8 +33,8 @@ import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.client.book.elements.TinkerItemElement;
 import slimeknights.tconstruct.library.recipe.TinkerRecipeTypes;
 import slimeknights.tconstruct.library.recipe.tinkerstation.building.ToolBuildingRecipe;
-import slimeknights.tconstruct.library.tools.definition.PartRequirement;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinition;
+import slimeknights.tconstruct.library.tools.definition.module.material.ToolPartsHook;
 import slimeknights.tconstruct.library.tools.helper.ToolBuildHandler;
 import slimeknights.tconstruct.library.tools.helper.TooltipUtil;
 import slimeknights.tconstruct.library.tools.item.IModifiableDisplay;
@@ -148,7 +148,7 @@ public class ContentTool extends PageContent {
     // determine the recipe to display
     if (this.parts == null || slotPos == null) {
       IModifiableDisplay tool = getTool();
-      List<PartRequirement> required = tool.getToolDefinition().getData().getParts();
+      List<IToolPart> required = ToolPartsHook.parts(tool.getToolDefinition());
       // if no required components, do a crafting recipe lookup
       if (required.isEmpty()) {
         // get the stacks for the first crafting table recipe
@@ -173,13 +173,10 @@ public class ContentTool extends PageContent {
       } else {
         ImmutableList.Builder<ItemStackList> partBuilder = ImmutableList.builder();
         for (int i = 0; i < required.size(); i++) {
-          IToolPart part = required.get(i).getPart();
-          if (part != null) {
-            // mark the part as display to suppress the invalid material tooltip
-            ItemStack stack = part.withMaterialForDisplay(ToolBuildHandler.getRenderMaterial(i));
-            stack.getOrCreateTag().putBoolean(TooltipUtil.KEY_DISPLAY, true);
-            partBuilder.add(ItemStackList.of(stack));
-          }
+          // mark the part as display to suppress the invalid material tooltip
+          ItemStack stack = required.get(i).withMaterialForDisplay(ToolBuildHandler.getRenderMaterial(i));
+          stack.getOrCreateTag().putBoolean(TooltipUtil.KEY_DISPLAY, true);
+          partBuilder.add(ItemStackList.of(stack));
         }
         // fetch the tool building recipe for extra ingredients
         List<Ingredient> extraRequirements = Optional.ofNullable(Minecraft.getInstance().level)

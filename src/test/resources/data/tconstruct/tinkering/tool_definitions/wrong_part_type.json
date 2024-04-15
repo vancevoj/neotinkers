@@ -1,6 +1,12 @@
 {
-	"parts": [
-		{ "item": "test:test_head" },
-		{ "item": "test:test_material" }
-	]
+  "modules": [
+    {
+      "type": "test:part_stats",
+      "parts": [
+        "test:test_head",
+        "test:test_material"
+      ],
+      "stat_provider": "tconstruct:melee_harvest"
+    }
+  ]
 }

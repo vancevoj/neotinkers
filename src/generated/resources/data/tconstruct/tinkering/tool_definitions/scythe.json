@@ -1,6 +1,16 @@
 {
   "modules": [
     {
+      "type": "tconstruct:part_stats",
+      "parts": [
+        "tconstruct:broad_blade",
+        "tconstruct:tough_handle",
+        "tconstruct:tool_binding",
+        "tconstruct:tough_handle"
+      ],
+      "stat_provider": "tconstruct:melee_harvest"
+    },
+    {
       "type": "tconstruct:modifier_slots",
       "slots": {
         "abilities": 1,
@@ -65,20 +75,6 @@
     {
       "type": "tconstruct:circle_melee",
       "diameter": 2.0
-    }
-  ],
-  "parts": [
-    {
-      "item": "tconstruct:broad_blade"
-    },
-    {
-      "item": "tconstruct:tough_handle"
-    },
-    {
-      "item": "tconstruct:tool_binding"
-    },
-    {
-      "item": "tconstruct:tough_handle"
     }
   ],
   "stats": {

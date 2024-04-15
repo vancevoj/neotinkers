@@ -18,7 +18,6 @@ import slimeknights.tconstruct.library.tools.stat.INumericToolStat;
 import slimeknights.tconstruct.library.tools.stat.IToolStat;
 import slimeknights.tconstruct.library.tools.stat.ModifierStatsBuilder;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -28,18 +27,15 @@ import java.util.Set;
  */
 public class ToolDefinitionData {
   /** Empty tool data definition instance */
-  public static final ToolDefinitionData EMPTY = new ToolDefinitionData(Collections.emptyList(), StatsNBT.EMPTY, MultiplierNBT.EMPTY, List.of(), ErrorFactory.RUNTIME);
+  public static final ToolDefinitionData EMPTY = new ToolDefinitionData(StatsNBT.EMPTY, MultiplierNBT.EMPTY, List.of(), ErrorFactory.RUNTIME);
   /** Loadable to parse definition data from JSON */
   public static final RecordLoadable<ToolDefinitionData> LOADABLE = RecordLoadable.create(
-    PartRequirement.LOADABLE.list(0).defaultField("parts", List.of(), d -> d.parts),
     new MergingField<>(StatsNBT.LOADABLE.defaultField("base", StatsNBT.EMPTY, d -> d.baseStats), "stats", MissingMode.CREATE),
     new MergingField<>(MultiplierNBT.LOADABLE.defaultField("multipliers", MultiplierNBT.EMPTY, d -> d.multipliers), "stats", MissingMode.CREATE),
     ToolModule.WITH_HOOKS.list(0).defaultField("modules", List.of(), d -> d.modules),
     ErrorFactory.FIELD, ToolDefinitionData::new);
 
   /** Gets a list of all parts in the tool */
-  @Getter
-  private final List<PartRequirement> parts;
   @VisibleForTesting
   protected final StatsNBT baseStats;
   @VisibleForTesting
@@ -48,8 +44,7 @@ public class ToolDefinitionData {
   @Getter
   private final transient ModifierHookMap hooks;
 
-  protected ToolDefinitionData(List<PartRequirement> parts, StatsNBT baseStats, MultiplierNBT multipliers, List<WithHooks<ToolModule>> modules, ErrorFactory error) {
-    this.parts = parts;
+  protected ToolDefinitionData(StatsNBT baseStats, MultiplierNBT multipliers, List<WithHooks<ToolModule>> modules, ErrorFactory error) {
     this.baseStats = baseStats;
     this.multipliers = multipliers;
     this.modules = modules;

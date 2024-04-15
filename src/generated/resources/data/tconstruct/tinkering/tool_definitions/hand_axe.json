@@ -1,6 +1,15 @@
 {
   "modules": [
     {
+      "type": "tconstruct:part_stats",
+      "parts": [
+        "tconstruct:small_axe_head",
+        "tconstruct:tool_handle",
+        "tconstruct:tool_binding"
+      ],
+      "stat_provider": "tconstruct:melee_harvest"
+    },
+    {
       "type": "tconstruct:modifier_slots",
       "slots": {
         "abilities": 1,
@@ -36,17 +45,6 @@
     {
       "type": "tconstruct:melee_particle",
       "particle": "tconstruct:axe_attack"
-    }
-  ],
-  "parts": [
-    {
-      "item": "tconstruct:small_axe_head"
-    },
-    {
-      "item": "tconstruct:tool_handle"
-    },
-    {
-      "item": "tconstruct:tool_binding"
     }
   ],
   "stats": {

@@ -25,6 +25,9 @@ import slimeknights.tconstruct.library.tools.definition.module.build.ToolSlotsMo
 import slimeknights.tconstruct.library.tools.definition.module.build.ToolTraitsModule;
 import slimeknights.tconstruct.library.tools.definition.module.interaction.DualOptionInteraction;
 import slimeknights.tconstruct.library.tools.definition.module.interaction.PreferenceSetInteraction;
+import slimeknights.tconstruct.library.tools.definition.module.material.MaterialStatProviders;
+import slimeknights.tconstruct.library.tools.definition.module.material.MaterialStatsModule;
+import slimeknights.tconstruct.library.tools.definition.module.material.PartStatsModule;
 import slimeknights.tconstruct.library.tools.definition.module.mining.IsEffectiveModule;
 import slimeknights.tconstruct.library.tools.definition.module.mining.MaxTierHarvestLogic;
 import slimeknights.tconstruct.library.tools.definition.module.mining.MiningSpeedModifierModule;
@@ -66,9 +69,10 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
     // pickaxes
     define(ToolDefinitions.PICKAXE)
       // parts
-      .part(pickHead)
-      .part(toolHandle)
-      .part(toolBinding)
+      .module(PartStatsModule.meleeHarvest()
+         .part(pickHead)
+         .part(toolHandle)
+         .part(toolBinding).build())
       // stats
       .stat(ToolStats.ATTACK_DAMAGE, 0.5f) // gains +0.5 damage from tool piercing, hence being lower than vanilla
       .stat(ToolStats.ATTACK_SPEED, 1.2f)
@@ -82,10 +86,11 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
 
     define(ToolDefinitions.SLEDGE_HAMMER)
       // parts
-      .part(hammerHead, 2)
-      .part(toughHandle)
-      .part(largePlate, 1)
-      .part(largePlate, 1)
+      .module(PartStatsModule.meleeHarvest()
+         .part(hammerHead, 2)
+         .part(toughHandle)
+         .part(largePlate, 1)
+         .part(largePlate, 1).build())
       // stats
       .stat(ToolStats.ATTACK_DAMAGE, 3f) // gains +5 undead damage from smite modifier
       .stat(ToolStats.ATTACK_SPEED, 0.75f)
@@ -103,10 +108,11 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
 
     define(ToolDefinitions.VEIN_HAMMER)
       // parts
-      .part(hammerHead, 2)
-      .part(toughHandle)
-      .part(pickHead, 1)
-      .part(largePlate)
+      .module(PartStatsModule.meleeHarvest()
+         .part(hammerHead, 2)
+         .part(toughHandle)
+         .part(pickHead, 1)
+         .part(largePlate).build())
       // stats
       .stat(ToolStats.ATTACK_DAMAGE, 3f) // gains +1.25 damage from piercing
       .stat(ToolStats.ATTACK_SPEED, 0.85f)
@@ -126,9 +132,10 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
     // shovels
     define(ToolDefinitions.MATTOCK)
       // parts
-      .part(smallAxeHead)
-      .part(toolHandle)
-      .part(roundPlate)
+      .module(PartStatsModule.meleeHarvest()
+         .part(smallAxeHead)
+         .part(toolHandle)
+         .part(roundPlate).build())
       // stats
       .stat(ToolStats.ATTACK_DAMAGE, 1.5f)
       .stat(ToolStats.ATTACK_SPEED, 0.9f)
@@ -147,9 +154,10 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
 
     define(ToolDefinitions.PICKADZE)
       // parts
-      .part(pickHead)
-      .part(toolHandle)
-      .part(roundPlate)
+      .module(PartStatsModule.meleeHarvest()
+         .part(pickHead)
+         .part(toolHandle)
+         .part(roundPlate).build())
       // stats
       .stat(ToolStats.ATTACK_DAMAGE, 0.5f)
       .stat(ToolStats.ATTACK_SPEED, 1.3f)
@@ -167,10 +175,11 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
 
     define(ToolDefinitions.EXCAVATOR)
       // parts
-      .part(largePlate)
-      .part(toughHandle)
-      .part(largePlate)
-      .part(toughHandle)
+      .module(PartStatsModule.meleeHarvest()
+         .part(largePlate)
+         .part(toughHandle)
+         .part(largePlate)
+         .part(toughHandle).build())
       // stats
       .stat(ToolStats.ATTACK_DAMAGE, 1.5f)
       .stat(ToolStats.ATTACK_SPEED, 1.0f)
@@ -192,9 +201,10 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
     // axes
     define(ToolDefinitions.HAND_AXE)
       // parts
-      .part(smallAxeHead)
-      .part(toolHandle)
-      .part(toolBinding)
+      .module(PartStatsModule.meleeHarvest()
+         .part(smallAxeHead)
+         .part(toolHandle)
+         .part(toolBinding).build())
       // stats
       .stat(ToolStats.ATTACK_DAMAGE, 6.0f)
       .stat(ToolStats.ATTACK_SPEED, 0.9f)
@@ -209,10 +219,11 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
 
     define(ToolDefinitions.BROAD_AXE)
       // parts
-      .part(broadAxeHead, 2)
-      .part(toughHandle)
-      .part(pickHead, 1)
-      .part(toolBinding)
+      .module(PartStatsModule.meleeHarvest()
+         .part(broadAxeHead, 2)
+         .part(toughHandle)
+         .part(pickHead, 1)
+         .part(toolBinding).build())
       // stats
       .stat(ToolStats.ATTACK_DAMAGE, 5f)
       .stat(ToolStats.ATTACK_SPEED, 0.6f)
@@ -238,9 +249,10 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
     };
     define(ToolDefinitions.KAMA)
       // parts
-      .part(smallBlade)
-      .part(toolHandle)
-      .part(toolBinding)
+      .module(PartStatsModule.meleeHarvest()
+         .part(smallBlade)
+         .part(toolHandle)
+         .part(toolBinding).build())
       // stats
       .stat(ToolStats.ATTACK_DAMAGE, 1f)
       .stat(ToolStats.ATTACK_SPEED, 1.6f)
@@ -259,10 +271,11 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
 
     define(ToolDefinitions.SCYTHE)
       // parts
-      .part(TinkerToolParts.broadBlade)
-      .part(TinkerToolParts.toughHandle)
-      .part(TinkerToolParts.toolBinding)
-      .part(TinkerToolParts.toughHandle)
+      .module(PartStatsModule.meleeHarvest()
+         .part(TinkerToolParts.broadBlade)
+         .part(TinkerToolParts.toughHandle)
+         .part(TinkerToolParts.toolBinding)
+         .part(TinkerToolParts.toughHandle).build())
       // stats
       .stat(ToolStats.ATTACK_DAMAGE, 1f)
       .stat(ToolStats.ATTACK_SPEED, 0.7f)
@@ -283,8 +296,9 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
     // swords
     define(ToolDefinitions.DAGGER)
       // parts
-      .part(smallBlade)
-      .part(toolHandle)
+      .module(PartStatsModule.meleeHarvest()
+         .part(smallBlade)
+         .part(toolHandle).build())
       // stats
       .stat(ToolStats.ATTACK_DAMAGE, 3f)
       .multiplier(ToolStats.ATTACK_DAMAGE, 0.65f)
@@ -311,9 +325,10 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
     };
     define(ToolDefinitions.SWORD)
       // parts
-      .part(smallBlade)
-      .part(toolHandle)
-      .part(toolHandle)
+      .module(PartStatsModule.meleeHarvest()
+         .part(smallBlade)
+         .part(toolHandle)
+         .part(toolHandle).build())
       // stats
       .stat(ToolStats.ATTACK_DAMAGE, 3f)
       .stat(ToolStats.ATTACK_SPEED, 1.6f)
@@ -329,10 +344,11 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
 
     define(ToolDefinitions.CLEAVER)
       // parts
-      .part(broadBlade)
-      .part(toughHandle)
-      .part(toughHandle)
-      .part(largePlate)
+      .module(PartStatsModule.meleeHarvest()
+         .part(broadBlade)
+         .part(toughHandle)
+         .part(toughHandle)
+         .part(largePlate).build())
       // stats
       .stat(ToolStats.ATTACK_DAMAGE, 3f)
       .stat(ToolStats.ATTACK_SPEED, 1.0f)
@@ -352,9 +368,10 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
     // bows
     define(ToolDefinitions.CROSSBOW)
       // parts
-      .part(bowLimb)
-      .part(bowGrip)
-      .part(bowstring)
+      .module(PartStatsModule.ranged()
+         .part(bowLimb)
+         .part(bowGrip)
+         .part(bowstring).build())
       // stats
       .stat(ToolStats.ATTACK_DAMAGE, 0f)
       .stat(ToolStats.ATTACK_SPEED, 1.0f)
@@ -362,10 +379,11 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
       .smallToolStartingSlots();
     define(ToolDefinitions.LONGBOW)
       // parts
-      .part(bowLimb)
-      .part(bowLimb)
-      .part(bowGrip)
-      .part(bowstring)
+      .module(PartStatsModule.ranged()
+         .part(bowLimb)
+         .part(bowLimb)
+         .part(bowGrip)
+         .part(bowstring).build())
       // stats
       .stat(ToolStats.DURABILITY, 120)
       .stat(ToolStats.ATTACK_DAMAGE, 0f)
@@ -489,7 +507,7 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
       .statEach(ToolStats.DURABILITY, 546, 630, 672, 362)
       .multiplier(ArmorSlotType.CHESTPLATE, ToolStats.ATTACK_DAMAGE, 0.4f)
       .module(slimeSlots)
-      .part(ArmorSlotType.HELMET, SkullStats.ID, 1)
+      .module(ArmorSlotType.HELMET, MaterialStatsModule.stats(MaterialStatProviders.SKULL).stat(SkullStats.ID, 1).build())
       .module(ArmorSlotType.HELMET, slimeTraits.build())
       .module(ArmorSlotType.CHESTPLATE, slimeTraits.copy().trait(ModifierIds.wings).build())
       .module(ArmorSlotType.LEGGINGS, slimeTraits.copy()

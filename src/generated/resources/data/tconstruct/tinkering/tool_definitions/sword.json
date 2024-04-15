@@ -1,6 +1,15 @@
 {
   "modules": [
     {
+      "type": "tconstruct:part_stats",
+      "parts": [
+        "tconstruct:small_blade",
+        "tconstruct:tool_handle",
+        "tconstruct:tool_handle"
+      ],
+      "stat_provider": "tconstruct:melee_harvest"
+    },
+    {
       "type": "tconstruct:modifier_slots",
       "slots": {
         "abilities": 1,
@@ -47,17 +56,6 @@
     {
       "type": "tconstruct:sweep_melee",
       "range": 1.0
-    }
-  ],
-  "parts": [
-    {
-      "item": "tconstruct:small_blade"
-    },
-    {
-      "item": "tconstruct:tool_handle"
-    },
-    {
-      "item": "tconstruct:tool_handle"
     }
   ],
   "stats": {

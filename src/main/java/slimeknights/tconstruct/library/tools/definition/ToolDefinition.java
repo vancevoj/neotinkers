@@ -11,52 +11,25 @@ import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.registries.RegistryObject;
 import slimeknights.mantle.registration.object.IdAwareObject;
 import slimeknights.tconstruct.TConstruct;
-import slimeknights.tconstruct.library.materials.IMaterialRegistry;
-import slimeknights.tconstruct.library.materials.MaterialRegistry;
-import slimeknights.tconstruct.library.materials.stats.IRepairableMaterialStats;
-import slimeknights.tconstruct.library.tools.nbt.MaterialNBT;
-import slimeknights.tconstruct.library.tools.nbt.StatsNBT;
-
-import java.util.List;
-import java.util.stream.IntStream;
+import slimeknights.tconstruct.library.modifiers.ModifierHook;
+import slimeknights.tconstruct.library.tools.definition.module.ToolHooks;
 
 /**
  * This class serves primarily as a container where the datapack tool data will be injected on datapack load
  */
+@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public class ToolDefinition {
   /** Empty tool definition instance to prevent the need for null for a fallback */
-  public static final ToolDefinition EMPTY = new ToolDefinition(TConstruct.getResource("empty"), new IToolStatProvider() {
-    @Override
-    public StatsNBT buildStats(ToolDefinition definition, MaterialNBT materials) {
-      return StatsNBT.EMPTY;
-    }
-
-    @Override
-    public boolean isMultipart() {
-      return false;
-    }
-  }, 0);
+  public static final ToolDefinition EMPTY = new ToolDefinition(TConstruct.getResource("empty"), 0);
 
   @Getter
   private final ResourceLocation id;
-  /** Function to convert from tool definition and materials into tool stats */
-  @Getter
-  private final IToolStatProvider statProvider;
-
   /** Max tier to pull materials from if uninitialized */
   @Getter
   private final int defaultMaxTier;
-
   /** Base data loaded from JSON, contains stats, traits, and starting slots */
   @Getter
-  protected ToolDefinitionData data;
-
-  protected ToolDefinition(ResourceLocation id, IToolStatProvider statProvider, int defaultMaxTier) {
-    this.id = id;
-    this.statProvider = statProvider;
-    this.defaultMaxTier = defaultMaxTier;
-    this.data = statProvider.getDefaultData();
-  }
+  protected ToolDefinitionData data = ToolDefinitionData.EMPTY;
 
   /**
    * Creates an tool definition builder
@@ -85,87 +58,33 @@ public class ToolDefinition {
     return builder(item.getId());
   }
 
-  /** Checks if the tool uses multipart stats, may not match {@link #getData()} if the JSON file was invalid*/
-  public boolean isMultipart() {
-    return statProvider.isMultipart();
+  /** Gets the given module from the tool */
+  public <T> T getHook(ModifierHook<T> hook) {
+    return data.getHook(hook);
   }
 
-  /**
-   * Builds the stats for this tool definition
-   * @param materials  Materials list
-   * @return  Stats NBT
-   */
-  public StatsNBT buildStats(MaterialNBT materials) {
-    return statProvider.buildStats(this, materials);
-  }
-
-
-  /* Repairing */
-
-  /** Cached indices that can be used to repair this tool */
-  private int[] repairIndices;
-
-  /** Largest weight of all repair parts */
-  private Integer maxRepairWeight;
-
-  /** Returns a list of part material requirements for repair materials */
-  public int[] getRepairParts() {
-    if (repairIndices == null) {
-      // get indices of all head parts
-      List<PartRequirement> components = getData().getParts();
-      if (components.isEmpty()) {
-        repairIndices = new int[0];
-      } else {
-        IMaterialRegistry registry = MaterialRegistry.getInstance();
-        repairIndices = IntStream.range(0, components.size())
-                                 .filter(i -> registry.getDefaultStats(components.get(i).getStatType()) instanceof IRepairableMaterialStats)
-                                 .toArray();
-      }
-    }
-    return repairIndices;
-  }
-
-  /** Gets the largest weight for all repair parts */
-  public int getMaxRepairWeight() {
-    if (maxRepairWeight == null) {
-      int max = 1;
-      List<PartRequirement> parts = getData().getParts();
-      for (int i : getRepairParts()) {
-        int cmp = parts.get(i).getWeight();
-        if (cmp > max) {
-          max = cmp;
-        }
-      }
-      maxRepairWeight = max;
-    }
-    return maxRepairWeight;
+  /** Checks if the tool uses multipart stats */
+  public boolean hasMaterials() {
+    return data.getHook(ToolHooks.MATERIAL_STATS).hasMaterials(this);
   }
 
 
   /* Loader methods */
 
-  /** Validates the given tool data works with this tool definition. Throws if invalid */
-  public void validate(ToolDefinitionData data) {
-    statProvider.validate(data);
-  }
-
   /** Updates the data in this tool definition from the JSON loader, should not be called directly other than by the loader */
   @VisibleForTesting
   public void setData(ToolDefinitionData data) {
     this.data = data;
-    // clear caches
-    repairIndices = null;
-    maxRepairWeight = null;
   }
 
-  /** Sets the tool data to the default, for the sake of erroring */
-  protected void setDefaultData() {
-    setData(statProvider.getDefaultData());
+  /** Sets the data back to empty */
+  protected void clearData() {
+    setData(ToolDefinitionData.EMPTY);
   }
 
   /** If true, the definition data is loaded from the datapack, so we can expect it to be reliable. False typically means datapacks are not yet loaded (e.g. menu startup) */
   public boolean isDataLoaded() {
-    return data != statProvider.getDefaultData();
+    return data != ToolDefinitionData.EMPTY;
   }
 
 	/** Builder to easily create a tool definition */
@@ -173,32 +92,11 @@ public class ToolDefinition {
   public static class Builder {
     /** ID for loading the tool definition data from datapacks */
     private final ResourceLocation id;
-    /** Stats provider for building the tool from tool parts */
-    @Setter @Accessors(chain = true)
-    private IToolStatProvider statsProvider;
     /** If true, registers the material with the tool definition data loader */
     private boolean register = true;
     /** Max tier to choose from for initializing tools with no materials, unused for non-multipart tools */
     @Setter @Accessors(chain = true)
     private int defaultMaxTier = 1;
-
-    /** Sets the tool to use a melee harvest tool stat provider, which requires at least 1 head part and uses any number of handle or bindings */
-    public Builder meleeHarvest() {
-      setStatsProvider(ToolStatProviders.MELEE_HARVEST);
-      return this;
-    }
-
-    /** Sets the tool to not use parts */
-    public Builder noParts() {
-      setStatsProvider(ToolStatProviders.NO_PARTS);
-      return this;
-    }
-
-    /** Sets the tool to use a ranged tool stat provider, which requires at least 1 limb part and uses any number of bowstrings */
-    public Builder ranged() {
-      setStatsProvider(ToolStatProviders.RANGED);
-      return this;
-    }
 
     /** Tells the definition to not be registered with the loader, used internally for testing. In general mods wont need this */
     public Builder skipRegister() {
@@ -211,10 +109,7 @@ public class ToolDefinition {
      * @return  Tool definition
      */
     public ToolDefinition build() {
-      if (statsProvider == null) {
-        throw new IllegalArgumentException("Stats provider is required for tools");
-      }
-      ToolDefinition definition = new ToolDefinition(id, statsProvider, defaultMaxTier);
+      ToolDefinition definition = new ToolDefinition(id, defaultMaxTier);
       if (register) {
         ToolDefinitionLoader.getInstance().registerToolDefinition(definition);
       }

@@ -1,7 +1,6 @@
 package slimeknights.tconstruct.library.tools.definition;
 
 import com.google.common.collect.ImmutableMap;
-import net.minecraft.world.item.Items;
 import net.minecraftforge.common.ToolActions;
 import org.junit.jupiter.api.Test;
 import slimeknights.tconstruct.library.tools.SlotType;
@@ -12,9 +11,12 @@ import slimeknights.tconstruct.library.tools.definition.module.build.ToolSlotsMo
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.ModDataNBT;
 import slimeknights.tconstruct.library.tools.nbt.StatsNBT;
+import slimeknights.tconstruct.library.tools.part.IToolPart;
 import slimeknights.tconstruct.library.tools.stat.ModifierStatsBuilder;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
 import slimeknights.tconstruct.test.BaseMcTest;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -31,13 +33,14 @@ class ToolDefinitionDataTest extends BaseMcTest {
   /** Checks that the stats are all empty */
   protected static void checkToolDataNonPartsEmpty(ToolDefinitionData data) {
     checkStatsEmpty(data);
-    assertThat(data.getHook(ToolHooks.TOOL_TRAITS).getTraits(Items.DIAMOND_PICKAXE, ToolDefinition.EMPTY)).isEmpty();
+    assertThat(data.getHook(ToolHooks.TOOL_TRAITS).getTraits(ToolDefinition.EMPTY)).isEmpty();
   }
 
   /** Checks that the stats are all empty */
   protected static void checkToolDataEmpty(ToolDefinitionData data) {
-    assertThat(data.getParts()).isNotNull();
-    assertThat(data.getParts()).isEmpty();
+    List<IToolPart> parts = data.getHook(ToolHooks.TOOL_PARTS).getParts(ToolDefinition.EMPTY);
+    assertThat(parts).isNotNull();
+    assertThat(parts).isEmpty();
     checkToolDataNonPartsEmpty(data);
     assertThat(data.getHooks().getAllModules()).isEmpty();
   }

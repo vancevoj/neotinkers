@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableMap;
 import io.netty.buffer.Unpooled;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.ToolActions;
 import org.junit.jupiter.api.BeforeAll;
@@ -24,6 +23,9 @@ import slimeknights.tconstruct.library.tools.definition.module.build.ToolActions
 import slimeknights.tconstruct.library.tools.definition.module.build.ToolSlotsModule;
 import slimeknights.tconstruct.library.tools.definition.module.build.ToolTraitsModule;
 import slimeknights.tconstruct.library.tools.definition.module.build.VolatileDataToolHook;
+import slimeknights.tconstruct.library.tools.definition.module.material.PartStatsModule;
+import slimeknights.tconstruct.library.tools.definition.module.material.PartStatsModule.WeightedPart;
+import slimeknights.tconstruct.library.tools.definition.module.material.ToolPartsHook;
 import slimeknights.tconstruct.library.tools.definition.module.mining.IsEffectiveModule;
 import slimeknights.tconstruct.library.tools.definition.module.mining.IsEffectiveToolHook;
 import slimeknights.tconstruct.library.tools.definition.module.weapon.MeleeHitToolHook;
@@ -60,8 +62,9 @@ class UpdateToolDefinitionDataPacketTest extends BaseMcTest {
     ToolDefinitionData filled = ToolDefinitionDataBuilder
       .builder()
       // parts
-      .part(MaterialItemFixture.MATERIAL_ITEM_HEAD, 10)
-      .part(MaterialItemFixture.MATERIAL_ITEM_HANDLE)
+      .module(PartStatsModule.meleeHarvest()
+                             .part(MaterialItemFixture.MATERIAL_ITEM_HEAD, 10)
+                             .part(MaterialItemFixture.MATERIAL_ITEM_HANDLE).build())
       // stats
       .stat(ToolStats.DURABILITY, 1000)
       .stat(ToolStats.ATTACK_DAMAGE, 152.5f)
@@ -92,26 +95,28 @@ class UpdateToolDefinitionDataPacketTest extends BaseMcTest {
     ToolDefinitionData parsed = parsedMap.get(EMPTY_ID);
     assertThat(parsed).isNotNull();
     // no parts
-    assertThat(parsed.getParts()).isEmpty();
+    assertThat(parsed.getHook(ToolHooks.MATERIAL_STATS).getStatTypes(ToolDefinition.EMPTY)).isEmpty();
     // no stats
     assertThat(parsed.baseStats.getContainedStats()).isEmpty();
     assertThat(parsed.multipliers.getContainedStats()).isEmpty();
     // no slots
     assertThat(parsed.getHook(ToolHooks.VOLATILE_DATA)).isNotInstanceOf(ToolSlotsModule.class);
     // no traits
-    assertThat(parsed.getHook(ToolHooks.TOOL_TRAITS).getTraits(Items.DIAMOND_PICKAXE, ToolDefinition.EMPTY)).isEmpty();
+    assertThat(parsed.getHook(ToolHooks.TOOL_TRAITS).getTraits(ToolDefinition.EMPTY)).isEmpty();
 
     // next, validate the filled one
     parsed = parsedMap.get(FILLED_ID);
     assertThat(parsed).isNotNull();
 
     // parts
-    List<PartRequirement> parts = parsed.getParts();
+    ToolPartsHook toolPartsHook = parsed.getHook(ToolHooks.TOOL_PARTS);
+    assertThat(toolPartsHook).isInstanceOf(PartStatsModule.class);
+    List<WeightedPart> parts = ((PartStatsModule)toolPartsHook).getParts();
     assertThat(parts).hasSize(2);
-    assertThat(parts.get(0).getPart()).isEqualTo(MaterialItemFixture.MATERIAL_ITEM_HEAD);
-    assertThat(parts.get(0).getWeight()).isEqualTo(10);
-    assertThat(parts.get(1).getPart()).isEqualTo(MaterialItemFixture.MATERIAL_ITEM_HANDLE);
-    assertThat(parts.get(1).getWeight()).isEqualTo(1);
+    assertThat(parts.get(0).part()).isEqualTo(MaterialItemFixture.MATERIAL_ITEM_HEAD);
+    assertThat(parts.get(0).weight()).isEqualTo(10);
+    assertThat(parts.get(1).part()).isEqualTo(MaterialItemFixture.MATERIAL_ITEM_HANDLE);
+    assertThat(parts.get(1).weight()).isEqualTo(1);
 
     // stats
     assertThat(parsed.baseStats.getContainedStats()).hasSize(2);
@@ -138,7 +143,7 @@ class UpdateToolDefinitionDataPacketTest extends BaseMcTest {
     assertThat(slots).containsEntry(SlotType.ABILITY, 8);
 
     // traits
-    List<ModifierEntry> traits = parsed.getHook(ToolHooks.TOOL_TRAITS).getTraits(Items.DIAMOND_PICKAXE, ToolDefinition.EMPTY);
+    List<ModifierEntry> traits = parsed.getHook(ToolHooks.TOOL_TRAITS).getTraits(ToolDefinition.EMPTY);
     assertThat(traits).hasSize(1);
     assertThat(traits.get(0).getModifier()).isEqualTo(ModifierFixture.TEST_MODIFIER_1);
     assertThat(traits.get(0).getLevel()).isEqualTo(10);

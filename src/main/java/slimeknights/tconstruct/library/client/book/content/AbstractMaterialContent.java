@@ -44,7 +44,8 @@ import slimeknights.tconstruct.library.recipe.TinkerRecipeTypes;
 import slimeknights.tconstruct.library.recipe.casting.material.MaterialCastingLookup;
 import slimeknights.tconstruct.library.recipe.casting.material.MaterialFluidRecipe;
 import slimeknights.tconstruct.library.recipe.material.MaterialRecipe;
-import slimeknights.tconstruct.library.tools.definition.PartRequirement;
+import slimeknights.tconstruct.library.tools.definition.module.material.MaterialStatsToolHook;
+import slimeknights.tconstruct.library.tools.definition.module.material.MaterialStatsToolHook.WeightedStatType;
 import slimeknights.tconstruct.library.tools.helper.ToolBuildHandler;
 import slimeknights.tconstruct.library.tools.item.IModifiable;
 import slimeknights.tconstruct.library.tools.nbt.MaterialNBT;
@@ -340,21 +341,21 @@ public abstract class AbstractMaterialContent extends PageContent {
       toolLoop:
       for (Holder<Item> item : Registry.ITEM.getTagOrEmpty(TinkerTags.Items.MULTIPART_TOOL)) {
         if (item.value() instanceof IModifiable tool) {
-          List<PartRequirement> requirements = tool.getToolDefinition().getData().getParts();
+          List<WeightedStatType> requirements = MaterialStatsToolHook.stats(tool.getToolDefinition());
           // start building the tool with the given material
           MaterialNBT.Builder materials = MaterialNBT.builder();
           boolean usedMaterial = false;
-          for (PartRequirement part : requirements) {
+          for (WeightedStatType part : requirements) {
             // if any stat type of the tool is not supported by this page, skip the whole tool
-            if (!supportsStatType(part.getStatType())) {
+            if (!supportsStatType(part.stat())) {
               continue toolLoop;
             }
             // if the stat type is not supported by the material, substitute
-            if (hasStatType(materialId, part.getStatType())) {
+            if (hasStatType(materialId, part.stat())) {
               materials.add(materialVariant);
               usedMaterial = true;
             } else {
-              materials.add(MaterialRegistry.firstWithStatType(part.getStatType()));
+              materials.add(MaterialRegistry.firstWithStatType(part.stat()));
             }
           }
 

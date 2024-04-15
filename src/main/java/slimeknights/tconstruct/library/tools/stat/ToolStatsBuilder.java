@@ -7,9 +7,9 @@ import slimeknights.tconstruct.library.materials.MaterialRegistry;
 import slimeknights.tconstruct.library.materials.definition.MaterialId;
 import slimeknights.tconstruct.library.materials.stats.IMaterialStats;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
-import slimeknights.tconstruct.library.tools.definition.PartRequirement;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinition;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinitionData;
+import slimeknights.tconstruct.library.tools.definition.module.material.MaterialStatsToolHook.WeightedStatType;
 import slimeknights.tconstruct.library.tools.nbt.MaterialNBT;
 import slimeknights.tconstruct.library.tools.nbt.StatsNBT;
 
@@ -100,22 +100,22 @@ public class ToolStatsBuilder {
    * Gets a list of all stats for the given part type
    * @param statsId             Stat type
    * @param materials           Materials list
-   * @param parts  List of required components, filters stat types
+   * @param statTypes  List of required components, filters stat types
    * @param <T>  Type of stats
    * @return  List of stats
    */
-  public static <T extends IMaterialStats> List<T> listOfCompatibleWith(MaterialStatsId statsId, MaterialNBT materials, List<PartRequirement> parts) {
+  public static <T extends IMaterialStats> List<T> listOfCompatibleWith(MaterialStatsId statsId, MaterialNBT materials, List<WeightedStatType> statTypes) {
     ImmutableList.Builder<T> builder = ImmutableList.builder();
     // iterating both lists at once, precondition that they have the same size
-    int size = parts.size();
+    int size = statTypes.size();
     for (int i = 0; i < size; i++) {
       // ensure stat type is valid
-      PartRequirement part = parts.get(i);
-      if (part.getStatType().equals(statsId)) {
-        T stats = fetchStatsOrDefault(materials.get(i).getId(), part.getStatType());
+      WeightedStatType statType = statTypes.get(i);
+      if (statType.stat().equals(statsId)) {
+        T stats = fetchStatsOrDefault(materials.get(i).getId(), statType.stat());
         if (stats != null) {
           // add a copy of the stat once per weight, lazy way to do weighting
-          for (int w = 0; w < part.getWeight(); w++) {
+          for (int w = 0; w < statType.weight(); w++) {
             builder.add(stats);
           }
         }
@@ -154,7 +154,6 @@ public class ToolStatsBuilder {
    * Gets the average value from a list of stat types
    * @param stats         Stat list
    * @param statGetter    Function to get the value
-   * @param missingValue  Default value to use for missing stats
    * @param <T>  Material type
    * @return  Average value
    */

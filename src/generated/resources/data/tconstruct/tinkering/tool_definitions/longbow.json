@@ -1,25 +1,21 @@
 {
   "modules": [
     {
+      "type": "tconstruct:part_stats",
+      "parts": [
+        "tconstruct:bow_limb",
+        "tconstruct:bow_limb",
+        "tconstruct:bow_grip",
+        "tconstruct:bowstring"
+      ],
+      "stat_provider": "tconstruct:ranged"
+    },
+    {
       "type": "tconstruct:modifier_slots",
       "slots": {
         "abilities": 1,
         "upgrades": 2
       }
-    }
-  ],
-  "parts": [
-    {
-      "item": "tconstruct:bow_limb"
-    },
-    {
-      "item": "tconstruct:bow_limb"
-    },
-    {
-      "item": "tconstruct:bow_grip"
-    },
-    {
-      "item": "tconstruct:bowstring"
     }
   ],
   "stats": {

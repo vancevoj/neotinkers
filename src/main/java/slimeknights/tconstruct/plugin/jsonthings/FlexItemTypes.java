@@ -12,9 +12,7 @@ import slimeknights.mantle.util.JsonHelper;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.materials.definition.MaterialId;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
-import slimeknights.tconstruct.library.tools.definition.IToolStatProvider;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinition;
-import slimeknights.tconstruct.library.tools.definition.ToolStatProviders;
 import slimeknights.tconstruct.plugin.jsonthings.item.DummyArmorMaterial;
 import slimeknights.tconstruct.plugin.jsonthings.item.FlexBasicArmorItem;
 import slimeknights.tconstruct.plugin.jsonthings.item.FlexFlatEmbellishedArmor;
@@ -60,29 +58,23 @@ public class FlexItemTypes {
 
     /* Register a modifiable tool instance for melee/harvest tools */
     register("tool", data -> {
-      IToolStatProvider statProvider = ToolStatProviders.REGISTRY.getIfPresent(data, "stat_provider");
       boolean breakBlocksInCreative = GsonHelper.getAsBoolean(data, "break_blocks_in_creative", true);
-      return (props, builder) -> add(TOOL_ITEMS, new FlexModifiableItem(props, ToolDefinition.builder(builder.getRegistryName()).setStatsProvider(statProvider).build(), breakBlocksInCreative));
+      return (props, builder) -> add(TOOL_ITEMS, new FlexModifiableItem(props, ToolDefinition.builder(builder.getRegistryName()).build(), breakBlocksInCreative));
     });
 
     /* Register a modifiable tool instance for melee/harvest tools */
     register("staff", data -> {
-      IToolStatProvider statProvider = ToolStatProviders.REGISTRY.getIfPresent(data, "stat_provider");
       boolean breakBlocksInCreative = GsonHelper.getAsBoolean(data, "break_blocks_in_creative", true);
-      return (props, builder) -> add(TOOL_ITEMS, new FlexModifiableStaffItem(props, ToolDefinition.builder(builder.getRegistryName()).setStatsProvider(statProvider).build(), breakBlocksInCreative));
+      return (props, builder) -> add(TOOL_ITEMS, new FlexModifiableStaffItem(props, ToolDefinition.builder(builder.getRegistryName()).build(), breakBlocksInCreative));
     });
 
     /* Register a modifiable tool instance for bow like items (release on finish) */
-    register("bow", data -> {
-      IToolStatProvider statProvider = data.has("stat_provider") ? ToolStatProviders.REGISTRY.getIfPresent(data, "stat_provider") : ToolStatProviders.RANGED;
-      return (props, builder) -> add(TOOL_ITEMS, new FlexModifiableBowItem(props, ToolDefinition.builder(builder.getRegistryName()).setStatsProvider(statProvider).build()));
-    });
+    register("bow", data -> (props, builder) -> add(TOOL_ITEMS, new FlexModifiableBowItem(props, ToolDefinition.builder(builder.getRegistryName()).build())));
 
     /* Register a modifiable tool instance for crossbow like items (load on finish) */
     register("crossbow", data -> {
-      IToolStatProvider statProvider = data.has("stat_provider") ? ToolStatProviders.REGISTRY.getIfPresent(data, "stat_provider") : ToolStatProviders.RANGED;
       boolean allowFireworks = GsonHelper.getAsBoolean(data, "allow_fireworks");
-      return (props, builder) -> add(CROSSBOW_ITEMS, new FlexModifiableCrossbowItem(props, ToolDefinition.builder(builder.getRegistryName()).setStatsProvider(statProvider).build(), allowFireworks));
+      return (props, builder) -> add(CROSSBOW_ITEMS, new FlexModifiableCrossbowItem(props, ToolDefinition.builder(builder.getRegistryName()).build(), allowFireworks));
     });
 
     /* Register a modifiable tool instance for crossbow like items (load on finish) */
@@ -92,8 +84,7 @@ public class FlexItemTypes {
       boolean hasGolden = GsonHelper.getAsBoolean(data, "has_golden", true);
       ArmorSlotType slot = JsonHelper.getAsEnum(data, "slot", ArmorSlotType.class);
       SoundEvent equipSound = JsonHelper.getAsEntry(ForgeRegistries.SOUND_EVENTS, data, "equip_sound");
-      IToolStatProvider statProvider = data.has("stat_provider") ? ToolStatProviders.REGISTRY.getIfPresent(data, "stat_provider") : ToolStatProviders.NO_PARTS;
-      return (props, builder) -> new FlexBasicArmorItem(new DummyArmorMaterial(name, equipSound), slot.getEquipmentSlot(), props, ToolDefinition.builder(builder.getRegistryName()).setStatsProvider(statProvider).build(), name, dyeable, hasGolden);
+      return (props, builder) -> new FlexBasicArmorItem(new DummyArmorMaterial(name, equipSound), slot.getEquipmentSlot(), props, ToolDefinition.builder(builder.getRegistryName()).build(), name, dyeable, hasGolden);
     });
 
     /* Register a modifiable armor part that supports embellishments */
@@ -101,8 +92,7 @@ public class FlexItemTypes {
       ResourceLocation name = JsonHelper.getResourceLocation(data, "texture_name");
       ArmorSlotType slot = JsonHelper.getAsEnum(data, "slot", ArmorSlotType.class);
       SoundEvent equipSound = JsonHelper.getAsEntry(ForgeRegistries.SOUND_EVENTS, data, "equip_sound");
-      IToolStatProvider statProvider = data.has("stat_provider") ? ToolStatProviders.REGISTRY.getIfPresent(data, "stat_provider") : ToolStatProviders.NO_PARTS;
-      return (props, builder) -> new FlexLayeredEmbellishedArmor(new DummyArmorMaterial(name, equipSound), slot.getEquipmentSlot(), props, ToolDefinition.builder(builder.getRegistryName()).setStatsProvider(statProvider).build(), name);
+      return (props, builder) -> new FlexLayeredEmbellishedArmor(new DummyArmorMaterial(name, equipSound), slot.getEquipmentSlot(), props, ToolDefinition.builder(builder.getRegistryName()).build(), name);
     });
 
     /* Register a modifiable tool instance for crossbow like items (load on finish) */
@@ -112,8 +102,7 @@ public class FlexItemTypes {
       boolean dyeable = GsonHelper.getAsBoolean(data, "dyeable", false);
       ArmorSlotType slot = JsonHelper.getAsEnum(data, "slot", ArmorSlotType.class);
       SoundEvent equipSound = JsonHelper.getAsEntry(ForgeRegistries.SOUND_EVENTS, data, "equip_sound");
-      IToolStatProvider statProvider = data.has("stat_provider") ? ToolStatProviders.REGISTRY.getIfPresent(data, "stat_provider") : ToolStatProviders.NO_PARTS;
-      return (props, builder) -> new FlexFlatEmbellishedArmor(new DummyArmorMaterial(name, equipSound), slot.getEquipmentSlot(), props, ToolDefinition.builder(builder.getRegistryName()).setStatsProvider(statProvider).build(), name, defaultMaterial, dyeable);
+      return (props, builder) -> new FlexFlatEmbellishedArmor(new DummyArmorMaterial(name, equipSound), slot.getEquipmentSlot(), props, ToolDefinition.builder(builder.getRegistryName()).build(), name, defaultMaterial, dyeable);
     });
   }
 

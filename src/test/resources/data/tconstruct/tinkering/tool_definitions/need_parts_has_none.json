@@ -1,2 +1,9 @@
 {
+  "modules": [
+    {
+      "type": "test:part_stats",
+      "parts": [],
+      "stat_provider": "tconstruct:melee_harvest"
+    }
+  ]
 }

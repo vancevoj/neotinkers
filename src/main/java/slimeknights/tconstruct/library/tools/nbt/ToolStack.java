@@ -22,10 +22,11 @@ import slimeknights.tconstruct.library.modifiers.TinkerHooks;
 import slimeknights.tconstruct.library.modifiers.hook.build.ModifierTraitHook.TraitBuilder;
 import slimeknights.tconstruct.library.tools.SlotType;
 import slimeknights.tconstruct.library.tools.context.ToolRebuildContext;
-import slimeknights.tconstruct.library.tools.definition.PartRequirement;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinition;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinitionData;
 import slimeknights.tconstruct.library.tools.definition.module.ToolHooks;
+import slimeknights.tconstruct.library.tools.definition.module.material.MaterialStatsToolHook;
+import slimeknights.tconstruct.library.tools.definition.module.material.MaterialStatsToolHook.WeightedStatType;
 import slimeknights.tconstruct.library.tools.helper.ToolBuildHandler;
 import slimeknights.tconstruct.library.tools.helper.TooltipUtil;
 import slimeknights.tconstruct.library.tools.item.IModifiable;
@@ -415,7 +416,7 @@ public class ToolStack implements IToolStackView {
 
   @Override
   public MaterialNBT getMaterials() {
-    if (!getDefinition().isMultipart()) {
+    if (!getDefinition().hasMaterials()) {
       return MaterialNBT.EMPTY;
     }
     if (materials == null) {
@@ -616,8 +617,9 @@ public class ToolStack implements IToolStackView {
     // if datapacks have loaded and the tool does not have stats, it needs to have stats built
     if (definition.isDataLoaded() && !isInitialized(nbt)) {
       // need materials to build stats, randomize them if missing
-      if (definition.isMultipart() && !nbt.contains(TAG_MATERIALS, Tag.TAG_LIST)) {
-        setMaterialsRaw(ToolBuildHandler.randomMaterials(definition.getData(), definition.getDefaultMaxTier(), false));
+      if (definition.hasMaterials() && !nbt.contains(TAG_MATERIALS, Tag.TAG_LIST)) {
+        // TODO: make this a new module
+        setMaterialsRaw(ToolBuildHandler.randomMaterials(definition, definition.getDefaultMaxTier(), false));
       }
       rebuildStats();
     }
@@ -632,7 +634,8 @@ public class ToolStack implements IToolStackView {
 
     // after slots, time to build stats
     MaterialNBT materials = getMaterials();
-    StatsNBT stats = definition.buildStats(materials);
+    MaterialStatsToolHook statsBuilder = toolData.getHook(ToolHooks.MATERIAL_STATS);
+    StatsNBT stats = statsBuilder.buildStats(definition, materials);
     ModifierStatsBuilder statBuilder = ModifierStatsBuilder.builder();
     toolData.buildStatMultipliers(statBuilder);
 
@@ -641,11 +644,11 @@ public class ToolStack implements IToolStackView {
     ModifierNBT.Builder modBuilder = ModifierNBT.builder();
     modBuilder.add(getUpgrades());
     toolData.getHook(ToolHooks.TOOL_TRAITS).addTraits(definition, modBuilder);
-    List<PartRequirement> parts = getDefinition().getData().getParts();
-    int max = Math.min(materials.size(), parts.size());
+    List<WeightedStatType> statTypes = statsBuilder.getStatTypes(definition);
+    int max = Math.min(materials.size(), statTypes.size());
     IMaterialRegistry materialRegistry = MaterialRegistry.getInstance();
     for (int i = 0; i < max; i++) {
-      modBuilder.add(materialRegistry.getTraits(materials.get(i).getId(), parts.get(i).getStatType()));
+      modBuilder.add(materialRegistry.getTraits(materials.get(i).getId(), statTypes.get(i).stat()));
     }
     ModifierNBT beforeTraits = modBuilder.build();
 
@@ -784,7 +787,7 @@ public class ToolStack implements IToolStackView {
     }
     // rebuild stats if we have required data (skip if multipart with no materials)
     ToolStack tool = ToolStack.from(item, definition, tag);
-    if (hasMaterials || !definition.isMultipart()) {
+    if (hasMaterials || !definition.hasMaterials()) {
       tool.rebuildStats();
     }
   }

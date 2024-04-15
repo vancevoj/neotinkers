@@ -24,8 +24,9 @@ import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.recipe.partbuilder.IPartBuilderContainer;
 import slimeknights.tconstruct.library.recipe.partbuilder.IPartBuilderRecipe;
 import slimeknights.tconstruct.library.recipe.partbuilder.Pattern;
-import slimeknights.tconstruct.library.tools.definition.PartRequirement;
+import slimeknights.tconstruct.library.tools.definition.module.material.ToolPartsHook;
 import slimeknights.tconstruct.library.tools.helper.ModifierUtil;
+import slimeknights.tconstruct.library.tools.item.IModifiable;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.library.tools.part.IToolPart;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
@@ -34,7 +35,6 @@ import slimeknights.tconstruct.tables.TinkerTables;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Stream;
 
 /** Recipe to break a tool into tool parts */
@@ -70,12 +70,13 @@ public class PartBuilderToolRecycle implements IPartBuilderRecipe {
 
   @Override
   public Stream<Pattern> getPatterns(IPartBuilderContainer inv) {
-    return ToolStack.from(inv.getStack()).getDefinition().getData().getParts().stream()
-               .map(PartRequirement::getPart)
-               .filter(Objects::nonNull)
-               .map(part -> Registry.ITEM.getKey(part.asItem()))
-               .distinct()
-               .map(Pattern::new);
+    if (inv.getStack().getItem() instanceof IModifiable modifiable) {
+      return ToolPartsHook.parts(modifiable.getToolDefinition()).stream()
+                          .map(part -> Registry.ITEM.getKey(part.asItem()))
+                          .distinct()
+                          .map(Pattern::new);
+    }
+    return Stream.empty();
   }
 
   @Override
@@ -104,10 +105,10 @@ public class PartBuilderToolRecycle implements IPartBuilderRecipe {
     // first, try to find a matching part
     IToolPart match = null;
     int matchIndex = -1;
-    List<PartRequirement> requirements = tool.getDefinition().getData().getParts();
+    List<IToolPart> requirements = ToolPartsHook.parts(tool.getDefinition());
     for (int i = 0; i < requirements.size(); i++) {
-      IToolPart part = requirements.get(i).getPart();
-      if (part != null && pattern.equals(Registry.ITEM.getKey(part.asItem()))) {
+      IToolPart part = requirements.get(i);
+      if (pattern.equals(Registry.ITEM.getKey(part.asItem()))) {
         matchIndex = i;
         match = part;
         break;
@@ -137,16 +138,14 @@ public class PartBuilderToolRecycle implements IPartBuilderRecipe {
     List<IToolPart> parts = new ArrayList<>();
     IntList indices = new IntArrayList();
     boolean found = false;
-    List<PartRequirement> requirements = tool.getDefinition().getData().getParts();
+    List<IToolPart> requirements = ToolPartsHook.parts(tool.getDefinition());
     for (int i = 0; i < requirements.size(); i++) {
-      IToolPart part = requirements.get(i).getPart();
-      if (part != null) {
-        if (found || !pattern.equals(Registry.ITEM.getKey(part.asItem()))) {
-          parts.add(part);
-          indices.add(i);
-        } else {
-          found = true;
-        }
+      IToolPart part = requirements.get(i);
+      if (found || !pattern.equals(Registry.ITEM.getKey(part.asItem()))) {
+        parts.add(part);
+        indices.add(i);
+      } else {
+        found = true;
       }
     }
     if (parts.isEmpty()) {

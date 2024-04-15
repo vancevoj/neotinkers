@@ -11,7 +11,6 @@ import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.tconstruct.library.materials.definition.LazyMaterial;
 import slimeknights.tconstruct.library.materials.definition.MaterialId;
 import slimeknights.tconstruct.library.recipe.tinkerstation.ITinkerStationContainer;
-import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.tables.TinkerTables;
 import slimeknights.tconstruct.tables.recipe.TinkerStationRepairRecipe;
 
@@ -34,11 +33,6 @@ public class SpecializedRepairRecipe extends TinkerStationRepairRecipe implement
 
   @Override
   public MaterialId getRepairMaterial() {
-    return repairMaterial.getId();
-  }
-
-  @Override
-  protected MaterialId getPrimaryMaterial(IToolStackView tool) {
     return repairMaterial.getId();
   }
 

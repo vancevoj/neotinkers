@@ -152,20 +152,6 @@ public class ModifiableArmorMaterial implements ArmorMaterial {
       return this;
     }
 
-    /** Sets the stat provider for the given slot */
-    public Builder setStatsProvider(ArmorSlotType slot, IToolStatProvider statProvider) {
-      getBuilder(slot).setStatsProvider(statProvider);
-      return this;
-    }
-
-    /** Sets the stat provider for all slots slot */
-    public Builder setStatsProvider(IToolStatProvider statProvider) {
-      for (ArmorSlotType slotType : slotTypes) {
-        setStatsProvider(slotType, statProvider);
-      }
-      return this;
-    }
-
     /** Tells the definition to not be registered with the loader, used internally for testing. In general mods wont need this */
     public Builder skipRegister() {
       for (ArmorSlotType slotType : slotTypes) {

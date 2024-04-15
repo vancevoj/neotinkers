@@ -56,6 +56,8 @@ import slimeknights.tconstruct.library.tools.definition.module.build.ToolSlotsMo
 import slimeknights.tconstruct.library.tools.definition.module.build.ToolTraitsModule;
 import slimeknights.tconstruct.library.tools.definition.module.interaction.DualOptionInteraction;
 import slimeknights.tconstruct.library.tools.definition.module.interaction.PreferenceSetInteraction;
+import slimeknights.tconstruct.library.tools.definition.module.material.MaterialStatsModule;
+import slimeknights.tconstruct.library.tools.definition.module.material.PartStatsModule;
 import slimeknights.tconstruct.library.tools.definition.module.mining.IsEffectiveModule;
 import slimeknights.tconstruct.library.tools.definition.module.mining.MaxTierHarvestLogic;
 import slimeknights.tconstruct.library.tools.definition.module.mining.MiningSpeedModifierModule;
@@ -203,6 +205,8 @@ public final class TinkerTools extends TinkerModule {
       ItemPredicate.register(ToolStackItemPredicate.ID, ToolStackItemPredicate::deserialize);
 
       // tool definition components
+      ToolModule.LOADER.register(getResource("material_stats"), MaterialStatsModule.LOADER);
+      ToolModule.LOADER.register(getResource("part_stats"), PartStatsModule.LOADER);
       ToolModule.LOADER.register(getResource("tool_actions"), ToolActionsModule.LOADER);
       ToolModule.LOADER.register(getResource("traits"), ToolTraitsModule.LOADER);
       ToolModule.LOADER.register(getResource("modifier_slots"), ToolSlotsModule.LOADER);
