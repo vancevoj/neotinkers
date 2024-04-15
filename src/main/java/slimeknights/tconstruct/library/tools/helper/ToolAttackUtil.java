@@ -36,6 +36,7 @@ import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.TinkerHooks;
 import slimeknights.tconstruct.library.tools.context.ToolAttackContext;
+import slimeknights.tconstruct.library.tools.definition.module.weapon.MeleeHitToolHook;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
@@ -294,7 +295,7 @@ public class ToolAttackUtil {
     if (isExtraAttack) {
       didHit = dealDefaultDamage(attackerLiving, targetEntity, damage);
     } else {
-      didHit = tool.getDefinition().getData().getAttack().dealDamage(tool, context, damage);
+      didHit = MeleeHitToolHook.dealDamage(tool, context, damage);
     }
 
     // reset hand to make sure we don't mess with vanilla tools

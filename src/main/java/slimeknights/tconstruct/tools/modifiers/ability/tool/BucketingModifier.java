@@ -46,7 +46,7 @@ import slimeknights.tconstruct.library.modifiers.hook.interaction.InteractionSou
 import slimeknights.tconstruct.library.modifiers.modules.behavior.ShowOffhandModule;
 import slimeknights.tconstruct.library.modifiers.modules.fluid.TankModule;
 import slimeknights.tconstruct.library.modifiers.util.ModifierHookMap.Builder;
-import slimeknights.tconstruct.library.tools.definition.module.ToolModuleHooks;
+import slimeknights.tconstruct.library.tools.definition.module.ToolHooks;
 import slimeknights.tconstruct.library.tools.definition.module.interaction.DualOptionInteraction;
 import slimeknights.tconstruct.library.tools.item.ModifiableItem;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
@@ -146,7 +146,7 @@ public class BucketingModifier extends Modifier implements BlockInteractionModif
 
   @Override
   public InteractionResult afterBlockUse(IToolStackView tool, ModifierEntry modifier, UseOnContext context, InteractionSource source) {
-    if (!tool.getDefinitionData().getModule(ToolModuleHooks.INTERACTION).canInteract(tool, modifier.getId(), source)) {
+    if (!tool.getHook(ToolHooks.INTERACTION).canInteract(tool, modifier.getId(), source)) {
       return InteractionResult.PASS;
     }
     // only place fluid if sneaking, we contain at least a bucket, and its a block
@@ -217,7 +217,7 @@ public class BucketingModifier extends Modifier implements BlockInteractionModif
 
   @Override
   public InteractionResult onToolUse(IToolStackView tool, ModifierEntry modifier, Player player, InteractionHand hand, InteractionSource source) {
-    if (player.isCrouching() || !tool.getDefinitionData().getModule(ToolModuleHooks.INTERACTION).canInteract(tool, modifier.getId(), source)) {
+    if (player.isCrouching() || !tool.getHook(ToolHooks.INTERACTION).canInteract(tool, modifier.getId(), source)) {
       return InteractionResult.PASS;
     }
 

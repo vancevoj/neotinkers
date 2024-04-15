@@ -1,28 +1,19 @@
 package slimeknights.tconstruct.library.tools.nbt;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonSerializationContext;
-import com.google.gson.JsonSerializer;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 import lombok.ToString;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.util.GsonHelper;
+import slimeknights.mantle.data.loadable.Loadable;
+import slimeknights.mantle.data.loadable.primitive.FloatLoadable;
 import slimeknights.tconstruct.library.tools.stat.INumericToolStat;
-import slimeknights.tconstruct.library.tools.stat.IToolStat;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
 
 import javax.annotation.Nullable;
-import java.lang.reflect.Type;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -35,8 +26,8 @@ import java.util.Set;
 @EqualsAndHashCode
 @ToString
 public class MultiplierNBT {
-  /** Serializer to parse this from JSON */
-  public static Serializer SERIALIZER = new Serializer();
+  /** Loadable instance to parse this from buffers and alike */
+  public static final Loadable<MultiplierNBT> LOADABLE = ToolStats.NUMERIC_LOADER.mapWithValues(FloatLoadable.ANY, 0).flatXmap(MultiplierNBT::new, m -> m.stats);
   /** Empty stats */
   public static final MultiplierNBT EMPTY = new MultiplierNBT(ImmutableMap.of());
 
@@ -106,32 +97,22 @@ public class MultiplierNBT {
   /* Network */
 
   /** Writes this to a packet buffer */
+  @Deprecated
   public void toNetwork(FriendlyByteBuf buffer) {
-    buffer.writeVarInt(stats.size());
-    for (Entry<INumericToolStat<?>,Float> entry : stats.entrySet()) {
-      buffer.writeUtf(entry.getKey().getName().toString());
-      buffer.writeFloat(entry.getValue());
-    }
+    LOADABLE.encode(buffer, this);
   }
 
   /** Reads this object from the network */
+  @Deprecated
   public static MultiplierNBT fromNetwork(FriendlyByteBuf buffer) {
-    Builder builder = builder();
-    int max = buffer.readVarInt();
-    for (int i = 0; i < max; i++) {
-      IToolStat<?> stat = ToolStats.fromNetwork(buffer);
-      float value = buffer.readFloat();
-      if (stat instanceof INumericToolStat<?> numericStat) {
-        builder.set(numericStat, value);
-      }
-    }
-    return builder.build();
+    return LOADABLE.decode(buffer);
   }
 
   /** Builder for a multiplier, mostly prevents nulls from being added */
-  @NoArgsConstructor(access = AccessLevel.PRIVATE)
   public static class Builder {
     private final ImmutableMap.Builder<INumericToolStat<?>, Float> builder = ImmutableMap.builder();
+
+    private Builder() {}
 
     /** Sets the given stat in the builder */
     public Builder set(INumericToolStat<?> stat, float value) {
@@ -148,29 +129,6 @@ public class MultiplierNBT {
         return EMPTY;
       }
       return new MultiplierNBT(map);
-    }
-  }
-
-  /** Serializes and deserializes from JSON */
-  protected static class Serializer implements JsonDeserializer<MultiplierNBT>, JsonSerializer<MultiplierNBT> {
-    @Override
-    public MultiplierNBT deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-      JsonObject object = GsonHelper.convertToJsonObject(json, "stats");
-      Builder builder = builder();
-      for (Entry<String,JsonElement> entry : object.entrySet()) {
-        String key = entry.getKey();
-        builder.set(ToolStats.numericFromJson(key), GsonHelper.convertToFloat(entry.getValue(), key));
-      }
-      return builder.build();
-    }
-
-    @Override
-    public JsonElement serialize(MultiplierNBT stats, Type typeOfSrc, JsonSerializationContext context) {
-      JsonObject json = new JsonObject();
-      for (Entry<INumericToolStat<?>,Float> entry : stats.stats.entrySet()) {
-        json.addProperty(entry.getKey().getName().toString(), entry.getValue());
-      }
-      return json;
     }
   }
 }

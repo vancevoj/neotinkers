@@ -1,17 +1,41 @@
 {
-  "actions": [
-    "axe_dig",
-    "shield_disable"
-  ],
-  "attack": {
-    "type": "tconstruct:particle",
-    "particle": "tconstruct:axe_attack"
-  },
-  "harvest": {
-    "aoe": {
-      "type": "tconstruct:fallback",
-      "fallback": {
-        "type": "tconstruct:box",
+  "modules": [
+    {
+      "type": "tconstruct:modifier_slots",
+      "slots": {
+        "abilities": 1,
+        "upgrades": 2
+      }
+    },
+    {
+      "type": "tconstruct:traits",
+      "traits": [
+        {
+          "level": 1,
+          "name": "tconstruct:stripping"
+        }
+      ]
+    },
+    {
+      "type": "tconstruct:tool_actions",
+      "tool_actions": [
+        "axe_dig",
+        "shield_disable"
+      ]
+    },
+    {
+      "type": "tconstruct:is_effective",
+      "predicate_type": "mantle:tag",
+      "tag": "minecraft:mineable/axe"
+    },
+    {
+      "type": "tconstruct:conditional_aoe",
+      "condition": {
+        "type": "mantle:tag",
+        "tag": "tconstruct:tree_log"
+      },
+      "if_false": {
+        "type": "tconstruct:box_aoe",
         "bonus": {
           "height": 5
         },
@@ -25,18 +49,17 @@
           }
         ]
       },
-      "if_matches": {
-        "type": "tconstruct:tree",
+      "if_true": {
+        "type": "tconstruct:tree_aoe",
         "depth_bonus": 0,
         "width_bonus": 0
-      },
-      "tag": "tconstruct:tree_log"
+      }
     },
-    "logic": {
-      "type": "tconstruct:effective_tag",
-      "effective": "minecraft:mineable/axe"
+    {
+      "type": "tconstruct:melee_particle",
+      "particle": "tconstruct:axe_attack"
     }
-  },
+  ],
   "parts": [
     {
       "item": "tconstruct:broad_axe_head",
@@ -52,10 +75,6 @@
       "item": "tconstruct:tool_binding"
     }
   ],
-  "slots": {
-    "abilities": 1,
-    "upgrades": 2
-  },
   "stats": {
     "base": {
       "tconstruct:attack_damage": 5.0,
@@ -66,11 +85,5 @@
       "tconstruct:durability": 4.25,
       "tconstruct:mining_speed": 0.3
     }
-  },
-  "traits": [
-    {
-      "level": 1,
-      "name": "tconstruct:stripping"
-    }
-  ]
+  }
 }

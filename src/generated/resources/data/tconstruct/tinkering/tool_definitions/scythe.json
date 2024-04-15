@@ -1,11 +1,51 @@
 {
-  "attack": {
-    "type": "tconstruct:circle",
-    "diameter": 2.0
-  },
-  "harvest": {
-    "aoe": {
-      "type": "tconstruct:box",
+  "modules": [
+    {
+      "type": "tconstruct:modifier_slots",
+      "slots": {
+        "abilities": 1,
+        "upgrades": 2
+      }
+    },
+    {
+      "type": "tconstruct:traits",
+      "traits": [
+        {
+          "level": 1,
+          "name": "tconstruct:tilling"
+        },
+        {
+          "level": 1,
+          "name": "tconstruct:silky_aoe_shears"
+        },
+        {
+          "level": 1,
+          "name": "tconstruct:harvest"
+        }
+      ]
+    },
+    {
+      "type": "tconstruct:is_effective",
+      "predicate_type": "mantle:tag",
+      "tag": "tconstruct:mineable/scythe"
+    },
+    {
+      "type": "tconstruct:mining_speed_modifier",
+      "modifier": 0.3,
+      "predicate_type": "mantle:tag",
+      "tag": "minecraft:wool"
+    },
+    {
+      "type": "tconstruct:mining_speed_modifier",
+      "blocks": [
+        "minecraft:vine",
+        "minecraft:glow_lichen"
+      ],
+      "modifier": 0.1,
+      "predicate_type": "mantle:set"
+    },
+    {
+      "type": "tconstruct:box_aoe",
       "bonus": {
         "depth": 2,
         "height": 1,
@@ -22,30 +62,11 @@
         }
       ]
     },
-    "logic": {
-      "type": "tconstruct:modified_tag",
-      "effective": "tconstruct:mineable/scythe",
-      "modifiers": [
-        {
-          "modifier": 0.3,
-          "predicate": {
-            "type": "mantle:tag",
-            "tag": "minecraft:wool"
-          }
-        },
-        {
-          "modifier": 0.1,
-          "predicate": {
-            "type": "mantle:set",
-            "blocks": [
-              "minecraft:vine",
-              "minecraft:glow_lichen"
-            ]
-          }
-        }
-      ]
+    {
+      "type": "tconstruct:circle_melee",
+      "diameter": 2.0
     }
-  },
+  ],
   "parts": [
     {
       "item": "tconstruct:broad_blade"
@@ -60,10 +81,6 @@
       "item": "tconstruct:tough_handle"
     }
   ],
-  "slots": {
-    "abilities": 1,
-    "upgrades": 2
-  },
   "stats": {
     "base": {
       "tconstruct:attack_damage": 1.0,
@@ -73,19 +90,5 @@
       "tconstruct:durability": 2.5,
       "tconstruct:mining_speed": 0.45
     }
-  },
-  "traits": [
-    {
-      "level": 1,
-      "name": "tconstruct:tilling"
-    },
-    {
-      "level": 1,
-      "name": "tconstruct:silky_aoe_shears"
-    },
-    {
-      "level": 1,
-      "name": "tconstruct:harvest"
-    }
-  ]
+  }
 }

@@ -4,13 +4,15 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.ToolActions;
 import net.minecraftforge.common.util.Lazy;
+import slimeknights.mantle.data.predicate.block.BlockPredicate;
 import slimeknights.tconstruct.library.tools.definition.IToolStatProvider;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinition;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinitionData;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinitionDataBuilder;
+import slimeknights.tconstruct.library.tools.definition.module.build.ToolActionsModule;
+import slimeknights.tconstruct.library.tools.definition.module.mining.IsEffectiveModule;
 import slimeknights.tconstruct.library.tools.nbt.MaterialNBT;
 import slimeknights.tconstruct.library.tools.nbt.StatsNBT;
-import slimeknights.tconstruct.test.BlockHarvestLogic;
 import slimeknights.tconstruct.tools.MeleeHarvestToolStatsBuilder;
 
 public final class ToolDefinitionFixture {
@@ -23,8 +25,8 @@ public final class ToolDefinitionFixture {
                                      .part(MaterialItemFixture.MATERIAL_ITEM_HEAD)
                                      .part(MaterialItemFixture.MATERIAL_ITEM_HANDLE)
                                      .part(MaterialItemFixture.MATERIAL_ITEM_EXTRA)
-                                     .action(ToolActions.PICKAXE_DIG)
-                                     .harvestLogic(new BlockHarvestLogic(Blocks.STONE))
+                                     .module(ToolActionsModule.of(ToolActions.PICKAXE_DIG))
+                                     .module(new IsEffectiveModule(BlockPredicate.set(Blocks.STONE)))
                                      .smallToolStartingSlots()
                                      .build());
     @Override

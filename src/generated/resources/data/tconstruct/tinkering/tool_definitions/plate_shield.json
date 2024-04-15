@@ -1,6 +1,23 @@
 {
-  "modules": {
-    "tconstruct:tool_interaction": {
+  "modules": [
+    {
+      "type": "tconstruct:modifier_slots",
+      "slots": {
+        "abilities": 1,
+        "defense": 4,
+        "upgrades": 1
+      }
+    },
+    {
+      "type": "tconstruct:traits",
+      "traits": [
+        {
+          "level": 1,
+          "name": "tconstruct:blocking"
+        }
+      ]
+    },
+    {
       "type": "tconstruct:preference_set_interaction",
       "preferred_modifiers": {
         "type": "tconstruct:single",
@@ -8,12 +25,7 @@
       },
       "preferred_source": "right_click"
     }
-  },
-  "slots": {
-    "abilities": 1,
-    "defense": 4,
-    "upgrades": 1
-  },
+  ],
   "stats": {
     "base": {
       "tconstruct:armor_toughness": 2.0,
@@ -21,11 +33,5 @@
       "tconstruct:block_angle": 180.0,
       "tconstruct:durability": 500.0
     }
-  },
-  "traits": [
-    {
-      "level": 1,
-      "name": "tconstruct:blocking"
-    }
-  ]
+  }
 }

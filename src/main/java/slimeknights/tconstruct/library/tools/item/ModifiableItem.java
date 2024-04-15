@@ -45,6 +45,8 @@ import slimeknights.tconstruct.library.tools.IndestructibleItemEntity;
 import slimeknights.tconstruct.library.tools.capability.ToolCapabilityProvider;
 import slimeknights.tconstruct.library.tools.capability.ToolInventoryCapability;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinition;
+import slimeknights.tconstruct.library.tools.definition.module.mining.IsEffectiveToolHook;
+import slimeknights.tconstruct.library.tools.definition.module.mining.MiningSpeedToolHook;
 import slimeknights.tconstruct.library.tools.helper.ModifierUtil;
 import slimeknights.tconstruct.library.tools.helper.ToolAttackUtil;
 import slimeknights.tconstruct.library.tools.helper.ToolBuildHandler;
@@ -258,7 +260,7 @@ public class ModifiableItem extends Item implements IModifiableDisplay {
 
   @Override
   public boolean canDisableShield(ItemStack stack, ItemStack shield, LivingEntity entity, LivingEntity attacker) {
-    return !ToolDamageUtil.isBroken(stack) && toolDefinition.getData().canPerformAction(TinkerToolActions.SHIELD_DISABLE);
+    return canPerformAction(stack, TinkerToolActions.SHIELD_DISABLE);
   }
 
 
@@ -266,7 +268,7 @@ public class ModifiableItem extends Item implements IModifiableDisplay {
 
   @Override
   public boolean isCorrectToolForDrops(ItemStack stack, BlockState state) {
-    return ToolHarvestLogic.isEffective(ToolStack.from(stack), state);
+    return IsEffectiveToolHook.isEffective(ToolStack.from(stack), state);
   }
 
   @Override
@@ -276,7 +278,7 @@ public class ModifiableItem extends Item implements IModifiableDisplay {
 
   @Override
   public float getDestroySpeed(ItemStack stack, BlockState state) {
-    return ToolHarvestLogic.getDestroySpeed(stack, state);
+    return MiningSpeedToolHook.getDestroySpeed(stack, state);
   }
 
   @Override

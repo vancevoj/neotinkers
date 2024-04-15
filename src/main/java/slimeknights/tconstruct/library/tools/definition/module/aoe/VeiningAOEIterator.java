@@ -1,4 +1,4 @@
-package slimeknights.tconstruct.library.tools.definition.aoe;
+package slimeknights.tconstruct.library.tools.definition.module.aoe;
 
 import com.google.common.collect.AbstractIterator;
 import net.minecraft.core.BlockPos;
@@ -10,7 +10,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import slimeknights.mantle.data.loadable.primitive.IntLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
-import slimeknights.mantle.data.registry.GenericLoaderRegistry.IGenericLoader;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.tools.TinkerModifiers;
 
@@ -23,11 +22,11 @@ import java.util.Set;
  * Harvest logic that breaks a block plus neighbors of the same type
  * @param maxDistance  Maximum distance from the starting block to vein, min of 0
  */
-public record VeiningAOEIterator(int maxDistance) implements IAreaOfEffectIterator {
+public record VeiningAOEIterator(int maxDistance) implements AreaOfEffectIterator.Loadable {
   public static final RecordLoadable<VeiningAOEIterator> LOADER = RecordLoadable.create(IntLoadable.FROM_ZERO.defaultField("max_distance", 0, true, VeiningAOEIterator::maxDistance), VeiningAOEIterator::new);
 
   @Override
-  public IGenericLoader<? extends IAreaOfEffectIterator> getLoader() {
+  public RecordLoadable<VeiningAOEIterator> getLoader() {
     return LOADER;
   }
 

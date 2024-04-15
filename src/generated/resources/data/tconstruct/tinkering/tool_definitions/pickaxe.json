@@ -1,10 +1,34 @@
 {
-  "actions": [
-    "pickaxe_dig"
-  ],
-  "harvest": {
-    "aoe": {
-      "type": "tconstruct:box",
+  "modules": [
+    {
+      "type": "tconstruct:modifier_slots",
+      "slots": {
+        "abilities": 1,
+        "upgrades": 3
+      }
+    },
+    {
+      "type": "tconstruct:traits",
+      "traits": [
+        {
+          "level": 1,
+          "name": "tconstruct:pierce"
+        }
+      ]
+    },
+    {
+      "type": "tconstruct:tool_actions",
+      "tool_actions": [
+        "pickaxe_dig"
+      ]
+    },
+    {
+      "type": "tconstruct:is_effective",
+      "predicate_type": "mantle:tag",
+      "tag": "minecraft:mineable/pickaxe"
+    },
+    {
+      "type": "tconstruct:box_aoe",
       "expansion_direction": "tconstruct:pitch",
       "expansions": [
         {
@@ -14,12 +38,8 @@
           "height": 1
         }
       ]
-    },
-    "logic": {
-      "type": "tconstruct:effective_tag",
-      "effective": "minecraft:mineable/pickaxe"
     }
-  },
+  ],
   "parts": [
     {
       "item": "tconstruct:pick_head"
@@ -31,20 +51,10 @@
       "item": "tconstruct:tool_binding"
     }
   ],
-  "slots": {
-    "abilities": 1,
-    "upgrades": 3
-  },
   "stats": {
     "base": {
       "tconstruct:attack_damage": 0.5,
       "tconstruct:attack_speed": 1.2
     }
-  },
-  "traits": [
-    {
-      "level": 1,
-      "name": "tconstruct:pierce"
-    }
-  ]
+  }
 }

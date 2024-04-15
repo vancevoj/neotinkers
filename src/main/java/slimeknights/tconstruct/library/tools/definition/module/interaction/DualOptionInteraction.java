@@ -2,18 +2,23 @@ package slimeknights.tconstruct.library.tools.definition.module.interaction;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import slimeknights.mantle.data.registry.GenericLoaderRegistry.IGenericLoader;
 import slimeknights.mantle.data.registry.GenericLoaderRegistry.SingletonLoader;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.modifiers.Modifier;
+import slimeknights.tconstruct.library.modifiers.ModifierHook;
 import slimeknights.tconstruct.library.modifiers.ModifierId;
 import slimeknights.tconstruct.library.modifiers.hook.interaction.InteractionSource;
+import slimeknights.tconstruct.library.modifiers.modules.ModifierHookProvider;
 import slimeknights.tconstruct.library.recipe.worktable.ModifierSetWorktableRecipe;
-import slimeknights.tconstruct.library.tools.definition.module.IToolModule;
+import slimeknights.tconstruct.library.tools.definition.module.ToolHooks;
+import slimeknights.tconstruct.library.tools.definition.module.ToolModule;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 
+import java.util.List;
+
 /** Tool that supports interaction with either hand. Uses persistent NBT to choose which hand is allowed to interact */
-public class DualOptionInteraction implements InteractionToolModule, IToolModule {
+public class DualOptionInteraction implements InteractionToolModule, ToolModule {
+  private static final List<ModifierHook<?>> DEFAULT_HOOKS = ModifierHookProvider.<DualOptionInteraction>defaultHooks(ToolHooks.INTERACTION);
   /** Singleton instance */
   public static final DualOptionInteraction INSTANCE = new DualOptionInteraction();
   /** Loader instance */
@@ -26,12 +31,17 @@ public class DualOptionInteraction implements InteractionToolModule, IToolModule
   private DualOptionInteraction() {}
 
   @Override
+  public List<ModifierHook<?>> getDefaultHooks() {
+    return DEFAULT_HOOKS;
+  }
+
+  @Override
   public boolean canInteract(IToolStackView tool, ModifierId modifier, InteractionSource source) {
     return (source == InteractionSource.RIGHT_CLICK) != ModifierSetWorktableRecipe.isInSet(tool.getPersistentData(), KEY, modifier);
   }
 
   @Override
-  public IGenericLoader<? extends IToolModule> getLoader() {
+  public SingletonLoader<DualOptionInteraction> getLoader() {
     return LOADER;
   }
 

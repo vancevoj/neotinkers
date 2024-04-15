@@ -19,7 +19,7 @@ public interface VolatileDataModifierHook {
    *   <li>Persistent mod data (accessed via {@link IToolStackView}): Can be written to freely, but will not automatically remove if the modifier is removed.</li>
    *   <li>{@link RawDataModifierHook}: Allows modifying a restricted view of the tools main data, might help with other mod compat, but not modifier compat</li>
    * </ul>
-   * @param context         Context about the tool beilt. Partial view of {@link IToolStackView} as the tool is not fully built
+   * @param context         Context about the tool being built. Partial view of {@link IToolStackView} as the tool is not fully built
    * @param modifier        Modifier level
    * @param volatileData    Mutable mod NBT data, result of this method
    */

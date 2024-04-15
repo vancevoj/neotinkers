@@ -1,4 +1,13 @@
 {
+  "modules": [
+    {
+      "type": "tconstruct:modifier_slots",
+      "slots": {
+        "abilities": 1,
+        "upgrades": 2
+      }
+    }
+  ],
   "parts": [
     {
       "item": "tconstruct:bow_limb"
@@ -13,10 +22,6 @@
       "item": "tconstruct:bowstring"
     }
   ],
-  "slots": {
-    "abilities": 1,
-    "upgrades": 2
-  },
   "stats": {
     "base": {
       "tconstruct:attack_damage": 0.0,

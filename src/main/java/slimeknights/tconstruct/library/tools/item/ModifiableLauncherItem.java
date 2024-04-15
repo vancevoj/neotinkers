@@ -39,6 +39,8 @@ import slimeknights.tconstruct.library.tools.capability.TinkerDataCapability;
 import slimeknights.tconstruct.library.tools.capability.TinkerDataKeys;
 import slimeknights.tconstruct.library.tools.capability.ToolCapabilityProvider;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinition;
+import slimeknights.tconstruct.library.tools.definition.module.mining.IsEffectiveToolHook;
+import slimeknights.tconstruct.library.tools.definition.module.mining.MiningSpeedToolHook;
 import slimeknights.tconstruct.library.tools.helper.ModifierUtil;
 import slimeknights.tconstruct.library.tools.helper.ToolBuildHandler;
 import slimeknights.tconstruct.library.tools.helper.ToolDamageUtil;
@@ -268,7 +270,7 @@ public abstract class ModifiableLauncherItem extends ProjectileWeaponItem implem
 
   @Override
   public boolean canDisableShield(ItemStack stack, ItemStack shield, LivingEntity entity, LivingEntity attacker) {
-    return !ToolDamageUtil.isBroken(stack) && toolDefinition.getData().canPerformAction(TinkerToolActions.SHIELD_DISABLE);
+    return canPerformAction(stack, TinkerToolActions.SHIELD_DISABLE);
   }
 
 
@@ -363,7 +365,7 @@ public abstract class ModifiableLauncherItem extends ProjectileWeaponItem implem
 
   @Override
   public boolean isCorrectToolForDrops(ItemStack stack, BlockState state) {
-    return ToolHarvestLogic.isEffective(ToolStack.from(stack), state);
+    return IsEffectiveToolHook.isEffective(ToolStack.from(stack), state);
   }
 
   @Override
@@ -373,7 +375,7 @@ public abstract class ModifiableLauncherItem extends ProjectileWeaponItem implem
 
   @Override
   public float getDestroySpeed(ItemStack stack, BlockState state) {
-    return ToolHarvestLogic.getDestroySpeed(stack, state);
+    return MiningSpeedToolHook.getDestroySpeed(stack, state);
   }
 
   @Override

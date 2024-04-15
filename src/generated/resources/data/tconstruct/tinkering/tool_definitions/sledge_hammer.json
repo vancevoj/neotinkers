@@ -1,14 +1,34 @@
 {
-  "actions": [
-    "pickaxe_dig"
-  ],
-  "attack": {
-    "type": "tconstruct:particle",
-    "particle": "tconstruct:hammer_attack"
-  },
-  "harvest": {
-    "aoe": {
-      "type": "tconstruct:box",
+  "modules": [
+    {
+      "type": "tconstruct:modifier_slots",
+      "slots": {
+        "abilities": 1,
+        "upgrades": 2
+      }
+    },
+    {
+      "type": "tconstruct:traits",
+      "traits": [
+        {
+          "level": 2,
+          "name": "tconstruct:smite"
+        }
+      ]
+    },
+    {
+      "type": "tconstruct:tool_actions",
+      "tool_actions": [
+        "pickaxe_dig"
+      ]
+    },
+    {
+      "type": "tconstruct:is_effective",
+      "predicate_type": "mantle:tag",
+      "tag": "minecraft:mineable/pickaxe"
+    },
+    {
+      "type": "tconstruct:box_aoe",
       "bonus": {
         "height": 1,
         "width": 1
@@ -23,11 +43,11 @@
         }
       ]
     },
-    "logic": {
-      "type": "tconstruct:effective_tag",
-      "effective": "minecraft:mineable/pickaxe"
+    {
+      "type": "tconstruct:melee_particle",
+      "particle": "tconstruct:hammer_attack"
     }
-  },
+  ],
   "parts": [
     {
       "item": "tconstruct:hammer_head",
@@ -43,10 +63,6 @@
       "item": "tconstruct:large_plate"
     }
   ],
-  "slots": {
-    "abilities": 1,
-    "upgrades": 2
-  },
   "stats": {
     "base": {
       "tconstruct:attack_damage": 3.0,
@@ -57,11 +73,5 @@
       "tconstruct:durability": 4.0,
       "tconstruct:mining_speed": 0.4
     }
-  },
-  "traits": [
-    {
-      "level": 2,
-      "name": "tconstruct:smite"
-    }
-  ]
+  }
 }

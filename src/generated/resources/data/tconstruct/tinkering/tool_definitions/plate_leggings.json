@@ -1,9 +1,14 @@
 {
-  "slots": {
-    "abilities": 1,
-    "defense": 4,
-    "upgrades": 1
-  },
+  "modules": [
+    {
+      "type": "tconstruct:modifier_slots",
+      "slots": {
+        "abilities": 1,
+        "defense": 4,
+        "upgrades": 1
+      }
+    }
+  ],
   "stats": {
     "base": {
       "tconstruct:armor": 5.0,

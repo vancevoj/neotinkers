@@ -1,4 +1,4 @@
-package slimeknights.tconstruct.library.tools.definition.aoe;
+package slimeknights.tconstruct.library.tools.definition.module.aoe;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -9,9 +9,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import slimeknights.mantle.data.loadable.primitive.BooleanLoadable;
 import slimeknights.mantle.data.loadable.primitive.IntLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
-import slimeknights.mantle.data.registry.GenericLoaderRegistry.IGenericLoader;
-import slimeknights.tconstruct.library.tools.definition.aoe.BoxAOEIterator.RectangleIterator;
-import slimeknights.tconstruct.library.tools.definition.aoe.IBoxExpansion.ExpansionDirections;
+import slimeknights.tconstruct.library.tools.definition.module.aoe.BoxAOEIterator.RectangleIterator;
+import slimeknights.tconstruct.library.tools.definition.module.aoe.IBoxExpansion.ExpansionDirections;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.tools.TinkerModifiers;
 
@@ -23,14 +22,14 @@ import java.util.function.Predicate;
  * @param diameter  Diameter of the circle, starting from 1
  * @param is3D      If true, calculates AOE blocks in 3D instead of 2D
  */
-public record CircleAOEIterator(int diameter, boolean is3D) implements IAreaOfEffectIterator {
+public record CircleAOEIterator(int diameter, boolean is3D) implements AreaOfEffectIterator.Loadable {
   public static final RecordLoadable<CircleAOEIterator> LOADER = RecordLoadable.create(
     IntLoadable.FROM_ONE.defaultField("diameter", 1, true, CircleAOEIterator::diameter),
     BooleanLoadable.INSTANCE.defaultField("3D", false, CircleAOEIterator::is3D),
     CircleAOEIterator::new);
 
   @Override
-  public IGenericLoader<? extends IAreaOfEffectIterator> getLoader() {
+  public RecordLoadable<CircleAOEIterator> getLoader() {
     return LOADER;
   }
 
@@ -61,7 +60,7 @@ public record CircleAOEIterator(int diameter, boolean is3D) implements IAreaOfEf
 
     // math works out that we can leave this an integer and get the radius working still
     int radiusSq = diameter * diameter / 4;
-    Predicate<BlockPos> posPredicate = IAreaOfEffectIterator.defaultBlockPredicate(tool, stack, world, origin, matchType);
+    Predicate<BlockPos> posPredicate = AreaOfEffectIterator.defaultBlockPredicate(tool, stack, world, origin, matchType);
     ExpansionDirections directions = IBoxExpansion.SIDE_HIT.getDirections(player, sideHit);
     // max needs to be an odd number
     return () -> new CircleIterator(origin, directions.width(), directions.height(), directions.traverseDown(), directions.depth(), radiusSq, diameter / 2, is3D, posPredicate);

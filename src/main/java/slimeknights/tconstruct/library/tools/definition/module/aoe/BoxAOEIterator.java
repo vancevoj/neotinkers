@@ -1,4 +1,4 @@
-package slimeknights.tconstruct.library.tools.definition.aoe;
+package slimeknights.tconstruct.library.tools.definition.module.aoe;
 
 import com.google.common.collect.AbstractIterator;
 import com.google.common.collect.ImmutableList;
@@ -14,7 +14,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import slimeknights.mantle.data.loadable.primitive.IntLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
-import slimeknights.tconstruct.library.tools.definition.aoe.IBoxExpansion.ExpansionDirections;
+import slimeknights.tconstruct.library.tools.definition.module.aoe.IBoxExpansion.ExpansionDirections;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.tools.TinkerModifiers;
 
@@ -29,7 +29,7 @@ import java.util.function.Predicate;
  * @param expansions  Values to boost the size by for each expansion
  * @param direction   Direction for expanding
  */
-public record BoxAOEIterator(BoxSize base, List<BoxSize> expansions, IBoxExpansion direction) implements IAreaOfEffectIterator {
+public record BoxAOEIterator(BoxSize base, List<BoxSize> expansions, IBoxExpansion direction) implements AreaOfEffectIterator.Loadable {
   public static final RecordLoadable<BoxAOEIterator> LOADER = RecordLoadable.create(
     BoxSize.LOADER.defaultField("bonus", BoxSize.ZERO, BoxAOEIterator::base),
     BoxSize.LOADER.list(0).defaultField("expansions", List.of(), BoxAOEIterator::expansions),
@@ -100,7 +100,7 @@ public record BoxAOEIterator(BoxSize base, List<BoxSize> expansions, IBoxExpansi
       return Collections.emptyList();
     }
     ExpansionDirections expansion = expansionDirection.getDirections(player, sideHit);
-    Predicate<BlockPos> posPredicate = IAreaOfEffectIterator.defaultBlockPredicate(tool, stack, world, origin, matchType);
+    Predicate<BlockPos> posPredicate = AreaOfEffectIterator.defaultBlockPredicate(tool, stack, world, origin, matchType);
     return () -> new RectangleIterator(origin, expansion.width(), extraSize.width, expansion.height(), extraSize.height, expansion.traverseDown(), expansion.depth(), extraSize.depth, posPredicate);
   }
 

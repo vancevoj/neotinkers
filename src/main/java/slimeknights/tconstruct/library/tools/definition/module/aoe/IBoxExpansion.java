@@ -1,4 +1,4 @@
-package slimeknights.tconstruct.library.tools.definition.aoe;
+package slimeknights.tconstruct.library.tools.definition.module.aoe;
 
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;

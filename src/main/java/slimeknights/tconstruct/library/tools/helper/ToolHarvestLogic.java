@@ -24,7 +24,9 @@ import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.TinkerHooks;
 import slimeknights.tconstruct.library.modifiers.hook.mining.HarvestEnchantmentsModifierHook;
 import slimeknights.tconstruct.library.tools.context.ToolHarvestContext;
-import slimeknights.tconstruct.library.tools.definition.aoe.IAreaOfEffectIterator;
+import slimeknights.tconstruct.library.tools.definition.module.ToolHooks;
+import slimeknights.tconstruct.library.tools.definition.module.aoe.AreaOfEffectIterator;
+import slimeknights.tconstruct.library.tools.definition.module.mining.IsEffectiveToolHook;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.library.utils.BlockSideHitListener;
@@ -52,35 +54,6 @@ public class ToolHarvestLogic {
     }
     // if it lacks the harvest tag, it takes double damage (swords for instance)
     return tool.hasTag(TinkerTags.Items.HARVEST_PRIMARY) ? 1 : 2;
-  }
-
-  /**
-   * Checks if the given tool is effective on the given state
-   * @param tool   Tool to check
-   * @param state  State to check
-   * @return  True if this tool is effective
-   */
-  public static boolean isEffective(IToolStackView tool, BlockState state) {
-    // must not be broken, and the tool definition must be effective
-    return !tool.isBroken() && tool.getDefinition().getData().getHarvestLogic().isEffective(tool, state);
-  }
-
-  /**
-   * Calculates the dig speed for the given blockstate
-   *
-   * @param stack the tool stack
-   * @param state the block state to check
-   * @return the dig speed
-   */
-  public static float getDestroySpeed(ItemStack stack, BlockState state) {
-    if(!stack.hasTag()) {
-      return 1f;
-    }
-    ToolStack tool = ToolStack.from(stack);
-    if (tool.isBroken()) {
-      return 0.3f;
-    }
-    return tool.getDefinition().getData().getHarvestLogic().getDestroySpeed(tool, state);
   }
 
   /**
@@ -242,9 +215,10 @@ public class ToolHarvestLogic {
       player.setItemInHand(InteractionHand.MAIN_HAND, stack);
     } else {
       // add in harvest info
+      // must not be broken, and the tool definition must be effective
       ToolHarvestContext context = new ToolHarvestContext(world, serverPlayer, state, pos, sideHit,
                                                           !player.isCreative() && state.canHarvestBlock(world, pos, player),
-                                                          isEffective(tool, state));
+                                                          IsEffectiveToolHook.isEffective(tool, state));
       // tell modifiers we are about to harvest, lets them add for instance modifiers conditioned on harvesting
       for (ModifierEntry entry : tool.getModifierList()) {
         entry.getHook(TinkerHooks.BLOCK_HARVEST).startHarvest(tool, entry, context);
@@ -253,7 +227,7 @@ public class ToolHarvestLogic {
       // TODO: should we have a hook for non-enchantment armor responses?
       ListTag originalEnchantments = HarvestEnchantmentsModifierHook.updateHarvestEnchantments(tool, stack, context);
       // need to calculate the iterator before we break the block, as we need the reference hardness from the center
-      Iterable<BlockPos> extraBlocks = context.isEffective() ? tool.getDefinition().getData().getAOE().getBlocks(tool, stack, player, state, world, pos, sideHit, IAreaOfEffectIterator.AOEMatchType.BREAKING) : Collections.emptyList();
+      Iterable<BlockPos> extraBlocks = context.isEffective() ? tool.getHook(ToolHooks.AOE_ITERATOR).getBlocks(tool, stack, player, state, world, pos, sideHit, AreaOfEffectIterator.AOEMatchType.BREAKING) : Collections.emptyList();
 
       // actually break the block, run AOE if successful
       boolean didHarvest = breakBlock(tool, stack, context);
@@ -289,7 +263,8 @@ public class ToolHarvestLogic {
     }
 
     if (!worldIn.isClientSide && worldIn instanceof ServerLevel) {
-      boolean isEffective = ToolHarvestLogic.isEffective(tool, state);
+      // must not be broken, and the tool definition must be effective
+      boolean isEffective = IsEffectiveToolHook.isEffective(tool, state);
       ToolHarvestContext context = new ToolHarvestContext((ServerLevel) worldIn, entityLiving, state, pos, Direction.UP, true, isEffective);
       for (ModifierEntry entry : tool.getModifierList()) {
         entry.getHook(TinkerHooks.BLOCK_BREAK).afterBlockBreak(tool, entry, context);

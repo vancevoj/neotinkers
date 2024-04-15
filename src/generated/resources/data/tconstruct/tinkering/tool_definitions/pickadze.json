@@ -1,24 +1,47 @@
 {
-  "actions": [
-    "pickaxe_dig",
-    "shovel_dig"
-  ],
-  "harvest": {
-    "aoe": {
-      "type": "tconstruct:box",
+  "modules": [
+    {
+      "type": "tconstruct:modifier_slots",
+      "slots": {
+        "abilities": 1,
+        "upgrades": 3
+      }
+    },
+    {
+      "type": "tconstruct:traits",
+      "traits": [
+        {
+          "level": 1,
+          "name": "tconstruct:pathing"
+        }
+      ]
+    },
+    {
+      "type": "tconstruct:tool_actions",
+      "tool_actions": [
+        "pickaxe_dig",
+        "shovel_dig"
+      ]
+    },
+    {
+      "type": "tconstruct:is_effective",
+      "predicate_type": "mantle:tag",
+      "tag": "tconstruct:mineable/pickadze"
+    },
+    {
+      "type": "tconstruct:max_tier",
+      "tier": "minecraft:gold"
+    },
+    {
+      "type": "tconstruct:box_aoe",
       "expansion_direction": "tconstruct:side_hit",
       "expansions": [
         {
           "height": 1
         }
       ]
-    },
-    "logic": {
-      "type": "tconstruct:fixed_tier",
-      "effective": "tconstruct:mineable/pickadze",
-      "tier": "minecraft:gold"
     }
-  },
+  ],
   "parts": [
     {
       "item": "tconstruct:pick_head"
@@ -30,10 +53,6 @@
       "item": "tconstruct:round_plate"
     }
   ],
-  "slots": {
-    "abilities": 1,
-    "upgrades": 3
-  },
   "stats": {
     "base": {
       "tconstruct:attack_damage": 0.5,
@@ -44,11 +63,5 @@
       "tconstruct:durability": 1.3,
       "tconstruct:mining_speed": 0.75
     }
-  },
-  "traits": [
-    {
-      "level": 1,
-      "name": "tconstruct:pathing"
-    }
-  ]
+  }
 }

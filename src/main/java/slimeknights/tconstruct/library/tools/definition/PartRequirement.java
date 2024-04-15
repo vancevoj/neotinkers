@@ -1,47 +1,41 @@
 package slimeknights.tconstruct.library.tools.definition;
 
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonSerializationContext;
-import com.google.gson.JsonSerializer;
-import com.google.gson.JsonSyntaxException;
 import lombok.Data;
 import lombok.Getter;
 import net.minecraft.core.Registry;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.registries.ForgeRegistries;
-import slimeknights.mantle.recipe.helper.RecipeHelper;
-import slimeknights.mantle.util.JsonHelper;
+import slimeknights.mantle.data.loadable.IAmLoadable;
+import slimeknights.mantle.data.loadable.field.LoadableField;
+import slimeknights.mantle.data.loadable.mapping.EitherLoadable;
+import slimeknights.mantle.data.loadable.primitive.IntLoadable;
+import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.tconstruct.library.client.materials.MaterialTooltipCache;
+import slimeknights.tconstruct.library.json.TinkerLoadables;
 import slimeknights.tconstruct.library.materials.MaterialRegistry;
 import slimeknights.tconstruct.library.materials.definition.MaterialVariantId;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
 import slimeknights.tconstruct.library.tools.part.IToolPart;
 
 import javax.annotation.Nullable;
-import java.lang.reflect.Type;
-import java.util.Objects;
 
 /** Element that contains data about a single tool part */
 @Data
-public abstract class PartRequirement {
-  public static final Serializer SERIALIZER = new Serializer();
+public abstract class PartRequirement implements IAmLoadable.Record {
+  /* Loadables */
+  private static final LoadableField<Integer,PartRequirement> WEIGHT_FIELD = IntLoadable.FROM_ONE.defaultField("weight", 1, r -> r.weight);
+  private static final RecordLoadable<ToolPart> TOOL_PART = RecordLoadable.create(TinkerLoadables.TOOL_PART_ITEM.requiredField("item", r -> r.part), WEIGHT_FIELD, PartRequirement::ofPart);
+  private static final RecordLoadable<StatType> STAT_TYPE = RecordLoadable.create(MaterialStatsId.PARSER.requiredField("stat", r -> r.statType), WEIGHT_FIELD, PartRequirement::ofStat);
+  public static final RecordLoadable<PartRequirement> LOADABLE = EitherLoadable.<PartRequirement>record().key("item", TOOL_PART).key("stat", STAT_TYPE).build();
 
   /** Creates a new part requirement for a part */
-  public static PartRequirement ofPart(IToolPart part, int weight) {
-    return new PartRequirement.ToolPart(part, weight);
+  public static ToolPart ofPart(IToolPart part, int weight) {
+    return new ToolPart(part, weight);
   }
 
   /** Creates a new part requirement for a stat type */
-  public static PartRequirement ofStat(MaterialStatsId statsId, int weight) {
-    return new PartRequirement.StatType(statsId, weight);
+  public static StatType ofStat(MaterialStatsId statsId, int weight) {
+    return new StatType(statsId, weight);
   }
 
   /** Weight of this part for the stat builder */
@@ -63,59 +57,6 @@ public abstract class PartRequirement {
   /** Gets the stat type for this part */
   public abstract MaterialStatsId getStatType();
 
-
-  /* Serializing */
-
-  /** Writes a tool definition stat object to a packet buffer */
-  public abstract void write(FriendlyByteBuf buffer);
-
-  /** Writes a tool definition stat object to a packet buffer */
-  public abstract JsonObject serialize();
-
-  /** Reads a tool definition stat object from a packet buffer */
-  public static PartRequirement read(FriendlyByteBuf buffer) {
-    if (buffer.readBoolean()) {
-      IToolPart part = RecipeHelper.readItem(buffer, IToolPart.class);
-      int weight = buffer.readVarInt();
-      return ofPart(part, weight);
-    } else {
-      MaterialStatsId statsId = new MaterialStatsId(buffer.readResourceLocation());
-      int weight = buffer.readVarInt();
-      return ofStat(statsId, weight);
-    }
-  }
-
-  /** Serializer logic */
-  protected static class Serializer implements JsonDeserializer<PartRequirement>, JsonSerializer<PartRequirement> {
-    @Override
-    public PartRequirement deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-      JsonObject jsonObject = GsonHelper.convertToJsonObject(json, "part");
-      int weight = GsonHelper.getAsInt(jsonObject, "weight", 1);
-      // part item
-      if (jsonObject.has("item")) {
-        ResourceLocation name = JsonHelper.getResourceLocation(jsonObject, "item");
-        if (!ForgeRegistries.ITEMS.containsKey(name)) {
-          throw new JsonSyntaxException("Invalid item '" + name + "' for tool part, does not exist");
-        }
-        Item item = Objects.requireNonNull(ForgeRegistries.ITEMS.getValue(name));
-        if (!(item instanceof IToolPart)) {
-          throw new JsonSyntaxException("Invalid item '" + name + "' for tool part, must implement IToolPart");
-        }
-        return ofPart((IToolPart) item, weight);
-      }
-      // part stat
-      if (jsonObject.has("stat")) {
-        MaterialStatsId stat = new MaterialStatsId(JsonHelper.getResourceLocation(jsonObject, "stat"));
-        return ofStat(stat, weight);
-      }
-      throw new JsonSyntaxException("Invalid part, must have either 'item' or 'stat'");
-    }
-
-    @Override
-    public JsonElement serialize(PartRequirement part, Type typeOfSrc, JsonSerializationContext context) {
-      return part.serialize();
-    }
-  }
 
   /** Implementation that contains a tool part */
   private static class ToolPart extends PartRequirement {
@@ -147,20 +88,13 @@ public abstract class PartRequirement {
     }
 
     @Override
-    public void write(FriendlyByteBuf buffer) {
-      buffer.writeBoolean(true);
-      RecipeHelper.writeItem(buffer, part);
-      buffer.writeVarInt(getWeight());
+    public RecordLoadable<?> loadable() {
+      return TOOL_PART;
     }
 
     @Override
-    public JsonObject serialize() {
-      JsonObject jsonObject = new JsonObject();
-      jsonObject.addProperty("item", Registry.ITEM.getKey(part.asItem()).toString());
-      if (getWeight() != 1) {
-        jsonObject.addProperty("weight", getWeight());
-      }
-      return jsonObject;
+    public String toString() {
+      return "PartRequirement.ToolPart{" + Registry.ITEM.getKey(part.asItem()) + '*' + getWeight() + '}';
     }
   }
 
@@ -195,20 +129,14 @@ public abstract class PartRequirement {
     }
 
     @Override
-    public void write(FriendlyByteBuf buffer) {
-      buffer.writeBoolean(false);
-      buffer.writeResourceLocation(statType);
-      buffer.writeVarInt(getWeight());
+    public RecordLoadable<?> loadable() {
+      return STAT_TYPE;
     }
 
+
     @Override
-    public JsonObject serialize() {
-      JsonObject jsonObject = new JsonObject();
-      jsonObject.addProperty("stat", statType.toString());
-      if (getWeight() != 1) {
-        jsonObject.addProperty("weight", getWeight());
-      }
-      return jsonObject;
+    public String toString() {
+      return "PartRequirement.StatType{" + statType + '*' + getWeight() + '}';
     }
   }
 }

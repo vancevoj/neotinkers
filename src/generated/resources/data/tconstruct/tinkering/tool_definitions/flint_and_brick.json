@@ -1,24 +1,32 @@
 {
-  "slots": {
-    "upgrades": 1
-  },
+  "modules": [
+    {
+      "type": "tconstruct:modifier_slots",
+      "slots": {
+        "upgrades": 1
+      }
+    },
+    {
+      "type": "tconstruct:traits",
+      "traits": [
+        {
+          "level": 1,
+          "name": "tconstruct:firestarter"
+        },
+        {
+          "level": 1,
+          "name": "tconstruct:fiery"
+        },
+        {
+          "level": 1,
+          "name": "tconstruct:scorching"
+        }
+      ]
+    }
+  ],
   "stats": {
     "base": {
       "tconstruct:durability": 100.0
     }
-  },
-  "traits": [
-    {
-      "level": 1,
-      "name": "tconstruct:firestarter"
-    },
-    {
-      "level": 1,
-      "name": "tconstruct:fiery"
-    },
-    {
-      "level": 1,
-      "name": "tconstruct:scorching"
-    }
-  ]
+  }
 }

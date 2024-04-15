@@ -38,9 +38,9 @@ import slimeknights.tconstruct.library.modifiers.impl.NoLevelsModifier;
 import slimeknights.tconstruct.library.modifiers.modules.behavior.ShowOffhandModule;
 import slimeknights.tconstruct.library.modifiers.util.ModifierHookMap.Builder;
 import slimeknights.tconstruct.library.tools.context.ToolHarvestContext;
-import slimeknights.tconstruct.library.tools.definition.aoe.CircleAOEIterator;
-import slimeknights.tconstruct.library.tools.definition.aoe.IAreaOfEffectIterator;
-import slimeknights.tconstruct.library.tools.definition.module.ToolModuleHooks;
+import slimeknights.tconstruct.library.tools.definition.module.ToolHooks;
+import slimeknights.tconstruct.library.tools.definition.module.aoe.AreaOfEffectIterator;
+import slimeknights.tconstruct.library.tools.definition.module.aoe.CircleAOEIterator;
 import slimeknights.tconstruct.library.tools.definition.module.interaction.DualOptionInteraction;
 import slimeknights.tconstruct.library.tools.helper.ToolDamageUtil;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
@@ -86,7 +86,7 @@ public class FirestarterModifier extends NoLevelsModifier implements EntityInter
 
   @Override
   public InteractionResult afterEntityUse(IToolStackView tool, ModifierEntry modifier, Player player, LivingEntity target, InteractionHand hand, InteractionSource source) {
-    if (tool.getDefinitionData().getModule(ToolModuleHooks.INTERACTION).canInteract(tool, modifier.getId(), source) && target instanceof Creeper creeper) {
+    if (tool.getHook(ToolHooks.INTERACTION).canInteract(tool, modifier.getId(), source) && target instanceof Creeper creeper) {
       player.level.playSound(player, creeper.getX(), creeper.getY(), creeper.getZ(), SoundEvents.FLINTANDSTEEL_USE, creeper.getSoundSource(), 1.0F, RANDOM.nextFloat() * 0.4F + 0.8F);
       if (!player.level.isClientSide) {
         creeper.ignite();
@@ -126,7 +126,7 @@ public class FirestarterModifier extends NoLevelsModifier implements EntityInter
 
   @Override
   public InteractionResult beforeBlockUse(IToolStackView tool, ModifierEntry modifier, UseOnContext context, InteractionSource source) {
-    if (tool.isBroken() || !tool.getDefinitionData().getModule(ToolModuleHooks.INTERACTION).canInteract(tool, modifier.getId(), source)) {
+    if (tool.isBroken() || !tool.getHook(ToolHooks.INTERACTION).canInteract(tool, modifier.getId(), source)) {
       return InteractionResult.PASS;
     }
     if (context.getLevel().getBlockState(context.getClickedPos()).is(BlockTags.CANDLE_CAKES)) {
@@ -137,7 +137,7 @@ public class FirestarterModifier extends NoLevelsModifier implements EntityInter
 
   @Override
   public InteractionResult afterBlockUse(IToolStackView tool, ModifierEntry modifier, UseOnContext context, InteractionSource source) {
-    if (tool.isBroken() || !tool.getDefinitionData().getModule(ToolModuleHooks.INTERACTION).canInteract(tool, modifier.getId(), source)) {
+    if (tool.isBroken() || !tool.getHook(ToolHooks.INTERACTION).canInteract(tool, modifier.getId(), source)) {
       return InteractionResult.PASS;
     }
     Player player = context.getPlayer();
@@ -157,7 +157,7 @@ public class FirestarterModifier extends NoLevelsModifier implements EntityInter
     int range = tool.getModifierLevel(TinkerModifiers.fireprimer.getId()) + tool.getModifierLevel(TinkerModifiers.expanded.getId());
     Iterable<BlockPos> targets = Collections.emptyList();
     if (range > 0 && player != null) {
-      targets = CircleAOEIterator.calculate(tool, ItemStack.EMPTY, world, player, pos, sideHit, 1 + range, true, IAreaOfEffectIterator.AOEMatchType.TRANSFORM);
+      targets = CircleAOEIterator.calculate(tool, ItemStack.EMPTY, world, player, pos, sideHit, 1 + range, true, AreaOfEffectIterator.AOEMatchType.TRANSFORM);
     }
 
     // burn it all in AOE
@@ -194,7 +194,7 @@ public class FirestarterModifier extends NoLevelsModifier implements EntityInter
   @Nullable
   @Override
   public Boolean removeBlock(IToolStackView tool, ModifierEntry modifier, ToolHarvestContext context) {
-    if (context.getState().is(Blocks.FIRE) && tool.getDefinitionData().getModule(ToolModuleHooks.INTERACTION).canInteract(tool, getId(), InteractionSource.LEFT_CLICK)) {
+    if (context.getState().is(Blocks.FIRE) && tool.getHook(ToolHooks.INTERACTION).canInteract(tool, getId(), InteractionSource.LEFT_CLICK)) {
       return false;
     }
     return null;

@@ -1,38 +1,58 @@
 {
-  "actions": [
-    "sword_dig"
-  ],
-  "attack": {
-    "type": "tconstruct:sweep",
-    "range": 2.0
-  },
-  "harvest": {
-    "logic": {
-      "type": "tconstruct:modified_tag",
-      "effective": "forge:mineable/sword",
-      "modifiers": [
+  "modules": [
+    {
+      "type": "tconstruct:modifier_slots",
+      "slots": {
+        "abilities": 1,
+        "upgrades": 2
+      }
+    },
+    {
+      "type": "tconstruct:traits",
+      "traits": [
         {
-          "modifier": 7.5,
-          "predicate": {
-            "type": "mantle:set",
-            "blocks": [
-              "minecraft:cobweb"
-            ]
-          }
+          "level": 2,
+          "name": "tconstruct:severing"
         },
         {
-          "modifier": 100.0,
-          "predicate": {
-            "type": "mantle:set",
-            "blocks": [
-              "minecraft:bamboo",
-              "minecraft:bamboo_sapling"
-            ]
-          }
+          "level": 1,
+          "name": "tconstruct:silky_aoe_shears"
         }
       ]
+    },
+    {
+      "type": "tconstruct:tool_actions",
+      "tool_actions": [
+        "sword_dig"
+      ]
+    },
+    {
+      "type": "tconstruct:is_effective",
+      "predicate_type": "mantle:tag",
+      "tag": "forge:mineable/sword"
+    },
+    {
+      "type": "tconstruct:mining_speed_modifier",
+      "blocks": [
+        "minecraft:cobweb"
+      ],
+      "modifier": 7.5,
+      "predicate_type": "mantle:set"
+    },
+    {
+      "type": "tconstruct:mining_speed_modifier",
+      "blocks": [
+        "minecraft:bamboo",
+        "minecraft:bamboo_sapling"
+      ],
+      "modifier": 100.0,
+      "predicate_type": "mantle:set"
+    },
+    {
+      "type": "tconstruct:sweep_melee",
+      "range": 2.0
     }
-  },
+  ],
   "parts": [
     {
       "item": "tconstruct:broad_blade"
@@ -47,10 +67,6 @@
       "item": "tconstruct:large_plate"
     }
   ],
-  "slots": {
-    "abilities": 1,
-    "upgrades": 2
-  },
   "stats": {
     "base": {
       "tconstruct:attack_damage": 3.0,
@@ -61,15 +77,5 @@
       "tconstruct:durability": 3.5,
       "tconstruct:mining_speed": 0.25
     }
-  },
-  "traits": [
-    {
-      "level": 2,
-      "name": "tconstruct:severing"
-    },
-    {
-      "level": 1,
-      "name": "tconstruct:silky_aoe_shears"
-    }
-  ]
+  }
 }

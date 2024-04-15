@@ -1,4 +1,4 @@
-package slimeknights.tconstruct.library.tools.definition.weapon;
+package slimeknights.tconstruct.library.tools.definition.module.weapon;
 
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
@@ -8,25 +8,38 @@ import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.player.Player;
 import slimeknights.mantle.data.loadable.primitive.FloatLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
-import slimeknights.mantle.data.registry.GenericLoaderRegistry.IGenericLoader;
+import slimeknights.tconstruct.library.modifiers.ModifierHook;
+import slimeknights.tconstruct.library.modifiers.modules.ModifierHookProvider;
 import slimeknights.tconstruct.library.tools.context.ToolAttackContext;
+import slimeknights.tconstruct.library.tools.definition.module.ToolHooks;
+import slimeknights.tconstruct.library.tools.definition.module.ToolModule;
 import slimeknights.tconstruct.library.tools.helper.ToolAttackUtil;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.tools.TinkerModifiers;
 
+import java.util.List;
+
 /** Attack logic for a sweep attack, similar to a sword */
-public record SweepWeaponAttack(float range) implements IWeaponAttack {
+public record SweepWeaponAttack(float range) implements MeleeHitToolHook, ToolModule {
   public static final RecordLoadable<SweepWeaponAttack> LOADER = RecordLoadable.create(FloatLoadable.FROM_ZERO.defaultField("range", 0f, true, SweepWeaponAttack::range), SweepWeaponAttack::new);
+  private static final List<ModifierHook<?>> DEFAULT_HOOKS = ModifierHookProvider.<SweepWeaponAttack>defaultHooks(ToolHooks.MELEE_HIT);
 
   @Override
-  public boolean dealDamage(IToolStackView tool, ToolAttackContext context, float damage) {
-    // deal damage first
-    boolean hit = ToolAttackUtil.dealDefaultDamage(context.getAttacker(), context.getTarget(), damage);
+  public List<ModifierHook<?>> getDefaultHooks() {
+    return DEFAULT_HOOKS;
+  }
 
+  @Override
+  public RecordLoadable<SweepWeaponAttack> getLoader() {
+    return LOADER;
+  }
+
+  @Override
+  public void afterMeleeHit(IToolStackView tool, ToolAttackContext context, float damage) {
     // sweep code from Player#attack(Entity)
     // basically: no crit, no sprinting and has to stand on the ground for sweep. Also has to move regularly slowly
     LivingEntity attacker = context.getAttacker();
-    if (hit && context.isFullyCharged() && !attacker.isSprinting() && !context.isCritical() && attacker.isOnGround() && (attacker.walkDist - attacker.walkDistO) < attacker.getSpeed()) {
+    if (context.isFullyCharged() && !attacker.isSprinting() && !context.isCritical() && attacker.isOnGround() && (attacker.walkDist - attacker.walkDistO) < attacker.getSpeed()) {
       // loop through all nearby entities
       double range = this.range + tool.getModifierLevel(TinkerModifiers.expanded.getId());
       double rangeSq = (2 + range); // TODO: why do we add 2 here? should that not be defined in the datagen?
@@ -48,12 +61,5 @@ public record SweepWeaponAttack(float range) implements IWeaponAttack {
         player.sweepAttack();
       }
     }
-
-    return hit;
-  }
-
-  @Override
-  public IGenericLoader<? extends IWeaponAttack> getLoader() {
-    return LOADER;
   }
 }

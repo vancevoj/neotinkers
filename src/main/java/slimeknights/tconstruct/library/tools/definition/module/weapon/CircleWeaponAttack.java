@@ -1,4 +1,4 @@
-package slimeknights.tconstruct.library.tools.definition.weapon;
+package slimeknights.tconstruct.library.tools.definition.module.weapon;
 
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
@@ -8,19 +8,34 @@ import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.player.Player;
 import slimeknights.mantle.data.loadable.primitive.FloatLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
-import slimeknights.mantle.data.registry.GenericLoaderRegistry.IGenericLoader;
+import slimeknights.tconstruct.library.modifiers.ModifierHook;
+import slimeknights.tconstruct.library.modifiers.modules.ModifierHookProvider;
 import slimeknights.tconstruct.library.tools.context.ToolAttackContext;
+import slimeknights.tconstruct.library.tools.definition.module.ToolHooks;
+import slimeknights.tconstruct.library.tools.definition.module.ToolModule;
 import slimeknights.tconstruct.library.tools.helper.ToolAttackUtil;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.tools.TinkerModifiers;
 
+import java.util.List;
+
 /** Deals damage in a circle around the primary target */
-public record CircleWeaponAttack(float diameter) implements IWeaponAttack {
+public record CircleWeaponAttack(float diameter) implements MeleeHitToolHook, ToolModule {
   public static final RecordLoadable<CircleWeaponAttack> LOADER = RecordLoadable.create(FloatLoadable.ANY.defaultField("diameter", 0f, true, CircleWeaponAttack::diameter), CircleWeaponAttack::new);
+  private static final List<ModifierHook<?>> DEFAULT_HOOKS = ModifierHookProvider.<CircleWeaponAttack>defaultHooks(ToolHooks.MELEE_HIT);
 
   @Override
-  public boolean dealDamage(IToolStackView tool, ToolAttackContext context, float damage) {
-    boolean hit = ToolAttackUtil.dealDefaultDamage(context.getAttacker(), context.getTarget(), damage);
+  public List<ModifierHook<?>> getDefaultHooks() {
+    return DEFAULT_HOOKS;
+  }
+
+  @Override
+  public RecordLoadable<CircleWeaponAttack> getLoader() {
+    return LOADER;
+  }
+
+  @Override
+  public void afterMeleeHit(IToolStackView tool, ToolAttackContext context, float damage) {
     // only need fully charged for scythe sweep, easier than sword sweep
     if (context.isFullyCharged()) {
       // basically sword sweep logic, just deals full damage to all entities
@@ -35,7 +50,8 @@ public record CircleWeaponAttack(float diameter) implements IWeaponAttack {
               && !(aoeTarget instanceof ArmorStand stand && stand.isMarker()) && target.distanceToSqr(aoeTarget) < rangeSq) {
             float angle = attacker.getYRot() * ((float)Math.PI / 180F);
             aoeTarget.knockback(0.4F, Mth.sin(angle), -Mth.cos(angle));
-            hit |= ToolAttackUtil.extraEntityAttack(tool, attacker, context.getHand(), aoeTarget);
+            // TODO: do we want to bring back the behavior where circle returns success if any AOE target is hit?
+            ToolAttackUtil.extraEntityAttack(tool, attacker, context.getHand(), aoeTarget);
           }
         }
 
@@ -45,12 +61,5 @@ public record CircleWeaponAttack(float diameter) implements IWeaponAttack {
         }
       }
     }
-
-    return hit;
-  }
-
-  @Override
-  public IGenericLoader<? extends IWeaponAttack> getLoader() {
-    return LOADER;
   }
 }

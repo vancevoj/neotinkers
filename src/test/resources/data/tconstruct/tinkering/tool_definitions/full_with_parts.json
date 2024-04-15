@@ -1,4 +1,39 @@
 {
+  "modules": [
+    {
+      "type": "test:modifier_slots",
+      "slots": {
+        "upgrades": 3,
+        "defense": 2,
+        "abilities": 1
+      }
+    },
+    {
+      "type": "test:traits",
+      "traits": [
+        { "name": "test:modifier_1", "level": 1 },
+        { "name": "test:modifier_2", "level": 3 }
+      ]
+    },
+    {
+      "type": "test:actions",
+      "tool_actions": [ "axe_dig", "custom_action" ]
+    },
+    {
+      "type": "test:is_effective",
+      "predicate_type": "mantle:set",
+      "blocks": ["minecraft:diamond_block"]
+    },
+    {
+      "type": "test:circle",
+      "diameter": 3,
+      "3D": true
+    },
+    {
+      "type": "test:sweep",
+      "range": 5.0
+    }
+  ],
   "parts": [
     { "item": "test:test_extra", "weight": 2 },
     { "item": "test:test_head", "weight": 1 },
@@ -11,43 +46,10 @@
       "tconstruct:attack_speed": 3.75,
       "tconstruct:mining_speed": 4
     },
-	"multipliers": {
+	  "multipliers": {
       "tconstruct:durability": 1.5,
       "tconstruct:attack_damage": 2,
       "tconstruct:mining_speed": 0.5
-	}
-  },
-  "slots": {
-    "upgrades": 3,
-    "defense": 2,
-    "abilities": 1
-  },
-  "traits": [
-    {
-      "name": "test:modifier_1",
-      "level": 1
-    },
-    {
-      "name": "test:modifier_2",
-      "level": 3
-    }
-  ],
-  "actions": [
-    "axe_dig", "custom_action"
-  ],
-  "harvest": {
-    "logic": {
-      "type": "test:block",
-      "block": "minecraft:diamond_block"
-    },
-    "aoe": {
-      "type": "test:circle",
-      "diameter": 3,
-      "3D": true
-    }
-  },
-  "attack": {
-    "type": "test:sweep",
-    "range": 5.0
+	  }
   }
 }

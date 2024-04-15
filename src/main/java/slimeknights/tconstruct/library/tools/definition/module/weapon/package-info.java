@@ -1,6 +1,6 @@
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-package slimeknights.tconstruct.library.tools.definition.weapon;
+package slimeknights.tconstruct.library.tools.definition.module.weapon;
 
 import net.minecraft.MethodsReturnNonnullByDefault;
 

@@ -31,8 +31,8 @@ import slimeknights.tconstruct.library.modifiers.hook.interaction.InteractionSou
 import slimeknights.tconstruct.library.modifiers.impl.NoLevelsModifier;
 import slimeknights.tconstruct.library.modifiers.modules.behavior.ShowOffhandModule;
 import slimeknights.tconstruct.library.modifiers.util.ModifierHookMap.Builder;
-import slimeknights.tconstruct.library.tools.definition.aoe.IAreaOfEffectIterator;
-import slimeknights.tconstruct.library.tools.definition.module.ToolModuleHooks;
+import slimeknights.tconstruct.library.tools.definition.module.ToolHooks;
+import slimeknights.tconstruct.library.tools.definition.module.aoe.AreaOfEffectIterator;
 import slimeknights.tconstruct.library.tools.definition.module.interaction.DualOptionInteraction;
 import slimeknights.tconstruct.library.tools.helper.ToolDamageUtil;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
@@ -242,7 +242,7 @@ public class HarvestAbilityModifier extends NoLevelsModifier implements BlockInt
 
   @Override
   public InteractionResult beforeBlockUse(IToolStackView tool, ModifierEntry modifier, UseOnContext context, InteractionSource source) {
-    if (tool.isBroken() || !tool.getDefinitionData().getModule(ToolModuleHooks.INTERACTION).canInteract(tool, modifier.getId(), source)) {
+    if (tool.isBroken() || !tool.getHook(ToolHooks.INTERACTION).canInteract(tool, modifier.getId(), source)) {
       return InteractionResult.PASS;
     }
 
@@ -271,7 +271,7 @@ public class HarvestAbilityModifier extends NoLevelsModifier implements BlockInt
 
         // if we have a player and harvest logic, try doing AOE harvest
         if (!broken && player != null) {
-          for (BlockPos newPos : tool.getDefinition().getData().getAOE().getBlocks(tool, stack, player, state, world, pos, context.getClickedFace(), IAreaOfEffectIterator.AOEMatchType.TRANSFORM)) {
+          for (BlockPos newPos : tool.getHook(ToolHooks.AOE_ITERATOR).getBlocks(tool, stack, player, state, world, pos, context.getClickedFace(), AreaOfEffectIterator.AOEMatchType.TRANSFORM)) {
             // try harvesting the crop, if successful and survival, damage the tool
             if (harvest(context, tool, server, world.getBlockState(newPos), newPos, source)) {
               didHarvest = true;

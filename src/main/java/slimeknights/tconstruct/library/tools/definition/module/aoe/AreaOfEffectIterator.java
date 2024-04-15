@@ -1,37 +1,44 @@
-package slimeknights.tconstruct.library.tools.definition.aoe;
+package slimeknights.tconstruct.library.tools.definition.module.aoe;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import slimeknights.mantle.data.registry.DefaultingLoaderRegistry;
+import slimeknights.mantle.data.registry.GenericLoaderRegistry;
 import slimeknights.mantle.data.registry.GenericLoaderRegistry.IGenericLoader;
-import slimeknights.mantle.data.registry.GenericLoaderRegistry.IHaveLoader;
-import slimeknights.tconstruct.library.tools.helper.ToolHarvestLogic;
+import slimeknights.tconstruct.library.modifiers.ModifierHook;
+import slimeknights.tconstruct.library.tools.definition.module.ToolHooks;
+import slimeknights.tconstruct.library.tools.definition.module.ToolModule;
+import slimeknights.tconstruct.library.tools.definition.module.mining.IsEffectiveToolHook;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 
-import java.util.Collections;
+import java.util.List;
 import java.util.function.Predicate;
 
 /** Logic for iterating over a set of blocks */
-public interface IAreaOfEffectIterator extends IHaveLoader {
-  /** Default iterator, no blocks */
-  IAreaOfEffectIterator DEFAULT = new IAreaOfEffectIterator() {
-    @Override
-    public Iterable<BlockPos> getBlocks(IToolStackView tool, ItemStack stack, Player player, BlockState state, Level world, BlockPos origin, Direction sideHit, AOEMatchType matchType) {
-      return Collections.emptyList();
-    }
+public interface AreaOfEffectIterator {
+
+  /** Interface for loadable area of effect iterators, used for the fallback AOE iterator */
+  interface Loadable extends AreaOfEffectIterator, ToolModule {
+    List<ModifierHook<?>> DEFAULT_HOOKS = List.of(ToolHooks.AOE_ITERATOR);
 
     @Override
-    public IGenericLoader<? extends IAreaOfEffectIterator> getLoader() {
-      throw new UnsupportedOperationException("Attempt to serialize empty AOE iterator");
+    default List<ModifierHook<?>> getDefaultHooks() {
+      return DEFAULT_HOOKS;
     }
-  };
+  }
 
   /** Registry of all AOE loaders */
-  DefaultingLoaderRegistry<IAreaOfEffectIterator> LOADER = new DefaultingLoaderRegistry<>("AOE Iterator", DEFAULT, false);
+  GenericLoaderRegistry<Loadable> LOADER = new GenericLoaderRegistry<>("AOE Iterator", false);
+
+  /** Registers a loader with both tool modules and area of effect (latter used for fallback loader) */
+  static void register(ResourceLocation name, IGenericLoader<? extends Loadable> loader) {
+    ToolModule.LOADER.register(name, loader);
+    LOADER.register(name, loader);
+  }
 
   /**
    * Gets a list of blocks that the tool can affect.
@@ -72,7 +79,8 @@ public interface IAreaOfEffectIterator extends IHaveLoader {
           return false;
         }
         if (refHardness == 0 ? hardness == 0 : hardness / refHardness <= 3) {
-          return ToolHarvestLogic.isEffective(tool, state);
+          // must not be broken, and the tool definition must be effective
+          return IsEffectiveToolHook.isEffective(tool, state);
         }
         return false;
       };

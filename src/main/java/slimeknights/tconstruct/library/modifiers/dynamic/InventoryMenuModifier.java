@@ -19,7 +19,7 @@ import slimeknights.tconstruct.library.modifiers.hook.interaction.KeybindInterac
 import slimeknights.tconstruct.library.modifiers.impl.InventoryModifier;
 import slimeknights.tconstruct.library.modifiers.util.ModifierHookMap.Builder;
 import slimeknights.tconstruct.library.tools.capability.ToolInventoryCapability;
-import slimeknights.tconstruct.library.tools.definition.module.ToolModuleHooks;
+import slimeknights.tconstruct.library.tools.definition.module.ToolHooks;
 import slimeknights.tconstruct.library.tools.definition.module.interaction.DualOptionInteraction;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 
@@ -53,7 +53,7 @@ public class InventoryMenuModifier extends InventoryModifier implements KeybindI
 
   @Override
   public InteractionResult onToolUse(IToolStackView tool, ModifierEntry modifier, Player player, InteractionHand hand, InteractionSource source) {
-    if (player.isCrouching() && tool.getDefinitionData().getModule(ToolModuleHooks.INTERACTION).canInteract(tool, modifier.getId(), source)) {
+    if (player.isCrouching() && tool.getHook(ToolHooks.INTERACTION).canInteract(tool, modifier.getId(), source)) {
       EquipmentSlot slot = source.getSlot(hand);
       return ToolInventoryCapability.tryOpenContainer(player.getItemBySlot(slot), tool, player, slot);
     }

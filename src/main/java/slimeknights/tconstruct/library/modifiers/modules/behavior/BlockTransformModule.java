@@ -16,8 +16,8 @@ import slimeknights.tconstruct.library.modifiers.hook.interaction.BlockInteracti
 import slimeknights.tconstruct.library.modifiers.hook.interaction.InteractionSource;
 import slimeknights.tconstruct.library.modifiers.modules.ModifierHookProvider;
 import slimeknights.tconstruct.library.modifiers.modules.ModifierModule;
-import slimeknights.tconstruct.library.tools.definition.aoe.IAreaOfEffectIterator;
-import slimeknights.tconstruct.library.tools.definition.module.ToolModuleHooks;
+import slimeknights.tconstruct.library.tools.definition.module.ToolHooks;
+import slimeknights.tconstruct.library.tools.definition.module.aoe.AreaOfEffectIterator;
 import slimeknights.tconstruct.library.tools.helper.ToolDamageUtil;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.utils.MutableUseOnContext;
@@ -42,7 +42,7 @@ public interface BlockTransformModule extends ModifierModule, BlockInteractionMo
   @Override
   default InteractionResult afterBlockUse(IToolStackView tool, ModifierEntry modifier, UseOnContext context, InteractionSource source) {
     // tool must not be broken
-    if (tool.isBroken() || !tool.getDefinitionData().getModule(ToolModuleHooks.INTERACTION).canInteract(tool, modifier.getId(), source)) {
+    if (tool.isBroken() || !tool.getHook(ToolHooks.INTERACTION).canInteract(tool, modifier.getId(), source)) {
       return InteractionResult.PASS;
     }
 
@@ -83,7 +83,7 @@ public interface BlockTransformModule extends ModifierModule, BlockInteractionMo
     // note we consider anything effective, as hoes are not effective on all tillable blocks
     if (player != null && !tool.isBroken()) {
       int totalTransformed = 0;
-      Iterator<BlockPos> aoePos = tool.getDefinition().getData().getAOE().getBlocks(tool, stack, player, original, world, pos, context.getClickedFace(), IAreaOfEffectIterator.AOEMatchType.TRANSFORM).iterator();
+      Iterator<BlockPos> aoePos = tool.getHook(ToolHooks.AOE_ITERATOR).getBlocks(tool, stack, player, original, world, pos, context.getClickedFace(), AreaOfEffectIterator.AOEMatchType.TRANSFORM).iterator();
       if (aoePos.hasNext()) {
         MutableUseOnContext offsetContext = new MutableUseOnContext(context);
         do {

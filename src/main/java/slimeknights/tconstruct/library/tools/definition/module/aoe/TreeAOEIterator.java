@@ -1,4 +1,4 @@
-package slimeknights.tconstruct.library.tools.definition.aoe;
+package slimeknights.tconstruct.library.tools.definition.module.aoe;
 
 import com.google.common.collect.AbstractIterator;
 import net.minecraft.core.BlockPos;
@@ -11,7 +11,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import slimeknights.mantle.data.loadable.primitive.IntLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
-import slimeknights.mantle.data.registry.GenericLoaderRegistry.IGenericLoader;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.tools.TinkerModifiers;
 
@@ -25,7 +24,7 @@ import java.util.Set;
  * @param width  Absolute distance to the left or right to mine, 0 or more
  * @param depth  How far back to mine into the tree beyond the first block, 0 or more
  */
-public record TreeAOEIterator(int width, int depth) implements IAreaOfEffectIterator {
+public record TreeAOEIterator(int width, int depth) implements AreaOfEffectIterator.Loadable {
   public static final RecordLoadable<TreeAOEIterator> LOADER = RecordLoadable.create(
     IntLoadable.FROM_ZERO.defaultField("width_bonus", 0, true, TreeAOEIterator::width),
     IntLoadable.FROM_ZERO.defaultField("depth_bonus", 0, true, TreeAOEIterator::depth),
@@ -35,7 +34,7 @@ public record TreeAOEIterator(int width, int depth) implements IAreaOfEffectIter
   private static final int MAX_BRANCH_DISTANCE = 10;
 
   @Override
-  public IGenericLoader<? extends IAreaOfEffectIterator> getLoader() {
+  public RecordLoadable<TreeAOEIterator> getLoader() {
     return LOADER;
   }
 

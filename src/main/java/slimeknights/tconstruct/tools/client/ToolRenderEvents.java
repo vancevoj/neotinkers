@@ -30,8 +30,9 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.TinkerTags;
-import slimeknights.tconstruct.library.tools.definition.aoe.IAreaOfEffectIterator;
-import slimeknights.tconstruct.library.tools.helper.ToolHarvestLogic;
+import slimeknights.tconstruct.library.tools.definition.module.ToolHooks;
+import slimeknights.tconstruct.library.tools.definition.module.aoe.AreaOfEffectIterator;
+import slimeknights.tconstruct.library.tools.definition.module.mining.IsEffectiveToolHook;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 
 import java.util.Iterator;
@@ -72,10 +73,11 @@ public class ToolRenderEvents {
     BlockHitResult blockTrace = event.getTarget();
     BlockPos origin = blockTrace.getBlockPos();
     BlockState state = world.getBlockState(origin);
-    if (!ToolHarvestLogic.isEffective(tool, state)) {
+    // must not be broken, and the tool definition must be effective
+    if (!IsEffectiveToolHook.isEffective(tool, state)) {
       return;
     }
-    Iterator<BlockPos> extraBlocks = tool.getDefinition().getData().getAOE().getBlocks(tool, stack, player, world.getBlockState(origin), world, origin, blockTrace.getDirection(), IAreaOfEffectIterator.AOEMatchType.BREAKING).iterator();
+    Iterator<BlockPos> extraBlocks = tool.getHook(ToolHooks.AOE_ITERATOR).getBlocks(tool, stack, player, world.getBlockState(origin), world, origin, blockTrace.getDirection(), AreaOfEffectIterator.AOEMatchType.BREAKING).iterator();
     if (!extraBlocks.hasNext()) {
       return;
     }
@@ -149,10 +151,11 @@ public class ToolRenderEvents {
     }
     // determine extra blocks to highlight
     BlockState state = world.getBlockState(target);
-    if (!ToolHarvestLogic.isEffective(tool, state)) {
+    // must not be broken, and the tool definition must be effective
+    if (!IsEffectiveToolHook.isEffective(tool, state)) {
       return;
     }
-    Iterator<BlockPos> extraBlocks = tool.getDefinition().getData().getAOE().getBlocks(tool, stack, player, state, world, target, blockTrace.getDirection(), IAreaOfEffectIterator.AOEMatchType.BREAKING).iterator();
+    Iterator<BlockPos> extraBlocks = tool.getHook(ToolHooks.AOE_ITERATOR).getBlocks(tool, stack, player, state, world, target, blockTrace.getDirection(), AreaOfEffectIterator.AOEMatchType.BREAKING).iterator();
     if (!extraBlocks.hasNext()) {
       return;
     }

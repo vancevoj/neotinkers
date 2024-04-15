@@ -1,41 +1,65 @@
 {
-  "actions": [
-    "hoe_dig"
-  ],
-  "attack": {
-    "type": "tconstruct:circle",
-    "diameter": 1.0
-  },
-  "harvest": {
-    "aoe": {
-      "type": "tconstruct:circle",
+  "modules": [
+    {
+      "type": "tconstruct:modifier_slots",
+      "slots": {
+        "abilities": 1,
+        "upgrades": 3
+      }
+    },
+    {
+      "type": "tconstruct:traits",
+      "traits": [
+        {
+          "level": 1,
+          "name": "tconstruct:tilling"
+        },
+        {
+          "level": 1,
+          "name": "tconstruct:shears"
+        },
+        {
+          "level": 1,
+          "name": "tconstruct:harvest"
+        }
+      ]
+    },
+    {
+      "type": "tconstruct:tool_actions",
+      "tool_actions": [
+        "hoe_dig"
+      ]
+    },
+    {
+      "type": "tconstruct:is_effective",
+      "predicate_type": "mantle:tag",
+      "tag": "tconstruct:mineable/scythe"
+    },
+    {
+      "type": "tconstruct:mining_speed_modifier",
+      "modifier": 0.3,
+      "predicate_type": "mantle:tag",
+      "tag": "minecraft:wool"
+    },
+    {
+      "type": "tconstruct:mining_speed_modifier",
+      "blocks": [
+        "minecraft:vine",
+        "minecraft:glow_lichen"
+      ],
+      "modifier": 0.1,
+      "predicate_type": "mantle:set"
+    },
+    {
+      "type": "tconstruct:circle_aoe",
       "3D": true,
       "diameter": 1
     },
-    "logic": {
-      "type": "tconstruct:modified_tag",
-      "effective": "tconstruct:mineable/scythe",
-      "modifiers": [
-        {
-          "modifier": 0.3,
-          "predicate": {
-            "type": "mantle:tag",
-            "tag": "minecraft:wool"
-          }
-        },
-        {
-          "modifier": 0.1,
-          "predicate": {
-            "type": "mantle:set",
-            "blocks": [
-              "minecraft:vine",
-              "minecraft:glow_lichen"
-            ]
-          }
-        }
-      ]
+    {
+      "type": "tconstruct:circle_melee",
+      "diameter": 1.0
     }
-  },
+  ],
   "parts": [
     {
       "item": "tconstruct:small_blade"
@@ -47,10 +71,6 @@
       "item": "tconstruct:tool_binding"
     }
   ],
-  "slots": {
-    "abilities": 1,
-    "upgrades": 3
-  },
   "stats": {
     "base": {
       "tconstruct:attack_damage": 1.0,
@@ -59,19 +79,5 @@
     "multipliers": {
       "tconstruct:attack_damage": 0.5
     }
-  },
-  "traits": [
-    {
-      "level": 1,
-      "name": "tconstruct:tilling"
-    },
-    {
-      "level": 1,
-      "name": "tconstruct:shears"
-    },
-    {
-      "level": 1,
-      "name": "tconstruct:harvest"
-    }
-  ]
+  }
 }

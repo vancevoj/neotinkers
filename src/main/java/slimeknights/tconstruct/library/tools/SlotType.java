@@ -33,7 +33,7 @@ import java.util.regex.Pattern;
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public final class SlotType {
   /** Loadable for a slot type */
-  public static final Loadable<SlotType> LOADABLE = StringLoadable.DEFAULT.comapFlatMap((name, error) -> {
+  public static final StringLoadable<SlotType> LOADABLE = StringLoadable.DEFAULT.comapFlatMap((name, error) -> {
     if (!isValidName(name)) {
       throw error.create("Invalid slot type name '" + name + '\'');
     }

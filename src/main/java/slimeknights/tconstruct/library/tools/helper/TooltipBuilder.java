@@ -11,10 +11,10 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Tier;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.tools.SlotType;
+import slimeknights.tconstruct.library.tools.definition.module.mining.MiningTierToolHook;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.library.tools.stat.INumericToolStat;
@@ -83,8 +83,7 @@ public class TooltipBuilder {
    * @return the tooltip builder
    */
   public TooltipBuilder addTier() {
-    Tier tier = tool.getDefinition().getData().getHarvestLogic().getTier(tool);
-    this.tooltips.add(ToolStats.HARVEST_TIER.formatValue(tier));
+    this.tooltips.add(ToolStats.HARVEST_TIER.formatValue(MiningTierToolHook.getTier(tool)));
     return this;
   }
 

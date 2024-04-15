@@ -5,6 +5,7 @@ import net.minecraft.world.item.Item;
 import slimeknights.tconstruct.library.materials.definition.MaterialVariant;
 import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
+import slimeknights.tconstruct.library.modifiers.ModifierHook;
 import slimeknights.tconstruct.library.modifiers.ModifierId;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinition;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinitionData;
@@ -33,6 +34,11 @@ public interface IToolContext {
   @SuppressWarnings("deprecation")
   default boolean hasTag(TagKey<Item> tag) {
     return getItem().builtInRegistryHolder().containsTag(tag);
+  }
+
+  /** Gets the given hook from the tool */
+  default <T> T getHook(ModifierHook<T> hook) {
+    return getDefinition().getData().getHook(hook);
   }
 
 

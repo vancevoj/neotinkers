@@ -7,15 +7,17 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import slimeknights.mantle.data.predicate.block.BlockPredicate;
 import slimeknights.tconstruct.fixture.MaterialItemFixture;
 import slimeknights.tconstruct.fixture.MaterialStatsFixture;
 import slimeknights.tconstruct.fixture.ToolDefinitionFixture;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinition;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinitionDataBuilder;
+import slimeknights.tconstruct.library.tools.definition.module.mining.IsEffectiveModule;
+import slimeknights.tconstruct.library.tools.definition.module.mining.MiningSpeedToolHook;
 import slimeknights.tconstruct.library.tools.item.ModifiableItem;
 import slimeknights.tconstruct.library.tools.item.ToolItemTest;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
-import slimeknights.tconstruct.test.BlockHarvestLogic;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -35,7 +37,7 @@ class ToolHarvestLogicTest extends ToolItemTest {
   void calcSpeed_dirt_notEffective() {
     ItemStack tool = buildTestTool(pickaxeTool);
 
-    float speed = ToolHarvestLogic.getDestroySpeed(tool, Blocks.DIRT.defaultBlockState());
+    float speed = MiningSpeedToolHook.getDestroySpeed(tool, Blocks.DIRT.defaultBlockState());
 
     assertThat(speed).isEqualTo(1f);
   }
@@ -44,7 +46,7 @@ class ToolHarvestLogicTest extends ToolItemTest {
   void calcSpeed_cobble_effective() {
     ItemStack tool = buildTestTool(pickaxeTool);
 
-    float speed = ToolHarvestLogic.getDestroySpeed(tool, Blocks.COBBLESTONE.defaultBlockState());
+    float speed = MiningSpeedToolHook.getDestroySpeed(tool, Blocks.COBBLESTONE.defaultBlockState());
 
     assertThat(speed).isEqualTo(MaterialStatsFixture.MATERIAL_STATS_HEAD.getMiningSpeed());
   }
@@ -53,7 +55,7 @@ class ToolHarvestLogicTest extends ToolItemTest {
   void calcSpeed_obsidian_notEnoughHarvestLevel() {
     ItemStack tool = buildTestTool(pickaxeTool);
 
-    float speed = ToolHarvestLogic.getDestroySpeed(tool, Blocks.OBSIDIAN.defaultBlockState());
+    float speed = MiningSpeedToolHook.getDestroySpeed(tool, Blocks.OBSIDIAN.defaultBlockState());
 
     assertThat(speed).isEqualTo(1f);
   }
@@ -63,7 +65,7 @@ class ToolHarvestLogicTest extends ToolItemTest {
     ItemStack tool = buildTestTool(pickaxeTool);
     breakTool(tool);
 
-    float speed = ToolHarvestLogic.getDestroySpeed(tool, Blocks.DIRT.defaultBlockState());
+    float speed = MiningSpeedToolHook.getDestroySpeed(tool, Blocks.DIRT.defaultBlockState());
 
     assertThat(speed).isLessThan(1f);
     assertThat(speed).isGreaterThan(0f);
@@ -76,7 +78,7 @@ class ToolHarvestLogicTest extends ToolItemTest {
     ToolDefinition definition = ToolDefinition.builder(new ResourceLocation("test", "mining_tool")).meleeHarvest().skipRegister().build();
     definition.setData(ToolDefinitionDataBuilder
                          .builder()
-                         .harvestLogic(new BlockHarvestLogic(Blocks.COBBLESTONE))
+                         .module(new IsEffectiveModule(BlockPredicate.set(Blocks.COBBLESTONE)))
                          .part(MaterialItemFixture.MATERIAL_ITEM_HEAD)
                          .part(MaterialItemFixture.MATERIAL_ITEM_HANDLE)
                          .part(MaterialItemFixture.MATERIAL_ITEM_EXTRA)
@@ -88,11 +90,11 @@ class ToolHarvestLogicTest extends ToolItemTest {
     ItemStack tool = buildTestTool(toolWithMiningModifier);
 
     // boosted by correct block
-    float speed = ToolHarvestLogic.getDestroySpeed(tool, Blocks.COBBLESTONE.defaultBlockState());
+    float speed = MiningSpeedToolHook.getDestroySpeed(tool, Blocks.COBBLESTONE.defaultBlockState());
     assertThat(speed).isEqualTo(MaterialStatsFixture.MATERIAL_STATS_HEAD.getMiningSpeed() * modifier);
 
     // default speed
-    speed = ToolHarvestLogic.getDestroySpeed(tool, Blocks.STONE.defaultBlockState());
+    speed = MiningSpeedToolHook.getDestroySpeed(tool, Blocks.STONE.defaultBlockState());
     assertThat(speed).isEqualTo(1.0f);
   }
 }

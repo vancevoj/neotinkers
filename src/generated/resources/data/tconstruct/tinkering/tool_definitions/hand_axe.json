@@ -1,23 +1,43 @@
 {
-  "actions": [
-    "axe_dig",
-    "shield_disable"
-  ],
-  "attack": {
-    "type": "tconstruct:particle",
-    "particle": "tconstruct:axe_attack"
-  },
-  "harvest": {
-    "aoe": {
-      "type": "tconstruct:circle",
+  "modules": [
+    {
+      "type": "tconstruct:modifier_slots",
+      "slots": {
+        "abilities": 1,
+        "upgrades": 3
+      }
+    },
+    {
+      "type": "tconstruct:traits",
+      "traits": [
+        {
+          "level": 1,
+          "name": "tconstruct:stripping"
+        }
+      ]
+    },
+    {
+      "type": "tconstruct:tool_actions",
+      "tool_actions": [
+        "axe_dig",
+        "shield_disable"
+      ]
+    },
+    {
+      "type": "tconstruct:is_effective",
+      "predicate_type": "mantle:tag",
+      "tag": "tconstruct:mineable/hand_axe"
+    },
+    {
+      "type": "tconstruct:circle_aoe",
       "3D": false,
       "diameter": 1
     },
-    "logic": {
-      "type": "tconstruct:effective_tag",
-      "effective": "tconstruct:mineable/hand_axe"
+    {
+      "type": "tconstruct:melee_particle",
+      "particle": "tconstruct:axe_attack"
     }
-  },
+  ],
   "parts": [
     {
       "item": "tconstruct:small_axe_head"
@@ -29,20 +49,10 @@
       "item": "tconstruct:tool_binding"
     }
   ],
-  "slots": {
-    "abilities": 1,
-    "upgrades": 3
-  },
   "stats": {
     "base": {
       "tconstruct:attack_damage": 6.0,
       "tconstruct:attack_speed": 0.9
     }
-  },
-  "traits": [
-    {
-      "level": 1,
-      "name": "tconstruct:stripping"
-    }
-  ]
+  }
 }

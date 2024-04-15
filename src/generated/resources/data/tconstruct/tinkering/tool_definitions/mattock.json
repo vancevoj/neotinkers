@@ -1,37 +1,54 @@
 {
-  "actions": [
-    "axe_dig",
-    "shovel_dig"
-  ],
-  "harvest": {
-    "aoe": {
-      "type": "tconstruct:vein",
-      "max_distance": 0
+  "modules": [
+    {
+      "type": "tconstruct:modifier_slots",
+      "slots": {
+        "abilities": 1,
+        "upgrades": 3
+      }
     },
-    "logic": {
-      "type": "tconstruct:modified_tag",
-      "effective": "tconstruct:mineable/mattock",
-      "modifiers": [
+    {
+      "type": "tconstruct:traits",
+      "traits": [
         {
-          "modifier": 2.0,
-          "predicate": {
-            "type": "mantle:and",
-            "predicates": [
-              {
-                "type": "mantle:tag",
-                "tag": "minecraft:mineable/axe"
-              },
-              {
-                "type": "mantle:inverted",
-                "inverted_type": "mantle:tag",
-                "tag": "tconstruct:mineable/mattock"
-              }
-            ]
-          }
+          "level": 1,
+          "name": "tconstruct:tilling"
         }
       ]
+    },
+    {
+      "type": "tconstruct:tool_actions",
+      "tool_actions": [
+        "axe_dig",
+        "shovel_dig"
+      ]
+    },
+    {
+      "type": "tconstruct:is_effective",
+      "predicate_type": "mantle:tag",
+      "tag": "tconstruct:mineable/mattock"
+    },
+    {
+      "type": "tconstruct:mining_speed_modifier",
+      "modifier": 2.0,
+      "predicate_type": "mantle:and",
+      "predicates": [
+        {
+          "type": "mantle:tag",
+          "tag": "minecraft:mineable/axe"
+        },
+        {
+          "type": "mantle:inverted",
+          "inverted_type": "mantle:tag",
+          "tag": "tconstruct:mineable/mattock"
+        }
+      ]
+    },
+    {
+      "type": "tconstruct:vein_aoe",
+      "max_distance": 0
     }
-  },
+  ],
   "parts": [
     {
       "item": "tconstruct:small_axe_head"
@@ -43,10 +60,6 @@
       "item": "tconstruct:round_plate"
     }
   ],
-  "slots": {
-    "abilities": 1,
-    "upgrades": 3
-  },
   "stats": {
     "base": {
       "tconstruct:attack_damage": 1.5,
@@ -57,11 +70,5 @@
       "tconstruct:durability": 1.25,
       "tconstruct:mining_speed": 1.1
     }
-  },
-  "traits": [
-    {
-      "level": 1,
-      "name": "tconstruct:tilling"
-    }
-  ]
+  }
 }

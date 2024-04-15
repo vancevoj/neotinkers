@@ -1,6 +1,6 @@
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-package slimeknights.tconstruct.library.tools.definition.harvest;
+package slimeknights.tconstruct.library.tools.definition.module.mining;
 
 import net.minecraft.MethodsReturnNonnullByDefault;
 

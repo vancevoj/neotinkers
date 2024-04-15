@@ -1,26 +1,32 @@
 {
-  "slots": {
-    "abilities": 1,
-    "defense": 0,
-    "upgrades": 5
-  },
+  "modules": [
+    {
+      "type": "tconstruct:modifier_slots",
+      "slots": {
+        "abilities": 1,
+        "upgrades": 5
+      }
+    },
+    {
+      "type": "tconstruct:traits",
+      "traits": [
+        {
+          "level": 1,
+          "name": "tconstruct:overslime_friend"
+        },
+        {
+          "level": 1,
+          "name": "tconstruct:wings"
+        }
+      ]
+    }
+  ],
   "stats": {
     "base": {
-      "tconstruct:armor": 0.0,
       "tconstruct:durability": 672.0
     },
     "multipliers": {
       "tconstruct:attack_damage": 0.4
     }
-  },
-  "traits": [
-    {
-      "level": 1,
-      "name": "tconstruct:overslime_friend"
-    },
-    {
-      "level": 1,
-      "name": "tconstruct:wings"
-    }
-  ]
+  }
 }

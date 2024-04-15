@@ -25,6 +25,7 @@ import slimeknights.tconstruct.library.tools.context.ToolRebuildContext;
 import slimeknights.tconstruct.library.tools.definition.PartRequirement;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinition;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinitionData;
+import slimeknights.tconstruct.library.tools.definition.module.ToolHooks;
 import slimeknights.tconstruct.library.tools.helper.ToolBuildHandler;
 import slimeknights.tconstruct.library.tools.helper.TooltipUtil;
 import slimeknights.tconstruct.library.tools.item.IModifiable;
@@ -628,9 +629,6 @@ public class ToolStack implements IToolStackView {
   public void rebuildStats() {
     // add tool slots to volatile data, ensures it is there even from an empty tool, and properly updates on datapack update
     ToolDefinitionData toolData = getDefinitionData();
-    ModDataNBT volatileData = new ModDataNBT();
-    toolData.buildSlots(volatileData);
-    ModDataNBT persistentData = getPersistentData();
 
     // after slots, time to build stats
     MaterialNBT materials = getMaterials();
@@ -642,7 +640,7 @@ public class ToolStack implements IToolStackView {
     // we start by cloning upgrades and adding tool traits and material traits
     ModifierNBT.Builder modBuilder = ModifierNBT.builder();
     modBuilder.add(getUpgrades());
-    modBuilder.add(toolData.getTraits());
+    toolData.getHook(ToolHooks.TOOL_TRAITS).addTraits(definition, modBuilder);
     List<PartRequirement> parts = getDefinition().getData().getParts();
     int max = Math.min(materials.size(), parts.size());
     IMaterialRegistry materialRegistry = MaterialRegistry.getInstance();
@@ -651,16 +649,18 @@ public class ToolStack implements IToolStackView {
     }
     ModifierNBT beforeTraits = modBuilder.build();
 
+    // temporary context while we add modifier traits, used directly for volatile data with no modifiers
+    ModDataNBT volatileData = new ModDataNBT();
+    ToolRebuildContext context = new ToolRebuildContext(item, definition, getMaterials(), getUpgrades(), beforeTraits, stats, getPersistentData(), volatileData);
+
     // next, update modifier related properties, can skip if we have none
     List<ModifierEntry> modifierList = Collections.emptyList();
     if (beforeTraits.isEmpty()) {
       // if no modifiers, clear out data that only exists with modifiers
       // no way to have modifier traits without modifiers
-      nbt.remove(TAG_VOLATILE_MOD_DATA);
       setModifiers(ModifierNBT.EMPTY);
+      toolData.getHook(ToolHooks.VOLATILE_DATA).addVolatileData(context, volatileData);
     } else {
-      // temporary context while we add modifier traits
-      ToolRebuildContext context = new ToolRebuildContext(item, getDefinition(), getMaterials(), getUpgrades(), beforeTraits, stats, persistentData, volatileData);
       modBuilder = ModifierNBT.builder();
       TraitBuilder traitBuilder = new TraitBuilder(context, modBuilder);
       for (ModifierEntry entry : beforeTraits.getModifiers()) {
@@ -675,7 +675,8 @@ public class ToolStack implements IToolStackView {
       // context for further modifier hooks
       context = context.withModifiers(allMods);
 
-      // build persistent data first, its a parameter to the other two hooks
+      // build volatile data first, it's a parameter to the other hooks
+      toolData.getHook(ToolHooks.VOLATILE_DATA).addVolatileData(context, volatileData);
       for (ModifierEntry entry : modifierList) {
         entry.getHook(TinkerHooks.VOLATILE_DATA).addVolatileData(context, entry, volatileData);
       }
