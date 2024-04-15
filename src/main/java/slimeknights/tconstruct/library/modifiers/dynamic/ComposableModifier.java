@@ -1,19 +1,15 @@
 package slimeknights.tconstruct.library.modifiers.dynamic;
 
 import com.google.common.collect.ImmutableList;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSyntaxException;
-import io.netty.handler.codec.DecoderException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.GsonHelper;
-import slimeknights.mantle.data.registry.GenericLoaderRegistry.IGenericLoader;
-import slimeknights.mantle.util.JsonHelper;
+import slimeknights.mantle.data.loadable.ErrorFactory;
+import slimeknights.mantle.data.loadable.primitive.EnumLoadable;
+import slimeknights.mantle.data.loadable.primitive.IntLoadable;
+import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
@@ -21,19 +17,27 @@ import slimeknights.tconstruct.library.modifiers.ModifierHook;
 import slimeknights.tconstruct.library.modifiers.TinkerHooks;
 import slimeknights.tconstruct.library.modifiers.impl.BasicModifier;
 import slimeknights.tconstruct.library.modifiers.modules.ModifierModule;
-import slimeknights.tconstruct.library.modifiers.modules.ModifierModule.ModuleWithHooks;
+import slimeknights.tconstruct.library.modifiers.util.ModifierHookMap;
+import slimeknights.tconstruct.library.modifiers.util.ModifierHookMap.WithHooks;
 import slimeknights.tconstruct.library.modifiers.util.ModifierLevelDisplay;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 import java.util.stream.Collectors;
 
 /** Modifier consisting of many composed hooks, used in datagen as a serialized modifier. */
 public class ComposableModifier extends BasicModifier {
-  private final List<ModuleWithHooks> modules;
+  public static final RecordLoadable<ComposableModifier> LOADER = RecordLoadable.create(
+    ModifierLevelDisplay.LOADER.defaultField("level_display", true, m -> m.levelDisplay),
+    new EnumLoadable<>(TooltipDisplay.class).defaultField("tooltip_display", TooltipDisplay.ALWAYS, true, m -> m.tooltipDisplay),
+    IntLoadable.ANY_FULL.defaultField("priority", Integer.MIN_VALUE, m -> m.priority),
+    ModifierModule.WITH_HOOKS.list(0).defaultField("modules", List.of(), m -> m.modules),
+    ErrorFactory.FIELD,
+    (level, tooltip, priority, modules, error) -> new ComposableModifier(level, tooltip, priority == Integer.MIN_VALUE ? computePriority(modules) : priority, modules, error));
+
+  private final List<WithHooks<ModifierModule>> modules;
 
   /**
    * Creates a new instance
@@ -42,8 +46,8 @@ public class ComposableModifier extends BasicModifier {
    * @param priority         If the value is {@link Integer#MIN_VALUE}, assumed unset for datagen
    * @param modules          Modules for this modifier
    */
-  protected ComposableModifier(ModifierLevelDisplay levelDisplay, TooltipDisplay tooltipDisplay, int priority, List<ModuleWithHooks> modules) {
-    super(ModifierModule.createMap(modules), levelDisplay, tooltipDisplay, priority);
+  protected ComposableModifier(ModifierLevelDisplay levelDisplay, TooltipDisplay tooltipDisplay, int priority, List<WithHooks<ModifierModule>> modules, ErrorFactory error) {
+    super(ModifierHookMap.createMap(modules, error), levelDisplay, tooltipDisplay, priority);
     this.modules = modules;
   }
 
@@ -53,7 +57,7 @@ public class ComposableModifier extends BasicModifier {
   }
 
   @Override
-  public IGenericLoader<? extends Modifier> getLoader() {
+  public RecordLoadable<ComposableModifier> getLoader() {
     return LOADER;
   }
 
@@ -63,10 +67,10 @@ public class ComposableModifier extends BasicModifier {
   }
 
   /** Computes the recommended priority for a set of modifier modules */
-  private static int computePriority(List<ModuleWithHooks> modules) {
+  private static int computePriority(List<WithHooks<ModifierModule>> modules) {
     // poll all modules to find who has a priority preference
     List<ModifierModule> priorityModules = new ArrayList<>();
-    for (ModuleWithHooks module : modules) {
+    for (WithHooks<ModifierModule> module : modules) {
       if (module.module().getPriority() != null) {
         priorityModules.add(module.module());
       }
@@ -91,74 +95,6 @@ public class ComposableModifier extends BasicModifier {
     return Modifier.DEFAULT_PRIORITY;
   }
 
-  public static IGenericLoader<ComposableModifier> LOADER = new IGenericLoader<>() {
-    @Override
-    public ComposableModifier deserialize(JsonObject json) {
-      ModifierLevelDisplay level_display = ModifierLevelDisplay.LOADER.getIfPresent(json, "level_display");
-      TooltipDisplay tooltipDisplay = TooltipDisplay.ALWAYS;
-      if (json.has("tooltip_display")) {
-        tooltipDisplay = JsonHelper.getAsEnum(json, "tooltip_display", TooltipDisplay.class);
-      }
-      List<ModuleWithHooks> modules = JsonHelper.parseList(json, "modules", ModuleWithHooks::deserialize);
-      int priority;
-      if (json.has("priority")) {
-        priority = GsonHelper.getAsInt(json, "priority");
-      } else {
-        priority = computePriority(modules);
-      }
-
-      // convert illegal argument to json syntax, bit more expected in this context
-      // TODO: figure out the best way to do this in loadables
-      try {
-        return new ComposableModifier(level_display, tooltipDisplay, priority, modules);
-      } catch (IllegalArgumentException e) {
-        throw new JsonSyntaxException(e.getMessage(), e);
-      }
-    }
-
-    @Override
-    public void serialize(ComposableModifier object, JsonObject json) {
-      json.add("level_display", ModifierLevelDisplay.LOADER.serialize(object.levelDisplay));
-      json.addProperty("tooltip_display", object.tooltipDisplay.name().toLowerCase(Locale.ROOT));
-      if (object.priority != Integer.MIN_VALUE) {
-        json.addProperty("priority", object.priority);
-      }
-      JsonArray modules = new JsonArray();
-      for (ModuleWithHooks module : object.modules) {
-        modules.add(module.serialize());
-      }
-      json.add("modules", modules);
-    }
-
-    @Override
-    public ComposableModifier fromNetwork(FriendlyByteBuf buffer) {
-      ModifierLevelDisplay levelDisplay = ModifierLevelDisplay.LOADER.decode(buffer);
-      TooltipDisplay tooltipDisplay = buffer.readEnum(TooltipDisplay.class);
-      int priority = buffer.readInt();
-      int moduleCount = buffer.readVarInt();
-      ImmutableList.Builder<ModuleWithHooks> builder = ImmutableList.builder();
-      for (int i = 0; i < moduleCount; i++) {
-        builder.add(ModuleWithHooks.fromNetwork(buffer));
-      }
-      try {
-        return new ComposableModifier(levelDisplay, tooltipDisplay, priority, builder.build());
-      } catch (IllegalArgumentException e) {
-        throw new DecoderException(e.getMessage(), e);
-      }
-    }
-
-    @Override
-    public void toNetwork(ComposableModifier object, FriendlyByteBuf buffer) {
-      ModifierLevelDisplay.LOADER.encode(buffer, object.levelDisplay);
-      buffer.writeEnum(object.tooltipDisplay);
-      buffer.writeInt(object.priority);
-      buffer.writeVarInt(object.modules.size());
-      for (ModuleWithHooks module : object.modules) {
-        module.toNetwork(buffer);
-      }
-    }
-  };
-
   /** Builder for a composable modifier instance */
   @SuppressWarnings("UnusedReturnValue")  // it's a builder
   @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
@@ -171,11 +107,11 @@ public class ComposableModifier extends BasicModifier {
     /** {@link Integer#MIN_VALUE} is an internal value used to represent unset for datagen, to distinguish unset from {@link Modifier#DEFAULT_PRIORITY} */
     @Setter
     private int priority = Integer.MIN_VALUE;
-    private final ImmutableList.Builder<ModuleWithHooks> modules = ImmutableList.builder();
+    private final ImmutableList.Builder<WithHooks<ModifierModule>> modules = ImmutableList.builder();
 
     /** Adds a module to the builder */
     public final Builder addModule(ModifierModule module) {
-      modules.add(new ModuleWithHooks(module, Collections.emptyList()));
+      modules.add(new WithHooks<>(module, Collections.emptyList()));
       return this;
     }
 
@@ -191,18 +127,18 @@ public class ComposableModifier extends BasicModifier {
     @SuppressWarnings("UnusedReturnValue")
     @SafeVarargs
     public final <T extends ModifierModule> Builder addModule(T object, ModifierHook<? super T>... hooks) {
-      modules.add(new ModuleWithHooks(object, List.of(hooks)));
+      modules.add(new WithHooks<>(object, List.of(hooks)));
       return this;
     }
 
     /** Builds the final instance */
     public ComposableModifier build() {
-      List<ModuleWithHooks> modules = this.modules.build();
+      List<WithHooks<ModifierModule>> modules = this.modules.build();
       if (priority == Integer.MIN_VALUE) {
         // call computePriority if we did not set one so we get the warning if multiple modules wish to set the priority
         computePriority(modules);
       }
-      return new ComposableModifier(levelDisplay, tooltipDisplay, priority, modules);
+      return new ComposableModifier(levelDisplay, tooltipDisplay, priority, modules, ErrorFactory.RUNTIME);
     }
   }
 }

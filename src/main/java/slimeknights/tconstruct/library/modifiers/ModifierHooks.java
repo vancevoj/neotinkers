@@ -1,6 +1,8 @@
 package slimeknights.tconstruct.library.modifiers;
 
 import net.minecraft.resources.ResourceLocation;
+import slimeknights.mantle.data.loadable.Loadables;
+import slimeknights.mantle.data.loadable.primitive.StringLoadable;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
@@ -17,6 +19,15 @@ public class ModifierHooks {
   private static final Map<ResourceLocation,ModifierHook<?>> HOOKS = new ConcurrentHashMap<>();
   /** Unmodifiable view of the hook map */
   private static final Collection<ResourceLocation> HOOK_IDS = Collections.unmodifiableCollection(HOOKS.keySet());
+
+  /** Loadable instance for hooks */
+  public static final StringLoadable<ModifierHook<?>> LOADABLE = Loadables.RESOURCE_LOCATION.comapFlatMap((id, error) -> {
+    ModifierHook<?> hook = getHook(id);
+    if (hook == null) {
+      throw error.create("Unknown modifier hook " + id);
+    }
+    return hook;
+  }, ModifierHook::getName);
 
 
   /* Registry */

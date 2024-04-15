@@ -3,14 +3,19 @@ package slimeknights.tconstruct.library.modifiers.util;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.LinkedHashMultimap;
 import lombok.RequiredArgsConstructor;
-import slimeknights.tconstruct.library.modifiers.Modifier;
+import slimeknights.mantle.data.loadable.ErrorFactory;
+import slimeknights.mantle.data.loadable.record.RecordLoadable;
+import slimeknights.mantle.data.registry.GenericLoaderRegistry;
+import slimeknights.mantle.data.registry.GenericLoaderRegistry.IHaveLoader;
 import slimeknights.tconstruct.library.modifiers.ModifierHook;
+import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.impl.BasicModifier;
 import slimeknights.tconstruct.library.modifiers.modules.ModifierHookProvider;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -23,6 +28,24 @@ public class ModifierHookMap {
 
   /** Internal map of modifier hook to object. It's the caller's responsibility to make sure the object is valid for the hook */
   private final Map<ModifierHook<?>,Object> modules;
+
+  /**
+   * Creates a modifier hook map from the given module list
+   * @param modules  List of modules
+   * @return  Modifier hook map
+   */
+  public static ModifierHookMap createMap(List<? extends WithHooks<?>> modules, ErrorFactory error) {
+    if (modules.isEmpty()) {
+      return EMPTY;
+    }
+    Builder builder = builder();
+    for (WithHooks<?> module : modules) {
+      for (ModifierHook<?> hook : module.getModuleHooks()) {
+        builder.addHookChecked(module.module(), hook, error);
+      }
+    }
+    return builder.build();
+  }
 
   /** Checks if a module is registered for the given hook */
   public boolean hasHook(ModifierHook<?> hook) {
@@ -57,6 +80,7 @@ public class ModifierHookMap {
 
   @SuppressWarnings("UnusedReturnValue")
   public static class Builder {
+    private final ErrorFactory ILLEGAL_ARGUMENT = IllegalArgumentException::new;
     /** Builder for the final map */
     private final LinkedHashMultimap<ModifierHook<?>,Object> modules = LinkedHashMultimap.create();
 
@@ -67,10 +91,18 @@ public class ModifierHookMap {
      * @throws IllegalArgumentException  if the hook type is invalid
      */
     public Builder addHookChecked(Object object, ModifierHook<?> hook) {
+      return addHookChecked(object, hook, ILLEGAL_ARGUMENT);
+    }
+
+    /**
+     * Adds a module to the builder, validating it at runtime. Used for JSON parsing
+     * @throws RuntimeException  if the hook is type in invalid matching the given factory
+     */
+    public Builder addHookChecked(Object object, ModifierHook<?> hook, ErrorFactory error) {
       if (hook.isValid(object)) {
         modules.put(hook, object);
       } else {
-        throw new IllegalArgumentException("Object " + object + " is invalid for hook " + hook);
+        throw error.create("Object " + object + " is invalid for hook " + hook);
       }
       return this;
     }
@@ -138,6 +170,22 @@ public class ModifierHookMap {
     /** Transitions this builder into a basic modifier builder */
     public BasicModifier.Builder modifier() {
       return BasicModifier.Builder.builder(build());
+    }
+  }
+
+  /** Represents a modifier module with a list of hooks */
+  public record WithHooks<T extends ModifierHookProvider>(T module, List<ModifierHook<?>> hooks) {
+    /** Gets the list of hooks to use for this module */
+    public List<ModifierHook<?>> getModuleHooks() {
+      if (hooks.isEmpty()) {
+        return module.getDefaultHooks();
+      }
+      return hooks;
+    }
+
+    /** Makes a loadable for a module with hooks */
+    public static <T extends ModifierHookProvider & IHaveLoader> RecordLoadable<WithHooks<T>> makeLoadable(GenericLoaderRegistry<T> loaderRegistry) {
+      return RecordLoadable.create(loaderRegistry.directField(WithHooks::module), ModifierHooks.LOADABLE.list(0).defaultField("hooks", List.of(), WithHooks::hooks), WithHooks::new);
     }
   }
 }
