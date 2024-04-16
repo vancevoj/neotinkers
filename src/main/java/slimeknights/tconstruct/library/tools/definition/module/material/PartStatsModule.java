@@ -13,6 +13,8 @@ import slimeknights.tconstruct.library.modifiers.modules.ModifierHookProvider;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinition;
 import slimeknights.tconstruct.library.tools.definition.module.ToolHooks;
 import slimeknights.tconstruct.library.tools.part.IToolPart;
+import slimeknights.tconstruct.library.tools.stat.MaterialStatProvider;
+import slimeknights.tconstruct.library.tools.stat.MaterialStatProviders;
 
 import java.util.List;
 import java.util.function.Supplier;

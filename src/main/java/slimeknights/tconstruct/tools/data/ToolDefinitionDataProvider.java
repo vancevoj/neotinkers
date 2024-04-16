@@ -27,7 +27,6 @@ import slimeknights.tconstruct.library.tools.definition.module.build.ToolSlotsMo
 import slimeknights.tconstruct.library.tools.definition.module.build.ToolTraitsModule;
 import slimeknights.tconstruct.library.tools.definition.module.interaction.DualOptionInteraction;
 import slimeknights.tconstruct.library.tools.definition.module.interaction.PreferenceSetInteraction;
-import slimeknights.tconstruct.library.tools.definition.module.material.MaterialStatProviders;
 import slimeknights.tconstruct.library.tools.definition.module.material.MaterialStatsModule;
 import slimeknights.tconstruct.library.tools.definition.module.material.PartStatsModule;
 import slimeknights.tconstruct.library.tools.definition.module.mining.IsEffectiveModule;
@@ -38,6 +37,7 @@ import slimeknights.tconstruct.library.tools.definition.module.weapon.ParticleWe
 import slimeknights.tconstruct.library.tools.definition.module.weapon.SweepWeaponAttack;
 import slimeknights.tconstruct.library.tools.nbt.MultiplierNBT;
 import slimeknights.tconstruct.library.tools.nbt.StatsNBT;
+import slimeknights.tconstruct.library.tools.stat.MaterialStatProviders;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
 import slimeknights.tconstruct.tools.ArmorDefinitions;
 import slimeknights.tconstruct.tools.TinkerModifiers;

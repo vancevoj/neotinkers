@@ -19,6 +19,8 @@ import slimeknights.tconstruct.library.tools.definition.module.build.ToolTraitHo
 import slimeknights.tconstruct.library.tools.nbt.IToolContext;
 import slimeknights.tconstruct.library.tools.nbt.MaterialNBT;
 import slimeknights.tconstruct.library.tools.nbt.ModifierNBT;
+import slimeknights.tconstruct.library.tools.stat.MaterialStatProvider;
+import slimeknights.tconstruct.library.tools.stat.MaterialStatProviders;
 import slimeknights.tconstruct.library.tools.stat.ModifierStatsBuilder;
 
 import java.util.List;
@@ -95,11 +97,10 @@ public class MaterialStatsModule implements ToolStatsHook, ToolTraitHook, ToolMa
 
   @Override
   public void addTraits(ToolDefinition definition, MaterialNBT materials, ModifierNBT.Builder builder) {
-    int stats = statTypes.size();
-    // if the NBT is invalid, no-op to prevent an exception here (could kill itemstacks)
-    if (materials.size() == stats) {
+    int max = Math.min(materials.size(), statTypes.size());
+    if (max > 0) {
       IMaterialRegistry materialRegistry = MaterialRegistry.getInstance();
-      for (int i = 0; i < stats; i++) {
+      for (int i = 0; i < max; i++) {
         builder.add(materialRegistry.getTraits(materials.get(i).getId(), statTypes.get(i).stat()));
       }
     }

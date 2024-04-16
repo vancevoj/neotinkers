@@ -2,7 +2,11 @@ package slimeknights.tconstruct.library.tools.stat;
 
 import com.google.common.collect.ImmutableList;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import net.minecraft.resources.ResourceLocation;
+import slimeknights.mantle.data.loadable.ErrorFactory;
+import slimeknights.mantle.registration.object.IdAwareObject;
 import slimeknights.tconstruct.library.materials.MaterialRegistry;
 import slimeknights.tconstruct.library.materials.definition.MaterialId;
 import slimeknights.tconstruct.library.materials.stats.IMaterialStats;
@@ -12,26 +16,26 @@ import slimeknights.tconstruct.library.tools.nbt.MaterialNBT;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
- * Extendable utilities for a stats builder.
- * <p>
- * It's encouraged to extend this for the base of your calculation. Using this class directly will give a no parts stat builder
+ * Extendable utilities for a material stat builder.
  */
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
-public abstract class ToolStatsBuilder {
+public abstract class MaterialStatProvider implements IdAwareObject {
+  @Getter
+  private final ResourceLocation id;
+  private final Set<MaterialStatsId> requiredType;
+  private final Set<MaterialStatsId> otherTypes;
+
   /**
    * Called after bonuses are processed to set the unique stats for this builder.
    * @param builder  Stats builder
    */
-  public abstract void addStats(ModifierStatsBuilder builder);
-
-  /** Gets the given stat, returning a default if its missing instead of the stat's default */
-  @SuppressWarnings("SameParameterValue")
-  protected <T extends Number> T getStatOrDefault(IToolStat<T> stat, T defaultValue) {
-    return defaultValue;
-  }
+  public abstract void addStats(List<WeightedStatType> statTypes, MaterialNBT materials, ModifierStatsBuilder builder);
 
 
   /* Helpers */
@@ -114,5 +118,37 @@ public abstract class ToolStatsBuilder {
     return (float)stats.stream()
                 .mapToDouble(value -> statGetter.apply(value).doubleValue())
                 .sum();
+  }
+
+
+  /* JSON parsing */
+
+  /** Joins the stats by commas */
+  private static String join(Stream<MaterialStatsId> stats) {
+    return stats.map(MaterialStatsId::toString).collect(Collectors.joining(", "));
+  }
+
+  /**
+   * Validates that the given parts meet the requirements
+   * @param stats  Stats to validate
+   * @param error  Error factory
+   */
+  public void validate(List<WeightedStatType> stats, ErrorFactory error) {
+    // have a required type, make sure it exists and no unexpected types exist
+    if (stats.isEmpty()) {
+      throw error.create(id + " must have at least one tool part");
+    }
+    boolean foundHead = false;
+    for (WeightedStatType weightedStat : stats) {
+      MaterialStatsId statType = weightedStat.stat();
+      if (requiredType.contains(statType)) {
+        foundHead = true;
+      } else if (!otherTypes.contains(statType)) {
+        throw new IllegalStateException(id + " does not support type " + statType + ", must be one of: " + join(Stream.concat(requiredType.stream(), otherTypes.stream())));
+      }
+    }
+    if (!foundHead) {
+      throw new IllegalStateException(id + " must use at least one of " + join(requiredType.stream()) + " part");
+    }
   }
 }

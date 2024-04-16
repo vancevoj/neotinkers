@@ -1,107 +1,33 @@
-package slimeknights.tconstruct.tools.stats;
+package slimeknights.tconstruct.library.tools.stat;
 
 import net.minecraft.world.item.Tiers;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import slimeknights.tconstruct.fixture.MaterialItemFixture;
-import slimeknights.tconstruct.fixture.MaterialStatsFixture;
-import slimeknights.tconstruct.fixture.ToolDefinitionFixture;
 import slimeknights.tconstruct.library.materials.MaterialRegistryExtension;
-import slimeknights.tconstruct.library.materials.definition.IMaterial;
-import slimeknights.tconstruct.library.tools.definition.module.material.ToolMaterialHook;
-import slimeknights.tconstruct.library.tools.nbt.MaterialNBT;
 import slimeknights.tconstruct.library.tools.nbt.StatsNBT;
-import slimeknights.tconstruct.library.tools.stat.ModifierStatsBuilder;
-import slimeknights.tconstruct.library.tools.stat.ToolStats;
-import slimeknights.tconstruct.library.tools.stat.ToolStatsBuilder;
 import slimeknights.tconstruct.test.BaseMcTest;
+import slimeknights.tconstruct.tools.stats.HandleMaterialStats;
+import slimeknights.tconstruct.tools.stats.HeadMaterialStats;
 
 import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static slimeknights.tconstruct.fixture.MaterialFixture.MATERIAL_WITH_ALL_STATS;
-import static slimeknights.tconstruct.fixture.MaterialFixture.MATERIAL_WITH_EXTRA;
-import static slimeknights.tconstruct.fixture.MaterialFixture.MATERIAL_WITH_HANDLE;
-import static slimeknights.tconstruct.fixture.MaterialFixture.MATERIAL_WITH_HEAD;
 
 @ExtendWith(MaterialRegistryExtension.class)
-class StatsBuilderTest extends BaseMcTest {
+class StatProviderTest extends BaseMcTest {
   @BeforeAll
   static void beforeAll() {
     MaterialItemFixture.init();
-  }
-
-  /**
-   * Gets a builder for the given materials list, validating the size is correct
-   * @param materials  List of materials
-   * @return  Melee harvest tool stats builder
-   */
-  static MeleeHarvestToolStatsBuilder getBuilder(IMaterial... materials) {
-    ToolStatsBuilder builder = MeleeHarvestToolStatsBuilder.from(ToolMaterialHook.stats(ToolDefinitionFixture.getStandardToolDefinition()), MaterialNBT.of(materials));
-    assertThat(builder).overridingErrorMessage("Given materials list is the wrong size").isInstanceOf(MeleeHarvestToolStatsBuilder.class);
-    return (MeleeHarvestToolStatsBuilder) builder;
-  }
-
-  @Test
-  void init_onlyHead() {
-    MeleeHarvestToolStatsBuilder builder = getBuilder(MATERIAL_WITH_HEAD, MATERIAL_WITH_HEAD, MATERIAL_WITH_HEAD);
-
-    assertThat(builder.getHeads()).containsExactly(MaterialStatsFixture.MATERIAL_STATS_HEAD);
-    assertThat(builder.getHandles()).containsExactly(HandleMaterialStats.DEFAULT);
-    assertThat(builder.getExtras()).containsExactly(ExtraMaterialStats.DEFAULT);
-  }
-
-  @Test
-  void init_onlyHandle() {
-    MeleeHarvestToolStatsBuilder builder = getBuilder(MATERIAL_WITH_HANDLE, MATERIAL_WITH_HANDLE, MATERIAL_WITH_HANDLE);
-
-    assertThat(builder.getHeads()).containsExactly(HeadMaterialStats.DEFAULT);
-    assertThat(builder.getHandles()).containsExactly(MaterialStatsFixture.MATERIAL_STATS_HANDLE);
-    assertThat(builder.getExtras()).containsExactly(ExtraMaterialStats.DEFAULT);
-  }
-
-  @Test
-  void init_onlyExtra() {
-    MeleeHarvestToolStatsBuilder builder = getBuilder(MATERIAL_WITH_EXTRA, MATERIAL_WITH_EXTRA, MATERIAL_WITH_EXTRA);
-
-    assertThat(builder.getHeads()).containsExactly(HeadMaterialStats.DEFAULT);
-    assertThat(builder.getHandles()).containsExactly(HandleMaterialStats.DEFAULT);
-    assertThat(builder.getExtras()).containsExactly(MaterialStatsFixture.MATERIAL_STATS_EXTRA);
-  }
-
-  @Test
-  void init_allCorrectStats() {
-    MeleeHarvestToolStatsBuilder builder = getBuilder(MATERIAL_WITH_HEAD, MATERIAL_WITH_HANDLE, MATERIAL_WITH_EXTRA);
-
-    assertThat(builder.getHeads()).containsExactly(MaterialStatsFixture.MATERIAL_STATS_HEAD);
-    assertThat(builder.getHandles()).containsExactly(MaterialStatsFixture.MATERIAL_STATS_HANDLE);
-    assertThat(builder.getExtras()).containsExactly(MaterialStatsFixture.MATERIAL_STATS_EXTRA);
-  }
-
-  @Test
-  void init_wrongOrder() {
-    MeleeHarvestToolStatsBuilder builder = getBuilder(MATERIAL_WITH_HANDLE, MATERIAL_WITH_EXTRA, MATERIAL_WITH_HEAD);
-
-    assertThat(builder.getHeads()).containsExactly(HeadMaterialStats.DEFAULT);
-    assertThat(builder.getHandles()).containsExactly(HandleMaterialStats.DEFAULT);
-    assertThat(builder.getExtras()).containsExactly(ExtraMaterialStats.DEFAULT);
-  }
-
-  @Test
-  void init_singleMaterialAllStats() {
-    MeleeHarvestToolStatsBuilder builder = getBuilder(MATERIAL_WITH_ALL_STATS, MATERIAL_WITH_ALL_STATS, MATERIAL_WITH_ALL_STATS);
-
-    assertThat(builder.getHeads()).containsExactly(MaterialStatsFixture.MATERIAL_STATS_HEAD);
-    assertThat(builder.getHandles()).containsExactly(MaterialStatsFixture.MATERIAL_STATS_HANDLE);
-    assertThat(builder.getExtras()).containsExactly(MaterialStatsFixture.MATERIAL_STATS_EXTRA);
+    setupTierSorting();
   }
 
   @Test
   void calculateValues_noStats() {
     ModifierStatsBuilder builder = ModifierStatsBuilder.builder();
-    new MeleeHarvestToolStatsBuilder(Collections.emptyList(), Collections.emptyList(), Collections.emptyList()).addStats(builder);
+    MaterialStatProviders.MELEE_HARVEST.addStats(Collections.emptyList(), Collections.emptyList(), builder);
 
     StatsNBT stats = builder.build();
     assertThat(stats.getInt(ToolStats.DURABILITY)).isEqualTo(1);
@@ -118,7 +44,7 @@ class StatsBuilderTest extends BaseMcTest {
 
     ModifierStatsBuilder builder = ModifierStatsBuilder.builder();
     ToolStats.DURABILITY.update(builder, 100f);
-    new MeleeHarvestToolStatsBuilder(List.of(stats1, stats2), Collections.emptyList(), Collections.emptyList()).addStats(builder);
+    MaterialStatProviders.MELEE_HARVEST.addStats(List.of(stats1, stats2), Collections.emptyList(), builder);
     assertThat(builder.build().get(ToolStats.DURABILITY)).isEqualTo(175); // 100 + average of 100 and 75
   }
 
@@ -128,7 +54,7 @@ class StatsBuilderTest extends BaseMcTest {
     HandleMaterialStats statsHandle = new HandleMaterialStats(0.5f, 0, 0, 0);
 
     ModifierStatsBuilder builder = ModifierStatsBuilder.builder();
-    new MeleeHarvestToolStatsBuilder(List.of(statsHead), List.of(statsHandle), Collections.emptyList()).addStats(builder);
+    MaterialStatProviders.MELEE_HARVEST.addStats(List.of(statsHead), List.of(statsHandle), builder);
 
     assertThat(builder.build().getInt(ToolStats.DURABILITY)).isEqualTo(100); // 100 * 0.5
   }
@@ -137,10 +63,9 @@ class StatsBuilderTest extends BaseMcTest {
   void buildMiningSpeed_testHandleMiningSpeed() {
     HeadMaterialStats statsHead = new HeadMaterialStats(0, 2.0f, Tiers.WOOD, 0);
     HandleMaterialStats statsHandle = new HandleMaterialStats(0, 5f, 0, 0);
-    ExtraMaterialStats statsExtra = ExtraMaterialStats.DEFAULT;
 
     ModifierStatsBuilder builder = ModifierStatsBuilder.builder();
-    new MeleeHarvestToolStatsBuilder(List.of(statsHead), List.of(statsHandle), List.of(statsExtra)).addStats(builder);
+    MaterialStatProviders.MELEE_HARVEST.addStats(List.of(statsHead), List.of(statsHandle), builder);
 
     assertThat(builder.build().get(ToolStats.MINING_SPEED)).isEqualTo(10f); // 2 * 5
   }
@@ -152,7 +77,7 @@ class StatsBuilderTest extends BaseMcTest {
     HandleMaterialStats statsHandle2 = new HandleMaterialStats(0.7f, 0, 0, 0);
 
     ModifierStatsBuilder builder = ModifierStatsBuilder.builder();
-    new MeleeHarvestToolStatsBuilder(List.of(statsHead), List.of(statsHandle1, statsHandle2), Collections.emptyList()).addStats(builder);
+    MaterialStatProviders.MELEE_HARVEST.addStats(List.of(statsHead), List.of(statsHandle1, statsHandle2), builder);
 
     assertThat(builder.build().getInt(ToolStats.DURABILITY)).isEqualTo(100); // 200 * (0.3 + 0.7)/2
   }
@@ -164,7 +89,7 @@ class StatsBuilderTest extends BaseMcTest {
     HandleMaterialStats statsHandle2 = new HandleMaterialStats(0, 0.7f, 0, 0);
 
     ModifierStatsBuilder builder = ModifierStatsBuilder.builder();
-    new MeleeHarvestToolStatsBuilder(List.of(statsHead), List.of(statsHandle1, statsHandle2), Collections.emptyList()).addStats(builder);
+    MaterialStatProviders.MELEE_HARVEST.addStats(List.of(statsHead), List.of(statsHandle1, statsHandle2), builder);
 
     assertThat(builder.build().get(ToolStats.MINING_SPEED)).isEqualTo(2.5f); // 5 * (0.3 + 0.7)/2
   }
@@ -176,7 +101,7 @@ class StatsBuilderTest extends BaseMcTest {
 
     ModifierStatsBuilder builder = ModifierStatsBuilder.builder();
     ToolStats.MINING_SPEED.update(builder, 10f);
-    new MeleeHarvestToolStatsBuilder(List.of(stats1, stats2), Collections.emptyList(), Collections.emptyList()).addStats(builder);
+    MaterialStatProviders.MELEE_HARVEST.addStats(List.of(stats1, stats2), Collections.emptyList(), builder);
 
     assertThat(builder.build().get(ToolStats.MINING_SPEED)).isEqualTo(17.5f); // 10+(10+5)/2
   }
@@ -188,7 +113,7 @@ class StatsBuilderTest extends BaseMcTest {
 
     ModifierStatsBuilder builder = ModifierStatsBuilder.builder();
     ToolStats.ATTACK_DAMAGE.update(builder, 10f);
-    new MeleeHarvestToolStatsBuilder(List.of(stats1, stats2), Collections.emptyList(), Collections.emptyList()).addStats(builder);
+    MaterialStatProviders.MELEE_HARVEST.addStats(List.of(stats1, stats2), Collections.emptyList(), builder);
 
     assertThat(builder.build().get(ToolStats.ATTACK_DAMAGE)).isEqualTo(17.5f); // 10+(10+5)/2
   }
@@ -201,7 +126,7 @@ class StatsBuilderTest extends BaseMcTest {
     HeadMaterialStats stats4 = new HeadMaterialStats(1, 1, Tiers.WOOD, 0);
 
     ModifierStatsBuilder builder = ModifierStatsBuilder.builder();
-    new MeleeHarvestToolStatsBuilder(List.of(stats1, stats2, stats3, stats4), Collections.emptyList(), Collections.emptyList()).addStats(builder);
+    MaterialStatProviders.MELEE_HARVEST.addStats(List.of(stats1, stats2, stats3, stats4), Collections.emptyList(), builder);
 
     assertThat(builder.build().get(ToolStats.HARVEST_TIER)).isEqualTo(Tiers.DIAMOND);
   }
@@ -210,7 +135,7 @@ class StatsBuilderTest extends BaseMcTest {
   void buildAttackSpeed_set() {
     ModifierStatsBuilder builder = ModifierStatsBuilder.builder();
     ToolStats.ATTACK_SPEED.update(builder, 1.5f);
-    new MeleeHarvestToolStatsBuilder(Collections.emptyList(), Collections.emptyList(), Collections.emptyList()).addStats(builder);
+    MaterialStatProviders.MELEE_HARVEST.addStats(Collections.emptyList(), Collections.emptyList(), builder);
     assertThat(builder.build().get(ToolStats.ATTACK_SPEED)).isEqualTo(1.5f);
   }
 
@@ -220,7 +145,7 @@ class StatsBuilderTest extends BaseMcTest {
     HandleMaterialStats stats = new HandleMaterialStats(0, 0, 0, 0.5f);
 
     ModifierStatsBuilder builder = ModifierStatsBuilder.builder();
-    new MeleeHarvestToolStatsBuilder(List.of(head), List.of(stats), Collections.emptyList()).addStats(builder);
+    MaterialStatProviders.MELEE_HARVEST.addStats(List.of(head), List.of(stats), builder);
 
     assertThat(builder.build().get(ToolStats.ATTACK_DAMAGE)).isEqualTo(1.0f); // 2 * 0.5
   }
@@ -233,7 +158,7 @@ class StatsBuilderTest extends BaseMcTest {
 
     ModifierStatsBuilder builder = ModifierStatsBuilder.builder();
     ToolStats.ATTACK_DAMAGE.update(builder, 2f);
-    new MeleeHarvestToolStatsBuilder(List.of(head), List.of(stats1, stats2), Collections.emptyList()).addStats(builder);
+    MaterialStatProviders.MELEE_HARVEST.addStats(List.of(head), List.of(stats1, stats2), builder);
 
     assertThat(builder.build().get(ToolStats.ATTACK_DAMAGE)).isEqualTo(9); // (4+2) * (1.3+1.7)/2
   }
@@ -243,7 +168,7 @@ class StatsBuilderTest extends BaseMcTest {
     HandleMaterialStats stats = new HandleMaterialStats(0, 0, 1.5f, 0);
 
     ModifierStatsBuilder builder = ModifierStatsBuilder.builder();
-    new MeleeHarvestToolStatsBuilder(Collections.emptyList(), List.of(stats), Collections.emptyList()).addStats(builder);
+    MaterialStatProviders.MELEE_HARVEST.addStats(Collections.emptyList(), List.of(stats), builder);
 
     assertThat(builder.build().get(ToolStats.ATTACK_SPEED)).isEqualTo(1.5f); // 1 * 1.5f
   }
@@ -254,7 +179,7 @@ class StatsBuilderTest extends BaseMcTest {
     HandleMaterialStats stats2 = new HandleMaterialStats(0, 0, 1.7f, 0);
 
     ModifierStatsBuilder builder = ModifierStatsBuilder.builder();
-    new MeleeHarvestToolStatsBuilder(Collections.emptyList(), List.of(stats1, stats2), Collections.emptyList()).addStats(builder);
+    MaterialStatProviders.MELEE_HARVEST.addStats(Collections.emptyList(), List.of(stats1, stats2), builder);
 
     assertThat(builder.build().get(ToolStats.ATTACK_SPEED)).isEqualTo(1.5f); // 1 * (1.3+1.7)/2
   }
