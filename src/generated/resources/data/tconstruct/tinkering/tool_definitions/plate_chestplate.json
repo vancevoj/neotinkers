@@ -1,6 +1,21 @@
 {
   "modules": [
     {
+      "type": "tconstruct:base_stats",
+      "stats": {
+        "tconstruct:armor": 7.0,
+        "tconstruct:armor_toughness": 2.0,
+        "tconstruct:durability": 480.0,
+        "tconstruct:knockback_resistance": 0.1
+      }
+    },
+    {
+      "type": "tconstruct:multiply_stats",
+      "multipliers": {
+        "tconstruct:attack_damage": 0.4
+      }
+    },
+    {
       "type": "tconstruct:modifier_slots",
       "slots": {
         "abilities": 1,
@@ -8,16 +23,5 @@
         "upgrades": 1
       }
     }
-  ],
-  "stats": {
-    "base": {
-      "tconstruct:armor": 7.0,
-      "tconstruct:armor_toughness": 2.0,
-      "tconstruct:durability": 480.0,
-      "tconstruct:knockback_resistance": 0.1
-    },
-    "multipliers": {
-      "tconstruct:attack_damage": 0.4
-    }
-  }
+  ]
 }

@@ -65,7 +65,7 @@ public class ToolDefinition {
 
   /** Checks if the tool uses multipart stats */
   public boolean hasMaterials() {
-    return data.getHook(ToolHooks.MATERIAL_STATS).hasMaterials(this);
+    return data.getHook(ToolHooks.TOOL_MATERIALS).hasMaterials(this);
   }
 
 

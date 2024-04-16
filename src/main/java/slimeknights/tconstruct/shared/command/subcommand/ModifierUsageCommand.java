@@ -22,8 +22,9 @@ import slimeknights.tconstruct.library.modifiers.ModifierManager;
 import slimeknights.tconstruct.library.recipe.modifiers.ModifierRecipeLookup;
 import slimeknights.tconstruct.library.tools.SlotType;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinition;
-import slimeknights.tconstruct.library.tools.definition.module.ToolHooks;
+import slimeknights.tconstruct.library.tools.definition.module.build.ToolTraitHook;
 import slimeknights.tconstruct.library.tools.item.IModifiable;
+import slimeknights.tconstruct.library.tools.nbt.MaterialNBT;
 import slimeknights.tconstruct.shared.command.argument.SlotTypeArgument;
 import slimeknights.tconstruct.shared.command.argument.SlotTypeArgument.OptionalSlotType;
 
@@ -83,7 +84,7 @@ public class ModifierUsageCommand {
                                              .filter(item -> item instanceof IModifiable)
                                              .flatMap(item -> {
                                                ToolDefinition definition = ((IModifiable) item).getToolDefinition();
-                                               return definition.getData().getHook(ToolHooks.TOOL_TRAITS).getTraits(definition).stream();
+                                               return ToolTraitHook.getTraits(definition, MaterialNBT.EMPTY).getModifiers().stream();
                                              })
                                              .map(ModifierEntry::getModifier)
                                              .collect(Collectors.toSet());

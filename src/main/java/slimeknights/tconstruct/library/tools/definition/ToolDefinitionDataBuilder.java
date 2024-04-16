@@ -10,9 +10,7 @@ import slimeknights.tconstruct.library.modifiers.util.ModifierHookMap.WithHooks;
 import slimeknights.tconstruct.library.tools.SlotType;
 import slimeknights.tconstruct.library.tools.definition.module.ToolModule;
 import slimeknights.tconstruct.library.tools.definition.module.build.ToolSlotsModule;
-import slimeknights.tconstruct.library.tools.nbt.MultiplierNBT;
 import slimeknights.tconstruct.library.tools.nbt.StatsNBT;
-import slimeknights.tconstruct.library.tools.stat.INumericToolStat;
 import slimeknights.tconstruct.library.tools.stat.IToolStat;
 
 import java.util.List;
@@ -24,7 +22,6 @@ import java.util.List;
 @Accessors(fluent = true)
 public class ToolDefinitionDataBuilder {
   private final StatsNBT.Builder bonuses = StatsNBT.builder();
-  private final MultiplierNBT.Builder multipliers = MultiplierNBT.builder();
   private final ImmutableList.Builder<WithHooks<ToolModule>> modules = ImmutableList.builder();
 
 
@@ -35,22 +32,6 @@ public class ToolDefinitionDataBuilder {
    */
   public <T> ToolDefinitionDataBuilder stat(IToolStat<T> stat, T value) {
     bonuses.set(stat, value);
-    return this;
-  }
-
-  /**
-   * Adds a bonus to the builder, overload for floats as they come up pretty often, helps with boxing
-   */
-  public ToolDefinitionDataBuilder stat(IToolStat<Float> stat, float value) {
-    bonuses.set(stat, value);
-    return this;
-  }
-
-  /**
-   * Applies a global multiplier
-   */
-  public ToolDefinitionDataBuilder multiplier(INumericToolStat<?> stat, float value) {
-    multipliers.set(stat, value);
     return this;
   }
 
@@ -97,6 +78,6 @@ public class ToolDefinitionDataBuilder {
 
   /** Builds the final definition JSON to serialize */
   public ToolDefinitionData build() {
-    return new ToolDefinitionData(bonuses.build(), multipliers.build(), modules.build(), ErrorFactory.RUNTIME);
+    return new ToolDefinitionData(modules.build(), ErrorFactory.RUNTIME);
   }
 }

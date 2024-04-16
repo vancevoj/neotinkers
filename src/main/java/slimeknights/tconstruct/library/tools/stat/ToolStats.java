@@ -51,7 +51,7 @@ public class ToolStats {
 
   // harvest
   /** How fast the tool breaks blocks */
-  public static final FloatToolStat MINING_SPEED = register(new FloatToolStat(name("mining_speed"), 0xFF78A0CD, 1, 0, 2048f, TinkerTags.Items.HARVEST));
+  public static final FloatToolStat MINING_SPEED = register(new FloatToolStat(name("mining_speed"), 0xFF78A0CD, 1, 0.1f, 2048f, TinkerTags.Items.HARVEST));
   /** Mining level for breaking blocks */
   public static final ToolTierStat HARVEST_TIER = register(new ToolTierStat(name("harvest_tier")));
 

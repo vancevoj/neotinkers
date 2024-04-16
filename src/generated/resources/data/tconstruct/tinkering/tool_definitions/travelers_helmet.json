@@ -1,6 +1,13 @@
 {
   "modules": [
     {
+      "type": "tconstruct:base_stats",
+      "stats": {
+        "tconstruct:armor": 1.0,
+        "tconstruct:durability": 110.0
+      }
+    },
+    {
       "type": "tconstruct:modifier_slots",
       "slots": {
         "abilities": 1,
@@ -8,11 +15,5 @@
         "upgrades": 3
       }
     }
-  ],
-  "stats": {
-    "base": {
-      "tconstruct:armor": 1.0,
-      "tconstruct:durability": 110.0
-    }
-  }
+  ]
 }

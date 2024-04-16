@@ -2,6 +2,8 @@ package slimeknights.tconstruct.library.tools.stat;
 
 import lombok.NoArgsConstructor;
 import net.minecraft.world.item.Item;
+import org.jetbrains.annotations.ApiStatus.Internal;
+import org.jetbrains.annotations.VisibleForTesting;
 import slimeknights.tconstruct.library.tools.nbt.MultiplierNBT;
 import slimeknights.tconstruct.library.tools.nbt.StatsNBT;
 
@@ -9,7 +11,6 @@ import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 import java.util.function.Consumer;
 
 /**
@@ -17,9 +18,6 @@ import java.util.function.Consumer;
  */
 @NoArgsConstructor(staticName = "builder")
 public class ModifierStatsBuilder {
-  /** If true, a change was made */
-  private boolean dirty = false;
-
   /** Map of all stats in the builder */
   private final Map<IToolStat<?>,Object> map = new HashMap<>();
   /** Map of multipliers set */
@@ -33,16 +31,6 @@ public class ModifierStatsBuilder {
   @SuppressWarnings("unchecked")
   public <B> void updateStat(IToolStat<?> stat, Consumer<B> consumer) {
     consumer.accept((B)map.computeIfAbsent(stat, IToolStat::makeBuilder));
-    dirty = true;
-  }
-
-  /** Sets the given stat into the builder from the base NBT, method to help with generics */
-  private <T> void setStat(StatsNBT.Builder builder, IToolStat<T> stat, StatsNBT base) {
-    if (map.containsKey(stat)) {
-      builder.set(stat, stat.build(map.get(stat), base.get(stat)));
-    } else {
-      builder.set(stat, base.get(stat));
-    }
   }
 
   /** Multiplies the given multiplier value by the parameter */
@@ -52,31 +40,26 @@ public class ModifierStatsBuilder {
 
   /** Builds the given stat, method exists to make generic easier */
   private <T> void buildStat(StatsNBT.Builder builder, IToolStat<T> stat) {
-    builder.set(stat, stat.build(map.get(stat), stat.getDefaultValue()));
+    T value = stat.build(map.get(stat));
+    if (!value.equals(stat.getDefaultValue())) {
+      builder.set(stat, value);
+    }
   }
 
   /**
    * Builds the stats with a filter
-   * @param base    Base stats
    * @param filter  Item the stats must match to be included
    * @return  Built stats
    */
-  public StatsNBT build(StatsNBT base, @Nullable Item filter) {
-    if (!dirty) {
-      return base;
-    }
-
-    StatsNBT.Builder builder = StatsNBT.builder();
-
-    // first, iterate all stats in the base set
-    Set<IToolStat<?>> existing = base.getContainedStats();
-    for (IToolStat<?> stat : existing) {
-      setStat(builder, stat, base);
+  public StatsNBT build(@Nullable Item filter) {
+    if (map.isEmpty()) {
+      return StatsNBT.EMPTY;
     }
 
     // next, iterate any stats we have that are not in base
+    StatsNBT.Builder builder = StatsNBT.builder();
     for (IToolStat<?> stat : map.keySet()) {
-      if (!existing.contains(stat) && (filter == null || stat.supports(filter))) {
+      if (disableFilter || filter == null || stat.supports(filter)) {
         buildStat(builder, stat);
       }
     }
@@ -86,11 +69,10 @@ public class ModifierStatsBuilder {
 
   /**
    * Builds the stats unfiltered
-   * @param base  Base stats
    * @return  Built stats
    */
-  public StatsNBT build(StatsNBT base) {
-    return build(base, null);
+  public StatsNBT build() {
+    return build(null);
   }
 
   /**
@@ -102,7 +84,7 @@ public class ModifierStatsBuilder {
     MultiplierNBT.Builder builder = MultiplierNBT.builder();
     for (Entry<INumericToolStat<?>,Float> entry : multipliers.entrySet()) {
       INumericToolStat<?> stat = entry.getKey();
-      if (filter == null || stat.supports(filter)) {
+      if (disableFilter || filter == null || stat.supports(filter)) {
         builder.set(stat, entry.getValue());
       }
     }
@@ -115,5 +97,17 @@ public class ModifierStatsBuilder {
    */
   public MultiplierNBT buildMultipliers() {
     return buildMultipliers(null);
+  }
+
+
+  /* Testing */
+  private static boolean disableFilter = false;
+
+  /** Disables the stat filters in the builder. Used when testing where tags don't exist, not meant to be used by mods. */
+  @Internal
+  @VisibleForTesting
+  public static void disableFilter() {
+    // TODO: is there a better way to solve this problem?
+    disableFilter = true;
   }
 }

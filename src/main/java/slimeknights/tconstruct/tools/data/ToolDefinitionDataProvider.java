@@ -20,6 +20,8 @@ import slimeknights.tconstruct.library.tools.definition.module.aoe.ConditionalAO
 import slimeknights.tconstruct.library.tools.definition.module.aoe.IBoxExpansion;
 import slimeknights.tconstruct.library.tools.definition.module.aoe.TreeAOEIterator;
 import slimeknights.tconstruct.library.tools.definition.module.aoe.VeiningAOEIterator;
+import slimeknights.tconstruct.library.tools.definition.module.build.MultiplyStatsModule;
+import slimeknights.tconstruct.library.tools.definition.module.build.SetStatsModule;
 import slimeknights.tconstruct.library.tools.definition.module.build.ToolActionsModule;
 import slimeknights.tconstruct.library.tools.definition.module.build.ToolSlotsModule;
 import slimeknights.tconstruct.library.tools.definition.module.build.ToolTraitsModule;
@@ -34,6 +36,8 @@ import slimeknights.tconstruct.library.tools.definition.module.mining.MiningSpee
 import slimeknights.tconstruct.library.tools.definition.module.weapon.CircleWeaponAttack;
 import slimeknights.tconstruct.library.tools.definition.module.weapon.ParticleWeaponAttack;
 import slimeknights.tconstruct.library.tools.definition.module.weapon.SweepWeaponAttack;
+import slimeknights.tconstruct.library.tools.nbt.MultiplierNBT;
+import slimeknights.tconstruct.library.tools.nbt.StatsNBT;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
 import slimeknights.tconstruct.tools.ArmorDefinitions;
 import slimeknights.tconstruct.tools.TinkerModifiers;
@@ -74,8 +78,9 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
          .part(toolHandle)
          .part(toolBinding).build())
       // stats
-      .stat(ToolStats.ATTACK_DAMAGE, 0.5f) // gains +0.5 damage from tool piercing, hence being lower than vanilla
-      .stat(ToolStats.ATTACK_SPEED, 1.2f)
+      .module(new SetStatsModule(StatsNBT.builder()
+        .set(ToolStats.ATTACK_DAMAGE, 0.5f) // gains +0.5 damage from tool piercing, hence being lower than vanilla
+        .set(ToolStats.ATTACK_SPEED, 1.2f).build()))
       .smallToolStartingSlots()
       // traits
       .module(ToolTraitsModule.builder().trait(ModifierIds.pierce, 1).build())
@@ -92,11 +97,13 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
          .part(largePlate, 1)
          .part(largePlate, 1).build())
       // stats
-      .stat(ToolStats.ATTACK_DAMAGE, 3f) // gains +5 undead damage from smite modifier
-      .stat(ToolStats.ATTACK_SPEED, 0.75f)
-      .multiplier(ToolStats.ATTACK_DAMAGE, 1.35f)
-      .multiplier(ToolStats.MINING_SPEED, 0.4f)
-      .multiplier(ToolStats.DURABILITY, 4f)
+      .module(new SetStatsModule(StatsNBT.builder()
+        .set(ToolStats.ATTACK_DAMAGE, 3f) // gains +5 undead damage from smite modifier
+        .set(ToolStats.ATTACK_SPEED, 0.75f).build()))
+      .module(new MultiplyStatsModule(MultiplierNBT.builder()
+        .set(ToolStats.ATTACK_DAMAGE, 1.35f)
+        .set(ToolStats.MINING_SPEED, 0.4f)
+        .set(ToolStats.DURABILITY, 4f).build()))
       .largeToolStartingSlots()
       // traits
       .module(ToolTraitsModule.builder().trait(ModifierIds.smite, 2).build())
@@ -114,11 +121,13 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
          .part(pickHead, 1)
          .part(largePlate).build())
       // stats
-      .stat(ToolStats.ATTACK_DAMAGE, 3f) // gains +1.25 damage from piercing
-      .stat(ToolStats.ATTACK_SPEED, 0.85f)
-      .multiplier(ToolStats.ATTACK_DAMAGE, 1.25f)
-      .multiplier(ToolStats.MINING_SPEED, 0.3f)
-      .multiplier(ToolStats.DURABILITY, 5.0f)
+      .module(new SetStatsModule(StatsNBT.builder()
+        .set(ToolStats.ATTACK_DAMAGE, 3f) // gains +1.25 damage from piercing
+        .set(ToolStats.ATTACK_SPEED, 0.85f).build()))
+      .module(new MultiplyStatsModule(MultiplierNBT.builder()
+        .set(ToolStats.ATTACK_DAMAGE, 1.25f)
+        .set(ToolStats.MINING_SPEED, 0.3f)
+        .set(ToolStats.DURABILITY, 5.0f).build()))
       .largeToolStartingSlots()
       // traits
       .module(ToolTraitsModule.builder().trait(ModifierIds.pierce, 2).build())
@@ -137,12 +146,14 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
          .part(toolHandle)
          .part(roundPlate).build())
       // stats
-      .stat(ToolStats.ATTACK_DAMAGE, 1.5f)
-      .stat(ToolStats.ATTACK_SPEED, 0.9f)
+      .module(new SetStatsModule(StatsNBT.builder()
+        .set(ToolStats.ATTACK_DAMAGE, 1.5f)
+        .set(ToolStats.ATTACK_SPEED, 0.9f).build()))
       .smallToolStartingSlots()
-      .multiplier(ToolStats.DURABILITY, 1.25f)
-      .multiplier(ToolStats.MINING_SPEED, 1.1f)
-      .multiplier(ToolStats.ATTACK_DAMAGE, 1.1f)
+      .module(new MultiplyStatsModule(MultiplierNBT.builder()
+        .set(ToolStats.DURABILITY, 1.25f)
+        .set(ToolStats.MINING_SPEED, 1.1f)
+        .set(ToolStats.ATTACK_DAMAGE, 1.1f).build()))
       // traits
       .module(ToolTraitsModule.builder().trait(ModifierIds.tilling).build())
       // harvest
@@ -159,12 +170,14 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
          .part(toolHandle)
          .part(roundPlate).build())
       // stats
-      .stat(ToolStats.ATTACK_DAMAGE, 0.5f)
-      .stat(ToolStats.ATTACK_SPEED, 1.3f)
+      .module(new SetStatsModule(StatsNBT.builder()
+        .set(ToolStats.ATTACK_DAMAGE, 0.5f)
+        .set(ToolStats.ATTACK_SPEED, 1.3f).build()))
       .smallToolStartingSlots()
-      .multiplier(ToolStats.DURABILITY, 1.3f)
-      .multiplier(ToolStats.MINING_SPEED, 0.75f)
-      .multiplier(ToolStats.ATTACK_DAMAGE, 1.15f)
+      .module(new MultiplyStatsModule(MultiplierNBT.builder()
+        .set(ToolStats.DURABILITY, 1.3f)
+        .set(ToolStats.MINING_SPEED, 0.75f)
+        .set(ToolStats.ATTACK_DAMAGE, 1.15f).build()))
       // traits
       .module(ToolTraitsModule.builder().trait(ModifierIds.pathing).build())
       // harvest
@@ -181,11 +194,13 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
          .part(largePlate)
          .part(toughHandle).build())
       // stats
-      .stat(ToolStats.ATTACK_DAMAGE, 1.5f)
-      .stat(ToolStats.ATTACK_SPEED, 1.0f)
-      .multiplier(ToolStats.ATTACK_DAMAGE, 1.2f)
-      .multiplier(ToolStats.MINING_SPEED, 0.3f)
-      .multiplier(ToolStats.DURABILITY, 3.75f)
+      .module(new SetStatsModule(StatsNBT.builder()
+        .set(ToolStats.ATTACK_DAMAGE, 1.5f)
+        .set(ToolStats.ATTACK_SPEED, 1.0f).build()))
+      .module(new MultiplyStatsModule(MultiplierNBT.builder()
+        .set(ToolStats.ATTACK_DAMAGE, 1.2f)
+        .set(ToolStats.MINING_SPEED, 0.3f)
+        .set(ToolStats.DURABILITY, 3.75f).build()))
       .largeToolStartingSlots()
       // traits
       .module(ToolTraitsModule.builder()
@@ -206,8 +221,9 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
          .part(toolHandle)
          .part(toolBinding).build())
       // stats
-      .stat(ToolStats.ATTACK_DAMAGE, 6.0f)
-      .stat(ToolStats.ATTACK_SPEED, 0.9f)
+      .module(new SetStatsModule(StatsNBT.builder()
+        .set(ToolStats.ATTACK_DAMAGE, 6.0f)
+        .set(ToolStats.ATTACK_SPEED, 0.9f).build()))
       .smallToolStartingSlots()
       // traits
       .module(ToolTraitsModule.builder().trait(ModifierIds.stripping).build())
@@ -225,11 +241,13 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
          .part(pickHead, 1)
          .part(toolBinding).build())
       // stats
-      .stat(ToolStats.ATTACK_DAMAGE, 5f)
-      .stat(ToolStats.ATTACK_SPEED, 0.6f)
-      .multiplier(ToolStats.ATTACK_DAMAGE, 1.65f)
-      .multiplier(ToolStats.MINING_SPEED, 0.3f)
-      .multiplier(ToolStats.DURABILITY, 4.25f)
+      .module(new SetStatsModule(StatsNBT.builder()
+        .set(ToolStats.ATTACK_DAMAGE, 5f)
+        .set(ToolStats.ATTACK_SPEED, 0.6f).build()))
+      .module(new MultiplyStatsModule(MultiplierNBT.builder()
+        .set(ToolStats.ATTACK_DAMAGE, 1.65f)
+        .set(ToolStats.MINING_SPEED, 0.3f)
+        .set(ToolStats.DURABILITY, 4.25f).build()))
       .largeToolStartingSlots()
       // traits
       .module(ToolTraitsModule.builder().trait(ModifierIds.stripping).build())
@@ -254,9 +272,11 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
          .part(toolHandle)
          .part(toolBinding).build())
       // stats
-      .stat(ToolStats.ATTACK_DAMAGE, 1f)
-      .stat(ToolStats.ATTACK_SPEED, 1.6f)
-      .multiplier(ToolStats.ATTACK_DAMAGE, 0.5f)
+      .module(new SetStatsModule(StatsNBT.builder()
+        .set(ToolStats.ATTACK_DAMAGE, 1f)
+        .set(ToolStats.ATTACK_SPEED, 1.6f).build()))
+      .module(new MultiplyStatsModule(MultiplierNBT.builder()
+        .set(ToolStats.ATTACK_DAMAGE, 0.5f).build()))
       .smallToolStartingSlots()
       // traits
       .module(ToolTraitsModule.builder()
@@ -277,10 +297,12 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
          .part(TinkerToolParts.toolBinding)
          .part(TinkerToolParts.toughHandle).build())
       // stats
-      .stat(ToolStats.ATTACK_DAMAGE, 1f)
-      .stat(ToolStats.ATTACK_SPEED, 0.7f)
-      .multiplier(ToolStats.MINING_SPEED, 0.45f)
-      .multiplier(ToolStats.DURABILITY, 2.5f)
+      .module(new SetStatsModule(StatsNBT.builder()
+        .set(ToolStats.ATTACK_DAMAGE, 1f)
+        .set(ToolStats.ATTACK_SPEED, 0.7f).build()))
+      .module(new MultiplyStatsModule(MultiplierNBT.builder()
+        .set(ToolStats.MINING_SPEED, 0.45f)
+        .set(ToolStats.DURABILITY, 2.5f).build()))
       .largeToolStartingSlots()
       // traits
       .module(ToolTraitsModule.builder()
@@ -300,13 +322,15 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
          .part(smallBlade)
          .part(toolHandle).build())
       // stats
-      .stat(ToolStats.ATTACK_DAMAGE, 3f)
-      .multiplier(ToolStats.ATTACK_DAMAGE, 0.65f)
-      .stat(ToolStats.ATTACK_SPEED, 2.0f)
-      .multiplier(ToolStats.MINING_SPEED, 0.75f)
-      .multiplier(ToolStats.DURABILITY, 0.75f)
-      .stat(ToolStats.BLOCK_AMOUNT, 10)
-      .stat(ToolStats.USE_ITEM_SPEED, 1.0f)
+      .module(new SetStatsModule(StatsNBT.builder()
+        .set(ToolStats.ATTACK_DAMAGE, 3f)
+        .set(ToolStats.ATTACK_SPEED, 2.0f)
+        .set(ToolStats.BLOCK_AMOUNT, 10)
+        .set(ToolStats.USE_ITEM_SPEED, 1.0f).build()))
+      .module(new MultiplyStatsModule(MultiplierNBT.builder()
+        .set(ToolStats.ATTACK_DAMAGE, 0.65f)
+        .set(ToolStats.MINING_SPEED, 0.75f)
+        .set(ToolStats.DURABILITY, 0.75f).build()))
       .smallToolStartingSlots()
       // traits
       .module(ToolTraitsModule.builder()
@@ -330,10 +354,12 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
          .part(toolHandle)
          .part(toolHandle).build())
       // stats
-      .stat(ToolStats.ATTACK_DAMAGE, 3f)
-      .stat(ToolStats.ATTACK_SPEED, 1.6f)
-      .multiplier(ToolStats.MINING_SPEED, 0.5f)
-      .multiplier(ToolStats.DURABILITY, 1.1f)
+      .module(new SetStatsModule(StatsNBT.builder()
+        .set(ToolStats.ATTACK_DAMAGE, 3f)
+        .set(ToolStats.ATTACK_SPEED, 1.6f).build()))
+      .module(new MultiplyStatsModule(MultiplierNBT.builder()
+        .set(ToolStats.MINING_SPEED, 0.5f)
+        .set(ToolStats.DURABILITY, 1.1f).build()))
       .smallToolStartingSlots()
       // traits
       .module(ToolTraitsModule.builder().trait(TinkerModifiers.silkyShears).build())
@@ -350,11 +376,13 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
          .part(toughHandle)
          .part(largePlate).build())
       // stats
-      .stat(ToolStats.ATTACK_DAMAGE, 3f)
-      .stat(ToolStats.ATTACK_SPEED, 1.0f)
-      .multiplier(ToolStats.ATTACK_DAMAGE, 1.5f)
-      .multiplier(ToolStats.MINING_SPEED, 0.25f)
-      .multiplier(ToolStats.DURABILITY, 3.5f)
+      .module(new SetStatsModule(StatsNBT.builder()
+        .set(ToolStats.ATTACK_DAMAGE, 3f)
+        .set(ToolStats.ATTACK_SPEED, 1.0f).build()))
+      .module(new MultiplyStatsModule(MultiplierNBT.builder()
+        .set(ToolStats.ATTACK_DAMAGE, 1.5f)
+        .set(ToolStats.MINING_SPEED, 0.25f)
+        .set(ToolStats.DURABILITY, 3.5f).build()))
       .largeToolStartingSlots()
       // traits
       .module(ToolTraitsModule.builder()
@@ -373,9 +401,11 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
          .part(bowGrip)
          .part(bowstring).build())
       // stats
-      .stat(ToolStats.ATTACK_DAMAGE, 0f)
-      .stat(ToolStats.ATTACK_SPEED, 1.0f)
-      .multiplier(ToolStats.DURABILITY, 2f)
+      .module(new SetStatsModule(StatsNBT.builder()
+        .set(ToolStats.ATTACK_DAMAGE, 0f)
+        .set(ToolStats.ATTACK_SPEED, 1.0f).build()))
+      .module(new MultiplyStatsModule(MultiplierNBT.builder()
+        .set(ToolStats.DURABILITY, 2f).build()))
       .smallToolStartingSlots();
     define(ToolDefinitions.LONGBOW)
       // parts
@@ -385,16 +415,18 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
          .part(bowGrip)
          .part(bowstring).build())
       // stats
-      .stat(ToolStats.DURABILITY, 120)
-      .stat(ToolStats.ATTACK_DAMAGE, 0f)
-      .stat(ToolStats.ATTACK_SPEED, 1.0f)
-      .multiplier(ToolStats.DURABILITY, 1.5f) // gets effectively 2x durability from having 2 heads
+      .module(new SetStatsModule(StatsNBT.builder()
+        .set(ToolStats.DURABILITY, 120)
+        .set(ToolStats.ATTACK_DAMAGE, 0f)
+        .set(ToolStats.ATTACK_SPEED, 1.0f).build()))
+      .module(new MultiplyStatsModule(MultiplierNBT.builder()
+        .set(ToolStats.DURABILITY, 1.5f).build())) // gets effectively 2x durability from having 2 heads
       .largeToolStartingSlots();
 
     // special
     define(ToolDefinitions.FLINT_AND_BRICK)
       // stats
-      .stat(ToolStats.DURABILITY, 100)
+      .module(new SetStatsModule(StatsNBT.builder().set(ToolStats.DURABILITY, 100).build()))
       .module(new ToolSlotsModule(ImmutableMap.of(SlotType.UPGRADE, 1)))
       // traits
       .module(ToolTraitsModule.builder()
@@ -403,11 +435,12 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
         .trait(ModifierIds.scorching).build());
     // staff
     define(ToolDefinitions.SKY_STAFF)
-      .stat(ToolStats.DURABILITY, 375)
-      .stat(ToolStats.BLOCK_AMOUNT, 15)
-      .stat(ToolStats.USE_ITEM_SPEED, 0.4f)
-      .stat(ToolStats.VELOCITY, 0.8f)
-      .stat(ToolStats.DRAW_SPEED, 1.25f)
+      .module(new SetStatsModule(StatsNBT.builder()
+        .set(ToolStats.DURABILITY, 375)
+        .set(ToolStats.BLOCK_AMOUNT, 15)
+        .set(ToolStats.USE_ITEM_SPEED, 0.4f)
+        .set(ToolStats.VELOCITY, 0.8f)
+        .set(ToolStats.DRAW_SPEED, 1.25f).build()))
       .module(ToolSlotsModule.builder()
         .slots(SlotType.UPGRADE, 5)
         .slots(SlotType.ABILITY, 2).build())
@@ -415,11 +448,12 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
       .module(new CircleAOEIterator(1, false))
       .module(DualOptionInteraction.INSTANCE);
     define(ToolDefinitions.EARTH_STAFF)
-      .stat(ToolStats.DURABILITY, 800)
-      .stat(ToolStats.BLOCK_AMOUNT, 35)
-      .stat(ToolStats.USE_ITEM_SPEED, 0.4f)
-      .stat(ToolStats.PROJECTILE_DAMAGE, 1.5f)
-      .stat(ToolStats.ACCURACY, 0.9f)
+      .module(new SetStatsModule(StatsNBT.builder()
+        .set(ToolStats.DURABILITY, 800)
+        .set(ToolStats.BLOCK_AMOUNT, 35)
+        .set(ToolStats.USE_ITEM_SPEED, 0.4f)
+        .set(ToolStats.PROJECTILE_DAMAGE, 1.5f)
+        .set(ToolStats.ACCURACY, 0.9f).build()))
       .module(ToolSlotsModule.builder()
         .slots(SlotType.UPGRADE, 2)
         .slots(SlotType.DEFENSE, 3)
@@ -428,11 +462,12 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
       .module(new CircleAOEIterator(1, false))
       .module(DualOptionInteraction.INSTANCE);
     define(ToolDefinitions.ICHOR_STAFF)
-      .stat(ToolStats.DURABILITY, 1225)
-      .stat(ToolStats.BLOCK_AMOUNT, 15)
-      .stat(ToolStats.USE_ITEM_SPEED, 0.4f)
-      .stat(ToolStats.VELOCITY, 1.2f)
-      .stat(ToolStats.DRAW_SPEED, 0.75f)
+      .module(new SetStatsModule(StatsNBT.builder()
+        .set(ToolStats.DURABILITY, 1225)
+        .set(ToolStats.BLOCK_AMOUNT, 15)
+        .set(ToolStats.USE_ITEM_SPEED, 0.4f)
+        .set(ToolStats.VELOCITY, 1.2f)
+        .set(ToolStats.DRAW_SPEED, 0.75f).build()))
       .module(ToolSlotsModule.builder()
         .slots(SlotType.UPGRADE, 2)
         .slots(SlotType.ABILITY, 3).build())
@@ -440,12 +475,13 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
       .module(new CircleAOEIterator(1, false))
       .module(DualOptionInteraction.INSTANCE);
     define(ToolDefinitions.ENDER_STAFF)
-      .stat(ToolStats.DURABILITY, 1520)
-      .stat(ToolStats.BLOCK_AMOUNT, 15)
-      .stat(ToolStats.BLOCK_ANGLE, 140)
-      .stat(ToolStats.USE_ITEM_SPEED, 0.4f)
-      .stat(ToolStats.PROJECTILE_DAMAGE, 3f)
-      .stat(ToolStats.ACCURACY, 0.5f)
+      .module(new SetStatsModule(StatsNBT.builder()
+        .set(ToolStats.DURABILITY, 1520)
+        .set(ToolStats.BLOCK_AMOUNT, 15)
+        .set(ToolStats.BLOCK_ANGLE, 140)
+        .set(ToolStats.USE_ITEM_SPEED, 0.4f)
+        .set(ToolStats.PROJECTILE_DAMAGE, 3f)
+        .set(ToolStats.ACCURACY, 0.5f).build()))
       .module(ToolSlotsModule.builder()
         .slots(SlotType.UPGRADE, 3)
         .slots(SlotType.DEFENSE, 1)
@@ -463,16 +499,18 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
       .slots(SlotType.DEFENSE, 2)
       .slots(SlotType.ABILITY, 1).build();
     defineArmor(ArmorDefinitions.TRAVELERS)
-      .durabilityFactor(10)
-      .statEach(ToolStats.ARMOR, 1, 4, 5, 1)
-      .multiplier(ArmorSlotType.CHESTPLATE, ToolStats.ATTACK_DAMAGE, 0.55f)
+      .module(slots -> SetStatsModule.armor(slots)
+        .durabilityFactor(10)
+        .setEach(ToolStats.ARMOR, 1, 4, 5, 1))
+      .module(ArmorSlotType.CHESTPLATE, new MultiplyStatsModule(MultiplierNBT.builder().set(ToolStats.ATTACK_DAMAGE, 0.55f).build()))
       .module(travelersSlots)
       .module(ArmorSlotType.BOOTS, ToolTraitsModule.builder().trait(ModifierIds.snowBoots).build());
     define(ArmorDefinitions.TRAVELERS_SHIELD)
-      .stat(ToolStats.DURABILITY, 200)
-      .stat(ToolStats.BLOCK_AMOUNT, 10)
-      .stat(ToolStats.BLOCK_ANGLE, 90)
-      .stat(ToolStats.USE_ITEM_SPEED, 0.8f)
+      .module(new SetStatsModule(StatsNBT.builder()
+        .set(ToolStats.DURABILITY, 200)
+        .set(ToolStats.BLOCK_AMOUNT, 10)
+        .set(ToolStats.BLOCK_ANGLE, 90)
+        .set(ToolStats.USE_ITEM_SPEED, 0.8f).build()))
       .module(travelersSlots)
       .module(ToolTraitsModule.builder().trait(TinkerModifiers.blocking).build())
       .module(new PreferenceSetInteraction(InteractionSource.RIGHT_CLICK, new SingleModifierPredicate(TinkerModifiers.blocking.getId())));
@@ -483,17 +521,19 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
       .slots(SlotType.DEFENSE, 4)
       .slots(SlotType.ABILITY, 1).build();
     defineArmor(ArmorDefinitions.PLATE)
-      .durabilityFactor(30)
-      .statEach(ToolStats.ARMOR, 2, 5, 7, 2)
-      .statAll(ToolStats.ARMOR_TOUGHNESS, 2)
-      .statAll(ToolStats.KNOCKBACK_RESISTANCE, 0.1f)
-      .multiplier(ArmorSlotType.CHESTPLATE, ToolStats.ATTACK_DAMAGE, 0.4f)
+      .module(slots -> SetStatsModule.armor(slots)
+        .durabilityFactor(30)
+        .setEach(ToolStats.ARMOR, 2, 5, 7, 2)
+        .setAll(ToolStats.ARMOR_TOUGHNESS, 2)
+        .setAll(ToolStats.KNOCKBACK_RESISTANCE, 0.1f))
+      .module(ArmorSlotType.CHESTPLATE, new MultiplyStatsModule(MultiplierNBT.builder().set(ToolStats.ATTACK_DAMAGE, 0.4f).build()))
       .module(plateSlots);
     define(ArmorDefinitions.PLATE_SHIELD)
-      .stat(ToolStats.DURABILITY, 500)
-      .stat(ToolStats.BLOCK_AMOUNT, 100)
-      .stat(ToolStats.BLOCK_ANGLE, 180)
-      .stat(ToolStats.ARMOR_TOUGHNESS, 2)
+      .module(new SetStatsModule(StatsNBT.builder()
+        .set(ToolStats.DURABILITY, 500)
+        .set(ToolStats.BLOCK_AMOUNT, 100)
+        .set(ToolStats.BLOCK_ANGLE, 180)
+        .set(ToolStats.ARMOR_TOUGHNESS, 2).build()))
       .module(plateSlots)
       .module(ToolTraitsModule.builder().trait(TinkerModifiers.blocking).build())
       .module(new PreferenceSetInteraction(InteractionSource.RIGHT_CLICK, new SingleModifierPredicate(TinkerModifiers.blocking.getId())));
@@ -504,8 +544,10 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
       .slots(SlotType.ABILITY, 1).build();
     ToolTraitsModule.Builder slimeTraits = ToolTraitsModule.builder().trait(ModifierIds.overslimeFriend);
     defineArmor(ArmorDefinitions.SLIMESUIT)
-      .statEach(ToolStats.DURABILITY, 546, 630, 672, 362)
-      .multiplier(ArmorSlotType.CHESTPLATE, ToolStats.ATTACK_DAMAGE, 0.4f)
+      // not using durabilityFactor as helmet stats give a bonus too
+      .module(slots -> SetStatsModule.armor(slots)
+         .setEach(ToolStats.DURABILITY, 546, 630, 672, 362))
+      .module(ArmorSlotType.CHESTPLATE, new MultiplyStatsModule(MultiplierNBT.builder().set(ToolStats.ATTACK_DAMAGE, 0.4f).build()))
       .module(slimeSlots)
       .module(ArmorSlotType.HELMET, MaterialStatsModule.stats(MaterialStatProviders.SKULL).stat(SkullStats.ID, 1).build())
       .module(ArmorSlotType.HELMET, slimeTraits.build())

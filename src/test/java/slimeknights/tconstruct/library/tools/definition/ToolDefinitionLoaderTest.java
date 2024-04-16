@@ -20,6 +20,8 @@ import slimeknights.tconstruct.library.tools.definition.module.ToolHooks;
 import slimeknights.tconstruct.library.tools.definition.module.ToolModule;
 import slimeknights.tconstruct.library.tools.definition.module.aoe.AreaOfEffectIterator;
 import slimeknights.tconstruct.library.tools.definition.module.aoe.CircleAOEIterator;
+import slimeknights.tconstruct.library.tools.definition.module.build.MultiplyStatsModule;
+import slimeknights.tconstruct.library.tools.definition.module.build.SetStatsModule;
 import slimeknights.tconstruct.library.tools.definition.module.build.ToolActionToolHook;
 import slimeknights.tconstruct.library.tools.definition.module.build.ToolActionsModule;
 import slimeknights.tconstruct.library.tools.definition.module.build.ToolSlotsModule;
@@ -33,9 +35,11 @@ import slimeknights.tconstruct.library.tools.definition.module.mining.IsEffectiv
 import slimeknights.tconstruct.library.tools.definition.module.weapon.MeleeHitToolHook;
 import slimeknights.tconstruct.library.tools.definition.module.weapon.SweepWeaponAttack;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
+import slimeknights.tconstruct.library.tools.nbt.StatsNBT;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
 import slimeknights.tconstruct.test.BaseMcTest;
 import slimeknights.tconstruct.test.JsonFileLoader;
+import slimeknights.tconstruct.test.TestHelper;
 
 import java.util.List;
 import java.util.Map;
@@ -44,7 +48,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
 class ToolDefinitionLoaderTest extends BaseMcTest {
-  private static final ToolDefinitionData WRONG_DATA = ToolDefinitionDataBuilder.builder().stat(ToolStats.DURABILITY, 100).build();
+  private static final ToolDefinitionData WRONG_DATA = ToolDefinitionDataBuilder.builder().module(new SetStatsModule(StatsNBT.builder().set(ToolStats.DURABILITY, 100).build())).build();
   private static final JsonFileLoader fileLoader = new JsonFileLoader(JsonHelper.DEFAULT_GSON, ToolDefinitionLoader.FOLDER);
   private static final ToolDefinition NO_PARTS_MINIMAL = ToolDefinition.builder(TConstruct.getResource("minimal_no_parts")).build();
   private static final ToolDefinition NO_PARTS_FULL = ToolDefinition.builder(TConstruct.getResource("full_no_parts")).build();
@@ -56,6 +60,8 @@ class ToolDefinitionLoaderTest extends BaseMcTest {
   @BeforeAll
   static void beforeAll() {
     MaterialItemFixture.init();
+    RegistrationFixture.register(ToolModule.LOADER, "base_stats", SetStatsModule.LOADER);
+    RegistrationFixture.register(ToolModule.LOADER, "multiply_stats", MultiplyStatsModule.LOADER);
     RegistrationFixture.register(ToolModule.LOADER, "part_stats", PartStatsModule.LOADER);
     RegistrationFixture.register(ToolModule.LOADER, "modifier_slots", ToolSlotsModule.LOADER);
     RegistrationFixture.register(ToolModule.LOADER, "traits", ToolTraitsModule.LOADER);
@@ -68,20 +74,20 @@ class ToolDefinitionLoaderTest extends BaseMcTest {
   /** Helper to do all the stats checks */
   private static void checkFullNonParts(ToolDefinitionData data) {
     // base stats
-    assertThat(data.getAllBaseStats()).hasSize(4);
-    assertThat(data.getAllBaseStats()).contains(ToolStats.DURABILITY);
-    assertThat(data.getAllBaseStats()).contains(ToolStats.ATTACK_DAMAGE);
-    assertThat(data.getAllBaseStats()).contains(ToolStats.ATTACK_SPEED);
-    assertThat(data.getAllBaseStats()).contains(ToolStats.MINING_SPEED);
+    assertThat(data.getBaseStats().getContainedStats()).hasSize(4);
+    assertThat(data.getBaseStats().getContainedStats()).contains(ToolStats.DURABILITY);
+    assertThat(data.getBaseStats().getContainedStats()).contains(ToolStats.ATTACK_DAMAGE);
+    assertThat(data.getBaseStats().getContainedStats()).contains(ToolStats.ATTACK_SPEED);
+    assertThat(data.getBaseStats().getContainedStats()).contains(ToolStats.MINING_SPEED);
     assertThat(data.getBaseStat(ToolStats.DURABILITY)).isEqualTo(100f);
     assertThat(data.getBaseStat(ToolStats.ATTACK_DAMAGE)).isEqualTo(2.5f);
     assertThat(data.getBaseStat(ToolStats.ATTACK_SPEED)).isEqualTo(3.75f);
     assertThat(data.getBaseStat(ToolStats.MINING_SPEED)).isEqualTo(4f);
     // multiplier stats
-    assertThat(data.multipliers.getContainedStats()).hasSize(3);
-    assertThat(data.multipliers.getContainedStats()).contains(ToolStats.DURABILITY);
-    assertThat(data.multipliers.getContainedStats()).contains(ToolStats.ATTACK_DAMAGE);
-    assertThat(data.multipliers.getContainedStats()).contains(ToolStats.MINING_SPEED);
+    assertThat(data.getMultipliers().getContainedStats()).hasSize(3);
+    assertThat(data.getMultipliers().getContainedStats()).contains(ToolStats.DURABILITY);
+    assertThat(data.getMultipliers().getContainedStats()).contains(ToolStats.ATTACK_DAMAGE);
+    assertThat(data.getMultipliers().getContainedStats()).contains(ToolStats.MINING_SPEED);
     assertThat(data.getMultiplier(ToolStats.DURABILITY)).isEqualTo(1.5f);
     assertThat(data.getMultiplier(ToolStats.ATTACK_DAMAGE)).isEqualTo(2f);
     assertThat(data.getMultiplier(ToolStats.MINING_SPEED)).isEqualTo(0.5f);
@@ -94,7 +100,7 @@ class ToolDefinitionLoaderTest extends BaseMcTest {
     assertThat(slots).containsEntry(SlotType.DEFENSE, 2);
     assertThat(slots).containsEntry(SlotType.ABILITY, 1);
     // traits
-    List<ModifierEntry> traits = data.getHook(ToolHooks.TOOL_TRAITS).getTraits(ToolDefinition.EMPTY);
+    List<ModifierEntry> traits = TestHelper.getTraits(data);
     assertThat(traits).hasSize(2);
     assertThat(traits.get(0).getId()).isEqualTo(ModifierFixture.TEST_1);
     assertThat(traits.get(0).getLevel()).isEqualTo(1);

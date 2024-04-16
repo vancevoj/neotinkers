@@ -123,7 +123,7 @@ public class TinkerHooks {
   /* Tool Building */
 
   /** Hook for adding raw unconditional stats to a tool */
-  public static final ModifierHook<ToolStatsModifierHook> TOOL_STATS = register("tool_stats", ToolStatsModifierHook.class, ToolStatsModifierHook.AllMerger::new, (context, modifier, builder) -> {});
+  public static final ModifierHook<ToolStatsModifierHook> TOOL_STATS = register("modifier_stats", ToolStatsModifierHook.class, ToolStatsModifierHook.AllMerger::new, (context, modifier, builder) -> {});
 
   /** Hook for adding item stack attributes to a tool when in the proper slot */
   public static final ModifierHook<AttributesModifierHook> ATTRIBUTES = register("attributes", AttributesModifierHook.class, AttributesModifierHook.AllMerger::new, (tool, modifier, slot, consumer) -> {});

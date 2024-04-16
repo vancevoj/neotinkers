@@ -10,6 +10,13 @@
       "stat_provider": "tconstruct:melee_harvest"
     },
     {
+      "type": "tconstruct:base_stats",
+      "stats": {
+        "tconstruct:attack_damage": 6.0,
+        "tconstruct:attack_speed": 0.9
+      }
+    },
+    {
       "type": "tconstruct:modifier_slots",
       "slots": {
         "abilities": 1,
@@ -46,11 +53,5 @@
       "type": "tconstruct:melee_particle",
       "particle": "tconstruct:axe_attack"
     }
-  ],
-  "stats": {
-    "base": {
-      "tconstruct:attack_damage": 6.0,
-      "tconstruct:attack_speed": 0.9
-    }
-  }
+  ]
 }

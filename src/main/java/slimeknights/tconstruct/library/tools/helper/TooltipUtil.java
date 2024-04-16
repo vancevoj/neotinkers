@@ -34,8 +34,8 @@ import slimeknights.tconstruct.library.materials.definition.MaterialVariantId;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.TinkerHooks;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinition;
-import slimeknights.tconstruct.library.tools.definition.module.material.MaterialStatsToolHook;
-import slimeknights.tconstruct.library.tools.definition.module.material.MaterialStatsToolHook.WeightedStatType;
+import slimeknights.tconstruct.library.tools.definition.module.material.ToolMaterialHook;
+import slimeknights.tconstruct.library.tools.definition.module.material.ToolMaterialHook.WeightedStatType;
 import slimeknights.tconstruct.library.tools.definition.module.material.ToolPartsHook;
 import slimeknights.tconstruct.library.tools.item.IModifiable;
 import slimeknights.tconstruct.library.tools.item.IModifiableDisplay;
@@ -211,7 +211,7 @@ public class TooltipUtil {
     if (!name.isEmpty()) {
       return Component.literal(name);
     }
-    List<WeightedStatType> components = MaterialStatsToolHook.stats(toolDefinition);
+    List<WeightedStatType> components = ToolMaterialHook.stats(toolDefinition);
     Component baseName = Component.translatable(stack.getDescriptionId());
     if (components.isEmpty()) {
       return baseName;
@@ -435,7 +435,7 @@ public class TooltipUtil {
    */
   public static void getComponents(IModifiable item, ItemStack stack, List<Component> tooltips, TooltipFlag flag) {
     // no components, nothing to do
-    List<WeightedStatType> components = MaterialStatsToolHook.stats(item.getToolDefinition());
+    List<WeightedStatType> components = ToolMaterialHook.stats(item.getToolDefinition());
     if (components.isEmpty()) {
       return;
     }

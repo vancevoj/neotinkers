@@ -10,6 +10,20 @@
       "stat_provider": "tconstruct:melee_harvest"
     },
     {
+      "type": "tconstruct:base_stats",
+      "stats": {
+        "tconstruct:attack_damage": 3.0,
+        "tconstruct:attack_speed": 1.6
+      }
+    },
+    {
+      "type": "tconstruct:multiply_stats",
+      "multipliers": {
+        "tconstruct:durability": 1.1,
+        "tconstruct:mining_speed": 0.5
+      }
+    },
+    {
       "type": "tconstruct:modifier_slots",
       "slots": {
         "abilities": 1,
@@ -57,15 +71,5 @@
       "type": "tconstruct:sweep_melee",
       "range": 1.0
     }
-  ],
-  "stats": {
-    "base": {
-      "tconstruct:attack_damage": 3.0,
-      "tconstruct:attack_speed": 1.6
-    },
-    "multipliers": {
-      "tconstruct:durability": 1.1,
-      "tconstruct:mining_speed": 0.5
-    }
-  }
+  ]
 }

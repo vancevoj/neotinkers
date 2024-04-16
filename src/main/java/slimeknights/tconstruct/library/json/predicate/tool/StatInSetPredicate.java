@@ -8,6 +8,7 @@ import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.util.JsonHelper;
 import slimeknights.mantle.util.typed.TypedMap;
 import slimeknights.tconstruct.library.tools.nbt.IToolContext;
+import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.stat.IToolStat;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
 
@@ -27,7 +28,8 @@ public record StatInSetPredicate<T>(IToolStat<T> stat, Set<T> values) implements
 
   @Override
   public boolean matches(IToolContext tool) {
-    return values.contains(tool.getStats().get(stat));
+    // TODO: migrate to tool stack predicate
+    return tool instanceof IToolStackView view && values.contains(view.getStats().get(stat));
   }
 
   @Override

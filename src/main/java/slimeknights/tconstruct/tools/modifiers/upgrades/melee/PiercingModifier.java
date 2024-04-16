@@ -38,7 +38,7 @@ public class PiercingModifier extends Modifier implements ToolStatsModifierHook,
   @Override
   public void addVolatileData(ToolRebuildContext context, ModifierEntry modifier, ModDataNBT volatileData) {
     float toRemove = 0.5f * modifier.getEffectiveLevel();
-    float baseDamage = context.getBaseStats().get(ToolStats.ATTACK_DAMAGE);
+    float baseDamage = context.getDefinitionData().getBaseStat(ToolStats.ATTACK_DAMAGE);
     if (baseDamage < toRemove) {
       volatileData.putFloat(PIERCING_DEBUFF, toRemove - baseDamage);
     }

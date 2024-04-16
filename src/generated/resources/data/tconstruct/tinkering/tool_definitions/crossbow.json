@@ -10,20 +10,24 @@
       "stat_provider": "tconstruct:ranged"
     },
     {
+      "type": "tconstruct:base_stats",
+      "stats": {
+        "tconstruct:attack_damage": 0.0,
+        "tconstruct:attack_speed": 1.0
+      }
+    },
+    {
+      "type": "tconstruct:multiply_stats",
+      "multipliers": {
+        "tconstruct:durability": 2.0
+      }
+    },
+    {
       "type": "tconstruct:modifier_slots",
       "slots": {
         "abilities": 1,
         "upgrades": 3
       }
     }
-  ],
-  "stats": {
-    "base": {
-      "tconstruct:attack_damage": 0.0,
-      "tconstruct:attack_speed": 1.0
-    },
-    "multipliers": {
-      "tconstruct:durability": 2.0
-    }
-  }
+  ]
 }

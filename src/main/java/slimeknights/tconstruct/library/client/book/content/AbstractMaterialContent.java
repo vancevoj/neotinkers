@@ -44,8 +44,8 @@ import slimeknights.tconstruct.library.recipe.TinkerRecipeTypes;
 import slimeknights.tconstruct.library.recipe.casting.material.MaterialCastingLookup;
 import slimeknights.tconstruct.library.recipe.casting.material.MaterialFluidRecipe;
 import slimeknights.tconstruct.library.recipe.material.MaterialRecipe;
-import slimeknights.tconstruct.library.tools.definition.module.material.MaterialStatsToolHook;
-import slimeknights.tconstruct.library.tools.definition.module.material.MaterialStatsToolHook.WeightedStatType;
+import slimeknights.tconstruct.library.tools.definition.module.material.ToolMaterialHook;
+import slimeknights.tconstruct.library.tools.definition.module.material.ToolMaterialHook.WeightedStatType;
 import slimeknights.tconstruct.library.tools.helper.ToolBuildHandler;
 import slimeknights.tconstruct.library.tools.item.IModifiable;
 import slimeknights.tconstruct.library.tools.nbt.MaterialNBT;
@@ -341,7 +341,7 @@ public abstract class AbstractMaterialContent extends PageContent {
       toolLoop:
       for (Holder<Item> item : Registry.ITEM.getTagOrEmpty(TinkerTags.Items.MULTIPART_TOOL)) {
         if (item.value() instanceof IModifiable tool) {
-          List<WeightedStatType> requirements = MaterialStatsToolHook.stats(tool.getToolDefinition());
+          List<WeightedStatType> requirements = ToolMaterialHook.stats(tool.getToolDefinition());
           // start building the tool with the given material
           MaterialNBT.Builder materials = MaterialNBT.builder();
           boolean usedMaterial = false;

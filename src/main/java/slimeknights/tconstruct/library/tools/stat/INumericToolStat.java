@@ -5,6 +5,14 @@ import net.minecraft.network.chat.Component;
 /** Tool stat which contains a numeric value */
 public interface INumericToolStat<T extends Number> extends IToolStat<T> {
   /**
+   * Updates the base value to the passed value. If applied multiple times, consecutive update calls act identical to {@link #add(ModifierStatsBuilder, double)}
+   * @param builder  Builder instance
+   * @param value    Amount to add
+   */
+  @Override
+  void update(ModifierStatsBuilder builder, T value);
+
+  /**
    * Adds the given value to the stat
    * @param builder  Builder instance
    * @param value    Amount to add
@@ -31,11 +39,6 @@ public interface INumericToolStat<T extends Number> extends IToolStat<T> {
 
 
   /** Implementations */
-
-  @Override
-  default void update(ModifierStatsBuilder builder, T value) {
-    add(builder, value.doubleValue());
-  }
 
   @Override
   default Component formatValue(T value) {

@@ -67,8 +67,8 @@ public class MaxToolStat implements IToolStat<Integer> {
   }
 
   @Override
-  public Integer build(Object builder, Integer value) {
-    return Math.max(value, ((TierBuilder)builder).tier);
+  public Integer build(Object builder) {
+    return ((TierBuilder)builder).tier;
   }
 
   @Nullable

@@ -22,9 +22,6 @@ public interface IToolContext {
   /** Gets the tool definition */
   ToolDefinition getDefinition();
 
-  /** On built tools, contains the full tool stats. During tool rebuild, contains the base stats before considering modifiers. */
-  StatsNBT getStats();
-
   /** Gets the tool definition data */
   default ToolDefinitionData getDefinitionData() {
     return getDefinition().getData();

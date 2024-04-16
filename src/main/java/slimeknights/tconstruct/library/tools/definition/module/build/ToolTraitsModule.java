@@ -10,6 +10,8 @@ import slimeknights.tconstruct.library.modifiers.util.LazyModifier;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinition;
 import slimeknights.tconstruct.library.tools.definition.module.ToolHooks;
 import slimeknights.tconstruct.library.tools.definition.module.ToolModule;
+import slimeknights.tconstruct.library.tools.nbt.MaterialNBT;
+import slimeknights.tconstruct.library.tools.nbt.ModifierNBT;
 
 import java.util.List;
 
@@ -33,8 +35,8 @@ public record ToolTraitsModule(List<ModifierEntry> traits) implements ToolTraitH
   }
 
   @Override
-  public List<ModifierEntry> getTraits(ToolDefinition definition) {
-    return traits;
+  public void addTraits(ToolDefinition definition, MaterialNBT materials, ModifierNBT.Builder builder) {
+    builder.add(traits);
   }
 
   public static class Builder {

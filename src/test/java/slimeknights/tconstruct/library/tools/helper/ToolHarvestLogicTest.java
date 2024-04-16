@@ -13,11 +13,13 @@ import slimeknights.tconstruct.fixture.MaterialStatsFixture;
 import slimeknights.tconstruct.fixture.ToolDefinitionFixture;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinition;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinitionDataBuilder;
+import slimeknights.tconstruct.library.tools.definition.module.build.MultiplyStatsModule;
 import slimeknights.tconstruct.library.tools.definition.module.material.PartStatsModule;
 import slimeknights.tconstruct.library.tools.definition.module.mining.IsEffectiveModule;
 import slimeknights.tconstruct.library.tools.definition.module.mining.MiningSpeedToolHook;
 import slimeknights.tconstruct.library.tools.item.ModifiableItem;
 import slimeknights.tconstruct.library.tools.item.ToolItemTest;
+import slimeknights.tconstruct.library.tools.nbt.MultiplierNBT;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -84,7 +86,7 @@ class ToolHarvestLogicTest extends ToolItemTest {
                                                 .part(MaterialItemFixture.MATERIAL_ITEM_HEAD)
                                                 .part(MaterialItemFixture.MATERIAL_ITEM_HANDLE)
                                                 .part(MaterialItemFixture.MATERIAL_ITEM_EXTRA).build())
-                         .multiplier(ToolStats.MINING_SPEED, modifier)
+                         .module(new MultiplyStatsModule(MultiplierNBT.builder().set(ToolStats.MINING_SPEED, modifier).build()))
                          .build());
 
     ModifiableItem toolWithMiningModifier = new ModifiableItem(new Item.Properties(), definition);

@@ -15,7 +15,6 @@ import slimeknights.tconstruct.library.tools.stat.ModifierStatsBuilder;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
 import slimeknights.tconstruct.tools.modifiers.ability.tool.OffhandAttackModifier;
 
-// TODO: rename in 1.19
 public class AmbidextrousModifier extends OffhandAttackModifier implements EquipmentChangeModifierHook, ToolStatsModifierHook {
   @Override
   protected void registerHooks(Builder hookBuilder) {
@@ -27,7 +26,7 @@ public class AmbidextrousModifier extends OffhandAttackModifier implements Equip
   @Override
   public void addToolStats(ToolRebuildContext context, ModifierEntry modifier, ModifierStatsBuilder builder) {
     // main hand has 4.0 attack speed, so make the offhand have that too
-    ToolStats.ATTACK_SPEED.add(builder, 4.0 - context.getBaseStats().get(ToolStats.ATTACK_SPEED));
+    ToolStats.ATTACK_SPEED.add(builder, 4.0 - context.getDefinitionData().getBaseStat(ToolStats.ATTACK_SPEED));
   }
 
   @Override

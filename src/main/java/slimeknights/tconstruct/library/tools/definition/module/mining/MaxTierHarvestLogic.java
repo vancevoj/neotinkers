@@ -7,7 +7,7 @@ import slimeknights.tconstruct.library.modifiers.ModifierHook;
 import slimeknights.tconstruct.library.modifiers.modules.ModifierHookProvider;
 import slimeknights.tconstruct.library.tools.definition.module.ToolHooks;
 import slimeknights.tconstruct.library.tools.definition.module.ToolModule;
-import slimeknights.tconstruct.library.tools.nbt.IToolContext;
+import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.utils.HarvestTiers;
 
 import java.util.List;
@@ -28,7 +28,7 @@ public record MaxTierHarvestLogic(Tier tier) implements MiningTierToolHook, Tool
   }
 
   @Override
-  public Tier modifyTier(IToolContext tool, Tier tier) {
+  public Tier modifyTier(IToolStackView tool, Tier tier) {
     return HarvestTiers.min(this.tier, tier);
   }
 }

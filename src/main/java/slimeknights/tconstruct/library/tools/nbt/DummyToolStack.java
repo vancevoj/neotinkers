@@ -60,4 +60,9 @@ public class DummyToolStack implements IToolStackView {
   public StatsNBT getStats() {
     return StatsNBT.EMPTY;
   }
+
+  @Override
+  public MultiplierNBT getMultipliers() {
+    return MultiplierNBT.EMPTY;
+  }
 }

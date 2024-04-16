@@ -1,6 +1,23 @@
 {
   "modules": [
     {
+      "type": "test:base_stats",
+      "stats": {
+        "tconstruct:durability": 100.0,
+        "tconstruct:attack_damage": 2.5,
+        "tconstruct:attack_speed": 3.75,
+        "tconstruct:mining_speed": 4
+      }
+    },
+    {
+      "type": "test:multiply_stats",
+      "multipliers": {
+        "tconstruct:durability": 1.5,
+        "tconstruct:attack_damage": 2,
+        "tconstruct:mining_speed": 0.5
+      }
+    },
+    {
       "type": "test:part_stats",
       "parts": [
         { "item": "test:test_extra",  "weight": 2 },
@@ -42,18 +59,5 @@
       "type": "test:sweep",
       "range": 5.0
     }
-  ],
-  "stats": {
-    "base": {
-      "tconstruct:durability": 100.0,
-      "tconstruct:attack_damage": 2.5,
-      "tconstruct:attack_speed": 3.75,
-      "tconstruct:mining_speed": 4
-    },
-	  "multipliers": {
-      "tconstruct:durability": 1.5,
-      "tconstruct:attack_damage": 2,
-      "tconstruct:mining_speed": 0.5
-	  }
-  }
+  ]
 }

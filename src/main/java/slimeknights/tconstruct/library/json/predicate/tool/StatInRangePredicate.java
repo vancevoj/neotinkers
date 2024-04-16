@@ -4,6 +4,7 @@ import slimeknights.mantle.data.loadable.primitive.FloatLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.data.registry.GenericLoaderRegistry.IGenericLoader;
 import slimeknights.tconstruct.library.tools.nbt.IToolContext;
+import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.StatsNBT;
 import slimeknights.tconstruct.library.tools.stat.INumericToolStat;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
@@ -59,7 +60,8 @@ public record StatInRangePredicate(INumericToolStat<?> stat, float min, float ma
 
   @Override
   public boolean matches(IToolContext tool) {
-    return test(tool.getStats());
+    // TODO: split out IToolStackView predicate
+    return tool instanceof IToolStackView view && test(view.getStats());
   }
 
   @Override

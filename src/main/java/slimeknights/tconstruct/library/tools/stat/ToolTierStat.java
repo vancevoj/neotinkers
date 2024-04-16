@@ -47,8 +47,8 @@ public class ToolTierStat implements IToolStat<Tier> {
   }
 
   @Override
-  public Tier build(Object builder, Tier value) {
-    return HarvestTiers.max(((TierBuilder) builder).value, value);
+  public Tier build(Object builder) {
+    return ((TierBuilder) builder).value;
   }
 
   /**

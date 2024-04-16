@@ -7,11 +7,8 @@ import slimeknights.tconstruct.library.materials.MaterialRegistry;
 import slimeknights.tconstruct.library.materials.definition.MaterialId;
 import slimeknights.tconstruct.library.materials.stats.IMaterialStats;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
-import slimeknights.tconstruct.library.tools.definition.ToolDefinition;
-import slimeknights.tconstruct.library.tools.definition.ToolDefinitionData;
-import slimeknights.tconstruct.library.tools.definition.module.material.MaterialStatsToolHook.WeightedStatType;
+import slimeknights.tconstruct.library.tools.definition.module.material.ToolMaterialHook.WeightedStatType;
 import slimeknights.tconstruct.library.tools.nbt.MaterialNBT;
-import slimeknights.tconstruct.library.tools.nbt.StatsNBT;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -23,61 +20,17 @@ import java.util.function.Function;
  * It's encouraged to extend this for the base of your calculation. Using this class directly will give a no parts stat builder
  */
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
-public class ToolStatsBuilder {
-  /** Tool base stats, primarily for bonuses. The stat builder is responsible for using the bonuses */
-  protected final ToolDefinitionData toolData;
-
-  /**
-   * Gets the stat builder for no tool parts
-   * @param definition  Tool definition
-   * @return  Stats builder
-   */
-  public static ToolStatsBuilder noParts(ToolDefinition definition) {
-    return new ToolStatsBuilder(definition.getData());
-  }
-
+public abstract class ToolStatsBuilder {
   /**
    * Called after bonuses are processed to set the unique stats for this builder.
-   * Any stats added to the builder here need to return true in {@link #handles(IToolStat)} to prevent errors on tool building with tool definitions setting those stats
    * @param builder  Stats builder
    */
-  protected void setStats(StatsNBT.Builder builder) {}
-
-  /**
-   * Checks if the given stat type is handled by this builder and should be skipped in the bonuses
-   * @param stat  Stat type
-   * @return  True if handled
-   */
-  protected boolean handles(IToolStat<?> stat) {
-    return false;
-  }
+  public abstract void addStats(ModifierStatsBuilder builder);
 
   /** Gets the given stat, returning a default if its missing instead of the stat's default */
-  @SuppressWarnings("SameParameterValue") // seriously IDEA, what do you expect me to do? there is no way to dynamically box a number
+  @SuppressWarnings("SameParameterValue")
   protected <T extends Number> T getStatOrDefault(IToolStat<T> stat, T defaultValue) {
-    if (toolData.hasBaseStat(stat)) {
-      return toolData.getBaseStat(stat);
-    }
     return defaultValue;
-  }
-
-  /** Sets the given stat into the builder from the tool's base stat */
-  private <T> void setToBase(StatsNBT.Builder builder, IToolStat<T> stat) {
-    builder.set(stat, toolData.getBaseStat(stat));
-  }
-
-  /** Builds default stats */
-  public StatsNBT buildStats() {
-    StatsNBT.Builder builder = StatsNBT.builder();
-    // start by adding in all relevant bonuses that are not handled elsewhere.
-    // the handled check is needed becuase the immutable map builder does not like duplicate keys
-    for (IToolStat<?> stat : toolData.getAllBaseStats()) {
-      if (!handles(stat)) {
-        setToBase(builder, stat);
-      }
-    }
-    setStats(builder);
-    return builder.build();
   }
 
 
@@ -131,7 +84,7 @@ public class ToolStatsBuilder {
    * @param <T>  Material type
    * @return  Average value
    */
-  public static <T extends IMaterialStats> double getAverageValue(List<T> stats, Function<T, ? extends Number> statGetter) {
+  public static <T extends IMaterialStats> float getAverageValue(List<T> stats, Function<T, ? extends Number> statGetter) {
     return getAverageValue(stats, statGetter, 0);
   }
 
@@ -143,8 +96,8 @@ public class ToolStatsBuilder {
    * @param <T>  Material type
    * @return  Average value
    */
-  public static <T extends IMaterialStats, N extends Number> double getAverageValue(List<T> stats, Function<T, N> statGetter, double missingValue) {
-    return stats.stream()
+  public static <T extends IMaterialStats, N extends Number> float getAverageValue(List<T> stats, Function<T, N> statGetter, double missingValue) {
+    return (float)stats.stream()
                 .mapToDouble(value -> statGetter.apply(value).doubleValue())
                 .average()
                 .orElse(missingValue);
@@ -157,8 +110,8 @@ public class ToolStatsBuilder {
    * @param <T>  Material type
    * @return  Average value
    */
-  public static <T extends IMaterialStats, N extends Number> double getTotalValue(List<T> stats, Function<T, N> statGetter) {
-    return stats.stream()
+  public static <T extends IMaterialStats, N extends Number> float getTotalValue(List<T> stats, Function<T, N> statGetter) {
+    return (float)stats.stream()
                 .mapToDouble(value -> statGetter.apply(value).doubleValue())
                 .sum();
   }

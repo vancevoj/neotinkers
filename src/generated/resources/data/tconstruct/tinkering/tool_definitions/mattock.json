@@ -10,10 +10,25 @@
       "stat_provider": "tconstruct:melee_harvest"
     },
     {
+      "type": "tconstruct:base_stats",
+      "stats": {
+        "tconstruct:attack_damage": 1.5,
+        "tconstruct:attack_speed": 0.9
+      }
+    },
+    {
       "type": "tconstruct:modifier_slots",
       "slots": {
         "abilities": 1,
         "upgrades": 3
+      }
+    },
+    {
+      "type": "tconstruct:multiply_stats",
+      "multipliers": {
+        "tconstruct:attack_damage": 1.1,
+        "tconstruct:durability": 1.25,
+        "tconstruct:mining_speed": 1.1
       }
     },
     {
@@ -57,16 +72,5 @@
       "type": "tconstruct:vein_aoe",
       "max_distance": 0
     }
-  ],
-  "stats": {
-    "base": {
-      "tconstruct:attack_damage": 1.5,
-      "tconstruct:attack_speed": 0.9
-    },
-    "multipliers": {
-      "tconstruct:attack_damage": 1.1,
-      "tconstruct:durability": 1.25,
-      "tconstruct:mining_speed": 1.1
-    }
-  }
+  ]
 }

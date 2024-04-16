@@ -14,6 +14,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.util.typed.TypedMap;
 import slimeknights.tconstruct.TConstruct;
+import slimeknights.tconstruct.library.tools.stat.INumericToolStat;
 import slimeknights.tconstruct.library.tools.stat.IToolStat;
 import slimeknights.tconstruct.library.tools.stat.ToolStatId;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
@@ -185,6 +186,11 @@ public class StatsNBT {
     public <T> Builder set(IToolStat<T> stat, T value) {
       builder.put(stat, stat.clamp(value));
       return this;
+    }
+
+    /** Sets the given stat in the builder */
+    public Builder set(INumericToolStat<Float> stat, float value) {
+      return set(stat, (Float)value);
     }
 
     /** Builds the stats from the given values */

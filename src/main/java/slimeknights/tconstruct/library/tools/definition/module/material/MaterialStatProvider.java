@@ -4,10 +4,9 @@ import net.minecraft.resources.ResourceLocation;
 import slimeknights.mantle.data.loadable.ErrorFactory;
 import slimeknights.mantle.registration.object.IdAwareObject;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
-import slimeknights.tconstruct.library.tools.definition.ToolDefinition;
-import slimeknights.tconstruct.library.tools.definition.module.material.MaterialStatsToolHook.WeightedStatType;
+import slimeknights.tconstruct.library.tools.definition.module.material.ToolMaterialHook.WeightedStatType;
 import slimeknights.tconstruct.library.tools.nbt.MaterialNBT;
-import slimeknights.tconstruct.library.tools.nbt.StatsNBT;
+import slimeknights.tconstruct.library.tools.stat.ModifierStatsBuilder;
 import slimeknights.tconstruct.library.tools.stat.ToolStatsBuilder;
 
 import java.util.List;
@@ -24,10 +23,13 @@ import java.util.stream.Stream;
  * @param builder       Function to create a builder
  *
  */
-public record MaterialStatProvider(ResourceLocation getId, Set<MaterialStatsId> requiredType, Set<MaterialStatsId> otherTypes, BiFunction<ToolDefinition,MaterialNBT,ToolStatsBuilder> builder) implements IdAwareObject {
+public record MaterialStatProvider(ResourceLocation getId, Set<MaterialStatsId> requiredType, Set<MaterialStatsId> otherTypes, BiFunction<List<WeightedStatType>,MaterialNBT,ToolStatsBuilder> builder) implements IdAwareObject {
   /** Builds the stats from the given definition and materials */
-  public StatsNBT buildStats(ToolDefinition definition, MaterialNBT materials) {
-    return builder.apply(definition, materials).buildStats();
+  public void addStats(List<WeightedStatType> statTypes, MaterialNBT materials, ModifierStatsBuilder statBuilder) {
+    // if the NBT is invalid, no-op to prevent an exception here (could kill itemstacks)
+    if (materials.size() == statTypes.size()) {
+      this.builder.apply(statTypes, materials).addStats(statBuilder);
+    }
   }
 
   /** Joins the stats by commas */

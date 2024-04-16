@@ -7,13 +7,11 @@ import slimeknights.tconstruct.library.materials.definition.MaterialId;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinition;
 import slimeknights.tconstruct.library.tools.definition.module.ToolHooks;
-import slimeknights.tconstruct.library.tools.nbt.MaterialNBT;
-import slimeknights.tconstruct.library.tools.nbt.StatsNBT;
 
 import java.util.List;
 
-/** Hook for building material tool stats. Not mergable. */
-public interface MaterialStatsToolHook {
+/** Hook for getting material info on tools */
+public interface ToolMaterialHook {
   /**
    * Gets the list of parts on the tool
    * @param definition  Tool definition instance
@@ -35,14 +33,6 @@ public interface MaterialStatsToolHook {
     return 1;
   }
 
-  /**
-   * Builds the stats for the given definition and materials
-   * @param definition  Definition instance
-   * @param materials   Materials instance
-   * @return  Tool stats
-   */
-  StatsNBT buildStats(ToolDefinition definition, MaterialNBT materials);
-
   /** Stat with weights */
   record WeightedStatType(MaterialStatsId stat, int weight) {
     public static final RecordLoadable<WeightedStatType> LOADABLE = RecordLoadable.create(
@@ -58,6 +48,6 @@ public interface MaterialStatsToolHook {
 
   /** Gets the stat types from the given definition */
   static List<WeightedStatType> stats(ToolDefinition definition) {
-    return definition.getHook(ToolHooks.MATERIAL_STATS).getStatTypes(definition);
+    return definition.getHook(ToolHooks.TOOL_MATERIALS).getStatTypes(definition);
   }
 }

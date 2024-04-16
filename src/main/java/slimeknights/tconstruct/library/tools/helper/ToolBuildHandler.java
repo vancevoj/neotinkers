@@ -13,8 +13,8 @@ import slimeknights.tconstruct.library.materials.definition.MaterialVariantId;
 import slimeknights.tconstruct.library.materials.stats.IMaterialStats;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinition;
-import slimeknights.tconstruct.library.tools.definition.module.material.MaterialStatsToolHook;
-import slimeknights.tconstruct.library.tools.definition.module.material.MaterialStatsToolHook.WeightedStatType;
+import slimeknights.tconstruct.library.tools.definition.module.material.ToolMaterialHook;
+import slimeknights.tconstruct.library.tools.definition.module.material.ToolMaterialHook.WeightedStatType;
 import slimeknights.tconstruct.library.tools.item.IModifiable;
 import slimeknights.tconstruct.library.tools.nbt.MaterialIdNBT;
 import slimeknights.tconstruct.library.tools.nbt.MaterialNBT;
@@ -89,7 +89,7 @@ public final class ToolBuildHandler {
    */
   public static MaterialNBT randomMaterials(ToolDefinition definition, int maxTier, boolean allowHidden) {
     // start by getting a list of materials for each stat type we need
-    List<WeightedStatType> requirements = MaterialStatsToolHook.stats(definition);
+    List<WeightedStatType> requirements = ToolMaterialHook.stats(definition);
     // figure out which stat types we need
     Map<MaterialStatsId,List<IMaterial>> materialChoices = requirements.stream()
       .map(WeightedStatType::stat)
@@ -166,7 +166,7 @@ public final class ToolBuildHandler {
 
   /** Makes a single sub item for the given materials */
   private static boolean addSubItem(IModifiable item, List<ItemStack> items, IMaterial material) {
-    List<WeightedStatType> required = MaterialStatsToolHook.stats(item.getToolDefinition());
+    List<WeightedStatType> required = ToolMaterialHook.stats(item.getToolDefinition());
     MaterialNBT.Builder materials = MaterialNBT.builder();
     boolean useMaterial = false;
     for (WeightedStatType requirement : required) {

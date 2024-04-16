@@ -21,7 +21,7 @@ import slimeknights.tconstruct.library.recipe.tinkerstation.ITinkerStationRecipe
 import slimeknights.tconstruct.library.tools.definition.ToolDefinition;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinitionData;
 import slimeknights.tconstruct.library.tools.definition.module.ToolHooks;
-import slimeknights.tconstruct.library.tools.definition.module.material.MaterialStatsToolHook;
+import slimeknights.tconstruct.library.tools.definition.module.material.ToolMaterialHook;
 import slimeknights.tconstruct.library.tools.helper.ToolDamageUtil;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
@@ -50,7 +50,7 @@ public class TinkerStationRepairRecipe implements ITinkerStationRecipe {
    * @return  Index if can repair, -1 if invalid
    */
   public static int getRepairIndex(IToolStackView tool, MaterialId material) {
-    for (int part : tool.getHook(ToolHooks.MATERIAL_STATS).getRepairIndices(tool.getDefinition())) {
+    for (int part : tool.getHook(ToolHooks.TOOL_MATERIALS).getRepairIndices(tool.getDefinition())) {
       if (tool.getMaterial(part).getId().equals(material)) {
         return part;
       }
@@ -85,7 +85,7 @@ public class TinkerStationRepairRecipe implements ITinkerStationRecipe {
     if (repairIndex < 0) {
       return null; // default to the first repair stats
     }
-    return MaterialStatsToolHook.stats(tool.getDefinition()).get(repairIndex).stat();
+    return ToolMaterialHook.stats(tool.getDefinition()).get(repairIndex).stat();
   }
 
   /** Gets the amount to repair per item */
@@ -214,7 +214,7 @@ public class TinkerStationRepairRecipe implements ITinkerStationRecipe {
   /** Gets the repair weight for the given material */
   public static float getRepairWeight(IToolStackView tool, MaterialId repairMaterial) {
     ToolDefinition definition = tool.getDefinition();
-    MaterialStatsToolHook materialStats = definition.getHook(ToolHooks.MATERIAL_STATS);
+    ToolMaterialHook materialStats = definition.getHook(ToolHooks.TOOL_MATERIALS);
     // return the weight of the largest part matching this material
     return IntStream.of(materialStats.getRepairIndices(definition))
                     .filter(i -> tool.getMaterial(i).matches(repairMaterial))

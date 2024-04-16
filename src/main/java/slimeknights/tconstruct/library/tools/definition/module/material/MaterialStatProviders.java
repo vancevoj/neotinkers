@@ -3,20 +3,21 @@ package slimeknights.tconstruct.library.tools.definition.module.material;
 import slimeknights.mantle.data.registry.IdAwareComponentRegistry;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
-import slimeknights.tconstruct.library.tools.definition.ToolDefinition;
+import slimeknights.tconstruct.library.tools.definition.module.material.ToolMaterialHook.WeightedStatType;
 import slimeknights.tconstruct.library.tools.nbt.MaterialNBT;
 import slimeknights.tconstruct.library.tools.stat.ToolStatsBuilder;
-import slimeknights.tconstruct.tools.MeleeHarvestToolStatsBuilder;
-import slimeknights.tconstruct.tools.RangedToolStatsBuilder;
 import slimeknights.tconstruct.tools.stats.BowstringMaterialStats;
 import slimeknights.tconstruct.tools.stats.ExtraMaterialStats;
 import slimeknights.tconstruct.tools.stats.GripMaterialStats;
 import slimeknights.tconstruct.tools.stats.HandleMaterialStats;
 import slimeknights.tconstruct.tools.stats.HeadMaterialStats;
 import slimeknights.tconstruct.tools.stats.LimbMaterialStats;
+import slimeknights.tconstruct.tools.stats.MeleeHarvestToolStatsBuilder;
+import slimeknights.tconstruct.tools.stats.RangedToolStatsBuilder;
 import slimeknights.tconstruct.tools.stats.SkullStats;
 import slimeknights.tconstruct.tools.stats.SkullToolStatsBuilder;
 
+import java.util.List;
 import java.util.Set;
 import java.util.function.BiFunction;
 
@@ -33,7 +34,7 @@ public class MaterialStatProviders {
   public static final MaterialStatProvider SKULL = register("skull", SkullStats.ID, Set.of(), SkullToolStatsBuilder::from);
 
   /** Helper to register in our domain */
-  private static MaterialStatProvider register(String name, MaterialStatsId requiredType, Set<MaterialStatsId> otherTypes, BiFunction<ToolDefinition,MaterialNBT,ToolStatsBuilder> builder) {
+  private static MaterialStatProvider register(String name, MaterialStatsId requiredType, Set<MaterialStatsId> otherTypes, BiFunction<List<WeightedStatType>,MaterialNBT,ToolStatsBuilder> builder) {
     return REGISTRY.register(new MaterialStatProvider(TConstruct.getResource(name), Set.of(requiredType), otherTypes, builder));
   }
 }

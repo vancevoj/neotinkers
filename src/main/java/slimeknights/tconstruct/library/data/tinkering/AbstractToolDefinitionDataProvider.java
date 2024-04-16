@@ -15,9 +15,7 @@ import slimeknights.tconstruct.library.tools.definition.ToolDefinitionData;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinitionDataBuilder;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinitionLoader;
 import slimeknights.tconstruct.library.tools.definition.module.ToolModule;
-import slimeknights.tconstruct.library.tools.stat.FloatToolStat;
-import slimeknights.tconstruct.library.tools.stat.IToolStat;
-import slimeknights.tconstruct.library.tools.stat.ToolStats;
+import slimeknights.tconstruct.library.tools.definition.module.ToolModule.ArmorModuleBuilder;
 import slimeknights.tconstruct.tools.item.ArmorSlotType;
 
 import java.io.IOException;
@@ -121,82 +119,6 @@ public abstract class AbstractToolDefinitionDataProvider extends GenericDataProv
     }
 
 
-    /* Stats */
-
-    /** Adds a bonus to the builder */
-    public <T> ArmorDataBuilder stat(ArmorSlotType slotType, IToolStat<T> stat, T value) {
-      getBuilder(slotType).stat(stat, value);
-      return this;
-    }
-
-    /** Adds a bonus to the builder */
-    public ArmorDataBuilder stat(ArmorSlotType slotType, IToolStat<Float> stat, float value) {
-      return stat(slotType, stat, (Float) value);
-    }
-
-    /** Sets the same bonus on all pieces */
-    public <T> ArmorDataBuilder statAll(IToolStat<T> stat, T value) {
-      for (ArmorSlotType slotType : slotTypes) {
-        stat(slotType, stat, value);
-      }
-      return this;
-    }
-
-    /** Sets the same bonus on all pieces */
-    public ArmorDataBuilder statAll(IToolStat<Float> stat, float value) {
-      return statAll(stat, (Float) value);
-    }
-
-    /** Sets a different bonus on all pieces */
-    @SafeVarargs
-    public final <T> ArmorDataBuilder statEach(IToolStat<T> stat, T... values) {
-      if (values.length != slotTypes.size()) {
-        throw new IllegalStateException("Wrong number of stats set");
-      }
-      for (int i = 0; i < values.length; i++) {
-        stat(slotTypes.get(i), stat, values[i]);
-      }
-      return this;
-    }
-
-    /** Sets a different bonus on all pieces, float overload as it comes up commonly */
-    public final ArmorDataBuilder statEach(IToolStat<Float> stat, float... values) {
-      if (values.length != slotTypes.size()) {
-        throw new IllegalStateException("Wrong number of stats set");
-      }
-      for (int i = 0; i < values.length; i++) {
-        stat(slotTypes.get(i), stat, values[i]);
-      }
-      return this;
-    }
-
-    /**
-     * Sets the durability for all parts like vanilla armor materials
-     * @param maxDamageFactor  Durability modifier applied to the base value for each slot
-     * @return  Builder
-     */
-    public ArmorDataBuilder durabilityFactor(float maxDamageFactor) {
-      for (ArmorSlotType slotType : slotTypes) {
-        stat(slotType, ToolStats.DURABILITY, MAX_DAMAGE_ARRAY[slotType.getIndex()] * maxDamageFactor);
-      }
-      return this;
-    }
-
-    /** Applies a global multiplier to a single slot */
-    public ArmorDataBuilder multiplier(ArmorSlotType slotType, FloatToolStat stat, float value) {
-      getBuilder(slotType).multiplier(stat, value);
-      return this;
-    }
-
-    /** Applies a global multiplier to all slots */
-    public ArmorDataBuilder multiplier(FloatToolStat stat, float value) {
-      for (ArmorSlotType slotType : slotTypes) {
-        multiplier(slotType, stat, value);
-      }
-      return this;
-    }
-
-
     /* Modules */
 
     /** Adds a module to the definition with the given hooks */
@@ -240,6 +162,25 @@ public abstract class AbstractToolDefinitionDataProvider extends GenericDataProv
     public ArmorDataBuilder module(ToolModule... modules) {
       for (ArmorSlotType armorSlot : slotTypes) {
         module(armorSlot, modules);
+      }
+      return this;
+    }
+
+    /** Adds modules to the definition using the passed builder */
+    @SafeVarargs
+    public final <T extends ToolModule> ArmorDataBuilder module(Function<List<ArmorSlotType>,ArmorModuleBuilder<T>> constructor, ModifierHook<? super T>... hooks) {
+      ArmorModuleBuilder<T> builder = constructor.apply(slotTypes);
+      for (ArmorSlotType armorSlot : slotTypes) {
+        module(armorSlot, builder.build(armorSlot), hooks);
+      }
+      return this;
+    }
+
+    /** Adds modules to the definition using the passed builder */
+    public ArmorDataBuilder module(Function<List<ArmorSlotType>,ArmorModuleBuilder<?>> constructor) {
+      ArmorModuleBuilder<?> builder = constructor.apply(slotTypes);
+      for (ArmorSlotType armorSlot : slotTypes) {
+        module(armorSlot, builder.build(armorSlot));
       }
       return this;
     }

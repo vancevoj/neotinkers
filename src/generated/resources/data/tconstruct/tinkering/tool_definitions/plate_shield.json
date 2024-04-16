@@ -1,6 +1,15 @@
 {
   "modules": [
     {
+      "type": "tconstruct:base_stats",
+      "stats": {
+        "tconstruct:armor_toughness": 2.0,
+        "tconstruct:block_amount": 100.0,
+        "tconstruct:block_angle": 180.0,
+        "tconstruct:durability": 500.0
+      }
+    },
+    {
       "type": "tconstruct:modifier_slots",
       "slots": {
         "abilities": 1,
@@ -25,13 +34,5 @@
       },
       "preferred_source": "right_click"
     }
-  ],
-  "stats": {
-    "base": {
-      "tconstruct:armor_toughness": 2.0,
-      "tconstruct:block_amount": 100.0,
-      "tconstruct:block_angle": 180.0,
-      "tconstruct:durability": 500.0
-    }
-  }
+  ]
 }

@@ -3,7 +3,6 @@ package slimeknights.tconstruct.library.tools.stat;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import net.minecraft.nbt.FloatTag;
 import net.minecraft.nbt.NumericTag;
 import net.minecraft.nbt.Tag;
@@ -71,7 +70,15 @@ public class FloatToolStat implements INumericToolStat<Float> {
 
   @Override
   public FloatBuilder makeBuilder() {
-    return new FloatBuilder();
+    return new FloatBuilder(defaultValue);
+  }
+
+  @Override
+  public void update(ModifierStatsBuilder builder, Float value) {
+    builder.<FloatBuilder>updateStat(this, b -> {
+      b.add += value;
+      b.base = 0;
+    });
   }
 
   @Override
@@ -91,9 +98,9 @@ public class FloatToolStat implements INumericToolStat<Float> {
   }
 
   @Override
-  public Float build(Object builderObj, Float value) {
+  public Float build(Object builderObj) {
     FloatBuilder builder = (FloatBuilder)builderObj;
-    return (value + builder.add) * builder.multiply;
+    return (builder.base + builder.add) * builder.multiply;
   }
 
   @Nullable
@@ -142,11 +149,15 @@ public class FloatToolStat implements INumericToolStat<Float> {
   }
 
   /** Internal builder to store the add and multiply value */
-  @NoArgsConstructor
   protected static class FloatBuilder {
+    private float base;
     /** Value summed with the base, applies first */
     private float add = 0;
     /** Value multiplied by the sum, applies second */
     private float multiply = 1;
+
+    public FloatBuilder(float base) {
+      this.base = base;
+    }
   }
 }

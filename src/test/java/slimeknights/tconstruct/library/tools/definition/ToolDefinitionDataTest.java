@@ -6,15 +6,19 @@ import org.junit.jupiter.api.Test;
 import slimeknights.tconstruct.library.tools.SlotType;
 import slimeknights.tconstruct.library.tools.context.ToolRebuildContext;
 import slimeknights.tconstruct.library.tools.definition.module.ToolHooks;
+import slimeknights.tconstruct.library.tools.definition.module.build.MultiplyStatsModule;
+import slimeknights.tconstruct.library.tools.definition.module.build.SetStatsModule;
 import slimeknights.tconstruct.library.tools.definition.module.build.ToolActionsModule;
 import slimeknights.tconstruct.library.tools.definition.module.build.ToolSlotsModule;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.ModDataNBT;
+import slimeknights.tconstruct.library.tools.nbt.MultiplierNBT;
 import slimeknights.tconstruct.library.tools.nbt.StatsNBT;
 import slimeknights.tconstruct.library.tools.part.IToolPart;
 import slimeknights.tconstruct.library.tools.stat.ModifierStatsBuilder;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
 import slimeknights.tconstruct.test.BaseMcTest;
+import slimeknights.tconstruct.test.TestHelper;
 
 import java.util.List;
 
@@ -24,16 +28,14 @@ import static org.mockito.Mockito.mock;
 class ToolDefinitionDataTest extends BaseMcTest {
   /** Checks that the stats are all empty */
   protected static void checkStatsEmpty(ToolDefinitionData data) {
-    assertThat(data.baseStats).isNotNull();
-    assertThat(data.baseStats.getContainedStats()).isEmpty();
-    assertThat(data.multipliers).isNotNull();
-    assertThat(data.multipliers.getContainedStats()).isEmpty();
+    assertThat(data.getBaseStats().getContainedStats()).isEmpty();
+    assertThat(data.getMultipliers().getContainedStats()).isEmpty();
   }
 
   /** Checks that the stats are all empty */
   protected static void checkToolDataNonPartsEmpty(ToolDefinitionData data) {
     checkStatsEmpty(data);
-    assertThat(data.getHook(ToolHooks.TOOL_TRAITS).getTraits(ToolDefinition.EMPTY)).isEmpty();
+    assertThat(TestHelper.getTraits(data)).isEmpty();
   }
 
   /** Checks that the stats are all empty */
@@ -52,16 +54,14 @@ class ToolDefinitionDataTest extends BaseMcTest {
 
   @Test
   void data_getStatBonus() {
-    assertThat(ToolDefinitionData.EMPTY.getAllBaseStats()).isEmpty();
     ToolDefinitionData withBonuses = ToolDefinitionDataBuilder
       .builder()
-      .stat(ToolStats.DURABILITY, 100)
-      .stat(ToolStats.ATTACK_SPEED, 5.5f)
+      .module(new SetStatsModule(StatsNBT.builder().set(ToolStats.DURABILITY, 100).set(ToolStats.ATTACK_SPEED, 5.5f).build()))
       .build();
 
     // ensure stats are in the right place
-    assertThat(withBonuses.getAllBaseStats()).hasSize(2);
-    assertThat(withBonuses.multipliers.getContainedStats()).isEmpty();
+    assertThat(withBonuses.getBaseStats().getContainedStats()).hasSize(2);
+    assertThat(withBonuses.getMultipliers().getContainedStats()).isEmpty();
     assertThat(withBonuses.getBaseStat(ToolStats.DURABILITY)).isEqualTo(100);
     assertThat(withBonuses.getBaseStat(ToolStats.ATTACK_SPEED)).isEqualTo(5.5f);
     // note mining speed was chosen as it has a non-zero default
@@ -72,15 +72,17 @@ class ToolDefinitionDataTest extends BaseMcTest {
   void data_getStatMultiplier() {
     ToolDefinitionData withMultipliers = ToolDefinitionDataBuilder
       .builder()
-      .multiplier(ToolStats.DURABILITY, 10)
-      .multiplier(ToolStats.ATTACK_SPEED, 2.5f)
+      .module(new MultiplyStatsModule(MultiplierNBT.builder()
+        .set(ToolStats.DURABILITY, 10)
+        .set(ToolStats.ATTACK_SPEED, 2.5f).build()))
       .build();
 
     // ensure stats are in the right place
-    assertThat(withMultipliers.getAllBaseStats()).isEmpty();
-    assertThat(withMultipliers.multipliers.getContainedStats()).hasSize(2);
+    assertThat(withMultipliers.getBaseStats().getContainedStats()).isEmpty();
+    assertThat(withMultipliers.getMultipliers().getContainedStats()).hasSize(2);
     assertThat(withMultipliers.getMultiplier(ToolStats.DURABILITY)).isEqualTo(10);
     assertThat(withMultipliers.getMultiplier(ToolStats.ATTACK_SPEED)).isEqualTo(2.5f);
+    // stat not present
     assertThat(withMultipliers.getMultiplier(ToolStats.MINING_SPEED)).isEqualTo(1);
   }
 
@@ -89,37 +91,38 @@ class ToolDefinitionDataTest extends BaseMcTest {
     ModifierStatsBuilder builder = ModifierStatsBuilder.builder();
     ToolStats.MINING_SPEED.add(builder, 5);
     ToolStats.ATTACK_DAMAGE.add(builder, 3);
-    ToolDefinitionData.EMPTY.buildStatMultipliers(builder);
+    ToolDefinitionData.EMPTY.getHook(ToolHooks.TOOL_STATS).addToolStats(mock(ToolRebuildContext.class), builder);
 
-    StatsNBT stats = builder.build(StatsNBT.EMPTY);
+    StatsNBT stats = builder.build();
     assertThat(stats.getContainedStats()).hasSize(2);
     assertThat(stats.getContainedStats()).contains(ToolStats.MINING_SPEED);
     assertThat(stats.getContainedStats()).contains(ToolStats.ATTACK_DAMAGE);
-    assertThat(stats.get(ToolStats.MINING_SPEED)).isEqualTo(6);
-    assertThat(stats.get(ToolStats.ATTACK_DAMAGE)).isEqualTo(3);
+    assertThat(stats.get(ToolStats.MINING_SPEED)).isEqualTo(6); // adds to the base value of 1
+    assertThat(stats.get(ToolStats.ATTACK_DAMAGE)).isEqualTo(3); // base value 0
   }
 
   @Test
   void data_buildStats_withData() {
     ModifierStatsBuilder builder = ModifierStatsBuilder.builder();
     ToolStats.MINING_SPEED.add(builder, 5);
-    ToolStats.DURABILITY.add(builder, 100);
+    ToolStats.DURABILITY.update(builder, 100f);
 
     ToolDefinitionData data = ToolDefinitionDataBuilder
       .builder()
-      .multiplier(ToolStats.MINING_SPEED, 5)
-      .multiplier(ToolStats.ATTACK_SPEED, 2)
+      .module(new MultiplyStatsModule(MultiplierNBT.builder()
+        .set(ToolStats.MINING_SPEED, 5)
+        .set(ToolStats.ATTACK_SPEED, 2).build()))
       .build();
-    data.buildStatMultipliers(builder);
+    data.getHook(ToolHooks.TOOL_STATS).addToolStats(mock(ToolRebuildContext.class), builder);
 
-    StatsNBT stats = builder.build(StatsNBT.EMPTY);
+    StatsNBT stats = builder.build();
     assertThat(stats.getContainedStats()).hasSize(3);
     assertThat(stats.getContainedStats()).contains(ToolStats.DURABILITY);
     assertThat(stats.getContainedStats()).contains(ToolStats.MINING_SPEED);
     assertThat(stats.getContainedStats()).contains(ToolStats.ATTACK_SPEED);
-    assertThat(stats.get(ToolStats.MINING_SPEED)).isEqualTo(30);
-    assertThat(stats.get(ToolStats.DURABILITY)).isEqualTo(101);
-    assertThat(stats.get(ToolStats.ATTACK_SPEED)).isEqualTo(2);
+    assertThat(stats.get(ToolStats.MINING_SPEED)).isEqualTo(30); // (1+5)*6
+    assertThat(stats.get(ToolStats.DURABILITY)).isEqualTo(100); // ignores base value
+    assertThat(stats.get(ToolStats.ATTACK_SPEED)).isEqualTo(2); // (1)*2
   }
 
   @Test

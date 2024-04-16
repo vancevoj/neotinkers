@@ -68,10 +68,11 @@ import slimeknights.tconstruct.library.recipe.molding.MoldingRecipe;
 import slimeknights.tconstruct.library.recipe.partbuilder.IDisplayPartBuilderRecipe;
 import slimeknights.tconstruct.library.recipe.worktable.IModifierWorktableRecipe;
 import slimeknights.tconstruct.library.tools.SlotType;
-import slimeknights.tconstruct.library.tools.definition.module.ToolHooks;
+import slimeknights.tconstruct.library.tools.definition.module.build.ToolTraitHook;
 import slimeknights.tconstruct.library.tools.item.IModifiable;
 import slimeknights.tconstruct.library.tools.item.IModifiableDisplay;
 import slimeknights.tconstruct.library.tools.nbt.MaterialIdNBT;
+import slimeknights.tconstruct.library.tools.nbt.MaterialNBT;
 import slimeknights.tconstruct.library.tools.part.IMaterialItem;
 import slimeknights.tconstruct.plugin.jei.casting.CastingBasinCategory;
 import slimeknights.tconstruct.plugin.jei.casting.CastingTableCategory;
@@ -252,7 +253,7 @@ public class JEIPlugin implements IModPlugin {
     // modifiers
     for (Item item : Objects.requireNonNull(ForgeRegistries.ITEMS.tags()).getTag(TinkerTags.Items.MELEE)) {
       // add any tools with a severing trait
-      if (item instanceof IModifiable modifiable && modifiable.getToolDefinition().getData().getHook(ToolHooks.TOOL_TRAITS).getTraits(modifiable.getToolDefinition()).stream().anyMatch(entry -> entry.matches(TinkerModifiers.severing.getId()))) {
+      if (item instanceof IModifiable modifiable && ToolTraitHook.getTraits(modifiable.getToolDefinition(), MaterialNBT.EMPTY).getLevel(TinkerModifiers.severing.getId()) > 0) {
         registry.addRecipeCatalyst(IModifiableDisplay.getDisplayStack(item), TConstructJEIConstants.SEVERING);
       }
     }

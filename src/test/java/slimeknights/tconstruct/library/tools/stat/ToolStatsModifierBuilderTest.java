@@ -25,8 +25,7 @@ class ToolStatsModifierBuilderTest extends BaseMcTest {
   @Test
   void empty() {
     ModifierStatsBuilder builder = ModifierStatsBuilder.builder();
-    StatsNBT nbt = builder.build(testStatsNBT);
-    assertThat(nbt).isEqualTo(testStatsNBT);
+    assertThat(builder.build()).isEqualTo(StatsNBT.EMPTY);
   }
 
 
@@ -36,32 +35,15 @@ class ToolStatsModifierBuilderTest extends BaseMcTest {
   void tierToolStat_defaultStat() {
     ModifierStatsBuilder builder = ModifierStatsBuilder.builder();
     ToolStats.ATTACK_DAMAGE.add(builder, 1);
-    StatsNBT nbt = builder.build(StatsNBT.EMPTY);
+    StatsNBT nbt = builder.build();
     assertThat(nbt.get(ToolStats.HARVEST_TIER)).isEqualTo(ToolStats.HARVEST_TIER.getDefaultValue());
   }
 
   @Test
-  void tierToolStat_noChangeCopy() {
-    ModifierStatsBuilder builder = ModifierStatsBuilder.builder();
-    ToolStats.ATTACK_DAMAGE.add(builder, 1);
-    StatsNBT nbt = builder.build(testStatsNBT);
-    assertThat(nbt.get(ToolStats.HARVEST_TIER)).isEqualTo(Tiers.STONE);
-  }
-
-
-  @Test
-  void tierToolStat_replace() {
-    ModifierStatsBuilder builder = ModifierStatsBuilder.builder();
-    ToolStats.HARVEST_TIER.update(builder, Tiers.NETHERITE);
-    StatsNBT nbt = builder.build(testStatsNBT);
-    assertThat(nbt.get(ToolStats.HARVEST_TIER)).isEqualTo(Tiers.NETHERITE);
-  }
-
-  @Test
-  void tierToolStat_missing() {
+  void tierToolStat_set() {
     ModifierStatsBuilder builder = ModifierStatsBuilder.builder();
     ToolStats.HARVEST_TIER.update(builder, Tiers.DIAMOND);
-    StatsNBT nbt = builder.build(StatsNBT.EMPTY);
+    StatsNBT nbt = builder.build();
     assertThat(nbt.get(ToolStats.HARVEST_TIER)).isEqualTo(Tiers.DIAMOND);
   }
 
@@ -70,22 +52,14 @@ class ToolStatsModifierBuilderTest extends BaseMcTest {
     ModifierStatsBuilder builder = ModifierStatsBuilder.builder();
     ToolStats.HARVEST_TIER.update(builder, Tiers.IRON);
     ToolStats.HARVEST_TIER.update(builder, Tiers.DIAMOND);
-    StatsNBT nbt = builder.build(testStatsNBT);
+    StatsNBT nbt = builder.build();
     assertThat(nbt.get(ToolStats.HARVEST_TIER)).isEqualTo(Tiers.DIAMOND);
 
     builder = ModifierStatsBuilder.builder();
     ToolStats.HARVEST_TIER.update(builder, Tiers.NETHERITE);
     ToolStats.HARVEST_TIER.update(builder, Tiers.DIAMOND);
-    nbt = builder.build(testStatsNBT);
+    nbt = builder.build();
     assertThat(nbt.get(ToolStats.HARVEST_TIER)).isEqualTo(Tiers.NETHERITE);
-  }
-
-  @Test
-  void tierToolStat_preserveStats() {
-    ModifierStatsBuilder builder = ModifierStatsBuilder.builder();
-    ToolStats.HARVEST_TIER.update(builder, Tiers.GOLD);
-    StatsNBT nbt = builder.build(testStatsNBT);
-    assertThat(nbt.get(ToolStats.HARVEST_TIER)).isEqualTo(Tiers.STONE);
   }
 
 
@@ -95,7 +69,7 @@ class ToolStatsModifierBuilderTest extends BaseMcTest {
   void floatToolStat_defaultStat() {
     ModifierStatsBuilder builder = ModifierStatsBuilder.builder();
     ToolStats.ATTACK_DAMAGE.add(builder, 1);
-    StatsNBT nbt = builder.build(StatsNBT.EMPTY);
+    StatsNBT nbt = builder.build();
     assertThat(nbt.get(ToolStats.DURABILITY)).isEqualTo(ToolStats.DURABILITY.getDefaultValue());
   }
 
@@ -103,15 +77,7 @@ class ToolStatsModifierBuilderTest extends BaseMcTest {
   void floatToolStat_add() {
     ModifierStatsBuilder builder = ModifierStatsBuilder.builder();
     ToolStats.DURABILITY.add(builder, 10);
-    StatsNBT nbt = builder.build(testStatsNBT);
-    assertThat(nbt.getInt(ToolStats.DURABILITY)).isEqualTo(110);
-  }
-
-  @Test
-  void floatToolStat_addMissing() {
-    ModifierStatsBuilder builder = ModifierStatsBuilder.builder();
-    ToolStats.DURABILITY.add(builder, 10);
-    StatsNBT nbt = builder.build(StatsNBT.EMPTY);
+    StatsNBT nbt = builder.build();
     assertThat(nbt.getInt(ToolStats.DURABILITY)).isEqualTo(11);
   }
 
@@ -120,23 +86,15 @@ class ToolStatsModifierBuilderTest extends BaseMcTest {
     ModifierStatsBuilder builder = ModifierStatsBuilder.builder();
     ToolStats.DURABILITY.add(builder, 10);
     ToolStats.DURABILITY.add(builder, 15);
-    StatsNBT nbt = builder.build(testStatsNBT);
-    assertThat(nbt.getInt(ToolStats.DURABILITY)).isEqualTo(125);
+    StatsNBT nbt = builder.build();
+    assertThat(nbt.getInt(ToolStats.DURABILITY)).isEqualTo(26);
   }
 
   @Test
   void floatToolStat_multiply() {
     ModifierStatsBuilder builder = ModifierStatsBuilder.builder();
     ToolStats.DURABILITY.multiply(builder, 2f);
-    StatsNBT nbt = builder.build(testStatsNBT);
-    assertThat(nbt.getInt(ToolStats.DURABILITY)).isEqualTo(200);
-  }
-
-  @Test
-  void floatToolStat_multiplyMissing() {
-    ModifierStatsBuilder builder = ModifierStatsBuilder.builder();
-    ToolStats.DURABILITY.multiply(builder, 2f);
-    StatsNBT nbt = builder.build(StatsNBT.EMPTY);
+    StatsNBT nbt = builder.build();
     assertThat(nbt.getInt(ToolStats.DURABILITY)).isEqualTo(2);
   }
 
@@ -145,8 +103,8 @@ class ToolStatsModifierBuilderTest extends BaseMcTest {
     ModifierStatsBuilder builder = ModifierStatsBuilder.builder();
     ToolStats.DURABILITY.multiply(builder, 2f);
     ToolStats.DURABILITY.multiply(builder, 1.5f);
-    StatsNBT nbt = builder.build(testStatsNBT);
-    assertThat(nbt.getInt(ToolStats.DURABILITY)).isEqualTo(300);
+    StatsNBT nbt = builder.build();
+    assertThat(nbt.getInt(ToolStats.DURABILITY)).isEqualTo(3);
   }
 
   @Test
@@ -154,21 +112,21 @@ class ToolStatsModifierBuilderTest extends BaseMcTest {
     ModifierStatsBuilder builder = ModifierStatsBuilder.builder();
     ToolStats.DURABILITY.add(builder, 10);
     ToolStats.DURABILITY.multiply(builder, 2f);
-    StatsNBT nbt = builder.build(testStatsNBT);
-    assertThat(nbt.getInt(ToolStats.DURABILITY)).isEqualTo(220);
+    StatsNBT nbt = builder.build();
+    assertThat(nbt.getInt(ToolStats.DURABILITY)).isEqualTo(22);
 
     builder = ModifierStatsBuilder.builder();
     ToolStats.DURABILITY.multiply(builder, 2f);
     ToolStats.DURABILITY.add(builder, 10);
-    nbt = builder.build(testStatsNBT);
-    assertThat(nbt.getInt(ToolStats.DURABILITY)).isEqualTo(220);
+    nbt = builder.build();
+    assertThat(nbt.getInt(ToolStats.DURABILITY)).isEqualTo(22);
   }
 
   @Test
   void floatToolStat_min() {
     ModifierStatsBuilder builder = ModifierStatsBuilder.builder();
     ToolStats.DURABILITY.add(builder, Short.MIN_VALUE);
-    StatsNBT nbt = builder.build(testStatsNBT);
+    StatsNBT nbt = builder.build();
     assertThat(nbt.get(ToolStats.DURABILITY)).isEqualTo(ToolStats.DURABILITY.getMinValue());
   }
 
@@ -176,7 +134,7 @@ class ToolStatsModifierBuilderTest extends BaseMcTest {
   void floatToolStat_max() {
     ModifierStatsBuilder builder = ModifierStatsBuilder.builder();
     ToolStats.ATTACK_DAMAGE.add(builder, 4096);
-    StatsNBT nbt = builder.build(testStatsNBT);
+    StatsNBT nbt = builder.build();
     assertThat(nbt.get(ToolStats.ATTACK_DAMAGE)).isEqualTo(ToolStats.ATTACK_DAMAGE.getMaxValue());
   }
 }

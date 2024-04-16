@@ -51,6 +51,8 @@ import slimeknights.tconstruct.library.tools.definition.module.aoe.CircleAOEIter
 import slimeknights.tconstruct.library.tools.definition.module.aoe.ConditionalAOEIterator;
 import slimeknights.tconstruct.library.tools.definition.module.aoe.TreeAOEIterator;
 import slimeknights.tconstruct.library.tools.definition.module.aoe.VeiningAOEIterator;
+import slimeknights.tconstruct.library.tools.definition.module.build.MultiplyStatsModule;
+import slimeknights.tconstruct.library.tools.definition.module.build.SetStatsModule;
 import slimeknights.tconstruct.library.tools.definition.module.build.ToolActionsModule;
 import slimeknights.tconstruct.library.tools.definition.module.build.ToolSlotsModule;
 import slimeknights.tconstruct.library.tools.definition.module.build.ToolTraitsModule;
@@ -205,6 +207,8 @@ public final class TinkerTools extends TinkerModule {
       ItemPredicate.register(ToolStackItemPredicate.ID, ToolStackItemPredicate::deserialize);
 
       // tool definition components
+      ToolModule.LOADER.register(getResource("base_stats"), SetStatsModule.LOADER);
+      ToolModule.LOADER.register(getResource("multiply_stats"), MultiplyStatsModule.LOADER);
       ToolModule.LOADER.register(getResource("material_stats"), MaterialStatsModule.LOADER);
       ToolModule.LOADER.register(getResource("part_stats"), PartStatsModule.LOADER);
       ToolModule.LOADER.register(getResource("tool_actions"), ToolActionsModule.LOADER);

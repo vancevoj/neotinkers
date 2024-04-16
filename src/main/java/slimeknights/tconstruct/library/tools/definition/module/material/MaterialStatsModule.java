@@ -14,15 +14,19 @@ import slimeknights.tconstruct.library.modifiers.modules.ModifierHookProvider;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinition;
 import slimeknights.tconstruct.library.tools.definition.module.ToolHooks;
 import slimeknights.tconstruct.library.tools.definition.module.ToolModule;
+import slimeknights.tconstruct.library.tools.definition.module.build.ToolStatsHook;
+import slimeknights.tconstruct.library.tools.definition.module.build.ToolTraitHook;
+import slimeknights.tconstruct.library.tools.nbt.IToolContext;
 import slimeknights.tconstruct.library.tools.nbt.MaterialNBT;
-import slimeknights.tconstruct.library.tools.nbt.StatsNBT;
+import slimeknights.tconstruct.library.tools.nbt.ModifierNBT;
+import slimeknights.tconstruct.library.tools.stat.ModifierStatsBuilder;
 
 import java.util.List;
 import java.util.stream.IntStream;
 
 /** Module for building tool stats using materials */
-public class MaterialStatsModule implements MaterialStatsToolHook, ToolModule {
-  private static final List<ModifierHook<?>> DEFAULT_HOOKS = ModifierHookProvider.<MaterialStatsModule>defaultHooks(ToolHooks.MATERIAL_STATS);
+public class MaterialStatsModule implements ToolStatsHook, ToolTraitHook, ToolMaterialHook, ToolModule {
+  private static final List<ModifierHook<?>> DEFAULT_HOOKS = ModifierHookProvider.<MaterialStatsModule>defaultHooks(ToolHooks.TOOL_STATS, ToolHooks.TOOL_TRAITS, ToolHooks.TOOL_MATERIALS);
   protected static final LoadableField<MaterialStatProvider,MaterialStatsModule> STAT_PROVIDER_FIELD = MaterialStatProviders.REGISTRY.requiredField("stat_provider", m -> m.statProvider);
   public static final RecordLoadable<MaterialStatsModule> LOADER = RecordLoadable.create(
     STAT_PROVIDER_FIELD,
@@ -85,8 +89,20 @@ public class MaterialStatsModule implements MaterialStatsToolHook, ToolModule {
   }
 
   @Override
-  public StatsNBT buildStats(ToolDefinition definition, MaterialNBT materials) {
-    return statProvider.buildStats(definition, materials);
+  public void addToolStats(IToolContext context, ModifierStatsBuilder builder) {
+    statProvider.addStats(statTypes, context.getMaterials(), builder);
+  }
+
+  @Override
+  public void addTraits(ToolDefinition definition, MaterialNBT materials, ModifierNBT.Builder builder) {
+    int stats = statTypes.size();
+    // if the NBT is invalid, no-op to prevent an exception here (could kill itemstacks)
+    if (materials.size() == stats) {
+      IMaterialRegistry materialRegistry = MaterialRegistry.getInstance();
+      for (int i = 0; i < stats; i++) {
+        builder.add(materialRegistry.getTraits(materials.get(i).getId(), statTypes.get(i).stat()));
+      }
+    }
   }
 
 

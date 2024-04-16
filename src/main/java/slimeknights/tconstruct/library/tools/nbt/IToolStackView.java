@@ -13,9 +13,20 @@ import slimeknights.tconstruct.library.tools.stat.INumericToolStat;
  * If you receive an instance of this interface a parameter, do NOT use an instanceof check and cast it to a ToolStack. Don't make me use a private wrapper class.
  */
 public interface IToolStackView extends IToolContext {
+  /* Stats */
+
+  /** On built tools, contains the full tool stats. During tool rebuild, contains the base stats before considering modifiers. */
+  StatsNBT getStats();
+
+  /**
+   * Gets the tool stats if parsed, or parses from NBT if not yet parsed
+   * @return stats
+   */
+  MultiplierNBT getMultipliers();
+
   /** Commonly used operation, getting a stat multiplier */
   default float getMultiplier(INumericToolStat<?> stat) {
-    return getDefinition().getData().getMultiplier(stat);
+    return getMultipliers().get(stat);
   }
 
 

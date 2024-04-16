@@ -9,9 +9,11 @@ import slimeknights.tconstruct.library.tools.nbt.IToolContext;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.MaterialNBT;
 import slimeknights.tconstruct.library.tools.nbt.ModifierNBT;
-import slimeknights.tconstruct.library.tools.nbt.StatsNBT;
 
-/** A more limited view of {@link IToolStackView} for use in tool rebuild hooks */
+/**
+ * A more limited view of {@link IToolStackView} for use in tool rebuild hooks
+ * TODO: remove usage of this class from modifier hooks, use {@link IToolContext} instead for flexability
+ */
 @SuppressWarnings("ClassCanBeRecord")
 @Data
 public class ToolRebuildContext implements IToolContext {
@@ -26,15 +28,8 @@ public class ToolRebuildContext implements IToolContext {
   /** List of all modifiers on the tool being rebuilt, from recipes and traits */
   @With
   private final ModifierNBT modifiers;
-  /** Tool stats before modifiers add stats */
-  private final StatsNBT baseStats;
   /** Persistent modifier data, intentionally read only */
   private final IModDataView persistentData;
   /** Volatile modifier data */
   private final IModDataView volatileData;
-
-  @Override
-  public StatsNBT getStats() {
-    return getBaseStats();
-  }
 }

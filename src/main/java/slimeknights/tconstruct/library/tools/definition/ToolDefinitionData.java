@@ -3,15 +3,18 @@ package slimeknights.tconstruct.library.tools.definition;
 import com.google.common.annotations.VisibleForTesting;
 import lombok.Getter;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.item.Items;
 import slimeknights.mantle.data.loadable.ErrorFactory;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
-import slimeknights.tconstruct.library.json.field.MergingField;
-import slimeknights.tconstruct.library.json.field.MergingField.MissingMode;
 import slimeknights.tconstruct.library.modifiers.ModifierHook;
 import slimeknights.tconstruct.library.modifiers.util.ModifierHookMap;
 import slimeknights.tconstruct.library.modifiers.util.ModifierHookMap.WithHooks;
+import slimeknights.tconstruct.library.tools.definition.module.ToolHooks;
 import slimeknights.tconstruct.library.tools.definition.module.ToolModule;
+import slimeknights.tconstruct.library.tools.nbt.DummyToolStack;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
+import slimeknights.tconstruct.library.tools.nbt.ModDataNBT;
+import slimeknights.tconstruct.library.tools.nbt.ModifierNBT;
 import slimeknights.tconstruct.library.tools.nbt.MultiplierNBT;
 import slimeknights.tconstruct.library.tools.nbt.StatsNBT;
 import slimeknights.tconstruct.library.tools.stat.INumericToolStat;
@@ -19,7 +22,6 @@ import slimeknights.tconstruct.library.tools.stat.IToolStat;
 import slimeknights.tconstruct.library.tools.stat.ModifierStatsBuilder;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * This class contains all data pack configurable data for a tool, before materials are factored in.
@@ -27,26 +29,18 @@ import java.util.Set;
  */
 public class ToolDefinitionData {
   /** Empty tool data definition instance */
-  public static final ToolDefinitionData EMPTY = new ToolDefinitionData(StatsNBT.EMPTY, MultiplierNBT.EMPTY, List.of(), ErrorFactory.RUNTIME);
+  public static final ToolDefinitionData EMPTY = new ToolDefinitionData(List.of(), ErrorFactory.RUNTIME);
   /** Loadable to parse definition data from JSON */
-  public static final RecordLoadable<ToolDefinitionData> LOADABLE = RecordLoadable.create(
-    new MergingField<>(StatsNBT.LOADABLE.defaultField("base", StatsNBT.EMPTY, d -> d.baseStats), "stats", MissingMode.CREATE),
-    new MergingField<>(MultiplierNBT.LOADABLE.defaultField("multipliers", MultiplierNBT.EMPTY, d -> d.multipliers), "stats", MissingMode.CREATE),
-    ToolModule.WITH_HOOKS.list(0).defaultField("modules", List.of(), d -> d.modules),
-    ErrorFactory.FIELD, ToolDefinitionData::new);
+  public static final RecordLoadable<ToolDefinitionData> LOADABLE = RecordLoadable.create(ToolModule.WITH_HOOKS.list(0).defaultField("modules", List.of(), d -> d.modules), ErrorFactory.FIELD, ToolDefinitionData::new);
 
-  /** Gets a list of all parts in the tool */
-  @VisibleForTesting
-  protected final StatsNBT baseStats;
-  @VisibleForTesting
-  protected final MultiplierNBT multipliers;
   private final List<WithHooks<ToolModule>> modules;
   @Getter
   private final transient ModifierHookMap hooks;
 
-  protected ToolDefinitionData(StatsNBT baseStats, MultiplierNBT multipliers, List<WithHooks<ToolModule>> modules, ErrorFactory error) {
-    this.baseStats = baseStats;
-    this.multipliers = multipliers;
+  private transient StatsNBT baseStats;
+  private transient MultiplierNBT multipliers;
+
+  protected ToolDefinitionData(List<WithHooks<ToolModule>> modules, ErrorFactory error) {
     this.modules = modules;
     this.hooks = ModifierHookMap.createMap(modules, error);
   }
@@ -62,41 +56,51 @@ public class ToolDefinitionData {
 
   /* Stats */
 
-  /** Gets a set of bonuses applied to this tool, for stat building */
-  public Set<IToolStat<?>> getAllBaseStats() {
-    return baseStats.getContainedStats();
+  /** Computes the stats for the given tool */
+  private void computeStats() {
+    ModifierStatsBuilder builder = ModifierStatsBuilder.builder();
+    getHook(ToolHooks.TOOL_STATS).addToolStats(new DummyToolStack(Items.AIR, ModifierNBT.EMPTY, new ModDataNBT()), builder);
+    multipliers = builder.buildMultipliers();
+    // cancel out multipliers on the base stats, as people expect base stats to be comparable to be usable in the modifier stats builder
+    for (INumericToolStat<?> stat : multipliers.getContainedStats()) {
+      // TODO: this is a hack, alternative is somehow telling the builder to ignore multipliers
+      stat.multiply(builder, 1 / multipliers.get(stat));
+    }
+    baseStats = builder.build();
   }
 
-  /** Determines if the given stat is defined in this definition, for stat building */
-  public boolean hasBaseStat(IToolStat<?> stat) {
-    return baseStats.hasStat(stat);
+  /** Gets the stats of this tool without materials or modifiers */
+  @VisibleForTesting
+  protected StatsNBT getBaseStats() {
+    if (baseStats == null) {
+      computeStats();
+    }
+    return baseStats;
   }
 
-  /** Gets the value of a stat in this tool, or the default value if missing */
+  /** Gets the multipliers of this tool without materials or modifiers */
+  @VisibleForTesting
+  protected MultiplierNBT getMultipliers() {
+    if (multipliers == null) {
+      computeStats();
+    }
+    return multipliers;
+  }
+
+  /**
+   * Gets the value of a stat in this tool, or the default value if missing.
+   * Generally better to use {@link IToolStackView#getStats()} as it takes the modifier stats into account.
+   */
   public <T> T getBaseStat(IToolStat<T> toolStat) {
-    return baseStats.get(toolStat);
+    return getBaseStats().get(toolStat);
   }
 
   /**
    * Gets the multiplier for this stat to use for modifiers
-   *
    * In most cases, its better to use {@link IToolStackView#getMultiplier(INumericToolStat)} as that takes the modifier multiplier into account
    */
   public float getMultiplier(INumericToolStat<?> toolStat) {
-    return multipliers.get(toolStat);
-  }
-
-
-  /* Tool building */
-
-  /**
-   * Applies the extra tool stats to the tool like a modifier
-   * @param builder  Tool stats builder
-   */
-  public void buildStatMultipliers(ModifierStatsBuilder builder) {
-    for (INumericToolStat<?> stat : multipliers.getContainedStats()) {
-      stat.multiplyAll(builder, multipliers.get(stat));
-    }
+    return getMultipliers().get(toolStat);
   }
 
 

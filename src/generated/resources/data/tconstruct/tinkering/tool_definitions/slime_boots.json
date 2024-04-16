@@ -1,6 +1,12 @@
 {
   "modules": [
     {
+      "type": "tconstruct:base_stats",
+      "stats": {
+        "tconstruct:durability": 546.0
+      }
+    },
+    {
       "type": "tconstruct:modifier_slots",
       "slots": {
         "abilities": 1,
@@ -24,10 +30,5 @@
         }
       ]
     }
-  ],
-  "stats": {
-    "base": {
-      "tconstruct:durability": 546.0
-    }
-  }
+  ]
 }
