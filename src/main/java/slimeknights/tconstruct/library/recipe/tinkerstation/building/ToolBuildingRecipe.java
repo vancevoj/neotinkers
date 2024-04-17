@@ -26,7 +26,6 @@ import slimeknights.tconstruct.library.tools.part.IToolPart;
 import slimeknights.tconstruct.tables.TinkerTables;
 
 import java.util.List;
-import java.util.function.Function;
 import java.util.stream.IntStream;
 
 /**
@@ -40,12 +39,7 @@ public class ToolBuildingRecipe implements ITinkerStationRecipe {
     TinkerLoadables.MODIFIABLE_ITEM.requiredField("result", r -> r.output),
     IntLoadable.FROM_ONE.defaultField("result_count", 1, true, r -> r.outputCount),
     IngredientLoadable.DISALLOW_EMPTY.list(0).defaultField("extra_requirements", List.of(), r -> r.ingredients),
-    ToolBuildingRecipe::new).comapFlatMap((recipe, error) -> {
-    if (ToolPartsHook.parts(recipe.output.getToolDefinition()).isEmpty() && recipe.ingredients.isEmpty()) {
-      throw error.create("Modifiable item must have tool parts or extra requirements to use tool building recipes in " + recipe.id);
-    }
-    return recipe;
-  }, Function.identity());
+    ToolBuildingRecipe::new);
 
   @Getter
   protected final ResourceLocation id;
