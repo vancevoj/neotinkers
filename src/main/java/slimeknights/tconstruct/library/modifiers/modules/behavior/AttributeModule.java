@@ -14,10 +14,10 @@ import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHook;
 import slimeknights.tconstruct.library.modifiers.TinkerHooks;
 import slimeknights.tconstruct.library.modifiers.hook.behavior.AttributesModifierHook;
-import slimeknights.tconstruct.library.modifiers.modules.AttributeModuleBuilder;
 import slimeknights.tconstruct.library.modifiers.modules.ModifierModule;
-import slimeknights.tconstruct.library.modifiers.modules.ModifierModuleCondition;
-import slimeknights.tconstruct.library.modifiers.modules.ModifierModuleCondition.ConditionalModifierModule;
+import slimeknights.tconstruct.library.modifiers.modules.util.AttributeModuleBuilder;
+import slimeknights.tconstruct.library.modifiers.modules.util.ModifierCondition;
+import slimeknights.tconstruct.library.modifiers.modules.util.ModifierCondition.ConditionalModule;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 
 import java.util.Collection;
@@ -30,7 +30,7 @@ import java.util.function.BiConsumer;
 /**
  * Module to add an attribute to a tool
  */
-public record AttributeModule(String unique, Attribute attribute, Operation operation, LevelingValue amount, UUID[] slotUUIDs, ModifierModuleCondition condition) implements AttributesModifierHook, ModifierModule, ConditionalModifierModule {
+public record AttributeModule(String unique, Attribute attribute, Operation operation, LevelingValue amount, UUID[] slotUUIDs, ModifierCondition<IToolStackView> condition) implements AttributesModifierHook, ModifierModule, ConditionalModule<IToolStackView> {
   private static final List<ModifierHook<?>> DEFAULT_HOOKS = List.of(TinkerHooks.ATTRIBUTES);
   public static final RecordLoadable<AttributeModule> LOADER = RecordLoadable.create(
     StringLoadable.DEFAULT.requiredField("unique", AttributeModule::unique),
@@ -38,7 +38,7 @@ public record AttributeModule(String unique, Attribute attribute, Operation oper
     TinkerLoadables.OPERATION.requiredField("operation", AttributeModule::operation),
     LevelingValue.LOADABLE.directField(AttributeModule::amount),
     TinkerLoadables.EQUIPMENT_SLOT_SET.requiredField("slots", m -> uuidsToSlots(m.slotUUIDs)),
-    ModifierModuleCondition.FIELD,
+    ModifierCondition.TOOL_FIELD,
     (unique, attribute, operation, amount, slots, condition) -> new AttributeModule(unique, attribute, operation, amount, slotsToUUIDs(unique, slots), condition));
 
   /** Gets the UUID from a name */

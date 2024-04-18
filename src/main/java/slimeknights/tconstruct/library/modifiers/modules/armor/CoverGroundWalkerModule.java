@@ -10,12 +10,12 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import slimeknights.mantle.data.loadable.common.BlockStateLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
-import slimeknights.mantle.data.registry.GenericLoaderRegistry.IGenericLoader;
 import slimeknights.tconstruct.library.json.LevelingValue;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.modules.ModifierModule;
-import slimeknights.tconstruct.library.modifiers.modules.ModifierModuleCondition;
-import slimeknights.tconstruct.library.modifiers.modules.ModifierModuleCondition.ConditionalModifierModule;
+import slimeknights.tconstruct.library.modifiers.modules.util.ModifierCondition;
+import slimeknights.tconstruct.library.modifiers.modules.util.ModifierCondition.ConditionalModule;
+import slimeknights.tconstruct.library.modifiers.modules.util.ModuleBuilder;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.tools.TinkerModifiers;
 
@@ -25,11 +25,11 @@ import slimeknights.tconstruct.tools.TinkerModifiers;
  * @param radius     Radius to cover
  * @param condition  Standard module condition
  */
-public record CoverGroundWalkerModule(BlockState state, LevelingValue radius, ModifierModuleCondition condition) implements ModifierModule, ArmorWalkRadiusModule<Void>, ConditionalModifierModule {
+public record CoverGroundWalkerModule(BlockState state, LevelingValue radius, ModifierCondition<IToolStackView> condition) implements ModifierModule, ArmorWalkRadiusModule<Void>, ConditionalModule<IToolStackView> {
   public static final RecordLoadable<CoverGroundWalkerModule> LOADER = RecordLoadable.create(
     BlockStateLoadable.DIFFERENCE.directField(CoverGroundWalkerModule::state),
     LevelingValue.LOADABLE.requiredField("radius", CoverGroundWalkerModule::radius),
-    ModifierModuleCondition.FIELD,
+    ModifierCondition.TOOL_FIELD,
     CoverGroundWalkerModule::new);
 
   @Override
@@ -52,7 +52,7 @@ public record CoverGroundWalkerModule(BlockState state, LevelingValue radius, Mo
   }
 
   @Override
-  public IGenericLoader<? extends ModifierModule> getLoader() {
+  public RecordLoadable<CoverGroundWalkerModule> getLoader() {
     return LOADER;
   }
 
@@ -70,7 +70,7 @@ public record CoverGroundWalkerModule(BlockState state, LevelingValue radius, Mo
   }
 
   @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-  public static class Builder extends ModifierModuleCondition.Builder<Builder> implements LevelingValue.Builder<CoverGroundWalkerModule> {
+  public static class Builder extends ModuleBuilder.Stack<Builder> implements LevelingValue.Builder<CoverGroundWalkerModule> {
     private final BlockState state;
 
     @Override

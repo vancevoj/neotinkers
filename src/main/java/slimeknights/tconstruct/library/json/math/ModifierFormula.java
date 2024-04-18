@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import net.minecraft.network.FriendlyByteBuf;
 import slimeknights.tconstruct.library.json.LevelingValue;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
-import slimeknights.tconstruct.library.modifiers.modules.ModifierModuleCondition;
+import slimeknights.tconstruct.library.modifiers.modules.util.ModuleBuilder;
 
 /**
  * Represents a modifier formula that may be either simple or complex.
@@ -90,7 +90,7 @@ public sealed interface ModifierFormula permits PostFixFormula, SimpleLevelingFo
 
   /** Builder for a module containing a modifier formula */
   @RequiredArgsConstructor
-  abstract class Builder<T extends Builder<T,M>,M> extends ModifierModuleCondition.Builder<T> implements LevelingValue.Builder<M> {
+  abstract class Builder<T extends Builder<T,M>,M> extends ModuleBuilder.Stack<T> implements LevelingValue.Builder<M> {
     /** Variables to use for post fix formulas */
     protected final String[] variableNames;
 

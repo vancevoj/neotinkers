@@ -184,12 +184,12 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
     IJsonPredicate<IToolContext> noUnbreakable = HasModifierPredicate.hasModifier(TinkerModifiers.unbreakable.getId(), 1).inverted();
     buildModifier(ModifierIds.reinforced)
       // level 0 to 5: 0.025 * LEVEL * (11 - LEVEL)
-      .addModule(ReduceToolDamageModule.builder().tool(noUnbreakable).maxLevel(5).formula()
+      .addModule(ReduceToolDamageModule.builder().toolContext(noUnbreakable).maxLevel(5).formula()
                                        .constant(0.025f).variable(LEVEL).multiply() // 0.025 * level
                                        .constant(11).variable(LEVEL).subtract()     // 11 - level
                                        .multiply().build())
       // level 6+: 0.5 + level * 0.05
-      .addModule(ReduceToolDamageModule.builder().tool(noUnbreakable).minLevel(6).amount(0.5f, 0.05f));
+      .addModule(ReduceToolDamageModule.builder().toolContext(noUnbreakable).minLevel(6).amount(0.5f, 0.05f));
     // unbreakable priority is after overslime but before standard modifiers like dense
     buildModifier(TinkerModifiers.unbreakable)
       .levelDisplay(ModifierLevelDisplay.NO_LEVELS).priority(125)

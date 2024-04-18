@@ -12,12 +12,12 @@ import slimeknights.tconstruct.library.tools.nbt.IToolContext;
 import java.util.List;
 import java.util.function.Predicate;
 
-/** Simple serializable tool predicate */
+/** Simple serializable tool predicate, for early loading context */
 public interface ToolContextPredicate extends IJsonPredicate<IToolContext> {
   /** Predicate that matches all tools */
   ToolContextPredicate ANY = simple(tool -> true);
   /** Loader for tool predicates */
-  FallbackPredicateRegistry<IToolContext,Item> LOADER = new FallbackPredicateRegistry<>("Tool Predicate", ANY, ItemPredicate.LOADER, IToolContext::getItem, "item");
+  FallbackPredicateRegistry<IToolContext,Item> LOADER = new FallbackPredicateRegistry<>("Tool Context Predicate", ANY, ItemPredicate.LOADER, IToolContext::getItem, "item");
 
   @Override
   default IJsonPredicate<IToolContext> inverted() {
@@ -48,7 +48,7 @@ public interface ToolContextPredicate extends IJsonPredicate<IToolContext> {
 
   /* Helper methods */
 
-  /** Creates a tag predicate */
+  /** Creates an item predicate */
   static IJsonPredicate<IToolContext> fallback(IJsonPredicate<Item> predicate) {
     return LOADER.fallback(predicate);
   }

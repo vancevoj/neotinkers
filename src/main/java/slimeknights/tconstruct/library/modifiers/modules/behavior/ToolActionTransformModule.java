@@ -18,15 +18,14 @@ import slimeknights.mantle.data.loadable.Loadables;
 import slimeknights.mantle.data.loadable.primitive.BooleanLoadable;
 import slimeknights.mantle.data.loadable.primitive.IntLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
-import slimeknights.mantle.data.registry.GenericLoaderRegistry.IGenericLoader;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHook;
 import slimeknights.tconstruct.library.modifiers.TinkerHooks;
 import slimeknights.tconstruct.library.modifiers.hook.behavior.ToolActionModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.special.BlockTransformModifierHook;
-import slimeknights.tconstruct.library.modifiers.modules.ModifierModule;
-import slimeknights.tconstruct.library.modifiers.modules.ModifierModuleCondition;
-import slimeknights.tconstruct.library.modifiers.modules.ModifierModuleCondition.ConditionalModifierModule;
+import slimeknights.tconstruct.library.modifiers.modules.util.ModifierCondition;
+import slimeknights.tconstruct.library.modifiers.modules.util.ModifierCondition.ConditionalModule;
+import slimeknights.tconstruct.library.modifiers.modules.util.ModuleBuilder;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 
 import java.util.List;
@@ -34,14 +33,14 @@ import java.util.List;
 /**
  * Module which transforms a block using a tool action
  */
-public record ToolActionTransformModule(ToolAction action, SoundEvent sound, boolean requireGround, int eventId, ModifierModuleCondition condition) implements BlockTransformModule, ToolActionModifierHook, ConditionalModifierModule {
+public record ToolActionTransformModule(ToolAction action, SoundEvent sound, boolean requireGround, int eventId, ModifierCondition<IToolStackView> condition) implements BlockTransformModule, ToolActionModifierHook, ConditionalModule<IToolStackView> {
   private static final List<ModifierHook<?>> DEFAULT_HOOKS = List.of(TinkerHooks.BLOCK_INTERACT, TinkerHooks.TOOL_ACTION);
   public static final RecordLoadable<ToolActionTransformModule> LOADER = RecordLoadable.create(
     Loadables.TOOL_ACTION.requiredField("tool_action", ToolActionTransformModule::action),
     Loadables.SOUND_EVENT.requiredField("sound", ToolActionTransformModule::sound),
     BooleanLoadable.INSTANCE.requiredField("require_ground", ToolActionTransformModule::requireGround),
     IntLoadable.FROM_MINUS_ONE.defaultField("event_id", -1, ToolActionTransformModule::eventId),
-    ModifierModuleCondition.FIELD,
+    ModifierCondition.TOOL_FIELD,
     ToolActionTransformModule::new);
 
   @Override
@@ -91,7 +90,7 @@ public record ToolActionTransformModule(ToolAction action, SoundEvent sound, boo
   }
 
   @Override
-  public IGenericLoader<? extends ModifierModule> getLoader() {
+  public RecordLoadable<ToolActionTransformModule> getLoader() {
     return LOADER;
   }
 
@@ -103,7 +102,7 @@ public record ToolActionTransformModule(ToolAction action, SoundEvent sound, boo
   }
 
   @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-  public static class Builder extends ModifierModuleCondition.Builder<Builder> {
+  public static class Builder extends ModuleBuilder.Stack<Builder> {
     private final ToolAction action;
     private final SoundEvent sound;
     private boolean requireGround;

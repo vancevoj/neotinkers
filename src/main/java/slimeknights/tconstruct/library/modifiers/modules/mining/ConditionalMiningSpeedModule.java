@@ -12,7 +12,6 @@ import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.data.predicate.IJsonPredicate;
 import slimeknights.mantle.data.predicate.block.BlockPredicate;
 import slimeknights.mantle.data.predicate.entity.LivingEntityPredicate;
-import slimeknights.mantle.data.registry.GenericLoaderRegistry.IGenericLoader;
 import slimeknights.tconstruct.library.json.math.ModifierFormula;
 import slimeknights.tconstruct.library.json.variable.VariableFormula;
 import slimeknights.tconstruct.library.json.variable.mining.MiningSpeedFormula;
@@ -22,9 +21,9 @@ import slimeknights.tconstruct.library.modifiers.ModifierHook;
 import slimeknights.tconstruct.library.modifiers.TinkerHooks;
 import slimeknights.tconstruct.library.modifiers.hook.mining.BreakSpeedModifierHook;
 import slimeknights.tconstruct.library.modifiers.modules.ModifierModule;
-import slimeknights.tconstruct.library.modifiers.modules.ModifierModuleCondition;
-import slimeknights.tconstruct.library.modifiers.modules.ModifierModuleCondition.ConditionalModifierModule;
-import slimeknights.tconstruct.library.modifiers.modules.behavior.ConditionalStatTooltip;
+import slimeknights.tconstruct.library.modifiers.modules.util.ConditionalStatTooltip;
+import slimeknights.tconstruct.library.modifiers.modules.util.ModifierCondition;
+import slimeknights.tconstruct.library.modifiers.modules.util.ModifierCondition.ConditionalModule;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.stat.INumericToolStat;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
@@ -41,15 +40,15 @@ import java.util.List;
  */
 public record ConditionalMiningSpeedModule(
   IJsonPredicate<BlockState> block, IJsonPredicate<LivingEntity> holder, boolean requireEffective,
-  MiningSpeedFormula formula, ModifierModuleCondition condition
-) implements BreakSpeedModifierHook, ConditionalStatTooltip, ModifierModule, ConditionalModifierModule {
+  MiningSpeedFormula formula, ModifierCondition<IToolStackView> condition
+) implements BreakSpeedModifierHook, ConditionalStatTooltip, ModifierModule, ConditionalModule<IToolStackView> {
   private static final List<ModifierHook<?>> DEFAULT_HOOKS = List.of(TinkerHooks.BREAK_SPEED, TinkerHooks.TOOLTIP);
   public static final RecordLoadable<ConditionalMiningSpeedModule> LOADER = RecordLoadable.create(
     BlockPredicate.LOADER.defaultField("blocks", ConditionalMiningSpeedModule::block),
     LivingEntityPredicate.LOADER.defaultField("entity", ConditionalMiningSpeedModule::holder),
     BooleanLoadable.INSTANCE.defaultField("require_effective", true, ConditionalMiningSpeedModule::requireEffective),
     MiningSpeedFormula.LOADER.directField(ConditionalMiningSpeedModule::formula),
-    ModifierModuleCondition.FIELD,
+    ModifierCondition.TOOL_FIELD,
     ConditionalMiningSpeedModule::new);
 
   @Override
@@ -88,7 +87,7 @@ public record ConditionalMiningSpeedModule(
   }
 
   @Override
-  public IGenericLoader<? extends ModifierModule> getLoader() {
+  public RecordLoadable<ConditionalMiningSpeedModule> getLoader() {
     return LOADER;
   }
 

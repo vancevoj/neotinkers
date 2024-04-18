@@ -2,8 +2,6 @@ package slimeknights.tconstruct.library.json.predicate.tool;
 
 import slimeknights.mantle.data.loadable.primitive.FloatLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
-import slimeknights.mantle.data.registry.GenericLoaderRegistry.IGenericLoader;
-import slimeknights.tconstruct.library.tools.nbt.IToolContext;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.StatsNBT;
 import slimeknights.tconstruct.library.tools.stat.INumericToolStat;
@@ -15,7 +13,7 @@ import java.util.function.Predicate;
  * Predicate to check if a tool has the given stat within the range.
  * @see slimeknights.tconstruct.library.json.predicate.tool.StatInSetPredicate
  */
-public record StatInRangePredicate(INumericToolStat<?> stat, float min, float max) implements Predicate<StatsNBT>, ToolContextPredicate {
+public record StatInRangePredicate(INumericToolStat<?> stat, float min, float max) implements Predicate<StatsNBT>, ToolStackPredicate {
   public static final RecordLoadable<StatInRangePredicate> LOADER = RecordLoadable.create(
     ToolStats.NUMERIC_LOADER.requiredField("stat", StatInRangePredicate::stat),
     FloatLoadable.ANY.defaultField("min", Float.NEGATIVE_INFINITY, StatInRangePredicate::min),
@@ -59,13 +57,12 @@ public record StatInRangePredicate(INumericToolStat<?> stat, float min, float ma
   }
 
   @Override
-  public boolean matches(IToolContext tool) {
-    // TODO: split out IToolStackView predicate
-    return tool instanceof IToolStackView view && test(view.getStats());
+  public boolean matches(IToolStackView tool) {
+    return test(tool.getStats());
   }
 
   @Override
-  public IGenericLoader<? extends ToolContextPredicate> getLoader() {
+  public RecordLoadable<StatInRangePredicate> getLoader() {
     return LOADER;
   }
 }

@@ -15,10 +15,10 @@ import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHook;
 import slimeknights.tconstruct.library.modifiers.TinkerHooks;
 import slimeknights.tconstruct.library.modifiers.hook.combat.MeleeHitModifierHook;
-import slimeknights.tconstruct.library.modifiers.modules.AttributeModuleBuilder;
 import slimeknights.tconstruct.library.modifiers.modules.ModifierModule;
-import slimeknights.tconstruct.library.modifiers.modules.ModifierModuleCondition;
-import slimeknights.tconstruct.library.modifiers.modules.ModifierModuleCondition.ConditionalModifierModule;
+import slimeknights.tconstruct.library.modifiers.modules.util.AttributeModuleBuilder;
+import slimeknights.tconstruct.library.modifiers.modules.util.ModifierCondition;
+import slimeknights.tconstruct.library.modifiers.modules.util.ModifierCondition.ConditionalModule;
 import slimeknights.tconstruct.library.tools.context.ToolAttackContext;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 
@@ -35,17 +35,17 @@ import java.util.UUID;
  * @param amount     Amount of the attribute to apply
  * @param condition  Standard modifier conditions
  */
-public record MeleeAttributeModule(String unique, Attribute attribute, UUID uuid, Operation operation, LevelingValue amount, ModifierModuleCondition condition) implements ModifierModule, MeleeHitModifierHook, ConditionalModifierModule {
+public record MeleeAttributeModule(String unique, Attribute attribute, UUID uuid, Operation operation, LevelingValue amount, ModifierCondition<IToolStackView> condition) implements ModifierModule, MeleeHitModifierHook, ConditionalModule<IToolStackView> {
   private static final List<ModifierHook<?>> DEFAULT_HOOKS = List.of(TinkerHooks.MELEE_HIT);
   public static final RecordLoadable<MeleeAttributeModule> LOADER = RecordLoadable.create(
     StringLoadable.DEFAULT.requiredField("unique", MeleeAttributeModule::unique),
     Loadables.ATTRIBUTE.requiredField("attribute", MeleeAttributeModule::attribute),
     TinkerLoadables.OPERATION.requiredField("operation", MeleeAttributeModule::operation),
     LevelingValue.LOADABLE.directField(MeleeAttributeModule::amount),
-    ModifierModuleCondition.FIELD,
+    ModifierCondition.TOOL_FIELD,
     MeleeAttributeModule::new);
 
-  public MeleeAttributeModule(String unique, Attribute attribute, Operation operation, LevelingValue amount, ModifierModuleCondition condition) {
+  public MeleeAttributeModule(String unique, Attribute attribute, Operation operation, LevelingValue amount, ModifierCondition<IToolStackView> condition) {
     this(unique, attribute, UUID.nameUUIDFromBytes(unique.getBytes()), operation, amount, condition);
   }
 

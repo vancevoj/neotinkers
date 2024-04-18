@@ -1,4 +1,4 @@
-package slimeknights.tconstruct.library.modifiers.modules;
+package slimeknights.tconstruct.library.modifiers.modules.util;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +13,7 @@ import slimeknights.tconstruct.library.json.LevelingValue;
  * @param <M>  Module return type
  */
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
-public abstract class AttributeModuleBuilder<T extends AttributeModuleBuilder<T,M>, M> extends ModifierModuleCondition.Builder<T> implements LevelingValue.Builder<M> {
+public abstract class AttributeModuleBuilder<T extends AttributeModuleBuilder<T,M>, M> extends ModuleBuilder.Stack<T> implements LevelingValue.Builder<M> {
   protected final Attribute attribute;
   protected final Operation operation;
   protected String unique;

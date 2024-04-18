@@ -7,7 +7,8 @@ import net.minecraft.network.FriendlyByteBuf;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.util.typed.TypedMap;
 import slimeknights.tconstruct.library.json.math.ModifierFormula.FallbackFormula;
-import slimeknights.tconstruct.library.modifiers.modules.ModifierModuleCondition;
+import slimeknights.tconstruct.library.modifiers.modules.util.ModifierCondition;
+import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 
 import java.util.function.BiFunction;
 
@@ -34,14 +35,14 @@ public record FormulaLoadable(FallbackFormula fallback, String... variables) imp
   }
 
   /** Creates a builder instance */
-  public <T> Builder<T> builder(BiFunction<ModifierFormula,ModifierModuleCondition,T> constructor) {
+  public <T> Builder<T> builder(BiFunction<ModifierFormula,ModifierCondition<IToolStackView>,T> constructor) {
     return new Builder<>(constructor, variables);
   }
 
   /** Builder for this module */
   public static class Builder<T> extends ModifierFormula.Builder<Builder<T>,T> {
-    private final BiFunction<ModifierFormula,ModifierModuleCondition,T> constructor;
-    private Builder(BiFunction<ModifierFormula,ModifierModuleCondition,T> constructor, String[] variableNames) {
+    private final BiFunction<ModifierFormula,ModifierCondition<IToolStackView>,T> constructor;
+    private Builder(BiFunction<ModifierFormula,ModifierCondition<IToolStackView>,T> constructor, String[] variableNames) {
       super(variableNames);
       this.constructor = constructor;
     }

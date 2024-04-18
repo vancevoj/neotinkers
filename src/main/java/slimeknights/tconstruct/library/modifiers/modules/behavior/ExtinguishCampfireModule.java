@@ -14,16 +14,16 @@ import slimeknights.mantle.data.registry.GenericLoaderRegistry.IGenericLoader;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.hook.interaction.InteractionSource;
 import slimeknights.tconstruct.library.modifiers.modules.ModifierModule;
-import slimeknights.tconstruct.library.modifiers.modules.ModifierModuleCondition;
-import slimeknights.tconstruct.library.modifiers.modules.ModifierModuleCondition.ConditionalModifierModule;
+import slimeknights.tconstruct.library.modifiers.modules.util.ModifierCondition;
+import slimeknights.tconstruct.library.modifiers.modules.util.ModifierCondition.ConditionalModule;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 
 /**
  * Module which performs AOE removing of campfires
  */
-public record ExtinguishCampfireModule(ModifierModuleCondition condition) implements BlockTransformModule, ConditionalModifierModule {
-  public static final ExtinguishCampfireModule INSTANCE = new ExtinguishCampfireModule(ModifierModuleCondition.ANY);
-  public static final RecordLoadable<ExtinguishCampfireModule> LOADER = RecordLoadable.create(ModifierModuleCondition.FIELD, ExtinguishCampfireModule::new);
+public record ExtinguishCampfireModule(ModifierCondition<IToolStackView> condition) implements BlockTransformModule, ConditionalModule<IToolStackView> {
+  public static final ExtinguishCampfireModule INSTANCE = new ExtinguishCampfireModule(ModifierCondition.ANY_TOOL);
+  public static final RecordLoadable<ExtinguishCampfireModule> LOADER = RecordLoadable.create(ModifierCondition.TOOL_FIELD, ExtinguishCampfireModule::new);
 
   @Override
   public IGenericLoader<? extends ModifierModule> getLoader() {

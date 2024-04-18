@@ -6,7 +6,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.TooltipFlag;
 import slimeknights.mantle.client.TooltipKey;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
-import slimeknights.mantle.data.registry.GenericLoaderRegistry.IGenericLoader;
 import slimeknights.tconstruct.library.json.math.FormulaLoadable;
 import slimeknights.tconstruct.library.json.math.ModifierFormula;
 import slimeknights.tconstruct.library.json.math.ModifierFormula.FallbackFormula;
@@ -16,9 +15,8 @@ import slimeknights.tconstruct.library.modifiers.TinkerHooks;
 import slimeknights.tconstruct.library.modifiers.hook.behavior.ToolDamageModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.display.TooltipModifierHook;
 import slimeknights.tconstruct.library.modifiers.modules.ModifierModule;
-import slimeknights.tconstruct.library.modifiers.modules.ModifierModuleCondition;
-import slimeknights.tconstruct.library.modifiers.modules.ModifierModuleCondition.ConditionalModifierModule;
-import slimeknights.tconstruct.library.tools.nbt.IToolContext;
+import slimeknights.tconstruct.library.modifiers.modules.util.ModifierCondition;
+import slimeknights.tconstruct.library.modifiers.modules.util.ModifierCondition.ConditionalModule;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.utils.Util;
 
@@ -32,12 +30,12 @@ import static slimeknights.tconstruct.TConstruct.RANDOM;
  * @param formula    Formula to use
  * @param condition  Condition for this module to run
  */
-public record ReduceToolDamageModule(ModifierFormula formula, ModifierModuleCondition condition) implements ModifierModule, ToolDamageModifierHook, TooltipModifierHook, ConditionalModifierModule {
+public record ReduceToolDamageModule(ModifierFormula formula, ModifierCondition<IToolStackView> condition) implements ModifierModule, ToolDamageModifierHook, TooltipModifierHook, ConditionalModule<IToolStackView> {
   private static final List<ModifierHook<?>> DEFAULT_HOOKS = List.of(TinkerHooks.TOOL_DAMAGE, TinkerHooks.TOOLTIP);
   /** Formula instance for the loader */
   private static final FormulaLoadable FORMULA = new FormulaLoadable(FallbackFormula.IDENTITY, "level");
   /** Loader instance */
-  public static final RecordLoadable<ReduceToolDamageModule> LOADER = RecordLoadable.create(FORMULA.directField(ReduceToolDamageModule::formula), ModifierModuleCondition.FIELD, ReduceToolDamageModule::new);
+  public static final RecordLoadable<ReduceToolDamageModule> LOADER = RecordLoadable.create(FORMULA.directField(ReduceToolDamageModule::formula), ModifierCondition.TOOL_FIELD, ReduceToolDamageModule::new);
 
   /** Creates a builder instance */
   public static FormulaLoadable.Builder<ReduceToolDamageModule> builder() {
@@ -50,7 +48,7 @@ public record ReduceToolDamageModule(ModifierFormula formula, ModifierModuleCond
   }
 
   /** Gets the percentage to reduce tool damage */
-  private float getPercent(IToolContext tool, ModifierEntry modifier) {
+  private float getPercent(ModifierEntry modifier) {
     return formula.apply(formula.processLevel(modifier));
   }
 
@@ -82,7 +80,7 @@ public record ReduceToolDamageModule(ModifierFormula formula, ModifierModuleCond
   @Override
   public int onDamageTool(IToolStackView tool, ModifierEntry modifier, int amount, @Nullable LivingEntity holder) {
     if (this.condition.matches(tool, modifier)) {
-      return reduceDamage(amount, getPercent(tool, modifier));
+      return reduceDamage(amount, getPercent(modifier));
     }
     return amount;
   }
@@ -90,12 +88,12 @@ public record ReduceToolDamageModule(ModifierFormula formula, ModifierModuleCond
   @Override
   public void addTooltip(IToolStackView tool, ModifierEntry modifier, @Nullable Player player, List<Component> tooltip, TooltipKey tooltipKey, TooltipFlag tooltipFlag) {
     if (this.condition.matches(tool, modifier)) {
-      tooltip.add(modifier.getModifier().applyStyle(Component.literal(Util.PERCENT_FORMAT.format(getPercent(tool, modifier)) + " ").append(modifier.getModifier().getDisplayName())));
+      tooltip.add(modifier.getModifier().applyStyle(Component.literal(Util.PERCENT_FORMAT.format(getPercent(modifier)) + " ").append(modifier.getModifier().getDisplayName())));
     }
   }
 
   @Override
-  public IGenericLoader<? extends ModifierModule> getLoader() {
+  public RecordLoadable<ReduceToolDamageModule> getLoader() {
     return LOADER;
   }
 }

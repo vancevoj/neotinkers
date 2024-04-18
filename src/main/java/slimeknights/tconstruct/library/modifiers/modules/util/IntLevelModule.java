@@ -1,4 +1,4 @@
-package slimeknights.tconstruct.library.modifiers.modules;
+package slimeknights.tconstruct.library.modifiers.modules.util;
 
 import net.minecraft.util.Mth;
 import slimeknights.mantle.data.loadable.field.LoadableField;

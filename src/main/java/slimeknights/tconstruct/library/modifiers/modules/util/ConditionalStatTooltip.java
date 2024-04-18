@@ -1,4 +1,4 @@
-package slimeknights.tconstruct.library.modifiers.modules.behavior;
+package slimeknights.tconstruct.library.modifiers.modules.util;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.LivingEntity;
@@ -10,7 +10,7 @@ import slimeknights.tconstruct.library.json.predicate.TinkerPredicate;
 import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.hook.display.TooltipModifierHook;
-import slimeknights.tconstruct.library.modifiers.modules.ModifierModuleCondition;
+import slimeknights.tconstruct.library.modifiers.modules.util.ModifierCondition.ConditionalModule;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.stat.INumericToolStat;
 
@@ -18,13 +18,11 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 /** Common tooltip logic for conditional stat modules */
-public interface ConditionalStatTooltip extends TooltipModifierHook {
+public interface ConditionalStatTooltip extends TooltipModifierHook, ConditionalModule<IToolStackView> {
   /** Gets the holder condition for this module */
   IJsonPredicate<LivingEntity> holder();
   /** Gets the stat for this tooltip */
   INumericToolStat<?> stat();
-  /** Gets the common modifier condition for this module */
-  ModifierModuleCondition condition();
   /** If true, display as percent. If false, display as boost */
   boolean percent();
 

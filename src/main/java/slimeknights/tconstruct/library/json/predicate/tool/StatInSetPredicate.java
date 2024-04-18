@@ -7,7 +7,6 @@ import net.minecraft.network.FriendlyByteBuf;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.util.JsonHelper;
 import slimeknights.mantle.util.typed.TypedMap;
-import slimeknights.tconstruct.library.tools.nbt.IToolContext;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.stat.IToolStat;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
@@ -21,15 +20,14 @@ import java.util.Set;
  * @param values  Set of values to match
  * @see StatInRangePredicate
  */
-public record StatInSetPredicate<T>(IToolStat<T> stat, Set<T> values) implements ToolContextPredicate {
+public record StatInSetPredicate<T>(IToolStat<T> stat, Set<T> values) implements ToolStackPredicate {
   public StatInSetPredicate(IToolStat<T> stat, T value) {
     this(stat, Set.of(value));
   }
 
   @Override
-  public boolean matches(IToolContext tool) {
-    // TODO: migrate to tool stack predicate
-    return tool instanceof IToolStackView view && values.contains(view.getStats().get(stat));
+  public boolean matches(IToolStackView tool) {
+    return values.contains(tool.getStats().get(stat));
   }
 
   @Override

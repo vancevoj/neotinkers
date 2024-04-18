@@ -7,7 +7,6 @@ import net.minecraft.world.entity.player.Player;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.data.predicate.IJsonPredicate;
 import slimeknights.mantle.data.predicate.entity.LivingEntityPredicate;
-import slimeknights.mantle.data.registry.GenericLoaderRegistry.IGenericLoader;
 import slimeknights.tconstruct.library.json.math.ModifierFormula;
 import slimeknights.tconstruct.library.json.variable.VariableFormula;
 import slimeknights.tconstruct.library.json.variable.stat.ConditionalStatFormula;
@@ -17,8 +16,9 @@ import slimeknights.tconstruct.library.modifiers.ModifierHook;
 import slimeknights.tconstruct.library.modifiers.TinkerHooks;
 import slimeknights.tconstruct.library.modifiers.hook.build.ConditionalStatModifierHook;
 import slimeknights.tconstruct.library.modifiers.modules.ModifierModule;
-import slimeknights.tconstruct.library.modifiers.modules.ModifierModuleCondition;
-import slimeknights.tconstruct.library.modifiers.modules.ModifierModuleCondition.ConditionalModifierModule;
+import slimeknights.tconstruct.library.modifiers.modules.util.ConditionalStatTooltip;
+import slimeknights.tconstruct.library.modifiers.modules.util.ModifierCondition;
+import slimeknights.tconstruct.library.modifiers.modules.util.ModifierCondition.ConditionalModule;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.stat.FloatToolStat;
 import slimeknights.tconstruct.library.tools.stat.INumericToolStat;
@@ -34,20 +34,14 @@ import java.util.List;
  * @param formula     Formula to apply
  * @param condition   Standard modifier module conditions
  */
-public record ConditionalStatModule(INumericToolStat<?> stat, IJsonPredicate<LivingEntity> holder, ConditionalStatFormula formula, ModifierModuleCondition condition) implements ModifierModule, ConditionalStatModifierHook, ConditionalStatTooltip, ConditionalModifierModule {
+public record ConditionalStatModule(INumericToolStat<?> stat, IJsonPredicate<LivingEntity> holder, ConditionalStatFormula formula, ModifierCondition<IToolStackView> condition) implements ModifierModule, ConditionalStatModifierHook, ConditionalStatTooltip, ConditionalModule<IToolStackView> {
   private static final List<ModifierHook<?>> DEFAULT_HOOKS = List.of(TinkerHooks.CONDITIONAL_STAT, TinkerHooks.TOOLTIP);
   public static final RecordLoadable<ConditionalStatModule> LOADER = RecordLoadable.create(
     ToolStats.NUMERIC_LOADER.requiredField("stat", ConditionalStatModule::stat),
     LivingEntityPredicate.LOADER.defaultField("entity", ConditionalStatModule::holder),
     ConditionalStatFormula.LOADER.directField(ConditionalStatModule::formula),
-    ModifierModuleCondition.FIELD,
+    ModifierCondition.TOOL_FIELD,
     ConditionalStatModule::new);
-
-  // variables for the formula
-  /** Value from the previous conditional modifier */
-  public static final int VALUE = 1;
-  /** Stat multiplier from the tool */
-  public static final int MULTIPLIER = 2;
 
   @Override
   public boolean percent() {
@@ -80,7 +74,7 @@ public record ConditionalStatModule(INumericToolStat<?> stat, IJsonPredicate<Liv
   }
 
   @Override
-  public IGenericLoader<? extends ConditionalStatModule> getLoader() {
+  public RecordLoadable<ConditionalStatModule> getLoader() {
     return LOADER;
   }
 

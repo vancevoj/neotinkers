@@ -11,7 +11,6 @@ import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.data.predicate.IJsonPredicate;
 import slimeknights.mantle.data.predicate.damage.DamageSourcePredicate;
 import slimeknights.mantle.data.predicate.entity.LivingEntityPredicate;
-import slimeknights.mantle.data.registry.GenericLoaderRegistry.IGenericLoader;
 import slimeknights.tconstruct.library.json.TinkerLoadables;
 import slimeknights.tconstruct.library.json.predicate.TinkerPredicate;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
@@ -19,11 +18,12 @@ import slimeknights.tconstruct.library.modifiers.ModifierHook;
 import slimeknights.tconstruct.library.modifiers.TinkerHooks;
 import slimeknights.tconstruct.library.modifiers.hook.combat.ArmorLootingModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.combat.LootingModifierHook;
-import slimeknights.tconstruct.library.modifiers.modules.IntLevelModule;
 import slimeknights.tconstruct.library.modifiers.modules.ModifierHookProvider;
 import slimeknights.tconstruct.library.modifiers.modules.ModifierModule;
-import slimeknights.tconstruct.library.modifiers.modules.ModifierModuleCondition;
-import slimeknights.tconstruct.library.modifiers.modules.ModifierModuleCondition.ConditionalModifierModule;
+import slimeknights.tconstruct.library.modifiers.modules.util.IntLevelModule;
+import slimeknights.tconstruct.library.modifiers.modules.util.ModifierCondition;
+import slimeknights.tconstruct.library.modifiers.modules.util.ModifierCondition.ConditionalModule;
+import slimeknights.tconstruct.library.modifiers.modules.util.ModuleBuilder;
 import slimeknights.tconstruct.library.tools.context.EquipmentContext;
 import slimeknights.tconstruct.library.tools.context.LootingContext;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
@@ -35,7 +35,7 @@ import java.util.Set;
  * Module for increasing the looting level, used for tools, on pants, and from bows
  * Currently, does not support incremental.
  */
-public interface LootingModule extends ModifierModule, IntLevelModule, ConditionalModifierModule {
+public interface LootingModule extends ModifierModule, IntLevelModule, ConditionalModule<IToolStackView> {
   /* Common fields */
   LoadableField<IJsonPredicate<LivingEntity>,LootingModule> HOLDER = LivingEntityPredicate.LOADER.defaultField("holder", LootingModule::holder);
   LoadableField<IJsonPredicate<LivingEntity>,LootingModule> TARGET = LivingEntityPredicate.LOADER.defaultField("target", LootingModule::target);
@@ -62,7 +62,7 @@ public interface LootingModule extends ModifierModule, IntLevelModule, Condition
   @SuppressWarnings("unused") // API
   @Setter
   @Accessors(fluent = true)
-  class Builder extends ModifierModuleCondition.Builder<Builder> {
+  class Builder extends ModuleBuilder.Stack<Builder> {
     private int level = 1;
     private IJsonPredicate<LivingEntity> holder = LivingEntityPredicate.ANY;
     private IJsonPredicate<LivingEntity> target = LivingEntityPredicate.ANY;
@@ -95,9 +95,9 @@ public interface LootingModule extends ModifierModule, IntLevelModule, Condition
   }
 
   /** Implementation for weapon looting */
-  record Weapon(int level, IJsonPredicate<LivingEntity> holder, IJsonPredicate<LivingEntity> target, IJsonPredicate<DamageSource> damageSource, ModifierModuleCondition condition) implements LootingModule, LootingModifierHook {
+  record Weapon(int level, IJsonPredicate<LivingEntity> holder, IJsonPredicate<LivingEntity> target, IJsonPredicate<DamageSource> damageSource, ModifierCondition<IToolStackView> condition) implements LootingModule, LootingModifierHook {
     private static final List<ModifierHook<?>> DEFAULT_HOOKS = ModifierHookProvider.<Weapon>defaultHooks(TinkerHooks.WEAPON_LOOTING);
-    public static final RecordLoadable<Weapon> LOADER = RecordLoadable.create(IntLevelModule.FIELD, HOLDER, TARGET, DAMAGE_SOURCE, ModifierModuleCondition.FIELD, Weapon::new);
+    public static final RecordLoadable<Weapon> LOADER = RecordLoadable.create(IntLevelModule.FIELD, HOLDER, TARGET, DAMAGE_SOURCE, ModifierCondition.TOOL_FIELD, Weapon::new);
 
     @Override
     public int updateLooting(IToolStackView tool, ModifierEntry modifier, LootingContext context, int looting) {
@@ -108,7 +108,7 @@ public interface LootingModule extends ModifierModule, IntLevelModule, Condition
     }
 
     @Override
-    public IGenericLoader<? extends ModifierModule> getLoader() {
+    public RecordLoadable<Weapon> getLoader() {
       return LOADER;
     }
 
@@ -119,9 +119,9 @@ public interface LootingModule extends ModifierModule, IntLevelModule, Condition
   }
 
   /** Implementation for armor looting */
-  record Armor(int level, IJsonPredicate<LivingEntity> holder, IJsonPredicate<LivingEntity> target, IJsonPredicate<DamageSource> damageSource, ModifierModuleCondition condition, Set<EquipmentSlot> slots) implements LootingModule, ArmorLootingModifierHook {
+  record Armor(int level, IJsonPredicate<LivingEntity> holder, IJsonPredicate<LivingEntity> target, IJsonPredicate<DamageSource> damageSource, ModifierCondition<IToolStackView> condition, Set<EquipmentSlot> slots) implements LootingModule, ArmorLootingModifierHook {
     private static final List<ModifierHook<?>> DEFAULT_HOOKS = ModifierHookProvider.<Armor>defaultHooks(TinkerHooks.ARMOR_LOOTING);
-    public static final RecordLoadable<Armor> LOADER = RecordLoadable.create(IntLevelModule.FIELD, HOLDER, TARGET, DAMAGE_SOURCE, ModifierModuleCondition.FIELD, TinkerLoadables.EQUIPMENT_SLOT_SET.requiredField("slots", Armor::slots), Armor::new);
+    public static final RecordLoadable<Armor> LOADER = RecordLoadable.create(IntLevelModule.FIELD, HOLDER, TARGET, DAMAGE_SOURCE, ModifierCondition.TOOL_FIELD, TinkerLoadables.EQUIPMENT_SLOT_SET.requiredField("slots", Armor::slots), Armor::new);
 
     @Override
     public int updateArmorLooting(IToolStackView tool, ModifierEntry modifier, LootingContext context, EquipmentContext equipment, EquipmentSlot slot, int looting) {
@@ -132,7 +132,7 @@ public interface LootingModule extends ModifierModule, IntLevelModule, Condition
     }
 
     @Override
-    public IGenericLoader<? extends ModifierModule> getLoader() {
+    public RecordLoadable<Armor> getLoader() {
       return LOADER;
     }
 

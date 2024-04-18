@@ -18,7 +18,6 @@ import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.data.predicate.IJsonPredicate;
 import slimeknights.mantle.data.predicate.damage.DamageSourcePredicate;
 import slimeknights.mantle.data.predicate.entity.LivingEntityPredicate;
-import slimeknights.mantle.data.registry.GenericLoaderRegistry.IGenericLoader;
 import slimeknights.mantle.util.LogicHelper;
 import slimeknights.tconstruct.library.json.LevelingValue;
 import slimeknights.tconstruct.library.modifiers.Modifier;
@@ -28,8 +27,9 @@ import slimeknights.tconstruct.library.modifiers.TinkerHooks;
 import slimeknights.tconstruct.library.modifiers.hook.armor.ProtectionModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.display.TooltipModifierHook;
 import slimeknights.tconstruct.library.modifiers.modules.ModifierModule;
-import slimeknights.tconstruct.library.modifiers.modules.ModifierModuleCondition;
-import slimeknights.tconstruct.library.modifiers.modules.ModifierModuleCondition.ConditionalModifierModule;
+import slimeknights.tconstruct.library.modifiers.modules.util.ModifierCondition;
+import slimeknights.tconstruct.library.modifiers.modules.util.ModifierCondition.ConditionalModule;
+import slimeknights.tconstruct.library.modifiers.modules.util.ModuleBuilder;
 import slimeknights.tconstruct.library.tools.capability.TinkerDataCapability;
 import slimeknights.tconstruct.library.tools.context.EquipmentContext;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
@@ -47,14 +47,14 @@ import java.util.List;
  * @param subtract  Enchantment also part of this modifier, subtracted from the protection amount to prevent redundancies
  * @param condition Modifier module conditions
  */
-public record ProtectionModule(IJsonPredicate<DamageSource> source, IJsonPredicate<LivingEntity> entity, LevelingValue amount, @Nullable Enchantment subtract, ModifierModuleCondition condition) implements ProtectionModifierHook, TooltipModifierHook, ModifierModule, ConditionalModifierModule {
+public record ProtectionModule(IJsonPredicate<DamageSource> source, IJsonPredicate<LivingEntity> entity, LevelingValue amount, @Nullable Enchantment subtract, ModifierCondition<IToolStackView> condition) implements ProtectionModifierHook, TooltipModifierHook, ModifierModule, ConditionalModule<IToolStackView> {
   private static final List<ModifierHook<?>> DEFAULT_HOOKS = List.of(TinkerHooks.PROTECTION, TinkerHooks.TOOLTIP);
   public static final RecordLoadable<ProtectionModule> LOADER = RecordLoadable.create(
     DamageSourcePredicate.LOADER.defaultField("damage_source", ProtectionModule::source),
     LivingEntityPredicate.LOADER.defaultField("wearing_entity", ProtectionModule::entity),
     LevelingValue.LOADABLE.directField(ProtectionModule::amount),
     Loadables.ENCHANTMENT.nullableField("subtract_enchantment", ProtectionModule::subtract),
-    ModifierModuleCondition.FIELD,
+    ModifierCondition.TOOL_FIELD,
     ProtectionModule::new);
 
   @Override
@@ -98,7 +98,7 @@ public record ProtectionModule(IJsonPredicate<DamageSource> source, IJsonPredica
   }
 
   @Override
-  public IGenericLoader<? extends ModifierModule> getLoader() {
+  public RecordLoadable<ProtectionModule> getLoader() {
     return LOADER;
   }
 
@@ -113,7 +113,7 @@ public record ProtectionModule(IJsonPredicate<DamageSource> source, IJsonPredica
   @Setter
   @Accessors(fluent = true)
   @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-  public static class Builder extends ModifierModuleCondition.Builder<Builder> implements LevelingValue.Builder<ProtectionModule> {
+  public static class Builder extends ModuleBuilder.Stack<Builder> implements LevelingValue.Builder<ProtectionModule> {
     private final IJsonPredicate<DamageSource> source;
     private IJsonPredicate<LivingEntity> entity = LivingEntityPredicate.ANY;
     private Enchantment subtract;

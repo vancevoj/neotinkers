@@ -16,7 +16,6 @@ import slimeknights.mantle.data.loadable.Loadables;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.data.predicate.IJsonPredicate;
 import slimeknights.mantle.data.predicate.entity.LivingEntityPredicate;
-import slimeknights.mantle.data.registry.GenericLoaderRegistry.IGenericLoader;
 import slimeknights.tconstruct.library.json.RandomLevelingValue;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHook;
@@ -26,8 +25,9 @@ import slimeknights.tconstruct.library.modifiers.hook.combat.MeleeHitModifierHoo
 import slimeknights.tconstruct.library.modifiers.hook.ranged.ProjectileHitModifierHook;
 import slimeknights.tconstruct.library.modifiers.modules.ModifierHookProvider;
 import slimeknights.tconstruct.library.modifiers.modules.ModifierModule;
-import slimeknights.tconstruct.library.modifiers.modules.ModifierModuleCondition;
-import slimeknights.tconstruct.library.modifiers.modules.ModifierModuleCondition.ConditionalModifierModule;
+import slimeknights.tconstruct.library.modifiers.modules.util.ModifierCondition;
+import slimeknights.tconstruct.library.modifiers.modules.util.ModifierCondition.ConditionalModule;
+import slimeknights.tconstruct.library.modifiers.modules.util.ModuleBuilder;
 import slimeknights.tconstruct.library.tools.context.EquipmentContext;
 import slimeknights.tconstruct.library.tools.context.ToolAttackContext;
 import slimeknights.tconstruct.library.tools.helper.ToolDamageUtil;
@@ -43,20 +43,14 @@ import static slimeknights.tconstruct.TConstruct.RANDOM;
 /**
  * Module that applies a mob effect on melee attack, projectile hit, and counterattack
  */
-public record MobEffectModule(
-  IJsonPredicate<LivingEntity> target,
-  MobEffect effect,
-  RandomLevelingValue level,
-  RandomLevelingValue time,
-  ModifierModuleCondition condition
-) implements OnAttackedModifierHook, MeleeHitModifierHook, ProjectileHitModifierHook, ModifierModule, ConditionalModifierModule {
+public record MobEffectModule(IJsonPredicate<LivingEntity> target, MobEffect effect, RandomLevelingValue level, RandomLevelingValue time, ModifierCondition<IToolStackView> condition) implements OnAttackedModifierHook, MeleeHitModifierHook, ProjectileHitModifierHook, ModifierModule, ConditionalModule<IToolStackView> {
   private static final List<ModifierHook<?>> DEFAULT_HOOKS = ModifierHookProvider.<MobEffectModule>defaultHooks(TinkerHooks.ON_ATTACKED, TinkerHooks.MELEE_HIT, TinkerHooks.PROJECTILE_HIT);
   public static final RecordLoadable<MobEffectModule> LOADER = RecordLoadable.create(
     LivingEntityPredicate.LOADER.defaultField("target", MobEffectModule::target),
     Loadables.MOB_EFFECT.requiredField("effect", MobEffectModule::effect),
     RandomLevelingValue.LOADABLE.requiredField("level", MobEffectModule::level),
     RandomLevelingValue.LOADABLE.requiredField("time", MobEffectModule::time),
-    ModifierModuleCondition.FIELD,
+    ModifierCondition.TOOL_FIELD,
     MobEffectModule::new);
 
   /** Creates a builder instance */
@@ -109,7 +103,7 @@ public record MobEffectModule(
   }
 
   @Override
-  public IGenericLoader<? extends ModifierModule> getLoader() {
+  public RecordLoadable<MobEffectModule> getLoader() {
     return LOADER;
   }
 
@@ -117,7 +111,7 @@ public record MobEffectModule(
   @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
   @Accessors(fluent = true)
   @Setter
-  public static class Builder extends ModifierModuleCondition.Builder<Builder> {
+  public static class Builder extends ModuleBuilder.Stack<Builder> {
     private final MobEffect effect;
     private IJsonPredicate<LivingEntity> target = LivingEntityPredicate.ANY;
     private RandomLevelingValue level = RandomLevelingValue.flat(1);
