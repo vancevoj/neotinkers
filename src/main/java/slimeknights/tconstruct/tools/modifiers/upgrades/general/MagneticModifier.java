@@ -43,7 +43,7 @@ public class MagneticModifier extends Modifier implements PlantHarvestModifierHo
   protected void registerHooks(Builder hookBuilder) {
     super.registerHooks(hookBuilder);
     hookBuilder.addHook(this, TinkerHooks.PLANT_HARVEST, TinkerHooks.SHEAR_ENTITY, TinkerHooks.BLOCK_BREAK, TinkerHooks.MELEE_HIT);
-    hookBuilder.addModule(new ArmorLevelModule(MAGNET, false));
+    hookBuilder.addModule(new ArmorLevelModule(MAGNET, false, null));
   }
 
   @Override

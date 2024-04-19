@@ -28,6 +28,7 @@ import slimeknights.mantle.registration.object.ItemObject;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.TinkerEffect;
 import slimeknights.tconstruct.common.TinkerModule;
+import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.common.data.tags.ModifierTagProvider;
 import slimeknights.tconstruct.library.json.predicate.modifier.ModifierPredicate;
 import slimeknights.tconstruct.library.json.predicate.modifier.SingleModifierPredicate;
@@ -368,7 +369,7 @@ public final class TinkerModifiers extends TinkerModule {
   public static final StaticModifier<RicochetModifier> ricochet = MODIFIERS.register("ricochet", RicochetModifier::new);
   public static final StaticModifier<EmbellishmentModifier> embellishment = MODIFIERS.register("embellishment", EmbellishmentModifier::new);
   public static final StaticModifier<DyedModifier> dyed = MODIFIERS.register("dyed", DyedModifier::new);
-  public static final StaticModifier<BasicModifier> boundless = MODIFIERS.register("boundless", () -> ModifierHookMap.builder().addModule(new ArmorStatModule(TinkerDataKeys.PROTECTION_CAP, 2.5f, true)).modifier().levelDisplay(ModifierLevelDisplay.SINGLE_LEVEL).build());
+  public static final StaticModifier<BasicModifier> boundless = MODIFIERS.register("boundless", () -> ModifierHookMap.builder().addModule(new ArmorStatModule(TinkerDataKeys.PROTECTION_CAP, 2.5f, true, TinkerTags.Items.HELD_ARMOR)).modifier().levelDisplay(ModifierLevelDisplay.SINGLE_LEVEL).build());
   // counterattack
   public static final StaticModifier<ThornsModifier> thorns = MODIFIERS.register("thorns", ThornsModifier::new);
   public static final StaticModifier<SpringyModifier> springy = MODIFIERS.register("springy", SpringyModifier::new);

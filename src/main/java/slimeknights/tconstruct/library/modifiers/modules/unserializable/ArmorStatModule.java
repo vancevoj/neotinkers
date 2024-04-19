@@ -1,6 +1,8 @@
 package slimeknights.tconstruct.library.modifiers.modules.unserializable;
 
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.Item;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHook;
 import slimeknights.tconstruct.library.modifiers.TinkerHooks;
@@ -9,9 +11,9 @@ import slimeknights.tconstruct.library.modifiers.modules.ModifierHookProvider;
 import slimeknights.tconstruct.library.tools.capability.TinkerDataCapability;
 import slimeknights.tconstruct.library.tools.capability.TinkerDataCapability.TinkerDataKey;
 import slimeknights.tconstruct.library.tools.context.EquipmentChangeContext;
-import slimeknights.tconstruct.library.tools.helper.ModifierUtil;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -19,7 +21,7 @@ import java.util.List;
  * @see ArmorLevelModule
  * @see TinkerDataKey
  */
-public record ArmorStatModule(TinkerDataKey<Float> key, float scale, boolean allowBroken) implements ModifierHookProvider, EquipmentChangeModifierHook {
+public record ArmorStatModule(TinkerDataKey<Float> key, float scale, boolean allowBroken, @Nullable TagKey<Item> heldTag) implements ModifierHookProvider, EquipmentChangeModifierHook {
   private static final List<ModifierHook<?>> DEFAULT_HOOKS = ModifierHookProvider.<ArmorStatModule>defaultHooks(TinkerHooks.EQUIPMENT_CHANGE);
 
   @Override
@@ -29,12 +31,12 @@ public record ArmorStatModule(TinkerDataKey<Float> key, float scale, boolean all
 
   @Override
   public void onEquip(IToolStackView tool, ModifierEntry modifier, EquipmentChangeContext context) {
-    ArmorStatModule.addStatIfArmor(tool, context, key, modifier.getEffectiveLevel() * scale, allowBroken);
+    ArmorStatModule.addStatIfArmor(tool, context, key, modifier.getEffectiveLevel() * scale, allowBroken, heldTag);
   }
 
   @Override
   public void onUnequip(IToolStackView tool, ModifierEntry modifier, EquipmentChangeContext context) {
-    ArmorStatModule.addStatIfArmor(tool, context, key, -modifier.getEffectiveLevel() * scale, allowBroken);
+    ArmorStatModule.addStatIfArmor(tool, context, key, -modifier.getEffectiveLevel() * scale, allowBroken, heldTag);
   }
 
 
@@ -63,9 +65,10 @@ public record ArmorStatModule(TinkerDataKey<Float> key, float scale, boolean all
    * @param context  Equipment change context
    * @param key      Key to modify
    * @param amount   Amount to add
+   * @param heldTag  Tag to check to validate held items, null means held disallowed
    */
-  public static void addStatIfArmor(IToolStackView tool, EquipmentChangeContext context, TinkerDataKey<Float> key, float amount, boolean allowBroken) {
-    if (ModifierUtil.validArmorSlot(tool, context.getChangedSlot()) && (!tool.isBroken() || allowBroken)) {
+  public static void addStatIfArmor(IToolStackView tool, EquipmentChangeContext context, TinkerDataKey<Float> key, float amount, boolean allowBroken, @Nullable TagKey<Item> heldTag) {
+    if (ArmorLevelModule.validSlot(tool, context.getChangedSlot(), heldTag) && (!tool.isBroken() || allowBroken)) {
       addStat(context, key, amount);
     }
   }

@@ -21,7 +21,7 @@ public class LeapingModifier extends Modifier {
   @Override
   protected void registerHooks(Builder hookBuilder) {
     super.registerHooks(hookBuilder);
-    hookBuilder.addModule(new ArmorStatModule(LEAPING, 1, false));
+    hookBuilder.addModule(new ArmorStatModule(LEAPING, 1, false, null));
   }
 
   /** Reduce fall distance for fall damage */

@@ -32,7 +32,7 @@ public class DoubleJumpModifier extends Modifier {
   @Override
   protected void registerHooks(Builder hookBuilder) {
     super.registerHooks(hookBuilder);
-    hookBuilder.addHook(new ArmorLevelModule(EXTRA_JUMPS, false));
+    hookBuilder.addModule(new ArmorLevelModule(EXTRA_JUMPS, false, null));
   }
 
   @Override

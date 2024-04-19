@@ -35,7 +35,7 @@ public class HasteModifier extends Modifier implements ToolStatsModifierHook, To
   @Override
   protected void registerHooks(Builder hookBuilder) {
     super.registerHooks(hookBuilder);
-    hookBuilder.addModule(new ArmorStatModule(HASTE, 0.1f, false));
+    hookBuilder.addModule(new ArmorStatModule(HASTE, 0.1f, false, null));
     hookBuilder.addHook(this, TinkerHooks.TOOL_STATS, TinkerHooks.TOOLTIP);
   }
 

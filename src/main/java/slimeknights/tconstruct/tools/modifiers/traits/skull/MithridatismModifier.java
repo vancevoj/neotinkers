@@ -6,6 +6,7 @@ import net.minecraftforge.event.entity.living.MobEffectEvent.Applicable;
 import net.minecraftforge.eventbus.api.Event.Result;
 import net.minecraftforge.eventbus.api.EventPriority;
 import slimeknights.tconstruct.TConstruct;
+import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.modifiers.impl.NoLevelsModifier;
 import slimeknights.tconstruct.library.modifiers.modules.unserializable.ArmorLevelModule;
 import slimeknights.tconstruct.library.modifiers.util.ModifierHookMap.Builder;
@@ -21,7 +22,7 @@ public class MithridatismModifier extends NoLevelsModifier {
   @Override
   protected void registerHooks(Builder hookBuilder) {
     super.registerHooks(hookBuilder);
-    hookBuilder.addModule(new ArmorLevelModule(MITHRIDATISM, false));
+    hookBuilder.addModule(new ArmorLevelModule(MITHRIDATISM, false, TinkerTags.Items.HELD_ARMOR));
   }
 
   /** Prevents poison on the entity */

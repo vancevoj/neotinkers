@@ -1,6 +1,10 @@
 package slimeknights.tconstruct.library.modifiers.modules.unserializable;
 
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.EquipmentSlot.Type;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.Item;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHook;
 import slimeknights.tconstruct.library.modifiers.TinkerHooks;
@@ -9,9 +13,9 @@ import slimeknights.tconstruct.library.modifiers.modules.ModifierHookProvider;
 import slimeknights.tconstruct.library.tools.capability.TinkerDataCapability;
 import slimeknights.tconstruct.library.tools.capability.TinkerDataCapability.TinkerDataKey;
 import slimeknights.tconstruct.library.tools.context.EquipmentChangeContext;
-import slimeknights.tconstruct.library.tools.helper.ModifierUtil;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -20,7 +24,7 @@ import java.util.List;
  * @see TinkerDataKey
  * @see slimeknights.tconstruct.library.modifiers.modules.behavior.ShowOffhandModule
  */
-public record ArmorLevelModule(TinkerDataKey<Integer> key, boolean allowBroken) implements ModifierHookProvider, EquipmentChangeModifierHook {
+public record ArmorLevelModule(TinkerDataKey<Integer> key, boolean allowBroken, @Nullable TagKey<Item> heldTag) implements ModifierHookProvider, EquipmentChangeModifierHook {
   private static final List<ModifierHook<?>> DEFAULT_HOOKS = ModifierHookProvider.<ArmorLevelModule>defaultHooks(TinkerHooks.EQUIPMENT_CHANGE);
 
   @Override
@@ -30,12 +34,12 @@ public record ArmorLevelModule(TinkerDataKey<Integer> key, boolean allowBroken) 
 
   @Override
   public void onEquip(IToolStackView tool, ModifierEntry modifier, EquipmentChangeContext context) {
-    addLevelsIfArmor(tool, context, key, modifier.intEffectiveLevel(), allowBroken);
+    addLevelsIfArmor(tool, context, key, modifier.intEffectiveLevel(), allowBroken, heldTag);
   }
 
   @Override
   public void onUnequip(IToolStackView tool, ModifierEntry modifier, EquipmentChangeContext context) {
-    addLevelsIfArmor(tool, context, key, -modifier.intEffectiveLevel(), allowBroken);
+    addLevelsIfArmor(tool, context, key, -modifier.intEffectiveLevel(), allowBroken, heldTag);
   }
 
 
@@ -58,15 +62,21 @@ public record ArmorLevelModule(TinkerDataKey<Integer> key, boolean allowBroken) 
     });
   }
 
+  /** Checks if the given slot is valid */
+  public static boolean validSlot(IToolStackView tool, EquipmentSlot slot, @Nullable TagKey<Item> heldTag) {
+    return slot.getType() == Type.ARMOR || heldTag != null && tool.hasTag(heldTag);
+  }
+
   /**
    * Adds levels to the given key in entity modifier data for an armor modifier
    * @param tool     Tool instance
    * @param context  Equipment change context
    * @param key      Key to modify
    * @param amount   Amount to add
+   * @param heldTag  Tag to check to validate held items, if null held items are considered to never be valid
    */
-  public static void addLevelsIfArmor(IToolStackView tool, EquipmentChangeContext context, TinkerDataKey<Integer> key, int amount, boolean allowBroken) {
-    if (ModifierUtil.validArmorSlot(tool, context.getChangedSlot()) && (allowBroken || !tool.isBroken())) {
+  public static void addLevelsIfArmor(IToolStackView tool, EquipmentChangeContext context, TinkerDataKey<Integer> key, int amount, boolean allowBroken, @Nullable TagKey<Item> heldTag) {
+    if (validSlot(tool, context.getChangedSlot(), heldTag) && (allowBroken || !tool.isBroken())) {
       addLevels(context, key, amount);
     }
   }

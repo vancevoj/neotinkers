@@ -3,6 +3,7 @@ package slimeknights.tconstruct.tools.modifiers.upgrades.armor;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingKnockBackEvent;
 import slimeknights.tconstruct.TConstruct;
+import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.modules.unserializable.ArmorLevelModule;
 import slimeknights.tconstruct.library.modifiers.util.ModifierHookMap.Builder;
@@ -19,7 +20,7 @@ public class RicochetModifier extends Modifier {
   @Override
   protected void registerHooks(Builder hookBuilder) {
     super.registerHooks(hookBuilder);
-    hookBuilder.addModule(new ArmorLevelModule(LEVELS, false));
+    hookBuilder.addModule(new ArmorLevelModule(LEVELS, false, TinkerTags.Items.HELD_ARMOR));
   }
 
   /** Called on knockback to adjust player knockback */

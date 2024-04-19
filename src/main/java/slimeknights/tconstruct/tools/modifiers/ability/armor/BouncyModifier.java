@@ -24,7 +24,7 @@ public class BouncyModifier extends NoLevelsModifier {
   @Override
   protected void registerHooks(Builder hookBuilder) {
     super.registerHooks(hookBuilder);
-    hookBuilder.addModule(new ArmorLevelModule(BOUNCY, false));
+    hookBuilder.addModule(new ArmorLevelModule(BOUNCY, false, null));
   }
 
   /** Called when an entity lands to handle the event */
