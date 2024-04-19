@@ -1,11 +1,8 @@
 package slimeknights.tconstruct.library.tools.definition;
 
 import com.google.common.annotations.VisibleForTesting;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.experimental.Accessors;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.registries.RegistryObject;
@@ -16,46 +13,34 @@ import slimeknights.tconstruct.library.tools.definition.module.ToolHooks;
 
 /**
  * This class serves primarily as a container where the datapack tool data will be injected on datapack load
+ * @see #create(ResourceLocation)
  */
-@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
-public class ToolDefinition {
+@RequiredArgsConstructor
+public class ToolDefinition implements IdAwareObject {
   /** Empty tool definition instance to prevent the need for null for a fallback */
-  public static final ToolDefinition EMPTY = new ToolDefinition(TConstruct.getResource("empty"), 0);
+  public static final ToolDefinition EMPTY = new ToolDefinition(TConstruct.getResource("empty"));
 
   @Getter
   private final ResourceLocation id;
-  /** Max tier to pull materials from if uninitialized */
-  @Getter
-  private final int defaultMaxTier;
   /** Base data loaded from JSON, contains stats, traits, and starting slots */
   @Getter
   protected ToolDefinitionData data = ToolDefinitionData.EMPTY;
 
-  /**
-   * Creates an tool definition builder
-   * @param id  Tool definition ID
-   * @return Definition builder
-   */
-  public static ToolDefinition.Builder builder(ResourceLocation id) {
-    return new Builder(id);
+  /** Creates and registers a new tool definition */
+  public static ToolDefinition create(ResourceLocation id) {
+    ToolDefinition definition = new ToolDefinition(id);
+    ToolDefinitionLoader.getInstance().registerToolDefinition(definition);
+    return definition;
   }
 
-  /**
-   * Creates an tool definition builder
-   * @param item  Tool item
-   * @return Definition builder
-   */
-  public static ToolDefinition.Builder builder(RegistryObject<? extends ItemLike> item) {
-    return builder(item.getId());
+  /** Creates and registers a new tool definition */
+  public static ToolDefinition create(RegistryObject<? extends ItemLike> item) {
+    return create(item.getId());
   }
 
-  /**
-   * Creates an tool definition builder
-   * @param item  Tool item
-   * @return Definition builder
-   */
-  public static ToolDefinition.Builder builder(IdAwareObject item) {
-    return builder(item.getId());
+  /** Creates and registers a new tool definition */
+  public static ToolDefinition create(IdAwareObject item) {
+    return create(item.getId());
   }
 
   /** Gets the given module from the tool */
@@ -85,35 +70,5 @@ public class ToolDefinition {
   /** If true, the definition data is loaded from the datapack, so we can expect it to be reliable. False typically means datapacks are not yet loaded (e.g. menu startup) */
   public boolean isDataLoaded() {
     return data != ToolDefinitionData.EMPTY;
-  }
-
-	/** Builder to easily create a tool definition */
-  @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-  public static class Builder {
-    /** ID for loading the tool definition data from datapacks */
-    private final ResourceLocation id;
-    /** If true, registers the material with the tool definition data loader */
-    private boolean register = true;
-    /** Max tier to choose from for initializing tools with no materials, unused for non-multipart tools */
-    @Setter @Accessors(chain = true)
-    private int defaultMaxTier = 1;
-
-    /** Tells the definition to not be registered with the loader, used internally for testing. In general mods wont need this */
-    public Builder skipRegister() {
-      register = false;
-      return this;
-    }
-
-    /**
-     * Builds the final tool definition
-     * @return  Tool definition
-     */
-    public ToolDefinition build() {
-      ToolDefinition definition = new ToolDefinition(id, defaultMaxTier);
-      if (register) {
-        ToolDefinitionLoader.getInstance().registerToolDefinition(definition);
-      }
-      return definition;
-    }
   }
 }

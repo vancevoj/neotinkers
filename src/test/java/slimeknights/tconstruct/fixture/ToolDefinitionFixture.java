@@ -14,7 +14,7 @@ public final class ToolDefinitionFixture {
   private static final ResourceLocation DEFINITION_ID = new ResourceLocation("test", "test_tool");
 
   /** Standard tool definition for testing */
-  private static final ToolDefinition STANDARD_TOOL_DEFINITION = ToolDefinition.builder(DEFINITION_ID).skipRegister().build();
+  private static final ToolDefinition STANDARD_TOOL_DEFINITION = new ToolDefinition(DEFINITION_ID);
   static {
     STANDARD_TOOL_DEFINITION.setData(
       ToolDefinitionDataBuilder.builder()

@@ -50,12 +50,12 @@ import static org.mockito.Mockito.mock;
 class ToolDefinitionLoaderTest extends BaseMcTest {
   private static final ToolDefinitionData WRONG_DATA = ToolDefinitionDataBuilder.builder().module(new SetStatsModule(StatsNBT.builder().set(ToolStats.DURABILITY, 100).build())).build();
   private static final JsonFileLoader fileLoader = new JsonFileLoader(JsonHelper.DEFAULT_GSON, ToolDefinitionLoader.FOLDER);
-  private static final ToolDefinition NO_PARTS_MINIMAL = ToolDefinition.builder(TConstruct.getResource("minimal_no_parts")).build();
-  private static final ToolDefinition NO_PARTS_FULL = ToolDefinition.builder(TConstruct.getResource("full_no_parts")).build();
-  private static final ToolDefinition MELEE_HARVEST_MINIMAL = ToolDefinition.builder(TConstruct.getResource("minimal_with_parts")).build();
-  private static final ToolDefinition MELEE_HARVEST_FULL = ToolDefinition.builder(TConstruct.getResource("full_with_parts")).build();
-  private static final ToolDefinition NEED_PARTS_HAS_NONE = ToolDefinition.builder(TConstruct.getResource("need_parts_has_none")).build();
-  private static final ToolDefinition WRONG_PART_TYPE = ToolDefinition.builder(TConstruct.getResource("wrong_part_type")).build();
+  private static final ToolDefinition NO_PARTS_MINIMAL = ToolDefinition.create(TConstruct.getResource("minimal_no_parts"));
+  private static final ToolDefinition NO_PARTS_FULL = ToolDefinition.create(TConstruct.getResource("full_no_parts"));
+  private static final ToolDefinition MELEE_HARVEST_MINIMAL = ToolDefinition.create(TConstruct.getResource("minimal_with_parts"));
+  private static final ToolDefinition MELEE_HARVEST_FULL = ToolDefinition.create(TConstruct.getResource("full_with_parts"));
+  private static final ToolDefinition NEED_PARTS_HAS_NONE = ToolDefinition.create(TConstruct.getResource("need_parts_has_none"));
+  private static final ToolDefinition WRONG_PART_TYPE = ToolDefinition.create(TConstruct.getResource("wrong_part_type"));
 
   @BeforeAll
   static void beforeAll() {

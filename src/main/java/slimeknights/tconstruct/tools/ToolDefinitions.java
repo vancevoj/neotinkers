@@ -7,35 +7,35 @@ import slimeknights.tconstruct.library.tools.definition.ToolDefinition;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ToolDefinitions {
   // rock
-  public static final ToolDefinition PICKAXE = ToolDefinition.builder(TinkerTools.pickaxe).build();
-  public static final ToolDefinition SLEDGE_HAMMER = ToolDefinition.builder(TinkerTools.sledgeHammer).build();
-  public static final ToolDefinition VEIN_HAMMER = ToolDefinition.builder(TinkerTools.veinHammer).build();
+  public static final ToolDefinition PICKAXE = ToolDefinition.create(TinkerTools.pickaxe);
+  public static final ToolDefinition SLEDGE_HAMMER = ToolDefinition.create(TinkerTools.sledgeHammer);
+  public static final ToolDefinition VEIN_HAMMER = ToolDefinition.create(TinkerTools.veinHammer);
 
   // dirt
-  public static final ToolDefinition MATTOCK = ToolDefinition.builder(TinkerTools.mattock).build();
-  public static final ToolDefinition PICKADZE = ToolDefinition.builder(TinkerTools.pickadze).build();
-  public static final ToolDefinition EXCAVATOR = ToolDefinition.builder(TinkerTools.excavator).build();
+  public static final ToolDefinition MATTOCK = ToolDefinition.create(TinkerTools.mattock);
+  public static final ToolDefinition PICKADZE = ToolDefinition.create(TinkerTools.pickadze);
+  public static final ToolDefinition EXCAVATOR = ToolDefinition.create(TinkerTools.excavator);
 
   // wood
-  public static final ToolDefinition HAND_AXE = ToolDefinition.builder(TinkerTools.handAxe).build();
-  public static final ToolDefinition BROAD_AXE = ToolDefinition.builder(TinkerTools.broadAxe).build();
+  public static final ToolDefinition HAND_AXE = ToolDefinition.create(TinkerTools.handAxe);
+  public static final ToolDefinition BROAD_AXE = ToolDefinition.create(TinkerTools.broadAxe);
 
   // scythes
-  public static final ToolDefinition KAMA = ToolDefinition.builder(TinkerTools.kama).build();
-  public static final ToolDefinition SCYTHE = ToolDefinition.builder(TinkerTools.scythe).build();
+  public static final ToolDefinition KAMA = ToolDefinition.create(TinkerTools.kama);
+  public static final ToolDefinition SCYTHE = ToolDefinition.create(TinkerTools.scythe);
   // swords
-  public static final ToolDefinition DAGGER = ToolDefinition.builder(TinkerTools.dagger).build();
-  public static final ToolDefinition SWORD = ToolDefinition.builder(TinkerTools.sword).build();
-  public static final ToolDefinition CLEAVER = ToolDefinition.builder(TinkerTools.cleaver).build();
+  public static final ToolDefinition DAGGER = ToolDefinition.create(TinkerTools.dagger);
+  public static final ToolDefinition SWORD = ToolDefinition.create(TinkerTools.sword);
+  public static final ToolDefinition CLEAVER = ToolDefinition.create(TinkerTools.cleaver);
 
   // bows
-  public static final ToolDefinition CROSSBOW = ToolDefinition.builder(TinkerTools.crossbow).build();
-  public static final ToolDefinition LONGBOW = ToolDefinition.builder(TinkerTools.longbow).build();
+  public static final ToolDefinition CROSSBOW = ToolDefinition.create(TinkerTools.crossbow);
+  public static final ToolDefinition LONGBOW = ToolDefinition.create(TinkerTools.longbow);
 
   // special
-  public static final ToolDefinition FLINT_AND_BRICK = ToolDefinition.builder(TinkerTools.flintAndBrick).build();
-  public static final ToolDefinition SKY_STAFF = ToolDefinition.builder(TinkerTools.skyStaff).build();
-  public static final ToolDefinition EARTH_STAFF = ToolDefinition.builder(TinkerTools.earthStaff).build();
-  public static final ToolDefinition ICHOR_STAFF = ToolDefinition.builder(TinkerTools.ichorStaff).build();
-  public static final ToolDefinition ENDER_STAFF = ToolDefinition.builder(TinkerTools.enderStaff).build();
+  public static final ToolDefinition FLINT_AND_BRICK = ToolDefinition.create(TinkerTools.flintAndBrick);
+  public static final ToolDefinition SKY_STAFF = ToolDefinition.create(TinkerTools.skyStaff);
+  public static final ToolDefinition EARTH_STAFF = ToolDefinition.create(TinkerTools.earthStaff);
+  public static final ToolDefinition ICHOR_STAFF = ToolDefinition.create(TinkerTools.ichorStaff);
+  public static final ToolDefinition ENDER_STAFF = ToolDefinition.create(TinkerTools.enderStaff);
 }

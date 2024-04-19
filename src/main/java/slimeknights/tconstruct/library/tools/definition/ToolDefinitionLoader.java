@@ -108,7 +108,7 @@ public class ToolDefinitionLoader extends SimpleJsonResourceReloadListener {
   }
 
   /** Registers a tool definition with the loader */
-  public void registerToolDefinition(ToolDefinition definition) {
+  public synchronized void registerToolDefinition(ToolDefinition definition) {
     ResourceLocation name = definition.getId();
     if (definitions.containsKey(name)) {
       throw new IllegalArgumentException("Duplicate tool definition " + name);

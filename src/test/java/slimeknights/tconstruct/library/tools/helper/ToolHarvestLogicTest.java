@@ -78,7 +78,7 @@ class ToolHarvestLogicTest extends ToolItemTest {
   void calcSpeed_effective_withMiningModifier() {
     float modifier = 2f;
 
-    ToolDefinition definition = ToolDefinition.builder(new ResourceLocation("test", "mining_tool")).skipRegister().build();
+    ToolDefinition definition = new ToolDefinition(new ResourceLocation("test", "mining_tool"));
     definition.setData(ToolDefinitionDataBuilder
                          .builder()
                          .module(new IsEffectiveModule(BlockPredicate.set(Blocks.COBBLESTONE)))

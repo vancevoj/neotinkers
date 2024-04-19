@@ -28,9 +28,6 @@ import java.util.stream.Collectors;
 
 /** Base datagenerator to generate tool definition data */
 public abstract class AbstractToolDefinitionDataProvider extends GenericDataProvider {
-  /** copy of the vanilla array for the builder */
-  private static final int[] MAX_DAMAGE_ARRAY = {13, 15, 16, 11};
-
   private final Map<ResourceLocation,ToolDefinitionDataBuilder> allTools = new HashMap<>();
   /** Mod ID to filter definitions we care about */
   private final String modId;
@@ -96,7 +93,7 @@ public abstract class AbstractToolDefinitionDataProvider extends GenericDataProv
     private final ToolDefinitionDataBuilder[] builders;
     private final List<ArmorSlotType> slotTypes;
     private ArmorDataBuilder(ModifiableArmorMaterial armorMaterial) {
-      this.name = new ResourceLocation(armorMaterial.getName());
+      this.name = armorMaterial.getId();
       this.builders = new ToolDefinitionDataBuilder[4];
       ImmutableList.Builder<ArmorSlotType> slotTypes = ImmutableList.builder();
       for (ArmorSlotType slotType : ArmorSlotType.values()) {
