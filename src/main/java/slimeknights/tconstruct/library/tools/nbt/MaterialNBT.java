@@ -154,7 +154,11 @@ public class MaterialNBT {
 
     /** Builds the final list */
     public MaterialNBT build() {
-      return new MaterialNBT(builder.build());
+      List<MaterialVariant> materials = builder.build();
+      if (materials.isEmpty()) {
+        return MaterialNBT.EMPTY;
+      }
+      return new MaterialNBT(materials);
     }
   }
 }

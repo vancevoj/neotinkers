@@ -192,7 +192,7 @@ public final class MaterialRegistry {
   private static final Function<MaterialStatsId,IMaterial> FIRST_LOADER = statsId -> {
     IMaterialRegistry instance = getInstance();
     for (IMaterial material : instance.getVisibleMaterials()) {
-      if (instance.getMaterialStats(material.getIdentifier(), statsId).isPresent()) {
+      if (!material.isHidden() && instance.getMaterialStats(material.getIdentifier(), statsId).isPresent()) {
         return material;
       }
     }

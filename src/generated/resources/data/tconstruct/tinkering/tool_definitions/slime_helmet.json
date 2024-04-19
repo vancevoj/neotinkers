@@ -26,6 +26,14 @@
       ]
     },
     {
+      "type": "tconstruct:default_materials",
+      "materials": [
+        {
+          "type": "tconstruct:random"
+        }
+      ]
+    },
+    {
       "type": "tconstruct:traits",
       "traits": [
         {

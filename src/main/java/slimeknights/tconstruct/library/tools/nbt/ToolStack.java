@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -23,7 +24,6 @@ import slimeknights.tconstruct.library.tools.context.ToolRebuildContext;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinition;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinitionData;
 import slimeknights.tconstruct.library.tools.definition.module.ToolHooks;
-import slimeknights.tconstruct.library.tools.helper.ToolBuildHandler;
 import slimeknights.tconstruct.library.tools.helper.TooltipUtil;
 import slimeknights.tconstruct.library.tools.item.IModifiable;
 import slimeknights.tconstruct.library.tools.stat.ModifierStatsBuilder;
@@ -598,14 +598,17 @@ public class ToolStack implements IToolStackView {
 
   /** Called on inventory tick to ensure the tool has all required data including materials and starting slots, prevents tools with no stats from existing */
   public void ensureHasData() {
-    // if datapacks have loaded and the tool does not have stats, it needs to have stats built
-    if (definition.isDataLoaded() && !isInitialized(nbt)) {
-      // need materials to build stats, randomize them if missing
-      if (definition.hasMaterials() && !nbt.contains(TAG_MATERIALS, Tag.TAG_LIST)) {
-        // TODO: make this a new module
-        setMaterialsRaw(ToolBuildHandler.randomMaterials(definition, definition.getDefaultMaxTier(), false));
+    // if we try initializing before datapacks load we will get garbage data
+    if (definition.isDataLoaded()) {
+      // build data if we either lack data (signified by no stats) or we lack materials but expect them
+      boolean needsMaterials = definition.hasMaterials() && !nbt.contains(TAG_MATERIALS, Tag.TAG_LIST);
+      if (needsMaterials || !isInitialized(nbt)) {
+        // randomize materials if missing
+        if (needsMaterials) {
+          setMaterialsRaw(definition.getHook(ToolHooks.MISSING_MATERIALS).fillMaterials(definition, RandomSource.create()));
+        }
+        rebuildStats();
       }
-      rebuildStats();
     }
   }
 
@@ -709,8 +712,8 @@ public class ToolStack implements IToolStackView {
    * @param stack ItemStack to initialize
    */
   public static void ensureInitialized(ItemStack stack) {
-    if (stack.getItem() instanceof IModifiable) {
-      ensureInitialized(stack, ((IModifiable) stack.getItem()).getToolDefinition());
+    if (stack.getItem() instanceof IModifiable modifiable) {
+      ensureInitialized(stack, modifiable.getToolDefinition());
     }
   }
 

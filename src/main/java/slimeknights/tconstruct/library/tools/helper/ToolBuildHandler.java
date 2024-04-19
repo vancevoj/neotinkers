@@ -4,13 +4,10 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.config.Config;
-import slimeknights.tconstruct.library.materials.IMaterialRegistry;
 import slimeknights.tconstruct.library.materials.MaterialRegistry;
 import slimeknights.tconstruct.library.materials.definition.IMaterial;
 import slimeknights.tconstruct.library.materials.definition.MaterialId;
-import slimeknights.tconstruct.library.materials.definition.MaterialVariant;
 import slimeknights.tconstruct.library.materials.definition.MaterialVariantId;
-import slimeknights.tconstruct.library.materials.stats.IMaterialStats;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinition;
 import slimeknights.tconstruct.library.tools.definition.module.material.ToolMaterialHook;
@@ -19,12 +16,8 @@ import slimeknights.tconstruct.library.tools.nbt.MaterialIdNBT;
 import slimeknights.tconstruct.library.tools.nbt.MaterialNBT;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 /**
  * Logic to help in creating new tools
@@ -77,47 +70,6 @@ public final class ToolBuildHandler {
     }
     stack.getOrCreateTag().putBoolean(TooltipUtil.KEY_DISPLAY, true);
     return stack;
-  }
-
-  /**
-   * Gets a list of random materials consistent with the given tool definition data
-   * @param definition   Definition for part requirements
-   * @param maxTier      Max tier of material allowed
-   * @param allowHidden  If true, hidden materials may be used
-   * @return  List of random materials
-   */
-  public static MaterialNBT randomMaterials(ToolDefinition definition, int maxTier, boolean allowHidden) {
-    // start by getting a list of materials for each stat type we need
-    List<MaterialStatsId> requirements = ToolMaterialHook.stats(definition);
-    // figure out which stat types we need
-    Map<MaterialStatsId,List<IMaterial>> materialChoices = requirements.stream()
-      .distinct()
-      .collect(Collectors.toMap(Function.identity(), t -> new ArrayList<>()));
-    IMaterialRegistry registry = MaterialRegistry.getInstance();
-    registry.getAllMaterials().stream()
-            .filter(mat -> (allowHidden || !mat.isHidden()) && mat.getTier() <= maxTier)
-            .forEach(mat -> {
-              for (IMaterialStats stats : registry.getAllStats(mat.getIdentifier())) {
-                List<IMaterial> list = materialChoices.get(stats.getIdentifier());
-                if (list != null) {
-                  list.add(mat);
-                }
-              }
-            });
-
-    // then randomly choose a material from the lists for each part
-    MaterialNBT.Builder builder = MaterialNBT.builder();
-    for (MaterialStatsId requirement : requirements) {
-      // if the list has no materials for some reason, skip, null should be impossible but might as well be safe
-      List<IMaterial> choices = materialChoices.get(requirement);
-      if (choices == null || choices.isEmpty()) {
-        builder.add(MaterialVariant.UNKNOWN);
-        TConstruct.LOG.error("Failed to find a {} material of type {} below tier {}", allowHidden ? "non-hidden " : "", requirement, maxTier);
-      } else {
-        builder.add(choices.get(TConstruct.RANDOM.nextInt(choices.size())));
-      }
-    }
-    return builder.build();
   }
 
 

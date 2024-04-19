@@ -11,6 +11,7 @@ import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.data.tinkering.AbstractToolDefinitionDataProvider;
 import slimeknights.tconstruct.library.json.predicate.modifier.SingleModifierPredicate;
+import slimeknights.tconstruct.library.materials.RandomMaterial;
 import slimeknights.tconstruct.library.modifiers.hook.interaction.InteractionSource;
 import slimeknights.tconstruct.library.tools.SlotType;
 import slimeknights.tconstruct.library.tools.definition.module.ToolModule;
@@ -27,6 +28,7 @@ import slimeknights.tconstruct.library.tools.definition.module.build.ToolSlotsMo
 import slimeknights.tconstruct.library.tools.definition.module.build.ToolTraitsModule;
 import slimeknights.tconstruct.library.tools.definition.module.interaction.DualOptionInteraction;
 import slimeknights.tconstruct.library.tools.definition.module.interaction.PreferenceSetInteraction;
+import slimeknights.tconstruct.library.tools.definition.module.material.DefaultMaterialsModule;
 import slimeknights.tconstruct.library.tools.definition.module.material.MaterialRepairModule;
 import slimeknights.tconstruct.library.tools.definition.module.material.MaterialStatsModule;
 import slimeknights.tconstruct.library.tools.definition.module.material.PartStatsModule;
@@ -75,6 +77,10 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
 
   @Override
   protected void addToolDefinitions() {
+    RandomMaterial tier1Material = RandomMaterial.random().tier(1).build();
+    DefaultMaterialsModule defaultThreeParts = DefaultMaterialsModule.builder().material(tier1Material, tier1Material, tier1Material).build();
+    DefaultMaterialsModule defaultFourParts = DefaultMaterialsModule.builder().material(tier1Material, tier1Material, tier1Material, tier1Material).build();
+
     // pickaxes
     define(ToolDefinitions.PICKAXE)
       // parts
@@ -82,6 +88,7 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
          .part(pickHead)
          .part(toolHandle)
          .part(toolBinding).build())
+      .module(defaultThreeParts)
       // stats
       .module(new SetStatsModule(StatsNBT.builder()
         .set(ToolStats.ATTACK_DAMAGE, 0.5f) // gains +0.5 damage from tool piercing, hence being lower than vanilla
@@ -101,6 +108,7 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
          .part(toughHandle)
          .part(largePlate, 1)
          .part(largePlate, 1).build())
+      .module(defaultFourParts)
       // stats
       .module(new SetStatsModule(StatsNBT.builder()
         .set(ToolStats.ATTACK_DAMAGE, 3f) // gains +5 undead damage from smite modifier
@@ -125,6 +133,7 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
          .part(toughHandle)
          .part(pickHead, 1)
          .part(largePlate).build())
+      .module(defaultFourParts)
       // stats
       .module(new SetStatsModule(StatsNBT.builder()
         .set(ToolStats.ATTACK_DAMAGE, 3f) // gains +1.25 damage from piercing
@@ -150,6 +159,7 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
          .part(smallAxeHead)
          .part(toolHandle)
          .part(roundPlate).build())
+      .module(defaultThreeParts)
       // stats
       .module(new SetStatsModule(StatsNBT.builder()
         .set(ToolStats.ATTACK_DAMAGE, 1.5f)
@@ -174,6 +184,7 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
          .part(pickHead)
          .part(toolHandle)
          .part(roundPlate).build())
+      .module(defaultThreeParts)
       // stats
       .module(new SetStatsModule(StatsNBT.builder()
         .set(ToolStats.ATTACK_DAMAGE, 0.5f)
@@ -198,6 +209,7 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
          .part(toughHandle)
          .part(largePlate)
          .part(toughHandle).build())
+      .module(defaultFourParts)
       // stats
       .module(new SetStatsModule(StatsNBT.builder()
         .set(ToolStats.ATTACK_DAMAGE, 1.5f)
@@ -225,6 +237,7 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
          .part(smallAxeHead)
          .part(toolHandle)
          .part(toolBinding).build())
+      .module(defaultThreeParts)
       // stats
       .module(new SetStatsModule(StatsNBT.builder()
         .set(ToolStats.ATTACK_DAMAGE, 6.0f)
@@ -245,6 +258,7 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
          .part(toughHandle)
          .part(pickHead, 1)
          .part(toolBinding).build())
+      .module(defaultFourParts)
       // stats
       .module(new SetStatsModule(StatsNBT.builder()
         .set(ToolStats.ATTACK_DAMAGE, 5f)
@@ -276,6 +290,7 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
          .part(smallBlade)
          .part(toolHandle)
          .part(toolBinding).build())
+      .module(defaultThreeParts)
       // stats
       .module(new SetStatsModule(StatsNBT.builder()
         .set(ToolStats.ATTACK_DAMAGE, 1f)
@@ -301,6 +316,7 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
          .part(TinkerToolParts.toughHandle)
          .part(TinkerToolParts.toolBinding)
          .part(TinkerToolParts.toughHandle).build())
+      .module(defaultFourParts)
       // stats
       .module(new SetStatsModule(StatsNBT.builder()
         .set(ToolStats.ATTACK_DAMAGE, 1f)
@@ -326,6 +342,7 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
       .module(PartStatsModule.meleeHarvest()
          .part(smallBlade)
          .part(toolHandle).build())
+      .module(DefaultMaterialsModule.builder().material(tier1Material, tier1Material).build())
       // stats
       .module(new SetStatsModule(StatsNBT.builder()
         .set(ToolStats.ATTACK_DAMAGE, 3f)
@@ -358,6 +375,7 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
          .part(smallBlade)
          .part(toolHandle)
          .part(toolHandle).build())
+      .module(defaultThreeParts)
       // stats
       .module(new SetStatsModule(StatsNBT.builder()
         .set(ToolStats.ATTACK_DAMAGE, 3f)
@@ -380,6 +398,7 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
          .part(toughHandle)
          .part(toughHandle)
          .part(largePlate).build())
+      .module(defaultFourParts)
       // stats
       .module(new SetStatsModule(StatsNBT.builder()
         .set(ToolStats.ATTACK_DAMAGE, 3f)
@@ -405,6 +424,7 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
          .part(bowLimb)
          .part(bowGrip)
          .part(bowstring).build())
+      .module(defaultThreeParts)
       // stats
       .module(new SetStatsModule(StatsNBT.builder()
         .set(ToolStats.ATTACK_DAMAGE, 0f)
@@ -419,6 +439,7 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
          .part(bowLimb)
          .part(bowGrip)
          .part(bowstring).build())
+      .module(defaultFourParts)
       // stats
       .module(new SetStatsModule(StatsNBT.builder()
         .set(ToolStats.DURABILITY, 120)
@@ -579,6 +600,7 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
       .module(ArmorSlotType.BOOTS, new MaterialRepairModule(MaterialIds.leather, RepairKitStats.ID))
       // stats
       .module(ArmorSlotType.HELMET, MaterialStatsModule.stats(MaterialStatProviders.SKULL).stat(SkullStats.ID, 1).build())
+      .module(ArmorSlotType.HELMET, DefaultMaterialsModule.builder().material(RandomMaterial.random().build()).build())
       .module(ArmorSlotType.HELMET, slimeTraits.build())
       // traits
       .module(ArmorSlotType.CHESTPLATE, slimeTraits.copy().trait(ModifierIds.wings).build())

@@ -1,7 +1,6 @@
 package slimeknights.tconstruct.library.json.loot;
 
 import com.google.common.collect.ImmutableList;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
@@ -9,23 +8,23 @@ import com.google.gson.JsonSyntaxException;
 import lombok.experimental.Accessors;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import slimeknights.mantle.util.JsonHelper;
+import slimeknights.mantle.data.loadable.field.LoadableField;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.TinkerTags;
+import slimeknights.tconstruct.library.materials.RandomMaterial;
 import slimeknights.tconstruct.library.materials.definition.MaterialId;
-import slimeknights.tconstruct.library.tools.nbt.MaterialNBT;
+import slimeknights.tconstruct.library.tools.definition.ToolDefinition;
+import slimeknights.tconstruct.library.tools.definition.module.material.ToolMaterialHook;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
 import slimeknights.tconstruct.tools.TinkerTools;
 
-import java.util.Collections;
 import java.util.List;
 
 /** Loot function to add data to a tool. */
@@ -58,13 +57,9 @@ public class AddToolDataFunction extends LootItemConditionalFunction {
   protected ItemStack run(ItemStack stack, LootContext context) {
     if (stack.is(TinkerTags.Items.MODIFIABLE)) {
       ToolStack tool = ToolStack.from(stack);
-      if (tool.getDefinition().hasMaterials() && !materials.isEmpty()) {
-        MaterialNBT.Builder builder = MaterialNBT.builder();
-        RandomSource random = context.getRandom();
-        for (RandomMaterial material : materials) {
-          builder.add(material.getMaterial(random));
-        }
-        tool.setMaterials(builder.build());
+      ToolDefinition definition = tool.getDefinition();
+      if (definition.hasMaterials() && !materials.isEmpty()) {
+        tool.setMaterials(RandomMaterial.build(ToolMaterialHook.stats(definition), materials, context.getRandom()));
       } else {
         // not multipart? no sense doing materials, just initialize stats
         tool.rebuildStats();
@@ -79,6 +74,8 @@ public class AddToolDataFunction extends LootItemConditionalFunction {
 
   /** Serializer logic for the function */
   private static class Serializer extends LootItemConditionalFunction.Serializer<AddToolDataFunction> {
+    private static final LoadableField<List<RandomMaterial>,AddToolDataFunction> MATERIAL_LIST = RandomMaterial.LOADER.list(0).defaultField("materials", List.of(), d -> d.materials);
+
     @Override
     public void serialize(JsonObject json, AddToolDataFunction loot, JsonSerializationContext context) {
       super.serialize(json, loot, context);
@@ -86,13 +83,7 @@ public class AddToolDataFunction extends LootItemConditionalFunction {
       if (loot.damage > 0) {
         json.addProperty("damage_percent", loot.damage);
       }
-      if (!loot.materials.isEmpty()) {
-        JsonArray array = new JsonArray();
-        for (RandomMaterial material : loot.materials) {
-          array.add(material.serialize());
-        }
-        json.add("materials", array);
-      }
+      MATERIAL_LIST.serialize(loot, json);
     }
 
     @Override
@@ -101,10 +92,7 @@ public class AddToolDataFunction extends LootItemConditionalFunction {
       if (damage < 0 || damage > 1) {
         throw new JsonSyntaxException("damage_percent must be between 0 and 1, given " + damage);
       }
-      List<RandomMaterial> materials = Collections.emptyList();
-      if (object.has("materials")) {
-        materials = JsonHelper.parseList(object, "materials", RandomMaterial::deserialize);
-      }
+      List<RandomMaterial> materials = MATERIAL_LIST.get(object);
       return new AddToolDataFunction(conditions, damage, materials);
     }
   }

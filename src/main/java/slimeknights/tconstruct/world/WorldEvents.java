@@ -27,13 +27,10 @@ import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.config.Config;
 import slimeknights.tconstruct.fluids.TinkerFluids;
 import slimeknights.tconstruct.library.json.loot.AddToolDataFunction;
-import slimeknights.tconstruct.library.json.loot.RandomMaterial;
+import slimeknights.tconstruct.library.materials.RandomMaterial;
 import slimeknights.tconstruct.library.recipe.FluidValues;
 import slimeknights.tconstruct.smeltery.TinkerSmeltery;
 import slimeknights.tconstruct.tools.TinkerTools;
-import slimeknights.tconstruct.tools.stats.ExtraMaterialStats;
-import slimeknights.tconstruct.tools.stats.HandleMaterialStats;
-import slimeknights.tconstruct.tools.stats.HeadMaterialStats;
 import slimeknights.tconstruct.world.block.FoliageType;
 
 import java.util.Arrays;
@@ -116,22 +113,21 @@ public class WorldEvents {
         case "chests/spawn_bonus_chest": {
           int weight = Config.COMMON.tinkerToolBonusChest.get();
           if (weight > 0) {
-            RandomMaterial randomHead = RandomMaterial.random(HeadMaterialStats.ID).tier(1).build();
-            RandomMaterial firstHandle = RandomMaterial.firstWithStat(HandleMaterialStats.ID); // should be wood
-            RandomMaterial randomBinding = RandomMaterial.random(ExtraMaterialStats.ID).tier(1).build();
+            RandomMaterial randomTier1 = RandomMaterial.random().tier(1).build();
+            RandomMaterial firstWithStat = RandomMaterial.firstWithStat(); // should be wood
             injectInto(event, "main", LootItem.lootTableItem(TinkerTools.handAxe.get())
                                               .setWeight(weight)
                                               .apply(AddToolDataFunction.builder()
-                                                               .addMaterial(randomHead)
-                                                               .addMaterial(firstHandle)
-                                                               .addMaterial(randomBinding))
+                                                               .addMaterial(randomTier1)
+                                                               .addMaterial(firstWithStat)
+                                                               .addMaterial(randomTier1))
                                               .build());
             injectInto(event, "pool1", LootItem.lootTableItem(TinkerTools.pickaxe.get())
                                                .setWeight(weight)
                                                .apply(AddToolDataFunction.builder()
-                                                               .addMaterial(randomHead)
-                                                               .addMaterial(firstHandle)
-                                                               .addMaterial(randomBinding))
+                                                               .addMaterial(randomTier1)
+                                                               .addMaterial(firstWithStat)
+                                                               .addMaterial(randomTier1))
                                                .build());
           }
           break;

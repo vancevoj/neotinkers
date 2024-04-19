@@ -1,7 +1,9 @@
 package slimeknights.tconstruct.library.tools.definition.module;
 
 import slimeknights.tconstruct.TConstruct;
+import slimeknights.tconstruct.library.materials.MaterialRegistry;
 import slimeknights.tconstruct.library.materials.definition.MaterialId;
+import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
 import slimeknights.tconstruct.library.modifiers.ModifierHook;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.tools.definition.module.aoe.AreaOfEffectIterator;
@@ -12,6 +14,7 @@ import slimeknights.tconstruct.library.tools.definition.module.build.VolatileDat
 import slimeknights.tconstruct.library.tools.definition.module.interaction.InteractionToolModule;
 import slimeknights.tconstruct.library.tools.definition.module.material.MaterialRepairToolHook;
 import slimeknights.tconstruct.library.tools.definition.module.material.MaterialRepairToolHook.MaxMerger;
+import slimeknights.tconstruct.library.tools.definition.module.material.MissingMaterialsToolHook;
 import slimeknights.tconstruct.library.tools.definition.module.material.ToolMaterialHook;
 import slimeknights.tconstruct.library.tools.definition.module.material.ToolPartsHook;
 import slimeknights.tconstruct.library.tools.definition.module.mining.IsEffectiveToolHook;
@@ -19,6 +22,7 @@ import slimeknights.tconstruct.library.tools.definition.module.mining.MiningSpee
 import slimeknights.tconstruct.library.tools.definition.module.mining.MiningTierToolHook;
 import slimeknights.tconstruct.library.tools.definition.module.weapon.MeleeHitToolHook;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
+import slimeknights.tconstruct.library.tools.nbt.MaterialNBT;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
@@ -38,6 +42,14 @@ public class ToolHooks {
   public static final ModifierHook<ToolMaterialHook> TOOL_MATERIALS = register("tool_materials", ToolMaterialHook.class, definition -> List.of());
   /** Hook for checking if a tool can perform a given action. TODO: rename to {@code volatile_data} */
   public static final ModifierHook<ToolPartsHook> TOOL_PARTS = register("tool_parts", ToolPartsHook.class, definition -> List.of());
+  /** Hook for filling materials on a tool with no materials set */
+  public static final ModifierHook<MissingMaterialsToolHook> MISSING_MATERIALS = register("missing_materials", MissingMaterialsToolHook.class, ((definition, random) -> {
+    MaterialNBT.Builder builder = MaterialNBT.builder();
+    for (MaterialStatsId statType : ToolMaterialHook.stats(definition)) {
+      builder.add(MaterialRegistry.firstWithStatType(statType));
+    }
+    return builder.build();
+  }));
 
   /** Hook for repairing a tool using a material. */
   public static final ModifierHook<MaterialRepairToolHook> MATERIAL_REPAIR = register("material_repair", MaterialRepairToolHook.class, MaxMerger::new, new MaterialRepairToolHook() {
