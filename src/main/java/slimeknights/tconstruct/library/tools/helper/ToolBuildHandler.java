@@ -14,7 +14,6 @@ import slimeknights.tconstruct.library.materials.stats.IMaterialStats;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinition;
 import slimeknights.tconstruct.library.tools.definition.module.material.ToolMaterialHook;
-import slimeknights.tconstruct.library.tools.definition.module.material.ToolMaterialHook.WeightedStatType;
 import slimeknights.tconstruct.library.tools.item.IModifiable;
 import slimeknights.tconstruct.library.tools.nbt.MaterialIdNBT;
 import slimeknights.tconstruct.library.tools.nbt.MaterialNBT;
@@ -89,10 +88,9 @@ public final class ToolBuildHandler {
    */
   public static MaterialNBT randomMaterials(ToolDefinition definition, int maxTier, boolean allowHidden) {
     // start by getting a list of materials for each stat type we need
-    List<WeightedStatType> requirements = ToolMaterialHook.stats(definition);
+    List<MaterialStatsId> requirements = ToolMaterialHook.stats(definition);
     // figure out which stat types we need
     Map<MaterialStatsId,List<IMaterial>> materialChoices = requirements.stream()
-      .map(WeightedStatType::stat)
       .distinct()
       .collect(Collectors.toMap(Function.identity(), t -> new ArrayList<>()));
     IMaterialRegistry registry = MaterialRegistry.getInstance();
@@ -109,12 +107,12 @@ public final class ToolBuildHandler {
 
     // then randomly choose a material from the lists for each part
     MaterialNBT.Builder builder = MaterialNBT.builder();
-    for (WeightedStatType requirement : requirements) {
+    for (MaterialStatsId requirement : requirements) {
       // if the list has no materials for some reason, skip, null should be impossible but might as well be safe
-      List<IMaterial> choices = materialChoices.get(requirement.stat());
+      List<IMaterial> choices = materialChoices.get(requirement);
       if (choices == null || choices.isEmpty()) {
         builder.add(MaterialVariant.UNKNOWN);
-        TConstruct.LOG.error("Failed to find a {} material of type {} below tier {}", allowHidden ? "non-hidden " : "", requirement.stat(), maxTier);
+        TConstruct.LOG.error("Failed to find a {} material of type {} below tier {}", allowHidden ? "non-hidden " : "", requirement, maxTier);
       } else {
         builder.add(choices.get(TConstruct.RANDOM.nextInt(choices.size())));
       }
@@ -166,17 +164,17 @@ public final class ToolBuildHandler {
 
   /** Makes a single sub item for the given materials */
   private static boolean addSubItem(IModifiable item, List<ItemStack> items, IMaterial material) {
-    List<WeightedStatType> required = ToolMaterialHook.stats(item.getToolDefinition());
+    List<MaterialStatsId> required = ToolMaterialHook.stats(item.getToolDefinition());
     MaterialNBT.Builder materials = MaterialNBT.builder();
     boolean useMaterial = false;
-    for (WeightedStatType requirement : required) {
+    for (MaterialStatsId requirement : required) {
       // try to use requested material
       if (requirement.canUseMaterial(material.getIdentifier())) {
         materials.add(material);
         useMaterial = true;
       } else {
         // fallback to first that works
-        materials.add(MaterialRegistry.firstWithStatType(requirement.stat()));
+        materials.add(MaterialRegistry.firstWithStatType(requirement));
       }
     }
     // only report success if we actually used the material somewhere

@@ -1,9 +1,5 @@
 package slimeknights.tconstruct.library.tools.definition.module.material;
 
-import slimeknights.mantle.data.loadable.primitive.IntLoadable;
-import slimeknights.mantle.data.loadable.record.RecordLoadable;
-import slimeknights.tconstruct.library.materials.MaterialRegistry;
-import slimeknights.tconstruct.library.materials.definition.MaterialId;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinition;
 import slimeknights.tconstruct.library.tools.definition.module.ToolHooks;
@@ -17,29 +13,10 @@ public interface ToolMaterialHook {
    * @param definition  Tool definition instance
    * @return  List of part requirements
    */
-  List<WeightedStatType> getStatTypes(ToolDefinition definition);
-
-  /** Checks if this definition has materials */
-  default boolean hasMaterials(ToolDefinition definition) {
-    return !getStatTypes(definition).isEmpty();
-  }
-
-
-  /** Stat with weights */
-  record WeightedStatType(MaterialStatsId stat, int weight) {
-    public static final RecordLoadable<WeightedStatType> LOADABLE = RecordLoadable.create(
-      MaterialStatsId.PARSER.requiredField("stat", WeightedStatType::stat),
-      IntLoadable.FROM_ONE.defaultField("weight", 1, WeightedStatType::weight),
-      WeightedStatType::new).compact(MaterialStatsId.PARSER.flatXmap(id -> new WeightedStatType(id, 1), WeightedStatType::stat), s -> s.weight == 1);
-
-    /** Checks if the given material can be used */
-    public boolean canUseMaterial(MaterialId material) {
-      return MaterialRegistry.getInstance().getMaterialStats(material.getId(), stat).isPresent();
-    }
-  }
+  List<MaterialStatsId> getStatTypes(ToolDefinition definition);
 
   /** Gets the stat types from the given definition */
-  static List<WeightedStatType> stats(ToolDefinition definition) {
+  static List<MaterialStatsId> stats(ToolDefinition definition) {
     return definition.getHook(ToolHooks.TOOL_MATERIALS).getStatTypes(definition);
   }
 }

@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import net.minecraft.resources.ResourceLocation;
 import slimeknights.mantle.data.loadable.ErrorFactory;
 import slimeknights.mantle.data.loadable.field.LoadableField;
+import slimeknights.mantle.data.loadable.primitive.IntLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.tconstruct.library.materials.IMaterialRegistry;
 import slimeknights.tconstruct.library.materials.MaterialRegistry;
@@ -44,12 +45,14 @@ public class MaterialStatsModule implements ToolStatsHook, ToolTraitHook, ToolMa
 
   private final MaterialStatProvider statProvider;
   private final List<WeightedStatType> statTypes;
+  private final List<MaterialStatsId> flatStats;
   private int[] repairIndices;
   private int maxRepairWeight = 0;
 
   public MaterialStatsModule(MaterialStatProvider statProvider, List<WeightedStatType> statTypes) {
     this.statProvider = statProvider;
     this.statTypes = statTypes;
+    this.flatStats = statTypes.stream().map(WeightedStatType::stat).toList();
   }
 
   /** Validates the stat types against the stat provider */
@@ -68,8 +71,8 @@ public class MaterialStatsModule implements ToolStatsHook, ToolTraitHook, ToolMa
   }
 
   @Override
-  public List<WeightedStatType> getStatTypes(ToolDefinition definition) {
-    return statTypes;
+  public List<MaterialStatsId> getStatTypes(ToolDefinition definition) {
+    return flatStats;
   }
 
   /** Gets the repair indices, calculating them if needed */
@@ -166,5 +169,13 @@ public class MaterialStatsModule implements ToolStatsHook, ToolTraitHook, ToolMa
     public MaterialStatsModule build() {
       return new MaterialStatsModule(statProvider, stats.build());
     }
+  }
+
+  /** Stat with weights */
+  public record WeightedStatType(MaterialStatsId stat, int weight) {
+    public static final RecordLoadable<WeightedStatType> LOADABLE = RecordLoadable.create(
+      MaterialStatsId.PARSER.requiredField("stat", WeightedStatType::stat),
+      IntLoadable.FROM_ONE.defaultField("weight", 1, WeightedStatType::weight),
+      WeightedStatType::new).compact(MaterialStatsId.PARSER.flatXmap(id -> new WeightedStatType(id, 1), WeightedStatType::stat), s -> s.weight == 1);
   }
 }

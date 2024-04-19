@@ -11,7 +11,7 @@ import slimeknights.tconstruct.library.materials.MaterialRegistry;
 import slimeknights.tconstruct.library.materials.definition.MaterialId;
 import slimeknights.tconstruct.library.materials.stats.IMaterialStats;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
-import slimeknights.tconstruct.library.tools.definition.module.material.ToolMaterialHook.WeightedStatType;
+import slimeknights.tconstruct.library.tools.definition.module.material.MaterialStatsModule.WeightedStatType;
 import slimeknights.tconstruct.library.tools.nbt.MaterialNBT;
 
 import javax.annotation.Nullable;

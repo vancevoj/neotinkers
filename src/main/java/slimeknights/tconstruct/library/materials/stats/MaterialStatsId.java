@@ -1,6 +1,8 @@
 package slimeknights.tconstruct.library.materials.stats;
 
 import net.minecraft.resources.ResourceLocation;
+import slimeknights.tconstruct.library.materials.MaterialRegistry;
+import slimeknights.tconstruct.library.materials.definition.MaterialId;
 import slimeknights.tconstruct.library.utils.IdParser;
 
 import javax.annotation.Nullable;
@@ -31,5 +33,10 @@ public class MaterialStatsId extends ResourceLocation {
   @Nullable
   public static MaterialStatsId tryParse(String string) {
     return PARSER.tryParse(string);
+  }
+
+  /** Checks if the given material can be used */
+  public boolean canUseMaterial(MaterialId material) {
+    return MaterialRegistry.getInstance().getMaterialStats(material.getId(), this).isPresent();
   }
 }

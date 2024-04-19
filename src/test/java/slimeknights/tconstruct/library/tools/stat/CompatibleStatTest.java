@@ -5,13 +5,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import slimeknights.tconstruct.fixture.MaterialItemFixture;
 import slimeknights.tconstruct.fixture.MaterialStatsFixture;
-import slimeknights.tconstruct.fixture.ToolDefinitionFixture;
 import slimeknights.tconstruct.library.materials.MaterialRegistryExtension;
 import slimeknights.tconstruct.library.materials.definition.IMaterial;
 import slimeknights.tconstruct.library.materials.stats.IMaterialStats;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
-import slimeknights.tconstruct.library.tools.definition.module.material.ToolMaterialHook;
-import slimeknights.tconstruct.library.tools.definition.module.material.ToolMaterialHook.WeightedStatType;
+import slimeknights.tconstruct.library.tools.definition.module.material.MaterialStatsModule.WeightedStatType;
 import slimeknights.tconstruct.library.tools.nbt.MaterialNBT;
 import slimeknights.tconstruct.test.BaseMcTest;
 import slimeknights.tconstruct.tools.stats.ExtraMaterialStats;
@@ -61,7 +59,7 @@ public class CompatibleStatTest extends BaseMcTest {
    * @return  Melee harvest tool stats builder
    */
   static StatTypesWithMaterials withMaterials(IMaterial... materials) {
-    List<WeightedStatType> statTypes = ToolMaterialHook.stats(ToolDefinitionFixture.getStandardToolDefinition());
+    List<WeightedStatType> statTypes = List.of(new WeightedStatType(HeadMaterialStats.ID, 1), new WeightedStatType(HandleMaterialStats.ID, 1), new WeightedStatType(ExtraMaterialStats.ID, 1));
     assertThat(materials).overridingErrorMessage("Given materials list is the wrong size").hasSize(statTypes.size());
     return new StatTypesWithMaterials(statTypes, MaterialNBT.of(materials));
   }

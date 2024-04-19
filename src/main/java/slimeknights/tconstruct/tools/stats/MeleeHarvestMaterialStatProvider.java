@@ -4,7 +4,7 @@ import com.google.common.annotations.VisibleForTesting;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Tier;
 import net.minecraftforge.common.TierSortingRegistry;
-import slimeknights.tconstruct.library.tools.definition.module.material.ToolMaterialHook.WeightedStatType;
+import slimeknights.tconstruct.library.tools.definition.module.material.MaterialStatsModule.WeightedStatType;
 import slimeknights.tconstruct.library.tools.nbt.MaterialNBT;
 import slimeknights.tconstruct.library.tools.stat.MaterialStatProvider;
 import slimeknights.tconstruct.library.tools.stat.ModifierStatsBuilder;

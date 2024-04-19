@@ -31,11 +31,11 @@ import slimeknights.tconstruct.library.materials.IMaterialRegistry;
 import slimeknights.tconstruct.library.materials.MaterialRegistry;
 import slimeknights.tconstruct.library.materials.definition.IMaterial;
 import slimeknights.tconstruct.library.materials.definition.MaterialVariantId;
+import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.TinkerHooks;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinition;
 import slimeknights.tconstruct.library.tools.definition.module.material.ToolMaterialHook;
-import slimeknights.tconstruct.library.tools.definition.module.material.ToolMaterialHook.WeightedStatType;
 import slimeknights.tconstruct.library.tools.definition.module.material.ToolPartsHook;
 import slimeknights.tconstruct.library.tools.item.IModifiable;
 import slimeknights.tconstruct.library.tools.item.IModifiableDisplay;
@@ -211,7 +211,7 @@ public class TooltipUtil {
     if (!name.isEmpty()) {
       return Component.literal(name);
     }
-    List<WeightedStatType> components = ToolMaterialHook.stats(toolDefinition);
+    List<MaterialStatsId> components = ToolMaterialHook.stats(toolDefinition);
     Component baseName = Component.translatable(stack.getDescriptionId());
     if (components.isEmpty()) {
       return baseName;
@@ -230,7 +230,7 @@ public class TooltipUtil {
     MaterialVariantId firstMaterial = null;
     IMaterialRegistry registry = MaterialRegistry.getInstance();
     for (int i = 0; i < components.size(); i++) {
-      if (i < materials.size() && registry.canRepair(components.get(i).stat())) {
+      if (i < materials.size() && registry.canRepair(components.get(i))) {
         MaterialVariantId material = materials.get(i).getVariant();
         if (!IMaterial.UNKNOWN_ID.equals(material)) {
           if (firstMaterial == null) {
@@ -435,7 +435,7 @@ public class TooltipUtil {
    */
   public static void getComponents(IModifiable item, ItemStack stack, List<Component> tooltips, TooltipFlag flag) {
     // no components, nothing to do
-    List<WeightedStatType> components = ToolMaterialHook.stats(item.getToolDefinition());
+    List<MaterialStatsId> components = ToolMaterialHook.stats(item.getToolDefinition());
     if (components.isEmpty()) {
       return;
     }
@@ -469,7 +469,7 @@ public class TooltipUtil {
         tooltips.add((Component.literal(material.toString())).withStyle(ChatFormatting.DARK_GRAY));
       }
       // material stats
-      MaterialRegistry.getInstance().getMaterialStats(material.getId(), components.get(i).stat()).ifPresent(stat -> tooltips.addAll(stat.getLocalizedInfo()));
+      MaterialRegistry.getInstance().getMaterialStats(material.getId(), components.get(i)).ifPresent(stat -> tooltips.addAll(stat.getLocalizedInfo()));
       if (i != max) {
         tooltips.add(Component.empty());
       }
