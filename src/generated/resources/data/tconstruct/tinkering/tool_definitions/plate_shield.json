@@ -18,6 +18,11 @@
       }
     },
     {
+      "type": "tconstruct:material_repair",
+      "material": "tconstruct:cobalt",
+      "stat_type": "tconstruct:head"
+    },
+    {
       "type": "tconstruct:traits",
       "traits": [
         {

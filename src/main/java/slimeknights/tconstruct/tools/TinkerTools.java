@@ -59,6 +59,7 @@ import slimeknights.tconstruct.library.tools.definition.module.build.ToolSlotsMo
 import slimeknights.tconstruct.library.tools.definition.module.build.ToolTraitsModule;
 import slimeknights.tconstruct.library.tools.definition.module.interaction.DualOptionInteraction;
 import slimeknights.tconstruct.library.tools.definition.module.interaction.PreferenceSetInteraction;
+import slimeknights.tconstruct.library.tools.definition.module.material.MaterialRepairModule;
 import slimeknights.tconstruct.library.tools.definition.module.material.MaterialStatsModule;
 import slimeknights.tconstruct.library.tools.definition.module.material.PartStatsModule;
 import slimeknights.tconstruct.library.tools.definition.module.mining.IsEffectiveModule;
@@ -210,8 +211,6 @@ public final class TinkerTools extends TinkerModule {
       // tool definition components
       ToolModule.LOADER.register(getResource("base_stats"), SetStatsModule.LOADER);
       ToolModule.LOADER.register(getResource("multiply_stats"), MultiplyStatsModule.LOADER);
-      ToolModule.LOADER.register(getResource("material_stats"), MaterialStatsModule.LOADER);
-      ToolModule.LOADER.register(getResource("part_stats"), PartStatsModule.LOADER);
       ToolModule.LOADER.register(getResource("tool_actions"), ToolActionsModule.LOADER);
       ToolModule.LOADER.register(getResource("traits"), ToolTraitsModule.LOADER);
       ToolModule.LOADER.register(getResource("modifier_slots"), ToolSlotsModule.LOADER);
@@ -219,6 +218,10 @@ public final class TinkerTools extends TinkerModule {
       ToolModule.LOADER.register(getResource("is_effective"), IsEffectiveModule.LOADER);
       ToolModule.LOADER.register(getResource("mining_speed_modifier"), MiningSpeedModifierModule.LOADER);
       ToolModule.LOADER.register(getResource("max_tier"), MaxTierHarvestLogic.LOADER);
+      // material
+      ToolModule.LOADER.register(getResource("material_stats"), MaterialStatsModule.LOADER);
+      ToolModule.LOADER.register(getResource("part_stats"), PartStatsModule.LOADER);
+      ToolModule.LOADER.register(getResource("material_repair"), MaterialRepairModule.LOADER);
       // aoe
       AreaOfEffectIterator.register(getResource("box_aoe"), BoxAOEIterator.LOADER);
       AreaOfEffectIterator.register(getResource("circle_aoe"), CircleAOEIterator.LOADER);

@@ -5,7 +5,7 @@
       "conditions": {
         "items": [
           {
-            "tag": "forge:ingots/cobalt"
+            "tag": "forge:ingots/copper"
           }
         ]
       },
@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:armor/building/plate_helmet"
+        "recipe": "tconstruct:tools/armor/travelers_goggles"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -26,7 +26,7 @@
   ],
   "rewards": {
     "recipes": [
-      "tconstruct:armor/building/plate_helmet"
+      "tconstruct:tools/armor/travelers_goggles"
     ]
   }
 }

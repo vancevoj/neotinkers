@@ -14,6 +14,16 @@
         "defense": 2,
         "upgrades": 3
       }
+    },
+    {
+      "type": "tconstruct:material_repair",
+      "material": "tconstruct:copper",
+      "stat_type": "tconstruct:head"
+    },
+    {
+      "type": "tconstruct:material_repair",
+      "material": "tconstruct:leather",
+      "stat_type": "tconstruct:repair_kit"
     }
   ]
 }

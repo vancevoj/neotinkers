@@ -76,6 +76,7 @@ import slimeknights.tconstruct.tools.recipe.ArmorDyeingRecipe;
 import slimeknights.tconstruct.tools.recipe.EnchantmentConvertingRecipeBuilder;
 import slimeknights.tconstruct.tools.recipe.ModifierRemovalRecipeBuilder;
 import slimeknights.tconstruct.tools.recipe.ModifierSortingRecipeBuilder;
+import slimeknights.tconstruct.tools.stats.RepairKitStats;
 import slimeknights.tconstruct.world.TinkerHeadType;
 import slimeknights.tconstruct.world.TinkerWorld;
 import slimeknights.tconstruct.world.block.FoliageType;
@@ -161,14 +162,14 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
 
     // modifier repair
     // stringy - from string
-    ModifierMaterialRepairRecipeBuilder.repair(ModifierIds.stringy, MaterialIds.string)
+    ModifierMaterialRepairRecipeBuilder.repair(ModifierIds.stringy, MaterialIds.string, RepairKitStats.ID)
                                        .saveCraftingTable(consumer, wrap(ModifierIds.stringy, folder, "_crafting_table"))
                                        .save(consumer, wrap(ModifierIds.stringy, folder, "_tinker_station"));
     // pig iron - from bacon, only in the tinker station
     ModifierRepairRecipeBuilder.repair(TinkerModifiers.tasty, Ingredient.of(TinkerCommons.bacon), 25)
                                .save(consumer, prefix(TinkerModifiers.tasty, folder));
     // golden makes armor repair from gold
-    ModifierMaterialRepairRecipeBuilder.repair(TinkerModifiers.golden, MaterialIds.gold)
+    ModifierMaterialRepairRecipeBuilder.repair(TinkerModifiers.golden, MaterialIds.gold, RepairKitStats.ID)
                                        .saveCraftingTable(consumer, wrap(TinkerModifiers.golden, folder, "_crafting_table"))
                                        .save(consumer, wrap(TinkerModifiers.golden, folder, "_tinker_station"));
   }

@@ -1,6 +1,7 @@
 package slimeknights.tconstruct.library.tools.definition.module;
 
 import slimeknights.tconstruct.TConstruct;
+import slimeknights.tconstruct.library.materials.definition.MaterialId;
 import slimeknights.tconstruct.library.modifiers.ModifierHook;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.tools.definition.module.aoe.AreaOfEffectIterator;
@@ -9,12 +10,15 @@ import slimeknights.tconstruct.library.tools.definition.module.build.ToolStatsHo
 import slimeknights.tconstruct.library.tools.definition.module.build.ToolTraitHook;
 import slimeknights.tconstruct.library.tools.definition.module.build.VolatileDataToolHook;
 import slimeknights.tconstruct.library.tools.definition.module.interaction.InteractionToolModule;
+import slimeknights.tconstruct.library.tools.definition.module.material.MaterialRepairToolHook;
+import slimeknights.tconstruct.library.tools.definition.module.material.MaterialRepairToolHook.MaxMerger;
 import slimeknights.tconstruct.library.tools.definition.module.material.ToolMaterialHook;
 import slimeknights.tconstruct.library.tools.definition.module.material.ToolPartsHook;
 import slimeknights.tconstruct.library.tools.definition.module.mining.IsEffectiveToolHook;
 import slimeknights.tconstruct.library.tools.definition.module.mining.MiningSpeedToolHook;
 import slimeknights.tconstruct.library.tools.definition.module.mining.MiningTierToolHook;
 import slimeknights.tconstruct.library.tools.definition.module.weapon.MeleeHitToolHook;
+import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
@@ -34,6 +38,24 @@ public class ToolHooks {
   public static final ModifierHook<ToolMaterialHook> TOOL_MATERIALS = register("tool_materials", ToolMaterialHook.class, definition -> List.of());
   /** Hook for checking if a tool can perform a given action. TODO: rename to {@code volatile_data} */
   public static final ModifierHook<ToolPartsHook> TOOL_PARTS = register("tool_parts", ToolPartsHook.class, definition -> List.of());
+
+  /** Hook for repairing a tool using a material. */
+  public static final ModifierHook<MaterialRepairToolHook> MATERIAL_REPAIR = register("material_repair", MaterialRepairToolHook.class, MaxMerger::new, new MaterialRepairToolHook() {
+    @Override
+    public boolean isRepairMaterial(IToolStackView tool, MaterialId material) {
+      return false;
+    }
+
+    @Override
+    public float getRepairAmount(IToolStackView tool, MaterialId material) {
+      return 0;
+    }
+
+    @Override
+    public float getRepairFactor(IToolStackView tool, MaterialId material) {
+      return 0;
+    }
+  });
 
   /** Hook for adding raw unconditional stats to a tool */
   public static final ModifierHook<ToolStatsHook> TOOL_STATS = register("tool_stats", ToolStatsHook.class, ToolStatsHook.AllMerger::new, (context, builder) -> {});

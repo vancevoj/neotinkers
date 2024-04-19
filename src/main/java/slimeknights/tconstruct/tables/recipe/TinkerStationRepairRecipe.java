@@ -10,7 +10,6 @@ import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.materials.definition.IMaterial;
 import slimeknights.tconstruct.library.materials.definition.MaterialId;
-import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.TinkerHooks;
 import slimeknights.tconstruct.library.recipe.RecipeResult;
@@ -19,19 +18,14 @@ import slimeknights.tconstruct.library.recipe.tinkerstation.IMutableTinkerStatio
 import slimeknights.tconstruct.library.recipe.tinkerstation.ITinkerStationContainer;
 import slimeknights.tconstruct.library.recipe.tinkerstation.ITinkerStationRecipe;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinition;
-import slimeknights.tconstruct.library.tools.definition.ToolDefinitionData;
-import slimeknights.tconstruct.library.tools.definition.module.ToolHooks;
-import slimeknights.tconstruct.library.tools.definition.module.material.ToolMaterialHook;
+import slimeknights.tconstruct.library.tools.definition.module.material.MaterialRepairToolHook;
 import slimeknights.tconstruct.library.tools.helper.ToolDamageUtil;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.library.tools.part.IRepairKitItem;
-import slimeknights.tconstruct.library.tools.part.IToolPart;
 import slimeknights.tconstruct.tables.TinkerTables;
 
-import javax.annotation.Nullable;
 import java.util.function.IntConsumer;
-import java.util.stream.IntStream;
 
 /** Recipe for repairing tools */
 @RequiredArgsConstructor
@@ -42,21 +36,6 @@ public class TinkerStationRepairRecipe implements ITinkerStationRecipe {
 
   @Getter
   private final ResourceLocation id;
-
-  /**
-   * Checks if the tool can be repaired with the given material
-   * @param tool      Tool to check
-   * @param material  Material to try
-   * @return  Index if can repair, -1 if invalid
-   */
-  public static int getRepairIndex(IToolStackView tool, MaterialId material) {
-    for (int part : tool.getHook(ToolHooks.TOOL_MATERIALS).getRepairIndices(tool.getDefinition())) {
-      if (tool.getMaterial(part).getId().equals(material)) {
-        return part;
-      }
-    }
-    return -1;
-  }
 
   /**
    * Gets the material for the given slot
@@ -78,32 +57,27 @@ public class TinkerStationRepairRecipe implements ITinkerStationRecipe {
     return IMaterial.UNKNOWN_ID;
   }
 
-  /** Gets the default stats ID to use if the item is not a tool part */
-  @Nullable
-  public static MaterialStatsId getDefaultStatsId(IToolStackView tool, MaterialId repairMaterial) {
-    int repairIndex = getRepairIndex(tool, repairMaterial);
-    if (repairIndex < 0) {
-      return null; // default to the first repair stats
-    }
-    return ToolMaterialHook.stats(tool.getDefinition()).get(repairIndex).stat();
+  /** Gets the amount to repair given the passed tool */
+  protected float getRepairAmount(IToolStackView tool, MaterialId repairMaterial) {
+    return MaterialRepairToolHook.repairAmount(tool, repairMaterial);
   }
 
   /** Gets the amount to repair per item */
   protected float getRepairPerItem(ToolStack tool, ITinkerStationContainer inv, int slot, MaterialId repairMaterial) {
-    ItemStack stack = inv.getInput(slot);
-    // repair kit first
-    ToolDefinitionData toolData = tool.getDefinition().getData();
-    if (stack.getItem() instanceof IRepairKitItem kit) {
-      // multiply by 2 (part cost), divide again by the repair factor to get the final percent
-      return MaterialRecipe.getRepairDurability(toolData, repairMaterial, getDefaultStatsId(tool, repairMaterial)) * kit.getRepairAmount() / MaterialRecipe.INGOTS_PER_REPAIR;
-    } else {
-      // material recipe fallback
-      MaterialRecipe recipe = inv.getInputMaterial(slot);
-      if (recipe != null) {
-        if (stack.getItem() instanceof IToolPart) {
-          return recipe.getRepairPerItem(toolData, ((IToolPart)stack.getItem()).getStatType());
+    // repair stat may be null in the modifier repair recipe
+    float amount = getRepairAmount(tool, repairMaterial);
+    if (amount > 0) {
+      ItemStack stack = inv.getInput(slot);
+      // repair kit first
+      if (stack.getItem() instanceof IRepairKitItem kit) {
+        // multiply by repair kit value, divide again by the repair factor to get the final percent
+        return amount * kit.getRepairAmount() / MaterialRecipe.INGOTS_PER_REPAIR;
+      } else {
+        // material recipe fallback
+        MaterialRecipe recipe = inv.getInputMaterial(slot);
+        if (recipe != null) {
+          return recipe.scaleRepair(amount);
         }
-        return recipe.getRepairPerItem(toolData, getDefaultStatsId(tool, repairMaterial));
       }
     }
     return 0;
@@ -115,19 +89,13 @@ public class TinkerStationRepairRecipe implements ITinkerStationRecipe {
     ItemStack tinkerable = inv.getTinkerableStack();
     // must be repairable and multipart to use this recipe
     // if its not multipart, different recipe will be used to repair it (as it has a dedicated repair item)
-    if (tinkerable.isEmpty()
-        || !tinkerable.is(TinkerTags.Items.MULTIPART_TOOL)
-        || !tinkerable.is(TinkerTags.Items.DURABILITY)) {
+    if (tinkerable.isEmpty() || !tinkerable.is(TinkerTags.Items.DURABILITY)) {
       return false;
     }
 
     // validate materials
     MaterialId material = null;
     ToolStack tool = ToolStack.from(tinkerable);
-    // not sure why you are tagging a tool with no materials as multipart, you are wrong and should feel ashamed of yourself
-    if (!tool.getDefinition().hasMaterials()) {
-      return false;
-    }
     for (int i = 0; i < inv.getInputCount(); i++) {
       // skip empty slots
       ItemStack stack = inv.getInput(i);
@@ -144,7 +112,7 @@ public class TinkerStationRepairRecipe implements ITinkerStationRecipe {
       // on first match, store and validate the material. For later matches, just ensure material matches
       if (material == null) {
         material = inputMaterial;
-        if (getRepairIndex(tool, material) < 0) {
+        if (!MaterialRepairToolHook.canRepairWith(tool, material)) {
           return false;
         }
       } else if (!material.equals(inputMaterial)) {
@@ -211,18 +179,6 @@ public class TinkerStationRepairRecipe implements ITinkerStationRecipe {
     }
   }
 
-  /** Gets the repair weight for the given material */
-  public static float getRepairWeight(IToolStackView tool, MaterialId repairMaterial) {
-    ToolDefinition definition = tool.getDefinition();
-    ToolMaterialHook materialStats = definition.getHook(ToolHooks.TOOL_MATERIALS);
-    // return the weight of the largest part matching this material
-    return IntStream.of(materialStats.getRepairIndices(definition))
-                    .filter(i -> tool.getMaterial(i).matches(repairMaterial))
-                    .map(i -> materialStats.getStatTypes(definition).get(i).weight())
-                    .max().orElse(1)
-           / (float)materialStats.maxRepairWeight(definition);
-  }
-
   /**
    * Gets the amount to repair from the given slot
    * @param tool            Tool instance
@@ -240,9 +196,6 @@ public class TinkerStationRepairRecipe implements ITinkerStationRecipe {
       if (!repairMaterial.equals(IMaterial.UNKNOWN_ID)) {
         float durabilityPerItem = getRepairPerItem(tool, inv, slot, repairMaterial);
         if (durabilityPerItem > 0) {
-          // if not the primary material, reduced effectiveness
-          durabilityPerItem *= getRepairWeight(tool, repairMaterial);
-
           // adjust the factor based on modifiers
           // main example is wood, +25% per level
           for (ModifierEntry entry : tool.getModifierList()) {

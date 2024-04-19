@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:armor/building/travelers_shield"
+        "recipe": "tconstruct:tools/armor/travelers_chestplate"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -26,7 +26,7 @@
   ],
   "rewards": {
     "recipes": [
-      "tconstruct:armor/building/travelers_shield"
+      "tconstruct:tools/armor/travelers_chestplate"
     ]
   }
 }

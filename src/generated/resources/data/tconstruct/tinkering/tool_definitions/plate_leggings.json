@@ -16,6 +16,11 @@
         "defense": 4,
         "upgrades": 1
       }
+    },
+    {
+      "type": "tconstruct:material_repair",
+      "material": "tconstruct:cobalt",
+      "stat_type": "tconstruct:head"
     }
   ]
 }

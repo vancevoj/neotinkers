@@ -18,6 +18,16 @@
       }
     },
     {
+      "type": "tconstruct:material_repair",
+      "material": "tconstruct:copper",
+      "stat_type": "tconstruct:head"
+    },
+    {
+      "type": "tconstruct:material_repair",
+      "material": "tconstruct:wood",
+      "stat_type": "tconstruct:head"
+    },
+    {
       "type": "tconstruct:traits",
       "traits": [
         {

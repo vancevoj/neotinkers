@@ -11,7 +11,9 @@ import slimeknights.mantle.data.loadable.field.ContextKey;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.materials.definition.MaterialId;
+import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
 import slimeknights.tconstruct.library.modifiers.ModifierId;
+import slimeknights.tconstruct.library.tools.definition.module.material.MaterialRepairModule;
 import slimeknights.tconstruct.library.tools.helper.ModifierUtil;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
@@ -21,7 +23,7 @@ import slimeknights.tconstruct.tools.TinkerModifiers;
 
 /** Recipe for using a repair kit in a crafting station for a specialized tool */
 public class ModifierMaterialRepairKitRecipe extends CraftingTableRepairKitRecipe implements IModifierMaterialRepairRecipe {
-  public static final RecordLoadable<ModifierMaterialRepairKitRecipe> LOADER = RecordLoadable.create(ContextKey.ID.requiredField(), MODIFIER_FIELD, REPAIR_MATERIAL_FIELD, ModifierMaterialRepairKitRecipe::new);
+  public static final RecordLoadable<ModifierMaterialRepairKitRecipe> LOADER = RecordLoadable.create(ContextKey.ID.requiredField(), MODIFIER_FIELD, REPAIR_MATERIAL_FIELD, STAT_TYPE_FIELD, ModifierMaterialRepairKitRecipe::new);
 
   /** Tool that can be repaired with this recipe */
   @Getter
@@ -29,15 +31,19 @@ public class ModifierMaterialRepairKitRecipe extends CraftingTableRepairKitRecip
   /** ID of material used in repairing */
   @Getter
   private final MaterialId repairMaterial;
-  public ModifierMaterialRepairKitRecipe(ResourceLocation id, ModifierId modifier, MaterialId repairMaterial) {
+  /** Stat type used for repairing, null means it will be fetched as the first available stat type */
+  @Getter
+  private final MaterialStatsId statType;
+  public ModifierMaterialRepairKitRecipe(ResourceLocation id, ModifierId modifier, MaterialId repairMaterial, MaterialStatsId statType) {
     super(id);
     this.modifier = modifier;
     this.repairMaterial = repairMaterial;
+    this.statType = statType;
   }
 
   @Override
   protected boolean toolMatches(ItemStack stack) {
-    return stack.is(TinkerTags.Items.MODIFIABLE) && ModifierUtil.getModifierLevel(stack, modifier) > 0;
+    return stack.is(TinkerTags.Items.DURABILITY) && ModifierUtil.getModifierLevel(stack, modifier) > 0;
   }
 
   @Override
@@ -48,7 +54,7 @@ public class ModifierMaterialRepairKitRecipe extends CraftingTableRepairKitRecip
 
   @Override
   protected float getRepairAmount(IToolStackView tool, ItemStack repairStack) {
-    return super.getRepairAmount(tool, repairStack) * tool.getModifierLevel(modifier);
+    return MaterialRepairModule.getDurability(tool.getDefinition().getId(), repairMaterial.getId(), statType) * tool.getModifierLevel(modifier);
   }
 
   @Override

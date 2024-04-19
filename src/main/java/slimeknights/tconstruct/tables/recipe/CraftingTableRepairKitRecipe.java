@@ -12,10 +12,10 @@ import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.common.config.Config;
 import slimeknights.tconstruct.library.materials.definition.IMaterial;
 import slimeknights.tconstruct.library.materials.definition.MaterialId;
-import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.TinkerHooks;
 import slimeknights.tconstruct.library.recipe.material.MaterialRecipe;
+import slimeknights.tconstruct.library.tools.definition.module.material.MaterialRepairToolHook;
 import slimeknights.tconstruct.library.tools.helper.ToolDamageUtil;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
@@ -37,7 +37,7 @@ public class CraftingTableRepairKitRecipe extends CustomRecipe {
    * @return  True if valid
    */
   protected boolean toolMatches(ItemStack stack) {
-    return stack.is(TinkerTags.Items.MULTIPART_TOOL) && stack.is(TinkerTags.Items.DURABILITY);
+    return stack.is(TinkerTags.Items.DURABILITY);
   }
 
   /**
@@ -90,19 +90,12 @@ public class CraftingTableRepairKitRecipe extends CustomRecipe {
   @Override
   public boolean matches(CraftingContainer inv, Level worldIn) {
     Pair<ToolStack, ItemStack> inputs = getRelevantInputs(inv);
-    return inputs != null && TinkerStationRepairRecipe.getRepairIndex(inputs.getFirst(), IMaterialItem.getMaterialFromStack(inputs.getSecond()).getId()) >= 0;
+    return inputs != null && MaterialRepairToolHook.canRepairWith(inputs.getFirst(), IMaterialItem.getMaterialFromStack(inputs.getSecond()).getId());
   }
 
   /** Gets the amount to repair for the given material */
   protected float getRepairAmount(IToolStackView tool, ItemStack repairStack) {
-    MaterialId repairMaterial = IMaterialItem.getMaterialFromStack(repairStack).getId();
-    float repairFactor = repairStack.getItem() instanceof IRepairKitItem kit ? kit.getRepairAmount() : Config.COMMON.repairKitAmount.get().floatValue();
-    MaterialStatsId repairStats = TinkerStationRepairRecipe.getDefaultStatsId(tool, repairMaterial);
-    float repairAmount = MaterialRecipe.getRepairDurability(tool.getDefinition().getData(), repairMaterial, repairStats) * repairFactor / MaterialRecipe.INGOTS_PER_REPAIR;
-    if (repairAmount > 0) {
-      repairAmount *= TinkerStationRepairRecipe.getRepairWeight(tool, repairMaterial);
-    }
-    return repairAmount;
+    return MaterialRepairToolHook.repairAmount(tool, IMaterialItem.getMaterialFromStack(repairStack).getId());
   }
 
   @Override
@@ -115,9 +108,12 @@ public class CraftingTableRepairKitRecipe extends CustomRecipe {
 
     // first identify materials and durability
     ToolStack tool = inputs.getFirst().copy();
+    ItemStack repairKit = inputs.getSecond();
     // vanilla says 25% durability per ingot, repair kits are worth 2 ingots
-    float repairAmount = getRepairAmount(tool, inputs.getSecond());
+    float repairAmount = getRepairAmount(tool, repairKit);
     if (repairAmount > 0) {
+      // add in repair kit value
+      repairAmount *= (repairKit.getItem() instanceof IRepairKitItem kit ? kit.getRepairAmount() : Config.COMMON.repairKitAmount.get().floatValue()) / MaterialRecipe.INGOTS_PER_REPAIR;
       // adjust the factor based on modifiers
       // main example is wood, +25% per level
       for (ModifierEntry entry : tool.getModifierList()) {

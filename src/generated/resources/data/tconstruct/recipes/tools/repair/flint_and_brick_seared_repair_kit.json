@@ -1,7 +1,0 @@
-{
-  "type": "tconstruct:specialized_repair_kit",
-  "repair_material": "tconstruct:seared_stone",
-  "tool": {
-    "item": "tconstruct:flint_and_brick"
-  }
-}

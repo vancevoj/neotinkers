@@ -1,7 +1,0 @@
-{
-  "type": "tconstruct:specialized_repair_kit",
-  "repair_material": "tconstruct:phantom",
-  "tool": {
-    "item": "tconstruct:slime_chestplate"
-  }
-}

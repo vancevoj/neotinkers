@@ -21,7 +21,7 @@ import java.util.function.Supplier;
 
 /** Tool using tool parts for its material stats, allows part swapping and tool building */
 public class PartStatsModule extends MaterialStatsModule implements ToolPartsHook {
-  private static final List<ModifierHook<?>> DEFAULT_HOOKS = ModifierHookProvider.<PartStatsModule>defaultHooks(ToolHooks.TOOL_STATS, ToolHooks.TOOL_TRAITS, ToolHooks.TOOL_MATERIALS, ToolHooks.TOOL_PARTS);
+  private static final List<ModifierHook<?>> DEFAULT_HOOKS = ModifierHookProvider.<PartStatsModule>defaultHooks(ToolHooks.TOOL_STATS, ToolHooks.TOOL_TRAITS, ToolHooks.TOOL_MATERIALS, ToolHooks.TOOL_PARTS, ToolHooks.MATERIAL_REPAIR);
   public static final RecordLoadable<PartStatsModule> LOADER = RecordLoadable.create(
     STAT_PROVIDER_FIELD,
     WeightedPart.LOADABLE.list(1).requiredField("parts", m -> m.parts),

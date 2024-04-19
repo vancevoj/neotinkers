@@ -20,6 +20,16 @@
       }
     },
     {
+      "type": "tconstruct:material_repair",
+      "material": "tconstruct:enderslime",
+      "stat_type": "tconstruct:repair_kit"
+    },
+    {
+      "type": "tconstruct:material_repair",
+      "material": "tconstruct:phantom",
+      "stat_type": "tconstruct:repair_kit"
+    },
+    {
       "type": "tconstruct:traits",
       "traits": [
         {

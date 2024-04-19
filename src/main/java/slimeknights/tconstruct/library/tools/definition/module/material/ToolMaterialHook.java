@@ -24,14 +24,6 @@ public interface ToolMaterialHook {
     return !getStatTypes(definition).isEmpty();
   }
 
-  /** Gets the material stats that represent repairing */
-  default int[] getRepairIndices(ToolDefinition definition) {
-    return new int[0];
-  }
-
-  default int maxRepairWeight(ToolDefinition definition) {
-    return 1;
-  }
 
   /** Stat with weights */
   record WeightedStatType(MaterialStatsId stat, int weight) {

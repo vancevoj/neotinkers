@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:armor/building/plate_leggings"
+        "recipe": "tconstruct:tools/armor/plate_helmet"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -26,7 +26,7 @@
   ],
   "rewards": {
     "recipes": [
-      "tconstruct:armor/building/plate_leggings"
+      "tconstruct:tools/armor/plate_helmet"
     ]
   }
 }

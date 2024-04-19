@@ -3,11 +3,13 @@ package slimeknights.tconstruct.library.tools.definition.module.material;
 import com.google.common.collect.ImmutableList;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import net.minecraft.resources.ResourceLocation;
 import slimeknights.mantle.data.loadable.ErrorFactory;
 import slimeknights.mantle.data.loadable.field.LoadableField;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.tconstruct.library.materials.IMaterialRegistry;
 import slimeknights.tconstruct.library.materials.MaterialRegistry;
+import slimeknights.tconstruct.library.materials.definition.MaterialId;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
 import slimeknights.tconstruct.library.modifiers.ModifierHook;
 import slimeknights.tconstruct.library.modifiers.modules.ModifierHookProvider;
@@ -17,6 +19,7 @@ import slimeknights.tconstruct.library.tools.definition.module.ToolModule;
 import slimeknights.tconstruct.library.tools.definition.module.build.ToolStatsHook;
 import slimeknights.tconstruct.library.tools.definition.module.build.ToolTraitHook;
 import slimeknights.tconstruct.library.tools.nbt.IToolContext;
+import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.MaterialNBT;
 import slimeknights.tconstruct.library.tools.nbt.ModifierNBT;
 import slimeknights.tconstruct.library.tools.stat.MaterialStatProvider;
@@ -24,11 +27,12 @@ import slimeknights.tconstruct.library.tools.stat.MaterialStatProviders;
 import slimeknights.tconstruct.library.tools.stat.ModifierStatsBuilder;
 
 import java.util.List;
+import java.util.function.IntUnaryOperator;
 import java.util.stream.IntStream;
 
 /** Module for building tool stats using materials */
-public class MaterialStatsModule implements ToolStatsHook, ToolTraitHook, ToolMaterialHook, ToolModule {
-  private static final List<ModifierHook<?>> DEFAULT_HOOKS = ModifierHookProvider.<MaterialStatsModule>defaultHooks(ToolHooks.TOOL_STATS, ToolHooks.TOOL_TRAITS, ToolHooks.TOOL_MATERIALS);
+public class MaterialStatsModule implements ToolStatsHook, ToolTraitHook, ToolMaterialHook, MaterialRepairToolHook, ToolModule {
+  private static final List<ModifierHook<?>> DEFAULT_HOOKS = ModifierHookProvider.<MaterialStatsModule>defaultHooks(ToolHooks.TOOL_STATS, ToolHooks.TOOL_TRAITS, ToolHooks.TOOL_MATERIALS, ToolHooks.MATERIAL_REPAIR);
   protected static final LoadableField<MaterialStatProvider,MaterialStatsModule> STAT_PROVIDER_FIELD = MaterialStatProviders.REGISTRY.requiredField("stat_provider", m -> m.statProvider);
   public static final RecordLoadable<MaterialStatsModule> LOADER = RecordLoadable.create(
     STAT_PROVIDER_FIELD,
@@ -77,17 +81,45 @@ public class MaterialStatsModule implements ToolStatsHook, ToolTraitHook, ToolMa
     return repairIndices;
   }
 
-  @Override
-  public int[] getRepairIndices(ToolDefinition definition) {
-    return getRepairIndices();
-  }
-
-  @Override
-  public int maxRepairWeight(ToolDefinition definition) {
+  /** Gets the largest weight of all repair materials */
+  private int maxRepairWeight() {
     if (maxRepairWeight == 0) {
       maxRepairWeight = IntStream.of(getRepairIndices()).map(i -> statTypes.get(i).weight()).max().orElse(1);
     }
     return maxRepairWeight;
+  }
+
+  @Override
+  public boolean isRepairMaterial(IToolStackView tool, MaterialId material) {
+    for (int part : getRepairIndices()) {
+      if (tool.getMaterial(part).matches(material)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /** Shared logic for both repair value functions */
+  private float getRepair(IToolStackView tool, MaterialId material, IntUnaryOperator mapper) {
+    return IntStream.of(getRepairIndices())
+                    .filter(i -> tool.getMaterial(i).matches(material))
+                    .map(mapper)
+                    .reduce(0, Integer::max)
+           / (float)maxRepairWeight();
+  }
+
+  @Override
+  public float getRepairFactor(IToolStackView tool, MaterialId material) {
+    return getRepair(tool, material, i -> statTypes.get(i).weight());
+  }
+
+  @Override
+  public float getRepairAmount(IToolStackView tool, MaterialId material) {
+    ResourceLocation toolId = tool.getDefinition().getId();
+    return getRepair(tool, material, i -> {
+      WeightedStatType statType = statTypes.get(i);
+      return MaterialRepairModule.getDurability(toolId, material, statType.stat()) * statType.weight();
+    });
   }
 
   @Override

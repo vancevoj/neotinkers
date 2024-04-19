@@ -25,8 +25,6 @@ import slimeknights.tconstruct.library.recipe.material.MaterialRecipe;
 import slimeknights.tconstruct.library.recipe.partbuilder.ItemPartRecipe;
 import slimeknights.tconstruct.library.recipe.partbuilder.PartRecipe;
 import slimeknights.tconstruct.library.recipe.tinkerstation.building.ToolBuildingRecipe;
-import slimeknights.tconstruct.library.recipe.tinkerstation.repairing.SpecializedRepairKitRecipe;
-import slimeknights.tconstruct.library.recipe.tinkerstation.repairing.SpecializedRepairRecipe;
 import slimeknights.tconstruct.library.tools.layout.StationSlotLayoutLoader;
 import slimeknights.tconstruct.shared.block.TableBlock;
 import slimeknights.tconstruct.tables.block.ChestBlock;
@@ -130,9 +128,6 @@ public final class TinkerTables extends TinkerModule {
   // repair - standard
   public static final RegistryObject<SimpleRecipeSerializer<TinkerStationRepairRecipe>> tinkerStationRepairSerializer = RECIPE_SERIALIZERS.register("tinker_station_repair", () -> new SimpleRecipeSerializer<>(TinkerStationRepairRecipe::new));
   public static final RegistryObject<SimpleRecipeSerializer<CraftingTableRepairKitRecipe>> craftingTableRepairSerializer = RECIPE_SERIALIZERS.register("crafting_table_repair", () -> new SimpleRecipeSerializer<>(CraftingTableRepairKitRecipe::new));
-  // repair - specialized
-  public static final RegistryObject<RecipeSerializer<SpecializedRepairRecipe>> specializedRepairSerializer = RECIPE_SERIALIZERS.register("specialized_station_repair", () -> LoadableRecipeSerializer.of(SpecializedRepairRecipe.LOADER));
-  public static final RegistryObject<RecipeSerializer<SpecializedRepairKitRecipe>> specializedRepairKitSerializer = RECIPE_SERIALIZERS.register("specialized_repair_kit", () -> LoadableRecipeSerializer.of(SpecializedRepairKitRecipe.LOADER));
 
   @SubscribeEvent
   void commonSetup(final FMLCommonSetupEvent event) {

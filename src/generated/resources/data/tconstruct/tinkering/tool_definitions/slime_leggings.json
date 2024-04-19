@@ -14,6 +14,16 @@
       }
     },
     {
+      "type": "tconstruct:material_repair",
+      "material": "tconstruct:enderslime",
+      "stat_type": "tconstruct:repair_kit"
+    },
+    {
+      "type": "tconstruct:material_repair",
+      "material": "tconstruct:chorus",
+      "stat_type": "tconstruct:head"
+    },
+    {
       "type": "tconstruct:traits",
       "traits": [
         {

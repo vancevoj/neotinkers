@@ -27,6 +27,11 @@
       ]
     },
     {
+      "type": "tconstruct:material_repair",
+      "material": "tconstruct:slimewood",
+      "stat_type": "tconstruct:limb"
+    },
+    {
       "type": "tconstruct:circle_aoe",
       "3D": false,
       "diameter": 1
