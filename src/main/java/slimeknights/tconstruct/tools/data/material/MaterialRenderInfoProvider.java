@@ -3,6 +3,7 @@ package slimeknights.tconstruct.tools.data.material;
 import net.minecraft.data.DataGenerator;
 import slimeknights.tconstruct.library.client.data.material.AbstractMaterialRenderInfoProvider;
 import slimeknights.tconstruct.library.client.data.material.AbstractMaterialSpriteProvider;
+import slimeknights.tconstruct.library.materials.definition.IMaterial;
 import slimeknights.tconstruct.library.tools.helper.ToolBuildHandler;
 
 public class MaterialRenderInfoProvider extends AbstractMaterialRenderInfoProvider {
@@ -12,6 +13,9 @@ public class MaterialRenderInfoProvider extends AbstractMaterialRenderInfoProvid
 
   @Override
   protected void addMaterialRenderInfo() {
+    // fallback
+    buildRenderInfo(IMaterial.UNKNOWN_ID);
+
     // tier 1
     buildRenderInfo(MaterialIds.flint).color(0x3D3C3C).fallbacks("crystal", "rock", "stick");
     buildRenderInfo(MaterialIds.basalt);

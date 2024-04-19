@@ -7,7 +7,6 @@ import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.Material;
 import net.minecraft.resources.ResourceLocation;
-import org.apache.commons.lang3.mutable.MutableObject;
 import slimeknights.mantle.util.ItemLayerPixels;
 import slimeknights.tconstruct.library.client.materials.MaterialRenderInfo;
 import slimeknights.tconstruct.library.client.materials.MaterialRenderInfoLoader;
@@ -77,9 +76,10 @@ public class MaterialModifierModel implements IBakedModifierModel {
   public ImmutableList<BakedQuad> getQuads(IToolStackView tool, ModifierEntry modifier, Function<Material,TextureAtlasSprite> spriteGetter, Transformation transforms, boolean isLarge, int startTintIndex, @Nullable ItemLayerPixels pixels) {
     Material texture = isLarge ? large : small;
     if (texture != null) {
-      MutableObject<ImmutableList<BakedQuad>> mutable = new MutableObject<>();
-      mutable.setValue(MaterialModel.getQuadsForMaterial(spriteGetter, texture, getMaterial(tool, modifier.getModifier()), -1, transforms, pixels));
-      return mutable.getValue();
+      MaterialVariantId material = getMaterial(tool, modifier.getModifier());
+      if (material != null) {
+        return MaterialModel.getQuadsForMaterial(spriteGetter, texture, material, -1, transforms, pixels);
+      }
     }
     return ImmutableList.of();
   }

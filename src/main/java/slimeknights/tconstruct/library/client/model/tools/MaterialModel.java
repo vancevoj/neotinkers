@@ -36,12 +36,14 @@ import slimeknights.tconstruct.library.client.materials.MaterialRenderInfo;
 import slimeknights.tconstruct.library.client.materials.MaterialRenderInfo.TintedSprite;
 import slimeknights.tconstruct.library.client.materials.MaterialRenderInfoLoader;
 import slimeknights.tconstruct.library.client.model.DynamicTextureLoader;
+import slimeknights.tconstruct.library.materials.definition.IMaterial;
 import slimeknights.tconstruct.library.materials.definition.MaterialVariantId;
 import slimeknights.tconstruct.library.tools.part.IMaterialItem;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -102,14 +104,12 @@ public class MaterialModel implements IUnbakedGeometry<MaterialModel> {
    * @param material      Material variant
    * @return  Tinted sprite or fallback
    */
-  public static TintedSprite getMaterialSprite(Function<Material, TextureAtlasSprite> spriteGetter, Material texture, @Nullable MaterialVariantId material) {
+  public static TintedSprite getMaterialSprite(Function<Material, TextureAtlasSprite> spriteGetter, Material texture, MaterialVariantId material) {
     // if the base material is non-null, try to find the sprite for that material
-    if (material != null) {
-      // first, find a render info
-      Optional<MaterialRenderInfo> optional = MaterialRenderInfoLoader.INSTANCE.getRenderInfo(material);
-      if (optional.isPresent()) {
-        return optional.get().getSprite(texture, spriteGetter);
-      }
+    // first, find a render info
+    Optional<MaterialRenderInfo> optional = MaterialRenderInfoLoader.INSTANCE.getRenderInfo(material);
+    if (optional.isPresent()) {
+      return optional.get().getSprite(texture, spriteGetter);
     }
     return new TintedSprite(spriteGetter.apply(texture), -1, 0);
   }
@@ -124,7 +124,7 @@ public class MaterialModel implements IUnbakedGeometry<MaterialModel> {
    * @param pixels          Pixels to prevent z-fighting for multiple layers
    * @return  Quad list
    */
-  public static ImmutableList<BakedQuad> getQuadsForMaterial(Function<Material, TextureAtlasSprite> spriteGetter, Material texture, @Nullable MaterialVariantId material, int tintIndex, Transformation transformation, @Nullable ItemLayerPixels pixels) {
+  public static ImmutableList<BakedQuad> getQuadsForMaterial(Function<Material, TextureAtlasSprite> spriteGetter, Material texture, MaterialVariantId material, int tintIndex, Transformation transformation, @Nullable ItemLayerPixels pixels) {
     TintedSprite sprite = getMaterialSprite(spriteGetter, texture, material);
     return MantleItemLayerModel.getQuadsForSprite(sprite.color(), tintIndex, sprite.sprite(), transformation, sprite.emissivity(), pixels);
   }
@@ -139,7 +139,7 @@ public class MaterialModel implements IUnbakedGeometry<MaterialModel> {
    * @param overrides      Override instance to use, will either be empty or {@link MaterialOverrideHandler}
    * @return  Baked model
    */
-  private static BakedModel bakeInternal(IGeometryBakingContext owner, Function<Material, TextureAtlasSprite> spriteGetter, Transformation transform, @Nullable MaterialVariantId material, int index, ItemOverrides overrides) {
+  private static BakedModel bakeInternal(IGeometryBakingContext owner, Function<Material, TextureAtlasSprite> spriteGetter, Transformation transform, MaterialVariantId material, int index, ItemOverrides overrides) {
     TintedSprite materialSprite = getMaterialSprite(spriteGetter, owner.getMaterial("texture"), material);
     CompositeModel.Baked.Builder builder = CompositeModel.Baked.builder(owner, materialSprite.sprite(), overrides, owner.getTransforms());
     // TODO: let material choose its render type
@@ -167,7 +167,7 @@ public class MaterialModel implements IUnbakedGeometry<MaterialModel> {
     }
 
     // after that its base logic
-    return bakeInternal(owner, spriteGetter, transforms, material, index, overrides);
+    return bakeInternal(owner, spriteGetter, transforms, Objects.requireNonNullElse(material, IMaterial.UNKNOWN_ID), index, overrides);
   }
 
   /**
