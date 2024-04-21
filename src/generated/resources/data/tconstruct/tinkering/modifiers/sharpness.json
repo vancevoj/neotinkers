@@ -2,6 +2,7 @@
   "type": "tconstruct:composable",
   "level_display": {
     "type": "tconstruct:unique",
+    "first_unique": true,
     "unique_until": 5
   },
   "modules": [

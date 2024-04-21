@@ -1726,8 +1726,7 @@
   "modifier.tconstruct.offhanded": "Offhanded",
   "modifier.tconstruct.offhanded.2": "Nohanded",
   "modifier.tconstruct.offhanded.flavor": "Don't think about it too hard",
-  "modifier.tconstruct.offhanded.description": "Disables the tools interaction abilities when the offhand is filled",
-  "modifier.tconstruct.offhanded.description.2": "Disables the tools interaction abilities entirely",
+  "modifier.tconstruct.offhanded.description": "Disables the tools interaction abilities when the offhand is filled. Second level disables interaction abilities entirely.",
 
 
   "_comment": "Durability",
@@ -1767,7 +1766,6 @@
   "modifier.tconstruct.magnetic.description": "Hitting things attracts nearby items?!",
 
   "modifier.tconstruct.haste": "Haste",
-  "modifier.tconstruct.haste.1": "Haste",
   "modifier.tconstruct.haste.2": "Hastier",
   "modifier.tconstruct.haste.3": "Hastiest",
   "modifier.tconstruct.haste.4": "Hastiester",
@@ -1848,7 +1846,6 @@
   "modifier.tconstruct.sharpness.flavor": "How Sharp?",
   "modifier.tconstruct.sharpness.description": "Tool is so much sharper, dealing more damage!",
   "modifier.tconstruct.swiftstrike": "Swiftstrike",
-  "modifier.tconstruct.swiftstrike.1": "Swiftstrike",
   "modifier.tconstruct.swiftstrike.2": "Swifterstrike",
   "modifier.tconstruct.swiftstrike.3": "Swifteststrike",
   "modifier.tconstruct.swiftstrike.4": "Swiftesterstrike",
@@ -2096,8 +2093,7 @@
   "modifier.tconstruct.autosmelt": "Autosmelt",
   "modifier.tconstruct.autosmelt.flavor": "Fires of the Nether in your tool!",
   "modifier.tconstruct.autosmelt.description": "Tool automatically smelts all drops",
-  "modifier.tconstruct.luck": "Luck",
-  "modifier.tconstruct.luck.1": "Lucky",
+  "modifier.tconstruct.luck": "Lucky",
   "modifier.tconstruct.luck.2": "Luckier",
   "modifier.tconstruct.luck.3": "Luckiest",
   "modifier.tconstruct.luck.flavor": "Flashy!",

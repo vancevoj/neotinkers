@@ -37,6 +37,7 @@ import slimeknights.tconstruct.library.data.tinkering.AbstractModifierProvider;
 import slimeknights.tconstruct.library.json.RandomLevelingValue;
 import slimeknights.tconstruct.library.json.predicate.TinkerPredicate;
 import slimeknights.tconstruct.library.json.predicate.tool.HasModifierPredicate;
+import slimeknights.tconstruct.library.json.predicate.tool.ToolContextPredicate;
 import slimeknights.tconstruct.library.json.variable.block.BlockVariable;
 import slimeknights.tconstruct.library.json.variable.entity.AttributeEntityVariable;
 import slimeknights.tconstruct.library.json.variable.entity.ConditionalEntityVariable;
@@ -50,8 +51,9 @@ import slimeknights.tconstruct.library.json.variable.stat.EntityConditionalStatV
 import slimeknights.tconstruct.library.json.variable.tool.ToolStatVariable;
 import slimeknights.tconstruct.library.json.variable.tool.ToolVariable;
 import slimeknights.tconstruct.library.modifiers.Modifier;
-import slimeknights.tconstruct.library.modifiers.ModifierId;
+import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
+import slimeknights.tconstruct.library.modifiers.ModifierId;
 import slimeknights.tconstruct.library.modifiers.dynamic.InventoryMenuModifier;
 import slimeknights.tconstruct.library.modifiers.impl.BasicModifier.TooltipDisplay;
 import slimeknights.tconstruct.library.modifiers.modules.armor.BlockDamageSourceModule;
@@ -83,6 +85,7 @@ import slimeknights.tconstruct.library.modifiers.modules.combat.MobEffectModule;
 import slimeknights.tconstruct.library.modifiers.modules.display.DurabilityBarColorModule;
 import slimeknights.tconstruct.library.modifiers.modules.fluid.TankModule;
 import slimeknights.tconstruct.library.modifiers.modules.mining.ConditionalMiningSpeedModule;
+import slimeknights.tconstruct.library.modifiers.modules.util.ModifierCondition;
 import slimeknights.tconstruct.library.modifiers.util.ModifierLevelDisplay;
 import slimeknights.tconstruct.library.modifiers.util.ModifierLevelDisplay.UniqueForLevels;
 import slimeknights.tconstruct.library.tools.SlotType;
@@ -177,6 +180,10 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
     // general
     buildModifier(ModifierIds.worldbound).addModule(new VolatileFlagModule(IModifiable.INDESTRUCTIBLE_ENTITY)).addModule(new RarityModule(Rarity.UNCOMMON)).levelDisplay(ModifierLevelDisplay.NO_LEVELS);
     buildModifier(ModifierIds.shiny).addModule(new VolatileFlagModule(IModifiable.SHINY)).addModule(new RarityModule(Rarity.EPIC)).levelDisplay(ModifierLevelDisplay.NO_LEVELS);
+    buildModifier(ModifierIds.offhanded)
+      .addModule(new VolatileFlagModule(IModifiable.DEFER_OFFHAND))
+      .addModule(new VolatileFlagModule(IModifiable.NO_INTERACTION, new ModifierCondition<>(ToolContextPredicate.ANY, ModifierEntry.VALID_LEVEL.min(2))))
+      .levelDisplay(new UniqueForLevels(2));
     // general abilities
     buildModifier(ModifierIds.reach)
       .addModule(AttributeModule.builder(ForgeMod.REACH_DISTANCE.get(), Operation.ADDITION).uniqueFrom(ModifierIds.reach).eachLevel(1))
@@ -273,9 +280,8 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
     // damage boost
     // vanilla give +1, 1.5, 2, 2.5, 3, but that is low
     // we instead do +0.75, +1.5, +2.25, +3, +3.75
-    UniqueForLevels uniqueForFive = new UniqueForLevels(5);
-    buildModifier(ModifierIds.sharpness).addModule(StatBoostModule.add(ToolStats.ATTACK_DAMAGE).eachLevel(0.75f)).levelDisplay(uniqueForFive);
-    buildModifier(ModifierIds.swiftstrike).addModule(StatBoostModule.multiplyBase(ToolStats.ATTACK_SPEED).eachLevel(0.05f)).levelDisplay(uniqueForFive);
+    buildModifier(ModifierIds.sharpness).addModule(StatBoostModule.add(ToolStats.ATTACK_DAMAGE).eachLevel(0.75f)).levelDisplay(new UniqueForLevels(5, true));
+    buildModifier(ModifierIds.swiftstrike).addModule(StatBoostModule.multiplyBase(ToolStats.ATTACK_SPEED).eachLevel(0.05f)).levelDisplay(new UniqueForLevels(5));
     buildModifier(ModifierIds.smite).addModule(ConditionalMeleeDamageModule.builder().target(new MobTypePredicate(MobType.UNDEAD)).eachLevel(2.0f));
     buildModifier(ModifierIds.antiaquatic).addModule(ConditionalMeleeDamageModule.builder().target(new MobTypePredicate(MobType.WATER)).eachLevel(2.0f));
     buildModifier(ModifierIds.cooling).addModule(ConditionalMeleeDamageModule.builder().target(LivingEntityPredicate.FIRE_IMMUNE).eachLevel(1.6f));

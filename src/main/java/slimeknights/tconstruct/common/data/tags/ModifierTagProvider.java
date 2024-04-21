@@ -149,7 +149,7 @@ public class ModifierTagProvider extends AbstractModifierTagProvider {
     // slotless
     this.tag(GENERAL_SLOTLESS).add(
       TinkerModifiers.overslime.getId(), ModifierIds.shiny, ModifierIds.worldbound,
-      TinkerModifiers.offhanded.getId(), ModifierIds.blindshot,
+      ModifierIds.offhanded, ModifierIds.blindshot,
       TinkerModifiers.farsighted.getId(), TinkerModifiers.nearsighted.getId(),
       TinkerModifiers.dyed.getId(), TinkerModifiers.embellishment.getId());
     this.tag(BONUS_SLOTLESS).add(

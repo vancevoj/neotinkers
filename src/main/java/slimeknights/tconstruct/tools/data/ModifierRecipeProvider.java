@@ -302,13 +302,13 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                                     .setTools(TinkerTags.Items.MODIFIABLE)
                                     .setInput(Items.INK_SAC, 1, 45)
                                     .save(consumer, prefix(TinkerModifiers.nearsighted, upgradeFolder));
-    ModifierRecipeBuilder.modifier(TinkerModifiers.offhanded)
+    ModifierRecipeBuilder.modifier(ModifierIds.offhanded)
                          .setTools(TinkerTags.Items.INTERACTABLE_RIGHT)
                          .addInput(Items.LEATHER)
                          .addInput(Items.FIRE_CHARGE)
                          .addInput(SlimeType.ICHOR.getSlimeballTag())
                          .setMaxLevel(2)
-                         .save(consumer, prefix(TinkerModifiers.offhanded, upgradeFolder));
+                         .save(consumer, prefix(ModifierIds.offhanded, upgradeFolder));
 
     /*
      * Speed

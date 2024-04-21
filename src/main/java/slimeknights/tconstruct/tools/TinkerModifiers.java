@@ -110,10 +110,10 @@ import slimeknights.tconstruct.library.modifiers.modules.mining.ConditionalMinin
 import slimeknights.tconstruct.library.modifiers.modules.unserializable.ArmorStatModule;
 import slimeknights.tconstruct.library.modifiers.util.DynamicModifier;
 import slimeknights.tconstruct.library.modifiers.util.ModifierDeferredRegister;
-import slimeknights.tconstruct.library.module.ModuleHookMap;
 import slimeknights.tconstruct.library.modifiers.util.ModifierLevelDisplay;
 import slimeknights.tconstruct.library.modifiers.util.ModifierLevelDisplay.UniqueForLevels;
 import slimeknights.tconstruct.library.modifiers.util.StaticModifier;
+import slimeknights.tconstruct.library.module.ModuleHookMap;
 import slimeknights.tconstruct.library.recipe.modifiers.ModifierSalvage;
 import slimeknights.tconstruct.library.recipe.modifiers.adding.IncrementalModifierRecipe;
 import slimeknights.tconstruct.library.recipe.modifiers.adding.ModifierRecipe;
@@ -244,7 +244,6 @@ import slimeknights.tconstruct.tools.modifiers.upgrades.armor.SpringyModifier;
 import slimeknights.tconstruct.tools.modifiers.upgrades.armor.ThornsModifier;
 import slimeknights.tconstruct.tools.modifiers.upgrades.general.ExperiencedModifier;
 import slimeknights.tconstruct.tools.modifiers.upgrades.general.MagneticModifier;
-import slimeknights.tconstruct.tools.modifiers.upgrades.general.OffhandedModifier;
 import slimeknights.tconstruct.tools.modifiers.upgrades.general.OverforcedModifier;
 import slimeknights.tconstruct.tools.modifiers.upgrades.general.SoulboundModifier;
 import slimeknights.tconstruct.tools.modifiers.upgrades.melee.FieryModifier;
@@ -327,7 +326,6 @@ public final class TinkerModifiers extends TinkerModule {
   // general effects
   public static final StaticModifier<ExperiencedModifier> experienced = MODIFIERS.register("experienced", ExperiencedModifier::new);
   public static final StaticModifier<MagneticModifier> magnetic = MODIFIERS.register("magnetic", MagneticModifier::new);
-  public static final StaticModifier<OffhandedModifier> offhanded = MODIFIERS.register("offhanded", OffhandedModifier::new);
   public static final StaticModifier<FarsightedModifier> farsighted = MODIFIERS.register("farsighted", FarsightedModifier::new);
   public static final StaticModifier<NearsightedModifier> nearsighted = MODIFIERS.register("nearsighted", NearsightedModifier::new);
 

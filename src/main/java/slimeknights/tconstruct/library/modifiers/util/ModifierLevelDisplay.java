@@ -1,6 +1,7 @@
 package slimeknights.tconstruct.library.modifiers.util;
 
 import net.minecraft.network.chat.Component;
+import slimeknights.mantle.data.loadable.primitive.BooleanLoadable;
 import slimeknights.mantle.data.loadable.primitive.IntLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.data.registry.DefaultingLoaderRegistry;
@@ -67,12 +68,24 @@ public interface ModifierLevelDisplay extends IHaveLoader {
 
   /**
    * Name that is unique for the first several levels
+   * @param unique       Number of levels with unique names
+   * @param firstUnique  If true, first level has a unique name. If false, first level uses the levelless modifier name
    */
-  record UniqueForLevels(int unique) implements ModifierLevelDisplay {
-    public static final RecordLoadable<UniqueForLevels> LOADER = RecordLoadable.create(IntLoadable.FROM_ONE.requiredField("unique_until", UniqueForLevels::unique), UniqueForLevels::new);
+  record UniqueForLevels(int unique, boolean firstUnique) implements ModifierLevelDisplay {
+    public static final RecordLoadable<UniqueForLevels> LOADER = RecordLoadable.create(
+      IntLoadable.FROM_ONE.requiredField("unique_until", UniqueForLevels::unique),
+      BooleanLoadable.INSTANCE.defaultField("first_unique", false, UniqueForLevels::firstUnique),
+      UniqueForLevels::new);
+
+    public UniqueForLevels(int unique) {
+      this(unique, false);
+    }
 
     @Override
     public Component nameForLevel(Modifier modifier, int level) {
+      if (!firstUnique && level == 1) {
+        return modifier.getDisplayName();
+      }
       if (level <= unique) {
         return modifier.applyStyle(Component.translatable(modifier.getTranslationKey() + "." + level));
       }

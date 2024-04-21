@@ -1,0 +1,22 @@
+{
+  "type": "tconstruct:composable",
+  "level_display": {
+    "type": "tconstruct:unique",
+    "first_unique": false,
+    "unique_until": 2
+  },
+  "modules": [
+    {
+      "type": "tconstruct:volatile_flag",
+      "flag": "tconstruct:defer_offhand"
+    },
+    {
+      "type": "tconstruct:volatile_flag",
+      "flag": "tconstruct:no_interaction",
+      "modifier_level": {
+        "min": 2
+      }
+    }
+  ],
+  "tooltip_display": "always"
+}
