@@ -16,7 +16,7 @@ import org.apache.commons.lang3.mutable.MutableInt;
 import slimeknights.mantle.command.MantleCommand;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.modifiers.Modifier;
-import slimeknights.tconstruct.library.modifiers.TinkerHooks;
+import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.shared.command.HeldModifiableItemIterator;
 import slimeknights.tconstruct.shared.command.argument.ModifierArgument;
@@ -105,7 +105,7 @@ public class ModifiersCommand {
       // first remove hook, primarily for removing raw NBT which is highly discouraged using
       int newLevel = currentLevel - removeLevel;
       if (newLevel <= 0) {
-        modifier.getHook(TinkerHooks.RAW_DATA).removeRawData(tool, modifier, tool.getRestrictedNBT());
+        modifier.getHook(ModifierHooks.RAW_DATA).removeRawData(tool, modifier, tool.getRestrictedNBT());
       }
 
       // remove the actual modifier
@@ -119,7 +119,7 @@ public class ModifiersCommand {
 
       // if this was the last level, validate the tool is still valid without it
       if (newLevel <= 0) {
-        validated = modifier.getHook(TinkerHooks.REMOVE).onRemoved(tool, modifier);
+        validated = modifier.getHook(ModifierHooks.REMOVE).onRemoved(tool, modifier);
         if (validated != null) {
           throw MODIFIER_ERROR.create(validated);
         }

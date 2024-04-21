@@ -18,12 +18,12 @@ import slimeknights.mantle.data.predicate.IJsonPredicate;
 import slimeknights.mantle.data.predicate.entity.LivingEntityPredicate;
 import slimeknights.tconstruct.library.json.RandomLevelingValue;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
-import slimeknights.tconstruct.library.modifiers.ModifierHook;
-import slimeknights.tconstruct.library.modifiers.TinkerHooks;
+import slimeknights.tconstruct.library.module.ModuleHook;
+import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.hook.armor.OnAttackedModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.combat.MeleeHitModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.ranged.ProjectileHitModifierHook;
-import slimeknights.tconstruct.library.modifiers.modules.ModifierHookProvider;
+import slimeknights.tconstruct.library.module.HookProvider;
 import slimeknights.tconstruct.library.modifiers.modules.ModifierModule;
 import slimeknights.tconstruct.library.modifiers.modules.util.ModifierCondition;
 import slimeknights.tconstruct.library.modifiers.modules.util.ModifierCondition.ConditionalModule;
@@ -44,7 +44,7 @@ import static slimeknights.tconstruct.TConstruct.RANDOM;
  * Module that applies a mob effect on melee attack, projectile hit, and counterattack
  */
 public record MobEffectModule(IJsonPredicate<LivingEntity> target, MobEffect effect, RandomLevelingValue level, RandomLevelingValue time, ModifierCondition<IToolStackView> condition) implements OnAttackedModifierHook, MeleeHitModifierHook, ProjectileHitModifierHook, ModifierModule, ConditionalModule<IToolStackView> {
-  private static final List<ModifierHook<?>> DEFAULT_HOOKS = ModifierHookProvider.<MobEffectModule>defaultHooks(TinkerHooks.ON_ATTACKED, TinkerHooks.MELEE_HIT, TinkerHooks.PROJECTILE_HIT);
+  private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<MobEffectModule>defaultHooks(ModifierHooks.ON_ATTACKED, ModifierHooks.MELEE_HIT, ModifierHooks.PROJECTILE_HIT);
   public static final RecordLoadable<MobEffectModule> LOADER = RecordLoadable.create(
     LivingEntityPredicate.LOADER.defaultField("target", MobEffectModule::target),
     Loadables.MOB_EFFECT.requiredField("effect", MobEffectModule::effect),
@@ -98,7 +98,7 @@ public record MobEffectModule(IJsonPredicate<LivingEntity> target, MobEffect eff
   }
 
   @Override
-  public List<ModifierHook<?>> getDefaultHooks() {
+  public List<ModuleHook<?>> getDefaultHooks() {
     return DEFAULT_HOOKS;
   }
 

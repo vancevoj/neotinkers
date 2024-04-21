@@ -14,11 +14,11 @@ import slimeknights.mantle.data.predicate.entity.LivingEntityPredicate;
 import slimeknights.tconstruct.library.json.TinkerLoadables;
 import slimeknights.tconstruct.library.json.predicate.TinkerPredicate;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
-import slimeknights.tconstruct.library.modifiers.ModifierHook;
-import slimeknights.tconstruct.library.modifiers.TinkerHooks;
+import slimeknights.tconstruct.library.module.ModuleHook;
+import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.hook.combat.ArmorLootingModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.combat.LootingModifierHook;
-import slimeknights.tconstruct.library.modifiers.modules.ModifierHookProvider;
+import slimeknights.tconstruct.library.module.HookProvider;
 import slimeknights.tconstruct.library.modifiers.modules.ModifierModule;
 import slimeknights.tconstruct.library.modifiers.modules.util.IntLevelModule;
 import slimeknights.tconstruct.library.modifiers.modules.util.ModifierCondition;
@@ -96,7 +96,7 @@ public interface LootingModule extends ModifierModule, IntLevelModule, Condition
 
   /** Implementation for weapon looting */
   record Weapon(int level, IJsonPredicate<LivingEntity> holder, IJsonPredicate<LivingEntity> target, IJsonPredicate<DamageSource> damageSource, ModifierCondition<IToolStackView> condition) implements LootingModule, LootingModifierHook {
-    private static final List<ModifierHook<?>> DEFAULT_HOOKS = ModifierHookProvider.<Weapon>defaultHooks(TinkerHooks.WEAPON_LOOTING);
+    private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<Weapon>defaultHooks(ModifierHooks.WEAPON_LOOTING);
     public static final RecordLoadable<Weapon> LOADER = RecordLoadable.create(IntLevelModule.FIELD, HOLDER, TARGET, DAMAGE_SOURCE, ModifierCondition.TOOL_FIELD, Weapon::new);
 
     @Override
@@ -113,14 +113,14 @@ public interface LootingModule extends ModifierModule, IntLevelModule, Condition
     }
 
     @Override
-    public List<ModifierHook<?>> getDefaultHooks() {
+    public List<ModuleHook<?>> getDefaultHooks() {
       return DEFAULT_HOOKS;
     }
   }
 
   /** Implementation for armor looting */
   record Armor(int level, IJsonPredicate<LivingEntity> holder, IJsonPredicate<LivingEntity> target, IJsonPredicate<DamageSource> damageSource, ModifierCondition<IToolStackView> condition, Set<EquipmentSlot> slots) implements LootingModule, ArmorLootingModifierHook {
-    private static final List<ModifierHook<?>> DEFAULT_HOOKS = ModifierHookProvider.<Armor>defaultHooks(TinkerHooks.ARMOR_LOOTING);
+    private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<Armor>defaultHooks(ModifierHooks.ARMOR_LOOTING);
     public static final RecordLoadable<Armor> LOADER = RecordLoadable.create(IntLevelModule.FIELD, HOLDER, TARGET, DAMAGE_SOURCE, ModifierCondition.TOOL_FIELD, TinkerLoadables.EQUIPMENT_SLOT_SET.requiredField("slots", Armor::slots), Armor::new);
 
     @Override
@@ -137,7 +137,7 @@ public interface LootingModule extends ModifierModule, IntLevelModule, Condition
     }
 
     @Override
-    public List<ModifierHook<?>> getDefaultHooks() {
+    public List<ModuleHook<?>> getDefaultHooks() {
       return DEFAULT_HOOKS;
     }
   }

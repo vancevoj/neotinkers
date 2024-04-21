@@ -9,8 +9,8 @@ import slimeknights.tconstruct.library.materials.definition.MaterialId;
 import slimeknights.tconstruct.library.materials.stats.IMaterialStats;
 import slimeknights.tconstruct.library.materials.stats.IRepairableMaterialStats;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
-import slimeknights.tconstruct.library.modifiers.ModifierHook;
-import slimeknights.tconstruct.library.modifiers.modules.ModifierHookProvider;
+import slimeknights.tconstruct.library.module.ModuleHook;
+import slimeknights.tconstruct.library.module.HookProvider;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinition;
 import slimeknights.tconstruct.library.tools.definition.module.ToolHooks;
 import slimeknights.tconstruct.library.tools.definition.module.ToolModule;
@@ -21,7 +21,7 @@ import java.util.List;
 
 /** Module for repairing a tool using a non-tool part material */
 public final class MaterialRepairModule implements MaterialRepairToolHook, ToolModule {
-  private static final List<ModifierHook<?>> DEFAULT_HOOKS = ModifierHookProvider.<MaterialRepairModule>defaultHooks(ToolHooks.MATERIAL_REPAIR);
+  private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<MaterialRepairModule>defaultHooks(ToolHooks.MATERIAL_REPAIR);
   public static final RecordLoadable<MaterialRepairModule> LOADER = RecordLoadable.create(
     MaterialId.PARSER.requiredField("material", m -> m.material),
     MaterialStatsId.PARSER.requiredField("stat_type", m -> m.statType),
@@ -76,7 +76,7 @@ public final class MaterialRepairModule implements MaterialRepairToolHook, ToolM
   }
 
   @Override
-  public List<ModifierHook<?>> getDefaultHooks() {
+  public List<ModuleHook<?>> getDefaultHooks() {
     return DEFAULT_HOOKS;
   }
 

@@ -1,31 +1,31 @@
-package slimeknights.tconstruct.library.modifiers;
+package slimeknights.tconstruct.library.module;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.minecraft.resources.ResourceLocation;
-import slimeknights.tconstruct.library.modifiers.util.ModifierHookMap.Builder;
+import slimeknights.mantle.registration.object.IdAwareObject;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.function.Function;
 
-/** Class implementing a modifier hook, used as a key for {@link Modifier#registerHooks(Builder)} and {@link Modifier#getHook(ModifierHook)} */
+/** Class implementing a modifier hook, used as a key for {@link ModuleHookMap )} */
 @RequiredArgsConstructor
-public class ModifierHook<T> {
+public class ModuleHook<T> implements IdAwareObject {
   /** Unique name of this hook, used for serialization */
   @Getter
-  private final ResourceLocation name;
+  private final ResourceLocation id;
   /** Filter to check if an object is valid for this hook */
   private final Class<T> filter;
-  /** Default instance for when a modifier does not implement this hook */
-  @Getter
-  private final T defaultInstance;
   /** Logic to merge multiple instances into a single instance */
   @Nullable
   private final Function<Collection<T>,T> merger;
+  /** Default instance for when a modifier does not implement this hook */
+  @Getter
+  private final T defaultInstance;
 
-  public ModifierHook(ResourceLocation name, Class<T> filter, T defaultInstance) {
-    this(name, filter, defaultInstance, null);
+  public ModuleHook(ResourceLocation name, Class<T> filter, T defaultInstance) {
+    this(name, filter, null, defaultInstance);
   }
 
   /** checks if the given module can be used for this hook */
@@ -53,26 +53,26 @@ public class ModifierHook<T> {
       return modules.iterator().next();
     }
     if (merger == null) {
-      throw new IllegalStateException(name + " does not support merging");
+      throw new IllegalStateException(id + " does not support merging");
     }
     return merger.apply(modules);
   }
 
   @Override
   public String toString() {
-    return "ModifierHook{" + name + '}';
+    return "ModifierHook{" + id + '}';
   }
 
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
-    ModifierHook<?> that = (ModifierHook<?>)o;
-    return this.name.equals(that.name);
+    ModuleHook<?> that = (ModuleHook<?>)o;
+    return this.id.equals(that.id);
   }
 
   @Override
   public int hashCode() {
-    return name.hashCode();
+    return id.hashCode();
   }
 }

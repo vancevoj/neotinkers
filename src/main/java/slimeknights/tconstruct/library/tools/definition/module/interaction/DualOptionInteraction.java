@@ -5,10 +5,10 @@ import net.minecraft.resources.ResourceLocation;
 import slimeknights.mantle.data.registry.GenericLoaderRegistry.SingletonLoader;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.modifiers.Modifier;
-import slimeknights.tconstruct.library.modifiers.ModifierHook;
+import slimeknights.tconstruct.library.module.ModuleHook;
 import slimeknights.tconstruct.library.modifiers.ModifierId;
 import slimeknights.tconstruct.library.modifiers.hook.interaction.InteractionSource;
-import slimeknights.tconstruct.library.modifiers.modules.ModifierHookProvider;
+import slimeknights.tconstruct.library.module.HookProvider;
 import slimeknights.tconstruct.library.recipe.worktable.ModifierSetWorktableRecipe;
 import slimeknights.tconstruct.library.tools.definition.module.ToolHooks;
 import slimeknights.tconstruct.library.tools.definition.module.ToolModule;
@@ -18,7 +18,7 @@ import java.util.List;
 
 /** Tool that supports interaction with either hand. Uses persistent NBT to choose which hand is allowed to interact */
 public class DualOptionInteraction implements InteractionToolModule, ToolModule {
-  private static final List<ModifierHook<?>> DEFAULT_HOOKS = ModifierHookProvider.<DualOptionInteraction>defaultHooks(ToolHooks.INTERACTION);
+  private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<DualOptionInteraction>defaultHooks(ToolHooks.INTERACTION);
   /** Singleton instance */
   public static final DualOptionInteraction INSTANCE = new DualOptionInteraction();
   /** Loader instance */
@@ -31,7 +31,7 @@ public class DualOptionInteraction implements InteractionToolModule, ToolModule 
   private DualOptionInteraction() {}
 
   @Override
-  public List<ModifierHook<?>> getDefaultHooks() {
+  public List<ModuleHook<?>> getDefaultHooks() {
     return DEFAULT_HOOKS;
   }
 

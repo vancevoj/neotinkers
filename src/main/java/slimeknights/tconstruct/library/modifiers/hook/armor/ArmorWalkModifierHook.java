@@ -6,17 +6,9 @@ import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 
 import java.util.Collection;
-import java.util.function.Function;
 
 /** Modifier hook for boots when the player walks. */
 public interface ArmorWalkModifierHook {
-  /** Empty implementation for the sake of default behavior */
-  ArmorWalkModifierHook EMPTY = (tool, modifier, living, prevPos, newPos) -> {};
-
-  /** Constructor for a merger that runs all hooks from the children */
-  Function<Collection<ArmorWalkModifierHook>, ArmorWalkModifierHook> ALL_MERGER = AllMerger::new;
-
-
   /**
    * Called when an entity's block position changes
    * @param tool     Tool in boots slot

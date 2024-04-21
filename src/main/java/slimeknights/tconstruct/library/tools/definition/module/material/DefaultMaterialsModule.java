@@ -5,8 +5,8 @@ import net.minecraft.util.RandomSource;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.tconstruct.library.materials.RandomMaterial;
 import slimeknights.tconstruct.library.materials.definition.MaterialId;
-import slimeknights.tconstruct.library.modifiers.ModifierHook;
-import slimeknights.tconstruct.library.modifiers.modules.ModifierHookProvider;
+import slimeknights.tconstruct.library.module.ModuleHook;
+import slimeknights.tconstruct.library.module.HookProvider;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinition;
 import slimeknights.tconstruct.library.tools.definition.module.ToolHooks;
 import slimeknights.tconstruct.library.tools.definition.module.ToolModule;
@@ -16,7 +16,7 @@ import java.util.List;
 
 /** Module to fill missing materials on a tool */
 public record DefaultMaterialsModule(List<RandomMaterial> materials) implements MissingMaterialsToolHook, ToolModule {
-  private static final List<ModifierHook<?>> DEFAULT_HOOKS = ModifierHookProvider.defaultHooks(ToolHooks.MISSING_MATERIALS);
+  private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.defaultHooks(ToolHooks.MISSING_MATERIALS);
   /** Loader instance */
   public static final RecordLoadable<DefaultMaterialsModule> LOADER = RecordLoadable.create(RandomMaterial.LOADER.list(1).requiredField("materials", m -> m.materials), DefaultMaterialsModule::new);
 
@@ -26,7 +26,7 @@ public record DefaultMaterialsModule(List<RandomMaterial> materials) implements 
   }
 
   @Override
-  public List<ModifierHook<?>> getDefaultHooks() {
+  public List<ModuleHook<?>> getDefaultHooks() {
     return DEFAULT_HOOKS;
   }
 

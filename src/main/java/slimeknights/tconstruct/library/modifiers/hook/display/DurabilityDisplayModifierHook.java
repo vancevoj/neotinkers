@@ -4,7 +4,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
-import slimeknights.tconstruct.library.modifiers.TinkerHooks;
+import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
@@ -53,7 +53,7 @@ public interface DurabilityDisplayModifierHook {
     // poll modifiers to see if any think the bar should show or should not show
     ToolStack tool = ToolStack.from(stack);
     for (ModifierEntry entry : tool.getModifierList()) {
-      Boolean show = entry.getHook(TinkerHooks.DURABILITY_DISPLAY).showDurabilityBar(tool, entry);
+      Boolean show = entry.getHook(ModifierHooks.DURABILITY_DISPLAY).showDurabilityBar(tool, entry);
       if (show != null) {
         return show;
       }
@@ -95,7 +95,7 @@ public interface DurabilityDisplayModifierHook {
     }
     // poll each modifier for an override
     for (ModifierEntry entry : tool.getModifierList()) {
-      int width = entry.getHook(TinkerHooks.DURABILITY_DISPLAY).getDurabilityWidth(tool, entry);
+      int width = entry.getHook(ModifierHooks.DURABILITY_DISPLAY).getDurabilityWidth(tool, entry);
       if (width > 0) {
         return width;
       }
@@ -120,7 +120,7 @@ public interface DurabilityDisplayModifierHook {
 
     // first modifier who wishs to handle it wins
     for (ModifierEntry entry : tool.getModifierList()) {
-      int rgb = entry.getHook(TinkerHooks.DURABILITY_DISPLAY).getDurabilityRGB(tool, entry);
+      int rgb = entry.getHook(ModifierHooks.DURABILITY_DISPLAY).getDurabilityRGB(tool, entry);
       // not a problem to check against -1, the top 16 bits are unused so no one should be using it
       if (rgb != -1) {
         return rgb;

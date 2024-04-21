@@ -10,16 +10,9 @@ import slimeknights.tconstruct.library.tools.nbt.NamespacedNBT;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
-import java.util.function.Function;
 
 /** Hook fired when an arrow hits an entity */
 public interface ProjectileHitModifierHook {
-  /** Default instance */
-  ProjectileHitModifierHook EMPTY = new ProjectileHitModifierHook() {};
-
-  /** Merger instance */
-  Function<Collection<ProjectileHitModifierHook>,ProjectileHitModifierHook> FIRST_MERGER = AllMerger::new;
-
   /**
    * Called when a projectile hits an entity
    * @param modifiers       Modifiers from the tool firing this arrow

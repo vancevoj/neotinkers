@@ -5,7 +5,7 @@ import net.minecraft.world.item.Item;
 import slimeknights.tconstruct.library.materials.definition.MaterialVariant;
 import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
-import slimeknights.tconstruct.library.modifiers.ModifierHook;
+import slimeknights.tconstruct.library.module.ModuleHook;
 import slimeknights.tconstruct.library.modifiers.ModifierId;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinition;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinitionData;
@@ -34,7 +34,7 @@ public interface IToolContext {
   }
 
   /** Gets the given hook from the tool */
-  default <T> T getHook(ModifierHook<T> hook) {
+  default <T> T getHook(ModuleHook<T> hook) {
     return getDefinition().getData().getHook(hook);
   }
 

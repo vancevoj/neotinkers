@@ -32,7 +32,7 @@ import slimeknights.mantle.client.SafeClientAccess;
 import slimeknights.mantle.client.TooltipKey;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
-import slimeknights.tconstruct.library.modifiers.TinkerHooks;
+import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.hook.behavior.EnchantmentModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.display.DurabilityDisplayModifierHook;
 import slimeknights.tconstruct.library.tools.IndestructibleItemEntity;
@@ -296,7 +296,7 @@ public class ModifiableArmorItem extends ArmorItem implements IModifiableDisplay
       // grab attributes from modifiers
       BiConsumer<Attribute,AttributeModifier> attributeConsumer = builder::put;
       for (ModifierEntry entry : tool.getModifierList()) {
-        entry.getHook(TinkerHooks.ATTRIBUTES).addAttributes(tool, entry, slot, attributeConsumer);
+        entry.getHook(ModifierHooks.ATTRIBUTES).addAttributes(tool, entry, slot, attributeConsumer);
       }
     }
 
@@ -327,7 +327,7 @@ public class ModifiableArmorItem extends ArmorItem implements IModifiableDisplay
       if (!tool.isBroken()) {
         // if any modifier says stop flying, stop flying
         for (ModifierEntry entry : tool.getModifierList()) {
-          if (entry.getHook(TinkerHooks.ELYTRA_FLIGHT).elytraFlightTick(tool, entry, entity, flightTicks)) {
+          if (entry.getHook(ModifierHooks.ELYTRA_FLIGHT).elytraFlightTick(tool, entry, entity, flightTicks)) {
             return false;
           }
         }
@@ -360,7 +360,7 @@ public class ModifiableArmorItem extends ArmorItem implements IModifiableDisplay
         boolean isCorrectSlot = living.getItemBySlot(slot) == stack;
         // we pass in the stack for most custom context, but for the sake of armor its easier to tell them that this is the correct slot for effects
         for (ModifierEntry entry : modifiers) {
-          entry.getHook(TinkerHooks.INVENTORY_TICK).onInventoryTick(tool, entry, levelIn, living, itemSlot, isSelected, isCorrectSlot, stack);
+          entry.getHook(ModifierHooks.INVENTORY_TICK).onInventoryTick(tool, entry, levelIn, living, itemSlot, isSelected, isCorrectSlot, stack);
         }
       }
     }

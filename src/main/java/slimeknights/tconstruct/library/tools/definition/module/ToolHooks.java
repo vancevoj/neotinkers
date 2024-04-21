@@ -1,11 +1,12 @@
 package slimeknights.tconstruct.library.tools.definition.module;
 
+import net.minecraft.resources.ResourceLocation;
+import slimeknights.mantle.data.registry.IdAwareComponentRegistry;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.materials.MaterialRegistry;
 import slimeknights.tconstruct.library.materials.definition.MaterialId;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
-import slimeknights.tconstruct.library.modifiers.ModifierHook;
-import slimeknights.tconstruct.library.modifiers.ModifierHooks;
+import slimeknights.tconstruct.library.module.ModuleHook;
 import slimeknights.tconstruct.library.tools.definition.module.aoe.AreaOfEffectIterator;
 import slimeknights.tconstruct.library.tools.definition.module.build.ToolActionToolHook;
 import slimeknights.tconstruct.library.tools.definition.module.build.ToolStatsHook;
@@ -34,16 +35,19 @@ import java.util.function.Function;
 public class ToolHooks {
   private ToolHooks() {}
 
+  /** Loader for tool hooks */
+  public static final IdAwareComponentRegistry<ModuleHook<?>> LOADER = new IdAwareComponentRegistry<>("Unknown Tool Hook");
+
   public static void init() {}
 
 
   /* Build */
   /** Hook for checking if a tool can perform a given action. */
-  public static final ModifierHook<ToolMaterialHook> TOOL_MATERIALS = register("tool_materials", ToolMaterialHook.class, definition -> List.of());
-  /** Hook for checking if a tool can perform a given action. TODO: rename to {@code volatile_data} */
-  public static final ModifierHook<ToolPartsHook> TOOL_PARTS = register("tool_parts", ToolPartsHook.class, definition -> List.of());
+  public static final ModuleHook<ToolMaterialHook> TOOL_MATERIALS = register("tool_materials", ToolMaterialHook.class, definition -> List.of());
+  /** Hook for checking if a tool can perform a given action. */
+  public static final ModuleHook<ToolPartsHook> TOOL_PARTS = register("tool_parts", ToolPartsHook.class, definition -> List.of());
   /** Hook for filling materials on a tool with no materials set */
-  public static final ModifierHook<MissingMaterialsToolHook> MISSING_MATERIALS = register("missing_materials", MissingMaterialsToolHook.class, ((definition, random) -> {
+  public static final ModuleHook<MissingMaterialsToolHook> MISSING_MATERIALS = register("missing_materials", MissingMaterialsToolHook.class, ((definition, random) -> {
     MaterialNBT.Builder builder = MaterialNBT.builder();
     for (MaterialStatsId statType : ToolMaterialHook.stats(definition)) {
       builder.add(MaterialRegistry.firstWithStatType(statType));
@@ -52,7 +56,7 @@ public class ToolHooks {
   }));
 
   /** Hook for repairing a tool using a material. */
-  public static final ModifierHook<MaterialRepairToolHook> MATERIAL_REPAIR = register("material_repair", MaterialRepairToolHook.class, MaxMerger::new, new MaterialRepairToolHook() {
+  public static final ModuleHook<MaterialRepairToolHook> MATERIAL_REPAIR = register("material_repair", MaterialRepairToolHook.class, MaxMerger::new, new MaterialRepairToolHook() {
     @Override
     public boolean isRepairMaterial(IToolStackView tool, MaterialId material) {
       return false;
@@ -70,47 +74,54 @@ public class ToolHooks {
   });
 
   /** Hook for adding raw unconditional stats to a tool */
-  public static final ModifierHook<ToolStatsHook> TOOL_STATS = register("tool_stats", ToolStatsHook.class, ToolStatsHook.AllMerger::new, (context, builder) -> {});
-  /** Hook for checking if a tool can perform a given action. TODO: rename to {@code volatile_data} */
-  public static final ModifierHook<VolatileDataToolHook> VOLATILE_DATA = register("tool_volatile_data", VolatileDataToolHook.class, VolatileDataToolHook.AllMerger::new, (context, data) -> {});
+  public static final ModuleHook<ToolStatsHook> TOOL_STATS = register("tool_stats", ToolStatsHook.class, ToolStatsHook.AllMerger::new, (context, builder) -> {});
+  /** Hook for checking if a tool can perform a given action. */
+  public static final ModuleHook<VolatileDataToolHook> VOLATILE_DATA = register("volatile_data", VolatileDataToolHook.class, VolatileDataToolHook.AllMerger::new, (context, data) -> {});
   /** Hook for fetching tool traits */
-  public static final ModifierHook<ToolTraitHook> TOOL_TRAITS = register("tool_traits", ToolTraitHook.class, ToolTraitHook.AllMerger::new, (definition, materials, builder) -> {});
-  /** Hook for checking if a tool can perform a given action. TODO: rename to {@code tool_action} */
-  public static final ModifierHook<ToolActionToolHook> TOOL_ACTION = register("tool_tool_actions", ToolActionToolHook.class, ToolActionToolHook.AnyMerger::new, (tool, action) -> false);
+  public static final ModuleHook<ToolTraitHook> TOOL_TRAITS = register("tool_traits", ToolTraitHook.class, ToolTraitHook.AllMerger::new, (definition, materials, builder) -> {});
+  /** Hook for checking if a tool can perform a given action. */
+  public static final ModuleHook<ToolActionToolHook> TOOL_ACTION = register("tool_actions", ToolActionToolHook.class, ToolActionToolHook.AnyMerger::new, (tool, action) -> false);
 
 
   /* Mining */
   /** Hook for checking if a tool is effective against the given block */
-  public static final ModifierHook<IsEffectiveToolHook> IS_EFFECTIVE = register("is_effective", IsEffectiveToolHook.class, (tool, state) -> false);
+  public static final ModuleHook<IsEffectiveToolHook> IS_EFFECTIVE = register("is_effective", IsEffectiveToolHook.class, (tool, state) -> false);
   /** Hook for modifying the tier from the stat */
-  public static final ModifierHook<MiningTierToolHook> MINING_TIER = register("mining_tier", MiningTierToolHook.class, MiningTierToolHook.ComposeMerger::new, (tool, tier) -> tier);
+  public static final ModuleHook<MiningTierToolHook> MINING_TIER = register("mining_tier", MiningTierToolHook.class, MiningTierToolHook.ComposeMerger::new, (tool, tier) -> tier);
   /** Hook for modifying the mining speed from the stat/effectiveness */
-  public static final ModifierHook<MiningSpeedToolHook> MINING_SPEED = register("mining_speed_modifier", MiningSpeedToolHook.class, MiningSpeedToolHook.ComposeMerger::new, (tool, state, speed) -> speed);
+  public static final ModuleHook<MiningSpeedToolHook> MINING_SPEED = register("mining_speed_modifier", MiningSpeedToolHook.class, MiningSpeedToolHook.ComposeMerger::new, (tool, state, speed) -> speed);
   /** Logic for finding AOE blocks */
-  public static final ModifierHook<AreaOfEffectIterator> AOE_ITERATOR = register("aoe_iterator", AreaOfEffectIterator.class, (tool, stack, player, state, world, origin, sideHit, match) -> Collections.emptyList());
+  public static final ModuleHook<AreaOfEffectIterator> AOE_ITERATOR = register("aoe_iterator", AreaOfEffectIterator.class, (tool, stack, player, state, world, origin, sideHit, match) -> Collections.emptyList());
 
 
   /* Weapon */
-  /** Hook that runs after a melee hit to apply extra effects. TODO: rename to {@code after_melee_hit} */
-  public static final ModifierHook<MeleeHitToolHook> MELEE_HIT = register("after_melee_hit", MeleeHitToolHook.class, MeleeHitToolHook.AllMerger::new, (tool, context, damage) -> {});
+  /** Hook that runs after a melee hit to apply extra effects. */
+  public static final ModuleHook<MeleeHitToolHook> MELEE_HIT = register("after_melee_hit", MeleeHitToolHook.class, MeleeHitToolHook.AllMerger::new, (tool, context, damage) -> {});
 
 
   /** Hook for configuring interaction behaviors on the tool */
-  public static final ModifierHook<InteractionToolModule> INTERACTION = register("tool_interaction", InteractionToolModule.class, (t, m, s) -> true);
+  public static final ModuleHook<InteractionToolModule> INTERACTION = register("tool_interaction", InteractionToolModule.class, (t, m, s) -> true);
 
 
+  /* Registration */
 
-
-
-  /** Registers a new modifier hook under {@code tconstruct} that cannot merge */
-  @SuppressWarnings("SameParameterValue")
-  private static <T> ModifierHook<T> register(String name, Class<T> filter, T defaultInstance) {
-    return ModifierHooks.register(TConstruct.getResource(name), filter, defaultInstance);
+  /** Registers a new tool hook that merges */
+  public static <T> ModuleHook<T> register(ResourceLocation name, Class<T> filter, @Nullable Function<Collection<T>,T> merger, T defaultInstance) {
+    return LOADER.register(new ModuleHook<>(name, filter, merger, defaultInstance));
   }
 
-  /** Registers a new modifier hook under {@code tconstruct} that merges */
-  @SuppressWarnings("SameParameterValue")
-  private static <T> ModifierHook<T> register(String name, Class<T> filter, @Nullable Function<Collection<T>,T> merger, T defaultInstance) {
-    return ModifierHooks.register(TConstruct.getResource(name), filter, defaultInstance, merger);
+  /** Registers a new tool hook that does not merge */
+  public static <T> ModuleHook<T> register(ResourceLocation name, Class<T> filter, T defaultInstance) {
+    return register(name, filter, null, defaultInstance);
+  }
+
+  /** Registers a new tool hook under {@code tconstruct} that merges */
+  private static <T> ModuleHook<T> register(String name, Class<T> filter, @Nullable Function<Collection<T>,T> merger, T defaultInstance) {
+    return register(TConstruct.getResource(name), filter, merger, defaultInstance);
+  }
+
+  /** Registers a new tool hook under {@code tconstruct} that cannot merge */
+  private static <T> ModuleHook<T> register(String name, Class<T> filter, T defaultInstance) {
+    return register(name, filter, null, defaultInstance);
   }
 }

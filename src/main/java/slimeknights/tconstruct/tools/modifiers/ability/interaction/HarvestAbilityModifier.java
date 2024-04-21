@@ -25,12 +25,12 @@ import net.minecraftforge.eventbus.api.Event.Result;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.events.TinkerToolEvent.ToolHarvestEvent;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
-import slimeknights.tconstruct.library.modifiers.TinkerHooks;
+import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.hook.interaction.BlockInteractionModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.interaction.InteractionSource;
 import slimeknights.tconstruct.library.modifiers.impl.NoLevelsModifier;
 import slimeknights.tconstruct.library.modifiers.modules.behavior.ShowOffhandModule;
-import slimeknights.tconstruct.library.modifiers.util.ModifierHookMap.Builder;
+import slimeknights.tconstruct.library.module.ModuleHookMap.Builder;
 import slimeknights.tconstruct.library.tools.definition.module.ToolHooks;
 import slimeknights.tconstruct.library.tools.definition.module.aoe.AreaOfEffectIterator;
 import slimeknights.tconstruct.library.tools.definition.module.interaction.DualOptionInteraction;
@@ -51,7 +51,7 @@ public class HarvestAbilityModifier extends NoLevelsModifier implements BlockInt
   protected void registerHooks(Builder hookBuilder) {
     super.registerHooks(hookBuilder);
     hookBuilder.addModule(ShowOffhandModule.DISALLOW_BROKEN);
-    hookBuilder.addHook(this, TinkerHooks.BLOCK_INTERACT);
+    hookBuilder.addHook(this, ModifierHooks.BLOCK_INTERACT);
   }
 
   @Override
@@ -233,7 +233,7 @@ public class HarvestAbilityModifier extends NoLevelsModifier implements BlockInt
     // if we successfully harvested, run the modifier hook
     if (didHarvest) {
       for (ModifierEntry entry : tool.getModifierList()) {
-        entry.getHook(TinkerHooks.PLANT_HARVEST).afterHarvest(tool, entry, context, world, state, pos);
+        entry.getHook(ModifierHooks.PLANT_HARVEST).afterHarvest(tool, entry, context, world, state, pos);
       }
     }
 

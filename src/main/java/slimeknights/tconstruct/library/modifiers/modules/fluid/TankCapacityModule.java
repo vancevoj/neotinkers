@@ -11,10 +11,11 @@ import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.data.registry.GenericLoaderRegistry.IGenericLoader;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
-import slimeknights.tconstruct.library.modifiers.ModifierHook;
-import slimeknights.tconstruct.library.modifiers.TinkerHooks;
+import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.hook.build.VolatileDataModifierHook;
 import slimeknights.tconstruct.library.modifiers.modules.ModifierModule;
+import slimeknights.tconstruct.library.module.HookProvider;
+import slimeknights.tconstruct.library.module.ModuleHook;
 import slimeknights.tconstruct.library.tools.context.ToolRebuildContext;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.ModDataNBT;
@@ -25,7 +26,7 @@ import java.util.List;
 @Getter
 @RequiredArgsConstructor
 public class TankCapacityModule implements ModifierModule, VolatileDataModifierHook {
-  private static final List<ModifierHook<?>> DEFAULT_HOOKS = List.of(TinkerHooks.VOLATILE_DATA);
+  private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<TankCapacityModule>defaultHooks(ModifierHooks.VOLATILE_DATA);
   /** Default key for capacity */
   public static final ResourceLocation DEFAULT_CAPACITY_KEY = TConstruct.getResource("tank_capacity");
   /* Fields */
@@ -58,12 +59,12 @@ public class TankCapacityModule implements ModifierModule, VolatileDataModifierH
   }
 
   @Override
-  public List<ModifierHook<?>> getDefaultHooks() {
+  public List<ModuleHook<?>> getDefaultHooks() {
     return DEFAULT_HOOKS;
   }
 
   @Override
-  public IGenericLoader<? extends ModifierModule> getLoader() {
+  public IGenericLoader<? extends TankCapacityModule> getLoader() {
     return LOADER;
   }
 }

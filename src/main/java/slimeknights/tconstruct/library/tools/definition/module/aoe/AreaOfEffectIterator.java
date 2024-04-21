@@ -9,7 +9,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import slimeknights.mantle.data.registry.GenericLoaderRegistry;
 import slimeknights.mantle.data.registry.GenericLoaderRegistry.IGenericLoader;
-import slimeknights.tconstruct.library.modifiers.ModifierHook;
+import slimeknights.tconstruct.library.module.HookProvider;
+import slimeknights.tconstruct.library.module.ModuleHook;
 import slimeknights.tconstruct.library.tools.definition.module.ToolHooks;
 import slimeknights.tconstruct.library.tools.definition.module.ToolModule;
 import slimeknights.tconstruct.library.tools.definition.module.mining.IsEffectiveToolHook;
@@ -23,10 +24,10 @@ public interface AreaOfEffectIterator {
 
   /** Interface for loadable area of effect iterators, used for the fallback AOE iterator */
   interface Loadable extends AreaOfEffectIterator, ToolModule {
-    List<ModifierHook<?>> DEFAULT_HOOKS = List.of(ToolHooks.AOE_ITERATOR);
+    List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<Loadable>defaultHooks(ToolHooks.AOE_ITERATOR);
 
     @Override
-    default List<ModifierHook<?>> getDefaultHooks() {
+    default List<ModuleHook<?>> getDefaultHooks() {
       return DEFAULT_HOOKS;
     }
   }

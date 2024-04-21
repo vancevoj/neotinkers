@@ -2,7 +2,7 @@ package slimeknights.tconstruct.library.modifiers.hook.combat;
 
 import net.minecraft.world.entity.EquipmentSlot;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
-import slimeknights.tconstruct.library.modifiers.TinkerHooks;
+import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.tools.context.EquipmentContext;
 import slimeknights.tconstruct.library.tools.context.LootingContext;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
@@ -47,7 +47,7 @@ public interface ArmorLootingModifierHook {
         IToolStackView armor = equipment.getValidTool(slot);
         if (armor != null) {
           for (ModifierEntry entry : armor.getModifierList()) {
-            looting = entry.getHook(TinkerHooks.ARMOR_LOOTING).updateArmorLooting(armor, entry, context, equipment, slot, looting);
+            looting = entry.getHook(ModifierHooks.ARMOR_LOOTING).updateArmorLooting(armor, entry, context, equipment, slot, looting);
           }
         }
       }

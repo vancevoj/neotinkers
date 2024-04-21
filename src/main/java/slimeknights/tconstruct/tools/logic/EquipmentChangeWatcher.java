@@ -26,7 +26,7 @@ import net.minecraftforge.fml.loading.FMLEnvironment;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.events.ToolEquipmentChangeEvent;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
-import slimeknights.tconstruct.library.modifiers.TinkerHooks;
+import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.hook.interaction.GeneralInteractionModifierHook;
 import slimeknights.tconstruct.library.tools.context.EquipmentChangeContext;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
@@ -98,7 +98,7 @@ public class EquipmentChangeWatcher {
     IToolStackView tool = context.getOriginalTool();
     if (tool != null) {
       for (ModifierEntry entry : tool.getModifierList()) {
-        entry.getHook(TinkerHooks.EQUIPMENT_CHANGE).onUnequip(tool, entry, context);
+        entry.getHook(ModifierHooks.EQUIPMENT_CHANGE).onUnequip(tool, entry, context);
       }
       // only path that should bring you here that did not already call the modifier method is when your shield breaks. ideally we will switch to a forge onStoppedUsing method instead
       // TODO 1.19: consider simplier check, such as the tool having the active modifier tag set. Will need to do a bit of work for bows which don't set modifiers though
@@ -111,7 +111,7 @@ public class EquipmentChangeWatcher {
     tool = context.getReplacementTool();
     if (tool != null) {
       for (ModifierEntry entry : tool.getModifierList()) {
-        entry.getHook(TinkerHooks.EQUIPMENT_CHANGE).onEquip(tool, entry, context);
+        entry.getHook(ModifierHooks.EQUIPMENT_CHANGE).onEquip(tool, entry, context);
       }
     }
 
@@ -121,7 +121,7 @@ public class EquipmentChangeWatcher {
         tool = context.getToolInSlot(otherSlot);
         if (tool != null) {
           for (ModifierEntry entry : tool.getModifierList()) {
-            entry.getHook(TinkerHooks.EQUIPMENT_CHANGE).onEquipmentChange(tool, entry, context, otherSlot);
+            entry.getHook(ModifierHooks.EQUIPMENT_CHANGE).onEquipmentChange(tool, entry, context, otherSlot);
           }
         }
       }

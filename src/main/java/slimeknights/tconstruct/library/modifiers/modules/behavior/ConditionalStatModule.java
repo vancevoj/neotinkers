@@ -12,13 +12,14 @@ import slimeknights.tconstruct.library.json.variable.VariableFormula;
 import slimeknights.tconstruct.library.json.variable.stat.ConditionalStatFormula;
 import slimeknights.tconstruct.library.json.variable.stat.ConditionalStatVariable;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
-import slimeknights.tconstruct.library.modifiers.ModifierHook;
-import slimeknights.tconstruct.library.modifiers.TinkerHooks;
+import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.hook.build.ConditionalStatModifierHook;
 import slimeknights.tconstruct.library.modifiers.modules.ModifierModule;
 import slimeknights.tconstruct.library.modifiers.modules.util.ConditionalStatTooltip;
 import slimeknights.tconstruct.library.modifiers.modules.util.ModifierCondition;
 import slimeknights.tconstruct.library.modifiers.modules.util.ModifierCondition.ConditionalModule;
+import slimeknights.tconstruct.library.module.HookProvider;
+import slimeknights.tconstruct.library.module.ModuleHook;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.stat.FloatToolStat;
 import slimeknights.tconstruct.library.tools.stat.INumericToolStat;
@@ -35,7 +36,7 @@ import java.util.List;
  * @param condition   Standard modifier module conditions
  */
 public record ConditionalStatModule(INumericToolStat<?> stat, IJsonPredicate<LivingEntity> holder, ConditionalStatFormula formula, ModifierCondition<IToolStackView> condition) implements ModifierModule, ConditionalStatModifierHook, ConditionalStatTooltip, ConditionalModule<IToolStackView> {
-  private static final List<ModifierHook<?>> DEFAULT_HOOKS = List.of(TinkerHooks.CONDITIONAL_STAT, TinkerHooks.TOOLTIP);
+  private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<ConditionalStatModule>defaultHooks(ModifierHooks.CONDITIONAL_STAT, ModifierHooks.TOOLTIP);
   public static final RecordLoadable<ConditionalStatModule> LOADER = RecordLoadable.create(
     ToolStats.NUMERIC_LOADER.requiredField("stat", ConditionalStatModule::stat),
     LivingEntityPredicate.LOADER.defaultField("entity", ConditionalStatModule::holder),
@@ -69,7 +70,7 @@ public record ConditionalStatModule(INumericToolStat<?> stat, IJsonPredicate<Liv
   }
 
   @Override
-  public List<ModifierHook<?>> getDefaultHooks() {
+  public List<ModuleHook<?>> getDefaultHooks() {
     return DEFAULT_HOOKS;
   }
 

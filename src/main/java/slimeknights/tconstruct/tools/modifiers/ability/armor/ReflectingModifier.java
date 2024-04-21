@@ -23,7 +23,7 @@ import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.common.network.TinkerNetwork;
 import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
-import slimeknights.tconstruct.library.modifiers.TinkerHooks;
+import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.hook.build.ConditionalStatModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.interaction.GeneralInteractionModifierHook;
 import slimeknights.tconstruct.library.tools.helper.ModifierUtil;
@@ -55,7 +55,7 @@ public class ReflectingModifier extends Modifier {
           if (reflectingLevel > 0) {
             ModifierEntry activeModifier = GeneralInteractionModifierHook.getActiveModifier(tool);
             if (activeModifier != ModifierEntry.EMPTY) {
-              GeneralInteractionModifierHook hook = activeModifier.getHook(TinkerHooks.GENERAL_INTERACT);
+              GeneralInteractionModifierHook hook = activeModifier.getHook(ModifierHooks.GENERAL_INTERACT);
               int time = hook.getUseDuration(tool, activeModifier) - living.getUseItemRemainingTicks();
               // must be blocking, started blocking within the last 2*level seconds, and be within the block angle
               if (hook.getUseAction(tool, activeModifier) == UseAnim.BLOCK

@@ -5,17 +5,9 @@ import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 
 import java.util.Collection;
-import java.util.function.Function;
 
 /** Hook for chestplate modifiers to control eltyra flight behavior. */
 public interface ElytraFlightModifierHook {
-  /** Default implementation */
-  ElytraFlightModifierHook DEFAULT = (tool, modifier, entity, flightTicks) -> true;
-
-  /** Constructor for a merger that stops after the first hook returns */
-  Function<Collection<ElytraFlightModifierHook>, ElytraFlightModifierHook> FIRST_MERGER = FirstMerger::new;
-
-
   /**
    * Call on elytra flight tick to run any update effects
    * @param tool         Elytra instance

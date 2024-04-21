@@ -34,7 +34,7 @@ import slimeknights.tconstruct.library.json.IntRange;
 import slimeknights.tconstruct.library.materials.IMaterialRegistry;
 import slimeknights.tconstruct.library.materials.MaterialRegistry;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
-import slimeknights.tconstruct.library.modifiers.TinkerHooks;
+import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.recipe.modifiers.adding.IDisplayModifierRecipe;
 import slimeknights.tconstruct.library.tools.SlotType;
 import slimeknights.tconstruct.library.tools.SlotType.SlotCount;
@@ -143,7 +143,7 @@ public class ModifierRecipeCategory implements IRecipeCategory<IDisplayModifierR
 
     // draw info icons
     ModifierEntry result = recipe.getDisplayResult();
-    if (result.getHook(TinkerHooks.REQUIREMENTS).requirementsError(result) != null) {
+    if (result.getHook(ModifierHooks.REQUIREMENTS).requirementsError(result) != null) {
       requirements.draw(matrices, 66, 58);
     }
     if (recipe.isIncremental()) {
@@ -190,7 +190,7 @@ public class ModifierRecipeCategory implements IRecipeCategory<IDisplayModifierR
     int checkY = (int) mouseY;
     ModifierEntry result = recipe.getDisplayResult();
     if (GuiUtil.isHovered(checkX, checkY, 66, 58, 16, 16)) {
-      Component requirements = result.getHook(TinkerHooks.REQUIREMENTS).requirementsError(result);
+      Component requirements = result.getHook(ModifierHooks.REQUIREMENTS).requirementsError(result);
       if (requirements != null) {
         return Collections.singletonList(requirements);
       }

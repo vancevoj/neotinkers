@@ -25,9 +25,10 @@ import slimeknights.mantle.data.registry.GenericLoaderRegistry.IHaveLoader;
 import slimeknights.mantle.registration.object.IdAwareObject;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.modifiers.ModifierManager.ModifierRegistrationEvent;
-import slimeknights.tconstruct.library.modifiers.util.ModifierHookMap;
-import slimeknights.tconstruct.library.modifiers.util.ModifierHookMap.Builder;
+import slimeknights.tconstruct.library.module.ModuleHookMap;
+import slimeknights.tconstruct.library.module.ModuleHookMap.Builder;
 import slimeknights.tconstruct.library.modifiers.util.ModifierLevelDisplay;
+import slimeknights.tconstruct.library.module.ModuleHook;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.library.utils.Util;
@@ -40,8 +41,8 @@ import java.util.Objects;
 import java.util.Random;
 
 /**
- * Class representing both modifiers and traits. Acts as a storage container for {@link ModifierHook} modules, which are used to implement various modifier behaviors.
- * @see TinkerHooks
+ * Class representing both modifiers and traits. Acts as a storage container for {@link ModuleHook} modules, which are used to implement various modifier behaviors.
+ * @see ModifierHooks
  * @see #registerHooks(Builder)
  */
 @SuppressWarnings("unused")
@@ -92,16 +93,16 @@ public class Modifier implements IHaveLoader, IdAwareObject {
   private Component description;
   /** Map of all modifier hooks registered to this modifier */
   @Getter
-  private final ModifierHookMap hooks;
+  private final ModuleHookMap hooks;
 
   /** Creates a new modifier using the given hook map */
-  protected Modifier(ModifierHookMap hooks) {
+  protected Modifier(ModuleHookMap hooks) {
     this.hooks = hooks;
   }
 
   /** Creates a new instance using the hook builder */
   public Modifier() {
-    ModifierHookMap.Builder hookBuilder = ModifierHookMap.builder();
+    ModuleHookMap.Builder hookBuilder = ModuleHookMap.builder();
     registerHooks(hookBuilder);
     this.hooks = hookBuilder.build();
   }
@@ -111,7 +112,7 @@ public class Modifier implements IHaveLoader, IdAwareObject {
    * Note that this is run in the constructor, so you are unable to use any instance fields in this method unless initialized in this method.
    * TODO 1.19: consider making abstract as everyone is going to need it in the future.
    */
-  protected void registerHooks(ModifierHookMap.Builder hookBuilder) {}
+  protected void registerHooks(ModuleHookMap.Builder hookBuilder) {}
 
   @Override
   public IGenericLoader<? extends Modifier> getLoader() {
@@ -358,7 +359,7 @@ public class Modifier implements IHaveLoader, IdAwareObject {
    * @param <T>   Hook return type
    * @return  Submodule implementing the hook, or default instance if its not implemented
    */
-  public final <T> T getHook(ModifierHook<T> hook) {
+  public final <T> T getHook(ModuleHook<T> hook) {
     return hooks.getOrDefault(hook);
   }
 

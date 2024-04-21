@@ -5,21 +5,13 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.ToolAction;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
-import slimeknights.tconstruct.library.modifiers.TinkerHooks;
+import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 
 import java.util.Collection;
-import java.util.function.Function;
 
 /** Interface that allows another modifier to hook into the block transform modifier. */
 public interface BlockTransformModifierHook {
-
-  /** Default behavior of no action */
-  BlockTransformModifierHook EMPTY = (tool, modifier, context, state, pos, action) -> {};
-
-  /** Merger that runs all hooks */
-  Function<Collection<BlockTransformModifierHook>, BlockTransformModifierHook> ALL_MERGER = AllMerger::new;
-
   /**
    * Called after a block is successfully transformed
    * @param tool     Tool used in transforming
@@ -41,7 +33,7 @@ public interface BlockTransformModifierHook {
    */
   static void afterTransformBlock(IToolStackView tool, UseOnContext context, BlockState state, BlockPos pos, ToolAction action) {
     for (ModifierEntry entry : tool.getModifierList()) {
-      entry.getHook(TinkerHooks.BLOCK_TRANSFORM).afterTransformBlock(tool, entry, context, state, pos, action);
+      entry.getHook(ModifierHooks.BLOCK_TRANSFORM).afterTransformBlock(tool, entry, context, state, pos, action);
     }
   }
 

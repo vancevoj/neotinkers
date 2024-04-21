@@ -6,9 +6,9 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.item.Items;
 import slimeknights.mantle.data.loadable.ErrorFactory;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
-import slimeknights.tconstruct.library.modifiers.ModifierHook;
-import slimeknights.tconstruct.library.modifiers.util.ModifierHookMap;
-import slimeknights.tconstruct.library.modifiers.util.ModifierHookMap.WithHooks;
+import slimeknights.tconstruct.library.module.ModuleHook;
+import slimeknights.tconstruct.library.module.ModuleHookMap;
+import slimeknights.tconstruct.library.module.WithHooks;
 import slimeknights.tconstruct.library.tools.definition.module.ToolHooks;
 import slimeknights.tconstruct.library.tools.definition.module.ToolModule;
 import slimeknights.tconstruct.library.tools.nbt.DummyToolStack;
@@ -35,21 +35,21 @@ public class ToolDefinitionData {
 
   private final List<WithHooks<ToolModule>> modules;
   @Getter
-  private final transient ModifierHookMap hooks;
+  private final transient ModuleHookMap hooks;
 
   private transient StatsNBT baseStats;
   private transient MultiplierNBT multipliers;
 
   protected ToolDefinitionData(List<WithHooks<ToolModule>> modules, ErrorFactory error) {
     this.modules = modules;
-    this.hooks = ModifierHookMap.createMap(modules, error);
+    this.hooks = ModuleHookMap.createMap(modules, error);
   }
 
 
   /* Getters */
 
   /** Gets the given module from the tool */
-  public <T> T getHook(ModifierHook<T> hook) {
+  public <T> T getHook(ModuleHook<T> hook) {
     return hooks.getOrDefault(hook);
   }
 

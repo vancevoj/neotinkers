@@ -5,7 +5,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
-import slimeknights.tconstruct.library.modifiers.TinkerHooks;
+import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 
@@ -48,7 +48,7 @@ public interface InventoryTickModifierHook {
         // we pass in the stack for most custom context, but for the sake of armor it is easier to tell them that this is the correct slot for effects
         boolean isHeld = isSelected || living.getOffhandItem() == stack;
         for (ModifierEntry entry : modifiers) {
-          entry.getHook(TinkerHooks.INVENTORY_TICK).onInventoryTick(tool, entry, worldIn, living, itemSlot, isSelected, isHeld, stack);
+          entry.getHook(ModifierHooks.INVENTORY_TICK).onInventoryTick(tool, entry, worldIn, living, itemSlot, isSelected, isHeld, stack);
         }
       }
     }

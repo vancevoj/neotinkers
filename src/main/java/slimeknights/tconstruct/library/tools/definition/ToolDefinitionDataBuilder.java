@@ -5,8 +5,8 @@ import com.google.common.collect.ImmutableMap;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import slimeknights.mantle.data.loadable.ErrorFactory;
-import slimeknights.tconstruct.library.modifiers.ModifierHook;
-import slimeknights.tconstruct.library.modifiers.util.ModifierHookMap.WithHooks;
+import slimeknights.tconstruct.library.module.ModuleHook;
+import slimeknights.tconstruct.library.module.WithHooks;
 import slimeknights.tconstruct.library.tools.SlotType;
 import slimeknights.tconstruct.library.tools.definition.module.ToolModule;
 import slimeknights.tconstruct.library.tools.definition.module.build.ToolSlotsModule;
@@ -56,7 +56,7 @@ public class ToolDefinitionDataBuilder {
 
   /** Adds a module to the definition with the given hooks */
   @SafeVarargs
-  public final <T extends ToolModule> ToolDefinitionDataBuilder module(T module, ModifierHook<? super T>... hooks) {
+  public final <T extends ToolModule> ToolDefinitionDataBuilder module(T module, ModuleHook<? super T>... hooks) {
     modules.add(new WithHooks<>(module, List.of(hooks)));
     return this;
   }

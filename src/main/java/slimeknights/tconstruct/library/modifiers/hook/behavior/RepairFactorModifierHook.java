@@ -9,6 +9,7 @@ import java.util.Collection;
 public interface RepairFactorModifierHook {
   /**
    * Called when the tool is repair. Can be used to decrease, increase, or cancel the repair.
+   * TODO: cleanup to always pass in durability instead of multipliers
    * @param tool       Tool stack
    * @param entry      Modifier and level
    * @param factor     Original factor

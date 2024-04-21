@@ -6,12 +6,12 @@ import net.minecraft.world.entity.LivingEntity;
 import slimeknights.tconstruct.library.modifiers.IncrementalModifierEntry;
 import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
-import slimeknights.tconstruct.library.modifiers.TinkerHooks;
+import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.hook.behavior.ToolDamageModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.build.ModifierRemovalHook;
 import slimeknights.tconstruct.library.modifiers.hook.build.ValidateModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.display.DurabilityDisplayModifierHook;
-import slimeknights.tconstruct.library.modifiers.util.ModifierHookMap.Builder;
+import slimeknights.tconstruct.library.module.ModuleHookMap.Builder;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.ModDataNBT;
 
@@ -21,7 +21,7 @@ public abstract class DurabilityShieldModifier extends Modifier implements ToolD
   @Override
   protected void registerHooks(Builder hookBuilder) {
     super.registerHooks(hookBuilder);
-    hookBuilder.addHook(this, TinkerHooks.TOOL_DAMAGE, TinkerHooks.VALIDATE, TinkerHooks.REMOVE, TinkerHooks.DURABILITY_DISPLAY);
+    hookBuilder.addHook(this, ModifierHooks.TOOL_DAMAGE, ModifierHooks.VALIDATE, ModifierHooks.REMOVE, ModifierHooks.DURABILITY_DISPLAY);
   }
 
   @Override

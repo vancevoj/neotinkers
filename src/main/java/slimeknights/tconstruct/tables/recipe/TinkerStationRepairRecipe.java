@@ -11,7 +11,7 @@ import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.materials.definition.IMaterial;
 import slimeknights.tconstruct.library.materials.definition.MaterialId;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
-import slimeknights.tconstruct.library.modifiers.TinkerHooks;
+import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.recipe.RecipeResult;
 import slimeknights.tconstruct.library.recipe.material.MaterialRecipe;
 import slimeknights.tconstruct.library.recipe.tinkerstation.IMutableTinkerStationContainer;
@@ -199,7 +199,7 @@ public class TinkerStationRepairRecipe implements ITinkerStationRecipe {
           // adjust the factor based on modifiers
           // main example is wood, +25% per level
           for (ModifierEntry entry : tool.getModifierList()) {
-            durabilityPerItem = entry.getHook(TinkerHooks.REPAIR_FACTOR).getRepairFactor(tool, entry, durabilityPerItem);
+            durabilityPerItem = entry.getHook(ModifierHooks.REPAIR_FACTOR).getRepairFactor(tool, entry, durabilityPerItem);
             if (durabilityPerItem <= 0) {
               return 0;
             }

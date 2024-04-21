@@ -34,7 +34,7 @@ import net.minecraftforge.common.ToolAction;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import slimeknights.mantle.client.SafeClientAccess;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
-import slimeknights.tconstruct.library.modifiers.TinkerHooks;
+import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.hook.behavior.AttributesModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.behavior.EnchantmentModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.display.DurabilityDisplayModifierHook;
@@ -316,7 +316,7 @@ public class ModifiableItem extends Item implements IModifiableDisplay {
     InteractionHand hand = context.getHand();
     if (shouldInteract(context.getPlayer(), tool, hand)) {
       for (ModifierEntry entry : tool.getModifierList()) {
-        InteractionResult result = entry.getHook(TinkerHooks.BLOCK_INTERACT).beforeBlockUse(tool, entry, context, InteractionSource.RIGHT_CLICK);
+        InteractionResult result = entry.getHook(ModifierHooks.BLOCK_INTERACT).beforeBlockUse(tool, entry, context, InteractionSource.RIGHT_CLICK);
         if (result.consumesAction()) {
           return result;
         }
@@ -331,7 +331,7 @@ public class ModifiableItem extends Item implements IModifiableDisplay {
     InteractionHand hand = context.getHand();
     if (shouldInteract(context.getPlayer(), tool, hand)) {
       for (ModifierEntry entry : tool.getModifierList()) {
-        InteractionResult result = entry.getHook(TinkerHooks.BLOCK_INTERACT).afterBlockUse(tool, entry, context, InteractionSource.RIGHT_CLICK);
+        InteractionResult result = entry.getHook(ModifierHooks.BLOCK_INTERACT).afterBlockUse(tool, entry, context, InteractionSource.RIGHT_CLICK);
         if (result.consumesAction()) {
           return result;
         }
@@ -345,7 +345,7 @@ public class ModifiableItem extends Item implements IModifiableDisplay {
     ToolStack tool = ToolStack.from(stack);
     if (shouldInteract(playerIn, tool, hand)) {
       for (ModifierEntry entry : tool.getModifierList()) {
-        InteractionResult result = entry.getHook(TinkerHooks.ENTITY_INTERACT).afterEntityUse(tool, entry, playerIn, target, hand, InteractionSource.RIGHT_CLICK);
+        InteractionResult result = entry.getHook(ModifierHooks.ENTITY_INTERACT).afterEntityUse(tool, entry, playerIn, target, hand, InteractionSource.RIGHT_CLICK);
         if (result.consumesAction()) {
           return result;
         }
@@ -360,7 +360,7 @@ public class ModifiableItem extends Item implements IModifiableDisplay {
     ToolStack tool = ToolStack.from(stack);
     if (shouldInteract(playerIn, tool, hand)) {
       for (ModifierEntry entry : tool.getModifierList()) {
-        InteractionResult result = entry.getHook(TinkerHooks.GENERAL_INTERACT).onToolUse(tool, entry, playerIn, hand, InteractionSource.RIGHT_CLICK);
+        InteractionResult result = entry.getHook(ModifierHooks.GENERAL_INTERACT).onToolUse(tool, entry, playerIn, hand, InteractionSource.RIGHT_CLICK);
         if (result.consumesAction()) {
           return new InteractionResultHolder<>(result, stack);
         }
@@ -375,7 +375,7 @@ public class ModifiableItem extends Item implements IModifiableDisplay {
     ToolStack tool = ToolStack.from(stack);
     ModifierEntry activeModifier = GeneralInteractionModifierHook.getActiveModifier(tool);
     if (activeModifier != ModifierEntry.EMPTY) {
-      activeModifier.getHook(TinkerHooks.GENERAL_INTERACT).onUsingTick(tool, activeModifier, entityLiving, timeLeft);
+      activeModifier.getHook(ModifierHooks.GENERAL_INTERACT).onUsingTick(tool, activeModifier, entityLiving, timeLeft);
     }
   }
 
@@ -394,7 +394,7 @@ public class ModifiableItem extends Item implements IModifiableDisplay {
     ToolStack tool = ToolStack.from(stack);
     ModifierEntry activeModifier = GeneralInteractionModifierHook.getActiveModifier(tool);
     if (activeModifier != ModifierEntry.EMPTY) {
-      activeModifier.getHook(TinkerHooks.GENERAL_INTERACT).onFinishUsing(tool, activeModifier, entityLiving);
+      activeModifier.getHook(ModifierHooks.GENERAL_INTERACT).onFinishUsing(tool, activeModifier, entityLiving);
     }
     GeneralInteractionModifierHook.finishUsing(tool);
     return stack;
@@ -405,7 +405,7 @@ public class ModifiableItem extends Item implements IModifiableDisplay {
     ToolStack tool = ToolStack.from(stack);
     ModifierEntry activeModifier = GeneralInteractionModifierHook.getActiveModifier(tool);
     if (activeModifier != ModifierEntry.EMPTY) {
-      activeModifier.getHook(TinkerHooks.GENERAL_INTERACT).onStoppedUsing(tool, activeModifier, entityLiving, timeLeft);
+      activeModifier.getHook(ModifierHooks.GENERAL_INTERACT).onStoppedUsing(tool, activeModifier, entityLiving, timeLeft);
     }
     GeneralInteractionModifierHook.finishUsing(tool);
   }
@@ -415,7 +415,7 @@ public class ModifiableItem extends Item implements IModifiableDisplay {
     ToolStack tool = ToolStack.from(stack);
     ModifierEntry activeModifier = GeneralInteractionModifierHook.getActiveModifier(tool);
     if (activeModifier != ModifierEntry.EMPTY) {
-      return activeModifier.getHook(TinkerHooks.GENERAL_INTERACT).getUseDuration(tool, activeModifier);
+      return activeModifier.getHook(ModifierHooks.GENERAL_INTERACT).getUseDuration(tool, activeModifier);
     }
     return 0;
   }
@@ -425,7 +425,7 @@ public class ModifiableItem extends Item implements IModifiableDisplay {
     ToolStack tool = ToolStack.from(stack);
     ModifierEntry activeModifier = GeneralInteractionModifierHook.getActiveModifier(tool);
     if (activeModifier != ModifierEntry.EMPTY) {
-      return activeModifier.getHook(TinkerHooks.GENERAL_INTERACT).getUseAction(tool, activeModifier);
+      return activeModifier.getHook(ModifierHooks.GENERAL_INTERACT).getUseAction(tool, activeModifier);
     }
     return UseAnim.NONE;
   }

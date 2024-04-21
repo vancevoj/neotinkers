@@ -7,8 +7,8 @@ import slimeknights.mantle.data.loadable.primitive.FloatLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.data.predicate.IJsonPredicate;
 import slimeknights.mantle.data.predicate.block.BlockPredicate;
-import slimeknights.tconstruct.library.modifiers.ModifierHook;
-import slimeknights.tconstruct.library.modifiers.modules.ModifierHookProvider;
+import slimeknights.tconstruct.library.module.ModuleHook;
+import slimeknights.tconstruct.library.module.HookProvider;
 import slimeknights.tconstruct.library.tools.definition.module.ToolHooks;
 import slimeknights.tconstruct.library.tools.definition.module.ToolModule;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
@@ -21,7 +21,7 @@ public record MiningSpeedModifierModule(float modifier, IJsonPredicate<BlockStat
     FloatLoadable.ANY.requiredField("modifier", MiningSpeedModifierModule::modifier),
     BlockPredicate.LOADER.directField("predicate_type", MiningSpeedModifierModule::predicate),
     MiningSpeedModifierModule::new);
-  private static final List<ModifierHook<?>> DEFAULT_HOOKS = ModifierHookProvider.<MiningSpeedModifierModule>defaultHooks(ToolHooks.MINING_SPEED);
+  private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<MiningSpeedModifierModule>defaultHooks(ToolHooks.MINING_SPEED);
 
   /** Modifies the given tag */
   public static MiningSpeedModifierModule tag(TagKey<Block> tag, float modifier) {
@@ -39,7 +39,7 @@ public record MiningSpeedModifierModule(float modifier, IJsonPredicate<BlockStat
   }
 
   @Override
-  public List<ModifierHook<?>> getDefaultHooks() {
+  public List<ModuleHook<?>> getDefaultHooks() {
     return DEFAULT_HOOKS;
   }
 

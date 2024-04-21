@@ -6,12 +6,12 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.UseAnim;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
-import slimeknights.tconstruct.library.modifiers.TinkerHooks;
+import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.hook.build.ConditionalStatModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.interaction.GeneralInteractionModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.interaction.InteractionSource;
 import slimeknights.tconstruct.library.modifiers.impl.NoLevelsModifier;
-import slimeknights.tconstruct.library.modifiers.util.ModifierHookMap.Builder;
+import slimeknights.tconstruct.library.module.ModuleHookMap.Builder;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
 import slimeknights.tconstruct.tools.TinkerModifiers;
@@ -24,7 +24,7 @@ import slimeknights.tconstruct.tools.modifiers.upgrades.ranged.ScopeModifier;
 public abstract class SlingModifier extends NoLevelsModifier implements GeneralInteractionModifierHook {
   @Override
   protected void registerHooks(Builder builder) {
-    builder.addHook(this, TinkerHooks.GENERAL_INTERACT);
+    builder.addHook(this, ModifierHooks.GENERAL_INTERACT);
   }
 
   @Override

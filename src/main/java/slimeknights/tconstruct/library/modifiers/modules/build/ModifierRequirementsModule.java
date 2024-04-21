@@ -15,12 +15,12 @@ import slimeknights.tconstruct.library.json.predicate.tool.HasModifierPredicate;
 import slimeknights.tconstruct.library.json.predicate.tool.ToolContextPredicate;
 import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
-import slimeknights.tconstruct.library.modifiers.ModifierHook;
+import slimeknights.tconstruct.library.module.ModuleHook;
 import slimeknights.tconstruct.library.modifiers.ModifierId;
-import slimeknights.tconstruct.library.modifiers.TinkerHooks;
+import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.hook.build.ValidateModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.display.RequirementsModifierHook;
-import slimeknights.tconstruct.library.modifiers.modules.ModifierHookProvider;
+import slimeknights.tconstruct.library.module.HookProvider;
 import slimeknights.tconstruct.library.modifiers.modules.ModifierModule;
 import slimeknights.tconstruct.library.modifiers.util.LazyModifier;
 import slimeknights.tconstruct.library.tools.nbt.IToolContext;
@@ -44,7 +44,7 @@ public class ModifierRequirementsModule implements ValidateModifierHook, Modifie
     ModifierEntry.LOADABLE.list(0).defaultField("display_modifiers", List.of(), m -> m.display),
     ModifierRequirementsModule::new);
 
-  private static final List<ModifierHook<?>> DEFAULT_HOOKS = ModifierHookProvider.<ModifierRequirementsModule>defaultHooks(TinkerHooks.VALIDATE, TinkerHooks.REQUIREMENTS);
+  private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<ModifierRequirementsModule>defaultHooks(ModifierHooks.VALIDATE, ModifierHooks.REQUIREMENTS);
 
   /** Requirements to check, if they fail, the error will be displayed */
   private final IJsonPredicate<IToolContext> requirement;
@@ -91,7 +91,7 @@ public class ModifierRequirementsModule implements ValidateModifierHook, Modifie
   }
 
   @Override
-  public List<ModifierHook<?>> getDefaultHooks() {
+  public List<ModuleHook<?>> getDefaultHooks() {
     return DEFAULT_HOOKS;
   }
 

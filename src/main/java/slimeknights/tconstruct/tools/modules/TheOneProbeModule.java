@@ -1,15 +1,14 @@
 package slimeknights.tconstruct.tools.modules;
 
-import slimeknights.mantle.data.registry.GenericLoaderRegistry.IGenericLoader;
 import slimeknights.mantle.data.registry.GenericLoaderRegistry.SingletonLoader;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
-import slimeknights.tconstruct.library.modifiers.ModifierHook;
-import slimeknights.tconstruct.library.modifiers.TinkerHooks;
+import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.hook.build.RawDataModifierHook;
-import slimeknights.tconstruct.library.modifiers.modules.ModifierHookProvider;
 import slimeknights.tconstruct.library.modifiers.modules.ModifierModule;
+import slimeknights.tconstruct.library.module.HookProvider;
+import slimeknights.tconstruct.library.module.ModuleHook;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.utils.RestrictedCompoundTag;
 
@@ -19,8 +18,8 @@ import java.util.List;
 public enum TheOneProbeModule implements ModifierModule, RawDataModifierHook {
   INSTANCE;
 
-  private static final List<ModifierHook<?>> DEFAULT_HOOKS = ModifierHookProvider.<TheOneProbeModule>defaultHooks(TinkerHooks.RAW_DATA);
-  public static final IGenericLoader<TheOneProbeModule> LOADER = new SingletonLoader<>(INSTANCE);
+  private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<TheOneProbeModule>defaultHooks(ModifierHooks.RAW_DATA);
+  public static final SingletonLoader<TheOneProbeModule> LOADER = new SingletonLoader<>(INSTANCE);
   public static final String TOP_NBT_HELMET = "theoneprobe";
   public static final String TOP_NBT_HAND = "theoneprobe_hand";
 
@@ -41,12 +40,12 @@ public enum TheOneProbeModule implements ModifierModule, RawDataModifierHook {
   }
 
   @Override
-  public List<ModifierHook<?>> getDefaultHooks() {
+  public List<ModuleHook<?>> getDefaultHooks() {
     return DEFAULT_HOOKS;
   }
 
   @Override
-  public IGenericLoader<? extends ModifierModule> getLoader() {
+  public SingletonLoader<TheOneProbeModule> getLoader() {
     return LOADER;
   }
 }

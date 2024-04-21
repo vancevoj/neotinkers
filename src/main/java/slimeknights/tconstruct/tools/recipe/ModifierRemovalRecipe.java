@@ -17,7 +17,7 @@ import slimeknights.tconstruct.library.json.predicate.modifier.ModifierPredicate
 import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierId;
-import slimeknights.tconstruct.library.modifiers.TinkerHooks;
+import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.recipe.ITinkerableContainer;
 import slimeknights.tconstruct.library.recipe.RecipeResult;
 import slimeknights.tconstruct.library.recipe.modifiers.ModifierRecipeLookup;
@@ -119,7 +119,7 @@ public class ModifierRemovalRecipe extends AbstractWorktableRecipe {
     int newLevel = tool.getModifierLevel(modifierId) - 1;
     Modifier modifier = entry.getModifier();
     if (newLevel <= 0) {
-      modifier.getHook(TinkerHooks.RAW_DATA).removeRawData(tool, modifier, tool.getRestrictedNBT());
+      modifier.getHook(ModifierHooks.RAW_DATA).removeRawData(tool, modifier, tool.getRestrictedNBT());
     }
 
     // remove the actual modifier
@@ -132,7 +132,7 @@ public class ModifierRemovalRecipe extends AbstractWorktableRecipe {
     }
     // if this was the last level, validate the tool is still valid without it
     if (newLevel <= 0) {
-      error = modifier.getHook(TinkerHooks.REMOVE).onRemoved(tool, modifier);
+      error = modifier.getHook(ModifierHooks.REMOVE).onRemoved(tool, modifier);
       if (error != null) {
         return RecipeResult.failure(error);
       }

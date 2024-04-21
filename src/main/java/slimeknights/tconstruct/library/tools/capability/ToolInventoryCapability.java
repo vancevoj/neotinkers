@@ -18,8 +18,8 @@ import net.minecraftforge.network.NetworkHooks;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
-import slimeknights.tconstruct.library.modifiers.ModifierHook;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
+import slimeknights.tconstruct.library.module.ModuleHook;
 import slimeknights.tconstruct.library.recipe.partbuilder.Pattern;
 import slimeknights.tconstruct.library.tools.capability.ToolCapabilityProvider.IToolCapabilityProvider;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinition;
@@ -44,8 +44,7 @@ public class ToolInventoryCapability extends InventoryModifierHookIterator<Modif
   public static final ResourceLocation INCLUDE_OFFHAND = TConstruct.getResource("inventory_show_offhand");
 
   /** Modifier hook instance to make an inventory modifier */
-  @SuppressWarnings("deprecation")
-  public static final ModifierHook<InventoryModifierHook> HOOK = ModifierHooks.register(TConstruct.getResource("inventory"), InventoryModifierHook.class, new InventoryModifierHook() {
+  public static final ModuleHook<InventoryModifierHook> HOOK = ModifierHooks.register(TConstruct.getResource("inventory"), InventoryModifierHook.class, InventoryModifierHookMerger::new, new InventoryModifierHook() {
     @Override
     public int getSlots(IToolStackView tool, ModifierEntry modifier) {
       return 0;
@@ -68,7 +67,7 @@ public class ToolInventoryCapability extends InventoryModifierHookIterator<Modif
     public boolean isItemValid(IToolStackView tool, ModifierEntry modifier, int slot, ItemStack stack) {
       return false;
     }
-  }, InventoryModifierHookMerger::new);
+  });
 
   /** Supplier to the tool instance */
   private final Supplier<? extends IToolStackView> tool;

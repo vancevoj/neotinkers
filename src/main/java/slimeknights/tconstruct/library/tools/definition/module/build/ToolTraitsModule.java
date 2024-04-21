@@ -3,9 +3,9 @@ package slimeknights.tconstruct.library.tools.definition.module.build;
 import com.google.common.collect.ImmutableList;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
-import slimeknights.tconstruct.library.modifiers.ModifierHook;
+import slimeknights.tconstruct.library.module.ModuleHook;
 import slimeknights.tconstruct.library.modifiers.ModifierId;
-import slimeknights.tconstruct.library.modifiers.modules.ModifierHookProvider;
+import slimeknights.tconstruct.library.module.HookProvider;
 import slimeknights.tconstruct.library.modifiers.util.LazyModifier;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinition;
 import slimeknights.tconstruct.library.tools.definition.module.ToolHooks;
@@ -18,7 +18,7 @@ import java.util.List;
 /** Module for adding traits to a tool */
 public record ToolTraitsModule(List<ModifierEntry> traits) implements ToolTraitHook, ToolModule {
   public static final RecordLoadable<ToolTraitsModule> LOADER = RecordLoadable.create(ModifierEntry.LOADABLE.list(1).requiredField("traits", ToolTraitsModule::traits), ToolTraitsModule::new);
-  private static final List<ModifierHook<?>> DEFAULT_HOOKS = ModifierHookProvider.<ToolTraitsModule>defaultHooks(ToolHooks.TOOL_TRAITS);
+  private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<ToolTraitsModule>defaultHooks(ToolHooks.TOOL_TRAITS);
 
   public static Builder builder() {
     return new Builder();
@@ -30,7 +30,7 @@ public record ToolTraitsModule(List<ModifierEntry> traits) implements ToolTraitH
   }
 
   @Override
-  public List<ModifierHook<?>> getDefaultHooks() {
+  public List<ModuleHook<?>> getDefaultHooks() {
     return DEFAULT_HOOKS;
   }
 

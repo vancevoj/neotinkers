@@ -4,7 +4,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
-import slimeknights.tconstruct.library.modifiers.ModifierHook;
+import slimeknights.tconstruct.library.module.ModuleHook;
 import slimeknights.tconstruct.library.tools.context.EquipmentContext;
 import slimeknights.tconstruct.library.tools.definition.ModifiableArmorMaterial;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
@@ -50,8 +50,8 @@ public interface ModifyDamageModifierHook {
     }
   }
 
-  /** Internal logic for {@link #modifyDamageTaken(ModifierHook, EquipmentContext, DamageSource, float, boolean)} */
-  private static float modifyDamageTaken(ModifierHook<ModifyDamageModifierHook> hook, EquipmentContext context, DamageSource source, float amount, boolean isDirectDamage, EquipmentSlot slotType) {
+  /** Internal logic for {@link #modifyDamageTaken(ModuleHook, EquipmentContext, DamageSource, float, boolean)} */
+  private static float modifyDamageTaken(ModuleHook<ModifyDamageModifierHook> hook, EquipmentContext context, DamageSource source, float amount, boolean isDirectDamage, EquipmentSlot slotType) {
     IToolStackView toolStack = context.getToolInSlot(slotType);
     if (toolStack != null && !toolStack.isBroken()) {
       for (ModifierEntry entry : toolStack.getModifierList()) {
@@ -72,7 +72,7 @@ public interface ModifyDamageModifierHook {
    * @param amount          Damage amount
    * @param isDirectDamage  If true, the damage source is applying directly
    */
-  static float modifyDamageTaken(ModifierHook<ModifyDamageModifierHook> hook, EquipmentContext context, DamageSource source, float amount, boolean isDirectDamage) {
+  static float modifyDamageTaken(ModuleHook<ModifyDamageModifierHook> hook, EquipmentContext context, DamageSource source, float amount, boolean isDirectDamage) {
     // first we need to determine if any of the four slots want to cancel the event, then we need to determine if any want to respond assuming its not canceled
     for (EquipmentSlot slotType : ModifiableArmorMaterial.ARMOR_SLOTS) {
       amount = modifyDamageTaken(hook, context, source, amount, isDirectDamage, slotType);

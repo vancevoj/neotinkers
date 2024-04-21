@@ -10,8 +10,8 @@ import net.minecraftforge.common.util.TablePrinter;
 import slimeknights.mantle.command.MantleCommand;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.modifiers.Modifier;
-import slimeknights.tconstruct.library.modifiers.ModifierHook;
 import slimeknights.tconstruct.library.modifiers.ModifierManager;
+import slimeknights.tconstruct.library.module.ModuleHook;
 import slimeknights.tconstruct.shared.command.argument.ModifierHookArgument;
 
 import java.util.Comparator;
@@ -53,12 +53,12 @@ public class ModifierPriorityCommand {
 
     // if filtered, show fewer modifiers and add to the log name
     if (filtered) {
-      ModifierHook<?> filter = ModifierHookArgument.getModifier(context, "modifier_hook");
+      ModuleHook<?> filter = ModifierHookArgument.getModifier(context, "modifier_hook");
       modifiers = modifiers.filter(m -> m.getHooks().hasHook(filter));
-      builder.append(" for ").append(filter.getName());
+      builder.append(" for ").append(filter.getId());
     } else {
       // if not filtered, include a row listing all used hooks
-      table.header("Hooks", m -> m.getHooks().getAllModules().keySet().stream().map(ModifierHook::getName).sorted().map(ResourceLocation::toString).collect(Collectors.joining(", ")));
+      table.header("Hooks", m -> m.getHooks().getAllModules().keySet().stream().map(ModuleHook::getId).sorted().map(ResourceLocation::toString).collect(Collectors.joining(", ")));
     }
     builder.append(":").append(System.lineSeparator());
     List<Modifier> list = modifiers.sorted(Comparator.comparingInt(Modifier::getPriority).reversed().thenComparing(Modifier::getId)).toList();

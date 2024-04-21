@@ -16,11 +16,11 @@ import slimeknights.mantle.data.registry.GenericLoaderRegistry.IGenericLoader;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
-import slimeknights.tconstruct.library.modifiers.ModifierHook;
+import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.ModifierId;
-import slimeknights.tconstruct.library.modifiers.TinkerHooks;
 import slimeknights.tconstruct.library.modifiers.hook.display.TooltipModifierHook;
-import slimeknights.tconstruct.library.modifiers.modules.ModifierModule;
+import slimeknights.tconstruct.library.module.HookProvider;
+import slimeknights.tconstruct.library.module.ModuleHook;
 import slimeknights.tconstruct.library.tools.capability.ToolFluidCapability;
 import slimeknights.tconstruct.library.tools.capability.ToolFluidCapability.FluidModifierHook;
 import slimeknights.tconstruct.library.tools.context.ToolRebuildContext;
@@ -39,7 +39,7 @@ import java.util.function.BiFunction;
 public class TankModule extends TankCapacityModule implements FluidModifierHook, TooltipModifierHook {
   private static final String FILLED_KEY = TConstruct.makeTranslationKey("modifier", "tank.filled");
   private static final String CAPACITY_KEY = TConstruct.makeTranslationKey("modifier", "tank.capacity");
-  private static final List<ModifierHook<?>> DEFAULT_HOOKS = List.of(TinkerHooks.VOLATILE_DATA, ToolFluidCapability.HOOK, TinkerHooks.TOOLTIP);
+  private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<TankModule>defaultHooks(ModifierHooks.VOLATILE_DATA, ToolFluidCapability.HOOK, ModifierHooks.TOOLTIP);
   /** Default key for owner */
   public static final ResourceLocation DEFAULT_OWNER_KEY = TConstruct.getResource("tank_owner");
   /** Default key for fluid */
@@ -221,12 +221,12 @@ public class TankModule extends TankCapacityModule implements FluidModifierHook,
   /* Module logic */
 
   @Override
-  public List<ModifierHook<?>> getDefaultHooks() {
+  public List<ModuleHook<?>> getDefaultHooks() {
     return DEFAULT_HOOKS;
   }
 
   @Override
-  public IGenericLoader<? extends ModifierModule> getLoader() {
+  public IGenericLoader<? extends TankModule> getLoader() {
     return LOADER;
   }
 }

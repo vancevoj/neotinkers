@@ -12,7 +12,7 @@ import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierId;
-import slimeknights.tconstruct.library.modifiers.TinkerHooks;
+import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.recipe.RecipeResult;
 import slimeknights.tconstruct.library.recipe.modifiers.adding.IncrementalModifierRecipe;
 import slimeknights.tconstruct.library.recipe.tinkerstation.IMutableTinkerStationContainer;
@@ -59,7 +59,7 @@ public class ModifierRepairTinkerStationRecipe implements ITinkerStationRecipe, 
     // apply modifiers to possibly boost it
     float repairFactor = 1;
     for (ModifierEntry entry : tool.getModifierList()) {
-      repairFactor = entry.getHook(TinkerHooks.REPAIR_FACTOR).getRepairFactor(tool, entry, repairFactor);
+      repairFactor = entry.getHook(ModifierHooks.REPAIR_FACTOR).getRepairFactor(tool, entry, repairFactor);
       if (repairFactor <= 0) {
         return RecipeResult.pass();
       }
@@ -89,7 +89,7 @@ public class ModifierRepairTinkerStationRecipe implements ITinkerStationRecipe, 
     // rescale the amount based on modifiers
     float repairFactor = 1.0f;
     for (ModifierEntry entry : tool.getModifierList()) {
-      repairFactor = entry.getHook(TinkerHooks.REPAIR_FACTOR).getRepairFactor(tool, entry, repairFactor);
+      repairFactor = entry.getHook(ModifierHooks.REPAIR_FACTOR).getRepairFactor(tool, entry, repairFactor);
       if (repairFactor <= 0) {
         return;
       }

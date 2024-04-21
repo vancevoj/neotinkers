@@ -8,16 +8,9 @@ import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 
 import java.util.Collection;
-import java.util.function.Function;
 
 /** Modifier module to detect when the harvest modifier harvested a block. */
 public interface PlantHarvestModifierHook {
-  /** Default behavior for modifiers not using this hook */
-  PlantHarvestModifierHook EMPTY = (tool, modifier, context, world, state, pos) -> {};
-
-  /** Merger that calls all hooks */
-  Function<Collection<PlantHarvestModifierHook>,PlantHarvestModifierHook> ALL_MERGER = AllMerger::new;
-
   /**
    * Called after a block is successfully harvested
    * @param tool    Tool used in harvesting

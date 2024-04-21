@@ -8,7 +8,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.items.ItemHandlerHelper;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
-import slimeknights.tconstruct.library.modifiers.TinkerHooks;
+import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.tools.TinkerModifiers;
 
@@ -58,7 +58,7 @@ public interface BowAmmoModifierHook {
       return true;
     }
     for (ModifierEntry entry : tool.getModifierList()) {
-      if (!entry.getHook(TinkerHooks.BOW_AMMO).findAmmo(tool, entry, player, ItemStack.EMPTY, predicate).isEmpty()) {
+      if (!entry.getHook(ModifierHooks.BOW_AMMO).findAmmo(tool, entry, player, ItemStack.EMPTY, predicate).isEmpty()) {
         return true;
       }
     }
@@ -111,7 +111,7 @@ public interface BowAmmoModifierHook {
     ItemStack standardAmmo = player.getProjectile(bow);
     ItemStack resultStack = ItemStack.EMPTY;
     for (ModifierEntry entry : tool.getModifierList()) {
-      BowAmmoModifierHook hook = entry.getHook(TinkerHooks.BOW_AMMO);
+      BowAmmoModifierHook hook = entry.getHook(ModifierHooks.BOW_AMMO);
       ItemStack ammo = hook.findAmmo(tool, entry, player, standardAmmo, predicate);
       if (!ammo.isEmpty()) {
         // if creative, we are done, just return the ammo with the given size
@@ -161,7 +161,7 @@ public interface BowAmmoModifierHook {
       }
       // next, try asking modifiers if they have anything new again
       for (ModifierEntry entry : tool.getModifierList()) {
-        BowAmmoModifierHook hook = entry.getHook(TinkerHooks.BOW_AMMO);
+        BowAmmoModifierHook hook = entry.getHook(ModifierHooks.BOW_AMMO);
         ItemStack ammo = hook.findAmmo(tool, entry, player, standardAmmo, predicate);
         if (!ammo.isEmpty()) {
           // consume as much of the stack as we need then restart the loop

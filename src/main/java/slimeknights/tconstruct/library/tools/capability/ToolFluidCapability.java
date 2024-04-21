@@ -12,8 +12,8 @@ import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
-import slimeknights.tconstruct.library.modifiers.ModifierHook;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
+import slimeknights.tconstruct.library.module.ModuleHook;
 import slimeknights.tconstruct.library.tools.capability.ToolCapabilityProvider.IToolCapabilityProvider;
 import slimeknights.tconstruct.library.tools.nbt.IToolContext;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
@@ -34,8 +34,7 @@ public class ToolFluidCapability extends FluidModifierHookIterator<ModifierEntry
   public static final ResourceLocation TOTAL_TANKS = TConstruct.getResource("total_tanks");
 
   /** Modifier hook instance to make an inventory modifier */
-  @SuppressWarnings("deprecation")
-  public static final ModifierHook<FluidModifierHook> HOOK = ModifierHooks.register(TConstruct.getResource("fluid"), FluidModifierHook.class, new FluidModifierHook() {
+  public static final ModuleHook<FluidModifierHook> HOOK = ModifierHooks.register(TConstruct.getResource("fluid"), FluidModifierHook.class, FluidModifierHookMerger::new, new FluidModifierHook() {
     @Override
     public int getTanks(IToolContext tool, Modifier modifier) {
       return 0;
@@ -60,7 +59,7 @@ public class ToolFluidCapability extends FluidModifierHookIterator<ModifierEntry
     public FluidStack drain(IToolStackView tool, ModifierEntry modifier, int maxDrain, FluidAction action) {
       return FluidStack.EMPTY;
     }
-  }, FluidModifierHookMerger::new);
+  });
 
   @Getter
   private final ItemStack container;

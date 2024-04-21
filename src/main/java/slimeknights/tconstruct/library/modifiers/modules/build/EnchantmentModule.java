@@ -18,12 +18,12 @@ import slimeknights.mantle.data.predicate.block.BlockPredicate;
 import slimeknights.mantle.data.predicate.entity.LivingEntityPredicate;
 import slimeknights.tconstruct.library.json.TinkerLoadables;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
-import slimeknights.tconstruct.library.modifiers.ModifierHook;
-import slimeknights.tconstruct.library.modifiers.TinkerHooks;
+import slimeknights.tconstruct.library.module.ModuleHook;
+import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.hook.behavior.EnchantmentModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.mining.BlockHarvestModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.mining.HarvestEnchantmentsModifierHook;
-import slimeknights.tconstruct.library.modifiers.modules.ModifierHookProvider;
+import slimeknights.tconstruct.library.module.HookProvider;
 import slimeknights.tconstruct.library.modifiers.modules.ModifierModule;
 import slimeknights.tconstruct.library.modifiers.modules.util.IntLevelModule;
 import slimeknights.tconstruct.library.modifiers.modules.util.ModifierCondition;
@@ -119,7 +119,7 @@ public interface EnchantmentModule extends ModifierModule, IntLevelModule, Condi
 
   /** Implementation of a simple constant enchantment for the current tool */
   record Constant(Enchantment enchantment, int level, ModifierCondition<IToolStackView> condition) implements EnchantmentModule, EnchantmentModifierHook {
-    private static final List<ModifierHook<?>> DEFAULT_HOOKS = ModifierHookProvider.<Constant>defaultHooks(TinkerHooks.ENCHANTMENTS);
+    private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<Constant>defaultHooks(ModifierHooks.ENCHANTMENTS);
     public static final RecordLoadable<Constant> LOADER = RecordLoadable.create(ENCHANTMENT, IntLevelModule.FIELD, ModifierCondition.TOOL_FIELD, Constant::new);
 
     public Constant(Enchantment enchantment, int level) {
@@ -142,7 +142,7 @@ public interface EnchantmentModule extends ModifierModule, IntLevelModule, Condi
     }
 
     @Override
-    public List<ModifierHook<?>> getDefaultHooks() {
+    public List<ModuleHook<?>> getDefaultHooks() {
       return DEFAULT_HOOKS;
     }
 
@@ -154,7 +154,7 @@ public interface EnchantmentModule extends ModifierModule, IntLevelModule, Condi
 
   /** Enchantment module that can condition on the block mined or the entity mining. */
   record MainHandHarvest(Enchantment enchantment, int level, ModifierCondition<IToolStackView> condition, ResourceLocation conditionFlag, IJsonPredicate<BlockState> block, IJsonPredicate<LivingEntity> holder) implements EnchantmentModule, EnchantmentModifierHook, BlockHarvestModifierHook {
-    private static final List<ModifierHook<?>> DEFAULT_HOOKS = ModifierHookProvider.<MainHandHarvest>defaultHooks(TinkerHooks.ENCHANTMENTS, TinkerHooks.BLOCK_HARVEST);
+    private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<MainHandHarvest>defaultHooks(ModifierHooks.ENCHANTMENTS, ModifierHooks.BLOCK_HARVEST);
     public static final RecordLoadable<MainHandHarvest> LOADER = RecordLoadable.create(ENCHANTMENT, IntLevelModule.FIELD, ModifierCondition.TOOL_FIELD, Loadables.RESOURCE_LOCATION.requiredField("condition_flag", MainHandHarvest::conditionFlag), BLOCK, HOLDER, MainHandHarvest::new);
 
     @Override
@@ -186,7 +186,7 @@ public interface EnchantmentModule extends ModifierModule, IntLevelModule, Condi
     }
 
     @Override
-    public List<ModifierHook<?>> getDefaultHooks() {
+    public List<ModuleHook<?>> getDefaultHooks() {
       return DEFAULT_HOOKS;
     }
 
@@ -198,7 +198,7 @@ public interface EnchantmentModule extends ModifierModule, IntLevelModule, Condi
 
   /** Enchantment module that can condition on the block mined or the entity mining on armor. Requires the harvesting be done with a tinker tool. */
   record ArmorHarvest(Enchantment enchantment, int level, ModifierCondition<IToolStackView> condition, Set<EquipmentSlot> slots, IJsonPredicate<BlockState> block, IJsonPredicate<LivingEntity> holder) implements EnchantmentModule, HarvestEnchantmentsModifierHook {
-    private static final List<ModifierHook<?>> DEFAULT_HOOKS = ModifierHookProvider.<ArmorHarvest>defaultHooks(TinkerHooks.HARVEST_ENCHANTMENTS);
+    private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<ArmorHarvest>defaultHooks(ModifierHooks.HARVEST_ENCHANTMENTS);
     public static final RecordLoadable<ArmorHarvest> LOADER = RecordLoadable.create(ENCHANTMENT, IntLevelModule.FIELD, ModifierCondition.TOOL_FIELD, TinkerLoadables.EQUIPMENT_SLOT_SET.requiredField("slots", ArmorHarvest::slots), BLOCK, HOLDER, ArmorHarvest::new);
 
     @Override
@@ -209,7 +209,7 @@ public interface EnchantmentModule extends ModifierModule, IntLevelModule, Condi
     }
 
     @Override
-    public List<ModifierHook<?>> getDefaultHooks() {
+    public List<ModuleHook<?>> getDefaultHooks() {
       return DEFAULT_HOOKS;
     }
 

@@ -7,20 +7,12 @@ import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 
 import java.util.Collection;
-import java.util.function.Function;
 
 /**
  * Hooks for interacting with a tool based on a keybind.
  * If you wish to use this hook for another slot, please discuss it with us, so we can implement a solution that will benefit all addons rather than having dupliate keybinds.
  */
 public interface KeybindInteractModifierHook {
-  /** Empty implementation */
-  KeybindInteractModifierHook EMPTY = new KeybindInteractModifierHook() {};
-
-  /** Merger that uses the first on start interact, but runs all on stop */
-  Function<Collection<KeybindInteractModifierHook>,KeybindInteractModifierHook> MERGER = InteractMerger::new;
-
-
   /**
    * Called when the helmet keybinding is pressed to interact with this helmet modifier
    * @param tool     Tool instance

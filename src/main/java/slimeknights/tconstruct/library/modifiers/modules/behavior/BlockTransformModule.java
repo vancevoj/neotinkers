@@ -10,11 +10,11 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
-import slimeknights.tconstruct.library.modifiers.ModifierHook;
-import slimeknights.tconstruct.library.modifiers.TinkerHooks;
+import slimeknights.tconstruct.library.module.ModuleHook;
+import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.hook.interaction.BlockInteractionModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.interaction.InteractionSource;
-import slimeknights.tconstruct.library.modifiers.modules.ModifierHookProvider;
+import slimeknights.tconstruct.library.module.HookProvider;
 import slimeknights.tconstruct.library.modifiers.modules.ModifierModule;
 import slimeknights.tconstruct.library.tools.definition.module.ToolHooks;
 import slimeknights.tconstruct.library.tools.definition.module.aoe.AreaOfEffectIterator;
@@ -29,13 +29,13 @@ import java.util.List;
  * Shared logic for interaction actions which transform blocks
  */
 public interface BlockTransformModule extends ModifierModule, BlockInteractionModifierHook {
-  List<ModifierHook<?>> DEFAULT_HOOKS = ModifierHookProvider.<BlockTransformModule>defaultHooks(TinkerHooks.BLOCK_INTERACT);
+  List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<BlockTransformModule>defaultHooks(ModifierHooks.BLOCK_INTERACT);
 
   /** If true, disallows targeting the bottom face of the block to transform */
   boolean requireGround();
 
   @Override
-  default List<ModifierHook<?>> getDefaultHooks() {
+  default List<ModuleHook<?>> getDefaultHooks() {
     return DEFAULT_HOOKS;
   }
 

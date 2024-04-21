@@ -12,6 +12,7 @@ import slimeknights.mantle.data.loadable.primitive.IntLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.tconstruct.library.json.IntRange;
 import slimeknights.tconstruct.library.modifiers.util.LazyModifier;
+import slimeknights.tconstruct.library.module.ModuleHook;
 
 import javax.annotation.Nullable;
 
@@ -79,7 +80,7 @@ public class ModifierEntry implements Comparable<ModifierEntry> {
   }
 
   /** Gets the given hook from the modifier, returning default instance if not present */
-  public final <T> T getHook(ModifierHook<T> hook) {
+  public final <T> T getHook(ModuleHook<T> hook) {
     return modifier.get().getHook(hook);
   }
 

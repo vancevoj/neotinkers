@@ -8,13 +8,14 @@ import slimeknights.mantle.data.registry.GenericLoaderRegistry.IGenericLoader;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
-import slimeknights.tconstruct.library.modifiers.ModifierHook;
-import slimeknights.tconstruct.library.modifiers.TinkerHooks;
+import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.hook.build.ModifierRemovalHook;
 import slimeknights.tconstruct.library.modifiers.hook.build.VolatileDataModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.display.DisplayNameModifierHook;
 import slimeknights.tconstruct.library.modifiers.modules.ModifierModule;
 import slimeknights.tconstruct.library.modifiers.util.ModuleWithKey;
+import slimeknights.tconstruct.library.module.HookProvider;
+import slimeknights.tconstruct.library.module.ModuleHook;
 import slimeknights.tconstruct.library.tools.SlotType;
 import slimeknights.tconstruct.library.tools.context.ToolRebuildContext;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
@@ -30,7 +31,7 @@ import java.util.List;
  * @param slotCount       Number of slots to grant
  */
 public record SwappableSlotModule(@Nullable ResourceLocation key, int slotCount) implements VolatileDataModifierHook, DisplayNameModifierHook, ModifierRemovalHook, ModifierModule, ModuleWithKey {
-  private static final List<ModifierHook<?>> DEFAULT_HOOKS = List.of(TinkerHooks.VOLATILE_DATA, TinkerHooks.DISPLAY_NAME, TinkerHooks.REMOVE);
+  private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<SwappableSlotModule>defaultHooks(ModifierHooks.VOLATILE_DATA, ModifierHooks.DISPLAY_NAME, ModifierHooks.REMOVE);
   /** Format key for swappable variant */
   private static final String FORMAT = TConstruct.makeTranslationKey("modifier", "extra_modifier.type_format");
   public static final RecordLoadable<SwappableSlotModule> LOADER = RecordLoadable.create(
@@ -79,7 +80,7 @@ public record SwappableSlotModule(@Nullable ResourceLocation key, int slotCount)
   }
 
   @Override
-  public List<ModifierHook<?>> getDefaultHooks() {
+  public List<ModuleHook<?>> getDefaultHooks() {
     return DEFAULT_HOOKS;
   }
 
@@ -90,7 +91,7 @@ public record SwappableSlotModule(@Nullable ResourceLocation key, int slotCount)
 
   /** Module to add (or remove) additional slots based on the given swappable slot type */
   public record BonusSlot(@Nullable ResourceLocation key, SlotType match, SlotType bonus, int slotCount) implements VolatileDataModifierHook, ModifierModule, ModuleWithKey {
-    private static final List<ModifierHook<?>> DEFAULT_HOOKS = List.of(TinkerHooks.VOLATILE_DATA);
+    private static final List<ModuleHook<?>> DEFAULT_HOOKS = List.of(ModifierHooks.VOLATILE_DATA);
     public static final RecordLoadable<BonusSlot> LOADER = RecordLoadable.create(
       ModuleWithKey.FIELD,
       SlotType.LOADABLE.requiredField("match", BonusSlot::match),
@@ -111,7 +112,7 @@ public record SwappableSlotModule(@Nullable ResourceLocation key, int slotCount)
     }
 
     @Override
-    public List<ModifierHook<?>> getDefaultHooks() {
+    public List<ModuleHook<?>> getDefaultHooks() {
       return DEFAULT_HOOKS;
     }
 

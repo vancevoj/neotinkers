@@ -34,7 +34,7 @@ import slimeknights.mantle.util.SingleKeyMultimap;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
-import slimeknights.tconstruct.library.modifiers.TinkerHooks;
+import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.tools.context.ToolAttackContext;
 import slimeknights.tconstruct.library.tools.definition.module.weapon.MeleeHitToolHook;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
@@ -99,7 +99,7 @@ public class ToolAttackUtil {
       }
     };
     for (ModifierEntry entry : tool.getModifierList()) {
-      entry.getHook(TinkerHooks.ATTRIBUTES).addAttributes(tool, entry, EquipmentSlot.MAINHAND, attributeConsumer);
+      entry.getHook(ModifierHooks.ATTRIBUTES).addAttributes(tool, entry, EquipmentSlot.MAINHAND, attributeConsumer);
     }
     Multimap<Attribute,AttributeModifier> offhandModifiers = new SingleKeyMultimap<>(Attributes.ATTACK_DAMAGE, listBuilder.build());
 
@@ -203,7 +203,7 @@ public class ToolAttackUtil {
     float baseDamage = damage;
     List<ModifierEntry> modifiers = tool.getModifierList();
     for (ModifierEntry entry : modifiers) {
-      damage = entry.getHook(TinkerHooks.MELEE_DAMAGE).getMeleeDamage(tool, entry, context, baseDamage, damage);
+      damage = entry.getHook(ModifierHooks.MELEE_DAMAGE).getMeleeDamage(tool, entry, context, baseDamage, damage);
     }
 
     // no damage? do nothing
@@ -268,7 +268,7 @@ public class ToolAttackUtil {
     // apply modifier knockback and special effects
     float baseKnockback = knockback;
     for (ModifierEntry entry : modifiers) {
-      knockback = entry.getHook(TinkerHooks.MELEE_HIT).beforeMeleeHit(tool, entry, context, damage, baseKnockback, knockback);
+      knockback = entry.getHook(ModifierHooks.MELEE_HIT).beforeMeleeHit(tool, entry, context, damage, baseKnockback, knockback);
     }
 
     // set hand for proper looting context
@@ -313,7 +313,7 @@ public class ToolAttackUtil {
       }
       // alert modifiers nothing was hit, mainly used for fiery
       for (ModifierEntry entry : modifiers) {
-        entry.getHook(TinkerHooks.MELEE_HIT).failedMeleeHit(tool, entry, context, damage);
+        entry.getHook(ModifierHooks.MELEE_HIT).failedMeleeHit(tool, entry, context, damage);
       }
 
       return !isExtraAttack;
@@ -372,7 +372,7 @@ public class ToolAttackUtil {
     // apply modifier effects
     // removed: bane of arthropods hook, replaced by this
     for (ModifierEntry entry : modifiers) {
-      entry.getHook(TinkerHooks.MELEE_HIT).afterMeleeHit(tool, entry, context, damageDealt);
+      entry.getHook(ModifierHooks.MELEE_HIT).afterMeleeHit(tool, entry, context, damageDealt);
     }
 
     // hurt resistance adjustment for high speed weapons

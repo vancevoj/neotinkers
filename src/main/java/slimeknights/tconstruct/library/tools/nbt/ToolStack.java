@@ -17,7 +17,7 @@ import slimeknights.tconstruct.common.config.Config;
 import slimeknights.tconstruct.library.materials.definition.MaterialVariantId;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierId;
-import slimeknights.tconstruct.library.modifiers.TinkerHooks;
+import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.hook.build.ModifierTraitHook.TraitBuilder;
 import slimeknights.tconstruct.library.tools.SlotType;
 import slimeknights.tconstruct.library.tools.context.ToolRebuildContext;
@@ -588,7 +588,7 @@ public class ToolStack implements IToolStackView {
     // next, ensure modifiers validate
     Component result;
     for (ModifierEntry entry : getModifierList()) {
-      result = entry.getHook(TinkerHooks.VALIDATE).validate(this, entry);
+      result = entry.getHook(ModifierHooks.VALIDATE).validate(this, entry);
       if (result != null) {
         return result;
       }
@@ -654,14 +654,14 @@ public class ToolStack implements IToolStackView {
     // build volatile data first, it's a parameter to the other hooks
     toolData.getHook(ToolHooks.VOLATILE_DATA).addVolatileData(context, volatileData);
     for (ModifierEntry entry : modifierList) {
-      entry.getHook(TinkerHooks.VOLATILE_DATA).addVolatileData(context, entry, volatileData);
+      entry.getHook(ModifierHooks.VOLATILE_DATA).addVolatileData(context, entry, volatileData);
     }
 
     // regular stats last so we can include volatile data
     ModifierStatsBuilder statBuilder = ModifierStatsBuilder.builder();
     toolData.getHook(ToolHooks.TOOL_STATS).addToolStats(context, statBuilder);
     for (ModifierEntry entry : modifierList) {
-      entry.getHook(TinkerHooks.TOOL_STATS).addToolStats(context, entry, statBuilder);
+      entry.getHook(ModifierHooks.TOOL_STATS).addToolStats(context, entry, statBuilder);
     }
 
     // set into NBT
@@ -671,7 +671,7 @@ public class ToolStack implements IToolStackView {
 
     // finally, update raw data, called last to make the parameters more convenient mostly, plus no other hooks should be responding to this data
     for (ModifierEntry entry : modifierList) {
-      entry.getHook(TinkerHooks.RAW_DATA).addRawData(this, entry, getRestrictedNBT());
+      entry.getHook(ModifierHooks.RAW_DATA).addRawData(this, entry, getRestrictedNBT());
     }
   }
 

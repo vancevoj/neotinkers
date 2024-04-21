@@ -3,8 +3,8 @@ package slimeknights.tconstruct.library.tools.definition.module.build;
 import com.google.common.collect.ImmutableMap;
 import slimeknights.mantle.data.loadable.primitive.IntLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
-import slimeknights.tconstruct.library.modifiers.ModifierHook;
-import slimeknights.tconstruct.library.modifiers.modules.ModifierHookProvider;
+import slimeknights.tconstruct.library.module.ModuleHook;
+import slimeknights.tconstruct.library.module.HookProvider;
 import slimeknights.tconstruct.library.tools.SlotType;
 import slimeknights.tconstruct.library.tools.context.ToolRebuildContext;
 import slimeknights.tconstruct.library.tools.definition.module.ToolHooks;
@@ -18,7 +18,7 @@ import java.util.Map.Entry;
 /** Adds starting modifier slots to a tool */
 public record ToolSlotsModule(Map<SlotType,Integer> slots) implements VolatileDataToolHook, ToolModule {
   public static final RecordLoadable<ToolSlotsModule> LOADER = RecordLoadable.create(SlotType.LOADABLE.mapWithValues(IntLoadable.FROM_ONE).requiredField("slots", ToolSlotsModule::slots), ToolSlotsModule::new);
-  private static final List<ModifierHook<?>> DEFAULT_HOOKS = ModifierHookProvider.<ToolSlotsModule>defaultHooks(ToolHooks.VOLATILE_DATA);
+  private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<ToolSlotsModule>defaultHooks(ToolHooks.VOLATILE_DATA);
 
   public static Builder builder() {
     return new Builder();
@@ -30,7 +30,7 @@ public record ToolSlotsModule(Map<SlotType,Integer> slots) implements VolatileDa
   }
 
   @Override
-  public List<ModifierHook<?>> getDefaultHooks() {
+  public List<ModuleHook<?>> getDefaultHooks() {
     return DEFAULT_HOOKS;
   }
 

@@ -20,13 +20,14 @@ import slimeknights.mantle.data.loadable.Loadables;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.tconstruct.library.json.LevelingValue;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
-import slimeknights.tconstruct.library.modifiers.ModifierHook;
-import slimeknights.tconstruct.library.modifiers.TinkerHooks;
+import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.hook.behavior.ToolActionModifierHook;
 import slimeknights.tconstruct.library.modifiers.modules.ModifierModule;
 import slimeknights.tconstruct.library.modifiers.modules.util.ModifierCondition;
 import slimeknights.tconstruct.library.modifiers.modules.util.ModifierCondition.ConditionalModule;
 import slimeknights.tconstruct.library.modifiers.modules.util.ModuleBuilder;
+import slimeknights.tconstruct.library.module.HookProvider;
+import slimeknights.tconstruct.library.module.ModuleHook;
 import slimeknights.tconstruct.library.tools.helper.ToolDamageUtil;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.utils.MutableUseOnContext;
@@ -43,7 +44,7 @@ import java.util.List;
  * @param condition  Standard module condition
  */
 public record ToolActionWalkerTransformModule(ToolAction action, SoundEvent sound, LevelingValue radius, ModifierCondition<IToolStackView> condition) implements ModifierModule, ArmorWalkRadiusModule<MutableUseOnContext>, ToolActionModifierHook, ConditionalModule<IToolStackView> {
-  private static final List<ModifierHook<?>> DEFAULT_HOOKS = List.of(TinkerHooks.BOOT_WALK, TinkerHooks.TOOL_ACTION);
+  private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<ToolActionWalkerTransformModule>defaultHooks(ModifierHooks.BOOT_WALK, ModifierHooks.TOOL_ACTION);
   public static final RecordLoadable<ToolActionWalkerTransformModule> LOADER = RecordLoadable.create(
     Loadables.TOOL_ACTION.requiredField("tool_action", ToolActionWalkerTransformModule::action),
     Loadables.SOUND_EVENT.requiredField("sound", ToolActionWalkerTransformModule::sound),
@@ -52,7 +53,7 @@ public record ToolActionWalkerTransformModule(ToolAction action, SoundEvent soun
     ToolActionWalkerTransformModule::new);
 
   @Override
-  public List<ModifierHook<?>> getDefaultHooks() {
+  public List<ModuleHook<?>> getDefaultHooks() {
     return DEFAULT_HOOKS;
   }
 

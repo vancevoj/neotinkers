@@ -13,13 +13,13 @@ import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
-import slimeknights.tconstruct.library.modifiers.ModifierHook;
-import slimeknights.tconstruct.library.modifiers.TinkerHooks;
+import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.impl.BasicModifier;
 import slimeknights.tconstruct.library.modifiers.modules.ModifierModule;
-import slimeknights.tconstruct.library.modifiers.util.ModifierHookMap;
-import slimeknights.tconstruct.library.modifiers.util.ModifierHookMap.WithHooks;
 import slimeknights.tconstruct.library.modifiers.util.ModifierLevelDisplay;
+import slimeknights.tconstruct.library.module.ModuleHook;
+import slimeknights.tconstruct.library.module.ModuleHookMap;
+import slimeknights.tconstruct.library.module.WithHooks;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 
 import java.util.ArrayList;
@@ -47,7 +47,7 @@ public class ComposableModifier extends BasicModifier {
    * @param modules          Modules for this modifier
    */
   protected ComposableModifier(ModifierLevelDisplay levelDisplay, TooltipDisplay tooltipDisplay, int priority, List<WithHooks<ModifierModule>> modules, ErrorFactory error) {
-    super(ModifierHookMap.createMap(modules, error), levelDisplay, tooltipDisplay, priority);
+    super(ModuleHookMap.createMap(modules, error), levelDisplay, tooltipDisplay, priority);
     this.modules = modules;
   }
 
@@ -63,7 +63,7 @@ public class ComposableModifier extends BasicModifier {
 
   @Override
   public Component getDisplayName(IToolStackView tool, ModifierEntry entry) {
-    return getHook(TinkerHooks.DISPLAY_NAME).getDisplayName(tool, entry, entry.getDisplayName());
+    return getHook(ModifierHooks.DISPLAY_NAME).getDisplayName(tool, entry, entry.getDisplayName());
   }
 
   /** Computes the recommended priority for a set of modifier modules */
@@ -126,7 +126,7 @@ public class ComposableModifier extends BasicModifier {
     /** Adds a module to the builder */
     @SuppressWarnings("UnusedReturnValue")
     @SafeVarargs
-    public final <T extends ModifierModule> Builder addModule(T object, ModifierHook<? super T>... hooks) {
+    public final <T extends ModifierModule> Builder addModule(T object, ModuleHook<? super T>... hooks) {
       modules.add(new WithHooks<>(object, List.of(hooks)));
       return this;
     }

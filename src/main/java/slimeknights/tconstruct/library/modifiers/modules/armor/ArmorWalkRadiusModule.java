@@ -6,22 +6,24 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
-import slimeknights.tconstruct.library.modifiers.ModifierHook;
-import slimeknights.tconstruct.library.modifiers.TinkerHooks;
+import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.hook.armor.ArmorWalkModifierHook;
 import slimeknights.tconstruct.library.modifiers.modules.ModifierModule;
+import slimeknights.tconstruct.library.module.HookProvider;
+import slimeknights.tconstruct.library.module.ModuleHook;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 
 import java.util.List;
 
 /**
  * Implementation of the standard radius walk behavior used by most implementations
+ * @param <T>  Context class
  */
 public interface ArmorWalkRadiusModule<T> extends ArmorWalkModifierHook, ModifierModule {
-  List<ModifierHook<?>> DEFAULT_HOOKS = List.of(TinkerHooks.BOOT_WALK);
+  List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<ArmorWalkRadiusModule<?>>defaultHooks(ModifierHooks.BOOT_WALK);
 
   @Override
-  default List<ModifierHook<?>> getDefaultHooks() {
+  default List<ModuleHook<?>> getDefaultHooks() {
     return DEFAULT_HOOKS;
   }
 

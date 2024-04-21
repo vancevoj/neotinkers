@@ -8,7 +8,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.world.level.ItemLike;
 import slimeknights.mantle.data.GenericDataProvider;
-import slimeknights.tconstruct.library.modifiers.ModifierHook;
+import slimeknights.tconstruct.library.module.ModuleHook;
 import slimeknights.tconstruct.library.tools.definition.ModifiableArmorMaterial;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinition;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinitionData;
@@ -120,7 +120,7 @@ public abstract class AbstractToolDefinitionDataProvider extends GenericDataProv
 
     /** Adds a module to the definition with the given hooks */
     @SafeVarargs
-    public final <T extends ToolModule> ArmorDataBuilder module(ArmorSlotType slotType, T module, ModifierHook<? super T>... hooks) {
+    public final <T extends ToolModule> ArmorDataBuilder module(ArmorSlotType slotType, T module, ModuleHook<? super T>... hooks) {
       getBuilder(slotType).module(module, hooks);
       return this;
     }
@@ -140,7 +140,7 @@ public abstract class AbstractToolDefinitionDataProvider extends GenericDataProv
 
     /** Adds a module to the definition with the given hooks */
     @SafeVarargs
-    public final <T extends ToolModule> ArmorDataBuilder module(T module, ModifierHook<? super T>... hooks) {
+    public final <T extends ToolModule> ArmorDataBuilder module(T module, ModuleHook<? super T>... hooks) {
       for (ArmorSlotType armorSlot : slotTypes) {
         module(armorSlot, module, hooks);
       }
@@ -165,7 +165,7 @@ public abstract class AbstractToolDefinitionDataProvider extends GenericDataProv
 
     /** Adds modules to the definition using the passed builder */
     @SafeVarargs
-    public final <T extends ToolModule> ArmorDataBuilder module(Function<List<ArmorSlotType>,ArmorModuleBuilder<T>> constructor, ModifierHook<? super T>... hooks) {
+    public final <T extends ToolModule> ArmorDataBuilder module(Function<List<ArmorSlotType>,ArmorModuleBuilder<T>> constructor, ModuleHook<? super T>... hooks) {
       ArmorModuleBuilder<T> builder = constructor.apply(slotTypes);
       for (ArmorSlotType armorSlot : slotTypes) {
         module(armorSlot, builder.build(armorSlot), hooks);

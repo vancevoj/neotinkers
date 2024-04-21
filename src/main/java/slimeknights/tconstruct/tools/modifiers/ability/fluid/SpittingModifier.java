@@ -13,14 +13,14 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidType;
 import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
-import slimeknights.tconstruct.library.modifiers.TinkerHooks;
+import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.fluid.FluidEffectManager;
 import slimeknights.tconstruct.library.modifiers.fluid.FluidEffects;
 import slimeknights.tconstruct.library.modifiers.hook.build.ConditionalStatModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.interaction.GeneralInteractionModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.interaction.InteractionSource;
 import slimeknights.tconstruct.library.modifiers.modules.fluid.TankModule;
-import slimeknights.tconstruct.library.modifiers.util.ModifierHookMap.Builder;
+import slimeknights.tconstruct.library.module.ModuleHookMap.Builder;
 import slimeknights.tconstruct.library.tools.capability.EntityModifierCapability;
 import slimeknights.tconstruct.library.tools.capability.PersistentDataCapability;
 import slimeknights.tconstruct.library.tools.helper.ModifierUtil;
@@ -39,7 +39,7 @@ public class SpittingModifier extends Modifier implements GeneralInteractionModi
 
   @Override
   protected void registerHooks(Builder builder) {
-    builder.addHook(this, TinkerHooks.GENERAL_INTERACT);
+    builder.addHook(this, ModifierHooks.GENERAL_INTERACT);
     tank = new TankModule(FluidType.BUCKET_VOLUME, true);
     builder.addModule(tank);
   }
@@ -118,7 +118,7 @@ public class SpittingModifier extends Modifier implements GeneralInteractionModi
                 NamespacedNBT arrowData = PersistentDataCapability.getOrWarn(spit);
                 // let modifiers set properties
                 for (ModifierEntry entry : tool.getModifierList()) {
-                  entry.getHook(TinkerHooks.PROJECTILE_LAUNCH).onProjectileLaunch(tool, entry, entity, spit, null, arrowData, shotIndex == primaryIndex);
+                  entry.getHook(ModifierHooks.PROJECTILE_LAUNCH).onProjectileLaunch(tool, entry, entity, spit, null, arrowData, shotIndex == primaryIndex);
                 }
 
                 // finally, fire the projectile

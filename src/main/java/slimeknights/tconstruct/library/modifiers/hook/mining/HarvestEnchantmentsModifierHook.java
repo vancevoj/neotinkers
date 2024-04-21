@@ -8,7 +8,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
-import slimeknights.tconstruct.library.modifiers.TinkerHooks;
+import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.hook.behavior.EnchantmentModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.combat.LootingModifierHook;
 import slimeknights.tconstruct.library.tools.context.EquipmentContext;
@@ -72,7 +72,7 @@ public interface HarvestEnchantmentsModifierHook {
         if (armor != null) {
           for (ModifierEntry entry : armor.getModifierList()) {
             // skip processing if we lack the hook, saves us parsing if none of the modifiers use it
-            HarvestEnchantmentsModifierHook hook = entry.getModifier().getHooks().getOrNull(TinkerHooks.HARVEST_ENCHANTMENTS);
+            HarvestEnchantmentsModifierHook hook = entry.getModifier().getHooks().getOrNull(ModifierHooks.HARVEST_ENCHANTMENTS);
             if (hook != null) {
               // if we have not yet parsed the enchantments, time to do so
               if (enchantments == null) {

@@ -1,7 +1,7 @@
 package slimeknights.tconstruct.library.modifiers.hook.combat;
 
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
-import slimeknights.tconstruct.library.modifiers.TinkerHooks;
+import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.tools.context.LootingContext;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 
@@ -32,7 +32,7 @@ public interface LootingModifierHook {
   static int getLooting(IToolStackView tool, LootingContext context, int looting) {
     if (!tool.isBroken()) {
       for (ModifierEntry entry : tool.getModifierList()) {
-        looting = entry.getHook(TinkerHooks.WEAPON_LOOTING).updateLooting(tool, entry, context, looting);
+        looting = entry.getHook(ModifierHooks.WEAPON_LOOTING).updateLooting(tool, entry, context, looting);
       }
     }
     return looting;

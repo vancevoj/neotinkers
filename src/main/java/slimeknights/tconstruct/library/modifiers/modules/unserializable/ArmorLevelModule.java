@@ -6,10 +6,10 @@ import net.minecraft.world.entity.EquipmentSlot.Type;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
-import slimeknights.tconstruct.library.modifiers.ModifierHook;
-import slimeknights.tconstruct.library.modifiers.TinkerHooks;
+import slimeknights.tconstruct.library.module.ModuleHook;
+import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.hook.armor.EquipmentChangeModifierHook;
-import slimeknights.tconstruct.library.modifiers.modules.ModifierHookProvider;
+import slimeknights.tconstruct.library.module.HookProvider;
 import slimeknights.tconstruct.library.tools.capability.TinkerDataCapability;
 import slimeknights.tconstruct.library.tools.capability.TinkerDataCapability.TinkerDataKey;
 import slimeknights.tconstruct.library.tools.context.EquipmentChangeContext;
@@ -24,11 +24,11 @@ import java.util.List;
  * @see TinkerDataKey
  * @see slimeknights.tconstruct.library.modifiers.modules.behavior.ShowOffhandModule
  */
-public record ArmorLevelModule(TinkerDataKey<Integer> key, boolean allowBroken, @Nullable TagKey<Item> heldTag) implements ModifierHookProvider, EquipmentChangeModifierHook {
-  private static final List<ModifierHook<?>> DEFAULT_HOOKS = ModifierHookProvider.<ArmorLevelModule>defaultHooks(TinkerHooks.EQUIPMENT_CHANGE);
+public record ArmorLevelModule(TinkerDataKey<Integer> key, boolean allowBroken, @Nullable TagKey<Item> heldTag) implements HookProvider, EquipmentChangeModifierHook {
+  private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<ArmorLevelModule>defaultHooks(ModifierHooks.EQUIPMENT_CHANGE);
 
   @Override
-  public List<ModifierHook<?>> getDefaultHooks() {
+  public List<ModuleHook<?>> getDefaultHooks() {
     return DEFAULT_HOOKS;
   }
 

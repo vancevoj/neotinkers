@@ -8,8 +8,8 @@ import lombok.RequiredArgsConstructor;
 import slimeknights.mantle.data.loadable.primitive.IntLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.tconstruct.library.json.TinkerLoadables;
-import slimeknights.tconstruct.library.modifiers.ModifierHook;
-import slimeknights.tconstruct.library.modifiers.modules.ModifierHookProvider;
+import slimeknights.tconstruct.library.module.ModuleHook;
+import slimeknights.tconstruct.library.module.HookProvider;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinition;
 import slimeknights.tconstruct.library.tools.definition.module.ToolHooks;
 import slimeknights.tconstruct.library.tools.part.IToolPart;
@@ -21,7 +21,7 @@ import java.util.function.Supplier;
 
 /** Tool using tool parts for its material stats, allows part swapping and tool building */
 public class PartStatsModule extends MaterialStatsModule implements ToolPartsHook {
-  private static final List<ModifierHook<?>> DEFAULT_HOOKS = ModifierHookProvider.<PartStatsModule>defaultHooks(ToolHooks.TOOL_STATS, ToolHooks.TOOL_TRAITS, ToolHooks.TOOL_MATERIALS, ToolHooks.TOOL_PARTS, ToolHooks.MATERIAL_REPAIR);
+  private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<PartStatsModule>defaultHooks(ToolHooks.TOOL_STATS, ToolHooks.TOOL_TRAITS, ToolHooks.TOOL_MATERIALS, ToolHooks.TOOL_PARTS, ToolHooks.MATERIAL_REPAIR);
   public static final RecordLoadable<PartStatsModule> LOADER = RecordLoadable.create(
     STAT_PROVIDER_FIELD,
     WeightedPart.LOADABLE.list(1).requiredField("parts", m -> m.parts),
@@ -49,7 +49,7 @@ public class PartStatsModule extends MaterialStatsModule implements ToolPartsHoo
   }
 
   @Override
-  public List<ModifierHook<?>> getDefaultHooks() {
+  public List<ModuleHook<?>> getDefaultHooks() {
     return DEFAULT_HOOKS;
   }
 

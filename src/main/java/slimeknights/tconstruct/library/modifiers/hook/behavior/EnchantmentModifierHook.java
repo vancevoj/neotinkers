@@ -4,7 +4,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
-import slimeknights.tconstruct.library.modifiers.TinkerHooks;
+import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.hook.mining.BlockHarvestModifierHook;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
@@ -59,7 +59,7 @@ public interface EnchantmentModifierHook {
     int level = EnchantmentHelper.getTagEnchantmentLevel(enchantment, stack);
     IToolStackView tool = ToolStack.from(stack);
     for (ModifierEntry entry : tool.getModifierList()) {
-      level = entry.getHook(TinkerHooks.ENCHANTMENTS).updateEnchantmentLevel(tool, entry, enchantment, level);
+      level = entry.getHook(ModifierHooks.ENCHANTMENTS).updateEnchantmentLevel(tool, entry, enchantment, level);
     }
     // we allow hooks to return negative, such as to cancel out an enchantment
     return Math.max(level, 0);
@@ -74,7 +74,7 @@ public interface EnchantmentModifierHook {
     Map<Enchantment,Integer> enchantments = EnchantmentHelper.getEnchantments(stack);
     IToolStackView tool = ToolStack.from(stack);
     for (ModifierEntry entry : tool.getModifierList()) {
-      entry.getHook(TinkerHooks.ENCHANTMENTS).updateEnchantments(tool, entry, enchantments);
+      entry.getHook(ModifierHooks.ENCHANTMENTS).updateEnchantments(tool, entry, enchantments);
     }
     // we allow hooks to return negative, such as to cancel out an enchantment
     enchantments.values().removeIf(VALUE_REMOVER);

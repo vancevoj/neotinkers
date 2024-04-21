@@ -19,7 +19,7 @@ import net.minecraftforge.common.ToolActions;
 import net.minecraftforge.eventbus.api.Event.Result;
 import slimeknights.tconstruct.library.events.TinkerToolEvent.ToolShearEvent;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
-import slimeknights.tconstruct.library.modifiers.TinkerHooks;
+import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.hook.behavior.ToolActionModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.combat.ArmorLootingModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.combat.LootingModifierHook;
@@ -27,7 +27,7 @@ import slimeknights.tconstruct.library.modifiers.hook.interaction.EntityInteract
 import slimeknights.tconstruct.library.modifiers.hook.interaction.InteractionSource;
 import slimeknights.tconstruct.library.modifiers.impl.NoLevelsModifier;
 import slimeknights.tconstruct.library.modifiers.modules.behavior.ShowOffhandModule;
-import slimeknights.tconstruct.library.modifiers.util.ModifierHookMap.Builder;
+import slimeknights.tconstruct.library.module.ModuleHookMap.Builder;
 import slimeknights.tconstruct.library.tools.context.LootingContext;
 import slimeknights.tconstruct.library.tools.definition.module.ToolHooks;
 import slimeknights.tconstruct.library.tools.definition.module.interaction.DualOptionInteraction;
@@ -47,7 +47,7 @@ public class ShearsAbilityModifier extends NoLevelsModifier implements EntityInt
   protected void registerHooks(Builder hookBuilder) {
     super.registerHooks(hookBuilder);
     hookBuilder.addModule(ShowOffhandModule.DISALLOW_BROKEN);
-    hookBuilder.addHook(this, TinkerHooks.ENTITY_INTERACT, TinkerHooks.TOOL_ACTION);
+    hookBuilder.addHook(this, ModifierHooks.ENTITY_INTERACT, ModifierHooks.TOOL_ACTION);
   }
 
   @Override
@@ -135,7 +135,7 @@ public class ShearsAbilityModifier extends NoLevelsModifier implements EntityInt
   /** Runs the hook after shearing an entity */
   private static void runShearHook(IToolStackView tool, Player player, Entity entity, boolean isTarget) {
     for (ModifierEntry entry : tool.getModifierList()) {
-      entry.getHook(TinkerHooks.SHEAR_ENTITY).afterShearEntity(tool, entry, player, entity, isTarget);
+      entry.getHook(ModifierHooks.SHEAR_ENTITY).afterShearEntity(tool, entry, player, entity, isTarget);
     }
   }
 

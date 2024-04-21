@@ -18,7 +18,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import slimeknights.mantle.command.MantleCommand;
 import slimeknights.tconstruct.TConstruct;
-import slimeknights.tconstruct.library.modifiers.TinkerHooks;
+import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.library.tools.stat.INumericToolStat;
@@ -200,7 +200,7 @@ public class StatsCommand {
         if (error != null) {
           throw MODIFIER_ERROR.create(error);
         }
-        error = stats.getHook(TinkerHooks.REMOVE).onRemoved(tool, stats);
+        error = stats.getHook(ModifierHooks.REMOVE).onRemoved(tool, stats);
         if (error != null) {
           throw MODIFIER_ERROR.create(error);
         }

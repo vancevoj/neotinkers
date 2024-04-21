@@ -6,17 +6,9 @@ import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 
 import java.util.Collection;
-import java.util.function.Function;
 
 /** Interface that allows another modifier to hook into the shears modifier. */
 public interface ShearsModifierHook {
-  /** Default behavior of no action */
-  ShearsModifierHook EMPTY = (tool, modifier, player, entity, isTarget) -> {};
-
-  /** Merger that runs all hooks */
-  Function<Collection<ShearsModifierHook>,ShearsModifierHook> ALL_MERGER = AllMerger::new;
-
-
   /**
    * Called after a block is successfully harvested
    * @param tool     Tool used in harvesting

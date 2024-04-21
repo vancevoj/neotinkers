@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
-import slimeknights.tconstruct.library.modifiers.TinkerHooks;
+import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.tools.context.ToolRebuildContext;
 import slimeknights.tconstruct.library.tools.nbt.ModifierNBT;
 
@@ -48,7 +48,7 @@ public interface ModifierTraitHook {
     private void addTraits(ModifierEntry entry) {
       Modifier modifier = entry.getModifier();
       // if the modifier lacks the trait hook, then we can skip tracking it, no need to add it to any data structures
-      ModifierTraitHook hook = modifier.getHooks().getOrNull(TinkerHooks.MODIFIER_TRAITS);
+      ModifierTraitHook hook = modifier.getHooks().getOrNull(ModifierHooks.MODIFIER_TRAITS);
       if (hook != null) {
         // if this modifier is already on the stack, ignore it to avoid infinite recursion
         if (currentStack.contains(modifier)) {

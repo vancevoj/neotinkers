@@ -2,7 +2,7 @@ package slimeknights.tconstruct.library.modifiers.hook.build;
 
 import net.minecraft.world.entity.LivingEntity;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
-import slimeknights.tconstruct.library.modifiers.TinkerHooks;
+import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.stat.FloatToolStat;
 
@@ -26,7 +26,7 @@ public interface ConditionalStatModifierHook {
   static float getModifiedStat(IToolStackView tool, LivingEntity living, FloatToolStat stat, float value) {
     float multiplier = tool.getMultiplier(stat);
     for (ModifierEntry entry : tool.getModifierList()) {
-      value = entry.getHook(TinkerHooks.CONDITIONAL_STAT).modifyStat(tool, entry, living, stat, value, multiplier);
+      value = entry.getHook(ModifierHooks.CONDITIONAL_STAT).modifyStat(tool, entry, living, stat, value, multiplier);
     }
     return stat.clamp(value);
   }

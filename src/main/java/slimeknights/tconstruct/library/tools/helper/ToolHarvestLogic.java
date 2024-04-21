@@ -21,7 +21,7 @@ import net.minecraftforge.common.ToolActions;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.common.network.TinkerNetwork;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
-import slimeknights.tconstruct.library.modifiers.TinkerHooks;
+import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.hook.mining.HarvestEnchantmentsModifierHook;
 import slimeknights.tconstruct.library.tools.context.ToolHarvestContext;
 import slimeknights.tconstruct.library.tools.definition.module.ToolHooks;
@@ -66,7 +66,7 @@ public class ToolHarvestLogic {
     Boolean removed = null;
     if (!tool.isBroken()) {
       for (ModifierEntry entry : tool.getModifierList()) {
-        removed = entry.getHook(TinkerHooks.REMOVE_BLOCK).removeBlock(tool, entry, context);
+        removed = entry.getHook(ModifierHooks.REMOVE_BLOCK).removeBlock(tool, entry, context);
         if (removed != null) {
           break;
         }
@@ -138,7 +138,7 @@ public class ToolHarvestLogic {
     // broken means we are using "empty hand"
     if (!tool.isBroken() && removed) {
       for (ModifierEntry entry : tool.getModifierList()) {
-        entry.getHook(TinkerHooks.BLOCK_BREAK).afterBlockBreak(tool, entry, context);
+        entry.getHook(ModifierHooks.BLOCK_BREAK).afterBlockBreak(tool, entry, context);
       }
       ToolDamageUtil.damageAnimated(tool, damage, player);
     }
@@ -221,7 +221,7 @@ public class ToolHarvestLogic {
                                                           IsEffectiveToolHook.isEffective(tool, state));
       // tell modifiers we are about to harvest, lets them add for instance modifiers conditioned on harvesting
       for (ModifierEntry entry : tool.getModifierList()) {
-        entry.getHook(TinkerHooks.BLOCK_HARVEST).startHarvest(tool, entry, context);
+        entry.getHook(ModifierHooks.BLOCK_HARVEST).startHarvest(tool, entry, context);
       }
       // let armor change enchantments
       // TODO: should we have a hook for non-enchantment armor responses?
@@ -248,7 +248,7 @@ public class ToolHarvestLogic {
       }
       // alert modifiers we finished harvesting
       for (ModifierEntry entry : tool.getModifierList()) {
-        entry.getHook(TinkerHooks.BLOCK_HARVEST).finishHarvest(tool, entry, context, didHarvest);
+        entry.getHook(ModifierHooks.BLOCK_HARVEST).finishHarvest(tool, entry, context, didHarvest);
       }
     }
 
@@ -267,7 +267,7 @@ public class ToolHarvestLogic {
       boolean isEffective = IsEffectiveToolHook.isEffective(tool, state);
       ToolHarvestContext context = new ToolHarvestContext((ServerLevel) worldIn, entityLiving, state, pos, Direction.UP, true, isEffective);
       for (ModifierEntry entry : tool.getModifierList()) {
-        entry.getHook(TinkerHooks.BLOCK_BREAK).afterBlockBreak(tool, entry, context);
+        entry.getHook(ModifierHooks.BLOCK_BREAK).afterBlockBreak(tool, entry, context);
       }
       ToolDamageUtil.damageAnimated(tool, ToolHarvestLogic.getDamage(tool, worldIn, pos, state), entityLiving);
     }

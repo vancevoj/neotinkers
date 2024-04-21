@@ -13,7 +13,7 @@ import slimeknights.tconstruct.common.config.Config;
 import slimeknights.tconstruct.library.materials.definition.IMaterial;
 import slimeknights.tconstruct.library.materials.definition.MaterialId;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
-import slimeknights.tconstruct.library.modifiers.TinkerHooks;
+import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.recipe.material.MaterialRecipe;
 import slimeknights.tconstruct.library.tools.definition.module.material.MaterialRepairToolHook;
 import slimeknights.tconstruct.library.tools.helper.ToolDamageUtil;
@@ -117,7 +117,7 @@ public class CraftingTableRepairKitRecipe extends CustomRecipe {
       // adjust the factor based on modifiers
       // main example is wood, +25% per level
       for (ModifierEntry entry : tool.getModifierList()) {
-        repairAmount = entry.getHook(TinkerHooks.REPAIR_FACTOR).getRepairFactor(tool, entry, repairAmount);
+        repairAmount = entry.getHook(ModifierHooks.REPAIR_FACTOR).getRepairFactor(tool, entry, repairAmount);
         if (repairAmount <= 0) {
           // failed to repair
           return tool.createStack();

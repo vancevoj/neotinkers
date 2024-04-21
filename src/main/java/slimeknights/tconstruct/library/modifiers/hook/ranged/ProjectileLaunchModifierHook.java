@@ -9,15 +9,9 @@ import slimeknights.tconstruct.library.tools.nbt.NamespacedNBT;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
-import java.util.function.Function;
 
 /** Hook for modifiers which wish to modify an arrow before its fired. */
 public interface ProjectileLaunchModifierHook {
-  /** Default instance */
-  ProjectileLaunchModifierHook EMPTY = (tool, modifier, shooter, projectile, arrow, persistentData, primary) -> {};
-  /** Merger instance */
-  Function<Collection<ProjectileLaunchModifierHook>,ProjectileLaunchModifierHook> ALL_MERGER = AllMerger::new;
-
   /**
    * Hook to modify arrow properties after an arrow is fired. Called serverside only, so randomness is safe.
    * @param tool            Bow instance

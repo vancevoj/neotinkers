@@ -17,7 +17,7 @@ import slimeknights.tconstruct.library.materials.definition.MaterialVariant;
 import slimeknights.tconstruct.library.materials.definition.MaterialVariantId;
 import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
-import slimeknights.tconstruct.library.modifiers.TinkerHooks;
+import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.recipe.RecipeResult;
 import slimeknights.tconstruct.library.recipe.casting.material.MaterialCastingLookup;
 import slimeknights.tconstruct.library.recipe.material.MaterialRecipe;
@@ -169,7 +169,7 @@ public class TinkerStationPartSwapping implements ITinkerStationRecipe {
           for (Entry<Modifier,Integer> entry : removedTraits.entrySet()) {
             Modifier modifier = entry.getKey();
             if (tool.getModifierLevel(modifier) <= entry.getValue()) {
-              modifier.getHook(TinkerHooks.RAW_DATA).removeRawData(tool, modifier, tool.getRestrictedNBT());
+              modifier.getHook(ModifierHooks.RAW_DATA).removeRawData(tool, modifier, tool.getRestrictedNBT());
               actuallyRemoved.add(modifier);
             }
           }
@@ -188,7 +188,7 @@ public class TinkerStationPartSwapping implements ITinkerStationRecipe {
             float factor = cost / MaterialRecipe.INGOTS_PER_REPAIR * MaterialRepairToolHook.repairFactor(tool, partVariant.getId());
             if (factor > 0) {
               for (ModifierEntry entry : tool.getModifierList()) {
-                factor = entry.getHook(TinkerHooks.REPAIR_FACTOR).getRepairFactor(tool, entry, factor);
+                factor = entry.getHook(ModifierHooks.REPAIR_FACTOR).getRepairFactor(tool, entry, factor);
                 if (factor <= 0) {
                   break;
                 }
@@ -208,7 +208,7 @@ public class TinkerStationPartSwapping implements ITinkerStationRecipe {
         }
         // finally, validate removed modifiers
         for (Modifier modifier : actuallyRemoved) {
-          error = modifier.getHook(TinkerHooks.REMOVE).onRemoved(tool, modifier);
+          error = modifier.getHook(ModifierHooks.REMOVE).onRemoved(tool, modifier);
           if (error != null) {
             return RecipeResult.failure(error);
           }

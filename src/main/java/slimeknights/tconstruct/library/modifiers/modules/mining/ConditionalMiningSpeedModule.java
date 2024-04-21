@@ -17,13 +17,14 @@ import slimeknights.tconstruct.library.json.variable.VariableFormula;
 import slimeknights.tconstruct.library.json.variable.mining.MiningSpeedFormula;
 import slimeknights.tconstruct.library.json.variable.mining.MiningSpeedVariable;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
-import slimeknights.tconstruct.library.modifiers.ModifierHook;
-import slimeknights.tconstruct.library.modifiers.TinkerHooks;
+import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.hook.mining.BreakSpeedModifierHook;
 import slimeknights.tconstruct.library.modifiers.modules.ModifierModule;
 import slimeknights.tconstruct.library.modifiers.modules.util.ConditionalStatTooltip;
 import slimeknights.tconstruct.library.modifiers.modules.util.ModifierCondition;
 import slimeknights.tconstruct.library.modifiers.modules.util.ModifierCondition.ConditionalModule;
+import slimeknights.tconstruct.library.module.HookProvider;
+import slimeknights.tconstruct.library.module.ModuleHook;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.stat.INumericToolStat;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
@@ -42,7 +43,7 @@ public record ConditionalMiningSpeedModule(
   IJsonPredicate<BlockState> block, IJsonPredicate<LivingEntity> holder, boolean requireEffective,
   MiningSpeedFormula formula, ModifierCondition<IToolStackView> condition
 ) implements BreakSpeedModifierHook, ConditionalStatTooltip, ModifierModule, ConditionalModule<IToolStackView> {
-  private static final List<ModifierHook<?>> DEFAULT_HOOKS = List.of(TinkerHooks.BREAK_SPEED, TinkerHooks.TOOLTIP);
+  private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<ConditionalMiningSpeedModule>defaultHooks(ModifierHooks.BREAK_SPEED, ModifierHooks.TOOLTIP);
   public static final RecordLoadable<ConditionalMiningSpeedModule> LOADER = RecordLoadable.create(
     BlockPredicate.LOADER.defaultField("blocks", ConditionalMiningSpeedModule::block),
     LivingEntityPredicate.LOADER.defaultField("entity", ConditionalMiningSpeedModule::holder),
@@ -82,7 +83,7 @@ public record ConditionalMiningSpeedModule(
   }
 
   @Override
-  public List<ModifierHook<?>> getDefaultHooks() {
+  public List<ModuleHook<?>> getDefaultHooks() {
     return DEFAULT_HOOKS;
   }
 

@@ -8,7 +8,7 @@ import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.registries.RegistryObject;
 import slimeknights.mantle.registration.object.IdAwareObject;
 import slimeknights.tconstruct.TConstruct;
-import slimeknights.tconstruct.library.modifiers.ModifierHook;
+import slimeknights.tconstruct.library.module.ModuleHook;
 import slimeknights.tconstruct.library.tools.definition.module.ToolHooks;
 
 /**
@@ -44,7 +44,7 @@ public class ToolDefinition implements IdAwareObject {
   }
 
   /** Gets the given module from the tool */
-  public <T> T getHook(ModifierHook<T> hook) {
+  public <T> T getHook(ModuleHook<T> hook) {
     return data.getHook(hook);
   }
 
