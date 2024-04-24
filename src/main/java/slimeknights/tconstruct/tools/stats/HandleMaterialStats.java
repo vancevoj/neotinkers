@@ -1,65 +1,49 @@
 package slimeknights.tconstruct.tools.stats;
 
-import com.google.common.collect.ImmutableList;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
-import lombok.With;
-import net.minecraft.network.FriendlyByteBuf;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 import net.minecraft.network.chat.Component;
+import slimeknights.mantle.data.loadable.primitive.FloatLoadable;
+import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.tconstruct.TConstruct;
-import slimeknights.tconstruct.library.materials.stats.BaseMaterialStats;
+import slimeknights.tconstruct.library.materials.stats.IMaterialStats;
+import slimeknights.tconstruct.library.materials.stats.MaterialStatType;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
 import slimeknights.tconstruct.library.tools.stat.IToolStat;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
-@AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
-@ToString
-@With
-public class HandleMaterialStats extends BaseMaterialStats {
+import static slimeknights.tconstruct.library.materials.stats.IMaterialStats.makeTooltip;
+import static slimeknights.tconstruct.library.materials.stats.IMaterialStats.makeTooltipKey;
+
+/** Stats for melee harvest handles */
+public record HandleMaterialStats(float durability, float miningSpeed, float meleeSpeed, float attackDamage) implements IMaterialStats {
   public static final MaterialStatsId ID = new MaterialStatsId(TConstruct.getResource("handle"));
-  public static final HandleMaterialStats DEFAULT = new HandleMaterialStats(1f, 1f, 1f, 1f);
+  public static final MaterialStatType<HandleMaterialStats> TYPE = new MaterialStatType<>(ID, new HandleMaterialStats(1f, 1f, 1f, 1f), RecordLoadable.create(
+    FloatLoadable.FROM_ZERO.defaultField("durability", 1f, true, HandleMaterialStats::durability),
+    FloatLoadable.FROM_ZERO.defaultField("melee_damage", 1f, true, HandleMaterialStats::attackDamage),
+    FloatLoadable.FROM_ZERO.defaultField("melee_speed", 1f, true, HandleMaterialStats::meleeSpeed),
+    FloatLoadable.FROM_ZERO.defaultField("mining_speed", 1f, true, HandleMaterialStats::miningSpeed),
+    HandleMaterialStats::new));
+
   // tooltip prefixes
   private static final String DURABILITY_PREFIX = makeTooltipKey(TConstruct.getResource("durability"));
   private static final String ATTACK_DAMAGE_PREFIX = makeTooltipKey(TConstruct.getResource("attack_damage"));
   private static final String ATTACK_SPEED_PREFIX = makeTooltipKey(TConstruct.getResource("attack_speed"));
   private static final String MINING_SPEED_PREFIX = makeTooltipKey(TConstruct.getResource("mining_speed"));
   // tooltip descriptions
-  private static final Component DURABILITY_DESCRIPTION = makeTooltip(TConstruct.getResource("handle.durability.description"));
-  private static final Component ATTACK_DAMAGE_DESCRIPTION = makeTooltip(TConstruct.getResource("handle.attack_damage.description"));
-  private static final Component ATTACK_SPEED_DESCRIPTION = makeTooltip(TConstruct.getResource("handle.attack_speed.description"));
-  private static final Component MINING_SPEED_DESCRIPTION = makeTooltip(TConstruct.getResource("handle.mining_speed.description"));
-  private static final List<Component> DESCRIPTION = ImmutableList.of(DURABILITY_DESCRIPTION, ATTACK_DAMAGE_DESCRIPTION, ATTACK_SPEED_DESCRIPTION, MINING_SPEED_DESCRIPTION);
+  private static final List<Component> DESCRIPTION = List.of(
+    makeTooltip(TConstruct.getResource("handle.durability.description")),
+    makeTooltip(TConstruct.getResource("handle.attack_damage.description")),
+    makeTooltip(TConstruct.getResource("handle.attack_speed.description")),
+    makeTooltip(TConstruct.getResource("handle.mining_speed.description")));
 
   // multipliers
-  private final float durability;
-  private final float miningSpeed;
-  private final float attackSpeed;
-  private final float attackDamage;
-
-  public HandleMaterialStats(FriendlyByteBuf buffer) {
-    this.durability = buffer.readFloat();
-    this.attackDamage = buffer.readFloat();
-    this.attackSpeed = buffer.readFloat();
-    this.miningSpeed = buffer.readFloat();
-  }
 
   @Override
-  public void encode(FriendlyByteBuf buffer) {
-    buffer.writeFloat(this.durability);
-    buffer.writeFloat(this.attackDamage);
-    buffer.writeFloat(this.attackSpeed);
-    buffer.writeFloat(this.miningSpeed);
-  }
-
-  @Override
-  public MaterialStatsId getIdentifier() {
-    return ID;
+  public MaterialStatType<HandleMaterialStats> getType() {
+    return TYPE;
   }
 
   @Override
@@ -67,7 +51,7 @@ public class HandleMaterialStats extends BaseMaterialStats {
     List<Component> list = new ArrayList<>();
     list.add(formatDurability(this.durability));
     list.add(formatAttackDamage(this.attackDamage));
-    list.add(formatAttackSpeed(this.attackSpeed));
+    list.add(formatAttackSpeed(this.meleeSpeed));
     list.add(formatMiningSpeed(this.miningSpeed));
     return list;
   }
@@ -95,5 +79,28 @@ public class HandleMaterialStats extends BaseMaterialStats {
   /** Applies formatting for mining speed */
   public static Component formatMiningSpeed(float quality) {
     return IToolStat.formatColoredMultiplier(MINING_SPEED_PREFIX, quality);
+  }
+
+
+  /* Builder */
+
+  /** Creates a new builder instance */
+  public static Builder builder() {
+    return new Builder();
+  }
+
+  @Accessors(fluent = true)
+  @Setter
+  public static class Builder {
+    private float durability = 1;
+    private float miningSpeed = 1;
+    private float attackSpeed = 1;
+    private float attackDamage = 1;
+
+    private Builder() {}
+
+    public HandleMaterialStats build() {
+      return new HandleMaterialStats(durability, miningSpeed, attackSpeed, attackDamage);
+    }
   }
 }

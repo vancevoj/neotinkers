@@ -4,7 +4,7 @@
     "ignoreMaterialStats": false,
     "supportedStats": [
       "tconstruct:repair_kit",
-      "tconstruct:extra"
+      "tconstruct:binding"
     ],
     "transformer": {
       "type": "tconstruct:recolor_sprite",

@@ -51,7 +51,7 @@ class ToolHarvestLogicTest extends ToolItemTest {
 
     float speed = MiningSpeedToolHook.getDestroySpeed(tool, Blocks.COBBLESTONE.defaultBlockState());
 
-    assertThat(speed).isEqualTo(MaterialStatsFixture.MATERIAL_STATS_HEAD.getMiningSpeed());
+    assertThat(speed).isEqualTo(MaterialStatsFixture.MATERIAL_STATS_HEAD.miningSpeed());
   }
 
   @Test
@@ -95,7 +95,7 @@ class ToolHarvestLogicTest extends ToolItemTest {
 
     // boosted by correct block
     float speed = MiningSpeedToolHook.getDestroySpeed(tool, Blocks.COBBLESTONE.defaultBlockState());
-    assertThat(speed).isEqualTo(MaterialStatsFixture.MATERIAL_STATS_HEAD.getMiningSpeed() * modifier);
+    assertThat(speed).isEqualTo(MaterialStatsFixture.MATERIAL_STATS_HEAD.miningSpeed() * modifier);
 
     // default speed
     speed = MiningSpeedToolHook.getDestroySpeed(tool, Blocks.STONE.defaultBlockState());

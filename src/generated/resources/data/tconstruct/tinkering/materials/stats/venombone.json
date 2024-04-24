@@ -1,26 +1,26 @@
 {
   "stats": {
-    "tconstruct:extra": {},
+    "tconstruct:binding": {},
     "tconstruct:grip": {
       "accuracy": -0.1,
       "durability": 0.9,
-      "meleeAttack": 2.25
+      "melee_damage": 2.25
     },
     "tconstruct:handle": {
-      "attackDamage": 1.05,
-      "attackSpeed": 1.1,
       "durability": 0.9,
-      "miningSpeed": 1.0
+      "melee_damage": 1.05,
+      "melee_speed": 1.1,
+      "mining_speed": 1.0
     },
     "tconstruct:head": {
-      "attack": 2.25,
       "durability": 175,
-      "harvestTier": "minecraft:iron",
-      "miningSpeed": 4.5
+      "melee_attack": 2.25,
+      "mining_speed": 4.5,
+      "mining_tier": "minecraft:iron"
     },
     "tconstruct:limb": {
       "accuracy": 0.05,
-      "drawSpeed": 0.1,
+      "draw_speed": 0.1,
       "durability": 175,
       "velocity": -0.1
     },

@@ -5,7 +5,7 @@ import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.materials.definition.MaterialId;
 import slimeknights.tconstruct.library.materials.definition.MaterialVariantId;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
-import slimeknights.tconstruct.tools.stats.ExtraMaterialStats;
+import slimeknights.tconstruct.tools.stats.BindingMaterialStats;
 import slimeknights.tconstruct.tools.stats.HandleMaterialStats;
 import slimeknights.tconstruct.tools.stats.HeadMaterialStats;
 
@@ -31,7 +31,7 @@ public class ContentMaterial extends AbstractMaterialContent {
     return switch (index) {
       case 0 -> HeadMaterialStats.ID;
       case 1 -> HandleMaterialStats.ID;
-      case 2 -> ExtraMaterialStats.ID;
+      case 2 -> BindingMaterialStats.ID;
       default -> null;
     };
   }
@@ -43,6 +43,6 @@ public class ContentMaterial extends AbstractMaterialContent {
 
   @Override
   protected boolean supportsStatType(MaterialStatsId statsId) {
-    return statsId.equals(HeadMaterialStats.ID) || statsId.equals(HandleMaterialStats.ID) || statsId.equals(ExtraMaterialStats.ID);
+    return statsId.equals(HeadMaterialStats.ID) || statsId.equals(HandleMaterialStats.ID) || statsId.equals(BindingMaterialStats.ID);
   }
 }

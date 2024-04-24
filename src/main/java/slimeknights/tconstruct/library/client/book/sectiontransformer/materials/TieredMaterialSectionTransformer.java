@@ -5,7 +5,7 @@ import slimeknights.tconstruct.library.materials.MaterialRegistry;
 import slimeknights.tconstruct.library.materials.definition.IMaterial;
 import slimeknights.tconstruct.library.materials.stats.IMaterialStats;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
-import slimeknights.tconstruct.tools.stats.ExtraMaterialStats;
+import slimeknights.tconstruct.tools.stats.BindingMaterialStats;
 import slimeknights.tconstruct.tools.stats.HandleMaterialStats;
 import slimeknights.tconstruct.tools.stats.HeadMaterialStats;
 
@@ -14,7 +14,7 @@ import java.util.Set;
 /** @deprecated use {@link TierRangeMaterialSectionTransformer} */
 @Deprecated
 public class TieredMaterialSectionTransformer extends AbstractMaterialSectionTransformer {
-  private static final Set<MaterialStatsId> VISIBLE_STATS = ImmutableSet.of(HeadMaterialStats.ID, HandleMaterialStats.ID, ExtraMaterialStats.ID);
+  private static final Set<MaterialStatsId> VISIBLE_STATS = ImmutableSet.of(HeadMaterialStats.ID, HandleMaterialStats.ID, BindingMaterialStats.ID);
 
   private final int materialTier;
   public TieredMaterialSectionTransformer(String sectionName, int materialTier, boolean detailed) {

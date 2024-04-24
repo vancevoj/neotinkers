@@ -26,7 +26,7 @@
     },
     {
       "path": "tconstruct:item/tool/parts/tool_binding",
-      "statType": "tconstruct:extra"
+      "statType": "tconstruct:binding"
     },
     {
       "path": "tconstruct:item/tool/parts/repair_kit",
@@ -154,7 +154,7 @@
     },
     {
       "path": "tconstruct:item/tool/pickaxe/binding",
-      "statType": "tconstruct:extra"
+      "statType": "tconstruct:binding"
     },
     {
       "path": "tconstruct:item/tool/pickaxe/handle",
@@ -338,7 +338,7 @@
     },
     {
       "path": "tconstruct:item/tool/hand_axe/binding",
-      "statType": "tconstruct:extra"
+      "statType": "tconstruct:binding"
     },
     {
       "path": "tconstruct:item/tool/hand_axe/head_broken",
@@ -358,7 +358,7 @@
     },
     {
       "path": "tconstruct:item/tool/broad_axe/binding",
-      "statType": "tconstruct:extra"
+      "statType": "tconstruct:binding"
     },
     {
       "path": "tconstruct:item/tool/broad_axe/handle",
@@ -382,7 +382,7 @@
     },
     {
       "path": "tconstruct:item/tool/broad_axe/large/binding",
-      "statType": "tconstruct:extra"
+      "statType": "tconstruct:binding"
     },
     {
       "path": "tconstruct:item/tool/broad_axe/large/handle",
@@ -398,7 +398,7 @@
     },
     {
       "path": "tconstruct:item/tool/kama/binding",
-      "statType": "tconstruct:extra"
+      "statType": "tconstruct:binding"
     },
     {
       "path": "tconstruct:item/tool/kama/head_broken",
@@ -410,7 +410,7 @@
     },
     {
       "path": "tconstruct:item/tool/scythe/binding",
-      "statType": "tconstruct:extra"
+      "statType": "tconstruct:binding"
     },
     {
       "path": "tconstruct:item/tool/scythe/handle",
@@ -430,7 +430,7 @@
     },
     {
       "path": "tconstruct:item/tool/scythe/large/binding",
-      "statType": "tconstruct:extra"
+      "statType": "tconstruct:binding"
     },
     {
       "path": "tconstruct:item/tool/scythe/large/handle",

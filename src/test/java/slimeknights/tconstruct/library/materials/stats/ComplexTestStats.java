@@ -1,41 +1,44 @@
 package slimeknights.tconstruct.library.materials.stats;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import slimeknights.mantle.data.loadable.primitive.FloatLoadable;
+import slimeknights.mantle.data.loadable.primitive.IntLoadable;
+import slimeknights.mantle.data.loadable.primitive.StringLoadable;
+import slimeknights.mantle.data.loadable.record.RecordLoadable;
 
-import java.util.ArrayList;
 import java.util.List;
 
-@AllArgsConstructor
-@Getter
-public class ComplexTestStats extends BaseMaterialStats {
-  private MaterialStatsId identifier;
-  private final int num;
-  private final float floating;
-  private final String text;
-
-  public ComplexTestStats(FriendlyByteBuf buffer) {
-    num = buffer.readInt();
-    floating = buffer.readFloat();
-    text = buffer.readUtf();
-  }
+/** Stat type testing weird fields like strings along with a variable type */
+public record ComplexTestStats(MaterialStatType<?> type, int num, float floating, String text) implements IMaterialStats {
+  public static final RecordLoadable<ComplexTestStats> LOADER = RecordLoadable.create(
+    MaterialStatType.CONTEXT_KEY.requiredField(),
+    IntLoadable.ANY_SHORT.defaultField("num", 0, ComplexTestStats::num),
+    FloatLoadable.ANY.defaultField("floating", 0f, ComplexTestStats::floating),
+    StringLoadable.DEFAULT.nullableField("text", ComplexTestStats::text),
+    ComplexTestStats::new);
 
   @Override
-  public void encode(FriendlyByteBuf buffer) {
-    buffer.writeInt(num);
-    buffer.writeFloat(floating);
-    buffer.writeUtf(text);
+  public MaterialStatType<?> getType() {
+    return type;
+  }
+
+  /** Makes a new type with the given name */
+  public static MaterialStatType<ComplexTestStats> makeType(MaterialStatsId name) {
+    return new MaterialStatType<ComplexTestStats>(name, type -> new ComplexTestStats(type, 0, 0f, ""), LOADER);
+  }
+
+  /** Makes a new type with the given name */
+  public static MaterialStatType<ComplexTestStats> makeType(MaterialStatsId name, int num, float floating, String text) {
+    return new MaterialStatType<ComplexTestStats>(name, type -> new ComplexTestStats(type, num, floating, text), LOADER);
   }
 
   @Override
   public List<Component> getLocalizedInfo() {
-    return new ArrayList<>();
+    return List.of();
   }
 
   @Override
   public List<Component> getLocalizedDescriptions() {
-    return new ArrayList<>();
+    return List.of();
   }
 }

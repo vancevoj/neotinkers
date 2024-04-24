@@ -1,24 +1,25 @@
 package slimeknights.tconstruct.fixture;
 
 import lombok.AllArgsConstructor;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.tags.TagKey;
+import slimeknights.mantle.data.loadable.Loadable;
 import slimeknights.tconstruct.library.materials.IMaterialRegistry;
 import slimeknights.tconstruct.library.materials.definition.IMaterial;
 import slimeknights.tconstruct.library.materials.definition.MaterialId;
 import slimeknights.tconstruct.library.materials.stats.IMaterialStats;
+import slimeknights.tconstruct.library.materials.stats.MaterialStatType;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
 import slimeknights.tconstruct.library.materials.traits.MaterialTraits;
 import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 
+import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
@@ -75,13 +76,24 @@ public class MaterialRegistryFixture implements IMaterialRegistry {
   }
 
   @Override
+  public Loadable<MaterialStatType<?>> getStatTypeLoader() {
+    throw new UnsupportedOperationException("No registration possible in test mock");
+  }
+
+  @Nullable
+  @Override
+  public <T extends IMaterialStats> MaterialStatType<T> getStatType(MaterialStatsId statsId) {
+    return null;
+  }
+
+  @Override
   @SuppressWarnings("unchecked")
   public <T extends IMaterialStats> T getDefaultStats(MaterialStatsId statsId) {
     return Objects.requireNonNull((T)defaultStats.get(statsId));
   }
 
   @Override
-  public <T extends IMaterialStats> void registerStatType(T defaultStats, Class<T> clazz, Function<FriendlyByteBuf,T> decoder) {
+  public void registerStatType(MaterialStatType<?> type) {
     throw new UnsupportedOperationException("No registration possible in test mock");
   }
 

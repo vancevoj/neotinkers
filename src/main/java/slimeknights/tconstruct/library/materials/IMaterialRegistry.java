@@ -1,10 +1,12 @@
 package slimeknights.tconstruct.library.materials;
 
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.tags.TagKey;
+import slimeknights.mantle.data.loadable.Loadable;
+import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.tconstruct.library.materials.definition.IMaterial;
 import slimeknights.tconstruct.library.materials.definition.MaterialId;
 import slimeknights.tconstruct.library.materials.stats.IMaterialStats;
+import slimeknights.tconstruct.library.materials.stats.MaterialStatType;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
 import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
@@ -13,7 +15,6 @@ import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
 
 public interface IMaterialRegistry {
   /* Materials */
@@ -81,6 +82,17 @@ public interface IMaterialRegistry {
    */
   Collection<IMaterialStats> getAllStats(MaterialId materialId);
 
+  /** Gets the loader for material stat types */
+  Loadable<MaterialStatType<?>> getStatTypeLoader();
+
+  /**
+   * Gets the stat type for the given stat ID, which handles the default instance, serializing, and deserializing.
+   * @param statsId  Stat ID
+   * @return  Stat type, or null if nothing is registered with the ID
+   */
+  @Nullable
+  <T extends IMaterialStats> MaterialStatType<T> getStatType(MaterialStatsId statsId);
+
   /**
    * Gets the default stats for the given stats ID
    * @param statsId  Stats type
@@ -88,7 +100,22 @@ public interface IMaterialRegistry {
    * @return  Default stats for the type
    */
   @Nullable
-  <T extends IMaterialStats> T getDefaultStats(MaterialStatsId statsId);
+  default <T extends IMaterialStats> T getDefaultStats(MaterialStatsId statsId) {
+    MaterialStatType<T> type = getStatType(statsId);
+    return type != null ? type.getDefaultStats() : null;
+  }
+
+  /**
+   * Gets the loadable for the given stat type
+   * @param statsId  Stats type
+   * @param <T>      Stats class type
+   * @return  Loadable instance, or null if the stat type is not registered
+   */
+  @Nullable
+  default <T extends IMaterialStats> RecordLoadable<T> getStatLoadable(MaterialStatsId statsId) {
+    MaterialStatType<T> type = getStatType(statsId);
+    return type != null ? type.getLoadable() : null;
+  }
 
   /**
    * Checks if the given material stats ID can repair, this is equivelent to an instanceof check on a stat type for {@link slimeknights.tconstruct.library.materials.stats.IRepairableMaterialStats}
@@ -96,7 +123,8 @@ public interface IMaterialRegistry {
    * @return  True if it can repair
    */
   default boolean canRepair(MaterialStatsId statsId) {
-    return false;
+    MaterialStatType<?> type = getStatType(statsId);
+    return type != null && type.canRepair();
   }
 
   /**
@@ -112,11 +140,9 @@ public interface IMaterialRegistry {
    * <p>
    * All material stats for the same materialStatType <em>must</em> have the same class as its default after it's registered.
    *
-   * @param defaultStats  Default stats instance
-   * @param clazz         Stat type class
-   * @param decoder       Logic to decode the stat from the buffer
+   * @param type  Stat type
    */
-  <T extends IMaterialStats> void registerStatType(T defaultStats, Class<T> clazz, Function<FriendlyByteBuf,T> decoder);
+  void registerStatType(MaterialStatType<?> type);
 
   /**
    * This method serves three purposes:
@@ -132,12 +158,11 @@ public interface IMaterialRegistry {
    * <p>
    * All material stats for the same materialStatType <em>must</em> have the same class as its default after it's registered.
    *
-   * @param defaultStats  Default stats instance
-   * @param clazz         Stat type class
-   * @param decoder       Logic to decode the stat from the buffer
+   * @param type           Stat type
+   * @param traitFallback  Fallback to use if the traits are not set
    */
-  default <T extends IMaterialStats> void registerStatType(T defaultStats, Class<T> clazz, Function<FriendlyByteBuf,T> decoder, @Nullable MaterialStatsId traitFallback) {
-    registerStatType(defaultStats, clazz, decoder);
+  default void registerStatType(MaterialStatType<?> type, @Nullable MaterialStatsId traitFallback) {
+    registerStatType(type);
   }
 
 

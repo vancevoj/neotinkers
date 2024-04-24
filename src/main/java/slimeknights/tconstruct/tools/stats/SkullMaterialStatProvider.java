@@ -28,7 +28,7 @@ public class SkullMaterialStatProvider extends MaterialStatProvider {
   @VisibleForTesting
   public void addStats(List<SkullStats> skulls, ModifierStatsBuilder builder) {
     // add in specific stat types handled by our materials
-    ToolStats.DURABILITY.update(builder, getAverageValue(skulls, SkullStats::getDurability));
-    ToolStats.ARMOR.add(builder, getAverageValue(skulls, SkullStats::getArmor));
+    ToolStats.DURABILITY.update(builder, getAverageValue(skulls, SkullStats::durability));
+    ToolStats.ARMOR.add(builder, getAverageValue(skulls, SkullStats::armor));
   }
 }

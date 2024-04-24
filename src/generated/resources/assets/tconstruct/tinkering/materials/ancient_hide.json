@@ -3,7 +3,7 @@
   "generator": {
     "ignoreMaterialStats": false,
     "supportedStats": [
-      "tconstruct:extra"
+      "tconstruct:binding"
     ],
     "transformer": {
       "type": "tconstruct:recolor_sprite",

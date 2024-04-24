@@ -1,11 +1,12 @@
 package slimeknights.tconstruct.library.materials;
 
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.tags.TagKey;
+import slimeknights.mantle.data.loadable.Loadable;
 import slimeknights.tconstruct.library.materials.definition.IMaterial;
 import slimeknights.tconstruct.library.materials.definition.MaterialId;
 import slimeknights.tconstruct.library.materials.definition.MaterialManager;
 import slimeknights.tconstruct.library.materials.stats.IMaterialStats;
+import slimeknights.tconstruct.library.materials.stats.MaterialStatType;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsManager;
 import slimeknights.tconstruct.library.materials.traits.MaterialTraitsManager;
@@ -16,7 +17,6 @@ import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
 
 /**
  * Holds all materials and the extra information registered for them (stat classes).
@@ -26,7 +26,6 @@ import java.util.function.Function;
  * For the Client, materials are synced from the server on server join.
  */
 public class MaterialRegistryImpl implements IMaterialRegistry {
-
   private final MaterialManager materialManager;
   private final MaterialStatsManager materialStatsManager;
   private final MaterialTraitsManager materialTraitsManager;
@@ -76,6 +75,18 @@ public class MaterialRegistryImpl implements IMaterialRegistry {
 
   /* Stats */
 
+  /** Gets the loader for all stat types */
+  @Override
+  public Loadable<MaterialStatType<?>> getStatTypeLoader() {
+    return materialStatsManager.getStatTypes();
+  }
+
+  @Nullable
+  @Override
+  public <T extends IMaterialStats> MaterialStatType<T> getStatType(MaterialStatsId statsId) {
+    return materialStatsManager.getStatType(statsId);
+  }
+
   @Override
   public <T extends IMaterialStats> Optional<T> getMaterialStats(MaterialId materialId, MaterialStatsId statsId) {
     return materialStatsManager.getStats(materialId, statsId);
@@ -87,25 +98,15 @@ public class MaterialRegistryImpl implements IMaterialRegistry {
   }
 
   @Override
-  public <T extends IMaterialStats> T getDefaultStats(MaterialStatsId statsId) {
-    return materialStatsManager.getDefaultStats(statsId);
+  public void registerStatType(MaterialStatType<?> type) {
+    materialStatsManager.registerStatType(type);
   }
 
   @Override
-  public boolean canRepair(MaterialStatsId statsId) {
-    return materialStatsManager.canRepair(statsId);
-  }
-
-  @Override
-  public <T extends IMaterialStats> void registerStatType(T defaultStats, Class<T> clazz, Function<FriendlyByteBuf,T> decoder) {
-    materialStatsManager.registerMaterialStat(defaultStats, clazz, decoder);
-  }
-
-  @Override
-  public <T extends IMaterialStats> void registerStatType(T defaultStats, Class<T> clazz, Function<FriendlyByteBuf,T> decoder, @Nullable MaterialStatsId fallback) {
-    registerStatType(defaultStats, clazz, decoder);
+  public void registerStatType(MaterialStatType<?> type, @Nullable MaterialStatsId fallback) {
+    registerStatType(type);
     if (fallback != null) {
-      materialTraitsManager.registerStatTypeFallback(defaultStats.getIdentifier(), fallback);
+      materialTraitsManager.registerStatTypeFallback(type.getId(), fallback);
     }
   }
 

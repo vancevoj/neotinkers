@@ -7,8 +7,8 @@ import lombok.RequiredArgsConstructor;
 import net.minecraft.resources.ResourceLocation;
 import slimeknights.tconstruct.library.client.data.util.AbstractSpriteReader;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
+import slimeknights.tconstruct.tools.stats.BindingMaterialStats;
 import slimeknights.tconstruct.tools.stats.BowstringMaterialStats;
-import slimeknights.tconstruct.tools.stats.ExtraMaterialStats;
 import slimeknights.tconstruct.tools.stats.GripMaterialStats;
 import slimeknights.tconstruct.tools.stats.HandleMaterialStats;
 import slimeknights.tconstruct.tools.stats.HeadMaterialStats;
@@ -91,7 +91,7 @@ public abstract class AbstractPartSpriteProvider {
 
   /** Adds a sprite requiring extra stats */
   protected void addBinding(String name) {
-    addPart(name, ExtraMaterialStats.ID);
+    addPart(name, BindingMaterialStats.ID);
   }
 
   /** Adds a sprite requiring head stats */
@@ -212,7 +212,7 @@ public abstract class AbstractPartSpriteProvider {
 
     /** Adds a sprite requiring extra stats */
     public ToolSpriteBuilder addBinding(String name) {
-      return addPart(name, ExtraMaterialStats.ID);
+      return addPart(name, BindingMaterialStats.ID);
     }
 
     /** Adds a sprite requiring limb stats */

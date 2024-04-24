@@ -1,36 +1,26 @@
 package slimeknights.tconstruct.tools.stats;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import slimeknights.tconstruct.TConstruct;
-import slimeknights.tconstruct.library.materials.stats.BaseMaterialStats;
+import slimeknights.tconstruct.library.materials.stats.IMaterialStats;
+import slimeknights.tconstruct.library.materials.stats.MaterialStatType;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
 
-import java.util.Collections;
 import java.util.List;
 
-@Getter
-@NoArgsConstructor
-@EqualsAndHashCode(callSuper = false)
-@ToString
-public class BowstringMaterialStats extends BaseMaterialStats {
+public enum BowstringMaterialStats implements IMaterialStats {
+  DEFAULT;
+
   public static final MaterialStatsId ID = new MaterialStatsId(TConstruct.getResource("bowstring"));
-  public static final BowstringMaterialStats DEFAULT = new BowstringMaterialStats();
-  private static final List<Component> LOCALIZED = Collections.singletonList(makeTooltip(TConstruct.getResource("extra.no_stats")));
-  private static final List<Component> DESCRIPTION = Collections.singletonList(Component.empty());
+  public static final MaterialStatType<BowstringMaterialStats> TYPE = MaterialStatType.singleton(ID, DEFAULT);
+  private static final List<Component> LOCALIZED = List.of(IMaterialStats.makeTooltip(TConstruct.getResource("extra.no_stats")));
+  private static final List<Component> DESCRIPTION = List.of(Component.empty());
 
   // no stats
 
   @Override
-  public void encode(FriendlyByteBuf buffer) {}
-
-  @Override
-  public MaterialStatsId getIdentifier() {
-    return ID;
+  public MaterialStatType<?> getType() {
+    return TYPE;
   }
 
   @Override

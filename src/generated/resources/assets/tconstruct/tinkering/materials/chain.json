@@ -7,7 +7,7 @@
   "generator": {
     "ignoreMaterialStats": false,
     "supportedStats": [
-      "tconstruct:extra",
+      "tconstruct:binding",
       "tconstruct:bowstring"
     ],
     "transformer": {

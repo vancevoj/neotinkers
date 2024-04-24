@@ -1,19 +1,18 @@
 package slimeknights.tconstruct.library.materials.stats;
 
-import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableMap;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
+import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.GsonHelper;
 import slimeknights.mantle.data.listener.MergingJsonDataLoader;
-import slimeknights.tconstruct.library.exception.TinkerAPIMaterialException;
+import slimeknights.mantle.data.registry.IdAwareComponentRegistry;
+import slimeknights.mantle.util.JsonHelper;
+import slimeknights.mantle.util.typed.TypedMapBuilder;
 import slimeknights.tconstruct.library.materials.definition.MaterialId;
 import slimeknights.tconstruct.library.materials.json.MaterialStatJson;
 import slimeknights.tconstruct.library.utils.Util;
@@ -44,91 +43,43 @@ import java.util.stream.Collectors;
 @Log4j2
 public class MaterialStatsManager extends MergingJsonDataLoader<Map<ResourceLocation,JsonObject>> {
   public static final String FOLDER = "tinkering/materials/stats";
-  public static final Gson GSON = (new GsonBuilder())
-    .registerTypeAdapter(ResourceLocation.class, new ResourceLocation.Serializer())
-    .setPrettyPrinting()
-    .disableHtmlEscaping()
-    .create();
 
   /** Runnable to run after loading material stats */
   private final Runnable onLoaded;
 
   /**
-   * This map represents the known stats of the manager. Only known materials can be loaded.
+   * This registry represents the known stats of the manager. Only known material types can be loaded.
    * Usually they're registered by the registry, when a new material stats type is registered.
-   * It is not cleared on reload, since it does not represend loaded data. Think of it as a GSON type adapter.
+   * It is not cleared on reload, since it does not represent loaded data. Think of it as a GSON type adapter.
    */
-  private final Map<MaterialStatsId, MaterialStatType<?>> materialStatTypes = new HashMap<>();
+  @Getter
+  private final IdAwareComponentRegistry<MaterialStatType<?>> statTypes = new IdAwareComponentRegistry<>("Unknown Material Stat Type");
 
   /** Final map of material ID to material stat ID to material stats */
   private Map<MaterialId, Map<MaterialStatsId, IMaterialStats>> materialToStatsPerType = Collections.emptyMap();
 
   public MaterialStatsManager(Runnable onLoaded) {
-    super(GSON, FOLDER, id -> new HashMap<>());
+    super(JsonHelper.DEFAULT_GSON, FOLDER, id -> new HashMap<>());
     this.onLoaded = onLoaded;
-  }
-
-  @VisibleForTesting
-  MaterialStatsManager() {
-    this(() -> {});
   }
 
   /**
    * Registers a new material stat type
-   * @param defaultStats   Default stats for the material
-   * @param statsClass     Class representing the type
+   * @param type   Type object
    */
-  public <T extends IMaterialStats> void registerMaterialStat(T defaultStats, Class<T> statsClass, Function<FriendlyByteBuf,T> decoder) {
-    MaterialStatsId materialStatType = defaultStats.getIdentifier();
-    if (materialStatTypes.containsKey(materialStatType)) {
-      throw TinkerAPIMaterialException.materialStatsTypeRegisteredTwice(materialStatType);
-    }
-    materialStatTypes.put(materialStatType, new MaterialStatType<T>(materialStatType, statsClass, decoder, defaultStats, defaultStats instanceof IRepairableMaterialStats));
+  public <T extends IMaterialStats> void registerStatType(MaterialStatType<T> type) {
+    statTypes.register(type);
   }
 
   /**
-   * Gets the class for the given stats ID
-   * @param id  Stats class
-   * @return  Stats ID
+   * Gets the stat type for the given ID
+   * @param id  Material stat ID
+   * @return  Stat type, or null if unknown
    */
+  @SuppressWarnings("unchecked")
   @Nullable
-  public Class<? extends IMaterialStats> getClassForStat(MaterialStatsId id) {
-    MaterialStatType<?> type = materialStatTypes.get(id);
-    return type == null ? null : type.getStatsClass();
-  }
-
-  /**
-   * Gets the class for the given stats ID
-   * @param id  Stats class
-   * @return  Stats ID
-   */
-  @Nullable
-  public Function<FriendlyByteBuf,? extends IMaterialStats> getStatDecoder(MaterialStatsId id) {
-    MaterialStatType<?> type = materialStatTypes.get(id);
-    return type == null ? null : type.getDecoder();
-  }
-
-  /**
-   * Checks if the given stats ID can repair
-   * @param id  ID
-   * @return  True if it can repair
-   */
-  public boolean canRepair(MaterialStatsId id) {
-    MaterialStatType<?> type = materialStatTypes.get(id);
-    return type != null && type.canRepair();
-  }
-
-  /**
-   * Gets the default stats for the given stats ID
-   * @param statsId  Stats ID
-   * @param <T>  Stats type
-   * @return  Default stats
-   */
-  @Nullable
-  public <T extends IMaterialStats> T getDefaultStats(MaterialStatsId statsId) {
-    MaterialStatType<?> type = materialStatTypes.get(statsId);
-    //noinspection unchecked
-    return type == null ? null : (T) type.getDefaultStats();
+  public <T extends IMaterialStats> MaterialStatType<T> getStatType(MaterialStatsId id) {
+    return (MaterialStatType<T>) statTypes.getValue(id);
   }
 
   /**
@@ -139,7 +90,7 @@ public class MaterialStatsManager extends MergingJsonDataLoader<Map<ResourceLoca
    * @return  Optional containing the stats, empty if no stats
    */
   public <T extends IMaterialStats> Optional<T> getStats(MaterialId materialId, MaterialStatsId statId) {
-    Map<MaterialStatsId, IMaterialStats> materialStats = materialToStatsPerType.getOrDefault(materialId, ImmutableMap.of());
+    Map<MaterialStatsId, IMaterialStats> materialStats = materialToStatsPerType.getOrDefault(materialId, Map.of());
     IMaterialStats stats = materialStats.get(statId);
     // class will always match, since it's only filled by deserialization, which only puts it in if it's the registered type
     //noinspection unchecked
@@ -152,7 +103,7 @@ public class MaterialStatsManager extends MergingJsonDataLoader<Map<ResourceLoca
    * @return  Collection of all stats
    */
   public Collection<IMaterialStats> getAllStats(MaterialId materialId) {
-    return materialToStatsPerType.getOrDefault(materialId, ImmutableMap.of()).values();
+    return materialToStatsPerType.getOrDefault(materialId, Map.of()).values();
   }
 
   /**
@@ -174,7 +125,7 @@ public class MaterialStatsManager extends MergingJsonDataLoader<Map<ResourceLoca
 
   @Override
   protected void parse(Map<ResourceLocation, JsonObject> builder, ResourceLocation id, JsonElement element) throws JsonSyntaxException {
-    MaterialStatJson json = GSON.fromJson(element, MaterialStatJson.class);
+    MaterialStatJson json = JsonHelper.DEFAULT_GSON.fromJson(element, MaterialStatJson.class);
     // instead of simply replacing the whole JSON object, merge the two together
     for (Entry<ResourceLocation,JsonElement> entry : json.getStats().entrySet()) {
       ResourceLocation key = entry.getKey();
@@ -239,25 +190,15 @@ public class MaterialStatsManager extends MergingJsonDataLoader<Map<ResourceLoca
    */
   private Map<MaterialStatsId, IMaterialStats> deserializeMaterialStatsFromContent(Map<ResourceLocation, JsonObject> contentsMap) {
     ImmutableMap.Builder<MaterialStatsId, IMaterialStats> builder = ImmutableMap.builder();
-    contentsMap.forEach((loc, contents) -> {
-      MaterialStatsId id = new MaterialStatsId(loc);
-      deserializeMaterialStat(id, contents).ifPresent(stats -> builder.put(id, stats));
-    });
-    return builder.build();
-  }
-
-  /**
-   * Deserializes the json element and stats ID into material stats
-   * @param statsId    Stats ID
-   * @param statsJson  Stats JSON
-   * @return  Optional of the element, empty if the stats failed to parse
-   */
-  private Optional<IMaterialStats> deserializeMaterialStat(MaterialStatsId statsId, JsonElement statsJson) {
-    MaterialStatType<?> type = materialStatTypes.get(statsId);
-    if (type == null) {
-      log.error("The material stat of type '" + statsId + "' has not been registered");
-      return Optional.empty();
+    for (Entry<ResourceLocation, JsonObject> entry : contentsMap.entrySet()) {
+      MaterialStatsId statType = new MaterialStatsId(entry.getKey());
+      MaterialStatType<?> type = getStatType(statType);
+      if (type == null) {
+        log.error("The material stat of type '" + statType + "' has not been registered");
+        continue;
+      }
+      builder.put(statType, type.getLoadable().deserialize(entry.getValue(), TypedMapBuilder.builder().put(MaterialStatType.CONTEXT_KEY, type).build()));
     }
-    return Optional.ofNullable(GSON.fromJson(statsJson, type.getStatsClass()));
+    return builder.build();
   }
 }

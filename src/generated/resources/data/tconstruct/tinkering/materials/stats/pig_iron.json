@@ -1,17 +1,17 @@
 {
   "stats": {
-    "tconstruct:extra": {},
+    "tconstruct:binding": {},
     "tconstruct:handle": {
-      "attackDamage": 1.1,
-      "attackSpeed": 1.0,
       "durability": 1.1,
-      "miningSpeed": 0.85
+      "melee_damage": 1.1,
+      "melee_speed": 1.0,
+      "mining_speed": 0.85
     },
     "tconstruct:head": {
-      "attack": 2.5,
       "durability": 580,
-      "harvestTier": "minecraft:diamond",
-      "miningSpeed": 6.0
+      "melee_attack": 2.5,
+      "mining_speed": 6.0,
+      "mining_tier": "minecraft:diamond"
     },
     "tconstruct:skull": {
       "armor": 2,

@@ -1,22 +1,29 @@
 package slimeknights.tconstruct.library.materials.stats;
 
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.ApiStatus.NonExtendable;
 import slimeknights.tconstruct.library.utils.Util;
 
 import java.util.List;
 
 /**
  * Basic interface for all material stats.
- * Note that you should extend {@link BaseMaterialStats} for your material to load from the JSONs.
  */
 public interface IMaterialStats {
+  /**
+   * Returns the stat type, which is used for parsing the stat and getting default stats.
+   */
+  MaterialStatType<?> getType();
 
   /**
    * Returns a unique ResourceLocation to identify the type of stats the material has.
    */
-  MaterialStatsId getIdentifier();
+  @NonExtendable
+  default MaterialStatsId getIdentifier() {
+    return getType().getId();
+  }
 
   /**
    * Returns the name of the stat type, to be displayed to the player.
@@ -43,6 +50,24 @@ public interface IMaterialStats {
    */
   List<Component> getLocalizedDescriptions();
 
-  /** Encodes these stats to the buffer */
-  void encode(FriendlyByteBuf buffer);
+
+  /* Helpers */
+
+  /**
+   * Helper to make a translation key for the given name
+   * @param name  name
+   * @return  Text component
+   */
+  static String makeTooltipKey(ResourceLocation name) {
+    return Util.makeTranslationKey("tool_stat", name);
+  }
+
+  /**
+   * Helper to make a text component for the given name
+   * @param name  name
+   * @return  Text component
+   */
+  static Component makeTooltip(ResourceLocation name) {
+    return Component.translatable(makeTooltipKey(name));
+  }
 }

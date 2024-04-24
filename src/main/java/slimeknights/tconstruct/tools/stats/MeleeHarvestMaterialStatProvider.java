@@ -20,7 +20,7 @@ import java.util.Set;
 public final class MeleeHarvestMaterialStatProvider extends MaterialStatProvider {
   @VisibleForTesting
   public MeleeHarvestMaterialStatProvider(ResourceLocation id) {
-    super(id, Set.of(HeadMaterialStats.ID), Set.of(HandleMaterialStats.ID, ExtraMaterialStats.ID));
+    super(id, Set.of(HeadMaterialStats.ID), Set.of(HandleMaterialStats.ID, BindingMaterialStats.ID));
   }
 
   @Override
@@ -34,22 +34,22 @@ public final class MeleeHarvestMaterialStatProvider extends MaterialStatProvider
   @VisibleForTesting
   public void addStats(List<HeadMaterialStats> heads, List<HandleMaterialStats> handles, ModifierStatsBuilder builder) {
     // add in specific stat types handled by our materials
-    ToolStats.DURABILITY.update(builder, getAverageValue(heads, HeadMaterialStats::getDurability));
-    ToolStats.DURABILITY.multiply(builder, getAverageValue(handles, HandleMaterialStats::getDurability, 1f));
+    ToolStats.DURABILITY.update(builder, getAverageValue(heads, HeadMaterialStats::durability));
+    ToolStats.DURABILITY.multiply(builder, getAverageValue(handles, HandleMaterialStats::durability, 1f));
     ToolStats.HARVEST_TIER.update(builder, buildHarvestLevel(heads));
-    ToolStats.ATTACK_DAMAGE.update(builder, getAverageValue(heads, HeadMaterialStats::getAttack));
-    ToolStats.ATTACK_DAMAGE.multiply(builder, getAverageValue(handles, HandleMaterialStats::getAttackDamage, 1f));
-    ToolStats.ATTACK_SPEED.multiply(builder, getAverageValue(handles, HandleMaterialStats::getAttackSpeed, 1f));
+    ToolStats.ATTACK_DAMAGE.update(builder, getAverageValue(heads, HeadMaterialStats::attack));
+    ToolStats.ATTACK_DAMAGE.multiply(builder, getAverageValue(handles, HandleMaterialStats::attackDamage, 1f));
+    ToolStats.ATTACK_SPEED.multiply(builder, getAverageValue(handles, HandleMaterialStats::meleeSpeed, 1f));
     // ignore default value
-    ToolStats.MINING_SPEED.update(builder, getAverageValue(heads, HeadMaterialStats::getMiningSpeed));
-    ToolStats.MINING_SPEED.multiply(builder, getAverageValue(handles, HandleMaterialStats::getMiningSpeed, 1));
+    ToolStats.MINING_SPEED.update(builder, getAverageValue(heads, HeadMaterialStats::miningSpeed));
+    ToolStats.MINING_SPEED.multiply(builder, getAverageValue(handles, HandleMaterialStats::miningSpeed, 1));
   }
 
   /** Builds the harvest level for the tool */
   private static Tier buildHarvestLevel(List<HeadMaterialStats> heads) {
     List<Tier> sortedTiers = TierSortingRegistry.getSortedTiers();
     return heads.stream()
-      .map(HeadMaterialStats::getTier)
+      .map(HeadMaterialStats::tier)
       .max(Comparator.comparingInt(sortedTiers::indexOf))
       .orElse(sortedTiers.get(0));
   }

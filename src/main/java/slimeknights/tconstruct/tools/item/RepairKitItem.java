@@ -10,7 +10,6 @@ import slimeknights.tconstruct.library.materials.MaterialRegistry;
 import slimeknights.tconstruct.library.materials.definition.IMaterial;
 import slimeknights.tconstruct.library.materials.definition.MaterialId;
 import slimeknights.tconstruct.library.materials.definition.MaterialVariantId;
-import slimeknights.tconstruct.library.materials.stats.IRepairableMaterialStats;
 import slimeknights.tconstruct.library.tools.helper.TooltipUtil;
 import slimeknights.tconstruct.library.tools.part.IRepairKitItem;
 import slimeknights.tconstruct.library.tools.part.MaterialItem;
@@ -29,7 +28,7 @@ public class RepairKitItem extends MaterialItem implements IRepairKitItem {
     return MaterialRegistry.getInstance()
                            .getAllStats(material)
                            .stream()
-                           .anyMatch(stats -> stats instanceof IRepairableMaterialStats);
+                           .anyMatch(stats -> stats.getType().canRepair());
   }
 
   @Override

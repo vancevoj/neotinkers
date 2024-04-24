@@ -8,7 +8,7 @@
     "supportedStats": [
       "tconstruct:head",
       "tconstruct:handle",
-      "tconstruct:extra",
+      "tconstruct:binding",
       "tconstruct:repair_kit"
     ],
     "transformer": {

@@ -9,8 +9,8 @@ import slimeknights.tconstruct.library.materials.definition.MaterialId;
 import slimeknights.tconstruct.library.materials.stats.IMaterialStats;
 import slimeknights.tconstruct.library.materials.stats.IRepairableMaterialStats;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
-import slimeknights.tconstruct.library.module.ModuleHook;
 import slimeknights.tconstruct.library.module.HookProvider;
+import slimeknights.tconstruct.library.module.ModuleHook;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinition;
 import slimeknights.tconstruct.library.tools.definition.module.ToolHooks;
 import slimeknights.tconstruct.library.tools.definition.module.ToolModule;
@@ -85,7 +85,7 @@ public final class MaterialRepairModule implements MaterialRepairToolHook, ToolM
   public static int getDurability(@Nullable ResourceLocation toolId, MaterialId material, MaterialStatsId statType) {
     IMaterialStats stats = MaterialRegistry.getInstance().getMaterialStats(material, statType).orElse(null);
     if (stats instanceof IRepairableMaterialStats repairable) {
-      return repairable.getDurability();
+      return repairable.durability();
     } else {
       if (toolId != null) {
         TConstruct.LOG.warn("Attempting to repair {} using {}, but stat type {}{}. This usually indicates a broken datapack.", toolId, material, statType, stats == null ? " does not exist for the material" : " does not contain durability");

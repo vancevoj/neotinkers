@@ -5,7 +5,9 @@ import lombok.Getter;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent.Context;
 import org.apache.logging.log4j.Logger;
+import slimeknights.mantle.data.loadable.Loadable;
 import slimeknights.mantle.network.packet.IThreadsafePacket;
+import slimeknights.mantle.util.typed.TypedMapBuilder;
 import slimeknights.tconstruct.library.materials.MaterialRegistry;
 import slimeknights.tconstruct.library.materials.definition.MaterialId;
 import slimeknights.tconstruct.library.utils.Util;
@@ -15,8 +17,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-import java.util.function.Function;
 
 @Getter
 @AllArgsConstructor
@@ -26,10 +26,10 @@ public class UpdateMaterialStatsPacket implements IThreadsafePacket {
   protected final Map<MaterialId, Collection<IMaterialStats>> materialToStats;
 
   public UpdateMaterialStatsPacket(FriendlyByteBuf buffer) {
-    this(buffer, MaterialRegistry::getStatDecoder);
+    this(buffer, MaterialRegistry.getInstance().getStatTypeLoader());
   }
 
-  public UpdateMaterialStatsPacket(FriendlyByteBuf buffer, Function<MaterialStatsId, Function<FriendlyByteBuf,? extends IMaterialStats>> decoderResolver) {
+  public UpdateMaterialStatsPacket(FriendlyByteBuf buffer, Loadable<MaterialStatType<?>> statTypeLoader) {
     int materialCount = buffer.readInt();
     materialToStats = new HashMap<>(materialCount);
     for (int i = 0; i < materialCount; i++) {
@@ -37,30 +37,14 @@ public class UpdateMaterialStatsPacket implements IThreadsafePacket {
       int statCount = buffer.readInt();
       List<IMaterialStats> statList = new ArrayList<>();
       for (int j = 0; j < statCount; j++) {
-        decodeStat(buffer, decoderResolver).ifPresent(statList::add);
+        try {
+          MaterialStatType<?> statType = statTypeLoader.decode(buffer);
+          statList.add(statType.getLoadable().decode(buffer, TypedMapBuilder.builder().put(MaterialStatType.CONTEXT_KEY, statType).build()));
+        } catch (Exception e) {
+          log.error("Could not deserialize stat. Are client and server in sync?", e);
+        }
       }
       materialToStats.put(id, statList);
-    }
-  }
-
-  /**
-   * Decodes a single stat
-   * @param buffer           Buffer instance
-   * @param decoderResolver  Logic to decode stats
-   * @return  Optional of the decoded material stats
-   */
-  private Optional<IMaterialStats> decodeStat(FriendlyByteBuf buffer, Function<MaterialStatsId,Function<FriendlyByteBuf,? extends IMaterialStats>> decoderResolver) {
-    MaterialStatsId statsId = new MaterialStatsId(buffer.readResourceLocation());
-    try {
-      Function<FriendlyByteBuf,? extends IMaterialStats> decoder = decoderResolver.apply(statsId);
-      if (decoder == null) {
-        log.error("Unknown stat type {}. Are client and server in sync?", statsId);
-        return Optional.empty();
-      }
-      return Optional.of(decoder.apply(buffer));
-    } catch (Exception e) {
-      log.error("Could not load class for deserialization of stats {}. Are client and server in sync?", statsId, e);
-      return Optional.empty();
     }
   }
 
@@ -70,7 +54,7 @@ public class UpdateMaterialStatsPacket implements IThreadsafePacket {
     materialToStats.forEach((materialId, stats) -> {
       buffer.writeResourceLocation(materialId);
       buffer.writeInt(stats.size());
-      stats.forEach(stat -> encodeStat(buffer, stat));
+      stats.forEach(stat -> encodeStat(buffer, stat, stat.getType()));
     });
   }
 
@@ -79,9 +63,10 @@ public class UpdateMaterialStatsPacket implements IThreadsafePacket {
    * @param buffer  Buffer instance
    * @param stat    Stat to encode
    */
-  private void encodeStat(FriendlyByteBuf buffer, IMaterialStats stat) {
-    buffer.writeResourceLocation(stat.getIdentifier());
-    stat.encode(buffer);
+  @SuppressWarnings("unchecked")
+  private <T extends IMaterialStats> void encodeStat(FriendlyByteBuf buffer, IMaterialStats stat, MaterialStatType<T> type) {
+    MaterialStatsId.PARSER.encode(buffer, type.getId());
+    type.getLoadable().encode(buffer, (T) stat);
   }
 
   @Override

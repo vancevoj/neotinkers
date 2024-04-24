@@ -1,8 +1,6 @@
 package slimeknights.tconstruct.tools.stats;
 
 import com.google.common.annotations.VisibleForTesting;
-import lombok.AccessLevel;
-import lombok.Getter;
 import net.minecraft.resources.ResourceLocation;
 import slimeknights.tconstruct.library.tools.definition.module.material.MaterialStatsModule.WeightedStatType;
 import slimeknights.tconstruct.library.tools.nbt.MaterialNBT;
@@ -16,7 +14,6 @@ import java.util.Set;
 /**
  * Standard stat builder for ranged tools. Includes some melee attributes for melee bows
  */
-@Getter(AccessLevel.PROTECTED)
 public class RangedMaterialStatProvider extends MaterialStatProvider {
   public RangedMaterialStatProvider(ResourceLocation id) {
     super(id, Set.of(LimbMaterialStats.ID), Set.of(BowstringMaterialStats.ID, GripMaterialStats.ID));
@@ -33,11 +30,11 @@ public class RangedMaterialStatProvider extends MaterialStatProvider {
   @VisibleForTesting
   public void addStats(List<LimbMaterialStats> limbs, List<GripMaterialStats> grips, ModifierStatsBuilder builder) {
     // add in specific stat types handled by our materials
-    ToolStats.DURABILITY.update(builder, getTotalValue(limbs, LimbMaterialStats::getDurability));
-    ToolStats.DURABILITY.multiply(builder, getAverageValue(grips, GripMaterialStats::getDurability, 1));
-    ToolStats.DRAW_SPEED.add(builder, getTotalValue(limbs, LimbMaterialStats::getDrawSpeed));
-    ToolStats.VELOCITY.add(builder, getTotalValue(limbs, LimbMaterialStats::getVelocity));
-    ToolStats.ACCURACY.add(builder, getTotalValue(limbs, LimbMaterialStats::getAccuracy) + getTotalValue(grips, GripMaterialStats::getAccuracy));
-    ToolStats.ATTACK_DAMAGE.update(builder, getAverageValue(grips, GripMaterialStats::getMeleeAttack));
+    ToolStats.DURABILITY.update(builder, getTotalValue(limbs, LimbMaterialStats::durability));
+    ToolStats.DURABILITY.multiply(builder, getAverageValue(grips, GripMaterialStats::durability, 1));
+    ToolStats.DRAW_SPEED.add(builder, getTotalValue(limbs, LimbMaterialStats::drawSpeed));
+    ToolStats.VELOCITY.add(builder, getTotalValue(limbs, LimbMaterialStats::velocity));
+    ToolStats.ACCURACY.add(builder, getTotalValue(limbs, LimbMaterialStats::accuracy) + getTotalValue(grips, GripMaterialStats::accuracy));
+    ToolStats.ATTACK_DAMAGE.update(builder, getAverageValue(grips, GripMaterialStats::meleeDamage));
   }
 }
