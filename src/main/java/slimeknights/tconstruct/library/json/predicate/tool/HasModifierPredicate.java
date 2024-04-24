@@ -31,6 +31,7 @@ public record HasModifierPredicate(IJsonPredicate<ModifierId> modifier, IntRange
   @Override
   public boolean matches(IToolContext tool) {
     for (ModifierEntry entry : check.getModifiers(tool).getModifiers()) {
+      // TODO: what if multiple modifiers match?
       if (modifier.matches(entry.getId())) {
         return level.test(entry.getLevel());
       }

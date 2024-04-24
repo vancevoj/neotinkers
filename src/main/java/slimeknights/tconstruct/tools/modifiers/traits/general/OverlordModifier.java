@@ -33,7 +33,6 @@ public class OverlordModifier extends Modifier implements ToolStatsModifierHook,
   @Override
   public void addVolatileData(IToolContext context, ModifierEntry modifier, ModDataNBT volatileData) {
     OverslimeModifier overslime = TinkerModifiers.overslime.get();
-    overslime.setFriend(volatileData);
     // gains +15% of the durability per level, note that base stats does not consider the durability modifier
     overslime.addCapacity(volatileData, getBoost(context, modifier.getLevel(), 0.10f * context.getDefinition().getData().getMultiplier(ToolStats.DURABILITY)));
   }

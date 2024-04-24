@@ -538,6 +538,9 @@ public class TinkerTags {
     /** Common defense modifier types, used for skyslime armor */
     public static final TagKey<Modifier> SLIME_DEFENSE = tag("slime_defense");
 
+    /** Modifiers in this tag prevent the overslime debuff */
+    public static final TagKey<Modifier> OVERSLIME_FRIEND = tag("overslime_friend");
+
     // book tags - these are used to determine pages to load in resource packs
     // upgrades
     public static final TagKey<Modifier> UPGRADES = tag("upgrades");

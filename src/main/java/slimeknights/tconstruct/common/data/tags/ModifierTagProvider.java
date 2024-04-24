@@ -36,6 +36,7 @@ import static slimeknights.tconstruct.common.TinkerTags.Modifiers.LEGGING_ABILIT
 import static slimeknights.tconstruct.common.TinkerTags.Modifiers.LEGGING_UPGRADES;
 import static slimeknights.tconstruct.common.TinkerTags.Modifiers.MELEE_ABILITIES;
 import static slimeknights.tconstruct.common.TinkerTags.Modifiers.MELEE_UPGRADES;
+import static slimeknights.tconstruct.common.TinkerTags.Modifiers.OVERSLIME_FRIEND;
 import static slimeknights.tconstruct.common.TinkerTags.Modifiers.PROTECTION_DEFENSE;
 import static slimeknights.tconstruct.common.TinkerTags.Modifiers.RANGED_ABILITIES;
 import static slimeknights.tconstruct.common.TinkerTags.Modifiers.RANGED_UPGRADES;
@@ -72,6 +73,9 @@ public class ModifierTagProvider extends AbstractModifierTagProvider {
       .add(TinkerModifiers.meleeProtection.getId(), TinkerModifiers.projectileProtection.getId(),
            ModifierIds.fireProtection, TinkerModifiers.magicProtection.getId(),
            TinkerModifiers.blastProtection.getId(), TinkerModifiers.golden.getId());
+    tag(OVERSLIME_FRIEND)
+      .add(TinkerModifiers.overgrowth.getId(), TinkerModifiers.overcast.getId(), TinkerModifiers.overlord.getId(),
+           TinkerModifiers.overforced.getId(), ModifierIds.overslimeFriend, TinkerModifiers.overworked.getId());
 
     // book tags
     this.tag(UPGRADES).addTag(GENERAL_UPGRADES, MELEE_UPGRADES, DAMAGE_UPGRADES, HARVEST_UPGRADES, ARMOR_UPGRADES, RANGED_UPGRADES);

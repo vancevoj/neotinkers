@@ -25,7 +25,6 @@ public class OvercastModifier extends Modifier implements VolatileDataModifierHo
   @Override
   public void addVolatileData(IToolContext context, ModifierEntry modifier, ModDataNBT volatileData) {
     OverslimeModifier overslime = TinkerModifiers.overslime.get();
-    overslime.setFriend(volatileData);
     int level = modifier.getLevel();
     overslime.addCapacity(volatileData, level * 25);
     overslime.multiplyCapacity(volatileData, 1f + (level * 0.5f));

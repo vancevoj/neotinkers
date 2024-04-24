@@ -21,6 +21,5 @@ public class OverforcedModifier extends Modifier implements VolatileDataModifier
   public void addVolatileData(IToolContext context, ModifierEntry modifier, ModDataNBT volatileData) {
     OverslimeModifier overslime = TinkerModifiers.overslime.get();
     overslime.addCapacity(volatileData, Math.round(modifier.getEffectiveLevel() * 75));
-    overslime.setFriend(volatileData);
   }
 }

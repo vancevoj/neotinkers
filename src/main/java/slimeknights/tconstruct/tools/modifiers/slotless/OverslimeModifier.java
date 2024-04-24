@@ -7,6 +7,7 @@ import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.common.TinkerTags.Items;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
+import slimeknights.tconstruct.library.modifiers.ModifierManager;
 import slimeknights.tconstruct.library.modifiers.hook.build.ToolStatsModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.build.VolatileDataModifierHook;
 import slimeknights.tconstruct.library.modifiers.impl.DurabilityShieldModifier;
@@ -24,11 +25,6 @@ import javax.annotation.Nullable;
 public class OverslimeModifier extends DurabilityShieldModifier implements ToolStatsModifierHook, VolatileDataModifierHook {
   /** Key for max overslime on a tool */
   private static final ResourceLocation KEY_OVERSLIME_CAP = TConstruct.getResource("overslime_cap");
-  /**
-   * Key marking another modifier as an overslime "friend". If no friends exist, overslime causes some debuffs.
-   * Use {@link #getFriendKey()} when possible
-   */
-  public static final ResourceLocation KEY_OVERSLIME_FRIEND = TConstruct.getResource("overslime_friend");
 
   @Override
   protected void registerHooks(Builder hookBuilder) {
@@ -51,9 +47,19 @@ public class OverslimeModifier extends DurabilityShieldModifier implements ToolS
     addCapacity(volatileData, (int)(50 * context.getDefinitionData().getMultiplier(ToolStats.DURABILITY)));
   }
 
+  /** Checks if the given tool has an overslime friend */
+  private static boolean hasFriend(IToolContext context) {
+    for (ModifierEntry entry : context.getModifierList()) {
+      if (ModifierManager.isInTag(entry.getId(), TinkerTags.Modifiers.OVERSLIME_FRIEND)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   @Override
   public void addToolStats(IToolContext context, ModifierEntry modifier, ModifierStatsBuilder builder) {
-    if (!context.getVolatileData().getBoolean(KEY_OVERSLIME_FRIEND)) {
+    if (!hasFriend(context)) {
       if (context.hasTag(Items.MELEE)) {
         ToolStats.ATTACK_DAMAGE.multiply(builder, 0.9f);
       }
@@ -110,15 +116,6 @@ public class OverslimeModifier extends DurabilityShieldModifier implements ToolS
     return KEY_OVERSLIME_CAP;
   }
 
-  /** Gets the key for overslime friends */
-  public ResourceLocation getFriendKey() {
-    return KEY_OVERSLIME_FRIEND;
-  }
-
-  /** Sets the friend key in this tool */
-  public void setFriend(ModDataNBT volatileData) {
-    volatileData.putBoolean(getFriendKey(), true);
-  }
 
   /* Capacity helpers */
 

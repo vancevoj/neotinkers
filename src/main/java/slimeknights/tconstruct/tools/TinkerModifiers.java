@@ -200,7 +200,6 @@ import slimeknights.tconstruct.tools.modifiers.traits.general.EnderportingModifi
 import slimeknights.tconstruct.tools.modifiers.traits.general.OvercastModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.general.OvergrowthModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.general.OverlordModifier;
-import slimeknights.tconstruct.tools.modifiers.traits.general.OverworkedModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.general.SolarPoweredModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.general.StoneshieldModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.general.TannedModifier;
@@ -466,7 +465,7 @@ public final class TinkerModifiers extends TinkerModule {
   public static final StaticModifier<TemperateModifier> temperate = MODIFIERS.register("temperate", TemperateModifier::new);
   public static final StaticModifier<InvariantModifier> invariant = MODIFIERS.register("invariant", InvariantModifier::new);
   public static final StaticModifier<DecayModifier> decay = MODIFIERS.register("decay", DecayModifier::new);
-  public static final StaticModifier<OverworkedModifier> overworked = MODIFIERS.register("overworked", OverworkedModifier::new);
+  public static final StaticModifier<Modifier> overworked = MODIFIERS.register("overworked", Modifier::new);
   // experienced is also an upgrade
 
   // traits - slimeskull

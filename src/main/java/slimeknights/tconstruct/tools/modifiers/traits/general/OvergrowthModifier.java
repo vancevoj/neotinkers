@@ -6,25 +6,17 @@ import net.minecraft.world.level.Level;
 import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
-import slimeknights.tconstruct.library.modifiers.hook.build.VolatileDataModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.interaction.InventoryTickModifierHook;
 import slimeknights.tconstruct.library.module.ModuleHookMap.Builder;
-import slimeknights.tconstruct.library.tools.nbt.IToolContext;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
-import slimeknights.tconstruct.library.tools.nbt.ModDataNBT;
 import slimeknights.tconstruct.tools.TinkerModifiers;
 import slimeknights.tconstruct.tools.modifiers.slotless.OverslimeModifier;
 
-public class OvergrowthModifier extends Modifier implements InventoryTickModifierHook, VolatileDataModifierHook {
+public class OvergrowthModifier extends Modifier implements InventoryTickModifierHook {
   @Override
   protected void registerHooks(Builder hookBuilder) {
     super.registerHooks(hookBuilder);
-    hookBuilder.addHook(this, ModifierHooks.INVENTORY_TICK, ModifierHooks.VOLATILE_DATA);
-  }
-
-  @Override
-  public void addVolatileData(IToolContext context, ModifierEntry modifier, ModDataNBT volatileData) {
-    TinkerModifiers.overslime.get().setFriend(volatileData);
+    hookBuilder.addHook(this, ModifierHooks.INVENTORY_TICK);
   }
 
   @Override
