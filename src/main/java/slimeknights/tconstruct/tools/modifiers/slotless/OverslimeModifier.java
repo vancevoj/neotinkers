@@ -11,8 +11,8 @@ import slimeknights.tconstruct.library.modifiers.hook.build.ToolStatsModifierHoo
 import slimeknights.tconstruct.library.modifiers.hook.build.VolatileDataModifierHook;
 import slimeknights.tconstruct.library.modifiers.impl.DurabilityShieldModifier;
 import slimeknights.tconstruct.library.module.ModuleHookMap.Builder;
-import slimeknights.tconstruct.library.tools.context.ToolRebuildContext;
 import slimeknights.tconstruct.library.tools.nbt.IModDataView;
+import slimeknights.tconstruct.library.tools.nbt.IToolContext;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.ModDataNBT;
 import slimeknights.tconstruct.library.tools.stat.ModifierStatsBuilder;
@@ -46,13 +46,13 @@ public class OverslimeModifier extends DurabilityShieldModifier implements ToolS
   /* Tool building */
 
   @Override
-  public void addVolatileData(ToolRebuildContext context, ModifierEntry modifier, ModDataNBT volatileData) {
+  public void addVolatileData(IToolContext context, ModifierEntry modifier, ModDataNBT volatileData) {
     // base cap
     addCapacity(volatileData, (int)(50 * context.getDefinitionData().getMultiplier(ToolStats.DURABILITY)));
   }
 
   @Override
-  public void addToolStats(ToolRebuildContext context, ModifierEntry modifier, ModifierStatsBuilder builder) {
+  public void addToolStats(IToolContext context, ModifierEntry modifier, ModifierStatsBuilder builder) {
     if (!context.getVolatileData().getBoolean(KEY_OVERSLIME_FRIEND)) {
       if (context.hasTag(Items.MELEE)) {
         ToolStats.ATTACK_DAMAGE.multiply(builder, 0.9f);

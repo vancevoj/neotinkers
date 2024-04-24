@@ -16,7 +16,6 @@ import slimeknights.tconstruct.library.modifiers.modules.util.ModifierCondition.
 import slimeknights.tconstruct.library.modifiers.modules.util.ModuleBuilder;
 import slimeknights.tconstruct.library.module.HookProvider;
 import slimeknights.tconstruct.library.module.ModuleHook;
-import slimeknights.tconstruct.library.tools.context.ToolRebuildContext;
 import slimeknights.tconstruct.library.tools.nbt.IToolContext;
 import slimeknights.tconstruct.library.tools.stat.IToolStat;
 import slimeknights.tconstruct.library.tools.stat.ModifierStatsBuilder;
@@ -32,7 +31,7 @@ public record SetStatModule<T>(IToolStat<T> stat, T value, ModifierCondition<ITo
   private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<SetStatModule<?>>defaultHooks(ModifierHooks.TOOL_STATS);
 
   @Override
-  public void addToolStats(ToolRebuildContext context, ModifierEntry modifier, ModifierStatsBuilder builder) {
+  public void addToolStats(IToolContext context, ModifierEntry modifier, ModifierStatsBuilder builder) {
     if (condition.matches(context, modifier)) {
       stat.update(builder, value);
     }

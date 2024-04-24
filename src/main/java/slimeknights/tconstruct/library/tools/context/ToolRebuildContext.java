@@ -11,8 +11,7 @@ import slimeknights.tconstruct.library.tools.nbt.MaterialNBT;
 import slimeknights.tconstruct.library.tools.nbt.ModifierNBT;
 
 /**
- * A more limited view of {@link IToolStackView} for use in tool rebuild hooks
- * TODO: remove usage of this class from modifier hooks, use {@link IToolContext} instead for flexability
+ * Implementation of the limited view of {@link IToolStackView} for use in tool rebuild hooks
  */
 @SuppressWarnings("ClassCanBeRecord")
 @Data

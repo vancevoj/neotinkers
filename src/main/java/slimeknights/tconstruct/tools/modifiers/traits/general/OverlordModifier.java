@@ -6,7 +6,6 @@ import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.hook.build.ToolStatsModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.build.VolatileDataModifierHook;
 import slimeknights.tconstruct.library.module.ModuleHookMap.Builder;
-import slimeknights.tconstruct.library.tools.context.ToolRebuildContext;
 import slimeknights.tconstruct.library.tools.nbt.IToolContext;
 import slimeknights.tconstruct.library.tools.nbt.ModDataNBT;
 import slimeknights.tconstruct.library.tools.stat.ModifierStatsBuilder;
@@ -32,7 +31,7 @@ public class OverlordModifier extends Modifier implements ToolStatsModifierHook,
   }
 
   @Override
-  public void addVolatileData(ToolRebuildContext context, ModifierEntry modifier, ModDataNBT volatileData) {
+  public void addVolatileData(IToolContext context, ModifierEntry modifier, ModDataNBT volatileData) {
     OverslimeModifier overslime = TinkerModifiers.overslime.get();
     overslime.setFriend(volatileData);
     // gains +15% of the durability per level, note that base stats does not consider the durability modifier
@@ -40,7 +39,7 @@ public class OverlordModifier extends Modifier implements ToolStatsModifierHook,
   }
 
   @Override
-  public void addToolStats(ToolRebuildContext context, ModifierEntry modifier, ModifierStatsBuilder builder) {
+  public void addToolStats(IToolContext context, ModifierEntry modifier, ModifierStatsBuilder builder) {
     // at most subtract 90% durability, note this runs before the tool durability modifier
     ToolStats.DURABILITY.add(builder, -getBoost(context, Math.min(modifier.getLevel(), 6), 0.15f));
   }

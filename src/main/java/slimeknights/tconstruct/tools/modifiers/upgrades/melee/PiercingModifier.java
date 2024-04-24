@@ -16,8 +16,8 @@ import slimeknights.tconstruct.library.modifiers.hook.combat.MeleeHitModifierHoo
 import slimeknights.tconstruct.library.modifiers.hook.display.TooltipModifierHook;
 import slimeknights.tconstruct.library.module.ModuleHookMap.Builder;
 import slimeknights.tconstruct.library.tools.context.ToolAttackContext;
-import slimeknights.tconstruct.library.tools.context.ToolRebuildContext;
 import slimeknights.tconstruct.library.tools.helper.ToolAttackUtil;
+import slimeknights.tconstruct.library.tools.nbt.IToolContext;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.ModDataNBT;
 import slimeknights.tconstruct.library.tools.stat.ModifierStatsBuilder;
@@ -36,7 +36,7 @@ public class PiercingModifier extends Modifier implements ToolStatsModifierHook,
   }
 
   @Override
-  public void addVolatileData(ToolRebuildContext context, ModifierEntry modifier, ModDataNBT volatileData) {
+  public void addVolatileData(IToolContext context, ModifierEntry modifier, ModDataNBT volatileData) {
     float toRemove = 0.5f * modifier.getEffectiveLevel();
     float baseDamage = context.getDefinitionData().getBaseStat(ToolStats.ATTACK_DAMAGE);
     if (baseDamage < toRemove) {
@@ -45,7 +45,7 @@ public class PiercingModifier extends Modifier implements ToolStatsModifierHook,
   }
 
   @Override
-  public void addToolStats(ToolRebuildContext context, ModifierEntry modifier, ModifierStatsBuilder builder) {
+  public void addToolStats(IToolContext context, ModifierEntry modifier, ModifierStatsBuilder builder) {
     float toRemove = 0.5f * modifier.getEffectiveLevel() - context.getVolatileData().getFloat(PIERCING_DEBUFF);
     ToolStats.ATTACK_DAMAGE.add(builder, -toRemove);
   }

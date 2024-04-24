@@ -15,7 +15,6 @@ import slimeknights.tconstruct.library.modifiers.modules.util.ModifierCondition.
 import slimeknights.tconstruct.library.modifiers.modules.util.ModuleBuilder;
 import slimeknights.tconstruct.library.module.HookProvider;
 import slimeknights.tconstruct.library.module.ModuleHook;
-import slimeknights.tconstruct.library.tools.context.ToolRebuildContext;
 import slimeknights.tconstruct.library.tools.nbt.IToolContext;
 import slimeknights.tconstruct.library.tools.stat.INumericToolStat;
 import slimeknights.tconstruct.library.tools.stat.ModifierStatsBuilder;
@@ -35,7 +34,7 @@ public record StatBoostModule(INumericToolStat<?> stat, StatOperation operation,
     StatBoostModule::new);
 
   @Override
-  public void addToolStats(ToolRebuildContext context, ModifierEntry modifier, ModifierStatsBuilder builder) {
+  public void addToolStats(IToolContext context, ModifierEntry modifier, ModifierStatsBuilder builder) {
     if (condition.matches(context, modifier)) {
       operation.apply(builder, stat, amount.compute(modifier.getEffectiveLevel()));
     }

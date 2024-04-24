@@ -17,7 +17,6 @@ import slimeknights.tconstruct.library.modifiers.hook.build.VolatileDataModifier
 import slimeknights.tconstruct.library.module.ModuleHookMap.Builder;
 import slimeknights.tconstruct.library.tools.capability.ToolInventoryCapability;
 import slimeknights.tconstruct.library.tools.capability.ToolInventoryCapability.InventoryModifierHook;
-import slimeknights.tconstruct.library.tools.context.ToolRebuildContext;
 import slimeknights.tconstruct.library.tools.nbt.IModDataView;
 import slimeknights.tconstruct.library.tools.nbt.IToolContext;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
@@ -62,7 +61,7 @@ public class InventoryModifier extends Modifier implements InventoryModifierHook
   }
 
   @Override
-  public void addVolatileData(ToolRebuildContext context, ModifierEntry modifier, ModDataNBT volatileData) {
+  public void addVolatileData(IToolContext context, ModifierEntry modifier, ModDataNBT volatileData) {
     ToolInventoryCapability.addSlots(volatileData, getSlots(context, modifier.getLevel()));
   }
 

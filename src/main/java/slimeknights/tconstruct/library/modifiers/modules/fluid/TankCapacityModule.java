@@ -16,7 +16,7 @@ import slimeknights.tconstruct.library.modifiers.hook.build.VolatileDataModifier
 import slimeknights.tconstruct.library.modifiers.modules.ModifierModule;
 import slimeknights.tconstruct.library.module.HookProvider;
 import slimeknights.tconstruct.library.module.ModuleHook;
-import slimeknights.tconstruct.library.tools.context.ToolRebuildContext;
+import slimeknights.tconstruct.library.tools.nbt.IToolContext;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.ModDataNBT;
 
@@ -53,7 +53,7 @@ public class TankCapacityModule implements ModifierModule, VolatileDataModifierH
   }
 
   @Override
-  public void addVolatileData(ToolRebuildContext context, ModifierEntry modifier, ModDataNBT volatileData) {
+  public void addVolatileData(IToolContext context, ModifierEntry modifier, ModDataNBT volatileData) {
     ResourceLocation key = getCapacityKey();
     volatileData.putInt(key, capacity * modifier.getLevel() + volatileData.getInt(key));
   }

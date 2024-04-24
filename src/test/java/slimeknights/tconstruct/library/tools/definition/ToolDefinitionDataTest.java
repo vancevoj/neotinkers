@@ -4,12 +4,12 @@ import com.google.common.collect.ImmutableMap;
 import net.minecraftforge.common.ToolActions;
 import org.junit.jupiter.api.Test;
 import slimeknights.tconstruct.library.tools.SlotType;
-import slimeknights.tconstruct.library.tools.context.ToolRebuildContext;
 import slimeknights.tconstruct.library.tools.definition.module.ToolHooks;
 import slimeknights.tconstruct.library.tools.definition.module.build.MultiplyStatsModule;
 import slimeknights.tconstruct.library.tools.definition.module.build.SetStatsModule;
 import slimeknights.tconstruct.library.tools.definition.module.build.ToolActionsModule;
 import slimeknights.tconstruct.library.tools.definition.module.build.ToolSlotsModule;
+import slimeknights.tconstruct.library.tools.nbt.IToolContext;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.ModDataNBT;
 import slimeknights.tconstruct.library.tools.nbt.MultiplierNBT;
@@ -91,7 +91,7 @@ class ToolDefinitionDataTest extends BaseMcTest {
     ModifierStatsBuilder builder = ModifierStatsBuilder.builder();
     ToolStats.MINING_SPEED.add(builder, 5);
     ToolStats.ATTACK_DAMAGE.add(builder, 3);
-    ToolDefinitionData.EMPTY.getHook(ToolHooks.TOOL_STATS).addToolStats(mock(ToolRebuildContext.class), builder);
+    ToolDefinitionData.EMPTY.getHook(ToolHooks.TOOL_STATS).addToolStats(mock(IToolContext.class), builder);
 
     StatsNBT stats = builder.build();
     assertThat(stats.getContainedStats()).hasSize(2);
@@ -113,7 +113,7 @@ class ToolDefinitionDataTest extends BaseMcTest {
         .set(ToolStats.MINING_SPEED, 5)
         .set(ToolStats.ATTACK_SPEED, 2).build()))
       .build();
-    data.getHook(ToolHooks.TOOL_STATS).addToolStats(mock(ToolRebuildContext.class), builder);
+    data.getHook(ToolHooks.TOOL_STATS).addToolStats(mock(IToolContext.class), builder);
 
     StatsNBT stats = builder.build();
     assertThat(stats.getContainedStats()).hasSize(3);
@@ -132,7 +132,7 @@ class ToolDefinitionDataTest extends BaseMcTest {
       .builder()
       .module(new ToolSlotsModule(ImmutableMap.of(SlotType.UPGRADE, 5, SlotType.ABILITY, 2)))
       .build();
-    data.getHook(ToolHooks.VOLATILE_DATA).addVolatileData(mock(ToolRebuildContext.class), modData);
+    data.getHook(ToolHooks.VOLATILE_DATA).addVolatileData(mock(IToolContext.class), modData);
     assertThat(modData.getSlots(SlotType.UPGRADE)).isEqualTo(5);
     assertThat(modData.getSlots(SlotType.ABILITY)).isEqualTo(2);
     for (SlotType type : SlotType.getAllSlotTypes()) {

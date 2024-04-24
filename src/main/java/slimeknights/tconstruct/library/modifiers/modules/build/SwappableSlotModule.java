@@ -17,7 +17,7 @@ import slimeknights.tconstruct.library.modifiers.util.ModuleWithKey;
 import slimeknights.tconstruct.library.module.HookProvider;
 import slimeknights.tconstruct.library.module.ModuleHook;
 import slimeknights.tconstruct.library.tools.SlotType;
-import slimeknights.tconstruct.library.tools.context.ToolRebuildContext;
+import slimeknights.tconstruct.library.tools.nbt.IToolContext;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.ModDataNBT;
 
@@ -62,7 +62,7 @@ public record SwappableSlotModule(@Nullable ResourceLocation key, int slotCount)
   }
 
   @Override
-  public void addVolatileData(ToolRebuildContext context, ModifierEntry modifier, ModDataNBT volatileData) {
+  public void addVolatileData(IToolContext context, ModifierEntry modifier, ModDataNBT volatileData) {
     String slotName = context.getPersistentData().getString(getKey(modifier.getModifier()));
     if (!slotName.isEmpty()) {
       SlotType type = SlotType.getIfPresent(slotName);
@@ -104,7 +104,7 @@ public record SwappableSlotModule(@Nullable ResourceLocation key, int slotCount)
     }
 
     @Override
-    public void addVolatileData(ToolRebuildContext context, ModifierEntry modifier, ModDataNBT volatileData) {
+    public void addVolatileData(IToolContext context, ModifierEntry modifier, ModDataNBT volatileData) {
       String slotName = context.getPersistentData().getString(getKey(modifier.getModifier()));
       if (!slotName.isEmpty() && match.getName().equals(slotName)) {
         volatileData.addSlots(bonus, slotCount);

@@ -10,7 +10,7 @@ import slimeknights.tconstruct.library.modifiers.hook.build.ModifierTraitHook;
 import slimeknights.tconstruct.library.modifiers.modules.ModifierModule;
 import slimeknights.tconstruct.library.module.HookProvider;
 import slimeknights.tconstruct.library.module.ModuleHook;
-import slimeknights.tconstruct.library.tools.context.ToolRebuildContext;
+import slimeknights.tconstruct.library.tools.nbt.IToolContext;
 
 import java.util.List;
 
@@ -29,7 +29,7 @@ public record ModifierTraitModule(ModifierEntry modifier, boolean fixedLevel) im
   }
 
   @Override
-  public void addTraits(ToolRebuildContext context, ModifierEntry self, TraitBuilder builder, boolean firstEncounter) {
+  public void addTraits(IToolContext context, ModifierEntry self, TraitBuilder builder, boolean firstEncounter) {
     if (fixedLevel) {
       // fixed levels do not need to add again if already added
       if (firstEncounter) {

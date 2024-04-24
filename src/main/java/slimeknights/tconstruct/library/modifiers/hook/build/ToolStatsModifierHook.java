@@ -3,7 +3,7 @@ package slimeknights.tconstruct.library.modifiers.hook.build;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.hook.behavior.AttributesModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.mining.BreakSpeedModifierHook;
-import slimeknights.tconstruct.library.tools.context.ToolRebuildContext;
+import slimeknights.tconstruct.library.tools.nbt.IToolContext;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.stat.ModifierStatsBuilder;
 
@@ -26,12 +26,12 @@ public interface ToolStatsModifierHook {
    * @param modifier        Modifier level
    * @param builder         Tool stat builder
    */
-  void addToolStats(ToolRebuildContext context, ModifierEntry modifier, ModifierStatsBuilder builder);
+  void addToolStats(IToolContext context, ModifierEntry modifier, ModifierStatsBuilder builder);
 
   /** Merger that runs all hooks */
   record AllMerger(Collection<ToolStatsModifierHook> modules) implements ToolStatsModifierHook {
     @Override
-    public void addToolStats(ToolRebuildContext context, ModifierEntry modifier, ModifierStatsBuilder builder) {
+    public void addToolStats(IToolContext context, ModifierEntry modifier, ModifierStatsBuilder builder) {
       for (ToolStatsModifierHook module : modules) {
         module.addToolStats(context, modifier, builder);
       }

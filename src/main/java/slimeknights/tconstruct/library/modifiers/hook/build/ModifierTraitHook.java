@@ -5,7 +5,7 @@ import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
-import slimeknights.tconstruct.library.tools.context.ToolRebuildContext;
+import slimeknights.tconstruct.library.tools.nbt.IToolContext;
 import slimeknights.tconstruct.library.tools.nbt.ModifierNBT;
 
 import java.util.Collection;
@@ -24,7 +24,7 @@ public interface ModifierTraitHook {
    * @param builder         Builder handling traits, use methods on this object to add traits
    * @param firstEncounter  If true, this is the first time this modifier has been seen while rebuilding the stats
    */
-  void addTraits(ToolRebuildContext context, ModifierEntry modifier, TraitBuilder builder, boolean firstEncounter);
+  void addTraits(IToolContext context, ModifierEntry modifier, TraitBuilder builder, boolean firstEncounter);
 
   /** Builder that handles adding traits that can themselves contain traits */
   @RequiredArgsConstructor
@@ -34,7 +34,7 @@ public interface ModifierTraitHook {
     /** Modifiers that are currently adding their traits, prevents adding traits for a modifier inside itself, which will recurse infinitely */
     private final Set<Modifier> currentStack = new LinkedHashSet<>();
     /** Context for tool building */
-    private final ToolRebuildContext context;
+    private final IToolContext context;
     /** Builder instance */
     private final ModifierNBT.Builder builder;
 
@@ -72,7 +72,7 @@ public interface ModifierTraitHook {
   /** Merger that runs all hooks */
   record AllMerger(Collection<ModifierTraitHook> modules) implements ModifierTraitHook {
     @Override
-    public void addTraits(ToolRebuildContext context, ModifierEntry modifier, TraitBuilder builder, boolean firstEncounter) {
+    public void addTraits(IToolContext context, ModifierEntry modifier, TraitBuilder builder, boolean firstEncounter) {
       for (ModifierTraitHook module : modules) {
         module.addTraits(context, modifier, builder, firstEncounter);
       }

@@ -3,12 +3,12 @@ package slimeknights.tconstruct.library.tools.definition.module.build;
 import com.google.common.collect.ImmutableMap;
 import slimeknights.mantle.data.loadable.primitive.IntLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
-import slimeknights.tconstruct.library.module.ModuleHook;
 import slimeknights.tconstruct.library.module.HookProvider;
+import slimeknights.tconstruct.library.module.ModuleHook;
 import slimeknights.tconstruct.library.tools.SlotType;
-import slimeknights.tconstruct.library.tools.context.ToolRebuildContext;
 import slimeknights.tconstruct.library.tools.definition.module.ToolHooks;
 import slimeknights.tconstruct.library.tools.definition.module.ToolModule;
+import slimeknights.tconstruct.library.tools.nbt.IToolContext;
 import slimeknights.tconstruct.library.tools.nbt.ModDataNBT;
 
 import java.util.List;
@@ -35,7 +35,7 @@ public record ToolSlotsModule(Map<SlotType,Integer> slots) implements VolatileDa
   }
 
   @Override
-  public void addVolatileData(ToolRebuildContext context, ModDataNBT volatileData) {
+  public void addVolatileData(IToolContext context, ModDataNBT volatileData) {
     for (Entry<SlotType,Integer> entry : slots.entrySet()) {
       volatileData.addSlots(entry.getKey(), entry.getValue());
     }
