@@ -51,7 +51,7 @@ public class ShieldStrapModifier extends InventoryMenuModifier {
       }
       // offhand must be able to go in the pants
       ItemStack offhand = player.getOffhandItem();
-      int slots = getSlots(tool, modifier.getLevel());
+      int slots = getSlots(tool, modifier);
       if (offhand.isEmpty() || !ToolInventoryCapability.isBlacklisted(offhand)) {
         ItemStack newOffhand = ItemStack.EMPTY;
         ModDataNBT persistentData = tool.getPersistentData();

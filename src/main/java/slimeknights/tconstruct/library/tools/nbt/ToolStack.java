@@ -16,8 +16,8 @@ import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.config.Config;
 import slimeknights.tconstruct.library.materials.definition.MaterialVariantId;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
-import slimeknights.tconstruct.library.modifiers.ModifierId;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
+import slimeknights.tconstruct.library.modifiers.ModifierId;
 import slimeknights.tconstruct.library.modifiers.hook.build.ModifierTraitHook.TraitBuilder;
 import slimeknights.tconstruct.library.tools.SlotType;
 import slimeknights.tconstruct.library.tools.context.ToolRebuildContext;
@@ -628,8 +628,8 @@ public class ToolStack implements IToolStackView {
     ModifierNBT beforeTraits = modBuilder.build();
 
     // temporary context while we add modifier traits, will recreate if we have modifiers
-    ModDataNBT volatileData = new ModDataNBT();
-    ToolRebuildContext context = new ToolRebuildContext(item, definition, materials, getUpgrades(), beforeTraits, getPersistentData(), volatileData);
+    // clear out volatile data, mostly affects the volatile data hook
+    ToolRebuildContext context = new ToolRebuildContext(item, definition, materials, getUpgrades(), beforeTraits, getPersistentData());
 
     // if we have modifiers, apply modifier traits, saves creating some builders if empty
     List<ModifierEntry> modifierList = Collections.emptyList();
@@ -652,10 +652,12 @@ public class ToolStack implements IToolStackView {
     }
 
     // build volatile data first, it's a parameter to the other hooks
+    ModDataNBT volatileData = new ModDataNBT();
     toolData.getHook(ToolHooks.VOLATILE_DATA).addVolatileData(context, volatileData);
     for (ModifierEntry entry : modifierList) {
       entry.getHook(ModifierHooks.VOLATILE_DATA).addVolatileData(context, entry, volatileData);
     }
+    setVolatileModData(volatileData);
 
     // regular stats last so we can include volatile data
     ModifierStatsBuilder statBuilder = ModifierStatsBuilder.builder();
@@ -663,9 +665,6 @@ public class ToolStack implements IToolStackView {
     for (ModifierEntry entry : modifierList) {
       entry.getHook(ModifierHooks.TOOL_STATS).addToolStats(context, entry, statBuilder);
     }
-
-    // set into NBT
-    setVolatileModData(volatileData);
     setStats(statBuilder.build(item));
     setMultipliers(statBuilder.buildMultipliers(item));
 

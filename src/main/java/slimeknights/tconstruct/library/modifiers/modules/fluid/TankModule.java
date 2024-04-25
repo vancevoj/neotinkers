@@ -14,7 +14,6 @@ import slimeknights.mantle.data.loadable.Loadables;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.data.registry.GenericLoaderRegistry.IGenericLoader;
 import slimeknights.tconstruct.TConstruct;
-import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.ModifierId;
@@ -23,6 +22,7 @@ import slimeknights.tconstruct.library.module.HookProvider;
 import slimeknights.tconstruct.library.module.ModuleHook;
 import slimeknights.tconstruct.library.tools.capability.ToolFluidCapability;
 import slimeknights.tconstruct.library.tools.capability.ToolFluidCapability.FluidModifierHook;
+import slimeknights.tconstruct.library.tools.nbt.INamespacedNBTView;
 import slimeknights.tconstruct.library.tools.nbt.IToolContext;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.ModDataNBT;
@@ -85,18 +85,23 @@ public class TankModule extends TankCapacityModule implements FluidModifierHook,
   /* Properties */
 
   /** Checks if the given modifier is the owner of the tank */
-  public boolean isOwner(IToolContext tool, ModifierId modifier) {
+  public boolean isOwner(INamespacedNBTView volatileData, ModifierId modifier) {
     ResourceLocation key = getOwnerKey();
     if (key == null) {
       return true;
     }
-    return modifier.toString().equals(tool.getVolatileData().getString(key));
+    return modifier.toString().equals(volatileData.getString(key));
+  }
+
+  /** Checks if the given modifier is the owner of the tank */
+  public final boolean isOwner(IToolStackView tool, ModifierId modifier) {
+    return isOwner(tool.getVolatileData(), modifier);
   }
 
   // TODO: may be worth separating tanks vs unique tanks, unique tanks are used for drain/fill hooks while total tanks for anyone interacting directly such as modifiers
   @Override
-  public int getTanks(IToolContext tool, Modifier modifier) {
-    return isOwner(tool, modifier.getId()) ? 1 : 0;
+  public int getTanks(INamespacedNBTView volatileData, ModifierEntry modifier) {
+    return isOwner(volatileData, modifier.getId()) ? 1 : 0;
   }
 
   @Override
@@ -111,7 +116,7 @@ public class TankModule extends TankCapacityModule implements FluidModifierHook,
     if (!volatileData.contains(ownerKey, Tag.TAG_STRING)) {
       volatileData.putString(ownerKey, modifier.getId().toString());
     }
-    ToolFluidCapability.addTanks(context, modifier.getModifier(), volatileData, this);
+    ToolFluidCapability.addTanks(modifier, volatileData, this);
   }
 
 

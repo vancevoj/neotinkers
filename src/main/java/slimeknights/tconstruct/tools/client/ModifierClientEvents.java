@@ -153,9 +153,9 @@ public class ModifierClientEvents {
         IToolStackView tool = context.getToolInSlot(EquipmentSlot.HEAD);
         if (tool != null) {
           ItemFrameModifier modifier = TinkerModifiers.itemFrame.get();
-          int level = tool.getModifierLevel(modifier);
-          if (level > 0) {
-            modifier.getAllStacks(tool, level, itemFrames);
+          ModifierEntry entry = tool.getModifier(modifier);
+          if (entry.intEffectiveLevel() > 0) {
+            modifier.getAllStacks(tool, entry, itemFrames);
           }
         }
       }

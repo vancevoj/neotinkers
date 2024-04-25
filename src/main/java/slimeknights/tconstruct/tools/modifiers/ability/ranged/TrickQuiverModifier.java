@@ -19,7 +19,7 @@ import slimeknights.tconstruct.library.modifiers.hook.interaction.InteractionSou
 import slimeknights.tconstruct.library.modifiers.hook.ranged.BowAmmoModifierHook;
 import slimeknights.tconstruct.library.module.ModuleHookMap.Builder;
 import slimeknights.tconstruct.library.recipe.partbuilder.Pattern;
-import slimeknights.tconstruct.library.tools.nbt.IToolContext;
+import slimeknights.tconstruct.library.tools.nbt.INamespacedNBTView;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.ModDataNBT;
 
@@ -53,7 +53,7 @@ public class TrickQuiverModifier extends InventoryMenuModifier implements BowAmm
   }
 
   @Override
-  public int getSlots(IToolContext tool, int level) {
+  public int getSlots(INamespacedNBTView tool, ModifierEntry modifier) {
     return 3;
   }
 
@@ -93,7 +93,7 @@ public class TrickQuiverModifier extends InventoryMenuModifier implements BowAmm
       if (!player.level.isClientSide) {
         // first, increment the number
         ModDataNBT data = tool.getPersistentData();
-        int totalSlots = getSlots(tool, modifier.getLevel());
+        int totalSlots = getSlots(tool, modifier);
         // support going 1 above max to disable the trick arrows
         int newSelected = (data.getInt(SELECTED_SLOT) + 1) % (totalSlots + 1);
         data.putInt(SELECTED_SLOT, newSelected);

@@ -17,7 +17,7 @@ abstract class FluidModifierHookIterator<I> extends CompoundIndexHookIterator<Fl
 
   @Override
   protected int getSize(IToolStackView tool, FluidModifierHook hook) {
-    return hook.getTanks(tool, indexEntry.getModifier());
+    return hook.getTanks(tool.getVolatileData(), indexEntry);
   }
 
   /**

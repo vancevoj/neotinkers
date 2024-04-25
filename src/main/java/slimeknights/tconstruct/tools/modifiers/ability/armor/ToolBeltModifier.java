@@ -30,6 +30,7 @@ import slimeknights.tconstruct.library.module.ModuleHookMap.Builder;
 import slimeknights.tconstruct.library.recipe.partbuilder.Pattern;
 import slimeknights.tconstruct.library.tools.capability.ToolInventoryCapability;
 import slimeknights.tconstruct.library.tools.nbt.IModDataView;
+import slimeknights.tconstruct.library.tools.nbt.INamespacedNBTView;
 import slimeknights.tconstruct.library.tools.nbt.IToolContext;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.ModDataNBT;
@@ -106,7 +107,8 @@ public class ToolBeltModifier extends InventoryMenuModifier implements VolatileD
   }
 
   /** Gets the proper number of slots for the given level */
-  private int getProperSlots(int level) {
+  private int getProperSlots(ModifierEntry entry) {
+    int level = entry.intEffectiveLevel();
     if (level <= 0) {
       return 0;
     }
@@ -119,7 +121,7 @@ public class ToolBeltModifier extends InventoryMenuModifier implements VolatileD
 
   @Override
   public void addVolatileData(IToolContext context, ModifierEntry modifier, ModDataNBT volatileData) {
-    int properSlots = getProperSlots(modifier.getLevel());
+    int properSlots = getProperSlots(modifier);
     int slots;
     // find the largest slot index and either add or update the override as needed
     // TODO: can probably remove this code for 1.19
@@ -149,18 +151,18 @@ public class ToolBeltModifier extends InventoryMenuModifier implements VolatileD
   }
 
   @Override
-  public int getSlots(IToolContext tool, int level) {
-    int properSlots = getProperSlots(level);
+  public int getSlots(INamespacedNBTView volatileData, ModifierEntry modifier) {
+    int properSlots = getProperSlots(modifier);
     if (properSlots >= 9) {
       return 9;
     }
-    return Mth.clamp(tool.getVolatileData().getInt(SLOT_OVERRIDE), properSlots, 9);
+    return Mth.clamp(volatileData.getInt(SLOT_OVERRIDE), properSlots, 9);
   }
 
   @Nullable
   @Override
   public Component validate(IToolStackView tool, ModifierEntry modifier) {
-    return validateForMaxSlots(tool, getProperSlots(modifier.getLevel()));
+    return validateForMaxSlots(tool, getProperSlots(modifier));
   }
 
   @Override
@@ -174,7 +176,7 @@ public class ToolBeltModifier extends InventoryMenuModifier implements VolatileD
       }
 
       boolean didChange = false;
-      int slots = getSlots(tool, modifier.getLevel());
+      int slots = getSlots(tool, modifier);
       ModDataNBT persistentData = tool.getPersistentData();
       ListTag list = new ListTag();
       boolean[] swapped = new boolean[slots];

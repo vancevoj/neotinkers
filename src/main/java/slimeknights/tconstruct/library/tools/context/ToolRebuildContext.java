@@ -29,6 +29,4 @@ public class ToolRebuildContext implements IToolContext {
   private final ModifierNBT modifiers;
   /** Persistent modifier data, intentionally read only */
   private final IModDataView persistentData;
-  /** Volatile modifier data */
-  private final IModDataView volatileData;
 }

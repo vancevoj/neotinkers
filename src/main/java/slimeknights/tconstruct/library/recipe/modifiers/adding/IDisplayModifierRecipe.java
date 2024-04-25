@@ -123,7 +123,7 @@ public interface IDisplayModifierRecipe extends IModifierRecipe {
     CompoundTag volatileNBT = new CompoundTag();
     ModDataNBT volatileData = ModDataNBT.readFromNBT(volatileNBT);
     persistentDataConsumer.accept(persistentData);
-    ToolRebuildContext context = new ToolRebuildContext(stack.getItem(), ToolDefinition.EMPTY, MaterialNBT.EMPTY, modifiers, modifiers, persistentData, volatileData);
+    ToolRebuildContext context = new ToolRebuildContext(stack.getItem(), ToolDefinition.EMPTY, MaterialNBT.EMPTY, modifiers, modifiers, persistentData);
     for (ModifierEntry entry : modifiers.getModifiers()) {
       entry.getHook(ModifierHooks.VOLATILE_DATA).addVolatileData(context, entry, volatileData);
     }

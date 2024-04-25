@@ -18,6 +18,7 @@ import slimeknights.tconstruct.library.module.ModuleHookMap.Builder;
 import slimeknights.tconstruct.library.tools.capability.ToolInventoryCapability;
 import slimeknights.tconstruct.library.tools.capability.ToolInventoryCapability.InventoryModifierHook;
 import slimeknights.tconstruct.library.tools.nbt.IModDataView;
+import slimeknights.tconstruct.library.tools.nbt.INamespacedNBTView;
 import slimeknights.tconstruct.library.tools.nbt.IToolContext;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.ModDataNBT;
@@ -62,7 +63,7 @@ public class InventoryModifier extends Modifier implements InventoryModifierHook
 
   @Override
   public void addVolatileData(IToolContext context, ModifierEntry modifier, ModDataNBT volatileData) {
-    ToolInventoryCapability.addSlots(volatileData, getSlots(context, modifier.getLevel()));
+    ToolInventoryCapability.addSlots(volatileData, getSlots(volatileData, modifier));
   }
 
   /**
@@ -108,7 +109,7 @@ public class InventoryModifier extends Modifier implements InventoryModifierHook
   @Nullable
   @Override
   public Component validate(IToolStackView tool, ModifierEntry modifier) {
-    return validateForMaxSlots(tool, getSlots(tool, modifier.getLevel()));
+    return validateForMaxSlots(tool, getSlots(tool, modifier));
   }
 
   @Nullable
@@ -177,13 +178,13 @@ public class InventoryModifier extends Modifier implements InventoryModifierHook
   }
 
   /** Gets the number of slots for this modifier */
-  public int getSlots(IToolContext tool, int level) {
-    return level * slotsPerLevel;
+  public int getSlots(INamespacedNBTView volatileData, ModifierEntry modifier) {
+    return modifier.intEffectiveLevel() * slotsPerLevel;
   }
 
   @Override
   public final int getSlots(IToolStackView tool, ModifierEntry modifier) {
-    return getSlots(tool, modifier.getLevel());
+    return getSlots(tool.getVolatileData(), modifier);
   }
 
   /** Writes a stack to NBT, including the slot */

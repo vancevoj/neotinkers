@@ -33,11 +33,11 @@ public class ItemFrameModifier extends InventoryModifier {
   }
 
   /** Parses all stacks in NBT into the passed list */
-  public void getAllStacks(IToolStackView tool, int level, List<ItemStack> stackList) {
+  public void getAllStacks(IToolStackView tool, ModifierEntry entry, List<ItemStack> stackList) {
     IModDataView modData = tool.getPersistentData();
     if (modData.contains(ITEM_FRAME, Tag.TAG_LIST)) {
       ListTag list = tool.getPersistentData().get(ITEM_FRAME, GET_COMPOUND_LIST);
-      int max = getSlots(tool, level);
+      int max = getSlots(tool, entry);
 
       // make sure the stacks are in order, NBT could store them in any order
       ItemStack[] parsed = new ItemStack[max];

@@ -5,8 +5,8 @@ import net.minecraft.world.item.Item;
 import slimeknights.tconstruct.library.materials.definition.MaterialVariant;
 import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
-import slimeknights.tconstruct.library.module.ModuleHook;
 import slimeknights.tconstruct.library.modifiers.ModifierId;
+import slimeknights.tconstruct.library.module.ModuleHook;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinition;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinitionData;
 
@@ -115,11 +115,4 @@ public interface IToolContext {
    * TODO 1.19: change return type to INamespacedNBTView as modifiers should not be slot sensitive
    */
   IModDataView getPersistentData();
-
-  /**
-   * Gets volatile modifier data from the tool.
-   * This data will be reset whenever modifiers reload and should not be edited.
-   * TODO 1.19: change return type to INamespacedNBTView as modifiers should not be slot sensitive
-   */
-  IModDataView getVolatileData();
 }
