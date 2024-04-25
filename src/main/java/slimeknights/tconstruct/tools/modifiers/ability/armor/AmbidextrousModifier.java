@@ -5,28 +5,18 @@ import slimeknights.mantle.util.OffhandCooldownTracker;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.hook.armor.EquipmentChangeModifierHook;
-import slimeknights.tconstruct.library.modifiers.hook.build.ToolStatsModifierHook;
 import slimeknights.tconstruct.library.modifiers.modules.behavior.ShowOffhandModule;
 import slimeknights.tconstruct.library.module.ModuleHookMap.Builder;
 import slimeknights.tconstruct.library.tools.context.EquipmentChangeContext;
-import slimeknights.tconstruct.library.tools.nbt.IToolContext;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
-import slimeknights.tconstruct.library.tools.stat.ModifierStatsBuilder;
-import slimeknights.tconstruct.library.tools.stat.ToolStats;
 import slimeknights.tconstruct.tools.modifiers.ability.tool.OffhandAttackModifier;
 
-public class AmbidextrousModifier extends OffhandAttackModifier implements EquipmentChangeModifierHook, ToolStatsModifierHook {
+public class AmbidextrousModifier extends OffhandAttackModifier implements EquipmentChangeModifierHook {
   @Override
   protected void registerHooks(Builder hookBuilder) {
     super.registerHooks(hookBuilder);
-    hookBuilder.addHook(this, ModifierHooks.EQUIPMENT_CHANGE, ModifierHooks.TOOL_STATS);
+    hookBuilder.addHook(this, ModifierHooks.EQUIPMENT_CHANGE);
     hookBuilder.addModule(ShowOffhandModule.DISALLOW_BROKEN);
-  }
-
-  @Override
-  public void addToolStats(IToolContext context, ModifierEntry modifier, ModifierStatsBuilder builder) {
-    // main hand has 4.0 attack speed, so make the offhand have that too
-    ToolStats.ATTACK_SPEED.add(builder, 4.0 - context.getDefinitionData().getBaseStat(ToolStats.ATTACK_SPEED));
   }
 
   @Override

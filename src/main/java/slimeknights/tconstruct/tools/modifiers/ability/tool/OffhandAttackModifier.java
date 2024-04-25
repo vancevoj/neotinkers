@@ -61,7 +61,8 @@ public class OffhandAttackModifier extends NoLevelsModifier implements EntityInt
       if (!player.level.isClientSide()) {
         ToolAttackUtil.attackEntity(tool, player, InteractionHand.OFF_HAND, target, ToolAttackUtil.getCooldownFunction(player, InteractionHand.OFF_HAND), false, source.getSlot(hand));
       }
-      OffhandCooldownTracker.applyCooldown(player, tool.getStats().get(ToolStats.ATTACK_SPEED), 20);
+      // for armor, always assume attack speed is 4.0, we cannot change the attack speed of the main hand and we want them to match
+      OffhandCooldownTracker.applyCooldown(player, source == InteractionSource.ARMOR ? 4 : tool.getStats().get(ToolStats.ATTACK_SPEED), 20);
       // we handle swinging the arm, return consume to prevent resetting cooldown
       OffhandCooldownTracker.swingHand(player, InteractionHand.OFF_HAND, false);
       return InteractionResult.CONSUME;
@@ -73,7 +74,7 @@ public class OffhandAttackModifier extends NoLevelsModifier implements EntityInt
   public InteractionResult onToolUse(IToolStackView tool, ModifierEntry modifier, Player player, InteractionHand hand, InteractionSource source) {
     if (canAttack(tool, player, hand)) {
       // target done in onEntityInteract, this is just for cooldown cause you missed
-      OffhandCooldownTracker.applyCooldown(player, tool.getStats().get(ToolStats.ATTACK_SPEED), 20);
+      OffhandCooldownTracker.applyCooldown(player, source == InteractionSource.ARMOR ? 4 : tool.getStats().get(ToolStats.ATTACK_SPEED), 20);
       // we handle swinging the arm, return consume to prevent resetting cooldown
       OffhandCooldownTracker.swingHand(player, InteractionHand.OFF_HAND, false);
       return InteractionResult.CONSUME;
