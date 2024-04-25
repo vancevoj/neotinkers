@@ -38,12 +38,35 @@ public class ModifierStatsBuilder {
     multipliers.put(stat, (float)(multipliers.getOrDefault(stat, 1f) * value));
   }
 
+
+  /* Querying */
+
+  /**
+   * Gets the value of the given stat so far.
+   * Note: unlike other methods on the builder, this one depends on priority, make sure you consider modifier order if you are going to use this method.
+   */
+  public <T> T getStat(IToolStat<T> stat) {
+    Object builder = map.get(stat);
+    if (builder == null) {
+      return stat.getDefaultValue();
+    }
+    return stat.build(this, map.get(stat));
+  }
+
   /** Builds the given stat, method exists to make generic easier */
   private <T> void buildStat(StatsNBT.Builder builder, IToolStat<T> stat) {
-    T value = stat.build(map.get(stat));
+    T value = stat.build(this, map.get(stat));
     if (!value.equals(stat.getDefaultValue())) {
       builder.set(stat, value);
     }
+  }
+
+  /**
+   * Gets the current value of the given multiplier.
+   * Note: unlike other methods on the builder, this one depends on priority, make sure you consider modifier order if you are going to use this method.
+   */
+  public float getMultiplier(INumericToolStat<?> stat) {
+    return multipliers.getOrDefault(stat, 1f);
   }
 
   /**

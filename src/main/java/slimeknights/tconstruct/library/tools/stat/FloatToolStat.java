@@ -98,7 +98,7 @@ public class FloatToolStat implements INumericToolStat<Float> {
   }
 
   @Override
-  public Float build(Object builderObj) {
+  public Float build(ModifierStatsBuilder parent, Object builderObj) {
     FloatBuilder builder = (FloatBuilder)builderObj;
     return (builder.base + builder.add) * builder.multiply;
   }

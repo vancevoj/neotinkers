@@ -67,7 +67,7 @@ public class MaxToolStat implements IToolStat<Integer> {
   }
 
   @Override
-  public Integer build(Object builder) {
+  public Integer build(ModifierStatsBuilder parent, Object builder) {
     return ((TierBuilder)builder).tier;
   }
 

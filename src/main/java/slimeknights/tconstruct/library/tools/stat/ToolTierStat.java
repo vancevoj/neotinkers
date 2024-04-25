@@ -47,7 +47,7 @@ public class ToolTierStat implements IToolStat<Tier> {
   }
 
   @Override
-  public Tier build(Object builder) {
+  public Tier build(ModifierStatsBuilder parent, Object builder) {
     return ((TierBuilder) builder).value;
   }
 

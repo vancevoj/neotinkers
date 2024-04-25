@@ -49,10 +49,12 @@ public interface IToolStat<T> {
 
   /**
    * Builds this stat using the given builder
+   *
+   * @param parent   Builder parent, allows fetching properties from teh parent
    * @param builder  Builder object, will be the same object you returned in {@link #makeBuilder()} so unchecked casting is safe
    * @return  Final float value
    */
-  T build(Object builder);
+  T build(ModifierStatsBuilder parent, Object builder);
 
   /**
    * Updates the stat with a new value. The stat can determine how to merge that with existing values
