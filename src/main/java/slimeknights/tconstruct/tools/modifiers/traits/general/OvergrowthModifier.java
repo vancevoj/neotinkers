@@ -23,13 +23,11 @@ public class OvergrowthModifier extends Modifier implements InventoryTickModifie
   public void onInventoryTick(IToolStackView tool, ModifierEntry modifier, Level world, LivingEntity holder, int itemSlot, boolean isSelected, boolean isCorrectSlot, ItemStack stack) {
     // update 1 times a second, but skip when active (messes with pulling bow back)
     if (!world.isClientSide && holder.tickCount % 20 == 0 && holder.getUseItem() != stack) {
-      // ensure we have overslime
       OverslimeModifier overslime = TinkerModifiers.overslime.get();
-      int current = overslime.getOverslime(tool);
-      int cap = overslime.getCapacity(tool);
+      ModifierEntry entry = tool.getModifier(TinkerModifiers.overslime.getId());
       // has a 5% chance of restoring each second per level
-      if (current < cap && RANDOM.nextFloat() < (modifier.getLevel() * 0.05)) {
-        overslime.addOverslime(tool, 1);
+      if (entry.getLevel() > 0 && overslime.getShield(tool) < overslime.getShieldCapacity(tool, entry) && RANDOM.nextFloat() < (modifier.getLevel() * 0.05)) {
+        overslime.addOverslime(tool, entry, 1);
       }
     }
   }

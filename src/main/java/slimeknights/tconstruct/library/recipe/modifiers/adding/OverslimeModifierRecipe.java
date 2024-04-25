@@ -69,20 +69,19 @@ public class OverslimeModifierRecipe implements ITinkerStationRecipe, IDisplayMo
     ToolStack tool = ToolStack.from(tinkerable);
     OverslimeModifier overslime = TinkerModifiers.overslime.get();
     ModifierId overslimeId = TinkerModifiers.overslime.getId();
+    ModifierEntry entry = tool.getModifier(overslimeId);
     // if the tool lacks true overslime, add overslime
     if (tool.getUpgrades().getLevel(overslimeId) == 0) {
       // however, if we have overslime though a trait and reached our cap, also do nothing
-      if (tool.getModifierLevel(overslimeId) > 0) {
-        if (overslime.getOverslime(tool) >= overslime.getCapacity(tool)) {
-          return AT_CAPACITY;
-        }
+      if (entry.getLevel() > 0 && overslime.getShield(tool) >= overslime.getShieldCapacity(tool, entry)) {
+        return AT_CAPACITY;
       }
       // truely add overslime, this will cost a slime crystal if full durability
       tool = tool.copy();
       tool.addModifier(TinkerModifiers.overslime.getId(), 1);
     } else {
       // ensure we are not at the cap already
-      if (overslime.getOverslime(tool) >= overslime.getCapacity(tool)) {
+      if (overslime.getShield(tool) >= overslime.getShieldCapacity(tool, entry)) {
         return AT_CAPACITY;
       }
       // copy the tool as we will change it later
@@ -91,7 +90,7 @@ public class OverslimeModifierRecipe implements ITinkerStationRecipe, IDisplayMo
 
     // see how much value is available, update overslime to the max possible
     int available = IncrementalModifierRecipe.getAvailableAmount(inv, ingredient, restoreAmount);
-    overslime.addOverslime(tool, available);
+    overslime.addOverslime(tool, entry, available);
     return RecipeResult.success(tool.createStack(Math.min(tinkerable.getCount(), shrinkToolSlotBy())));
   }
 
@@ -107,11 +106,11 @@ public class OverslimeModifierRecipe implements ITinkerStationRecipe, IDisplayMo
     int current = 0;
     OverslimeModifier overslime = TinkerModifiers.overslime.get();
     if (tool.getModifierLevel(overslime) != 0) {
-      current = overslime.getOverslime(tool);
+      current = overslime.getShield(tool);
     }
 
     // how much did we actually consume?
-    int maxNeeded = overslime.getOverslime(ToolStack.from(result)) - current;
+    int maxNeeded = overslime.getShield(ToolStack.from(result)) - current;
     IncrementalModifierRecipe.updateInputs(inv, ingredient, maxNeeded, restoreAmount, ItemStack.EMPTY);
   }
 

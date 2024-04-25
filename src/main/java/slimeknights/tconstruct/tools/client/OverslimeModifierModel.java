@@ -36,7 +36,7 @@ public class OverslimeModifierModel extends NormalModifierModel {
   @Nullable
   @Override
   public Object getCacheKey(IToolStackView tool, ModifierEntry entry) {
-    if (entry.getModifier() instanceof OverslimeModifier overslime && overslime.getOverslime(tool) == 0) {
+    if (entry.getModifier() instanceof OverslimeModifier overslime && overslime.getShield(tool) == 0) {
       return null;
     }
     return super.getCacheKey(tool, entry);
@@ -44,7 +44,7 @@ public class OverslimeModifierModel extends NormalModifierModel {
 
   @Override
   public ImmutableList<BakedQuad> getQuads(IToolStackView tool, ModifierEntry entry, Function<Material,TextureAtlasSprite> spriteGetter, Transformation transforms, boolean isLarge, int startTintIndex, @Nullable ItemLayerPixels pixels) {
-    if (entry.getModifier() instanceof OverslimeModifier overslime && overslime.getOverslime(tool) == 0) {
+    if (entry.getModifier() instanceof OverslimeModifier overslime && overslime.getShield(tool) == 0) {
       return ImmutableList.of();
     }
     return super.getQuads(tool, entry, spriteGetter, transforms, isLarge, startTintIndex, pixels);

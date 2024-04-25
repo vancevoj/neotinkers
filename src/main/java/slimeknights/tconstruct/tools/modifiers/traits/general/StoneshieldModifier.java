@@ -14,8 +14,8 @@ import java.util.List;
 
 public class StoneshieldModifier extends DurabilityShieldModifier {
   @Override
-  protected int getShieldCapacity(IToolStackView tool, int level) {
-    return (int)(level * 100 * tool.getMultiplier(ToolStats.DURABILITY));
+  public int getShieldCapacity(IToolStackView tool, ModifierEntry modifier) {
+    return (int)(modifier.getEffectiveLevel() * 100 * tool.getMultiplier(ToolStats.DURABILITY));
   }
 
   @Override
@@ -60,7 +60,7 @@ public class StoneshieldModifier extends DurabilityShieldModifier {
     // if we found any stone, add shield
     if (addedShield > 0) {
       // 3 stoneshield per stone eaten
-      addShield(tool, modifier.getLevel(), addedShield * 3);
+      addShield(tool, modifier, addedShield * 3);
     }
   }
 

@@ -26,7 +26,7 @@ public abstract class DurabilityShieldModifier extends Modifier implements ToolD
 
   @Override
   public Component getDisplayName(IToolStackView tool, ModifierEntry entry) {
-    return IncrementalModifierEntry.addAmountToName(getDisplayName(entry.getLevel()), getShield(tool), getShieldCapacity(tool, entry.getLevel()));
+    return IncrementalModifierEntry.addAmountToName(getDisplayName(entry.getLevel()), getShield(tool), getShieldCapacity(tool, entry));
   }
 
 
@@ -36,7 +36,7 @@ public abstract class DurabilityShieldModifier extends Modifier implements ToolD
   @Override
   public Component validate(IToolStackView tool, ModifierEntry modifier) {
     // clear excess overslime
-    int cap = getShieldCapacity(tool, modifier.getLevel());
+    int cap = getShieldCapacity(tool, modifier);
     if (getShield(tool) > cap) {
       setShield(tool.getPersistentData(), cap);
     }
@@ -57,16 +57,15 @@ public abstract class DurabilityShieldModifier extends Modifier implements ToolD
   @Override
   public int onDamageTool(IToolStackView tool, ModifierEntry modifier, int amount, @Nullable LivingEntity holder) {
     int shield = getShield(tool);
-    int level = modifier.getLevel();
     if (shield > 0) {
       // if we have more overslime than amount, remove some overslime
       if (shield >= amount) {
-        setShield(tool, level, shield - amount);
+        setShield(tool, modifier, shield - amount);
         return 0;
       }
       // amount is more than overslime, reduce and clear overslime
       amount -= shield;
-      setShield(tool, level, 0);
+      setShield(tool, modifier, 0);
     }
     return amount;
   }
@@ -75,7 +74,7 @@ public abstract class DurabilityShieldModifier extends Modifier implements ToolD
   public int getDurabilityWidth(IToolStackView tool, ModifierEntry modifier) {
     int shield = getShield(tool);
     if (shield > 0) {
-      return DurabilityDisplayModifierHook.getWidthFor(shield, getShieldCapacity(tool, modifier.getLevel()));
+      return DurabilityDisplayModifierHook.getWidthFor(shield, getShieldCapacity(tool, modifier));
     }
     return 0;
   }
@@ -89,31 +88,31 @@ public abstract class DurabilityShieldModifier extends Modifier implements ToolD
   }
 
   /** Gets the current shield amount */
-  protected int getShield(IToolStackView tool) {
+  public int getShield(IToolStackView tool) {
     return tool.getPersistentData().getInt(getShieldKey());
   }
 
   /** Gets the capacity of the shield for the given tool */
-  protected abstract int getShieldCapacity(IToolStackView tool, int level);
+  public abstract int getShieldCapacity(IToolStackView tool, ModifierEntry modifier);
 
   /**
    * Sets the shield, bypassing the capacity
    * @param persistentData  Persistent data
    * @param amount          Amount to set
    */
-  protected void setShield(ModDataNBT persistentData, int amount) {
+  public void setShield(ModDataNBT persistentData, int amount) {
     persistentData.putInt(getShieldKey(), Math.max(amount, 0));
   }
 
   /**
    * Sets the shield on a tool
    */
-  protected void setShield(IToolStackView tool, int level, int amount) {
-    setShield(tool.getPersistentData(), Math.min(amount, getShieldCapacity(tool, level)));
+  public void setShield(IToolStackView tool, ModifierEntry modifier, int amount) {
+    setShield(tool.getPersistentData(), Math.min(amount, getShieldCapacity(tool, modifier)));
   }
 
   /** Adds the given amount to the current shield */
-  protected void addShield(IToolStackView tool, int level, int amount) {
-    setShield(tool, level, amount + getShield(tool));
+  protected void addShield(IToolStackView tool, ModifierEntry modifier, int amount) {
+    setShield(tool, modifier, amount + getShield(tool));
   }
 }
