@@ -1,25 +1,15 @@
 package slimeknights.tconstruct.library.tools.definition;
 
-import com.google.common.annotations.VisibleForTesting;
 import lombok.Getter;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.world.item.Items;
 import slimeknights.mantle.data.loadable.ErrorFactory;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.tconstruct.library.module.ModuleHook;
 import slimeknights.tconstruct.library.module.ModuleHookMap;
 import slimeknights.tconstruct.library.module.WithHooks;
-import slimeknights.tconstruct.library.tools.definition.module.ToolHooks;
 import slimeknights.tconstruct.library.tools.definition.module.ToolModule;
-import slimeknights.tconstruct.library.tools.nbt.DummyToolStack;
-import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
-import slimeknights.tconstruct.library.tools.nbt.ModDataNBT;
-import slimeknights.tconstruct.library.tools.nbt.ModifierNBT;
 import slimeknights.tconstruct.library.tools.nbt.MultiplierNBT;
 import slimeknights.tconstruct.library.tools.nbt.StatsNBT;
-import slimeknights.tconstruct.library.tools.stat.INumericToolStat;
-import slimeknights.tconstruct.library.tools.stat.IToolStat;
-import slimeknights.tconstruct.library.tools.stat.ModifierStatsBuilder;
 
 import java.util.List;
 
@@ -51,56 +41,6 @@ public class ToolDefinitionData {
   /** Gets the given module from the tool */
   public <T> T getHook(ModuleHook<T> hook) {
     return hooks.getOrDefault(hook);
-  }
-
-
-  /* Stats */
-
-  /** Computes the stats for the given tool */
-  private void computeStats() {
-    ModifierStatsBuilder builder = ModifierStatsBuilder.builder();
-    getHook(ToolHooks.TOOL_STATS).addToolStats(new DummyToolStack(Items.AIR, ModifierNBT.EMPTY, new ModDataNBT()), builder);
-    multipliers = builder.buildMultipliers();
-    // cancel out multipliers on the base stats, as people expect base stats to be comparable to be usable in the modifier stats builder
-    for (INumericToolStat<?> stat : multipliers.getContainedStats()) {
-      // TODO: this is a hack, alternative is somehow telling the builder to ignore multipliers
-      stat.multiply(builder, 1 / multipliers.get(stat));
-    }
-    baseStats = builder.build();
-  }
-
-  /** Gets the stats of this tool without materials or modifiers */
-  @VisibleForTesting
-  protected StatsNBT getBaseStats() {
-    if (baseStats == null) {
-      computeStats();
-    }
-    return baseStats;
-  }
-
-  /** Gets the multipliers of this tool without materials or modifiers */
-  @VisibleForTesting
-  protected MultiplierNBT getMultipliers() {
-    if (multipliers == null) {
-      computeStats();
-    }
-    return multipliers;
-  }
-
-  /**
-   * Gets the value of a stat in this tool, or the default value if missing.
-   * Generally better to use {@link IToolStackView#getStats()} as it takes the modifier stats into account.
-   */
-  public <T> T getBaseStat(IToolStat<T> toolStat) {
-    return getBaseStats().get(toolStat);
-  }
-
-  /**
-   * Gets the multiplier for this stat to use for modifiers
-   * In most cases, its better to use {@link IToolStackView#getMultiplier(INumericToolStat)} as that takes the modifier multiplier into account
-   */
-  public float getMultiplier(INumericToolStat<?> toolStat) {
-    return getMultipliers().get(toolStat);
   }
 
 

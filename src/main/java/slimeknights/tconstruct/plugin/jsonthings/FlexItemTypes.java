@@ -13,7 +13,7 @@ import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.materials.definition.MaterialId;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinition;
-import slimeknights.tconstruct.plugin.jsonthings.item.DummyArmorMaterial;
+import slimeknights.tconstruct.library.tools.item.DummyArmorMaterial;
 import slimeknights.tconstruct.plugin.jsonthings.item.FlexBasicArmorItem;
 import slimeknights.tconstruct.plugin.jsonthings.item.FlexFlatEmbellishedArmor;
 import slimeknights.tconstruct.plugin.jsonthings.item.FlexLayeredEmbellishedArmor;

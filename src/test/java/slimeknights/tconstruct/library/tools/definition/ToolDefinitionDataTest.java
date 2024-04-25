@@ -19,6 +19,7 @@ import slimeknights.tconstruct.library.tools.stat.ModifierStatsBuilder;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
 import slimeknights.tconstruct.test.BaseMcTest;
 import slimeknights.tconstruct.test.TestHelper;
+import slimeknights.tconstruct.test.TestHelper.ToolDefinitionStats;
 
 import java.util.List;
 
@@ -28,8 +29,9 @@ import static org.mockito.Mockito.mock;
 class ToolDefinitionDataTest extends BaseMcTest {
   /** Checks that the stats are all empty */
   protected static void checkStatsEmpty(ToolDefinitionData data) {
-    assertThat(data.getBaseStats().getContainedStats()).isEmpty();
-    assertThat(data.getMultipliers().getContainedStats()).isEmpty();
+    ToolDefinitionStats stats = TestHelper.buildStats(data);
+    assertThat(stats.base().getContainedStats()).isEmpty();
+    assertThat(stats.multipliers().getContainedStats()).isEmpty();
   }
 
   /** Checks that the stats are all empty */
@@ -60,12 +62,13 @@ class ToolDefinitionDataTest extends BaseMcTest {
       .build();
 
     // ensure stats are in the right place
-    assertThat(withBonuses.getBaseStats().getContainedStats()).hasSize(2);
-    assertThat(withBonuses.getMultipliers().getContainedStats()).isEmpty();
-    assertThat(withBonuses.getBaseStat(ToolStats.DURABILITY)).isEqualTo(100);
-    assertThat(withBonuses.getBaseStat(ToolStats.ATTACK_SPEED)).isEqualTo(5.5f);
+    ToolDefinitionStats stats = TestHelper.buildStats(withBonuses);
+    assertThat(stats.base().getContainedStats()).hasSize(2);
+    assertThat(stats.multipliers().getContainedStats()).isEmpty();
+    assertThat(stats.base().get(ToolStats.DURABILITY)).isEqualTo(100);
+    assertThat(stats.base().get(ToolStats.ATTACK_SPEED)).isEqualTo(5.5f);
     // note mining speed was chosen as it has a non-zero default
-    assertThat(withBonuses.getBaseStat(ToolStats.MINING_SPEED)).isEqualTo(ToolStats.MINING_SPEED.getDefaultValue());
+    assertThat(stats.base().get(ToolStats.MINING_SPEED)).isEqualTo(ToolStats.MINING_SPEED.getDefaultValue());
   }
 
   @Test
@@ -78,12 +81,13 @@ class ToolDefinitionDataTest extends BaseMcTest {
       .build();
 
     // ensure stats are in the right place
-    assertThat(withMultipliers.getBaseStats().getContainedStats()).isEmpty();
-    assertThat(withMultipliers.getMultipliers().getContainedStats()).hasSize(2);
-    assertThat(withMultipliers.getMultiplier(ToolStats.DURABILITY)).isEqualTo(10);
-    assertThat(withMultipliers.getMultiplier(ToolStats.ATTACK_SPEED)).isEqualTo(2.5f);
+    ToolDefinitionStats stats = TestHelper.buildStats(withMultipliers);
+    assertThat(stats.base().getContainedStats()).isEmpty();
+    assertThat(stats.multipliers().getContainedStats()).hasSize(2);
+    assertThat(stats.multipliers().get(ToolStats.DURABILITY)).isEqualTo(10);
+    assertThat(stats.multipliers().get(ToolStats.ATTACK_SPEED)).isEqualTo(2.5f);
     // stat not present
-    assertThat(withMultipliers.getMultiplier(ToolStats.MINING_SPEED)).isEqualTo(1);
+    assertThat(stats.multipliers().get(ToolStats.MINING_SPEED)).isEqualTo(1);
   }
 
   @Test

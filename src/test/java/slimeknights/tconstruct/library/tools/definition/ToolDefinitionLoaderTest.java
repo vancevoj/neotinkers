@@ -40,6 +40,7 @@ import slimeknights.tconstruct.library.tools.stat.ToolStats;
 import slimeknights.tconstruct.test.BaseMcTest;
 import slimeknights.tconstruct.test.JsonFileLoader;
 import slimeknights.tconstruct.test.TestHelper;
+import slimeknights.tconstruct.test.TestHelper.ToolDefinitionStats;
 
 import java.util.List;
 import java.util.Map;
@@ -74,23 +75,24 @@ class ToolDefinitionLoaderTest extends BaseMcTest {
   /** Helper to do all the stats checks */
   private static void checkFullNonParts(ToolDefinitionData data) {
     // base stats
-    assertThat(data.getBaseStats().getContainedStats()).hasSize(4);
-    assertThat(data.getBaseStats().getContainedStats()).contains(ToolStats.DURABILITY);
-    assertThat(data.getBaseStats().getContainedStats()).contains(ToolStats.ATTACK_DAMAGE);
-    assertThat(data.getBaseStats().getContainedStats()).contains(ToolStats.ATTACK_SPEED);
-    assertThat(data.getBaseStats().getContainedStats()).contains(ToolStats.MINING_SPEED);
-    assertThat(data.getBaseStat(ToolStats.DURABILITY)).isEqualTo(100f);
-    assertThat(data.getBaseStat(ToolStats.ATTACK_DAMAGE)).isEqualTo(2.5f);
-    assertThat(data.getBaseStat(ToolStats.ATTACK_SPEED)).isEqualTo(3.75f);
-    assertThat(data.getBaseStat(ToolStats.MINING_SPEED)).isEqualTo(4f);
+    ToolDefinitionStats stats = TestHelper.buildStats(data);
+    assertThat(stats.base().getContainedStats()).hasSize(4);
+    assertThat(stats.base().getContainedStats()).contains(ToolStats.DURABILITY);
+    assertThat(stats.base().getContainedStats()).contains(ToolStats.ATTACK_DAMAGE);
+    assertThat(stats.base().getContainedStats()).contains(ToolStats.ATTACK_SPEED);
+    assertThat(stats.base().getContainedStats()).contains(ToolStats.MINING_SPEED);
+    assertThat(stats.base().get(ToolStats.DURABILITY)).isEqualTo(100f);
+    assertThat(stats.base().get(ToolStats.ATTACK_DAMAGE)).isEqualTo(2.5f);
+    assertThat(stats.base().get(ToolStats.ATTACK_SPEED)).isEqualTo(3.75f);
+    assertThat(stats.base().get(ToolStats.MINING_SPEED)).isEqualTo(4f);
     // multiplier stats
-    assertThat(data.getMultipliers().getContainedStats()).hasSize(3);
-    assertThat(data.getMultipliers().getContainedStats()).contains(ToolStats.DURABILITY);
-    assertThat(data.getMultipliers().getContainedStats()).contains(ToolStats.ATTACK_DAMAGE);
-    assertThat(data.getMultipliers().getContainedStats()).contains(ToolStats.MINING_SPEED);
-    assertThat(data.getMultiplier(ToolStats.DURABILITY)).isEqualTo(1.5f);
-    assertThat(data.getMultiplier(ToolStats.ATTACK_DAMAGE)).isEqualTo(2f);
-    assertThat(data.getMultiplier(ToolStats.MINING_SPEED)).isEqualTo(0.5f);
+    assertThat(stats.multipliers().getContainedStats()).hasSize(3);
+    assertThat(stats.multipliers().getContainedStats()).contains(ToolStats.DURABILITY);
+    assertThat(stats.multipliers().getContainedStats()).contains(ToolStats.ATTACK_DAMAGE);
+    assertThat(stats.multipliers().getContainedStats()).contains(ToolStats.MINING_SPEED);
+    assertThat(stats.multipliers().get(ToolStats.DURABILITY)).isEqualTo(1.5f);
+    assertThat(stats.multipliers().get(ToolStats.ATTACK_DAMAGE)).isEqualTo(2f);
+    assertThat(stats.multipliers().get(ToolStats.MINING_SPEED)).isEqualTo(0.5f);
     // slots
     VolatileDataToolHook volatileHook = data.getHook(ToolHooks.VOLATILE_DATA);
     assertThat(volatileHook).isInstanceOf(ToolSlotsModule.class);
