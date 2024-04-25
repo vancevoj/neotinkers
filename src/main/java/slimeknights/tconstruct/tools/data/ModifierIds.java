@@ -24,6 +24,7 @@ public class ModifierIds {
 
   // general
   public static final ModifierId reinforced = id("reinforced");
+  public static final ModifierId overforced = id("overforced");
   public static final ModifierId worldbound = id("worldbound");
   public static final ModifierId shiny      = id("shiny");
   public static final ModifierId sticky     = id("sticky");
@@ -112,6 +113,7 @@ public class ModifierIds {
   public static final ModifierId heavy = id("heavy");
   public static final ModifierId featherweight = id("featherweight");
   // traits - tier 3
+  public static final ModifierId overcast = id("overcast");
   public static final ModifierId crumbling = id("crumbling");
   public static final ModifierId enhanced = id("enhanced");
   public static final ModifierId lightweight = id("lightweight");

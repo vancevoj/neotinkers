@@ -197,13 +197,13 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .setTools(TinkerTags.Items.DURABILITY)
                          .saveSalvage(consumer, prefix(ModifierIds.reinforced, upgradeSalvage))
                          .save(consumer, prefix(ModifierIds.reinforced, upgradeFolder));
-    IncrementalModifierRecipeBuilder.modifier(TinkerModifiers.overforced)
+    IncrementalModifierRecipeBuilder.modifier(ModifierIds.overforced)
                                     .setInput(TinkerModifiers.slimesteelReinforcement, 1, 20)
                                     .setMaxLevel(5) // +250 capacity
                                     .setSlots(SlotType.UPGRADE, 1)
                                     .setTools(TinkerTags.Items.DURABILITY)
-                                    .saveSalvage(consumer, prefix(TinkerModifiers.overforced, upgradeSalvage))
-                                    .save(consumer, prefix(TinkerModifiers.overforced, upgradeFolder));
+                                    .saveSalvage(consumer, prefix(ModifierIds.overforced, upgradeSalvage))
+                                    .save(consumer, prefix(ModifierIds.overforced, upgradeFolder));
     // gems are special, I'd like them to be useful on all types of tools
     ModifierRecipeBuilder.modifier(ModifierIds.emerald)
                          .setTools(TinkerTags.Items.DURABILITY)

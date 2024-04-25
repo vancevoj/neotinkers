@@ -52,7 +52,7 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     addDefaultTraits(MaterialIds.skyslimeVine, ModifierIds.airborne);
 
     // tier 3
-    addDefaultTraits(MaterialIds.slimesteel, TinkerModifiers.overcast, TinkerModifiers.overslime);
+    addDefaultTraits(MaterialIds.slimesteel, ModifierIds.overcast, TinkerModifiers.overslime.getId());
     addTraits(MaterialIds.amethystBronze, MELEE_HARVEST, ModifierIds.crumbling);
     addTraits(MaterialIds.amethystBronze, RANGED, TinkerModifiers.crystalbound);
     addDefaultTraits(MaterialIds.nahuatl, TinkerModifiers.lacerating);

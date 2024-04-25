@@ -197,7 +197,6 @@ import slimeknights.tconstruct.tools.modifiers.slotless.OverslimeModifier;
 import slimeknights.tconstruct.tools.modifiers.slotless.StatOverrideModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.DamageSpeedTradeModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.general.EnderportingModifier;
-import slimeknights.tconstruct.tools.modifiers.traits.general.OvercastModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.general.OvergrowthModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.general.OverlordModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.general.SolarPoweredModifier;
@@ -243,7 +242,6 @@ import slimeknights.tconstruct.tools.modifiers.upgrades.armor.SpringyModifier;
 import slimeknights.tconstruct.tools.modifiers.upgrades.armor.ThornsModifier;
 import slimeknights.tconstruct.tools.modifiers.upgrades.general.ExperiencedModifier;
 import slimeknights.tconstruct.tools.modifiers.upgrades.general.MagneticModifier;
-import slimeknights.tconstruct.tools.modifiers.upgrades.general.OverforcedModifier;
 import slimeknights.tconstruct.tools.modifiers.upgrades.general.SoulboundModifier;
 import slimeknights.tconstruct.tools.modifiers.upgrades.melee.FieryModifier;
 import slimeknights.tconstruct.tools.modifiers.upgrades.melee.PiercingModifier;
@@ -318,7 +316,6 @@ public final class TinkerModifiers extends TinkerModule {
    * Modifiers
    */
   // durability
-  public static final StaticModifier<OverforcedModifier> overforced = MODIFIERS.register("overforced", OverforcedModifier::new);
   public static final StaticModifier<SoulboundModifier> soulbound = MODIFIERS.register("soulbound", SoulboundModifier::new);
   public static final StaticModifier<OverslimeModifier> overslime = MODIFIERS.register("overslime", OverslimeModifier::new);
 
@@ -445,7 +442,6 @@ public final class TinkerModifiers extends TinkerModule {
   public static final StaticModifier<DwarvenModifier> dwarven = MODIFIERS.register("dwarven", DwarvenModifier::new);
   public static final StaticModifier<OvergrowthModifier> overgrowth = MODIFIERS.register("overgrowth", OvergrowthModifier::new);
   // traits - tier 3
-  public static final StaticModifier<OvercastModifier> overcast = MODIFIERS.register("overcast", OvercastModifier::new);
   public static final StaticModifier<LaceratingModifier> lacerating = MODIFIERS.register("lacerating", LaceratingModifier::new);
   public static final StaticModifier<TastyModifier> tasty = MODIFIERS.register("tasty", TastyModifier::new);
   public static final StaticModifier<CrystalboundModifier> crystalbound = MODIFIERS.register("crystalbound", CrystalboundModifier::new);

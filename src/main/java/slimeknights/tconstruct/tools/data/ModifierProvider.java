@@ -95,6 +95,7 @@ import slimeknights.tconstruct.library.tools.nbt.IToolContext;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
 import slimeknights.tconstruct.tools.TinkerModifiers;
 import slimeknights.tconstruct.tools.modifiers.ability.armor.ToolBeltModifier;
+import slimeknights.tconstruct.tools.modifiers.slotless.OverslimeModifier;
 import slimeknights.tconstruct.tools.modules.TheOneProbeModule;
 
 import static slimeknights.tconstruct.common.TinkerTags.Items.ARMOR;
@@ -204,6 +205,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .addModule(ReduceToolDamageModule.builder().flat(1.0f));
     buildModifier(ModifierIds.tank).addModule(new TankModule(FluidType.BUCKET_VOLUME, true));
     buildModifier(ModifierIds.theOneProbe, modLoaded("theoneprobe")).levelDisplay(ModifierLevelDisplay.NO_LEVELS).addModule(TheOneProbeModule.INSTANCE);
+    buildModifier(ModifierIds.overforced).addModule(StatBoostModule.add(OverslimeModifier.OVERSLIME_STAT).eachLevel(75));
 
     // harvest
     buildModifier(ModifierIds.blasting).addModule(
@@ -460,6 +462,9 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
         .subtract().build());
 
     // traits - tier 3
+    buildModifier(ModifierIds.overcast)
+      .addModule(StatBoostModule.add(OverslimeModifier.OVERSLIME_STAT).eachLevel(25))
+      .addModule(StatBoostModule.multiplyBase(OverslimeModifier.OVERSLIME_STAT).eachLevel(0.5f));
     buildModifier(ModifierIds.crumbling).addModule(ConditionalMiningSpeedModule.builder().blocks(BlockPredicate.REQUIRES_TOOL.inverted()).allowIneffective().eachLevel(0.5f));
     buildModifier(ModifierIds.enhanced).priority(60).addModule(UPGRADE);
     // traits - tier 3 nether
