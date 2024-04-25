@@ -74,7 +74,7 @@ public class MeltingModifier extends NoLevelsModifier implements MeleeHitModifie
   }
 
   @Override
-  public void processLoot(IToolStackView tool, int level, List<ItemStack> generatedLoot, LootContext context) {
+  public void processLoot(IToolStackView tool, ModifierEntry modifier, List<ItemStack> generatedLoot, LootContext context) {
     // if tank is full, nothing to do
     FluidStack current = tank.getFluid(tool);
     int capacity = tank.getCapacity(tool);

@@ -79,7 +79,7 @@ public class TastyModifier extends Modifier implements GeneralInteractionModifie
   }
 
   @Override
-  public void processLoot(IToolStackView tool, int level, List<ItemStack> generatedLoot, LootContext context) {
+  public void processLoot(IToolStackView tool, ModifierEntry modifier, List<ItemStack> generatedLoot, LootContext context) {
     // if no damage source, probably not a mob
     // otherwise blocks breaking (where THIS_ENTITY is the player) start dropping bacon
     if (!context.hasParam(LootContextParams.DAMAGE_SOURCE)) {
@@ -91,7 +91,7 @@ public class TastyModifier extends Modifier implements GeneralInteractionModifie
     if (entity != null && entity.getType().is(TinkerTags.EntityTypes.BACON_PRODUCER)) {
       // at tasty 1, 2, 3, and 4 its a 2%, 4.15%, 6.25%, 8% per level
       int looting = context.getLootingModifier();
-      if (RANDOM.nextInt(48 / level) <= looting) {
+      if (RANDOM.nextInt(48 / modifier.intEffectiveLevel()) <= looting) {
         // bacon
         generatedLoot.add(new ItemStack(TinkerCommons.bacon));
       }

@@ -7,6 +7,7 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraftforge.common.Tags;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.modifiers.Modifier;
+import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.recipe.modifiers.severing.SeveringRecipe;
 import slimeknights.tconstruct.library.recipe.modifiers.severing.SeveringRecipeCache;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
@@ -15,7 +16,7 @@ import java.util.List;
 
 public class SeveringModifier extends Modifier {
   @Override
-  public void processLoot(IToolStackView tool, int level, List<ItemStack> generatedLoot, LootContext context) {
+  public void processLoot(IToolStackView tool, ModifierEntry modifier, List<ItemStack> generatedLoot, LootContext context) {
     // if no damage source, probably not a mob
     // otherwise blocks breaking (where THIS_ENTITY is the player) start dropping player heads
     if (!context.hasParam(LootContextParams.DAMAGE_SOURCE)) {
@@ -31,7 +32,7 @@ public class SeveringModifier extends Modifier {
         List<SeveringRecipe> recipes = SeveringRecipeCache.findRecipe(context.getLevel().getRecipeManager(), entity.getType());
         if (!recipes.isEmpty()) {
           // 5% chance per level, each luck level adds an extra 1% per severing level
-          float chance = (level) * (0.05f + 0.01f * context.getLootingModifier());
+          float chance = modifier.getEffectiveLevel() * (0.05f + 0.01f * context.getLootingModifier());
           // double chance for mobs such as ender dragons and the wither
           if (entity.getType().is(TinkerTags.EntityTypes.RARE_MOBS)) {
             chance *= 2;

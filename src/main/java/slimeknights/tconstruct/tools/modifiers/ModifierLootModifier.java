@@ -48,7 +48,7 @@ public class ModifierLootModifier extends LootModifier {
       ToolStack tool = ToolStack.from(stack);
       if (!tool.isBroken()) {
         for (ModifierEntry entry : tool.getModifierList()) {
-          entry.getModifier().processLoot(tool, entry.getLevel(), generatedLoot, context);
+          entry.getModifier().processLoot(tool, entry, generatedLoot, context);
         }
       }
     }

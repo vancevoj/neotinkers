@@ -25,10 +25,10 @@ import slimeknights.mantle.data.registry.GenericLoaderRegistry.IHaveLoader;
 import slimeknights.mantle.registration.object.IdAwareObject;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.modifiers.ModifierManager.ModifierRegistrationEvent;
-import slimeknights.tconstruct.library.module.ModuleHookMap;
-import slimeknights.tconstruct.library.module.ModuleHookMap.Builder;
 import slimeknights.tconstruct.library.modifiers.util.ModifierLevelDisplay;
 import slimeknights.tconstruct.library.module.ModuleHook;
+import slimeknights.tconstruct.library.module.ModuleHookMap;
+import slimeknights.tconstruct.library.module.ModuleHookMap.Builder;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.library.utils.Util;
@@ -341,13 +341,12 @@ public class Modifier implements IHaveLoader, IdAwareObject {
   /**
    * Called on entity or block loot to allow modifying loot
    * @param tool           Current tool instance
-   * @param level          Modifier level
+   * @param modifier          Modifier level
    * @param generatedLoot  Current loot list before this modifier
    * @param context        Full loot context
-   * @return  Loot replacement
    * TODO: can we ditch this hook in favor of just using GLMs? Just need a loot condition to detect a modifier, and it gives us a lot more flexability
    */
-  public void processLoot(IToolStackView tool, int level, List<ItemStack> generatedLoot, LootContext context) {}
+  public void processLoot(IToolStackView tool, ModifierEntry modifier, List<ItemStack> generatedLoot, LootContext context) {}
 
 
   /* Modules */
