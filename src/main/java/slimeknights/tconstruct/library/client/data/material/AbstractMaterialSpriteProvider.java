@@ -15,12 +15,12 @@ import slimeknights.tconstruct.library.materials.MaterialRegistry;
 import slimeknights.tconstruct.library.materials.definition.MaterialId;
 import slimeknights.tconstruct.library.materials.definition.MaterialVariantId;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
-import slimeknights.tconstruct.tools.stats.BindingMaterialStats;
 import slimeknights.tconstruct.tools.stats.GripMaterialStats;
 import slimeknights.tconstruct.tools.stats.HandleMaterialStats;
 import slimeknights.tconstruct.tools.stats.HeadMaterialStats;
 import slimeknights.tconstruct.tools.stats.LimbMaterialStats;
 import slimeknights.tconstruct.tools.stats.RepairKitStats;
+import slimeknights.tconstruct.tools.stats.StatlessMaterialStats;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
@@ -151,7 +151,7 @@ public abstract class AbstractMaterialSpriteProvider {
     public MaterialSpriteInfoBuilder meleeHarvest() {
       statType(HeadMaterialStats.ID);
       statType(HandleMaterialStats.ID);
-      statType(BindingMaterialStats.ID);
+      statType(StatlessMaterialStats.BINDING.getIdentifier());
       statType(RepairKitStats.ID);
       return this;
     }

@@ -12,9 +12,9 @@ import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
 import slimeknights.tconstruct.library.tools.definition.module.material.MaterialStatsModule.WeightedStatType;
 import slimeknights.tconstruct.library.tools.nbt.MaterialNBT;
 import slimeknights.tconstruct.test.BaseMcTest;
-import slimeknights.tconstruct.tools.stats.BindingMaterialStats;
 import slimeknights.tconstruct.tools.stats.HandleMaterialStats;
 import slimeknights.tconstruct.tools.stats.HeadMaterialStats;
+import slimeknights.tconstruct.tools.stats.StatlessMaterialStats;
 
 import java.util.List;
 
@@ -48,8 +48,8 @@ public class CompatibleStatTest extends BaseMcTest {
     }
 
     /** Gets extra material stats */
-    public List<BindingMaterialStats> getExtras() {
-      return getStats(BindingMaterialStats.ID);
+    public List<StatlessMaterialStats> getExtras() {
+      return getStats(StatlessMaterialStats.BINDING.getIdentifier());
     }
   }
 
@@ -59,7 +59,7 @@ public class CompatibleStatTest extends BaseMcTest {
    * @return  Melee harvest tool stats builder
    */
   static StatTypesWithMaterials withMaterials(IMaterial... materials) {
-    List<WeightedStatType> statTypes = List.of(new WeightedStatType(HeadMaterialStats.ID, 1), new WeightedStatType(HandleMaterialStats.ID, 1), new WeightedStatType(BindingMaterialStats.ID, 1));
+    List<WeightedStatType> statTypes = List.of(new WeightedStatType(HeadMaterialStats.ID, 1), new WeightedStatType(HandleMaterialStats.ID, 1), new WeightedStatType(StatlessMaterialStats.BINDING.getIdentifier(), 1));
     assertThat(materials).overridingErrorMessage("Given materials list is the wrong size").hasSize(statTypes.size());
     return new StatTypesWithMaterials(statTypes, MaterialNBT.of(materials));
   }
@@ -70,7 +70,7 @@ public class CompatibleStatTest extends BaseMcTest {
 
     assertThat(builder.getHeads()).containsExactly(MaterialStatsFixture.MATERIAL_STATS_HEAD);
     assertThat(builder.getHandles()).containsExactly(HandleMaterialStats.TYPE.getDefaultStats());
-    assertThat(builder.getExtras()).containsExactly(BindingMaterialStats.TYPE.getDefaultStats());
+    assertThat(builder.getExtras()).containsExactly(StatlessMaterialStats.BINDING.getType().getDefaultStats());
   }
 
   @Test
@@ -79,7 +79,7 @@ public class CompatibleStatTest extends BaseMcTest {
 
     assertThat(builder.getHeads()).containsExactly(HeadMaterialStats.TYPE.getDefaultStats());
     assertThat(builder.getHandles()).containsExactly(MaterialStatsFixture.MATERIAL_STATS_HANDLE);
-    assertThat(builder.getExtras()).containsExactly(BindingMaterialStats.DEFAULT);
+    assertThat(builder.getExtras()).containsExactly(StatlessMaterialStats.BINDING);
   }
 
   @Test
@@ -106,7 +106,7 @@ public class CompatibleStatTest extends BaseMcTest {
 
     assertThat(builder.getHeads()).containsExactly(HeadMaterialStats.TYPE.getDefaultStats());
     assertThat(builder.getHandles()).containsExactly(HandleMaterialStats.TYPE.getDefaultStats());
-    assertThat(builder.getExtras()).containsExactly(BindingMaterialStats.DEFAULT);
+    assertThat(builder.getExtras()).containsExactly(StatlessMaterialStats.BINDING);
   }
 
   @Test

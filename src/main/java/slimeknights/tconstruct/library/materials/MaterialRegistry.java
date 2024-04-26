@@ -20,14 +20,13 @@ import slimeknights.tconstruct.library.materials.stats.MaterialStatsManager;
 import slimeknights.tconstruct.library.materials.stats.UpdateMaterialStatsPacket;
 import slimeknights.tconstruct.library.materials.traits.MaterialTraitsManager;
 import slimeknights.tconstruct.library.materials.traits.UpdateMaterialTraitsPacket;
-import slimeknights.tconstruct.tools.stats.BindingMaterialStats;
-import slimeknights.tconstruct.tools.stats.BowstringMaterialStats;
 import slimeknights.tconstruct.tools.stats.GripMaterialStats;
 import slimeknights.tconstruct.tools.stats.HandleMaterialStats;
 import slimeknights.tconstruct.tools.stats.HeadMaterialStats;
 import slimeknights.tconstruct.tools.stats.LimbMaterialStats;
 import slimeknights.tconstruct.tools.stats.RepairKitStats;
 import slimeknights.tconstruct.tools.stats.SkullStats;
+import slimeknights.tconstruct.tools.stats.StatlessMaterialStats;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -100,11 +99,11 @@ public final class MaterialRegistry {
     // melee harvest
     registry.registerStatType(HeadMaterialStats.TYPE, MELEE_HARVEST);
     registry.registerStatType(HandleMaterialStats.TYPE, MELEE_HARVEST);
-    registry.registerStatType(BindingMaterialStats.TYPE, MELEE_HARVEST);
+    registry.registerStatType(StatlessMaterialStats.BINDING.getType(), MELEE_HARVEST);
     // ranged
     registry.registerStatType(LimbMaterialStats.TYPE, RANGED);
     registry.registerStatType(GripMaterialStats.TYPE, RANGED);
-    registry.registerStatType(BowstringMaterialStats.TYPE, RANGED);
+    registry.registerStatType(StatlessMaterialStats.BOWSTRING.getType(), RANGED);
     // misc
     registry.registerStatType(RepairKitStats.TYPE);
     registry.registerStatType(SkullStats.TYPE);

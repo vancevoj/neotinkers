@@ -22,9 +22,9 @@ import slimeknights.tconstruct.library.materials.definition.MaterialManager;
 import slimeknights.tconstruct.library.materials.definition.MaterialVariantId;
 import slimeknights.tconstruct.library.materials.stats.IMaterialStats;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
-import slimeknights.tconstruct.tools.stats.BindingMaterialStats;
 import slimeknights.tconstruct.tools.stats.HandleMaterialStats;
 import slimeknights.tconstruct.tools.stats.HeadMaterialStats;
+import slimeknights.tconstruct.tools.stats.StatlessMaterialStats;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
@@ -38,7 +38,7 @@ import java.util.function.Predicate;
  * Section transformer to show a range of materials tiers in the book
  */
 public class TierRangeMaterialSectionTransformer extends BookTransformer {
-  private static final Set<MaterialStatsId> MELEE_HARVEST = ImmutableSet.of(HeadMaterialStats.ID, HandleMaterialStats.ID, BindingMaterialStats.ID);
+  private static final Set<MaterialStatsId> MELEE_HARVEST = ImmutableSet.of(HeadMaterialStats.ID, HandleMaterialStats.ID, StatlessMaterialStats.BINDING.getIdentifier());
   private static final ResourceLocation KEY = TConstruct.getResource("material_tier");
 
   private static final Map<ResourceLocation,MaterialType> MATERIAL_TYPES = new HashMap<>();

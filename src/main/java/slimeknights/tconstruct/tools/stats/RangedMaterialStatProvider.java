@@ -16,7 +16,7 @@ import java.util.Set;
  */
 public class RangedMaterialStatProvider extends MaterialStatProvider {
   public RangedMaterialStatProvider(ResourceLocation id) {
-    super(id, Set.of(LimbMaterialStats.ID), Set.of(BowstringMaterialStats.ID, GripMaterialStats.ID));
+    super(id, Set.of(LimbMaterialStats.ID), Set.of(StatlessMaterialStats.BOWSTRING.getIdentifier(), GripMaterialStats.ID));
   }
 
   @Override

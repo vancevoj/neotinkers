@@ -8,9 +8,9 @@ import slimeknights.tconstruct.fixture.MaterialFixture;
 import slimeknights.tconstruct.fixture.MaterialStatsFixture;
 import slimeknights.tconstruct.library.materials.definition.MaterialId;
 import slimeknights.tconstruct.test.BaseMcTest;
-import slimeknights.tconstruct.tools.stats.BindingMaterialStats;
 import slimeknights.tconstruct.tools.stats.HandleMaterialStats;
 import slimeknights.tconstruct.tools.stats.HeadMaterialStats;
+import slimeknights.tconstruct.tools.stats.StatlessMaterialStats;
 
 import java.util.Collection;
 import java.util.List;
@@ -26,7 +26,7 @@ class UpdateMaterialStatsPacketTest extends BaseMcTest {
     LOADER.register(MaterialStatsFixture.COMPLEX_TYPE);
     LOADER.register(HeadMaterialStats.TYPE);
     LOADER.register(HandleMaterialStats.TYPE);
-    LOADER.register(BindingMaterialStats.TYPE);
+    LOADER.register(StatlessMaterialStats.BINDING.getType());
   }
 
   @Test
@@ -55,7 +55,7 @@ class UpdateMaterialStatsPacketTest extends BaseMcTest {
     List<IMaterialStats> stats = List.of(
         HeadMaterialStats.TYPE.getDefaultStats(),
         HandleMaterialStats.TYPE.getDefaultStats(),
-        BindingMaterialStats.DEFAULT);
+        StatlessMaterialStats.BINDING);
     Map<MaterialId, Collection<IMaterialStats>> materialToStats = Map.of(MATERIAL_ID, stats);
 
     UpdateMaterialStatsPacket packet = sendAndReceivePacket(materialToStats);

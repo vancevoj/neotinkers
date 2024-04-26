@@ -5,9 +5,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.registries.ForgeRegistries;
 import slimeknights.tconstruct.library.tools.part.ToolPartItem;
-import slimeknights.tconstruct.tools.stats.BindingMaterialStats;
 import slimeknights.tconstruct.tools.stats.HandleMaterialStats;
 import slimeknights.tconstruct.tools.stats.HeadMaterialStats;
+import slimeknights.tconstruct.tools.stats.StatlessMaterialStats;
 
 public class MaterialItemFixture {
 
@@ -27,7 +27,7 @@ public class MaterialItemFixture {
     MATERIAL_ITEM_2 = new ToolPartItem(new Item.Properties(), MaterialStatsFixture.STATS_TYPE_2);
     MATERIAL_ITEM_HEAD = new ToolPartItem(new Item.Properties(), HeadMaterialStats.ID);
     MATERIAL_ITEM_HANDLE = new ToolPartItem(new Item.Properties(), HandleMaterialStats.ID);
-    MATERIAL_ITEM_EXTRA = new ToolPartItem(new Item.Properties(), BindingMaterialStats.ID);
+    MATERIAL_ITEM_EXTRA = new ToolPartItem(new Item.Properties(), StatlessMaterialStats.BINDING.getIdentifier());
     ForgeRegistries.ITEMS.register(new ResourceLocation("test", "test_material"), MATERIAL_ITEM);
     ForgeRegistries.ITEMS.register(new ResourceLocation("test", "test_material_2"), MATERIAL_ITEM_2);
     ForgeRegistries.ITEMS.register(new ResourceLocation("test", "test_head"), MATERIAL_ITEM_HEAD);

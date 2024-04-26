@@ -6,9 +6,9 @@ import slimeknights.tconstruct.library.materials.definition.MaterialId;
 import slimeknights.tconstruct.library.materials.definition.MaterialVariantId;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
 import slimeknights.tconstruct.library.utils.Util;
-import slimeknights.tconstruct.tools.stats.BowstringMaterialStats;
 import slimeknights.tconstruct.tools.stats.GripMaterialStats;
 import slimeknights.tconstruct.tools.stats.LimbMaterialStats;
+import slimeknights.tconstruct.tools.stats.StatlessMaterialStats;
 
 import javax.annotation.Nullable;
 
@@ -31,7 +31,7 @@ public class RangedMaterialContent extends AbstractMaterialContent {
     return switch (index) {
       case 0 -> LimbMaterialStats.ID;
       case 1 -> GripMaterialStats.ID;
-      case 2 -> BowstringMaterialStats.ID;
+      case 2 -> StatlessMaterialStats.BOWSTRING.getIdentifier();
       default -> null;
     };
   }
@@ -50,6 +50,6 @@ public class RangedMaterialContent extends AbstractMaterialContent {
 
   @Override
   protected boolean supportsStatType(MaterialStatsId statsId) {
-    return statsId.equals(LimbMaterialStats.ID) || statsId.equals(GripMaterialStats.ID) || statsId.equals(BowstringMaterialStats.ID);
+    return statsId.equals(LimbMaterialStats.ID) || statsId.equals(GripMaterialStats.ID) || statsId.equals(StatlessMaterialStats.BOWSTRING.getIdentifier());
   }
 }

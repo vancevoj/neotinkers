@@ -21,13 +21,12 @@ import slimeknights.tconstruct.library.client.book.sectiontransformer.materials.
 import slimeknights.tconstruct.library.client.book.sectiontransformer.materials.TierRangeMaterialSectionTransformer;
 import slimeknights.tconstruct.library.client.book.sectiontransformer.materials.TieredMaterialSectionTransformer;
 import slimeknights.tconstruct.shared.item.TinkerBookItem.BookType;
-import slimeknights.tconstruct.tools.stats.BindingMaterialStats;
-import slimeknights.tconstruct.tools.stats.BowstringMaterialStats;
 import slimeknights.tconstruct.tools.stats.GripMaterialStats;
 import slimeknights.tconstruct.tools.stats.HandleMaterialStats;
 import slimeknights.tconstruct.tools.stats.HeadMaterialStats;
 import slimeknights.tconstruct.tools.stats.LimbMaterialStats;
 import slimeknights.tconstruct.tools.stats.SkullStats;
+import slimeknights.tconstruct.tools.stats.StatlessMaterialStats;
 
 import static slimeknights.tconstruct.library.TinkerBookIDs.ENCYCLOPEDIA_ID;
 import static slimeknights.tconstruct.library.TinkerBookIDs.FANTASTIC_FOUNDRY_ID;
@@ -57,8 +56,8 @@ public class TinkerBook extends BookData {
     BookLoader.registerPageType(ContentModifier.ID, ContentModifier.class);
     BookLoader.registerPageType(TooltipShowcaseContent.ID, TooltipShowcaseContent.class);
 
-    TierRangeMaterialSectionTransformer.registerMaterialType(TConstruct.getResource("melee_harvest"), ContentMaterial::new, HeadMaterialStats.ID, HandleMaterialStats.ID, BindingMaterialStats.ID);
-    TierRangeMaterialSectionTransformer.registerMaterialType(TConstruct.getResource("ranged"), RangedMaterialContent::new, LimbMaterialStats.ID, GripMaterialStats.ID, BowstringMaterialStats.ID);
+    TierRangeMaterialSectionTransformer.registerMaterialType(TConstruct.getResource("melee_harvest"), ContentMaterial::new, HeadMaterialStats.ID, HandleMaterialStats.ID, StatlessMaterialStats.BINDING.getIdentifier());
+    TierRangeMaterialSectionTransformer.registerMaterialType(TConstruct.getResource("ranged"), RangedMaterialContent::new, LimbMaterialStats.ID, GripMaterialStats.ID, StatlessMaterialStats.BOWSTRING.getIdentifier());
     TierRangeMaterialSectionTransformer.registerMaterialType(TConstruct.getResource("skull"), ContentMaterialSkull::new, SkullStats.ID);
 
     // add transformers that load modifiers from tags

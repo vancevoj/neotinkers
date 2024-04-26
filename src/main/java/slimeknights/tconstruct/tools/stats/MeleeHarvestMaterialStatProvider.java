@@ -20,7 +20,7 @@ import java.util.Set;
 public final class MeleeHarvestMaterialStatProvider extends MaterialStatProvider {
   @VisibleForTesting
   public MeleeHarvestMaterialStatProvider(ResourceLocation id) {
-    super(id, Set.of(HeadMaterialStats.ID), Set.of(HandleMaterialStats.ID, BindingMaterialStats.ID));
+    super(id, Set.of(HeadMaterialStats.ID), Set.of(HandleMaterialStats.ID, StatlessMaterialStats.BINDING.getIdentifier()));
   }
 
   @Override

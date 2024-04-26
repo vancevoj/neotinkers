@@ -7,12 +7,11 @@ import lombok.RequiredArgsConstructor;
 import net.minecraft.resources.ResourceLocation;
 import slimeknights.tconstruct.library.client.data.util.AbstractSpriteReader;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
-import slimeknights.tconstruct.tools.stats.BindingMaterialStats;
-import slimeknights.tconstruct.tools.stats.BowstringMaterialStats;
 import slimeknights.tconstruct.tools.stats.GripMaterialStats;
 import slimeknights.tconstruct.tools.stats.HandleMaterialStats;
 import slimeknights.tconstruct.tools.stats.HeadMaterialStats;
 import slimeknights.tconstruct.tools.stats.LimbMaterialStats;
+import slimeknights.tconstruct.tools.stats.StatlessMaterialStats;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -91,7 +90,7 @@ public abstract class AbstractPartSpriteProvider {
 
   /** Adds a sprite requiring extra stats */
   protected void addBinding(String name) {
-    addPart(name, BindingMaterialStats.ID);
+    addPart(name, StatlessMaterialStats.BINDING.getIdentifier());
   }
 
   /** Adds a sprite requiring head stats */
@@ -101,7 +100,7 @@ public abstract class AbstractPartSpriteProvider {
 
   /** Adds a sprite requiring head stats */
   protected void addBowstring(String name) {
-    addPart(name, BowstringMaterialStats.ID);
+    addPart(name, StatlessMaterialStats.BOWSTRING.getIdentifier());
   }
 
   /** Create a builder for tool sprites */
@@ -212,7 +211,7 @@ public abstract class AbstractPartSpriteProvider {
 
     /** Adds a sprite requiring extra stats */
     public ToolSpriteBuilder addBinding(String name) {
-      return addPart(name, BindingMaterialStats.ID);
+      return addPart(name, StatlessMaterialStats.BINDING.getIdentifier());
     }
 
     /** Adds a sprite requiring limb stats */
@@ -227,12 +226,12 @@ public abstract class AbstractPartSpriteProvider {
 
     /** Adds a sprite requiring bowstring stats */
     public ToolSpriteBuilder addBowstring(String name) {
-      return addPart(name, BowstringMaterialStats.ID);
+      return addPart(name, StatlessMaterialStats.BOWSTRING.getIdentifier());
     }
 
     /** Adds a breakable sprite requiring bowstring stats */
     public ToolSpriteBuilder addBreakableBowstring(String name) {
-      return addBreakablePart(name, BowstringMaterialStats.ID);
+      return addBreakablePart(name, StatlessMaterialStats.BOWSTRING.getIdentifier());
     }
 
     /** Adds sprites for large parts as well */
