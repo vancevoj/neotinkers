@@ -205,7 +205,7 @@ public class StatsNBT {
 
   public static final RecordLoadable<StatsNBT> LOADABLE = new RecordLoadable<>() {
     @Override
-    public StatsNBT deserialize(JsonObject json, TypedMap<Object> context) {
+    public StatsNBT deserialize(JsonObject json, TypedMap context) {
       ImmutableMap.Builder<IToolStat<?>,Object> builder = ImmutableMap.builder();
       for (Entry<String,JsonElement> entry : json.entrySet()) {
         IToolStat<?> stat = ToolStats.fromJson(entry.getKey());
@@ -229,7 +229,7 @@ public class StatsNBT {
     }
 
     @Override
-    public StatsNBT decode(FriendlyByteBuf buffer, TypedMap<Object> context) {
+    public StatsNBT decode(FriendlyByteBuf buffer, TypedMap context) {
       return StatsNBT.fromNetwork(buffer);
     }
 

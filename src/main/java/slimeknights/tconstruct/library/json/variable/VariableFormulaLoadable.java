@@ -37,7 +37,7 @@ public record VariableFormulaLoadable<V extends IHaveLoader, F extends VariableF
   }
 
   @Override
-  public F deserialize(JsonObject json, TypedMap<Object> context) {
+  public F deserialize(JsonObject json, TypedMap context) {
     boolean percent = GsonHelper.getAsBoolean(json, "percent", false);
     if (json.has("variables")) {
       if (!json.has("formula")) {
@@ -81,7 +81,7 @@ public record VariableFormulaLoadable<V extends IHaveLoader, F extends VariableF
   }
 
   @Override
-  public F decode(FriendlyByteBuf buffer, TypedMap<Object> context) {
+  public F decode(FriendlyByteBuf buffer, TypedMap context) {
     boolean percent = buffer.readBoolean();
     ImmutableList.Builder<V> builder = ImmutableList.builder();
     int size = buffer.readVarInt();

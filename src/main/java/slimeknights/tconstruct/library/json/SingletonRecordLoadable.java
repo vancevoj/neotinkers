@@ -10,7 +10,7 @@ import slimeknights.mantle.util.typed.TypedMap;
  */
 public record SingletonRecordLoadable<T>(T instance) implements RecordLoadable<T> {
   @Override
-  public T deserialize(JsonObject json, TypedMap<Object> context) {
+  public T deserialize(JsonObject json, TypedMap context) {
     return instance;
   }
 
@@ -18,7 +18,7 @@ public record SingletonRecordLoadable<T>(T instance) implements RecordLoadable<T
   public void serialize(T object, JsonObject json) {}
 
   @Override
-  public T decode(FriendlyByteBuf buffer, TypedMap<Object> context) {
+  public T decode(FriendlyByteBuf buffer, TypedMap context) {
     return instance;
   }
 

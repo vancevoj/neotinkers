@@ -50,7 +50,7 @@ public record SetStatModule<T>(IToolStat<T> stat, T value, ModifierCondition<ITo
   /** Loader instance, manually created as the value parsing another value is difficult with the builder */
   public static final RecordLoadable<SetStatModule<?>> LOADER = new RecordLoadable<>() {
     @Override
-    public SetStatModule<?> deserialize(JsonObject json, TypedMap<Object> context) {
+    public SetStatModule<?> deserialize(JsonObject json, TypedMap context) {
       return deserialize(json, ToolStats.LOADER.getIfPresent(json, "stat"));
     }
 
@@ -76,7 +76,7 @@ public record SetStatModule<T>(IToolStat<T> stat, T value, ModifierCondition<ITo
     }
 
     @Override
-    public SetStatModule<?> decode(FriendlyByteBuf buffer, TypedMap<Object> context) {
+    public SetStatModule<?> decode(FriendlyByteBuf buffer, TypedMap context) {
       return decode(buffer, ToolStats.LOADER.decode(buffer));
     }
 

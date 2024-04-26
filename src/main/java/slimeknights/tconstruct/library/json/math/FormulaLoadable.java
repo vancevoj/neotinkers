@@ -15,7 +15,7 @@ import java.util.function.BiFunction;
 /** Loadable for a modifier formula */
 public record FormulaLoadable(FallbackFormula fallback, String... variables) implements RecordLoadable<ModifierFormula> {
   @Override
-  public ModifierFormula deserialize(JsonObject json, TypedMap<Object> context) {
+  public ModifierFormula deserialize(JsonObject json, TypedMap context) {
     return ModifierFormula.deserialize(json, variables, fallback);
   }
 
@@ -25,7 +25,7 @@ public record FormulaLoadable(FallbackFormula fallback, String... variables) imp
   }
 
   @Override
-  public ModifierFormula decode(FriendlyByteBuf buffer, TypedMap<Object> context) throws DecoderException {
+  public ModifierFormula decode(FriendlyByteBuf buffer, TypedMap context) throws DecoderException {
     return ModifierFormula.fromNetwork(buffer, variables.length, fallback);
   }
 
