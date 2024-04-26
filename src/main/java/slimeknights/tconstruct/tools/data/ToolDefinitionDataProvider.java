@@ -52,7 +52,6 @@ import slimeknights.tconstruct.tools.data.material.MaterialIds;
 import slimeknights.tconstruct.tools.item.ArmorSlotType;
 import slimeknights.tconstruct.tools.stats.HeadMaterialStats;
 import slimeknights.tconstruct.tools.stats.LimbMaterialStats;
-import slimeknights.tconstruct.tools.stats.RepairKitStats;
 import slimeknights.tconstruct.tools.stats.SkullStats;
 
 import static slimeknights.tconstruct.tools.TinkerToolParts.bowGrip;
@@ -460,10 +459,10 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
         .trait(TinkerModifiers.fiery)
         .trait(ModifierIds.scorching).build())
       // repair
-      .module(new MaterialRepairModule(MaterialIds.searedStone, HeadMaterialStats.ID))
-      .module(new MaterialRepairModule(MaterialIds.scorchedStone, HeadMaterialStats.ID));
+      .module(MaterialRepairModule.of(MaterialIds.searedStone, HeadMaterialStats.ID))
+      .module(MaterialRepairModule.of(MaterialIds.scorchedStone, HeadMaterialStats.ID));
     // staff
-    MaterialRepairModule staffRepair = new MaterialRepairModule(MaterialIds.slimewood, LimbMaterialStats.ID);
+    MaterialRepairModule staffRepair = MaterialRepairModule.of(MaterialIds.slimewood, LimbMaterialStats.ID);
     define(ToolDefinitions.SKY_STAFF)
       .module(new SetStatsModule(StatsNBT.builder()
         .set(ToolStats.DURABILITY, 375)
@@ -528,20 +527,19 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
 
 
     // travelers armor
-    ToolModule[] travelersModules = {
+    ToolModule travelersSlots =
       ToolSlotsModule.builder()
                      .slots(SlotType.UPGRADE, 3)
                      .slots(SlotType.DEFENSE, 2)
-                     .slots(SlotType.ABILITY, 1).build(),
-      new MaterialRepairModule(MaterialIds.copper, HeadMaterialStats.ID)
-    };
+                     .slots(SlotType.ABILITY, 1).build();
     defineArmor(ArmorDefinitions.TRAVELERS)
-      .module(slots -> SetStatsModule.armor(slots)
+      .modules(slots -> SetStatsModule.armor(slots)
         .durabilityFactor(10)
         .setEach(ToolStats.ARMOR, 1, 4, 5, 1))
       .module(ArmorSlotType.CHESTPLATE, new MultiplyStatsModule(MultiplierNBT.builder().set(ToolStats.ATTACK_DAMAGE, 0.55f).build()))
-      .module(travelersModules)
-      .module(new MaterialRepairModule(MaterialIds.leather, RepairKitStats.ID))
+      .module(travelersSlots)
+      .module(MaterialRepairModule.armor(MaterialIds.copper).durabilityFactor(10))
+      .module(MaterialRepairModule.armor(MaterialIds.leather).durabilityFactor(7.5f))
       .module(ArmorSlotType.BOOTS, ToolTraitsModule.builder().trait(ModifierIds.snowBoots).build());
     define(ArmorDefinitions.TRAVELERS_SHIELD)
       .module(new SetStatsModule(StatsNBT.builder()
@@ -549,55 +547,53 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
         .set(ToolStats.BLOCK_AMOUNT, 10)
         .set(ToolStats.BLOCK_ANGLE, 90)
         .set(ToolStats.USE_ITEM_SPEED, 0.8f).build()))
-      .module(travelersModules)
-      .module(new MaterialRepairModule(MaterialIds.wood, HeadMaterialStats.ID))
+      .module(travelersSlots)
+      .module(MaterialRepairModule.of(MaterialIds.copper, 200))
+      .module(MaterialRepairModule.of(MaterialIds.wood, 60))
       .module(ToolTraitsModule.builder().trait(TinkerModifiers.blocking).build())
       .module(new PreferenceSetInteraction(InteractionSource.RIGHT_CLICK, new SingleModifierPredicate(TinkerModifiers.blocking.getId())));
 
     // plate armor
-    ToolModule[] plateModules = {
+    ToolModule plateSlots =
       ToolSlotsModule.builder()
                      .slots(SlotType.UPGRADE, 1)
                      .slots(SlotType.DEFENSE, 4)
-                     .slots(SlotType.ABILITY, 1).build(),
-      new MaterialRepairModule(MaterialIds.cobalt, HeadMaterialStats.ID)
-    };
+                     .slots(SlotType.ABILITY, 1).build();
     defineArmor(ArmorDefinitions.PLATE)
-      .module(slots -> SetStatsModule.armor(slots)
+      .modules(slots -> SetStatsModule.armor(slots)
         .durabilityFactor(30)
         .setEach(ToolStats.ARMOR, 2, 5, 7, 2)
         .setAll(ToolStats.ARMOR_TOUGHNESS, 2)
         .setAll(ToolStats.KNOCKBACK_RESISTANCE, 0.1f))
       .module(ArmorSlotType.CHESTPLATE, new MultiplyStatsModule(MultiplierNBT.builder().set(ToolStats.ATTACK_DAMAGE, 0.4f).build()))
-      .module(plateModules);
+      .module(plateSlots)
+      .module(MaterialRepairModule.armor(MaterialIds.cobalt).durabilityFactor(30));
     define(ArmorDefinitions.PLATE_SHIELD)
       .module(new SetStatsModule(StatsNBT.builder()
         .set(ToolStats.DURABILITY, 500)
         .set(ToolStats.BLOCK_AMOUNT, 100)
         .set(ToolStats.BLOCK_ANGLE, 180)
         .set(ToolStats.ARMOR_TOUGHNESS, 2).build()))
-      .module(plateModules)
+      .module(plateSlots)
+      .module(MaterialRepairModule.of(MaterialIds.cobalt, 500))
       .module(ToolTraitsModule.builder().trait(TinkerModifiers.blocking).build())
       .module(new PreferenceSetInteraction(InteractionSource.RIGHT_CLICK, new SingleModifierPredicate(TinkerModifiers.blocking.getId())));
 
     // slime suit
-    ToolModule[] slimeModules = {
-      ToolSlotsModule.builder()
-                     .slots(SlotType.UPGRADE, 5)
-                     .slots(SlotType.ABILITY, 1).build(),
-      new MaterialRepairModule(MaterialIds.enderslime, RepairKitStats.ID)
-    };
     ToolTraitsModule.Builder slimeTraits = ToolTraitsModule.builder().trait(ModifierIds.overslimeFriend);
     defineArmor(ArmorDefinitions.SLIMESUIT)
-      // not using durabilityFactor as helmet stats give a bonus too
-      .module(slots -> SetStatsModule.armor(slots)
+      // not using durabilityFactor as helmet stats give a bonus too, factor is 42
+      .modules(slots -> SetStatsModule.armor(slots)
          .setEach(ToolStats.DURABILITY, 546, 630, 672, 362))
       .module(ArmorSlotType.CHESTPLATE, new MultiplyStatsModule(MultiplierNBT.builder().set(ToolStats.ATTACK_DAMAGE, 0.4f).build()))
-      .module(slimeModules)
+      .module(ToolSlotsModule.builder()
+                             .slots(SlotType.UPGRADE, 5)
+                             .slots(SlotType.ABILITY, 1).build())
       // repair
-      .module(ArmorSlotType.CHESTPLATE, new MaterialRepairModule(MaterialIds.phantom, RepairKitStats.ID))
-      .module(ArmorSlotType.LEGGINGS, new MaterialRepairModule(MaterialIds.chorus, HeadMaterialStats.ID))
-      .module(ArmorSlotType.BOOTS, new MaterialRepairModule(MaterialIds.leather, RepairKitStats.ID))
+      .module(MaterialRepairModule.armor(MaterialIds.enderslime).durabilityFactor(4.2f))
+      .module(ArmorSlotType.CHESTPLATE, MaterialRepairModule.of(MaterialIds.phantom, ArmorSlotType.CHESTPLATE, 42))
+      .module(ArmorSlotType.LEGGINGS, MaterialRepairModule.of(MaterialIds.chorus, ArmorSlotType.LEGGINGS, 42))
+      .module(ArmorSlotType.BOOTS, MaterialRepairModule.of(MaterialIds.leather, ArmorSlotType.BOOTS, 42))
       // stats
       .module(ArmorSlotType.HELMET, MaterialStatsModule.stats(MaterialStatProviders.SKULL).stat(SkullStats.ID, 1).build())
       .module(ArmorSlotType.HELMET, DefaultMaterialsModule.builder().material(RandomMaterial.random().build()).build())

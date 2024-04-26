@@ -1,8 +1,8 @@
 package slimeknights.tconstruct.library.tools.definition.module.build;
 
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
-import slimeknights.tconstruct.library.module.ModuleHook;
 import slimeknights.tconstruct.library.module.HookProvider;
+import slimeknights.tconstruct.library.module.ModuleHook;
 import slimeknights.tconstruct.library.tools.definition.module.ToolHooks;
 import slimeknights.tconstruct.library.tools.definition.module.ToolModule;
 import slimeknights.tconstruct.library.tools.nbt.IToolContext;
@@ -47,9 +47,7 @@ public record SetStatsModule(StatsNBT stats) implements ToolStatsHook, ToolModul
     return new ArmorBuilder(slots);
   }
 
-  public static class ArmorBuilder implements ArmorModuleBuilder<SetStatsModule> {
-    /** copy of the vanilla array for the builder */
-    private static final int[] MAX_DAMAGE_ARRAY = {13, 15, 16, 11};
+  public static class ArmorBuilder implements ArmorSlotType.ArmorBuilder<SetStatsModule> {
 
     private final List<ArmorSlotType> slotTypes;
     private final StatsNBT.Builder[] builders = new StatsNBT.Builder[4];
@@ -112,7 +110,7 @@ public record SetStatsModule(StatsNBT stats) implements ToolStatsHook, ToolModul
      */
     public ArmorBuilder durabilityFactor(float maxDamageFactor) {
       for (ArmorSlotType slotType : slotTypes) {
-        set(slotType, ToolStats.DURABILITY, MAX_DAMAGE_ARRAY[slotType.getIndex()] * maxDamageFactor);
+        set(slotType, ToolStats.DURABILITY, ArmorSlotType.MAX_DAMAGE_ARRAY[slotType.getIndex()] * maxDamageFactor);
       }
       return this;
     }

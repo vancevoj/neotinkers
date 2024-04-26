@@ -7,7 +7,6 @@ import slimeknights.tconstruct.tools.stats.GripMaterialStats;
 import slimeknights.tconstruct.tools.stats.HandleMaterialStats;
 import slimeknights.tconstruct.tools.stats.HeadMaterialStats;
 import slimeknights.tconstruct.tools.stats.LimbMaterialStats;
-import slimeknights.tconstruct.tools.stats.RepairKitStats;
 import slimeknights.tconstruct.tools.stats.SkullStats;
 import slimeknights.tconstruct.tools.stats.StatlessMaterialStats;
 
@@ -333,7 +332,7 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
 
   private void addMisc() {
     // travelers gear
-    addMaterialStats(MaterialIds.leather, new RepairKitStats(150));
+    addMaterialStats(MaterialIds.leather, StatlessMaterialStats.REPAIR_KIT);
     // slimeskull
     addMaterialStats(MaterialIds.glass,        new SkullStats( 90, 0));
     addMaterialStats(MaterialIds.enderPearl,   new SkullStats(180, 0));
@@ -350,8 +349,8 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
     addMaterialStats(MaterialIds.roseGold,     new SkullStats(175, 1));
     addMaterialStats(MaterialIds.pigIron,      new SkullStats(150, 2));
     // slimesuit
-    addMaterialStats(MaterialIds.enderslime, new RepairKitStats( 30));
-    addMaterialStats(MaterialIds.phantom,    new RepairKitStats(324));
+    addMaterialStats(MaterialIds.enderslime, StatlessMaterialStats.REPAIR_KIT);
+    addMaterialStats(MaterialIds.phantom, StatlessMaterialStats.REPAIR_KIT);
     // crafting
     addMaterialStats(MaterialIds.obsidian);
     addMaterialStats(MaterialIds.debris);

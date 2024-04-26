@@ -17,13 +17,13 @@
     },
     {
       "type": "tconstruct:material_repair",
-      "material": "tconstruct:copper",
-      "stat_type": "tconstruct:head"
+      "durability": 130,
+      "material": "tconstruct:copper"
     },
     {
       "type": "tconstruct:material_repair",
-      "material": "tconstruct:leather",
-      "stat_type": "tconstruct:repair_kit"
+      "durability": 97,
+      "material": "tconstruct:leather"
     },
     {
       "type": "tconstruct:traits",

@@ -15,13 +15,13 @@
     },
     {
       "type": "tconstruct:material_repair",
-      "material": "tconstruct:enderslime",
-      "stat_type": "tconstruct:repair_kit"
+      "durability": 62,
+      "material": "tconstruct:enderslime"
     },
     {
       "type": "tconstruct:material_repair",
-      "material": "tconstruct:chorus",
-      "stat_type": "tconstruct:head"
+      "durability": 630,
+      "material": "tconstruct:chorus"
     },
     {
       "type": "tconstruct:traits",

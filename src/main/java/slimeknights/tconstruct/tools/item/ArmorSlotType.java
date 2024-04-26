@@ -19,6 +19,8 @@ public enum ArmorSlotType implements StringRepresentable {
 
   /** Armor slots in order from helmet to boots, {@link #values()} will go from boots to helmet. */
   public static final ArmorSlotType[] TOP_DOWN = { HELMET, CHESTPLATE, LEGGINGS, BOOTS };
+  /** copy of the vanilla array for use in builders */
+  public static final int[] MAX_DAMAGE_ARRAY = {13, 15, 16, 11};
 
   private final EquipmentSlot equipmentSlot;
   private final String serializedName = toString().toLowerCase(Locale.ROOT);
@@ -34,5 +36,13 @@ public enum ArmorSlotType implements StringRepresentable {
       case HEAD -> HELMET;
       default -> null;
     };
+  }
+
+  /**
+   * Interface for armor module builders, which are builders designed to create slightly varied modules based on the armor slot
+   */
+  public interface ArmorBuilder<T> {
+    /** Builds the object for the given slot */
+    T build(ArmorSlotType slot);
   }
 }

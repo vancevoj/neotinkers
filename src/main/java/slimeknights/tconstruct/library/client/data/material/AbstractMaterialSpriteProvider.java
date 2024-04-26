@@ -19,7 +19,6 @@ import slimeknights.tconstruct.tools.stats.GripMaterialStats;
 import slimeknights.tconstruct.tools.stats.HandleMaterialStats;
 import slimeknights.tconstruct.tools.stats.HeadMaterialStats;
 import slimeknights.tconstruct.tools.stats.LimbMaterialStats;
-import slimeknights.tconstruct.tools.stats.RepairKitStats;
 import slimeknights.tconstruct.tools.stats.StatlessMaterialStats;
 
 import javax.annotation.Nullable;
@@ -147,12 +146,17 @@ public abstract class AbstractMaterialSpriteProvider {
       return this;
     }
 
+    /** Adds repair kits */
+    public MaterialSpriteInfoBuilder repairKit() {
+      return statType(StatlessMaterialStats.REPAIR_KIT.getIdentifier());
+    }
+
     /** Adds stat types for melee and harvest tools - head, handle and extra */
     public MaterialSpriteInfoBuilder meleeHarvest() {
       statType(HeadMaterialStats.ID);
       statType(HandleMaterialStats.ID);
       statType(StatlessMaterialStats.BINDING.getIdentifier());
-      statType(RepairKitStats.ID);
+      repairKit();
       return this;
     }
 
@@ -160,7 +164,7 @@ public abstract class AbstractMaterialSpriteProvider {
     public MaterialSpriteInfoBuilder ranged() {
       statType(LimbMaterialStats.ID);
       statType(GripMaterialStats.ID);
-      statType(RepairKitStats.ID);
+      repairKit();
       return this;
     }
 

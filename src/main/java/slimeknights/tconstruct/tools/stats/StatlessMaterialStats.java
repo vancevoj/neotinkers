@@ -12,7 +12,9 @@ import java.util.List;
 /** Shared code for material stats types with no stats */
 public enum StatlessMaterialStats implements IMaterialStats {
   BINDING("binding"),
-  BOWSTRING("bowstring");
+  BOWSTRING("bowstring"),
+  /** Internal stat type that forces a repair kit to appear, used for things that repair without having a head stat */
+  REPAIR_KIT("repair_kit");
 
   private static final List<Component> LOCALIZED = List.of(IMaterialStats.makeTooltip(TConstruct.getResource("extra.no_stats")));
   private static final List<Component> DESCRIPTION = List.of(Component.empty());

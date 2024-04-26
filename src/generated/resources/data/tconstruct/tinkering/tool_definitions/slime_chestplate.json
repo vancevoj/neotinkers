@@ -21,13 +21,13 @@
     },
     {
       "type": "tconstruct:material_repair",
-      "material": "tconstruct:enderslime",
-      "stat_type": "tconstruct:repair_kit"
+      "durability": 67,
+      "material": "tconstruct:enderslime"
     },
     {
       "type": "tconstruct:material_repair",
-      "material": "tconstruct:phantom",
-      "stat_type": "tconstruct:repair_kit"
+      "durability": 672,
+      "material": "tconstruct:phantom"
     },
     {
       "type": "tconstruct:traits",

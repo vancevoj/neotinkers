@@ -15,13 +15,13 @@
     },
     {
       "type": "tconstruct:material_repair",
-      "material": "tconstruct:enderslime",
-      "stat_type": "tconstruct:repair_kit"
+      "durability": 54,
+      "material": "tconstruct:enderslime"
     },
     {
       "type": "tconstruct:material_repair",
-      "material": "tconstruct:leather",
-      "stat_type": "tconstruct:repair_kit"
+      "durability": 546,
+      "material": "tconstruct:leather"
     },
     {
       "type": "tconstruct:traits",

@@ -24,7 +24,6 @@ import slimeknights.tconstruct.tools.stats.GripMaterialStats;
 import slimeknights.tconstruct.tools.stats.HandleMaterialStats;
 import slimeknights.tconstruct.tools.stats.HeadMaterialStats;
 import slimeknights.tconstruct.tools.stats.LimbMaterialStats;
-import slimeknights.tconstruct.tools.stats.RepairKitStats;
 import slimeknights.tconstruct.tools.stats.SkullStats;
 import slimeknights.tconstruct.tools.stats.StatlessMaterialStats;
 
@@ -105,7 +104,7 @@ public final class MaterialRegistry {
     registry.registerStatType(GripMaterialStats.TYPE, RANGED);
     registry.registerStatType(StatlessMaterialStats.BOWSTRING.getType(), RANGED);
     // misc
-    registry.registerStatType(RepairKitStats.TYPE);
+    registry.registerStatType(StatlessMaterialStats.REPAIR_KIT.getType());
     registry.registerStatType(SkullStats.TYPE);
   }
 

@@ -15,8 +15,8 @@
     },
     {
       "type": "tconstruct:material_repair",
-      "material": "tconstruct:enderslime",
-      "stat_type": "tconstruct:repair_kit"
+      "durability": 46,
+      "material": "tconstruct:enderslime"
     },
     {
       "type": "tconstruct:material_stats",
