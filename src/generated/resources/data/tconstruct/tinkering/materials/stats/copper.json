@@ -1,6 +1,7 @@
 {
   "stats": {
     "tconstruct:binding": {},
+    "tconstruct:chainmail": {},
     "tconstruct:grip": {
       "accuracy": 0.0,
       "durability": 0.8,
@@ -23,6 +24,22 @@
       "draw_speed": -0.1,
       "durability": 210,
       "velocity": 0.05
+    },
+    "tconstruct:plating_boots": {
+      "armor": 1.0,
+      "durability": 169
+    },
+    "tconstruct:plating_chestplate": {
+      "armor": 3.0,
+      "durability": 208
+    },
+    "tconstruct:plating_helmet": {
+      "armor": 1.0,
+      "durability": 143
+    },
+    "tconstruct:plating_leggings": {
+      "armor": 2.0,
+      "durability": 195
     },
     "tconstruct:skull": {
       "armor": 2,

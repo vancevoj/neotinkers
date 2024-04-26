@@ -10,6 +10,7 @@ import slimeknights.tconstruct.library.materials.json.MaterialStatJson;
 import slimeknights.tconstruct.library.materials.stats.IMaterialStats;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatType;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsManager;
+import slimeknights.tconstruct.tools.item.ArmorSlotType;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -61,6 +62,23 @@ public abstract class AbstractMaterialStatsDataProvider extends GenericDataProvi
   protected void addMaterialStats(MaterialId location, IMaterialStats... stats) {
     allMaterialStats.computeIfAbsent(location, materialId -> new ArrayList<>())
                     .addAll(Arrays.asList(stats));
+  }
+
+  /**
+   * Adds material stats from the given armor builder
+   * @param location     Material ID
+   * @param statBuilder  Stat builder
+   * @param otherStats   Other stat types to add after the builder
+   */
+  protected void addArmorStats(MaterialId location, ArmorSlotType.ArmorBuilder<? extends IMaterialStats> statBuilder, IMaterialStats... otherStats) {
+    IMaterialStats[] stats = new IMaterialStats[4];
+    for (ArmorSlotType slotType : ArmorSlotType.values()) {
+      stats[slotType.getIndex()] = statBuilder.build(slotType);
+    }
+    addMaterialStats(location, stats);
+    if (otherStats.length > 0) {
+      addMaterialStats(location, otherStats);
+    }
   }
 
   /* Internal */

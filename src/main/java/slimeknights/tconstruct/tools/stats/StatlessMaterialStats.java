@@ -13,6 +13,7 @@ import java.util.List;
 public enum StatlessMaterialStats implements IMaterialStats {
   BINDING("binding"),
   BOWSTRING("bowstring"),
+  CHAINMAIL("chainmail"),
   /** Internal stat type that forces a repair kit to appear, used for things that repair without having a head stat */
   REPAIR_KIT("repair_kit");
 

@@ -24,6 +24,7 @@ import slimeknights.tconstruct.tools.stats.GripMaterialStats;
 import slimeknights.tconstruct.tools.stats.HandleMaterialStats;
 import slimeknights.tconstruct.tools.stats.HeadMaterialStats;
 import slimeknights.tconstruct.tools.stats.LimbMaterialStats;
+import slimeknights.tconstruct.tools.stats.PlatingMaterialStats;
 import slimeknights.tconstruct.tools.stats.SkullStats;
 import slimeknights.tconstruct.tools.stats.StatlessMaterialStats;
 
@@ -37,6 +38,8 @@ public final class MaterialRegistry {
   public static final MaterialStatsId MELEE_HARVEST = new MaterialStatsId(TConstruct.getResource("melee_harvest"));
   /** Internal material stats ID for the sake of adding traits exclusive to ranged materials */
   public static final MaterialStatsId RANGED = new MaterialStatsId(TConstruct.getResource("ranged"));
+  /** Internal material stats ID for the sake of adding traits exclusive to armor materials */
+  public static final MaterialStatsId ARMOR = new MaterialStatsId(TConstruct.getResource("armor"));
 
   static MaterialRegistry INSTANCE;
 
@@ -103,6 +106,12 @@ public final class MaterialRegistry {
     registry.registerStatType(LimbMaterialStats.TYPE, RANGED);
     registry.registerStatType(GripMaterialStats.TYPE, RANGED);
     registry.registerStatType(StatlessMaterialStats.BOWSTRING.getType(), RANGED);
+    // armor
+    registry.registerStatType(PlatingMaterialStats.HELMET, ARMOR);
+    registry.registerStatType(PlatingMaterialStats.CHESTPLATE, ARMOR);
+    registry.registerStatType(PlatingMaterialStats.LEGGINGS, ARMOR);
+    registry.registerStatType(PlatingMaterialStats.BOOTS, ARMOR);
+    registry.registerStatType(StatlessMaterialStats.CHAINMAIL.getType(), ARMOR);
     // misc
     registry.registerStatType(StatlessMaterialStats.REPAIR_KIT.getType());
     registry.registerStatType(SkullStats.TYPE);
