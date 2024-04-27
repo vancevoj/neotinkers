@@ -14,6 +14,11 @@
     "tconstruct:bow_limb",
     "tconstruct:bow_grip",
     "tconstruct:bowstring",
-    "tconstruct:repair_kit"
+    "tconstruct:chainmail",
+    "tconstruct:repair_kit",
+    "tconstruct:boots_plating",
+    "tconstruct:leggings_plating",
+    "tconstruct:chestplate_plating",
+    "tconstruct:helmet_plating"
   ]
 }

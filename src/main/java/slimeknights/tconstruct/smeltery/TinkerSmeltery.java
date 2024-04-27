@@ -330,6 +330,13 @@ public final class TinkerSmeltery extends TinkerModule {
   // bow
   public static final CastItemObject bowLimbCast = ITEMS.registerCast("bow_limb", SMELTERY_PROPS);
   public static final CastItemObject bowGripCast = ITEMS.registerCast("bow_grip", SMELTERY_PROPS);
+  // armor
+  public static final CastItemObject helmetPlatingCast = ITEMS.registerCast("helmet_plating", SMELTERY_PROPS);
+  public static final CastItemObject chestplatePlatingCast = ITEMS.registerCast("chestplate_plating", SMELTERY_PROPS);
+  public static final CastItemObject leggingsPlatingCast = ITEMS.registerCast("leggings_plating", SMELTERY_PROPS);
+  public static final CastItemObject bootsPlatingCast = ITEMS.registerCast("boots_plating", SMELTERY_PROPS);
+  public static final CastItemObject chainmailCast = ITEMS.registerCast("chainmail", SMELTERY_PROPS);
+
 
   /*
    * Recipe

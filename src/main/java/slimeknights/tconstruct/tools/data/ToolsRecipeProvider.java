@@ -262,6 +262,12 @@ public class ToolsRecipeProvider extends BaseRecipeProvider implements IMaterial
     partRecipes(consumer, TinkerToolParts.largePlate,  TinkerSmeltery.largePlateCast,  4, partFolder, castFolder);
     partRecipes(consumer, TinkerToolParts.toolHandle,  TinkerSmeltery.toolHandleCast,  1, partFolder, castFolder);
     partRecipes(consumer, TinkerToolParts.toughHandle, TinkerSmeltery.toughHandleCast, 3, partFolder, castFolder);
+    // armor
+    partCasting(consumer, TinkerToolParts.plating.get(ArmorSlotType.HELMET),     TinkerSmeltery.helmetPlatingCast,     3, partFolder, castFolder);
+    partCasting(consumer, TinkerToolParts.plating.get(ArmorSlotType.CHESTPLATE), TinkerSmeltery.chestplatePlatingCast, 6, partFolder, castFolder);
+    partCasting(consumer, TinkerToolParts.plating.get(ArmorSlotType.LEGGINGS),   TinkerSmeltery.leggingsPlatingCast,   5, partFolder, castFolder);
+    partCasting(consumer, TinkerToolParts.plating.get(ArmorSlotType.BOOTS),      TinkerSmeltery.bootsPlatingCast,      2, partFolder, castFolder);
+    partRecipes(consumer, TinkerToolParts.chainmail, TinkerSmeltery.chainmailCast, 2, partFolder, castFolder);
 
     // bowstrings are not castable, part builder exclusive
     PartRecipeBuilder.partRecipe(TinkerToolParts.bowstring.get())

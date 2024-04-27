@@ -1,0 +1,11 @@
+{
+  "type": "tconstruct:molding_table",
+  "material": {
+    "item": "tconstruct:blank_sand_cast"
+  },
+  "pattern": {
+    "type": "tconstruct:material",
+    "item": "tconstruct:boots_plating"
+  },
+  "result": "tconstruct:boots_plating_sand_cast"
+}

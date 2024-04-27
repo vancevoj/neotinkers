@@ -33,36 +33,8 @@
       "statType": "tconstruct:repair_kit"
     },
     {
-      "path": "tconstruct:item/tool/armor/plate/helmet_modifiers/tconstruct_embellishment",
-      "statType": "tconstruct:plate"
-    },
-    {
-      "path": "tconstruct:item/tool/armor/plate/helmet_modifiers/broken/tconstruct_embellishment",
-      "statType": "tconstruct:plate"
-    },
-    {
-      "path": "tconstruct:item/tool/armor/plate/chestplate_modifiers/tconstruct_embellishment",
-      "statType": "tconstruct:plate"
-    },
-    {
-      "path": "tconstruct:item/tool/armor/plate/chestplate_modifiers/broken/tconstruct_embellishment",
-      "statType": "tconstruct:plate"
-    },
-    {
-      "path": "tconstruct:item/tool/armor/plate/leggings_modifiers/tconstruct_embellishment",
-      "statType": "tconstruct:plate"
-    },
-    {
-      "path": "tconstruct:item/tool/armor/plate/leggings_modifiers/broken/tconstruct_embellishment",
-      "statType": "tconstruct:plate"
-    },
-    {
-      "path": "tconstruct:item/tool/armor/plate/boot_modifiers/tconstruct_embellishment",
-      "statType": "tconstruct:plate"
-    },
-    {
-      "path": "tconstruct:item/tool/armor/plate/boot_modifiers/broken/tconstruct_embellishment",
-      "statType": "tconstruct:plate"
+      "path": "tconstruct:item/tool/parts/chainmail",
+      "statType": "tconstruct:chainmail"
     },
     {
       "path": "tconstruct:models/armor/plate/layer_1",
@@ -147,6 +119,38 @@
     {
       "path": "tconstruct:models/armor/slime/wings",
       "statType": "tconstruct:slimesuit"
+    },
+    {
+      "path": "tconstruct:item/tool/armor/plate/boots/plating",
+      "statType": "tconstruct:plating_boots"
+    },
+    {
+      "path": "tconstruct:item/tool/armor/plate/boots/plating_broken",
+      "statType": "tconstruct:plating_boots"
+    },
+    {
+      "path": "tconstruct:item/tool/armor/plate/leggings/plating",
+      "statType": "tconstruct:plating_leggings"
+    },
+    {
+      "path": "tconstruct:item/tool/armor/plate/leggings/plating_broken",
+      "statType": "tconstruct:plating_leggings"
+    },
+    {
+      "path": "tconstruct:item/tool/armor/plate/chestplate/plating",
+      "statType": "tconstruct:plating_chestplate"
+    },
+    {
+      "path": "tconstruct:item/tool/armor/plate/chestplate/plating_broken",
+      "statType": "tconstruct:plating_chestplate"
+    },
+    {
+      "path": "tconstruct:item/tool/armor/plate/helmet/plating",
+      "statType": "tconstruct:plating_helmet"
+    },
+    {
+      "path": "tconstruct:item/tool/armor/plate/helmet/plating_broken",
+      "statType": "tconstruct:plating_helmet"
     },
     {
       "path": "tconstruct:item/tool/pickaxe/head",

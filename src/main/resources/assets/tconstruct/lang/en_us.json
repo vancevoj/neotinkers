@@ -293,6 +293,7 @@
   "pattern.tconstruct.round_plate": "Round Plate",
   "pattern.tconstruct.large_plate": "Large Plate",
   "pattern.tconstruct.bowstring": "Bowstring",
+  "pattern.tconstruct.chainmail": "Maille",
 
   "_comment": "Tool Handle Patterns",
 
@@ -342,6 +343,13 @@
   "item.tconstruct.tool_handle_cast": "Tool Handle Gold Cast",
   "item.tconstruct.tough_handle_cast": "Tough Handle Gold Cast",
 
+  "_comment": "Armor Gold Casts",
+  "item.tconstruct.helmet_plating_cast": "Helmet Plating Gold Cast",
+  "item.tconstruct.chestplate_plating_cast": "Chest Plating Gold Cast",
+  "item.tconstruct.leggings_plating_cast": "Leg Plating Gold Cast",
+  "item.tconstruct.boots_plating_cast": "Boot Plating Gold Cast",
+  "item.tconstruct.chainmail_cast": "Maille Gold Cast",
+
 
   "_comment": "Tinkers Sand Casts",
 
@@ -384,6 +392,14 @@
   "item.tconstruct.tool_handle_sand_cast": "Tool Handle Sand Cast",
   "item.tconstruct.tough_handle_sand_cast": "Tough Handle Sand Cast",
 
+  "_comment": "Armor Sand Casts",
+
+  "item.tconstruct.helmet_plating_sand_cast": "Helmet Plating Sand Cast",
+  "item.tconstruct.chestplate_plating_sand_cast": "Chest Plating Sand Cast",
+  "item.tconstruct.leggings_plating_sand_cast": "Leg Plating Sand Cast",
+  "item.tconstruct.boots_plating_sand_cast": "Boot Plating Sand Cast",
+  "item.tconstruct.chainmail_sand_cast": "Maille Sand Cast",
+
 
   "_comment": "Tinkers Red Sand Casts",
 
@@ -425,6 +441,14 @@
 
   "item.tconstruct.tool_handle_red_sand_cast": "Tool Handle Red Sand Cast",
   "item.tconstruct.tough_handle_red_sand_cast": "Tough Handle Red Sand Cast",
+
+  "_comment": "Armor Red Sand Casts",
+
+  "item.tconstruct.helmet_plating_red_sand_cast": "Helmet Plating Red Sand Cast",
+  "item.tconstruct.chestplate_plating_red_sand_cast": "Chest Plating Red Sand Cast",
+  "item.tconstruct.leggings_plating_red_sand_cast": "Leg Plating Red Sand Cast",
+  "item.tconstruct.boots_plating_red_sand_cast": "Boot Plating Red Sand Cast",
+  "item.tconstruct.chainmail_red_sand_cast": "Maille Red Sand Cast",
 
 
   "_comment": "Tinkers Fluids",
@@ -930,6 +954,12 @@
   "item.tconstruct.bow_limb": "Bow Limb",
   "item.tconstruct.bow_grip": "Bow Grip",
   "item.tconstruct.bowstring": "Bowstring",
+
+  "item.tconstruct.helmet_plating": "Helmet Plating",
+  "item.tconstruct.chestplate_plating": "Chest Plating",
+  "item.tconstruct.leggings_plating": "Leg Plating",
+  "item.tconstruct.boots_plating": "Boot Plating",
+  "item.tconstruct.chainmail": "Maille",
 
 
   "_conment": "Tool Descriptions",
@@ -2565,6 +2595,11 @@
   "tool_stat.tconstruct.attack_damage": "Melee Damage: ",
   "tool_stat.tconstruct.attack_damage.description": "Base value for melee attack damage calculations.\nThe end result depends on the tool itself and the other components used.",
 
+  "stat.tconstruct.plating_helmet": "Helmet Plating",
+  "stat.tconstruct.plating_chestplate": "Chest Plating",
+  "stat.tconstruct.plating_leggings": "Leg Plating",
+  "stat.tconstruct.plating_boots": "Boot Plating",
+  "stat.tconstruct.chainmail": "Maille",
   "tool_stat.tconstruct.armor": "Armor: ",
   "tool_stat.tconstruct.armor.description": "How much this protects you when worn.",
   "tool_stat.tconstruct.armor_toughness": "Armor Toughness: ",

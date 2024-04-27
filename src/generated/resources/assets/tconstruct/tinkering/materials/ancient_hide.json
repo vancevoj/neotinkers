@@ -3,7 +3,8 @@
   "generator": {
     "ignoreMaterialStats": false,
     "supportedStats": [
-      "tconstruct:binding"
+      "tconstruct:binding",
+      "tconstruct:chainmail"
     ],
     "transformer": {
       "type": "tconstruct:recolor_sprite",

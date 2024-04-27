@@ -6,6 +6,12 @@
   "generator": {
     "ignoreMaterialStats": false,
     "supportedStats": [
+      "tconstruct:plating_boots",
+      "tconstruct:plating_leggings",
+      "tconstruct:plating_chestplate",
+      "tconstruct:plating_helmet",
+      "tconstruct:chainmail",
+      "tconstruct:repair_kit",
       "tconstruct:plate"
     ],
     "transformer": {

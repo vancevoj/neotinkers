@@ -43,25 +43,17 @@ public interface IToolRecipeHelper extends ICastCreationHelper {
     toolBuilding(consumer, tool.get(), folder);
   }
 
+
   /**
-   * Adds a recipe to craft a material item
+   * Adds cast creation and casting recipes for using a part. Does not add part builder recipes.
    * @param consumer Recipe consumer
    * @param part     Part to be crafted
    * @param cast     Part cast
    * @param cost     Part cost
    * @param partFolder   Folder for recipes
    */
-  default void partRecipes(Consumer<FinishedRecipe> consumer, IMaterialItem part, CastItemObject cast, int cost, String partFolder, String castFolder) {
-    ResourceLocation id = id(part);
-    String name = id.getPath();
-
-    // Part Builder
-    PartRecipeBuilder.partRecipe(part)
-                     .setPattern(id)
-                     .setPatternItem(CompoundIngredient.of(Ingredient.of(TinkerTags.Items.DEFAULT_PATTERNS), Ingredient.of(cast.get())))
-                     .setCost(cost)
-                     .save(consumer, location(partFolder + "builder/" + name));
-
+  default void partCasting(Consumer<FinishedRecipe> consumer, IMaterialItem part, CastItemObject cast, int cost, String partFolder, String castFolder) {
+    String name = id(part).getPath();
     // Material Casting
     String castingFolder = partFolder + "casting/";
     MaterialCastingRecipeBuilder.tableRecipe(part)
@@ -78,6 +70,26 @@ public interface IToolRecipeHelper extends ICastCreationHelper {
     // Cast Casting
     MaterialIngredient ingredient = MaterialIngredient.fromItem(part);
     castCreation(consumer, ingredient, cast, castFolder, name);
+  }
+
+  /**
+   * Adds cast creation, casting, and part builder recipes for a material item
+   * @param consumer Recipe consumer
+   * @param part     Part to be crafted
+   * @param cast     Part cast
+   * @param cost     Part cost
+   * @param partFolder   Folder for recipes
+   */
+  default void partRecipes(Consumer<FinishedRecipe> consumer, IMaterialItem part, CastItemObject cast, int cost, String partFolder, String castFolder) {
+    ResourceLocation id = id(part);
+    // Part Builder
+    PartRecipeBuilder.partRecipe(part)
+                     .setPattern(id)
+                     .setPatternItem(CompoundIngredient.of(Ingredient.of(TinkerTags.Items.DEFAULT_PATTERNS), Ingredient.of(cast.get())))
+                     .setCost(cost)
+                     .save(consumer, location(partFolder + "builder/" + id.getPath()));
+    // casting
+    partCasting(consumer, part, cast, cost, partFolder, castFolder);
   }
 
   /**

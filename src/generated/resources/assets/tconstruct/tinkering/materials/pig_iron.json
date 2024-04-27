@@ -10,6 +10,11 @@
       "tconstruct:handle",
       "tconstruct:binding",
       "tconstruct:repair_kit",
+      "tconstruct:plating_boots",
+      "tconstruct:plating_leggings",
+      "tconstruct:plating_chestplate",
+      "tconstruct:plating_helmet",
+      "tconstruct:chainmail",
       "tconstruct:plate"
     ],
     "transformer": {

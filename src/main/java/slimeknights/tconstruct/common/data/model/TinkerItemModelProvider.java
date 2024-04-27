@@ -3,6 +3,7 @@ package slimeknights.tconstruct.common.data.model;
 import net.minecraft.core.Registry;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.client.model.generators.ItemModelBuilder;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
@@ -14,6 +15,7 @@ import slimeknights.tconstruct.common.registration.CastItemObject;
 import slimeknights.tconstruct.library.tools.part.MaterialItem;
 import slimeknights.tconstruct.smeltery.TinkerSmeltery;
 import slimeknights.tconstruct.tools.TinkerToolParts;
+import slimeknights.tconstruct.tools.item.ArmorSlotType;
 
 import static slimeknights.tconstruct.TConstruct.getResource;
 
@@ -47,6 +49,16 @@ public class TinkerItemModelProvider extends ItemModelProvider {
     part(TinkerToolParts.toolHandle);
     part(TinkerToolParts.toughHandle);
     part(TinkerToolParts.repairKit);
+    // armor
+    TinkerToolParts.plating.forEach((slot, item) -> {
+      MaterialModelBuilder<ItemModelBuilder> b = this.part(item, "armor/plate/" + slot.getSerializedName() + "/plating");
+      if (slot == ArmorSlotType.HELMET) {
+        b.offset(0, 2);
+      } else if (slot == ArmorSlotType.LEGGINGS) {
+        b.offset(0, 1);
+      }
+    });
+    part(TinkerToolParts.chainmail);
 
     // casts //
     // basic
@@ -80,6 +92,12 @@ public class TinkerItemModelProvider extends ItemModelProvider {
     // bow
     cast(TinkerSmeltery.bowLimbCast);
     cast(TinkerSmeltery.bowGripCast);
+    // armor
+    cast(TinkerSmeltery.helmetPlatingCast);
+    cast(TinkerSmeltery.chestplatePlatingCast);
+    cast(TinkerSmeltery.leggingsPlatingCast);
+    cast(TinkerSmeltery.bootsPlatingCast);
+    cast(TinkerSmeltery.chainmailCast);
   }
 
   /** Generated item with a texture */
@@ -94,17 +112,31 @@ public class TinkerItemModelProvider extends ItemModelProvider {
     return basicItem(Registry.ITEM.getKey(item.asItem()), texture);
   }
 
+
+  /* Parts */
+
   /** Creates a part model with the given texture */
-  private MaterialModelBuilder<ItemModelBuilder> part(ItemObject<? extends MaterialItem> part, String texture) {
-    return withExistingParent(part.getId().getPath(), "forge:item/default")
+  private MaterialModelBuilder<ItemModelBuilder> part(ResourceLocation part, String texture) {
+    return withExistingParent(part.getPath(), "forge:item/default")
       .texture("texture", getResource("item/tool/" + texture))
       .customLoader(MaterialModelBuilder::new);
+  }
+
+  /** Creates a part model in the parts folder */
+  private MaterialModelBuilder<ItemModelBuilder> part(Item item, String texture) {
+    return part(Registry.ITEM.getKey(item), texture);
+  }
+
+  /** Creates a part model with the given texture */
+  private MaterialModelBuilder<ItemModelBuilder> part(ItemObject<? extends MaterialItem> part, String texture) {
+    return part(part.getId(), texture);
   }
 
   /** Creates a part model in the parts folder */
   private void part(ItemObject<? extends MaterialItem> part) {
     part(part, "parts/" + part.getId().getPath());
   }
+
 
   /** Creates models for the given cast object */
   private void cast(CastItemObject cast) {

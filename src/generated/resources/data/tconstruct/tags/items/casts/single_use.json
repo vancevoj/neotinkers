@@ -22,6 +22,11 @@
     "#tconstruct:casts/single_use/tool_handle",
     "#tconstruct:casts/single_use/tough_handle",
     "#tconstruct:casts/single_use/bow_limb",
-    "#tconstruct:casts/single_use/bow_grip"
+    "#tconstruct:casts/single_use/bow_grip",
+    "#tconstruct:casts/single_use/helmet_plating",
+    "#tconstruct:casts/single_use/chestplate_plating",
+    "#tconstruct:casts/single_use/leggings_plating",
+    "#tconstruct:casts/single_use/boots_plating",
+    "#tconstruct:casts/single_use/chainmail"
   ]
 }

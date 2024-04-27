@@ -14,11 +14,13 @@ import slimeknights.tconstruct.library.client.materials.MaterialRenderInfoJson.M
 import slimeknights.tconstruct.library.materials.MaterialRegistry;
 import slimeknights.tconstruct.library.materials.definition.MaterialId;
 import slimeknights.tconstruct.library.materials.definition.MaterialVariantId;
+import slimeknights.tconstruct.library.materials.stats.MaterialStatType;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
 import slimeknights.tconstruct.tools.stats.GripMaterialStats;
 import slimeknights.tconstruct.tools.stats.HandleMaterialStats;
 import slimeknights.tconstruct.tools.stats.HeadMaterialStats;
 import slimeknights.tconstruct.tools.stats.LimbMaterialStats;
+import slimeknights.tconstruct.tools.stats.PlatingMaterialStats;
 import slimeknights.tconstruct.tools.stats.StatlessMaterialStats;
 
 import javax.annotation.Nullable;
@@ -164,6 +166,16 @@ public abstract class AbstractMaterialSpriteProvider {
     public MaterialSpriteInfoBuilder ranged() {
       statType(LimbMaterialStats.ID);
       statType(GripMaterialStats.ID);
+      repairKit();
+      return this;
+    }
+
+    /** Adds stat types for armor, all plating plus chainmail */
+    public MaterialSpriteInfoBuilder armor() {
+      for (MaterialStatType<?> type : PlatingMaterialStats.TYPES) {
+        statType(type.getId());
+      }
+      statType(StatlessMaterialStats.CHAINMAIL.getIdentifier());
       repairKit();
       return this;
     }

@@ -1,6 +1,18 @@
 {
   "parent": "tconstruct:smeltery/gold_casting",
   "criteria": {
+    "boots_plating": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "tconstruct:boots_plating_cast"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
     "bow_grip": {
       "conditions": {
         "items": [
@@ -49,6 +61,30 @@
       },
       "trigger": "minecraft:inventory_changed"
     },
+    "chainmail": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "tconstruct:chainmail_cast"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "chestplate_plating": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "tconstruct:chestplate_plating_cast"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
     "gem": {
       "conditions": {
         "items": [
@@ -73,6 +109,18 @@
       },
       "trigger": "minecraft:inventory_changed"
     },
+    "helmet_plating": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "tconstruct:helmet_plating_cast"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
     "ingot": {
       "conditions": {
         "items": [
@@ -91,6 +139,18 @@
           {
             "items": [
               "tconstruct:large_plate_cast"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "leggings_plating": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "tconstruct:leggings_plating_cast"
             ]
           }
         ]
@@ -287,6 +347,21 @@
     ],
     [
       "bow_grip"
+    ],
+    [
+      "helmet_plating"
+    ],
+    [
+      "chestplate_plating"
+    ],
+    [
+      "leggings_plating"
+    ],
+    [
+      "boots_plating"
+    ],
+    [
+      "chainmail"
     ]
   ]
 }

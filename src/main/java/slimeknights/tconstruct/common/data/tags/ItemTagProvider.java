@@ -339,7 +339,9 @@ public class ItemTagProvider extends ItemTagsProvider {
 						 TinkerToolParts.toolBinding.get(), TinkerToolParts.roundPlate.get(), TinkerToolParts.largePlate.get(),
 						 TinkerToolParts.toolHandle.get(), TinkerToolParts.toughHandle.get(),
 						 TinkerToolParts.bowLimb.get(), TinkerToolParts.bowGrip.get(), TinkerToolParts.bowstring.get(),
-						 TinkerToolParts.repairKit.get()); // repair kit is not strictly a tool part, but this list just helps out JEI
+						 TinkerToolParts.chainmail.get(),
+						 TinkerToolParts.repairKit.get()) // repair kit is not strictly a tool part, but this list just helps out JEI
+        .add(TinkerToolParts.plating.values().toArray(new Item[0]));
 
     TagAppender<Item> slimySeeds = this.tag(TinkerTags.Items.SLIMY_SEEDS);
     TinkerWorld.slimeGrassSeeds.values().forEach(slimySeeds::add);
@@ -457,6 +459,12 @@ public class ItemTagProvider extends ItemTagsProvider {
     // bow
     addCast.accept(TinkerSmeltery.bowLimbCast);
     addCast.accept(TinkerSmeltery.bowGripCast);
+    // armor
+    addCast.accept(TinkerSmeltery.helmetPlatingCast);
+    addCast.accept(TinkerSmeltery.chestplatePlatingCast);
+    addCast.accept(TinkerSmeltery.leggingsPlatingCast);
+    addCast.accept(TinkerSmeltery.bootsPlatingCast);
+    addCast.accept(TinkerSmeltery.chainmailCast);
 
     // add all casts to a common tag
     this.tag(TinkerTags.Items.CASTS)

@@ -21,6 +21,11 @@
     "tconstruct:tool_handle_cast",
     "tconstruct:tough_handle_cast",
     "tconstruct:bow_limb_cast",
-    "tconstruct:bow_grip_cast"
+    "tconstruct:bow_grip_cast",
+    "tconstruct:helmet_plating_cast",
+    "tconstruct:chestplate_plating_cast",
+    "tconstruct:leggings_plating_cast",
+    "tconstruct:boots_plating_cast",
+    "tconstruct:chainmail_cast"
   ]
 }
