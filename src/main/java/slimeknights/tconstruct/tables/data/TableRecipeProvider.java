@@ -208,12 +208,12 @@ public class TableRecipeProvider extends BaseRecipeProvider {
     consumer.accept(new PartBuilderToolRecycle.Finished(
         location(folder + "tool_recycling"),
         SizedIngredient.of(DifferenceIngredient.of(Ingredient.of(TinkerTags.Items.MULTIPART_TOOL), Ingredient.of(TinkerTags.Items.UNSALVAGABLE))),
-        Ingredient.of(TinkerTags.Items.PATTERNS)
+        Ingredient.of(TinkerTags.Items.DEFAULT_PATTERNS)
     ));
     consumer.accept(new PartBuilderToolRecycle.Finished(
         location(folder + "dagger_recycling"),
         SizedIngredient.fromItems(2, TinkerTools.dagger),
-        Ingredient.of(TinkerTags.Items.PATTERNS)
+        Ingredient.of(TinkerTags.Items.DEFAULT_PATTERNS)
     ));
 
     // tool repair recipe

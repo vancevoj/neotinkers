@@ -8,7 +8,7 @@ import javax.annotation.Nullable;
 /** Class for a material variant, lazily loads the material instance and stores the variant string */
 public class MaterialVariant extends LazyMaterial {
   /** Unknown material variant, as it comes up a lot */
-  public static final MaterialVariant UNKNOWN = of(IMaterial.UNKNOWN);
+  public static final MaterialVariant UNKNOWN = new MaterialVariant(IMaterial.UNKNOWN, "");
 
   @Getter
   private final MaterialVariantId variant;
@@ -24,6 +24,9 @@ public class MaterialVariant extends LazyMaterial {
 
   /** Creates a new lazy material variant with the given variant ID */
   public static MaterialVariant of(MaterialVariantId variantId) {
+    if (variantId.equals(IMaterial.UNKNOWN_ID)) {
+      return UNKNOWN;
+    }
     return new MaterialVariant(variantId);
   }
 
@@ -39,6 +42,9 @@ public class MaterialVariant extends LazyMaterial {
 
   /** Creates a new lazy material variant with the given ID and variant */
   public static MaterialVariant of(IMaterial material) {
+    if (material == IMaterial.UNKNOWN) {
+      return UNKNOWN;
+    }
     return of(material, "");
   }
 

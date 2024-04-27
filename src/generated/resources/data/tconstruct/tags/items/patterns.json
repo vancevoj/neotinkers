@@ -1,6 +1,10 @@
 {
   "values": [
     "#tconstruct:patterns/default",
-    "#tconstruct:patterns/reusable"
+    "#tconstruct:patterns/reusable",
+    "#tconstruct:casts/sand",
+    "#tconstruct:casts/red_sand",
+    "minecraft:sand",
+    "minecraft:red_sand"
   ]
 }

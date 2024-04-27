@@ -16,16 +16,19 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.ItemStack;
-import slimeknights.mantle.client.ResourceColorManager;
 import slimeknights.tconstruct.TConstruct;
+import slimeknights.tconstruct.library.client.GuiUtil;
+import slimeknights.tconstruct.library.client.RenderUtils;
 import slimeknights.tconstruct.library.client.materials.MaterialTooltipCache;
+import slimeknights.tconstruct.library.materials.definition.MaterialVariant;
 import slimeknights.tconstruct.library.recipe.partbuilder.IDisplayPartBuilderRecipe;
+import slimeknights.tconstruct.library.tools.layout.Patterns;
 import slimeknights.tconstruct.plugin.jei.TConstructJEIConstants;
 import slimeknights.tconstruct.tables.TinkerTables;
 
 import java.awt.Color;
-import java.util.Objects;
 
 public class PartBuilderCategory implements IRecipeCategory<IDisplayPartBuilderRecipe> {
   private static final ResourceLocation BACKGROUND_LOC = TConstruct.getResource("textures/gui/jei/tinker_station.png");
@@ -53,17 +56,26 @@ public class PartBuilderCategory implements IRecipeCategory<IDisplayPartBuilderR
 
   @Override
   public void draw(IDisplayPartBuilderRecipe recipe, IRecipeSlotsView slots, PoseStack matrixStack, double mouseX, double mouseY) {
-    Font fontRenderer = Minecraft.getInstance().font;
-    Component name = MaterialTooltipCache.getColoredDisplayName(recipe.getMaterial().getVariant());
-    fontRenderer.drawShadow(matrixStack, name.getString(), 3, 2, Objects.requireNonNullElse(name.getStyle().getColor(), ResourceColorManager.WHITE).getValue());
-    String coolingString = I18n.get(KEY_COST, recipe.getCost());
-    fontRenderer.draw(matrixStack, coolingString, 3, 35, Color.GRAY.getRGB());
+    MaterialVariant variant = recipe.getMaterial();
+    if (!variant.isEmpty()) {
+      Font fontRenderer = Minecraft.getInstance().font;
+      Component name = MaterialTooltipCache.getColoredDisplayName(variant.getVariant());
+      fontRenderer.drawShadow(matrixStack, name, 3, 2, -1);
+      String coolingString = I18n.get(KEY_COST, recipe.getCost());
+      fontRenderer.draw(matrixStack, coolingString, 3, 35, Color.GRAY.getRGB());
+    } else {
+      RenderUtils.setup(InventoryMenu.BLOCK_ATLAS);
+      GuiUtil.renderPattern(matrixStack, Patterns.INGOT, 25, 16);
+    }
   }
 
   @Override
   public void setRecipe(IRecipeLayoutBuilder builder, IDisplayPartBuilderRecipe recipe, IFocusGroup focuses) {
     // items
-    builder.addSlot(RecipeIngredientRole.INPUT, 25, 16).addItemStacks(MaterialItemList.getItems(recipe.getMaterial().getVariant()));
+    MaterialVariant material = recipe.getMaterial();
+    if (!material.isEmpty()) {
+      builder.addSlot(RecipeIngredientRole.INPUT, 25, 16).addItemStacks(MaterialItemList.getItems(material.getVariant()));
+    }
     builder.addSlot(RecipeIngredientRole.INPUT,  4, 16).addItemStacks(recipe.getPatternItems());
     // patterns
     builder.addSlot(RecipeIngredientRole.INPUT, 46, 16).addIngredient(TConstructJEIConstants.PATTERN_TYPE, recipe.getPattern());

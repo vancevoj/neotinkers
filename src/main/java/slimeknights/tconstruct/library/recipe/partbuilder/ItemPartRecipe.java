@@ -11,6 +11,7 @@ import slimeknights.mantle.data.loadable.field.ContextKey;
 import slimeknights.mantle.data.loadable.primitive.IntLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.recipe.helper.ItemOutput;
+import slimeknights.tconstruct.library.materials.definition.IMaterial;
 import slimeknights.tconstruct.library.materials.definition.MaterialVariant;
 import slimeknights.tconstruct.library.materials.definition.MaterialVariantId;
 import slimeknights.tconstruct.library.recipe.material.IMaterialValue;
@@ -25,12 +26,17 @@ import java.util.List;
 public class ItemPartRecipe implements IDisplayPartBuilderRecipe {
   public static final RecordLoadable<ItemPartRecipe> LOADER = RecordLoadable.create(
     ContextKey.ID.requiredField(),
-    MaterialVariantId.LOADABLE.requiredField("material", r -> r.material.getVariant()),
+    MaterialVariantId.LOADABLE.defaultField("material", IMaterial.UNKNOWN_ID, r -> r.material.getVariant()),
     Pattern.PARSER.requiredField("pattern", ItemPartRecipe::getPattern),
     IngredientLoadable.DISALLOW_EMPTY.defaultField("pattern_item", DEFAULT_PATTERNS, r -> r.patternItem),
-    IntLoadable.FROM_ONE.requiredField("cost", ItemPartRecipe::getCost),
+    IntLoadable.FROM_ZERO.defaultField("cost", 0, ItemPartRecipe::getCost),
     ItemOutput.Loadable.REQUIRED_STACK.requiredField("result", r -> r.result),
-    ItemPartRecipe::new);
+    ItemPartRecipe::new).validate((recipe, error) -> {
+      if (recipe.cost == 0 && !recipe.material.isEmpty()) {
+        throw error.create("Cost must be greater than zero if material is defined");
+      }
+      return recipe;
+    });
 
   @Getter
   private final ResourceLocation id;
@@ -60,6 +66,10 @@ public class ItemPartRecipe implements IDisplayPartBuilderRecipe {
     }
     // if there is a material item, it must have a valid material and be craftable
     if (!inv.getStack().isEmpty()) {
+      // no material means we expect no stack in the material slot
+      if (material.isEmpty()) {
+        return false;
+      }
       IMaterialValue materialRecipe = inv.getMaterial();
       return materialRecipe != null && material.matchesVariant(materialRecipe.getMaterial());
     }
@@ -69,9 +79,20 @@ public class ItemPartRecipe implements IDisplayPartBuilderRecipe {
 
   @Override
   public boolean matches(IPartBuilderContainer inv, Level worldIn) {
+    if (material.isEmpty()) {
+      return inv.getStack().isEmpty();
+    }
     IMaterialValue materialRecipe = inv.getMaterial();
     return materialRecipe != null && material.matchesVariant(materialRecipe.getMaterial())
            && inv.getStack().getCount() >= materialRecipe.getItemsUsed(cost);
+  }
+
+  @Override
+  public int getItemsUsed(IPartBuilderContainer inv) {
+    if (material.isEmpty()) {
+      return 0;
+    }
+    return IDisplayPartBuilderRecipe.super.getItemsUsed(inv);
   }
 
   @Override

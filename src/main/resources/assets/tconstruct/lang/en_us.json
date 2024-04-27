@@ -271,8 +271,22 @@
 
   "_comment": "Tinkers Patterns",
 
+  "pattern.tconstruct.ingot": "Ingot",
+  "pattern.tconstruct.nugget": "Nugget",
+  "pattern.tconstruct.gem": "Gem",
+  "pattern.tconstruct.rod": "Rod",
+
+  "pattern.tconstruct.gear": "Gear",
+  "pattern.tconstruct.plate": "Small Plate",
+  "pattern.tconstruct.coin": "Coin",
+  "pattern.tconstruct.wire": "Wire",
+
   "pattern.tconstruct.repair_kit": "Repair Kit",
   "pattern.tconstruct.plating": "Plating",
+  "pattern.tconstruct.helmet_plating": "Helmet Plating",
+  "pattern.tconstruct.chestplate_plating": "Chest Plating",
+  "pattern.tconstruct.leggings_plating": "Leg Plating",
+  "pattern.tconstruct.boots_plating": "Boot Plating",
 
   "_comment": "Small Head Patterns",
 

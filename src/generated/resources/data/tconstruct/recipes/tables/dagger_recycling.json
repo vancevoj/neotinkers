@@ -1,7 +1,7 @@
 {
   "type": "tconstruct:part_builder_tool_recycling",
   "pattern": {
-    "tag": "tconstruct:patterns"
+    "tag": "tconstruct:patterns/default"
   },
   "tools": {
     "amount_needed": 2,

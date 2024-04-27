@@ -1,16 +1,20 @@
 package slimeknights.tconstruct.library.data.recipe;
 
 import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraftforge.common.Tags;
 import slimeknights.mantle.recipe.data.IRecipeHelper;
+import slimeknights.mantle.recipe.helper.ItemOutput;
+import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.common.registration.CastItemObject;
 import slimeknights.tconstruct.fluids.TinkerFluids;
 import slimeknights.tconstruct.library.recipe.FluidValues;
 import slimeknights.tconstruct.library.recipe.casting.ItemCastingRecipeBuilder;
 import slimeknights.tconstruct.library.recipe.molding.MoldingRecipeBuilder;
-import slimeknights.tconstruct.smeltery.TinkerSmeltery;
+import slimeknights.tconstruct.library.recipe.partbuilder.ItemPartRecipeBuilder;
 
 import java.util.function.Consumer;
 
@@ -44,14 +48,29 @@ public interface ICastCreationHelper extends IRecipeHelper {
                             .setFluidAndTime(TinkerFluids.moltenGold, true, FluidValues.INGOT)
                             .setCast(input, true)
                             .setSwitchSlots()
-                            .save(consumer, location(folder + "gold_casts/" + name));
+                            .save(consumer, location(folder + "gold/" + name));
+    // make sand casts via molding in the casting table
     MoldingRecipeBuilder.moldingTable(cast.getSand())
-                        .setMaterial(TinkerSmeltery.blankSandCast)
+                        .setMaterial(TinkerTags.Items.SAND_CASTS)
                         .setPattern(input, false)
-                        .save(consumer, location(folder + "sand_casts/" + name));
+                        .save(consumer, location(folder + "sand/molding/" + name));
     MoldingRecipeBuilder.moldingTable(cast.getRedSand())
-                        .setMaterial(TinkerSmeltery.blankRedSandCast)
+                        .setMaterial(TinkerTags.Items.RED_SAND_CASTS)
                         .setPattern(input, false)
-                        .save(consumer, location(folder + "red_sand_casts/" + name));
+                        .save(consumer, location(folder + "red_sand/molding/" + name));
+    // make sand casts in the part builder
+    ResourceLocation pattern = cast.getName();
+    ItemPartRecipeBuilder.item(pattern, ItemOutput.fromItem(cast.getSand()))
+                         .setPatternItem(Ingredient.of(TinkerTags.Items.SAND_CASTS))
+                         .save(consumer, location(folder + "sand/builder_cast/" + name));
+    ItemPartRecipeBuilder.item(pattern, ItemOutput.fromItem(cast.getRedSand()))
+                         .setPatternItem(Ingredient.of(TinkerTags.Items.RED_SAND_CASTS))
+                         .save(consumer, location(folder + "red_sand/builder_cast/" + name));
+    ItemPartRecipeBuilder.item(pattern, ItemOutput.fromItem(cast.getSand(), 4))
+                         .setPatternItem(Ingredient.of(Tags.Items.SAND_COLORLESS))
+                         .save(consumer, location(folder + "sand/builder_block/" + name));
+    ItemPartRecipeBuilder.item(pattern, ItemOutput.fromItem(cast.getRedSand(), 4))
+                         .setPatternItem(Ingredient.of(Tags.Items.SAND_RED))
+                         .save(consumer, location(folder + "red_sand/builder_block/" + name));
   }
 }

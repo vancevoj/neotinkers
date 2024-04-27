@@ -1,7 +1,6 @@
 package slimeknights.tconstruct.common.registration;
 
 import net.minecraft.world.item.Item;
-import net.minecraft.resources.ResourceLocation;
 import slimeknights.mantle.registration.deferred.ItemDeferredRegister;
 import slimeknights.mantle.registration.object.ItemObject;
 
@@ -20,6 +19,6 @@ public class ItemDeferredRegisterExtension extends ItemDeferredRegister {
     ItemObject<Item> cast = register(name + "_cast", props);
     ItemObject<Item> sandCast = register(name + "_sand_cast", props);
     ItemObject<Item> redSandCast = register(name + "_red_sand_cast", props);
-    return new CastItemObject(new ResourceLocation(resourceName(name)), cast, sandCast, redSandCast);
+    return new CastItemObject(resource(name), cast, sandCast, redSandCast);
   }
 }
