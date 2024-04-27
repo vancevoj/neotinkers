@@ -17,6 +17,10 @@ public class Patterns {
 
   /** Repair icon, not an outline but a button icon */
   public static final Pattern REPAIR = pattern("button_repair");
+  /** Icon with multiple plate armor pieces */
+  public static final Pattern PLATE_ARMOR = pattern("plate_armor");
+  /** Pattern for generic plating */
+  public static final Pattern PLATING = pattern("plating");
 
   private static Pattern pattern(String name) {
     return new Pattern(TConstruct.MOD_ID, name);

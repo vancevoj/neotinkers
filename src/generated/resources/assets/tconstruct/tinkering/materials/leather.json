@@ -1,5 +1,8 @@
 {
   "color": "C65C35",
+  "fallbacks": [
+    "cloth"
+  ],
   "generator": {
     "ignoreMaterialStats": false,
     "supportedStats": [

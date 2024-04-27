@@ -2,14 +2,21 @@
   "loader": "tconstruct:tool",
   "parent": "forge:item/default",
   "textures": {
-    "tool": "tconstruct:item/tool/armor/plate/helmet_broken"
+    "plating": "tconstruct:item/tool/armor/plate/helmet/plating_broken",
+    "chainmail": "tconstruct:item/tool/armor/plate/helmet/chainmail_broken"
   },
   "modifier_roots": [
-    "tconstruct:item/tool/armor/plate/helmet_modifiers/broken/",
-    "tconstruct:item/tool/armor/plate/helmet_modifiers/"
+    "tconstruct:item/tool/armor/plate/helmet/modifiers/broken/",
+    "tconstruct:item/tool/armor/plate/helmet/modifiers/"
   ],
-  "first_modifiers": [
-    "tconstruct:embellishment",
-    "tconstruct:golden"
+  "parts": [
+    {
+      "name": "plating",
+      "index": 0
+    },
+    {
+      "name": "chainmail",
+      "index": 1
+    }
   ]
 }

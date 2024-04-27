@@ -1,26 +1,32 @@
 {
   "modules": [
     {
-      "type": "tconstruct:base_stats",
-      "stats": {
-        "tconstruct:armor": 2.0,
-        "tconstruct:armor_toughness": 2.0,
-        "tconstruct:durability": 390.0,
-        "tconstruct:knockback_resistance": 0.1
-      }
+      "type": "tconstruct:part_stats",
+      "parts": [
+        "tconstruct:boots_plating",
+        "tconstruct:chainmail"
+      ],
+      "stat_provider": "tconstruct:armor"
+    },
+    {
+      "type": "tconstruct:default_materials",
+      "materials": [
+        {
+          "type": "tconstruct:fixed",
+          "material": "tconstruct:cobalt"
+        },
+        {
+          "type": "tconstruct:fixed",
+          "material": "tconstruct:ancient_hide"
+        }
+      ]
     },
     {
       "type": "tconstruct:modifier_slots",
       "slots": {
-        "abilities": 1,
-        "defense": 4,
-        "upgrades": 1
+        "defense": 3,
+        "upgrades": 2
       }
-    },
-    {
-      "type": "tconstruct:material_repair",
-      "durability": 390,
-      "material": "tconstruct:cobalt"
     }
   ]
 }

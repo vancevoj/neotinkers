@@ -1,15 +1,5 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "key": {
-    "m": {
-      "tag": "forge:ingots/cobalt"
-    }
-  },
-  "pattern": [
-    "m m",
-    "m m"
-  ],
-  "result": {
-    "item": "tconstruct:plate_boots"
-  }
+  "type": "tconstruct:tool_building",
+  "result": "tconstruct:plate_boots",
+  "result_count": 1
 }

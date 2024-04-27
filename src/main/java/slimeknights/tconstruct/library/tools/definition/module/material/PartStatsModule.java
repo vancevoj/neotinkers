@@ -7,14 +7,16 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import slimeknights.mantle.data.loadable.primitive.IntLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
+import slimeknights.mantle.registration.object.EnumObject;
 import slimeknights.tconstruct.library.json.TinkerLoadables;
-import slimeknights.tconstruct.library.module.ModuleHook;
 import slimeknights.tconstruct.library.module.HookProvider;
+import slimeknights.tconstruct.library.module.ModuleHook;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinition;
 import slimeknights.tconstruct.library.tools.definition.module.ToolHooks;
 import slimeknights.tconstruct.library.tools.part.IToolPart;
 import slimeknights.tconstruct.library.tools.stat.MaterialStatProvider;
 import slimeknights.tconstruct.library.tools.stat.MaterialStatProviders;
+import slimeknights.tconstruct.tools.item.ArmorSlotType;
 
 import java.util.List;
 import java.util.function.Supplier;
@@ -84,6 +86,16 @@ public class PartStatsModule extends MaterialStatsModule implements ToolPartsHoo
     return parts(MaterialStatProviders.RANGED);
   }
 
+  /** Starts a builder for armor stats */
+  public static ArmorBuilder armor(List<ArmorSlotType> slots, MaterialStatProvider statProvider) {
+    return new ArmorBuilder(slots, statProvider);
+  }
+
+  /** Starts a builder for armor stats */
+  public static ArmorBuilder armor(List<ArmorSlotType> slots) {
+    return armor(slots, MaterialStatProviders.ARMOR);
+  }
+
   @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
   public static class Builder {
     private final ImmutableList.Builder<WeightedPart> parts = ImmutableList.builder();
@@ -113,6 +125,61 @@ public class PartStatsModule extends MaterialStatsModule implements ToolPartsHoo
     /** Builds the module */
     public PartStatsModule build() {
       return new PartStatsModule(statProvider, parts.build());
+    }
+  }
+
+  /** Builder for armor */
+  public static class ArmorBuilder implements ArmorSlotType.ArmorBuilder<PartStatsModule> {
+    private final List<ArmorSlotType> slotTypes;
+    private final Builder[] builders = new Builder[4];
+
+    private ArmorBuilder(List<ArmorSlotType> slotTypes, MaterialStatProvider statProvider) {
+      this.slotTypes = slotTypes;
+      for (ArmorSlotType slotType : slotTypes) {
+        builders[slotType.getIndex()] = new Builder(statProvider);
+      }
+    }
+
+    /** Gets the builder for the given slot */
+    protected Builder getBuilder(ArmorSlotType slotType) {
+      Builder builder = builders[slotType.getIndex()];
+      if (builder == null) {
+        throw new IllegalArgumentException("Unsupported slot type " + slotType);
+      }
+      return builder;
+    }
+
+    /** Adds a part to the given slot */
+    public ArmorBuilder part(ArmorSlotType slotType, IToolPart part, int weight) {
+      getBuilder(slotType).part(part, weight);
+      return this;
+    }
+
+    /** Adds a part to all slots */
+    public ArmorBuilder part(IToolPart part, int weight) {
+      for (ArmorSlotType slotType : slotTypes) {
+        getBuilder(slotType).part(part, weight);
+      }
+      return this;
+    }
+
+    /** Adds a part to all slots */
+    public ArmorBuilder part(Supplier<? extends IToolPart> part, int weight) {
+      return part(part.get(), weight);
+    }
+
+    /** Adds parts to the builder from the passed object */
+    public ArmorBuilder part(EnumObject<ArmorSlotType, ? extends IToolPart> parts, int weight) {
+      for (ArmorSlotType slotType : slotTypes) {
+        getBuilder(slotType).part(parts.get(slotType), weight);
+      }
+      return this;
+    }
+
+
+    @Override
+    public PartStatsModule build(ArmorSlotType slot) {
+      return getBuilder(slot).build();
     }
   }
 }

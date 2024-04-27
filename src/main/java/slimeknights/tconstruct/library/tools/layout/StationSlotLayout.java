@@ -244,6 +244,11 @@ public class StationSlotLayout {
       return addInputItem(new Pattern(Registry.ITEM.getKey(item.asItem())), item, x, y);
     }
 
+    /** Adds an input slot with the given properties */
+    public Builder addInputPattern(Pattern icon, int x, int y, Ingredient ingredient) {
+      return addInputSlot(icon, icon.getTranslationKey(), x, y, ingredient);
+    }
+
     /** Builds a station slot layout */
     public StationSlotLayout build() {
       return new StationSlotLayout(translationKey, icon, sortIndex, toolSlot, inputSlots.build());

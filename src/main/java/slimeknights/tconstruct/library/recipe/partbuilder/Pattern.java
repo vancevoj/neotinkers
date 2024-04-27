@@ -26,11 +26,19 @@ public class Pattern extends ResourceLocation {
   }
 
   /**
+   * Gets the translation key for this pattern
+   * @return  Translation key
+   */
+  public String getTranslationKey() {
+    return Util.makeTranslationKey("pattern", this);
+  }
+
+  /**
    * Gets the display name for this pattern
    * @return  Display name
    */
   public Component getDisplayName() {
-    return Component.translatable(Util.makeTranslationKey("pattern", this));
+    return Component.translatable(getTranslationKey());
   }
 
   /**

@@ -554,27 +554,27 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
       .module(new PreferenceSetInteraction(InteractionSource.RIGHT_CLICK, new SingleModifierPredicate(TinkerModifiers.blocking.getId())));
 
     // plate armor
-    ToolModule plateSlots =
-      ToolSlotsModule.builder()
-                     .slots(SlotType.UPGRADE, 1)
-                     .slots(SlotType.DEFENSE, 4)
-                     .slots(SlotType.ABILITY, 1).build();
     defineArmor(ArmorDefinitions.PLATE)
-      .modules(slots -> SetStatsModule.armor(slots)
-        .durabilityFactor(30)
-        .setEach(ToolStats.ARMOR, 2, 5, 7, 2)
-        .setAll(ToolStats.ARMOR_TOUGHNESS, 2)
-        .setAll(ToolStats.KNOCKBACK_RESISTANCE, 0.1f))
+      .modules(slots -> PartStatsModule.armor(slots)
+         .part(TinkerToolParts.plating, 1)
+         .part(TinkerToolParts.chainmail, 1))
+      .module(DefaultMaterialsModule.builder()
+         .material(MaterialIds.cobalt)
+         .material(MaterialIds.ancientHide).build())
       .module(ArmorSlotType.CHESTPLATE, new MultiplyStatsModule(MultiplierNBT.builder().set(ToolStats.ATTACK_DAMAGE, 0.4f).build()))
-      .module(plateSlots)
-      .module(MaterialRepairModule.armor(MaterialIds.cobalt).durabilityFactor(30));
+      .module(ToolSlotsModule.builder()
+         .slots(SlotType.UPGRADE, 2)
+         .slots(SlotType.DEFENSE, 3).build());
     define(ArmorDefinitions.PLATE_SHIELD)
       .module(new SetStatsModule(StatsNBT.builder()
         .set(ToolStats.DURABILITY, 500)
         .set(ToolStats.BLOCK_AMOUNT, 100)
         .set(ToolStats.BLOCK_ANGLE, 180)
         .set(ToolStats.ARMOR_TOUGHNESS, 2).build()))
-      .module(plateSlots)
+      .module(ToolSlotsModule.builder()
+         .slots(SlotType.UPGRADE, 1)
+         .slots(SlotType.DEFENSE, 4)
+         .slots(SlotType.ABILITY, 1).build())
       .module(MaterialRepairModule.of(MaterialIds.cobalt, 500))
       .module(ToolTraitsModule.builder().trait(TinkerModifiers.blocking).build())
       .module(new PreferenceSetInteraction(InteractionSource.RIGHT_CLICK, new SingleModifierPredicate(TinkerModifiers.blocking.getId())));

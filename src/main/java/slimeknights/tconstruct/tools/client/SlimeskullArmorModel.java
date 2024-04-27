@@ -15,6 +15,7 @@ import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import slimeknights.mantle.data.listener.ISafeManagerReloadListener;
+import slimeknights.tconstruct.library.client.model.ArmorModelHelper;
 import slimeknights.tconstruct.library.materials.definition.IMaterial;
 import slimeknights.tconstruct.library.materials.definition.MaterialId;
 import slimeknights.tconstruct.library.tools.nbt.MaterialIdNBT;
@@ -26,6 +27,7 @@ import java.util.Map.Entry;
 import java.util.function.Function;
 
 /** Model to render a slimeskull helmet with both the helmet and skull */
+// TODO: cleanup and move to library
 public class SlimeskullArmorModel extends Model {
   /** Singleton model instance, all data is passed in via setters */
   private static final SlimeskullArmorModel INSTANCE = new SlimeskullArmorModel();

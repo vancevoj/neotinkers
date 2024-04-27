@@ -272,6 +272,7 @@
   "_comment": "Tinkers Patterns",
 
   "pattern.tconstruct.repair_kit": "Repair Kit",
+  "pattern.tconstruct.plating": "Plating",
 
   "_comment": "Small Head Patterns",
 
@@ -985,6 +986,8 @@
   "item.tconstruct.crossbow.description": "The Crossbow is a light ranged weapon, capable of quickly firing arrows and fireworks.",
   "item.tconstruct.longbow.description": "The Longbow is a broad ranged weapon, capable of firing arrows with precision over long distances.",
 
+  "gui.tconstruct.plate_armor": "Plate Armor",
+  "gui.tconstruct.plate_armor.description": "Plate armor is a highly defensive armor set with limited ability slots.",
 
   "_comment": "Smeltery shared",
 

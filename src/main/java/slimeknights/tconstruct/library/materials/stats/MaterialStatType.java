@@ -42,7 +42,7 @@ public class MaterialStatType<T extends IMaterialStats> implements IdAwareObject
     this.id = id;
     this.loadable = loadable;
     this.defaultStats = defaultStatsProvider.apply(this);
-    this.canRepair = defaultStatsProvider instanceof IRepairableMaterialStats;
+    this.canRepair = defaultStats instanceof IRepairableMaterialStats;
   }
 
   /** Creates a stat type that always resolves to the same instance */

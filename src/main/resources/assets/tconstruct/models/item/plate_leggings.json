@@ -2,10 +2,14 @@
   "loader": "tconstruct:tool",
   "parent": "forge:item/default",
   "textures": {
-    "tool": "tconstruct:item/tool/armor/plate/leggings"
+    "plating":   "tconstruct:item/tool/armor/plate/leggings/plating",
+    "chainmail": "tconstruct:item/tool/armor/plate/leggings/chainmail"
   },
-  "modifier_roots": [ "tconstruct:item/tool/armor/plate/leggings_modifiers/" ],
-  "first_modifiers": [ "tconstruct:embellishment", "tconstruct:golden" ],
+  "modifier_roots": [ "tconstruct:item/tool/armor/plate/leggings/modifiers/" ],
+  "parts": [
+    { "name": "plating",   "index": 0 },
+    { "name": "chainmail", "index": 1 }
+  ],
   "overrides": [
     {
       "predicate": { "tconstruct:broken": 1 },

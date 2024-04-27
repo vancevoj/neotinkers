@@ -2,6 +2,7 @@ package slimeknights.tconstruct.tools.data.sprite;
 
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.client.data.material.AbstractPartSpriteProvider;
+import slimeknights.tconstruct.library.materials.MaterialRegistry;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
 import slimeknights.tconstruct.tools.item.ArmorSlotType;
 import slimeknights.tconstruct.tools.stats.PlatingMaterialStats;
@@ -43,10 +44,14 @@ public class TinkerPartSpriteProvider extends AbstractPartSpriteProvider {
     // plate textures
     addPart("chainmail", StatlessMaterialStats.CHAINMAIL.getIdentifier());
     for (ArmorSlotType slot : ArmorSlotType.values()) {
-      buildTool("armor/plate/" + slot.getSerializedName()).addBreakablePart("plating", PlatingMaterialStats.TYPES.get(slot.getIndex()).getId());
+      buildTool("armor/plate/" + slot.getSerializedName())
+        .addBreakablePart("plating", PlatingMaterialStats.TYPES.get(slot.getIndex()).getId())
+        .addBreakablePart("chainmail", StatlessMaterialStats.CHAINMAIL.getIdentifier());
     }
-    addTexture("models/armor/plate/layer_1", PLATE);
-    addTexture("models/armor/plate/layer_2", PLATE);
+    addTexture("models/armor/plate/armor_1", MaterialRegistry.ARMOR);
+    addTexture("models/armor/plate/leggings_1", PlatingMaterialStats.LEGGINGS.getId());
+    addTexture("models/armor/plate/armor_2", StatlessMaterialStats.CHAINMAIL.getIdentifier());
+    addTexture("models/armor/plate/leggings_2", StatlessMaterialStats.CHAINMAIL.getIdentifier());
 
     // shield textures
     addSprite("armor/travelers/shield_modifiers/tconstruct_embellishment", PLATE);

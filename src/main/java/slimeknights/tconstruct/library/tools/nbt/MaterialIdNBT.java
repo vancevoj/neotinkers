@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 @ToString
 public class MaterialIdNBT {
   /** Instance containing no materials, for errors with parsing NBT */
-  final static MaterialIdNBT EMPTY = new MaterialIdNBT(ImmutableList.of());
+  public final static MaterialIdNBT EMPTY = new MaterialIdNBT(ImmutableList.of());
 
   /** List of materials contained in this NBT */
   @Getter

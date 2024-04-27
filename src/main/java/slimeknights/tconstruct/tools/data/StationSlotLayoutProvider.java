@@ -1,6 +1,7 @@
 package slimeknights.tconstruct.tools.data;
 
 import net.minecraft.data.DataGenerator;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import slimeknights.tconstruct.TConstruct;
@@ -149,6 +150,14 @@ public class StationSlotLayoutProvider extends AbstractStationSlotLayoutProvider
       .addInputItem(TinkerToolParts.bowLimb,   45, 30)
       .addInputItem(TinkerToolParts.bowGrip,   25, 35)
       .addInputItem(TinkerToolParts.bowstring, 45, 55)
+      .build();
+    // use a single button for all plate armor, its all the same recipe and a single description is suitable
+    define(TConstruct.getResource("plate_armor"))
+      .sortIndex(SORT_ARMOR)
+      .translationKey(TConstruct.makeTranslationKey("gui", "plate_armor"))
+      .icon(Patterns.PLATE_ARMOR)
+      .addInputPattern(Patterns.PLATING,   33, 29, Ingredient.of(TinkerToolParts.plating.values().toArray(new Item[0])))
+      .addInputItem(TinkerToolParts.chainmail, 33, 53)
       .build();
   }
 

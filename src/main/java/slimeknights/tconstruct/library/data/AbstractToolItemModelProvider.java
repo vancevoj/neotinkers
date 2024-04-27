@@ -109,9 +109,9 @@ public abstract class AbstractToolItemModelProvider extends GenericDataProvider 
 
   /** Adds broken and blocking models for the armor set */
   @SuppressWarnings("deprecation")  // no its not
-  protected void armor(String name, EnumObject<ArmorSlotType,? extends Item> armor) throws IOException {
+  protected void armor(String name, EnumObject<ArmorSlotType,? extends Item> armor, String... textures) throws IOException {
     for (ArmorSlotType slot : ArmorSlotType.values()) {
-      transformTool("armor/" + name + '/' + slot.getSerializedName() + "_broken", readJson(Registry.ITEM.getKey(armor.get(slot))), "", false, "broken", "tool");
+      transformTool("armor/" + name + '/' + slot.getSerializedName() + "_broken", readJson(Registry.ITEM.getKey(armor.get(slot))), "", false, "broken", textures);
     }
   }
 

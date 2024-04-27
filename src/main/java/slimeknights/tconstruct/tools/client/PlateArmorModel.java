@@ -10,7 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import slimeknights.mantle.data.listener.ISafeManagerReloadListener;
-import slimeknights.tconstruct.TConstruct;
+import slimeknights.tconstruct.library.client.model.ArmorModelHelper;
 import slimeknights.tconstruct.library.materials.definition.MaterialVariantId;
 import slimeknights.tconstruct.library.tools.helper.ModifierUtil;
 import slimeknights.tconstruct.tools.TinkerModifiers;
@@ -21,13 +21,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+// TODO: cleanup and move to library
 public class PlateArmorModel extends Model {
   /** Singleton model instance, all data is passed in via setters */
   private static final Map<ResourceLocation,PlateArmorModel> MODELS = new HashMap<>();
   /** Cached constructor to not need to create each tick */
   private static final Function<ResourceLocation,PlateArmorModel> CONSTRUCTOR = PlateArmorModel::new;
-  /** default name */
-  private static final ResourceLocation PLATE = TConstruct.getResource("plate");
 
   /** Listener to clear caches */
   public static final ISafeManagerReloadListener RELOAD_LISTENER = manager -> MODELS.clear();
@@ -39,13 +38,6 @@ public class PlateArmorModel extends Model {
     PlateArmorModel model = MODELS.computeIfAbsent(name, CONSTRUCTOR);
     model.setup(baseModel, stack, slot);
     return model;
-  }
-
-  /**
-   * Gets the model for a given entity
-   */
-  public static Model getModel(ItemStack stack, EquipmentSlot slot, HumanoidModel<?> baseModel) {
-    return getModel(stack, slot, baseModel, PLATE);
   }
 
   /** Cache of armor render types */

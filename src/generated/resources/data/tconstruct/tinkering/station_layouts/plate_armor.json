@@ -1,0 +1,38 @@
+{
+  "icon": {
+    "pattern": "tconstruct:plate_armor"
+  },
+  "input_slots": [
+    {
+      "filter": [
+        {
+          "item": "tconstruct:boots_plating"
+        },
+        {
+          "item": "tconstruct:leggings_plating"
+        },
+        {
+          "item": "tconstruct:chestplate_plating"
+        },
+        {
+          "item": "tconstruct:helmet_plating"
+        }
+      ],
+      "icon": "tconstruct:plating",
+      "translation_key": "pattern.tconstruct.plating",
+      "x": 33,
+      "y": 29
+    },
+    {
+      "filter": {
+        "item": "tconstruct:chainmail"
+      },
+      "icon": "tconstruct:chainmail",
+      "translation_key": "item.tconstruct.chainmail",
+      "x": 33,
+      "y": 53
+    }
+  ],
+  "sortIndex": 15,
+  "translation_key": "gui.tconstruct.plate_armor"
+}

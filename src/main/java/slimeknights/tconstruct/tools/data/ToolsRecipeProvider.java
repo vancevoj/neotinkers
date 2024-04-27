@@ -169,35 +169,7 @@ public class ToolsRecipeProvider extends BaseRecipeProvider implements IMaterial
                        .save(consumer, location(armorFolder + "travelers_shield"));
 
     // plate armor
-    ShapedRecipeBuilder.shaped(TinkerTools.plateArmor.get(ArmorSlotType.HELMET))
-                       .pattern("mmm")
-                       .pattern("ccc")
-                       .define('m', TinkerMaterials.cobalt.getIngotTag())
-                       .define('c', Items.CHAIN)
-                       .unlockedBy("has_item", has(TinkerMaterials.cobalt.getIngotTag()))
-                       .save(consumer, location(armorFolder + "plate_helmet"));
-    ShapedRecipeBuilder.shaped(TinkerTools.plateArmor.get(ArmorSlotType.CHESTPLATE))
-                       .pattern("m m")
-                       .pattern("mmm")
-                       .pattern("cmc")
-                       .define('m', TinkerMaterials.cobalt.getIngotTag())
-                       .define('c', Items.CHAIN)
-                       .unlockedBy("has_item", has(TinkerMaterials.cobalt.getIngotTag()))
-                       .save(consumer, location(armorFolder + "plate_chestplate"));
-    ShapedRecipeBuilder.shaped(TinkerTools.plateArmor.get(ArmorSlotType.LEGGINGS))
-                       .pattern("mmm")
-                       .pattern("m m")
-                       .pattern("c c")
-                       .define('m', TinkerMaterials.cobalt.getIngotTag())
-                       .define('c', Items.CHAIN)
-                       .unlockedBy("has_item", has(TinkerMaterials.cobalt.getIngotTag()))
-                       .save(consumer, location(armorFolder + "plate_leggings"));
-    ShapedRecipeBuilder.shaped(TinkerTools.plateArmor.get(ArmorSlotType.BOOTS))
-                       .pattern("m m")
-                       .pattern("m m")
-                       .define('m', TinkerMaterials.cobalt.getIngotTag())
-                       .unlockedBy("has_item", has(TinkerMaterials.cobalt.getIngotTag()))
-                       .save(consumer, location(armorFolder + "plate_boots"));
+    TinkerTools.plateArmor.forEach(item -> toolBuilding(consumer, item, armorFolder));
     ShapedRecipeBuilder.shaped(TinkerTools.plateShield)
                        .pattern("ww")
                        .pattern("cc")

@@ -2,14 +2,21 @@
   "loader": "tconstruct:tool",
   "parent": "forge:item/default",
   "textures": {
-    "tool": "tconstruct:item/tool/armor/plate/boots_broken"
+    "plating": "tconstruct:item/tool/armor/plate/boots/plating_broken",
+    "chainmail": "tconstruct:item/tool/armor/plate/boots/chainmail_broken"
   },
   "modifier_roots": [
-    "tconstruct:item/tool/armor/plate/boot_modifiers/broken/",
-    "tconstruct:item/tool/armor/plate/boot_modifiers/"
+    "tconstruct:item/tool/armor/plate/boots/modifiers/broken/",
+    "tconstruct:item/tool/armor/plate/boots/modifiers/"
   ],
-  "first_modifiers": [
-    "tconstruct:embellishment",
-    "tconstruct:golden"
+  "parts": [
+    {
+      "name": "plating",
+      "index": 0
+    },
+    {
+      "name": "chainmail",
+      "index": 1
+    }
   ]
 }

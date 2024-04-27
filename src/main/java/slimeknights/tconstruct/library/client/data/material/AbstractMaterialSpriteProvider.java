@@ -172,6 +172,7 @@ public abstract class AbstractMaterialSpriteProvider {
 
     /** Adds stat types for armor, all plating plus chainmail */
     public MaterialSpriteInfoBuilder armor() {
+      statType(MaterialRegistry.ARMOR);
       for (MaterialStatType<?> type : PlatingMaterialStats.TYPES) {
         statType(type.getId());
       }

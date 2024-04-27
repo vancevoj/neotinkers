@@ -13,6 +13,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import slimeknights.mantle.data.listener.ISafeManagerReloadListener;
+import slimeknights.tconstruct.library.client.model.ArmorModelHelper;
 import slimeknights.tconstruct.tools.data.material.MaterialIds;
 import slimeknights.tconstruct.tools.item.SlimesuitItem;
 
@@ -22,6 +23,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 /** Model to render elytra wings as a chestplate */
+// TODO: cleanup and move to library
 public class SlimelytraArmorModel extends Model {
   /** Singleton model instance, all data is passed in via setters */
   private static final SlimelytraArmorModel INSTANCE = new SlimelytraArmorModel();

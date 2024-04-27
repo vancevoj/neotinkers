@@ -28,8 +28,8 @@ import java.util.stream.Stream;
 public abstract class MaterialStatProvider implements IdAwareObject {
   @Getter
   private final ResourceLocation id;
-  private final Set<MaterialStatsId> requiredType;
-  private final Set<MaterialStatsId> otherTypes;
+  protected final Set<MaterialStatsId> requiredType;
+  protected final Set<MaterialStatsId> otherTypes;
 
   /**
    * Called after bonuses are processed to set the unique stats for this builder.
@@ -62,13 +62,25 @@ public abstract class MaterialStatProvider implements IdAwareObject {
    * @return  List of stats
    */
   public static <T extends IMaterialStats> List<T> listOfCompatibleWith(MaterialStatsId statsId, MaterialNBT materials, List<WeightedStatType> statTypes) {
+    return listOfCompatibleWith(Set.of(statsId), materials, statTypes);
+  }
+
+  /**
+   * Gets a list of all stats for the given part type
+   * @param statsIds            Stat IDs to fetch. Its the callers responsibility to make sure they all use the correct type.
+   * @param materials           Materials list
+   * @param statTypes  List of required components, filters stat types
+   * @param <T>  Type of stats
+   * @return  List of stats
+   */
+  public static <T extends IMaterialStats> List<T> listOfCompatibleWith(Set<MaterialStatsId> statsIds, MaterialNBT materials, List<WeightedStatType> statTypes) {
     ImmutableList.Builder<T> builder = ImmutableList.builder();
     // iterating both lists at once, precondition that they have the same size
     int size = statTypes.size();
     for (int i = 0; i < size; i++) {
       // ensure stat type is valid
       WeightedStatType statType = statTypes.get(i);
-      if (statType.stat().equals(statsId)) {
+      if (statsIds.contains(statType.stat())) {
         T stats = fetchStatsOrDefault(materials.get(i).getId(), statType.stat());
         if (stats != null) {
           // add a copy of the stat once per weight, lazy way to do weighting

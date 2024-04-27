@@ -27,6 +27,8 @@ public abstract class AbstractStationSlotLayoutProvider extends GenericDataProvi
   protected static final int SORT_RANGED = 8;
   /** Index for large tools, add to either weapon or harvest */
   protected static final int SORT_LARGE = 6;
+  /** Index for armor */
+  protected static final int SORT_ARMOR = 15;
 
   private final Map<ResourceLocation,StationSlotLayout.Builder> allLayouts = new HashMap<>();
 
