@@ -528,9 +528,6 @@ public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelt
     MeltingRecipeBuilder.melting(Ingredient.of(TinkerSmeltery.searedDuct), TinkerFluids.moltenGold.get(), FluidValues.INGOT * 2, 2.5f)
                         .addByproduct(new FluidStack(TinkerFluids.searedStone.get(), FluidValues.BRICK * 4))
                         .save(consumer, location("smeltery/melting/metal/cobalt/seared_duct"));
-    // reinforcement - no seared stone as it can also be casted from scorched
-    MeltingRecipeBuilder.melting(Ingredient.of(TinkerModifiers.searedReinforcement), TinkerFluids.moltenObsidian.get(), FluidValues.GLASS_PANE)
-                        .save(consumer, location(meltingFolder + "reinforcement"));
   }
 
   private void addFoundryRecipes(Consumer<FinishedRecipe> consumer) {
@@ -1474,8 +1471,7 @@ public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelt
                         .save(consumer, location(metalFolder + "iron/tripwire"));
     MeltingRecipeBuilder.melting(Ingredient.of(Blocks.LANTERN, Blocks.SOUL_LANTERN), TinkerFluids.moltenIron.get(), FluidValues.NUGGET * 8)
                         .save(consumer, location(metalFolder + "iron/lantern"));
-    MeltingRecipeBuilder.melting(Ingredient.of(TinkerModifiers.ironReinforcement), TinkerFluids.moltenIron.get(), FluidValues.NUGGET * 3)
-                        .addByproduct(new FluidStack(TinkerFluids.moltenObsidian.get(), FluidValues.GLASS_PANE))
+    MeltingRecipeBuilder.melting(Ingredient.of(TinkerModifiers.ironReinforcement), TinkerFluids.moltenIron.get(), FluidValues.INGOT)
                         .save(consumer, location(metalFolder + "iron/reinforcement"));
     // armor
     MeltingRecipeBuilder.melting(Ingredient.of(Items.IRON_HELMET), TinkerFluids.moltenIron.get(), FluidValues.INGOT * 5)
@@ -1521,8 +1517,7 @@ public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelt
                         .save(consumer, location(metalFolder + "gold/apple"));
     MeltingRecipeBuilder.melting(Ingredient.of(Items.GLISTERING_MELON_SLICE, Items.GOLDEN_CARROT), TinkerFluids.moltenGold.get(), FluidValues.NUGGET * 8)
                         .save(consumer, location(metalFolder + "gold/produce"));
-    MeltingRecipeBuilder.melting(Ingredient.of(TinkerModifiers.goldReinforcement), TinkerFluids.moltenGold.get(), FluidValues.NUGGET * 3)
-                        .addByproduct(new FluidStack(TinkerFluids.moltenObsidian.get(), FluidValues.GLASS_PANE))
+    MeltingRecipeBuilder.melting(Ingredient.of(TinkerModifiers.goldReinforcement), TinkerFluids.moltenGold.get(), FluidValues.INGOT)
                         .save(consumer, location(metalFolder + "gold/reinforcement"));
     MeltingRecipeBuilder.melting(Ingredient.of(TinkerCommons.goldBars), TinkerFluids.moltenGold.get(), FluidValues.NUGGET * 3)
                         .save(consumer, location(metalFolder + "gold/nugget_3"));
@@ -1682,15 +1677,13 @@ public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelt
     MeltingRecipeBuilder.melting(Ingredient.of(TinkerModifiers.silkyCloth), TinkerFluids.moltenRoseGold.get(), FluidValues.INGOT)
                         .save(consumer, location(metalFolder + "rose_gold/silky_cloth"));
 
-    // misc reinforcements
+    // durability reinforcements
     MeltingRecipeBuilder.melting(Ingredient.of(TinkerModifiers.slimesteelReinforcement), TinkerFluids.moltenSlimesteel.get(), FluidValues.NUGGET * 3)
                         .addByproduct(new FluidStack(TinkerFluids.moltenObsidian.get(), FluidValues.GLASS_PANE))
                         .save(consumer, location(metalFolder + "slimesteel/reinforcement"));
-    MeltingRecipeBuilder.melting(Ingredient.of(TinkerModifiers.bronzeReinforcement), TinkerFluids.moltenAmethystBronze.get(), FluidValues.NUGGET * 3)
-                        .addByproduct(new FluidStack(TinkerFluids.moltenObsidian.get(), FluidValues.GLASS_PANE))
-                        .save(consumer, location(metalFolder + "amethyst_bronze/reinforcement"));
-    MeltingRecipeBuilder.melting(Ingredient.of(TinkerModifiers.cobaltReinforcement), TinkerFluids.moltenCobalt.get(), FluidValues.NUGGET * 3)
-                        .addByproduct(new FluidStack(TinkerFluids.moltenObsidian.get(), FluidValues.GLASS_PANE))
+    MeltingRecipeBuilder.melting(Ingredient.of(TinkerModifiers.obsidianReinforcement), TinkerFluids.moltenObsidian.get(), FluidValues.GLASS_BLOCK)
+                        .save(consumer, location(metalFolder + "obsidian/reinforcement"));
+    MeltingRecipeBuilder.melting(Ingredient.of(TinkerModifiers.cobaltReinforcement), TinkerFluids.moltenCobalt.get(), FluidValues.INGOT)
                         .save(consumer, location(metalFolder + "cobalt/reinforcement"));
 
     MeltingRecipeBuilder.melting(Ingredient.of(TinkerCommons.cobaltPlatform), TinkerFluids.moltenCobalt.get(), FluidValues.NUGGET * 10)

@@ -3,9 +3,9 @@
   "allow_crystal": true,
   "amount_per_item": 1,
   "input": {
-    "item": "tconstruct:bronze_reinforcement"
+    "item": "tconstruct:iron_reinforcement"
   },
-  "needed_per_level": 20,
+  "needed_per_level": 5,
   "result": "tconstruct:projectile_protection",
   "slots": {
     "defense": 1

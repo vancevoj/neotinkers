@@ -3,12 +3,12 @@
   "allow_crystal": true,
   "amount_per_item": 1,
   "input": {
-    "item": "tconstruct:iron_reinforcement"
+    "item": "tconstruct:emerald_reinforcement"
   },
   "level": {
     "max": 5
   },
-  "needed_per_level": 20,
+  "needed_per_level": 4,
   "result": "tconstruct:reinforced",
   "slots": {
     "upgrades": 1

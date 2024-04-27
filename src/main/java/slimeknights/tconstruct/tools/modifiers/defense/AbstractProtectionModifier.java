@@ -2,7 +2,6 @@ package slimeknights.tconstruct.tools.modifiers.defense;
 
 import lombok.RequiredArgsConstructor;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
 import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
@@ -18,6 +17,11 @@ import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 @RequiredArgsConstructor
 public abstract class AbstractProtectionModifier<T extends ModifierMaxLevel> extends Modifier implements EquipmentChangeModifierHook {
   private final TinkerDataKey<T> key;
+  private final boolean allowClient;
+
+  public AbstractProtectionModifier(TinkerDataKey<T> key) {
+    this(key, false);
+  }
 
   @Override
   protected void registerHooks(Builder hookBuilder) {
@@ -38,9 +42,8 @@ public abstract class AbstractProtectionModifier<T extends ModifierMaxLevel> ext
 
   @Override
   public void onUnequip(IToolStackView tool, ModifierEntry modifier, EquipmentChangeContext context) {
-    LivingEntity entity = context.getEntity();
     EquipmentSlot slot = context.getChangedSlot();
-    if (ModifierUtil.validArmorSlot(tool, slot) && !entity.level.isClientSide) {
+    if ((allowClient || !context.getEntity().level.isClientSide) && ModifierUtil.validArmorSlot(tool, slot)) {
       context.getTinkerData().ifPresent(data -> {
         T modData = data.get(key);
         if (modData != null) {
@@ -55,9 +58,8 @@ public abstract class AbstractProtectionModifier<T extends ModifierMaxLevel> ext
 
   @Override
   public void onEquip(IToolStackView tool, ModifierEntry modifier, EquipmentChangeContext context) {
-    LivingEntity entity = context.getEntity();
     EquipmentSlot slot = context.getChangedSlot();
-    if (!entity.level.isClientSide && ModifierUtil.validArmorSlot(tool, slot) && !tool.isBroken()) {
+    if ((allowClient || !context.getEntity().level.isClientSide) && ModifierUtil.validArmorSlot(tool, slot) && !tool.isBroken()) {
       float scaledLevel = modifier.getEffectiveLevel();
       context.getTinkerData().ifPresent(data -> {
         T modData = data.get(key);

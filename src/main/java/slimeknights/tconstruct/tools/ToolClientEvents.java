@@ -10,6 +10,7 @@ import net.minecraft.client.player.Input;
 import net.minecraft.client.renderer.entity.ItemEntityRenderer;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.server.packs.PackType;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -55,6 +56,8 @@ import slimeknights.tconstruct.library.client.modifiers.TankModifierModel;
 import slimeknights.tconstruct.library.client.particle.AttackParticle;
 import slimeknights.tconstruct.library.modifiers.ModifierId;
 import slimeknights.tconstruct.library.modifiers.ModifierManager;
+import slimeknights.tconstruct.library.modifiers.modules.unserializable.ArmorStatModule;
+import slimeknights.tconstruct.library.tools.capability.TinkerDataKeys;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
 import slimeknights.tconstruct.library.utils.HarvestTiers;
@@ -283,14 +286,19 @@ public class ToolClientEvents extends ClientEventBase {
     Player player = event.getEntity();
     if (player.isUsingItem() && !player.isPassenger()) {
       ItemStack using = player.getUseItem();
+      // start by calculating tool stat
+      float speed = 0.2f;
       if (using.is(TinkerTags.Items.HELD)) {
         ToolStack tool = ToolStack.from(using);
-        // multiply by 5 to cancel out the vanilla 20%
-        float speed = 5 * (tool.getStats().get(ToolStats.USE_ITEM_SPEED));
-        Input input = event.getInput();
-        input.leftImpulse *= speed;
-        input.forwardImpulse *= speed;
+        speed = tool.getStats().get(ToolStats.USE_ITEM_SPEED);
       }
+      // next, add in armor bonus
+      speed = Mth.clamp(speed + ArmorStatModule.getStat(player, TinkerDataKeys.USE_SPEED_BONUS), 0, 1);
+      // update speed, note if the armor stat is 0 and the held tool is not tinkers this is a no-op effectively
+      Input input = event.getInput();
+      // multiply by 5 to cancel out the vanilla 20%
+      input.leftImpulse *= speed * 5;
+      input.forwardImpulse *= speed * 5;
     }
   }
 }

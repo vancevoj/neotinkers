@@ -191,7 +191,8 @@ public class TConstruct {
       case "blood_bottle" -> TinkerFluids.slimeBottle.get(SlimeType.EARTH);
       // ID switched from non-generated to generated
       case "ichor_bottle" -> TinkerFluids.slimeBottle.get(SlimeType.ICHOR);
-      // fallback to blocks to reduce duplication of listings
+      // reinforcement rework, bronze was the only type dropped so map to the new type
+      case "bronze_reinforcement" -> TinkerModifiers.obsidianReinforcement.get();
       default -> {
         Block block = missingBlock(name);
         yield block == null ? null : block.asItem();

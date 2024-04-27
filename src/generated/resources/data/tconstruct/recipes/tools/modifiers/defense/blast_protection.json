@@ -3,9 +3,9 @@
   "allow_crystal": true,
   "amount_per_item": 1,
   "input": {
-    "item": "tconstruct:emerald_reinforcement"
+    "item": "tconstruct:obsidian_reinforcement"
   },
-  "needed_per_level": 20,
+  "needed_per_level": 5,
   "result": "tconstruct:blast_protection",
   "slots": {
     "defense": 1

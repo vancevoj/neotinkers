@@ -79,9 +79,9 @@
 
 
     "__defense__": null,
-    "blast_protection":      "#17DD62",
+    "blast_protection":      "#443753",
     "magic_protection":      "#F4D362",
-    "projectile_protection": "#E2A856",
+    "projectile_protection": "#D8D8D8",
     "melee_protection":      "#2376DD",
     "fire_protection":       "#4F4A47",
     "golden":                "#FFD83E",
@@ -123,7 +123,7 @@
     "netherite":     "#8E7C7F",
     "offhanded":     "#7E627B",
     "overforced":    "#2759C4",
-    "reinforced":    "#cacaca",
+    "reinforced":    "#41f384",
     "soulbound":     "#D1A75D",
     "tank":          "#3f3f3f",
     "the_one_probe": "#7FF2FF",

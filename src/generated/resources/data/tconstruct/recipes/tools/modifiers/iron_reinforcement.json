@@ -1,12 +1,12 @@
 {
   "type": "tconstruct:casting_table",
   "cast": {
-    "item": "tconstruct:obsidian_pane"
+    "item": "tconstruct:pattern"
   },
   "cast_consumed": true,
-  "cooling_time": 35,
+  "cooling_time": 60,
   "fluid": {
-    "amount": 30,
+    "amount": 90,
     "tag": "forge:molten_iron"
   },
   "result": "tconstruct:iron_reinforcement"

@@ -15,6 +15,7 @@ import slimeknights.tconstruct.library.modifiers.hook.display.TooltipModifierHoo
 import slimeknights.tconstruct.library.modifiers.modules.armor.ProtectionModule;
 import slimeknights.tconstruct.library.module.ModuleHookMap.Builder;
 import slimeknights.tconstruct.library.tools.capability.TinkerDataCapability.TinkerDataKey;
+import slimeknights.tconstruct.library.tools.capability.TinkerDataKeys;
 import slimeknights.tconstruct.library.tools.context.EquipmentChangeContext;
 import slimeknights.tconstruct.library.tools.context.EquipmentContext;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
@@ -24,9 +25,9 @@ import java.util.List;
 
 public class ProjectileProtectionModifier extends AbstractProtectionModifier<ModifierMaxLevel> implements ProtectionModifierHook, TooltipModifierHook {
   /** Entity data key for the data associated with this modifier */
-  public static final TinkerDataKey<ModifierMaxLevel> PROJECTILE_DATA = TConstruct.createKey("projectile_protection");
+  private static final TinkerDataKey<ModifierMaxLevel> PROJECTILE_DATA = TConstruct.createKey("projectile_protection");
   public ProjectileProtectionModifier() {
-    super(PROJECTILE_DATA);
+    super(PROJECTILE_DATA, true);
   }
 
   @Override
@@ -38,6 +39,16 @@ public class ProjectileProtectionModifier extends AbstractProtectionModifier<Mod
   @Override
   protected ModifierMaxLevel createData(EquipmentChangeContext context) {
     return new ModifierMaxLevel();
+  }
+
+  @Override
+  protected void set(ModifierMaxLevel data, EquipmentSlot slot, float scaledLevel, EquipmentChangeContext context) {
+    float oldMax = data.getMax();
+    super.set(data, slot, scaledLevel, context);
+    float newMax = data.getMax();
+    if (oldMax != newMax) {
+      context.getTinkerData().ifPresent(d -> d.add(TinkerDataKeys.USE_SPEED_BONUS, (newMax - oldMax) * 0.05f));
+    }
   }
 
   @Override

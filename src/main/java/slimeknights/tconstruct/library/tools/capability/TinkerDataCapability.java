@@ -130,6 +130,20 @@ public class TinkerDataCapability {
     }
 
     /**
+     * Adds the given value to the float data key
+     * @param key    Key to add
+     * @param value  Value to add
+     */
+    public void add(TinkerDataKey<Float> key, float value) {
+      float newValue = get(key, 0f) + value;
+      if (newValue == 0) {
+        data.remove(key);
+      } else {
+        data.put(key, newValue);
+      }
+    }
+
+    /**
      * Removes a value to the holder
      * @param key  Key to remove
      */

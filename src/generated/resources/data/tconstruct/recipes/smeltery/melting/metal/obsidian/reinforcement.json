@@ -1,12 +1,12 @@
 {
   "type": "tconstruct:melting",
   "ingredient": {
-    "item": "tconstruct:seared_reinforcement"
+    "item": "tconstruct:obsidian_reinforcement"
   },
   "result": {
-    "amount": 250,
+    "amount": 1000,
     "fluid": "tconstruct:molten_obsidian"
   },
   "temperature": 1000,
-  "time": 111
+  "time": 221
 }

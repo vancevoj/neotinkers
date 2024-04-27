@@ -48,7 +48,6 @@ import slimeknights.tconstruct.library.events.TinkerToolEvent.ToolHarvestEvent;
 import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
-import slimeknights.tconstruct.library.modifiers.data.ModifierMaxLevel;
 import slimeknights.tconstruct.library.modifiers.hook.armor.ModifyDamageModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.armor.OnAttackedModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.armor.ProtectionModifierHook;
@@ -69,7 +68,6 @@ import slimeknights.tconstruct.library.tools.nbt.NamespacedNBT;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.library.utils.BlockSideHitListener;
 import slimeknights.tconstruct.tools.TinkerModifiers;
-import slimeknights.tconstruct.tools.modifiers.defense.ProjectileProtectionModifier;
 import slimeknights.tconstruct.tools.modifiers.upgrades.armor.HasteModifier;
 
 import java.util.List;
@@ -392,16 +390,6 @@ public class ToolEvents {
       if (disguises != null && disguises.contains(lookingEntity.getType())) {
         // not as good as a real head
         event.modifyVisibility(0.65f);
-      }
-
-      // projectile protection
-      ModifierMaxLevel projData = data.get(ProjectileProtectionModifier.PROJECTILE_DATA);
-      if (projData != null) {
-        float max = projData.getMax();
-        if (max > 0) {
-          // reduces visibility by 5% per level
-          event.modifyVisibility(Math.max(0, 1 - (max * 0.05)));
-        }
       }
     });
   }
