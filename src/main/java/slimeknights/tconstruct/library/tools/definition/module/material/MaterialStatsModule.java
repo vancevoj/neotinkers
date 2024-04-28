@@ -12,8 +12,8 @@ import slimeknights.tconstruct.library.materials.IMaterialRegistry;
 import slimeknights.tconstruct.library.materials.MaterialRegistry;
 import slimeknights.tconstruct.library.materials.definition.MaterialId;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
-import slimeknights.tconstruct.library.module.ModuleHook;
 import slimeknights.tconstruct.library.module.HookProvider;
+import slimeknights.tconstruct.library.module.ModuleHook;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinition;
 import slimeknights.tconstruct.library.tools.definition.module.ToolHooks;
 import slimeknights.tconstruct.library.tools.definition.module.ToolModule;
@@ -127,7 +127,10 @@ public class MaterialStatsModule implements ToolStatsHook, ToolTraitHook, ToolMa
 
   @Override
   public void addToolStats(IToolContext context, ModifierStatsBuilder builder) {
-    statProvider.addStats(statTypes, context.getMaterials(), builder);
+    MaterialNBT materials = context.getMaterials();
+    if (materials.size() > 0) {
+      statProvider.addStats(statTypes, context.getMaterials(), builder);
+    }
   }
 
   @Override
