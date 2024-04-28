@@ -3,7 +3,7 @@
   "level_display": "tconstruct:default",
   "modules": [
     {
-      "type": "tconstruct:constant_enchantment",
+      "type": "tconstruct:enchantment_ignoring_protection",
       "level": 1,
       "name": "minecraft:fire_protection"
     },
@@ -16,8 +16,7 @@
           "mantle:fire"
         ]
       },
-      "each_level": 2.5,
-      "subtract_enchantment": "minecraft:fire_protection"
+      "each_level": 2.5
     }
   ],
   "tooltip_display": "always"

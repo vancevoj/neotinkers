@@ -2,10 +2,12 @@ package slimeknights.tconstruct.library.modifiers.modules.build;
 
 import com.google.common.collect.ImmutableSet;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -16,19 +18,21 @@ import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.data.predicate.IJsonPredicate;
 import slimeknights.mantle.data.predicate.block.BlockPredicate;
 import slimeknights.mantle.data.predicate.entity.LivingEntityPredicate;
+import slimeknights.mantle.util.LogicHelper;
 import slimeknights.tconstruct.library.json.TinkerLoadables;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
-import slimeknights.tconstruct.library.module.ModuleHook;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
+import slimeknights.tconstruct.library.modifiers.hook.armor.ProtectionModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.behavior.EnchantmentModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.mining.BlockHarvestModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.mining.HarvestEnchantmentsModifierHook;
-import slimeknights.tconstruct.library.module.HookProvider;
 import slimeknights.tconstruct.library.modifiers.modules.ModifierModule;
 import slimeknights.tconstruct.library.modifiers.modules.util.IntLevelModule;
 import slimeknights.tconstruct.library.modifiers.modules.util.ModifierCondition;
 import slimeknights.tconstruct.library.modifiers.modules.util.ModifierCondition.ConditionalModule;
 import slimeknights.tconstruct.library.modifiers.modules.util.ModuleBuilder;
+import slimeknights.tconstruct.library.module.HookProvider;
+import slimeknights.tconstruct.library.module.ModuleHook;
 import slimeknights.tconstruct.library.tools.context.EquipmentContext;
 import slimeknights.tconstruct.library.tools.context.ToolHarvestContext;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
@@ -85,6 +89,14 @@ public interface EnchantmentModule extends ModifierModule, IntLevelModule, Condi
       return new Constant(enchantment, level, condition);
     }
 
+    /** Builds a module for a constant enchantment which ignores its protection value */
+    public Protection protection() {
+      if (block != BlockPredicate.ANY || holder != LivingEntityPredicate.ANY) {
+        throw new IllegalStateException("Cannot build a constant enchantment module with block or holder conditions");
+      }
+      return new Protection(enchantment, level, condition);
+    }
+
     /**
      * Creates a new main hand harvest module
      * @param key  Key to use for checking conditions, needs to be unique. Recommend suffixing the modifier ID (using the modifier ID will conflict with incremental)
@@ -118,9 +130,15 @@ public interface EnchantmentModule extends ModifierModule, IntLevelModule, Condi
   }
 
   /** Implementation of a simple constant enchantment for the current tool */
-  record Constant(Enchantment enchantment, int level, ModifierCondition<IToolStackView> condition) implements EnchantmentModule, EnchantmentModifierHook {
+  @Accessors(fluent = true)
+  @Getter
+  @RequiredArgsConstructor
+  class Constant implements EnchantmentModule, EnchantmentModifierHook {
     private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<Constant>defaultHooks(ModifierHooks.ENCHANTMENTS);
     public static final RecordLoadable<Constant> LOADER = RecordLoadable.create(ENCHANTMENT, IntLevelModule.FIELD, ModifierCondition.TOOL_FIELD, Constant::new);
+    private final Enchantment enchantment;
+    private final int level;
+    private final ModifierCondition<IToolStackView> condition;
 
     public Constant(Enchantment enchantment, int level) {
       this(enchantment, level, ModifierCondition.ANY_TOOL);
@@ -149,6 +167,37 @@ public interface EnchantmentModule extends ModifierModule, IntLevelModule, Condi
     @Override
     public RecordLoadable<Constant> getLoader() {
       return LOADER;
+    }
+  }
+
+  /** Constant enchantment which cancels out the protection value */
+  class Protection extends Constant implements ProtectionModifierHook {
+    private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<Protection>defaultHooks(ModifierHooks.ENCHANTMENTS, ModifierHooks.PROTECTION);
+    public static final RecordLoadable<Constant> LOADER = RecordLoadable.create(ENCHANTMENT, IntLevelModule.FIELD, ModifierCondition.TOOL_FIELD, Protection::new);
+    public Protection(Enchantment enchantment, int level, ModifierCondition<IToolStackView> condition) {
+      super(enchantment, level, condition);
+    }
+
+    @Override
+    public List<ModuleHook<?>> getDefaultHooks() {
+      return DEFAULT_HOOKS;
+    }
+
+    @Override
+    public RecordLoadable<Constant> getLoader() {
+      return LOADER;
+    }
+
+    @Override
+    public float getProtectionModifier(IToolStackView tool, ModifierEntry modifier, EquipmentContext context, EquipmentSlot slotType, DamageSource source, float modifierValue) {
+      if (condition().matches(tool, modifier)) {
+        int subtractLevel = getLevel(modifier);
+        Enchantment enchantment = enchantment();
+        if (subtractLevel > 0 && LogicHelper.isInList(enchantment.slots, slotType) && !source.isBypassEnchantments()) {
+          modifierValue -= enchantment.getDamageProtection(subtractLevel, source);
+        }
+      }
+      return modifierValue;
     }
   }
 
