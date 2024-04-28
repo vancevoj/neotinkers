@@ -51,7 +51,12 @@
         "item": "tconstruct:plate_chestplate",
         "nbt": {
           "tic_broken": false,
-          "tic_display": true
+          "tic_display": true,
+          "Damage": 0,
+          "tic_materials": [
+            "tconstruct:ui_render#extra",
+            "tconstruct:ui_render#head"
+          ]
         }
       }
     },

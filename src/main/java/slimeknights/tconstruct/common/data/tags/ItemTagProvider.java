@@ -274,13 +274,13 @@ public class ItemTagProvider extends ItemTagsProvider {
       bookArmor.add(TinkerTools.travelersGear.get(slotType));
     }
     bookArmor.add(TinkerTools.travelersShield.get());
-    tag(MIGHTY_ARMOR);
-    bookArmor = this.tag(FANTASTIC_ARMOR);
     for (ArmorSlotType slotType : ArmorSlotType.TOP_DOWN) {
       bookArmor.add(TinkerTools.plateArmor.get(slotType));
     }
+    tag(MIGHTY_ARMOR);
+    bookArmor = tag(FANTASTIC_ARMOR);
     bookArmor.add(TinkerTools.plateShield.get());
-    bookArmor = this.tag(GADGETRY_ARMOR);
+    bookArmor = tag(GADGETRY_ARMOR);
     for (ArmorSlotType slotType : ArmorSlotType.TOP_DOWN) {
       bookArmor.add(TinkerTools.slimesuit.get(slotType));
     }
