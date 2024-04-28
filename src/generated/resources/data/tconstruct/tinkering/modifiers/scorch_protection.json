@@ -1,0 +1,26 @@
+{
+  "type": "tconstruct:composable",
+  "level_display": "tconstruct:default",
+  "modules": [
+    {
+      "type": "tconstruct:enchantment_ignoring_protection",
+      "level": 1,
+      "name": "minecraft:fire_protection"
+    },
+    {
+      "type": "tconstruct:protection",
+      "damage_source": {
+        "type": "mantle:and",
+        "predicates": [
+          "mantle:can_protect",
+          {
+            "type": "mantle:attacker",
+            "entity_type": "mantle:fire_immune"
+          }
+        ]
+      },
+      "each_level": 1.25
+    }
+  ],
+  "tooltip_display": "always"
+}

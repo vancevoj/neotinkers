@@ -26,6 +26,7 @@ import slimeknights.mantle.data.predicate.IJsonPredicate;
 import slimeknights.mantle.data.predicate.block.BlockPredicate;
 import slimeknights.mantle.data.predicate.block.BlockPropertiesPredicate;
 import slimeknights.mantle.data.predicate.damage.DamageSourcePredicate;
+import slimeknights.mantle.data.predicate.damage.SourceAttackerPredicate;
 import slimeknights.mantle.data.predicate.damage.SourceMessagePredicate;
 import slimeknights.mantle.data.predicate.entity.HasEnchantmentEntityPredicate;
 import slimeknights.mantle.data.predicate.entity.LivingEntityPredicate;
@@ -317,8 +318,8 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
     // protection
     buildModifier(ModifierIds.protection).addModule(ProtectionModule.source(DamageSourcePredicate.CAN_PROTECT).eachLevel(1.25f));
     buildModifier(ModifierIds.fireProtection)
-      .addModule(EnchantmentModule.builder(Enchantments.FIRE_PROTECTION).constant())
-      .addModule(ProtectionModule.source(DamageSourcePredicate.and(DamageSourcePredicate.CAN_PROTECT, DamageSourcePredicate.FIRE)).subtract(Enchantments.FIRE_PROTECTION).eachLevel(2.5f));
+      .addModule(EnchantmentModule.builder(Enchantments.FIRE_PROTECTION).protection())
+      .addModule(ProtectionModule.source(DamageSourcePredicate.CAN_PROTECT, DamageSourcePredicate.FIRE).eachLevel(2.5f));
     buildModifier(ModifierIds.turtleShell)
       .addModule(AttributeModule.builder(ForgeMod.SWIM_SPEED.get(), Operation.MULTIPLY_TOTAL).uniqueFrom(ModifierIds.turtleShell).slots(armorSlots).eachLevel(0.05f))
       .addModule(ProtectionModule.source(DamageSourcePredicate.CAN_PROTECT)
@@ -427,6 +428,10 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
         // finally, add in base damage
         .variable(VALUE).add().build());
 
+    // triats - tier 2
+    buildModifier(ModifierIds.scorchProtection)
+      .addModule(EnchantmentModule.builder(Enchantments.FIRE_PROTECTION).protection())
+      .addModule(ProtectionModule.source(DamageSourcePredicate.and(DamageSourcePredicate.CAN_PROTECT, new SourceAttackerPredicate(LivingEntityPredicate.FIRE_IMMUNE))).eachLevel(1.25f));
 
     // traits - tier 2 compat
     addModifier(ModifierIds.lustrous, new Modifier());
@@ -503,6 +508,8 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
         .constant(0.05f).multiply()
         .variable(MULTIPLIER).multiply()
         .variable(VALUE).add().build());
+    // traits - tier 4
+    buildModifier(ModifierIds.fortified).priority(60).addModule(new ModifierSlotModule(SlotType.DEFENSE));
 
     // mob disguise
     buildModifier(ModifierIds.creeperDisguise        ).addModule(new MobDisguiseModule(EntityType.CREEPER));

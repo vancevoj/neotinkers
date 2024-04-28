@@ -177,8 +177,13 @@ public class TinkerDataCapability {
 
     /** Gets the value from the holder, creating it if missing */
     @SuppressWarnings("unchecked")
+    public <T> T computeIfAbsent(TinkerDataKey<T> key, Function<TinkerDataKey<?>,T> constructor) {
+      return (T) data.computeIfAbsent(key, constructor);
+    }
+
+    /** Gets the value from the holder, creating it if missing */
     public <T, U extends TinkerDataKey<T> & Function<TinkerDataKey<?>,T>> T computeIfAbsent(U key) {
-      return (T) data.computeIfAbsent(key, key);
+      return computeIfAbsent(key, key);
     }
 
     /**

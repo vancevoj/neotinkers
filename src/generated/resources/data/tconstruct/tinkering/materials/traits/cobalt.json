@@ -4,5 +4,13 @@
       "level": 1,
       "name": "tconstruct:lightweight"
     }
-  ]
+  ],
+  "perStat": {
+    "tconstruct:armor": [
+      {
+        "level": 1,
+        "name": "tconstruct:melee_protection"
+      }
+    ]
+  }
 }

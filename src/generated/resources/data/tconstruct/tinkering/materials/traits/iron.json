@@ -6,6 +6,12 @@
     }
   ],
   "perStat": {
+    "tconstruct:armor": [
+      {
+        "level": 1,
+        "name": "tconstruct:projectile_protection"
+      }
+    ],
     "tconstruct:skull": [
       {
         "level": 1,

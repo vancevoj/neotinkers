@@ -7,6 +7,7 @@ import slimeknights.tconstruct.tools.TinkerModifiers;
 import slimeknights.tconstruct.tools.data.ModifierIds;
 import slimeknights.tconstruct.tools.stats.SkullStats;
 
+import static slimeknights.tconstruct.library.materials.MaterialRegistry.ARMOR;
 import static slimeknights.tconstruct.library.materials.MaterialRegistry.MELEE_HARVEST;
 import static slimeknights.tconstruct.library.materials.MaterialRegistry.RANGED;
 
@@ -34,17 +35,21 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     addDefaultTraits(MaterialIds.string, ModifierIds.stringy);
     addDefaultTraits(MaterialIds.leather, TinkerModifiers.tanned);
     addDefaultTraits(MaterialIds.vine, TinkerModifiers.solarPowered);
+    addTraits(MaterialIds.gold, ARMOR, TinkerModifiers.golden, TinkerModifiers.magicProtection);
 
     // tier 2
     addDefaultTraits(MaterialIds.iron, TinkerModifiers.magnetic);
+    addTraits(MaterialIds.iron, ARMOR, TinkerModifiers.projectileProtection);
     addDefaultTraits(MaterialIds.copper, TinkerModifiers.dwarven);
     addDefaultTraits(MaterialIds.searedStone, TinkerModifiers.searing);
+    addTraits(MaterialIds.searedStone, ARMOR, ModifierIds.fireProtection);
     addDefaultTraits(MaterialIds.slimewood, TinkerModifiers.overgrowth, TinkerModifiers.overslime);
     addDefaultTraits(MaterialIds.venombone, ModifierIds.antitoxin);
     addTraits(MaterialIds.aluminum, RANGED, ModifierIds.featherweight);
     // tier 2 - nether
     addDefaultTraits(MaterialIds.necroticBone, TinkerModifiers.necrotic);
     addDefaultTraits(MaterialIds.scorchedStone, ModifierIds.scorching);
+    addTraits(MaterialIds.scorchedStone, ARMOR, ModifierIds.scorchProtection);
     // tier 2 - end
     addDefaultTraits(MaterialIds.whitestone, TinkerModifiers.stoneshield);
     // tier 2 - binding
@@ -53,13 +58,16 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
 
     // tier 3
     addDefaultTraits(MaterialIds.slimesteel, ModifierIds.overcast, TinkerModifiers.overslime.getId());
+    // crystalbound is used for armor and ranged
+    addDefaultTraits(MaterialIds.amethystBronze, TinkerModifiers.crystalbound);
     addTraits(MaterialIds.amethystBronze, MELEE_HARVEST, ModifierIds.crumbling);
-    addTraits(MaterialIds.amethystBronze, RANGED, TinkerModifiers.crystalbound);
     addDefaultTraits(MaterialIds.nahuatl, TinkerModifiers.lacerating);
     addDefaultTraits(MaterialIds.roseGold, ModifierIds.enhanced);
     addDefaultTraits(MaterialIds.pigIron, TinkerModifiers.tasty);
+    addTraits(MaterialIds.obsidian, ARMOR, TinkerModifiers.blastProtection);
     // tier 3 - nether
     addDefaultTraits(MaterialIds.cobalt, ModifierIds.lightweight);
+    addTraits(MaterialIds.cobalt, ARMOR, TinkerModifiers.meleeProtection);
     // tier 3 - binding
     addDefaultTraits(MaterialIds.darkthread, ModifierIds.looting);
 
@@ -70,6 +78,7 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     addDefaultTraits(MaterialIds.blazingBone, TinkerModifiers.conducting);
     // tier 4 - binding
     addDefaultTraits(MaterialIds.ancientHide, ModifierIds.fortune);
+    addTraits(MaterialIds.ancientHide, ARMOR, ModifierIds.fortified);
 
     // tier 5
     addDefaultTraits(MaterialIds.enderslimeVine, TinkerModifiers.enderporting);

@@ -2,10 +2,12 @@ package slimeknights.tconstruct.tools.modifiers.traits.general;
 
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.EquipmentSlot.Type;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -18,24 +20,25 @@ import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
+import slimeknights.tconstruct.library.modifiers.hook.armor.OnAttackedModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.interaction.GeneralInteractionModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.interaction.InteractionSource;
 import slimeknights.tconstruct.library.module.ModuleHookMap.Builder;
+import slimeknights.tconstruct.library.tools.context.EquipmentContext;
 import slimeknights.tconstruct.library.tools.helper.ModifierUtil;
 import slimeknights.tconstruct.library.tools.helper.ToolDamageUtil;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
-import slimeknights.tconstruct.library.tools.nbt.ModDataNBT;
 import slimeknights.tconstruct.shared.TinkerCommons;
 
 import java.util.List;
 
-public class TastyModifier extends Modifier implements GeneralInteractionModifierHook {
+public class TastyModifier extends Modifier implements GeneralInteractionModifierHook, OnAttackedModifierHook {
   // TODO: consider making this modifier dynamic and letting addons swap out representative items and food rewards
   private static final Lazy<ItemStack> BACON_STACK = Lazy.of(() -> new ItemStack(TinkerCommons.bacon));
 
   @Override
   protected void registerHooks(Builder hookBuilder) {
-    hookBuilder.addHook(this, ModifierHooks.GENERAL_INTERACT);
+    hookBuilder.addHook(this, ModifierHooks.GENERAL_INTERACT, ModifierHooks.ON_ATTACKED);
   }
 
   @Override
@@ -47,17 +50,13 @@ public class TastyModifier extends Modifier implements GeneralInteractionModifie
     return InteractionResult.PASS;
   }
 
-  @Override
-  public void onFinishUsing(IToolStackView tool, ModifierEntry modifier, LivingEntity entity) {
-    // remove is eating tag to prevent from messing with other modifiers
-    ModDataNBT persistentData = tool.getPersistentData();
-    if (!tool.isBroken() && entity instanceof Player player && player.canEat(false)) {
-      // eat the food
-      int level = modifier.getLevel();
+  /** Takes a nibble of the tool */
+  private void eat(IToolStackView tool, ModifierEntry modifier, LivingEntity entity) {
+    int level = modifier.intEffectiveLevel();
+    if (level > 0 && entity instanceof Player player && player.canEat(false)) {
       Level world = entity.getLevel();
-      player.getFoodData().eat(level, level * 0.1f);
-      ModifierUtil.foodConsumer.onConsume(player, BACON_STACK.get(), level, level * 0.1f);
-      player.awardStat(Stats.ITEM_USED.get(tool.getItem()));
+      player.getFoodData().eat(level, 0.4F);
+      ModifierUtil.foodConsumer.onConsume(player, BACON_STACK.get(), level, 0.6F);
       world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.GENERIC_EAT, SoundSource.NEUTRAL, 1.0F, 1.0F + (world.random.nextFloat() - world.random.nextFloat()) * 0.4F);
       world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_BURP, SoundSource.NEUTRAL, 0.5F, world.random.nextFloat() * 0.1F + 0.9F);
 
@@ -69,6 +68,13 @@ public class TastyModifier extends Modifier implements GeneralInteractionModifie
   }
 
   @Override
+  public void onFinishUsing(IToolStackView tool, ModifierEntry modifier, LivingEntity entity) {
+    if (!tool.isBroken()) {
+      eat(tool, modifier, entity);
+    }
+  }
+
+  @Override
   public UseAnim getUseAction(IToolStackView tool, ModifierEntry modifier) {
     return UseAnim.EAT;
   }
@@ -76,6 +82,21 @@ public class TastyModifier extends Modifier implements GeneralInteractionModifie
   @Override
   public int getUseDuration(IToolStackView tool, ModifierEntry modifier) {
     return 16;
+  }
+
+  @Override
+  public void onAttacked(IToolStackView tool, ModifierEntry modifier, EquipmentContext context, EquipmentSlot slotType, DamageSource source, float amount, boolean isDirectDamage) {
+    // this works like vanilla, damage is capped due to the hurt immunity mechanics, so if multiple pieces apply thorns between us and vanilla, damage is capped at 4
+    if (isDirectDamage) {
+      // 15% chance of working per level, doubled bonus on shields
+      float level = modifier.getEffectiveLevel();
+      if (slotType.getType() == Type.HAND) {
+        level *= 2;
+      }
+      if (RANDOM.nextFloat() < (level * 0.15f)) {
+        eat(tool, modifier, context.getEntity());
+      }
+    }
   }
 
   @Override

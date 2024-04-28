@@ -19,6 +19,8 @@ public interface TinkerDataKeys {
 	/** Cap modifier. Cap defaults to 20, but can be increased up to 23.75 and decreased down to 0 */
 	TinkerDataKey<Float> PROTECTION_CAP = TConstruct.createKey("protection_cap");
 
-	/** Bonus to add to movement speed when using items */
+	/** Bonus to add to movement speed when using items, used in {@link slimeknights.tconstruct.tools.TinkerModifiers#projectileProtection} */
 	TinkerDataKey<Float> USE_SPEED_BONUS = TConstruct.createKey("use_speed_bonus");
+	/** Knockback bonus */
+	TinkerDataKey<Float> KNOCKBACK = TConstruct.createKey("knockback");
 }

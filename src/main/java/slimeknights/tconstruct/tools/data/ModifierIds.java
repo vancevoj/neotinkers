@@ -106,6 +106,7 @@ public class ModifierIds {
   public static final ModifierId scorching = id("scorching");
   public static final ModifierId antitoxin = id("antitoxin");
   public static final ModifierId airborne = id("airborne");
+  public static final ModifierId scorchProtection = id("scorch_protection");
   // traits - tier 2 compat
   public static final ModifierId dense = id("dense");
   public static final ModifierId lustrous = id("lustrous");
@@ -120,6 +121,8 @@ public class ModifierIds {
   // traits - tier 3 compat
   public static final ModifierId maintained = id("maintained");
   public static final ModifierId ductile = id("ductile");
+  // traits - tier 4
+  public static final ModifierId fortified = id("fortified");
 
   // unused for now, will be reassigned later
   public static final ModifierId raging = id("raging");
