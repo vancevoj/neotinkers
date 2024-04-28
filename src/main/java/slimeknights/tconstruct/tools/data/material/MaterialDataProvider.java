@@ -51,6 +51,7 @@ public class MaterialDataProvider extends AbstractMaterialDataProvider {
     addMaterial(MaterialIds.slimesteel,     3, ORDER_GENERAL, false);
     addMaterial(MaterialIds.amethystBronze, 3, ORDER_HARVEST, false);
     addMaterial(MaterialIds.nahuatl,        3, ORDER_WEAPON,  false);
+    addMaterial(MaterialIds.obsidian,       3, ORDER_WEAPON,  false);
     addMaterial(MaterialIds.roseGold,       3, ORDER_SPECIAL, false);
     addMaterial(MaterialIds.pigIron,        3, ORDER_SPECIAL, false);
     // tier 3 (nether)
@@ -90,7 +91,6 @@ public class MaterialDataProvider extends AbstractMaterialDataProvider {
     addCompatMetalMaterial(MaterialIds.platedSlimewood, 3, ORDER_COMPAT + ORDER_SPECIAL, "brass");
 
     // plate
-    addMaterial(MaterialIds.obsidian,  3, ORDER_REPAIR, false);
     addMaterial(MaterialIds.debris,    3, ORDER_REPAIR, false);
     addMaterial(MaterialIds.netherite, 4, ORDER_REPAIR, false);
     addCompatMetalMaterial(MaterialIds.nickel,   2, ORDER_REPAIR);
