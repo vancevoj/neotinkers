@@ -705,13 +705,14 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .saveSalvage(consumer, prefix(ModifierIds.knockbackResistance, defenseSalvage))
                          .save(consumer, prefix(ModifierIds.knockbackResistance, defenseFolder));
     ModifierRecipeBuilder.modifier(TinkerModifiers.golden)
-                         .setTools(TinkerTags.Items.WORN_ARMOR) // piglins ignore held items
                          .addInput(Tags.Items.INGOTS_GOLD)
                          .addInput(Tags.Items.INGOTS_GOLD)
                          .addInput(Tags.Items.INGOTS_GOLD)
                          .setSlots(SlotType.DEFENSE, 1)
                          .setMaxLevel(1)
+                         .setTools(TinkerTags.Items.WORN_ARMOR) // allow salvage on all worn armor
                          .saveSalvage(consumer, prefix(TinkerModifiers.golden, defenseSalvage))
+                         .setTools(DifferenceIngredient.of(Ingredient.of(TinkerTags.Items.WORN_ARMOR), Ingredient.of(TinkerTools.plateArmor.values().toArray(new ItemLike[0])))) // piglins ignore held items
                          .save(consumer, prefix(TinkerModifiers.golden, defenseFolder));
     IncrementalModifierRecipeBuilder.modifier(ModifierIds.turtleShell)
                                     .setInput(Items.SCUTE, 1, 5)

@@ -8,7 +8,7 @@ import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.data.ModifierMaxLevel;
 import slimeknights.tconstruct.library.modifiers.hook.armor.EquipmentChangeModifierHook;
 import slimeknights.tconstruct.library.module.ModuleHookMap.Builder;
-import slimeknights.tconstruct.library.tools.capability.TinkerDataCapability.TinkerDataKey;
+import slimeknights.tconstruct.library.tools.capability.TinkerDataCapability.ComputableDataKey;
 import slimeknights.tconstruct.library.tools.context.EquipmentChangeContext;
 import slimeknights.tconstruct.library.tools.helper.ModifierUtil;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
@@ -16,10 +16,10 @@ import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 /** Base class for protection modifiers that want to keep track of the largest level for a bonus */
 @RequiredArgsConstructor
 public abstract class AbstractProtectionModifier<T extends ModifierMaxLevel> extends Modifier implements EquipmentChangeModifierHook {
-  private final TinkerDataKey<T> key;
+  private final ComputableDataKey<T> key;
   private final boolean allowClient;
 
-  public AbstractProtectionModifier(TinkerDataKey<T> key) {
+  public AbstractProtectionModifier(ComputableDataKey<T> key) {
     this(key, false);
   }
 
@@ -28,9 +28,6 @@ public abstract class AbstractProtectionModifier<T extends ModifierMaxLevel> ext
     super.registerHooks(hookBuilder);
     hookBuilder.addHook(this, ModifierHooks.EQUIPMENT_CHANGE);
   }
-
-  /** Creates a new data instance */
-  protected abstract T createData(EquipmentChangeContext context);
 
   /** Called when the last piece of equipment is removed to reset the data */
   protected void reset(T data, EquipmentChangeContext context) {}
@@ -62,14 +59,8 @@ public abstract class AbstractProtectionModifier<T extends ModifierMaxLevel> ext
     if ((allowClient || !context.getEntity().level.isClientSide) && ModifierUtil.validArmorSlot(tool, slot) && !tool.isBroken()) {
       float scaledLevel = modifier.getEffectiveLevel();
       context.getTinkerData().ifPresent(data -> {
-        T modData = data.get(key);
-        if (modData == null) {
-          // not calculated yet? add all vanilla values to the tracker
-          modData = createData(context);
-          data.put(key, modData);
-        }
         // add ourself to the data
-        set(modData, slot, scaledLevel, context);
+        set(data.computeIfAbsent(key), slot, scaledLevel, context);
       });
     }
   }

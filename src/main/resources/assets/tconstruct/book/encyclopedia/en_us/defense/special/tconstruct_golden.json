@@ -11,6 +11,7 @@
   "more_text_space": true,
   "effects": [
     "Maximum of 1 level per piece",
-    "Requires 1 defense slot"
+    "Requires 1 defense slot",
+    "Does not work on plate armor"
   ]
 }

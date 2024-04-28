@@ -18,6 +18,23 @@
     "defense": 1
   },
   "tools": {
-    "tag": "tconstruct:modifiable/armor/worn"
+    "type": "forge:difference",
+    "base": {
+      "tag": "tconstruct:modifiable/armor/worn"
+    },
+    "subtracted": [
+      {
+        "item": "tconstruct:plate_boots"
+      },
+      {
+        "item": "tconstruct:plate_leggings"
+      },
+      {
+        "item": "tconstruct:plate_chestplate"
+      },
+      {
+        "item": "tconstruct:plate_helmet"
+      }
+    ]
   }
 }

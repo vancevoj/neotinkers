@@ -18,9 +18,9 @@
     },
     {
       "type": "tconstruct:stat_boost",
-      "flat": 0.05,
+      "flat": 1.0,
       "operation": "add",
-      "stat": "tconstruct:knockback_resistance"
+      "stat": "tconstruct:armor_toughness"
     },
     {
       "type": "tconstruct:stat_boost",

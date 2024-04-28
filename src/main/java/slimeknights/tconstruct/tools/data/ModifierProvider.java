@@ -140,7 +140,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .addModule(StatBoostModule.multiplyBase(ToolStats.DURABILITY).flat(0.5f))
       .addModule(RepairModule.builder().flat(0.5f))
       // armor
-      .addModule(StatBoostModule.add(ToolStats.KNOCKBACK_RESISTANCE).flat(0.05f))
+      .addModule(StatBoostModule.add(ToolStats.ARMOR_TOUGHNESS).flat(1))
       // melee harvest
       .addModule(StatBoostModule.multiplyConditional(ToolStats.ATTACK_DAMAGE).flat(0.25f))
       .addModule(StatBoostModule.multiplyConditional(ToolStats.MINING_SPEED).flat(0.25f))

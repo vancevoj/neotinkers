@@ -99,6 +99,12 @@ public record ProtectionModule(IJsonPredicate<DamageSource> source, IJsonPredica
     return new Builder(source);
   }
 
+  /* Creates a new builder instance */
+  @SafeVarargs
+  public static Builder source(IJsonPredicate<DamageSource>... sources) {
+    return source(DamageSourcePredicate.and(sources));
+  }
+
   @Setter
   @Accessors(fluent = true)
   @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
