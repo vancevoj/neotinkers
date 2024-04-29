@@ -63,8 +63,8 @@
     "increments": 128
   },
   "items": [
-    { "center": [  8, 12, 12 ], "size": 7.5 },
-    { "center": [  4, 12,  4 ], "size": 7.5 },
-    { "center": [ 12, 12,  4 ], "size": 7.5 }
+    { "center": [  8, 12, 12 ], "size": 7.5, "transform": "tconstruct:melter" },
+    { "center": [  4, 12,  4 ], "size": 7.5, "transform": "tconstruct:melter" },
+    { "center": [ 12, 12,  4 ], "size": 7.5, "transform": "tconstruct:melter" }
   ]
 }

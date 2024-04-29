@@ -11,14 +11,14 @@
   },
   "retextured": [ "leg", "legBottom" ],
   "items": [
-    { "center": [  5, 17,  5 ], "size": 2 },
-    { "center": [  8, 17,  5 ], "size": 2 },
-    { "center": [ 11, 17,  5 ], "size": 2 },
-    { "center": [  5, 17,  8 ], "size": 2 },
-    { "center": [  8, 17,  8 ], "size": 2 },
-    { "center": [ 11, 17,  8 ], "size": 2 },
-    { "center": [  5, 17, 11 ], "size": 2 },
-    { "center": [  8, 17, 11 ], "size": 2 },
-    { "center": [ 11, 17, 11 ], "size": 2 }
+    { "center": [  5, 17,  5 ], "size": 2, "transform": "tconstruct:table" },
+    { "center": [  8, 17,  5 ], "size": 2, "transform": "tconstruct:table" },
+    { "center": [ 11, 17,  5 ], "size": 2, "transform": "tconstruct:table" },
+    { "center": [  5, 17,  8 ], "size": 2, "transform": "tconstruct:table" },
+    { "center": [  8, 17,  8 ], "size": 2, "transform": "tconstruct:table" },
+    { "center": [ 11, 17,  8 ], "size": 2, "transform": "tconstruct:table" },
+    { "center": [  5, 17, 11 ], "size": 2, "transform": "tconstruct:table" },
+    { "center": [  8, 17, 11 ], "size": 2, "transform": "tconstruct:table" },
+    { "center": [ 11, 17, 11 ], "size": 2, "transform": "tconstruct:table" }
   ]
 }

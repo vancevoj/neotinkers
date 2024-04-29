@@ -158,7 +158,7 @@
     }
   },
   "items": [
-    { "center": [ 8, 10, 8 ], "size": 11.95 },
-    { "center": [ 8, 10, 8 ], "size": 12    }
+    { "center": [ 8, 10, 8 ], "size": 11.95, "transform": "tconstruct:casting_basin" },
+    { "center": [ 8, 10, 8 ], "size": 12,    "transform": "tconstruct:casting_basin" }
   ]
 }

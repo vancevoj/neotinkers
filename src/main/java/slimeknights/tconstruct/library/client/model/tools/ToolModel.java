@@ -7,6 +7,7 @@ import com.google.common.collect.Sets;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.math.Transformation;
 import com.mojang.math.Vector3f;
@@ -16,6 +17,7 @@ import net.minecraft.client.color.item.ItemColors;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.ItemOverrides;
+import net.minecraft.client.renderer.block.model.ItemTransforms.TransformType;
 import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
@@ -30,6 +32,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec2;
+import net.minecraftforge.client.model.BakedModelWrapper;
 import net.minecraftforge.client.model.IModelBuilder;
 import net.minecraftforge.client.model.geometry.IGeometryBakingContext;
 import net.minecraftforge.client.model.geometry.IGeometryLoader;
@@ -56,6 +59,7 @@ import slimeknights.tconstruct.library.tools.nbt.MaterialIdNBT;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 
 import javax.annotation.Nullable;
+import java.util.BitSet;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -73,6 +77,15 @@ import java.util.function.Supplier;
 public class ToolModel implements IUnbakedGeometry<ToolModel> {
   /** Shared loader instance */
   public static final IGeometryLoader<ToolModel> LOADER = ToolModel::deserialize;
+  /** Set of transform types that make tools render small */
+  private static final BitSet SMALL_TOOL_TYPES = new BitSet();
+
+  /** Registers a new small tool transform type */
+  public static synchronized TransformType registerSmallTool(TransformType type) {
+    SMALL_TOOL_TYPES.set(type.ordinal());
+    return type;
+  }
+
 
   /** Color handler instance for all tools, handles both material and modifier colors */
   public static final ItemColor COLOR_HANDLER = (stack, index) -> {
@@ -253,11 +266,6 @@ public class ToolModel implements IUnbakedGeometry<ToolModel> {
   /** Record for a first modifier in the model */
   private record FirstModifier(ModifierEntry entry, IBakedModifierModel model, int modelIndex) {}
 
-  /** Filters the list of baked quads to just south quads to simplify the GUI */
-  private static List<BakedQuad> filterToGuiQuads(List<BakedQuad> quads) {
-    return quads.stream().filter(quad -> quad.getDirection() == Direction.SOUTH).toList();
-  }
-
   /** Makes a model builder for the given context and overrides */
   private static IModelBuilder<?> makeModelBuilder(IGeometryBakingContext context, ItemOverrides overrides, TextureAtlasSprite particle) {
     return IModelBuilder.of(context.useAmbientOcclusion(), context.useBlockLight(), context.isGui3d(), context.getTransforms(), overrides, particle, MantleItemLayerModel.getDefaultRenderType(context));
@@ -281,27 +289,19 @@ public class ToolModel implements IUnbakedGeometry<ToolModel> {
     Transformation smallTransforms = Transformation.identity();
 
     // TODO: would be nice to support render types per material/per modifier
-    // builder for the GUI model, receives only south quads
-    ReversedListBuilder<Collection<BakedQuad>> guiQuads = new ReversedListBuilder<>();
-    // builder for the full model, receives all quads
-    ReversedListBuilder<Collection<BakedQuad>> fullQuads = new ReversedListBuilder<>();
-    // logic to track which pixels are used, only needed for the full model (which will be the large model if large is enabled)
-    ItemLayerPixels pixels = new ItemLayerPixels();
+    // small model is used in GUIs (though that will be filtered to just front faces) and in small tool contexts like casting blocks
+    ReversedListBuilder<Collection<BakedQuad>> smallQuads = new ReversedListBuilder<>();
+    ItemLayerPixels smallPixels = new ItemLayerPixels();
+    // large model is used in all other places
+    ReversedListBuilder<Collection<BakedQuad>> largeQuads = largeTransforms != null ? new ReversedListBuilder<>() : smallQuads;
+    ItemLayerPixels largePixels = largeTransforms != null ? new ItemLayerPixels() : smallPixels;
 
     // add quads for all modifiers first, for the sake of the item layer pixels
     if (tool != null && !modifierModels.isEmpty()) {
-      // TODO: tell the modifier models directly to not ship non-south quads instead of filtering
-      Consumer<ImmutableList<BakedQuad>> guiConsumer = quads -> guiQuads.add(filterToGuiQuads(quads));
-      // if we have a large model, that means we will fetech models twice, once for large then again for small
+      addModifierQuads(spriteGetter, modifierModels, firstModifiers, tool, smallQuads::add, smallPixels, smallTransforms, false);
+      // if we have a large model, that means we will fetch models twice, once for large then again for small
       if (largeTransforms != null) {
-        addModifierQuads(spriteGetter, modifierModels, firstModifiers, tool, guiConsumer, null, smallTransforms, false);
-        addModifierQuads(spriteGetter, modifierModels, firstModifiers, tool, fullQuads::add, pixels, largeTransforms, true);
-      } else {
-        // in small, we load a single set which both consumers receive
-        addModifierQuads(spriteGetter, modifierModels, firstModifiers, tool, quads -> {
-          guiConsumer.accept(quads);
-          fullQuads.add(quads);
-        }, pixels, Transformation.identity(), false);
+        addModifierQuads(spriteGetter, modifierModels, firstModifiers, tool, largeQuads::add, largePixels, largeTransforms, true);
       }
     }
 
@@ -318,26 +318,18 @@ public class ToolModel implements IUnbakedGeometry<ToolModel> {
         TintedSprite materialSprite = MaterialModel.getMaterialSprite(spriteGetter, owner.getMaterial(part.getName(false)), material);
         particle = materialSprite.sprite();
 
-        // same drill as above, large means more quad fetching but we can use a simplier variant for small
+        // need full quads for both as small is directly rendered in a few non-GUI cases
+        smallQuads.add(MantleItemLayerModel.getQuadsForSprite(materialSprite.color(), -1, materialSprite.sprite(), smallTransforms, materialSprite.emissivity(), smallPixels));
         if (largeTransforms != null) {
-          guiQuads.add(List.of(MantleItemLayerModel.getQuadForGui(materialSprite.color(), -1, particle, smallTransforms, materialSprite.emissivity())));
-          fullQuads.add(MaterialModel.getQuadsForMaterial(spriteGetter, owner.getMaterial(part.getName(true)), material, -1, largeTransforms, pixels));
-        } else {
-          List<BakedQuad> quads = MantleItemLayerModel.getQuadsForSprite(materialSprite.color(), -1, particle, smallTransforms, materialSprite.emissivity(), pixels);
-          guiQuads.add(filterToGuiQuads(quads));
-          fullQuads.add(quads);
+          largeQuads.add(MaterialModel.getQuadsForMaterial(spriteGetter, owner.getMaterial(part.getName(true)), material, -1, largeTransforms, largePixels));
         }
       } else {
         // part without materials
         particle = spriteGetter.apply(owner.getMaterial(part.getName(false)));
-        // same drill as above, large means more quad fetching but we can use a simplier variant for small
+        // same drill as above
+        smallQuads.add(MantleItemLayerModel.getQuadsForSprite(-1, -1, particle, smallTransforms, 0, smallPixels));
         if (largeTransforms != null) {
-          guiQuads.add(List.of(MantleItemLayerModel.getQuadForGui(-1, -1, particle, smallTransforms, 0)));
-          fullQuads.add(MantleItemLayerModel.getQuadsForSprite(-1, -1, spriteGetter.apply(owner.getMaterial(part.getName(true))), largeTransforms, 0, pixels));
-        } else {
-          List<BakedQuad> quads = MantleItemLayerModel.getQuadsForSprite(-1, -1, particle, smallTransforms, 0, pixels);
-          guiQuads.add(filterToGuiQuads(quads));
-          fullQuads.add(quads);
+          largeQuads.add(MantleItemLayerModel.getQuadsForSprite(-1, -1, spriteGetter.apply(owner.getMaterial(part.getName(true))), largeTransforms, 0, largePixels));
         }
       }
     }
@@ -347,12 +339,21 @@ public class ToolModel implements IUnbakedGeometry<ToolModel> {
       TConstruct.LOG.error("Created tool model without a particle sprite, this means it somehow has no parts. This should not be possible");
     }
 
-    // we need to build 2 models, one for the GUI and one for other perspectives. Then we combine the two into our final model
+    // start by building the small models, one for GUI and one outside
+    IModelBuilder<?> smallModelBuilder = makeModelBuilder(owner, overrides, particle);
     IModelBuilder<?> guiModelBuilder = makeModelBuilder(owner, overrides, particle);
-    guiQuads.build(quads -> quads.forEach(guiModelBuilder::addUnculledFace));
-    IModelBuilder<?> fullModelBuilder = makeModelBuilder(owner, overrides, particle);
-    fullQuads.build(quads -> quads.forEach(fullModelBuilder::addUnculledFace));
-    return new BakedUniqueGuiModel(fullModelBuilder.build(), guiModelBuilder.build());
+    smallQuads.build(quads -> quads.forEach(quad -> {
+      smallModelBuilder.addUnculledFace(quad);
+      if (quad.getDirection() == Direction.SOUTH) {
+        guiModelBuilder.addUnculledFace(quad);
+      }
+    }));
+    if (largeTransforms == null) {
+      return new BakedUniqueGuiModel(smallModelBuilder.build(), guiModelBuilder.build());
+    }
+    IModelBuilder<?> largeModelBuilder = makeModelBuilder(owner, overrides, particle);
+    largeQuads.build(quads -> quads.forEach(largeModelBuilder::addUnculledFace));
+    return new BakedLargeToolModel(largeModelBuilder.build(), smallModelBuilder.build(), guiModelBuilder.build());
   }
 
   @Override
@@ -361,6 +362,28 @@ public class ToolModel implements IUnbakedGeometry<ToolModel> {
     overrides = new MaterialOverrideHandler(owner, toolParts, firstModifiers, largeTransforms, modifierModels, overrides);
     // bake the original with no tool, meaning it will skip modifiers and materials
     return bakeInternal(owner, spriteGetter, largeTransforms, toolParts, modifierModels, firstModifiers, Collections.emptyList(), null, overrides);
+  }
+
+  /** Swaps out the large model for the small or gui model as needed */
+  private static class BakedLargeToolModel extends BakedModelWrapper<BakedModel> {
+    private final BakedModel small;
+    private final BakedModel gui;
+    public BakedLargeToolModel(BakedModel large, BakedModel small, BakedModel gui) {
+      super(large);
+      this.small = small;
+      this.gui = gui;
+    }
+
+    @Override
+    public BakedModel applyTransform(TransformType cameraTransformType, PoseStack mat, boolean applyLeftHandTransform) {
+      BakedModel model = originalModel;
+      if (cameraTransformType == TransformType.GUI) {
+        model = gui;
+      } else if (SMALL_TOOL_TYPES.get(cameraTransformType.ordinal())) {
+        model = small;
+      }
+      return model.applyTransform(cameraTransformType, mat, applyLeftHandTransform);
+    }
   }
 
   /**

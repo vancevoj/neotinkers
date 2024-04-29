@@ -34,6 +34,7 @@ import slimeknights.tconstruct.library.client.data.spritetransformer.IColorMappi
 import slimeknights.tconstruct.library.client.data.spritetransformer.ISpriteTransformer;
 import slimeknights.tconstruct.library.client.data.spritetransformer.RecolorSpriteTransformer;
 import slimeknights.tconstruct.library.client.materials.MaterialRenderInfoLoader;
+import slimeknights.tconstruct.library.client.model.TinkerTransformTypes;
 import slimeknights.tconstruct.library.client.modifiers.ModifierIconManager;
 import slimeknights.tconstruct.tables.client.PatternGuiTextureLoader;
 
@@ -53,6 +54,7 @@ public class TinkerClient {
     PatternGuiTextureLoader.init();
     ModifierIconManager.init();
     MaterialRenderInfoLoader.init();
+    TinkerTransformTypes.init();
 
     // add the recipe cache invalidator to the client
     Consumer<RecipesUpdatedEvent> recipesUpdated = event -> RecipeCacheInvalidator.reload(true);

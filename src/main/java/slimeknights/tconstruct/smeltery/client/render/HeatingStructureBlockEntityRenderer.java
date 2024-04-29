@@ -8,7 +8,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.block.model.ItemTransforms.TransformType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider.Context;
 import net.minecraft.client.renderer.entity.ItemRenderer;
@@ -24,6 +23,7 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraftforge.client.model.data.ModelData;
 import slimeknights.tconstruct.common.config.Config;
 import slimeknights.tconstruct.library.client.TinkerRenderTypes;
+import slimeknights.tconstruct.library.client.model.TinkerTransformTypes;
 import slimeknights.tconstruct.smeltery.block.controller.ControllerBlock;
 import slimeknights.tconstruct.smeltery.block.entity.controller.HeatingStructureBlockEntity;
 import slimeknights.tconstruct.smeltery.block.entity.module.MeltingModuleInventory;
@@ -105,7 +105,7 @@ public class HeatingStructureBlockEntityRenderer implements BlockEntityRenderer<
           matrices.mulPose(itemRotation);
           matrices.scale(ITEM_SCALE, ITEM_SCALE, ITEM_SCALE);
           BakedModel model = itemRenderer.getModel(stack, world, null, 0);
-          itemRenderer.render(stack, TransformType.NONE, false, matrices, buffer, LevelRenderer.getLightColor(world, itemPos), OverlayTexture.NO_OVERLAY, model);
+          itemRenderer.render(stack, TinkerTransformTypes.MELTER, false, matrices, buffer, LevelRenderer.getLightColor(world, itemPos), OverlayTexture.NO_OVERLAY, model);
           matrices.popPose();
 
           // done as quads rather than items as its not that expensive to draw blocks, items are the problem
