@@ -7,7 +7,8 @@
   ],
   "effects": [
     "Decreases damages from projectiles",
-    "Can apply levels incrementally",
+    "Increases knockback resistance",
+    "Multiple levels, each level boosts effects",
     "Requires 1 defense slot"
   ]
 }
