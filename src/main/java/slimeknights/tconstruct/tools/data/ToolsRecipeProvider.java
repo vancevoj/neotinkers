@@ -11,9 +11,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.crafting.DifferenceIngredient;
-import net.minecraftforge.common.crafting.IntersectionIngredient;
 import slimeknights.mantle.recipe.helper.ItemOutput;
-import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.common.data.BaseRecipeProvider;
 import slimeknights.tconstruct.fluids.TinkerFluids;
 import slimeknights.tconstruct.library.data.recipe.IMaterialRecipeHelper;
@@ -21,12 +19,13 @@ import slimeknights.tconstruct.library.data.recipe.IToolRecipeHelper;
 import slimeknights.tconstruct.library.materials.definition.MaterialId;
 import slimeknights.tconstruct.library.recipe.FluidValues;
 import slimeknights.tconstruct.library.recipe.casting.ItemCastingRecipeBuilder;
-import slimeknights.tconstruct.library.recipe.casting.material.CompositeCastingRecipeBuilder;
-import slimeknights.tconstruct.library.recipe.partbuilder.PartRecipeBuilder;
+import slimeknights.tconstruct.library.recipe.casting.material.MaterialCastingRecipeBuilder;
+import slimeknights.tconstruct.library.recipe.ingredient.MaterialIngredient;
 import slimeknights.tconstruct.library.recipe.tinkerstation.building.ToolBuildingRecipeBuilder;
 import slimeknights.tconstruct.library.tools.nbt.MaterialIdNBT;
 import slimeknights.tconstruct.shared.TinkerMaterials;
 import slimeknights.tconstruct.smeltery.TinkerSmeltery;
+import slimeknights.tconstruct.tables.TinkerTables;
 import slimeknights.tconstruct.tools.TinkerToolParts;
 import slimeknights.tconstruct.tools.TinkerTools;
 import slimeknights.tconstruct.tools.data.material.MaterialIds;
@@ -170,14 +169,11 @@ public class ToolsRecipeProvider extends BaseRecipeProvider implements IMaterial
 
     // plate armor
     TinkerTools.plateArmor.forEach(item -> toolBuilding(consumer, item, armorFolder));
-    ShapedRecipeBuilder.shaped(TinkerTools.plateShield)
-                       .pattern("ww")
-                       .pattern("cc")
-                       .pattern("ww")
-                       .define('c', TinkerMaterials.cobalt.getIngotTag())
-                       .define('w', DifferenceIngredient.of(IntersectionIngredient.of(Ingredient.of(ItemTags.PLANKS), Ingredient.of(ItemTags.NON_FLAMMABLE_WOOD)), Ingredient.of(TinkerTags.Items.SLIMY_PLANKS)))
-                       .unlockedBy("has_item", has(TinkerMaterials.cobalt.getIngotTag()))
-                       .save(consumer, location(armorFolder + "plate_shield"));
+    MaterialCastingRecipeBuilder.tableRecipe(TinkerTools.plateShield.get())
+                                .setCast(MaterialIngredient.of(TinkerToolParts.shieldCore), true)
+                                .setItemCost(3)
+                                .partSwapping(consumer, 1, location(armorFolder + "plate_shield_part_swapping"))
+                                .save(consumer, location(armorFolder + "plate_shield"));
 
     // slimeskull
     slimeskullCasting(consumer, MaterialIds.glass,        Items.CREEPER_HEAD,          armorFolder);
@@ -241,14 +237,9 @@ public class ToolsRecipeProvider extends BaseRecipeProvider implements IMaterial
     partCasting(consumer, TinkerToolParts.plating.get(ArmorSlotType.BOOTS),      TinkerSmeltery.bootsPlatingCast,      2, partFolder, castFolder);
     partRecipes(consumer, TinkerToolParts.chainmail, TinkerSmeltery.chainmailCast, 2, partFolder, castFolder);
 
-    // bowstrings are not castable, part builder exclusive
-    PartRecipeBuilder.partRecipe(TinkerToolParts.bowstring.get())
-                     .setPattern(location("bowstring"))
-                     .setPatternItem(Ingredient.of(TinkerTags.Items.DEFAULT_PATTERNS))
-                     .setCost(1)
-                     .save(consumer, location(partFolder + "builder/bowstring"));
-    CompositeCastingRecipeBuilder.table(TinkerToolParts.bowstring.get(), 1)
-                                 .save(consumer, location(partFolder + "casting//bowstring_composite"));
+    // bowstrings and shield cores are part builder exclusive
+    uncastablePart(consumer, TinkerToolParts.bowstring.get(),  1, partFolder);
+    uncastablePart(consumer, TinkerToolParts.shieldCore.get(), 4, partFolder);
   }
 
   /** Helper to create a casting recipe for a slimeskull variant */

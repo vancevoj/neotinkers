@@ -10,6 +10,7 @@
       "draw_speed": 0.1,
       "durability": 70,
       "velocity": -0.05
-    }
+    },
+    "tconstruct:shield_core": {}
   }
 }

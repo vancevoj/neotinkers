@@ -20,6 +20,10 @@
       "armor": 4.0,
       "durability": 165,
       "knockback_resistance": 0.15
+    },
+    "tconstruct:plating_shield": {
+      "durability": 198,
+      "knockback_resistance": 0.15
     }
   }
 }

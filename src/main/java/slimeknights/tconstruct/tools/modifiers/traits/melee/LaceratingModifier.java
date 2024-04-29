@@ -1,6 +1,9 @@
 package slimeknights.tconstruct.tools.modifiers.traits.melee;
 
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.EquipmentSlot.Type;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
@@ -8,9 +11,11 @@ import net.minecraft.world.phys.EntityHitResult;
 import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
+import slimeknights.tconstruct.library.modifiers.hook.armor.OnAttackedModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.combat.MeleeHitModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.ranged.ProjectileHitModifierHook;
 import slimeknights.tconstruct.library.module.ModuleHookMap.Builder;
+import slimeknights.tconstruct.library.tools.context.EquipmentContext;
 import slimeknights.tconstruct.library.tools.context.ToolAttackContext;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.ModifierNBT;
@@ -19,7 +24,7 @@ import slimeknights.tconstruct.tools.TinkerModifiers;
 
 import javax.annotation.Nullable;
 
-public class LaceratingModifier extends Modifier implements ProjectileHitModifierHook, MeleeHitModifierHook {
+public class LaceratingModifier extends Modifier implements ProjectileHitModifierHook, MeleeHitModifierHook, OnAttackedModifierHook {
   /** Applies the effect to the target */
   private static void applyEffect(LivingEntity target, int level) {
     // potions are 0 indexed instead of 1 indexed
@@ -53,5 +58,20 @@ public class LaceratingModifier extends Modifier implements ProjectileHitModifie
       applyEffect(target, modifier.getLevel());
     }
     return false;
+  }
+
+  @Override
+  public void onAttacked(IToolStackView tool, ModifierEntry modifier, EquipmentContext context, EquipmentSlot slotType, DamageSource source, float amount, boolean isDirectDamage) {
+    // this works like vanilla, damage is capped due to the hurt immunity mechanics, so if multiple pieces apply thorns between us and vanilla, damage is capped at 4
+    if (isDirectDamage && source.getEntity() instanceof LivingEntity attacker) {
+      // 15% chance of working per level, doubled bonus on shields
+      int level = modifier.getLevel();
+      if (slotType.getType() == Type.HAND) {
+        level *= 2;
+      }
+      if (RANDOM.nextFloat() < (level * 0.25f)) {
+        applyEffect(attacker, modifier.getLevel());
+      }
+    }
   }
 }

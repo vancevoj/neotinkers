@@ -81,6 +81,17 @@ public abstract class AbstractMaterialStatsDataProvider extends GenericDataProvi
     }
   }
 
+  /**
+   * Adds material stats from the given armor and shield builder
+   * @param location     Material ID
+   * @param statBuilder  Stat builder
+   * @param otherStats   Other stat types to add after the builder
+   */
+  protected void addArmorShieldStats(MaterialId location, ArmorSlotType.ArmorShieldBuilder<? extends IMaterialStats> statBuilder, IMaterialStats... otherStats) {
+    addArmorStats(location, statBuilder, otherStats);
+    addMaterialStats(location, statBuilder.buildShield());
+  }
+
   /* Internal */
 
   /** Converts a material and stats list to a JSON */

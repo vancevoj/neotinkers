@@ -44,6 +44,10 @@
       "armor": 5.0,
       "durability": 420,
       "toughness": 2.0
+    },
+    "tconstruct:plating_shield": {
+      "durability": 504,
+      "toughness": 2.0
     }
   }
 }

@@ -1,0 +1,13 @@
+{
+  "type": "tconstruct:composable",
+  "level_display": "tconstruct:default",
+  "modules": [
+    {
+      "type": "tconstruct:stat_boost",
+      "each_level": 0.1,
+      "operation": "add",
+      "stat": "tconstruct:use_item_speed"
+    }
+  ],
+  "tooltip_display": "always"
+}

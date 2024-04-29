@@ -63,6 +63,7 @@ import slimeknights.tconstruct.library.tools.definition.module.material.DefaultM
 import slimeknights.tconstruct.library.tools.definition.module.material.MaterialRepairModule;
 import slimeknights.tconstruct.library.tools.definition.module.material.MaterialStatsModule;
 import slimeknights.tconstruct.library.tools.definition.module.material.PartStatsModule;
+import slimeknights.tconstruct.library.tools.definition.module.material.PartsModule;
 import slimeknights.tconstruct.library.tools.definition.module.mining.IsEffectiveModule;
 import slimeknights.tconstruct.library.tools.definition.module.mining.MaxTierHarvestLogic;
 import slimeknights.tconstruct.library.tools.definition.module.mining.MiningSpeedModifierModule;
@@ -222,6 +223,7 @@ public final class TinkerTools extends TinkerModule {
       // material
       ToolModule.LOADER.register(getResource("material_stats"), MaterialStatsModule.LOADER);
       ToolModule.LOADER.register(getResource("part_stats"), PartStatsModule.LOADER);
+      ToolModule.LOADER.register(getResource("tool_parts"), PartsModule.LOADER);
       ToolModule.LOADER.register(getResource("material_repair"), MaterialRepairModule.LOADER);
       ToolModule.LOADER.register(getResource("default_materials"), DefaultMaterialsModule.LOADER);
       // aoe

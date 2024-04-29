@@ -1,0 +1,8 @@
+{
+  "type": "tconstruct:table_part_swapping",
+  "item_cost": 3,
+  "material_index": 1,
+  "tool": {
+    "item": "tconstruct:plate_shield"
+  }
+}

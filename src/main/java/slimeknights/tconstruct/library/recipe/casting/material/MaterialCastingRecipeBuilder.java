@@ -12,6 +12,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import slimeknights.mantle.recipe.data.AbstractRecipeBuilder;
 import slimeknights.mantle.recipe.helper.TypeAwareRecipeSerializer;
+import slimeknights.tconstruct.library.tools.item.IModifiable;
 import slimeknights.tconstruct.library.tools.part.IMaterialItem;
 import slimeknights.tconstruct.smeltery.TinkerSmeltery;
 
@@ -21,7 +22,9 @@ import java.util.function.Consumer;
 @RequiredArgsConstructor(staticName = "castingRecipe")
 public class MaterialCastingRecipeBuilder extends AbstractRecipeBuilder<MaterialCastingRecipeBuilder> {
   private final IMaterialItem result;
-  private final TypeAwareRecipeSerializer<? extends MaterialCastingRecipe> recipeSerializer;
+  private final IModifiable resultTool;
+  private final TypeAwareRecipeSerializer<? extends AbstractMaterialCastingRecipe> recipeSerializer;
+  private final TypeAwareRecipeSerializer<? extends ToolPartSwappingRecipe> swapSerializer;
   private Ingredient cast = Ingredient.EMPTY;
   @Setter @Accessors(chain = true)
   private int itemCost = 0;
@@ -34,7 +37,7 @@ public class MaterialCastingRecipeBuilder extends AbstractRecipeBuilder<Material
    * @return  Builder instance
    */
   public static MaterialCastingRecipeBuilder basinRecipe(IMaterialItem result) {
-    return castingRecipe(result, TinkerSmeltery.basinMaterialSerializer.get());
+    return castingRecipe(result, null, TinkerSmeltery.basinMaterialSerializer.get(), null);
   }
 
   /**
@@ -43,7 +46,25 @@ public class MaterialCastingRecipeBuilder extends AbstractRecipeBuilder<Material
    * @return  Builder instance
    */
   public static MaterialCastingRecipeBuilder tableRecipe(IMaterialItem result) {
-    return castingRecipe(result, TinkerSmeltery.tableMaterialSerializer.get());
+    return castingRecipe(result, null, TinkerSmeltery.tableMaterialSerializer.get(), null);
+  }
+
+  /**
+   * Creates a new material casting recipe for an basin recipe
+   * @param result            Material item result
+   * @return  Builder instance
+   */
+  public static MaterialCastingRecipeBuilder basinRecipe(IModifiable result) {
+    return castingRecipe(null, result, TinkerSmeltery.basinToolSerializer.get(), TinkerSmeltery.basinPartSwappingSerializer.get());
+  }
+
+  /**
+   * Creates a new material casting recipe for an table recipe
+   * @param result            Material item result
+   * @return  Builder instance
+   */
+  public static MaterialCastingRecipeBuilder tableRecipe(IModifiable result) {
+    return castingRecipe(null, result, TinkerSmeltery.tableToolSerializer.get(), TinkerSmeltery.tablePartSwappingSerializer.get());
   }
 
   /**
@@ -92,12 +113,31 @@ public class MaterialCastingRecipeBuilder extends AbstractRecipeBuilder<Material
     this.save(consumer, Registry.ITEM.getKey(this.result.asItem()));
   }
 
+  /** Generates a part swapping recipe for this tool */
+  public MaterialCastingRecipeBuilder partSwapping(Consumer<FinishedRecipe> consumer, int materialIndex, ResourceLocation id) {
+    if (swapSerializer == null) {
+      throw new IllegalStateException("Cannot perform swapping without a swapping serializer, did you call the wrong static constructor?");
+    }
+    if (this.itemCost <= 0) {
+      throw new IllegalStateException("Material casting recipes require a positive amount of fluid");
+    }
+    ResourceLocation advancementId = this.buildOptionalAdvancement(id, "casting");
+    consumer.accept(new LoadableFinishedRecipe<>(new ToolPartSwappingRecipe(swapSerializer, id, group, Ingredient.of(resultTool), itemCost, materialIndex), ToolPartSwappingRecipe.LOADER, advancementId));
+    return this;
+  }
+
   @Override
   public void save(Consumer<FinishedRecipe> consumer, ResourceLocation id) {
     if (this.itemCost <= 0) {
       throw new IllegalStateException("Material casting recipes require a positive amount of fluid");
     }
     ResourceLocation advancementId = this.buildOptionalAdvancement(id, "casting");
-    consumer.accept(new LoadableFinishedRecipe<>(new MaterialCastingRecipe(recipeSerializer, id, group, cast, itemCost, result, consumed, switchSlots), MaterialCastingRecipe.LOADER, advancementId));
+    if (result != null) {
+      consumer.accept(new LoadableFinishedRecipe<>(new MaterialCastingRecipe(recipeSerializer, id, group, cast, itemCost, result, consumed, switchSlots), MaterialCastingRecipe.LOADER, advancementId));
+    } else if (resultTool != null) {
+      consumer.accept(new LoadableFinishedRecipe<>(new ToolCastingRecipe(recipeSerializer, id, group, cast, itemCost, resultTool), ToolCastingRecipe.LOADER, advancementId));
+    } else {
+      throw new IllegalArgumentException("Must have either result or result tool");
+    }
   }
 }

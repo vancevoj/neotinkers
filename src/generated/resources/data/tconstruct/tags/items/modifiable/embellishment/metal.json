@@ -1,10 +1,5 @@
 {
   "values": [
-    "tconstruct:plate_boots",
-    "tconstruct:plate_leggings",
-    "tconstruct:plate_chestplate",
-    "tconstruct:plate_helmet",
-    "tconstruct:travelers_shield",
-    "tconstruct:plate_shield"
+    "tconstruct:travelers_shield"
   ]
 }

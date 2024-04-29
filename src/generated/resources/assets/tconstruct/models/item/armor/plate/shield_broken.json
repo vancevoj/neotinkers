@@ -2,26 +2,34 @@
   "loader": "tconstruct:tool",
   "parent": "tconstruct:item/base/shield_large",
   "textures": {
-    "tool": "tconstruct:item/tool/armor/plate/shield_broken",
-    "large_tool": "tconstruct:item/tool/armor/plate/shield_large_broken"
+    "plating": "tconstruct:item/tool/armor/plate/shield/plating_broken",
+    "core": "tconstruct:item/tool/armor/plate/shield/core_broken",
+    "large_plating": "tconstruct:item/tool/armor/plate/shield/plating_large_broken",
+    "large_core": "tconstruct:item/tool/armor/plate/shield/core_large_broken"
   },
   "modifier_roots": {
     "small": [
-      "tconstruct:item/tool/armor/plate/shield_modifiers/broken/",
-      "tconstruct:item/tool/armor/plate/shield_modifiers/"
+      "tconstruct:item/tool/armor/plate/shield/modifiers/broken/",
+      "tconstruct:item/tool/armor/plate/shield/modifiers/"
     ],
     "large": [
-      "tconstruct:item/tool/armor/plate/shield_large_modifiers/broken/",
-      "tconstruct:item/tool/armor/plate/shield_large_modifiers/"
+      "tconstruct:item/tool/armor/plate/shield/large_modifiers/broken/",
+      "tconstruct:item/tool/armor/plate/shield/large_modifiers/"
     ]
   },
+  "parts": [
+    {
+      "name": "core",
+      "index": 0
+    },
+    {
+      "name": "plating",
+      "index": 1
+    }
+  ],
   "large": true,
   "large_offset": [
     -8,
     0
-  ],
-  "first_modifiers": [
-    "tconstruct:dyed",
-    "tconstruct:embellishment"
   ]
 }

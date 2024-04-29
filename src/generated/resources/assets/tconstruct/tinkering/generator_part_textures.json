@@ -61,22 +61,6 @@
       "statType": "tconstruct:plate"
     },
     {
-      "path": "tconstruct:item/tool/armor/plate/shield_modifiers/tconstruct_embellishment",
-      "statType": "tconstruct:plate"
-    },
-    {
-      "path": "tconstruct:item/tool/armor/plate/shield_modifiers/broken/tconstruct_embellishment",
-      "statType": "tconstruct:plate"
-    },
-    {
-      "path": "tconstruct:item/tool/armor/plate/shield_large_modifiers/tconstruct_embellishment",
-      "statType": "tconstruct:plate"
-    },
-    {
-      "path": "tconstruct:item/tool/armor/plate/shield_large_modifiers/broken/tconstruct_embellishment",
-      "statType": "tconstruct:plate"
-    },
-    {
       "path": "tconstruct:item/tool/staff/modifiers/tconstruct_embellishment",
       "statType": "tconstruct:wood"
     },
@@ -191,6 +175,38 @@
     {
       "path": "tconstruct:item/tool/armor/plate/helmet/chainmail_broken",
       "statType": "tconstruct:chainmail"
+    },
+    {
+      "path": "tconstruct:item/tool/armor/plate/shield/plating",
+      "statType": "tconstruct:plating_shield"
+    },
+    {
+      "path": "tconstruct:item/tool/armor/plate/shield/plating_broken",
+      "statType": "tconstruct:plating_shield"
+    },
+    {
+      "path": "tconstruct:item/tool/armor/plate/shield/core",
+      "statType": "tconstruct:shield_core"
+    },
+    {
+      "path": "tconstruct:item/tool/armor/plate/shield/core_broken",
+      "statType": "tconstruct:shield_core"
+    },
+    {
+      "path": "tconstruct:item/tool/armor/plate/shield/plating_large",
+      "statType": "tconstruct:plating_shield"
+    },
+    {
+      "path": "tconstruct:item/tool/armor/plate/shield/plating_large_broken",
+      "statType": "tconstruct:plating_shield"
+    },
+    {
+      "path": "tconstruct:item/tool/armor/plate/shield/core_large",
+      "statType": "tconstruct:shield_core"
+    },
+    {
+      "path": "tconstruct:item/tool/armor/plate/shield/core_large_broken",
+      "statType": "tconstruct:shield_core"
     },
     {
       "path": "tconstruct:item/tool/pickaxe/head",

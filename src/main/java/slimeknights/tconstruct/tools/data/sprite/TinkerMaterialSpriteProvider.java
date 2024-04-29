@@ -38,7 +38,7 @@ public class TinkerMaterialSpriteProvider extends AbstractMaterialSpriteProvider
       .meleeHarvest().ranged()
       // not using the helper to avoid catching armor models
       .statType(PlatingMaterialStats.TYPES.stream().map(MaterialStatType::getId).toArray(MaterialStatsId[]::new))
-      .statType(StatlessMaterialStats.BOWSTRING.getIdentifier(), StatlessMaterialStats.CHAINMAIL.getIdentifier())
+      .statType(StatlessMaterialStats.BOWSTRING.getIdentifier(), StatlessMaterialStats.SHIELD_CORE.getIdentifier(), StatlessMaterialStats.CHAINMAIL.getIdentifier())
       .colorMapper(GreyToColorMapping.builder().addARGB(63, 0xFF000000).addARGB(102, 0xFF222222).addARGB(103, 0x00000000).build());
 
     // tier 1
@@ -71,52 +71,52 @@ public class TinkerMaterialSpriteProvider extends AbstractMaterialSpriteProvider
       .fallbacks("primitive")
       .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF143306).addARGB(102, 0xFF183D08).addARGB(140, 0xFF1F4E0A).addARGB(178, 0xFF265F0D).addARGB(216, 0xFF2E730F).addARGB(255, 0xFF3A9313).build());
     buildMaterial(MaterialIds.chorus)
-      .meleeHarvest().ranged()
+      .meleeHarvest().ranged().shieldCore()
       .fallbacks("rock")
       .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF4F2A4F).addARGB(102, 0xFF593559).addARGB(140, 0xFF643C64).addARGB(178, 0xFF774D77).addARGB(216, 0xFF8F648F).addARGB(255, 0xFFA47CA4).build());
     // tier 1 - wood
     buildMaterial(MaterialIds.wood)
-      .meleeHarvest().ranged()
+      .meleeHarvest().ranged().shieldCore()
       .fallbacks("wood", "stick", "primitive")
       .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF281E0B).addARGB(102, 0xFF493615).addARGB(140, 0xFF584014).addARGB(178, 0xFF684E1E).addARGB(216, 0xFF785A22).addARGB(255, 0xFF896727).build());
     buildMaterial(MaterialIds.oak)
-      .meleeHarvest().ranged().statType(WOOD)
+      .meleeHarvest().ranged().shieldCore().statType(WOOD)
       .fallbacks("wood", "stick", "primitive")
       .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF382B18).addARGB(102, 0xFF4C3D26).addARGB(140, 0xFF5F4A2B).addARGB(178, 0xFF745A36).addARGB(216, 0xFF917142).addARGB(255, 0xFF9F844D).build());
     buildMaterial(MaterialIds.spruce)
-      .meleeHarvest().ranged().statType(WOOD)
+      .meleeHarvest().ranged().shieldCore().statType(WOOD)
       .fallbacks("wood", "stick", "primitive")
       .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF311E0B).addARGB(102, 0xFF3B2713).addARGB(140, 0xFF4D3317).addARGB(178, 0xFF553A1F).addARGB(216, 0xFF5A4424).addARGB(255, 0xFF685032).build());
     buildMaterial(MaterialIds.birch)
-      .meleeHarvest().ranged().statType(WOOD)
+      .meleeHarvest().ranged().shieldCore().statType(WOOD)
       .fallbacks("wood", "stick", "primitive")
       .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF36342A).addARGB(102, 0xFF605E54).addARGB(140, 0xFFBEBEAE).addARGB(178, 0xFFDED3D5).addARGB(216, 0xFFF0EEEB).addARGB(255, 0xFFFFFFFF).build());
     buildMaterial(MaterialIds.jungle)
-      .meleeHarvest().ranged().statType(WOOD)
+      .meleeHarvest().ranged().shieldCore().statType(WOOD)
       .fallbacks("wood", "stick", "primitive")
       .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF403612).addARGB(102, 0xFF503F16).addARGB(140, 0xFF59461A).addARGB(178, 0xFF59511B).addARGB(216, 0xFF635820).addARGB(255, 0xFF766626).build());
     buildMaterial(MaterialIds.darkOak)
-      .meleeHarvest().ranged().statType(WOOD)
+      .meleeHarvest().ranged().shieldCore().statType(WOOD)
       .fallbacks("wood", "stick", "primitive")
       .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF292011).addARGB(102, 0xFF302513).addARGB(140, 0xFF3F311D).addARGB(178, 0xFF4A381E).addARGB(216, 0xFF584428).addARGB(255, 0xFF664F2E).build());
     buildMaterial(MaterialIds.acacia)
-      .meleeHarvest().ranged().statType(WOOD)
+      .meleeHarvest().ranged().shieldCore().statType(WOOD)
       .fallbacks("wood", "stick", "primitive")
       .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF504B40).addARGB(102, 0xFF585349).addARGB(140, 0xFF696259).addARGB(178, 0xFF7B7368).addARGB(216, 0xFF8D8477).addARGB(255, 0xFF998F82).build());
     buildMaterial(MaterialIds.mangrove)
-      .meleeHarvest().ranged().statType(WOOD)
+      .meleeHarvest().ranged().shieldCore().statType(WOOD)
       .fallbacks("wood", "stick", "primitive")
       .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF5D1C1E).addARGB(102, 0xFF642423).addARGB(140, 0xFF6F2A2D).addARGB(178, 0xFF773934).addARGB(216, 0xFF7F4234).addARGB(255, 0xFF8B4D3A).build());
     buildMaterial(MaterialIds.crimson)
-      .meleeHarvest().ranged().statType(WOOD)
+      .meleeHarvest().ranged().shieldCore().statType(WOOD)
       .fallbacks("wood", "stick", "primitive")
       .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF442131).addARGB(102, 0xFF4B2737).addARGB(140, 0xFF521810).addARGB(178, 0xFF7B0000).addARGB(216, 0xFF961515).addARGB(255, 0xFFB12727).build());
     buildMaterial(MaterialIds.warped)
-      .meleeHarvest().ranged().statType(WOOD)
+      .meleeHarvest().ranged().shieldCore().statType(WOOD)
       .fallbacks("wood", "stick", "primitive")
       .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF38254C).addARGB(102, 0xFF452D5C).addARGB(140, 0xFF16615B).addARGB(178, 0xFF136C68).addARGB(216, 0xFF118066).addARGB(255, 0xFF14956F).build());
     buildMaterial(MaterialIds.bamboo)
-      .ranged().statType(WOOD)
+      .ranged().shieldCore().statType(WOOD)
       .fallbacks("wood", "stick", "primitive")
       .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF3D5A1F).addARGB(102, 0xFF456317).addARGB(140, 0xFF507516).addARGB(178, 0xFF5E8A24).addARGB(216, 0xFF8AAE60).addARGB(255, 0xFF97C463).build());
     // tier 1 - stone
@@ -208,19 +208,19 @@ public class TinkerMaterialSpriteProvider extends AbstractMaterialSpriteProvider
       .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF777B7C).addARGB(102, 0xFF818587).addARGB(140, 0xFF909698).addARGB(178, 0xFF999FA2).addARGB(216, 0xFFB2BABC).addARGB(255, 0xFFC5CDD0).build());
     // tier 2 - slimewood
     buildMaterial(MaterialIds.greenheart)
-      .meleeHarvest().ranged().statType(WOOD)
+      .meleeHarvest().ranged().shieldCore().statType(WOOD)
       .fallbacks("wood", "primitive")
       .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF34532F).addARGB(102, 0xFF477A42).addARGB(140, 0xFF5E9854).addARGB(178, 0xFF71AC63).addARGB(216, 0xFF76BE6D).addARGB(255, 0xFF96DD8F).build());
     buildMaterial(MaterialIds.skyroot)
-      .meleeHarvest().ranged().statType(WOOD)
+      .meleeHarvest().ranged().shieldCore().statType(WOOD)
       .fallbacks("wood", "primitive")
       .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF00507C).addARGB(102, 0xFF00628A).addARGB(140, 0xFF007F9A).addARGB(178, 0xFF1D96A6).addARGB(216, 0xFF17B2B7).addARGB(255, 0xFF19D4D6).build());
     buildMaterial(MaterialIds.bloodshroom)
-      .meleeHarvest().ranged().statType(WOOD)
+      .meleeHarvest().ranged().shieldCore().statType(WOOD)
       .fallbacks("wood", "primitive")
       .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF7F3500).addARGB(102, 0xFF954200).addARGB(140, 0xFFB24100).addARGB(178, 0xFFCB4B00).addARGB(216, 0xFFEF6F05).addARGB(255, 0xFFFF9826).build());
     buildMaterial(MaterialIds.enderbark)
-      .meleeHarvest().ranged().statType(WOOD)
+      .meleeHarvest().ranged().shieldCore().statType(WOOD)
       .fallbacks("wood", "primitive")
       .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF891FB3).addARGB(102, 0xFF9D2ABD).addARGB(140, 0xFF272127).addARGB(178, 0xFF362E35).addARGB(216, 0xFF3E353F).addARGB(255, 0xFF423942).build());
 
@@ -242,7 +242,7 @@ public class TinkerMaterialSpriteProvider extends AbstractMaterialSpriteProvider
       .fallbacks("metal")
       .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF6A2D6F).addARGB(102, 0xFF8B4991).addARGB(140, 0xFFBE76B8).addARGB(178, 0xFFD28CC5).addARGB(216, 0xFFDFA8CF).addARGB(255, 0xFFEEC6DE).build());
     buildMaterial(MaterialIds.nahuatl)
-      .meleeHarvest().ranged().statType(WOOD)
+      .meleeHarvest().ranged().shieldCore().statType(WOOD)
       .fallbacks("wood", "stick")
       .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF100C1C).addARGB(102, 0xFF271E3D).addARGB(140, 0xFF49332E).addARGB(178, 0xFF543D30).addARGB(216, 0xFF664B2D).addARGB(255, 0xFF7A5C2D).build());
     buildMaterial(MaterialIds.pigIron)
@@ -328,7 +328,6 @@ public class TinkerMaterialSpriteProvider extends AbstractMaterialSpriteProvider
       .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF6300B0).addARGB(102, 0xFF790CC9).addARGB(140, 0xFF9727DD).addARGB(178, 0xFFA936ED).addARGB(216, 0xFFBF58F7).addARGB(255, 0xFFD37CFF).build());
 
     // plate
-    buildMaterial(MaterialIds.obsidian).armor().statType(PLATE).fallbacks("rock").colorMapper(obsidianPalette);
     buildMaterial(MaterialIds.debris).statType(PLATE).fallbacks("rock").colorMapper(ancientDebrisPalette);
     buildMaterial(MaterialIds.netherite)
       .statType(PLATE)
@@ -338,6 +337,7 @@ public class TinkerMaterialSpriteProvider extends AbstractMaterialSpriteProvider
       .armor().statType(PLATE, SLIMESUIT)
       .fallbacks("metal")
       .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFFB26411).addARGB(102, 0xFFB26411).addARGB(140, 0xFFE9B115).addARGB(178, 0xFFFAD64A).addARGB(216, 0xFFFDF55F).addARGB(255, 0xFFFFFDE0).build());
+    buildMaterial(MaterialIds.obsidian).armor().statType(PLATE).fallbacks("rock").colorMapper(obsidianPalette);
     // compat plate
     buildMaterial(MaterialIds.nickel)
       .statType(PLATE)

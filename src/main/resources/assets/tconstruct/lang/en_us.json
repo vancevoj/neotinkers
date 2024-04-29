@@ -309,6 +309,7 @@
   "pattern.tconstruct.large_plate": "Large Plate",
   "pattern.tconstruct.bowstring": "Bowstring",
   "pattern.tconstruct.chainmail": "Maille",
+  "pattern.tconstruct.shield_core": "Shield Core",
 
   "_comment": "Tool Handle Patterns",
 
@@ -975,6 +976,7 @@
   "item.tconstruct.leggings_plating": "Leg Plating",
   "item.tconstruct.boots_plating": "Boot Plating",
   "item.tconstruct.chainmail": "Maille",
+  "item.tconstruct.shield_core": "Shield Core",
 
 
   "_conment": "Tool Descriptions",
@@ -1468,7 +1470,7 @@
 
   "material.tconstruct.bamboo": "Bamboo",
   "material.tconstruct.bamboo.flavor": "Get bamboozled!",
-  "material.tconstruct.bamboo.ranged": "Arrows have 110% velocity, but deal 90% damage. Effectively, they go farther while dealing about the same damage",
+  "material.tconstruct.bamboo.ranged": "Movement penalty when drawing back the bow is reduced by 10%",
 
   "material.tconstruct.rock": "Rock",
   "material.tconstruct.rock.stone":      "Stone",
@@ -2309,9 +2311,9 @@
   "modifier.tconstruct.enderference": "Enderference",
   "modifier.tconstruct.enderference.flavor": "Really quite distracting",
   "modifier.tconstruct.enderference.description": "Prevents target from teleporting for a short time",
-  "modifier.tconstruct.flexible": "Flexible",
-  "modifier.tconstruct.flexible.flavor": "Twang",
-  "modifier.tconstruct.flexible.description": "Your arrows fly faster, but do the same damage",
+  "modifier.tconstruct.unburdened": "Unburdened",
+  "modifier.tconstruct.unburdened.flavor": "Easy to use",
+  "modifier.tconstruct.unburdened.description": "Movement speed is hindered less when using the item.",
   "modifier.tconstruct.stringy": "Stringy",
   "modifier.tconstruct.stringy.flavor": "Like cheese, but less tasty",
   "modifier.tconstruct.stringy.description": "Tool can be repaired using string",
@@ -2627,6 +2629,8 @@
   "stat.tconstruct.plating_chestplate": "Chest Plating",
   "stat.tconstruct.plating_leggings": "Leg Plating",
   "stat.tconstruct.plating_boots": "Boot Plating",
+  "stat.tconstruct.plating_shield": "Shield Plating",
+  "stat.tconstruct.shield_core": "Shield Core",
   "stat.tconstruct.chainmail": "Maille",
   "tool_stat.tconstruct.armor": "Armor: ",
   "tool_stat.tconstruct.armor.description": "How much this protects you when worn.",

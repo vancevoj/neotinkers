@@ -59,6 +59,7 @@ public class TinkerItemModelProvider extends ItemModelProvider {
       }
     });
     part(TinkerToolParts.chainmail);
+    part(TinkerToolParts.shieldCore, "armor/plate/shield/core");
 
     // casts //
     // basic

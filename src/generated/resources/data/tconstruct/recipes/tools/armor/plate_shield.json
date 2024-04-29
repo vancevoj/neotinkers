@@ -1,33 +1,9 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "key": {
-    "c": {
-      "tag": "forge:ingots/cobalt"
-    },
-    "w": {
-      "type": "forge:difference",
-      "base": {
-        "type": "forge:intersection",
-        "children": [
-          {
-            "tag": "minecraft:planks"
-          },
-          {
-            "tag": "minecraft:non_flammable_wood"
-          }
-        ]
-      },
-      "subtracted": {
-        "tag": "tconstruct:slimy_planks"
-      }
-    }
+  "type": "tconstruct:table_tool_casting",
+  "cast": {
+    "type": "tconstruct:material",
+    "item": "tconstruct:shield_core"
   },
-  "pattern": [
-    "ww",
-    "cc",
-    "ww"
-  ],
-  "result": {
-    "item": "tconstruct:plate_shield"
-  }
+  "item_cost": 3,
+  "result": "tconstruct:plate_shield"
 }

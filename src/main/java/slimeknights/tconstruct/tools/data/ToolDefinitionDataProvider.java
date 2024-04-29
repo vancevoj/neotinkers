@@ -32,6 +32,7 @@ import slimeknights.tconstruct.library.tools.definition.module.material.DefaultM
 import slimeknights.tconstruct.library.tools.definition.module.material.MaterialRepairModule;
 import slimeknights.tconstruct.library.tools.definition.module.material.MaterialStatsModule;
 import slimeknights.tconstruct.library.tools.definition.module.material.PartStatsModule;
+import slimeknights.tconstruct.library.tools.definition.module.material.PartsModule;
 import slimeknights.tconstruct.library.tools.definition.module.mining.IsEffectiveModule;
 import slimeknights.tconstruct.library.tools.definition.module.mining.MaxTierHarvestLogic;
 import slimeknights.tconstruct.library.tools.definition.module.mining.MiningSpeedModifierModule;
@@ -52,7 +53,11 @@ import slimeknights.tconstruct.tools.data.material.MaterialIds;
 import slimeknights.tconstruct.tools.item.ArmorSlotType;
 import slimeknights.tconstruct.tools.stats.HeadMaterialStats;
 import slimeknights.tconstruct.tools.stats.LimbMaterialStats;
+import slimeknights.tconstruct.tools.stats.PlatingMaterialStats;
 import slimeknights.tconstruct.tools.stats.SkullStats;
+import slimeknights.tconstruct.tools.stats.StatlessMaterialStats;
+
+import java.util.List;
 
 import static slimeknights.tconstruct.tools.TinkerToolParts.bowGrip;
 import static slimeknights.tconstruct.tools.TinkerToolParts.bowLimb;
@@ -554,6 +559,10 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
       .module(new PreferenceSetInteraction(InteractionSource.RIGHT_CLICK, new SingleModifierPredicate(TinkerModifiers.blocking.getId())));
 
     // plate armor
+    ToolModule plateSlots =
+      ToolSlotsModule.builder()
+                     .slots(SlotType.UPGRADE, 2)
+                     .slots(SlotType.DEFENSE, 3).build();
     defineArmor(ArmorDefinitions.PLATE)
       .modules(slots -> PartStatsModule.armor(slots)
          .part(TinkerToolParts.plating, 1)
@@ -562,20 +571,21 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
          .material(MaterialIds.cobalt)
          .material(MaterialIds.ancientHide).build())
       .module(ArmorSlotType.CHESTPLATE, new MultiplyStatsModule(MultiplierNBT.builder().set(ToolStats.ATTACK_DAMAGE, 0.4f).build()))
-      .module(ToolSlotsModule.builder()
-         .slots(SlotType.UPGRADE, 2)
-         .slots(SlotType.DEFENSE, 3).build());
+      .module(plateSlots);
+    // plate shield
     define(ArmorDefinitions.PLATE_SHIELD)
+      .module(MaterialStatsModule.stats(MaterialStatProviders.ARMOR)
+        .stat(StatlessMaterialStats.SHIELD_CORE.getIdentifier())
+        .stat(PlatingMaterialStats.SHIELD.getId()).build())
+      .module(new PartsModule(List.of(TinkerToolParts.shieldCore.get())))
+      .module(DefaultMaterialsModule.builder()
+         .material(MaterialIds.wood)
+         .material(MaterialIds.cobalt)
+         .build())
       .module(new SetStatsModule(StatsNBT.builder()
-        .set(ToolStats.DURABILITY, 500)
         .set(ToolStats.BLOCK_AMOUNT, 100)
-        .set(ToolStats.BLOCK_ANGLE, 180)
-        .set(ToolStats.ARMOR_TOUGHNESS, 2).build()))
-      .module(ToolSlotsModule.builder()
-         .slots(SlotType.UPGRADE, 1)
-         .slots(SlotType.DEFENSE, 4)
-         .slots(SlotType.ABILITY, 1).build())
-      .module(MaterialRepairModule.of(MaterialIds.cobalt, 500))
+        .set(ToolStats.BLOCK_ANGLE, 180).build()))
+      .module(plateSlots)
       .module(ToolTraitsModule.builder().trait(TinkerModifiers.blocking).build())
       .module(new PreferenceSetInteraction(InteractionSource.RIGHT_CLICK, new SingleModifierPredicate(TinkerModifiers.blocking.getId())));
 

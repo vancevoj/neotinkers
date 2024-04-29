@@ -100,7 +100,7 @@ public class ModifierIds {
   // traits - tier 1
   public static final ModifierId cultivated = id("cultivated");
   public static final ModifierId stringy = id("stringy");
-  public static final ModifierId flexible = id("flexible");
+  public static final ModifierId unburdened = id("unburdened");
   // traits - tier 2
   public static final ModifierId sturdy = id("sturdy");
   public static final ModifierId scorching = id("scorching");

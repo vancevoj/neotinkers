@@ -42,9 +42,9 @@ public class ToolHooks {
 
 
   /* Build */
-  /** Hook for checking if a tool can perform a given action. */
+  /** Hook for getting the material requirements for a tool. */
   public static final ModuleHook<ToolMaterialHook> TOOL_MATERIALS = register("tool_materials", ToolMaterialHook.class, definition -> List.of());
-  /** Hook for checking if a tool can perform a given action. */
+  /** Hook for getting a list of tool parts on a tool. */
   public static final ModuleHook<ToolPartsHook> TOOL_PARTS = register("tool_parts", ToolPartsHook.class, definition -> List.of());
   /** Hook for filling materials on a tool with no materials set */
   public static final ModuleHook<MissingMaterialsToolHook> MISSING_MATERIALS = register("missing_materials", MissingMaterialsToolHook.class, ((definition, random) -> {

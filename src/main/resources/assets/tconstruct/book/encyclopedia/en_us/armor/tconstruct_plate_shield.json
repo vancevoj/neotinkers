@@ -4,13 +4,12 @@
     { "text": "The plate shield is a highly defensive shield, granting high blocking power at the cost of speed while blocking." }
   ],
   "properties": [
-    "500 Durability",
+    "Material controlled stats",
     "Blocks 100 damage",
     "180° block angle",
     "20% block speed",
-    "+2 Toughness",
-    "1 Upgrade Slot",
+    "2 Upgrade Slot",
     "4 Defense Slots",
-    "1 Ability Slot"
+    "1 Material Trait"
   ]
 }

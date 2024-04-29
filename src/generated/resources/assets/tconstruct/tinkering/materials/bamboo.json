@@ -11,6 +11,7 @@
       "tconstruct:limb",
       "tconstruct:grip",
       "tconstruct:repair_kit",
+      "tconstruct:shield_core",
       "tconstruct:wood"
     ],
     "transformer": {

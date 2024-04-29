@@ -191,6 +191,11 @@ public abstract class AbstractMaterialSpriteProvider {
       return this;
     }
 
+    /** Makes this work as the wood part for a shield */
+    public MaterialSpriteInfoBuilder shieldCore() {
+      return statType(StatlessMaterialStats.SHIELD_CORE.getIdentifier());
+    }
+
     /** Builds a material sprite info */
     private MaterialSpriteInfo build() {
       if (transformer == null) {

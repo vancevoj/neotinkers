@@ -40,6 +40,9 @@
     "tconstruct:plating_leggings": {
       "armor": 5.0,
       "durability": 600
+    },
+    "tconstruct:plating_shield": {
+      "durability": 720
     }
   }
 }

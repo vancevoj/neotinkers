@@ -53,14 +53,16 @@ public class TinkerPartSpriteProvider extends AbstractPartSpriteProvider {
     addTexture("models/armor/plate/leggings_1", ARMOR_PLATING);
     addTexture("models/armor/plate/armor_2", ARMOR_CHAINMAIL);
     addTexture("models/armor/plate/leggings_2", ARMOR_CHAINMAIL);
+    buildTool("armor/plate/shield")
+      .addBreakablePart("plating", PlatingMaterialStats.SHIELD.getId())
+      .addBreakablePart("core", StatlessMaterialStats.SHIELD_CORE.getIdentifier())
+      // withLarge wants to use a subfolder, easier to just add another part than special casing
+      .addBreakablePart("plating_large", PlatingMaterialStats.SHIELD.getId())
+      .addBreakablePart("core_large", StatlessMaterialStats.SHIELD_CORE.getIdentifier());
 
     // shield textures
     addSprite("armor/travelers/shield_modifiers/tconstruct_embellishment", PLATE);
     addSprite("armor/travelers/shield_modifiers/broken/tconstruct_embellishment", PLATE);
-    addSprite("armor/plate/shield_modifiers/tconstruct_embellishment", PLATE);
-    addSprite("armor/plate/shield_modifiers/broken/tconstruct_embellishment", PLATE);
-    addSprite("armor/plate/shield_large_modifiers/tconstruct_embellishment", PLATE);
-    addSprite("armor/plate/shield_large_modifiers/broken/tconstruct_embellishment", PLATE);
 
     // staff
     addSprite("staff/modifiers/tconstruct_embellishment", WOOD);

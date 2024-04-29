@@ -15,6 +15,7 @@ import slimeknights.tconstruct.library.materials.definition.IMaterial;
 import slimeknights.tconstruct.library.materials.definition.MaterialId;
 import slimeknights.tconstruct.library.materials.definition.MaterialManager;
 import slimeknights.tconstruct.library.materials.definition.UpdateMaterialsPacket;
+import slimeknights.tconstruct.library.materials.stats.MaterialStatType;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsManager;
 import slimeknights.tconstruct.library.materials.stats.UpdateMaterialStatsPacket;
@@ -107,11 +108,11 @@ public final class MaterialRegistry {
     registry.registerStatType(GripMaterialStats.TYPE, RANGED);
     registry.registerStatType(StatlessMaterialStats.BOWSTRING.getType(), RANGED);
     // armor
-    registry.registerStatType(PlatingMaterialStats.HELMET, ARMOR);
-    registry.registerStatType(PlatingMaterialStats.CHESTPLATE, ARMOR);
-    registry.registerStatType(PlatingMaterialStats.LEGGINGS, ARMOR);
-    registry.registerStatType(PlatingMaterialStats.BOOTS, ARMOR);
+    for (MaterialStatType<?> type : PlatingMaterialStats.TYPES) {
+      registry.registerStatType(type, ARMOR);
+    }
     registry.registerStatType(StatlessMaterialStats.CHAINMAIL.getType(), ARMOR);
+    registry.registerStatType(StatlessMaterialStats.SHIELD_CORE.getType(), ARMOR);
     // misc
     registry.registerStatType(StatlessMaterialStats.REPAIR_KIT.getType());
     registry.registerStatType(SkullStats.TYPE);

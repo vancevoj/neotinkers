@@ -21,6 +21,8 @@ public enum ArmorSlotType implements StringRepresentable {
   public static final ArmorSlotType[] TOP_DOWN = { HELMET, CHESTPLATE, LEGGINGS, BOOTS };
   /** copy of the vanilla array for use in builders */
   public static final int[] MAX_DAMAGE_ARRAY = {13, 15, 16, 11};
+  /** factor for shield durability */
+  public static final int SHIELD_DAMAGE = 22;
 
   private final EquipmentSlot equipmentSlot;
   private final String serializedName = toString().toLowerCase(Locale.ROOT);
@@ -44,5 +46,13 @@ public enum ArmorSlotType implements StringRepresentable {
   public interface ArmorBuilder<T> {
     /** Builds the object for the given slot */
     T build(ArmorSlotType slot);
+  }
+
+  /**
+   * Builder for an object that also includes shields
+   */
+  public interface ArmorShieldBuilder<T> extends ArmorBuilder<T> {
+    /** Builds the object for the shield */
+    T buildShield();
   }
 }

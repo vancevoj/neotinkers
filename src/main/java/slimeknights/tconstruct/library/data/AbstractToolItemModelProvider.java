@@ -101,10 +101,10 @@ public abstract class AbstractToolItemModelProvider extends GenericDataProvider 
   }
 
   /** Adds broken and blocking models for the shield */
-  protected void shield(String setName, IdAwareObject shield, JsonObject properties) throws IOException {
+  protected void shield(String setName, IdAwareObject shield, JsonObject properties, String... parts) throws IOException {
     ResourceLocation id = shield.getId();
     withDisplay("armor/" + setName + "/shield_blocking", id, Objects.requireNonNull(properties));
-    transformTool("armor/" + setName + "/shield_broken", readJson(id), "", false, "broken", "tool");
+    transformTool("armor/" + setName + "/shield_broken", readJson(id), "", false, "broken", parts);
   }
 
   /** Adds broken and blocking models for the armor set */

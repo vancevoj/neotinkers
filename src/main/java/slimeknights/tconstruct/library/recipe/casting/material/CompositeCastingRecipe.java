@@ -30,10 +30,8 @@ public class CompositeCastingRecipe extends MaterialCastingRecipe {
     LoadableRecipeSerializer.RECIPE_GROUP, RESULT_FIELD, ITEM_COST_FIELD,
     CompositeCastingRecipe::new);
 
-  private final IMaterialItem result;
   public CompositeCastingRecipe(TypeAwareRecipeSerializer<?> serializer, ResourceLocation id, String group, IMaterialItem result, int itemCost) {
     super(serializer, id, group, Ingredient.of(result), itemCost, result, true, false);
-    this.result = result;
   }
 
   @Override

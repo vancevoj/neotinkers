@@ -73,6 +73,23 @@ public interface IToolRecipeHelper extends ICastCreationHelper {
   }
 
   /**
+   * Adds recipes for a part with no cast item
+   * @param consumer Recipe consumer
+   * @param part     Part to be crafted
+   * @param cost     Part cost
+   * @param partFolder   Folder for recipes
+   */
+  default void uncastablePart(Consumer<FinishedRecipe> consumer, IMaterialItem part, int cost, String partFolder) {
+    ResourceLocation id = id(part);
+    PartRecipeBuilder.partRecipe(part)
+                     .setPattern(id)
+                     .setPatternItem(Ingredient.of(TinkerTags.Items.DEFAULT_PATTERNS))
+                     .setCost(cost)
+                     .save(consumer, location(partFolder + "builder/" + id.getPath()));
+    CompositeCastingRecipeBuilder.table(part, cost).save(consumer, location(partFolder + "casting/" + id.getPath() + "_composite"));
+  }
+
+  /**
    * Adds cast creation, casting, and part builder recipes for a material item
    * @param consumer Recipe consumer
    * @param part     Part to be crafted

@@ -49,6 +49,8 @@ import slimeknights.tconstruct.library.recipe.casting.container.ContainerFilling
 import slimeknights.tconstruct.library.recipe.casting.material.CompositeCastingRecipe;
 import slimeknights.tconstruct.library.recipe.casting.material.MaterialCastingRecipe;
 import slimeknights.tconstruct.library.recipe.casting.material.MaterialFluidRecipe;
+import slimeknights.tconstruct.library.recipe.casting.material.ToolCastingRecipe;
+import slimeknights.tconstruct.library.recipe.casting.material.ToolPartSwappingRecipe;
 import slimeknights.tconstruct.library.recipe.entitymelting.EntityMeltingRecipe;
 import slimeknights.tconstruct.library.recipe.fuel.MeltingFuel;
 import slimeknights.tconstruct.library.recipe.melting.DamageableMeltingRecipe;
@@ -355,6 +357,10 @@ public final class TinkerSmeltery extends TinkerModule {
   public static final RegistryObject<TypeAwareRecipeSerializer<MaterialCastingRecipe>> tableMaterialSerializer = RECIPE_SERIALIZERS.register("table_casting_material", () -> LoadableRecipeSerializer.of(MaterialCastingRecipe.LOADER, TinkerRecipeTypes.CASTING_TABLE));
   public static final RegistryObject<TypeAwareRecipeSerializer<CompositeCastingRecipe>> basinCompositeSerializer = RECIPE_SERIALIZERS.register("basin_casting_composite", () -> LoadableRecipeSerializer.of(CompositeCastingRecipe.LOADER, TinkerRecipeTypes.CASTING_BASIN));
   public static final RegistryObject<TypeAwareRecipeSerializer<CompositeCastingRecipe>> tableCompositeSerializer = RECIPE_SERIALIZERS.register("table_casting_composite", () -> LoadableRecipeSerializer.of(CompositeCastingRecipe.LOADER, TinkerRecipeTypes.CASTING_TABLE));
+  public static final RegistryObject<TypeAwareRecipeSerializer<ToolCastingRecipe>> basinToolSerializer = RECIPE_SERIALIZERS.register("basin_tool_casting", () -> LoadableRecipeSerializer.of(ToolCastingRecipe.LOADER, TinkerRecipeTypes.CASTING_BASIN));
+  public static final RegistryObject<TypeAwareRecipeSerializer<ToolCastingRecipe>> tableToolSerializer = RECIPE_SERIALIZERS.register("table_tool_casting", () -> LoadableRecipeSerializer.of(ToolCastingRecipe.LOADER, TinkerRecipeTypes.CASTING_TABLE));
+  public static final RegistryObject<TypeAwareRecipeSerializer<ToolPartSwappingRecipe>> basinPartSwappingSerializer = RECIPE_SERIALIZERS.register("basin_part_swapping", () -> LoadableRecipeSerializer.of(ToolPartSwappingRecipe.LOADER, TinkerRecipeTypes.CASTING_BASIN));
+  public static final RegistryObject<TypeAwareRecipeSerializer<ToolPartSwappingRecipe>> tablePartSwappingSerializer = RECIPE_SERIALIZERS.register("table_part_swapping", () -> LoadableRecipeSerializer.of(ToolPartSwappingRecipe.LOADER, TinkerRecipeTypes.CASTING_TABLE));
   public static final RegistryObject<RecipeSerializer<MaterialFluidRecipe>> materialFluidRecipe = RECIPE_SERIALIZERS.register("material_fluid", () -> LoadableRecipeSerializer.of(MaterialFluidRecipe.LOADER));
   // molding
   public static final RegistryObject<TypeAwareRecipeSerializer<MoldingRecipe>> moldingBasinSerializer = RECIPE_SERIALIZERS.register("molding_basin", () -> LoadableRecipeSerializer.of(MoldingRecipe.LOADER, TinkerRecipeTypes.MOLDING_BASIN));

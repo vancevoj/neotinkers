@@ -41,6 +41,9 @@
       "armor": 3.0,
       "durability": 135
     },
+    "tconstruct:plating_shield": {
+      "durability": 162
+    },
     "tconstruct:skull": {
       "armor": 1,
       "durability": 175
