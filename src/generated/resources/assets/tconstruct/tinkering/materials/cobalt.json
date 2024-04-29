@@ -19,8 +19,7 @@
       "tconstruct:plating_helmet",
       "tconstruct:plating_shield",
       "tconstruct:chainmail",
-      "tconstruct:armor_chainmail",
-      "tconstruct:plate"
+      "tconstruct:armor_chainmail"
     ],
     "transformer": {
       "type": "tconstruct:recolor_sprite",

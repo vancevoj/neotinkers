@@ -1620,57 +1620,6 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
     // travelers gear //
     consumer.accept(new ArmorDyeingRecipe.Finished(location(folder + "travelers_dyeing"), Ingredient.of(TinkerTags.Items.DYEABLE)));
 
-    // plate //
-    // tier 2
-    plateTexture(consumer, MaterialIds.iron,   false, folder);
-    SwappableModifierRecipeBuilder.modifier(TinkerModifiers.embellishment, MaterialIds.oxidizedIron.toString())
-                                  .setTools(TinkerTags.Items.EMBELLISHMENT_METAL)
-                                  .addInput(Tags.Items.RAW_MATERIALS_IRON).addInput(Tags.Items.RAW_MATERIALS_IRON).addInput(Tags.Items.RAW_MATERIALS_IRON)
-                                  .save(consumer, wrap(TinkerModifiers.embellishment, folder, "/metal/iron_oxidized"));
-    plateTexture(consumer, MaterialIds.copper, false, folder);
-    SwappableModifierRecipeBuilder.modifier(TinkerModifiers.embellishment, MaterialIds.oxidizedCopper.toString())
-                                  .setTools(TinkerTags.Items.EMBELLISHMENT_METAL)
-                                  .addInput(Tags.Items.RAW_MATERIALS_COPPER).addInput(Tags.Items.RAW_MATERIALS_COPPER).addInput(Tags.Items.RAW_MATERIALS_COPPER)
-                                  .save(consumer, wrap(TinkerModifiers.embellishment, folder, "/metal/copper_oxidized"));
-    SwappableModifierRecipeBuilder.modifier(TinkerModifiers.embellishment, MaterialIds.gold.toString())
-                                  .setTools(DifferenceIngredient.of(Ingredient.of(TinkerTags.Items.EMBELLISHMENT_METAL), Ingredient.of(TinkerTags.Items.WORN_ARMOR)))
-                                  .addInput(Tags.Items.INGOTS_GOLD).addInput(Tags.Items.INGOTS_GOLD).addInput(Tags.Items.INGOTS_GOLD)
-                                  .save(consumer, wrap(TinkerModifiers.embellishment, folder, "/metal/gold"));
-    // tier 3
-    plateTexture(consumer, MaterialIds.slimesteel,    false, folder);
-    plateTexture(consumer, MaterialIds.amethystBronze, false, folder);
-    plateTexture(consumer, MaterialIds.roseGold,      false, folder);
-    plateTexture(consumer, MaterialIds.pigIron,       false, folder);
-    SwappableModifierRecipeBuilder.modifier(TinkerModifiers.embellishment, MaterialIds.obsidian.toString())
-                                  .setTools(TinkerTags.Items.EMBELLISHMENT_METAL)
-                                  .addInput(TinkerCommons.obsidianPane).addInput(TinkerCommons.obsidianPane).addInput(TinkerCommons.obsidianPane)
-                                  .save(consumer, wrap(TinkerModifiers.embellishment, folder, "_obsidian"));
-    // does nothing by default, but helpful for addons
-    plateTexture(consumer, MaterialIds.cobalt,    false, folder);
-    // tier 4
-    plateTexture(consumer, MaterialIds.debris, "nuggets/netherite_scrap", false, folder);
-    plateTexture(consumer, MaterialIds.manyullyn, false, folder);
-    plateTexture(consumer, MaterialIds.hepatizon, false, folder);
-    plateTexture(consumer, MaterialIds.netherite, "nuggets/netherite", false, folder);
-    // tier 2 compat
-    plateTexture(consumer, MaterialIds.osmium,   true, folder);
-    plateTexture(consumer, MaterialIds.tungsten, true, folder);
-    plateTexture(consumer, MaterialIds.platinum, true, folder);
-    plateTexture(consumer, MaterialIds.silver,   true, folder);
-    plateTexture(consumer, MaterialIds.lead,     true, folder);
-    plateTexture(consumer, MaterialIds.aluminum, true, folder);
-    plateTexture(consumer, MaterialIds.nickel,   true, folder);
-    plateTexture(consumer, MaterialIds.tin,      true, folder);
-    plateTexture(consumer, MaterialIds.zinc,     true, folder);
-    plateTexture(consumer, MaterialIds.uranium,  true, folder);
-    // tier 3 compat
-    plateTexture(consumer, MaterialIds.steel,      true, folder);
-    plateTexture(consumer, MaterialIds.bronze,     true, folder);
-    plateTexture(consumer, MaterialIds.constantan, true, folder);
-    plateTexture(consumer, MaterialIds.invar,      true, folder);
-    plateTexture(consumer, MaterialIds.electrum,   true, folder);
-    plateTexture(consumer, MaterialIds.brass,      true, folder);
-
     // slimesuit //
     // basic slime
     slimeTexture(consumer, MaterialIds.earthslime, SlimeType.EARTH, folder);
@@ -1773,29 +1722,12 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
     SpecialRecipeBuilder.special(TinkerModifiers.sheepShearing.get()).save(consumer, prefix(folder + "sheep_wool"));
   }
 
-  /** Adds recipes for a plate armor texture */
-  private void plateTexture(Consumer<FinishedRecipe> consumer, MaterialId material, boolean optional, String folder) {
-    plateTexture(consumer, material, "ingots/" + material.getPath(), optional, folder);
-  }
-
   /** Adds recipes for a plate armor texture with a custom tag */
   private void woodTexture(Consumer<FinishedRecipe> consumer, MaterialVariantId material, ItemLike planks, String folder) {
     SwappableModifierRecipeBuilder.modifier(TinkerModifiers.embellishment, material.toString())
                                   .setTools(TinkerTags.Items.EMBELLISHMENT_WOOD)
                                   .addInput(planks).addInput(TinkerTables.pattern).addInput(planks)
                                   .save(consumer, wrap(TinkerModifiers.embellishment, folder, "/wood/" + material.getLocation('_').getPath()));
-  }
-
-  /** Adds recipes for a plate armor texture with a custom tag */
-  private void plateTexture(Consumer<FinishedRecipe> consumer, MaterialVariantId material, String tag, boolean optional, String folder) {
-    Ingredient ingot = Ingredient.of(getItemTag("forge", tag));
-    if (optional) {
-      consumer = withCondition(consumer, tagCondition(tag));
-    }
-    SwappableModifierRecipeBuilder.modifier(TinkerModifiers.embellishment, material.toString())
-                                  .setTools(TinkerTags.Items.EMBELLISHMENT_METAL)
-                                  .addInput(ingot).addInput(ingot).addInput(ingot)
-                                  .save(consumer, wrap(TinkerModifiers.embellishment, folder, "/metal/" + material.getLocation('_').getPath()));
   }
 
   /** Adds recipes for a slime armor texture */

@@ -4,13 +4,11 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.common.Tags;
-import net.minecraftforge.common.crafting.DifferenceIngredient;
 import slimeknights.mantle.recipe.helper.ItemOutput;
 import slimeknights.tconstruct.common.data.BaseRecipeProvider;
 import slimeknights.tconstruct.fluids.TinkerFluids;
@@ -159,12 +157,12 @@ public class ToolsRecipeProvider extends BaseRecipeProvider implements IMaterial
                        .unlockedBy("has_item", has(Tags.Items.INGOTS_COPPER))
                        .save(consumer, location(armorFolder + "travelers_boots"));
     ShapedRecipeBuilder.shaped(TinkerTools.travelersShield)
-                       .pattern(" c ")
-                       .pattern("cwc")
-                       .pattern(" c ")
-                       .define('c', Tags.Items.INGOTS_COPPER)
-                       .define('w', DifferenceIngredient.of(Ingredient.of(ItemTags.PLANKS), Ingredient.of(TinkerTags.Items.SLIMY_PLANKS)))
-                       .unlockedBy("has_item", has(Tags.Items.INGOTS_COPPER))
+                       .pattern(" w ")
+                       .pattern("wlw")
+                       .pattern(" w ")
+                       .define('l', Tags.Items.LEATHER)
+                       .define('w', TinkerTables.pattern)
+                       .unlockedBy("has_item", has(Tags.Items.LEATHER))
                        .save(consumer, location(armorFolder + "travelers_shield"));
 
     // plate armor

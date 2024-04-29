@@ -14,8 +14,7 @@
       "tconstruct:plating_shield",
       "tconstruct:chainmail",
       "tconstruct:armor_chainmail",
-      "tconstruct:repair_kit",
-      "tconstruct:plate"
+      "tconstruct:repair_kit"
     ],
     "transformer": {
       "type": "tconstruct:recolor_sprite",

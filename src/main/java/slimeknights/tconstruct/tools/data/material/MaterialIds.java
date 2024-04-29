@@ -76,14 +76,6 @@ public final class MaterialIds {
   // plate
   public static final MaterialId gold = id("gold");
   public static final MaterialId obsidian = id("obsidian");
-  public static final MaterialId debris = id("debris");
-  public static final MaterialId netherite = id("netherite");
-  // plate - compat
-  public static final MaterialId nickel = id("nickel");
-  public static final MaterialId tin = id("tin");
-  public static final MaterialId zinc = id("zinc");
-  public static final MaterialId uranium = id("uranium");
-  public static final MaterialId brass = id("brass");
   // slimeskull
   public static final MaterialId glass = id("glass");
   public static final MaterialId enderPearl = id("ender_pearl");

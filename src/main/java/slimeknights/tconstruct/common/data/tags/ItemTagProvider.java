@@ -48,7 +48,6 @@ import static slimeknights.tconstruct.common.TinkerTags.Items.CHESTPLATES;
 import static slimeknights.tconstruct.common.TinkerTags.Items.CROSSBOWS;
 import static slimeknights.tconstruct.common.TinkerTags.Items.DURABILITY;
 import static slimeknights.tconstruct.common.TinkerTags.Items.DYEABLE;
-import static slimeknights.tconstruct.common.TinkerTags.Items.EMBELLISHMENT_METAL;
 import static slimeknights.tconstruct.common.TinkerTags.Items.EMBELLISHMENT_SLIME;
 import static slimeknights.tconstruct.common.TinkerTags.Items.EMBELLISHMENT_WOOD;
 import static slimeknights.tconstruct.common.TinkerTags.Items.FANTASTIC_ARMOR;
@@ -264,7 +263,7 @@ public class ItemTagProvider extends ItemTagsProvider {
     addToolTags(TinkerTools.slimesuit.get(ArmorSlotType.HELMET), MULTIPART_TOOL);
 
     // shields
-    addToolTags(TinkerTools.travelersShield, DURABILITY, DYEABLE, SHIELDS, INTERACTABLE_LEFT, EMBELLISHMENT_METAL);
+    addToolTags(TinkerTools.travelersShield, DURABILITY, SHIELDS, INTERACTABLE_LEFT, EMBELLISHMENT_WOOD, DYEABLE);
     addToolTags(TinkerTools.plateShield,     DURABILITY, SHIELDS, INTERACTABLE_LEFT, MULTIPART_TOOL);
 
     // care about order for armor in the book

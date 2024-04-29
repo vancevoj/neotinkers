@@ -553,8 +553,8 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
         .set(ToolStats.BLOCK_ANGLE, 90)
         .set(ToolStats.USE_ITEM_SPEED, 0.8f).build()))
       .module(travelersSlots)
-      .module(MaterialRepairModule.of(MaterialIds.copper, 200))
-      .module(MaterialRepairModule.of(MaterialIds.wood, 60))
+      .module(MaterialRepairModule.of(MaterialIds.leather, 200))
+      .module(MaterialRepairModule.of(MaterialIds.wood, 100))
       .module(ToolTraitsModule.builder().trait(TinkerModifiers.blocking).build())
       .module(new PreferenceSetInteraction(InteractionSource.RIGHT_CLICK, new SingleModifierPredicate(TinkerModifiers.blocking.getId())));
 

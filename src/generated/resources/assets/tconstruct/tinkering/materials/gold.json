@@ -15,7 +15,6 @@
       "tconstruct:chainmail",
       "tconstruct:armor_chainmail",
       "tconstruct:repair_kit",
-      "tconstruct:plate",
       "tconstruct:slimesuit"
     ],
     "transformer": {

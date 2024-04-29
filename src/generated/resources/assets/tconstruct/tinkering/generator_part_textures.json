@@ -54,11 +54,11 @@
     },
     {
       "path": "tconstruct:item/tool/armor/travelers/shield_modifiers/tconstruct_embellishment",
-      "statType": "tconstruct:plate"
+      "statType": "tconstruct:wood"
     },
     {
       "path": "tconstruct:item/tool/armor/travelers/shield_modifiers/broken/tconstruct_embellishment",
-      "statType": "tconstruct:plate"
+      "statType": "tconstruct:wood"
     },
     {
       "path": "tconstruct:item/tool/staff/modifiers/tconstruct_embellishment",

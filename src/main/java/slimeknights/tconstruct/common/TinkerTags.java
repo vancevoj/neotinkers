@@ -404,8 +404,6 @@ public class TinkerTags {
 
     /** Tools that can receive wood based embellishments */
     public static final TagKey<Item> EMBELLISHMENT_WOOD = tag("modifiable/embellishment/wood");
-    /** Tools that can receive metal based embellishments */
-    public static final TagKey<Item> EMBELLISHMENT_METAL = tag("modifiable/embellishment/metal");
     /** Tools that can receive slime based embellishments */
     public static final TagKey<Item> EMBELLISHMENT_SLIME = tag("modifiable/embellishment/slime");
     /** Tools that can be dyed */

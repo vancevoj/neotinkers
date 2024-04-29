@@ -90,14 +90,6 @@ public class MaterialDataProvider extends AbstractMaterialDataProvider {
     addCompatMetalMaterial(MaterialIds.electrum,        3, ORDER_COMPAT + ORDER_SPECIAL);
     addCompatMetalMaterial(MaterialIds.platedSlimewood, 3, ORDER_COMPAT + ORDER_SPECIAL, "brass");
 
-    // plate
-    addMaterial(MaterialIds.debris,    3, ORDER_REPAIR, false);
-    addMaterial(MaterialIds.netherite, 4, ORDER_REPAIR, false);
-    addCompatMetalMaterial(MaterialIds.nickel,   2, ORDER_REPAIR);
-    addCompatMetalMaterial(MaterialIds.tin,      2, ORDER_REPAIR);
-    addCompatMetalMaterial(MaterialIds.zinc,     2, ORDER_REPAIR);
-    addCompatMetalMaterial(MaterialIds.brass,    3, ORDER_REPAIR);
-    addCompatMetalMaterial(MaterialIds.uranium,  2, ORDER_REPAIR);
     // slimeskull - put in the most appropriate tier
     addMaterial(MaterialIds.gold,        2, ORDER_REPAIR, false);
     addMaterial(MaterialIds.glass,       2, ORDER_REPAIR, false);

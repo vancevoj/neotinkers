@@ -13,7 +13,6 @@ import slimeknights.tconstruct.tools.stats.StatlessMaterialStats;
  */
 public class TinkerPartSpriteProvider extends AbstractPartSpriteProvider {
   public static final MaterialStatsId WOOD = new MaterialStatsId(TConstruct.MOD_ID, "wood");
-  public static final MaterialStatsId PLATE = new MaterialStatsId(TConstruct.MOD_ID, "plate");
   public static final MaterialStatsId SLIMESUIT = new MaterialStatsId(TConstruct.MOD_ID, "slimesuit");
   public static final MaterialStatsId ARMOR_PLATING = new MaterialStatsId(TConstruct.MOD_ID, "armor_plating");
   public static final MaterialStatsId ARMOR_CHAINMAIL = new MaterialStatsId(TConstruct.MOD_ID, "armor_chainmail");
@@ -61,8 +60,8 @@ public class TinkerPartSpriteProvider extends AbstractPartSpriteProvider {
       .addBreakablePart("core_large", StatlessMaterialStats.SHIELD_CORE.getIdentifier());
 
     // shield textures
-    addSprite("armor/travelers/shield_modifiers/tconstruct_embellishment", PLATE);
-    addSprite("armor/travelers/shield_modifiers/broken/tconstruct_embellishment", PLATE);
+    addSprite("armor/travelers/shield_modifiers/tconstruct_embellishment", WOOD);
+    addSprite("armor/travelers/shield_modifiers/broken/tconstruct_embellishment", WOOD);
 
     // staff
     addSprite("staff/modifiers/tconstruct_embellishment", WOOD);

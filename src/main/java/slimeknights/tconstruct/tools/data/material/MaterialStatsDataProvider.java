@@ -381,10 +381,7 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
     // slimesuit
     addMaterialStats(MaterialIds.enderslime, StatlessMaterialStats.REPAIR_KIT);
     addMaterialStats(MaterialIds.phantom, StatlessMaterialStats.REPAIR_KIT);
-    // crafting
-    addMaterialStats(MaterialIds.obsidian);
-    addMaterialStats(MaterialIds.debris);
-    addMaterialStats(MaterialIds.netherite);
+    // slimesuit embellishments
     addMaterialStats(MaterialIds.earthslime);
     addMaterialStats(MaterialIds.skyslime);
     addMaterialStats(MaterialIds.blood);
@@ -392,12 +389,5 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
     addMaterialStats(MaterialIds.ichor);
     addMaterialStats(MaterialIds.clay);
     addMaterialStats(MaterialIds.honey);
-    // compat
-    addMaterialStats(MaterialIds.aluminum);
-    addMaterialStats(MaterialIds.nickel);
-    addMaterialStats(MaterialIds.tin);
-    addMaterialStats(MaterialIds.zinc);
-    addMaterialStats(MaterialIds.brass);
-    addMaterialStats(MaterialIds.uranium);
   }
 }

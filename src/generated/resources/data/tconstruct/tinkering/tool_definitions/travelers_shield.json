@@ -20,11 +20,11 @@
     {
       "type": "tconstruct:material_repair",
       "durability": 200,
-      "material": "tconstruct:copper"
+      "material": "tconstruct:leather"
     },
     {
       "type": "tconstruct:material_repair",
-      "durability": 60,
+      "durability": 100,
       "material": "tconstruct:wood"
     },
     {

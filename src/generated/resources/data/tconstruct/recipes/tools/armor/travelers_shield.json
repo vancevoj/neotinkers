@@ -1,23 +1,17 @@
 {
   "type": "minecraft:crafting_shaped",
   "key": {
-    "c": {
-      "tag": "forge:ingots/copper"
+    "l": {
+      "tag": "forge:leather"
     },
     "w": {
-      "type": "forge:difference",
-      "base": {
-        "tag": "minecraft:planks"
-      },
-      "subtracted": {
-        "tag": "tconstruct:slimy_planks"
-      }
+      "item": "tconstruct:pattern"
     }
   },
   "pattern": [
-    " c ",
-    "cwc",
-    " c "
+    " w ",
+    "wlw",
+    " w "
   ],
   "result": {
     "item": "tconstruct:travelers_shield"

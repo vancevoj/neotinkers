@@ -103,14 +103,6 @@ public class MaterialRenderInfoProvider extends AbstractMaterialRenderInfoProvid
     // plate
     buildRenderInfo(MaterialIds.gold).color(0xFDF55F).fallbacks("metal");
     buildRenderInfo(MaterialIds.obsidian);
-    buildRenderInfo(MaterialIds.debris);
-    buildRenderInfo(MaterialIds.netherite).color(0x4C4143).fallbacks("metal");
-    // compat plate
-    buildRenderInfo(MaterialIds.nickel);
-    buildRenderInfo(MaterialIds.tin);
-    buildRenderInfo(MaterialIds.zinc);
-    buildRenderInfo(MaterialIds.brass);
-    buildRenderInfo(MaterialIds.uranium);
     // slimeskull
     buildRenderInfo(MaterialIds.glass);
     buildRenderInfo(MaterialIds.enderPearl);
