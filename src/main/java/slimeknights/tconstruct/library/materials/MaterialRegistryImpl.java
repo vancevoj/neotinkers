@@ -10,7 +10,6 @@ import slimeknights.tconstruct.library.materials.stats.MaterialStatType;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsManager;
 import slimeknights.tconstruct.library.materials.traits.MaterialTraitsManager;
-import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 
 import javax.annotation.Nullable;
@@ -68,7 +67,7 @@ public class MaterialRegistryImpl implements IMaterialRegistry {
   }
 
   @Override
-  public List<IMaterial> getTagValues(TagKey<Modifier> tag) {
+  public List<IMaterial> getTagValues(TagKey<IMaterial> tag) {
     return materialManager.getValues(tag);
   }
 

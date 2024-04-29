@@ -68,7 +68,7 @@ public interface IToolRecipeHelper extends ICastCreationHelper {
                                  .save(consumer, location(castingFolder + name + "_composite"));
 
     // Cast Casting
-    MaterialIngredient ingredient = MaterialIngredient.fromItem(part);
+    MaterialIngredient ingredient = MaterialIngredient.of(part);
     castCreation(consumer, ingredient, cast, castFolder, name);
   }
 

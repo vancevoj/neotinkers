@@ -46,7 +46,7 @@ public class NoContainerIngredient extends NestedIngredient {
     }
     // if we have an array or a type, then serialize nested
     JsonObject json = JsonUtils.withType(ID);
-    json.add("match", nested.toJson());
+    json.add("match", nestedElement);
     return json;
   }
 

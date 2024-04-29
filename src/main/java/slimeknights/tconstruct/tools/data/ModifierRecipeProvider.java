@@ -1023,9 +1023,9 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
 
     // transform ingredients
     Ingredient bootsWithDuraibility = IntersectionIngredient.of(Ingredient.of(TinkerTags.Items.BOOTS), Ingredient.of(TinkerTags.Items.DURABILITY));
-    SizedIngredient roundPlate = SizedIngredient.of(MaterialIngredient.fromItem(TinkerToolParts.roundPlate.get()));
-    SizedIngredient smallBlade = SizedIngredient.of(MaterialIngredient.fromItem(TinkerToolParts.smallBlade.get()));
-    SizedIngredient toolBinding = SizedIngredient.of(MaterialIngredient.fromItem(TinkerToolParts.toolBinding.get()));
+    SizedIngredient roundPlate = SizedIngredient.of(MaterialIngredient.of(TinkerToolParts.roundPlate.get()));
+    SizedIngredient smallBlade = SizedIngredient.of(MaterialIngredient.of(TinkerToolParts.smallBlade.get()));
+    SizedIngredient toolBinding = SizedIngredient.of(MaterialIngredient.of(TinkerToolParts.toolBinding.get()));
     ModifierRecipeBuilder.modifier(ModifierIds.pathMaker)
                          .setTools(bootsWithDuraibility)
                          .addInput(roundPlate)
@@ -1272,7 +1272,7 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .save(consumer, prefix(ModifierIds.pathing, abilityFolder));
     ModifierRecipeBuilder.modifier(ModifierIds.stripping)
                          .setTools(DifferenceIngredient.of(interactableWithDurability, Ingredient.of(TinkerTools.handAxe, TinkerTools.broadAxe)))
-                         .addInput(SizedIngredient.of(MaterialIngredient.fromItem(TinkerToolParts.smallAxeHead.get())))
+                         .addInput(SizedIngredient.of(MaterialIngredient.of(TinkerToolParts.smallAxeHead.get())))
                          .addInput(TinkerMaterials.cobalt.getIngotTag())
                          .addInput(toolBinding)
                          .setMaxLevel(1)
