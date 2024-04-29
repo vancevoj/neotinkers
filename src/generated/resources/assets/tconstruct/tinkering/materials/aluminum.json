@@ -9,12 +9,13 @@
       "tconstruct:limb",
       "tconstruct:grip",
       "tconstruct:repair_kit",
-      "tconstruct:armor",
+      "tconstruct:armor_plating",
       "tconstruct:plating_boots",
       "tconstruct:plating_leggings",
       "tconstruct:plating_chestplate",
       "tconstruct:plating_helmet",
       "tconstruct:chainmail",
+      "tconstruct:armor_chainmail",
       "tconstruct:plate"
     ],
     "transformer": {

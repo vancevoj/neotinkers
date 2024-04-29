@@ -1,6 +1,7 @@
 package slimeknights.tconstruct.library.client.data.material;
 
 import com.google.common.collect.ImmutableSet;
+import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ import slimeknights.tconstruct.library.materials.definition.MaterialId;
 import slimeknights.tconstruct.library.materials.definition.MaterialVariantId;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatType;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
+import slimeknights.tconstruct.tools.data.sprite.TinkerPartSpriteProvider;
 import slimeknights.tconstruct.tools.stats.GripMaterialStats;
 import slimeknights.tconstruct.tools.stats.HandleMaterialStats;
 import slimeknights.tconstruct.tools.stats.HeadMaterialStats;
@@ -132,6 +134,7 @@ public abstract class AbstractMaterialSpriteProvider {
     }
 
     /** Sets the transformer to a color mapping transform */
+    @CanIgnoreReturnValue
     public MaterialSpriteInfoBuilder colorMapper(IColorMapping mapping) {
       return transformer(new RecolorSpriteTransformer(mapping));
     }
@@ -170,13 +173,20 @@ public abstract class AbstractMaterialSpriteProvider {
       return this;
     }
 
+    /** Adds stat types for chainmail */
+    public MaterialSpriteInfoBuilder chainmail() {
+      statType(StatlessMaterialStats.CHAINMAIL.getIdentifier());
+      statType(TinkerPartSpriteProvider.ARMOR_CHAINMAIL);
+      return this;
+    }
+
     /** Adds stat types for armor, all plating plus chainmail */
     public MaterialSpriteInfoBuilder armor() {
-      statType(MaterialRegistry.ARMOR);
+      statType(TinkerPartSpriteProvider.ARMOR_PLATING);
       for (MaterialStatType<?> type : PlatingMaterialStats.TYPES) {
         statType(type.getId());
       }
-      statType(StatlessMaterialStats.CHAINMAIL.getIdentifier());
+      chainmail();
       repairKit();
       return this;
     }

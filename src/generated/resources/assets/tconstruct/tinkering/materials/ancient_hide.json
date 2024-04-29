@@ -7,7 +7,8 @@
     "ignoreMaterialStats": false,
     "supportedStats": [
       "tconstruct:binding",
-      "tconstruct:chainmail"
+      "tconstruct:chainmail",
+      "tconstruct:armor_chainmail"
     ],
     "transformer": {
       "type": "tconstruct:recolor_sprite",

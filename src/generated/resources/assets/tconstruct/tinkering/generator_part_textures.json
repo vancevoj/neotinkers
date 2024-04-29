@@ -38,19 +38,19 @@
     },
     {
       "path": "tconstruct:models/armor/plate/armor_1",
-      "statType": "tconstruct:armor"
+      "statType": "tconstruct:armor_plating"
     },
     {
       "path": "tconstruct:models/armor/plate/leggings_1",
-      "statType": "tconstruct:plating_leggings"
+      "statType": "tconstruct:armor_plating"
     },
     {
       "path": "tconstruct:models/armor/plate/armor_2",
-      "statType": "tconstruct:chainmail"
+      "statType": "tconstruct:armor_chainmail"
     },
     {
       "path": "tconstruct:models/armor/plate/leggings_2",
-      "statType": "tconstruct:chainmail"
+      "statType": "tconstruct:armor_chainmail"
     },
     {
       "path": "tconstruct:item/tool/armor/travelers/shield_modifiers/tconstruct_embellishment",

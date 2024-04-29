@@ -8,7 +8,14 @@
       "tconstruct:binding",
       "tconstruct:repair_kit",
       "tconstruct:limb",
-      "tconstruct:grip"
+      "tconstruct:grip",
+      "tconstruct:plating_boots",
+      "tconstruct:plating_leggings",
+      "tconstruct:plating_chestplate",
+      "tconstruct:plating_helmet",
+      "tconstruct:bowstring",
+      "tconstruct:shield_core",
+      "tconstruct:chainmail"
     ],
     "transformer": {
       "type": "tconstruct:recolor_sprite",
