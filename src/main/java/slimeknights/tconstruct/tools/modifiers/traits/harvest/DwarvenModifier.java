@@ -14,6 +14,7 @@ import net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed;
 import slimeknights.mantle.client.TooltipKey;
 import slimeknights.mantle.data.predicate.damage.DamageSourcePredicate;
 import slimeknights.tconstruct.TConstruct;
+import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
@@ -102,7 +103,8 @@ public class DwarvenModifier extends Modifier implements ConditionalStatModifier
 
   @Override
   public float getProtectionModifier(IToolStackView tool, ModifierEntry modifier, EquipmentContext context, EquipmentSlot slotType, DamageSource source, float modifierValue) {
-    if (DamageSourcePredicate.CAN_PROTECT.matches(source)) {
+    // only boost armor, dwarven also ends up on melee/harvest/bows
+    if (DamageSourcePredicate.CAN_PROTECT.matches(source) && tool.hasTag(TinkerTags.Items.ARMOR)) {
       LivingEntity living = context.getEntity();
       return getBoost(living.level, (float)living.getY(), modifier, modifierValue, PROTECTION_BONUS);
     }

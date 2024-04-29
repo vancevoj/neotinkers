@@ -39,7 +39,7 @@ public class CrystalboundModifier extends Modifier implements ProjectileLaunchMo
     hookBuilder.addModule(AttributeModule.builder(Attributes.ATTACK_SPEED, Operation.MULTIPLY_TOTAL)
                                          .uniqueFrom(TinkerModifiers.crystalbound.getId())
                                          .toolItem(ItemPredicate.tag(TinkerTags.Items.ARMOR))
-                                         .eachLevel(0.05f));
+                                         .eachLevel(0.025f));
   }
 
   @Override

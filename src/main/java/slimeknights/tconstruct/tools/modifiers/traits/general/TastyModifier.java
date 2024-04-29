@@ -86,16 +86,13 @@ public class TastyModifier extends Modifier implements GeneralInteractionModifie
 
   @Override
   public void onAttacked(IToolStackView tool, ModifierEntry modifier, EquipmentContext context, EquipmentSlot slotType, DamageSource source, float amount, boolean isDirectDamage) {
-    // this works like vanilla, damage is capped due to the hurt immunity mechanics, so if multiple pieces apply thorns between us and vanilla, damage is capped at 4
-    if (isDirectDamage) {
-      // 15% chance of working per level, doubled bonus on shields
-      float level = modifier.getEffectiveLevel();
-      if (slotType.getType() == Type.HAND) {
-        level *= 2;
-      }
-      if (RANDOM.nextFloat() < (level * 0.15f)) {
-        eat(tool, modifier, context.getEntity());
-      }
+    // 15% chance of working per level, doubled bonus on shields
+    float level = modifier.getEffectiveLevel();
+    if (slotType.getType() == Type.HAND) {
+      level *= 2;
+    }
+    if (RANDOM.nextFloat() < (level * 0.15f)) {
+      eat(tool, modifier, context.getEntity());
     }
   }
 

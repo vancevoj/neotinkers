@@ -14,6 +14,7 @@ import slimeknights.mantle.client.TooltipKey;
 import slimeknights.mantle.data.predicate.damage.DamageSourcePredicate;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.TinkerEffect;
+import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
@@ -104,7 +105,7 @@ public class MomentumModifier extends Modifier implements ProjectileLaunchModifi
 
   @Override
   public float modifyDamageTaken(IToolStackView tool, ModifierEntry modifier, EquipmentContext context, EquipmentSlot slotType, DamageSource source, float amount, boolean isDirectDamage) {
-    if (isDirectDamage && SlotInChargeModule.isInCharge(context.getTinkerData(), SLOT_IN_CHARGE, slotType)) {
+    if (source.getEntity() != null && SlotInChargeModule.isInCharge(context.getTinkerData(), SLOT_IN_CHARGE, slotType)) {
       applyEffect(context.getEntity(), ToolType.ARMOR, 5*20, 1);
     }
     return amount;
@@ -112,7 +113,7 @@ public class MomentumModifier extends Modifier implements ProjectileLaunchModifi
 
   @Override
   public float getProtectionModifier(IToolStackView tool, ModifierEntry modifier, EquipmentContext context, EquipmentSlot slotType, DamageSource source, float modifierValue) {
-    if (DamageSourcePredicate.CAN_PROTECT.matches(source)) {
+    if (DamageSourcePredicate.CAN_PROTECT.matches(source) && tool.hasTag(TinkerTags.Items.ARMOR)) {
       modifierValue += getBonus(context.getEntity(), ToolType.ARMOR, modifier) * 2.5 / 4;
     }
     return modifierValue;
