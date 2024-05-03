@@ -103,7 +103,6 @@ public class MaterialRecipeProvider extends BaseRecipeProvider implements IMater
     materialRecipe(consumer, MaterialIds.necroticBone, Ingredient.of(TinkerTags.Items.WITHER_BONES), 1, 1, folder + "necrotic_bone");
     materialRecipe(consumer, MaterialIds.endstone, Ingredient.of(Tags.Items.END_STONES), 1, 2, folder + "endstone");
 
-    materialRecipe(consumer, MaterialIds.chain, Ingredient.of(Blocks.CHAIN), 1, 1, folder + "chain");
     materialRecipe(consumer, MaterialIds.skyslimeVine, Ingredient.of(TinkerWorld.skySlimeVine), 1, 1, folder + "skyslime_vine");
     // slimewood
     materialRecipe(consumer, MaterialIds.greenheart,  Ingredient.of(TinkerWorld.greenheart),  1, 1, folder + "slimewood/greenheart_planks");
@@ -173,12 +172,13 @@ public class MaterialRecipeProvider extends BaseRecipeProvider implements IMater
     materialMeltingCasting(consumer, MaterialIds.copper,        TinkerFluids.moltenCopper,  true,  folder);
     materialMeltingCasting(consumer, MaterialIds.searedStone, TinkerFluids.searedStone, false, FluidValues.BRICK * 2, folder);
     materialMeltingCasting(consumer, MaterialIds.scorchedStone, TinkerFluids.scorchedStone, false, FluidValues.BRICK * 2, folder);
-    materialMelting(consumer, MaterialIds.chain, TinkerFluids.moltenIron.get(), FluidValues.INGOT + (FluidValues.NUGGET * 2), folder);
     // half a clay is 1 seared brick per grout amounts
     materialComposite(consumer, MaterialIds.rock,  MaterialIds.searedStone,        TinkerFluids.moltenClay, false, FluidValues.BRICK,     folder);
     materialComposite(consumer, MaterialIds.wood,  MaterialIds.slimewoodComposite, TinkerFluids.earthSlime, true,  FluidValues.SLIMEBALL, folder);
     materialComposite(consumer, MaterialIds.flint, MaterialIds.scorchedStone,      TinkerFluids.magma,      true,  FluidValues.SLIMEBALL, folder);
     materialComposite(consumer, MaterialIds.bone,  MaterialIds.venombone,          TinkerFluids.venom,      false, FluidValues.SLIMEBALL, folder);
+    // decorative iron variant based on chain
+    materialComposite(consumer, MaterialIds.iron,  MaterialIds.wroughtIron, TinkerFluids.moltenGlass, false, FluidValues.GLASS_PANE, folder);
     // oxidize copper and iron via water, it does not rust iron because magic
     MaterialFluidRecipeBuilder.material(MaterialIds.oxidizedIron)
                               .setInputId(MaterialVariantId.create(MaterialIds.iron, MaterialVariantId.DEFAULT_VARIANT))
@@ -198,6 +198,8 @@ public class MaterialRecipeProvider extends BaseRecipeProvider implements IMater
     materialMeltingCasting(consumer, MaterialIds.pigIron,        TinkerFluids.moltenPigIron,        false, folder);
     materialMeltingCasting(consumer, MaterialIds.cobalt,         TinkerFluids.moltenCobalt,         true,  folder);
     materialMeltingCasting(consumer, MaterialIds.obsidian,       TinkerFluids.moltenObsidian,       false, FluidValues.GLASS_BLOCK, folder);
+    // allow rose gold as a bowstring by string composite, means we also get a redundant binding recipe, but thats fine
+    materialComposite(consumer, MaterialIds.string, MaterialIds.roseGold,  TinkerFluids.moltenRoseGold, true, FluidValues.INGOT, folder);
     materialMeltingComposite(consumer, MaterialIds.wood,   MaterialIds.nahuatl,    TinkerFluids.moltenObsidian, false, FluidValues.GLASS_BLOCK, folder);
     materialMeltingComposite(consumer, MaterialIds.string, MaterialIds.darkthread, TinkerFluids.moltenObsidian, false, FluidValues.GLASS_PANE,  folder);
 

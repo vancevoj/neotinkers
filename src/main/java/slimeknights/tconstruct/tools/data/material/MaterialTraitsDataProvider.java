@@ -55,7 +55,6 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     // tier 2 - end
     addDefaultTraits(MaterialIds.whitestone, TinkerModifiers.stoneshield);
     // tier 2 - binding
-    addDefaultTraits(MaterialIds.chain, ModifierIds.reinforced);
     addDefaultTraits(MaterialIds.skyslimeVine, ModifierIds.airborne);
 
     // tier 3

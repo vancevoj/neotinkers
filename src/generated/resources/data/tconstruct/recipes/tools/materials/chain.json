@@ -1,9 +1,0 @@
-{
-  "type": "tconstruct:material",
-  "ingredient": {
-    "item": "minecraft:chain"
-  },
-  "material": "tconstruct:chain",
-  "needed": 1,
-  "value": 1
-}

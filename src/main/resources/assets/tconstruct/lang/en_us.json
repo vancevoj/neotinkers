@@ -1523,6 +1523,7 @@
 
   "__comment": "Tier 2 Materials",
   "material.tconstruct.iron": "Iron",
+  "material.tconstruct.iron.wrought": "Wrought Iron",
   "material.tconstruct.iron.oxidized": "Raw Iron",
   "material.tconstruct.iron.flavor": "Ironic. He could save others from death, but not himself.",
   "material.tconstruct.iron.encyclopedia": "Causes mining blocks and hitting mobs to attract nearby items.",
@@ -1565,10 +1566,6 @@
   "material.tconstruct.rose_gold.encyclopedia": "Grants 1 extra upgrade slot per part",
   "material.tconstruct.rose_gold.skull_flavor": "Putting that arm shield to good use",
   "material.tconstruct.rose_gold.skull_encyclopedia": "Boosts health by 1 heart, plus an additional heart per piece of golden armor.",
-
-  "material.tconstruct.chain": "Chain",
-  "material.tconstruct.chain.flavor": "You too can become the chain user now.",
-  "material.tconstruct.chain.encyclopedia": "Tool takes 25% less damage",
 
   "material.tconstruct.skyslime_vine": "Slimy Vine",
   "material.tconstruct.skyslime_vine.flavor": "Float like a butterfly, sting like a bee.",

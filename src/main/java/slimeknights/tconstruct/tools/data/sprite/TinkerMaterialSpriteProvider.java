@@ -149,6 +149,10 @@ public class TinkerMaterialSpriteProvider extends AbstractMaterialSpriteProvider
       .meleeHarvest().armor()
       .fallbacks("metal").ranged()
       .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF353535).addARGB(102, 0xFF5E5E5E).addARGB(140, 0xFF828282).addARGB(178, 0xFFA8A8A8).addARGB(216, 0xFFD8D8D8).addARGB(255, 0xFFFFFFFF).build());
+    buildMaterial(MaterialIds.wroughtIron)
+      .meleeHarvest().armor()
+      .fallbacks("metal").ranged()
+      .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF1B202D).addARGB(102, 0xFF252C3D).addARGB(140, 0xFF323847).addARGB(178, 0xFF3E4453).addARGB(216, 0xFF495065).addARGB(255, 0xFF545C72).build());
     buildMaterial(MaterialIds.oxidizedIron)
       .meleeHarvest().armor()
       .fallbacks("metal").ranged()
@@ -224,10 +228,6 @@ public class TinkerMaterialSpriteProvider extends AbstractMaterialSpriteProvider
       .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF891FB3).addARGB(102, 0xFF9D2ABD).addARGB(140, 0xFF272127).addARGB(178, 0xFF362E35).addARGB(216, 0xFF3E353F).addARGB(255, 0xFF423942).build());
 
     // tier 3
-    buildMaterial(MaterialIds.chain)
-      .statType(StatlessMaterialStats.BINDING.getIdentifier(), StatlessMaterialStats.BOWSTRING.getIdentifier())
-      .fallbacks("chain", "metal")
-      .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF1B202D).addARGB(102, 0xFF252C3D).addARGB(140, 0xFF323847).addARGB(178, 0xFF3E4453).addARGB(216, 0xFF495065).addARGB(255, 0xFF545C72).build());
     buildMaterial(MaterialIds.skyslimeVine)
       .statType(StatlessMaterialStats.BINDING.getIdentifier(), StatlessMaterialStats.BOWSTRING.getIdentifier())
       .fallbacks("primitive")
@@ -249,7 +249,7 @@ public class TinkerMaterialSpriteProvider extends AbstractMaterialSpriteProvider
       .fallbacks("metal")
       .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF69363A).addARGB(102, 0xFF7E484C).addARGB(140, 0xFFAF666C).addARGB(178, 0xFFC87D82).addARGB(216, 0xFFF0A8A4).addARGB(255, 0xFFFBCECC).build());
     buildMaterial(MaterialIds.roseGold)
-      .meleeHarvest().ranged().armor()
+      .meleeHarvest().ranged().statType(StatlessMaterialStats.BOWSTRING.getIdentifier()).armor()
       .fallbacks("metal")
       .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFFAD685B).addARGB(102, 0xFFBF8070).addARGB(140, 0xFFDB9A87).addARGB(178, 0xFFE8B3A0).addARGB(216, 0xFFF7CDBB).addARGB(255, 0xFFFFE7DB).build());
     buildMaterial(MaterialIds.steel)

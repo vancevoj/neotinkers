@@ -47,6 +47,7 @@ public class MaterialRenderInfoProvider extends AbstractMaterialRenderInfoProvid
 
     // tier 2
     buildRenderInfo(MaterialIds.iron).color(0xD8D8D8).fallbacks("metal");
+    buildRenderInfo(MaterialIds.wroughtIron).color(0x3E4453).fallbacks("metal");
     buildRenderInfo(MaterialIds.oxidizedIron).color(0xE9C8B1).fallbacks("metal");
     buildRenderInfo(MaterialIds.copper).color(0xE77C56).fallbacks("metal");
     buildRenderInfo(MaterialIds.oxidizedCopper).color(0x4FAB90).fallbacks("metal");
@@ -55,7 +56,6 @@ public class MaterialRenderInfoProvider extends AbstractMaterialRenderInfoProvid
     buildRenderInfo(MaterialIds.venombone).color(0xA2935E).fallbacks("bone", "rock");
     buildRenderInfo(MaterialIds.necroticBone).color(0x2A2A2A).fallbacks("bone", "rock");
     buildRenderInfo(MaterialIds.endstone);
-    buildRenderInfo(MaterialIds.chain).color(0x3E4453).fallbacks("chain", "metal");
     buildRenderInfo(MaterialIds.skyslimeVine).color(0x00F4DA).fallbacks("vine");
     // slimewood
     buildRenderInfo(MaterialIds.slimewood).materialTexture(MaterialIds.greenheart).color(0x82c873).fallbacks("wood", "primitive");

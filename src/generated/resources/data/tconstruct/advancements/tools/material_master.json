@@ -71,20 +71,6 @@
       },
       "trigger": "minecraft:inventory_changed"
     },
-    "chain": {
-      "conditions": {
-        "items": [
-          {
-            "type": "tconstruct:tool_stack",
-            "predicate": {
-              "type": "tconstruct:has_material",
-              "material": "tconstruct:chain"
-            }
-          }
-        ]
-      },
-      "trigger": "minecraft:inventory_changed"
-    },
     "chorus": {
       "conditions": {
         "items": [
@@ -496,9 +482,6 @@
     ],
     [
       "slimewood"
-    ],
-    [
-      "chain"
     ],
     [
       "skyslime_vine"

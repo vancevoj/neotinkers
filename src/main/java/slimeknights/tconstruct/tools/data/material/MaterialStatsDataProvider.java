@@ -104,7 +104,6 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
                      HandleMaterialStats.builder().durability(0.95f).miningSpeed(1.1f).attackSpeed(0.95f).build(),
                      StatlessMaterialStats.BINDING);
     // tier 2 - bindings
-    addMaterialStats(MaterialIds.chain, StatlessMaterialStats.BINDING);
     addMaterialStats(MaterialIds.skyslimeVine, StatlessMaterialStats.BINDING);
 
     // tier 2 (mod integration)
@@ -252,7 +251,6 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
                      new LimbMaterialStats(125, 0.05f, 0.05f, -0.15f),
                      new GripMaterialStats(0.7f, 0.1f, 2.25f));
     // tier 2 - bowstring
-    addMaterialStats(MaterialIds.chain, StatlessMaterialStats.BOWSTRING);
     addMaterialStats(MaterialIds.skyslimeVine, StatlessMaterialStats.BOWSTRING);
 
     // tier 2 - compat
@@ -284,7 +282,8 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
                      new GripMaterialStats(1.0f, 0.1f, 1.5f));
     addMaterialStats(MaterialIds.roseGold,
                      new LimbMaterialStats(175, 0.15f, -0.25f, 0.15f),
-                     new GripMaterialStats(0.6f, 0.25f, 1.0f));
+                     new GripMaterialStats(0.6f, 0.25f, 1.0f),
+                     StatlessMaterialStats.BOWSTRING);
     addMaterialStats(MaterialIds.cobalt,
                      new LimbMaterialStats(800, 0.05f, 0.05f, 0.05f),
                      new GripMaterialStats(1.05f, 0.05f, 2.25f));

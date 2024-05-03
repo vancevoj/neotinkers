@@ -1,6 +1,7 @@
 {
   "stats": {
     "tconstruct:binding": {},
+    "tconstruct:bowstring": {},
     "tconstruct:chainmail": {},
     "tconstruct:grip": {
       "accuracy": 0.25,
