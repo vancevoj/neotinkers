@@ -24,7 +24,6 @@ public class MaterialCastingRecipeBuilder extends AbstractRecipeBuilder<Material
   private final IMaterialItem result;
   private final IModifiable resultTool;
   private final TypeAwareRecipeSerializer<? extends AbstractMaterialCastingRecipe> recipeSerializer;
-  private final TypeAwareRecipeSerializer<? extends ToolPartSwappingRecipe> swapSerializer;
   private Ingredient cast = Ingredient.EMPTY;
   @Setter @Accessors(chain = true)
   private int itemCost = 0;
@@ -37,7 +36,7 @@ public class MaterialCastingRecipeBuilder extends AbstractRecipeBuilder<Material
    * @return  Builder instance
    */
   public static MaterialCastingRecipeBuilder basinRecipe(IMaterialItem result) {
-    return castingRecipe(result, null, TinkerSmeltery.basinMaterialSerializer.get(), null);
+    return castingRecipe(result, null, TinkerSmeltery.basinMaterialSerializer.get());
   }
 
   /**
@@ -46,7 +45,7 @@ public class MaterialCastingRecipeBuilder extends AbstractRecipeBuilder<Material
    * @return  Builder instance
    */
   public static MaterialCastingRecipeBuilder tableRecipe(IMaterialItem result) {
-    return castingRecipe(result, null, TinkerSmeltery.tableMaterialSerializer.get(), null);
+    return castingRecipe(result, null, TinkerSmeltery.tableMaterialSerializer.get());
   }
 
   /**
@@ -55,7 +54,7 @@ public class MaterialCastingRecipeBuilder extends AbstractRecipeBuilder<Material
    * @return  Builder instance
    */
   public static MaterialCastingRecipeBuilder basinRecipe(IModifiable result) {
-    return castingRecipe(null, result, TinkerSmeltery.basinToolSerializer.get(), TinkerSmeltery.basinPartSwappingSerializer.get());
+    return castingRecipe(null, result, TinkerSmeltery.basinToolSerializer.get());
   }
 
   /**
@@ -64,7 +63,7 @@ public class MaterialCastingRecipeBuilder extends AbstractRecipeBuilder<Material
    * @return  Builder instance
    */
   public static MaterialCastingRecipeBuilder tableRecipe(IModifiable result) {
-    return castingRecipe(null, result, TinkerSmeltery.tableToolSerializer.get(), TinkerSmeltery.tablePartSwappingSerializer.get());
+    return castingRecipe(null, result, TinkerSmeltery.tableToolSerializer.get());
   }
 
   /**
@@ -111,19 +110,6 @@ public class MaterialCastingRecipeBuilder extends AbstractRecipeBuilder<Material
   @Override
   public void save(Consumer<FinishedRecipe> consumer) {
     this.save(consumer, Registry.ITEM.getKey(this.result.asItem()));
-  }
-
-  /** Generates a part swapping recipe for this tool */
-  public MaterialCastingRecipeBuilder partSwapping(Consumer<FinishedRecipe> consumer, int materialIndex, ResourceLocation id) {
-    if (swapSerializer == null) {
-      throw new IllegalStateException("Cannot perform swapping without a swapping serializer, did you call the wrong static constructor?");
-    }
-    if (this.itemCost <= 0) {
-      throw new IllegalStateException("Material casting recipes require a positive amount of fluid");
-    }
-    ResourceLocation advancementId = this.buildOptionalAdvancement(id, "casting");
-    consumer.accept(new LoadableFinishedRecipe<>(new ToolPartSwappingRecipe(swapSerializer, id, group, Ingredient.of(resultTool), itemCost, materialIndex), ToolPartSwappingRecipe.LOADER, advancementId));
-    return this;
   }
 
   @Override

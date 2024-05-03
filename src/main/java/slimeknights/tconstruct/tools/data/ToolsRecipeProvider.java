@@ -170,7 +170,6 @@ public class ToolsRecipeProvider extends BaseRecipeProvider implements IMaterial
     MaterialCastingRecipeBuilder.tableRecipe(TinkerTools.plateShield.get())
                                 .setCast(MaterialIngredient.of(TinkerToolParts.shieldCore), true)
                                 .setItemCost(3)
-                                .partSwapping(consumer, 1, location(armorFolder + "plate_shield_part_swapping"))
                                 .save(consumer, location(armorFolder + "plate_shield"));
 
     // slimeskull

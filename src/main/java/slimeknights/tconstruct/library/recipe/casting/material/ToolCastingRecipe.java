@@ -23,6 +23,7 @@ import slimeknights.tconstruct.library.tools.definition.module.material.ToolMate
 import slimeknights.tconstruct.library.tools.helper.ToolBuildHandler;
 import slimeknights.tconstruct.library.tools.item.IModifiable;
 import slimeknights.tconstruct.library.tools.nbt.MaterialNBT;
+import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.library.tools.part.IMaterialItem;
 
 import java.util.Arrays;
@@ -47,19 +48,20 @@ public class ToolCastingRecipe extends AbstractMaterialCastingRecipe implements 
   @Override
   public boolean matches(ICastingContainer inv, Level level) {
     ItemStack cast = inv.getStack();
-    if (!this.getCast().test(cast)) {
+    // tool match is used for part swapping
+    boolean partSwapping = cast.getItem() == result.asItem();
+    if (!partSwapping && !this.getCast().test(cast)) {
       return false;
     }
     // if we have a material item input, must have exactly 2 materials, else exactly 1
     List<MaterialStatsId> requirements = ToolMaterialHook.stats(result.getToolDefinition());
-    if (cast.getItem() instanceof IMaterialItem) {
-      if (requirements.size() != 2) {
-        return false;
-      }
-    } else if (requirements.size() != 1) {
+    // must have 1 or 2 tool parts
+    int numRequirements = requirements.size();
+    if (numRequirements < 1 || numRequirements > 2) {
       return false;
     }
-    MaterialStatsId requirement = requirements.get(requirements.size() - 1);
+    // last material is the part, may be 1 or 2
+    MaterialStatsId requirement = requirements.get(numRequirements - 1);
     return getCachedMaterialFluid(inv).filter(recipe -> requirement.canUseMaterial(recipe.getOutput().getId())).isPresent();
 
   }
@@ -73,13 +75,22 @@ public class ToolCastingRecipe extends AbstractMaterialCastingRecipe implements 
   public ItemStack assemble(ICastingContainer inv) {
     MaterialVariant material = getCachedMaterialFluid(inv).map(MaterialFluidRecipe::getOutput).orElse(MaterialVariant.UNKNOWN);
     ItemStack cast = inv.getStack();
-    MaterialNBT materials;
-    if (cast.getItem() instanceof IMaterialItem materialItem) {
-      materials = new MaterialNBT(List.of(MaterialVariant.of(materialItem.getMaterial(cast)), material));
+    int requirements = ToolMaterialHook.stats(result.getToolDefinition()).size();
+    // if the cast is the result, we are part swapping, replace the last material
+    if (cast.getItem() == result) {
+      ToolStack tool = ToolStack.from(cast);
+      tool.replaceMaterial(requirements - 1, material.getVariant());
+      return tool.createStack();
     } else {
-      materials = new MaterialNBT(List.of(material));
+      MaterialNBT materials;
+      // if we have 2 materials, we assume the cast has a material. 1 means the cast is a random item
+      if (requirements == 2) {
+        materials = new MaterialNBT(List.of(MaterialVariant.of(IMaterialItem.getMaterialFromStack(cast)), material));
+      } else {
+        materials = new MaterialNBT(List.of(material));
+      }
+      return ToolBuildHandler.buildItemFromMaterials(result, materials);
     }
-    return ToolBuildHandler.buildItemFromMaterials(result, materials);
   }
 
 
