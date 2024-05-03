@@ -1,19 +1,13 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "key": {
-    "g": {
-      "tag": "forge:ingots/rose_gold"
-    },
-    "s": {
-      "tag": "forge:string"
-    }
+  "type": "tconstruct:casting_table",
+  "cast": {
+    "item": "minecraft:cobweb"
   },
-  "pattern": [
-    "sss",
-    "sgs",
-    "sss"
-  ],
-  "result": {
-    "item": "tconstruct:silky_cloth"
-  }
+  "cast_consumed": true,
+  "cooling_time": 52,
+  "fluid": {
+    "amount": 90,
+    "tag": "tconstruct:molten_rose_gold"
+  },
+  "result": "tconstruct:silky_cloth"
 }

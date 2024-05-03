@@ -2,7 +2,6 @@ package slimeknights.tconstruct.tools.data;
 
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.recipes.FinishedRecipe;
-import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.data.recipes.SpecialRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
@@ -146,14 +145,10 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                             .save(consumer, prefix(TinkerCommons.jeweledApple, folder));
 
     // silky cloth
-    ShapedRecipeBuilder.shaped(TinkerModifiers.silkyCloth)
-                       .define('s', Tags.Items.STRING)
-                       .define('g', TinkerMaterials.roseGold.getIngotTag())
-                       .pattern("sss")
-                       .pattern("sgs")
-                       .pattern("sss")
-                       .unlockedBy("has_item", has(Tags.Items.INGOTS_GOLD))
-                       .save(consumer, prefix(TinkerModifiers.silkyCloth, folder));
+    ItemCastingRecipeBuilder.tableRecipe(TinkerModifiers.silkyCloth)
+                            .setCast(Items.COBWEB, true)
+                            .setFluidAndTime(TinkerFluids.moltenRoseGold, false, FluidValues.INGOT)
+                            .save(consumer, prefix(TinkerModifiers.silkyCloth, folder));
 
     // wither bone purifying
     ShapelessRecipeBuilder.shapeless(Items.BONE)
@@ -1672,6 +1667,9 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
     // beeyeing
     SeveringRecipeBuilder.severing(EntityIngredient.of(EntityType.SPIDER, EntityType.CAVE_SPIDER), Items.SPIDER_EYE)
                          .save(consumer, location(folder + "spider_eye"));
+    // besilking
+    SeveringRecipeBuilder.severing(EntityIngredient.of(EntityType.SPIDER, EntityType.CAVE_SPIDER), Items.COBWEB)
+                         .save(consumer, location(folder + "cobweb"));
     // be-internal-combustion-device
     SeveringRecipeBuilder.severing(EntityIngredient.of(EntityType.CREEPER), Blocks.TNT)
                          .save(consumer, location(folder + "creeper_tnt"));
