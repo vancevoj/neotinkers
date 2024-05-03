@@ -193,12 +193,7 @@ public class ClientGeneratePartTexturesCommand {
           Resource resource = resources.get(r);
           try (BufferedReader reader = resource.openAsReader()) {
             JsonObject object = GsonHelper.parse(reader);
-            List<PartSpriteInfo> parts = JsonHelper.parseList(object, "parts", (element, name) -> {
-              JsonObject part = GsonHelper.convertToJsonObject(element, name);
-              ResourceLocation path = JsonHelper.getResourceLocation(part, "path");
-              MaterialStatsId statId = new MaterialStatsId(JsonHelper.getResourceLocation(part, "statType"));
-              return new PartSpriteInfo(path, statId);
-            });
+            List<PartSpriteInfo> parts = PartSpriteInfo.LIST_LOADABLE.getIfPresent(object, "parts");
             builder.addAll(parts);
             if (object.has("overrides")) {
               for (Entry<String,JsonElement> entry : GsonHelper.getAsJsonObject(object, "overrides").entrySet()) {

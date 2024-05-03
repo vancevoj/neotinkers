@@ -53,11 +53,7 @@ public class GeneratorPartTextureJsonGenerator extends GenericDataProvider {
   public void run(CachedOutput cache) throws IOException {
     JsonObject json = new JsonObject();
     json.addProperty("replace", false);
-    JsonArray parts = new JsonArray();
-    for (PartSpriteInfo spriteInfo : spriteProvider.getSprites()) {
-      parts.add(GSON.toJsonTree(spriteInfo));
-    }
-    json.add("parts", parts);
+    json.add("parts", PartSpriteInfo.LIST_LOADABLE.serialize(spriteProvider.getSprites()));
     if (!overrides.overrides.isEmpty()) {
       json.add("overrides", overrides.serialize());
     }

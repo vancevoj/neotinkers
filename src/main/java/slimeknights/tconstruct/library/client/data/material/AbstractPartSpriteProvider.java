@@ -5,6 +5,9 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.minecraft.resources.ResourceLocation;
+import slimeknights.mantle.data.loadable.Loadable;
+import slimeknights.mantle.data.loadable.Loadables;
+import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.tconstruct.library.client.data.util.AbstractSpriteReader;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
 import slimeknights.tconstruct.tools.stats.GripMaterialStats;
@@ -144,6 +147,14 @@ public abstract class AbstractPartSpriteProvider {
   /** Data class containing a sprite path, and different bases */
   @RequiredArgsConstructor
   public static class PartSpriteInfo {
+    /** Loadable instance */
+    public static final RecordLoadable<PartSpriteInfo> LOADABLE = RecordLoadable.create(
+      Loadables.RESOURCE_LOCATION.requiredField("path", i -> i.path),
+      MaterialStatsId.PARSER.requiredField("stat_type", i -> i.statType),
+      PartSpriteInfo::new);
+    /** Loadable for a list, since its the main usage of this */
+    public static final Loadable<List<PartSpriteInfo>> LIST_LOADABLE = LOADABLE.list(1);
+
     /** Path to the base sprite */
     @Getter
     private final ResourceLocation path;
