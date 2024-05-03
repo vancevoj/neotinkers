@@ -173,20 +173,20 @@ public abstract class AbstractMaterialSpriteProvider {
       return this;
     }
 
-    /** Adds stat types for chainmail */
-    public MaterialSpriteInfoBuilder chainmail() {
-      statType(StatlessMaterialStats.CHAINMAIL.getIdentifier());
-      statType(TinkerPartSpriteProvider.ARMOR_CHAINMAIL);
+    /** Adds stat types for maille */
+    public MaterialSpriteInfoBuilder maille() {
+      statType(StatlessMaterialStats.MAILLE.getIdentifier());
+      statType(TinkerPartSpriteProvider.ARMOR_MAILLE);
       return this;
     }
 
-    /** Adds stat types for armor, all plating plus chainmail */
+    /** Adds stat types for armor, all plating plus maille */
     public MaterialSpriteInfoBuilder armor() {
       statType(TinkerPartSpriteProvider.ARMOR_PLATING);
       for (MaterialStatType<?> type : PlatingMaterialStats.TYPES) {
         statType(type.getId());
       }
-      chainmail();
+      maille();
       repairKit();
       return this;
     }

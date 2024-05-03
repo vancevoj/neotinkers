@@ -16,7 +16,7 @@
       "tconstruct:plating_shield",
       "tconstruct:bowstring",
       "tconstruct:shield_core",
-      "tconstruct:chainmail"
+      "tconstruct:maille"
     ],
     "transformer": {
       "type": "tconstruct:recolor_sprite",

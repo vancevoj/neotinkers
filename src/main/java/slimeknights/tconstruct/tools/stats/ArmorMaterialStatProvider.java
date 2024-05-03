@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
  */
 public class ArmorMaterialStatProvider extends MaterialStatProvider {
   public ArmorMaterialStatProvider(ResourceLocation id) {
-    super(id, PlatingMaterialStats.TYPES.stream().map(MaterialStatType::getId).collect(Collectors.toSet()), Set.of(StatlessMaterialStats.CHAINMAIL.getIdentifier(), StatlessMaterialStats.SHIELD_CORE.getIdentifier()));
+    super(id, PlatingMaterialStats.TYPES.stream().map(MaterialStatType::getId).collect(Collectors.toSet()), Set.of(StatlessMaterialStats.MAILLE.getIdentifier(), StatlessMaterialStats.SHIELD_CORE.getIdentifier()));
   }
 
   @Override

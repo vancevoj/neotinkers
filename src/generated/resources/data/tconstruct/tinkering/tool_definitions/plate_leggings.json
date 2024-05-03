@@ -4,7 +4,7 @@
       "type": "tconstruct:part_stats",
       "parts": [
         "tconstruct:leggings_plating",
-        "tconstruct:chainmail"
+        "tconstruct:maille"
       ],
       "stat_provider": "tconstruct:armor"
     },

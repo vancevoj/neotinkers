@@ -33,8 +33,8 @@
       "statType": "tconstruct:repair_kit"
     },
     {
-      "path": "tconstruct:item/tool/parts/chainmail",
-      "statType": "tconstruct:chainmail"
+      "path": "tconstruct:item/tool/parts/maille",
+      "statType": "tconstruct:maille"
     },
     {
       "path": "tconstruct:models/armor/plate/armor_1",
@@ -46,11 +46,11 @@
     },
     {
       "path": "tconstruct:models/armor/plate/armor_2",
-      "statType": "tconstruct:armor_chainmail"
+      "statType": "tconstruct:armor_maille"
     },
     {
       "path": "tconstruct:models/armor/plate/leggings_2",
-      "statType": "tconstruct:armor_chainmail"
+      "statType": "tconstruct:armor_maille"
     },
     {
       "path": "tconstruct:item/tool/armor/travelers/shield_modifiers/tconstruct_embellishment",
@@ -121,12 +121,12 @@
       "statType": "tconstruct:plating_boots"
     },
     {
-      "path": "tconstruct:item/tool/armor/plate/boots/chainmail",
-      "statType": "tconstruct:chainmail"
+      "path": "tconstruct:item/tool/armor/plate/boots/maille",
+      "statType": "tconstruct:maille"
     },
     {
-      "path": "tconstruct:item/tool/armor/plate/boots/chainmail_broken",
-      "statType": "tconstruct:chainmail"
+      "path": "tconstruct:item/tool/armor/plate/boots/maille_broken",
+      "statType": "tconstruct:maille"
     },
     {
       "path": "tconstruct:item/tool/armor/plate/leggings/plating",
@@ -137,12 +137,12 @@
       "statType": "tconstruct:plating_leggings"
     },
     {
-      "path": "tconstruct:item/tool/armor/plate/leggings/chainmail",
-      "statType": "tconstruct:chainmail"
+      "path": "tconstruct:item/tool/armor/plate/leggings/maille",
+      "statType": "tconstruct:maille"
     },
     {
-      "path": "tconstruct:item/tool/armor/plate/leggings/chainmail_broken",
-      "statType": "tconstruct:chainmail"
+      "path": "tconstruct:item/tool/armor/plate/leggings/maille_broken",
+      "statType": "tconstruct:maille"
     },
     {
       "path": "tconstruct:item/tool/armor/plate/chestplate/plating",
@@ -153,12 +153,12 @@
       "statType": "tconstruct:plating_chestplate"
     },
     {
-      "path": "tconstruct:item/tool/armor/plate/chestplate/chainmail",
-      "statType": "tconstruct:chainmail"
+      "path": "tconstruct:item/tool/armor/plate/chestplate/maille",
+      "statType": "tconstruct:maille"
     },
     {
-      "path": "tconstruct:item/tool/armor/plate/chestplate/chainmail_broken",
-      "statType": "tconstruct:chainmail"
+      "path": "tconstruct:item/tool/armor/plate/chestplate/maille_broken",
+      "statType": "tconstruct:maille"
     },
     {
       "path": "tconstruct:item/tool/armor/plate/helmet/plating",
@@ -169,12 +169,12 @@
       "statType": "tconstruct:plating_helmet"
     },
     {
-      "path": "tconstruct:item/tool/armor/plate/helmet/chainmail",
-      "statType": "tconstruct:chainmail"
+      "path": "tconstruct:item/tool/armor/plate/helmet/maille",
+      "statType": "tconstruct:maille"
     },
     {
-      "path": "tconstruct:item/tool/armor/plate/helmet/chainmail_broken",
-      "statType": "tconstruct:chainmail"
+      "path": "tconstruct:item/tool/armor/plate/helmet/maille_broken",
+      "statType": "tconstruct:maille"
     },
     {
       "path": "tconstruct:item/tool/armor/plate/shield/plating",

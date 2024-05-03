@@ -25,10 +25,10 @@
     },
     {
       "filter": {
-        "item": "tconstruct:chainmail"
+        "item": "tconstruct:maille"
       },
-      "icon": "tconstruct:chainmail",
-      "translation_key": "item.tconstruct.chainmail",
+      "icon": "tconstruct:maille",
+      "translation_key": "item.tconstruct.maille",
       "x": 33,
       "y": 53
     }

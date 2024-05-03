@@ -1,8 +1,8 @@
 {
   "type": "tconstruct:table_casting_material",
   "cast": {
-    "tag": "tconstruct:casts/multi_use/chainmail"
+    "tag": "tconstruct:casts/multi_use/maille"
   },
   "item_cost": 2,
-  "result": "tconstruct:chainmail"
+  "result": "tconstruct:maille"
 }

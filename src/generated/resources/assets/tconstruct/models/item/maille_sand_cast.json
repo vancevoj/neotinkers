@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "tconstruct:item/cast/chainmail"
+    "layer0": "tconstruct:item/sand_cast/maille"
   }
 }

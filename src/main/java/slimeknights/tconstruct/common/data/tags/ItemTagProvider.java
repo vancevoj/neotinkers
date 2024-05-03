@@ -333,13 +333,13 @@ public class ItemTagProvider extends ItemTagsProvider {
     // tag for tool parts, mostly used by JEI right now
     this.tag(TinkerTags.Items.TOOL_PARTS)
         .add(TinkerToolParts.pickHead.get(), TinkerToolParts.hammerHead.get(),
-						 TinkerToolParts.smallAxeHead.get(), TinkerToolParts.broadAxeHead.get(),
-						 TinkerToolParts.smallBlade.get(), TinkerToolParts.broadBlade.get(),
-						 TinkerToolParts.toolBinding.get(), TinkerToolParts.roundPlate.get(), TinkerToolParts.largePlate.get(),
-						 TinkerToolParts.toolHandle.get(), TinkerToolParts.toughHandle.get(),
-						 TinkerToolParts.bowLimb.get(), TinkerToolParts.bowGrip.get(), TinkerToolParts.bowstring.get(),
-						 TinkerToolParts.chainmail.get(), TinkerToolParts.shieldCore.get(),
-						 TinkerToolParts.repairKit.get()) // repair kit is not strictly a tool part, but this list just helps out JEI
+             TinkerToolParts.smallAxeHead.get(), TinkerToolParts.broadAxeHead.get(),
+             TinkerToolParts.smallBlade.get(), TinkerToolParts.broadBlade.get(),
+             TinkerToolParts.toolBinding.get(), TinkerToolParts.roundPlate.get(), TinkerToolParts.largePlate.get(),
+             TinkerToolParts.toolHandle.get(), TinkerToolParts.toughHandle.get(),
+             TinkerToolParts.bowLimb.get(), TinkerToolParts.bowGrip.get(), TinkerToolParts.bowstring.get(),
+             TinkerToolParts.maille.get(), TinkerToolParts.shieldCore.get(),
+             TinkerToolParts.repairKit.get()) // repair kit is not strictly a tool part, but this list just helps out JEI
         .add(TinkerToolParts.plating.values().toArray(new Item[0]));
 
     TagAppender<Item> slimySeeds = this.tag(TinkerTags.Items.SLIMY_SEEDS);
@@ -465,7 +465,7 @@ public class ItemTagProvider extends ItemTagsProvider {
     addCast.accept(TinkerSmeltery.chestplatePlatingCast);
     addCast.accept(TinkerSmeltery.leggingsPlatingCast);
     addCast.accept(TinkerSmeltery.bootsPlatingCast);
-    addCast.accept(TinkerSmeltery.chainmailCast);
+    addCast.accept(TinkerSmeltery.mailleCast);
 
     // add all casts to a common tag
     this.tag(TinkerTags.Items.CASTS)

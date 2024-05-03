@@ -4,7 +4,7 @@
       "type": "tconstruct:part_stats",
       "parts": [
         "tconstruct:helmet_plating",
-        "tconstruct:chainmail"
+        "tconstruct:maille"
       ],
       "stat_provider": "tconstruct:armor"
     },

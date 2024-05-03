@@ -1,16 +1,16 @@
 {
   "type": "tconstruct:part_builder",
   "cost": 2,
-  "pattern": "tconstruct:chainmail",
+  "pattern": "tconstruct:maille",
   "pattern_item": [
     {
       "tag": "tconstruct:patterns/default"
     },
     {
-      "item": "tconstruct:chainmail_cast"
+      "item": "tconstruct:maille_cast"
     }
   ],
   "result": {
-    "item": "tconstruct:chainmail"
+    "item": "tconstruct:maille"
   }
 }

@@ -229,7 +229,7 @@ public class AdvancementsProvider extends GenericDataProvider {
       with.accept(TinkerSmeltery.chestplatePlatingCast);
       with.accept(TinkerSmeltery.leggingsPlatingCast);
       with.accept(TinkerSmeltery.bootsPlatingCast);
-      with.accept(TinkerSmeltery.chainmailCast);
+      with.accept(TinkerSmeltery.mailleCast);
     });
     Advancement mightySmelting = builder(TinkerCommons.mightySmelting, resource("smeltery/mighty_smelting"), melter, FrameType.TASK, builder ->
       builder.addCriterion("crafted_book", hasItem(TinkerCommons.mightySmelting)));

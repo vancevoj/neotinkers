@@ -59,7 +59,7 @@ public final class TinkerToolParts extends TinkerModule {
   public static final ItemObject<ToolPartItem> toughHandle = ITEMS.register("tough_handle", () -> new ToolPartItem(PARTS_PROPS, HandleMaterialStats.ID));
   // armor
   public static final EnumObject<ArmorSlotType,ToolPartItem> plating = ITEMS.registerEnum(ArmorSlotType.values(), "plating", type -> new ToolPartItem(PARTS_PROPS, PlatingMaterialStats.TYPES.get(type.getIndex()).getId()));
-  public static final ItemObject<ToolPartItem> chainmail = ITEMS.register("chainmail", () -> new ToolPartItem(PARTS_PROPS, StatlessMaterialStats.CHAINMAIL.getIdentifier()));
+  public static final ItemObject<ToolPartItem> maille = ITEMS.register("maille", () -> new ToolPartItem(PARTS_PROPS, StatlessMaterialStats.MAILLE.getIdentifier()));
   public static final ItemObject<ToolPartItem> shieldCore = ITEMS.register("shield_core", () -> new ToolPartItem(PARTS_PROPS, StatlessMaterialStats.SHIELD_CORE.getIdentifier()));
 
 }

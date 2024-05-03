@@ -157,7 +157,7 @@ public class StationSlotLayoutProvider extends AbstractStationSlotLayoutProvider
       .translationKey(TConstruct.makeTranslationKey("gui", "plate_armor"))
       .icon(Patterns.PLATE_ARMOR)
       .addInputPattern(Patterns.PLATING,   33, 29, Ingredient.of(TinkerToolParts.plating.values().toArray(new Item[0])))
-      .addInputItem(TinkerToolParts.chainmail, 33, 53)
+      .addInputItem(TinkerToolParts.maille, 33, 53)
       .build();
   }
 

@@ -566,7 +566,7 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
     defineArmor(ArmorDefinitions.PLATE)
       .modules(slots -> PartStatsModule.armor(slots)
          .part(TinkerToolParts.plating, 1)
-         .part(TinkerToolParts.chainmail, 1))
+         .part(TinkerToolParts.maille, 1))
       .module(DefaultMaterialsModule.builder()
          .material(MaterialIds.cobalt)
          .material(MaterialIds.ancientHide).build())

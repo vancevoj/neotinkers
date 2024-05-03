@@ -232,7 +232,7 @@ public class ToolsRecipeProvider extends BaseRecipeProvider implements IMaterial
     partCasting(consumer, TinkerToolParts.plating.get(ArmorSlotType.CHESTPLATE), TinkerSmeltery.chestplatePlatingCast, 6, partFolder, castFolder);
     partCasting(consumer, TinkerToolParts.plating.get(ArmorSlotType.LEGGINGS),   TinkerSmeltery.leggingsPlatingCast,   5, partFolder, castFolder);
     partCasting(consumer, TinkerToolParts.plating.get(ArmorSlotType.BOOTS),      TinkerSmeltery.bootsPlatingCast,      2, partFolder, castFolder);
-    partRecipes(consumer, TinkerToolParts.chainmail, TinkerSmeltery.chainmailCast, 2, partFolder, castFolder);
+    partRecipes(consumer, TinkerToolParts.maille, TinkerSmeltery.mailleCast, 2, partFolder, castFolder);
 
     // bowstrings and shield cores are part builder exclusive
     uncastablePart(consumer, TinkerToolParts.bowstring.get(),  1, partFolder);

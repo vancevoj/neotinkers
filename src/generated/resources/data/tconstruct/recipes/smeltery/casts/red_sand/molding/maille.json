@@ -5,7 +5,7 @@
   },
   "pattern": {
     "type": "tconstruct:material",
-    "item": "tconstruct:chainmail"
+    "item": "tconstruct:maille"
   },
-  "result": "tconstruct:chainmail_red_sand_cast"
+  "result": "tconstruct:maille_red_sand_cast"
 }

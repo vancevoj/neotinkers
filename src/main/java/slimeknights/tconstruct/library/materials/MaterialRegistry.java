@@ -111,7 +111,7 @@ public final class MaterialRegistry {
     for (MaterialStatType<?> type : PlatingMaterialStats.TYPES) {
       registry.registerStatType(type, ARMOR);
     }
-    registry.registerStatType(StatlessMaterialStats.CHAINMAIL.getType(), ARMOR);
+    registry.registerStatType(StatlessMaterialStats.MAILLE.getType(), ARMOR);
     registry.registerStatType(StatlessMaterialStats.SHIELD_CORE.getType(), ARMOR);
     // misc
     registry.registerStatType(StatlessMaterialStats.REPAIR_KIT.getType());

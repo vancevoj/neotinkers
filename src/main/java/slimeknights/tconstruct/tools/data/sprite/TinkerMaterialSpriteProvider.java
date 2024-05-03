@@ -37,7 +37,7 @@ public class TinkerMaterialSpriteProvider extends AbstractMaterialSpriteProvider
       .meleeHarvest().ranged()
       // not using the helper to avoid catching armor models
       .statType(PlatingMaterialStats.TYPES.stream().map(MaterialStatType::getId).toArray(MaterialStatsId[]::new))
-      .statType(StatlessMaterialStats.BOWSTRING.getIdentifier(), StatlessMaterialStats.SHIELD_CORE.getIdentifier(), StatlessMaterialStats.CHAINMAIL.getIdentifier())
+      .statType(StatlessMaterialStats.BOWSTRING.getIdentifier(), StatlessMaterialStats.SHIELD_CORE.getIdentifier(), StatlessMaterialStats.MAILLE.getIdentifier())
       .colorMapper(GreyToColorMapping.builder().addARGB(63, 0xFF000000).addARGB(102, 0xFF222222).addARGB(103, 0x00000000).build());
 
     // tier 1
@@ -59,7 +59,7 @@ public class TinkerMaterialSpriteProvider extends AbstractMaterialSpriteProvider
       .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF050505).addARGB(102, 0xFF0E0E0E).addARGB(140, 0xFF151515).addARGB(178, 0xFF1F1F1F).addARGB(216, 0xFF292929).addARGB(255, 0xFF343434).build());
     buildMaterial(MaterialIds.leather)
       .fallbacks("cloth")
-      .repairKit().statType(StatlessMaterialStats.BINDING.getIdentifier()).chainmail()
+      .repairKit().statType(StatlessMaterialStats.BINDING.getIdentifier()).maille()
       .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF3D1C10).addARGB(102, 0xFF542716).addARGB(140, 0xFF893B25).addARGB(178, 0xFF9E492A).addARGB(216, 0xFFC65C35).addARGB(255, 0xFFD76B43).build());
     buildMaterial(MaterialIds.string)
       .statType(StatlessMaterialStats.BINDING.getIdentifier(), StatlessMaterialStats.BOWSTRING.getIdentifier()).repairKit()
@@ -319,7 +319,7 @@ public class TinkerMaterialSpriteProvider extends AbstractMaterialSpriteProvider
     IColorMapping ancientDebrisPalette = GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF24110B).addARGB(102, 0xFF411E15).addARGB(140, 0xFF4A281D).addARGB(178, 0xFF654740).addARGB(216, 0xFF7E6059).addARGB(255, 0xFF95867E).build();
     buildMaterial(MaterialIds.ancientHide)
       .fallbacks("cloth")
-      .statType(StatlessMaterialStats.BINDING.getIdentifier()).chainmail()
+      .statType(StatlessMaterialStats.BINDING.getIdentifier()).maille()
       .colorMapper(ancientDebrisPalette);
     buildMaterial(MaterialIds.enderslimeVine)
       .statType(StatlessMaterialStats.BINDING.getIdentifier(), StatlessMaterialStats.BOWSTRING.getIdentifier())

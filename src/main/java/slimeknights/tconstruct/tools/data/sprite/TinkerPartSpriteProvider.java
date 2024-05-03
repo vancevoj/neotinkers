@@ -15,7 +15,7 @@ public class TinkerPartSpriteProvider extends AbstractPartSpriteProvider {
   public static final MaterialStatsId WOOD = new MaterialStatsId(TConstruct.MOD_ID, "wood");
   public static final MaterialStatsId SLIMESUIT = new MaterialStatsId(TConstruct.MOD_ID, "slimesuit");
   public static final MaterialStatsId ARMOR_PLATING = new MaterialStatsId(TConstruct.MOD_ID, "armor_plating");
-  public static final MaterialStatsId ARMOR_CHAINMAIL = new MaterialStatsId(TConstruct.MOD_ID, "armor_chainmail");
+  public static final MaterialStatsId ARMOR_MAILLE = new MaterialStatsId(TConstruct.MOD_ID, "armor_maille");
 
   public TinkerPartSpriteProvider() {
     super(TConstruct.MOD_ID);
@@ -42,16 +42,16 @@ public class TinkerPartSpriteProvider extends AbstractPartSpriteProvider {
     addPart("repair_kit", StatlessMaterialStats.REPAIR_KIT.getIdentifier());
 
     // plate textures
-    addPart("chainmail", StatlessMaterialStats.CHAINMAIL.getIdentifier());
+    addPart("maille", StatlessMaterialStats.MAILLE.getIdentifier());
     for (ArmorSlotType slot : ArmorSlotType.values()) {
       buildTool("armor/plate/" + slot.getSerializedName())
         .addBreakablePart("plating", PlatingMaterialStats.TYPES.get(slot.getIndex()).getId())
-        .addBreakablePart("chainmail", StatlessMaterialStats.CHAINMAIL.getIdentifier());
+        .addBreakablePart("maille", StatlessMaterialStats.MAILLE.getIdentifier());
     }
     addTexture("models/armor/plate/armor_1", ARMOR_PLATING);
     addTexture("models/armor/plate/leggings_1", ARMOR_PLATING);
-    addTexture("models/armor/plate/armor_2", ARMOR_CHAINMAIL);
-    addTexture("models/armor/plate/leggings_2", ARMOR_CHAINMAIL);
+    addTexture("models/armor/plate/armor_2", ARMOR_MAILLE);
+    addTexture("models/armor/plate/leggings_2", ARMOR_MAILLE);
     buildTool("armor/plate/shield")
       .addBreakablePart("plating", PlatingMaterialStats.SHIELD.getId())
       .addBreakablePart("core", StatlessMaterialStats.SHIELD_CORE.getIdentifier())

@@ -58,7 +58,7 @@ public class TinkerItemModelProvider extends ItemModelProvider {
         b.offset(0, 1);
       }
     });
-    part(TinkerToolParts.chainmail);
+    part(TinkerToolParts.maille);
     part(TinkerToolParts.shieldCore, "armor/plate/shield/core");
 
     // casts //
@@ -98,7 +98,7 @@ public class TinkerItemModelProvider extends ItemModelProvider {
     cast(TinkerSmeltery.chestplatePlatingCast);
     cast(TinkerSmeltery.leggingsPlatingCast);
     cast(TinkerSmeltery.bootsPlatingCast);
-    cast(TinkerSmeltery.chainmailCast);
+    cast(TinkerSmeltery.mailleCast);
   }
 
   /** Generated item with a texture */

@@ -17,7 +17,7 @@ public class MaterialStatProviders {
   public static final MeleeHarvestMaterialStatProvider MELEE_HARVEST = REGISTRY.register(new MeleeHarvestMaterialStatProvider(getResource("melee_harvest")));
   /** Tools with 1 or more tool parts using ranged stats */
   public static final RangedMaterialStatProvider RANGED = REGISTRY.register(new RangedMaterialStatProvider(getResource("ranged")));
-  /** Tools with 1 or more types of plating and some chainmail */
+  /** Tools with 1 or more types of plating and some maille or a shield core */
   public static final ArmorMaterialStatProvider ARMOR = REGISTRY.register(new ArmorMaterialStatProvider(getResource("armor")));
   /** Stat provider for slimeskulls */
   public static final SkullMaterialStatProvider SKULL = REGISTRY.register(new SkullMaterialStatProvider(getResource("skull")));

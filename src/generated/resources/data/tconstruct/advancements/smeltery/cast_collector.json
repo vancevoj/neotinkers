@@ -61,18 +61,6 @@
       },
       "trigger": "minecraft:inventory_changed"
     },
-    "chainmail": {
-      "conditions": {
-        "items": [
-          {
-            "items": [
-              "tconstruct:chainmail_cast"
-            ]
-          }
-        ]
-      },
-      "trigger": "minecraft:inventory_changed"
-    },
     "chestplate_plating": {
       "conditions": {
         "items": [
@@ -151,6 +139,18 @@
           {
             "items": [
               "tconstruct:leggings_plating_cast"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "maille": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "tconstruct:maille_cast"
             ]
           }
         ]
@@ -361,7 +361,7 @@
       "boots_plating"
     ],
     [
-      "chainmail"
+      "maille"
     ]
   ]
 }

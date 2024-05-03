@@ -1,7 +1,6 @@
 {
   "stats": {
     "tconstruct:binding": {},
-    "tconstruct:chainmail": {},
     "tconstruct:handle": {
       "durability": 1.1,
       "melee_damage": 1.1,
@@ -14,6 +13,7 @@
       "mining_speed": 6.0,
       "mining_tier": "minecraft:diamond"
     },
+    "tconstruct:maille": {},
     "tconstruct:plating_boots": {
       "armor": 1.0,
       "durability": 299,

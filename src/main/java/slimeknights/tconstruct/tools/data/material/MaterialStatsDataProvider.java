@@ -336,27 +336,27 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
     addMaterialStats(MaterialIds.wood, StatlessMaterialStats.SHIELD_CORE);
     addMaterialStats(MaterialIds.bamboo, StatlessMaterialStats.SHIELD_CORE);
     addMaterialStats(MaterialIds.chorus, StatlessMaterialStats.SHIELD_CORE);
-    addArmorShieldStats(MaterialIds.copper, PlatingMaterialStats.builder().durabilityFactor(13).armor(1, 2, 3, 1), StatlessMaterialStats.CHAINMAIL);
-    addMaterialStats(MaterialIds.leather, StatlessMaterialStats.CHAINMAIL);
+    addArmorShieldStats(MaterialIds.copper, PlatingMaterialStats.builder().durabilityFactor(13).armor(1, 2, 3, 1), StatlessMaterialStats.MAILLE);
+    addMaterialStats(MaterialIds.leather, StatlessMaterialStats.MAILLE);
     // tier 2
     addMaterialStats(MaterialIds.slimewood, StatlessMaterialStats.SHIELD_CORE);
-    addArmorShieldStats(MaterialIds.iron, PlatingMaterialStats.builder().durabilityFactor(15).armor(2, 4, 5, 2), StatlessMaterialStats.CHAINMAIL);
-    addArmorShieldStats(MaterialIds.gold, PlatingMaterialStats.builder().durabilityFactor(7).armor(1, 3, 4, 1), StatlessMaterialStats.CHAINMAIL);
-    addArmorShieldStats(MaterialIds.searedStone, PlatingMaterialStats.builder().durabilityFactor(14).armor(1, 3, 4, 2).knockbackResistance(0.1f), StatlessMaterialStats.CHAINMAIL);
-    addArmorShieldStats(MaterialIds.scorchedStone, PlatingMaterialStats.builder().durabilityFactor(10).armor(1, 4, 5, 2).knockbackResistance(0.5f), StatlessMaterialStats.CHAINMAIL);
+    addArmorShieldStats(MaterialIds.iron, PlatingMaterialStats.builder().durabilityFactor(15).armor(2, 4, 5, 2), StatlessMaterialStats.MAILLE);
+    addArmorShieldStats(MaterialIds.gold, PlatingMaterialStats.builder().durabilityFactor(7).armor(1, 3, 4, 1), StatlessMaterialStats.MAILLE);
+    addArmorShieldStats(MaterialIds.searedStone, PlatingMaterialStats.builder().durabilityFactor(14).armor(1, 3, 4, 2).knockbackResistance(0.1f), StatlessMaterialStats.MAILLE);
+    addArmorShieldStats(MaterialIds.scorchedStone, PlatingMaterialStats.builder().durabilityFactor(10).armor(1, 4, 5, 2).knockbackResistance(0.5f), StatlessMaterialStats.MAILLE);
     // tier 3
     addMaterialStats(MaterialIds.nahuatl, StatlessMaterialStats.SHIELD_CORE);
-    addArmorShieldStats(MaterialIds.slimesteel, PlatingMaterialStats.builder().durabilityFactor(40).armor(2, 5, 6, 2), StatlessMaterialStats.CHAINMAIL);
-    addArmorShieldStats(MaterialIds.amethystBronze, PlatingMaterialStats.builder().durabilityFactor(28).armor(2, 5, 6, 2).toughness(2), StatlessMaterialStats.CHAINMAIL);
-    addArmorShieldStats(MaterialIds.obsidian, PlatingMaterialStats.builder().durabilityFactor(11).armor(2, 4, 5, 2).knockbackResistance(0.15f), StatlessMaterialStats.CHAINMAIL);
-    addArmorShieldStats(MaterialIds.roseGold, PlatingMaterialStats.builder().durabilityFactor(9).armor(1, 3, 5, 2), StatlessMaterialStats.CHAINMAIL);
-    addArmorShieldStats(MaterialIds.pigIron, PlatingMaterialStats.builder().durabilityFactor(23).armor(1, 3, 4, 1).toughness(1).knockbackResistance(0.1f), StatlessMaterialStats.CHAINMAIL);
-    addArmorShieldStats(MaterialIds.cobalt, PlatingMaterialStats.builder().durabilityFactor(30).armor(2, 5, 7, 2).toughness(1).knockbackResistance(0.05f), StatlessMaterialStats.CHAINMAIL);
+    addArmorShieldStats(MaterialIds.slimesteel, PlatingMaterialStats.builder().durabilityFactor(40).armor(2, 5, 6, 2), StatlessMaterialStats.MAILLE);
+    addArmorShieldStats(MaterialIds.amethystBronze, PlatingMaterialStats.builder().durabilityFactor(28).armor(2, 5, 6, 2).toughness(2), StatlessMaterialStats.MAILLE);
+    addArmorShieldStats(MaterialIds.obsidian, PlatingMaterialStats.builder().durabilityFactor(11).armor(2, 4, 5, 2).knockbackResistance(0.15f), StatlessMaterialStats.MAILLE);
+    addArmorShieldStats(MaterialIds.roseGold, PlatingMaterialStats.builder().durabilityFactor(9).armor(1, 3, 5, 2), StatlessMaterialStats.MAILLE);
+    addArmorShieldStats(MaterialIds.pigIron, PlatingMaterialStats.builder().durabilityFactor(23).armor(1, 3, 4, 1).toughness(1).knockbackResistance(0.1f), StatlessMaterialStats.MAILLE);
+    addArmorShieldStats(MaterialIds.cobalt, PlatingMaterialStats.builder().durabilityFactor(30).armor(2, 5, 7, 2).toughness(1).knockbackResistance(0.05f), StatlessMaterialStats.MAILLE);
     // tier 4
-    addArmorShieldStats(MaterialIds.queensSlime, PlatingMaterialStats.builder().durabilityFactor(50).armor(2, 5, 7, 2).toughness(1), StatlessMaterialStats.CHAINMAIL);
-    addArmorShieldStats(MaterialIds.hepatizon, PlatingMaterialStats.builder().durabilityFactor(32).armor(2, 5, 7, 2).toughness(2).knockbackResistance(0.10f), StatlessMaterialStats.CHAINMAIL);
-    addArmorShieldStats(MaterialIds.manyullyn, PlatingMaterialStats.builder().durabilityFactor(35).armor(2, 5, 7, 2).toughness(3).knockbackResistance(0.05f), StatlessMaterialStats.CHAINMAIL);
-    addMaterialStats(MaterialIds.ancientHide, StatlessMaterialStats.CHAINMAIL);
+    addArmorShieldStats(MaterialIds.queensSlime, PlatingMaterialStats.builder().durabilityFactor(50).armor(2, 5, 7, 2).toughness(1), StatlessMaterialStats.MAILLE);
+    addArmorShieldStats(MaterialIds.hepatizon, PlatingMaterialStats.builder().durabilityFactor(32).armor(2, 5, 7, 2).toughness(2).knockbackResistance(0.10f), StatlessMaterialStats.MAILLE);
+    addArmorShieldStats(MaterialIds.manyullyn, PlatingMaterialStats.builder().durabilityFactor(35).armor(2, 5, 7, 2).toughness(3).knockbackResistance(0.05f), StatlessMaterialStats.MAILLE);
+    addMaterialStats(MaterialIds.ancientHide, StatlessMaterialStats.MAILLE);
   }
 
   private void addMisc() {

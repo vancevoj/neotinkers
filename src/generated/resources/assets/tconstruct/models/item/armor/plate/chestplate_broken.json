@@ -3,7 +3,7 @@
   "parent": "forge:item/default",
   "textures": {
     "plating": "tconstruct:item/tool/armor/plate/chestplate/plating_broken",
-    "chainmail": "tconstruct:item/tool/armor/plate/chestplate/chainmail_broken"
+    "maille": "tconstruct:item/tool/armor/plate/chestplate/maille_broken"
   },
   "modifier_roots": [
     "tconstruct:item/tool/armor/plate/chestplate/modifiers/broken/",
@@ -15,7 +15,7 @@
       "index": 0
     },
     {
-      "name": "chainmail",
+      "name": "maille",
       "index": 1
     }
   ]

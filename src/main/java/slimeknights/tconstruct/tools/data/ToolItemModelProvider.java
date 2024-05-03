@@ -43,7 +43,7 @@ public class ToolItemModelProvider extends AbstractToolItemModelProvider {
     tool(TinkerTools.scythe, toolBlocking, "head");
     // shield
     armor("travelers", TinkerTools.travelersGear, "tool");
-    armor("plate", TinkerTools.plateArmor, "plating", "chainmail");
+    armor("plate", TinkerTools.plateArmor, "plating", "maille");
     armor("slime", TinkerTools.slimesuit, "tool");
     shield("travelers", TinkerTools.travelersShield, toolBlocking, "tool");
     shield("plate", TinkerTools.plateShield, shieldBlocking, "plating", "core");

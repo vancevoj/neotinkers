@@ -308,7 +308,7 @@
   "pattern.tconstruct.round_plate": "Round Plate",
   "pattern.tconstruct.large_plate": "Large Plate",
   "pattern.tconstruct.bowstring": "Bowstring",
-  "pattern.tconstruct.chainmail": "Maille",
+  "pattern.tconstruct.maille": "Maille",
   "pattern.tconstruct.shield_core": "Shield Core",
 
   "_comment": "Tool Handle Patterns",
@@ -364,7 +364,7 @@
   "item.tconstruct.chestplate_plating_cast": "Chest Plating Gold Cast",
   "item.tconstruct.leggings_plating_cast": "Leg Plating Gold Cast",
   "item.tconstruct.boots_plating_cast": "Boot Plating Gold Cast",
-  "item.tconstruct.chainmail_cast": "Maille Gold Cast",
+  "item.tconstruct.maille_cast": "Maille Gold Cast",
 
 
   "_comment": "Tinkers Sand Casts",
@@ -414,7 +414,7 @@
   "item.tconstruct.chestplate_plating_sand_cast": "Chest Plating Sand Cast",
   "item.tconstruct.leggings_plating_sand_cast": "Leg Plating Sand Cast",
   "item.tconstruct.boots_plating_sand_cast": "Boot Plating Sand Cast",
-  "item.tconstruct.chainmail_sand_cast": "Maille Sand Cast",
+  "item.tconstruct.maille_sand_cast": "Maille Sand Cast",
 
 
   "_comment": "Tinkers Red Sand Casts",
@@ -464,7 +464,7 @@
   "item.tconstruct.chestplate_plating_red_sand_cast": "Chest Plating Red Sand Cast",
   "item.tconstruct.leggings_plating_red_sand_cast": "Leg Plating Red Sand Cast",
   "item.tconstruct.boots_plating_red_sand_cast": "Boot Plating Red Sand Cast",
-  "item.tconstruct.chainmail_red_sand_cast": "Maille Red Sand Cast",
+  "item.tconstruct.maille_red_sand_cast": "Maille Red Sand Cast",
 
 
   "_comment": "Tinkers Fluids",
@@ -975,7 +975,7 @@
   "item.tconstruct.chestplate_plating": "Chest Plating",
   "item.tconstruct.leggings_plating": "Leg Plating",
   "item.tconstruct.boots_plating": "Boot Plating",
-  "item.tconstruct.chainmail": "Maille",
+  "item.tconstruct.maille": "Maille",
   "item.tconstruct.shield_core": "Shield Core",
 
 
@@ -2628,7 +2628,7 @@
   "stat.tconstruct.plating_boots": "Boot Plating",
   "stat.tconstruct.plating_shield": "Shield Plating",
   "stat.tconstruct.shield_core": "Shield Core",
-  "stat.tconstruct.chainmail": "Maille",
+  "stat.tconstruct.maille": "Maille",
   "tool_stat.tconstruct.armor": "Armor: ",
   "tool_stat.tconstruct.armor.description": "How much this protects you when worn.",
   "tool_stat.tconstruct.armor_toughness": "Armor Toughness: ",
@@ -2653,7 +2653,7 @@
   "tool_stat.tconstruct.projectile_damage": "Proj. Power: ",
   "tool_stat.tconsturct.projectile_damage.description": "Determines the base damage or strength of projectiles fired by this weapon.",
 
-  "stat.tconstruct.extra": "Binding",
+  "stat.tconstruct.binding": "Binding",
   "stat.tconstruct.bowstring": "Bowstring",
   "tool_stat.tconstruct.extra.no_stats": "No stats",
 

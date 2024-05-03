@@ -1,7 +1,6 @@
 {
   "stats": {
     "tconstruct:binding": {},
-    "tconstruct:chainmail": {},
     "tconstruct:grip": {
       "accuracy": -0.2,
       "durability": 1.1,
@@ -25,6 +24,7 @@
       "durability": 1250,
       "velocity": 0.25
     },
+    "tconstruct:maille": {},
     "tconstruct:plating_boots": {
       "armor": 2.0,
       "durability": 455,

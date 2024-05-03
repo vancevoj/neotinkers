@@ -1,8 +1,8 @@
 {
   "type": "tconstruct:item_part_builder",
-  "pattern": "tconstruct:chainmail",
+  "pattern": "tconstruct:maille",
   "pattern_item": {
     "tag": "tconstruct:casts/red_sand"
   },
-  "result": "tconstruct:chainmail_red_sand_cast"
+  "result": "tconstruct:maille_red_sand_cast"
 }
