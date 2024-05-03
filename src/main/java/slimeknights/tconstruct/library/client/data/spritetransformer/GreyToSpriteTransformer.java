@@ -16,6 +16,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.GsonHelper;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import slimeknights.mantle.data.loadable.common.ColorLoadable;
 import slimeknights.mantle.util.JsonHelper;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.client.data.material.MaterialPartTextureGenerator;
@@ -37,7 +38,7 @@ import static com.mojang.blaze3d.platform.NativeImage.getA;
 /**
  * Supports including sprites as "part of the palette"
  */
-@RequiredArgsConstructor
+@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public class GreyToSpriteTransformer implements ISpriteTransformer {
   public static final ResourceLocation NAME = TConstruct.getResource("grey_to_sprite");
   public static final Deserializer DESERIALIZER = new Deserializer();
@@ -46,7 +47,7 @@ public class GreyToSpriteTransformer implements ISpriteTransformer {
   private static final String TEXTURE_FOLDER = "textures";
   /** Sprite reader instance, filled in by events */
   @Nullable
-  private static AbstractSpriteReader READER = null;
+  static AbstractSpriteReader READER = null;
   /** List of all sprite mappings with cached data that need to be cleared */
   private static final List<SpriteMapping> MAPPINGS_TO_CLEAR = new ArrayList<>();
 
@@ -62,7 +63,7 @@ public class GreyToSpriteTransformer implements ISpriteTransformer {
   private static final ToIntFunction<SpriteMapping> GET_GREY = SpriteMapping::getGrey;
 
   /** Gets the sprite for the given color */
-  private SpriteRange getSpriteRange(int grey) {
+  protected SpriteRange getSpriteRange(int grey) {
     if (foundSpriteCache[grey] == null) {
       foundSpriteCache[grey] = GreyToColorMapping.getNearestByGrey(sprites, GET_GREY, grey, SPRITE_RANGE);
     }
@@ -82,7 +83,7 @@ public class GreyToSpriteTransformer implements ISpriteTransformer {
   }
 
   @Override
-  public void transform(NativeImage image) {
+  public void transform(NativeImage image, boolean allowAnimated) {
     for (int x = 0; x < image.getWidth(); x++) {
       for (int y = 0; y < image.getHeight(); y++) {
         image.setPixelRGBA(x, y, getNewColor(image.getPixelRGBA(x, y), x, y));
@@ -129,10 +130,7 @@ public class GreyToSpriteTransformer implements ISpriteTransformer {
           paletteBuilder.addABGR(0, 0xFF000000);
         }
         // get the proper type
-        int color = -1;
-        if (palettePair.has("color")) {
-          color = JsonHelper.parseColor(GsonHelper.getAsString(palettePair, "color"));
-        }
+        int color = ColorLoadable.ALPHA.getOrDefault(palettePair, "color", -1);
         if (palettePair.has("path")) {
           paletteBuilder.addTexture(grey, JsonHelper.getResourceLocation(palettePair, "path"), color);
         } else {
@@ -205,6 +203,15 @@ public class GreyToSpriteTransformer implements ISpriteTransformer {
       }
       return new GreyToSpriteTransformer(list);
     }
+
+    /** Builds an animated transformer */
+    public AnimatedGreyToSpriteTransformer animated(ResourceLocation metaPath, int frames) {
+      List<SpriteMapping> list = builder.build();
+      if (list.size() < 2) {
+        throw new IllegalStateException("Too few colors in palette, must have at least 2");
+      }
+      return new AnimatedGreyToSpriteTransformer(list, metaPath, frames);
+    }
   }
 
 
@@ -212,7 +219,7 @@ public class GreyToSpriteTransformer implements ISpriteTransformer {
 
   /** Mapping from greyscale to color */
   @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-  private static class SpriteMapping {
+  static class SpriteMapping {
     @Getter
     private final int grey;
     private final int color;
@@ -240,12 +247,22 @@ public class GreyToSpriteTransformer implements ISpriteTransformer {
       return image;
     }
 
-    /** Gets the color for the given X and Y */
-    public int getColor(int x, int y) {
+    /** Gets the color for the given X, Y, and frame */
+    public int getColor(int x, int y, int frame) {
       if (path != null) {
         NativeImage image = getImage();
         if (image != null) {
-          int spriteColor = image.getPixelRGBA(x % image.getWidth(), y % image.getHeight());
+          int spriteColor;
+          // -1 means we are not doing frames, treat the whole image as one thing. This notably does not require it to be square
+          if (frame == -1) {
+            spriteColor = image.getPixelRGBA(x % image.getWidth(), y % image.getHeight());
+          } else {
+            // assume the frames of this are square, otherwise we have to store the ratio somewhere
+            int width = image.getWidth();
+            // ensure the x and y coordinates are within the individual frame by wrapping, needed notably for large tool sprites
+            // then offset the y value, and ensure the offset is within the final height
+            spriteColor = image.getPixelRGBA(x % width, (y % width + frame * width) % image.getHeight());
+          }
           // if we have a color set, treat it as a tint
           if (color != -1) {
             spriteColor = GreyToColorMapping.scaleColor(spriteColor, color, 255);
@@ -258,20 +275,30 @@ public class GreyToSpriteTransformer implements ISpriteTransformer {
   }
 
   /** Result from a sprite search for a given color */
-  private record SpriteRange(@Nullable SpriteMapping before, @Nullable SpriteMapping after) {
+  protected record SpriteRange(@Nullable SpriteMapping before, @Nullable SpriteMapping after) {
     /**
      * Gets the color of this range
      */
     public int getColor(int x, int y, int grey) {
+      return getColor(x, y, -1, grey);
+    }
+
+    /**
+     * Gets the color of this range for the given frame
+     */
+    public int getColor(int x, int y, int frame, int grey) {
       // after only
       if (before == null) {
         assert after != null;
-        return after.getColor(x, y);
+        return after.getColor(x, y, frame);
       }
       if (after == null || before == after) {
-        return before.getColor(x, y);
+        return before.getColor(x, y, frame);
       }
-      return GreyToColorMapping.interpolateColors(before.getColor(x, y), before.getGrey(), after.getColor(x, y), after.getGrey(), grey);
+      return GreyToColorMapping.interpolateColors(
+        before.getColor(x, y, frame), before.getGrey(),
+        after.getColor(x, y, frame), after.getGrey(),
+        grey);
     }
   }
 

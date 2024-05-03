@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import net.minecraft.resources.ResourceLocation;
 import slimeknights.mantle.data.loadable.Loadable;
 import slimeknights.mantle.data.loadable.Loadables;
+import slimeknights.mantle.data.loadable.primitive.BooleanLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.tconstruct.library.client.data.util.AbstractSpriteReader;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
@@ -51,8 +52,26 @@ public abstract class AbstractPartSpriteProvider {
    * @param sprite  Sprite name
    * @param requiredStats  At least one of these stat types must be present for this sprite to be generated
    */
+  protected void addTexture(ResourceLocation sprite, MaterialStatsId requiredStats, boolean allowAnimated) {
+    sprites.add(new PartSpriteInfo(sprite, requiredStats, allowAnimated));
+  }
+
+  /**
+   * Adds a given texture to the list to generate
+   * @param sprite  Sprite name
+   * @param requiredStats  At least one of these stat types must be present for this sprite to be generated
+   */
   protected void addTexture(ResourceLocation sprite, MaterialStatsId requiredStats) {
-    sprites.add(new PartSpriteInfo(sprite, requiredStats));
+    addTexture(sprite, requiredStats, true);
+  }
+
+  /**
+   * Adds a given sprite to the list to generate, local to textures instead of tool
+   * @param name           Name relative to the mod
+   * @param requiredStats  At least one of these stat types must be present for this sprite to be generated
+   */
+  protected void addTexture(String name, MaterialStatsId requiredStats, boolean allowAnimated) {
+    addTexture(new ResourceLocation(modID, name), requiredStats, allowAnimated);
   }
 
   /**
@@ -151,6 +170,7 @@ public abstract class AbstractPartSpriteProvider {
     public static final RecordLoadable<PartSpriteInfo> LOADABLE = RecordLoadable.create(
       Loadables.RESOURCE_LOCATION.requiredField("path", i -> i.path),
       MaterialStatsId.PARSER.requiredField("stat_type", i -> i.statType),
+      BooleanLoadable.INSTANCE.defaultField("allow_animated", true, false, i -> i.allowAnimated),
       PartSpriteInfo::new);
     /** Loadable for a list, since its the main usage of this */
     public static final Loadable<List<PartSpriteInfo>> LIST_LOADABLE = LOADABLE.list(1);
@@ -161,6 +181,8 @@ public abstract class AbstractPartSpriteProvider {
     /** Stat type of this part */
     @Getter
     private final MaterialStatsId statType;
+    @Getter
+    private final boolean allowAnimated;
     /** Cache of fetched images for each sprite name */
     private transient final Map<String,NativeImage> sprites = new HashMap<>();
 

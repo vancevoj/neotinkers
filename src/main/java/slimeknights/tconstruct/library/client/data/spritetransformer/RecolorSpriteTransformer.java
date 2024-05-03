@@ -26,7 +26,7 @@ public class RecolorSpriteTransformer implements ISpriteTransformer {
   private final IColorMapping colorMapping;
 
   @Override
-  public void transform(NativeImage image) {
+  public void transform(NativeImage image, boolean allowAnimated) {
     for (int x = 0; x < image.getWidth(); x++) {
       for (int y = 0; y < image.getHeight(); y++) {
         image.setPixelRGBA(x, y, colorMapping.mapColor(image.getPixelRGBA(x, y)));

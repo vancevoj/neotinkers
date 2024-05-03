@@ -1,5 +1,6 @@
 package slimeknights.tconstruct.library.client.data.material;
 
+import com.google.gson.JsonObject;
 import com.mojang.blaze3d.platform.NativeImage;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
@@ -10,6 +11,7 @@ import slimeknights.tconstruct.library.client.data.GenericTextureGenerator;
 import slimeknights.tconstruct.library.client.data.material.AbstractMaterialSpriteProvider.MaterialSpriteInfo;
 import slimeknights.tconstruct.library.client.data.material.AbstractPartSpriteProvider.PartSpriteInfo;
 import slimeknights.tconstruct.library.client.data.material.GeneratorPartTextureJsonGenerator.StatOverride;
+import slimeknights.tconstruct.library.client.data.spritetransformer.ISpriteTransformer;
 import slimeknights.tconstruct.library.client.data.util.AbstractSpriteReader;
 import slimeknights.tconstruct.library.client.data.util.DataGenSpriteReader;
 
@@ -80,18 +82,19 @@ public class MaterialPartTextureGenerator extends GenericTextureGenerator {
     }
 
     // for each material list, generate sprites
+    BiConsumer<ResourceLocation, NativeImage> saver = (path, image) -> saveImage(cache, path, image);
+    BiConsumer<ResourceLocation, JsonObject> metaSaver = (path, meta) -> saveMetadata(cache, path, meta);
     for (AbstractMaterialSpriteProvider materialProvider : materialProviders) {
       Collection<MaterialSpriteInfo> materials = materialProvider.getMaterials().values();
       if (materials.isEmpty()) {
         throw new IllegalStateException(materialProvider.getName() + " has no materials, must have at least one material to generate");
       }
       // want cross product of textures
-      BiConsumer<ResourceLocation, NativeImage> saver = (path, image) -> saveImage(cache, path, image);
       Predicate<ResourceLocation> shouldGenerate = path -> !spriteReader.exists(path);
       for (MaterialSpriteInfo material : materials) {
         for (PartSpriteInfo part : parts) {
           if (material.supportStatType(part.getStatType()) || overrides.hasOverride(part.getStatType(), material.getTexture())) {
-            generateSprite(spriteReader, material, part, shouldGenerate, saver);
+            generateSprite(spriteReader, material, part, shouldGenerate, saver, metaSaver);
           }
         }
       }
@@ -107,9 +110,10 @@ public class MaterialPartTextureGenerator extends GenericTextureGenerator {
    * @param material        Material for the sprite
    * @param part            Part for the sprites
    * @param shouldGenerate  Predicate to determine if the sprite should generate, given the local path to the sprite
-   * @param saver           Function to save the file
+   * @param saver           Function to save the images
+   * @param metaSaver       Function to save the animation metadata
    */
-  public static void generateSprite(AbstractSpriteReader spriteReader, MaterialSpriteInfo material, PartSpriteInfo part, Predicate<ResourceLocation> shouldGenerate, BiConsumer<ResourceLocation, NativeImage> saver) {
+  public static void generateSprite(AbstractSpriteReader spriteReader, MaterialSpriteInfo material, PartSpriteInfo part, Predicate<ResourceLocation> shouldGenerate, BiConsumer<ResourceLocation, NativeImage> saver, BiConsumer<ResourceLocation,JsonObject> metaSaver) {
     // first step: see if this sprite has already been generated, if so nothing to do
     // path format: pNamespace:pPath_mNamespace_mPath
     ResourceLocation partPath = part.getPath();
@@ -134,9 +138,16 @@ public class MaterialPartTextureGenerator extends GenericTextureGenerator {
         throw new IllegalStateException("Missing sprite at " + partPath + ".png, cannot generate textures");
       }
       // successfully found a texture, now transform and save
-      NativeImage transformed = material.getTransformer().transformCopy(base);
+      ISpriteTransformer transformer = material.getTransformer();
+      NativeImage transformed = transformer.transformCopy(base, part.isAllowAnimated());
       spriteReader.track(transformed);
       saver.accept(spritePath, transformed);
+      if (part.isAllowAnimated()) {
+        JsonObject meta = transformer.animationMeta(base);
+        if (meta != null) {
+          metaSaver.accept(spritePath, meta);
+        }
+      }
     }
   }
 

@@ -98,6 +98,7 @@ public class ClientGeneratePartTexturesCommand {
     // prepare the output directory
     Path path = Minecraft.getInstance().getResourcePackDirectory().toPath().resolve(PACK_NAME);
     BiConsumer<ResourceLocation,NativeImage> saver = (outputPath, image) -> saveImage(path, outputPath, image);
+    BiConsumer<ResourceLocation,JsonObject> metaSaver = (outputPath, image) -> saveMetadata(path, outputPath, image);
 
     // create a pack.mcmeta so its a valid resource pack
     savePackMcmeta(path);
@@ -125,7 +126,7 @@ public class ClientGeneratePartTexturesCommand {
     for (MaterialSpriteInfo material : materialSprites) {
       for (PartSpriteInfo part : generatorConfig.sprites) {
         if (material.supportStatType(part.getStatType()) || generatorConfig.statOverrides.hasOverride(part.getStatType(), material.getTexture())) {
-          MaterialPartTextureGenerator.generateSprite(spriteReader, material, part, shouldGenerate, saver);
+          MaterialPartTextureGenerator.generateSprite(spriteReader, material, part, shouldGenerate, saver, metaSaver);
         }
       }
     }
@@ -171,6 +172,21 @@ public class ClientGeneratePartTexturesCommand {
       image.writeToFile(path);
     } catch (IOException e) {
       log.error("Couldn't create image for {}", location, e);
+    }
+  }
+
+  /** Saves metadata to the output folder */
+  private static void saveMetadata(Path folder, ResourceLocation location, JsonObject meta) {
+    Path path = folder.resolve(Paths.get(PackType.CLIENT_RESOURCES.getDirectory(),
+                                         location.getNamespace(), MaterialPartTextureGenerator.FOLDER, location.getPath() + ".png.mcmeta"));
+    try {
+      Files.createDirectories(path.getParent());
+      String json = MaterialRenderInfoLoader.GSON.toJson(meta);
+      try (BufferedWriter bufferedwriter = Files.newBufferedWriter(path)) {
+        bufferedwriter.write(json);
+      }
+    } catch (IOException e) {
+      log.error("Couldn't create metadata for {}", location, e);
     }
   }
 
