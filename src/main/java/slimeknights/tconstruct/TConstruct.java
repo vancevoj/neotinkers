@@ -164,6 +164,10 @@ public class TConstruct {
       case "blood_slime" -> Blocks.SLIME_BLOCK;
       case "blood_congealed_slime" -> TinkerWorld.congealedSlime.get(SlimeType.EARTH);
       case "blood_fluid" -> TinkerFluids.earthSlime.getBlock();
+      // lavawood removal
+      case "lavawood" -> TinkerMaterials.blazewood.get();
+      case "lavawood_slab" -> TinkerMaterials.blazewood.getSlab();
+      case "lavawood_stairs" -> TinkerMaterials.blazewood.getStairs();
       default -> null;
     };
   }

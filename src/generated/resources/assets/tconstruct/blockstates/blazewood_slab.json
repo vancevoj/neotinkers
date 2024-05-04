@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "tconstruct:block/wood/blazewood/slab"
+    },
+    "type=double": {
+      "model": "tconstruct:block/wood/blazewood/planks"
+    },
+    "type=top": {
+      "model": "tconstruct:block/wood/blazewood/slab_top"
+    }
+  }
+}

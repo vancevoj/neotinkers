@@ -1609,6 +1609,7 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
     woodTexture(consumer, MaterialIds.bloodshroom, TinkerWorld.bloodshroom, folder);
     woodTexture(consumer, MaterialIds.enderbark, TinkerWorld.enderbark, folder);
     // special
+    woodTexture(consumer, MaterialIds.blazewood, TinkerMaterials.blazewood, folder);
     woodTexture(consumer, MaterialIds.nahuatl, TinkerMaterials.nahuatl, folder);
     woodTexture(consumer, MaterialIds.bamboo, Blocks.BAMBOO, folder);
 

@@ -154,6 +154,7 @@ public class AdvancementsProvider extends GenericDataProvider {
       with.accept(MaterialIds.hepatizon);
       with.accept(MaterialIds.queensSlime);
       with.accept(MaterialIds.blazingBone);
+      with.accept(MaterialIds.blazewood);
       with.accept(MaterialIds.ancientHide);
       with.accept(MaterialIds.enderslimeVine);
     });

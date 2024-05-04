@@ -21,13 +21,10 @@
   "block.tconstruct.mud_bricks_slab": "Mud Bricks Slab",
   "block.tconstruct.mud_bricks_stairs": "Mud Bricks Stairs",
 
-  "block.tconstruct.lavawood": "Lavawood",
-  "block.tconstruct.lavawood_slab": "Lavawood Slab",
-  "block.tconstruct.lavawood_stairs": "Lavawood Stairs",
-
   "block.tconstruct.blazewood": "Blazewood",
   "block.tconstruct.blazewood_slab": "Blazewood Slab",
   "block.tconstruct.blazewood_stairs": "Blazewood Stairs",
+  "block.tconstruct.blazewood_fence": "Blazewood Fence",
 
   "block.tconstruct.nahuatl": "Nahuatl Planks",
   "block.tconstruct.nahuatl_slab": "Nahuatl Slab",
@@ -1628,6 +1625,10 @@
   "material.tconstruct.blazing_bone.skull_flavor": "I told them this is technically firespit, not firebreath, but apparently I don't get to decide the names for things I invent",
   "material.tconstruct.blazing_bone.skull_encyclopedia": "Allows spitting firecharges from the inventory as fireballs. Has a cooldown of 5 seconds and does not work underwater",
 
+  "material.tconstruct.blazewood": "Blazewood",
+  "material.tconstruct.blazewood.flavor": "The flame protects the flame",
+  "material.tconstruct.blazewood.encyclopedia": "Grants +1% damage per second of fire, up to +15% from lava's 15 seconds. Bonus reduced by fire resistance.",
+
   "material.tconstruct.soulsteel": "Soulsteel",
 
   "material.tconstruct.ancient_hide": "Ancient Hide",
@@ -2403,7 +2404,7 @@
   "modifier.tconstruct.conducting": "Conducting",
   "modifier.tconstruct.conducting.flavor": "Thermodynamic!",
   "modifier.tconstruct.conducting.description": "Tool deals multiplied damage when you are on fire",
-  "modifier.tconstruct.conducting.attack_damage": "On-Fire Damage Max",
+  "modifier.tconstruct.conducting.boost": "On-Fire Boost Max",
 
   "__comment": "Tier 5 Traits",
   "modifier.tconstruct.enderporting": "Enderporting",

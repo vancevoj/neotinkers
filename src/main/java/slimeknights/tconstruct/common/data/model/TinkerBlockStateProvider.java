@@ -41,6 +41,7 @@ public class TinkerBlockStateProvider extends BlockStateProvider {
 
   @Override
   protected void registerStatesAndModels() {
+    addFenceBuildingBlock(TinkerMaterials.blazewood, "block/wood/blazewood/", "planks", blockTexture("wood/blazewood"));
     addFenceBuildingBlock(TinkerMaterials.nahuatl, "block/wood/nahuatl/", "planks", blockTexture("wood/nahuatl"));
     addWood(TinkerWorld.greenheart, false);
     addWood(TinkerWorld.skyroot, true);

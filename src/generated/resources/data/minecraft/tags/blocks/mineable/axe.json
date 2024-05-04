@@ -1,12 +1,10 @@
 {
   "values": [
-    "tconstruct:lavawood",
-    "tconstruct:lavawood_slab",
-    "tconstruct:lavawood_stairs",
+    "tconstruct:punji",
     "tconstruct:blazewood",
     "tconstruct:blazewood_slab",
     "tconstruct:blazewood_stairs",
-    "tconstruct:punji",
+    "tconstruct:blazewood_fence",
     "tconstruct:nahuatl",
     "tconstruct:nahuatl_slab",
     "tconstruct:nahuatl_stairs",

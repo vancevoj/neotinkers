@@ -1,0 +1,38 @@
+{
+  "color": "F2D500",
+  "fallbacks": [
+    "wood",
+    "stick"
+  ],
+  "generator": {
+    "ignoreMaterialStats": false,
+    "supportedStats": [
+      "tconstruct:shield_core",
+      "tconstruct:wood"
+    ],
+    "transformer": {
+      "type": "tconstruct:grey_to_sprite",
+      "palette": [
+        {
+          "color": "FF000000",
+          "grey": 0
+        },
+        {
+          "color": "FF404040",
+          "grey": 63,
+          "path": "tconstruct:block/wood/blazewood"
+        },
+        {
+          "color": "FF808080",
+          "grey": 102,
+          "path": "tconstruct:block/wood/blazewood"
+        },
+        {
+          "grey": 140,
+          "path": "tconstruct:block/wood/blazewood"
+        }
+      ]
+    }
+  },
+  "luminosity": 7
+}

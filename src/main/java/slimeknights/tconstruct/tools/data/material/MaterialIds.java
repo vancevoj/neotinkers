@@ -50,6 +50,7 @@ public final class MaterialIds {
   public static final MaterialId hepatizon = id("hepatizon");
   public static final MaterialId queensSlime = id("queens_slime");
   public static final MaterialId blazingBone = id("blazing_bone");
+  public static final MaterialId blazewood = id("blazewood");
   //public static final MaterialId soulsteel = id("soulsteel");
   // tier 4 - bindings
   public static final MaterialId ancientHide = id("ancient_hide");

@@ -52,8 +52,12 @@ public class CommonRecipeProvider extends BaseRecipeProvider implements ICommonR
   private void addCommonRecipes(Consumer<FinishedRecipe> consumer) {
     // firewood and lavawood
     String folder = "common/firewood/";
-    slabStairsCrafting(consumer, TinkerCommons.blazewood, folder, false);
-    slabStairsCrafting(consumer, TinkerCommons.lavawood, folder, false);
+    slabStairsCrafting(consumer, TinkerMaterials.blazewood, folder, false);
+    ShapedRecipeBuilder.shaped(TinkerMaterials.blazewood.getFence(), 6)
+                       .pattern("WWW").pattern("WWW")
+                       .define('W', TinkerMaterials.blazewood)
+                       .unlockedBy("has_planks", has(TinkerMaterials.blazewood))
+                       .save(consumer, location(folder + "blazewood_fence"));
 
     // nahuatl
     slabStairsCrafting(consumer, TinkerMaterials.nahuatl, folder, false);

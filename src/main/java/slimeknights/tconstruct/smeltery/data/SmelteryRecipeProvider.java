@@ -28,7 +28,6 @@ import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.crafting.CompoundIngredient;
 import net.minecraftforge.common.crafting.ConditionalRecipe;
 import net.minecraftforge.common.crafting.DifferenceIngredient;
-import net.minecraftforge.common.crafting.IntersectionIngredient;
 import net.minecraftforge.common.crafting.conditions.ICondition;
 import net.minecraftforge.common.crafting.conditions.ModLoadedCondition;
 import net.minecraftforge.common.crafting.conditions.NotCondition;
@@ -1113,15 +1112,23 @@ public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelt
     concreteCasting.accept(Blocks.RED_CONCRETE_POWDER,        Blocks.RED_CONCRETE);
     concreteCasting.accept(Blocks.BLACK_CONCRETE_POWDER,      Blocks.BLACK_CONCRETE);
 
-    // misc
-    ItemCastingRecipeBuilder.basinRecipe(TinkerCommons.lavawood)
-                            .setFluidAndTime(new FluidStack(Fluids.LAVA, FluidType.BUCKET_VOLUME / 10))
-                            .setCast(ItemTags.PLANKS, true)
-                            .save(consumer, prefix(TinkerCommons.lavawood, folder));
-    ItemCastingRecipeBuilder.basinRecipe(TinkerCommons.blazewood)
-                            .setFluidAndTime(TinkerFluids.blazingBlood, false, FluidType.BUCKET_VOLUME / 10)
-                            .setCast(IntersectionIngredient.of(Ingredient.of(ItemTags.PLANKS), Ingredient.of(ItemTags.NON_FLAMMABLE_WOOD)), true)
-                            .save(consumer, prefix(TinkerCommons.blazewood, folder));
+    // blazewood
+    ItemCastingRecipeBuilder.basinRecipe(TinkerMaterials.blazewood)
+                            .setFluidAndTime(TinkerFluids.blazingBlood, false, FluidType.BUCKET_VOLUME / 4)
+                            .setCast(TinkerWorld.bloodshroom, true)
+                            .save(consumer, prefix(TinkerMaterials.blazewood, folder));
+    ItemCastingRecipeBuilder.basinRecipe(TinkerMaterials.blazewood.getSlab())
+                            .setFluidAndTime(TinkerFluids.blazingBlood, false, FluidType.BUCKET_VOLUME / 8)
+                            .setCast(TinkerWorld.bloodshroom.getSlab(), true)
+                            .save(consumer, wrap(TinkerMaterials.blazewood, folder, "_slab"));
+    ItemCastingRecipeBuilder.basinRecipe(TinkerMaterials.blazewood.getStairs())
+                            .setFluidAndTime(TinkerFluids.blazingBlood, false, FluidType.BUCKET_VOLUME / 4)
+                            .setCast(TinkerWorld.bloodshroom.getStairs(), true)
+                            .save(consumer, wrap(TinkerMaterials.blazewood, folder, "_stairs"));
+    ItemCastingRecipeBuilder.basinRecipe(TinkerMaterials.blazewood.getFence())
+                            .setFluidAndTime(TinkerFluids.blazingBlood, false, FluidType.BUCKET_VOLUME / 4)
+                            .setCast(TinkerWorld.bloodshroom.getFence(), true)
+                            .save(consumer, wrap(TinkerMaterials.blazewood, folder, "_fence"));
 
     // cast molten blaze into blazing stuff
     castingWithCast(consumer, TinkerFluids.blazingBlood, false, FluidType.BUCKET_VOLUME / 10, TinkerSmeltery.rodCast, Items.BLAZE_ROD, folder + "blaze/rod");
@@ -1252,6 +1259,18 @@ public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelt
                             .setFluidAndTime(TinkerFluids.moltenObsidian, false, FluidType.BUCKET_VOLUME)
                             .setCast(ItemTags.PLANKS, true)
                             .save(consumer, location(folder + "obsidian/nahuatl"));
+    ItemCastingRecipeBuilder.basinRecipe(TinkerMaterials.nahuatl.getSlab())
+                            .setFluidAndTime(TinkerFluids.moltenObsidian, false, FluidType.BUCKET_VOLUME / 2)
+                            .setCast(ItemTags.WOODEN_SLABS, true)
+                            .save(consumer, location(folder + "obsidian/nahuatl_slab"));
+    ItemCastingRecipeBuilder.basinRecipe(TinkerMaterials.nahuatl.getStairs())
+                            .setFluidAndTime(TinkerFluids.moltenObsidian, false, FluidType.BUCKET_VOLUME)
+                            .setCast(ItemTags.WOODEN_STAIRS, true)
+                            .save(consumer, location(folder + "obsidian/nahuatl_stairs"));
+    ItemCastingRecipeBuilder.basinRecipe(TinkerMaterials.nahuatl.getFence())
+                            .setFluidAndTime(TinkerFluids.moltenObsidian, false, FluidType.BUCKET_VOLUME)
+                            .setCast(ItemTags.WOODEN_FENCES, true)
+                            .save(consumer, location(folder + "obsidian/nahuatl_fence"));
     // overworld stones from quartz
     ItemCastingRecipeBuilder.basinRecipe(Blocks.ANDESITE)
                             .setFluidAndTime(TinkerFluids.moltenQuartz, false, FluidValues.GEM / 2)

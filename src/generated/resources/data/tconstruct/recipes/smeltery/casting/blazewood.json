@@ -1,20 +1,12 @@
 {
   "type": "tconstruct:casting_basin",
   "cast": {
-    "type": "forge:intersection",
-    "children": [
-      {
-        "tag": "minecraft:planks"
-      },
-      {
-        "tag": "minecraft:non_flammable_wood"
-      }
-    ]
+    "item": "tconstruct:bloodshroom_planks"
   },
   "cast_consumed": true,
-  "cooling_time": 85,
+  "cooling_time": 134,
   "fluid": {
-    "amount": 100,
+    "amount": 250,
     "tag": "tconstruct:blazing_blood"
   },
   "result": "tconstruct:blazewood"

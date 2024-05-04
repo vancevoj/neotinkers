@@ -11,7 +11,6 @@ import net.minecraft.world.phys.EntityHitResult;
 import slimeknights.mantle.client.TooltipKey;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.TinkerEffect;
-import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
@@ -21,7 +20,6 @@ import slimeknights.tconstruct.library.modifiers.hook.combat.MeleeDamageModifier
 import slimeknights.tconstruct.library.modifiers.hook.combat.MeleeHitModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.display.TooltipModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.ranged.ProjectileHitModifierHook;
-import slimeknights.tconstruct.library.modifiers.modules.unserializable.ArmorLevelModule;
 import slimeknights.tconstruct.library.modifiers.modules.unserializable.SlotInChargeModule;
 import slimeknights.tconstruct.library.modifiers.modules.unserializable.SlotInChargeModule.SlotInCharge;
 import slimeknights.tconstruct.library.module.ModuleHookMap.Builder;
@@ -41,8 +39,7 @@ import java.util.List;
 
 public class InsatiableModifier extends Modifier implements ProjectileHitModifierHook, ConditionalStatModifierHook, MeleeDamageModifierHook, MeleeHitModifierHook, ModifyDamageModifierHook, TooltipModifierHook {
   public static final ToolType[] TYPES = {ToolType.MELEE, ToolType.RANGED, ToolType.ARMOR};
-  private static final TinkerDataKey<Integer> LEVEL_KEY = TConstruct.createKey("insatiable_level");
-  private static final TinkerDataKey<SlotInCharge> SLOT_IN_CHARGE = TConstruct.createKey("insatiable_slot");
+  private static final TinkerDataKey<SlotInCharge> SLOT_IN_CHARGE = TConstruct.createKey("insatiable");
 
   /** Gets the current bonus for the entity */
   private static float getBonus(LivingEntity attacker, int level, ToolType type) {
@@ -59,7 +56,6 @@ public class InsatiableModifier extends Modifier implements ProjectileHitModifie
   @Override
   protected void registerHooks(Builder hookBuilder) {
     hookBuilder.addHook(this, ModifierHooks.PROJECTILE_HIT, ModifierHooks.CONDITIONAL_STAT, ModifierHooks.MELEE_DAMAGE, ModifierHooks.MELEE_HIT, ModifierHooks.MODIFY_DAMAGE, ModifierHooks.TOOLTIP);
-    hookBuilder.addModule(new ArmorLevelModule(LEVEL_KEY, false, TinkerTags.Items.HELD_ARMOR));
     hookBuilder.addModule(new SlotInChargeModule(SLOT_IN_CHARGE));
   }
 
@@ -96,9 +92,11 @@ public class InsatiableModifier extends Modifier implements ProjectileHitModifie
 
   @Override
   public float modifyDamageTaken(IToolStackView tool, ModifierEntry modifier, EquipmentContext context, EquipmentSlot slotType, DamageSource source, float amount, boolean isDirectDamage) {
-    if (isDirectDamage && SlotInChargeModule.isInCharge(context.getTinkerData(), SLOT_IN_CHARGE, slotType)) {
-      int level = ArmorLevelModule.getLevel(context.getTinkerData(), LEVEL_KEY);
-      applyEffect(context.getEntity(), ToolType.ARMOR, 10*20, 1, level * 2 - 1);
+    if (isDirectDamage) {
+      int level = SlotInChargeModule.getLevel(context.getTinkerData(), SLOT_IN_CHARGE, slotType);
+      if (level > 0) {
+        applyEffect(context.getEntity(), ToolType.ARMOR, 10*20, 1, level * 2 - 1);
+      }
     }
     return amount;
   }

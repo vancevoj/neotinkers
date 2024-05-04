@@ -138,7 +138,7 @@ public class BlockTagProvider extends BlockTagsProvider {
     // allow using wood variants to make tables
     this.tag(TinkerTags.Blocks.PLANKLIKE)
         .addTag(BlockTags.PLANKS)
-        .add(TinkerCommons.lavawood.get(), TinkerCommons.blazewood.get(), TinkerMaterials.nahuatl.get());
+        .add(TinkerMaterials.blazewood.get(), TinkerMaterials.nahuatl.get());
     // things the platform connects to on the sides
     this.tag(TinkerTags.Blocks.PLATFORM_CONNECTIONS)
         .add(Blocks.LEVER, Blocks.LADDER, Blocks.IRON_BARS, TinkerCommons.goldBars.get(), Blocks.TRIPWIRE_HOOK, Blocks.WALL_TORCH, Blocks.SOUL_WALL_TORCH, Blocks.REDSTONE_WALL_TORCH, Blocks.REDSTONE_WIRE)
@@ -305,7 +305,7 @@ public class BlockTagProvider extends BlockTagsProvider {
       TinkerSmeltery.scorchedRoad.get(),
       TinkerSmeltery.chiseledScorchedBricks.get());
     this.tag(TinkerTags.Blocks.FOUNDRY_BRICKS).addTag(TinkerTags.Blocks.SCORCHED_BLOCKS);
-    this.tag(BlockTags.FENCES).add(TinkerSmeltery.scorchedBricks.getFence(), TinkerMaterials.nahuatl.getFence());
+    this.tag(BlockTags.FENCES).add(TinkerSmeltery.scorchedBricks.getFence(), TinkerMaterials.blazewood.getFence(), TinkerMaterials.nahuatl.getFence());
 
     this.tag(TinkerTags.Blocks.CISTERN_CONNECTIONS)
         // cannot add channels as it requires a block state property to properly detect, look into a way to fix this later
@@ -380,7 +380,6 @@ public class BlockTagProvider extends BlockTagsProvider {
   private void addHarvest() {
     // commons
     tagBlocks(MINEABLE_WITH_SHOVEL, TinkerCommons.mudBricks, TinkerCommons.cheeseBlock);
-    tagBlocks(MINEABLE_WITH_AXE, TinkerCommons.lavawood, TinkerCommons.blazewood);
     tagBlocks(MINEABLE_WITH_AXE, TinkerGadgets.punji);
     tagBlocks(MINEABLE_WITH_PICKAXE, NEEDS_DIAMOND_TOOL, TinkerCommons.obsidianPane);
     tagBlocks(MINEABLE_WITH_PICKAXE, NEEDS_STONE_TOOL, TinkerCommons.ironPlatform);
@@ -389,6 +388,7 @@ public class BlockTagProvider extends BlockTagsProvider {
     this.tag(NEEDS_STONE_TOOL).addTag(TinkerTags.Blocks.COPPER_PLATFORMS);
 
     // materials
+    tagBlocks(MINEABLE_WITH_AXE, NEEDS_IRON_TOOL, TinkerMaterials.blazewood);
     tagBlocks(MINEABLE_WITH_AXE, NEEDS_DIAMOND_TOOL, TinkerMaterials.nahuatl);
     tagBlocks(MINEABLE_WITH_PICKAXE, NEEDS_IRON_TOOL, TinkerWorld.cobaltOre, TinkerWorld.rawCobaltBlock, TinkerMaterials.cobalt, TinkerMaterials.slimesteel, TinkerMaterials.amethystBronze, TinkerMaterials.roseGold, TinkerMaterials.pigIron);
     tagBlocks(MINEABLE_WITH_PICKAXE, NEEDS_DIAMOND_TOOL, TinkerMaterials.queensSlime, TinkerMaterials.manyullyn, TinkerMaterials.hepatizon, TinkerMaterials.soulsteel, TinkerModifiers.silkyJewelBlock);

@@ -43,6 +43,20 @@
       },
       "trigger": "minecraft:inventory_changed"
     },
+    "blazewood": {
+      "conditions": {
+        "items": [
+          {
+            "type": "tconstruct:tool_stack",
+            "predicate": {
+              "type": "tconstruct:has_material",
+              "material": "tconstruct:blazewood"
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
     "blazing_bone": {
       "conditions": {
         "items": [
@@ -521,6 +535,9 @@
     ],
     [
       "blazing_bone"
+    ],
+    [
+      "blazewood"
     ],
     [
       "ancient_hide"

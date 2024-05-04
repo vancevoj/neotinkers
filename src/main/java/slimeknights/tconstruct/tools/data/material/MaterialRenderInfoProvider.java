@@ -79,6 +79,7 @@ public class MaterialRenderInfoProvider extends AbstractMaterialRenderInfoProvid
     buildRenderInfo(MaterialIds.hepatizon).color(0x60496b).fallbacks("metal");
     buildRenderInfo(MaterialIds.manyullyn).color(0x9261cc).fallbacks("metal");
     buildRenderInfo(MaterialIds.blazingBone).color(0xF2D500).fallbacks("bone", "rock").luminosity(15);
+    buildRenderInfo(MaterialIds.blazewood).color(0xF2D500).fallbacks("wood", "stick").luminosity(7);
     buildRenderInfo(MaterialIds.ancientHide);
     buildRenderInfo(MaterialIds.enderslimeVine).color(0xa92dff).fallbacks("vine");
 

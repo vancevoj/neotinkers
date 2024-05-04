@@ -316,6 +316,15 @@ public class TinkerMaterialSpriteProvider extends AbstractMaterialSpriteProvider
       .meleeHarvest().ranged()
       .fallbacks("bone", "rock")
       .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF7F3611).addARGB(102, 0xFF934114).addARGB(140, 0xFFB5671E).addARGB(178, 0xFFE28F28).addARGB(216, 0xFFEFC62F).addARGB(255, 0xFFF4EA5A).build());
+    ResourceLocation blazewoodTexture = TConstruct.getResource("block/wood/blazewood");
+    buildMaterial(MaterialIds.blazewood)
+      .shieldCore().statType(WOOD)
+      .fallbacks("wood", "stick")
+      .transformer(GreyToSpriteTransformer.builderFromBlack()
+                                          .addTexture( 63, blazewoodTexture, 0xFF404040)
+                                          .addTexture(102, blazewoodTexture, 0xFF808080)
+                                          .addTexture(140, blazewoodTexture)
+                                          .animated(blazewoodTexture, 7));
     IColorMapping ancientDebrisPalette = GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF24110B).addARGB(102, 0xFF411E15).addARGB(140, 0xFF4A281D).addARGB(178, 0xFF654740).addARGB(216, 0xFF7E6059).addARGB(255, 0xFF95867E).build();
     buildMaterial(MaterialIds.ancientHide)
       .fallbacks("cloth")

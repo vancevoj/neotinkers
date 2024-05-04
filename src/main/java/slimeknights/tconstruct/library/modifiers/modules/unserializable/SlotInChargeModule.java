@@ -1,5 +1,6 @@
 package slimeknights.tconstruct.library.modifiers.modules.unserializable;
 
+import lombok.Getter;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.EquipmentSlot.Type;
 import net.minecraftforge.common.util.LazyOptional;
@@ -51,7 +52,7 @@ public record SlotInChargeModule(TinkerDataKey<SlotInCharge> key) implements Hoo
   public void onEquip(IToolStackView tool, ModifierEntry modifier, EquipmentChangeContext context) {
     EquipmentSlot slot = context.getChangedSlot();
     if (toolValid(tool, slot, context)) {
-      context.getTinkerData().ifPresent(data -> data.computeIfAbsent(key, CONSTRUCTOR).addSlot(slot));
+      context.getTinkerData().ifPresent(data -> data.computeIfAbsent(key, CONSTRUCTOR).addSlot(slot, modifier.getLevel()));
     }
   }
 
@@ -68,17 +69,30 @@ public record SlotInChargeModule(TinkerDataKey<SlotInCharge> key) implements Hoo
     }).isPresent();
   }
 
+  /** Checks if the given slot is in charge */
+  public static int getLevel(LazyOptional<TinkerDataCapability.Holder> data, TinkerDataKey<SlotInCharge> key, EquipmentSlot slot) {
+    return data.map(d -> {
+      SlotInCharge inCharge = d.get(key);
+      return inCharge != null && inCharge.inCharge == slot ? inCharge.totalLevel : 0;
+    }).orElse(0);
+  }
+
   /** Tracker to determine which slot should be in charge */
   public static class SlotInCharge {
-    private final boolean[] active = new boolean[6];
+    private final int[] levels = new int[6];
+    @Getter
+    private int totalLevel = 0;
+    @Getter
     @Nullable
     private EquipmentSlot inCharge = null;
 
     private SlotInCharge() {}
 
     /** Adds the given slot to the tracker */
-    private void addSlot(EquipmentSlot slotType) {
-      active[slotType.getFilterFlag()] = true;
+    private void addSlot(EquipmentSlot slotType, int level) {
+      int index = slotType.getFilterFlag();
+      totalLevel += level - levels[index];
+      levels[index] = level;
       // prefer armor in charge as hand only runs when blocking, prefer mainhand over offhand
       if (inCharge == null || (inCharge.getType() == Type.HAND && slotType != EquipmentSlot.OFFHAND)) {
         inCharge = slotType;
@@ -87,17 +101,19 @@ public record SlotInChargeModule(TinkerDataKey<SlotInCharge> key) implements Hoo
 
     /** Removes the given slot from the tracker */
     private void removeSlot(EquipmentSlot slotType) {
-      active[slotType.getFilterFlag()] = false;
+      int index = slotType.getFilterFlag();
+      totalLevel -= levels[index];
+      levels[index] = 0;
       // prioritize armor slots
       for (EquipmentSlot armorSlot : ModifiableArmorMaterial.ARMOR_SLOTS) {
-        if (active[slotType.getFilterFlag()]) {
+        if (levels[slotType.getFilterFlag()] > 0) {
           inCharge = armorSlot;
           return;
         }
       }
       // if none, find a hand slot
       for (EquipmentSlot hand : InteractionHandler.HAND_SLOTS) {
-        if (active[slotType.getFilterFlag()]) {
+        if (levels[slotType.getFilterFlag()] > 0) {
           inCharge = hand;
           return;
         }
