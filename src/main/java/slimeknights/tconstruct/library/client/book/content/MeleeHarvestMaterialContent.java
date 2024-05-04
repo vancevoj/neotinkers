@@ -11,13 +11,12 @@ import slimeknights.tconstruct.tools.stats.StatlessMaterialStats;
 
 /**
  * Content page for melee/harvest materials
- * TODO: rename class
  */
-public class ContentMaterial extends AbstractMaterialContent {
+public class MeleeHarvestMaterialContent extends AbstractMaterialContent {
   /** Page ID for using this index directly */
-  public static final ResourceLocation ID = TConstruct.getResource("toolmaterial");
+  public static final ResourceLocation ID = TConstruct.getResource("melee_harvest_material");
 
-  public ContentMaterial(MaterialVariantId materialVariant, boolean detailed) {
+  public MeleeHarvestMaterialContent(MaterialVariantId materialVariant, boolean detailed) {
     super(materialVariant, detailed);
   }
 

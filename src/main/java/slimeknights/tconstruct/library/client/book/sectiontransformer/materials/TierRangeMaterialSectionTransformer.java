@@ -13,18 +13,15 @@ import slimeknights.mantle.client.book.transformer.BookTransformer;
 import slimeknights.mantle.util.JsonHelper;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.client.book.content.AbstractMaterialContent;
-import slimeknights.tconstruct.library.client.book.content.ContentMaterial;
+import slimeknights.tconstruct.library.json.IntRange;
+import slimeknights.tconstruct.library.json.TinkerLoadables;
 import slimeknights.tconstruct.library.materials.IMaterialRegistry;
 import slimeknights.tconstruct.library.materials.MaterialRegistry;
 import slimeknights.tconstruct.library.materials.definition.IMaterial;
 import slimeknights.tconstruct.library.materials.definition.MaterialId;
-import slimeknights.tconstruct.library.materials.definition.MaterialManager;
 import slimeknights.tconstruct.library.materials.definition.MaterialVariantId;
 import slimeknights.tconstruct.library.materials.stats.IMaterialStats;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
-import slimeknights.tconstruct.tools.stats.HandleMaterialStats;
-import slimeknights.tconstruct.tools.stats.HeadMaterialStats;
-import slimeknights.tconstruct.tools.stats.StatlessMaterialStats;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
@@ -38,8 +35,8 @@ import java.util.function.Predicate;
  * Section transformer to show a range of materials tiers in the book
  */
 public class TierRangeMaterialSectionTransformer extends BookTransformer {
-  private static final Set<MaterialStatsId> MELEE_HARVEST = ImmutableSet.of(HeadMaterialStats.ID, HandleMaterialStats.ID, StatlessMaterialStats.BINDING.getIdentifier());
   private static final ResourceLocation KEY = TConstruct.getResource("material_tier");
+  private static final IntRange TIER = new IntRange(0, Short.MAX_VALUE);
 
   private static final Map<ResourceLocation,MaterialType> MATERIAL_TYPES = new HashMap<>();
 
@@ -55,50 +52,22 @@ public class TierRangeMaterialSectionTransformer extends BookTransformer {
   @Override
   public void transform(BookData book) {
     for (SectionData section : book.sections) {
-      JsonElement json = section.extraData.get(KEY);
-      if (json != null) {
+      JsonElement element = section.extraData.get(KEY);
+      if (element != null) {
         try {
-          int min = 0;
-          int max = Integer.MAX_VALUE;
+          JsonObject json = GsonHelper.convertToJsonObject(element, KEY.toString());
+          IntRange tier = TIER.getOrDefault(json, "tier");
           Function<MaterialVariantId,AbstractMaterialContent> pageBuilder;
           Set<MaterialStatsId> visibleStats;
-          TagKey<IMaterial> tag = null;
-
-          // if primitive, its either an int tier, or a tag
-          if (json.isJsonPrimitive()) {
-            if (json.getAsJsonPrimitive().isNumber()) {
-              min = json.getAsInt();
-              max = min;
-            } else {
-              tag = MaterialManager.getTag(JsonHelper.convertToResourceLocation(json, KEY.toString()));
-            }
-            pageBuilder = id -> new ContentMaterial(id, false);
-            visibleStats = MELEE_HARVEST;
-            TConstruct.LOG.warn("Using tconstruct:material_tier with a number or tag is deprecated");
-          } else if (json.isJsonObject()) {
-            // object means we have a tier/min/max, or potentially a tag
-            JsonObject jsonObject = json.getAsJsonObject();
-            if (jsonObject.has("tier")) {
-              min = GsonHelper.getAsInt(jsonObject, "tier");
-              max = min;
-            } else {
-              min = GsonHelper.getAsInt(jsonObject, "min", 0);
-              max = GsonHelper.getAsInt(jsonObject, "max", Integer.MAX_VALUE);
-            }
-            if (jsonObject.has("tag")) {
-              tag = MaterialManager.getTag(JsonHelper.getResourceLocation(jsonObject, "tag"));
-            }
-            ResourceLocation type = jsonObject.has("type") ? JsonHelper.getResourceLocation(jsonObject, "type") : TConstruct.getResource("melee_harvest");
-            MaterialType typeData = MATERIAL_TYPES.get(type);
-            if (typeData == null) {
-              throw new JsonSyntaxException("Invalid material section type " + type);
-            }
-            visibleStats = typeData.visibleStats();
-            pageBuilder = typeData.getMapping(GsonHelper.getAsBoolean(jsonObject, "detailed", false));
-          } else {
-            throw new JsonSyntaxException("Invalid tconstruct:material_tier, expected number or JSON object");
+          TagKey<IMaterial> tag = TinkerLoadables.MATERIAL_TAGS.getOrDefault(json, "tag", null);
+          ResourceLocation type = JsonHelper.getResourceLocation(json, "type");
+          MaterialType typeData = MATERIAL_TYPES.get(type);
+          if (typeData == null) {
+            throw new JsonSyntaxException("Invalid material section type " + type);
           }
-          AbstractMaterialSectionTransformer.createPages(book, section, new ValidMaterial(visibleStats, min, max, tag), pageBuilder);
+          visibleStats = typeData.visibleStats();
+          pageBuilder = typeData.getMapping(GsonHelper.getAsBoolean(json, "detailed", false));
+          AbstractMaterialSectionTransformer.createPages(book, section, new ValidMaterial(visibleStats, tier, tag), pageBuilder);
         } catch (JsonSyntaxException e) {
           TConstruct.LOG.error("Failed to parse material tier section data", e);
         }
@@ -107,16 +76,10 @@ public class TierRangeMaterialSectionTransformer extends BookTransformer {
   }
 
   /** Helper to create a material predicate */
-  public record ValidMaterial(Set<MaterialStatsId> visibleStats, int min, int max, @Nullable TagKey<IMaterial> tag) implements Predicate<IMaterial> {
-    @Deprecated
-    public ValidMaterial(Set<MaterialStatsId> visibleStats, int min, int max) {
-      this(visibleStats, min, max, null);
-    }
-
+  public record ValidMaterial(Set<MaterialStatsId> visibleStats, IntRange tier, @Nullable TagKey<IMaterial> tag) implements Predicate<IMaterial> {
     @Override
     public boolean test(IMaterial material) {
-      int tier = material.getTier();
-      if (tier < min || tier > max) {
+      if (!this.tier.test(material.getTier())) {
         return false;
       }
       IMaterialRegistry registry = MaterialRegistry.getInstance();

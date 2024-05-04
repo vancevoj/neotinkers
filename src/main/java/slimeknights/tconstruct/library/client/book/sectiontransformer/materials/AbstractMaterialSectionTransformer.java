@@ -10,7 +10,7 @@ import slimeknights.mantle.client.book.transformer.SectionTransformer;
 import slimeknights.mantle.client.screen.book.element.ItemElement;
 import slimeknights.mantle.client.screen.book.element.SizedBookElement;
 import slimeknights.tconstruct.library.client.book.content.AbstractMaterialContent;
-import slimeknights.tconstruct.library.client.book.content.ContentMaterial;
+import slimeknights.tconstruct.library.client.book.content.MeleeHarvestMaterialContent;
 import slimeknights.tconstruct.library.client.book.content.ContentPageIconList;
 import slimeknights.tconstruct.library.materials.MaterialRegistry;
 import slimeknights.tconstruct.library.materials.definition.IMaterial;
@@ -43,7 +43,7 @@ public abstract class AbstractMaterialSectionTransformer extends SectionTransfor
    * @return  Material page
    */
   protected AbstractMaterialContent getPageContent(MaterialVariantId material) {
-    return new ContentMaterial(material, detailed);
+    return new MeleeHarvestMaterialContent(material, detailed);
   }
 
   @Override

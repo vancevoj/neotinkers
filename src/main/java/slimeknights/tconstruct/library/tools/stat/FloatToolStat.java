@@ -15,7 +15,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.item.Item;
 import slimeknights.mantle.util.RegistryHelper;
 import slimeknights.tconstruct.library.utils.TagUtil;
-import slimeknights.tconstruct.library.utils.Util;
 
 import javax.annotation.Nullable;
 
@@ -140,7 +139,7 @@ public class FloatToolStat implements INumericToolStat<Float> {
   /** Generic friendly way to format the value */
   @Override
   public Component formatValue(float value) {
-    return IToolStat.formatNumber(Util.makeTranslationKey("tool_stat", getName()), getColor(), value);
+    return IToolStat.formatNumber(getTranslationKey(), getColor(), value);
   }
 
   @Override

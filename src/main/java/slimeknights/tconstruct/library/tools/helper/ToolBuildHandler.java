@@ -7,6 +7,7 @@ import slimeknights.tconstruct.common.config.Config;
 import slimeknights.tconstruct.library.materials.MaterialRegistry;
 import slimeknights.tconstruct.library.materials.definition.IMaterial;
 import slimeknights.tconstruct.library.materials.definition.MaterialId;
+import slimeknights.tconstruct.library.materials.definition.MaterialVariant;
 import slimeknights.tconstruct.library.materials.definition.MaterialVariantId;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinition;
@@ -97,7 +98,7 @@ public final class ToolBuildHandler {
         MaterialId materialId = MaterialId.tryParse(showOnlyId);
         if (materialId != null) {
           IMaterial material = MaterialRegistry.getMaterial(materialId);
-          if (material != IMaterial.UNKNOWN && addSubItem(item, itemList, material)) {
+          if (material != IMaterial.UNKNOWN && addSubItem(item, itemList, MaterialVariant.of(material))) {
             added = true;
           }
         }
@@ -106,7 +107,7 @@ public final class ToolBuildHandler {
       if (!added) {
         for (IMaterial material : MaterialRegistry.getInstance().getVisibleMaterials()) {
           // if we added it and we want a single material, we are done
-          if (addSubItem(item, itemList, material) && !showOnlyId.isEmpty()) {
+          if (addSubItem(item, itemList, MaterialVariant.of(material)) && !showOnlyId.isEmpty()) {
             break;
           }
         }
@@ -115,13 +116,13 @@ public final class ToolBuildHandler {
   }
 
   /** Makes a single sub item for the given materials */
-  private static boolean addSubItem(IModifiable item, List<ItemStack> items, IMaterial material) {
+  public static boolean addSubItem(IModifiable item, List<ItemStack> items, MaterialVariant material) {
     List<MaterialStatsId> required = ToolMaterialHook.stats(item.getToolDefinition());
     MaterialNBT.Builder materials = MaterialNBT.builder();
     boolean useMaterial = false;
     for (MaterialStatsId requirement : required) {
       // try to use requested material
-      if (requirement.canUseMaterial(material.getIdentifier())) {
+      if (requirement.canUseMaterial(material.getId())) {
         materials.add(material);
         useMaterial = true;
       } else {

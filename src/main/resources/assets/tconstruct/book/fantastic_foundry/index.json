@@ -44,6 +44,14 @@
     }
   },
   {
+    "name": "armor_materials",
+    "data": "no-load",
+    "extraData": { "tconstruct:material_tier": { "type": "tconstruct:armor", "tier": 4 } },
+    "icon": {
+      "item": "tconstruct:blazewood"
+    }
+  },
+  {
     "name": "armor",
     "icon": {
       "item": {

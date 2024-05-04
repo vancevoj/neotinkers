@@ -44,6 +44,14 @@
     }
   },
   {
+    "name": "armor_materials",
+    "data": "no-load",
+    "extraData": { "tconstruct:material_tier": { "type": "tconstruct:armor", "tier": { "min": 1, "max": 2 } } },
+    "icon": {
+      "item": "minecraft:gold_ingot"
+    }
+  },
+  {
     "name": "armor",
     "icon": {
       "item": {

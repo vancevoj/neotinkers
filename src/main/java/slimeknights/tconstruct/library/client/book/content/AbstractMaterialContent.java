@@ -9,7 +9,6 @@ import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.ComponentContents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -31,6 +30,7 @@ import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.client.book.elements.TinkerItemElement;
 import slimeknights.tconstruct.library.client.materials.MaterialTooltipCache;
+import slimeknights.tconstruct.library.materials.IMaterialRegistry;
 import slimeknights.tconstruct.library.materials.MaterialRegistry;
 import slimeknights.tconstruct.library.materials.definition.IMaterial;
 import slimeknights.tconstruct.library.materials.definition.MaterialId;
@@ -67,6 +67,9 @@ public abstract class AbstractMaterialContent extends PageContent {
   private static final Component PART_BUILDER = TConstruct.makeTranslation("book", "material.part_builder");
   private static final String CAST_FROM = TConstruct.makeTranslationKey("book", "material.cast_from");
   private static final String COMPOSITE_FROM = TConstruct.makeTranslationKey("book", "material.composite_from");
+
+  static final int COLUMN_MARGIN = 22;
+  static final int STAT_WIDTH = BookScreen.PAGE_WIDTH / 2 - 10;
 
   // cached data
   private transient MaterialVariantId materialVariant;
@@ -159,59 +162,39 @@ public abstract class AbstractMaterialContent extends PageContent {
     // the cool tools to the left/right
     this.addDisplayItems(list, rightSide ? BookScreen.PAGE_WIDTH - 18 : 0, materialVariant);
 
-    int col_margin = 22;
-    int top = getTitleHeight();
-    int left = rightSide ? 0 : col_margin;
+    int y = getTitleHeight();
+    int x = (rightSide ? 0 : COLUMN_MARGIN) + 2;
 
-    int y = top;
-    int x = left + 2;
-    int w = BookScreen.PAGE_WIDTH / 2 - 10;
+    // material stats
+    y = addAllMaterialStats(x, y, list, 2, true);
+    // material description
+    addDescription(x, y, list);
+  }
 
-    // first two types, typically longer
-    MaterialId material = materialVariant.getId();
-    y = Math.max(
-      this.addStatsDisplay(x - 3,          y, w, list, material, getStatType(0)),
-      this.addStatsDisplay(x + w, y, w, list, material, getStatType(1)));
-    // next two, shorter
-    y = Math.max(
-      this.addStatsDisplay(x,          y, w, list, material, getStatType(2)),
-      this.addStatsDisplay(x + w, y, w, list, material, getStatType(3)));
-
-    // inspirational quote, or boring description text
-    String textKey = getTextKey(material);
-    if (I18n.exists(textKey)) {
-      // using forge instead of I18n.format as that prevents % from being interpreted as a format key
-      String translated = ForgeI18n.getPattern(textKey);
-      if (!detailed) {
-        translated = '"' + translated + '"';
-      }
-      TextData flavourData = new TextData(translated);
-      flavourData.italic = !detailed;
-      list.add(new TextElement(x - 3, y + 5, BookScreen.PAGE_WIDTH - col_margin - 5, 60, flavourData));
+  /** Adds the given number of rows of material info */
+  protected int addAllMaterialStats(int x, int y, List<BookElement> list, int rows, boolean includeStats) {
+    for (int i = 0; i < rows; i++) {
+      y = Math.max(
+        this.addMaterialStat(x - 3,          y, STAT_WIDTH, list, getStatType(i * 2),     includeStats),
+        this.addMaterialStat(x + STAT_WIDTH, y, STAT_WIDTH, list, getStatType(i * 2 + 1), includeStats));
     }
+    return y;
   }
 
   /** Adds the stats for a stat type */
-  protected int addStatsDisplay(int x, int y, int w, ArrayList<BookElement> list, MaterialId material, @Nullable MaterialStatsId statsId) {
+  protected int addMaterialStat(int x, int y, int w, List<BookElement> list, @Nullable MaterialStatsId statsId, boolean includeStats) {
     if (statsId == null) {
       return y;
     }
-    Optional<IMaterialStats> stats = MaterialRegistry.getInstance().getMaterialStats(material, statsId);
+    IMaterialRegistry registry = MaterialRegistry.getInstance();
+    MaterialVariantId material = getMaterialVariant();
+    Optional<IMaterialStats> stats = registry.getMaterialStats(material.getId(), statsId);
     if (stats.isEmpty()) {
       return y;
     }
 
-    List<ModifierEntry> traits = MaterialRegistry.getInstance().getTraits(material, statsId);
-
     // create a list of all valid toolparts with the stats
-    List<ItemStack> parts = Lists.newLinkedList();
-
-    for (IToolPart part : getToolParts()) {
-      if (part.getStatType() == statsId) {
-        parts.add(part.withMaterial(material));
-      }
-    }
-
+    List<ItemStack> parts = getPartsWithMaterial(material, statsId);
     // said parts next to the name
     int textOffset = 0;
     if (!parts.isEmpty()) {
@@ -221,20 +204,15 @@ public abstract class AbstractMaterialContent extends PageContent {
     }
 
     // and the name itself
-    TextElement name = new TextElement(x + textOffset, y, w - textOffset, 10, stats.get().getLocalizedName().getString());
-    name.text[0].bold = true;
-    name.text[0].underlined = true;
-    list.add(name);
+    list.add(new TextComponentElement(x + textOffset, y, w - textOffset, 10, stats.get().getLocalizedName().withStyle(ChatFormatting.BOLD, ChatFormatting.UNDERLINE)));
     y += 12;
 
     List<TextComponentData> lineData = Lists.newArrayList();
     // add lines of tool information
-    List<Component> localizedDescription = stats.get().getLocalizedDescriptions();
-    // TODO: better way to check for empty components?
-    if (!localizedDescription.isEmpty() && (localizedDescription.size() > 1 || localizedDescription.get(0).getContents() != ComponentContents.EMPTY)) {
-      lineData.addAll(getStatLines(stats.get()));
+    if (includeStats) {
+      addStatLines(lineData, stats.get());
     }
-    lineData.addAll(getTraitLines(traits));
+    addTraitLines(lineData, registry.getTraits(material.getId(), statsId));
 
     list.add(new TextComponentElement(x, y, w, BookScreen.PAGE_HEIGHT, lineData));
 
@@ -242,29 +220,27 @@ public abstract class AbstractMaterialContent extends PageContent {
   }
 
   /** Gets all stat text data for the given stat instance */
-  private static List<TextComponentData> getStatLines(IMaterialStats stats) {
-    List<TextComponentData> lineData = new ArrayList<>();
-
-    List<Component> localizedDescription = stats.getLocalizedDescriptions();
-    for (int i = 0; i < stats.getLocalizedInfo().size(); i++) {
-      TextComponentData text = new TextComponentData(stats.getLocalizedInfo().get(i));
-      if (localizedDescription.get(i).getString().isEmpty()) {
+  private static void addStatLines(List<TextComponentData> lineData, IMaterialStats stats) {
+    List<Component> statInfo = stats.getLocalizedInfo();
+    List<Component> tooltips = stats.getLocalizedDescriptions();
+    int size = Math.min(statInfo.size(), tooltips.size());
+    for (int i = 0; i < size; i++) {
+      // skip empty tooltips, means empty stats
+      Component tooltip = tooltips.get(i);
+      TextComponentData text = new TextComponentData(statInfo.get(i));
+      if (tooltip.getString().isEmpty()) {
         text.tooltips = null;
       } else {
-        text.tooltips = new Component[]{localizedDescription.get(i)};
+        text.tooltips = new Component[]{tooltip};
       }
 
       lineData.add(text);
       lineData.add(new TextComponentData("\n"));
     }
-
-    return lineData;
   }
 
   /** Gets all trait text data for the given stat instance */
-  private static List<TextComponentData> getTraitLines(List<ModifierEntry> traits) {
-    List<TextComponentData> lineData = new ArrayList<>();
-
+  protected static void addTraitLines(List<TextComponentData> lineData, List<ModifierEntry> traits) {
     for (ModifierEntry trait : traits) {
       Modifier mod = trait.getModifier();
       TextComponentData textComponentData = new TextComponentData(mod.getDisplayName());
@@ -276,8 +252,6 @@ public abstract class AbstractMaterialContent extends PageContent {
       lineData.add(textComponentData);
       lineData.add(new TextComponentData("\n"));
     }
-
-    return lineData;
   }
 
   /** Adds items to the display tools list for all relevant recipes */
@@ -379,11 +353,42 @@ public abstract class AbstractMaterialContent extends PageContent {
     }
   }
 
+  /** Adds the display text at the end of the material description */
+  protected void addDescription(int x, int y, List<BookElement> list) {
+    // inspirational quote, or boring description text
+    String textKey = getTextKey(materialVariant.getId());
+    if (I18n.exists(textKey)) {
+      // using forge instead of I18n.format as that prevents % from being interpreted as a format key
+      String translated = ForgeI18n.getPattern(textKey);
+      if (!detailed) {
+        translated = '"' + translated + '"';
+      }
+      TextData flavourData = new TextData(translated);
+      flavourData.italic = !detailed;
+      list.add(new TextElement(x - 3, y + 5, BookScreen.PAGE_WIDTH - COLUMN_MARGIN - 5, 60, flavourData));
+    }
+  }
+
+
   /** Gets a list of all tool parts */
-  private List<IToolPart> getToolParts() {
-    return RegistryHelper.getTagValueStream(Registry.ITEM, TinkerTags.Items.TOOL_PARTS)
-                         .filter(item -> item instanceof IToolPart)
-                         .map(item -> (IToolPart) item)
-                         .collect(Collectors.toList());
+  private static List<IToolPart> ALL_PARTS = null;
+
+  /** Gets a list of all tool parts */
+  private static List<IToolPart> getToolParts() {
+    if (ALL_PARTS == null) {
+      ALL_PARTS = RegistryHelper.getTagValueStream(Registry.ITEM, TinkerTags.Items.TOOL_PARTS)
+                                .filter(item -> item instanceof IToolPart)
+                                .map(item -> (IToolPart)item)
+                                .toList();
+    }
+    return ALL_PARTS;
+  }
+
+  /** Gets a list of all parts with the given material */
+  private static List<ItemStack> getPartsWithMaterial(MaterialVariantId material, MaterialStatsId statType) {
+    return getToolParts().stream()
+                         .filter(part -> part.getStatType().equals(statType))
+                         .map(part -> part.withMaterialForDisplay(material))
+                         .toList();
   }
 }

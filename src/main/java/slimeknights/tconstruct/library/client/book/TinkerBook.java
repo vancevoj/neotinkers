@@ -6,20 +6,18 @@ import slimeknights.mantle.client.book.BookLoader;
 import slimeknights.mantle.client.book.data.BookData;
 import slimeknights.mantle.client.book.repository.FileRepository;
 import slimeknights.mantle.client.book.transformer.BookTransformer;
-import slimeknights.tconstruct.TConstruct;
-import slimeknights.tconstruct.library.client.book.content.ContentMaterial;
+import slimeknights.tconstruct.library.client.book.content.ArmorMaterialContent;
 import slimeknights.tconstruct.library.client.book.content.ContentMaterialSkull;
 import slimeknights.tconstruct.library.client.book.content.ContentModifier;
 import slimeknights.tconstruct.library.client.book.content.ContentTool;
+import slimeknights.tconstruct.library.client.book.content.MeleeHarvestMaterialContent;
 import slimeknights.tconstruct.library.client.book.content.RangedMaterialContent;
 import slimeknights.tconstruct.library.client.book.content.TooltipShowcaseContent;
 import slimeknights.tconstruct.library.client.book.sectiontransformer.ModifierSectionTransformer;
 import slimeknights.tconstruct.library.client.book.sectiontransformer.ModifierTagInjectorTransformer;
 import slimeknights.tconstruct.library.client.book.sectiontransformer.ToolSectionTransformer;
 import slimeknights.tconstruct.library.client.book.sectiontransformer.ToolTagInjectorTransformer;
-import slimeknights.tconstruct.library.client.book.sectiontransformer.materials.SkullMaterialSectionTransformer;
 import slimeknights.tconstruct.library.client.book.sectiontransformer.materials.TierRangeMaterialSectionTransformer;
-import slimeknights.tconstruct.library.client.book.sectiontransformer.materials.TieredMaterialSectionTransformer;
 import slimeknights.tconstruct.shared.item.TinkerBookItem.BookType;
 import slimeknights.tconstruct.tools.stats.GripMaterialStats;
 import slimeknights.tconstruct.tools.stats.HandleMaterialStats;
@@ -28,12 +26,18 @@ import slimeknights.tconstruct.tools.stats.LimbMaterialStats;
 import slimeknights.tconstruct.tools.stats.SkullStats;
 import slimeknights.tconstruct.tools.stats.StatlessMaterialStats;
 
+import static slimeknights.tconstruct.TConstruct.getResource;
 import static slimeknights.tconstruct.library.TinkerBookIDs.ENCYCLOPEDIA_ID;
 import static slimeknights.tconstruct.library.TinkerBookIDs.FANTASTIC_FOUNDRY_ID;
 import static slimeknights.tconstruct.library.TinkerBookIDs.MATERIALS_BOOK_ID;
 import static slimeknights.tconstruct.library.TinkerBookIDs.MIGHTY_SMELTING_ID;
 import static slimeknights.tconstruct.library.TinkerBookIDs.PUNY_SMELTING_ID;
 import static slimeknights.tconstruct.library.TinkerBookIDs.TINKERS_GADGETRY_ID;
+import static slimeknights.tconstruct.tools.stats.PlatingMaterialStats.BOOTS;
+import static slimeknights.tconstruct.tools.stats.PlatingMaterialStats.CHESTPLATE;
+import static slimeknights.tconstruct.tools.stats.PlatingMaterialStats.HELMET;
+import static slimeknights.tconstruct.tools.stats.PlatingMaterialStats.LEGGINGS;
+import static slimeknights.tconstruct.tools.stats.PlatingMaterialStats.SHIELD;
 
 public class TinkerBook extends BookData {
   public static final BookData MATERIALS_AND_YOU = BookLoader.registerBook(MATERIALS_BOOK_ID,    false, false);
@@ -51,14 +55,20 @@ public class TinkerBook extends BookData {
     BookLoader.registerGsonTypeAdapter(Component.class, new Component.Serializer());
 
     // register page types
-    BookLoader.registerPageType(ContentMaterial.ID, ContentMaterial.class);
-    BookLoader.registerPageType(ContentTool.ID,     ContentTool.class);
+    BookLoader.registerPageType(MeleeHarvestMaterialContent.ID, MeleeHarvestMaterialContent.class);
+    BookLoader.registerPageType(RangedMaterialContent.ID,       RangedMaterialContent.class);
+    BookLoader.registerPageType(ArmorMaterialContent.ID,        ArmorMaterialContent.class);
+    BookLoader.registerPageType(ContentTool.ID, ContentTool.class);
     BookLoader.registerPageType(ContentModifier.ID, ContentModifier.class);
     BookLoader.registerPageType(TooltipShowcaseContent.ID, TooltipShowcaseContent.class);
 
-    TierRangeMaterialSectionTransformer.registerMaterialType(TConstruct.getResource("melee_harvest"), ContentMaterial::new, HeadMaterialStats.ID, HandleMaterialStats.ID, StatlessMaterialStats.BINDING.getIdentifier());
-    TierRangeMaterialSectionTransformer.registerMaterialType(TConstruct.getResource("ranged"), RangedMaterialContent::new, LimbMaterialStats.ID, GripMaterialStats.ID, StatlessMaterialStats.BOWSTRING.getIdentifier());
-    TierRangeMaterialSectionTransformer.registerMaterialType(TConstruct.getResource("skull"), ContentMaterialSkull::new, SkullStats.ID);
+    // material types
+    TierRangeMaterialSectionTransformer.registerMaterialType(getResource("melee_harvest"), MeleeHarvestMaterialContent::new, HeadMaterialStats.ID, HandleMaterialStats.ID, StatlessMaterialStats.BINDING.getIdentifier());
+    TierRangeMaterialSectionTransformer.registerMaterialType(getResource("ranged"), RangedMaterialContent::new, LimbMaterialStats.ID, GripMaterialStats.ID, StatlessMaterialStats.BOWSTRING.getIdentifier());
+    TierRangeMaterialSectionTransformer.registerMaterialType(getResource("armor"), ArmorMaterialContent::new,
+                                                             HELMET.getId(), CHESTPLATE.getId(), LEGGINGS.getId(), BOOTS.getId(), SHIELD.getId(),
+                                                             StatlessMaterialStats.MAILLE.getIdentifier(), StatlessMaterialStats.SHIELD_CORE.getIdentifier());
+    TierRangeMaterialSectionTransformer.registerMaterialType(getResource("skull"), ContentMaterialSkull::new, SkullStats.ID);
 
     // add transformers that load modifiers from tags
     ToolSectionTransformer armorTransformer = new ToolSectionTransformer("armor");
@@ -74,20 +84,6 @@ public class TinkerBook extends BookData {
     MIGHTY_SMELTING.addTransformer(ToolSectionTransformer.INSTANCE);
     TINKERS_GADGETRY.addTransformer(new ToolSectionTransformer("staffs"));
     ENCYCLOPEDIA.addTransformer(ToolSectionTransformer.INSTANCE);
-
-    // material tier transformers
-    // TODO 1.19: remove old material section transformers
-    MATERIALS_AND_YOU.addTransformer(new TieredMaterialSectionTransformer("tier_one_materials", 1, false));
-    PUNY_SMELTING.addTransformer(new TieredMaterialSectionTransformer("tier_two_materials", 2, false));
-    MIGHTY_SMELTING.addTransformer(new TieredMaterialSectionTransformer("tier_three_materials", 3, false));
-    FANTASTIC_FOUNDRY.addTransformer(new TieredMaterialSectionTransformer("tier_four_materials", 4, false));
-    TINKERS_GADGETRY.addTransformer(new SkullMaterialSectionTransformer("skull_materials", false));
-    // detailed transformers
-    ENCYCLOPEDIA.addTransformer(new TieredMaterialSectionTransformer("tier_one_materials", 1, true));
-    ENCYCLOPEDIA.addTransformer(new TieredMaterialSectionTransformer("tier_two_materials", 2, true));
-    ENCYCLOPEDIA.addTransformer(new TieredMaterialSectionTransformer("tier_three_materials", 3, true));
-    ENCYCLOPEDIA.addTransformer(new TieredMaterialSectionTransformer("tier_four_materials", 4, true));
-    ENCYCLOPEDIA.addTransformer(new SkullMaterialSectionTransformer("skull_materials", true));
 
     // modifier transformers
     ModifierSectionTransformer upgrades = new ModifierSectionTransformer("upgrades");

@@ -1468,6 +1468,7 @@
   "material.tconstruct.bamboo": "Bamboo",
   "material.tconstruct.bamboo.flavor": "Get bamboozled!",
   "material.tconstruct.bamboo.ranged": "Movement penalty when drawing back the bow is reduced by 10%",
+  "material.tconstruct.bamboo.armor": "Movement penalty when using the shield is reduced by 10%",
 
   "material.tconstruct.rock": "Rock",
   "material.tconstruct.rock.stone":      "Stone",
@@ -1498,10 +1499,11 @@
   "material.tconstruct.necrotic_bone.skull_flavor": "Spooky Scary Skeleton!",
   "material.tconstruct.necrotic_bone.skull_encyclopedia": "Melee attacks cause withering. After drinking milk the effect becomes faster",
 
-  "material.tconstruct.chorus":              "Chorus",
-  "material.tconstruct.chorus.flavor":       "Not just the endermen, but the enderwomen, and the enderchildren",
+  "material.tconstruct.chorus": "Chorus",
+  "material.tconstruct.chorus.flavor": "Not just the endermen, but the enderwomen, and the enderchildren",
   "material.tconstruct.chorus.encyclopedia": "Prevents the target from teleporting for a 5 seconds per effect level",
   "material.tconstruct.chorus.ranged": "Prevents the target from teleporting for a 5 seconds per effect level and allows damaging endermen with arrows",
+  "material.tconstruct.chorus.armor": "Has a 15% chance per level of preventing attackers from teleporting for a 5 seconds",
 
   "material.tconstruct.string": "String",
   "material.tconstruct.string.flavor": "Theoretically the best material.",
@@ -1524,22 +1526,27 @@
   "material.tconstruct.iron.oxidized": "Raw Iron",
   "material.tconstruct.iron.flavor": "Ironic. He could save others from death, but not himself.",
   "material.tconstruct.iron.encyclopedia": "Causes mining blocks and hitting mobs to attract nearby items.",
+  "material.tconstruct.iron.ranged": "Causes firing arrows to attract nearby items to the holder.",
+  "material.tconstruct.iron.armor": "Reduces damage from projectiles by 10% per level, and grants 5% projectile protection based on the max level.",
   "material.tconstruct.iron.skull_flavor": "Violation of quarantine",
   "material.tconstruct.iron.skull_encyclopedia": "Melee attacks copy all negative status effects from the wearer to the target",
 
   "material.tconstruct.seared_stone": "Seared Stone",
   "material.tconstruct.seared_stone.flavor": "Hotter Grout.",
   "material.tconstruct.seared_stone.encyclopedia": "Gives +6 mining speed against blocks that can be melted in a melter",
+  "material.tconstruct.seared_stone.armor": "Reduces damage from fire by 10% per level, and reduces fire burn time",
 
   "material.tconstruct.scorched_stone": "Scorched Stone",
   "material.tconstruct.scorched_stone.flavor": "Founders edition bonus.",
   "material.tconstruct.scorched_stone.encyclopedia": "Gives +2 damage per level against burning targets",
+  "material.tconstruct.scorched_stone.armor": "Reduces damage from fire immune mobs by 5% per level, and reduces fire burn time",
 
   "material.tconstruct.copper": "Copper",
   "material.tconstruct.copper.oxidized": "Oxidized Copper",
   "material.tconstruct.copper.flavor": "Don't let this tarnish your day.",
   "material.tconstruct.copper.encyclopedia": "Grants bonus mining speed at lower depth, +6 per 64 blocks below 64",
   "material.tconstruct.copper.ranged": "Grants bonus velocity at lower depth, +0.05 per 64 blocks below 64",
+  "material.tconstruct.copper.armor": "Grants bonus protection at lower depth, +5% per 64 blocks below 64",
   "material.tconstruct.copper.skull_flavor": "Knocks the wind right out of them",
   "material.tconstruct.copper.skull_encyclopedia": "Melee attacks steal 3 seconds of air from the target",
 
@@ -1578,15 +1585,18 @@
   "material.tconstruct.nahuatl": "Nahuatl",
   "material.tconstruct.nahuatl.flavor": "This is not an obsidian part, if it was it would say \"Obsidian.\"",
   "material.tconstruct.nahuatl.encyclopedia": "Has a 50% chance of doing up to 5 damage over time, more damage at higher levels",
+  "material.tconstruct.nahuatl.armor": "Has a 25% chance per level of doing up to 5 damage over time",
 
   "material.tconstruct.amethyst_bronze": "Amethyst Bronze",
   "material.tconstruct.amethyst_bronze.flavor": "Not to be confused with bronze.",
   "material.tconstruct.amethyst_bronze.encyclopedia": "Grants +0.5 mining speed per level to blocks that don't require tools, even ones where the tool is not effective",
   "material.tconstruct.amethyst_bronze.ranged": "Adds +0.1 velocity per level at the cost of limiting arrow angles to 32, 16, or 8 directions at the first 3 levels respectively",
+  "material.tconstruct.amethyst_bronze.armor": "Grants +2.5% attack speed per level at the cost of limiting taken knockback angles to 32, 16, 8, or 4 directions",
 
   "material.tconstruct.pig_iron": "Pig Iron",
   "material.tconstruct.pig_iron.flavor": "The absolute best material, no debates.",
-  "material.tconstruct.pig_iron.encyclopedia": "Can be eaten to restore 1 hunger and 0.1 saturation per level",
+  "material.tconstruct.pig_iron.encyclopedia": "Can be eaten to restore 1 hunger per level at 0.6 saturation",
+  "material.tconstruct.pig_iron.armor": "Grants a 15% chance per level of eating the armor for 1 hunger per level at 0.6 saturation",
   "material.tconstruct.pig_iron.skull_flavor": "You won't like me when I'm angry!",
   "material.tconstruct.pig_iron.skull_encyclopedia": "Grants 15 seconds of strength when damaged by another mob",
 
@@ -1603,16 +1613,19 @@
   "material.tconstruct.cobalt.flavor": "Coblat. The material of the Red Army.",
   "material.tconstruct.cobalt.encyclopedia": "Boosts mining and attack speed by 7% per level",
   "material.tconstruct.cobalt.ranged": "Boosts drawspeed and velocity by 5% per level",
+  "material.tconstruct.cobalt.armor": "Reduces damage from melee attacks by 10% per level, and boosts movement speed when using items by 5% per max level",
 
   "material.tconstruct.manyullyn": "Manyullyn",
   "material.tconstruct.manyullyn.flavor": "The metal that most Tinkers will never pronounce right. Also known as a star cutting material.",
   "material.tconstruct.manyullyn.encyclopedia": "Grants +2 damage per level after 8 consecutive hits",
   "material.tconstruct.manyullyn.ranged": "Arrows gain +1 damage per level (before velocity) after 8 consecutive arrow hits",
+  "material.tconstruct.manyullyn.armor": "Temporarily boosts melee damge by 1 after taking damage, capping at twice the total level",
 
   "material.tconstruct.hepatizon": "Hepatizon",
   "material.tconstruct.hepatizon.flavor": "He-pa-ti-zon - boil it, mash it, put it in a stew.",
   "material.tconstruct.hepatizon.encyclopedia": "Boosts mining speed by 25% per level after mining 32 consecutive blocks",
   "material.tconstruct.hepatizon.ranged": "Boosts drawspeed by 25% per level after firing 16 consecutive arrows",
+  "material.tconstruct.hepatizon.armor": "Reduces damage from all attacks by 5% per level if you recently took damage",
 
   "material.tconstruct.queens_slime": "Queen's Slime",
   "material.tconstruct.queens_slime.flavor": "Princesses are evil, get yourself a Queen.",
@@ -1627,13 +1640,14 @@
 
   "material.tconstruct.blazewood": "Blazewood",
   "material.tconstruct.blazewood.flavor": "The flame protects the flame",
-  "material.tconstruct.blazewood.encyclopedia": "Grants +1% damage per second of fire, up to +15% from lava's 15 seconds. Bonus reduced by fire resistance.",
+  "material.tconstruct.blazewood.encyclopedia": "Grants +1% protection against non-fire damage per second of fire, up to +15% from lava's 15 seconds. Bonus reduced by fire resistance.",
 
   "material.tconstruct.soulsteel": "Soulsteel",
 
   "material.tconstruct.ancient_hide": "Ancient Hide",
   "material.tconstruct.ancient_hide.flavor": "Leather tanned by the oldest of stone",
   "material.tconstruct.ancient_hide.encyclopedia": "Increases drop chances from blocks, stacking with luck",
+  "material.tconstruct.ancient_hide.armor": "Grants an extra defense slot",
 
   "__comment": "Tier End Materials",
   "material.tconstruct.knightslime": "Knightslime",
@@ -1657,10 +1671,14 @@
   "material.tconstruct.rotten_flesh.skull_encyclopedia": "Melee attacks increase the targets fire time based on the wearer's fire time",
 
   "material.tconstruct.gold": "Gold",
+  "material.tconstruct.gold.flavor": "Piglins love it.",
+  "material.tconstruct.gold.armor": "Grants 10% protection per level against magic damage and reduces the time of negative potion effects. Also makes piglins friendly.",
   "material.tconstruct.gold.skull_flavor": "So shiny",
   "material.tconstruct.gold.skull_encyclopedia": "Causes some gold ores to drop extra gold nuggets, and increases drop chance of gold armor by 4%. Nuggets and armor drops are further boosted by each piece of golden armor worn.",
 
   "material.tconstruct.obsidian":   "Obsidian",
+  "material.tconstruct.obsidian.flavor": "This is an obsidian part, if it was not it would not say \"Obsidian.\"",
+  "material.tconstruct.obsidian.armor": "Grants 10% protection per level against explosions, and reduces explosion knockback",
   "material.tconstruct.debris":     "Debris",
   "material.tconstruct.netherite":  "Netherite",
   "material.tconstruct.earthslime": "Earthslime",
@@ -2623,6 +2641,8 @@
   "tool_stat.tconstruct.attack_damage": "Melee Damage: ",
   "tool_stat.tconstruct.attack_damage.description": "Base value for melee attack damage calculations.\nThe end result depends on the tool itself and the other components used.",
 
+  "stat.tconstruct.plating": "Plating",
+  "stat.tconstruct.plating_armor": "Armor Plating",
   "stat.tconstruct.plating_helmet": "Helmet Plating",
   "stat.tconstruct.plating_chestplate": "Chest Plating",
   "stat.tconstruct.plating_leggings": "Leg Plating",

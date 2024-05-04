@@ -89,14 +89,19 @@ public interface IToolStat<T> {
 
   /* Display */
 
+  /** Gets the prefix translation key for displaying stats */
+  default String getTranslationKey() {
+    return Util.makeTranslationKey("tool_stat", getName());
+  }
+
   /** Gets the prefix for this tool stat */
   default MutableComponent getPrefix() {
-    return Component.translatable(Util.makeTranslationKey("tool_stat", getName()));
+    return Component.translatable(getTranslationKey());
   }
 
   /** Gets the description for this tool stat */
   default MutableComponent getDescription() {
-    return Component.translatable(Util.makeTranslationKey("tool_stat", getName()) + ".description");
+    return Component.translatable(getTranslationKey() + ".description");
   }
 
   /** Formats the value using this tool stat */
