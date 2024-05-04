@@ -281,7 +281,7 @@ public abstract class AbstractMaterialContent extends PageContent {
     List<MaterialFluidRecipe> composites = MaterialCastingLookup.getCompositeFluids(materialId);
     for (MaterialFluidRecipe composite : composites) {
       MaterialVariant input = composite.getInput();
-      if (input != null) {
+      if (input != null && !materialVariant.matchesVariant(input.getVariant())) {
         MaterialVariantId inputId = input.getVariant();
         ItemElement elementItem = new TinkerItemElement(0, 0, 1, MaterialCastingLookup.getAllItemCosts().stream()
                                                                                       .map(Entry::getKey)
