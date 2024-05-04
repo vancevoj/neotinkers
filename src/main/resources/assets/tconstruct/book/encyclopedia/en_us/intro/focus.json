@@ -1,0 +1,12 @@
+{
+  "title": "Focus",
+  "text": [
+    {
+      "text": "This book is focused on tool building. Unlike other volumes like Materials and You or Mighty Smelting, it won't explain how to use the technology used in tool creation; it just lists all the optionals available assuming you have the technology."
+    },
+    {
+      "text": "If you are unsure of how to use the technology or find the resources, you will need to refer to a copy of Materials and You, Puny Smelting, Mighty Smelting, Fantastic Foundry, or Tinkers' Gadgetry.",
+      "paragraph": true
+    }
+  ]
+}

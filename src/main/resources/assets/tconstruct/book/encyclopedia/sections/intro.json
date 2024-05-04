@@ -5,8 +5,8 @@
     "data": "intro/foreward.json"
   },
   {
-    "name": "updates",
+    "name": "focus",
     "type": "mantle:text",
-    "data": "intro/updates.json"
+    "data": "intro/focus.json"
   }
 ]
