@@ -343,7 +343,7 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
     addArmorShieldStats(MaterialIds.iron, PlatingMaterialStats.builder().durabilityFactor(15).armor(2, 4, 5, 2), StatlessMaterialStats.MAILLE);
     addArmorShieldStats(MaterialIds.gold, PlatingMaterialStats.builder().durabilityFactor(7).armor(1, 3, 4, 1), StatlessMaterialStats.MAILLE);
     addArmorShieldStats(MaterialIds.searedStone, PlatingMaterialStats.builder().durabilityFactor(14).armor(1, 3, 4, 2).knockbackResistance(0.1f), StatlessMaterialStats.MAILLE);
-    addArmorShieldStats(MaterialIds.scorchedStone, PlatingMaterialStats.builder().durabilityFactor(10).armor(1, 4, 5, 2).knockbackResistance(0.5f), StatlessMaterialStats.MAILLE);
+    addArmorShieldStats(MaterialIds.scorchedStone, PlatingMaterialStats.builder().durabilityFactor(10).armor(1, 4, 5, 2).knockbackResistance(0.05f), StatlessMaterialStats.MAILLE);
     // tier 3
     addMaterialStats(MaterialIds.nahuatl, StatlessMaterialStats.SHIELD_CORE);
     addArmorShieldStats(MaterialIds.slimesteel, PlatingMaterialStats.builder().durabilityFactor(40).armor(2, 5, 6, 2), StatlessMaterialStats.MAILLE);

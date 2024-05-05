@@ -1114,19 +1114,19 @@ public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelt
 
     // blazewood
     ItemCastingRecipeBuilder.basinRecipe(TinkerMaterials.blazewood)
-                            .setFluidAndTime(TinkerFluids.blazingBlood, false, FluidType.BUCKET_VOLUME / 4)
+                            .setFluidAndTime(TinkerFluids.blazingBlood, false, FluidType.BUCKET_VOLUME / 5)
                             .setCast(TinkerWorld.bloodshroom, true)
                             .save(consumer, prefix(TinkerMaterials.blazewood, folder));
     ItemCastingRecipeBuilder.basinRecipe(TinkerMaterials.blazewood.getSlab())
-                            .setFluidAndTime(TinkerFluids.blazingBlood, false, FluidType.BUCKET_VOLUME / 8)
+                            .setFluidAndTime(TinkerFluids.blazingBlood, false, FluidType.BUCKET_VOLUME / 10)
                             .setCast(TinkerWorld.bloodshroom.getSlab(), true)
                             .save(consumer, wrap(TinkerMaterials.blazewood, folder, "_slab"));
     ItemCastingRecipeBuilder.basinRecipe(TinkerMaterials.blazewood.getStairs())
-                            .setFluidAndTime(TinkerFluids.blazingBlood, false, FluidType.BUCKET_VOLUME / 4)
+                            .setFluidAndTime(TinkerFluids.blazingBlood, false, FluidType.BUCKET_VOLUME / 5)
                             .setCast(TinkerWorld.bloodshroom.getStairs(), true)
                             .save(consumer, wrap(TinkerMaterials.blazewood, folder, "_stairs"));
     ItemCastingRecipeBuilder.basinRecipe(TinkerMaterials.blazewood.getFence())
-                            .setFluidAndTime(TinkerFluids.blazingBlood, false, FluidType.BUCKET_VOLUME / 4)
+                            .setFluidAndTime(TinkerFluids.blazingBlood, false, FluidType.BUCKET_VOLUME / 5)
                             .setCast(TinkerWorld.bloodshroom.getFence(), true)
                             .save(consumer, wrap(TinkerMaterials.blazewood, folder, "_fence"));
 

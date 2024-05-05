@@ -52,7 +52,6 @@ import slimeknights.tconstruct.library.json.variable.mining.BlockMiningSpeedVari
 import slimeknights.tconstruct.library.json.variable.stat.EntityConditionalStatVariable;
 import slimeknights.tconstruct.library.json.variable.tool.ToolStatVariable;
 import slimeknights.tconstruct.library.json.variable.tool.ToolVariable;
-import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.ModifierId;
@@ -393,7 +392,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
 
     // traits - tier 1
     buildModifier(ModifierIds.cultivated).addModule(RepairModule.builder().eachLevel(0.5f));
-    addModifier(ModifierIds.stringy, new Modifier());
+    buildModifier(ModifierIds.stringy);
     buildModifier(ModifierIds.unburdened).addModule(StatBoostModule.add(ToolStats.USE_ITEM_SPEED).eachLevel(0.1f));
     buildModifier(ModifierIds.depthProtection).addModule(DepthProtectionModule.builder().protection(1.25f).baselineHeight(64).neutralRange(32).build());
     // traits - tier 2
@@ -453,7 +452,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .addModule(ProtectionModule.builder().sources(DamageSourcePredicate.CAN_PROTECT, new SourceAttackerPredicate(LivingEntityPredicate.FIRE_IMMUNE)).eachLevel(1.25f));
 
     // traits - tier 2 compat
-    addModifier(ModifierIds.lustrous, new Modifier());
+    buildModifier(ModifierIds.lustrous);
     buildModifier(ModifierIds.sharpweight)
       .addModule(StatBoostModule.multiplyBase(ToolStats.MINING_SPEED).eachLevel(0.1f))
       .addModule(StatBoostModule.multiplyBase(ToolStats.DRAW_SPEED).eachLevel(0.15f))

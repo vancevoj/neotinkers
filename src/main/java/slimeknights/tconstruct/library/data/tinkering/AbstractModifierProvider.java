@@ -35,7 +35,8 @@ public abstract class AbstractModifierProvider extends GenericDataProvider {
    */
   protected abstract void addModifiers();
 
-  /** Adds a modifier to be saved */
+  /** @deprecated use {@link #buildModifier(ModifierId, ICondition, JsonRedirect...)} */
+  @Deprecated
   protected void addModifier(ModifierId id, @Nullable ICondition condition, @Nullable Modifier result, JsonRedirect... redirects) {
     if (result == null && redirects.length == 0) {
       throw new IllegalArgumentException("Must have either a modifier or a redirect");
@@ -46,17 +47,20 @@ public abstract class AbstractModifierProvider extends GenericDataProvider {
     }
   }
 
-  /** Adds a modifier to be saved */
+  /** @deprecated use {@link #buildModifier(ModifierId, JsonRedirect...)} */
+  @Deprecated
   protected void addModifier(ModifierId id, @Nullable Modifier result, JsonRedirect... redirects) {
     addModifier(id, null, result, redirects);
   }
 
-  /** Adds a modifier to be saved */
+  /** @deprecated use {@link #buildModifier(DynamicModifier, ICondition, JsonRedirect...)} */
+  @Deprecated
   protected void addModifier(DynamicModifier<?> id, @Nullable ICondition condition, @Nullable Modifier result, JsonRedirect... redirects) {
     addModifier(id.getId(), condition, result, redirects);
   }
 
-  /** Adds a modifier to be saved */
+  /** @deprecated use {@link #buildModifier(DynamicModifier, JsonRedirect...)} */
+  @Deprecated
   protected void addModifier(DynamicModifier<?> id, @Nullable Modifier result, JsonRedirect... redirects) {
     addModifier(id, null, result, redirects);
   }

@@ -4,9 +4,9 @@
     "item": "tconstruct:bloodshroom_fence"
   },
   "cast_consumed": true,
-  "cooling_time": 134,
+  "cooling_time": 120,
   "fluid": {
-    "amount": 250,
+    "amount": 200,
     "tag": "tconstruct:blazing_blood"
   },
   "result": "tconstruct:blazewood_fence"

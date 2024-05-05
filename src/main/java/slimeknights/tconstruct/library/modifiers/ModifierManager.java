@@ -92,7 +92,8 @@ public class ModifierManager extends SimpleJsonResourceReloadListener {
   final Map<ModifierId,Modifier> staticModifiers = new HashMap<>();
   /** Map of all modifier types that are expected to load in datapacks */
   private final Map<ModifierId,Class<?>> expectedDynamicModifiers = new HashMap<>();
-  /** Map of all modifier types that are expected to load in datapacks */
+  /** @deprecated use {@link slimeknights.tconstruct.library.modifiers.modules.ModifierModule#LOADER} */
+  @Deprecated
   public static final GenericLoaderRegistry<Modifier> MODIFIER_LOADERS = new GenericLoaderRegistry<>("Modifier", false);
 
   /** Modifiers loaded from JSON */
