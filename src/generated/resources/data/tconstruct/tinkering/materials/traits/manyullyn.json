@@ -4,5 +4,13 @@
       "level": 1,
       "name": "tconstruct:insatiable"
     }
-  ]
+  ],
+  "perStat": {
+    "tconstruct:armor": [
+      {
+        "level": 1,
+        "name": "tconstruct:kinetic"
+      }
+    ]
+  }
 }

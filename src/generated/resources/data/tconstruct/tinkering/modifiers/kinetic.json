@@ -1,0 +1,10 @@
+{
+  "type": "tconstruct:composable",
+  "level_display": "tconstruct:default",
+  "modules": [
+    {
+      "type": "tconstruct:kinetic"
+    }
+  ],
+  "tooltip_display": "always"
+}

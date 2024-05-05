@@ -11,7 +11,7 @@ import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.modifiers.modules.technical.ArmorStatModule;
 import slimeknights.tconstruct.library.tools.capability.TinkerDataCapability;
 import slimeknights.tconstruct.library.tools.capability.TinkerDataKeys;
-import slimeknights.tconstruct.tools.modifiers.traits.ranged.CrystalboundModifier;
+import slimeknights.tconstruct.tools.modules.ranged.RestrictAngleModule;
 
 /** Events to implement modifier specific behaviors, such as those defined by {@link TinkerDataKeys}. General hooks will typically be in {@link ToolEvents} */
 @EventBusSubscriber(modid = TConstruct.MOD_ID, bus = Bus.FORGE)
@@ -25,9 +25,9 @@ public class ModifierEvents {
         event.setStrength(event.getStrength() * (1 + knockback));
       }
       // apply crystalbound bonus
-      int crystalbound = data.get(CrystalboundModifier.LEVEL, 0);
+      int crystalbound = data.get(TinkerDataKeys.CRYSTALSTRIKE, 0);
       if (crystalbound > 0) {
-        CrystalboundModifier.onKnockback(event, crystalbound);
+        RestrictAngleModule.onKnockback(event, crystalbound);
       }
     });
   }

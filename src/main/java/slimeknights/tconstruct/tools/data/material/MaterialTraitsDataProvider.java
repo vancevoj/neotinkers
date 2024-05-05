@@ -29,7 +29,7 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     addDefaultTraits(MaterialIds.rock, TinkerModifiers.stonebound);
     addDefaultTraits(MaterialIds.flint, TinkerModifiers.jagged);
     addDefaultTraits(MaterialIds.bone, ModifierIds.pierce);
-    addTraits(MaterialIds.bamboo, RANGED, ModifierIds.unburdened);
+    addDefaultTraits(MaterialIds.bamboo, ModifierIds.unburdened);
     // tier 1 - end
     addDefaultTraits(MaterialIds.chorus, TinkerModifiers.enderference);
     // tier 1 - binding
@@ -43,6 +43,7 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     addDefaultTraits(MaterialIds.iron, TinkerModifiers.magnetic);
     addTraits(MaterialIds.iron, ARMOR, TinkerModifiers.projectileProtection);
     addDefaultTraits(MaterialIds.copper, TinkerModifiers.dwarven);
+    addTraits(MaterialIds.copper, ARMOR, ModifierIds.depthProtection);
     addDefaultTraits(MaterialIds.searedStone, TinkerModifiers.searing);
     addTraits(MaterialIds.searedStone, ARMOR, ModifierIds.fireProtection);
     addDefaultTraits(MaterialIds.slimewood, TinkerModifiers.overgrowth, TinkerModifiers.overslime);
@@ -59,9 +60,9 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
 
     // tier 3
     addDefaultTraits(MaterialIds.slimesteel, ModifierIds.overcast, TinkerModifiers.overslime.getId());
-    // crystalbound is used for armor and ranged
-    addDefaultTraits(MaterialIds.amethystBronze, TinkerModifiers.crystalbound);
     addTraits(MaterialIds.amethystBronze, MELEE_HARVEST, ModifierIds.crumbling);
+    addTraits(MaterialIds.amethystBronze, RANGED, ModifierIds.crystalbound);
+    addTraits(MaterialIds.amethystBronze, ARMOR, ModifierIds.crystalstrike);
     addDefaultTraits(MaterialIds.nahuatl, TinkerModifiers.lacerating);
     addDefaultTraits(MaterialIds.roseGold, ModifierIds.enhanced);
     addDefaultTraits(MaterialIds.pigIron, TinkerModifiers.tasty);
@@ -75,9 +76,11 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     // tier 4
     addDefaultTraits(MaterialIds.queensSlime, TinkerModifiers.overlord, TinkerModifiers.overslime);
     addDefaultTraits(MaterialIds.hepatizon, TinkerModifiers.momentum);
+    addTraits(MaterialIds.hepatizon, ARMOR, ModifierIds.recurrentProtection);
     addDefaultTraits(MaterialIds.manyullyn, TinkerModifiers.insatiable);
+    addTraits(MaterialIds.manyullyn, ARMOR, ModifierIds.kinetic);
     addDefaultTraits(MaterialIds.blazingBone, TinkerModifiers.conducting);
-    addDefaultTraits(MaterialIds.blazewood, TinkerModifiers.conducting);
+    addDefaultTraits(MaterialIds.blazewood, ModifierIds.flameBarrier);
     // tier 4 - binding
     addDefaultTraits(MaterialIds.ancientHide, ModifierIds.fortune);
     addTraits(MaterialIds.ancientHide, ARMOR, ModifierIds.fortified);

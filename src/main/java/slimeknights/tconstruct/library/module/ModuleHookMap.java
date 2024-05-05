@@ -33,10 +33,12 @@ public class ModuleHookMap {
       return EMPTY;
     }
     Builder builder = builder();
-    for (WithHooks<?> module : modules) {
-      for (ModuleHook<?> hook : module.getModuleHooks()) {
-        builder.addHookChecked(module.module(), hook, error);
+    for (WithHooks<?> withHooks : modules) {
+      HookProvider module = withHooks.module();
+      for (ModuleHook<?> hook : withHooks.getModuleHooks()) {
+        builder.addHookChecked(module, hook, error);
       }
+      module.addModules(builder);
     }
     return builder.build();
   }
@@ -106,6 +108,7 @@ public class ModuleHookMap {
       for (ModuleHook<?> hook : module.getDefaultHooks()) {
         addHookChecked(module, hook);
       }
+      module.addModules(this);
       return this;
     }
 

@@ -1,0 +1,28 @@
+{
+  "type": "tconstruct:composable",
+  "level_display": "tconstruct:default",
+  "modules": [
+    {
+      "type": "tconstruct:attribute",
+      "attribute": "minecraft:generic.attack_speed",
+      "each_level": 0.025,
+      "operation": "multiply_total",
+      "slots": [
+        "mainhand",
+        "offhand",
+        "feet",
+        "legs",
+        "chest",
+        "head"
+      ],
+      "unique": "tconstruct.modifier.crystalstrike"
+    },
+    {
+      "type": "tconstruct:armor_level",
+      "allow_broken": false,
+      "held_tag": "tconstruct:modifiable/armor/held",
+      "key": "tconstruct:crystalstrike_knockback"
+    }
+  ],
+  "tooltip_display": "always"
+}

@@ -1,15 +1,21 @@
 {
-  "default": [
-    {
-      "level": 1,
-      "name": "tconstruct:crystalbound"
-    }
-  ],
   "perStat": {
+    "tconstruct:armor": [
+      {
+        "level": 1,
+        "name": "tconstruct:crystalstrike"
+      }
+    ],
     "tconstruct:melee_harvest": [
       {
         "level": 1,
         "name": "tconstruct:crumbling"
+      }
+    ],
+    "tconstruct:ranged": [
+      {
+        "level": 1,
+        "name": "tconstruct:crystalbound"
       }
     ]
   }

@@ -34,6 +34,9 @@ public interface TinkerDataKeys {
   /** Player modifier data key for haste, represents an additive percentage boost on mining speed. */
   TinkerDataKey<Float> HASTE = TConstruct.createKey("haste");
 
+  /** Crystaltrike level for knockback restriction */
+  TinkerDataKey<Integer> CRYSTALSTRIKE = intKey("crystalstrike_knockback");
+
 
   /** Creates and registers an integer key */
   private static TinkerDataKey<Integer> intKey(String name) {

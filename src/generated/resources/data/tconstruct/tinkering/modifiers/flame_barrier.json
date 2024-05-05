@@ -1,0 +1,11 @@
+{
+  "type": "tconstruct:composable",
+  "level_display": "tconstruct:default",
+  "modules": [
+    {
+      "type": "tconstruct:flame_barrier",
+      "each_level": 1.875
+    }
+  ],
+  "tooltip_display": "always"
+}

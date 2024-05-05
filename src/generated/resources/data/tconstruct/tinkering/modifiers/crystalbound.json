@@ -1,0 +1,16 @@
+{
+  "type": "tconstruct:composable",
+  "level_display": "tconstruct:default",
+  "modules": [
+    {
+      "type": "tconstruct:restrict_projectile_angle"
+    },
+    {
+      "type": "tconstruct:stat_boost",
+      "each_level": 0.1,
+      "operation": "add",
+      "stat": "tconstruct:velocity"
+    }
+  ],
+  "tooltip_display": "always"
+}

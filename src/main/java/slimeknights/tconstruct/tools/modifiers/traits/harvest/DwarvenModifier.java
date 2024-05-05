@@ -4,26 +4,20 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed;
 import slimeknights.mantle.client.TooltipKey;
-import slimeknights.mantle.data.predicate.damage.DamageSourcePredicate;
 import slimeknights.tconstruct.TConstruct;
-import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
-import slimeknights.tconstruct.library.modifiers.hook.armor.ProtectionModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.build.ConditionalStatModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.display.TooltipModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.mining.BreakSpeedModifierHook;
 import slimeknights.tconstruct.library.module.ModuleHookMap.Builder;
-import slimeknights.tconstruct.library.tools.context.EquipmentContext;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.stat.FloatToolStat;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
@@ -33,10 +27,10 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
 
-public class DwarvenModifier extends Modifier implements ConditionalStatModifierHook, BreakSpeedModifierHook, ProtectionModifierHook, TooltipModifierHook {
+// TODO: convert into a module
+public class DwarvenModifier extends Modifier implements ConditionalStatModifierHook, BreakSpeedModifierHook, TooltipModifierHook {
   private static final Component MINING_SPEED = TConstruct.makeTranslation("modifier", "dwarven.mining_speed");
   private static final Component VELOCITY = TConstruct.makeTranslation("modifier", "dwarven.velocity");
-  private static final Component PROTECTION = TConstruct.makeTranslation("modifier", "dwarven.resistance");
   /** Distance below sea level to get boost */
   private static final float BOOST_DISTANCE = 64f;
   /** Blocks above 0 when debuff starts, and the range of debuff in the world */
@@ -45,8 +39,8 @@ public class DwarvenModifier extends Modifier implements ConditionalStatModifier
   private static final float MINING_BONUS = 6;
   /** Velocity boost when at distance, gets larger when lower */
   private static final float VELOCITY_BONUS = 0.05f;
-  /** Protection boost when at distance, gets larger when lower */
-  private static final float PROTECTION_BONUS = 1.25f;
+
+  private static final ToolType[] TYPES = { ToolType.RANGED, ToolType.MELEE };
 
   @Override
   public int getPriority() {
@@ -55,7 +49,7 @@ public class DwarvenModifier extends Modifier implements ConditionalStatModifier
 
   @Override
   protected void registerHooks(Builder hookBuilder) {
-    hookBuilder.addHook(this, ModifierHooks.CONDITIONAL_STAT, ModifierHooks.BREAK_SPEED, ModifierHooks.TOOLTIP, ModifierHooks.PROTECTION);
+    hookBuilder.addHook(this, ModifierHooks.CONDITIONAL_STAT, ModifierHooks.BREAK_SPEED, ModifierHooks.TOOLTIP);
   }
 
   /** Gets the boost for the given level and height, can go negative */
@@ -102,29 +96,11 @@ public class DwarvenModifier extends Modifier implements ConditionalStatModifier
   }
 
   @Override
-  public float getProtectionModifier(IToolStackView tool, ModifierEntry modifier, EquipmentContext context, EquipmentSlot slotType, DamageSource source, float modifierValue) {
-    // only boost armor, dwarven also ends up on melee/harvest/bows
-    if (DamageSourcePredicate.CAN_PROTECT.matches(source) && tool.hasTag(TinkerTags.Items.ARMOR)) {
-      LivingEntity living = context.getEntity();
-      return getBoost(living.level, (float)living.getY(), modifier, modifierValue, PROTECTION_BONUS);
-    }
-    return modifierValue;
-  }
-
-  @Override
   public void addTooltip(IToolStackView tool, ModifierEntry modifier, @Nullable Player player, List<Component> tooltip, TooltipKey key, TooltipFlag tooltipFlag) {
-    ToolType type = ToolType.from(tool.getItem(), ToolType.NO_MELEE);
+    ToolType type = ToolType.from(tool.getItem(), TYPES);
     if (type != null) {
-      Component prefix = switch (type) {
-        default -> MINING_SPEED;
-        case RANGED -> VELOCITY;
-        case ARMOR -> PROTECTION;
-      };
-      float baseBoost = switch (type) {
-        default -> MINING_BONUS;
-        case RANGED -> VELOCITY_BONUS;
-        case ARMOR -> PROTECTION_BONUS;
-      };
+      Component prefix = type == ToolType.RANGED ? VELOCITY : MINING_SPEED;
+      float baseBoost = type == ToolType.RANGED ? VELOCITY_BONUS : MINING_BONUS;
       double boost;
       if (player != null && key == TooltipKey.SHIFT) {
         // passing in 1 means greater than 1 is a boost, and less than 1 is a percentage
@@ -141,11 +117,7 @@ public class DwarvenModifier extends Modifier implements ConditionalStatModifier
         boost = baseBoost * modifier.getLevel();
       }
       if (boost >= 0.01) {
-        if (type == ToolType.ARMOR) {
-          TooltipModifierHook.addPercentBoost(this, prefix, boost / 25, tooltip);
-        } else {
-          TooltipModifierHook.addFlatBoost(this, prefix, boost * tool.getMultiplier(type == ToolType.RANGED ? ToolStats.VELOCITY : ToolStats.MINING_SPEED), tooltip);
-        }
+        TooltipModifierHook.addFlatBoost(this, prefix, boost * tool.getMultiplier(type == ToolType.RANGED ? ToolStats.VELOCITY : ToolStats.MINING_SPEED), tooltip);
       }
     }
   }

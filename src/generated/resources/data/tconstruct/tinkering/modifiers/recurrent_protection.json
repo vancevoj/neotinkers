@@ -1,0 +1,11 @@
+{
+  "type": "tconstruct:composable",
+  "level_display": "tconstruct:default",
+  "modules": [
+    {
+      "type": "tconstruct:recurrent_protection",
+      "each_level": 1.25
+    }
+  ],
+  "tooltip_display": "always"
+}

@@ -35,6 +35,7 @@ import slimeknights.mantle.data.predicate.item.ItemPredicate;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.data.tinkering.AbstractModifierProvider;
+import slimeknights.tconstruct.library.json.LevelingValue;
 import slimeknights.tconstruct.library.json.RandomLevelingValue;
 import slimeknights.tconstruct.library.json.predicate.TinkerPredicate;
 import slimeknights.tconstruct.library.json.predicate.tool.HasModifierPredicate;
@@ -102,6 +103,11 @@ import slimeknights.tconstruct.tools.TinkerModifiers;
 import slimeknights.tconstruct.tools.modifiers.ability.armor.ToolBeltModifier;
 import slimeknights.tconstruct.tools.modifiers.slotless.OverslimeModifier;
 import slimeknights.tconstruct.tools.modules.TheOneProbeModule;
+import slimeknights.tconstruct.tools.modules.armor.DepthProtectionModule;
+import slimeknights.tconstruct.tools.modules.armor.FlameBarrierModule;
+import slimeknights.tconstruct.tools.modules.armor.KineticModule;
+import slimeknights.tconstruct.tools.modules.armor.RecurrentProtectionModule;
+import slimeknights.tconstruct.tools.modules.ranged.RestrictAngleModule;
 
 import static slimeknights.tconstruct.common.TinkerTags.Items.ARMOR;
 import static slimeknights.tconstruct.common.TinkerTags.Items.HARVEST;
@@ -389,6 +395,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
     buildModifier(ModifierIds.cultivated).addModule(RepairModule.builder().eachLevel(0.5f));
     addModifier(ModifierIds.stringy, new Modifier());
     buildModifier(ModifierIds.unburdened).addModule(StatBoostModule.add(ToolStats.USE_ITEM_SPEED).eachLevel(0.1f));
+    buildModifier(ModifierIds.depthProtection).addModule(DepthProtectionModule.builder().protection(1.25f).baselineHeight(64).neutralRange(32).build());
     // traits - tier 2
     buildModifier(ModifierIds.sturdy).addModule(StatBoostModule.multiplyBase(ToolStats.DURABILITY).eachLevel(0.15f));
     buildModifier(ModifierIds.scorching).addModule(ConditionalMeleeDamageModule.builder().target(LivingEntityPredicate.ON_FIRE).eachLevel(2f));
@@ -484,6 +491,12 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .addModule(StatBoostModule.multiplyBase(OverslimeModifier.OVERSLIME_STAT).eachLevel(0.5f));
     buildModifier(ModifierIds.crumbling).addModule(ConditionalMiningSpeedModule.builder().blocks(BlockPredicate.REQUIRES_TOOL.inverted()).allowIneffective().eachLevel(0.5f));
     buildModifier(ModifierIds.enhanced).priority(60).addModule(UPGRADE);
+    buildModifier(ModifierIds.crystalbound).addModule(RestrictAngleModule.INSTANCE).addModule(StatBoostModule.add(ToolStats.VELOCITY).eachLevel(0.1f));
+    buildModifier(ModifierIds.crystalstrike)
+      .addModule(AttributeModule.builder(Attributes.ATTACK_SPEED, Operation.MULTIPLY_TOTAL)
+                                .uniqueFrom(ModifierIds.crystalstrike)
+                                .eachLevel(0.025f))
+      .addModule(new ArmorLevelModule(TinkerDataKeys.CRYSTALSTRIKE, false, TinkerTags.Items.HELD_ARMOR));
     // traits - tier 3 nether
     buildModifier(ModifierIds.lightweight)
       .addModule(StatBoostModule.multiplyBase(ToolStats.ATTACK_SPEED).eachLevel(0.07f))
@@ -522,6 +535,9 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
         .variable(VALUE).add().build());
     // traits - tier 4
     buildModifier(ModifierIds.fortified).priority(60).addModule(new ModifierSlotModule(SlotType.DEFENSE));
+    buildModifier(ModifierIds.kinetic).addModule(KineticModule.INSTANCE);
+    buildModifier(ModifierIds.recurrentProtection).addModule(new RecurrentProtectionModule(LevelingValue.eachLevel(1.25f)));
+    buildModifier(ModifierIds.flameBarrier).addModule(new FlameBarrierModule(LevelingValue.eachLevel(1.875f)));
 
     // mob disguise
     buildModifier(ModifierIds.creeperDisguise        ).addModule(new MobDisguiseModule(EntityType.CREEPER));

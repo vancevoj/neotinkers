@@ -2,8 +2,6 @@ package slimeknights.tconstruct.tools.modifiers.traits.harvest;
 
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
@@ -11,26 +9,18 @@ import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed;
 import slimeknights.mantle.client.TooltipKey;
-import slimeknights.mantle.data.predicate.damage.DamageSourcePredicate;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.TinkerEffect;
-import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
-import slimeknights.tconstruct.library.modifiers.hook.armor.ModifyDamageModifierHook;
-import slimeknights.tconstruct.library.modifiers.hook.armor.ProtectionModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.build.ConditionalStatModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.display.TooltipModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.mining.BlockBreakModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.mining.BreakSpeedModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.ranged.ProjectileLaunchModifierHook;
 import slimeknights.tconstruct.library.modifiers.modules.armor.ProtectionModule;
-import slimeknights.tconstruct.library.modifiers.modules.technical.SlotInChargeModule;
-import slimeknights.tconstruct.library.modifiers.modules.technical.SlotInChargeModule.SlotInCharge;
 import slimeknights.tconstruct.library.module.ModuleHookMap.Builder;
-import slimeknights.tconstruct.library.tools.capability.TinkerDataCapability.TinkerDataKey;
-import slimeknights.tconstruct.library.tools.context.EquipmentContext;
 import slimeknights.tconstruct.library.tools.context.ToolHarvestContext;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.NamespacedNBT;
@@ -42,14 +32,12 @@ import slimeknights.tconstruct.tools.stats.ToolType;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class MomentumModifier extends Modifier implements ProjectileLaunchModifierHook, ConditionalStatModifierHook, BlockBreakModifierHook, BreakSpeedModifierHook, ModifyDamageModifierHook, ProtectionModifierHook, TooltipModifierHook {
+public class MomentumModifier extends Modifier implements ProjectileLaunchModifierHook, ConditionalStatModifierHook, BlockBreakModifierHook, BreakSpeedModifierHook, TooltipModifierHook {
   private static final Component SPEED = TConstruct.makeTranslation("modifier", "momentum.speed");
-  private static final TinkerDataKey<SlotInCharge> SLOT_IN_CHARGE = TConstruct.createKey("momentum");
 
   @Override
   protected void registerHooks(Builder hookBuilder) {
-    hookBuilder.addHook(this, ModifierHooks.CONDITIONAL_STAT, ModifierHooks.PROJECTILE_LAUNCH, ModifierHooks.BLOCK_BREAK, ModifierHooks.BREAK_SPEED, ModifierHooks.MODIFY_DAMAGE, ModifierHooks.PROTECTION, ModifierHooks.TOOLTIP);
-    hookBuilder.addModule(new SlotInChargeModule(SLOT_IN_CHARGE));
+    hookBuilder.addHook(this, ModifierHooks.CONDITIONAL_STAT, ModifierHooks.PROJECTILE_LAUNCH, ModifierHooks.BLOCK_BREAK, ModifierHooks.BREAK_SPEED, ModifierHooks.TOOLTIP);
   }
 
   @Override
@@ -101,22 +89,6 @@ public class MomentumModifier extends Modifier implements ProjectileLaunchModifi
       return baseValue * (1 + getBonus(living, ToolType.RANGED, modifier) / 64f);
     }
     return baseValue;
-  }
-
-  @Override
-  public float modifyDamageTaken(IToolStackView tool, ModifierEntry modifier, EquipmentContext context, EquipmentSlot slotType, DamageSource source, float amount, boolean isDirectDamage) {
-    if (source.getEntity() != null && SlotInChargeModule.isInCharge(context.getTinkerData(), SLOT_IN_CHARGE, slotType)) {
-      applyEffect(context.getEntity(), ToolType.ARMOR, 5*20, 1);
-    }
-    return amount;
-  }
-
-  @Override
-  public float getProtectionModifier(IToolStackView tool, ModifierEntry modifier, EquipmentContext context, EquipmentSlot slotType, DamageSource source, float modifierValue) {
-    if (DamageSourcePredicate.CAN_PROTECT.matches(source) && tool.hasTag(TinkerTags.Items.ARMOR)) {
-      modifierValue += getBonus(context.getEntity(), ToolType.ARMOR, modifier) * 2.5 / 4;
-    }
-    return modifierValue;
   }
 
   @Override

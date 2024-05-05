@@ -214,7 +214,6 @@ import slimeknights.tconstruct.tools.modifiers.traits.melee.InsatiableModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.melee.InvariantModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.melee.LaceratingModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.melee.NecroticModifier;
-import slimeknights.tconstruct.tools.modifiers.traits.ranged.CrystalboundModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.ranged.HolyModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.ranged.OlympicModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.skull.BoonOfSssssModifier;
@@ -250,6 +249,11 @@ import slimeknights.tconstruct.tools.modifiers.upgrades.ranged.PunchModifier;
 import slimeknights.tconstruct.tools.modifiers.upgrades.ranged.ScopeModifier;
 import slimeknights.tconstruct.tools.modifiers.upgrades.ranged.SinistralModifier;
 import slimeknights.tconstruct.tools.modules.TheOneProbeModule;
+import slimeknights.tconstruct.tools.modules.armor.DepthProtectionModule;
+import slimeknights.tconstruct.tools.modules.armor.FlameBarrierModule;
+import slimeknights.tconstruct.tools.modules.armor.KineticModule;
+import slimeknights.tconstruct.tools.modules.armor.RecurrentProtectionModule;
+import slimeknights.tconstruct.tools.modules.ranged.RestrictAngleModule;
 import slimeknights.tconstruct.tools.recipe.ArmorDyeingRecipe;
 import slimeknights.tconstruct.tools.recipe.CreativeSlotRecipe;
 import slimeknights.tconstruct.tools.recipe.EnchantmentConvertingRecipe;
@@ -435,7 +439,6 @@ public final class TinkerModifiers extends TinkerModule {
   // traits - tier 3
   public static final StaticModifier<LaceratingModifier> lacerating = MODIFIERS.register("lacerating", LaceratingModifier::new);
   public static final StaticModifier<TastyModifier> tasty = MODIFIERS.register("tasty", TastyModifier::new);
-  public static final StaticModifier<CrystalboundModifier> crystalbound = MODIFIERS.register("crystalbound", CrystalboundModifier::new);
   // traits - tier 4
   public static final StaticModifier<OverlordModifier> overlord = MODIFIERS.register("overlord", OverlordModifier::new);
   public static final StaticModifier<MomentumModifier> momentum = MODIFIERS.register("momentum", MomentumModifier::new);
@@ -486,7 +489,7 @@ public final class TinkerModifiers extends TinkerModule {
   public static final RegistryObject<TinkerEffect> pierceEffect = MOB_EFFECTS.register("pierce", () -> new NoMilkEffect(MobEffectCategory.HARMFUL, 0xD1D37A, true).addAttributeModifier(Attributes.ARMOR, "cd45be7c-c86f-4a7e-813b-42a44a054f44", -1, Operation.ADDITION));
   // markers
   public static final EnumObject<ToolType,TinkerEffect> momentumEffect = MOB_EFFECTS.registerEnum("momentum", ToolType.NO_MELEE, type -> new NoMilkEffect(MobEffectCategory.BENEFICIAL, 0x60496b, true));
-  public static final EnumObject<ToolType,TinkerEffect> insatiableEffect = MOB_EFFECTS.registerEnum("insatiable", InsatiableModifier.TYPES, type -> {
+  public static final EnumObject<ToolType,TinkerEffect> insatiableEffect = MOB_EFFECTS.registerEnum("insatiable", new ToolType[] {ToolType.MELEE, ToolType.RANGED, ToolType.ARMOR}, type -> {
     TinkerEffect effect = new NoMilkEffect(MobEffectCategory.BENEFICIAL, 0x9261cc, true);
     if (type == ToolType.ARMOR) {
       effect.addAttributeModifier(Attributes.ATTACK_DAMAGE, "cc6904f7-674a-4e6a-b992-4f3cb8edfef4", 1, AttributeModifier.Operation.ADDITION);
@@ -632,6 +635,13 @@ public final class TinkerModifiers extends TinkerModule {
 
       // special
       ModifierModule.LOADER.register(getResource("the_one_probe"), TheOneProbeModule.INSTANCE.getLoader());
+      // armor
+      ModifierModule.LOADER.register(getResource("depth_protection"), DepthProtectionModule.LOADER);
+      ModifierModule.LOADER.register(getResource("flame_barrier"), FlameBarrierModule.LOADER);
+      ModifierModule.LOADER.register(getResource("kinetic"), KineticModule.LOADER);
+      ModifierModule.LOADER.register(getResource("recurrent_protection"), RecurrentProtectionModule.LOADER);
+      // ranged
+      ModifierModule.LOADER.register(getResource("restrict_projectile_angle"), RestrictAngleModule.LOADER);
 
       // modifier predicates
       ModifierPredicate.LOADER.register(getResource("single"), SingleModifierPredicate.LOADER);
