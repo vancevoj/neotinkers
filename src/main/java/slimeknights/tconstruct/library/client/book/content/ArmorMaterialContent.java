@@ -24,10 +24,10 @@ import slimeknights.tconstruct.library.materials.definition.MaterialVariantId;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatType;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
 import slimeknights.tconstruct.library.tools.helper.ToolBuildHandler;
-import slimeknights.tconstruct.library.tools.item.IModifiableDisplay;
 import slimeknights.tconstruct.library.tools.stat.FloatToolStat;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
 import slimeknights.tconstruct.library.utils.Util;
+import slimeknights.tconstruct.tools.TinkerToolParts;
 import slimeknights.tconstruct.tools.TinkerTools;
 import slimeknights.tconstruct.tools.item.ArmorSlotType;
 import slimeknights.tconstruct.tools.stats.PlatingMaterialStats;
@@ -102,14 +102,17 @@ public class ArmorMaterialContent extends AbstractMaterialContent {
   }
 
   /** Gets the tool to display for the given stat type, just hardcoding to plate armor for simplicity */
-  private static IModifiableDisplay getTool(MaterialStatsId statType) {
+  private static void addPlatingItem(MaterialStatsId statType, List<ItemStack> stacks, MaterialVariantId variant) {
     for (ArmorSlotType slotType : ArmorSlotType.values()) {
       if (statType.equals(PlatingMaterialStats.TYPES.get(slotType.getIndex()).getId())) {
-        return TinkerTools.plateArmor.get(slotType);
+        stacks.add(TinkerToolParts.plating.get(slotType).withMaterialForDisplay(variant));
+        return;
       }
     }
     // gotta have something, so just fallback to shield
-    return TinkerTools.plateShield.get();
+    if (!ToolBuildHandler.addSubItem(TinkerTools.plateShield.get(), stacks, MaterialVariant.of(variant))) {
+      stacks.add(TinkerTools.plateShield.get().getRenderTool());
+    }
   }
 
   @Override
@@ -128,21 +131,17 @@ public class ArmorMaterialContent extends AbstractMaterialContent {
     IMaterialRegistry registry = MaterialRegistry.getInstance();
     List<PlatingMaterialStats> stats = TOP_DOWN_STATS.stream().flatMap(id -> registry.<PlatingMaterialStats>getMaterialStats(material, id).stream()).toList();
     if (!stats.isEmpty()) {
-      List<ItemStack> tools = new ArrayList<>();
-      MaterialVariant variant = MaterialVariant.of(materialVariant);
+      List<ItemStack> plating = new ArrayList<>();
       for (PlatingMaterialStats stat : stats) {
-        IModifiableDisplay tool = getTool(stat.getIdentifier());
-        if (!ToolBuildHandler.addSubItem(tool, tools, variant)) {
-          tools.add(tool.getRenderTool());
-        }
+        addPlatingItem(stat.getIdentifier(), plating, materialVariant);
       }
       int platingWidth = book.fontRenderer.width(PLATING_LABEL);
       list.add(new TextComponentElement(x, y, platingWidth, 10, PLATING_LABEL));
-      for (int i = 0; i < tools.size(); i++) {
+      for (int i = 0; i < plating.size(); i++) {
         if (i != 0) {
           list.add(new TextElement(platingWidth - 2 + x + i * 20, y, 15, 10, "/"));
         }
-        list.add(new TinkerItemElement(platingWidth + 5 + x + i * 20, y, 0.5f, List.of(tools.get(i))));
+        list.add(new TinkerItemElement(platingWidth + 5 + x + i * 20, y, 0.5f, List.of(plating.get(i))));
       }
       y += 10;
       List<TextComponentData> lineData = new ArrayList<>();
