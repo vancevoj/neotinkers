@@ -137,6 +137,9 @@ public class ModifierIds {
   public static final ModifierId kinetic = id("kinetic");
   public static final ModifierId flameBarrier = id("flame_barrier");
 
+  // traits - slimeskull
+  public static final ModifierId mithridatism = id("mithridatism");
+
   // unused for now, will be reassigned later
   public static final ModifierId raging = id("raging");
 

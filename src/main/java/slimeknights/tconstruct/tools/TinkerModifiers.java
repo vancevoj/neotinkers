@@ -77,6 +77,7 @@ import slimeknights.tconstruct.library.modifiers.impl.SingleLevelModifier;
 import slimeknights.tconstruct.library.modifiers.modules.ModifierModule;
 import slimeknights.tconstruct.library.modifiers.modules.armor.BlockDamageSourceModule;
 import slimeknights.tconstruct.library.modifiers.modules.armor.CoverGroundWalkerModule;
+import slimeknights.tconstruct.library.modifiers.modules.armor.EffectImmunityModule;
 import slimeknights.tconstruct.library.modifiers.modules.armor.MobDisguiseModule;
 import slimeknights.tconstruct.library.modifiers.modules.armor.ProtectionModule;
 import slimeknights.tconstruct.library.modifiers.modules.armor.ReplaceBlockWalkerModule;
@@ -223,7 +224,6 @@ import slimeknights.tconstruct.tools.modifiers.traits.skull.EnderdodgingModifier
 import slimeknights.tconstruct.tools.modifiers.traits.skull.FirebreathModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.skull.FrosttouchModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.skull.GoldGuardModifier;
-import slimeknights.tconstruct.tools.modifiers.traits.skull.MithridatismModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.skull.PlagueModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.skull.RevengeModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.skull.SelfDestructiveModifier;
@@ -465,7 +465,6 @@ public final class TinkerModifiers extends TinkerModule {
   public static final StaticModifier<FrosttouchModifier> frosttouch = MODIFIERS.register("frosttouch", FrosttouchModifier::new);
   public static final StaticModifier<WitheredModifier> withered = MODIFIERS.register("withered", WitheredModifier::new);
   public static final StaticModifier<BoonOfSssssModifier> boonOfSssss = MODIFIERS.register("boon_of_sssss", BoonOfSssssModifier::new);
-  public static final StaticModifier<MithridatismModifier> mithridatism = MODIFIERS.register("mithridatism", MithridatismModifier::new);
   public static final StaticModifier<WildfireModifier> wildfire = MODIFIERS.register("wildfire", WildfireModifier::new);
   public static final StaticModifier<PlagueModifier> plague = MODIFIERS.register("plague", PlagueModifier::new);
   public static final StaticModifier<BreathtakingModifier> breathtaking = MODIFIERS.register("breathtaking", BreathtakingModifier::new);
@@ -585,6 +584,7 @@ public final class TinkerModifiers extends TinkerModule {
 
       // modifier modules //
       // armor
+      ModifierModule.LOADER.register(getResource("effect_immunity"), EffectImmunityModule.LOADER);
       ModifierModule.LOADER.register(getResource("mob_disguise"), MobDisguiseModule.LOADER);
       ModifierModule.LOADER.register(getResource("block_damage"), BlockDamageSourceModule.LOADER);
       ModifierModule.LOADER.register(getResource("cover_ground"), CoverGroundWalkerModule.LOADER);
