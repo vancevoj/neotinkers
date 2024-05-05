@@ -34,7 +34,7 @@ public interface ConditionalStatTooltip extends TooltipModifierHook, Conditional
     // if holding shift, or we have no attacker condition, then we don't need the player to show the tooltip
     INumericToolStat<?> stat = stat();
     IJsonPredicate<LivingEntity> holder = holder();
-    if (stat.supports(tool.getItem()) && condition().matches(tool, entry) && (tooltipKey != TooltipKey.SHIFT || TinkerPredicate.matches(holder, player))) {
+    if (stat.supports(tool.getItem()) && condition().matches(tool, entry) && TinkerPredicate.matchesInTooltip(holder, player, tooltipKey)) {
       // it's hard to display a good tooltip value without knowing the details of the formula, best we can do is guess based on the boolean
       // if this is inaccurate, just add this module without the tooltip hook to ignore
       Modifier modifier = entry.getModifier();

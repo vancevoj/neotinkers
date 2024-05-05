@@ -2,6 +2,7 @@ package slimeknights.tconstruct.library.json.predicate;
 
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
+import slimeknights.mantle.client.TooltipKey;
 import slimeknights.mantle.data.predicate.IJsonPredicate;
 import slimeknights.mantle.data.predicate.damage.DamageSourcePredicate;
 import slimeknights.mantle.data.predicate.entity.LivingEntityPredicate;
@@ -21,6 +22,11 @@ public class TinkerPredicate {
       return predicate == LivingEntityPredicate.ANY;
     }
     return predicate.matches(entity);
+  }
+
+  /** Checks if the condition matches in a tooltip context */
+  public static boolean matchesInTooltip(IJsonPredicate<LivingEntity> predicate, @Nullable LivingEntity entity, TooltipKey tooltipKey) {
+    return tooltipKey != TooltipKey.SHIFT || matches(predicate, entity);
   }
 
   /** Helper for dealing with the common case of nullable entities, often used when they are entity but not living. */

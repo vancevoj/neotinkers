@@ -5,7 +5,6 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.CriticalHitEvent;
 import net.minecraftforge.eventbus.api.Event.Result;
 import net.minecraftforge.eventbus.api.EventPriority;
-import slimeknights.mantle.data.predicate.damage.DamageSourcePredicate;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.json.predicate.TinkerPredicate;
 import slimeknights.tconstruct.library.modifiers.data.ModifierMaxLevel;
@@ -24,7 +23,7 @@ public class DragonbornModifier extends AbstractProtectionModifier<ModifierMaxLe
   @Override
   protected void registerHooks(Builder hookBuilder) {
     super.registerHooks(hookBuilder);
-    hookBuilder.addModule(ProtectionModule.source(DamageSourcePredicate.CAN_PROTECT).entity(TinkerPredicate.AIRBORNE).eachLevel(2.5f));
+    hookBuilder.addModule(ProtectionModule.builder().entity(TinkerPredicate.AIRBORNE).eachLevel(2.5f));
   }
 
   /** Boosts critical hit damage */

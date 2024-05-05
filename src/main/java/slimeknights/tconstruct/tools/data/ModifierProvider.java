@@ -322,19 +322,18 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
     buildModifier(ModifierIds.ricochet).addModule(ArmorStatModule.builder(TinkerDataKeys.KNOCKBACK).eachLevel(0.2f));
 
     // defense
-    // TODO: floor?
     buildModifier(ModifierIds.revitalizing).addModule(AttributeModule.builder(Attributes.MAX_HEALTH, Operation.ADDITION).uniqueFrom(ModifierIds.revitalizing).slots(armorSlots).eachLevel(2));
     // protection
-    buildModifier(ModifierIds.protection).addModule(ProtectionModule.source(DamageSourcePredicate.CAN_PROTECT).eachLevel(1.25f));
+    buildModifier(ModifierIds.protection).addModule(ProtectionModule.builder().eachLevel(1.25f));
     buildModifier(ModifierIds.fireProtection)
       .addModule(EnchantmentModule.builder(Enchantments.FIRE_PROTECTION).protection())
-      .addModule(ProtectionModule.source(DamageSourcePredicate.CAN_PROTECT, DamageSourcePredicate.FIRE).eachLevel(2.5f));
+      .addModule(ProtectionModule.builder().sources(DamageSourcePredicate.CAN_PROTECT, DamageSourcePredicate.FIRE).eachLevel(2.5f));
     buildModifier(ModifierIds.turtleShell)
       .addModule(AttributeModule.builder(ForgeMod.SWIM_SPEED.get(), Operation.MULTIPLY_TOTAL).uniqueFrom(ModifierIds.turtleShell).slots(armorSlots).eachLevel(0.05f))
-      .addModule(ProtectionModule.source(DamageSourcePredicate.CAN_PROTECT)
+      .addModule(ProtectionModule.builder()
                                  .toolItem(ItemPredicate.or(ItemPredicate.tag(TinkerTags.Items.HELMETS), ItemPredicate.tag(TinkerTags.Items.CHESTPLATES)))
                                  .entity(LivingEntityPredicate.EYES_IN_WATER).eachLevel(2.5f))
-      .addModule(ProtectionModule.source(DamageSourcePredicate.CAN_PROTECT)
+      .addModule(ProtectionModule.builder()
                                  .toolItem(ItemPredicate.or(ItemPredicate.tag(TinkerTags.Items.LEGGINGS), ItemPredicate.tag(TinkerTags.Items.BOOTS)))
                                  .entity(LivingEntityPredicate.FEET_IN_WATER).eachLevel(2.5f));
     // helmet
@@ -350,7 +349,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
     buildModifier(ModifierIds.leaping).addModule(ArmorStatModule.builder(TinkerDataKeys.JUMP_BOOST).eachLevel(1));
     // boots
     buildModifier(ModifierIds.depthStrider).addModule(EnchantmentModule.builder(Enchantments.DEPTH_STRIDER).constant());
-    buildModifier(ModifierIds.featherFalling).addModule(ProtectionModule.source(DamageSourcePredicate.FALL).eachLevel(3.75f));
+    buildModifier(ModifierIds.featherFalling).addModule(ProtectionModule.builder().source(DamageSourcePredicate.FALL).eachLevel(3.75f));
     buildModifier(ModifierIds.longFall)
       .levelDisplay(ModifierLevelDisplay.NO_LEVELS)
       .addModule(ModifierRequirementsModule.builder().requireModifier(ModifierIds.featherFalling, 4).modifierKey(ModifierIds.longFall).build())
@@ -444,7 +443,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
     // triats - tier 2
     buildModifier(ModifierIds.scorchProtection)
       .addModule(EnchantmentModule.builder(Enchantments.FIRE_PROTECTION).protection())
-      .addModule(ProtectionModule.source(DamageSourcePredicate.and(DamageSourcePredicate.CAN_PROTECT, new SourceAttackerPredicate(LivingEntityPredicate.FIRE_IMMUNE))).eachLevel(1.25f));
+      .addModule(ProtectionModule.builder().sources(DamageSourcePredicate.CAN_PROTECT, new SourceAttackerPredicate(LivingEntityPredicate.FIRE_IMMUNE)).eachLevel(1.25f));
 
     // traits - tier 2 compat
     addModifier(ModifierIds.lustrous, new Modifier());

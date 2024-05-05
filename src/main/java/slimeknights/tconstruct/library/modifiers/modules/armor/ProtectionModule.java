@@ -1,7 +1,5 @@
 package slimeknights.tconstruct.library.modifiers.modules.armor;
 
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import net.minecraft.network.chat.Component;
@@ -16,6 +14,7 @@ import slimeknights.mantle.data.predicate.IJsonPredicate;
 import slimeknights.mantle.data.predicate.damage.DamageSourcePredicate;
 import slimeknights.mantle.data.predicate.entity.LivingEntityPredicate;
 import slimeknights.tconstruct.library.json.LevelingValue;
+import slimeknights.tconstruct.library.json.predicate.TinkerPredicate;
 import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
@@ -81,7 +80,7 @@ public record ProtectionModule(IJsonPredicate<DamageSource> source, IJsonPredica
 
   @Override
   public void addTooltip(IToolStackView tool, ModifierEntry modifier, @Nullable Player player, List<Component> tooltip, TooltipKey tooltipKey, TooltipFlag tooltipFlag) {
-    if (condition.matches(tool, modifier)) {
+    if (condition.matches(tool, modifier) && TinkerPredicate.matchesInTooltip(this.entity, player, tooltipKey)) {
       addResistanceTooltip(tool, modifier.getModifier(), amount.compute(modifier.getEffectiveLevel()), player, tooltip);
     }
   }
@@ -95,22 +94,23 @@ public record ProtectionModule(IJsonPredicate<DamageSource> source, IJsonPredica
   /* Builder */
 
   /* Creates a new builder instance */
-  public static Builder source(IJsonPredicate<DamageSource> source) {
-    return new Builder(source);
-  }
-
-  /* Creates a new builder instance */
-  @SafeVarargs
-  public static Builder source(IJsonPredicate<DamageSource>... sources) {
-    return source(DamageSourcePredicate.and(sources));
+  public static Builder builder() {
+    return new Builder();
   }
 
   @Setter
   @Accessors(fluent = true)
-  @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
   public static class Builder extends ModuleBuilder.Stack<Builder> implements LevelingValue.Builder<ProtectionModule> {
-    private final IJsonPredicate<DamageSource> source;
+    private IJsonPredicate<DamageSource> source = DamageSourcePredicate.CAN_PROTECT;
     private IJsonPredicate<LivingEntity> entity = LivingEntityPredicate.ANY;
+
+    private Builder() {}
+
+    /** Sets the source to the given sources anded together */
+    @SafeVarargs
+    public final Builder sources(IJsonPredicate<DamageSource>... sources) {
+      return source(DamageSourcePredicate.and(sources));
+    }
 
     @Override
     public ProtectionModule amount(float flat, float eachLevel) {
