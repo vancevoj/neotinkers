@@ -26,8 +26,8 @@ import slimeknights.tconstruct.library.modifiers.hook.mining.BlockBreakModifierH
 import slimeknights.tconstruct.library.modifiers.hook.mining.BreakSpeedModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.ranged.ProjectileLaunchModifierHook;
 import slimeknights.tconstruct.library.modifiers.modules.armor.ProtectionModule;
-import slimeknights.tconstruct.library.modifiers.modules.unserializable.SlotInChargeModule;
-import slimeknights.tconstruct.library.modifiers.modules.unserializable.SlotInChargeModule.SlotInCharge;
+import slimeknights.tconstruct.library.modifiers.modules.technical.SlotInChargeModule;
+import slimeknights.tconstruct.library.modifiers.modules.technical.SlotInChargeModule.SlotInCharge;
 import slimeknights.tconstruct.library.module.ModuleHookMap.Builder;
 import slimeknights.tconstruct.library.tools.capability.TinkerDataCapability.TinkerDataKey;
 import slimeknights.tconstruct.library.tools.context.EquipmentContext;

@@ -35,6 +35,7 @@ public class ModifierIds {
   public static final ModifierId reach = id("reach");
 
   // harvest
+  public static final ModifierId haste = id("haste");
   public static final ModifierId blasting = id("blasting");
   public static final ModifierId hydraulic = id("hydraulic");
   public static final ModifierId lightspeed = id("lightspeed");
@@ -66,6 +67,8 @@ public class ModifierIds {
   public static final ModifierId turtleShell = id("turtle_shell");
   public static final ModifierId wings = id("wings");
   public static final ModifierId knockbackResistance = id("knockback_resistance");
+  // counter
+  public static final ModifierId ricochet = id("ricochet");
   // defense
   public static final ModifierId revitalizing = id("revitalizing");
   // helmet
@@ -78,6 +81,7 @@ public class ModifierIds {
   public static final ModifierId stepUp = id("step_up");
   public static final ModifierId speedy = id("speedy");
   public static final ModifierId toolBelt = id("tool_belt");
+  public static final ModifierId leaping = id("leaping");
   // boots
   public static final ModifierId depthStrider = id("depth_strider");
   public static final ModifierId featherFalling = id("feather_falling");
@@ -86,6 +90,9 @@ public class ModifierIds {
   public static final ModifierId pathMaker = id("path_maker");
   public static final ModifierId plowing = id("plowing");
   public static final ModifierId snowdrift = id("snowdrift");
+  // shield
+  public static final ModifierId boundless = id("boundless");
+
 
   // interaction
   public static final ModifierId pathing = id("pathing");

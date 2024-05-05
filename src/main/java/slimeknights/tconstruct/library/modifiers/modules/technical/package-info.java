@@ -1,6 +1,6 @@
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-package slimeknights.tconstruct.library.modifiers.modules.unserializable;
+package slimeknights.tconstruct.library.modifiers.modules.technical;
 
 import net.minecraft.MethodsReturnNonnullByDefault;
 

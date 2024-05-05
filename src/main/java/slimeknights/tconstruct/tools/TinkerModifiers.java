@@ -30,7 +30,6 @@ import slimeknights.mantle.registration.object.ItemObject;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.TinkerEffect;
 import slimeknights.tconstruct.common.TinkerModule;
-import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.common.data.tags.ModifierTagProvider;
 import slimeknights.tconstruct.library.json.predicate.modifier.ModifierPredicate;
 import slimeknights.tconstruct.library.json.predicate.modifier.SingleModifierPredicate;
@@ -74,7 +73,6 @@ import slimeknights.tconstruct.library.modifiers.fluid.entity.MobEffectFluidEffe
 import slimeknights.tconstruct.library.modifiers.fluid.entity.PotionFluidEffect;
 import slimeknights.tconstruct.library.modifiers.fluid.entity.RemoveEffectFluidEffect;
 import slimeknights.tconstruct.library.modifiers.fluid.entity.RestoreHungerFluidEffect;
-import slimeknights.tconstruct.library.modifiers.impl.BasicModifier;
 import slimeknights.tconstruct.library.modifiers.impl.SingleLevelModifier;
 import slimeknights.tconstruct.library.modifiers.modules.ModifierModule;
 import slimeknights.tconstruct.library.modifiers.modules.armor.BlockDamageSourceModule;
@@ -109,13 +107,13 @@ import slimeknights.tconstruct.library.modifiers.modules.display.DurabilityBarCo
 import slimeknights.tconstruct.library.modifiers.modules.fluid.TankCapacityModule;
 import slimeknights.tconstruct.library.modifiers.modules.fluid.TankModule;
 import slimeknights.tconstruct.library.modifiers.modules.mining.ConditionalMiningSpeedModule;
-import slimeknights.tconstruct.library.modifiers.modules.unserializable.ArmorStatModule;
+import slimeknights.tconstruct.library.modifiers.modules.technical.ArmorLevelModule;
+import slimeknights.tconstruct.library.modifiers.modules.technical.ArmorStatModule;
 import slimeknights.tconstruct.library.modifiers.util.DynamicModifier;
 import slimeknights.tconstruct.library.modifiers.util.ModifierDeferredRegister;
 import slimeknights.tconstruct.library.modifiers.util.ModifierLevelDisplay;
 import slimeknights.tconstruct.library.modifiers.util.ModifierLevelDisplay.UniqueForLevels;
 import slimeknights.tconstruct.library.modifiers.util.StaticModifier;
-import slimeknights.tconstruct.library.module.ModuleHookMap;
 import slimeknights.tconstruct.library.recipe.modifiers.ModifierSalvage;
 import slimeknights.tconstruct.library.recipe.modifiers.adding.IncrementalModifierRecipe;
 import slimeknights.tconstruct.library.recipe.modifiers.adding.ModifierRecipe;
@@ -234,9 +232,7 @@ import slimeknights.tconstruct.tools.modifiers.traits.skull.SelfDestructiveModif
 import slimeknights.tconstruct.tools.modifiers.traits.skull.StrongBonesModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.skull.WildfireModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.skull.WitheredModifier;
-import slimeknights.tconstruct.tools.modifiers.upgrades.armor.HasteModifier;
 import slimeknights.tconstruct.tools.modifiers.upgrades.armor.ItemFrameModifier;
-import slimeknights.tconstruct.tools.modifiers.upgrades.armor.LeapingModifier;
 import slimeknights.tconstruct.tools.modifiers.upgrades.armor.LightspeedArmorModifier;
 import slimeknights.tconstruct.tools.modifiers.upgrades.armor.SoulSpeedModifier;
 import slimeknights.tconstruct.tools.modifiers.upgrades.armor.SpringyModifier;
@@ -281,6 +277,7 @@ public final class TinkerModifiers extends TinkerModule {
     DynamicModifier.init();
     FluidEffectManager.INSTANCE.init();
     MODIFIERS.register(FMLJavaModLoadingContext.get().getModEventBus());
+    TinkerDataKeys.init();
   }
 
   /*
@@ -325,9 +322,6 @@ public final class TinkerModifiers extends TinkerModule {
   public static final StaticModifier<FarsightedModifier> farsighted = MODIFIERS.register("farsighted", FarsightedModifier::new);
   public static final StaticModifier<NearsightedModifier> nearsighted = MODIFIERS.register("nearsighted", NearsightedModifier::new);
 
-  // harvest
-  public static final StaticModifier<HasteModifier> haste = MODIFIERS.register("haste", HasteModifier::new);
-
   // weapon
   public static final DynamicModifier<Modifier> knockback = MODIFIERS.registerDynamic("knockback");
   public static final DynamicModifier<Modifier> padded = MODIFIERS.registerDynamic("padded");
@@ -360,10 +354,8 @@ public final class TinkerModifiers extends TinkerModule {
   public static final StaticModifier<DragonbornModifier> dragonborn = MODIFIERS.register("dragonborn", DragonbornModifier::new);
   // general
   public static final DynamicModifier<Modifier> golden = MODIFIERS.registerDynamic("golden", Modifier.class);
-  public static final StaticModifier<Modifier> ricochet = MODIFIERS.register("ricochet", () -> ModuleHookMap.builder().addModule(new ArmorStatModule(TinkerDataKeys.KNOCKBACK, 0.2f, false, null)).modifier().build());
   public static final StaticModifier<EmbellishmentModifier> embellishment = MODIFIERS.register("embellishment", EmbellishmentModifier::new);
   public static final StaticModifier<DyedModifier> dyed = MODIFIERS.register("dyed", DyedModifier::new);
-  public static final StaticModifier<BasicModifier> boundless = MODIFIERS.register("boundless", () -> ModuleHookMap.builder().addModule(new ArmorStatModule(TinkerDataKeys.PROTECTION_CAP, 2.5f, true, TinkerTags.Items.HELD_ARMOR)).modifier().levelDisplay(ModifierLevelDisplay.SINGLE_LEVEL).build());
   // counterattack
   public static final StaticModifier<ThornsModifier> thorns = MODIFIERS.register("thorns", ThornsModifier::new);
   public static final StaticModifier<SpringyModifier> springy = MODIFIERS.register("springy", SpringyModifier::new);
@@ -374,7 +366,6 @@ public final class TinkerModifiers extends TinkerModule {
   // chestplate
   public static final StaticModifier<AmbidextrousModifier> ambidextrous = MODIFIERS.register("ambidextrous", AmbidextrousModifier::new);
   // leggings
-  public static final StaticModifier<LeapingModifier> leaping = MODIFIERS.register("leaping", LeapingModifier::new);
   public static final StaticModifier<ShieldStrapModifier> shieldStrap = MODIFIERS.register("shield_strap", ShieldStrapModifier::new);
   public static final StaticModifier<WettingModifier> wetting = MODIFIERS.register("wetting", WettingModifier::new);
 
@@ -635,6 +626,10 @@ public final class TinkerModifiers extends TinkerModule {
       // fluid
       ModifierModule.LOADER.register(getResource("tank_capacity"), TankCapacityModule.LOADER);
       ModifierModule.LOADER.register(getResource("tank"), TankModule.LOADER);
+      // technical
+      ModifierModule.LOADER.register(getResource("armor_level"), ArmorLevelModule.LOADER);
+      ModifierModule.LOADER.register(getResource("armor_stat"), ArmorStatModule.LOADER);
+
       // special
       ModifierModule.LOADER.register(getResource("the_one_probe"), TheOneProbeModule.INSTANCE.getLoader());
 

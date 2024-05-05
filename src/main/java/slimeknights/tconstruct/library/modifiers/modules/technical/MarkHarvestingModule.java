@@ -1,9 +1,9 @@
-package slimeknights.tconstruct.library.modifiers.modules.unserializable;
+package slimeknights.tconstruct.library.modifiers.modules.technical;
 
-import slimeknights.tconstruct.library.module.ModuleHook;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.hook.mining.BlockHarvestModifierHook;
 import slimeknights.tconstruct.library.module.HookProvider;
+import slimeknights.tconstruct.library.module.ModuleHook;
 
 import java.util.List;
 

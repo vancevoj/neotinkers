@@ -312,7 +312,7 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
      */
 
     // haste can use redstone or blocks
-    hasteRecipes(consumer, TinkerModifiers.haste.getId(), ingredientFromTags(TinkerTags.Items.HARVEST, TinkerTags.Items.CHESTPLATES), 5, upgradeFolder, upgradeSalvage);
+    hasteRecipes(consumer, ModifierIds.haste, ingredientFromTags(TinkerTags.Items.HARVEST, TinkerTags.Items.CHESTPLATES), 5, upgradeFolder, upgradeSalvage);
     IncrementalModifierRecipeBuilder.modifier(ModifierIds.blasting)
                                     .setTools(TinkerTags.Items.STONE_HARVEST)
                                     .setInput(Tags.Items.GUNPOWDER, 1, 20)
@@ -681,7 +681,7 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .setMaxLevel(1)
                          .saveSalvage(consumer, prefix(ModifierIds.protection, abilitySalvage))
                          .save(consumer, prefix(ModifierIds.protection, abilityFolder));
-    ModifierRecipeBuilder.modifier(TinkerModifiers.boundless)
+    ModifierRecipeBuilder.modifier(ModifierIds.boundless)
                          .addInput(TinkerCommons.obsidianPane, 4)
                          .addInput(Items.WRITABLE_BOOK)
                          .addInput(TinkerCommons.obsidianPane, 4)
@@ -690,8 +690,8 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .setSlots(SlotType.ABILITY, 1)
                          .setTools(TinkerTags.Items.SHIELDS)
                          .setMaxLevel(1)
-                         .saveSalvage(consumer, prefix(TinkerModifiers.boundless, abilitySalvage))
-                         .save(consumer, prefix(TinkerModifiers.boundless, abilityFolder));
+                         .saveSalvage(consumer, prefix(ModifierIds.boundless, abilitySalvage))
+                         .save(consumer, prefix(ModifierIds.boundless, abilityFolder));
     ModifierRecipeBuilder.modifier(ModifierIds.knockbackResistance)
                          .setTools(TinkerTags.Items.ARMOR)
                          .addInput(SizedIngredient.fromItems(Blocks.ANVIL, Blocks.CHIPPED_ANVIL, Blocks.DAMAGED_ANVIL))
@@ -781,13 +781,13 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
     hasteRecipes(consumer, ModifierIds.speedy, Ingredient.of(TinkerTags.Items.LEGGINGS), 3, upgradeFolder, upgradeSalvage);
     // leaping lets you disable skyslime geodes in case you don't like fun
     // if you are disabling both, you have a ton of recipes to fix anyways
-    IncrementalModifierRecipeBuilder.modifier(TinkerModifiers.leaping)
+    IncrementalModifierRecipeBuilder.modifier(ModifierIds.leaping)
                                     .setTools(TinkerTags.Items.LEGGINGS)
                                     .setInput(TinkerWorld.skyGeode.asItem(), 1, 36)
                                     .setMaxLevel(2)
                                     .setSlots(SlotType.UPGRADE, 1)
-                                    .saveSalvage(consumer, prefix(TinkerModifiers.leaping, upgradeSalvage))
-                                    .save(consumer, prefix(TinkerModifiers.leaping, upgradeFolder));
+                                    .saveSalvage(consumer, prefix(ModifierIds.leaping, upgradeSalvage))
+                                    .save(consumer, prefix(ModifierIds.leaping, upgradeFolder));
     ModifierRecipeBuilder.modifier(ModifierIds.stepUp)
                          .setTools(TinkerTags.Items.LEGGINGS)
                          .addInput(Items.LEATHER)
@@ -842,14 +842,14 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                                     .disallowCrystal()
                                     .save(consumer, wrap(TinkerModifiers.lightspeedArmor, upgradeFolder, "_from_block"));
     // upgrade - all
-    ModifierRecipeBuilder.modifier(TinkerModifiers.ricochet)
+    ModifierRecipeBuilder.modifier(ModifierIds.ricochet)
                          .setTools(wornOrShield)
                          .addInput(Items.PISTON)
                          .addInput(TinkerWorld.slime.get(SlimeType.SKY))
                          .setSlots(SlotType.UPGRADE, 1)
                          .setMaxLevel(2) // 2 per piece gives +160% total
-                         .saveSalvage(consumer, prefix(TinkerModifiers.ricochet, upgradeSalvage))
-                         .save(consumer, prefix(TinkerModifiers.ricochet, upgradeFolder));
+                         .saveSalvage(consumer, prefix(ModifierIds.ricochet, upgradeSalvage))
+                         .save(consumer, prefix(ModifierIds.ricochet, upgradeFolder));
 
     // armor ability
     // helmet

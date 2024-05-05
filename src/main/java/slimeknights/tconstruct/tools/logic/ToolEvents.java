@@ -53,10 +53,11 @@ import slimeknights.tconstruct.library.modifiers.hook.armor.ModifyDamageModifier
 import slimeknights.tconstruct.library.modifiers.hook.armor.OnAttackedModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.armor.ProtectionModifierHook;
 import slimeknights.tconstruct.library.modifiers.modules.armor.MobDisguiseModule;
-import slimeknights.tconstruct.library.modifiers.modules.unserializable.ArmorStatModule;
+import slimeknights.tconstruct.library.modifiers.modules.technical.ArmorStatModule;
 import slimeknights.tconstruct.library.tools.capability.EntityModifierCapability;
 import slimeknights.tconstruct.library.tools.capability.PersistentDataCapability;
 import slimeknights.tconstruct.library.tools.capability.TinkerDataCapability;
+import slimeknights.tconstruct.library.tools.capability.TinkerDataKeys;
 import slimeknights.tconstruct.library.tools.context.EquipmentContext;
 import slimeknights.tconstruct.library.tools.definition.ModifiableArmorMaterial;
 import slimeknights.tconstruct.library.tools.helper.ArmorUtil;
@@ -69,7 +70,6 @@ import slimeknights.tconstruct.library.tools.nbt.NamespacedNBT;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.library.utils.BlockSideHitListener;
 import slimeknights.tconstruct.tools.TinkerModifiers;
-import slimeknights.tconstruct.tools.modifiers.upgrades.armor.HasteModifier;
 
 import java.util.List;
 import java.util.Objects;
@@ -107,7 +107,7 @@ public class ToolEvents {
     }
 
     // next, add in armor haste
-    float armorHaste = ArmorStatModule.getStat(player, HasteModifier.HASTE);
+    float armorHaste = ArmorStatModule.getStat(player, TinkerDataKeys.HASTE);
     if (armorHaste > 0) {
       // adds in 10% per level
       event.setNewSpeed(event.getNewSpeed() * (1 + armorHaste));

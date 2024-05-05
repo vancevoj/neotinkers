@@ -283,7 +283,7 @@ public class AdvancementsProvider extends GenericDataProvider {
       with.accept(ModifierIds.plowing);
       with.accept(ModifierIds.snowdrift);
       // shield
-      withL.accept(TinkerModifiers.boundless);
+      with.accept(ModifierIds.boundless);
       withL.accept(TinkerModifiers.reflecting);
       // harvest
       withL.accept(TinkerModifiers.autosmelt);

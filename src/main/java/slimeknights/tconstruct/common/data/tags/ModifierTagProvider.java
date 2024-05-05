@@ -101,14 +101,14 @@ public class ModifierTagProvider extends AbstractModifierTagProvider {
       ModifierIds.sharpness, ModifierIds.pierce, ModifierIds.swiftstrike,
       ModifierIds.antiaquatic, ModifierIds.baneOfSssss, ModifierIds.cooling, ModifierIds.killager, ModifierIds.smite);
 
-    this.tag(HARVEST_UPGRADES).add(TinkerModifiers.haste.getId(), ModifierIds.blasting, ModifierIds.hydraulic, ModifierIds.lightspeed);
+    this.tag(HARVEST_UPGRADES).add(ModifierIds.haste, ModifierIds.blasting, ModifierIds.hydraulic, ModifierIds.lightspeed);
 
     this.tag(GENERAL_ARMOR_UPGRADES).add(
       TinkerModifiers.fiery.getId(), TinkerModifiers.freezing.getId(), TinkerModifiers.thorns.getId(),
-      TinkerModifiers.ricochet.getId(), TinkerModifiers.springy.getId());
+      ModifierIds.ricochet, TinkerModifiers.springy.getId());
     this.tag(HELMET_UPGRADES).add(TinkerModifiers.itemFrame.getId(), ModifierIds.respiration);
-    this.tag(CHESTPLATE_UPGRADES).add(TinkerModifiers.haste.getId(), TinkerModifiers.knockback.getId());
-    this.tag(LEGGING_UPGRADES).add(TinkerModifiers.leaping.getId(), TinkerModifiers.shieldStrap.getId(), ModifierIds.speedy, ModifierIds.stepUp);
+    this.tag(CHESTPLATE_UPGRADES).add(ModifierIds.haste, TinkerModifiers.knockback.getId());
+    this.tag(LEGGING_UPGRADES).add(ModifierIds.leaping, TinkerModifiers.shieldStrap.getId(), ModifierIds.speedy, ModifierIds.stepUp);
     this.tag(BOOT_UPGRADES).add(ModifierIds.depthStrider, ModifierIds.featherFalling, TinkerModifiers.lightspeedArmor.getId(), TinkerModifiers.soulspeed.getId());
 
     this.tag(RANGED_UPGRADES).add(
@@ -141,7 +141,7 @@ public class ModifierTagProvider extends AbstractModifierTagProvider {
     this.tag(BOOT_ABILITIES).add(
       TinkerModifiers.bouncy.getId(), TinkerModifiers.doubleJump.getId(), ModifierIds.longFall,
       TinkerModifiers.flamewake.getId(), ModifierIds.snowdrift, ModifierIds.plowing, ModifierIds.pathMaker, ModifierIds.frostWalker);
-    this.tag(SHIELD_ABILITIES).add(TinkerModifiers.boundless.getId(), TinkerModifiers.reflecting.getId());
+    this.tag(SHIELD_ABILITIES).add(ModifierIds.boundless, TinkerModifiers.reflecting.getId());
 
     // defense
     this.tag(PROTECTION_DEFENSE).add(

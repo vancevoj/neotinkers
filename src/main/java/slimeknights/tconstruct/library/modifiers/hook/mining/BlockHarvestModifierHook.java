@@ -54,7 +54,7 @@ public interface BlockHarvestModifierHook {
   /**
    * Implementation that simply marks we are harvesting in the tools persistent data.
    * Not a problem if multiple modifiers use the default impl as it just sets the flag and clears it multiple times.
-   * @see slimeknights.tconstruct.library.modifiers.modules.unserializable.MarkHarvestingModule
+   * @see slimeknights.tconstruct.library.modifiers.modules.technical.MarkHarvestingModule
    */
   interface MarkHarvesting extends BlockHarvestModifierHook {
     /** Flag marking we are currently harvesting. Will be shared by all usages of this hook as its not a problem if its set/removed multiple times. */

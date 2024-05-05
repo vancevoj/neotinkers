@@ -2313,7 +2313,6 @@
 
 
   "__comment": "Tier 1 Traits",
-  "modifier.tconstruct.fake_attribute.mining_speed": "Mining Speed",
 
   "modifier.tconstruct.cultivated": "Cultivated",
   "modifier.tconstruct.cultivated.flavor": "Economical!",
@@ -2702,6 +2701,8 @@
   "stat.tconstruct.slot.display.abilities": "ability",
   "stat.tconstruct.slot.display.souls": "soul",
   "stat.tconstruct.slot.display.defense": "defense",
+
+  "armor_stat.tconstruct.haste": "Mining Speed",
 
 
   "_comment": "Tooltips",

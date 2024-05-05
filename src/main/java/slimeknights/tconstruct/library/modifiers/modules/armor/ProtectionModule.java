@@ -31,7 +31,7 @@ import slimeknights.tconstruct.library.tools.capability.TinkerDataCapability;
 import slimeknights.tconstruct.library.tools.context.EquipmentContext;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.utils.Util;
-import slimeknights.tconstruct.tools.TinkerModifiers;
+import slimeknights.tconstruct.tools.data.ModifierIds;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -72,7 +72,7 @@ public record ProtectionModule(IJsonPredicate<DamageSource> source, IJsonPredica
     if (player != null) {
       cap = ProtectionModifierHook.getProtectionCap(player.getCapability(TinkerDataCapability.CAPABILITY));
     } else {
-      cap = Math.min(20f + tool.getModifierLevel(TinkerModifiers.boundless.getId()) * 2.5f, 20 * 0.95f);
+      cap = Math.min(20f + tool.getModifierLevel(ModifierIds.boundless) * 2.5f, 20 * 0.95f);
     }
     tooltip.add(modifier.applyStyle(
       Component.literal(Util.PERCENT_BOOST_FORMAT.format(Math.min(amount, cap) / 25f))

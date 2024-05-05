@@ -1,4 +1,4 @@
-package slimeknights.tconstruct.library.modifiers.modules.unserializable;
+package slimeknights.tconstruct.library.modifiers.modules.technical;
 
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -6,13 +6,18 @@ import net.minecraft.world.entity.EquipmentSlot.Type;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.common.util.LazyOptional;
+import slimeknights.mantle.data.loadable.Loadables;
+import slimeknights.mantle.data.loadable.primitive.BooleanLoadable;
+import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.hook.armor.EquipmentChangeModifierHook;
+import slimeknights.tconstruct.library.modifiers.modules.ModifierModule;
 import slimeknights.tconstruct.library.module.HookProvider;
 import slimeknights.tconstruct.library.module.ModuleHook;
 import slimeknights.tconstruct.library.tools.capability.TinkerDataCapability;
 import slimeknights.tconstruct.library.tools.capability.TinkerDataCapability.TinkerDataKey;
+import slimeknights.tconstruct.library.tools.capability.TinkerDataKeys;
 import slimeknights.tconstruct.library.tools.context.EquipmentChangeContext;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 
@@ -25,8 +30,18 @@ import java.util.List;
  * @see TinkerDataKey
  * @see slimeknights.tconstruct.library.modifiers.modules.behavior.ShowOffhandModule
  */
-public record ArmorLevelModule(TinkerDataKey<Integer> key, boolean allowBroken, @Nullable TagKey<Item> heldTag) implements HookProvider, EquipmentChangeModifierHook {
+public record ArmorLevelModule(TinkerDataKey<Integer> key, boolean allowBroken, @Nullable TagKey<Item> heldTag) implements HookProvider, EquipmentChangeModifierHook, ModifierModule {
   private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<ArmorLevelModule>defaultHooks(ModifierHooks.EQUIPMENT_CHANGE);
+  public static final RecordLoadable<ArmorLevelModule> LOADER = RecordLoadable.create(
+    TinkerDataKeys.INTEGER_REGISTRY.requiredField("key", ArmorLevelModule::key),
+    BooleanLoadable.INSTANCE.defaultField("allow_broken", false, ArmorLevelModule::allowBroken),
+    Loadables.ITEM_TAG.nullableField("held_tag", ArmorLevelModule::heldTag),
+    ArmorLevelModule::new);
+
+  @Override
+  public RecordLoadable<ArmorLevelModule> getLoader() {
+    return LOADER;
+  }
 
   @Override
   public List<ModuleHook<?>> getDefaultHooks() {

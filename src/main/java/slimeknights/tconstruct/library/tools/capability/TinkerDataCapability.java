@@ -1,5 +1,6 @@
 package slimeknights.tconstruct.library.tools.capability;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
@@ -15,6 +16,7 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import slimeknights.mantle.registration.object.IdAwareObject;
 import slimeknights.tconstruct.TConstruct;
 
 import javax.annotation.Nonnull;
@@ -85,13 +87,14 @@ public class TinkerDataCapability {
   /** Class for generic keys */
   @SuppressWarnings("unused")
   @RequiredArgsConstructor(staticName = "of")
-  public static class TinkerDataKey<T> {
+  public static class TinkerDataKey<T> implements IdAwareObject {
     /** Name for debug */
-    private final ResourceLocation name;
+    @Getter
+    private final ResourceLocation id;
 
     @Override
     public String toString() {
-      return "TinkerDataKey{" + name + '}';
+      return "TinkerDataKey{" + id + '}';
     }
   }
 

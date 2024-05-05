@@ -1,0 +1,13 @@
+{
+  "type": "tconstruct:composable",
+  "level_display": "tconstruct:default",
+  "modules": [
+    {
+      "type": "tconstruct:armor_stat",
+      "allow_broken": false,
+      "each_level": 0.2,
+      "key": "tconstruct:knockback"
+    }
+  ],
+  "tooltip_display": "always"
+}

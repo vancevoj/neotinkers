@@ -86,10 +86,14 @@ import slimeknights.tconstruct.library.modifiers.modules.combat.MobEffectModule;
 import slimeknights.tconstruct.library.modifiers.modules.display.DurabilityBarColorModule;
 import slimeknights.tconstruct.library.modifiers.modules.fluid.TankModule;
 import slimeknights.tconstruct.library.modifiers.modules.mining.ConditionalMiningSpeedModule;
+import slimeknights.tconstruct.library.modifiers.modules.technical.ArmorLevelModule;
+import slimeknights.tconstruct.library.modifiers.modules.technical.ArmorStatModule;
+import slimeknights.tconstruct.library.modifiers.modules.technical.ArmorStatModule.TooltipStyle;
 import slimeknights.tconstruct.library.modifiers.modules.util.ModifierCondition;
 import slimeknights.tconstruct.library.modifiers.util.ModifierLevelDisplay;
 import slimeknights.tconstruct.library.modifiers.util.ModifierLevelDisplay.UniqueForLevels;
 import slimeknights.tconstruct.library.tools.SlotType;
+import slimeknights.tconstruct.library.tools.capability.TinkerDataKeys;
 import slimeknights.tconstruct.library.tools.item.IModifiable;
 import slimeknights.tconstruct.library.tools.item.ModifiableArmorItem;
 import slimeknights.tconstruct.library.tools.nbt.IToolContext;
@@ -209,6 +213,10 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
     buildModifier(ModifierIds.overforced).addModule(StatBoostModule.add(OverslimeModifier.OVERSLIME_STAT).eachLevel(75));
 
     // harvest
+    buildModifier(ModifierIds.haste)
+      .levelDisplay(new UniqueForLevels(5))
+      .addModule(StatBoostModule.add(ToolStats.MINING_SPEED).eachLevel(4))
+      .addModule(ArmorStatModule.builder(TinkerDataKeys.HASTE).tooltipStyle(TooltipStyle.PERCENT).toolItem(ItemPredicate.tag(TinkerTags.Items.ARMOR)).eachLevel(0.1f));
     buildModifier(ModifierIds.blasting).addModule(
       ConditionalMiningSpeedModule.builder()
         .customVariable("resistance", new BlockMiningSpeedVariable(BlockVariable.BLAST_RESISTANCE, 3))
@@ -311,6 +319,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
     buildModifier(TinkerModifiers.golden).addModule(new VolatileFlagModule(ModifiableArmorItem.PIGLIN_NEUTRAL)).levelDisplay(ModifierLevelDisplay.NO_LEVELS);
     buildModifier(ModifierIds.wings).addModule(new VolatileFlagModule(ModifiableArmorItem.ELYTRA)).levelDisplay(ModifierLevelDisplay.NO_LEVELS);
     buildModifier(ModifierIds.knockbackResistance).addModule(StatBoostModule.add(ToolStats.KNOCKBACK_RESISTANCE).eachLevel(0.1f));
+    buildModifier(ModifierIds.ricochet).addModule(ArmorStatModule.builder(TinkerDataKeys.KNOCKBACK).eachLevel(0.2f));
 
     // defense
     // TODO: floor?
@@ -338,6 +347,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
     addModifier(ModifierIds.toolBelt, new ToolBeltModifier(new int[] {4, 5, 6, 7, 8, 9}));
     buildModifier(ModifierIds.stepUp).addModule(AttributeModule.builder(ForgeMod.STEP_HEIGHT_ADDITION.get(), Operation.ADDITION).uniqueFrom(ModifierIds.stepUp).slots(armorSlots).eachLevel(0.5f));
     buildModifier(ModifierIds.speedy).addModule(AttributeModule.builder(Attributes.MOVEMENT_SPEED, Operation.MULTIPLY_TOTAL).uniqueFrom(ModifierIds.speedy).slots(armorMainHand).eachLevel(0.1f));
+    buildModifier(ModifierIds.leaping).addModule(ArmorStatModule.builder(TinkerDataKeys.JUMP_BOOST).eachLevel(1));
     // boots
     buildModifier(ModifierIds.depthStrider).addModule(EnchantmentModule.builder(Enchantments.DEPTH_STRIDER).constant());
     buildModifier(ModifierIds.featherFalling).addModule(ProtectionModule.source(DamageSourcePredicate.FALL).eachLevel(3.75f));
@@ -352,6 +362,10 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
     buildModifier(ModifierIds.pathMaker).levelDisplay(ModifierLevelDisplay.NO_LEVELS).addModule(ToolActionWalkerTransformModule.builder(ToolActions.SHOVEL_FLATTEN, SoundEvents.SHOVEL_FLATTEN).amount(0.5f, 1));
     buildModifier(ModifierIds.plowing).levelDisplay(ModifierLevelDisplay.NO_LEVELS).addModule(ToolActionWalkerTransformModule.builder(ToolActions.HOE_TILL, SoundEvents.HOE_TILL).amount(0.5f, 1));
     buildModifier(ModifierIds.snowdrift).priority(90).levelDisplay(ModifierLevelDisplay.NO_LEVELS).addModule(CoverGroundWalkerModule.block(Blocks.SNOW).amount(0.5f, 1));
+    // shield
+    buildModifier(ModifierIds.boundless)
+      .levelDisplay(ModifierLevelDisplay.SINGLE_LEVEL)
+      .addModule(ArmorStatModule.builder(TinkerDataKeys.PROTECTION_CAP).allowBroken().heldTag(TinkerTags.Items.HELD_ARMOR).eachLevel(2.5f));
 
     // interaction
     buildModifier(ModifierIds.pathing)

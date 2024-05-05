@@ -1,10 +1,14 @@
 package slimeknights.tconstruct.tools.logic;
 
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
+import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.event.entity.living.LivingKnockBackEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import slimeknights.tconstruct.TConstruct;
+import slimeknights.tconstruct.library.modifiers.modules.technical.ArmorStatModule;
 import slimeknights.tconstruct.library.tools.capability.TinkerDataCapability;
 import slimeknights.tconstruct.library.tools.capability.TinkerDataKeys;
 import slimeknights.tconstruct.tools.modifiers.traits.ranged.CrystalboundModifier;
@@ -26,5 +30,25 @@ public class ModifierEvents {
         CrystalboundModifier.onKnockback(event, crystalbound);
       }
     });
+  }
+
+  /** Reduce fall distance for fall damage */
+  @SubscribeEvent
+  static void onLivingFall(LivingFallEvent event) {
+    LivingEntity entity = event.getEntity();
+    float boost = ArmorStatModule.getStat(entity, TinkerDataKeys.JUMP_BOOST);
+    if (boost > 0) {
+      event.setDistance(Math.max(event.getDistance() - boost, 0));
+    }
+  }
+
+  /** Called on jumping to boost the jump height of the entity */
+  @SubscribeEvent
+  public static void onLivingJump(LivingJumpEvent event) {
+    LivingEntity entity = event.getEntity();
+    float boost = ArmorStatModule.getStat(entity, TinkerDataKeys.JUMP_BOOST);
+    if (boost > 0) {
+      entity.setDeltaMovement(entity.getDeltaMovement().add(0, boost * 0.1, 0));
+    }
   }
 }

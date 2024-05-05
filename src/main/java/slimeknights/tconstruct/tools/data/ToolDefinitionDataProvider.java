@@ -615,7 +615,7 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
         .trait(TinkerModifiers.shulking, 1).build())
       .module(ArmorSlotType.BOOTS, slimeTraits.copy()
         .trait(TinkerModifiers.bouncy)
-        .trait(TinkerModifiers.leaping, 1).build());
+        .trait(ModifierIds.leaping, 1).build());
   }
 
   @Override

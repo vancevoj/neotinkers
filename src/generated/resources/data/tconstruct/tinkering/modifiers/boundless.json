@@ -1,0 +1,14 @@
+{
+  "type": "tconstruct:composable",
+  "level_display": "tconstruct:single_level",
+  "modules": [
+    {
+      "type": "tconstruct:armor_stat",
+      "allow_broken": true,
+      "each_level": 2.5,
+      "held_tag": "tconstruct:modifiable/armor/held",
+      "key": "tconstruct:protection_cap"
+    }
+  ],
+  "tooltip_display": "always"
+}
