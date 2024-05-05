@@ -65,7 +65,7 @@ public class MaterialArmorModel extends Model {
       // render all material layers
       if (ArmorModelHelper.buffer != null){
         for (int i = 0; i < expectedMaterials; i++) {
-          ResourceLocation texture = getArmorTexture(materials.getMaterial(i), isLegs ? "leggings" : "armor", i+1);
+          ResourceLocation texture = getArmorTexture(materials.getMaterial(i), isLegs ? "leggings" : "armor", i);
           VertexConsumer overlayBuffer = ItemRenderer.getArmorFoilBuffer(ArmorModelHelper.buffer, ArmorModelHelper.getRenderType(texture), false, hasGlint);
           base.renderToBuffer(matrices, overlayBuffer, packedLightIn, packedOverlayIn, red, green, blue, alpha);
         }

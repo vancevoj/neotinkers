@@ -38,22 +38,22 @@
     },
     {
       "allow_animated": false,
+      "path": "tconstruct:models/armor/plate/armor_0",
+      "stat_type": "tconstruct:armor_plating"
+    },
+    {
+      "allow_animated": false,
+      "path": "tconstruct:models/armor/plate/leggings_0",
+      "stat_type": "tconstruct:armor_plating"
+    },
+    {
+      "allow_animated": false,
       "path": "tconstruct:models/armor/plate/armor_1",
-      "stat_type": "tconstruct:armor_plating"
-    },
-    {
-      "allow_animated": false,
-      "path": "tconstruct:models/armor/plate/leggings_1",
-      "stat_type": "tconstruct:armor_plating"
-    },
-    {
-      "allow_animated": false,
-      "path": "tconstruct:models/armor/plate/armor_2",
       "stat_type": "tconstruct:armor_maille"
     },
     {
       "allow_animated": false,
-      "path": "tconstruct:models/armor/plate/leggings_2",
+      "path": "tconstruct:models/armor/plate/leggings_1",
       "stat_type": "tconstruct:armor_maille"
     },
     {

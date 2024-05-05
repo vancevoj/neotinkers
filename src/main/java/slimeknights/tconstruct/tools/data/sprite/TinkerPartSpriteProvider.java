@@ -48,10 +48,10 @@ public class TinkerPartSpriteProvider extends AbstractPartSpriteProvider {
         .addBreakablePart("plating", PlatingMaterialStats.TYPES.get(slot.getIndex()).getId())
         .addBreakablePart("maille", StatlessMaterialStats.MAILLE.getIdentifier());
     }
-    addTexture("models/armor/plate/armor_1", ARMOR_PLATING, false);
-    addTexture("models/armor/plate/leggings_1", ARMOR_PLATING, false);
-    addTexture("models/armor/plate/armor_2", ARMOR_MAILLE, false);
-    addTexture("models/armor/plate/leggings_2", ARMOR_MAILLE, false);
+    addTexture("models/armor/plate/armor_0", ARMOR_PLATING, false);
+    addTexture("models/armor/plate/leggings_0", ARMOR_PLATING, false);
+    addTexture("models/armor/plate/armor_1", ARMOR_MAILLE, false);
+    addTexture("models/armor/plate/leggings_1", ARMOR_MAILLE, false);
     buildTool("armor/plate/shield")
       .addBreakablePart("plating", PlatingMaterialStats.SHIELD.getId())
       .addBreakablePart("core", StatlessMaterialStats.SHIELD_CORE.getIdentifier())
