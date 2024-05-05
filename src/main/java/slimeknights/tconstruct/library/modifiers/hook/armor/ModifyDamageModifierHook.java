@@ -2,13 +2,10 @@ package slimeknights.tconstruct.library.modifiers.hook.armor;
 
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.module.ModuleHook;
 import slimeknights.tconstruct.library.tools.context.EquipmentContext;
-import slimeknights.tconstruct.library.tools.definition.ModifiableArmorMaterial;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
-import slimeknights.tconstruct.library.utils.Util;
 
 import java.util.Collection;
 
@@ -50,20 +47,6 @@ public interface ModifyDamageModifierHook {
     }
   }
 
-  /** Internal logic for {@link #modifyDamageTaken(ModuleHook, EquipmentContext, DamageSource, float, boolean)} */
-  private static float modifyDamageTaken(ModuleHook<ModifyDamageModifierHook> hook, EquipmentContext context, DamageSource source, float amount, boolean isDirectDamage, EquipmentSlot slotType) {
-    IToolStackView toolStack = context.getToolInSlot(slotType);
-    if (toolStack != null && !toolStack.isBroken()) {
-      for (ModifierEntry entry : toolStack.getModifierList()) {
-        amount = entry.getHook(hook).modifyDamageTaken(toolStack, entry, context, slotType, source, amount, isDirectDamage);
-        if (amount < 0) {
-          return 0;
-        }
-      }
-    }
-    return amount;
-  }
-
   /**
 	 * Allows modifiers to respond to the entity being attacked
    * @param hook            Hook to use
@@ -73,17 +56,16 @@ public interface ModifyDamageModifierHook {
    * @param isDirectDamage  If true, the damage source is applying directly
    */
   static float modifyDamageTaken(ModuleHook<ModifyDamageModifierHook> hook, EquipmentContext context, DamageSource source, float amount, boolean isDirectDamage) {
-    // first we need to determine if any of the four slots want to cancel the event, then we need to determine if any want to respond assuming its not canceled
-    for (EquipmentSlot slotType : ModifiableArmorMaterial.ARMOR_SLOTS) {
-      amount = modifyDamageTaken(hook, context, source, amount, isDirectDamage, slotType);
-      if (amount <= 0) {
-        return 0;
+    for (EquipmentSlot slotType : EquipmentSlot.values()) {
+      IToolStackView toolStack = context.getToolInSlot(slotType);
+      if (toolStack != null && !toolStack.isBroken()) {
+        for (ModifierEntry entry : toolStack.getModifierList()) {
+          amount = entry.getHook(hook).modifyDamageTaken(toolStack, entry, context, slotType, source, amount, isDirectDamage);
+          if (amount < 0) {
+            return 0;
+          }
+        }
       }
-    }
-    // shields only run this hook when blocking
-    LivingEntity entity = context.getEntity();
-    if (entity.isBlocking()) {
-      amount = modifyDamageTaken(hook, context, source, amount, isDirectDamage, Util.getSlotType(entity.getUsedItemHand()));
     }
     return amount;
   }
