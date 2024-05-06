@@ -31,8 +31,8 @@ public interface TinkerDataKeys {
 	TinkerDataKey<Float> KNOCKBACK = floatKey("knockback");
   /** Jump height bonus in blocks */
   TinkerDataKey<Float> JUMP_BOOST = floatKey("jump_boost");
-  /** Player modifier data key for haste, represents an additive percentage boost on mining speed. */
-  TinkerDataKey<Float> HASTE = TConstruct.createKey("haste");
+  /** Player modifier data key for mining speed multiplier as an additive percentage boost on mining speed. Used for armor haste. */
+  TinkerDataKey<Float> MINING_SPEED = floatKey("mining_speed");
   /** Multiplier for experience drops from events */
   TinkerDataKey<Float> EXPERIENCE = floatKey("experience");
 

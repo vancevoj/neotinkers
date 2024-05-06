@@ -107,7 +107,7 @@ public class ToolEvents {
     }
 
     // next, add in armor haste
-    float armorHaste = ArmorStatModule.getStat(player, TinkerDataKeys.HASTE);
+    float armorHaste = ArmorStatModule.getStat(player, TinkerDataKeys.MINING_SPEED);
     if (armorHaste > 0) {
       // adds in 10% per level
       event.setNewSpeed(event.getNewSpeed() * (1 + armorHaste));

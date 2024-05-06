@@ -222,7 +222,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
     buildModifier(ModifierIds.haste)
       .levelDisplay(new UniqueForLevels(5))
       .addModule(StatBoostModule.add(ToolStats.MINING_SPEED).eachLevel(4))
-      .addModule(ArmorStatModule.builder(TinkerDataKeys.HASTE).tooltipStyle(TooltipStyle.PERCENT).toolItem(ItemPredicate.tag(TinkerTags.Items.ARMOR)).eachLevel(0.1f));
+      .addModule(ArmorStatModule.builder(TinkerDataKeys.MINING_SPEED).tooltipStyle(TooltipStyle.PERCENT).toolItem(ItemPredicate.tag(TinkerTags.Items.ARMOR)).eachLevel(0.1f));
     buildModifier(ModifierIds.blasting).addModule(
       ConditionalMiningSpeedModule.builder()
         .customVariable("resistance", new BlockMiningSpeedVariable(BlockVariable.BLAST_RESISTANCE, 3))
