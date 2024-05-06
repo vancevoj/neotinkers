@@ -83,7 +83,7 @@ public record ArmorStatModule(TinkerDataKey<Float> key, LevelingValue amount, bo
     if (condition.matches(tool, modifier) && (tool.hasTag(TinkerTags.Items.WORN_ARMOR) || heldTag != null && tool.hasTag(heldTag)) && (!tool.isBroken() || allowBroken)) {
       float value = amount.compute(modifier.getEffectiveLevel());
       if (value != 0) {
-        Component name = Component.literal(Util.makeTranslationKey("armor_stat", key.getId()));
+        Component name = Component.translatable(Util.makeTranslationKey("armor_stat", key.getId()));
         switch (tooltipStyle) {
           case BOOST -> TooltipModifierHook.addFlatBoost(modifier.getModifier(), name, value, tooltip);
           case PERCENT -> TooltipModifierHook.addPercentBoost(modifier.getModifier(), name, value, tooltip);
