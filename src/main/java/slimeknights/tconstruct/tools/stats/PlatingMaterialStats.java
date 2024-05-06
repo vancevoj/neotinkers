@@ -52,7 +52,7 @@ public record PlatingMaterialStats(MaterialStatType<?> getType, int durability, 
   public List<Component> getLocalizedInfo() {
     Component durability = ToolStats.DURABILITY.formatValue(this.durability);
     Component toughness = ToolStats.ARMOR_TOUGHNESS.formatValue(this.toughness);
-    Component knockbackResistance = ToolStats.KNOCKBACK_RESISTANCE.formatValue(this.knockbackResistance);
+    Component knockbackResistance = ToolStats.KNOCKBACK_RESISTANCE.formatValue(this.knockbackResistance * 10); // multiply by 10 as vanilla multiplies toughness by 10 for display
     if (getType == SHIELD) {
       return List.of(durability, toughness, knockbackResistance);
     }

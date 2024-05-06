@@ -148,7 +148,7 @@ public class ArmorMaterialContent extends AbstractMaterialContent {
       addStatLine(lineData, stats, ToolStats.DURABILITY, PlatingMaterialStats::durability);
       addStatLine(lineData, stats, ToolStats.ARMOR, PlatingMaterialStats::armor);
       addStatLine(lineData, stats, ToolStats.ARMOR_TOUGHNESS, PlatingMaterialStats::toughness);
-      addStatLine(lineData, stats, ToolStats.KNOCKBACK_RESISTANCE, PlatingMaterialStats::knockbackResistance);
+      addStatLine(lineData, stats, ToolStats.KNOCKBACK_RESISTANCE, stat -> stat.knockbackResistance() * 10);
       list.add(new TextComponentElement(x - 2, y, BookScreen.PAGE_WIDTH - 20, BookScreen.PAGE_HEIGHT, lineData));
       y += lineData.size() * 5;
     }
