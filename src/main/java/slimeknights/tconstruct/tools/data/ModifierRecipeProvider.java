@@ -259,15 +259,15 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
     /*
      * general effects
      */
-    ModifierRecipeBuilder.modifier(TinkerModifiers.experienced)
+    ModifierRecipeBuilder.modifier(ModifierIds.experienced)
                          .addInput(Items.EXPERIENCE_BOTTLE)
                          .addInput(Items.EXPERIENCE_BOTTLE)
                          .addInput(Items.EXPERIENCE_BOTTLE)
                          .setMaxLevel(5) // max +250%
                          .setSlots(SlotType.UPGRADE, 1)
                          .setTools(ingredientFromTags(TinkerTags.Items.MELEE, TinkerTags.Items.HARVEST, TinkerTags.Items.BOWS, TinkerTags.Items.LEGGINGS))
-                         .saveSalvage(consumer, prefix(TinkerModifiers.experienced, upgradeSalvage))
-                         .save(consumer, prefix(TinkerModifiers.experienced, upgradeFolder));
+                         .saveSalvage(consumer, prefix(ModifierIds.experienced, upgradeSalvage))
+                         .save(consumer, prefix(ModifierIds.experienced, upgradeFolder));
     ModifierRecipeBuilder.modifier(TinkerModifiers.magnetic)
                          .addInput(Items.COMPASS)
                          .setMaxLevel(5)

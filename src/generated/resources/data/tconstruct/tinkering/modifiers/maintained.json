@@ -61,6 +61,45 @@
           "stat": "tconstruct:durability"
         }
       }
+    },
+    {
+      "type": "tconstruct:attribute",
+      "attribute": "minecraft:generic.armor_toughness",
+      "formula": [
+        "$max_durability",
+        0.5,
+        "*",
+        "duplicate",
+        "$durability",
+        "!-",
+        "non-negative",
+        "!/",
+        "$level",
+        "*",
+        2.0,
+        "*"
+      ],
+      "operation": "addition",
+      "slots": [
+        "mainhand",
+        "offhand",
+        "feet",
+        "legs",
+        "chest",
+        "head"
+      ],
+      "tool": {
+        "type": "mantle:tag",
+        "tag": "tconstruct:modifiable/armor"
+      },
+      "unique": "tconstruct.modifier.maintained",
+      "variables": {
+        "durability": "tconstruct:tool_durability",
+        "max_durability": {
+          "type": "tconstruct:tool_stat",
+          "stat": "tconstruct:durability"
+        }
+      }
     }
   ],
   "tooltip_display": "always"

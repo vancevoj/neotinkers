@@ -48,7 +48,7 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     addTraits(MaterialIds.searedStone, ARMOR, ModifierIds.fireProtection);
     addDefaultTraits(MaterialIds.slimewood, TinkerModifiers.overgrowth, TinkerModifiers.overslime);
     addDefaultTraits(MaterialIds.venombone, ModifierIds.antitoxin);
-    addTraits(MaterialIds.aluminum, RANGED, ModifierIds.featherweight);
+    addDefaultTraits(MaterialIds.aluminum, ModifierIds.featherweight);
     // tier 2 - nether
     addDefaultTraits(MaterialIds.necroticBone, TinkerModifiers.necrotic);
     addDefaultTraits(MaterialIds.scorchedStone, ModifierIds.scorching);
@@ -96,13 +96,14 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     addDefaultTraits(MaterialIds.lead, ModifierIds.heavy);
     addTraits(MaterialIds.silver, MELEE_HARVEST, ModifierIds.smite);
     addTraits(MaterialIds.silver, RANGED, TinkerModifiers.holy);
+    addTraits(MaterialIds.silver, ARMOR, ModifierIds.consecrated);
     // tier 3 - mod compat
     addDefaultTraits(MaterialIds.steel, ModifierIds.ductile);
     addDefaultTraits(MaterialIds.bronze, ModifierIds.maintained);
     addDefaultTraits(MaterialIds.constantan, TinkerModifiers.temperate);
     addDefaultTraits(MaterialIds.invar, TinkerModifiers.invariant);
     addDefaultTraits(MaterialIds.necronium, TinkerModifiers.decay);
-    addDefaultTraits(MaterialIds.electrum, TinkerModifiers.experienced);
+    addDefaultTraits(MaterialIds.electrum, ModifierIds.experienced);
     addDefaultTraits(MaterialIds.platedSlimewood, TinkerModifiers.overworked, TinkerModifiers.overslime);
 
     // slimeskull

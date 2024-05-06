@@ -21,7 +21,7 @@ public class EnchantmentTagProvider extends TagsProvider<Enchantment> {
   @Override
   protected void addTags() {
     // upgrade
-    modifierTag(TinkerModifiers.experienced.getId(), "cyclic:experience_boost", "ensorcellation:exp_boost");
+    modifierTag(ModifierIds.experienced, "cyclic:experience_boost", "ensorcellation:exp_boost");
     modifierTag(ModifierIds.killager, "ensorcellation:damage_illager");
     modifierTag(TinkerModifiers.magnetic.getId(), "cyclic:magnet");
     modifierTag(TinkerModifiers.necrotic.getId(), "cyclic:life_leech", "ensorcellation:leech");

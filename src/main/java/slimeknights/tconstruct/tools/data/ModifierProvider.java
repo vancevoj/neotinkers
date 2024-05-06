@@ -277,6 +277,8 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
     buildModifier(ModifierIds.luck).levelDisplay(new UniqueForLevels(3)).addModules(CONSTANT_FORTUNE, ARMOR_FORTUNE, WEAPON_LOOTING, ARMOR_LOOTING);
     buildModifier(ModifierIds.fortune).addModules(CONSTANT_FORTUNE, ARMOR_FORTUNE);
     buildModifier(ModifierIds.looting).addModules(WEAPON_LOOTING, ARMOR_LOOTING);
+    // note that the held bonus is hardcoded to 50% based on this modifier ID
+    buildModifier(ModifierIds.experienced).addModule(ArmorStatModule.builder(TinkerDataKeys.EXPERIENCE).heldTag(TinkerTags.Items.HELD_ARMOR).tooltipStyle(TooltipStyle.PERCENT).eachLevel(0.25f));
 
 
     /// attack
@@ -457,14 +459,18 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
     buildModifier(ModifierIds.sharpweight)
       .addModule(StatBoostModule.multiplyBase(ToolStats.MINING_SPEED).eachLevel(0.1f))
       .addModule(StatBoostModule.multiplyBase(ToolStats.DRAW_SPEED).eachLevel(0.15f))
-      .addModule(AttributeModule.builder(Attributes.MOVEMENT_SPEED, Operation.MULTIPLY_BASE).uniqueFrom(ModifierIds.sharpweight).slots(handSlots).eachLevel(-0.1f));
+      .addModule(StatBoostModule.add(ToolStats.ARMOR_TOUGHNESS).eachLevel(2))
+      .addModule(AttributeModule.builder(Attributes.MOVEMENT_SPEED, Operation.MULTIPLY_BASE).uniqueFrom(ModifierIds.sharpweight).eachLevel(-0.1f));
     buildModifier(ModifierIds.heavy)
       .addModule(StatBoostModule.multiplyBase(ToolStats.ATTACK_DAMAGE).eachLevel(0.1f))
       .addModule(StatBoostModule.multiplyBase(ToolStats.PROJECTILE_DAMAGE).eachLevel(0.1f))
-      .addModule(AttributeModule.builder(Attributes.MOVEMENT_SPEED, Operation.MULTIPLY_BASE).uniqueFrom(ModifierIds.heavy).slots(handSlots).eachLevel(-0.1f));
+      .addModule(StatBoostModule.add(ToolStats.KNOCKBACK_RESISTANCE).eachLevel(0.1f))
+      .addModule(AttributeModule.builder(Attributes.MOVEMENT_SPEED, Operation.MULTIPLY_BASE).uniqueFrom(ModifierIds.heavy).eachLevel(-0.1f));
     buildModifier(ModifierIds.featherweight)
       .addModule(StatBoostModule.multiplyBase(ToolStats.DRAW_SPEED).eachLevel(0.07f))
-      .addModule(StatBoostModule.multiplyBase(ToolStats.ACCURACY).eachLevel(0.07f));
+      .addModule(StatBoostModule.multiplyBase(ToolStats.ACCURACY).eachLevel(0.07f))
+      .addModule(ProtectionModule.builder().eachLevel(-1.25f))
+      .addModule(ArmorStatModule.builder(TinkerDataKeys.USE_ITEM_SPEED).heldTag(TinkerTags.Items.HELD_ARMOR).tooltipStyle(TooltipStyle.PERCENT).eachLevel(0.1f));
     buildModifier(ModifierIds.dense)
       // from 0 to 5, repair formula is FACTOR * (1 - 0.025 * LEVEL * (11 - LEVEL))
       .addModule(RepairModule.builder().maxLevel(5).formula()
@@ -484,6 +490,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
             .constant(1.5f).variable(LEVEL).power()
           .divide()
         .subtract().build());
+    buildModifier(ModifierIds.consecrated).addModule(ProtectionModule.builder().attacker(new MobTypePredicate(MobType.UNDEAD)).eachLevel(1.25f));
 
     // traits - tier 3
     buildModifier(ModifierIds.overcast)
@@ -509,7 +516,8 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .addModule(StatBoostModule.multiplyBase(ToolStats.ATTACK_DAMAGE).eachLevel(0.04f))
       .addModule(StatBoostModule.multiplyBase(ToolStats.MINING_SPEED).eachLevel(0.04f))
       .addModule(StatBoostModule.multiplyBase(ToolStats.VELOCITY).eachLevel(0.03f))
-      .addModule(StatBoostModule.multiplyBase(ToolStats.PROJECTILE_DAMAGE).eachLevel(0.03f));
+      .addModule(StatBoostModule.multiplyBase(ToolStats.PROJECTILE_DAMAGE).eachLevel(0.03f))
+      .addModule(StatBoostModule.add(ToolStats.ARMOR_TOUGHNESS).eachLevel(1));
     buildModifier(ModifierIds.maintained)
       .addModule(ConditionalMiningSpeedModule.builder()
         .customVariable("durability", ToolVariable.CURRENT_DURABILITY)
@@ -532,7 +540,18 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
         .variable(LEVEL).multiply()
         .constant(0.05f).multiply()
         .variable(MULTIPLIER).multiply()
-        .variable(VALUE).add().build());
+        .variable(VALUE).add().build())
+      .addModule(AttributeModule.builder(Attributes.ARMOR_TOUGHNESS, Operation.ADDITION)
+        .toolItem(ItemPredicate.tag(TinkerTags.Items.ARMOR))
+        .uniqueFrom(ModifierIds.maintained)
+        .customVariable("durability", ToolVariable.CURRENT_DURABILITY)
+        .customVariable("max_durability", new ToolStatVariable(ToolStats.DURABILITY))
+        .formula()
+        .customVariable("max_durability").constant(0.5f).multiply().duplicate()
+        .customVariable("durability").subtractFlipped()
+        .nonNegative().divideFlipped()
+        .variable(LEVEL).multiply()
+        .constant(2).multiply().build());
     // traits - tier 4
     buildModifier(ModifierIds.fortified).priority(60).addModule(new ModifierSlotModule(SlotType.DEFENSE));
     buildModifier(ModifierIds.kinetic).addModule(KineticModule.INSTANCE);

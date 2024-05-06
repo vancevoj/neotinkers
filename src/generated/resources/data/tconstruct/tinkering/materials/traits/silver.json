@@ -1,5 +1,11 @@
 {
   "perStat": {
+    "tconstruct:armor": [
+      {
+        "level": 1,
+        "name": "tconstruct:consecrated"
+      }
+    ],
     "tconstruct:melee_harvest": [
       {
         "level": 1,

@@ -15,13 +15,23 @@
       "stat": "tconstruct:projectile_damage"
     },
     {
+      "type": "tconstruct:stat_boost",
+      "each_level": 0.1,
+      "operation": "add",
+      "stat": "tconstruct:knockback_resistance"
+    },
+    {
       "type": "tconstruct:attribute",
       "attribute": "minecraft:generic.movement_speed",
       "each_level": -0.1,
       "operation": "multiply_base",
       "slots": [
         "mainhand",
-        "offhand"
+        "offhand",
+        "feet",
+        "legs",
+        "chest",
+        "head"
       ],
       "unique": "tconstruct.modifier.heavy"
     }

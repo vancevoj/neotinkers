@@ -89,7 +89,7 @@ public class ModifierTagProvider extends AbstractModifierTagProvider {
     this.tag(GENERAL_UPGRADES).add(
       ModifierIds.diamond, ModifierIds.emerald, ModifierIds.netherite,
       ModifierIds.reinforced, ModifierIds.overforced, TinkerModifiers.soulbound.getId(),
-      TinkerModifiers.experienced.getId(), TinkerModifiers.magnetic.getId(), TinkerModifiers.zoom.getId(),
+      ModifierIds.experienced, TinkerModifiers.magnetic.getId(), TinkerModifiers.zoom.getId(),
       ModifierIds.tank, TinkerModifiers.fireprimer.getId())
         .addOptional(ModifierIds.theOneProbe);
 

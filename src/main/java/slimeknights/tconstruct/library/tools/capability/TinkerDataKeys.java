@@ -26,13 +26,15 @@ public interface TinkerDataKeys {
 	TinkerDataKey<Float> PROTECTION_CAP = floatKey("protection_cap");
 
 	/** Bonus to add to movement speed when using items, used in {@link slimeknights.tconstruct.tools.TinkerModifiers#projectileProtection} */
-	TinkerDataKey<Float> USE_SPEED_BONUS = floatKey("use_speed_bonus");
+	TinkerDataKey<Float> USE_ITEM_SPEED = floatKey("use_item_speed");
 	/** Knockback bonus */
 	TinkerDataKey<Float> KNOCKBACK = floatKey("knockback");
   /** Jump height bonus in blocks */
   TinkerDataKey<Float> JUMP_BOOST = floatKey("jump_boost");
   /** Player modifier data key for haste, represents an additive percentage boost on mining speed. */
   TinkerDataKey<Float> HASTE = TConstruct.createKey("haste");
+  /** Multiplier for experience drops from events */
+  TinkerDataKey<Float> EXPERIENCE = floatKey("experience");
 
   /** Crystaltrike level for knockback restriction */
   TinkerDataKey<Integer> CRYSTALSTRIKE = intKey("crystalstrike_knockback");

@@ -27,8 +27,14 @@ public record VariableFormulaLoadable<V extends IHaveLoader, F extends VariableF
   FallbackFormula boostFallback, FallbackFormula percentFallback,
   Function3<ModifierFormula,List<V>,Boolean,F> constructor
 ) implements RecordLoadable<F> {
+  /** Loader with default fallback formulas */
   public VariableFormulaLoadable(GenericLoaderRegistry<V> variableLoader, String[] defaultNames, Function3<ModifierFormula,List<V>,Boolean,F> constructor) {
     this(variableLoader, defaultNames, FallbackFormula.BOOST, FallbackFormula.PERCENT, constructor);
+  }
+
+  /** Loader with just 1 fallback formula */
+  public VariableFormulaLoadable(GenericLoaderRegistry<V> variableLoader, String[] defaultNames, FallbackFormula formula, Function3<ModifierFormula,List<V>,Boolean,F> constructor) {
+    this(variableLoader, defaultNames, formula, formula, constructor);
   }
 
   /** Gets the fallback formula given percent */
@@ -38,7 +44,7 @@ public record VariableFormulaLoadable<V extends IHaveLoader, F extends VariableF
 
   @Override
   public F deserialize(JsonObject json, TypedMap context) {
-    boolean percent = GsonHelper.getAsBoolean(json, "percent", false);
+    boolean percent = boostFallback != percentFallback && GsonHelper.getAsBoolean(json, "percent", false);
     if (json.has("variables")) {
       if (!json.has("formula")) {
         throw new JsonSyntaxException("Cannot set variables when not using formula");
@@ -66,7 +72,9 @@ public record VariableFormulaLoadable<V extends IHaveLoader, F extends VariableF
 
   @Override
   public void serialize(F object, JsonObject json) {
-    json.addProperty("percent", object.percent());
+    if (boostFallback != percentFallback) {
+      json.addProperty("percent", object.percent());
+    }
     List<V> variables = object.variables();
     if (!variables.isEmpty()) {
       JsonObject variablesObject = new JsonObject();
@@ -82,7 +90,7 @@ public record VariableFormulaLoadable<V extends IHaveLoader, F extends VariableF
 
   @Override
   public F decode(FriendlyByteBuf buffer, TypedMap context) {
-    boolean percent = buffer.readBoolean();
+    boolean percent = boostFallback != percentFallback && buffer.readBoolean();
     ImmutableList.Builder<V> builder = ImmutableList.builder();
     int size = buffer.readVarInt();
     for (int i = 0; i < size; i++) {
@@ -94,7 +102,9 @@ public record VariableFormulaLoadable<V extends IHaveLoader, F extends VariableF
 
   @Override
   public void encode(FriendlyByteBuf buffer, F object) throws EncoderException {
-    buffer.writeBoolean(object.percent());
+    if (boostFallback != percentFallback) {
+      buffer.writeBoolean(object.percent());
+    }
     List<V> variables = object.variables();
     buffer.writeVarInt(variables.size());
     for (V variable : variables) {

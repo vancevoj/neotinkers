@@ -57,7 +57,7 @@ public class EnchantmentToModifierProvider extends AbstractEnchantmentToModifier
 
     // tag compat
     // upgrade
-    addCompat(TinkerModifiers.experienced.getId());
+    addCompat(ModifierIds.experienced);
     addCompat(ModifierIds.killager);
     addCompat(TinkerModifiers.magnetic.getId());
     addCompat(TinkerModifiers.necrotic.getId());

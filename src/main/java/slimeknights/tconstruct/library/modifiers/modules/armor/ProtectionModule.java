@@ -42,11 +42,12 @@ import java.util.List;
  * @param amount    Amount of damage to block
  * @param condition Modifier module conditions
  */
-public record ProtectionModule(IJsonPredicate<DamageSource> source, IJsonPredicate<LivingEntity> entity, LevelingValue amount, ModifierCondition<IToolStackView> condition) implements ProtectionModifierHook, TooltipModifierHook, ModifierModule, ConditionalModule<IToolStackView> {
+public record ProtectionModule(IJsonPredicate<DamageSource> source, IJsonPredicate<LivingEntity> entity, IJsonPredicate<LivingEntity> attacker, LevelingValue amount, ModifierCondition<IToolStackView> condition) implements ProtectionModifierHook, TooltipModifierHook, ModifierModule, ConditionalModule<IToolStackView> {
   private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<ProtectionModule>defaultHooks(ModifierHooks.PROTECTION, ModifierHooks.TOOLTIP);
   public static final RecordLoadable<ProtectionModule> LOADER = RecordLoadable.create(
     DamageSourcePredicate.LOADER.defaultField("damage_source", ProtectionModule::source),
     LivingEntityPredicate.LOADER.defaultField("wearing_entity", ProtectionModule::entity),
+    LivingEntityPredicate.LOADER.defaultField("attacker", ProtectionModule::attacker),
     LevelingValue.LOADABLE.directField(ProtectionModule::amount),
     ModifierCondition.TOOL_FIELD,
     ProtectionModule::new);
@@ -59,7 +60,9 @@ public record ProtectionModule(IJsonPredicate<DamageSource> source, IJsonPredica
   @Override
   public float getProtectionModifier(IToolStackView tool, ModifierEntry modifier, EquipmentContext context, EquipmentSlot slotType, DamageSource source, float modifierValue) {
     // apply the main protection bonus
-    if (condition.matches(tool, modifier) && this.source.matches(source) && this.entity.matches(context.getEntity())) {
+    if (condition.matches(tool, modifier) && this.source.matches(source) && this.entity.matches(context.getEntity())
+        // skip the instanceof check if the attacker is non-living
+        && (this.attacker == LivingEntityPredicate.ANY || source.getEntity() instanceof LivingEntity living && attacker.matches(living))) {
       modifierValue += amount.compute(modifier.getEffectiveLevel());
     }
     return modifierValue;
@@ -103,6 +106,7 @@ public record ProtectionModule(IJsonPredicate<DamageSource> source, IJsonPredica
   public static class Builder extends ModuleBuilder.Stack<Builder> implements LevelingValue.Builder<ProtectionModule> {
     private IJsonPredicate<DamageSource> source = DamageSourcePredicate.CAN_PROTECT;
     private IJsonPredicate<LivingEntity> entity = LivingEntityPredicate.ANY;
+    private IJsonPredicate<LivingEntity> attacker = LivingEntityPredicate.ANY;
 
     private Builder() {}
 
@@ -114,7 +118,7 @@ public record ProtectionModule(IJsonPredicate<DamageSource> source, IJsonPredica
 
     @Override
     public ProtectionModule amount(float flat, float eachLevel) {
-      return new ProtectionModule(source, entity, new LevelingValue(flat, eachLevel), condition);
+      return new ProtectionModule(source, entity, attacker, new LevelingValue(flat, eachLevel), condition);
     }
   }
 }

@@ -29,7 +29,7 @@ public class MeleeProtectionModifier extends AbstractProtectionModifier<Modifier
     super.set(data, slot, scaledLevel, context);
     float newMax = data.getMax();
     if (oldMax != newMax) {
-      context.getTinkerData().ifPresent(d -> d.add(TinkerDataKeys.USE_SPEED_BONUS, (newMax - oldMax) * 0.05f));
+      context.getTinkerData().ifPresent(d -> d.add(TinkerDataKeys.USE_ITEM_SPEED, (newMax - oldMax) * 0.05f));
     }
   }
 }

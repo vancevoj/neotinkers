@@ -1,5 +1,8 @@
 package slimeknights.tconstruct.library.modifiers.modules.combat;
 
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -14,9 +17,9 @@ import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.hook.combat.MeleeHitModifierHook;
 import slimeknights.tconstruct.library.modifiers.modules.ModifierModule;
-import slimeknights.tconstruct.library.modifiers.modules.util.AttributeModuleBuilder;
 import slimeknights.tconstruct.library.modifiers.modules.util.ModifierCondition;
 import slimeknights.tconstruct.library.modifiers.modules.util.ModifierCondition.ConditionalModule;
+import slimeknights.tconstruct.library.modifiers.modules.util.ModuleBuilder;
 import slimeknights.tconstruct.library.module.HookProvider;
 import slimeknights.tconstruct.library.module.ModuleHook;
 import slimeknights.tconstruct.library.tools.context.ToolAttackContext;
@@ -98,9 +101,25 @@ public record MeleeAttributeModule(String unique, Attribute attribute, UUID uuid
     return new Builder(attribute, operation);
   }
 
-  public static class Builder extends AttributeModuleBuilder<Builder,MeleeAttributeModule> {
-    private Builder(Attribute attribute, Operation operation) {
-      super(attribute, operation);
+  @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
+  public static class Builder extends ModuleBuilder.Stack<Builder> implements LevelingValue.Builder<MeleeAttributeModule>  {
+    protected final Attribute attribute;
+    protected final Operation operation;
+    protected String unique;
+
+    /**
+     * Sets the unique string directly
+     */
+    public Builder unique(String unique) {
+      this.unique = unique;
+      return this;
+    }
+
+    /**
+     * Sets the unique string using a resource location
+     */
+    public Builder uniqueFrom(ResourceLocation id) {
+      return unique(id.getNamespace() + ".modifier." + id.getPath());
     }
 
     @Override

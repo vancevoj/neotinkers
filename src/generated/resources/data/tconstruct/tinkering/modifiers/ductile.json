@@ -31,6 +31,12 @@
       "each_level": 0.03,
       "operation": "multiply_base",
       "stat": "tconstruct:projectile_damage"
+    },
+    {
+      "type": "tconstruct:stat_boost",
+      "each_level": 1.0,
+      "operation": "add",
+      "stat": "tconstruct:armor_toughness"
     }
   ],
   "tooltip_display": "always"

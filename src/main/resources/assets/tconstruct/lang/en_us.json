@@ -1708,6 +1708,7 @@
   "material.tconstruct.tungsten.flavor": "Have you considered starting a heavy metal band?",
   "material.tconstruct.tungsten.encyclopedia": "Grants +10% mining speed and -10% movement speed per level",
   "material.tconstruct.tungsten.ranged": "Grants +15% draw speed and -10% movement speed per level",
+  "material.tconstruct.tungsten.armor": "Grants +2 toughness and -10% movement speed per level",
 
   "material.tconstruct.platinum": "Platinum",
   "material.tconstruct.platinum.flavor": "Its what winners use!",
@@ -1718,11 +1719,13 @@
   "material.tconstruct.lead.flavor": "Could try and make a sandwich out of this.",
   "material.tconstruct.lead.encyclopedia": "Grants +10% attack and -10% movement speed per level",
   "material.tconstruct.lead.ranged": "Grants +10% projectile power and -10% movement speed per level",
+  "material.tconstruct.lead.armor": "Grants +10% knockback resistance and -10% movement speed per level",
 
   "material.tconstruct.silver": "Silver",
   "material.tconstruct.silver.flavor": "You know, this tool isn't going to look so shiny in a few days.",
   "material.tconstruct.silver.encyclopedia": "Gives +2.5 damage against undead per level",
   "material.tconstruct.silver.ranged": "Gives +0.5 projectile power against undead per level",
+  "material.tconstruct.silver.armor": "Reduces dmage from undead by 5% per level",
 
   "material.tconstruct.whitestone": "Whitestone",
   "material.tconstruct.whitestone.end": "End Stone",
@@ -1732,6 +1735,7 @@
   "material.tconstruct.aluminum": "Aluminum",
   "material.tconstruct.aluminum.flavor": "Found most commonly in ashmounds.",
   "material.tconstruct.aluminum.ranged": "Grants +7% drawspeed and accuracy",
+  "material.tconstruct.aluminum.armor": "Grants +5% use item speed at the cost of 5% loss of protection",
 
 
   "__comment": "Tier 3 Integration Materials",
@@ -1739,21 +1743,25 @@
   "material.tconstruct.steel.flavor": "Basically 90% of material science",
   "material.tconstruct.steel.encyclopedia": "Grants +4% durability, damage, and speed per level",
   "material.tconstruct.steel.ranged": "Grants +4% durability, +3% velocity, and +3% projectile power per level",
+  "material.tconstruct.steel.armor": "Grants +4% durability and +1 toughness per level",
 
   "material.tconstruct.bronze": "Bronze",
   "material.tconstruct.bronze.flavor": "Not to be confused with amethyst bronze.",
   "material.tconstruct.bronze.encyclopedia": "Grants +6 mining speed per level at full durability, 0 boost below 50% durability",
   "material.tconstruct.bronze.ranged": "Grants +0.05 velocity per level at full durability, 0 boost below 50% durability",
+  "material.tconstruct.bronze.armor": "Boosts toughness by 2 per level when at full durability, but boost drops to 0 below 50% durability",
 
   "material.tconstruct.constantan": "Constantan",
   "material.tconstruct.constantan.flavor": "Constantantantantantantan... Sorry it's fun to add more \"tans.\"",
   "material.tconstruct.constantan.encyclopedia": "Grants +7.5 mining speed in extreme cold and twice reinforced in extreme heat",
   "material.tconstruct.constantan.ranged": "Grants +0.15 velocity in extreme cold and twice reinforced in extreme heat",
+  "material.tconstruct.constantan.armor": "Grants 5% protection in extreme cold and twice reinforced in extreme heat",
 
   "material.tconstruct.invar": "Invar",
   "material.tconstruct.invar.flavor": "Resists both temperature and arrest.",
   "material.tconstruct.invar.encyclopedia": "Grants +2.5 damage in biomes with neutral temperatures",
   "material.tconstruct.invar.ranged": "Grants +0.15 accuracy in biomes with neutral temperatures",
+  "material.tconstruct.invar.armor": "Redudes damage by 5% per level in biomes with neutral temperatures",
 
   "material.tconstruct.electrum": "Electrum",
   "material.tconstruct.electrum.flavor": "Good for electronic components.",
@@ -2452,7 +2460,7 @@
   "modifier.tconstruct.dense.description": "Tool lasts longer, but is harder to repair",
   "modifier.tconstruct.sharpweight": "Sharpweight",
   "modifier.tconstruct.sharpweight.flavor": "As opposed to a dumbweight",
-  "modifier.tconstruct.sharpweight.description": "Mines faster, but is extremely hard to move",
+  "modifier.tconstruct.sharpweight.description": "Stronger, but is extremely hard to move",
   "modifier.tconstruct.lustrous": "Lustrous",
   "modifier.tconstruct.lustrous.flavor": "The shiniest of ores!",
   "modifier.tconstruct.lustrous.description": "Ores drop bonus nuggets",
@@ -2467,16 +2475,21 @@
   "modifier.tconstruct.stoneshield.description": "Mined stone has a chance to protect the tool from future damage",
   "modifier.tconstruct.featherweight": "Featherweight",
   "modifier.tconstruct.featherweight.flavor": "Light as a feather",
-  "modifier.tconstruct.featherweight.description": "Tool is so easy to use, it has higher drawspeed and accuracy",
+  "modifier.tconstruct.featherweight.description": "Tool is so easy to use, it has higher drawspeed and accuracy. Armor makes it easier to use bows and shields but is not highly defensive",
+  "modifier.tconstruct.featherweight.resistance": "Resistance",
   "modifier.tconstruct.holy": "Holy",
   "modifier.tconstruct.holy.flavor": "Die, Fowl Creature!",
   "modifier.tconstruct.holy.description": "Arrows deal bonus damage against undead",
+  "modifier.tconstruct.consecrated": "Consecrated",
+  "modifier.tconstruct.consecrated.flavor": "Die, Fowl Creature!",
+  "modifier.tconstruct.consecrated.description": "Take less damage from the undead",
+  "modifier.tconstruct.consecrated.resistance": "Undead Resistance",
 
 
   "__comment": "Tier 3 Mod Compat Traits",
   "modifier.tconstruct.ductile": "Ductile",
   "modifier.tconstruct.ductile.flavor": "Reshapes well!",
-  "modifier.tconstruct.ductile.description": "Tool is longer lasting, mines faster, and damages more",
+  "modifier.tconstruct.ductile.description": "Tool is longer lasting, mines faster, damages more and is tougher",
   "modifier.tconstruct.maintained": "Maintained",
   "modifier.tconstruct.maintained.flavor": "Stays Sharper, Longer!",
   "modifier.tconstruct.maintained.description": "Tool mines faster when at higher durability",
@@ -2490,11 +2503,13 @@
   "modifier.tconstruct.temperate.description": "Tool mines faster when in extreme temperatures",
   "modifier.tconstruct.temperate.speed": "Temperate Speed",
   "modifier.tconstruct.temperate.reinforced": "Temperate Reinforcement",
+  "modifier.tconstruct.temperate.resistance": "Temperate Resistance",
   "modifier.tconstruct.invariant": "Invariant",
   "modifier.tconstruct.invariant.flavor": "Couldn't care less",
   "modifier.tconstruct.invariant.description": "Tool does more damage in neutral temperatures",
   "modifier.tconstruct.invariant.attack_damage": "Neutral Damage",
   "modifier.tconstruct.invariant.accuracy": "Neutral Accuracy",
+  "modifier.tconstruct.invariant.resistance": "Invariant Resistance",
   "modifier.tconstruct.decay": "Decay",
   "modifier.tconstruct.decay.flavor": "Radioactive Withering",
   "modifier.tconstruct.decay.description": "Causes targets to wither away, but may also cause the holder to wither",
@@ -2719,7 +2734,9 @@
   "stat.tconstruct.slot.display.souls": "soul",
   "stat.tconstruct.slot.display.defense": "defense",
 
-  "armor_stat.tconstruct.haste": "Mining Speed",
+  "armor_stat.tconstruct.mining_speed": "Mining Speed",
+  "armor_stat.tconstruct.use_item_speed": "Use Item Speed",
+  "armor_stat.tconstruct.experience": "Experience",
 
 
   "_comment": "Tooltips",

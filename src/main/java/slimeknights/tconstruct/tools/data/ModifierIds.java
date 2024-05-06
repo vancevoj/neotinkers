@@ -44,6 +44,7 @@ public class ModifierIds {
   public static final ModifierId luck    = id("luck");
   public static final ModifierId looting = id("looting");
   public static final ModifierId fortune = id("fortune");
+  public static final ModifierId experienced = id("experienced");
 
   // damage boost
   public static final ModifierId sharpness   = id("sharpness");
@@ -121,6 +122,7 @@ public class ModifierIds {
   public static final ModifierId sharpweight = id("sharpweight");
   public static final ModifierId heavy = id("heavy");
   public static final ModifierId featherweight = id("featherweight");
+  public static final ModifierId consecrated = id("consecrated");
   // traits - tier 3
   public static final ModifierId overcast = id("overcast");
   public static final ModifierId crumbling = id("crumbling");

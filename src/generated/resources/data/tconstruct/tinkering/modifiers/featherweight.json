@@ -13,6 +13,19 @@
       "each_level": 0.07,
       "operation": "multiply_base",
       "stat": "tconstruct:accuracy"
+    },
+    {
+      "type": "tconstruct:protection",
+      "damage_source": "mantle:can_protect",
+      "each_level": -1.25
+    },
+    {
+      "type": "tconstruct:armor_stat",
+      "allow_broken": false,
+      "each_level": 0.1,
+      "held_tag": "tconstruct:modifiable/armor/held",
+      "key": "tconstruct:use_item_speed",
+      "tooltip_style": "percent"
     }
   ],
   "tooltip_display": "always"
