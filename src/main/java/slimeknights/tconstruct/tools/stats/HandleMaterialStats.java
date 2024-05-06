@@ -22,9 +22,9 @@ public record HandleMaterialStats(float durability, float miningSpeed, float mel
   public static final MaterialStatsId ID = new MaterialStatsId(TConstruct.getResource("handle"));
   public static final MaterialStatType<HandleMaterialStats> TYPE = new MaterialStatType<>(ID, new HandleMaterialStats(1f, 1f, 1f, 1f), RecordLoadable.create(
     FloatLoadable.FROM_ZERO.defaultField("durability", 1f, true, HandleMaterialStats::durability),
-    FloatLoadable.FROM_ZERO.defaultField("melee_damage", 1f, true, HandleMaterialStats::attackDamage),
-    FloatLoadable.FROM_ZERO.defaultField("melee_speed", 1f, true, HandleMaterialStats::meleeSpeed),
     FloatLoadable.FROM_ZERO.defaultField("mining_speed", 1f, true, HandleMaterialStats::miningSpeed),
+    FloatLoadable.FROM_ZERO.defaultField("melee_speed", 1f, true, HandleMaterialStats::meleeSpeed),
+    FloatLoadable.FROM_ZERO.defaultField("melee_damage", 1f, true, HandleMaterialStats::attackDamage),
     HandleMaterialStats::new));
 
   // tooltip prefixes
