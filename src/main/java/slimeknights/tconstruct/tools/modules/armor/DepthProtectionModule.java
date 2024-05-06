@@ -14,6 +14,7 @@ import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.data.predicate.IJsonPredicate;
 import slimeknights.mantle.data.predicate.damage.DamageSourcePredicate;
 import slimeknights.mantle.data.predicate.entity.LivingEntityPredicate;
+import slimeknights.tconstruct.library.json.LevelingValue;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.hook.armor.ProtectionModifierHook;
@@ -35,16 +36,17 @@ import java.util.List;
  * Module implementing the depth protection modifier
  * @param baselineHeight  Y level of neutral behavior, buff goes negative above
  * @param neutralRange    Distance above baseline with no effect
- * @param protection      Multiplier to the protection level to grant
+ * @param amount          Multiplier to the protection level to grant
  */
-public record DepthProtectionModule(IJsonPredicate<DamageSource> source, IJsonPredicate<LivingEntity> entity, float baselineHeight, float neutralRange, float protection, ModifierCondition<IToolStackView> condition) implements ModifierModule, ProtectionModifierHook, TooltipModifierHook, ConditionalModule<IToolStackView> {
+// TODO: consider formula support in protection module
+public record DepthProtectionModule(IJsonPredicate<DamageSource> source, IJsonPredicate<LivingEntity> entity, float baselineHeight, float neutralRange, LevelingValue amount, ModifierCondition<IToolStackView> condition) implements ModifierModule, ProtectionModifierHook, TooltipModifierHook, ConditionalModule<IToolStackView> {
   private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<DepthProtectionModule>defaultHooks(ModifierHooks.PROTECTION, ModifierHooks.TOOLTIP);
   public static final RecordLoadable<DepthProtectionModule> LOADER = RecordLoadable.create(
     DamageSourcePredicate.LOADER.defaultField("damage_source", DepthProtectionModule::source),
     LivingEntityPredicate.LOADER.defaultField("wearing_entity", DepthProtectionModule::entity),
     FloatLoadable.ANY.requiredField("baseline_height", DepthProtectionModule::baselineHeight),
     FloatLoadable.FROM_ZERO.requiredField("neutral_range", DepthProtectionModule::neutralRange),
-    FloatLoadable.ANY.requiredField("each_level", DepthProtectionModule::protection),
+    LevelingValue.LOADABLE.directField(DepthProtectionModule::amount),
     ModifierCondition.TOOL_FIELD,
     DepthProtectionModule::new);
 
@@ -68,7 +70,7 @@ public record DepthProtectionModule(IJsonPredicate<DamageSource> source, IJsonPr
     // debuff above the range
     float debuffHeight = baselineHeight + neutralRange;
     if (y > debuffHeight) {
-      return Math.max((debuffHeight - y) / debuffHeight, -1);
+      return Math.max((debuffHeight - y) / baselineHeight, -1);
     }
     return  0;
   }
@@ -77,7 +79,7 @@ public record DepthProtectionModule(IJsonPredicate<DamageSource> source, IJsonPr
   public float getProtectionModifier(IToolStackView tool, ModifierEntry modifier, EquipmentContext context, EquipmentSlot slotType, DamageSource source, float modifierValue) {
     LivingEntity target = context.getEntity();
     if (this.condition.matches(tool, modifier) && this.source.matches(source) && this.entity.matches(target)) {
-      modifierValue += getBonusMultiplier(context.getEntity(), baselineHeight, neutralRange) * modifier.getEffectiveLevel() * protection;
+      modifierValue += getBonusMultiplier(context.getEntity(), baselineHeight, neutralRange) * amount.compute(modifier.getEffectiveLevel());
     }
     return modifierValue;
   }
@@ -92,7 +94,7 @@ public record DepthProtectionModule(IJsonPredicate<DamageSource> source, IJsonPr
         multiplier = getBonusMultiplier(player, baselineHeight, neutralRange);
       }
       if (multiplier != 0) {
-        ProtectionModule.addResistanceTooltip(tool, modifier.getModifier(), multiplier * modifier.getEffectiveLevel() * protection, player, tooltip);
+        ProtectionModule.addResistanceTooltip(tool, modifier.getModifier(), multiplier * amount.compute(modifier.getEffectiveLevel()), player, tooltip);
       }
     }
   }
@@ -106,18 +108,15 @@ public record DepthProtectionModule(IJsonPredicate<DamageSource> source, IJsonPr
 
   @Setter
   @Accessors(fluent = true)
-  public static class Builder extends ModuleBuilder.Stack<Builder> {
+  public static class Builder extends ModuleBuilder.Stack<Builder> implements LevelingValue.Builder<DepthProtectionModule> {
     private IJsonPredicate<DamageSource> source = DamageSourcePredicate.CAN_PROTECT;
     private IJsonPredicate<LivingEntity> entity = LivingEntityPredicate.ANY;
     private float baselineHeight;
     private float neutralRange;
-    private float protection;
 
-    public DepthProtectionModule build() {
-      if (protection == 0) {
-        throw new IllegalStateException("Must set protection");
-      }
-      return new DepthProtectionModule(source, entity, baselineHeight, neutralRange, protection, condition);
+    @Override
+    public DepthProtectionModule amount(float flat, float eachLevel) {
+      return new DepthProtectionModule(source, entity, baselineHeight, neutralRange, new LevelingValue(flat, eachLevel), condition);
     }
   }
 }

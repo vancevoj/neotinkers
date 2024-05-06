@@ -397,7 +397,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
     buildModifier(ModifierIds.cultivated).addModule(RepairModule.builder().eachLevel(0.5f));
     buildModifier(ModifierIds.stringy);
     buildModifier(ModifierIds.unburdened).addModule(StatBoostModule.add(ToolStats.USE_ITEM_SPEED).eachLevel(0.1f));
-    buildModifier(ModifierIds.depthProtection).addModule(DepthProtectionModule.builder().protection(1.25f).baselineHeight(64).neutralRange(32).build());
+    buildModifier(ModifierIds.depthProtection).addModule(DepthProtectionModule.builder().baselineHeight(64).neutralRange(32).eachLevel(1.25f));
     // traits - tier 2
     buildModifier(ModifierIds.sturdy).addModule(StatBoostModule.multiplyBase(ToolStats.DURABILITY).eachLevel(0.15f));
     buildModifier(ModifierIds.scorching).addModule(ConditionalMeleeDamageModule.builder().target(LivingEntityPredicate.ON_FIRE).eachLevel(2f));
