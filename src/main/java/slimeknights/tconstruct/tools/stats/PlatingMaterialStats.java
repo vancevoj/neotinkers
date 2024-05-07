@@ -10,6 +10,7 @@ import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.materials.stats.IRepairableMaterialStats;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatType;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
+import slimeknights.tconstruct.library.tools.stat.ModifierStatsBuilder;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
 import slimeknights.tconstruct.tools.item.ArmorSlotType;
 import slimeknights.tconstruct.tools.item.ArmorSlotType.ArmorShieldBuilder;
@@ -62,6 +63,14 @@ public record PlatingMaterialStats(MaterialStatType<?> getType, int durability, 
   @Override
   public List<Component> getLocalizedDescriptions() {
     return getType == SHIELD ? SHIELD_DESCRIPTION : DESCRIPTION;
+  }
+
+  @Override
+  public void apply(ModifierStatsBuilder builder, float scale) {
+    ToolStats.DURABILITY.update(builder, durability * scale);
+    ToolStats.ARMOR.update(builder, armor * scale);
+    ToolStats.ARMOR_TOUGHNESS.update(builder, toughness * scale);
+    ToolStats.KNOCKBACK_RESISTANCE.update(builder, knockbackResistance * scale);
   }
 
   /** Makes a stat type for the given name */

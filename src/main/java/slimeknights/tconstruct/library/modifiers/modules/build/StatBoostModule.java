@@ -81,6 +81,12 @@ public record StatBoostModule(INumericToolStat<?> stat, StatOperation operation,
         stat.add(builder, value);
       }
     },
+    PERCENT {
+      @Override
+      public void apply(ModifierStatsBuilder builder, INumericToolStat<?> stat, float value) {
+        stat.percent(builder, value);
+      }
+    },
     MULTIPLY_BASE {
       @Override
       public void apply(ModifierStatsBuilder builder, INumericToolStat<?> stat, float value) {

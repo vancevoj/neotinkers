@@ -4,10 +4,15 @@
       "type": "tconstruct:part_stats",
       "parts": [
         "tconstruct:small_blade",
-        "tconstruct:tool_handle",
-        "tconstruct:tool_handle"
-      ],
-      "stat_provider": "tconstruct:melee_harvest"
+        {
+          "item": "tconstruct:tool_handle",
+          "scale": 0.5
+        },
+        {
+          "item": "tconstruct:tool_handle",
+          "scale": 0.5
+        }
+      ]
     },
     {
       "type": "tconstruct:default_materials",

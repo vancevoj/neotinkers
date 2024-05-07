@@ -4,14 +4,14 @@
     "tconstruct:bowstring": {},
     "tconstruct:grip": {
       "accuracy": 0.25,
-      "durability": 0.6,
+      "durability": -0.4,
       "melee_damage": 1.0
     },
     "tconstruct:handle": {
-      "durability": 0.6,
-      "melee_damage": 1.0,
-      "melee_speed": 1.2,
-      "mining_speed": 1.2
+      "durability": -0.4,
+      "melee_damage": 0.0,
+      "melee_speed": 0.2,
+      "mining_speed": 0.2
     },
     "tconstruct:head": {
       "durability": 175,

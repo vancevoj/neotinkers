@@ -6,8 +6,7 @@
         "tconstruct:bow_limb",
         "tconstruct:bow_grip",
         "tconstruct:bowstring"
-      ],
-      "stat_provider": "tconstruct:ranged"
+      ]
     },
     {
       "type": "tconstruct:default_materials",

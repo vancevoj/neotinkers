@@ -82,7 +82,7 @@ class ToolHarvestLogicTest extends ToolItemTest {
     definition.setData(ToolDefinitionDataBuilder
                          .builder()
                          .module(new IsEffectiveModule(BlockPredicate.set(Blocks.COBBLESTONE)))
-                         .module(PartStatsModule.meleeHarvest()
+                         .module(PartStatsModule.parts()
                                                 .part(MaterialItemFixture.MATERIAL_ITEM_HEAD)
                                                 .part(MaterialItemFixture.MATERIAL_ITEM_HANDLE)
                                                 .part(MaterialItemFixture.MATERIAL_ITEM_EXTRA).build())

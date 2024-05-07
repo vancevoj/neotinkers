@@ -7,6 +7,7 @@ import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.materials.stats.IRepairableMaterialStats;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatType;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
+import slimeknights.tconstruct.library.tools.stat.ModifierStatsBuilder;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
 
 import java.util.List;
@@ -37,5 +38,11 @@ public record SkullStats(int durability, int armor) implements IRepairableMateri
   @Override
   public List<Component> getLocalizedDescriptions() {
     return DESCRIPTION;
+  }
+
+  @Override
+  public void apply(ModifierStatsBuilder builder, float scale) {
+    ToolStats.DURABILITY.update(builder, durability * scale);
+    ToolStats.ARMOR.update(builder, armor * scale);
   }
 }

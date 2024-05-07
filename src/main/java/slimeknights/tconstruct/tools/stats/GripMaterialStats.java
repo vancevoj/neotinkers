@@ -10,6 +10,7 @@ import slimeknights.tconstruct.library.materials.stats.IMaterialStats;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatType;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
 import slimeknights.tconstruct.library.tools.stat.IToolStat;
+import slimeknights.tconstruct.library.tools.stat.ModifierStatsBuilder;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
 
 import java.util.List;
@@ -19,8 +20,8 @@ import static slimeknights.tconstruct.tools.stats.LimbMaterialStats.ACCURACY_PRE
 /** Secondary stats for a bow */
 public record GripMaterialStats(float durability, float accuracy, float meleeDamage) implements IMaterialStats {
   public static final MaterialStatsId ID = new MaterialStatsId(TConstruct.getResource("grip"));
-  public static final MaterialStatType<GripMaterialStats> TYPE = new MaterialStatType<>(ID, new GripMaterialStats(1f, 0f, 0f), RecordLoadable.create(
-    FloatLoadable.FROM_ZERO.defaultField("durability", 1f, true, GripMaterialStats::durability),
+  public static final MaterialStatType<GripMaterialStats> TYPE = new MaterialStatType<>(ID, new GripMaterialStats(0f, 0f, 0f), RecordLoadable.create(
+    FloatLoadable.ANY.defaultField("durability", 0f, true, GripMaterialStats::durability),
     FloatLoadable.ANY.defaultField("accuracy", 0f, true, GripMaterialStats::accuracy),
     FloatLoadable.FROM_ZERO.defaultField("melee_damage", 0f, true, GripMaterialStats::meleeDamage),
     GripMaterialStats::new));
@@ -41,8 +42,8 @@ public record GripMaterialStats(float durability, float accuracy, float meleeDam
   @Override
   public List<Component> getLocalizedInfo() {
     List<Component> info = Lists.newArrayList();
-    info.add(IToolStat.formatColoredMultiplier(DURABILITY_PREFIX, this.durability));
-    info.add(IToolStat.formatColoredBonus(ACCURACY_PREFIX, this.accuracy, 0.5f));
+    info.add(IToolStat.formatColoredPercentBoost(DURABILITY_PREFIX, this.durability));
+    info.add(IToolStat.formatColoredBonus(ACCURACY_PREFIX, this.accuracy));
     info.add(ToolStats.ATTACK_DAMAGE.formatValue(this.meleeDamage));
     return info;
   }
@@ -50,5 +51,12 @@ public record GripMaterialStats(float durability, float accuracy, float meleeDam
   @Override
   public List<Component> getLocalizedDescriptions() {
     return DESCRIPTION;
+  }
+
+  @Override
+  public void apply(ModifierStatsBuilder builder, float scale) {
+    ToolStats.DURABILITY.percent(builder, durability * scale);
+    ToolStats.ACCURACY.add(builder, accuracy * scale);
+    ToolStats.ATTACK_DAMAGE.update(builder, meleeDamage * scale);
   }
 }

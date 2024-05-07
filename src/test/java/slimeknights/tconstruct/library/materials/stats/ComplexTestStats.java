@@ -5,6 +5,7 @@ import slimeknights.mantle.data.loadable.primitive.FloatLoadable;
 import slimeknights.mantle.data.loadable.primitive.IntLoadable;
 import slimeknights.mantle.data.loadable.primitive.StringLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
+import slimeknights.tconstruct.library.tools.stat.ModifierStatsBuilder;
 
 import java.util.List;
 
@@ -41,4 +42,7 @@ public record ComplexTestStats(MaterialStatType<?> type, int num, float floating
   public List<Component> getLocalizedDescriptions() {
     return List.of();
   }
+
+  @Override
+  public void apply(ModifierStatsBuilder builder, float scale) {}
 }

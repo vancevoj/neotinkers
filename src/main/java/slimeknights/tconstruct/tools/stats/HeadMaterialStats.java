@@ -12,6 +12,7 @@ import slimeknights.tconstruct.library.json.TinkerLoadables;
 import slimeknights.tconstruct.library.materials.stats.IRepairableMaterialStats;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatType;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
+import slimeknights.tconstruct.library.tools.stat.ModifierStatsBuilder;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
 
 import java.util.List;
@@ -47,5 +48,15 @@ public record HeadMaterialStats(int durability, float miningSpeed, Tier tier, fl
   @Override
   public List<Component> getLocalizedDescriptions() {
     return DESCRIPTION;
+  }
+
+  @Override
+  public void apply(ModifierStatsBuilder builder, float scale) {
+    // update for floats cancels out the base stats the first time used, makes the behavior more predictable between this and the stats module
+    ToolStats.DURABILITY.update(builder, durability * scale);
+    ToolStats.ATTACK_DAMAGE.update(builder, attack * scale);
+    ToolStats.MINING_SPEED.update(builder, miningSpeed * scale);
+    // no need to scale tier, we just take the max across everything
+    ToolStats.HARVEST_TIER.update(builder, tier);
   }
 }

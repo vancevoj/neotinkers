@@ -6,8 +6,7 @@
         "tconstruct:small_blade",
         "tconstruct:tool_handle",
         "tconstruct:tool_binding"
-      ],
-      "stat_provider": "tconstruct:melee_harvest"
+      ]
     },
     {
       "type": "tconstruct:default_materials",

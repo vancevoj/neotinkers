@@ -11,6 +11,7 @@ import net.minecraft.world.item.Item;
 import slimeknights.tconstruct.library.utils.Util;
 
 import javax.annotation.Nullable;
+import java.text.DecimalFormat;
 
 /**
  * Interface for all tool stats, can implement to determine the behavior of stats in the modifier stat builder
@@ -146,15 +147,15 @@ public interface IToolStat<T> {
   }
 
   /**
-   * Formats a multiplier with hue shifting
+   * Formats with hue shifting
    * @param loc     Prefix location
    * @param number  Percentage
+   * @param format  Number formatter
    * @return  Colored percent with prefix
    */
-  static Component formatColoredMultiplier(String loc, float number) {
-    // 0.5 is red, 1.0 should be roughly green, 1.5 is blue
-    float hue = Mth.positiveModulo(number - 0.5f, 2f);
-    return Component.translatable(loc).append(Component.literal(Util.MULTIPLIER_FORMAT.format(number)).withStyle(style -> style.withColor(TextColor.fromRgb(Mth.hsvToRgb(hue / 1.5f, 1.0f, 0.75f)))));
+  static Component formatColored(String loc, float number, float offset, DecimalFormat format) {
+    float hue = Mth.positiveModulo(offset + number, 2f);
+    return Component.translatable(loc).append(Component.literal(format.format(number)).withStyle(style -> style.withColor(TextColor.fromRgb(Mth.hsvToRgb(hue / 1.5f, 1.0f, 0.75f)))));
   }
 
   /**
@@ -163,9 +164,30 @@ public interface IToolStat<T> {
    * @param number  Percentage
    * @return  Colored percent with prefix
    */
-  static Component formatColoredBonus(String loc, float number, float scale) {
+  static Component formatColoredMultiplier(String loc, float number) {
     // 0.5 is red, 1.0 should be roughly green, 1.5 is blue
-    float hue = Mth.positiveModulo(0.5f + number / (2*scale), 2f);
-    return Component.translatable(loc).append(Component.literal(Util.BONUS_FORMAT.format(number)).withStyle(style -> style.withColor(TextColor.fromRgb(Mth.hsvToRgb(hue / 1.5f, 1.0f, 0.75f)))));
+    return formatColored(loc, number, -0.5f, Util.MULTIPLIER_FORMAT);
+  }
+
+  /**
+   * Formats an additive bonus with hue shifting
+   * @param loc     Prefix location
+   * @param number  Percentage
+   * @return  Colored percent with prefix
+   */
+  static Component formatColoredBonus(String loc, float number) {
+    // -0.5 is red, 0 should be roughly green, +0.5 is blue
+    return formatColored(loc, number, 0.5f, Util.BONUS_FORMAT);
+  }
+
+  /**
+   * Formats a percent boost with hue shifting
+   * @param loc     Prefix location
+   * @param number  Percentage
+   * @return  Colored percent with prefix
+   */
+  static Component formatColoredPercentBoost(String loc, float number) {
+    // -0.5 is red, 0 should be roughly green, +0.5 is blue
+    return formatColored(loc, number, 0.5f, Util.PERCENT_BOOST_FORMAT);
   }
 }

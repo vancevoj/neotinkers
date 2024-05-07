@@ -18,7 +18,7 @@ public final class ToolDefinitionFixture {
   static {
     STANDARD_TOOL_DEFINITION.setData(
       ToolDefinitionDataBuilder.builder()
-                               .module(PartStatsModule.meleeHarvest()
+                               .module(PartStatsModule.parts()
                                                       .part(MaterialItemFixture.MATERIAL_ITEM_HEAD)
                                                       .part(MaterialItemFixture.MATERIAL_ITEM_HANDLE)
                                                       .part(MaterialItemFixture.MATERIAL_ITEM_EXTRA).build())

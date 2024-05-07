@@ -10,6 +10,8 @@ import slimeknights.tconstruct.library.materials.stats.IMaterialStats;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatType;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
 import slimeknights.tconstruct.library.tools.stat.IToolStat;
+import slimeknights.tconstruct.library.tools.stat.ModifierStatsBuilder;
+import slimeknights.tconstruct.library.tools.stat.ToolStats;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,11 +22,11 @@ import static slimeknights.tconstruct.library.materials.stats.IMaterialStats.mak
 /** Stats for melee harvest handles */
 public record HandleMaterialStats(float durability, float miningSpeed, float meleeSpeed, float attackDamage) implements IMaterialStats {
   public static final MaterialStatsId ID = new MaterialStatsId(TConstruct.getResource("handle"));
-  public static final MaterialStatType<HandleMaterialStats> TYPE = new MaterialStatType<>(ID, new HandleMaterialStats(1f, 1f, 1f, 1f), RecordLoadable.create(
-    FloatLoadable.FROM_ZERO.defaultField("durability", 1f, true, HandleMaterialStats::durability),
-    FloatLoadable.FROM_ZERO.defaultField("mining_speed", 1f, true, HandleMaterialStats::miningSpeed),
-    FloatLoadable.FROM_ZERO.defaultField("melee_speed", 1f, true, HandleMaterialStats::meleeSpeed),
-    FloatLoadable.FROM_ZERO.defaultField("melee_damage", 1f, true, HandleMaterialStats::attackDamage),
+  public static final MaterialStatType<HandleMaterialStats> TYPE = new MaterialStatType<>(ID, new HandleMaterialStats(0f, 0f, 0f, 0f), RecordLoadable.create(
+    FloatLoadable.ANY.defaultField("durability", 0f, true, HandleMaterialStats::durability),
+    FloatLoadable.ANY.defaultField("mining_speed", 0f, true, HandleMaterialStats::miningSpeed),
+    FloatLoadable.ANY.defaultField("melee_speed", 0f, true, HandleMaterialStats::meleeSpeed),
+    FloatLoadable.ANY.defaultField("melee_damage", 0f, true, HandleMaterialStats::attackDamage),
     HandleMaterialStats::new));
 
   // tooltip prefixes
@@ -61,45 +63,81 @@ public record HandleMaterialStats(float durability, float miningSpeed, float mel
     return DESCRIPTION;
   }
 
+  @Override
+  public void apply(ModifierStatsBuilder builder, float scale) {
+    ToolStats.DURABILITY.percent(builder, durability * scale);
+    ToolStats.ATTACK_DAMAGE.percent(builder, attackDamage * scale);
+    ToolStats.ATTACK_SPEED.percent(builder, meleeSpeed * scale);
+    ToolStats.MINING_SPEED.percent(builder, miningSpeed * scale);
+  }
+
   /** Applies formatting for durability */
   public static Component formatDurability(float quality) {
-    return IToolStat.formatColoredMultiplier(DURABILITY_PREFIX, quality);
+    return IToolStat.formatColoredPercentBoost(DURABILITY_PREFIX, quality);
   }
 
   /** Applies formatting for attack speed */
   public static Component formatAttackDamage(float quality) {
-    return IToolStat.formatColoredMultiplier(ATTACK_DAMAGE_PREFIX, quality);
+    return IToolStat.formatColoredPercentBoost(ATTACK_DAMAGE_PREFIX, quality);
   }
 
   /** Applies formatting for attack speed */
   public static Component formatAttackSpeed(float quality) {
-    return IToolStat.formatColoredMultiplier(ATTACK_SPEED_PREFIX, quality);
+    return IToolStat.formatColoredPercentBoost(ATTACK_SPEED_PREFIX, quality);
   }
 
   /** Applies formatting for mining speed */
   public static Component formatMiningSpeed(float quality) {
-    return IToolStat.formatColoredMultiplier(MINING_SPEED_PREFIX, quality);
+    return IToolStat.formatColoredPercentBoost(MINING_SPEED_PREFIX, quality);
   }
 
 
   /* Builder */
 
-  /** Creates a new builder instance */
-  public static Builder builder() {
-    return new Builder();
+  /**
+   * Creates a new builder instance using percent boost values (meaning 0.25 is 125%)
+   */
+  public static Builder percents() {
+    return new Builder(false);
+  }
+
+  /**
+   * Creates a new builder instance using multiplier values (meaning 0.25 is 25%).
+   * Note using multiplier mode limits you to 1% increments, not that there is any use of less than 1%.
+   */
+  public static Builder multipliers() {
+    return new Builder(true);
   }
 
   @Accessors(fluent = true)
   @Setter
   public static class Builder {
-    private float durability = 1;
-    private float miningSpeed = 1;
-    private float attackSpeed = 1;
-    private float attackDamage = 1;
+    private final boolean multiplier;
+    private float durability;
+    private float miningSpeed;
+    private float attackSpeed;
+    private float attackDamage;
 
-    private Builder() {}
+    private Builder(boolean multiplier) {
+      this.multiplier = multiplier;
+      float defaultValue = multiplier ? 1 : 0;
+      this.durability = defaultValue;
+      this.miningSpeed = defaultValue;
+      this.attackSpeed = defaultValue;
+      this.attackDamage = defaultValue;
+    }
 
+    /** Converts a multiplier to a percent in a way that minimizes round off error */
+    private static float percent(float multiplier) {
+      // round to the nearest 100 to get rid of floating point weirdness
+      return (Math.round(multiplier * 100) - 100) / 100f;
+    }
+
+    /** Builds the final stats */
     public HandleMaterialStats build() {
+      if (multiplier) {
+        return new HandleMaterialStats(percent(durability), percent(miningSpeed), percent(attackSpeed), percent(attackDamage));
+      }
       return new HandleMaterialStats(durability, miningSpeed, attackSpeed, attackDamage);
     }
   }

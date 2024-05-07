@@ -3,11 +3,16 @@
     {
       "type": "tconstruct:part_stats",
       "parts": [
-        "tconstruct:pick_head",
+        {
+          "item": "tconstruct:pick_head",
+          "scale": 0.5
+        },
         "tconstruct:tool_handle",
-        "tconstruct:round_plate"
-      ],
-      "stat_provider": "tconstruct:melee_harvest"
+        {
+          "item": "tconstruct:round_plate",
+          "scale": 0.5
+        }
+      ]
     },
     {
       "type": "tconstruct:default_materials",

@@ -4,11 +4,16 @@
       "type": "tconstruct:part_stats",
       "parts": [
         "tconstruct:broad_blade",
-        "tconstruct:tough_handle",
+        {
+          "item": "tconstruct:tough_handle",
+          "scale": 0.5
+        },
         "tconstruct:tool_binding",
-        "tconstruct:tough_handle"
-      ],
-      "stat_provider": "tconstruct:melee_harvest"
+        {
+          "item": "tconstruct:tough_handle",
+          "scale": 0.5
+        }
+      ]
     },
     {
       "type": "tconstruct:default_materials",

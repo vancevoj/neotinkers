@@ -26,7 +26,6 @@ import slimeknights.tconstruct.library.tools.definition.module.build.ToolSlotsMo
 import slimeknights.tconstruct.library.tools.definition.module.build.ToolTraitsModule;
 import slimeknights.tconstruct.library.tools.definition.module.build.VolatileDataToolHook;
 import slimeknights.tconstruct.library.tools.definition.module.material.PartStatsModule;
-import slimeknights.tconstruct.library.tools.definition.module.material.PartStatsModule.WeightedPart;
 import slimeknights.tconstruct.library.tools.definition.module.material.ToolPartsHook;
 import slimeknights.tconstruct.library.tools.definition.module.mining.IsEffectiveModule;
 import slimeknights.tconstruct.library.tools.definition.module.mining.IsEffectiveToolHook;
@@ -35,6 +34,7 @@ import slimeknights.tconstruct.library.tools.definition.module.weapon.SweepWeapo
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.MultiplierNBT;
 import slimeknights.tconstruct.library.tools.nbt.StatsNBT;
+import slimeknights.tconstruct.library.tools.part.IToolPart;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
 import slimeknights.tconstruct.test.BaseMcTest;
 import slimeknights.tconstruct.test.TestHelper;
@@ -68,7 +68,7 @@ class UpdateToolDefinitionDataPacketTest extends BaseMcTest {
     ToolDefinitionData filled = ToolDefinitionDataBuilder
       .builder()
       // parts
-      .module(PartStatsModule.meleeHarvest()
+      .module(PartStatsModule.parts()
                              .part(MaterialItemFixture.MATERIAL_ITEM_HEAD, 10)
                              .part(MaterialItemFixture.MATERIAL_ITEM_HANDLE).build())
       // stats
@@ -120,12 +120,14 @@ class UpdateToolDefinitionDataPacketTest extends BaseMcTest {
     // parts
     ToolPartsHook toolPartsHook = parsed.getHook(ToolHooks.TOOL_PARTS);
     assertThat(toolPartsHook).isInstanceOf(PartStatsModule.class);
-    List<WeightedPart> parts = ((PartStatsModule)toolPartsHook).getParts();
+    PartStatsModule module = (PartStatsModule)toolPartsHook;
+    List<IToolPart> parts = module.getParts(ToolDefinition.EMPTY);
+    float[] scales = module.getScales();
     assertThat(parts).hasSize(2);
-    assertThat(parts.get(0).part()).isEqualTo(MaterialItemFixture.MATERIAL_ITEM_HEAD);
-    assertThat(parts.get(0).weight()).isEqualTo(10);
-    assertThat(parts.get(1).part()).isEqualTo(MaterialItemFixture.MATERIAL_ITEM_HANDLE);
-    assertThat(parts.get(1).weight()).isEqualTo(1);
+    assertThat(parts.get(0)).isEqualTo(MaterialItemFixture.MATERIAL_ITEM_HEAD);
+    assertThat(scales[0]).isEqualTo(10);
+    assertThat(parts.get(1)).isEqualTo(MaterialItemFixture.MATERIAL_ITEM_HANDLE);
+    assertThat(scales[1]).isEqualTo(1);
 
     // stats
     stats = TestHelper.buildStats(parsed);

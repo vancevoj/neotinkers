@@ -3,14 +3,14 @@
     "tconstruct:binding": {},
     "tconstruct:grip": {
       "accuracy": -0.1,
-      "durability": 1.2,
+      "durability": 0.2,
       "melee_damage": 2.5
     },
     "tconstruct:handle": {
-      "durability": 1.2,
-      "melee_damage": 1.0,
-      "melee_speed": 0.95,
-      "mining_speed": 1.0
+      "durability": 0.2,
+      "melee_damage": 0.0,
+      "melee_speed": -0.05,
+      "mining_speed": 0.0
     },
     "tconstruct:head": {
       "durability": 1040,

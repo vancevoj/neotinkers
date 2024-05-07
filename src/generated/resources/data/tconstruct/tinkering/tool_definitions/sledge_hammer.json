@@ -5,13 +5,18 @@
       "parts": [
         {
           "item": "tconstruct:hammer_head",
-          "weight": 2
+          "scale": 0.5
         },
         "tconstruct:tough_handle",
-        "tconstruct:large_plate",
-        "tconstruct:large_plate"
-      ],
-      "stat_provider": "tconstruct:melee_harvest"
+        {
+          "item": "tconstruct:large_plate",
+          "scale": 0.25
+        },
+        {
+          "item": "tconstruct:large_plate",
+          "scale": 0.25
+        }
+      ]
     },
     {
       "type": "tconstruct:default_materials",

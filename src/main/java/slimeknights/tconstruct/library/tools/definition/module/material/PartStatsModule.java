@@ -1,21 +1,17 @@
 package slimeknights.tconstruct.library.tools.definition.module.material;
 
-import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableList;
 import lombok.AccessLevel;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import slimeknights.mantle.data.loadable.primitive.IntLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.registration.object.EnumObject;
 import slimeknights.tconstruct.library.json.TinkerLoadables;
+import slimeknights.tconstruct.library.json.field.OptionallyNestedLoadable;
 import slimeknights.tconstruct.library.module.HookProvider;
 import slimeknights.tconstruct.library.module.ModuleHook;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinition;
 import slimeknights.tconstruct.library.tools.definition.module.ToolHooks;
 import slimeknights.tconstruct.library.tools.part.IToolPart;
-import slimeknights.tconstruct.library.tools.stat.MaterialStatProvider;
-import slimeknights.tconstruct.library.tools.stat.MaterialStatProviders;
 import slimeknights.tconstruct.tools.item.ArmorSlotType;
 
 import java.util.List;
@@ -25,24 +21,14 @@ import java.util.function.Supplier;
 public class PartStatsModule extends MaterialStatsModule implements ToolPartsHook {
   private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<PartStatsModule>defaultHooks(ToolHooks.TOOL_STATS, ToolHooks.TOOL_TRAITS, ToolHooks.TOOL_MATERIALS, ToolHooks.TOOL_PARTS, ToolHooks.MATERIAL_REPAIR);
   public static final RecordLoadable<PartStatsModule> LOADER = RecordLoadable.create(
-    STAT_PROVIDER_FIELD,
-    WeightedPart.LOADABLE.list(1).requiredField("parts", m -> m.parts),
-    PartStatsModule::new).validate((module, error) -> {
-    module.validate(error);
-    return module;
-  });
+    new OptionallyNestedLoadable<>(TinkerLoadables.TOOL_PART_ITEM, "item").list().requiredField("parts", m -> m.parts),
+    new StatScaleField("item", "parts"),
+    PartStatsModule::new);
 
-  /** Parts for serializing */
-  @VisibleForTesting
-  @Getter
-  private final List<WeightedPart> parts;
-  /*** Flattened parts for the hook */
-  private final List<IToolPart> flatParts;
-
-  public PartStatsModule(MaterialStatProvider statProvider, List<WeightedPart> parts) {
-    super(statProvider, parts.stream().map(part -> new WeightedStatType(part.part.getStatType(), part.weight)).toList());
+  private final List<IToolPart> parts;
+  public PartStatsModule(List<IToolPart> parts, float[] scales) {
+    super(parts.stream().map(IToolPart::getStatType).toList(), scales);
     this.parts = parts;
-    this.flatParts = parts.stream().map(WeightedPart::part).toList();
   }
 
   @Override
@@ -57,59 +43,36 @@ public class PartStatsModule extends MaterialStatsModule implements ToolPartsHoo
 
   @Override
   public List<IToolPart> getParts(ToolDefinition definition) {
-    return flatParts;
-  }
-
-  /** Stat with weights */
-  @VisibleForTesting
-  public record WeightedPart(IToolPart part, int weight) {
-    public static final RecordLoadable<WeightedPart> LOADABLE = RecordLoadable.create(
-      TinkerLoadables.TOOL_PART_ITEM.requiredField("item", WeightedPart::part),
-      IntLoadable.FROM_ONE.defaultField("weight", 1, WeightedPart::weight),
-      WeightedPart::new).compact(TinkerLoadables.TOOL_PART_ITEM.flatXmap(item -> new WeightedPart(item, 1), WeightedPart::part), s -> s.weight == 1);
+    return parts;
   }
 
 
   /* Builder */
 
-  public static Builder parts(MaterialStatProvider statProvider) {
-    return new Builder(statProvider);
-  }
-
-  /** Starts a builder for melee harvest stats */
-  public static Builder meleeHarvest() {
-    return parts(MaterialStatProviders.MELEE_HARVEST);
-  }
-
-  /** Starts a builder for ranged stats */
-  public static Builder ranged() {
-    return parts(MaterialStatProviders.RANGED);
-  }
-
-  /** Starts a builder for armor stats */
-  public static ArmorBuilder armor(List<ArmorSlotType> slots, MaterialStatProvider statProvider) {
-    return new ArmorBuilder(slots, statProvider);
+  public static Builder parts() {
+    return new Builder();
   }
 
   /** Starts a builder for armor stats */
   public static ArmorBuilder armor(List<ArmorSlotType> slots) {
-    return armor(slots, MaterialStatProviders.ARMOR);
+    return new ArmorBuilder(slots);
   }
 
   @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
   public static class Builder {
-    private final ImmutableList.Builder<WeightedPart> parts = ImmutableList.builder();
-    private final MaterialStatProvider statProvider;
+    private final ImmutableList.Builder<IToolPart> parts = ImmutableList.builder();
+    private final ImmutableList.Builder<Float> scales = ImmutableList.builder();
 
     /** Adds a part to the builder */
-    public Builder part(IToolPart part, int weight) {
-      parts.add(new WeightedPart(part, weight));
+    public Builder part(IToolPart part, float scale) {
+      parts.add(part);
+      scales.add(scale);
       return this;
     }
 
     /** Adds a part to the builder */
-    public Builder part(Supplier<? extends IToolPart> part, int weight) {
-      return part(part.get(), weight);
+    public Builder part(Supplier<? extends IToolPart> part, float scale) {
+      return part(part.get(), scale);
     }
 
     /** Adds a part to the builder */
@@ -124,7 +87,7 @@ public class PartStatsModule extends MaterialStatsModule implements ToolPartsHoo
 
     /** Builds the module */
     public PartStatsModule build() {
-      return new PartStatsModule(statProvider, parts.build());
+      return new PartStatsModule(parts.build(), MaterialStatsModule.Builder.buildScales(scales.build()));
     }
   }
 
@@ -133,10 +96,10 @@ public class PartStatsModule extends MaterialStatsModule implements ToolPartsHoo
     private final List<ArmorSlotType> slotTypes;
     private final Builder[] builders = new Builder[4];
 
-    private ArmorBuilder(List<ArmorSlotType> slotTypes, MaterialStatProvider statProvider) {
+    private ArmorBuilder(List<ArmorSlotType> slotTypes) {
       this.slotTypes = slotTypes;
       for (ArmorSlotType slotType : slotTypes) {
-        builders[slotType.getIndex()] = new Builder(statProvider);
+        builders[slotType.getIndex()] = new Builder();
       }
     }
 
@@ -150,28 +113,28 @@ public class PartStatsModule extends MaterialStatsModule implements ToolPartsHoo
     }
 
     /** Adds a part to the given slot */
-    public ArmorBuilder part(ArmorSlotType slotType, IToolPart part, int weight) {
-      getBuilder(slotType).part(part, weight);
+    public ArmorBuilder part(ArmorSlotType slotType, IToolPart part, float scale) {
+      getBuilder(slotType).part(part, scale);
       return this;
     }
 
     /** Adds a part to all slots */
-    public ArmorBuilder part(IToolPart part, int weight) {
+    public ArmorBuilder part(IToolPart part, float scale) {
       for (ArmorSlotType slotType : slotTypes) {
-        getBuilder(slotType).part(part, weight);
+        getBuilder(slotType).part(part, scale);
       }
       return this;
     }
 
     /** Adds a part to all slots */
-    public ArmorBuilder part(Supplier<? extends IToolPart> part, int weight) {
-      return part(part.get(), weight);
+    public ArmorBuilder part(Supplier<? extends IToolPart> part, float scale) {
+      return part(part.get(), scale);
     }
 
     /** Adds parts to the builder from the passed object */
-    public ArmorBuilder part(EnumObject<ArmorSlotType, ? extends IToolPart> parts, int weight) {
+    public ArmorBuilder part(EnumObject<ArmorSlotType, ? extends IToolPart> parts, float scale) {
       for (ArmorSlotType slotType : slotTypes) {
-        getBuilder(slotType).part(parts.get(slotType), weight);
+        getBuilder(slotType).part(parts.get(slotType), scale);
       }
       return this;
     }

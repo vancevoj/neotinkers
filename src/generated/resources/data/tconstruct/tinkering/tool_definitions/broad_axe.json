@@ -5,13 +5,15 @@
       "parts": [
         {
           "item": "tconstruct:broad_axe_head",
-          "weight": 2
+          "scale": 0.75
         },
         "tconstruct:tough_handle",
-        "tconstruct:pick_head",
+        {
+          "item": "tconstruct:pick_head",
+          "scale": 0.25
+        },
         "tconstruct:tool_binding"
-      ],
-      "stat_provider": "tconstruct:melee_harvest"
+      ]
     },
     {
       "type": "tconstruct:default_materials",

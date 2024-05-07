@@ -5,8 +5,7 @@
       "parts": [
         "tconstruct:boots_plating",
         "tconstruct:maille"
-      ],
-      "stat_provider": "tconstruct:armor"
+      ]
     },
     {
       "type": "tconstruct:default_materials",

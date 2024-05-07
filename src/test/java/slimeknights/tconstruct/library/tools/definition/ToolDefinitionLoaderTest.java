@@ -28,7 +28,6 @@ import slimeknights.tconstruct.library.tools.definition.module.build.ToolSlotsMo
 import slimeknights.tconstruct.library.tools.definition.module.build.ToolTraitsModule;
 import slimeknights.tconstruct.library.tools.definition.module.build.VolatileDataToolHook;
 import slimeknights.tconstruct.library.tools.definition.module.material.PartStatsModule;
-import slimeknights.tconstruct.library.tools.definition.module.material.PartStatsModule.WeightedPart;
 import slimeknights.tconstruct.library.tools.definition.module.material.ToolPartsHook;
 import slimeknights.tconstruct.library.tools.definition.module.mining.IsEffectiveModule;
 import slimeknights.tconstruct.library.tools.definition.module.mining.IsEffectiveToolHook;
@@ -36,6 +35,7 @@ import slimeknights.tconstruct.library.tools.definition.module.weapon.MeleeHitTo
 import slimeknights.tconstruct.library.tools.definition.module.weapon.SweepWeaponAttack;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.StatsNBT;
+import slimeknights.tconstruct.library.tools.part.IToolPart;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
 import slimeknights.tconstruct.test.BaseMcTest;
 import slimeknights.tconstruct.test.JsonFileLoader;
@@ -181,11 +181,15 @@ class ToolDefinitionLoaderTest extends BaseMcTest {
     assertThat(data).isNotSameAs(ToolDefinitionData.EMPTY);
     ToolPartsHook toolPartsHook = data.getHook(ToolHooks.TOOL_PARTS);
     assertThat(toolPartsHook).isInstanceOf(PartStatsModule.class);
-    List<WeightedPart> parts = ((PartStatsModule)toolPartsHook).getParts();
+    PartStatsModule module = (PartStatsModule) toolPartsHook;
+    List<IToolPart> parts = module.getParts(ToolDefinition.EMPTY);
+    float[] scales = module.getScales();
     assertThat(parts).isNotNull();
     assertThat(parts).hasSize(1);
-    assertThat(parts.get(0).part()).isEqualTo(MaterialItemFixture.MATERIAL_ITEM_HEAD);
-    assertThat(parts.get(0).weight()).isEqualTo(1);
+    assertThat(scales).isNotNull();
+    assertThat(scales).hasSize(1);
+    assertThat(parts.get(0)).isEqualTo(MaterialItemFixture.MATERIAL_ITEM_HEAD);
+    assertThat(scales[0]).isEqualTo(1);
     ToolDefinitionDataTest.checkToolDataNonPartsEmpty(data);
   }
 
@@ -199,14 +203,17 @@ class ToolDefinitionLoaderTest extends BaseMcTest {
     assertThat(data).isNotSameAs(ToolDefinitionData.EMPTY);
     ToolPartsHook toolPartsHook = data.getHook(ToolHooks.TOOL_PARTS);
     assertThat(toolPartsHook).isInstanceOf(PartStatsModule.class);
-    List<WeightedPart> parts = ((PartStatsModule)toolPartsHook).getParts();
+    PartStatsModule module = (PartStatsModule) toolPartsHook;
+    List<IToolPart> parts = module.getParts(ToolDefinition.EMPTY);
+    float[] scales = module.getScales();
     assertThat(parts).hasSize(3);
-    assertThat(parts.get(0).part()).isEqualTo(MaterialItemFixture.MATERIAL_ITEM_EXTRA);
-    assertThat(parts.get(0).weight()).isEqualTo(2);
-    assertThat(parts.get(1).part()).isEqualTo(MaterialItemFixture.MATERIAL_ITEM_HEAD);
-    assertThat(parts.get(1).weight()).isEqualTo(1);
-    assertThat(parts.get(2).part()).isEqualTo(MaterialItemFixture.MATERIAL_ITEM_HANDLE);
-    assertThat(parts.get(2).weight()).isEqualTo(3);
+    assertThat(scales).hasSize(3);
+    assertThat(parts.get(0)).isEqualTo(MaterialItemFixture.MATERIAL_ITEM_EXTRA);
+    assertThat(scales[0]).isEqualTo(2);
+    assertThat(parts.get(1)).isEqualTo(MaterialItemFixture.MATERIAL_ITEM_HEAD);
+    assertThat(scales[1]).isEqualTo(1);
+    assertThat(parts.get(2)).isEqualTo(MaterialItemFixture.MATERIAL_ITEM_HANDLE);
+    assertThat(scales[2]).isEqualTo(3);
     checkFullNonParts(data);
   }
 
@@ -216,13 +223,5 @@ class ToolDefinitionLoaderTest extends BaseMcTest {
     Map<ResourceLocation,JsonElement> splashList = fileLoader.loadFilesAsSplashlist(NEED_PARTS_HAS_NONE.getId().getPath());
     ToolDefinitionLoader.getInstance().apply(splashList, mock(ResourceManager.class), mock(ProfilerFiller.class));
     assertThat(NEED_PARTS_HAS_NONE.getData()).isSameAs(ToolDefinitionData.EMPTY);
-  }
-
-  @Test
-  void meleeHarvest_wrongPartType_defaults() {
-    WRONG_PART_TYPE.setData(WRONG_DATA); // set to wrong data to ensure something changes
-    Map<ResourceLocation,JsonElement> splashList = fileLoader.loadFilesAsSplashlist(WRONG_PART_TYPE.getId().getPath());
-    ToolDefinitionLoader.getInstance().apply(splashList, mock(ResourceManager.class), mock(ProfilerFiller.class));
-    assertThat(WRONG_PART_TYPE.getData()).isSameAs(ToolDefinitionData.EMPTY);
   }
 }

@@ -86,6 +86,11 @@ public class FloatToolStat implements INumericToolStat<Float> {
   }
 
   @Override
+  public void percent(ModifierStatsBuilder builder, double factor) {
+    builder.<FloatBuilder>updateStat(this, b -> b.percent += factor);
+  }
+
+  @Override
   public void multiply(ModifierStatsBuilder builder, double factor) {
     builder.<FloatBuilder>updateStat(this, b -> b.multiply *= factor);
   }
@@ -99,7 +104,7 @@ public class FloatToolStat implements INumericToolStat<Float> {
   @Override
   public Float build(ModifierStatsBuilder parent, Object builderObj) {
     FloatBuilder builder = (FloatBuilder)builderObj;
-    return (builder.base + builder.add) * builder.multiply;
+    return (builder.base + builder.add) * (1 + builder.percent) * builder.multiply;
   }
 
   @Nullable
@@ -149,9 +154,12 @@ public class FloatToolStat implements INumericToolStat<Float> {
 
   /** Internal builder to store the add and multiply value */
   protected static class FloatBuilder {
+    /** Base value of the stat, may get zeroed out */
     private float base;
     /** Value summed with the base, applies first */
     private float add = 0;
+    /** Percent multiplier, applies second */
+    private float percent = 0;
     /** Value multiplied by the sum, applies second */
     private float multiply = 1;
 

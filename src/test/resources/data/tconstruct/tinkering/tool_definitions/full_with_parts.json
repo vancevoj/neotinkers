@@ -20,9 +20,9 @@
     {
       "type": "test:part_stats",
       "parts": [
-        { "item": "test:test_extra",  "weight": 2 },
-        { "item": "test:test_head",   "weight": 1 },
-        { "item": "test:test_handle", "weight": 3 }
+        { "item": "test:test_extra",  "scale": 2 },
+        { "item": "test:test_head",   "scale": 1 },
+        { "item": "test:test_handle", "scale": 3 }
       ],
       "stat_provider": "tconstruct:melee_harvest"
     },

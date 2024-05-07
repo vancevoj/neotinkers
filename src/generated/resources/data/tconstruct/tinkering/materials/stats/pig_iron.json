@@ -2,10 +2,10 @@
   "stats": {
     "tconstruct:binding": {},
     "tconstruct:handle": {
-      "durability": 1.1,
-      "melee_damage": 1.1,
-      "melee_speed": 1.0,
-      "mining_speed": 0.85
+      "durability": 0.1,
+      "melee_damage": 0.1,
+      "melee_speed": 0.0,
+      "mining_speed": -0.15
     },
     "tconstruct:head": {
       "durability": 580,

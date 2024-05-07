@@ -11,6 +11,7 @@ import slimeknights.tconstruct.library.materials.stats.IRepairableMaterialStats;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatType;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
 import slimeknights.tconstruct.library.tools.stat.IToolStat;
+import slimeknights.tconstruct.library.tools.stat.ModifierStatsBuilder;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
 
 import java.util.List;
@@ -40,14 +41,22 @@ public record LimbMaterialStats(int durability, float drawSpeed, float velocity,
   public List<Component> getLocalizedInfo() {
     List<Component> info = Lists.newArrayList();
     info.add(ToolStats.DURABILITY.formatValue(this.durability));
-    info.add(IToolStat.formatColoredBonus(DRAW_SPEED_PREFIX, this.drawSpeed, 0.5f));
-    info.add(IToolStat.formatColoredBonus(VELOCITY_PREFIX, this.velocity, 0.5f));
-    info.add(IToolStat.formatColoredBonus(ACCURACY_PREFIX, this.accuracy, 0.5f));
+    info.add(IToolStat.formatColoredBonus(DRAW_SPEED_PREFIX, this.drawSpeed));
+    info.add(IToolStat.formatColoredBonus(VELOCITY_PREFIX, this.velocity));
+    info.add(IToolStat.formatColoredBonus(ACCURACY_PREFIX, this.accuracy));
     return info;
   }
 
   @Override
   public List<Component> getLocalizedDescriptions() {
     return DESCRIPTION;
+  }
+
+  @Override
+  public void apply(ModifierStatsBuilder builder, float scale) {
+    ToolStats.DURABILITY.update(builder, durability * scale);
+    ToolStats.DRAW_SPEED.add(builder, drawSpeed * scale);
+    ToolStats.VELOCITY.add(builder, velocity * scale);
+    ToolStats.ACCURACY.add(builder, accuracy * scale);
   }
 }

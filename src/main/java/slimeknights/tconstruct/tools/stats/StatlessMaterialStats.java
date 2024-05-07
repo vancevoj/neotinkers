@@ -6,6 +6,7 @@ import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.materials.stats.IMaterialStats;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatType;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
+import slimeknights.tconstruct.library.tools.stat.ModifierStatsBuilder;
 
 import java.util.List;
 
@@ -38,4 +39,7 @@ public enum StatlessMaterialStats implements IMaterialStats {
   public List<Component> getLocalizedDescriptions() {
     return DESCRIPTION;
   }
+
+  @Override
+  public void apply(ModifierStatsBuilder builder, float scale) {}
 }

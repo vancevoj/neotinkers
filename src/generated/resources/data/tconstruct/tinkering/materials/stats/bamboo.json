@@ -2,7 +2,7 @@
   "stats": {
     "tconstruct:grip": {
       "accuracy": 0.05,
-      "durability": 0.95,
+      "durability": -0.05,
       "melee_damage": 0.75
     },
     "tconstruct:limb": {

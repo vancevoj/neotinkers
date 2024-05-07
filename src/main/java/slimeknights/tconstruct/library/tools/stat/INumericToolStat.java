@@ -20,9 +20,16 @@ public interface INumericToolStat<T extends Number> extends IToolStat<T> {
   void add(ModifierStatsBuilder builder, double value);
 
   /**
-   * Multiplies the stat by the given value. Multiplication is applied after all addiiton
+   * Adds the given percentage to the tool. If called multiple times, values get summed rather than multiplied together.
    * @param builder  Builder instance
-   * @param factor   Amount to multiply
+   * @param value    Percentage to add. For example. 0.25 will multiply the final value by 1.25
+   */
+  void percent(ModifierStatsBuilder builder, double value);
+
+  /**
+   * Multiplies the stat by the given value. Multiplication is applied after all addition
+   * @param builder  Builder instance
+   * @param factor   Amount to multiply. For example. 0.25 will multiply the final value by 0.25
    */
   void multiply(ModifierStatsBuilder builder, double factor);
 

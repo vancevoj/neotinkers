@@ -20,7 +20,6 @@
     },
     {
       "type": "tconstruct:material_stats",
-      "stat_provider": "tconstruct:skull",
       "stat_types": [
         "tconstruct:skull"
       ]

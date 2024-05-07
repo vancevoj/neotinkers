@@ -4,6 +4,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.ApiStatus.NonExtendable;
+import slimeknights.tconstruct.library.tools.stat.ModifierStatsBuilder;
 import slimeknights.tconstruct.library.utils.Util;
 
 import java.util.List;
@@ -49,6 +50,13 @@ public interface IMaterialStats {
    * @return a list of Text Components
    */
   List<Component> getLocalizedDescriptions();
+
+  /**
+   * Applies this stat to the builder
+   * @param builder  Builder instance
+   * @param scale    Scaling factor for applying these stats, used to allow multiple stats of the same type to exist on one tool
+   */
+  void apply(ModifierStatsBuilder builder, float scale);
 
 
   /* Helpers */
