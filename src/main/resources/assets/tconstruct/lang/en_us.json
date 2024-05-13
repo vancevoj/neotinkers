@@ -252,6 +252,7 @@
   "item.tconstruct.modifier_crystal.format": "%s Crystal",
   "item.tconstruct.modifier_crystal.missing": "Missing or invalid NBT defining the modifier type",
   "item.tconstruct.modifier_crystal.tooltip": "Apply to a tool to gain 1 level of the modifier, consuming the appropriate slots.",
+  "item.tconstruct.modifier_crystal.modifier_id": "Modifier ID: %s",
 
   "item.tconstruct.creative_slot": "Creative Slot",
   "item.tconstruct.creative_slot.upgrades": "Creative Upgrade",

@@ -11,6 +11,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.modifiers.ModifierId;
+import slimeknights.tconstruct.library.modifiers.ModifierManager;
 import slimeknights.tconstruct.library.recipe.modifiers.ModifierRecipeLookup;
 import slimeknights.tconstruct.library.utils.Util;
 import slimeknights.tconstruct.tools.TinkerModifiers;
@@ -22,6 +23,7 @@ import java.util.List;
 public class ModifierCrystalItem extends Item {
   private static final Component TOOLTIP_MISSING = TConstruct.makeTranslation("item", "modifier_crystal.missing").withStyle(ChatFormatting.GRAY);
   private static final Component TOOLTIP_APPLY = TConstruct.makeTranslation("item", "modifier_crystal.tooltip").withStyle(ChatFormatting.GRAY);
+  private static final String MODIFIER_KEY = TConstruct.makeTranslationKey("item", "modifier_crystal.modifier_id");
   private static final String TAG_MODIFIER = "modifier";
   public ModifierCrystalItem(Properties props) {
     super(props);
@@ -43,10 +45,16 @@ public class ModifierCrystalItem extends Item {
 
   @Override
   public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag advanced) {
-    if (getModifier(stack) != null) {
+    ModifierId id = getModifier(stack);
+    if (id != null) {
+      if (ModifierManager.INSTANCE.contains(id)) {
+        tooltip.addAll(ModifierManager.INSTANCE.get(id).getDescriptionList());
+      }
       tooltip.add(TOOLTIP_APPLY);
-    }
-    else {
+      if (advanced.isAdvanced()) {
+        tooltip.add((Component.translatable(MODIFIER_KEY, id.toString())).withStyle(ChatFormatting.DARK_GRAY));
+      }
+    } else {
       tooltip.add(TOOLTIP_MISSING);
     }
   }
