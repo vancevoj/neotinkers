@@ -90,6 +90,7 @@ public class PlatformBlock extends Block implements SimpleWaterloggedBlock {
 
   public PlatformBlock(Properties props) {
     super(props);
+    this.registerDefaultState(this.stateDefinition.any().setValue(WATERLOGGED, false));
   }
 
   @Override
