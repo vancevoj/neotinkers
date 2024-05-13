@@ -21,9 +21,13 @@ public class BlockEntityTypeTagProvider extends TagsProvider<BlockEntityType<?>>
   @Override
   protected void addTags() {
     this.tag(TinkerTags.TileEntityTypes.CRAFTING_STATION_BLACKLIST)
-        .add(TinkerTables.craftingStationTile.get(), TinkerTables.tinkerStationTile.get(), TinkerTables.partBuilderTile.get(),
-						 TinkerTables.partChestTile.get(), TinkerTables.tinkersChestTile.get(), TinkerTables.castChestTile.get(),
-						 TinkerSmeltery.basin.get(), TinkerSmeltery.table.get(), TinkerSmeltery.smeltery.get());
+        .add(
+          BlockEntityType.FURNACE, BlockEntityType.BLAST_FURNACE, BlockEntityType.SMOKER, BlockEntityType.BREWING_STAND,
+          TinkerTables.craftingStationTile.get(), TinkerTables.tinkerStationTile.get(), TinkerTables.partBuilderTile.get(),
+          TinkerTables.partChestTile.get(), TinkerTables.tinkersChestTile.get(), TinkerTables.castChestTile.get(),
+          TinkerSmeltery.basin.get(), TinkerSmeltery.table.get(),
+          TinkerSmeltery.melter.get(), TinkerSmeltery.smeltery.get(), TinkerSmeltery.foundry.get()
+        );
 
   }
 
