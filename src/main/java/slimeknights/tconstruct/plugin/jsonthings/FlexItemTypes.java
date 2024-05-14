@@ -20,7 +20,6 @@ import slimeknights.tconstruct.plugin.jsonthings.item.FlexLayeredEmbellishedArmo
 import slimeknights.tconstruct.plugin.jsonthings.item.FlexModifiableBowItem;
 import slimeknights.tconstruct.plugin.jsonthings.item.FlexModifiableCrossbowItem;
 import slimeknights.tconstruct.plugin.jsonthings.item.FlexModifiableItem;
-import slimeknights.tconstruct.plugin.jsonthings.item.FlexModifiableStaffItem;
 import slimeknights.tconstruct.plugin.jsonthings.item.FlexRepairKitItem;
 import slimeknights.tconstruct.plugin.jsonthings.item.FlexToolPartItem;
 import slimeknights.tconstruct.tools.item.ArmorSlotType;
@@ -60,12 +59,6 @@ public class FlexItemTypes {
     register("tool", data -> {
       boolean breakBlocksInCreative = GsonHelper.getAsBoolean(data, "break_blocks_in_creative", true);
       return (props, builder) -> add(TOOL_ITEMS, new FlexModifiableItem(props, ToolDefinition.create(builder.getRegistryName()), breakBlocksInCreative));
-    });
-
-    /* Register a modifiable tool instance for melee/harvest tools */
-    register("staff", data -> {
-      boolean breakBlocksInCreative = GsonHelper.getAsBoolean(data, "break_blocks_in_creative", true);
-      return (props, builder) -> add(TOOL_ITEMS, new FlexModifiableStaffItem(props, ToolDefinition.create(builder.getRegistryName()), breakBlocksInCreative));
     });
 
     /* Register a modifiable tool instance for bow like items (release on finish) */
