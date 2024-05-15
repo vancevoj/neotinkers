@@ -5,7 +5,7 @@ import dev.gigaherz.jsonthings.things.StackContext;
 import dev.gigaherz.jsonthings.things.events.FlexEventHandler;
 import net.minecraft.world.item.CreativeModeTab;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinition;
-import slimeknights.tconstruct.tools.item.ModifiableBowItem;
+import slimeknights.tconstruct.library.tools.item.ranged.ModifiableBowItem;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;

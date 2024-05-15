@@ -6,7 +6,7 @@ import dev.gigaherz.jsonthings.things.events.FlexEventHandler;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinition;
-import slimeknights.tconstruct.tools.item.ModifiableCrossbowItem;
+import slimeknights.tconstruct.library.tools.item.ranged.ModifiableCrossbowItem;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
