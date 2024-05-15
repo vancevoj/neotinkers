@@ -12,16 +12,15 @@ import slimeknights.mantle.data.loadable.Loadable;
 import slimeknights.mantle.data.loadable.Loadables;
 import slimeknights.mantle.util.JsonHelper;
 import slimeknights.tconstruct.TConstruct;
+import slimeknights.tconstruct.library.client.armor.texture.ArmorTextureSupplier;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinition;
 import slimeknights.tconstruct.library.tools.item.armor.DummyArmorMaterial;
-import slimeknights.tconstruct.library.tools.item.armor.texture.ArmorTextureSupplier;
 import slimeknights.tconstruct.plugin.jsonthings.item.FlexModifiableBowItem;
 import slimeknights.tconstruct.plugin.jsonthings.item.FlexModifiableCrossbowItem;
 import slimeknights.tconstruct.plugin.jsonthings.item.FlexModifiableItem;
 import slimeknights.tconstruct.plugin.jsonthings.item.FlexRepairKitItem;
 import slimeknights.tconstruct.plugin.jsonthings.item.FlexToolPartItem;
-import slimeknights.tconstruct.plugin.jsonthings.item.armor.FlexMaterialArmorItem;
 import slimeknights.tconstruct.plugin.jsonthings.item.armor.FlexModifiableArmorItem;
 import slimeknights.tconstruct.plugin.jsonthings.item.armor.FlexMultilayerArmorModel;
 import slimeknights.tconstruct.tools.item.ArmorSlotType;
@@ -88,17 +87,10 @@ public class FlexItemTypes {
     /* Layered armor type, used for golden, dyeable, etc */
     Loadable<List<ArmorTextureSupplier>> ARMOR_TEXTURES = ArmorTextureSupplier.LOADER.list(1);
     register("multilayer_armor", data -> {
+      ResourceLocation name = JsonHelper.getResourceLocation(data, "model_name");
       SoundEvent sound = Loadables.SOUND_EVENT.getOrDefault(data, "equip_sound", SoundEvents.ARMOR_EQUIP_GENERIC);
       ArmorSlotType slot = JsonHelper.getAsEnum(data, "slot", ArmorSlotType.class);
-      List<ArmorTextureSupplier> layers = ARMOR_TEXTURES.getIfPresent(data, "texture_layers");
-      return (props, builder) -> add(ARMOR_ITEMS, new FlexMultilayerArmorModel(new DummyArmorMaterial(builder.getRegistryName(), sound), slot.getEquipmentSlot(), props, ToolDefinition.create(builder.getRegistryName()), layers.toArray(new ArmorTextureSupplier[0])));
-    });
-
-    /* Register a modifiable armor part that supports embellishments */
-    register("material_armor", data -> {
-      SoundEvent sound = Loadables.SOUND_EVENT.getOrDefault(data, "equip_sound", SoundEvents.ARMOR_EQUIP_GENERIC);
-      ArmorSlotType slot = JsonHelper.getAsEnum(data, "slot", ArmorSlotType.class);
-      return (props, builder) -> add(ARMOR_ITEMS, new FlexMaterialArmorItem(new DummyArmorMaterial(builder.getRegistryName(), sound), slot.getEquipmentSlot(), props, ToolDefinition.create(builder.getRegistryName())));
+      return (props, builder) -> add(ARMOR_ITEMS, new FlexMultilayerArmorModel(new DummyArmorMaterial(name, sound), slot.getEquipmentSlot(), props, ToolDefinition.create(builder.getRegistryName())));
     });
   }
 

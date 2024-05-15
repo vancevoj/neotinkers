@@ -27,6 +27,11 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.common.recipe.RecipeCacheInvalidator;
+import slimeknights.tconstruct.library.client.armor.texture.ArmorTextureSupplier;
+import slimeknights.tconstruct.library.client.armor.texture.DyedArmorTextureSupplier;
+import slimeknights.tconstruct.library.client.armor.texture.FirstArmorTextureSupplier;
+import slimeknights.tconstruct.library.client.armor.texture.FixedArmorTextureSupplier;
+import slimeknights.tconstruct.library.client.armor.texture.MaterialArmorTextureSupplier;
 import slimeknights.tconstruct.library.client.book.TinkerBook;
 import slimeknights.tconstruct.library.client.data.spritetransformer.GreyToColorMapping;
 import slimeknights.tconstruct.library.client.data.spritetransformer.GreyToSpriteTransformer;
@@ -39,6 +44,8 @@ import slimeknights.tconstruct.library.client.modifiers.ModifierIconManager;
 import slimeknights.tconstruct.tables.client.PatternGuiTextureLoader;
 
 import java.util.function.Consumer;
+
+import static slimeknights.tconstruct.TConstruct.getResource;
 
 /**
  * This class should only be referenced on the client side
@@ -64,6 +71,13 @@ public class TinkerClient {
     ISpriteTransformer.SERIALIZER.registerDeserializer(RecolorSpriteTransformer.NAME, RecolorSpriteTransformer.DESERIALIZER);
     GreyToSpriteTransformer.init();
     IColorMapping.SERIALIZER.registerDeserializer(GreyToColorMapping.NAME, GreyToColorMapping.DESERIALIZER);
+
+    // armor textures
+    ArmorTextureSupplier.LOADER.register(getResource("fixed"), FixedArmorTextureSupplier.LOADER);
+    ArmorTextureSupplier.LOADER.register(getResource("dyed"), DyedArmorTextureSupplier.LOADER);
+    ArmorTextureSupplier.LOADER.register(getResource("first_present"), FirstArmorTextureSupplier.LOADER);
+    ArmorTextureSupplier.LOADER.register(getResource("material"), MaterialArmorTextureSupplier.Material.LOADER);
+    ArmorTextureSupplier.LOADER.register(getResource("persistent_data"), MaterialArmorTextureSupplier.PersistentData.LOADER);
   }
 
   @SubscribeEvent

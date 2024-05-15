@@ -20,10 +20,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.EventPriority;
+import slimeknights.tconstruct.library.client.armor.texture.ArmorTextureSupplier.ArmorTexture;
+import slimeknights.tconstruct.library.client.armor.texture.ArmorTextureSupplier.TextureType;
 import slimeknights.tconstruct.library.tools.helper.ModifierUtil;
 import slimeknights.tconstruct.library.tools.item.armor.ModifiableArmorItem;
-import slimeknights.tconstruct.library.tools.item.armor.texture.ArmorTextureSupplier.ArmorTexture;
-import slimeknights.tconstruct.library.tools.item.armor.texture.ArmorTextureSupplier.TextureType;
 
 import javax.annotation.Nullable;
 import java.util.function.Function;

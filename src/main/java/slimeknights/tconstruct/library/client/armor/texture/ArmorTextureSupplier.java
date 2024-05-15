@@ -1,5 +1,6 @@
-package slimeknights.tconstruct.library.tools.item.armor.texture;
+package slimeknights.tconstruct.library.client.armor.texture;
 
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import slimeknights.mantle.data.listener.ResourceValidator;
@@ -11,7 +12,7 @@ public interface ArmorTextureSupplier extends IHaveLoader {
   /** Folder for tinkers armor, intentionally not the normal armor folder to make the texture scan low risk */
   String FOLDER = "textures/tinker_armor";
   /** Validator checking if armor textures exist */
-  ResourceValidator ARMOR_VALIDATOR = new ResourceValidator(FOLDER, FOLDER, ".png");
+  ResourceValidator TEXTURE_VALIDATOR = new ResourceValidator(FOLDER, FOLDER, ".png");
 
   /** Registry for Json Things */
   GenericLoaderRegistry<ArmorTextureSupplier> LOADER = new GenericLoaderRegistry<>("Armor texture type", true);
@@ -37,5 +38,12 @@ public interface ArmorTextureSupplier extends IHaveLoader {
     public static TextureType fromSlot(EquipmentSlot slot) {
       return slot == EquipmentSlot.LEGS ? LEGGINGS : ARMOR;
     }
+  }
+
+  /**
+   * Gets a texture using the named format
+   */
+  static String getTexturePath(ResourceLocation name) {
+    return name.getNamespace() + ':' + FOLDER + '/' + name.getPath() + ".png";
   }
 }

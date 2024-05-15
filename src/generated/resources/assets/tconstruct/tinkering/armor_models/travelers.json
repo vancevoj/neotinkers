@@ -1,0 +1,24 @@
+{
+  "layers": [
+    {
+      "type": "tconstruct:first_present",
+      "options": [
+        {
+          "type": "tconstruct:fixed",
+          "modifier": "tconstruct:golden",
+          "prefix": "tconstruct:travelers/golden_"
+        },
+        {
+          "type": "tconstruct:fixed",
+          "prefix": "tconstruct:travelers/base_"
+        }
+      ]
+    },
+    {
+      "type": "tconstruct:dyed",
+      "always_render": false,
+      "modifier": "tconstruct:dyed",
+      "prefix": "tconstruct:travelers/overlay_"
+    }
+  ]
+}

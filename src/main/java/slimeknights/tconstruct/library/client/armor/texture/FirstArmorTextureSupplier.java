@@ -1,4 +1,4 @@
-package slimeknights.tconstruct.library.tools.item.armor.texture;
+package slimeknights.tconstruct.library.client.armor.texture;
 
 import net.minecraft.world.item.ItemStack;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;

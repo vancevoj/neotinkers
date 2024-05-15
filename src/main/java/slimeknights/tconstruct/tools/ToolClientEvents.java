@@ -41,6 +41,7 @@ import slimeknights.tconstruct.common.ClientEventBase;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.common.network.TinkerNetwork;
 import slimeknights.tconstruct.library.client.armor.AbstractArmorModel;
+import slimeknights.tconstruct.library.client.armor.ArmorModelManager;
 import slimeknights.tconstruct.library.client.materials.MaterialTooltipCache;
 import slimeknights.tconstruct.library.client.model.DynamicTextureLoader;
 import slimeknights.tconstruct.library.client.model.TinkerItemProperties;
@@ -58,8 +59,6 @@ import slimeknights.tconstruct.library.modifiers.ModifierId;
 import slimeknights.tconstruct.library.modifiers.ModifierManager;
 import slimeknights.tconstruct.library.modifiers.modules.technical.ArmorStatModule;
 import slimeknights.tconstruct.library.tools.capability.TinkerDataKeys;
-import slimeknights.tconstruct.library.tools.item.armor.texture.ArmorTextureSupplier;
-import slimeknights.tconstruct.library.tools.item.armor.texture.MaterialArmorTextureSupplier;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
 import slimeknights.tconstruct.library.utils.HarvestTiers;
@@ -99,8 +98,7 @@ public class ToolClientEvents extends ClientEventBase {
     manager.registerReloadListener(MODIFIER_RELOAD_LISTENER);
     manager.registerReloadListener(SlimeskullArmorModel.RELOAD_LISTENER);
     manager.registerReloadListener(HarvestTiers.RELOAD_LISTENER);
-    manager.registerReloadListener(MaterialArmorTextureSupplier.RELOAD_LISTENER);
-    manager.registerReloadListener(ArmorTextureSupplier.ARMOR_VALIDATOR);
+    ArmorModelManager.init(manager);
   }
 
   @SubscribeEvent

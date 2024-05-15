@@ -1,6 +1,5 @@
 package slimeknights.tconstruct.tools;
 
-import net.minecraft.Util;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.core.Registry;
 import net.minecraft.core.particles.SimpleParticleType;
@@ -13,7 +12,6 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -74,23 +72,17 @@ import slimeknights.tconstruct.library.tools.definition.module.weapon.ParticleWe
 import slimeknights.tconstruct.library.tools.definition.module.weapon.SweepWeaponAttack;
 import slimeknights.tconstruct.library.tools.helper.ModifierLootingHandler;
 import slimeknights.tconstruct.library.tools.item.ModifiableItem;
-import slimeknights.tconstruct.library.tools.item.armor.MaterialArmorItem;
 import slimeknights.tconstruct.library.tools.item.armor.ModifiableArmorItem;
 import slimeknights.tconstruct.library.tools.item.armor.MultilayerArmorItem;
-import slimeknights.tconstruct.library.tools.item.armor.texture.ArmorTextureSupplier;
-import slimeknights.tconstruct.library.tools.item.armor.texture.DyedArmorTextureSupplier;
-import slimeknights.tconstruct.library.tools.item.armor.texture.FirstArmorTextureSupplier;
-import slimeknights.tconstruct.library.tools.item.armor.texture.FixedArmorTextureSupplier;
-import slimeknights.tconstruct.library.tools.item.armor.texture.MaterialArmorTextureSupplier;
 import slimeknights.tconstruct.library.tools.item.ranged.ModifiableBowItem;
 import slimeknights.tconstruct.library.tools.item.ranged.ModifiableCrossbowItem;
 import slimeknights.tconstruct.library.utils.BlockSideHitListener;
+import slimeknights.tconstruct.tools.data.ArmorModelProvider;
 import slimeknights.tconstruct.tools.data.StationSlotLayoutProvider;
 import slimeknights.tconstruct.tools.data.ToolDefinitionDataProvider;
 import slimeknights.tconstruct.tools.data.ToolItemModelProvider;
 import slimeknights.tconstruct.tools.data.ToolsRecipeProvider;
 import slimeknights.tconstruct.tools.data.material.MaterialDataProvider;
-import slimeknights.tconstruct.tools.data.material.MaterialIds;
 import slimeknights.tconstruct.tools.data.material.MaterialRecipeProvider;
 import slimeknights.tconstruct.tools.data.material.MaterialRenderInfoProvider;
 import slimeknights.tconstruct.tools.data.material.MaterialStatsDataProvider;
@@ -116,13 +108,6 @@ public final class TinkerTools extends TinkerModule {
     BlockSideHitListener.init();
     ModifierLootingHandler.init();
     RandomMaterial.init();
-
-    // armor textures - need to ensure registered before item registry event
-    ArmorTextureSupplier.LOADER.register(getResource("fixed"), FixedArmorTextureSupplier.LOADER);
-    ArmorTextureSupplier.LOADER.register(getResource("dyed"), DyedArmorTextureSupplier.LOADER);
-    ArmorTextureSupplier.LOADER.register(getResource("first"), FirstArmorTextureSupplier.LOADER);
-    ArmorTextureSupplier.LOADER.register(getResource("material"), MaterialArmorTextureSupplier.Material.LOADER);
-    ArmorTextureSupplier.LOADER.register(getResource("persistent_data"), MaterialArmorTextureSupplier.PersistentData.LOADER);
   }
 
   /** Creative tab for all tool items */
@@ -164,22 +149,12 @@ public final class TinkerTools extends TinkerModule {
   public static final ItemObject<ModifiableItem> enderStaff = ITEMS.register("ender_staff", () -> new ModifiableItem(TOOL, ToolDefinitions.ENDER_STAFF));
 
   // armor
-  public static final EnumObject<ArmorSlotType,ModifiableArmorItem> travelersGear = ITEMS.registerEnum("travelers", ArmorSlotType.values(), type -> new MultilayerArmorItem(ArmorDefinitions.TRAVELERS, type, TOOL, Util.memoize(name -> new ArmorTextureSupplier[] {
-    new FirstArmorTextureSupplier(FixedArmorTextureSupplier.builder(name, "/golden_").modifier(TinkerModifiers.golden.getId()).build(), FixedArmorTextureSupplier.builder(name, "/base_").build()),
-    new DyedArmorTextureSupplier(name, "/overlay_", TinkerModifiers.dyed.getId(), false)
-  })));
-  public static final EnumObject<ArmorSlotType,ModifiableArmorItem> plateArmor = ITEMS.registerEnum("plate", ArmorSlotType.values(), type -> new MaterialArmorItem(ArmorDefinitions.PLATE, type, TOOL));
-  public static final EnumObject<ArmorSlotType,ModifiableArmorItem> slimesuit;
-  static {
-    Lazy<ArmorTextureSupplier> texture = () -> new FirstArmorTextureSupplier(
-      FixedArmorTextureSupplier.builder(ArmorDefinitions.SLIMESUIT.getId(), "/").materialSuffix(MaterialIds.gold).modifier(TinkerModifiers.golden.getId()).build(),
-      new MaterialArmorTextureSupplier.PersistentData(ArmorDefinitions.SLIMESUIT.getId(), TinkerModifiers.embellishment.getId()),
-      FixedArmorTextureSupplier.builder(ArmorDefinitions.SLIMESUIT.getId(), "/").materialSuffix(MaterialIds.enderslime).build());
-    slimesuit = new EnumObject.Builder<ArmorSlotType,ModifiableArmorItem>(ArmorSlotType.class)
-      .putAll(ITEMS.registerEnum("slime", new ArmorSlotType[] {ArmorSlotType.BOOTS, ArmorSlotType.LEGGINGS, ArmorSlotType.CHESTPLATE}, type -> new MultilayerArmorItem(ArmorDefinitions.SLIMESUIT, type, TOOL, texture.get())))
-      .put(ArmorSlotType.HELMET, ITEMS.register("slime_helmet", () -> new SlimeskullItem(ArmorDefinitions.SLIMESUIT, TOOL, texture.get())))
-      .build();
-  }
+  public static final EnumObject<ArmorSlotType,ModifiableArmorItem> travelersGear = ITEMS.registerEnum("travelers", ArmorSlotType.values(), type -> new MultilayerArmorItem(ArmorDefinitions.TRAVELERS, type, TOOL));
+  public static final EnumObject<ArmorSlotType,ModifiableArmorItem> plateArmor = ITEMS.registerEnum("plate", ArmorSlotType.values(), type -> new MultilayerArmorItem(ArmorDefinitions.PLATE, type, TOOL));
+  public static final EnumObject<ArmorSlotType,ModifiableArmorItem> slimesuit = new EnumObject.Builder<ArmorSlotType,ModifiableArmorItem>(ArmorSlotType.class)
+    .putAll(ITEMS.registerEnum("slime", new ArmorSlotType[] {ArmorSlotType.BOOTS, ArmorSlotType.LEGGINGS, ArmorSlotType.CHESTPLATE}, type -> new MultilayerArmorItem(ArmorDefinitions.SLIMESUIT, type, TOOL)))
+    .put(ArmorSlotType.HELMET, ITEMS.register("slime_helmet", () -> new SlimeskullItem(ArmorDefinitions.SLIMESUIT, TOOL)))
+    .build();
 
 
   // shields
@@ -292,5 +267,6 @@ public final class TinkerTools extends TinkerModule {
     generator.addProvider(client, new GeneratorPartTextureJsonGenerator(generator, TConstruct.MOD_ID, partSprites));
     generator.addProvider(client, new MaterialPartTextureGenerator(generator, existingFileHelper, partSprites, materialSprites));
     generator.addProvider(client, new MaterialPaletteDebugGenerator(generator, TConstruct.MOD_ID, materialSprites));
+    generator.addProvider(client, new ArmorModelProvider(generator));
   }
 }

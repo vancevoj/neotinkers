@@ -1,4 +1,4 @@
-package slimeknights.tconstruct.library.tools.item.armor.texture;
+package slimeknights.tconstruct.library.client.armor.texture;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -14,24 +14,24 @@ import slimeknights.tconstruct.library.tools.helper.ModifierUtil;
  */
 public class DyedArmorTextureSupplier implements ArmorTextureSupplier {
   public static final RecordLoadable<DyedArmorTextureSupplier> LOADER = RecordLoadable.create(
-    Loadables.RESOURCE_LOCATION.requiredField("name", s -> s.name),
+    Loadables.RESOURCE_LOCATION.requiredField("prefix", s -> s.prefix),
     ModifierId.PARSER.requiredField("modifier", s -> s.modifier),
     BooleanLoadable.INSTANCE.defaultField("always_render", false, s -> s.alwaysRender),
     DyedArmorTextureSupplier::new);
 
-  private final ResourceLocation name;
+  private final ResourceLocation prefix;
   private final ModifierId modifier;
   private final boolean alwaysRender;
   private final String[] textures;
 
-  public DyedArmorTextureSupplier(ResourceLocation name, ModifierId modifier, boolean alwaysRender) {
-    this.name = name;
+  public DyedArmorTextureSupplier(ResourceLocation prefix, ModifierId modifier, boolean alwaysRender) {
+    this.prefix = prefix;
     this.modifier = modifier;
     this.alwaysRender = alwaysRender;
     this.textures = new String[] {
-      FixedArmorTextureSupplier.getTexture(name, "armor"),
-      FixedArmorTextureSupplier.getTexture(name, "leggings"),
-      FixedArmorTextureSupplier.getTexture(name, "wings"),
+      getTexture(prefix, "armor"),
+      getTexture(prefix, "leggings"),
+      getTexture(prefix, "wings"),
     };
   }
 
@@ -39,9 +39,19 @@ public class DyedArmorTextureSupplier implements ArmorTextureSupplier {
     this(LocationExtender.INSTANCE.suffix(base, variant), modifier, alwaysRender);
   }
 
+  /** Gets a texture if it exists, empty otherwise */
+  public static String getTexture(ResourceLocation base, String variant) {
+    ResourceLocation name = LocationExtender.INSTANCE.suffix(base, variant);
+    if (TEXTURE_VALIDATOR.test(name)) {
+      return ArmorTextureSupplier.getTexturePath(name);
+    }
+    return "";
+  }
+
   @Override
   public ArmorTexture getArmorTexture(ItemStack stack, TextureType textureType) {
-    if (alwaysRender || ModifierUtil.getModifierLevel(stack, modifier) > 0) {
+    String texture = textures[textureType.ordinal()];
+    if (!texture.isEmpty() && (alwaysRender || ModifierUtil.getModifierLevel(stack, modifier) > 0)) {
       int color = ModifierUtil.getPersistentInt(stack, modifier, -1);
       return new ArmorTexture(textures[textureType.ordinal()], 0xFF000000 | color);
     }

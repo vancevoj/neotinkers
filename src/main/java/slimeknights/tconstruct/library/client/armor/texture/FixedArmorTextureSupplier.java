@@ -1,4 +1,4 @@
-package slimeknights.tconstruct.library.tools.item.armor.texture;
+package slimeknights.tconstruct.library.client.armor.texture;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -22,40 +22,44 @@ import javax.annotation.Nullable;
  */
 public class FixedArmorTextureSupplier implements ArmorTextureSupplier {
   public static final RecordLoadable<FixedArmorTextureSupplier> LOADER = RecordLoadable.create(
-    Loadables.RESOURCE_LOCATION.requiredField("name", s -> s.name),
+    Loadables.RESOURCE_LOCATION.requiredField("prefix", s -> s.prefix),
     StringLoadable.DEFAULT.defaultField("suffix", "", s -> s.suffix),
     ColorLoadable.ALPHA.defaultField("color", -1, s -> s.textures[0].color()),
     ModifierId.PARSER.nullableField("modifier", s -> s.modifier),
     FixedArmorTextureSupplier::new);
-  public static final String VARIANT = "{variant}";
 
-  private final ResourceLocation name;
+  private final ResourceLocation prefix;
   private final String suffix;
   @Nullable
   private final ModifierId modifier;
   private final ArmorTexture[] textures;
-  public FixedArmorTextureSupplier(ResourceLocation name, String suffix, int color, @Nullable ModifierId modifier) {
-    this.name = name;
+  public FixedArmorTextureSupplier(ResourceLocation prefix, String suffix, int color, @Nullable ModifierId modifier) {
+    this.prefix = prefix;
     this.suffix = suffix;
     this.modifier = modifier;
+    // ensure the texture exists to add it. Not an issue during datagen as this section is not serialized
     this.textures = new ArmorTexture[] {
-      new ArmorTexture(getTexture(name, "armor" + suffix), color),
-      new ArmorTexture(getTexture(name, "leggings" + suffix), color),
-      new ArmorTexture(getTexture(name, "wings" + suffix), color),
+      getTexture(prefix, "armor" + suffix, color),
+      getTexture(prefix, "leggings" + suffix, color),
+      getTexture(prefix, "wings" + suffix, color),
     };
   }
 
-  /**
-   * Gets a texture using the named format
-   */
-  public static String getTexture(ResourceLocation base, String variant) {
-    return base.getNamespace() + ':' + FOLDER + '/' + base.getPath() + variant + ".png";
+  /** Gets the texture for the given name */
+  public static ArmorTexture getTexture(ResourceLocation base, String suffix, int color) {
+    ResourceLocation name = LocationExtender.INSTANCE.suffix(base, suffix);
+    if (TEXTURE_VALIDATOR.test(name)) {
+      return new ArmorTexture(ArmorTextureSupplier.getTexturePath(name), color);
+    }
+    return ArmorTexture.EMPTY;
   }
 
   @Override
   public ArmorTexture getArmorTexture(ItemStack stack, TextureType textureType) {
-    if (modifier == null || ModifierUtil.getModifierLevel(stack, modifier) > 0) {
-      return textures[textureType.ordinal()];
+    ArmorTexture texture = textures[textureType.ordinal()];
+    // skip the modifier check if the texture is not set, saves some effort
+    if (texture != ArmorTexture.EMPTY && (modifier == null || ModifierUtil.getModifierLevel(stack, modifier) > 0)) {
+      return texture;
     }
     return ArmorTexture.EMPTY;
   }
