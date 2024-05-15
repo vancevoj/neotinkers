@@ -87,11 +87,6 @@ public class ModifiableItem extends Item implements IModifiableDisplay {
   /* Basic properties */
 
   @Override
-  public int getMaxStackSize(ItemStack stack) {
-    return 1;
-  }
-
-  @Override
   public boolean isNotReplaceableByPickAction(ItemStack stack, Player player, int inventorySlot) {
     return true;
   }
@@ -222,8 +217,8 @@ public class ModifiableItem extends Item implements IModifiableDisplay {
   /* Durability display */
 
   @Override
-  public boolean isBarVisible(ItemStack pStack) {
-    return DurabilityDisplayModifierHook.showDurabilityBar(pStack);
+  public boolean isBarVisible(ItemStack stack) {
+    return stack.getCount() == 1 && DurabilityDisplayModifierHook.showDurabilityBar(stack);
   }
 
   @Override
@@ -241,7 +236,7 @@ public class ModifiableItem extends Item implements IModifiableDisplay {
 
   @Override
   public boolean onLeftClickEntity(ItemStack stack, Player player, Entity target) {
-    return EntityInteractionModifierHook.leftClickEntity(stack, player, target);
+    return stack.getCount() > 1 || EntityInteractionModifierHook.leftClickEntity(stack, player, target);
   }
 
   @Override
@@ -278,12 +273,12 @@ public class ModifiableItem extends Item implements IModifiableDisplay {
 
   @Override
   public float getDestroySpeed(ItemStack stack, BlockState state) {
-    return MiningSpeedToolHook.getDestroySpeed(stack, state);
+    return stack.getCount() == 1 ? MiningSpeedToolHook.getDestroySpeed(stack, state) : 0;
   }
 
   @Override
   public boolean onBlockStartBreak(ItemStack stack, BlockPos pos, Player player) {
-    return ToolHarvestLogic.handleBlockBreak(stack, pos, player);
+    return stack.getCount() > 1 || ToolHarvestLogic.handleBlockBreak(stack, pos, player);
   }
 
 
@@ -312,13 +307,15 @@ public class ModifiableItem extends Item implements IModifiableDisplay {
   
   @Override
   public InteractionResult onItemUseFirst(ItemStack stack, UseOnContext context) {
-    ToolStack tool = ToolStack.from(stack);
-    InteractionHand hand = context.getHand();
-    if (shouldInteract(context.getPlayer(), tool, hand)) {
-      for (ModifierEntry entry : tool.getModifierList()) {
-        InteractionResult result = entry.getHook(ModifierHooks.BLOCK_INTERACT).beforeBlockUse(tool, entry, context, InteractionSource.RIGHT_CLICK);
-        if (result.consumesAction()) {
-          return result;
+    if (stack.getCount() == 1) {
+      ToolStack tool = ToolStack.from(stack);
+      InteractionHand hand = context.getHand();
+      if (shouldInteract(context.getPlayer(), tool, hand)) {
+        for (ModifierEntry entry : tool.getModifierList()) {
+          InteractionResult result = entry.getHook(ModifierHooks.BLOCK_INTERACT).beforeBlockUse(tool, entry, context, InteractionSource.RIGHT_CLICK);
+          if (result.consumesAction()) {
+            return result;
+          }
         }
       }
     }
@@ -327,13 +324,16 @@ public class ModifiableItem extends Item implements IModifiableDisplay {
 
   @Override
   public InteractionResult useOn(UseOnContext context) {
-    ToolStack tool = ToolStack.from(context.getItemInHand());
-    InteractionHand hand = context.getHand();
-    if (shouldInteract(context.getPlayer(), tool, hand)) {
-      for (ModifierEntry entry : tool.getModifierList()) {
-        InteractionResult result = entry.getHook(ModifierHooks.BLOCK_INTERACT).afterBlockUse(tool, entry, context, InteractionSource.RIGHT_CLICK);
-        if (result.consumesAction()) {
-          return result;
+    ItemStack stack = context.getItemInHand();
+    if (stack.getCount() == 1) {
+      ToolStack tool = ToolStack.from(stack);
+      InteractionHand hand = context.getHand();
+      if (shouldInteract(context.getPlayer(), tool, hand)) {
+        for (ModifierEntry entry : tool.getModifierList()) {
+          InteractionResult result = entry.getHook(ModifierHooks.BLOCK_INTERACT).afterBlockUse(tool, entry, context, InteractionSource.RIGHT_CLICK);
+          if (result.consumesAction()) {
+            return result;
+          }
         }
       }
     }
@@ -357,6 +357,9 @@ public class ModifiableItem extends Item implements IModifiableDisplay {
   @Override
   public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand hand) {
     ItemStack stack = playerIn.getItemInHand(hand);
+    if (stack.getCount() > 1) {
+      return InteractionResultHolder.pass(stack);
+    }
     ToolStack tool = ToolStack.from(stack);
     if (shouldInteract(playerIn, tool, hand)) {
       for (ModifierEntry entry : tool.getModifierList()) {
@@ -366,8 +369,7 @@ public class ModifiableItem extends Item implements IModifiableDisplay {
         }
       }
     }
-    InteractionResult result = ToolInventoryCapability.tryOpenContainer(stack, tool, playerIn, Util.getSlotType(hand));
-    return new InteractionResultHolder<>(result, stack);
+    return new InteractionResultHolder<>(ToolInventoryCapability.tryOpenContainer(stack, tool, playerIn, Util.getSlotType(hand)), stack);
   }
 
   @Override
@@ -432,7 +434,7 @@ public class ModifiableItem extends Item implements IModifiableDisplay {
 
   @Override
   public boolean canPerformAction(ItemStack stack, ToolAction toolAction) {
-    return ModifierUtil.canPerformAction(ToolStack.from(stack), toolAction);
+    return stack.getCount() == 1 && ModifierUtil.canPerformAction(ToolStack.from(stack), toolAction);
   }
 
 
