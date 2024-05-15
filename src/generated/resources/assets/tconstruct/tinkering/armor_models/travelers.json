@@ -16,7 +16,6 @@
     },
     {
       "type": "tconstruct:dyed",
-      "always_render": false,
       "modifier": "tconstruct:dyed",
       "prefix": "tconstruct:travelers/overlay_"
     }

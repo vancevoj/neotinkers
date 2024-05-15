@@ -22,7 +22,7 @@ public class ArmorModelProvider extends AbstractArmorModelProvider {
       new FirstArmorTextureSupplier(
         FixedArmorTextureSupplier.builder(name, "/golden_").modifier(TinkerModifiers.golden.getId()).build(),
         FixedArmorTextureSupplier.builder(name, "/base_").build()),
-      new DyedArmorTextureSupplier(name, "/overlay_", TinkerModifiers.dyed.getId(), false)
+      new DyedArmorTextureSupplier(name, "/overlay_", TinkerModifiers.dyed.getId(), null)
     });
     addModel(ArmorDefinitions.PLATE, name -> new ArmorTextureSupplier[] {
       new MaterialArmorTextureSupplier.Material(name, "/plating_", 0),
