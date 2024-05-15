@@ -41,11 +41,9 @@ public class DyedArmorTextureSupplier implements ArmorTextureSupplier {
 
   @Override
   public ArmorTexture getArmorTexture(ItemStack stack, TextureType textureType) {
-    if (ModifierUtil.getModifierLevel(stack, modifier) > 0) {
+    if (alwaysRender || ModifierUtil.getModifierLevel(stack, modifier) > 0) {
       int color = ModifierUtil.getPersistentInt(stack, modifier, -1);
-      if (alwaysRender || color != -1) {
-        return new ArmorTexture(textures[textureType.ordinal()], 0xFF000000 | color);
-      }
+      return new ArmorTexture(textures[textureType.ordinal()], 0xFF000000 | color);
     }
     return ArmorTexture.EMPTY;
   }
