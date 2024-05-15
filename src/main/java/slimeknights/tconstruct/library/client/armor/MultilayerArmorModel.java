@@ -34,7 +34,7 @@ public class MultilayerArmorModel extends AbstractArmorModel {
       for (ArmorTextureSupplier textureSupplier : textures) {
         ArmorTexture texture = textureSupplier.getArmorTexture(armorStack, textureType);
         if (texture != ArmorTexture.EMPTY) {
-          renderTexture(matrices, base, packedLightIn, packedOverlayIn, texture, red, green, blue, alpha);
+          renderTexture(base, matrices, packedLightIn, packedOverlayIn, texture, red, green, blue, alpha);
         }
         if (hasWings) {
           texture = textureSupplier.getArmorTexture(armorStack, TextureType.WINGS);

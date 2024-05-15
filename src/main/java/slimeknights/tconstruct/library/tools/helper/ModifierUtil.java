@@ -17,8 +17,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.ToolAction;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
-import slimeknights.tconstruct.library.modifiers.ModifierId;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
+import slimeknights.tconstruct.library.modifiers.ModifierId;
 import slimeknights.tconstruct.library.modifiers.hook.build.ConditionalStatModifierHook;
 import slimeknights.tconstruct.library.tools.definition.module.ToolHooks;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
@@ -139,12 +139,17 @@ public final class ModifierUtil {
   }
 
   /** Shortcut to get a persistent string value when the tool stack is not needed otherwise */
-  public static String getPersistentString(ItemStack stack, ResourceLocation flag) {
+  public static String getPersistentString(ItemStack stack, ResourceLocation flag, String defaultValue) {
     CompoundTag nbt = stack.getTag();
     if (nbt != null && nbt.contains(ToolStack.TAG_PERSISTENT_MOD_DATA, Tag.TAG_COMPOUND)) {
       return nbt.getCompound(ToolStack.TAG_PERSISTENT_MOD_DATA).getString(flag.toString());
     }
-    return "";
+    return defaultValue;
+  }
+
+  /** Shortcut to get a persistent string value when the tool stack is not needed otherwise */
+  public static String getPersistentString(ItemStack stack, ResourceLocation flag) {
+    return getPersistentString(stack, flag, "");
   }
 
   /** Checks if a tool can perform the given action */

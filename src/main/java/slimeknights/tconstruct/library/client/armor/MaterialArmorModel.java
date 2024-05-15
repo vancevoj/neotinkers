@@ -46,7 +46,7 @@ public class MaterialArmorModel extends AbstractArmorModel {
         String material = materials.getString(i);
         ArmorTexture texture = this.cache.getTexture(material, i, textureType);
         if (texture != ArmorTexture.EMPTY) {
-          renderTexture(matrices, base, packedLightIn, packedOverlayIn, texture, red, green, blue, alpha);
+          renderTexture(base, matrices, packedLightIn, packedOverlayIn, texture, red, green, blue, alpha);
         }
         if (hasWings) {
           texture = this.cache.getTexture(material, i, TextureType.WINGS);

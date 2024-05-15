@@ -61,25 +61,29 @@ public abstract class AbstractArmorModel extends Model {
     }
   }
 
-  /** Renders a single armor texture */
-  protected void renderTexture(PoseStack matrices, Model model, int packedLightIn, int packedOverlayIn, ArmorTexture texture, float red, float green, float blue, float alpha) {
-    assert buffer != null;
-    int color = texture.color();
+  /** Renders a colored model */
+  protected void renderColored(Model model, PoseStack matrices, VertexConsumer buffer, int packedLightIn, int packedOverlayIn, int color, float red, float green, float blue, float alpha) {
     if (color != -1) {
       alpha *= (float)(color >> 24 & 255) / 255.0F;
       red *= (float)(color >> 16 & 255) / 255.0F;
       green *= (float)(color >> 8 & 255) / 255.0F;
       blue *= (float)(color & 255) / 255.0F;
     }
+    model.renderToBuffer(matrices, buffer, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+  }
+
+  /** Renders a single armor texture */
+  protected void renderTexture(Model model, PoseStack matrices, int packedLightIn, int packedOverlayIn, ArmorTexture texture, float red, float green, float blue, float alpha) {
+    assert buffer != null;
     VertexConsumer overlayBuffer = ItemRenderer.getArmorFoilBuffer(buffer, getRenderType(texture.path()), false, hasGlint);
-    model.renderToBuffer(matrices, overlayBuffer, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+    renderColored(model, matrices, overlayBuffer, packedLightIn, packedOverlayIn, texture.color(), red, green, blue, alpha);
   }
 
   /** Renders the wings layer */
   protected void renderWings(PoseStack matrices, int packedLightIn, int packedOverlayIn, ArmorTexture texture, float red, float green, float blue, float alpha) {
     matrices.pushPose();
     matrices.translate(0.0D, 0.0D, 0.125D);
-    renderTexture(matrices, getWings(), packedLightIn, packedOverlayIn, texture, red, green, blue, alpha);
+    renderTexture(getWings(), matrices, packedLightIn, packedOverlayIn, texture, red, green, blue, alpha);
     matrices.popPose();
   }
 
