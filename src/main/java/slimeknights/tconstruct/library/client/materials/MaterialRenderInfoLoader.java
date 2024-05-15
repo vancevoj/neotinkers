@@ -15,6 +15,7 @@ import net.minecraftforge.fml.ModLoader;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import slimeknights.mantle.data.gson.ResourceLocationSerializer;
 import slimeknights.mantle.data.listener.IEarlySafeManagerReloadListener;
+import slimeknights.mantle.data.loadable.common.ColorLoadable;
 import slimeknights.mantle.util.JsonHelper;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.client.data.spritetransformer.IColorMapping;
@@ -148,7 +149,7 @@ public class MaterialRenderInfoLoader implements IEarlySafeManagerReloadListener
     // parse color
     int color = 0xFFFFFFFF;
     if (json.getColor() != null) {
-      color = JsonHelper.parseColor(json.getColor());
+      color = ColorLoadable.ALPHA.parseString(json.getColor(), "color");
     }
 
     // texture fallback to ID if not told to skip

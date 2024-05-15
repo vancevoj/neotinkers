@@ -7,6 +7,7 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
 import slimeknights.mantle.data.GenericDataProvider;
+import slimeknights.mantle.data.loadable.common.ColorLoadable;
 import slimeknights.tconstruct.library.client.data.material.AbstractMaterialSpriteProvider.MaterialSpriteInfo;
 import slimeknights.tconstruct.library.client.materials.MaterialRenderInfoJson;
 import slimeknights.tconstruct.library.client.materials.MaterialRenderInfoJson.MaterialGeneratorJson;
@@ -86,7 +87,6 @@ public abstract class AbstractMaterialRenderInfoProvider extends GenericDataProv
     @Setter
     private ResourceLocation texture = null;
     private String[] fallbacks;
-    @Setter
     private int color = -1;
     @Setter
     private boolean skipUniqueTexture;
@@ -94,6 +94,15 @@ public abstract class AbstractMaterialRenderInfoProvider extends GenericDataProv
     private int luminosity = 0;
     @Setter
     private MaterialGeneratorJson generator = null;
+
+    /** Sets the color */
+    public RenderInfoBuilder color(int color) {
+      if ((color & 0xFF000000) == 0) {
+        color |= 0xFF000000;
+      }
+      this.color = color;
+      return this;
+    }
 
     /** Sets the fallback names */
     public RenderInfoBuilder fallbacks(@Nullable String... fallbacks) {
@@ -108,7 +117,7 @@ public abstract class AbstractMaterialRenderInfoProvider extends GenericDataProv
 
     /** Builds the material */
     public MaterialRenderInfoJson build() {
-      return new MaterialRenderInfoJson(texture, fallbacks, String.format("%06X", color), skipUniqueTexture ? Boolean.TRUE : null, luminosity, generator);
+      return new MaterialRenderInfoJson(texture, fallbacks, ColorLoadable.ALPHA.getString(color), skipUniqueTexture ? Boolean.TRUE : null, luminosity, generator);
     }
   }
 }
