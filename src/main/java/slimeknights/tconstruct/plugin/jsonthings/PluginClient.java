@@ -23,6 +23,9 @@ public class PluginClient {
       for (Item item : FlexItemTypes.CROSSBOW_ITEMS) {
         TinkerItemProperties.registerCrossbowProperties(item);
       }
+      for (Item item : FlexItemTypes.ARMOR_ITEMS) {
+        TinkerItemProperties.registerBrokenProperty(item);
+      }
     });
   }
 }
