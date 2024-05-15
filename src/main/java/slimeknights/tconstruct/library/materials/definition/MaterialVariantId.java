@@ -43,6 +43,9 @@ public sealed interface MaterialVariantId permits MaterialId, MaterialVariantIdI
    */
   ResourceLocation getLocation(char separator);
 
+  /** Gets the texture suffix for this material */
+  String getSuffix();
+
 
   /* Match methods */
 

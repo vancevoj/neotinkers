@@ -36,6 +36,11 @@ record MaterialVariantIdImpl(MaterialId material, String variant) implements Mat
   }
 
   @Override
+  public String getSuffix() {
+    return material.getNamespace() + '_' + material.getPath() + '_' + variant;
+  }
+
+  @Override
   public String toString() {
     return material + "#" + variant;
   }

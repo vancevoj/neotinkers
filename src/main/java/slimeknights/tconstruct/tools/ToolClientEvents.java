@@ -40,8 +40,8 @@ import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.ClientEventBase;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.common.network.TinkerNetwork;
+import slimeknights.tconstruct.library.client.armor.AbstractArmorModel;
 import slimeknights.tconstruct.library.client.materials.MaterialTooltipCache;
-import slimeknights.tconstruct.library.client.model.ArmorModelHelper;
 import slimeknights.tconstruct.library.client.model.DynamicTextureLoader;
 import slimeknights.tconstruct.library.client.model.TinkerItemProperties;
 import slimeknights.tconstruct.library.client.model.tools.MaterialModel;
@@ -58,6 +58,8 @@ import slimeknights.tconstruct.library.modifiers.ModifierId;
 import slimeknights.tconstruct.library.modifiers.ModifierManager;
 import slimeknights.tconstruct.library.modifiers.modules.technical.ArmorStatModule;
 import slimeknights.tconstruct.library.tools.capability.TinkerDataKeys;
+import slimeknights.tconstruct.library.tools.item.armor.texture.ArmorTextureSupplier;
+import slimeknights.tconstruct.library.tools.item.armor.texture.MaterialArmorTextureSupplier;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
 import slimeknights.tconstruct.library.utils.HarvestTiers;
@@ -65,8 +67,6 @@ import slimeknights.tconstruct.library.utils.Util;
 import slimeknights.tconstruct.tools.client.CrystalshotRenderer;
 import slimeknights.tconstruct.tools.client.FluidEffectProjectileRenderer;
 import slimeknights.tconstruct.tools.client.OverslimeModifierModel;
-import slimeknights.tconstruct.tools.client.PlateArmorModel;
-import slimeknights.tconstruct.tools.client.SlimelytraArmorModel;
 import slimeknights.tconstruct.tools.client.SlimeskullArmorModel;
 import slimeknights.tconstruct.tools.client.ToolContainerScreen;
 import slimeknights.tconstruct.tools.item.ModifierCrystalItem;
@@ -97,11 +97,10 @@ public class ToolClientEvents extends ClientEventBase {
     MaterialTooltipCache.init(manager);
     DynamicTextureLoader.init(manager);
     manager.registerReloadListener(MODIFIER_RELOAD_LISTENER);
-    manager.registerReloadListener(ArmorModelHelper.RELOAD_LISTENER);
-    manager.registerReloadListener(PlateArmorModel.RELOAD_LISTENER);
     manager.registerReloadListener(SlimeskullArmorModel.RELOAD_LISTENER);
-    manager.registerReloadListener(SlimelytraArmorModel.RELOAD_LISTENER);
     manager.registerReloadListener(HarvestTiers.RELOAD_LISTENER);
+    manager.registerReloadListener(MaterialArmorTextureSupplier.RELOAD_LISTENER);
+    manager.registerReloadListener(ArmorTextureSupplier.ARMOR_VALIDATOR);
   }
 
   @SubscribeEvent
@@ -137,7 +136,7 @@ public class ToolClientEvents extends ClientEventBase {
   static void clientSetupEvent(FMLClientSetupEvent event) {
     MinecraftForge.EVENT_BUS.addListener(ToolClientEvents::handleKeyBindings);
     MinecraftForge.EVENT_BUS.addListener(ToolClientEvents::handleInput);
-    ArmorModelHelper.init();
+    AbstractArmorModel.init();
 
     // keybinds
     event.enqueueWork(() -> {

@@ -4,7 +4,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.EquipmentSlot;
 import slimeknights.mantle.util.IdExtender.LocationExtender;
-import slimeknights.tconstruct.library.tools.item.DummyArmorMaterial;
+import slimeknights.tconstruct.library.tools.item.armor.DummyArmorMaterial;
 import slimeknights.tconstruct.tools.item.ArmorSlotType;
 
 import javax.annotation.Nullable;

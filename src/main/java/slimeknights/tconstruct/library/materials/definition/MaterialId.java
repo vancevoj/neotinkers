@@ -56,6 +56,11 @@ public final class MaterialId extends ResourceLocation implements MaterialVarian
   }
 
   @Override
+  public String getSuffix() {
+    return getNamespace() + '_' + getPath();
+  }
+
+  @Override
   public boolean matchesVariant(MaterialVariantId other) {
     return this.equals(other.getId());
   }

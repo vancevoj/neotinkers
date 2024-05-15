@@ -4,82 +4,57 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.Model;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.ItemRenderer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
-import slimeknights.tconstruct.library.client.model.ArmorModelHelper;
-import slimeknights.tconstruct.library.materials.definition.IMaterial;
-import slimeknights.tconstruct.library.materials.definition.MaterialVariantId;
+import slimeknights.tconstruct.library.tools.definition.ToolDefinition;
 import slimeknights.tconstruct.library.tools.definition.module.material.ToolMaterialHook;
-import slimeknights.tconstruct.library.tools.item.ModifiableArmorItem;
-import slimeknights.tconstruct.library.tools.nbt.MaterialIdNBT;
-
-import javax.annotation.Nullable;
+import slimeknights.tconstruct.library.tools.item.armor.texture.ArmorTextureSupplier.ArmorTexture;
+import slimeknights.tconstruct.library.tools.item.armor.texture.ArmorTextureSupplier.TextureType;
+import slimeknights.tconstruct.library.tools.item.armor.texture.MaterialArmorTextureSupplier.MaterialSetCache;
+import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 
 /** Model for armor with multiple materials */
-public class MaterialArmorModel extends Model {
+public class MaterialArmorModel extends AbstractArmorModel {
   public static final MaterialArmorModel INSTANCE = new MaterialArmorModel();
 
-  /** Texture name for this model */
-  private ResourceLocation name = new ResourceLocation("missingno");
-  /** If true, renders the base layer of the model */
-  private boolean renderBase;
-  /* Properties set before render */
-  /** Base model instance for rendering */
-  @Nullable
-  private HumanoidModel<?> base;
   /** Number of materials to render */
   private int expectedMaterials = 1;
+  /** Texture cache for material armor */
+  private MaterialSetCache cache;
   /** List of materials on the item */
-  private MaterialIdNBT materials = MaterialIdNBT.EMPTY;
-  /** If true, uses the legs texture */
-  private boolean isLegs = false;
-  /** If true, applies the enchantment glint to extra layers */
-  private boolean hasGlint = false;
-  private MaterialArmorModel() {
-    super(RenderType::entityCutoutNoCull);
-  }
+  private ListTag materials = new ListTag();
+
+  private MaterialArmorModel() {}
 
   /** Setup the model for the current properties */
-  public Model setup(HumanoidModel<?> base, ModifiableArmorItem item, ItemStack stack, EquipmentSlot slot, boolean renderBase) {
-    this.name = new ResourceLocation(item.getMaterial().getName());
-    this.base = base;
-    this.renderBase = renderBase;
-    this.expectedMaterials = ToolMaterialHook.stats(item.getToolDefinition()).size();
-    this.materials = MaterialIdNBT.from(stack);
-    this.isLegs = slot == EquipmentSlot.LEGS;
-    this.hasGlint = stack.hasFoil();
+  public Model setup(LivingEntity living, ItemStack stack, EquipmentSlot slot, HumanoidModel<?> base, ToolDefinition definition, MaterialSetCache cache) {
+    this.setup(living, stack, slot, base);
+    this.expectedMaterials = ToolMaterialHook.stats(definition).size();
+    cache.checkSize(expectedMaterials);
+    this.cache = cache;
+    this.materials = stack.getOrCreateTag().getList(ToolStack.TAG_MATERIALS, Tag.TAG_STRING);
     return this;
   }
 
   @Override
   public void renderToBuffer(PoseStack matrices, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
-    if (this.base != null) {
-      // render the base layer if requested
-      // TODO: consider allowing this to be dyeable
-      if (renderBase) {
-        base.renderToBuffer(matrices, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
-      }
-      // render all material layers
-      if (ArmorModelHelper.buffer != null){
-        for (int i = 0; i < expectedMaterials; i++) {
-          ResourceLocation texture = getArmorTexture(materials.getMaterial(i), isLegs ? "leggings" : "armor", i);
-          VertexConsumer overlayBuffer = ItemRenderer.getArmorFoilBuffer(ArmorModelHelper.buffer, ArmorModelHelper.getRenderType(texture), false, hasGlint);
-          base.renderToBuffer(matrices, overlayBuffer, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+    if (this.base != null && buffer != null && cache != null) {
+      for (int i = 0; i < expectedMaterials; i++) {
+        String material = materials.getString(i);
+        ArmorTexture texture = this.cache.getTexture(material, i, textureType);
+        if (texture != ArmorTexture.EMPTY) {
+          renderTexture(matrices, base, packedLightIn, packedOverlayIn, texture, red, green, blue, alpha);
+        }
+        if (hasWings) {
+          texture = this.cache.getTexture(material, i, TextureType.WINGS);
+          if (texture != ArmorTexture.EMPTY) {
+            renderWings(matrices, packedLightIn, packedOverlayIn, texture, red, green, blue, alpha);
+          }
         }
       }
     }
-  }
-
-  /** Gets the armor texture for a material */
-  private ResourceLocation getArmorTexture(MaterialVariantId material, String variant, int index) {
-    String basePath = "textures/models/armor/" + name.getPath() + '/' + variant + '_' + index;
-    if (material.equals(IMaterial.UNKNOWN_ID)) {
-      return new ResourceLocation(name.getNamespace(), basePath + ".png");
-    }
-    ResourceLocation location = material.getLocation('_');
-    return new ResourceLocation(name.getNamespace(), basePath + '_' + location.getNamespace() + '_' + location.getPath() + ".png");
   }
 }

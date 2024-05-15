@@ -5,23 +5,25 @@ import dev.gigaherz.jsonthings.things.serializers.FlexItemType;
 import dev.gigaherz.jsonthings.things.serializers.IItemSerializer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.registries.ForgeRegistries;
+import slimeknights.mantle.data.loadable.Loadable;
+import slimeknights.mantle.data.loadable.Loadables;
 import slimeknights.mantle.util.JsonHelper;
 import slimeknights.tconstruct.TConstruct;
-import slimeknights.tconstruct.library.materials.definition.MaterialId;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinition;
-import slimeknights.tconstruct.library.tools.item.DummyArmorMaterial;
-import slimeknights.tconstruct.plugin.jsonthings.item.FlexBasicArmorItem;
-import slimeknights.tconstruct.plugin.jsonthings.item.FlexFlatEmbellishedArmor;
-import slimeknights.tconstruct.plugin.jsonthings.item.FlexLayeredEmbellishedArmor;
+import slimeknights.tconstruct.library.tools.item.armor.DummyArmorMaterial;
+import slimeknights.tconstruct.library.tools.item.armor.texture.ArmorTextureSupplier;
 import slimeknights.tconstruct.plugin.jsonthings.item.FlexModifiableBowItem;
 import slimeknights.tconstruct.plugin.jsonthings.item.FlexModifiableCrossbowItem;
 import slimeknights.tconstruct.plugin.jsonthings.item.FlexModifiableItem;
 import slimeknights.tconstruct.plugin.jsonthings.item.FlexRepairKitItem;
 import slimeknights.tconstruct.plugin.jsonthings.item.FlexToolPartItem;
+import slimeknights.tconstruct.plugin.jsonthings.item.armor.FlexMaterialArmorItem;
+import slimeknights.tconstruct.plugin.jsonthings.item.armor.FlexModifiableArmorItem;
+import slimeknights.tconstruct.plugin.jsonthings.item.armor.FlexMultilayerArmorModel;
 import slimeknights.tconstruct.tools.item.ArmorSlotType;
 
 import java.util.ArrayList;
@@ -70,32 +72,31 @@ public class FlexItemTypes {
       return (props, builder) -> add(CROSSBOW_ITEMS, new FlexModifiableCrossbowItem(props, ToolDefinition.create(builder.getRegistryName()), allowFireworks));
     });
 
-    /* Register a modifiable tool instance for crossbow like items (load on finish) */
+
+    /* Armor */
+
+    /* Simple armor type with a flat texture */
     register("basic_armor", data -> {
       ResourceLocation name = JsonHelper.getResourceLocation(data, "texture_name");
-      boolean dyeable = GsonHelper.getAsBoolean(data, "dyeable", false);
-      boolean hasGolden = GsonHelper.getAsBoolean(data, "has_golden", true);
+      SoundEvent sound = Loadables.SOUND_EVENT.getOrDefault(data, "equip_sound", SoundEvents.ARMOR_EQUIP_GENERIC);
       ArmorSlotType slot = JsonHelper.getAsEnum(data, "slot", ArmorSlotType.class);
-      SoundEvent equipSound = JsonHelper.getAsEntry(ForgeRegistries.SOUND_EVENTS, data, "equip_sound");
-      return (props, builder) -> new FlexBasicArmorItem(new DummyArmorMaterial(name, equipSound), slot.getEquipmentSlot(), props, ToolDefinition.create(builder.getRegistryName()), name, dyeable, hasGolden);
+      return (props, builder) -> new FlexModifiableArmorItem(new DummyArmorMaterial(name, sound), slot.getEquipmentSlot(), props, ToolDefinition.create(builder.getRegistryName()));
+    });
+
+    /* Layered armor type, used for golden, dyeable, etc */
+    Loadable<List<ArmorTextureSupplier>> ARMOR_TEXTURES = ArmorTextureSupplier.LOADER.list(1);
+    register("multilayer_armor", data -> {
+      SoundEvent sound = Loadables.SOUND_EVENT.getOrDefault(data, "equip_sound", SoundEvents.ARMOR_EQUIP_GENERIC);
+      ArmorSlotType slot = JsonHelper.getAsEnum(data, "slot", ArmorSlotType.class);
+      List<ArmorTextureSupplier> layers = ARMOR_TEXTURES.getIfPresent(data, "texture_layers");
+      return (props, builder) -> new FlexMultilayerArmorModel(new DummyArmorMaterial(builder.getRegistryName(), sound), slot.getEquipmentSlot(), props, ToolDefinition.create(builder.getRegistryName()), layers.toArray(new ArmorTextureSupplier[0]));
     });
 
     /* Register a modifiable armor part that supports embellishments */
-    register("layered_embellished_armor", data -> {
-      ResourceLocation name = JsonHelper.getResourceLocation(data, "texture_name");
+    register("material_armor", data -> {
+      SoundEvent sound = Loadables.SOUND_EVENT.getOrDefault(data, "equip_sound", SoundEvents.ARMOR_EQUIP_GENERIC);
       ArmorSlotType slot = JsonHelper.getAsEnum(data, "slot", ArmorSlotType.class);
-      SoundEvent equipSound = JsonHelper.getAsEntry(ForgeRegistries.SOUND_EVENTS, data, "equip_sound");
-      return (props, builder) -> new FlexLayeredEmbellishedArmor(new DummyArmorMaterial(name, equipSound), slot.getEquipmentSlot(), props, ToolDefinition.create(builder.getRegistryName()), name);
-    });
-
-    /* Register a modifiable tool instance for crossbow like items (load on finish) */
-    register("flat_embellished_armor", data -> {
-      ResourceLocation name = JsonHelper.getResourceLocation(data, "texture_name");
-      MaterialId defaultMaterial = new MaterialId(JsonHelper.getResourceLocation(data, "default_material"));
-      boolean dyeable = GsonHelper.getAsBoolean(data, "dyeable", false);
-      ArmorSlotType slot = JsonHelper.getAsEnum(data, "slot", ArmorSlotType.class);
-      SoundEvent equipSound = JsonHelper.getAsEntry(ForgeRegistries.SOUND_EVENTS, data, "equip_sound");
-      return (props, builder) -> new FlexFlatEmbellishedArmor(new DummyArmorMaterial(name, equipSound), slot.getEquipmentSlot(), props, ToolDefinition.create(builder.getRegistryName()), name, defaultMaterial, dyeable);
+      return (props, builder) -> new FlexMaterialArmorItem(new DummyArmorMaterial(builder.getRegistryName(), sound), slot.getEquipmentSlot(), props, ToolDefinition.create(builder.getRegistryName()));
     });
   }
 
