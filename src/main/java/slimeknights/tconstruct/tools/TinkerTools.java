@@ -116,6 +116,13 @@ public final class TinkerTools extends TinkerModule {
     BlockSideHitListener.init();
     ModifierLootingHandler.init();
     RandomMaterial.init();
+
+    // armor textures - need to ensure registered before item registry event
+    ArmorTextureSupplier.LOADER.register(getResource("fixed"), FixedArmorTextureSupplier.LOADER);
+    ArmorTextureSupplier.LOADER.register(getResource("dyed"), DyedArmorTextureSupplier.LOADER);
+    ArmorTextureSupplier.LOADER.register(getResource("first"), FirstArmorTextureSupplier.LOADER);
+    ArmorTextureSupplier.LOADER.register(getResource("material"), MaterialArmorTextureSupplier.Material.LOADER);
+    ArmorTextureSupplier.LOADER.register(getResource("persistent_data"), MaterialArmorTextureSupplier.PersistentData.LOADER);
   }
 
   /** Creative tab for all tool items */
@@ -260,13 +267,6 @@ public final class TinkerTools extends TinkerModule {
       ToolStackPredicate.LOADER.register(getResource("not_broken"), ToolStackPredicate.NOT_BROKEN.getLoader());
       ToolStackPredicate.LOADER.register(getResource("stat_in_range"), StatInRangePredicate.LOADER);
       ToolStackPredicate.LOADER.register(getResource("stat_in_set"), StatInSetPredicate.LOADER);
-
-      // armor textures
-      ArmorTextureSupplier.LOADER.register(getResource("fixed"), FixedArmorTextureSupplier.LOADER);
-      ArmorTextureSupplier.LOADER.register(getResource("dyed"), DyedArmorTextureSupplier.LOADER);
-      ArmorTextureSupplier.LOADER.register(getResource("first"), FirstArmorTextureSupplier.LOADER);
-      ArmorTextureSupplier.LOADER.register(getResource("material"), MaterialArmorTextureSupplier.Material.LOADER);
-      ArmorTextureSupplier.LOADER.register(getResource("persistent_data"), MaterialArmorTextureSupplier.PersistentData.LOADER);
     }
   }
 
