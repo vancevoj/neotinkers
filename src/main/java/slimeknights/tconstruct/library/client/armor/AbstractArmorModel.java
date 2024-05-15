@@ -48,7 +48,7 @@ public abstract class AbstractArmorModel extends Model {
   protected void setup(LivingEntity living, ItemStack stack, EquipmentSlot slot, HumanoidModel<?> base) {
     this.base = base;
     this.hasGlint = stack.hasFoil();
-    this.textureType = slot == EquipmentSlot.LEGS ? TextureType.LEGGINGS : TextureType.ARMOR;
+    this.textureType = TextureType.fromSlot(slot);
     if (slot == EquipmentSlot.CHEST) {
       this.hasWings = ModifierUtil.checkVolatileFlag(stack, ModifiableArmorItem.ELYTRA);
       if (hasWings) {

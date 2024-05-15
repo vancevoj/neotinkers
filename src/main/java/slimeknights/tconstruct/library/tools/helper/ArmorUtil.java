@@ -1,6 +1,7 @@
 package slimeknights.tconstruct.library.tools.helper;
 
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.EquipmentSlot;
 
 import static net.minecraft.world.damagesource.CombatRules.getDamageAfterAbsorb;
 
@@ -115,5 +116,18 @@ public class ArmorUtil {
 
     // final damage: A-1(V-1(M(A(x))))
     return damage;
+  }
+
+  private static final String DIAMOND_ARMOR = "textures/models/armor/diamond_layer_1.png";
+  private static final String DIAMOND_LEGGINGS = "textures/models/armor/diamond_layer_2.png";
+
+  /**
+   * We override the armor model to not use the "vanilla" texture in favor of our own system that fetches the texture from NBT.
+   * However, this means vanilla constructs some non-existing textures for us producing errors in the log.
+   * Since we don't end up using that texture, bypass the error by just returning a vanilla texture.
+   * We would just use our system, but it notably supports returning no texture to not render (would still lead to errors) and requires unneeded stack parsing, so faster to just use an arbitrary texture we know exists.
+   */
+  public static String getDummyArmorTexture(EquipmentSlot slot) {
+    return slot == EquipmentSlot.LEGS ? DIAMOND_LEGGINGS : DIAMOND_ARMOR;
   }
 }

@@ -1,5 +1,6 @@
 package slimeknights.tconstruct.library.tools.item.armor.texture;
 
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import slimeknights.mantle.data.listener.ResourceValidator;
 import slimeknights.mantle.data.registry.GenericLoaderRegistry;
@@ -29,5 +30,12 @@ public interface ArmorTextureSupplier extends IHaveLoader {
   }
 
   /** Texture variants, armor is used for helmet, chestplate, and boots, while leggings is leggings and wings is on chest for elytra */
-  enum TextureType { ARMOR, LEGGINGS, WINGS }
+  enum TextureType {
+    ARMOR, LEGGINGS, WINGS;
+
+    /** Gets the type for the given slot */
+    public static TextureType fromSlot(EquipmentSlot slot) {
+      return slot == EquipmentSlot.LEGS ? LEGGINGS : ARMOR;
+    }
+  }
 }
