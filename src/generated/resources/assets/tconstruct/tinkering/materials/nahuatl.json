@@ -34,19 +34,23 @@
             "grey": 102
           },
           {
-            "color": "FF49332E",
+            "color": "FF2D2347",
             "grey": 140
           },
           {
-            "color": "FF543D30",
+            "color": "FF49332E",
             "grey": 178
           },
           {
-            "color": "FF664B2D",
+            "color": "FF553F3A",
             "grey": 216
           },
           {
-            "color": "FF7A5C2D",
+            "color": "FF5C4641",
+            "grey": 234
+          },
+          {
+            "color": "FF644E49",
             "grey": 255
           }
         ]

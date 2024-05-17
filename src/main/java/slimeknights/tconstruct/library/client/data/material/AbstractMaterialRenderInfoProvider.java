@@ -6,6 +6,7 @@ import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
+import net.minecraftforge.common.data.ExistingFileHelper;
 import slimeknights.mantle.data.GenericDataProvider;
 import slimeknights.mantle.data.loadable.common.ColorLoadable;
 import slimeknights.tconstruct.library.client.data.material.AbstractMaterialSpriteProvider.MaterialSpriteInfo;
@@ -25,14 +26,17 @@ public abstract class AbstractMaterialRenderInfoProvider extends GenericDataProv
   private final Map<MaterialVariantId,RenderInfoBuilder> allRenderInfo = new HashMap<>();
   @Nullable
   private final AbstractMaterialSpriteProvider materialSprites;
+  @Nullable
+  private final ExistingFileHelper existingFileHelper;
 
-  public AbstractMaterialRenderInfoProvider(DataGenerator gen, @Nullable AbstractMaterialSpriteProvider materialSprites) {
+  public AbstractMaterialRenderInfoProvider(DataGenerator gen, @Nullable AbstractMaterialSpriteProvider materialSprites, @Nullable ExistingFileHelper existingFileHelper) {
     super(gen, PackType.CLIENT_RESOURCES, MaterialRenderInfoLoader.FOLDER, MaterialRenderInfoLoader.GSON);
     this.materialSprites = materialSprites;
+    this.existingFileHelper = existingFileHelper;
   }
 
   public AbstractMaterialRenderInfoProvider(DataGenerator gen) {
-    this(gen, null);
+    this(gen, null, null);
   }
 
   /** Adds all relevant material stats */
@@ -40,9 +44,15 @@ public abstract class AbstractMaterialRenderInfoProvider extends GenericDataProv
 
   @Override
   public void run(CachedOutput cache) {
+    if (existingFileHelper != null) {
+      MaterialPartTextureGenerator.runCallbacks(existingFileHelper, null);
+    }
     addMaterialRenderInfo();
     // generate
     allRenderInfo.forEach((materialId, info) -> saveJson(cache, materialId.getLocation('/'), info.build()));
+    if (existingFileHelper != null) {
+      MaterialPartTextureGenerator.runCallbacks(null, null);
+    }
   }
 
 

@@ -263,7 +263,7 @@ public final class TinkerTools extends TinkerModule {
     generator.addProvider(client, new ToolItemModelProvider(generator, existingFileHelper));
     TinkerMaterialSpriteProvider materialSprites = new TinkerMaterialSpriteProvider();
     TinkerPartSpriteProvider partSprites = new TinkerPartSpriteProvider();
-    generator.addProvider(client, new MaterialRenderInfoProvider(generator, materialSprites));
+    generator.addProvider(client, new MaterialRenderInfoProvider(generator, materialSprites, existingFileHelper));
     generator.addProvider(client, new GeneratorPartTextureJsonGenerator(generator, TConstruct.MOD_ID, partSprites));
     generator.addProvider(client, new MaterialPartTextureGenerator(generator, existingFileHelper, partSprites, materialSprites));
     generator.addProvider(client, new MaterialPaletteDebugGenerator(generator, TConstruct.MOD_ID, materialSprites));

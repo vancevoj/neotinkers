@@ -12,6 +12,7 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.NoSuchElementException;
 
 /**
  * Logic to read sprites from existing images and return native images which can later be modified
@@ -39,7 +40,7 @@ public class DataGenSpriteReader extends AbstractSpriteReader {
       NativeImage image = NativeImage.read(resource.open());
       openedImages.add(image);
       return image;
-    } catch (IOException e) {
+    } catch (IOException|NoSuchElementException e) {
       log.error("Failed to read image at {}", path);
       throw e;
     }

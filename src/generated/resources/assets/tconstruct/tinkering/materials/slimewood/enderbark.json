@@ -1,7 +1,8 @@
 {
-  "color": "FF3E353F",
+  "color": "FF5B2F66",
   "fallbacks": [
     "wood",
+    "stick",
     "primitive"
   ],
   "generator": {
@@ -17,40 +18,35 @@
       "tconstruct:wood"
     ],
     "transformer": {
-      "type": "tconstruct:recolor_sprite",
-      "color_mapping": {
-        "type": "tconstruct:grey_to_color",
-        "palette": [
-          {
-            "color": "FF000000",
-            "grey": 0
-          },
-          {
-            "color": "FF891FB3",
-            "grey": 63
-          },
-          {
-            "color": "FF9D2ABD",
-            "grey": 102
-          },
-          {
-            "color": "FF272127",
-            "grey": 140
-          },
-          {
-            "color": "FF362E35",
-            "grey": 178
-          },
-          {
-            "color": "FF3E353F",
-            "grey": 216
-          },
-          {
-            "color": "FF423942",
-            "grey": 255
-          }
-        ]
-      }
+      "type": "tconstruct:grey_to_sprite",
+      "palette": [
+        {
+          "color": "FF000000",
+          "grey": 0
+        },
+        {
+          "color": "FF404040",
+          "grey": 63,
+          "path": "tconstruct:block/wood/enderbark/planks"
+        },
+        {
+          "color": "FF808080",
+          "grey": 102,
+          "path": "tconstruct:block/wood/enderbark/planks"
+        },
+        {
+          "grey": 140,
+          "path": "tconstruct:block/wood/enderbark/planks"
+        },
+        {
+          "grey": 216,
+          "path": "tconstruct:block/wood/enderbark/planks"
+        },
+        {
+          "color": "FF594D59",
+          "grey": 255
+        }
+      ]
     }
   },
   "luminosity": 0

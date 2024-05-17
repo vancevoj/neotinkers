@@ -1,5 +1,5 @@
 {
-  "color": "FF917142",
+  "color": "FF967441",
   "fallbacks": [
     "wood",
     "stick",
@@ -27,27 +27,31 @@
             "grey": 0
           },
           {
-            "color": "FF382B18",
+            "color": "FF4C3B20",
             "grey": 63
           },
           {
-            "color": "FF4C3D26",
+            "color": "FF594426",
             "grey": 102
           },
           {
-            "color": "FF5F4A2B",
+            "color": "FF67502C",
             "grey": 140
           },
           {
-            "color": "FF745A36",
+            "color": "FF7E6237",
             "grey": 178
           },
           {
-            "color": "FF917142",
+            "color": "FF967441",
             "grey": 216
           },
           {
-            "color": "FF9F844D",
+            "color": "FFAF8F55",
+            "grey": 234
+          },
+          {
+            "color": "FFB8945F",
             "grey": 255
           }
         ]

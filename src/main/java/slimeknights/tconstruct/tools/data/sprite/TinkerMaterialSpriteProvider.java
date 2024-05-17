@@ -1,18 +1,20 @@
 package slimeknights.tconstruct.tools.data.sprite;
 
 import net.minecraft.resources.ResourceLocation;
-import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.client.data.material.AbstractMaterialSpriteProvider;
 import slimeknights.tconstruct.library.client.data.spritetransformer.GreyToColorMapping;
 import slimeknights.tconstruct.library.client.data.spritetransformer.GreyToSpriteTransformer;
 import slimeknights.tconstruct.library.client.data.spritetransformer.IColorMapping;
+import slimeknights.tconstruct.library.client.data.spritetransformer.ISpriteTransformer;
 import slimeknights.tconstruct.library.materials.definition.IMaterial;
+import slimeknights.tconstruct.library.materials.definition.MaterialVariantId;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatType;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
 import slimeknights.tconstruct.tools.data.material.MaterialIds;
 import slimeknights.tconstruct.tools.stats.PlatingMaterialStats;
 import slimeknights.tconstruct.tools.stats.StatlessMaterialStats;
 
+import static slimeknights.tconstruct.TConstruct.getResource;
 import static slimeknights.tconstruct.tools.data.sprite.TinkerPartSpriteProvider.SLIMESUIT;
 import static slimeknights.tconstruct.tools.data.sprite.TinkerPartSpriteProvider.WOOD;
 
@@ -78,42 +80,15 @@ public class TinkerMaterialSpriteProvider extends AbstractMaterialSpriteProvider
       .meleeHarvest().ranged().shieldCore()
       .fallbacks("wood", "stick", "primitive")
       .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF281E0B).addARGB(102, 0xFF493615).addARGB(140, 0xFF584014).addARGB(178, 0xFF684E1E).addARGB(216, 0xFF785A22).addARGB(255, 0xFF896727).build());
-    buildMaterial(MaterialIds.oak)
-      .meleeHarvest().ranged().shieldCore().statType(WOOD)
-      .fallbacks("wood", "stick", "primitive")
-      .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF382B18).addARGB(102, 0xFF4C3D26).addARGB(140, 0xFF5F4A2B).addARGB(178, 0xFF745A36).addARGB(216, 0xFF917142).addARGB(255, 0xFF9F844D).build());
-    buildMaterial(MaterialIds.spruce)
-      .meleeHarvest().ranged().shieldCore().statType(WOOD)
-      .fallbacks("wood", "stick", "primitive")
-      .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF311E0B).addARGB(102, 0xFF3B2713).addARGB(140, 0xFF4D3317).addARGB(178, 0xFF553A1F).addARGB(216, 0xFF5A4424).addARGB(255, 0xFF685032).build());
-    buildMaterial(MaterialIds.birch)
-      .meleeHarvest().ranged().shieldCore().statType(WOOD)
-      .fallbacks("wood", "stick", "primitive")
-      .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF36342A).addARGB(102, 0xFF605E54).addARGB(140, 0xFFBEBEAE).addARGB(178, 0xFFDED3D5).addARGB(216, 0xFFF0EEEB).addARGB(255, 0xFFFFFFFF).build());
-    buildMaterial(MaterialIds.jungle)
-      .meleeHarvest().ranged().shieldCore().statType(WOOD)
-      .fallbacks("wood", "stick", "primitive")
-      .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF403612).addARGB(102, 0xFF503F16).addARGB(140, 0xFF59461A).addARGB(178, 0xFF59511B).addARGB(216, 0xFF635820).addARGB(255, 0xFF766626).build());
-    buildMaterial(MaterialIds.darkOak)
-      .meleeHarvest().ranged().shieldCore().statType(WOOD)
-      .fallbacks("wood", "stick", "primitive")
-      .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF292011).addARGB(102, 0xFF302513).addARGB(140, 0xFF3F311D).addARGB(178, 0xFF4A381E).addARGB(216, 0xFF584428).addARGB(255, 0xFF664F2E).build());
-    buildMaterial(MaterialIds.acacia)
-      .meleeHarvest().ranged().shieldCore().statType(WOOD)
-      .fallbacks("wood", "stick", "primitive")
-      .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF504B40).addARGB(102, 0xFF585349).addARGB(140, 0xFF696259).addARGB(178, 0xFF7B7368).addARGB(216, 0xFF8D8477).addARGB(255, 0xFF998F82).build());
-    buildMaterial(MaterialIds.mangrove)
-      .meleeHarvest().ranged().shieldCore().statType(WOOD)
-      .fallbacks("wood", "stick", "primitive")
-      .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF5D1C1E).addARGB(102, 0xFF642423).addARGB(140, 0xFF6F2A2D).addARGB(178, 0xFF773934).addARGB(216, 0xFF7F4234).addARGB(255, 0xFF8B4D3A).build());
-    buildMaterial(MaterialIds.crimson)
-      .meleeHarvest().ranged().shieldCore().statType(WOOD)
-      .fallbacks("wood", "stick", "primitive")
-      .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF442131).addARGB(102, 0xFF4B2737).addARGB(140, 0xFF521810).addARGB(178, 0xFF7B0000).addARGB(216, 0xFF961515).addARGB(255, 0xFFB12727).build());
-    buildMaterial(MaterialIds.warped)
-      .meleeHarvest().ranged().shieldCore().statType(WOOD)
-      .fallbacks("wood", "stick", "primitive")
-      .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF38254C).addARGB(102, 0xFF452D5C).addARGB(140, 0xFF16615B).addARGB(178, 0xFF136C68).addARGB(216, 0xFF118066).addARGB(255, 0xFF14956F).build());
+    buildPlanks(MaterialIds.oak     ).colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF4C3B20).addARGB(102, 0xFF594426).addARGB(140, 0xFF67502C).addARGB(178, 0xFF7E6237).addARGB(216, 0xFF967441).addARGB(234, 0xFFAF8F55).addARGB(255, 0xFFB8945F).build());
+    buildPlanks(MaterialIds.spruce  ).colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF3A2815).addARGB(102, 0xFF47301A).addARGB(140, 0xFF553A1F).addARGB(178, 0xFF5A4424).addARGB(216, 0xFF614B2E).addARGB(234, 0xFF7A5A34).addARGB(255, 0xFF82613A).build());
+    buildPlanks(MaterialIds.birch   ).colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF7F704F).addARGB(102, 0xFF8C7B56).addARGB(140, 0xFF9E8B61).addARGB(178, 0xFFA59467).addARGB(216, 0xFFAE9F76).addARGB(234, 0xFFC8B77A).addARGB(255, 0xFFD7C185).build());
+    buildPlanks(MaterialIds.jungle  ).colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF4C3323).addARGB(102, 0xFF593C29).addARGB(140, 0xFF68462F).addARGB(178, 0xFF785437).addARGB(216, 0xFF976A44).addARGB(234, 0xFFAA7954).addARGB(255, 0xFFB88764).build());
+    buildPlanks(MaterialIds.darkOak ).colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF160E06).addARGB(102, 0xFF1E1309).addARGB(140, 0xFF291A0C).addARGB(178, 0xFF301E0E).addARGB(216, 0xFF3A2411).addARGB(234, 0xFF492F17).addARGB(255, 0xFF4F3218).build());
+    buildPlanks(MaterialIds.acacia  ).colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF703A21).addARGB(102, 0xFF7A3F24).addARGB(140, 0xFF884728).addARGB(178, 0xFF8F4C2A).addARGB(216, 0xFF99502B).addARGB(234, 0xFFAD5D32).addARGB(255, 0xFFBA6337).build());
+    buildPlanks(MaterialIds.mangrove).colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF471617).addARGB(102, 0xFF51191B).addARGB(140, 0xFF5D1C1E).addARGB(178, 0xFF642423).addARGB(216, 0xFF6F2A2D).addARGB(234, 0xFF773934).addARGB(255, 0xFF7F4234).build());
+    buildPlanks(MaterialIds.crimson ).colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF2B141F).addARGB(102, 0xFF331824).addARGB(140, 0xFF3F1E2D).addARGB(178, 0xFF442131).addARGB(216, 0xFF4B2737).addARGB(234, 0xFF6A344B).addARGB(255, 0xFF7E3A56).build());
+    buildPlanks(MaterialIds.warped  ).colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF0A211F).addARGB(102, 0xFF0D2B28).addARGB(140, 0xFF113835).addARGB(178, 0xFF1E4340).addARGB(216, 0xFF1F5752).addARGB(234, 0xFF287067).addARGB(255, 0xFF398382).build());
     buildMaterial(MaterialIds.bamboo)
       .ranged().shieldCore().statType(WOOD)
       .fallbacks("wood", "stick", "primitive")
@@ -210,22 +185,10 @@ public class TinkerMaterialSpriteProvider extends AbstractMaterialSpriteProvider
       .fallbacks("metal")
       .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF777B7C).addARGB(102, 0xFF818587).addARGB(140, 0xFF909698).addARGB(178, 0xFF999FA2).addARGB(216, 0xFFB2BABC).addARGB(255, 0xFFC5CDD0).build());
     // tier 2 - slimewood
-    buildMaterial(MaterialIds.greenheart)
-      .meleeHarvest().ranged().shieldCore().statType(WOOD)
-      .fallbacks("wood", "primitive")
-      .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF34532F).addARGB(102, 0xFF477A42).addARGB(140, 0xFF5E9854).addARGB(178, 0xFF71AC63).addARGB(216, 0xFF76BE6D).addARGB(255, 0xFF96DD8F).build());
-    buildMaterial(MaterialIds.skyroot)
-      .meleeHarvest().ranged().shieldCore().statType(WOOD)
-      .fallbacks("wood", "primitive")
-      .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF00507C).addARGB(102, 0xFF00628A).addARGB(140, 0xFF007F9A).addARGB(178, 0xFF1D96A6).addARGB(216, 0xFF17B2B7).addARGB(255, 0xFF19D4D6).build());
-    buildMaterial(MaterialIds.bloodshroom)
-      .meleeHarvest().ranged().shieldCore().statType(WOOD)
-      .fallbacks("wood", "primitive")
-      .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF7F3500).addARGB(102, 0xFF954200).addARGB(140, 0xFFB24100).addARGB(178, 0xFFCB4B00).addARGB(216, 0xFFEF6F05).addARGB(255, 0xFFFF9826).build());
-    buildMaterial(MaterialIds.enderbark)
-      .meleeHarvest().ranged().shieldCore().statType(WOOD)
-      .fallbacks("wood", "primitive")
-      .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF891FB3).addARGB(102, 0xFF9D2ABD).addARGB(140, 0xFF272127).addARGB(178, 0xFF362E35).addARGB(216, 0xFF3E353F).addARGB(255, 0xFF423942).build());
+    buildPlanks(MaterialIds.greenheart ).colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF229630).addARGB(102, 0xFF24A033).addARGB(140, 0xFF27AB37).addARGB(178, 0xFF3EBD42).addARGB(216, 0xFF56CF4C).addARGB(234, 0xFF6FEA60).addARGB(255, 0xFF82F86D).build());
+    buildPlanks(MaterialIds.skyroot    ).colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF007E8C).addARGB(102, 0xFF008796).addARGB(140, 0xFF0090A3).addARGB(178, 0xFF00A2AE).addARGB(216, 0xFF00B4B8).addARGB(234, 0xFF10CFCC).addARGB(255, 0xFF23DDD9).build());
+    buildPlanks(MaterialIds.bloodshroom).colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF7F0000).addARGB(102, 0xFF890000).addARGB(140, 0xFF960000).addARGB(178, 0xFF9B0000).addARGB(216, 0xFFC10000).addARGB(234, 0xFFD50000).addARGB(255, 0xFFDD0000).build());
+    buildPlanks(MaterialIds.enderbark).transformer(transformerFromSprite(getResource("block/wood/enderbark/planks"), 1, 0xFF594D59));
 
     // tier 3
     buildMaterial(MaterialIds.skyslimeVine)
@@ -243,7 +206,7 @@ public class TinkerMaterialSpriteProvider extends AbstractMaterialSpriteProvider
     buildMaterial(MaterialIds.nahuatl)
       .meleeHarvest().ranged().shieldCore().statType(WOOD)
       .fallbacks("wood", "stick")
-      .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF100C1C).addARGB(102, 0xFF271E3D).addARGB(140, 0xFF49332E).addARGB(178, 0xFF543D30).addARGB(216, 0xFF664B2D).addARGB(255, 0xFF7A5C2D).build());
+      .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF100C1C).addARGB(102, 0xFF271E3D).addARGB(140, 0xFF2D2347).addARGB(178, 0xFF49332E).addARGB(216, 0xFF553F3A).addARGB(234, 0xFF5C4641).addARGB(255, 0xFF644E49).build());
     buildMaterial(MaterialIds.pigIron)
       .meleeHarvest().armor()
       .fallbacks("metal")
@@ -293,9 +256,9 @@ public class TinkerMaterialSpriteProvider extends AbstractMaterialSpriteProvider
       .colorMapper(obsidianPalette);
 
     // tier 4
-    ResourceLocation baseTexture = TConstruct.getResource("item/materials/generator/queens_slime");
-    ResourceLocation highlightTexture = TConstruct.getResource("item/materials/generator/queens_slime_highlight");
-    ResourceLocation borderTexture = TConstruct.getResource("item/materials/generator/queens_slime_border");
+    ResourceLocation baseTexture = getResource("item/materials/generator/queens_slime");
+    ResourceLocation highlightTexture = getResource("item/materials/generator/queens_slime_highlight");
+    ResourceLocation borderTexture = getResource("item/materials/generator/queens_slime_border");
     buildMaterial(MaterialIds.queensSlime)
       .meleeHarvest().ranged().armor()
       .fallbacks("slime_metal", "metal")
@@ -316,15 +279,10 @@ public class TinkerMaterialSpriteProvider extends AbstractMaterialSpriteProvider
       .meleeHarvest().ranged()
       .fallbacks("bone", "rock")
       .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF7F3611).addARGB(102, 0xFF934114).addARGB(140, 0xFFB5671E).addARGB(178, 0xFFE28F28).addARGB(216, 0xFFEFC62F).addARGB(255, 0xFFF4EA5A).build());
-    ResourceLocation blazewoodTexture = TConstruct.getResource("block/wood/blazewood");
     buildMaterial(MaterialIds.blazewood)
       .shieldCore().statType(WOOD)
       .fallbacks("wood", "stick")
-      .transformer(GreyToSpriteTransformer.builderFromBlack()
-                                          .addTexture( 63, blazewoodTexture, 0xFF404040)
-                                          .addTexture(102, blazewoodTexture, 0xFF808080)
-                                          .addTexture(140, blazewoodTexture)
-                                          .animated(blazewoodTexture, 7));
+      .transformer(transformerFromSprite(getResource("block/wood/blazewood"), 7, 0));
     IColorMapping ancientDebrisPalette = GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF24110B).addARGB(102, 0xFF411E15).addARGB(140, 0xFF4A281D).addARGB(178, 0xFF654740).addARGB(216, 0xFF7E6059).addARGB(255, 0xFF95867E).build();
     buildMaterial(MaterialIds.ancientHide)
       .fallbacks("cloth")
@@ -404,5 +362,27 @@ public class TinkerMaterialSpriteProvider extends AbstractMaterialSpriteProvider
 //    buildMaterial(MaterialIds.venom)
 //      .statType(TinkerPartSpriteProvider.SLIMESUIT)
 //      .colorMapper(GreyToColorMapping.builder().addARGB(0, 0xE07F7F7F).addARGB(63, 0xE59B9B9B).addARGB(102, 0xE6A1A1A1).addARGB(140, 0xE9A7A7A7).addARGB(178, 0xEDBBBBBB).addARGB(216, 0xF3D4D4D4).addARGB(255, 0xF8EFEFEF).build());
+  }
+
+  /** Creates a palette for a sprite that tints it for borders */
+  public static ISpriteTransformer transformerFromSprite(ResourceLocation texture, int frames, int highlightColor) {
+    GreyToSpriteTransformer.Builder builder = GreyToSpriteTransformer.builderFromBlack();
+    builder.addTexture( 63, texture, 0xFF404040)
+           .addTexture(102, texture, 0xFF808080)
+           .addTexture(140, texture);
+    if (highlightColor != 0) {
+      builder.addTexture(216, texture).addARGB(255, highlightColor);
+    }
+    if (frames > 1) {
+      return builder.animated(texture, frames);
+    }
+    return builder.build();
+  }
+
+  /** Adds a plank type as a wood variant */
+  private MaterialSpriteInfoBuilder buildPlanks(MaterialVariantId material) {
+    return buildMaterial(material)
+      .meleeHarvest().ranged().shieldCore().statType(WOOD)
+      .fallbacks("wood", "stick", "primitive");
   }
 }

@@ -21,7 +21,7 @@ public interface ISpriteTransformer extends IJsonSerializable {
    */
   void transform(NativeImage image, boolean allowAnimated);
 
-  /** Gets the default color to use in tinting for this transformer, for the case where the texture is missing. Most commonly caused by one addon adding a tool and a different one adding a material */
+  /** Gets the default color to use in tinting for this transformer in AABBGGRR format, for the case where the texture is missing. Most commonly caused by one addon adding a tool and a different one adding a material */
   default int getFallbackColor() {
     return -1;
   }

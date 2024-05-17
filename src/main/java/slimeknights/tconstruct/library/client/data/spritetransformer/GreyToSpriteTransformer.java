@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.ToIntFunction;
 
 import static com.mojang.blaze3d.platform.NativeImage.getA;
@@ -91,6 +92,10 @@ public class GreyToSpriteTransformer implements ISpriteTransformer {
     }
   }
 
+  @Override
+  public int getFallbackColor() {
+    return getSpriteRange(216).getAverage(216);
+  }
 
   /* Serializing */
 
@@ -272,6 +277,41 @@ public class GreyToSpriteTransformer implements ISpriteTransformer {
       }
       return color;
     }
+
+    /** Gets the average color of this sprite in ARGB format, or the base color if no path */
+    public int getAverage() {
+      if (path != null) {
+        NativeImage image = getImage();
+        if (image != null) {
+          int red = 0;
+          int green = 0;
+          int blue = 0;
+          int alpha = 0;
+          for (int x = 0; x < image.getWidth(); x++) {
+            for (int y = 0; y < image.getHeight(); y++) {
+              int color = image.getPixelRGBA(x, y);
+              red   += NativeImage.getR(color);
+              green += NativeImage.getG(color);
+              blue  += NativeImage.getB(color);
+              alpha += NativeImage.getA(color);
+            }
+          }
+          int pixels = image.getWidth() * image.getHeight();
+          int spriteColor = NativeImage.combine(alpha / pixels, blue / pixels, green / pixels, red / pixels);
+          // if we have a color set, treat it as a tint
+          if (color != -1) {
+            spriteColor = GreyToColorMapping.scaleColor(spriteColor, color, 255);
+          }
+          return spriteColor;
+        }
+      }
+      return color;
+    }
+
+    /** Checks if these two mappings have the same values */
+    public boolean isSame(SpriteMapping other) {
+      return this == other || (this.color == other.color && Objects.equals(this.path, other.path));
+    }
   }
 
   /** Result from a sprite search for a given color */
@@ -292,12 +332,27 @@ public class GreyToSpriteTransformer implements ISpriteTransformer {
         assert after != null;
         return after.getColor(x, y, frame);
       }
-      if (after == null || before == after) {
+      if (after == null || before.isSame(after)) {
         return before.getColor(x, y, frame);
       }
       return GreyToColorMapping.interpolateColors(
         before.getColor(x, y, frame), before.getGrey(),
         after.getColor(x, y, frame), after.getGrey(),
+        grey);
+    }
+
+    /** Gets the average value for the given grey value */
+    public int getAverage(int grey) {
+      if (before == null) {
+        assert after != null;
+        return after.getAverage();
+      }
+      if (after == null || before.isSame(after)) {
+        return before.getAverage();
+      }
+      return GreyToColorMapping.interpolateColors(
+        before.getAverage(), before.getGrey(),
+        after.getAverage(), after.getGrey(),
         grey);
     }
   }
