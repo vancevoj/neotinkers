@@ -125,7 +125,7 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
                      StatlessMaterialStats.BINDING);
     addMaterialStats(MaterialIds.lead,
                      new HeadMaterialStats(200, 5f, IRON, 2.5f),
-                     HandleMaterialStats.multipliers().durability(0.9f).attackSpeed(0.9f).attackDamage(1.2f).build(),
+                     HandleMaterialStats.multipliers().durability(0.9f).attackSpeed(0.95f).attackDamage(1.15f).build(),
                      StatlessMaterialStats.BINDING);
 
     // tier 3
@@ -140,16 +140,16 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
                      StatlessMaterialStats.BINDING);
     addMaterialStats(MaterialIds.nahuatl,
                      new HeadMaterialStats(350, 4.5f, DIAMOND, 3f),
-                     HandleMaterialStats.multipliers().durability(0.9f).attackSpeed(0.9f).attackDamage(1.30f).build(),
+                     HandleMaterialStats.multipliers().durability(0.9f).attackSpeed(0.9f).attackDamage(1.25f).build(),
                      StatlessMaterialStats.BINDING);
     addMaterialStats(MaterialIds.pigIron,
                      new HeadMaterialStats(580, 6f, DIAMOND, 2.5f),
-                     HandleMaterialStats.multipliers().durability(1.10f).miningSpeed(0.85f).attackDamage(1.1f).build(),
+                     HandleMaterialStats.multipliers().durability(1.10f).miningSpeed(0.85f).attackDamage(1.15f).build(),
                      StatlessMaterialStats.BINDING);
     // vanilla gold: 32, 12f, WOOD, 0f
     addMaterialStats(MaterialIds.roseGold,
                      new HeadMaterialStats(175, 9f, GOLD, 1f), // gold mining level technically puts it in tier 0, but lets see if some mod does something weird
-                     HandleMaterialStats.multipliers().durability(0.6f).miningSpeed(1.20f).attackSpeed(1.20f).build(),
+                     HandleMaterialStats.multipliers().durability(0.7f).miningSpeed(1.10f).attackSpeed(1.10f).build(),
                      StatlessMaterialStats.BINDING);
     // tier 3 (nether)
     addMaterialStats(MaterialIds.cobalt,
@@ -174,7 +174,7 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
                      StatlessMaterialStats.BINDING);
     addMaterialStats(MaterialIds.invar,
                      new HeadMaterialStats(630, 5.5f, DIAMOND, 2.5f),
-                     HandleMaterialStats.multipliers().miningSpeed(0.9f).attackDamage(1.2f).build(),
+                     HandleMaterialStats.multipliers().miningSpeed(0.9f).attackSpeed(1.05f).attackDamage(1.15f).build(),
                      StatlessMaterialStats.BINDING);
     addMaterialStats(MaterialIds.necronium,
                      new HeadMaterialStats(357, 4.0f, DIAMOND, 2.75f),
@@ -201,7 +201,7 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
                      StatlessMaterialStats.BINDING);
     addMaterialStats(MaterialIds.manyullyn,
                      new HeadMaterialStats(1250, 6.5f, NETHERITE, 3.5f),
-                     HandleMaterialStats.multipliers().durability(1.1f).miningSpeed(0.9f).attackSpeed(0.95f).attackDamage(1.25f).build(),
+                     HandleMaterialStats.multipliers().durability(1.1f).miningSpeed(0.9f).attackSpeed(0.95f).attackDamage(1.20f).build(),
                      StatlessMaterialStats.BINDING);
     addMaterialStats(MaterialIds.blazingBone,
                      new HeadMaterialStats(530, 6f, IRON, 3f),
