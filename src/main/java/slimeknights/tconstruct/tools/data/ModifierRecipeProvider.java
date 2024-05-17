@@ -901,6 +901,13 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                                     .setSlots(SlotType.ABILITY, 1)
                                     .saveSalvage(consumer, prefix(ModifierIds.strength, abilitySalvage))
                                     .save(consumer, prefix(ModifierIds.strength, abilityFolder));
+    ModifierRecipeBuilder.modifier(ModifierIds.wings)
+                         .setTools(TinkerTags.Items.CHESTPLATES)
+                         .setMaxLevel(1).checkTraitLevel()
+                         .addInput(Items.ELYTRA)
+                         .setSlots(SlotType.ABILITY, 2)
+                         .saveSalvage(consumer, prefix(ModifierIds.wings, abilitySalvage))
+                         .save(consumer, prefix(ModifierIds.wings, abilityFolder));
 
     // leggings
     ModifierRecipeBuilder.modifier(ModifierIds.pockets)

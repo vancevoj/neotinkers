@@ -129,6 +129,7 @@
   "tconstruct:reflecting":       "tconstruct:gui/modifiers/armor/reflecting",
   "tconstruct:snowdrift":        "tconstruct:gui/modifiers/armor/snowdrift",
   "tconstruct:soulspeed":        "tconstruct:gui/modifiers/armor/soulspeed",
+  "tconstruct:wings": [ "minecraft:item/elytra", "tconstruct:gui/modifiers/plus" ],
   
   "tconstruct:gilded":      ["minecraft:item/golden_apple", "tconstruct:gui/modifiers/plus"],
   "tconstruct:writable":    ["minecraft:item/writable_book", "tconstruct:gui/modifiers/plus"],
