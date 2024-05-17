@@ -1065,6 +1065,7 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
      * ability
      */
     ModifierRecipeBuilder.modifier(ModifierIds.gilded)
+                         .setTools(TinkerTags.Items.BONUS_SLOTS)
                          .addInput(Items.GOLDEN_APPLE)
                          .setSlots(SlotType.ABILITY, 1)
                          .saveSalvage(consumer, prefix(ModifierIds.gilded, abilitySalvage))
@@ -1420,26 +1421,32 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
      * extra modifiers
      */
     ModifierRecipeBuilder.modifier(ModifierIds.writable)
+                         .setTools(TinkerTags.Items.BONUS_SLOTS)
                          .addInput(Items.WRITABLE_BOOK)
                          .setMaxLevel(1)
                          .save(consumer, prefix(ModifierIds.writable, slotlessFolder));
     ModifierRecipeBuilder.modifier(ModifierIds.harmonious)
+                         .setTools(TinkerTags.Items.BONUS_SLOTS)
                          .addInput(ItemTags.MUSIC_DISCS)
                          .setMaxLevel(1)
                          .save(consumer, prefix(ModifierIds.harmonious, slotlessFolder));
     ModifierRecipeBuilder.modifier(ModifierIds.recapitated)
+                         .setTools(TinkerTags.Items.BONUS_SLOTS)
                          .addInput(SizedIngredient.of(DifferenceIngredient.of(Ingredient.of(Tags.Items.HEADS), Ingredient.of(Items.DRAGON_HEAD))))
                          .setMaxLevel(1)
                          .save(consumer, prefix(ModifierIds.recapitated, slotlessFolder));
     ModifierRecipeBuilder.modifier(ModifierIds.resurrected)
+                         .setTools(TinkerTags.Items.BONUS_SLOTS)
                          .addInput(Items.END_CRYSTAL)
                          .setMaxLevel(1)
                          .save(consumer, prefix(ModifierIds.resurrected, slotlessFolder));
     ModifierRecipeBuilder.modifier(ModifierIds.draconic)
+                         .setTools(TinkerTags.Items.BONUS_SLOTS)
                          .addInput(Items.DRAGON_HEAD)
                          .setMaxLevel(1)
                          .save(consumer, wrap(ModifierIds.draconic, slotlessFolder, "_from_head"));
     ModifierRecipeBuilder.modifier(ModifierIds.draconic)
+                         .setTools(TinkerTags.Items.BONUS_SLOTS)
                          .addInput(Blocks.WITHER_ROSE)
                          .addInput(TinkerModifiers.dragonScale)
                          .addInput(Blocks.WITHER_ROSE)
@@ -1451,6 +1458,7 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
     // rebalanced
     Ingredient rebalancedCommon = Ingredient.of(TinkerModifiers.dragonScale, Blocks.GILDED_BLACKSTONE);
     SwappableModifierRecipeBuilder.modifier(ModifierIds.rebalanced, SlotType.UPGRADE.getName())
+                                  .setTools(TinkerTags.Items.BONUS_SLOTS)
                                   .addInput(rebalancedCommon)
                                   .addInput(TinkerMaterials.roseGold.getIngotTag())
                                   .addInput(rebalancedCommon)
@@ -1459,7 +1467,7 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                                   .disallowCrystal()
                                   .save(consumer, wrap(ModifierIds.rebalanced, slotlessFolder, "_" + SlotType.UPGRADE.getName()));
     SwappableModifierRecipeBuilder.modifier(ModifierIds.rebalanced, SlotType.DEFENSE.getName())
-                                  .setTools(ingredientFromTags(TinkerTags.Items.ARMOR, TinkerTags.Items.HELD))
+                                  .setTools(IntersectionIngredient.of(ingredientFromTags(TinkerTags.Items.ARMOR, TinkerTags.Items.HELD), Ingredient.of(TinkerTags.Items.BONUS_SLOTS)))
                                   .addInput(rebalancedCommon)
                                   .addInput(TinkerMaterials.cobalt.getIngotTag())
                                   .addInput(rebalancedCommon)
@@ -1468,6 +1476,7 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                                   .disallowCrystal()
                                   .save(consumer, wrap(ModifierIds.rebalanced, slotlessFolder, "_" + SlotType.DEFENSE.getName()));
     SwappableModifierRecipeBuilder.modifier(ModifierIds.rebalanced, SlotType.ABILITY.getName())
+                                  .setTools(TinkerTags.Items.BONUS_SLOTS)
                                   .addInput(rebalancedCommon)
                                   .addInput(TinkerMaterials.queensSlime.getIngotTag())
                                   .addInput(rebalancedCommon)

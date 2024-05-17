@@ -9,6 +9,6 @@
   "level": 1,
   "result": "tconstruct:writable",
   "tools": {
-    "tag": "tconstruct:modifiable"
+    "tag": "tconstruct:modifiable/bonus_slots"
   }
 }

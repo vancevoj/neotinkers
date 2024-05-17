@@ -311,6 +311,8 @@ public class TinkerTags {
 
     /** Anything that can be modified in the tool station */
     public static final TagKey<Item> MODIFIABLE = tag("modifiable");
+    /** Anything that supports modifiers that grant extra modifiers */
+    public static final TagKey<Item> BONUS_SLOTS = tag("modifiable/bonus_slots");
 
     /** Modifiable items that contain multiple parts */
     public static final TagKey<Item> MULTIPART_TOOL = tag("modifiable/multipart");

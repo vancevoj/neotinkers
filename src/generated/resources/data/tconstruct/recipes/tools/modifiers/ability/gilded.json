@@ -11,6 +11,6 @@
     "abilities": 1
   },
   "tools": {
-    "tag": "tconstruct:modifiable"
+    "tag": "tconstruct:modifiable/bonus_slots"
   }
 }
