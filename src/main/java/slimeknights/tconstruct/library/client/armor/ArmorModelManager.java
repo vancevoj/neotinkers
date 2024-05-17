@@ -22,9 +22,11 @@ import slimeknights.tconstruct.library.client.armor.texture.ArmorTextureSupplier
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 public class ArmorModelManager extends SimpleJsonResourceReloadListener {
   /** Folder containing the logic */
@@ -78,8 +80,16 @@ public class ArmorModelManager extends SimpleJsonResourceReloadListener {
 
     this.models = builder.build();
     // clear dispatcher model cache
+    Set<ResourceLocation> missing = new HashSet<>();
     for (ArmorModelDispatcher dispatcher : DISPATCHERS) {
       dispatcher.model = null;
+      ResourceLocation name = dispatcher.getName();
+      if (!this.models.containsKey(name)) {
+        missing.add(name);
+      }
+    }
+    if (!missing.isEmpty()) {
+      TConstruct.LOG.error("Missing armor models used by items: {}", missing);
     }
     TConstruct.LOG.info("Loaded {} armor models in {} ms", models.size(), (System.nanoTime() - time) / 1000000f);
   }
