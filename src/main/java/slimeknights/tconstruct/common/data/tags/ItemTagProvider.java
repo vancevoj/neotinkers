@@ -260,7 +260,12 @@ public class ItemTagProvider extends ItemTagsProvider {
 
     // armor
     addArmorTags(TinkerTools.travelersGear, DURABILITY, BONUS_SLOTS, GOLDEN_ARMOR, DYEABLE, ItemTags.FREEZE_IMMUNE_WEARABLES);
-    addArmorTags(TinkerTools.plateArmor,    DURABILITY, BONUS_SLOTS, MULTIPART_TOOL);
+    addArmorTags(TinkerTools.plateArmor,    DURABILITY, BONUS_SLOTS);
+    // want these in top down order as it looks better in the book then
+    TagAppender<Item> multipart = tag(MULTIPART_TOOL);
+    for (ArmorSlotType slotType : ArmorSlotType.TOP_DOWN) {
+      multipart.add(TinkerTools.plateArmor.get(slotType));
+    }
     addArmorTags(TinkerTools.slimesuit,     DURABILITY, BONUS_SLOTS, GOLDEN_ARMOR, EMBELLISHMENT_SLIME);
     addToolTags(TinkerTools.slimesuit.get(ArmorSlotType.HELMET), MULTIPART_TOOL);
 
