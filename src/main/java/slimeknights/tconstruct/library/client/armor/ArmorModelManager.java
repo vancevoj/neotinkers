@@ -103,6 +103,10 @@ public class ArmorModelManager extends SimpleJsonResourceReloadListener {
   public abstract static class ArmorModelDispatcher implements IClientItemExtensions {
     private ArmorModel model;
 
+    public ArmorModelDispatcher() {
+      DISPATCHERS.add(this);
+    }
+
     /**
      * Gets the name of the model to use.
      * Not a constructor parameter as forge initializes client extensions before we can store fields from the parent constructor.
