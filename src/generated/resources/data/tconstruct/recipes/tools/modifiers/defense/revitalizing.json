@@ -5,9 +5,6 @@
   "input": {
     "item": "tconstruct:jeweled_apple"
   },
-  "level": {
-    "max": 5
-  },
   "needed_per_level": 2,
   "result": "tconstruct:revitalizing",
   "slots": {

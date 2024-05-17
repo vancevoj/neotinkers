@@ -139,7 +139,7 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
 
     // jeweled apple
     ItemCastingRecipeBuilder.tableRecipe(TinkerCommons.jeweledApple)
-                            .setFluidAndTime(TinkerFluids.moltenDiamond, false, FluidValues.GEM * 4)
+                            .setFluidAndTime(TinkerFluids.moltenDiamond, false, FluidValues.GEM * 2)
                             .setCast(Items.APPLE, true)
                             .save(consumer, prefix(TinkerCommons.jeweledApple, folder));
 
@@ -731,7 +731,6 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                                     .setTools(ingredientFromTags(TinkerTags.Items.WORN_ARMOR)) // revitalizing would suck on an item you constantly change
                                     .setInput(TinkerCommons.jeweledApple, 1, 2)
                                     .setSlots(SlotType.DEFENSE, 1)
-                                    .setMaxLevel(5)
                                     .saveSalvage(consumer, prefix(ModifierIds.revitalizing, defenseSalvage))
                                     .save(consumer, prefix(ModifierIds.revitalizing, defenseFolder));
 
