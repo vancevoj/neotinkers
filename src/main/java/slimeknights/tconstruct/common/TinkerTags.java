@@ -377,6 +377,9 @@ public class TinkerTags {
     public static final TagKey<Item> HELD_ARMOR = tag("modifiable/armor/held");
     /** Modifiable items that have innate shielding behavior */
     public static final TagKey<Item> SHIELDS = tag("modifiable/shields");
+    /** Armor that supports being made golden */
+    public static final TagKey<Item> GOLDEN_ARMOR = tag("modifiable/armor/golden");
+
     // armor book tags
     /** Full list of armor shown in the encyclopedia, can add to directly to show only in the encyclopedia */
     public static final TagKey<Item> BOOK_ARMOR = tag("modifiable/book_armor");

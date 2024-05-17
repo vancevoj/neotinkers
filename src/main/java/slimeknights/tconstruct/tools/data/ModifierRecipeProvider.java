@@ -706,7 +706,7 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .setMaxLevel(1).checkTraitLevel()
                          .setTools(TinkerTags.Items.WORN_ARMOR) // allow salvage on all worn armor
                          .saveSalvage(consumer, prefix(TinkerModifiers.golden, defenseSalvage))
-                         .setTools(DifferenceIngredient.of(Ingredient.of(TinkerTags.Items.WORN_ARMOR), Ingredient.of(TinkerTools.plateArmor.values().toArray(new ItemLike[0])))) // piglins ignore held items
+                         .setTools(TinkerTags.Items.GOLDEN_ARMOR)
                          .save(consumer, prefix(TinkerModifiers.golden, defenseFolder));
     IncrementalModifierRecipeBuilder.modifier(ModifierIds.turtleShell)
                                     .setInput(Items.SCUTE, 1, 5)

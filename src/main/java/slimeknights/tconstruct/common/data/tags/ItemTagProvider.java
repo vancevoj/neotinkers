@@ -52,6 +52,7 @@ import static slimeknights.tconstruct.common.TinkerTags.Items.EMBELLISHMENT_SLIM
 import static slimeknights.tconstruct.common.TinkerTags.Items.EMBELLISHMENT_WOOD;
 import static slimeknights.tconstruct.common.TinkerTags.Items.FANTASTIC_ARMOR;
 import static slimeknights.tconstruct.common.TinkerTags.Items.GADGETRY_ARMOR;
+import static slimeknights.tconstruct.common.TinkerTags.Items.GOLDEN_ARMOR;
 import static slimeknights.tconstruct.common.TinkerTags.Items.HARVEST;
 import static slimeknights.tconstruct.common.TinkerTags.Items.HARVEST_PRIMARY;
 import static slimeknights.tconstruct.common.TinkerTags.Items.HELD;
@@ -257,9 +258,9 @@ public class ItemTagProvider extends ItemTagsProvider {
     addToolTags(TinkerTools.enderStaff,    DURABILITY, STAFFS, SPECIAL_TOOLS, HELD_ARMOR, INTERACTABLE_DUAL, AOE, DYEABLE, EMBELLISHMENT_WOOD);
 
     // armor
-    addArmorTags(TinkerTools.travelersGear, DURABILITY, DYEABLE, ItemTags.FREEZE_IMMUNE_WEARABLES);
+    addArmorTags(TinkerTools.travelersGear, DURABILITY, GOLDEN_ARMOR, DYEABLE, ItemTags.FREEZE_IMMUNE_WEARABLES);
     addArmorTags(TinkerTools.plateArmor,    DURABILITY, MULTIPART_TOOL);
-    addArmorTags(TinkerTools.slimesuit,     DURABILITY, EMBELLISHMENT_SLIME);
+    addArmorTags(TinkerTools.slimesuit,     DURABILITY, GOLDEN_ARMOR, EMBELLISHMENT_SLIME);
     addToolTags(TinkerTools.slimesuit.get(ArmorSlotType.HELMET), MULTIPART_TOOL);
 
     // shields
