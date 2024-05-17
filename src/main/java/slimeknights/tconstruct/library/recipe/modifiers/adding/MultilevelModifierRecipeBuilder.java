@@ -40,6 +40,7 @@ public class MultilevelModifierRecipeBuilder extends AbstractRecipeBuilder<Multi
   private boolean allowCrystal = true;
   private Ingredient tools = Ingredient.EMPTY;
   private int maxToolSize = ITinkerStationRecipe.DEFAULT_TOOL_STACK_SIZE;
+  private boolean checkTraitLevel = false;
 
 
   /* Inputs */
@@ -150,6 +151,15 @@ public class MultilevelModifierRecipeBuilder extends AbstractRecipeBuilder<Multi
     return this;
   }
 
+  /**
+   * Makes the recipe check the trait level in addition to the level of recipe modifiers
+   * @return  Builder instance
+   */
+  public MultilevelModifierRecipeBuilder checkTraitLevel() {
+    checkTraitLevel = true;
+    return this;
+  }
+
 
   /* Requirements */
 
@@ -227,7 +237,7 @@ public class MultilevelModifierRecipeBuilder extends AbstractRecipeBuilder<Multi
       throw new IllegalStateException("Must have at least 1 level");
     }
     ResourceLocation advancementId = buildOptionalAdvancement(id, "modifiers");
-    consumer.accept(new LoadableFinishedRecipe<>(new MultilevelModifierRecipe(id, inputs, tools, maxToolSize, result, allowCrystal, levels), MultilevelModifierRecipe.LOADER, advancementId));
+    consumer.accept(new LoadableFinishedRecipe<>(new MultilevelModifierRecipe(id, inputs, tools, maxToolSize, result, allowCrystal, levels, checkTraitLevel), MultilevelModifierRecipe.LOADER, advancementId));
   }
 
   /** Writes common JSON elements */

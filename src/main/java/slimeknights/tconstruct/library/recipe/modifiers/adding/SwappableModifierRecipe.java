@@ -45,7 +45,7 @@ public class SwappableModifierRecipe extends ModifierRecipe {
   /** Value of the modifier being swapped, distinguishing this recipe from others for the same modifier */
   private final String value;
   public SwappableModifierRecipe(ResourceLocation id, List<SizedIngredient> inputs, Ingredient toolRequirement, int maxToolSize, ModifierId result, String value, @Nullable SlotCount slots, boolean allowCrystal) {
-    super(id, inputs, toolRequirement, maxToolSize, result, new IntRange(1, 1), slots, allowCrystal);
+    super(id, inputs, toolRequirement, maxToolSize, result, new IntRange(1, 1), slots, allowCrystal, false);
     this.value = value;
   }
 

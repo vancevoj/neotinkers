@@ -36,6 +36,7 @@ public abstract class AbstractModifierRecipeBuilder<T extends AbstractModifierRe
   protected boolean useSalvageMax = false;
   // modifier recipe
   protected boolean allowCrystal = true;
+  protected boolean checkTraitLevel = false;
 
   /**
    * Sets the list of tools this modifier can be applied to
@@ -131,6 +132,15 @@ public abstract class AbstractModifierRecipeBuilder<T extends AbstractModifierRe
    */
   public T disallowCrystal() {
     allowCrystal = false;
+    return (T) this;
+  }
+
+  /**
+   * Makes the recipe check the trait level in addition to the level of recipe modifiers
+   * @return  Builder instance
+   */
+  public T checkTraitLevel() {
+    checkTraitLevel = true;
     return (T) this;
   }
 

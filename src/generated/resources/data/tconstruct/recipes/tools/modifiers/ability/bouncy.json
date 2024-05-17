@@ -1,6 +1,7 @@
 {
   "type": "tconstruct:modifier",
   "allow_crystal": true,
+  "check_trait_level": true,
   "inputs": [
     {
       "amount_needed": 4,
@@ -29,12 +30,6 @@
     "abilities": 1
   },
   "tools": {
-    "type": "forge:difference",
-    "base": {
-      "tag": "tconstruct:modifiable/armor/boots"
-    },
-    "subtracted": {
-      "item": "tconstruct:slime_boots"
-    }
+    "tag": "tconstruct:modifiable/armor/boots"
   }
 }

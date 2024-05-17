@@ -117,6 +117,6 @@ public class IncrementalModifierRecipeBuilder extends AbstractModifierRecipeBuil
       throw new IllegalStateException("Must set input");
     }
     ResourceLocation advancementId = buildOptionalAdvancement(id, "modifiers");
-    consumer.accept(new LoadableFinishedRecipe<>(new IncrementalModifierRecipe(id, input, amountPerItem, neededPerLevel, tools, maxToolSize, result, ModifierEntry.VALID_LEVEL.range(minLevel, maxLevel), slots, leftover, allowCrystal), IncrementalModifierRecipe.LOADER, advancementId));
+    consumer.accept(new LoadableFinishedRecipe<>(new IncrementalModifierRecipe(id, input, amountPerItem, neededPerLevel, tools, maxToolSize, result, ModifierEntry.VALID_LEVEL.range(minLevel, maxLevel), slots, leftover, allowCrystal, checkTraitLevel), IncrementalModifierRecipe.LOADER, advancementId));
   }
 }

@@ -40,10 +40,9 @@ public class IncrementalModifierRecipe extends AbstractModifierRecipe {
     IngredientLoadable.DISALLOW_EMPTY.requiredField("input", r -> r.input),
     IntLoadable.FROM_ONE.defaultField("amount_per_item", 1, true, r -> r.amountPerInput),
     IntLoadable.FROM_ONE.requiredField("needed_per_level", r -> r.neededPerLevel),
-    TOOLS_FIELD, MAX_TOOL_SIZE_FIELD, RESULT_FIELD, LEVEL_FIELD,
-    SLOTS_FIELD,
+    TOOLS_FIELD, MAX_TOOL_SIZE_FIELD, RESULT_FIELD, LEVEL_FIELD, SLOTS_FIELD,
     ItemOutput.Loadable.OPTIONAL_STACK.emptyField("leftover", r -> r.leftover),
-    ALLOW_CRYSTAL_FIELD,
+    ALLOW_CRYSTAL_FIELD, CHECK_TRAIT_LEVEL_FIELD,
     IncrementalModifierRecipe::new);
 
 
@@ -56,8 +55,8 @@ public class IncrementalModifierRecipe extends AbstractModifierRecipe {
   /** Item stack to use when a partial amount is leftover */
   private final ItemOutput leftover;
 
-  public IncrementalModifierRecipe(ResourceLocation id, Ingredient input, int amountPerInput, int neededPerLevel, Ingredient toolRequirement, int maxToolSize, ModifierId result, IntRange level, @Nullable SlotCount slots, ItemOutput leftover, boolean allowCrystal) {
-    super(id, toolRequirement, maxToolSize, result, level, slots, allowCrystal);
+  public IncrementalModifierRecipe(ResourceLocation id, Ingredient input, int amountPerInput, int neededPerLevel, Ingredient toolRequirement, int maxToolSize, ModifierId result, IntRange level, @Nullable SlotCount slots, ItemOutput leftover, boolean allowCrystal, boolean checkTraitLevel) {
+    super(id, toolRequirement, maxToolSize, result, level, slots, allowCrystal, checkTraitLevel);
     this.input = input;
     this.amountPerInput = amountPerInput;
     this.neededPerLevel = neededPerLevel;

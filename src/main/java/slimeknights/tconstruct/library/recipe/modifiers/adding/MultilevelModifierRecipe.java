@@ -34,6 +34,7 @@ public class MultilevelModifierRecipe extends ModifierRecipe implements IMultiRe
     SizedIngredient.LOADABLE.list(0).defaultField("inputs", List.of(), r -> r.inputs),
     TOOLS_FIELD, MAX_TOOL_SIZE_FIELD, RESULT_FIELD, ALLOW_CRYSTAL_FIELD,
     LevelEntry.LOADABLE.list(1).requiredField("levels", r -> r.levels),
+    CHECK_TRAIT_LEVEL_FIELD,
     MultilevelModifierRecipe::new).validate((recipe, error) -> {
     if (recipe.inputs.isEmpty() && !recipe.allowCrystal) {
       throw error.create("Must either have inputs or allow crystal");
@@ -42,8 +43,8 @@ public class MultilevelModifierRecipe extends ModifierRecipe implements IMultiRe
   });
 
   private final List<LevelEntry> levels;
-  protected MultilevelModifierRecipe(ResourceLocation id, List<SizedIngredient> inputs, Ingredient toolRequirement, int maxToolSize, ModifierId result, boolean allowCrystal, List<LevelEntry> levels) {
-    super(id, inputs, toolRequirement, maxToolSize, result, levels.get(0).level, levels.get(0).slots(), allowCrystal);
+  protected MultilevelModifierRecipe(ResourceLocation id, List<SizedIngredient> inputs, Ingredient toolRequirement, int maxToolSize, ModifierId result, boolean allowCrystal, List<LevelEntry> levels, boolean checkTraitLevel) {
+    super(id, inputs, toolRequirement, maxToolSize, result, levels.get(0).level, levels.get(0).slots(), allowCrystal, checkTraitLevel);
     this.levels = levels;
   }
 
@@ -53,7 +54,7 @@ public class MultilevelModifierRecipe extends ModifierRecipe implements IMultiRe
     ToolStack tool = ToolStack.from(tinkerable);
 
     // next few checks depend on the current level to decide
-    int newLevel = tool.getModifierLevel(result.getId()) + 1;
+    int newLevel = (checkTraitLevel ? tool.getModifiers() : tool.getUpgrades()).getLevel(result.getId()) + 1;
     LevelEntry levelEntry = null;
     for (LevelEntry check : levels) {
       if (check.matches(newLevel)) {

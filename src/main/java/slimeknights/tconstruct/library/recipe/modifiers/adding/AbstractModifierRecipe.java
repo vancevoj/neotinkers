@@ -36,8 +36,10 @@ import static slimeknights.tconstruct.library.recipe.modifiers.adding.IDisplayMo
 public abstract class AbstractModifierRecipe implements ITinkerStationRecipe, IDisplayModifierRecipe {
   /** Error for when the tool has does not have enough existing levels of this modifier, has a single parameter, modifier with level */
   protected static final String KEY_MIN_LEVEL = TConstruct.makeTranslationKey("recipe", "modifier.min_level");
+  protected static final String KEY_MIN_LEVEL_TRAITS = KEY_MIN_LEVEL + ".traits";
   /** Error for when the tool is at the max modifier level */
   protected static final String KEY_MAX_LEVEL = TConstruct.makeTranslationKey("recipe", "modifier.max_level");
+  protected static final String KEY_MAX_LEVEL_TRAITS = KEY_MAX_LEVEL + ".traits";
   /** Error for when the tool has too few upgrade slots */
   protected static final String KEY_NOT_ENOUGH_SLOTS = TConstruct.makeTranslationKey("recipe", "modifier.not_enough_slots");
   /** Error for when the tool has too few upgrade slots from a single slot */
@@ -50,6 +52,7 @@ public abstract class AbstractModifierRecipe implements ITinkerStationRecipe, ID
   protected static final LoadableField<IntRange,AbstractModifierRecipe> LEVEL_FIELD = ModifierEntry.VALID_LEVEL.defaultField("level", r -> r.level);
   protected static final LoadableField<SlotCount,AbstractModifierRecipe> SLOTS_FIELD = SlotCount.LOADABLE.nullableField("slots", r -> r.slots);
   protected static final LoadableField<Boolean,AbstractModifierRecipe> ALLOW_CRYSTAL_FIELD = BooleanLoadable.INSTANCE.defaultField("allow_crystal", true, r -> r.allowCrystal);
+  protected static final LoadableField<Boolean,AbstractModifierRecipe> CHECK_TRAIT_LEVEL_FIELD = BooleanLoadable.INSTANCE.defaultField("check_trait_level", false, false, r -> r.checkTraitLevel);
 
 
   @Getter
@@ -69,9 +72,11 @@ public abstract class AbstractModifierRecipe implements ITinkerStationRecipe, ID
   private final SlotCount slots;
   /** If true, this recipe can be applied using modifier crystals */
   protected final boolean allowCrystal;
+  /** If true, validates the level against the trait level. False validates against recipe modifiers only. */
+  protected final boolean checkTraitLevel;
 
   protected AbstractModifierRecipe(ResourceLocation id, Ingredient toolRequirement, int maxToolSize,
-                                   ModifierId result, IntRange level, @Nullable SlotCount slots, boolean allowCrystal) {
+                                   ModifierId result, IntRange level, @Nullable SlotCount slots, boolean allowCrystal, boolean checkTraitLevel) {
     this.id = id;
     this.toolRequirement = toolRequirement;
     this.maxToolSize = maxToolSize;
@@ -79,6 +84,7 @@ public abstract class AbstractModifierRecipe implements ITinkerStationRecipe, ID
     this.level = level;
     this.slots = slots;
     this.allowCrystal = allowCrystal;
+    this.checkTraitLevel = checkTraitLevel;
     ModifierRecipeLookup.addRecipeModifier(SlotCount.type(slots), this.result);
   }
 
@@ -186,11 +192,11 @@ public abstract class AbstractModifierRecipe implements ITinkerStationRecipe, ID
   @Nullable
   protected Component validateLevel(int resultLevel) {
     if (resultLevel < this.level.min()) {
-      return Component.translatable(KEY_MIN_LEVEL, result.get().getDisplayName(this.level.min() - 1));
+      return Component.translatable(checkTraitLevel ? KEY_MIN_LEVEL_TRAITS : KEY_MIN_LEVEL, result.get().getDisplayName(this.level.min() - 1));
     }
     // max level of modifier
     if (resultLevel > this.level.max()) {
-      return Component.translatable(KEY_MAX_LEVEL, result.get().getDisplayName(), this.level.max());
+      return Component.translatable(checkTraitLevel ? KEY_MAX_LEVEL_TRAITS : KEY_MAX_LEVEL, result.get().getDisplayName(), this.level.max());
     }
     return null;
   }
@@ -238,7 +244,7 @@ public abstract class AbstractModifierRecipe implements ITinkerStationRecipe, ID
    */
   @Nullable
   protected Component validatePrerequisites(IToolStackView tool) {
-    return validatePrerequisites(tool, tool.getModifierLevel(result.getId()) + 1);
+    return validatePrerequisites(tool, (checkTraitLevel ? tool.getModifiers() : tool.getUpgrades()).getLevel(result.getId()) + 1);
   }
 
   @Override

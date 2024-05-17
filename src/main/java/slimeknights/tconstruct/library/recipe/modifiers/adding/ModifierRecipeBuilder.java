@@ -109,6 +109,6 @@ public class ModifierRecipeBuilder extends AbstractModifierRecipeBuilder<Modifie
       throw new IllegalStateException("Must have at least 1 input");
     }
     ResourceLocation advancementId = buildOptionalAdvancement(id, "modifiers");
-    consumer.accept(new LoadableFinishedRecipe<>(new ModifierRecipe(id, inputs, tools, maxToolSize, result, ModifierEntry.VALID_LEVEL.range(minLevel, maxLevel), slots, allowCrystal), ModifierRecipe.LOADER, advancementId));
+    consumer.accept(new LoadableFinishedRecipe<>(new ModifierRecipe(id, inputs, tools, maxToolSize, result, ModifierEntry.VALID_LEVEL.range(minLevel, maxLevel), slots, allowCrystal, checkTraitLevel), ModifierRecipe.LOADER, advancementId));
   }
 }

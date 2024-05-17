@@ -32,7 +32,7 @@ import java.util.List;
  */
 public class ModifierRecipe extends AbstractModifierRecipe {
   protected static final LoadableField<List<SizedIngredient>,ModifierRecipe> INPUTS_FIELD = SizedIngredient.LOADABLE.list(1).requiredField("inputs", r -> r.inputs);
-  public static final RecordLoadable<ModifierRecipe> LOADER = RecordLoadable.create(ContextKey.ID.requiredField(), INPUTS_FIELD, TOOLS_FIELD, MAX_TOOL_SIZE_FIELD, RESULT_FIELD, LEVEL_FIELD, SLOTS_FIELD, ALLOW_CRYSTAL_FIELD, ModifierRecipe::new);
+  public static final RecordLoadable<ModifierRecipe> LOADER = RecordLoadable.create(ContextKey.ID.requiredField(), INPUTS_FIELD, TOOLS_FIELD, MAX_TOOL_SIZE_FIELD, RESULT_FIELD, LEVEL_FIELD, SLOTS_FIELD, ALLOW_CRYSTAL_FIELD, CHECK_TRAIT_LEVEL_FIELD, ModifierRecipe::new);
 
   /**
    * List of input ingredients.
@@ -41,8 +41,8 @@ public class ModifierRecipe extends AbstractModifierRecipe {
    */
   protected final List<SizedIngredient> inputs;
 
-  public ModifierRecipe(ResourceLocation id, List<SizedIngredient> inputs, Ingredient toolRequirement, int maxToolSize, ModifierId result, IntRange level, @Nullable SlotCount slots, boolean allowCrystal) {
-    super(id, toolRequirement, maxToolSize, result, level, slots, allowCrystal);
+  public ModifierRecipe(ResourceLocation id, List<SizedIngredient> inputs, Ingredient toolRequirement, int maxToolSize, ModifierId result, IntRange level, @Nullable SlotCount slots, boolean allowCrystal, boolean checkTraitLevel) {
+    super(id, toolRequirement, maxToolSize, result, level, slots, allowCrystal, checkTraitLevel);
     this.inputs = inputs;
   }
 
