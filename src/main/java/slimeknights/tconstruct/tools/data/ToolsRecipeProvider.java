@@ -10,6 +10,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.common.Tags;
 import slimeknights.mantle.recipe.helper.ItemOutput;
+import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.common.data.BaseRecipeProvider;
 import slimeknights.tconstruct.fluids.TinkerFluids;
 import slimeknights.tconstruct.library.data.recipe.IMaterialRecipeHelper;
@@ -19,6 +20,7 @@ import slimeknights.tconstruct.library.recipe.FluidValues;
 import slimeknights.tconstruct.library.recipe.casting.ItemCastingRecipeBuilder;
 import slimeknights.tconstruct.library.recipe.casting.material.MaterialCastingRecipeBuilder;
 import slimeknights.tconstruct.library.recipe.ingredient.MaterialIngredient;
+import slimeknights.tconstruct.library.recipe.partbuilder.PartRecipeBuilder;
 import slimeknights.tconstruct.library.recipe.tinkerstation.building.ToolBuildingRecipeBuilder;
 import slimeknights.tconstruct.library.tools.nbt.MaterialIdNBT;
 import slimeknights.tconstruct.shared.TinkerMaterials;
@@ -234,9 +236,14 @@ public class ToolsRecipeProvider extends BaseRecipeProvider implements IMaterial
     partCasting(consumer, TinkerToolParts.plating.get(ArmorSlotType.BOOTS),      TinkerSmeltery.bootsPlatingCast,      2, partFolder, castFolder);
     partRecipes(consumer, TinkerToolParts.maille, TinkerSmeltery.mailleCast, 2, partFolder, castFolder);
 
-    // bowstrings and shield cores are part builder exclusive
+    // bowstrings are part builder exclusive, but also support composite
     uncastablePart(consumer, TinkerToolParts.bowstring.get(),  1, partFolder);
-    uncastablePart(consumer, TinkerToolParts.shieldCore.get(), 4, partFolder);
+    // no shield core composite, conflicts with tool casting
+    PartRecipeBuilder.partRecipe(TinkerToolParts.shieldCore.get())
+                     .setPattern(TinkerToolParts.shieldCore.getId())
+                     .setPatternItem(Ingredient.of(TinkerTags.Items.DEFAULT_PATTERNS))
+                     .setCost(4)
+                     .save(consumer, prefix(TinkerToolParts.shieldCore, partFolder + "builder/"));
   }
 
   /** Helper to create a casting recipe for a slimeskull variant */

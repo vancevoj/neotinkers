@@ -49,7 +49,7 @@ public class MaterialDataProvider extends AbstractMaterialDataProvider {
     // tier 3
     addMaterial(MaterialIds.slimesteel,     3, ORDER_GENERAL, false);
     addMaterial(MaterialIds.amethystBronze, 3, ORDER_HARVEST, false);
-    addMaterial(MaterialIds.nahuatl,        3, ORDER_WEAPON,  false);
+    addMaterial(MaterialIds.nahuatl,        3, ORDER_WEAPON,  true);
     addMaterial(MaterialIds.obsidian,       3, ORDER_WEAPON,  false);
     addMaterial(MaterialIds.roseGold,       3, ORDER_SPECIAL, false);
     addMaterial(MaterialIds.pigIron,        3, ORDER_SPECIAL, false);
