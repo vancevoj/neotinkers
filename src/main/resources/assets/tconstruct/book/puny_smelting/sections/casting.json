@@ -23,6 +23,11 @@
     "data": "casting/sandcast_craft.json"
   },
   {
+    "name": "sand_cast3",
+    "type": "mantle:image_text",
+    "data": "casting/sandcast3.json"
+  },
+  {
     "name": "gold_cast",
     "type": "mantle:image_text",
     "data": "casting/goldcast.json"
