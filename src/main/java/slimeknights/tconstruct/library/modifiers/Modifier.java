@@ -18,7 +18,6 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.level.storage.loot.LootContext;
 import slimeknights.mantle.client.ResourceColorManager;
 import slimeknights.mantle.data.registry.GenericLoaderRegistry.IGenericLoader;
 import slimeknights.mantle.data.registry.GenericLoaderRegistry.IHaveLoader;
@@ -337,16 +336,6 @@ public class Modifier implements IHaveLoader, IdAwareObject {
 
 
   /* Hooks */
-
-  /**
-   * Called on entity or block loot to allow modifying loot
-   * @param tool           Current tool instance
-   * @param modifier          Modifier level
-   * @param generatedLoot  Current loot list before this modifier
-   * @param context        Full loot context
-   * TODO: can we ditch this hook in favor of just using GLMs? Just need a loot condition to detect a modifier, and it gives us a lot more flexability
-   */
-  public void processLoot(IToolStackView tool, ModifierEntry modifier, List<ItemStack> generatedLoot, LootContext context) {}
 
 
   /* Modules */

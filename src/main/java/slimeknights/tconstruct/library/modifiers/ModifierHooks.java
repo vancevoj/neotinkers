@@ -17,6 +17,7 @@ import slimeknights.tconstruct.library.modifiers.hook.armor.OnAttackedModifierHo
 import slimeknights.tconstruct.library.modifiers.hook.armor.ProtectionModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.behavior.AttributesModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.behavior.EnchantmentModifierHook;
+import slimeknights.tconstruct.library.modifiers.hook.behavior.ProcessLootModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.behavior.RepairFactorModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.behavior.ToolActionModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.behavior.ToolDamageModifierHook;
@@ -198,6 +199,8 @@ public class ModifierHooks {
 
   /* Loot */
 
+  /** Hook to modify the results of a loot table */
+  public static final ModuleHook<ProcessLootModifierHook> PROCESS_LOOT = register("process_loot", ProcessLootModifierHook.class, ProcessLootModifierHook.AllMerger::new, (tool, modifier, loot, context) -> {});
   /** Hook for a tool boosting the looting value */
   public static final ModuleHook<LootingModifierHook> WEAPON_LOOTING = register("weapon_looting", LootingModifierHook.class, LootingModifierHook.ComposeMerger::new, (tool, modifier, context, looting) -> looting);
   /** Hook for leggings boosting the tool's looting level */

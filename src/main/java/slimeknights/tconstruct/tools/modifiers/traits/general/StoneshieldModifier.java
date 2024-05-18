@@ -4,7 +4,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
+import slimeknights.tconstruct.library.modifiers.ModifierHooks;
+import slimeknights.tconstruct.library.modifiers.hook.behavior.ProcessLootModifierHook;
 import slimeknights.tconstruct.library.modifiers.impl.DurabilityShieldModifier;
+import slimeknights.tconstruct.library.module.ModuleHookMap.Builder;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
 
@@ -12,7 +15,12 @@ import javax.annotation.Nullable;
 import java.util.Iterator;
 import java.util.List;
 
-public class StoneshieldModifier extends DurabilityShieldModifier {
+public class StoneshieldModifier extends DurabilityShieldModifier implements ProcessLootModifierHook {
+  @Override
+  protected void registerHooks(Builder hookBuilder) {
+    hookBuilder.addHook(this, ModifierHooks.PROCESS_LOOT);
+  }
+
   @Override
   public int getShieldCapacity(IToolStackView tool, ModifierEntry modifier) {
     return (int)(modifier.getEffectiveLevel() * 100 * tool.getMultiplier(ToolStats.DURABILITY));

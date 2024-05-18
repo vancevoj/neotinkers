@@ -13,6 +13,7 @@ import net.minecraftforge.common.loot.IGlobalLootModifier;
 import net.minecraftforge.common.loot.LootModifier;
 import slimeknights.mantle.loot.AbstractLootModifierBuilder.GenericLootModifierBuilder;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
+import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.tools.helper.ModifierLootingHandler;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 
@@ -48,7 +49,7 @@ public class ModifierLootModifier extends LootModifier {
       ToolStack tool = ToolStack.from(stack);
       if (!tool.isBroken()) {
         for (ModifierEntry entry : tool.getModifierList()) {
-          entry.getModifier().processLoot(tool, entry, generatedLoot, context);
+          entry.getHook(ModifierHooks.PROCESS_LOOT).processLoot(tool, entry, generatedLoot, context);
         }
       }
     }

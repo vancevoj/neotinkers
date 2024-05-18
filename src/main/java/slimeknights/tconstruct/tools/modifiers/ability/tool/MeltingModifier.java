@@ -11,6 +11,7 @@ import net.minecraftforge.fluids.FluidType;
 import slimeknights.tconstruct.common.config.Config;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
+import slimeknights.tconstruct.library.modifiers.hook.behavior.ProcessLootModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.combat.MeleeHitModifierHook;
 import slimeknights.tconstruct.library.modifiers.impl.NoLevelsModifier;
 import slimeknights.tconstruct.library.modifiers.modules.fluid.TankModule;
@@ -27,7 +28,7 @@ import slimeknights.tconstruct.smeltery.block.entity.module.EntityMeltingModule;
 import java.util.Iterator;
 import java.util.List;
 
-public class MeltingModifier extends NoLevelsModifier implements MeleeHitModifierHook {
+public class MeltingModifier extends NoLevelsModifier implements MeleeHitModifierHook, ProcessLootModifierHook {
   /** Max temperature allowed for melting items */
   private static final int MAX_TEMPERATURE = 1000;
 
@@ -43,7 +44,7 @@ public class MeltingModifier extends NoLevelsModifier implements MeleeHitModifie
     super.registerHooks(hookBuilder);
     tank = new TankModule(FluidType.BUCKET_VOLUME, true);
     hookBuilder.addModule(tank);
-    hookBuilder.addHook(this, ModifierHooks.MELEE_HIT);
+    hookBuilder.addHook(this, ModifierHooks.MELEE_HIT, ModifierHooks.PROCESS_LOOT);
   }
 
   /**
