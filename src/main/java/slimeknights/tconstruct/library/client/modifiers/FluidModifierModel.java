@@ -1,6 +1,5 @@
 package slimeknights.tconstruct.library.client.modifiers;
 
-import com.google.common.collect.ImmutableList;
 import com.mojang.math.Transformation;
 import com.mojang.math.Vector3f;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -26,7 +25,9 @@ import slimeknights.tconstruct.library.tools.capability.ToolFluidCapability.Flui
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 
 import javax.annotation.Nullable;
+import java.util.Collection;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
@@ -84,11 +85,9 @@ public class FluidModifierModel extends NormalModifierModel {
   }
 
   @Override
-  public ImmutableList<BakedQuad> getQuads(IToolStackView tool, ModifierEntry entry, Function<Material,TextureAtlasSprite> spriteGetter, Transformation transforms, boolean isLarge, int startTintIndex, @Nullable ItemLayerPixels pixels) {
+  public void addQuads(IToolStackView tool, ModifierEntry entry, Function<Material,TextureAtlasSprite> spriteGetter, Transformation transforms, boolean isLarge, int startTintIndex, Consumer<Collection<BakedQuad>> quadConsumer, @Nullable ItemLayerPixels pixels) {
     // first, determine stored fluid
-    ImmutableList<BakedQuad> quads = super.getQuads(tool, entry, spriteGetter, transforms, isLarge, startTintIndex, pixels);
     // modifier must be tank
-    // TODO: is there anything that can be done about the fluid? to prevent weird offsets?
     FluidModifierHook tank = entry.getHook(ToolFluidCapability.HOOK);
     FluidStack fluid = tank.getFluidInTank(tool, entry, 0);
     // must have fluid
@@ -102,6 +101,7 @@ public class FluidModifierModel extends NormalModifierModel {
 
         // build fluid like the forge dynamic container model
         List<BlockElement> unbaked = UnbakedGeometryHelper.createUnbakedItemMaskElements(-1, spriteGetter.apply(template)); // Use template as mask
+        // TODO: is there anything that can be done about the fluid? to prevent weird offsets?
         List<BakedQuad> fluidQuads = UnbakedGeometryHelper.bakeElements(unbaked, mat -> fluidSprite, new SimpleModelState(transforms.applyOrigin(ORIGIN).compose(FluidContainerModel.FLUID_TRANSFORM), false), BAKE_LOCATION); // Bake with fluid texture
 
         // apply brightness and color
@@ -113,11 +113,11 @@ public class FluidModifierModel extends NormalModifierModel {
         if (color != -1) {
           ColoredBlockModel.applyColorQuadTransformer(color).processInPlace(fluidQuads);
         }
-
-        quads = ImmutableList.<BakedQuad>builder().addAll(quads).addAll(fluidQuads).build();
+        quadConsumer.accept(fluidQuads);
       }
     }
-    return quads;
+    // add tank outline quads
+    super.addQuads(tool, entry, spriteGetter, transforms, isLarge, startTintIndex, quadConsumer, pixels);
   }
 
   /** Cache key for the model */

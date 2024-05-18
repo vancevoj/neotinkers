@@ -1,6 +1,5 @@
 package slimeknights.tconstruct.library.client.modifiers;
 
-import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonObject;
 import com.mojang.math.Transformation;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +14,8 @@ import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 
 import javax.annotation.Nullable;
+import java.util.Collection;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
@@ -40,8 +41,8 @@ public class NormalModifierModel implements IBakedModifierModel {
   }
 
   @Override
-  public ImmutableList<BakedQuad> getQuads(IToolStackView tool, ModifierEntry entry, Function<Material,TextureAtlasSprite> spriteGetter, Transformation transforms, boolean isLarge, int startTintIndex, @Nullable ItemLayerPixels pixels) {
-    return MantleItemLayerModel.getQuadsForSprite(color, -1, spriteGetter.apply(isLarge ? large : small), transforms, luminosity, pixels);
+  public void addQuads(IToolStackView tool, ModifierEntry entry, Function<Material,TextureAtlasSprite> spriteGetter, Transformation transforms, boolean isLarge, int startTintIndex, Consumer<Collection<BakedQuad>> quadConsumer, @Nullable ItemLayerPixels pixels) {
+    quadConsumer.accept(MantleItemLayerModel.getQuadsForSprite(color, -1, spriteGetter.apply(isLarge ? large : small), transforms, luminosity, pixels));
   }
 
   private record Unbaked(int color, int luminosity) implements IUnbakedModifierModel {

@@ -1,6 +1,5 @@
 package slimeknights.tconstruct.library.client.modifiers;
 
-import com.google.common.collect.ImmutableList;
 import com.mojang.math.Transformation;
 import lombok.RequiredArgsConstructor;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -18,6 +17,8 @@ import slimeknights.tconstruct.library.modifiers.ModifierId;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 
 import javax.annotation.Nullable;
+import java.util.Collection;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 /** Model for a modifier that has variants based on a material */
@@ -73,15 +74,14 @@ public class MaterialModifierModel implements IBakedModifierModel {
   }
 
   @Override
-  public ImmutableList<BakedQuad> getQuads(IToolStackView tool, ModifierEntry modifier, Function<Material,TextureAtlasSprite> spriteGetter, Transformation transforms, boolean isLarge, int startTintIndex, @Nullable ItemLayerPixels pixels) {
+  public void addQuads(IToolStackView tool, ModifierEntry modifier, Function<Material,TextureAtlasSprite> spriteGetter, Transformation transforms, boolean isLarge, int startTintIndex, Consumer<Collection<BakedQuad>> quadConsumer, @Nullable ItemLayerPixels pixels) {
     Material texture = isLarge ? large : small;
     if (texture != null) {
       MaterialVariantId material = getMaterial(tool, modifier.getModifier());
       if (material != null) {
-        return MaterialModel.getQuadsForMaterial(spriteGetter, texture, material, -1, transforms, pixels);
+        quadConsumer.accept(MaterialModel.getQuadsForMaterial(spriteGetter, texture, material, -1, transforms, pixels));
       }
     }
-    return ImmutableList.of();
   }
 
   /** Data class to cache a mateirla texture */

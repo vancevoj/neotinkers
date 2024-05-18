@@ -225,7 +225,7 @@ public class ToolModel implements IUnbakedGeometry<ToolModel> {
    * @param transforms      Transforms to apply
    * @param isLarge         If true, the quads are for a large tool
    */
-  private static void addModifierQuads(Function<Material, TextureAtlasSprite> spriteGetter, Map<ModifierId,IBakedModifierModel> modifierModels, List<ModifierId> firstModifiers, IToolStackView tool, Consumer<ImmutableList<BakedQuad>> quadConsumer, @Nullable ItemLayerPixels pixels, Transformation transforms, boolean isLarge) {
+  private static void addModifierQuads(Function<Material, TextureAtlasSprite> spriteGetter, Map<ModifierId,IBakedModifierModel> modifierModels, List<ModifierId> firstModifiers, IToolStackView tool, Consumer<Collection<BakedQuad>> quadConsumer, @Nullable ItemLayerPixels pixels, Transformation transforms, boolean isLarge) {
     if (!modifierModels.isEmpty()) {
       // keep a running tint index so models know where they should start, currently starts at 0 as the main model does not use tint indexes
       int modelIndex = 0;
@@ -244,7 +244,7 @@ public class ToolModel implements IUnbakedGeometry<ToolModel> {
               // if the modifier is in the list, delay adding its quads, but keep the expected tint index
               int index = firstModifiers.indexOf(modifier);
               if (index == -1) {
-                quadConsumer.accept(model.getQuads(tool, entry, spriteGetter, transforms, isLarge, modelIndex, pixels));
+                model.addQuads(tool, entry, spriteGetter, transforms, isLarge, modelIndex, quadConsumer, pixels);
               } else {
                 firsts[index] = new FirstModifier(entry, model, modelIndex);
               }
@@ -256,7 +256,7 @@ public class ToolModel implements IUnbakedGeometry<ToolModel> {
         for (int i = firsts.length - 1; i >= 0; i--) {
           FirstModifier first = firsts[i];
           if (first != null) {
-            quadConsumer.accept(first.model.getQuads(tool, first.entry, spriteGetter, transforms, isLarge, first.modelIndex, pixels));
+            first.model.addQuads(tool, first.entry, spriteGetter, transforms, isLarge, first.modelIndex, quadConsumer, pixels);
           }
         }
       }
