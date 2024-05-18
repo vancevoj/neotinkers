@@ -568,7 +568,6 @@ public final class TinkerModifiers extends TinkerModule {
 
 
       // modifier loaders
-      ModifierManager.MODIFIER_LOADERS.register(getResource("default"), Modifier.DEFAULT_LOADER);
       ModifierManager.MODIFIER_LOADERS.register(getResource("inventory_with_menu"), InventoryMenuModifier.LOADER);
       ModifierManager.MODIFIER_LOADERS.register(getResource("composable"), ComposableModifier.LOADER);
       // specialized
