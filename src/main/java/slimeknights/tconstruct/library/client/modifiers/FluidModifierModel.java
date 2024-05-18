@@ -2,6 +2,7 @@ package slimeknights.tconstruct.library.client.modifiers;
 
 import com.google.common.collect.ImmutableList;
 import com.mojang.math.Transformation;
+import com.mojang.math.Vector3f;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.BlockElement;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -17,12 +18,12 @@ import net.minecraftforge.fluids.FluidStack;
 import slimeknights.mantle.client.model.util.ColoredBlockModel;
 import slimeknights.mantle.util.ItemLayerPixels;
 import slimeknights.tconstruct.TConstruct;
+import slimeknights.tconstruct.library.client.model.FluidContainerModel;
 import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.tools.capability.ToolFluidCapability;
 import slimeknights.tconstruct.library.tools.capability.ToolFluidCapability.FluidModifierHook;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
-import slimeknights.tconstruct.library.client.model.FluidContainerModel;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -34,6 +35,12 @@ import java.util.function.Function;
 public class FluidModifierModel extends NormalModifierModel {
   /** Location used for baking dynamic models, name does not matter so just using a constant */
   private static final ResourceLocation BAKE_LOCATION = TConstruct.getResource("dynamic_fluid_model");
+
+  /**
+   * The vanilla model bakery uses an orgin of 0.5,0.5,0.5, and forges dynamic fluid code uses the vanilla model bakery. (see{@link net.minecraft.client.renderer.block.model.FaceBakery} {@code #rotateVertexBy()} for vanilla bakery)
+   * However, item layer wants an origin of 0,0,0, which is what we expect in our tool models. So cancel out the origin.
+  */
+  private static final Vector3f ORIGIN = new Vector3f(-0.5f, -0.5f, -0.5f);
 
   /** Constant unbaked model instance, as they are all the same */
   public static final IUnbakedModifierModel UNBAKED_INSTANCE = (smallGetter, largeGetter) -> {
@@ -94,8 +101,8 @@ public class FluidModifierModel extends NormalModifierModel {
         TextureAtlasSprite fluidSprite = spriteGetter.apply(new Material(InventoryMenu.BLOCK_ATLAS, attributes.getStillTexture(fluid)));
 
         // build fluid like the forge dynamic container model
-        List<BlockElement> unbaked = UnbakedGeometryHelper.createUnbakedItemMaskElements(1, spriteGetter.apply(template)); // Use template as mask
-        List<BakedQuad> fluidQuads = UnbakedGeometryHelper.bakeElements(unbaked, mat -> fluidSprite, new SimpleModelState(transforms.compose(FluidContainerModel.FLUID_TRANSFORM), false), BAKE_LOCATION); // Bake with fluid texture
+        List<BlockElement> unbaked = UnbakedGeometryHelper.createUnbakedItemMaskElements(-1, spriteGetter.apply(template)); // Use template as mask
+        List<BakedQuad> fluidQuads = UnbakedGeometryHelper.bakeElements(unbaked, mat -> fluidSprite, new SimpleModelState(transforms.applyOrigin(ORIGIN).compose(FluidContainerModel.FLUID_TRANSFORM), false), BAKE_LOCATION); // Bake with fluid texture
 
         // apply brightness and color
         int luminosity = fluid.getFluid().getFluidType().getLightLevel(fluid);
@@ -106,7 +113,8 @@ public class FluidModifierModel extends NormalModifierModel {
         if (color != -1) {
           ColoredBlockModel.applyColorQuadTransformer(color).processInPlace(fluidQuads);
         }
-        quads = ImmutableList.copyOf(fluidQuads);
+
+        quads = ImmutableList.<BakedQuad>builder().addAll(quads).addAll(fluidQuads).build();
       }
     }
     return quads;
