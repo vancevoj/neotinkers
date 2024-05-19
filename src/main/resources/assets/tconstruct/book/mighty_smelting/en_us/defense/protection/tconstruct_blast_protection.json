@@ -8,6 +8,6 @@
   "effects": [
     "Reduces explosive damage and knockback",
     "Multiple levels, each level further increases resistance",
-    "Requires 1 defense slot"
+    "Requires 1 defense slot per level"
   ]
 }

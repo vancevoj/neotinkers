@@ -6,10 +6,10 @@
     }
   ],
   "effects": [
-	"Gives the bow three toggleable arrow slots",
-	"Switch slots by attacking",
-	"Access the slots by sneaking and attacking",
-	"Single level",
-	"Requires 1 ability slot"
+    "Gives the bow three toggleable arrow slots",
+    "Switch slots by attacking",
+    "Access the slots by sneaking and attacking",
+    "Single level",
+    "Requires 1 ability slot"
   ]
 }

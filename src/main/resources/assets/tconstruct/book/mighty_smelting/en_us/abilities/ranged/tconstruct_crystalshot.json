@@ -6,10 +6,10 @@
     }
   ],
   "effects": [
-	"Shoots crystals instead of arrows",
-	"Doesn't require ammo, consumes extra durability",
-	"Changes colors based on crystals used to craft",
-	"Single level",
-	"Requires 1 ability slot"
+    "Shoots crystals instead of arrows",
+    "Doesn't require ammo, consumes extra durability",
+    "Changes colors based on crystals used to craft",
+    "Single level",
+    "Requires 1 ability slot"
   ]
 }

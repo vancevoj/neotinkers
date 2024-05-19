@@ -8,7 +8,7 @@
   "effects": [
     "Interact to place glows",
     "Placing glows consumes durability, even if the tool has unbreaking",
-    "Single Level",
+    "Single level",
     "Requires 1 ability slot"
   ]
 }

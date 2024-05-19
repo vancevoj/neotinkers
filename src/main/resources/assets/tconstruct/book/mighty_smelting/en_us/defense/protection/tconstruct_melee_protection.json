@@ -10,6 +10,6 @@
     "Decreases damage from melee attacks",
     "Boosts movement speed when using shields and bows",
     "Multiple levels, each level boosts effects",
-    "Requires 1 defense slot"
+    "Requires 1 defense slot per level"
   ]
 }

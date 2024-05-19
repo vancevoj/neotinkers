@@ -8,6 +8,6 @@
   "effects": [
     "Decreases fire damage and burn time",
     "Multiple levels, each level further decreases damage and burn time.",
-    "Requires 1 defense slot"
+    "Requires 1 defense slot per level"
   ]
 }

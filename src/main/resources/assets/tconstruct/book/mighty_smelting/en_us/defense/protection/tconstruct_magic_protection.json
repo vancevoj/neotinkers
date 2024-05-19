@@ -8,6 +8,6 @@
   "effects": [
     "Decreases magic damage",
     "Multiple levels, each level further decreases magic damage",
-    "Requires 1 defense slot"
+    "Requires 1 defense slot per level"
   ]
 }

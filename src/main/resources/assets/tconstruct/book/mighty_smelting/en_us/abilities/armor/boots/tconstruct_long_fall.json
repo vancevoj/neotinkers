@@ -8,6 +8,7 @@
   "effects": [
     "Prevents all fall damage",
     "Requires Feather Falling IV",
+    "Single level",
     "Requires 1 ability slot"
   ]
 }

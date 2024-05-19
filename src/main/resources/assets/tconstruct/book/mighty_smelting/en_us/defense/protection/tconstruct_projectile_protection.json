@@ -9,6 +9,6 @@
     "Decreases damages from projectiles",
     "Increases knockback resistance",
     "Multiple levels, each level boosts effects",
-    "Requires 1 defense slot"
+    "Requires 1 defense slot per level"
   ]
 }

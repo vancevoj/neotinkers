@@ -209,14 +209,14 @@ public class ContentTool extends PageContent {
 
   @Override
   public void build(BookData book, ArrayList<BookElement> list, boolean brightSide) {
-    this.addTitle(list, getTitle());
+    this.addTitle(list, getTitle());s
 
     int padding = 5;
 
     // description
     int h = BookScreen.PAGE_WIDTH / 3 - 10;
     int y = getTitleHeight();
-    list.add(new TextElement(padding, y, BookScreen.PAGE_WIDTH - padding * 2, h, text));
+    list.add(new TextElement(padding, y, BookScreen.PAGE_WIDTH - padding * 2, h + 5, text));
 
     // do we want to show the crafting recipe here perhaps? or just nothing?
     int imgWidth = 0;

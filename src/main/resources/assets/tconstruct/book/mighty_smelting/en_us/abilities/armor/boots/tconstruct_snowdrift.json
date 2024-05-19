@@ -9,7 +9,7 @@
     "Creates snow as you walk",
     "Does not work in warm biomes",
     "Area boosted by expanded",
-    "Maximum of 1 level",
+    "Single level",
     "Requires 1 ability slot"
   ]
 }

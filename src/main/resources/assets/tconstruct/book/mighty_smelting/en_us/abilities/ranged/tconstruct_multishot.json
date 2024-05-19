@@ -6,8 +6,8 @@
     }
   ],
   "effects": [
-	"Shoots multiple arrows at once",
-	"Multiple levels, each level increases amount of arrows fired",
-	"Requires 1 ability slot"
+    "Shoots multiple arrows at once",
+    "Multiple levels, each level increases amount of arrows fired",
+    "Requires 1 ability slot per level"
   ]
 }
