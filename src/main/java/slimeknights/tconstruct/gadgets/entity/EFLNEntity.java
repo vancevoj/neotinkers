@@ -1,34 +1,34 @@
 package slimeknights.tconstruct.gadgets.entity;
 
-import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientboundExplodePacket;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.Explosion;
+import net.minecraft.world.level.Explosion.BlockInteraction;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.entity.IEntityAdditionalSpawnData;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.network.NetworkHooks;
-import slimeknights.tconstruct.gadgets.Exploder;
 import slimeknights.tconstruct.gadgets.TinkerGadgets;
 
 import javax.annotation.Nonnull;
 
-public class EflnBallEntity extends ThrowableItemProjectile implements IEntityAdditionalSpawnData {
-
-  public EflnBallEntity(EntityType<? extends EflnBallEntity> p_i50159_1_, Level p_i50159_2_) {
-    super(p_i50159_1_, p_i50159_2_);
+public class EFLNEntity extends ThrowableItemProjectile implements IEntityAdditionalSpawnData {
+  public EFLNEntity(EntityType<? extends EFLNEntity> type, Level level) {
+    super(type, level);
   }
 
-  public EflnBallEntity(Level worldIn, LivingEntity throwerIn) {
-    super(TinkerGadgets.eflnEntity.get(), throwerIn, worldIn);
+  public EFLNEntity(Level level, LivingEntity thrower) {
+    super(TinkerGadgets.eflnEntity.get(), thrower, level);
   }
 
-  public EflnBallEntity(Level worldIn, double x, double y, double z) {
+  public EFLNEntity(Level worldIn, double x, double y, double z) {
     super(TinkerGadgets.eflnEntity.get(), x, y, z, worldIn);
   }
 
@@ -40,14 +40,19 @@ public class EflnBallEntity extends ThrowableItemProjectile implements IEntityAd
   @Override
   protected void onHit(HitResult result) {
     if (!this.level.isClientSide) {
-      EFLNExplosion explosion = new EFLNExplosion(this.level, this, null, null, this.getX(), this.getY(), this.getZ(), 6f, false, Explosion.BlockInteraction.NONE);
+      // based on ServerLevel#explode
+      EFLNExplosion explosion = new EFLNExplosion(this.level, this, null, null, this.getX(), this.getY(), this.getZ(), 4f, false, BlockInteraction.BREAK);
       if (!ForgeEventFactory.onExplosionStart(this.level, explosion)) {
-        Exploder.startExplosion(this.level, explosion, this, new BlockPos(this.getX(), this.getY(), this.getZ()), 6f, 6f);
+        explosion.explode();
+        explosion.finalizeExplosion(false);
+        if (level instanceof ServerLevel server) {
+          for (ServerPlayer player : server.players()) {
+            if (player.distanceToSqr(this) < 4096.0D) {
+              player.connection.send(new ClientboundExplodePacket(getX(), getY(), getZ(), 6, explosion.getToBlow(), explosion.getHitPlayers().get(player)));
+            }
+          }
+        }
       }
-    }
-
-    if (!this.level.isClientSide) {
-      this.level.broadcastEntityEvent(this, (byte) 3);
       this.discard();
     }
   }

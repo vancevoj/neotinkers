@@ -28,13 +28,13 @@ import slimeknights.tconstruct.gadgets.block.FoodCakeBlock;
 import slimeknights.tconstruct.gadgets.block.PunjiBlock;
 import slimeknights.tconstruct.gadgets.capability.PiggybackCapability;
 import slimeknights.tconstruct.gadgets.data.GadgetRecipeProvider;
-import slimeknights.tconstruct.gadgets.entity.EflnBallEntity;
+import slimeknights.tconstruct.gadgets.entity.EFLNEntity;
 import slimeknights.tconstruct.gadgets.entity.FancyItemFrameEntity;
 import slimeknights.tconstruct.gadgets.entity.FrameType;
 import slimeknights.tconstruct.gadgets.entity.GlowballEntity;
 import slimeknights.tconstruct.gadgets.entity.shuriken.FlintShurikenEntity;
 import slimeknights.tconstruct.gadgets.entity.shuriken.QuartzShurikenEntity;
-import slimeknights.tconstruct.gadgets.item.EflnBallItem;
+import slimeknights.tconstruct.gadgets.item.EFLNItem;
 import slimeknights.tconstruct.gadgets.item.FancyItemFrameItem;
 import slimeknights.tconstruct.gadgets.item.GlowBallItem;
 import slimeknights.tconstruct.gadgets.item.PiggyBackPackItem;
@@ -77,7 +77,7 @@ public final class TinkerGadgets extends TinkerModule {
 
   // throwballs
   public static final ItemObject<GlowBallItem> glowBall = ITEMS.register("glow_ball", GlowBallItem::new);
-  public static final ItemObject<EflnBallItem> efln = ITEMS.register("efln_ball", EflnBallItem::new);
+  public static final ItemObject<EFLNItem> efln = ITEMS.register("efln_ball", EFLNItem::new);
 
   // foods
   private static final BlockBehaviour.Properties CAKE = builder(Material.CAKE, SoundType.WOOL).strength(0.5F);
@@ -109,14 +109,14 @@ public final class TinkerGadgets extends TinkerModule {
       .setCustomClientFactory((spawnEntity, world) -> new GlowballEntity(TinkerGadgets.glowBallEntity.get(), world))
       .setShouldReceiveVelocityUpdates(true)
   );
-  public static final RegistryObject<EntityType<EflnBallEntity>> eflnEntity = ENTITIES.register("efln_ball", () ->
-    EntityType.Builder.<EflnBallEntity>of(EflnBallEntity::new, MobCategory.MISC)
+  public static final RegistryObject<EntityType<EFLNEntity>> eflnEntity = ENTITIES.register("efln_ball", () ->
+    EntityType.Builder.<EFLNEntity>of(EFLNEntity::new, MobCategory.MISC)
       .sized(0.25F, 0.25F)
       .setTrackingRange(4)
       .setUpdateInterval(10)
-      .setCustomClientFactory((spawnEntity, world) -> new EflnBallEntity(TinkerGadgets.eflnEntity.get(), world))
+      .setCustomClientFactory((spawnEntity, world) -> new EFLNEntity(TinkerGadgets.eflnEntity.get(), world))
       .setShouldReceiveVelocityUpdates(true)
-  );
+                                                                                           );
   public static final RegistryObject<EntityType<QuartzShurikenEntity>> quartzShurikenEntity = ENTITIES.register("quartz_shuriken", () ->
     EntityType.Builder.<QuartzShurikenEntity>of(QuartzShurikenEntity::new, MobCategory.MISC)
       .sized(0.25F, 0.25F)

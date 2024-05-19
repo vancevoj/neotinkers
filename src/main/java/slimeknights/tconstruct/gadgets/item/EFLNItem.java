@@ -13,34 +13,34 @@ import net.minecraft.world.level.Level;
 import slimeknights.mantle.util.TranslationHelper;
 import slimeknights.tconstruct.common.Sounds;
 import slimeknights.tconstruct.gadgets.TinkerGadgets;
-import slimeknights.tconstruct.gadgets.entity.EflnBallEntity;
+import slimeknights.tconstruct.gadgets.entity.EFLNEntity;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class EflnBallItem extends SnowballItem {
+public class EFLNItem extends SnowballItem {
 
-  public EflnBallItem() {
+  public EFLNItem() {
     super((new Properties()).stacksTo(16).tab(TinkerGadgets.TAB_GADGETS));
   }
 
   @Override
   public InteractionResultHolder<ItemStack> use(Level level, Player playerIn, InteractionHand handIn) {
-    ItemStack itemstack = playerIn.getItemInHand(handIn);
+    ItemStack stack = playerIn.getItemInHand(handIn);
     if (!playerIn.getAbilities().instabuild) {
-      itemstack.shrink(1);
+      stack.shrink(1);
     }
 
     level.playSound(null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), Sounds.THROWBALL_THROW.getSound(), SoundSource.NEUTRAL, 0.5F, 0.4F / (level.getRandom().nextFloat() * 0.4F + 0.8F));
     if (!level.isClientSide()) {
-      EflnBallEntity eflnBallEntity = new EflnBallEntity(level, playerIn);
-      eflnBallEntity.setItem(itemstack);
-      eflnBallEntity.shootFromRotation(playerIn, playerIn.getXRot(), playerIn.getYRot(), 0.0F, 1.5F, 1.0F);
-      level.addFreshEntity(eflnBallEntity);
+      EFLNEntity efln = new EFLNEntity(level, playerIn);
+      efln.setItem(stack);
+      efln.shootFromRotation(playerIn, playerIn.getXRot(), playerIn.getYRot(), 0.0F, 1.5F, 1.0F);
+      level.addFreshEntity(efln);
     }
 
     playerIn.awardStat(Stats.ITEM_USED.get(this));
-    return InteractionResultHolder.sidedSuccess(itemstack, level.isClientSide);
+    return InteractionResultHolder.sidedSuccess(stack, level.isClientSide);
   }
 
   @Override

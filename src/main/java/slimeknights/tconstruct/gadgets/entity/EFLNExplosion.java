@@ -1,144 +1,119 @@
 package slimeknights.tconstruct.gadgets.entity;
 
-import com.google.common.collect.ImmutableSet;
-import com.mojang.datafixers.util.Pair;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.PrimedTnt;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.enchantment.ProtectionEnchantment;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.ExplosionDamageCalculator;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.FluidState;
-import net.minecraft.world.level.storage.loot.LootContext;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import slimeknights.tconstruct.TConstruct;
+import net.minecraftforge.event.ForgeEventFactory;
 
 import javax.annotation.Nullable;
-import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
+/** Custom explosion logic for EFLNs, more spherical and less random, plus works underwater */
 public class EFLNExplosion extends Explosion {
-
-  protected ImmutableSet<BlockPos> affectedBlockPositionsInternal;
-
-  public EFLNExplosion(Level world, @Nullable Entity entity, @Nullable DamageSource damage, @Nullable ExplosionDamageCalculator context, double x, double y, double z, float size, boolean causesFire, Explosion.BlockInteraction mode) {
+  public EFLNExplosion(Level world, @Nullable Entity entity, @Nullable DamageSource damage, @Nullable ExplosionDamageCalculator context, double x, double y, double z, float size, boolean causesFire, BlockInteraction mode) {
     super(world, entity, damage, context, x, y, z, size, causesFire, mode);
   }
 
-  /**
-   * Does the first part of the explosion (destroy blocks)
-   */
   @Override
   public void explode() {
-    ImmutableSet.Builder<BlockPos> builder = ImmutableSet.builder();
+    this.level.gameEvent(this.source, GameEvent.EXPLODE, new Vec3(this.x, this.y, this.z));
 
     // we do a sphere of a certain radius, and check if the blockpos is inside the radius
-    float r = this.radius * this.radius;
-    int i = (int) r + 1;
+    float radius = this.radius * this.radius;
+    int range = (int) radius + 1;
 
-    for (int j = -i; j < i; ++j) {
-      for (int k = -i; k < i; ++k) {
-        for (int l = -i; l < i; ++l) {
-          int d = j * j + k * k + l * l;
+    Set<BlockPos> set = new HashSet<>();
+    for (int x = -range; x < range; ++x) {
+      for (int y = -range; y < range; ++y) {
+        for (int z = -range; z < range; ++z) {
+          int distance = x * x + y * y + z * z;
           // inside the sphere?
-          if (d <= r) {
-            BlockPos blockpos = new BlockPos(j, k, l).offset(this.x, this.y, this.z);
+          if (distance <= radius) {
+            BlockPos blockpos = new BlockPos(x, y, z).offset(this.x, this.y, this.z);
             // no air blocks
             if (this.level.isEmptyBlock(blockpos)) {
               continue;
             }
 
             // explosion "strength" at the current position
-            float f = this.radius * (1f - d / (r));
+            float f = this.radius * (1f - distance / (radius));
             BlockState blockstate = this.level.getBlockState(blockpos);
 
-            FluidState ifluidstate = this.level.getFluidState(blockpos);
-            float f2 = Math.max(blockstate.getExplosionResistance(this.level, blockpos, this), ifluidstate.getExplosionResistance(this.level, blockpos, this));
+            FluidState fluid = this.level.getFluidState(blockpos);
+            float f2 = Math.max(blockstate.getExplosionResistance(this.level, blockpos, this), fluid.getExplosionResistance(this.level, blockpos, this));
             if (this.source != null) {
-              f2 = this.source.getBlockExplosionResistance(this, this.level, blockpos, blockstate, ifluidstate, f2);
+              f2 = this.source.getBlockExplosionResistance(this, this.level, blockpos, blockstate, fluid, f2);
             }
 
             f -= (f2 + 0.3F) * 0.3F;
 
             if (f > 0.0F && (this.source == null || this.source.shouldBlockExplode(this, this.level, blockpos, blockstate, f))) {
-              builder.add(blockpos);
+              set.add(blockpos);
             }
           }
         }
       }
     }
+    this.toBlow.addAll(set);
 
-    this.affectedBlockPositionsInternal = builder.build();
-  }
+    // damage and blast back entities
+    float diameter = this.radius * 2;
+    List<Entity> list = this.level.getEntities(
+      this.source,
+      new AABB(Math.floor(this.x - diameter - 1),
+               Math.floor(this.y - diameter - 1),
+               Math.floor(this.z - diameter - 1),
+               Math.floor(this.x + diameter + 1),
+               Math.floor(this.y + diameter + 1),
+               Math.floor(this.z + diameter + 1)),
+      entity -> entity != null && !entity.ignoreExplosion() && !entity.isSpectator() && entity.isAlive());
+    ForgeEventFactory.onExplosionDetonate(this.level, this, list, diameter);
 
-  @Override
-  public void finalizeExplosion(boolean spawnParticles) {
-    if (this.level.isClientSide) {
-      this.level.playLocalSound(this.x, this.y, this.z, SoundEvents.GENERIC_EXPLODE, SoundSource.BLOCKS, 4.0F, (1.0F + (this.level.random.nextFloat() - this.level.random.nextFloat()) * 0.2F) * 0.7F, false);
-    }
+    // start pushing entities
+    Vec3 center = new Vec3(this.x, this.y, this.z);
+    for (Entity entity : list) {
+      Vec3 dir = entity.position().subtract(center);
+      double length = dir.length();
+      double distance = length / diameter;
+      if (distance <= 1) {
+        // non-TNT uses eye height for explosion direction
+        if (!(entity instanceof PrimedTnt)) {
+          dir = dir.add(0, entity.getEyeY() - entity.getY(), 0);
+          length = dir.length();
+        }
+        if (length > 1.0E-4D) {
+          double strength = (1.0D - distance) * getSeenPercent(center, entity);
+          entity.hurt(this.getDamageSource(), (int)((strength * strength + strength) / 2 * diameter + 1));
 
-    this.level.addParticle(ParticleTypes.EXPLOSION, this.x, this.y, this.z, 1.0D, 0.0D, 0.0D);
-
-    ObjectArrayList<Pair<ItemStack, BlockPos>> arrayList = new ObjectArrayList<>();
-    Collections.shuffle(this.toBlow, TConstruct.RANDOM);
-
-    for (BlockPos blockpos : this.toBlow) {
-      BlockState blockstate = this.level.getBlockState(blockpos);
-      Block block = blockstate.getBlock();
-
-      if (!blockstate.isAir()) {
-        BlockPos blockpos1 = blockpos.immutable();
-
-        this.level.getProfiler().push("explosion_blocks");
-
-        if (blockstate.canDropFromExplosion(this.level, blockpos, this) && this.level instanceof ServerLevel) {
-          BlockEntity tileentity = blockstate.hasBlockEntity() ? this.level.getBlockEntity(blockpos) : null;
-          LootContext.Builder builder = (new LootContext.Builder((ServerLevel) this.level)).withRandom(this.level.random).withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(blockpos)).withParameter(LootContextParams.TOOL, ItemStack.EMPTY).withOptionalParameter(LootContextParams.BLOCK_ENTITY, tileentity).withOptionalParameter(LootContextParams.THIS_ENTITY, this.source);
-
-          if (this.blockInteraction == Explosion.BlockInteraction.DESTROY) {
-            builder.withParameter(LootContextParams.EXPLOSION_RADIUS, this.radius);
+          // apply enchantment
+          // TODO 1.19.4, this was broke, reportably fixed in 1.19.4+
+          double reducedStrength = strength;
+          if (entity instanceof LivingEntity living) {
+            reducedStrength = ProtectionEnchantment.getExplosionKnockbackAfterDampener(living, strength);
           }
-
-          blockstate.getDrops(builder).forEach((stack) -> addStack(arrayList, stack, blockpos1));
-        }
-
-        blockstate.onBlockExploded(this.level, blockpos, this);
-        this.level.getProfiler().pop();
-      }
-    }
-  }
-
-  public void addAffectedBlock(BlockPos blockPos) {
-    this.toBlow.add(blockPos);
-  }
-
-  private static void addStack(ObjectArrayList<Pair<ItemStack, BlockPos>> arrayList, ItemStack merge, BlockPos blockPos) {
-    int i = arrayList.size();
-
-    for (int j = 0; j < i; ++j) {
-      Pair<ItemStack, BlockPos> pair = arrayList.get(j);
-      ItemStack itemstack = pair.getFirst();
-
-      if (ItemEntity.areMergable(itemstack, merge)) {
-        ItemStack itemstack1 = ItemEntity.merge(itemstack, merge, 16);
-        arrayList.set(j, Pair.of(itemstack1, pair.getSecond()));
-
-        if (merge.isEmpty()) {
-          return;
+          entity.setDeltaMovement(entity.getDeltaMovement().add(dir.scale(reducedStrength / length)));
+          if (entity instanceof Player player) {
+            if (!player.isCreative() || !player.getAbilities().flying) {
+              // TODO 1.19.4: shouldn't this be reducedStrength? just copied vanilla here
+              this.getHitPlayers().put(player, dir.scale(strength / length));
+            }
+          }
         }
       }
     }
-
-    arrayList.add(Pair.of(merge, blockPos));
   }
 }
