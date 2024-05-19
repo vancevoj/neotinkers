@@ -14,10 +14,10 @@ import slimeknights.tconstruct.library.materials.definition.MaterialVariantId;
 import slimeknights.tconstruct.library.recipe.casting.ICastingContainer;
 import slimeknights.tconstruct.library.tools.part.IMaterialItem;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -99,14 +99,15 @@ public class MaterialCastingLookup {
    * @param inventory  Inventory
    * @return  Recipe
    */
-  public static Optional<MaterialFluidRecipe> getCastingFluid(ICastingContainer inventory) {
-    // TODO: reconsider cache
+  @Nullable
+  public static MaterialFluidRecipe getCastingFluid(ICastingContainer inventory) {
+    // TODO: if we wished, we could turn this into a map from fluid to recipe
     for (MaterialFluidRecipe recipe : CASTING_FLUIDS) {
       if (recipe.matches(inventory)) {
-        return Optional.of(recipe);
+        return recipe;
       }
     }
-    return Optional.empty();
+    return null;
   }
 
   /**
@@ -114,13 +115,14 @@ public class MaterialCastingLookup {
    * @param inventory  Inventory
    * @return  Composite fluid recipe
    */
-  public static Optional<MaterialFluidRecipe> getCompositeFluid(ICastingContainer inventory) {
+  @Nullable
+  public static MaterialFluidRecipe getCompositeFluid(ICastingContainer inventory) {
     for (MaterialFluidRecipe recipe : COMPOSITE_FLUIDS) {
       if (recipe.matches(inventory)) {
-        return Optional.of(recipe);
+        return recipe;
       }
     }
-    return Optional.empty();
+    return null;
   }
 
   /**

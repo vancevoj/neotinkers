@@ -52,20 +52,17 @@ public class MaterialFluidRecipe implements ICustomOutputRecipe<ICastingContaine
     MaterialCastingLookup.registerFluid(this);
   }
 
-  /** Checks if the recipe matches the given inventory */
+  /** Checks if the recipe matches the given inventory, faster than {@link #matches(Fluid, MaterialVariantId)} when you do not already have the material. */
   public boolean matches(ICastingContainer inv) {
-    if (output.isUnknown() || !fluid.test(inv.getFluid())) {
-      return false;
-    }
-    if (input != null) {
-      // if the input ID is null, want to avoid checking this
-      // not null means we should have a material and it failed to find
-      if (input.isUnknown()) {
-        return false;
-      }
-      return input.matchesVariant(inv.getStack());
-    }
-    return true;
+    return !output.isUnknown() && this.fluid.test(inv.getFluid())
+     // if the input ID is null, can skip fetching the input stack material
+      && (input == null || input.matchesVariant(inv.getStack()));
+  }
+
+  /** Checks if this recipe is valid for the given fluid and material */
+  public boolean matches(Fluid fluid, MaterialVariantId material) {
+    return !output.isUnknown() && this.fluid.test(fluid)
+           && (input == null || input.matchesVariant(material));
   }
 
   /** Gets the amount of fluid to cast this recipe */

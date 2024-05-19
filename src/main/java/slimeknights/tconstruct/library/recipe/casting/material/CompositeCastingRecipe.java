@@ -18,7 +18,6 @@ import slimeknights.tconstruct.library.tools.part.IMaterialItem;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -35,7 +34,7 @@ public class CompositeCastingRecipe extends MaterialCastingRecipe {
   }
 
   @Override
-  protected Optional<MaterialFluidRecipe> getMaterialFluid(ICastingContainer inv) {
+  protected MaterialFluidRecipe getMaterialFluid(ICastingContainer inv) {
     return MaterialCastingLookup.getCompositeFluid(inv);
   }
 

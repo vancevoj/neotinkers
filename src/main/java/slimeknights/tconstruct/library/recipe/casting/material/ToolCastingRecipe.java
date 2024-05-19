@@ -5,6 +5,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import slimeknights.mantle.data.loadable.field.ContextKey;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
@@ -14,6 +15,7 @@ import slimeknights.mantle.recipe.helper.TypeAwareRecipeSerializer;
 import slimeknights.tconstruct.library.json.TinkerLoadables;
 import slimeknights.tconstruct.library.materials.MaterialRegistry;
 import slimeknights.tconstruct.library.materials.definition.MaterialVariant;
+import slimeknights.tconstruct.library.materials.definition.MaterialVariantId;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
 import slimeknights.tconstruct.library.recipe.casting.DisplayCastingRecipe;
 import slimeknights.tconstruct.library.recipe.casting.ICastingContainer;
@@ -22,10 +24,12 @@ import slimeknights.tconstruct.library.recipe.casting.IDisplayableCastingRecipe;
 import slimeknights.tconstruct.library.tools.definition.module.material.ToolMaterialHook;
 import slimeknights.tconstruct.library.tools.helper.ToolBuildHandler;
 import slimeknights.tconstruct.library.tools.item.IModifiable;
+import slimeknights.tconstruct.library.tools.nbt.MaterialIdNBT;
 import slimeknights.tconstruct.library.tools.nbt.MaterialNBT;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.library.tools.part.IMaterialItem;
 
+import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
@@ -40,9 +44,49 @@ public class ToolCastingRecipe extends AbstractMaterialCastingRecipe implements 
     ToolCastingRecipe::new);
 
   private final IModifiable result;
+  /** Last composite casting recipe to match, speeds up recipe lookup for cooling time and fluid amount */
+  @Nullable
+  private MaterialFluidRecipe cachedPartSwapping = null;
   public ToolCastingRecipe(TypeAwareRecipeSerializer<?> serializer, ResourceLocation id, String group, Ingredient cast, int itemCost, IModifiable result) {
     super(serializer, id, group, cast, itemCost, true, false);
     this.result = result;
+  }
+
+  @Override
+  @Nullable
+  protected MaterialFluidRecipe getCachedMaterialFluid(ICastingContainer inv) {
+    ItemStack stack = inv.getStack();
+    // if its not part swapping, super is sufficient
+    if (stack.getItem() != result.asItem()) {
+      return super.getCachedMaterialFluid(inv);
+    }
+    // so we are part swapping, we might have a casting or a composite recipe. We only do composite if the fluid does not match casting
+    // start with the cached part swapping, can be either type. No need to check casting stat type here as it would never get cached if invalid
+    Fluid fluid = inv.getFluid();
+    List<MaterialStatsId> requirements = ToolMaterialHook.stats(result.getToolDefinition());
+    int indexToCheck = requirements.size() - 1;
+    MaterialVariantId currentMaterial = MaterialIdNBT.from(stack).getMaterial(indexToCheck);
+    if (cachedPartSwapping != null && cachedPartSwapping.matches(fluid, currentMaterial)) {
+      return cachedPartSwapping;
+    }
+    // cache did not match? try a casting recipe.
+    // note its possible we have a valid casting material that is just not valid for this tool, hence the extra check
+    // the casting recipe needs to match our stat type to be valid
+    MaterialFluidRecipe casting = super.getCachedMaterialFluid(inv);
+    // need to validate the stat type, since the super call will not check stat type
+    if (casting != null && requirements.get(indexToCheck).canUseMaterial(casting.getOutput().getId())) {
+      cachedPartSwapping = casting;
+      return casting;
+    }
+    // no casting? try composite.
+    // No need to validate stat type here (matches will handle it). we only check above to know if we can skip casting
+    for (MaterialFluidRecipe composite : MaterialCastingLookup.getAllCompositeFluids()) {
+      if (composite.matches(fluid, currentMaterial)) {
+        cachedPartSwapping = composite;
+        return composite;
+      }
+    }
+    return null;
   }
 
   @Override
@@ -61,9 +105,8 @@ public class ToolCastingRecipe extends AbstractMaterialCastingRecipe implements 
       return false;
     }
     // last material is the part, may be 1 or 2
-    MaterialStatsId requirement = requirements.get(numRequirements - 1);
-    return getCachedMaterialFluid(inv).filter(recipe -> requirement.canUseMaterial(recipe.getOutput().getId())).isPresent();
-
+    MaterialFluidRecipe recipe = getCachedMaterialFluid(inv);
+    return recipe != null && requirements.get(numRequirements - 1).canUseMaterial(recipe.getOutput().getId());
   }
 
   @Override
@@ -73,7 +116,8 @@ public class ToolCastingRecipe extends AbstractMaterialCastingRecipe implements 
 
   @Override
   public ItemStack assemble(ICastingContainer inv) {
-    MaterialVariant material = getCachedMaterialFluid(inv).map(MaterialFluidRecipe::getOutput).orElse(MaterialVariant.UNKNOWN);
+    MaterialFluidRecipe fluid = getCachedMaterialFluid(inv);
+    MaterialVariant material = fluid != null ? fluid.getOutput() : MaterialVariant.UNKNOWN;
     ItemStack cast = inv.getStack();
     int requirements = ToolMaterialHook.stats(result.getToolDefinition()).size();
     // if the cast is the result, we are part swapping, replace the last material

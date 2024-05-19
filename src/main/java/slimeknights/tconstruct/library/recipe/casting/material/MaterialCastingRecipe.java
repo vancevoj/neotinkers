@@ -13,6 +13,7 @@ import slimeknights.mantle.recipe.IMultiRecipe;
 import slimeknights.mantle.recipe.helper.LoadableRecipeSerializer;
 import slimeknights.mantle.recipe.helper.TypeAwareRecipeSerializer;
 import slimeknights.tconstruct.library.json.TinkerLoadables;
+import slimeknights.tconstruct.library.materials.definition.IMaterial;
 import slimeknights.tconstruct.library.materials.definition.MaterialVariant;
 import slimeknights.tconstruct.library.recipe.casting.DisplayCastingRecipe;
 import slimeknights.tconstruct.library.recipe.casting.ICastingContainer;
@@ -48,7 +49,8 @@ public class MaterialCastingRecipe extends AbstractMaterialCastingRecipe impleme
     if (!this.getCast().test(inv.getStack())) {
       return false;
     }
-    return getCachedMaterialFluid(inv).filter(recipe -> result.canUseMaterial(recipe.getOutput().getId())).isPresent();
+    MaterialFluidRecipe fluid = getCachedMaterialFluid(inv);
+    return fluid != null && result.canUseMaterial(fluid.getOutput().getId());
   }
 
   @Override
@@ -58,8 +60,8 @@ public class MaterialCastingRecipe extends AbstractMaterialCastingRecipe impleme
 
   @Override
   public ItemStack assemble(ICastingContainer inv) {
-    MaterialVariant material = getCachedMaterialFluid(inv).map(MaterialFluidRecipe::getOutput).orElse(MaterialVariant.UNKNOWN);
-    return result.withMaterial(material.getVariant());
+    MaterialFluidRecipe fluid = getCachedMaterialFluid(inv);
+    return result.withMaterial(fluid != null ? fluid.getOutput().getVariant() : IMaterial.UNKNOWN_ID);
   }
 
   /* JEI display */
