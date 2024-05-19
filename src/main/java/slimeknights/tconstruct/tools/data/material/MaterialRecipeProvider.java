@@ -16,7 +16,6 @@ import slimeknights.tconstruct.common.data.BaseRecipeProvider;
 import slimeknights.tconstruct.fluids.TinkerFluids;
 import slimeknights.tconstruct.library.data.recipe.IMaterialRecipeHelper;
 import slimeknights.tconstruct.library.json.condition.TagDifferencePresentCondition;
-import slimeknights.tconstruct.library.materials.definition.MaterialVariantId;
 import slimeknights.tconstruct.library.recipe.FluidValues;
 import slimeknights.tconstruct.library.recipe.casting.material.MaterialFluidRecipeBuilder;
 import slimeknights.tconstruct.shared.TinkerCommons;
@@ -179,15 +178,15 @@ public class MaterialRecipeProvider extends BaseRecipeProvider implements IMater
     materialComposite(consumer, MaterialIds.flint, MaterialIds.scorchedStone,      TinkerFluids.magma,      true,  FluidValues.SLIMEBALL, folder);
     materialComposite(consumer, MaterialIds.bone,  MaterialIds.venombone,          TinkerFluids.venom,      false, FluidValues.SLIMEBALL, folder);
     // decorative iron variant based on chain
-    materialComposite(consumer, MaterialIds.iron,  MaterialIds.wroughtIron, TinkerFluids.moltenGlass, false, FluidValues.GLASS_PANE, folder);
+    materialComposite(consumer, MaterialIds.iron, MaterialIds.wroughtIron, TinkerFluids.moltenGlass, false, FluidValues.GLASS_PANE, folder);
     // oxidize copper and iron via water, it does not rust iron because magic
     MaterialFluidRecipeBuilder.material(MaterialIds.oxidizedIron)
-                              .setInputId(MaterialVariantId.create(MaterialIds.iron, MaterialVariantId.DEFAULT_VARIANT))
+                              .setInputId(MaterialIds.iron)
                               .setFluid(MantleTags.Fluids.WATER, FluidValues.BOTTLE)
                               .setTemperature(1)
                               .save(consumer, location(folder + "composite/iron_oxidized"));
     MaterialFluidRecipeBuilder.material(MaterialIds.oxidizedCopper)
-                              .setInputId(MaterialVariantId.create(MaterialIds.copper, MaterialVariantId.DEFAULT_VARIANT))
+                              .setInputId(MaterialIds.copper)
                               .setFluid(MantleTags.Fluids.WATER, FluidValues.BOTTLE)
                               .setTemperature(1)
                               .save(consumer, location(folder + "composite/copper_oxidized"));

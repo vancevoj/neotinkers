@@ -63,7 +63,8 @@ public class MaterialFluidRecipe implements ICustomOutputRecipe<ICastingContaine
 
   /** Checks if this recipe is valid for the given fluid and material */
   public boolean matches(Fluid fluid, MaterialVariantId material) {
-    return matches(fluid) && (input == null || input.matchesVariant(material));
+    // disallow casting if the input material matches the output (including variant) to prevent wasted resources
+    return matches(fluid) && (input == null || input.matchesVariant(material)) && !output.sameVariant(material);
   }
 
   /** Gets the amount of fluid to cast this recipe */

@@ -4,7 +4,7 @@
     "amount": 250,
     "tag": "mantle:water"
   },
-  "input": "tconstruct:copper#default",
+  "input": "tconstruct:copper",
   "output": "tconstruct:copper#oxidized",
   "temperature": 1
 }

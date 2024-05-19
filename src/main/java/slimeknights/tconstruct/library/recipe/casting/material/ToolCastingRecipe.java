@@ -73,7 +73,7 @@ public class ToolCastingRecipe extends AbstractMaterialCastingRecipe implements 
     // the casting recipe needs to match our stat type to be valid
     MaterialFluidRecipe casting = super.getFluidRecipe(inv);
     // need to validate the stat type, since the super call will not check stat type
-    if (casting != MaterialFluidRecipe.EMPTY && requirements.get(indexToCheck).canUseMaterial(casting.getOutput().getId())) {
+    if (casting != MaterialFluidRecipe.EMPTY && !casting.getOutput().sameVariant(currentMaterial) && requirements.get(indexToCheck).canUseMaterial(casting.getOutput().getId())) {
       cachedPartSwapping = casting;
       return casting;
     }
