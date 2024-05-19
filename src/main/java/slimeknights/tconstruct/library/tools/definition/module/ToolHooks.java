@@ -66,11 +66,6 @@ public class ToolHooks {
     public float getRepairAmount(IToolStackView tool, MaterialId material) {
       return 0;
     }
-
-    @Override
-    public float getRepairFactor(IToolStackView tool, MaterialId material) {
-      return 0;
-    }
   });
 
   /** Hook for adding raw unconditional stats to a tool */

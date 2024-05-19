@@ -28,7 +28,6 @@ import slimeknights.tconstruct.library.tools.stat.ModifierStatsBuilder;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.function.IntToDoubleFunction;
 import java.util.stream.IntStream;
 
 /** Module for building tool stats using materials */
@@ -43,7 +42,6 @@ public class MaterialStatsModule implements ToolStatsHook, ToolTraitHook, ToolMa
   @Getter @VisibleForTesting
   final float[] scales;
   private int[] repairIndices;
-  private float maxRepairScale = 0;
 
   public MaterialStatsModule(List<MaterialStatsId> statTypes, float[] scales) {
     this.statTypes = statTypes;
@@ -74,14 +72,6 @@ public class MaterialStatsModule implements ToolStatsHook, ToolTraitHook, ToolMa
     return repairIndices;
   }
 
-  /** Gets the largest weight of all repair materials */
-  private float maxRepairScale() {
-    if (maxRepairScale == 0) {
-      maxRepairScale = (float)IntStream.of(getRepairIndices()).mapToDouble(i -> scales[i]).max().orElse(1f);
-    }
-    return maxRepairScale;
-  }
-
   @Override
   public boolean isRepairMaterial(IToolStackView tool, MaterialId material) {
     for (int part : getRepairIndices()) {
@@ -92,24 +82,15 @@ public class MaterialStatsModule implements ToolStatsHook, ToolTraitHook, ToolMa
     return false;
   }
 
-  /** Shared logic for both repair value functions */
-  private float getRepair(IToolStackView tool, MaterialId material, IntToDoubleFunction mapper) {
-    return (float)(IntStream.of(getRepairIndices())
-                                .filter(i -> tool.getMaterial(i).matches(material))
-                                .mapToDouble(mapper)
-                                .reduce(0, Double::max)
-                   / maxRepairScale());
-  }
-
-  @Override
-  public float getRepairFactor(IToolStackView tool, MaterialId material) {
-    return getRepair(tool, material, i -> scales[i]);
-  }
-
   @Override
   public float getRepairAmount(IToolStackView tool, MaterialId material) {
     ResourceLocation toolId = tool.getDefinition().getId();
-    return getRepair(tool, material, i -> MaterialRepairModule.getDurability(toolId, material, statTypes.get(i)) * scales[i]);
+    for (int i : getRepairIndices()) {
+      if (tool.getMaterial(i).matches(material)) {
+        return MaterialRepairModule.getDurability(toolId, material, statTypes.get(i));
+      }
+    }
+    return 0;
   }
 
   @Override

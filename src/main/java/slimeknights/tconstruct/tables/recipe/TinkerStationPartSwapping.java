@@ -24,7 +24,6 @@ import slimeknights.tconstruct.library.recipe.material.MaterialRecipe;
 import slimeknights.tconstruct.library.recipe.tinkerstation.ITinkerStationContainer;
 import slimeknights.tconstruct.library.recipe.tinkerstation.ITinkerStationRecipe;
 import slimeknights.tconstruct.library.tools.definition.module.material.MaterialRepairModule;
-import slimeknights.tconstruct.library.tools.definition.module.material.MaterialRepairToolHook;
 import slimeknights.tconstruct.library.tools.definition.module.material.ToolPartsHook;
 import slimeknights.tconstruct.library.tools.helper.ToolDamageUtil;
 import slimeknights.tconstruct.library.tools.item.IModifiable;
@@ -133,7 +132,7 @@ public class TinkerStationPartSwapping implements ITinkerStationRecipe {
         // ensure there is a change in the part or we are repairing the tool, note we compare variants so you could swap oak head for birch head
         MaterialVariant toolVariant = tool.getMaterial(index);
         boolean didChange = !toolVariant.sameVariant(partVariant);
-        int repairDurability = MaterialRepairModule.getDurability(null, partVariant.getId(), part.getStatType());
+        float repairDurability = MaterialRepairModule.getDurability(null, partVariant.getId(), part.getStatType());
         if (!didChange && (tool.getDamage() == 0 || repairDurability == 0)) {
           return RecipeResult.pass();
         }
@@ -184,18 +183,18 @@ public class TinkerStationPartSwapping implements ITinkerStationRecipe {
           // must have a registered recipe
           int cost = MaterialCastingLookup.getItemCost(part);
           if (cost > 0) {
-            // apply tool repair factor and modifier repair boost, note this works because the material has been swapped already
-            float factor = cost / MaterialRecipe.INGOTS_PER_REPAIR * MaterialRepairToolHook.repairFactor(tool, partVariant.getId());
-            if (factor > 0) {
+            // takes 3 ingots for a full repair, however count the head cost in the repair amount
+            repairDurability *= cost / MaterialRecipe.INGOTS_PER_REPAIR;
+            if (repairDurability > 0) {
               for (ModifierEntry entry : tool.getModifierList()) {
-                factor = entry.getHook(ModifierHooks.REPAIR_FACTOR).getRepairFactor(tool, entry, factor);
-                if (factor <= 0) {
+                repairDurability = entry.getHook(ModifierHooks.REPAIR_FACTOR).getRepairFactor(tool, entry, repairDurability);
+                if (repairDurability <= 0) {
                   break;
                 }
               }
             }
-            if (factor > 0) {
-              ToolDamageUtil.repair(tool, (int)(repairDurability * factor));
+            if (repairDurability > 0) {
+              ToolDamageUtil.repair(tool, (int)repairDurability);
             }
           }
         }

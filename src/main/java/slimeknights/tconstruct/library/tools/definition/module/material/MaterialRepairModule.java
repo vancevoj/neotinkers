@@ -75,11 +75,6 @@ public class MaterialRepairModule implements MaterialRepairToolHook, ToolModule,
   }
 
   @Override
-  public float getRepairFactor(IToolStackView tool, MaterialId material) {
-    return this.material.equals(material) ? 1 : 0;
-  }
-
-  @Override
   public float getRepairAmount(IToolStackView tool, MaterialId material) {
     return this.material.equals(material) ? repairAmount : 0;
   }
