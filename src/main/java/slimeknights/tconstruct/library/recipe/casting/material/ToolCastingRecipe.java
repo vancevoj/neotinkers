@@ -53,12 +53,11 @@ public class ToolCastingRecipe extends AbstractMaterialCastingRecipe implements 
   }
 
   @Override
-  @Nullable
-  protected MaterialFluidRecipe getCachedMaterialFluid(ICastingContainer inv) {
+  protected MaterialFluidRecipe getFluidRecipe(ICastingContainer inv) {
     ItemStack stack = inv.getStack();
     // if its not part swapping, super is sufficient
     if (stack.getItem() != result.asItem()) {
-      return super.getCachedMaterialFluid(inv);
+      return super.getFluidRecipe(inv);
     }
     // so we are part swapping, we might have a casting or a composite recipe. We only do composite if the fluid does not match casting
     // start with the cached part swapping, can be either type. No need to check casting stat type here as it would never get cached if invalid
@@ -72,21 +71,19 @@ public class ToolCastingRecipe extends AbstractMaterialCastingRecipe implements 
     // cache did not match? try a casting recipe.
     // note its possible we have a valid casting material that is just not valid for this tool, hence the extra check
     // the casting recipe needs to match our stat type to be valid
-    MaterialFluidRecipe casting = super.getCachedMaterialFluid(inv);
+    MaterialFluidRecipe casting = super.getFluidRecipe(inv);
     // need to validate the stat type, since the super call will not check stat type
-    if (casting != null && requirements.get(indexToCheck).canUseMaterial(casting.getOutput().getId())) {
+    if (casting != MaterialFluidRecipe.EMPTY && requirements.get(indexToCheck).canUseMaterial(casting.getOutput().getId())) {
       cachedPartSwapping = casting;
       return casting;
     }
     // no casting? try composite.
-    // No need to validate stat type here (matches will handle it). we only check above to know if we can skip casting
-    for (MaterialFluidRecipe composite : MaterialCastingLookup.getAllCompositeFluids()) {
-      if (composite.matches(fluid, currentMaterial)) {
-        cachedPartSwapping = composite;
-        return composite;
-      }
+    MaterialFluidRecipe composite = MaterialCastingLookup.getCompositeFluid(fluid, currentMaterial);
+    if (composite != MaterialFluidRecipe.EMPTY) {
+      cachedPartSwapping = composite;
+      return composite;
     }
-    return null;
+    return MaterialFluidRecipe.EMPTY;
   }
 
   @Override
@@ -104,9 +101,9 @@ public class ToolCastingRecipe extends AbstractMaterialCastingRecipe implements 
     if (numRequirements < 1 || numRequirements > 2) {
       return false;
     }
-    // last material is the part, may be 1 or 2
-    MaterialFluidRecipe recipe = getCachedMaterialFluid(inv);
-    return recipe != null && requirements.get(numRequirements - 1).canUseMaterial(recipe.getOutput().getId());
+    // last material is the part, may be index 0 or 1
+    MaterialFluidRecipe recipe = getFluidRecipe(inv);
+    return recipe != MaterialFluidRecipe.EMPTY && requirements.get(numRequirements - 1).canUseMaterial(recipe.getOutput().getId());
   }
 
   @Override
@@ -116,8 +113,7 @@ public class ToolCastingRecipe extends AbstractMaterialCastingRecipe implements 
 
   @Override
   public ItemStack assemble(ICastingContainer inv) {
-    MaterialFluidRecipe fluid = getCachedMaterialFluid(inv);
-    MaterialVariant material = fluid != null ? fluid.getOutput() : MaterialVariant.UNKNOWN;
+    MaterialVariant material = getFluidRecipe(inv).getOutput();
     ItemStack cast = inv.getStack();
     int requirements = ToolMaterialHook.stats(result.getToolDefinition()).size();
     // if the cast is the result, we are part swapping, replace the last material

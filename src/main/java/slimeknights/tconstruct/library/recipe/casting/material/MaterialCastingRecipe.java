@@ -13,7 +13,6 @@ import slimeknights.mantle.recipe.IMultiRecipe;
 import slimeknights.mantle.recipe.helper.LoadableRecipeSerializer;
 import slimeknights.mantle.recipe.helper.TypeAwareRecipeSerializer;
 import slimeknights.tconstruct.library.json.TinkerLoadables;
-import slimeknights.tconstruct.library.materials.definition.IMaterial;
 import slimeknights.tconstruct.library.materials.definition.MaterialVariant;
 import slimeknights.tconstruct.library.recipe.casting.DisplayCastingRecipe;
 import slimeknights.tconstruct.library.recipe.casting.ICastingContainer;
@@ -49,8 +48,8 @@ public class MaterialCastingRecipe extends AbstractMaterialCastingRecipe impleme
     if (!this.getCast().test(inv.getStack())) {
       return false;
     }
-    MaterialFluidRecipe fluid = getCachedMaterialFluid(inv);
-    return fluid != null && result.canUseMaterial(fluid.getOutput().getId());
+    MaterialFluidRecipe fluid = getFluidRecipe(inv);
+    return fluid != MaterialFluidRecipe.EMPTY && result.canUseMaterial(fluid.getOutput().getId());
   }
 
   @Override
@@ -60,8 +59,7 @@ public class MaterialCastingRecipe extends AbstractMaterialCastingRecipe impleme
 
   @Override
   public ItemStack assemble(ICastingContainer inv) {
-    MaterialFluidRecipe fluid = getCachedMaterialFluid(inv);
-    return result.withMaterial(fluid != null ? fluid.getOutput().getVariant() : IMaterial.UNKNOWN_ID);
+    return result.withMaterial(getFluidRecipe(inv).getOutput().getVariant());
   }
 
   /* JEI display */

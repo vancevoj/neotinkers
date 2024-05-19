@@ -12,6 +12,8 @@ import slimeknights.mantle.data.loadable.primitive.IntLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.recipe.ICustomOutputRecipe;
 import slimeknights.mantle.recipe.ingredient.FluidIngredient;
+import slimeknights.tconstruct.TConstruct;
+import slimeknights.tconstruct.library.materials.definition.IMaterial;
 import slimeknights.tconstruct.library.materials.definition.MaterialVariant;
 import slimeknights.tconstruct.library.materials.definition.MaterialVariantId;
 import slimeknights.tconstruct.library.recipe.TinkerRecipeTypes;
@@ -30,6 +32,8 @@ public class MaterialFluidRecipe implements ICustomOutputRecipe<ICastingContaine
     MaterialVariantId.LOADABLE.nullableField("input", r -> r.input != null ? r.input.getVariant() : null),
     MaterialVariantId.LOADABLE.nullableField("output", r -> r.output.getVariant()),
     MaterialFluidRecipe::new);
+  /** Empty recipe instance, used as a fallback */
+  public static final MaterialFluidRecipe EMPTY = new MaterialFluidRecipe(TConstruct.getResource("missingno"), FluidIngredient.EMPTY, 0, null, IMaterial.UNKNOWN_ID);
 
   @Getter
   private final ResourceLocation id;
@@ -52,17 +56,14 @@ public class MaterialFluidRecipe implements ICustomOutputRecipe<ICastingContaine
     MaterialCastingLookup.registerFluid(this);
   }
 
-  /** Checks if the recipe matches the given inventory, faster than {@link #matches(Fluid, MaterialVariantId)} when you do not already have the material. */
-  public boolean matches(ICastingContainer inv) {
-    return !output.isUnknown() && this.fluid.test(inv.getFluid())
-     // if the input ID is null, can skip fetching the input stack material
-      && (input == null || input.matchesVariant(inv.getStack()));
+  /** Checks if this recipe is valid for the given fluid and material */
+  public boolean matches(Fluid fluid) {
+    return !output.isUnknown() && this.fluid.test(fluid);
   }
 
   /** Checks if this recipe is valid for the given fluid and material */
   public boolean matches(Fluid fluid, MaterialVariantId material) {
-    return !output.isUnknown() && this.fluid.test(fluid)
-           && (input == null || input.matchesVariant(material));
+    return matches(fluid) && (input == null || input.matchesVariant(material));
   }
 
   /** Gets the amount of fluid to cast this recipe */
@@ -77,7 +78,8 @@ public class MaterialFluidRecipe implements ICustomOutputRecipe<ICastingContaine
 
   @Override
   public final boolean matches(ICastingContainer inv, Level worldIn) {
-    return matches(inv);
+    // if the input ID is null, can skip fetching the input stack material
+    return matches(inv.getFluid()) && (input == null || input.matchesVariant(inv.getStack()));
   }
 
   @Override

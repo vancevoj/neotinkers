@@ -6,6 +6,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.common.crafting.CompoundIngredient;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.common.registration.CastItemObject;
+import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
 import slimeknights.tconstruct.library.recipe.casting.material.CompositeCastingRecipeBuilder;
 import slimeknights.tconstruct.library.recipe.casting.material.MaterialCastingRecipeBuilder;
 import slimeknights.tconstruct.library.recipe.ingredient.MaterialIngredient;
@@ -14,6 +15,7 @@ import slimeknights.tconstruct.library.recipe.tinkerstation.building.ToolBuildin
 import slimeknights.tconstruct.library.tools.item.IModifiable;
 import slimeknights.tconstruct.library.tools.part.IMaterialItem;
 
+import javax.annotation.Nullable;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -74,19 +76,22 @@ public interface IToolRecipeHelper extends ICastCreationHelper {
 
   /**
    * Adds recipes for a part with no cast item
-   * @param consumer Recipe consumer
-   * @param part     Part to be crafted
-   * @param cost     Part cost
+   * @param consumer             Recipe consumer
+   * @param part                 Part to be crafted
+   * @param cost                 Part cost
+   * @param castingStatConflict  If nonnull, disallows casting if a material matching this fluid and stat type can be casted. Prevents conflicts with tool casting
    * @param partFolder   Folder for recipes
    */
-  default void uncastablePart(Consumer<FinishedRecipe> consumer, IMaterialItem part, int cost, String partFolder) {
+  default void uncastablePart(Consumer<FinishedRecipe> consumer, IMaterialItem part, int cost, @Nullable MaterialStatsId castingStatConflict, String partFolder) {
     ResourceLocation id = id(part);
     PartRecipeBuilder.partRecipe(part)
                      .setPattern(id)
                      .setPatternItem(Ingredient.of(TinkerTags.Items.DEFAULT_PATTERNS))
                      .setCost(cost)
                      .save(consumer, location(partFolder + "builder/" + id.getPath()));
-    CompositeCastingRecipeBuilder.table(part, cost).save(consumer, location(partFolder + "casting/" + id.getPath() + "_composite"));
+    CompositeCastingRecipeBuilder.table(part, cost)
+                                 .castingStatConflict(castingStatConflict)
+                                 .save(consumer, location(partFolder + "casting/" + id.getPath() + "_composite"));
   }
 
   /**
