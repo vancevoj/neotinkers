@@ -12,29 +12,29 @@ import slimeknights.tconstruct.library.modifiers.fluid.FluidEffectContext;
 import slimeknights.tconstruct.library.modifiers.fluid.FluidEffectManager;
 import slimeknights.tconstruct.library.modifiers.fluid.FluidEffects;
 import slimeknights.tconstruct.library.modifiers.hook.combat.MeleeHitModifierHook;
-import slimeknights.tconstruct.library.modifiers.modules.fluid.TankModule;
+import slimeknights.tconstruct.library.modifiers.modules.build.StatBoostModule;
 import slimeknights.tconstruct.library.module.ModuleHookMap.Builder;
+import slimeknights.tconstruct.library.tools.capability.fluid.ToolTankHelper;
 import slimeknights.tconstruct.library.tools.context.ToolAttackContext;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 
+import static slimeknights.tconstruct.library.tools.capability.fluid.ToolTankHelper.TANK_HELPER;
 import static slimeknights.tconstruct.tools.modifiers.ability.fluid.UseFluidOnHitModifier.spawnParticles;
 
 /** Modifier applying fluid effects on melee hit */
 public class SpillingModifier extends Modifier implements MeleeHitModifierHook {
-  protected TankModule tank;
-
   @Override
   protected void registerHooks(Builder hookBuilder) {
     super.registerHooks(hookBuilder);
-    tank = new TankModule(FluidType.BUCKET_VOLUME, true);
-    hookBuilder.addModule(tank);
+    hookBuilder.addModule(ToolTankHelper.TANK_HANDLER);
+    hookBuilder.addModule(StatBoostModule.add(ToolTankHelper.CAPACITY_STAT).eachLevel(FluidType.BUCKET_VOLUME));
     hookBuilder.addHook(this, ModifierHooks.MELEE_HIT);
   }
 
   @Override
   public void afterMeleeHit(IToolStackView tool, ModifierEntry modifier, ToolAttackContext context, float damageDealt) {
     if (damageDealt > 0 && context.isFullyCharged()) {
-      FluidStack fluid = tank.getFluid(tool);
+      FluidStack fluid = TANK_HELPER.getFluid(tool);
       if (!fluid.isEmpty()) {
         FluidEffects recipe = FluidEffectManager.INSTANCE.find(fluid.getFluid());
         if (recipe.hasEntityEffects()) {
@@ -44,7 +44,7 @@ public class SpillingModifier extends Modifier implements MeleeHitModifierHook {
           if (consumed > 0 && (player == null || !player.isCreative())) {
             spawnParticles(context.getTarget(), fluid);
             fluid.shrink(consumed);
-            tank.setFluid(tool, fluid);
+            TANK_HELPER.setFluid(tool, fluid);
           }
         }
       }

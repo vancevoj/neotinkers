@@ -19,10 +19,11 @@ import slimeknights.tconstruct.library.modifiers.fluid.FluidEffects;
 import slimeknights.tconstruct.library.modifiers.hook.build.ConditionalStatModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.interaction.GeneralInteractionModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.interaction.InteractionSource;
-import slimeknights.tconstruct.library.modifiers.modules.fluid.TankModule;
+import slimeknights.tconstruct.library.modifiers.modules.build.StatBoostModule;
 import slimeknights.tconstruct.library.module.ModuleHookMap.Builder;
 import slimeknights.tconstruct.library.tools.capability.EntityModifierCapability;
 import slimeknights.tconstruct.library.tools.capability.PersistentDataCapability;
+import slimeknights.tconstruct.library.tools.capability.fluid.ToolTankHelper;
 import slimeknights.tconstruct.library.tools.helper.ModifierUtil;
 import slimeknights.tconstruct.library.tools.helper.ToolDamageUtil;
 import slimeknights.tconstruct.library.tools.item.ranged.ModifiableLauncherItem;
@@ -33,15 +34,15 @@ import slimeknights.tconstruct.tools.entity.FluidEffectProjectile;
 import slimeknights.tconstruct.tools.modifiers.ability.interaction.BlockingModifier;
 import slimeknights.tconstruct.tools.modifiers.upgrades.ranged.ScopeModifier;
 
+import static slimeknights.tconstruct.library.tools.capability.fluid.ToolTankHelper.TANK_HELPER;
+
 /** Modifier that fires fluid as a projectile */
 public class SpittingModifier extends Modifier implements GeneralInteractionModifierHook {
-  private TankModule tank;
-
   @Override
   protected void registerHooks(Builder builder) {
     builder.addHook(this, ModifierHooks.GENERAL_INTERACT);
-    tank = new TankModule(FluidType.BUCKET_VOLUME, true);
-    builder.addModule(tank);
+    builder.addModule(ToolTankHelper.TANK_HANDLER);
+    builder.addModule(StatBoostModule.add(ToolTankHelper.CAPACITY_STAT).eachLevel(FluidType.BUCKET_VOLUME));
   }
 
   @Override
@@ -58,7 +59,7 @@ public class SpittingModifier extends Modifier implements GeneralInteractionModi
   public InteractionResult onToolUse(IToolStackView tool, ModifierEntry modifier, Player player, InteractionHand hand, InteractionSource source) {
     if (!tool.isBroken() && source == InteractionSource.RIGHT_CLICK) {
       // launch if the fluid has effects, cannot simulate as we don't know the target yet
-      FluidStack fluid = tank.getFluid(tool);
+      FluidStack fluid = TANK_HELPER.getFluid(tool);
       if (fluid.getAmount() >= (1 + 2 * (modifier.getLevel() - 1)) && FluidEffectManager.INSTANCE.find(fluid.getFluid()).hasEffects()) {
         GeneralInteractionModifierHook.startUsingWithDrawtime(tool, modifier.getId(), player, hand, 1.5f);
         return InteractionResult.SUCCESS;
@@ -79,7 +80,7 @@ public class SpittingModifier extends Modifier implements GeneralInteractionModi
       int chargeTime = getUseDuration(tool, modifier) - timeLeft;
       if (chargeTime > 0) {
         // find the fluid to spit
-        FluidStack fluid = tank.getFluid(tool);
+        FluidStack fluid = TANK_HELPER.getFluid(tool);
         if (!fluid.isEmpty()) {
           FluidEffects recipe = FluidEffectManager.INSTANCE.find(fluid.getFluid());
           if (recipe.hasEffects()) {
@@ -129,7 +130,7 @@ public class SpittingModifier extends Modifier implements GeneralInteractionModi
 
               // consume the fluid and durability
               fluid.shrink(amount * level);
-              tank.setFluid(tool, fluid);
+              TANK_HELPER.setFluid(tool, fluid);
               ToolDamageUtil.damageAnimated(tool, shots, entity, entity.getUsedItemHand());
             }
           }

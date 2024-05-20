@@ -1,9 +1,10 @@
-package slimeknights.tconstruct.library.tools.capability;
+package slimeknights.tconstruct.library.tools.capability.fluid;
 
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
-import slimeknights.tconstruct.library.tools.capability.ToolFluidCapability.FluidModifierHook;
+import slimeknights.tconstruct.library.tools.capability.CompoundIndexHookIterator;
+import slimeknights.tconstruct.library.tools.capability.fluid.ToolFluidCapability.FluidModifierHook;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 
 import java.util.Iterator;

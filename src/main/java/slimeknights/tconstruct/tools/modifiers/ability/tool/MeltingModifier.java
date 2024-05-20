@@ -14,19 +14,22 @@ import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.hook.behavior.ProcessLootModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.combat.MeleeHitModifierHook;
 import slimeknights.tconstruct.library.modifiers.impl.NoLevelsModifier;
-import slimeknights.tconstruct.library.modifiers.modules.fluid.TankModule;
+import slimeknights.tconstruct.library.modifiers.modules.build.StatBoostModule;
 import slimeknights.tconstruct.library.module.ModuleHookMap.Builder;
 import slimeknights.tconstruct.library.recipe.TinkerRecipeTypes;
 import slimeknights.tconstruct.library.recipe.entitymelting.EntityMeltingRecipe;
 import slimeknights.tconstruct.library.recipe.entitymelting.EntityMeltingRecipeCache;
 import slimeknights.tconstruct.library.recipe.melting.IMeltingContainer;
 import slimeknights.tconstruct.library.recipe.melting.IMeltingRecipe;
+import slimeknights.tconstruct.library.tools.capability.fluid.ToolTankHelper;
 import slimeknights.tconstruct.library.tools.context.ToolAttackContext;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.smeltery.block.entity.module.EntityMeltingModule;
 
 import java.util.Iterator;
 import java.util.List;
+
+import static slimeknights.tconstruct.library.tools.capability.fluid.ToolTankHelper.TANK_HELPER;
 
 public class MeltingModifier extends NoLevelsModifier implements MeleeHitModifierHook, ProcessLootModifierHook {
   /** Max temperature allowed for melting items */
@@ -37,13 +40,11 @@ public class MeltingModifier extends NoLevelsModifier implements MeleeHitModifie
   /** Inventory used for finding recipes */
   private static final MeltingContainer inventory = new MeltingContainer();
 
-  private TankModule tank;
-
   @Override
   protected void registerHooks(Builder hookBuilder) {
     super.registerHooks(hookBuilder);
-    tank = new TankModule(FluidType.BUCKET_VOLUME, true);
-    hookBuilder.addModule(tank);
+    hookBuilder.addModule(ToolTankHelper.TANK_HANDLER);
+    hookBuilder.addModule(StatBoostModule.add(ToolTankHelper.CAPACITY_STAT).eachLevel(FluidType.BUCKET_VOLUME));
     hookBuilder.addHook(this, ModifierHooks.MELEE_HIT, ModifierHooks.PROCESS_LOOT);
   }
 
@@ -77,8 +78,8 @@ public class MeltingModifier extends NoLevelsModifier implements MeleeHitModifie
   @Override
   public void processLoot(IToolStackView tool, ModifierEntry modifier, List<ItemStack> generatedLoot, LootContext context) {
     // if tank is full, nothing to do
-    FluidStack current = tank.getFluid(tool);
-    int capacity = tank.getCapacity(tool);
+    FluidStack current = TANK_HELPER.getFluid(tool);
+    int capacity = TANK_HELPER.getCapacity(tool);
     if (current.getAmount() >= capacity) {
       return;
     }
@@ -115,7 +116,7 @@ public class MeltingModifier extends NoLevelsModifier implements MeleeHitModifie
       }
     }
     if (isDirty) {
-      tank.setFluid(tool, current);
+      TANK_HELPER.setFluid(tool, current);
     }
   }
 
@@ -145,14 +146,14 @@ public class MeltingModifier extends NoLevelsModifier implements MeleeHitModifie
         }
 
         // fluid must match that which is stored in the tank
-        FluidStack fluid = tank.getFluid(tool);
+        FluidStack fluid = TANK_HELPER.getFluid(tool);
         if (fluid.isEmpty()) {
           output.setAmount(fluidAmount);
           fluid = output;
         } else {
           fluid.grow(fluidAmount);
         }
-        tank.setFluid(tool, fluid);
+        TANK_HELPER.setFluid(tool, fluid);
       }
     }
   }

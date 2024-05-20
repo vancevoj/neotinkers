@@ -3,9 +3,16 @@
   "level_display": "tconstruct:default",
   "modules": [
     {
-      "type": "tconstruct:tank",
-      "capacity": 1000,
-      "scale_capacity": true
+      "type": "tconstruct:stat_boost",
+      "each_level": 1000.0,
+      "operation": "add",
+      "stat": "tconstruct:tank_capacity"
+    },
+    {
+      "type": "tconstruct:trait",
+      "fixed_level": true,
+      "level": 1,
+      "name": "tconstruct:tank_handler"
     }
   ],
   "tooltip_display": "always"

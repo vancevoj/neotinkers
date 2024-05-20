@@ -1,7 +1,9 @@
-package slimeknights.tconstruct.library.tools.capability;
+package slimeknights.tconstruct.library.tools.capability.inventory;
 
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
-import slimeknights.tconstruct.library.tools.capability.ToolInventoryCapability.InventoryModifierHook;
+import slimeknights.tconstruct.library.tools.capability.CompoundIndexHookIterator;
+import slimeknights.tconstruct.library.tools.capability.fluid.ToolFluidCapability;
+import slimeknights.tconstruct.library.tools.capability.inventory.ToolInventoryCapability.InventoryModifierHook;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 
 /**

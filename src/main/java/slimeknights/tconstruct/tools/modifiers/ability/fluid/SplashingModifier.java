@@ -27,8 +27,9 @@ import slimeknights.tconstruct.library.modifiers.hook.build.ConditionalStatModif
 import slimeknights.tconstruct.library.modifiers.hook.interaction.BlockInteractionModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.interaction.EntityInteractionModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.interaction.InteractionSource;
-import slimeknights.tconstruct.library.modifiers.modules.fluid.TankModule;
+import slimeknights.tconstruct.library.modifiers.modules.build.StatBoostModule;
 import slimeknights.tconstruct.library.module.ModuleHookMap.Builder;
+import slimeknights.tconstruct.library.tools.capability.fluid.ToolTankHelper;
 import slimeknights.tconstruct.library.tools.definition.module.ToolHooks;
 import slimeknights.tconstruct.library.tools.definition.module.aoe.AreaOfEffectIterator;
 import slimeknights.tconstruct.library.tools.definition.module.aoe.CircleAOEIterator;
@@ -39,17 +40,16 @@ import slimeknights.tconstruct.shared.TinkerCommons;
 import slimeknights.tconstruct.shared.particle.FluidParticleData;
 import slimeknights.tconstruct.tools.TinkerModifiers;
 
+import static slimeknights.tconstruct.library.tools.capability.fluid.ToolTankHelper.TANK_HELPER;
 import static slimeknights.tconstruct.library.tools.helper.ModifierUtil.asLiving;
 
-/** Modifier to handle spilling recipes */
+/** Modifier to handle spilling recipes on interaction */
 public class SplashingModifier extends Modifier implements EntityInteractionModifierHook, BlockInteractionModifierHook {
-  protected TankModule tank;
-
   @Override
   protected void registerHooks(Builder hookBuilder) {
     super.registerHooks(hookBuilder);
-    tank = new TankModule(FluidType.BUCKET_VOLUME, true);
-    hookBuilder.addModule(tank);
+    hookBuilder.addModule(ToolTankHelper.TANK_HANDLER);
+    hookBuilder.addModule(StatBoostModule.add(ToolTankHelper.CAPACITY_STAT).eachLevel(FluidType.BUCKET_VOLUME));
     hookBuilder.addHook(this, ModifierHooks.ENTITY_INTERACT, ModifierHooks.BLOCK_INTERACT);
   }
 
@@ -57,7 +57,7 @@ public class SplashingModifier extends Modifier implements EntityInteractionModi
   public InteractionResult beforeEntityUse(IToolStackView tool, ModifierEntry modifier, Player player, Entity target, InteractionHand hand, InteractionSource source) {
     // melee items get spilling via attack, non melee interact to use it
     if (tool.getHook(ToolHooks.INTERACTION).canInteract(tool, modifier.getId(), source)) {
-      FluidStack fluid = tank.getFluid(tool);
+      FluidStack fluid = TANK_HELPER.getFluid(tool);
       if (!fluid.isEmpty()) {
         FluidEffects recipe = FluidEffectManager.INSTANCE.find(fluid.getFluid());
         if (recipe.hasEntityEffects()) {
@@ -92,7 +92,7 @@ public class SplashingModifier extends Modifier implements EntityInteractionModi
             if (!player.isCreative() ) {
               if (consumed > 0) {
                 fluid.shrink(consumed);
-                tank.setFluid(tool, fluid);
+                TANK_HELPER.setFluid(tool, fluid);
               }
 
               // damage the tool, we charge for the multiplier and for the number of targets hit
@@ -120,7 +120,7 @@ public class SplashingModifier extends Modifier implements EntityInteractionModi
   @Override
   public InteractionResult afterBlockUse(IToolStackView tool, ModifierEntry modifier, UseOnContext context, InteractionSource source) {
     if (tool.getHook(ToolHooks.INTERACTION).canInteract(tool, modifier.getId(), source)) {
-      FluidStack fluid = tank.getFluid(tool);
+      FluidStack fluid = TANK_HELPER.getFluid(tool);
       if (!fluid.isEmpty()) {
         FluidEffects recipe = FluidEffectManager.INSTANCE.find(fluid.getFluid());
         if (recipe.hasEntityEffects()) {
@@ -158,7 +158,7 @@ public class SplashingModifier extends Modifier implements EntityInteractionModi
             if (player == null || !player.isCreative() ) {
               if (consumed > 0) {
                 fluid.shrink(consumed);
-                tank.setFluid(tool, fluid);
+                TANK_HELPER.setFluid(tool, fluid);
               }
 
               // damage the tool, we charge for the multiplier and for the number of targets hit

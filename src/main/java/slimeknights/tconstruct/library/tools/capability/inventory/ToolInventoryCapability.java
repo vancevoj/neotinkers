@@ -1,4 +1,4 @@
-package slimeknights.tconstruct.library.tools.capability;
+package slimeknights.tconstruct.library.tools.capability.inventory;
 
 import lombok.RequiredArgsConstructor;
 import net.minecraft.resources.ResourceLocation;

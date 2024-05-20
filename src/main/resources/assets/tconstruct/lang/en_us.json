@@ -2249,8 +2249,6 @@
   "modifier.tconstruct.melting.flavor": "The power of a Melter on a stick!",
   "modifier.tconstruct.melting.description": "Melts attacked entities and items dropped!",
   "modifier.tconstruct.tank": "Tank",
-  "modifier.tconstruct.tank.filled": "Tank: %s mb %s",
-  "modifier.tconstruct.tank.capacity": "Tank Capacity: %s mb",
   "modifier.tconstruct.tank.flavor": "Bigger is always better!",
   "modifier.tconstruct.tank.description": "Tool has a fluid tank, allowing it to store fluid",
   "modifier.tconstruct.bucketing": "Bucketing",
@@ -2714,6 +2712,12 @@
   "tool_stat.tconstruct.block_amount.description": "Maximum amount of damage blocked by this shield per attack.",
   "tool_stat.tconstruct.block_angle": "Block Angle: ",
   "tool_stat.tconstruct.block_angle.description": "Total angle of protection in front when shielding out of a max 360 degrees. Any attacks from an angle beyond this are not blocked.",
+
+  "tool_stat.tconstruct.overslime": "Overslime Capacity: ",
+  "tool_stat.tconstruct.overslime.description": "Maximum amount of overslime allowed on this tool.",
+  "tool_stat.tconstruct.tank_capacity": "Tank Capacity: ",
+  "tool_stat.tconstruct.tank_capacity.description": "Maximum amount of fluid that can be stored in this tool's tank.",
+  "tool_stat.tconstruct.tank_capacity.fluid": "Fluid: ",
 
   "stat.tconstruct.repair_kit": "Repair Kit",
   "stat.tconstruct.skull": "Slimeskull",

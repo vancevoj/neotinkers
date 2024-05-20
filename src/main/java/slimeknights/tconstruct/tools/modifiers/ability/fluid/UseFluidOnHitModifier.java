@@ -15,8 +15,9 @@ import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.fluid.FluidEffectContext;
 import slimeknights.tconstruct.library.modifiers.fluid.FluidEffectManager;
 import slimeknights.tconstruct.library.modifiers.fluid.FluidEffects;
-import slimeknights.tconstruct.library.modifiers.modules.fluid.TankModule;
+import slimeknights.tconstruct.library.modifiers.modules.build.StatBoostModule;
 import slimeknights.tconstruct.library.module.ModuleHookMap.Builder;
+import slimeknights.tconstruct.library.tools.capability.fluid.ToolTankHelper;
 import slimeknights.tconstruct.library.tools.context.EquipmentContext;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.shared.TinkerCommons;
@@ -24,15 +25,15 @@ import slimeknights.tconstruct.shared.particle.FluidParticleData;
 
 import javax.annotation.Nullable;
 
+import static slimeknights.tconstruct.library.tools.capability.fluid.ToolTankHelper.TANK_HELPER;
+
 /** Modifier to handle spilling recipes onto self when attacked */
 public abstract class UseFluidOnHitModifier extends Modifier {
-  protected TankModule tank;
-
   @Override
   protected void registerHooks(Builder hookBuilder) {
     super.registerHooks(hookBuilder);
-    tank = new TankModule(FluidType.BUCKET_VOLUME, true);
-    hookBuilder.addModule(tank);
+    hookBuilder.addModule(ToolTankHelper.TANK_HANDLER);
+    hookBuilder.addModule(StatBoostModule.add(ToolTankHelper.CAPACITY_STAT).eachLevel(FluidType.BUCKET_VOLUME));
   }
 
   /** Spawns particles at the given entity */
@@ -50,7 +51,7 @@ public abstract class UseFluidOnHitModifier extends Modifier {
     // 25% chance of working per level, 50% per level on shields
     float level = modifier.getEffectiveLevel();
     if (RANDOM.nextInt(slotType.getType() == Type.HAND ? 2 : 4) < level) {
-      FluidStack fluid = tank.getFluid(tool);
+      FluidStack fluid = TANK_HELPER.getFluid(tool);
       if (!fluid.isEmpty()) {
         LivingEntity self = context.getEntity();
         Player player = self instanceof Player p ? p : null;
@@ -61,7 +62,7 @@ public abstract class UseFluidOnHitModifier extends Modifier {
           if (consumed > 0 && (player == null || !player.isCreative())) {
             spawnParticles(fluidContext.getTarget(), fluid);
             fluid.shrink(consumed);
-            tank.setFluid(tool, fluid);
+            TANK_HELPER.setFluid(tool, fluid);
           }
         }
       }
