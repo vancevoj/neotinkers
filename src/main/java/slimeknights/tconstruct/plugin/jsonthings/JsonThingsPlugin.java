@@ -7,6 +7,7 @@ import net.minecraftforge.fml.loading.FMLEnvironment;
 public class JsonThingsPlugin {
   /** Called by mod constructor to register JsonThings things */
   public static void onConstruct() {
+    FlexBlockTypes.init();
     FlexItemTypes.init();
 
     if (FMLEnvironment.dist == Dist.CLIENT) {
