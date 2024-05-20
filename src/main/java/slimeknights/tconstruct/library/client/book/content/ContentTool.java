@@ -209,7 +209,7 @@ public class ContentTool extends PageContent {
 
   @Override
   public void build(BookData book, ArrayList<BookElement> list, boolean brightSide) {
-    this.addTitle(list, getTitle());s
+    this.addTitle(list, getTitle());
 
     int padding = 5;
 
