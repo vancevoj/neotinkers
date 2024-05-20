@@ -16,8 +16,9 @@ import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.json.predicate.modifier.ModifierPredicate;
 import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
-import slimeknights.tconstruct.library.modifiers.ModifierId;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
+import slimeknights.tconstruct.library.modifiers.ModifierId;
+import slimeknights.tconstruct.library.modifiers.hook.build.ModifierRemovalHook;
 import slimeknights.tconstruct.library.recipe.ITinkerableContainer;
 import slimeknights.tconstruct.library.recipe.RecipeResult;
 import slimeknights.tconstruct.library.recipe.modifiers.ModifierRecipeLookup;
@@ -103,10 +104,10 @@ public class ModifierRemovalRecipe extends AbstractWorktableRecipe {
 
   @Override
   public RecipeResult<ToolStack> getResult(ITinkerableContainer inv, ModifierEntry entry) {
-    ToolStack tool = inv.getTinkerable();
+    ToolStack original = inv.getTinkerable();
 
     // salvage
-    tool = tool.copy();
+    ToolStack tool = original.copy();
     ModifierId modifierId = entry.getId();
     ModifierSalvage salvage = ModifierRecipeLookup.getSalvage(inv.getTinkerableStack(), tool, modifierId, entry.getLevel());
 
@@ -130,12 +131,9 @@ public class ModifierRemovalRecipe extends AbstractWorktableRecipe {
     if (error != null) {
       return RecipeResult.failure(error);
     }
-    // if this was the last level, validate the tool is still valid without it
-    if (newLevel <= 0) {
-      error = modifier.getHook(ModifierHooks.REMOVE).onRemoved(tool, modifier);
-      if (error != null) {
-        return RecipeResult.failure(error);
-      }
+    error = ModifierRemovalHook.onRemoved(original, tool);
+    if (error != null) {
+      return RecipeResult.failure(error);
     }
     // successfully removed
     return RecipeResult.success(tool);

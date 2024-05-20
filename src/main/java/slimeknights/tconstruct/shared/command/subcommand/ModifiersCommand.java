@@ -17,6 +17,7 @@ import slimeknights.mantle.command.MantleCommand;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
+import slimeknights.tconstruct.library.modifiers.hook.build.ModifierRemovalHook;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.shared.command.HeldModifiableItemIterator;
 import slimeknights.tconstruct.shared.command.argument.ModifierArgument;
@@ -89,10 +90,10 @@ public class ModifiersCommand {
     MutableInt maxRemove = new MutableInt(1);
     List<LivingEntity> successes = HeldModifiableItemIterator.apply(context, (living, stack) -> {
       // add modifier
-      ToolStack tool = ToolStack.from(stack);
+      ToolStack original = ToolStack.from(stack);
 
       // first, see if the modifier exists
-      int currentLevel = tool.getUpgrades().getLevel(modifier.getId());
+      int currentLevel = original.getUpgrades().getLevel(modifier.getId());
       if (currentLevel == 0) {
         throw CANNOT_REMOVE.create(modifier.getDisplayName(level), living.getName());
       }
@@ -100,7 +101,7 @@ public class ModifiersCommand {
       if (removeLevel > maxRemove.intValue()) {
         maxRemove.setValue(removeLevel);
       }
-      tool = tool.copy();
+      ToolStack tool = original.copy();
 
       // first remove hook, primarily for removing raw NBT which is highly discouraged using
       int newLevel = currentLevel - removeLevel;
@@ -117,13 +118,12 @@ public class ModifiersCommand {
         throw MODIFIER_ERROR.create(validated);
       }
 
-      // if this was the last level, validate the tool is still valid without it
-      if (newLevel <= 0) {
-        validated = modifier.getHook(ModifierHooks.REMOVE).onRemoved(tool, modifier);
-        if (validated != null) {
-          throw MODIFIER_ERROR.create(validated);
-        }
+      // ask modifiers if it's okay to remove them
+      validated = ModifierRemovalHook.onRemoved(original, tool);
+      if (validated != null) {
+        throw MODIFIER_ERROR.create(validated);
       }
+
       // if successful, update held item
       living.setItemInHand(InteractionHand.MAIN_HAND, tool.createStack(stack.getCount()));
       return true;

@@ -2,6 +2,8 @@ package slimeknights.tconstruct.library.modifiers.hook.build;
 
 import net.minecraft.network.chat.Component;
 import slimeknights.tconstruct.library.modifiers.Modifier;
+import slimeknights.tconstruct.library.modifiers.ModifierEntry;
+import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.utils.RestrictedCompoundTag;
 
@@ -40,5 +42,26 @@ public interface ModifierRemovalHook {
       }
       return null;
     }
+  }
+
+  /**
+   * Calls the hook for all modifiers that were on the original but not on the updated tool.
+   * Handles any modifier update including standard removal, part swapping, and even modifier traits.
+   * @param original  Tool before changes were made
+   * @param updated   Tool after changes were made
+   * @return  Error message if a removed modifier errored, or null if no error
+   */
+  @Nullable
+  static Component onRemoved(IToolStackView original, IToolStackView updated) {
+    for (ModifierEntry entry : original.getModifierList()) {
+      ModifierRemovalHook hook = entry.getModifier().getHooks().getOrNull(ModifierHooks.REMOVE);
+      if (hook != null && updated.getModifierLevel(entry.getId()) == 0) {
+        Component error = hook.onRemoved(updated, entry.getModifier());
+        if (error != null) {
+          return error;
+        }
+      }
+    }
+    return null;
   }
 }
