@@ -67,9 +67,6 @@ public class CommonRecipeProvider extends BaseRecipeProvider implements ICommonR
                        .unlockedBy("has_planks", has(TinkerMaterials.nahuatl))
                        .save(consumer, location(folder + "nahuatl_fence"));
 
-    // mud bricks
-    slabStairsCrafting(consumer, TinkerCommons.mudBricks, "common/", false);
-
     // gold
     ShapedRecipeBuilder.shaped(TinkerCommons.goldBars, 16)
                        .define('#', Tags.Items.INGOTS_GOLD)

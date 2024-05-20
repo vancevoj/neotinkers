@@ -379,7 +379,7 @@ public class BlockTagProvider extends BlockTagsProvider {
 
   private void addHarvest() {
     // commons
-    tagBlocks(MINEABLE_WITH_SHOVEL, TinkerCommons.mudBricks, TinkerCommons.cheeseBlock);
+    tagBlocks(MINEABLE_WITH_SHOVEL, TinkerCommons.cheeseBlock);
     tagBlocks(MINEABLE_WITH_AXE, TinkerGadgets.punji);
     tagBlocks(MINEABLE_WITH_PICKAXE, NEEDS_DIAMOND_TOOL, TinkerCommons.obsidianPane);
     tagBlocks(MINEABLE_WITH_PICKAXE, NEEDS_STONE_TOOL, TinkerCommons.ironPlatform);

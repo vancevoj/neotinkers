@@ -8,6 +8,7 @@ import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.data.recipes.SimpleCookingRecipeBuilder;
 import net.minecraft.data.recipes.SingleItemRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
@@ -61,6 +62,7 @@ import slimeknights.tconstruct.library.recipe.casting.PotionCastingRecipeBuilder
 import slimeknights.tconstruct.library.recipe.casting.container.ContainerFillingRecipeBuilder;
 import slimeknights.tconstruct.library.recipe.entitymelting.EntityMeltingRecipeBuilder;
 import slimeknights.tconstruct.library.recipe.fuel.MeltingFuelBuilder;
+import slimeknights.tconstruct.library.recipe.ingredient.BlockTagIngredient;
 import slimeknights.tconstruct.library.recipe.ingredient.NoContainerIngredient;
 import slimeknights.tconstruct.library.recipe.melting.IMeltingContainer.OreRateType;
 import slimeknights.tconstruct.library.recipe.melting.IMeltingRecipe;
@@ -1070,10 +1072,10 @@ public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelt
 
     // water
     String waterFolder = folder + "water/";
-    ItemCastingRecipeBuilder.basinRecipe(TinkerCommons.mudBricks)
-                            .setFluidAndTime(new FluidStack(Fluids.WATER, FluidType.BUCKET_VOLUME / 10))
-                            .setCast(Items.DIRT, true)
-                            .save(consumer, prefix(TinkerCommons.mudBricks, waterFolder));
+    ItemCastingRecipeBuilder.basinRecipe(Blocks.MUD)
+                            .setFluidAndTime(new FluidStack(Fluids.WATER, FluidValues.BOTTLE))
+                            .setCast(new BlockTagIngredient(BlockTags.CONVERTABLE_TO_MUD), true)
+                            .save(consumer, location(waterFolder + "mud"));
     ItemCastingRecipeBuilder.tableRecipe(ItemOutput.fromStack(PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.WATER)))
                             .setFluid(MantleTags.Fluids.WATER, FluidValues.BOTTLE * 2)
                             .setCoolingTime(1)

@@ -116,8 +116,6 @@ public class BlockLootTableProvider extends BlockLoot {
     }
     this.dropSelf(TinkerCommons.soulGlass.get());
     this.dropSelf(TinkerCommons.soulGlassPane.get());
-
-    this.registerBuildingLootTables(TinkerCommons.mudBricks);
   }
 
   private void addTools() {

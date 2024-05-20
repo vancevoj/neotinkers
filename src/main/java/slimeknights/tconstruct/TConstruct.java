@@ -168,6 +168,10 @@ public class TConstruct {
       case "lavawood" -> TinkerMaterials.blazewood.get();
       case "lavawood_slab" -> TinkerMaterials.blazewood.getSlab();
       case "lavawood_stairs" -> TinkerMaterials.blazewood.getStairs();
+      // migrate mud bricks to vanilla
+      case "mud_bricks" -> Blocks.MUD_BRICKS;
+      case "mud_bricks_slab" -> Blocks.MUD_BRICK_SLAB;
+      case "mud_bricks_stairs" -> Blocks.MUD_BRICK_STAIRS;
       default -> null;
     };
   }

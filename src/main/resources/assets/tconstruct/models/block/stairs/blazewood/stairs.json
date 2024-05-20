@@ -1,8 +1,0 @@
-{
-    "parent": "block/stairs",
-    "textures": {
-        "bottom": "tconstruct:block/blazewood",
-        "top": "tconstruct:block/blazewood",
-        "side": "tconstruct:block/blazewood"
-    }
-}
