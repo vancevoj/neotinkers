@@ -7,6 +7,13 @@
       "each_level": 0.1,
       "operation": "add",
       "stat": "tconstruct:use_item_speed"
+    },
+    {
+      "type": "tconstruct:armor_stat",
+      "allow_broken": false,
+      "each_level": 0.05,
+      "key": "tconstruct:use_item_speed",
+      "tooltip_style": "percent"
     }
   ],
   "tooltip_display": "always"
