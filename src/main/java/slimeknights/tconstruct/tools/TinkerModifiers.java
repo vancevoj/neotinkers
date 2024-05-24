@@ -239,7 +239,6 @@ import slimeknights.tconstruct.tools.modifiers.upgrades.armor.SoulSpeedModifier;
 import slimeknights.tconstruct.tools.modifiers.upgrades.armor.SpringyModifier;
 import slimeknights.tconstruct.tools.modifiers.upgrades.armor.ThornsModifier;
 import slimeknights.tconstruct.tools.modifiers.upgrades.general.MagneticModifier;
-import slimeknights.tconstruct.tools.modifiers.upgrades.general.SoulboundModifier;
 import slimeknights.tconstruct.tools.modifiers.upgrades.melee.FieryModifier;
 import slimeknights.tconstruct.tools.modifiers.upgrades.melee.PiercingModifier;
 import slimeknights.tconstruct.tools.modifiers.upgrades.melee.SeveringModifier;
@@ -317,11 +316,7 @@ public final class TinkerModifiers extends TinkerModule {
   /*
    * Modifiers
    */
-  // durability
-  public static final StaticModifier<SoulboundModifier> soulbound = MODIFIERS.register("soulbound", SoulboundModifier::new);
   public static final StaticModifier<OverslimeModifier> overslime = MODIFIERS.register("overslime", OverslimeModifier::new);
-
-  // general effects
   public static final StaticModifier<MagneticModifier> magnetic = MODIFIERS.register("magnetic", MagneticModifier::new);
   public static final StaticModifier<FarsightedModifier> farsighted = MODIFIERS.register("farsighted", FarsightedModifier::new);
   public static final StaticModifier<NearsightedModifier> nearsighted = MODIFIERS.register("nearsighted", NearsightedModifier::new);

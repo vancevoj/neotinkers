@@ -31,6 +31,7 @@ public class ModifierIds {
   public static final ModifierId tank       = id("tank");
   public static final ModifierId offhanded  = id("offhanded");
   public static final ModifierId theOneProbe = id("the_one_probe");
+  public static final ModifierId soulbound = id("soulbound");
   // general abilities
   public static final ModifierId reach = id("reach");
 
@@ -83,6 +84,7 @@ public class ModifierIds {
   public static final ModifierId speedy = id("speedy");
   public static final ModifierId toolBelt = id("tool_belt");
   public static final ModifierId leaping = id("leaping");
+  public static final ModifierId soulBelt = id("soul_belt");
   // boots
   public static final ModifierId depthStrider = id("depth_strider");
   public static final ModifierId featherFalling = id("feather_falling");

@@ -1,0 +1,30 @@
+{
+  "type": "tconstruct:composable",
+  "level_display": "tconstruct:no_levels",
+  "modules": [
+    {
+      "type": "tconstruct:armor_level",
+      "allow_broken": true,
+      "key": "tconstruct:soul_belt"
+    },
+    {
+      "type": "tconstruct:requirements",
+      "display_modifiers": [
+        {
+          "level": 1,
+          "name": "tconstruct:soulbound"
+        }
+      ],
+      "requirement": {
+        "type": "tconstruct:has_modifier",
+        "check": "all",
+        "modifier": {
+          "type": "tconstruct:single",
+          "modifier": "tconstruct:soulbound"
+        }
+      },
+      "translation_key": "modifier.tconstruct.soul_belt.requirements"
+    }
+  ],
+  "tooltip_display": "always"
+}

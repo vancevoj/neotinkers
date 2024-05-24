@@ -1,15 +1,25 @@
 package slimeknights.tconstruct.tools.logic;
 
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.GameRules;
+import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
 import net.minecraftforge.event.entity.living.LivingExperienceDropEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.event.entity.living.LivingKnockBackEvent;
 import net.minecraftforge.event.entity.living.MobEffectEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.level.BlockEvent.BreakEvent;
 import net.minecraftforge.eventbus.api.Event.Result;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -18,20 +28,34 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.modules.armor.EffectImmunityModule;
+import slimeknights.tconstruct.library.modifiers.modules.technical.ArmorLevelModule;
 import slimeknights.tconstruct.library.modifiers.modules.technical.ArmorStatModule;
 import slimeknights.tconstruct.library.tools.capability.EntityModifierCapability;
 import slimeknights.tconstruct.library.tools.capability.TinkerDataCapability;
 import slimeknights.tconstruct.library.tools.capability.TinkerDataCapability.TinkerDataKey;
 import slimeknights.tconstruct.library.tools.capability.TinkerDataKeys;
 import slimeknights.tconstruct.library.tools.helper.ModifierLootingHandler;
+import slimeknights.tconstruct.library.tools.helper.ModifierUtil;
 import slimeknights.tconstruct.library.tools.nbt.ModifierNBT;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.tools.data.ModifierIds;
 import slimeknights.tconstruct.tools.modules.ranged.RestrictAngleModule;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+
 /** Events to implement modifier specific behaviors, such as those defined by {@link TinkerDataKeys}. General hooks will typically be in {@link ToolEvents} */
 @EventBusSubscriber(modid = TConstruct.MOD_ID, bus = Bus.FORGE)
 public class ModifierEvents {
+  /** NBT key for items to preserve their slot in soulbound */
+  private static final String SOULBOUND_SLOT = "tic_soulbound_slot";
+  /** Multiplier for experience drops from events */
+  private static final TinkerDataKey<Float> PROJECTILE_EXPERIENCE = TConstruct.createKey("projectile_experience");
+  /** Volatile data flag making a modifier grant the tool soulbound */
+  public static final ResourceLocation SOULBOUND = TConstruct.getResource("soulbound");
+
   @SubscribeEvent
   static void onKnockback(LivingKnockBackEvent event) {
     event.getEntity().getCapability(TinkerDataCapability.CAPABILITY).ifPresent(data -> {
@@ -78,11 +102,44 @@ public class ModifierEvents {
     });
   }
 
+  /** Called when the player dies to store the item in the original inventory */
+  @SubscribeEvent
+  static void onLivingDeath(LivingDeathEvent event) {
+    // if a projectile kills the target, mark the projectile level
+    DamageSource source = event.getSource();
+    if (source != null && source.getDirectEntity() instanceof Projectile projectile) {
+      ModifierNBT modifiers = EntityModifierCapability.getOrEmpty(projectile);
+      if (!modifiers.isEmpty()) {
+        event.getEntity().getCapability(TinkerDataCapability.CAPABILITY).ifPresent(data -> data.put(PROJECTILE_EXPERIENCE, modifiers.getEntry(ModifierIds.experienced).getEffectiveLevel()));
+      }
+    }
+    // this is the latest we can add slot markers to the items so we can return them to slots
+    LivingEntity entity = event.getEntity();
+    if (!entity.level.getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY) && entity instanceof Player player && !(player instanceof FakePlayer)) {
+      // start with the hotbar, must be soulbound or soul belt
+      boolean soulBelt = ArmorLevelModule.getLevel(player, TinkerDataKeys.SOUL_BELT) > 0;
+      Inventory inventory = player.getInventory();
+      int hotbarSize = Inventory.getSelectionSize();
+      for (int i = 0; i < hotbarSize; i++) {
+        ItemStack stack = inventory.getItem(i);
+        if (!stack.isEmpty() && (soulBelt || ModifierUtil.checkVolatileFlag(stack, SOULBOUND))) {
+          stack.getOrCreateTag().putInt(SOULBOUND_SLOT, i);
+        }
+      }
+      // rest of the inventory, only check soulbound (no modifier that moves non-soulbound currently)
+      // note this includes armor and offhand
+      int totalSize = inventory.getContainerSize();
+      for (int i = hotbarSize; i < totalSize; i++) {
+        ItemStack stack = inventory.getItem(i);
+        if (!stack.isEmpty() && ModifierUtil.checkVolatileFlag(stack, SOULBOUND)) {
+          stack.getOrCreateTag().putInt(SOULBOUND_SLOT, i);
+        }
+      }
+    }
+  }
+
 
   /* Experience */
-
-  /** Multiplier for experience drops from events */
-  private static final TinkerDataKey<Float> PROJECTILE_EXPERIENCE = TConstruct.createKey("projectile_experience");
 
   /**
    * Boosts the original based on the level
@@ -99,18 +156,6 @@ public class ModifierEvents {
     float bonus = ArmorStatModule.getStat(event.getPlayer(), TinkerDataKeys.EXPERIENCE);
     if (bonus != 0) {
       event.setExpToDrop(boost(event.getExpToDrop(), bonus));
-    }
-  }
-
-  @SubscribeEvent
-  static void onEntityKilled(LivingDeathEvent event) {
-    // if a projectile kills the target, mark the projectile level
-    DamageSource source = event.getSource();
-    if (source != null && source.getDirectEntity() instanceof Projectile projectile) {
-      ModifierNBT modifiers = EntityModifierCapability.getOrEmpty(projectile);
-      if (!modifiers.isEmpty()) {
-        event.getEntity().getCapability(TinkerDataCapability.CAPABILITY).ifPresent(data -> data.put(PROJECTILE_EXPERIENCE, modifiers.getEntry(ModifierIds.experienced).getEffectiveLevel()));
-      }
     }
   }
 
@@ -133,6 +178,90 @@ public class ModifierEvents {
       float boost = (tool != null ? tool.getModifier(ModifierIds.experienced).getEffectiveLevel() : 0) * 0.5f + armorBoost;
       if (boost > 0) {
         event.setDroppedExperience(boost(event.getDroppedExperience(), boost));
+      }
+    }
+  }
+
+
+  /* Soulbound */
+
+  /** Called when the player dies to store the item in the original inventory */
+  @SubscribeEvent
+  static void onPlayerDropItems(LivingDropsEvent event) {
+    // only care about real players with keep inventory off
+    LivingEntity entity = event.getEntity();
+    if (!entity.level.getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY) && entity instanceof Player player && !(entity instanceof FakePlayer)) {
+      Collection<ItemEntity> drops = event.getDrops();
+      Iterator<ItemEntity> iter = drops.iterator();
+      Inventory inventory = player.getInventory();
+      List<ItemEntity> takenSlot = new ArrayList<>();
+      while (iter.hasNext()) {
+        ItemEntity itemEntity = iter.next();
+        ItemStack stack = itemEntity.getItem();
+        // find items with our soulbound tag set and move them back into the inventory, will move them over later
+        CompoundTag tag = stack.getTag();
+        if (tag != null && tag.contains(SOULBOUND_SLOT, Tag.TAG_ANY_NUMERIC)) {
+          int slot = tag.getInt(SOULBOUND_SLOT);
+          // return the tool to its requested slot if possible, remove from the drops
+          if (inventory.getItem(slot).isEmpty()) {
+            inventory.setItem(slot, stack);
+          } else {
+            // hold off on handling items that did not get the requested slot for now
+            // want to make sure they don't get in the way of items that have not yet been seen
+            takenSlot.add(itemEntity);
+          }
+          iter.remove();
+          // don't clear the tag yet, we need it one last time for player clone
+        }
+      }
+      // handle items that did not get their requested slot last, to ensure they don't take someone else's slot while being added to a default
+      for (ItemEntity itemEntity : takenSlot) {
+        ItemStack stack = itemEntity.getItem();
+        if (!inventory.add(stack)) {
+          // last resort, somehow we just cannot put the stack anywhere, so drop it on the ground
+          // this should never happen, but better to be safe
+          // ditch the soulbound slot tag, to prevent item stacking issues
+          CompoundTag tag = stack.getTag();
+          if (tag != null) {
+            tag.remove(SOULBOUND_SLOT);
+            if (tag.isEmpty()) {
+              stack.setTag(null);
+            }
+          }
+          drops.add(itemEntity);
+        }
+      }
+    }
+  }
+
+  /** Called when the new player is created to fetch the soulbound item from the old */
+  @SubscribeEvent
+  static void onPlayerClone(PlayerEvent.Clone event) {
+    if (!event.isWasDeath()) {
+      return;
+    }
+    Player original = event.getOriginal();
+    Player clone = event.getEntity();
+    // inventory already copied
+    if (clone.level.getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY) || original.isSpectator()) {
+      return;
+    }
+    // find items with the soulbound tag set and move them over
+    Inventory originalInv = original.getInventory();
+    Inventory cloneInv = clone.getInventory();
+    int size = Math.min(originalInv.getContainerSize(), cloneInv.getContainerSize()); // not needed probably, but might as well be safe
+    for(int i = 0; i < size; i++) {
+      ItemStack stack = originalInv.getItem(i);
+      if (!stack.isEmpty()) {
+        CompoundTag tag = stack.getTag();
+        if (tag != null && tag.contains(SOULBOUND_SLOT, Tag.TAG_ANY_NUMERIC)) {
+          cloneInv.setItem(i, stack);
+          // remove the slot tag, clear the tag if needed
+          tag.remove(SOULBOUND_SLOT);
+          if (tag.isEmpty()) {
+            stack.setTag(null);
+          }
+        }
       }
     }
   }

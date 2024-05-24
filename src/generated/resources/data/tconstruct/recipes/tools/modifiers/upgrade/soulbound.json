@@ -3,14 +3,7 @@
   "allow_crystal": true,
   "inputs": [
     {
-      "ingredient": [
-        {
-          "item": "minecraft:totem_of_undying"
-        },
-        {
-          "item": "minecraft:nether_star"
-        }
-      ]
+      "item": "minecraft:echo_shard"
     }
   ],
   "level": 1,

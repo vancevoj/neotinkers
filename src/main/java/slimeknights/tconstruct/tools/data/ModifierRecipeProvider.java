@@ -219,12 +219,12 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .addInput(TinkerTags.Items.INGOTS_NETHERITE_SCRAP)
                          .setMaxLevel(1)
                          .save(consumer, prefix(ModifierIds.worldbound, slotlessFolder));
-    ModifierRecipeBuilder.modifier(TinkerModifiers.soulbound)
-                         .addInput(Ingredient.of(Items.TOTEM_OF_UNDYING, Items.NETHER_STAR))
+    ModifierRecipeBuilder.modifier(ModifierIds.soulbound)
+                         .addInput(Ingredient.of(Items.ECHO_SHARD))
                          .setSlots(SlotType.UPGRADE, 1)
                          .setMaxLevel(1)
-                         .saveSalvage(consumer, prefix(TinkerModifiers.soulbound, upgradeSalvage))
-                         .save(consumer, prefix(TinkerModifiers.soulbound, upgradeFolder));
+                         .saveSalvage(consumer, prefix(ModifierIds.soulbound, upgradeSalvage))
+                         .save(consumer, prefix(ModifierIds.soulbound, upgradeFolder));
     ModifierRecipeBuilder.modifier(ModifierIds.netherite)
                          .setTools(TinkerTags.Items.DURABILITY)
                          .addInput(Tags.Items.INGOTS_NETHERITE)
@@ -954,6 +954,15 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                                    .addLevel(SlotType.ABILITY, 1, 1)
                                    .addLevelRange(2, 6)
                                    .save(consumer, wrap(ModifierIds.toolBelt, abilityFolder, "_crystal"));
+    ModifierRecipeBuilder.modifier(ModifierIds.soulBelt)
+                         .addInput(Items.LEATHER)
+                         .addInput(Ingredient.of(Items.RECOVERY_COMPASS))
+                         .addInput(Items.LEATHER)
+                         .setSlots(SlotType.ABILITY, 1)
+                         .setMaxLevel(1)
+                         .setTools(TinkerTags.Items.LEGGINGS)
+                         .saveSalvage(consumer, prefix(ModifierIds.soulBelt, abilitySalvage))
+                         .save(consumer, prefix(ModifierIds.soulBelt, abilityFolder));
 
     ModifierRecipeBuilder.modifier(TinkerModifiers.wetting)
                          .addInput(Tags.Items.DUSTS_REDSTONE)

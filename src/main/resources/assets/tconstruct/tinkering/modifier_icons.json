@@ -3,7 +3,7 @@
   "tconstruct:unbreakable": ["tconstruct:gui/modifiers/unbreakable", "tconstruct:gui/modifiers/book"],
   "tconstruct:overforced":  ["tconstruct:item/materials/reinforcement/slimesteel", "tconstruct:gui/modifiers/book"],
   "tconstruct:overslime":   ["minecraft:item/slime_ball", "tconstruct:gui/modifiers/book"],
-  "tconstruct:soulbound":   ["minecraft:item/totem_of_undying", "tconstruct:gui/modifiers/book"],
+  "tconstruct:soulbound":   ["minecraft:item/echo_shard", "tconstruct:gui/modifiers/book"],
   "tconstruct:tank":        "tconstruct:gui/modifiers/tank",
   
   "tconstruct:emerald":     ["minecraft:item/emerald", "tconstruct:gui/modifiers/tier"],
@@ -116,6 +116,7 @@
   "tconstruct:step_up":       "tconstruct:gui/modifiers/armor/step_up",
   "tconstruct:tool_belt":     "tconstruct:gui/modifiers/armor/tool_belt",
   "tconstruct:wetting":       "tconstruct:gui/modifiers/armor/wetting",
+  "tconstruct:soul_belt": ["minecraft:item/recovery_compass_16", "tconstruct:gui/modifiers/book"],
   
   "tconstruct:bouncy":           "tconstruct:gui/modifiers/armor/bouncy",
   "tconstruct:double_jump":      "tconstruct:gui/modifiers/armor/double_jump",

@@ -36,8 +36,11 @@ public interface TinkerDataKeys {
   /** Multiplier for experience drops from events */
   TinkerDataKey<Float> EXPERIENCE = floatKey("experience");
 
-  /** Crystaltrike level for knockback restriction */
+  /** Crystalstrike level for knockback restriction */
   TinkerDataKey<Integer> CRYSTALSTRIKE = intKey("crystalstrike_knockback");
+
+  /** Soul belt level for hotbar preservation */
+  TinkerDataKey<Integer> SOUL_BELT = intKey("soul_belt");
 
 
   /** Creates and registers an integer key */

@@ -2103,6 +2103,10 @@
   "modifier.tconstruct.tool_belt": "Tool Belt",
   "modifier.tconstruct.tool_belt.flavor": "Ever wish for more hands?",
   "modifier.tconstruct.tool_belt.description": "Interacting with the leggings while holding control allows swapping the hotbar",
+  "modifier.tconstruct.soul_belt": "Soul Belt",
+  "modifier.tconstruct.soul_belt.flavor": "Keeps up your soul pants!",
+  "modifier.tconstruct.soul_belt.description": "Items in the hotbar remain in the inventory on death!",
+  "modifier.tconstruct.soul_belt.requirements": "Soul Belt requires Soulbound",
 
   "modifier.tconstruct.inventory_cannot_remove": "Making this change would cause an item stored in this tool to be deleted",
 
