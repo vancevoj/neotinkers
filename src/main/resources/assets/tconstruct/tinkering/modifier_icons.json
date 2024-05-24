@@ -1,5 +1,5 @@
 {
-  "tconstruct:reinforced":  ["tconstruct:item/materials/reinforcement/iron", "tconstruct:gui/modifiers/book"],
+  "tconstruct:reinforced":  ["tconstruct:item/materials/reinforcement/emerald", "tconstruct:gui/modifiers/book"],
   "tconstruct:unbreakable": ["tconstruct:gui/modifiers/unbreakable", "tconstruct:gui/modifiers/book"],
   "tconstruct:overforced":  ["tconstruct:item/materials/reinforcement/slimesteel", "tconstruct:gui/modifiers/book"],
   "tconstruct:overslime":   ["minecraft:item/slime_ball", "tconstruct:gui/modifiers/book"],
