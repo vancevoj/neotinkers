@@ -357,6 +357,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
     buildModifier(ModifierIds.stepUp).addModule(AttributeModule.builder(ForgeMod.STEP_HEIGHT_ADDITION.get(), Operation.ADDITION).uniqueFrom(ModifierIds.stepUp).slots(armorSlots).eachLevel(0.5f));
     buildModifier(ModifierIds.speedy).addModule(AttributeModule.builder(Attributes.MOVEMENT_SPEED, Operation.MULTIPLY_TOTAL).uniqueFrom(ModifierIds.speedy).slots(armorMainHand).eachLevel(0.1f));
     buildModifier(ModifierIds.leaping).addModule(ArmorStatModule.builder(TinkerDataKeys.JUMP_BOOST).eachLevel(1));
+    buildModifier(ModifierIds.swiftSneak).addModule(EnchantmentModule.builder(Enchantments.SWIFT_SNEAK).constant());
     // TODO: consider higher levels keeping more of the inventory
     buildModifier(ModifierIds.soulBelt).levelDisplay(ModifierLevelDisplay.NO_LEVELS).addModule(new ArmorLevelModule(TinkerDataKeys.SOUL_BELT, true, null)).addModule(ModifierRequirementsModule.builder().modifierKey(ModifierIds.soulBelt).requireModifier(ModifierIds.soulbound, 1).build());
     // boots

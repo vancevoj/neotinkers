@@ -82,6 +82,7 @@ public class ModifierIds {
   public static final ModifierId pockets = id("pockets");
   public static final ModifierId stepUp = id("step_up");
   public static final ModifierId speedy = id("speedy");
+  public static final ModifierId swiftSneak = id("swift_sneak");
   public static final ModifierId toolBelt = id("tool_belt");
   public static final ModifierId leaping = id("leaping");
   public static final ModifierId soulBelt = id("soul_belt");

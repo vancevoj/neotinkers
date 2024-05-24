@@ -30,6 +30,7 @@ public class EnchantmentToModifierProvider extends AbstractEnchantmentToModifier
     add(Enchantments.DEPTH_STRIDER, ModifierIds.depthStrider);
     add(Enchantments.FROST_WALKER, ModifierIds.frostWalker);
     add(Enchantments.SOUL_SPEED, TinkerModifiers.soulspeed.getId());
+    add(Enchantments.SWIFT_SNEAK, ModifierIds.swiftSneak);
 
     // melee
     add(Enchantments.SHARPNESS, ModifierIds.sharpness);

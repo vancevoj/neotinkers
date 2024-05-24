@@ -1,0 +1,13 @@
+{
+  "modifier_id": "tconstruct:swift_sneak",
+  "text": [
+    {
+      "text": "Reduces the sneaking movement speed penalty by 15% per level. At level 5, you may sprint while sneaking."
+    }
+  ],
+  "more_text_space": true,
+  "effects": [
+    "Maximum of 5 levels",
+    "Requires 1 upgrade slot per level"
+  ]
+}

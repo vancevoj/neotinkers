@@ -2107,6 +2107,9 @@
   "modifier.tconstruct.soul_belt.flavor": "Keeps up your soul pants!",
   "modifier.tconstruct.soul_belt.description": "Items in the hotbar remain in the inventory on death!",
   "modifier.tconstruct.soul_belt.requirements": "Soul Belt requires Soulbound",
+  "modifier.tconstruct.swift_sneak": "Swift Sneak",
+  "modifier.tconstruct.swift_sneak.flavor": "Sneaky, but faster!",
+  "modifier.tconstruct.swift_sneak.description": "Increases movement speed while crouching",
 
   "modifier.tconstruct.inventory_cannot_remove": "Making this change would cause an item stored in this tool to be deleted",
 

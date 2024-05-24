@@ -797,6 +797,13 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .setMaxLevel(2)
                          .saveSalvage(consumer, prefix(ModifierIds.stepUp, upgradeSalvage))
                          .save(consumer, prefix(ModifierIds.stepUp, upgradeFolder));
+    ModifierRecipeBuilder.modifier(ModifierIds.swiftSneak)
+                         .setTools(TinkerTags.Items.LEGGINGS)
+                         .addInput(Blocks.SCULK_SENSOR)
+                         .setMaxLevel(5)
+                         .setSlots(SlotType.UPGRADE, 1)
+                         .saveSalvage(consumer, prefix(ModifierIds.swiftSneak, upgradeSalvage))
+                         .save(consumer, prefix(ModifierIds.swiftSneak, upgradeFolder));
 
     // upgrade - boots
     IncrementalModifierRecipeBuilder.modifier(ModifierIds.featherFalling)
