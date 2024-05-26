@@ -57,6 +57,7 @@ import slimeknights.tconstruct.library.recipe.melting.MaterialMeltingRecipe;
 import slimeknights.tconstruct.library.recipe.melting.MeltingRecipe;
 import slimeknights.tconstruct.library.recipe.melting.OreMeltingRecipe;
 import slimeknights.tconstruct.library.recipe.molding.MoldingRecipe;
+import slimeknights.tconstruct.library.tools.part.PartCastItem;
 import slimeknights.tconstruct.library.utils.Util;
 import slimeknights.tconstruct.shared.block.ClearGlassPaneBlock;
 import slimeknights.tconstruct.shared.block.PlaceBlockDispenserBehavior;
@@ -107,6 +108,8 @@ import slimeknights.tconstruct.smeltery.menu.HeatingStructureContainerMenu;
 import slimeknights.tconstruct.smeltery.menu.MelterContainerMenu;
 import slimeknights.tconstruct.smeltery.menu.SingleItemContainerMenu;
 import slimeknights.tconstruct.tables.item.TableBlockItem;
+import slimeknights.tconstruct.tools.TinkerToolParts;
+import slimeknights.tconstruct.tools.item.ArmorSlotType;
 
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -307,36 +310,36 @@ public final class TinkerSmeltery extends TinkerModule {
   public static final CastItemObject nuggetCast = ITEMS.registerCast("nugget", SMELTERY_PROPS);
   public static final CastItemObject gemCast    = ITEMS.registerCast("gem",    SMELTERY_PROPS);
   public static final CastItemObject rodCast    = ITEMS.registerCast("rod",   SMELTERY_PROPS);
-  public static final CastItemObject repairKitCast = ITEMS.registerCast("repair_kit", SMELTERY_PROPS);
+  public static final CastItemObject repairKitCast = ITEMS.registerCast(TinkerToolParts.repairKit, SMELTERY_PROPS);
   // compatability
   public static final CastItemObject plateCast  = ITEMS.registerCast("plate", SMELTERY_PROPS);
   public static final CastItemObject gearCast   = ITEMS.registerCast("gear",  SMELTERY_PROPS);
   public static final CastItemObject coinCast   = ITEMS.registerCast("coin",  SMELTERY_PROPS);
   public static final CastItemObject wireCast   = ITEMS.registerCast("wire",  SMELTERY_PROPS);
   // small tool heads
-  public static final CastItemObject pickHeadCast = ITEMS.registerCast("pick_head", SMELTERY_PROPS);
-  public static final CastItemObject smallAxeHeadCast = ITEMS.registerCast("small_axe_head", SMELTERY_PROPS);
-  public static final CastItemObject smallBladeCast = ITEMS.registerCast("small_blade", SMELTERY_PROPS);
+  public static final CastItemObject pickHeadCast = ITEMS.registerCast(TinkerToolParts.pickHead, SMELTERY_PROPS);
+  public static final CastItemObject smallAxeHeadCast = ITEMS.registerCast(TinkerToolParts.smallAxeHead, SMELTERY_PROPS);
+  public static final CastItemObject smallBladeCast = ITEMS.registerCast(TinkerToolParts.smallBlade, SMELTERY_PROPS);
   // large tool heads
-  public static final CastItemObject hammerHeadCast   = ITEMS.registerCast("hammer_head", SMELTERY_PROPS);
-  public static final CastItemObject broadBladeCast   = ITEMS.registerCast("broad_blade", SMELTERY_PROPS);
-  public static final CastItemObject broadAxeHeadCast = ITEMS.registerCast("broad_axe_head", SMELTERY_PROPS);
+  public static final CastItemObject hammerHeadCast   = ITEMS.registerCast(TinkerToolParts.hammerHead, SMELTERY_PROPS);
+  public static final CastItemObject broadBladeCast   = ITEMS.registerCast(TinkerToolParts.broadBlade, SMELTERY_PROPS);
+  public static final CastItemObject broadAxeHeadCast = ITEMS.registerCast(TinkerToolParts.broadAxeHead, SMELTERY_PROPS);
   // bindings
-  public static final CastItemObject toolBindingCast = ITEMS.registerCast("tool_binding", SMELTERY_PROPS);
-  public static final CastItemObject roundPlateCast  = ITEMS.registerCast("round_plate", SMELTERY_PROPS);
-  public static final CastItemObject largePlateCast  = ITEMS.registerCast("large_plate", SMELTERY_PROPS);
+  public static final CastItemObject toolBindingCast = ITEMS.registerCast(TinkerToolParts.toolBinding, SMELTERY_PROPS);
+  public static final CastItemObject roundPlateCast  = ITEMS.registerCast(TinkerToolParts.roundPlate, SMELTERY_PROPS);
+  public static final CastItemObject largePlateCast  = ITEMS.registerCast(TinkerToolParts.largePlate, SMELTERY_PROPS);
   // tool rods
-  public static final CastItemObject toolHandleCast  = ITEMS.registerCast("tool_handle", SMELTERY_PROPS);
-  public static final CastItemObject toughHandleCast = ITEMS.registerCast("tough_handle", SMELTERY_PROPS);
+  public static final CastItemObject toolHandleCast  = ITEMS.registerCast(TinkerToolParts.toolHandle, SMELTERY_PROPS);
+  public static final CastItemObject toughHandleCast = ITEMS.registerCast(TinkerToolParts.toughHandle, SMELTERY_PROPS);
   // bow
-  public static final CastItemObject bowLimbCast = ITEMS.registerCast("bow_limb", SMELTERY_PROPS);
-  public static final CastItemObject bowGripCast = ITEMS.registerCast("bow_grip", SMELTERY_PROPS);
+  public static final CastItemObject bowLimbCast = ITEMS.registerCast(TinkerToolParts.bowLimb, SMELTERY_PROPS);
+  public static final CastItemObject bowGripCast = ITEMS.registerCast(TinkerToolParts.bowGrip, SMELTERY_PROPS);
   // armor
-  public static final CastItemObject helmetPlatingCast = ITEMS.registerCast("helmet_plating", SMELTERY_PROPS);
-  public static final CastItemObject chestplatePlatingCast = ITEMS.registerCast("chestplate_plating", SMELTERY_PROPS);
-  public static final CastItemObject leggingsPlatingCast = ITEMS.registerCast("leggings_plating", SMELTERY_PROPS);
-  public static final CastItemObject bootsPlatingCast = ITEMS.registerCast("boots_plating", SMELTERY_PROPS);
-  public static final CastItemObject mailleCast = ITEMS.registerCast("maille", SMELTERY_PROPS);
+  public static final CastItemObject helmetPlatingCast = ITEMS.registerCast("helmet_plating", () -> new PartCastItem(SMELTERY_PROPS, () -> TinkerToolParts.plating.get(ArmorSlotType.HELMET)));
+  public static final CastItemObject chestplatePlatingCast = ITEMS.registerCast("chestplate_plating", () -> new PartCastItem(SMELTERY_PROPS, () -> TinkerToolParts.plating.get(ArmorSlotType.CHESTPLATE)));
+  public static final CastItemObject leggingsPlatingCast = ITEMS.registerCast("leggings_plating", () -> new PartCastItem(SMELTERY_PROPS, () -> TinkerToolParts.plating.get(ArmorSlotType.LEGGINGS)));
+  public static final CastItemObject bootsPlatingCast = ITEMS.registerCast("boots_plating", () -> new PartCastItem(SMELTERY_PROPS, () -> TinkerToolParts.plating.get(ArmorSlotType.BOOTS)));
+  public static final CastItemObject mailleCast = ITEMS.registerCast(TinkerToolParts.maille, SMELTERY_PROPS);
 
 
   /*

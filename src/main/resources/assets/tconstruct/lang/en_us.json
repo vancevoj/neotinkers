@@ -318,6 +318,8 @@
 
   "_comment": "Tinkers Gold Casts",
 
+  "item.tconstruct.cast.cost": "Material cost: %d",
+
   "item.tconstruct.blank_cast": "Blank Gold Cast",
   "item.tconstruct.ingot_cast": "Ingot Gold Cast",
   "item.tconstruct.nugget_cast": "Nugget Gold Cast",

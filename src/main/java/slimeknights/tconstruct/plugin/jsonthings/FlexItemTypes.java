@@ -8,8 +8,10 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.Item;
+import net.minecraftforge.common.util.Lazy;
 import slimeknights.mantle.data.loadable.Loadable;
 import slimeknights.mantle.data.loadable.Loadables;
+import slimeknights.mantle.data.loadable.primitive.ResourceLocationLoadable;
 import slimeknights.mantle.util.JsonHelper;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.client.armor.texture.ArmorTextureSupplier;
@@ -19,6 +21,7 @@ import slimeknights.tconstruct.library.tools.item.armor.DummyArmorMaterial;
 import slimeknights.tconstruct.plugin.jsonthings.item.FlexModifiableBowItem;
 import slimeknights.tconstruct.plugin.jsonthings.item.FlexModifiableCrossbowItem;
 import slimeknights.tconstruct.plugin.jsonthings.item.FlexModifiableItem;
+import slimeknights.tconstruct.plugin.jsonthings.item.FlexPartCastItem;
 import slimeknights.tconstruct.plugin.jsonthings.item.FlexRepairKitItem;
 import slimeknights.tconstruct.plugin.jsonthings.item.FlexToolPartItem;
 import slimeknights.tconstruct.plugin.jsonthings.item.armor.FlexModifiableArmorItem;
@@ -71,6 +74,12 @@ public class FlexItemTypes {
     register("crossbow", data -> {
       boolean allowFireworks = GsonHelper.getAsBoolean(data, "allow_fireworks");
       return (props, builder) -> add(CROSSBOW_ITEMS, new FlexModifiableCrossbowItem(props, ToolDefinition.create(builder.getRegistryName()), allowFireworks));
+    });
+
+    /* Registries a cast item that shows a part cost in the tooltip */
+    register("part_cast", data -> {
+      ResourceLocation partId = JsonHelper.getResourceLocation(data, "part");
+      return (props, builder) -> new FlexPartCastItem(props, builder, Lazy.of(() -> ((ResourceLocationLoadable<Item>)Loadables.ITEM).fromKey(partId, "part")));
     });
 
 
