@@ -33,7 +33,7 @@ public class TankModifierModel extends FluidModifierModel {
       // cache by modifier, fluid, and not being full
       return new TankModifierCacheKey(entry.getModifier(), fluid.getFluid(), fluid.getAmount() < helper.getCapacity(tool));
     }
-    return entry.getModifier();
+    return entry != ModifierEntry.EMPTY ? entry.getId() : null;
   }
 
   @Override
@@ -54,10 +54,12 @@ public class TankModifierModel extends FluidModifierModel {
     public IBakedModifierModel forTool(Function<String,Material> smallGetter, Function<String,Material> largeGetter) {
       Material smallTexture = smallGetter.apply("");
       Material largeTexture = largeGetter.apply("");
-      if (smallTexture != null || largeTexture != null) {
-        return new TankModifierModel(helper, smallTexture, largeTexture,
-                                     smallGetter.apply("_partial"), largeGetter.apply("_partial"),
-                                     smallGetter.apply("_full"), largeGetter.apply("_full"));
+      Material smallPartial = smallGetter.apply("_partial");
+      Material largePartial = largeGetter.apply("_partial");
+      Material smallFull = smallGetter.apply("_full");
+      Material largeFull = largeGetter.apply("_full");
+      if (smallTexture != null || largeTexture != null || smallPartial != null || largePartial != null || smallFull != null || largeFull != null) {
+        return new TankModifierModel(helper, smallTexture, largeTexture, smallPartial, largePartial, smallFull, largeFull);
       }
       return null;
     }

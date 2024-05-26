@@ -69,7 +69,7 @@ public class FluidModifierModel extends NormalModifierModel {
       // cache by modifier and fluid
       return new FluidModifierCacheKey(entry.getModifier(), fluid.getFluid());
     }
-    return entry.getId();
+    return entry != ModifierEntry.EMPTY ? entry.getId() : null;
   }
 
   @Nullable
@@ -121,8 +121,10 @@ public class FluidModifierModel extends NormalModifierModel {
     public IBakedModifierModel forTool(Function<String,Material> smallGetter, Function<String,Material> largeGetter) {
       Material smallTexture = smallGetter.apply("");
       Material largeTexture = largeGetter.apply("");
-      if (smallTexture != null || largeTexture != null) {
-        return new FluidModifierModel(helper, smallTexture, largeTexture, smallGetter.apply("_full"), largeGetter.apply("_full"));
+      Material smallFluid = smallGetter.apply("_full");
+      Material largeFluid = largeGetter.apply("_full");
+      if (smallTexture != null || largeTexture != null || smallFluid != null || largeFluid != null) {
+        return new FluidModifierModel(helper, smallTexture, largeTexture, smallFluid, largeFluid);
       }
       return null;
     }

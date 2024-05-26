@@ -42,7 +42,10 @@ public class NormalModifierModel implements IBakedModifierModel {
 
   @Override
   public void addQuads(IToolStackView tool, ModifierEntry entry, Function<Material,TextureAtlasSprite> spriteGetter, Transformation transforms, boolean isLarge, int startTintIndex, Consumer<Collection<BakedQuad>> quadConsumer, @Nullable ItemLayerPixels pixels) {
-    quadConsumer.accept(MantleItemLayerModel.getQuadsForSprite(color, -1, spriteGetter.apply(isLarge ? large : small), transforms, luminosity, pixels));
+    Material spriteName = isLarge ? large : small;
+    if (spriteName != null) {
+      quadConsumer.accept(MantleItemLayerModel.getQuadsForSprite(color, -1, spriteGetter.apply(spriteName), transforms, luminosity, pixels));
+    }
   }
 
   private record Unbaked(int color, int luminosity) implements IUnbakedModifierModel {

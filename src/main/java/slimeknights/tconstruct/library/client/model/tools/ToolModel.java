@@ -38,6 +38,10 @@ import net.minecraftforge.client.model.geometry.IGeometryBakingContext;
 import net.minecraftforge.client.model.geometry.IGeometryLoader;
 import net.minecraftforge.client.model.geometry.IUnbakedGeometry;
 import slimeknights.mantle.client.model.util.MantleItemLayerModel;
+import slimeknights.mantle.data.loadable.Loadable;
+import slimeknights.mantle.data.loadable.mapping.CompactLoadable;
+import slimeknights.mantle.data.loadable.primitive.BooleanLoadable;
+import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.util.ItemLayerPixels;
 import slimeknights.mantle.util.JsonHelper;
 import slimeknights.mantle.util.ReversedListBuilder;
@@ -49,7 +53,6 @@ import slimeknights.tconstruct.library.client.modifiers.IBakedModifierModel;
 import slimeknights.tconstruct.library.client.modifiers.ModifierModelManager;
 import slimeknights.tconstruct.library.materials.definition.IMaterial;
 import slimeknights.tconstruct.library.materials.definition.MaterialVariantId;
-import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierId;
 import slimeknights.tconstruct.library.recipe.worktable.ModifierSetWorktableRecipe;
@@ -64,6 +67,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.function.BiFunction;
@@ -98,19 +102,41 @@ public class ToolModel implements IUnbakedGeometry<ToolModel> {
         // modifier model indexes start at the last part
         int localIndex = 0;
         List<ModifierEntry> modifiers = tool.getUpgrades().getModifiers();
+        ModifierEntry[] firsts = new ModifierEntry[overrides.firstModifiers.size()];
         for (int i = modifiers.size() - 1; i >= 0; i--) {
           ModifierEntry entry = modifiers.get(i);
-          // colors are assumed to not be sensitive to the model's large status
-          IBakedModifierModel modifierModel = overrides.getModifierModel(entry.getModifier());
-          if (modifierModel != null) {
-            // indexes from [0,modelIndexes) are passed to this model
-            // if below the range, make the index model relative
-            // if above the range, add the count and let the next model handle it
-            int modelIndexes = modifierModel.getTintIndexes();
-            if (localIndex + modelIndexes > index) {
-              return modifierModel.getTint(tool, entry, index - localIndex);
+          ModifierId id = entry.getId();
+          int firstIndex = FirstModifier.indexOf(overrides.firstModifiers, id);
+          if (firstIndex != -1) {
+            firsts[firstIndex] = entry;
+          } else {
+            // colors are assumed to not be sensitive to the model's large status
+            IBakedModifierModel modifierModel = overrides.modifierModels.get(entry.getId());
+            if (modifierModel != null) {
+              // indexes from [0,modelIndexes) are passed to this model
+              // if below the range, make the index model relative
+              // if above the range, add the count and let the next model handle it
+              int modelIndexes = modifierModel.getTintIndexes();
+              if (localIndex + modelIndexes > index) {
+                return modifierModel.getTint(tool, entry, index - localIndex);
+              }
+              localIndex += modelIndexes;
             }
-            localIndex += modelIndexes;
+          }
+        }
+        // first, add the first modifier tints
+        for (int i = firsts.length - 1; i >= 0; i--) {
+          ModifierEntry entry = firsts[i];
+          FirstModifier first = overrides.firstModifiers.get(i);
+          if (entry != null || first.forced) {
+            IBakedModifierModel model = overrides.modifierModels.get(first.id);
+            if (model != null) {
+              int modelIndexes = model.getTintIndexes();
+              if (localIndex + modelIndexes > index) {
+                return model.getTint(tool, Objects.requireNonNullElse(entry, ModifierEntry.EMPTY), index - localIndex);
+              }
+              localIndex += modelIndexes;
+            }
           }
         }
       }
@@ -155,10 +181,7 @@ public class ToolModel implements IUnbakedGeometry<ToolModel> {
       }
     }
     // modifiers first
-    List<ModifierId> firstModifiers = Collections.emptyList();
-    if (json.has("first_modifiers")) {
-      firstModifiers = JsonHelper.parseList(json, "first_modifiers", ModifierId.PARSER::convert);
-    }
+    List<FirstModifier> firstModifiers = FirstModifier.LOADABLE.getOrDefault(json, "first_modifiers", List.of());
     return new ToolModel(parts, isLarge, offset, smallModifierRoots, largeModifierRoots, firstModifiers);
   }
 
@@ -173,11 +196,11 @@ public class ToolModel implements IUnbakedGeometry<ToolModel> {
   /** Location to fetch modifier textures for large variant */
   private final List<ResourceLocation> largeModifierRoots;
   /** Modifiers that show first on tools, bypassing normal sort order */
-  private final List<ModifierId> firstModifiers;
+  private final List<FirstModifier> firstModifiers;
   /** Models for the relevant modifiers */
   private Map<ModifierId,IBakedModifierModel> modifierModels = Collections.emptyMap();
 
-  public ToolModel(List<ToolPart> parts, boolean isLarge, Vec2 offset, List<ResourceLocation> smallModifierRoots, List<ResourceLocation> largeModifierRoots, List<ModifierId> firstModifiers) {
+  public ToolModel(List<ToolPart> parts, boolean isLarge, Vec2 offset, List<ResourceLocation> smallModifierRoots, List<ResourceLocation> largeModifierRoots, List<FirstModifier> firstModifiers) {
     this.toolParts = parts;
     this.isLarge = isLarge;
     this.offset = offset;
@@ -225,46 +248,66 @@ public class ToolModel implements IUnbakedGeometry<ToolModel> {
    * @param transforms      Transforms to apply
    * @param isLarge         If true, the quads are for a large tool
    */
-  private static void addModifierQuads(Function<Material, TextureAtlasSprite> spriteGetter, Map<ModifierId,IBakedModifierModel> modifierModels, List<ModifierId> firstModifiers, IToolStackView tool, Consumer<Collection<BakedQuad>> quadConsumer, @Nullable ItemLayerPixels pixels, Transformation transforms, boolean isLarge) {
+  private static void addModifierQuads(Function<Material, TextureAtlasSprite> spriteGetter, Map<ModifierId,IBakedModifierModel> modifierModels, List<FirstModifier> firstModifiers, IToolStackView tool, Consumer<Collection<BakedQuad>> quadConsumer, @Nullable ItemLayerPixels pixels, Transformation transforms, boolean isLarge) {
     if (!modifierModels.isEmpty()) {
       // keep a running tint index so models know where they should start, currently starts at 0 as the main model does not use tint indexes
       int modelIndex = 0;
       // reversed order to ensure the pixels is updated correctly
       List<ModifierEntry> modifiers = tool.getUpgrades().getModifiers();
+      // keep track of the entry for each first modifier, as that may impact how it renders
+      ModifierEntry[] firsts = new ModifierEntry[firstModifiers.size()];
       if (!modifiers.isEmpty()) {
         // last, add all regular modifiers
-        FirstModifier[] firsts = new FirstModifier[firstModifiers.size()];
         Set<ModifierId> hidden = ModifierSetWorktableRecipe.getModifierSet(tool.getPersistentData(), TConstruct.getResource("invisible_modifiers"));
         for (int i = modifiers.size() - 1; i >= 0; i--) {
           ModifierEntry entry = modifiers.get(i);
           ModifierId modifier = entry.getModifier().getId();
-          if (!hidden.contains(modifier)) {
+          int index = FirstModifier.indexOf(firstModifiers, modifier);
+          if (index != -1) {
+            // handle first modifiers later
+            firsts[index] = entry;
+          } else if (!hidden.contains(modifier)) {
             IBakedModifierModel model = modifierModels.get(modifier);
             if (model != null) {
               // if the modifier is in the list, delay adding its quads, but keep the expected tint index
-              int index = firstModifiers.indexOf(modifier);
-              if (index == -1) {
-                model.addQuads(tool, entry, spriteGetter, transforms, isLarge, modelIndex, quadConsumer, pixels);
-              } else {
-                firsts[index] = new FirstModifier(entry, model, modelIndex);
-              }
+              model.addQuads(tool, entry, spriteGetter, transforms, isLarge, modelIndex, quadConsumer, pixels);
               modelIndex += model.getTintIndexes();
             }
           }
         }
-        // first, add the first modifiers
-        for (int i = firsts.length - 1; i >= 0; i--) {
-          FirstModifier first = firsts[i];
-          if (first != null) {
-            first.model.addQuads(tool, first.entry, spriteGetter, transforms, isLarge, first.modelIndex, quadConsumer, pixels);
+      }
+      // first, add the first modifiers
+      for (int i = firsts.length - 1; i >= 0; i--) {
+        ModifierEntry entry = firsts[i];
+        FirstModifier first = firstModifiers.get(i);
+        if (entry != null || first.forced) {
+          IBakedModifierModel model = modifierModels.get(first.id);
+          if (model != null) {
+            model.addQuads(tool, Objects.requireNonNullElse(entry, ModifierEntry.EMPTY), spriteGetter, transforms, isLarge, modelIndex, quadConsumer, pixels);
+            modelIndex += model.getTintIndexes();
           }
         }
       }
     }
   }
 
-  /** Record for a first modifier in the model */
-  private record FirstModifier(ModifierEntry entry, IBakedModifierModel model, int modelIndex) {}
+  /** Modifier that may be forced */
+  private record FirstModifier(ModifierId id, boolean forced) {
+    private static final Loadable<List<FirstModifier>> LOADABLE = CompactLoadable.of(
+      RecordLoadable.create(ModifierId.PARSER.requiredField("name", FirstModifier::id), BooleanLoadable.INSTANCE.defaultField("forced", false, false, FirstModifier::forced), FirstModifier::new),
+      ModifierId.PARSER.flatXmap(id -> new FirstModifier(id, false), FirstModifier::id),
+      f -> !f.forced).list(0);
+
+    /** Gets the index of a modifier in the list */
+    public static int indexOf(List<FirstModifier> list, ModifierId id) {
+      for (int i = 0; i < list.size(); i++) {
+        if (list.get(i).id.equals(id)) {
+          return i;
+        }
+      }
+      return -1;
+    }
+  }
 
   /** Makes a model builder for the given context and overrides */
   private static IModelBuilder<?> makeModelBuilder(IGeometryBakingContext context, ItemOverrides overrides, TextureAtlasSprite particle) {
@@ -284,7 +327,7 @@ public class ToolModel implements IUnbakedGeometry<ToolModel> {
    * @return  Baked model
    */
   private static BakedModel bakeInternal(IGeometryBakingContext owner, Function<Material, TextureAtlasSprite> spriteGetter, @Nullable Transformation largeTransforms,
-                                         List<ToolPart> parts, Map<ModifierId,IBakedModifierModel> modifierModels, List<ModifierId> firstModifiers,
+                                         List<ToolPart> parts, Map<ModifierId,IBakedModifierModel> modifierModels, List<FirstModifier> firstModifiers,
                                          List<MaterialVariantId> materials, @Nullable IToolStackView tool, ItemOverrides overrides) {
     Transformation smallTransforms = Transformation.identity();
 
@@ -441,29 +484,19 @@ public class ToolModel implements IUnbakedGeometry<ToolModel> {
     // parameters needed for rebaking
     private final IGeometryBakingContext owner;
     private final List<ToolPart> toolParts;
-    private final List<ModifierId> firstModifiers;
+    private final List<FirstModifier> firstModifiers;
     @Nullable
     private final Transformation largeTransforms;
     private final Map<ModifierId,IBakedModifierModel> modifierModels;
     private final ItemOverrides nested;
 
-    private MaterialOverrideHandler(IGeometryBakingContext owner, List<ToolPart> toolParts, List<ModifierId> firstModifiers, @Nullable Transformation largeTransforms, Map<ModifierId,IBakedModifierModel> modifierModels, ItemOverrides nested) {
+    private MaterialOverrideHandler(IGeometryBakingContext owner, List<ToolPart> toolParts, List<FirstModifier> firstModifiers, @Nullable Transformation largeTransforms, Map<ModifierId,IBakedModifierModel> modifierModels, ItemOverrides nested) {
       this.owner = owner;
       this.toolParts = toolParts;
       this.firstModifiers = firstModifiers;
       this.largeTransforms = largeTransforms;
       this.modifierModels = modifierModels;
       this.nested = nested;
-    }
-
-    /**
-     * Gets the modifier model for this instance
-     * @param modifier  Modifier
-     * @return  Model for the modifier
-     */
-    @Nullable
-    public IBakedModifierModel getModifierModel(Modifier modifier) {
-      return modifierModels.get(modifier.getId());
     }
 
     /**
@@ -496,19 +529,44 @@ public class ToolModel implements IUnbakedGeometry<ToolModel> {
       IToolStackView tool = ToolStack.from(stack);
 
       // if nothing unique, render original
+      skip:
       if (materialIds.isEmpty() && tool.getUpgrades().isEmpty()) {
+        for (FirstModifier modifier : firstModifiers) {
+          if (modifier.forced) {
+            break skip;
+          }
+        }
         return originalModel;
       }
 
       // build the cache key for the modifiers, based on what the modifier requests
       // for many, it is just the modifier entry, but they can have more complex keys if needed
       ImmutableList.Builder<Object> builder = ImmutableList.builder();
+      Set<ModifierId> hidden = ModifierSetWorktableRecipe.getModifierSet(tool.getPersistentData(), TConstruct.getResource("invisible_modifiers"));
+      ModifierEntry[] firstEntries = new ModifierEntry[firstModifiers.size()];
       for (ModifierEntry entry : tool.getUpgrades().getModifiers()) {
-        Set<ModifierId> hidden = ModifierSetWorktableRecipe.getModifierSet(tool.getPersistentData(), TConstruct.getResource("invisible_modifiers"));
-        if (!hidden.contains(entry.getId())) {
-          IBakedModifierModel model = getModifierModel(entry.getModifier());
+        ModifierId id = entry.getId();
+        int index = FirstModifier.indexOf(firstModifiers, id);
+        if (index != -1) {
+          // handle all the first entries together, keeps their order consistent
+          firstEntries[index] = entry;
+        } else if (!hidden.contains(id)) {
+          IBakedModifierModel model = modifierModels.get(id);
           if (model != null) {
             Object cacheKey = model.getCacheKey(tool, entry);
+            if (cacheKey != null) {
+              builder.add(cacheKey);
+            }
+          }
+        }
+      }
+      for (int i = 0; i < firstModifiers.size(); i++) {
+        FirstModifier modifier = firstModifiers.get(i);
+        ModifierEntry entry = firstEntries[i];
+        if (entry != null || modifier.forced) {
+          IBakedModifierModel model = modifierModels.get(modifier.id);
+          if (model != null) {
+            Object cacheKey = model.getCacheKey(tool, Objects.requireNonNullElse(entry, ModifierEntry.EMPTY));
             if (cacheKey != null) {
               builder.add(cacheKey);
             }
