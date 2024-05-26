@@ -81,15 +81,6 @@
       "predicate_type": "mantle:set"
     },
     {
-      "type": "tconstruct:mining_speed_modifier",
-      "blocks": [
-        "minecraft:bamboo",
-        "minecraft:bamboo_sapling"
-      ],
-      "modifier": 100.0,
-      "predicate_type": "mantle:set"
-    },
-    {
       "type": "tconstruct:sweep_melee",
       "range": 1.0
     }

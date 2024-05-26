@@ -369,8 +369,7 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
 
     ToolModule[] swordHarvest = {
       IsEffectiveModule.tag(TinkerTags.Blocks.MINABLE_WITH_SWORD),
-      MiningSpeedModifierModule.blocks(7.5f, Blocks.COBWEB),
-      MiningSpeedModifierModule.blocks(100f, Blocks.BAMBOO, Blocks.BAMBOO_SAPLING)
+      MiningSpeedModifierModule.blocks(7.5f, Blocks.COBWEB)
     };
     define(ToolDefinitions.SWORD)
       // parts
