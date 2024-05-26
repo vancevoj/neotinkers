@@ -36,6 +36,7 @@ import slimeknights.tconstruct.library.tools.definition.module.material.PartsMod
 import slimeknights.tconstruct.library.tools.definition.module.mining.IsEffectiveModule;
 import slimeknights.tconstruct.library.tools.definition.module.mining.MaxTierHarvestLogic;
 import slimeknights.tconstruct.library.tools.definition.module.mining.MiningSpeedModifierModule;
+import slimeknights.tconstruct.library.tools.definition.module.mining.OneClickBreakModule;
 import slimeknights.tconstruct.library.tools.definition.module.weapon.CircleWeaponAttack;
 import slimeknights.tconstruct.library.tools.definition.module.weapon.ParticleWeaponAttack;
 import slimeknights.tconstruct.library.tools.definition.module.weapon.SweepWeaponAttack;

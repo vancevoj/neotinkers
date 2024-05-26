@@ -67,6 +67,7 @@ import slimeknights.tconstruct.library.tools.definition.module.material.PartsMod
 import slimeknights.tconstruct.library.tools.definition.module.mining.IsEffectiveModule;
 import slimeknights.tconstruct.library.tools.definition.module.mining.MaxTierHarvestLogic;
 import slimeknights.tconstruct.library.tools.definition.module.mining.MiningSpeedModifierModule;
+import slimeknights.tconstruct.library.tools.definition.module.mining.OneClickBreakModule;
 import slimeknights.tconstruct.library.tools.definition.module.weapon.CircleWeaponAttack;
 import slimeknights.tconstruct.library.tools.definition.module.weapon.ParticleWeaponAttack;
 import slimeknights.tconstruct.library.tools.definition.module.weapon.SweepWeaponAttack;
@@ -215,6 +216,7 @@ public final class TinkerTools extends TinkerModule {
       ToolModule.LOADER.register(getResource("is_effective"), IsEffectiveModule.LOADER);
       ToolModule.LOADER.register(getResource("mining_speed_modifier"), MiningSpeedModifierModule.LOADER);
       ToolModule.LOADER.register(getResource("max_tier"), MaxTierHarvestLogic.LOADER);
+      ToolModule.LOADER.register(getResource("one_click_break"), OneClickBreakModule.LOADER);
       // material
       ToolModule.LOADER.register(getResource("material_stats"), MaterialStatsModule.LOADER);
       ToolModule.LOADER.register(getResource("part_stats"), PartStatsModule.LOADER);

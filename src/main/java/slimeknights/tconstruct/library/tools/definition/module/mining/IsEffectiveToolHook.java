@@ -1,7 +1,6 @@
 package slimeknights.tconstruct.library.tools.definition.module.mining;
 
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.TierSortingRegistry;
 import slimeknights.tconstruct.library.tools.definition.module.ToolHooks;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 
@@ -12,6 +11,6 @@ public interface IsEffectiveToolHook {
 
   /** Checks if this tool is effective against the given block considering mining tiers */
   static boolean isEffective(IToolStackView tool, BlockState state) {
-    return !tool.isBroken() && tool.getHook(ToolHooks.IS_EFFECTIVE).isToolEffective(tool, state) && TierSortingRegistry.isCorrectTierForDrops(MiningTierToolHook.getTier(tool), state);
+    return !tool.isBroken() && tool.getHook(ToolHooks.IS_EFFECTIVE).isToolEffective(tool, state);
   }
 }
