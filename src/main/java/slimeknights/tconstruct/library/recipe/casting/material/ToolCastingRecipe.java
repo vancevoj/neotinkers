@@ -17,12 +17,17 @@ import slimeknights.tconstruct.library.materials.MaterialRegistry;
 import slimeknights.tconstruct.library.materials.definition.MaterialVariant;
 import slimeknights.tconstruct.library.materials.definition.MaterialVariantId;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
+import slimeknights.tconstruct.library.modifiers.ModifierEntry;
+import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.recipe.casting.DisplayCastingRecipe;
 import slimeknights.tconstruct.library.recipe.casting.ICastingContainer;
 import slimeknights.tconstruct.library.recipe.casting.ICastingRecipe;
 import slimeknights.tconstruct.library.recipe.casting.IDisplayableCastingRecipe;
+import slimeknights.tconstruct.library.recipe.material.MaterialRecipe;
+import slimeknights.tconstruct.library.tools.definition.module.material.MaterialRepairModule;
 import slimeknights.tconstruct.library.tools.definition.module.material.ToolMaterialHook;
 import slimeknights.tconstruct.library.tools.helper.ToolBuildHandler;
+import slimeknights.tconstruct.library.tools.helper.ToolDamageUtil;
 import slimeknights.tconstruct.library.tools.item.IModifiable;
 import slimeknights.tconstruct.library.tools.nbt.MaterialIdNBT;
 import slimeknights.tconstruct.library.tools.nbt.MaterialNBT;
@@ -113,18 +118,38 @@ public class ToolCastingRecipe extends AbstractMaterialCastingRecipe implements 
 
   @Override
   public ItemStack assemble(ICastingContainer inv) {
-    MaterialVariant material = getFluidRecipe(inv).getOutput();
+    MaterialFluidRecipe fluidRecipe = getFluidRecipe(inv);
+    MaterialVariant material = fluidRecipe.getOutput();
     ItemStack cast = inv.getStack();
-    int requirements = ToolMaterialHook.stats(result.getToolDefinition()).size();
+    List<MaterialStatsId> stats = ToolMaterialHook.stats(result.getToolDefinition());
     // if the cast is the result, we are part swapping, replace the last material
     if (cast.getItem() == result) {
       ToolStack tool = ToolStack.from(cast);
-      tool.replaceMaterial(requirements - 1, material.getVariant());
+      int replaceIndex = stats.size() - 1;
+      tool.replaceMaterial(replaceIndex, material.getVariant());
+      // don't repair if its a composite recipe, since those are not paying the proper repair cost
+      if (fluidRecipe.getInput() == null) {
+        // if its a new material, repair with the head stat
+        // with the tools we have this will always be a full repair, but addon usage of this recipe may vary
+        float repairDurability = MaterialRepairModule.getDurability(null, material.getId(), stats.get(replaceIndex));
+        if (repairDurability > 0 && tool.getDamage() > 0) {
+          repairDurability *= itemCost / MaterialRecipe.INGOTS_PER_REPAIR;
+          for (ModifierEntry entry : tool.getModifierList()) {
+            repairDurability = entry.getHook(ModifierHooks.REPAIR_FACTOR).getRepairFactor(tool, entry, repairDurability);
+            if (repairDurability <= 0) {
+              break;
+            }
+          }
+          if (repairDurability > 0) {
+            ToolDamageUtil.repair(tool, (int)repairDurability);
+          }
+        }
+      }
       return tool.createStack();
     } else {
       MaterialNBT materials;
       // if we have 2 materials, we assume the cast has a material. 1 means the cast is a random item
-      if (requirements == 2) {
+      if (stats.size() == 2) {
         materials = new MaterialNBT(List.of(MaterialVariant.of(IMaterialItem.getMaterialFromStack(cast)), material));
       } else {
         materials = new MaterialNBT(List.of(material));
