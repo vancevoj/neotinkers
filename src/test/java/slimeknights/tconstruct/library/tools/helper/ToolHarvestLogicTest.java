@@ -81,7 +81,7 @@ class ToolHarvestLogicTest extends ToolItemTest {
     ToolDefinition definition = new ToolDefinition(new ResourceLocation("test", "mining_tool"));
     definition.setData(ToolDefinitionDataBuilder
                          .builder()
-                         .module(new IsEffectiveModule(BlockPredicate.set(Blocks.COBBLESTONE)))
+                         .module(new IsEffectiveModule(BlockPredicate.set(Blocks.COBBLESTONE), true))
                          .module(PartStatsModule.parts()
                                                 .part(MaterialItemFixture.MATERIAL_ITEM_HEAD)
                                                 .part(MaterialItemFixture.MATERIAL_ITEM_HANDLE)

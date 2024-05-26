@@ -39,7 +39,8 @@
     {
       "type": "test:is_effective",
       "predicate_type": "mantle:set",
-      "blocks": ["minecraft:diamond_block"]
+      "blocks": ["minecraft:diamond_block"],
+      "ignore_tier": true
     },
     {
       "type": "test:circle",

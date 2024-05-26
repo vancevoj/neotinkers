@@ -50,6 +50,7 @@ public class MaterialRegistryExtension implements BeforeEachCallback, AfterAllCa
     // empty map as nothing using the extension uses traits
     materialRegistry = new MaterialRegistryFixture(materials, stats, defaultStats, Collections.emptyMap());
     MaterialRegistry.INSTANCE = new MaterialRegistry(materialRegistry);
+    MaterialRegistry.fullyLoaded = true;
   }
 
   @Override

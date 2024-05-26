@@ -23,7 +23,7 @@ public final class ToolDefinitionFixture {
                                                       .part(MaterialItemFixture.MATERIAL_ITEM_HANDLE)
                                                       .part(MaterialItemFixture.MATERIAL_ITEM_EXTRA).build())
                                .module(ToolActionsModule.of(ToolActions.PICKAXE_DIG))
-                               .module(new IsEffectiveModule(BlockPredicate.set(Blocks.STONE)))
+                               .module(new IsEffectiveModule(BlockPredicate.set(Blocks.STONE), true))
                                .smallToolStartingSlots()
                                .build());
   }

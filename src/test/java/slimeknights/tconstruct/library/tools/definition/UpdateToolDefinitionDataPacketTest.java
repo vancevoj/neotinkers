@@ -84,7 +84,7 @@ class UpdateToolDefinitionDataPacketTest extends BaseMcTest {
       .module(ToolTraitsModule.builder().trait(ModifierFixture.TEST_1, 10).build())
       .module(ToolActionsModule.of(ToolActions.AXE_DIG, ToolActions.SHOVEL_FLATTEN))
       // behavior
-      .module(new IsEffectiveModule(BlockPredicate.set(Blocks.GRANITE)))
+      .module(new IsEffectiveModule(BlockPredicate.set(Blocks.GRANITE), true))
       .module(new CircleAOEIterator(7, true))
       .module(new SweepWeaponAttack(4))
       .build();
