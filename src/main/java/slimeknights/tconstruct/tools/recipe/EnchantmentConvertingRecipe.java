@@ -127,10 +127,10 @@ public class EnchantmentConvertingRecipe extends AbstractWorktableRecipe {
       return getEnchantments(inv.getTinkerableStack()).entrySet().stream().map(entry -> {
         Modifier modifier = ModifierManager.INSTANCE.get(entry.getKey());
         if (modifier != null && modifierPredicate.matches(modifier.getId())) {
-          return new ModifierEntry(modifier, entry.getValue());
+          return new ModifierEntry(modifier, returnInput ? 1 : entry.getValue());
         }
         return null;
-      }).filter(Objects::nonNull).toList();
+      }).filter(Objects::nonNull).distinct().toList();
     }
     if (displayModifiers == null) {
       displayModifiers = ModifierRecipeLookup.getAllRecipeModifiers().filter(modifier -> modifierPredicate.matches(modifier.getId())).map(mod -> new ModifierEntry(mod, 1)).toList();
@@ -177,12 +177,23 @@ public class EnchantmentConvertingRecipe extends AbstractWorktableRecipe {
       ModifierId modifier = ModifierCrystalItem.getModifier(result.getStack());
       assert modifier != null;
       ItemStack current = inv.getTinkerableStack();
-      Map<Enchantment,Integer> enchantments = getEnchantments(current).entrySet().stream()
-                                                                      .filter(entry -> {
-                                                                        Modifier enchantmentModifier = ModifierManager.INSTANCE.get(entry.getKey());
-                                                                        return enchantmentModifier == null || !enchantmentModifier.getId().equals(modifier);
-                                                                      })
-                                                                      .collect(Collectors.toMap(Entry::getKey, Entry::getValue));
+      // returnInput drops just 1 level of the enchantment
+      // worth noting, its possible multiple match, if thats the case we just extract the first we find
+      Map<Enchantment,Integer> enchantments = getEnchantments(current);
+      for (Entry<Enchantment,Integer> entry : enchantments.entrySet()) {
+        Enchantment enchantment = entry.getKey();
+        Modifier enchantmentModifier = ModifierManager.INSTANCE.get(enchantment);
+        if (enchantmentModifier != null && enchantmentModifier.getId().equals(modifier)) {
+          int newLevel = entry.getValue() - 1;
+          if (newLevel <= 0) {
+            enchantments.remove(enchantment);
+          } else {
+            enchantments.put(enchantment, newLevel);
+          }
+          break;
+        }
+      }
+
       ItemStack unenchanted;
       if (matchBook && enchantments.isEmpty()) {
         unenchanted = new ItemStack(Items.BOOK);
