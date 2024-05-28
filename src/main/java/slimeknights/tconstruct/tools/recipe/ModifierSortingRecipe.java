@@ -14,7 +14,7 @@ import slimeknights.tconstruct.library.recipe.ITinkerableContainer;
 import slimeknights.tconstruct.library.recipe.RecipeResult;
 import slimeknights.tconstruct.library.recipe.modifiers.adding.ModifierRecipe;
 import slimeknights.tconstruct.library.recipe.worktable.AbstractWorktableRecipe;
-import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
+import slimeknights.tconstruct.library.tools.nbt.LazyToolStack;
 import slimeknights.tconstruct.library.tools.nbt.ModifierNBT;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.tools.TinkerModifiers;
@@ -59,7 +59,7 @@ public class ModifierSortingRecipe extends AbstractWorktableRecipe {
   }
 
   @Override
-  public RecipeResult<ToolStack> getResult(ITinkerableContainer inv, ModifierEntry modifier) {
+  public RecipeResult<LazyToolStack> getResult(ITinkerableContainer inv, ModifierEntry modifier) {
     ToolStack tool = inv.getTinkerable();
 
     // find the modifier to remove
@@ -79,16 +79,11 @@ public class ModifierSortingRecipe extends AbstractWorktableRecipe {
     tool.setUpgrades(new ModifierNBT(newUpgrades));
 
     // no need to validate, its the same modifiers
-    return RecipeResult.success(tool);
+    return RecipeResult.success(LazyToolStack.from(tool, inv.getTinkerableSize()));
   }
 
   @Override
-  public int toolResultSize() {
-    return 64;
-  }
-
-  @Override
-  public void updateInputs(IToolStackView result, ITinkerableContainer.Mutable inv, ModifierEntry selected, boolean isServer) {
+  public void updateInputs(LazyToolStack result, ITinkerableContainer.Mutable inv, ModifierEntry selected, boolean isServer) {
     // input is not consumed
   }
 

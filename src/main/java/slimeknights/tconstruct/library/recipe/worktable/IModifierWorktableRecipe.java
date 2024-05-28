@@ -10,9 +10,7 @@ import slimeknights.tconstruct.library.recipe.ITinkerableContainer;
 import slimeknights.tconstruct.library.recipe.RecipeResult;
 import slimeknights.tconstruct.library.recipe.TinkerRecipeTypes;
 import slimeknights.tconstruct.library.recipe.tinkerstation.IMutableTinkerStationContainer;
-import slimeknights.tconstruct.library.recipe.tinkerstation.ITinkerStationRecipe;
-import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
-import slimeknights.tconstruct.library.tools.nbt.ToolStack;
+import slimeknights.tconstruct.library.tools.nbt.LazyToolStack;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -53,16 +51,10 @@ public interface IModifierWorktableRecipe extends ICommonRecipe<ITinkerableConta
    * @return Tool stack result. Can be the same instance as previousResult or a new instance.
    *         Should never share NBT with {@link ITinkerableContainer#getTinkerable()}, needs to be a copy.
    */
-  RecipeResult<ToolStack> getResult(ITinkerableContainer inv, ModifierEntry modifier);
+  RecipeResult<LazyToolStack> getResult(ITinkerableContainer inv, ModifierEntry modifier);
 
-  /** Gets the number to shrink the tool slot by and the size of the output, perfectly valid for this to be higher than the contained number of tools */
-  default int toolResultSize() {
-    return ITinkerStationRecipe.DEFAULT_TOOL_STACK_SIZE;
-  }
-  
-  /** Recipe sensitive result size */
-  default int toolResultSize(ITinkerableContainer inv, ModifierEntry selected) {
-    return Math.min(inv.getTinkerableStack().getCount(), toolResultSize());
+  default int shrinkToolSlotBy(LazyToolStack result) {
+    return result.getSize();
   }
 
   /**
@@ -71,7 +63,7 @@ public interface IModifierWorktableRecipe extends ICommonRecipe<ITinkerableConta
    * @param inv       Inventory instance to modify inputs
    * @param isServer  If true, this is on the serverside. Use to handle randomness, {@link IMutableTinkerStationContainer#giveItem(ItemStack)} should handle being called serverside only
    */
-  default void updateInputs(IToolStackView result, ITinkerableContainer.Mutable inv, ModifierEntry selected, boolean isServer) {
+  default void updateInputs(LazyToolStack result, ITinkerableContainer.Mutable inv, ModifierEntry selected, boolean isServer) {
     // shrink all stacks by 1
     for (int index = 0; index < inv.getInputCount(); index++) {
       inv.shrinkInput(index, 1);

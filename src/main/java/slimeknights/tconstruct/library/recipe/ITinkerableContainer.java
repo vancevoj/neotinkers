@@ -19,6 +19,11 @@ public interface ITinkerableContainer extends IRecipeContainer {
     return ToolStack.from(getTinkerableStack());
   }
 
+  /** Gets the size of the tinkerable stack, common operation */
+  default int getTinkerableSize() {
+    return getTinkerableStack().getCount();
+  }
+
   /**
    * Gets the stack in the given input slot
    * @param index  Slot index

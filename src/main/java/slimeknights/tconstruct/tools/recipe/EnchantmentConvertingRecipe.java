@@ -29,8 +29,7 @@ import slimeknights.tconstruct.library.recipe.RecipeResult;
 import slimeknights.tconstruct.library.recipe.modifiers.ModifierRecipeLookup;
 import slimeknights.tconstruct.library.recipe.modifiers.adding.ModifierRecipe;
 import slimeknights.tconstruct.library.recipe.worktable.AbstractWorktableRecipe;
-import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
-import slimeknights.tconstruct.library.tools.nbt.ToolStack;
+import slimeknights.tconstruct.library.tools.nbt.LazyToolStack;
 import slimeknights.tconstruct.tools.TinkerModifiers;
 import slimeknights.tconstruct.tools.item.ModifierCrystalItem;
 
@@ -140,7 +139,7 @@ public class EnchantmentConvertingRecipe extends AbstractWorktableRecipe {
   }
 
   @Override
-  public RecipeResult<ToolStack> getResult(ITinkerableContainer inv, ModifierEntry modifier) {
+  public RecipeResult<LazyToolStack> getResult(ITinkerableContainer inv, ModifierEntry modifier) {
     // first, ensure we have enough items for counts above 1
     int level = modifier.getLevel();
     if (level > 1) {
@@ -159,24 +158,23 @@ public class EnchantmentConvertingRecipe extends AbstractWorktableRecipe {
         return TOO_FEW;
       }
     }
-    // TODO 1.19: this is a pretty big hack, converting it into a tool stack when its an item stack. Consider whether we should use item stack output for 1.19
-    return RecipeResult.success(ToolStack.from(ModifierCrystalItem.withModifier(modifier.getId())));
+    return RecipeResult.success(LazyToolStack.from(ModifierCrystalItem.withModifier(modifier.getId(), level)));
   }
 
   @Override
-  public int toolResultSize(ITinkerableContainer inv, ModifierEntry selected) {
-    return selected.getLevel();
+  public int shrinkToolSlotBy(LazyToolStack result) {
+    return 1;
   }
 
   @Override
-  public void updateInputs(IToolStackView result, ITinkerableContainer.Mutable inv, ModifierEntry selected, boolean isServer) {
+  public void updateInputs(LazyToolStack result, ITinkerableContainer.Mutable inv, ModifierEntry selected, boolean isServer) {
     // consume inputs once per selected item
     for (int i = 0; i < selected.getLevel(); i++) {
       ModifierRecipe.updateInputs(inv, inputs);
     }
     // give back unenchanted item if requested
     if (returnInput && isServer) {
-      ModifierId modifier = ModifierCrystalItem.getModifier(((ToolStack)result).createStack());
+      ModifierId modifier = ModifierCrystalItem.getModifier(result.getStack());
       assert modifier != null;
       ItemStack current = inv.getTinkerableStack();
       Map<Enchantment,Integer> enchantments = getEnchantments(current).entrySet().stream()

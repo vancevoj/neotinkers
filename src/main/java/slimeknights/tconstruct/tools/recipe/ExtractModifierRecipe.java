@@ -14,6 +14,7 @@ import slimeknights.tconstruct.library.modifiers.ModifierId;
 import slimeknights.tconstruct.library.recipe.ITinkerableContainer;
 import slimeknights.tconstruct.library.recipe.ITinkerableContainer.Mutable;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
+import slimeknights.tconstruct.library.tools.nbt.LazyToolStack;
 import slimeknights.tconstruct.tools.TinkerModifiers;
 import slimeknights.tconstruct.tools.item.ModifierCrystalItem;
 
@@ -60,7 +61,7 @@ public class ExtractModifierRecipe extends ModifierRemovalRecipe {
   }
 
   @Override
-  public void updateInputs(IToolStackView result, Mutable inv, ModifierEntry selected, boolean isServer) {
+  public void updateInputs(LazyToolStack result, Mutable inv, ModifierEntry selected, boolean isServer) {
     super.updateInputs(result, inv, selected, isServer);
     if (isServer) {
       // just 1 crystal in this version as just 1 level was removed

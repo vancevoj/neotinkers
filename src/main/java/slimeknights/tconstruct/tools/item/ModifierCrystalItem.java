@@ -73,10 +73,15 @@ public class ModifierCrystalItem extends Item {
   /* Helpers */
 
   /** Creates a stack with the given modifier */
-  public static ItemStack withModifier(ModifierId modifier) {
-    ItemStack stack = new ItemStack(TinkerModifiers.modifierCrystal.get());
+  public static ItemStack withModifier(ModifierId modifier, int count) {
+    ItemStack stack = new ItemStack(TinkerModifiers.modifierCrystal.get(), count);
     stack.getOrCreateTag().putString(TAG_MODIFIER, modifier.toString());
     return stack;
+  }
+
+  /** Creates a stack with the given modifier */
+  public static ItemStack withModifier(ModifierId modifier) {
+    return withModifier(modifier, 1);
   }
 
   /** Gets the modifier stored on this stack */

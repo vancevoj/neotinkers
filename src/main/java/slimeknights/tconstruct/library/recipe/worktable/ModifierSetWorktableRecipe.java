@@ -24,6 +24,7 @@ import slimeknights.tconstruct.library.recipe.RecipeResult;
 import slimeknights.tconstruct.library.recipe.modifiers.ModifierRecipeLookup;
 import slimeknights.tconstruct.library.tools.nbt.IModDataView;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
+import slimeknights.tconstruct.library.tools.nbt.LazyToolStack;
 import slimeknights.tconstruct.library.tools.nbt.ModDataNBT;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.library.utils.Util;
@@ -115,7 +116,7 @@ public class ModifierSetWorktableRecipe extends AbstractWorktableRecipe {
   }
 
   @Override
-  public RecipeResult<ToolStack> getResult(ITinkerableContainer inv, ModifierEntry modifier) {
+  public RecipeResult<LazyToolStack> getResult(ITinkerableContainer inv, ModifierEntry modifier) {
     ToolStack tool = inv.getTinkerable().copy();
     ModDataNBT persistentData = tool.getPersistentData();
     ListTag tagList;
@@ -139,7 +140,7 @@ public class ModifierSetWorktableRecipe extends AbstractWorktableRecipe {
     if (!found && addToSet) {
       tagList.add(StringTag.valueOf(value));
     }
-    return RecipeResult.success(tool);
+    return RecipeResult.success(LazyToolStack.from(tool, inv.getTinkerableSize()));
   }
 
   @Override

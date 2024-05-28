@@ -16,7 +16,7 @@ import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.recipe.RecipeResult;
 import slimeknights.tconstruct.library.recipe.TinkerRecipeTypes;
 import slimeknights.tconstruct.library.recipe.worktable.IModifierWorktableRecipe;
-import slimeknights.tconstruct.library.tools.nbt.ToolStack;
+import slimeknights.tconstruct.library.tools.nbt.LazyToolStack;
 import slimeknights.tconstruct.shared.inventory.ConfigurableInvWrapperCapability;
 import slimeknights.tconstruct.tables.TinkerTables;
 import slimeknights.tconstruct.tables.block.entity.inventory.LazyResultContainer;
@@ -60,7 +60,7 @@ public class ModifierWorktableBlockEntity extends RetexturedTableBlockEntity imp
 
   /** Current result, may be modified again later */
   @Nullable @Getter
-  private ToolStack result = null;
+  private LazyToolStack result = null;
   /** Current message displayed on the screen */
   @Getter
   private Component currentMessage = Component.empty();
@@ -88,7 +88,7 @@ public class ModifierWorktableBlockEntity extends RetexturedTableBlockEntity imp
 
         // last recipe must be nonnull for list to be non-empty
         assert lastRecipe != null;
-        RecipeResult<ToolStack> recipeResult = lastRecipe.getResult(inventoryWrapper, entry);
+        RecipeResult<LazyToolStack> recipeResult = lastRecipe.getResult(inventoryWrapper, entry);
         if (recipeResult.isSuccess()) {
           result = recipeResult.getResult();
           currentMessage = Component.empty();
@@ -194,7 +194,7 @@ public class ModifierWorktableBlockEntity extends RetexturedTableBlockEntity imp
     if (selectedModifierIndex != -1) {
       IModifierWorktableRecipe recipe = getCurrentRecipe();
       if (recipe != null && result != null) {
-        return result.createStack(recipe.toolResultSize(inventoryWrapper, getCurrentButtons().get(selectedModifierIndex)));
+        return result.getStack();
       }
     }
     return ItemStack.EMPTY;
@@ -203,6 +203,7 @@ public class ModifierWorktableBlockEntity extends RetexturedTableBlockEntity imp
   @Override
   public void onCraft(Player player, ItemStack resultItem, int amount) {
     // the recipe should match if we got this far, but being null is a problem
+    LazyToolStack result = this.result;  // result is going to get cleared as we update things
     if (amount == 0 || this.level == null || lastRecipe == null || result == null) {
       return;
     }
@@ -220,7 +221,7 @@ public class ModifierWorktableBlockEntity extends RetexturedTableBlockEntity imp
 
     ItemStack tinkerable = this.getItem(TINKER_SLOT);
     if (!tinkerable.isEmpty()) {
-      int shrinkToolSlot = lastRecipe.toolResultSize();
+      int shrinkToolSlot = lastRecipe.shrinkToolSlotBy(result);
       if (tinkerable.getCount() <= shrinkToolSlot) {
         this.setItem(TINKER_SLOT, ItemStack.EMPTY);
       } else {

@@ -20,6 +20,7 @@ import slimeknights.tconstruct.library.modifiers.ModifierId;
 import slimeknights.tconstruct.library.modifiers.ModifierManager;
 import slimeknights.tconstruct.library.recipe.partbuilder.Pattern;
 import slimeknights.tconstruct.library.recipe.worktable.IModifierWorktableRecipe;
+import slimeknights.tconstruct.library.tools.nbt.LazyToolStack;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.tables.block.entity.table.ModifierWorktableBlockEntity;
 import slimeknights.tconstruct.tables.client.inventory.module.InfoPanelScreen;
@@ -189,14 +190,15 @@ public class ModifierWorktableScreen extends BaseTabbedScreen<ModifierWorktableB
         return;
       }
 
-      ToolStack result = tile.getResult();
-      if (result == null) {
+      LazyToolStack lazyResult = tile.getResult();
+      if (lazyResult == null) {
         message(TABLE_INFO);
         return;
       }
 
       // reuse logic from tinker station for final result
-      ItemStack resultStack = getMenu().getOutputSlot().getItem();
+      ToolStack result = lazyResult.getTool();
+      ItemStack resultStack = lazyResult.getStack();
       TinkerStationScreen.updateToolPanel(tinkerInfo, result, resultStack);
 
       this.modifierInfo.setCaption(Component.empty());

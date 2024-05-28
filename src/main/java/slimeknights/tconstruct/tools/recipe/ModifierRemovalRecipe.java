@@ -29,6 +29,7 @@ import slimeknights.tconstruct.library.recipe.modifiers.adding.ModifierRecipe;
 import slimeknights.tconstruct.library.recipe.worktable.AbstractWorktableRecipe;
 import slimeknights.tconstruct.library.tools.item.IModifiableDisplay;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
+import slimeknights.tconstruct.library.tools.nbt.LazyToolStack;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.tools.TinkerModifiers;
 
@@ -111,13 +112,14 @@ public class ModifierRemovalRecipe extends AbstractWorktableRecipe {
   }
 
   @Override
-  public RecipeResult<ToolStack> getResult(ITinkerableContainer inv, ModifierEntry entry) {
+  public RecipeResult<LazyToolStack> getResult(ITinkerableContainer inv, ModifierEntry entry) {
     ToolStack original = inv.getTinkerable();
 
     // salvage
     ToolStack tool = original.copy();
     ModifierId modifierId = entry.getId();
-    ModifierSalvage salvage = ModifierRecipeLookup.getSalvage(inv.getTinkerableStack(), tool, modifierId, entry.getLevel());
+    ItemStack originalStack = inv.getTinkerableStack();
+    ModifierSalvage salvage = ModifierRecipeLookup.getSalvage(originalStack, tool, modifierId, entry.getLevel());
 
     // restore the slots
     if (salvage != null) {
@@ -144,16 +146,11 @@ public class ModifierRemovalRecipe extends AbstractWorktableRecipe {
       return RecipeResult.failure(error);
     }
     // successfully removed
-    return RecipeResult.success(tool);
+    return RecipeResult.success(LazyToolStack.from(tool, originalStack.getCount()));
   }
 
   @Override
-  public int toolResultSize() {
-    return 64;
-  }
-
-  @Override
-  public void updateInputs(IToolStackView result, ITinkerableContainer.Mutable inv, ModifierEntry selected, boolean isServer) {
+  public void updateInputs(LazyToolStack result, ITinkerableContainer.Mutable inv, ModifierEntry selected, boolean isServer) {
     super.updateInputs(result, inv, selected, isServer);
     if (isServer) {
       for (ItemStack stack : leftovers) {
