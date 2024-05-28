@@ -2821,9 +2821,9 @@
   "gui.tconstruct.modifier_worktable.info": "Add a tool and the proper items to tune the tool's modifiers",
   "recipe.tconstruct.modifier_set_worktable.empty": "Tool has no applicable modifiers",
 
-  "recipe.tconstruct.remove_modifier.title": "Remove Modifiers",
+  "recipe.tconstruct.remove_modifier.modifiers": "Remove Modifiers",
   "recipe.tconstruct.remove_modifier.description": "Select a modifier to remove, slots will be returned but any item cost is lost. Fluid will be consumed from the input, and the container returned.",
-  "recipe.tconstruct.remove_modifier.no_modifiers": "Tool does not have any removable modifiers",
+  "recipe.tconstruct.remove_modifier.no_modifiers": "Tool does not have any modifiers removable by this recipe",
 
   "recipe.tconstruct.modifier_sorting.title": "Sort Modifiers",
   "recipe.tconstruct.modifier_sorting.description": "Select a modifier to swap its location with the next modifier in the list. Does not consume items to swap.",
@@ -2840,17 +2840,16 @@
   "recipe.tconstruct.attack_modifiers.removing.title": "Untoggle Interaction",
   "recipe.tconstruct.attack_modifiers.removing.description": "Switches an interaction modifier back to activating on interaction",
 
-  "recipe.tconstruct.extract_modifier.title": "Extract Modifier",
+  "recipe.tconstruct.extract_modifier.upgrades": "Extract Upgrade",
+  "recipe.tconstruct.extract_modifier.slotless": "Extract Slotless",
+  "recipe.tconstruct.extract_modifier.abilities": "Extract Ability",
+  "recipe.tconstruct.extract_modifier.defense": "Extract Defense",
+  "recipe.tconstruct.extract_modifier.modifiers": "Extract Modifier",
   "recipe.tconstruct.extract_modifier.description": "Select a modifier to extract onto a modifier crystal, slots will be returned but any item cost is lost.",
-  "recipe.tconstruct.extract_modifier.no_modifiers": "Tool does not have any extractable modifiers",
+  "recipe.tconstruct.extract_modifier.no_modifiers": "Tool does not have any modifiers extractable with this recipe",
 
-  "recipe.tconstruct.enchantment_converting.upgrades.title": "Extract Upgrade",
-  "recipe.tconstruct.enchantment_converting.slotless.title": "Extract Slotless",
-  "recipe.tconstruct.enchantment_converting.abilities.title": "Extract Ability",
-  "recipe.tconstruct.enchantment_converting.defense.title": "Extract Defense",
-  "recipe.tconstruct.enchantment_converting.modifiers.title": "Extract Modifier",
   "recipe.tconstruct.enchantment_converting.description.lost": "Select a modifier of the given type from the enchanted book to extract as a modifier crystal. The enchanted item will be lost.",
-  "recipe.tconstruct.enchantment_converting.description.keep": "Select a modifier of the given type from the enchanted book to extract as a modifier crystal. The item will be returned unenchanted.",
+  "recipe.tconstruct.enchantment_converting.description.keep": "Select a modifier of the given type from the enchanted book to extract as a modifier crystal. The item will be returned without that enchantment.",
   "recipe.tconstruct.enchantment_converting.no_enchantments": "Item does not have any applicable enchantments",
   "recipe.tconstruct.enchantment_converting.too_few": "Need to provide more inputs to convert an enchantment of a higher level",
 

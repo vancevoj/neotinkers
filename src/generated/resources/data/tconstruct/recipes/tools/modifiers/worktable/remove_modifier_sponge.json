@@ -8,6 +8,7 @@
   "leftovers": [
     "minecraft:sponge"
   ],
+  "name": "modifiers",
   "tools": {
     "tag": "tconstruct:modifiable"
   }

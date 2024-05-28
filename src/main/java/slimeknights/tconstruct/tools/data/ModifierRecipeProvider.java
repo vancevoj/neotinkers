@@ -1511,34 +1511,52 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                                                                  FluidContainerIngredient.fromIngredient(FluidIngredient.of(TinkerFluids.venom.getLocalTag(), FluidValues.BOTTLE),
                                                                                                          Ingredient.of(TinkerFluids.venomBottle))))
                                 .save(consumer, location(worktableFolder + "remove_modifier_venom"));
-    // non-dagger extracting
-    ModifierRemovalRecipeBuilder.extract()
-                                .setTools(DifferenceIngredient.of(Ingredient.of(TinkerTags.Items.MODIFIABLE), Ingredient.of(TinkerTags.Items.UNSALVAGABLE)))
-                                .addInput(TinkerWorld.enderGeode)
-                                .addInput(Items.DRAGON_BREATH, 5)
-                                .modifierPredicate(new TagModifierPredicate(TinkerTags.Modifiers.EXTRACT_MODIFIER_BLACKLIST).inverted())
-                                .save(consumer, location(worktableFolder + "extract_modifier_breath"));
-    ModifierRemovalRecipeBuilder.extract()
-                                .setTools(DifferenceIngredient.of(Ingredient.of(TinkerTags.Items.MODIFIABLE), Ingredient.of(TinkerTags.Items.UNSALVAGABLE)))
-                                .addInput(TinkerWorld.enderGeode)
-                                .addInput(Items.WET_SPONGE)
-                                .addLeftover(Items.SPONGE)
-                                .modifierPredicate(new TagModifierPredicate(TinkerTags.Modifiers.EXTRACT_MODIFIER_BLACKLIST).inverted())
-                                .save(consumer, location(worktableFolder + "extract_modifier_sponge"));
-    // dagger extracting
-    ModifierRemovalRecipeBuilder.extract()
-                                .setTools(SizedIngredient.fromItems(2, TinkerTools.dagger))
-                                .addInput(TinkerWorld.enderGeode)
-                                .addInput(Items.DRAGON_BREATH, 5)
-                                .modifierPredicate(new TagModifierPredicate(TinkerTags.Modifiers.EXTRACT_MODIFIER_BLACKLIST).inverted())
-                                .save(consumer, location(worktableFolder + "extract_dagger_modifier_breath"));
-    ModifierRemovalRecipeBuilder.extract()
-                                .setTools(SizedIngredient.fromItems(2, TinkerTools.dagger))
-                                .addInput(TinkerWorld.enderGeode)
-                                .addInput(Items.WET_SPONGE)
-                                .addLeftover(Items.SPONGE)
-                                .modifierPredicate(new TagModifierPredicate(TinkerTags.Modifiers.EXTRACT_MODIFIER_BLACKLIST).inverted())
-                                .save(consumer, location(worktableFolder + "extract_dagger_modifier_sponge"));
+    // modifier extracting: sponge + crystal
+    IJsonPredicate<ModifierId> extractBlacklist = new TagModifierPredicate(TinkerTags.Modifiers.EXTRACT_MODIFIER_BLACKLIST).inverted();
+    for (boolean dagger : new boolean[]{false, true}) {
+      String suffix = dagger ? "_dagger" : "";
+      SizedIngredient tools = dagger ? SizedIngredient.fromItems(2, TinkerTools.dagger) : SizedIngredient.of(DifferenceIngredient.of(Ingredient.of(TinkerTags.Items.MODIFIABLE), Ingredient.of(TinkerTags.Items.UNSALVAGABLE)));
+      ModifierRemovalRecipeBuilder.extract()
+                                  .setTools(tools)
+                                  .setName("slotless")
+                                  .addInput(Items.AMETHYST_SHARD)
+                                  .addInput(Items.WET_SPONGE)
+                                  .addLeftover(Items.SPONGE)
+                                  .modifierPredicate(ModifierPredicate.and(extractBlacklist, new SlotTypeModifierPredicate(null), new TagModifierPredicate(TinkerTags.Modifiers.EXTRACT_SLOTLESS_BLACKLIST).inverted()))
+                                  .save(consumer, location(worktableFolder + "extract/slotless" + suffix));
+      ModifierRemovalRecipeBuilder.extract()
+                                  .setTools(tools)
+                                  .slotName(SlotType.UPGRADE)
+                                  .addInput(TinkerWorld.skyGeode)
+                                  .addInput(Items.WET_SPONGE)
+                                  .addLeftover(Items.SPONGE)
+                                  .modifierPredicate(ModifierPredicate.and(extractBlacklist, new SlotTypeModifierPredicate(SlotType.UPGRADE)))
+                                  .save(consumer, location(worktableFolder + "extract/upgrade" + suffix));
+      ModifierRemovalRecipeBuilder.extract()
+                                  .setTools(tools)
+                                  .slotName(SlotType.DEFENSE)
+                                  .addInput(TinkerWorld.earthGeode)
+                                  .addInput(Items.WET_SPONGE)
+                                  .addLeftover(Items.SPONGE)
+                                  .modifierPredicate(ModifierPredicate.and(extractBlacklist, new SlotTypeModifierPredicate(SlotType.DEFENSE)))
+                                  .save(consumer, location(worktableFolder + "extract/defense" + suffix));
+      ModifierRemovalRecipeBuilder.extract()
+                                  .setTools(tools)
+                                  .slotName(SlotType.ABILITY)
+                                  .addInput(TinkerWorld.ichorGeode)
+                                  .addInput(Items.WET_SPONGE)
+                                  .addLeftover(Items.SPONGE)
+                                  .modifierPredicate(ModifierPredicate.and(extractBlacklist, new SlotTypeModifierPredicate(SlotType.ABILITY)))
+                                  .save(consumer, location(worktableFolder + "extract/ability" + suffix));
+      ModifierRemovalRecipeBuilder.extract()
+                                  .setTools(tools)
+                                  .addInput(TinkerWorld.enderGeode)
+                                  .addInput(Items.WET_SPONGE)
+                                  .addLeftover(Items.SPONGE)
+                                  .modifierPredicate(extractBlacklist)
+                                  .save(consumer, location(worktableFolder + "extract/modifier" + suffix));
+
+    }
     ModifierSortingRecipeBuilder.sorting()
                                 .addInput(Items.COMPASS)
                                 .save(consumer, location(worktableFolder + "modifier_sorting"));

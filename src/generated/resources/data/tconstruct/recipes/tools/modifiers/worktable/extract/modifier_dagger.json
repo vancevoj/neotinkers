@@ -5,15 +5,18 @@
       "item": "tconstruct:ender_slime_crystal"
     },
     {
-      "amount_needed": 5,
-      "item": "minecraft:dragon_breath"
+      "item": "minecraft:wet_sponge"
     }
+  ],
+  "leftovers": [
+    "minecraft:sponge"
   ],
   "modifier_predicate": {
     "type": "mantle:inverted",
     "inverted_type": "tconstruct:tag",
     "tag": "tconstruct:extract_blacklist/tools"
   },
+  "name": "modifiers",
   "tools": {
     "amount_needed": 2,
     "item": "tconstruct:dagger"

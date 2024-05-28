@@ -45,11 +45,10 @@ import java.util.stream.IntStream;
 
 /** Recipe for converting enchanted books into modifier crystals */
 public class EnchantmentConvertingRecipe extends AbstractWorktableRecipe {
-  private static final String BASE_KEY = TConstruct.makeTranslationKey("recipe", "enchantment_converting");
   private static final Component DESCRIPTION_LOST = TConstruct.makeTranslation("recipe", "enchantment_converting.description.lost");
   private static final Component DESCRIPTION_KEEP = TConstruct.makeTranslation("recipe", "enchantment_converting.description.keep");
   private static final Component NO_ENCHANTMENT = TConstruct.makeTranslation("recipe", "enchantment_converting.no_enchantments");
-  private static final RecipeResult<ToolStack> TOO_FEW = RecipeResult.failure(TConstruct.makeTranslationKey("recipe", "enchantment_converting.too_few"));
+  private static final RecipeResult<LazyToolStack> TOO_FEW = RecipeResult.failure(TConstruct.makeTranslationKey("recipe", "enchantment_converting.too_few"));
   /** Loader instance */
   public static final RecordLoadable<EnchantmentConvertingRecipe> LOADER = RecordLoadable.create(
     ContextKey.ID.requiredField(),
@@ -78,7 +77,7 @@ public class EnchantmentConvertingRecipe extends AbstractWorktableRecipe {
   public EnchantmentConvertingRecipe(ResourceLocation id, String name, List<SizedIngredient> inputs, boolean matchBook, boolean returnInput, IJsonPredicate<ModifierId> modifierPredicate) {
     super(id, inputs);
     this.name = name;
-    this.title = Component.translatable(BASE_KEY + "." + name + ".title");
+    this.title = Component.translatable(ModifierRemovalRecipe.BASE_KEY + "." + name);
     this.matchBook = matchBook;
     this.returnInput = returnInput;
     this.modifierPredicate = modifierPredicate;
@@ -177,19 +176,28 @@ public class EnchantmentConvertingRecipe extends AbstractWorktableRecipe {
     }
     // give back unenchanted item if requested
     if (returnInput && isServer) {
+      ModifierId modifier = ModifierCrystalItem.getModifier(((ToolStack)result).createStack());
+      assert modifier != null;
       ItemStack current = inv.getTinkerableStack();
+      Map<Enchantment,Integer> enchantments = getEnchantments(current).entrySet().stream()
+                                                                      .filter(entry -> {
+                                                                        Modifier enchantmentModifier = ModifierManager.INSTANCE.get(entry.getKey());
+                                                                        return enchantmentModifier == null || !enchantmentModifier.getId().equals(modifier);
+                                                                      })
+                                                                      .collect(Collectors.toMap(Entry::getKey, Entry::getValue));
       ItemStack unenchanted;
-      if (matchBook) {
+      if (matchBook && enchantments.isEmpty()) {
         unenchanted = new ItemStack(Items.BOOK);
         if (current.hasCustomHoverName()) {
           unenchanted.setHoverName(current.getHoverName());
         }
       } else {
         unenchanted = current.copy();
-        EnchantmentHelper.setEnchantments(getEnchantments(unenchanted).entrySet().stream()
-                                                                      .filter(entry -> entry.getKey().isCurse())
-                                                                      .collect(Collectors.toMap(Entry::getKey, Entry::getValue)),
-                                          unenchanted);
+        if (matchBook) {
+          // for some dumb reason setEnchantments for a book just adds them instead of setting them
+          unenchanted.removeTagKey("StoredEnchantments");
+        }
+        EnchantmentHelper.setEnchantments(enchantments, unenchanted);
       }
       inv.giveItem(unenchanted);
     }

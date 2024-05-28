@@ -1,6 +1,6 @@
 package slimeknights.tconstruct.tools.recipe;
 
-import com.mojang.datafixers.util.Function5;
+import com.mojang.datafixers.util.Function6;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -15,6 +15,7 @@ import slimeknights.mantle.recipe.ingredient.SizedIngredient;
 import slimeknights.tconstruct.library.json.predicate.modifier.ModifierPredicate;
 import slimeknights.tconstruct.library.modifiers.ModifierId;
 import slimeknights.tconstruct.library.recipe.worktable.AbstractSizedIngredientRecipeBuilder;
+import slimeknights.tconstruct.library.tools.SlotType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,11 +24,14 @@ import java.util.function.Consumer;
 /** Builder for {@link ModifierRemovalRecipe} and {@link ExtractModifierRecipe} */
 @RequiredArgsConstructor(staticName = "removal")
 public class ModifierRemovalRecipeBuilder extends AbstractSizedIngredientRecipeBuilder<ModifierRemovalRecipeBuilder> {
-  private final Function5<ResourceLocation,SizedIngredient,List<SizedIngredient>,List<ItemStack>,IJsonPredicate<ModifierId>,ModifierRemovalRecipe> constructor;
+  private final Function6<ResourceLocation,String,SizedIngredient,List<SizedIngredient>,List<ItemStack>,IJsonPredicate<ModifierId>,ModifierRemovalRecipe> constructor;
   private final List<ItemStack> leftovers = new ArrayList<>();
-  private SizedIngredient tools = ModifierRemovalRecipe.DEFAULT_TOOLS;
+  @Accessors(chain = true)
   @Setter
+  private String name = "modifiers";
+  private SizedIngredient tools = ModifierRemovalRecipe.DEFAULT_TOOLS;
   @Accessors(fluent = true)
+  @Setter
   private IJsonPredicate<ModifierId> modifierPredicate = ModifierPredicate.ANY;
 
   public static ModifierRemovalRecipeBuilder removal() {
@@ -36,6 +40,11 @@ public class ModifierRemovalRecipeBuilder extends AbstractSizedIngredientRecipeB
 
   public static ModifierRemovalRecipeBuilder extract() {
     return removal(ExtractModifierRecipe::new);
+  }
+
+  /** Sets the name from the given slot */
+  public ModifierRemovalRecipeBuilder slotName(SlotType slot) {
+    return setName(slot.getName());
   }
 
   /**
@@ -79,6 +88,6 @@ public class ModifierRemovalRecipeBuilder extends AbstractSizedIngredientRecipeB
       throw new IllegalStateException("Must have at least one input");
     }
     ResourceLocation advancementId = buildOptionalAdvancement(id, "modifiers");
-    consumer.accept(new LoadableFinishedRecipe<>(constructor.apply(id, tools, inputs, leftovers, modifierPredicate), ModifierRemovalRecipe.LOADER, advancementId));
+    consumer.accept(new LoadableFinishedRecipe<>(constructor.apply(id, name, tools, inputs, leftovers, modifierPredicate), ModifierRemovalRecipe.LOADER, advancementId));
   }
 }

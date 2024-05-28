@@ -1,5 +1,6 @@
 package slimeknights.tconstruct.tools.recipe;
 
+import lombok.Getter;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -9,6 +10,7 @@ import net.minecraftforge.items.ItemHandlerHelper;
 import slimeknights.mantle.data.loadable.common.ItemStackLoadable;
 import slimeknights.mantle.data.loadable.field.ContextKey;
 import slimeknights.mantle.data.loadable.field.LoadableField;
+import slimeknights.mantle.data.loadable.primitive.StringLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.data.predicate.IJsonPredicate;
 import slimeknights.mantle.recipe.ingredient.SizedIngredient;
@@ -35,18 +37,22 @@ import java.util.List;
 import java.util.function.Predicate;
 
 public class ModifierRemovalRecipe extends AbstractWorktableRecipe {
-  private static final Component TITLE = TConstruct.makeTranslation("recipe", "remove_modifier.title");
+  public static final String BASE_KEY = TConstruct.makeTranslationKey("recipe", "remove_modifier");
   private static final Component DESCRIPTION = TConstruct.makeTranslation("recipe", "remove_modifier.description");
   private static final Component NO_MODIFIERS = TConstruct.makeTranslation("recipe", "remove_modifier.no_modifiers");
   public static final SizedIngredient DEFAULT_TOOLS = SizedIngredient.of(AbstractWorktableRecipe.DEFAULT_TOOLS);
 
+  protected static final LoadableField<String,ModifierRemovalRecipe> NAME_FIELD = StringLoadable.DEFAULT.defaultField("name", "modifiers", true, r -> r.name);
   protected static final LoadableField<SizedIngredient,ModifierRemovalRecipe> TOOLS_FIELD = SizedIngredient.LOADABLE.defaultField("tools", DEFAULT_TOOLS, true, r -> r.sizedTool);
   protected static final LoadableField<List<ItemStack>,ModifierRemovalRecipe> LEFTOVERS_FIELD = ItemStackLoadable.REQUIRED_STACK_NBT.list(0).defaultField("leftovers", List.of(), r -> r.leftovers);
   protected static final LoadableField<IJsonPredicate<ModifierId>,ModifierRemovalRecipe> MODIFIER_PREDICATE_FIELD = ModifierPredicate.LOADER.defaultField("modifier_predicate", false, r -> r.modifierPredicate);
 
   /** Recipe loadable */
-  public static final RecordLoadable<ModifierRemovalRecipe> LOADER = RecordLoadable.create(ContextKey.ID.requiredField(), TOOLS_FIELD, INPUTS_FIELD, LEFTOVERS_FIELD, MODIFIER_PREDICATE_FIELD, ModifierRemovalRecipe::new);
+  public static final RecordLoadable<ModifierRemovalRecipe> LOADER = RecordLoadable.create(ContextKey.ID.requiredField(), NAME_FIELD, TOOLS_FIELD, INPUTS_FIELD, LEFTOVERS_FIELD, MODIFIER_PREDICATE_FIELD, ModifierRemovalRecipe::new);
 
+  private final String name;
+  @Getter
+  private final Component title;
   private final SizedIngredient sizedTool;
   private final List<ItemStack> leftovers;
   private final IJsonPredicate<ModifierId> modifierPredicate;
@@ -54,17 +60,19 @@ public class ModifierRemovalRecipe extends AbstractWorktableRecipe {
   protected final Predicate<ModifierEntry> entryPredicate;
   private List<ModifierEntry> displayModifiers;
 
-  public ModifierRemovalRecipe(ResourceLocation id, SizedIngredient toolRequirement, List<SizedIngredient> inputs, List<ItemStack> leftovers, IJsonPredicate<ModifierId> modifierPredicate) {
+  public ModifierRemovalRecipe(ResourceLocation id, String name, SizedIngredient toolRequirement, List<SizedIngredient> inputs, List<ItemStack> leftovers, IJsonPredicate<ModifierId> modifierPredicate) {
     super(id, toolRequirement.getIngredient(), inputs);
+    this.name = name;
+    this.title = Component.translatable(getBaseKey() + "." + name);
     this.sizedTool = toolRequirement;
     this.leftovers = leftovers;
     this.modifierPredicate = modifierPredicate;
     this.entryPredicate = mod -> modifierPredicate.matches(mod.getId());
   }
 
-  @Override
-  public Component getTitle() {
-    return TITLE;
+  /** Gets the base key for the title translation */
+  protected String getBaseKey() {
+    return BASE_KEY;
   }
 
   @Override

@@ -2,7 +2,7 @@
   "type": "tconstruct:extract_modifier",
   "inputs": [
     {
-      "item": "tconstruct:ender_slime_crystal"
+      "item": "tconstruct:ichor_slime_crystal"
     },
     {
       "item": "minecraft:wet_sponge"
@@ -12,10 +12,20 @@
     "minecraft:sponge"
   ],
   "modifier_predicate": {
-    "type": "mantle:inverted",
-    "inverted_type": "tconstruct:tag",
-    "tag": "tconstruct:extract_blacklist/tools"
+    "type": "mantle:and",
+    "predicates": [
+      {
+        "type": "mantle:inverted",
+        "inverted_type": "tconstruct:tag",
+        "tag": "tconstruct:extract_blacklist/tools"
+      },
+      {
+        "type": "tconstruct:slot_type",
+        "slot": "abilities"
+      }
+    ]
   },
+  "name": "abilities",
   "tools": {
     "type": "forge:difference",
     "base": {
