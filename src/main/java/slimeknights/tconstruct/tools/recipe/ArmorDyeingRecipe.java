@@ -72,8 +72,7 @@ public class ArmorDyeingRecipe implements ITinkerStationRecipe, IMultiRecipe<IDi
 
   @Override
   public ItemStack assemble(ITinkerStationContainer inv) {
-    ItemStack tinkerable = inv.getTinkerableStack();
-    ToolStack tool = ToolStack.copyFrom(tinkerable);
+    ToolStack tool = inv.getTinkerable().copy();
 
     ModDataNBT persistentData = tool.getPersistentData();
     ResourceLocation key = TinkerModifiers.dyed.getId();
@@ -135,7 +134,7 @@ public class ArmorDyeingRecipe implements ITinkerStationRecipe, IMultiRecipe<IDi
     if (tool.getModifierLevel(modifier) == 0) {
       tool.addModifier(modifier, 1);
     }
-    return tool.createStack(Math.min(tinkerable.getCount(), shrinkToolSlotBy()));
+    return tool.createStack(Math.min(inv.getTinkerableSize(), shrinkToolSlotBy()));
   }
 
   @Override

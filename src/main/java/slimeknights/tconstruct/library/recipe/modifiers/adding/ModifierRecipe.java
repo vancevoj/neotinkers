@@ -129,8 +129,7 @@ public class ModifierRecipe extends AbstractModifierRecipe {
    */
   @Override
   public RecipeResult<ItemStack> getValidatedResult(ITinkerStationContainer inv) {
-    ItemStack tinkerable = inv.getTinkerableStack();
-    ToolStack tool = ToolStack.from(tinkerable);
+    ToolStack tool = inv.getTinkerable();
 
     // common errors
     Component commonError = validatePrerequisites(tool);
@@ -155,7 +154,7 @@ public class ModifierRecipe extends AbstractModifierRecipe {
       return RecipeResult.failure(toolValidation);
     }
 
-    return RecipeResult.success(tool.createStack(Math.min(tinkerable.getCount(), shrinkToolSlotBy())));
+    return RecipeResult.success(tool.createStack(Math.min(inv.getTinkerableSize(), shrinkToolSlotBy())));
   }
 
   /** Updates all inputs in the given container */

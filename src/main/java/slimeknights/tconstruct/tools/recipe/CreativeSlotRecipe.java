@@ -77,8 +77,7 @@ public class CreativeSlotRecipe implements ITinkerStationRecipe, IModifierRecipe
 
   @Override
   public ItemStack assemble(ITinkerStationContainer inv) {
-    ItemStack tinkerable = inv.getTinkerableStack();
-    ToolStack toolStack = ToolStack.copyFrom(tinkerable);
+    ToolStack toolStack = inv.getTinkerable().copy();
 
     // first, fetch the slots compound
     CompoundTag slots;
@@ -104,7 +103,7 @@ public class CreativeSlotRecipe implements ITinkerStationRecipe, IModifierRecipe
     } else {
       toolStack.rebuildStats();
     }
-    return toolStack.createStack(tinkerable.getCount());
+    return toolStack.createStack(inv.getTinkerableSize());
   }
 
   @Override

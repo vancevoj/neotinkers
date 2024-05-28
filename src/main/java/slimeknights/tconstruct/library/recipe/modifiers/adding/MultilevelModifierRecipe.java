@@ -50,8 +50,7 @@ public class MultilevelModifierRecipe extends ModifierRecipe implements IMultiRe
 
   @Override
   public RecipeResult<ItemStack> getValidatedResult(ITinkerStationContainer inv) {
-    ItemStack tinkerable = inv.getTinkerableStack();
-    ToolStack tool = ToolStack.from(tinkerable);
+    ToolStack tool = inv.getTinkerable();
 
     // next few checks depend on the current level to decide
     int newLevel = (checkTraitLevel ? tool.getModifiers() : tool.getUpgrades()).getLevel(result.getId()) + 1;
@@ -95,7 +94,7 @@ public class MultilevelModifierRecipe extends ModifierRecipe implements IMultiRe
       return RecipeResult.failure(toolValidation);
     }
 
-    return RecipeResult.success(tool.createStack(Math.min(tinkerable.getCount(), shrinkToolSlotBy())));
+    return RecipeResult.success(tool.createStack(Math.min(inv.getTinkerableSize(), shrinkToolSlotBy())));
   }
 
 

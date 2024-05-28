@@ -85,8 +85,7 @@ public class TinkerStationPartSwapping implements ITinkerStationRecipe {
   @Override
   public RecipeResult<ItemStack> getValidatedResult(ITinkerStationContainer inv) {
     // copy the tool NBT to ensure the original tool is intact
-    ItemStack tinkerable = inv.getTinkerableStack();
-    ToolStack original = ToolStack.from(tinkerable);
+    ToolStack original = inv.getTinkerable();
     List<IToolPart> parts = ToolPartsHook.parts(original.getDefinition());
 
     // prevent part swapping on large tools in small tables
@@ -174,7 +173,7 @@ public class TinkerStationPartSwapping implements ITinkerStationRecipe {
           }
         }
         // everything worked, so good to go
-        return RecipeResult.success(tool.createStack(Math.min(tinkerable.getCount(), shrinkToolSlotBy())));
+        return RecipeResult.success(tool.createStack(Math.min(inv.getTinkerableSize(), shrinkToolSlotBy())));
       }
     }
     // no item found, should never happen

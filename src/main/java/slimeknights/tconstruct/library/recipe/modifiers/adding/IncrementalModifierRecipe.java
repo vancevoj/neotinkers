@@ -74,8 +74,7 @@ public class IncrementalModifierRecipe extends AbstractModifierRecipe {
 
   @Override
   public RecipeResult<ItemStack> getValidatedResult(ITinkerStationContainer inv) {
-    ItemStack tinkerable = inv.getTinkerableStack();
-    ToolStack tool = ToolStack.from(tinkerable);
+    ToolStack tool = inv.getTinkerable();
 
     // fetch the amount from the modifier, will be 0 if we have a full level
     ModifierId modifier = result.getId();
@@ -110,7 +109,7 @@ public class IncrementalModifierRecipe extends AbstractModifierRecipe {
     }
 
     // successfully added the modifier
-    return RecipeResult.success(tool.createStack(Math.min(tinkerable.getCount(), shrinkToolSlotBy())));
+    return RecipeResult.success(tool.createStack(Math.min(inv.getTinkerableSize(), shrinkToolSlotBy())));
   }
 
   /**
@@ -127,7 +126,7 @@ public class IncrementalModifierRecipe extends AbstractModifierRecipe {
     }
 
     // fetch the differences
-    ToolStack inputTool = ToolStack.from(inv.getTinkerableStack());
+    ToolStack inputTool = inv.getTinkerable();
     ToolStack resultTool = ToolStack.from(result);
     ModifierId modifier = this.result.getId();
     ModifierEntry inputEntry = inputTool.getUpgrades().getEntry(modifier);

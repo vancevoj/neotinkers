@@ -11,8 +11,8 @@ import slimeknights.mantle.data.loadable.field.ContextKey;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
-import slimeknights.tconstruct.library.modifiers.ModifierId;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
+import slimeknights.tconstruct.library.modifiers.ModifierId;
 import slimeknights.tconstruct.library.recipe.RecipeResult;
 import slimeknights.tconstruct.library.recipe.modifiers.adding.IncrementalModifierRecipe;
 import slimeknights.tconstruct.library.recipe.tinkerstation.IMutableTinkerStationContainer;
@@ -41,7 +41,7 @@ public class ModifierRepairTinkerStationRecipe implements ITinkerStationRecipe, 
     if (!tinkerable.is(TinkerTags.Items.DURABILITY)) {
       return false;
     }
-    ToolStack tool = ToolStack.from(tinkerable);
+    ToolStack tool = inv.getTinkerable();
     if (tool.getModifierLevel(modifier) == 0) {
       return false;
     }
@@ -50,7 +50,7 @@ public class ModifierRepairTinkerStationRecipe implements ITinkerStationRecipe, 
 
   @Override
   public RecipeResult<ItemStack> getValidatedResult(ITinkerStationContainer inv) {
-    ToolStack tool = ToolStack.from(inv.getTinkerableStack());
+    ToolStack tool = inv.getTinkerable();
     int amountPerItem = tool.getModifierLevel(modifier) * repairAmount;
     if (amountPerItem <= 0) {
       return RecipeResult.pass();
@@ -84,7 +84,7 @@ public class ModifierRepairTinkerStationRecipe implements ITinkerStationRecipe, 
 
   @Override
   public void updateInputs(ItemStack result, IMutableTinkerStationContainer inv, boolean isServer) {
-    ToolStack tool = ToolStack.from(inv.getTinkerableStack());
+    ToolStack tool = inv.getTinkerable();
 
     // rescale the amount based on modifiers
     float repairFactor = 1.0f;

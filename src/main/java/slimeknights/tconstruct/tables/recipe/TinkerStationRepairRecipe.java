@@ -95,7 +95,7 @@ public class TinkerStationRepairRecipe implements ITinkerStationRecipe {
 
     // validate materials
     MaterialId material = null;
-    ToolStack tool = ToolStack.from(tinkerable);
+    ToolStack tool = inv.getTinkerable();
     for (int i = 0; i < inv.getInputCount(); i++) {
       // skip empty slots
       ItemStack stack = inv.getInput(i);
@@ -131,7 +131,7 @@ public class TinkerStationRepairRecipe implements ITinkerStationRecipe {
 
   @Override
   public RecipeResult<ItemStack> getValidatedResult(ITinkerStationContainer inv) {
-    ToolStack tool = ToolStack.from(inv.getTinkerableStack());
+    ToolStack tool = inv.getTinkerable();
     if (tool.getDefinition() == ToolDefinition.EMPTY) {
       return RecipeResult.pass();
     }

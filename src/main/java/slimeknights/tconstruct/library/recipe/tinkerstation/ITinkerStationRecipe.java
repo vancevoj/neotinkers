@@ -40,6 +40,7 @@ public interface ITinkerStationRecipe extends ICommonRecipe<ITinkerStationContai
 
   /**
    * Gets the recipe result, or an object containing an error message if the recipe matches but cannot be applied.
+   * TODO 1.20: switch return type to {@code RecipeResult<LazyToolStack>}
    * @return Validated result
    */
   default RecipeResult<ItemStack> getValidatedResult(ITinkerStationContainer inv) {
@@ -57,7 +58,7 @@ public interface ITinkerStationRecipe extends ICommonRecipe<ITinkerStationContai
 
   /**
    * Updates the input stacks upon crafting this recipe
-   * @param result  Result from {@link #assemble(ITinkerStationContainer)}. Generally should not be modified
+   * @param result  Result from {@link #assemble(ITinkerStationContainer)}. Generally should not be modified. TODO: switch parameter to LazyToolStack.
    * @param inv     Inventory instance to modify inputs
    * @param isServer  If true, this is on the serverside. Use to handle randomness, {@link IMutableTinkerStationContainer#giveItem(ItemStack)} should handle being called serverside only
    */
