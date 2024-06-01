@@ -1,0 +1,13 @@
+{
+  "modifier_id": "tconstruct:experienced",
+  "text": [
+    {
+      "text": "Gezip gördükçe az daha akıllı hissediyorsun."
+    }
+  ],
+  "effects": [
+    "Bloklardan ve yaratıklardan deneyim kazanımını artırır",
+    "Çoklu seviyeler, deneyim kazanımını her seviyede arırır",
+    "Seviye başına 1 yükseltme yuvası gerekir"
+  ]
+}

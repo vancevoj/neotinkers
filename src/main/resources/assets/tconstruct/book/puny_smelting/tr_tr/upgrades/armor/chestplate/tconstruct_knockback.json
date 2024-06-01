@@ -1,0 +1,14 @@
+{
+  "modifier_id": "tconstruct:knockback",
+  "text": [
+    {
+      "text": "Koşarken enerji harcamaı bırak ve düşmanlarının sana dönerken enerji harcasın."
+    }
+  ],
+  "tool_filter": "tconstruct:modifiable/armor",
+  "effects": [
+    "Herhangi bir silahla düşmanlara vurulduğunda onları geri savurur",
+    "Çoklu seviyeler, savurma kuvvetini her seviyede artırır",
+    "Seviye başına 1 yükseltme yuvası gerekir"
+  ]
+}

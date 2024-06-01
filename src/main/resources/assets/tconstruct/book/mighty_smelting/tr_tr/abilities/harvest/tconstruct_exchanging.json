@@ -1,0 +1,13 @@
+{
+  "modifier_id": "tconstruct:exchanging",
+  "text": [
+    {
+      "text": "Bunu kullanmak koca bir kaya kütlesinin peşinden gelmesini başlatabilir de başlatmayabilir de çünkü bir şeyleri doğru düzgün değiş tokuşlayamazsın."
+    }
+  ],
+  "effects": [
+    "Kırılan bloklar öbür eldeki blokla yer değiştirir",
+    "Tek seviye",
+    "1 yetenek yuvası gerekir"
+  ]
+}

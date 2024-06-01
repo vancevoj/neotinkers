@@ -1,0 +1,13 @@
+{
+  "modifier_id": "tconstruct:killager",
+  "text": [
+    {
+      "text": "Minecraft'ın en yeni ölüm metali takımı. Çok yakında yakınınızdaki bir köye geliyoruz."
+    }
+  ],
+  "effects": [
+    "Köylülere ve höylülere karşı hasarı artırır",
+    "Çoklu seviyeler, hasarı her seviyede daha da artırır",
+    "Seviye başına 1 yükseltme yuvası gerekir"
+  ]
+}

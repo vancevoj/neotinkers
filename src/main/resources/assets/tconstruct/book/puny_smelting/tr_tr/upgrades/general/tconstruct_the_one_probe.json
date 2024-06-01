@@ -1,0 +1,17 @@
+{
+  "modifier_id": "tconstruct:the_one_probe",
+  "text": [
+    {
+      "text": "Onu ateşe atın! Yok edin!"
+    },
+    {
+      "text": "Hayır.",
+      "paragraph": true
+    }
+  ],
+  "effects": [
+    "Aracı tutarken veya giyerken bloklar ve varlıkların süslü bilgilerini verir",
+    "Tek seviye",
+    "1 yükseltme seviyesi gerekir"
+  ]
+}

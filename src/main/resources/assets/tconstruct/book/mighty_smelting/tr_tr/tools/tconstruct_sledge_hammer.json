@@ -1,0 +1,20 @@
+{
+  "tool": "tconstruct:sledge_hammer",
+  "text": [
+    {
+      "text": "Balyoz koca çıkarım aracıdır. Geniş alanda blokları çıkarır ve yaşayan ölülere karşı etkilidir."
+    },
+    {
+      "text": "\n"
+    },
+    {
+      "text": "Büyük alanları çıkarmaya ve uzun madencilik yolculuklarına uygundur."
+    }
+  ],
+  "properties": [
+    "İleri madencilik aracı",
+    "3x3 etki alanında çıkarım",
+    "Taş ve cevherlerde etkilidir",
+    "Darbe II ile başlar"
+  ]
+}

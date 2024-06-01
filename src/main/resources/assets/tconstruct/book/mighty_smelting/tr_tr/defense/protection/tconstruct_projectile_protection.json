@@ -1,0 +1,13 @@
+{
+  "modifier_id": "tconstruct:projectile_protection",
+  "text": [
+    {
+      "text": "Dizlerini oklardan korumayacak, böylece maceraları zorla bıraktırıp koruma olacaksın."
+    }
+  ],
+  "effects": [
+    "Uzun menzillilerin hasarını azaltır",
+    "Seviyeler aşamalı olarak uygulanabilir",
+    "Seviye başına 1 savunma yuvası gerekir"
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "modifier_id": "tconstruct:magic_protection",
+  "text": [
+    {
+      "text": "Bunu kullanmak zorundaysan sen pek iyi bir büyücü değilsin Harry. Daha çok saptırma büyüsü kullan."
+    }
+  ],
+  "effects": [
+    "Büyü hasarını azaltır",
+    "Çoklu seviyeler, büyü hasarını her seviyede daha da azaltır",
+    "Seviye başına 1 savunma yuvası gerekir"
+  ]
+}

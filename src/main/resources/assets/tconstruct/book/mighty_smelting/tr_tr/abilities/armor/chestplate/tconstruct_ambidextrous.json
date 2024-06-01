@@ -1,0 +1,13 @@
+{
+  "modifier_id": "tconstruct:ambidextrous",
+  "text": [
+    {
+      "text": "Herkes Kung Fu Dövüşüyor."
+    }
+  ],
+  "effects": [
+    "İki elle yumruklamaya izin verir",
+    "Tek seviye",
+    "1 yetenek yuvası gerekir"
+  ]
+}

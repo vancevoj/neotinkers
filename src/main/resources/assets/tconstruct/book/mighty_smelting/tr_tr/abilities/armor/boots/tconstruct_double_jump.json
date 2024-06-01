@@ -1,0 +1,13 @@
+{
+  "modifier_id": "tconstruct:double_jump",
+  "text": [
+    {
+      "text": "Tavşan selmesi becerilerini artırır ve oyunda seni çok daha iyi yapar. En çok etki için biraz eğim katmayı unutmayın."
+    }
+  ],
+  "effects": [
+    "Ek zıplama sağlar",
+    "Çoklu seviyeler, bir ek zıplamayı her seviyede verir",
+    "Seviye başına 1 yetenek yuvası gereklidir"
+  ]
+}

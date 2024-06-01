@@ -1,0 +1,14 @@
+{
+  "modifier_id": "tconstruct:tool_belt",
+  "text": [
+    {
+      "text": "Araçlarını tutmak için bir kemer. Araç kemeri."
+    }
+  ],
+  "effects": [
+    "Yuvalar control ile pantolon etkileşimini kullanarak araç çubuklarının yerinin değiştirilmesini sağlar.",
+    "4 yuva sağlar, her ardışık seviyede 1 fazlası",
+    "Seviye başına farklı tarifler",
+    "İlk seviye için 1 yetenek yuvası gerekir"
+  ]
+}

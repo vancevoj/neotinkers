@@ -1,0 +1,12 @@
+{
+  "modifier_id": "tconstruct:writable",
+  "text": [
+    {
+      "text": "Başından sözcükler geçtikçe aracın da sanki biraz daha öğrenebilirmiş gibi hissediyor. Belkide aracınla da yazabilirsin."
+    }
+  ],
+  "effects": [
+    "Bir yükseltme yuvası ekler",
+    "Tek seviye"
+  ]
+}

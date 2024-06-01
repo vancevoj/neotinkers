@@ -1,0 +1,14 @@
+{
+  "modifier_id": "tconstruct:necrotic",
+  "text": [
+    {
+      "text": "Düşmanlarının yaşamını daha uzun yaşamda kalmak için biç."
+    }
+  ],
+  "tool_filter": "tconstruct:modifiable/ranged",
+  "effects": [
+    "Tümüyle çekilmiş oklar düşmanlarından seni iyileştimek için can çalar",
+    "Çoklu seviyeler, can çalma niceliğini her seviyede artırır",
+    "Seviye başına 1 yükseltme yuvası gerekir"
+  ]
+}

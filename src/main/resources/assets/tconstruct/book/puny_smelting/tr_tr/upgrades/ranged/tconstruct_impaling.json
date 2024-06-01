@@ -1,0 +1,18 @@
+{
+  "modifier_id": "tconstruct:impaling",
+  "text": [
+    {
+      "text": "Beni şişleme ile şişleseydin oldukça dehşete düşerdim."
+    },
+
+    {
+      "text": "Suculsuz ile karıştırılmamalıdır",
+      "paragraph": true
+    }
+  ],
+  "effects": [
+    "Tatar yayından ateşlenen uzun menzillinin hasarını artırır",
+    "Çoklu seviyeler, hasar her seviyede daha da artar",
+    "Seviye başına 1 yükseltme yuvası gerekir"
+  ]
+}

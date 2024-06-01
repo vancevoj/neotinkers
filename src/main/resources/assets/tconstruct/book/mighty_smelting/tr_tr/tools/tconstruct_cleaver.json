@@ -1,0 +1,20 @@
+{
+  "tool": "tconstruct:cleaver",
+  "text": [
+    {
+      "text": "Satır yüksek hasarlı, düşük savurmalı bir silahtır."
+    },
+    {
+      "text": "\n"
+    },
+    {
+      "text": "Onların başlarıyla defol!",
+	  "paragraph": true
+    }
+  ],
+  "properties": [
+    "Güçlü Silah",
+    "Yavaş Savurma",
+    "Koparma II ile başlar"
+  ]
+}

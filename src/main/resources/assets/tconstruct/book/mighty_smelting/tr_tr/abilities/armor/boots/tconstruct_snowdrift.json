@@ -1,0 +1,15 @@
+{
+  "modifier_id": "tconstruct:snowdrift",
+  "text": [
+    {
+      "text": "Kar adama bak. Epey havalı değil mi, kar izleri bırakıyor? Daha önce sen de kardan izler bırakabilmek dilememiş miydin?"
+    }
+  ],
+  "effects": [
+    "Yürüdükçe kar oluşturur",
+    "Ilık biyomlarda çalışmaz",
+    "Genişletilmiş ile alanı artırılabilir",
+    "Tek seviye",
+    "1 yetenek yuvası gerekir"
+  ]
+}

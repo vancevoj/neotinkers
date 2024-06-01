@@ -1,0 +1,13 @@
+{
+  "modifier_id": "tconstruct:revitalizing",
+  "text": [
+    {
+      "text": "Kuyumlu elmalar, ne geri dönüş ama."
+    }
+  ],
+  "effects": [
+    "Seviyeler aşamalı olarak uygulanabilir",
+    "En çok 5 seviye",
+    "Seviye başına 1 savunma yuvası gerekir"
+  ]
+}

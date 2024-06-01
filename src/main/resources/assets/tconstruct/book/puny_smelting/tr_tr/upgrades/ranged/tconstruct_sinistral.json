@@ -1,0 +1,14 @@
+{
+  "modifier_id": "tconstruct:sinistral",
+  "text": [
+    {
+      "text": "Yayları çiftlemek sıkıntıyı çiftler."
+    }
+  ],
+  "effects": [
+    "Tatar yayı ana eldeyken saldırı tuşuyla ateşlenecek ve eğilirken yeniden doldurmaz",
+    "Tatar yaylarını çifte kullanılmasını veya kalkanla kullanılmasını sağlar",
+    "Tek seviye",
+    "1 yükseltme yuvası gerekir"
+  ]
+}

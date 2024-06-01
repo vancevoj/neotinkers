@@ -1,0 +1,13 @@
+{
+  "modifier_id": "tconstruct:reflecting",
+  "text": [
+    {
+      "text": "Senin kalkanın ayrıca senin trambolinin."
+    }
+  ],
+  "effects": [
+    "Uzun menzilleri engelledikten kısa bir süre sonra sektir",
+    "Çoklu seviyeler, yansıtan pencereyi her seviyede artırır",
+    "Seviye başına 1 yetenek yuvası gerekir"
+  ]
+}

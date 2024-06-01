@@ -1,0 +1,14 @@
+{
+  "modifier_id": "tconstruct:tank",
+  "text": [
+    {
+      "text": "Bu bebeğin bir 120mm topu, bir gömülü makine tü... bekle bu o tür bir tank değil..? Bu ümit kırıcı, taşıtımın olmasını yeğlerdim."
+    }
+  ],
+  "effects": [
+    "Aracın tank boyutunu artırır",
+    "Araç taşınabilir bir sıvı tutucu olur",
+    "Çoklu seviyeler, tank boyutu her seviyede daha da artar",
+    "Seviye başına 1 yükseltme yuvası gerekir"
+  ]
+}

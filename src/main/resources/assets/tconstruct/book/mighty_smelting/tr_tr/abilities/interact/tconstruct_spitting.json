@@ -1,0 +1,13 @@
+{
+  "modifier_id": "tconstruct:spitting",
+  "text": [
+    {
+      "text": "Asla lama ile tükürme yarışına girme"
+    }
+  ],
+  "effects": [
+    "Bakılan yönde sıvı ateşlemek için yükle",
+    "Daha yüksek seviyeler daha çok uzun menzilli fırlatır",
+    "Seviye başına 1 yetenek yuvası gerekir"
+  ]
+}

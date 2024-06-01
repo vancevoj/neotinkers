@@ -1,0 +1,13 @@
+{
+  "modifier_id": "tconstruct:autosmelt",
+  "text": [
+    {
+      "text": "Cehennemin ateşleri ısıyı yükseltmek için kullanışlıdır."
+    }
+  ],
+  "effects": [
+    "Olasıysa bütün düşen bloklar kallanır",
+    "Tek seviye",
+    "1 yetenek yuvası gereklidir"
+  ]
+}

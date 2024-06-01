@@ -1,0 +1,14 @@
+{
+  "modifier_id": "tconstruct:overslime",
+  "text": [
+    {
+      "text": "Bu yükseltme biraz abartılı, sence de öyle değil mi?"
+    }
+  ],
+  "effects": [
+    "Dayanıklılıktan önce kullanılacak balçık aşımı çubuğu ekler",
+    "Balçık topu ile yeniden yüklenir, niceliği türe göre değişir",
+    "Birçok araç malzemesiyle aracın sığasını artırır",
+    "Balçığımsı malzemeleri olmayan araçlara güçsüzleştirme uygular"
+  ]
+}

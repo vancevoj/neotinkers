@@ -1,0 +1,14 @@
+{
+  "title": "Alazlı Kan",
+  "image": {
+    "file": "tconstruct:book/images/manyullyn_alloy.png",
+    "width": 179,
+    "height": 69
+  },
+  "text": [
+    {
+      "text": "Yani Onarıcı, daha iyi alaşımlar yapmayı deniyorsun ve lavı çok zayıf mı buldun? Yaşayan blazelerin özünü isteklerinin yakıtını doldurmak için sıvılaştırmak neden olmasın?",
+      "paragraph": true
+    }
+  ]
+}

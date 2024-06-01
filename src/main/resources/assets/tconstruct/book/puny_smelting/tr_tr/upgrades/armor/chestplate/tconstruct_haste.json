@@ -1,0 +1,18 @@
+{
+  "modifier_id": "tconstruct:haste",
+  "text": [
+    {
+      "text": "Göğüslüğüne redstone eklemek sanki kolların daha verimli olmuş gibi tüm araçları daha hızlı yapıyormuş gibi gözüküyor."
+    },
+    {
+      "text": "Gerçekten çılgın bir şey gibi, doğru değil miyim??",
+      "paragraph": true
+    }
+  ],
+  "tool_filter": "tconstruct:modifiable/armor",
+  "effects": [
+    "Çıkarım hızını artırır",
+    "Çoklu seviyeler, hızı her seviyede az daha artırır",
+    "Seviye başına 1 yükseltme yuvası gerekir"
+  ]
+}

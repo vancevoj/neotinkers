@@ -1,0 +1,13 @@
+{
+  "modifier_id": "tconstruct:punch",
+  "text": [
+    {
+      "text": "İşte vurucu nokta geliyor."
+    }
+  ],
+  "effects": [
+    "Ateşlenen uzun menzillinin savurmasını artırır",
+    "Çoklu seviyeler, savurmayı her seviye daha da artırır",
+    "Seviye başına 1 yükseltme yuvası gerekir"
+  ]
+}

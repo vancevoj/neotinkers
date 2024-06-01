@@ -1,0 +1,13 @@
+{
+  "modifier_id": "tconstruct:overforced",
+  "text": [
+    {
+      "text": "Aşırı güçlenmiş... ne ad ama, çok fazla güç mü kullanılmış?"
+    }
+  ],
+  "effects": [
+    "Balçık aşımı sığasını artırır",
+    "Çoklu seviyeler, balçık aşımı sığısını her seviyede daha da artırır",
+    "Seviye başına 1 yükseltme yuvası gerekir"
+  ]
+}

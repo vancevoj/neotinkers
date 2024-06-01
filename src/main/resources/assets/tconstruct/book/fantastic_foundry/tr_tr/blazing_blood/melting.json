@@ -1,0 +1,14 @@
+{
+  "modifier_id": "tconstruct:melting",
+  "text": [
+    {
+      "text": "Dökümevi yeterince taşınabilir değil mi? Aracını elde tutlan bir dökümevine dönüştürmeyi dene! Belki Thruul onca şeyin ardından beklemeye değer bir şey yapmaya yetecek kadar akıllıdır."
+    }
+  ],
+  "effects": [
+    "Saldırılan yaratıkları aracın tankına ergitin",
+    "Düşen eşyalar olasıysa onlarda ergitilir",
+    "Araç tanka veya kallama ocağına boşaltılabilir",
+    "1 yetenek yuvası gerekir, tek seviye"
+  ]
+}

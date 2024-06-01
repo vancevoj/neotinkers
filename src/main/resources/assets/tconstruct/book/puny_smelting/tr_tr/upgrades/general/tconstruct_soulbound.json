@@ -1,0 +1,13 @@
+{
+  "modifier_id": "tconstruct:soulbound",
+  "text": [
+    {
+      "text": "Ruhunu bir nesne ile aşılamak pek sağlıklı gelmiyor ama oldukça kullanışlıdır!"
+    }
+  ],
+  "effects": [
+    "Araç zamansız ölümlerinin sonrasında bile sende kalacak",
+    "Tek seviye",
+    "1 yükseltme yuvası gerekir"
+  ]
+}

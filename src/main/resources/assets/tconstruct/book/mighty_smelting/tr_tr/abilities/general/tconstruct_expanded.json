@@ -1,0 +1,14 @@
+{
+  "modifier_id": "tconstruct:expanded",
+  "text": [
+    {
+      "text": "Daha büyük her zaman daha iyidir değil mi?"
+    }
+  ],
+  "effects": [
+    "Çıkarım genişliğini ve yüksekliğini artırır",
+    "Bütün araçların aralığı farklıdır",
+    "Çoklu seviyeler, genişliği ve yüksekliği her seviyede bir artırır",
+    "Seviye başına 1 yetenek yuvası gerekir"
+  ]
+}

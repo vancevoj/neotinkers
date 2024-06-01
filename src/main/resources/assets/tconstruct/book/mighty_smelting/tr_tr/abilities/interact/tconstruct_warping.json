@@ -1,0 +1,14 @@
+{
+  "modifier_id": "tconstruct:warping",
+  "text": [
+    {
+      "text": "Üzerinden gidemiyoruz. Altından gidemiyoruz. Olamaz! İçinden gitmek zorundayız!"
+    }
+  ],
+  "effects": [
+    "Baktığın yönde ışınlanmak için yükle",
+    "Güç ile ışınlanma uzaklığı artırılabilir",
+    "Tek seviye",
+    "1 yetenek yuvası gerekir"
+  ]
+}

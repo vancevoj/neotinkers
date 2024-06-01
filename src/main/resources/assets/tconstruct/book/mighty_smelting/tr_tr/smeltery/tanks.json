@@ -1,0 +1,16 @@
+{
+  "title": "Kararmış Tanklar",
+  "item": {
+    "tag": "tconstruct:seared_tanks"
+  },
+  "text": [
+    {
+      "text": "Tanklar ergimiş sıvıları ve yakıtları depolamak için iyidir. Kallama ocağında metal ergitmek istiyorsan bir tane gerekecek! Tanklar kovalarla, iksirlerle ve ayrıca bir şeyleri sonrası için saklamak istiyorsan veya kallama ocaksız dökmek istiyorsan kallama ocağından içine dökülerek de doldurulabilirler.",
+      "paragraph": true
+    },
+    {
+      "text": "Tank kallama ocağının tabanında kullanılamaz.",
+      "paragraph": true
+    }
+  ]
+}

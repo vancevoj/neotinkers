@@ -1,0 +1,13 @@
+{
+  "modifier_id": "tconstruct:blocking",
+  "text": [
+    {
+      "text": "Kılıcın artık bir kalkan, şimdi yalnızca kalkanını kılç yapmanın bir yolunu bulman gerekecek."
+    }
+  ],
+  "effects": [
+    "Aracınla engellemeni sağlar",
+    "Tek seviye",
+    "1 yetenek yuvası gereklidir"
+  ]
+}

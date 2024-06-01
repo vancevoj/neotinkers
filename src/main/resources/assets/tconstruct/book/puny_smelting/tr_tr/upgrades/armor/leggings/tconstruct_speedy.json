@@ -1,0 +1,13 @@
+{
+  "modifier_id": "tconstruct:speedy",
+  "text": [
+    {
+      "text": "Hızlı gitmeliyim."
+    }
+  ],
+  "effects": [
+    "Hareket hızını artırır",
+    "Çoklu seviyeler, hızı her sevide daha da artırır",
+    "Seviye başına 1 yükseltme yuvası gerekir"
+  ]
+}

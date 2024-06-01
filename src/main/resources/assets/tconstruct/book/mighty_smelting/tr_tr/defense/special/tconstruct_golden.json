@@ -1,0 +1,14 @@
+{
+  "modifier_id": "tconstruct:golden",
+  "text": [
+    {
+      "text": "Piglinler o şıklığı sever."
+    }
+  ],
+  "effects": [
+    "Piglinler sana saldırmayacaklar",
+    "Zırhın altınla onarılabilir",
+    "Tek seviye",
+    "1 savunma yuvası gerekir"
+  ]
+}

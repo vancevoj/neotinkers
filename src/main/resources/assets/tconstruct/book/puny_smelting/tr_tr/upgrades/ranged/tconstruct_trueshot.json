@@ -1,0 +1,13 @@
+{
+  "modifier_id": "tconstruct:trueshot",
+  "text": [
+    {
+      "text": "Hedefine odaklan."
+    }
+  ],
+  "effects": [
+    "Ateşlenen uzun menzillinin doğruluğunu artırır",
+    "Çoklu seviyeler, doğruluğu her seviye daha da artırır",
+    "Seviye başına 1 yükseltme yuvası gerekir"
+  ]
+}

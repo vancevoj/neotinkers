@@ -1,0 +1,19 @@
+{
+  "tool": "tconstruct:broad_axe",
+  "text": [
+    {
+      "text": "Savaş Baltası, yüksek verimlilikli ağaç kesme aracıdır. Bir vuruşta ağacı yok edebiliyor."
+    },
+    {
+      "text": "\n"
+    },
+    {
+      "text": "Ormanları çabucak ardı ardına kesmek için uygundur."
+    }
+  ],
+  "properties": [
+    "İleri kesme aracı",
+    "Bütün bir ağacı bir kesmede yok edebilir",
+    "Bütün bir ağacı bir etkileşimde soyabilir"
+  ]
+}

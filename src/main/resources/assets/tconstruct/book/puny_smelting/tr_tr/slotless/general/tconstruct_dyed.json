@@ -1,0 +1,13 @@
+{
+  "modifier_id": "tconstruct:dyed",
+  "text": [
+    {
+      "text": "Siyah içinde mi geliyor?"
+    }
+  ],
+  "effects": [
+    "Aracın rengini değiştirmek için boya kullanılabilir",
+    "Çoklu kullanım",
+    "Yuvasız"
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "modifier_id": "tconstruct:thorns",
+  "text": [
+    {
+      "text": "Ne biçim deliş."
+    }
+  ],
+  "effects": [
+    "Saldıranlar vurdujkarında hasar alma şansı vardır",
+    "Çoklu seviyeler, şansı her seviyede daha da artırır",
+    "Seviye başına 1 yükseltme yuvası gerekir"
+  ]
+}

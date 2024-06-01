@@ -1,0 +1,13 @@
+{
+  "modifier_id": "tconstruct:tilling",
+  "text": [
+    {
+      "text": "Elmasları çapada boşuna harcama."
+    }
+  ],
+  "effects": [
+    "Aracınla yeri sürmeni sağlar",
+    "Tek seviye",
+    "1 yetenek yuvası gerekir"
+  ]
+}

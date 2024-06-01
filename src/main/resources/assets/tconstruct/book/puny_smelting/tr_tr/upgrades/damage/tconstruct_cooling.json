@@ -1,0 +1,13 @@
+{
+  "modifier_id": "tconstruct:cooling",
+  "text": [
+    {
+      "text": "Netherın ateşlerini yenmesinin en iyi yolu onları dondurarak onların sonsuz alevini söndürmektir."
+    }
+  ],
+  "effects": [
+    "Ateşe dayalı yaratıklara karşı hasarı artırır",
+    "Çoklu seviyeler, hasar her seviyede daha da artar",
+    "Seviye başına 1 yükseltme yuvası gerekir"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "modifier_id": "tconstruct:pockets",
+  "text": [
+    {
+      "text": "Artık gereken tek şey bir cep hesap makinesidir böylece büyük olasılıkla cep sayılarını ekleyebilirsin."
+    }
+  ],
+  "effects": [
+    "Daha fazla envanter boşluğu ekler",
+    "Shift ile pantolon etkileşimiyle eriş",
+    "Çoklu seviyeler, +18 yuva her seviyede verilir",
+    "Seviye başına 1 yetenek yuvası gerekir"
+  ]
+}

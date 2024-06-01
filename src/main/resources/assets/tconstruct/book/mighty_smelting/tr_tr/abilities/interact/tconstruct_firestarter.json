@@ -1,0 +1,14 @@
+{
+  "modifier_id": "tconstruct:firestarter",
+  "text": [
+    {
+      "text": "Her şey ateşleyici değiştiricisi saldırdığında değişti."
+    }
+  ],
+  "effects": [
+    "Ateş başlatmak için etkileşim kur",
+    "Tek seviye",
+    "1 yetenek yuvası gerekir",
+    "Çakmak taşı ve tuğlada kullanmak alanı artırır ve 1 yükseltme yuvası gerektirir"
+  ]
+}

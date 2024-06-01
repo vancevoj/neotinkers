@@ -1,0 +1,18 @@
+{
+  "modifier_id": "tconstruct:haste",
+  "text": [
+    {
+      "text": "Araca redstone eklemek hızını artırıyor gibi görünüyor. Çıkarım hızı artışı yavaş araçlarda daha etkili gözüküyor."
+    },
+    {
+      "text": "Redstone. Çılgın bir şey, doğru değil miyim?",
+      "paragraph": true
+    }
+  ],
+  "tool_filter": "tconstruct:modifiable/harvest",
+  "effects": [
+    "Çıkarım hızını artırır",
+    "Çoklu seviyeler, hızı her seviyede az daha artırır",
+    "Seviye başına 1 yükseltme yuvası gerekir"
+  ]
+}

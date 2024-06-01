@@ -1,0 +1,14 @@
+{
+  "modifier_id": "tconstruct:shulking",
+  "text": [
+    {
+      "text": "Ev kabuğun olduğu yerdir."
+    }
+  ],
+  "effects": [
+    "Eğilirken alınan ve verilen hasarı azaltır",
+    "Çoklu seviyeler, etkileri her seviyede daha da artırır",
+    "Seviyeler aşamalı olarak uygulanabilir",
+    "Seviye başına 1 savunma yuvası gerekir"
+  ]
+}

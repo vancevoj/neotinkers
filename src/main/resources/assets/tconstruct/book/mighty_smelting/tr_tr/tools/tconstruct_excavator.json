@@ -1,0 +1,21 @@
+{
+  "tool": "tconstruct:excavator",
+  "text": [
+    {
+      "text": "Kazaratar koca küreme aracıdır. Geniş alandaki toprağı ve karı kürer."
+    },
+    {
+      "text": "\n"
+    },
+    {
+      "text": "Çokca çakıl küremen gerektiği zaman kullanışlıdır."
+    }
+  ],
+  "properties": [
+    "İleri küreme aracı",
+    "3x3 etki alanlı küreme",
+    "Toprakta, kumda ve çakılda etkilidir",
+    "Yolak yapabilir",
+    "Savurma II ile başlar"
+  ]
+}

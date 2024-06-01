@@ -1,0 +1,17 @@
+{
+  "modifier_id": "tconstruct:slurping",
+  "text": [
+    {
+      "text": "O bir numaraydı!"
+    },
+    {
+      "text": "Aracı tutarken tanka sağ tıklamak aracı sıvı ile doldurur.", "paragraph": true
+    }
+  ],
+  "effects": [
+    "Kaskta depolanan sıvıyı iç",
+    "İçmek için tuş ataması kullanılır",
+    "Tek seviye",
+    "1 yetenek yuvası gerekir"
+  ]
+}

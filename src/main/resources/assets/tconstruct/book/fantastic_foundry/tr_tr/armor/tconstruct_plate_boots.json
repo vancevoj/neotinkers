@@ -1,0 +1,16 @@
+{
+  "tool": "tconstruct:plate_boots",
+  "text": [
+    { "text": "Buuuuunlaaar neeee?" },
+	{
+      "text": "Nethera girmek ayaklarını korumak için sert botlar gerektirir! Kimse yerin gerçekten ne kadar sıcak olduğunu hiç düşünmüyor.", "paragraph": true
+    }
+  ],
+  "properties": [
+    "Yüksek Dayanıklılık",
+    "Yüksek Zırh",
+    "1 Yükseltme Yuvası",
+    "4 Savunma Yuvası",
+    "1 Yetenek Yuvası"
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "modifier_id": "tconstruct:blasting",
+  "text": [
+    {
+      "text": "Yani neyse, patlamaya başladım."
+    }
+  ],
+  "effects": [
+    "Cevherler gibi patlamaya zayıf blokları daha hızlı kazar",
+    "Çoklu seviyeler, hızı her seviyede daha da artırır",
+    "Seviye başına 1 yükseltme yuvası gerekir"
+  ]
+}

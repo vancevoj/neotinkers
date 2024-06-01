@@ -1,0 +1,16 @@
+{
+  "tool": "tconstruct:plate_helmet",
+  "text": [
+    { "text": "Sert başlar için sert şapkalar." },
+	{
+      "text": "Beynini korumak için iyi bir katı kask. Hiçbir şey o başını incitemez!", "paragraph": true
+    }
+  ],
+  "properties": [
+    "Yüksek Dayanıklılık",
+    "Yüksek Zırh",
+    "1 Yükseltme Yuvası",
+    "4 Savunma Yuvası",
+    "1 Yetenek Yuvası"
+  ]
+}
