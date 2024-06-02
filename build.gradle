@@ -18,6 +18,7 @@ plugins {
 //import net.minecraftforge.gradle.common.task.SignJar
 
 repositories {
+    mavenCentral()
     maven { // Mantle
         name 'DVS1 Maven FS'
         url 'https://dvs1.progwml6.com/files/maven'
