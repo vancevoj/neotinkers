@@ -1,0 +1,13 @@
+{
+  "modifier_id": "tconstruct:quick_charge",
+  "text": [
+    {
+      "text": "Oldukça çok gergin ol."
+    }
+  ],
+  "effects": [
+    "Tatar yayının veya asaların çekme hızını artırır",
+    "Çoklu seviyeler, çekim hızını her seviyede daha da artırır",
+    "Seviye başına 1 yükseltme yuvası gerekir"
+  ]
+}

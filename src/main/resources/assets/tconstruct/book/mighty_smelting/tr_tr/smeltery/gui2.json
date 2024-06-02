@@ -1,0 +1,16 @@
+{
+  "title": "Kallama Ocağı Grafiksel Kullanıcı Arayüzü",
+  "text": [
+    {
+      "text": "1: Burası kallamak istediğin eşyaları koyduğun yer. Kallama ocağının boyutuna göre yuva sayısı değişecektir."
+    },
+    {
+      "text": "2: Burası ergimiş malzemelerini görebileceğin yer. Birine tıklayıp onu döküm için seçebilirsin, boş bölgenin üzerine tutarak kallama ocağının sığasıyla ilgili ayrıntıları alabilirsin.",
+      "paragraph": true
+    },
+    {
+      "text": "3: Burası yakıtını görebileceğin yer. Üzerinde tutmak kesin niceliği ve türü gösterir.",
+      "paragraph": true
+    }
+  ]
+}

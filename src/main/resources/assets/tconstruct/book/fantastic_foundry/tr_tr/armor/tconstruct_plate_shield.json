@@ -1,0 +1,17 @@
+{
+  "tool": "tconstruct:plate_shield",
+  "text": [
+    { "text": "Parlak mavi maceraseverler için parlak mavi kalkan." },
+    {
+      "text": "En güçlü saldırıları engellemek için güçlü bir kalkan.", "paragraph": true
+    }
+  ],
+  "properties": [
+    "Yüksek Dayanıklılık",
+    "Yüksek Engelleme Yeteneği",
+    "Kalkanla korunurken yavaş hız",
+    "1 Yükseltme Yuvası",
+    "4 Savunma Yuvası",
+    "1 Yetenek Yuvası"
+  ]
+}

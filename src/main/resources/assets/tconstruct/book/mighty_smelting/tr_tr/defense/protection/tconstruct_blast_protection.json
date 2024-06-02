@@ -1,0 +1,13 @@
+{
+  "modifier_id": "tconstruct:blast_protection",
+  "text": [
+    {
+      "text": "Creeper, Ayy adamım."
+    }
+  ],
+  "effects": [
+    "Patlayıcı hasarı ve savurmayı azaltır",
+    "Çoklu seviyeler, direnci her seviyede daha da artırır",
+    "Seviye başına 1 savunma yuvası gerekir"
+  ]
+}

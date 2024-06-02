@@ -1,0 +1,14 @@
+{
+  "modifier_id": "tconstruct:worldbound",
+  "text": [
+    {
+      "text": "Ateş artık düşmanın değil, aracın çevresindeki dünya ile rahat hisseder."
+    }
+  ],
+  "effects": [
+    "Netheritin ham sürümü",
+    "Dış hasarlara karşı dokunulmazlık sağlar ancak güç artırmaz",
+    "Tek seviye",
+    "Yuva gerektirmez"
+  ]
+}

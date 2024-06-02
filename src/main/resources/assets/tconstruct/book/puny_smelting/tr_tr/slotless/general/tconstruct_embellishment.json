@@ -1,0 +1,15 @@
+{
+  "modifier_id": "tconstruct:embellishment",
+  "text": [
+    {
+      "text": "Hiç zırhı olmasını dilediğiniz kadar güzel bir metal gördünüz mü? Şimdi herhangi bir metal zırhtır."
+    }
+  ],
+  "effects": [
+    "Zırhın, kalkanın ve asanın görünümünü değiştirir",
+    "Metalleri, külçelerle süsle",
+    "Balçıkları, katılaşmış balçıklarla süsle",
+    "Çoklu kullamım",
+    "Yuvasız"
+  ]
+}

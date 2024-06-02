@@ -1,0 +1,13 @@
+{
+  "modifier_id": "tconstruct:depth_strider",
+  "text": [
+    {
+      "text": "Bu ya delilik ya da ökeliktir. Bu iki niteliğin ne sıklıkla örtüştüğü dikkat çekici."
+    }
+  ],
+  "effects": [
+    "Su altında hareket hızını artırır",
+    "Çoklu seviyeler, hızı her seviyede daha da artırır",
+    "Seviye başına 1 yükseltme yuvası gerekir"
+  ]
+}

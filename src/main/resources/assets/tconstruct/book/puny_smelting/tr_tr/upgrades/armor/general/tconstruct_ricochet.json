@@ -1,0 +1,13 @@
+{
+  "modifier_id": "tconstruct:ricochet",
+  "text": [
+    {
+      "text": "Gözü pek bir kaçış yapma zamanı."
+    }
+  ],
+  "effects": [
+    "Karşıladığın savurmayı artırır",
+    "Çoklu seviyeler, savurmayı her seviyede daha da artırır",
+    "Seviye başına 1 yükseltme yuvası gerekir"
+  ]
+}

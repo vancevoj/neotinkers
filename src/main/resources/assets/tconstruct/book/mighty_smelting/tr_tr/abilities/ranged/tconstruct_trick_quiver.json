@@ -1,0 +1,15 @@
+{
+  "modifier_id": "tconstruct:trick_quiver",
+  "text": [
+    {
+      "text": "Hawkeye'ın okluğu yayında."
+    }
+  ],
+  "effects": [
+    "Yaya, geçişli üç ok yuvası verir",
+    "Saldırarak yuvaları değiştir",
+    "Eğilip saldırırken yuvalara eriş",
+    "Tek seviye",
+    "1 yetenek yuvası gerekir"
+  ]
+}

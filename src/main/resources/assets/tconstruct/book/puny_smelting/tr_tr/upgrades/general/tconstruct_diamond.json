@@ -1,0 +1,13 @@
+{
+  "modifier_id": "tconstruct:diamond",
+  "text": [
+    {
+      "text": "Sonsuza dek elmaslar!"
+    }
+  ],
+  "effects": [
+    "Dayanıklılığı, çıkarım hızını, saldırı hasarını ve zırhı artırır",
+    "Tek seviye",
+    "1 yükseltme yuvası gerekir"
+  ]
+}

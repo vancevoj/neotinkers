@@ -1,0 +1,13 @@
+{
+  "modifier_id": "tconstruct:blindshot",
+  "text": [
+    {
+      "text": "Gözlerine biraz toprak koyacağım."
+    }
+  ],
+  "effects": [
+    "Ateşlenen uzun menzillilerin doğruluğunu azaltır",
+    "Çoklu seviyeler, doğruluğu her seviyede daha da azaltır",
+    "Yuvasız"
+  ]
+}

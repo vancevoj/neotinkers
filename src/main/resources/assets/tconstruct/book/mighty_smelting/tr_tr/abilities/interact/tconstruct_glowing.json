@@ -1,0 +1,14 @@
+{
+  "modifier_id": "tconstruct:glowing",
+  "text": [
+    {
+      "text": "Parlak bir düşünce."
+    }
+  ],
+  "effects": [
+    "Parıltı koymak için etkileşim kur",
+    "Parıltı koymak araçta kırılmazlık olsa bile dayanıklılık tüketir",
+    "Tek seviye",
+    "1 yetenek yuvası gerektirir"
+  ]
+}

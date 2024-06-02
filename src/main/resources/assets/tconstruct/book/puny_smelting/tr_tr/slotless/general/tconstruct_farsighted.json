@@ -1,0 +1,13 @@
+{
+  "modifier_id": "tconstruct:farsighted",
+  "text": [
+    {
+      "text": "Menyullen mükemmel bir malzemedir ama erişimi daha kolay bir çok iyi malzeme vardır, biraz zaman ayır ve sona akın yapmadan önce onları deneyin."
+    }
+  ],
+  "effects": [
+    "Araç tutulduğunda veya zırh giyildiğinde görüş açısını azaltır",
+    "Çoklu seviyeler",
+    "Yuvasız"
+  ]
+}

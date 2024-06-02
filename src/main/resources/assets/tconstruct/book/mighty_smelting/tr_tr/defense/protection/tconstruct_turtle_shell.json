@@ -1,0 +1,13 @@
+{
+  "modifier_id": "tconstruct:turtle_shell",
+  "text": [
+    {
+      "text": "Seni yeşil, kırmızı veya mavi kabuklardan korumaz."
+    }
+  ],
+  "effects": [
+    "Su altında hasarı azaltır ve yüzme hızını artırır",
+    "Çoklu seviyeler, etkileri her seviyede daha da artırır",
+    "Seviye başına 1 savunma yuvası gerekir"
+  ]
+}

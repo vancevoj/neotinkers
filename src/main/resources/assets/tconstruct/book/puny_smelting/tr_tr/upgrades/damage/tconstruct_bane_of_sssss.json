@@ -1,0 +1,13 @@
+{
+  "modifier_id": "tconstruct:bane_of_sssss",
+  "text": [
+    {
+      "text": "Örümcek veya creeper yılgısı olanlar için en iyi yükseltmedir. Örümcekler ve creeperlar sakının."
+    }
+  ],
+  "effects": [
+    "Hasarı artırır ve örümcekleri ve börtü böcekleri yavaşlık uygular",
+    "Çoklu seviyeli, hasarı her seviyede daha da artırır",
+    "Seviye başına 1 yükseltme yuvası gerekir"
+  ]
+}

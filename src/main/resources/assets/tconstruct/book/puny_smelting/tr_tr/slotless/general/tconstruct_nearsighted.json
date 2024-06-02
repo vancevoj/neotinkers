@@ -1,0 +1,13 @@
+{
+  "modifier_id": "tconstruct:nearsighted",
+  "text": [
+    {
+      "text": "Eninde sonunda kırık taş araçlarını geçmen gerekecek."
+    }
+  ],
+  "effects": [
+    "Araç tutulduğunda veya zırh giyildiğinde görüş açısını artırır",
+    "Çoklu seviyeler",
+    "Yuvasız"
+  ]
+}

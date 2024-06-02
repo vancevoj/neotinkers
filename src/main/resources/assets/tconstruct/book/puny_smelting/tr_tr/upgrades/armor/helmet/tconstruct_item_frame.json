@@ -1,0 +1,13 @@
+{
+  "modifier_id": "tconstruct:item_frame",
+  "text": [
+    {
+      "text": "Saatini ve pusulanı tutmaktan yoruldun mu? Onun yerine neden onu giymiyorsun?"
+    }
+  ],
+  "effects": [
+    "Kaska yuvalar ekler, erişmek için etkileşin",
+    "Kask giyildiğinde eşyaları görüntüler",
+    "Seviye başına 1 yükseltme yuvası gerekir"
+  ]
+}

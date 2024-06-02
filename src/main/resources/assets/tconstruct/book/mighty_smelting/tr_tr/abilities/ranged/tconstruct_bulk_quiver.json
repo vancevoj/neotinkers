@@ -1,0 +1,14 @@
+{
+  "modifier_id": "tconstruct:bulk_quiver",
+  "text": [
+    {
+      "text": "Arkana okluk koymak abartılmıştır."
+    }
+  ],
+  "effects": [
+    "Yayının ok depolamasını sağlar",
+    "Eğilip saldırırken erişilebilir",
+    "Çoklu seviyeler, depolama boyutunu her seviyede artırır",
+    "Seviye başına 1 yetenek yuvası gerekir"
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "modifier_id": "tconstruct:knockback_resistance",
+  "text": [
+    {
+      "text": "Burada duruyorum, tank bile beni oynatamaz."
+    }
+  ],
+  "effects": [
+    "Alınan savurmayı azaltır",
+    "Tek seviye",
+    "1 savunma yuvası gerekir"
+  ]
+}

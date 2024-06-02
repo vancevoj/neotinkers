@@ -1,0 +1,14 @@
+{
+  "title": "Alaşımlayıcı Grafiksel Kullanıcı Arayüzü",
+  "image": {
+    "file": "tconstruct:book/images/alloyergui.png",
+    "width": 166,
+    "height": 78
+  },
+  "text": [
+    {
+      "text": "Senin yalın alaşımlayıcı grafiksel kullanıcı arayüzün ancak daha çoğu veya azı olabilir",
+      "paragraph": true
+    }
+	]
+}

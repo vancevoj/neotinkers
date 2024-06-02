@@ -1,0 +1,14 @@
+{
+  "modifier_id": "tconstruct:offhanded",
+  "text": [
+    {
+      "text": "En umursamaz değiştirici."
+    }
+  ],
+  "more_text_space": true,
+  "effects": [
+    "Aracın etkileşimlerini öbür eli doluyken devre dışı bırakır",
+    "İkinci seviyesi tümüyle etkileşimleri devre dışı bırakır",
+    "En çok 2 seviye"
+  ]
+}

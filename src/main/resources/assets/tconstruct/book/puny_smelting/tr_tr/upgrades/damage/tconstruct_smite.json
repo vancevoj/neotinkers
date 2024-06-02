@@ -1,0 +1,17 @@
+{
+  "modifier_id": "tconstruct:smite",
+  "text": [
+    {
+      "text": "Yaşayan ölüler benden korkun..."
+    },
+    {
+      "text": "Çünkü ben altınla aşılanmış karpuzun gücünü kullanıyorum! Belki altın karpuz zırhı onları benden uzak durduracaktır.",
+      "paragraph": true
+    }
+  ],
+  "effects": [
+    "Yaşayan ölülere karşı hasarı artırır",
+    "Çoklu seviyeler, hasarı her seviyede daha da artırır",
+    "Seviye başına 1 yükseltme yuvası gerekir"
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "tool": "tconstruct:longbow",
+  "text": [
+    {
+      "text": "Uzun yay direnmeye ve güçle savaşmaya hazır olanlar için kullanışlıdır"
+    },
+    {
+      "text": "\n"
+    },
+    {
+      "text": "Yaydan daha uzun ama uzun uzun yaydan daha kısa",
+      "paragraph": true
+    }
+  ],
+  "properties": [
+    "Yavaş ama daha güçlü yay",
+    "Daha yüksek hasar için tasarlandı"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "modifier_id": "tconstruct:flinging",
+  "text": [
+    {
+      "text": "Sonsuzluğa ve ötesine! (Uçma oyuncağı değildir)"
+    }
+  ],
+  "effects": [
+    "Hedeflenen bloktan uzağa fırlamak için yükle",
+    "Fırlatma hızını güç veya savurma ile artırılabilir",
+    "Tek seviye",
+    "1 yetenek yuvası gerekir"
+  ]
+}

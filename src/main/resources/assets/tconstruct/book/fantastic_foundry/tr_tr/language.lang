@@ -1,0 +1,15 @@
+intro=Tanıtım
+
+alloyer=Alaşımlayıcı
+
+foundry=Dökümevi
+
+blazing_blood=Alazlı Kan
+
+armor=Düşlemsel Zırh
+armor.subtext=Nether kaynaklarını kullanarak daha yüksek zırh düzeylerine erişim sağlayın. Örneğin, yavuz sac zırhı yüksek savunması olan övüncesi vardır ancak değiştirilebilirliği azdır. Kendini koruyabiliyorken kim fazladan özelliğe gereksinim duyar?
+
+melee_harvest_materials=4. Düzey Yakın Menzilli Çıkarım Malzemeleri
+melee_harvest_materials.subtext=Bu malzemelerin üretimi için alazlı kana gereksinim duyar ve bunlar yakın menzilli silahların veya çıkarım araçlarının araç parçalarında kullanılabilirler.
+ranged_materials=4. Düzey Uzun Menzilli Malzemeleri 
+melee_harvest_materials.subtext=Bu malzemelerin üretimi için alazlı kana gereksinim duyar ve bunlar yay gibi uzun menzilli silahların araç parçalarında kullanılabilirler.

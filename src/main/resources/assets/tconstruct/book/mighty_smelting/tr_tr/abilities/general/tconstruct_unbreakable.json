@@ -1,0 +1,14 @@
+{
+  "modifier_id": "tconstruct:unbreakable",
+  "text": [
+    {
+      "text": "Kırık şeyler eğlenceli değildir, çok şükür ki o şeyler kırılmaz yapılabilir."
+    }
+  ],
+  "effects": [
+    "Aracın artık kırılmaz",
+    "Tek seviye",
+    "1 yetenek yuvası, Sağlamlaştırılmış V ve Netherit gerekir",
+    "Aracını yemeyi denersen etkili değildir"
+  ]
+}

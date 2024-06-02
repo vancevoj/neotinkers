@@ -1,0 +1,13 @@
+{
+  "modifier_id": "tconstruct:parrying",
+  "text": [
+    {
+      "text": "Çılgın ninja becerilerini havadan gelen saldırıları savurmak için kullan."
+    }
+  ],
+  "effects": [
+    "Hançerler ile saldırdıktan kısaca sonra engellemeni sağlar",
+    "Tek seviye",
+    "1 yetenek yuvası gerekir"
+  ]
+}

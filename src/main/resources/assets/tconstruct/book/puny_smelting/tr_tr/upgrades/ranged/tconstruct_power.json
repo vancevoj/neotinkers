@@ -1,0 +1,13 @@
+{
+  "modifier_id": "tconstruct:power",
+  "text": [
+    {
+      "text": "Sınırsız §1§lGÜÜÜÜÜÜÜÜÜÜÜÜÜÜÇ§r."
+    }
+  ],
+  "effects": [
+    "Uzun yaylardan ateşlenen uzun menzillilerin hasarını artırır",
+    "Çoklu seviyeler, hasarı her seviyede daha da artırır",
+    "Seviye başına 1 yükseltme yuvası gerekir"
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "modifier_id": "tconstruct:multishot",
+  "text": [
+    {
+      "text": "Thruul, birden fazla uzun menzilli atarken yaşanabilecek kazalardan sorum değildir."
+    }
+  ],
+  "effects": [
+	"Bir kerede çoklu ok atar",
+	"Çoklu seviyeler, ateşlenen ok niceliğini artırır",
+	"Seviye başına 1 yetenek yuvası gerekir"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "modifier_id": "tconstruct:fiery",
+  "text": [
+    {
+      "text": "Netherın ateşleri düşmanlarını cezalandırmak için çalışır."
+    }
+  ],
+  "tool_filter": "tconstruct:modifiable/armor",
+  "effects": [
+    "Saldıranlar vurduklarında onları yakma şansı vardır",
+    "Çoklu seviyeler, yanış süresi seviye yükseldikçe artar",
+    "Seviye başına 1 yükseltme yuvası gerekir"
+  ]
+}

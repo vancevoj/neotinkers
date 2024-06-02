@@ -1,0 +1,14 @@
+{
+  "modifier_id": "tconstruct:plowing",
+  "text": [
+    {
+      "text": "Hiç büyük bir tarlaya gerek duymuş muydun? Gerçekten büyük bir tarla gibi? Şimdi yapabilirsin."
+    }
+  ],
+  "effects": [
+    "Yürüdükçe tarım alanı oluştur",
+    "Genişletilmiş ile alan artırılabilir",
+    "Tek seviye",
+    "1 yetenek yuvası gerekir"
+  ]
+}

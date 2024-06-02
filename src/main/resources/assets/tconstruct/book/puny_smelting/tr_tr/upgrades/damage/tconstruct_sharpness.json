@@ -1,0 +1,13 @@
+{
+  "modifier_id": "tconstruct:sharpness",
+  "text": [
+    {
+      "text": "Bıçak ağzı ne kadar keskinse kullanıcısı da o kadar keskindir."
+    }
+  ],
+  "effects": [
+    "Aracın hasarını artırır",
+    "Çoklu seviyeler, hasarı her seviyede daha da artırır",
+    "Seviye başına 1 yükseltme yuvası gerekir"
+  ]
+}

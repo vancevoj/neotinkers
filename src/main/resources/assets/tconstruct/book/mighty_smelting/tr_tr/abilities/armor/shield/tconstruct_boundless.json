@@ -1,0 +1,14 @@
+{
+  "modifier_id": "tconstruct:boundless",
+  "text": [
+    {
+      "text": "Sınırların yok! Tamam, hayla sınırların var, artık yalnızca daha yüksekteler."
+    }
+  ],
+  "effects": [
+    "En çok koruma niceliğini 10% artırır",
+    "İkinci parça ek 5% sağlar",
+    "Tek seviye",
+    "1 yetenek yuvası gerekir"
+  ]
+}

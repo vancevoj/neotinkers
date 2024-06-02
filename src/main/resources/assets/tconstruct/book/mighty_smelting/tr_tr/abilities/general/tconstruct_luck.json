@@ -1,0 +1,14 @@
+{
+  "modifier_id": "tconstruct:luck",
+  "text": [
+    {
+      "text": "Deneyimlerime göre şans diye bir şey yok."
+    }
+  ],
+  "effects": [
+    "Yaratıklardan düşenleri ve bloklardan düşenleri artırır",
+    "Araçlarda en çok 3 seviye ve her seviyenin tarifi farklı",
+    "Pantolonlarda tek seviye ve tutulan aracın düşenlerini artırır",
+    "Yalnızca ilk seviyesi için 1 yetenek yuvası gerekir"
+  ]
+}

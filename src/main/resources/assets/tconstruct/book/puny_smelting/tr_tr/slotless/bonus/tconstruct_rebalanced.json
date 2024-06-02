@@ -1,0 +1,17 @@
+{
+  "modifier_id": "tconstruct:rebalanced",
+  "text": [
+    {
+      "text": "Güç dengesi barışın ölçeğidir. --Thomas Paine."
+    },
+    {
+      "text": "Güç dengesi gerçekte ejderhanın puludur. Gerçi antik yaldızlama şaşırtıcı bir biçimde yakın. --Thruul M'Gon.", "paragraph": true
+    }
+  ],
+  "effects": [
+    "Bir değiştirici yuvası ekler",
+    "Yuva türü tarife göre belirlenir",
+    "Açgözlülük cezalandırılır",
+    "Tek seviye"
+  ]
+}

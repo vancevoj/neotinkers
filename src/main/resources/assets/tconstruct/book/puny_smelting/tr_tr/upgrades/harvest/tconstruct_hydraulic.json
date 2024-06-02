@@ -1,0 +1,13 @@
+{
+  "modifier_id": "tconstruct:hydraulic",
+  "text": [
+    {
+      "text": "Pompaların büyüsünü ve sıvıları kullanarak bir şeyleri kolayca hareket ettirebilirsin. Demem o ki bu durumda yapamazsın."
+    }
+  ],
+  "effects": [
+    "Su altında veya yağmurda daha hızlı çıkarır",
+    "Çoklu seviyeler, hızı her seviyede daha da artırır",
+    "Seviye başına 1 yükseltme yuvası gerekir"
+  ]
+}

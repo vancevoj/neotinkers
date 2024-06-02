@@ -1,0 +1,20 @@
+{
+  "title": "Yapı Gereksinimleri",
+  "text": [
+    {
+      "text": "Dökümevinin biraz gereksinimi var, daha büyük hep daha iyi değildir."
+    },
+    {
+      "text": "Dökümevinin tabanında cam dışında kabul edilebilir dökümevi bloklarından olması zorundadır. Kabul edilebilir bloklar az bir sayfa sonrasında gösterilecektir! Ayrıca dökümevin dikdörtgen olmalıdır; L biçiminde, çember biçiminde veya onikiyüzlü biçiminde olamaz.",
+      "paragraph": true
+    },
+    {
+      "text": "Dökümevinin en büyük boyutu dışardan 16x16x65 veya içerden 14x14x64.",
+      "paragraph": true
+    },
+    {
+      "text": "Dökümevinin doğru çalışabilmesi için köşeleri ve kenarları olması zorundadır.",
+      "paragraph": true
+    }
+  ]
+}

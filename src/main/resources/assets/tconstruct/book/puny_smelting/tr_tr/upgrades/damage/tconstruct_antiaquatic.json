@@ -1,0 +1,20 @@
+{
+  "modifier_id": "tconstruct:antiaquatic",
+  "text": [
+    {
+      "text": "Denizin düşmanları bu değiştiricili silahları kullananları görünce korkudan titriyorlar."
+    },
+    {
+      "text": "Sorumluluk Reddi: Sen bunu barışcıl deniz yaşamına karşı kullanıyorsan çok kötü birisin."
+    },
+    {
+      "text": "Şişleme ile karıştırılmamalıdır.",
+      "paragraph": true	
+    }
+  ],
+  "effects": [
+    "Deniz canlılarına hasarı artırır",
+    "Çoklu seviyeler, hasarı her seviyede daha da artırır",
+    "Seviye başına 1 yükseltme yuvası gerekir"
+  ]
+}

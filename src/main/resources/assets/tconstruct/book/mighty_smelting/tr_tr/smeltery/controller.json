@@ -1,0 +1,13 @@
+{
+  "title": "Kallama Ocağı Denetimcisi",
+  "image": {
+    "file": "tconstruct:book/images/scontroller.png",
+    "width": 128,
+    "height": 64
+  },
+  "text": [
+    {
+      "text": "Ergiticini kullanarak kallama ocağı denetimcini almak için kararmış tuğlanın üzerine dört külçe değerinde bakır dök."
+    }
+  ]
+}

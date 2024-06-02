@@ -1,0 +1,14 @@
+{
+  "title": "Kavrulmuş Cam",
+  "item": "tconstruct:scorched_glass",
+  "text": [
+    {
+      "text": "Bu cam ile düşlemsel dökümevini geçersiz kılmadan ergimiş malzemelerinin yavuz mucizelerine bakabilirsin. Bir kenara yaz, tank gibi su depolayamaz ",
+      "paragraph": true
+    },
+	{
+      "text": "Cam dökümevinin tabanı olarak kullanılamaz.",
+      "paragraph": true
+    }
+  ]
+}

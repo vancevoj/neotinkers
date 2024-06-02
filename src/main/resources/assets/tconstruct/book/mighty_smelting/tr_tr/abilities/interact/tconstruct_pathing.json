@@ -1,0 +1,13 @@
+{
+  "modifier_id": "tconstruct:pathing",
+  "text": [
+    {
+      "text": "Altın tuğlalı yolunu bulamıyorsan kendi toprak yolak yolunu yap."
+    }
+  ],
+  "effects": [
+    "Aracınla yolak yapmanı sağlar",
+    "Tek seviye",
+    "1 yetenek yuvası gerekir"
+  ]
+}

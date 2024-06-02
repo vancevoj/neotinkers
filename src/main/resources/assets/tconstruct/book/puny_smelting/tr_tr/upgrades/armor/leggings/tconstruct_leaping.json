@@ -1,0 +1,13 @@
+{
+  "modifier_id": "tconstruct:leaping",
+  "text": [
+    {
+      "text": "Yıldızlara sıçra ve eğer onlara yetişemiyorsan bir dağa tırman ve yeniden dene ve onlara yetiş."
+    }
+  ],
+  "effects": [
+    "Zıplama yüksekliğini ve güvenli düşüş yüksekliğini artırır",
+    "Çoklu seviyeler, zıplama ve düşüş hasarı yüksekliğini her seviyede daha da artırır",
+    "Seviye başına 1 yükseltme yuvası gerekir"
+  ]
+}

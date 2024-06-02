@@ -1,0 +1,13 @@
+{
+  "modifier_id": "tconstruct:soulspeed",
+  "text": [
+    {
+      "text": "Görünüşe göre ruhlar hızlı koşmak için ülküseldir. Aktöreye uygun mudur?"
+    }
+  ],
+  "effects": [
+    "Ruh hızı üzerinde hareket hızını artırır",
+    "Çoklu seviyeler, hızı her seviyede daha da artırır",
+    "Seviye başına 1 yükseltme yuvası gerekir"
+  ]
+}

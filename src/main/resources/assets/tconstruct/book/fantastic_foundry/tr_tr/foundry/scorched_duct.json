@@ -1,0 +1,14 @@
+{
+  "title": "Kavrulmuş Boşaltaç",
+  "item": "tconstruct:scorched_duct",
+  "text": [
+    {
+      "text": "Kavrulmuş boşaltaç kallama ocağından belirli bir sıvıyı çıkarma yoludur. Sıvı, boşaltıcının süzgeç yuvasına konan sıvıyla tümüyle dolu olan bakır teneke kutuya veya kovaya göre seçilir.",
+      "paragraph": true
+    },
+	{
+      "text": "Süzülmesi için seçtiğiniz sıvı doldurucunun ortasında gösterilecek.",
+      "paragraph": true
+    }
+	]
+}

@@ -1,0 +1,12 @@
+{
+  "title": "Kararmış Bloklar",
+  "item": {
+    "tag": "tconstruct:seared_blocks"
+  },
+  "text": [
+    {
+      "text": "Bu bloklar kallama ocağının tabanını veya duvarları gibi herhangi bir parçasında kullanılabilir. Üstünü süslemek için de kullanışlıdır",
+      "paragraph": true
+    }
+  ]
+}
