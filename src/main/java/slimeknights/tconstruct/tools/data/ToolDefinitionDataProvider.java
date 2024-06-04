@@ -37,7 +37,6 @@ import slimeknights.tconstruct.library.tools.definition.module.material.PartsMod
 import slimeknights.tconstruct.library.tools.definition.module.mining.IsEffectiveModule;
 import slimeknights.tconstruct.library.tools.definition.module.mining.MaxTierHarvestLogic;
 import slimeknights.tconstruct.library.tools.definition.module.mining.MiningSpeedModifierModule;
-import slimeknights.tconstruct.library.tools.definition.module.mining.OneClickBreakModule;
 import slimeknights.tconstruct.library.tools.definition.module.weapon.CircleWeaponAttack;
 import slimeknights.tconstruct.library.tools.definition.module.weapon.ParticleWeaponAttack;
 import slimeknights.tconstruct.library.tools.definition.module.weapon.SweepWeaponAttack;
@@ -550,6 +549,7 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
       .module(travelersSlots)
       .module(MaterialRepairModule.armor(MaterialIds.copper).durabilityFactor(10))
       .module(MaterialRepairModule.armor(MaterialIds.leather).durabilityFactor(7.5f))
+      .module(ToolTraitsModule.builder().trait(TinkerModifiers.tanned).build())
       .module(ArmorSlotType.BOOTS, ToolTraitsModule.builder().trait(ModifierIds.snowBoots).build());
     define(ArmorDefinitions.TRAVELERS_SHIELD)
       .module(new SetStatsModule(StatsNBT.builder()
@@ -560,7 +560,7 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
       .module(travelersSlots)
       .module(MaterialRepairModule.of(MaterialIds.leather, 200))
       .module(MaterialRepairModule.of(MaterialIds.wood, 100))
-      .module(ToolTraitsModule.builder().trait(TinkerModifiers.blocking).build())
+      .module(ToolTraitsModule.builder().trait(TinkerModifiers.blocking).trait(TinkerModifiers.tanned).build())
       .module(new PreferenceSetInteraction(InteractionSource.RIGHT_CLICK, new SingleModifierPredicate(TinkerModifiers.blocking.getId())));
 
     // plate armor

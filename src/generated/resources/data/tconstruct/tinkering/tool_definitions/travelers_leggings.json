@@ -24,6 +24,15 @@
       "type": "tconstruct:material_repair",
       "durability": 112,
       "material": "tconstruct:leather"
+    },
+    {
+      "type": "tconstruct:traits",
+      "traits": [
+        {
+          "level": 1,
+          "name": "tconstruct:tanned"
+        }
+      ]
     }
   ]
 }

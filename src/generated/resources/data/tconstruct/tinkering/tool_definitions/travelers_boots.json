@@ -30,6 +30,15 @@
       "traits": [
         {
           "level": 1,
+          "name": "tconstruct:tanned"
+        }
+      ]
+    },
+    {
+      "type": "tconstruct:traits",
+      "traits": [
+        {
+          "level": 1,
           "name": "tconstruct:snow_boots"
         }
       ]

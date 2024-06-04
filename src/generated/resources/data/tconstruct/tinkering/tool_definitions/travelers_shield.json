@@ -33,6 +33,10 @@
         {
           "level": 1,
           "name": "tconstruct:blocking"
+        },
+        {
+          "level": 1,
+          "name": "tconstruct:tanned"
         }
       ]
     },
