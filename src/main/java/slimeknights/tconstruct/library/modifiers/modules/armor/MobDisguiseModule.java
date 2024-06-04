@@ -34,7 +34,7 @@ public record MobDisguiseModule(EntityType<?> entity) implements EquipmentChange
   @Override
   public void onEquip(IToolStackView tool, ModifierEntry modifier, EquipmentChangeContext context) {
     if (context.getChangedSlot().getType() == Type.ARMOR) {
-      context.getTinkerData().ifPresent(data -> data.computeIfAbsent(DISGUISES).add(entity));
+      context.getTinkerData().ifPresent(data -> data.computeIfAbsent(DISGUISES).add(entity, modifier.getLevel()));
     }
   }
 
@@ -44,7 +44,7 @@ public record MobDisguiseModule(EntityType<?> entity) implements EquipmentChange
       context.getTinkerData().ifPresent(data -> {
         Multiset<EntityType<?>> disguises = data.get(DISGUISES);
         if (disguises != null) {
-          disguises.remove(entity);
+          disguises.remove(entity, modifier.getLevel());
         }
       });
     }

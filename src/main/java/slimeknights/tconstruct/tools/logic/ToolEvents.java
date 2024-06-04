@@ -392,9 +392,12 @@ public class ToolEvents {
     living.getCapability(TinkerDataCapability.CAPABILITY).ifPresent(data -> {
       // mob disguise
       Multiset<EntityType<?>> disguises = data.get(MobDisguiseModule.DISGUISES);
-      if (disguises != null && disguises.contains(lookingEntity.getType())) {
-        // not as good as a real head
-        event.modifyVisibility(0.65f);
+      if (disguises != null) {
+        int count = disguises.count(living.getType());
+        if (count > 0) {
+          // halves the range per level
+          event.modifyVisibility(1 / Math.pow(2, count));
+        }
       }
     });
   }
