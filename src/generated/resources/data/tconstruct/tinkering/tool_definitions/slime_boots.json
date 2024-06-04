@@ -39,6 +39,18 @@
           "name": "tconstruct:leaping"
         }
       ]
+    },
+    {
+      "type": "tconstruct:traits",
+      "hooks": [
+        "tconstruct:rebalanced_trait"
+      ],
+      "traits": [
+        {
+          "level": 1,
+          "name": "tconstruct:leaping"
+        }
+      ]
     }
   ]
 }

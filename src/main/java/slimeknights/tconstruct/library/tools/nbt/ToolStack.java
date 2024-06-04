@@ -639,9 +639,7 @@ public class ToolStack implements IToolStackView {
     } else {
       modBuilder = ModifierNBT.builder();
       TraitBuilder traitBuilder = new TraitBuilder(context, modBuilder);
-      for (ModifierEntry entry : beforeTraits.getModifiers()) {
-        traitBuilder.addEntry(entry);
-      }
+      traitBuilder.add(beforeTraits);
 
       // set the final modifier list on the tool
       ModifierNBT allMods = modBuilder.build();

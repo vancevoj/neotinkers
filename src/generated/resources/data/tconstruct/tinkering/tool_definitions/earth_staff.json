@@ -28,6 +28,18 @@
       ]
     },
     {
+      "type": "tconstruct:traits",
+      "hooks": [
+        "tconstruct:rebalanced_trait"
+      ],
+      "traits": [
+        {
+          "level": 1,
+          "name": "tconstruct:reach"
+        }
+      ]
+    },
+    {
       "type": "tconstruct:material_repair",
       "material": "tconstruct:slimewood",
       "stat_type": "tconstruct:limb"

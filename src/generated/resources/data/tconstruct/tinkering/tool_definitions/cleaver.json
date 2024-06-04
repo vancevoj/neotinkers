@@ -19,7 +19,8 @@
           "item": "tconstruct:large_plate",
           "scale": 0.25
         }
-      ]
+      ],
+      "primary_part": 0
     },
     {
       "type": "tconstruct:default_materials",

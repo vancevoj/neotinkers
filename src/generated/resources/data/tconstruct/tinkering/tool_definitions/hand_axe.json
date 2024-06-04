@@ -6,7 +6,8 @@
         "tconstruct:small_axe_head",
         "tconstruct:tool_handle",
         "tconstruct:tool_binding"
-      ]
+      ],
+      "primary_part": 0
     },
     {
       "type": "tconstruct:default_materials",

@@ -5,7 +5,8 @@
       "parts": [
         "tconstruct:helmet_plating",
         "tconstruct:maille"
-      ]
+      ],
+      "primary_part": 0
     },
     {
       "type": "tconstruct:default_materials",

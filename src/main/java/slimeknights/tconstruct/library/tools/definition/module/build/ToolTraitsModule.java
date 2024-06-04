@@ -3,15 +3,15 @@ package slimeknights.tconstruct.library.tools.definition.module.build;
 import com.google.common.collect.ImmutableList;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
-import slimeknights.tconstruct.library.module.ModuleHook;
 import slimeknights.tconstruct.library.modifiers.ModifierId;
-import slimeknights.tconstruct.library.module.HookProvider;
 import slimeknights.tconstruct.library.modifiers.util.LazyModifier;
+import slimeknights.tconstruct.library.module.HookProvider;
+import slimeknights.tconstruct.library.module.ModuleHook;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinition;
 import slimeknights.tconstruct.library.tools.definition.module.ToolHooks;
 import slimeknights.tconstruct.library.tools.definition.module.ToolModule;
+import slimeknights.tconstruct.library.tools.helper.ModifierBuilder;
 import slimeknights.tconstruct.library.tools.nbt.MaterialNBT;
-import slimeknights.tconstruct.library.tools.nbt.ModifierNBT;
 
 import java.util.List;
 
@@ -35,7 +35,7 @@ public record ToolTraitsModule(List<ModifierEntry> traits) implements ToolTraitH
   }
 
   @Override
-  public void addTraits(ToolDefinition definition, MaterialNBT materials, ModifierNBT.Builder builder) {
+  public void addTraits(ToolDefinition definition, MaterialNBT materials, ModifierBuilder builder) {
     builder.add(traits);
   }
 

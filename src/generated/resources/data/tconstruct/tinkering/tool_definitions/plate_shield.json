@@ -2,6 +2,7 @@
   "modules": [
     {
       "type": "tconstruct:material_stats",
+      "primary_part": 1,
       "stat_types": [
         "tconstruct:shield_core",
         "tconstruct:plating_shield"

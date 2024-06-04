@@ -5,7 +5,8 @@
       "parts": [
         "tconstruct:small_blade",
         "tconstruct:tool_handle"
-      ]
+      ],
+      "primary_part": 0
     },
     {
       "type": "tconstruct:default_materials",

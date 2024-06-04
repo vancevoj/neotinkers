@@ -14,6 +14,7 @@ import slimeknights.tconstruct.library.json.predicate.modifier.SingleModifierPre
 import slimeknights.tconstruct.library.materials.RandomMaterial;
 import slimeknights.tconstruct.library.modifiers.hook.interaction.InteractionSource;
 import slimeknights.tconstruct.library.tools.SlotType;
+import slimeknights.tconstruct.library.tools.definition.module.ToolHooks;
 import slimeknights.tconstruct.library.tools.definition.module.ToolModule;
 import slimeknights.tconstruct.library.tools.definition.module.aoe.BoxAOEIterator;
 import slimeknights.tconstruct.library.tools.definition.module.aoe.CircleAOEIterator;
@@ -462,6 +463,7 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
         .trait(TinkerModifiers.firestarter)
         .trait(TinkerModifiers.fiery)
         .trait(ModifierIds.scorching).build())
+      .module(ToolTraitsModule.builder().trait(ModifierIds.scorching).build(), ToolHooks.REBALANCED_TRAIT)
       // repair
       .module(MaterialRepairModule.of(MaterialIds.searedStone, HeadMaterialStats.ID))
       .module(MaterialRepairModule.of(MaterialIds.scorchedStone, HeadMaterialStats.ID));
@@ -478,6 +480,7 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
         .slots(SlotType.UPGRADE, 5)
         .slots(SlotType.ABILITY, 2).build())
       .module(ToolTraitsModule.builder().trait(ModifierIds.overslimeFriend).build())
+      .module(ToolTraitsModule.builder().trait(ModifierIds.reach).build(), ToolHooks.REBALANCED_TRAIT)
       .module(staffRepair)
       .module(new CircleAOEIterator(1, false))
       .module(DualOptionInteraction.INSTANCE);
@@ -493,6 +496,7 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
         .slots(SlotType.DEFENSE, 3)
         .slots(SlotType.ABILITY, 2).build())
       .module(ToolTraitsModule.builder().trait(ModifierIds.overslimeFriend).build())
+      .module(ToolTraitsModule.builder().trait(ModifierIds.reach).build(), ToolHooks.REBALANCED_TRAIT)
       .module(staffRepair)
       .module(new CircleAOEIterator(1, false))
       .module(DualOptionInteraction.INSTANCE);
@@ -507,6 +511,7 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
         .slots(SlotType.UPGRADE, 2)
         .slots(SlotType.ABILITY, 3).build())
       .module(ToolTraitsModule.builder().trait(ModifierIds.overslimeFriend).build())
+      .module(ToolTraitsModule.builder().trait(ModifierIds.reach).build(), ToolHooks.REBALANCED_TRAIT)
       .module(staffRepair)
       .module(new CircleAOEIterator(1, false))
       .module(DualOptionInteraction.INSTANCE);
@@ -525,6 +530,7 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
       .module(ToolTraitsModule.builder()
         .trait(ModifierIds.overslimeFriend)
         .trait(ModifierIds.reach, 2).build())
+      .module(ToolTraitsModule.builder().trait(ModifierIds.reach).build(), ToolHooks.REBALANCED_TRAIT)
       .module(staffRepair)
       .module(new CircleAOEIterator(1, false))
       .module(DualOptionInteraction.INSTANCE);
@@ -575,7 +581,8 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
     define(ArmorDefinitions.PLATE_SHIELD)
       .module(MaterialStatsModule.stats()
         .stat(StatlessMaterialStats.SHIELD_CORE.getIdentifier())
-        .stat(PlatingMaterialStats.SHIELD.getId()).build())
+        .stat(PlatingMaterialStats.SHIELD.getId())
+        .primaryPart(1).build())
       .module(new PartsModule(List.of(TinkerToolParts.shieldCore.get())))
       .module(DefaultMaterialsModule.builder()
          .material(MaterialIds.wood)
@@ -612,9 +619,11 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
       .module(ArmorSlotType.LEGGINGS, slimeTraits.copy()
         .trait(ModifierIds.pockets, 1)
         .trait(TinkerModifiers.shulking, 1).build())
+      .module(ArmorSlotType.LEGGINGS, ToolTraitsModule.builder().trait(TinkerModifiers.shulking, 1).build(), ToolHooks.REBALANCED_TRAIT)
       .module(ArmorSlotType.BOOTS, slimeTraits.copy()
         .trait(TinkerModifiers.bouncy)
-        .trait(ModifierIds.leaping, 1).build());
+        .trait(ModifierIds.leaping, 1).build())
+      .module(ArmorSlotType.BOOTS, ToolTraitsModule.builder().trait(ModifierIds.leaping, 1).build(), ToolHooks.REBALANCED_TRAIT);
   }
 
   @Override

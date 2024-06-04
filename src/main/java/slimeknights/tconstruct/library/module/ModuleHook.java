@@ -33,6 +33,11 @@ public class ModuleHook<T> implements IdAwareObject {
     return filter.isInstance(module);
   }
 
+  /** Checks if the given class */
+  public boolean supportsHook(Class<?> classType) {
+    return classType.isAssignableFrom(filter);
+  }
+
   /** Unchecked cast of the module to this hook type. Use only if certain the module type and hook type are the same */
   @SuppressWarnings("unchecked")
   public T cast(Object module) {

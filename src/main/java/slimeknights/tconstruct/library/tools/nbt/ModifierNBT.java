@@ -7,10 +7,9 @@ import lombok.RequiredArgsConstructor;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import slimeknights.tconstruct.library.modifiers.IncrementalModifierEntry;
-import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierId;
-import slimeknights.tconstruct.library.modifiers.ModifierManager;
+import slimeknights.tconstruct.library.tools.helper.ModifierBuilder;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
@@ -212,17 +211,13 @@ public class ModifierNBT {
   /**
    * Builder class for creating a modifier list with multiple additions. Builder results will be sorted
    */
-  public static class Builder {
+  public static class Builder implements ModifierBuilder {
     /** Intentionally using modifiers to ensure they are resolved */
     private final Map<ModifierId, ModifierEntry> modifiers = new LinkedHashMap<>();
 
     private Builder() {}
 
-    /**
-     * Adds an entry to the builder
-     * @param entry  Entry to add
-     * @return  Builder instance
-     */
+    @Override
     public Builder add(ModifierEntry entry) {
       if (entry != ModifierEntry.EMPTY) {
         ModifierId id = entry.getId();
@@ -235,63 +230,7 @@ public class ModifierNBT {
       return this;
     }
 
-    /**
-     * Adds a single modifier to the builder
-     * @param modifier  Modifier
-     * @param level     Modifier level
-     * @return  Builder instance
-     */
-    public Builder add(ModifierId modifier, int level) {
-      if (level <= 0) {
-        throw new IllegalArgumentException("Level must be above 0");
-      }
-      // skip if it's the empty modifier, no sense tracking
-      if (!modifier.equals(ModifierManager.EMPTY)) {
-        add(new ModifierEntry(modifier, level));
-      }
-      return this;
-    }
-
-    /**
-     * Adds a single modifier to the builder
-     * @param modifier  Modifier
-     * @param level     Modifier level
-     * @return  Builder instance
-     */
-    public Builder add(Modifier modifier, int level) {
-      if (level <= 0) {
-        throw new IllegalArgumentException("Level must be above 0");
-      }
-      // skip if it's the empty modifier, no sense tracking
-      if (modifier != ModifierManager.INSTANCE.getDefaultValue()) {
-        add(new ModifierEntry(modifier, level));
-      }
-      return this;
-    }
-
-    /**
-     * Adds an entry to the builder
-     * @param entries  Entries to add
-     * @return  Builder instance
-     */
-    public Builder add(List<ModifierEntry> entries) {
-      for (ModifierEntry entry : entries) {
-        add(entry);
-      }
-      return this;
-    }
-
-    /**
-     * Adds all modifiers from the given modifier NBT
-     * @param nbt  NBT object
-     * @return  Builder instance
-     */
-    public Builder add(ModifierNBT nbt) {
-      add(nbt.getModifiers());
-      return this;
-    }
-
-    /** Builds the NBT */
+    @Override
     public ModifierNBT build() {
       // converts the map into a list of entries, priority sorted
       // note priority is negated so higher numbers go first

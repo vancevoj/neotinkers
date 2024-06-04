@@ -30,6 +30,18 @@
       ]
     },
     {
+      "type": "tconstruct:traits",
+      "hooks": [
+        "tconstruct:rebalanced_trait"
+      ],
+      "traits": [
+        {
+          "level": 1,
+          "name": "tconstruct:scorching"
+        }
+      ]
+    },
+    {
       "type": "tconstruct:material_repair",
       "material": "tconstruct:seared_stone",
       "stat_type": "tconstruct:head"

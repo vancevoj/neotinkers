@@ -33,7 +33,7 @@ import java.util.List;
 public record SwappableSlotModule(@Nullable ResourceLocation key, int slotCount) implements VolatileDataModifierHook, DisplayNameModifierHook, ModifierRemovalHook, ModifierModule, ModuleWithKey {
   private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<SwappableSlotModule>defaultHooks(ModifierHooks.VOLATILE_DATA, ModifierHooks.DISPLAY_NAME, ModifierHooks.REMOVE);
   /** Format key for swappable variant */
-  private static final String FORMAT = TConstruct.makeTranslationKey("modifier", "extra_modifier.type_format");
+  public static final String FORMAT = TConstruct.makeTranslationKey("modifier", "extra_modifier.type_format");
   public static final RecordLoadable<SwappableSlotModule> LOADER = RecordLoadable.create(
     ModuleWithKey.FIELD,
     IntLoadable.ANY_SHORT.requiredField("slots", SwappableSlotModule::slotCount),
@@ -75,7 +75,7 @@ public record SwappableSlotModule(@Nullable ResourceLocation key, int slotCount)
   @Nullable
   @Override
   public Component onRemoved(IToolStackView tool, Modifier modifier) {
-    tool.getPersistentData().remove(modifier.getId());
+    tool.getPersistentData().remove(getKey(modifier));
     return null;
   }
 

@@ -3,6 +3,8 @@ package slimeknights.tconstruct.library.tools.definition.module.material;
 import com.google.common.collect.ImmutableList;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.registration.object.EnumObject;
 import slimeknights.tconstruct.library.json.TinkerLoadables;
@@ -23,11 +25,19 @@ public class PartStatsModule extends MaterialStatsModule implements ToolPartsHoo
   public static final RecordLoadable<PartStatsModule> LOADER = RecordLoadable.create(
     new OptionallyNestedLoadable<>(TinkerLoadables.TOOL_PART_ITEM, "item").list().requiredField("parts", m -> m.parts),
     new StatScaleField("item", "parts"),
+    PRIMARY_PART_FIELD,
     PartStatsModule::new);
 
   private final List<IToolPart> parts;
+
+  /** @deprecated use {@link #PartStatsModule(List,float[], int)} or {@link Builder} */
+  @Deprecated
   public PartStatsModule(List<IToolPart> parts, float[] scales) {
-    super(parts.stream().map(IToolPart::getStatType).toList(), scales);
+    this(parts, scales, 0);
+  }
+
+  protected PartStatsModule(List<IToolPart> parts, float[] scales, int primaryPart) {
+    super(parts.stream().map(IToolPart::getStatType).toList(), scales, primaryPart);
     this.parts = parts;
   }
 
@@ -62,6 +72,8 @@ public class PartStatsModule extends MaterialStatsModule implements ToolPartsHoo
   public static class Builder {
     private final ImmutableList.Builder<IToolPart> parts = ImmutableList.builder();
     private final ImmutableList.Builder<Float> scales = ImmutableList.builder();
+    @Setter @Accessors(fluent = true)
+    private int primaryPart = 0;
 
     /** Adds a part to the builder */
     public Builder part(IToolPart part, float scale) {
@@ -87,7 +99,11 @@ public class PartStatsModule extends MaterialStatsModule implements ToolPartsHoo
 
     /** Builds the module */
     public PartStatsModule build() {
-      return new PartStatsModule(parts.build(), MaterialStatsModule.Builder.buildScales(scales.build()));
+      List<IToolPart> parts = this.parts.build();
+      if (primaryPart >= parts.size() || primaryPart < -1) {
+        throw new IllegalStateException("Primary part must be within parts list, maximum " + parts.size() + ", got " + primaryPart);
+      }
+      return new PartStatsModule(parts, MaterialStatsModule.Builder.buildScales(scales.build()), primaryPart);
     }
   }
 
@@ -139,6 +155,13 @@ public class PartStatsModule extends MaterialStatsModule implements ToolPartsHoo
       return this;
     }
 
+    /** Sets the primary part for all slots, assuming its the same index as you defined the parts using this builder. */
+    public ArmorBuilder primaryPart(int index) {
+      for (ArmorSlotType slotType : slotTypes) {
+        getBuilder(slotType).primaryPart(index);
+      }
+      return this;
+    }
 
     @Override
     public PartStatsModule build(ArmorSlotType slot) {

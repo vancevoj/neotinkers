@@ -43,7 +43,7 @@ public final class SlotType {
   /** Key for uppercase slot name */
   private static final String KEY_PREFIX = TConstruct.makeTranslationKey("stat", "slot.prefix.");
   /** Key for lowercase slot name */
-  private static final String KEY_DISPLAY = TConstruct.makeTranslationKey("stat", "slot.display.");
+  public static final String KEY_DISPLAY = TConstruct.makeTranslationKey("stat", "slot.display.");
   /** Map of instances for each name */
   private static final Map<String,SlotType> SLOT_TYPES = new HashMap<>();
   /** List of all slots in the order they were added */

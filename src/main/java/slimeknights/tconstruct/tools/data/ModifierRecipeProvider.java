@@ -50,6 +50,7 @@ import slimeknights.tconstruct.library.recipe.FluidValues;
 import slimeknights.tconstruct.library.recipe.casting.ItemCastingRecipeBuilder;
 import slimeknights.tconstruct.library.recipe.ingredient.MaterialIngredient;
 import slimeknights.tconstruct.library.recipe.ingredient.NoContainerIngredient;
+import slimeknights.tconstruct.library.recipe.ingredient.ToolHookIngredient;
 import slimeknights.tconstruct.library.recipe.modifiers.adding.IncrementalModifierRecipeBuilder;
 import slimeknights.tconstruct.library.recipe.modifiers.adding.ModifierRecipeBuilder;
 import slimeknights.tconstruct.library.recipe.modifiers.adding.MultilevelModifierRecipeBuilder;
@@ -60,6 +61,7 @@ import slimeknights.tconstruct.library.recipe.tinkerstation.repairing.ModifierMa
 import slimeknights.tconstruct.library.recipe.tinkerstation.repairing.ModifierRepairRecipeBuilder;
 import slimeknights.tconstruct.library.recipe.worktable.ModifierSetWorktableRecipeBuilder;
 import slimeknights.tconstruct.library.tools.SlotType;
+import slimeknights.tconstruct.library.tools.definition.module.ToolHooks;
 import slimeknights.tconstruct.library.tools.definition.module.interaction.DualOptionInteraction;
 import slimeknights.tconstruct.shared.TinkerCommons;
 import slimeknights.tconstruct.shared.TinkerMaterials;
@@ -1498,6 +1500,15 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                                   .addInput(TinkerWorld.ichorGeode.getBlock())
                                   .disallowCrystal()
                                   .save(consumer, wrap(ModifierIds.rebalanced, slotlessFolder, "_" + SlotType.ABILITY.getName()));
+    SwappableModifierRecipeBuilder.modifier(ModifierIds.rebalanced, "traits")
+                                  .setTools(ToolHookIngredient.of(TinkerTags.Items.BONUS_SLOTS, ToolHooks.REBALANCED_TRAIT))
+                                  .addInput(rebalancedCommon)
+                                  .addInput(TinkerMaterials.manyullyn.getIngotTag())
+                                  .addInput(rebalancedCommon)
+                                  .addInput(TinkerWorld.enderGeode.getBlock())
+                                  .addInput(TinkerWorld.enderGeode.getBlock())
+                                  .disallowCrystal()
+                                  .save(consumer, wrap(ModifierIds.rebalanced, slotlessFolder, "_traits"));
     // creative
     SpecialRecipeBuilder.special(TinkerModifiers.creativeSlotSerializer.get()).save(consumer, prefix(slotlessFolder + "creative_slot"));
 

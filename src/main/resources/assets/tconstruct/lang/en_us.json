@@ -2747,6 +2747,7 @@
   "stat.tconstruct.slot.display.abilities": "ability",
   "stat.tconstruct.slot.display.souls": "soul",
   "stat.tconstruct.slot.display.defense": "defense",
+  "stat.tconstruct.slot.display.traits": "trait",
 
   "armor_stat.tconstruct.mining_speed": "Mining Speed",
   "armor_stat.tconstruct.use_item_speed": "Use Item Speed",

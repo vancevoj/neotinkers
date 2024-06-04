@@ -33,11 +33,11 @@ public record ModifierTraitModule(ModifierEntry modifier, boolean fixedLevel) im
     if (fixedLevel) {
       // fixed levels do not need to add again if already added
       if (firstEncounter) {
-        builder.addEntry(this.modifier);
+        builder.add(this.modifier);
       }
     } else {
       // level of the trait is based on the level of the modifier, just multiply the two
-      builder.addEntry(this.modifier.withLevel(this.modifier.getLevel() * self.getLevel()));
+      builder.add(this.modifier.withLevel(this.modifier.getLevel() * self.getLevel()));
     }
   }
 

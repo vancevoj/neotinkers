@@ -13,7 +13,8 @@
           "scale": 0.25
         },
         "tconstruct:tool_binding"
-      ]
+      ],
+      "primary_part": 0
     },
     {
       "type": "tconstruct:default_materials",

@@ -11,6 +11,11 @@
       "bonus": "upgrades",
       "match": "abilities",
       "slots": -1
+    },
+    {
+      "type": "tconstruct:swappable_tool_traits",
+      "hook": "tconstruct:rebalanced_trait",
+      "match": "traits"
     }
   ],
   "tooltip_display": "tinker_station"

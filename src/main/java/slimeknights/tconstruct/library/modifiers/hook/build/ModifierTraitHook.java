@@ -5,6 +5,7 @@ import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
+import slimeknights.tconstruct.library.tools.helper.ModifierBuilder;
 import slimeknights.tconstruct.library.tools.nbt.IToolContext;
 import slimeknights.tconstruct.library.tools.nbt.ModifierNBT;
 
@@ -28,7 +29,7 @@ public interface ModifierTraitHook {
 
   /** Builder that handles adding traits that can themselves contain traits */
   @RequiredArgsConstructor
-  class TraitBuilder {
+  class TraitBuilder implements ModifierBuilder {
     /** Set of all modifiers that have been encountered during this rebuild */
     private final Set<Modifier> seenModifiers = new HashSet<>();
     /** Modifiers that are currently adding their traits, prevents adding traits for a modifier inside itself, which will recurse infinitely */
@@ -39,9 +40,17 @@ public interface ModifierTraitHook {
     private final ModifierNBT.Builder builder;
 
     /** Adds the given modifier to the builder and adds all its traits */
-    public void addEntry(ModifierEntry entry) {
+    @Override
+    public TraitBuilder add(ModifierEntry entry) {
       builder.add(entry);
       addTraits(entry);
+      return this;
+    }
+
+    /** @deprecated use {@link #add(ModifierEntry)} */
+    @Deprecated(forRemoval = true)
+    public void addEntry(ModifierEntry entry) {
+      add(entry);
     }
 
     /** Adds all traits for the given modifier entry */
@@ -66,6 +75,11 @@ public interface ModifierTraitHook {
     /** Checks if the given modifier has been seen before */
     public boolean hasSeenModifier(Modifier modifier) {
       return seenModifiers.contains(modifier);
+    }
+
+    @Override
+    public ModifierNBT build() {
+      return builder.build();
     }
   }
 

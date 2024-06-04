@@ -11,6 +11,7 @@ import net.minecraft.world.item.ArrowItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
+import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -39,6 +40,7 @@ import slimeknights.tconstruct.library.json.predicate.tool.ToolStackItemPredicat
 import slimeknights.tconstruct.library.json.predicate.tool.ToolStackPredicate;
 import slimeknights.tconstruct.library.materials.RandomMaterial;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
+import slimeknights.tconstruct.library.recipe.ingredient.ToolHookIngredient;
 import slimeknights.tconstruct.library.tools.IndestructibleItemEntity;
 import slimeknights.tconstruct.library.tools.SlotType;
 import slimeknights.tconstruct.library.tools.capability.ToolCapabilityProvider;
@@ -62,6 +64,7 @@ import slimeknights.tconstruct.library.tools.definition.module.interaction.Prefe
 import slimeknights.tconstruct.library.tools.definition.module.material.DefaultMaterialsModule;
 import slimeknights.tconstruct.library.tools.definition.module.material.MaterialRepairModule;
 import slimeknights.tconstruct.library.tools.definition.module.material.MaterialStatsModule;
+import slimeknights.tconstruct.library.tools.definition.module.material.MaterialTraitsModule;
 import slimeknights.tconstruct.library.tools.definition.module.material.PartStatsModule;
 import slimeknights.tconstruct.library.tools.definition.module.material.PartsModule;
 import slimeknights.tconstruct.library.tools.definition.module.mining.IsEffectiveModule;
@@ -205,6 +208,7 @@ public final class TinkerTools extends TinkerModule {
   void registerRecipeSerializers(RegisterEvent event) {
     if (event.getRegistryKey() == Registry.RECIPE_SERIALIZER_REGISTRY) {
       ItemPredicate.register(ToolStackItemPredicate.ID, ToolStackItemPredicate::deserialize);
+      CraftingHelper.register(ToolHookIngredient.Serializer.ID, ToolHookIngredient.Serializer.INSTANCE);
 
       // tool definition components
       ToolModule.LOADER.register(getResource("base_stats"), SetStatsModule.LOADER);
@@ -220,6 +224,7 @@ public final class TinkerTools extends TinkerModule {
       // material
       ToolModule.LOADER.register(getResource("material_stats"), MaterialStatsModule.LOADER);
       ToolModule.LOADER.register(getResource("part_stats"), PartStatsModule.LOADER);
+      ToolModule.LOADER.register(getResource("material_traits"), MaterialTraitsModule.LOADER);
       ToolModule.LOADER.register(getResource("tool_parts"), PartsModule.LOADER);
       ToolModule.LOADER.register(getResource("material_repair"), MaterialRepairModule.LOADER);
       ToolModule.LOADER.register(getResource("default_materials"), DefaultMaterialsModule.LOADER);

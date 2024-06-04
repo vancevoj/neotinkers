@@ -19,7 +19,8 @@
           "item": "tconstruct:tough_handle",
           "scale": 0.5
         }
-      ]
+      ],
+      "primary_part": 0
     },
     {
       "type": "tconstruct:default_materials",

@@ -73,7 +73,15 @@ public class ToolHooks {
   /** Hook for checking if a tool can perform a given action. */
   public static final ModuleHook<VolatileDataToolHook> VOLATILE_DATA = register("volatile_data", VolatileDataToolHook.class, VolatileDataToolHook.AllMerger::new, (context, data) -> {});
   /** Hook for fetching tool traits */
-  public static final ModuleHook<ToolTraitHook> TOOL_TRAITS = register("tool_traits", ToolTraitHook.class, ToolTraitHook.AllMerger::new, (definition, materials, builder) -> {});
+  public static final ModuleHook<ToolTraitHook> TOOL_TRAITS;
+  /** Hook for fetching traits for the rebalanced modifier */
+  public static final ModuleHook<ToolTraitHook> REBALANCED_TRAIT;
+  static {
+    Function<Collection<ToolTraitHook>,ToolTraitHook> merger = ToolTraitHook.AllMerger::new;
+    ToolTraitHook defaultInstance = (definition, materials, builder) -> {};
+    TOOL_TRAITS = register("tool_traits", ToolTraitHook.class, merger, defaultInstance);
+    REBALANCED_TRAIT = register("rebalanced_trait", ToolTraitHook.class, merger, defaultInstance);
+  }
   /** Hook for checking if a tool can perform a given action. */
   public static final ModuleHook<ToolActionToolHook> TOOL_ACTION = register("tool_actions", ToolActionToolHook.class, ToolActionToolHook.AnyMerger::new, (tool, action) -> false);
 
