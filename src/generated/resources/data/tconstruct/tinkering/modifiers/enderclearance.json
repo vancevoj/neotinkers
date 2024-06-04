@@ -1,0 +1,10 @@
+{
+  "type": "tconstruct:composable",
+  "level_display": "tconstruct:single_level",
+  "modules": [
+    {
+      "type": "tconstruct:enderclearance"
+    }
+  ],
+  "tooltip_display": "always"
+}

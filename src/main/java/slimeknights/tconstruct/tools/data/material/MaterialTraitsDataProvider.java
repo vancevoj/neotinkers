@@ -32,6 +32,7 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     addDefaultTraits(MaterialIds.bamboo, ModifierIds.unburdened);
     // tier 1 - end
     addDefaultTraits(MaterialIds.chorus, TinkerModifiers.enderference);
+    addTraits(MaterialIds.chorus, ARMOR, ModifierIds.enderclearance);
     // tier 1 - binding
     addDefaultTraits(MaterialIds.string, ModifierIds.stringy);
     addDefaultTraits(MaterialIds.leather, TinkerModifiers.tanned);

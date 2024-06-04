@@ -1506,7 +1506,7 @@
   "material.tconstruct.chorus.flavor": "Not just the endermen, but the enderwomen, and the enderchildren",
   "material.tconstruct.chorus.encyclopedia": "Prevents the target from teleporting for a 5 seconds per effect level",
   "material.tconstruct.chorus.ranged": "Prevents the target from teleporting for a 5 seconds per effect level and allows damaging endermen with arrows",
-  "material.tconstruct.chorus.armor": "Has a 15% chance per level of preventing attackers from teleporting for a 5 seconds",
+  "material.tconstruct.chorus.armor": "Has a 25% chance per level of randomly teleporting attackers away",
 
   "material.tconstruct.string": "String",
   "material.tconstruct.string.flavor": "Theoretically the best material.",
@@ -2354,6 +2354,9 @@
   "modifier.tconstruct.enderference": "Enderference",
   "modifier.tconstruct.enderference.flavor": "Really quite distracting",
   "modifier.tconstruct.enderference.description": "Prevents target from teleporting for a short time",
+  "modifier.tconstruct.enderclearance": "Enderclearance",
+  "modifier.tconstruct.enderclearance.flavor": "Discount on the ender",
+  "modifier.tconstruct.enderclearance.description": "Has a chance to teleport attackers away",
   "modifier.tconstruct.unburdened": "Unburdened",
   "modifier.tconstruct.unburdened.flavor": "Easy to use",
   "modifier.tconstruct.unburdened.description": "Movement speed is hindered less when using the item.",

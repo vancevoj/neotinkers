@@ -113,6 +113,7 @@ public class ModifierIds {
   public static final ModifierId stringy = id("stringy");
   public static final ModifierId unburdened = id("unburdened");
   public static final ModifierId depthProtection = id("depth_protection");
+  public static final ModifierId enderclearance = id("enderclearance");
   // traits - tier 2
   public static final ModifierId sturdy = id("sturdy");
   public static final ModifierId scorching = id("scorching");
