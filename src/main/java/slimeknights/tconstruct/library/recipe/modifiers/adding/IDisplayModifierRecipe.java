@@ -3,6 +3,7 @@ package slimeknights.tconstruct.library.recipe.modifiers.adding;
 import com.google.common.collect.Streams;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import slimeknights.tconstruct.library.json.IntRange;
@@ -57,6 +58,15 @@ public interface IDisplayModifierRecipe extends IModifierRecipe {
    */
   default IntRange getLevel() {
     return ModifierEntry.VALID_LEVEL;
+  }
+
+  /**
+   * Gets the swappable variant for this recipe. Mutually exclusive with level for recipe display.
+   * @return  Variant text for the modifier, or null if not a variant.
+   */
+  @Nullable
+  default Component getVariant() {
+    return null;
   }
 
   /** Gets the slot type used by this modifier */

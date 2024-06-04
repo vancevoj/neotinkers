@@ -3,20 +3,21 @@
   "allow_crystal": false,
   "inputs": [
     {
-      "item": "minecraft:magma_block"
+      "item": "tconstruct:enderbark_planks"
     },
     {
-      "item": "minecraft:magma_cream"
+      "item": "tconstruct:ender_slime_sapling"
     },
     {
-      "item": "minecraft:magma_block"
+      "item": "tconstruct:enderbark_planks"
     }
   ],
   "result": {
     "name": "tconstruct:embellishment",
-    "value": "tconstruct:magma"
+    "value": "tconstruct:enderslime"
   },
   "tools": {
     "tag": "tconstruct:modifiable/embellishment/slime"
-  }
+  },
+  "variant_formatter": "tconstruct:material"
 }

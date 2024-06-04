@@ -1,15 +1,20 @@
 package slimeknights.tconstruct.library.recipe.modifiers.adding;
 
+import lombok.Setter;
+import lombok.experimental.Accessors;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.resources.ResourceLocation;
 import slimeknights.tconstruct.library.modifiers.ModifierId;
 import slimeknights.tconstruct.library.modifiers.util.LazyModifier;
+import slimeknights.tconstruct.library.recipe.modifiers.adding.SwappableModifierRecipe.VariantFormatter;
 
 import java.util.function.Consumer;
 
 /** Builder for a modifier with a swappable string key */
 public class SwappableModifierRecipeBuilder extends ModifierRecipeBuilder {
   private final String value;
+  @Setter @Accessors(fluent = true)
+  private VariantFormatter variantFormatter = VariantFormatter.DEFAULT;
   protected SwappableModifierRecipeBuilder(ModifierId modifier, String value) {
     super(modifier);
     this.value = value;
@@ -47,6 +52,6 @@ public class SwappableModifierRecipeBuilder extends ModifierRecipeBuilder {
       throw new IllegalStateException("Must have at least 1 input");
     }
     ResourceLocation advancementId = buildOptionalAdvancement(id, "modifiers");
-    consumer.accept(new LoadableFinishedRecipe<>(new SwappableModifierRecipe(id, inputs, tools, maxToolSize, result, value, slots, allowCrystal), SwappableModifierRecipe.LOADER, advancementId));
+    consumer.accept(new LoadableFinishedRecipe<>(new SwappableModifierRecipe(id, inputs, tools, maxToolSize, result, value, variantFormatter, slots, allowCrystal), SwappableModifierRecipe.LOADER, advancementId));
   }
 }

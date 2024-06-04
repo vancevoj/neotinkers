@@ -3,20 +3,21 @@
   "allow_crystal": false,
   "inputs": [
     {
-      "item": "minecraft:honey_block"
+      "item": "tconstruct:greenheart_planks"
     },
     {
-      "item": "minecraft:honey_bottle"
+      "item": "tconstruct:earth_slime_sapling"
     },
     {
-      "item": "minecraft:honey_block"
+      "item": "tconstruct:greenheart_planks"
     }
   ],
   "result": {
     "name": "tconstruct:embellishment",
-    "value": "tconstruct:honey"
+    "value": "tconstruct:earthslime"
   },
   "tools": {
     "tag": "tconstruct:modifiable/embellishment/slime"
-  }
+  },
+  "variant_formatter": "tconstruct:material"
 }

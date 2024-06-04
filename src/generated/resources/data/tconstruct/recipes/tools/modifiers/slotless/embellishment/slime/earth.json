@@ -18,5 +18,6 @@
   },
   "tools": {
     "tag": "tconstruct:modifiable/embellishment/slime"
-  }
+  },
+  "variant_formatter": "tconstruct:material"
 }

@@ -55,6 +55,7 @@ import slimeknights.tconstruct.library.recipe.modifiers.adding.IncrementalModifi
 import slimeknights.tconstruct.library.recipe.modifiers.adding.ModifierRecipeBuilder;
 import slimeknights.tconstruct.library.recipe.modifiers.adding.MultilevelModifierRecipeBuilder;
 import slimeknights.tconstruct.library.recipe.modifiers.adding.OverslimeModifierRecipeBuilder;
+import slimeknights.tconstruct.library.recipe.modifiers.adding.SwappableModifierRecipe.VariantFormatter;
 import slimeknights.tconstruct.library.recipe.modifiers.adding.SwappableModifierRecipeBuilder;
 import slimeknights.tconstruct.library.recipe.modifiers.severing.SeveringRecipeBuilder;
 import slimeknights.tconstruct.library.recipe.tinkerstation.repairing.ModifierMaterialRepairRecipeBuilder;
@@ -1682,17 +1683,20 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
     slimyWoodTexture(consumer, MaterialIds.enderslime, TinkerWorld.enderbark,   FoliageType.ENDER, folder);
     // weird slime
     SwappableModifierRecipeBuilder.modifier(TinkerModifiers.embellishment, MaterialIds.clay.toString())
+                                  .variantFormatter(VariantFormatter.MATERIAL)
                                   .setTools(TinkerTags.Items.EMBELLISHMENT_SLIME)
                                   .addInput(Blocks.CLAY).addInput(Items.CLAY_BALL).addInput(Blocks.CLAY)
-                                  .save(consumer, wrap(TinkerModifiers.embellishment, folder, "_clay"));
+                                  .save(consumer, wrap(TinkerModifiers.embellishment, folder, "/slime/clay"));
     SwappableModifierRecipeBuilder.modifier(TinkerModifiers.embellishment, MaterialIds.magma.toString())
+                                  .variantFormatter(VariantFormatter.MATERIAL)
                                   .setTools(TinkerTags.Items.EMBELLISHMENT_SLIME)
                                   .addInput(Blocks.MAGMA_BLOCK).addInput(Items.MAGMA_CREAM).addInput(Blocks.MAGMA_BLOCK)
-                                  .save(consumer, wrap(TinkerModifiers.embellishment, folder, "_magma"));
+                                  .save(consumer, wrap(TinkerModifiers.embellishment, folder, "/slime/magma"));
     SwappableModifierRecipeBuilder.modifier(TinkerModifiers.embellishment, MaterialIds.honey.toString())
+                                  .variantFormatter(VariantFormatter.MATERIAL)
                                   .setTools(TinkerTags.Items.EMBELLISHMENT_SLIME)
                                   .addInput(Blocks.HONEY_BLOCK).addInput(Items.HONEY_BOTTLE).addInput(Blocks.HONEY_BLOCK)
-                                  .save(consumer, wrap(TinkerModifiers.embellishment, folder, "_honey"));
+                                  .save(consumer, wrap(TinkerModifiers.embellishment, folder, "/slime/honey"));
   }
 
   private void addHeadRecipes(Consumer<FinishedRecipe> consumer) {
@@ -1777,6 +1781,7 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
   /** Adds recipes for a plate armor texture with a custom tag */
   private void woodTexture(Consumer<FinishedRecipe> consumer, MaterialVariantId material, ItemLike planks, String folder) {
     SwappableModifierRecipeBuilder.modifier(TinkerModifiers.embellishment, material.toString())
+                                  .variantFormatter(VariantFormatter.MATERIAL)
                                   .setTools(TinkerTags.Items.EMBELLISHMENT_WOOD)
                                   .addInput(planks).addInput(TinkerTables.pattern).addInput(planks)
                                   .save(consumer, wrap(TinkerModifiers.embellishment, folder, "/wood/" + material.getLocation('_').getPath()));
@@ -1786,6 +1791,7 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
   private void slimeTexture(Consumer<FinishedRecipe> consumer, MaterialId material, SlimeType slime, String folder) {
     ItemLike congealed = TinkerWorld.congealedSlime.get(slime);
     SwappableModifierRecipeBuilder.modifier(TinkerModifiers.embellishment, material.toString())
+                                  .variantFormatter(VariantFormatter.MATERIAL)
                                   .setTools(TinkerTags.Items.EMBELLISHMENT_SLIME)
                                   .addInput(congealed).addInput(TinkerCommons.slimeball.get(slime)).addInput(congealed)
                                   .save(consumer, wrap(TinkerModifiers.embellishment, folder, "/slime/" + slime.getSerializedName()));
@@ -1795,9 +1801,10 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
   private void slimyWoodTexture(Consumer<FinishedRecipe> consumer, MaterialId material, WoodBlockObject wood, FoliageType foliage, String folder) {
     ItemLike planks = wood.get();
     SwappableModifierRecipeBuilder.modifier(TinkerModifiers.embellishment, material.toString())
+                                  .variantFormatter(VariantFormatter.MATERIAL)
                                   .setTools(TinkerTags.Items.EMBELLISHMENT_SLIME)
                                   .addInput(planks).addInput(TinkerWorld.slimeSapling.get(foliage)).addInput(planks)
-                                  .save(consumer, wrap(TinkerModifiers.embellishment, folder, "_" + wood.getWoodType().name().split(":", 2)[1]));
+                                  .save(consumer, wrap(TinkerModifiers.embellishment, folder, "/slime/" + wood.getWoodType().name().split(":", 2)[1]));
   }
 
   /** Adds haste like recipes using redstone */

@@ -3,20 +3,21 @@
   "allow_crystal": false,
   "inputs": [
     {
-      "item": "tconstruct:greenheart_planks"
+      "item": "minecraft:magma_block"
     },
     {
-      "item": "tconstruct:earth_slime_sapling"
+      "item": "minecraft:magma_cream"
     },
     {
-      "item": "tconstruct:greenheart_planks"
+      "item": "minecraft:magma_block"
     }
   ],
   "result": {
     "name": "tconstruct:embellishment",
-    "value": "tconstruct:earthslime"
+    "value": "tconstruct:magma"
   },
   "tools": {
     "tag": "tconstruct:modifiable/embellishment/slime"
-  }
+  },
+  "variant_formatter": "tconstruct:material"
 }

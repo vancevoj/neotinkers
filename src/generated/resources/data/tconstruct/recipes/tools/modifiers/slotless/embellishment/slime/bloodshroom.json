@@ -3,20 +3,21 @@
   "allow_crystal": false,
   "inputs": [
     {
-      "item": "minecraft:clay"
+      "item": "tconstruct:bloodshroom_planks"
     },
     {
-      "item": "minecraft:clay_ball"
+      "item": "tconstruct:blood_slime_sapling"
     },
     {
-      "item": "minecraft:clay"
+      "item": "tconstruct:bloodshroom_planks"
     }
   ],
   "result": {
     "name": "tconstruct:embellishment",
-    "value": "tconstruct:clay"
+    "value": "tconstruct:blood"
   },
   "tools": {
     "tag": "tconstruct:modifiable/embellishment/slime"
-  }
+  },
+  "variant_formatter": "tconstruct:material"
 }

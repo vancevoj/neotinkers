@@ -3,20 +3,21 @@
   "allow_crystal": false,
   "inputs": [
     {
-      "item": "tconstruct:enderbark_planks"
+      "item": "minecraft:honey_block"
     },
     {
-      "item": "tconstruct:ender_slime_sapling"
+      "item": "minecraft:honey_bottle"
     },
     {
-      "item": "tconstruct:enderbark_planks"
+      "item": "minecraft:honey_block"
     }
   ],
   "result": {
     "name": "tconstruct:embellishment",
-    "value": "tconstruct:enderslime"
+    "value": "tconstruct:honey"
   },
   "tools": {
     "tag": "tconstruct:modifiable/embellishment/slime"
-  }
+  },
+  "variant_formatter": "tconstruct:material"
 }

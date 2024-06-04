@@ -152,24 +152,30 @@ public class ModifierRecipeCategory implements IRecipeCategory<IDisplayModifierR
 
     // draw level requirements
     Font fontRenderer = Minecraft.getInstance().font;
-    IntRange level = recipe.getLevel();
-    int min = level.min();
-    int max = level.max();
-    // min being 1 means we only have a max level, we check this first as Max Level is better than exact typiclly
     Component levelText = null;
-    if (min == 1) {
-      if (max < ModifierEntry.VALID_LEVEL.max()) {
-        levelText = Component.translatable(KEY_MAX, max);
-      }
-    } else if (min == max) {
-      levelText = Component.translatable(KEY_EXACT, min);
-    } else if (max == ModifierEntry.VALID_LEVEL.max()) {
-      levelText = Component.translatable(KEY_MIN, min);
+    Component variant = recipe.getVariant();
+    if (variant != null) {
+      levelText = variant;
     } else {
-      levelText = Component.translatable(KEY_RANGE, min, max);
+      IntRange level = recipe.getLevel();
+      int min = level.min();
+      int max = level.max();
+      // min being 1 means we only have a max level, we check this first as Max Level is better than exact typiclly
+      if (min == 1) {
+        if (max < ModifierEntry.VALID_LEVEL.max()) {
+          levelText = Component.translatable(KEY_MAX, max);
+        }
+      } else if (min == max) {
+        levelText = Component.translatable(KEY_EXACT, min);
+      } else if (max == ModifierEntry.VALID_LEVEL.max()) {
+        levelText = Component.translatable(KEY_MIN, min);
+      } else {
+        levelText = Component.translatable(KEY_RANGE, min, max);
+      }
     }
     if (levelText != null) {
-      fontRenderer.draw(matrices, levelText, 60, 16, Color.GRAY.getRGB());
+      // center string
+      fontRenderer.draw(matrices, levelText, 86 - fontRenderer.width(levelText) / 2f, 16, Color.GRAY.getRGB());
     }
 
     // draw slot cost
@@ -179,8 +185,7 @@ public class ModifierRecipeCategory implements IRecipeCategory<IDisplayModifierR
     } else {
       drawSlotType(matrices, slots.type(), 110, 58);
       String text = Integer.toString(slots.count());
-      int x = 111 - fontRenderer.width(text);
-      fontRenderer.draw(matrices, text, x, 63, Color.GRAY.getRGB());
+      fontRenderer.draw(matrices, text, 111 - fontRenderer.width(text), 63, Color.GRAY.getRGB());
     }
   }
 
