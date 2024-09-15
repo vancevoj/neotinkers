@@ -137,23 +137,25 @@ public class MeltingModifier extends NoLevelsModifier implements MeleeHitModifie
           output = EntityMeltingModule.getDefaultFluid();
           damagePerOutput = 2;
         }
-        // recipe amount determines how much we get per hit, up to twice the recipe damage
-        int fluidAmount;
-        if (damageDealt < damagePerOutput * 2) {
-          fluidAmount = (int)(output.getAmount() * damageDealt / damagePerOutput);
-        } else {
-          fluidAmount = output.getAmount() * 2;
-        }
-
-        // fluid must match that which is stored in the tank
         FluidStack fluid = TANK_HELPER.getFluid(tool);
-        if (fluid.isEmpty()) {
-          output.setAmount(fluidAmount);
-          fluid = output;
-        } else {
-          fluid.grow(fluidAmount);
+        if (fluid.isEmpty() || fluid.isFluidEqual(output)) {
+          // recipe amount determines how much we get per hit, up to twice the recipe damage
+          int fluidAmount;
+          if (damageDealt < damagePerOutput * 2) {
+            fluidAmount = (int)(output.getAmount() * damageDealt / damagePerOutput);
+          } else {
+            fluidAmount = output.getAmount() * 2;
+          }
+
+          // fluid must match that which is stored in the tank
+          if (fluid.isEmpty()) {
+            output.setAmount(fluidAmount);
+            fluid = output;
+          } else {
+            fluid.grow(fluidAmount);
+          }
+          TANK_HELPER.setFluid(tool, fluid);
         }
-        TANK_HELPER.setFluid(tool, fluid);
       }
     }
   }
