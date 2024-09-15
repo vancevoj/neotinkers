@@ -28,7 +28,7 @@ public class SmelteryFluidClickedPacket implements IThreadsafePacket {
   @Override
   public void handleThreadsafe(Context context) {
     ServerPlayer sender = context.getSender();
-    if (sender != null) {
+    if (sender != null && !sender.isSpectator()) {
       AbstractContainerMenu container = sender.containerMenu;
       if (container instanceof BaseContainerMenu<?> base && base.getTile() instanceof ISmelteryTankHandler tank) {
         tank.getTank().moveFluidToBottom(index);

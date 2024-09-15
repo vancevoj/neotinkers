@@ -1,6 +1,7 @@
 package slimeknights.tconstruct.smeltery.client.screen.module;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
@@ -188,10 +189,13 @@ public class GuiSmelteryTank {
    * Checks if the tank was clicked at the given location
    */
   public void handleClick(int mouseX, int mouseY) {
-    if (tank.getContained() > 0 && withinTank(mouseX, mouseY)) {
-      int index = getFluidFromMouse(calcLiquidHeights(false), mouseY);
-      if (index != -1) {
-        TinkerNetwork.getInstance().sendToServer(new SmelteryFluidClickedPacket(index));
+    Minecraft minecraft = Minecraft.getInstance();
+    if (minecraft.player != null && !minecraft.player.isSpectator()) {
+      if (tank.getContained() > 0 && withinTank(mouseX, mouseY)) {
+        int index = getFluidFromMouse(calcLiquidHeights(false), mouseY);
+        if (index != -1) {
+          TinkerNetwork.getInstance().sendToServer(new SmelteryFluidClickedPacket(index));
+        }
       }
     }
   }
