@@ -6,21 +6,12 @@
     },
     {
       "item": "tconstruct:husk_head"
-    },
-    {
-      "item": "tconstruct:piglin_head"
-    },
-    {
-      "item": "tconstruct:piglin_brute_head"
-    },
-    {
-      "item": "tconstruct:zombified_piglin_head"
     }
   ],
   "result": {
-    "amount": 500,
-    "fluid": "tconstruct:liquid_soul"
+    "amount": 90,
+    "fluid": "tconstruct:molten_iron"
   },
-  "temperature": 400,
-  "time": 109
+  "temperature": 800,
+  "time": 60
 }

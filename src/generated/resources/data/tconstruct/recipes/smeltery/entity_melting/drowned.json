@@ -1,11 +1,11 @@
 {
   "type": "tconstruct:entity_melting",
-  "damage": 2,
+  "damage": 4,
   "entity": {
     "type": "minecraft:drowned"
   },
   "result": {
-    "amount": 20,
-    "fluid": "minecraft:water"
+    "amount": 10,
+    "fluid": "tconstruct:molten_copper"
   }
 }

@@ -4,9 +4,9 @@
     "item": "tconstruct:drowned_head"
   },
   "result": {
-    "amount": 250,
-    "fluid": "minecraft:water"
+    "amount": 90,
+    "fluid": "tconstruct:molten_copper"
   },
-  "temperature": 0,
-  "time": 47
+  "temperature": 500,
+  "time": 50
 }

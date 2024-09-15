@@ -29,7 +29,7 @@ public class EntityMeltingRecipe implements ICustomOutputRecipe<IEmptyContainer>
   public static final RecordLoadable<EntityMeltingRecipe> LOADER = RecordLoadable.create(
     ContextKey.ID.requiredField(),
     EntityIngredient.LOADABLE.requiredField("entity", r -> r.ingredient),
-    FluidStackLoadable.REQUIRED_STACK.requiredField("result", r -> r.output),
+    FluidStackLoadable.REQUIRED_STACK_NBT.requiredField("result", r -> r.output),
     IntLoadable.FROM_ONE.defaultField("damage", 2, true, r -> r.damage),
     EntityMeltingRecipe::new);
 

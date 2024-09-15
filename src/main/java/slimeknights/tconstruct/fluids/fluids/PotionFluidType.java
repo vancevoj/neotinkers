@@ -1,14 +1,17 @@
 package slimeknights.tconstruct.fluids.fluids;
 
+import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidType;
 import slimeknights.mantle.fluid.texture.ClientTextureFluidType;
+import slimeknights.tconstruct.fluids.TinkerFluids;
 
 import java.util.function.Consumer;
 
@@ -49,5 +52,15 @@ public class PotionFluidType extends FluidType {
         return PotionUtils.getColor(PotionUtils.getAllEffects(tag)) | 0xFF000000;
       }
     });
+  }
+
+  /** Creates a fluid stack for the given potion */
+  public static FluidStack potionFluid(Potion potion, int size) {
+    CompoundTag tag = null;
+    if (potion != Potions.EMPTY) {
+      tag = new CompoundTag();
+      tag.putString("Potion", Registry.POTION.getKey(potion).toString());
+    }
+    return new FluidStack(TinkerFluids.potion.get(), size, tag);
   }
 }
