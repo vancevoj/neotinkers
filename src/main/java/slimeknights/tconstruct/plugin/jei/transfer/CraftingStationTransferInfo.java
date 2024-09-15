@@ -3,9 +3,11 @@ package slimeknights.tconstruct.plugin.jei.transfer;
 import mezz.jei.api.constants.RecipeTypes;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.transfer.IRecipeTransferInfo;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.crafting.CraftingRecipe;
+import slimeknights.mantle.client.SafeClientAccess;
 import slimeknights.tconstruct.tables.TinkerTables;
 import slimeknights.tconstruct.tables.menu.CraftingStationContainerMenu;
 
@@ -47,8 +49,15 @@ public class CraftingStationTransferInfo implements IRecipeTransferInfo<Crafting
 
     // next, add side inventory. shouldn't be a problem due to the blacklist
     // 10 slots for the crafting table
-    for (int i = 10; i < sideInventoryEnd; i++) {
-      slots.add(container.getSlot(i));
+    Player player = SafeClientAccess.getPlayer();
+    if (player != null) {
+      for (int i = 10; i < sideInventoryEnd; i++) {
+        Slot slot = container.getSlot(i);
+        // skip slots with no item, we don't want JEI putting stuff in empty slots as that's confusing
+        if (slot.hasItem() && slot.allowModification(player)) {
+          slots.add(container.getSlot(i));
+        }
+      }
     }
     return slots;
   }
