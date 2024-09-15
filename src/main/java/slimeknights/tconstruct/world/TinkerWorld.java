@@ -227,9 +227,9 @@ public final class TinkerWorld extends TinkerModule {
   });
   public static final EnumObject<FoliageType,FlowerPotBlock> pottedSlimeSapling = BLOCKS.registerPottedEnum(FoliageType.values(), "slime_sapling", slimeSapling);
   public static final EnumObject<FoliageType, Block> slimeLeaves = new EnumObject.Builder<FoliageType, Block>(FoliageType.class)
-    .putAll(BLOCKS.registerEnum(FoliageType.OVERWORLD, "slime_leaves", type -> new SlimeLeavesBlock(builder(Material.LEAVES, type.getMapColor(), SoundType.GRASS).strength(1.0f).randomTicks().noOcclusion().isValidSpawn((s, w, p, e) -> false), type), DEFAULT_BLOCK_ITEM))
+    .putAll(BLOCKS.registerEnum(FoliageType.OVERWORLD, "slime_leaves", type -> new SlimeLeavesBlock(builder(Material.LEAVES, type.getMapColor(), SoundType.GRASS).strength(1.0f).randomTicks().noOcclusion().isValidSpawn(Blocks::never).isSuffocating(Blocks::never).isViewBlocking(Blocks::never), type), DEFAULT_BLOCK_ITEM))
     .putAll(BLOCKS.registerEnum(FoliageType.NETHER, "slime_leaves", type -> new SlimeWartBlock(builder(Material.GRASS, type.getMapColor(), SoundType.WART_BLOCK).strength(1.5F).isValidSpawn((s, w, p, e) -> false), type), DEFAULT_BLOCK_ITEM))
-    .put(FoliageType.ENDER, BLOCKS.register("ender_slime_leaves", () -> new SlimePropaguleLeavesBlock(builder(Material.LEAVES, FoliageType.ENDER.getMapColor(), SoundType.GRASS).strength(1.0f).randomTicks().noOcclusion().isValidSpawn((s, w, p, e) -> false), FoliageType.ENDER), DEFAULT_BLOCK_ITEM))
+    .put(FoliageType.ENDER, BLOCKS.register("ender_slime_leaves", () -> new SlimePropaguleLeavesBlock(builder(Material.LEAVES, FoliageType.ENDER.getMapColor(), SoundType.GRASS).strength(1.0f).randomTicks().noOcclusion().isValidSpawn(Blocks::never).isSuffocating(Blocks::never).isViewBlocking(Blocks::never), FoliageType.ENDER), DEFAULT_BLOCK_ITEM))
     .build();
 
   // slime vines
