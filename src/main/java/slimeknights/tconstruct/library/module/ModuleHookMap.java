@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.LinkedHashMultimap;
 import lombok.RequiredArgsConstructor;
 import slimeknights.mantle.data.loadable.ErrorFactory;
+import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.modifiers.impl.BasicModifier;
 
 import javax.annotation.Nullable;
@@ -136,6 +137,10 @@ public class ModuleHookMap {
     /** Adds a module to the builder that implements multiple hooks */
     @SafeVarargs
     public final <T> Builder addHook(T object, ModuleHook<? super T>... hooks) {
+      // TODO 1.20: change signature to addHook(Object, ModuleHook, ModuleHook...) and ditch this error
+      if (hooks.length == 0) {
+        TConstruct.LOG.error("Module {} added with no hooks, this is a bug in the mod adding it as it does nothing, and will not be allowed in the future.", object, new IllegalArgumentException("Empty hooks list passed to hook map builder"));
+      }
       for (ModuleHook<? super T> hook : hooks) {
         addHook(object, hook);
       }
