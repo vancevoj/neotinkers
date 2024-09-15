@@ -26,7 +26,7 @@ public class SoulSpeedModifier extends Modifier implements TooltipModifierHook {
   @Override
   protected void registerHooks(Builder hookBuilder) {
     super.registerHooks(hookBuilder);
-    hookBuilder.addHook(new Constant(Enchantments.SOUL_SPEED, 1));
+    hookBuilder.addModule(new Constant(Enchantments.SOUL_SPEED, 1));
     hookBuilder.addHook(this, ModifierHooks.TOOLTIP);
   }
 

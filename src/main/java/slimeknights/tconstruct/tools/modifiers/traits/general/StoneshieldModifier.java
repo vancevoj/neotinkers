@@ -18,6 +18,7 @@ import java.util.List;
 public class StoneshieldModifier extends DurabilityShieldModifier implements ProcessLootModifierHook {
   @Override
   protected void registerHooks(Builder hookBuilder) {
+    super.registerHooks(hookBuilder);
     hookBuilder.addHook(this, ModifierHooks.PROCESS_LOOT);
   }
 
