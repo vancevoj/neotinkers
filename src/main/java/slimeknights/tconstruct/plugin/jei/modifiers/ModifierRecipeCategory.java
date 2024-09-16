@@ -211,7 +211,7 @@ public class ModifierRecipeCategory implements IRecipeCategory<IDisplayModifierR
         if (count == 1) {
           return Collections.singletonList(Component.translatable(KEY_SLOT, slots.type().getDisplayName()));
         } else if (count > 1) {
-          return Collections.singletonList(Component.translatable(KEY_SLOTS, slots, slots.type().getDisplayName()));
+          return Collections.singletonList(Component.translatable(KEY_SLOTS, slots.count(), slots.type().getDisplayName()));
         }
       } else {
         return TEXT_FREE;

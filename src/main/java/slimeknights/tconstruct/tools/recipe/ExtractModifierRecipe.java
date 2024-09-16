@@ -23,7 +23,7 @@ import java.util.List;
 
 /** Recipe that removes a modifier, placing it on a crystal for reapplication */
 public class ExtractModifierRecipe extends ModifierRemovalRecipe {
-  private static final String BASE_KEY = TConstruct.makeTranslationKey("recipe", "extract_modifier");
+  public static final String BASE_KEY = TConstruct.makeTranslationKey("recipe", "extract_modifier");
   private static final Component DESCRIPTION = TConstruct.makeTranslation("recipe", "extract_modifier.description");
   private static final Component NO_MODIFIERS = TConstruct.makeTranslation("recipe", "extract_modifier.no_modifiers");
 

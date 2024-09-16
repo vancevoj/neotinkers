@@ -76,7 +76,7 @@ public class EnchantmentConvertingRecipe extends AbstractWorktableRecipe {
   public EnchantmentConvertingRecipe(ResourceLocation id, String name, List<SizedIngredient> inputs, boolean matchBook, boolean returnInput, IJsonPredicate<ModifierId> modifierPredicate) {
     super(id, inputs);
     this.name = name;
-    this.title = Component.translatable(ModifierRemovalRecipe.BASE_KEY + "." + name);
+    this.title = Component.translatable(ExtractModifierRecipe.BASE_KEY + "." + name);
     this.matchBook = matchBook;
     this.returnInput = returnInput;
     this.modifierPredicate = modifierPredicate;

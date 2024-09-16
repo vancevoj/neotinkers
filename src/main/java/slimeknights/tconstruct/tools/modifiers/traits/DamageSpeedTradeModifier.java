@@ -35,7 +35,7 @@ import java.util.function.BiConsumer;
  * Shared logic for jagged and stonebound. Trait boosts attack damage as it lowers mining speed.
  */
 public class DamageSpeedTradeModifier extends Modifier implements AttributesModifierHook, TooltipModifierHook, BreakSpeedModifierHook {
-  private static final Component MINING_SPEED = TConstruct.makeTranslation("modifier", "fake_attribute.mining_speed");
+  private static final Component MINING_SPEED = TConstruct.makeTranslation("armor_stat", "mining_speed");
   private final float multiplier;
   private final Lazy<UUID> uuid = Lazy.of(() -> UUID.nameUUIDFromBytes(getId().toString().getBytes()));
   private final Lazy<String> attributeName = Lazy.of(() -> {

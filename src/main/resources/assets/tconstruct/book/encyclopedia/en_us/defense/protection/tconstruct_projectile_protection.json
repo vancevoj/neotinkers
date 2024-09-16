@@ -11,6 +11,6 @@
   "more_text_space": true,
   "effects": [
     "Can apply levels incrementally",
-    "Requires 1 defense slot"
+    "Requires 1 defense slot per level"
   ]
 }
