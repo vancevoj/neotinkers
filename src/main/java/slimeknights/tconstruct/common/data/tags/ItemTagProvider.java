@@ -348,6 +348,8 @@ public class ItemTagProvider extends ItemTagsProvider {
              TinkerToolParts.maille.get(), TinkerToolParts.shieldCore.get(),
              TinkerToolParts.repairKit.get()) // repair kit is not strictly a tool part, but this list just helps out JEI
         .add(TinkerToolParts.plating.values().toArray(new Item[0]));
+    // tag for the part chest items
+    this.tag(TinkerTags.Items.CHEST_PARTS).addTag(TinkerTags.Items.TOOL_PARTS).add(TinkerSmeltery.dummyPlating.values().toArray(new Item[0]));
 
     TagAppender<Item> slimySeeds = this.tag(TinkerTags.Items.SLIMY_SEEDS);
     TinkerWorld.slimeGrassSeeds.values().forEach(slimySeeds::add);

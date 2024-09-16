@@ -950,6 +950,8 @@
 
   "_comment": "Tinkers Tool Parts",
 
+  "item.tconstruct.dummy_tool_part.tooltip": "Used to create casts, cannot be used to create tools.",
+
   "item.tconstruct.repair_kit": "Repair Kit",
 
   "item.tconstruct.pick_head": "Pick Head",
@@ -975,6 +977,10 @@
   "item.tconstruct.chestplate_plating": "Chest Plating",
   "item.tconstruct.leggings_plating": "Leg Plating",
   "item.tconstruct.boots_plating": "Boot Plating",
+  "item.tconstruct.helmet_plating_dummy": "Stone Helmet Plating",
+  "item.tconstruct.chestplate_plating_dummy": "Stone Chest Plating",
+  "item.tconstruct.leggings_plating_dummy": "Stone Leg Plating",
+  "item.tconstruct.boots_plating_dummy": "Stone Boot Plating",
   "item.tconstruct.maille": "Maille",
   "item.tconstruct.shield_core": "Shield Core",
 

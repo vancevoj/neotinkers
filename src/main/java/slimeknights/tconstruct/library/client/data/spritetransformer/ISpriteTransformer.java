@@ -2,6 +2,7 @@ package slimeknights.tconstruct.library.client.data.spritetransformer;
 
 import com.google.gson.JsonObject;
 import com.mojang.blaze3d.platform.NativeImage;
+import org.jetbrains.annotations.ApiStatus.NonExtendable;
 import slimeknights.mantle.data.gson.GenericRegisteredSerializer;
 import slimeknights.mantle.data.gson.GenericRegisteredSerializer.IJsonSerializable;
 
@@ -27,13 +28,24 @@ public interface ISpriteTransformer extends IJsonSerializable {
   }
 
   /**
+   * Copies the image. Overridable version of {@link #copyImage(NativeImage)} to make it easier to wrap a transformer.
+   * @param image          Image to copy
+   * @param allowAnimated  If true, the image may be animated
+   * @return  Copy of the passed image with the first frame filled.
+   */
+  default NativeImage copyImage(NativeImage image, boolean allowAnimated) {
+    return copyImage(image);
+  }
+
+  /**
    * Creates a copy of the given sprite and applies the transform to it
    * @param image          Image to transform, do not modify directly
    * @param allowAnimated  If true, the sprite transformer is allowed to generate an animated sprite. If false, the input image cannot be animated
    * @return  Transformed copy
    */
+  @NonExtendable
   default NativeImage transformCopy(NativeImage image, boolean allowAnimated) {
-    NativeImage copy = copyImage(image);
+    NativeImage copy = copyImage(image, allowAnimated);
     transform(copy, allowAnimated);
     return copy;
   }
@@ -45,6 +57,11 @@ public interface ISpriteTransformer extends IJsonSerializable {
   @Nullable
   default JsonObject animationMeta(NativeImage image) {
     return null;
+  }
+
+  /** Gets the number of animation frames represented by this transformer, used to make nesting transformers possible */
+  default int getFrames() {
+    return 1;
   }
 
   /** Copies the given native image */

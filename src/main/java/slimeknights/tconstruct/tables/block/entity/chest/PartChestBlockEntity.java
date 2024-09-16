@@ -5,6 +5,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import slimeknights.tconstruct.TConstruct;
+import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.tools.part.IMaterialItem;
 import slimeknights.tconstruct.tables.TinkerTables;
 import slimeknights.tconstruct.tables.block.entity.inventory.ScalingChestItemHandler;
@@ -34,7 +35,8 @@ public class PartChestBlockEntity extends AbstractChestBlockEntity {
           return i == slot; // only allowed in the same slot
         }
       }
-      return stack.getItem() instanceof IMaterialItem;
+      // TODO 1.20: ditch material item check in favor of the tag
+      return stack.is(TinkerTags.Items.CHEST_PARTS) || stack.getItem() instanceof IMaterialItem;
     }
   }
 }

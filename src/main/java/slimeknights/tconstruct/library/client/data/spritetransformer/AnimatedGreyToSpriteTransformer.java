@@ -23,6 +23,11 @@ public class AnimatedGreyToSpriteTransformer extends GreyToSpriteTransformer {
     this.frames = frames;
   }
 
+  @Override
+  public int getFrames() {
+    return frames;
+  }
+
   /** Gets the color at the given location from its full color value */
   private int getNewColor(int color, int x, int y, int frame) {
     // if fully transparent, just return fully transparent
@@ -53,12 +58,10 @@ public class AnimatedGreyToSpriteTransformer extends GreyToSpriteTransformer {
   }
 
   @Override
-  public NativeImage transformCopy(NativeImage image, boolean allowAnimated) {
-    // if not animated, use the frame as is
+  public NativeImage copyImage(NativeImage image, boolean allowAnimated) {
     int frames = allowAnimated ? this.frames : 1;
     NativeImage copy = new NativeImage(image.getWidth(), image.getHeight() * frames, true);
     copy.copyFrom(image); // note this only fills in the first frame
-    transform(copy, allowAnimated);
     return copy;
   }
 

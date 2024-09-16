@@ -230,10 +230,10 @@ public class ToolsRecipeProvider extends BaseRecipeProvider implements IMaterial
     partRecipes(consumer, TinkerToolParts.toolHandle,  TinkerSmeltery.toolHandleCast,  1, partFolder, castFolder);
     partRecipes(consumer, TinkerToolParts.toughHandle, TinkerSmeltery.toughHandleCast, 3, partFolder, castFolder);
     // armor
-    partCasting(consumer, TinkerToolParts.plating.get(ArmorSlotType.HELMET),     TinkerSmeltery.helmetPlatingCast,     3, partFolder, castFolder);
-    partCasting(consumer, TinkerToolParts.plating.get(ArmorSlotType.CHESTPLATE), TinkerSmeltery.chestplatePlatingCast, 6, partFolder, castFolder);
-    partCasting(consumer, TinkerToolParts.plating.get(ArmorSlotType.LEGGINGS),   TinkerSmeltery.leggingsPlatingCast,   5, partFolder, castFolder);
-    partCasting(consumer, TinkerToolParts.plating.get(ArmorSlotType.BOOTS),      TinkerSmeltery.bootsPlatingCast,      2, partFolder, castFolder);
+    partWithDummy(consumer, TinkerToolParts.plating.get(ArmorSlotType.HELMET),     TinkerSmeltery.dummyPlating.get(ArmorSlotType.HELMET),     TinkerSmeltery.helmetPlatingCast,     3, partFolder, castFolder);
+    partWithDummy(consumer, TinkerToolParts.plating.get(ArmorSlotType.CHESTPLATE), TinkerSmeltery.dummyPlating.get(ArmorSlotType.CHESTPLATE), TinkerSmeltery.chestplatePlatingCast, 6, partFolder, castFolder);
+    partWithDummy(consumer, TinkerToolParts.plating.get(ArmorSlotType.LEGGINGS),   TinkerSmeltery.dummyPlating.get(ArmorSlotType.LEGGINGS),   TinkerSmeltery.leggingsPlatingCast,   5, partFolder, castFolder);
+    partWithDummy(consumer, TinkerToolParts.plating.get(ArmorSlotType.BOOTS),      TinkerSmeltery.dummyPlating.get(ArmorSlotType.BOOTS),      TinkerSmeltery.bootsPlatingCast,      2, partFolder, castFolder);
     partRecipes(consumer, TinkerToolParts.maille, TinkerSmeltery.mailleCast, 2, partFolder, castFolder);
 
     // bowstrings and shield cores are part builder exclusive. Shield core additionally disallows anything that conflicts with casting shield plating (obsidian/nahuatl conflict)

@@ -102,6 +102,7 @@ import slimeknights.tconstruct.smeltery.block.entity.controller.SmelteryBlockEnt
 import slimeknights.tconstruct.smeltery.data.FluidContainerTransferProvider;
 import slimeknights.tconstruct.smeltery.data.SmelteryRecipeProvider;
 import slimeknights.tconstruct.smeltery.item.CopperCanItem;
+import slimeknights.tconstruct.smeltery.item.DummyMaterialItem;
 import slimeknights.tconstruct.smeltery.item.TankItem;
 import slimeknights.tconstruct.smeltery.menu.AlloyerContainerMenu;
 import slimeknights.tconstruct.smeltery.menu.HeatingStructureContainerMenu;
@@ -340,6 +341,8 @@ public final class TinkerSmeltery extends TinkerModule {
   public static final CastItemObject leggingsPlatingCast = ITEMS.registerCast("leggings_plating", () -> new PartCastItem(SMELTERY_PROPS, () -> TinkerToolParts.plating.get(ArmorSlotType.LEGGINGS)));
   public static final CastItemObject bootsPlatingCast = ITEMS.registerCast("boots_plating", () -> new PartCastItem(SMELTERY_PROPS, () -> TinkerToolParts.plating.get(ArmorSlotType.BOOTS)));
   public static final CastItemObject mailleCast = ITEMS.registerCast(TinkerToolParts.maille, SMELTERY_PROPS);
+  // dummy cast creation items
+  public static final EnumObject<ArmorSlotType,DummyMaterialItem> dummyPlating = ITEMS.registerEnum(ArmorSlotType.values(), "plating_dummy", type -> new DummyMaterialItem(SMELTERY_PROPS));
 
 
   /*

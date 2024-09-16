@@ -1,9 +1,14 @@
 {
   "type": "tconstruct:casting_table",
-  "cast": {
-    "type": "tconstruct:material",
-    "item": "tconstruct:helmet_plating"
-  },
+  "cast": [
+    {
+      "type": "tconstruct:material",
+      "item": "tconstruct:helmet_plating"
+    },
+    {
+      "item": "tconstruct:helmet_plating_dummy"
+    }
+  ],
   "cast_consumed": true,
   "cooling_time": 57,
   "fluid": {
