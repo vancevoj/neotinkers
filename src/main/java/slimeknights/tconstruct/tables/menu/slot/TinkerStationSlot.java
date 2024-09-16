@@ -33,7 +33,7 @@ public class TinkerStationSlot extends Slot {
   @Override
   public boolean mayPlace(ItemStack stack) {
     // dormant slots don't take any items, they can only be taken out of
-    return layout != null && layout.isValid(stack);
+    return stack.isEmpty() || (layout != null && layout.isValid(stack));
   }
 
   @Override
