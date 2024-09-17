@@ -2,7 +2,7 @@
   "tool": "tconstruct:sledge_hammer",
   "text": [
     { "text": "大锤是一种范围挖掘工具，可以挖掘3x3范围的石头。" },
-    { "text": "“延展”强化会交替增加挖掘宽度和高度。", "paragraph": true }
+    { "text": "“延展”会交替增加挖掘宽度和高度。", "paragraph": true }
   ],
   "properties": [
     "+3 攻击力",

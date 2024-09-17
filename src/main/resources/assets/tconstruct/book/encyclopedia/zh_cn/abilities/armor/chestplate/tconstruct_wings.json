@@ -1,0 +1,13 @@
+{
+  "modifier_id": "tconstruct:wings",
+  "text": [
+    {
+      "text": "允许在半空中跳跃滑翔。滑翔时会缓慢损耗胸甲耐久度。"
+    }
+  ],
+  "more_text_space": true,
+  "effects": [
+    "最高1级",
+    "需要2个能力槽"
+  ]
+}

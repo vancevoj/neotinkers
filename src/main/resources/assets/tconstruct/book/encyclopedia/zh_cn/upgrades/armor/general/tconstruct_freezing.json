@@ -12,7 +12,7 @@
     "tool_filter": "tconstruct:modifiable/armor",
     "effects": [
       "最高3级",
-      "与“怒火”强化相性不佳",
+      "与“怒火”相性不佳",
       "每级需要1个升级槽"
     ]
   }
