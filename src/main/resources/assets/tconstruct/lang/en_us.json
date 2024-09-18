@@ -2881,9 +2881,9 @@
   "recipe.tconstruct.modifier.not_enough_slots": "Need at least %s %s slots to add this modifier",
   "recipe.tconstruct.modifier.validate_slots": "This change leaves the tool with too few %s slots",
   "recipe.tconstruct.modifier.min_level": "This recipe requires the tool to have at least %s to apply (ignoring traits)",
-  "recipe.tconstruct.modifier.max_level": "%s level cannot be above %s (ignoring traits)",
+  "recipe.tconstruct.modifier.max_level": "This recipe cannot increase %s above level %s (ignoring traits)",
   "recipe.tconstruct.modifier.min_level.traits": "This recipe requires the tool to have at least %s to apply (including traits)",
-  "recipe.tconstruct.modifier.max_level.traits": "%s level cannot be above %s (including traits)",
+  "recipe.tconstruct.modifier.max_level.traits": "This recipe cannot increase %s above level %s (including traits)",
 
   "recipe.tconstruct.tool_recycling": "Tool Recycling",
   "recipe.tconstruct.tool_recycling.info": "Select which part to salvage from this tool. There is a chance based on the tool's remaining durability to salvage a second part.",
