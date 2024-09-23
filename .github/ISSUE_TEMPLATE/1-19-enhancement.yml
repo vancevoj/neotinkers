@@ -9,8 +9,8 @@ body:
         Please search the following links to make sure your enhancement is not covered:
         
         * **[Roadmap](/SlimeKnights/TinkersConstruct/wiki/Tinkers%27-Construct-3-Roadmap)**: Discusses unimplemented features and planned new changes
-        * **[What's New](/SlimeKnights/TinkersConstruct/wiki/New-in-Tinkers%27-Construct-3)**: Discusses many of the major changes in the 1.18 alphas
-        * **[FAQ](/SlimeKnights/TinkersConstruct/wiki/Tinkers%27-Construct-3-FAQ)**: Answers to many frequently asked questions about the 1.18 versions
+        * **[What's New](/SlimeKnights/TinkersConstruct/wiki/New-in-Tinkers%27-Construct-3)**: Discusses many of the major changes in Tinkers' Construct 3
+        * **[FAQ](/SlimeKnights/TinkersConstruct/wiki/Tinkers%27-Construct-3-FAQ)**: Answers to many frequently asked questions about the Tinkers' Construct 3 versions
   
   - type: markdown
     attributes:
@@ -25,7 +25,7 @@ body:
     id: minecraft-version
     attributes:
       label: Minecraft Version
-      value: 1.18.2
+      value: 1.19.2
     validations:
       required: true
   - type: input
