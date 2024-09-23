@@ -1,8 +1,5 @@
 blank_issues_enabled: false
 contact_links:
- - name: 1.18 Typo or language bug
-   url: https://github.com/SlimeKnights/TinkersConstruct/issues/4932
-   about: Use the typo collection issue instead of reporting 1.18 typos as separate issues.
  - name: 1.19 Typo or Language bug
    url: https://github.com/SlimeKnights/TinkersConstruct/issues/5201
    about: Use the typo collection issue instead of reporting 1.19 typos as separate issues.
