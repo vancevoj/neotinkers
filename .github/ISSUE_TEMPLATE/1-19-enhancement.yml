@@ -1,11 +1,11 @@
-name: 1.18 Enhancement
-description: Suggest a change to existing 1.18 features
-labels: [1.18, Enhancement, Unreviewed]
+name: 1.19 Enhancement
+description: Suggest a change to existing 1.19 features
+labels: [1.19, Enhancement, Unreviewed]
 body:
   - type: markdown
     attributes:
       value: |
-        Please note that 1.18 versions are no longer receiving significant new features. If your idea requires discussion or is complicated, [join our discord](https://discord.gg/njGrvuh) instead of posting a new issue.
+        If your idea requires discussion or is complicated, [join our discord](https://discord.gg/njGrvuh) instead of posting a new issue.
         Please search the following links to make sure your enhancement is not covered:
         
         * **[Roadmap](/SlimeKnights/TinkersConstruct/wiki/Tinkers%27-Construct-3-Roadmap)**: Discusses unimplemented features and planned new changes

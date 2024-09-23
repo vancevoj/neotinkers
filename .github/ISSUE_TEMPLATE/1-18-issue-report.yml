@@ -5,7 +5,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Please note that 1.18 versions are no longer receiving significant new features. Before submitting an issue, please search the following links to make sure your issue is not covered:
+        Please note that another 1.18.2 release is unlikely unless there is a signficant issue. Before submitting an issue, please search the following links to make sure your issue is not covered:
         
         * **[Pinned Issues](/SlimeKnights/TinkersConstruct/issues)**: Some commonly reported issues are pinned
         * **[Roadmap](/SlimeKnights/TinkersConstruct/wiki/Tinkers%27-Construct-3-Roadmap)**: Discusses unimplemented features and planned new changes
@@ -87,6 +87,17 @@ body:
       options:
         - 'Yes'
         - 'I will go do that now'
+        - 'No'
+    validations:
+      required: true
+      
+  - type: dropdown
+    id: one-nineteen
+    attributes:
+      label: "Does this issue affect Tinkers' Construct in 1.19.2?"
+      options:
+        - 'Yes'
+        - 'I will go test that now'
         - 'No'
     validations:
       required: true
