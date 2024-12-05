@@ -169,6 +169,9 @@ public class ToolClientEvents extends ClientEventBase {
       TinkerItemProperties.registerToolProperties(TinkerTools.earthStaff.asItem());
       TinkerItemProperties.registerToolProperties(TinkerTools.ichorStaff.asItem());
       TinkerItemProperties.registerToolProperties(TinkerTools.enderStaff.asItem());
+      // ancient
+      TinkerItemProperties.registerCrossbowProperties(TinkerTools.warPick.asItem());
+      TinkerItemProperties.registerToolProperties(TinkerTools.battlesign.asItem());
       // armor
       TinkerItemProperties.registerToolProperties(TinkerTools.travelersShield.asItem());
       TinkerItemProperties.registerToolProperties(TinkerTools.plateShield.asItem());
@@ -213,6 +216,9 @@ public class ToolClientEvents extends ClientEventBase {
     // bow
     registerItemColors(colors, TinkerTools.crossbow);
     registerItemColors(colors, TinkerTools.longbow);
+    // ancient
+    registerItemColors(colors, TinkerTools.warPick);
+    registerItemColors(colors, TinkerTools.battlesign);
     // armor
     registerItemColors(colors, TinkerTools.travelersShield);
     registerItemColors(colors, TinkerTools.plateShield);
