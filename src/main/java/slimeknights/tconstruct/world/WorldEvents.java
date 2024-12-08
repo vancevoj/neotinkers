@@ -17,13 +17,16 @@ import net.minecraft.world.level.block.SkullBlock;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingVisibilityEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent.SpecialSpawn;
+import net.minecraftforge.event.village.WandererTradesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.config.Config;
 import slimeknights.tconstruct.library.tools.helper.ToolBuildHandler;
 import slimeknights.tconstruct.tools.TinkerTools;
+import slimeknights.tconstruct.world.logic.AncientToolItemListing;
 
+import java.util.Collections;
 
 @SuppressWarnings("unused")
 @Mod.EventBusSubscriber(modid = TConstruct.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
@@ -88,6 +91,15 @@ public class WorldEvents {
       } else if (item == Items.GOLDEN_SWORD || item == Items.GOLDEN_AXE) {
         mob.setItemInHand(InteractionHand.MAIN_HAND, ToolBuildHandler.buildItemRandomMaterials(TinkerTools.battlesign.get(), level.getRandom()));
       }
+    }
+  }
+
+  @SubscribeEvent
+  static void wanderingTrades(WandererTradesEvent event) {
+    // add ancient tools to the wandering trader table
+    int weight = Config.COMMON.wandererAncientToolWeight.get();
+    if (weight > 0) {
+      event.getRareTrades().addAll(Collections.nCopies(weight, AncientToolItemListing.INSTANCE));
     }
   }
 }
