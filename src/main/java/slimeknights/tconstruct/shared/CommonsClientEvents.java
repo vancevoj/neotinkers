@@ -1,14 +1,10 @@
 package slimeknights.tconstruct.shared;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.color.block.BlockColors;
-import net.minecraft.client.color.item.ItemColors;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.font.FontManager;
-import net.minecraft.world.level.block.Block;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RegisterClientReloadListenersEvent;
-import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
@@ -18,7 +14,6 @@ import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.ClientEventBase;
 import slimeknights.tconstruct.library.client.book.TinkerBook;
 import slimeknights.tconstruct.library.utils.DomainDisplayName;
-import slimeknights.tconstruct.shared.block.ClearStainedGlassBlock.GlassColor;
 import slimeknights.tconstruct.shared.client.FluidParticle;
 
 @EventBusSubscriber(modid = TConstruct.MOD_ID, value = Dist.CLIENT, bus = Bus.MOD)
@@ -40,22 +35,8 @@ public class CommonsClientEvents extends ClientEventBase {
   }
 
   @SubscribeEvent
-  static void registerColorHandlers(RegisterColorHandlersEvent.Item event) {
-    // colors apply a constant tint to make models easier
-    BlockColors blockColors = event.getBlockColors();
-    ItemColors itemColors = event.getItemColors();
-    for (GlassColor color : GlassColor.values()) {
-      Block block = TinkerCommons.clearStainedGlass.get(color);
-      Block pane = TinkerCommons.clearStainedGlassPane.get(color);
-      blockColors.register((state, reader, pos, index) -> color.getColor(), block, pane);
-      registerBlockItemColorAlias(blockColors, itemColors, block);
-      registerBlockItemColorAlias(blockColors, itemColors, pane);
-    }
-  }
-
-  @SubscribeEvent
   static void registerParticleFactories(RegisterParticleProvidersEvent event) {
-    Minecraft.getInstance().particleEngine.register(TinkerCommons.fluidParticle.get(), new FluidParticle.Factory());
+    event.register(TinkerCommons.fluidParticle.get(), new FluidParticle.Factory());
   }
 
   private static Font unicodeRenderer;

@@ -1,6 +1,8 @@
 package slimeknights.tconstruct.common.data.model;
 
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.core.Direction;
+import net.minecraft.core.Direction.Axis;
 import net.minecraft.core.Registry;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
@@ -10,26 +12,38 @@ import net.minecraft.world.level.block.ButtonBlock;
 import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.FenceBlock;
 import net.minecraft.world.level.block.FenceGateBlock;
+import net.minecraft.world.level.block.IronBarsBlock;
+import net.minecraft.world.level.block.PipeBlock;
 import net.minecraft.world.level.block.PressurePlateBlock;
 import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.TrapDoorBlock;
+import net.minecraftforge.client.model.generators.BlockModelBuilder;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ItemModelBuilder;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.client.model.generators.ModelFile.UncheckedModelFile;
 import net.minecraftforge.client.model.generators.ModelProvider;
+import net.minecraftforge.client.model.generators.MultiPartBlockStateBuilder;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import slimeknights.mantle.client.model.builder.ColoredModelBuilder;
+import slimeknights.mantle.client.model.builder.ConnectedModelBuilder;
+import slimeknights.mantle.client.model.builder.MantleItemLayerBuilder;
 import slimeknights.mantle.registration.object.BuildingBlockObject;
 import slimeknights.mantle.registration.object.FenceBuildingBlockObject;
 import slimeknights.mantle.registration.object.WoodBlockObject;
 import slimeknights.tconstruct.TConstruct;
+import slimeknights.tconstruct.shared.TinkerCommons;
 import slimeknights.tconstruct.shared.TinkerMaterials;
+import slimeknights.tconstruct.shared.block.ClearStainedGlassBlock.GlassColor;
+import slimeknights.tconstruct.smeltery.TinkerSmeltery;
 import slimeknights.tconstruct.world.TinkerWorld;
 
+import javax.annotation.Nullable;
 import java.util.function.Function;
 
+import static net.minecraftforge.client.model.generators.ModelProvider.BLOCK_FOLDER;
 import static slimeknights.mantle.util.IdExtender.INSTANCE;
 
 @SuppressWarnings({"UnusedReturnValue", "SameParameterValue"})
@@ -56,6 +70,25 @@ public class TinkerBlockStateProvider extends BlockStateProvider {
       String name = type.getSerializedName();
       cubeColumn(block, "block/wood/enderbark/roots/" + name, blockTexture("wood/enderbark/roots/" + name), blockTexture("wood/enderbark/roots/" + name + "_top"));
     });
+
+    // clear glass
+    glassBlock(TinkerCommons.clearGlass.get(), TinkerCommons.clearGlassPane.get(), "clear_glass/", TConstruct.getResource("block/clear_glass"), -1, true, null);
+    ResourceLocation clearStainedGlass = TConstruct.getResource("block/clear_stained_glass");
+    RenderType translucent = RenderType.translucent();
+    for (GlassColor color : GlassColor.values()) {
+      glassBlock(TinkerCommons.clearStainedGlass.get(color), TinkerCommons.clearStainedGlassPane.get(color), "clear_glass/" + color.getSerializedName() + "/", clearStainedGlass, 0xFF000000 | color.getColor(), false, translucent);
+    }
+    glassBlock(TinkerCommons.soulGlass.get(), TinkerCommons.soulGlassPane.get(), "soul_glass/", TConstruct.getResource("block/soul_glass"), -1, false, translucent);
+    // smeltery glass - share a common top texture
+    glassBlock(TinkerSmeltery.searedGlass.get(),     TinkerSmeltery.searedGlassPane.get(),     "smeltery/glass/", TConstruct.getResource("block/smeltery/seared_glass"), -1, true, null);
+    glassBlock(TinkerSmeltery.searedSoulGlass.get(), TinkerSmeltery.searedSoulGlassPane.get(), "smeltery/soul_glass/",
+               TConstruct.getResource("block/smeltery/soul_glass"), TConstruct.getResource("block/smeltery/seared_glass_top"), -1, true, translucent);
+    glassBlock(TinkerSmeltery.scorchedGlass.get(),     TinkerSmeltery.scorchedGlassPane.get(),     "foundry/glass/", TConstruct.getResource("block/foundry/glass"), -1, true, null);
+    glassBlock(TinkerSmeltery.scorchedSoulGlass.get(), TinkerSmeltery.scorchedSoulGlassPane.get(), "foundry/soul_glass/",
+               TConstruct.getResource("block/foundry/soul_glass"), TConstruct.getResource("block/foundry/glass_top"), -1, true, translucent);
+    // obsidian pane
+    ResourceLocation obsidian = new ResourceLocation("block/obsidian");
+    paneBlock(TinkerCommons.obsidianPane.get(), "obsidian_pane/", obsidian, obsidian, false, -1, false, RenderType.solid());
   }
 
 
@@ -63,7 +96,7 @@ public class TinkerBlockStateProvider extends BlockStateProvider {
 
   /** Creates a texture in the block folder */
   protected ResourceLocation blockTexture(String path) {
-    return new ResourceLocation(TConstruct.MOD_ID, ModelProvider.BLOCK_FOLDER + "/" + path);
+    return new ResourceLocation(TConstruct.MOD_ID, BLOCK_FOLDER + "/" + path);
   }
 
   /** Creates a texture in the block folder */
@@ -333,5 +366,98 @@ public class TinkerBlockStateProvider extends BlockStateProvider {
     ModelFile button = models().button(location, texture);
     buttonBlock(block, button, models().buttonPressed(location + "_pressed", texture));
     itemModels().withExistingParent(itemName(block), "minecraft:block/button_inventory").texture("texture", texture);
+  }
+
+
+  /* Panes and glass */
+
+  /** Creates a pane model using the TConstruct templates */
+  private BlockModelBuilder paneModel(String baseName, String variant, ResourceLocation pane, @Nullable ResourceLocation edge, @Nullable RenderType renderType, boolean connected, int tint) {
+    BlockModelBuilder builder = models().withExistingParent(BLOCK_FOLDER + "/" + baseName + variant, TConstruct.getResource("block/template/pane/" + variant));
+    builder.texture("pane", pane);
+    if (edge != null) {
+      builder.texture("edge", edge);
+    }
+    if (renderType != null) {
+      builder.renderType(renderType.name);
+    }
+    if (connected) {
+      ConnectedModelBuilder<BlockModelBuilder> cBuilder = builder.customLoader(ConnectedModelBuilder::new);
+      cBuilder.connected("pane", "cornerless_full").setPredicate("pane");
+      if (tint != -1) {
+        cBuilder.color(tint);
+      }
+    } else if (tint != -1) {
+      builder.customLoader(ColoredModelBuilder::new).color(tint);
+    }
+    return builder;
+  }
+
+  /** Creates a new pane block state */
+  private void paneBlockWithEdge(IronBarsBlock block, ModelFile post, ModelFile side, ModelFile sideAlt, ModelFile noSide, ModelFile noSideAlt, ModelFile noSideEdge) {
+    MultiPartBlockStateBuilder builder = getMultipartBuilder(block)
+      .part().modelFile(post).addModel().end();
+    PipeBlock.PROPERTY_BY_DIRECTION.forEach((dir, value) -> {
+      if (dir.getAxis().isHorizontal()) {
+        boolean alt = dir == Direction.SOUTH;
+        builder.part().modelFile(alt || dir == Direction.WEST ? sideAlt : side).rotationY(dir.getAxis() == Axis.X ? 90 : 0).addModel()
+               .condition(value, true).end()
+               .part().modelFile(alt || dir == Direction.EAST ? noSideAlt : noSide).rotationY(dir == Direction.WEST ? 270 : dir == Direction.SOUTH ? 90 : 0).addModel()
+               .condition(value, false).end()
+               .part().modelFile(noSideEdge).rotationY((int)dir.getOpposite().toYRot()).addModel()
+               .condition(value, false)
+               .condition(PipeBlock.PROPERTY_BY_DIRECTION.get(dir.getClockWise()), false)
+               .condition(PipeBlock.PROPERTY_BY_DIRECTION.get(dir.getCounterClockWise()), false).end();
+      }
+    });
+  }
+
+  /** Creates a new pane block with all relevant models */
+  public void paneBlock(IronBarsBlock block, String baseName, ResourceLocation pane, ResourceLocation edge, boolean connected, int tint, boolean solidEdge, @Nullable RenderType renderType) {
+    // build block models
+    ModelFile post      = paneModel(baseName, "post",       pane, edge, renderType, connected, tint);
+    ModelFile side      = paneModel(baseName, "side",       pane, edge, renderType, connected, tint);
+    ModelFile sideAlt   = paneModel(baseName, "side_alt",   pane, edge, renderType, connected, tint);
+    ModelFile noSide    = paneModel(baseName, "noside",     pane, null, renderType, connected, tint);
+    ModelFile noSideAlt = paneModel(baseName, "noside_alt", pane, null, renderType, connected, tint);
+    if (solidEdge && !pane.equals(edge)) {
+      ModelFile noSideEdge = paneModel(baseName, "noside_edge", pane, edge, renderType, false, tint);
+      paneBlockWithEdge(block, post, side, sideAlt, noSide, noSideAlt, noSideEdge);
+    } else {
+      paneBlock(block, post, side, sideAlt, noSide, noSideAlt);
+    }
+    // build item model
+    ItemModelBuilder item = itemModels().getBuilder(itemKey(block).toString()).parent(GENERATED).texture("layer0", pane);
+    if (tint != -1) {
+      item.customLoader(MantleItemLayerBuilder::new).color(tint);
+    }
+    if (renderType != null) {
+      item.renderType(renderType.name);
+    }
+  }
+
+  /** Adds models for a glass block with a glass pane */
+  public void glassBlock(Block glass, IronBarsBlock pane, String baseName, ResourceLocation front, int tint, boolean solidEdge, @Nullable RenderType renderType) {
+    glassBlock(glass, pane, baseName, front, INSTANCE.suffix(front, "_top"), tint, solidEdge, renderType);
+  }
+
+  /** Adds models for a glass block with a glass pane */
+  public void glassBlock(Block glass, IronBarsBlock pane, String baseName, ResourceLocation front, ResourceLocation edge, int tint, boolean solidEdge, @Nullable RenderType renderType) {
+    // make block model
+    BlockModelBuilder block = models().cubeAll(BLOCK_FOLDER + "/" + baseName + "block", front);
+    ConnectedModelBuilder<BlockModelBuilder> cBuilder = block.customLoader(ConnectedModelBuilder::new);
+    cBuilder.connected("all", "cornerless_full");
+    if (tint != -1) {
+      cBuilder.color(tint);
+    }
+    if (renderType != null) {
+      block.renderType(renderType.name);
+    } else {
+      // glass generally wants cutout
+      block.renderType(RenderType.cutout().name);
+    }
+    basicBlock(glass, block);
+    // make pane models
+    paneBlock(pane, baseName + "pane_", front, edge, true, tint, solidEdge, renderType);
   }
 }

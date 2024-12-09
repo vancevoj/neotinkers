@@ -1,6 +1,5 @@
 package slimeknights.tconstruct.common.data.model;
 
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.Registry;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
@@ -14,7 +13,6 @@ import slimeknights.mantle.registration.object.ItemObject;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.registration.CastItemObject;
 import slimeknights.tconstruct.library.tools.part.MaterialItem;
-import slimeknights.tconstruct.shared.TinkerCommons;
 import slimeknights.tconstruct.smeltery.TinkerSmeltery;
 import slimeknights.tconstruct.tools.TinkerToolParts;
 import slimeknights.tconstruct.tools.item.ArmorSlotType;
@@ -106,17 +104,6 @@ public class TinkerItemModelProvider extends ItemModelProvider {
     TinkerSmeltery.dummyPlating.forEach((type, item) -> {
       basicItem(item, "tool/parts/plating_" + type.getSerializedName());
     });
-
-    // panes
-    String translucent = RenderType.translucent().name;
-    generated(TinkerCommons.obsidianPane.getId(), new ResourceLocation("block/obsidian"));
-    generated(TinkerCommons.clearGlassPane, "block/clear_glass");
-    generated(TinkerCommons.soulGlassPane, "block/soul_glass");
-    TinkerCommons.clearStainedGlassPane.forEach(block -> generated(block, "block/clear_stained_glass").renderType(translucent));
-    generated(TinkerSmeltery.searedGlassPane, "block/smeltery/seared_glass");
-    generated(TinkerSmeltery.searedSoulGlassPane, "block/smeltery/soul_glass").renderType(translucent);
-    generated(TinkerSmeltery.scorchedGlassPane, "block/foundry/glass");
-    generated(TinkerSmeltery.scorchedSoulGlassPane, "block/foundry/soul_glass").renderType(translucent);
   }
 
   private ResourceLocation id(ItemLike item) {
