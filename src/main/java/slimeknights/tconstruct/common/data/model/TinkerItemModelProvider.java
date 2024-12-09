@@ -1,5 +1,6 @@
 package slimeknights.tconstruct.common.data.model;
 
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.Registry;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
@@ -7,12 +8,13 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.client.model.generators.ItemModelBuilder;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
-import net.minecraftforge.client.model.generators.ModelFile;
+import net.minecraftforge.client.model.generators.ModelFile.UncheckedModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import slimeknights.mantle.registration.object.ItemObject;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.registration.CastItemObject;
 import slimeknights.tconstruct.library.tools.part.MaterialItem;
+import slimeknights.tconstruct.shared.TinkerCommons;
 import slimeknights.tconstruct.smeltery.TinkerSmeltery;
 import slimeknights.tconstruct.tools.TinkerToolParts;
 import slimeknights.tconstruct.tools.item.ArmorSlotType;
@@ -21,6 +23,7 @@ import static slimeknights.tconstruct.TConstruct.getResource;
 
 @SuppressWarnings("UnusedReturnValue")
 public class TinkerItemModelProvider extends ItemModelProvider {
+  private final UncheckedModelFile GENERATED = new UncheckedModelFile("item/generated");
   public TinkerItemModelProvider(DataGenerator generator, ExistingFileHelper existingFileHelper) {
     super(generator, TConstruct.MOD_ID, existingFileHelper);
   }
@@ -103,18 +106,46 @@ public class TinkerItemModelProvider extends ItemModelProvider {
     TinkerSmeltery.dummyPlating.forEach((type, item) -> {
       basicItem(item, "tool/parts/plating_" + type.getSerializedName());
     });
+
+    // panes
+    String translucent = RenderType.translucent().name;
+    generated(TinkerCommons.obsidianPane.getId(), new ResourceLocation("block/obsidian"));
+    generated(TinkerCommons.clearGlassPane, "block/clear_glass");
+    generated(TinkerCommons.soulGlassPane, "block/soul_glass");
+    TinkerCommons.clearStainedGlassPane.forEach(block -> generated(block, "block/clear_stained_glass").renderType(translucent));
+    generated(TinkerSmeltery.searedGlassPane, "block/smeltery/seared_glass");
+    generated(TinkerSmeltery.searedSoulGlassPane, "block/smeltery/soul_glass").renderType(translucent);
+    generated(TinkerSmeltery.scorchedGlassPane, "block/foundry/glass");
+    generated(TinkerSmeltery.scorchedSoulGlassPane, "block/foundry/soul_glass").renderType(translucent);
+  }
+
+  private ResourceLocation id(ItemLike item) {
+    return Registry.ITEM.getKey(item.asItem());
+  }
+
+  /** Generated item with a texture */
+  private ItemModelBuilder generated(ResourceLocation item, ResourceLocation texture) {
+    return getBuilder(item.toString()).parent(GENERATED).texture("layer0", texture);
+  }
+
+  /** Generated item with a texture */
+  private ItemModelBuilder generated(ResourceLocation item, String texture) {
+    return generated(item, new ResourceLocation(item.getNamespace(), texture));
+  }
+
+  /** Generated item with a texture */
+  private ItemModelBuilder generated(ItemLike item, String texture) {
+    return generated(id(item), texture);
   }
 
   /** Generated item with a texture */
   private ItemModelBuilder basicItem(ResourceLocation item, String texture) {
-    return getBuilder(item.toString())
-      .parent(new ModelFile.UncheckedModelFile("item/generated"))
-      .texture("layer0", new ResourceLocation(item.getNamespace(), "item/" + texture));
+    return generated(item, "item/" + texture);
   }
 
   /** Generated item with a texture */
   private ItemModelBuilder basicItem(ItemLike item, String texture) {
-    return basicItem(Registry.ITEM.getKey(item.asItem()), texture);
+    return basicItem(id(item), texture);
   }
 
 
@@ -129,7 +160,7 @@ public class TinkerItemModelProvider extends ItemModelProvider {
 
   /** Creates a part model in the parts folder */
   private MaterialModelBuilder<ItemModelBuilder> part(Item item, String texture) {
-    return part(Registry.ITEM.getKey(item), texture);
+    return part(id(item), texture);
   }
 
   /** Creates a part model with the given texture */
