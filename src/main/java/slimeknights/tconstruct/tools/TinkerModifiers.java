@@ -180,10 +180,6 @@ import slimeknights.tconstruct.tools.modifiers.ability.tool.GlowingModifier;
 import slimeknights.tconstruct.tools.modifiers.ability.tool.MeltingModifier;
 import slimeknights.tconstruct.tools.modifiers.ability.tool.OffhandAttackModifier;
 import slimeknights.tconstruct.tools.modifiers.ability.tool.ParryingModifier;
-import slimeknights.tconstruct.tools.modifiers.defense.BlastProtectionModifier;
-import slimeknights.tconstruct.tools.modifiers.defense.DragonbornModifier;
-import slimeknights.tconstruct.tools.modifiers.defense.MagicProtectionModifier;
-import slimeknights.tconstruct.tools.modifiers.defense.ShulkingModifier;
 import slimeknights.tconstruct.tools.modifiers.effect.BleedingEffect;
 import slimeknights.tconstruct.tools.modifiers.effect.MagneticEffect;
 import slimeknights.tconstruct.tools.modifiers.effect.NoMilkEffect;
@@ -348,15 +344,23 @@ public final class TinkerModifiers extends TinkerModule {
   // armor
   // protection
   /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#meleeProtection} */
-  @Deprecated
+  @Deprecated(forRemoval = true)
   public static final DynamicModifier<Modifier> meleeProtection = MODIFIERS.registerDynamic("melee_protection");
-  public static final StaticModifier<BlastProtectionModifier> blastProtection = MODIFIERS.register("blast_protection", BlastProtectionModifier::new);
-  public static final StaticModifier<MagicProtectionModifier> magicProtection = MODIFIERS.register("magic_protection", MagicProtectionModifier::new);
+  /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#blastProtection} */
+  @Deprecated(forRemoval = true)
+  public static final DynamicModifier<Modifier> blastProtection = MODIFIERS.registerDynamic("blast_protection");
+  /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#magicProtection} */
+  @Deprecated(forRemoval = true)
+  public static final DynamicModifier<Modifier> magicProtection = MODIFIERS.registerDynamic("magic_protection");
   /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#projectileProtection} */
-  @Deprecated
+  @Deprecated(forRemoval = true)
   public static final DynamicModifier<Modifier> projectileProtection = MODIFIERS.registerDynamic("projectile_protection");
-  public static final StaticModifier<ShulkingModifier> shulking = MODIFIERS.register("shulking", ShulkingModifier::new);
-  public static final StaticModifier<DragonbornModifier> dragonborn = MODIFIERS.register("dragonborn", DragonbornModifier::new);
+  /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#shulking} */
+  @Deprecated(forRemoval = true)
+  public static final DynamicModifier<Modifier> shulking = MODIFIERS.registerDynamic("shulking");
+  /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#dragonborn} */
+  @Deprecated(forRemoval = true)
+  public static final DynamicModifier<Modifier> dragonborn = MODIFIERS.registerDynamic("dragonborn");
   // general
   public static final DynamicModifier<Modifier> golden = MODIFIERS.registerDynamic("golden", Modifier.class);
   public static final StaticModifier<EmbellishmentModifier> embellishment = MODIFIERS.register("embellishment", EmbellishmentModifier::new);

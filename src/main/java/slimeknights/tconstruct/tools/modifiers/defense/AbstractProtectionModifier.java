@@ -17,7 +17,7 @@ import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
  * Base class for protection modifiers that want to keep track of the largest level for a bonus
  * @deprecated use {@link slimeknights.tconstruct.library.modifiers.modules.technical.MaxArmorLevelModule} and {@link slimeknights.tconstruct.library.modifiers.modules.armor.ProtectionModule}
  */
-@Deprecated
+@Deprecated(forRemoval = true)
 @RequiredArgsConstructor
 public abstract class AbstractProtectionModifier<T extends ModifierMaxLevel> extends Modifier implements EquipmentChangeModifierHook {
   private final ComputableDataKey<T> key;
