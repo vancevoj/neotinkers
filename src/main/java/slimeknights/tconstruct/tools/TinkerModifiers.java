@@ -79,6 +79,7 @@ import slimeknights.tconstruct.library.modifiers.modules.ModifierModule;
 import slimeknights.tconstruct.library.modifiers.modules.armor.BlockDamageSourceModule;
 import slimeknights.tconstruct.library.modifiers.modules.armor.CoverGroundWalkerModule;
 import slimeknights.tconstruct.library.modifiers.modules.armor.EffectImmunityModule;
+import slimeknights.tconstruct.library.modifiers.modules.armor.MaxArmorAttributeModule;
 import slimeknights.tconstruct.library.modifiers.modules.armor.MobDisguiseModule;
 import slimeknights.tconstruct.library.modifiers.modules.armor.ProtectionModule;
 import slimeknights.tconstruct.library.modifiers.modules.armor.ReplaceBlockWalkerModule;
@@ -182,7 +183,6 @@ import slimeknights.tconstruct.tools.modifiers.ability.tool.ParryingModifier;
 import slimeknights.tconstruct.tools.modifiers.defense.BlastProtectionModifier;
 import slimeknights.tconstruct.tools.modifiers.defense.DragonbornModifier;
 import slimeknights.tconstruct.tools.modifiers.defense.MagicProtectionModifier;
-import slimeknights.tconstruct.tools.modifiers.defense.ProjectileProtectionModifier;
 import slimeknights.tconstruct.tools.modifiers.defense.ShulkingModifier;
 import slimeknights.tconstruct.tools.modifiers.effect.BleedingEffect;
 import slimeknights.tconstruct.tools.modifiers.effect.MagneticEffect;
@@ -352,7 +352,9 @@ public final class TinkerModifiers extends TinkerModule {
   public static final DynamicModifier<Modifier> meleeProtection = MODIFIERS.registerDynamic("melee_protection");
   public static final StaticModifier<BlastProtectionModifier> blastProtection = MODIFIERS.register("blast_protection", BlastProtectionModifier::new);
   public static final StaticModifier<MagicProtectionModifier> magicProtection = MODIFIERS.register("magic_protection", MagicProtectionModifier::new);
-  public static final StaticModifier<ProjectileProtectionModifier> projectileProtection = MODIFIERS.register("projectile_protection", ProjectileProtectionModifier::new);
+  /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#projectileProtection} */
+  @Deprecated
+  public static final DynamicModifier<Modifier> projectileProtection = MODIFIERS.registerDynamic("projectile_protection");
   public static final StaticModifier<ShulkingModifier> shulking = MODIFIERS.register("shulking", ShulkingModifier::new);
   public static final StaticModifier<DragonbornModifier> dragonborn = MODIFIERS.register("dragonborn", DragonbornModifier::new);
   // general
@@ -583,6 +585,7 @@ public final class TinkerModifiers extends TinkerModule {
 
       // modifier modules //
       // armor
+      ModifierModule.LOADER.register(getResource("max_armor_attribute"), MaxArmorAttributeModule.LOADER);
       ModifierModule.LOADER.register(getResource("effect_immunity"), EffectImmunityModule.LOADER);
       ModifierModule.LOADER.register(getResource("mob_disguise"), MobDisguiseModule.LOADER);
       ModifierModule.LOADER.register(getResource("block_damage"), BlockDamageSourceModule.LOADER);

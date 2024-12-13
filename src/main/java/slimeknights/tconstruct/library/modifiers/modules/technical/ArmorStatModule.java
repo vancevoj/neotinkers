@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -81,13 +82,17 @@ public record ArmorStatModule(TinkerDataKey<Float> key, LevelingValue amount, bo
   @Override
   public void addTooltip(IToolStackView tool, ModifierEntry modifier, @Nullable Player player, List<Component> tooltip, TooltipKey tooltipKey, TooltipFlag tooltipFlag) {
     if (condition.matches(tool, modifier) && (tool.hasTag(TinkerTags.Items.WORN_ARMOR) || heldTag != null && tool.hasTag(heldTag)) && (!tool.isBroken() || allowBroken)) {
-      float value = amount.compute(modifier.getEffectiveLevel());
-      if (value != 0) {
-        Component name = Component.translatable(Util.makeTranslationKey("armor_stat", key.getId()));
-        switch (tooltipStyle) {
-          case BOOST -> TooltipModifierHook.addFlatBoost(modifier.getModifier(), name, value, tooltip);
-          case PERCENT -> TooltipModifierHook.addPercentBoost(modifier.getModifier(), name, value, tooltip);
-        }
+      addStatTooltip(modifier, key.getId(), amount.computeForLevel(modifier.getEffectiveLevel()), tooltipStyle, tooltip);
+    }
+  }
+
+  /** Adds the given stat tooltip */
+  public static void addStatTooltip(ModifierEntry modifier, ResourceLocation key, float value, TooltipStyle tooltipStyle, List<Component> tooltip) {
+    if (value != 0) {
+      Component name = Component.translatable(Util.makeTranslationKey("armor_stat", key));
+      switch (tooltipStyle) {
+        case BOOST -> TooltipModifierHook.addFlatBoost(modifier.getModifier(), name, value, tooltip);
+        case PERCENT -> TooltipModifierHook.addPercentBoost(modifier.getModifier(), name, value, tooltip);
       }
     }
   }

@@ -15,6 +15,8 @@ import slimeknights.tconstruct.library.tools.context.EquipmentChangeContext;
 
 import java.util.UUID;
 
+/** @deprecated use {@link slimeknights.tconstruct.library.modifiers.modules.armor.MaxArmorAttributeModule} and {@link ProtectionModule} */
+@Deprecated
 public class ProjectileProtectionModifier extends AbstractProtectionModifier<ModifierMaxLevel> {
   private static final UUID ATTRIBUTE_UUID = UUID.fromString("6f030b1e-e9e1-11ec-8fea-0242ac120002");
   /** Entity data key for the data associated with this modifier */

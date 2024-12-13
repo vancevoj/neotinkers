@@ -60,6 +60,7 @@ import slimeknights.tconstruct.library.modifiers.impl.BasicModifier.TooltipDispl
 import slimeknights.tconstruct.library.modifiers.modules.armor.BlockDamageSourceModule;
 import slimeknights.tconstruct.library.modifiers.modules.armor.CoverGroundWalkerModule;
 import slimeknights.tconstruct.library.modifiers.modules.armor.EffectImmunityModule;
+import slimeknights.tconstruct.library.modifiers.modules.armor.MaxArmorAttributeModule;
 import slimeknights.tconstruct.library.modifiers.modules.armor.MobDisguiseModule;
 import slimeknights.tconstruct.library.modifiers.modules.armor.ProtectionModule;
 import slimeknights.tconstruct.library.modifiers.modules.armor.ReplaceBlockWalkerModule;
@@ -345,8 +346,11 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
     // protection
     buildModifier(ModifierIds.protection).addModule(ProtectionModule.builder().eachLevel(1.25f));
     buildModifier(ModifierIds.meleeProtection)
-      .addModule(MaxArmorStatModule.builder(TinkerDataKeys.USE_ITEM_SPEED).eachLevel(0.05f))
+      .addModule(MaxArmorStatModule.builder(TinkerDataKeys.USE_ITEM_SPEED).heldTag(TinkerTags.Items.HELD).tooltipStyle(TooltipStyle.PERCENT).eachLevel(0.05f))
       .addModule(ProtectionModule.builder().sources(DamageSourcePredicate.CAN_PROTECT, DamageSourcePredicate.MELEE).eachLevel(2.5f));
+    buildModifier(ModifierIds.projectileProtection)
+      .addModule(MaxArmorAttributeModule.builder(Attributes.KNOCKBACK_RESISTANCE, Operation.ADDITION).heldTag(TinkerTags.Items.HELD).uniqueFrom(ModifierIds.projectileProtection).eachLevel(0.05f))
+      .addModule(ProtectionModule.builder().sources(DamageSourcePredicate.CAN_PROTECT, DamageSourcePredicate.PROJECTILE).eachLevel(2.5f));
     buildModifier(ModifierIds.fireProtection)
       .addModule(EnchantmentModule.builder(Enchantments.FIRE_PROTECTION).protection())
       .addModule(ProtectionModule.builder().sources(DamageSourcePredicate.CAN_PROTECT, DamageSourcePredicate.FIRE).eachLevel(2.5f));

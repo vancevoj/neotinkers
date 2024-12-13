@@ -42,7 +42,7 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
 
     // tier 2
     addDefaultTraits(MaterialIds.iron, TinkerModifiers.magnetic);
-    addTraits(MaterialIds.iron, ARMOR, TinkerModifiers.projectileProtection);
+    addTraits(MaterialIds.iron, ARMOR, ModifierIds.projectileProtection);
     addDefaultTraits(MaterialIds.copper, TinkerModifiers.dwarven);
     addTraits(MaterialIds.copper, ARMOR, ModifierIds.depthProtection);
     addDefaultTraits(MaterialIds.searedStone, TinkerModifiers.searing);

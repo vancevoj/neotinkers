@@ -648,12 +648,12 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                                     .setTools(protectableTools)
                                     .saveSalvage(consumer, prefix(ModifierIds.meleeProtection, defenseSalvage))
                                     .save(consumer, prefix(ModifierIds.meleeProtection, defenseFolder));
-    IncrementalModifierRecipeBuilder.modifier(TinkerModifiers.projectileProtection)
+    IncrementalModifierRecipeBuilder.modifier(ModifierIds.projectileProtection)
                                     .setInput(TinkerModifiers.ironReinforcement, 1, 5)
                                     .setSlots(SlotType.DEFENSE, 1)
                                     .setTools(protectableTools)
-                                    .saveSalvage(consumer, prefix(TinkerModifiers.projectileProtection, defenseSalvage))
-                                    .save(consumer, prefix(TinkerModifiers.projectileProtection, defenseFolder));
+                                    .saveSalvage(consumer, prefix(ModifierIds.projectileProtection, defenseSalvage))
+                                    .save(consumer, prefix(ModifierIds.projectileProtection, defenseFolder));
     IncrementalModifierRecipeBuilder.modifier(TinkerModifiers.blastProtection)
                                     .setInput(TinkerModifiers.obsidianReinforcement, 1, 5)
                                     .setSlots(SlotType.DEFENSE, 1)
