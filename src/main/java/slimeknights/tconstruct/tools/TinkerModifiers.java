@@ -110,6 +110,7 @@ import slimeknights.tconstruct.library.modifiers.modules.display.DurabilityBarCo
 import slimeknights.tconstruct.library.modifiers.modules.mining.ConditionalMiningSpeedModule;
 import slimeknights.tconstruct.library.modifiers.modules.technical.ArmorLevelModule;
 import slimeknights.tconstruct.library.modifiers.modules.technical.ArmorStatModule;
+import slimeknights.tconstruct.library.modifiers.modules.technical.MaxArmorStatModule;
 import slimeknights.tconstruct.library.modifiers.util.DynamicModifier;
 import slimeknights.tconstruct.library.modifiers.util.ModifierDeferredRegister;
 import slimeknights.tconstruct.library.modifiers.util.ModifierLevelDisplay;
@@ -181,7 +182,6 @@ import slimeknights.tconstruct.tools.modifiers.ability.tool.ParryingModifier;
 import slimeknights.tconstruct.tools.modifiers.defense.BlastProtectionModifier;
 import slimeknights.tconstruct.tools.modifiers.defense.DragonbornModifier;
 import slimeknights.tconstruct.tools.modifiers.defense.MagicProtectionModifier;
-import slimeknights.tconstruct.tools.modifiers.defense.MeleeProtectionModifier;
 import slimeknights.tconstruct.tools.modifiers.defense.ProjectileProtectionModifier;
 import slimeknights.tconstruct.tools.modifiers.defense.ShulkingModifier;
 import slimeknights.tconstruct.tools.modifiers.effect.BleedingEffect;
@@ -347,7 +347,9 @@ public final class TinkerModifiers extends TinkerModule {
 
   // armor
   // protection
-  public static final StaticModifier<MeleeProtectionModifier> meleeProtection = MODIFIERS.register("melee_protection", MeleeProtectionModifier::new);
+  /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#meleeProtection} */
+  @Deprecated
+  public static final DynamicModifier<Modifier> meleeProtection = MODIFIERS.registerDynamic("melee_protection");
   public static final StaticModifier<BlastProtectionModifier> blastProtection = MODIFIERS.register("blast_protection", BlastProtectionModifier::new);
   public static final StaticModifier<MagicProtectionModifier> magicProtection = MODIFIERS.register("magic_protection", MagicProtectionModifier::new);
   public static final StaticModifier<ProjectileProtectionModifier> projectileProtection = MODIFIERS.register("projectile_protection", ProjectileProtectionModifier::new);
@@ -626,6 +628,7 @@ public final class TinkerModifiers extends TinkerModule {
       ModifierModule.LOADER.register(getResource("conditional_mining_speed"), ConditionalMiningSpeedModule.LOADER);
       // technical
       ModifierModule.LOADER.register(getResource("armor_level"), ArmorLevelModule.LOADER);
+      ModifierModule.LOADER.register(getResource("max_armor_stat"), MaxArmorStatModule.LOADER);
       ModifierModule.LOADER.register(getResource("armor_stat"), ArmorStatModule.LOADER);
 
       // special

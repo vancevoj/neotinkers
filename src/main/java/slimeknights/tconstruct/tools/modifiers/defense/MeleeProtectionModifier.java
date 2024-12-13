@@ -10,6 +10,8 @@ import slimeknights.tconstruct.library.tools.capability.TinkerDataCapability.Com
 import slimeknights.tconstruct.library.tools.capability.TinkerDataKeys;
 import slimeknights.tconstruct.library.tools.context.EquipmentChangeContext;
 
+/** @deprecated use {@link ProtectionModule} and {@link slimeknights.tconstruct.library.modifiers.modules.technical.MaxArmorStatModule} */
+@Deprecated(forRemoval = true)
 public class MeleeProtectionModifier extends AbstractProtectionModifier<ModifierMaxLevel> {
   private static final ComputableDataKey<ModifierMaxLevel> KEY = TConstruct.createKey("melee_protection", ModifierMaxLevel::new);
 
