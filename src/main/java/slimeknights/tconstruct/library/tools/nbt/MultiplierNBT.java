@@ -7,7 +7,6 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.network.FriendlyByteBuf;
 import slimeknights.mantle.data.loadable.Loadable;
 import slimeknights.mantle.data.loadable.primitive.FloatLoadable;
 import slimeknights.tconstruct.library.tools.stat.INumericToolStat;
@@ -93,20 +92,6 @@ public class MultiplierNBT {
     return nbt;
   }
 
-
-  /* Network */
-
-  /** Writes this to a packet buffer */
-  @Deprecated
-  public void toNetwork(FriendlyByteBuf buffer) {
-    LOADABLE.encode(buffer, this);
-  }
-
-  /** Reads this object from the network */
-  @Deprecated
-  public static MultiplierNBT fromNetwork(FriendlyByteBuf buffer) {
-    return LOADABLE.decode(buffer);
-  }
 
   /** Builder for a multiplier, mostly prevents nulls from being added */
   public static class Builder {

@@ -47,12 +47,6 @@ public interface ModifierTraitHook {
       return this;
     }
 
-    /** @deprecated use {@link #add(ModifierEntry)} */
-    @Deprecated(forRemoval = true)
-    public void addEntry(ModifierEntry entry) {
-      add(entry);
-    }
-
     /** Adds all traits for the given modifier entry */
     private void addTraits(ModifierEntry entry) {
       Modifier modifier = entry.getModifier();

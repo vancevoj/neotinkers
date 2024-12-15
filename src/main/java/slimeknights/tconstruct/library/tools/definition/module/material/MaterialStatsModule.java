@@ -51,12 +51,6 @@ public class MaterialStatsModule implements ToolStatsHook, ToolTraitHook, ToolMa
   private int[] repairIndices;
   private final int primaryPart;
 
-  /** @deprecated use {@link #MaterialStatsModule(List,float[], int)} or {@link Builder}  */
-  @Deprecated
-  public MaterialStatsModule(List<MaterialStatsId> statTypes, float[] scales) {
-    this(statTypes, scales, 0);
-  }
-
   protected MaterialStatsModule(List<MaterialStatsId> statTypes, float[] scales, int primaryPart) {
     this.statTypes = statTypes;
     this.scales = scales;

@@ -56,7 +56,6 @@ import slimeknights.tconstruct.library.json.variable.tool.ToolVariable;
 import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierManager;
 import slimeknights.tconstruct.library.modifiers.dynamic.ComposableModifier;
-import slimeknights.tconstruct.library.modifiers.dynamic.InventoryMenuModifier;
 import slimeknights.tconstruct.library.modifiers.fluid.ConditionalFluidEffect;
 import slimeknights.tconstruct.library.modifiers.fluid.FluidEffect;
 import slimeknights.tconstruct.library.modifiers.fluid.FluidEffectManager;
@@ -152,7 +151,6 @@ import slimeknights.tconstruct.tools.modifiers.ability.armor.AmbidextrousModifie
 import slimeknights.tconstruct.tools.modifiers.ability.armor.BouncyModifier;
 import slimeknights.tconstruct.tools.modifiers.ability.armor.DoubleJumpModifier;
 import slimeknights.tconstruct.tools.modifiers.ability.armor.ReflectingModifier;
-import slimeknights.tconstruct.tools.modifiers.ability.armor.ToolBeltModifier;
 import slimeknights.tconstruct.tools.modifiers.ability.armor.ZoomModifier;
 import slimeknights.tconstruct.tools.modifiers.ability.armor.walker.FlamewakeModifier;
 import slimeknights.tconstruct.tools.modifiers.ability.fluid.BurstingModifier;
@@ -336,37 +334,12 @@ public final class TinkerModifiers extends TinkerModule {
   public static final StaticModifier<PunchModifier> punch = MODIFIERS.register("punch", PunchModifier::new);
   public static final StaticModifier<ImpalingModifier> impaling = MODIFIERS.register("impaling", ImpalingModifier::new);
   public static final StaticModifier<FreezingModifier> freezing = MODIFIERS.register("freezing", FreezingModifier::new);
-  /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#bulkQuiver} */
-  @Deprecated(forRemoval = true)
-  public static final DynamicModifier<Modifier> bulkQuiver = MODIFIERS.registerDynamic("bulk_quiver");
-  /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#trickQuiver} */
-  @Deprecated(forRemoval = true)
-  public static final DynamicModifier<Modifier> trickQuiver = MODIFIERS.registerDynamic("trick_quiver");
   public static final StaticModifier<CrystalshotModifier> crystalshot = MODIFIERS.register("crystalshot", CrystalshotModifier::new);
   public static final StaticModifier<Modifier> multishot = MODIFIERS.register("multishot", Modifier::new);
   public static final StaticModifier<SinistralModifier> sinistral = MODIFIERS.register("sinistral", SinistralModifier::new);
   public static final StaticModifier<ScopeModifier> scope = MODIFIERS.register("scope", ScopeModifier::new);
 
   // armor
-  // protection
-  /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#meleeProtection} */
-  @Deprecated(forRemoval = true)
-  public static final DynamicModifier<Modifier> meleeProtection = MODIFIERS.registerDynamic("melee_protection");
-  /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#blastProtection} */
-  @Deprecated(forRemoval = true)
-  public static final DynamicModifier<Modifier> blastProtection = MODIFIERS.registerDynamic("blast_protection");
-  /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#magicProtection} */
-  @Deprecated(forRemoval = true)
-  public static final DynamicModifier<Modifier> magicProtection = MODIFIERS.registerDynamic("magic_protection");
-  /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#projectileProtection} */
-  @Deprecated(forRemoval = true)
-  public static final DynamicModifier<Modifier> projectileProtection = MODIFIERS.registerDynamic("projectile_protection");
-  /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#shulking} */
-  @Deprecated(forRemoval = true)
-  public static final DynamicModifier<Modifier> shulking = MODIFIERS.registerDynamic("shulking");
-  /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#dragonborn} */
-  @Deprecated(forRemoval = true)
-  public static final DynamicModifier<Modifier> dragonborn = MODIFIERS.registerDynamic("dragonborn");
   // general
   public static final DynamicModifier<Modifier> golden = MODIFIERS.registerDynamic("golden");
   public static final StaticModifier<EmbellishmentModifier> embellishment = MODIFIERS.register("embellishment", EmbellishmentModifier::new);
@@ -553,7 +526,6 @@ public final class TinkerModifiers extends TinkerModule {
    * Events
    */
 
-  @SuppressWarnings("removal")
   @SubscribeEvent
   void registerSerializers(RegisterEvent event) {
     if (event.getRegistryKey() == Registry.RECIPE_SERIALIZER_REGISTRY) {
@@ -583,10 +555,7 @@ public final class TinkerModifiers extends TinkerModule {
 
 
       // modifier loaders
-      ModifierManager.MODIFIER_LOADERS.register(getResource("inventory_with_menu"), InventoryMenuModifier.LOADER);
       ModifierManager.MODIFIER_LOADERS.register(getResource("composable"), ComposableModifier.LOADER);
-      // specialized
-      ModifierManager.MODIFIER_LOADERS.register(getResource("tool_belt"), ToolBeltModifier.LOADER);
       // modifier names, sometimes I wonder if I have too many registries for tiny JSON pieces
       ModifierLevelDisplay.LOADER.register(getResource("default"), ModifierLevelDisplay.DEFAULT.getLoader());
       ModifierLevelDisplay.LOADER.register(getResource("single_level"), ModifierLevelDisplay.SINGLE_LEVEL.getLoader());

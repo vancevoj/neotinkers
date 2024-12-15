@@ -54,8 +54,8 @@ class MultiplierNBTTest extends BaseMcTest {
       .build();
 
     FriendlyByteBuf buffer = new FriendlyByteBuf(Unpooled.buffer());
-    multipliers.toNetwork(buffer);
-    MultiplierNBT decoded = MultiplierNBT.fromNetwork(buffer);
+    MultiplierNBT.LOADABLE.encode(buffer, multipliers);
+    MultiplierNBT decoded = MultiplierNBT.LOADABLE.decode(buffer);
 
     // multiplier of 1 is skipped
     assertThat(decoded.getContainedStats()).hasSize(4);

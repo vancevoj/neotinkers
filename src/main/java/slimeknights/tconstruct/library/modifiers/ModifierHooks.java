@@ -282,12 +282,6 @@ public class ModifierHooks {
     return register(name, filter, null, defaultInstance);
   }
 
-  /** @deprecated worse parameter order, use {{@link #register(ResourceLocation, Class, Function, Object)}} */
-  @Deprecated(forRemoval = true, since = "3.8.1")
-  public static <T> ModuleHook<T> register(ResourceLocation name, Class<T> filter, T defaultInstance, @Nullable Function<Collection<T>,T> merger) {
-    return register(name, filter, merger, defaultInstance);
-  }
-
   /** Registers a new modifier hook under {@code tconstruct} */
   private static <T> ModuleHook<T> register(String name, Class<T> filter, @Nullable Function<Collection<T>,T> merger, T defaultInstance) {
     return register(TConstruct.getResource(name), filter, merger, defaultInstance);

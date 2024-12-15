@@ -86,7 +86,7 @@ public class MaterialTraits {
     ImmutableList.Builder<ModifierEntry> builder = ImmutableList.builder();
     int count = buffer.readVarInt();
     for (int i = 0; i < count; i++) {
-      builder.add(ModifierEntry.read(buffer));
+      builder.add(ModifierEntry.LOADABLE.decode(buffer));
     }
     return builder.build();
   }
@@ -99,7 +99,7 @@ public class MaterialTraits {
   private static void writeTraitList(FriendlyByteBuf buffer, List<ModifierEntry> traits) {
     buffer.writeVarInt(traits.size());
     for (ModifierEntry entry : traits) {
-      entry.write(buffer);
+      ModifierEntry.LOADABLE.encode(buffer, entry);
     }
   }
 

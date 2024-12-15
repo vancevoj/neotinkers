@@ -1,15 +1,12 @@
 package slimeknights.tconstruct.library.tools.definition;
 
 import lombok.Getter;
-import net.minecraft.network.FriendlyByteBuf;
 import slimeknights.mantle.data.loadable.ErrorFactory;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.tconstruct.library.module.ModuleHook;
 import slimeknights.tconstruct.library.module.ModuleHookMap;
 import slimeknights.tconstruct.library.module.WithHooks;
 import slimeknights.tconstruct.library.tools.definition.module.ToolModule;
-import slimeknights.tconstruct.library.tools.nbt.MultiplierNBT;
-import slimeknights.tconstruct.library.tools.nbt.StatsNBT;
 
 import java.util.List;
 
@@ -27,9 +24,6 @@ public class ToolDefinitionData {
   @Getter
   private final transient ModuleHookMap hooks;
 
-  private transient StatsNBT baseStats;
-  private transient MultiplierNBT multipliers;
-
   protected ToolDefinitionData(List<WithHooks<ToolModule>> modules, ErrorFactory error) {
     this.modules = modules;
     this.hooks = ModuleHookMap.createMap(modules, error);
@@ -41,20 +35,5 @@ public class ToolDefinitionData {
   /** Gets the given module from the tool */
   public <T> T getHook(ModuleHook<T> hook) {
     return hooks.getOrDefault(hook);
-  }
-
-
-  /* Packet buffers */
-
-  /** Writes a tool definition stat object to a packet buffer */
-  @Deprecated
-  public void write(FriendlyByteBuf buffer) {
-    LOADABLE.encode(buffer, this);
-  }
-
-  /** Reads a tool definition stat object from a packet buffer */
-  @Deprecated
-  public static ToolDefinitionData read(FriendlyByteBuf buffer) {
-    return LOADABLE.decode(buffer);
   }
 }

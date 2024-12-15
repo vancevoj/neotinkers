@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.With;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.TagKey;
 import slimeknights.mantle.data.loadable.primitive.IntLoadable;
@@ -208,27 +207,6 @@ public class ModifierEntry implements Comparable<ModifierEntry> {
     tag.putString(TAG_MODIFIER, modifier.getId().toString());
     tag.putInt(TAG_LEVEL, level);
     return tag;
-  }
-
-  /**
-   * Reads this modifier entry from the packet buffer
-   * @param buffer  Buffer instance
-   * @return  Read entry
-   * @deprecated use {@link #LOADABLE}
-   */
-  @Deprecated
-  public static ModifierEntry read(FriendlyByteBuf buffer) {
-    return LOADABLE.decode(buffer);
-  }
-
-  /**
-   * Writes this modifier entry to the packet buffer
-   * @param buffer  Buffer instance
-   * @deprecated use {@link #LOADABLE}
-   */
-  @Deprecated
-  public void write(FriendlyByteBuf buffer) {
-    LOADABLE.encode(buffer, this);
   }
 
 

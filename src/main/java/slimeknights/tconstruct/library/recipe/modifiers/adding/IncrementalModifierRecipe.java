@@ -2,7 +2,6 @@ package slimeknights.tconstruct.library.recipe.modifiers.adding;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.math.IntMath;
-import com.google.gson.JsonObject;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -25,7 +24,6 @@ import slimeknights.tconstruct.library.recipe.tinkerstation.IMutableTinkerStatio
 import slimeknights.tconstruct.library.recipe.tinkerstation.ITinkerStationContainer;
 import slimeknights.tconstruct.library.tools.SlotType.SlotCount;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
-import slimeknights.tconstruct.library.utils.JsonUtils;
 import slimeknights.tconstruct.tools.TinkerModifiers;
 
 import javax.annotation.Nullable;
@@ -285,11 +283,5 @@ public class IncrementalModifierRecipe extends AbstractModifierRecipe {
         itemsNeeded -= count;
       }
     }
-  }
-
-  /** @deprecated use {@link slimeknights.mantle.data.loadable.common.ItemStackLoadable#REQUIRED_STACK_NBT} */
-  @Deprecated
-  public static ItemStack deseralizeResultItem(JsonObject parent, String name) {
-    return JsonUtils.getAsItemStack(parent, name);
   }
 }

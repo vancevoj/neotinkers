@@ -30,12 +30,6 @@ public class PartStatsModule extends MaterialStatsModule implements ToolPartsHoo
 
   private final List<IToolPart> parts;
 
-  /** @deprecated use {@link #PartStatsModule(List,float[], int)} or {@link Builder} */
-  @Deprecated
-  public PartStatsModule(List<IToolPart> parts, float[] scales) {
-    this(parts, scales, 0);
-  }
-
   protected PartStatsModule(List<IToolPart> parts, float[] scales, int primaryPart) {
     super(parts.stream().map(IToolPart::getStatType).toList(), scales, primaryPart);
     this.parts = parts;

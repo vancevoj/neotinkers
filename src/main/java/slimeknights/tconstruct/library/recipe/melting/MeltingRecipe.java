@@ -1,14 +1,9 @@
 package slimeknights.tconstruct.library.recipe.melting;
 
-import com.google.common.collect.ImmutableList;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSyntaxException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.minecraft.core.NonNullList;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
@@ -22,9 +17,6 @@ import slimeknights.mantle.data.loadable.field.LoadableField;
 import slimeknights.mantle.data.loadable.primitive.IntLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.recipe.helper.LoadableRecipeSerializer;
-import slimeknights.mantle.recipe.helper.LoggingRecipeSerializer;
-import slimeknights.mantle.recipe.helper.RecipeHelper;
-import slimeknights.mantle.util.JsonHelper;
 import slimeknights.tconstruct.common.config.Config;
 import slimeknights.tconstruct.library.recipe.melting.IMeltingContainer.OreRateType;
 import slimeknights.tconstruct.smeltery.TinkerSmeltery;
@@ -122,70 +114,5 @@ public class MeltingRecipe implements IMeltingRecipe {
       }), byproducts.stream()).map(Collections::singletonList).collect(Collectors.toList());
     }
     return outputWithByproducts;
-  }
-
-  /** Interface for use in the serializer */
-  @FunctionalInterface
-  public interface IFactory<T extends MeltingRecipe> {
-    /** Creates a new instance of this recipe */
-    T create(ResourceLocation id, String group, Ingredient input, FluidStack output, int temperature, int time, List<FluidStack> byproducts);
-  }
-
-  @Deprecated(forRemoval = true)
-  protected abstract static class AbstractSerializer<T extends MeltingRecipe> implements LoggingRecipeSerializer<T> {
-    /** Creates a new recipe instance from Json */
-    protected abstract T createFromJson(ResourceLocation id, String group, Ingredient input, FluidStack output, int temperature, int time, List<FluidStack> byproducts, JsonObject json);
-
-    /** Creates a new recipe instance from the network */
-    protected abstract T createFromNetwork(ResourceLocation id, String group, Ingredient input, FluidStack output, int temperature, int time, List<FluidStack> byproducts, FriendlyByteBuf buffer);
-
-    @Override
-    public T fromJson(ResourceLocation id, JsonObject json) {
-      String group = GsonHelper.getAsString(json, "group", "");
-      Ingredient input = Ingredient.fromJson(json.get("ingredient"));
-      FluidStack output = RecipeHelper.deserializeFluidStack(GsonHelper.getAsJsonObject(json, "result"));
-
-      // temperature calculates
-      int temperature = GsonHelper.getAsInt(json, "temperature");
-      int time = GsonHelper.getAsInt(json, "time");
-      // validate values
-      if (temperature < 0) throw new JsonSyntaxException("Melting temperature must be greater than zero");
-      if (time <= 0) throw new JsonSyntaxException("Melting time must be greater than zero");
-      List<FluidStack> byproducts = Collections.emptyList();
-      if (json.has("byproducts")) {
-        byproducts = JsonHelper.parseList(json, "byproducts", RecipeHelper::deserializeFluidStack);
-      }
-
-      return createFromJson(id, group, input, output, temperature, time, byproducts, json);
-    }
-
-    @Nullable
-    @Override
-    public T fromNetworkSafe(ResourceLocation id, FriendlyByteBuf buffer) {
-      String group = buffer.readUtf(Short.MAX_VALUE);
-      Ingredient input = Ingredient.fromNetwork(buffer);
-      FluidStack output = FluidStack.readFromPacket(buffer);
-      int temperature = buffer.readInt();
-      int time = buffer.readVarInt();
-      ImmutableList.Builder<FluidStack> builder = ImmutableList.builder();
-      int byproductCount = buffer.readVarInt();
-      for (int i = 0; i < byproductCount; i++) {
-        builder.add(FluidStack.readFromPacket(buffer));
-      }
-      return createFromNetwork(id, group, input, output, temperature, time, builder.build(), buffer);
-    }
-
-    @Override
-    public void toNetworkSafe(FriendlyByteBuf buffer, T recipe) {
-      buffer.writeUtf(recipe.group);
-      recipe.input.toNetwork(buffer);
-      recipe.output.writeToPacket(buffer);
-      buffer.writeInt(recipe.temperature);
-      buffer.writeVarInt(recipe.time);
-      buffer.writeVarInt(recipe.byproducts.size());
-      for (FluidStack fluidStack : recipe.byproducts) {
-        fluidStack.writeToPacket(buffer);
-      }
-    }
   }
 }

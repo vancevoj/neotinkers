@@ -67,12 +67,6 @@ public class ToolBuildingRecipe implements ITinkerStationRecipe {
   public static final int Y_OFFSET = -15;
   public static final int SLOT_SIZE = 18;
 
-  /** @deprecated Use {@link #ToolBuildingRecipe(ResourceLocation, String, IModifiable, int, ResourceLocation, List)} */
-  @Deprecated
-  public ToolBuildingRecipe(ResourceLocation id, String group, IModifiable output, int outputCount, List<Ingredient> ingredients) {
-    this(id, group, output, outputCount, null, ingredients);
-  }
-
   /**
    * Gets the ID of the station slot layout for displaying this recipe.
    * Typically matches the output definition ID, but some tool recipes share a single layout.

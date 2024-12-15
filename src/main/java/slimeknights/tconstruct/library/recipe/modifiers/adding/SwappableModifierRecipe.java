@@ -60,12 +60,6 @@ public class SwappableModifierRecipe extends ModifierRecipe {
   @Getter
   private final Component variant;
 
-  /** @deprecated use {@link #SwappableModifierRecipe(ResourceLocation, List, Ingredient, int, ModifierId, String, VariantFormatter, SlotCount, boolean)}} */
-  @Deprecated
-  public SwappableModifierRecipe(ResourceLocation id, List<SizedIngredient> inputs, Ingredient toolRequirement, int maxToolSize, ModifierId result, String value, @Nullable SlotCount slots, boolean allowCrystal) {
-    this(id, inputs, toolRequirement, maxToolSize, result, value, VariantFormatter.DEFAULT, slots, allowCrystal);
-  }
-
   public SwappableModifierRecipe(ResourceLocation id, List<SizedIngredient> inputs, Ingredient toolRequirement, int maxToolSize, ModifierId result, String value, VariantFormatter variantFormatter, @Nullable SlotCount slots, boolean allowCrystal) {
     super(id, inputs, toolRequirement, maxToolSize, result, new IntRange(1, 1), slots, allowCrystal, false);
     this.value = value;
