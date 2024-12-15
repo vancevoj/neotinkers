@@ -62,6 +62,8 @@ public class ModifierIds {
   public static final ModifierId quickCharge = id("quick_charge");
   public static final ModifierId trueshot = id("trueshot");
   public static final ModifierId blindshot = id("blindshot");
+  public static final ModifierId bulkQuiver = id("bulk_quiver");
+  public static final ModifierId trickQuiver = id("trick_quiver");
 
   // armor
   public static final ModifierId protection = id("protection");

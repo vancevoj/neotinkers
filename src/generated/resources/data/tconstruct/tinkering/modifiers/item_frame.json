@@ -1,0 +1,17 @@
+{
+  "type": "tconstruct:composable",
+  "level_display": "tconstruct:default",
+  "modules": [
+    {
+      "type": "tconstruct:inventory",
+      "limit": {
+        "flat": 1
+      },
+      "pattern": "tconstruct:item_frame",
+      "slots": {
+        "each_level": 1
+      }
+    }
+  ],
+  "tooltip_display": "always"
+}

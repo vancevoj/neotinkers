@@ -10,6 +10,7 @@ import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraftforge.common.TierSortingRegistry;
 import net.minecraftforge.common.loot.LootModifierManager;
+import slimeknights.mantle.client.TooltipKey;
 import slimeknights.mantle.data.loadable.Loadable;
 import slimeknights.mantle.data.loadable.Loadables;
 import slimeknights.mantle.data.loadable.common.RegistryLoadable;
@@ -36,6 +37,7 @@ public class TinkerLoadables {
   public static final StringLoadable<LightLayer> LIGHT_LAYER = new EnumLoadable<>(LightLayer.class);
   public static final StringLoadable<InteractionSource> INTERACTION_SOURCE = new EnumLoadable<>(InteractionSource.class);
   public static final StringLoadable<OreRateType> ORE_RATE_TYPE = new EnumLoadable<>(OreRateType.class);
+  public static final StringLoadable<TooltipKey> TOOLTIP_KEY = new EnumLoadable<>(TooltipKey.class);
 
   /* Registries */
   public static final StringLoadable<ResourceLocation> CUSTOM_STAT = new RegistryLoadable<>(Registry.CUSTOM_STAT);

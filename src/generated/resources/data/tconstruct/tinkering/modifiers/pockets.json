@@ -1,4 +1,17 @@
 {
-  "type": "tconstruct:inventory_with_menu",
-  "size": 18
+  "type": "tconstruct:composable",
+  "level_display": "tconstruct:default",
+  "modules": [
+    {
+      "type": "tconstruct:inventory",
+      "slots": {
+        "each_level": 18
+      }
+    },
+    {
+      "type": "tconstruct:inventory_menu",
+      "on_key": "any"
+    }
+  ],
+  "tooltip_display": "always"
 }
