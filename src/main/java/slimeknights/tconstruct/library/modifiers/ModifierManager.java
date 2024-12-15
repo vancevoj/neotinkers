@@ -11,7 +11,6 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import net.minecraft.core.Registry;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
@@ -36,11 +35,11 @@ import net.minecraftforge.fml.event.IModBusEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.ForgeRegistries;
-import slimeknights.mantle.data.registry.GenericLoaderRegistry;
 import slimeknights.mantle.util.JsonHelper;
 import slimeknights.mantle.util.RegistryHelper;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.json.JsonRedirect;
+import slimeknights.tconstruct.library.modifiers.impl.ComposableModifier;
 import slimeknights.tconstruct.library.utils.GenericTagUtil;
 import slimeknights.tconstruct.library.utils.JsonUtils;
 
@@ -48,6 +47,7 @@ import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -90,11 +90,8 @@ public class ModifierManager extends SimpleJsonResourceReloadListener {
   /** All modifiers registered directly with the manager */
   @VisibleForTesting
   final Map<ModifierId,Modifier> staticModifiers = new HashMap<>();
-  /** Map of all modifier types that are expected to load in datapacks */
-  private final Map<ModifierId,Class<?>> expectedDynamicModifiers = new HashMap<>();
-  /** @deprecated use {@link slimeknights.tconstruct.library.modifiers.modules.ModifierModule#LOADER} */
-  @Deprecated
-  public static final GenericLoaderRegistry<Modifier> MODIFIER_LOADERS = new GenericLoaderRegistry<>("Modifier", false);
+  /** Set all modifier types that are expected to load in datapacks */
+  private final Set<ModifierId> expectedDynamicModifiers = new HashSet<>();
 
   /** Modifiers loaded from JSON */
   private Map<ModifierId,Modifier> dynamicModifiers = Collections.emptyMap();
@@ -166,12 +163,9 @@ public class ModifierManager extends SimpleJsonResourceReloadListener {
     this.dynamicModifiers.putAll(resolvedRedirects);
 
     // validate required modifiers
-    for (Entry<ModifierId,Class<?>> entry : expectedDynamicModifiers.entrySet()) {
-      Modifier modifier = dynamicModifiers.get(entry.getKey());
-      if (modifier == null) {
-        log.error("Missing expected modifier '" + entry.getKey() + "'");
-      } else if (!entry.getValue().isInstance(modifier)) {
-        log.error("Modifier '" + entry.getKey() + "' was loaded with the wrong class type. Expected " + entry.getValue().getName() + ", got " + modifier.getClass().getName());
+    for (ModifierId id : expectedDynamicModifiers) {
+      if (!dynamicModifiers.containsKey(id)) {
+        log.error("Missing expected modifier '" + id + "'");
       }
     }
 
@@ -261,7 +255,7 @@ public class ModifierManager extends SimpleJsonResourceReloadListener {
       }
 
       // fallback to actual modifier
-      Modifier modifier = MODIFIER_LOADERS.deserialize(json);
+      Modifier modifier = ComposableModifier.LOADER.deserialize(json);
       modifier.setId(new ModifierId(key));
       return modifier;
     } catch (JsonSyntaxException e) {
@@ -291,7 +285,7 @@ public class ModifierManager extends SimpleJsonResourceReloadListener {
 
   /** Checks if the given static modifier exists */
   public boolean containsStatic(ModifierId id) {
-    return staticModifiers.containsKey(id) || expectedDynamicModifiers.containsKey(id);
+    return staticModifiers.containsKey(id) || expectedDynamicModifiers.contains(id);
   }
 
   /** Checks if the registry contains the given modifier */
@@ -360,58 +354,6 @@ public class ModifierManager extends SimpleJsonResourceReloadListener {
     return INSTANCE.get(name);
   }
 
-  /**
-   * Parses a modifier from JSON
-   * @param element   Element to deserialize
-   * @param key       Json key
-   * @return  Registry value
-   * @throws JsonSyntaxException  If something failed to parse
-   * @deprecated use {@link ModifierId} or {@link slimeknights.tconstruct.library.modifiers.util.LazyModifier}
-   */
-  @Deprecated(forRemoval = true)
-  public static Modifier convertToModifier(JsonElement element, String key) {
-    ModifierId name = new ModifierId(JsonHelper.convertToResourceLocation(element, key));
-    if (INSTANCE.contains(name)) {
-      return INSTANCE.get(name);
-    }
-    throw new JsonSyntaxException("Unknown modifier " + name);
-  }
-
-  /**
-   * Parses a modifier from JSON
-   * @param parent    Parent JSON object
-   * @param key       Json key
-   * @return  Registry value
-   * @throws JsonSyntaxException  If something failed to parse
-   * @deprecated use {@link ModifierId} or {@link slimeknights.tconstruct.library.modifiers.util.LazyModifier}
-   */
-  @Deprecated(forRemoval = true)
-  public static Modifier deserializeModifier(JsonObject parent, String key) {
-    return convertToModifier(JsonHelper.getElement(parent, key), key);
-  }
-
-  /**
-   * Reads a modifier from the buffer
-   * @param buffer  Buffer instance
-   * @return  Modifier instance
-   * @deprecated use {@link ModifierId} or {@link slimeknights.tconstruct.library.modifiers.util.LazyModifier}
-   */
-  @Deprecated(forRemoval = true)
-  public static Modifier fromNetwork(FriendlyByteBuf buffer) {
-    return INSTANCE.get(new ModifierId(buffer.readUtf(Short.MAX_VALUE)));
-  }
-
-  /**
-   * Reads a modifier from the buffer
-   * @param modifier  Modifier instance
-   * @param buffer    Buffer instance
-   * @deprecated use {@link ModifierId} or {@link slimeknights.tconstruct.library.modifiers.util.LazyModifier}
-   */
-  @Deprecated(forRemoval = true)
-  public static void toNetwork(Modifier modifier, FriendlyByteBuf buffer) {
-    buffer.writeUtf(modifier.getId().toString());
-  }
-
 
   /* Tags */
 
@@ -465,7 +407,7 @@ public class ModifierManager extends SimpleJsonResourceReloadListener {
       checkModNamespace(name);
 
       // should not include under both types
-      if (expectedDynamicModifiers.containsKey(name)) {
+      if (expectedDynamicModifiers.contains(name)) {
         throw new IllegalArgumentException(name + " is already expected as a dynamic modifier");
       }
 
@@ -478,33 +420,18 @@ public class ModifierManager extends SimpleJsonResourceReloadListener {
     }
 
     /**
-     * Registers that the given modifier is expected to be loaded in datapacks, without a class type check
+     * Registers that the given modifier is expected to be loaded in datapacks
      * @param name  Modifier name
      */
     public void registerExpected(ModifierId name) {
-      registerExpected(name, Modifier.class);
-    }
-
-    /**
-     * Registers that the given modifier is expected to be loaded in datapacks
-     * @param name         Modifier name
-     * @param classFilter  Class type the modifier is expected to have. Can be an interface
-     * @deprecated use {@link #registerExpected(ModifierId)}, class specific modifier serializers are being phased out.
-     */
-    @Deprecated
-    public void registerExpected(ModifierId name, Class<?> classFilter) {
       checkModNamespace(name);
 
       // should not include under both types
       if (staticModifiers.containsKey(name)) {
         throw new IllegalArgumentException(name + " is already registered as a static modifier");
       }
-
       // register it
-      Class<?> existing = expectedDynamicModifiers.putIfAbsent(name, classFilter);
-      if (existing != null) {
-        throw new IllegalArgumentException("Attempting to register a duplicate expected modifier, this is not supported. Original value " + existing);
-      }
+      expectedDynamicModifiers.add(name);
     }
   }
 

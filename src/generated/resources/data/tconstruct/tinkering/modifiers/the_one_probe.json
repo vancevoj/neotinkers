@@ -1,5 +1,4 @@
 {
-  "type": "tconstruct:composable",
   "condition": {
     "type": "forge:mod_loaded",
     "modid": "theoneprobe"

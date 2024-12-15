@@ -17,8 +17,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import slimeknights.mantle.client.ResourceColorManager;
-import slimeknights.mantle.data.registry.GenericLoaderRegistry.IGenericLoader;
-import slimeknights.mantle.data.registry.GenericLoaderRegistry.IHaveLoader;
 import slimeknights.mantle.registration.object.IdAwareObject;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.modifiers.ModifierManager.ModifierRegistrationEvent;
@@ -43,7 +41,7 @@ import java.util.Random;
  * @see #registerHooks(Builder)
  */
 @SuppressWarnings("unused")
-public class Modifier implements IHaveLoader, IdAwareObject {
+public class Modifier implements IdAwareObject {
   /** Modifier random instance, use for chance based effects */
   protected static Random RANDOM = new Random();
 
@@ -87,11 +85,6 @@ public class Modifier implements IHaveLoader, IdAwareObject {
    * TODO 1.19: consider making abstract as everyone is going to need it in the future.
    */
   protected void registerHooks(ModuleHookMap.Builder hookBuilder) {}
-
-  @Override
-  public IGenericLoader<? extends Modifier> getLoader() {
-    throw new IllegalStateException("Attempting to serialize an unserializable modifier. This likely means the modifier did not override getLoader()");
-  }
 
   /**
    * Override this method to make your modifier run earlier or later.

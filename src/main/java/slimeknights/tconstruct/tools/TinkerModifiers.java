@@ -55,7 +55,6 @@ import slimeknights.tconstruct.library.json.variable.tool.ToolStatVariable;
 import slimeknights.tconstruct.library.json.variable.tool.ToolVariable;
 import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierManager;
-import slimeknights.tconstruct.library.modifiers.dynamic.ComposableModifier;
 import slimeknights.tconstruct.library.modifiers.fluid.ConditionalFluidEffect;
 import slimeknights.tconstruct.library.modifiers.fluid.FluidEffect;
 import slimeknights.tconstruct.library.modifiers.fluid.FluidEffectManager;
@@ -320,8 +319,8 @@ public final class TinkerModifiers extends TinkerModule {
   public static final StaticModifier<NearsightedModifier> nearsighted = MODIFIERS.register("nearsighted", NearsightedModifier::new);
 
   // weapon
-  public static final DynamicModifier<Modifier> knockback = MODIFIERS.registerDynamic("knockback");
-  public static final DynamicModifier<Modifier> padded = MODIFIERS.registerDynamic("padded");
+  public static final DynamicModifier knockback = MODIFIERS.registerDynamic("knockback");
+  public static final DynamicModifier padded = MODIFIERS.registerDynamic("padded");
   public static final StaticModifier<FieryModifier> fiery = MODIFIERS.register("fiery", FieryModifier::new);
   public static final StaticModifier<SeveringModifier> severing = MODIFIERS.register("severing", SeveringModifier::new);
   public static final StaticModifier<ReflectingModifier> reflecting = MODIFIERS.register("reflecting", ReflectingModifier::new);
@@ -341,20 +340,20 @@ public final class TinkerModifiers extends TinkerModule {
 
   // armor
   // general
-  public static final DynamicModifier<Modifier> golden = MODIFIERS.registerDynamic("golden");
+  public static final DynamicModifier golden = MODIFIERS.registerDynamic("golden");
   public static final StaticModifier<EmbellishmentModifier> embellishment = MODIFIERS.register("embellishment", EmbellishmentModifier::new);
   public static final StaticModifier<DyedModifier> dyed = MODIFIERS.register("dyed", DyedModifier::new);
   // counterattack
   public static final StaticModifier<ThornsModifier> thorns = MODIFIERS.register("thorns", ThornsModifier::new);
   public static final StaticModifier<SpringyModifier> springy = MODIFIERS.register("springy", SpringyModifier::new);
   // helmet
-  public static final DynamicModifier<Modifier> itemFrame = MODIFIERS.registerDynamic("item_frame");
+  public static final DynamicModifier itemFrame = MODIFIERS.registerDynamic("item_frame");
   public static final StaticModifier<ZoomModifier> zoom = MODIFIERS.register("zoom", ZoomModifier::new);
   public static final StaticModifier<SlurpingModifier> slurping = MODIFIERS.register("slurping", SlurpingModifier::new);
   // chestplate
   public static final StaticModifier<AmbidextrousModifier> ambidextrous = MODIFIERS.register("ambidextrous", AmbidextrousModifier::new);
   // leggings
-  public static final DynamicModifier<Modifier> shieldStrap = MODIFIERS.registerDynamic("shield_strap");
+  public static final DynamicModifier shieldStrap = MODIFIERS.registerDynamic("shield_strap");
   public static final StaticModifier<WettingModifier> wetting = MODIFIERS.register("wetting", WettingModifier::new);
 
   // boots
@@ -365,11 +364,11 @@ public final class TinkerModifiers extends TinkerModule {
   public static final StaticModifier<FlamewakeModifier> flamewake = MODIFIERS.register("flamewake", FlamewakeModifier::new);
 
   // abilities
-  public static final DynamicModifier<Modifier> unbreakable = MODIFIERS.registerDynamic("unbreakable");
+  public static final DynamicModifier unbreakable = MODIFIERS.registerDynamic("unbreakable");
   // weapon
   public static final StaticModifier<DuelWieldingModifier> dualWielding = MODIFIERS.register("dual_wielding", DuelWieldingModifier::new);
   // harvest
-  public static final DynamicModifier<Modifier> silky = MODIFIERS.registerDynamic("silky");
+  public static final DynamicModifier silky = MODIFIERS.registerDynamic("silky");
   public static final StaticModifier<AutosmeltModifier> autosmelt = MODIFIERS.register("autosmelt", AutosmeltModifier::new);
   public static final StaticModifier<Modifier> expanded = MODIFIERS.register("expanded", Modifier::new);
   public static final StaticModifier<ExchangingModifier> exchanging = MODIFIERS.register("exchanging", ExchangingModifier::new);
@@ -554,8 +553,6 @@ public final class TinkerModifiers extends TinkerModule {
       FluidEffect.BLOCK_EFFECTS.register(getResource("potion_cloud"), PotionCloudFluidEffect.LOADER);
 
 
-      // modifier loaders
-      ModifierManager.MODIFIER_LOADERS.register(getResource("composable"), ComposableModifier.LOADER);
       // modifier names, sometimes I wonder if I have too many registries for tiny JSON pieces
       ModifierLevelDisplay.LOADER.register(getResource("default"), ModifierLevelDisplay.DEFAULT.getLoader());
       ModifierLevelDisplay.LOADER.register(getResource("single_level"), ModifierLevelDisplay.SINGLE_LEVEL.getLoader());

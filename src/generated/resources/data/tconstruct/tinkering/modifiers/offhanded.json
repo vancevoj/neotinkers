@@ -1,5 +1,4 @@
 {
-  "type": "tconstruct:composable",
   "level_display": {
     "type": "tconstruct:unique",
     "first_unique": false,

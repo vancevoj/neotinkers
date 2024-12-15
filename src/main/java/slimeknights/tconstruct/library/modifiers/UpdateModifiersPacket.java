@@ -11,6 +11,8 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraftforge.network.NetworkEvent.Context;
 import net.minecraftforge.registries.ForgeRegistries;
 import slimeknights.mantle.network.packet.IThreadsafePacket;
+import slimeknights.tconstruct.TConstruct;
+import slimeknights.tconstruct.library.modifiers.impl.ComposableModifier;
 import slimeknights.tconstruct.library.utils.GenericTagUtil;
 
 import java.util.Collection;
@@ -27,7 +29,7 @@ public class UpdateModifiersPacket implements IThreadsafePacket {
   /** Map of all modifier tags */
   private final Map<TagKey<Modifier>,List<Modifier>> tags;
   /** Collection of non-redirect modifiers */
-  private Collection<Modifier> modifiers;
+  private Collection<ComposableModifier> modifiers;
   /** Map of modifier redirect ID pairs */
   private Map<ModifierId,ModifierId> redirects;
   /** Map of enchantment to modifier pair */
@@ -38,15 +40,21 @@ public class UpdateModifiersPacket implements IThreadsafePacket {
   /** Ensures both the modifiers and redirects lists are calculated, allows one packet to be used multiple times without redundant work */
   private void ensureCalculated() {
     if (this.modifiers == null || this.redirects == null) {
-      ImmutableList.Builder<Modifier> modifiers = ImmutableList.builder();
+      ImmutableList.Builder<ComposableModifier> modifiers = ImmutableList.builder();
       ImmutableMap.Builder<ModifierId,ModifierId> redirects = ImmutableMap.builder();
       for (Entry<ModifierId,Modifier> entry : allModifiers.entrySet()) {
         ModifierId id = entry.getKey();
-        Modifier mod = entry.getValue();
-        if (id.equals(mod.getId())) {
-          modifiers.add(mod);
+        Modifier value = entry.getValue();
+        ModifierId actual = value.getId();
+        if (id.equals(actual)) {
+          // we can't sync anything that is not composable
+          if (value instanceof ComposableModifier composable) {
+            modifiers.add(composable);
+          } else {
+            TConstruct.LOG.warn("Unable to sync modifier {} as its not ComposableModifier; got class {}", id, value.getClass().getName());
+          }
         } else {
-          redirects.put(id, mod.getId());
+          redirects.put(id, actual);
         }
       }
       this.modifiers = modifiers.build();
@@ -72,7 +80,8 @@ public class UpdateModifiersPacket implements IThreadsafePacket {
     Map<ModifierId,Modifier> modifiers = new HashMap<>();
     for (int i = 0; i < size; i++) {
       ModifierId id = new ModifierId(buffer.readUtf(Short.MAX_VALUE));
-      Modifier modifier = ModifierManager.MODIFIER_LOADERS.decode(buffer);
+      Modifier modifier = ComposableModifier.LOADER.decode(buffer);
+      // need cast to call package private method
       modifier.setId(id);
       modifiers.put(id, modifier);
     }
@@ -109,9 +118,9 @@ public class UpdateModifiersPacket implements IThreadsafePacket {
     ensureCalculated();
     // write modifiers
     buffer.writeVarInt(modifiers.size());
-    for (Modifier modifier : modifiers) {
+    for (ComposableModifier modifier : modifiers) {
       buffer.writeResourceLocation(modifier.getId());
-      ModifierManager.MODIFIER_LOADERS.encode(buffer, modifier);
+      ComposableModifier.LOADER.encode(buffer, modifier);
     }
     // write redirects
     buffer.writeVarInt(redirects.size());

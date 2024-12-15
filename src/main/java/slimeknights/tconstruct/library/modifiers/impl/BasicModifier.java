@@ -6,12 +6,12 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 import net.minecraft.network.chat.Component;
 import slimeknights.tconstruct.library.modifiers.Modifier;
-import slimeknights.tconstruct.library.module.ModuleHookMap;
 import slimeknights.tconstruct.library.modifiers.util.ModifierLevelDisplay;
+import slimeknights.tconstruct.library.module.ModuleHookMap;
 
 /**
  * Basic modifier, having a collection of hooks and the ability to set common modifier properties.
- * In most cases it's better to use {@link slimeknights.tconstruct.library.modifiers.dynamic.ComposableModifier},
+ * In most cases it's better to use {@link ComposableModifier},
  * however as sometimes its not feasible extract code to JSON this can be a good alternative for static modifiers.
  */
 public class BasicModifier extends Modifier {
@@ -48,7 +48,7 @@ public class BasicModifier extends Modifier {
   public enum TooltipDisplay { ALWAYS, TINKER_STATION, NEVER }
 
   /**
-   * Builder to create simple static modifiers. Similar to {@link slimeknights.tconstruct.library.modifiers.dynamic.ComposableModifier.Builder}, except more efficient as we don't require it be JSON serializable.
+   * Builder to create simple static modifiers. Similar to {@link ComposableModifier.Builder}, except more efficient as we don't require it be JSON serializable.
    * Generally it's better to just use composable unless there is a good reason.
    */
   @Accessors(fluent = true)

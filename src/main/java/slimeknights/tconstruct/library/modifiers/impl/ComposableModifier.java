@@ -1,4 +1,4 @@
-package slimeknights.tconstruct.library.modifiers.dynamic;
+package slimeknights.tconstruct.library.modifiers.impl;
 
 import com.google.common.collect.ImmutableList;
 import lombok.AccessLevel;
@@ -14,7 +14,6 @@ import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
-import slimeknights.tconstruct.library.modifiers.impl.BasicModifier;
 import slimeknights.tconstruct.library.modifiers.modules.ModifierModule;
 import slimeknights.tconstruct.library.modifiers.util.ModifierLevelDisplay;
 import slimeknights.tconstruct.library.module.ModuleHook;
@@ -54,11 +53,6 @@ public class ComposableModifier extends BasicModifier {
   /** Creates a builder instance for datagen */
   public static Builder builder() {
     return new Builder();
-  }
-
-  @Override
-  public RecordLoadable<ComposableModifier> getLoader() {
-    return LOADER;
   }
 
   @Override
