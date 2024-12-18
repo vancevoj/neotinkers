@@ -867,7 +867,7 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
     // armor ability
     // helmet
     ModifierRecipeBuilder.modifier(TinkerModifiers.zoom)
-                         .setTools(ingredientFromTags(TinkerTags.Items.HELMETS, TinkerTags.Items.INTERACTABLE_RIGHT))
+                         .setTools(ingredientFromTags(TinkerTags.Items.HELMETS, TinkerTags.Items.INTERACTABLE_RIGHT, TinkerTags.Items.SHIELDS))
                          .addInput(Tags.Items.STRING)
                          .addInput(Items.SPYGLASS)
                          .addInput(Tags.Items.STRING)
@@ -1242,7 +1242,7 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .setTools(ingredientFromTags(TinkerTags.Items.CHESTPLATES, TinkerTags.Items.SHIELDS))
                          .saveSalvage(consumer, prefix(TinkerModifiers.bursting, abilitySalvage))
                          .save(consumer, prefix(TinkerModifiers.bursting, abilityFolder));
-    Ingredient durabilityRightClick = IntersectionIngredient.of(Ingredient.of(TinkerTags.Items.DURABILITY), Ingredient.of(TinkerTags.Items.INTERACTABLE_RIGHT));
+    Ingredient blockWhileCharging = IntersectionIngredient.of(Ingredient.of(TinkerTags.Items.DURABILITY), ingredientFromTags(TinkerTags.Items.INTERACTABLE_RIGHT, TinkerTags.Items.SHIELDS));
     ModifierRecipeBuilder.modifier(TinkerModifiers.spitting)
                          .addInput(tanks)
                          .addInput(Items.DISPENSER)
@@ -1250,7 +1250,7 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .addInput(Tags.Items.INGOTS_COPPER)
                          .addInput(Tags.Items.INGOTS_COPPER)
                          .setSlots(SlotType.ABILITY, 1)
-                         .setTools(durabilityRightClick)
+                         .setTools(blockWhileCharging)
                          .saveSalvage(consumer, prefix(TinkerModifiers.spitting, abilitySalvage))
                          .save(consumer, prefix(TinkerModifiers.spitting, abilityFolder));
     ModifierRecipeBuilder.modifier(ModifierIds.tank)
@@ -1338,7 +1338,7 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .save(consumer, prefix(TinkerModifiers.fireprimer, upgradeFolder));
     // slings
     ModifierRecipeBuilder.modifier(TinkerModifiers.flinging)
-                         .setTools(durabilityRightClick)
+                         .setTools(blockWhileCharging)
                          .addInput(Tags.Items.STRING)
                          .addInput(TinkerWorld.earthGeode.asItem())
                          .addInput(Tags.Items.STRING)
@@ -1349,7 +1349,7 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .saveSalvage(consumer, prefix(TinkerModifiers.flinging, abilitySalvage))
                          .save(consumer, prefix(TinkerModifiers.flinging, abilityFolder));
     ModifierRecipeBuilder.modifier(TinkerModifiers.springing)
-                         .setTools(durabilityRightClick)
+                         .setTools(blockWhileCharging)
                          .addInput(Tags.Items.FEATHERS)
                          .addInput(TinkerWorld.skyGeode.asItem())
                          .addInput(Tags.Items.FEATHERS)
@@ -1360,7 +1360,7 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .saveSalvage(consumer, prefix(TinkerModifiers.springing, abilitySalvage))
                          .save(consumer, prefix(TinkerModifiers.springing, abilityFolder));
     ModifierRecipeBuilder.modifier(TinkerModifiers.bonking)
-                         .setTools(durabilityRightClick)
+                         .setTools(blockWhileCharging)
                          .addInput(Tags.Items.INGOTS_IRON)
                          .addInput(TinkerWorld.ichorGeode.asItem())
                          .addInput(Tags.Items.INGOTS_IRON)
@@ -1371,7 +1371,7 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .saveSalvage(consumer, prefix(TinkerModifiers.bonking, abilitySalvage))
                          .save(consumer, prefix(TinkerModifiers.bonking, abilityFolder));
     ModifierRecipeBuilder.modifier(TinkerModifiers.warping)
-                         .setTools(durabilityRightClick)
+                         .setTools(blockWhileCharging)
                          .addInput(Tags.Items.ENDER_PEARLS)
                          .addInput(TinkerWorld.enderGeode.asItem())
                          .addInput(Tags.Items.ENDER_PEARLS)

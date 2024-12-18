@@ -538,6 +538,8 @@ public class TinkerTags {
     public static final TagKey<Modifier> EXTRACT_MODIFIER_BLACKLIST = tag("extract_blacklist/tools");
     /** Blacklist for modifiers that cannot be extracted via the slotless recipe */
     public static final TagKey<Modifier> EXTRACT_SLOTLESS_BLACKLIST = tag("extract_blacklist/slotless");
+    /** Modifiers that support blocking while charging, for the sake of shields */
+    public static final TagKey<Modifier> BLOCK_WHILE_CHARGING = tag("block_while_charging");
     /** Modifiers that can be used on both left and right click. Does not care about armor modifiers */
     public static final TagKey<Modifier> DUAL_INTERACTION = tag("dual_interaction");
     /** Common defense modifier types, used for skyslime armor */

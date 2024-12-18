@@ -10,7 +10,9 @@ import slimeknights.mantle.data.predicate.block.BlockPredicate;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.data.tinkering.AbstractToolDefinitionDataProvider;
+import slimeknights.tconstruct.library.json.predicate.modifier.ModifierPredicate;
 import slimeknights.tconstruct.library.json.predicate.modifier.SingleModifierPredicate;
+import slimeknights.tconstruct.library.json.predicate.modifier.TagModifierPredicate;
 import slimeknights.tconstruct.library.materials.RandomMaterial;
 import slimeknights.tconstruct.library.modifiers.hook.interaction.InteractionSource;
 import slimeknights.tconstruct.library.tools.SlotType;
@@ -350,7 +352,7 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
       .module(PartStatsModule.parts()
          .part(smallBlade)
          .part(toolHandle).build())
-      .module(DefaultMaterialsModule.builder().material(tier1Material, tier1Material).build())
+      .module(defaultTwoParts)
       // stats
       .module(new SetStatsModule(StatsNBT.builder()
         .set(ToolStats.ATTACK_DAMAGE, 3f)
@@ -540,6 +542,10 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
 
 
     // travelers armor
+    PreferenceSetInteraction shieldInteraction = new PreferenceSetInteraction(
+      InteractionSource.RIGHT_CLICK,
+      ModifierPredicate.or(new SingleModifierPredicate(TinkerModifiers.blocking.getId()), new TagModifierPredicate(TinkerTags.Modifiers.BLOCK_WHILE_CHARGING))
+    );
     ToolModule travelersSlots =
       ToolSlotsModule.builder()
                      .slots(SlotType.UPGRADE, 3)
@@ -565,7 +571,7 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
       .module(MaterialRepairModule.of(MaterialIds.leather, 200))
       .module(MaterialRepairModule.of(MaterialIds.wood, 100))
       .module(ToolTraitsModule.builder().trait(TinkerModifiers.blocking).trait(TinkerModifiers.tanned).build())
-      .module(new PreferenceSetInteraction(InteractionSource.RIGHT_CLICK, new SingleModifierPredicate(TinkerModifiers.blocking.getId())));
+      .module(shieldInteraction);
 
     // plate armor
     ToolModule plateSlots =
@@ -597,7 +603,7 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
         .set(ToolStats.BLOCK_ANGLE, 180).build()))
       .module(plateSlots)
       .module(ToolTraitsModule.builder().trait(TinkerModifiers.blocking).build())
-      .module(new PreferenceSetInteraction(InteractionSource.RIGHT_CLICK, new SingleModifierPredicate(TinkerModifiers.blocking.getId())));
+      .module(shieldInteraction);
 
     // slime suit
     ToolTraitsModule.Builder slimeTraits = ToolTraitsModule.builder().trait(ModifierIds.overslimeFriend);
