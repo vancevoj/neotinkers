@@ -86,6 +86,22 @@ public class LootTableInjectionProvider extends AbstractLootTableInjectionProvid
                                                            .apply(buildData)
                                                            .setWeight(5).build());
 
+    // frypans just show up in some assorted locations
+    injectChest("simple_dungeon")
+      .addToPool("main", LootItem.lootTableItem(TinkerTools.meltingPan.get())
+                                 .setWeight(10) // about as often as both diamond swords
+                                 .apply(ancientToolData)
+                                 .build());
+    injectChest("igloo_chest")
+      .addToPool("main", LootItem.lootTableItem(TinkerTools.meltingPan.get())
+                                 .setWeight(2) // common as a stone axe
+                                 .apply(ancientToolData)
+                                 .build());
+    inject("hero_of_the_toolsmith", "gameplay/hero_of_the_village/toolsmith_gift")
+      .addToPool("main", LootItem.lootTableItem(TinkerTools.meltingPan.get())
+                                 .setWeight(2) // makes it a 40% chance of frypan as opposed to an axe variant
+                                 .apply(ancientToolData)
+                                 .build());
 
     // find warpicks in pillager outputs, 50% chance to replace the crossbow
     AddToolDataFunction.Builder warPickData = AddToolDataFunction.builder().addMaterial(random).addMaterial(random).addMaterial(random);

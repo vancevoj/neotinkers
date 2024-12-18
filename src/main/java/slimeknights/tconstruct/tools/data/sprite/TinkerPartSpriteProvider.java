@@ -4,6 +4,8 @@ import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.client.data.material.AbstractPartSpriteProvider;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
 import slimeknights.tconstruct.tools.item.ArmorSlotType;
+import slimeknights.tconstruct.tools.stats.HandleMaterialStats;
+import slimeknights.tconstruct.tools.stats.LimbMaterialStats;
 import slimeknights.tconstruct.tools.stats.PlatingMaterialStats;
 import slimeknights.tconstruct.tools.stats.StatlessMaterialStats;
 
@@ -82,8 +84,8 @@ public class TinkerPartSpriteProvider extends AbstractPartSpriteProvider {
     addTexture("tinker_armor/slime/wings", false, SLIMESUIT);
 
     // tools
-    // pickaxe
-    buildTool("pickaxe").addBreakableHead("head").addHandle("handle").addBinding("binding");
+    // pickaxe - regular variant uses handle on frypans as a grip so generate those too
+    buildTool("pickaxe").addBreakableHead("head").addPart("handle", HandleMaterialStats.ID, LimbMaterialStats.ID).addBinding("binding");
     buildTool("sledge_hammer").withLarge().addBreakableHead("head").addBreakableHead("back").addBreakableHead("front").addHandle("handle");
     buildTool("vein_hammer").withLarge().addBreakableHead("head").addHead("back").addBreakableHead("front").addHandle("handle");
     // shovel
@@ -111,6 +113,7 @@ public class TinkerPartSpriteProvider extends AbstractPartSpriteProvider {
       .addBreakableBowstring("bowstring").addBowstring("bowstring_1").addBowstring("bowstring_2").addBowstring("bowstring_3");
 
     // ancient tools
+    buildTool("melting_pan").addBreakablePart("head", PlatingMaterialStats.SHIELD.getId());
     buildTool("war_pick").addHead("limb").addLimb("body")
                          .addBowstring("bowstring").addBowstring("bowstring_1").addBowstring("bowstring_2").addBowstring("bowstring_3");
     buildTool("battlesign").addBreakableHead("head").addPart("handle", PlatingMaterialStats.SHIELD.getId());

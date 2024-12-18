@@ -149,6 +149,8 @@ public class TinkerTags {
     public static final TagKey<Block> MINABLE_WITH_SHEARS = forgeTag("mineable/shears");
     /** Blocks that the dagger is effective on */
     public static final TagKey<Block> MINABLE_WITH_DAGGER = tag("mineable/dagger");
+    /** Blocks that the melting pan cannot mine */
+    public static final TagKey<Block> MINEABLE_MELTING_BLACKLIST = tag("mineable/melting_blacklist");
 
     /** Any block that can be harvested using a kama or scythe */
     public static final TagKey<Block> HARVESTABLE = tag("harvestable");

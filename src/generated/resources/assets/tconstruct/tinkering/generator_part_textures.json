@@ -230,7 +230,10 @@
     },
     {
       "path": "tconstruct:item/tool/pickaxe/handle",
-      "stat_type": "tconstruct:handle"
+      "stat_type": [
+        "tconstruct:handle",
+        "tconstruct:limb"
+      ]
     },
     {
       "path": "tconstruct:item/tool/pickaxe/binding",
@@ -727,6 +730,14 @@
     {
       "path": "tconstruct:item/tool/longbow/large/bowstring_3",
       "stat_type": "tconstruct:bowstring"
+    },
+    {
+      "path": "tconstruct:item/tool/melting_pan/head",
+      "stat_type": "tconstruct:plating_shield"
+    },
+    {
+      "path": "tconstruct:item/tool/melting_pan/head_broken",
+      "stat_type": "tconstruct:plating_shield"
     },
     {
       "path": "tconstruct:item/tool/war_pick/limb",
