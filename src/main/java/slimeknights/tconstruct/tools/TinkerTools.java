@@ -101,6 +101,7 @@ import slimeknights.tconstruct.tools.item.ModifiableSwordItem;
 import slimeknights.tconstruct.tools.item.SlimeskullItem;
 import slimeknights.tconstruct.tools.logic.EquipmentChangeWatcher;
 import slimeknights.tconstruct.tools.menu.ToolContainerMenu;
+import slimeknights.tconstruct.tools.modules.MeltingFluidEffectiveModule;
 
 import static slimeknights.tconstruct.TConstruct.getResource;
 
@@ -247,6 +248,8 @@ public final class TinkerTools extends TinkerModule {
       // generic tool modules
       ToolModule.LOADER.register(getResource("dual_option_interaction"), DualOptionInteraction.LOADER);
       ToolModule.LOADER.register(getResource("preference_set_interaction"), PreferenceSetInteraction.LOADER);
+      // special tool modules
+      ToolModule.LOADER.register(getResource("melting_fluid_effective"), MeltingFluidEffectiveModule.LOADER);
       // tool predicates
       ToolContextPredicate.LOADER.register(getResource("has_upgrades"), ToolContextPredicate.HAS_UPGRADES.getLoader());
       ToolContextPredicate.LOADER.register(getResource("has_modifier"), HasModifierPredicate.LOADER);
