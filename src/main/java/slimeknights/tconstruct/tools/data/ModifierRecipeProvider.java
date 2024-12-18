@@ -1195,6 +1195,7 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .addInput(Items.LAVA_BUCKET)
                          .addInput(Items.LAVA_BUCKET)
                          .setMaxLevel(1)
+                         .checkTraitLevel()
                          .setSlots(SlotType.ABILITY, 1)
                          .setTools(ingredientFromTags(TinkerTags.Items.MELEE, TinkerTags.Items.HARVEST))
                          .saveSalvage(consumer, prefix(TinkerModifiers.melting, abilitySalvage))

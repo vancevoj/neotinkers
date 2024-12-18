@@ -176,7 +176,6 @@ import slimeknights.tconstruct.tools.modifiers.ability.tool.BucketingModifier;
 import slimeknights.tconstruct.tools.modifiers.ability.tool.DuelWieldingModifier;
 import slimeknights.tconstruct.tools.modifiers.ability.tool.ExchangingModifier;
 import slimeknights.tconstruct.tools.modifiers.ability.tool.GlowingModifier;
-import slimeknights.tconstruct.tools.modifiers.ability.tool.MeltingModifier;
 import slimeknights.tconstruct.tools.modifiers.ability.tool.OffhandAttackModifier;
 import slimeknights.tconstruct.tools.modifiers.ability.tool.ParryingModifier;
 import slimeknights.tconstruct.tools.modifiers.effect.BleedingEffect;
@@ -243,6 +242,7 @@ import slimeknights.tconstruct.tools.modifiers.upgrades.ranged.ImpalingModifier;
 import slimeknights.tconstruct.tools.modifiers.upgrades.ranged.PunchModifier;
 import slimeknights.tconstruct.tools.modifiers.upgrades.ranged.ScopeModifier;
 import slimeknights.tconstruct.tools.modifiers.upgrades.ranged.SinistralModifier;
+import slimeknights.tconstruct.tools.modules.MeltingModule;
 import slimeknights.tconstruct.tools.modules.SmeltingModule;
 import slimeknights.tconstruct.tools.modules.TheOneProbeModule;
 import slimeknights.tconstruct.tools.modules.armor.DepthProtectionModule;
@@ -404,7 +404,7 @@ public final class TinkerModifiers extends TinkerModule {
 
   // fluid abilities
   public static final StaticModifier<Modifier> tankHandler = MODIFIERS.register("tank_handler", () -> ModuleHookMap.builder().addModule(new TankModule(ToolTankHelper.TANK_HELPER)).modifier().levelDisplay(ModifierLevelDisplay.NO_LEVELS).tooltipDisplay(TooltipDisplay.NEVER).build());
-  public static final StaticModifier<MeltingModifier> melting = MODIFIERS.register("melting", MeltingModifier::new);
+  public static final DynamicModifier<Modifier> melting = MODIFIERS.registerDynamic("melting");
   public static final StaticModifier<BucketingModifier> bucketing = MODIFIERS.register("bucketing", BucketingModifier::new);
   public static final StaticModifier<SpillingModifier> spilling = MODIFIERS.register("spilling", SpillingModifier::new);
   public static final StaticModifier<SpittingModifier> spitting = MODIFIERS.register("spitting", SpittingModifier::new);
@@ -652,6 +652,7 @@ public final class TinkerModifiers extends TinkerModule {
       ModifierModule.LOADER.register(getResource("the_one_probe"), TheOneProbeModule.INSTANCE.getLoader());
       ModifierModule.LOADER.register(getResource("enderclearance"), EnderclearanceModule.INSTANCE.getLoader());
       ModifierModule.LOADER.register(getResource("smelting"), SmeltingModule.LOADER);
+      ModifierModule.LOADER.register(getResource("melting"), MeltingModule.LOADER);
       // armor
       ModifierModule.LOADER.register(getResource("depth_protection"), DepthProtectionModule.LOADER);
       ModifierModule.LOADER.register(getResource("flame_barrier"), FlameBarrierModule.LOADER);

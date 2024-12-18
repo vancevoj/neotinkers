@@ -37,6 +37,7 @@ import slimeknights.mantle.data.predicate.item.ItemPredicate;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.data.tinkering.AbstractModifierProvider;
+import slimeknights.tconstruct.library.json.LevelingInt;
 import slimeknights.tconstruct.library.json.LevelingValue;
 import slimeknights.tconstruct.library.json.RandomLevelingValue;
 import slimeknights.tconstruct.library.json.predicate.TinkerPredicate;
@@ -111,6 +112,7 @@ import slimeknights.tconstruct.library.tools.stat.ToolStats;
 import slimeknights.tconstruct.tools.TinkerModifiers;
 import slimeknights.tconstruct.tools.logic.ModifierEvents;
 import slimeknights.tconstruct.tools.modifiers.slotless.OverslimeModifier;
+import slimeknights.tconstruct.tools.modules.MeltingModule;
 import slimeknights.tconstruct.tools.modules.SmeltingModule;
 import slimeknights.tconstruct.tools.modules.TheOneProbeModule;
 import slimeknights.tconstruct.tools.modules.armor.DepthProtectionModule;
@@ -219,6 +221,12 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
     buildModifier(ModifierIds.reach)
       .addModule(AttributeModule.builder(ForgeMod.REACH_DISTANCE.get(), Operation.ADDITION).uniqueFrom(ModifierIds.reach).eachLevel(1))
       .addModule(AttributeModule.builder(ForgeMod.ATTACK_RANGE.get(), Operation.ADDITION).uniqueFrom(ModifierIds.reach).eachLevel(1));
+    buildModifier(TinkerModifiers.melting)
+      .levelDisplay(ModifierLevelDisplay.PLUSES)
+      .addModule(ToolTankHelper.TANK_HANDLER)
+      .addModule(StatBoostModule.add(ToolTankHelper.CAPACITY_STAT).eachLevel(FluidType.BUCKET_VOLUME))
+      // give a bonus 500 degrees and a bonus 3 nuggets and 50% of a gem at level 2
+      .addModule(MeltingModule.builder().temperature(new LevelingInt(1000, 500)).nuggetsPerMetal(new LevelingInt(9, 3)).shardsPerGem(new LevelingInt(6, 2)).build());
     IJsonPredicate<IToolContext> noUnbreakable = HasModifierPredicate.hasModifier(TinkerModifiers.unbreakable.getId(), 1).inverted();
     buildModifier(ModifierIds.reinforced)
       // level 0 to 5: 0.025 * LEVEL * (11 - LEVEL)
