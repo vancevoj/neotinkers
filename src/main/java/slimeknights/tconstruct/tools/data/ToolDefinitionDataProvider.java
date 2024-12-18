@@ -642,11 +642,11 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
       .module(MaterialStatsModule.stats()
         .stat(HeadMaterialStats.ID)
         .stat(LimbMaterialStats.ID)
-        .primaryPart(-1).build())
-      .module(defaultAncient)
-      // ancient tools add a second copy of traits, and add both traits to rebalanced
-      .module(new MaterialTraitsModule(HeadMaterialStats.ID, 0), ToolHooks.TOOL_TRAITS, ToolHooks.REBALANCED_TRAIT)
-      .module(new MaterialTraitsModule(LimbMaterialStats.ID, 1), ToolHooks.TOOL_TRAITS, ToolHooks.REBALANCED_TRAIT)
+        .stat(StatlessMaterialStats.BOWSTRING.getIdentifier())
+        .build())
+      .module(DefaultMaterialsModule.builder().material(randomMaterial, randomMaterial, randomMaterial).build())
+      // ancient tools when rebalanced get both heads
+      .module(new MaterialTraitsModule(LimbMaterialStats.ID, 1), ToolHooks.REBALANCED_TRAIT)
       // stats
       .module(new SetStatsModule(StatsNBT.builder().set(ToolStats.ATTACK_SPEED, 1.2f).build()))
       .smallToolStartingSlots()
@@ -659,22 +659,25 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
       .module(MaterialStatsModule.stats()
         .stat(HeadMaterialStats.ID)
         .stat(PlatingMaterialStats.SHIELD.getId())
-        .primaryPart(-1).build())
+        .build())
       .module(defaultAncient)
-      // ancient tools add a second copy of traits, and add both traits to rebalanced
-      .module(new MaterialTraitsModule(HeadMaterialStats.ID,                0), ToolHooks.TOOL_TRAITS, ToolHooks.REBALANCED_TRAIT)
-      .module(new MaterialTraitsModule(PlatingMaterialStats.SHIELD.getId(), 1), ToolHooks.TOOL_TRAITS, ToolHooks.REBALANCED_TRAIT)
+      // ancient tools when rebalanced get both heads
+      .module(new MaterialTraitsModule(PlatingMaterialStats.SHIELD.getId(), 1), ToolHooks.REBALANCED_TRAIT)
       // stats
       .module(new SetStatsModule(StatsNBT.builder()
         .set(ToolStats.ATTACK_DAMAGE, 2f)
-        .set(ToolStats.ATTACK_SPEED, 1.4f)
+        .set(ToolStats.ATTACK_SPEED, 1.2f)
         .set(ToolStats.BLOCK_AMOUNT, 50)
         .set(ToolStats.BLOCK_ANGLE, 120).build()))
       .module(ToolSlotsModule.builder()
         .slots(SlotType.DEFENSE, 3)
         .slots(SlotType.ABILITY, 1).build())
       // traits
-      .module(ToolTraitsModule.builder().trait(TinkerModifiers.blocking).build());
+      .module(ToolTraitsModule.builder()
+        .trait(TinkerModifiers.blocking)
+        .trait(TinkerModifiers.bonking)
+        .trait(TinkerModifiers.knockback).build())
+      .module(new ParticleWeaponAttack(TinkerTools.bonkAttackParticle.get()));
   }
 
   @Override

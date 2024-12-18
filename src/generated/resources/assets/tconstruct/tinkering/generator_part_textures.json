@@ -737,6 +737,22 @@
       "stat_type": "tconstruct:limb"
     },
     {
+      "path": "tconstruct:item/tool/war_pick/bowstring",
+      "stat_type": "tconstruct:bowstring"
+    },
+    {
+      "path": "tconstruct:item/tool/war_pick/bowstring_1",
+      "stat_type": "tconstruct:bowstring"
+    },
+    {
+      "path": "tconstruct:item/tool/war_pick/bowstring_2",
+      "stat_type": "tconstruct:bowstring"
+    },
+    {
+      "path": "tconstruct:item/tool/war_pick/bowstring_3",
+      "stat_type": "tconstruct:bowstring"
+    },
+    {
       "path": "tconstruct:item/tool/battlesign/head",
       "stat_type": "tconstruct:head"
     },
