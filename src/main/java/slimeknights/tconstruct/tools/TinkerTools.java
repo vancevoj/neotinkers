@@ -59,6 +59,7 @@ import slimeknights.tconstruct.library.tools.definition.module.build.SetStatsMod
 import slimeknights.tconstruct.library.tools.definition.module.build.ToolActionsModule;
 import slimeknights.tconstruct.library.tools.definition.module.build.ToolSlotsModule;
 import slimeknights.tconstruct.library.tools.definition.module.build.ToolTraitsModule;
+import slimeknights.tconstruct.library.tools.definition.module.build.VolatileFlagModule;
 import slimeknights.tconstruct.library.tools.definition.module.interaction.DualOptionInteraction;
 import slimeknights.tconstruct.library.tools.definition.module.interaction.PreferenceSetInteraction;
 import slimeknights.tconstruct.library.tools.definition.module.material.DefaultMaterialsModule;
@@ -220,6 +221,7 @@ public final class TinkerTools extends TinkerModule {
       ToolModule.LOADER.register(getResource("tool_actions"), ToolActionsModule.LOADER);
       ToolModule.LOADER.register(getResource("traits"), ToolTraitsModule.LOADER);
       ToolModule.LOADER.register(getResource("modifier_slots"), ToolSlotsModule.LOADER);
+      ToolModule.LOADER.register(getResource("volatile_flag"), VolatileFlagModule.LOADER);
       // harvest
       ToolModule.LOADER.register(getResource("is_effective"), IsEffectiveModule.LOADER);
       ToolModule.LOADER.register(getResource("mining_speed_modifier"), MiningSpeedModifierModule.LOADER);
