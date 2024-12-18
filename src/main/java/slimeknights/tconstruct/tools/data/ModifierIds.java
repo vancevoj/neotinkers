@@ -32,6 +32,7 @@ public class ModifierIds {
   public static final ModifierId offhanded  = id("offhanded");
   public static final ModifierId theOneProbe = id("the_one_probe");
   public static final ModifierId soulbound = id("soulbound");
+  public static final ModifierId smelting = id("smelting");
   // general abilities
   public static final ModifierId reach = id("reach");
 
@@ -115,8 +116,6 @@ public class ModifierIds {
   public static final ModifierId overslimeFriend = id("overslime_friend");
   public static final ModifierId snowBoots = id("snow_boots");
 
-  // traits
-  public static final ModifierId frying = id("frying");
   // traits - tier 1
   public static final ModifierId cultivated = id("cultivated");
   public static final ModifierId stringy = id("stringy");

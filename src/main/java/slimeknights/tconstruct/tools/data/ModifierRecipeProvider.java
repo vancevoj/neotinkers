@@ -308,6 +308,12 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .addInput(SlimeType.ICHOR.getSlimeballTag())
                          .setMaxLevel(2)
                          .save(consumer, prefix(ModifierIds.offhanded, upgradeFolder));
+    ModifierRecipeBuilder.modifier(ModifierIds.smelting)
+                         .setTools(ingredientFromTags(TinkerTags.Items.INTERACTABLE, TinkerTags.Items.WORN_ARMOR))
+                         .addInput(Blocks.CAMPFIRE)
+                         .setSlots(SlotType.UPGRADE, 1)
+                         .saveSalvage(consumer, prefix(ModifierIds.smelting, upgradeSalvage))
+                         .save(consumer, prefix(ModifierIds.smelting, upgradeFolder));
 
     /*
      * Speed
@@ -572,7 +578,7 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .setMaxLevel(2)
                          .saveSalvage(consumer, prefix(ModifierIds.trickQuiver, abilitySalvage))
                          .save(consumer, prefix(ModifierIds.trickQuiver, abilityFolder));
-    BiConsumer<ItemLike,String> crystalshotRecipe = (item, variant) -> {
+    BiConsumer<ItemLike,String> crystalshotRecipe = (item, variant) ->
       SwappableModifierRecipeBuilder.modifier(TinkerModifiers.crystalshot, variant)
                                     .addInput(item)
                                     .addInput(Items.BLAZE_ROD)
@@ -582,7 +588,6 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                                     .setTools(TinkerTags.Items.BOWS)
                                     .setSlots(SlotType.ABILITY, 1)
                                     .save(consumer, wrap(TinkerModifiers.crystalshot, abilityFolder, "_" + variant));
-    };
     crystalshotRecipe.accept(Items.AMETHYST_CLUSTER, "amethyst");
     crystalshotRecipe.accept(TinkerWorld.earthGeode.getBud(BudSize.CLUSTER), "earthslime");
     crystalshotRecipe.accept(TinkerWorld.skyGeode.getBud(BudSize.CLUSTER), "skyslime");
@@ -1102,16 +1107,16 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .setSlots(SlotType.ABILITY, 1)
                          .disallowCrystal() // handled below
                          .save(consumer, wrap(ModifierIds.luck, abilityFolder, "_level_1"));
-     ModifierRecipeBuilder.modifier(ModifierIds.luck)
-                          .setTools(luckSupporting)
-                          .addInput(Tags.Items.INGOTS_GOLD)
-                          .addInput(Items.GOLDEN_CARROT)
-                          .addInput(Tags.Items.INGOTS_GOLD)
-                          .addInput(Tags.Items.ENDER_PEARLS)
-                          .addInput(Tags.Items.ENDER_PEARLS)
-                          .disallowCrystal() // handled below
-                          .exactLevel(2)
-                          .save(consumer, wrap(ModifierIds.luck, abilityFolder, "_level_2"));
+    ModifierRecipeBuilder.modifier(ModifierIds.luck)
+                         .setTools(luckSupporting)
+                         .addInput(Tags.Items.INGOTS_GOLD)
+                         .addInput(Items.GOLDEN_CARROT)
+                         .addInput(Tags.Items.INGOTS_GOLD)
+                         .addInput(Tags.Items.ENDER_PEARLS)
+                         .addInput(Tags.Items.ENDER_PEARLS)
+                         .disallowCrystal() // handled below
+                         .exactLevel(2)
+                         .save(consumer, wrap(ModifierIds.luck, abilityFolder, "_level_2"));
     ModifierRecipeBuilder.modifier(ModifierIds.luck)
                          .setTools(luckSupporting)
                          .addInput(TinkerMaterials.roseGold.getIngotTag())

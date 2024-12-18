@@ -111,7 +111,7 @@ import slimeknights.tconstruct.library.tools.stat.ToolStats;
 import slimeknights.tconstruct.tools.TinkerModifiers;
 import slimeknights.tconstruct.tools.logic.ModifierEvents;
 import slimeknights.tconstruct.tools.modifiers.slotless.OverslimeModifier;
-import slimeknights.tconstruct.tools.modules.MeleeSmeltingModule;
+import slimeknights.tconstruct.tools.modules.SmeltingModule;
 import slimeknights.tconstruct.tools.modules.TheOneProbeModule;
 import slimeknights.tconstruct.tools.modules.armor.DepthProtectionModule;
 import slimeknights.tconstruct.tools.modules.armor.EnderclearanceModule;
@@ -466,11 +466,11 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .addModule(ToolActionTransformModule.builder(ToolActions.HOE_TILL, SoundEvents.HOE_TILL).build());
 
     // traits
-    buildModifier(ModifierIds.frying)
+    buildModifier(ModifierIds.smelting)
       .priority(110) // want to be higher than bonking and alike
       .levelDisplay(ModifierLevelDisplay.SINGLE_LEVEL)
       .addModule(InventoryMenuModule.SHIFT)
-      .addModule(new MeleeSmeltingModule(RecipeType.CAMPFIRE_COOKING, 20, InventoryModule.builder().pattern(pattern("fire")).flatLimit(1).slotsPerLevel(3)));
+      .addModule(new SmeltingModule(RecipeType.SMELTING, 10, InventoryModule.builder().pattern(pattern("fire")).flatLimit(1).slotsPerLevel(1)));
 
     // internal
     buildModifier(ModifierIds.overslimeFriend).tooltipDisplay(TooltipDisplay.NEVER);
