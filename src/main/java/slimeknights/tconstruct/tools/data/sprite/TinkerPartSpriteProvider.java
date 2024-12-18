@@ -48,11 +48,11 @@ public class TinkerPartSpriteProvider extends AbstractPartSpriteProvider {
         .addBreakablePart("plating", PlatingMaterialStats.TYPES.get(slot.getIndex()).getId())
         .addBreakablePart("maille", StatlessMaterialStats.MAILLE.getIdentifier());
     }
-    addTexture("tinker_armor/plate/plating_armor", ARMOR_PLATING, false);
-    addTexture("tinker_armor/plate/plating_leggings", ARMOR_PLATING, false);
-    addTexture("tinker_armor/plate/maille_armor", ARMOR_MAILLE, false);
-    addTexture("tinker_armor/plate/maille_leggings", ARMOR_MAILLE, false);
-    addTexture("tinker_armor/plate/maille_wings", ARMOR_MAILLE, false);
+    addTexture("tinker_armor/plate/plating_armor", false, ARMOR_PLATING);
+    addTexture("tinker_armor/plate/plating_leggings", false, ARMOR_PLATING);
+    addTexture("tinker_armor/plate/maille_armor", false, ARMOR_MAILLE);
+    addTexture("tinker_armor/plate/maille_leggings", false, ARMOR_MAILLE);
+    addTexture("tinker_armor/plate/maille_wings", false, ARMOR_MAILLE);
     buildTool("armor/plate/shield")
       .addBreakablePart("plating", PlatingMaterialStats.SHIELD.getId())
       .addBreakablePart("core", StatlessMaterialStats.SHIELD_CORE.getIdentifier())
@@ -77,9 +77,9 @@ public class TinkerPartSpriteProvider extends AbstractPartSpriteProvider {
     addSprite("armor/slime/shell_modifiers/broken/tconstruct_embellishment", SLIMESUIT);
     addSprite("armor/slime/boot_modifiers/tconstruct_embellishment", SLIMESUIT);
     addSprite("armor/slime/boot_modifiers/broken/tconstruct_embellishment", SLIMESUIT);
-    addTexture("tinker_armor/slime/armor", SLIMESUIT, false);
-    addTexture("tinker_armor/slime/leggings", SLIMESUIT, false);
-    addTexture("tinker_armor/slime/wings", SLIMESUIT, false);
+    addTexture("tinker_armor/slime/armor", false, SLIMESUIT);
+    addTexture("tinker_armor/slime/leggings", false, SLIMESUIT);
+    addTexture("tinker_armor/slime/wings", false, SLIMESUIT);
 
     // tools
     // pickaxe
