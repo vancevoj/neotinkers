@@ -34,10 +34,8 @@ import slimeknights.tconstruct.library.tools.definition.module.ToolHooks;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.smeltery.block.entity.module.EntityMeltingModule;
 
-import javax.annotation.Nullable;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Objects;
 
 import static slimeknights.tconstruct.library.tools.capability.fluid.ToolTankHelper.TANK_HELPER;
 
@@ -47,9 +45,8 @@ import static slimeknights.tconstruct.library.tools.capability.fluid.ToolTankHel
  * @param nuggetsPerMetal  Number of nuggets to produce per ingot of metal from ore recipes.
  * @param shardsPerGem     Number of quarter gems to produce per gem from ore recipes.
  * @param condition        General modifier conditions
- * @param oreRate          Extra parameter for the sake of the deprecated MeltingModifier, will be removed in 1.20.
  */
-public record MeltingModule(LevelingInt temperature, LevelingInt nuggetsPerMetal, LevelingInt shardsPerGem, ModifierCondition<IToolStackView> condition, @Nullable IOreRate oreRate) implements ModifierModule, MeleeHitModifierHook, ProcessLootModifierHook, ConditionalModule<IToolStackView>, IMeltingContainer, IOreRate {
+public record MeltingModule(LevelingInt temperature, LevelingInt nuggetsPerMetal, LevelingInt shardsPerGem, ModifierCondition<IToolStackView> condition) implements ModifierModule, MeleeHitModifierHook, ProcessLootModifierHook, ConditionalModule<IToolStackView>, IMeltingContainer, IOreRate {
   private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<MeltingModule>defaultHooks(ModifierHooks.MELEE_HIT, ModifierHooks.PROCESS_LOOT);
   /** Volatile data flag which makes a tool always melt regardless of tank space */
   public static final ResourceLocation FORCE_MELTING = TConstruct.getResource("force_melting");
@@ -60,15 +57,6 @@ public record MeltingModule(LevelingInt temperature, LevelingInt nuggetsPerMetal
     LevelingInt.LOADABLE.requiredField("shards_per_gem", MeltingModule::shardsPerGem),
     ModifierCondition.TOOL_FIELD,
     MeltingModule::new);
-
-  /** @deprecated use {@link #MeltingModule(LevelingInt, LevelingInt, LevelingInt, ModifierCondition)} */
-  @SuppressWarnings("DeprecatedIsStillUsed")
-  @Deprecated(forRemoval = true)
-  public MeltingModule {}
-
-  public MeltingModule(LevelingInt temperature, LevelingInt nuggetsPerMetal, LevelingInt shardsPerGem, ModifierCondition<IToolStackView> condition) {
-    this(temperature, nuggetsPerMetal, shardsPerGem, condition, null);
-  }
 
   @Override
   public RecordLoadable<MeltingModule> getLoader() {
@@ -106,7 +94,7 @@ public record MeltingModule(LevelingInt temperature, LevelingInt nuggetsPerMetal
 
   @Override
   public IOreRate getOreRate() {
-    return Objects.requireNonNullElse(oreRate, this);
+    return this;
   }
 
 

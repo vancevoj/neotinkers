@@ -63,31 +63,9 @@ public abstract class AbstractPartSpriteProvider {
    * Adds a given texture to the list to generate
    * @param sprite  Sprite name
    * @param requiredStats  At least one of these stat types must be present for this sprite to be generated
-   * @deprecated use {@link #addTexture(ResourceLocation, boolean, MaterialStatsId...)}
-   */
-  @Deprecated(forRemoval = true)
-  protected void addTexture(ResourceLocation sprite, MaterialStatsId requiredStats, boolean allowAnimated) {
-    addTexture(sprite, allowAnimated, requiredStats);
-  }
-
-  /**
-   * Adds a given texture to the list to generate
-   * @param sprite  Sprite name
-   * @param requiredStats  At least one of these stat types must be present for this sprite to be generated
    */
   protected void addTexture(ResourceLocation sprite, MaterialStatsId... requiredStats) {
     addTexture(sprite, true, requiredStats);
-  }
-
-  /**
-   * Adds a given sprite to the list to generate, local to textures instead of tool
-   * @param name           Name relative to the mod
-   * @param requiredStats  At least one of these stat types must be present for this sprite to be generated
-   * @deprecated use {@link #addTexture(String, boolean, MaterialStatsId...)}
-   */
-  @Deprecated(forRemoval = true)
-  protected void addTexture(String name, MaterialStatsId requiredStats, boolean allowAnimated) {
-    addTexture(new ResourceLocation(modID, name), requiredStats, allowAnimated);
   }
 
   /**
@@ -217,12 +195,6 @@ public abstract class AbstractPartSpriteProvider {
 
     public PartSpriteInfo(ResourceLocation path, MaterialStatsId stat, boolean allowAnimated) {
       this(path, Set.of(stat), allowAnimated);
-    }
-
-    /** @deprecated use {@link #getStatTypes()} */
-    @Deprecated(forRemoval = true)
-    public MaterialStatsId getStatType() {
-      return statTypes.iterator().next();
     }
 
     /** Gets the texture for the given fallback name, use empty string for the default */

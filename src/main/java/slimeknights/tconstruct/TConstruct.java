@@ -41,7 +41,6 @@ import slimeknights.tconstruct.common.data.tags.ItemTagProvider;
 import slimeknights.tconstruct.common.network.TinkerNetwork;
 import slimeknights.tconstruct.fluids.TinkerFluids;
 import slimeknights.tconstruct.gadgets.TinkerGadgets;
-import slimeknights.tconstruct.library.TinkerBookIDs;
 import slimeknights.tconstruct.library.materials.MaterialRegistry;
 import slimeknights.tconstruct.library.tools.capability.TinkerDataCapability.ComputableDataKey;
 import slimeknights.tconstruct.library.tools.capability.TinkerDataCapability.TinkerDataKey;
@@ -76,7 +75,6 @@ import java.util.function.Supplier;
  * @author mDiyo
  */
 
-@SuppressWarnings("unused")
 @Mod(TConstruct.MOD_ID)
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public class TConstruct {
@@ -88,7 +86,6 @@ public class TConstruct {
   /* Instance of this mod, used for grabbing prototype fields */
   public static TConstruct instance;
 
-  @SuppressWarnings("removal")
   public TConstruct() {
     instance = this;
 
@@ -117,7 +114,6 @@ public class TConstruct {
     TinkerModule.initRegisters();
     TinkerNetwork.setup();
     TinkerTags.init();
-    TinkerBookIDs.registerCommandSuggestion();
     // init client logic
     DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> TinkerClient::onConstruct);
 

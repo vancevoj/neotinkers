@@ -223,13 +223,6 @@ public record SmeltingModule(RecipeType<? extends AbstractCookingRecipe> recipeT
   }
 
   @Override
-  public void finishHarvest(IToolStackView tool, ModifierEntry modifier, ToolHarvestContext context, boolean didHarvest) {
-    if (didHarvest) {
-      cookItems(tool, modifier, context.getLiving(), 1);
-    }
-  }
-
-  @Override
   public void finishHarvest(IToolStackView tool, ModifierEntry modifier, ToolHarvestContext context, int harvested) {
     cookItems(tool, modifier, context.getLiving(), harvested);
   }

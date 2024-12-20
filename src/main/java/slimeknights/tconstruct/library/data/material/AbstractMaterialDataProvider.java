@@ -138,12 +138,6 @@ public abstract class AbstractMaterialDataProvider extends GenericDataProvider {
     addMaterial(location, tier, order, craftable, false, condition);
   }
 
-  /** @deprecated use {@link #addCompatMaterial(MaterialId, int, int, boolean, String...)} */
-  @Deprecated(forRemoval = true)
-  protected void addCompatMaterial(MaterialId location, int tier, int order, String tagName, boolean craftable) {
-    addCompatMaterial(location, tier, order, craftable, tagName);
-  }
-
   /** Creates a new compat material */
   protected void addCompatMetalMaterial(MaterialId location, int tier, int order, String... ingotNames) {
     addCompatMaterial(location, tier, order, false, Arrays.stream(ingotNames).map(name -> "ingots/" + name).toArray(String[]::new));
