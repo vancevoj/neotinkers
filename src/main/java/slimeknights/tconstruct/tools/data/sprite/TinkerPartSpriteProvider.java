@@ -1,9 +1,9 @@
 package slimeknights.tconstruct.tools.data.sprite;
 
+import net.minecraft.world.item.ArmorItem;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.client.data.material.AbstractPartSpriteProvider;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
-import slimeknights.tconstruct.tools.item.ArmorSlotType;
 import slimeknights.tconstruct.tools.stats.HandleMaterialStats;
 import slimeknights.tconstruct.tools.stats.LimbMaterialStats;
 import slimeknights.tconstruct.tools.stats.PlatingMaterialStats;
@@ -45,9 +45,9 @@ public class TinkerPartSpriteProvider extends AbstractPartSpriteProvider {
 
     // plate textures
     addPart("maille", StatlessMaterialStats.MAILLE.getIdentifier());
-    for (ArmorSlotType slot : ArmorSlotType.values()) {
-      buildTool("armor/plate/" + slot.getSerializedName())
-        .addBreakablePart("plating", PlatingMaterialStats.TYPES.get(slot.getIndex()).getId())
+    for (ArmorItem.Type slot : ArmorItem.Type.values()) {
+      buildTool("armor/plate/" + slot.getName())
+        .addBreakablePart("plating", PlatingMaterialStats.TYPES.get(slot.ordinal()).getId())
         .addBreakablePart("maille", StatlessMaterialStats.MAILLE.getIdentifier());
     }
     addTexture("tinker_armor/plate/plating_armor", false, ARMOR_PLATING);

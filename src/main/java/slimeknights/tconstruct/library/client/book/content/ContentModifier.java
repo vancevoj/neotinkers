@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.gson.annotations.SerializedName;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.language.I18n;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -109,7 +109,7 @@ public class ContentModifier extends PageContent {
       return null;
     }
     if (this.toolFilterTag == null) {
-      this.toolFilterTag = TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation(toolFilter));
+      this.toolFilterTag = TagKey.create(Registries.ITEM, new ResourceLocation(toolFilter));
     }
     return this.toolFilterTag;
   }

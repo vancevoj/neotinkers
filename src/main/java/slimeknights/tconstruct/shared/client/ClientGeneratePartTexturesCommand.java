@@ -101,7 +101,7 @@ public class ClientGeneratePartTexturesCommand {
     }
 
     // prepare the output directory
-    Path path = Minecraft.getInstance().getResourcePackDirectory().toPath().resolve(PACK_NAME);
+    Path path = Minecraft.getInstance().getResourcePackDirectory().resolve(PACK_NAME);
     BiConsumer<ResourceLocation,NativeImage> saver = (outputPath, image) -> saveImage(path, outputPath, image);
     BiConsumer<ResourceLocation,JsonObject> metaSaver = (outputPath, image) -> saveMetadata(path, outputPath, image);
 
@@ -132,7 +132,10 @@ public class ClientGeneratePartTexturesCommand {
       for (PartSpriteInfo part : generatorConfig.sprites) {
         for (MaterialStatsId statType : part.getStatTypes()) {
           if (material.supportStatType(statType) || generatorConfig.statOverrides.hasOverride(statType, material.getTexture())) {
-            MaterialPartTextureGenerator.generateSprite(spriteReader, material, part, shouldGenerate, saver, metaSaver);
+            ResourceLocation spritePath = MaterialPartTextureGenerator.outputPath(part, material);
+            if (shouldGenerate.test(spritePath)) {
+              MaterialPartTextureGenerator.generateSprite(spriteReader, material, part, spritePath, saver, metaSaver);
+            }
             break;
           }
         }

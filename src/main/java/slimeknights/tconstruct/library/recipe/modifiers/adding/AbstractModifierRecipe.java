@@ -91,12 +91,6 @@ public abstract class AbstractModifierRecipe implements ITinkerStationRecipe, ID
   @Override
   public abstract RecipeResult<ItemStack> getValidatedResult(ITinkerStationContainer inv);
 
-  /** @deprecated use {@link #getValidatedResult(ITinkerStationContainer)} */
-  @Override @Deprecated
-  public ItemStack getResultItem() {
-    return ItemStack.EMPTY;
-  }
-
   @Override
   public int shrinkToolSlotBy() {
     return maxToolSize;

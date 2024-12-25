@@ -1,6 +1,6 @@
 package slimeknights.tconstruct.tools.data;
 
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import slimeknights.tconstruct.library.client.armor.texture.ArmorTextureSupplier;
 import slimeknights.tconstruct.library.client.armor.texture.DyedArmorTextureSupplier;
 import slimeknights.tconstruct.library.client.armor.texture.FirstArmorTextureSupplier;
@@ -12,8 +12,8 @@ import slimeknights.tconstruct.tools.TinkerModifiers;
 import slimeknights.tconstruct.tools.data.material.MaterialIds;
 
 public class ArmorModelProvider extends AbstractArmorModelProvider {
-  public ArmorModelProvider(DataGenerator generator) {
-    super(generator);
+  public ArmorModelProvider(PackOutput packOutput) {
+    super(packOutput);
   }
 
   @Override

@@ -70,13 +70,6 @@ public class TinkerStationDamagingRecipe implements ITinkerStationRecipe {
     IncrementalModifierRecipe.updateInputs(inv, ingredient, damageTaken, damageAmount, ItemStack.EMPTY);
   }
 
-  /** @deprecated Use {@link #getValidatedResult(ITinkerStationContainer)} */
-  @Deprecated
-  @Override
-  public ItemStack getResultItem() {
-    return ItemStack.EMPTY;
-  }
-
   @Override
   public RecipeSerializer<?> getSerializer() {
     return TinkerTables.tinkerStationDamagingSerializer.get();

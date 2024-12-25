@@ -23,10 +23,11 @@ import java.util.function.Consumer;
  */
 public record DamageFluidEffect(List<Consumer<DamageSource>> modifiers, float damage) implements FluidEffect<FluidEffectContext.Entity> {
   /** Registry of various damage sources */
+  @Deprecated(forRemoval = true)
   public static final NamedComponentRegistry<Consumer<DamageSource>> SOURCE_MODIFIERS = new NamedComponentRegistry<>("Unregistered damage source modifier");
   /** Loader for this effect */
   public static final RecordLoadable<DamageFluidEffect> LOADER = RecordLoadable.create(
-    SOURCE_MODIFIERS.list(0).defaultField("modifier", List.of(), e -> e.modifiers),
+    SOURCE_MODIFIERS.list(0).defaultField("modifier", List.of(), e -> e.modifiers), // TODO: this no longer works, redesign it
     FloatLoadable.FROM_ZERO.requiredField("damage", e -> e.damage),
     DamageFluidEffect::new);
 
@@ -55,21 +56,29 @@ public record DamageFluidEffect(List<Consumer<DamageSource>> modifiers, float da
 
 
   /** Makes the source fire damage */
-  public static final Consumer<DamageSource> FIRE = modifier("fire", DamageSource::setIsFire);
+  @Deprecated(forRemoval = true)
+  public static final Consumer<DamageSource> FIRE = modifier("fire", source -> {});
   /** Makes the source explosion damage */
-  public static final Consumer<DamageSource> EXPLOSION = modifier("explosion", DamageSource::setExplosion);
+  @Deprecated(forRemoval = true)
+  public static final Consumer<DamageSource> EXPLOSION = modifier("explosion", source -> {});
   /** Makes the source magic damage */
-  public static final Consumer<DamageSource> MAGIC = modifier("magic", DamageSource::setMagic);
+  @Deprecated(forRemoval = true)
+  public static final Consumer<DamageSource> MAGIC = modifier("magic", source -> {});
   /** Makes the source fall damage */
-  public static final Consumer<DamageSource> FALL = modifier("fall", DamageSource::setIsFall);
+  @Deprecated(forRemoval = true)
+  public static final Consumer<DamageSource> FALL = modifier("fall", source -> {});
   /** Makes the source not make the target hostile */
-  public static final Consumer<DamageSource> NO_AGGRO = modifier("no_aggro", DamageSource::setNoAggro);
+  @Deprecated(forRemoval = true)
+  public static final Consumer<DamageSource> NO_AGGRO = modifier("no_aggro", source -> {});
   /** Makes the damage bypass basic armor protection */
-  public static final Consumer<DamageSource> BYPASS_ARMOR = modifier("bypass_armor", DamageSource::bypassArmor);
+  @Deprecated(forRemoval = true)
+  public static final Consumer<DamageSource> BYPASS_ARMOR = modifier("bypass_armor", source -> {});
   /** Makes the damage bypass enchantments like protection */
-  public static final Consumer<DamageSource> BYPASS_ENCHANTMENTS = modifier("bypass_enchantments", DamageSource::bypassEnchantments);
+  @Deprecated(forRemoval = true)
+  public static final Consumer<DamageSource> BYPASS_ENCHANTMENTS = modifier("bypass_enchantments", source -> {});
   /** Makes the damage bypass potion effects and enchantments */
-  public static final Consumer<DamageSource> BYPASS_MAGIC = modifier("bypass_magic", DamageSource::bypassMagic);
+  @Deprecated(forRemoval = true)
+  public static final Consumer<DamageSource> BYPASS_MAGIC = modifier("bypass_magic", source -> {});
 
   /** Registers a modifier locally */
   private static Consumer<DamageSource> modifier(String name, Consumer<DamageSource> consumer) {

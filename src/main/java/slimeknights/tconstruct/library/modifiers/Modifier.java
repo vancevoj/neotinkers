@@ -381,7 +381,7 @@ public class Modifier implements IdAwareObject {
     if (entity.isEyeInFluid(FluidTags.WATER) && !EnchantmentHelper.hasAquaAffinity(entity)) {
       modifier /= 5.0F;
     }
-    if (!entity.isOnGround()) {
+    if (!entity.onGround()) {
       modifier /= 5.0F;
     }
     return modifier;

@@ -75,13 +75,6 @@ public class TinkerStationPartSwapping implements ITinkerStationRecipe {
     return foundItem;
   }
 
-  /** @deprecated Use {@link #assemble(ITinkerStationContainer)}  */
-  @Deprecated
-  @Override
-  public ItemStack getResultItem() {
-    return ItemStack.EMPTY;
-  }
-
   @Override
   public RecipeResult<ItemStack> getValidatedResult(ITinkerStationContainer inv) {
     // copy the tool NBT to ensure the original tool is intact

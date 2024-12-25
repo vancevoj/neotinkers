@@ -1,6 +1,6 @@
 package slimeknights.tconstruct.common.data.tags;
 
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.data.tinkering.AbstractModifierTagProvider;
@@ -48,8 +48,8 @@ import static slimeknights.tconstruct.common.TinkerTags.Modifiers.SPECIAL_DEFENS
 import static slimeknights.tconstruct.common.TinkerTags.Modifiers.UPGRADES;
 
 public class ModifierTagProvider extends AbstractModifierTagProvider {
-  public ModifierTagProvider(DataGenerator generator, ExistingFileHelper existingFileHelper) {
-    super(generator, TConstruct.MOD_ID, existingFileHelper);
+  public ModifierTagProvider(PackOutput packOutput, ExistingFileHelper existingFileHelper) {
+    super(packOutput, TConstruct.MOD_ID, existingFileHelper);
   }
 
   @Override

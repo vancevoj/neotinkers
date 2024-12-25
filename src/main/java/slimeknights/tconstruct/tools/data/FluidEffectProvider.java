@@ -1,6 +1,6 @@
 package slimeknights.tconstruct.tools.data;
 
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.stats.Stats;
@@ -45,8 +45,8 @@ import slimeknights.tconstruct.tools.modifiers.traits.skull.StrongBonesModifier;
 import java.util.function.Function;
 
 public class FluidEffectProvider extends AbstractFluidEffectProvider {
-  public FluidEffectProvider(DataGenerator generator) {
-    super(generator, TConstruct.MOD_ID);
+  public FluidEffectProvider(PackOutput packOutput) {
+    super(packOutput, TConstruct.MOD_ID);
   }
 
   @Override

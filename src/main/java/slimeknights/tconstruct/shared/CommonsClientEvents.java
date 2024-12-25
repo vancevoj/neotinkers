@@ -36,7 +36,7 @@ public class CommonsClientEvents extends ClientEventBase {
 
   @SubscribeEvent
   static void registerParticleFactories(RegisterParticleProvidersEvent event) {
-    event.register(TinkerCommons.fluidParticle.get(), new FluidParticle.Factory());
+    event.registerSpecial(TinkerCommons.fluidParticle.get(), new FluidParticle.Factory());
   }
 
   private static Font unicodeRenderer;

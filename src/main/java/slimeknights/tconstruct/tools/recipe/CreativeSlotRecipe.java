@@ -11,6 +11,7 @@ import net.minecraft.world.level.Level;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierId;
+import slimeknights.tconstruct.library.recipe.RecipeResult;
 import slimeknights.tconstruct.library.recipe.modifiers.adding.IModifierRecipe;
 import slimeknights.tconstruct.library.recipe.tinkerstation.ITinkerStationContainer;
 import slimeknights.tconstruct.library.recipe.tinkerstation.ITinkerStationRecipe;
@@ -76,7 +77,7 @@ public class CreativeSlotRecipe implements ITinkerStationRecipe, IModifierRecipe
   }
 
   @Override
-  public ItemStack assemble(ITinkerStationContainer inv) {
+  public RecipeResult<ItemStack> getValidatedResult(ITinkerStationContainer inv) {
     ToolStack toolStack = inv.getTinkerable().copy();
 
     // first, fetch the slots compound
@@ -103,19 +104,12 @@ public class CreativeSlotRecipe implements ITinkerStationRecipe, IModifierRecipe
     } else {
       toolStack.rebuildStats();
     }
-    return toolStack.createStack(inv.getTinkerableSize());
+    return RecipeResult.success(toolStack.createStack(inv.getTinkerableSize()));
   }
 
   @Override
   public Modifier getModifier() {
     return TinkerModifiers.creativeSlot.get();
-  }
-
-  /** @deprecated Use {@link #assemble(ITinkerStationContainer)} */
-  @Deprecated
-  @Override
-  public ItemStack getResultItem() {
-    return ItemStack.EMPTY;
   }
 
   @Override

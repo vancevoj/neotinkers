@@ -220,11 +220,4 @@ public class TinkerStationRepairRecipe implements ITinkerStationRecipe {
   public RecipeSerializer<?> getSerializer() {
     return TinkerTables.tinkerStationRepairSerializer.get();
   }
-
-  /** @deprecated Use {@link #assemble(ITinkerStationContainer)} */
-  @Deprecated
-  @Override
-  public ItemStack getResultItem() {
-    return ItemStack.EMPTY;
-  }
 }

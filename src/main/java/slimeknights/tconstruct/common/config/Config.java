@@ -1,7 +1,6 @@
 package slimeknights.tconstruct.common.config;
 
 import com.google.common.collect.ImmutableList;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraftforge.common.ForgeConfigSpec;
@@ -10,10 +9,8 @@ import net.minecraftforge.common.ForgeConfigSpec.ConfigValue;
 import net.minecraftforge.common.ForgeConfigSpec.DoubleValue;
 import net.minecraftforge.common.ForgeConfigSpec.EnumValue;
 import net.minecraftforge.common.ForgeConfigSpec.IntValue;
-import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.commons.lang3.tuple.Pair;
 import slimeknights.tconstruct.library.recipe.melting.IMeltingContainer.IOreRate;
 import slimeknights.tconstruct.library.recipe.melting.IMeltingContainer.OreRateType;
@@ -62,7 +59,7 @@ public class Config {
     // debug
     public final BooleanValue forceIntegrationMaterials;
     public final EnumValue<LogInvalidToolStack> logInvalidToolStack;
-    public enum LogInvalidToolStack { STACKTRACE, WARNING, IGNORED };
+    public enum LogInvalidToolStack { STACKTRACE, WARNING, IGNORED }
 
     Common(ForgeConfigSpec.Builder builder) {
       builder.comment("Everything to do with gameplay").push("gameplay");
@@ -78,6 +75,7 @@ public class Config {
                                          "If true, extends the applicable slots for the fire protection enchantment to work better with shields. Will not impact gameplay with the vanilla enchantment.\nIf false, fire protection on a shield will not reduce fire tick time.",
                                          () -> Enchantments.FIRE_PROTECTION.slots = EquipmentSlot.values()));
 
+      /* TODO: migrate these to tags if still needed
       builder.comment("Tweaks to vanilla damage sources to better work with armor").push("damageTweaks");
       actions.add(new ConfigurableAction(builder, "wither", true, "Makes withering damage count as magic", DamageSource.WITHER::setMagic));
       actions.add(new ConfigurableAction(builder, "dragon_breath", true, "Makes dragons breath count as magic", DamageSource.DRAGON_BREATH::setMagic));
@@ -87,13 +85,13 @@ public class Config {
         DamageSource.FALLING_STALACTITE.setProjectile();
       }));
       actions.add(new ConfigurableAction(builder, "lightning", true, "Makes lightning count as fire damage", DamageSource.LIGHTNING_BOLT::setIsFire));
+      builder.pop();
+      */
       toolTweaks = actions.build();
 
       this.repairKitAmount = builder
         .comment("Amount of durability restored by a repair kit in terms of ingots. Does not affect the cost to create the kit, that is controlled by JSON.")
         .defineInRange("repairKitAmount", 2f, 0f, Short.MAX_VALUE);
-
-      builder.pop();
 
 //      this.chestsKeepInventory = builder
 //        .comment("Pattern and Part chests keep their inventory when harvested.")
@@ -349,8 +347,6 @@ public class Config {
   public static void init() {
     ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.commonSpec);
     ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, Config.clientSpec);
-
-    IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
   }
 
   /** Configuration for an ore rate, such as melter or foundry */

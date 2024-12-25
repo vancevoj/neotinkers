@@ -66,7 +66,7 @@ public enum TrickQuiverModule implements ModifierModule, BowAmmoModifierHook, Ge
   @Override
   public InteractionResult onToolUse(IToolStackView tool, ModifierEntry modifier, Player player, InteractionHand hand, InteractionSource source) {
     if (!player.isCrouching()) {
-      if (!player.level.isClientSide) {
+      if (!player.level().isClientSide) {
         // first, increment the number
         ModDataNBT data = tool.getPersistentData();
         InventoryModifierHook inventory = modifier.getHook(ToolInventoryCapability.HOOK);

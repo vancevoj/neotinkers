@@ -3,9 +3,13 @@ package slimeknights.tconstruct.library.tools.part;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
+import slimeknights.tconstruct.common.config.Config;
+import slimeknights.tconstruct.library.materials.MaterialRegistry;
 import slimeknights.tconstruct.library.materials.definition.IMaterial;
 import slimeknights.tconstruct.library.materials.definition.MaterialId;
 import slimeknights.tconstruct.library.materials.definition.MaterialVariantId;
+
+import java.util.List;
 
 /**
  * Items implementing this interface contain a material
@@ -47,6 +51,35 @@ public interface IMaterialItem extends ItemLike {
   /** Returns true if the material can be used for this toolpart, simply an alias for {@link #canUseMaterial(MaterialId)} */
   default boolean canUseMaterial(IMaterial mat) {
     return canUseMaterial(mat.getIdentifier());
+  }
+
+  /** Adds all variants of the material item to the given item stack list */
+  default void addVariants(List<ItemStack> items) {
+    if (MaterialRegistry.isFullyLoaded()) {
+      // if a specific material is set in the config, try adding that
+      String showOnlyId = Config.COMMON.showOnlyPartMaterial.get();
+      boolean added = false;
+      if (!showOnlyId.isEmpty()) {
+        MaterialVariantId materialId = MaterialVariantId.tryParse(showOnlyId);
+        if (materialId != null && canUseMaterial(materialId.getId())) {
+          items.add(this.withMaterialForDisplay(materialId));
+          added = true;
+        }
+      }
+      // if no material is set or we failed to find it, iterate all materials
+      if (!added) {
+        for (IMaterial material : MaterialRegistry.getInstance().getVisibleMaterials()) {
+          MaterialId id = material.getIdentifier();
+          if (this.canUseMaterial(id)) {
+            items.add(this.withMaterial(id));
+            // if a specific material was requested and not found, stop after first
+            if (!showOnlyId.isEmpty()) {
+              break;
+            }
+          }
+        }
+      }
+    }
   }
 
   /**

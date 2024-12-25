@@ -18,18 +18,18 @@ import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import mezz.jei.api.registration.IRecipeTransferRegistration;
 import mezz.jei.api.registration.ISubtypeRegistration;
+import mezz.jei.api.runtime.IClickableIngredient;
 import mezz.jei.api.runtime.IIngredientManager;
 import mezz.jei.api.runtime.IJeiRuntime;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.core.NonNullList;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.Container;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.alchemy.Potion;
@@ -44,9 +44,9 @@ import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.tags.ITag;
-import slimeknights.mantle.item.RetexturedBlockItem;
 import slimeknights.mantle.recipe.helper.RecipeHelper;
 import slimeknights.mantle.util.RegistryHelper;
+import slimeknights.mantle.util.RetexturedHelper;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.common.config.Config;
 import slimeknights.tconstruct.common.registration.CastItemObject;
@@ -96,25 +96,27 @@ import slimeknights.tconstruct.plugin.jei.partbuilder.PatternIngredientHelper;
 import slimeknights.tconstruct.plugin.jei.partbuilder.PatternIngredientRenderer;
 import slimeknights.tconstruct.plugin.jei.transfer.CraftingStationTransferInfo;
 import slimeknights.tconstruct.plugin.jei.transfer.TinkerStationTransferInfo;
+import slimeknights.tconstruct.plugin.jei.util.ClickableIngredient;
 import slimeknights.tconstruct.shared.TinkerMaterials;
 import slimeknights.tconstruct.smeltery.TinkerSmeltery;
 import slimeknights.tconstruct.smeltery.client.screen.HeatingStructureScreen;
 import slimeknights.tconstruct.smeltery.client.screen.IScreenWithFluidTank;
+import slimeknights.tconstruct.smeltery.client.screen.IScreenWithFluidTank.FluidLocation;
 import slimeknights.tconstruct.smeltery.client.screen.MelterScreen;
 import slimeknights.tconstruct.smeltery.data.SmelteryCompat;
 import slimeknights.tconstruct.smeltery.item.CopperCanItem;
 import slimeknights.tconstruct.tables.TinkerTables;
 import slimeknights.tconstruct.tools.TinkerModifiers;
 import slimeknights.tconstruct.tools.TinkerTools;
-import slimeknights.tconstruct.tools.item.ArmorSlotType;
 import slimeknights.tconstruct.tools.item.CreativeSlotItem;
 import slimeknights.tconstruct.tools.item.ModifierCrystalItem;
 
-import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @SuppressWarnings("unused")
@@ -291,7 +293,7 @@ public class JEIPlugin implements IModPlugin {
     // retexturable blocks
     IIngredientSubtypeInterpreter<ItemStack> tables = (stack, context) -> {
       if (context == UidContext.Ingredient) {
-        return RetexturedBlockItem.getTextureName(stack);
+        return RetexturedHelper.getTextureName(stack);
       }
       return IIngredientSubtypeInterpreter.NONE;
     };
@@ -340,7 +342,7 @@ public class JEIPlugin implements IModPlugin {
     }
 
     // tools
-    Item slimeskull = TinkerTools.slimesuit.get(ArmorSlotType.HELMET);
+    Item slimeskull = TinkerTools.slimesuit.get(ArmorItem.Type.HELMET);
     registry.registerSubtypeInterpreter(VanillaTypes.ITEM_STACK, slimeskull, ToolSubtypeInterpreter.ALWAYS);
     for (Item item : getTag(TinkerTags.Items.MULTIPART_TOOL)) {
       if (item != slimeskull) {
@@ -385,7 +387,7 @@ public class JEIPlugin implements IModPlugin {
 
   /** Helper to get an item tag */
   private static ITag<Item> getTag(ResourceLocation name) {
-    return getTag(TagKey.create(Registry.ITEM_REGISTRY, name));
+    return getTag(TagKey.create(Registries.ITEM, name));
   }
 
   /** Helper to get an item tag */
@@ -424,8 +426,8 @@ public class JEIPlugin implements IModPlugin {
     IIngredientManager manager = jeiRuntime.getIngredientManager();
 
     // shown via the modifiers
-    NonNullList<ItemStack> modifierCrystals = NonNullList.create();
-    TinkerModifiers.modifierCrystal.get().fillItemCategory(CreativeModeTab.TAB_SEARCH, modifierCrystals);
+    List<ItemStack> modifierCrystals = new ArrayList<>();
+    ModifierCrystalItem.addVariants(modifierCrystals);
     if (!modifierCrystals.isEmpty()) {
       manager.removeIngredientsAtRuntime(VanillaTypes.ITEM_STACK, modifierCrystals);
     }
@@ -461,9 +463,12 @@ public class JEIPlugin implements IModPlugin {
   /** Class to pass {@link IScreenWithFluidTank} into JEI */
   public static class GuiContainerTankHandler<C extends AbstractContainerMenu, T extends AbstractContainerScreen<C> & IScreenWithFluidTank> implements IGuiContainerHandler<T> {
     @Override
-    @Nullable
-    public Object getIngredientUnderMouse(T containerScreen, double mouseX, double mouseY) {
-      return containerScreen.getIngredientUnderMouse(mouseX, mouseY);
+    public Optional<IClickableIngredient<?>> getClickableIngredientUnderMouse(T containerScreen, double mouseX, double mouseY) {
+      FluidLocation fluid = containerScreen.getFluidUnderMouse((int)mouseX, (int)mouseY);
+      if (fluid != null) {
+        return Optional.of(new ClickableIngredient<>(ForgeTypes.FLUID_STACK, fluid.fluid(), fluid.location()));
+      }
+      return Optional.empty();
     }
   }
 

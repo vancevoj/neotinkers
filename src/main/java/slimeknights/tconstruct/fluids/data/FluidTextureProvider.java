@@ -1,6 +1,6 @@
 package slimeknights.tconstruct.fluids.data;
 
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import slimeknights.mantle.fluid.texture.AbstractFluidTextureProvider;
 import slimeknights.mantle.fluid.texture.FluidTexture;
 import slimeknights.mantle.registration.object.FluidObject;
@@ -11,8 +11,8 @@ import static slimeknights.tconstruct.TConstruct.getResource;
 
 @SuppressWarnings({"UnusedReturnValue", "SameParameterValue"})
 public class FluidTextureProvider extends AbstractFluidTextureProvider {
-  public FluidTextureProvider(DataGenerator generator) {
-    super(generator, TConstruct.MOD_ID);
+  public FluidTextureProvider(PackOutput packOutput) {
+    super(packOutput, TConstruct.MOD_ID);
   }
 
   @Override

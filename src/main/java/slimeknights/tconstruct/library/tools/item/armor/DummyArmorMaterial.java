@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ArmorItem.Type;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.crafting.Ingredient;
 import slimeknights.mantle.registration.object.IdAwareObject;
@@ -25,14 +25,12 @@ public class DummyArmorMaterial implements ArmorMaterial, IdAwareObject {
   /* Required dummy methods */
 
   @Override
-  @Deprecated
-  public int getDurabilityForSlot(EquipmentSlot pSlot) {
+  public int getDurabilityForType(Type pType) {
     return 0;
   }
 
   @Override
-  @Deprecated
-  public int getDefenseForSlot(EquipmentSlot pSlot) {
+  public int getDefenseForType(Type pType) {
     return 0;
   }
 

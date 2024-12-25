@@ -108,9 +108,4 @@ public class ModifierRepairTinkerStationRecipe implements ITinkerStationRecipe, 
   public RecipeSerializer<?> getSerializer() {
     return TinkerModifiers.modifierRepair.get();
   }
-
-  @Override
-  public ItemStack getResultItem() {
-    return ItemStack.EMPTY;
-  }
 }

@@ -1,6 +1,7 @@
 package slimeknights.tconstruct.library.recipe.tinkerstation;
 
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
@@ -27,29 +28,11 @@ public interface ITinkerStationRecipe extends ICommonRecipe<ITinkerStationContai
   boolean matches(ITinkerStationContainer inv, Level world);
 
   /**
-   * Gets the recipe result. Return {@link ItemStack#EMPTY) to represent {@link RecipeResult#PASS}, or a non-empty stack to represent success.
-   * For more complex recipes, override {@link #getValidatedResult(ITinkerStationContainer)} instead.
-   *
-   * Do not call this method directly, but it is okay to override it.
-   * @return  Recipe result, may be empty.
-   */
-  @Override
-  default ItemStack assemble(ITinkerStationContainer inv) {
-    return getResultItem().copy();
-  }
-
-  /**
    * Gets the recipe result, or an object containing an error message if the recipe matches but cannot be applied.
    * TODO 1.20: switch return type to {@code RecipeResult<LazyToolStack>}
    * @return Validated result
    */
-  default RecipeResult<ItemStack> getValidatedResult(ITinkerStationContainer inv) {
-    ItemStack result = assemble(inv);
-    if (result.isEmpty()) {
-      return RecipeResult.pass();
-    }
-    return RecipeResult.success(result);
-  }
+  RecipeResult<ItemStack> getValidatedResult(ITinkerStationContainer inv);
 
   /** Gets the number to shrink the tool slot by, perfectly valid for this to be higher than the contained number of tools */
   default int shrinkToolSlotBy() {
@@ -58,7 +41,7 @@ public interface ITinkerStationRecipe extends ICommonRecipe<ITinkerStationContai
 
   /**
    * Updates the input stacks upon crafting this recipe
-   * @param result  Result from {@link #assemble(ITinkerStationContainer)}. Generally should not be modified. TODO: switch parameter to LazyToolStack.
+   * @param result  Result from {@link #assemble(ITinkerStationContainer, RegistryAccess)}. Generally should not be modified. TODO: switch parameter to LazyToolStack.
    * @param inv     Inventory instance to modify inputs
    * @param isServer  If true, this is on the serverside. Use to handle randomness, {@link IMutableTinkerStationContainer#giveItem(ItemStack)} should handle being called serverside only
    */
@@ -71,6 +54,20 @@ public interface ITinkerStationRecipe extends ICommonRecipe<ITinkerStationContai
 
 
   /* Deprecated */
+
+  /** @deprecated use {@link #getValidatedResult(ITinkerStationContainer)}*/
+  @Deprecated
+  @Override
+  default ItemStack getResultItem(RegistryAccess pRegistryAccess) {
+    return ItemStack.EMPTY;
+  }
+
+  /** @deprecated use {@link #getValidatedResult(ITinkerStationContainer)}*/
+  @Deprecated
+  @Override
+  default ItemStack assemble(ITinkerStationContainer inv, RegistryAccess access) {
+    return getResultItem(access).copy();
+  }
 
   /** @deprecated use {@link #updateInputs(ItemStack, IMutableTinkerStationContainer, boolean)} */
   @Override

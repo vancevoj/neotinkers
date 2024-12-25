@@ -1,8 +1,9 @@
 package slimeknights.tconstruct.tools.data;
 
 import com.google.common.collect.ImmutableMap;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Tiers;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.ToolActions;
@@ -54,7 +55,6 @@ import slimeknights.tconstruct.tools.TinkerToolParts;
 import slimeknights.tconstruct.tools.TinkerTools;
 import slimeknights.tconstruct.tools.ToolDefinitions;
 import slimeknights.tconstruct.tools.data.material.MaterialIds;
-import slimeknights.tconstruct.tools.item.ArmorSlotType;
 import slimeknights.tconstruct.tools.modules.MeltingFluidEffectiveModule;
 import slimeknights.tconstruct.tools.modules.MeltingModule;
 import slimeknights.tconstruct.tools.stats.HeadMaterialStats;
@@ -81,8 +81,8 @@ import static slimeknights.tconstruct.tools.TinkerToolParts.toolHandle;
 import static slimeknights.tconstruct.tools.TinkerToolParts.toughHandle;
 
 public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvider {
-  public ToolDefinitionDataProvider(DataGenerator generator) {
-    super(generator, TConstruct.MOD_ID);
+  public ToolDefinitionDataProvider(PackOutput packOutput) {
+    super(packOutput, TConstruct.MOD_ID);
   }
 
   @Override
@@ -557,13 +557,13 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
     defineArmor(ArmorDefinitions.TRAVELERS)
       .modules(slots -> SetStatsModule.armor(slots)
         .durabilityFactor(10)
-        .setEach(ToolStats.ARMOR, 1, 4, 5, 1))
-      .module(ArmorSlotType.CHESTPLATE, new MultiplyStatsModule(MultiplierNBT.builder().set(ToolStats.ATTACK_DAMAGE, 0.55f).build()))
+        .setTopDown(ToolStats.ARMOR, 1, 5, 4, 1))
+      .module(ArmorItem.Type.CHESTPLATE, new MultiplyStatsModule(MultiplierNBT.builder().set(ToolStats.ATTACK_DAMAGE, 0.55f).build()))
       .module(travelersSlots)
       .module(MaterialRepairModule.armor(MaterialIds.copper).durabilityFactor(10))
       .module(MaterialRepairModule.armor(MaterialIds.leather).durabilityFactor(7.5f))
       .module(ToolTraitsModule.builder().trait(TinkerModifiers.tanned).build())
-      .module(ArmorSlotType.BOOTS, ToolTraitsModule.builder().trait(ModifierIds.snowBoots).build());
+      .module(ArmorItem.Type.BOOTS, ToolTraitsModule.builder().trait(ModifierIds.snowBoots).build());
     define(ArmorDefinitions.TRAVELERS_SHIELD)
       .module(new SetStatsModule(StatsNBT.builder()
         .set(ToolStats.DURABILITY, 200)
@@ -588,7 +588,7 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
       .module(DefaultMaterialsModule.builder()
          .material(MaterialIds.cobalt)
          .material(MaterialIds.ancientHide).build())
-      .module(ArmorSlotType.CHESTPLATE, new MultiplyStatsModule(MultiplierNBT.builder().set(ToolStats.ATTACK_DAMAGE, 0.4f).build()))
+      .module(ArmorItem.Type.CHESTPLATE, new MultiplyStatsModule(MultiplierNBT.builder().set(ToolStats.ATTACK_DAMAGE, 0.4f).build()))
       .module(plateSlots);
     // plate shield
     define(ArmorDefinitions.PLATE_SHIELD)
@@ -613,30 +613,30 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
     defineArmor(ArmorDefinitions.SLIMESUIT)
       // not using durabilityFactor as helmet stats give a bonus too, factor is 42
       .modules(slots -> SetStatsModule.armor(slots)
-         .setEach(ToolStats.DURABILITY, 546, 630, 672, 362))
-      .module(ArmorSlotType.CHESTPLATE, new MultiplyStatsModule(MultiplierNBT.builder().set(ToolStats.ATTACK_DAMAGE, 0.4f).build()))
+         .setTopDown(ToolStats.DURABILITY, 362, 672, 630, 546))
+      .module(ArmorItem.Type.CHESTPLATE, new MultiplyStatsModule(MultiplierNBT.builder().set(ToolStats.ATTACK_DAMAGE, 0.4f).build()))
       .module(ToolSlotsModule.builder()
                              .slots(SlotType.UPGRADE, 5)
                              .slots(SlotType.ABILITY, 1).build())
       // repair
       .module(MaterialRepairModule.armor(MaterialIds.enderslime).durabilityFactor(4.2f))
-      .module(ArmorSlotType.CHESTPLATE, MaterialRepairModule.of(MaterialIds.phantom, ArmorSlotType.CHESTPLATE, 42))
-      .module(ArmorSlotType.LEGGINGS, MaterialRepairModule.of(MaterialIds.chorus, ArmorSlotType.LEGGINGS, 42))
-      .module(ArmorSlotType.BOOTS, MaterialRepairModule.of(MaterialIds.leather, ArmorSlotType.BOOTS, 42))
+      .module(ArmorItem.Type.CHESTPLATE, MaterialRepairModule.of(MaterialIds.phantom, ArmorItem.Type.CHESTPLATE, 42))
+      .module(ArmorItem.Type.LEGGINGS, MaterialRepairModule.of(MaterialIds.chorus, ArmorItem.Type.LEGGINGS, 42))
+      .module(ArmorItem.Type.BOOTS, MaterialRepairModule.of(MaterialIds.leather, ArmorItem.Type.BOOTS, 42))
       // stats
-      .module(ArmorSlotType.HELMET, MaterialStatsModule.stats().stat(SkullStats.ID, 1).build())
-      .module(ArmorSlotType.HELMET, DefaultMaterialsModule.builder().material(randomMaterial).build())
-      .module(ArmorSlotType.HELMET, slimeTraits.build())
+      .module(ArmorItem.Type.HELMET, MaterialStatsModule.stats().stat(SkullStats.ID, 1).build())
+      .module(ArmorItem.Type.HELMET, DefaultMaterialsModule.builder().material(randomMaterial).build())
+      .module(ArmorItem.Type.HELMET, slimeTraits.build())
       // traits
-      .module(ArmorSlotType.CHESTPLATE, slimeTraits.copy().trait(ModifierIds.wings).build())
-      .module(ArmorSlotType.LEGGINGS, slimeTraits.copy()
+      .module(ArmorItem.Type.CHESTPLATE, slimeTraits.copy().trait(ModifierIds.wings).build())
+      .module(ArmorItem.Type.LEGGINGS, slimeTraits.copy()
         .trait(ModifierIds.pockets, 1)
         .trait(ModifierIds.shulking, 1).build())
-      .module(ArmorSlotType.LEGGINGS, ToolTraitsModule.builder().trait(ModifierIds.shulking, 1).build(), ToolHooks.REBALANCED_TRAIT)
-      .module(ArmorSlotType.BOOTS, slimeTraits.copy()
+      .module(ArmorItem.Type.LEGGINGS, ToolTraitsModule.builder().trait(ModifierIds.shulking, 1).build(), ToolHooks.REBALANCED_TRAIT)
+      .module(ArmorItem.Type.BOOTS, slimeTraits.copy()
         .trait(TinkerModifiers.bouncy)
         .trait(ModifierIds.leaping, 1).build())
-      .module(ArmorSlotType.BOOTS, ToolTraitsModule.builder().trait(ModifierIds.leaping, 1).build(), ToolHooks.REBALANCED_TRAIT);
+      .module(ArmorItem.Type.BOOTS, ToolTraitsModule.builder().trait(ModifierIds.leaping, 1).build(), ToolHooks.REBALANCED_TRAIT);
 
     // ancient
     // melting pan

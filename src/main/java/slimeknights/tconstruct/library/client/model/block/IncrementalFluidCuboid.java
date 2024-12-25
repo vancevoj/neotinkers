@@ -1,13 +1,13 @@
 package slimeknights.tconstruct.library.client.model.block;
 
 import com.google.gson.JsonObject;
-import com.mojang.math.Vector3f;
 import lombok.Getter;
 import net.minecraft.client.renderer.block.model.BlockElement;
 import net.minecraft.client.renderer.block.model.BlockElementFace;
 import net.minecraft.client.renderer.block.model.BlockFaceUV;
 import net.minecraft.core.Direction;
 import net.minecraft.util.GsonHelper;
+import org.joml.Vector3f;
 import slimeknights.mantle.client.model.fluid.FluidCuboid;
 import slimeknights.mantle.client.model.util.ModelHelper;
 
@@ -40,11 +40,11 @@ public class IncrementalFluidCuboid extends FluidCuboid {
     float minY = from.y();
     float maxY = to.y();
     if (gas) {
-      from = from.copy();
-      from.setY(maxY + (amount * (minY - maxY) / increments));
+      from = new Vector3f(from);
+      from.y = maxY + (amount * (minY - maxY) / increments);
     } else {
-      to = to.copy();
-      to.setY(minY + (amount * (maxY - minY) / increments));
+      to = new Vector3f(to);
+      to.y = minY + (amount * (maxY - minY) / increments);
     }
 
     // create faces based on face data

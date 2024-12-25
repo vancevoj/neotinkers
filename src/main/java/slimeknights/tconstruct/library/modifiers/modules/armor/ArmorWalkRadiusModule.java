@@ -2,6 +2,7 @@ package slimeknights.tconstruct.library.modifiers.modules.armor;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.BlockPos.MutableBlockPos;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
@@ -54,15 +55,16 @@ public interface ArmorWalkRadiusModule<T> extends ArmorWalkModifierHook, Modifie
 
   @Override
   default void onWalk(IToolStackView tool, ModifierEntry modifier, LivingEntity living, BlockPos prevPos, BlockPos newPos) {
-    if (living.isOnGround() && !tool.isBroken() && !living.level.isClientSide) {
+    Level world = living.level();
+    if (living.onGround() && !tool.isBroken() && !world.isClientSide) {
       T context = getContext(tool, modifier, living, prevPos, newPos);
-      float radius = Math.min(16, getRadius(tool, modifier));
+      float trueRadius = Math.min(16, getRadius(tool, modifier));
+      int radius = Mth.floor(trueRadius);
       MutableBlockPos mutable = new MutableBlockPos();
-      Level world = living.level;
       Vec3 posVec = living.position();
-      BlockPos center = new BlockPos(posVec.x, posVec.y + 0.5, posVec.z);
+      BlockPos center = BlockPos.containing(posVec.x, posVec.y + 0.5, posVec.z);
       for (BlockPos pos : BlockPos.betweenClosed(center.offset(-radius, 0, -radius), center.offset(radius, 0, radius))) {
-        if (pos.closerToCenterThan(living.position(), radius)) {
+        if (pos.closerToCenterThan(living.position(), trueRadius)) {
           walkOn(tool, modifier, living, world, pos, mutable, context);
           if (tool.isBroken()) {
             break;

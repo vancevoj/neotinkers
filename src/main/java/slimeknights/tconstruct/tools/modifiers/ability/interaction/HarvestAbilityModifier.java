@@ -17,10 +17,7 @@ import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.block.state.properties.Property;
-import net.minecraft.world.level.storage.loot.LootContext;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.eventbus.api.Event.Result;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.events.TinkerToolEvent.ToolHarvestEvent;
@@ -152,14 +149,8 @@ public class HarvestAbilityModifier extends NoLevelsModifier implements BlockInt
       }
     }
 
-    // crop is fully grown, get loot context
-    LootContext.Builder lootContext = new LootContext.Builder(world)
-      .withRandom(world.random)
-      .withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(pos))
-      .withParameter(LootContextParams.TOOL, ItemStack.EMPTY)
-      .withOptionalParameter(LootContextParams.BLOCK_ENTITY, world.getBlockEntity(pos));
-    // find drops
-    List<ItemStack> drops = state.getDrops(lootContext);
+    // crop is fully grown, get block drops
+    List<ItemStack> drops = Block.getDrops(state, world, pos, world.getBlockEntity(pos), player, stack);
 
     // find a seed to remove from the drops
     Iterator<ItemStack> iterator = drops.iterator();

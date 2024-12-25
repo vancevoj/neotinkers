@@ -7,11 +7,11 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.Material;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.InventoryMenu;
+import slimeknights.tconstruct.library.client.model.DynamicTextureLoader;
 import slimeknights.tconstruct.library.materials.definition.MaterialVariantId;
 
 import javax.annotation.Nullable;
 import java.util.function.Function;
-import java.util.function.Predicate;
 
 /**
  * Determines the type of texture used for rendering a specific material
@@ -34,59 +34,57 @@ public class MaterialRenderInfo {
 
   /**
    * Tries to get a sprite for the given texture
-   * @param base           Base texture
-   * @param suffix         Sprite suffix
-   * @param spriteGetter   Logic to get the sprite
+   * @param base              Base texture
+   * @param suffix            Sprite suffix
+   * @param spriteGetter      Logic to get the sprite
+   * @param logMissingSprites If true, logs a warning if a sprite is missing
    * @return  Sprite if valid, null if missing
    */
   @Nullable
-  private TextureAtlasSprite trySprite(Material base, String suffix, Function<Material,TextureAtlasSprite> spriteGetter) {
-    TextureAtlasSprite sprite = spriteGetter.apply(getMaterial(base.texture(), suffix));
-    if (!MissingTextureAtlasSprite.getLocation().equals(sprite.getName())) {
+  private TextureAtlasSprite trySprite(Material base, String suffix, Function<Material,TextureAtlasSprite> spriteGetter, boolean logMissingSprites) {
+    Material materialTexture = getMaterial(base.texture(), suffix);
+    TextureAtlasSprite sprite = spriteGetter.apply(materialTexture);
+    if (!MissingTextureAtlasSprite.getLocation().equals(sprite.contents().name())) {
       return sprite;
+    }
+    if (logMissingSprites) {
+      DynamicTextureLoader.logMissingTexture(materialTexture.texture());
     }
     return null;
   }
 
   /**
-   * Gets the texture for this render material
+   * Gets the texture for this render material, not logging warnings if its missing.
    * @param base          Base texture
    * @param spriteGetter  Logic to get a sprite
    * @return  Pair of the sprite, and a boolean indicating whether the sprite should be tinted
    */
   public TintedSprite getSprite(Material base, Function<Material,TextureAtlasSprite> spriteGetter) {
+    return getSprite(base, spriteGetter, false);
+  }
+
+  /**
+   * Gets the texture for this render material
+   * @param base               Base texture
+   * @param spriteGetter       Logic to get a sprite
+   * @param logMissingSprites  If true, logs a warning if a sprite is missing
+   * @return  Pair of the sprite, and a boolean indicating whether the sprite should be tinted
+   */
+  public TintedSprite getSprite(Material base, Function<Material,TextureAtlasSprite> spriteGetter, boolean logMissingSprites) {
     TextureAtlasSprite sprite;
     if (texture != null) {
-      sprite = trySprite(base, getSuffix(texture), spriteGetter);
+      sprite = trySprite(base, getSuffix(texture), spriteGetter, logMissingSprites);
       if (sprite != null) {
         return new TintedSprite(sprite, -1, getLuminosity());
       }
     }
     for (String fallback : fallbacks) {
-      sprite = trySprite(base, fallback, spriteGetter);
+      sprite = trySprite(base, fallback, spriteGetter, logMissingSprites);
       if (sprite != null) {
         return new TintedSprite(sprite, vertexColor, getLuminosity());
       }
     }
     return new TintedSprite(spriteGetter.apply(base), vertexColor, getLuminosity());
-  }
-
-  /**
-   * Gets all dependencies for this render info
-   * @param textures  Texture consumer
-   * @param base      Base texture, will be used to generate texture names
-   */
-  public void getTextureDependencies(Predicate<Material> textures, Material base) {
-    if (texture != null) {
-      if (textures.test(getMaterial(base.texture(), getSuffix(texture)))) {
-        return;
-      }
-    }
-    for (String fallback : fallbacks) {
-      if (textures.test(getMaterial(base.texture(), fallback))) {
-        break;
-      }
-    }
   }
 
   /**

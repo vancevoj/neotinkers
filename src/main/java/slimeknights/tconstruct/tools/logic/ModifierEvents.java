@@ -124,7 +124,7 @@ public class ModifierEvents {
     }
     // this is the latest we can add slot markers to the items so we can return them to slots
     LivingEntity entity = event.getEntity();
-    if (!entity.level.getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY) && entity instanceof Player player && !(player instanceof FakePlayer)) {
+    if (!entity.level().getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY) && entity instanceof Player player && !(player instanceof FakePlayer)) {
       // start with the hotbar, must be soulbound or soul belt
       boolean soulBelt = ArmorLevelModule.getLevel(player, TinkerDataKeys.SOUL_BELT) > 0;
       Inventory inventory = player.getInventory();
@@ -199,7 +199,7 @@ public class ModifierEvents {
   static void onPlayerDropItems(LivingDropsEvent event) {
     // only care about real players with keep inventory off
     LivingEntity entity = event.getEntity();
-    if (!entity.level.getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY) && entity instanceof Player player && !(entity instanceof FakePlayer)) {
+    if (!entity.level().getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY) && entity instanceof Player player && !(entity instanceof FakePlayer)) {
       Collection<ItemEntity> drops = event.getDrops();
       Iterator<ItemEntity> iter = drops.iterator();
       Inventory inventory = player.getInventory();
@@ -252,7 +252,7 @@ public class ModifierEvents {
     Player original = event.getOriginal();
     Player clone = event.getEntity();
     // inventory already copied
-    if (clone.level.getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY) || original.isSpectator()) {
+    if (clone.level().getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY) || original.isSpectator()) {
       return;
     }
     // find items with the soulbound tag set and move them over
@@ -305,8 +305,6 @@ public class ModifierEvents {
   static void onPotionStart(MobEffectEvent.Added event) {
     MobEffectInstance newEffect = event.getEffectInstance();
     if (!newEffect.getCurativeItems().isEmpty()) {
-      LivingEntity living = event.getEntity();
-
       // use two different stats based on whether the effect is beneficial
       float boost = ArmorStatModule.getStat(event.getEntity(), newEffect.getEffect().isBeneficial() ? TinkerDataKeys.GOOD_EFFECT_DURATION : TinkerDataKeys.BAD_EFFECT_DURATION);
       if (boost != 0) {
@@ -356,7 +354,7 @@ public class ModifierEvents {
   @SubscribeEvent
   static void livingTick(LivingTickEvent event) {
     LivingEntity living = event.getEntity();
-    if (!living.level.isClientSide && !living.isSpectator()) {
+    if (!living.level().isClientSide && !living.isSpectator()) {
       living.getCapability(TinkerDataCapability.CAPABILITY).ifPresent(data -> {
         if (data.get(WAS_KNOCKBACK, false)) {
           data.remove(WAS_KNOCKBACK);

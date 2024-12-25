@@ -2,8 +2,9 @@ package slimeknights.tconstruct.library.data.material;
 
 import com.google.gson.JsonElement;
 import net.minecraft.data.CachedOutput;
-import net.minecraft.data.DataGenerator;
-import net.minecraft.server.packs.PackType;
+import net.minecraft.data.PackOutput;
+import net.minecraft.data.PackOutput.Target;
+import net.minecraft.world.item.ArmorItem;
 import slimeknights.mantle.data.GenericDataProvider;
 import slimeknights.tconstruct.library.materials.definition.MaterialId;
 import slimeknights.tconstruct.library.materials.json.MaterialStatJson;
@@ -18,6 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 /** Base data generator for use in addons, depends on the regular material provider */
@@ -27,8 +29,8 @@ public abstract class AbstractMaterialStatsDataProvider extends GenericDataProvi
   /* Materials data provider for validation */
   private final AbstractMaterialDataProvider materials;
 
-  public AbstractMaterialStatsDataProvider(DataGenerator gen, AbstractMaterialDataProvider materials) {
-    super(gen, PackType.SERVER_DATA, MaterialStatsManager.FOLDER);
+  public AbstractMaterialStatsDataProvider(PackOutput packOutput, AbstractMaterialDataProvider materials) {
+    super(packOutput, Target.DATA_PACK, MaterialStatsManager.FOLDER);
     this.materials = materials;
   }
 
@@ -36,7 +38,7 @@ public abstract class AbstractMaterialStatsDataProvider extends GenericDataProvi
   protected abstract void addMaterialStats();
 
   @Override
-  public void run(CachedOutput cache) {
+  public CompletableFuture<?> run(CachedOutput cache) {
     addMaterialStats();
 
     // ensure we have stats for all materials
@@ -48,7 +50,7 @@ public abstract class AbstractMaterialStatsDataProvider extends GenericDataProvi
     }
     // does not ensure we have materials for all stats, we may be adding stats for another mod
     // generate finally
-    allMaterialStats.forEach((materialId, materialStats) -> saveJson(cache, materialId, convert(materialStats)));
+    return allOf(allMaterialStats.entrySet().stream().map(entry -> saveJson(cache, entry.getKey(), convert(entry.getValue()))));
   }
 
 
@@ -72,8 +74,8 @@ public abstract class AbstractMaterialStatsDataProvider extends GenericDataProvi
    */
   protected void addArmorStats(MaterialId location, ArmorSlotType.ArmorBuilder<? extends IMaterialStats> statBuilder, IMaterialStats... otherStats) {
     IMaterialStats[] stats = new IMaterialStats[4];
-    for (ArmorSlotType slotType : ArmorSlotType.values()) {
-      stats[slotType.getIndex()] = statBuilder.build(slotType);
+    for (ArmorItem.Type slotType : ArmorItem.Type.values()) {
+      stats[slotType.ordinal()] = statBuilder.build(slotType);
     }
     addMaterialStats(location, stats);
     if (otherStats.length > 0) {

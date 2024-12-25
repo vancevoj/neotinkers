@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ArmorItem;
 import slimeknights.mantle.data.loadable.IAmLoadable;
 import slimeknights.mantle.data.loadable.field.LoadableField;
 import slimeknights.mantle.data.loadable.mapping.EitherLoadable;
@@ -50,8 +51,8 @@ public class MaterialRepairModule implements MaterialRepairToolHook, ToolModule,
   }
 
   /** Creates a new module using a constant durability */
-  public static MaterialRepairModule of(MaterialId material, ArmorSlotType slot, float durabilityFactor) {
-    return new MaterialRepairModule(material, (int)(ArmorSlotType.MAX_DAMAGE_ARRAY[slot.getIndex()] * durabilityFactor));
+  public static MaterialRepairModule of(MaterialId material, ArmorItem.Type slot, float durabilityFactor) {
+    return new MaterialRepairModule(material, (int)(ArmorSlotType.MAX_DAMAGE_ARRAY[slot.ordinal()] * durabilityFactor));
   }
 
   /** Creates a new module using a stat type lookup */
@@ -146,16 +147,16 @@ public class MaterialRepairModule implements MaterialRepairToolHook, ToolModule,
 
     /** Sets the durability for the piece based on the given factor */
     public ArmorBuilder durabilityFactor(float maxDamageFactor) {
-      for (ArmorSlotType slotType : ArmorSlotType.values()) {
-        int index = slotType.getIndex();
+      for (ArmorItem.Type slotType : ArmorItem.Type.values()) {
+        int index = slotType.ordinal();
         durability[index] = (int)(ArmorSlotType.MAX_DAMAGE_ARRAY[index] * maxDamageFactor);
       }
       return this;
     }
 
     @Override
-    public MaterialRepairModule build(ArmorSlotType slot) {
-      return new MaterialRepairModule(material, durability[slot.getIndex()]);
+    public MaterialRepairModule build(ArmorItem.Type slot) {
+      return new MaterialRepairModule(material, durability[slot.ordinal()]);
     }
   }
 }

@@ -1,7 +1,7 @@
 package slimeknights.tconstruct.tools.data;
 
 import com.google.gson.JsonObject;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.data.AbstractToolItemModelProvider;
@@ -13,8 +13,8 @@ import static slimeknights.tconstruct.TConstruct.getResource;
 
 /** Provider for tool models, mostly used for duplicating displays */
 public class ToolItemModelProvider extends AbstractToolItemModelProvider {
-  public ToolItemModelProvider(DataGenerator generator, ExistingFileHelper existingFileHelper) {
-    super(generator, existingFileHelper, TConstruct.MOD_ID);
+  public ToolItemModelProvider(PackOutput packOutput, ExistingFileHelper existingFileHelper) {
+    super(packOutput, existingFileHelper, TConstruct.MOD_ID);
   }
 
   @Override
