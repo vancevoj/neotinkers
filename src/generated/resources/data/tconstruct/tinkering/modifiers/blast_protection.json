@@ -15,7 +15,10 @@
         "type": "mantle:and",
         "predicates": [
           "mantle:can_protect",
-          "mantle:explosion"
+          {
+            "type": "mantle:tag",
+            "tag": "minecraft:is_explosion"
+          }
         ]
       },
       "each_level": 2.5

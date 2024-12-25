@@ -15,7 +15,10 @@
         "type": "mantle:and",
         "predicates": [
           "mantle:can_protect",
-          "mantle:magic"
+          {
+            "type": "mantle:tag",
+            "tag": "minecraft:witch_resistant_to"
+          }
         ]
       },
       "each_level": 2.5

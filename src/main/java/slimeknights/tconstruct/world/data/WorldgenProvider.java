@@ -1,14 +1,9 @@
 package slimeknights.tconstruct.world.data;
 
-import com.mojang.serialization.Lifecycle;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Holder.Reference;
 import net.minecraft.core.HolderGetter;
-import net.minecraft.core.HolderLookup.RegistryLookup;
 import net.minecraft.core.HolderOwner;
 import net.minecraft.core.HolderSet;
-import net.minecraft.core.HolderSet.Named;
-import net.minecraft.core.Registry;
 import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -18,7 +13,6 @@ import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.TagKey;
 import net.minecraft.util.random.WeightedRandomList;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.util.valueproviders.IntProvider;
@@ -95,9 +89,7 @@ import slimeknights.tconstruct.world.worldgen.trees.config.SlimeTreeConfig;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.function.Supplier;
-import java.util.stream.Stream;
 
 import static net.minecraft.core.HolderSet.direct;
 import static slimeknights.tconstruct.TConstruct.getResource;
@@ -340,9 +332,9 @@ public class WorldgenProvider {
     context.register(spawnCobaltOre, new AddFeaturesBiomeModifier(nether, direct(placed.getOrThrow(TinkerWorld.placedSmallCobaltOre), placed.getOrThrow(placedLargeCobaltOre)), Decoration.UNDERGROUND_DECORATION));
     // geodes
     context.register(spawnEarthGeode, new AddFeaturesBiomeModifier(overworld, direct(placed.getOrThrow(placedEarthGeode)), Decoration.LOCAL_MODIFICATIONS));
-    context.register(spawnSkyGeode,   new AddFeaturesBiomeModifier(and(overworld, not(context, Registries.BIOME, or(biomes.getOrThrow(BiomeTags.IS_OCEAN), biomes.getOrThrow(BiomeTags.IS_DEEP_OCEAN), biomes.getOrThrow(BiomeTags.IS_BEACH), biomes.getOrThrow(BiomeTags.IS_RIVER)))), direct(placed.getOrThrow(TinkerWorld.placedSkyGeode)), Decoration.LOCAL_MODIFICATIONS));
+    context.register(spawnSkyGeode,   new AddFeaturesBiomeModifier(and(overworld, not(or(biomes.getOrThrow(BiomeTags.IS_OCEAN), biomes.getOrThrow(BiomeTags.IS_DEEP_OCEAN), biomes.getOrThrow(BiomeTags.IS_BEACH), biomes.getOrThrow(BiomeTags.IS_RIVER)))), direct(placed.getOrThrow(TinkerWorld.placedSkyGeode)), Decoration.LOCAL_MODIFICATIONS));
     context.register(spawnIchorGeode, new AddFeaturesBiomeModifier(nether, direct(placed.getOrThrow(TinkerWorld.placedIchorGeode)), Decoration.LOCAL_MODIFICATIONS));
-    context.register(spawnEnderGeode, new AddFeaturesBiomeModifier(and(end, not(context, Registries.BIOME, direct(biomes.getOrThrow(Biomes.THE_END)))), direct(placed.getOrThrow(TinkerWorld.placedEnderGeode)), Decoration.LOCAL_MODIFICATIONS));
+    context.register(spawnEnderGeode, new AddFeaturesBiomeModifier(and(end, not(direct(biomes.getOrThrow(Biomes.THE_END)))), direct(placed.getOrThrow(TinkerWorld.placedEnderGeode)), Decoration.LOCAL_MODIFICATIONS));
     // spawns
     context.register(spawnOverworldSlime, new AddSpawnsBiomeModifier(overworld, List.of(new SpawnerData(TinkerWorld.skySlimeEntity.get(), 100, 2, 4))));
     context.register(spawnEndSlime,       new AddSpawnsBiomeModifier(end,       List.of(new SpawnerData(TinkerWorld.enderSlimeEntity.get(), 10, 2, 4))));
@@ -364,39 +356,18 @@ public class WorldgenProvider {
   }
 
   /** Nots the set */
-  private static <T> NotHolderSet<T> not(BootstapContext<BiomeModifier> context, ResourceKey<? extends Registry<T>> key, HolderSet<T> set) {
+  private static <T> NotHolderSet<T> not(HolderSet<T> set) {
     // passing in null as its impossible to create the object Forge demands of us during datagen, and seems it work without it
-    return new NotHolderSet<>(new ForgeDidNotMakeTheirHolderSetDatagennable<>(key, context.lookup(key)), set);
+    return new SerializableNotHolderSet<>(set);
   }
-  // TODO: do we even need the key?
-  private record ForgeDidNotMakeTheirHolderSetDatagennable<T>(ResourceKey<? extends Registry<T>> key, HolderGetter<T> getter) implements RegistryLookup<T> {
-    @Override
-    public Lifecycle registryLifecycle() {
-      return Lifecycle.stable();
+
+  private static class SerializableNotHolderSet<T> extends NotHolderSet<T> {
+    public SerializableNotHolderSet(HolderSet<T> value) {
+      super(null, value);
     }
 
     @Override
-    public Stream<Reference<T>> listElements() {
-      throw new IllegalStateException();
-    }
-
-    @Override
-    public Stream<Named<T>> listTags() {
-      throw new IllegalStateException();
-    }
-
-    @Override
-    public Optional<Reference<T>> get(ResourceKey<T> resourceKey) {
-      return getter.get(resourceKey);
-    }
-
-    @Override
-    public Optional<Named<T>> get(TagKey<T> tag) {
-      return getter.get(tag);
-    }
-
-    @Override
-    public boolean canSerializeIn(HolderOwner<T> pOwner) {
+    public boolean canSerializeIn(HolderOwner<T> holderOwner) {
       return true;
     }
   }

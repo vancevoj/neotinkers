@@ -15,7 +15,7 @@
         "type": "mantle:and",
         "predicates": [
           "mantle:can_protect",
-          "mantle:melee"
+          "tconstruct:direct"
         ]
       },
       "each_level": 2.5

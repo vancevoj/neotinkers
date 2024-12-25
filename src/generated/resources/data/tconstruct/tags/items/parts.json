@@ -17,9 +17,9 @@
     "tconstruct:maille",
     "tconstruct:shield_core",
     "tconstruct:repair_kit",
-    "tconstruct:boots_plating",
-    "tconstruct:leggings_plating",
+    "tconstruct:helmet_plating",
     "tconstruct:chestplate_plating",
-    "tconstruct:helmet_plating"
+    "tconstruct:leggings_plating",
+    "tconstruct:boots_plating"
   ]
 }
