@@ -139,7 +139,7 @@ public class GuiTankModule implements IScreenWithFluidTank {
       }
 
       // TODO: renderComponentTooltip->renderTooltip
-      graphics.renderComponentTooltip(screen.getMinecraft().font, tooltip, mouseX, mouseY);
+      graphics.renderComponentTooltip(screen.font, tooltip, mouseX, mouseY);
     }
   }
 

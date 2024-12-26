@@ -184,7 +184,7 @@ public class GuiSmelteryTank implements IScreenWithFluidTank {
       else {
         tooltip = FluidTooltipHandler.getFluidTooltip(tank.getFluidInTank(hovered));
       }
-      graphics.renderComponentTooltip(parent.getMinecraft().font, tooltip, mouseX, mouseY);
+      graphics.renderComponentTooltip(parent.font, tooltip, mouseX, mouseY);
     }
   }
 

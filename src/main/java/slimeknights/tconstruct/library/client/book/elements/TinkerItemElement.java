@@ -55,6 +55,8 @@ public class TinkerItemElement extends ItemElement {
       return;
     }
 
+    // TODO: what is going on here? this code looks like it got ported wrongly at some time
+    // is it intended to be the item font in the null check?
     if (this.tooltip == null) {
       fontRenderer = mc.font;
     }
