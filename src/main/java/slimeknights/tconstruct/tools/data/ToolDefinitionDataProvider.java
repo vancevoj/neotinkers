@@ -557,7 +557,7 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
     defineArmor(ArmorDefinitions.TRAVELERS)
       .modules(slots -> SetStatsModule.armor(slots)
         .durabilityFactor(10)
-        .setTopDown(ToolStats.ARMOR, 1, 5, 4, 1))
+        .setInOrder(ToolStats.ARMOR, 1, 5, 4, 1))
       .module(ArmorItem.Type.CHESTPLATE, new MultiplyStatsModule(MultiplierNBT.builder().set(ToolStats.ATTACK_DAMAGE, 0.55f).build()))
       .module(travelersSlots)
       .module(MaterialRepairModule.armor(MaterialIds.copper).durabilityFactor(10))
@@ -613,7 +613,7 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
     defineArmor(ArmorDefinitions.SLIMESUIT)
       // not using durabilityFactor as helmet stats give a bonus too, factor is 42
       .modules(slots -> SetStatsModule.armor(slots)
-         .setTopDown(ToolStats.DURABILITY, 362, 672, 630, 546))
+         .setInOrder(ToolStats.DURABILITY, 362, 672, 630, 546))
       .module(ArmorItem.Type.CHESTPLATE, new MultiplyStatsModule(MultiplierNBT.builder().set(ToolStats.ATTACK_DAMAGE, 0.4f).build()))
       .module(ToolSlotsModule.builder()
                              .slots(SlotType.UPGRADE, 5)

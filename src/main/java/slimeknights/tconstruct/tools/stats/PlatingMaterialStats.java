@@ -13,8 +13,8 @@ import slimeknights.tconstruct.library.materials.stats.MaterialStatType;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
 import slimeknights.tconstruct.library.tools.stat.ModifierStatsBuilder;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
-import slimeknights.tconstruct.tools.item.ArmorSlotType;
-import slimeknights.tconstruct.tools.item.ArmorSlotType.ArmorShieldBuilder;
+import slimeknights.tconstruct.tools.modules.ArmorModuleBuilder;
+import slimeknights.tconstruct.tools.modules.ArmorModuleBuilder.ArmorShieldModuleBuilder;
 
 import java.util.List;
 
@@ -87,7 +87,7 @@ public record PlatingMaterialStats(MaterialStatType<?> getType, int durability, 
   /** Builder to create plating material stats for all four pieces */
   @Setter
   @Accessors(fluent = true)
-  public static class Builder implements ArmorShieldBuilder<PlatingMaterialStats> {
+  public static class Builder implements ArmorShieldModuleBuilder<PlatingMaterialStats> {
     private final int[] durability = new int[4];
     private int shieldDurability = 0;
     private final float[] armor = new float[4];
@@ -100,7 +100,7 @@ public record PlatingMaterialStats(MaterialStatType<?> getType, int durability, 
     public Builder durabilityFactor(float maxDamageFactor) {
       for (ArmorItem.Type slotType : ArmorItem.Type.values()) {
         int index = slotType.ordinal();
-        durability[index] = (int)(ArmorSlotType.MAX_DAMAGE_ARRAY[index] * maxDamageFactor);
+        durability[index] = (int)(ArmorModuleBuilder.MAX_DAMAGE_ARRAY[index] * maxDamageFactor);
       }
       if (shieldDurability == 0) {
         shieldDurability = (int)(maxDamageFactor * 18);

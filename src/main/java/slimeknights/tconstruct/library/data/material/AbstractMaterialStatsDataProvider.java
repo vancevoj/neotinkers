@@ -11,7 +11,8 @@ import slimeknights.tconstruct.library.materials.json.MaterialStatJson;
 import slimeknights.tconstruct.library.materials.stats.IMaterialStats;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatType;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsManager;
-import slimeknights.tconstruct.tools.item.ArmorSlotType;
+import slimeknights.tconstruct.tools.modules.ArmorModuleBuilder;
+import slimeknights.tconstruct.tools.modules.ArmorModuleBuilder.ArmorShieldModuleBuilder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -72,7 +73,7 @@ public abstract class AbstractMaterialStatsDataProvider extends GenericDataProvi
    * @param statBuilder  Stat builder
    * @param otherStats   Other stat types to add after the builder
    */
-  protected void addArmorStats(MaterialId location, ArmorSlotType.ArmorBuilder<? extends IMaterialStats> statBuilder, IMaterialStats... otherStats) {
+  protected void addArmorStats(MaterialId location, ArmorModuleBuilder<? extends IMaterialStats> statBuilder, IMaterialStats... otherStats) {
     IMaterialStats[] stats = new IMaterialStats[4];
     for (ArmorItem.Type slotType : ArmorItem.Type.values()) {
       stats[slotType.ordinal()] = statBuilder.build(slotType);
@@ -89,7 +90,7 @@ public abstract class AbstractMaterialStatsDataProvider extends GenericDataProvi
    * @param statBuilder  Stat builder
    * @param otherStats   Other stat types to add after the builder
    */
-  protected void addArmorShieldStats(MaterialId location, ArmorSlotType.ArmorShieldBuilder<? extends IMaterialStats> statBuilder, IMaterialStats... otherStats) {
+  protected void addArmorShieldStats(MaterialId location, ArmorShieldModuleBuilder<? extends IMaterialStats> statBuilder, IMaterialStats... otherStats) {
     addArmorStats(location, statBuilder, otherStats);
     addMaterialStats(location, statBuilder.buildShield());
   }

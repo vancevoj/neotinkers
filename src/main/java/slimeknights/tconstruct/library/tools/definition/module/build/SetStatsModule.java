@@ -11,7 +11,7 @@ import slimeknights.tconstruct.library.tools.nbt.StatsNBT;
 import slimeknights.tconstruct.library.tools.stat.IToolStat;
 import slimeknights.tconstruct.library.tools.stat.ModifierStatsBuilder;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
-import slimeknights.tconstruct.tools.item.ArmorSlotType;
+import slimeknights.tconstruct.tools.modules.ArmorModuleBuilder;
 
 import java.util.List;
 
@@ -48,7 +48,7 @@ public record SetStatsModule(StatsNBT stats) implements ToolStatsHook, ToolModul
     return new ArmorBuilder(slots);
   }
 
-  public static class ArmorBuilder implements ArmorSlotType.ArmorBuilder<SetStatsModule> {
+  public static class ArmorBuilder implements ArmorModuleBuilder<SetStatsModule> {
 
     private final List<ArmorItem.Type> slotTypes;
     private final StatsNBT.Builder[] builders = new StatsNBT.Builder[4];
@@ -93,8 +93,11 @@ public record SetStatsModule(StatsNBT stats) implements ToolStatsHook, ToolModul
       return setAll(stat, (Float) value);
     }
 
-    /** Sets a different bonus on all pieces, order is helmet, chestplate, leggings, boot */
-    public final ArmorBuilder setTopDown(IToolStat<Float> stat, float... values) {
+    /**
+     * Sets a different bonus on all pieces.
+     * order is usually helmet, chestplate, leggings, boot, but depends on the order from {@link SetStatsModule#armor(List)}
+     */
+    public final ArmorBuilder setInOrder(IToolStat<Float> stat, float... values) {
       if (values.length != slotTypes.size()) {
         throw new IllegalStateException("Wrong number of stats set");
       }
@@ -111,7 +114,7 @@ public record SetStatsModule(StatsNBT stats) implements ToolStatsHook, ToolModul
      */
     public ArmorBuilder durabilityFactor(float maxDamageFactor) {
       for (ArmorItem.Type slotType : slotTypes) {
-        set(slotType, ToolStats.DURABILITY, ArmorSlotType.MAX_DAMAGE_ARRAY[slotType.ordinal()] * maxDamageFactor);
+        set(slotType, ToolStats.DURABILITY, ArmorModuleBuilder.MAX_DAMAGE_ARRAY[slotType.ordinal()] * maxDamageFactor);
       }
       return this;
     }

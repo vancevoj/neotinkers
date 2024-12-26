@@ -15,7 +15,7 @@ import slimeknights.tconstruct.library.module.ModuleHook;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinition;
 import slimeknights.tconstruct.library.tools.definition.module.ToolHooks;
 import slimeknights.tconstruct.library.tools.part.IToolPart;
-import slimeknights.tconstruct.tools.item.ArmorSlotType;
+import slimeknights.tconstruct.tools.modules.ArmorModuleBuilder;
 
 import java.util.List;
 import java.util.function.Supplier;
@@ -103,7 +103,7 @@ public class PartStatsModule extends MaterialStatsModule implements ToolPartsHoo
   }
 
   /** Builder for armor */
-  public static class ArmorBuilder implements ArmorSlotType.ArmorBuilder<PartStatsModule> {
+  public static class ArmorBuilder implements ArmorModuleBuilder<PartStatsModule> {
     private final List<ArmorItem.Type> slotTypes;
     private final Builder[] builders = new Builder[4];
 

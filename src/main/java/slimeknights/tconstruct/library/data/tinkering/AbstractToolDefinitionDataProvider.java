@@ -16,7 +16,7 @@ import slimeknights.tconstruct.library.tools.definition.ToolDefinitionData;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinitionDataBuilder;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinitionLoader;
 import slimeknights.tconstruct.library.tools.definition.module.ToolModule;
-import slimeknights.tconstruct.tools.item.ArmorSlotType.ArmorBuilder;
+import slimeknights.tconstruct.tools.modules.ArmorModuleBuilder;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -169,7 +169,7 @@ public abstract class AbstractToolDefinitionDataProvider extends GenericDataProv
 
     /** Adds modules to the definition using the passed builder */
     @SafeVarargs
-    public final <T extends ToolModule> ArmorDataBuilder module(ArmorBuilder<T> builder, ModuleHook<? super T>... hooks) {
+    public final <T extends ToolModule> ArmorDataBuilder module(ArmorModuleBuilder<T> builder, ModuleHook<? super T>... hooks) {
       for (ArmorItem.Type armorSlot : slotTypes) {
         module(armorSlot, builder.build(armorSlot), hooks);
       }
@@ -177,7 +177,7 @@ public abstract class AbstractToolDefinitionDataProvider extends GenericDataProv
     }
 
     /** Adds modules to the definition using the passed builder */
-    public ArmorDataBuilder module(ArmorBuilder<? extends ToolModule> builder) {
+    public ArmorDataBuilder module(ArmorModuleBuilder<? extends ToolModule> builder) {
       for (ArmorItem.Type armorSlot : slotTypes) {
         module(armorSlot, builder.build(armorSlot));
       }
@@ -186,12 +186,12 @@ public abstract class AbstractToolDefinitionDataProvider extends GenericDataProv
 
     /** Adds modules to the definition using the passed builder */
     @SafeVarargs
-    public final <T extends ToolModule> ArmorDataBuilder modules(Function<List<ArmorItem.Type>,ArmorBuilder<T>> constructor, ModuleHook<? super T>... hooks) {
+    public final <T extends ToolModule> ArmorDataBuilder modules(Function<List<ArmorItem.Type>,ArmorModuleBuilder<T>> constructor, ModuleHook<? super T>... hooks) {
       return module(constructor.apply(slotTypes), hooks);
     }
 
     /** Adds modules to the definition using the passed builder */
-    public ArmorDataBuilder modules(Function<List<ArmorItem.Type>,ArmorBuilder<? extends ToolModule>> constructor) {
+    public ArmorDataBuilder modules(Function<List<ArmorItem.Type>,ArmorModuleBuilder<? extends ToolModule>> constructor) {
       return module(constructor.apply(slotTypes));
     }
   }

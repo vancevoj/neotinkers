@@ -21,7 +21,7 @@ import slimeknights.tconstruct.library.module.ModuleHook;
 import slimeknights.tconstruct.library.tools.definition.module.ToolHooks;
 import slimeknights.tconstruct.library.tools.definition.module.ToolModule;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
-import slimeknights.tconstruct.tools.item.ArmorSlotType;
+import slimeknights.tconstruct.tools.modules.ArmorModuleBuilder;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -52,7 +52,7 @@ public class MaterialRepairModule implements MaterialRepairToolHook, ToolModule,
 
   /** Creates a new module using a constant durability */
   public static MaterialRepairModule of(MaterialId material, ArmorItem.Type slot, float durabilityFactor) {
-    return new MaterialRepairModule(material, (int)(ArmorSlotType.MAX_DAMAGE_ARRAY[slot.ordinal()] * durabilityFactor));
+    return new MaterialRepairModule(material, (int)(ArmorModuleBuilder.MAX_DAMAGE_ARRAY[slot.ordinal()] * durabilityFactor));
   }
 
   /** Creates a new module using a stat type lookup */
@@ -141,7 +141,7 @@ public class MaterialRepairModule implements MaterialRepairToolHook, ToolModule,
 
   /** Builder logic */
   @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-  public static class ArmorBuilder implements ArmorSlotType.ArmorBuilder<MaterialRepairModule> {
+  public static class ArmorBuilder implements ArmorModuleBuilder<MaterialRepairModule> {
     private final MaterialId material;
     private final int[] durability = new int[4];
 
@@ -149,7 +149,7 @@ public class MaterialRepairModule implements MaterialRepairToolHook, ToolModule,
     public ArmorBuilder durabilityFactor(float maxDamageFactor) {
       for (ArmorItem.Type slotType : ArmorItem.Type.values()) {
         int index = slotType.ordinal();
-        durability[index] = (int)(ArmorSlotType.MAX_DAMAGE_ARRAY[index] * maxDamageFactor);
+        durability[index] = (int)(ArmorModuleBuilder.MAX_DAMAGE_ARRAY[index] * maxDamageFactor);
       }
       return this;
     }
