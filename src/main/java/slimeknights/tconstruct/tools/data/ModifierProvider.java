@@ -546,7 +546,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
     // triats - tier 2
     buildModifier(ModifierIds.scorchProtection)
       .addModule(EnchantmentModule.builder(Enchantments.FIRE_PROTECTION).protection())
-      .addModule(ProtectionModule.builder().sources(DamageSourcePredicate.CAN_PROTECT, new SourceAttackerPredicate(LivingEntityPredicate.FIRE_IMMUNE)).eachLevel(1.25f));
+      .addModule(ProtectionModule.builder().sources(DamageSourcePredicate.CAN_PROTECT, SourceAttackerPredicate.causing(LivingEntityPredicate.FIRE_IMMUNE)).eachLevel(1.25f));
 
     // traits - tier 2 compat
     buildModifier(ModifierIds.lustrous);
