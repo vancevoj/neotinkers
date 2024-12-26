@@ -17,7 +17,7 @@
           "mantle:can_protect",
           {
             "type": "mantle:tag",
-            "tag": "minecraft:witch_resistant_to"
+            "tag": "tconstruct:protection/magic"
           }
         ]
       },

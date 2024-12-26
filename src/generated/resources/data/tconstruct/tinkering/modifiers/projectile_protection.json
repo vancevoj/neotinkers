@@ -18,7 +18,7 @@
           "mantle:can_protect",
           {
             "type": "mantle:tag",
-            "tag": "minecraft:is_projectile"
+            "tag": "tconstruct:protection/projectile"
           }
         ]
       },

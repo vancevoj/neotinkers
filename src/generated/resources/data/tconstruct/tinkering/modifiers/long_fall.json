@@ -26,7 +26,7 @@
       "type": "tconstruct:block_damage",
       "damage_source": {
         "type": "mantle:tag",
-        "tag": "minecraft:is_fall"
+        "tag": "tconstruct:protection/fall"
       }
     }
   ],

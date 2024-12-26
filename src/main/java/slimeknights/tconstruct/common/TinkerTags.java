@@ -3,6 +3,7 @@ package slimeknights.tconstruct.common;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.biome.Biome;
@@ -19,6 +20,7 @@ import slimeknights.tconstruct.library.tools.stat.ToolStats;
 public class TinkerTags {
   /** Called on mod construct to set up tags */
   public static void init() {
+    // TODO: is this really needed anymore?
     Blocks.init();
     Items.init();
     Fluids.init();
@@ -27,6 +29,7 @@ public class TinkerTags {
     Biomes.init();
     Modifiers.init();
     Materials.init();
+    DamageTypes.init();
   }
 
   public static class Blocks {
@@ -606,6 +609,26 @@ public class TinkerTags {
     @SuppressWarnings("SameParameterValue")  // may want more tags later
     private static TagKey<IMaterial> tag(String name) {
       return MaterialManager.getTag(TConstruct.getResource(name));
+    }
+  }
+
+  public static class DamageTypes {
+    private static void init() {}
+    /** Damage types reduced by the melee protection modifier */
+    public static final TagKey<DamageType> MELEE_PROTECTION = tag("protection/melee");
+    /** Damage types reduced by the projectile protection modifier */
+    public static final TagKey<DamageType> PROJECTILE_PROTECTION = tag("protection/projectile");
+    /** Damage types reduced by the fire protection modifier */
+    public static final TagKey<DamageType> FIRE_PROTECTION = tag("protection/fire");
+    /** Damage types reduced by the blast protection modifier */
+    public static final TagKey<DamageType> BLAST_PROTECTION = tag("protection/blast");
+    /** Damage types reduced by the magic protection modifier */
+    public static final TagKey<DamageType> MAGIC_PROTECTION = tag("protection/magic");
+    /** Damage types reduced by the feather falling modifier */
+    public static final TagKey<DamageType> FALL_PROTECTION = tag("protection/fall");
+
+    private static TagKey<DamageType> tag(String name) {
+      return TagKey.create(Registries.DAMAGE_TYPE, TConstruct.getResource(name));
     }
   }
 }

@@ -74,19 +74,6 @@ public class Config {
       actions.add(new ConfigurableAction(builder, "extendFireProtectionSlots", true,
                                          "If true, extends the applicable slots for the fire protection enchantment to work better with shields. Will not impact gameplay with the vanilla enchantment.\nIf false, fire protection on a shield will not reduce fire tick time.",
                                          () -> Enchantments.FIRE_PROTECTION.slots = EquipmentSlot.values()));
-
-      /* TODO: migrate these to tags if still needed
-      builder.comment("Tweaks to vanilla damage sources to better work with armor").push("damageTweaks");
-      actions.add(new ConfigurableAction(builder, "wither", true, "Makes withering damage count as magic", DamageSource.WITHER::setMagic));
-      actions.add(new ConfigurableAction(builder, "dragon_breath", true, "Makes dragons breath count as magic", DamageSource.DRAGON_BREATH::setMagic));
-      actions.add(new ConfigurableAction(builder, "falling_block", false, "Makes falling blocks count as projectile", () -> {
-        DamageSource.FALLING_BLOCK.setProjectile();
-        DamageSource.ANVIL.setProjectile();
-        DamageSource.FALLING_STALACTITE.setProjectile();
-      }));
-      actions.add(new ConfigurableAction(builder, "lightning", true, "Makes lightning count as fire damage", DamageSource.LIGHTNING_BOLT::setIsFire));
-      builder.pop();
-      */
       toolTweaks = actions.build();
 
       this.repairKitAmount = builder

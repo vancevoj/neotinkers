@@ -5,7 +5,7 @@
       "type": "tconstruct:protection",
       "damage_source": {
         "type": "mantle:tag",
-        "tag": "minecraft:is_fall"
+        "tag": "tconstruct:protection/fall"
       },
       "each_level": 3.75
     }
