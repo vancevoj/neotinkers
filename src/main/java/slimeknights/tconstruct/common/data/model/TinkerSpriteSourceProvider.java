@@ -17,6 +17,8 @@ public class TinkerSpriteSourceProvider extends SpriteSourceProvider {
   @Override
   protected void addSources() {
     atlas(BLOCKS_ATLAS)
+      // We load our fluid textures from here
+      .addSource(directory("fluid"))
       // patterns load from this directory
       .addSource(directory("gui/modifiers"))
       // we typically use this directory for modifier icons that are not items nor blocks
