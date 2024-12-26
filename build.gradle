@@ -101,7 +101,7 @@ sourceSets {
 minecraft {
     mappings channel: 'parchment', version: "${parchment_version}-${minecraft_version}"
 
-    enableIdeaPrepareRuns = true
+    // enableIdeaPrepareRuns = true
     copyIdeResources = true
 
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
