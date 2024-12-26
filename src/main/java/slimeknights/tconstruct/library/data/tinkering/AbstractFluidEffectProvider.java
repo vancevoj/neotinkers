@@ -21,6 +21,7 @@ import slimeknights.mantle.data.predicate.IJsonPredicate;
 import slimeknights.mantle.data.predicate.entity.LivingEntityPredicate;
 import slimeknights.mantle.recipe.ingredient.FluidIngredient;
 import slimeknights.mantle.registration.object.FluidObject;
+import slimeknights.tconstruct.common.TinkerDamageTypes;
 import slimeknights.tconstruct.library.modifiers.fluid.ConditionalFluidEffect;
 import slimeknights.tconstruct.library.modifiers.fluid.FluidEffect;
 import slimeknights.tconstruct.library.modifiers.fluid.FluidEffectContext;
@@ -109,7 +110,7 @@ public abstract class AbstractFluidEffectProvider extends GenericDataProvider {
 
   /** Adds a builder for burning */
   protected Builder burningFluid(String name, TagKey<Fluid> tag, int amount, float damage, int time) {
-    Builder builder = addFluid(name, tag, amount).addEntityEffect(LivingEntityPredicate.FIRE_IMMUNE.inverted(), new DamageFluidEffect(damage, DamageFluidEffect.FIRE));
+    Builder builder = addFluid(name, tag, amount).addEntityEffect(LivingEntityPredicate.FIRE_IMMUNE.inverted(), new DamageFluidEffect(damage, TinkerDamageTypes.FLUID_FIRE));
     if (time > 0) {
       builder.addEntityEffect(new FireFluidEffect(TimeAction.SET, time)).addBlockEffect(new PlaceBlockFluidEffect(Blocks.FIRE));
     }

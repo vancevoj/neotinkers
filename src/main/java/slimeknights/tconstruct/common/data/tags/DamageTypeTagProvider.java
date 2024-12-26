@@ -30,10 +30,13 @@ import static net.minecraft.world.damagesource.DamageTypes.STING;
 import static net.minecraft.world.damagesource.DamageTypes.WITHER;
 import static net.minecraft.world.damagesource.DamageTypes.WITHER_SKULL;
 import static slimeknights.tconstruct.common.TinkerDamageTypes.BLEEDING;
+import static slimeknights.tconstruct.common.TinkerDamageTypes.FLUID_FIRE;
+import static slimeknights.tconstruct.common.TinkerDamageTypes.FLUID_MAGIC;
 import static slimeknights.tconstruct.common.TinkerDamageTypes.PIERCING;
 import static slimeknights.tconstruct.common.TinkerDamageTypes.SELF_DESTRUCT;
 import static slimeknights.tconstruct.common.TinkerDamageTypes.SMELTERY_HEAT;
 import static slimeknights.tconstruct.common.TinkerDamageTypes.SMELTERY_MAGIC;
+import static slimeknights.tconstruct.common.TinkerDamageTypes.WATER;
 import static slimeknights.tconstruct.common.TinkerTags.DamageTypes.BLAST_PROTECTION;
 import static slimeknights.tconstruct.common.TinkerTags.DamageTypes.FALL_PROTECTION;
 import static slimeknights.tconstruct.common.TinkerTags.DamageTypes.FIRE_PROTECTION;
@@ -49,12 +52,14 @@ public class DamageTypeTagProvider extends DamageTypeTagsProvider {
   @SuppressWarnings("unchecked")
   @Override
   protected void addTags(Provider pProvider) {
-    tag(IS_FIRE).add(SMELTERY_HEAT);
+    tag(IS_FIRE).add(SMELTERY_HEAT).add(FLUID_FIRE.values());
     tag(IS_EXPLOSION).add(SELF_DESTRUCT);
-    tag(WITCH_RESISTANT_TO).add(SMELTERY_MAGIC);
-    tag(BYPASSES_ARMOR).add(PIERCING, SELF_DESTRUCT, BLEEDING);
+    tag(WITCH_RESISTANT_TO).add(SMELTERY_MAGIC).add(FLUID_MAGIC.values());
+    tag(BYPASSES_ARMOR).add(PIERCING, SELF_DESTRUCT, BLEEDING).add(WATER.values());
     tag(BYPASSES_ENCHANTMENTS).add(BLEEDING);
     tag(AVOIDS_GUARDIAN_THORNS).add(BLEEDING);
+    // whole reason these are a pair is so we can tag one as projectile
+    tag(IS_PROJECTILE).add(FLUID_FIRE.ranged(), FLUID_MAGIC.ranged(), WATER.ranged());
 
     // protection modifier tags
     tag(MELEE_PROTECTION).addTag(FALL_PROTECTION).add(PLAYER_ATTACK, MOB_ATTACK, MOB_ATTACK_NO_AGGRO, CRAMMING, STING);

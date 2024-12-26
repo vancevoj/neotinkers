@@ -1,5 +1,7 @@
 {
   "values": [
-    "tconstruct:smeltery_magic"
+    "tconstruct:smeltery_magic",
+    "tconstruct:fluid_magic_melee",
+    "tconstruct:fluid_magic_ranged"
   ]
 }

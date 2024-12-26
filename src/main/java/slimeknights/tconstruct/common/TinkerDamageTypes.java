@@ -7,6 +7,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.Entity;
 import slimeknights.tconstruct.TConstruct;
+import slimeknights.tconstruct.library.modifiers.fluid.entity.DamageFluidEffect.DamageTypePair;
 
 import javax.annotation.Nullable;
 
@@ -30,9 +31,25 @@ public class TinkerDamageTypes {
   /** Damage source for a non-projectile with arrow death messages */
   public static final ResourceKey<DamageType> MELEE_ARROW = create("melee_arrow");
 
+  /* Fluid effects */
+  /** Effect for a flaming fluid */
+  public static final DamageTypePair FLUID_FIRE = createPair("fluid_fire");
+  /** Effect for a magic fluid */
+  public static final DamageTypePair FLUID_MAGIC = createPair("fluid_magic");
+  /** Effect for water */
+  public static final DamageTypePair WATER = createPair("water");
+
+
   /** Creates a new damage type tag */
   private static ResourceKey<DamageType> create(String name) {
     return ResourceKey.create(Registries.DAMAGE_TYPE, TConstruct.getResource(name));
+  }
+  /** Creates a new damage type tag */
+  private static DamageTypePair createPair(String name) {
+    return new DamageTypePair(
+      create(name + "_melee"),
+      create(name + "_ranged")
+    );
   }
 
   /** Creates a new damage source using a custom type */

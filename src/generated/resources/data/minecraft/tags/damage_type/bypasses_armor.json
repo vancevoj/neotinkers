@@ -2,6 +2,8 @@
   "values": [
     "tconstruct:piercing",
     "tconstruct:self_destruct",
-    "tconstruct:bleeding"
+    "tconstruct:bleeding",
+    "tconstruct:water_melee",
+    "tconstruct:water_ranged"
   ]
 }
