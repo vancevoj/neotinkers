@@ -25,11 +25,13 @@ public class DummyArmorMaterial implements ArmorMaterial, IdAwareObject {
   /* Required dummy methods */
 
   @Override
+  @Deprecated
   public int getDurabilityForType(Type pType) {
     return 0;
   }
 
   @Override
+  @Deprecated
   public int getDefenseForType(Type pType) {
     return 0;
   }
