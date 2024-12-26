@@ -9,7 +9,6 @@ import net.minecraft.world.phys.Vec3;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.hook.armor.ArmorWalkModifierHook;
-import slimeknights.tconstruct.library.modifiers.modules.ModifierModule;
 import slimeknights.tconstruct.library.module.HookProvider;
 import slimeknights.tconstruct.library.module.ModuleHook;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
@@ -20,7 +19,7 @@ import java.util.List;
  * Implementation of the standard radius walk behavior used by most implementations
  * @param <T>  Context class
  */
-public interface ArmorWalkRadiusModule<T> extends ArmorWalkModifierHook, ModifierModule {
+public interface ArmorWalkRadiusModule<T> extends ArmorWalkModifierHook, HookProvider {
   List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<ArmorWalkRadiusModule<?>>defaultHooks(ModifierHooks.BOOT_WALK);
 
   @Override
