@@ -5,7 +5,7 @@
     "can_double_height": true,
     "has_vines": true,
     "leaves_provider": {
-      "type": "tconstruct:supplier_state_provider",
+      "type": "minecraft:simple_state_provider",
       "state": {
         "Name": "tconstruct:sky_slime_leaves",
         "Properties": {
@@ -18,7 +18,7 @@
     "planted": false,
     "random_height": 4,
     "trunk_provider": {
-      "type": "tconstruct:supplier_state_provider",
+      "type": "minecraft:simple_state_provider",
       "state": {
         "Name": "tconstruct:skyroot_log",
         "Properties": {
@@ -27,7 +27,7 @@
       }
     },
     "vines_provider": {
-      "type": "tconstruct:supplier_state_provider",
+      "type": "minecraft:simple_state_provider",
       "state": {
         "Name": "tconstruct:sky_slime_vine",
         "Properties": {

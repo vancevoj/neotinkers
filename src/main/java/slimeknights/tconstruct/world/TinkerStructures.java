@@ -7,7 +7,6 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.rootplacers.RootPlacerType;
-import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProviderType;
 import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecoratorType;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
@@ -30,7 +29,6 @@ import slimeknights.tconstruct.world.worldgen.islands.IslandPiece;
 import slimeknights.tconstruct.world.worldgen.islands.IslandStructure;
 import slimeknights.tconstruct.world.worldgen.trees.ExtraRootVariantPlacer;
 import slimeknights.tconstruct.world.worldgen.trees.LeaveVineDecorator;
-import slimeknights.tconstruct.world.worldgen.trees.SupplierBlockStateProvider;
 import slimeknights.tconstruct.world.worldgen.trees.config.SlimeFungusConfig;
 import slimeknights.tconstruct.world.worldgen.trees.config.SlimeTreeConfig;
 import slimeknights.tconstruct.world.worldgen.trees.feature.SlimeFungusFeature;
@@ -45,7 +43,6 @@ public final class TinkerStructures extends TinkerModule {
   private static final DeferredRegister<Feature<?>> FEATURES = DeferredRegister.create(ForgeRegistries.FEATURES, TConstruct.MOD_ID);
   private static final DeferredRegister<StructureType<?>> STRUCTURE_TYPE = DeferredRegister.create(Registries.STRUCTURE_TYPE, TConstruct.MOD_ID);
   private static final DeferredRegister<StructurePieceType> STRUCTURE_PIECE = DeferredRegister.create(Registries.STRUCTURE_PIECE, TConstruct.MOD_ID);
-  private static final DeferredRegister<BlockStateProviderType<?>> BLOCK_STATE_PROVIDER_TYPES = DeferredRegister.create(ForgeRegistries.BLOCK_STATE_PROVIDER_TYPES, TConstruct.MOD_ID);
   private static final DeferredRegister<TreeDecoratorType<?>> TREE_DECORATORS = DeferredRegister.create(Registries.TREE_DECORATOR_TYPE, TConstruct.MOD_ID);
   private static final DeferredRegister<RootPlacerType<?>> ROOT_PLACERS = DeferredRegister.create(Registries.ROOT_PLACER_TYPE, TConstruct.MOD_ID);
 
@@ -55,7 +52,6 @@ public final class TinkerStructures extends TinkerModule {
     FEATURES.register(bus);
     STRUCTURE_TYPE.register(bus);
     STRUCTURE_PIECE.register(bus);
-    BLOCK_STATE_PROVIDER_TYPES.register(bus);
     TREE_DECORATORS.register(bus);
     ROOT_PLACERS.register(bus);
   }
@@ -64,7 +60,6 @@ public final class TinkerStructures extends TinkerModule {
   /*
    * Misc
    */
-  public static final RegistryObject<BlockStateProviderType<SupplierBlockStateProvider>> supplierBlockstateProvider = BLOCK_STATE_PROVIDER_TYPES.register("supplier_state_provider", () -> new BlockStateProviderType<>(SupplierBlockStateProvider.CODEC));
   public static final RegistryObject<TreeDecoratorType<LeaveVineDecorator>> leaveVineDecorator = TREE_DECORATORS.register("leave_vines", () -> new TreeDecoratorType<>(LeaveVineDecorator.CODEC));
   public static final RegistryObject<RootPlacerType<ExtraRootVariantPlacer>> extraRootVariantPlacer = ROOT_PLACERS.register("extra_root_variants", () -> new RootPlacerType<>(ExtraRootVariantPlacer.CODEC));
 

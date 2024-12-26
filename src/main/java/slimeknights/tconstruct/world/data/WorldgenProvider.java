@@ -82,7 +82,6 @@ import slimeknights.tconstruct.world.block.SlimeVineBlock.VineStage;
 import slimeknights.tconstruct.world.worldgen.islands.IslandStructure;
 import slimeknights.tconstruct.world.worldgen.trees.ExtraRootVariantPlacer;
 import slimeknights.tconstruct.world.worldgen.trees.LeaveVineDecorator;
-import slimeknights.tconstruct.world.worldgen.trees.SupplierBlockStateProvider;
 import slimeknights.tconstruct.world.worldgen.trees.config.SlimeFungusConfig;
 import slimeknights.tconstruct.world.worldgen.trees.config.SlimeTreeConfig;
 
@@ -157,29 +156,29 @@ public class WorldgenProvider {
     register(context, earthSlimeTree, slimeTree,
              new SlimeTreeConfig.Builder()
                .planted()
-               .trunk(() -> TinkerWorld.greenheart.getLog().defaultBlockState())
-               .leaves(() -> TinkerWorld.slimeLeaves.get(FoliageType.EARTH).defaultBlockState())
+               .trunk(TinkerWorld.greenheart.getLog())
+               .leaves(TinkerWorld.slimeLeaves.get(FoliageType.EARTH))
                .baseHeight(4).randomHeight(3)
                .build());
     register(context, skySlimeTree, slimeTree,
              new SlimeTreeConfig.Builder()
                .planted().canDoubleHeight()
-               .trunk(() -> TinkerWorld.skyroot.getLog().defaultBlockState())
-               .leaves(() -> TinkerWorld.slimeLeaves.get(FoliageType.SKY).defaultBlockState())
+               .trunk(TinkerWorld.skyroot.getLog())
+               .leaves(TinkerWorld.slimeLeaves.get(FoliageType.SKY))
                .build());
     // island trees
     register(context, earthSlimeIslandTree, slimeTree,
              new SlimeTreeConfig.Builder()
-               .trunk(() -> TinkerWorld.greenheart.getLog().defaultBlockState())
-               .leaves(() -> TinkerWorld.slimeLeaves.get(FoliageType.EARTH).defaultBlockState())
+               .trunk(TinkerWorld.greenheart.getLog())
+               .leaves(TinkerWorld.slimeLeaves.get(FoliageType.EARTH))
                .baseHeight(4).randomHeight(3)
                .build());
     register(context, skySlimeIslandTree, slimeTree,
              new SlimeTreeConfig.Builder()
                .canDoubleHeight()
-               .trunk(() -> TinkerWorld.skyroot.getLog().defaultBlockState())
-               .leaves(() -> TinkerWorld.slimeLeaves.get(FoliageType.SKY).defaultBlockState())
-               .vines(() -> TinkerWorld.skySlimeVine.get().defaultBlockState().setValue(SlimeVineBlock.STAGE, VineStage.MIDDLE))
+               .trunk(TinkerWorld.skyroot.getLog())
+               .leaves(TinkerWorld.slimeLeaves.get(FoliageType.SKY))
+               .vines(TinkerWorld.skySlimeVine.get().defaultBlockState().setValue(SlimeVineBlock.STAGE, VineStage.MIDDLE))
                .build());
 
     // mangrove style
@@ -392,7 +391,7 @@ public class WorldgenProvider {
     register(context, key, Feature.GEODE, new GeodeConfiguration(
       new GeodeBlockSettings(BlockStateProvider.simple(Blocks.AIR),
                              BlockStateProvider.simple(geode.getBlock()),
-                             SupplierBlockStateProvider.ofBlock(geode::getBudding),
+                             BlockStateProvider.simple(geode.getBudding()),
                              middleLayer, outerLayer,
                              Arrays.stream(BudSize.values()).map(type -> geode.getBud(type).defaultBlockState()).toList(),
                              BlockTags.FEATURES_CANNOT_REPLACE, BlockTags.GEODE_INVALID_BLOCKS),
