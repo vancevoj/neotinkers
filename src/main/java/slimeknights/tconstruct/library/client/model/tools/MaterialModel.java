@@ -32,7 +32,6 @@ import slimeknights.tconstruct.common.config.Config;
 import slimeknights.tconstruct.library.client.materials.MaterialRenderInfo;
 import slimeknights.tconstruct.library.client.materials.MaterialRenderInfo.TintedSprite;
 import slimeknights.tconstruct.library.client.materials.MaterialRenderInfoLoader;
-import slimeknights.tconstruct.library.client.model.DynamicTextureLoader;
 import slimeknights.tconstruct.library.materials.definition.IMaterial;
 import slimeknights.tconstruct.library.materials.definition.MaterialVariantId;
 import slimeknights.tconstruct.library.tools.part.IMaterialItem;
@@ -61,7 +60,7 @@ public class MaterialModel implements IUnbakedGeometry<MaterialModel> {
   private final Vec2 offset;
 
   /**
-   * Checks that all unique material textures for the given part exist, logs any that are missing.
+   * Checks that all unique material textures for the given part exist, logs any that are missing via the sprite getter function.
    * @param owner        Model owner
    * @param textureName  Texture name to add
    * @param material     List of materials
@@ -70,14 +69,12 @@ public class MaterialModel implements IUnbakedGeometry<MaterialModel> {
     Material texture = owner.getMaterial(textureName);
 
     // if the texture is missing, stop here with a warning for the root
-    if (MissingTextureAtlasSprite.getLocation().equals(texture.texture())) {
-      DynamicTextureLoader.logMissingTexture(texture.texture());
-    } else {
+    if (!MissingTextureAtlasSprite.getLocation().equals(texture.texture())) {
       // if no specific material is set, load all materials as dependencies. If just one material, use just that one
       if (material == null) {
-        MaterialRenderInfoLoader.INSTANCE.getAllRenderInfos().forEach(info -> info.getSprite(texture, spriteGetter, true));
+        MaterialRenderInfoLoader.INSTANCE.getAllRenderInfos().forEach(info -> info.getSprite(texture, spriteGetter));
       } else {
-        MaterialRenderInfoLoader.INSTANCE.getRenderInfo(material).ifPresent(info -> info.getSprite(texture, spriteGetter, true));
+        MaterialRenderInfoLoader.INSTANCE.getRenderInfo(material).ifPresent(info -> info.getSprite(texture, spriteGetter));
       }
     }
   }

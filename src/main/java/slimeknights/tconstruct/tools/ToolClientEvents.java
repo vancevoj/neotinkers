@@ -94,7 +94,7 @@ public class ToolClientEvents extends ClientEventBase {
   static void addResourceListener(RegisterClientReloadListenersEvent manager) {
     ModifierModelManager.init(manager);
     MaterialTooltipCache.init(manager);
-    DynamicTextureLoader.init();
+    DynamicTextureLoader.init(manager);
     manager.registerReloadListener(MODIFIER_RELOAD_LISTENER);
     manager.registerReloadListener(SlimeskullArmorModel.RELOAD_LISTENER);
     manager.registerReloadListener(HarvestTiers.RELOAD_LISTENER);

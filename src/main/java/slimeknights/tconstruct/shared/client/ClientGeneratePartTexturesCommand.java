@@ -30,7 +30,6 @@ import slimeknights.tconstruct.library.client.data.util.ResourceManagerSpriteRea
 import slimeknights.tconstruct.library.client.materials.MaterialRenderInfoJson;
 import slimeknights.tconstruct.library.client.materials.MaterialRenderInfoJson.MaterialGeneratorJson;
 import slimeknights.tconstruct.library.client.materials.MaterialRenderInfoLoader;
-import slimeknights.tconstruct.library.client.model.DynamicTextureLoader;
 import slimeknights.tconstruct.library.materials.definition.MaterialVariantId;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
 import slimeknights.tconstruct.shared.network.GeneratePartTexturesPacket.Operation;
@@ -142,7 +141,6 @@ public class ClientGeneratePartTexturesCommand {
       }
     }
     spriteReader.closeAll();
-    DynamicTextureLoader.clearCache();
 
     // success message
     long deltaTime = System.nanoTime() - time;
