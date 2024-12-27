@@ -110,7 +110,10 @@ public class ArmorMaterialContent extends AbstractMaterialContent {
       }
     }
     // gotta have something, so just fallback to shield
-    if (!ToolBuildHandler.addSubItem(TinkerTools.plateShield.get(), stacks, MaterialVariant.of(variant))) {
+    ItemStack tool = ToolBuildHandler.createSingleMaterial(TinkerTools.plateShield.get(), MaterialVariant.of(variant));
+    if (!tool.isEmpty()) {
+      stacks.add(tool);
+    } else {
       stacks.add(TinkerTools.plateShield.get().getRenderTool());
     }
   }

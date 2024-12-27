@@ -4,6 +4,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -65,13 +66,13 @@ public class CreativeSlotItem extends Item {
   }
 
   /** Adds all variants of this slot item to the creative tab */
-  public void addVariants(List<ItemStack> items) {
+  public void addVariants(CreativeModeTab.Output items) {
     Collection<SlotType> allTypes = SlotType.getAllSlotTypes();
     if (allTypes.isEmpty()) {
-      items.add(new ItemStack(this));
+      items.accept(new ItemStack(this));
     } else {
       for (SlotType type : allTypes) {
-        items.add(withSlot(new ItemStack(this), type));
+        items.accept(withSlot(new ItemStack(this), type));
       }
     }
   }

@@ -2818,11 +2818,12 @@
   "_comment": "GUIs",
 
   "itemGroup.tconstruct.general": "Tinkers' General Items",
+  "itemGroup.tconstruct.tables": "Tinkers' Tables",
   "itemGroup.tconstruct.tools": "Tinkers' Tools",
-  "itemGroup.tconstruct.tool_parts": "Tinkers' Toolparts",
+  "itemGroup.tconstruct.tool_parts": "Tinkers' Tool Parts",
   "itemGroup.tconstruct.smeltery": "Tinkers' Smeltery",
+  "itemGroup.tconstruct.fluids": "Tinkers' Fluids",
   "itemGroup.tconstruct.world": "Tinkers' World",
-  "itemGroup.tconstruct.gadgets": "Tinkers' Gadgets",
 
   "gui.tconstruct.crafting_station": "Crafting Station",
   "gui.tconstruct.crafting_station.uncraftable": "This item is not currently craftable by the player",

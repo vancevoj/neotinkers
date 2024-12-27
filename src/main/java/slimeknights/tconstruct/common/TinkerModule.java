@@ -1,15 +1,21 @@
 package slimeknights.tconstruct.common;
 
 import com.mojang.serialization.Codec;
+import net.minecraft.core.HolderSet.Named;
 import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleType;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.syncher.EntityDataSerializer;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.CreativeModeTab.TabVisibility;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
@@ -31,12 +37,15 @@ import slimeknights.mantle.registration.deferred.EntityTypeDeferredRegister;
 import slimeknights.mantle.registration.deferred.FluidDeferredRegister;
 import slimeknights.mantle.registration.deferred.MenuTypeDeferredRegister;
 import slimeknights.mantle.registration.deferred.SynchronizedDeferredRegister;
+import slimeknights.mantle.registration.object.BuildingBlockObject;
+import slimeknights.mantle.registration.object.EnumObject;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.registration.BlockDeferredRegisterExtension;
 import slimeknights.tconstruct.common.registration.EnumDeferredRegister;
 import slimeknights.tconstruct.common.registration.ItemDeferredRegisterExtension;
 import slimeknights.tconstruct.library.recipe.TinkerRecipeTypes;
 
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -56,6 +65,7 @@ public abstract class TinkerModule {
   protected static final EnumDeferredRegister<MobEffect> MOB_EFFECTS = new EnumDeferredRegister<>(Registries.MOB_EFFECT, TConstruct.MOD_ID);
   protected static final SynchronizedDeferredRegister<ParticleType<?>> PARTICLE_TYPES = SynchronizedDeferredRegister.create(ForgeRegistries.PARTICLE_TYPES, TConstruct.MOD_ID);
   protected static final SynchronizedDeferredRegister<EntityDataSerializer<?>> DATA_SERIALIZERS = SynchronizedDeferredRegister.create(Keys.ENTITY_DATA_SERIALIZERS, TConstruct.MOD_ID);
+  protected static final SynchronizedDeferredRegister<CreativeModeTab> CREATIVE_TABS = SynchronizedDeferredRegister.create(Registries.CREATIVE_MODE_TAB, TConstruct.MOD_ID);
   // gameplay instances
   protected static final BlockEntityTypeDeferredRegister BLOCK_ENTITIES = new BlockEntityTypeDeferredRegister(TConstruct.MOD_ID);
   protected static final EntityTypeDeferredRegister ENTITIES = new EntityTypeDeferredRegister(TConstruct.MOD_ID);
@@ -66,9 +76,6 @@ public abstract class TinkerModule {
   protected static final SynchronizedDeferredRegister<LootItemConditionType> LOOT_CONDITIONS = SynchronizedDeferredRegister.create(Registries.LOOT_CONDITION_TYPE, TConstruct.MOD_ID);
   protected static final SynchronizedDeferredRegister<LootItemFunctionType> LOOT_FUNCTIONS = SynchronizedDeferredRegister.create(Registries.LOOT_FUNCTION_TYPE, TConstruct.MOD_ID);
   protected static final SynchronizedDeferredRegister<LootPoolEntryType> LOOT_ENTRIES = SynchronizedDeferredRegister.create(Registries.LOOT_POOL_ENTRY_TYPE, TConstruct.MOD_ID);
-
-  /* Creative tab for items that do not fit in another tab, TODO: migrate to new system */
-  //public static final CreativeModeTab TAB_GENERAL = new SupplierCreativeTab(TConstruct.MOD_ID, "general", () -> new ItemStack(TinkerCommons.slimeball.get(SlimeType.SKY)));
 
   // base item properties
   protected static final Item.Properties ITEM_PROPS = new Item.Properties();
@@ -88,6 +95,7 @@ public abstract class TinkerModule {
     MOB_EFFECTS.register(bus);
     PARTICLE_TYPES.register(bus);
     DATA_SERIALIZERS.register(bus);
+    CREATIVE_TABS.register(bus);
     // gameplay instance
     BLOCK_ENTITIES.register(bus);
     ENTITIES.register(bus);
@@ -137,5 +145,43 @@ public abstract class TinkerModule {
   /** Creates a new resource key for tinkers */
   protected static <T> ResourceKey<T> key(ResourceKey<? extends Registry<T>> registry, String name) {
     return ResourceKey.create(registry, TConstruct.getResource(name));
+  }
+
+
+  /* Creative tab helpers */
+
+  /** Adds an enum object to the given tab */
+  protected static void accept(CreativeModeTab.Output output, EnumObject<?,? extends ItemLike> items, TabVisibility visibility) {
+    items.forEach(item -> output.accept(item, visibility));
+  }
+
+  /** Adds an enum object to the given tab with default visbility */
+  protected static void accept(CreativeModeTab.Output output, EnumObject<?,? extends ItemLike> items) {
+    accept(output, items, TabVisibility.PARENT_AND_SEARCH_TABS);
+  }
+
+  /** Adds an building block object to the given tab with default visbility */
+  protected static void accept(CreativeModeTab.Output output, BuildingBlockObject object, TabVisibility visibility) {
+    object.forEach(item -> output.accept(item, visibility));
+  }
+
+  /** Adds an building block object to the given tab with default visbility */
+  protected static void accept(CreativeModeTab.Output output, BuildingBlockObject object) {
+    accept(output, object, TabVisibility.PARENT_AND_SEARCH_TABS);
+  }
+
+  /** Accepts the given item if the passed tag has items */
+  protected static boolean acceptIfTag(CreativeModeTab.Output output, ItemLike item, TabVisibility visibility, TagKey<Item> tagCondition) {
+    Optional<Named<Item>> tag = BuiltInRegistries.ITEM.getTag(tagCondition);
+    if (tag.isPresent() && tag.get().size() > 0) {
+      output.accept(item, visibility);
+      return true;
+    }
+    return false;
+  }
+
+  /** Accepts the given item if the passed tag has items */
+  protected static boolean acceptIfTag(CreativeModeTab.Output output, ItemLike item, TagKey<Item> tagCondition) {
+    return acceptIfTag(output, item, TabVisibility.PARENT_AND_SEARCH_TABS, tagCondition);
   }
 }

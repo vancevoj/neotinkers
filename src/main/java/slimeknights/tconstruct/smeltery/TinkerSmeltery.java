@@ -3,10 +3,18 @@ package slimeknights.tconstruct.smeltery;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.CreativeModeTab.ItemDisplayParameters;
+import net.minecraft.world.item.CreativeModeTab.Output;
+import net.minecraft.world.item.CreativeModeTab.TabVisibility;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DispenserBlock;
@@ -14,6 +22,7 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraftforge.data.event.GatherDataEvent;
@@ -21,7 +30,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.registries.RegisterEvent;
 import net.minecraftforge.registries.RegistryObject;
-import org.apache.logging.log4j.Logger;
 import slimeknights.mantle.fluid.transfer.FluidContainerTransferManager;
 import slimeknights.mantle.recipe.helper.LoadableRecipeSerializer;
 import slimeknights.mantle.recipe.helper.TypeAwareRecipeSerializer;
@@ -30,8 +38,13 @@ import slimeknights.mantle.registration.object.EnumObject;
 import slimeknights.mantle.registration.object.FenceBuildingBlockObject;
 import slimeknights.mantle.registration.object.ItemObject;
 import slimeknights.mantle.registration.object.WallBuildingBlockObject;
+import slimeknights.mantle.util.RetexturedHelper;
+import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.TinkerModule;
+import slimeknights.tconstruct.common.TinkerTags;
+import slimeknights.tconstruct.common.config.Config;
 import slimeknights.tconstruct.common.registration.CastItemObject;
+import slimeknights.tconstruct.fluids.TinkerFluids;
 import slimeknights.tconstruct.fluids.item.EmptyPotionTransfer;
 import slimeknights.tconstruct.library.recipe.FluidValues;
 import slimeknights.tconstruct.library.recipe.TinkerRecipeTypes;
@@ -52,7 +65,7 @@ import slimeknights.tconstruct.library.recipe.melting.MeltingRecipe;
 import slimeknights.tconstruct.library.recipe.melting.OreMeltingRecipe;
 import slimeknights.tconstruct.library.recipe.molding.MoldingRecipe;
 import slimeknights.tconstruct.library.tools.part.PartCastItem;
-import slimeknights.tconstruct.library.utils.Util;
+import slimeknights.tconstruct.shared.TinkerCommons;
 import slimeknights.tconstruct.shared.block.ClearGlassPaneBlock;
 import slimeknights.tconstruct.shared.block.PlaceBlockDispenserBehavior;
 import slimeknights.tconstruct.shared.block.SoulGlassPaneBlock;
@@ -114,9 +127,13 @@ import java.util.function.Supplier;
  */
 @SuppressWarnings("unused")
 public final class TinkerSmeltery extends TinkerModule {
-  /* Tab for all blocks related to the smeltery, TODO: migrate to new tab system */
-  //public static final CreativeModeTab TAB_SMELTERY = new SupplierCreativeTab(TConstruct.MOD_ID, "smeltery", () -> new ItemStack(TinkerSmeltery.smelteryController));
-  public static final Logger log = Util.getLogger("tinker_smeltery");
+  /** Creative tab for smeltery, all contents related to the multiblocks */
+  public static final RegistryObject<CreativeModeTab> tabSmeltery = CREATIVE_TABS.register(
+    "smeltery", () -> CreativeModeTab.builder().title(TConstruct.makeTranslation("itemGroup", "smeltery"))
+                                     .icon(() -> new ItemStack(TinkerSmeltery.smelteryController))
+                                     .displayItems(TinkerSmeltery::addTabItems)
+                                     .withTabsBefore(TinkerToolParts.tabToolParts.getId())
+                                     .build());
 
   /* Bricks */
   /* Crafting related items */
@@ -391,5 +408,150 @@ public final class TinkerSmeltery extends TinkerModule {
     PackOutput packOutput = generator.getPackOutput();
     generator.addProvider(server, new SmelteryRecipeProvider(packOutput));
     generator.addProvider(server, new FluidContainerTransferProvider(packOutput));
+  }
+
+  /** Adds all relevant items to the creative tab */
+  private static void addTabItems(ItemDisplayParameters itemDisplayParameters, Output output) {
+    // crafting materials
+    output.accept(grout);
+    output.accept(searedBrick);
+    output.accept(netherGrout);
+    output.accept(scorchedBrick);
+    output.accept(copperCan);
+
+    // controllers
+    output.accept(searedMelter);
+    output.accept(searedHeater);
+    output.accept(scorchedAlloyer);
+    output.accept(smelteryController);
+    output.accept(foundryController);
+
+    // IO blocks
+    output.accept(searedDrain);
+    output.accept(searedDuct);
+    output.accept(searedChute);
+    output.accept(scorchedDrain);
+    output.accept(scorchedDuct);
+    output.accept(scorchedChute);
+
+    // tanks
+    accept(output, searedTank);
+    // toss in some pre filled fuel tanks
+    output.accept(TinkerFluids.fillTank(searedTank, TankType.FUEL_TANK, Fluids.LAVA));
+    output.accept(TinkerFluids.fillTank(searedTank, TankType.FUEL_TANK, TinkerFluids.blazingBlood.get()));
+    output.accept(searedLantern);
+    accept(output, scorchedTank);
+    output.accept(TinkerFluids.fillTank(scorchedTank, TankType.FUEL_TANK, Fluids.LAVA));
+    output.accept(TinkerFluids.fillTank(scorchedTank, TankType.FUEL_TANK, TinkerFluids.blazingBlood.get()));
+    output.accept(scorchedLantern);
+
+    // fluid transfer
+    output.accept(searedFaucet);
+    output.accept(scorchedFaucet);
+    output.accept(searedChannel);
+    output.accept(scorchedChannel);
+    // casting
+    output.accept(searedTable);
+    output.accept(scorchedTable);
+    output.accept(TinkerCommons.goldBars, TabVisibility.PARENT_TAB_ONLY);
+    output.accept(searedBasin);
+    output.accept(scorchedBasin);
+    output.accept(TinkerCommons.goldPlatform, TabVisibility.PARENT_TAB_ONLY);
+
+    // seared blocks
+    accept(output, searedBricks);
+    accept(output, searedStone);
+    output.accept(searedCrackedBricks);
+    output.accept(searedFancyBricks);
+    output.accept(searedTriangleBricks);
+    accept(output, searedCobble);
+    accept(output, searedPaver);
+    output.accept(searedLadder);
+    output.accept(searedGlass);
+    output.accept(searedTintedGlass);
+    output.accept(searedSoulGlass);
+    output.accept(searedGlassPane);
+    output.accept(searedSoulGlassPane);
+
+    // scorched blocks
+    accept(output, scorchedBricks);
+    output.accept(chiseledScorchedBricks);
+    output.accept(scorchedStone);
+    output.accept(polishedScorchedStone);
+    accept(output, scorchedRoad);
+    output.accept(scorchedLadder);
+    output.accept(scorchedGlass);
+    output.accept(scorchedTintedGlass);
+    output.accept(scorchedSoulGlass);
+    output.accept(scorchedGlassPane);
+    output.accept(scorchedSoulGlassPane);
+
+    // casts
+    addCasts(output, CastItemObject::get);
+    output.accept(blankSandCast);
+    addCasts(output, CastItemObject::getSand);
+    output.accept(blankRedSandCast);
+    addCasts(output, CastItemObject::getRedSand);
+    // dummy parts are in tool parts creative tab
+
+    // additional texture variants of controllers, drains, and ducts
+    TabVisibility variantVisibility = Config.COMMON.showAllSmelteryVariants.get() ? TabVisibility.PARENT_AND_SEARCH_TABS : TabVisibility.PARENT_TAB_ONLY;
+    RetexturedHelper.addTagVariants(output, smelteryController, TinkerTags.Items.SEARED_BLOCKS, variantVisibility, variantVisibility);
+    RetexturedHelper.addTagVariants(output, searedDrain, TinkerTags.Items.SEARED_BLOCKS, variantVisibility, variantVisibility);
+    RetexturedHelper.addTagVariants(output, searedDuct, TinkerTags.Items.SEARED_BLOCKS, variantVisibility, variantVisibility);
+    RetexturedHelper.addTagVariants(output, searedChute, TinkerTags.Items.SEARED_BLOCKS, variantVisibility, variantVisibility);
+    RetexturedHelper.addTagVariants(output, foundryController, TinkerTags.Items.SCORCHED_BLOCKS, variantVisibility, variantVisibility);
+    RetexturedHelper.addTagVariants(output, scorchedDrain, TinkerTags.Items.SCORCHED_BLOCKS, variantVisibility, variantVisibility);
+    RetexturedHelper.addTagVariants(output, scorchedDuct, TinkerTags.Items.SCORCHED_BLOCKS, variantVisibility, variantVisibility);
+    RetexturedHelper.addTagVariants(output, scorchedChute, TinkerTags.Items.SCORCHED_BLOCKS, variantVisibility, variantVisibility);
+  }
+
+  /** Adds adds all casts of the given type to the tab */
+  private static void addCasts(CreativeModeTab.Output output, Function<CastItemObject,ItemLike> getter) {
+    // common casts
+    accept(output, getter, ingotCast);
+    accept(output, getter, nuggetCast);
+    accept(output, getter, gemCast);
+    accept(output, getter, rodCast);
+    accept(output, getter, repairKitCast);
+    // compat casts
+    acceptIfTag(output, getter, plateCast);
+    acceptIfTag(output, getter, gearCast);
+    acceptIfTag(output, getter, coinCast);
+    acceptIfTag(output, getter, wireCast);
+    // small heads
+    accept(output, getter, pickHeadCast);
+    accept(output, getter, smallAxeHeadCast);
+    accept(output, getter, smallBladeCast);
+    accept(output, getter, roundPlateCast);
+    // large heads
+    accept(output, getter, hammerHeadCast);
+    accept(output, getter, broadAxeHeadCast);
+    accept(output, getter, broadBladeCast);
+    accept(output, getter, largePlateCast);
+    // binding and rods
+    accept(output, getter, toolHandleCast);
+    accept(output, getter, toolBindingCast);
+    accept(output, getter, toughHandleCast);
+    // ranged
+    accept(output, getter, bowLimbCast);
+    accept(output, getter, bowGripCast);
+    // no binding cast
+    // armor
+    accept(output, getter, helmetPlatingCast);
+    accept(output, getter, chestplatePlatingCast);
+    accept(output, getter, leggingsPlatingCast);
+    accept(output, getter, bootsPlatingCast);
+    accept(output, getter, mailleCast);
+  }
+
+  /** Adds a cast to the tab */
+  private static void accept(CreativeModeTab.Output output, Function<CastItemObject,ItemLike> getter, CastItemObject cast) {
+    output.accept(getter.apply(cast));
+  }
+
+  /** Adds a cast to the tab */
+  private static void acceptIfTag(CreativeModeTab.Output output, Function<CastItemObject,ItemLike> getter, CastItemObject cast) {
+    acceptIfTag(output, getter.apply(cast), TagKey.create(Registries.ITEM, new ResourceLocation("forge", cast.getName().getPath() + "s")));
   }
 }

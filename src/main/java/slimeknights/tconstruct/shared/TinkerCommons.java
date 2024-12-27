@@ -5,8 +5,11 @@ import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.CreativeModeTab.ItemDisplayParameters;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Item.Properties;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -29,7 +32,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.registries.RegisterEvent;
 import net.minecraftforge.registries.RegistryObject;
-import org.apache.logging.log4j.Logger;
 import slimeknights.mantle.data.predicate.block.BlockPredicate;
 import slimeknights.mantle.data.predicate.damage.DamageSourcePredicate;
 import slimeknights.mantle.data.predicate.entity.LivingEntityPredicate;
@@ -37,6 +39,7 @@ import slimeknights.mantle.data.predicate.item.ItemPredicate;
 import slimeknights.mantle.item.EdibleItem;
 import slimeknights.mantle.registration.object.EnumObject;
 import slimeknights.mantle.registration.object.ItemObject;
+import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.TinkerModule;
 import slimeknights.tconstruct.common.data.model.ModelSpriteProvider;
 import slimeknights.tconstruct.common.data.model.TinkerBlockStateProvider;
@@ -45,6 +48,7 @@ import slimeknights.tconstruct.common.data.model.TinkerSpriteSourceProvider;
 import slimeknights.tconstruct.common.json.BlockOrEntityCondition;
 import slimeknights.tconstruct.common.json.ConfigEnabledCondition;
 import slimeknights.tconstruct.common.recipe.RecipeCacheInvalidator;
+import slimeknights.tconstruct.gadgets.TinkerGadgets;
 import slimeknights.tconstruct.library.json.condition.TagDifferencePresentCondition;
 import slimeknights.tconstruct.library.json.condition.TagIntersectionPresentCondition;
 import slimeknights.tconstruct.library.json.condition.TagNotEmptyCondition;
@@ -53,7 +57,6 @@ import slimeknights.tconstruct.library.json.predicate.TinkerPredicate;
 import slimeknights.tconstruct.library.recipe.ingredient.BlockTagIngredient;
 import slimeknights.tconstruct.library.recipe.ingredient.NoContainerIngredient;
 import slimeknights.tconstruct.library.utils.SlimeBounceHandler;
-import slimeknights.tconstruct.library.utils.Util;
 import slimeknights.tconstruct.shared.block.BetterPaneBlock;
 import slimeknights.tconstruct.shared.block.ClearGlassPaneBlock;
 import slimeknights.tconstruct.shared.block.ClearStainedGlassBlock;
@@ -74,6 +77,7 @@ import slimeknights.tconstruct.shared.item.CheeseItem;
 import slimeknights.tconstruct.shared.item.TinkerBookItem;
 import slimeknights.tconstruct.shared.item.TinkerBookItem.BookType;
 import slimeknights.tconstruct.shared.particle.FluidParticleData;
+import slimeknights.tconstruct.tools.TinkerModifiers;
 
 import static slimeknights.tconstruct.TConstruct.getResource;
 
@@ -82,7 +86,12 @@ import static slimeknights.tconstruct.TConstruct.getResource;
  */
 @SuppressWarnings("unused")
 public final class TinkerCommons extends TinkerModule {
-  static final Logger log = Util.getLogger("tinker_commons");
+  /** Creative tab for general items, or those that lack another tab */
+  public static final RegistryObject<CreativeModeTab> tabGeneral = CREATIVE_TABS.register(
+    "general", () -> CreativeModeTab.builder().title(TConstruct.makeTranslation("itemGroup", "general"))
+                                    .icon(() -> new ItemStack(TinkerCommons.materialsAndYou))
+                                    .displayItems(TinkerCommons::addTabItems)
+                                    .build());
 
   /*
    * Blocks
@@ -189,5 +198,46 @@ public final class TinkerCommons extends TinkerModule {
     generator.addProvider(client, new TinkerItemModelProvider(output, existingFileHelper));
     generator.addProvider(client, new TinkerBlockStateProvider(output, existingFileHelper));
     generator.addProvider(event.includeServer(), new CommonRecipeProvider(output));
+  }
+
+  /** Adds all relevant items to the creative tab */
+  private static void addTabItems(ItemDisplayParameters itemDisplayParameters, CreativeModeTab.Output output) {
+    // books
+    output.accept(materialsAndYou);
+    output.accept(punySmelting);
+    output.accept(mightySmelting);
+    output.accept(tinkersGadgetry);
+    output.accept(fantasticFoundry);
+    output.accept(encyclopedia);
+
+    // food
+    output.accept(bacon);
+    output.accept(jeweledApple);
+    output.accept(cheeseIngot);
+    output.accept(cheeseBlock);
+
+    // glass
+    output.accept(clearGlass);
+    accept(output, clearStainedGlass);
+    output.accept(clearTintedGlass);
+    output.accept(soulGlass);
+    output.accept(clearGlassPane);
+    accept(output, clearStainedGlassPane);
+    output.accept(soulGlassPane);
+    // bars
+    output.accept(goldBars);
+    output.accept(obsidianPane);
+    // platforms
+    accept(output, copperPlatform);
+    accept(output, waxedCopperPlatform);
+    output.accept(ironPlatform);
+    output.accept(goldPlatform);
+    output.accept(cobaltPlatform);
+
+    // slimeballs are in world
+
+    TinkerGadgets.addTabItems(itemDisplayParameters, output);
+    TinkerMaterials.addTabItems(itemDisplayParameters, output);
+    TinkerModifiers.addTabItems(itemDisplayParameters, output);
   }
 }

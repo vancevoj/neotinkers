@@ -1,10 +1,21 @@
 package slimeknights.tconstruct.tools;
 
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.CreativeModeTab.ItemDisplayParameters;
+import net.minecraftforge.registries.RegistryObject;
 import slimeknights.mantle.registration.object.EnumObject;
 import slimeknights.mantle.registration.object.ItemObject;
+import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.TinkerModule;
+import slimeknights.tconstruct.library.materials.MaterialRegistry;
+import slimeknights.tconstruct.library.materials.definition.MaterialVariantId;
+import slimeknights.tconstruct.library.tools.helper.ToolBuildHandler;
+import slimeknights.tconstruct.library.tools.part.IMaterialItem;
 import slimeknights.tconstruct.library.tools.part.ToolPartItem;
+import slimeknights.tconstruct.smeltery.TinkerSmeltery;
+import slimeknights.tconstruct.tools.item.ModifierCrystalItem;
 import slimeknights.tconstruct.tools.item.RepairKitItem;
 import slimeknights.tconstruct.tools.stats.GripMaterialStats;
 import slimeknights.tconstruct.tools.stats.HandleMaterialStats;
@@ -13,17 +24,24 @@ import slimeknights.tconstruct.tools.stats.LimbMaterialStats;
 import slimeknights.tconstruct.tools.stats.PlatingMaterialStats;
 import slimeknights.tconstruct.tools.stats.StatlessMaterialStats;
 
+import java.util.function.Supplier;
+
 public final class TinkerToolParts extends TinkerModule {
-  /* Tab for all tool parts */
-  /* TODO - migrate to new tab system
-  public static final CreativeModeTab TAB_TOOL_PARTS = new SupplierCreativeTab(TConstruct.MOD_ID, "tool_parts", () -> {
-    List<IMaterial> materials = new ArrayList<>(MaterialRegistry.getInstance().getVisibleMaterials());
-    if (materials.isEmpty()) {
-      return new ItemStack(TinkerToolParts.pickHead);
-    }
-    return TinkerToolParts.pickHead.get().withMaterial(materials.get(TConstruct.RANDOM.nextInt(materials.size())).getIdentifier());
-  });
-  */
+  /** Tab for all tool parts or tool components with many variants */
+  public static final RegistryObject<CreativeModeTab> tabToolParts = CREATIVE_TABS.register(
+    "tool_parts", () -> CreativeModeTab.builder().title(TConstruct.makeTranslation("itemGroup", "tool_parts"))
+                                       .icon(() -> {
+                                         MaterialVariantId material;
+                                         if (MaterialRegistry.isFullyLoaded()) {
+                                           material = ToolBuildHandler.RANDOM.getMaterial(HeadMaterialStats.ID, RandomSource.create());
+                                         } else {
+                                           material = ToolBuildHandler.getRenderMaterial(0);
+                                         }
+                                         return TinkerToolParts.pickHead.get().withMaterialForDisplay(material);
+                                       })
+                                       .displayItems(TinkerToolParts::addTabItems)
+                                       .withTabsBefore(TinkerTools.tabTools.getId())
+                                       .build());
 
   // repair kit, technically a head so it filters to things useful for repair
   public static final ItemObject<RepairKitItem> repairKit = ITEMS.register("repair_kit", () -> new RepairKitItem(ITEM_PROPS));
@@ -53,4 +71,41 @@ public final class TinkerToolParts extends TinkerModule {
   public static final ItemObject<ToolPartItem> maille = ITEMS.register("maille", () -> new ToolPartItem(ITEM_PROPS, StatlessMaterialStats.MAILLE.getIdentifier()));
   public static final ItemObject<ToolPartItem> shieldCore = ITEMS.register("shield_core", () -> new ToolPartItem(ITEM_PROPS, StatlessMaterialStats.SHIELD_CORE.getIdentifier()));
 
+  /** Adds all relevant items to the creative tab */
+  private static void addTabItems(ItemDisplayParameters itemDisplayParameters, CreativeModeTab.Output output) {
+    accept(output, repairKit);
+    // small heads
+    accept(output, pickHead);
+    accept(output, smallAxeHead);
+    accept(output, smallBlade);
+    accept(output, roundPlate);
+    // large heads
+    accept(output, hammerHead);
+    accept(output, broadAxeHead);
+    accept(output, broadBlade);
+    accept(output, largePlate);
+    // binding and rods
+    accept(output, toolHandle);
+    accept(output, toolBinding);
+    accept(output, toughHandle);
+    // ranged
+    accept(output, bowLimb);
+    accept(output, bowGrip);
+    accept(output, bowstring);
+    // plating, pair each one with the dummy plating item
+    for (ArmorItem.Type type : ArmorItem.Type.values()) {
+      output.accept(TinkerSmeltery.dummyPlating.get(type));
+      plating.get(type).addVariants(output);
+    }
+    accept(output, maille);
+    accept(output, shieldCore);
+
+    // end with modifier crystal dynamic listing
+    ModifierCrystalItem.addVariants(output::accept);
+  }
+
+  /** Adds a tool part to the tab */
+  private static void accept(CreativeModeTab.Output output, Supplier<? extends IMaterialItem> item) {
+    item.get().addVariants(output);
+  }
 }

@@ -14,6 +14,9 @@ import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.CreativeModeTab.ItemDisplayParameters;
+import net.minecraft.world.item.CreativeModeTab.Output;
 import net.minecraft.world.item.FireworkRocketItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -50,17 +53,23 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
-import org.apache.logging.log4j.Logger;
+import slimeknights.mantle.registration.object.EntityObject;
 import slimeknights.mantle.registration.object.EnumObject;
 import slimeknights.mantle.registration.object.ItemObject;
 import slimeknights.mantle.registration.object.WoodBlockObject;
 import slimeknights.mantle.registration.object.WoodBlockObject.WoodVariant;
+import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.Sounds;
 import slimeknights.tconstruct.common.TinkerModule;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.common.registration.GeodeItemObject;
+import slimeknights.tconstruct.common.registration.GeodeItemObject.BudSize;
+import slimeknights.tconstruct.fluids.TinkerFluids;
 import slimeknights.tconstruct.library.utils.Util;
+import slimeknights.tconstruct.shared.TinkerCommons;
+import slimeknights.tconstruct.shared.TinkerMaterials;
 import slimeknights.tconstruct.shared.block.SlimeType;
+import slimeknights.tconstruct.tools.TinkerModifiers;
 import slimeknights.tconstruct.world.block.CongealedSlimeBlock;
 import slimeknights.tconstruct.world.block.DirtType;
 import slimeknights.tconstruct.world.block.FoliageType;
@@ -96,12 +105,15 @@ import java.util.function.Function;
  */
 @SuppressWarnings("unused")
 public final class TinkerWorld extends TinkerModule {
-
-  /* Tab for anything generated in the world, TODO: migrate to new crative tab setup */
-  //public static final CreativeModeTab TAB_WORLD = new SupplierCreativeTab(TConstruct.MOD_ID, "world", () -> new ItemStack(TinkerWorld.cobaltOre));
-	static final Logger log = Util.getLogger("tinker_world");
-
   public static final PlantType SLIME_PLANT_TYPE = PlantType.get("slime");
+
+  /** Creative tab for anything that is naturally found in the world */
+  public static final RegistryObject<CreativeModeTab> tabWorld = CREATIVE_TABS.register(
+    "world", () -> CreativeModeTab.builder().title(TConstruct.makeTranslation("itemGroup", "world"))
+                                  .icon(() -> new ItemStack(TinkerWorld.cobaltOre))
+                                  .displayItems(TinkerWorld::addTabItems)
+                                  .withTabsBefore(TinkerFluids.tabFluids.getId())
+                                  .build());
 
   /*
    * Block base properties
@@ -250,19 +262,19 @@ public final class TinkerWorld extends TinkerModule {
    * Entities
    */
   // our own copy of the slime to make spawning a bit easier
-  public static final RegistryObject<EntityType<SkySlimeEntity>> skySlimeEntity = ENTITIES.registerWithEgg("sky_slime", () ->
+  public static final EntityObject<SkySlimeEntity> skySlimeEntity = ENTITIES.registerWithEgg("sky_slime", () ->
     EntityType.Builder.of(SkySlimeEntity::new, MobCategory.MONSTER)
                       .setShouldReceiveVelocityUpdates(true)
                       .setTrackingRange(20)
                       .sized(2.04F, 2.04F)
                       .setCustomClientFactory((spawnEntity, world) -> TinkerWorld.skySlimeEntity.get().create(world)), 0x47eff5, 0xacfff4);
-  public static final RegistryObject<EntityType<EnderSlimeEntity>> enderSlimeEntity = ENTITIES.registerWithEgg("ender_slime", () ->
+  public static final EntityObject<EnderSlimeEntity> enderSlimeEntity = ENTITIES.registerWithEgg("ender_slime", () ->
     EntityType.Builder.of(EnderSlimeEntity::new, MobCategory.MONSTER)
                       .setShouldReceiveVelocityUpdates(true)
                       .setTrackingRange(32)
                       .sized(2.04F, 2.04F)
                       .setCustomClientFactory((spawnEntity, world) -> TinkerWorld.enderSlimeEntity.get().create(world)), 0x6300B0, 0xD37CFF);
-  public static final RegistryObject<EntityType<TerracubeEntity>> terracubeEntity = ENTITIES.registerWithEgg("terracube", () ->
+  public static final EntityObject<TerracubeEntity> terracubeEntity = ENTITIES.registerWithEgg("terracube", () ->
     EntityType.Builder.of(TerracubeEntity::new, MobCategory.MONSTER)
                       .setShouldReceiveVelocityUpdates(true)
                       .setTrackingRange(8)
@@ -384,6 +396,80 @@ public final class TinkerWorld extends TinkerModule {
     generator.addProvider(event.includeServer(), new WorldRecipeProvider(generator.getPackOutput()));
   }
 
+  /** Adds all relevant items to the creative tab */
+  private static void addTabItems(ItemDisplayParameters itemDisplayParameters, Output output) {
+    // ores
+    output.accept(cobaltOre);
+    output.accept(rawCobalt);
+    output.accept(rawCobaltBlock);
+
+    // monsters
+    output.accept(skySlimeEntity);
+    output.accept(enderSlimeEntity);
+
+    // mob drops
+    output.accept(TinkerMaterials.necroticBone);
+    output.accept(TinkerModifiers.dragonScale);
+    accept(output, headItems);
+
+    // earth is not in the loop as we only add congealed
+    output.accept(congealedSlime.get(SlimeType.EARTH));
+    for (SlimeType type : SlimeType.TINKER) {
+      output.accept(TinkerCommons.slimeball.get(type));
+      output.accept(slime.get(type));
+      output.accept(congealedSlime.get(type));
+    }
+
+    // slime wood
+    accept(output, greenheart);
+    output.accept(slimeSapling.get(FoliageType.EARTH));
+    output.accept(slimeLeaves.get(FoliageType.EARTH));
+    accept(output, skyroot);
+    output.accept(slimeSapling.get(FoliageType.SKY));
+    output.accept(slimeLeaves.get(FoliageType.SKY));
+    accept(output, bloodshroom);
+    output.accept(slimeSapling.get(FoliageType.BLOOD));
+    output.accept(slimeLeaves.get(FoliageType.BLOOD));
+    accept(output, enderbark);
+    output.accept(slimeSapling.get(FoliageType.ENDER));
+    output.accept(slimeLeaves.get(FoliageType.ENDER));
+    output.accept(enderbarkRoots);
+    accept(output, slimyEnderbarkRoots);
+
+    // slime foliage
+    accept(output, slimeDirt);
+    for (FoliageType type : FoliageType.VISIBLE) {
+      output.accept(slimeTallGrass.get(type));
+      output.accept(slimeFern.get(type));
+      if (type == FoliageType.SKY) {
+        output.accept(skySlimeVine);
+      } else if (type == FoliageType.ENDER) {
+        output.accept(enderSlimeVine);
+      }
+      output.accept(slimeGrassSeeds.get(type));
+      output.accept(vanillaSlimeGrass.get(type));
+      output.accept(earthSlimeGrass.get(type));
+      output.accept(skySlimeGrass.get(type));
+      output.accept(ichorSlimeGrass.get(type));
+      output.accept(enderSlimeGrass.get(type));
+    }
+
+    // geodes
+    accept(output, earthGeode);
+    accept(output, skyGeode);
+    accept(output, ichorGeode);
+    accept(output, enderGeode);
+  }
+
+  /** Add a geode to the creative tab */
+  private static void accept(CreativeModeTab.Output output, GeodeItemObject geode) {
+    output.accept(geode);
+    output.accept(geode.getBlock());
+    output.accept(geode.getBudding());
+    for (BudSize size : BudSize.values()) {
+      output.accept(geode.getBud(size));
+    }
+  }
 
   /* helpers */
 

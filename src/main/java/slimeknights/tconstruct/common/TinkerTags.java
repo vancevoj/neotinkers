@@ -432,6 +432,10 @@ public class TinkerTags {
     public static final TagKey<Item> SPLASH_BOTTLE = forgeTag("bottles/splash");
     public static final TagKey<Item> LINGERING_BOTTLE = forgeTag("bottles/lingering");
 
+    // compat tags
+    /** Tag meaning necronium is available */
+    public static final TagKey<Item> URANIUM_INGOTS = forgeTag("ingots/uranium");
+
     /** Makes a tag in the tinkers domain */
     private static TagKey<Item> tag(String name) {
       return TagKey.create(Registries.ITEM, TConstruct.getResource(name));

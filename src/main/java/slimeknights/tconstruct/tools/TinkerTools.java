@@ -10,6 +10,8 @@ import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArrowItem;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.CreativeModeTab.ItemDisplayParameters;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraftforge.common.crafting.CraftingHelper;
@@ -76,12 +78,15 @@ import slimeknights.tconstruct.library.tools.definition.module.weapon.CircleWeap
 import slimeknights.tconstruct.library.tools.definition.module.weapon.ParticleWeaponAttack;
 import slimeknights.tconstruct.library.tools.definition.module.weapon.SweepWeaponAttack;
 import slimeknights.tconstruct.library.tools.helper.ModifierLootingHandler;
+import slimeknights.tconstruct.library.tools.helper.ToolBuildHandler;
+import slimeknights.tconstruct.library.tools.item.IModifiable;
 import slimeknights.tconstruct.library.tools.item.ModifiableItem;
 import slimeknights.tconstruct.library.tools.item.armor.ModifiableArmorItem;
 import slimeknights.tconstruct.library.tools.item.armor.MultilayerArmorItem;
 import slimeknights.tconstruct.library.tools.item.ranged.ModifiableBowItem;
 import slimeknights.tconstruct.library.tools.item.ranged.ModifiableCrossbowItem;
 import slimeknights.tconstruct.library.utils.BlockSideHitListener;
+import slimeknights.tconstruct.tables.TinkerTables;
 import slimeknights.tconstruct.tools.data.ArmorModelProvider;
 import slimeknights.tconstruct.tools.data.StationSlotLayoutProvider;
 import slimeknights.tconstruct.tools.data.ToolDefinitionDataProvider;
@@ -102,6 +107,8 @@ import slimeknights.tconstruct.tools.logic.EquipmentChangeWatcher;
 import slimeknights.tconstruct.tools.menu.ToolContainerMenu;
 import slimeknights.tconstruct.tools.modules.MeltingFluidEffectiveModule;
 
+import java.util.function.Supplier;
+
 import static slimeknights.tconstruct.TConstruct.getResource;
 
 /**
@@ -115,8 +122,13 @@ public final class TinkerTools extends TinkerModule {
     RandomMaterial.init();
   }
 
-  /* Creative tab for all tool items, TODO: migrate to new tab system */
-  //public static final CreativeModeTab TAB_TOOLS = new SupplierCreativeTab(TConstruct.MOD_ID, "tools", () -> TinkerTools.pickaxe.get().getRenderTool());
+  /** Creative tab for complete tools */
+  public static final RegistryObject<CreativeModeTab> tabTools = CREATIVE_TABS.register(
+    "tools", () -> CreativeModeTab.builder().title(TConstruct.makeTranslation("itemGroup", "tools"))
+                                  .icon(() -> TinkerTools.pickaxe.get().getRenderTool())
+                                  .displayItems(TinkerTools::addTabItems)
+                                  .withTabsBefore(TinkerTables.tabTables.getId())
+                                  .build());
 
   /** Loot function type for tool add data */
   public static final RegistryObject<LootItemFunctionType> lootAddToolData = LOOT_FUNCTIONS.register("add_tool_data", () -> new LootItemFunctionType(AddToolDataFunction.SERIALIZER));
@@ -283,5 +295,58 @@ public final class TinkerTools extends TinkerModule {
     generator.addProvider(client, new MaterialPartTextureGenerator(packOutput, existingFileHelper, partSprites, materialSprites));
     generator.addProvider(client, new MaterialPaletteDebugGenerator(packOutput, TConstruct.MOD_ID, materialSprites));
     generator.addProvider(client, new ArmorModelProvider(packOutput));
+  }
+
+  /** Adds all relevant items to the creative tab */
+  private static void addTabItems(ItemDisplayParameters itemDisplayParameters, CreativeModeTab.Output output) {
+    // start with tools that lack materials
+    acceptTool(output, flintAndBrick);
+    acceptTool(output, skyStaff);
+    acceptTool(output, earthStaff);
+    acceptTool(output, ichorStaff);
+    acceptTool(output, enderStaff);
+
+    // small tools
+    acceptTool(output, pickaxe);
+    acceptTool(output, pickadze);
+    acceptTool(output, mattock);
+    acceptTool(output, handAxe);
+    acceptTool(output, kama);
+    acceptTool(output, dagger);
+    acceptTool(output, sword);
+
+    // broad tools
+    acceptTool(output, sledgeHammer);
+    acceptTool(output, veinHammer);
+    acceptTool(output, excavator);
+    acceptTool(output, broadAxe);
+    acceptTool(output, scythe);
+    acceptTool(output, cleaver);
+
+    // ranged tools
+    acceptTool(output, crossbow);
+    acceptTool(output, longbow);
+
+    // ancient tools
+    acceptTool(output, meltingPan);
+    acceptTool(output, warPick);
+    acceptTool(output, battlesign);
+
+    // armor
+    acceptTools(output, travelersGear);
+    acceptTool(output, travelersShield);
+    acceptTools(output, plateArmor);
+    acceptTool(output, plateShield);
+    acceptTools(output, slimesuit);
+  }
+
+  /** Adds a tool to the tab */
+  private static void acceptTool(CreativeModeTab.Output output, Supplier<? extends IModifiable> tool) {
+    ToolBuildHandler.addVariants(output, tool.get());
+  }
+
+  /** Adds a tool to the tab */
+  private static void acceptTools(CreativeModeTab.Output output, EnumObject<?,? extends IModifiable> tools) {
+    tools.forEach(tool -> ToolBuildHandler.addVariants(output, tool));
   }
 }

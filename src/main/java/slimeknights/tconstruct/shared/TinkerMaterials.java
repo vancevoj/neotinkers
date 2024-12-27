@@ -1,6 +1,8 @@
 package slimeknights.tconstruct.shared;
 
 import net.minecraft.core.registries.Registries;
+import net.minecraft.world.item.CreativeModeTab.ItemDisplayParameters;
+import net.minecraft.world.item.CreativeModeTab.Output;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
@@ -12,6 +14,7 @@ import slimeknights.mantle.registration.object.FenceBuildingBlockObject;
 import slimeknights.mantle.registration.object.ItemObject;
 import slimeknights.mantle.registration.object.MetalItemObject;
 import slimeknights.tconstruct.common.TinkerModule;
+import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.recipe.ingredient.MaterialIngredient;
 import slimeknights.tconstruct.shared.block.OrientableBlock;
 import slimeknights.tconstruct.shared.block.SlimesteelBlock;
@@ -55,5 +58,39 @@ public final class TinkerMaterials extends TinkerModule {
     if (event.getRegistryKey() == Registries.RECIPE_SERIALIZER) {
       CraftingHelper.register(MaterialIngredient.Serializer.ID, MaterialIngredient.Serializer.INSTANCE);
     }
+  }
+
+  /** Adds all relevant items to the creative tab, called by general tab */
+  public static void addTabItems(ItemDisplayParameters itemDisplayParameters, Output output) {
+    // non-metals
+    // necrotic bone is in world
+    output.accept(venombone);
+    output.accept(blazewood);
+    acceptIfTag(output, necroniumBone, TinkerTags.Items.URANIUM_INGOTS);
+    accept(output, nahuatl);
+    accept(output, blazewood);
+
+    // natural ores
+    output.accept(copperNugget);
+    accept(output, cobalt);
+    output.accept(debrisNugget);
+    // mod alloys
+    accept(output, slimesteel);
+    accept(output, amethystBronze);
+    accept(output, roseGold);
+    accept(output, pigIron);
+    accept(output, queensSlime);
+    accept(output, manyullyn);
+    accept(output, hepatizon);
+    output.accept(netheriteNugget);
+    // future: soulsteel
+    // future: knightslime
+  }
+
+  /** Adds a metal to the tab */
+  private static void accept(Output output, MetalItemObject metal) {
+    output.accept(metal.getIngot());
+    output.accept(metal.getNugget());
+    output.accept(metal.get());
   }
 }

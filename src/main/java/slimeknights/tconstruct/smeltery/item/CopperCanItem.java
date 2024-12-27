@@ -68,11 +68,12 @@ public class CopperCanItem extends Item {
     }
   }
 
+
   /** Sets the fluid on the given stack */
   @SuppressWarnings("deprecation")
-  public static ItemStack setFluid(ItemStack stack, FluidStack fluid) {
+  public static ItemStack setFluid(ItemStack stack, Fluid fluid, @Nullable CompoundTag fluidTag) {
     // if empty, try to remove the NBT, helps with recipes
-    if (fluid.isEmpty()) {
+    if (fluid == Fluids.EMPTY) {
       CompoundTag nbt = stack.getTag();
       if (nbt != null) {
         nbt.remove(TAG_FLUID);
@@ -83,8 +84,7 @@ public class CopperCanItem extends Item {
       }
     } else {
       CompoundTag nbt = stack.getOrCreateTag();
-      nbt.putString(TAG_FLUID, BuiltInRegistries.FLUID.getKey(fluid.getFluid()).toString());
-      CompoundTag fluidTag = fluid.getTag();
+      nbt.putString(TAG_FLUID, BuiltInRegistries.FLUID.getKey(fluid).toString());
       if (fluidTag != null) {
         nbt.put(TAG_FLUID_TAG, fluidTag.copy());
       } else {
@@ -92,6 +92,11 @@ public class CopperCanItem extends Item {
       }
     }
     return stack;
+  }
+
+  /** Sets the fluid on the given stack */
+  public static ItemStack setFluid(ItemStack stack, FluidStack fluid) {
+    return setFluid(stack, fluid.getFluid(), fluid.getTag());
   }
 
   /** Gets the fluid from the given stack */

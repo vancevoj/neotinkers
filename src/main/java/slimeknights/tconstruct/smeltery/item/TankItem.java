@@ -9,6 +9,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 import slimeknights.mantle.client.SafeClientAccess;
 import slimeknights.mantle.client.TooltipKey;
@@ -118,6 +119,27 @@ public class TankItem extends BlockTooltipItem {
   }
 
   /**
+   * Sets the tank to the given stack
+   * @param stack  Stack
+   * @param fluid  Fluid
+   * @return  Stack with tank
+   */
+  public static ItemStack setTank(ItemStack stack, FluidStack fluid) {
+    if (fluid.isEmpty()) {
+      CompoundTag nbt = stack.getTag();
+      if (nbt != null) {
+        nbt.remove(NBTTags.TANK);
+        if (nbt.isEmpty()) {
+          stack.setTag(null);
+        }
+      }
+    } else {
+      stack.getOrCreateTag().put(NBTTags.TANK, fluid.writeToNBT(new CompoundTag()));
+    }
+    return stack;
+  }
+
+  /**
    * Gets the tank for the given stack
    * @param stack  Tank stack
    * @return  Tank stored in the stack
@@ -129,5 +151,18 @@ public class TankItem extends BlockTooltipItem {
       tank.readFromNBT(stack.getTag().getCompound(NBTTags.TANK));
     }
     return tank;
+  }
+
+  /**
+   * Gets a string variant name for the given stack
+   * @param stack  Stack instance to check
+   * @return  String variant name
+   */
+  public static String getSubtype(ItemStack stack) {
+    CompoundTag nbt = stack.getTag();
+    if (nbt != null && nbt.contains(NBTTags.TANK, Tag.TAG_COMPOUND)) {
+      return nbt.getCompound(NBTTags.TANK).getString("FluidName");
+    }
+    return "";
   }
 }

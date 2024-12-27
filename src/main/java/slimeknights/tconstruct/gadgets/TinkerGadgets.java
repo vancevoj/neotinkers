@@ -3,6 +3,8 @@ package slimeknights.tconstruct.gadgets;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.item.CreativeModeTab.ItemDisplayParameters;
+import net.minecraft.world.item.CreativeModeTab.Output;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Item.Properties;
 import net.minecraft.world.level.block.ComposterBlock;
@@ -37,13 +39,11 @@ import slimeknights.tconstruct.shared.TinkerFood;
 import slimeknights.tconstruct.world.block.FoliageType;
 
 /**
- * Contains any special tools unrelated to the base tools
+ * Contains any special tools unrelated to the base tools.
+ * TODO: consider merging this into commons, the distinction of what is a gadget is getting pretty narrow.
  */
 @SuppressWarnings("unused")
 public final class TinkerGadgets extends TinkerModule {
-  /* Tab for all special tools added by the mod, TODO: migrate to new tab system */
-  // public static final CreativeModeTab TAB_GADGETS = new SupplierCreativeTab(TConstruct.MOD_ID, "gadgets", () -> new ItemStack(TinkerGadgets.itemFrame.get(FrameType.CLEAR)));
-
   /* Block base properties */
 
   /*
@@ -147,5 +147,18 @@ public final class TinkerGadgets extends TinkerModule {
   void gatherData(final GatherDataEvent event) {
     DataGenerator generator = event.getGenerator();
     generator.addProvider(event.includeServer(), new GadgetRecipeProvider(generator.getPackOutput()));
+  }
+
+  /** Adds all relevant items to the creative tab, called by general tab */
+  public static void addTabItems(ItemDisplayParameters itemDisplayParameters, Output output) {
+    output.accept(punji);
+    accept(output, itemFrame);
+    output.accept(glowBall);
+    output.accept(efln);
+    output.accept(quartzShuriken);
+    output.accept(flintShuriken);
+    output.accept(piggyBackpack);
+    accept(output, cake);
+    output.accept(magmaCake);
   }
 }

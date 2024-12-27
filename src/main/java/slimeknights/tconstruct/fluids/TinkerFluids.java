@@ -5,20 +5,29 @@ import net.minecraft.core.BlockSource;
 import net.minecraft.core.cauldron.CauldronInteraction;
 import net.minecraft.core.dispenser.DefaultDispenseItemBehavior;
 import net.minecraft.core.dispenser.DispenseItemBehavior;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.minecraft.network.syncher.EntityDataSerializer;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.CreativeModeTab.ItemDisplayParameters;
+import net.minecraft.world.item.CreativeModeTab.TabVisibility;
 import net.minecraft.world.item.DispensibleContainerItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DispenserBlock;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraftforge.common.ForgeMod;
@@ -30,6 +39,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.registries.RegistryObject;
 import slimeknights.mantle.fluid.UnplaceableFluid;
@@ -58,6 +68,10 @@ import slimeknights.tconstruct.fluids.util.FillBottle;
 import slimeknights.tconstruct.library.recipe.FluidValues;
 import slimeknights.tconstruct.shared.TinkerFood;
 import slimeknights.tconstruct.shared.block.SlimeType;
+import slimeknights.tconstruct.smeltery.TinkerSmeltery;
+import slimeknights.tconstruct.smeltery.block.component.SearedTankBlock.TankType;
+import slimeknights.tconstruct.smeltery.item.CopperCanItem;
+import slimeknights.tconstruct.smeltery.item.TankItem;
 import slimeknights.tconstruct.tools.TinkerModifiers;
 import slimeknights.tconstruct.tools.network.FluidDataSerializer;
 import slimeknights.tconstruct.world.TinkerWorld;
@@ -73,6 +87,14 @@ public final class TinkerFluids extends TinkerModule {
   public TinkerFluids() {
     ForgeMod.enableMilkFluid();
   }
+
+  /** Creative tab for general items, or those that lack another tab */
+  public static final RegistryObject<CreativeModeTab> tabFluids = CREATIVE_TABS.register(
+    "fluids", () -> CreativeModeTab.builder().title(TConstruct.makeTranslation("itemGroup", "fluids"))
+                                   .icon(() -> new ItemStack(TinkerFluids.moltenIron))
+                                   .displayItems(TinkerFluids::addTabItems)
+                                   .withTabsBefore(TinkerSmeltery.tabSmeltery.getId())
+                                   .build());
 
   // basic
   public static final FlowingFluidObject<ForgeFlowingFluid> venom = FLUIDS.register("venom").type(slime("venom").temperature(310)).bucket().block(createEffect(MapColor.QUARTZ, 0, () -> new MobEffectInstance(MobEffects.POISON, 5*20))).flowing();
@@ -340,5 +362,142 @@ public final class TinkerFluids extends TinkerModule {
       }
       BrewingRecipeRegistry.addRecipe(new BrewingRecipe(Ingredient.of(Items.GLASS_BOTTLE), Ingredient.of(Blocks.MAGMA_BLOCK), new ItemStack(TinkerFluids.magmaBottle)));
     });
+  }
+
+  /** Adds all relevant items to the creative tab, called by smeltery */
+  @SuppressWarnings("deprecation")
+  private static void addTabItems(ItemDisplayParameters itemDisplayParameters, CreativeModeTab.Output output) {
+    // containers
+    output.accept(splashBottle);
+    output.accept(lingeringBottle);
+    // slime
+    output.accept(earthSlime);
+    output.accept(skySlime);
+    output.accept(enderSlime);
+    accept(output, slimeBottle);
+    output.accept(magma);
+    output.accept(magmaBottle);
+    output.accept(venom);
+    output.accept(venomBottle);
+
+    // food
+    output.accept(honey);
+    output.accept(beetrootSoup);
+    output.accept(mushroomStew);
+    output.accept(rabbitStew);
+    output.accept(meatSoup);
+    output.accept(meatSoupBowl);
+
+    // stone
+    output.accept(searedStone);
+    output.accept(scorchedStone);
+    output.accept(moltenClay);
+    if (ModList.get().isLoaded("ceramics")) {
+      output.accept(moltenPorcelain);
+    }
+    output.accept(moltenGlass);
+    output.accept(moltenObsidian);
+    output.accept(liquidSoul);
+    output.accept(moltenEnder);
+    output.accept(blazingBlood);
+
+    // ores
+    output.accept(moltenEmerald);
+    output.accept(moltenQuartz);
+    output.accept(moltenAmethyst);
+    output.accept(moltenDiamond);
+    output.accept(moltenDebris);
+    // metal ores
+    output.accept(moltenCopper);
+    output.accept(moltenIron);
+    output.accept(moltenGold);
+    output.accept(moltenCobalt);
+
+    // overworld alloys
+    output.accept(moltenSlimesteel);
+    output.accept(moltenAmethystBronze);
+    output.accept(moltenRoseGold);
+    output.accept(moltenPigIron);
+    // nether alloys
+    output.accept(moltenQueensSlime);
+    output.accept(moltenManyullyn);
+    output.accept(moltenHepatizon);
+    output.accept(moltenNetherite);
+    // future: soulsteel
+    // future: knightslime
+
+    // compat ores
+    acceptMolten(output, moltenTin);
+    acceptMolten(output, moltenAluminum);
+    acceptMolten(output, moltenLead);
+    acceptMolten(output, moltenSilver);
+    acceptMolten(output, moltenNickel);
+    acceptMolten(output, moltenZinc);
+    acceptMolten(output, moltenPlatinum);
+    acceptMolten(output, moltenTungsten);
+    acceptMolten(output, moltenOsmium);
+    acceptMolten(output, moltenUranium);
+    // compat alloys
+    acceptMolten(output, moltenBronze, "tin");
+    acceptMolten(output, moltenBrass, "zinc");
+    acceptMolten(output, moltenElectrum, "silver");
+    acceptMolten(output, moltenInvar, "nickel");
+    acceptMolten(output, moltenConstantan, "nickel");
+    acceptMolten(output, moltenPewter);
+    acceptMolten(output, moltenSteel);
+    acceptMolten(output, moltenEnderium);
+    acceptMolten(output, moltenLumium);
+    acceptMolten(output, moltenSignalum);
+    acceptMolten(output, moltenRefinedGlowstone);
+    acceptMolten(output, moltenRefinedObsidian);
+
+    // add copper cans, tanks, and lanterns for all the fluids
+    for (Fluid fluid : BuiltInRegistries.FLUID) {
+      if (fluid.isSource(fluid.defaultFluidState())) {
+        output.accept(CopperCanItem.setFluid(new ItemStack(TinkerSmeltery.copperCan), fluid, null), TabVisibility.PARENT_TAB_ONLY);
+      }
+    }
+    for (Fluid fluid : BuiltInRegistries.FLUID) {
+      if (fluid.isSource(fluid.defaultFluidState())) {
+        output.accept(TankItem.setTank(new ItemStack(TinkerSmeltery.searedLantern), new FluidStack(fluid, FluidValues.LANTERN_CAPACITY)), TabVisibility.PARENT_TAB_ONLY);
+        output.accept(TankItem.setTank(new ItemStack(TinkerSmeltery.scorchedLantern), new FluidStack(fluid, FluidValues.LANTERN_CAPACITY)), TabVisibility.PARENT_TAB_ONLY);
+        // use an ingot variety for metals
+        TankType tankType = fluid.is(TinkerTags.Fluids.METAL_TOOLTIPS) ? TankType.INGOT_GAUGE : TankType.FUEL_GAUGE;
+        output.accept(fillTank(TinkerSmeltery.searedTank, tankType, fluid), TabVisibility.PARENT_TAB_ONLY);
+        output.accept(fillTank(TinkerSmeltery.scorchedTank, tankType, fluid), TabVisibility.PARENT_TAB_ONLY);
+      }
+    }
+  }
+
+  /** Accepts the given item if any of the listed ingots are present */
+  private static void acceptCompat(CreativeModeTab.Output output, ItemLike item, String... ingots) {
+    for (String ingot : ingots) {
+      if (acceptIfTag(output, item, TagKey.create(Registries.ITEM, new ResourceLocation("forge", "ingots/" + ingot)))) {
+        break;
+      }
+    }
+  }
+
+  /** Accepts the given item if the ingot named after the fluid is present */
+  private static void acceptMolten(CreativeModeTab.Output output, FluidObject<?> fluid) {
+    acceptCompat(output, fluid, withoutMolten(fluid));
+  }
+
+  /** Accepts the given item if the ingot named after the fluid or the passed ingot name is present */
+  private static void acceptMolten(CreativeModeTab.Output output, FluidObject<?> fluid, String ingot) {
+    acceptCompat(output, fluid, withoutMolten(fluid), ingot);
+  }
+
+  /** Length of the molten prefix */
+  private static final int MOLTEN_LENGTH = "molten_".length();
+
+  /** Removes the "molten_" prefix from the fluids ID */
+  public static String withoutMolten(FluidObject<?> fluid) {
+    return fluid.getId().getPath().substring(MOLTEN_LENGTH);
+  }
+
+  /** Fills a tank stack with the given fluid */
+  public static ItemStack fillTank(EnumObject<TankType,? extends ItemLike> tank, TankType type, Fluid fluid) {
+    return TankItem.setTank(new ItemStack(tank.get(type)), new FluidStack(fluid, type.getCapacity()));
   }
 }

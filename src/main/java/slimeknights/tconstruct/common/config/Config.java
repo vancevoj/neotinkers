@@ -89,34 +89,36 @@ public class Config {
 //        .worldRestart()
 //        .define("chestsKeepInventory", true);
 
+      builder.comment("Creative search and JEI display").push("creative_search");
       this.showOnlyToolMaterial = builder
-        .comment("If non-empty, only this material will be shown on tools in creative and JEI (or the first valid material if this is invalid for the tool).", "If empty, all materials will show")
+        .comment("If non-empty, only this material will be shown on tools in creative search and JEI (or the first valid material if this is invalid for the tool).", "If empty, all materials will show")
         .translation("tconstruct.configgui.showOnlyToolMaterial")
         .worldRestart()
         .define("showOnlyToolMaterial", "");
 
       this.showOnlyPartMaterial = builder
-        .comment("If non-empty, only material will be shown on parts in creative and JEI (or the first valid material if this is invalid for the part).", "If empty, all materials will show")
+        .comment("If non-empty, only material will be shown on parts in creative search and JEI (or the first valid material if this is invalid for the part).", "If empty, all materials will show")
         .translation("tconstruct.configgui.showOnlyPartMaterial")
         .worldRestart()
         .define("showOnlyPartMaterial", "");
 
       this.showAllTableVariants = builder
-        .comment("If true, tables such as the part builder and tinker station will show all variants. If false shows only a variant with a default texture.")
+        .comment("If true, tables such as the part builder and tinker station will show all variants in JEI and creative search. If false the variants only show in the tables tab")
         .translation("tconstruct.configgui.showAllTableVariants")
-        .define("showAllTableVariants", true);
+        .define("showAllTableVariants", false);
 
       this.showAllAnvilVariants = builder
-        .comment("If true, anvils will show all metal variants. If false, shows only a variant with the default texture")
+        .comment("If true, anvils will show all metal variants in JEI and creative search. If false, the variants only show in the tables tab")
         .translation("tconstruct.configgui.showAllAnvilVariants")
         .define("showAllAnvilVariants", true);
 
       this.showAllSmelteryVariants = builder
-        .comment("If true, smeltery and foundry controllers, drains, ducts, and chutes will show all variants")
+        .comment("If true, smeltery and foundry controllers, drains, ducts, and chutes will show all variants in JEI and creative search. If false, the variants only shows in the smeltery tab")
         .translation("tconstruct.configgui.showAllSmelteryVariants")
-        .define("showAllSmelteryVariants", true);
+        .define("showAllSmelteryVariants", false);
 
-      builder.pop();
+      builder.pop(); // creative
+      builder.pop(); // gameplay
 
       builder.comment("Options related to recipes, limited options as a datapack allows most recipes to be modified").push("recipes");
 

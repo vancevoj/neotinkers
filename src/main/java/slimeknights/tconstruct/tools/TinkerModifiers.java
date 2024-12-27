@@ -11,6 +11,9 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.CreativeModeTab.ItemDisplayParameters;
+import net.minecraft.world.item.CreativeModeTab.TabVisibility;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -138,6 +141,7 @@ import slimeknights.tconstruct.library.tools.capability.fluid.TankModule;
 import slimeknights.tconstruct.library.tools.capability.fluid.ToolTankHelper;
 import slimeknights.tconstruct.library.tools.capability.inventory.InventoryMenuModule;
 import slimeknights.tconstruct.library.tools.capability.inventory.InventoryModule;
+import slimeknights.tconstruct.tables.TinkerTables;
 import slimeknights.tconstruct.tools.data.EnchantmentToModifierProvider;
 import slimeknights.tconstruct.tools.data.FluidEffectProvider;
 import slimeknights.tconstruct.tools.data.ModifierProvider;
@@ -284,13 +288,14 @@ public final class TinkerModifiers extends TinkerModule {
   /*
    * Blocks
    */
-  // material
+  // TODO: decide what to do with this block
   public static final ItemObject<Block> silkyJewelBlock = BLOCKS.register("silky_jewel_block", metalBuilder(MapColor.GOLD), BLOCK_ITEM);
 
   /*
    * Items
    */
   public static final ItemObject<Item> silkyCloth = ITEMS.register("silky_cloth", ITEM_PROPS);
+  // TODO: decide what to do with this item
   public static final ItemObject<Item> silkyJewel = ITEMS.register("silky_jewel", ITEM_PROPS);
   public static final ItemObject<Item> dragonScale = ITEMS.register("dragon_scale", () -> new DragonScaleItem(new Item.Properties().rarity(Rarity.RARE)));
   // durability reinforcements
@@ -304,7 +309,7 @@ public final class TinkerModifiers extends TinkerModule {
   public static final ItemObject<Item> obsidianReinforcement = ITEMS.register("obsidian_reinforcement", ITEM_PROPS);
   // special
   public static final ItemObject<Item> modifierCrystal = ITEMS.register("modifier_crystal", () -> new ModifierCrystalItem(new Item.Properties().stacksTo(16)));
-  public static final ItemObject<Item> creativeSlotItem = ITEMS.register("creative_slot", () -> new CreativeSlotItem(ITEM_PROPS));
+  public static final ItemObject<CreativeSlotItem> creativeSlotItem = ITEMS.register("creative_slot", () -> new CreativeSlotItem(ITEM_PROPS));
 
   // entity
   public static final RegistryObject<EntityType<FluidEffectProjectile>> fluidSpitEntity = ENTITIES.register("fluid_spit", () ->
@@ -687,5 +692,21 @@ public final class TinkerModifiers extends TinkerModule {
     generator.addProvider(server, new FluidEffectProvider(packOutput));
     generator.addProvider(server, new ModifierTagProvider(packOutput, event.getExistingFileHelper()));
     generator.addProvider(server, new EnchantmentToModifierProvider(packOutput));
+  }
+
+  /** Adds all relevant items to the creative tab, called by general */
+  public static void addTabItems(ItemDisplayParameters itemDisplayParameters, CreativeModeTab.Output output) {
+    output.accept(silkyCloth);
+    // dragon scale is handled by world
+    output.accept(emeraldReinforcement);
+    output.accept(slimesteelReinforcement);
+    output.accept(TinkerTables.pattern, TabVisibility.PARENT_TAB_ONLY); // extra listing of pattern, also in table as you need it for part builder usage
+    output.accept(ironReinforcement);
+    output.accept(searedReinforcement);
+    output.accept(goldReinforcement);
+    output.accept(cobaltReinforcement);
+    output.accept(obsidianReinforcement);
+    creativeSlotItem.get().addVariants(output);
+    // modifier crystal is handled by tool parts
   }
 }

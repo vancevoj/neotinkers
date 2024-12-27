@@ -1,5 +1,7 @@
 package slimeknights.tconstruct.library.tools.part;
 
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.CreativeModeTab.TabVisibility;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
@@ -8,8 +10,6 @@ import slimeknights.tconstruct.library.materials.MaterialRegistry;
 import slimeknights.tconstruct.library.materials.definition.IMaterial;
 import slimeknights.tconstruct.library.materials.definition.MaterialId;
 import slimeknights.tconstruct.library.materials.definition.MaterialVariantId;
-
-import java.util.List;
 
 /**
  * Items implementing this interface contain a material
@@ -54,28 +54,30 @@ public interface IMaterialItem extends ItemLike {
   }
 
   /** Adds all variants of the material item to the given item stack list */
-  default void addVariants(List<ItemStack> items) {
+  default void addVariants(CreativeModeTab.Output items) {
     if (MaterialRegistry.isFullyLoaded()) {
-      // if a specific material is set in the config, try adding that
+      // TODO: this is not the best for the different material stat types
+      // if a specific material is set in the config, try adding that as search tab only
       String showOnlyId = Config.COMMON.showOnlyPartMaterial.get();
       boolean added = false;
       if (!showOnlyId.isEmpty()) {
         MaterialVariantId materialId = MaterialVariantId.tryParse(showOnlyId);
         if (materialId != null && canUseMaterial(materialId.getId())) {
-          items.add(this.withMaterialForDisplay(materialId));
+          items.accept(this.withMaterialForDisplay(materialId), TabVisibility.SEARCH_TAB_ONLY);
           added = true;
         }
       }
-      // if no material is set or we failed to find it, iterate all materials
-      if (!added) {
-        for (IMaterial material : MaterialRegistry.getInstance().getVisibleMaterials()) {
-          MaterialId id = material.getIdentifier();
-          if (this.canUseMaterial(id)) {
-            items.add(this.withMaterial(id));
-            // if a specific material was requested and not found, stop after first
-            if (!showOnlyId.isEmpty()) {
-              break;
-            }
+      // add all applicable materials to the tab, and possibly to serach
+      for (IMaterial material : MaterialRegistry.getInstance().getVisibleMaterials()) {
+        MaterialId id = material.getIdentifier();
+        if (this.canUseMaterial(id)) {
+          // if config is empty, everything goes in search
+          if (showOnlyId.isEmpty()) {
+            items.accept(this.withMaterial(id), TabVisibility.PARENT_AND_SEARCH_TABS);
+          } else {
+            // if config is set, only add to search if not yet added
+            items.accept(this.withMaterial(id), added ? TabVisibility.PARENT_TAB_ONLY : TabVisibility.PARENT_AND_SEARCH_TABS);
+            added = true;
           }
         }
       }
