@@ -608,6 +608,10 @@
       "stat_type": "tconstruct:bowstring"
     },
     {
+      "path": "tconstruct:item/tool/crossbow/bowstring_broken",
+      "stat_type": "tconstruct:bowstring"
+    },
+    {
       "path": "tconstruct:item/tool/crossbow/bowstring_1",
       "stat_type": "tconstruct:bowstring"
     },
@@ -749,6 +753,10 @@
     },
     {
       "path": "tconstruct:item/tool/war_pick/bowstring",
+      "stat_type": "tconstruct:bowstring"
+    },
+    {
+      "path": "tconstruct:item/tool/war_pick/bowstring_broken",
       "stat_type": "tconstruct:bowstring"
     },
     {
