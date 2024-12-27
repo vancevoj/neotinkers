@@ -14,7 +14,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag.Default;
@@ -385,7 +384,6 @@ public class TinkerStationScreen extends BaseTabbedScreen<TinkerStationBlockEnti
     Pattern pattern = icon.getValue(Pattern.class);
     if (pattern != null) {
       // draw pattern sprite
-      RenderSystem.applyModelViewMatrix();
       GuiUtil.renderPattern(graphics, pattern, x, y);
       return;
     }
@@ -409,13 +407,12 @@ public class TinkerStationScreen extends BaseTabbedScreen<TinkerStationBlockEnti
     final float yOff = 22f;
 
     // render the background icon
-    PoseStack renderPose = RenderSystem.getModelViewStack();
+    PoseStack renderPose = graphics.pose();
     renderPose.pushPose();
     renderPose.translate(xOff, yOff, 0.0F);
     renderPose.scale(scale, scale, 1.0f);
     renderIcon(graphics, currentLayout.getIcon(), (int) (this.cornerX / scale), (int) (this.cornerY / scale));
     renderPose.popPose();
-    RenderSystem.applyModelViewMatrix();
 
     // rebind gui texture since itemstack drawing sets it to something else
     RenderUtils.setup(TINKER_STATION_TEXTURE, 1.0f, 1.0f, 1.0f, 0.82f);
@@ -476,7 +473,6 @@ public class TinkerStationScreen extends BaseTabbedScreen<TinkerStationBlockEnti
     this.panelDecorationR.draw(graphics, this.modifierInfo.guiRight() - 5 - this.panelDecorationR.w, this.modifierInfo.topPos - this.panelDecorationR.h);
 
     // render slot background icons
-    RenderSystem.setShaderTexture(0, InventoryMenu.BLOCK_ATLAS);
     for (int i = 0; i <= maxInputs; i++) {
       Slot slot = this.getMenu().getSlot(i);
       if (!slot.hasItem()) {

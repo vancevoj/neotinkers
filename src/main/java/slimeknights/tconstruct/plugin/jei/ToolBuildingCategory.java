@@ -84,9 +84,8 @@ public class ToolBuildingCategory implements IRecipeCategory<ToolBuildingRecipe>
   public void draw(ToolBuildingRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics graphics, double mouseX, double mouseY) {
     // first, draw the item background
     ItemStack outputStack = recipe.getOutput() instanceof IModifiableDisplay modifiable ? modifiable.getRenderTool() : recipe.getOutput().asItem().getDefaultInstance();
-    PoseStack renderPose = RenderSystem.getModelViewStack();
+    PoseStack renderPose = graphics.pose();
     renderPose.pushPose();
-    renderPose.mulPoseMatrix(graphics.pose().last().pose());
     renderPose.translate(5, 6.5, 0);
     renderPose.scale(3.7f, 3.7f, 1.0f);
     graphics.renderItem(outputStack, 0, 0);
@@ -95,7 +94,6 @@ public class ToolBuildingCategory implements IRecipeCategory<ToolBuildingRecipe>
     // next, overlay the item with transparent grey, makes it appear transparent
     RenderSystem.enableBlend();
     RenderSystem.disableDepthTest();
-    RenderSystem.applyModelViewMatrix();
     RenderSystem.setShaderColor(1, 1, 1, 0.82f);
     itemCover.draw(graphics, 5, 6);
 
