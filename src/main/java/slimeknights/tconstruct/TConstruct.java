@@ -2,12 +2,16 @@ package slimeknights.tconstruct;
 
 import net.minecraft.core.HolderLookup.Provider;
 import net.minecraft.core.RegistrySetBuilder;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.data.DatapackBuiltinEntriesProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.data.event.GatherDataEvent;
@@ -18,8 +22,10 @@ import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.MissingMappingsEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import slimeknights.mantle.registration.RegistrationHelper;
 import slimeknights.tconstruct.common.TinkerModule;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.common.config.Config;
@@ -92,6 +98,7 @@ public class TConstruct {
     TinkerItemDisplays.init();
 
     // initialize modules, done this way rather than with annotations to give us control over the order
+    MinecraftForge.EVENT_BUS.addListener(TConstruct::missingMappings);
     IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
     // base
     bus.register(new TinkerCommons());
@@ -172,6 +179,20 @@ public class TConstruct {
     generator.addProvider(server, new LootTableInjectionProvider(packOutput));
   }
 
+  /** Handles missing mappings of all types */
+  private static void missingMappings(MissingMappingsEvent event) {
+    RegistrationHelper.handleMissingMappings(event, MOD_ID, Registries.BLOCK, name -> switch (name) {
+      case "piglin_head" -> Blocks.PIGLIN_HEAD;
+      case "piglin_wall_head" -> Blocks.PIGLIN_WALL_HEAD;
+      default -> null;
+    });
+    RegistrationHelper.handleMissingMappings(event, MOD_ID, Registries.ITEM, name -> {
+      if ("piglin_head".equals(name)) {
+        return Items.PIGLIN_HEAD;
+      }
+      return null;
+    });
+  }
 
   /* Utils */
 

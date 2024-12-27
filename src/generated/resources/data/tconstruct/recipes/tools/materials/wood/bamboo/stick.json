@@ -4,6 +4,6 @@
     "item": "minecraft:bamboo"
   },
   "material": "tconstruct:bamboo",
-  "needed": 4,
+  "needed": 9,
   "value": 1
 }

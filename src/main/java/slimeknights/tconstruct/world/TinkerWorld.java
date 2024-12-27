@@ -477,7 +477,7 @@ public final class TinkerWorld extends TinkerModule {
   private static SkullBlock makeHead(TinkerHeadType type) {
     // TODO: find a way for Forge to give me new instruments
     BlockBehaviour.Properties props = BlockBehaviour.Properties.of().strength(1.0F).pushReaction(PushReaction.DESTROY);
-    if (type == TinkerHeadType.PIGLIN || type == TinkerHeadType.PIGLIN_BRUTE || type == TinkerHeadType.ZOMBIFIED_PIGLIN) {
+    if (type.isPiglin()) {
       return new PiglinHeadBlock(type, props);
     }
     return new SkullBlock(type, props);
@@ -486,7 +486,7 @@ public final class TinkerWorld extends TinkerModule {
   /** Creates a skull wall block for the given head type */
   private static WallSkullBlock makeWallHead(TinkerHeadType type) {
     BlockBehaviour.Properties props = BlockBehaviour.Properties.of().strength(1.0F).lootFrom(() -> heads.get(type));
-    if (type == TinkerHeadType.PIGLIN || type == TinkerHeadType.PIGLIN_BRUTE || type == TinkerHeadType.ZOMBIFIED_PIGLIN) {
+    if (type.isPiglin()) {
       return new PiglinWallHeadBlock(type, props);
     }
     return new WallSkullBlock(type, props);

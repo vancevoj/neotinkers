@@ -34,6 +34,7 @@ public class MaterialRenderInfoProvider extends AbstractMaterialRenderInfoProvid
     buildRenderInfo(MaterialIds.darkOak);
     buildRenderInfo(MaterialIds.acacia);
     buildRenderInfo(MaterialIds.mangrove);
+    buildRenderInfo(MaterialIds.cherry);
     buildRenderInfo(MaterialIds.crimson);
     buildRenderInfo(MaterialIds.warped);
     buildRenderInfo(MaterialIds.bamboo);

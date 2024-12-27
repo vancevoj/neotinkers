@@ -253,6 +253,7 @@ public class BlockTagProvider extends BlockTagsProvider {
     });
     endermanHoldable.addTag(TinkerTags.Blocks.SLIMY_SOIL);
     tagBlocks(BlockTags.SWORD_EFFICIENT, TinkerWorld.slimeTallGrass, TinkerWorld.slimeFern);
+    tagBlocks(BlockTags.REPLACEABLE, TinkerWorld.slimeTallGrass, TinkerWorld.slimeFern);
     tagBlocks(BlockTags.REPLACEABLE_BY_TREES, TinkerWorld.slimeTallGrass, TinkerWorld.slimeFern);
     tagBlocks(BlockTags.AZALEA_ROOT_REPLACEABLE, TinkerWorld.slimeTallGrass, TinkerWorld.slimeFern);
 
@@ -282,11 +283,8 @@ public class BlockTagProvider extends BlockTagsProvider {
     this.tag(TinkerTags.Blocks.ENDER_SLIME_SPAWN).add(TinkerWorld.enderGeode.getBlock(), TinkerWorld.enderGeode.getBudding()).addTag(FoliageType.ENDER.getGrassBlockTag());
 
     this.tag(BlockTags.GUARDED_BY_PIGLINS)
-        .add(TinkerTables.castChest.get(), TinkerCommons.goldBars.get(), TinkerCommons.goldPlatform.get(),
-             // piglins do not appreciate you touching their corpses
-             TinkerWorld.heads.get(TinkerHeadType.PIGLIN), TinkerWorld.heads.get(TinkerHeadType.PIGLIN_BRUTE),
-             TinkerWorld.wallHeads.get(TinkerHeadType.PIGLIN), TinkerWorld.wallHeads.get(TinkerHeadType.PIGLIN_BRUTE));
-    // piglins are not a fan of zombie piglin corpses though
+        .add(TinkerTables.castChest.get(), TinkerCommons.goldBars.get(), TinkerCommons.goldPlatform.get());
+    // piglins are not a fan of zombie piglin corpses
     this.tag(BlockTags.PIGLIN_REPELLENTS)
         .add(TinkerWorld.heads.get(TinkerHeadType.ZOMBIFIED_PIGLIN), TinkerWorld.wallHeads.get(TinkerHeadType.ZOMBIFIED_PIGLIN));
 
