@@ -40,7 +40,6 @@ import slimeknights.tconstruct.library.client.data.spritetransformer.ISpriteTran
 import slimeknights.tconstruct.library.client.data.spritetransformer.OffsettingSpriteTransformer;
 import slimeknights.tconstruct.library.client.data.spritetransformer.RecolorSpriteTransformer;
 import slimeknights.tconstruct.library.client.materials.MaterialRenderInfoLoader;
-import slimeknights.tconstruct.library.client.model.TinkerItemDisplays;
 import slimeknights.tconstruct.library.client.modifiers.ModifierIconManager;
 
 import java.util.function.Consumer;
@@ -60,7 +59,6 @@ public class TinkerClient {
     // needs to register listeners early enough for minecraft to load
     ModifierIconManager.init();
     MaterialRenderInfoLoader.init();
-    TinkerItemDisplays.init();
 
     // add the recipe cache invalidator to the client
     Consumer<RecipesUpdatedEvent> recipesUpdated = event -> RecipeCacheInvalidator.reload(true);

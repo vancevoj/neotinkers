@@ -39,6 +39,7 @@ import slimeknights.tconstruct.common.data.tags.ItemTagProvider;
 import slimeknights.tconstruct.common.network.TinkerNetwork;
 import slimeknights.tconstruct.fluids.TinkerFluids;
 import slimeknights.tconstruct.gadgets.TinkerGadgets;
+import slimeknights.tconstruct.library.TinkerItemDisplays;
 import slimeknights.tconstruct.library.materials.MaterialRegistry;
 import slimeknights.tconstruct.library.tools.capability.TinkerDataCapability.ComputableDataKey;
 import slimeknights.tconstruct.library.tools.capability.TinkerDataCapability.TinkerDataKey;
@@ -88,6 +89,7 @@ public class TConstruct {
     instance = this;
 
     Config.init();
+    TinkerItemDisplays.init();
 
     // initialize modules, done this way rather than with annotations to give us control over the order
     IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();

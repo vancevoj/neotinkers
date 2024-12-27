@@ -23,7 +23,7 @@ import net.minecraftforge.client.model.data.ModelData;
 import org.joml.Quaternionf;
 import slimeknights.tconstruct.common.config.Config;
 import slimeknights.tconstruct.library.client.TinkerRenderTypes;
-import slimeknights.tconstruct.library.client.model.TinkerItemDisplays;
+import slimeknights.tconstruct.library.TinkerItemDisplays;
 import slimeknights.tconstruct.smeltery.block.controller.ControllerBlock;
 import slimeknights.tconstruct.smeltery.block.entity.controller.HeatingStructureBlockEntity;
 import slimeknights.tconstruct.smeltery.block.entity.module.MeltingModuleInventory;
