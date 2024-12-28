@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -75,8 +76,8 @@ public class FirestarterModifier extends NoLevelsModifier implements EntityInter
   }
 
   @Override
-  public Component getDisplayName(IToolStackView tool, ModifierEntry entry) {
-    return DualOptionInteraction.formatModifierName(tool, this, super.getDisplayName(tool, entry));
+  public Component getDisplayName(IToolStackView tool, ModifierEntry entry, @Nullable RegistryAccess access) {
+    return DualOptionInteraction.formatModifierName(tool, this, super.getDisplayName(tool, entry, access));
   }
 
   @Override

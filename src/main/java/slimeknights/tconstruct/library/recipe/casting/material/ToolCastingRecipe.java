@@ -164,7 +164,7 @@ public class ToolCastingRecipe extends AbstractMaterialCastingRecipe implements 
   protected List<IDisplayableCastingRecipe> multiRecipes;
 
   @Override
-  public List<IDisplayableCastingRecipe> getRecipes() {
+  public List<IDisplayableCastingRecipe> getRecipes(RegistryAccess access) {
     if (multiRecipes == null) {
       List<MaterialStatsId> requirements = ToolMaterialHook.stats(result.getToolDefinition());
       if (requirements.isEmpty()) {

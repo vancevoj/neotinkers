@@ -9,6 +9,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.ForgeI18n;
 import slimeknights.mantle.client.book.data.BookData;
 import slimeknights.mantle.client.book.data.content.PageContent;
@@ -123,12 +124,13 @@ public class ContentModifier extends PageContent {
   @Override
   public void load() {
     if (this.recipes == null) {
-      assert Minecraft.getInstance().level != null;
       Modifier modifier = getModifier();
       if (modifier == ModifierManager.INSTANCE.getDefaultValue()) {
         this.recipes = Collections.emptyList();
       } else {
-        this.recipes = RecipeHelper.getJEIRecipes(Minecraft.getInstance().level.getRecipeManager(), TinkerRecipeTypes.TINKER_STATION.get(), IDisplayModifierRecipe.class).stream().filter(recipe -> recipe.getDisplayResult().matches(modifier)).collect(Collectors.toList());
+        Level level = Minecraft.getInstance().level;
+        assert level != null;
+        this.recipes = RecipeHelper.getJEIRecipes(level.registryAccess(), level.getRecipeManager(), TinkerRecipeTypes.TINKER_STATION.get(), IDisplayModifierRecipe.class).stream().filter(recipe -> recipe.getDisplayResult().matches(modifier)).collect(Collectors.toList());
       }
     }
   }

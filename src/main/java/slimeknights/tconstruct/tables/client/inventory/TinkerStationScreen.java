@@ -9,11 +9,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.renderer.Rect2i;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag.Default;
@@ -116,8 +118,8 @@ public class TinkerStationScreen extends BaseTabbedScreen<TinkerStationBlockEnti
 
   // components
   protected EditBox textField;
-  protected InfoPanelScreen<TinkerStationScreen,TinkerStationContainerMenu> tinkerInfo;
-  protected InfoPanelScreen<TinkerStationScreen,TinkerStationContainerMenu> modifierInfo;
+  protected final InfoPanelScreen<TinkerStationScreen,TinkerStationContainerMenu> tinkerInfo;
+  protected final InfoPanelScreen<TinkerStationScreen,TinkerStationContainerMenu> modifierInfo;
   protected TinkerStationButtonsWidget buttonsScreen;
 
   /** Maximum available slots */
@@ -126,10 +128,13 @@ public class TinkerStationScreen extends BaseTabbedScreen<TinkerStationBlockEnti
   /** How many of the available input slots are active */
   protected int activeInputs;
 
+  private final Player player;
+
   @SuppressWarnings("deprecation")
   public TinkerStationScreen(TinkerStationContainerMenu container, Inventory playerInventory, Component title) {
     super(container, playerInventory, title);
 
+    this.player = playerInventory.player;
     this.tinkerInfo = new InfoPanelScreen<>(this, container, playerInventory, title);
     this.tinkerInfo.setTextScale(8/9f);
     this.addModule(this.tinkerInfo);
@@ -243,7 +248,7 @@ public class TinkerStationScreen extends BaseTabbedScreen<TinkerStationBlockEnti
   }
 
   /** Updates the tool panel area */
-  static void updateToolPanel(InfoPanelScreen<TinkerStationScreen,TinkerStationContainerMenu> tinkerInfo, ToolStack tool, ItemStack result) {
+  static void updateToolPanel(InfoPanelScreen<?,?> tinkerInfo, ToolStack tool, ItemStack result) {
     if (tool.getItem() instanceof ITinkerStationDisplay display) {
       tinkerInfo.setCaption(display.getLocalizedName());
       tinkerInfo.setText(display.getStatInformation(tool, Minecraft.getInstance().player, new ArrayList<>(), SafeClientAccess.getTooltipKey(), TinkerTooltipFlags.TINKER_STATION));
@@ -257,7 +262,7 @@ public class TinkerStationScreen extends BaseTabbedScreen<TinkerStationBlockEnti
   }
 
   /** Updates the modifier panel with relevant info */
-  static void updateModifierPanel(InfoPanelScreen<TinkerStationScreen,TinkerStationContainerMenu> modifierInfo, ToolStack tool) {
+  static void updateModifierPanel(InfoPanelScreen<?,?> modifierInfo, ToolStack tool, RegistryAccess access) {
     List<Component> modifierNames = new ArrayList<>();
     List<Component> modifierTooltip = new ArrayList<>();
     Component title;
@@ -272,7 +277,7 @@ public class TinkerStationScreen extends BaseTabbedScreen<TinkerStationBlockEnti
           int level = entry.getLevel() - upgrades.getOrDefault(mod, 0);
           if (level > 0) {
             ModifierEntry trait = new ModifierEntry(entry.getModifier(), level);
-            modifierNames.add(mod.getDisplayName(tool, trait));
+            modifierNames.add(mod.getDisplayName(tool, trait, access));
             modifierTooltip.add(mod.getDescription(tool, trait));
           }
         }
@@ -290,7 +295,7 @@ public class TinkerStationScreen extends BaseTabbedScreen<TinkerStationBlockEnti
       for (ModifierEntry entry : modifiers) {
         Modifier mod = entry.getModifier();
         if (mod.shouldDisplay(true)) {
-          modifierNames.add(mod.getDisplayName(tool, entry));
+          modifierNames.add(mod.getDisplayName(tool, entry, access));
           modifierTooltip.add(mod.getDescription(tool, entry));
         }
       }
@@ -339,7 +344,7 @@ public class TinkerStationScreen extends BaseTabbedScreen<TinkerStationBlockEnti
     if (toolStack.is(TinkerTags.Items.MODIFIABLE)) {
       ToolStack tool = ToolStack.from(toolStack);
       updateToolPanel(tinkerInfo, tool, toolStack);
-      updateModifierPanel(modifierInfo, tool);
+      updateModifierPanel(modifierInfo, tool, player.level().registryAccess());
     }
     // tool build info
     else {

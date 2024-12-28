@@ -8,6 +8,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
@@ -42,8 +43,8 @@ public class ModifierWorktableScreen extends BaseTabbedScreen<ModifierWorktableB
   };
 
   /** Side panels, for tools and modifiers */
-  protected InfoPanelScreen tinkerInfo;
-  protected InfoPanelScreen modifierInfo;
+  protected final InfoPanelScreen<ModifierWorktableScreen,ModifierWorktableContainerMenu> tinkerInfo;
+  protected final InfoPanelScreen<ModifierWorktableScreen,ModifierWorktableContainerMenu> modifierInfo;
 
   /** Current scrollbar position */
   private float sliderProgress = 0.0F;
@@ -57,14 +58,17 @@ public class ModifierWorktableScreen extends BaseTabbedScreen<ModifierWorktableB
    */
   private int modifierIndexOffset = 0;
 
+  private final Player player;
+
   public ModifierWorktableScreen(ModifierWorktableContainerMenu container, Inventory playerInventory, Component title) {
     super(container, playerInventory, title);
 
-    this.tinkerInfo = new InfoPanelScreen(this, container, playerInventory, title);
+    this.player = playerInventory.player;
+    this.tinkerInfo = new InfoPanelScreen<>(this, container, playerInventory, title);
     this.tinkerInfo.setTextScale(8/9f);
     this.addModule(this.tinkerInfo);
 
-    this.modifierInfo = new InfoPanelScreen(this, container, playerInventory, title);
+    this.modifierInfo = new InfoPanelScreen<>(this, container, playerInventory, title);
     this.modifierInfo.setTextScale(7/9f);
     this.addModule(this.modifierInfo);
 
@@ -204,7 +208,7 @@ public class ModifierWorktableScreen extends BaseTabbedScreen<ModifierWorktableB
       this.modifierInfo.setCaption(Component.empty());
       this.modifierInfo.setText(Component.empty());
       if (result.hasTag(TinkerTags.Items.MODIFIABLE)) {
-        TinkerStationScreen.updateModifierPanel(modifierInfo, result);
+        TinkerStationScreen.updateModifierPanel(modifierInfo, result, player.level().registryAccess());
       } else {
         // modifier crystals can show their modifier, along with anything else with a modifier there
         ModifierId modifierId = ModifierCrystalItem.getModifier(resultStack);

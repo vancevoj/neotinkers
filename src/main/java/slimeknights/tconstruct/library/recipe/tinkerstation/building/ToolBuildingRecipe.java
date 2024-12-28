@@ -165,7 +165,7 @@ public class ToolBuildingRecipe implements ITinkerStationRecipe {
   }
 
   @Override
-  public RecipeResult<ItemStack> getValidatedResult(ITinkerStationContainer inv) {
+  public RecipeResult<ItemStack> getValidatedResult(ITinkerStationContainer inv, RegistryAccess access) {
     // first n slots contain parts
     List<MaterialVariant> materials = IntStream.range(0, ToolPartsHook.parts(output.getToolDefinition()).size())
                                                .mapToObj(i -> MaterialVariant.of(IMaterialItem.getMaterialFromStack(inv.getInput(i))))
@@ -182,6 +182,6 @@ public class ToolBuildingRecipe implements ITinkerStationRecipe {
   @Deprecated
   @Override
   public ItemStack assemble(ITinkerStationContainer inv, RegistryAccess access) {
-    return getValidatedResult(inv).getResult();
+    return getValidatedResult(inv, access).getResult();
   }
 }

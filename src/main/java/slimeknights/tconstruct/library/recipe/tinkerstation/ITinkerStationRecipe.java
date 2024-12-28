@@ -32,7 +32,7 @@ public interface ITinkerStationRecipe extends ICommonRecipe<ITinkerStationContai
    * TODO 1.20: switch return type to {@code RecipeResult<LazyToolStack>}
    * @return Validated result
    */
-  RecipeResult<ItemStack> getValidatedResult(ITinkerStationContainer inv);
+  RecipeResult<ItemStack> getValidatedResult(ITinkerStationContainer inv, RegistryAccess access);
 
   /** Gets the number to shrink the tool slot by, perfectly valid for this to be higher than the contained number of tools */
   default int shrinkToolSlotBy() {
@@ -55,14 +55,14 @@ public interface ITinkerStationRecipe extends ICommonRecipe<ITinkerStationContai
 
   /* Deprecated */
 
-  /** @deprecated use {@link #getValidatedResult(ITinkerStationContainer)}*/
+  /** @deprecated use {@link #getValidatedResult(ITinkerStationContainer, RegistryAccess)}*/
   @Deprecated
   @Override
   default ItemStack getResultItem(RegistryAccess pRegistryAccess) {
     return ItemStack.EMPTY;
   }
 
-  /** @deprecated use {@link #getValidatedResult(ITinkerStationContainer)}*/
+  /** @deprecated use {@link #getValidatedResult(ITinkerStationContainer, RegistryAccess)}*/
   @Deprecated
   @Override
   default ItemStack assemble(ITinkerStationContainer inv, RegistryAccess access) {

@@ -44,7 +44,7 @@ public class CastDuplicationRecipe extends ItemCastingRecipe implements IMultiRe
   private List<ItemCastingRecipe> displayRecipes = null;
 
   @Override
-  public List<ItemCastingRecipe> getRecipes() {
+  public List<ItemCastingRecipe> getRecipes(RegistryAccess access) {
     if (displayRecipes == null) {
       displayRecipes = Arrays.stream(getCast().getItems())
                              .map(item -> new ItemCastingRecipe(getSerializer(), getId(), getGroup(), Ingredient.of(item), fluid, ItemOutput.fromStack(item), coolingTime, false, false))

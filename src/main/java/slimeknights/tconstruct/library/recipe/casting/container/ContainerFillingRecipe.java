@@ -109,7 +109,7 @@ public class ContainerFillingRecipe implements ICastingRecipe, IMultiRecipe<Disp
   private List<DisplayCastingRecipe> displayRecipes = null;
 
   @Override
-  public List<DisplayCastingRecipe> getRecipes() {
+  public List<DisplayCastingRecipe> getRecipes(RegistryAccess access) {
     if (displayRecipes == null) {
       List<ItemStack> casts = Collections.singletonList(new ItemStack(container));
       displayRecipes = ForgeRegistries.FLUIDS.getValues().stream()

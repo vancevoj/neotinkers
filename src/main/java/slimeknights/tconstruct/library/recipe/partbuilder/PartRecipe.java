@@ -142,7 +142,7 @@ public class PartRecipe implements IPartBuilderRecipe, IMultiRecipe<ItemPartReci
   private List<ItemPartRecipe> multiRecipes;
 
   @Override
-  public List<ItemPartRecipe> getRecipes() {
+  public List<ItemPartRecipe> getRecipes(RegistryAccess access) {
     if (multiRecipes == null) {
       // TODO: recipe per variant instead of per material?
       multiRecipes = MaterialRegistry

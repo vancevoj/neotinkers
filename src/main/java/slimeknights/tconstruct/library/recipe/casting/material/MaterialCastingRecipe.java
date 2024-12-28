@@ -67,7 +67,7 @@ public class MaterialCastingRecipe extends AbstractMaterialCastingRecipe impleme
   protected List<IDisplayableCastingRecipe> multiRecipes;
 
   @Override
-  public List<IDisplayableCastingRecipe> getRecipes() {
+  public List<IDisplayableCastingRecipe> getRecipes(RegistryAccess access) {
     if (multiRecipes == null) {
       RecipeType<?> type = getType();
       List<ItemStack> castItems = Arrays.asList(getCast().getItems());
