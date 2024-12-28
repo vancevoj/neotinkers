@@ -8,7 +8,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
@@ -24,14 +23,13 @@ import slimeknights.tconstruct.library.recipe.worktable.IModifierWorktableRecipe
 import slimeknights.tconstruct.library.tools.nbt.LazyToolStack;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.tables.block.entity.table.ModifierWorktableBlockEntity;
-import slimeknights.tconstruct.tables.client.inventory.module.InfoPanelScreen;
 import slimeknights.tconstruct.tables.menu.ModifierWorktableContainerMenu;
 import slimeknights.tconstruct.tools.item.ModifierCrystalItem;
 
 import java.util.Collections;
 import java.util.List;
 
-public class ModifierWorktableScreen extends BaseTabbedScreen<ModifierWorktableBlockEntity,ModifierWorktableContainerMenu> {
+public class ModifierWorktableScreen extends ToolTableScreen<ModifierWorktableBlockEntity,ModifierWorktableContainerMenu> {
   protected static final Component TITLE = TConstruct.makeTranslation("gui", "modifier_worktable.title");
   protected static final Component TABLE_INFO = TConstruct.makeTranslation("gui", "modifier_worktable.info");
 
@@ -41,10 +39,6 @@ public class ModifierWorktableScreen extends BaseTabbedScreen<ModifierWorktableB
     new Pattern(TConstruct.MOD_ID, "ingot"),
     new Pattern(TConstruct.MOD_ID, "quartz")
   };
-
-  /** Side panels, for tools and modifiers */
-  protected final InfoPanelScreen<ModifierWorktableScreen,ModifierWorktableContainerMenu> tinkerInfo;
-  protected final InfoPanelScreen<ModifierWorktableScreen,ModifierWorktableContainerMenu> modifierInfo;
 
   /** Current scrollbar position */
   private float sliderProgress = 0.0F;
@@ -58,24 +52,28 @@ public class ModifierWorktableScreen extends BaseTabbedScreen<ModifierWorktableB
    */
   private int modifierIndexOffset = 0;
 
-  private final Player player;
-
   public ModifierWorktableScreen(ModifierWorktableContainerMenu container, Inventory playerInventory, Component title) {
     super(container, playerInventory, title);
-
-    this.player = playerInventory.player;
-    this.tinkerInfo = new InfoPanelScreen<>(this, container, playerInventory, title);
-    this.tinkerInfo.setTextScale(8/9f);
-    this.addModule(this.tinkerInfo);
-
-    this.modifierInfo = new InfoPanelScreen<>(this, container, playerInventory, title);
-    this.modifierInfo.setTextScale(7/9f);
-    this.addModule(this.modifierInfo);
 
     this.tinkerInfo.yOffset = 0;
     this.modifierInfo.yOffset = this.tinkerInfo.imageHeight + 4;
 
-    addChestSideInventory(playerInventory);
+    if (addChestSideInventory(playerInventory)) {
+      enableArmorStandPreview = false;
+    }
+  }
+
+  @Override
+  protected void init() {
+    super.init();
+    if (tile != null) {
+      LazyToolStack lazyResult = tile.getResult();
+      if (lazyResult != null) {
+        updateArmorStandPreview(lazyResult.getStack());
+      } else {
+        updateArmorStandPreview(menu.getSlot(ModifierWorktableBlockEntity.TINKER_SLOT).getItem());
+      }
+    }
   }
 
   @Override
@@ -96,6 +94,8 @@ public class ModifierWorktableScreen extends BaseTabbedScreen<ModifierWorktableB
     this.drawModifierIcons(graphics, this.cornerX + 28, this.cornerY + 15);
 
     super.renderBg(graphics, partialTicks, mouseX, mouseY);
+
+    renderArmorStand(graphics, -55, 125, 50);
   }
 
   /**
@@ -188,14 +188,24 @@ public class ModifierWorktableScreen extends BaseTabbedScreen<ModifierWorktableB
     }
 
     if (tile != null) {
+      LazyToolStack lazyResult = tile.getResult();
+      // set armor stand preview to input or result
+      if (lazyResult == null) {
+        updateArmorStandPreview(menu.getSlot(ModifierWorktableBlockEntity.TINKER_SLOT).getItem());
+      } else {
+        updateArmorStandPreview(lazyResult.getStack());
+      }
+
+
+      // if we have a message, just stop now
       Component message = tile.getCurrentMessage();
       if (!message.getString().isEmpty()) {
         message(message);
         return;
       }
 
-      LazyToolStack lazyResult = tile.getResult();
       if (lazyResult == null) {
+        updateArmorStandPreview(menu.getSlot(ModifierWorktableBlockEntity.TINKER_SLOT).getItem());
         message(TABLE_INFO);
         return;
       }
@@ -203,12 +213,12 @@ public class ModifierWorktableScreen extends BaseTabbedScreen<ModifierWorktableB
       // reuse logic from tinker station for final result
       ToolStack result = lazyResult.getTool();
       ItemStack resultStack = lazyResult.getStack();
-      TinkerStationScreen.updateToolPanel(tinkerInfo, result, resultStack);
+      updateToolPanel(result, resultStack);
 
       this.modifierInfo.setCaption(Component.empty());
       this.modifierInfo.setText(Component.empty());
       if (result.hasTag(TinkerTags.Items.MODIFIABLE)) {
-        TinkerStationScreen.updateModifierPanel(modifierInfo, result, player.level().registryAccess());
+        updateModifierPanel(result);
       } else {
         // modifier crystals can show their modifier, along with anything else with a modifier there
         ModifierId modifierId = ModifierCrystalItem.getModifier(resultStack);

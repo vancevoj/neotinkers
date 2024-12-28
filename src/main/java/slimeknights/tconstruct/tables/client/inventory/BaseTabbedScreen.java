@@ -79,7 +79,8 @@ public class BaseTabbedScreen<TILE extends BlockEntity, CONTAINER extends Tabbed
   public void updateDisplay() {
   }
 
-  protected void addChestSideInventory(Inventory inventory) {
+  /** Adds the chest screen, returning true if it was added */
+  protected boolean addChestSideInventory(Inventory inventory) {
     SideInventoryContainer<?> sideInventoryContainer = getMenu().getSubContainer(SideInventoryContainer.class);
     if (sideInventoryContainer != null) {
       // no title if missing one
@@ -90,7 +91,9 @@ public class BaseTabbedScreen<TILE extends BlockEntity, CONTAINER extends Tabbed
       }
 
       this.addModule(new SideInventoryScreen<>(this, sideInventoryContainer, inventory, sideInventoryName, sideInventoryContainer.getSlotCount(), sideInventoryContainer.getColumns()));
+      return true;
     }
+    return false;
   }
 
   @Override

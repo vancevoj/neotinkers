@@ -35,13 +35,14 @@ public class ModifierWorktableContainerMenu extends TabbedContainerMenu<Modifier
       // send the player the current recipe, as we only sync to open containers
 //      tile.syncRecipe(inv.player);
       // slots
-      this.addSlot(this.outputSlot = new LazyResultSlot(tile.getCraftingResult(), 125, 33));
       // inputs
       inputSlots = new ArrayList<>();
       inputSlots.add(this.addSlot(new WorktableSlot(this, tile, ModifierWorktableBlockEntity.TINKER_SLOT, 8, 15)));
       for (int index = 0; index < tile.getContainerSize() - 1; index++) {
         inputSlots.add(this.addSlot(new WorktableSlot(this, tile, index + ModifierWorktableBlockEntity.INPUT_START, 8, 35 + 18*index)));
       }
+      // result
+      this.addSlot(this.outputSlot = new LazyResultSlot(tile.getCraftingResult(), 125, 33));
 
       // listen for the button to change in the tile
       this.addDataSlot(new LambdaDataSlot(-1, tile::getSelectedIndex, i -> {

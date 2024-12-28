@@ -9,18 +9,14 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.renderer.Rect2i;
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag.Default;
 import org.lwjgl.glfw.GLFW;
-import slimeknights.mantle.client.SafeClientAccess;
 import slimeknights.mantle.client.screen.ElementScreen;
 import slimeknights.mantle.client.screen.ModuleScreen;
 import slimeknights.mantle.client.screen.ScalableElementScreen;
@@ -29,18 +25,13 @@ import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.common.network.TinkerNetwork;
 import slimeknights.tconstruct.library.client.GuiUtil;
 import slimeknights.tconstruct.library.client.RenderUtils;
-import slimeknights.tconstruct.library.modifiers.Modifier;
-import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.recipe.partbuilder.Pattern;
-import slimeknights.tconstruct.library.tools.item.ITinkerStationDisplay;
 import slimeknights.tconstruct.library.tools.layout.LayoutIcon;
 import slimeknights.tconstruct.library.tools.layout.LayoutSlot;
 import slimeknights.tconstruct.library.tools.layout.StationSlotLayout;
 import slimeknights.tconstruct.library.tools.layout.StationSlotLayoutLoader;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
-import slimeknights.tconstruct.library.utils.TinkerTooltipFlags;
 import slimeknights.tconstruct.tables.block.entity.table.TinkerStationBlockEntity;
-import slimeknights.tconstruct.tables.client.inventory.module.InfoPanelScreen;
 import slimeknights.tconstruct.tables.client.inventory.widget.SlotButtonItem;
 import slimeknights.tconstruct.tables.client.inventory.widget.TinkerStationButtonsWidget;
 import slimeknights.tconstruct.tables.menu.TinkerStationContainerMenu;
@@ -49,21 +40,15 @@ import slimeknights.tconstruct.tables.network.TinkerStationRenamePacket;
 import slimeknights.tconstruct.tables.network.TinkerStationSelectionPacket;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 import static slimeknights.tconstruct.tables.block.entity.table.TinkerStationBlockEntity.INPUT_SLOT;
 import static slimeknights.tconstruct.tables.block.entity.table.TinkerStationBlockEntity.TINKER_SLOT;
 
-public class TinkerStationScreen extends BaseTabbedScreen<TinkerStationBlockEntity,TinkerStationContainerMenu> {
+public class TinkerStationScreen extends ToolTableScreen<TinkerStationBlockEntity,TinkerStationContainerMenu> {
   // titles to display
   private static final Component COMPONENTS_TEXT = TConstruct.makeTranslation("gui", "tinker_station.components");
-  private static final Component MODIFIERS_TEXT = TConstruct.makeTranslation("gui", "tinker_station.modifiers");
-  private static final Component UPGRADES_TEXT = TConstruct.makeTranslation("gui", "tinker_station.upgrades");
-  private static final Component TRAITS_TEXT = TConstruct.makeTranslation("gui", "tinker_station.traits");
-  // fallback text for crafting with no named slots
+ // fallback text for crafting with no named slots
   private static final Component ASCII_ANVIL = Component.literal("\n\n")
     .append("       .\n")
     .append("     /( _________\n")
@@ -118,8 +103,6 @@ public class TinkerStationScreen extends BaseTabbedScreen<TinkerStationBlockEnti
 
   // components
   protected EditBox textField;
-  protected final InfoPanelScreen<TinkerStationScreen,TinkerStationContainerMenu> tinkerInfo;
-  protected final InfoPanelScreen<TinkerStationScreen,TinkerStationContainerMenu> modifierInfo;
   protected TinkerStationButtonsWidget buttonsScreen;
 
   /** Maximum available slots */
@@ -128,20 +111,10 @@ public class TinkerStationScreen extends BaseTabbedScreen<TinkerStationBlockEnti
   /** How many of the available input slots are active */
   protected int activeInputs;
 
-  private final Player player;
 
   @SuppressWarnings("deprecation")
   public TinkerStationScreen(TinkerStationContainerMenu container, Inventory playerInventory, Component title) {
     super(container, playerInventory, title);
-
-    this.player = playerInventory.player;
-    this.tinkerInfo = new InfoPanelScreen<>(this, container, playerInventory, title);
-    this.tinkerInfo.setTextScale(8/9f);
-    this.addModule(this.tinkerInfo);
-
-    this.modifierInfo = new InfoPanelScreen<>(this, container, playerInventory, title);
-    this.modifierInfo.setTextScale(7/9f);
-    this.addModule(this.modifierInfo);
 
     this.tinkerInfo.yOffset = 5;
     this.modifierInfo.yOffset = this.tinkerInfo.imageHeight + 9;
@@ -247,64 +220,6 @@ public class TinkerStationScreen extends BaseTabbedScreen<TinkerStationBlockEnti
     this.updateDisplay();
   }
 
-  /** Updates the tool panel area */
-  static void updateToolPanel(InfoPanelScreen<?,?> tinkerInfo, ToolStack tool, ItemStack result) {
-    if (tool.getItem() instanceof ITinkerStationDisplay display) {
-      tinkerInfo.setCaption(display.getLocalizedName());
-      tinkerInfo.setText(display.getStatInformation(tool, Minecraft.getInstance().player, new ArrayList<>(), SafeClientAccess.getTooltipKey(), TinkerTooltipFlags.TINKER_STATION));
-    }
-    else {
-      tinkerInfo.setCaption(result.getHoverName());
-      List<Component> list = new ArrayList<>();
-      result.getItem().appendHoverText(result, Minecraft.getInstance().level, list, Default.NORMAL);
-      tinkerInfo.setText(list);
-    }
-  }
-
-  /** Updates the modifier panel with relevant info */
-  static void updateModifierPanel(InfoPanelScreen<?,?> modifierInfo, ToolStack tool, RegistryAccess access) {
-    List<Component> modifierNames = new ArrayList<>();
-    List<Component> modifierTooltip = new ArrayList<>();
-    Component title;
-    // control displays just traits, bit trickier to do
-    if (hasControlDown()) {
-      title = TRAITS_TEXT;
-      Map<Modifier,Integer> upgrades = tool.getUpgrades().getModifiers().stream()
-                                           .collect(Collectors.toMap(ModifierEntry::getModifier, ModifierEntry::getLevel));
-      for (ModifierEntry entry : tool.getModifierList()) {
-        Modifier mod = entry.getModifier();
-        if (mod.shouldDisplay(true)) {
-          int level = entry.getLevel() - upgrades.getOrDefault(mod, 0);
-          if (level > 0) {
-            ModifierEntry trait = new ModifierEntry(entry.getModifier(), level);
-            modifierNames.add(mod.getDisplayName(tool, trait, access));
-            modifierTooltip.add(mod.getDescription(tool, trait));
-          }
-        }
-      }
-    } else {
-      // shift is just upgrades/abilities, otherwise all
-      List<ModifierEntry> modifiers;
-      if (hasShiftDown()) {
-        modifiers = tool.getUpgrades().getModifiers();
-        title = UPGRADES_TEXT;
-      } else {
-        modifiers = tool.getModifierList();
-        title = MODIFIERS_TEXT;
-      }
-      for (ModifierEntry entry : modifiers) {
-        Modifier mod = entry.getModifier();
-        if (mod.shouldDisplay(true)) {
-          modifierNames.add(mod.getDisplayName(tool, entry, access));
-          modifierTooltip.add(mod.getDescription(tool, entry));
-        }
-      }
-    }
-
-    modifierInfo.setCaption(title);
-    modifierInfo.setText(modifierNames, modifierTooltip);
-  }
-
   @Override
   public void updateDisplay() {
     if (this.tile == null) {
@@ -339,12 +254,13 @@ public class TinkerStationScreen extends BaseTabbedScreen<TinkerStationBlockEnti
     if (toolStack.isEmpty()) {
       toolStack = this.getMenu().getSlot(TINKER_SLOT).getItem();
     }
+    updateArmorStandPreview(toolStack);
 
     // if the contained stack is modifiable, display some information
     if (toolStack.is(TinkerTags.Items.MODIFIABLE)) {
       ToolStack tool = ToolStack.from(toolStack);
-      updateToolPanel(tinkerInfo, tool, toolStack);
-      updateModifierPanel(modifierInfo, tool, player.level().registryAccess());
+      updateToolPanel(tool, toolStack);
+      updateModifierPanel(tool);
     }
     // tool build info
     else {
@@ -500,6 +416,8 @@ public class TinkerStationScreen extends BaseTabbedScreen<TinkerStationBlockEnti
       TEXT_BOX.draw(graphics, this.cornerX + 79, this.cornerY + 3);
       this.textField.render(graphics, mouseX, mouseY, partialTicks);
     }
+
+    renderArmorStand(graphics, -55, 190, 35);
   }
 
   @Override
