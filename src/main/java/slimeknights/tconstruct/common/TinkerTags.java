@@ -422,6 +422,8 @@ public class TinkerTags {
     public static final TagKey<Item> EMBELLISHMENT_SLIME = tag("modifiable/embellishment/slime");
     /** Tools that can be dyed */
     public static final TagKey<Item> DYEABLE = tag("modifiable/dyeable");
+    /** Armor items that support trim */
+    public static final TagKey<Item> TRIM = tag("modifiable/armor/trim");
     /** Tools to blacklist from default salvage recipes. May still be salvagable in other recipes */
     public static final TagKey<Item> UNSALVAGABLE = tag("modifiable/unsalvageable");
 

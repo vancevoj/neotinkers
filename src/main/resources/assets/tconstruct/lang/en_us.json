@@ -2023,6 +2023,10 @@
   "modifier.tconstruct.dyed.formatted": "Dyed #%s",
   "modifier.tconstruct.dyed.flavor": "Redecorate!",
   "modifier.tconstruct.dyed.description": "Armor appearance changed to match a different material",
+  "modifier.tconstruct.trim": "Armor Trim",
+  "modifier.tconstruct.trim.formatted": "%s (%s)",
+  "modifier.tconstruct.trim.flavor": "Complex detailing!",
+  "modifier.tconstruct.trim.description": "Additional armor detailing using expensive patterns",
 
   "_comment": "Armor - Protection",
   "modifier.tconstruct.protection": "Protection",
@@ -2906,6 +2910,9 @@
   "recipe.tconstruct.modifier.max_level": "This recipe cannot increase %s above level %s (ignoring traits)",
   "recipe.tconstruct.modifier.min_level.traits": "This recipe requires the tool to have at least %s to apply (including traits)",
   "recipe.tconstruct.modifier.max_level.traits": "This recipe cannot increase %s above level %s (including traits)",
+
+  "recipe.tconstruct.modifier.armor_trim.invalid_material": "%s is not a valid trim material, this usually indicates an invalid tag",
+  "recipe.tconstruct.modifier.armor_trim.invalid_pattern": "%s is not a valid trim pattern, this usually indicates an invalid tag",
 
   "recipe.tconstruct.tool_recycling": "Tool Recycling",
   "recipe.tconstruct.tool_recycling.info": "Select which part to salvage from this tool. There is a chance based on the tool's remaining durability to salvage a second part.",

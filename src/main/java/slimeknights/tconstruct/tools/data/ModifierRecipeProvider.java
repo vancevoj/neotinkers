@@ -74,7 +74,6 @@ import slimeknights.tconstruct.tools.TinkerModifiers;
 import slimeknights.tconstruct.tools.TinkerToolParts;
 import slimeknights.tconstruct.tools.TinkerTools;
 import slimeknights.tconstruct.tools.data.material.MaterialIds;
-import slimeknights.tconstruct.tools.recipe.ArmorDyeingRecipe;
 import slimeknights.tconstruct.tools.recipe.EnchantmentConvertingRecipeBuilder;
 import slimeknights.tconstruct.tools.recipe.ModifierRemovalRecipeBuilder;
 import slimeknights.tconstruct.tools.recipe.ModifierSortingRecipeBuilder;
@@ -1675,8 +1674,9 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
     woodTexture(consumer, MaterialIds.nahuatl, TinkerMaterials.nahuatl, folder);
     woodTexture(consumer, MaterialIds.bamboo, Blocks.BAMBOO, folder);
 
-    // travelers gear //
-    consumer.accept(new ArmorDyeingRecipe.Finished(location(folder + "travelers_dyeing"), Ingredient.of(TinkerTags.Items.DYEABLE)));
+    // cosmetics //
+    consumer.accept(new SimpleFinishedRecipe(location(folder + "dyeing"), TinkerModifiers.armorDyeingSerializer.get()));
+    consumer.accept(new SimpleFinishedRecipe(location(folder + "trim"), TinkerModifiers.armorTrimSerializer.get()));
 
     // slimesuit //
     // basic slime
