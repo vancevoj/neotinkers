@@ -47,7 +47,7 @@ import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.config.Config;
 import slimeknights.tconstruct.library.client.materials.MaterialRenderInfo.TintedSprite;
 import slimeknights.tconstruct.library.client.materials.MaterialRenderInfoLoader;
-import slimeknights.tconstruct.library.client.model.BakedUniqueGuiModel;
+import slimeknights.tconstruct.library.client.model.UniqueGuiModel;
 import slimeknights.tconstruct.library.client.modifiers.IBakedModifierModel;
 import slimeknights.tconstruct.library.client.modifiers.ModifierModelManager;
 import slimeknights.tconstruct.library.materials.definition.IMaterial;
@@ -350,7 +350,7 @@ public class ToolModel implements IUnbakedGeometry<ToolModel> {
       }
     }));
     if (largeTransforms == null) {
-      return new BakedUniqueGuiModel(smallModelBuilder.build(), guiModelBuilder.build());
+      return new UniqueGuiModel.Baked(smallModelBuilder.build(), guiModelBuilder.build());
     }
     IModelBuilder<?> largeModelBuilder = makeModelBuilder(owner, overrides, particle);
     largeQuads.build(quads -> quads.forEach(largeModelBuilder::addUnculledFace));

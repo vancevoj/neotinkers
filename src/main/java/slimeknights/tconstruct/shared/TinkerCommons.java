@@ -45,6 +45,8 @@ import slimeknights.tconstruct.common.data.model.ModelSpriteProvider;
 import slimeknights.tconstruct.common.data.model.TinkerBlockStateProvider;
 import slimeknights.tconstruct.common.data.model.TinkerItemModelProvider;
 import slimeknights.tconstruct.common.data.model.TinkerSpriteSourceProvider;
+import slimeknights.tconstruct.common.data.render.RenderFluidProvider;
+import slimeknights.tconstruct.common.data.render.RenderItemProvider;
 import slimeknights.tconstruct.common.json.BlockOrEntityCondition;
 import slimeknights.tconstruct.common.json.ConfigEnabledCondition;
 import slimeknights.tconstruct.common.recipe.RecipeCacheInvalidator;
@@ -197,6 +199,8 @@ public final class TinkerCommons extends TinkerModule {
     generator.addProvider(client, new TinkerSpriteSourceProvider(output, existingFileHelper));
     generator.addProvider(client, new TinkerItemModelProvider(output, existingFileHelper));
     generator.addProvider(client, new TinkerBlockStateProvider(output, existingFileHelper));
+    generator.addProvider(client, new RenderFluidProvider(output));
+    generator.addProvider(client, new RenderItemProvider(output));
     generator.addProvider(event.includeServer(), new CommonRecipeProvider(output));
   }
 

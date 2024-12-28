@@ -42,8 +42,8 @@ import slimeknights.mantle.client.model.util.ExtraTextureContext;
 import slimeknights.mantle.client.model.util.SimpleBlockModel;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.config.Config;
-import slimeknights.tconstruct.library.client.model.BakedUniqueGuiModel;
 import slimeknights.tconstruct.library.client.model.ModelProperties;
+import slimeknights.tconstruct.library.client.model.UniqueGuiModel;
 import slimeknights.tconstruct.smeltery.item.TankItem;
 
 import javax.annotation.Nonnull;
@@ -113,7 +113,7 @@ public class TankModel implements IUnbakedGeometry<TankModel> {
    * Baked variant to load in the custom overrides
    * @param <T>  Parent model type, used to make this easier to extend
    */
-  public static class Baked<T extends TankModel> extends BakedUniqueGuiModel {
+  public static class Baked<T extends TankModel> extends UniqueGuiModel.Baked {
     private final IGeometryBakingContext owner;
     private final ModelState originalTransforms;
     @SuppressWarnings("WeakerAccess")
@@ -184,7 +184,7 @@ public class TankModel implements IUnbakedGeometry<TankModel> {
 
       // if we have GUI, bake a GUI variant
       if (original.gui != null) {
-        baked = new BakedUniqueGuiModel(baked, bakeWithFluid(textured, original.gui, fluid, color, 0));
+        baked = new UniqueGuiModel.Baked(baked, bakeWithFluid(textured, original.gui, fluid, color, 0));
       }
 
       // return what we ended up with

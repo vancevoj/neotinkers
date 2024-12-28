@@ -9,16 +9,14 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import slimeknights.mantle.client.model.FaucetFluidLoader;
+import slimeknights.mantle.client.render.FaucetFluid;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.ClientEventBase;
-import slimeknights.tconstruct.library.client.model.block.CastingModel;
-import slimeknights.tconstruct.library.client.model.block.ChannelModel;
 import slimeknights.tconstruct.library.client.model.block.FluidTextureModel;
-import slimeknights.tconstruct.library.client.model.block.MelterModel;
 import slimeknights.tconstruct.library.client.model.block.TankModel;
 import slimeknights.tconstruct.smeltery.client.render.CastingBlockEntityRenderer;
 import slimeknights.tconstruct.smeltery.client.render.ChannelBlockEntityRenderer;
+import slimeknights.tconstruct.smeltery.client.render.ChannelFluids;
 import slimeknights.tconstruct.smeltery.client.render.FaucetBlockEntityRenderer;
 import slimeknights.tconstruct.smeltery.client.render.HeatingStructureBlockEntityRenderer;
 import slimeknights.tconstruct.smeltery.client.render.MelterBlockEntityRenderer;
@@ -33,7 +31,8 @@ import slimeknights.tconstruct.smeltery.client.screen.SingleItemScreenFactory;
 public class SmelteryClientEvents extends ClientEventBase {
   @SubscribeEvent
   static void addResourceListener(RegisterClientReloadListenersEvent event) {
-    FaucetFluidLoader.initialize(event);
+    FaucetFluid.initialize(event);
+    event.registerReloadListener(ChannelFluids.REGISTRY);
   }
 
   @SubscribeEvent
@@ -60,9 +59,6 @@ public class SmelteryClientEvents extends ClientEventBase {
   @SubscribeEvent
   static void registerModelLoaders(RegisterGeometryLoaders event) {
     event.register("tank", TankModel.LOADER);
-    event.register("casting", CastingModel.LOADER);
-    event.register("melter", MelterModel.LOADER);
-    event.register("channel", ChannelModel.LOADER);
     event.register("fluid_texture", FluidTextureModel.LOADER);
   }
 }

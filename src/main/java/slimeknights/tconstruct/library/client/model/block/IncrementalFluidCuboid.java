@@ -8,8 +8,7 @@ import net.minecraft.client.renderer.block.model.BlockFaceUV;
 import net.minecraft.core.Direction;
 import net.minecraft.util.GsonHelper;
 import org.joml.Vector3f;
-import slimeknights.mantle.client.model.fluid.FluidCuboid;
-import slimeknights.mantle.client.model.util.ModelHelper;
+import slimeknights.mantle.client.render.FluidCuboid;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -135,10 +134,8 @@ public class IncrementalFluidCuboid extends FluidCuboid {
    * @return  Scalable fluid cuboid
    */
   public static IncrementalFluidCuboid fromJson(JsonObject json) {
-    Vector3f from = ModelHelper.arrayToVector(json, "from");
-    Vector3f to = ModelHelper.arrayToVector(json, "to");
-    Map<Direction,FluidFace> faces = getFaces(json);
+    FluidCuboid base = FluidCuboid.LOADABLE.deserialize(json);
     int increments = GsonHelper.getAsInt(json, "increments");
-    return new IncrementalFluidCuboid(from, to, faces, increments);
+    return new IncrementalFluidCuboid(base.getFrom(), base.getTo(), base.getFaces(), increments);
   }
 }

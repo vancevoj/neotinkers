@@ -11,7 +11,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidType;
-import slimeknights.mantle.client.model.fluid.FluidCuboid;
+import slimeknights.mantle.client.render.FluidCuboid;
 import slimeknights.mantle.client.render.FluidRenderer;
 import slimeknights.mantle.client.render.MantleRenderTypes;
 import slimeknights.tconstruct.library.fluid.FluidTankAnimated;
