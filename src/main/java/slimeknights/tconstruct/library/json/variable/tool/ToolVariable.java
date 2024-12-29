@@ -14,7 +14,7 @@ import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 
 import javax.annotation.Nullable;
 
-import static slimeknights.mantle.data.registry.GenericLoaderRegistry.SingletonLoader.singleton;
+import static slimeknights.mantle.data.loadable.record.SingletonLoader.singleton;
 
 /**
  * Variable that fetches a value from a tool instance.

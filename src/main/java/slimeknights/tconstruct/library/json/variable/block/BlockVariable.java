@@ -7,7 +7,7 @@ import slimeknights.mantle.data.registry.GenericLoaderRegistry.IHaveLoader;
 import slimeknights.tconstruct.library.json.variable.ToFloatFunction;
 import slimeknights.tconstruct.library.json.variable.VariableLoaderRegistry;
 
-import static slimeknights.mantle.data.registry.GenericLoaderRegistry.SingletonLoader.singleton;
+import static slimeknights.mantle.data.loadable.record.SingletonLoader.singleton;
 
 /** Variable that fetches a property from a block state */
 public interface BlockVariable extends IHaveLoader {
