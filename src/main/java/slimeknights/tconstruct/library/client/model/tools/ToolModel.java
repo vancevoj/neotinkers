@@ -85,9 +85,8 @@ public class ToolModel implements IUnbakedGeometry<ToolModel> {
   private static final BitSet SMALL_TOOL_TYPES = new BitSet();
 
   /** Registers a new small tool transform type */
-  public static synchronized ItemDisplayContext registerSmallTool(ItemDisplayContext type) {
+  public static synchronized void registerSmallTool(ItemDisplayContext type) {
     SMALL_TOOL_TYPES.set(type.ordinal());
-    return type;
   }
 
   /** Color handler instance for all tools, handles both material and modifier colors */

@@ -12,8 +12,10 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import slimeknights.mantle.client.render.FaucetFluid;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.ClientEventBase;
+import slimeknights.tconstruct.library.TinkerItemDisplays;
 import slimeknights.tconstruct.library.client.model.block.FluidTextureModel;
 import slimeknights.tconstruct.library.client.model.block.TankModel;
+import slimeknights.tconstruct.library.client.model.tools.ToolModel;
 import slimeknights.tconstruct.smeltery.client.render.CastingBlockEntityRenderer;
 import slimeknights.tconstruct.smeltery.client.render.ChannelBlockEntityRenderer;
 import slimeknights.tconstruct.smeltery.client.render.ChannelFluids;
@@ -54,6 +56,9 @@ public class SmelteryClientEvents extends ClientEventBase {
     MenuScreens.register(TinkerSmeltery.smelteryContainer.get(), HeatingStructureScreen::new);
     MenuScreens.register(TinkerSmeltery.singleItemContainer.get(), new SingleItemScreenFactory());
     MenuScreens.register(TinkerSmeltery.alloyerContainer.get(), AlloyerScreen::new);
+    ToolModel.registerSmallTool(TinkerItemDisplays.MELTER);
+    ToolModel.registerSmallTool(TinkerItemDisplays.CASTING_BASIN);
+    ToolModel.registerSmallTool(TinkerItemDisplays.CASTING_TABLE);
   }
 
   @SubscribeEvent

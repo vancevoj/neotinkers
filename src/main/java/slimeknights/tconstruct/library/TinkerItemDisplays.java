@@ -10,8 +10,6 @@ import slimeknights.tconstruct.TConstruct;
 
 import java.util.Locale;
 
-import static slimeknights.tconstruct.library.client.model.tools.ToolModel.registerSmallTool;
-
 /** Custom transform types used for tinkers item rendering */
 public class TinkerItemDisplays {
   private TinkerItemDisplays() {}
@@ -21,13 +19,13 @@ public class TinkerItemDisplays {
   }
 
   /** Used by the melter and smeltery for display of items its melting */
-  public static ItemDisplayContext MELTER = registerSmallTool(create("melter", ItemDisplayContext.NONE));
+  public static ItemDisplayContext MELTER = create("melter", ItemDisplayContext.NONE);
   /** Used by the part builder, crafting station, tinkers station, and tinker anvil */
   public static ItemDisplayContext TABLE = create("table", ItemDisplayContext.NONE);
   /** Used by the casting table for item rendering */
-  public static ItemDisplayContext CASTING_TABLE = registerSmallTool(create("casting_table", ItemDisplayContext.FIXED));
+  public static ItemDisplayContext CASTING_TABLE = create("casting_table", ItemDisplayContext.FIXED);
   /** Used by the casting basin for item rendering */
-  public static ItemDisplayContext CASTING_BASIN = registerSmallTool(create("casting_basin", ItemDisplayContext.NONE));
+  public static ItemDisplayContext CASTING_BASIN = create("casting_basin", ItemDisplayContext.NONE);
 
   /** Creates a transform type */
   private static ItemDisplayContext create(String name, ItemDisplayContext fallback) {
