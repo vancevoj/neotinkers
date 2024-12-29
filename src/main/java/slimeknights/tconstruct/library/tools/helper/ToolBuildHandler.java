@@ -1,12 +1,9 @@
 package slimeknights.tconstruct.library.tools.helper;
 
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.CreativeModeTab.TabVisibility;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import slimeknights.tconstruct.TConstruct;
-import slimeknights.tconstruct.common.config.Config;
 import slimeknights.tconstruct.common.recipe.RecipeCacheInvalidator;
 import slimeknights.tconstruct.library.materials.MaterialRegistry;
 import slimeknights.tconstruct.library.materials.RandomMaterial;
@@ -26,6 +23,7 @@ import slimeknights.tconstruct.library.tools.part.IToolPart;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * Logic to help in creating new tools
@@ -108,7 +106,7 @@ public final class ToolBuildHandler {
    * @param tab    Tab being filled
    * @param item   item being created
    */
-  public static void addVariants(CreativeModeTab.Output tab, IModifiable item) {
+  public static void addVariants(Consumer<ItemStack> tab, IModifiable item, String showOnlyMaterial) {
     ToolDefinition definition = item.getToolDefinition();
     boolean hasMaterials = definition.hasMaterials();
     if (!definition.isDataLoaded() || (hasMaterials && !MaterialRegistry.isFullyLoaded())) {
@@ -119,33 +117,31 @@ public final class ToolBuildHandler {
       tab.accept(buildItemFromMaterials(item, MaterialNBT.EMPTY));
     } else {
       // if a specific material is set, show just that in search
-      String showOnlyId = Config.COMMON.showOnlyToolMaterial.get();
       boolean added = false;
-      if (!showOnlyId.isEmpty()) {
-        MaterialId materialId = MaterialId.tryParse(showOnlyId);
+      if (!showOnlyMaterial.isEmpty()) {
+        MaterialId materialId = MaterialId.tryParse(showOnlyMaterial);
         if (materialId != null) {
           IMaterial material = MaterialRegistry.getMaterial(materialId);
           if (material != IMaterial.UNKNOWN) {
             ItemStack tool = createSingleMaterial(item, MaterialVariant.of(material));
             if (!tool.isEmpty()) {
-              tab.accept(tool, TabVisibility.SEARCH_TAB_ONLY);
+              tab.accept(tool);
               added = true;
             }
           }
         }
       }
       // add all materials to the parent, conditionally to search
-      for (IMaterial material : MaterialRegistry.getInstance().getVisibleMaterials()) {
-        // if we added it and we want a single material, we are done
-        ItemStack tool = createSingleMaterial(item, MaterialVariant.of(material));
-        if (!tool.isEmpty()) {
-          // if no filter, add to both parent and search
-          if (showOnlyId.isEmpty()) {
-            tab.accept(tool, TabVisibility.PARENT_AND_SEARCH_TABS);
-          } else {
-            // if a filter, only add to search if this is the first encounter
-            tab.accept(tool, added ? TabVisibility.PARENT_TAB_ONLY : TabVisibility.PARENT_AND_SEARCH_TABS);
-            added = true;
+      if (!added) {
+        for (IMaterial material : MaterialRegistry.getInstance().getVisibleMaterials()) {
+          // if we added it and we want a single material, we are done
+          ItemStack tool = createSingleMaterial(item, MaterialVariant.of(material));
+          if (!tool.isEmpty()) {
+            tab.accept(tool);
+            // if filter is set we wanted just the 1 item
+            if (!showOnlyMaterial.isEmpty()) {
+              break;
+            }
           }
         }
       }

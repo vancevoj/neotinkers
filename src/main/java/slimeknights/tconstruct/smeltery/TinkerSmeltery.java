@@ -42,7 +42,6 @@ import slimeknights.mantle.util.RetexturedHelper;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.TinkerModule;
 import slimeknights.tconstruct.common.TinkerTags;
-import slimeknights.tconstruct.common.config.Config;
 import slimeknights.tconstruct.common.registration.CastItemObject;
 import slimeknights.tconstruct.fluids.TinkerFluids;
 import slimeknights.tconstruct.fluids.item.EmptyPotionTransfer;
@@ -121,6 +120,7 @@ import slimeknights.tconstruct.tools.TinkerToolParts;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.IntFunction;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 /**
@@ -440,12 +440,12 @@ public final class TinkerSmeltery extends TinkerModule {
     // tanks
     accept(output, searedTank);
     // toss in some pre filled fuel tanks
-    output.accept(TinkerFluids.fillTank(searedTank, TankType.FUEL_TANK, Fluids.LAVA));
-    output.accept(TinkerFluids.fillTank(searedTank, TankType.FUEL_TANK, TinkerFluids.blazingBlood.get()));
+    output.accept(TankItem.fillTank(searedTank, TankType.FUEL_TANK, Fluids.LAVA));
+    output.accept(TankItem.fillTank(searedTank, TankType.FUEL_TANK, TinkerFluids.blazingBlood.get()));
     output.accept(searedLantern);
     accept(output, scorchedTank);
-    output.accept(TinkerFluids.fillTank(scorchedTank, TankType.FUEL_TANK, Fluids.LAVA));
-    output.accept(TinkerFluids.fillTank(scorchedTank, TankType.FUEL_TANK, TinkerFluids.blazingBlood.get()));
+    output.accept(TankItem.fillTank(scorchedTank, TankType.FUEL_TANK, Fluids.LAVA));
+    output.accept(TankItem.fillTank(scorchedTank, TankType.FUEL_TANK, TinkerFluids.blazingBlood.get()));
     output.accept(scorchedLantern);
 
     // fluid transfer
@@ -498,15 +498,18 @@ public final class TinkerSmeltery extends TinkerModule {
     // dummy parts are in tool parts creative tab
 
     // additional texture variants of controllers, drains, and ducts
-    TabVisibility variantVisibility = Config.COMMON.showAllSmelteryVariants.get() ? TabVisibility.PARENT_AND_SEARCH_TABS : TabVisibility.PARENT_TAB_ONLY;
-    RetexturedHelper.addTagVariants(output, smelteryController, TinkerTags.Items.SEARED_BLOCKS, variantVisibility, variantVisibility);
-    RetexturedHelper.addTagVariants(output, searedDrain, TinkerTags.Items.SEARED_BLOCKS, variantVisibility, variantVisibility);
-    RetexturedHelper.addTagVariants(output, searedDuct, TinkerTags.Items.SEARED_BLOCKS, variantVisibility, variantVisibility);
-    RetexturedHelper.addTagVariants(output, searedChute, TinkerTags.Items.SEARED_BLOCKS, variantVisibility, variantVisibility);
-    RetexturedHelper.addTagVariants(output, foundryController, TinkerTags.Items.SCORCHED_BLOCKS, variantVisibility, variantVisibility);
-    RetexturedHelper.addTagVariants(output, scorchedDrain, TinkerTags.Items.SCORCHED_BLOCKS, variantVisibility, variantVisibility);
-    RetexturedHelper.addTagVariants(output, scorchedDuct, TinkerTags.Items.SCORCHED_BLOCKS, variantVisibility, variantVisibility);
-    RetexturedHelper.addTagVariants(output, scorchedChute, TinkerTags.Items.SCORCHED_BLOCKS, variantVisibility, variantVisibility);
+    Predicate<ItemStack> variant = stack -> {
+      output.accept(stack);
+      return false;
+    };
+    RetexturedHelper.addTagVariants(variant, smelteryController, TinkerTags.Items.SEARED_BLOCKS);
+    RetexturedHelper.addTagVariants(variant, searedDrain, TinkerTags.Items.SEARED_BLOCKS);
+    RetexturedHelper.addTagVariants(variant, searedDuct, TinkerTags.Items.SEARED_BLOCKS);
+    RetexturedHelper.addTagVariants(variant, searedChute, TinkerTags.Items.SEARED_BLOCKS);
+    RetexturedHelper.addTagVariants(variant, foundryController, TinkerTags.Items.SCORCHED_BLOCKS);
+    RetexturedHelper.addTagVariants(variant, scorchedDrain, TinkerTags.Items.SCORCHED_BLOCKS);
+    RetexturedHelper.addTagVariants(variant, scorchedDuct, TinkerTags.Items.SCORCHED_BLOCKS);
+    RetexturedHelper.addTagVariants(variant, scorchedChute, TinkerTags.Items.SCORCHED_BLOCKS);
   }
 
   /** Adds adds all casts of the given type to the tab */

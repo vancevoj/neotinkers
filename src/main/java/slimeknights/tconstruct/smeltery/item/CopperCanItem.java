@@ -16,10 +16,13 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
+import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.recipe.FluidValues;
+import slimeknights.tconstruct.smeltery.TinkerSmeltery;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * Fluid container holding 1 ingot of fluid
@@ -112,6 +115,16 @@ public class CopperCanItem extends Item {
       }
     }
     return Fluids.EMPTY;
+  }
+
+  /** Adds filled variants of the copper can to the given consumer */
+  @SuppressWarnings("deprecation")
+  public static void addFilledVariants(Consumer<ItemStack> output) {
+    for (Fluid fluid : BuiltInRegistries.FLUID) {
+      if (fluid.isSource(fluid.defaultFluidState()) && !fluid.is(TinkerTags.Fluids.HIDE_IN_CREATIVE)) {
+        output.accept(CopperCanItem.setFluid(new ItemStack(TinkerSmeltery.copperCan), fluid, null));
+      }
+    }
   }
 
   /** Gets the fluid NBT from the given stack */

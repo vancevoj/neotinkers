@@ -13,6 +13,7 @@ import net.minecraft.world.item.ArrowItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTab.ItemDisplayParameters;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.data.ExistingFileHelper;
@@ -107,6 +108,7 @@ import slimeknights.tconstruct.tools.logic.EquipmentChangeWatcher;
 import slimeknights.tconstruct.tools.menu.ToolContainerMenu;
 import slimeknights.tconstruct.tools.modules.MeltingFluidEffectiveModule;
 
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import static slimeknights.tconstruct.TConstruct.getResource;
@@ -128,6 +130,7 @@ public final class TinkerTools extends TinkerModule {
                                   .icon(() -> TinkerTools.pickaxe.get().getRenderTool())
                                   .displayItems(TinkerTools::addTabItems)
                                   .withTabsBefore(TinkerTables.tabTables.getId())
+                                  .withSearchBar()
                                   .build());
 
   /** Loot function type for tool add data */
@@ -298,8 +301,9 @@ public final class TinkerTools extends TinkerModule {
   }
 
   /** Adds all relevant items to the creative tab */
-  private static void addTabItems(ItemDisplayParameters itemDisplayParameters, CreativeModeTab.Output output) {
+  private static void addTabItems(ItemDisplayParameters itemDisplayParameters, CreativeModeTab.Output tab) {
     // start with tools that lack materials
+    Consumer<ItemStack> output = tab::accept;
     acceptTool(output, flintAndBrick);
     acceptTool(output, skyStaff);
     acceptTool(output, earthStaff);
@@ -341,12 +345,12 @@ public final class TinkerTools extends TinkerModule {
   }
 
   /** Adds a tool to the tab */
-  private static void acceptTool(CreativeModeTab.Output output, Supplier<? extends IModifiable> tool) {
-    ToolBuildHandler.addVariants(output, tool.get());
+  private static void acceptTool(Consumer<ItemStack> output, Supplier<? extends IModifiable> tool) {
+    ToolBuildHandler.addVariants(output, tool.get(), "");
   }
 
   /** Adds a tool to the tab */
-  private static void acceptTools(CreativeModeTab.Output output, EnumObject<?,? extends IModifiable> tools) {
-    tools.forEach(tool -> ToolBuildHandler.addVariants(output, tool));
+  private static void acceptTools(Consumer<ItemStack> output, EnumObject<?,? extends IModifiable> tools) {
+    tools.forEach(tool -> ToolBuildHandler.addVariants(output, tool, ""));
   }
 }

@@ -156,6 +156,9 @@ public class FluidTagProvider extends FluidTagsProvider {
         .addTag(TinkerFluids.moltenLumium.getForgeTag())
         .addTag(TinkerFluids.moltenSignalum.getForgeTag())
         .addTag(TinkerFluids.moltenRefinedObsidian.getForgeTag());
+
+    // hide upcoming fluids and fluids that require NBT. Can expand this list if other mods report problems
+    tag(TinkerTags.Fluids.HIDE_IN_CREATIVE).add(TinkerFluids.potion.get(), TinkerFluids.moltenKnightslime.get(), TinkerFluids.moltenSoulsteel.get());
   }
 
   @Override

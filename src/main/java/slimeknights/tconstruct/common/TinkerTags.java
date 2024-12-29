@@ -474,6 +474,9 @@ public class TinkerTags {
     public static final TagKey<Fluid> AVERAGE_METAL_SPILLING = tag("spilling/metal/average");
     public static final TagKey<Fluid> EXPENSIVE_METAL_SPILLING = tag("spilling/metal/expensive");
 
+    /** Fluids in this tag won't show in the creative filled tanks */
+    public static final TagKey<Fluid> HIDE_IN_CREATIVE = tag("hide_in_creative");
+
     private static TagKey<Fluid> tag(String name) {
       return TagKey.create(Registries.FLUID, TConstruct.getResource(name));
     }

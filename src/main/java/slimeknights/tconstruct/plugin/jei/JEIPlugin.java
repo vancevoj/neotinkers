@@ -29,6 +29,7 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.Container;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -44,12 +45,11 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fml.ModList;
-import net.minecraftforge.registries.ForgeRegistries;
 import slimeknights.mantle.recipe.helper.RecipeHelper;
-import slimeknights.mantle.util.RegistryHelper;
 import slimeknights.mantle.util.RetexturedHelper;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.common.config.Config;
@@ -74,6 +74,7 @@ import slimeknights.tconstruct.library.recipe.tinkerstation.building.ToolBuildin
 import slimeknights.tconstruct.library.recipe.worktable.IModifierWorktableRecipe;
 import slimeknights.tconstruct.library.tools.SlotType;
 import slimeknights.tconstruct.library.tools.definition.module.build.ToolTraitHook;
+import slimeknights.tconstruct.library.tools.helper.ToolBuildHandler;
 import slimeknights.tconstruct.library.tools.item.IModifiable;
 import slimeknights.tconstruct.library.tools.item.IModifiableDisplay;
 import slimeknights.tconstruct.library.tools.layout.StationSlotLayoutLoader;
@@ -119,8 +120,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @SuppressWarnings("unused")
@@ -274,20 +276,20 @@ public class JEIPlugin implements IModPlugin {
     // modifiers
     registry.addRecipeCatalyst(TConstructJEIConstants.MODIFIER_TYPE, new ModifierEntry(TinkerModifiers.severing, 1), TConstructJEIConstants.SEVERING);
     registry.addRecipeCatalyst(TConstructJEIConstants.MODIFIER_TYPE, new ModifierEntry(TinkerModifiers.melting, 1), TConstructJEIConstants.MELTING, TConstructJEIConstants.ENTITY_MELTING);
-    for (Item item : Objects.requireNonNull(ForgeRegistries.ITEMS.tags()).getTag(TinkerTags.Items.MODIFIABLE)) {
-      if (item instanceof IModifiable modifiable) {
+    for (Holder<Item> item : BuiltInRegistries.ITEM.getTagOrEmpty(TinkerTags.Items.MODIFIABLE)) {
+      if (item.get() instanceof IModifiableDisplay modifiable) {
         // add any tools with a severing trait to severing
         ModifierNBT traits = ToolTraitHook.getTraits(modifiable.getToolDefinition(), MaterialNBT.EMPTY);
         if (traits.getLevel(TinkerModifiers.severing.getId()) > 0) {
-          registry.addRecipeCatalyst(IModifiableDisplay.getDisplayStack(item), TConstructJEIConstants.SEVERING);
+          registry.addRecipeCatalyst(modifiable.getRenderTool(), TConstructJEIConstants.SEVERING);
         }
         // add any tools with a melting trait to melting
         if (traits.getLevel(TinkerModifiers.melting.getId()) > 0) {
           // only add to entity melting if its melee too
-          if (RegistryHelper.contains(TinkerTags.Items.MELEE, item)) {
-            registry.addRecipeCatalyst(IModifiableDisplay.getDisplayStack(item), TConstructJEIConstants.MELTING, TConstructJEIConstants.ENTITY_MELTING);
+          if (item.containsTag(TinkerTags.Items.MELEE)) {
+            registry.addRecipeCatalyst(modifiable.getRenderTool(), TConstructJEIConstants.MELTING, TConstructJEIConstants.ENTITY_MELTING);
           } else {
-            registry.addRecipeCatalyst(IModifiableDisplay.getDisplayStack(item), TConstructJEIConstants.MELTING);
+            registry.addRecipeCatalyst(modifiable.getRenderTool(), TConstructJEIConstants.MELTING);
           }
         }
       }
@@ -406,15 +408,87 @@ public class JEIPlugin implements IModPlugin {
     return tag.isPresent() && tag.get().size() > 0;
   }
 
+  /** Removes any retextured variants that shouldn't show */
+  private static void cleanupRetexturedBlock(Predicate<ItemStack> remover, boolean showAll, ItemLike item, TagKey<Item> tag) {
+    if (showAll) {
+      remover.test(new ItemStack(item));
+    } else {
+      RetexturedHelper.addTagVariants(remover, item, tag);
+    }
+  }
+
   @Override
   public void onRuntimeAvailable(IJeiRuntime jeiRuntime) {
     IIngredientManager manager = jeiRuntime.getIngredientManager();
 
+    List<ItemStack> removeItems = new ArrayList<>();
+    Consumer<ItemStack> removeItem = removeItems::add;
+    List<ItemStack> addItems = new ArrayList<>();
+    Consumer<ItemStack> addItem = addItems::add;
     // shown via the modifiers
-    List<ItemStack> modifierCrystals = new ArrayList<>();
-    ModifierCrystalItem.addVariants(modifierCrystals::add);
-    if (!modifierCrystals.isEmpty()) {
-      manager.removeIngredientsAtRuntime(VanillaTypes.ITEM_STACK, modifierCrystals);
+    ModifierCrystalItem.addVariants(removeItem);
+    // fluids can be clutter so remove them by default
+    if (!Config.CLIENT.showFilledFluidTanks.get()) {
+      CopperCanItem.addFilledVariants(removeItem);
+      TankItem.addFilledVariants(removeItem);
+      // add back lava and blazing blood filled tanks, since they are useful and not much clutter
+      // easier to do this than to filter the list
+      addItems.add(TankItem.fillTank(TinkerSmeltery.searedTank, TankType.FUEL_TANK, Fluids.LAVA));
+      addItems.add(TankItem.fillTank(TinkerSmeltery.searedTank, TankType.FUEL_TANK, TinkerFluids.blazingBlood.get()));
+      addItems.add(TankItem.fillTank(TinkerSmeltery.scorchedTank, TankType.FUEL_TANK, Fluids.LAVA));
+      addItems.add(TankItem.fillTank(TinkerSmeltery.scorchedTank, TankType.FUEL_TANK, TinkerFluids.blazingBlood.get()));
+    }
+    // tool config filters to 1 material, easiest to just remove all then add back the 1
+    String showOnlyTools = Config.CLIENT.showOnlyToolMaterial.get();
+    if (!showOnlyTools.isEmpty()) {
+      for (Holder<Item> item : BuiltInRegistries.ITEM.getTagOrEmpty(TinkerTags.Items.MODIFIABLE)) {
+        if (item.get() instanceof IModifiable modifiable) {
+          ToolBuildHandler.addVariants(removeItem, modifiable, "");
+          ToolBuildHandler.addVariants(addItem, modifiable, showOnlyTools);
+        }
+      }
+    }
+    String showOnlyParts = Config.CLIENT.showOnlyPartMaterial.get();
+    if (!showOnlyTools.isEmpty()) {
+      for (Holder<Item> item : BuiltInRegistries.ITEM.getTagOrEmpty(TinkerTags.Items.TOOL_PARTS)) {
+        if (item.get() instanceof IMaterialItem part) {
+          part.addVariants(removeItem, "");
+          part.addVariants(addItem, showOnlyParts);
+        }
+      }
+    }
+    // for smeltery and tables, if the relevant config is true clear the blank variant
+    // if its false clear the special variants
+    Predicate<ItemStack> cleanupItem = stack -> {
+      removeItems.add(stack);
+      return false;
+    };
+    // wooden
+    boolean showTables = Config.CLIENT.showAllTableVariants.get();
+    cleanupRetexturedBlock(cleanupItem, showTables, TinkerTables.craftingStation, ItemTags.LOGS);
+    cleanupRetexturedBlock(cleanupItem, showTables, TinkerTables.partBuilder, ItemTags.PLANKS);
+    cleanupRetexturedBlock(cleanupItem, showTables, TinkerTables.tinkerStation, ItemTags.PLANKS);
+    cleanupRetexturedBlock(cleanupItem, showTables, TinkerTables.modifierWorktable, TinkerTags.Items.WORKSTATION_ROCK);
+    // anvils
+    boolean showAnvils = Config.CLIENT.showAllAnvilVariants.get();
+    cleanupRetexturedBlock(cleanupItem, showAnvils, TinkerTables.tinkersAnvil, TinkerTags.Items.ANVIL_METAL);
+    cleanupRetexturedBlock(cleanupItem, showAnvils, TinkerTables.scorchedAnvil, TinkerTags.Items.ANVIL_METAL);
+    // smeltery
+    boolean showSmeltery = Config.CLIENT.showAllSmelteryVariants.get();
+    cleanupRetexturedBlock(cleanupItem, showSmeltery, TinkerSmeltery.smelteryController, TinkerTags.Items.SEARED_BLOCKS);
+    cleanupRetexturedBlock(cleanupItem, showSmeltery, TinkerSmeltery.searedDrain, TinkerTags.Items.SEARED_BLOCKS);
+    cleanupRetexturedBlock(cleanupItem, showSmeltery, TinkerSmeltery.searedDuct, TinkerTags.Items.SEARED_BLOCKS);
+    cleanupRetexturedBlock(cleanupItem, showSmeltery, TinkerSmeltery.searedChute, TinkerTags.Items.SEARED_BLOCKS);
+    cleanupRetexturedBlock(cleanupItem, showSmeltery, TinkerSmeltery.foundryController, TinkerTags.Items.SCORCHED_BLOCKS);
+    cleanupRetexturedBlock(cleanupItem, showSmeltery, TinkerSmeltery.scorchedDrain, TinkerTags.Items.SCORCHED_BLOCKS);
+    cleanupRetexturedBlock(cleanupItem, showSmeltery, TinkerSmeltery.scorchedDuct, TinkerTags.Items.SCORCHED_BLOCKS);
+    cleanupRetexturedBlock(cleanupItem, showSmeltery, TinkerSmeltery.scorchedChute, TinkerTags.Items.SCORCHED_BLOCKS);
+
+    if (!removeItems.isEmpty()) {
+      manager.removeIngredientsAtRuntime(VanillaTypes.ITEM_STACK, removeItems);
+    }
+    if (!addItems.isEmpty()) {
+      manager.addIngredientsAtRuntime(VanillaTypes.ITEM_STACK, addItems);
     }
 
     // fluid hiding, buckets are hidden via the creative tab logic

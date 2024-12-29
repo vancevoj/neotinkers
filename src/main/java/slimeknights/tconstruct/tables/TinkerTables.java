@@ -5,7 +5,6 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTab.ItemDisplayParameters;
-import net.minecraft.world.item.CreativeModeTab.TabVisibility;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -26,7 +25,6 @@ import slimeknights.mantle.util.RetexturedHelper;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.TinkerModule;
 import slimeknights.tconstruct.common.TinkerTags;
-import slimeknights.tconstruct.common.config.Config;
 import slimeknights.tconstruct.library.recipe.material.MaterialRecipe;
 import slimeknights.tconstruct.library.recipe.partbuilder.ItemPartRecipe;
 import slimeknights.tconstruct.library.recipe.partbuilder.PartRecipe;
@@ -60,6 +58,8 @@ import slimeknights.tconstruct.tables.recipe.PartBuilderToolRecycle;
 import slimeknights.tconstruct.tables.recipe.TinkerStationDamagingRecipe;
 import slimeknights.tconstruct.tables.recipe.TinkerStationPartSwapping;
 import slimeknights.tconstruct.tables.recipe.TinkerStationRepairRecipe;
+
+import java.util.function.Predicate;
 
 /**
  * Handles all the table for tool creation
@@ -166,9 +166,8 @@ public final class TinkerTables extends TinkerModule {
     output.accept(partBuilder);
     output.accept(tinkerStation);
     // if showing all anvil variants, skip them in search at this first stage
-    TabVisibility firstAnvilVisibility = Config.COMMON.showAllAnvilVariants.get() ? TabVisibility.PARENT_TAB_ONLY : TabVisibility.PARENT_AND_SEARCH_TABS;
-    output.accept(tinkersAnvil, firstAnvilVisibility);
-    output.accept(scorchedAnvil, firstAnvilVisibility);
+    output.accept(tinkersAnvil);
+    output.accept(scorchedAnvil);
     output.accept(modifierWorktable);
 
     // chests, have less variants so go first
@@ -177,17 +176,19 @@ public final class TinkerTables extends TinkerModule {
     output.accept(castChest);
 
     // table variants at the end as there may be a lot
+    Predicate<ItemStack> variants = stack -> {
+      output.accept(stack);
+      return false;
+    };
     // crafting tables
-    TabVisibility woodVisibility = Config.COMMON.showAllTableVariants.get() ? TabVisibility.PARENT_AND_SEARCH_TABS : TabVisibility.PARENT_TAB_ONLY;
     // add crafting station with the default variant, its nice
-    RetexturedHelper.addTagVariants(output, craftingStation, ItemTags.LOGS, woodVisibility, woodVisibility);
+    RetexturedHelper.addTagVariants(variants, craftingStation, ItemTags.LOGS);
     // rest the default variant is the same as oak
-    RetexturedHelper.addTagVariants(output, partBuilder, ItemTags.PLANKS, woodVisibility, woodVisibility);
-    RetexturedHelper.addTagVariants(output, tinkerStation, ItemTags.PLANKS, woodVisibility, woodVisibility);
+    RetexturedHelper.addTagVariants(variants, partBuilder, ItemTags.PLANKS);
+    RetexturedHelper.addTagVariants(variants, tinkerStation, ItemTags.PLANKS);
     // anvil variants use their own config prop as the variants are less obvious
-    TabVisibility anvilVisibility = Config.COMMON.showAllAnvilVariants.get() ? TabVisibility.PARENT_AND_SEARCH_TABS : TabVisibility.PARENT_TAB_ONLY;
-    RetexturedHelper.addTagVariants(output, tinkersAnvil, TinkerTags.Items.ANVIL_METAL, anvilVisibility, anvilVisibility);
-    RetexturedHelper.addTagVariants(output, scorchedAnvil, TinkerTags.Items.ANVIL_METAL, anvilVisibility, anvilVisibility);
-    RetexturedHelper.addTagVariants(output, modifierWorktable, TinkerTags.Items.WORKSTATION_ROCK, woodVisibility, woodVisibility);
+    RetexturedHelper.addTagVariants(variants, tinkersAnvil, TinkerTags.Items.ANVIL_METAL);
+    RetexturedHelper.addTagVariants(variants, scorchedAnvil, TinkerTags.Items.ANVIL_METAL);
+    RetexturedHelper.addTagVariants(variants, modifierWorktable, TinkerTags.Items.WORKSTATION_ROCK);
   }
 }

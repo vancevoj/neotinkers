@@ -5,7 +5,6 @@ import net.minecraft.core.BlockSource;
 import net.minecraft.core.cauldron.CauldronInteraction;
 import net.minecraft.core.dispenser.DefaultDispenseItemBehavior;
 import net.minecraft.core.dispenser.DispenseItemBehavior;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
@@ -17,7 +16,6 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTab.ItemDisplayParameters;
-import net.minecraft.world.item.CreativeModeTab.TabVisibility;
 import net.minecraft.world.item.DispensibleContainerItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -27,7 +25,6 @@ import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DispenserBlock;
-import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraftforge.common.ForgeMod;
@@ -69,7 +66,6 @@ import slimeknights.tconstruct.library.recipe.FluidValues;
 import slimeknights.tconstruct.shared.TinkerFood;
 import slimeknights.tconstruct.shared.block.SlimeType;
 import slimeknights.tconstruct.smeltery.TinkerSmeltery;
-import slimeknights.tconstruct.smeltery.block.component.SearedTankBlock.TankType;
 import slimeknights.tconstruct.smeltery.item.CopperCanItem;
 import slimeknights.tconstruct.smeltery.item.TankItem;
 import slimeknights.tconstruct.tools.TinkerModifiers;
@@ -94,6 +90,7 @@ public final class TinkerFluids extends TinkerModule {
                                    .icon(() -> new ItemStack(TinkerFluids.moltenIron))
                                    .displayItems(TinkerFluids::addTabItems)
                                    .withTabsBefore(TinkerSmeltery.tabSmeltery.getId())
+                                   .withSearchBar()
                                    .build());
 
   // basic
@@ -452,21 +449,8 @@ public final class TinkerFluids extends TinkerModule {
     acceptMolten(output, moltenRefinedObsidian);
 
     // add copper cans, tanks, and lanterns for all the fluids
-    for (Fluid fluid : BuiltInRegistries.FLUID) {
-      if (fluid.isSource(fluid.defaultFluidState())) {
-        output.accept(CopperCanItem.setFluid(new ItemStack(TinkerSmeltery.copperCan), fluid, null), TabVisibility.PARENT_TAB_ONLY);
-      }
-    }
-    for (Fluid fluid : BuiltInRegistries.FLUID) {
-      if (fluid.isSource(fluid.defaultFluidState())) {
-        output.accept(TankItem.setTank(new ItemStack(TinkerSmeltery.searedLantern), new FluidStack(fluid, FluidValues.LANTERN_CAPACITY)), TabVisibility.PARENT_TAB_ONLY);
-        output.accept(TankItem.setTank(new ItemStack(TinkerSmeltery.scorchedLantern), new FluidStack(fluid, FluidValues.LANTERN_CAPACITY)), TabVisibility.PARENT_TAB_ONLY);
-        // use an ingot variety for metals
-        TankType tankType = fluid.is(TinkerTags.Fluids.METAL_TOOLTIPS) ? TankType.INGOT_GAUGE : TankType.FUEL_GAUGE;
-        output.accept(fillTank(TinkerSmeltery.searedTank, tankType, fluid), TabVisibility.PARENT_TAB_ONLY);
-        output.accept(fillTank(TinkerSmeltery.scorchedTank, tankType, fluid), TabVisibility.PARENT_TAB_ONLY);
-      }
-    }
+    CopperCanItem.addFilledVariants(output::accept);
+    TankItem.addFilledVariants(output::accept);
   }
 
   /** Accepts the given item if any of the listed ingots are present */
@@ -494,10 +478,5 @@ public final class TinkerFluids extends TinkerModule {
   /** Removes the "molten_" prefix from the fluids ID */
   public static String withoutMolten(FluidObject<?> fluid) {
     return fluid.getId().getPath().substring(MOLTEN_LENGTH);
-  }
-
-  /** Fills a tank stack with the given fluid */
-  public static ItemStack fillTank(EnumObject<TankType,? extends ItemLike> tank, TankType type, Fluid fluid) {
-    return TankItem.setTank(new ItemStack(tank.get(type)), new FluidStack(fluid, type.getCapacity()));
   }
 }

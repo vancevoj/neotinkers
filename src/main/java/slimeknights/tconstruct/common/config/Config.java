@@ -49,13 +49,6 @@ public class Config {
     public final OreRate smelteryOreRate;
     public final OreRate foundryOreRate, foundryByproductRate;
 
-    // overworld
-    public final ConfigValue<String> showOnlyToolMaterial;
-    public final ConfigValue<String> showOnlyPartMaterial;
-    public final BooleanValue showAllTableVariants;
-    public final BooleanValue showAllAnvilVariants;
-    public final BooleanValue showAllSmelteryVariants;
-
     // debug
     public final BooleanValue forceIntegrationMaterials;
     public final EnumValue<LogInvalidToolStack> logInvalidToolStack;
@@ -88,36 +81,6 @@ public class Config {
 //        .translation("tconstruct.configgui.chestsKeepInventory")
 //        .worldRestart()
 //        .define("chestsKeepInventory", true);
-
-      builder.comment("Creative search and JEI display").push("creative_search");
-      this.showOnlyToolMaterial = builder
-        .comment("If non-empty, only this material will be shown on tools in creative search and JEI (or the first valid material if this is invalid for the tool).", "If empty, all materials will show")
-        .translation("tconstruct.configgui.showOnlyToolMaterial")
-        .worldRestart()
-        .define("showOnlyToolMaterial", "");
-
-      this.showOnlyPartMaterial = builder
-        .comment("If non-empty, only material will be shown on parts in creative search and JEI (or the first valid material if this is invalid for the part).", "If empty, all materials will show")
-        .translation("tconstruct.configgui.showOnlyPartMaterial")
-        .worldRestart()
-        .define("showOnlyPartMaterial", "");
-
-      this.showAllTableVariants = builder
-        .comment("If true, tables such as the part builder and tinker station will show all variants in JEI and creative search. If false the variants only show in the tables tab")
-        .translation("tconstruct.configgui.showAllTableVariants")
-        .define("showAllTableVariants", false);
-
-      this.showAllAnvilVariants = builder
-        .comment("If true, anvils will show all metal variants in JEI and creative search. If false, the variants only show in the tables tab")
-        .translation("tconstruct.configgui.showAllAnvilVariants")
-        .define("showAllAnvilVariants", true);
-
-      this.showAllSmelteryVariants = builder
-        .comment("If true, smeltery and foundry controllers, drains, ducts, and chutes will show all variants in JEI and creative search. If false, the variants only shows in the smeltery tab")
-        .translation("tconstruct.configgui.showAllSmelteryVariants")
-        .define("showAllSmelteryVariants", false);
-
-      builder.pop(); // creative
       builder.pop(); // gameplay
 
       builder.comment("Options related to recipes, limited options as a datapack allows most recipes to be modified").push("recipes");
@@ -226,10 +189,18 @@ public class Config {
     public final ForgeConfigSpec.BooleanValue extraToolTips; // TODO: do we even need this config option? who would turn it off?
     public final ForgeConfigSpec.BooleanValue logMissingMaterialTextures;
     public final ForgeConfigSpec.BooleanValue logMissingModifierTextures;
-    public final ForgeConfigSpec.BooleanValue showModifiersInJEI;
     public final ForgeConfigSpec.BooleanValue renderShieldSlotItem;
     public final ForgeConfigSpec.BooleanValue modifiersIDsInAdvancedTooltips;
     public final ForgeConfigSpec.IntValue maxSmelteryItemQuads;
+
+    // JEI
+    public final BooleanValue showModifiersInJEI;
+    public final ConfigValue<String> showOnlyToolMaterial;
+    public final ConfigValue<String> showOnlyPartMaterial;
+    public final BooleanValue showAllTableVariants;
+    public final BooleanValue showAllAnvilVariants;
+    public final BooleanValue showAllSmelteryVariants;
+    public final BooleanValue showFilledFluidTanks;
 
     // framed modifier
     public final ForgeConfigSpec.BooleanValue renderItemFrame;
@@ -269,10 +240,47 @@ public class Config {
         .translation("tconstruct.configgui.logMissingMaterialTextures")
         .define("logMissingModifierTextures", false);
 
-      this.showModifiersInJEI = builder
-        .comment("If true, modifiers will be added to the JEI ingredient list. If false, they will only be visible in the modifiers recipe tab.")
-        .translation("tconstruct.configgui.showModifiersInJEI")
-        .define("showModifiersInJEI", true);
+      builder.comment("JEI configuration").push("jei");
+      {
+        this.showModifiersInJEI = builder
+          .comment("If true, modifiers will be added to the JEI ingredient list. If false, they will only be visible in the modifiers recipe tab.")
+          .translation("tconstruct.configgui.showModifiersInJEI")
+          .define("showModifiers", true);
+
+        this.showOnlyToolMaterial = builder
+          .comment("If non-empty, only this material will be shown on tools in JEI (or the first valid material if this is invalid for the tool).", "If empty, all materials will show")
+          .translation("tconstruct.configgui.showOnlyToolMaterial")
+          .worldRestart()
+          .define("showOnlyToolMaterial", "");
+
+        this.showOnlyPartMaterial = builder
+          .comment("If non-empty, only material will be shown on parts in JEI (or the first valid material if this is invalid for the part).", "If empty, all materials will show")
+          .translation("tconstruct.configgui.showOnlyPartMaterial")
+          .worldRestart()
+          .define("showOnlyPartMaterial", "");
+
+        this.showAllTableVariants = builder
+          .comment("If true, tables such as the part builder and tinker station will show all variants in JEI. If false the variants only show in the tables tab")
+          .translation("tconstruct.configgui.showAllTableVariants")
+          .define("showAllTableVariants", false);
+
+        this.showAllAnvilVariants = builder
+          .comment("If true, anvils will show all metal variants in JEI. If false, the variants only show in the tables tab")
+          .translation("tconstruct.configgui.showAllAnvilVariants")
+          .define("showAllAnvilVariants", true);
+
+        this.showAllSmelteryVariants = builder
+          .comment("If true, smeltery and foundry controllers, drains, ducts, and chutes will show all variants in JEI. If false, the variants only shows in the smeltery tab")
+          .translation("tconstruct.configgui.showAllSmelteryVariants")
+          .define("showAllSmelteryVariants", false);
+
+        this.showFilledFluidTanks = builder
+          .comment("If true, filled copper cans and fluid gauges will show in JEI. If false only empty ones will show")
+          .define("showFilledFluidTanks", false);
+      }
+      builder.pop(); // jei
+
+
 
       this.maxSmelteryItemQuads = builder
         .comment("Maximum number of quads to render for items in the smeltery. Most blocks are about 6 quads, items like ingots are around 26.",
