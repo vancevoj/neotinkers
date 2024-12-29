@@ -187,10 +187,14 @@ public class TConstruct {
       default -> null;
     });
     RegistrationHelper.handleMissingMappings(event, MOD_ID, Registries.ITEM, name -> {
-      if ("piglin_head".equals(name)) {
-        return Items.PIGLIN_HEAD;
-      }
-      return null;
+      return switch (name) {
+        case "piglin_head" -> Items.PIGLIN_HEAD;
+        case "round_plate" -> TinkerToolParts.adzeHead.get();
+        case "round_plate_cast" -> TinkerSmeltery.adzeHeadCast.get();
+        case "round_plate_sand_cast" -> TinkerSmeltery.adzeHeadCast.getSand();
+        case "round_plate_red_sand_cast" -> TinkerSmeltery.adzeHeadCast.getRedSand();
+        default -> null;
+      };
     });
   }
 

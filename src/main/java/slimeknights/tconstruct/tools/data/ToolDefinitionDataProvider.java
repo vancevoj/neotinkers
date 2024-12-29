@@ -65,6 +65,7 @@ import slimeknights.tconstruct.tools.stats.StatlessMaterialStats;
 
 import java.util.List;
 
+import static slimeknights.tconstruct.tools.TinkerToolParts.adzeHead;
 import static slimeknights.tconstruct.tools.TinkerToolParts.bowGrip;
 import static slimeknights.tconstruct.tools.TinkerToolParts.bowLimb;
 import static slimeknights.tconstruct.tools.TinkerToolParts.bowstring;
@@ -73,11 +74,11 @@ import static slimeknights.tconstruct.tools.TinkerToolParts.broadBlade;
 import static slimeknights.tconstruct.tools.TinkerToolParts.hammerHead;
 import static slimeknights.tconstruct.tools.TinkerToolParts.largePlate;
 import static slimeknights.tconstruct.tools.TinkerToolParts.pickHead;
-import static slimeknights.tconstruct.tools.TinkerToolParts.roundPlate;
 import static slimeknights.tconstruct.tools.TinkerToolParts.smallAxeHead;
 import static slimeknights.tconstruct.tools.TinkerToolParts.smallBlade;
 import static slimeknights.tconstruct.tools.TinkerToolParts.toolBinding;
 import static slimeknights.tconstruct.tools.TinkerToolParts.toolHandle;
+import static slimeknights.tconstruct.tools.TinkerToolParts.toughBinding;
 import static slimeknights.tconstruct.tools.TinkerToolParts.toughHandle;
 
 public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvider {
@@ -142,9 +143,9 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
     define(ToolDefinitions.VEIN_HAMMER)
       // parts
       .module(PartStatsModule.parts()
-         .part(hammerHead, 0.5f)
+         .part(hammerHead, 0.75f)
          .part(toughHandle)
-         .part(pickHead, 0.25f)
+         .part(toughBinding)
          .part(largePlate, 0.25f).build())
       .module(defaultFourParts)
       // stats
@@ -169,9 +170,9 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
     define(ToolDefinitions.MATTOCK)
       // parts
       .module(PartStatsModule.parts()
-         .part(smallAxeHead, 0.5f)
-         .part(toolHandle)
-         .part(roundPlate, 0.5f).build())
+                             .part(smallAxeHead, 0.5f)
+                             .part(toolHandle)
+                             .part(adzeHead, 0.5f).build())
       .module(defaultThreeParts)
       // stats
       .module(new SetStatsModule(StatsNBT.builder()
@@ -194,9 +195,9 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
     define(ToolDefinitions.PICKADZE)
       // parts
       .module(PartStatsModule.parts()
-         .part(pickHead, 0.5f)
-         .part(toolHandle)
-         .part(roundPlate, 0.5f).build())
+                             .part(pickHead, 0.5f)
+                             .part(toolHandle)
+                             .part(adzeHead, 0.5f).build())
       .module(defaultThreeParts)
       // stats
       .module(new SetStatsModule(StatsNBT.builder()
@@ -218,9 +219,9 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
     define(ToolDefinitions.EXCAVATOR)
       // parts
       .module(PartStatsModule.parts()
-         .part(largePlate, 0.5f)
+         .part(largePlate)
          .part(toughHandle, 0.5f)
-         .part(largePlate, 0.5f)
+         .part(toughBinding)
          .part(toughHandle, 0.5f).build())
       .module(defaultFourParts)
       // stats
@@ -270,7 +271,7 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
          .part(broadAxeHead, 0.75f)
          .part(toughHandle)
          .part(pickHead, 0.25f)
-         .part(toolBinding).build())
+         .part(toughBinding).build())
       .module(defaultFourParts)
       // stats
       .module(new SetStatsModule(StatsNBT.builder()
@@ -327,7 +328,7 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
       .module(PartStatsModule.parts()
          .part(TinkerToolParts.broadBlade)
          .part(TinkerToolParts.toughHandle, 0.5f)
-         .part(TinkerToolParts.toolBinding)
+         .part(TinkerToolParts.toughBinding)
          .part(TinkerToolParts.toughHandle, 0.5f).build())
       .module(defaultFourParts)
       // stats

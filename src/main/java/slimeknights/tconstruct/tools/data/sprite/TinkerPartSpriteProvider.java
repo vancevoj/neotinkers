@@ -31,7 +31,6 @@ public class TinkerPartSpriteProvider extends AbstractPartSpriteProvider {
   @Override
   protected void addAllSpites() {
     // heads
-    addHead("round_plate");
     addHead("large_plate");
     addHead("small_blade");
     // handles
@@ -41,6 +40,7 @@ public class TinkerPartSpriteProvider extends AbstractPartSpriteProvider {
     addBowstring("bowstring");
     // misc
     addBinding("tool_binding");
+    addBinding("tough_binding");
     addPart("repair_kit", StatlessMaterialStats.REPAIR_KIT.getIdentifier());
 
     // plate textures
@@ -87,11 +87,11 @@ public class TinkerPartSpriteProvider extends AbstractPartSpriteProvider {
     // pickaxe - regular variant uses handle on frypans as a grip so generate those too
     buildTool("pickaxe").addBreakableHead("head").addPart("handle", HandleMaterialStats.ID, LimbMaterialStats.ID).addBinding("binding");
     buildTool("sledge_hammer").withLarge().addBreakableHead("head").addBreakableHead("back").addBreakableHead("front").addHandle("handle");
-    buildTool("vein_hammer").withLarge().addBreakableHead("head").addHead("back").addBreakableHead("front").addHandle("handle");
+    buildTool("vein_hammer").withLarge().addBreakableHead("head").addBinding("grip").addBreakableHead("front").addHandle("handle");
     // shovel
     buildTool("mattock").addBreakableHead("axe").addBreakableHead("pick"); // handle provided by pickaxe
-    buildTool("pickadze").addBreakableHead("axe"); // handle and "pick" head provided by other tools
-    buildTool("excavator").withLarge().addBreakableHead("head").addHead("binding").addHandle("handle").addHandle("grip");
+    buildTool("pickadze").addBreakableHead("pick").addHead("adze"); // handle provided by pickaxe
+    buildTool("excavator").withLarge().addBreakableHead("head").addBinding("binding").addHandle("handle").addHandle("grip");
     // axe
     buildTool("hand_axe").addBreakableHead("head").addBinding("binding"); // handle provided by pickaxe
     buildTool("broad_axe").withLarge().addBreakableHead("blade").addBreakableHead("back").addHandle("handle").addBinding("binding");

@@ -221,12 +221,13 @@ public class AdvancementsProvider extends GenericDataProvider {
       with.accept(TinkerSmeltery.pickHeadCast);
       with.accept(TinkerSmeltery.smallAxeHeadCast);
       with.accept(TinkerSmeltery.smallBladeCast);
+      with.accept(TinkerSmeltery.adzeHeadCast);
       with.accept(TinkerSmeltery.hammerHeadCast);
       with.accept(TinkerSmeltery.broadBladeCast);
       with.accept(TinkerSmeltery.broadAxeHeadCast);
-      with.accept(TinkerSmeltery.toolBindingCast);
-      with.accept(TinkerSmeltery.roundPlateCast);
       with.accept(TinkerSmeltery.largePlateCast);
+      with.accept(TinkerSmeltery.toolBindingCast);
+      with.accept(TinkerSmeltery.toughBindingCast);
       with.accept(TinkerSmeltery.toolHandleCast);
       with.accept(TinkerSmeltery.toughHandleCast);
       with.accept(TinkerSmeltery.bowLimbCast);

@@ -291,7 +291,7 @@
   "pattern.tconstruct.pick_head": "Pick Head",
   "pattern.tconstruct.small_axe_head": "Small Axe Head",
   "pattern.tconstruct.small_blade": "Small Blade",
-  "pattern.tconstruct.sign_head": "Sign Head",
+  "pattern.tconstruct.adze_head": "Adze Head",
   "pattern.tconstruct.bow_limb": "Bow Limb",
 
   "_comment": "Large Head Patterns",
@@ -299,12 +299,12 @@
   "pattern.tconstruct.hammer_head": "Hammer Head",
   "pattern.tconstruct.broad_axe_head": "Broad Axe Head",
   "pattern.tconstruct.broad_blade": "Broad Blade",
+  "pattern.tconstruct.large_plate": "Large Plate",
 
   "_comment": "Binding Patterns",
 
   "pattern.tconstruct.tool_binding": "Tool Binding",
-  "pattern.tconstruct.round_plate": "Round Plate",
-  "pattern.tconstruct.large_plate": "Large Plate",
+  "pattern.tconstruct.tough_binding": "Tough Binding",
   "pattern.tconstruct.bowstring": "Bowstring",
   "pattern.tconstruct.maille": "Maille",
   "pattern.tconstruct.shield_core": "Shield Core",
@@ -341,18 +341,19 @@
   "item.tconstruct.sign_head_cast": "Sign Head Gold Cast",
   "item.tconstruct.bow_limb_cast": "Bow Limb Gold Cast",
   "item.tconstruct.bow_grip_cast": "Bow Grip Gold Cast",
+  "item.tconstruct.adze_head_cast": "Adze Head Gold Cast",
 
   "_comment": "Large Head Gold Casts",
 
   "item.tconstruct.hammer_head_cast": "Hammer Head Gold Cast",
   "item.tconstruct.broad_axe_head_cast": "Broad Axe Head Gold Cast",
   "item.tconstruct.broad_blade_cast": "Broad Blade Gold Cast",
+  "item.tconstruct.large_plate_cast": "Large Plate Gold Cast",
 
   "_comment": "Binding Gold Casts",
 
   "item.tconstruct.tool_binding_cast": "Tool Binding Gold Cast",
-  "item.tconstruct.round_plate_cast": "Round Plate Gold Cast",
-  "item.tconstruct.large_plate_cast": "Large Plate Gold Cast",
+  "item.tconstruct.tough_binding_cast": "Tough Binding Gold Cast",
 
   "_comment": "Tool Handle Gold Casts",
 
@@ -390,18 +391,19 @@
   "item.tconstruct.sign_head_sand_cast": "Sign Head Sand Cast",
   "item.tconstruct.bow_limb_sand_cast": "Bow Limb Sand Cast",
   "item.tconstruct.bow_grip_sand_cast": "Bow Grip Sand Cast",
+  "item.tconstruct.adze_head_sand_cast": "Adze Head Sand Cast",
 
   "_comment": "Large Head Sand Casts",
 
   "item.tconstruct.hammer_head_sand_cast": "Hammer Head Sand Cast",
   "item.tconstruct.broad_axe_head_sand_cast": "Broad Axe Head Sand Cast",
   "item.tconstruct.broad_blade_sand_cast": "Broad Blade Sand Cast",
+  "item.tconstruct.large_plate_sand_cast": "Large Plate Sand Cast",
 
   "_comment": "Binding Sand Casts",
 
   "item.tconstruct.tool_binding_sand_cast": "Tool Binding Sand Cast",
-  "item.tconstruct.round_plate_sand_cast": "Round Plate Sand Cast",
-  "item.tconstruct.large_plate_sand_cast": "Large Plate Sand Cast",
+  "item.tconstruct.tough_binding_sand_cast": "Tough Binding Sand Cast",
 
   "_comment": "Tool Handle Sand Casts",
 
@@ -440,18 +442,19 @@
   "item.tconstruct.sign_head_red_sand_cast": "Sign Head Red Sand Cast",
   "item.tconstruct.bow_limb_red_sand_cast": "Bow Limb Red Sand Cast",
   "item.tconstruct.bow_grip_red_sand_cast": "Bow Grip Red Sand Cast",
+  "item.tconstruct.adze_head_red_sand_cast": "Adze Head Red Sand Cast",
 
   "_comment": "Large Head Red Sand Casts",
 
   "item.tconstruct.hammer_head_red_sand_cast": "Hammer Head Red Sand Cast",
   "item.tconstruct.broad_axe_head_red_sand_cast": "Broad Axe Head Red Sand Cast",
   "item.tconstruct.broad_blade_red_sand_cast": "Broad Blade Red Sand Cast",
+  "item.tconstruct.large_plate_red_sand_cast": "Large Plate Red Sand Cast",
 
   "_comment": "Binding Red Sand Casts",
 
   "item.tconstruct.tool_binding_red_sand_cast": "Tool Binding Red Sand Cast",
-  "item.tconstruct.round_plate_red_sand_cast": "Round Plate Red Sand Cast",
-  "item.tconstruct.large_plate_red_sand_cast": "Large Plate Red Sand Cast",
+  "item.tconstruct.tough_binding_red_sand_cast": "Tough Binding Red Sand Cast",
 
   "_comment": "Tool Handle Red Sand Casts",
 
@@ -969,7 +972,8 @@
   "item.tconstruct.tool_handle": "Tool Handle",
   "item.tconstruct.tough_handle": "Tough Handle",
   "item.tconstruct.tool_binding": "Tool Binding",
-  "item.tconstruct.round_plate": "Round Plate",
+  "item.tconstruct.tough_binding": "Tough Binding",
+  "item.tconstruct.adze_head": "Adze Head",
   "item.tconstruct.large_plate": "Large Plate",
   
   "item.tconstruct.bow_limb": "Bow Limb",

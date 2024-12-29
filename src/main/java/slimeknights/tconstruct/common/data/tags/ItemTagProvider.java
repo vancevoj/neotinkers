@@ -361,7 +361,8 @@ public class ItemTagProvider extends ItemTagsProvider {
         .add(TinkerToolParts.pickHead.get(), TinkerToolParts.hammerHead.get(),
              TinkerToolParts.smallAxeHead.get(), TinkerToolParts.broadAxeHead.get(),
              TinkerToolParts.smallBlade.get(), TinkerToolParts.broadBlade.get(),
-             TinkerToolParts.toolBinding.get(), TinkerToolParts.roundPlate.get(), TinkerToolParts.largePlate.get(),
+             TinkerToolParts.adzeHead.get(), TinkerToolParts.largePlate.get(),
+             TinkerToolParts.toolBinding.get(), TinkerToolParts.toughBinding.get(),
              TinkerToolParts.toolHandle.get(), TinkerToolParts.toughHandle.get(),
              TinkerToolParts.bowLimb.get(), TinkerToolParts.bowGrip.get(), TinkerToolParts.bowstring.get(),
              TinkerToolParts.maille.get(), TinkerToolParts.shieldCore.get(),
@@ -474,14 +475,15 @@ public class ItemTagProvider extends ItemTagsProvider {
     addCast.accept(TinkerSmeltery.pickHeadCast);
     addCast.accept(TinkerSmeltery.smallAxeHeadCast);
     addCast.accept(TinkerSmeltery.smallBladeCast);
+    addCast.accept(TinkerSmeltery.adzeHeadCast);
     // large heads
     addCast.accept(TinkerSmeltery.hammerHeadCast);
     addCast.accept(TinkerSmeltery.broadAxeHeadCast);
     addCast.accept(TinkerSmeltery.broadBladeCast);
+    addCast.accept(TinkerSmeltery.largePlateCast);
     // bindings
     addCast.accept(TinkerSmeltery.toolBindingCast);
-    addCast.accept(TinkerSmeltery.roundPlateCast);
-    addCast.accept(TinkerSmeltery.largePlateCast);
+    addCast.accept(TinkerSmeltery.toughBindingCast);
     // tool rods
     addCast.accept(TinkerSmeltery.toolHandleCast);
     addCast.accept(TinkerSmeltery.toughHandleCast);

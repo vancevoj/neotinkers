@@ -321,14 +321,15 @@ public final class TinkerSmeltery extends TinkerModule {
   public static final CastItemObject pickHeadCast = ITEMS.registerCast(TinkerToolParts.pickHead, ITEM_PROPS);
   public static final CastItemObject smallAxeHeadCast = ITEMS.registerCast(TinkerToolParts.smallAxeHead, ITEM_PROPS);
   public static final CastItemObject smallBladeCast = ITEMS.registerCast(TinkerToolParts.smallBlade, ITEM_PROPS);
+  public static final CastItemObject adzeHeadCast = ITEMS.registerCast(TinkerToolParts.adzeHead, ITEM_PROPS);
   // large tool heads
   public static final CastItemObject hammerHeadCast   = ITEMS.registerCast(TinkerToolParts.hammerHead, ITEM_PROPS);
   public static final CastItemObject broadBladeCast   = ITEMS.registerCast(TinkerToolParts.broadBlade, ITEM_PROPS);
   public static final CastItemObject broadAxeHeadCast = ITEMS.registerCast(TinkerToolParts.broadAxeHead, ITEM_PROPS);
+  public static final CastItemObject largePlateCast  = ITEMS.registerCast(TinkerToolParts.largePlate, ITEM_PROPS);
   // bindings
   public static final CastItemObject toolBindingCast = ITEMS.registerCast(TinkerToolParts.toolBinding, ITEM_PROPS);
-  public static final CastItemObject roundPlateCast  = ITEMS.registerCast(TinkerToolParts.roundPlate, ITEM_PROPS);
-  public static final CastItemObject largePlateCast  = ITEMS.registerCast(TinkerToolParts.largePlate, ITEM_PROPS);
+  public static final CastItemObject toughBindingCast = ITEMS.registerCast(TinkerToolParts.toughBinding, ITEM_PROPS);
   // tool rods
   public static final CastItemObject toolHandleCast  = ITEMS.registerCast(TinkerToolParts.toolHandle, ITEM_PROPS);
   public static final CastItemObject toughHandleCast = ITEMS.registerCast(TinkerToolParts.toughHandle, ITEM_PROPS);
@@ -529,7 +530,7 @@ public final class TinkerSmeltery extends TinkerModule {
     accept(output, getter, pickHeadCast);
     accept(output, getter, smallAxeHeadCast);
     accept(output, getter, smallBladeCast);
-    accept(output, getter, roundPlateCast);
+    accept(output, getter, adzeHeadCast);
     // large heads
     accept(output, getter, hammerHeadCast);
     accept(output, getter, broadAxeHeadCast);
@@ -539,6 +540,7 @@ public final class TinkerSmeltery extends TinkerModule {
     accept(output, getter, toolHandleCast);
     accept(output, getter, toolBindingCast);
     accept(output, getter, toughHandleCast);
+    accept(output, getter, toughBindingCast);
     // ranged
     accept(output, getter, bowLimbCast);
     accept(output, getter, bowGripCast);
