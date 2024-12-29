@@ -3,7 +3,6 @@ package slimeknights.tconstruct.library.json.variable;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSyntaxException;
-import net.minecraft.network.FriendlyByteBuf;
 import slimeknights.mantle.data.loadable.field.LoadableField;
 import slimeknights.mantle.data.loadable.primitive.FloatLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
@@ -46,11 +45,6 @@ public class VariableLoaderRegistry<T extends IHaveLoader> extends GenericLoader
       return new JsonPrimitive(constant.value());
     }
     return super.serialize(src);
-  }
-
-  @Override
-  public T decode(FriendlyByteBuf buffer) {
-    return super.decode(buffer);
   }
 
   /** Interface for a float constructor */

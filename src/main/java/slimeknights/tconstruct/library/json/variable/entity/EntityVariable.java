@@ -3,7 +3,6 @@ package slimeknights.tconstruct.library.json.variable.entity;
 import net.minecraft.world.entity.LivingEntity;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.data.registry.GenericLoaderRegistry;
-import slimeknights.mantle.data.registry.GenericLoaderRegistry.IGenericLoader;
 import slimeknights.mantle.data.registry.GenericLoaderRegistry.IHaveLoader;
 import slimeknights.tconstruct.library.json.variable.ToFloatFunction;
 import slimeknights.tconstruct.library.json.variable.VariableLoaderRegistry;
@@ -18,7 +17,7 @@ public interface EntityVariable extends IHaveLoader {
   float getValue(LivingEntity entity);
 
   @Override
-  IGenericLoader<? extends EntityVariable> getLoader();
+  RecordLoadable<? extends EntityVariable> getLoader();
 
   /* Singletons */
 
@@ -31,7 +30,7 @@ public interface EntityVariable extends IHaveLoader {
       }
 
       @Override
-      public IGenericLoader<? extends EntityVariable> getLoader() {
+      public RecordLoadable<? extends EntityVariable> getLoader() {
         return loader;
       }
     });
@@ -53,7 +52,7 @@ public interface EntityVariable extends IHaveLoader {
     }
 
     @Override
-    public IGenericLoader<? extends EntityVariable> getLoader() {
+    public RecordLoadable<Constant> getLoader() {
       return LOADER;
     }
   }

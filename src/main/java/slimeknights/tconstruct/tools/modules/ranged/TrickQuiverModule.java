@@ -8,8 +8,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
+import slimeknights.mantle.data.registry.GenericLoaderRegistry.SingletonLoader;
 import slimeknights.tconstruct.TConstruct;
-import slimeknights.tconstruct.library.json.SingletonRecordLoadable;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.hook.interaction.GeneralInteractionModifierHook;
@@ -29,7 +29,7 @@ import java.util.function.Predicate;
 /** Module implementing trick quiver, with a selectable arrow slot */
 public enum TrickQuiverModule implements ModifierModule, BowAmmoModifierHook, GeneralInteractionModifierHook {
   INSTANCE;
-  public static final SingletonRecordLoadable<TrickQuiverModule> LOADER = new SingletonRecordLoadable<>(INSTANCE);
+  public static final SingletonLoader<TrickQuiverModule> LOADER = new SingletonLoader<>(INSTANCE);
   private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<TrickQuiverModule>defaultHooks(ModifierHooks.BOW_AMMO, ModifierHooks.GENERAL_INTERACT);
   /** Key for the currently selected arrow */
   private static final ResourceLocation SELECTED_SLOT = TConstruct.getResource("trick_quiver_selected");
