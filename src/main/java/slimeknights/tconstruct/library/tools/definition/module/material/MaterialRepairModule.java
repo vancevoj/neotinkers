@@ -66,7 +66,7 @@ public class MaterialRepairModule implements MaterialRepairToolHook, ToolModule,
   }
 
   @Override
-  public RecordLoadable<?> loadable() {
+  public RecordLoadable<? extends MaterialRepairModule> loadable() {
     return CONSTANT;
   }
 
@@ -102,7 +102,7 @@ public class MaterialRepairModule implements MaterialRepairToolHook, ToolModule,
     }
 
     @Override
-    public RecordLoadable<?> loadable() {
+    public RecordLoadable<StatType> loadable() {
       return STAT_TYPE;
     }
 
