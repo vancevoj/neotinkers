@@ -13,6 +13,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.fluids.FluidStack;
+import slimeknights.mantle.client.render.ChannelFluids;
 import slimeknights.mantle.client.render.FluidCuboid;
 import slimeknights.mantle.client.render.FluidRenderer;
 import slimeknights.mantle.client.render.MantleRenderTypes;
@@ -63,7 +64,7 @@ public class ChannelBlockEntityRenderer implements BlockEntityRenderer<ChannelBl
 				isRotated = RenderingHelper.applyRotation(matrices, direction);
 				// get the relevant fluid model, render it
 				if (te.isFlowing(direction)) {
-					cube = model.sideFlow(connection == ChannelConnection.OUT);
+					cube = model.side().flow(connection == ChannelConnection.OUT);
 
 					// add to center direction
 					if (connection == ChannelConnection.OUT) {
@@ -77,10 +78,10 @@ public class ChannelBlockEntityRenderer implements BlockEntityRenderer<ChannelBl
 					}
 					// render the extra edge against other blocks
 					if (!world.getBlockState(pos.relative(direction)).is(state.getBlock())) {
-						FluidRenderer.renderCuboid(matrices, builder, model.sideEdge(), 0, still, flowing, color, light, false);
+						FluidRenderer.renderCuboid(matrices, builder, model.side().edge(), 0, still, flowing, color, light, false);
 					}
 				} else {
-					cube = model.sideStill();
+					cube = model.side().still();
 				}
 				FluidRenderer.renderCuboid(matrices, builder, cube, 0, still, flowing, color, light, false);
 				// undo rotation
