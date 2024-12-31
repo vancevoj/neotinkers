@@ -14,7 +14,6 @@ import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraftforge.common.util.Lazy;
 import slimeknights.mantle.data.loadable.Loadables;
-import slimeknights.mantle.data.loadable.primitive.ResourceLocationLoadable;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.plugin.jsonthings.block.FlexBurningLiquidBlock;
 import slimeknights.tconstruct.plugin.jsonthings.block.FlexMobEffectLiquidBlock;
@@ -59,7 +58,7 @@ public class FlexBlockTypes {
       int effectLevel = GsonHelper.getAsInt(data, "burn_time");
       return (props, builder) -> {
         final List<Property<?>> _properties = builder.getProperties();
-        Lazy<MobEffect> effect = Lazy.of(() -> ((ResourceLocationLoadable<MobEffect>)Loadables.MOB_EFFECT).fromKey(effectName, "effect"));
+        Lazy<MobEffect> effect = Lazy.of(() -> Loadables.MOB_EFFECT.fromKey(effectName, "effect"));
         return new FlexMobEffectLiquidBlock(props, builder.getPropertyDefaultValues(), fluidSupplier(Objects.requireNonNullElse(fluidField, builder.getRegistryName())), () -> new MobEffectInstance(effect.get(), 5*20, effectLevel - 1)) {
           @Override
           protected void createBlockStateDefinition(Builder<Block,BlockState> stateBuilder) {

@@ -136,7 +136,7 @@ public class GreyToSpriteTransformer implements ISpriteTransformer {
           paletteBuilder.addABGR(0, 0xFF000000);
         }
         // get the proper type
-        int color = ColorLoadable.ALPHA.getOrDefault(palettePair, "color", -1);
+        int color = ColorLoadable.ALPHA.getOrWhite(palettePair, "color");
         if (palettePair.has("path")) {
           paletteBuilder.addTexture(grey, JsonHelper.getResourceLocation(palettePair, "path"), color);
         } else {

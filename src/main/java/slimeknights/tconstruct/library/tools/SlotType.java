@@ -15,6 +15,7 @@ import slimeknights.mantle.data.loadable.Loadable;
 import slimeknights.mantle.data.loadable.field.LoadableField;
 import slimeknights.mantle.data.loadable.primitive.IntLoadable;
 import slimeknights.mantle.data.loadable.primitive.StringLoadable;
+import slimeknights.mantle.util.typed.TypedMap;
 import slimeknights.tconstruct.TConstruct;
 
 import javax.annotation.Nullable;
@@ -157,7 +158,7 @@ public final class SlotType {
   public record SlotCount(SlotType type, int count) {
     public static final Loadable<SlotCount> LOADABLE = new Loadable<>() {
       @Override
-      public SlotCount convert(JsonElement element, String key) {
+      public SlotCount convert(JsonElement element, String key, TypedMap context) {
         JsonObject json = GsonHelper.convertToJsonObject(element, key);
         if (json.entrySet().size() != 1) {
           throw new JsonSyntaxException("Cannot set multiple slot types");
@@ -168,7 +169,7 @@ public final class SlotType {
           throw new JsonSyntaxException("Invalid slot type name '" + typeString + "'");
         }
         SlotType slotType = SlotType.getOrCreate(typeString);
-        int slots = IntLoadable.FROM_ONE.convert(entry.getValue(), "count");
+        int slots = IntLoadable.FROM_ONE.convert(entry.getValue(), "count", context);
         return new SlotCount(slotType, slots);
       }
 
@@ -180,7 +181,7 @@ public final class SlotType {
       }
 
       @Override
-      public SlotCount decode(FriendlyByteBuf buffer) {
+      public SlotCount decode(FriendlyByteBuf buffer, TypedMap context) {
         return new SlotCount(SlotType.read(buffer), buffer.readVarInt());
       }
 
@@ -200,8 +201,8 @@ public final class SlotType {
     private record NullableSlotCountField<P>(String key, Function<P,SlotCount> getter) implements LoadableField<SlotCount,P> {
       @Nullable
       @Override
-      public SlotCount get(JsonObject json) {
-        return LOADABLE.getOrDefault(json, key, null);
+      public SlotCount get(JsonObject json, TypedMap context) {
+        return LOADABLE.getOrDefault(json, key, null, context);
       }
 
       @Override
@@ -214,7 +215,7 @@ public final class SlotType {
 
       @Nullable
       @Override
-      public SlotCount decode(FriendlyByteBuf buffer) {
+      public SlotCount decode(FriendlyByteBuf buffer, TypedMap context) {
         int count = buffer.readVarInt();
         if (count == 0) {
           return null;
