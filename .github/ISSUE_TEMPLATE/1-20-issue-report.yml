@@ -25,10 +25,19 @@ body:
       value: 1.20.1
     validations:
       required: true
+  - type: dropdown
+    id: modloader
+    attributes:
+      label: "Modloader"
+      options:
+        - 'Forge'
+        - 'NeoForge'
+    validations:
+      required: true
   - type: input
     id: forge-version
     attributes:
-      label: Forge Version
+      label: Modloader Version
       placeholder: "Ex: 36.1.0"
     validations:
       required: true
