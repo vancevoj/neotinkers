@@ -338,7 +338,6 @@
   "item.tconstruct.pick_head_cast": "Pick Head Gold Cast",
   "item.tconstruct.small_axe_head_cast": "Small Axe Head Gold Cast",
   "item.tconstruct.small_blade_cast": "Small Blade Gold Cast",
-  "item.tconstruct.sign_head_cast": "Sign Head Gold Cast",
   "item.tconstruct.bow_limb_cast": "Bow Limb Gold Cast",
   "item.tconstruct.bow_grip_cast": "Bow Grip Gold Cast",
   "item.tconstruct.adze_head_cast": "Adze Head Gold Cast",
@@ -388,7 +387,6 @@
   "item.tconstruct.pick_head_sand_cast": "Pick Head Sand Cast",
   "item.tconstruct.small_axe_head_sand_cast": "Small Axe Head Sand Cast",
   "item.tconstruct.small_blade_sand_cast": "Small Blade Sand Cast",
-  "item.tconstruct.sign_head_sand_cast": "Sign Head Sand Cast",
   "item.tconstruct.bow_limb_sand_cast": "Bow Limb Sand Cast",
   "item.tconstruct.bow_grip_sand_cast": "Bow Grip Sand Cast",
   "item.tconstruct.adze_head_sand_cast": "Adze Head Sand Cast",
@@ -439,7 +437,6 @@
   "item.tconstruct.pick_head_red_sand_cast": "Pick Head Red Sand Cast",
   "item.tconstruct.small_axe_head_red_sand_cast": "Small Axe Head Red Sand Cast",
   "item.tconstruct.small_blade_red_sand_cast": "Small Blade Red Sand Cast",
-  "item.tconstruct.sign_head_red_sand_cast": "Sign Head Red Sand Cast",
   "item.tconstruct.bow_limb_red_sand_cast": "Bow Limb Red Sand Cast",
   "item.tconstruct.bow_grip_red_sand_cast": "Bow Grip Red Sand Cast",
   "item.tconstruct.adze_head_red_sand_cast": "Adze Head Red Sand Cast",
@@ -1414,6 +1411,8 @@
   "block.tconstruct.greenheart_button":         "Greenheart Button",
   "block.tconstruct.greenheart_sign":           "Greenheart Sign",
   "block.tconstruct.greenheart_wall_sign":      "Greenheart Sign",
+  "block.tconstruct.greenheart_hanging_sign":   "Greenheart Hanging Sign",
+  "block.tconstruct.greenheart_wall_hanging_sign": "Greenheart Hanging Sign",
 
   "block.tconstruct.skyroot_planks":        "Skyroot Planks",
   "block.tconstruct.skyroot_planks_slab":   "Skyroot Slab",
@@ -1431,6 +1430,8 @@
   "block.tconstruct.skyroot_button":         "Skyroot Button",
   "block.tconstruct.skyroot_sign":           "Skyroot Sign",
   "block.tconstruct.skyroot_wall_sign":      "Skyroot Sign",
+  "block.tconstruct.skyroot_hanging_sign":   "Skyroot Hanging Sign",
+  "block.tconstruct.skyroot_wall_hanging_sign": "Skyroot Hanging Sign",
 
   "block.tconstruct.bloodshroom_planks":        "Bloodshroom Planks",
   "block.tconstruct.bloodshroom_planks_slab":   "Bloodshroom Slab",
@@ -1448,6 +1449,8 @@
   "block.tconstruct.bloodshroom_button":         "Bloodshroom Button",
   "block.tconstruct.bloodshroom_sign":           "Bloodshroom Sign",
   "block.tconstruct.bloodshroom_wall_sign":      "Bloodshroom Sign",
+  "block.tconstruct.bloodshroom_hanging_sign":   "Bloodshroom Hanging Sign",
+  "block.tconstruct.bloodshroom_wall_hanging_sign": "Bloodshroom Hanging Sign",
 
   "block.tconstruct.enderbark_planks":        "Enderbark Planks",
   "block.tconstruct.enderbark_planks_slab":   "Enderbark Slab",
@@ -1471,6 +1474,8 @@
   "block.tconstruct.enderbark_button":         "Enderbark Button",
   "block.tconstruct.enderbark_sign":           "Enderbark Sign",
   "block.tconstruct.enderbark_wall_sign":      "Enderbark Sign",
+  "block.tconstruct.enderbark_hanging_sign":   "Enderbark Hanging Sign",
+  "block.tconstruct.enderbark_wall_hanging_sign": "Enderbark Hanging Sign",
 
 
   "material.tconstruct.unknown": "Unknown",

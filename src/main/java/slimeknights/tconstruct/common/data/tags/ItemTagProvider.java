@@ -239,6 +239,7 @@ public class ItemTagProvider extends ItemTagsProvider {
     this.copy(BlockTags.WOODEN_BUTTONS, ItemTags.WOODEN_BUTTONS);
     this.copy(BlockTags.WOODEN_PRESSURE_PLATES, ItemTags.WOODEN_PRESSURE_PLATES);
     this.copy(BlockTags.STANDING_SIGNS, ItemTags.SIGNS);
+    this.copy(BlockTags.CEILING_HANGING_SIGNS, ItemTags.HANGING_SIGNS);
   }
 
   private void addTools() {

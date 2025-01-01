@@ -574,7 +574,8 @@ public class BlockTagProvider extends BlockTagsProvider {
     for (WoodBlockObject block : blocks) {
       tag(tag).add(block.get(), block.getSlab(), block.getStairs(), block.getFence(),
                    block.getStrippedLog(), block.getStrippedWood(), block.getFenceGate(), block.getDoor(), block.getTrapdoor(),
-                   block.getPressurePlate(), block.getButton(), block.getSign(), block.getWallSign());
+                   block.getPressurePlate(), block.getButton(),
+                   block.getSign(), block.getWallSign(), block.getHangingSign(), block.getWallHangingSign());
     }
   }
 
@@ -626,5 +627,7 @@ public class BlockTagProvider extends BlockTagsProvider {
     // signs
     this.tag(BlockTags.STANDING_SIGNS).add(object.getSign());
     this.tag(BlockTags.WALL_SIGNS).add(object.getWallSign());
+    this.tag(BlockTags.CEILING_HANGING_SIGNS).add(object.getHangingSign());
+    this.tag(BlockTags.WALL_HANGING_SIGNS).add(object.getWallHangingSign());
   }
 }

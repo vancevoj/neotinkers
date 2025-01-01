@@ -388,6 +388,7 @@ public class BlockLootTableProvider extends BlockLootSubProvider {
     this.dropSelf(object.getButton());
     // sign
     this.dropSelf(object.getSign());
+    this.dropSelf(object.getHangingSign());
   }
 
   private final Function<Block, LootTable.Builder> ADD_TABLE = block -> droppingWithFunctions(block, (builder) ->

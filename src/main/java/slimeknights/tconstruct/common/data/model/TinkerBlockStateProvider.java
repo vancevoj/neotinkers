@@ -125,15 +125,17 @@ public class TinkerBlockStateProvider extends BlockStateProvider {
     // helper to get textures for wood, since we put them in a nice folder
     Function<String,ResourceLocation> texture = suffix -> blockTexture("wood/" + name + "/" + suffix);
     ResourceLocation planks = texture.apply("planks");
+    ResourceLocation log = texture.apply("log");
+    ResourceLocation stripped = texture.apply("stripped_log");
 
     // planks and fences
     addFenceBuildingBlock(wood, folder, "planks", planks);
     fenceGate(wood.getFenceGate(), folder + "fence/gate", planks);
     // logs
-    axisBlock(wood.getLog(),          folder + "log/log",           texture.apply("log"), true);
-    axisBlock(wood.getStrippedLog(),  folder + "log/stripped",      texture.apply("stripped_log"), true);
-    axisBlock(wood.getWood(),         folder + "log/wood",          texture.apply("log"), false);
-    axisBlock(wood.getStrippedWood(), folder + "log/wood_stripped", texture.apply("stripped_log"), false);
+    axisBlock(wood.getLog(),          folder + "log/log",           log,      true);
+    axisBlock(wood.getStrippedLog(),  folder + "log/stripped",      stripped, true);
+    axisBlock(wood.getWood(),         folder + "log/wood",          log,      false);
+    axisBlock(wood.getStrippedWood(), folder + "log/wood_stripped", stripped, false);
     // doors
     door(wood.getDoor(), folder, doorRenderType, texture.apply("door_bottom"), texture.apply("door_top"));
     basicItem(wood.getDoor(), "wood/");
@@ -144,6 +146,10 @@ public class TinkerBlockStateProvider extends BlockStateProvider {
     // sign
     signBlock(wood.getSign(), wood.getWallSign(), models().sign(folder + "sign", planks));
     basicItem(wood.getSign(), "wood/");
+    ModelFile hangingSign = models().sign(folder + "hanging_sign", stripped);
+    simpleBlock(wood.getHangingSign(), hangingSign);
+    simpleBlock(wood.getWallHangingSign(), hangingSign);
+    basicItem(wood.getHangingSign(), "wood/");
   }
 
 
