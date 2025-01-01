@@ -407,5 +407,10 @@
     "diamond":   "#55FFFF",
     "netherite": "#555555",
     "gold":      "#FFAA00"
+  },
+  "stat.tconstruct.slot": {
+    "upgrades": "#CCBA47",
+    "defense": "#A8FFA0",
+    "abilities": "#B8A0FF"
   }
 }

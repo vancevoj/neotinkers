@@ -11,6 +11,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
+import slimeknights.mantle.client.ResourceColorManager;
 import slimeknights.mantle.data.loadable.Loadable;
 import slimeknights.mantle.data.loadable.field.LoadableField;
 import slimeknights.mantle.data.loadable.primitive.IntLoadable;
@@ -42,9 +43,11 @@ public final class SlotType {
   }, SlotType::getName);
 
   /** Key for uppercase slot name */
-  private static final String KEY_PREFIX = TConstruct.makeTranslationKey("stat", "slot.prefix.");
+  private static final String KEY_SLOT = TConstruct.makeTranslationKey("stat", "slot.");
+  /** Key for uppercase slot name */
+  private static final String KEY_PREFIX = KEY_SLOT + "prefix.";
   /** Key for lowercase slot name */
-  public static final String KEY_DISPLAY = TConstruct.makeTranslationKey("stat", "slot.display.");
+  public static final String KEY_DISPLAY = KEY_SLOT + "display.";
   /** Map of instances for each name */
   private static final Map<String,SlotType> SLOT_TYPES = new HashMap<>();
   /** List of all slots in the order they were added */
@@ -54,13 +57,13 @@ public final class SlotType {
   private static final Pattern VALIDATOR = Pattern.compile("^[a-z0-9_]*$");
 
   /** Common slot type for modifiers with many levels */
-  public static final SlotType UPGRADE = create("upgrades", 0xFFCCBA47);
+  public static final SlotType UPGRADE = getOrCreate("upgrades");
   /** Slot type for protection based modifiers on armor */
-  public static final SlotType DEFENSE = create("defense", 0xFFA8FFA0);
+  public static final SlotType DEFENSE = getOrCreate("defense");
   /** Rare slot type for powerful and rather exclusive modifiers */
-  public static final SlotType ABILITY = create("abilities", 0xFFB8A0FF);
+  public static final SlotType ABILITY = getOrCreate("abilities");
   /** Slot type used in the soul forge */
-  public static final SlotType SOUL = create("souls", -1);
+  public static final SlotType SOUL = getOrCreate("souls");
 
   /** Just makes sure static initialization is done early enough */
   public static void init() {}
@@ -72,30 +75,23 @@ public final class SlotType {
   }
 
   /**
-   * Registers the given slot type.
+   * Gets an existing slot type, or creates it if missing.
    * Note that you will also want to define a texture for the creative modifier and JEI using {@link slimeknights.mantle.client.model.NBTKeyModel#registerExtraTexture(ResourceLocation, String, ResourceLocation)}
    * @param name     Name of the slot type
-   * @param color    Color of the slot
    * @return  Slot type instance for the name, only once instance for each name
-   * @apiNote
    * @throws IllegalArgumentException  Error if a name is invalid
    */
-  public static SlotType create(String name, int color) {
+  public static SlotType getOrCreate(String name) {
     if (SLOT_TYPES.containsKey(name)) {
       return SLOT_TYPES.get(name);
     }
     if (!isValidName(name)) {
       throw new IllegalArgumentException("Non [a-z0-9_] character in slot name: " + name);
     }
-    SlotType type = new SlotType(name, TextColor.fromRgb(color));
+    SlotType type = new SlotType(name);
     SLOT_TYPES.put(name, type);
     ALL_SLOTS.add(type);
     return type;
-  }
-
-  /** Gets an existing slot type, or creates it if missing */
-  public static SlotType getOrCreate(String name) {
-    return create(name, -1);
   }
 
   /**
@@ -124,9 +120,8 @@ public final class SlotType {
   /** Name of this slot type, used for serialization */
   @Getter
   private final String name;
-  /** Gets the color of this slot type */
-  @Getter
-  private final TextColor color;
+  /** Cached color of this slot type */
+  private TextColor color = null;
 
   /** Cached text component display names */
   private Component displayName = null;
@@ -142,6 +137,14 @@ public final class SlotType {
       displayName = Component.translatable(KEY_DISPLAY + name);
     }
     return displayName;
+  }
+
+  /** Gets the color of this slot type */
+  public TextColor getColor() {
+    if (color == null) {
+      color = ResourceColorManager.getTextColor(KEY_SLOT + name);
+    }
+    return color;
   }
 
   /** Writes this slot type to the packet buffer */
