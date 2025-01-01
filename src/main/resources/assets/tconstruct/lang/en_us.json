@@ -304,7 +304,7 @@
   "_comment": "Binding Patterns",
 
   "pattern.tconstruct.tool_binding": "Tool Binding",
-  "pattern.tconstruct.tough_binding": "Tough Binding",
+  "pattern.tconstruct.tough_binding": "Tough Collar",
   "pattern.tconstruct.bowstring": "Bowstring",
   "pattern.tconstruct.maille": "Maille",
   "pattern.tconstruct.shield_core": "Shield Core",
@@ -353,7 +353,7 @@
   "_comment": "Binding Gold Casts",
 
   "item.tconstruct.tool_binding_cast": "Tool Binding Gold Cast",
-  "item.tconstruct.tough_binding_cast": "Tough Binding Gold Cast",
+  "item.tconstruct.tough_binding_cast": "Tough Collar Gold Cast",
 
   "_comment": "Tool Handle Gold Casts",
 
@@ -403,7 +403,7 @@
   "_comment": "Binding Sand Casts",
 
   "item.tconstruct.tool_binding_sand_cast": "Tool Binding Sand Cast",
-  "item.tconstruct.tough_binding_sand_cast": "Tough Binding Sand Cast",
+  "item.tconstruct.tough_binding_sand_cast": "Tough Collar Sand Cast",
 
   "_comment": "Tool Handle Sand Casts",
 
@@ -454,7 +454,7 @@
   "_comment": "Binding Red Sand Casts",
 
   "item.tconstruct.tool_binding_red_sand_cast": "Tool Binding Red Sand Cast",
-  "item.tconstruct.tough_binding_red_sand_cast": "Tough Binding Red Sand Cast",
+  "item.tconstruct.tough_binding_red_sand_cast": "Tough Collar Red Sand Cast",
 
   "_comment": "Tool Handle Red Sand Casts",
 
@@ -972,7 +972,7 @@
   "item.tconstruct.tool_handle": "Tool Handle",
   "item.tconstruct.tough_handle": "Tough Handle",
   "item.tconstruct.tool_binding": "Tool Binding",
-  "item.tconstruct.tough_binding": "Tough Binding",
+  "item.tconstruct.tough_binding": "Tough Collar",
   "item.tconstruct.adze_head": "Adze Head",
   "item.tconstruct.large_plate": "Large Plate",
   
