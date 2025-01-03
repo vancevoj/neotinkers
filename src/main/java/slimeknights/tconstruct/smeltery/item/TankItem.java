@@ -178,7 +178,7 @@ public class TankItem extends BlockTooltipItem {
   @SuppressWarnings("deprecation")
   public static void addFilledVariants(Consumer<ItemStack> output) {
     for (Fluid fluid : BuiltInRegistries.FLUID) {
-      if (fluid.isSource(fluid.defaultFluidState()) && !fluid.is(TinkerTags.Fluids.HIDE_IN_CREATIVE)) {
+      if (fluid.isSource(fluid.defaultFluidState()) && !fluid.is(TinkerTags.Fluids.HIDE_IN_CREATIVE_TANKS)) {
         // use an ingot variety for metals
         TankType tank, gauge;
         if (fluid.is(TinkerTags.Fluids.METAL_TOOLTIPS)) {

@@ -121,7 +121,7 @@ public class CopperCanItem extends Item {
   @SuppressWarnings("deprecation")
   public static void addFilledVariants(Consumer<ItemStack> output) {
     for (Fluid fluid : BuiltInRegistries.FLUID) {
-      if (fluid.isSource(fluid.defaultFluidState()) && !fluid.is(TinkerTags.Fluids.HIDE_IN_CREATIVE)) {
+      if (fluid.isSource(fluid.defaultFluidState()) && !fluid.is(TinkerTags.Fluids.HIDE_IN_CREATIVE_TANKS)) {
         output.accept(CopperCanItem.setFluid(new ItemStack(TinkerSmeltery.copperCan), fluid, null));
       }
     }

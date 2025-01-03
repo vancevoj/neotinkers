@@ -492,9 +492,6 @@ public class JEIPlugin implements IModPlugin {
     }
 
     // fluid hiding, buckets are hidden via the creative tab logic
-    // hide knightslime and slimesteel until implemented
-    removeFluid(manager, TinkerFluids.moltenSoulsteel.get());
-    removeFluid(manager, TinkerFluids.moltenKnightslime.get());
     // hide compat that is not present
     for (SmelteryCompat compat : SmelteryCompat.values()) {
       if (!tagExists("ingots/" + compat.getName())) {

@@ -1,6 +1,8 @@
 package slimeknights.tconstruct.common;
 
+import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageType;
@@ -30,6 +32,11 @@ public class TinkerTags {
     Modifiers.init();
     Materials.init();
     DamageTypes.init();
+  }
+
+  /** Creates a tag that hides things from JEI */
+  private static <R> TagKey<R> hiddenFromRecipeViewers(ResourceKey<? extends Registry<R>> registry) {
+    return TagKey.create(registry, new ResourceLocation("c", "hidden_from_recipe_viewers"));
   }
 
   public static class Blocks {
@@ -475,7 +482,9 @@ public class TinkerTags {
     public static final TagKey<Fluid> EXPENSIVE_METAL_SPILLING = tag("spilling/metal/expensive");
 
     /** Fluids in this tag won't show in the creative filled tanks */
-    public static final TagKey<Fluid> HIDE_IN_CREATIVE = tag("hide_in_creative");
+    public static final TagKey<Fluid> HIDE_IN_CREATIVE_TANKS = tag("hide_in_creative_tanks");
+    /** Fluids in this tag won't show in JEI */
+    public static final TagKey<Fluid> HIDDEN_IN_RECIPE_VIEWERS = hiddenFromRecipeViewers(Registries.FLUID);
 
     private static TagKey<Fluid> tag(String name) {
       return TagKey.create(Registries.FLUID, TConstruct.getResource(name));
