@@ -5,6 +5,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.ItemLike;
@@ -105,6 +106,17 @@ public class TankItem extends BlockTooltipItem {
     return new TankItemFluidHandler(stack);
   }
 
+  /** Removes the tank from the given stack */
+  private static void removeTank(ItemStack stack) {
+    CompoundTag nbt = stack.getTag();
+    if (nbt != null) {
+      nbt.remove(NBTTags.TANK);
+      if (nbt.isEmpty()) {
+        stack.setTag(null);
+      }
+    }
+  }
+
   /**
    * Sets the tank to the given stack
    * @param stack  Stack
@@ -113,13 +125,7 @@ public class TankItem extends BlockTooltipItem {
    */
   public static ItemStack setTank(ItemStack stack, FluidTank tank) {
     if (tank.isEmpty()) {
-      CompoundTag nbt = stack.getTag();
-      if (nbt != null) {
-        nbt.remove(NBTTags.TANK);
-        if (nbt.isEmpty()) {
-          stack.setTag(null);
-        }
-      }
+      removeTank(stack);
     } else {
       stack.getOrCreateTag().put(NBTTags.TANK, tank.writeToNBT(new CompoundTag()));
     }
@@ -134,16 +140,20 @@ public class TankItem extends BlockTooltipItem {
    */
   public static ItemStack setTank(ItemStack stack, FluidStack fluid) {
     if (fluid.isEmpty()) {
-      CompoundTag nbt = stack.getTag();
-      if (nbt != null) {
-        nbt.remove(NBTTags.TANK);
-        if (nbt.isEmpty()) {
-          stack.setTag(null);
-        }
-      }
+      removeTank(stack);
     } else {
       stack.getOrCreateTag().put(NBTTags.TANK, fluid.writeToNBT(new CompoundTag()));
     }
+    return stack;
+  }
+
+  /** Creates a stack with the given fluid and amount, not validated. */
+  private static ItemStack setTank(ItemLike item, ResourceLocation fluid, int amount) {
+    CompoundTag tag = new CompoundTag();
+    tag.putString("FluidName", fluid.toString());
+    tag.putInt("Amount", amount);
+    ItemStack stack = new ItemStack(item);
+    stack.getOrCreateTag().put(NBTTags.TANK, tag);
     return stack;
   }
 
@@ -177,29 +187,36 @@ public class TankItem extends BlockTooltipItem {
   /** Adds filled variants of all standard tank items to the given consumer */
   @SuppressWarnings("deprecation")
   public static void addFilledVariants(Consumer<ItemStack> output) {
-    for (Fluid fluid : BuiltInRegistries.FLUID) {
-      if (fluid.isSource(fluid.defaultFluidState()) && !fluid.is(TinkerTags.Fluids.HIDE_IN_CREATIVE_TANKS)) {
-        // use an ingot variety for metals
-        TankType tank, gauge;
-        if (fluid.is(TinkerTags.Fluids.METAL_TOOLTIPS)) {
-          tank = TankType.INGOT_TANK;
-          gauge = TankType.INGOT_GAUGE;
-        } else {
-          tank = TankType.FUEL_TANK;
-          gauge = TankType.FUEL_GAUGE;
-        }
-        output.accept(setTank(new ItemStack(TinkerSmeltery.searedLantern), new FluidStack(fluid, FluidValues.LANTERN_CAPACITY)));
-        output.accept(fillTank(TinkerSmeltery.searedTank, tank, fluid));
-        output.accept(fillTank(TinkerSmeltery.searedTank, gauge, fluid));
-        output.accept(setTank(new ItemStack(TinkerSmeltery.scorchedLantern), new FluidStack(fluid, FluidValues.LANTERN_CAPACITY)));
-        output.accept(fillTank(TinkerSmeltery.scorchedTank, tank, fluid));
-        output.accept(fillTank(TinkerSmeltery.scorchedTank, gauge, fluid));
+    BuiltInRegistries.FLUID.holders().filter(holder -> {
+      Fluid fluid = holder.get();
+      return fluid.isSource(fluid.defaultFluidState()) && !holder.is(TinkerTags.Fluids.HIDE_IN_CREATIVE_TANKS);
+    }).forEachOrdered(holder -> {
+      // use an ingot variety for metals
+      TankType tank, gauge;
+      if (holder.is(TinkerTags.Fluids.METAL_TOOLTIPS)) {
+        tank = TankType.INGOT_TANK;
+        gauge = TankType.INGOT_GAUGE;
+      } else {
+        tank = TankType.FUEL_TANK;
+        gauge = TankType.FUEL_GAUGE;
       }
-    }
+      ResourceLocation fluidName = holder.key().location();
+      output.accept(setTank(TinkerSmeltery.searedLantern, fluidName, FluidValues.LANTERN_CAPACITY));
+      output.accept(fillTank(TinkerSmeltery.searedTank, tank, fluidName));
+      output.accept(fillTank(TinkerSmeltery.searedTank, gauge, fluidName));
+      output.accept(setTank(TinkerSmeltery.scorchedLantern, fluidName, FluidValues.LANTERN_CAPACITY));
+      output.accept(fillTank(TinkerSmeltery.scorchedTank, tank, fluidName));
+      output.accept(fillTank(TinkerSmeltery.scorchedTank, gauge, fluidName));
+    });
   }
 
   /** Fills a tank stack with the given fluid */
   public static ItemStack fillTank(EnumObject<TankType,? extends ItemLike> tank, TankType type, Fluid fluid) {
-    return TankItem.setTank(new ItemStack(tank.get(type)), new FluidStack(fluid, type.getCapacity()));
+    return setTank(new ItemStack(tank.get(type)), new FluidStack(fluid, type.getCapacity()));
+  }
+
+  /** Fills a tank stack with the given fluid */
+  public static ItemStack fillTank(EnumObject<TankType,? extends ItemLike> tank, TankType type, ResourceLocation fluid) {
+    return setTank(tank.get(type), fluid, type.getCapacity());
   }
 }
