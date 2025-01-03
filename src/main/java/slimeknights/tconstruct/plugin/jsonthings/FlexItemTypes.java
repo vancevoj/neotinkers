@@ -23,6 +23,8 @@ import slimeknights.tconstruct.plugin.jsonthings.item.FlexModifiableItem;
 import slimeknights.tconstruct.plugin.jsonthings.item.FlexPartCastItem;
 import slimeknights.tconstruct.plugin.jsonthings.item.FlexRepairKitItem;
 import slimeknights.tconstruct.plugin.jsonthings.item.FlexToolPartItem;
+import slimeknights.tconstruct.plugin.jsonthings.item.IMaterialItemFactory;
+import slimeknights.tconstruct.plugin.jsonthings.item.IToolItemFactory;
 import slimeknights.tconstruct.plugin.jsonthings.item.armor.FlexModifiableArmorItem;
 import slimeknights.tconstruct.plugin.jsonthings.item.armor.FlexMultilayerArmorModel;
 
@@ -50,28 +52,28 @@ public class FlexItemTypes {
     /* Register a tool part to create new tools */
     register("tool_part", data -> {
       MaterialStatsId statType = new MaterialStatsId(JsonHelper.getResourceLocation(data, "stat_type"));
-      return (props, builder) -> new FlexToolPartItem(props, statType);
+      return (IMaterialItemFactory<FlexToolPartItem>)(props, builder) -> new FlexToolPartItem(props, statType);
     });
 
     /* Register an item that can be used to repair tools */
     register("repair_kit", data -> {
       float repairAmount = GsonHelper.getAsFloat(data, "repair_amount");
-      return (props, builder) -> new FlexRepairKitItem(props, repairAmount);
+      return (IMaterialItemFactory<FlexRepairKitItem>)(props, builder) -> new FlexRepairKitItem(props, repairAmount);
     });
 
     /* Register a modifiable tool instance for melee/harvest tools */
     register("tool", data -> {
       boolean breakBlocksInCreative = GsonHelper.getAsBoolean(data, "break_blocks_in_creative", true);
-      return (props, builder) -> add(TOOL_ITEMS, new FlexModifiableItem(props, ToolDefinition.create(builder.getRegistryName()), breakBlocksInCreative));
+      return (IToolItemFactory<FlexModifiableItem>)(props, builder) -> add(TOOL_ITEMS, new FlexModifiableItem(props, ToolDefinition.create(builder.getRegistryName()), breakBlocksInCreative));
     });
 
     /* Register a modifiable tool instance for bow like items (release on finish) */
-    register("bow", data -> (props, builder) -> add(TOOL_ITEMS, new FlexModifiableBowItem(props, ToolDefinition.create(builder.getRegistryName()))));
+    register("bow", data -> (IToolItemFactory<FlexModifiableBowItem>)(props, builder) -> add(TOOL_ITEMS, new FlexModifiableBowItem(props, ToolDefinition.create(builder.getRegistryName()))));
 
     /* Register a modifiable tool instance for crossbow like items (load on finish) */
     register("crossbow", data -> {
       boolean allowFireworks = GsonHelper.getAsBoolean(data, "allow_fireworks");
-      return (props, builder) -> add(CROSSBOW_ITEMS, new FlexModifiableCrossbowItem(props, ToolDefinition.create(builder.getRegistryName()), allowFireworks));
+      return (IToolItemFactory<FlexModifiableCrossbowItem>)(props, builder) -> add(CROSSBOW_ITEMS, new FlexModifiableCrossbowItem(props, ToolDefinition.create(builder.getRegistryName()), allowFireworks));
     });
 
     /* Registries a cast item that shows a part cost in the tooltip */
@@ -88,7 +90,7 @@ public class FlexItemTypes {
       ResourceLocation name = JsonHelper.getResourceLocation(data, "texture_name");
       SoundEvent sound = Loadables.SOUND_EVENT.getOrDefault(data, "equip_sound", SoundEvents.ARMOR_EQUIP_GENERIC);
       ArmorItem.Type slot = JsonHelper.getAsEnum(data, "slot", ArmorItem.Type.class);
-      return (props, builder) -> add(ARMOR_ITEMS, new FlexModifiableArmorItem(new DummyArmorMaterial(name, sound), slot, props, ToolDefinition.create(builder.getRegistryName())));
+      return (IToolItemFactory<FlexModifiableArmorItem>)(props, builder) -> add(ARMOR_ITEMS, new FlexModifiableArmorItem(new DummyArmorMaterial(name, sound), slot, props, ToolDefinition.create(builder.getRegistryName())));
     });
 
     /* Layered armor type, used for golden, dyeable, etc */
@@ -97,7 +99,7 @@ public class FlexItemTypes {
       ResourceLocation name = JsonHelper.getResourceLocation(data, "model_name");
       SoundEvent sound = Loadables.SOUND_EVENT.getOrDefault(data, "equip_sound", SoundEvents.ARMOR_EQUIP_GENERIC);
       ArmorItem.Type slot = JsonHelper.getAsEnum(data, "slot", ArmorItem.Type.class);
-      return (props, builder) -> add(ARMOR_ITEMS, new FlexMultilayerArmorModel(new DummyArmorMaterial(name, sound), slot, props, ToolDefinition.create(builder.getRegistryName())));
+      return (IToolItemFactory<FlexMultilayerArmorModel>)(props, builder) -> add(ARMOR_ITEMS, new FlexMultilayerArmorModel(new DummyArmorMaterial(name, sound), slot, props, ToolDefinition.create(builder.getRegistryName())));
     });
   }
 
