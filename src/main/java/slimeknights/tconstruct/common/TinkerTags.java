@@ -177,6 +177,8 @@ public class TinkerTags {
     /** List of blocks that should produce bonus gold nugget drops from the chrysophilite modifier. Will only drop bonus if the block does not drop itself */
     public static final TagKey<Block> CHRYSOPHILITE_ORES = tag("chrysophilite_ores");
 
+    // misc compat
+    public static final TagKey<Block> BUDDING = forgeTag("budding");
     // ceramics compat
     public static final TagKey<Block> CISTERN_CONNECTIONS = TagKey.create(Registries.BLOCK, new ResourceLocation("ceramics", "cistern_connections"));
 

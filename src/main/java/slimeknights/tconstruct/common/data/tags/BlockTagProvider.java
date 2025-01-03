@@ -282,6 +282,9 @@ public class BlockTagProvider extends BlockTagsProvider {
     this.tag(TinkerTags.Blocks.EARTH_SLIME_SPAWN).add(TinkerWorld.skyGeode.getBlock(), TinkerWorld.skyGeode.getBudding()).addTag(FoliageType.EARTH.getGrassBlockTag());
     this.tag(TinkerTags.Blocks.ENDER_SLIME_SPAWN).add(TinkerWorld.enderGeode.getBlock(), TinkerWorld.enderGeode.getBudding()).addTag(FoliageType.ENDER.getGrassBlockTag());
 
+    // budding tag
+    tag(TinkerTags.Blocks.BUDDING).add(TinkerWorld.earthGeode.getBudding(), TinkerWorld.skyGeode.getBudding(), TinkerWorld.ichorGeode.getBudding(), TinkerWorld.enderGeode.getBudding());
+
     this.tag(BlockTags.GUARDED_BY_PIGLINS)
         .add(TinkerTables.castChest.get(), TinkerCommons.goldBars.get(), TinkerCommons.goldPlatform.get());
     // piglins are not a fan of zombie piglin corpses
