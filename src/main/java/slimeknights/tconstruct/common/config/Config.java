@@ -201,6 +201,7 @@ public class Config {
     public final BooleanValue showAllAnvilVariants;
     public final BooleanValue showAllSmelteryVariants;
     public final BooleanValue showFilledFluidTanks;
+    public final BooleanValue showPotionFluidInJEI;
 
     // framed modifier
     public final ForgeConfigSpec.BooleanValue renderItemFrame;
@@ -277,6 +278,10 @@ public class Config {
         this.showFilledFluidTanks = builder
           .comment("If true, filled copper cans and fluid gauges will show in JEI. If false only empty ones will show")
           .define("showFilledFluidTanks", false);
+
+        this.showPotionFluidInJEI = builder
+          .comment("If true, variants of our potion fluid for every potion will show in JEI. If false it will be hidden, but still usable.")
+          .define("showPotionFluid", true);
       }
       builder.pop(); // jei
 

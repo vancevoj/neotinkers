@@ -63,7 +63,7 @@ public class PotionBucketItem extends PotionItem {
 
   @Override
   public ItemStack getDefaultInstance() {
-    return PotionUtils.setPotion(super.getDefaultInstance(), Potions.WATER);
+    return PotionUtils.setPotion(new ItemStack(this), Potions.AWKWARD);
   }
 
   @Override
