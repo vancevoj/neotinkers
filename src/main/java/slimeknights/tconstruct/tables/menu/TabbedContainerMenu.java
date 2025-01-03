@@ -160,7 +160,7 @@ public class TabbedContainerMenu<TILE extends BlockEntity> extends TriggeringMul
   @SuppressWarnings("deprecation")  // your tag utils are overkill
   private static boolean isUsable(BlockEntity tileEntity, Player player) {
     // must not be blacklisted and be usable
-    return !RegistryHelper.contains(BuiltInRegistries.BLOCK_ENTITY_TYPE, TinkerTags.TileEntityTypes.CRAFTING_STATION_BLACKLIST, tileEntity.getType())
+    return RegistryHelper.contains(BuiltInRegistries.BLOCK_ENTITY_TYPE, TinkerTags.TileEntityTypes.SIDE_INVENTORIES, tileEntity.getType())
            && (!(tileEntity instanceof Container) || ((Container)tileEntity).stillValid(player));
   }
 

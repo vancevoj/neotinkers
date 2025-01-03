@@ -1,0 +1,68 @@
+{
+  "values": [
+    "minecraft:chest",
+    "minecraft:trapped_chest",
+    "minecraft:barrel",
+    "minecraft:shulker_box",
+    "minecraft:dispenser",
+    "minecraft:dropper",
+    "minecraft:hopper",
+    "minecraft:chiseled_bookshelf",
+    {
+      "id": "ironchest:iron_chest",
+      "required": false
+    },
+    {
+      "id": "ironchest:trapped_iron_chest",
+      "required": false
+    },
+    {
+      "id": "ironchest:gold_chest",
+      "required": false
+    },
+    {
+      "id": "ironchest:trapped_gold_chest",
+      "required": false
+    },
+    {
+      "id": "ironchest:diamond_chest",
+      "required": false
+    },
+    {
+      "id": "ironchest:trapped_diamond_chest",
+      "required": false
+    },
+    {
+      "id": "ironchest:copper_chest",
+      "required": false
+    },
+    {
+      "id": "ironchest:trapped_copper_chest",
+      "required": false
+    },
+    {
+      "id": "ironchest:crystal_chest",
+      "required": false
+    },
+    {
+      "id": "ironchest:trapped_crystal_chest",
+      "required": false
+    },
+    {
+      "id": "ironchest:obsidian_chest",
+      "required": false
+    },
+    {
+      "id": "ironchest:trapped_obsidian_chest",
+      "required": false
+    },
+    {
+      "id": "ironchest:dirt_chest",
+      "required": false
+    },
+    {
+      "id": "ironchest:trapped_dirt_chest",
+      "required": false
+    }
+  ]
+}

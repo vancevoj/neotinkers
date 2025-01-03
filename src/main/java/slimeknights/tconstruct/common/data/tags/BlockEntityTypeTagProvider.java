@@ -5,12 +5,11 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.IntrinsicHolderTagsProvider;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.TinkerTags;
-import slimeknights.tconstruct.smeltery.TinkerSmeltery;
-import slimeknights.tconstruct.tables.TinkerTables;
 
 import javax.annotation.Nullable;
 import java.util.concurrent.CompletableFuture;
@@ -24,17 +23,25 @@ public class BlockEntityTypeTagProvider extends IntrinsicHolderTagsProvider<Bloc
           TConstruct.MOD_ID, existingFileHelper);
   }
 
+  /** Creates a RL for iron chests */
+  private static void ironchest(IntrinsicTagAppender<BlockEntityType<?>> appender, String name) {
+    ResourceLocation chest = new ResourceLocation("ironchest", name + "_chest");
+    appender.addOptional(chest).addOptional(chest.withPrefix("trapped_"));
+  }
+
   @Override
   protected void addTags(Provider provider) {
-    this.tag(TinkerTags.TileEntityTypes.CRAFTING_STATION_BLACKLIST)
-        .add(
-          BlockEntityType.FURNACE, BlockEntityType.BLAST_FURNACE, BlockEntityType.SMOKER, BlockEntityType.BREWING_STAND,
-          TinkerTables.craftingStationTile.get(), TinkerTables.tinkerStationTile.get(), TinkerTables.partBuilderTile.get(),
-          TinkerTables.partChestTile.get(), TinkerTables.tinkersChestTile.get(), TinkerTables.castChestTile.get(),
-          TinkerSmeltery.basin.get(), TinkerSmeltery.table.get(),
-          TinkerSmeltery.melter.get(), TinkerSmeltery.smeltery.get(), TinkerSmeltery.foundry.get()
-        );
-
+    IntrinsicTagAppender<BlockEntityType<?>> sideInventories = tag(TinkerTags.TileEntityTypes.SIDE_INVENTORIES);
+    sideInventories.add(
+      BlockEntityType.CHEST, BlockEntityType.TRAPPED_CHEST, BlockEntityType.BARREL, BlockEntityType.SHULKER_BOX,
+      BlockEntityType.DISPENSER, BlockEntityType.DROPPER, BlockEntityType.HOPPER, BlockEntityType.CHISELED_BOOKSHELF);
+    ironchest(sideInventories, "iron");
+    ironchest(sideInventories, "gold");
+    ironchest(sideInventories, "diamond");
+    ironchest(sideInventories, "copper");
+    ironchest(sideInventories, "crystal");
+    ironchest(sideInventories, "obsidian");
+    ironchest(sideInventories, "dirt");
   }
 
   @Override

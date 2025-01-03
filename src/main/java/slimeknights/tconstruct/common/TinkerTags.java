@@ -518,7 +518,9 @@ public class TinkerTags {
 
   public static class TileEntityTypes {
     private static void init() {}
-    public static final TagKey<BlockEntityType<?>> CRAFTING_STATION_BLACKLIST = tag("crafting_station_blacklist");
+
+    /** Block entities in this tag can be used as a side inventory for the crafting station and alike */
+    public static final TagKey<BlockEntityType<?>> SIDE_INVENTORIES = tag("side_inventories");
 
     @SuppressWarnings("SameParameterValue")  // may want more tags later
     private static TagKey<BlockEntityType<?>> tag(String name) {
