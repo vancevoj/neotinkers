@@ -2,7 +2,6 @@ package slimeknights.tconstruct.common.data.tags;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.HolderLookup.Provider;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.resources.ResourceLocation;
@@ -51,6 +50,7 @@ import static net.minecraft.tags.BlockTags.NEEDS_IRON_TOOL;
 import static net.minecraft.tags.BlockTags.NEEDS_STONE_TOOL;
 import static net.minecraftforge.common.Tags.Blocks.NEEDS_GOLD_TOOL;
 import static net.minecraftforge.common.Tags.Blocks.NEEDS_NETHERITE_TOOL;
+import static slimeknights.mantle.Mantle.commonResource;
 import static slimeknights.tconstruct.common.TinkerTags.Blocks.MINEABLE_MELTING_BLACKLIST;
 
 @SuppressWarnings({"unchecked", "SameParameterValue"})
@@ -135,7 +135,7 @@ public class BlockTagProvider extends BlockTagsProvider {
         .addTag(Tags.Blocks.STORAGE_BLOCKS_NETHERITE);
     for (SmelteryCompat compat : SmelteryCompat.values()) {
       if (!compat.isOre()) {
-        builder.addOptionalTag(new ResourceLocation("forge", "storage_blocks/" + compat.getName()));
+        builder.addOptionalTag(commonResource("storage_blocks/" + compat.getName()));
       }
     }
 
@@ -168,7 +168,7 @@ public class BlockTagProvider extends BlockTagsProvider {
     this.tag(TinkerTags.Blocks.HARVESTABLE_CROPS)
         .add(Blocks.NETHER_WART)
         .addTag(BlockTags.CROPS)
-        .addOptionalTag(new ResourceLocation("forge", "crops"));
+        .addOptionalTag(commonResource("crops"));
     this.tag(TinkerTags.Blocks.HARVESTABLE_INTERACT)
         .add(Blocks.SWEET_BERRY_BUSH);
     this.tag(TinkerTags.Blocks.HARVESTABLE)
@@ -598,7 +598,7 @@ public class BlockTagProvider extends BlockTagsProvider {
   private void addGlass(EnumObject<GlassColor,? extends Block> blockObj, String tagPrefix, IntrinsicTagAppender<Block> blockTag) {
     blockObj.forEach((color, block) -> {
       blockTag.add(block);
-      this.tag(TagKey.create(Registries.BLOCK, new ResourceLocation("forge", tagPrefix + color.getSerializedName()))).add(block);
+      this.tag(BlockTags.create(commonResource(tagPrefix + color.getSerializedName()))).add(block);
     });
   }
 

@@ -6,13 +6,11 @@ import net.minecraft.core.cauldron.CauldronInteraction;
 import net.minecraft.core.dispenser.DefaultDispenseItemBehavior;
 import net.minecraft.core.dispenser.DispenseItemBehavior;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.minecraft.network.syncher.EntityDataSerializer;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.tags.TagKey;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.item.CreativeModeTab;
@@ -75,6 +73,7 @@ import slimeknights.tconstruct.tools.TinkerModifiers;
 import slimeknights.tconstruct.tools.network.FluidDataSerializer;
 import slimeknights.tconstruct.world.TinkerWorld;
 
+import static slimeknights.mantle.Mantle.commonResource;
 import static slimeknights.tconstruct.fluids.block.BurningLiquidBlock.createBurning;
 import static slimeknights.tconstruct.fluids.block.MobEffectLiquidBlock.createEffect;
 
@@ -465,7 +464,7 @@ public final class TinkerFluids extends TinkerModule {
   /** Accepts the given item if any of the listed ingots are present */
   private static void acceptCompat(CreativeModeTab.Output output, ItemLike item, String... ingots) {
     for (String ingot : ingots) {
-      if (acceptIfTag(output, item, TagKey.create(Registries.ITEM, new ResourceLocation("forge", "ingots/" + ingot)))) {
+      if (acceptIfTag(output, item, ItemTags.create(commonResource("ingots/" + ingot)))) {
         break;
       }
     }

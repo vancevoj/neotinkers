@@ -20,6 +20,8 @@ import slimeknights.tconstruct.library.recipe.melting.MaterialMeltingRecipeBuild
 import javax.annotation.Nullable;
 import java.util.function.Consumer;
 
+import static slimeknights.mantle.Mantle.COMMON;
+
 /**
  * Interface for adding recipes for tool materials
  */
@@ -67,14 +69,14 @@ public interface IMaterialRecipeHelper extends IRecipeHelper {
     Consumer<FinishedRecipe> wrapped = optional ? withCondition(consumer, tagCondition("ingots/" + name)) : consumer;
     String matName = material.getLocation('/').getPath();
     // ingot
-    TagKey<Item> ingotTag = getItemTag("forge", "ingots/" + name);
+    TagKey<Item> ingotTag = getItemTag(COMMON, "ingots/" + name);
     materialRecipe(wrapped, material, Ingredient.of(ingotTag), 1, 1, folder + matName + "/ingot");
     // nugget
     wrapped = optional ? withCondition(consumer, tagCondition("nuggets/" + name)) : consumer;
-    materialRecipe(wrapped, material, Ingredient.of(getItemTag("forge", "nuggets/" + name)), 1, 9, folder + matName + "/nugget");
+    materialRecipe(wrapped, material, Ingredient.of(getItemTag(COMMON, "nuggets/" + name)), 1, 9, folder + matName + "/nugget");
     // block
     wrapped = optional ? withCondition(consumer, tagCondition("storage_blocks/" + name)) : consumer;
-    materialRecipe(wrapped, material, Ingredient.of(getItemTag("forge", "storage_blocks/" + name)), 9, 1, ItemOutput.fromTag(ingotTag), folder + matName + "/block");
+    materialRecipe(wrapped, material, Ingredient.of(getItemTag(COMMON, "storage_blocks/" + name)), 9, 1, ItemOutput.fromTag(ingotTag), folder + matName + "/block");
   }
 
   /** Adds recipes to melt a material */

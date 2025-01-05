@@ -3,8 +3,7 @@ package slimeknights.tconstruct.smeltery;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.TagKey;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.CreativeModeTab;
@@ -122,6 +121,8 @@ import java.util.function.Function;
 import java.util.function.IntFunction;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+
+import static slimeknights.mantle.Mantle.commonResource;
 
 /**
  * Contains logic for the multiblocks in the mod
@@ -560,6 +561,6 @@ public final class TinkerSmeltery extends TinkerModule {
 
   /** Adds a cast to the tab */
   private static void acceptIfTag(CreativeModeTab.Output output, Function<CastItemObject,ItemLike> getter, CastItemObject cast) {
-    acceptIfTag(output, getter.apply(cast), TagKey.create(Registries.ITEM, new ResourceLocation("forge", cast.getName().getPath() + "s")));
+    acceptIfTag(output, getter.apply(cast), ItemTags.create(commonResource(cast.getName().getPath() + "s")));
   }
 }

@@ -26,6 +26,8 @@ import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static slimeknights.mantle.Mantle.COMMON;
+
 /**
  * Extendable material provider, useful for addons
  */
@@ -117,7 +119,7 @@ public abstract class AbstractMaterialDataProvider extends GenericDataProvider {
 
   /** Conditions on a forge tag existing */
   protected static ICondition tagExistsCondition(String name) {
-    return new NotCondition(new TagEmptyCondition("forge", name));
+    return new NotCondition(new TagEmptyCondition(COMMON, name));
   }
 
   /** Creates a normal material with a condition and a redirect */

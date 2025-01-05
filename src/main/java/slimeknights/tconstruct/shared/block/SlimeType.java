@@ -1,15 +1,17 @@
 package slimeknights.tconstruct.shared.block;
 
 import lombok.Getter;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.material.MapColor;
-import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.world.block.DirtType;
 import slimeknights.tconstruct.world.block.FoliageType;
 
 import java.util.Locale;
+
+import static slimeknights.mantle.Mantle.commonResource;
 
 /** Types of slime available in tinkers, all types notably have balls, congealed, and blocks */
 @Getter
@@ -49,7 +51,7 @@ public enum SlimeType implements StringRepresentable {
     this.nether = nether;
     this.lightLevel = lightLevel;
     // tags
-    slimeballTag = TinkerTags.Items.forgeTag("slimeball/" + this.getSerializedName());
+    slimeballTag = ItemTags.create(commonResource("slimeball/" + this.getSerializedName()));
   }
 
   SlimeType(int color, MapColor mapColor, boolean nether) {

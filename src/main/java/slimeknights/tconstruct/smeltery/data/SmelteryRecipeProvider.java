@@ -11,6 +11,7 @@ import net.minecraft.data.recipes.SingleItemRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.EntityTypeTags;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
@@ -84,6 +85,9 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
+
+import static slimeknights.mantle.Mantle.COMMON;
+import static slimeknights.mantle.Mantle.commonResource;
 
 public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelteryRecipeHelper, ICommonRecipeHelper {
   public SmelteryRecipeProvider(PackOutput packOutput) {
@@ -1217,10 +1221,10 @@ public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelt
     this.castCreation(consumer, Tags.Items.GEMS, TinkerSmeltery.gemCast, castFolder);
     this.castCreation(consumer, Tags.Items.RODS, TinkerSmeltery.rodCast, castFolder);
     // other casts are added if needed
-    this.castCreation(withCondition(consumer, tagCondition("plates")), getItemTag("forge", "plates"), TinkerSmeltery.plateCast, castFolder);
-    this.castCreation(withCondition(consumer, tagCondition("gears")), getItemTag("forge", "gears"), TinkerSmeltery.gearCast, castFolder);
-    this.castCreation(withCondition(consumer, tagCondition("coins")), getItemTag("forge", "coins"), TinkerSmeltery.coinCast, castFolder);
-    this.castCreation(withCondition(consumer, tagCondition("wires")), getItemTag("forge", "wires"), TinkerSmeltery.wireCast, castFolder);
+    this.castCreation(withCondition(consumer, tagCondition("plates")), getItemTag(COMMON, "plates"), TinkerSmeltery.plateCast, castFolder);
+    this.castCreation(withCondition(consumer, tagCondition("gears")),  getItemTag(COMMON, "gears"), TinkerSmeltery.gearCast, castFolder);
+    this.castCreation(withCondition(consumer, tagCondition("coins")),  getItemTag(COMMON, "coins"), TinkerSmeltery.coinCast, castFolder);
+    this.castCreation(withCondition(consumer, tagCondition("wires")),  getItemTag(COMMON, "wires"), TinkerSmeltery.wireCast, castFolder);
 
     // misc casting - gold
     ItemCastingRecipeBuilder.tableRecipe(TinkerCommons.goldBars)
@@ -1890,8 +1894,8 @@ public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelt
                      .build(wrapped, prefix(TinkerFluids.moltenPewter, folder));
 
     // thermal alloys
-    Function<String,ICondition> fluidTagLoaded = name -> new NotCondition(new TagEmptyCondition<>(Registries.FLUID, new ResourceLocation("forge", name)));
-    Function<String,TagKey<Fluid>> fluidTag = name -> TagKey.create(Registries.FLUID, new ResourceLocation("forge", name));
+    Function<String,ICondition> fluidTagLoaded = name -> new NotCondition(new TagEmptyCondition<>(Registries.FLUID, commonResource(name)));
+    Function<String,TagKey<Fluid>> fluidTag = name -> FluidTags.create(commonResource(name));
     // enderium
     wrapped = withCondition(consumer, tagCondition("ingots/enderium"), tagCondition("ingots/lead"));
     AlloyRecipeBuilder.alloy(TinkerFluids.moltenEnderium.get(), FluidValues.INGOT * 2)
@@ -2071,7 +2075,7 @@ public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelt
     // immersive engineering - casting treated wood
     ItemCastingRecipeBuilder.basinRecipe(ItemNameOutput.fromName(new ResourceLocation("immersiveengineering", "treated_wood_horizontal")))
                             .setCast(ItemTags.PLANKS, true)
-                            .setFluid(TagKey.create(Registries.FLUID, new ResourceLocation("forge", "creosote")), 125)
+                            .setFluid(TagKey.create(Registries.FLUID, commonResource("creosote")), 125)
                             .setCoolingTime(100)
                             .save(withCondition(consumer, new ModLoadedCondition("immersiveengineering")), location(folder + "immersiveengineering/treated_wood"));
 
@@ -2226,13 +2230,13 @@ public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelt
 
     // refined glowstone composite
     Consumer<FinishedRecipe> wrapped = withCondition(consumer, tagCondition("ingots/refined_glowstone"), tagCondition("ingots/osmium"));
-    ItemCastingRecipeBuilder.tableRecipe(ItemOutput.fromTag(getItemTag("forge", "ingots/refined_glowstone")))
+    ItemCastingRecipeBuilder.tableRecipe(ItemOutput.fromTag(getItemTag(COMMON, "ingots/refined_glowstone")))
                             .setCast(Tags.Items.DUSTS_GLOWSTONE, true)
                             .setFluidAndTime(TinkerFluids.moltenOsmium, FluidValues.INGOT)
                             .save(wrapped, location(folder + "refined_glowstone_ingot"));
     wrapped = withCondition(consumer, tagCondition("ingots/refined_obsidian"), tagCondition("ingots/osmium"));
-    ItemCastingRecipeBuilder.tableRecipe(ItemOutput.fromTag(getItemTag("forge", "ingots/refined_obsidian")))
-                            .setCast(getItemTag("forge", "dusts/refined_obsidian"), true)
+    ItemCastingRecipeBuilder.tableRecipe(ItemOutput.fromTag(getItemTag(COMMON, "ingots/refined_obsidian")))
+                            .setCast(getItemTag(COMMON, "dusts/refined_obsidian"), true)
                             .setFluidAndTime(TinkerFluids.moltenOsmium, FluidValues.INGOT)
                             .save(wrapped, location(folder + "refined_obsidian_ingot"));
     ItemCastingRecipeBuilder.tableRecipe(TinkerMaterials.necroniumBone)

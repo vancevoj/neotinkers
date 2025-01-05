@@ -24,7 +24,6 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet.Named;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
@@ -118,6 +117,8 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+
+import static slimeknights.mantle.Mantle.commonResource;
 
 @SuppressWarnings("unused")
 @JeiPlugin
@@ -376,7 +377,7 @@ public class JEIPlugin implements IModPlugin {
   /** Checks if the given tag exists */
   @SuppressWarnings("deprecation")
   private static boolean tagExists(String name) {
-    Optional<Named<Item>> tag = BuiltInRegistries.ITEM.getTag(TagKey.create(Registries.ITEM, new ResourceLocation("forge", name)));
+    Optional<Named<Item>> tag = BuiltInRegistries.ITEM.getTag(ItemTags.create(commonResource(name)));
     return tag.isPresent() && tag.get().size() > 0;
   }
 

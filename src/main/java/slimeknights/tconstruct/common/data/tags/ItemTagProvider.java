@@ -41,6 +41,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
 import static net.minecraft.tags.ItemTags.CLUSTER_MAX_HARVESTABLES;
+import static slimeknights.mantle.Mantle.commonResource;
 import static slimeknights.tconstruct.common.TinkerTags.Items.ANCIENT_TOOLS;
 import static slimeknights.tconstruct.common.TinkerTags.Items.AOE;
 import static slimeknights.tconstruct.common.TinkerTags.Items.ARMOR;
@@ -159,9 +160,9 @@ public class ItemTagProvider extends ItemTagsProvider {
     copy(Tags.Blocks.STAINED_GLASS, Tags.Items.STAINED_GLASS);
     copy(Tags.Blocks.STAINED_GLASS_PANES, Tags.Items.STAINED_GLASS_PANES);
     for (DyeColor color : DyeColor.values()) {
-      ResourceLocation name = new ResourceLocation("forge", "glass/" + color.getSerializedName());
+      ResourceLocation name = commonResource("glass/" + color.getSerializedName());
       copy(TagKey.create(Registries.BLOCK, name), TagKey.create(Registries.ITEM, name));
-      name = new ResourceLocation("forge", "glass_panes/" + color.getSerializedName());
+      name = commonResource("glass_panes/" + color.getSerializedName());
       copy(TagKey.create(Registries.BLOCK, name), TagKey.create(Registries.ITEM, name));
     }
 
