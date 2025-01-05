@@ -15,15 +15,15 @@ import slimeknights.tconstruct.fluids.TinkerFluids;
 public class ImmersiveEngineeringPlugin {
   @SubscribeEvent
   public void commonSetup(FMLCommonSetupEvent event) {
-    ChemthrowerHandler.registerFlammable(TinkerFluids.blazingBlood.getLocalTag());
-    registerChemEffect(TinkerFluids.earthSlime.getForgeTag(), MobEffects.MOVEMENT_SLOWDOWN, 140);
-    registerChemEffect(TinkerFluids.skySlime.getLocalTag(), MobEffects.JUMP, 200);
-    registerChemEffect(TinkerFluids.enderSlime.getLocalTag(), MobEffects.LEVITATION, 100);
-    registerChemEffect(TinkerFluids.venom.getLocalTag(), MobEffects.POISON, 300);
-    registerChemEffect(TinkerFluids.magma.getForgeTag(), MobEffects.FIRE_RESISTANCE, 200);
-    registerChemEffect(TinkerFluids.liquidSoul.getForgeTag(), MobEffects.BLINDNESS, 100);
-    ChemthrowerHandler.registerEffect(TinkerFluids.moltenEnder.getForgeTag(), new ChemthrowerEffect_RandomTeleport(null, 0, 1));
-    registerChemEffect(TinkerFluids.moltenUranium.getLocalTag(), MobEffects.POISON, 200);
+    ChemthrowerHandler.registerFlammable(TinkerFluids.blazingBlood.getTag());
+    registerChemEffect(TinkerFluids.earthSlime.getTag(), MobEffects.MOVEMENT_SLOWDOWN, 140);
+    registerChemEffect(TinkerFluids.skySlime.getTag(), MobEffects.JUMP, 200);
+    registerChemEffect(TinkerFluids.enderSlime.getTag(), MobEffects.LEVITATION, 100);
+    registerChemEffect(TinkerFluids.venom.getTag(), MobEffects.POISON, 300);
+    registerChemEffect(TinkerFluids.magma.getTag(), MobEffects.FIRE_RESISTANCE, 200);
+    registerChemEffect(TinkerFluids.liquidSoul.getTag(), MobEffects.BLINDNESS, 100);
+    ChemthrowerHandler.registerEffect(TinkerFluids.moltenEnder.getTag(), new ChemthrowerEffect_RandomTeleport(null, 0, 1));
+    registerChemEffect(TinkerFluids.moltenUranium.getTag(), MobEffects.POISON, 200);
   }
 
   /** Shorthand to register a chemical potion effect */

@@ -23,7 +23,7 @@
   "cooling_time": 66,
   "fluid": {
     "amount": 90,
-    "tag": "tconstruct:molten_osmium"
+    "tag": "forge:molten_osmium"
   },
   "result": {
     "tag": "forge:ingots/refined_obsidian"

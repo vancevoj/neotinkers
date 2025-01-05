@@ -110,46 +110,46 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
 
     // durability reinforcements, use obsidian
     ItemCastingRecipeBuilder.tableRecipe(TinkerModifiers.emeraldReinforcement)
-                            .setFluidAndTime(TinkerFluids.moltenEmerald, false, FluidValues.GEM_SHARD)
+                            .setFluidAndTime(TinkerFluids.moltenEmerald, FluidValues.GEM_SHARD)
                             .setCast(TinkerCommons.obsidianPane, true)
                             .save(consumer, prefix(TinkerModifiers.emeraldReinforcement, folder));
     ItemCastingRecipeBuilder.tableRecipe(TinkerModifiers.slimesteelReinforcement)
-                            .setFluidAndTime(TinkerFluids.moltenSlimesteel, false, FluidValues.NUGGET * 3)
+                            .setFluidAndTime(TinkerFluids.moltenSlimesteel, FluidValues.NUGGET * 3)
                             .setCast(TinkerCommons.obsidianPane, true)
                             .save(consumer, prefix(TinkerModifiers.slimesteelReinforcement, folder));
     // protection reinforcements, use patterns
     ItemCastingRecipeBuilder.tableRecipe(TinkerModifiers.ironReinforcement)
-                            .setFluidAndTime(TinkerFluids.moltenIron, true, FluidValues.INGOT)
+                            .setFluidAndTime(TinkerFluids.moltenIron, FluidValues.INGOT)
                             .setCast(TinkerTables.pattern, true)
                             .save(consumer, prefix(TinkerModifiers.ironReinforcement, folder));
     ItemCastingRecipeBuilder.tableRecipe(TinkerModifiers.searedReinforcement)
-                            .setFluid(FluidIngredient.of(FluidIngredient.of(TinkerFluids.searedStone.getLocalTag(), FluidValues.BRICK), FluidIngredient.of(TinkerFluids.scorchedStone.getLocalTag(), FluidValues.BRICK)))
+                            .setFluid(FluidIngredient.of(TinkerFluids.searedStone.ingredient(FluidValues.BRICK), TinkerFluids.scorchedStone.ingredient(FluidValues.BRICK)))
                             .setCoolingTime(TinkerFluids.searedStone.getType().getTemperature() - 300, FluidValues.BRICK)
                             .setCast(TinkerTables.pattern, true)
                             .save(consumer, prefix(TinkerModifiers.searedReinforcement, folder));
     ItemCastingRecipeBuilder.tableRecipe(TinkerModifiers.goldReinforcement)
-                            .setFluidAndTime(TinkerFluids.moltenGold, true, FluidValues.INGOT)
+                            .setFluidAndTime(TinkerFluids.moltenGold, FluidValues.INGOT)
                             .setCast(TinkerTables.pattern, true)
                             .save(consumer, prefix(TinkerModifiers.goldReinforcement, folder));
     ItemCastingRecipeBuilder.tableRecipe(TinkerModifiers.obsidianReinforcement)
-                            .setFluidAndTime(TinkerFluids.moltenObsidian, false, FluidValues.GLASS_BLOCK)
+                            .setFluidAndTime(TinkerFluids.moltenObsidian, FluidValues.GLASS_BLOCK)
                             .setCast(TinkerTables.pattern, true)
                             .save(consumer, prefix(TinkerModifiers.obsidianReinforcement, folder));
     ItemCastingRecipeBuilder.tableRecipe(TinkerModifiers.cobaltReinforcement)
-                            .setFluidAndTime(TinkerFluids.moltenCobalt, true, FluidValues.INGOT)
+                            .setFluidAndTime(TinkerFluids.moltenCobalt, FluidValues.INGOT)
                             .setCast(TinkerTables.pattern, true)
                             .save(consumer, prefix(TinkerModifiers.cobaltReinforcement, folder));
 
     // jeweled apple
     ItemCastingRecipeBuilder.tableRecipe(TinkerCommons.jeweledApple)
-                            .setFluidAndTime(TinkerFluids.moltenDiamond, false, FluidValues.GEM * 2)
+                            .setFluidAndTime(TinkerFluids.moltenDiamond, FluidValues.GEM * 2)
                             .setCast(Items.APPLE, true)
                             .save(consumer, prefix(TinkerCommons.jeweledApple, folder));
 
     // silky cloth
     ItemCastingRecipeBuilder.tableRecipe(TinkerModifiers.silkyCloth)
                             .setCast(Items.COBWEB, true)
-                            .setFluidAndTime(TinkerFluids.moltenRoseGold, false, FluidValues.INGOT)
+                            .setFluidAndTime(TinkerFluids.moltenRoseGold, FluidValues.INGOT)
                             .save(consumer, prefix(TinkerModifiers.silkyCloth, folder));
 
     // wither bone purifying
@@ -1531,8 +1531,8 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                                 .addLeftover(Blocks.SPONGE)
                                 .save(consumer, location(worktableFolder + "remove_modifier_sponge"));
     ModifierRemovalRecipeBuilder.removal()
-                                .addInput(CompoundIngredient.of(FluidContainerIngredient.fromFluid(TinkerFluids.venom, false),
-                                                                 FluidContainerIngredient.fromIngredient(FluidIngredient.of(TinkerFluids.venom.getLocalTag(), FluidValues.BOTTLE),
+                                .addInput(CompoundIngredient.of(FluidContainerIngredient.fromFluid(TinkerFluids.venom),
+                                                                 FluidContainerIngredient.fromIngredient(TinkerFluids.venom.ingredient(FluidValues.BOTTLE),
                                                                                                          Ingredient.of(TinkerFluids.venomBottle))))
                                 .save(consumer, location(worktableFolder + "remove_modifier_venom"));
     // modifier extracting: sponge + crystal

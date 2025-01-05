@@ -5,7 +5,7 @@
   },
   "fluid": {
     "amount": 250,
-    "fluid": "tconstruct:potion"
+    "tag": "forge:potion"
   },
   "result": "minecraft:splash_potion"
 }

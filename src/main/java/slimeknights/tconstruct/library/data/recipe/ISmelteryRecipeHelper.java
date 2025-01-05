@@ -219,48 +219,20 @@ public interface ISmelteryRecipeHelper extends ICastCreationHelper {
    * Adds a recipe for casting using a cast
    * @param consumer  Recipe consumer
    * @param fluid     Recipe fluid
-   * @param forgeTag  If true, uses the forge tag from the fluid instead of the local tag
-   * @param amount    Fluid amount
-   * @param cast      Cast used
-   * @param output    Recipe output
-   * @param location  Recipe base
-   */
-  default void castingWithCast(Consumer<FinishedRecipe> consumer, FluidObject<?> fluid, boolean forgeTag, int amount, CastItemObject cast, ItemOutput output, String location) {
-    ItemCastingRecipeBuilder.tableRecipe(output)
-                            .setFluidAndTime(fluid, forgeTag, amount)
-                            .setCast(cast.getMultiUseTag(), false)
-                            .save(consumer, location(location + "_gold_cast"));
-    ItemCastingRecipeBuilder.tableRecipe(output)
-                            .setFluidAndTime(fluid, forgeTag, amount)
-                            .setCast(cast.getSingleUseTag(), true)
-                            .save(consumer, location(location + "_sand_cast"));
-  }
-
-  /**
-   * Adds a recipe for casting using a cast
-   * @param consumer  Recipe consumer
-   * @param fluid     Recipe fluid
    * @param amount    Fluid amount
    * @param cast      Cast used
    * @param output    Recipe output
    * @param location  Recipe base
    */
   default void castingWithCast(Consumer<FinishedRecipe> consumer, FluidObject<?> fluid, int amount, CastItemObject cast, ItemOutput output, String location) {
-    castingWithCast(consumer, fluid, false, amount, cast, output, location);
-  }
-
-  /**
-   * Adds a recipe for casting using a cast
-   * @param consumer  Recipe consumer
-   * @param fluid     Recipe fluid
-   * @param forgeTag  If true, uses the forge tag from the fluid instead of the local tag
-   * @param amount    Fluid amount
-   * @param cast      Cast used
-   * @param output    Recipe output
-   * @param location  Recipe base
-   */
-  default void castingWithCast(Consumer<FinishedRecipe> consumer, FluidObject<?> fluid, boolean forgeTag, int amount, CastItemObject cast, ItemLike output, String location) {
-    castingWithCast(consumer, fluid, forgeTag, amount, cast, ItemOutput.fromItem(output), location);
+    ItemCastingRecipeBuilder.tableRecipe(output)
+                            .setFluidAndTime(fluid, amount)
+                            .setCast(cast.getMultiUseTag(), false)
+                            .save(consumer, location(location + "_gold_cast"));
+    ItemCastingRecipeBuilder.tableRecipe(output)
+                            .setFluidAndTime(fluid, amount)
+                            .setCast(cast.getSingleUseTag(), true)
+                            .save(consumer, location(location + "_sand_cast"));
   }
 
   /**
@@ -280,24 +252,6 @@ public interface ISmelteryRecipeHelper extends ICastCreationHelper {
    * Adds a recipe for casting an item from a tag
    * @param consumer     Recipe consumer
    * @param fluid        Input fluid
-   * @param forgeTag  If true, uses the forge tag from the fluid instead of the local tag
-   * @param amount       Recipe amount
-   * @param cast         Cast for recipe
-   * @param tagName      Tag for output
-   * @param recipeName   Name of the recipe for output
-   * @param optional     If true, conditions the recipe on the tag
-   */
-  default void tagCasting(Consumer<FinishedRecipe> consumer, FluidObject<?> fluid, boolean forgeTag, int amount, CastItemObject cast, String tagName, String recipeName, boolean optional) {
-    if (optional) {
-      consumer = withCondition(consumer, tagCondition(tagName));
-    }
-    castingWithCast(consumer, fluid, forgeTag, amount, cast, ItemOutput.fromTag(getItemTag("forge", tagName)), recipeName);
-  }
-
-  /**
-   * Adds a recipe for casting an item from a tag
-   * @param consumer     Recipe consumer
-   * @param fluid        Input fluid
    * @param amount       Recipe amount
    * @param cast         Cast for recipe
    * @param tagName      Tag for output
@@ -305,33 +259,10 @@ public interface ISmelteryRecipeHelper extends ICastCreationHelper {
    * @param optional     If true, conditions the recipe on the tag
    */
   default void tagCasting(Consumer<FinishedRecipe> consumer, FluidObject<?> fluid, int amount, CastItemObject cast, String tagName, String recipeName, boolean optional) {
-    tagCasting(consumer, fluid, false, amount, cast, tagName, recipeName, optional);
-  }
-
-
-  /**
-   * Adds a casting recipe using an ingot cast
-   * @param consumer  Recipe consumer
-   * @param fluid     Input fluid
-   * @param forgeTag  If true, uses the forge tag from the fluid instead of the local tag
-   * @param amount    Recipe amount
-   * @param ingot     Ingot output
-   * @param location  Recipe base
-   */
-  default void ingotCasting(Consumer<FinishedRecipe> consumer, FluidObject<?> fluid, boolean forgeTag, int amount, ItemLike ingot, String location) {
-    castingWithCast(consumer, fluid, forgeTag, amount, TinkerSmeltery.ingotCast, ingot, location);
-  }
-
-  /**
-   * Adds a casting recipe using an ingot cast
-   * @param consumer  Recipe consumer
-   * @param fluid     Input fluid
-   * @param forgeTag  If true, uses the forge tag from the fluid instead of the local tag
-   * @param ingot     Ingot output
-   * @param location  Recipe base
-   */
-  default void ingotCasting(Consumer<FinishedRecipe> consumer, FluidObject<?> fluid, boolean forgeTag, ItemLike ingot, String location) {
-    ingotCasting(consumer, fluid, forgeTag, FluidValues.INGOT, ingot, location);
+    if (optional) {
+      consumer = withCondition(consumer, tagCondition(tagName));
+    }
+    castingWithCast(consumer, fluid, amount, cast, ItemOutput.fromTag(getItemTag("forge", tagName)), recipeName);
   }
 
   /**
@@ -343,7 +274,7 @@ public interface ISmelteryRecipeHelper extends ICastCreationHelper {
    * @param location  Recipe base
    */
   default void ingotCasting(Consumer<FinishedRecipe> consumer, FluidObject<?> fluid, int amount, ItemLike ingot, String location) {
-    ingotCasting(consumer, fluid, false, amount, ingot, location);
+    castingWithCast(consumer, fluid, amount, TinkerSmeltery.ingotCast, ingot, location);
   }
 
   /**
@@ -372,54 +303,11 @@ public interface ISmelteryRecipeHelper extends ICastCreationHelper {
    * Adds a casting recipe using a nugget cast
    * @param consumer  Recipe consumer
    * @param fluid     Input fluid
-   * @param forgeTag  If true, uses the forge tag from the fluid instead of the local tag
    * @param nugget    Nugget output
    * @param location  Recipe base
    */
-  default void nuggetCasting(Consumer<FinishedRecipe> consumer, FluidObject<?> fluid, boolean forgeTag, ItemLike nugget, String location) {
-    castingWithCast(consumer, fluid, forgeTag, FluidValues.NUGGET, TinkerSmeltery.nuggetCast, nugget, location);
-  }
-
-  /**
-   * Adds a casting recipe using a nugget cast
-   * @param consumer  Recipe consumer
-   * @param fluid     Input fluid
-   * @param nugget    Nugget output
-   * @param location  Recipe base
-   */
-  default void nuggetCastingRecipe(Consumer<FinishedRecipe> consumer, FluidObject<?> fluid, ItemLike nugget, String location) {
-    nuggetCasting(consumer, fluid, false, nugget, location);
-  }
-
-  /**
-   * Add recipes for a standard mineral, uses local tag
-   * @param consumer  Recipe consumer
-   * @param fluid     Fluid input
-   * @param forgeTag  If true, uses the forge tag from the fluid instead of the local tag
-   * @param block     Block result
-   * @param ingot     Ingot result
-   * @param nugget    Nugget result
-   * @param folder    Output folder
-   */
-  default void metalCasting(Consumer<FinishedRecipe> consumer, FluidObject<?> fluid, boolean forgeTag, @Nullable ItemLike block, @Nullable ItemLike ingot, @Nullable ItemLike nugget, String folder, String metal) {
-    String metalFolder = folder + metal + "/";
-    if (block != null) {
-      ItemCastingRecipeBuilder.basinRecipe(block)
-                              .setFluidAndTime(fluid, forgeTag, FluidValues.METAL_BLOCK)
-                              .save(consumer, location(metalFolder + "block"));
-    }
-    if (ingot != null) {
-      ingotCasting(consumer, fluid, forgeTag, ingot, metalFolder + "ingot");
-    }
-    if (nugget != null) {
-      nuggetCasting(consumer, fluid, forgeTag, nugget, metalFolder + "nugget");
-    }
-    // plates are always optional, we don't ship them
-    tagCasting(consumer, fluid, forgeTag, FluidValues.INGOT, TinkerSmeltery.plateCast, "plates/" + metal, folder + metal + "/plate", true);
-    tagCasting(consumer, fluid, forgeTag, FluidValues.INGOT * 4, TinkerSmeltery.gearCast, "gears/" + metal, folder + metal + "/gear", true);
-    tagCasting(consumer, fluid, forgeTag, FluidValues.NUGGET * 3, TinkerSmeltery.coinCast, "coins/" + metal, folder + metal + "/coin", true);
-    tagCasting(consumer, fluid, forgeTag, FluidValues.INGOT / 2, TinkerSmeltery.rodCast, "rods/" + metal, folder + metal + "/rod", true);
-    tagCasting(consumer, fluid, forgeTag, FluidValues.INGOT / 2, TinkerSmeltery.wireCast, "wires/" + metal, folder + metal + "/wire", true);
+  default void nuggetCasting(Consumer<FinishedRecipe> consumer, FluidObject<?> fluid, ItemLike nugget, String location) {
+    castingWithCast(consumer, fluid, FluidValues.NUGGET, TinkerSmeltery.nuggetCast, nugget, location);
   }
 
   /**
@@ -432,7 +320,24 @@ public interface ISmelteryRecipeHelper extends ICastCreationHelper {
    * @param folder    Output folder
    */
   default void metalCasting(Consumer<FinishedRecipe> consumer, FluidObject<?> fluid, @Nullable ItemLike block, @Nullable ItemLike ingot, @Nullable ItemLike nugget, String folder, String metal) {
-    metalCasting(consumer, fluid, false, block, ingot, nugget, folder, metal);
+    String metalFolder = folder + metal + "/";
+    if (block != null) {
+      ItemCastingRecipeBuilder.basinRecipe(block)
+                              .setFluidAndTime(fluid, FluidValues.METAL_BLOCK)
+                              .save(consumer, location(metalFolder + "block"));
+    }
+    if (ingot != null) {
+      ingotCasting(consumer, fluid, ingot, metalFolder + "ingot");
+    }
+    if (nugget != null) {
+      nuggetCasting(consumer, fluid, nugget, metalFolder + "nugget");
+    }
+    // plates are always optional, we don't ship them
+    tagCasting(consumer, fluid, FluidValues.INGOT, TinkerSmeltery.plateCast, "plates/" + metal, folder + metal + "/plate", true);
+    tagCasting(consumer, fluid, FluidValues.INGOT * 4, TinkerSmeltery.gearCast, "gears/" + metal, folder + metal + "/gear", true);
+    tagCasting(consumer, fluid, FluidValues.NUGGET * 3, TinkerSmeltery.coinCast, "coins/" + metal, folder + metal + "/coin", true);
+    tagCasting(consumer, fluid, FluidValues.INGOT / 2, TinkerSmeltery.rodCast, "rods/" + metal, folder + metal + "/rod", true);
+    tagCasting(consumer, fluid, FluidValues.INGOT / 2, TinkerSmeltery.wireCast, "wires/" + metal, folder + metal + "/wire", true);
   }
 
   /**
@@ -456,18 +361,18 @@ public interface ISmelteryRecipeHelper extends ICastCreationHelper {
    */
   default void metalTagCasting(Consumer<FinishedRecipe> consumer, FluidObject<?> fluid, String name, String folder, boolean forceStandard) {
     // nugget and ingot
-    tagCasting(consumer, fluid, true, FluidValues.NUGGET, TinkerSmeltery.nuggetCast, "nuggets/" + name, folder + name + "/nugget", !forceStandard);
-    tagCasting(consumer, fluid, true, FluidValues.INGOT, TinkerSmeltery.ingotCast, "ingots/" + name, folder + name + "/ingot", !forceStandard);
-    tagCasting(consumer, fluid, true, FluidValues.INGOT, TinkerSmeltery.plateCast, "plates/" + name, folder + name + "/plate", true);
-    tagCasting(consumer, fluid, true, FluidValues.INGOT * 4, TinkerSmeltery.gearCast, "gears/" + name, folder + name + "/gear", true);
-    tagCasting(consumer, fluid, true, FluidValues.NUGGET * 3, TinkerSmeltery.coinCast, "coins/" + name, folder + name + "/coin", true);
-    tagCasting(consumer, fluid, true, FluidValues.INGOT / 2, TinkerSmeltery.rodCast, "rods/" + name, folder + name + "/rod", true);
-    tagCasting(consumer, fluid, true, FluidValues.INGOT / 2, TinkerSmeltery.wireCast, "wires/" + name, folder + name + "/wire", true);
+    tagCasting(consumer, fluid, FluidValues.NUGGET, TinkerSmeltery.nuggetCast, "nuggets/" + name, folder + name + "/nugget", !forceStandard);
+    tagCasting(consumer, fluid, FluidValues.INGOT, TinkerSmeltery.ingotCast, "ingots/" + name, folder + name + "/ingot", !forceStandard);
+    tagCasting(consumer, fluid, FluidValues.INGOT, TinkerSmeltery.plateCast, "plates/" + name, folder + name + "/plate", true);
+    tagCasting(consumer, fluid, FluidValues.INGOT * 4, TinkerSmeltery.gearCast, "gears/" + name, folder + name + "/gear", true);
+    tagCasting(consumer, fluid, FluidValues.NUGGET * 3, TinkerSmeltery.coinCast, "coins/" + name, folder + name + "/coin", true);
+    tagCasting(consumer, fluid, FluidValues.INGOT / 2, TinkerSmeltery.rodCast, "rods/" + name, folder + name + "/rod", true);
+    tagCasting(consumer, fluid, FluidValues.INGOT / 2, TinkerSmeltery.wireCast, "wires/" + name, folder + name + "/wire", true);
     // block
     TagKey<Item> block = getItemTag("forge", "storage_blocks/" + name);
     Consumer<FinishedRecipe> wrapped = forceStandard ? consumer : withCondition(consumer, tagCondition("storage_blocks/" + name));
     ItemCastingRecipeBuilder.basinRecipe(block)
-                            .setFluidAndTime(fluid, true, FluidValues.METAL_BLOCK)
+                            .setFluidAndTime(fluid, FluidValues.METAL_BLOCK)
                             .save(wrapped, location(folder + name + "/block"));
   }
 }

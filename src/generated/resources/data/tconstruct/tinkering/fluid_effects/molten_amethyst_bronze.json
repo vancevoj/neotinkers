@@ -23,6 +23,6 @@
   ],
   "fluid": {
     "amount": 10,
-    "tag": "tconstruct:molten_amethyst_bronze"
+    "tag": "forge:molten_amethyst_bronze"
   }
 }

@@ -82,7 +82,7 @@ public class GadgetRecipeProvider extends BaseRecipeProvider {
     folder = "gadgets/";
     ItemCastingRecipeBuilder.tableRecipe(TinkerGadgets.piggyBackpack)
                             .setCast(Items.SADDLE, true)
-                            .setFluidAndTime(TinkerFluids.skySlime, false, FluidValues.SLIMEBALL * 4)
+                            .setFluidAndTime(TinkerFluids.skySlime, FluidValues.SLIMEBALL * 4)
                             .save(consumer, prefix(TinkerGadgets.piggyBackpack, folder));
     ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, TinkerGadgets.punji)
                        .define('b', Items.BAMBOO)

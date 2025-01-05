@@ -43,6 +43,7 @@ import slimeknights.tconstruct.shared.TinkerCommons;
 import slimeknights.tconstruct.tools.TinkerModifiers;
 import slimeknights.tconstruct.tools.modifiers.traits.skull.StrongBonesModifier;
 
+import java.util.Objects;
 import java.util.function.Function;
 
 public class FluidEffectProvider extends AbstractFluidEffectProvider {
@@ -63,85 +64,85 @@ public class FluidEffectProvider extends AbstractFluidEffectProvider {
     addFluid(Tags.Fluids.MILK, FluidType.BUCKET_VOLUME / 10)
       .addEntityEffect(new CureEffectsFluidEffect(Items.MILK_BUCKET))
       .addEntityEffect(StrongBonesModifier.FLUID_EFFECT);
-    addFluid(TinkerFluids.powderedSnow.getForgeTag(), FluidType.BUCKET_VOLUME / 10)
+    addFluid(Objects.requireNonNull(TinkerFluids.powderedSnow.getCommonTag()), FluidType.BUCKET_VOLUME / 10)
       .addEntityEffect(new FreezeFluidEffect(TimeAction.ADD, 160))
       .addBlockEffect(new PlaceBlockFluidEffect(Blocks.SNOW));
 
     // blaze - more damage, less fire
-    burningFluid("blazing_blood", TinkerFluids.blazingBlood.getLocalTag(), FluidType.BUCKET_VOLUME / 20, 3f, 5);
+    burningFluid("blazing_blood", TinkerFluids.blazingBlood.getTag(), FluidType.BUCKET_VOLUME / 20, 3f, 5);
 
     // slime
     int slimeballPiece = FluidValues.SLIMEBALL / 5;
     // earth - lucky
-    addFluid(TinkerFluids.earthSlime.getForgeTag(), slimeballPiece).addEffect(TimeAction.SET, FluidMobEffect.builder().effect(MobEffects.LUCK, 15*20).effect(MobEffects.MOVEMENT_SLOWDOWN, 15*20));
+    addFluid(TinkerFluids.earthSlime.getTag(), slimeballPiece).addEffect(TimeAction.SET, FluidMobEffect.builder().effect(MobEffects.LUCK, 15 * 20).effect(MobEffects.MOVEMENT_SLOWDOWN, 15 * 20));
     // sky - jump boost
-    addFluid(TinkerFluids.skySlime.getLocalTag(), slimeballPiece).addEffect(TimeAction.SET, FluidMobEffect.builder().effect(MobEffects.JUMP, 20*20).effect(MobEffects.MOVEMENT_SLOWDOWN, 20*15));
+    addFluid(TinkerFluids.skySlime.getTag(), slimeballPiece).addEffect(TimeAction.SET, FluidMobEffect.builder().effect(MobEffects.JUMP, 20*20).effect(MobEffects.MOVEMENT_SLOWDOWN, 20*15));
     // ender - levitation
-    addFluid(TinkerFluids.enderSlime.getLocalTag(), slimeballPiece).addEffect(TimeAction.SET, FluidMobEffect.builder().effect(MobEffects.LEVITATION, 20*5).effect(MobEffects.MOVEMENT_SLOWDOWN, 20*15));
+    addFluid(TinkerFluids.enderSlime.getTag(), slimeballPiece).addEffect(TimeAction.SET, FluidMobEffect.builder().effect(MobEffects.LEVITATION, 20*5).effect(MobEffects.MOVEMENT_SLOWDOWN, 20*15));
     // slimelike
     // venom - poison & strength
-    addFluid(TinkerFluids.venom.getLocalTag(), slimeballPiece).addEffect(TimeAction.SET, FluidMobEffect.builder().effect(MobEffects.POISON, 20*5).effect(MobEffects.DAMAGE_BOOST, 20*10));
+    addFluid(TinkerFluids.venom.getTag(), slimeballPiece).addEffect(TimeAction.SET, FluidMobEffect.builder().effect(MobEffects.POISON, 20*5).effect(MobEffects.DAMAGE_BOOST, 20*10));
     // magma - fire resistance
-    addFluid(TinkerFluids.magma.getForgeTag(), slimeballPiece).addEffect(TimeAction.SET, FluidMobEffect.builder().effect(MobEffects.FIRE_RESISTANCE, 20*25));
+    addFluid(TinkerFluids.magma.getTag(), slimeballPiece).addEffect(TimeAction.SET, FluidMobEffect.builder().effect(MobEffects.FIRE_RESISTANCE, 20 * 25));
     // soul - slowness and blindness
-    addFluid(TinkerFluids.liquidSoul.getLocalTag(), FluidType.BUCKET_VOLUME / 20).addEffect(TimeAction.SET, FluidMobEffect.builder().effect(MobEffects.MOVEMENT_SLOWDOWN, 20*25, 2).effect(MobEffects.BLINDNESS, 20*5));
+    addFluid(TinkerFluids.liquidSoul.getTag(), FluidType.BUCKET_VOLUME / 20).addEffect(TimeAction.SET, FluidMobEffect.builder().effect(MobEffects.MOVEMENT_SLOWDOWN, 20*25, 2).effect(MobEffects.BLINDNESS, 20*5));
     // ender - teleporting
-    addFluid(TinkerFluids.moltenEnder.getForgeTag(), FluidType.BUCKET_VOLUME / 20)
+    addFluid(TinkerFluids.moltenEnder.getTag(), FluidType.BUCKET_VOLUME / 20)
       .addEntityEffect(new DamageFluidEffect(1f, TinkerDamageTypes.FLUID_MAGIC))
       .addEntityEffect(FluidEffect.TELEPORT);
 
     // foods - setup to give equivelent saturation on a full bowl/bottle to their food counterparts, though hunger may be slightly different
-    addFluid(TinkerFluids.honey.getForgeTag(), slimeballPiece)
+    addFluid(TinkerFluids.honey.getTag(), slimeballPiece)
       .addEntityEffect(new RestoreHungerFluidEffect(1, 0.12f, false, ItemOutput.fromItem(Items.HONEY_BOTTLE)))
       .addEntityEffect(new RemoveEffectFluidEffect(MobEffects.POISON));
     // soups
     int bowlSip = FluidValues.BOWL / 5;
-    addFluid(TinkerFluids.beetrootSoup.getForgeTag(), bowlSip).addEntityEffect(new RestoreHungerFluidEffect(1, 0.72f, false, ItemOutput.fromItem(Items.BEETROOT_SOUP)));
-    addFluid(TinkerFluids.mushroomStew.getForgeTag(), bowlSip).addEntityEffect(new RestoreHungerFluidEffect(1, 0.72f, false, ItemOutput.fromItem(Items.MUSHROOM_STEW)));
-    addFluid(TinkerFluids.rabbitStew.getForgeTag(), bowlSip).addEntityEffect(new RestoreHungerFluidEffect(2, 0.6f, false, ItemOutput.fromItem(Items.RABBIT_STEW)));
-    addFluid(TinkerFluids.meatSoup.getLocalTag(), bowlSip).addEntityEffect(new RestoreHungerFluidEffect(2, 0.48f, false, ItemOutput.fromItem(TinkerFluids.meatSoupBowl)));
+    addFluid(TinkerFluids.beetrootSoup.getTag(), bowlSip).addEntityEffect(new RestoreHungerFluidEffect(1, 0.72f, false, ItemOutput.fromItem(Items.BEETROOT_SOUP)));
+    addFluid(TinkerFluids.mushroomStew.getTag(), bowlSip).addEntityEffect(new RestoreHungerFluidEffect(1, 0.72f, false, ItemOutput.fromItem(Items.MUSHROOM_STEW)));
+    addFluid(TinkerFluids.rabbitStew.getTag(), bowlSip).addEntityEffect(new RestoreHungerFluidEffect(2, 0.6f, false, ItemOutput.fromItem(Items.RABBIT_STEW)));
+    addFluid(TinkerFluids.meatSoup.getTag(), bowlSip).addEntityEffect(new RestoreHungerFluidEffect(2, 0.48f, false, ItemOutput.fromItem(TinkerFluids.meatSoupBowl)));
     // pig iron fills you up food, but still hurts
-    addFluid(TinkerFluids.moltenPigIron.getLocalTag(), FluidValues.NUGGET)
+    addFluid(TinkerFluids.moltenPigIron.getTag(), FluidValues.NUGGET)
       .addEntityEffect(new RestoreHungerFluidEffect(2, 0.7f, false, ItemOutput.fromItem(TinkerCommons.bacon)))
       .addEntityEffect(new FireFluidEffect(TimeAction.SET, 2));
 
     // metals, lose reference to mistborn (though a true fan would probably get angry at how much I stray from the source)
-    metalborn(TinkerFluids.moltenIron.getForgeTag(), 2f).addEffect(TimeAction.SET, FluidMobEffect.builder().effect(TinkerModifiers.magneticEffect.get(), 20*4, 2));
-    metalborn(TinkerFluids.moltenSteel.getForgeTag(), 2f).addEffect(TimeAction.SET, FluidMobEffect.builder().effect(TinkerModifiers.repulsiveEffect.get(), 20*4, 2));
-    metalborn(TinkerFluids.moltenCopper.getForgeTag(), 1.5f).addEntityEffect(new AddBreathFluidEffect(80));
-    metalborn(TinkerFluids.moltenBronze.getForgeTag(), 2f).addEntityEffect(new AwardStatFluidEffect(Stats.TIME_SINCE_REST,  - 2000));
-    metalborn(TinkerFluids.moltenAmethystBronze.getLocalTag(), 1.5f).addEntityEffect(new AwardStatFluidEffect(Stats.TIME_SINCE_REST, 2000));
-    metalborn(TinkerFluids.moltenZinc.getForgeTag(), 1.5f).addEffect(TimeAction.SET, FluidMobEffect.builder().effect(MobEffects.MOVEMENT_SPEED, 20*10));
-    metalborn(TinkerFluids.moltenBrass.getForgeTag(), 2f).addEffect(TimeAction.SET, FluidMobEffect.builder().effect(MobEffects.FIRE_RESISTANCE, 20*8));
-    metalborn(TinkerFluids.moltenTin.getForgeTag(), 1.5f).addEffect(TimeAction.SET, FluidMobEffect.builder().effect(MobEffects.NIGHT_VISION, 20*8));
-    metalborn(TinkerFluids.moltenPewter.getForgeTag(), 2f).addEffect(TimeAction.SET, FluidMobEffect.builder().effect(MobEffects.DAMAGE_BOOST, 20*7));
-    addFluid(TinkerFluids.moltenGold.getForgeTag(), FluidValues.NUGGET)
+    metalborn(TinkerFluids.moltenIron.getTag(), 2f).addEffect(TimeAction.SET, FluidMobEffect.builder().effect(TinkerModifiers.magneticEffect.get(), 20 * 4, 2));
+    metalborn(TinkerFluids.moltenSteel.getTag(), 2f).addEffect(TimeAction.SET, FluidMobEffect.builder().effect(TinkerModifiers.repulsiveEffect.get(), 20 * 4, 2));
+    metalborn(TinkerFluids.moltenCopper.getTag(), 1.5f).addEntityEffect(new AddBreathFluidEffect(80));
+    metalborn(TinkerFluids.moltenBronze.getTag(), 2f).addEntityEffect(new AwardStatFluidEffect(Stats.TIME_SINCE_REST, - 2000));
+    metalborn(TinkerFluids.moltenAmethystBronze.getTag(), 1.5f).addEntityEffect(new AwardStatFluidEffect(Stats.TIME_SINCE_REST, 2000));
+    metalborn(TinkerFluids.moltenZinc.getTag(), 1.5f).addEffect(TimeAction.SET, FluidMobEffect.builder().effect(MobEffects.MOVEMENT_SPEED, 20 * 10));
+    metalborn(TinkerFluids.moltenBrass.getTag(), 2f).addEffect(TimeAction.SET, FluidMobEffect.builder().effect(MobEffects.FIRE_RESISTANCE, 20 * 8));
+    metalborn(TinkerFluids.moltenTin.getTag(), 1.5f).addEffect(TimeAction.SET, FluidMobEffect.builder().effect(MobEffects.NIGHT_VISION, 20 * 8));
+    metalborn(TinkerFluids.moltenPewter.getTag(), 2f).addEffect(TimeAction.SET, FluidMobEffect.builder().effect(MobEffects.DAMAGE_BOOST, 20 * 7));
+    addFluid(TinkerFluids.moltenGold.getTag(), FluidValues.NUGGET)
       .addEntityEffect(new MobTypePredicate(MobType.UNDEAD), new DamageFluidEffect(2f, TinkerDamageTypes.FLUID_MAGIC))
       .addEffect(TimeAction.SET, FluidMobEffect.builder().effect(MobEffects.REGENERATION, 20*6, 1));
-    addFluid(TinkerFluids.moltenElectrum.getForgeTag(), FluidValues.NUGGET)
+    addFluid(TinkerFluids.moltenElectrum.getTag(), FluidValues.NUGGET)
       .addEntityEffect(new MobTypePredicate(MobType.UNDEAD), new DamageFluidEffect(2f, TinkerDamageTypes.FLUID_MAGIC))
       .addEffect(TimeAction.SET, FluidMobEffect.builder().effect(MobEffects.DIG_SPEED, 20*8, 1));
-    addFluid(TinkerFluids.moltenRoseGold.getForgeTag(), FluidValues.NUGGET)
+    addFluid(TinkerFluids.moltenRoseGold.getTag(), FluidValues.NUGGET)
       .addEntityEffect(new MobTypePredicate(MobType.UNDEAD), new DamageFluidEffect(2f, TinkerDamageTypes.FLUID_MAGIC))
       .addEffect(TimeAction.SET, FluidMobEffect.builder().effect(MobEffects.HEALTH_BOOST, 20*15, 1));
-    metalborn(TinkerFluids.moltenAluminum.getForgeTag(), 1f).addEntityEffect(new CureEffectsFluidEffect(Items.MILK_BUCKET));
-    addFluid(TinkerFluids.moltenSilver.getForgeTag(), FluidValues.NUGGET)
+    metalborn(TinkerFluids.moltenAluminum.getTag(), 1f).addEntityEffect(new CureEffectsFluidEffect(Items.MILK_BUCKET));
+    addFluid(TinkerFluids.moltenSilver.getTag(), FluidValues.NUGGET)
       .addEntityEffect(new MobTypePredicate(MobType.UNDEAD), new DamageFluidEffect(2f, TinkerDamageTypes.FLUID_MAGIC))
       .addEntityEffect(new RemoveEffectFluidEffect(MobEffects.WITHER));
 
-    metalborn(TinkerFluids.moltenLead.getForgeTag(), 1.5f).addEffect(TimeAction.SET, FluidMobEffect.builder().effect(MobEffects.MOVEMENT_SLOWDOWN, 20*6, 1));
-    metalborn(TinkerFluids.moltenNickel.getForgeTag(), 1.5f).addEffect(TimeAction.SET, FluidMobEffect.builder().effect(MobEffects.WEAKNESS, 20*7, 1));
-    metalborn(TinkerFluids.moltenInvar.getForgeTag(), 2f).addEffect(TimeAction.SET, FluidMobEffect.builder().effect(MobEffects.HUNGER, 20*10, 1));
-    metalborn(TinkerFluids.moltenConstantan.getForgeTag(), 2f).addEffect(TimeAction.SET, FluidMobEffect.builder().effect(MobEffects.HUNGER, 20*10, 1));
-    burningFluid(TinkerFluids.moltenUranium.getForgeTag(), 1.5f, 3).addEffect(TimeAction.SET, FluidMobEffect.builder().effect(MobEffects.POISON, 20*10, 1));
+    metalborn(TinkerFluids.moltenLead.getTag(), 1.5f).addEffect(TimeAction.SET, FluidMobEffect.builder().effect(MobEffects.MOVEMENT_SLOWDOWN, 20 * 6, 1));
+    metalborn(TinkerFluids.moltenNickel.getTag(), 1.5f).addEffect(TimeAction.SET, FluidMobEffect.builder().effect(MobEffects.WEAKNESS, 20 * 7, 1));
+    metalborn(TinkerFluids.moltenInvar.getTag(), 2f).addEffect(TimeAction.SET, FluidMobEffect.builder().effect(MobEffects.HUNGER, 20 * 10, 1));
+    metalborn(TinkerFluids.moltenConstantan.getTag(), 2f).addEffect(TimeAction.SET, FluidMobEffect.builder().effect(MobEffects.HUNGER, 20 * 10, 1));
+    burningFluid(TinkerFluids.moltenUranium.getTag(), 1.5f, 3).addEffect(TimeAction.SET, FluidMobEffect.builder().effect(MobEffects.POISON, 20 * 10, 1));
 
-    metalborn(TinkerFluids.moltenCobalt.getForgeTag(), 1f).addEffect(TimeAction.SET, FluidMobEffect.builder().effect(MobEffects.DIG_SPEED, 20*7, 1).effect(MobEffects.MOVEMENT_SPEED, 20*7, 1));
-    metalborn(TinkerFluids.moltenManyullyn.getForgeTag(), 3f).addEffect(TimeAction.SET, FluidMobEffect.builder().effect(MobEffects.DAMAGE_RESISTANCE, 20*15, 1));
-    metalborn(TinkerFluids.moltenHepatizon.getForgeTag(), 2.5f).addEffect(TimeAction.SET, FluidMobEffect.builder().effect(MobEffects.DAMAGE_RESISTANCE, 20*10, 1));
-    burningFluid(TinkerFluids.moltenNetherite.getForgeTag(), 3.5f, 4).addEffect(TimeAction.SET, FluidMobEffect.builder().effect(MobEffects.BLINDNESS, 20*15, 1));
+    metalborn(TinkerFluids.moltenCobalt.getTag(), 1f).addEffect(TimeAction.SET, FluidMobEffect.builder().effect(MobEffects.DIG_SPEED, 20 * 7, 1).effect(MobEffects.MOVEMENT_SPEED, 20 * 7, 1));
+    metalborn(TinkerFluids.moltenManyullyn.getTag(), 3f).addEffect(TimeAction.SET, FluidMobEffect.builder().effect(MobEffects.DAMAGE_RESISTANCE, 20 * 15, 1));
+    metalborn(TinkerFluids.moltenHepatizon.getTag(), 2.5f).addEffect(TimeAction.SET, FluidMobEffect.builder().effect(MobEffects.DAMAGE_RESISTANCE, 20 * 10, 1));
+    burningFluid(TinkerFluids.moltenNetherite.getTag(), 3.5f, 4).addEffect(TimeAction.SET, FluidMobEffect.builder().effect(MobEffects.BLINDNESS, 20 * 15, 1));
 
-    metalborn(TinkerFluids.moltenSlimesteel.getLocalTag(), 1f).addEffect(TimeAction.SET, FluidMobEffect.builder().effect(MobEffects.SLOW_FALLING, 20*5, 1));
-    metalborn(TinkerFluids.moltenQueensSlime.getLocalTag(), 1f).addEffect(TimeAction.SET, FluidMobEffect.builder().effect(MobEffects.LEVITATION, 20*5, 1));
+    metalborn(TinkerFluids.moltenSlimesteel.getTag(), 1f).addEffect(TimeAction.SET, FluidMobEffect.builder().effect(MobEffects.SLOW_FALLING, 20*5, 1));
+    metalborn(TinkerFluids.moltenQueensSlime.getTag(), 1f).addEffect(TimeAction.SET, FluidMobEffect.builder().effect(MobEffects.LEVITATION, 20*5, 1));
 
     // multi-recipes
     burningFluid("glass",           TinkerTags.Fluids.GLASS_SPILLING,           FluidType.BUCKET_VOLUME / 10, 1f,   3);
@@ -153,7 +154,7 @@ public class FluidEffectProvider extends AbstractFluidEffectProvider {
     // potion fluid compat
     // standard potion is 250 mb, but we want a smaller number. divide into 5 pieces at 25% a piece (so healing is 1 health), means you gain 25% per potion
     int bottleSip = FluidValues.BOTTLE / 5;
-    addFluid("potion_fluid", TinkerFluids.potion.getForgeTag(), bottleSip)
+    addFluid("potion_fluid", Objects.requireNonNull(TinkerFluids.potion.getCommonTag()), bottleSip)
       .addEntityEffect(new PotionFluidEffect(0.25f, TagPredicate.ANY))
       .addBlockEffect(new PotionCloudFluidEffect(0.25f, TagPredicate.ANY));
 

@@ -11,6 +11,8 @@ import slimeknights.tconstruct.smeltery.TinkerSmeltery;
 import slimeknights.tconstruct.smeltery.menu.AlloyerContainerMenu;
 import slimeknights.tconstruct.smeltery.menu.MelterContainerMenu;
 
+import java.util.Objects;
+
 import static slimeknights.tconstruct.common.TinkerTags.Fluids.CLAY_TOOLTIPS;
 import static slimeknights.tconstruct.common.TinkerTags.Fluids.GLASS_TOOLTIPS;
 import static slimeknights.tconstruct.common.TinkerTags.Fluids.LARGE_GEM_TOOLTIPS;
@@ -61,17 +63,17 @@ public class FluidTooltipProvider extends AbstractFluidTooltipProvider {
       .addUnit("kilobucket", "mantle", FluidType.BUCKET_VOLUME * 1000)
       .addUnit("bucket",     "mantle", FluidType.BUCKET_VOLUME)
       .addUnit("bottle", FluidValues.BOTTLE);
-    add("venom", TinkerFluids.venom.getLocalTag())
+    add("venom", TinkerFluids.venom.getTag())
       .addUnit("kilobucket", "mantle", FluidType.BUCKET_VOLUME * 1000)
       .addUnit("bucket",     "mantle", FluidType.BUCKET_VOLUME)
       .addUnit("bottle", FluidValues.BOTTLE);
-    add("honey", TinkerFluids.honey.getForgeTag())
+    add("honey", TinkerFluids.honey.getTag())
       .addUnit("block", FluidValues.BOTTLE * 4)
       .addUnit("bottle", FluidValues.BOTTLE);
     add("soup", SOUP_TOOLTIPS)
       .addUnit("bowl", FluidValues.BOWL);
 
-    add("potion", TinkerFluids.potion.getForgeTag())
+    add("potion", Objects.requireNonNull(TinkerFluids.potion.getCommonTag()))
       .addUnit("bottle", FluidValues.BOTTLE);
   }
 

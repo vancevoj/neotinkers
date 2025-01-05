@@ -3,7 +3,7 @@
   "filled": "minecraft:lingering_potion",
   "fluid": {
     "amount": 250,
-    "fluid": "tconstruct:potion"
+    "tag": "forge:potion"
   },
   "input": {
     "tag": "forge:bottles/lingering"

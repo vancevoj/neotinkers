@@ -136,7 +136,7 @@ public class CommonRecipeProvider extends BaseRecipeProvider implements ICommonR
                           .unlockedBy("has_item", has(TinkerSmeltery.grout))
                           .save(consumer, prefix(TinkerCommons.punySmelting, "common/"));
     ItemCastingRecipeBuilder.tableRecipe(TinkerCommons.mightySmelting)
-                            .setFluidAndTime(TinkerFluids.searedStone, false, FluidValues.BRICK)
+                            .setFluidAndTime(TinkerFluids.searedStone, FluidValues.BRICK)
                             .setCast(Items.BOOK, true)
                             .save(consumer, prefix(TinkerCommons.mightySmelting, "common/"));
     ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, TinkerCommons.fantasticFoundry)
@@ -145,7 +145,7 @@ public class CommonRecipeProvider extends BaseRecipeProvider implements ICommonR
                           .unlockedBy("has_item", has(TinkerSmeltery.netherGrout))
                           .save(consumer, prefix(TinkerCommons.fantasticFoundry, "common/"));
     ItemCastingRecipeBuilder.tableRecipe(TinkerCommons.encyclopedia)
-                            .setFluidAndTime(TinkerFluids.moltenGold, true, FluidValues.INGOT)
+                            .setFluidAndTime(TinkerFluids.moltenGold, FluidValues.INGOT)
                             .setCast(Items.BOOK, true)
                             .save(consumer, prefix(TinkerCommons.encyclopedia, "common/"));
 

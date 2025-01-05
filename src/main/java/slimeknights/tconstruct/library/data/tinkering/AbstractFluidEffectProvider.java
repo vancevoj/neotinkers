@@ -99,8 +99,8 @@ public abstract class AbstractFluidEffectProvider extends GenericDataProvider {
   }
 
   /** Creates a builder for a fluid object */
-  protected Builder addFluid(FluidObject<?> fluid, boolean commonTag, int amount) {
-    return addFluid(fluid.getId().getPath(), fluid.ingredient(amount, commonTag));
+  protected Builder addFluid(FluidObject<?> fluid, int amount) {
+    return addFluid(fluid.getId().getPath(), fluid.ingredient(amount));
   }
 
   /** Adds a builder for burning with a nugget amount */
