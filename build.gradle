@@ -245,6 +245,14 @@ java {
     withSourcesJar()
 }
 
+sourcesJar {
+    exclude 'assets/**'
+    exclude 'data/**'
+    exclude 'pack.png'
+    exclude 'pack.mcmeta'
+    exclude 'META-INF/mods.toml'
+}
+
 artifacts {
     archives sourcesJar
 }
