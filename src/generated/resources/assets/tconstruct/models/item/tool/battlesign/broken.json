@@ -6,8 +6,8 @@
     "handle": "tconstruct:item/tool/battlesign/handle"
   },
   "modifier_roots": [
-    "tconstruct:item/tool/dagger/modifiers/broken/",
-    "tconstruct:item/tool/dagger/modifiers/"
+    "tconstruct:item/tool/battlesign/modifiers/broken/",
+    "tconstruct:item/tool/battlesign/modifiers/"
   ],
   "parts": [
     {

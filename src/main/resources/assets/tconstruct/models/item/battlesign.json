@@ -5,7 +5,7 @@
     "head":   "tconstruct:item/tool/battlesign/head",
     "handle": "tconstruct:item/tool/battlesign/handle"
   },
-  "modifier_roots": [ "tconstruct:item/tool/dagger/modifiers/" ],
+  "modifier_roots": [ "tconstruct:item/tool/battlesign/modifiers/" ],
   "parts": [
     { "name": "head",   "index": 0 },
     { "name": "handle", "index": 1 }
