@@ -2,9 +2,11 @@ package slimeknights.tconstruct.library.recipe.melting;
 
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import slimeknights.mantle.recipe.ICustomOutputRecipe;
+import slimeknights.mantle.registration.object.FluidObject;
 import slimeknights.tconstruct.library.recipe.FluidValues;
 import slimeknights.tconstruct.library.recipe.TinkerRecipeTypes;
 import slimeknights.tconstruct.smeltery.TinkerSmeltery;
@@ -56,6 +58,21 @@ public interface IMeltingRecipe extends ICustomOutputRecipe<IMeltingContainer> {
   /* Utils */
 
   double LOG9_2 = 0.31546487678;
+
+  /** Gets the temperature for a fluid */
+  static int getTemperature(Fluid fluid) {
+    return fluid.getFluidType().getTemperature() - 300;
+  }
+
+  /** Gets the temperature for a fluid */
+  static int getTemperature(FluidStack fluid) {
+    return fluid.getFluid().getFluidType().getTemperature(fluid) - 300;
+  }
+
+  /** Gets the temperature for a fluid */
+  static int getTemperature(FluidObject<?> fluid) {
+    return fluid.getType().getTemperature() - 300;
+  }
 
   /**
    * Calculates the temperature for a recipe based on the given temperature and factor

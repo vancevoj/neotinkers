@@ -6,7 +6,7 @@
   "rate": "gem",
   "result": {
     "amount": 250,
-    "fluid": "tconstruct:earth_slime"
+    "tag": "forge:slime"
   },
   "temperature": 50,
   "time": 31

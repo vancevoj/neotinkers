@@ -3,7 +3,7 @@
   "byproducts": [
     {
       "amount": 180,
-      "fluid": "tconstruct:molten_copper"
+      "tag": "forge:molten_copper"
     }
   ],
   "conditions": [
@@ -34,7 +34,7 @@
   "rate": "metal",
   "result": {
     "amount": 180,
-    "fluid": "tconstruct:molten_tin"
+    "tag": "forge:molten_tin"
   },
   "temperature": 225,
   "time": 98

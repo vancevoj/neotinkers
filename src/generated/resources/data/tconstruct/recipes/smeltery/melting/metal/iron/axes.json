@@ -10,7 +10,7 @@
   ],
   "result": {
     "amount": 270,
-    "fluid": "tconstruct:molten_iron",
+    "tag": "forge:molten_iron",
     "unit_size": 10
   },
   "temperature": 800,

@@ -41,7 +41,7 @@
         ],
         "result": {
           "amount": 270,
-          "fluid": "tconstruct:molten_pewter"
+          "tag": "forge:molten_pewter"
         },
         "temperature": 400
       }
@@ -66,7 +66,7 @@
         ],
         "result": {
           "amount": 180,
-          "fluid": "tconstruct:molten_pewter"
+          "tag": "forge:molten_pewter"
         },
         "temperature": 400
       }

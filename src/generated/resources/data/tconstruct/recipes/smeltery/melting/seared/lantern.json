@@ -7,7 +7,7 @@
     },
     {
       "amount": 30,
-      "fluid": "tconstruct:molten_iron"
+      "tag": "forge:molten_iron"
     }
   ],
   "ingredient": {

@@ -3,7 +3,7 @@
   "byproducts": [
     {
       "amount": 180,
-      "fluid": "tconstruct:molten_copper"
+      "tag": "forge:molten_copper"
     }
   ],
   "ingredient": {

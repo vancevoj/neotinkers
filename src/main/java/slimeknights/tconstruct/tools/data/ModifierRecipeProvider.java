@@ -87,6 +87,8 @@ import java.util.Arrays;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
+import static slimeknights.tconstruct.library.recipe.melting.IMeltingRecipe.getTemperature;
+
 public class ModifierRecipeProvider extends BaseRecipeProvider {
   public ModifierRecipeProvider(PackOutput packOutput) {
     super(packOutput);
@@ -124,7 +126,7 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                             .save(consumer, prefix(TinkerModifiers.ironReinforcement, folder));
     ItemCastingRecipeBuilder.tableRecipe(TinkerModifiers.searedReinforcement)
                             .setFluid(FluidIngredient.of(TinkerFluids.searedStone.ingredient(FluidValues.BRICK), TinkerFluids.scorchedStone.ingredient(FluidValues.BRICK)))
-                            .setCoolingTime(TinkerFluids.searedStone.getType().getTemperature() - 300, FluidValues.BRICK)
+                            .setCoolingTime(getTemperature(TinkerFluids.searedStone), FluidValues.BRICK)
                             .setCast(TinkerTables.pattern, true)
                             .save(consumer, prefix(TinkerModifiers.searedReinforcement, folder));
     ItemCastingRecipeBuilder.tableRecipe(TinkerModifiers.goldReinforcement)

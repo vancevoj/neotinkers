@@ -7,6 +7,8 @@ import slimeknights.tconstruct.library.recipe.TinkerRecipeTypes;
 import slimeknights.tconstruct.library.recipe.melting.IMeltingRecipe;
 import slimeknights.tconstruct.smeltery.TinkerSmeltery;
 
+import static slimeknights.tconstruct.library.recipe.melting.IMeltingRecipe.getTemperature;
+
 /**
  * Base interface for all casting recipes
  */
@@ -57,6 +59,6 @@ public interface ICastingRecipe extends ICommonRecipe<ICastingContainer> {
    * @return  Time for the recipe
    */
   static int calcCoolingTime(FluidStack fluid) {
-    return calcCoolingTime(fluid.getFluid().getFluidType().getTemperature(fluid) - 300, fluid.getAmount());
+    return calcCoolingTime(getTemperature(fluid), fluid.getAmount());
   }
 }

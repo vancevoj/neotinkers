@@ -26,7 +26,7 @@
         "byproducts": [
           {
             "amount": 90,
-            "fluid": "tconstruct:molten_lead"
+            "tag": "forge:molten_lead"
           }
         ],
         "ingredient": {
@@ -43,7 +43,7 @@
         "rate": "metal",
         "result": {
           "amount": 90,
-          "fluid": "tconstruct:molten_uranium"
+          "tag": "forge:molten_uranium"
         },
         "temperature": 830,
         "time": 92
@@ -60,7 +60,7 @@
         "byproducts": [
           {
             "amount": 90,
-            "fluid": "tconstruct:molten_copper"
+            "tag": "forge:molten_copper"
           }
         ],
         "ingredient": {
@@ -77,7 +77,7 @@
         "rate": "metal",
         "result": {
           "amount": 90,
-          "fluid": "tconstruct:molten_uranium"
+          "tag": "forge:molten_uranium"
         },
         "temperature": 830,
         "time": 92

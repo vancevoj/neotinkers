@@ -3,7 +3,7 @@
   "byproducts": [
     {
       "amount": 810,
-      "fluid": "tconstruct:molten_iron"
+      "tag": "forge:molten_iron"
     }
   ],
   "conditions": [
@@ -21,7 +21,7 @@
   "rate": "metal",
   "result": {
     "amount": 810,
-    "fluid": "tconstruct:molten_aluminum"
+    "tag": "forge:molten_aluminum"
   },
   "temperature": 425,
   "time": 283

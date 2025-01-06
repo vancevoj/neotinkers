@@ -10,6 +10,7 @@ import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
 import slimeknights.mantle.data.loadable.field.ContextKey;
 import slimeknights.mantle.data.loadable.primitive.IntLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
+import slimeknights.mantle.recipe.helper.FluidOutput;
 import slimeknights.mantle.recipe.helper.LoadableRecipeSerializer;
 import slimeknights.tconstruct.library.json.field.MergingField;
 import slimeknights.tconstruct.library.json.field.MergingField.MissingMode;
@@ -32,7 +33,7 @@ public class DamageableMeltingRecipe extends MeltingRecipe {
   private final int unitSize;
   /** Sizes of byproducts */
   private final List<Integer> byproductSizes;
-  public DamageableMeltingRecipe(ResourceLocation id, String group, Ingredient input, FluidStack output, int temperature, int time, List<FluidStack> byproducts, int unitSize, List<Integer> byproductSizes) {
+  public DamageableMeltingRecipe(ResourceLocation id, String group, Ingredient input, FluidOutput output, int temperature, int time, List<FluidOutput> byproducts, int unitSize, List<Integer> byproductSizes) {
     super(id, group, input, output, temperature, time, byproducts);
     this.unitSize = unitSize;
     this.byproductSizes = byproductSizes;
@@ -76,8 +77,8 @@ public class DamageableMeltingRecipe extends MeltingRecipe {
       // fill byproducts until we run out of space or byproducts
       int itemDamage = input.getDamageValue();
       for (int i = 0; i < byproducts.size(); i++) {
-        FluidStack fluidStack = byproducts.get(i);
-        handler.fill(scaleOutput(fluidStack, itemDamage, maxDamage, i < byproductSizes.size() ? byproductSizes.get(i) : unitSize), FluidAction.EXECUTE);
+        FluidOutput fluidStack = byproducts.get(i);
+        handler.fill(scaleOutput(fluidStack.get(), itemDamage, maxDamage, i < byproductSizes.size() ? byproductSizes.get(i) : unitSize), FluidAction.EXECUTE);
       }
     }
   }

@@ -5,7 +5,7 @@
   },
   "result": {
     "amount": 1000,
-    "fluid": "tconstruct:earth_slime"
+    "tag": "forge:slime"
   },
   "temperature": 50,
   "time": 62

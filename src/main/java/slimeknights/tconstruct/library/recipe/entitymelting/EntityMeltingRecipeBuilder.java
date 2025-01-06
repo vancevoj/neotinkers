@@ -6,6 +6,7 @@ import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 import slimeknights.mantle.recipe.data.AbstractRecipeBuilder;
+import slimeknights.mantle.recipe.helper.FluidOutput;
 import slimeknights.mantle.recipe.ingredient.EntityIngredient;
 
 import java.util.function.Consumer;
@@ -14,8 +15,18 @@ import java.util.function.Consumer;
 @RequiredArgsConstructor(staticName = "melting")
 public class EntityMeltingRecipeBuilder extends AbstractRecipeBuilder<EntityMeltingRecipeBuilder> {
   private final EntityIngredient ingredient;
-  private final FluidStack output;
+  private final FluidOutput output;
   private final int damage;
+
+  /** Creates a new builder */
+  public static EntityMeltingRecipeBuilder melting(EntityIngredient ingredient, FluidStack output, int damage) {
+    return melting(ingredient, FluidOutput.fromStack(output), damage);
+  }
+
+  /** Creates a new builder doing 2 damage */
+  public static EntityMeltingRecipeBuilder melting(EntityIngredient ingredient, FluidOutput output) {
+    return melting(ingredient, output, 2);
+  }
 
   /** Creates a new builder doing 2 damage */
   public static EntityMeltingRecipeBuilder melting(EntityIngredient ingredient, FluidStack output) {
@@ -24,7 +35,7 @@ public class EntityMeltingRecipeBuilder extends AbstractRecipeBuilder<EntityMelt
 
   @Override
   public void save(Consumer<FinishedRecipe> consumer) {
-    save(consumer, BuiltInRegistries.FLUID.getKey(output.getFluid()));
+    save(consumer, BuiltInRegistries.FLUID.getKey(output.get().getFluid()));
   }
 
   @Override

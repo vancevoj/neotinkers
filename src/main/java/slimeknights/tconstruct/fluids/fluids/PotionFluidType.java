@@ -13,8 +13,10 @@ import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidType;
 import slimeknights.mantle.fluid.texture.ClientTextureFluidType;
+import slimeknights.mantle.recipe.helper.FluidOutput;
 import slimeknights.tconstruct.fluids.TinkerFluids;
 
+import java.util.Objects;
 import java.util.function.Consumer;
 
 public class PotionFluidType extends FluidType {
@@ -80,6 +82,16 @@ public class PotionFluidType extends FluidType {
       tag = potionTag(BuiltInRegistries.POTION.getKey(potion));
     }
     return new FluidStack(TinkerFluids.potion.get(), size, tag);
+  }
+
+  /** Creates a fluid output for the given potion */
+  @SuppressWarnings("deprecation")  // forge registries have nullable keys, like why would you want that?
+  public static FluidOutput potionResult(Potion potion, int size) {
+    CompoundTag tag = null;
+    if (potion != Potions.EMPTY) {
+      tag = potionTag(BuiltInRegistries.POTION.getKey(potion));
+    }
+    return FluidOutput.fromTag(Objects.requireNonNull(TinkerFluids.potion.getCommonTag()), size, tag);
   }
 
   /** Creates a potion bucket for the given potion */

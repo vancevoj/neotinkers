@@ -6,7 +6,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.common.crafting.conditions.OrCondition;
-import net.minecraftforge.fluids.FluidStack;
 import slimeknights.mantle.recipe.data.IRecipeHelper;
 import slimeknights.mantle.recipe.helper.ItemOutput;
 import slimeknights.mantle.registration.object.FluidObject;
@@ -21,6 +20,7 @@ import javax.annotation.Nullable;
 import java.util.function.Consumer;
 
 import static slimeknights.mantle.Mantle.COMMON;
+import static slimeknights.tconstruct.library.recipe.melting.IMeltingRecipe.getTemperature;
 
 /**
  * Interface for adding recipes for tool materials
@@ -81,7 +81,13 @@ public interface IMaterialRecipeHelper extends IRecipeHelper {
 
   /** Adds recipes to melt a material */
   default void materialMelting(Consumer<FinishedRecipe> consumer, MaterialVariantId material, Fluid fluid, int fluidAmount, String folder) {
-    MaterialMeltingRecipeBuilder.material(material, new FluidStack(fluid, fluidAmount))
+    MaterialMeltingRecipeBuilder.material(material, fluid, fluidAmount)
+                                .save(consumer, location(folder + "melting/" + material.getLocation('_').getPath()));
+  }
+
+  /** Adds recipes to melt a material */
+  default void materialMelting(Consumer<FinishedRecipe> consumer, MaterialVariantId material, FluidObject<?> fluid, int fluidAmount, String folder) {
+    MaterialMeltingRecipeBuilder.material(material, fluid, fluidAmount)
                                 .save(consumer, location(folder + "melting/" + material.getLocation('_').getPath()));
   }
 
@@ -89,9 +95,9 @@ public interface IMaterialRecipeHelper extends IRecipeHelper {
   default void materialMeltingCasting(Consumer<FinishedRecipe> consumer, MaterialVariantId material, FluidObject<?> fluid, int fluidAmount, String folder) {
     MaterialFluidRecipeBuilder.material(material)
                               .setFluid(fluid.ingredient(fluidAmount))
-                              .setTemperature(fluid.getType().getTemperature() - 300)
+                              .setTemperature(getTemperature(fluid))
                               .save(consumer, location(folder + "casting/" + material.getLocation('_').getPath()));
-    materialMelting(consumer, material, fluid.get(), fluidAmount, folder);
+    materialMelting(consumer, material, fluid, fluidAmount, folder);
   }
 
   /** Adds recipes to melt and cast a compat material of ingot size */
@@ -111,7 +117,7 @@ public interface IMaterialRecipeHelper extends IRecipeHelper {
 
   /** Adds recipes to melt and cast a material of ingot size */
   default void materialMeltingComposite(Consumer<FinishedRecipe> consumer, MaterialVariantId input, MaterialVariantId output, FluidObject<?> fluid, int amount, String folder) {
-    materialMelting(consumer, output, fluid.get(), amount, folder);
+    materialMelting(consumer, output, fluid, amount, folder);
     materialComposite(consumer, input, output, fluid, amount, folder);
   }
 
@@ -120,7 +126,7 @@ public interface IMaterialRecipeHelper extends IRecipeHelper {
     MaterialFluidRecipeBuilder.material(output)
                               .setInputId(input)
                               .setFluid(fluid.ingredient(amount))
-                              .setTemperature(fluid.getType().getTemperature() - 300)
+                              .setTemperature(getTemperature(fluid))
                               .save(consumer, location(folder + "composite/" + name));
   }
 

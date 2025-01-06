@@ -17,7 +17,7 @@
   ],
   "result": {
     "amount": 90,
-    "fluid": "tconstruct:molten_netherite",
+    "tag": "forge:molten_netherite",
     "unit_size": 10
   },
   "temperature": 1250,

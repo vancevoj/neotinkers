@@ -9,6 +9,8 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import slimeknights.mantle.recipe.data.AbstractRecipeBuilder;
+import slimeknights.mantle.recipe.helper.FluidOutput;
+import slimeknights.mantle.registration.object.FluidObject;
 import slimeknights.tconstruct.library.recipe.melting.IMeltingContainer.OreRateType;
 
 import javax.annotation.Nullable;
@@ -17,13 +19,15 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
+import static slimeknights.tconstruct.library.recipe.melting.IMeltingRecipe.getTemperature;
+
 /**
  * Builder for a recipe that melts an ingredient into a fuel
  */
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class MeltingRecipeBuilder extends AbstractRecipeBuilder<MeltingRecipeBuilder> {
   private final Ingredient input;
-  private final FluidStack output;
+  private final FluidOutput output;
   private final int temperature;
   private final int time;
   @Nullable
@@ -31,7 +35,32 @@ public class MeltingRecipeBuilder extends AbstractRecipeBuilder<MeltingRecipeBui
   private List<OreRateType> byproductRates = List.of();
   @Nullable
   private int[] unitSizes;
-  private final List<FluidStack> byproducts = new ArrayList<>();
+  private final List<FluidOutput> byproducts = new ArrayList<>();
+
+  /**
+   * Creates a new builder instance using a specific temperature
+   * @param input        Recipe input
+   * @param output       Recipe output
+   * @param temperature  Temperature required
+   * @param time         Time this recipe takes
+   * @return  Builder instance
+   */
+  public static MeltingRecipeBuilder melting(Ingredient input, FluidOutput output, int temperature, int time) {
+    if (temperature < 0) throw new IllegalArgumentException("Invalid temperature " + temperature + ", must be greater than zero");
+    if (time <= 0) throw new IllegalArgumentException("Invalid time " + time + ", must be greater than zero");
+    return new MeltingRecipeBuilder(input, output, temperature, time);
+  }
+
+  /**
+   * Creates a new builder instance using a factored temperature
+   * @param input        Recipe input
+   * @param output       Recipe output
+   * @param temperature  Temperature required
+   * @return  Builder instance
+   */
+  public static MeltingRecipeBuilder melting(Ingredient input, FluidOutput output, int temperature, float timeFactor) {
+    return melting(input, output, temperature, IMeltingRecipe.calcTime(temperature, timeFactor));
+  }
 
   /**
    * Creates a new builder instance using a specific temperature
@@ -42,9 +71,20 @@ public class MeltingRecipeBuilder extends AbstractRecipeBuilder<MeltingRecipeBui
    * @return  Builder instance
    */
   public static MeltingRecipeBuilder melting(Ingredient input, FluidStack output, int temperature, int time) {
-    if (temperature < 0) throw new IllegalArgumentException("Invalid temperature " + temperature + ", must be greater than zero");
-    if (time <= 0) throw new IllegalArgumentException("Invalid time " + time + ", must be greater than zero");
-    return new MeltingRecipeBuilder(input, output, temperature, time);
+    return melting(input, FluidOutput.fromStack(output), temperature, time);
+  }
+
+  /**
+   * Creates a new builder instance using a specific temperature
+   * @param input        Recipe input
+   * @param fluid        Recipe result
+   * @param amount       Result amount
+   * @param timeFactor   Factor this recipe takes compared to the standard of ingots
+   * @return  Builder instance
+   */
+  public static MeltingRecipeBuilder melting(Ingredient input, FluidObject<?> fluid, int amount, float timeFactor) {
+    int temperature = getTemperature(fluid);
+    return melting(input, fluid.result(amount), temperature, IMeltingRecipe.calcTime(temperature, timeFactor));
   }
 
   /**
@@ -55,7 +95,7 @@ public class MeltingRecipeBuilder extends AbstractRecipeBuilder<MeltingRecipeBui
    * @return  Builder instance
    */
   public static MeltingRecipeBuilder melting(Ingredient input, FluidStack output, float timeFactor) {
-    int temperature = output.getFluid().getFluidType().getTemperature(output) - 300;
+    int temperature = getTemperature(output);
     return melting(input, output, temperature, IMeltingRecipe.calcTime(temperature, timeFactor));
   }
 
@@ -78,8 +118,19 @@ public class MeltingRecipeBuilder extends AbstractRecipeBuilder<MeltingRecipeBui
    * @param amount      Fluid returned from recipe
    * @return  Builder instance
    */
+  public static MeltingRecipeBuilder melting(Ingredient input, FluidObject<?> fluid, int amount) {
+    return melting(input, fluid, amount, IMeltingRecipe.calcTimeFactor(amount));
+  }
+
+  /**
+   * Creates a new builder instance using a specific temperature
+   * @param input       Recipe input
+   * @param fluid       Fluid result
+   * @param amount      Fluid returned from recipe
+   * @return  Builder instance
+   */
   public static MeltingRecipeBuilder melting(Ingredient input, Fluid fluid, int amount) {
-    return melting(input, new FluidStack(fluid, amount), IMeltingRecipe.calcTimeFactor(amount));
+    return melting(input, fluid, amount, IMeltingRecipe.calcTimeFactor(amount));
   }
 
   /**
@@ -103,17 +154,26 @@ public class MeltingRecipeBuilder extends AbstractRecipeBuilder<MeltingRecipeBui
 
   /**
    * Adds a byproduct to this recipe
-   * @param fluidStack  Byproduct to add
+   * @param fluid  Byproduct to add
    * @return  Builder instance
    */
-  public MeltingRecipeBuilder addByproduct(FluidStack fluidStack) {
-    byproducts.add(fluidStack);
+  public MeltingRecipeBuilder addByproduct(FluidOutput fluid) {
+    byproducts.add(fluid);
     return this;
+  }
+
+  /**
+   * Adds a byproduct to this recipe
+   * @param fluid  Byproduct to add
+   * @return  Builder instance
+   */
+  public MeltingRecipeBuilder addByproduct(FluidStack fluid) {
+    return addByproduct(FluidOutput.fromStack(fluid));
   }
 
   @Override
   public void save(Consumer<FinishedRecipe> consumer) {
-    save(consumer, BuiltInRegistries.FLUID.getKey(output.getFluid()));
+    save(consumer, BuiltInRegistries.FLUID.getKey(output.get().getFluid()));
   }
 
   @Override

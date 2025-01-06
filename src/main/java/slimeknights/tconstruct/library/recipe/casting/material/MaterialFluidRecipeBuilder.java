@@ -15,6 +15,8 @@ import slimeknights.tconstruct.library.materials.definition.MaterialVariantId;
 import javax.annotation.Nullable;
 import java.util.function.Consumer;
 
+import static slimeknights.tconstruct.library.recipe.melting.IMeltingRecipe.getTemperature;
+
 /**
  * Builder to make parts and composites castable
  */
@@ -41,7 +43,7 @@ public class MaterialFluidRecipeBuilder extends AbstractRecipeBuilder<MaterialFl
   public MaterialFluidRecipeBuilder setFluidAndTemp(FluidStack fluidStack) {
     this.fluid = FluidIngredient.of(fluidStack);
     if (this.temperature == -1) {
-      this.temperature = fluidStack.getFluid().getFluidType().getTemperature(fluidStack) - 300;
+      this.temperature = getTemperature(fluidStack);
     }
     return this;
   }

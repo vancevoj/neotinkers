@@ -12,7 +12,7 @@
   "input": "tconstruct:steel",
   "result": {
     "amount": 90,
-    "fluid": "tconstruct:molten_steel"
+    "tag": "forge:molten_steel"
   },
   "temperature": 950
 }

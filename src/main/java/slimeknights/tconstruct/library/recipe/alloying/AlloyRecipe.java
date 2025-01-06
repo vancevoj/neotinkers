@@ -1,17 +1,17 @@
 package slimeknights.tconstruct.library.recipe.alloying;
 
-import com.google.gson.JsonSyntaxException;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.fluids.FluidStack;
-import slimeknights.mantle.data.loadable.common.FluidStackLoadable;
 import slimeknights.mantle.data.loadable.field.ContextKey;
 import slimeknights.mantle.data.loadable.primitive.IntLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.recipe.ICustomOutputRecipe;
+import slimeknights.mantle.recipe.helper.FluidOutput;
 import slimeknights.mantle.recipe.ingredient.FluidIngredient;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.recipe.TinkerRecipeTypes;
@@ -19,26 +19,19 @@ import slimeknights.tconstruct.smeltery.TinkerSmeltery;
 
 import java.util.BitSet;
 import java.util.List;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
  * Base class for alloying recipes
  */
+@RequiredArgsConstructor
 public class AlloyRecipe implements ICustomOutputRecipe<IAlloyTank> {
   public static final RecordLoadable<AlloyRecipe> LOADER = RecordLoadable.create(
     ContextKey.ID.requiredField(),
     FluidIngredient.LOADABLE.list(2).requiredField("inputs", r -> r.inputs),
-    FluidStackLoadable.REQUIRED_STACK_NBT.requiredField("result", r -> r.output),
+    FluidOutput.Loadable.REQUIRED.requiredField("result", r -> r.output),
     IntLoadable.FROM_ONE.requiredField("temperature", r -> r.temperature),
-    AlloyRecipe::new).comapFlatMap((recipe, error) -> {
-    for (FluidIngredient input : recipe.inputs) {
-      if (input.test(recipe.output)) {
-        throw new JsonSyntaxException("Result fluid contained in input in alloy recipe " + recipe.id);
-      }
-    }
-    return recipe;
-  }, Function.identity());
+    AlloyRecipe::new);
 
   @Getter
   private final ResourceLocation id;
@@ -49,20 +42,12 @@ public class AlloyRecipe implements ICustomOutputRecipe<IAlloyTank> {
    */
   private final List<FluidIngredient> inputs;
   /** Recipe output */
-  @Getter
-  private final FluidStack output;
+  private final FluidOutput output;
   /** Required temperature to craft this */
   @Getter
   private final int temperature;
   /** Cache of recipe input list */
   private List<List<FluidStack>> displayInputs;
-
-  public AlloyRecipe(ResourceLocation id, List<FluidIngredient> inputs, FluidStack output, int temperature) {
-    this.id = id;
-    this.inputs = inputs;
-    this.output = output;
-    this.temperature = temperature;
-  }
 
   /**
    * Gets the list of inputs for display in JEI
@@ -73,6 +58,11 @@ public class AlloyRecipe implements ICustomOutputRecipe<IAlloyTank> {
       displayInputs = inputs.stream().map(FluidIngredient::getFluids).collect(Collectors.toList());
     }
     return displayInputs;
+  }
+
+  /** Gets the result of this recipe */
+  public FluidStack getOutput() {
+    return output.get();
   }
 
   /**
@@ -156,7 +146,7 @@ public class AlloyRecipe implements ICustomOutputRecipe<IAlloyTank> {
     }
 
     // ensure there is space for the recipe
-    return inv.canFit(output, drainAmount);
+    return inv.canFit(output.get(), drainAmount);
   }
 
   /**
@@ -191,7 +181,7 @@ public class AlloyRecipe implements ICustomOutputRecipe<IAlloyTank> {
 
     // ensure there is space for the recipe
     FluidStack drained;
-    if (inv.canFit(output, drainAmount)) {
+    if (inv.canFit(output.get(), drainAmount)) {
       // drain each marked fluid
       for (int i = 0; i < drainFluids.length; i++) {
         FluidStack toDrain = drainFluids[i];

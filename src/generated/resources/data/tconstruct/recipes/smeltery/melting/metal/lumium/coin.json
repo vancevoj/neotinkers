@@ -14,7 +14,7 @@
   },
   "result": {
     "amount": 30,
-    "fluid": "tconstruct:molten_lumium"
+    "tag": "forge:molten_lumium"
   },
   "temperature": 1050,
   "time": 45

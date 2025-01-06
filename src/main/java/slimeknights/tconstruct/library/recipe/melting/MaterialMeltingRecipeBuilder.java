@@ -7,10 +7,13 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import slimeknights.mantle.recipe.data.AbstractRecipeBuilder;
-import slimeknights.tconstruct.library.materials.definition.MaterialId;
+import slimeknights.mantle.recipe.helper.FluidOutput;
+import slimeknights.mantle.registration.object.FluidObject;
 import slimeknights.tconstruct.library.materials.definition.MaterialVariantId;
 
 import java.util.function.Consumer;
+
+import static slimeknights.tconstruct.library.recipe.melting.IMeltingRecipe.getTemperature;
 
 /**
  * Builder for a recipe to melt a dynamic part material item
@@ -19,10 +22,10 @@ import java.util.function.Consumer;
 public class MaterialMeltingRecipeBuilder extends AbstractRecipeBuilder<MaterialMeltingRecipeBuilder> {
   private final MaterialVariantId inputId;
   private final int temperature;
-  private final FluidStack result;
+  private final FluidOutput result;
 
   /** Creates a recipe using the fluids temperature */
-  public static MaterialMeltingRecipeBuilder material(MaterialVariantId materialId, int temperature, FluidStack result) {
+  public static MaterialMeltingRecipeBuilder material(MaterialVariantId materialId, int temperature, FluidOutput result) {
     if (temperature < 0) {
       throw new IllegalArgumentException("Invalid temperature " + temperature + ", must be 0 or greater");
     }
@@ -30,12 +33,22 @@ public class MaterialMeltingRecipeBuilder extends AbstractRecipeBuilder<Material
   }
 
   /** Creates a recipe using the fluids temperature */
-  public static MaterialMeltingRecipeBuilder material(MaterialVariantId materialId, FluidStack result) {
-    return material(materialId, result.getFluid().getFluidType().getTemperature(result) - 300, result);
+  public static MaterialMeltingRecipeBuilder material(MaterialVariantId materialId, int temperature, FluidStack result) {
+    return material(materialId, temperature, FluidOutput.fromStack(result));
   }
 
   /** Creates a recipe using the fluids temperature */
-  public static MaterialMeltingRecipeBuilder material(MaterialId materialId, Fluid result, int amount) {
+  public static MaterialMeltingRecipeBuilder material(MaterialVariantId materialId, FluidObject<?> fluid, int amount) {
+    return material(materialId, getTemperature(fluid), fluid.result(amount));
+  }
+
+  /** Creates a recipe using the fluids temperature */
+  public static MaterialMeltingRecipeBuilder material(MaterialVariantId materialId, FluidStack result) {
+    return material(materialId, getTemperature(result), result);
+  }
+
+  /** Creates a recipe using the fluids temperature */
+  public static MaterialMeltingRecipeBuilder material(MaterialVariantId materialId, Fluid result, int amount) {
     return material(materialId, new FluidStack(result, amount));
   }
 

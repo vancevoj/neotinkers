@@ -8,19 +8,33 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import slimeknights.mantle.recipe.data.AbstractRecipeBuilder;
+import slimeknights.mantle.recipe.helper.FluidOutput;
 import slimeknights.mantle.recipe.ingredient.FluidIngredient;
+import slimeknights.mantle.registration.object.FluidObject;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
+import static slimeknights.tconstruct.library.recipe.melting.IMeltingRecipe.getTemperature;
+
 /** Builder for alloy recipes */
 @SuppressWarnings("unused")
 @RequiredArgsConstructor(staticName = "alloy")
 public class AlloyRecipeBuilder extends AbstractRecipeBuilder<AlloyRecipeBuilder> {
-  private final FluidStack output;
+  private final FluidOutput output;
   private final int temperature;
   private final List<FluidIngredient> inputs = new ArrayList<>();
+
+  /**
+   * Creates a new recipe producing the given fluid
+   * @param fluid    fluid to alloy
+   * @param amount   fluid amount
+   * @return  Builder instance
+   */
+  public static AlloyRecipeBuilder alloy(FluidObject<?> fluid, int amount) {
+    return alloy(fluid.result(amount), getTemperature(fluid));
+  }
 
   /**
    * Creates a new recipe producing the given fluid
@@ -28,7 +42,7 @@ public class AlloyRecipeBuilder extends AbstractRecipeBuilder<AlloyRecipeBuilder
    * @return  Builder instance
    */
   public static AlloyRecipeBuilder alloy(FluidStack fluid) {
-    return alloy(fluid, fluid.getFluid().getFluidType().getTemperature(fluid) - 300);
+    return alloy(FluidOutput.fromStack(fluid), getTemperature(fluid));
   }
 
   /**
@@ -88,7 +102,7 @@ public class AlloyRecipeBuilder extends AbstractRecipeBuilder<AlloyRecipeBuilder
 
   @Override
   public void save(Consumer<FinishedRecipe> consumer) {
-    save(consumer, BuiltInRegistries.FLUID.getKey(output.getFluid()));
+    save(consumer, BuiltInRegistries.FLUID.getKey(output.get().getFluid()));
   }
 
   @Override

@@ -14,7 +14,7 @@
   },
   "result": {
     "amount": 45,
-    "fluid": "tconstruct:molten_enderium"
+    "tag": "forge:molten_enderium"
   },
   "temperature": 1350,
   "time": 15

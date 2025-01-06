@@ -8,8 +8,8 @@
     },
     {
       "amount": 270,
-      "fluid": "tconstruct:molten_gold",
-      "rate": "metal"
+      "rate": "metal",
+      "tag": "forge:molten_gold"
     }
   ],
   "ingredient": {

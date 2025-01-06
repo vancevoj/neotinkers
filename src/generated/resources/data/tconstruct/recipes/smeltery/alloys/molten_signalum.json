@@ -47,7 +47,7 @@
   ],
   "result": {
     "amount": 360,
-    "fluid": "tconstruct:molten_signalum"
+    "tag": "forge:molten_signalum"
   },
   "temperature": 1125
 }

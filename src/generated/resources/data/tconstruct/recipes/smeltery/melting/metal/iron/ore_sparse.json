@@ -26,7 +26,7 @@
         "byproducts": [
           {
             "amount": 90,
-            "fluid": "tconstruct:molten_nickel"
+            "tag": "forge:molten_nickel"
           }
         ],
         "ingredient": {
@@ -43,7 +43,7 @@
         "rate": "metal",
         "result": {
           "amount": 90,
-          "fluid": "tconstruct:molten_iron"
+          "tag": "forge:molten_iron"
         },
         "temperature": 800,
         "time": 90
@@ -60,7 +60,7 @@
         "byproducts": [
           {
             "amount": 90,
-            "fluid": "tconstruct:molten_copper"
+            "tag": "forge:molten_copper"
           }
         ],
         "ingredient": {
@@ -77,7 +77,7 @@
         "rate": "metal",
         "result": {
           "amount": 90,
-          "fluid": "tconstruct:molten_iron"
+          "tag": "forge:molten_iron"
         },
         "temperature": 800,
         "time": 90

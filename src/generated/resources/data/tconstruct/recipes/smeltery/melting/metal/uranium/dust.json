@@ -14,7 +14,7 @@
   },
   "result": {
     "amount": 90,
-    "fluid": "tconstruct:molten_uranium"
+    "tag": "forge:molten_uranium"
   },
   "temperature": 830,
   "time": 46

@@ -1,6 +1,6 @@
 package slimeknights.tconstruct.library.data.recipe;
 
-import net.minecraft.world.level.material.Fluid;
+import slimeknights.mantle.recipe.helper.FluidOutput;
 
 /** Interface for a byproduct for datagen, not required but makes parameters easier */
 public interface IByproduct {
@@ -11,8 +11,5 @@ public interface IByproduct {
   boolean isAlwaysPresent();
 
   /** Gets the fluid of this byproduct */
-  Fluid getFluid();
-
-  /** Gets the amount of byproduct produced before scaling */
-  int getAmount();
+  FluidOutput getFluid(float scale);
 }

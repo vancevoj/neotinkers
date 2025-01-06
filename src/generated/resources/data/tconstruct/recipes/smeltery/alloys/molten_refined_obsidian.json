@@ -32,7 +32,7 @@
   ],
   "result": {
     "amount": 90,
-    "fluid": "tconstruct:molten_refined_obsidian"
+    "tag": "forge:molten_refined_obsidian"
   },
   "temperature": 1475
 }

@@ -3,7 +3,7 @@
   "byproducts": [
     {
       "amount": 90,
-      "fluid": "tconstruct:molten_iron"
+      "tag": "forge:molten_iron"
     }
   ],
   "conditions": [
@@ -21,7 +21,7 @@
   "rate": "metal",
   "result": {
     "amount": 90,
-    "fluid": "tconstruct:molten_osmium"
+    "tag": "forge:molten_osmium"
   },
   "temperature": 975,
   "time": 98

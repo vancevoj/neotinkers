@@ -10,6 +10,8 @@ import slimeknights.mantle.recipe.ingredient.FluidIngredient;
 
 import java.util.function.Consumer;
 
+import static slimeknights.tconstruct.library.recipe.melting.IMeltingRecipe.getTemperature;
+
 /**
  * Builds a new recipe for a melter or smeltery fuel
  */
@@ -26,7 +28,7 @@ public class MeltingFuelBuilder extends AbstractRecipeBuilder<MeltingFuelBuilder
    * @return  Builder instance
    */
   public static MeltingFuelBuilder fuel(FluidStack fluid, int duration) {
-    return fuel(FluidIngredient.of(fluid), duration, fluid.getFluid().getFluidType().getTemperature(fluid) - 300);
+    return fuel(FluidIngredient.of(fluid), duration, getTemperature(fluid));
   }
 
   @Override

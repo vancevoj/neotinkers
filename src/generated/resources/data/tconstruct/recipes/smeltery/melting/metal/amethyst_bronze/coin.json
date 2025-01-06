@@ -14,7 +14,7 @@
   },
   "result": {
     "amount": 30,
-    "fluid": "tconstruct:molten_amethyst_bronze"
+    "tag": "forge:molten_amethyst_bronze"
   },
   "temperature": 820,
   "time": 41

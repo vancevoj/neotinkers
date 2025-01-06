@@ -3,7 +3,7 @@
   "byproducts": [
     {
       "amount": 90,
-      "fluid": "tconstruct:molten_iron"
+      "tag": "forge:molten_iron"
     }
   ],
   "ingredient": {
@@ -12,7 +12,7 @@
   "rate": "metal",
   "result": {
     "amount": 90,
-    "fluid": "tconstruct:molten_cobalt"
+    "tag": "forge:molten_cobalt"
   },
   "temperature": 950,
   "time": 97

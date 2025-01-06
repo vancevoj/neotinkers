@@ -14,7 +14,7 @@
   },
   "result": {
     "amount": 45,
-    "fluid": "tconstruct:molten_steel"
+    "tag": "forge:molten_steel"
   },
   "temperature": 950,
   "time": 13

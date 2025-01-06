@@ -17,9 +17,9 @@ public interface IMeltingContainer extends ISingleStackContainer {
     int applyOreBoost(OreRateType rate, int amount);
 
     /** Boosts the given fluid stack by the rate */
-    default FluidStack applyOreBoost(OreRateType rate, FluidStack fluid) {
+    default FluidStack applyOreBoost(OreRateType rate, FluidStack fluid, boolean forceCopy) {
       if (rate == OreRateType.DEFAULT || rate == OreRateType.NONE) {
-        return fluid;
+        return forceCopy ? fluid.copy() : fluid;
       }
       return new FluidStack(fluid, applyOreBoost(rate, fluid.getAmount()));
     }

@@ -3,7 +3,7 @@
   "byproducts": [
     {
       "amount": 810,
-      "fluid": "tconstruct:molten_copper"
+      "tag": "forge:molten_copper"
     }
   ],
   "ingredient": {
@@ -12,7 +12,7 @@
   "rate": "metal",
   "result": {
     "amount": 810,
-    "fluid": "tconstruct:molten_gold"
+    "tag": "forge:molten_gold"
   },
   "temperature": 700,
   "time": 341

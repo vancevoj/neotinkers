@@ -27,7 +27,7 @@
         "byproducts": [
           {
             "amount": 180,
-            "fluid": "tconstruct:molten_silver"
+            "tag": "forge:molten_silver"
           }
         ],
         "ingredient": {
@@ -47,7 +47,7 @@
         "rate": "metal",
         "result": {
           "amount": 180,
-          "fluid": "tconstruct:molten_lead"
+          "tag": "forge:molten_lead"
         },
         "temperature": 330,
         "time": 109
@@ -64,7 +64,7 @@
         "byproducts": [
           {
             "amount": 180,
-            "fluid": "tconstruct:molten_gold"
+            "tag": "forge:molten_gold"
           }
         ],
         "ingredient": {
@@ -84,7 +84,7 @@
         "rate": "metal",
         "result": {
           "amount": 180,
-          "fluid": "tconstruct:molten_lead"
+          "tag": "forge:molten_lead"
         },
         "temperature": 330,
         "time": 109

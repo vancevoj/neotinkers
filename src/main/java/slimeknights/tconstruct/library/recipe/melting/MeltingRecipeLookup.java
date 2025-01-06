@@ -6,6 +6,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.fluids.FluidStack;
+import slimeknights.mantle.recipe.helper.FluidOutput;
 import slimeknights.tconstruct.common.recipe.RecipeCacheInvalidator;
 import slimeknights.tconstruct.common.recipe.RecipeCacheInvalidator.DuelSidedListener;
 
@@ -23,9 +24,9 @@ public class MeltingRecipeLookup {
   private MeltingRecipeLookup() {}
 
   /** Record holding data from the melting recipe */
-  private record MeltingFluid(Ingredient ingredient, FluidStack result, int temperature) {
+  private record MeltingFluid(Ingredient ingredient, FluidOutput result, int temperature) {
     /** Empty instance, used to cache missing results */
-    public static final MeltingFluid EMPTY = new MeltingFluid(Ingredient.EMPTY, FluidStack.EMPTY, 0);
+    public static final MeltingFluid EMPTY = new MeltingFluid(Ingredient.EMPTY, FluidOutput.EMPTY, 0);
 
     /** Checks if this result is present */
     public boolean isEmpty() {
@@ -44,7 +45,7 @@ public class MeltingRecipeLookup {
   });
 
   /** Adds a fluid to the lookup */
-  public static void addMeltingFluid(Ingredient ingredient, FluidStack result, int temperature) {
+  public static void addMeltingFluid(Ingredient ingredient, FluidOutput result, int temperature) {
     CACHE.checkClear();
     FLUIDS.add(new MeltingFluid(ingredient, result, temperature));
   }
@@ -73,7 +74,7 @@ public class MeltingRecipeLookup {
     if (fluid.temperature > temperature) {
       return FluidStack.EMPTY;
     }
-    return fluid.result;
+    return fluid.result.get();
   }
 
   /** Checks if the given item can melt */

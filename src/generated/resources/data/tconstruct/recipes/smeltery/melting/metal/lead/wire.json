@@ -14,7 +14,7 @@
   },
   "result": {
     "amount": 45,
-    "fluid": "tconstruct:molten_lead"
+    "tag": "forge:molten_lead"
   },
   "temperature": 330,
   "time": 9

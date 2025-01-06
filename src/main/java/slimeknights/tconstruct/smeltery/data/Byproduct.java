@@ -2,13 +2,13 @@ package slimeknights.tconstruct.smeltery.data;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import net.minecraft.world.level.material.Fluid;
+import slimeknights.mantle.recipe.helper.FluidOutput;
+import slimeknights.mantle.registration.object.FluidObject;
 import slimeknights.tconstruct.fluids.TinkerFluids;
 import slimeknights.tconstruct.library.data.recipe.IByproduct;
 import slimeknights.tconstruct.library.recipe.FluidValues;
 
 import java.util.Locale;
-import java.util.function.Supplier;
 
 /** Standard ore byproducts for smeltery ores, this enum exists to simplify our builders to allow passing 3 args in varargs */
 @RequiredArgsConstructor
@@ -34,19 +34,20 @@ public enum Byproduct implements IByproduct {
   private final String name;
   @Getter
   private final boolean alwaysPresent;
-  private final Supplier<? extends Fluid> fluidSupplier;
+  @Getter
+  private final FluidObject<?> fluid;
   @Getter
   private final int amount;
 
-  Byproduct(boolean alwaysPresent, Supplier<? extends Fluid> fluidSupplier) {
+  Byproduct(boolean alwaysPresent, FluidObject<?> fluid) {
     this.name = name().toLowerCase(Locale.ROOT);
     this.alwaysPresent = alwaysPresent;
-    this.fluidSupplier = fluidSupplier;
+    this.fluid = fluid;
     this.amount = FluidValues.INGOT;
   }
 
   @Override
-  public Fluid getFluid() {
-    return fluidSupplier.get();
+  public FluidOutput getFluid(float scale) {
+    return fluid.result((int)(amount * scale));
   }
 }

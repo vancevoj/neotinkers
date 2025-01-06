@@ -4,6 +4,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.registries.ForgeRegistries;
+import slimeknights.mantle.recipe.helper.FluidOutput;
 import slimeknights.mantle.recipe.ingredient.EntityIngredient;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.TinkerTags;
@@ -42,7 +43,7 @@ public class DefaultEntityMeltingRecipe extends EntityMeltingRecipe {
 
   private final Lazy<EntityIngredient> entities;
   public DefaultEntityMeltingRecipe(List<EntityMeltingRecipe> recipes) {
-    super(TConstruct.getResource("__default"), EntityIngredient.EMPTY, EntityMeltingModule.getDefaultFluid(), 2);
+    super(TConstruct.getResource("__default"), EntityIngredient.EMPTY, FluidOutput.fromStack(EntityMeltingModule.getDefaultFluid()), 2);
     entities = Lazy.of(() -> getEntityList(recipes));
   }
 

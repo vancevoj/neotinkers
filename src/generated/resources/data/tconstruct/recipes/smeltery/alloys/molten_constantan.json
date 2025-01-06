@@ -21,7 +21,7 @@
   ],
   "result": {
     "amount": 180,
-    "fluid": "tconstruct:molten_constantan"
+    "tag": "forge:molten_constantan"
   },
   "temperature": 920
 }

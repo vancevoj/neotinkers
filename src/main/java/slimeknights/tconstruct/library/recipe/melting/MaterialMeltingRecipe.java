@@ -7,11 +7,11 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.fluids.FluidStack;
-import slimeknights.mantle.data.loadable.common.FluidStackLoadable;
 import slimeknights.mantle.data.loadable.field.ContextKey;
 import slimeknights.mantle.data.loadable.primitive.IntLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.recipe.IMultiRecipe;
+import slimeknights.mantle.recipe.helper.FluidOutput;
 import slimeknights.tconstruct.library.materials.definition.MaterialId;
 import slimeknights.tconstruct.library.materials.definition.MaterialVariant;
 import slimeknights.tconstruct.library.materials.definition.MaterialVariantId;
@@ -31,16 +31,16 @@ public class MaterialMeltingRecipe implements IMeltingRecipe, IMultiRecipe<Melti
     ContextKey.ID.requiredField(),
     MaterialVariantId.LOADABLE.requiredField("input", r -> r.input.getVariant()),
     IntLoadable.FROM_ONE.requiredField("temperature", r -> r.temperature),
-    FluidStackLoadable.REQUIRED_STACK.requiredField("result", r -> r.result),
+    FluidOutput.Loadable.REQUIRED.requiredField("result", r -> r.result),
     MaterialMeltingRecipe::new);
 
   @Getter
   private final ResourceLocation id;
   private final MaterialVariant input;
   private final int temperature;
-  private final FluidStack result;
+  private final FluidOutput result;
 
-  public MaterialMeltingRecipe(ResourceLocation id, MaterialVariantId input, int temperature, FluidStack result) {
+  public MaterialMeltingRecipe(ResourceLocation id, MaterialVariantId input, int temperature, FluidOutput result) {
     this.id = id;
     this.input = MaterialVariant.of(input);
     this.temperature = temperature;
@@ -73,7 +73,7 @@ public class MaterialMeltingRecipe implements IMeltingRecipe, IMultiRecipe<Melti
   @Override
   public FluidStack getOutput(IMeltingContainer inv) {
     int cost = MaterialCastingLookup.getItemCost(inv.getStack().getItem());
-    return new FluidStack(result, result.getAmount() * cost);
+    return new FluidStack(result.get(), result.getAmount() * cost);
   }
 
   @Override
@@ -97,9 +97,9 @@ public class MaterialMeltingRecipe implements IMeltingRecipe, IMultiRecipe<Melti
           .getAllItemCosts().stream()
           .filter(entry -> entry.getKey().canUseMaterial(inputId))
           .map(entry -> {
-            FluidStack output = this.result;
+            FluidOutput output = this.result;
             if (entry.getIntValue() != 1) {
-              output = new FluidStack(output, output.getAmount() * entry.getIntValue());
+              output = FluidOutput.fromStack(new FluidStack(output.get(), output.getAmount() * entry.getIntValue()));
             }
             return new MeltingRecipe(id, "", MaterialIngredient.of(entry.getKey(), inputId), output, temperature,
                                      IMeltingRecipe.calcTimeForAmount(temperature, output.getAmount()), Collections.emptyList(), false);

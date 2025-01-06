@@ -27,7 +27,7 @@
         "byproducts": [
           {
             "amount": 60,
-            "fluid": "tconstruct:molten_platinum"
+            "tag": "forge:molten_platinum"
           }
         ],
         "ingredient": {
@@ -47,7 +47,7 @@
         "rate": "metal",
         "result": {
           "amount": 180,
-          "fluid": "tconstruct:molten_tungsten"
+          "tag": "forge:molten_tungsten"
         },
         "temperature": 950,
         "time": 162
@@ -64,7 +64,7 @@
         "byproducts": [
           {
             "amount": 180,
-            "fluid": "tconstruct:molten_gold"
+            "tag": "forge:molten_gold"
           }
         ],
         "ingredient": {
@@ -84,7 +84,7 @@
         "rate": "metal",
         "result": {
           "amount": 180,
-          "fluid": "tconstruct:molten_tungsten"
+          "tag": "forge:molten_tungsten"
         },
         "temperature": 950,
         "time": 162

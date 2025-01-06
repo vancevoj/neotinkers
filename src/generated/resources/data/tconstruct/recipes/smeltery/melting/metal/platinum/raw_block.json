@@ -3,7 +3,7 @@
   "byproducts": [
     {
       "amount": 810,
-      "fluid": "tconstruct:molten_gold"
+      "tag": "forge:molten_gold"
     }
   ],
   "conditions": [
@@ -21,7 +21,7 @@
   "rate": "metal",
   "result": {
     "amount": 810,
-    "fluid": "tconstruct:molten_platinum"
+    "tag": "forge:molten_platinum"
   },
   "temperature": 970,
   "time": 393

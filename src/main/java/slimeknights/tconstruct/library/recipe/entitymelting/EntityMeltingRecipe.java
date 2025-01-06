@@ -9,12 +9,12 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.fluids.FluidStack;
-import slimeknights.mantle.data.loadable.common.FluidStackLoadable;
 import slimeknights.mantle.data.loadable.field.ContextKey;
 import slimeknights.mantle.data.loadable.primitive.IntLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.recipe.ICustomOutputRecipe;
 import slimeknights.mantle.recipe.container.IEmptyContainer;
+import slimeknights.mantle.recipe.helper.FluidOutput;
 import slimeknights.mantle.recipe.ingredient.EntityIngredient;
 import slimeknights.tconstruct.library.recipe.TinkerRecipeTypes;
 import slimeknights.tconstruct.smeltery.TinkerSmeltery;
@@ -29,7 +29,7 @@ public class EntityMeltingRecipe implements ICustomOutputRecipe<IEmptyContainer>
   public static final RecordLoadable<EntityMeltingRecipe> LOADER = RecordLoadable.create(
     ContextKey.ID.requiredField(),
     EntityIngredient.LOADABLE.requiredField("entity", r -> r.ingredient),
-    FluidStackLoadable.REQUIRED_STACK_NBT.requiredField("result", r -> r.output),
+    FluidOutput.Loadable.REQUIRED.requiredField("result", r -> r.output),
     IntLoadable.FROM_ONE.defaultField("damage", 2, true, r -> r.damage),
     EntityMeltingRecipe::new);
 
@@ -37,8 +37,7 @@ public class EntityMeltingRecipe implements ICustomOutputRecipe<IEmptyContainer>
   private final ResourceLocation id;
   @Getter
   private final EntityIngredient ingredient;
-  @Getter
-  private final FluidStack output;
+  private final FluidOutput output;
   @Getter
   private final int damage;
 
@@ -49,6 +48,11 @@ public class EntityMeltingRecipe implements ICustomOutputRecipe<IEmptyContainer>
    */
   public boolean matches(EntityType<?> type) {
     return ingredient.test(type);
+  }
+
+  /** Gets the non-entity sensitive recipe result */
+  public FluidStack getOutput() {
+    return output.get();
   }
 
   /**
