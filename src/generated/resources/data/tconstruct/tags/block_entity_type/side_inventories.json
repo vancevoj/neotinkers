@@ -9,11 +9,19 @@
     "minecraft:hopper",
     "minecraft:chiseled_bookshelf",
     {
+      "id": "immersiveengineering:woodencrate",
+      "required": false
+    },
+    {
       "id": "ironchest:iron_chest",
       "required": false
     },
     {
       "id": "ironchest:trapped_iron_chest",
+      "required": false
+    },
+    {
+      "id": "ironshulkerbox:iron_shulker_box",
       "required": false
     },
     {
@@ -25,11 +33,19 @@
       "required": false
     },
     {
+      "id": "ironshulkerbox:gold_shulker_box",
+      "required": false
+    },
+    {
       "id": "ironchest:diamond_chest",
       "required": false
     },
     {
       "id": "ironchest:trapped_diamond_chest",
+      "required": false
+    },
+    {
+      "id": "ironshulkerbox:diamond_shulker_box",
       "required": false
     },
     {
@@ -41,6 +57,10 @@
       "required": false
     },
     {
+      "id": "ironshulkerbox:copper_shulker_box",
+      "required": false
+    },
+    {
       "id": "ironchest:crystal_chest",
       "required": false
     },
@@ -49,11 +69,19 @@
       "required": false
     },
     {
+      "id": "ironshulkerbox:crystal_shulker_box",
+      "required": false
+    },
+    {
       "id": "ironchest:obsidian_chest",
       "required": false
     },
     {
       "id": "ironchest:trapped_obsidian_chest",
+      "required": false
+    },
+    {
+      "id": "ironshulkerbox:obsidian_shulker_box",
       "required": false
     },
     {

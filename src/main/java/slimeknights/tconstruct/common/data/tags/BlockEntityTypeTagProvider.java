@@ -27,6 +27,9 @@ public class BlockEntityTypeTagProvider extends IntrinsicHolderTagsProvider<Bloc
   private static void ironchest(IntrinsicTagAppender<BlockEntityType<?>> appender, String name) {
     ResourceLocation chest = new ResourceLocation("ironchest", name + "_chest");
     appender.addOptional(chest).addOptional(chest.withPrefix("trapped_"));
+    if (!"dirt".equals(name)) {
+      appender.addOptional(new ResourceLocation("ironshulkerbox", name + "_shulker_box"));
+    }
   }
 
   @Override
@@ -35,6 +38,7 @@ public class BlockEntityTypeTagProvider extends IntrinsicHolderTagsProvider<Bloc
     sideInventories.add(
       BlockEntityType.CHEST, BlockEntityType.TRAPPED_CHEST, BlockEntityType.BARREL, BlockEntityType.SHULKER_BOX,
       BlockEntityType.DISPENSER, BlockEntityType.DROPPER, BlockEntityType.HOPPER, BlockEntityType.CHISELED_BOOKSHELF);
+    sideInventories.addOptional(new ResourceLocation("immersiveengineering", "woodencrate"));
     ironchest(sideInventories, "iron");
     ironchest(sideInventories, "gold");
     ironchest(sideInventories, "diamond");
