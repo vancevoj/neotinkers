@@ -3,7 +3,7 @@
   "filled": "minecraft:glass_bottle",
   "fluid": {
     "amount": 250,
-    "fluid": "tconstruct:potion"
+    "tag": "forge:potion"
   },
   "input": {
     "item": "minecraft:potion"

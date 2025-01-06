@@ -3,7 +3,7 @@
   "filled": "tconstruct:splash_bottle",
   "fluid": {
     "amount": 250,
-    "fluid": "tconstruct:potion"
+    "tag": "forge:potion"
   },
   "input": {
     "item": "minecraft:splash_potion"

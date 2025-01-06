@@ -12,13 +12,14 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.fluids.FluidStack;
 import slimeknights.mantle.fluid.transfer.EmptyFluidWithNBTTransfer;
 import slimeknights.mantle.fluid.transfer.IFluidContainerTransfer;
+import slimeknights.mantle.recipe.helper.FluidOutput;
 import slimeknights.mantle.recipe.helper.ItemOutput;
 import slimeknights.tconstruct.TConstruct;
 
 /** Fluid transfer info that empties a fluid from an item, copying the fluid's NBT to the stack */
 public class EmptyPotionTransfer extends EmptyFluidWithNBTTransfer implements IFluidContainerTransfer {
   public static final ResourceLocation ID = TConstruct.getResource("empty_potion");
-  public EmptyPotionTransfer(Ingredient input, ItemOutput filled, FluidStack fluid) {
+  public EmptyPotionTransfer(Ingredient input, ItemOutput filled, FluidOutput fluid) {
     super(input, filled, fluid);
   }
 
@@ -27,7 +28,7 @@ public class EmptyPotionTransfer extends EmptyFluidWithNBTTransfer implements IF
     if (PotionUtils.getPotion(stack) == Potions.WATER) {
       return new FluidStack(Fluids.WATER, fluid.getAmount());
     }
-    return new FluidStack(fluid.getFluid(), fluid.getAmount(), stack.getTag());
+    return new FluidStack(fluid.get().getFluid(), fluid.getAmount(), stack.getTag());
   }
 
   @Override

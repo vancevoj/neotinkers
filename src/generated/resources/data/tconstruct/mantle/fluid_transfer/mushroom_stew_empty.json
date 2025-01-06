@@ -3,7 +3,7 @@
   "filled": "minecraft:bowl",
   "fluid": {
     "amount": 250,
-    "fluid": "tconstruct:mushroom_stew"
+    "tag": "forge:mushroom_stew"
   },
   "input": {
     "item": "minecraft:mushroom_stew"

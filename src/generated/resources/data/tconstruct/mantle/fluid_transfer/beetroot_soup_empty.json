@@ -3,7 +3,7 @@
   "filled": "minecraft:bowl",
   "fluid": {
     "amount": 250,
-    "fluid": "tconstruct:beetroot_soup"
+    "tag": "forge:beetroot_soup"
   },
   "input": {
     "item": "minecraft:beetroot_soup"
