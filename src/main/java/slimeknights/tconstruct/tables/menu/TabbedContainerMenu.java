@@ -24,6 +24,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import slimeknights.mantle.inventory.EmptyItemHandler;
 import slimeknights.mantle.util.RegistryHelper;
 import slimeknights.tconstruct.common.TinkerTags;
+import slimeknights.tconstruct.common.config.Config;
 import slimeknights.tconstruct.shared.inventory.TriggeringMultiModuleContainerMenu;
 import slimeknights.tconstruct.tables.TinkerTables;
 import slimeknights.tconstruct.tables.block.ITabbedBlock;
@@ -160,7 +161,7 @@ public class TabbedContainerMenu<TILE extends BlockEntity> extends TriggeringMul
   @SuppressWarnings("deprecation")  // your tag utils are overkill
   private static boolean isUsable(BlockEntity tileEntity, Player player) {
     // must not be blacklisted and be usable
-    return RegistryHelper.contains(BuiltInRegistries.BLOCK_ENTITY_TYPE, TinkerTags.TileEntityTypes.SIDE_INVENTORIES, tileEntity.getType())
+    return (Config.COMMON.disableSideInventoryWhitelist.get() || RegistryHelper.contains(BuiltInRegistries.BLOCK_ENTITY_TYPE, TinkerTags.TileEntityTypes.SIDE_INVENTORIES, tileEntity.getType()))
            && (!(tileEntity instanceof Container) || ((Container)tileEntity).stillValid(player));
   }
 
