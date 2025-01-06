@@ -1,6 +1,6 @@
 name: 1.20 Enhancement
 description: Suggest a change to existing 1.20 features
-labels: [1.20, Enhancement, Unreviewed]
+labels: ["1.20", Enhancement, Unreviewed]
 body:
   - type: markdown
     attributes:
