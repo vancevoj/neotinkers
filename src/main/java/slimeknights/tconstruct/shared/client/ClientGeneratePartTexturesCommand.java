@@ -225,6 +225,7 @@ public class ClientGeneratePartTexturesCommand {
                 boolean allowAnimated = part1.isAllowAnimated();
                 if (allowAnimated != part2.isAllowAnimated()) {
                   TConstruct.LOG.error("Texture {} has mismatching allowAnimated, forcing allow animated to false", part1.getPath());
+                  allowAnimated = false;
                 }
                 // merge stat types together
                 return new PartSpriteInfo(
@@ -252,7 +253,7 @@ public class ClientGeneratePartTexturesCommand {
             if (GsonHelper.getAsBoolean(object, "replace", false)) {
               break;
             }
-          } catch (IOException ex) {
+          } catch (Exception ex) {
             log.error("Failed to load modifier models from {} for pack {}", location, resource.sourcePackId(), ex);
           }
         }
