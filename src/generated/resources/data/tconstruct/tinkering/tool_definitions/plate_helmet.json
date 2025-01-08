@@ -13,11 +13,17 @@
       "materials": [
         {
           "type": "tconstruct:random",
-          "tier": 1
+          "tier": {
+            "max": 2,
+            "min": 1
+          }
         },
         {
           "type": "tconstruct:random",
-          "tier": 1
+          "tier": {
+            "max": 2,
+            "min": 1
+          }
         }
       ]
     },

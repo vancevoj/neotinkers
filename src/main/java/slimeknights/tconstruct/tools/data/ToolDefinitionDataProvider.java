@@ -578,6 +578,8 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
       .module(shieldInteraction);
 
     // plate armor
+    RandomMaterial tier2Material = RandomMaterial.random().tier(1, 2).build();
+    DefaultMaterialsModule plateMaterials = DefaultMaterialsModule.builder().material(tier2Material, tier2Material).build();
     ToolModule plateSlots =
       ToolSlotsModule.builder()
                      .slots(SlotType.UPGRADE, 2)
@@ -586,7 +588,7 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
       .modules(slots -> PartStatsModule.armor(slots)
          .part(TinkerToolParts.plating, 1)
          .part(TinkerToolParts.maille, 1))
-      .module(defaultTwoParts)
+      .module(plateMaterials)
       .module(ArmorItem.Type.CHESTPLATE, new MultiplyStatsModule(MultiplierNBT.builder().set(ToolStats.ATTACK_DAMAGE, 0.4f).build()))
       .module(plateSlots);
     // plate shield
@@ -596,7 +598,7 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
         .stat(PlatingMaterialStats.SHIELD.getId())
         .primaryPart(1).build())
       .module(new PartsModule(List.of(TinkerToolParts.shieldCore.get())))
-      .module(defaultTwoParts)
+      .module(plateMaterials)
       .module(new SetStatsModule(StatsNBT.builder()
         .set(ToolStats.BLOCK_AMOUNT, 100)
         .set(ToolStats.BLOCK_ANGLE, 180).build()))
