@@ -194,9 +194,11 @@ public abstract class HeatingStructureBlockEntity extends NameableBlockEntity im
     }
     // forge's onLoad method is called before reading from NBT client side
     // so a first tick handler is our only choice for reading this
-    if (!addedFluidListeners && structure != null) {
+    if (!addedFluidListeners) {
       addedFluidListeners = true;
-      updateFluidListeners(structure);
+      if (structure != null) {
+        updateFluidListeners(structure);
+      }
     }
   }
 
