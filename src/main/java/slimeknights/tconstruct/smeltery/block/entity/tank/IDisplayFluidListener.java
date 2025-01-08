@@ -1,6 +1,5 @@
 package slimeknights.tconstruct.smeltery.block.entity.tank;
 
-import net.minecraft.core.BlockPos;
 import net.minecraftforge.client.model.data.ModelProperty;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidType;
@@ -17,12 +16,6 @@ public interface IDisplayFluidListener {
    * @param fluid New display fluid, is safe to store (will not be modified)
    */
   void notifyDisplayFluidUpdated(FluidStack fluid);
-
-  /**
-   * Gets the position of the listener
-   * @return  Position of listener
-   */
-  BlockPos getListenerPos();
 
   /** Makes the fluid contain 1000mb, or {@link FluidStack#EMPTY} if empty */
   static FluidStack normalizeFluid(FluidStack fluid) {
