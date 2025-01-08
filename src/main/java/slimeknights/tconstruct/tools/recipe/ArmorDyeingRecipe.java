@@ -152,17 +152,23 @@ public class ArmorDyeingRecipe implements ITinkerStationRecipe, IMultiRecipe<IDi
 
   private static class DisplayRecipe implements IDisplayModifierRecipe {
     /** Cache of tint colors to save calculating it twice */
-    private static final int[] TINT_COLORS = new int[16];
+    private static final int[] TINT_COLORS = new int[DyeColor.values().length];
     private static final IntRange LEVELS = new IntRange(1, 1);
     private final ModifierEntry RESULT = new ModifierEntry(TinkerModifiers.dyed, 1);
 
     /** Gets the tint color for the given dye */
     private static int getTintColor(DyeColor color) {
       int id = color.getId();
+      // protect against the dye color being too large by bypassing cache
+      boolean illegal = id >= TINT_COLORS.length;
       // taking advantage of the fact no color is pure black
-      if (TINT_COLORS[id] == 0) {
+      if (illegal || TINT_COLORS[id] == 0) {
         float[] colors = color.getTextureDiffuseColors();
-        TINT_COLORS[id] = ((int)(colors[0] * 255) << 16) | ((int)(colors[1] * 255) << 8) | (int)(colors[2] * 255);
+        int combinedColor = ((int)(colors[0] * 255) << 16) | ((int)(colors[1] * 255) << 8) | (int)(colors[2] * 255);
+        if (illegal) {
+          return combinedColor;
+        }
+        TINT_COLORS[id] = combinedColor;
       }
       return TINT_COLORS[id];
     }
