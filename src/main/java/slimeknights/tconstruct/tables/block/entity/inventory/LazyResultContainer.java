@@ -62,7 +62,7 @@ public class LazyResultContainer implements Container {
    */
   public void craftResult(Player player, int amount) {
     // get result and consume items
-    crafter.onCraft(player, getResult().copy(), amount);
+    crafter.onCraft(player, getResult(player).copy(), amount);
     // clear result cache, items changed
     clearContent();
   }

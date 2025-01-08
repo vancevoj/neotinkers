@@ -53,7 +53,7 @@ public class TinkerStationBlockEntity extends RetexturedTableBlockEntity impleme
   private final TinkerStationContainerWrapper inventoryWrapper;
 
   /** Current result, may be modified again later */
-  @Nullable @Getter
+  @Nullable
   private LazyToolStack result = null;
 
   @Nullable
@@ -90,6 +90,20 @@ public class TinkerStationBlockEntity extends RetexturedTableBlockEntity impleme
    */
   public int getInputCount() {
     return getContainerSize() - 1;
+  }
+
+  /** Gets the tool contained in this block entity */
+  public LazyToolStack getTool() {
+    return inventoryWrapper.getTool();
+  }
+
+  /** Gets the recipe result */
+  @Nullable
+  public LazyToolStack getResult(@Nullable Player player) {
+    // ensure the result has been resolved else we may be returning null when we shouldn't
+    // if we return null that means there is no result, not its not calculated.
+    craftingResult.getResult(player);
+    return result;
   }
 
   @Override
@@ -159,16 +173,16 @@ public class TinkerStationBlockEntity extends RetexturedTableBlockEntity impleme
       }
     }
 
-      if (result != null) {
-        // set name if we have one
-        if (!itemName.isEmpty()) {
-          TooltipUtil.setDisplayName(result.getStack(), itemName);
-        }
-
-        return result.getStack();
-      } else {
-        return ItemStack.EMPTY;
+    if (result != null) {
+      // set name if we have one
+      if (!itemName.isEmpty()) {
+        TooltipUtil.setDisplayName(result.getStack(), itemName);
       }
+
+      return result.getStack();
+    } else {
+      return ItemStack.EMPTY;
+    }
   }
 
   @Override

@@ -8,6 +8,7 @@ import slimeknights.mantle.recipe.container.ISingleStackContainer;
 import slimeknights.tconstruct.library.recipe.TinkerRecipeTypes;
 import slimeknights.tconstruct.library.recipe.material.MaterialRecipe;
 import slimeknights.tconstruct.library.recipe.tinkerstation.IMutableTinkerStationContainer;
+import slimeknights.tconstruct.library.tools.nbt.LazyToolStack;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.tables.block.entity.table.TinkerStationBlockEntity;
 
@@ -26,7 +27,7 @@ public class TinkerStationContainerWrapper implements IMutableTinkerStationConta
 
   /** Cached tool instance to save lookup effort */
   @Nullable
-  private ToolStack tool;
+  private LazyToolStack tool;
 
   private MaterialRecipe lastMaterialRecipe;
   @Nullable @Setter
@@ -96,12 +97,18 @@ public class TinkerStationContainerWrapper implements IMutableTinkerStationConta
     return this.station.getItem(TINKER_SLOT);
   }
 
-  @Override
-  public ToolStack getTinkerable() {
+  // TODO: consider replacing getTinkerable and getTinkerableStack with this
+  /** Gets the contents of the tool slot */
+  public LazyToolStack getTool() {
     if (tool == null) {
-      tool = ToolStack.from(getTinkerableStack());
+      tool = LazyToolStack.from(getTinkerableStack());
     }
     return tool;
+  }
+
+  @Override
+  public ToolStack getTinkerable() {
+    return getTool().getTool();
   }
 
   @Override

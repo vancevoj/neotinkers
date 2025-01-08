@@ -111,8 +111,4 @@ public class TinkerStationContainerMenu extends TabbedContainerMenu<TinkerStatio
       }
     }
   }
-
-  public ItemStack getResult() {
-    return this.resultSlot.getItem();
-  }
 }

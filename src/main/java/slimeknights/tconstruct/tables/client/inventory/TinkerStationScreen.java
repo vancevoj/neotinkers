@@ -227,7 +227,8 @@ public class TinkerStationScreen extends ToolTableScreen<TinkerStationBlockEntit
       return;
     }
 
-    LazyToolStack lazyResult = tile.getResult();
+    // fetch the tool version of the result for the screen
+    LazyToolStack lazyResult = tile.getResult(this.player);
 
     // if we have a message, display instead of refreshing the tool
     Component currentError = tile.getCurrentError();
@@ -251,10 +252,14 @@ public class TinkerStationScreen extends ToolTableScreen<TinkerStationBlockEntit
       textField.setValue(tile.getItemName());
     }
 
-    updateArmorStandPreview(lazyResult != null ? lazyResult.getStack() : ItemStack.EMPTY);
+    // if there is no result, use the input
+    if (lazyResult == null) {
+      lazyResult = tile.getTool();
+    }
+    updateArmorStandPreview(lazyResult.getStack());
 
     // if the contained stack is modifiable, display some information
-    if (lazyResult != null && lazyResult.getTool().hasTag(TinkerTags.Items.MODIFIABLE)) {
+    if (lazyResult.hasTag(TinkerTags.Items.MODIFIABLE)) {
       ToolStack tool = lazyResult.getTool();
       updateToolPanel(lazyResult);
       updateModifierPanel(tool);
