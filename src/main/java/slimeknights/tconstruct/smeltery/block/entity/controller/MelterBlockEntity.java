@@ -99,8 +99,9 @@ public class MelterBlockEntity extends NameableBlockEntity implements ITankBlock
 
   @Override
   public @NotNull ModelData getModelData() {
-    // TODO: switch to tank property and fluid property
-    return ModelData.builder().with(ModelProperties.FLUID_TANK, tank).build();
+    return ModelData.builder()
+                    .with(ModelProperties.FLUID_STACK, tank.getFluid())
+                    .with(ModelProperties.TANK_CAPACITY, tank.getCapacity()).build();
   }
 
   @Nonnull

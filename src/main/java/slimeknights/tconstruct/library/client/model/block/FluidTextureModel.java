@@ -43,7 +43,7 @@ import slimeknights.mantle.util.JsonHelper;
 import slimeknights.mantle.util.LogicHelper;
 import slimeknights.mantle.util.RetexturedHelper;
 import slimeknights.tconstruct.TConstruct;
-import slimeknights.tconstruct.smeltery.block.entity.tank.IDisplayFluidListener;
+import slimeknights.tconstruct.library.client.model.ModelProperties;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -190,7 +190,7 @@ public class FluidTextureModel implements IUnbakedGeometry<FluidTextureModel> {
     @Nonnull
     @Override
     public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction direction, RandomSource random, ModelData data, @Nullable RenderType renderType) {
-      FluidStack fluid = fluids.isEmpty() ? FluidStack.EMPTY : data.get(IDisplayFluidListener.PROPERTY);
+      FluidStack fluid = fluids.isEmpty() ? FluidStack.EMPTY : data.get(ModelProperties.FLUID_STACK);
       if (fluid == null) {
         fluid = FluidStack.EMPTY;
       }

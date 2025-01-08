@@ -108,8 +108,9 @@ public class TankBlockEntity extends SmelteryComponentBlockEntity implements ITa
   @Nonnull
   @Override
   public ModelData getModelData() {
-    // TODO: switch to tank property and fluid property
-    return ModelData.builder().with(ModelProperties.FLUID_TANK, tank).build();
+    return ModelData.builder()
+                    .with(ModelProperties.FLUID_STACK, tank.getFluid())
+                    .with(ModelProperties.TANK_CAPACITY, tank.getCapacity()).build();
   }
 
   @Override

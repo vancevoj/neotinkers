@@ -20,11 +20,11 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.IItemHandler;
 import slimeknights.mantle.util.RetexturedHelper;
 import slimeknights.tconstruct.TConstruct;
+import slimeknights.tconstruct.library.client.model.ModelProperties;
 import slimeknights.tconstruct.smeltery.TinkerSmeltery;
 import slimeknights.tconstruct.smeltery.block.entity.component.SmelteryInputOutputBlockEntity.SmelteryFluidIO;
 import slimeknights.tconstruct.smeltery.block.entity.inventory.DuctItemHandler;
 import slimeknights.tconstruct.smeltery.block.entity.inventory.DuctTankWrapper;
-import slimeknights.tconstruct.smeltery.block.entity.tank.IDisplayFluidListener;
 import slimeknights.tconstruct.smeltery.menu.SingleItemContainerMenu;
 
 import javax.annotation.Nonnull;
@@ -89,7 +89,7 @@ public class DuctBlockEntity extends SmelteryFluidIO implements MenuProvider {
   @Nonnull
   @Override
   public ModelData getModelData() {
-    return RetexturedHelper.getModelDataBuilder(getTexture()).with(IDisplayFluidListener.PROPERTY, IDisplayFluidListener.normalizeFluid(itemHandler.getFluid())).build();
+    return RetexturedHelper.getModelDataBuilder(getTexture()).with(ModelProperties.FLUID_STACK, itemHandler.getFluid().copy()).build();
   }
 
   /** Updates the fluid in model data */

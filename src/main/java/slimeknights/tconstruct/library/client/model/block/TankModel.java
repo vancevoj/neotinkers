@@ -35,7 +35,6 @@ import net.minecraftforge.client.model.geometry.IGeometryLoader;
 import net.minecraftforge.client.model.geometry.IUnbakedGeometry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidType;
-import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 import slimeknights.mantle.client.model.util.ColoredBlockModel;
 import slimeknights.mantle.client.model.util.ExtraTextureContext;
@@ -50,6 +49,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Function;
 
@@ -97,10 +97,13 @@ public class TankModel implements IUnbakedGeometry<TankModel> {
     @SuppressWarnings("WeakerAccess")
     protected final TankModel original;
     private final FluidPartOverride overrides = new FluidPartOverride();
-    private final Cache<FluidStack,BakedModel> cache = CacheBuilder
+    private final Cache<CacheKey,BakedModel> cache = CacheBuilder
       .newBuilder()
       .maximumSize(64)
       .build();
+
+    /** Cache key since fluids don't do equality over amount */
+    private record CacheKey(FluidStack fluid, int increments) {}
 
     @SuppressWarnings("WeakerAccess")
     protected Baked(IGeometryBakingContext owner, ModelState transforms, BakedModel baked, BakedModel gui, TankModel original) {
@@ -142,11 +145,12 @@ public class TankModel implements IUnbakedGeometry<TankModel> {
 
     /**
      * Gets the model with the fluid part added
-     * @param stack  Fluid stack to add
+     * @param key  Cache key containing fluid and increments
      * @return  Model with the fluid part
      */
-    private BakedModel getModel(FluidStack stack) {
+    private BakedModel getModel(CacheKey key) {
       // fetch fluid data
+      FluidStack stack = key.fluid();
       IClientFluidTypeExtensions attributes = IClientFluidTypeExtensions.of(stack.getFluid());
       FluidType type = stack.getFluid().getFluidType();
       int color = attributes.getTintColor(stack);
@@ -157,7 +161,7 @@ public class TankModel implements IUnbakedGeometry<TankModel> {
       IGeometryBakingContext textured = new ExtraTextureContext(owner, textures);
 
       // add fluid part
-      BlockElement fluid = original.fluid.getPart(stack.getAmount(), type.isLighterThanAir());
+      BlockElement fluid = original.fluid.getPart(key.increments, type.isLighterThanAir());
       // bake the model
       BakedModel baked = bakeWithFluid(textured, original.model, fluid, color, luminosity);
 
@@ -175,7 +179,7 @@ public class TankModel implements IUnbakedGeometry<TankModel> {
      * @param fluid  Scaled contained fluid
      * @return  Cached model
      */
-    private BakedModel getCachedModel(FluidStack fluid) {
+    private BakedModel getCachedModel(CacheKey fluid) {
       try {
         return cache.get(fluid, () -> getModel(fluid));
       }
@@ -193,16 +197,17 @@ public class TankModel implements IUnbakedGeometry<TankModel> {
      */
     private BakedModel getCachedModel(FluidStack fluid, int capacity) {
       int increments = original.fluid.getIncrements();
-      return getCachedModel(new FluidStack(fluid, Mth.clamp(fluid.getAmount() * increments / capacity, 1, increments)));
+      return getCachedModel(new CacheKey(fluid.copy(), Mth.clamp(fluid.getAmount() * increments / capacity, 1, increments)));
     }
 
     @Nonnull
     @Override
     public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, RandomSource rand, ModelData data, @Nullable RenderType renderType) {
-      if ((original.forceModelFluid || Config.CLIENT.tankFluidModel.get()) && data.has(ModelProperties.FLUID_TANK)) {
-        IFluidTank tank = data.get(ModelProperties.FLUID_TANK);
-        if (tank != null && !tank.getFluid().isEmpty()) {
-          return getCachedModel(tank.getFluid(), tank.getCapacity()).getQuads(state, side, rand, ModelData.EMPTY, renderType);
+      if ((original.forceModelFluid || Config.CLIENT.tankFluidModel.get()) && data.has(ModelProperties.FLUID_STACK)) {
+        FluidStack fluid = data.get(ModelProperties.FLUID_STACK);
+        if (fluid != null && !fluid.isEmpty()) {
+          int capacity = Objects.requireNonNullElse(data.get(ModelProperties.TANK_CAPACITY), fluid.getAmount());
+          return getCachedModel(fluid, capacity).getQuads(state, side, rand, ModelData.EMPTY, renderType);
         }
       }
       return originalModel.getQuads(state, side, rand, data, renderType);

@@ -36,6 +36,7 @@ import slimeknights.mantle.util.BlockEntityHelper;
 import slimeknights.mantle.util.RetexturedHelper;
 import slimeknights.tconstruct.common.multiblock.IMasterLogic;
 import slimeknights.tconstruct.common.network.TinkerNetwork;
+import slimeknights.tconstruct.library.client.model.ModelProperties;
 import slimeknights.tconstruct.smeltery.block.controller.ControllerBlock;
 import slimeknights.tconstruct.smeltery.block.controller.SmelteryControllerBlock;
 import slimeknights.tconstruct.smeltery.block.entity.module.EntityMeltingModule;
@@ -181,7 +182,7 @@ public abstract class HeatingStructureBlockEntity extends NameableBlockEntity im
       if (!fluidDisplayListeners.isEmpty()) {
         FluidStack fluid = tank.getFluidInTank(0);
         if (!fluid.isEmpty()) {
-          updateListeners(IDisplayFluidListener.normalizeFluid(fluid));
+          updateListeners(fluid.copy());
         }
       }
     }
@@ -417,7 +418,7 @@ public abstract class HeatingStructureBlockEntity extends NameableBlockEntity im
   @Nonnull
   @Override
   public ModelData getModelData() {
-    return RetexturedHelper.getModelDataBuilder(getTexture()).with(IDisplayFluidListener.PROPERTY, displayFluid).build();
+    return RetexturedHelper.getModelDataBuilder(getTexture()).with(ModelProperties.FLUID_STACK, displayFluid).build();
   }
 
   /**
@@ -427,7 +428,7 @@ public abstract class HeatingStructureBlockEntity extends NameableBlockEntity im
   private void updateDisplayFluid(FluidStack fluid) {
     if (level != null && level.isClientSide) {
       // update ourself
-      this.displayFluid = IDisplayFluidListener.normalizeFluid(fluid);
+      this.displayFluid = fluid.copy();
       this.requestModelDataUpdate();
       BlockState state = getBlockState();
       level.sendBlockUpdated(worldPosition, state, state, 48);
