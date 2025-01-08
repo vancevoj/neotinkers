@@ -209,12 +209,12 @@ public class GuiSmelteryTank implements IScreenWithFluidTank {
     if (tank.getContained() > 0 && withinTank(checkX, checkY)) {
       // can't just use the helper as we need the location of the fluid
       int[] heights = calcLiquidHeights(false);
-      int y = this.y;
+      int y = this.y + height - 1;
       for (int i = 0; i < heights.length; i++) {
-        if (checkY < y + heights[i]) {
+        y -= heights[i];
+        if (y < checkY) {
           return new FluidLocation(tank.getFluidInTank(i), new Rect2i(x, y, width, heights[i]));
         }
-        y += heights[i];
       }
     }
     return null;
