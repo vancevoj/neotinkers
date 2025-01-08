@@ -94,11 +94,11 @@ public class MaterialStatsManager extends MergingJsonDataLoader<Map<ResourceLoca
    * @param <T>  Stats type
    * @return  Optional containing the stats, empty if no stats
    */
+  @SuppressWarnings("unchecked")
   public <T extends IMaterialStats> Optional<T> getStats(MaterialId materialId, MaterialStatsId statId) {
     Map<MaterialStatsId, IMaterialStats> materialStats = materialToStatsPerType.getOrDefault(materialId, Map.of());
     IMaterialStats stats = materialStats.get(statId);
     // class will always match, since it's only filled by deserialization, which only puts it in if it's the registered type
-    //noinspection unchecked
     return Optional.ofNullable((T) stats);
   }
 
