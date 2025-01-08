@@ -131,20 +131,15 @@ public class GuiSmelteryTank implements IScreenWithFluidTank {
         GuiUtil.renderHighlight(graphics, x, y, width, height);
       } else {
         int[] heights = calcLiquidHeights(false);
-        int hovered = getFluidFromMouse(heights, checkY);
-
-        // sum all heights below the hovered fluid
-        int heightSum = 0;
-        int loopMax = hovered == -1 ? heights.length : hovered + 1;
-        for (int i = 0; i < loopMax; i++) {
-          heightSum += heights[i];
+        int top = this.y + height;
+        for (int height : heights) {
+          top -= height;
+          if (top <= checkY) {
+            GuiUtil.renderHighlight(graphics, x, top, width, height);
+            return;
+          }
         }
-        // render the area
-        if (hovered == -1) {
-          GuiUtil.renderHighlight(graphics, x, y, width, height - heightSum);
-        } else {
-          GuiUtil.renderHighlight(graphics, x, (y + height) - heightSum, width, heights[hovered]);
-        }
+        GuiUtil.renderHighlight(graphics, x, y, width, top - y);
       }
     }
   }

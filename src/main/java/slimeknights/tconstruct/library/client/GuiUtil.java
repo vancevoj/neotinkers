@@ -235,7 +235,7 @@ public final class GuiUtil {
   public static void renderHighlight(GuiGraphics graphics, int x, int y, int width, int height) {
       RenderSystem.disableDepthTest();
       RenderSystem.colorMask(true, true, true, false);
-      graphics.fill(x, y, x + width, y + height, 0x80FFFFFF);
+      graphics.fill(x, y, x + width, y + height, 100, 0x80FFFFFF);
       RenderSystem.colorMask(true, true, true, true);
       RenderSystem.enableDepthTest();
   }
