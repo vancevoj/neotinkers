@@ -30,6 +30,7 @@ import slimeknights.tconstruct.library.tools.layout.LayoutIcon;
 import slimeknights.tconstruct.library.tools.layout.LayoutSlot;
 import slimeknights.tconstruct.library.tools.layout.StationSlotLayout;
 import slimeknights.tconstruct.library.tools.layout.StationSlotLayoutLoader;
+import slimeknights.tconstruct.library.tools.nbt.LazyToolStack;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.tables.block.entity.table.TinkerStationBlockEntity;
 import slimeknights.tconstruct.tables.client.inventory.widget.SlotButtonItem;
@@ -226,7 +227,7 @@ public class TinkerStationScreen extends ToolTableScreen<TinkerStationBlockEntit
       return;
     }
 
-    ItemStack toolStack = this.getMenu().getResult();
+    LazyToolStack lazyResult = tile.getResult();
 
     // if we have a message, display instead of refreshing the tool
     Component currentError = tile.getCurrentError();
@@ -237,7 +238,7 @@ public class TinkerStationScreen extends ToolTableScreen<TinkerStationBlockEntit
 
     // only get to rename new tool in the station
     // anvil can rename on any tool change
-    if (toolStack.isEmpty() || (tile.getInputCount() <= 4 && this.getMenu().getSlot(TINKER_SLOT).hasItem())) {
+    if (lazyResult == null || (tile.getInputCount() <= 4 && this.getMenu().getSlot(TINKER_SLOT).hasItem())) {
       textField.setEditable(false);
       textField.setValue("");
       textField.visible = false;
@@ -250,16 +251,12 @@ public class TinkerStationScreen extends ToolTableScreen<TinkerStationBlockEntit
       textField.setValue(tile.getItemName());
     }
 
-    // normal refresh
-    if (toolStack.isEmpty()) {
-      toolStack = this.getMenu().getSlot(TINKER_SLOT).getItem();
-    }
-    updateArmorStandPreview(toolStack);
+    updateArmorStandPreview(lazyResult != null ? lazyResult.getStack() : ItemStack.EMPTY);
 
     // if the contained stack is modifiable, display some information
-    if (toolStack.is(TinkerTags.Items.MODIFIABLE)) {
-      ToolStack tool = ToolStack.from(toolStack);
-      updateToolPanel(tool, toolStack);
+    if (lazyResult != null && lazyResult.getTool().hasTag(TinkerTags.Items.MODIFIABLE)) {
+      ToolStack tool = lazyResult.getTool();
+      updateToolPanel(lazyResult);
       updateModifierPanel(tool);
     }
     // tool build info

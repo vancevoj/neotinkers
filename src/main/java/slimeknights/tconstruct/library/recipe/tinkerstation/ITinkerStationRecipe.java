@@ -8,6 +8,7 @@ import net.minecraft.world.level.Level;
 import slimeknights.mantle.recipe.ICommonRecipe;
 import slimeknights.tconstruct.library.recipe.RecipeResult;
 import slimeknights.tconstruct.library.recipe.TinkerRecipeTypes;
+import slimeknights.tconstruct.library.tools.nbt.LazyToolStack;
 
 /**
  * Main interface for all recipes in the Tinker Station
@@ -29,10 +30,9 @@ public interface ITinkerStationRecipe extends ICommonRecipe<ITinkerStationContai
 
   /**
    * Gets the recipe result, or an object containing an error message if the recipe matches but cannot be applied.
-   * TODO 1.20: switch return type to {@code RecipeResult<LazyToolStack>}
    * @return Validated result
    */
-  RecipeResult<ItemStack> getValidatedResult(ITinkerStationContainer inv, RegistryAccess access);
+  RecipeResult<LazyToolStack> getValidatedResult(ITinkerStationContainer inv, RegistryAccess access);
 
   /** Gets the number to shrink the tool slot by, perfectly valid for this to be higher than the contained number of tools */
   default int shrinkToolSlotBy() {
@@ -41,11 +41,11 @@ public interface ITinkerStationRecipe extends ICommonRecipe<ITinkerStationContai
 
   /**
    * Updates the input stacks upon crafting this recipe
-   * @param result  Result from {@link #assemble(ITinkerStationContainer, RegistryAccess)}. Generally should not be modified. TODO: switch parameter to LazyToolStack.
+   * @param result  Result from {@link #assemble(ITinkerStationContainer, RegistryAccess)}. Generally should not be modified.
    * @param inv     Inventory instance to modify inputs
    * @param isServer  If true, this is on the serverside. Use to handle randomness, {@link IMutableTinkerStationContainer#giveItem(ItemStack)} should handle being called serverside only
    */
-  default void updateInputs(ItemStack result, IMutableTinkerStationContainer inv, boolean isServer) {
+  default void updateInputs(LazyToolStack result, IMutableTinkerStationContainer inv, boolean isServer) {
     // shrink all stacks by 1
     for (int index = 0; index < inv.getInputCount(); index++) {
       inv.shrinkInput(index, 1);
@@ -69,7 +69,7 @@ public interface ITinkerStationRecipe extends ICommonRecipe<ITinkerStationContai
     return getResultItem(access).copy();
   }
 
-  /** @deprecated use {@link #updateInputs(ItemStack, IMutableTinkerStationContainer, boolean)} */
+  /** @deprecated use {@link #updateInputs(LazyToolStack, IMutableTinkerStationContainer, boolean)} */
   @Override
   @Deprecated
   default NonNullList<ItemStack> getRemainingItems(ITinkerStationContainer inv) {
