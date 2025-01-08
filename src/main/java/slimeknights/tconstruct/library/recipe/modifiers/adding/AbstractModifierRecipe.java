@@ -6,6 +6,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import org.jetbrains.annotations.ApiStatus.NonExtendable;
 import slimeknights.mantle.data.loadable.common.IngredientLoadable;
 import slimeknights.mantle.data.loadable.field.LoadableField;
 import slimeknights.mantle.data.loadable.primitive.BooleanLoadable;
@@ -23,6 +24,7 @@ import slimeknights.tconstruct.library.tools.SlotType.SlotCount;
 import slimeknights.tconstruct.library.tools.item.IModifiableDisplay;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.LazyToolStack;
+import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.tools.TinkerModifiers;
 import slimeknights.tconstruct.tools.item.ModifierCrystalItem;
 
@@ -241,6 +243,18 @@ public abstract class AbstractModifierRecipe implements ITinkerStationRecipe, ID
   @Nullable
   protected Component validatePrerequisites(IToolStackView tool) {
     return validatePrerequisites(tool, (checkTraitLevel ? tool.getModifiers() : tool.getUpgrades()).getLevel(result.getId()) + 1);
+  }
+
+  /** Creates a successful result for the given tool and size */
+  @NonExtendable
+  protected RecipeResult<LazyToolStack> success(ToolStack tool, int count) {
+    return LazyToolStack.success(tool, Math.min(count, shrinkToolSlotBy()));
+  }
+
+  /** Creates a successful result for the given tool and input stack size */
+  @NonExtendable
+  protected RecipeResult<LazyToolStack> success(ToolStack tool, ITinkerStationContainer inv) {
+    return success(tool, inv.getTinkerableSize());
   }
 
   @Override

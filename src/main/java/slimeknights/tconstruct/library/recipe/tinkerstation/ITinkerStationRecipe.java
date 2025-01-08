@@ -9,6 +9,7 @@ import slimeknights.mantle.recipe.ICommonRecipe;
 import slimeknights.tconstruct.library.recipe.RecipeResult;
 import slimeknights.tconstruct.library.recipe.TinkerRecipeTypes;
 import slimeknights.tconstruct.library.tools.nbt.LazyToolStack;
+import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 
 /**
  * Main interface for all recipes in the Tinker Station
@@ -74,5 +75,16 @@ public interface ITinkerStationRecipe extends ICommonRecipe<ITinkerStationContai
   @Deprecated
   default NonNullList<ItemStack> getRemainingItems(ITinkerStationContainer inv) {
     return NonNullList.of(ItemStack.EMPTY);
+  }
+
+
+  /* Helpers */
+
+  /**
+   * Creates a success result for the given container with {@link #DEFAULT_TOOL_STACK_SIZE} as the max.
+   * In most cases, it's better to use {@link slimeknights.tconstruct.library.recipe.modifiers.adding.AbstractModifierRecipe}{@code #success()} as it responds to your specific {@link #shrinkToolSlotBy()}.
+   */
+  static RecipeResult<LazyToolStack> success(ToolStack tool, ITinkerStationContainer inv) {
+    return LazyToolStack.success(tool, Math.min(inv.getTinkerableSize(), DEFAULT_TOOL_STACK_SIZE));
   }
 }

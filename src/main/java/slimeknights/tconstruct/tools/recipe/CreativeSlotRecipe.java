@@ -106,7 +106,7 @@ public class CreativeSlotRecipe implements ITinkerStationRecipe, IModifierRecipe
     } else {
       toolStack.rebuildStats();
     }
-    return RecipeResult.success(LazyToolStack.from(toolStack, inv.getTinkerableSize()));
+    return LazyToolStack.success(toolStack, inv.getTinkerableSize());
   }
 
   @Override

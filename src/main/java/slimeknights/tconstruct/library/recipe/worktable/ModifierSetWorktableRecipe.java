@@ -140,7 +140,7 @@ public class ModifierSetWorktableRecipe extends AbstractWorktableRecipe {
     if (!found && addToSet) {
       tagList.add(StringTag.valueOf(value));
     }
-    return RecipeResult.success(LazyToolStack.from(tool, inv.getTinkerableSize()));
+    return LazyToolStack.success(tool, inv.getTinkerableSize());
   }
 
   @Override

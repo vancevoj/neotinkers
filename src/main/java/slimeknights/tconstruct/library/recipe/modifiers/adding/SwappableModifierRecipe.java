@@ -117,7 +117,7 @@ public class SwappableModifierRecipe extends ModifierRecipe {
     if (toolValidation != null) {
       return RecipeResult.failure(toolValidation);
     }
-    return RecipeResult.success(LazyToolStack.from(tool, Math.min(inv.getTinkerableSize(), shrinkToolSlotBy())));
+    return success(tool, inv);
   }
 
   @Override

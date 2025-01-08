@@ -171,7 +171,7 @@ public class ToolBuildingRecipe implements ITinkerStationRecipe {
     List<MaterialVariant> materials = IntStream.range(0, ToolPartsHook.parts(output.getToolDefinition()).size())
                                                .mapToObj(i -> MaterialVariant.of(IMaterialItem.getMaterialFromStack(inv.getInput(i))))
                                                .toList();
-    return RecipeResult.success(LazyToolStack.from(ToolStack.createTool(output.asItem(), output.getToolDefinition(), new MaterialNBT(materials)), outputCount));
+    return LazyToolStack.success(ToolStack.createTool(output.asItem(), output.getToolDefinition(), new MaterialNBT(materials)), outputCount);
   }
 
   @Deprecated

@@ -57,7 +57,7 @@ public class TinkerStationDamagingRecipe implements ITinkerStationRecipe {
     tool = tool.copy();
     int maxDamage = IncrementalModifierRecipe.getAvailableAmount(inv, ingredient, damageAmount);
     ToolDamageUtil.directDamage(tool, maxDamage, null, inv.getTinkerableStack());
-    return RecipeResult.success(LazyToolStack.from(tool));
+    return LazyToolStack.success(tool, 1);
   }
 
   @Override

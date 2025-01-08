@@ -127,7 +127,7 @@ public class ArmorDyeingRecipe implements ITinkerStationRecipe, IMultiRecipe<IDi
     if (tool.getModifierLevel(key) == 0) {
       tool.addModifier(key, 1);
     }
-    return RecipeResult.success(LazyToolStack.from(tool, Math.min(inv.getTinkerableSize(), shrinkToolSlotBy())));
+    return ITinkerStationRecipe.success(tool, inv);
   }
 
   @Override

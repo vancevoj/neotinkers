@@ -92,7 +92,7 @@ public class OverslimeModifierRecipe implements ITinkerStationRecipe, IDisplayMo
     // see how much value is available, update overslime to the max possible
     int available = IncrementalModifierRecipe.getAvailableAmount(inv, ingredient, restoreAmount);
     overslime.addOverslime(tool, entry, available);
-    return RecipeResult.success(LazyToolStack.from(tool, Math.min(inv.getTinkerableSize(), shrinkToolSlotBy())));
+    return ITinkerStationRecipe.success(tool, inv);
   }
 
   @Override

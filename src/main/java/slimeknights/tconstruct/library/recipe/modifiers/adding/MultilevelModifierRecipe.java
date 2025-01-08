@@ -95,8 +95,7 @@ public class MultilevelModifierRecipe extends ModifierRecipe implements IMultiRe
     if (toolValidation != null) {
       return RecipeResult.failure(toolValidation);
     }
-
-    return RecipeResult.success(LazyToolStack.from(tool, Math.min(inv.getTinkerableSize(), shrinkToolSlotBy())));
+    return success(tool, inv);
   }
 
 

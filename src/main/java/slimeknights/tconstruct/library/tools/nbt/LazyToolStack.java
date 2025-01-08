@@ -3,7 +3,11 @@ package slimeknights.tconstruct.library.tools.nbt;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import slimeknights.tconstruct.library.recipe.RecipeResult;
 
 import javax.annotation.Nullable;
 
@@ -27,9 +31,36 @@ public class LazyToolStack {
     return new LazyToolStack(null, tool, count);
   }
 
-  /** Creates from a tool with size 1, lazily loading the stack */
-  public static LazyToolStack from(ToolStack tool) {
-    return from(tool, 1);
+  /** Creates a success for a tinker station or modifier worktable recipe */
+  public static RecipeResult<LazyToolStack> success(ToolStack tool, int count) {
+    return RecipeResult.success(LazyToolStack.from(tool, count));
+  }
+
+  /** Creates a success for a tinker station or modifier worktable recipe */
+  public static RecipeResult<LazyToolStack> success(ItemStack stack) {
+    return RecipeResult.success(LazyToolStack.from(stack));
+  }
+
+  /** Gets the item inside this stack without a need to resolving. */
+  public Item getItem() {
+    if (stack != null) {
+      return stack.getItem();
+    }
+    if (tool != null) {
+      return tool.getItem();
+    }
+    return Items.AIR;
+  }
+
+  /** Checks if the stack has the given tag without resolving. */
+  public boolean hasTag(TagKey<Item> tag) {
+    if (stack != null) {
+      return stack.is(tag);
+    }
+    if (tool != null) {
+      return tool.hasTag(tag);
+    }
+    return false;
   }
 
   /** Gets the tool for this instance */

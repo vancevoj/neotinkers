@@ -158,7 +158,7 @@ public class EnchantmentConvertingRecipe extends AbstractWorktableRecipe {
         return TOO_FEW;
       }
     }
-    return RecipeResult.success(LazyToolStack.from(ModifierCrystalItem.withModifier(modifier.getId(), level)));
+    return LazyToolStack.success(ModifierCrystalItem.withModifier(modifier.getId(), level));
   }
 
   @Override

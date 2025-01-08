@@ -92,7 +92,7 @@ public class ModifierSortingRecipe extends AbstractWorktableRecipe {
     tool.setUpgrades(new ModifierNBT(newUpgrades));
 
     // no need to validate, its the same modifiers
-    return RecipeResult.success(LazyToolStack.from(tool, inv.getTinkerableSize()));
+    return LazyToolStack.success(tool, inv.getTinkerableSize());
   }
 
   @Override
