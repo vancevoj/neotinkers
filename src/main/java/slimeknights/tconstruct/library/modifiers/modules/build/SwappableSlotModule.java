@@ -21,7 +21,7 @@ import slimeknights.tconstruct.library.module.ModuleHook;
 import slimeknights.tconstruct.library.tools.SlotType;
 import slimeknights.tconstruct.library.tools.nbt.IToolContext;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
-import slimeknights.tconstruct.library.tools.nbt.ModDataNBT;
+import slimeknights.tconstruct.library.tools.nbt.ToolDataNBT;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -69,7 +69,7 @@ public record SwappableSlotModule(@Nullable ResourceLocation key, int slotCount,
   }
 
   @Override
-  public void addVolatileData(IToolContext context, ModifierEntry modifier, ModDataNBT volatileData) {
+  public void addVolatileData(IToolContext context, ModifierEntry modifier, ToolDataNBT volatileData) {
     if (condition.matches(context, modifier)) {
       String slotName = context.getPersistentData().getString(getKey(modifier.getModifier()));
       if (!slotName.isEmpty()) {
@@ -118,7 +118,7 @@ public record SwappableSlotModule(@Nullable ResourceLocation key, int slotCount,
     }
 
     @Override
-    public void addVolatileData(IToolContext context, ModifierEntry modifier, ModDataNBT volatileData) {
+    public void addVolatileData(IToolContext context, ModifierEntry modifier, ToolDataNBT volatileData) {
       if (condition.matches(context, modifier)) {
         String slotName = context.getPersistentData().getString(getKey(modifier.getModifier()));
         if (!slotName.isEmpty() && match.getName().equals(slotName)) {

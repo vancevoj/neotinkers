@@ -8,7 +8,7 @@ import slimeknights.tconstruct.library.module.ModuleHook;
 import slimeknights.tconstruct.library.tools.definition.module.ToolHooks;
 import slimeknights.tconstruct.library.tools.definition.module.ToolModule;
 import slimeknights.tconstruct.library.tools.nbt.IToolContext;
-import slimeknights.tconstruct.library.tools.nbt.ModDataNBT;
+import slimeknights.tconstruct.library.tools.nbt.ToolDataNBT;
 
 import java.util.List;
 
@@ -31,7 +31,7 @@ public record VolatileFlagModule(ResourceLocation flag) implements ToolModule, V
   }
 
   @Override
-  public void addVolatileData(IToolContext context, ModDataNBT volatileData) {
+  public void addVolatileData(IToolContext context, ToolDataNBT volatileData) {
     volatileData.putBoolean(flag, true);
   }
 }

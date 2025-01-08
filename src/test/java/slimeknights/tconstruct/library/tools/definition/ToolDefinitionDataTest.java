@@ -11,7 +11,7 @@ import slimeknights.tconstruct.library.tools.definition.module.build.ToolActions
 import slimeknights.tconstruct.library.tools.definition.module.build.ToolSlotsModule;
 import slimeknights.tconstruct.library.tools.nbt.IToolContext;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
-import slimeknights.tconstruct.library.tools.nbt.ModDataNBT;
+import slimeknights.tconstruct.library.tools.nbt.ToolDataNBT;
 import slimeknights.tconstruct.library.tools.nbt.MultiplierNBT;
 import slimeknights.tconstruct.library.tools.nbt.StatsNBT;
 import slimeknights.tconstruct.library.tools.part.IToolPart;
@@ -131,7 +131,7 @@ class ToolDefinitionDataTest extends BaseMcTest {
 
   @Test
   void data_buildSlots_withData() {
-    ModDataNBT modData = new ModDataNBT();
+    ToolDataNBT modData = new ToolDataNBT();
     ToolDefinitionData data = ToolDefinitionDataBuilder
       .builder()
       .module(new ToolSlotsModule(ImmutableMap.of(SlotType.UPGRADE, 5, SlotType.ABILITY, 2)))

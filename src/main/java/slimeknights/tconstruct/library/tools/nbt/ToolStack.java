@@ -99,7 +99,7 @@ public class ToolStack implements IToolStackView {
   private ModifierNBT upgrades;
   /** Data object containing modifier data that persists on stat rebuild */
   @Nullable
-  private ModDataNBT persistentModData;
+  private ToolDataNBT persistentModData;
 
   // nbt cache: these values are calculated tool data
   /** Combination of modifiers from upgrades and material traits */
@@ -530,16 +530,16 @@ public class ToolStack implements IToolStackView {
   /* Data */
 
   @Override
-  public ModDataNBT getPersistentData() {
+  public ToolDataNBT getPersistentData() {
     if (persistentModData == null) {
       // parse if the tag already exists
       if (nbt.contains(TAG_PERSISTENT_MOD_DATA, Tag.TAG_COMPOUND)) {
-        persistentModData = ModDataNBT.readFromNBT(nbt.getCompound(TAG_PERSISTENT_MOD_DATA));
+        persistentModData = ToolDataNBT.readFromNBT(nbt.getCompound(TAG_PERSISTENT_MOD_DATA));
       } else {
         // if no tag exists, create it
         CompoundTag tag = new CompoundTag();
         nbt.put(TAG_PERSISTENT_MOD_DATA, tag);
-        persistentModData = ModDataNBT.readFromNBT(tag);
+        persistentModData = ToolDataNBT.readFromNBT(tag);
       }
     }
     return persistentModData;
@@ -550,7 +550,7 @@ public class ToolStack implements IToolStackView {
     if (volatileModData == null) {
       // parse if the tag already exists
       if (nbt.contains(TAG_VOLATILE_MOD_DATA, Tag.TAG_COMPOUND)) {
-        volatileModData = ModDataNBT.readFromNBT(nbt.getCompound(TAG_VOLATILE_MOD_DATA));
+        volatileModData = ToolDataNBT.readFromNBT(nbt.getCompound(TAG_VOLATILE_MOD_DATA));
       } else {
         // if no tag exists, return empty
         volatileModData = IModDataView.EMPTY;
@@ -563,7 +563,7 @@ public class ToolStack implements IToolStackView {
    * Updates the volatile mod data in NBT, called in {@link #rebuildStats()}
    * @param modData  New data
    */
-  protected void setVolatileModData(ModDataNBT modData) {
+  protected void setVolatileModData(ToolDataNBT modData) {
     CompoundTag data = modData.getData();
     if (data.isEmpty()) {
       volatileModData = IModDataView.EMPTY;
@@ -650,7 +650,7 @@ public class ToolStack implements IToolStackView {
     }
 
     // build volatile data first, it's a parameter to the other hooks
-    ModDataNBT volatileData = new ModDataNBT();
+    ToolDataNBT volatileData = new ToolDataNBT();
     toolData.getHook(ToolHooks.VOLATILE_DATA).addVolatileData(context, volatileData);
     for (ModifierEntry entry : modifierList) {
       entry.getHook(ModifierHooks.VOLATILE_DATA).addVolatileData(context, entry, volatileData);

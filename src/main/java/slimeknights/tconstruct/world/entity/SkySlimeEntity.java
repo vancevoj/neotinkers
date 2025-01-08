@@ -19,7 +19,7 @@ import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierId;
 import slimeknights.tconstruct.library.modifiers.ModifierManager;
 import slimeknights.tconstruct.library.tools.SlotType;
-import slimeknights.tconstruct.library.tools.nbt.ModDataNBT;
+import slimeknights.tconstruct.library.tools.nbt.ToolDataNBT;
 import slimeknights.tconstruct.library.tools.nbt.ModifierNBT;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.tools.TinkerModifiers;
@@ -93,7 +93,7 @@ public class SkySlimeEntity extends ArmoredSlimeEntity {
       ToolStack tool = ToolStack.from(helmet);
       tool.ensureHasData();
       ModifierNBT modifiers = tool.getUpgrades();
-      ModDataNBT persistentData = tool.getPersistentData();
+      ToolDataNBT persistentData = tool.getPersistentData();
       if (!isPlate) {
         // travelers dyes a random color
         persistentData.putInt(TinkerModifiers.dyed.getId(), this.random.nextInt(0xFFFFFF+1));

@@ -14,9 +14,9 @@ import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.module.ModuleHook;
 import slimeknights.tconstruct.library.tools.capability.ToolCapabilityProvider.IToolCapabilityProvider;
-import slimeknights.tconstruct.library.tools.nbt.INamespacedNBTView;
+import slimeknights.tconstruct.library.tools.nbt.IModDataView;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
-import slimeknights.tconstruct.library.tools.nbt.NamespacedNBT;
+import slimeknights.tconstruct.library.tools.nbt.ModDataNBT;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -35,7 +35,7 @@ public class ToolFluidCapability extends FluidModifierHookIterator<ModifierEntry
   /** Modifier hook instance to make an inventory modifier */
   public static final ModuleHook<FluidModifierHook> HOOK = ModifierHooks.register(TConstruct.getResource("fluid"), FluidModifierHook.class, FluidModifierHookMerger::new, new FluidModifierHook() {
     @Override
-    public int getTanks(INamespacedNBTView volatileData, ModifierEntry modifier) {
+    public int getTanks(IModDataView volatileData, ModifierEntry modifier) {
       return 0;
     }
 
@@ -131,7 +131,7 @@ public class ToolFluidCapability extends FluidModifierHookIterator<ModifierEntry
   }
 
   /** Adds the tanks from the fluid modifier to the tool */
-  public static void addTanks(ModifierEntry modifier, NamespacedNBT volatileData, FluidModifierHook hook) {
+  public static void addTanks(ModifierEntry modifier, ModDataNBT volatileData, FluidModifierHook hook) {
     volatileData.putInt(TOTAL_TANKS, hook.getTanks(volatileData, modifier) + volatileData.getInt(TOTAL_TANKS));
   }
 
@@ -144,7 +144,7 @@ public class ToolFluidCapability extends FluidModifierHookIterator<ModifierEntry
      * @param modifier      Modifier to consider
      * @return  Number of tanks used
      */
-    default int getTanks(INamespacedNBTView volatileData, ModifierEntry modifier) {
+    default int getTanks(IModDataView volatileData, ModifierEntry modifier) {
       return 1;
     }
 
@@ -238,7 +238,7 @@ public class ToolFluidCapability extends FluidModifierHookIterator<ModifierEntry
     }
 
     @Override
-    public int getTanks(INamespacedNBTView volatileData, ModifierEntry modifier) {
+    public int getTanks(IModDataView volatileData, ModifierEntry modifier) {
       int sum = 0;
       for (FluidModifierHook module : modules) {
         sum += module.getTanks(volatileData, modifier);

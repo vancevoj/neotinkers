@@ -194,7 +194,7 @@ public class StatOverrideModifier extends NoLevelsModifier implements ToolStatsM
 
   /** Gets the given stat from Tag */
   private static float getStat(IToolStackView tool, ResourceLocation groupKey, INumericToolStat<?> stat, float defaultValue) {
-    ModDataNBT data = tool.getPersistentData();
+    IModDataView data = tool.getPersistentData();
     if (data.contains(groupKey, Tag.TAG_COMPOUND)) {
       CompoundTag nbt = data.getCompound(groupKey);
       String name = stat.getName().toString();

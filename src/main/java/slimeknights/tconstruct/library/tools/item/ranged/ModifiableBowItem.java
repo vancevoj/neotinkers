@@ -28,7 +28,7 @@ import slimeknights.tconstruct.library.tools.definition.ToolDefinition;
 import slimeknights.tconstruct.library.tools.helper.ModifierUtil;
 import slimeknights.tconstruct.library.tools.helper.ToolDamageUtil;
 import slimeknights.tconstruct.library.tools.nbt.ModifierNBT;
-import slimeknights.tconstruct.library.tools.nbt.NamespacedNBT;
+import slimeknights.tconstruct.library.tools.nbt.ModDataNBT;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
 import slimeknights.tconstruct.tools.modifiers.ability.interaction.BlockingModifier;
@@ -168,7 +168,7 @@ public class ModifiableBowItem extends ModifiableLauncherItem {
         arrow.getCapability(EntityModifierCapability.CAPABILITY).ifPresent(cap -> cap.setModifiers(modifiers));
 
         // fetch the persistent data for the arrow as modifiers may want to store data
-        NamespacedNBT arrowData = PersistentDataCapability.getOrWarn(arrow);
+        ModDataNBT arrowData = PersistentDataCapability.getOrWarn(arrow);
 
         // if infinite, skip pickup
         if (creative) {

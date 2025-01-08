@@ -20,7 +20,7 @@ import slimeknights.tconstruct.library.recipe.tinkerstation.IMutableTinkerStatio
 import slimeknights.tconstruct.library.recipe.tinkerstation.ITinkerStationContainer;
 import slimeknights.tconstruct.library.tools.SlotType.SlotCount;
 import slimeknights.tconstruct.library.tools.nbt.LazyToolStack;
-import slimeknights.tconstruct.library.tools.nbt.ModDataNBT;
+import slimeknights.tconstruct.library.tools.nbt.ToolDataNBT;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.tools.TinkerModifiers;
 
@@ -141,7 +141,7 @@ public class ModifierRecipe extends AbstractModifierRecipe {
 
     // consume slots
     tool = tool.copy();
-    ModDataNBT persistentData = tool.getPersistentData();
+    ToolDataNBT persistentData = tool.getPersistentData();
     SlotCount slots = getSlots();
     if (slots != null) {
       persistentData.addSlots(slots.type(), -slots.count());

@@ -30,7 +30,7 @@ public class DummyToolStack implements IToolStackView {
 
   @Override
   public IModDataView getVolatileData() {
-    return ModDataNBT.EMPTY;
+    return IModDataView.EMPTY;
   }
 
   @Override

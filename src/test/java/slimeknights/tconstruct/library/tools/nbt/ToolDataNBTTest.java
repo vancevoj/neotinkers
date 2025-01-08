@@ -9,7 +9,7 @@ import slimeknights.tconstruct.test.BaseMcTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class ModDataNBTTest extends BaseMcTest {
+class ToolDataNBTTest extends BaseMcTest {
   private static final ResourceLocation testKey = new ResourceLocation("test");
   private static final ResourceLocation testKey2 = new ResourceLocation("test2");
 
@@ -27,7 +27,7 @@ class ModDataNBTTest extends BaseMcTest {
 
   @Test
   void defaults() {
-    ModDataNBT nbt = new ModDataNBT();
+    ToolDataNBT nbt = new ToolDataNBT();
 
     for (SlotType type : SlotType.getAllSlotTypes()) {
       assertThat(IModDataView.EMPTY.getSlots(type)).isEqualTo(0);
@@ -37,7 +37,7 @@ class ModDataNBTTest extends BaseMcTest {
 
   @Test
   void serialize() {
-    ModDataNBT modData = new ModDataNBT();
+    ToolDataNBT modData = new ToolDataNBT();
     modData.setSlots(SlotType.UPGRADE, 2);
     modData.setSlots(SlotType.ABILITY, 3);
     modData.setSlots(SlotType.SOUL, 4);
@@ -63,7 +63,7 @@ class ModDataNBTTest extends BaseMcTest {
     tag.putInt("test", 1);
     nbt.put(testKey2.toString(), tag);
 
-    ModDataNBT modData = ModDataNBT.readFromNBT(nbt);
+    ToolDataNBT modData = ToolDataNBT.readFromNBT(nbt);
     assertThat(modData.getSlots(SlotType.UPGRADE)).isEqualTo(4);
     assertThat(modData.getSlots(SlotType.ABILITY)).isEqualTo(5);
     assertThat(modData.getSlots(SlotType.SOUL)).isEqualTo(6);

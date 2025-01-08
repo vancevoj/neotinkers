@@ -12,7 +12,7 @@ import slimeknights.tconstruct.library.module.HookProvider;
 import slimeknights.tconstruct.library.module.ModuleHook;
 import slimeknights.tconstruct.library.tools.SlotType;
 import slimeknights.tconstruct.library.tools.nbt.IToolContext;
-import slimeknights.tconstruct.library.tools.nbt.ModDataNBT;
+import slimeknights.tconstruct.library.tools.nbt.ToolDataNBT;
 
 import java.util.List;
 
@@ -42,7 +42,7 @@ public record ModifierSlotModule(SlotType type, int count, ModifierCondition<ITo
   }
 
   @Override
-  public void addVolatileData(IToolContext context, ModifierEntry modifier, ModDataNBT volatileData) {
+  public void addVolatileData(IToolContext context, ModifierEntry modifier, ToolDataNBT volatileData) {
     if (condition.matches(context, modifier)) {
       volatileData.addSlots(type, count * modifier.getLevel());
     }

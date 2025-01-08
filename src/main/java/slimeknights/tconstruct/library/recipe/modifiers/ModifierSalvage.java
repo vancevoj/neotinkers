@@ -20,6 +20,7 @@ import slimeknights.tconstruct.library.recipe.TinkerRecipeTypes;
 import slimeknights.tconstruct.library.recipe.tinkerstation.ITinkerStationRecipe;
 import slimeknights.tconstruct.library.tools.SlotType.SlotCount;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
+import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.tools.TinkerModifiers;
 
 /**
@@ -77,7 +78,7 @@ public class ModifierSalvage implements ICustomOutputRecipe<Container> {
    * Updates the tool data in light of removing this modifier
    * @param tool  Tool instance
    */
-  public void updateTool(IToolStackView tool) {
+  public void updateTool(ToolStack tool) {
     tool.getPersistentData().addSlots(slots.type(), slots.count());
   }
 

@@ -18,6 +18,7 @@ import slimeknights.tconstruct.library.tools.item.IModifiableDisplay;
 import slimeknights.tconstruct.library.tools.nbt.MaterialNBT;
 import slimeknights.tconstruct.library.tools.nbt.ModDataNBT;
 import slimeknights.tconstruct.library.tools.nbt.ModifierNBT;
+import slimeknights.tconstruct.library.tools.nbt.ToolDataNBT;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 
 import javax.annotation.Nullable;
@@ -131,7 +132,7 @@ public interface IDisplayModifierRecipe extends IModifierRecipe {
     CompoundTag persistentNBT = new CompoundTag();
     ModDataNBT persistentData = ModDataNBT.readFromNBT(persistentNBT);
     CompoundTag volatileNBT = new CompoundTag();
-    ModDataNBT volatileData = ModDataNBT.readFromNBT(volatileNBT);
+    ToolDataNBT volatileData = ToolDataNBT.readFromNBT(volatileNBT);
     persistentDataConsumer.accept(persistentData);
     ToolRebuildContext context = new ToolRebuildContext(stack.getItem(), ToolDefinition.EMPTY, MaterialNBT.EMPTY, modifiers, modifiers, persistentData);
     for (ModifierEntry entry : modifiers.getModifiers()) {

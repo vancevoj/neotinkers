@@ -17,7 +17,6 @@ import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.tools.SlotType;
 import slimeknights.tconstruct.library.tools.definition.module.mining.MiningTierToolHook;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
-import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.library.tools.stat.INumericToolStat;
 import slimeknights.tconstruct.library.tools.stat.IToolStat;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
@@ -46,7 +45,7 @@ public class TooltipBuilder {
   @Getter
   private final List<Component> tooltips;
 
-  public TooltipBuilder(ToolStack tool) {
+  public TooltipBuilder(IToolStackView tool) {
     this.tool = tool;
     this.tooltips = new ArrayList<>();
   }

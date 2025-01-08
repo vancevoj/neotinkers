@@ -45,7 +45,6 @@ import slimeknights.tconstruct.library.tools.helper.ToolDamageUtil;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.ModDataNBT;
 import slimeknights.tconstruct.library.tools.nbt.ModifierNBT;
-import slimeknights.tconstruct.library.tools.nbt.NamespacedNBT;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
 import slimeknights.tconstruct.tools.TinkerModifiers;
@@ -229,7 +228,7 @@ public class ModifiableCrossbowItem extends ModifiableLauncherItem {
         projectile.getCapability(EntityModifierCapability.CAPABILITY).ifPresent(cap -> cap.setModifiers(modifiers));
 
         // fetch the persistent data for the arrow as modifiers may want to store data
-        NamespacedNBT projectileData = PersistentDataCapability.getOrWarn(projectile);
+        ModDataNBT projectileData = PersistentDataCapability.getOrWarn(projectile);
 
         // let modifiers set properties
         for (ModifierEntry entry : modifiers.getModifiers()) {

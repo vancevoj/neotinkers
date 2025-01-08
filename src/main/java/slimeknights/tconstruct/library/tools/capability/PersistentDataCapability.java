@@ -20,7 +20,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.network.SyncPersistentDataPacket;
 import slimeknights.tconstruct.common.network.TinkerNetwork;
-import slimeknights.tconstruct.library.tools.nbt.NamespacedNBT;
+import slimeknights.tconstruct.library.tools.nbt.ModDataNBT;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -36,14 +36,14 @@ public class PersistentDataCapability {
   /** Capability ID */
   private static final ResourceLocation ID = TConstruct.getResource("persistent_data");
   /** Capability type */
-  public static final Capability<NamespacedNBT> CAPABILITY = CapabilityManager.get(new CapabilityToken<>() {});
+  public static final Capability<ModDataNBT> CAPABILITY = CapabilityManager.get(new CapabilityToken<>() {});
 
   /** Gets the data or warns if its missing */
-  public static NamespacedNBT getOrWarn(Entity entity) {
-    Optional<NamespacedNBT> data = entity.getCapability(CAPABILITY).resolve();
+  public static ModDataNBT getOrWarn(Entity entity) {
+    Optional<ModDataNBT> data = entity.getCapability(CAPABILITY).resolve();
     if (data.isEmpty()) {
       TConstruct.LOG.warn("Missing Tinkers NBT on entity {}, this should not happen", entity.getType());
-      return new NamespacedNBT();
+      return new ModDataNBT();
     }
     return data.get();
   }
@@ -60,7 +60,7 @@ public class PersistentDataCapability {
 
   /** Registers the capability with the event bus */
   private static void register(RegisterCapabilitiesEvent event) {
-    event.register(NamespacedNBT.class);
+    event.register(ModDataNBT.class);
   }
 
   /** Event listener to attach the capability */
@@ -107,10 +107,10 @@ public class PersistentDataCapability {
   /** Capability provider instance */
   private static class Provider implements ICapabilitySerializable<CompoundTag>, Runnable {
     private Lazy<CompoundTag> nbt;
-    private LazyOptional<NamespacedNBT> capability;
+    private LazyOptional<ModDataNBT> capability;
     private Provider() {
       this.nbt = Lazy.of(CompoundTag::new);
-      this.capability = LazyOptional.of(() -> NamespacedNBT.readFromNBT(nbt.get()));
+      this.capability = LazyOptional.of(() -> ModDataNBT.readFromNBT(nbt.get()));
     }
 
     @Nonnull
@@ -123,7 +123,7 @@ public class PersistentDataCapability {
     public void run() {
       // called when capabilities invalidate, create a new cap just in case they are revived later
       capability.invalidate();
-      capability = LazyOptional.of(() -> NamespacedNBT.readFromNBT(nbt.get()));
+      capability = LazyOptional.of(() -> ModDataNBT.readFromNBT(nbt.get()));
     }
 
     @Override

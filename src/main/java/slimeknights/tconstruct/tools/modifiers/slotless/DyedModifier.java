@@ -11,8 +11,8 @@ import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.hook.build.ModifierRemovalHook;
 import slimeknights.tconstruct.library.modifiers.impl.NoLevelsModifier;
 import slimeknights.tconstruct.library.module.ModuleHookMap.Builder;
+import slimeknights.tconstruct.library.tools.nbt.IModDataView;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
-import slimeknights.tconstruct.library.tools.nbt.ModDataNBT;
 
 import javax.annotation.Nullable;
 
@@ -27,7 +27,7 @@ public class DyedModifier extends NoLevelsModifier implements ModifierRemovalHoo
 
   @Override
   public Component getDisplayName(IToolStackView tool, ModifierEntry entry, @Nullable RegistryAccess access) {
-    ModDataNBT persistentData = tool.getPersistentData();
+    IModDataView persistentData = tool.getPersistentData();
     ResourceLocation key = getId();
     if (persistentData.contains(key, Tag.TAG_INT)) {
       int color = persistentData.getInt(key);

@@ -30,7 +30,7 @@ import slimeknights.tconstruct.library.tools.helper.ModifierUtil;
 import slimeknights.tconstruct.library.tools.helper.ToolDamageUtil;
 import slimeknights.tconstruct.library.tools.item.ranged.ModifiableLauncherItem;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
-import slimeknights.tconstruct.library.tools.nbt.NamespacedNBT;
+import slimeknights.tconstruct.library.tools.nbt.ModDataNBT;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
 import slimeknights.tconstruct.tools.entity.FluidEffectProjectile;
 import slimeknights.tconstruct.tools.modifiers.ability.interaction.BlockingModifier;
@@ -119,7 +119,7 @@ public class SpittingModifier extends Modifier implements GeneralInteractionModi
                 spit.getCapability(EntityModifierCapability.CAPABILITY).ifPresent(cap -> cap.setModifiers(tool.getModifiers()));
 
                 // fetch the persistent data for the arrow as modifiers may want to store data
-                NamespacedNBT arrowData = PersistentDataCapability.getOrWarn(spit);
+                ModDataNBT arrowData = PersistentDataCapability.getOrWarn(spit);
                 // let modifiers set properties
                 for (ModifierEntry entry : tool.getModifierList()) {
                   entry.getHook(ModifierHooks.PROJECTILE_LAUNCH).onProjectileLaunch(tool, entry, entity, spit, null, arrowData, shotIndex == primaryIndex);
