@@ -7,16 +7,20 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.Sheets;
+import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.TextColor;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.armortrim.TrimMaterial;
 import net.minecraft.world.item.armortrim.TrimPattern;
+import slimeknights.mantle.data.loadable.common.ColorLoadable;
 import slimeknights.mantle.data.loadable.record.SingletonLoader;
+import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.tools.helper.ModifierUtil;
 import slimeknights.tconstruct.tools.modifiers.slotless.TrimModifier;
 
@@ -54,8 +58,7 @@ public enum TrimArmorTextureSupplier implements ArmorTextureSupplier {
         texture = ArmorTexture.EMPTY;
         if (pattern != null && material != null) {
           ResourceLocation patternAsset = pattern.assetId();
-          texture = new TrimArmorTexture(patternAsset.withPath("trims/models/armor/" + patternAsset.getPath() + (textureType == TextureType.LEGGINGS ? "_leggings_" : "_") + material.assetName()));
-
+          texture = TrimArmorTexture.create(patternAsset.withPath("trims/models/armor/" + patternAsset.getPath() + (textureType == TextureType.LEGGINGS ? "_leggings" : "")), material);
         }
         cache.put(key, texture);
         return texture;
@@ -73,8 +76,7 @@ public enum TrimArmorTextureSupplier implements ArmorTextureSupplier {
   @RequiredArgsConstructor
   public static class TrimArmorTexture implements ArmorTexture {
     private static TextureAtlas armorTrimAtlas = null;
-    private final ResourceLocation trimLocation;
-    private TextureAtlasSprite trimSprite = null;
+    private final TextureAtlasSprite trimSprite;
 
     /** Gets the texture atlas for trim */
     private static TextureAtlas getTrimAtlas() {
@@ -84,18 +86,28 @@ public enum TrimArmorTextureSupplier implements ArmorTextureSupplier {
       return armorTrimAtlas;
     }
 
-    /** Gets the trim texture sprite */
-    private TextureAtlasSprite getSprite() {
-      if (trimSprite == null) {
-        trimSprite = getTrimAtlas().getSprite(trimLocation);
+    /** Creates the trim texture for the given root texture and material */
+    private static ArmorTexture create(ResourceLocation root, TrimMaterial material) {
+      // start by trying and finding the material specific sprite
+      ResourceLocation withMaterial = root.withSuffix('_' + material.assetName());
+      TextureAtlasSprite sprite = getTrimAtlas().getSprite(withMaterial);
+      if (!MissingTextureAtlasSprite.getLocation().equals(sprite.contents().name())) {
+        return new TrimArmorTexture(sprite);
       }
-      return trimSprite;
+      // failed to find the unique sprite, go for tinting the base
+      int color = -1;
+      TextColor textColor = material.description().getStyle().getColor();
+      if (textColor != null) {
+        color = textColor.getValue() | 0xFF000000;
+      }
+      TConstruct.LOG.error("Missing material specific texture {}, defaulting to tinting base texture #{}", withMaterial, ColorLoadable.NO_ALPHA.getString(color));
+      return new TintedArmorTexture(root.withPath("textures/" + root.getPath() + ".png"), color);
     }
 
     @Override
     public void renderTexture(Model model, PoseStack matrices, MultiBufferSource bufferSource, int packedLight, int packedOverlay, float red, float green, float blue, float alpha, boolean hasGlint) {
       // ignoring glint as odds are very low trim texture is the first one
-      VertexConsumer buffer = getSprite().wrap(bufferSource.getBuffer(Sheets.armorTrimsSheet()));
+      VertexConsumer buffer = trimSprite.wrap(bufferSource.getBuffer(Sheets.armorTrimsSheet()));
       model.renderToBuffer(matrices, buffer, packedLight, packedOverlay, red, green, blue, alpha);
     }
   }

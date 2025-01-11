@@ -38,6 +38,22 @@
         "minecraft:trims/items/leggings_trim",
         "minecraft:trims/items/boots_trim"
       ]
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "minecraft:trims/items/helmet_trim"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "minecraft:trims/items/chestplate_trim"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "minecraft:trims/items/leggings_trim"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "minecraft:trims/items/boots_trim"
     }
   ]
 }
