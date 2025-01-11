@@ -4,7 +4,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
-import slimeknights.mantle.util.IdExtender;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
@@ -93,6 +92,6 @@ public interface MaxArmorLevelModule extends HookProvider, EquipmentChangeModifi
     if (id == null) {
       id = new ResourceLocation("missingno");
     }
-    return ComputableDataKey.of(IdExtender.LocationExtender.INSTANCE.prefix(id, "_data"), ModifierMaxLevel::new);
+    return ComputableDataKey.of(id.withSuffix("_data"), ModifierMaxLevel::new);
   }
 }

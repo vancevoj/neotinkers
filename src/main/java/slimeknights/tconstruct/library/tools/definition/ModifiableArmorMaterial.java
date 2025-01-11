@@ -4,7 +4,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ArmorItem;
-import slimeknights.mantle.util.IdExtender.LocationExtender;
 import slimeknights.tconstruct.library.tools.item.armor.DummyArmorMaterial;
 
 import javax.annotation.Nullable;
@@ -29,7 +28,7 @@ public class ModifiableArmorMaterial extends DummyArmorMaterial {
   public static ModifiableArmorMaterial create(ResourceLocation id, SoundEvent equipSound, ArmorItem.Type... slots) {
     ToolDefinition[] definitions = new ToolDefinition[4];
     for (ArmorItem.Type slot : slots) {
-      definitions[slot.ordinal()] = ToolDefinition.create(LocationExtender.INSTANCE.suffix(id, "_" + slot.getName()));
+      definitions[slot.ordinal()] = ToolDefinition.create(id.withSuffix("_" + slot.getName()));
     }
     return new ModifiableArmorMaterial(id, equipSound, definitions);
   }

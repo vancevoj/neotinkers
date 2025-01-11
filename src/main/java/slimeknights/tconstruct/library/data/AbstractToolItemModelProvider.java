@@ -24,8 +24,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
-import static slimeknights.mantle.util.IdExtender.INSTANCE;
-
 /** Helper for generating tool item models */
 public abstract class AbstractToolItemModelProvider extends GenericDataProvider {
   protected final Map<String,JsonObject> models = new HashMap<>();
@@ -138,7 +136,7 @@ public abstract class AbstractToolItemModelProvider extends GenericDataProvider 
   /** Creates a model with display from the given target */
   protected void withDisplay(String destination, ResourceLocation parent, JsonObject properties) {
     JsonObject model = new JsonObject();
-    model.addProperty("parent", INSTANCE.prefix(parent, "item/").toString());
+    model.addProperty("parent", parent.withPrefix("item/").toString());
     model.add("display", properties.get("display"));
     models.put(destination, model);
   }

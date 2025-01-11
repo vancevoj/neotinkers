@@ -44,7 +44,6 @@ import javax.annotation.Nullable;
 import java.util.function.Function;
 
 import static net.minecraftforge.client.model.generators.ModelProvider.BLOCK_FOLDER;
-import static slimeknights.mantle.util.IdExtender.INSTANCE;
 
 @SuppressWarnings({"UnusedReturnValue", "SameParameterValue"})
 public class TinkerBlockStateProvider extends BlockStateProvider {
@@ -231,7 +230,7 @@ public class TinkerBlockStateProvider extends BlockStateProvider {
    *                     If false, uses the side for the top
    */
   public void axisBlock(Block block, String location, ResourceLocation texture, boolean horizontal) {
-    ResourceLocation endTexture = horizontal ? INSTANCE.suffix(texture, "_top") : texture;
+    ResourceLocation endTexture = horizontal ? texture.withSuffix("_top") : texture;
     ModelFile model = models().cubeColumn(TConstruct.resourceString(location), texture, endTexture);
     axisBlock((RotatedPillarBlock)block, model,
               horizontal ? models().cubeColumnHorizontal(TConstruct.resourceString(location + "_horizontal"), texture, endTexture) : model);
@@ -444,7 +443,7 @@ public class TinkerBlockStateProvider extends BlockStateProvider {
 
   /** Adds models for a glass block with a glass pane */
   public void glassBlock(Block glass, IronBarsBlock pane, String baseName, ResourceLocation front, int tint, boolean solidEdge, @Nullable RenderType renderType) {
-    glassBlock(glass, pane, baseName, front, INSTANCE.suffix(front, "_top"), tint, solidEdge, renderType);
+    glassBlock(glass, pane, baseName, front, front.withSuffix("_top"), tint, solidEdge, renderType);
   }
 
   /** Adds models for a glass block with a glass pane */

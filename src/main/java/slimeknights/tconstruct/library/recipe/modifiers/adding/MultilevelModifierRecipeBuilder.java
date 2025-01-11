@@ -12,7 +12,6 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.ItemLike;
 import slimeknights.mantle.recipe.data.AbstractRecipeBuilder;
 import slimeknights.mantle.recipe.ingredient.SizedIngredient;
-import slimeknights.mantle.util.IdExtender.LocationExtender;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierId;
@@ -216,7 +215,7 @@ public class MultilevelModifierRecipeBuilder extends AbstractRecipeBuilder<Multi
     for (LevelEntry levelEntry : levels) {
       if (levelEntry.slots() != null) {
         consumer.accept(new LoadableFinishedRecipe<>(new ModifierSalvage(
-          LocationExtender.INSTANCE.suffix(id, "_level_" + levelEntry.level().min()),
+          id.withSuffix("_level_" + levelEntry.level().min()),
           tools, maxToolSize, result, levelEntry.level(), levelEntry.slots()), ModifierSalvage.LOADER, null));
       }
     }

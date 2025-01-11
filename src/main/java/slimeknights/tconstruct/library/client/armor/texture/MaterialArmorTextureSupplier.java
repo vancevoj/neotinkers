@@ -11,7 +11,6 @@ import slimeknights.mantle.data.loadable.Loadables;
 import slimeknights.mantle.data.loadable.field.LoadableField;
 import slimeknights.mantle.data.loadable.primitive.IntLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
-import slimeknights.mantle.util.IdExtender.LocationExtender;
 import slimeknights.tconstruct.library.client.materials.MaterialRenderInfo;
 import slimeknights.tconstruct.library.client.materials.MaterialRenderInfoLoader;
 import slimeknights.tconstruct.library.materials.definition.MaterialVariantId;
@@ -29,7 +28,7 @@ public abstract class MaterialArmorTextureSupplier implements ArmorTextureSuppli
 
   /** Makes a texture for the given variant and material, returns null if its missing */
   private static ArmorTexture tryTexture(ResourceLocation name, int color, String material) {
-    ResourceLocation texture = LocationExtender.INSTANCE.suffix(name, material);
+    ResourceLocation texture = name.withSuffix(material);
     if (TEXTURE_VALIDATOR.test(texture)) {
       return new TintedArmorTexture(ArmorTextureSupplier.getTexturePath(texture), color);
     }
@@ -79,10 +78,10 @@ public abstract class MaterialArmorTextureSupplier implements ArmorTextureSuppli
   @SuppressWarnings("unchecked")
   public MaterialArmorTextureSupplier(ResourceLocation prefix) {
     this.prefix = prefix;
-    this.textures = new Function[] {
-      materialGetter(LocationExtender.INSTANCE.suffix(prefix, "armor")),
-      materialGetter(LocationExtender.INSTANCE.suffix(prefix, "leggings")),
-      materialGetter(LocationExtender.INSTANCE.suffix(prefix, "wings"))
+      this.textures = new Function[] {
+      materialGetter(prefix.withSuffix("armor")),
+      materialGetter(prefix.withSuffix("leggings")),
+      materialGetter(prefix.withSuffix("wings"))
     };
   }
 
@@ -113,7 +112,7 @@ public abstract class MaterialArmorTextureSupplier implements ArmorTextureSuppli
     }
 
     public PersistentData(ResourceLocation base, String suffix, ResourceLocation key) {
-      this(LocationExtender.INSTANCE.suffix(base, suffix), key);
+      this(base.withSuffix(suffix), key);
     }
 
     @Override
@@ -141,7 +140,7 @@ public abstract class MaterialArmorTextureSupplier implements ArmorTextureSuppli
     }
 
     public Material(ResourceLocation base, String variant, int index) {
-      this(LocationExtender.INSTANCE.suffix(base, variant), index);
+      this(base.withSuffix(variant), index);
     }
 
     @Override

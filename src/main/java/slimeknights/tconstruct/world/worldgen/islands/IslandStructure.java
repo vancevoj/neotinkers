@@ -22,7 +22,6 @@ import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureType;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilder;
 import net.minecraftforge.registries.RegistryObject;
-import slimeknights.mantle.util.IdExtender.LocationExtender;
 import slimeknights.tconstruct.world.TinkerStructures;
 import slimeknights.tconstruct.world.TinkerWorld;
 import slimeknights.tconstruct.world.block.FoliageType;
@@ -79,9 +78,7 @@ public class IslandStructure extends Structure {
 //    }
 
     // find variant
-    return onTopOfChunkCenter(context, Types.WORLD_SURFACE, builder -> {
-      this.generatePieces(builder, context);
-     });
+    return onTopOfChunkCenter(context, Types.WORLD_SURFACE, builder -> this.generatePieces(builder, context));
   }
 
   private void generatePieces(StructurePiecesBuilder builder, Structure.GenerationContext context) {
@@ -131,7 +128,7 @@ public class IslandStructure extends Structure {
     /** Adds the default 5 templates around the given prefix to the builder */
     public Builder addDefaultTemplates(ResourceLocation prefix) {
       for (String size : SIZES) {
-        addTemplate(LocationExtender.INSTANCE.suffix(prefix, size), 1);
+        addTemplate(prefix.withSuffix(size), 1);
       }
       return this;
     }

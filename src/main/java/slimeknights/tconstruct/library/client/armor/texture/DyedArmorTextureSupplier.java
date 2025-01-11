@@ -6,7 +6,6 @@ import net.minecraft.world.item.ItemStack;
 import slimeknights.mantle.data.loadable.Loadables;
 import slimeknights.mantle.data.loadable.common.ColorLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
-import slimeknights.mantle.util.IdExtender.LocationExtender;
 import slimeknights.tconstruct.library.modifiers.ModifierId;
 import slimeknights.tconstruct.library.tools.helper.ModifierUtil;
 
@@ -44,7 +43,7 @@ public class DyedArmorTextureSupplier implements ArmorTextureSupplier {
   }
 
   public DyedArmorTextureSupplier(ResourceLocation base, String variant, ModifierId modifier, @Nullable Integer defaultColor) {
-    this(LocationExtender.INSTANCE.suffix(base, variant), modifier, defaultColor);
+    this(base.withSuffix(variant), modifier, defaultColor);
   }
 
   @Override

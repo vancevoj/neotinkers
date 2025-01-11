@@ -11,7 +11,6 @@ import slimeknights.mantle.data.loadable.Loadables;
 import slimeknights.mantle.data.loadable.common.ColorLoadable;
 import slimeknights.mantle.data.loadable.primitive.StringLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
-import slimeknights.mantle.util.IdExtender.LocationExtender;
 import slimeknights.tconstruct.library.materials.definition.MaterialVariantId;
 import slimeknights.tconstruct.library.modifiers.ModifierId;
 import slimeknights.tconstruct.library.tools.helper.ModifierUtil;
@@ -78,7 +77,7 @@ public class FixedArmorTextureSupplier implements ArmorTextureSupplier {
 
   /** Creates a new builder instance */
   public static Builder builder(ResourceLocation base, String variant) {
-    return new Builder(LocationExtender.INSTANCE.suffix(base, variant));
+    return new Builder(base.withSuffix(variant));
   }
 
   @Accessors(fluent = true)
