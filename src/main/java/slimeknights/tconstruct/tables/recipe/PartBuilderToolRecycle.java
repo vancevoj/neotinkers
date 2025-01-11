@@ -182,7 +182,7 @@ public class PartBuilderToolRecycle implements IPartBuilderRecipe {
   public record Finished(ResourceLocation getId, SizedIngredient tools, Ingredient pattern) implements FinishedRecipe {
     @Override
     public void serializeRecipeData(JsonObject json) {
-      json.add("tools", tools.serialize());
+      json.add("tools", SizedIngredient.LOADABLE.serialize(tools));
       json.add("pattern", pattern.toJson());
     }
 
