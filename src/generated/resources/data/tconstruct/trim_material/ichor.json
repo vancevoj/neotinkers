@@ -1,0 +1,14 @@
+{
+  "asset_name": "tconstruct_ichor",
+  "description": {
+    "color": "#FF970D",
+    "translate": "trim_material.tconstruct.format",
+    "with": [
+      {
+        "translate": "material.tconstruct.ichor"
+      }
+    ]
+  },
+  "ingredient": "tconstruct:ichor_slime_crystal",
+  "item_model_index": 0.5
+}

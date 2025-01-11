@@ -64,6 +64,7 @@ import slimeknights.tconstruct.tables.TinkerTables;
 import slimeknights.tconstruct.tools.TinkerModifiers;
 import slimeknights.tconstruct.tools.TinkerToolParts;
 import slimeknights.tconstruct.tools.TinkerTools;
+import slimeknights.tconstruct.tools.data.material.TrimMaterialProvider;
 import slimeknights.tconstruct.world.TinkerStructures;
 import slimeknights.tconstruct.world.TinkerWorld;
 import slimeknights.tconstruct.world.data.WorldgenProvider;
@@ -158,6 +159,7 @@ public class TConstruct {
     RegistrySetBuilder registrySetBuilder = new RegistrySetBuilder();
     DamageTypeProvider.register(registrySetBuilder);
     WorldgenProvider.register(registrySetBuilder);
+    TrimMaterialProvider.register(registrySetBuilder);
     DatapackBuiltinEntriesProvider datapackRegistryProvider = new DatapackBuiltinEntriesProvider(packOutput, lookupProvider, registrySetBuilder, Set.of(MOD_ID));
     generator.addProvider(server, datapackRegistryProvider);
 

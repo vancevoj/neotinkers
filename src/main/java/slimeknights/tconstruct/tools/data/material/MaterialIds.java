@@ -92,6 +92,13 @@ public final class MaterialIds {
   public static final MaterialId clay = id("clay");
   public static final MaterialId honey = id("honey");
 
+  /** List of custom trim materials we support */
+  public static final MaterialId[] TRIM_MATERIALS = {
+    slimesteel, amethystBronze, pigIron, roseGold,
+    cobalt, manyullyn, hepatizon, queensSlime,
+    earthslime, skyslime, ichor, enderslime
+  };
+
   /*
    * Variants
    */

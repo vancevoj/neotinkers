@@ -1479,6 +1479,7 @@
 
 
   "material.tconstruct.unknown": "Unknown",
+  "trim_material.tconstruct.format": "%s Material",
 
   "__comment": "Tier 1 Materials",
   "material.tconstruct.wood": "Wood",

@@ -1,0 +1,14 @@
+{
+  "asset_name": "tconstruct_enderslime",
+  "description": {
+    "color": "#AF4CF6",
+    "translate": "trim_material.tconstruct.format",
+    "with": [
+      {
+        "translate": "material.tconstruct.enderslime"
+      }
+    ]
+  },
+  "ingredient": "tconstruct:ender_slime_crystal",
+  "item_model_index": 1.0
+}

@@ -1,0 +1,14 @@
+{
+  "asset_name": "tconstruct_pig_iron",
+  "description": {
+    "color": "#F0A8A4",
+    "translate": "trim_material.tconstruct.format",
+    "with": [
+      {
+        "translate": "material.tconstruct.pig_iron"
+      }
+    ]
+  },
+  "ingredient": "tconstruct:pig_iron_ingot",
+  "item_model_index": 0.5
+}

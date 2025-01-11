@@ -23,7 +23,7 @@ import java.util.concurrent.CompletionException;
 /** Data generator to create png image files */
 public abstract class GenericTextureGenerator extends GenericDataProvider {
   @Nullable
-  private final ExistingFileHelper existingFileHelper;
+  protected final ExistingFileHelper existingFileHelper;
   @Nullable
   private final ExistingFileHelper.ResourceType resourceType;
 

@@ -14,6 +14,30 @@
       "type": "minecraft:directory",
       "prefix": "gui/tinker_pattern/",
       "source": "gui/tinker_pattern"
+    },
+    {
+      "type": "minecraft:paletted_permutations",
+      "palette_key": "minecraft:trims/color_palettes/trim_palette",
+      "permutations": {
+        "tconstruct_amethyst_bronze": "tconstruct:trims/color_palettes/amethyst_bronze",
+        "tconstruct_cobalt": "tconstruct:trims/color_palettes/cobalt",
+        "tconstruct_earthslime": "tconstruct:trims/color_palettes/earthslime",
+        "tconstruct_enderslime": "tconstruct:trims/color_palettes/enderslime",
+        "tconstruct_hepatizon": "tconstruct:trims/color_palettes/hepatizon",
+        "tconstruct_ichor": "tconstruct:trims/color_palettes/ichor",
+        "tconstruct_manyullyn": "tconstruct:trims/color_palettes/manyullyn",
+        "tconstruct_pig_iron": "tconstruct:trims/color_palettes/pig_iron",
+        "tconstruct_queens_slime": "tconstruct:trims/color_palettes/queens_slime",
+        "tconstruct_rose_gold": "tconstruct:trims/color_palettes/rose_gold",
+        "tconstruct_skyslime": "tconstruct:trims/color_palettes/skyslime",
+        "tconstruct_slimesteel": "tconstruct:trims/color_palettes/slimesteel"
+      },
+      "textures": [
+        "minecraft:trims/items/helmet_trim",
+        "minecraft:trims/items/chestplate_trim",
+        "minecraft:trims/items/leggings_trim",
+        "minecraft:trims/items/boots_trim"
+      ]
     }
   ]
 }

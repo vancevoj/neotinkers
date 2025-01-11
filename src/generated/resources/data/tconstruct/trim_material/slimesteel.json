@@ -1,0 +1,14 @@
+{
+  "asset_name": "tconstruct_slimesteel",
+  "description": {
+    "color": "#27C6C6",
+    "translate": "trim_material.tconstruct.format",
+    "with": [
+      {
+        "translate": "material.tconstruct.slimesteel"
+      }
+    ]
+  },
+  "ingredient": "tconstruct:slimesteel_ingot",
+  "item_model_index": 0.8
+}

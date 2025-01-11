@@ -1,0 +1,14 @@
+{
+  "asset_name": "tconstruct_earthslime",
+  "description": {
+    "color": "#01CD4E",
+    "translate": "trim_material.tconstruct.format",
+    "with": [
+      {
+        "translate": "material.tconstruct.earthslime"
+      }
+    ]
+  },
+  "ingredient": "tconstruct:earth_slime_crystal",
+  "item_model_index": 0.7
+}
