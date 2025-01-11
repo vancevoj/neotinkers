@@ -3,6 +3,9 @@
   "allow_crystal": true,
   "inputs": [
     {
+      "item": "minecraft:netherite_upgrade_smithing_template"
+    },
+    {
       "tag": "forge:ingots/netherite"
     }
   ],

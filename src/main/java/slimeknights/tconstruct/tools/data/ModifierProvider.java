@@ -196,7 +196,6 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
     // netherite
     buildModifier(ModifierIds.netherite)
       .levelDisplay(ModifierLevelDisplay.NO_LEVELS)
-      .addModule(ModifierRequirementsModule.builder().modifierKey(ModifierIds.netherite).requireModifier(TinkerTags.Modifiers.GEMS, 1).displayModifier(ModifierIds.diamond, 1).build())
       .addModule(new RarityModule(Rarity.RARE))
       .addModule(new VolatileFlagModule(IModifiable.INDESTRUCTIBLE_ENTITY))
       .addModule(StatBoostModule.multiplyBase(ToolStats.DURABILITY).flat(0.2f))

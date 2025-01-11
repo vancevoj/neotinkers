@@ -3,6 +3,9 @@
   "allow_crystal": true,
   "inputs": [
     {
+      "item": "tconstruct:obsidian_pane"
+    },
+    {
       "tag": "forge:gems/emerald"
     }
   ],

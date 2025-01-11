@@ -2,24 +2,6 @@
   "level_display": "tconstruct:no_levels",
   "modules": [
     {
-      "type": "tconstruct:requirements",
-      "display_modifiers": [
-        {
-          "level": 1,
-          "name": "tconstruct:diamond"
-        }
-      ],
-      "requirement": {
-        "type": "tconstruct:has_modifier",
-        "check": "upgrades",
-        "modifier": {
-          "type": "tconstruct:tag",
-          "tag": "tconstruct:gems"
-        }
-      },
-      "translation_key": "modifier.tconstruct.netherite.requirements"
-    },
-    {
       "type": "tconstruct:rarity",
       "rarity": "rare"
     },

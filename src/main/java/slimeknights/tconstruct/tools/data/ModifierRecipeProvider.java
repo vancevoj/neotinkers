@@ -208,6 +208,7 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
     // gems are special, I'd like them to be useful on all types of tools
     ModifierRecipeBuilder.modifier(ModifierIds.emerald)
                          .setTools(TinkerTags.Items.DURABILITY)
+                         .addInput(TinkerCommons.obsidianPane)
                          .addInput(Tags.Items.GEMS_EMERALD)
                          .setMaxLevel(1)
                          .setSlots(SlotType.UPGRADE, 1)
@@ -215,6 +216,7 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .save(consumer, prefix(ModifierIds.emerald, upgradeFolder));
     ModifierRecipeBuilder.modifier(ModifierIds.diamond)
                          .setTools(TinkerTags.Items.DURABILITY)
+                         .addInput(TinkerTags.Items.GOLD_CASTS)
                          .addInput(Tags.Items.GEMS_DIAMOND)
                          .setMaxLevel(1)
                          .setSlots(SlotType.UPGRADE, 1)
@@ -232,6 +234,7 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .save(consumer, prefix(ModifierIds.soulbound, upgradeFolder));
     ModifierRecipeBuilder.modifier(ModifierIds.netherite)
                          .setTools(TinkerTags.Items.DURABILITY)
+                         .addInput(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE)
                          .addInput(Tags.Items.INGOTS_NETHERITE)
                          .setMaxLevel(1)
                          .setSlots(SlotType.UPGRADE, 1)
