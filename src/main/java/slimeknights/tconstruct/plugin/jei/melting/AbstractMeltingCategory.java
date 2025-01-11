@@ -25,6 +25,8 @@ import net.minecraftforge.fluids.FluidStack;
 import slimeknights.mantle.fluid.tooltip.FluidTooltipHandler;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.client.GuiUtil;
+import slimeknights.tconstruct.library.recipe.fuel.MeltingFuel;
+import slimeknights.tconstruct.library.recipe.fuel.MeltingFuelLookup;
 import slimeknights.tconstruct.library.recipe.melting.MeltingRecipe;
 import slimeknights.tconstruct.plugin.jei.util.IRecipeTooltipReplacement;
 
@@ -41,13 +43,14 @@ public abstract class AbstractMeltingCategory implements IRecipeCategory<Melting
   protected static final Component TOOLTIP_ORE = Component.translatable(TConstruct.makeTranslationKey("jei", "melting.ore"));
 
   /** Tooltip for fuel display */
-  @SuppressWarnings("SimplifyOptionalCallChains")  // one is Optional<?>, other is OptionalInt
   public static final IRecipeTooltipReplacement FUEL_TOOLTIP = (slot, tooltip) ->
-    slot.getDisplayedIngredient(ForgeTypes.FLUID_STACK).ifPresent(stack ->
-      MeltingFuelHandler.getTemperature(stack.getFluid()).ifPresent(temperature -> {
-        tooltip.add(Component.translatable(KEY_TEMPERATURE, temperature).withStyle(ChatFormatting.GRAY));
-        tooltip.add(Component.translatable(KEY_MULTIPLIER, temperature / 1000f).withStyle(ChatFormatting.GRAY));
-      }));
+    slot.getDisplayedIngredient(ForgeTypes.FLUID_STACK).ifPresent(stack -> {
+      MeltingFuel fuel = MeltingFuelLookup.findFuel(stack.getFluid());
+      if (fuel != null) {
+        tooltip.add(Component.translatable(KEY_TEMPERATURE, fuel.getTemperature()).withStyle(ChatFormatting.GRAY));
+        tooltip.add(Component.translatable(KEY_MULTIPLIER, fuel.getRate() / 10f).withStyle(ChatFormatting.GRAY));
+      }
+    });
 
   @Getter
   private final IDrawable background;

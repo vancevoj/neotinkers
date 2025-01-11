@@ -12,7 +12,6 @@ import slimeknights.mantle.data.loadable.field.ContextKey;
 import slimeknights.mantle.data.loadable.primitive.IntLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.recipe.ICustomOutputRecipe;
-import slimeknights.mantle.recipe.helper.LoadableRecipeSerializer;
 import slimeknights.mantle.recipe.ingredient.FluidIngredient;
 import slimeknights.tconstruct.library.recipe.TinkerRecipeTypes;
 import slimeknights.tconstruct.smeltery.TinkerSmeltery;
@@ -23,35 +22,36 @@ import java.util.List;
 /**
  * Recipe for a fuel for the melter or smeltery
  */
+@Getter
 public class MeltingFuel implements ICustomOutputRecipe<IFluidContainer> {
   public static final RecordLoadable<MeltingFuel> LOADER = RecordLoadable.create(
     ContextKey.ID.requiredField(),
-    LoadableRecipeSerializer.RECIPE_GROUP,
-    FluidIngredient.LOADABLE.requiredField("fluid", r -> r.input),
-    IntLoadable.FROM_ONE.requiredField("duration", MeltingFuel::getDuration),
-    IntLoadable.FROM_ONE.requiredField("temperature", MeltingFuel::getTemperature), // TODO: negative temperatures with int range
-    MeltingFuel::new);
+    FluidIngredient.LOADABLE.defaultField("fluid", FluidIngredient.EMPTY, r -> r.input),
+    IntLoadable.FROM_ONE.defaultField("duration", 0, MeltingFuel::getDuration),
+    IntLoadable.FROM_ONE.requiredField("temperature", MeltingFuel::getTemperature),
+    IntLoadable.FROM_ONE.requiredField("rate", MeltingFuel::getRate),
+    MeltingFuel::new).validate((fuel, error) -> {
+      // duration is optional (and ignored) for solid
+      if (fuel.input != FluidIngredient.EMPTY && fuel.duration == 0) {
+        throw error.create("Missing JSON field duration");
+      }
+      return fuel;
+    });
 
-  @Getter
   private final ResourceLocation id;
-  @Getter
-  private final String group;
   private final FluidIngredient input;
-  @Getter
   private final int duration;
-  @Getter
   private final int temperature;
+  private final int rate;
 
-  public MeltingFuel(ResourceLocation id, String group, FluidIngredient input, int duration, int temperature) {
+  public MeltingFuel(ResourceLocation id, FluidIngredient input, int duration, int temperature, int rate) {
     this.id = id;
-    this.group = group;
     this.input = input;
     this.duration = duration;
     this.temperature = temperature;
+    this.rate = rate;
     // register this recipe with the lookup
-    for (FluidStack fluid : input.getFluids()) {
-      MeltingFuelLookup.addFuel(fluid.getFluid(), this);
-    }
+    MeltingFuelLookup.addFuel(this);
   }
 
   /* Recipe methods */

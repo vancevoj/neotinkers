@@ -45,8 +45,6 @@ import java.util.function.Supplier;
 public class FuelModule implements ContainerData {
   /** Block position that will never be valid in world, used for sync */
   private static final BlockPos NULL_POS = new BlockPos(0, Short.MIN_VALUE, 0);
-  /** Temperature used for solid fuels, hot enough to melt iron */
-  public static final int SOLID_TEMPERATURE = 800;
 
   /** Listener to attach to stored capability */
   private final NonNullConsumer<LazyOptional<IFluidHandler>> fluidListener = new WeakConsumerWrapper<>(this, (self, cap) -> self.reset());
@@ -88,6 +86,8 @@ public class FuelModule implements ContainerData {
   /** Temperature of the current fuel */
   @Getter
   private int temperature = 0;
+  @Getter
+  private int rate = 0;
 
 
   /*
@@ -162,12 +162,14 @@ public class FuelModule implements ContainerData {
       ItemStack stack = handler.getStackInSlot(i);
       int time = ForgeHooks.getBurnTime(stack, TinkerRecipeTypes.FUEL.get()) / 4;
       if (time > 0) {
+        MeltingFuel solid = MeltingFuelLookup.getSolid();
         if (consume) {
           ItemStack extracted = handler.extractItem(i, 1, false);
           if (ItemStack.isSameItem(extracted, stack)) {
             fuel += time;
             fuelQuality = time;
-            temperature = SOLID_TEMPERATURE;
+            temperature = solid.getTemperature();
+            rate = solid.getRate();
             parent.setChangedFast();
             // return the container
             ItemStack container = extracted.getCraftingRemainingItem();
@@ -189,7 +191,7 @@ public class FuelModule implements ContainerData {
             TConstruct.LOG.error("Invalid item removed from solid fuel handler");
           }
         }
-        return SOLID_TEMPERATURE;
+        return solid.getTemperature();
       }
     }
     return 0;
@@ -223,6 +225,7 @@ public class FuelModule implements ContainerData {
           fuel += recipe.getDuration();
           fuelQuality = recipe.getDuration();
           temperature = recipe.getTemperature();
+          rate = recipe.getRate();
           parent.setChangedFast();
           return temperature;
         } else {
@@ -316,6 +319,7 @@ public class FuelModule implements ContainerData {
     // no handler found, tell client of the lack of fuel
     if (consume) {
       temperature = 0;
+      rate = 0;
     }
     return 0;
   }
@@ -323,6 +327,7 @@ public class FuelModule implements ContainerData {
   /* Tag */
   private static final String TAG_FUEL = "fuel";
   private static final String TAG_TEMPERATURE = "temperature";
+  private static final String TAG_RATE = "rate";
   private static final String TAG_LAST_FUEL = "last_fuel";
 
   /**
@@ -335,6 +340,7 @@ public class FuelModule implements ContainerData {
     }
     if (nbt.contains(TAG_TEMPERATURE, Tag.TAG_ANY_NUMERIC)) {
       temperature = nbt.getInt(TAG_TEMPERATURE);
+      rate = nbt.getInt(TAG_RATE);
     }
     if (nbt.contains(TAG_LAST_FUEL, Tag.TAG_COMPOUND)) {
       lastPos = NbtUtils.readBlockPos(nbt.getCompound(TAG_LAST_FUEL)).offset(parent.getBlockPos());
@@ -349,6 +355,7 @@ public class FuelModule implements ContainerData {
   public CompoundTag writeToTag(CompoundTag nbt) {
     nbt.putInt(TAG_FUEL, fuel);
     nbt.putInt(TAG_TEMPERATURE, temperature);
+    nbt.putInt(TAG_RATE, rate);
     // technically unneeded for melters, but does not hurt to add
     if (lastPos != NULL_POS) {
       nbt.put(TAG_LAST_FUEL, NbtUtils.writeBlockPos(lastPos.subtract(parent.getBlockPos())));
@@ -361,6 +368,7 @@ public class FuelModule implements ContainerData {
   private static final int FUEL = 0;
   private static final int FUEL_QUALITY = 1;
   private static final int TEMPERATURE = 2;
+  private static final int RATE = 6;
   private static final int LAST_X = 3;
   private static final int LAST_Y = 4;
   private static final int LAST_Z = 5;
@@ -376,6 +384,7 @@ public class FuelModule implements ContainerData {
       case FUEL         -> fuel;
       case FUEL_QUALITY -> fuelQuality;
       case TEMPERATURE  -> temperature;
+      case RATE         -> rate;
       case LAST_X -> lastPos.getX();
       case LAST_Y -> lastPos.getY();
       case LAST_Z -> lastPos.getZ();
@@ -389,6 +398,7 @@ public class FuelModule implements ContainerData {
       case FUEL         -> fuel = value;
       case FUEL_QUALITY -> fuelQuality = value;
       case TEMPERATURE  -> temperature = value;
+      case RATE         -> rate = value;
 
       // position sync takes three parts
       case LAST_X, LAST_Y, LAST_Z -> {
@@ -521,8 +531,8 @@ public class FuelModule implements ContainerData {
   public static class FuelInfo {
     /** Empty fuel instance */
     public static final FuelInfo EMPTY = new FuelInfo(FluidStack.EMPTY, 0, 0, 0);
-    /** Item fuel instance */
-    public static final FuelInfo ITEM = new FuelInfo(FluidStack.EMPTY, 0, 0, SOLID_TEMPERATURE);
+    /** Item fuel instance, doesn't really matter what data we set as it will all be ignored */
+    public static final FuelInfo ITEM = new FuelInfo(FluidStack.EMPTY, 0, 0, 0);
 
     private final FluidStack fluid;
     private int totalAmount;

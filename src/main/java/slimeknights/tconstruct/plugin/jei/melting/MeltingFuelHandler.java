@@ -1,10 +1,9 @@
 package slimeknights.tconstruct.plugin.jei.melting;
 
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.util.Lazy;
 import net.minecraftforge.fluids.FluidStack;
 import slimeknights.tconstruct.library.recipe.fuel.MeltingFuel;
@@ -12,10 +11,7 @@ import slimeknights.tconstruct.library.recipe.fuel.MeltingFuel;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.OptionalInt;
 import java.util.stream.Collectors;
 
 public class MeltingFuelHandler {
@@ -24,11 +20,6 @@ public class MeltingFuelHandler {
    * Sorted from highest to lowest temperature
    */
   private static List<Pair<Integer,List<FluidStack>>> fuelLookup = Collections.emptyList();
-
-  /**
-   * Lookup from fluid to fluids melting temperature
-   */
-  private static Map<Fluid,Integer> temperatureLookup = Collections.emptyMap();
 
   /** List of solid fuels for solid melting */
   public static final Lazy<List<ItemStack>> SOLID_FUELS = Lazy.of(() -> Arrays.asList(
@@ -50,11 +41,6 @@ public class MeltingFuelHandler {
                           .flatMap(fuel -> fuel.getInputs().stream())
                           .collect(Collectors.toList())))
                       .collect(Collectors.toList());
-    // get a map of fluid to temperature
-    temperatureLookup = fuels.stream().collect(HashMap::new, (map, fuel) -> {
-      int temperature = fuel.getTemperature();
-      fuel.getInputs().forEach((fluid) -> map.put(fluid.getFluid(), temperature));
-    }, Map::putAll);
   }
 
   /**
@@ -70,18 +56,5 @@ public class MeltingFuelHandler {
       }
     }
     return Collections.emptyList();
-  }
-
-  /**
-   * Gets the temperature for the given fluid
-   * @param fluid  Fluid to lookup
-   * @return  Temperature, or empty if the fluid is not valid
-   */
-  public static OptionalInt getTemperature(Fluid fluid) {
-    Integer temperature = temperatureLookup.get(fluid);
-    if (temperature != null) {
-      return OptionalInt.of(temperature);
-    }
-    return OptionalInt.empty();
   }
 }

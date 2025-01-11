@@ -23,28 +23,26 @@ import slimeknights.mantle.fluid.tooltip.FluidTooltipHandler;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.config.Config;
 import slimeknights.tconstruct.library.recipe.FluidValues;
+import slimeknights.tconstruct.library.recipe.fuel.MeltingFuel;
+import slimeknights.tconstruct.library.recipe.fuel.MeltingFuelLookup;
 import slimeknights.tconstruct.library.recipe.melting.IMeltingContainer.OreRateType;
 import slimeknights.tconstruct.library.recipe.melting.MeltingRecipe;
 import slimeknights.tconstruct.plugin.jei.TConstructJEIConstants;
 import slimeknights.tconstruct.smeltery.TinkerSmeltery;
-import slimeknights.tconstruct.smeltery.block.entity.module.FuelModule;
 
 import java.util.List;
 
 /** Shared by melter and smeltery */
 public class MeltingCategory extends AbstractMeltingCategory {
   private static final Component TITLE = TConstruct.makeTranslation("jei", "melting.title");
-  private static final String KEY_TEMPERATURE = TConstruct.makeTranslationKey("jei", "temperature");
-  private static final String KEY_MULTIPLIER = TConstruct.makeTranslationKey("jei", "melting.multiplier");
-  private static final Component SOLID_TEMPERATURE = Component.translatable(KEY_TEMPERATURE, FuelModule.SOLID_TEMPERATURE).withStyle(ChatFormatting.GRAY);
-  private static final Component SOLID_MULTIPLIER = Component.translatable(KEY_MULTIPLIER, FuelModule.SOLID_TEMPERATURE / 1000f).withStyle(ChatFormatting.GRAY);
   private static final Component TOOLTIP_SMELTERY = TConstruct.makeTranslation("jei", "melting.smeltery").withStyle(ChatFormatting.GRAY, ChatFormatting.UNDERLINE);
   private static final Component TOOLTIP_MELTER = TConstruct.makeTranslation("jei", "melting.melter").withStyle(ChatFormatting.GRAY, ChatFormatting.UNDERLINE);
 
   /** Tooltip callback for items */
   private static final IRecipeSlotTooltipCallback ITEM_FUEL_TOOLTIP = (slot, list) -> {
-    list.add(1, SOLID_TEMPERATURE);
-    list.add(2, SOLID_MULTIPLIER);
+    MeltingFuel solid = MeltingFuelLookup.getSolid();
+    list.add(1, Component.translatable(KEY_TEMPERATURE, solid.getTemperature()).withStyle(ChatFormatting.GRAY));
+    list.add(2, Component.translatable(KEY_MULTIPLIER, solid.getRate() / 10f).withStyle(ChatFormatting.GRAY));
   };
 
   /** Tooltip callback for ores */
@@ -77,7 +75,7 @@ public class MeltingCategory extends AbstractMeltingCategory {
 
     // solid fuel slot
     int temperature = recipe.getTemperature();
-    if (temperature <= FuelModule.SOLID_TEMPERATURE) {
+    if (temperature <= MeltingFuelLookup.getSolid().getTemperature()) {
       solidFuel.draw(graphics, 1, 19);
     }
   }
@@ -106,7 +104,7 @@ public class MeltingCategory extends AbstractMeltingCategory {
     // show fuels that are valid for this recipe
     int fuelHeight = 32;
     // solid fuel
-    if (recipe.getTemperature() <= FuelModule.SOLID_TEMPERATURE) {
+    if (recipe.getTemperature() <= MeltingFuelLookup.getSolid().getTemperature()) {
       fuelHeight = 15;
       builder.addSlot(RecipeIngredientRole.RENDER_ONLY, 2, 22)
              .addTooltipCallback(ITEM_FUEL_TOOLTIP)

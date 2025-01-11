@@ -278,10 +278,10 @@ public class MeltingModuleInventory implements IItemHandlerModifiable {
    * Heats all items in the inventory
    * @param temperature  Heating structure temperature
    */
-  public void heatItems(int temperature) {
+  public void heatItems(int temperature, int rate) {
     for (MeltingModule module : modules) {
       if (module != null) {
-        module.heatItem(temperature);
+        module.heatItem(temperature, rate);
       }
     }
   }

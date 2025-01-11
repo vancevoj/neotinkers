@@ -129,7 +129,7 @@ public class MeltingModule implements IMeltingContainer, ContainerData {
    * Heats the item in this slot
    * @param temperature     Heating structure temperature
    */
-  public void heatItem(int temperature) {
+  public void heatItem(int temperature, int rate) {
     // if the slot is able to be heated, heat it
     if (currentTime == NO_SPACE || canHeatItem(temperature)) {
       // if we are done, cook item
@@ -138,7 +138,7 @@ public class MeltingModule implements IMeltingContainer, ContainerData {
           resetRecipe();
         }
       } else {
-        currentTime += temperature / 100;
+        currentTime += rate;
       }
     }
   }

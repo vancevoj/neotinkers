@@ -1748,6 +1748,8 @@ public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelt
                         .save(consumer, location(slimeFolder + "mushroom_stew"));
 
     // fuels
+    MeltingFuelBuilder.solid(800)
+                      .save(consumer, location(folder + "fuel/solid"));
     MeltingFuelBuilder.fuel(new FluidStack(Fluids.LAVA, 50), 100)
                       .save(consumer, location(folder + "fuel/lava"));
     MeltingFuelBuilder.fuel(new FluidStack(TinkerFluids.blazingBlood.get(), 50), 150)

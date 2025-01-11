@@ -5,5 +5,6 @@
     "amount": 50,
     "fluid": "tconstruct:blazing_blood"
   },
+  "rate": 15,
   "temperature": 1500
 }

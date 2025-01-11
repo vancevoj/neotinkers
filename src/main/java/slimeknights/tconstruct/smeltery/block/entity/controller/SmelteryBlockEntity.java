@@ -87,7 +87,7 @@ public class SmelteryBlockEntity extends HeatingStructureBlockEntity {
         // second tick: melt items
         case 1:
           if (fuelModule.hasFuel()) {
-            meltingInventory.heatItems(fuelModule.getTemperature());
+            meltingInventory.heatItems(fuelModule.getTemperature(), fuelModule.getRate());
           } else {
             meltingInventory.coolItems();
           }
