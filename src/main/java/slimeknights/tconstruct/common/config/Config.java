@@ -191,7 +191,6 @@ public class Config {
   public static class Client {
     //public final ForgeConfigSpec.BooleanValue temperatureInCelsius;
     public final ForgeConfigSpec.BooleanValue tankFluidModel;
-    public final ForgeConfigSpec.BooleanValue extraToolTips; // TODO: do we even need this config option? who would turn it off?
     public final ForgeConfigSpec.BooleanValue logMissingMaterialTextures;
     public final ForgeConfigSpec.BooleanValue logMissingModifierTextures;
     public final ForgeConfigSpec.BooleanValue renderShieldSlotItem;
@@ -230,11 +229,6 @@ public class Config {
          )
         .translation("tconstruct.configgui.tankFluidModel")
         .define("tankFluidModel", false);
-
-      this.extraToolTips = builder
-        .comment("If true tools will show additional info in their tooltips")
-        .translation("tconstruct.configgui.extraToolTips")
-        .define("extraToolTips", true);
 
       this.logMissingMaterialTextures = builder
         .comment("If true, the game will log all material textures which do not exist in resource packs but can be added, can be helpful for moddevs or resourcepack makers")

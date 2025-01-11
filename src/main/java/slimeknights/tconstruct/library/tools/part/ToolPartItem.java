@@ -56,6 +56,7 @@ public class ToolPartItem extends MaterialItem implements IToolPart {
         tooltip.add((Component.translatable(MATERIAL_KEY, materialVariant.toString())).withStyle(ChatFormatting.DARK_GRAY));
       }
       if (canUseMaterial(id)) {
+        TooltipKey key = SafeClientAccess.getTooltipKey();
         for (ModifierEntry entry : MaterialRegistry.getInstance().getTraits(id, getStatType())) {
           Component name = entry.getDisplayName();
           if (flag.isAdvanced() && Config.CLIENT.modifiersIDsInAdvancedTooltips.get()) {
@@ -63,17 +64,23 @@ public class ToolPartItem extends MaterialItem implements IToolPart {
           } else {
             tooltip.add(name);
           }
+          // holding control shows descriptions for traits
+          if (key == TooltipKey.CONTROL) {
+            // skip the flavor line, trait name will take its spot instead
+            List<Component> description = entry.getModifier().getDescriptionList(entry.getLevel());
+            for (int i = 1; i < description.size(); i++) {
+              tooltip.add(description.get(i).plainCopy().withStyle(ChatFormatting.GRAY));
+            }
+          }
         }
         // add stats
-        if (Config.CLIENT.extraToolTips.get()) {
-          TooltipKey key = SafeClientAccess.getTooltipKey();
-          if (key == TooltipKey.SHIFT || key == TooltipKey.UNKNOWN) {
-            this.addStatInfoTooltip(id, tooltip);
-          } else {
-            // info tooltip for detailed and component info
-            tooltip.add(Component.empty());
-            tooltip.add(TooltipUtil.TOOLTIP_HOLD_SHIFT);
-          }
+        if (key == TooltipKey.SHIFT || key == TooltipKey.UNKNOWN) {
+          this.addStatInfoTooltip(id, tooltip);
+        } else if (key != TooltipKey.CONTROL) {
+          // info tooltip for detailed and component info
+          tooltip.add(Component.empty());
+          tooltip.add(TooltipUtil.TOOLTIP_HOLD_SHIFT);
+          tooltip.add(TooltipUtil.TOOLTIP_HOLD_CTRL);
         }
       } else {
         // is the material missing, or is it not valid for this stat type?
