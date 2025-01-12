@@ -11,7 +11,10 @@ import slimeknights.mantle.util.typed.TypedMap;
 import javax.annotation.Nullable;
 import java.util.function.Function;
 
-/** Helper to parse variants of resource locations, doubles as a loadable. */
+/**
+ * Helper to parse variants of resource locations, doubles as a loadable.
+ * @see ResourceId
+ */
 public record IdParser<T extends ResourceLocation>(Function<String, T> constructor, String name) implements StringLoadable<T> {
   /**
    * Creates a new ID from the given string
@@ -29,11 +32,11 @@ public record IdParser<T extends ResourceLocation>(Function<String, T> construct
 
   @Override
   public T parseString(String text, String key) {
-    T location = tryParse(text);
-    if (location == null) {
-      throw new JsonSyntaxException("Expected " + key + " to be a " + name + " ID, was '" + text + "'");
+    try {
+      return constructor.apply(text);
+    } catch (ResourceLocationException ex) {
+      throw new JsonSyntaxException("Expected " + key + " to be a " + name + " ID, received invalid characters", ex);
     }
-    return location;
   }
 
   @Override

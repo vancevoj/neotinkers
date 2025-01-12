@@ -3,6 +3,7 @@ package slimeknights.tconstruct.library.recipe.partbuilder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import slimeknights.tconstruct.library.utils.IdParser;
+import slimeknights.tconstruct.library.utils.ResourceId;
 import slimeknights.tconstruct.library.utils.Util;
 
 import javax.annotation.Nullable;
@@ -10,7 +11,7 @@ import javax.annotation.Nullable;
 /**
  * This is a copy of resource location with a couple extra helpers
  */
-public class Pattern extends ResourceLocation {
+public class Pattern extends ResourceId {
   public static final IdParser<Pattern> PARSER = new IdParser<>(Pattern::new, "Pattern");
 
   public Pattern(String resourceName) {
@@ -21,8 +22,12 @@ public class Pattern extends ResourceLocation {
     super(namespaceIn, pathIn);
   }
 
-  public Pattern(ResourceLocation resourceLocation) {
-    super(resourceLocation.getNamespace(), resourceLocation.getPath());
+  public Pattern(ResourceLocation location) {
+    super(location);
+  }
+
+  private Pattern(String namespace, String path, @Nullable Dummy pDummy) {
+    super(namespace, path, pDummy);
   }
 
   /**
@@ -49,13 +54,16 @@ public class Pattern extends ResourceLocation {
     return new ResourceLocation(getNamespace(), "gui/tinker_pattern/" + getPath());
   }
 
-  /**
-   * Tries to create a pattern from the given string, for NBT parsing
-   * @param string  String
-   * @return  Tool stat ID, or null of invalid
-   */
+
+  /** {@return Pattern ID, or null of invalid} */
   @Nullable
   public static Pattern tryParse(String string) {
-    return PARSER.tryParse(string);
+    return tryParse(string, (namespace, path) -> new Pattern(namespace, path, null));
+  }
+
+  /** {@return Pattern ID, or null of invalid} */
+  @Nullable
+  public static Pattern tryBuild(String namespace, String path) {
+    return tryBuild(namespace, path, (n, p) -> new Pattern(namespace, path, null));
   }
 }

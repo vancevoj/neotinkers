@@ -4,13 +4,14 @@ import net.minecraft.resources.ResourceLocation;
 import slimeknights.tconstruct.library.materials.MaterialRegistry;
 import slimeknights.tconstruct.library.materials.definition.MaterialId;
 import slimeknights.tconstruct.library.utils.IdParser;
+import slimeknights.tconstruct.library.utils.ResourceId;
 
 import javax.annotation.Nullable;
 
 /**
  * This is just a copy of ResourceLocation for type safety.
  */
-public class MaterialStatsId extends ResourceLocation {
+public class MaterialStatsId extends ResourceId {
   public static final IdParser<MaterialStatsId> PARSER = new IdParser<>(MaterialStatsId::new, "Material Stat Type");
 
   public MaterialStatsId(String text) {
@@ -21,22 +22,29 @@ public class MaterialStatsId extends ResourceLocation {
     super(namespaceIn, pathIn);
   }
 
-  public MaterialStatsId(ResourceLocation resourceLocation) {
-    super(resourceLocation.getNamespace(), resourceLocation.getPath());
+  public MaterialStatsId(ResourceLocation location) {
+    super(location);
   }
 
-  /**
-   * Creates a new material stat ID from the given string
-   * @param string  String
-   * @return  Material ID, or null if invalid
-   */
-  @Nullable
-  public static MaterialStatsId tryParse(String string) {
-    return PARSER.tryParse(string);
+  private MaterialStatsId(String namespace, String path, @Nullable Dummy pDummy) {
+    super(namespace, path, pDummy);
   }
 
   /** Checks if the given material can be used */
   public boolean canUseMaterial(MaterialId material) {
     return MaterialRegistry.getInstance().getMaterialStats(material.getId(), this).isPresent();
+  }
+
+
+  /** {@return Material Stats ID, or null of invalid} */
+  @Nullable
+  public static MaterialStatsId tryParse(String string) {
+    return tryParse(string, (namespace, path) -> new MaterialStatsId(namespace, path, null));
+  }
+
+  /** {@return Material Stats ID, or null of invalid} */
+  @Nullable
+  public static MaterialStatsId tryBuild(String namespace, String path) {
+    return tryBuild(namespace, path, (n, p) -> new MaterialStatsId(namespace, path, null));
   }
 }

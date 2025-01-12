@@ -4,13 +4,14 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import slimeknights.tconstruct.library.tools.part.IMaterialItem;
 import slimeknights.tconstruct.library.utils.IdParser;
+import slimeknights.tconstruct.library.utils.ResourceId;
 
 import javax.annotation.Nullable;
 
 /**
  * This is just a copy of ResourceLocation for type safety.
  */
-public final class MaterialId extends ResourceLocation implements MaterialVariantId {
+public final class MaterialId extends ResourceId implements MaterialVariantId {
   public static final IdParser<MaterialId> PARSER = new IdParser<>(MaterialId::new, "Material");
 
   public MaterialId(String resourceName) {
@@ -21,8 +22,12 @@ public final class MaterialId extends ResourceLocation implements MaterialVarian
     super(namespaceIn, pathIn);
   }
 
-  public MaterialId(ResourceLocation resourceLocation) {
-    super(resourceLocation.getNamespace(), resourceLocation.getPath());
+  public MaterialId(ResourceLocation location) {
+    super(location);
+  }
+
+  private MaterialId(String namespace, String path, @Nullable Dummy pDummy) {
+    super(namespace, path, pDummy);
   }
 
   /** Checks if this ID matches the given material */
@@ -67,13 +72,15 @@ public final class MaterialId extends ResourceLocation implements MaterialVarian
 
   /* Helpers */
 
-  /**
-   * Creates a new material ID from the given string
-   * @param string  String
-   * @return  Material ID, or null if invalid
-   */
+  /** {@return Material ID, or null of invalid} */
   @Nullable
   public static MaterialId tryParse(String string) {
-    return PARSER.tryParse(string);
+    return tryParse(string, (namespace, path) -> new MaterialId(namespace, path, null));
+  }
+
+  /** {@return Material ID, or null of invalid} */
+  @Nullable
+  public static MaterialId tryBuild(String namespace, String path) {
+    return tryBuild(namespace, path, (n, p) -> new MaterialId(namespace, path, null));
   }
 }
