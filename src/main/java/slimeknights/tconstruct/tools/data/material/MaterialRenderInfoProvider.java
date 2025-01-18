@@ -60,7 +60,7 @@ public class MaterialRenderInfoProvider extends AbstractMaterialRenderInfoProvid
     buildRenderInfo(MaterialIds.endstone);
     buildRenderInfo(MaterialIds.skyslimeVine).color(0x00F4DA).fallbacks("vine");
     // slimewood
-    buildRenderInfo(MaterialIds.slimewood).materialTexture(MaterialIds.greenheart).color(0x82c873).fallbacks("wood", "primitive");
+    buildRenderInfo(MaterialIds.slimewood).materialTexture(MaterialIds.greenheart).color(0x82c873).fallbacks("slime_wood", "wood", "stick", "primitive");
     buildRenderInfo(MaterialIds.greenheart);
     buildRenderInfo(MaterialIds.skyroot);
     buildRenderInfo(MaterialIds.bloodshroom);

@@ -20,6 +20,7 @@ import net.minecraft.util.GsonHelper;
 import net.minecraft.world.entity.player.Player;
 import org.apache.commons.lang3.mutable.MutableInt;
 import slimeknights.mantle.util.JsonHelper;
+import slimeknights.mantle.util.typed.TypedMap;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.client.data.material.AbstractMaterialSpriteProvider.MaterialSpriteInfo;
 import slimeknights.tconstruct.library.client.data.material.AbstractPartSpriteProvider.PartSpriteInfo;
@@ -27,8 +28,8 @@ import slimeknights.tconstruct.library.client.data.material.GeneratorPartTexture
 import slimeknights.tconstruct.library.client.data.material.MaterialPartTextureGenerator;
 import slimeknights.tconstruct.library.client.data.util.AbstractSpriteReader;
 import slimeknights.tconstruct.library.client.data.util.ResourceManagerSpriteReader;
-import slimeknights.tconstruct.library.client.materials.MaterialRenderInfoJson;
-import slimeknights.tconstruct.library.client.materials.MaterialRenderInfoJson.MaterialGeneratorJson;
+import slimeknights.tconstruct.library.client.materials.MaterialGeneratorInfo;
+import slimeknights.tconstruct.library.client.materials.MaterialRenderInfo;
 import slimeknights.tconstruct.library.client.materials.MaterialRenderInfoLoader;
 import slimeknights.tconstruct.library.materials.definition.MaterialVariantId;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
@@ -38,7 +39,6 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
-import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -47,7 +47,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -163,7 +162,7 @@ public class ClientGeneratePartTexturesCommand {
 
     try {
       Files.createDirectories(path.getParent());
-      String json = MaterialRenderInfoLoader.GSON.toJson(meta);
+      String json = JsonHelper.DEFAULT_GSON.toJson(meta);
       try (BufferedWriter bufferedwriter = Files.newBufferedWriter(path)) {
         bufferedwriter.write(json);
       }
@@ -190,7 +189,7 @@ public class ClientGeneratePartTexturesCommand {
                                          location.getNamespace(), MaterialPartTextureGenerator.FOLDER, location.getPath() + ".png.mcmeta"));
     try {
       Files.createDirectories(path.getParent());
-      String json = MaterialRenderInfoLoader.GSON.toJson(meta);
+      String json = JsonHelper.DEFAULT_GSON.toJson(meta);
       try (BufferedWriter bufferedwriter = Files.newBufferedWriter(path)) {
         bufferedwriter.write(json);
       }
@@ -274,25 +273,22 @@ public class ClientGeneratePartTexturesCommand {
     for(Entry<ResourceLocation,Resource> entry : manager.listResources(MaterialRenderInfoLoader.FOLDER, loc -> loc.getPath().endsWith(".json")).entrySet()) {
       // clean up ID by trimming off the extension
       ResourceLocation location = entry.getKey();
-      String localPath = JsonHelper.localize(location.getPath(), MaterialRenderInfoLoader.FOLDER, ".json");
-
-      // locate variant as a subfolder, and create final ID
-      String variant = "";
-      int slashIndex = localPath.lastIndexOf('/');
-      if (slashIndex >= 0) {
-        variant = localPath.substring(slashIndex + 1);
-        localPath = localPath.substring(0, slashIndex);
-      }
-      MaterialVariantId id = MaterialVariantId.create(location.getNamespace(), localPath, variant);
+      MaterialVariantId id = MaterialRenderInfoLoader.variant(location);
 
       // ensure its a material we care about
       if (validMaterialId.test(id)) {
-        try (Reader reader = entry.getValue().openAsReader()) {
-          // if the JSON has generator info, add it to the consumer
-          MaterialRenderInfoJson json = MaterialRenderInfoLoader.GSON.fromJson(reader, MaterialRenderInfoJson.class);
-          MaterialGeneratorJson generator = json.getGenerator();
-          if (generator != null) {
-            builder.add(new MaterialSpriteInfo(Objects.requireNonNullElse(json.getTexture(), id.getLocation('_')), Objects.requireNonNullElse(json.getFallbacks(), new String[0]), generator));
+        try {
+          JsonObject json = JsonHelper.getJson(entry.getValue(), id.getLocation('/'));
+          if (json != null && json.has("generator")) {
+            TypedMap context = MaterialRenderInfoLoader.createContext(id);
+            MaterialRenderInfo info = MaterialRenderInfo.LOADABLE.deserialize(json, context);
+            MaterialGeneratorInfo generator = MaterialGeneratorInfo.LOADABLE.getIfPresent(json, "generator", context);
+            ResourceLocation texture = info.texture();
+            if (texture == null) {
+              log.error("Skipping material {} as it has no texture despite having a generator", id);
+            } else {
+              builder.add(new MaterialSpriteInfo(texture, info.fallbacks(), generator));
+            }
           }
         } catch (JsonSyntaxException e) {
           log.error("Failed to read tool part texture generator info for {}", id, e);

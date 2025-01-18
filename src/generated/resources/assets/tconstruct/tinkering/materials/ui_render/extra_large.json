@@ -3,6 +3,5 @@
   "fallbacks": [
     "metal"
   ],
-  "luminosity": 0,
   "texture": "tconstruct:copper"
 }
