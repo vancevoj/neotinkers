@@ -1,17 +1,20 @@
 package slimeknights.tconstruct.library.client.materials;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import lombok.extern.log4j.Log4j2;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
+import net.minecraft.util.GsonHelper;
 import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.fml.ModLoader;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import slimeknights.mantle.data.datamap.RegistryDataMapLoader;
 import slimeknights.mantle.data.listener.IEarlySafeManagerReloadListener;
 import slimeknights.mantle.data.loadable.field.ContextKey;
 import slimeknights.mantle.util.JsonHelper;
@@ -86,16 +89,16 @@ public class MaterialRenderInfoLoader implements IEarlySafeManagerReloadListener
 
   /** Gets the variant for the given render info path */
   public static MaterialVariantId variant(ResourceLocation location) {
-    String localPath = JsonHelper.localize(location.getPath(), FOLDER, ".json");
+    String path = location.getPath();
 
     // locate variant as a subfolder, and create final ID
     String variant = "";
-    int slashIndex = localPath.lastIndexOf('/');
+    int slashIndex = path.lastIndexOf('/');
     if (slashIndex >= 0) {
-      variant = localPath.substring(slashIndex + 1);
-      localPath = localPath.substring(0, slashIndex);
+      variant = path.substring(slashIndex + 1);
+      path = path.substring(0, slashIndex);
     }
-    return MaterialVariantId.create(location.getNamespace(), localPath, variant);
+    return MaterialVariantId.create(location.getNamespace(), path, variant);
   }
 
   /** Creates the context for the render info parser */
@@ -106,28 +109,33 @@ public class MaterialRenderInfoLoader implements IEarlySafeManagerReloadListener
   @Override
   public void onReloadSafe(ResourceManager manager) {
     // first, we need to fetch all relevant JSON files
+    Map<ResourceLocation,JsonElement> jsons = new HashMap<>();
+    SimpleJsonResourceReloadListener.scanDirectory(manager, FOLDER, JsonHelper.DEFAULT_GSON, jsons);
+    // final result map
     Map<MaterialVariantId,MaterialRenderInfo> map = new HashMap<>();
-    for(Entry<ResourceLocation, Resource> entry : manager.listResources(FOLDER, (loc) -> loc.getPath().endsWith(".json")).entrySet()) {
+
+    // iterate the files, handling parenting thanks to the data map loader
+    for(Entry<ResourceLocation, JsonElement> entry : jsons.entrySet()) {
       // clean up ID by trimming off the extension and folder
       ResourceLocation location = entry.getKey();
       MaterialVariantId id = variant(location);
 
       // read in the JSON data
       try  {
-        JsonObject json = JsonHelper.getJson(entry.getValue(), location);
-        if (json != null) {
-          // parse it into material render info
-          MaterialRenderInfo old = map.put(id, MaterialRenderInfo.LOADABLE.deserialize(json, createContext(id));
-          if (old != null) {
-            throw new IllegalStateException("Duplicate data file ignored with ID " + id);
-          }
+        JsonObject json = GsonHelper.convertToJsonObject(entry.getValue(), location.toString());
+        // skip empty objects, its the way to disable it
+        if (json.keySet().isEmpty()) {
+          continue;
         }
+        // parse it into material render info
+        map.put(id, RegistryDataMapLoader.parseData("Material Render Info", jsons, location, json, null, MaterialRenderInfo.LOADABLE, createContext(id)));
       } catch (IllegalArgumentException | JsonParseException ex) {
         log.error("Couldn't parse data file {} from {}", id, location, ex);
       }
     }
+
     // store the list immediately, otherwise it is not in place in time for models to load
-    this.renderInfos = map;
+    this.renderInfos = Map.copyOf(map);
     log.debug("Loaded material render infos: {}", Util.toIndentedStringList(map.keySet()));
     log.info("{} material render infos loaded", map.size());
   }

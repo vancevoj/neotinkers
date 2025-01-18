@@ -1,7 +1,4 @@
 {
-  "color": "FF9261CC",
-  "fallbacks": [
-    "metal"
-  ],
+  "parent": "tconstruct:manyullyn",
   "texture": "tconstruct:manyullyn"
 }

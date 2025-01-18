@@ -1,7 +1,4 @@
 {
-  "color": "FFF98648",
-  "fallbacks": [
-    "metal"
-  ],
+  "parent": "tconstruct:copper",
   "texture": "tconstruct:copper"
 }

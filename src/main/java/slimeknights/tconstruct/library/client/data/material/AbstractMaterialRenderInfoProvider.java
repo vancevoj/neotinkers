@@ -1,5 +1,7 @@
 package slimeknights.tconstruct.library.client.data.material;
 
+import com.google.errorprone.annotations.CanIgnoreReturnValue;
+import com.google.errorprone.annotations.CheckReturnValue;
 import com.google.gson.JsonObject;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -62,9 +64,9 @@ public abstract class AbstractMaterialRenderInfoProvider extends GenericDataProv
   /* Helpers */
 
   /** Initializes a builder for the given material */
-  private RenderInfoBuilder getBuilder(ResourceLocation texture) {
+  private RenderInfoBuilder getBuilder(@Nullable ResourceLocation texture) {
     RenderInfoBuilder builder = new RenderInfoBuilder().texture(texture);
-    if (materialSprites != null) {
+    if (materialSprites != null && texture != null) {
       MaterialSpriteInfo spriteInfo = materialSprites.getMaterialInfo(texture);
       if (spriteInfo != null) {
         builder.fallbacks(spriteInfo.getFallbacks());
@@ -81,28 +83,43 @@ public abstract class AbstractMaterialRenderInfoProvider extends GenericDataProv
 
   /** Starts a builder for a general render info */
   protected RenderInfoBuilder buildRenderInfo(MaterialVariantId materialId) {
-    return allRenderInfo.computeIfAbsent(materialId, id -> getBuilder(materialId.getLocation('_')));
+    return buildRenderInfo(materialId, materialId.getLocation('_'));
   }
 
   /**
    * Starts a builder for a general render info with an overridden texture.
    * Use {@link #buildRenderInfo(MaterialVariantId)} if you plan to override the texture without copying the datagen settings
    */
-  protected RenderInfoBuilder buildRenderInfo(MaterialVariantId materialId, ResourceLocation texture) {
-    return allRenderInfo.computeIfAbsent(materialId, id -> getBuilder(texture).texture(texture));
+  protected RenderInfoBuilder buildRenderInfo(MaterialVariantId materialId, @Nullable ResourceLocation texture) {
+    return allRenderInfo.computeIfAbsent(materialId, id -> getBuilder(texture));
+  }
+
+  /** Creates a builder that redirects the given material to the given target material. Uses the default texture name (but you can override that if the target doesn't) */
+  protected RenderInfoBuilder redirect(MaterialVariantId materialId, MaterialVariantId target) {
+    // we need to set texture as if unset, its inferred from the ID
+    return buildRenderInfo(materialId, null).parentMaterial(target).texture(target.getLocation('_'));
   }
 
   @Accessors(fluent = true, chain = true)
+  @CanIgnoreReturnValue
   protected static class RenderInfoBuilder {
     @Setter
     @Nullable
     private ResourceLocation texture = null;
+    @Setter
+    @Nullable
+    private ResourceLocation parent = null;
     private String[] fallbacks = new String[0];
     private int color = -1;
     @Setter
     private int luminosity = 0;
     @Setter
     private MaterialGeneratorInfo generator = null;
+
+    /** Sets the parent to the given material ID */
+    public RenderInfoBuilder parentMaterial(MaterialVariantId material) {
+      return parent(material.getLocation('/'));
+    }
 
     /** Sets the color */
     public RenderInfoBuilder color(int color) {
@@ -130,8 +147,12 @@ public abstract class AbstractMaterialRenderInfoProvider extends GenericDataProv
     }
 
     /** Builds the material */
+    @CheckReturnValue
     public JsonObject build(MaterialVariantId id) {
       JsonObject json = new JsonObject();
+      if (parent != null) {
+        json.addProperty("parent", parent.toString());
+      }
       MaterialRenderInfo.LOADABLE.serialize(new MaterialRenderInfo(id, texture, fallbacks, color, luminosity), json);
       if (generator != null) {
         json.add("generator", MaterialGeneratorInfo.LOADABLE.serialize(generator));

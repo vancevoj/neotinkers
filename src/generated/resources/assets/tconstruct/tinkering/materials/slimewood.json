@@ -1,10 +1,4 @@
 {
-  "color": "FF82C873",
-  "fallbacks": [
-    "slime_wood",
-    "wood",
-    "stick",
-    "primitive"
-  ],
+  "parent": "tconstruct:slimewood/greenheart",
   "texture": "tconstruct:slimewood_greenheart"
 }

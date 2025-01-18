@@ -23,7 +23,7 @@ public record MaterialRenderInfo(MaterialVariantId id, @Nullable ResourceLocatio
     MaterialVariantId.CONTEXT_KEY.requiredField(),
     MaterialTextureField.INSTANCE,
     StringLoadable.DEFAULT.array(String[]::new, false, 0).emptyField("fallbacks", MaterialRenderInfo::fallbacks),
-    ColorLoadable.ALPHA.requiredField("color", MaterialRenderInfo::vertexColor),
+    ColorLoadable.ALPHA.defaultField("color", false, MaterialRenderInfo::vertexColor),
     IntLoadable.range(0, 15).defaultField("luminosity", 0, MaterialRenderInfo::luminosity),
     MaterialRenderInfo::new);
 

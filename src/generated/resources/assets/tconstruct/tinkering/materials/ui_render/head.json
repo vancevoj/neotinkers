@@ -1,7 +1,4 @@
 {
-  "color": "FFD8D8D8",
-  "fallbacks": [
-    "metal"
-  ],
+  "parent": "tconstruct:iron",
   "texture": "tconstruct:iron"
 }
