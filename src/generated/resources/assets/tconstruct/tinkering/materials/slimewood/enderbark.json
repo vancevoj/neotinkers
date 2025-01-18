@@ -47,6 +47,7 @@
           "grey": 255
         }
       ]
-    }
+    },
+    "variant": true
   }
 }

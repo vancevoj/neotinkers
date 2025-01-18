@@ -128,13 +128,16 @@ public class ClientGeneratePartTexturesCommand {
     // at this point in time we have all our materials, time to generate our sprites
     for (MaterialSpriteInfo material : materialSprites) {
       for (PartSpriteInfo part : generatorConfig.sprites) {
-        for (MaterialStatsId statType : part.getStatTypes()) {
-          if (material.supportStatType(statType) || generatorConfig.statOverrides.hasOverride(statType, material.getTexture())) {
-            ResourceLocation spritePath = MaterialPartTextureGenerator.outputPath(part, material);
-            if (shouldGenerate.test(spritePath)) {
-              MaterialPartTextureGenerator.generateSprite(spriteReader, material, part, spritePath, saver, metaSaver);
+        // if the part skips variants and the material is a variant, skip
+        if (!material.isVariant() || !part.isSkipVariants()) {
+          for (MaterialStatsId statType : part.getStatTypes()) {
+            if (material.supportStatType(statType) || generatorConfig.statOverrides.hasOverride(statType, material.getTexture())) {
+              ResourceLocation spritePath = MaterialPartTextureGenerator.outputPath(part, material);
+              if (shouldGenerate.test(spritePath)) {
+                MaterialPartTextureGenerator.generateSprite(spriteReader, material, part, spritePath, saver, metaSaver);
+              }
+              break;
             }
-            break;
           }
         }
       }
@@ -230,7 +233,9 @@ public class ClientGeneratePartTexturesCommand {
                 return new PartSpriteInfo(
                   part1.getPath(),
                   Streams.concat(part1.getStatTypes().stream(), part2.getStatTypes().stream()).collect(Collectors.toSet()),
-                  allowAnimated);
+                  allowAnimated,
+                  // if either sprite wants variants we are going to need them
+                  part1.isSkipVariants() && part2.isSkipVariants());
               });
             }
             if (object.has("overrides")) {

@@ -97,8 +97,8 @@ public abstract class AbstractMaterialSpriteProvider {
       this.fallbacks = fallbacks;
     }
 
-    public MaterialSpriteInfo(ResourceLocation texture, String[] fallbacks, ISpriteTransformer transformer, Set<MaterialStatsId> supportedStats) {
-      super(transformer, supportedStats, false);
+    public MaterialSpriteInfo(ResourceLocation texture, String[] fallbacks, ISpriteTransformer transformer, Set<MaterialStatsId> supportedStats, boolean variant) {
+      super(transformer, supportedStats, false, variant);
       this.texture = texture;
       this.fallbacks = fallbacks;
     }
@@ -130,6 +130,8 @@ public abstract class AbstractMaterialSpriteProvider {
     @Setter
     @Nullable
     private ISpriteTransformer transformer;
+    @Setter
+    private boolean variant = false;
 
     /** Sets the fallbacks */
     public MaterialSpriteInfoBuilder fallbacks(String... fallbacks) {
@@ -140,6 +142,11 @@ public abstract class AbstractMaterialSpriteProvider {
     /** Sets the transformer to a color mapping transform */
     public MaterialSpriteInfoBuilder colorMapper(IColorMapping mapping) {
       return transformer(new RecolorSpriteTransformer(mapping));
+    }
+
+    /** Marks this as a variant texture, which is skipped by some sprites such as ancient tools (which can never obtain them) */
+    public MaterialSpriteInfoBuilder variant() {
+      return variant(true);
     }
 
     /** Adds a stat type as supported */
@@ -209,7 +216,7 @@ public abstract class AbstractMaterialSpriteProvider {
       if (supportedStats.isEmpty()) {
         throw new IllegalStateException("Material must support at least one stat type");
       }
-      return new MaterialSpriteInfo(texture, fallbacks, transformer, supportedStats);
+      return new MaterialSpriteInfo(texture, fallbacks, transformer, supportedStats, variant);
     }
   }
 }

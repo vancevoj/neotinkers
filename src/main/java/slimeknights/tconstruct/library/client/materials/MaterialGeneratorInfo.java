@@ -33,6 +33,7 @@ public class MaterialGeneratorInfo {
     new GsonLoadable<>(GSON, ISpriteTransformer.class).requiredField("transformer", g -> g.transformer),
     new LegacyField<>(MaterialStatsId.PARSER.set(0).requiredField("supported_stats", g -> g.supportedStats), "supportedStats"),
     new LegacyField<>(BooleanLoadable.INSTANCE.defaultField("ignore_material_stats", false, false, g -> g.ignoreMaterialStats), "ignoreMaterialStats"),
+    BooleanLoadable.INSTANCE.defaultField("variant", false, false, g -> g.variant),
     MaterialGeneratorInfo::new);
 
   /** Transformer to update images */
@@ -42,9 +43,12 @@ public class MaterialGeneratorInfo {
   private final Set<MaterialStatsId> supportedStats;
   /** If true, this ignores the material stats when determining applicable stat types for the command. Only affects the command, not datagen */
   protected final boolean ignoreMaterialStats;
+  /** If true, this tool will not generate variant textures. Used on ancient tools to skip textures that will never appear. */
+  @Getter
+  private final boolean variant;
 
   public MaterialGeneratorInfo(MaterialGeneratorInfo other) {
-    this(other.transformer, other.supportedStats, other.ignoreMaterialStats);
+    this(other.transformer, other.supportedStats, other.ignoreMaterialStats, other.variant);
   }
 
   /** If true, this stat type is supported */
