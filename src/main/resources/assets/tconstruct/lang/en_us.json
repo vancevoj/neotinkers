@@ -1759,8 +1759,10 @@
   "material.tconstruct.silver.ranged": "Gives +0.5 projectile power against undead per level",
   "material.tconstruct.silver.armor": "Reduces damage from undead by 5% per level",
 
-  "material.tconstruct.whitestone": "Whitestone",
-  "material.tconstruct.whitestone.end": "End Stone",
+  "material.tconstruct.whitestone": "End Stone",
+  "material.tconstruct.whitestone.aluminum": "Whitestone",
+  "material.tconstruct.whitestone.tin": "Whitestone",
+  "material.tconstruct.whitestone.zinc": "Whitestone",
   "material.tconstruct.whitestone.flavor": "Take your useless white metals or rocks and make a useful tool",
   "material.tconstruct.whitestone.encyclopedia": "Mining stone has a 20% per level of granting +3 stoneshield",
 

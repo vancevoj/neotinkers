@@ -58,6 +58,7 @@ public class MaterialRenderInfoProvider extends AbstractMaterialRenderInfoProvid
     buildRenderInfo(MaterialIds.venombone).color(0xA2935E).fallbacks("bone", "rock");
     buildRenderInfo(MaterialIds.necroticBone).color(0x2A2A2A).fallbacks("bone", "rock");
     buildRenderInfo(MaterialIds.endstone);
+    redirect(MaterialIds.whitestone, MaterialIds.endstone);
     buildRenderInfo(MaterialIds.skyslimeVine).color(0x00F4DA).fallbacks("vine");
     // slimewood
     redirect(MaterialIds.slimewood, MaterialIds.greenheart);
@@ -91,7 +92,11 @@ public class MaterialRenderInfoProvider extends AbstractMaterialRenderInfoProvid
     buildRenderInfo(MaterialIds.platinum).color(0xA3E7FE).fallbacks("metal");
     buildRenderInfo(MaterialIds.silver).color(0xDAF3ED).fallbacks("metal");
     buildRenderInfo(MaterialIds.lead).color(0x696579).fallbacks("metal");
-    buildRenderInfo(MaterialIds.whitestone).color(0xE0E9EC).fallbacks("rock");
+    buildRenderInfo(MaterialIds.whitestoneComposite, MaterialIds.whitestone).color(0xE0E9EC).fallbacks("rock");
+    // redirect whitestone variants to whitestone composite instead of endstone
+    redirect(MaterialIds.whitestoneAluminum, MaterialIds.whitestoneComposite);
+    redirect(MaterialIds.whitestoneTin, MaterialIds.whitestoneComposite);
+    redirect(MaterialIds.whitestoneZinc, MaterialIds.whitestoneComposite);
     buildRenderInfo(MaterialIds.aluminum);
 
     // tier 3 compat
