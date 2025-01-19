@@ -44,7 +44,7 @@ public class TinkerPartSpriteProvider extends AbstractPartSpriteProvider {
     // plate textures
     addPart("maille", StatlessMaterialStats.MAILLE.getIdentifier());
     for (ArmorItem.Type slot : ArmorItem.Type.values()) {
-      buildTool("armor/plate/" + slot.getName())
+      buildTool("armor/plate/" + slot.getName()).disallowAnimated() // the armor model won't be animated, so don't animate the item
         .addBreakablePart("plating", PlatingMaterialStats.TYPES.get(slot.ordinal()).getId())
         .addBreakablePart("maille", StatlessMaterialStats.MAILLE.getIdentifier());
     }
@@ -68,15 +68,15 @@ public class TinkerPartSpriteProvider extends AbstractPartSpriteProvider {
     addSprite("staff/modifiers/tconstruct_embellishment", WOOD);
     addSprite("staff/large_modifiers/tconstruct_embellishment", WOOD);
 
-    // slimesuit textures
-    addSprite("armor/slime/skull_modifiers/tconstruct_embellishment", SLIMESUIT);
-    addSprite("armor/slime/skull_modifiers/broken/tconstruct_embellishment", SLIMESUIT);
-    addSprite("armor/slime/wings_modifiers/tconstruct_embellishment", SLIMESUIT);
-    addSprite("armor/slime/wings_modifiers/broken/tconstruct_embellishment", SLIMESUIT);
-    addSprite("armor/slime/shell_modifiers/tconstruct_embellishment", SLIMESUIT);
-    addSprite("armor/slime/shell_modifiers/broken/tconstruct_embellishment", SLIMESUIT);
-    addSprite("armor/slime/boot_modifiers/tconstruct_embellishment", SLIMESUIT);
-    addSprite("armor/slime/boot_modifiers/broken/tconstruct_embellishment", SLIMESUIT);
+    // slimesuit textures - the armor model won't be animated, so don't animate the item
+    addSprite("armor/slime/skull_modifiers/tconstruct_embellishment", SLIMESUIT).disallowAnimated();
+    addSprite("armor/slime/skull_modifiers/broken/tconstruct_embellishment", SLIMESUIT).disallowAnimated();
+    addSprite("armor/slime/wings_modifiers/tconstruct_embellishment", SLIMESUIT).disallowAnimated();
+    addSprite("armor/slime/wings_modifiers/broken/tconstruct_embellishment", SLIMESUIT).disallowAnimated();
+    addSprite("armor/slime/shell_modifiers/tconstruct_embellishment", SLIMESUIT).disallowAnimated();
+    addSprite("armor/slime/shell_modifiers/broken/tconstruct_embellishment", SLIMESUIT).disallowAnimated();
+    addSprite("armor/slime/boot_modifiers/tconstruct_embellishment", SLIMESUIT).disallowAnimated();
+    addSprite("armor/slime/boot_modifiers/broken/tconstruct_embellishment", SLIMESUIT).disallowAnimated();
     addTexture("tinker_armor/slime/armor", SLIMESUIT).disallowAnimated();
     addTexture("tinker_armor/slime/leggings", SLIMESUIT).disallowAnimated();
     addTexture("tinker_armor/slime/wings", SLIMESUIT).disallowAnimated();
