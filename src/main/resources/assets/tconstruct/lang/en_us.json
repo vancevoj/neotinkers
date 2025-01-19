@@ -3187,7 +3187,8 @@
   "advancements.tconstruct.world.slime_collector.title": "Slime Collector",
   "advancements.tconstruct.world.slime_collector.description": "Obtain all 5 types of slime",
   "advancements.tconstruct.world.piggybackpack.title": "Pig Piggyback",
-  "advancements.tconstruct.world.piggybackpack.description": "Pick up a pig with a piggybackpack"
-
+  "advancements.tconstruct.world.piggybackpack.description": "Pick up a pig with a piggybackpack",
+  "advancements.tconstruct.world.ancient_tools.title": "Archeologists",
+  "advancements.tconstruct.world.ancient_tools.description": "Discover all original types of ancient tool"
 }
 
