@@ -3077,6 +3077,7 @@
   "jei.tconstruct.entity_melting.per_heart": "Per 1.0 Heart Damage",
 
   "jei.tconstruct.alloy.title": "Alloying",
+  "jei.tconstruct.alloy.catalyst": "Not consumed",
 
   "jei.tconstruct.modifiers.title": "Modifiers",
   "jei.tconstruct.modifiers.slot": "Modifier requires 1 %s slot to apply",
