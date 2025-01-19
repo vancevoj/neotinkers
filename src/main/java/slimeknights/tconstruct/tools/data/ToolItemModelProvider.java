@@ -62,6 +62,7 @@ public class ToolItemModelProvider extends AbstractToolItemModelProvider {
     bow(TinkerTools.warPick, toolBlocking, true, "bowstring");
     // battlesign has custom properties for blocking, so that is just written directly
     transformTool("tool/battlesign/broken", readJson(TinkerTools.battlesign.getId()), "", false, "broken", "head");
+    pulling(TinkerTools.swasher, toolBlocking, AmmoType.NONE, "blade", 2, "barrel");
   }
 
   @Override

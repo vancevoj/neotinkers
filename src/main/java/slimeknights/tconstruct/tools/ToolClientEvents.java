@@ -178,6 +178,7 @@ public class ToolClientEvents extends ClientEventBase {
       TinkerItemProperties.registerToolProperties(TinkerTools.meltingPan);
       TinkerItemProperties.registerCrossbowProperties(TinkerTools.warPick);
       TinkerItemProperties.registerToolProperties(TinkerTools.battlesign);
+      TinkerItemProperties.registerToolProperties(TinkerTools.swasher);
       // armor
       TinkerItemProperties.registerToolProperties(TinkerTools.travelersShield);
       TinkerItemProperties.registerToolProperties(TinkerTools.plateShield);
@@ -226,6 +227,7 @@ public class ToolClientEvents extends ClientEventBase {
     registerItemColors(colors, TinkerTools.meltingPan);
     registerItemColors(colors, TinkerTools.warPick);
     registerItemColors(colors, TinkerTools.battlesign);
+    registerItemColors(colors, TinkerTools.swasher);
     // armor
     registerItemColors(colors, TinkerTools.travelersShield);
     registerItemColors(colors, TinkerTools.plateShield);

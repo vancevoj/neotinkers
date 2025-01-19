@@ -824,6 +824,36 @@
       "path": "tconstruct:item/tool/battlesign/handle",
       "skip_variants": true,
       "stat_type": "tconstruct:plating_shield"
+    },
+    {
+      "path": "tconstruct:item/tool/swasher/blade",
+      "skip_variants": true,
+      "stat_type": "tconstruct:head"
+    },
+    {
+      "path": "tconstruct:item/tool/swasher/blade_broken",
+      "skip_variants": true,
+      "stat_type": "tconstruct:head"
+    },
+    {
+      "path": "tconstruct:item/tool/swasher/handle",
+      "skip_variants": true,
+      "stat_type": "tconstruct:handle"
+    },
+    {
+      "path": "tconstruct:item/tool/swasher/barrel",
+      "skip_variants": true,
+      "stat_type": "tconstruct:grip"
+    },
+    {
+      "path": "tconstruct:item/tool/swasher/barrel_1",
+      "skip_variants": true,
+      "stat_type": "tconstruct:grip"
+    },
+    {
+      "path": "tconstruct:item/tool/swasher/barrel_2",
+      "skip_variants": true,
+      "stat_type": "tconstruct:grip"
     }
   ],
   "replace": false

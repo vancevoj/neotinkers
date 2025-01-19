@@ -1252,7 +1252,6 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .setTools(ingredientFromTags(TinkerTags.Items.CHESTPLATES, TinkerTags.Items.SHIELDS))
                          .saveSalvage(consumer, prefix(TinkerModifiers.bursting, abilitySalvage))
                          .save(consumer, prefix(TinkerModifiers.bursting, abilityFolder));
-    Ingredient blockWhileCharging = IntersectionIngredient.of(Ingredient.of(TinkerTags.Items.DURABILITY), ingredientFromTags(TinkerTags.Items.INTERACTABLE_RIGHT, TinkerTags.Items.SHIELDS));
     ModifierRecipeBuilder.modifier(TinkerModifiers.spitting)
                          .addInput(tanks)
                          .addInput(Items.DISPENSER)
@@ -1260,7 +1259,10 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .addInput(Tags.Items.INGOTS_COPPER)
                          .addInput(Tags.Items.INGOTS_COPPER)
                          .setSlots(SlotType.ABILITY, 1)
-                         .setTools(blockWhileCharging)
+                         // swasher gets spitting to get multishot, doesn't really fit any good categories for it otherwise (but feel free to request a tag)
+                         .setTools(IntersectionIngredient.of(Ingredient.of(TinkerTags.Items.DURABILITY), CompoundIngredient.of(
+                           Ingredient.of(TinkerTags.Items.INTERACTABLE_RIGHT), Ingredient.of(TinkerTags.Items.SHIELDS), Ingredient.of(TinkerTools.swasher))
+                         ))
                          .saveSalvage(consumer, prefix(TinkerModifiers.spitting, abilitySalvage))
                          .save(consumer, prefix(TinkerModifiers.spitting, abilityFolder));
     ModifierRecipeBuilder.modifier(ModifierIds.tank)
@@ -1347,6 +1349,7 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .saveSalvage(consumer, prefix(TinkerModifiers.fireprimer, upgradeSalvage))
                          .save(consumer, prefix(TinkerModifiers.fireprimer, upgradeFolder));
     // slings
+    Ingredient blockWhileCharging = IntersectionIngredient.of(Ingredient.of(TinkerTags.Items.DURABILITY), ingredientFromTags(TinkerTags.Items.INTERACTABLE_RIGHT, TinkerTags.Items.SHIELDS));
     ModifierRecipeBuilder.modifier(TinkerModifiers.flinging)
                          .setTools(blockWhileCharging)
                          .addInput(Tags.Items.STRING)
