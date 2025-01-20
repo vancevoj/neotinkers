@@ -716,16 +716,6 @@ public class ToolStack implements IToolStackView {
   }
 
   /**
-   * Checks if the given tool stats have been initialized, used as a marker to indicate slots are not yet applied
-   * @param stack  Stack to check
-   * @return  True if initialized
-   */
-  public static boolean hasMaterials(ItemStack stack) {
-    CompoundTag nbt = stack.getTag();
-    return nbt != null && nbt.contains(TAG_MATERIALS, Tag.TAG_LIST);
-  }
-
-  /**
    * Ensures the given item stack is initialized. Called in crafting hooks
    * @param stack ItemStack to initialize
    */
