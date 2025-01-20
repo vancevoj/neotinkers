@@ -13,11 +13,14 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import slimeknights.tconstruct.TConstruct;
+import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.common.config.Config;
+import slimeknights.tconstruct.library.materials.MaterialRegistry;
 import slimeknights.tconstruct.library.materials.definition.MaterialVariantId;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.ModifierId;
+import slimeknights.tconstruct.library.modifiers.ModifierManager;
 import slimeknights.tconstruct.library.modifiers.hook.build.ModifierTraitHook.TraitBuilder;
 import slimeknights.tconstruct.library.tools.SlotType;
 import slimeknights.tconstruct.library.tools.context.ToolRebuildContext;
@@ -624,6 +627,16 @@ public class ToolStack implements IToolStackView {
    * Recalculates any relevant cached data. Called after either the materials or modifiers list changes
    */
   public void rebuildStats() {
+    // quick safety checks: to rebuild stats we need
+    // * tool definition (contains stats and traits)
+    // * material registry (to fetch material stats and traits)
+    // * modifier registry (run relevant modifier hooks)
+    // * item tags (control tool behaviors in various places)
+    // if any of these are missing, attempting to rebuild stats may corrupt the tool's state (persistent data, damage, broken)
+    if (!definition.isDataLoaded() || !MaterialRegistry.isFullyLoaded() || !ModifierManager.INSTANCE.isDynamicModifiersLoaded() || !TinkerTags.isTagsLoaded()) {
+      return;
+    }
+
     // add tool slots to volatile data, ensures it is there even from an empty tool, and properly updates on datapack update
     ToolDefinitionData toolData = getDefinitionData();
 
@@ -750,12 +763,12 @@ public class ToolStack implements IToolStackView {
    */
   public static void verifyTag(Item item, CompoundTag tag, ToolDefinition definition) {
     // this function is sometimes called before datapack contents load, do nothing then
-    if (!definition.isDataLoaded() || tag.getBoolean(TooltipUtil.KEY_DISPLAY)) {
+    if (tag.getBoolean(TooltipUtil.KEY_DISPLAY)) {
       return;
     }
 
     // resolve all material redirects
-    boolean hasMaterials = tag.contains(ToolStack.TAG_MATERIALS, Tag.TAG_LIST);
+    boolean hasMaterials = MaterialRegistry.isFullyLoaded() && tag.contains(ToolStack.TAG_MATERIALS, Tag.TAG_LIST);
     if (hasMaterials) {
       MaterialIdNBT stored = MaterialIdNBT.readFromNBT(tag.getList(ToolStack.TAG_MATERIALS, Tag.TAG_STRING));
       MaterialIdNBT resolved = stored.resolveRedirects();
@@ -763,10 +776,9 @@ public class ToolStack implements IToolStackView {
         resolved.updateNBT(tag);
       }
     }
-    // rebuild stats if we have required data (skip if multipart with no materials)
-    ToolStack tool = ToolStack.from(item, definition, tag);
-    if (hasMaterials || !definition.hasMaterials()) {
-      tool.rebuildStats();
+    // only rebuild stats if we either have materials, or we don't need materials
+    if (definition.isDataLoaded() && (hasMaterials || !definition.hasMaterials())) {
+      ToolStack.from(item, definition, tag).rebuildStats();
     }
   }
 }
