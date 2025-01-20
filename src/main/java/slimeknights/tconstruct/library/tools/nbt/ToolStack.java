@@ -137,6 +137,7 @@ public class ToolStack implements IToolStackView {
           // bypass the setter as vanilla insists on setting damage values there, along with verifying the tag
           // both are things we will do later, doing so now causes us to recursively call this method (though not infinite)
           stack.tag = nbt;
+          // no need to set the damage value, if the tool wanted it set the stack would have had a tag already
         } else {
           switch (Config.COMMON.logInvalidToolStack.get()) {
             case STACKTRACE ->
@@ -221,7 +222,9 @@ public class ToolStack implements IToolStackView {
   /** Creates an item stack from this tool stack */
   public ItemStack createStack(int size) {
     ItemStack stack = new ItemStack(item, size);
-    stack.setTag(nbt);
+    // set the raw tag to avoid going through verifyTagAfterLoad and rebuilding stats again
+    stack.tag = nbt;
+    // damage value is already enforced via the stack creation above
     return stack;
   }
 
@@ -239,7 +242,12 @@ public class ToolStack implements IToolStackView {
     if (stack.getItem() != item) {
       throw new IllegalArgumentException("Wrong item in stack");
     }
-    stack.setTag(nbt.copy());
+    // set the raw tag to avoid going through verifyTagAfterLoad and rebuilding stats again
+    stack.tag = nbt.copy();
+    // ensure the damage value is set on the stack for the sake of stacking, since bypassing the vanilla setter skips that
+    if (!stack.tag.contains(TAG_DAMAGE, Tag.TAG_ANY_NUMERIC) && stack.getItem().isDamageable(stack)) {
+      stack.tag.putInt(TAG_DAMAGE, 0);
+    }
     return stack;
   }
 
