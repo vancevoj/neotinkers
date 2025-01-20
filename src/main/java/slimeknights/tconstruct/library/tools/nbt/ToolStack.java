@@ -663,8 +663,8 @@ public class ToolStack implements IToolStackView {
     for (ModifierEntry entry : modifierList) {
       entry.getHook(ModifierHooks.TOOL_STATS).addToolStats(context, entry, statBuilder);
     }
-    setStats(statBuilder.build(item));
-    setMultipliers(statBuilder.buildMultipliers(item));
+    setStats(statBuilder.build());
+    setMultipliers(statBuilder.buildMultipliers());
 
     // finally, update raw data, called last to make the parameters more convenient mostly, plus no other hooks should be responding to this data
     for (ModifierEntry entry : modifierList) {

@@ -14,7 +14,6 @@ import slimeknights.tconstruct.library.materials.MaterialRegistryExtension;
 import slimeknights.tconstruct.library.tools.helper.ToolBuildHandler;
 import slimeknights.tconstruct.library.tools.helper.ToolDamageUtil;
 import slimeknights.tconstruct.library.tools.nbt.MaterialNBT;
-import slimeknights.tconstruct.library.tools.stat.ModifierStatsBuilder;
 import slimeknights.tconstruct.test.BaseMcTest;
 
 @ExtendWith(MaterialRegistryExtension.class)
@@ -31,7 +30,7 @@ public abstract class ToolItemTest extends BaseMcTest {
       ForgeRegistries.ITEMS.register(new ResourceLocation("test", "toolcore"), tool);
     }
     setupTierSorting();
-    ModifierStatsBuilder.disableFilter();
+    // ModifierStatsBuilder.disableFilter();
   }
 
   @BeforeEach
