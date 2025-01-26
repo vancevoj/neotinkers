@@ -54,7 +54,8 @@ public class FluidTooltipProvider extends AbstractFluidTooltipProvider {
       .addUnit("brick", FluidValues.BRICK);
     add("slime", SLIME_TOOLTIPS)
       .addUnit("block", FluidValues.SLIME_BLOCK)
-      .addUnit("slimeball", FluidValues.SLIMEBALL);
+      .addUnit("slimeball", FluidValues.SLIMEBALL)
+      .addUnit("drop", FluidValues.SLIME_DROP);
     add("glass", GLASS_TOOLTIPS)
       .addUnit("block", FluidValues.GLASS_BLOCK)
       .addUnit("pane", FluidValues.GLASS_PANE);

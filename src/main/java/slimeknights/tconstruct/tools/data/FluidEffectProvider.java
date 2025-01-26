@@ -79,6 +79,7 @@ public class FluidEffectProvider extends AbstractFluidEffectProvider {
     addFluid(TinkerFluids.skySlime.getTag(), slimeballPiece).addEffect(TimeAction.SET, FluidMobEffect.builder().effect(MobEffects.JUMP, 20*20).effect(MobEffects.MOVEMENT_SLOWDOWN, 20*15));
     // ender - levitation
     addFluid(TinkerFluids.enderSlime.getTag(), slimeballPiece).addEffect(TimeAction.SET, FluidMobEffect.builder().effect(MobEffects.LEVITATION, 20*5).effect(MobEffects.MOVEMENT_SLOWDOWN, 20*15));
+    // TODO: ichor with block breaking rework
     // slimelike
     // venom - poison & strength
     addFluid(TinkerFluids.venom.getTag(), slimeballPiece).addEffect(TimeAction.SET, FluidMobEffect.builder().effect(MobEffects.POISON, 20*5).effect(MobEffects.DAMAGE_BOOST, 20*10));
