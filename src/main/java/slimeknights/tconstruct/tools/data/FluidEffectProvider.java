@@ -154,8 +154,7 @@ public class FluidEffectProvider extends AbstractFluidEffectProvider {
 
     // potion fluid compat
     // standard potion is 250 mb, but we want a smaller number. divide into 5 pieces at 25% a piece (so healing is 1 health), means you gain 25% per potion
-    int bottleSip = FluidValues.BOTTLE / 5;
-    addFluid("potion_fluid", Objects.requireNonNull(TinkerFluids.potion.getCommonTag()), bottleSip)
+    addFluid("potion_fluid", Objects.requireNonNull(TinkerFluids.potion.getCommonTag()), FluidValues.SIP)
       .addEntityEffect(new PotionFluidEffect(0.25f, TagPredicate.ANY))
       .addBlockEffect(new PotionCloudFluidEffect(0.25f, TagPredicate.ANY));
 
@@ -166,7 +165,7 @@ public class FluidEffectProvider extends AbstractFluidEffectProvider {
       return new TagPredicate(compound);
     };
     String create = "create";
-    addFluid("potion_create", FluidNameIngredient.of(new ResourceLocation(create, "potion"), bottleSip))
+    addFluid("potion_create", FluidNameIngredient.of(new ResourceLocation(create, "potion"), FluidValues.SIP))
       .addCondition(new ModLoadedCondition(create))
       .addEntityEffect(new PotionFluidEffect(0.25f, createBottle.apply("REGULAR")))
       .addEntityEffect(new PotionFluidEffect(0.5f, createBottle.apply("SPLASH")))

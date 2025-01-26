@@ -60,6 +60,8 @@ public final class FluidValues {
   public static final int BOWL = 250;
   /** Value of a single bottle of a potion */
   public static final int BOTTLE = 250;
+  /** Minimum unit for a bottle or bowl */
+  public static final int SIP = BOTTLE / 5;
 
   // tank capacities
   /** Capacity of a seared or scorched lantern */

@@ -63,19 +63,23 @@ public class FluidTooltipProvider extends AbstractFluidTooltipProvider {
     add("water", MantleTags.Fluids.WATER)
       .addUnit("kilobucket", "mantle", FluidType.BUCKET_VOLUME * 1000)
       .addUnit("bucket",     "mantle", FluidType.BUCKET_VOLUME)
-      .addUnit("bottle", FluidValues.BOTTLE);
+      .addUnit("bottle", FluidValues.BOTTLE)
+      .addUnit("drop", FluidValues.SIP);
     add("venom", TinkerFluids.venom.getTag())
       .addUnit("kilobucket", "mantle", FluidType.BUCKET_VOLUME * 1000)
       .addUnit("bucket",     "mantle", FluidType.BUCKET_VOLUME)
-      .addUnit("bottle", FluidValues.BOTTLE);
+      .addUnit("bottle", FluidValues.BOTTLE)
+      .addUnit("drop", FluidValues.SIP);
     add("honey", TinkerFluids.honey.getTag())
       .addUnit("block", FluidValues.BOTTLE * 4)
       .addUnit("bottle", FluidValues.BOTTLE);
     add("soup", SOUP_TOOLTIPS)
-      .addUnit("bowl", FluidValues.BOWL);
+      .addUnit("bowl", FluidValues.BOWL)
+      .addUnit("sip", FluidValues.SIP);
 
     add("potion", Objects.requireNonNull(TinkerFluids.potion.getCommonTag()))
-      .addUnit("bottle", FluidValues.BOTTLE);
+      .addUnit("bottle", FluidValues.BOTTLE)
+      .addUnit("sip", FluidValues.SIP);
   }
 
   @Override
