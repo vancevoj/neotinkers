@@ -1,0 +1,21 @@
+{
+  "type": "tconstruct:melting",
+  "conditions": [
+    {
+      "type": "forge:not",
+      "value": {
+        "type": "forge:tag_empty",
+        "tag": "forge:gears/cinderslime"
+      }
+    }
+  ],
+  "ingredient": {
+    "tag": "forge:gears/cinderslime"
+  },
+  "result": {
+    "amount": 360,
+    "fluid": "tconstruct:molten_cinderslime"
+  },
+  "temperature": 1050,
+  "time": 136
+}

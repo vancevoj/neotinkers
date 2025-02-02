@@ -147,6 +147,7 @@ public class ModifierIds {
   public static final ModifierId maintained = id("maintained");
   public static final ModifierId ductile = id("ductile");
   // traits - tier 4
+  public static final ModifierId overburn = id("overburn");
   public static final ModifierId recurrentProtection = id("recurrent_protection");
   public static final ModifierId fortified = id("fortified");
   public static final ModifierId kinetic = id("kinetic");

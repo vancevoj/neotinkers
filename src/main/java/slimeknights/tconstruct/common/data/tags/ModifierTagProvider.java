@@ -78,7 +78,7 @@ public class ModifierTagProvider extends AbstractModifierTagProvider {
            ModifierIds.fireProtection, ModifierIds.magicProtection,
            ModifierIds.blastProtection, TinkerModifiers.golden.getId());
     tag(OVERSLIME_FRIEND)
-      .add(TinkerModifiers.overgrowth.getId(), ModifierIds.overcast, TinkerModifiers.overlord.getId(),
+      .add(TinkerModifiers.overgrowth.getId(), ModifierIds.overcast, ModifierIds.overburn, TinkerModifiers.overlord.getId(),
            ModifierIds.overforced, ModifierIds.overslimeFriend, TinkerModifiers.overworked.getId());
 
     // book tags

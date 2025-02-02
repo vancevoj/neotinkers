@@ -1070,6 +1070,7 @@ public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelt
     // tier 4 alloys
     this.metalTagCasting(consumer, TinkerFluids.moltenManyullyn, "manyullyn", metalFolder, true);
     this.metalTagCasting(consumer, TinkerFluids.moltenHepatizon, "hepatizon", metalFolder, true);
+    this.metalCasting(consumer, TinkerFluids.moltenCinderslime, TinkerMaterials.cinderslime, metalFolder, "cinderslime");
     this.metalCasting(consumer, TinkerFluids.moltenQueensSlime, TinkerMaterials.queensSlime, metalFolder, "queens_slime");
     this.metalCasting(consumer, TinkerFluids.moltenSoulsteel, TinkerMaterials.soulsteel, metalFolder, "soulsteel");
     // tier 5 alloys
@@ -1341,6 +1342,7 @@ public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelt
     // tier 4
     metalMelting(consumer, TinkerFluids.moltenManyullyn, "manyullyn", false, true, metalFolder, false);
     metalMelting(consumer, TinkerFluids.moltenHepatizon, "hepatizon", false, true, metalFolder, false);
+    metalMelting(consumer, TinkerFluids.moltenCinderslime, "cinderslime", false, false, metalFolder, false);
     metalMelting(consumer, TinkerFluids.moltenQueensSlime, "queens_slime", false, false, metalFolder, false);
     //metalMelting(consumer, TinkerFluids.moltenSoulsteel, "soulsteel", false, false, metalFolder, false);
     metalMelting(consumer, TinkerFluids.moltenNetherite, "netherite", false, true, metalFolder, false);
@@ -1823,6 +1825,13 @@ public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelt
                       .save(consumer, prefix(TinkerFluids.moltenObsidian, folder));
 
     // tier 4
+
+    // cinderslime: 1 gold + 1 ichor + 1 scorched stone = 2
+    AlloyRecipeBuilder.alloy(TinkerFluids.moltenCinderslime, FluidValues.INGOT * 2)
+                      .addInput(TinkerFluids.moltenGold.ingredient(FluidValues.INGOT))
+                      .addInput(TinkerFluids.ichor.ingredient(FluidValues.SLIMEBALL))
+                      .addInput(TinkerFluids.scorchedStone.ingredient(FluidValues.BRICK))
+                      .save(consumer, prefix(TinkerFluids.moltenCinderslime, folder));
 
     // queens slime: 1 cobalt + 1 gold + 1 magma cream = 2
     AlloyRecipeBuilder.alloy(TinkerFluids.moltenQueensSlime, FluidValues.INGOT * 2)
