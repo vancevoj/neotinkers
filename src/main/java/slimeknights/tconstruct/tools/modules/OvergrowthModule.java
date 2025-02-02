@@ -1,22 +1,38 @@
-package slimeknights.tconstruct.tools.modifiers.traits.general;
+package slimeknights.tconstruct.tools.modules;
 
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import slimeknights.mantle.data.loadable.record.RecordLoadable;
+import slimeknights.tconstruct.library.json.LevelingValue;
 import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.hook.interaction.InventoryTickModifierHook;
-import slimeknights.tconstruct.library.module.ModuleHookMap.Builder;
+import slimeknights.tconstruct.library.modifiers.modules.ModifierModule;
+import slimeknights.tconstruct.library.module.HookProvider;
+import slimeknights.tconstruct.library.module.ModuleHook;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.tools.TinkerModifiers;
 import slimeknights.tconstruct.tools.modifiers.slotless.OverslimeModifier;
 
-public class OvergrowthModifier extends Modifier implements InventoryTickModifierHook {
+import java.util.List;
+
+/** Module implementing the overgrowth module */
+public record OvergrowthModule(LevelingValue chance) implements ModifierModule, InventoryTickModifierHook {
+  public static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<OvergrowthModule>defaultHooks(ModifierHooks.INVENTORY_TICK);
+  public static final RecordLoadable<OvergrowthModule> LOADER = RecordLoadable.create(
+    LevelingValue.LOADABLE.requiredField("chance", OvergrowthModule::chance),
+    OvergrowthModule::new);
+
   @Override
-  protected void registerHooks(Builder hookBuilder) {
-    super.registerHooks(hookBuilder);
-    hookBuilder.addHook(this, ModifierHooks.INVENTORY_TICK);
+  public RecordLoadable<OvergrowthModule> getLoader() {
+    return LOADER;
+  }
+
+  @Override
+  public List<ModuleHook<?>> getDefaultHooks() {
+    return DEFAULT_HOOKS;
   }
 
   @Override
@@ -26,7 +42,7 @@ public class OvergrowthModifier extends Modifier implements InventoryTickModifie
       OverslimeModifier overslime = TinkerModifiers.overslime.get();
       ModifierEntry entry = tool.getModifier(TinkerModifiers.overslime.getId());
       // has a 5% chance of restoring each second per level
-      if (entry.getLevel() > 0 && overslime.getShield(tool) < overslime.getShieldCapacity(tool, entry) && RANDOM.nextFloat() < (modifier.getLevel() * 0.05)) {
+      if (entry.getLevel() > 0 && overslime.getShield(tool) < overslime.getShieldCapacity(tool, entry) && Modifier.RANDOM.nextFloat() < chance.compute(modifier.getEffectiveLevel())) {
         overslime.addOverslime(tool, entry, 1);
       }
     }
