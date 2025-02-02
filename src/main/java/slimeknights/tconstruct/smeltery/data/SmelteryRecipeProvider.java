@@ -2076,6 +2076,8 @@ public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelt
     metal(consumer, TinkerFluids.moltenSignalum).optional().metal().dust().plate().gear().coin();
     metal(consumer, TinkerFluids.moltenRefinedObsidian ).optional().metal().armor().tools().paxel();
     metal(consumer, TinkerFluids.moltenRefinedGlowstone).optional().metal().armor().tools().paxel();
+    // embers provides their own fluid. so we just have to add the recipes
+    metal(consumer, "dawnstone", getFluidTag(COMMON, "molten_dawnstone")).temperature(900).optional().metal().plate();
   }
 
   private void addCompatRecipes(Consumer<FinishedRecipe> consumer) {
