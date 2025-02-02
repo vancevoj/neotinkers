@@ -5,5 +5,7 @@
     "amount": 810,
     "fluid": "tconstruct:molten_cinderslime"
   },
-  "result": "tconstruct:cinderslime_block"
+  "result": {
+    "tag": "forge:storage_blocks/cinderslime"
+  }
 }

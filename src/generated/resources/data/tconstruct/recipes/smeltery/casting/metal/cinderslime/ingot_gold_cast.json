@@ -8,5 +8,7 @@
     "amount": 90,
     "fluid": "tconstruct:molten_cinderslime"
   },
-  "result": "tconstruct:cinderslime_ingot"
+  "result": {
+    "tag": "forge:ingots/cinderslime"
+  }
 }
