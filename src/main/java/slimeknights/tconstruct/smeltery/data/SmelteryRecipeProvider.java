@@ -1466,6 +1466,27 @@ public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelt
     // unique melting
     MeltingRecipeBuilder.melting(Ingredient.of(Items.IRON_HORSE_ARMOR), TinkerFluids.moltenIron, FluidValues.INGOT * 7)
                         .save(consumer, location(metalFolder + "iron/horse_armor"));
+    // chainmail armor to steel
+    // working off the assumption that some mods out there decided to craft chainmail for an ingots worth of material at minimum, possibly a bit more if they used chains (which is nonsensical)
+    final int chainIron = FluidValues.NUGGET * 6;
+    final int chainSteel = FluidValues.NUGGET * 3;
+    MeltingRecipeBuilder.melting(Ingredient.of(Items.CHAINMAIL_HELMET), TinkerFluids.moltenIron, chainIron * 5)
+                        .addByproduct(TinkerFluids.moltenSteel.result(chainSteel * 5))
+                        .setDamagable(FluidValues.NUGGET)
+                        .save(consumer, location(metalFolder + "iron/chain_helmet"));
+    MeltingRecipeBuilder.melting(Ingredient.of(Items.CHAINMAIL_CHESTPLATE), TinkerFluids.moltenIron, chainIron * 8)
+                        .addByproduct(TinkerFluids.moltenSteel.result(chainSteel * 8))
+                        .setDamagable(FluidValues.NUGGET)
+                        .save(consumer, location(metalFolder + "iron/chain_chestplate"));
+    MeltingRecipeBuilder.melting(Ingredient.of(Items.CHAINMAIL_LEGGINGS), TinkerFluids.moltenIron, chainIron * 7)
+                        .addByproduct(TinkerFluids.moltenSteel.result(chainSteel * 7))
+                        .setDamagable(FluidValues.NUGGET)
+                        .save(consumer, location(metalFolder + "iron/chain_leggings"));
+    MeltingRecipeBuilder.melting(Ingredient.of(Items.CHAINMAIL_BOOTS), TinkerFluids.moltenIron, chainIron * 4)
+                        .addByproduct(TinkerFluids.moltenSteel.result(chainSteel * 4))
+                        .setDamagable(FluidValues.NUGGET)
+                        .save(consumer, location(metalFolder + "iron/chain_boots"));
+
 
 
     // gold melting
@@ -2032,6 +2053,7 @@ public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelt
     metal(consumer, TinkerFluids.moltenIron  ).byproducts(Byproduct.NICKEL, Byproduct.COPPER).metal().dust().plate().gear().coin().sheetmetal().geore().paxel().rod();
     metal(consumer, TinkerFluids.moltenGold  ).byproducts(Byproduct.COPPER                  ).metal().dust().plate().gear().coin().sheetmetal().geore().paxel();
     metal(consumer, TinkerFluids.moltenCobalt).byproducts(Byproduct.IRON                    ).metal().dust();
+    metal(consumer, TinkerFluids.moltenSteel )                                 .metal().dust().plate().gear().coin().sheetmetal()        .paxel().tools().armor().wire().rod();
     // gem ores
     molten(consumer, TinkerFluids.moltenDiamond).byproducts(Byproduct.QUARTZ ).largeGem().dust().gear().geore().paxel();
     molten(consumer, TinkerFluids.moltenEmerald).byproducts(Byproduct.DIAMOND).largeGem().dust().gear().geore().armor().tools();
@@ -2069,7 +2091,6 @@ public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelt
     metal(consumer, TinkerFluids.moltenInvar     ).optional().metal().dust().plate().gear().coin().armor().tools();
     metal(consumer, TinkerFluids.moltenConstantan).optional().metal().dust().plate().gear().coin().armor().tools().sheetmetal();
     metal(consumer, TinkerFluids.moltenPewter    ).optional().metal().dust();
-    metal(consumer, TinkerFluids.moltenSteel     ).optional().metal().dust().plate().gear().coin().armor().tools().sheetmetal().wire().rod().paxel();
     // specialty alloys
     metal(consumer, TinkerFluids.moltenEnderium).optional().metal().dust().plate().gear().coin();
     metal(consumer, TinkerFluids.moltenLumium  ).optional().metal().dust().plate().gear().coin();

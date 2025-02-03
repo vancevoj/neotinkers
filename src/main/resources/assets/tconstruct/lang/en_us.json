@@ -110,6 +110,10 @@
   "item.tconstruct.cobalt_ingot": "Cobalt Ingot",
   "item.tconstruct.cobalt_nugget": "Cobalt Nugget",
 
+  "block.tconstruct.steel_block": "Block of Steel",
+  "item.tconstruct.steel_ingot": "Steel Ingot",
+  "item.tconstruct.steel_nugget": "Steel Nugget",
+
 
   "__comment": "Tier 3 Metals",
 
