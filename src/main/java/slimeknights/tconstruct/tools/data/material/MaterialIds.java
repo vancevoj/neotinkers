@@ -135,7 +135,6 @@ public final class MaterialIds {
   public static final MaterialVariantId bloodshroom        = create(slimewood, "bloodshroom");
   public static final MaterialVariantId enderbark          = create(slimewood, "enderbark");
   // oxidized
-  public static final MaterialVariantId wroughtIron = create(iron, "wrought");
   public static final MaterialVariantId oxidizedIron = create(iron, "oxidized");
   public static final MaterialVariantId oxidizedCopper = create(copper, "oxidized");
 
