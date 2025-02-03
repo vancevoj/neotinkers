@@ -378,7 +378,7 @@ public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelt
                        .pattern("# #")
                        .pattern("C C")
                        .pattern("# #")
-                       .unlockedBy("has_item", has(TinkerMaterials.cobalt.getIngotTag()))
+                       .unlockedBy("has_item", has(Tags.Items.INGOTS_GOLD))
                        .save(consumer, location(folder + "duct"));
     ShapedRetexturedRecipeBuilder.fromShaped(
       ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, TinkerSmeltery.searedDuct)
@@ -444,7 +444,7 @@ public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelt
     // button is the closest we have to a single stone brick, just go with it, better than not having the recipe
     ItemCastingRecipeBuilder.tableRecipe(TinkerSmeltery.searedBrick)
                             .setFluidAndTime(TinkerFluids.moltenClay, FluidValues.BRICK / 2)
-                            .setCast(Items.STONE_BUTTON, true)
+                            .setCast(Items.FLINT, true) // if gravel works, flint makes sense to use
                             .save(consumer, location(castingFolder + "brick_composite"));
     // cobble
     searedCasting(consumer, TinkerSmeltery.searedCobble, CompoundIngredient.of(Ingredient.of(Tags.Items.COBBLESTONE), Ingredient.of(Blocks.GRAVEL)), castingFolder + "cobble/block");
@@ -774,7 +774,7 @@ public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelt
                        .pattern("# #")
                        .pattern("C C")
                        .pattern("# #")
-                       .unlockedBy("has_item", has(TinkerMaterials.cobalt.getIngotTag()))
+                       .unlockedBy("has_item", has(Tags.Items.INGOTS_GOLD))
                        .save(consumer, location(folder + "duct"));
     ShapedRetexturedRecipeBuilder.fromShaped(
       ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, TinkerSmeltery.scorchedDuct)
