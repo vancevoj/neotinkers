@@ -262,9 +262,9 @@ public class TinkerMaterialSpriteProvider extends AbstractMaterialSpriteProvider
       .colorMapper(obsidianPalette);
 
     // tier 4
-    ResourceLocation baseTexture = getResource("item/materials/generator/queens_slime");
-    ResourceLocation highlightTexture = getResource("item/materials/generator/queens_slime_highlight");
-    ResourceLocation borderTexture = getResource("item/materials/generator/queens_slime_border");
+    ResourceLocation baseTexture = getResource("generator/queens_slime");
+    ResourceLocation highlightTexture = getResource("generator/queens_slime_highlight");
+    ResourceLocation borderTexture = getResource("generator/queens_slime_border");
     buildMaterial(MaterialIds.queensSlime)
       .meleeHarvest().ranged().armor()
       .fallbacks("slime_metal", "metal")
