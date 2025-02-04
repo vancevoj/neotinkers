@@ -5,12 +5,12 @@
       "type": "forge:not",
       "value": {
         "type": "forge:tag_empty",
-        "tag": "forge:armors/boots/lead"
+        "tag": "forge:armors/helmets/lead"
       }
     }
   ],
   "ingredient": {
-    "tag": "forge:armors/boots/lead"
+    "tag": "forge:armors/helmets/lead"
   },
   "result": {
     "amount": 450,

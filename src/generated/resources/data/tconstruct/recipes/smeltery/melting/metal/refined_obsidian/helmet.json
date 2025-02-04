@@ -5,12 +5,12 @@
       "type": "forge:not",
       "value": {
         "type": "forge:tag_empty",
-        "tag": "forge:armors/boots/refined_obsidian"
+        "tag": "forge:armors/helmets/refined_obsidian"
       }
     }
   ],
   "ingredient": {
-    "tag": "forge:armors/boots/refined_obsidian"
+    "tag": "forge:armors/helmets/refined_obsidian"
   },
   "result": {
     "amount": 450,

@@ -5,12 +5,12 @@
       "type": "forge:not",
       "value": {
         "type": "forge:tag_empty",
-        "tag": "forge:armors/boots/osmium"
+        "tag": "forge:armors/helmets/osmium"
       }
     }
   ],
   "ingredient": {
-    "tag": "forge:armors/boots/osmium"
+    "tag": "forge:armors/helmets/osmium"
   },
   "result": {
     "amount": 450,

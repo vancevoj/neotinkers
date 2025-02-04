@@ -1,0 +1,22 @@
+{
+  "type": "tconstruct:damagable_melting",
+  "conditions": [
+    {
+      "type": "forge:not",
+      "value": {
+        "type": "forge:tag_empty",
+        "tag": "tconstruct:melting/steel/tools_costing_3"
+      }
+    }
+  ],
+  "ingredient": {
+    "tag": "tconstruct:melting/steel/tools_costing_3"
+  },
+  "result": {
+    "amount": 270,
+    "tag": "forge:molten_steel",
+    "unit_size": 10
+  },
+  "temperature": 950,
+  "time": 112
+}

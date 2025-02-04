@@ -5,12 +5,12 @@
       "type": "forge:not",
       "value": {
         "type": "forge:tag_empty",
-        "tag": "forge:armors/leggings/refined_obsidian"
+        "tag": "tconstruct:melting/refined_obsidian/tools_costing_7"
       }
     }
   ],
   "ingredient": {
-    "tag": "forge:armors/leggings/refined_obsidian"
+    "tag": "tconstruct:melting/refined_obsidian/tools_costing_7"
   },
   "result": {
     "amount": 630,

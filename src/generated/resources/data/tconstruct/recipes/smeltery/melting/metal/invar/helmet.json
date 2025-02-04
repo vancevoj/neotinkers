@@ -5,12 +5,12 @@
       "type": "forge:not",
       "value": {
         "type": "forge:tag_empty",
-        "tag": "forge:armors/boots/invar"
+        "tag": "forge:armors/helmets/invar"
       }
     }
   ],
   "ingredient": {
-    "tag": "forge:armors/boots/invar"
+    "tag": "forge:armors/helmets/invar"
   },
   "result": {
     "amount": 450,

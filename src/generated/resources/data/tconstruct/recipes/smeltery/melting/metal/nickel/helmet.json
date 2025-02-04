@@ -5,12 +5,12 @@
       "type": "forge:not",
       "value": {
         "type": "forge:tag_empty",
-        "tag": "forge:armors/boots/nickel"
+        "tag": "forge:armors/helmets/nickel"
       }
     }
   ],
   "ingredient": {
-    "tag": "forge:armors/boots/nickel"
+    "tag": "forge:armors/helmets/nickel"
   },
   "result": {
     "amount": 450,

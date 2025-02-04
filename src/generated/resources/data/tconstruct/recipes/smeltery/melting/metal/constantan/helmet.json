@@ -5,12 +5,12 @@
       "type": "forge:not",
       "value": {
         "type": "forge:tag_empty",
-        "tag": "forge:armors/boots/constantan"
+        "tag": "forge:armors/helmets/constantan"
       }
     }
   ],
   "ingredient": {
-    "tag": "forge:armors/boots/constantan"
+    "tag": "forge:armors/helmets/constantan"
   },
   "result": {
     "amount": 450,
