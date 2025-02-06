@@ -46,7 +46,16 @@ import java.util.function.Supplier;
 import static slimeknights.mantle.Mantle.commonResource;
 import static slimeknights.tconstruct.library.recipe.melting.IMeltingRecipe.getTemperature;
 
-/** Helper for building melting and casting recipes for a fluid */
+/**
+ * Helper for building melting and casting recipes for a fluid.
+ *
+ * Using this builder takes place in three steps:
+ * <ol>
+ *   <li>Start by calling any relevant builder methods to set relevant properties, such as {@link #optional()}, {@link #ore(IByproduct...)} and alike.</li>
+ *   <li>Once recipes are prepared, call either {@link #smallGem()}, {@link #largeGem()}, or {@link #metal()} to generate common recipes.</li>
+ *   <li>Finally, call any other recipe helpers such as {@link #dust()}, {@link #plate()} or the tool helpers through {@link #common(CommonRecipe...)} to generate non-common recipes.</li>
+ * </ol>
+ */
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Accessors(fluent = true)
 @CanIgnoreReturnValue
@@ -79,10 +88,13 @@ public class SmelteryRecipeBuilder {
   /** Folder to save casting recipes */
   private String castingFolder = "casting/";
   /** Keeps track of whether this builder is used for gems or metals */
+  @Setter
   private OreRateType oreRate = null;
   /** Base unit value for builder */
+  @Setter
   private int baseUnit = 0;
   /** Base unit value for builder */
+  @Setter
   private int damageUnit = 0;
 
   /* Constructors */
@@ -241,9 +253,10 @@ public class SmelteryRecipeBuilder {
   }
 
   /** Adds recipes to melt an ore item with byproducts */
-  private void oreMelting(float scale, String tagName, @Nullable TagKey<Item> size, float factor, String output, boolean forceOptional) {
+  private void oreMelting(float scale, String tagPrefix, @Nullable TagKey<Item> size, float factor, String output, boolean forceOptional) {
     assert oreRate != null;
     assert baseUnit != 0;
+    String tagName = tagPrefix + this.name.getPath();
     Consumer<FinishedRecipe> wrapped;
     Ingredient baseIngredient = Ingredient.of(itemTag(tagName));
     Ingredient ingredient;
@@ -412,27 +425,26 @@ public class SmelteryRecipeBuilder {
   public SmelteryRecipeBuilder rawOre() {
     assert oreRate != null;
     assert baseUnit != 0;
-    String name = this.name.getPath();
-    oreMelting(1, "raw_materials/" + name,      null, 1.5f, "raw",       false);
-    oreMelting(9, "storage_blocks/raw_" + name, null, 6.0f, "raw_block", false);
+    oreMelting(1, "raw_materials/",      null, 1.5f, "raw",       false);
+    oreMelting(9, "storage_blocks/raw_", null, 6.0f, "raw_block", false);
     return this;
   }
 
   /** Adds the sparse ore recipe at the given scale. Automatcally called by {@link #metal()} and {@link #gem(int)}, so only needed if doing unusual things. */
   public SmelteryRecipeBuilder sparseOre(float scale) {
-    oreMelting(scale, "ores/" + name.getPath(), Tags.Items.ORE_RATES_SPARSE, 1.5f, "ore_sparse", false);
+    oreMelting(scale, "ores/", Tags.Items.ORE_RATES_SPARSE, 1.5f, "ore_sparse", false);
     return this;
   }
 
   /** Adds the sparse ore recipe at the given scale. Automatcally called by {@link #metal()} and {@link #gem(int)}, so only needed if doing unusual things. */
   public SmelteryRecipeBuilder singularOre(float scale) {
-    oreMelting(scale, "ores/" + name.getPath(), Tags.Items.ORE_RATES_SINGULAR, 2.5f, "ore_singular", false);
+    oreMelting(scale, "ores/", Tags.Items.ORE_RATES_SINGULAR, 2.5f, "ore_singular", false);
     return this;
   }
 
   /** Adds the sparse ore recipe at the given scale. Automatcally called by {@link #metal()} and {@link #gem(int)}, so only needed if doing unusual things. */
   public SmelteryRecipeBuilder denseOre(float scale) {
-    oreMelting(scale, "ores/" + name.getPath(), Tags.Items.ORE_RATES_DENSE, 4.5f, "ore_dense", false);
+    oreMelting(scale, "ores/", Tags.Items.ORE_RATES_DENSE, 4.5f, "ore_dense", false);
     return this;
   }
 
@@ -441,9 +453,8 @@ public class SmelteryRecipeBuilder {
     oreRate = OreRateType.METAL;
     baseUnit = FluidValues.INGOT;
     damageUnit = FluidValues.NUGGET;
-    String name = this.name.getPath();
-    tagMelting(FluidValues.METAL_BLOCK, "block", 3.0f, "storage_blocks/" + name, false);
-    basinCasting(FluidValues.METAL_BLOCK, "block", "storage_blocks/" + name, false);
+    melting(9, "block", "storage_blocks", 3.0f, false, false);
+    basinCasting(FluidValues.METAL_BLOCK, "block", "storage_blocks/" + name.getPath(), false);
     meltingCasting(1,      TinkerSmeltery.ingotCast,  1.0f, false);
     meltingCasting(1 / 9f, TinkerSmeltery.nuggetCast, 1 / 3f, false);
     // if we set byproducts, we are an ore
@@ -462,7 +473,7 @@ public class SmelteryRecipeBuilder {
     baseUnit = FluidValues.GEM;
     damageUnit = FluidValues.GEM_SHARD;
     String name = this.name.getPath();
-    tagMelting(FluidValues.GEM * storageSize, "block", (float)Math.sqrt(storageSize), "storage_blocks/" + name, false);
+    melting(storageSize, "block", "storage_blocks", (float)Math.sqrt(storageSize), false, false);
     basinCasting(FluidValues.GEM * storageSize, "block", "storage_blocks/" + name, false);
     meltingCasting(1, TinkerSmeltery.gemCast, 1.0f, false);
     // if we set byproducts, we are an ore
@@ -488,15 +499,14 @@ public class SmelteryRecipeBuilder {
   public SmelteryRecipeBuilder geore() {
     assert oreRate != null;
     assert baseUnit != 0;
-    String name = this.name.getPath();
     // base - no byproducts
-    tagMelting(baseUnit, "geore/shard", 1.0f, "geore_shards/" + name, true);
-    tagMelting(baseUnit * 4, "geore/block", 2.0f, "geore_blocks/" + name, true);
+    melting(1, "geore/shard", "geore_shards", 1.0f, false, true);
+    melting(4, "geore/block", "geore_blocks", 2.0f, false, true);
     // clusters - ores with byproducts
-    oreMelting(4, "geore_clusters/" + name,    null, 2.5f, "geore/cluster",    true);
-    oreMelting(1, "geore_small_buds/" + name,  null, 1.0f, "geore/bud_small",  true);
-    oreMelting(2, "geore_medium_buds/" + name, null, 1.5f, "geore/bud_medium", true);
-    oreMelting(3, "geore_large_buds/" + name,  null, 2.0f, "geore/bud_large",  true);
+    oreMelting(4, "geore_clusters/",    null, 2.5f, "geore/cluster",    true);
+    oreMelting(1, "geore_small_buds/",  null, 1.0f, "geore/bud_small",  true);
+    oreMelting(2, "geore_medium_buds/", null, 1.5f, "geore/bud_medium", true);
+    oreMelting(3, "geore_large_buds/",  null, 2.0f, "geore/bud_large",  true);
     return this;
   }
 
