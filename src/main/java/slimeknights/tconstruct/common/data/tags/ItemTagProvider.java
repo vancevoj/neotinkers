@@ -531,26 +531,26 @@ public class ItemTagProvider extends ItemTagsProvider {
     // melting tags //
     // ores
     moltenTools(TinkerFluids.moltenCopper).add(1, Items.BRUSH).toolTags().toolsComplement();
-    moltenTools(TinkerFluids.moltenIron).minecraft().add(1, Items.FLINT_AND_STEEL, Items.SHIELD).add(2, Items.SHEARS);
+    moltenTools(TinkerFluids.moltenIron).minecraft().add(1, Items.FLINT_AND_STEEL, Items.SHIELD).add(2, Items.SHEARS).crowbar().excavatorSpikeMaul();
     moltenTools(TinkerFluids.moltenGold).minecraft("golden");
-    moltenTools(TinkerFluids.moltenSteel).toolTags().paxel();
+    moltenTools(TinkerFluids.moltenSteel).toolTags().leggingsPaxel().crowbar();
     moltenTools(TinkerFluids.moltenNetherite).minecraft();
     // gems
-    moltenTools(TinkerFluids.moltenDiamond).minecraft();
+    moltenTools(TinkerFluids.moltenDiamond).minecraft().excavatorSpikeMaul().crowbar();
     // mod ores
     moltenTools(TinkerFluids.moltenTin).toolTags().toolsComplement();
     moltenTools(TinkerFluids.moltenLead).toolTags().toolsComplement();
     moltenTools(TinkerFluids.moltenSilver).toolTags().toolsComplement();
     moltenTools(TinkerFluids.moltenNickel).toolTags().toolsComplement();
-    moltenTools(TinkerFluids.moltenOsmium).toolTags().paxel();
+    moltenTools(TinkerFluids.moltenOsmium).toolTags().leggingsPaxel();
     // mod alloys
-    moltenTools(TinkerFluids.moltenBronze).toolTags().toolsComplement().paxel();
+    moltenTools(TinkerFluids.moltenBronze).toolTags().toolsComplement().leggingsPaxel();
     moltenTools(TinkerFluids.moltenElectrum).toolTags().toolsComplement();
     moltenTools(TinkerFluids.moltenInvar).toolTags().toolsComplement();
     moltenTools(TinkerFluids.moltenConstantan).toolTags().toolsComplement();
     // special alloys
-    moltenTools(TinkerFluids.moltenRefinedGlowstone).toolTags().paxel();
-    moltenTools(TinkerFluids.moltenRefinedObsidian).toolTags().paxel();
+    moltenTools(TinkerFluids.moltenRefinedGlowstone).toolTags().leggingsPaxel();
+    moltenTools(TinkerFluids.moltenRefinedObsidian).toolTags().leggingsPaxel();
   }
 
   @Override

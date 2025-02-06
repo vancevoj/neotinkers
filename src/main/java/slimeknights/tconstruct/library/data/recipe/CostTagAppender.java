@@ -92,11 +92,8 @@ public class CostTagAppender {
 
   /* Vanilla tools */
 
-  /** Mod ID for tools complement, so its just in 1 place */
-  private static final String TOOLS_COMPLEMENT = "tools_complement";
-
   /** Adds common gear items from tags */
-  @Internal
+  @Internal // we cover everything from the base game that makes sense to melt, you probably want something more specialized if you wish to do stone/wood
   public CostTagAppender minecraft(String metal) {
     ResourceLocation prefix = new ResourceLocation(metal);
     // we use costs 1 and 3 for compat with tools complement
@@ -108,13 +105,13 @@ public class CostTagAppender {
     add(7, false, prefix, "leggings");
     toolTag(7, "paxels");
     // tools complement method is set to create the shovel tag, don't need it without them
-    optionalMetal(1, TOOLS_COMPLEMENT, "knife");
-    optionalMetal(3, TOOLS_COMPLEMENT, "sickle");
+    optionalMetal(1, "tools_complement", "knife");
+    optionalMetal(3, "tools_complement", "sickle");
     return this;
   }
 
   /** Adds common gear items from tags */
-  @Internal
+  @Internal // we cover everything from the base game that makes sense to melt, you probably want something more specialized if you wish to do stone/wood
   public CostTagAppender minecraft() {
     return minecraft(metal);
   }
@@ -130,17 +127,30 @@ public class CostTagAppender {
   }
 
   /** Adds tools complement tool items to the standard tags */
+  @Internal // we already cover all metals tools complement does, no need for addons to use
   public CostTagAppender toolsComplement() {
     // only need the 1 tag if tools complement is present
     toolTag(1, "shovels");
     // tools complement exclusive tools
-    optionalMetal(1, TOOLS_COMPLEMENT, "knife");
-    optionalMetal(3, TOOLS_COMPLEMENT, "sickle");
+    optionalMetal(1, "tools_complement", "knife");
+    optionalMetal(3, "tools_complement", "sickle");
     return this;
   }
 
   /** Creates a tag for the paxel and leggings. We currently have no paxels withot leggings, and leggings can be used directly without paxels */
-  public CostTagAppender paxel() {
+  public CostTagAppender leggingsPaxel() {
     return armorTag(7, "leggings").toolTag(7, "paxels");
+  }
+
+  /** Adds a railcraft crowbar */
+  @Internal // there are only 3 of them, not needed in addons
+  public CostTagAppender crowbar() {
+    return optionalMetal(3, "railcraft", "crowbar");
+  }
+
+  /** Adds a tools complement excavator and a railcraft spike maul */
+  @Internal // there are only 2 of them, not needed in addons
+  public CostTagAppender excavatorSpikeMaul() {
+    return optionalMetal(11, "tools_complement", "excavator").optionalMetal(11, "railcraft", "spike_maul");
   }
 }

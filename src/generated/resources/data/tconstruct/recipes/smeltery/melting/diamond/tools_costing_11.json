@@ -2,12 +2,12 @@
   "type": "tconstruct:damagable_melting",
   "conditions": [
     {
-      "type": "forge:item_exists",
-      "item": "tools_complement:diamond_excavator"
+      "type": "mantle:tag_filled",
+      "tag": "tconstruct:melting/diamond/tools_costing_11"
     }
   ],
   "ingredient": {
-    "item": "tools_complement:diamond_excavator"
+    "tag": "tconstruct:melting/diamond/tools_costing_11"
   },
   "result": {
     "amount": 1100,

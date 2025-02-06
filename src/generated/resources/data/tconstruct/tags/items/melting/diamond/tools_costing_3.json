@@ -5,6 +5,10 @@
     {
       "id": "tools_complement:diamond_sickle",
       "required": false
+    },
+    {
+      "id": "railcraft:diamond_crowbar",
+      "required": false
     }
   ]
 }

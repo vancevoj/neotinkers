@@ -2,12 +2,12 @@
   "type": "tconstruct:damagable_melting",
   "conditions": [
     {
-      "type": "forge:item_exists",
-      "item": "tools_complement:iron_excavator"
+      "type": "mantle:tag_filled",
+      "tag": "tconstruct:melting/iron/tools_costing_11"
     }
   ],
   "ingredient": {
-    "item": "tools_complement:iron_excavator"
+    "tag": "tconstruct:melting/iron/tools_costing_11"
   },
   "result": {
     "amount": 990,

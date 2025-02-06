@@ -85,10 +85,6 @@ public class SmelteryRecipeBuilder {
   /** Base unit value for builder */
   private int damageUnit = 0;
 
-  // mod compat
-  private boolean mekanismTools = false;
-  private boolean toolsComplement = false;
-
   /* Constructors */
 
   /** Creates a builder for the given fluid object */
@@ -178,7 +174,7 @@ public class SmelteryRecipeBuilder {
 
   /** Adds the given conditions to the given builder */
   @CheckReturnValue
-  public Consumer<FinishedRecipe> withCondition(ICondition... conditions) {
+  private Consumer<FinishedRecipe> withCondition(ICondition... conditions) {
     ConsumerWrapperBuilder builder = ConsumerWrapperBuilder.wrap();
     for (ICondition condition : conditions) {
       builder.addCondition(condition);
@@ -210,48 +206,37 @@ public class SmelteryRecipeBuilder {
     return name.withPath(folder + name.getPath() + '/' + variant);
   }
 
-  /** Fetchs an item from the registry */
-  @SuppressWarnings("deprecation")
-  private static Item item(String name) {
-    Item item = BuiltInRegistries.ITEM.get(new ResourceLocation(name));
-    if (item == Items.AIR) {
-      throw new IllegalArgumentException("Unknown item name minecraft:" + name);
-    }
-    return item;
-  }
-
 
   /* Melting helpers */
 
   /** Adds a recipe for melting a list of items. Never optional */
-  private void itemMelting(int amount, String output, float factor, int damageUnit, Item... items) {
-    MeltingRecipeBuilder.melting(Ingredient.of(items), result(amount), temperature, factor)
+  private void minecraftArmorMelting(int cost, String prefix, String name) {
+    Item item = BuiltInRegistries.ITEM.get(new ResourceLocation(prefix + '_' + name));
+    if (item == Items.AIR) {
+      throw new IllegalArgumentException("Unknown item name minecraft:" + name);
+    }
+    MeltingRecipeBuilder.melting(Ingredient.of(item), result(cost * baseUnit), temperature, (float)Math.sqrt(cost))
                         .setDamagable(damageUnit)
-                        .save(consumer, location(meltingFolder, output));
-  }
-
-  /** Adds a recipe for melting a list of items. Never optional */
-  private void itemMelting(int amount, String output, float factor, int damageUnit, String name) {
-    itemMelting(amount, output, factor, damageUnit, item(name));
+                        .save(consumer, location(meltingFolder, name));
   }
 
   /** Adds a recipe for melting an item by ID. Automatically optional */
-  private void itemMelting(int amount, String output, float factor, ResourceLocation itemName, int damageUnit) {
+  private void itemMelting(int amount, String output, float factor, ResourceLocation itemName, boolean damagable) {
     MeltingRecipeBuilder.melting(ItemNameIngredient.from(itemName), result(amount), temperature, factor)
-                        .setDamagable(damageUnit)
+                        .setDamagable(damagable ? damageUnit : 0)
                         .save(withCondition(new ItemExistsCondition(itemName)), location(meltingFolder, output));
   }
 
   /** Adds a recipe for melting an item from a tag */
   private void tagMelting(int amount, String output, float factor, String tagName, boolean forceOptional) {
-    tagMelting(amount, output, factor, commonResource(tagName), 0, forceOptional);
+    tagMelting(amount, output, factor, commonResource(tagName), false, forceOptional);
   }
 
   /** Adds a recipe for melting an item from a tag */
-  private void tagMelting(int amount, String output, float factor, ResourceLocation tagName, int damageUnit, boolean forceOptional) {
+  private void tagMelting(int amount, String output, float factor, ResourceLocation tagName, boolean damagable, boolean forceOptional) {
     Consumer<FinishedRecipe> wrapped = optional || forceOptional ? withCondition(tagCondition(tagName)) : consumer;
     MeltingRecipeBuilder.melting(Ingredient.of(ItemTags.create(tagName)), result(amount), temperature, factor)
-                        .setDamagable(damageUnit)
+                        .setDamagable(damagable ? damageUnit : 0)
                         .save(wrapped, location(meltingFolder, output));
   }
 
@@ -361,31 +346,59 @@ public class SmelteryRecipeBuilder {
     return meltingCasting(scale, cast.getName().getPath(), cast, factor, forceOptional);
   }
 
-  /** Adds a recipe melting a tag item */
-  public SmelteryRecipeBuilder melting(float scale, String output, ResourceLocation tagName, float factor, int damageUnit, boolean forceOptional) {
-    assert baseUnit != 0;
-    tagMelting((int)(baseUnit * scale), output, factor, tagName, damageUnit, forceOptional);
+
+  /* Melting helpers */
+
+  /** Adds a recipe for melting a tool from the given mod */
+  public SmelteryRecipeBuilder itemMelting(float scale, String domain, String path, boolean damagable) {
+    itemMelting((int)(baseUnit * scale), domain + '_' + path, (float)Math.sqrt(scale), new ResourceLocation(domain, path), damagable);
     return this;
   }
 
   /** Adds a recipe melting a tag item */
-  public SmelteryRecipeBuilder melting(float scale, String output, ResourceLocation tagName, int damageUnit, boolean forceOptional) {
-    return melting(scale, output, tagName, (float)Math.sqrt(scale), damageUnit, forceOptional);
+  public SmelteryRecipeBuilder melting(float scale, String output, ResourceLocation tagName, float factor, boolean damagable, boolean forceOptional) {
+    assert baseUnit != 0;
+    tagMelting((int)(baseUnit * scale), output, factor, tagName, damagable, forceOptional);
+    return this;
   }
 
   /** Adds a recipe melting a tag item */
-  public SmelteryRecipeBuilder melting(float scale, String output, String tagPrefix, float factor, int damageUnit, boolean forceOptional) {
-    return melting(scale, output, commonResource(tagPrefix + '/' + name.getPath()), factor, damageUnit, forceOptional);
+  public SmelteryRecipeBuilder melting(float scale, String output, String tagPrefix, float factor, boolean damagable, boolean forceOptional) {
+    return melting(scale, output, commonResource(tagPrefix + '/' + name.getPath()), factor, damagable, forceOptional);
   }
 
   /** Adds a recipe melting a tag item */
-  public SmelteryRecipeBuilder melting(float scale, String output, String tagPrefix, int damageUnit, boolean forceOptional) {
-    return melting(scale, output, tagPrefix, (float)Math.sqrt(scale), damageUnit, forceOptional);
+  public SmelteryRecipeBuilder melting(float scale, String output, String tagPrefix, boolean damagable, boolean forceOptional) {
+    return melting(scale, output, tagPrefix, (float)Math.sqrt(scale), damagable, forceOptional);
   }
 
   /** Adds a recipe melting a tag item */
   public SmelteryRecipeBuilder melting(float scale, String tagPrefix, float factor, boolean forceOptional) {
-    return melting(scale, tagPrefix, tagPrefix + "s", factor, 0, forceOptional);
+    return melting(scale, tagPrefix, tagPrefix + "s", factor, false, forceOptional);
+  }
+
+
+  /* Tool melting */
+
+  /** Adds a recipe for melting a tool from the given mod, automatically prefixing the metal into the name */
+  public SmelteryRecipeBuilder toolItemMelting(int cost, String domain, String path) {
+    itemMelting(baseUnit * cost, domain + '_' + path, (float)Math.sqrt(cost), new ResourceLocation(domain, this.name.getPath() + '_' + path), true);
+    return this;
+  }
+
+  /** Adds a recipe melting a tool with the given cost using the common tools tag. See {@link #melting(float, String, String, boolean, boolean)} for armor as names are less standard */
+  public SmelteryRecipeBuilder toolTagMelting(int cost, String name) {
+    return melting(cost, name, "tools/" + name + 's', true, true);
+  }
+
+  /** Adds a recipe melting a tool with the given cost using the local tools_costing tag */
+  public SmelteryRecipeBuilder toolCostMelting(int cost, String name, boolean forceOptional) {
+    return melting((float)cost, name, this.name.withPath("melting/" + this.name.getPath() + "/tools_costing_" + cost), (float)Math.sqrt((float)cost), true, forceOptional);
+  }
+
+  /** Adds a recipe melting a tool with the given cost using the local tools_costing tag */
+  public SmelteryRecipeBuilder toolCostMelting(int cost, String name) {
+    return toolCostMelting(cost, name, true);
   }
 
 
@@ -490,7 +503,7 @@ public class SmelteryRecipeBuilder {
   /** Adds recipes to melt oreberries */
   public SmelteryRecipeBuilder oreberry() {
     assert baseUnit == FluidValues.INGOT;
-    itemMelting(FluidValues.NUGGET, "oreberry", 1 / 3f, new ResourceLocation("oreberriesreplanted", name.getPath() + "_oreberry"), 0);
+    itemMelting(FluidValues.NUGGET, "oreberry", 1 / 3f, new ResourceLocation("oreberriesreplanted", name.getPath() + "_oreberry"), false);
     return this;
   }
 
@@ -529,32 +542,21 @@ public class SmelteryRecipeBuilder {
     return meltingCasting(0.5f, TinkerSmeltery.wireCast, 1 / 5f, true);
   }
 
-  /** Common logic between vanilla and mods */
-  private void commonTools(boolean forceOptional) {
-    // if tools complement is present, shovel recipe also handles knife
-    if (toolsComplement) {
-      melting(1, "shovel", name.withPath("melting/" + name.getPath() + "/tools_costing_1"), damageUnit, forceOptional);
-    } else {
-      melting(1, "shovel", "tools/shovels", damageUnit, forceOptional);
-    }
-    // sword recipe also handles hoe
-    melting(2, "sword", name.withPath("melting/" + name.getPath() + "/tools_costing_2"), damageUnit, true);
-    // axe and pickaxe together
-    melting(3, "axes",  name.withPath("melting/" + name.getPath() + "/tools_costing_3"), damageUnit, forceOptional);
-  }
-
   /** Adds vanilla tools with the given prefix for item IDs */
   @Internal
   public SmelteryRecipeBuilder minecraftTools(String prefix) {
-    // always have tools complement for vanilla
-    toolsComplement();
-    commonTools(false);
+    // shovel needs the cost tag for tool's complement knife
+    toolCostMelting(1, "shovel", false);
+    // sword recipe also handles hoe
+    toolCostMelting(2, "sword", false);
+    // axe and pickaxe together
+    toolCostMelting(3, "axes", false);
     // armor
-    itemMelting(baseUnit * 5, "helmet",     (float)Math.sqrt(5), damageUnit, prefix + "_helmet");
-    itemMelting(baseUnit * 8, "chestplate", (float)Math.sqrt(8), damageUnit, prefix + "_chestplate");
-    itemMelting(baseUnit * 4, "boots",      (float)Math.sqrt(4), damageUnit, prefix + "_boots");
+    minecraftArmorMelting(5, prefix, "helmet");
+    minecraftArmorMelting(8, prefix, "chestplate");
+    minecraftArmorMelting(4, prefix, "boots");
     // mekanism adds paxels for all vanilla tools, so use a tag to make supporting that easy
-    melting(7, "leggings", name.withPath("melting/" + name.getPath() + "/tools_costing_7"), damageUnit, false);
+    toolCostMelting(7, "leggings", false);
     return this;
   }
 
@@ -564,36 +566,65 @@ public class SmelteryRecipeBuilder {
     return minecraftTools(name.getPath());
   }
 
-  /** Adds gear recipes for mekanism gear */
-  public SmelteryRecipeBuilder mekanismTools() {
-    assert baseUnit != 0;
-    mekanismTools = true;
-    itemMelting(baseUnit * 6, "shield", (float)Math.sqrt(6), new ResourceLocation("mekanism", name.getPath() + "_shield"), damageUnit);
-    return this;
-  }
 
-  /** Adds gear recipes for tools complement gear */
-  public SmelteryRecipeBuilder toolsComplement() {
-    assert baseUnit != 0;
-    toolsComplement = true;
-    // Knife and sickle are handled via tags
-    itemMelting(baseUnit * 11, "excavator", (float)Math.sqrt(11), new ResourceLocation("tools_complement", name.getPath() + "_excavator"), damageUnit);
-    itemMelting(baseUnit * 13, "hammer", (float)Math.sqrt(13), new ResourceLocation("tools_complement", name.getPath() + "_hammer"), damageUnit);
-    return this;
-  }
+  /* Modded tools */
 
-  /** Adds gear recipes for all standard gear. Call after {@link #toolsComplement()} and {@link #mekanismTools()} */
-  public SmelteryRecipeBuilder tools() {
-    commonTools(true);
-    melting(5, "helmet",     "armors/helmets",     damageUnit, true);
-    melting(8, "chestplate", "armors/chestplates", damageUnit, true);
-    melting(4, "boots",      "armors/boots",       damageUnit, true);
-    // we only fill the 7 cost tag for things with paxels. Anything without
-    if (mekanismTools) {
-      melting(7, "leggings", name.withPath("melting/" + name.getPath() + "/tools_costing_7"), damageUnit, true);
-    } else {
-      melting(7, "leggings", "armors/leggings", damageUnit, true);
+  /** Applies the list of common recipes */
+  public SmelteryRecipeBuilder common(CommonRecipe... recipes) {
+    for (CommonRecipe recipe : recipes) {
+      recipe.accept(this);
     }
     return this;
   }
+
+  /** Avoids generic array creation for a recipe consumer */
+  public interface CommonRecipe extends Consumer<SmelteryRecipeBuilder> {}
+
+  /** Consumer melting a tool via the common tag */
+  public record ToolTagMelting(int cost, String name) implements CommonRecipe {
+    @Override
+    public void accept(SmelteryRecipeBuilder builder) {
+      builder.toolTagMelting(cost, name);
+    }
+  }
+
+  /** Consumer melting a tool via the common tag */
+  public record ArmorTagMelting(int cost, String name, String tag) implements CommonRecipe {
+    @Override
+    public void accept(SmelteryRecipeBuilder builder) {
+      builder.melting(cost, name, "armors/" + tag, true, true);
+    }
+  }
+
+  /** Consumer for melting a set of tools using the local tag */
+  public record ToolCostMelting(int cost, String name) implements CommonRecipe {
+    @Override
+    public void accept(SmelteryRecipeBuilder builder) {
+      builder.toolCostMelting(cost, name, true);
+    }
+  }
+
+  /** Consumer for melting a specific tool from a mod with the metal prefix */
+  public record ToolItemMelting(int cost, String domain, String name) implements CommonRecipe {
+    @Override
+    public void accept(SmelteryRecipeBuilder builder) {
+      builder.toolItemMelting(cost, domain, name);
+    }
+  }
+
+  /* Common tool melting */
+
+  // common
+  public static final ToolTagMelting SHOVEL = new ToolTagMelting(1, "shovel");
+  public static final ToolCostMelting SHOVEL_PLUS = new ToolCostMelting(1, "shovel");
+  public static final ToolCostMelting SWORD = new ToolCostMelting(2, "sword");
+  public static final ToolCostMelting AXES = new ToolCostMelting(3, "axes");
+  public static final CommonRecipe[] TOOLS = { SHOVEL, SWORD, AXES };
+  // armor
+  public static final ArmorTagMelting HELMET = new ArmorTagMelting(5, "helmet", "helmets");
+  public static final ArmorTagMelting CHESTPLATE = new ArmorTagMelting(8, "chestplate", "chestplates");
+  public static final ArmorTagMelting LEGGINGS = new ArmorTagMelting(7, "leggings", "leggings");
+  public static final ToolCostMelting LEGGINGS_PLUS = new ToolCostMelting(7, "leggings");
+  public static final ArmorTagMelting BOOTS = new ArmorTagMelting(4, "boots", "boots");
+  public static final CommonRecipe[] ARMOR = { HELMET, CHESTPLATE, LEGGINGS, BOOTS };
 }
