@@ -434,6 +434,8 @@ public class ItemTagProvider extends ItemTagsProvider {
     this.copy(TinkerTags.Blocks.FOUNDRY_BRICKS, TinkerTags.Items.FOUNDRY_BRICKS);
     this.copy(BlockTags.SOUL_FIRE_BASE_BLOCKS, ItemTags.SOUL_FIRE_BASE_BLOCKS);
 
+    this.tag(TinkerTags.Items.NON_SINGULAR_ORE_RATES).addTags(Tags.Items.ORE_RATES_DENSE, Tags.Items.ORE_RATES_SPARSE);
+
     // smeltery and foundry structure blocks
     this.tag(TinkerTags.Items.SMELTERY)
         .addTag(TinkerTags.Items.SEARED_BLOCKS)
