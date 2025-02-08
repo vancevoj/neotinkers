@@ -117,8 +117,7 @@ public class AlloyerScreen extends AbstractContainerScreen<AlloyerContainerMenu>
     if (fuel != null) fuel.renderHighlight(graphics, checkX, checkY);
 
     // scala
-    assert minecraft != null;
-    SCALA.draw(graphics, 114, 16);
+    SCALA.draw(graphics, 114, 16, 100);
   }
 
   @Override

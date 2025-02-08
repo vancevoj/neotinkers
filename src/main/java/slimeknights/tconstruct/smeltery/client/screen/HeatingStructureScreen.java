@@ -83,8 +83,7 @@ public class HeatingStructureScreen extends MultiModuleScreen<HeatingStructureCo
   protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
     super.renderLabels(graphics, mouseX, mouseY);
 
-    assert minecraft != null;
-    SCALA.draw(graphics, 8, 16);
+    SCALA.draw(graphics, 8, 16, 110);
 
     // highlight hovered fluids
     if (tank != null) tank.renderHighlight(graphics, mouseX, mouseY);
