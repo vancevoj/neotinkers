@@ -20,15 +20,12 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
-import slimeknights.mantle.client.SafeClientAccess;
-import slimeknights.mantle.client.TooltipKey;
 import slimeknights.mantle.fluid.FluidTransferHelper;
 import slimeknights.mantle.fluid.tooltip.FluidTooltipHandler;
 import slimeknights.mantle.fluid.transfer.FluidContainerTransferManager;
 import slimeknights.mantle.fluid.transfer.IFluidContainerTransfer.TransferDirection;
 import slimeknights.mantle.item.BlockTooltipItem;
 import slimeknights.mantle.registration.object.EnumObject;
-import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.recipe.FluidValues;
 import slimeknights.tconstruct.library.utils.NBTTags;
@@ -41,11 +38,6 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public class TankItem extends BlockTooltipItem {
-  private static final String KEY_FLUID = TConstruct.makeTranslationKey("block", "tank.fluid");
-  private static final String KEY_MB = TConstruct.makeTranslationKey("block", "tank.mb");
-  private static final String KEY_INGOTS = TConstruct.makeTranslationKey("block", "tank.ingots");
-  private static final String KEY_MIXED = TConstruct.makeTranslationKey("block", "tank.mixed");
-
   private final boolean limitStackSize;
   public TankItem(Block blockIn, Properties builder, boolean limitStackSize) {
     super(blockIn, builder);
@@ -82,25 +74,9 @@ public class TankItem extends BlockTooltipItem {
     if (stack.hasTag()) {
       FluidTank tank = getFluidTank(stack);
       if (tank.getFluidAmount() > 0) {
-        // TODO: migrate to a fluid tooltip JSON?
-        tooltip.add(Component.translatable(KEY_FLUID, tank.getFluid().getDisplayName()).withStyle(ChatFormatting.GRAY));
-        int amount = tank.getFluidAmount();
-        TooltipKey key = SafeClientAccess.getTooltipKey();
-        if (tank.getCapacity() % FluidValues.INGOT != 0 || key == TooltipKey.SHIFT) {
-          tooltip.add(Component.translatable(KEY_MB, amount).withStyle(ChatFormatting.GRAY));
-        } else {
-          int ingots = amount / FluidValues.INGOT;
-          int mb = amount % FluidValues.INGOT;
-          if (mb == 0) {
-            tooltip.add(Component.translatable(KEY_INGOTS, ingots).withStyle(ChatFormatting.GRAY));
-          } else {
-            tooltip.add(Component.translatable(KEY_MIXED, ingots, mb).withStyle(ChatFormatting.GRAY));
-          }
-          if (key != TooltipKey.UNKNOWN) {
-            tooltip.add(FluidTooltipHandler.HOLD_SHIFT);
-          }
-        }
-
+        FluidStack fluid = tank.getFluid();
+        tooltip.add(fluid.getDisplayName().plainCopy().withStyle(ChatFormatting.GRAY));
+        FluidTooltipHandler.appendMaterial(fluid, tooltip);
       }
     }
     else {
