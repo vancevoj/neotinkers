@@ -6,18 +6,26 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.SlotAccess;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ClickAction;
+import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 import slimeknights.mantle.client.SafeClientAccess;
 import slimeknights.mantle.client.TooltipKey;
+import slimeknights.mantle.fluid.FluidTransferHelper;
 import slimeknights.mantle.fluid.tooltip.FluidTooltipHandler;
+import slimeknights.mantle.fluid.transfer.FluidContainerTransferManager;
+import slimeknights.mantle.fluid.transfer.IFluidContainerTransfer.TransferDirection;
 import slimeknights.mantle.item.BlockTooltipItem;
 import slimeknights.mantle.registration.object.EnumObject;
 import slimeknights.tconstruct.TConstruct;
@@ -104,6 +112,68 @@ public class TankItem extends BlockTooltipItem {
   @Override
   public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
     return new TankItemFluidHandler(stack);
+  }
+
+  /** Checks if the given stack has fluid transfer */
+  private static boolean mayHaveFluid(ItemStack stack) {
+    return FluidContainerTransferManager.INSTANCE.mayHaveTransfer(stack) || stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).isPresent();
+  }
+
+  @Override
+  public boolean overrideStackedOnOther(ItemStack held, Slot slot, ClickAction action, Player player) {
+    // take over right click, assuming the target has an item. If not, then we want to place 1 item in the slot
+    if (action == ClickAction.SECONDARY && slot.allowModification(player)) {
+      ItemStack slotStack = slot.getItem();
+      if (!slotStack.isEmpty() && mayHaveFluid(slotStack)) {
+        // target must be stack size 1, if not then its not safe to modify it
+        if (slotStack.getCount() == 1) {
+          // transfer fluid
+          FluidTank tank = getFluidTank(held);
+          int oldCount = held.getCount();
+          ItemStack result = FluidTransferHelper.interactWithTankSlot(tank, slotStack, TransferDirection.REVERSE);
+          // update held tank
+          if (!result.isEmpty() || held.getCount() != oldCount) {
+            if (held.getCount() == 1) {
+              setTank(held, tank);
+            } else {
+              // if we have multiple, toss the update anywhere
+              ItemStack split = held.split(1);
+              setTank(split, tank);
+              if (!player.getInventory().add(split)) {
+                player.drop(split, false);
+              }
+            }
+          }
+          // update slot item
+          slot.set(FluidTransferHelper.getOrTransferFilled(player, slotStack, result));
+        }
+        return true;
+      }
+    }
+    return false;
+  }
+
+  @Override
+  public boolean overrideOtherStackedOnMe(ItemStack stack, ItemStack held, Slot slot, ClickAction action, Player player, SlotAccess pAccess) {
+    // take over right click, unless there is no held item (we still want split stack support)
+    if (action == ClickAction.SECONDARY && slot.allowModification(player) && !held.isEmpty() && mayHaveFluid(held)) {
+      // tank must be stack size 1 to modify. If not, then we just do nothing
+      if (stack.getCount() == 1) {
+        // transfer the fluid
+        FluidTank tank = getFluidTank(stack);
+        ItemStack result = FluidTransferHelper.interactWithTankSlot(tank, held, TransferDirection.AUTO);
+        // update tank
+        setTank(stack, tank);
+        // update held item, assuming its actually held
+        if (player.containerMenu.getCarried() == held) {
+          player.containerMenu.setCarried(FluidTransferHelper.getOrTransferFilled(player, held, result));
+        } else if (!player.getInventory().add(result)) {
+          player.drop(result, false);
+        }
+      }
+      return true;
+    }
+    return false;
   }
 
   /** Removes the tank from the given stack */
