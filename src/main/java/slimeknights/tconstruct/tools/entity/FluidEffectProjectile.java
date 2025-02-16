@@ -104,7 +104,7 @@ public class FluidEffectProjectile extends LlamaSpit {
     if (!level.isClientSide) {
       if (!fluid.isEmpty()) {
         FluidEffects recipe = FluidEffectManager.INSTANCE.find(fluid.getFluid());
-        if (recipe.hasEntityEffects()) {
+        if (recipe.hasBlockEffects()) {
           // run the effect until we run out of fluid or it fails
           FluidEffectContext.Block context = new FluidEffectContext.Block(level, asLiving(getOwner()), this, hitResult);
           int consumed;

@@ -124,7 +124,7 @@ public class SplashingModifier extends Modifier implements EntityInteractionModi
       FluidStack fluid = TANK_HELPER.getFluid(tool);
       if (!fluid.isEmpty()) {
         FluidEffects recipe = FluidEffectManager.INSTANCE.find(fluid.getFluid());
-        if (recipe.hasEntityEffects()) {
+        if (recipe.hasBlockEffects()) {
           Player player = context.getPlayer();
           Level world = context.getLevel();
           if (!context.getLevel().isClientSide) {
