@@ -70,20 +70,24 @@ public class SplashingModifier extends Modifier implements EntityInteractionModi
             if (consumed > 0) {
               numTargets++;
               UseFluidOnHitModifier.spawnParticles(target, fluid);
+              fluid.shrink(consumed);
             }
 
-            // expanded logic, they do not consume fluid, you get some splash for free
-            float range = 1 + tool.getModifierLevel(TinkerModifiers.expanded.get());
-            float rangeSq = range * range;
-            for (Entity aoeTarget : world.getEntitiesOfClass(Entity.class, target.getBoundingBox().inflate(range, 0.25, range))) {
-              if (aoeTarget != player && aoeTarget != target && !(aoeTarget instanceof ArmorStand stand && stand.isMarker()) && target.distanceToSqr(aoeTarget) < rangeSq) {
-                int aoeConsumed = recipe.applyToEntity(fluid, level, new FluidEffectContext.Entity(world, player, player, null, aoeTarget, asLiving(aoeTarget)), FluidAction.EXECUTE);
-                if (aoeConsumed > 0) {
-                  numTargets++;
-                  UseFluidOnHitModifier.spawnParticles(aoeTarget, fluid);
-                  // consume the largest amount requested from any entity
-                  if (aoeConsumed > consumed) {
-                    consumed = aoeConsumed;
+            // expanded logic, consumes extra fluid per target
+            if (!fluid.isEmpty()) {
+              float range = 1 + tool.getModifierLevel(TinkerModifiers.expanded.get());
+              float rangeSq = range * range;
+              for (Entity aoeTarget : world.getEntitiesOfClass(Entity.class, target.getBoundingBox().inflate(range, 0.25, range))) {
+                if (aoeTarget != player && aoeTarget != target && !(aoeTarget instanceof ArmorStand stand && stand.isMarker()) && target.distanceToSqr(aoeTarget) < rangeSq) {
+                  consumed = recipe.applyToEntity(fluid, level, new FluidEffectContext.Entity(world, player, player, null, aoeTarget, asLiving(aoeTarget)), FluidAction.EXECUTE);
+                  if (consumed > 0) {
+                    numTargets++;
+                    UseFluidOnHitModifier.spawnParticles(aoeTarget, fluid);
+                    // consume fluid for each target entity
+                    fluid.shrink(consumed);
+                    if (fluid.isEmpty()) {
+                      break;
+                    }
                   }
                 }
               }
@@ -91,8 +95,7 @@ public class SplashingModifier extends Modifier implements EntityInteractionModi
 
             // consume the fluid last, if any target used fluid
             if (!player.isCreative() ) {
-              if (consumed > 0) {
-                fluid.shrink(consumed);
+              if (numTargets > 0) {
                 TANK_HELPER.setFluid(tool, fluid);
               }
 
@@ -137,28 +140,30 @@ public class SplashingModifier extends Modifier implements EntityInteractionModi
             if (consumed > 0) {
               numTargets++;
               spawnParticles(world, hit, fluid);
+              fluid.shrink(consumed);
             }
 
-            // AOE selection logic, get boosted from both fireprimer (unique modifer) and expanded
+            // AOE selection logic, get boosted from expanded
             int range = tool.getModifierLevel(TinkerModifiers.expanded.getId());
-            if (range > 0 && player != null) {
+            if (range > 0 && player != null && !fluid.isEmpty()) {
               for (BlockPos offset : CircleAOEIterator.calculate(tool, ItemStack.EMPTY, world, player, pos, face, 1 + range, false, AreaOfEffectIterator.AOEMatchType.TRANSFORM)) {
                 BlockHitResult offsetHit = hit.withPosition(offset);
-                int aoeConsumed = recipe.applyToBlock(fluid, level, new FluidEffectContext.Block(world, player, null, offsetHit), FluidAction.EXECUTE);
-                if (aoeConsumed > 0) {
+                consumed = recipe.applyToBlock(fluid, level, new FluidEffectContext.Block(world, player, null, offsetHit), FluidAction.EXECUTE);
+                if (consumed > 0) {
                   numTargets++;
                   spawnParticles(world, offsetHit, fluid);
-                  if (aoeConsumed > consumed) {
-                    consumed = aoeConsumed;
+                  fluid.shrink(consumed);
+                  // stop if we run out of fluid
+                  if (fluid.isEmpty()) {
+                    break;
                   }
                 }
               }
             }
 
-            // consume the fluid last, if any target used fluid
+            // update fluid in tool and damage tool
             if (player == null || !player.isCreative() ) {
-              if (consumed > 0) {
-                fluid.shrink(consumed);
+              if (numTargets > 0) {
                 TANK_HELPER.setFluid(tool, fluid);
               }
 
@@ -170,7 +175,7 @@ public class SplashingModifier extends Modifier implements EntityInteractionModi
             }
           }
 
-          // cooldown based on attack speed/draw speed. both are on the same scale and default to 1, we don't care which one the tool uses
+          // cooldown based on draw speed, works similarly enough to attack speed
           if (player != null) {
             player.getCooldowns().addCooldown(tool.getItem(), (int)(20 / ConditionalStatModifierHook.getModifiedStat(tool, player, ToolStats.DRAW_SPEED)));
           }
