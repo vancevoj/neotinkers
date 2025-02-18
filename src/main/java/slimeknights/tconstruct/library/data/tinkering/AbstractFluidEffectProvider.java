@@ -22,7 +22,6 @@ import slimeknights.mantle.data.predicate.entity.LivingEntityPredicate;
 import slimeknights.mantle.recipe.ingredient.FluidIngredient;
 import slimeknights.mantle.registration.object.FluidObject;
 import slimeknights.tconstruct.common.TinkerDamageTypes;
-import slimeknights.tconstruct.library.modifiers.fluid.ConditionalFluidEffect;
 import slimeknights.tconstruct.library.modifiers.fluid.FluidEffect;
 import slimeknights.tconstruct.library.modifiers.fluid.FluidEffectContext;
 import slimeknights.tconstruct.library.modifiers.fluid.FluidEffectManager;
@@ -33,6 +32,7 @@ import slimeknights.tconstruct.library.modifiers.fluid.block.PlaceBlockFluidEffe
 import slimeknights.tconstruct.library.modifiers.fluid.entity.DamageFluidEffect;
 import slimeknights.tconstruct.library.modifiers.fluid.entity.FireFluidEffect;
 import slimeknights.tconstruct.library.modifiers.fluid.entity.MobEffectFluidEffect;
+import slimeknights.tconstruct.library.modifiers.fluid.general.ConditionalFluidEffect;
 import slimeknights.tconstruct.library.recipe.FluidValues;
 
 import java.util.ArrayList;
