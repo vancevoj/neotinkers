@@ -103,6 +103,34 @@ public abstract class AbstractFluidEffectProvider extends GenericDataProvider {
     return addFluid(fluid.getId().getPath(), fluid.ingredient(amount));
   }
 
+
+  /* Common units */
+
+  /** Builder for a gem based fluid */
+  protected Builder addGem(FluidObject<?> fluid) {
+    return addFluid(fluid, FluidValues.GEM_SHARD);
+  }
+
+  /** Builder for a metal based fluid */
+  protected Builder addMetal(FluidObject<?> fluid) {
+    return addFluid(fluid, FluidValues.NUGGET);
+  }
+
+  /** Builder for a clay based fluid */
+  protected Builder addClay(FluidObject<?> fluid) {
+    return addFluid(fluid, FluidValues.BRICK);
+  }
+
+  /** Builder for a glass based fluid */
+  protected Builder addGlass(FluidObject<?> fluid) {
+    return addFluid(fluid, FluidValues.GLASS_PANE);
+  }
+
+  /** Builder for a glass based fluid */
+  protected Builder addSlime(FluidObject<?> fluid) {
+    return addFluid(fluid, FluidValues.SLIME_DROP);
+  }
+
   /** Adds a builder for burning with a nugget amount */
   protected Builder burningFluid(TagKey<Fluid> tag, float damage, int time) {
     return burningFluid(tag.location().getPath(), tag, FluidValues.NUGGET, damage, time);
