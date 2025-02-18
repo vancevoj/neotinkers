@@ -61,6 +61,7 @@ import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierManager;
 import slimeknights.tconstruct.library.modifiers.fluid.FluidEffect;
 import slimeknights.tconstruct.library.modifiers.fluid.FluidEffectManager;
+import slimeknights.tconstruct.library.modifiers.fluid.block.BreakBlockFluidEffect;
 import slimeknights.tconstruct.library.modifiers.fluid.block.MobEffectCloudFluidEffect;
 import slimeknights.tconstruct.library.modifiers.fluid.block.PlaceBlockFluidEffect;
 import slimeknights.tconstruct.library.modifiers.fluid.block.PotionCloudFluidEffect;
@@ -559,6 +560,7 @@ public final class TinkerModifiers extends TinkerModule {
       FluidEffect.ENTITY_EFFECTS.register(getResource("add_breath"), AddBreathFluidEffect.LOADER);
       // block
       FluidEffect.BLOCK_EFFECTS.register(getResource("place_block"), PlaceBlockFluidEffect.LOADER);
+      FluidEffect.BLOCK_EFFECTS.register(getResource("break_block"), BreakBlockFluidEffect.LOADER);
       FluidEffect.BLOCK_EFFECTS.register(getResource("mob_effect_cloud"), MobEffectCloudFluidEffect.LOADER);
       FluidEffect.BLOCK_EFFECTS.register(getResource("potion_cloud"), PotionCloudFluidEffect.LOADER);
 
