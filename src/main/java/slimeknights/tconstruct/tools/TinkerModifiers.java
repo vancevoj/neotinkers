@@ -76,6 +76,7 @@ import slimeknights.tconstruct.library.modifiers.fluid.entity.PotionFluidEffect;
 import slimeknights.tconstruct.library.modifiers.fluid.entity.RemoveEffectFluidEffect;
 import slimeknights.tconstruct.library.modifiers.fluid.entity.RestoreHungerFluidEffect;
 import slimeknights.tconstruct.library.modifiers.fluid.general.ConditionalFluidEffect;
+import slimeknights.tconstruct.library.modifiers.fluid.general.DropItemFluidEffect;
 import slimeknights.tconstruct.library.modifiers.fluid.general.ScalingFluidEffect;
 import slimeknights.tconstruct.library.modifiers.impl.BasicModifier.TooltipDisplay;
 import slimeknights.tconstruct.library.modifiers.impl.SingleLevelModifier;
@@ -563,6 +564,8 @@ public final class TinkerModifiers extends TinkerModule {
       FluidEffect.BLOCK_EFFECTS.register(getResource("break_block"), BreakBlockFluidEffect.LOADER);
       FluidEffect.BLOCK_EFFECTS.register(getResource("mob_effect_cloud"), MobEffectCloudFluidEffect.LOADER);
       FluidEffect.BLOCK_EFFECTS.register(getResource("potion_cloud"), PotionCloudFluidEffect.LOADER);
+      // shared
+      FluidEffect.registerGeneral(getResource("drop_item"), DropItemFluidEffect.LOADER);
 
 
       // modifier names, sometimes I wonder if I have too many registries for tiny JSON pieces
