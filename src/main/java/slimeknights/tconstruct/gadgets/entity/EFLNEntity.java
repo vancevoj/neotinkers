@@ -11,7 +11,6 @@ import net.minecraft.world.level.Explosion.BlockInteraction;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.entity.IEntityAdditionalSpawnData;
-import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.network.NetworkHooks;
 import slimeknights.tconstruct.gadgets.TinkerGadgets;
 
@@ -39,13 +38,7 @@ public class EFLNEntity extends ThrowableItemProjectile implements IEntityAdditi
   protected void onHit(HitResult result) {
     Level level = level();
     if (!level.isClientSide) {
-      // based on ServerLevel#explode
-      EFLNExplosion explosion = new EFLNExplosion(level, this, 1, null, this.getX(), this.getY(), this.getZ(), 4f, false, BlockInteraction.DESTROY);
-      if (!ForgeEventFactory.onExplosionStart(level, explosion)) {
-        explosion.explode();
-        explosion.finalizeExplosion(false);
-        explosion.syncToClient(level);
-      }
+      new EFLNExplosion(level, position(), 4f, this, 8f, null, false, BlockInteraction.DESTROY).handleServer();
       this.discard();
     }
   }
