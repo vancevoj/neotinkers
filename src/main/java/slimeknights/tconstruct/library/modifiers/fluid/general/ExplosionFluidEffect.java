@@ -6,6 +6,8 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.projectile.Projectile;
@@ -123,5 +125,10 @@ public record ExplosionFluidEffect(LevelingValue radius, LevelingValue damage, L
     public ExplosionFluidEffect build() {
       return new ExplosionFluidEffect(radius, damage, knockback, placeFire, blockInteraction);
     }
+  }
+
+  @Override
+  public Component getDescription(RegistryAccess registryAccess) {
+    return FluidEffect.makeTranslation(getLoader(), radius.compute(1));
   }
 }

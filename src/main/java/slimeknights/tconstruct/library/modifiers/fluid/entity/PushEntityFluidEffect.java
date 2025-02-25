@@ -1,5 +1,7 @@
 package slimeknights.tconstruct.library.modifiers.fluid.entity;
 
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -62,5 +64,10 @@ public record PushEntityFluidEffect(LevelingValue value) implements FluidEffect<
       return value.isFlat() ? 1 : level.value();
     }
     return 0;
+  }
+
+  @Override
+  public Component getDescription(RegistryAccess registryAccess) {
+    return Component.translatable(FluidEffect.getTranslationKey(getLoader()) + (value.compute(1) >= 0 ? ".push" : ".pull"));
   }
 }

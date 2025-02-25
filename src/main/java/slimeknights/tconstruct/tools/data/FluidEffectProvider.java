@@ -189,34 +189,34 @@ public class FluidEffectProvider extends AbstractFluidEffectProvider {
     // metals, lose reference to mistborn (though a true fan would probably get angry at how much I stray from the source)
     // copper/bronze - air/rest
     addMetal(TinkerFluids.moltenCopper).fireDamage(1).addEntityEffect(new AddBreathFluidEffect(80));
-    addMetal(TinkerFluids.moltenBronze).fireDamage(3).addEntityEffect(new AwardStatFluidEffect(Stats.TIME_SINCE_REST, - 2000));
+    compatMetal(TinkerFluids.moltenBronze, "tin").fireDamage(3).addEntityEffect(new AwardStatFluidEffect(Stats.TIME_SINCE_REST, - 2000));
     addMetal(TinkerFluids.moltenAmethystBronze).fireDamage(3).addEntityEffect(new AwardStatFluidEffect(Stats.TIME_SINCE_REST, 2000));
     // iron/steel - pull/push
     addMetal(TinkerFluids.moltenIron).fireDamage(2f).addEffect(FluidMobEffect.builder().effect(TinkerModifiers.magneticEffect.get(), 20 * 5, 2), TimeAction.SET);
     addMetal(TinkerFluids.moltenSteel).fireDamage(2f).addEffect(FluidMobEffect.builder().effect(TinkerModifiers.repulsiveEffect.get(), 20 * 5, 2), TimeAction.SET);
     // zinc/brass - speed/heat
-    addMetal(TinkerFluids.moltenZinc).fireDamage(2).addEffect(FluidMobEffect.builder().effect(MobEffects.MOVEMENT_SPEED, 20 * 10), TimeAction.SET);
-    addMetal(TinkerFluids.moltenBrass).fireDamage(3).addEffect(FluidMobEffect.builder().effect(MobEffects.FIRE_RESISTANCE, 20 * 8), TimeAction.SET);
+    compatMetal(TinkerFluids.moltenZinc).fireDamage(2).addEffect(FluidMobEffect.builder().effect(MobEffects.MOVEMENT_SPEED, 20 * 10), TimeAction.SET);
+    compatMetal(TinkerFluids.moltenBrass, "zinc").fireDamage(3).addEffect(FluidMobEffect.builder().effect(MobEffects.FIRE_RESISTANCE, 20 * 8), TimeAction.SET);
     // tin/pewter - sight/strength
-    addMetal(TinkerFluids.moltenTin).fireDamage(2).addEffect(FluidMobEffect.builder().effect(MobEffects.NIGHT_VISION, 20 * 8), TimeAction.SET);
-    addMetal(TinkerFluids.moltenPewter).fireDamage(3).addEffect(FluidMobEffect.builder().effect(MobEffects.DAMAGE_BOOST, 20 * 7), TimeAction.SET);
+    compatMetal(TinkerFluids.moltenTin).fireDamage(2).addEffect(FluidMobEffect.builder().effect(MobEffects.NIGHT_VISION, 20 * 8), TimeAction.SET);
+    compatMetal(TinkerFluids.moltenPewter).fireDamage(3).addEffect(FluidMobEffect.builder().effect(MobEffects.DAMAGE_BOOST, 20 * 7), TimeAction.SET);
     // gold/electrum/rose gold - health/haste/absorption
     addMetal(TinkerFluids.moltenGold).magicDamage(2).addEffect(FluidMobEffect.builder().effect(MobEffects.REGENERATION, 20 * 6, 2), TimeAction.SET);
-    addMetal(TinkerFluids.moltenElectrum).magicDamage(3).addEffect(FluidMobEffect.builder().effect(MobEffects.DIG_SPEED, 20 * 8, 1), TimeAction.SET);
+    compatMetal(TinkerFluids.moltenElectrum, "silver").magicDamage(3).addEffect(FluidMobEffect.builder().effect(MobEffects.DIG_SPEED, 20 * 8, 1), TimeAction.SET);
     addMetal(TinkerFluids.moltenRoseGold).magicDamage(3).addEffect(FluidMobEffect.builder().effect(MobEffects.ABSORPTION, 20 * 15, 2), TimeAction.SET);
     // aluminum/silver - remove effects
-    addMetal(TinkerFluids.moltenAluminum).magicDamage(2).addEntityEffect(new CureEffectsFluidEffect(Items.MILK_BUCKET));
-    addMetal(TinkerFluids.moltenSilver).magicDamage(2).addEntityEffect(new RemoveEffectFluidEffect(MobEffects.WITHER));
+    compatMetal(TinkerFluids.moltenAluminum).magicDamage(2).addEntityEffect(new CureEffectsFluidEffect(Items.MILK_BUCKET));
+    compatMetal(TinkerFluids.moltenSilver).magicDamage(2).addEntityEffect(new RemoveEffectFluidEffect(MobEffects.WITHER));
     // non-cosmere ores
-    addMetal(TinkerFluids.moltenLead).fireDamage(2).addEffect(FluidMobEffect.builder().effect(MobEffects.POISON, 20 * 5, 1), TimeAction.SET);
-    addMetal(TinkerFluids.moltenNickel).fireDamage(2).addEffect(FluidMobEffect.builder().effect(MobEffects.WEAKNESS, 20 * 7, 1), TimeAction.SET);
-    addMetal(TinkerFluids.moltenPlatinum).fireDamage(2).addEffect(FluidMobEffect.builder().effect(MobEffects.DIG_SLOWDOWN, 20 * 10, 1), TimeAction.SET);
-    addMetal(TinkerFluids.moltenTungsten).fireDamage(2).addEffect(FluidMobEffect.builder().effect(MobEffects.MOVEMENT_SLOWDOWN, 20 * 10, 2), TimeAction.SET);
-    addMetal(TinkerFluids.moltenOsmium).fireDamage(2).addEffect(FluidMobEffect.builder().effect(MobEffects.MOVEMENT_SLOWDOWN, 20 * 10, 2), TimeAction.SET);
-    addMetal(TinkerFluids.moltenUranium).fireDamage(2).addEffect(FluidMobEffect.builder().effect(MobEffects.POISON, 20 * 10, 1), TimeAction.SET);
+    compatMetal(TinkerFluids.moltenLead).fireDamage(2).addEffect(FluidMobEffect.builder().effect(MobEffects.POISON, 20 * 5, 1), TimeAction.SET);
+    compatMetal(TinkerFluids.moltenNickel).fireDamage(2).addEffect(FluidMobEffect.builder().effect(MobEffects.WEAKNESS, 20 * 7, 1), TimeAction.SET);
+    compatMetal(TinkerFluids.moltenPlatinum).fireDamage(2).addEffect(FluidMobEffect.builder().effect(MobEffects.DIG_SLOWDOWN, 20 * 10, 1), TimeAction.SET);
+    compatMetal(TinkerFluids.moltenTungsten).fireDamage(2).addEffect(FluidMobEffect.builder().effect(MobEffects.MOVEMENT_SLOWDOWN, 20 * 10, 2), TimeAction.SET);
+    compatMetal(TinkerFluids.moltenOsmium).fireDamage(2).addEffect(FluidMobEffect.builder().effect(MobEffects.MOVEMENT_SLOWDOWN, 20 * 10, 2), TimeAction.SET);
+    compatMetal(TinkerFluids.moltenUranium).fireDamage(2).addEffect(FluidMobEffect.builder().effect(MobEffects.POISON, 20 * 10, 1), TimeAction.SET);
     // non-cosmere alloys
-    addMetal(TinkerFluids.moltenInvar).fireDamage(3).addEffect(FluidMobEffect.builder().effect(MobEffects.HUNGER, 20 * 10, 1), TimeAction.SET);
-    addMetal(TinkerFluids.moltenConstantan).fireDamage(3).addEffect(FluidMobEffect.builder().effect(MobEffects.HUNGER, 20 * 10, 1), TimeAction.SET);
+    compatMetal(TinkerFluids.moltenInvar, "nickel").fireDamage(3).addEffect(FluidMobEffect.builder().effect(MobEffects.HUNGER, 20 * 10, 1), TimeAction.SET);
+    compatMetal(TinkerFluids.moltenConstantan, "nickel").fireDamage(3).addEffect(FluidMobEffect.builder().effect(MobEffects.HUNGER, 20 * 10, 1), TimeAction.SET);
     // slime metal
     int slimeMetal = FluidValues.NUGGET * 2;
     addFluid(TinkerFluids.moltenSlimesteel, slimeMetal).addEffect(ExplosionFluidEffect.radius(1, 0.5f).knockback(LevelingValue.eachLevel(1)).build());
@@ -244,6 +244,7 @@ public class FluidEffectProvider extends AbstractFluidEffectProvider {
     };
     String create = "create";
     addFluid("potion_create", FluidNameIngredient.of(new ResourceLocation(create, "potion"), FluidValues.SIP))
+      .hidden() // we have the regular potion type showing, the create one in addition is a bit confusing
       .addCondition(new ModLoadedCondition(create))
       .addEntityEffect(new PotionFluidEffect(0.25f, createBottle.apply("REGULAR")))
       .addEntityEffect(new PotionFluidEffect(0.5f, createBottle.apply("SPLASH")))

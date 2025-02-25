@@ -2,6 +2,8 @@ package slimeknights.tconstruct.library.modifiers.fluid.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.Level;
@@ -169,5 +171,10 @@ public record MoveBlocksFluidEffect(boolean push, SoundEvent sound) implements F
     for (int i = moving - 1; i >= 0; i--) {
       world.updateNeighborsAt(targets[i], blocksToUpdate[i]);
     }
+  }
+
+  @Override
+  public Component getDescription(RegistryAccess registryAccess) {
+    return Component.translatable(FluidEffect.getTranslationKey(getLoader()) + (push ? ".push" : ".pull"));
   }
 }

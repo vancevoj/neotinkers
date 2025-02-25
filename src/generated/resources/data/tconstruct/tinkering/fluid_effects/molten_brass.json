@@ -11,6 +11,27 @@
       ]
     }
   ],
+  "conditions": [
+    {
+      "type": "forge:or",
+      "values": [
+        {
+          "type": "tconstruct:config",
+          "prop": "force_integration_materials"
+        },
+        {
+          "type": "mantle:tag_filled",
+          "registry": "minecraft:fluid",
+          "tag": "forge:ingots/brass"
+        },
+        {
+          "type": "mantle:tag_filled",
+          "registry": "minecraft:fluid",
+          "tag": "forge:ingots/zinc"
+        }
+      ]
+    }
+  ],
   "entity_effects": [
     {
       "type": "tconstruct:conditional",

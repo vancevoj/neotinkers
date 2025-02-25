@@ -1,5 +1,7 @@
 package slimeknights.tconstruct.library.modifiers.fluid.entity;
 
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
@@ -9,6 +11,8 @@ import slimeknights.tconstruct.library.modifiers.fluid.EffectLevel;
 import slimeknights.tconstruct.library.modifiers.fluid.FluidEffect;
 import slimeknights.tconstruct.library.modifiers.fluid.FluidEffectContext;
 import slimeknights.tconstruct.library.modifiers.fluid.TimeAction;
+
+import java.util.Locale;
 
 /**
  * Effect to set an entity freezing
@@ -51,5 +55,11 @@ public record FreezeFluidEffect(TimeAction action, int time) implements FluidEff
       }
       return effective - existing;
     }
+  }
+
+  @Override
+  public Component getDescription(RegistryAccess registryAccess) {
+    String prefix = FluidEffect.getTranslationKey(getLoader()) + "." + action.name().toLowerCase(Locale.ROOT);
+    return Component.translatable(prefix, time / 20);
   }
 }
