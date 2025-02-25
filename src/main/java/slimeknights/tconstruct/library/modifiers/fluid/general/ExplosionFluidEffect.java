@@ -95,7 +95,7 @@ public record ExplosionFluidEffect(LevelingValue radius, LevelingValue damage, L
     /** Explosion distance from target */
     private final LevelingValue radius;
     /** Explosion damage multiplier for entities */
-    private LevelingValue damage = LevelingValue.flat(7f);
+    private LevelingValue damage = LevelingValue.flat(0);
     /** Explosion knockback multiplier for entities */
     private LevelingValue knockback = LevelingValue.flat(1f);
     /** If true, explosion places fires */

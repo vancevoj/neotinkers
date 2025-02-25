@@ -1,8 +1,14 @@
 {
   "block_effects": [
     {
-      "type": "tconstruct:place_block",
-      "block": "minecraft:fire"
+      "type": "tconstruct:mob_effect_cloud",
+      "effects": [
+        {
+          "effect": "minecraft:slowness",
+          "level": 2,
+          "time": 200
+        }
+      ]
     }
   ],
   "entity_effects": [
@@ -10,7 +16,7 @@
       "type": "tconstruct:conditional",
       "effect": {
         "type": "tconstruct:damage",
-        "damage": 1.0,
+        "damage": 2.0,
         "damage_type": {
           "melee": "tconstruct:fluid_fire_melee",
           "ranged": "tconstruct:fluid_fire_ranged"
@@ -22,13 +28,15 @@
       }
     },
     {
-      "type": "tconstruct:fire",
+      "type": "tconstruct:mob_effect",
       "action": "set",
-      "time": 3
+      "effect": "minecraft:slowness",
+      "level": 2,
+      "time": 200
     }
   ],
   "fluid": {
-    "amount": 100,
-    "tag": "tconstruct:spilling/glass"
+    "amount": 10,
+    "tag": "forge:molten_tungsten"
   }
 }
