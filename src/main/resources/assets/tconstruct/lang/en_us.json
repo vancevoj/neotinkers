@@ -1889,7 +1889,7 @@
 
   "material.tconstruct.silver": "Silver",
   "material.tconstruct.silver.flavor": "You know, this tool isn't going to look so shiny in a few days.",
-  "material.tconstruct.silver.encyclopedia": "Gives +2.5 damage against undead per level",
+  "material.tconstruct.silver.encyclopedia": "Gives +2 damage against undead per level",
   "material.tconstruct.silver.ranged": "Gives +0.5 projectile power against undead per level",
   "material.tconstruct.silver.armor": "Reduces damage from undead by 5% per level",
 
@@ -1927,7 +1927,7 @@
 
   "material.tconstruct.invar": "Invar",
   "material.tconstruct.invar.flavor": "Resists both temperature and arrest.",
-  "material.tconstruct.invar.encyclopedia": "Grants +2.5 damage in biomes with neutral temperatures",
+  "material.tconstruct.invar.encyclopedia": "Grants +1.6 damage in biomes with neutral temperatures",
   "material.tconstruct.invar.ranged": "Grants +0.15 accuracy in biomes with neutral temperatures",
   "material.tconstruct.invar.armor": "Reduces damage by 5% per level in biomes with neutral temperatures",
 
