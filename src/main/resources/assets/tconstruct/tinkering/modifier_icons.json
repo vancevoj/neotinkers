@@ -92,6 +92,8 @@
   "tconstruct:shulking":              "tconstruct:gui/modifiers/armor/shulking",
   "tconstruct:revitalizing":          "tconstruct:gui/modifiers/armor/revitalizing",
   "tconstruct:knockback_resistance":  "tconstruct:gui/modifiers/armor/knockback_resistance",
+  "tconstruct:crafting_table":        "tconstruct:gui/modifiers/armor/crafting_table",
+  "tconstruct:workbench":             "tconstruct:gui/modifiers/armor/workbench",
   
   "tconstruct:ricochet": "tconstruct:gui/modifiers/armor/ricochet",
   "tconstruct:springy":  "tconstruct:gui/modifiers/armor/springy",

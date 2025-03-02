@@ -2287,6 +2287,12 @@
   "modifier.tconstruct.swift_sneak": "Swift Sneak",
   "modifier.tconstruct.swift_sneak.flavor": "Sneaky, but faster!",
   "modifier.tconstruct.swift_sneak.description": "Increases movement speed while crouching",
+  "modifier.tconstruct.workbench": "Workbench",
+  "modifier.tconstruct.workbench.flavor": "Convenient!",
+  "modifier.tconstruct.workbench.description": "Grants an inventory sized crafting grid in the tool inventory",
+  "modifier.tconstruct.crafting_table": "Crafting Table",
+  "modifier.tconstruct.crafting_table.flavor": "A full table in your pocket!",
+  "modifier.tconstruct.crafting_table.description": "Grants a full size crafting grid in the tool's inventory",
 
   "modifier.tconstruct.inventory_cannot_remove": "Making this change would cause an item stored in this tool to be deleted",
 

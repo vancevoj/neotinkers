@@ -16,6 +16,7 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.network.NetworkHooks;
+import slimeknights.mantle.inventory.EmptyItemHandler;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
@@ -24,6 +25,7 @@ import slimeknights.tconstruct.library.module.ModuleHook;
 import slimeknights.tconstruct.library.recipe.partbuilder.Pattern;
 import slimeknights.tconstruct.library.tools.capability.ToolCapabilityProvider.IToolCapabilityProvider;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinition;
+import slimeknights.tconstruct.library.tools.helper.ModifierUtil;
 import slimeknights.tconstruct.library.tools.helper.TooltipUtil;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.ModDataNBT;
@@ -44,6 +46,10 @@ public class ToolInventoryCapability extends InventoryModifierHookIterator<Modif
   public static final ResourceLocation TOTAL_SLOTS = TConstruct.getResource("total_item_slots");
   /** Boolean key to set in volatile mod data to show the offand in the inventory menu */
   public static final ResourceLocation INCLUDE_OFFHAND = TConstruct.getResource("inventory_show_offhand");
+  /** Boolean key to set to enable the 3x3 crafting table in the tool inventory */
+  public static final ResourceLocation CRAFTING_TABLE = TConstruct.getResource("crafting_table");
+  /** Boolean key to set to enable the 2x2 crafting table in the tool inventory */
+  public static final ResourceLocation INVENTORY_CRAFTING = TConstruct.getResource("inventory_crafting");
 
   /** Modifier hook instance to make an inventory modifier */
   public static final ModuleHook<InventoryModifierHook> HOOK = ModifierHooks.register(TConstruct.getResource("inventory"), InventoryModifierHook.class, InventoryModifierHookMerger::new, new InventoryModifierHook() {
@@ -517,11 +523,12 @@ public class ToolInventoryCapability extends InventoryModifierHookIterator<Modif
 
   /** Opens the tool inventory container if an inventory is present on the given tool */
   public static InteractionResult tryOpenContainer(ItemStack stack, @Nullable IToolStackView tool, ToolDefinition definition, Player player, int slotIndex) {
-    IItemHandler handler = stack.getCapability(ForgeCapabilities.ITEM_HANDLER).filter(cap -> cap instanceof IItemHandlerModifiable).orElse(null);
-    if (handler != null) {
+    IItemHandler handler = stack.getCapability(ForgeCapabilities.ITEM_HANDLER).filter(cap -> cap instanceof IItemHandlerModifiable).orElse(EmptyItemHandler.INSTANCE);
+    // open if we have any slots or we have a crafting table
+    if (handler.getSlots() > 0 || ModifierUtil.checkVolatileFlag(stack, CRAFTING_TABLE) || ModifierUtil.checkVolatileFlag(stack, INVENTORY_CRAFTING)) {
       if (player instanceof ServerPlayer serverPlayer) {
         NetworkHooks.openScreen(serverPlayer, new SimpleMenuProvider(
-          (id, inventory, p) -> new ToolContainerMenu(id, inventory, stack, (IItemHandlerModifiable)handler, slotIndex),
+          (id, inventory, p) -> new ToolContainerMenu(id, inventory, stack, handler, slotIndex),
           TooltipUtil.getDisplayName(stack, tool, definition)
         ), buf -> buf.writeVarInt(slotIndex));
       }

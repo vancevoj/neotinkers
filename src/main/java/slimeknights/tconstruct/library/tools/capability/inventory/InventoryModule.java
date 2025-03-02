@@ -2,7 +2,6 @@ package slimeknights.tconstruct.library.tools.capability.inventory;
 
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -10,7 +9,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.SlotAccess;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -19,9 +17,7 @@ import slimeknights.mantle.data.loadable.Loadables;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.data.predicate.IJsonPredicate;
 import slimeknights.mantle.data.predicate.item.ItemPredicate;
-import slimeknights.mantle.util.RegistryHelper;
 import slimeknights.tconstruct.TConstruct;
-import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.json.IntRange;
 import slimeknights.tconstruct.library.json.LevelingInt;
 import slimeknights.tconstruct.library.modifiers.Modifier;
@@ -318,28 +314,10 @@ public record InventoryModule(@Nullable ResourceLocation key, LevelingInt slots,
 
   /* Slot interaction */
 
-  private static boolean isValidContainer(AbstractContainerMenu menu) {
-    // player inventory has a null type, which throws when used through the getter
-    if (menu.menuType == null) {
-      return true;
-    }
-    // because vanilla set the throw precedent, add protection for other cases, just in case
-    // the try here is basically free
-    try {
-      return RegistryHelper.contains(BuiltInRegistries.MENU, TinkerTags.MenuTypes.TOOL_INVENTORY_REPLACEMENTS, menu.getType());
-    }
-    catch (UnsupportedOperationException e) {
-      return false;
-    }
-  }
-
   @Override
   public boolean overrideOtherStackedOnMe(IToolStackView slotTool, ModifierEntry modifier, ItemStack held, Slot slot, Player player, SlotAccess access) {
-    if (held.isEmpty() && slot.container == player.getInventory() && getSlots(slotTool, modifier) > 0 && isValidContainer(player.containerMenu)) {
-      if (!player.level().isClientSide) {
-        ToolInventoryCapability.tryOpenContainer(slot.getItem(), slotTool, slotTool.getDefinition(), player, slot.getSlotIndex());
-      }
-      return true;
+    if (getSlots(slotTool, modifier) > 0) {
+      return InventorySlotMenuModule.INSTANCE.overrideOtherStackedOnMe(slotTool, modifier, held, slot, player, access);
     }
     return false;
   }

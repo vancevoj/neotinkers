@@ -106,6 +106,7 @@ import slimeknights.tconstruct.library.tools.capability.TinkerDataKeys;
 import slimeknights.tconstruct.library.tools.capability.fluid.ToolTankHelper;
 import slimeknights.tconstruct.library.tools.capability.inventory.InventoryMenuModule;
 import slimeknights.tconstruct.library.tools.capability.inventory.InventoryModule;
+import slimeknights.tconstruct.library.tools.capability.inventory.InventorySlotMenuModule;
 import slimeknights.tconstruct.library.tools.capability.inventory.ToolInventoryCapability;
 import slimeknights.tconstruct.library.tools.definition.module.ToolHooks;
 import slimeknights.tconstruct.library.tools.item.IModifiable;
@@ -450,6 +451,16 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
     buildModifier(ModifierIds.swiftSneak).addModule(EnchantmentModule.builder(Enchantments.SWIFT_SNEAK).constant());
     // TODO: consider higher levels keeping more of the inventory
     buildModifier(ModifierIds.soulBelt).levelDisplay(ModifierLevelDisplay.NO_LEVELS).addModule(new ArmorLevelModule(TinkerDataKeys.SOUL_BELT, true, null)).addModule(ModifierRequirementsModule.builder().modifierKey(ModifierIds.soulBelt).requireModifier(ModifierIds.soulbound, 1).build());
+    buildModifier(ModifierIds.workbench)
+      .levelDisplay(ModifierLevelDisplay.NO_LEVELS)
+      .addModule(InventoryMenuModule.ANY)
+      .addModule(InventorySlotMenuModule.INSTANCE)
+      .addModule(new VolatileFlagModule(ToolInventoryCapability.INVENTORY_CRAFTING));
+    buildModifier(ModifierIds.craftingTable)
+      .levelDisplay(ModifierLevelDisplay.NO_LEVELS)
+      .addModule(InventoryMenuModule.ANY)
+      .addModule(InventorySlotMenuModule.INSTANCE)
+      .addModule(new VolatileFlagModule(ToolInventoryCapability.CRAFTING_TABLE));
     // boots
     buildModifier(ModifierIds.depthStrider).addModule(EnchantmentModule.builder(Enchantments.DEPTH_STRIDER).constant());
     buildModifier(ModifierIds.featherFalling).addModule(ProtectionModule.builder().source(DamageSourcePredicate.tag(TinkerTags.DamageTypes.FALL_PROTECTION)).eachLevel(3.75f));

@@ -982,7 +982,24 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .setTools(TinkerTags.Items.LEGGINGS)
                          .saveSalvage(consumer, prefix(ModifierIds.soulBelt, abilitySalvage))
                          .save(consumer, prefix(ModifierIds.soulBelt, abilityFolder));
-
+    ModifierRecipeBuilder.modifier(ModifierIds.workbench)
+                         .addInput(Items.LEATHER)
+                         .addInput(Blocks.CRAFTING_TABLE)
+                         .addInput(Items.LEATHER)
+                         .setSlots(SlotType.UPGRADE, 1)
+                         .setMaxLevel(1).checkTraitLevel()
+                         .setTools(TinkerTags.Items.LEGGINGS)
+                         .saveSalvage(consumer, prefix(ModifierIds.workbench, upgradeSalvage))
+                         .save(consumer, prefix(ModifierIds.workbench, upgradeFolder));
+    ModifierRecipeBuilder.modifier(ModifierIds.craftingTable)
+                         .addInput(Items.LEATHER)
+                         .addInput(TinkerTables.craftingStation)
+                         .addInput(Items.LEATHER)
+                         .setSlots(SlotType.ABILITY, 1)
+                         .setMaxLevel(1).checkTraitLevel()
+                         .setTools(TinkerTags.Items.LEGGINGS)
+                         .saveSalvage(consumer, prefix(ModifierIds.craftingTable, abilitySalvage))
+                         .save(consumer, prefix(ModifierIds.craftingTable, abilityFolder));
     ModifierRecipeBuilder.modifier(TinkerModifiers.wetting)
                          .addInput(Tags.Items.DUSTS_REDSTONE)
                          .addInput(tanks)
