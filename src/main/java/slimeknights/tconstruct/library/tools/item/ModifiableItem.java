@@ -77,14 +77,25 @@ public class ModifiableItem extends TieredItem implements IModifiableDisplay {
   @Getter
   private final ToolDefinition toolDefinition;
 
+  private final int maxStackSize;
+
   /** Cached tool for rendering on UIs */
   private ItemStack toolForRendering;
 
   public ModifiableItem(Properties properties, ToolDefinition toolDefinition) {
-    super(TinkerTier.INSTANCE, properties);
-    this.toolDefinition = toolDefinition;
+    this(properties, toolDefinition, 1);
   }
 
+  public ModifiableItem(Properties properties, ToolDefinition toolDefinition, int maxStackSize) {
+    super(TinkerTier.INSTANCE, properties);
+    this.toolDefinition = toolDefinition;
+    this.maxStackSize = maxStackSize;
+  }
+
+  @Override
+  public int getMaxStackSize(ItemStack stack) {
+    return stack.isDamaged() ? 1 : maxStackSize;
+  }
 
   /* Basic properties */
 

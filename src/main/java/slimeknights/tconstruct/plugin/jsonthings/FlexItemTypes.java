@@ -66,9 +66,10 @@ public class FlexItemTypes {
     /* Register a modifiable tool instance for melee/harvest tools */
     register("tool", data -> {
       boolean breakBlocksInCreative = GsonHelper.getAsBoolean(data, "break_blocks_in_creative", true);
+      int stackSize = GsonHelper.getAsInt(data, "max_stack_size", 1);
       return (IToolItemFactory<ModifiableItem>)(props, builder) -> {
         ToolDefinition definition = ToolDefinition.create(builder.getRegistryName());
-        return add(TOOL_ITEMS, breakBlocksInCreative ? new ModifiableItem(props, definition) : new ModifiableSwordItem(props, definition));
+        return add(TOOL_ITEMS, breakBlocksInCreative ? new ModifiableItem(props, definition, stackSize) : new ModifiableSwordItem(props, definition, stackSize));
       };
     });
 

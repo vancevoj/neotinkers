@@ -161,7 +161,7 @@ public final class TinkerTools extends TinkerModule {
 
   // setting durability to -1 makes sure its not 0 for the defaultDurability call in the TieredItem constructor, but is still less than 0 for the stacksTo call to work
   // problem is setting the durability sets the max stack size, and we don't want that. And we need TieredItem to work with piglins
-  public static final ItemObject<ModifiableItem> dagger = ITEMS.register("dagger", () -> new ModifiableSwordItem(new Item.Properties().durability(-1).stacksTo(2), ToolDefinitions.DAGGER));
+  public static final ItemObject<ModifiableItem> dagger = ITEMS.register("dagger", () -> new ModifiableSwordItem(new Item.Properties().durability(-1).stacksTo(2), ToolDefinitions.DAGGER, 2));
   public static final ItemObject<ModifiableItem> sword = ITEMS.register("sword", () -> new ModifiableSwordItem(UNSTACKABLE_PROPS, ToolDefinitions.SWORD));
   public static final ItemObject<ModifiableItem> cleaver = ITEMS.register("cleaver", () -> new ModifiableSwordItem(UNSTACKABLE_PROPS, ToolDefinitions.CLEAVER));
 
