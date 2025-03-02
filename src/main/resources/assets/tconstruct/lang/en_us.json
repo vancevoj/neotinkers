@@ -891,8 +891,8 @@
 
   "fluid_effect.tconstruct.cure_effects": "Cures most status effects",
   "fluid_effect.tconstruct.remove_effect": "Removes %s",
-  "fluid_effect.tconstruct.mob_effect.add": "+%d seconds %s %s",
-  "fluid_effect.tconstruct.mob_effect.set": "%d seconds %s %s",
+  "fluid_effect.tconstruct.mob_effect.add": "+%d seconds %s",
+  "fluid_effect.tconstruct.mob_effect.set": "%d seconds %s",
   "fluid_effect.tconstruct.potion": "Applies effects from potion",
 
   "fluid_effect.tconstruct.restore_hunger": "Restores %d hunger",
