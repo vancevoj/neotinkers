@@ -11,15 +11,18 @@ import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.inventory.Slot;
 import slimeknights.mantle.client.screen.ElementScreen;
 import slimeknights.tconstruct.TConstruct;
+import slimeknights.tconstruct.library.fluid.SimpleFluidTank;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.recipe.partbuilder.Pattern;
 import slimeknights.tconstruct.library.tools.capability.inventory.ToolInventoryCapability;
 import slimeknights.tconstruct.library.tools.capability.inventory.ToolInventoryCapability.InventoryModifierHook;
 import slimeknights.tconstruct.library.tools.layout.Patterns;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
-import slimeknights.tconstruct.library.tools.nbt.ToolStack;
+import slimeknights.tconstruct.smeltery.client.screen.IScreenWithFluidTank;
+import slimeknights.tconstruct.smeltery.client.screen.module.GuiTankModule;
 import slimeknights.tconstruct.tools.menu.ToolContainerMenu;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Function;
 
@@ -29,7 +32,7 @@ import static slimeknights.tconstruct.tools.menu.ToolContainerMenu.TITLE_SIZE;
 import static slimeknights.tconstruct.tools.menu.ToolContainerMenu.UI_START;
 
 /** Screen for a tool inventory */
-public class ToolContainerScreen extends AbstractContainerScreen<ToolContainerMenu> {
+public class ToolContainerScreen extends AbstractContainerScreen<ToolContainerMenu> implements IScreenWithFluidTank {
   /** The ResourceLocation containing the chest GUI texture. */
   private static final ResourceLocation TEXTURE = TConstruct.getResource("textures/gui/tool_inventory.png");
 
@@ -39,6 +42,8 @@ public class ToolContainerScreen extends AbstractContainerScreen<ToolContainerMe
   private static final ElementScreen CRAFTING_RESULT = CRAFTING_SLOTS.move(176, 20, 62, 54);
   /** Full 2x2 crafting grid */
   private static final ElementScreen INVENTORY_CRAFTING = CRAFTING_SLOTS.move(176, 128, 74, 36);
+  /** Fluid bar to draw at the bottom of the UI */
+  private static final ElementScreen FLUID_TANK = CRAFTING_SLOTS.move(0, 224, 176, 14);
 
   /** Max number of rows in the repeat slots background */
   private static final int REPEAT_BACKGROUND_SIZE = 6 * SLOT_SIZE;
@@ -57,8 +62,9 @@ public class ToolContainerScreen extends AbstractContainerScreen<ToolContainerMe
   private final int inventoryRows;
   /** Number of slots in the final row */
   private final int slotsInLastRow;
-  /** Tool instance being rendered */
-  private final IToolStackView tool;
+  /** Tool tank rendering logic */
+  @Nullable
+  private final GuiTankModule tank;
   public ToolContainerScreen(ToolContainerMenu menu, Inventory inv, Component title) {
     super(menu, inv, title);
     int slots = menu.getItemHandler().getSlots();
@@ -77,11 +83,17 @@ public class ToolContainerScreen extends AbstractContainerScreen<ToolContainerMe
     this.slotsInLastRow = slotsInLastRow;
     int craftingHeight = menu.getCraftingHeight() * SLOT_SIZE;
     this.imageHeight = UI_START + TITLE_SIZE + PLAYER_INVENTORY_HEIGHT + this.inventoryRows * SLOT_SIZE + craftingHeight;
+    SimpleFluidTank tank = menu.getTank();
+    if (tank.getCapacity() > 0) {
+      this.imageHeight += FLUID_TANK.h;
+      this.tank = new GuiTankModule(this, tank, 8, this.imageHeight - PLAYER_INVENTORY_HEIGHT - 9, 160, 8, true, null);
+    } else {
+      this.tank = null;
+    }
     if (slots > 0) {
       this.titleLabelY += craftingHeight;
     }
     this.inventoryLabelY = this.imageHeight - 93;
-    this.tool = ToolStack.from(menu.getStack());
   }
 
   @Override
@@ -124,6 +136,11 @@ public class ToolContainerScreen extends AbstractContainerScreen<ToolContainerMe
       }
       // draw last partial chunk
       graphics.blit(TEXTURE, xStart, yStart + yOffset, 0, REPEAT_BACKGROUND_START, this.imageWidth, remainingBackground);
+    }
+    // draw tank if we have capacity
+    if (tank != null) {
+      FLUID_TANK.draw(graphics, xStart, yStart + slotBackground);
+      slotBackground += FLUID_TANK.h;
     }
     // draw the player inventory background
     graphics.blit(TEXTURE, xStart, yStart + slotBackground, 0, PLAYER_INVENTORY_START, this.imageWidth, PLAYER_INVENTORY_HEIGHT);
@@ -177,6 +194,7 @@ public class ToolContainerScreen extends AbstractContainerScreen<ToolContainerMe
     int start = menu.getToolInventoryStart();
     int maxSlots = menu.slots.size();
 
+    IToolStackView tool = menu.getTool();
     List<ModifierEntry> modifiers = tool.getModifierList();
     modifiers:
     for (int modIndex = modifiers.size() - 1; modIndex >= 0; modIndex--) {
@@ -205,5 +223,45 @@ public class ToolContainerScreen extends AbstractContainerScreen<ToolContainerMe
         graphics.blit(xStart + slot.x, yStart + slot.y, 100, 16, 16, sprite);
       }
     }
+
+    if (tank != null) {
+      tank.draw(graphics);
+    }
+  }
+
+  @Override
+  protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
+    super.renderLabels(graphics, mouseX, mouseY);
+    if (tank != null) {
+      tank.highlightHoveredFluid(graphics, mouseX - this.leftPos, mouseY - this.topPos);
+    }
+  }
+
+  @Override
+  protected void renderTooltip(GuiGraphics graphics, int mouseX, int mouseY) {
+    super.renderTooltip(graphics, mouseX, mouseY);
+
+    if (tank != null) {
+      tank.renderTooltip(graphics, mouseX, mouseY);
+    }
+  }
+
+  @Override
+  public boolean mouseClicked(double mouseX, double mouseY, int button) {
+    assert minecraft != null && minecraft.player != null && minecraft.gameMode != null;
+    if (tank != null && (button == 0 || button == 1) && !menu.getCarried().isEmpty() && !minecraft.player.isSpectator()) {
+      if (tank.tryClick((int)mouseX - leftPos, (int)mouseY - topPos, button, 0)) {
+        return true;
+      }
+    }
+    return super.mouseClicked(mouseX, mouseY, button);
+  }
+
+  @Override
+  public FluidLocation getFluidUnderMouse(int mouseX, int mouseY) {
+    if (tank != null) {
+      return tank.getFluidUnderMouse(mouseX - leftPos, mouseY - topPos);
+    }
+    return null;
   }
 }

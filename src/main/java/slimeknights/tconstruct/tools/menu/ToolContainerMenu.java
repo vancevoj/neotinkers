@@ -15,13 +15,22 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.inventory.TransientCraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
+import slimeknights.mantle.fluid.FluidTransferHelper;
+import slimeknights.mantle.fluid.transfer.IFluidContainerTransfer.TransferDirection;
 import slimeknights.mantle.inventory.EmptyItemHandler;
 import slimeknights.mantle.inventory.SmartItemHandlerSlot;
+import slimeknights.tconstruct.common.network.TinkerNetwork;
+import slimeknights.tconstruct.library.fluid.SimpleFluidTank;
+import slimeknights.tconstruct.library.tools.capability.fluid.ToolTankHelper;
 import slimeknights.tconstruct.library.tools.capability.inventory.ToolInventoryCapability;
 import slimeknights.tconstruct.library.tools.helper.ModifierUtil;
+import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
+import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.tools.TinkerTools;
+import slimeknights.tconstruct.tools.network.ToolContainerFluidUpdatePacket;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -40,9 +49,15 @@ public class ToolContainerMenu extends AbstractContainerMenu {
   /** Stack containing the tool being rendered */
   @Getter
   private final ItemStack stack;
+  /** Tool hosting this tank */
+  @Getter
+  private final IToolStackView tool;
   /** Item handler being rendered */
   @Getter
   private final IItemHandler itemHandler;
+  /** Tank in the tool */
+  @Getter
+  private final SimpleFluidTank tank;
   @Getter
   private final Player player;
   @Getter
@@ -75,8 +90,10 @@ public class ToolContainerMenu extends AbstractContainerMenu {
   protected ToolContainerMenu(@Nullable MenuType<?> type, int id, Inventory playerInventory, ItemStack stack, IItemHandler handler, int slotIndex) {
     super(type, id);
     this.stack = stack;
+    this.tool = ToolStack.from(stack);
     this.itemHandler = handler;
     this.player = playerInventory.player;
+    this.tank = new ToolFluidHandler(tool, player.level().isClientSide ? null : player);
     this.slotIndex = slotIndex;
 
     // if requested, add 3x3 crafting area
@@ -129,6 +146,9 @@ public class ToolContainerMenu extends AbstractContainerMenu {
 
     // add player slots
     yOffset += TITLE_SIZE + ((slots + 8) / 9) * SLOT_SIZE;
+    if (tank.getCapacity() > 0) {
+      yOffset += 14;
+    }
     for(int r = 0; r < 3; ++r) {
       for(int c = 0; c < 9; ++c) {
         int index = c + r * 9 + 9;
@@ -224,6 +244,19 @@ public class ToolContainerMenu extends AbstractContainerMenu {
     }
   }
 
+  @Override
+  public boolean clickMenuButton(Player player, int id) {
+    ItemStack held = getCarried();
+    if ((id == 0 || id == 1) && !held.isEmpty() && !player.isSpectator()) {
+      if (!player.level().isClientSide) {
+        ItemStack result = FluidTransferHelper.interactWithTankSlot(tank, held, id == 0 ? TransferDirection.FILL_ITEM : TransferDirection.EMPTY_ITEM);
+        setCarried(FluidTransferHelper.getOrTransferFilled(player, held, result));
+      }
+      return true;
+    }
+    return false;
+  }
+
   private static class ToolContainerSlot extends SmartItemHandlerSlot {
 
     private final int index;
@@ -243,6 +276,35 @@ public class ToolContainerMenu extends AbstractContainerMenu {
     public void setChanged() {
       // no proper setChanged method on item handler, so just set the existing stack
       set(getItem());
+    }
+  }
+
+  /** Logic handling the fluid tank in the UI */
+  private record ToolFluidHandler(IToolStackView tool, @Nullable Player player) implements SimpleFluidTank {
+    @Nonnull
+    @Override
+    public FluidStack getFluid() {
+      return ToolTankHelper.TANK_HELPER.getFluid(tool);
+    }
+
+    @Override
+    public void setFluid(FluidStack fluid) {
+      ToolTankHelper.TANK_HELPER.setFluid(tool, fluid);
+    }
+
+    @Override
+    public void updateFluid(FluidStack updated, int change) {
+      if (change != 0) {
+        setFluid(updated);
+        if (player != null) {
+          TinkerNetwork.getInstance().sendTo(new ToolContainerFluidUpdatePacket(updated), player);
+        }
+      }
+    }
+
+    @Override
+    public int getCapacity() {
+      return ToolTankHelper.TANK_HELPER.getCapacity(tool);
     }
   }
 }

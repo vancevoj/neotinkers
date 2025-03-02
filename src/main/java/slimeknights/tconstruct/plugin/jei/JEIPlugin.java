@@ -106,6 +106,7 @@ import slimeknights.tconstruct.smeltery.item.TankItem;
 import slimeknights.tconstruct.tables.TinkerTables;
 import slimeknights.tconstruct.tools.TinkerModifiers;
 import slimeknights.tconstruct.tools.TinkerTools;
+import slimeknights.tconstruct.tools.client.ToolContainerScreen;
 import slimeknights.tconstruct.tools.item.CreativeSlotItem;
 import slimeknights.tconstruct.tools.item.ModifierCrystalItem;
 
@@ -356,6 +357,7 @@ public class JEIPlugin implements IModPlugin {
   public void registerGuiHandlers(IGuiHandlerRegistration registration) {
     registration.addGenericGuiContainerHandler(MelterScreen.class, new GuiContainerTankHandler<>());
     registration.addGenericGuiContainerHandler(HeatingStructureScreen.class, new GuiContainerTankHandler<>());
+    registration.addGenericGuiContainerHandler(ToolContainerScreen.class, new GuiContainerTankHandler<>());
   }
 
   @Override
