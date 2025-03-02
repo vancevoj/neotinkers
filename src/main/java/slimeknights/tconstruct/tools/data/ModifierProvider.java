@@ -377,11 +377,11 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .addModule(InventoryModule.builder().pattern(pattern("arrow"))
                                 .toolItem(ItemPredicate.tag(TinkerTags.Items.CROSSBOWS).inverted())
                                 .filter(TinkerPredicate.ARROW)
-                                .flatSlots(2))
+                                .slotsPerLevel(2))
       .addModule(InventoryModule.builder().pattern(pattern("arrow"))
                                 .toolItem(ItemPredicate.tag(TinkerTags.Items.CROSSBOWS))
                                 .filter(ItemPredicate.or(TinkerPredicate.ARROW, ItemPredicate.set(Items.FIREWORK_ROCKET)))
-                                .flatSlots(2))
+                                .slotsPerLevel(2))
       .addModule(BulkQuiverModule.INSTANCE)
       .addModule(InventoryMenuModule.ANY);
 
