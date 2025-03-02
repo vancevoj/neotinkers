@@ -2806,6 +2806,10 @@
   "modifier.tconstruct.the_one_probe": "The One Probe",
   "modifier.tconstruct.the_one_probe.flavor": "Sciency!",
   "modifier.tconstruct.the_one_probe.description": "Shows information about the targeted block when held or on a helmet.",
+  "modifier.tconstruct.headlight": "Headlight",
+  "modifier.tconstruct.headlight.flavor": "Lit!",
+  "modifier.tconstruct.headlight.variant": "Light Level %s",
+  "modifier.tconstruct.headlight.description": "Visually lights up the world.",
 
   "_comment": "Internal modifiers",
   "modifier.tconstruct.overslime_friend": "Overslime Friend",

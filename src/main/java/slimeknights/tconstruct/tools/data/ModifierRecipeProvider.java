@@ -1648,6 +1648,26 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .setMaxLevel(1).checkTraitLevel()
                          .saveSalvage(topConsumer, prefix(ModifierIds.theOneProbe, compatSalvage))
                          .save(topConsumer, prefix(ModifierIds.theOneProbe, compatFolder));
+    Consumer<FinishedRecipe> headlightConsumer = withCondition(consumer, modLoaded("headlight"));
+    BiConsumer<Ingredient,String> headlight = (ingredient, light) -> {
+      SwappableModifierRecipeBuilder builder = SwappableModifierRecipeBuilder.modifier(ModifierIds.headlight, light);
+      builder.variantFormatter(VariantFormatter.PARAMETER)
+             .setTools(TinkerTags.Items.HELMETS)
+             .addInput(Items.LEATHER)
+             .addInput(ingredient)
+             .addInput(Items.LEATHER)
+             .setSlots(SlotType.UPGRADE, 1)
+             .disallowCrystal();
+      if ("10".equals(light)) {
+        builder.saveSalvage(headlightConsumer, prefix(ModifierIds.headlight, compatSalvage));
+      } else {
+        builder.disallowCrystal();
+      }
+      builder.save(headlightConsumer, wrap(ModifierIds.headlight, compatFolder, "_" + light));
+    };
+    headlight.accept(Ingredient.of(Blocks.LANTERN), "15");
+    headlight.accept(Ingredient.of(Blocks.SOUL_LANTERN), "10");
+    headlight.accept(Ingredient.of(ItemTags.CANDLES), "5");
   }
 
   private void addTextureRecipes(Consumer<FinishedRecipe> consumer) {
