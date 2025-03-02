@@ -2926,6 +2926,9 @@
   "tool_stat.tconstruct.tank_capacity": "Tank Capacity: ",
   "tool_stat.tconstruct.tank_capacity.description": "Maximum amount of fluid that can be stored in this tool's tank.",
   "tool_stat.tconstruct.tank_capacity.fluid": "Fluid: ",
+  "tool_stat.tconstruct.energy": "%s FE",
+  "tool_stat.tconstruct.max_energy": "Max Energy: ",
+  "tool_stat.tconstruct.max_energy.description": "Maximum amount of energy that can be stord in this tool",
 
   "stat.tconstruct.repair_kit": "Repair Kit",
   "stat.tconstruct.skull": "Slimeskull",

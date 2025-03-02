@@ -66,7 +66,7 @@ public class TankModule implements HookProvider, FluidModifierHook, TooltipModif
     FluidStack current = helper.getFluid(tool);
     if (!current.isEmpty()) {
       tooltip.add(Component.translatable(FLUID_KEY)
-                           .append(Component.translatable(TankCapacityStat.MB_FORMAT, Util.COMMA_FORMAT.format(current.getAmount()))
+                           .append(Component.translatable(ToolTankHelper.MB_FORMAT, Util.COMMA_FORMAT.format(current.getAmount()))
                                             .append(" ")
                                             .append(current.getDisplayName())
                                             .withStyle(style -> style.withColor(ToolTankHelper.CAPACITY_STAT.getColor()))));
