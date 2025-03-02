@@ -237,7 +237,6 @@ import slimeknights.tconstruct.tools.modifiers.traits.skull.SelfDestructiveModif
 import slimeknights.tconstruct.tools.modifiers.traits.skull.StrongBonesModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.skull.WildfireModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.skull.WitheredModifier;
-import slimeknights.tconstruct.tools.modifiers.upgrades.armor.LightspeedArmorModifier;
 import slimeknights.tconstruct.tools.modifiers.upgrades.armor.SoulSpeedModifier;
 import slimeknights.tconstruct.tools.modifiers.upgrades.armor.SpringyModifier;
 import slimeknights.tconstruct.tools.modifiers.upgrades.armor.ThornsModifier;
@@ -262,6 +261,7 @@ import slimeknights.tconstruct.tools.modules.armor.EnderclearanceModule;
 import slimeknights.tconstruct.tools.modules.armor.FlameBarrierModule;
 import slimeknights.tconstruct.tools.modules.armor.GlowWalkerModule;
 import slimeknights.tconstruct.tools.modules.armor.KineticModule;
+import slimeknights.tconstruct.tools.modules.armor.LightspeedAttributeModule;
 import slimeknights.tconstruct.tools.modules.armor.RecurrentProtectionModule;
 import slimeknights.tconstruct.tools.modules.armor.ShieldStrapModule;
 import slimeknights.tconstruct.tools.modules.armor.ToolBeltModule;
@@ -378,7 +378,6 @@ public final class TinkerModifiers extends TinkerModule {
 
   // boots
   public static final StaticModifier<SoulSpeedModifier> soulspeed = MODIFIERS.register("soulspeed", SoulSpeedModifier::new);
-  public static final StaticModifier<LightspeedArmorModifier> lightspeedArmor = MODIFIERS.register("lightspeed_armor", LightspeedArmorModifier::new);
   public static final StaticModifier<DoubleJumpModifier> doubleJump = MODIFIERS.register("double_jump", DoubleJumpModifier::new);
   public static final StaticModifier<Modifier> bouncy = MODIFIERS.register("bouncy", BouncyModifier::new);
   public static final StaticModifier<FlamewakeModifier> flamewake = MODIFIERS.register("flamewake", FlamewakeModifier::new);
@@ -650,6 +649,7 @@ public final class TinkerModifiers extends TinkerModule {
       ModifierModule.LOADER.register(getResource("overburn"), OverburnModule.INSTANCE.getLoader());
       ModifierModule.LOADER.register(getResource("place_glow"), PlaceGlowModule.LOADER);
       ModifierModule.LOADER.register(getResource("glow_walker"), GlowWalkerModule.LOADER);
+      ModifierModule.LOADER.register(getResource("lightspeed_attribute"), LightspeedAttributeModule.LOADER);
       // armor
       ModifierModule.LOADER.register(getResource("depth_protection"), DepthProtectionModule.LOADER);
       ModifierModule.LOADER.register(getResource("flame_barrier"), FlameBarrierModule.LOADER);
