@@ -95,25 +95,25 @@ public record InventoryModule(@Nullable ResourceLocation key, LevelingInt slots,
   /* Properties */
 
   /** Gets the number of slots at the given level, assuming this module is active */
-  private int getPotentialSlots(int level) {
+  private int getPotentialSlots(float level) {
     return Math.max(0, slots.computeForLevel(level));
   }
 
   @Override
   public int getSlots(IToolStackView tool, ModifierEntry modifier) {
-    return condition.matches(tool, modifier) ? getPotentialSlots(modifier.intEffectiveLevel()) : 0;
+    return condition.matches(tool, modifier) ? getPotentialSlots(modifier.getEffectiveLevel()) : 0;
   }
 
   @Override
   public void addVolatileData(IToolContext context, ModifierEntry modifier, ToolDataNBT volatileData) {
     if (condition.matches(context, modifier)) {
-      ToolInventoryCapability.addSlots(volatileData, getPotentialSlots(modifier.intEffectiveLevel()));
+      ToolInventoryCapability.addSlots(volatileData, getPotentialSlots(modifier.getEffectiveLevel()));
     }
   }
 
   @Override
   public int getSlotLimit(IToolStackView tool, ModifierEntry modifier, int slot) {
-    return slotLimit.compute(modifier.intEffectiveLevel());
+    return slotLimit.compute(modifier.getEffectiveLevel());
   }
 
   @Override
