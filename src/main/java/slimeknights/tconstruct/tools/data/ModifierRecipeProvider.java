@@ -1330,15 +1330,15 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .saveSalvage(consumer, prefix(ModifierIds.tilling, abilitySalvage))
                          .save(consumer, prefix(ModifierIds.tilling, abilityFolder));
     // glowing
-    ModifierRecipeBuilder.modifier(TinkerModifiers.glowing)
-                         .setTools(interactableWithDurability)
+    ModifierRecipeBuilder.modifier(ModifierIds.glowing)
+                         .setTools(IntersectionIngredient.of(Ingredient.of(TinkerTags.Items.DURABILITY), ingredientFromTags(TinkerTags.Items.INTERACTABLE, TinkerTags.Items.BOOTS)))
                          .addInput(Items.GLOWSTONE)
                          .addInput(Items.DAYLIGHT_DETECTOR)
                          .addInput(Items.SHROOMLIGHT)
                          .setMaxLevel(1).checkTraitLevel()
                          .setSlots(SlotType.ABILITY, 1)
-                         .saveSalvage(consumer, prefix(TinkerModifiers.glowing, abilitySalvage))
-                         .save(consumer, prefix(TinkerModifiers.glowing, abilityFolder));
+                         .saveSalvage(consumer, prefix(ModifierIds.glowing, abilitySalvage))
+                         .save(consumer, prefix(ModifierIds.glowing, abilityFolder));
     ModifierRecipeBuilder.modifier(TinkerModifiers.firestarter)
                          .setTools(interactableWithDurability)
                          .addInput(TinkerMaterials.cobalt.getIngotTag())

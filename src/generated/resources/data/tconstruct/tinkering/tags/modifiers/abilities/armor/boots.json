@@ -7,6 +7,7 @@
     "tconstruct:snowdrift",
     "tconstruct:plowing",
     "tconstruct:path_maker",
-    "tconstruct:frost_walker"
+    "tconstruct:frost_walker",
+    "tconstruct:glowing"
   ]
 }
