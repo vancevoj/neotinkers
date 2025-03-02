@@ -98,6 +98,7 @@ import slimeknights.tconstruct.plugin.jei.util.ToolPartSubtypeInterpreter;
 import slimeknights.tconstruct.plugin.jei.util.ToolSubtypeInterpreter;
 import slimeknights.tconstruct.smeltery.TinkerSmeltery;
 import slimeknights.tconstruct.smeltery.block.component.SearedTankBlock.TankType;
+import slimeknights.tconstruct.smeltery.client.screen.AlloyerScreen;
 import slimeknights.tconstruct.smeltery.client.screen.HeatingStructureScreen;
 import slimeknights.tconstruct.smeltery.client.screen.MelterScreen;
 import slimeknights.tconstruct.smeltery.data.SmelteryCompat;
@@ -356,6 +357,7 @@ public class JEIPlugin implements IModPlugin {
   @Override
   public void registerGuiHandlers(IGuiHandlerRegistration registration) {
     registration.addGenericGuiContainerHandler(MelterScreen.class, new GuiContainerTankHandler<>());
+    registration.addGenericGuiContainerHandler(AlloyerScreen.class, new GuiContainerTankHandler<>());
     registration.addGenericGuiContainerHandler(HeatingStructureScreen.class, new GuiContainerTankHandler<>());
     registration.addGenericGuiContainerHandler(ToolContainerScreen.class, new GuiContainerTankHandler<>());
   }
