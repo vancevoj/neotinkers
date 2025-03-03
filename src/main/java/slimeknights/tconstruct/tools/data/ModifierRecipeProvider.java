@@ -1501,8 +1501,6 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                                   .addInput(TinkerWorld.enderGeode.getBlock())
                                   .disallowCrystal()
                                   .save(consumer, wrap(ModifierIds.rebalanced, slotlessFolder, "_traits"));
-    // creative
-    consumer.accept(new SimpleFinishedRecipe(location(slotlessFolder + "creative_slot"), TinkerModifiers.creativeSlotSerializer.get()));
 
     // removal
     ModifierRemovalRecipeBuilder.removal()

@@ -268,7 +268,8 @@
   "item.tconstruct.creative_slot.souls": "Creative Soul Slot",
   "item.tconstruct.creative_slot.defense": "Creative Defense Slot",
   "item.tconstruct.creative_slot.missing": "Missing or invalid NBT defining the slot type",
-  "item.tconstruct.creative_slot.tooltip": "Adds an additional %s slot to a tool",
+  "item.tconstruct.creative_slot.tooltip": "In creative, use on a tool in the inventory to grant an additional %s slot, or use a tool on it to remove the slot.",
+  "item.tconstruct.creative_slot.only": "Creative slots only work for players with operator permissions.",
 
   "item.tconstruct.copper_can": "Copper Can",
   "item.tconstruct.copper_can.tooltip": "Stackable container holding 1 ingot of fluid",
@@ -1075,6 +1076,7 @@
   "item.tconstruct.dummy_tool_part.tooltip": "Used to create casts, cannot be used to create tools.",
 
   "item.tconstruct.repair_kit": "Repair Kit",
+  "item.tconstruct.repair_kit.tooltip": "Use on a tool in the inventory to repair it the equivalent of %s ingots",
 
   "item.tconstruct.pick_head": "Pick Head",
   "item.tconstruct.hammer_head": "Hammer Head",
