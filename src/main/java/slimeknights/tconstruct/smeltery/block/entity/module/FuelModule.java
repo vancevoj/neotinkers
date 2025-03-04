@@ -306,19 +306,21 @@ public class FuelModule implements ContainerData, IFluidHandler {
         tankCap.addListener(fluidListener);
         lastPos = pos;
         return temperature.get();
-      } else {
-        BlockEntity te = getLevel().getBlockEntity(pos);
-        if (te != null) {
-          // if we find a valid item cap, consume fuel from that
-          LazyOptional<IItemHandler> itemCap = te.getCapability(ForgeCapabilities.ITEM_HANDLER);
-          temperature = itemCap.map(trySolidFuel(consume));
-          if (temperature.isPresent()) {
-            reset(false, null);
-            itemHandler = itemCap;
-            itemCap.addListener(itemListener);
-            lastPos = pos;
-            return temperature.get();
-          }
+      }
+    } else {
+      // TODO: seems a bit wasteful that we check this for missing tanks in the smeltery
+      // might be better to separate this into a solid fuel supporting and a multi-tank supporting module
+      BlockEntity te = getLevel().getBlockEntity(pos);
+      if (te != null) {
+        // if we find a valid item cap, consume fuel from that
+        LazyOptional<IItemHandler> itemCap = te.getCapability(ForgeCapabilities.ITEM_HANDLER);
+        Optional<Integer> temperature = itemCap.map(trySolidFuel(consume));
+        if (temperature.isPresent()) {
+          reset(false, null);
+          itemHandler = itemCap;
+          itemCap.addListener(itemListener);
+          lastPos = pos;
+          return temperature.get();
         }
       }
     }
