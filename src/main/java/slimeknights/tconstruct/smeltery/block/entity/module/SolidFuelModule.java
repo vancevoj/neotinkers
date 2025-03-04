@@ -20,13 +20,14 @@ import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.recipe.TinkerRecipeTypes;
 import slimeknights.tconstruct.library.recipe.fuel.MeltingFuel;
 import slimeknights.tconstruct.library.recipe.fuel.MeltingFuelLookup;
+import slimeknights.tconstruct.library.utils.Util;
 
 import javax.annotation.Nullable;
 
 /** Fuel module variant that supports both item and fluid fuels. Only supports a single fluid position which should not change. */
 public class SolidFuelModule extends FuelModule {
   /** Listener to attach to stored item capabilities */
-  private final NonNullConsumer<LazyOptional<IItemHandler>> itemListener = new WeakConsumerWrapper<>(this, SolidFuelModule::reset);
+  private final NonNullConsumer<LazyOptional<IItemHandler>> itemListener = new WeakConsumerWrapper<>(this, SolidFuelModule::resetHandler);
 
   /** Location of the fuel tank */
   private final BlockPos fuelPos;
@@ -40,13 +41,20 @@ public class SolidFuelModule extends FuelModule {
   }
 
   @Override
-  protected void reset(@Nullable LazyOptional<?> source) {
-    super.reset(source);
-    if (itemHandler != null) {
-      if (source != itemHandler) {
-        itemHandler.removeListener(itemListener);
+  protected void resetHandler(@Nullable LazyOptional<?> source) {
+    // if the source is either of our handlers, clear both listeners to ensure cleanest refetc
+    if (source == null || source == itemHandler || source == fluidHandler) {
+      // remove listeners for efficiency, but we have to skip removing the listener that caused this
+      if (Util.isForge()) {
+        if (itemHandler != null && itemHandler != source) {
+          itemHandler.removeListener(itemListener);
+        }
+        if (fluidHandler != null && fluidHandler != source) {
+          fluidHandler.removeListener(fluidListener);
+        }
       }
       itemHandler = null;
+      fluidHandler = null;
     }
   }
 

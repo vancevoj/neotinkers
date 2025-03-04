@@ -19,6 +19,7 @@ import slimeknights.mantle.util.WeakConsumerWrapper;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.recipe.fuel.MeltingFuel;
 import slimeknights.tconstruct.library.recipe.fuel.MeltingFuelLookup;
+import slimeknights.tconstruct.library.utils.Util;
 
 import javax.annotation.Nullable;
 import java.util.Objects;
@@ -29,7 +30,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public abstract class FuelModule implements ContainerData {
   /** Listener to attach to stored capability */
-  protected final NonNullConsumer<LazyOptional<IFluidHandler>> fluidListener = new WeakConsumerWrapper<>(this, FuelModule::reset);
+  protected final NonNullConsumer<LazyOptional<IFluidHandler>> fluidListener = new WeakConsumerWrapper<>(this, FuelModule::resetHandler);
 
   /** Parent TE */
   protected final MantleBlockEntity parent;
@@ -60,9 +61,11 @@ public abstract class FuelModule implements ContainerData {
    */
 
   /** Called when the capability invalidates to reset any listeners */
-  protected void reset(@Nullable LazyOptional<?> source) {
-    if (fluidHandler != null) {
-      if (source != fluidHandler) {
+  protected void resetHandler(@Nullable LazyOptional<?> source) {
+    if (source == null || source == fluidHandler) {
+      // for efficiency on Forge, clear listener. Neo lacks this so we protect against redundant calls
+      // note that this will break if the source is the listener, below check does both null check and not source check
+      if (source != fluidHandler && Util.isForge()) {
         fluidHandler.removeListener(fluidListener);
       }
       fluidHandler = null;

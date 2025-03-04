@@ -14,6 +14,7 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.EmptyFluidHandler;
 import slimeknights.mantle.block.entity.MantleBlockEntity;
 import slimeknights.mantle.util.WeakConsumerWrapper;
+import slimeknights.tconstruct.library.utils.Util;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -49,13 +50,15 @@ public class MultitankFuelModule extends FuelModule implements IFluidHandler {
 
   /** Resets just the last fluid listener */
   private void clearLastListener() {
-    super.reset(null);
+    super.resetHandler(null);
   }
 
   @Override
-  protected void reset(@Nullable LazyOptional<?> source) {
-    super.reset(source);
-    this.lastPos = NULL_POS;
+  protected void resetHandler(@Nullable LazyOptional<?> source) {
+    if (source == null || source == fluidHandler) {
+      this.lastPos = NULL_POS;
+    }
+    super.resetHandler(source);
   }
 
   /**
@@ -63,8 +66,10 @@ public class MultitankFuelModule extends FuelModule implements IFluidHandler {
    */
   public void clearFluidListeners() {
     if (tankHandlers != null) {
-      for (LazyOptional<IFluidHandler> handler : tankHandlers.values()) {
-        handler.removeListener(tankHandlerListener);
+      if (Util.isForge()) {
+        for (LazyOptional<IFluidHandler> handler : tankHandlers.values()) {
+          handler.removeListener(tankHandlerListener);
+        }
       }
       tankHandlers = null;
     }
