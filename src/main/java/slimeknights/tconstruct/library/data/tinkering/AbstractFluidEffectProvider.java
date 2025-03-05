@@ -124,6 +124,12 @@ public abstract class AbstractFluidEffectProvider extends GenericDataProvider {
     return addFluid(fluid, FluidValues.NUGGET);
   }
 
+  /** Adds a conditional fluid effect */
+  @SuppressWarnings("SameParameterValue")  // its an API
+  protected Builder compatFluid(TagKey<Fluid> fluid, int amount) {
+    return addFluid(fluid, amount).addCondition(new TagFilledCondition<>(fluid));
+  }
+
   /** Builder for a metal based fluid */
   protected Builder compatMetal(FluidObject<?> fluid, String... extraIngots) {
     Builder builder = addMetal(fluid);
