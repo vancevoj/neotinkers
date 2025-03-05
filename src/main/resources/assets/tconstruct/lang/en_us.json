@@ -2685,7 +2685,7 @@
   "__comment": "Tier 3 Mod Compat Traits",
   "modifier.tconstruct.ductile": "Ductile",
   "modifier.tconstruct.ductile.flavor": "Reshapes well!",
-  "modifier.tconstruct.ductile.description": "Tool is longer lasting, mines faster, damages more and is tougher",
+  "modifier.tconstruct.ductile.description": "Tool is longer lasting, damages more and is tougher",
   "modifier.tconstruct.maintained": "Maintained",
   "modifier.tconstruct.maintained.flavor": "Stays Sharper, Longer!",
   "modifier.tconstruct.maintained.description": "Tool mines faster when at higher durability",
