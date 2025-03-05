@@ -10,7 +10,7 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.data.PackOutput.Target;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.tags.FluidTags;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.block.Blocks;
@@ -205,7 +205,7 @@ public abstract class AbstractFluidEffectProvider extends GenericDataProvider {
       ICondition[] conditions = new ICondition[names.length + 1];
       conditions[0] = ConfigEnabledCondition.FORCE_INTEGRATION_MATERIALS;
       for (int i = 0; i < names.length; i++) {
-        conditions[i+1] = new TagFilledCondition<>(FluidTags.create(Mantle.commonResource("ingots/" + names[i])));
+        conditions[i+1] = new TagFilledCondition<>(ItemTags.create(Mantle.commonResource("ingots/" + names[i])));
       }
       return addCondition(new OrCondition(conditions));
     }
