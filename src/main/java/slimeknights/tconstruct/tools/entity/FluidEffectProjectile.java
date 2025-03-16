@@ -56,6 +56,10 @@ public class FluidEffectProjectile extends Projectile {
     super(type, level);
   }
 
+  public FluidEffectProjectile(Level level) {
+    this(TinkerModifiers.fluidSpitEntity.get(), level);
+  }
+
   public FluidEffectProjectile(Level level, LivingEntity owner, FluidStack fluid, float power) {
     this(TinkerModifiers.fluidSpitEntity.get(), level);
     this.setPos(owner.getX(), owner.getEyeY() - 0.1, owner.getZ());

@@ -1295,6 +1295,10 @@
   "block.tconstruct.seared_heater.tooltip": "Solid fuel source for the Melter.",
   "gui.tconstruct.heater": "Heater",
 
+  "block.tconstruct.seared_fluid_cannon": "Copper Fluid Cannon",
+  "block.tconstruct.seared_fluid_cannon.tooltip": "Shoots basic amounts of fluids when triggered by redstone.\nRetains liquid when broken.",
+  "block.tconstruct.scorched_fluid_cannon": "Cobalt Fluid Cannon",
+  "block.tconstruct.scorched_fluid_cannon.tooltip": "Shoots stronger fluid projectiles when triggered by redstone.\nRetains liquid when broken.",
   "entity.tconstruct.fluid_spit": "Fluid Projectile",
 
   "block.tconstruct.smeltery_controller": "Smeltery Controller",
