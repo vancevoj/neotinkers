@@ -7,6 +7,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -75,6 +76,11 @@ public class FluidEffectProjectile extends Projectile {
    */
   public void setFluid(FluidStack fluid) {
     this.entityData.set(FLUID, fluid);
+  }
+
+  @Override
+  protected Component getTypeName() {
+    return getFluid().getDisplayName();
   }
 
   @Override
