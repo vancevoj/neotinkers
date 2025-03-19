@@ -1,6 +1,7 @@
 package slimeknights.tconstruct.tools.modules.armor;
 
 import net.minecraft.network.chat.Component;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -60,17 +61,19 @@ public record RecurrentProtectionModule(LevelingValue percent, LevelingInt durat
 
   @Override
   public float modifyDamageTaken(IToolStackView tool, ModifierEntry modifier, EquipmentContext context, EquipmentSlot slotType, DamageSource source, float amount, boolean isDirectDamage) {
-    int level = SlotInChargeModule.getLevel(context.getTinkerData(), SLOT_KEY, slotType);
-    if (level > 0) {
-      // step 1: reduce damage based on the current effect level
-      MobEffect effect = TinkerModifiers.momentumEffect.get(ToolType.ARMOR);
-      LivingEntity entity = context.getEntity();
-      amount -= TinkerEffect.getLevel(entity, effect);
+    if (!source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
+      int level = SlotInChargeModule.getLevel(context.getTinkerData(), SLOT_KEY, slotType);
+      if (level > 0) {
+        // step 1: reduce damage based on the current effect level
+        MobEffect effect = TinkerModifiers.momentumEffect.get(ToolType.ARMOR);
+        LivingEntity entity = context.getEntity();
+        amount -= TinkerEffect.getLevel(entity, effect);
 
-      // step 2: apply momentum based on damage taken
-      int reduction = (int)(percent.compute(level) * amount);
-      if (reduction > 0) {
-        entity.addEffect(new MobEffectInstance(effect, duration.compute(level), reduction - 1, false, false, true));
+        // step 2: apply momentum based on damage taken
+        int reduction = (int)(percent.compute(level) * amount);
+        if (reduction > 0) {
+          entity.addEffect(new MobEffectInstance(effect, duration.compute(level), reduction - 1, false, false, true));
+        }
       }
     }
     return amount;
