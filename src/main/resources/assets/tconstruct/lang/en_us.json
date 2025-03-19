@@ -493,7 +493,7 @@
   "fluid.tconstruct.honey": "Honey",
   "fluid.tconstruct.flowing_honey": "Flowing Honey",
   "item.tconstruct.honey_bucket": "Honey Bucket",
-  "fluid.tconstruct.honey.fluid_effect": "So sweat, and removes toxins, what not to love with slurping honey?",
+  "fluid.tconstruct.honey.fluid_effect": "So sweet, and removes toxins, what not to love with slurping honey?",
 
   "block.tconstruct.beetroot_soup_fluid": "Beetroot Soup",
   "fluid.tconstruct.beetroot_soup": "Beetroot Soup",
@@ -524,7 +524,6 @@
   "_comment": "Potion",
 
   "fluid.tconstruct.potion": "Potion",
-  "fluid.tconstruct.potion.fluid_effect": "Potions allow a wide variety of effects crafted in a brewing stand. Can dump potions into tanks to fill tools.",
   "fluid.tconstruct.potion.fluid_effect": "Potions allow a wide variety of effects crafted in a brewing stand. Can dump potions into tanks to fill tools.",
 
   "item.tconstruct.potion_bucket": "Uncraftable Potion Bucket",
