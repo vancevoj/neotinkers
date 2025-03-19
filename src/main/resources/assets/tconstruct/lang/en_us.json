@@ -1804,7 +1804,7 @@
   "material.tconstruct.hepatizon.flavor": "He-pa-ti-zon - boil it, mash it, put it in a stew.",
   "material.tconstruct.hepatizon.encyclopedia": "Boosts mining speed by up to 25% per level, linearly increasing over mining 32 consecutive blocks",
   "material.tconstruct.hepatizon.ranged": "Boosts drawspeed by up to 25% per level, linearly increasing while firing 16 consecutive arrows",
-  "material.tconstruct.hepatizon.armor": "Reduces damage from all attacks by 5% per level if you recently took damage",
+  "material.tconstruct.hepatizon.armor": "Converts 50% of damage taken into a temporary flat damage reduction. Reduction lasts 5 seconds per level.",
 
   "material.tconstruct.cinderslime": "Cinderslime",
   "material.tconstruct.cinderslime.flavor": "Cast it into the fire!",
