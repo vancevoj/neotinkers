@@ -10,6 +10,7 @@ import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import lombok.RequiredArgsConstructor;
 import net.minecraft.commands.CommandSourceStack;
 import slimeknights.tconstruct.TConstruct;
+import slimeknights.tconstruct.library.client.materials.MaterialTooltipCache;
 import slimeknights.tconstruct.library.materials.MaterialRegistry;
 import slimeknights.tconstruct.library.materials.definition.IMaterial;
 import slimeknights.tconstruct.library.materials.definition.MaterialId;
@@ -42,7 +43,7 @@ public class MaterialArgument implements ArgumentType<IMaterial> {
 
   @Override
   public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
-    return TinkerSuggestionProvider.suggestResource(TConstruct.MOD_ID, MaterialRegistry.getMaterials().stream().map(IMaterial::getIdentifier), builder);
+    return TinkerSuggestionProvider.suggestResource(TConstruct.MOD_ID, MaterialRegistry.getMaterials().stream().map(IMaterial::getIdentifier), builder, id -> id, MaterialTooltipCache::getColoredDisplayName);
   }
 
   @Override

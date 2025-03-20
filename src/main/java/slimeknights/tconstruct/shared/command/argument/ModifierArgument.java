@@ -41,7 +41,7 @@ public class ModifierArgument implements ArgumentType<Modifier> {
 
   @Override
   public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
-    return TinkerSuggestionProvider.suggestResource(TConstruct.MOD_ID, ModifierManager.INSTANCE.getAllLocations(), builder);
+    return TinkerSuggestionProvider.suggestResource(TConstruct.MOD_ID, ModifierManager.INSTANCE.getAllValues(), builder, Modifier::getId, Modifier::getDisplayName);
   }
 
   @Override

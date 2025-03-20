@@ -14,6 +14,7 @@ import slimeknights.tconstruct.library.materials.MaterialRegistry;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatType;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
 import slimeknights.tconstruct.library.utils.IdParser;
+import slimeknights.tconstruct.library.utils.Util;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -42,7 +43,7 @@ public class MaterialStatsArgument implements ArgumentType<MaterialStatType<?>> 
 
     @Override
     public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
-      return TinkerSuggestionProvider.suggestResource(TConstruct.MOD_ID, MaterialRegistry.getInstance().getAllStatTypeIds(), builder);
+      return TinkerSuggestionProvider.suggestResource(TConstruct.MOD_ID, MaterialRegistry.getInstance().getAllStatTypeIds(), builder, id -> id, id -> Util.makeTranslation("stat", id));
     }
 
     @Override

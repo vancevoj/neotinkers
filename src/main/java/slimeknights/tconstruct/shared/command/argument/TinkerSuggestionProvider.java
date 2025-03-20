@@ -1,5 +1,6 @@
 package slimeknights.tconstruct.shared.command.argument;
 
+import com.mojang.brigadier.Message;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import net.minecraft.resources.ResourceLocation;
@@ -60,5 +61,31 @@ public interface TinkerSuggestionProvider {
    */
   static CompletableFuture<Suggestions> suggestResource(String defaultDomain, Stream<ResourceLocation> resources, SuggestionsBuilder builder) {
     return suggestResource(defaultDomain, resources::iterator, builder);
+  }
+
+  /**
+   * Reimplementation of {@link net.minecraft.commands.SharedSuggestionProvider#suggestResource(Iterable, SuggestionsBuilder, Function, Function)} with an argument to change the default namespace.
+   * @param defaultDomain   Default domain to use if the domain is unset
+   * @param resources       List of resources to filter
+   * @param builder         Builder for suggestion options
+   * @param idGetter        Function mapping the resource to its ID
+   * @param tooltip         Function mapping elements to their tooltip
+   */
+  static <T> CompletableFuture<Suggestions> suggestResource(String defaultDomain, Iterable<T> resources, SuggestionsBuilder builder, Function<T, ResourceLocation> idGetter, Function<T,Message> tooltip) {
+    String remaining = builder.getRemaining().toLowerCase(Locale.ROOT);
+    filterResources(defaultDomain, resources, remaining, idGetter, (resource) -> builder.suggest(idGetter.apply(resource).toString(), tooltip.apply(resource)));
+    return builder.buildFuture();
+  }
+
+  /**
+   * Reimplementation of {@link net.minecraft.commands.SharedSuggestionProvider#suggestResource(Stream, SuggestionsBuilder, Function, Function)} with an argument to change the default namespace.
+   * @param defaultDomain   Default domain to use if the domain is unset
+   * @param resources       List of resources to filter
+   * @param builder         Builder for suggestion options
+   * @param idGetter        Function mapping the resource to its ID
+   * @param tooltip         Function mapping elements to their tooltip
+   */
+  static <T> CompletableFuture<Suggestions> suggestResource(String defaultDomain, Stream<T> resources, SuggestionsBuilder builder, Function<T, ResourceLocation> idGetter, Function<T, Message> tooltip) {
+    return suggestResource(defaultDomain, resources::iterator, builder, idGetter, tooltip);
   }
 }
