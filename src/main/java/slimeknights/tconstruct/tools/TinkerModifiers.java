@@ -77,10 +77,12 @@ import slimeknights.tconstruct.library.modifiers.fluid.entity.PotionFluidEffect;
 import slimeknights.tconstruct.library.modifiers.fluid.entity.PushEntityFluidEffect;
 import slimeknights.tconstruct.library.modifiers.fluid.entity.RemoveEffectFluidEffect;
 import slimeknights.tconstruct.library.modifiers.fluid.entity.RestoreHungerFluidEffect;
+import slimeknights.tconstruct.library.modifiers.fluid.general.AlternativesFluidEffect;
 import slimeknights.tconstruct.library.modifiers.fluid.general.ConditionalFluidEffect;
 import slimeknights.tconstruct.library.modifiers.fluid.general.DropItemFluidEffect;
 import slimeknights.tconstruct.library.modifiers.fluid.general.ExplosionFluidEffect;
 import slimeknights.tconstruct.library.modifiers.fluid.general.ScalingFluidEffect;
+import slimeknights.tconstruct.library.modifiers.fluid.general.SequenceFluidEffect;
 import slimeknights.tconstruct.library.modifiers.impl.BasicModifier.TooltipDisplay;
 import slimeknights.tconstruct.library.modifiers.impl.SingleLevelModifier;
 import slimeknights.tconstruct.library.modifiers.modules.ModifierModule;
@@ -547,12 +549,15 @@ public final class TinkerModifiers extends TinkerModule {
   @SubscribeEvent
   void registerSerializers(RegisterEvent event) {
     if (event.getRegistryKey() == Registries.RECIPE_SERIALIZER) {
-      // conditional
+      // combinations
       FluidEffect.BLOCK_EFFECTS.register(getResource("conditional"), ConditionalFluidEffect.Block.LOADER);
       FluidEffect.ENTITY_EFFECTS.register(getResource("conditional"), ConditionalFluidEffect.Entity.LOADER);
-      // scaling
       FluidEffect.BLOCK_EFFECTS.register(getResource("scaling"), ScalingFluidEffect.BLOCK_LOADER);
       FluidEffect.ENTITY_EFFECTS.register(getResource("scaling"), ScalingFluidEffect.ENTITY_LOADER);
+      FluidEffect.BLOCK_EFFECTS.register(getResource("alternatives"), AlternativesFluidEffect.BLOCK_LOADER);
+      FluidEffect.ENTITY_EFFECTS.register(getResource("alternatives"), AlternativesFluidEffect.ENTITY_LOADER);
+      FluidEffect.BLOCK_EFFECTS.register(getResource("sequence"), SequenceFluidEffect.BLOCK_LOADER);
+      FluidEffect.ENTITY_EFFECTS.register(getResource("sequence"), SequenceFluidEffect.ENTITY_LOADER);
       // simple
       FluidEffect.ENTITY_EFFECTS.register(getResource("calcified"), StrongBonesModifier.FLUID_EFFECT.getLoader());
       FluidEffect.ENTITY_EFFECTS.register(getResource("extinguish"), FluidEffect.EXTINGUISH_FIRE.getLoader());
