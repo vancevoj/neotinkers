@@ -17,6 +17,7 @@ import slimeknights.tconstruct.library.materials.definition.MaterialVariantId;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
+import slimeknights.tconstruct.library.modifiers.hook.build.ModifierRemovalHook;
 import slimeknights.tconstruct.library.recipe.casting.AbstractCastingRecipe;
 import slimeknights.tconstruct.library.recipe.casting.ICastingContainer;
 import slimeknights.tconstruct.library.recipe.material.MaterialRecipe;
@@ -108,8 +109,16 @@ public class PartSwapCastingRecipe extends AbstractMaterialCastingRecipe {
     if (index >= requirements.size()) {
       return false;
     }
+    // must have a valid material
     MaterialFluidRecipe recipe = getFluidRecipe(inv, modifiable);
-    return recipe != MaterialFluidRecipe.EMPTY && requirements.get(index).canUseMaterial(recipe.getOutput().getId());
+    if (recipe == MaterialFluidRecipe.EMPTY || !requirements.get(index).canUseMaterial(recipe.getOutput().getId())) {
+      return false;
+    }
+    // ensure the tool is still valid after replacing
+    ToolStack original = ToolStack.from(cast);
+    ToolStack tool = original.copy();
+    tool.replaceMaterial(index, recipe.getOutput().getId());
+    return tool.tryValidate() == null && ModifierRemovalHook.onRemoved(original, tool) == null;
   }
 
   @Override
@@ -122,7 +131,8 @@ public class PartSwapCastingRecipe extends AbstractMaterialCastingRecipe {
     MaterialFluidRecipe fluidRecipe = getFluidRecipe(inv);
     MaterialVariant material = fluidRecipe.getOutput();
     ItemStack cast = inv.getStack();
-    ToolStack tool = ToolStack.copyFrom(cast);
+    ToolStack original = ToolStack.from(cast);
+    ToolStack tool = original.copy();
     tool.replaceMaterial(index, material.getVariant());
     // don't repair if its a composite recipe, since those are not paying the proper repair cost
     if (fluidRecipe.getInput() == null) {
@@ -143,6 +153,9 @@ public class PartSwapCastingRecipe extends AbstractMaterialCastingRecipe {
         }
       }
     }
+    // validate and run removal hooks, but don't give up if either failed (hopefully matches dealt with that)
+    tool.tryValidate();
+    ModifierRemovalHook.onRemoved(original, tool);
     return tool.createStack();
   }
 }
