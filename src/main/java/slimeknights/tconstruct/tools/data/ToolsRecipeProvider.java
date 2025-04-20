@@ -23,6 +23,7 @@ import slimeknights.tconstruct.library.materials.definition.MaterialId;
 import slimeknights.tconstruct.library.recipe.FluidValues;
 import slimeknights.tconstruct.library.recipe.casting.ItemCastingRecipeBuilder;
 import slimeknights.tconstruct.library.recipe.casting.material.MaterialCastingRecipeBuilder;
+import slimeknights.tconstruct.library.recipe.casting.material.PartSwapCastingRecipeBuilder;
 import slimeknights.tconstruct.library.recipe.ingredient.MaterialIngredient;
 import slimeknights.tconstruct.library.recipe.ingredient.MaterialValueIngredient;
 import slimeknights.tconstruct.library.recipe.tinkerstation.building.ToolBuildingRecipeBuilder;
@@ -171,6 +172,8 @@ public class ToolsRecipeProvider extends BaseRecipeProvider implements IMaterial
                        .define('w', TinkerTables.pattern)
                        .unlockedBy("has_item", has(Tags.Items.LEATHER))
                        .save(consumer, location(armorFolder + "travelers_shield"));
+    PartSwapCastingRecipeBuilder.tableRecipe(Ingredient.of(TinkerTools.travelersGear.values().toArray(new Item[0])), 2)
+      .save(consumer, location(armorFolder + "travelers_swapping"));
 
     // plate armor
     TinkerTools.plateArmor.forEach(item -> toolBuilding(consumer, item, armorFolder, TConstruct.getResource("plate_armor")));
@@ -178,6 +181,14 @@ public class ToolsRecipeProvider extends BaseRecipeProvider implements IMaterial
                                 .setCast(MaterialIngredient.of(TinkerToolParts.shieldCore), true)
                                 .setItemCost(3)
                                 .save(consumer, location(armorFolder + "plate_shield"));
+    PartSwapCastingRecipeBuilder.tableRecipe(Ingredient.of(TinkerTools.plateArmor.get(ArmorItem.Type.HELMET)), 3)
+      .save(consumer, location(armorFolder + "plate_helmet_swapping"));
+    PartSwapCastingRecipeBuilder.tableRecipe(Ingredient.of(TinkerTools.plateArmor.get(ArmorItem.Type.CHESTPLATE)), 6)
+      .save(consumer, location(armorFolder + "plate_chestplate_swapping"));
+    PartSwapCastingRecipeBuilder.tableRecipe(Ingredient.of(TinkerTools.plateArmor.get(ArmorItem.Type.LEGGINGS)), 5)
+      .save(consumer, location(armorFolder + "plate_leggings_swapping"));
+    PartSwapCastingRecipeBuilder.tableRecipe(Ingredient.of(TinkerTools.plateArmor.get(ArmorItem.Type.BOOTS)), 2)
+      .save(consumer, location(armorFolder + "plate_boots_swapping"));
 
     // slimeskull
     slimeskullCasting(consumer, MaterialIds.glass,        Items.CREEPER_HEAD,          armorFolder);
