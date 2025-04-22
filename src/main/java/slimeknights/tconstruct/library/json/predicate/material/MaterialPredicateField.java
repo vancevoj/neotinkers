@@ -38,7 +38,7 @@ public record MaterialPredicateField<P>(String key, Function<P, IJsonPredicate<M
       if (compact) {
         // ID predicate serializes to a raw ID
         if (predicate instanceof MaterialIdPredicate idPredicate) {
-          json.addProperty(key, idPredicate.id().toString());
+          json.addProperty(key, idPredicate.ids().toString());
           return;
         }
         // single variant predicate maps to exact variant match
