@@ -103,8 +103,9 @@ public class TankItem extends BlockTooltipItem {
     // take over right click, assuming the target has an item. If not, then we want to place 1 item in the slot
     if (action == ClickAction.SECONDARY && slot.allowModification(player)) {
       ItemStack slotStack = slot.getItem();
-      if (!slotStack.isEmpty() && mayHaveFluid(slotStack)) {
-        // target must be stack size 1, if not then its not safe to modify it
+      // if it's the same item, we might want to transfer fluid or just move 1 item; overrideOtherStackedOnMe will handle deciding which to take
+      if (!slotStack.isEmpty() && held.getItem() != slotStack.getItem() && mayHaveFluid(slotStack)) {
+        // target must be stack size 1, if not then it's not safe to modify it
         if (slotStack.getCount() == 1) {
           // transfer fluid - but we work with just 1 tank at a time instead of trying to transfer the whole stack
           FluidTank tank = getTank(held, 1);
@@ -147,6 +148,10 @@ public class TankItem extends BlockTooltipItem {
       if (stack.getCount() == 1) {
         // transfer the fluid
         FluidTank tank = getTank(stack);
+        // if both tanks are empty, just do standard stack operations; makes it nice and easy to move just 1 item at a time
+        if (tank.isEmpty() && ItemStack.isSameItemSameTags(stack, held)) {
+          return false;
+        }
         int oldCount = held.getCount();
         ItemStack result = FluidTransferHelper.interactWithTankSlot(tank, held, TransferDirection.AUTO);
         if (!result.isEmpty() || held.getCount() != oldCount) {
