@@ -892,6 +892,8 @@
   "fluid_effect.tconstruct.extinguish_fire": "Extinguishes fire",
   "fluid_effect.tconstruct.teleport": "Teleports target",
   "fluid_effect.tconstruct.calcified": "+10 Seconds Calcified",
+  "fluid_effect.tconstruct.interact.block": "Interacts with block",
+  "fluid_effect.tconstruct.interact.entity": "Interacts with entity",
 
   "fluid_effect.tconstruct.cure_effects": "Cures most status effects",
   "fluid_effect.tconstruct.remove_effect": "Removes %s",
