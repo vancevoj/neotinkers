@@ -92,6 +92,16 @@ public class RenderItemProvider extends RegistryDataMapProvider<Block,List<Rende
       itemBuilder.center( 4, 12,  4).build(),
       itemBuilder.center(12, 12,  4).build()
     ));
+    String fluidCannon = "templates/fluid_cannon";
+    // TODO: state sensitive render items
+//    String fluidCannonUp = "templates/fluid_cannon_up";
+//    String fluidCannonDown = "templates/fluid_cannon_down";
+    itemBuilder = RenderItem.builder().size(7.5f).transform(TinkerItemDisplays.MELTER);
+    entry(fluidCannon, List.of(itemBuilder.center(8, 4, 16).build()));
+//    entry(fluidCannonUp, List.of(itemBuilder.center(8, 16, 8).y(90).build()));
+//    entry(fluidCannonDown, List.of(itemBuilder.center(8, 0, 8).y(-90).build()));
+    redirect(TinkerSmeltery.searedFluidCannon, fluidCannon);
+    redirect(TinkerSmeltery.scorchedFluidCannon, fluidCannon);
   }
 
   @Override
