@@ -2,12 +2,12 @@
   "level_display": "tconstruct:default",
   "modules": [
     {
-      "type": "tconstruct:max_armor_stat",
+      "type": "tconstruct:max_armor_attribute",
       "allow_broken": false,
+      "attribute": "tconstruct:player.critical_damage_boost",
       "each_level": 0.05,
       "held_tag": "tconstruct:modifiable/held",
-      "key": "tconstruct:critical_damage",
-      "tooltip_style": "percent"
+      "operation": "multiply_base"
     },
     {
       "type": "tconstruct:protection",
