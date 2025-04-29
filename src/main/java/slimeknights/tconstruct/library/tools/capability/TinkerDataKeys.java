@@ -44,7 +44,7 @@ public interface TinkerDataKeys {
   /** @deprecated use {@link TinkerAttributes#EXPERIENCE_MULTIPLIER} */
   @Deprecated(forRemoval = true)
   TinkerDataKey<Float> EXPERIENCE = floatKey("experience");
-  /** @deprecated use {@link TinkerAttributes#CRITICAL_BOOST} */
+  /** @deprecated use {@link TinkerAttributes#CRITICAL_DAMAGE} */
   @Deprecated(forRemoval = true)
   TinkerDataKey<Float> CRITICAL_DAMAGE = floatKey("critical_damage");
   /** @deprecated use {@link TinkerAttributes#BAD_EFFECT_DURATION} */

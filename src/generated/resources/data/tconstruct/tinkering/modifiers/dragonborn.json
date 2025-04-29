@@ -4,10 +4,11 @@
     {
       "type": "tconstruct:max_armor_attribute",
       "allow_broken": false,
-      "attribute": "tconstruct:player.critical_damage_boost",
+      "attribute": "tconstruct:player.critical_damage",
       "each_level": 0.05,
       "held_tag": "tconstruct:modifiable/held",
-      "operation": "multiply_base"
+      "operation": "addition",
+      "tooltip_style": "percent"
     },
     {
       "type": "tconstruct:protection",

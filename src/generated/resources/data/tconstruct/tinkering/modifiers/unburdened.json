@@ -17,7 +17,12 @@
         "legs",
         "chest",
         "head"
-      ]
+      ],
+      "tool": {
+        "type": "mantle:tag",
+        "tag": "tconstruct:modifiable/armor/worn"
+      },
+      "tooltip_style": "percent"
     }
   ],
   "tooltip_display": "always"

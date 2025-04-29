@@ -34,7 +34,8 @@
       "tool": {
         "type": "mantle:tag",
         "tag": "tconstruct:modifiable/armor"
-      }
+      },
+      "tooltip_style": "percent"
     }
   ],
   "tooltip_display": "always"
