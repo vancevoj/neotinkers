@@ -1,5 +1,7 @@
 package slimeknights.tconstruct.library.modifiers.modules.behavior;
 
+import lombok.Setter;
+import lombok.experimental.Accessors;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -7,7 +9,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import slimeknights.mantle.data.loadable.Loadables;
-import slimeknights.mantle.data.loadable.primitive.StringLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.tconstruct.library.json.TinkerLoadables;
 import slimeknights.tconstruct.library.json.math.ModifierFormula;
@@ -32,6 +33,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.BiConsumer;
+import java.util.function.Supplier;
 
 /**
  * Module to add an attribute to a tool
@@ -45,7 +47,7 @@ public record AttributeModule(String unique, Attribute attribute, Operation oper
   private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<AttributeModule>defaultHooks(ModifierHooks.ATTRIBUTES);
   /** Loader for the module */
   public static final RecordLoadable<AttributeModule> LOADER = RecordLoadable.create(
-    StringLoadable.DEFAULT.requiredField("unique", AttributeModule::unique),
+    new AttributeUniqueField<>(AttributeModule::unique),
     Loadables.ATTRIBUTE.requiredField("attribute", AttributeModule::attribute),
     TinkerLoadables.OPERATION.requiredField("operation", AttributeModule::operation),
     VARIABLE_LOADER.directField(AttributeModule::formula),
@@ -108,10 +110,16 @@ public record AttributeModule(String unique, Attribute attribute, Operation oper
     return new Builder(attribute, operation);
   }
 
+  public static Builder builder(Supplier<Attribute> attribute, Operation operation) {
+    return new Builder(attribute.get(), operation);
+  }
+
   public static class Builder extends VariableFormula.Builder<Builder,AttributeModule,ToolVariable> {
     protected final Attribute attribute;
     protected final Operation operation;
-    protected String unique;
+    @Setter
+    @Accessors(fluent = true)
+    protected String unique = "";
     private EquipmentSlot[] slots = EquipmentSlot.values();
 
     protected Builder(Attribute attribute, Operation operation) {
@@ -127,14 +135,6 @@ public record AttributeModule(String unique, Attribute attribute, Operation oper
     }
 
     /**
-     * Sets the unique string directly
-     */
-    public Builder unique(String unique) {
-      this.unique = unique;
-      return this;
-    }
-
-    /**
      * Sets the unique string using a resource location
      */
     public Builder uniqueFrom(ResourceLocation id) {
@@ -143,9 +143,6 @@ public record AttributeModule(String unique, Attribute attribute, Operation oper
 
     @Override
     protected AttributeModule build(ModifierFormula formula) {
-      if (unique == null) {
-        throw new IllegalStateException("Must set unique for attributes");
-      }
       return new AttributeModule(unique, attribute, operation, new ToolFormula(formula, variables), slotsToUUIDs(unique, List.of(slots)), condition);
     }
   }
