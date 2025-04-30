@@ -27,7 +27,7 @@ public class TankInventoryBlockEntityRenderer<T extends BlockEntity & ITankInven
   public void render(T melter, float partialTicks, PoseStack matrices, MultiBufferSource buffer, int light, int combinedOverlayIn) {
     BlockState state = melter.getBlockState();
     List<FluidCuboid> fluids = Config.CLIENT.tankFluidModel.get() ? List.of() : FluidCuboid.REGISTRY.get(state, List.of());
-    List<RenderItem> renderItems = RenderItem.REGISTRY.get(state.getBlock(), List.of());
+    List<RenderItem> renderItems = RenderItem.STATE_REGISTRY.get(state, List.of());
     if (!fluids.isEmpty() || !renderItems.isEmpty()) {
       // rotate the matrix
       boolean isRotated = RenderingHelper.applyRotation(matrices, state.getValue(directionProperty));
