@@ -2859,6 +2859,12 @@
   "item.minecraft.lingering_potion.effect.tconstruct.levitation":   "Lingering Potion of Levitation",
   "item.minecraft.lingering_potion.effect.tconstruct.enderference": "Lingering Potion of Enderference",
 
+  "_comment": "Cake effects",
+  "effect.tconstruct.bouncy": "Bouncy",
+  "effect.tconstruct.double_jump": "Double Jump",
+  "effect.tconstruct.antigravity": "Antigravity",
+  "effect.tconstruct.returning": "Returning",
+
   "_comment": "Gameplay effects",
   "effect.tconstruct.bleeding": "Bleeding",
   "effect.tconstruct.magnetic": "Magnetic",
