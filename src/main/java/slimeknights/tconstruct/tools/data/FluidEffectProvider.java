@@ -53,8 +53,8 @@ import slimeknights.tconstruct.library.modifiers.fluid.general.SequenceFluidEffe
 import slimeknights.tconstruct.library.recipe.FluidValues;
 import slimeknights.tconstruct.library.recipe.TagPredicate;
 import slimeknights.tconstruct.shared.TinkerCommons;
+import slimeknights.tconstruct.shared.TinkerEffects;
 import slimeknights.tconstruct.smeltery.TinkerSmeltery;
-import slimeknights.tconstruct.tools.TinkerModifiers;
 import slimeknights.tconstruct.tools.modifiers.traits.skull.StrongBonesModifier;
 
 import java.util.function.Function;
@@ -109,7 +109,7 @@ public class FluidEffectProvider extends AbstractFluidEffectProvider {
       .addBlockEffect(MoveBlocksFluidEffect.push(Sounds.SLIME_SLING.getSound()));
     // ichor - levitation
     addSlime(TinkerFluids.ichor)
-      .addEntityEffects(FluidMobEffect.builder().effect(MobEffects.LEVITATION, 5*20).effect(MobEffects.MOVEMENT_SLOWDOWN, 20*5).buildEntity(TimeAction.ADD))
+      .addEntityEffects(FluidMobEffect.builder().effect(MobEffects.SLOW_FALLING, 7*20).effect(MobEffects.MOVEMENT_SLOWDOWN, 20*5).buildEntity(TimeAction.ADD))
       .addBlockEffect(new PlaceBlockFluidEffect(null));
     // ender - teleporting
     addSlime(TinkerFluids.enderSlime)
@@ -198,8 +198,8 @@ public class FluidEffectProvider extends AbstractFluidEffectProvider {
     compatMetal(TinkerFluids.moltenBronze, "tin").fireDamage(3).addEntityEffect(new AwardStatFluidEffect(Stats.TIME_SINCE_REST, - 2000));
     addMetal(TinkerFluids.moltenAmethystBronze).fireDamage(3).addEntityEffect(new AwardStatFluidEffect(Stats.TIME_SINCE_REST, 2000));
     // iron/steel - pull/push
-    addMetal(TinkerFluids.moltenIron).fireDamage(2f).addEffect(FluidMobEffect.builder().effect(TinkerModifiers.magneticEffect.get(), 20 * 5, 2), TimeAction.SET);
-    addMetal(TinkerFluids.moltenSteel).fireDamage(2f).addEffect(FluidMobEffect.builder().effect(TinkerModifiers.repulsiveEffect.get(), 20 * 5, 2), TimeAction.SET);
+    addMetal(TinkerFluids.moltenIron).fireDamage(2f).addEffect(FluidMobEffect.builder().effect(TinkerEffects.magnetic.get(), 20 * 5, 2), TimeAction.SET);
+    addMetal(TinkerFluids.moltenSteel).fireDamage(2f).addEffect(FluidMobEffect.builder().effect(TinkerEffects.repulsive.get(), 20 * 5, 2), TimeAction.SET);
     // zinc/brass - speed/heat
     compatMetal(TinkerFluids.moltenZinc).fireDamage(2).addEffect(FluidMobEffect.builder().effect(MobEffects.MOVEMENT_SPEED, 20 * 10), TimeAction.SET);
     compatMetal(TinkerFluids.moltenBrass, "zinc").fireDamage(3).addEffect(FluidMobEffect.builder().effect(MobEffects.FIRE_RESISTANCE, 20 * 8), TimeAction.SET);
@@ -230,7 +230,7 @@ public class FluidEffectProvider extends AbstractFluidEffectProvider {
     addFluid(TinkerFluids.moltenQueensSlime, slimeMetal).addEffect(ExplosionFluidEffect.radius(1, 1).damage(LevelingValue.eachLevel(3)).placeFire().ignoreBlocks().build());
     // tinkers nether
     addMetal(TinkerFluids.moltenCobalt).fireDamage(3).addEffect(FluidMobEffect.builder().effect(MobEffects.DIG_SPEED, 20 * 7, 1).effect(MobEffects.MOVEMENT_SPEED, 20 * 7, 1), TimeAction.SET);
-    addMetal(TinkerFluids.moltenManyullyn).fireDamage(4).addEffect(FluidMobEffect.builder().effect(TinkerModifiers.bleeding.get(), 20 * 2, 1), TimeAction.SET);
+    addMetal(TinkerFluids.moltenManyullyn).fireDamage(4).addEffect(FluidMobEffect.builder().effect(TinkerEffects.bleeding.get(), 20 * 2, 1), TimeAction.SET);
     addMetal(TinkerFluids.moltenHepatizon).fireDamage(4).addEffect(FluidMobEffect.builder().effect(MobEffects.DAMAGE_RESISTANCE, 20 * 15, 1), TimeAction.SET);
     addMetal(TinkerFluids.moltenNetherite).fireDamage(5).addEffect(FluidMobEffect.builder().effect(MobEffects.BLINDNESS, 20 * 5, 1), TimeAction.SET);
     // thermal compat
@@ -238,10 +238,10 @@ public class FluidEffectProvider extends AbstractFluidEffectProvider {
     compatFluid(FluidTags.create(commonResource("redstone")), FluidValues.GEM).addEffect(ExplosionFluidEffect.radius(1, 0.5f).knockback(LevelingValue.eachLevel(-2)).ignoreBlocks().build());
     compatMetal(TinkerFluids.moltenSignalum).addEffect(ExplosionFluidEffect.radius(1, 1).damage(LevelingValue.eachLevel(2)).knockback(LevelingValue.flat(-2)).ignoreBlocks().build());
     compatMetal(TinkerFluids.moltenLumium).magicDamage(4).addEffect(FluidMobEffect.builder().effect(MobEffects.GLOWING, 20 * 5, 1).effect(MobEffects.MOVEMENT_SPEED, 20 * 5, 1).effect(MobEffects.JUMP, 20 * 5, 1), TimeAction.SET);
-    compatMetal(TinkerFluids.moltenEnderium).magicDamage(4).addEffect(FluidMobEffect.builder().effect(TinkerModifiers.enderferenceEffect.get(), 20 * 10, 1), TimeAction.SET);
+    compatMetal(TinkerFluids.moltenEnderium).magicDamage(4).addEffect(FluidMobEffect.builder().effect(TinkerEffects.enderference.get(), 20 * 10, 1), TimeAction.SET);
     // mekanism compat
     compatMetal(TinkerFluids.moltenRefinedGlowstone).magicDamage(3).addEffect(FluidMobEffect.builder().effect(MobEffects.GLOWING, 20 * 10, 1), TimeAction.SET);
-    compatMetal(TinkerFluids.moltenRefinedObsidian).spikeDamage(3).addEffect(FluidMobEffect.builder().effect(TinkerModifiers.bleeding.get(), 20 * 2, 1), TimeAction.SET);
+    compatMetal(TinkerFluids.moltenRefinedObsidian).spikeDamage(3).addEffect(FluidMobEffect.builder().effect(TinkerEffects.bleeding.get(), 20 * 2, 1), TimeAction.SET);
 
     // potion fluid compat
     // standard potion is 250 mb, but we want a smaller number. divide into 5 pieces at 25% a piece (so healing is 1 health), means you gain 25% per potion

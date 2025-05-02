@@ -8,7 +8,6 @@ import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.CreativeModeTab;
@@ -153,6 +152,7 @@ import slimeknights.tconstruct.library.tools.capability.fluid.ToolTankHelper;
 import slimeknights.tconstruct.library.tools.capability.inventory.InventoryMenuModule;
 import slimeknights.tconstruct.library.tools.capability.inventory.InventoryModule;
 import slimeknights.tconstruct.library.tools.capability.inventory.InventorySlotMenuModule;
+import slimeknights.tconstruct.shared.TinkerEffects;
 import slimeknights.tconstruct.tables.TinkerTables;
 import slimeknights.tconstruct.tools.data.EnchantmentToModifierProvider;
 import slimeknights.tconstruct.tools.data.FluidEffectProvider;
@@ -234,7 +234,6 @@ import slimeknights.tconstruct.tools.modifiers.traits.skull.GoldGuardModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.skull.PlagueModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.skull.RevengeModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.skull.SelfDestructiveModifier;
-import slimeknights.tconstruct.tools.modifiers.traits.skull.SelfDestructiveModifier.SelfDestructiveEffect;
 import slimeknights.tconstruct.tools.modifiers.traits.skull.StrongBonesModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.skull.WildfireModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.skull.WitheredModifier;
@@ -479,17 +478,31 @@ public final class TinkerModifiers extends TinkerModule {
   
 
   /*
-   * Internal effects
+   * Effects
    */
-  public static final RegistryObject<BleedingEffect> bleeding = MOB_EFFECTS.register("bleeding", BleedingEffect::new);
-  public static final RegistryObject<MagneticEffect> magneticEffect = MOB_EFFECTS.register("magnetic", MagneticEffect::new);
-  public static final RegistryObject<RepulsiveEffect> repulsiveEffect = MOB_EFFECTS.register("repulsive", RepulsiveEffect::new);
-  public static final RegistryObject<TinkerEffect> enderferenceEffect = MOB_EFFECTS.register("enderference", () -> new NoMilkEffect(MobEffectCategory.HARMFUL, 0x8F648F, true));
+  /** @deprecated use {@link TinkerEffects#bleeding} */
+  @Deprecated(forRemoval = true)
+  public static final RegistryObject<BleedingEffect> bleeding = TinkerEffects.bleeding;
+  /** @deprecated use {@link TinkerEffects#magnetic} */
+  @Deprecated(forRemoval = true)
+  public static final RegistryObject<MagneticEffect> magneticEffect = TinkerEffects.magnetic;
+  /** @deprecated use {@link TinkerEffects#repulsive} */
+  @Deprecated(forRemoval = true)
+  public static final RegistryObject<RepulsiveEffect> repulsiveEffect = TinkerEffects.repulsive;
+  /** @deprecated use {@link TinkerEffects#enderference} */
+  @Deprecated(forRemoval = true)
+  public static final RegistryObject<TinkerEffect> enderferenceEffect = TinkerEffects.enderference;
+  /** @deprecated use {@link TinkerEffects#selfDestructing} */
+  @Deprecated(forRemoval = true)
+  public static final RegistryObject<TinkerEffect> selfDestructiveEffect = TinkerEffects.selfDestructing;
+  /** @deprecated use {@link TinkerEffects#pierce} */
+  @Deprecated(forRemoval = true)
+  public static final RegistryObject<TinkerEffect> pierceEffect = TinkerEffects.pierce;
+  // cooldown
   public static final RegistryObject<TinkerEffect> teleportCooldownEffect = MOB_EFFECTS.register("teleport_cooldown", () -> new NoMilkEffect(MobEffectCategory.HARMFUL, 0xCC00FA, true));
   public static final RegistryObject<TinkerEffect> fireballCooldownEffect = MOB_EFFECTS.register("fireball_cooldown", () -> new NoMilkEffect(MobEffectCategory.HARMFUL, 0xFC9600, true));
+  // internal
   public static final RegistryObject<TinkerEffect> calcifiedEffect = MOB_EFFECTS.register("calcified", () -> new NoMilkEffect(MobEffectCategory.BENEFICIAL, -1, true));
-  public static final RegistryObject<TinkerEffect> selfDestructiveEffect = MOB_EFFECTS.register("self_destructing", SelfDestructiveEffect::new);
-  public static final RegistryObject<TinkerEffect> pierceEffect = MOB_EFFECTS.register("pierce", () -> new NoMilkEffect(MobEffectCategory.HARMFUL, 0xD1D37A, true).addAttributeModifier(Attributes.ARMOR, "cd45be7c-c86f-4a7e-813b-42a44a054f44", -1, Operation.ADDITION));
   // markers
   public static final EnumObject<ToolType,TinkerEffect> momentumEffect = MOB_EFFECTS.registerEnum("momentum", ToolType.NO_MELEE, type -> new NoMilkEffect(MobEffectCategory.BENEFICIAL, 0x60496b, true));
   public static final EnumObject<ToolType,TinkerEffect> insatiableEffect = MOB_EFFECTS.registerEnum("insatiable", new ToolType[] {ToolType.MELEE, ToolType.RANGED, ToolType.ARMOR}, type -> {

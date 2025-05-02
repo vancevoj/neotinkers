@@ -2839,11 +2839,35 @@
   "modifier.tconstruct.snow_boots": "Snow Boots",
 
 
-  "_comment": "Internal effects",
+  "_comment": "Potion effects",
+  "effect.tconstruct.experienced": "Experienced",
+  "effect.tconstruct.ricochet": "Ricochet",
+  "effect.tconstruct.enderference": "Enderference",
+
+  "item.minecraft.potion.effect.tconstruct.experienced":  "Potion of Experience",
+  "item.minecraft.potion.effect.tconstruct.ricochet":     "Potion of Ricochet",
+  "item.minecraft.potion.effect.tconstruct.levitation":   "Potion of Levitation",
+  "item.minecraft.potion.effect.tconstruct.enderference": "Potion of Enderference",
+
+  "item.minecraft.splash_potion.effect.tconstruct.experienced":  "Splash Potion of Experience",
+  "item.minecraft.splash_potion.effect.tconstruct.ricochet":     "Splash Potion of Ricochet",
+  "item.minecraft.splash_potion.effect.tconstruct.levitation":   "Splash Potion of Levitation",
+  "item.minecraft.splash_potion.effect.tconstruct.enderference": "Splash Potion of Enderference",
+
+  "item.minecraft.lingering_potion.effect.tconstruct.experienced":  "Lingering Potion of Experience",
+  "item.minecraft.lingering_potion.effect.tconstruct.ricochet":     "Lingering Potion of Ricochet",
+  "item.minecraft.lingering_potion.effect.tconstruct.levitation":   "Lingering Potion of Levitation",
+  "item.minecraft.lingering_potion.effect.tconstruct.enderference": "Lingering Potion of Enderference",
+
+  "_comment": "Gameplay effects",
   "effect.tconstruct.bleeding": "Bleeding",
   "effect.tconstruct.magnetic": "Magnetic",
-  "effect.tconstruct.pierce": "Pierced",
   "effect.tconstruct.repulsive": "Repulsive",
+  "effect.tconstruct.pierce": "Pierced",
+  "effect.tconstruct.calcified": "Calcified",
+  "effect.tconstruct.self_destructing": "Self Destructing",
+
+  "_comment": "Internal effects",
   "effect.tconstruct.momentum_harvest": "Momentum",
   "effect.tconstruct.momentum_ranged": "Momentum",
   "effect.tconstruct.momentum_armor": "Recurrent",
@@ -2852,9 +2876,6 @@
   "effect.tconstruct.insatiable_armor": "Kinetic",
   "effect.tconstruct.teleport_cooldown": "Teleport Cooldown",
   "effect.tconstruct.fireball_cooldown": "Fireball Cooldown",
-  "effect.tconstruct.calcified": "Calcified",
-  "effect.tconstruct.self_destructing": "Self Destructing",
-  "effect.tconstruct.enderference": "Enderference",
 
 
   "_comment": "Roman numerals",
