@@ -1927,6 +1927,10 @@
   "material.tconstruct.aluminum.ranged": "Grants +7% drawspeed and accuracy at the cost of 5% loss of protection",
   "material.tconstruct.aluminum.armor": "Grants +5% use item speed at the cost of 5% loss of protection",
 
+  "material.tconstruct.treated_wood": "Treated Wood",
+  "material.tconstruct.treated_wood.flavor": "Slán go fóill",
+  "material.tconstruct.treated_wood.encyclopedia": "Increases both durability and repair efficiency by 15%",
+
 
   "__comment": "Tier 3 Integration Materials",
   "material.tconstruct.steel": "Steel",
@@ -2704,6 +2708,9 @@
   "modifier.tconstruct.consecrated.flavor": "Die, Fowl Creature!",
   "modifier.tconstruct.consecrated.description": "Take less damage from the undead",
   "modifier.tconstruct.consecrated.resistance": "Undead Resistance",
+  "modifier.tconstruct.preserved": "Preserved",
+  "modifier.tconstruct.preserved.flavor":  "A nice oil finish",
+  "modifier.tconstruct.preserved.description": "Makes the tool more durability and easier to repair",
 
 
   "__comment": "Tier 3 Mod Compat Traits",

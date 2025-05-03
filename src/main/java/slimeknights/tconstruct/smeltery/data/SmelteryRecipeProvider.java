@@ -2118,11 +2118,13 @@ public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelt
                             .save(createConsumer, location(folder + "create/andesite_alloy_zinc"));
 
     // immersive engineering - casting treated wood
-    ItemCastingRecipeBuilder.basinRecipe(ItemNameOutput.fromName(new ResourceLocation("immersiveengineering", "treated_wood_horizontal")))
+    String treatedWood = "treated_wood";
+    TagKey<Fluid> creosote = getFluidTag(COMMON, "creosote");
+    ItemCastingRecipeBuilder.basinRecipe(ItemOutput.fromTag(getItemTag(COMMON, treatedWood)))
                             .setCast(ItemTags.PLANKS, true)
-                            .setFluid(TagKey.create(Registries.FLUID, commonResource("creosote")), 125)
+                            .setFluid(creosote, 125)
                             .setCoolingTime(100)
-                            .save(withCondition(consumer, new ModLoadedCondition("immersiveengineering")), location(folder + "immersiveengineering/treated_wood"));
+                            .save(withCondition(consumer, tagCondition(treatedWood), new TagFilledCondition<>(creosote)), location(folder + "treated_wood"));
 
     // ceramics compat: a lot of melting and some casting
     String ceramics = "ceramics";

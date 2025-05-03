@@ -628,6 +628,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
           .divide()
         .subtract().build());
     buildModifier(ModifierIds.consecrated).addModule(ProtectionModule.builder().attacker(new MobTypePredicate(MobType.UNDEAD)).eachLevel(1.25f));
+    buildModifier(ModifierIds.preserved).addModules(StatBoostModule.multiplyBase(ToolStats.DURABILITY).eachLevel(0.15f), RepairModule.builder().eachLevel(0.15f));
 
     // traits - tier 3
     buildModifier(ModifierIds.overcast)
