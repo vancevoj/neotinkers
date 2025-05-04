@@ -66,7 +66,7 @@ public abstract class AbstractFluidEffectProvider extends GenericDataProvider {
   @Override
   public CompletableFuture<?> run(CachedOutput cache) {
     addFluids();
-    return allOf(entries.entrySet().stream().map(entry -> saveJson(cache, entry.getKey(), entry.getValue().build())));
+    return allOf(entries.entrySet().stream().map(entry -> saveJson(cache, entry.getKey(), entry.getValue().build(entry.getKey()))));
   }
 
   /* Helpers */
@@ -312,7 +312,12 @@ public abstract class AbstractFluidEffectProvider extends GenericDataProvider {
       if (blockEffects.isEmpty() && entityEffects.isEmpty()) {
         throw new IllegalStateException("Must have at least 1 effect");
       }
-      FluidEffects.LOADABLE.serialize(new FluidEffects(ingredient, blockEffects, entityEffects, hidden), json);
+      FluidEffects effects = new FluidEffects(ingredient, blockEffects, entityEffects, hidden);
+      try {
+        FluidEffects.LOADABLE.serialize(effects, json);
+      } catch (Exception e) {
+        throw new RuntimeException("Error serializing fluid effect ID " + id + " with value " + effects, e);
+      }
       return json;
     }
   }
