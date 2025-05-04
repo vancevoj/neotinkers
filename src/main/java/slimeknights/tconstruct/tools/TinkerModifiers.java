@@ -64,6 +64,7 @@ import slimeknights.tconstruct.library.modifiers.fluid.block.BlockInteractFluidE
 import slimeknights.tconstruct.library.modifiers.fluid.block.BreakBlockFluidEffect;
 import slimeknights.tconstruct.library.modifiers.fluid.block.MobEffectCloudFluidEffect;
 import slimeknights.tconstruct.library.modifiers.fluid.block.MoveBlocksFluidEffect;
+import slimeknights.tconstruct.library.modifiers.fluid.block.OffsetBlockFluidEffect;
 import slimeknights.tconstruct.library.modifiers.fluid.block.PlaceBlockFluidEffect;
 import slimeknights.tconstruct.library.modifiers.fluid.block.PotionCloudFluidEffect;
 import slimeknights.tconstruct.library.modifiers.fluid.entity.AddBreathFluidEffect;
@@ -79,11 +80,13 @@ import slimeknights.tconstruct.library.modifiers.fluid.entity.PushEntityFluidEff
 import slimeknights.tconstruct.library.modifiers.fluid.entity.RemoveEffectFluidEffect;
 import slimeknights.tconstruct.library.modifiers.fluid.entity.RestoreHungerFluidEffect;
 import slimeknights.tconstruct.library.modifiers.fluid.general.AlternativesFluidEffect;
+import slimeknights.tconstruct.library.modifiers.fluid.general.AreaMobEffectFluidEffect;
 import slimeknights.tconstruct.library.modifiers.fluid.general.ConditionalFluidEffect;
 import slimeknights.tconstruct.library.modifiers.fluid.general.DropItemFluidEffect;
 import slimeknights.tconstruct.library.modifiers.fluid.general.ExplosionFluidEffect;
 import slimeknights.tconstruct.library.modifiers.fluid.general.ScalingFluidEffect;
 import slimeknights.tconstruct.library.modifiers.fluid.general.SequenceFluidEffect;
+import slimeknights.tconstruct.library.modifiers.fluid.general.SetBlockFluidEffect;
 import slimeknights.tconstruct.library.modifiers.impl.SingleLevelModifier;
 import slimeknights.tconstruct.library.modifiers.modules.ModifierModule;
 import slimeknights.tconstruct.library.modifiers.modules.armor.BlockDamageSourceModule;
@@ -576,10 +579,12 @@ public final class TinkerModifiers extends TinkerModule {
       FluidEffect.ENTITY_EFFECTS.register(getResource("alternatives"), AlternativesFluidEffect.ENTITY_LOADER);
       FluidEffect.BLOCK_EFFECTS.register(getResource("sequence"), SequenceFluidEffect.BLOCK_LOADER);
       FluidEffect.ENTITY_EFFECTS.register(getResource("sequence"), SequenceFluidEffect.ENTITY_LOADER);
+      FluidEffect.BLOCK_EFFECTS.register(getResource("offset"), OffsetBlockFluidEffect.LOADER);
       // simple
       FluidEffect.ENTITY_EFFECTS.register(getResource("calcified"), StrongBonesModifier.FLUID_EFFECT.getLoader());
       FluidEffect.ENTITY_EFFECTS.register(getResource("extinguish"), FluidEffect.EXTINGUISH_FIRE.getLoader());
       FluidEffect.ENTITY_EFFECTS.register(getResource("teleport"), FluidEffect.TELEPORT.getLoader());
+      FluidEffect.BLOCK_EFFECTS.register(getResource("weather"), FluidEffect.WEATHER.getLoader());
       // potions
       FluidEffect.ENTITY_EFFECTS.register(getResource("cure_effects"), CureEffectsFluidEffect.LOADER);
       FluidEffect.ENTITY_EFFECTS.register(getResource("remove_effect"), RemoveEffectFluidEffect.LOADER);
@@ -597,6 +602,7 @@ public final class TinkerModifiers extends TinkerModule {
       // block
       FluidEffect.BLOCK_EFFECTS.register(getResource("place_block"), PlaceBlockFluidEffect.LOADER);
       FluidEffect.BLOCK_EFFECTS.register(getResource("break_block"), BreakBlockFluidEffect.LOADER);
+      FluidEffect.BLOCK_EFFECTS.register(getResource("remove_block"), FluidEffect.REMOVE_BLOCK.getLoader());
       FluidEffect.BLOCK_EFFECTS.register(getResource("mob_effect_cloud"), MobEffectCloudFluidEffect.LOADER);
       FluidEffect.BLOCK_EFFECTS.register(getResource("potion_cloud"), PotionCloudFluidEffect.LOADER);
       FluidEffect.BLOCK_EFFECTS.register(getResource("move_block"), MoveBlocksFluidEffect.LOADER);
@@ -604,6 +610,8 @@ public final class TinkerModifiers extends TinkerModule {
       // shared
       FluidEffect.registerGeneral(getResource("drop_item"), DropItemFluidEffect.LOADER);
       FluidEffect.registerGeneral(getResource("explosion"), ExplosionFluidEffect.LOADER);
+      FluidEffect.registerGeneral(getResource("set_block"), SetBlockFluidEffect.LOADER);
+      FluidEffect.registerGeneral(getResource("area_mob_effect"), AreaMobEffectFluidEffect.LOADER);
 
 
       // modifier names, sometimes I wonder if I have too many registries for tiny JSON pieces

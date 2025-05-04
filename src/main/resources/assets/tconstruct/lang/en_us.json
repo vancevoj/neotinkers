@@ -890,6 +890,8 @@
   "fluid_effect.tconstruct.separator": "%s and %s",
 
   "fluid_effect.tconstruct.extinguish_fire": "Extinguishes fire",
+  "fluid_effect.tconstruct.remove_block": "Removes block",
+  "fluid_effect.tconstruct.weather": "Weathers copper",
   "fluid_effect.tconstruct.teleport": "Teleports target",
   "fluid_effect.tconstruct.calcified": "+10 Seconds Calcified",
   "fluid_effect.tconstruct.interact.block": "Interacts with block",
@@ -923,6 +925,7 @@
 
   "fluid_effect.tconstruct.place_block": "Places %s",
   "fluid_effect.tconstruct.place_block.held": "Places held block",
+  "fluid_effect.tconstruct.set_block": "Places %s",
   "fluid_effect.tconstruct.break_block": "Mines block",
   "fluid_effect.tconstruct.break_block.enchanted": "Mines block with %s",
   "fluid_effect.tconstruct.break_block.hardness": "Mines up to hardness %s",
