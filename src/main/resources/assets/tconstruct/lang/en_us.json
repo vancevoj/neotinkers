@@ -1373,6 +1373,8 @@
   "block.tconstruct.scorched_basin.tooltip": "Cast items using molten metals from a Foundry, requires a cast or gold platform to cast",
   "block.tconstruct.scorched_table": "Scorched Casting Table",
   "block.tconstruct.scorched_table.tooltip": "Cast items using molten metals from a Foundry, requires a cast or gold bars to cast",
+  "block.tconstruct.scorched_proxy_tank": "Scorched Proxy Tank",
+  "block.tconstruct.scorched_proxy_tank.tooltip": "Tank block that fills or empties the item tank inside instead of an internal tank",
 
   "block.tconstruct.scorched_channel": "Scorched Channel",
   "block.tconstruct.scorched_channel.tooltip": "Distributes fluids poured from a faucet above.",

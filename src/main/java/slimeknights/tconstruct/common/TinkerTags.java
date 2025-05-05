@@ -288,6 +288,8 @@ public class TinkerTags {
     public static final TagKey<Item> TABLE_EMPTY_CASTS = local("casts/empty/table");
     /** Items that count as empty in a casting basin */
     public static final TagKey<Item> BASIN_EMPTY_CASTS = local("casts/empty/basin");
+    /** Tag of fluid container items disallowed in the proxy tank */
+    public static final TagKey<Item> PROXY_TANK_BLACKLIST = local("proxy_tank_blacklist");
 
     /** Items that can be placed in the pattern slot in the part builder */
     public static final TagKey<Item> PATTERNS = local("patterns");
