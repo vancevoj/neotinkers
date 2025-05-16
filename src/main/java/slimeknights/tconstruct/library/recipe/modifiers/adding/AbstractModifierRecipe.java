@@ -245,16 +245,29 @@ public abstract class AbstractModifierRecipe implements ITinkerStationRecipe, ID
     return validatePrerequisites(tool, (checkTraitLevel ? tool.getModifiers() : tool.getUpgrades()).getLevel(result.getId()) + 1);
   }
 
-  /** Creates a successful result for the given tool and size */
+  /** Creates a successful result for the given tool, size, and original stack */
+  @NonExtendable
+  protected RecipeResult<LazyToolStack> success(ToolStack tool, int count, ItemStack original) {
+    return LazyToolStack.successCopy(tool, Math.min(count, shrinkToolSlotBy()), original);
+  }
+
+  /** Creates a successful result for the given tool and original stack */
+  @NonExtendable
+  protected RecipeResult<LazyToolStack> success(ToolStack tool, ItemStack original) {
+    return LazyToolStack.successCopy(tool, original);
+  }
+
+  /** @deprecated use {@link #success(ToolStack, int, ItemStack)} or {@link #success(ToolStack, ItemStack)} to preserve capabilities. */
+  @Deprecated(forRemoval = true)
   @NonExtendable
   protected RecipeResult<LazyToolStack> success(ToolStack tool, int count) {
-    return LazyToolStack.success(tool, Math.min(count, shrinkToolSlotBy()));
+    return success(tool, count, ItemStack.EMPTY);
   }
 
   /** Creates a successful result for the given tool and input stack size */
   @NonExtendable
   protected RecipeResult<LazyToolStack> success(ToolStack tool, ITinkerStationContainer inv) {
-    return success(tool, inv.getTinkerableSize());
+    return success(tool, inv.getTinkerableStack());
   }
 
   @Override
