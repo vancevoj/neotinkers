@@ -1341,9 +1341,9 @@ public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelt
                         .save(consumer, location(metalFolder + "molten_debris/debris_nugget"));
     
     // venom
-    MeltingRecipeBuilder.melting(Ingredient.of(Items.SPIDER_EYE), TinkerFluids.venom, FluidValues.BOTTLE / 5, 1.0f)
+    MeltingRecipeBuilder.melting(Ingredient.of(Items.SPIDER_EYE), TinkerFluids.venom, FluidValues.BOTTLE, 1.0f)
                         .save(consumer, location(folder + "venom/eye"));
-    MeltingRecipeBuilder.melting(Ingredient.of(Items.FERMENTED_SPIDER_EYE), TinkerFluids.venom, FluidValues.BOTTLE * 2 / 5, 1.0f)
+    MeltingRecipeBuilder.melting(Ingredient.of(Items.FERMENTED_SPIDER_EYE), TinkerFluids.venom, FluidValues.BOTTLE * 2, 1.0f)
                         .save(consumer, location(folder + "venom/fermented_eye"));
 
     // glass
