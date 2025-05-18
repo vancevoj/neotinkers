@@ -2140,6 +2140,14 @@ public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelt
                             .setCoolingTime(100)
                             .save(withCondition(consumer, tagCondition(treatedWood), new TagFilledCondition<>(creosote)), location(folder + "treated_wood"));
 
+    // farmers delight - cast dough with a small discount to make numbers work out nicer
+    ResourceLocation dough = new ResourceLocation("farmersdelight", "wheat_dough");
+    ItemCastingRecipeBuilder.tableRecipe(ItemNameOutput.fromName(dough))
+      .setCast(Items.WHEAT, true)
+      .setFluid(MantleTags.Fluids.WATER, 250)
+      .setCoolingTime(50)
+      .save(withCondition(consumer, new ItemExistsCondition(dough)), location(folder + "wheat_dough"));
+
     // ceramics compat: a lot of melting and some casting
     String ceramics = "ceramics";
     String ceramicsFolder = folder + ceramics + "/";
