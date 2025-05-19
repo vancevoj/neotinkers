@@ -228,27 +228,41 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .saveSalvage(consumer, prefix(ModifierIds.netherite, upgradeSalvage))
                          .save(consumer, prefix(ModifierIds.netherite, upgradeFolder));
 
-    // overslime - earth
-    OverslimeModifierRecipeBuilder.modifier(TinkerCommons.slimeball.get(SlimeType.EARTH), 10)
-                                  .save(consumer, location(slotlessFolder + "overslime/earth_ball"));
-    OverslimeModifierRecipeBuilder.modifier(TinkerWorld.congealedSlime.get(SlimeType.EARTH), 45)
-                                  .save(consumer, location(slotlessFolder + "overslime/earth_congealed"));
-    OverslimeModifierRecipeBuilder.modifier(TinkerWorld.slime.get(SlimeType.EARTH), 108)
-                                  .save(consumer, location(slotlessFolder + "overslime/earth_block"));
-    // sky
-    OverslimeModifierRecipeBuilder.modifier(TinkerCommons.slimeball.get(SlimeType.SKY), 40)
-                                  .save(consumer, location(slotlessFolder + "overslime/sky_ball"));
-    OverslimeModifierRecipeBuilder.modifier(TinkerWorld.congealedSlime.get(SlimeType.SKY), 180)
-                                  .save(consumer, location(slotlessFolder + "overslime/sky_congealed"));
-    OverslimeModifierRecipeBuilder.modifier(TinkerWorld.slime.get(SlimeType.SKY), 432)
-                                  .save(consumer, location(slotlessFolder + "overslime/sky_block"));
-    // ichor
-    OverslimeModifierRecipeBuilder.modifier(TinkerCommons.slimeball.get(SlimeType.ICHOR), 100)
-                                  .save(consumer, location(slotlessFolder + "overslime/ichor_ball"));
-    OverslimeModifierRecipeBuilder.modifier(TinkerWorld.congealedSlime.get(SlimeType.ICHOR), 450)
-                                  .save(consumer, location(slotlessFolder + "overslime/ichor_congealed"));
-    OverslimeModifierRecipeBuilder.modifier(TinkerWorld.slime.get(SlimeType.ICHOR), 1080)
-                                  .save(consumer, location(slotlessFolder + "overslime/ichor_block"));
+    // overslime
+    for (SlimeType type : SlimeType.values()) {
+      int amount;
+      Ingredient tool = Ingredient.of(TinkerTags.Items.DURABILITY);
+      switch (type) {
+        // earth is common and easy to get
+        case EARTH -> amount = 20;
+        // sky is tinkers specialty
+        case SKY -> amount = 50;
+        // ichor is hard to farm
+          case ICHOR -> amount = 100;
+        // ender is late game, but easier to farm than ichor
+        case ENDER -> {
+          amount = 80;
+          tool = DifferenceIngredient.of(tool, Ingredient.of(TinkerTools.slimesuit.values().toArray(Item[]::new)));
+        }
+        // unhandled -> update
+        default -> {
+          continue;
+        }
+      };
+      String name = type.getSerializedName();
+      // ball and bottle - base amount
+      OverslimeModifierRecipeBuilder.modifier(TinkerCommons.slimeball.get(type), amount)
+        .setTools(tool)
+        .save(consumer, location(slotlessFolder + "overslime/" + name + "_ball"));
+      // congealed: 4x
+      OverslimeModifierRecipeBuilder.modifier(TinkerWorld.congealedSlime.get(type), amount * 4)
+        .setTools(tool)
+        .save(consumer, location(slotlessFolder + "overslime/" + name + "_congealed"));
+      // block: 9x
+      OverslimeModifierRecipeBuilder.modifier(TinkerWorld.slime.get(type), amount * 9)
+        .setTools(tool)
+        .save(consumer, location(slotlessFolder + "overslime/" + name + "_block"));
+    }
 
     /*
      * general effects
