@@ -46,4 +46,14 @@ public class OverslimeModifierRecipeBuilder extends AbstractRecipeBuilder<Oversl
     ResourceLocation advancementId = buildOptionalAdvancement(id, "modifiers");
     consumer.accept(new LoadableFinishedRecipe<>(new OverslimeModifierRecipe(id, tools, ingredient, restoreAmount), OverslimeModifierRecipe.LOADER, advancementId));
   }
+
+  /** Creates a crafting table overslime repair recipe */
+  public OverslimeModifierRecipeBuilder saveCrafting(Consumer<FinishedRecipe> consumer, ResourceLocation id) {
+    if (ingredient == Ingredient.EMPTY) {
+      throw new IllegalStateException("Empty ingredient not allowed");
+    }
+    ResourceLocation advancementId = buildOptionalAdvancement(id, "modifiers");
+    consumer.accept(new LoadableFinishedRecipe<>(new OverslimeCraftingTableRecipe(id, tools, ingredient, restoreAmount), OverslimeCraftingTableRecipe.LOADER, advancementId));
+    return this;
+  }
 }
