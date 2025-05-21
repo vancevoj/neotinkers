@@ -254,6 +254,9 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
       OverslimeModifierRecipeBuilder.modifier(TinkerCommons.slimeball.get(type), amount)
         .setTools(tool)
         .save(consumer, location(slotlessFolder + "overslime/" + name + "_ball"));
+      OverslimeModifierRecipeBuilder.modifier(TinkerFluids.slimeBottle.get(type), amount)
+        .saveCrafting(consumer, location(slotlessFolder + "overslime/" + name + "_bottle_crafting_table"))
+        .save(consumer, location(slotlessFolder + "overslime/" + name + "_bottle"));
       // congealed: 4x
       OverslimeModifierRecipeBuilder.modifier(TinkerWorld.congealedSlime.get(type), amount * 4)
         .setTools(tool)
@@ -709,7 +712,7 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .addInput(TinkerWorld.ichorGeode, 2)
                          .setSlots(SlotType.ABILITY, 1)
                          .setTools(TinkerTags.Items.SHIELDS)
-                         .setMaxLevel(1)
+                         .setMaxLevel(2)
                          .saveSalvage(consumer, prefix(ModifierIds.boundless, abilitySalvage))
                          .save(consumer, prefix(ModifierIds.boundless, abilityFolder));
     ModifierRecipeBuilder.modifier(ModifierIds.knockbackResistance)
