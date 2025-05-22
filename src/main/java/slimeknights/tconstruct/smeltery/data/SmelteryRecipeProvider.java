@@ -1213,19 +1213,24 @@ public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelt
 
     // cheese
     ItemCastingRecipeBuilder.tableRecipe(TinkerCommons.cheeseIngot)
-                            .setFluid(ForgeMod.MILK.get(), FluidValues.BOTTLE)
+                            .setFluid(Tags.Fluids.MILK, FluidValues.BOTTLE)
                             .setCast(TinkerSmeltery.ingotCast.getMultiUseTag(), false)
                             .setCoolingTime(20*60*2)
                             .save(consumer, location(folder + "cheese_ingot_gold_cast"));
     ItemCastingRecipeBuilder.tableRecipe(TinkerCommons.cheeseIngot)
-                            .setFluid(ForgeMod.MILK.get(), FluidValues.BOTTLE)
+                            .setFluid(Tags.Fluids.MILK, FluidValues.BOTTLE)
                             .setCast(TinkerSmeltery.ingotCast.getSingleUseTag(), true)
                             .setCoolingTime(20*60*2)
                             .save(consumer, location(folder + "cheese_ingot_sand_cast"));
     ItemCastingRecipeBuilder.basinRecipe(TinkerCommons.cheeseBlock)
-                            .setFluid(ForgeMod.MILK.get(), FluidType.BUCKET_VOLUME)
+                            .setFluid(Tags.Fluids.MILK, FluidType.BUCKET_VOLUME)
                             .setCoolingTime(20*60*5)
                             .save(consumer, location(folder + "cheese_block"));
+    ItemCastingRecipeBuilder.tableRecipe(Items.BONE)
+      .setFluid(Tags.Fluids.MILK, FluidType.BUCKET_VOLUME / 5)
+      .setCoolingTime(50)
+      .setCast(TinkerTags.Items.WITHER_BONES, true)
+      .save(consumer, location(folder + "bone_purifying"));
 
 
     String castFolder = "smeltery/casts/";

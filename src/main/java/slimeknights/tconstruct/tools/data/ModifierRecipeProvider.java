@@ -2,8 +2,6 @@ package slimeknights.tconstruct.tools.data;
 
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.FinishedRecipe;
-import net.minecraft.data.recipes.RecipeCategory;
-import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
@@ -36,7 +34,6 @@ import slimeknights.mantle.registration.object.WoodBlockObject;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.common.data.BaseRecipeProvider;
-import slimeknights.tconstruct.common.json.ConfigEnabledCondition;
 import slimeknights.tconstruct.common.registration.GeodeItemObject.BudSize;
 import slimeknights.tconstruct.fluids.TinkerFluids;
 import slimeknights.tconstruct.gadgets.TinkerGadgets;
@@ -151,12 +148,6 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                             .setCast(Items.COBWEB, true)
                             .setFluidAndTime(TinkerFluids.moltenRoseGold, FluidValues.INGOT)
                             .save(consumer, prefix(TinkerModifiers.silkyCloth, folder));
-
-    // wither bone purifying
-    ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, Items.BONE)
-                          .requires(TinkerTags.Items.WITHER_BONES)
-                          .unlockedBy("has_bone", has(TinkerTags.Items.WITHER_BONES))
-                          .save(withCondition(consumer, ConfigEnabledCondition.WITHER_BONE_CONVERSION), location(folder + "wither_bone_conversion"));
 
     // modifier repair
     // pig iron - from bacon, only in the tinker station
