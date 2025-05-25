@@ -3,6 +3,8 @@ package slimeknights.tconstruct.smeltery.block;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
@@ -109,6 +111,29 @@ public class CastingTankBlock extends InventoryBlock implements ITankBlock, Enti
     super.setPlacedBy(worldIn, pos, state, placer, stack);
   }
 
+  /* Redstone interaction */
+
+  @SuppressWarnings("deprecation")
+  @Deprecated
+  @Override
+  public void neighborChanged(BlockState state, Level worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
+    if (!worldIn.isClientSide() && worldIn.getBlockEntity(pos) instanceof CastingTankBlockEntity tank) {
+      tank.handleRedstone(worldIn.hasNeighborSignal(pos));
+    }
+  }
+
+  @SuppressWarnings("deprecation")
+  @Deprecated
+  @Override
+  public void tick(BlockState state, ServerLevel worldIn, BlockPos pos, RandomSource rand) {
+    if (!worldIn.isClientSide() && worldIn.getBlockEntity(pos) instanceof CastingTankBlockEntity tank) {
+      tank.swap();
+    }
+  }
+  
+
+  /* Comparator support */
+
   @Deprecated
   @Override
   public boolean hasAnalogOutputSignal(BlockState state) {
@@ -120,6 +145,8 @@ public class CastingTankBlock extends InventoryBlock implements ITankBlock, Enti
   public int getAnalogOutputSignal(BlockState blockState, Level worldIn, BlockPos pos) {
     return ITankBlockEntity.getComparatorInputOverride(worldIn, pos);
   }
+
+
 
   @Override
   public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter world, BlockPos pos, Player player) {

@@ -34,6 +34,7 @@ import slimeknights.mantle.fluid.FluidTransferHelper;
 import slimeknights.mantle.fluid.transfer.FluidContainerTransferManager;
 import slimeknights.mantle.fluid.transfer.IFluidContainerTransfer;
 import slimeknights.tconstruct.TConstruct;
+import slimeknights.tconstruct.common.Sounds;
 import slimeknights.tconstruct.library.client.model.ModelProperties;
 import slimeknights.tconstruct.library.fluid.FluidTankAnimated;
 import slimeknights.tconstruct.library.utils.NBTTags;
@@ -59,6 +60,8 @@ public class CastingTankBlockEntity extends TableBlockEntity implements ITankBlo
   protected final FluidTankAnimated tank;
   /** Capability holder for the tank */
   private final LazyOptional<IFluidHandler> fluidHolder;
+  /** Last redstone state of the block */
+  private boolean lastRedstone = false;
   /** Last comparator strength to reduce block updates */
   @Getter @Setter
   private int lastStrength = -1;
@@ -162,6 +165,28 @@ public class CastingTankBlockEntity extends TableBlockEntity implements ITankBlo
     return false;
   }
 
+  /** Called on block update to update the redstone state */
+  public void handleRedstone(boolean hasSignal) {
+    if (lastRedstone != hasSignal) {
+      if (hasSignal) {
+        if (level != null){
+          level.scheduleTick(worldPosition, this.getBlockState().getBlock(), 2);
+        }
+      }
+      lastRedstone = hasSignal;
+    }
+  }
+
+  /** Called after a redstone tick to swap input and output */
+  public void swap() {
+    ItemStack output = getItem(OUTPUT);
+    setItem(OUTPUT, getItem(INPUT));
+    setItem(INPUT, output);
+    if (level != null) {
+      level.playSound(null, getBlockPos(), Sounds.CASTING_CLICKS.getSound(), SoundSource.BLOCKS, 1.0f, 1.0f);
+    }
+  }
+
   /**
    * Tries to empty or fill an item in the input spot. If either happens, the resulting item is placed in the output slot.
    */
@@ -258,6 +283,7 @@ public class CastingTankBlockEntity extends TableBlockEntity implements ITankBlo
   /*
    * NBT
    */
+  private static final String TAG_REDSTONE = "redstone";
 
   /**
    * Sets the tag on the stack based on the contained tank
@@ -286,7 +312,14 @@ public class CastingTankBlockEntity extends TableBlockEntity implements ITankBlo
   public void load(CompoundTag tag) {
     tank.setCapacity(getCapacity(getBlockState().getBlock()));
     updateTank(tag.getCompound(NBTTags.TANK));
+    lastRedstone = tag.getBoolean(TAG_REDSTONE);
     super.load(tag);
+  }
+
+  @Override
+  public void saveAdditional(CompoundTag tags) {
+    super.saveAdditional(tags);
+    tags.putBoolean(TAG_REDSTONE, lastRedstone);
   }
 
   @Override
@@ -298,6 +331,7 @@ public class CastingTankBlockEntity extends TableBlockEntity implements ITankBlo
     }
   }
 
+  @Nullable
   @Override
   public AbstractContainerMenu createMenu(int pContainerId, Inventory pPlayerInventory, Player pPlayer) {
     return null;
