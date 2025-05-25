@@ -1316,6 +1316,8 @@
   "block.tconstruct.seared_chute": "Seared Chute",
   "block.tconstruct.seared_chute.tooltip": "Smeltery item input and output",
 
+  "block.tconstruct.seared_casting_tank": "Casting Tank",
+  "block.tconstruct.seared_casting_tank.tooltip": "Automatically empties or fills inserted items.\nRetains liquid when broken.",
 
   "_comment": "Tinkers Foundry",
 
