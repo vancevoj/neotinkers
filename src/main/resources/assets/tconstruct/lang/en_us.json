@@ -2876,6 +2876,11 @@
   "item.minecraft.lingering_potion.effect.tconstruct.levitation":   "Lingering Potion of Levitation",
   "item.minecraft.lingering_potion.effect.tconstruct.enderference": "Lingering Potion of Enderference",
 
+  "item.minecraft.tipped_arrow.effect.tconstruct.experienced":  "Arrow of Experience",
+  "item.minecraft.tipped_arrow.effect.tconstruct.ricochet":     "Arrow of Ricochet",
+  "item.minecraft.tipped_arrow.effect.tconstruct.levitation":   "Arrow of Levitation",
+  "item.minecraft.tipped_arrow.effect.tconstruct.enderference": "Arrow of Enderference",
+
   "_comment": "Cake effects",
   "effect.tconstruct.bouncy": "Bouncy",
   "effect.tconstruct.double_jump": "Double Jump",
