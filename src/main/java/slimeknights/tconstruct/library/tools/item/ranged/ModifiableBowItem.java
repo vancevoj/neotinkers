@@ -17,6 +17,7 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.common.ToolActions;
 import net.minecraftforge.event.ForgeEventFactory;
 import slimeknights.tconstruct.common.Sounds;
+import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.hook.build.ConditionalStatModifierHook;
@@ -77,7 +78,7 @@ public class ModifiableBowItem extends ModifiableLauncherItem {
     }
     // if no ammo, cannot fire
     // however, we can use a modifier if enabled
-    if (!player.getAbilities().instabuild && !hasAmmo) {
+    if (!player.getAbilities().instabuild && !hasAmmo && !tool.getModifiers().has(TinkerTags.Modifiers.CHARGE_EMPTY_BOW)) {
       // however, we can block if enabled
       if (ModifierUtil.canPerformAction(tool, ToolActions.SHIELD_BLOCK)) {
         player.startUsingItem(hand);

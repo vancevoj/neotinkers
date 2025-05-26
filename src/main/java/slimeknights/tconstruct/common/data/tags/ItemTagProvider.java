@@ -69,6 +69,7 @@ import static slimeknights.tconstruct.common.TinkerTags.Items.HELD_ARMOR;
 import static slimeknights.tconstruct.common.TinkerTags.Items.HELMETS;
 import static slimeknights.tconstruct.common.TinkerTags.Items.INTERACTABLE;
 import static slimeknights.tconstruct.common.TinkerTags.Items.INTERACTABLE_ARMOR;
+import static slimeknights.tconstruct.common.TinkerTags.Items.INTERACTABLE_CHARGE;
 import static slimeknights.tconstruct.common.TinkerTags.Items.INTERACTABLE_DUAL;
 import static slimeknights.tconstruct.common.TinkerTags.Items.INTERACTABLE_LEFT;
 import static slimeknights.tconstruct.common.TinkerTags.Items.INTERACTABLE_RIGHT;
@@ -330,9 +331,9 @@ public class ItemTagProvider extends ItemTagsProvider {
     // modifier helper tags
     this.tag(LOOT_CAPABLE_TOOL).addTag(MELEE).addTag(HARVEST);
     this.tag(UNARMED).addTag(CHESTPLATES);
-    // migrating one handed and two handed to interactable right
     this.tag(INTERACTABLE_RIGHT).addTags(INTERACTABLE_DUAL);
     this.tag(INTERACTABLE_LEFT).addTag(INTERACTABLE_DUAL);
+    this.tag(INTERACTABLE_CHARGE).addTags(INTERACTABLE_RIGHT, BOWS, SHIELDS);
     // interactable armor is mostly so some mod could disable all chestplate interactions in one swing
     this.tag(INTERACTABLE_ARMOR).addTag(CHESTPLATES);
     // left and right handed are held, but not armor

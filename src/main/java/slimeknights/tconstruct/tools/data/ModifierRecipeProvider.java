@@ -1318,7 +1318,7 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .saveSalvage(consumer, prefix(TinkerModifiers.fireprimer, upgradeSalvage))
                          .save(consumer, prefix(TinkerModifiers.fireprimer, upgradeFolder));
     // slings
-    Ingredient blockWhileCharging = IntersectionIngredient.of(Ingredient.of(TinkerTags.Items.DURABILITY), ingredientFromTags(TinkerTags.Items.INTERACTABLE_RIGHT, TinkerTags.Items.SHIELDS));
+    Ingredient blockWhileCharging = IntersectionIngredient.of(Ingredient.of(TinkerTags.Items.DURABILITY), Ingredient.of(TinkerTags.Items.INTERACTABLE_CHARGE));
     ModifierRecipeBuilder.modifier(TinkerModifiers.flinging)
                          .setTools(blockWhileCharging)
                          .addInput(Tags.Items.STRING)

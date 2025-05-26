@@ -33,6 +33,7 @@ import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import slimeknights.mantle.client.TooltipKey;
 import slimeknights.tconstruct.TConstruct;
+import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.hook.build.ConditionalStatModifierHook;
@@ -137,7 +138,12 @@ public class ModifiableCrossbowItem extends ModifiableLauncherItem {
           level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.CROSSBOW_QUICK_CHARGE_1, SoundSource.PLAYERS, 0.75F, 1.0F);
         }
         return InteractionResultHolder.consume(bow);
-
+      }
+      // no ammo still lets us use some modifiers
+      if (tool.getModifiers().has(TinkerTags.Modifiers.CHARGE_EMPTY_BOW)) {
+        GeneralInteractionModifierHook.startDrawtime(tool, player, 1);
+        player.startUsingItem(hand);
+        return InteractionResultHolder.consume(bow);
       }
       // can also block without ammo
       if (ModifierUtil.canPerformAction(tool, ToolActions.SHIELD_BLOCK)) {

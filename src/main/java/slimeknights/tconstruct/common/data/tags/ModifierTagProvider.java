@@ -15,6 +15,7 @@ import static slimeknights.tconstruct.common.TinkerTags.Modifiers.BLOCK_WHILE_CH
 import static slimeknights.tconstruct.common.TinkerTags.Modifiers.BONUS_SLOTLESS;
 import static slimeknights.tconstruct.common.TinkerTags.Modifiers.BOOT_ABILITIES;
 import static slimeknights.tconstruct.common.TinkerTags.Modifiers.BOOT_UPGRADES;
+import static slimeknights.tconstruct.common.TinkerTags.Modifiers.CHARGE_EMPTY_BOW;
 import static slimeknights.tconstruct.common.TinkerTags.Modifiers.CHESTPLATE_ABILITIES;
 import static slimeknights.tconstruct.common.TinkerTags.Modifiers.CHESTPLATE_UPGRADES;
 import static slimeknights.tconstruct.common.TinkerTags.Modifiers.DAMAGE_UPGRADES;
@@ -82,6 +83,7 @@ public class ModifierTagProvider extends AbstractModifierTagProvider {
       .add(ModifierIds.overgrowth, ModifierIds.overcast, ModifierIds.overburn, ModifierIds.overlord,
            ModifierIds.overforced, ModifierIds.overslimeFriend, TinkerModifiers.overworked.getId());
     tag(AOE_INTERACTION).add(ModifierIds.pathing, ModifierIds.stripping, ModifierIds.tilling, TinkerModifiers.splashing.getId(), TinkerModifiers.harvest.getId());
+    tag(CHARGE_EMPTY_BOW).add(TinkerModifiers.flinging.getId(), TinkerModifiers.springing.getId(), TinkerModifiers.bonking.getId(), TinkerModifiers.warping.getId());
 
     // book tags
     this.tag(UPGRADES).addTag(GENERAL_UPGRADES, MELEE_UPGRADES, DAMAGE_UPGRADES, HARVEST_UPGRADES, ARMOR_UPGRADES, RANGED_UPGRADES);
