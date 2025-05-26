@@ -306,7 +306,6 @@ public abstract class ModifiableLauncherItem extends ProjectileWeaponItem implem
     UsingToolModifierHook.afterStopUsing(tool, entity, timeLeft);
     ModDataNBT data = tool.getPersistentData();
     data.remove(KEY_DRAWTIME);
-    data.remove(NO_ARROW);
   }
 
   @Override
