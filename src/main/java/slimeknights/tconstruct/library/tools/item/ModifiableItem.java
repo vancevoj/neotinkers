@@ -175,6 +175,7 @@ public class ModifiableItem extends TieredItem implements IModifiableDisplay {
     return IndestructibleItemEntity.hasCustomEntity(stack);
   }
 
+  @Nullable
   @Override
   public Entity createEntity(Level world, Entity original, ItemStack stack) {
     return IndestructibleItemEntity.createFrom(world, original, stack);

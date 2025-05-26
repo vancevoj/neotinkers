@@ -165,6 +165,7 @@ public abstract class ModifiableLauncherItem extends ProjectileWeaponItem implem
     return IndestructibleItemEntity.hasCustomEntity(stack);
   }
 
+  @Nullable
   @Override
   public Entity createEntity(Level world, Entity original, ItemStack stack) {
     return IndestructibleItemEntity.createFrom(world, original, stack);

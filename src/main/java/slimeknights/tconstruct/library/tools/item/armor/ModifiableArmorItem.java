@@ -188,17 +188,13 @@ public class ModifiableArmorItem extends ArmorItem implements IModifiableDisplay
 
   @Override
   public boolean hasCustomEntity(ItemStack stack) {
-    return ModifierUtil.checkVolatileFlag(stack, INDESTRUCTIBLE_ENTITY);
+    return IndestructibleItemEntity.hasCustomEntity(stack);
   }
 
+  @Nullable
   @Override
   public Entity createEntity(Level level, Entity original, ItemStack stack) {
-    if (ModifierUtil.checkVolatileFlag(stack, INDESTRUCTIBLE_ENTITY)) {
-      IndestructibleItemEntity entity = new IndestructibleItemEntity(level, original.getX(), original.getY(), original.getZ(), stack);
-      entity.setPickupDelayFrom(original);
-      return entity;
-    }
-    return null;
+    return IndestructibleItemEntity.createFrom(level, original, stack);
   }
 
 
