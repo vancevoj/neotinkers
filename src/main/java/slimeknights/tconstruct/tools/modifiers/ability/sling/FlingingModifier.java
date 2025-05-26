@@ -20,7 +20,6 @@ import slimeknights.tconstruct.library.utils.SlimeBounceHandler;
 public class FlingingModifier extends SlingModifier {
   @Override
   public void onStoppedUsing(IToolStackView tool, ModifierEntry modifier, LivingEntity entity, int timeLeft) {
-    super.onStoppedUsing(tool, modifier, entity, timeLeft);
     Level level = entity.level();
     if (entity.onGround() && entity instanceof Player player) {
       // check if player was targeting a block

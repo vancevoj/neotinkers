@@ -71,13 +71,7 @@ public class SpittingModifier extends Modifier implements GeneralInteractionModi
   }
 
   @Override
-  public void onUsingTick(IToolStackView tool, ModifierEntry modifier, LivingEntity entity, int timeLeft) {
-    ScopeModifier.scopingUsingTick(tool, entity, getUseDuration(tool, modifier) - timeLeft);
-  }
-
-  @Override
   public void onStoppedUsing(IToolStackView tool, ModifierEntry modifier, LivingEntity entity, int timeLeft) {
-    ScopeModifier.stopScoping(entity);
     Level world = entity.level();
     if (!world.isClientSide) {
       int chargeTime = getUseDuration(tool, modifier) - timeLeft;
@@ -141,5 +135,4 @@ public class SpittingModifier extends Modifier implements GeneralInteractionModi
       }
     }
   }
-
 }

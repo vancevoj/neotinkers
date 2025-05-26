@@ -19,7 +19,6 @@ import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 public class WarpingModifier extends SlingModifier {
   @Override
   public void onStoppedUsing(IToolStackView tool, ModifierEntry modifier, LivingEntity entity, int timeLeft) {
-    super.onStoppedUsing(tool, modifier, entity, timeLeft);
     Level level = entity.level();
     if (!level.isClientSide && entity instanceof ServerPlayer player) {
       float f = getForce(tool, modifier, entity, timeLeft, false) * 6;

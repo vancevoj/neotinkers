@@ -45,6 +45,7 @@ import slimeknights.tconstruct.library.modifiers.hook.interaction.GeneralInterac
 import slimeknights.tconstruct.library.modifiers.hook.interaction.InteractionSource;
 import slimeknights.tconstruct.library.modifiers.hook.interaction.InventoryTickModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.interaction.SlotStackModifierHook;
+import slimeknights.tconstruct.library.modifiers.hook.interaction.UsingToolModifierHook;
 import slimeknights.tconstruct.library.tools.IndestructibleItemEntity;
 import slimeknights.tconstruct.library.tools.capability.ToolCapabilityProvider;
 import slimeknights.tconstruct.library.tools.capability.inventory.ToolInventoryCapability;
@@ -399,9 +400,14 @@ public class ModifiableItem extends TieredItem implements IModifiableDisplay {
   public void onUseTick(Level pLevel, LivingEntity entityLiving, ItemStack stack, int timeLeft) {
     ToolStack tool = ToolStack.from(stack);
     ModifierEntry activeModifier = GeneralInteractionModifierHook.getActiveModifier(tool);
-    if (activeModifier != ModifierEntry.EMPTY) {
-      activeModifier.getHook(ModifierHooks.GENERAL_INTERACT).onUsingTick(tool, activeModifier, entityLiving, timeLeft);
+    // new hook gets called on all actively in use modifiers
+    GeneralInteractionModifierHook hook = activeModifier.getHook(ModifierHooks.GENERAL_INTERACT);
+    int duration = hook.getUseDuration(tool, activeModifier);
+    for (ModifierEntry entry : tool.getModifiers()) {
+      entry.getHook(ModifierHooks.TOOL_USING).onUsingTick(tool, entry, entityLiving, duration, timeLeft, activeModifier);
     }
+    // old hook is called on just the main modifier
+    hook.onUsingTick(tool, activeModifier, entityLiving, timeLeft);
   }
 
   @Override
@@ -418,9 +424,12 @@ public class ModifiableItem extends TieredItem implements IModifiableDisplay {
   public ItemStack finishUsingItem(ItemStack stack, Level worldIn, LivingEntity entityLiving) {
     ToolStack tool = ToolStack.from(stack);
     ModifierEntry activeModifier = GeneralInteractionModifierHook.getActiveModifier(tool);
-    if (activeModifier != ModifierEntry.EMPTY) {
-      activeModifier.getHook(ModifierHooks.GENERAL_INTERACT).onFinishUsing(tool, activeModifier, entityLiving);
+    GeneralInteractionModifierHook hook = activeModifier.getHook(ModifierHooks.GENERAL_INTERACT);
+    int duration = hook.getUseDuration(tool, activeModifier);
+    for (ModifierEntry entry : tool.getModifiers()) {
+      entry.getHook(ModifierHooks.TOOL_USING).beforeReleaseUsing(tool, entry, entityLiving, duration, 0, activeModifier);
     }
+    hook.onFinishUsing(tool, activeModifier, entityLiving);
     return stack;
   }
 
@@ -428,16 +437,20 @@ public class ModifiableItem extends TieredItem implements IModifiableDisplay {
   public void releaseUsing(ItemStack stack, Level worldIn, LivingEntity entityLiving, int timeLeft) {
     ToolStack tool = ToolStack.from(stack);
     ModifierEntry activeModifier = GeneralInteractionModifierHook.getActiveModifier(tool);
-    if (activeModifier != ModifierEntry.EMPTY) {
-      activeModifier.getHook(ModifierHooks.GENERAL_INTERACT).onStoppedUsing(tool, activeModifier, entityLiving, timeLeft);
+    GeneralInteractionModifierHook hook = activeModifier.getHook(ModifierHooks.GENERAL_INTERACT);
+    int duration = hook.getUseDuration(tool, activeModifier);
+    for (ModifierEntry entry : tool.getModifiers()) {
+      entry.getHook(ModifierHooks.TOOL_USING).beforeReleaseUsing(tool, entry, entityLiving, duration, timeLeft, activeModifier);
     }
+    hook.onStoppedUsing(tool, activeModifier, entityLiving, timeLeft);
   }
 
   @Override
-  public void onStopUsing(ItemStack stack, LivingEntity entity, int count) {
-    // TODO: consider a stop using modifier hook, is that useful?
+  public void onStopUsing(ItemStack stack, LivingEntity entity, int timeLeft) {
     // triggers on scroll away and all that
-    GeneralInteractionModifierHook.finishUsing(ToolStack.from(stack));
+    ToolStack tool = ToolStack.from(stack);
+    UsingToolModifierHook.afterStopUsing(tool, entity, timeLeft);
+    GeneralInteractionModifierHook.finishUsing(tool);
   }
 
   @Override

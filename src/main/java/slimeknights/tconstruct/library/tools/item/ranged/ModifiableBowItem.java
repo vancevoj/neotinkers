@@ -32,11 +32,8 @@ import slimeknights.tconstruct.library.tools.nbt.ModifierNBT;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
 import slimeknights.tconstruct.tools.modifiers.ability.interaction.BlockingModifier;
-import slimeknights.tconstruct.tools.modifiers.upgrades.ranged.ScopeModifier;
 
 import java.util.function.Predicate;
-
-import static slimeknights.tconstruct.library.modifiers.hook.interaction.GeneralInteractionModifierHook.KEY_DRAWTIME;
 
 public class ModifiableBowItem extends ModifiableLauncherItem {
   public ModifiableBowItem(Properties properties, ToolDefinition toolDefinition) {
@@ -79,6 +76,7 @@ public class ModifiableBowItem extends ModifiableLauncherItem {
       return override;
     }
     // if no ammo, cannot fire
+    // however, we can use a modifier if enabled
     if (!player.getAbilities().instabuild && !hasAmmo) {
       // however, we can block if enabled
       if (ModifierUtil.canPerformAction(tool, ToolActions.SHIELD_BLOCK)) {
@@ -97,13 +95,15 @@ public class ModifiableBowItem extends ModifiableLauncherItem {
 
   @Override
   public void releaseUsing(ItemStack bow, Level level, LivingEntity living, int timeLeft) {
-    // clear zoom regardless, does not matter if the tool broke, we should not be zooming
-    ScopeModifier.stopScoping(living);
+    // call the stop using hook
+    ToolStack tool = ToolStack.from(bow);
+    int duration = getUseDuration(bow);
+    for (ModifierEntry entry : tool.getModifiers()) {
+      entry.getHook(ModifierHooks.TOOL_USING).beforeReleaseUsing(tool, entry, living, duration, timeLeft, ModifierEntry.EMPTY);
+    }
 
     // no broken
-    ToolStack tool = ToolStack.from(bow);
     if (tool.isBroken()) {
-      tool.getPersistentData().remove(KEY_DRAWTIME);
       return;
     }
 
@@ -111,24 +111,22 @@ public class ModifiableBowItem extends ModifiableLauncherItem {
     Player player = living instanceof Player p ? p : null;
     boolean creative = player != null && player.getAbilities().instabuild;
     // its a little redundant to search for ammo twice, but otherwise we risk shrinking the stack before we know if we can fire
-    // sldo helps blocking, as you can block without ammo
+    // also helps blocking, as you can block without ammo
     boolean hasAmmo = creative || BowAmmoModifierHook.hasAmmo(tool, bow, living, getSupportedHeldProjectiles());
 
     // ask forge its thoughts on shooting
-    int chargeTime = this.getUseDuration(bow) - timeLeft;
+    int chargeTime = duration - timeLeft;
     if (player != null) {
       chargeTime = ForgeEventFactory.onArrowLoose(bow, level, player, chargeTime, hasAmmo);
     }
 
     // no ammo? no charge? nothing to do
     if (!hasAmmo || chargeTime < 0) {
-      tool.getPersistentData().remove(KEY_DRAWTIME);
       return;
     }
 
     // calculate arrow power
     float charge = GeneralInteractionModifierHook.getToolCharge(tool, chargeTime);
-    tool.getPersistentData().remove(KEY_DRAWTIME);
     float velocity = ConditionalStatModifierHook.getModifiedStat(tool, living, ToolStats.VELOCITY);
     float power = charge * velocity;
     if (power < 0.1f) {

@@ -18,7 +18,6 @@ import slimeknights.tconstruct.library.tools.stat.ToolStats;
 import slimeknights.tconstruct.shared.TinkerAttributes;
 import slimeknights.tconstruct.tools.TinkerModifiers;
 import slimeknights.tconstruct.tools.modifiers.ability.interaction.BlockingModifier;
-import slimeknights.tconstruct.tools.modifiers.upgrades.ranged.ScopeModifier;
 
 /**
  * Shared logic for all slinging modifiers
@@ -38,16 +37,6 @@ public abstract class SlingModifier extends NoLevelsModifier implements GeneralI
     return InteractionResult.PASS;
   }
 
-
-  @Override
-  public void onUsingTick(IToolStackView tool, ModifierEntry modifier, LivingEntity entity, int timeLeft) {
-    ScopeModifier.scopingUsingTick(tool, entity, getUseDuration(tool, modifier) - timeLeft);
-  }
-
-  @Override
-  public void onStoppedUsing(IToolStackView tool, ModifierEntry modifier, LivingEntity entity, int timeLeft) {
-    ScopeModifier.stopScoping(entity);
-  }
 
   @Override
   public int getUseDuration(IToolStackView tool, ModifierEntry modifier) {

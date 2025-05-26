@@ -29,7 +29,6 @@ public class SpringingModifier extends SlingModifier {
 
   @Override
   public void onStoppedUsing(IToolStackView tool, ModifierEntry modifier, LivingEntity entity, int timeLeft) {
-    super.onStoppedUsing(tool, modifier, entity, timeLeft);
     Level level = entity.level();
     if (entity instanceof Player player && !player.isFallFlying()) {
       player.causeFoodExhaustion(0.2F);

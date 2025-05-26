@@ -50,7 +50,6 @@ import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
 import slimeknights.tconstruct.tools.TinkerModifiers;
 import slimeknights.tconstruct.tools.modifiers.ability.interaction.BlockingModifier;
-import slimeknights.tconstruct.tools.modifiers.upgrades.ranged.ScopeModifier;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -138,14 +137,17 @@ public class ModifiableCrossbowItem extends ModifiableLauncherItem {
           level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.CROSSBOW_QUICK_CHARGE_1, SoundSource.PLAYERS, 0.75F, 1.0F);
         }
         return InteractionResultHolder.consume(bow);
-        // no ammo still lets us block
-      } else if (ModifierUtil.canPerformAction(tool, ToolActions.SHIELD_BLOCK)) {
+
+      }
+      // can also block without ammo
+      if (ModifierUtil.canPerformAction(tool, ToolActions.SHIELD_BLOCK)) {
         player.startUsingItem(hand);
         return InteractionResultHolder.consume(bow);
-      } else {
-        return InteractionResultHolder.fail(bow);
       }
+      return InteractionResultHolder.fail(bow);
     }
+
+    // coming down here means we have ammo, try to use it
 
     // sinistral shoots on left click when in main hand, and lets us block instead of shooting if the offhand is empty
     if (sinistral) {
@@ -153,6 +155,7 @@ public class ModifiableCrossbowItem extends ModifiableLauncherItem {
       if (!offhand.isEmpty() && !offhand.is(Items.FIREWORK_ROCKET)) {
         return InteractionResultHolder.pass(bow);
       }
+      // can block while filled with ammo
       if (ModifierUtil.canPerformAction(tool, ToolActions.SHIELD_BLOCK)) {
         player.startUsingItem(hand);
         return InteractionResultHolder.consume(bow);
@@ -268,18 +271,18 @@ public class ModifiableCrossbowItem extends ModifiableLauncherItem {
 
   @Override
   public void releaseUsing(ItemStack bow, Level level, LivingEntity living, int chargeRemaining) {
-    // clear zoom regardless, does not matter if the tool broke, we should not be zooming
-    ScopeModifier.stopScoping(living);
     ToolStack tool = ToolStack.from(bow);
-    ModDataNBT persistentData = tool.getPersistentData();
-    if (tool.isBroken() || persistentData.contains(KEY_CROSSBOW_AMMO, Tag.TAG_COMPOUND)) {
-      return;
+
+    // call the stop using modifier hook
+    int duration = getUseDuration(bow);
+    for (ModifierEntry entry : tool.getModifiers()) {
+      entry.getHook(ModifierHooks.TOOL_USING).beforeReleaseUsing(tool, entry, living, duration, chargeRemaining, ModifierEntry.EMPTY);
     }
 
-    // did we charge enough?
-    int drawtime = persistentData.getInt(KEY_DRAWTIME);
-    persistentData.remove(KEY_DRAWTIME);
-    if ((getUseDuration(bow) - chargeRemaining) < drawtime) {
+    // any reason we shouldn't load?
+    // specifically: broken, not fully charged, already have ammo
+    ModDataNBT persistentData = tool.getPersistentData();
+    if (tool.isBroken() || getUseDuration(bow) - chargeRemaining < persistentData.getInt(KEY_DRAWTIME) || persistentData.contains(KEY_CROSSBOW_AMMO, Tag.TAG_COMPOUND)) {
       return;
     }
 

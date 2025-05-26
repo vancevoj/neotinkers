@@ -80,7 +80,6 @@ public class BonkingModifier extends SlingModifier implements MeleeHitModifierHo
 
   @Override
   public void onStoppedUsing(IToolStackView tool, ModifierEntry modifier, LivingEntity entity, int timeLeft) {
-    super.onStoppedUsing(tool, modifier, entity, timeLeft);
     Level level = entity.level();
     if (!level.isClientSide && (entity instanceof Player player)) {
       float f = getForce(tool, modifier, player, timeLeft, true);
