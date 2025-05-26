@@ -27,8 +27,8 @@ import slimeknights.tconstruct.library.tools.capability.PersistentDataCapability
 import slimeknights.tconstruct.library.tools.definition.ToolDefinition;
 import slimeknights.tconstruct.library.tools.helper.ModifierUtil;
 import slimeknights.tconstruct.library.tools.helper.ToolDamageUtil;
-import slimeknights.tconstruct.library.tools.nbt.ModifierNBT;
 import slimeknights.tconstruct.library.tools.nbt.ModDataNBT;
+import slimeknights.tconstruct.library.tools.nbt.ModifierNBT;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
 import slimeknights.tconstruct.tools.modifiers.ability.interaction.BlockingModifier;
@@ -100,10 +100,6 @@ public class ModifiableBowItem extends ModifiableLauncherItem {
     // clear zoom regardless, does not matter if the tool broke, we should not be zooming
     ScopeModifier.stopScoping(living);
 
-    // need player
-    if (!(living instanceof Player player)) {
-      return;
-    }
     // no broken
     ToolStack tool = ToolStack.from(bow);
     if (tool.isBroken()) {
@@ -112,14 +108,17 @@ public class ModifiableBowItem extends ModifiableLauncherItem {
     }
 
     // just not handling vanilla infinity at all, we have our own hooks which someone could use to mimic infinity if they wish with a bit of effort
-    boolean creative = player.getAbilities().instabuild;
+    Player player = living instanceof Player p ? p : null;
+    boolean creative = player != null && player.getAbilities().instabuild;
     // its a little redundant to search for ammo twice, but otherwise we risk shrinking the stack before we know if we can fire
     // sldo helps blocking, as you can block without ammo
-    boolean hasAmmo = creative || BowAmmoModifierHook.hasAmmo(tool, bow, player, getSupportedHeldProjectiles());
+    boolean hasAmmo = creative || BowAmmoModifierHook.hasAmmo(tool, bow, living, getSupportedHeldProjectiles());
 
     // ask forge its thoughts on shooting
     int chargeTime = this.getUseDuration(bow) - timeLeft;
-    chargeTime = ForgeEventFactory.onArrowLoose(bow, level, player, chargeTime, hasAmmo);
+    if (player != null) {
+      chargeTime = ForgeEventFactory.onArrowLoose(bow, level, player, chargeTime, hasAmmo);
+    }
 
     // no ammo? no charge? nothing to do
     if (!hasAmmo || chargeTime < 0) {
@@ -139,7 +138,7 @@ public class ModifiableBowItem extends ModifiableLauncherItem {
     // launch the arrow
     if (!level.isClientSide) {
       // find ammo after the return above, as otherwise we might consume ammo before
-      ItemStack ammo = BowAmmoModifierHook.findAmmo(tool, bow, player, getSupportedHeldProjectiles());
+      ItemStack ammo = BowAmmoModifierHook.findAmmo(tool, bow, living, player, getSupportedHeldProjectiles());
       // could only be empty at this point if we are creative, as hasAmmo returned true above
       if (ammo.isEmpty()) {
         ammo = new ItemStack(Items.ARROW);
@@ -151,9 +150,9 @@ public class ModifiableBowItem extends ModifiableLauncherItem {
       float startAngle = getAngleStart(ammo.getCount());
       int primaryIndex = ammo.getCount() / 2;
       for (int arrowIndex = 0; arrowIndex < ammo.getCount(); arrowIndex++) {
-        AbstractArrow arrow = arrowItem.createArrow(level, ammo, player);
+        AbstractArrow arrow = arrowItem.createArrow(level, ammo, living);
         float angle = startAngle + (10 * arrowIndex);
-        arrow.shootFromRotation(player, player.getXRot() + angle, player.getYRot(), 0, power * 3.0F, inaccuracy);
+        arrow.shootFromRotation(living, living.getXRot() + angle, living.getYRot(), 0, power * 3.0F, inaccuracy);
         if (charge == 1.0F) {
           arrow.setCritArrow(true);
         }
@@ -161,7 +160,7 @@ public class ModifiableBowItem extends ModifiableLauncherItem {
         // vanilla arrows have a base damage of 2, cancel that out then add in our base damage to account for custom arrows with higher base damage
         // calculate it just once as all four arrows are the same item, they should have the same damage
         float baseArrowDamage = (float)(arrow.getBaseDamage() - 2 + tool.getStats().get(ToolStats.PROJECTILE_DAMAGE));
-        arrow.setBaseDamage(ConditionalStatModifierHook.getModifiedStat(tool, player, ToolStats.PROJECTILE_DAMAGE, baseArrowDamage));
+        arrow.setBaseDamage(ConditionalStatModifierHook.getModifiedStat(tool, living, ToolStats.PROJECTILE_DAMAGE, baseArrowDamage));
 
         // just store all modifiers on the tool for simplicity
         ModifierNBT modifiers = tool.getModifiers();
@@ -180,12 +179,14 @@ public class ModifiableBowItem extends ModifiableLauncherItem {
           entry.getHook(ModifierHooks.PROJECTILE_LAUNCH).onProjectileLaunch(tool, entry, living, arrow, arrow, arrowData, arrowIndex == primaryIndex);
         }
         level.addFreshEntity(arrow);
-        level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ARROW_SHOOT, SoundSource.PLAYERS, 1.0F, 1.0F / (level.getRandom().nextFloat() * 0.4F + 1.2F) + charge * 0.5F + (angle / 10f));
+        level.playSound(null, living.getX(), living.getY(), living.getZ(), SoundEvents.ARROW_SHOOT, SoundSource.PLAYERS, 1.0F, 1.0F / (level.getRandom().nextFloat() * 0.4F + 1.2F) + charge * 0.5F + (angle / 10f));
       }
-      ToolDamageUtil.damageAnimated(tool, ammo.getCount(), player, player.getUsedItemHand());
+      ToolDamageUtil.damageAnimated(tool, ammo.getCount(), living, living.getUsedItemHand());
     }
 
     // stats and sounds
-    player.awardStat(Stats.ITEM_USED.get(this));
+    if (player != null) {
+      player.awardStat(Stats.ITEM_USED.get(this));
+    }
   }
 }

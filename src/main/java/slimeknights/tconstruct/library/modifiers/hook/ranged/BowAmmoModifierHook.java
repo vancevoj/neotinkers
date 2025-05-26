@@ -13,6 +13,7 @@ import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.tools.TinkerModifiers;
 
+import javax.annotation.Nullable;
 import java.util.function.Predicate;
 
 /** Hook to find ammo on a bow.*/
@@ -48,18 +49,18 @@ public interface BowAmmoModifierHook {
    * Checks if the player has ammo for the given tool
    * @param tool       Tool instance, for running modifier hooks
    * @param bowStack   Bow stack instance, for standard ammo lookup
-   * @param player     Player instance, for standard ammo lookup
+   * @param living     Player instance, for standard ammo lookup
    * @param predicate  Predicate for finding ammo in modifiers
    * @return  True if there is ammo either on the player or on the modifiers
    */
-  static boolean hasAmmo(IToolStackView tool, ItemStack bowStack, Player player, Predicate<ItemStack> predicate) {
+  static boolean hasAmmo(IToolStackView tool, ItemStack bowStack, LivingEntity living, Predicate<ItemStack> predicate) {
     // no need to ask the modifiers for ammo if we have it in the inventory, as there is no way for a modifier to say not to use ammo if its present
     // inventory search is probably a bit faster on average than modifier search as its already parsed
-    if (!player.getProjectile(bowStack).isEmpty()) {
+    if (!living.getProjectile(bowStack).isEmpty()) {
       return true;
     }
     for (ModifierEntry entry : tool.getModifierList()) {
-      if (!entry.getHook(ModifierHooks.BOW_AMMO).findAmmo(tool, entry, player, ItemStack.EMPTY, predicate).isEmpty()) {
+      if (!entry.getHook(ModifierHooks.BOW_AMMO).findAmmo(tool, entry, living, ItemStack.EMPTY, predicate).isEmpty()) {
         return true;
       }
     }
@@ -104,17 +105,30 @@ public interface BowAmmoModifierHook {
    * @return  Found ammo
    */
   static ItemStack findAmmo(IToolStackView tool, ItemStack bow, Player player, Predicate<ItemStack> predicate) {
+    return findAmmo(tool, bow, player, player, predicate);
+  }
+
+  /**
+   * Finds ammo in the inventory, and consume it if not creative
+   * @param tool       Tool instance
+   * @param bow        Bow stack instance
+   * @param predicate  Predicate for valid ammo
+   * @param living     Living entity to search.
+   * @param player     Player firing bow. If null, will not remove the fired stack from the player inventory.
+   * @return  Found ammo
+   */
+  static ItemStack findAmmo(IToolStackView tool, ItemStack bow, LivingEntity living, @Nullable Player player, Predicate<ItemStack> predicate) {
     int projectilesDesired = 1 + (2 * tool.getModifierLevel(TinkerModifiers.multishot.getId()));
     // treat client side as creative, no need to shrink the stacks clientside
-    Level level = player.level();
-    boolean creative = player.getAbilities().instabuild || level.isClientSide;
+    Level level = living.level();
+    boolean creative = (player != null && player.getAbilities().instabuild) || level.isClientSide;
 
     // first search, find what ammo type we want
-    ItemStack standardAmmo = player.getProjectile(bow);
+    ItemStack standardAmmo = living.getProjectile(bow);
     ItemStack resultStack = ItemStack.EMPTY;
     for (ModifierEntry entry : tool.getModifierList()) {
       BowAmmoModifierHook hook = entry.getHook(ModifierHooks.BOW_AMMO);
-      ItemStack ammo = hook.findAmmo(tool, entry, player, standardAmmo, predicate);
+      ItemStack ammo = hook.findAmmo(tool, entry, living, standardAmmo, predicate);
       if (!ammo.isEmpty()) {
         // if creative, we are done, just return the ammo with the given size
         if (creative) {
@@ -123,7 +137,7 @@ public interface BowAmmoModifierHook {
 
         // not creative, split out the desired amount. We may have to do more work if it is too small
         resultStack = ItemHandlerHelper.copyStackWithSize(ammo, Math.min(projectilesDesired, ammo.getCount()));
-        hook.shrinkAmmo(tool, entry, player, ammo, resultStack.getCount());
+        hook.shrinkAmmo(tool, entry, living, ammo, resultStack.getCount());
         break;
       }
     }
@@ -140,7 +154,7 @@ public interface BowAmmoModifierHook {
       }
       // make a copy of the result, up to the desired size
       resultStack = standardAmmo.split(projectilesDesired);
-      if (standardAmmo.isEmpty()) {
+      if (standardAmmo.isEmpty() && player != null) {
         player.getInventory().removeItem(standardAmmo);
       }
     }
@@ -159,17 +173,17 @@ public interface BowAmmoModifierHook {
     do {
       // if standard ammo is empty, try finding a matching stack again
       if (standardAmmo.isEmpty()) {
-        standardAmmo = findMatchingAmmo(bow, player, predicate);
+        standardAmmo = findMatchingAmmo(bow, living, predicate);
       }
       // next, try asking modifiers if they have anything new again
       int needed = projectilesDesired - resultStack.getCount();
       for (ModifierEntry entry : tool.getModifierList()) {
         BowAmmoModifierHook hook = entry.getHook(ModifierHooks.BOW_AMMO);
-        ItemStack ammo = hook.findAmmo(tool, entry, player, standardAmmo, predicate);
+        ItemStack ammo = hook.findAmmo(tool, entry, living, standardAmmo, predicate);
         if (!ammo.isEmpty()) {
           // consume as much of the stack as we need then continue, loop condition will stop if we are now done
           int gained = Math.min(needed, ammo.getCount());
-          hook.shrinkAmmo(tool, entry, player, ammo, gained);
+          hook.shrinkAmmo(tool, entry, living, ammo, gained);
           resultStack.grow(gained);
           continue hasEnough;
         }
@@ -183,7 +197,9 @@ public interface BowAmmoModifierHook {
       if (needed > standardAmmo.getCount()) {
         // consume the whole stack
         resultStack.grow(standardAmmo.getCount());
-        player.getInventory().removeItem(standardAmmo);
+        if (player != null) {
+          player.getInventory().removeItem(standardAmmo);
+        }
         standardAmmo = ItemStack.EMPTY;
       } else {
         // found what we need, we are done

@@ -172,16 +172,27 @@ public class ModifiableCrossbowItem extends ModifiableLauncherItem {
    * @param heldAmmo   Ammo used to fire, should be non-empty
    */
   public static void fireCrossbow(IToolStackView tool, Player player, InteractionHand hand, CompoundTag heldAmmo) {
+    fireCrossbow(tool, player, player.getAbilities().instabuild, hand, heldAmmo);
+  }
+
+  /**
+   * Fires the crossbow
+   * @param tool       Tool instance
+   * @param living     Entity firing
+   * @param creative   If true, was fired in creative
+   * @param hand       Hand fired from
+   * @param heldAmmo   Ammo used to fire, should be non-empty
+   */
+  public static void fireCrossbow(IToolStackView tool, LivingEntity living, boolean creative, InteractionHand hand, CompoundTag heldAmmo) {
     // ammo already loaded? time to fire
-    Level level = player.level();
+    Level level = living.level();
     if (!level.isClientSide) {
       // shoot the projectile
       int damage = 0;
 
       // don't need to calculate these multiple times
-      float velocity = ConditionalStatModifierHook.getModifiedStat(tool, player, ToolStats.VELOCITY);
-      float inaccuracy = ModifierUtil.getInaccuracy(tool, player);
-      boolean creative = player.getAbilities().instabuild;
+      float velocity = ConditionalStatModifierHook.getModifiedStat(tool, living, ToolStats.VELOCITY);
+      float inaccuracy = ModifierUtil.getInaccuracy(tool, living);
 
       // the ammo has a stack size that may be greater than 1 (meaning multishot)
       // when creating the ammo stacks, we use split, so its getting smaller each time
@@ -195,12 +206,12 @@ public class ModifiableCrossbowItem extends ModifiableLauncherItem {
         float speed;
         if (ammo.is(Items.FIREWORK_ROCKET)) {
           // TODO: don't hardcode fireworks, perhaps use a map or a JSON behavior list
-          projectile = new FireworkRocketEntity(level, ammo, player, player.getX(), player.getEyeY() - 0.15f, player.getZ(), true);
+          projectile = new FireworkRocketEntity(level, ammo, living, living.getX(), living.getEyeY() - 0.15f, living.getZ(), true);
           speed = 1.5f;
           damage += 3;
         } else {
           ArrowItem arrowItem = ammo.getItem() instanceof ArrowItem a ? a : (ArrowItem)Items.ARROW;
-          arrow = arrowItem.createArrow(level, ammo, player);
+          arrow = arrowItem.createArrow(level, ammo, living);
           projectile = arrow;
           arrow.setCritArrow(true);
           arrow.setSoundEvent(SoundEvents.CROSSBOW_HIT);
@@ -210,7 +221,7 @@ public class ModifiableCrossbowItem extends ModifiableLauncherItem {
 
           // vanilla arrows have a base damage of 2, cancel that out then add in our base damage to account for custom arrows with higher base damage
           float baseArrowDamage = (float)(arrow.getBaseDamage() - 2 + tool.getStats().get(ToolStats.PROJECTILE_DAMAGE));
-          arrow.setBaseDamage(ConditionalStatModifierHook.getModifiedStat(tool, player, ToolStats.PROJECTILE_DAMAGE, baseArrowDamage));
+          arrow.setBaseDamage(ConditionalStatModifierHook.getModifiedStat(tool, living, ToolStats.PROJECTILE_DAMAGE, baseArrowDamage));
 
           // fortunately, don't need to deal with vanilla infinity here, our infinity was dealt with during loading
           if (creative) {
@@ -221,9 +232,9 @@ public class ModifiableCrossbowItem extends ModifiableLauncherItem {
         // TODO: can we get piglins/illagers to use our crossbow?
 
         // setup projectile
-        Vec3 upVector = player.getUpVector(1.0f);
+        Vec3 upVector = living.getUpVector(1.0f);
         float angle = startAngle + (10 * arrowIndex);
-        Vector3f targetVector = player.getViewVector(1.0f).toVector3f().rotate((new Quaternionf()).setAngleAxis(angle * Math.PI / 180F, upVector.x, upVector.y, upVector.z));
+        Vector3f targetVector = living.getViewVector(1.0f).toVector3f().rotate((new Quaternionf()).setAngleAxis(angle * Math.PI / 180F, upVector.x, upVector.y, upVector.z));
         projectile.shoot(targetVector.x(), targetVector.y(), targetVector.z(), velocity * speed, inaccuracy);
 
         // add modifiers to the projectile, will let us use them on impact
@@ -235,21 +246,21 @@ public class ModifiableCrossbowItem extends ModifiableLauncherItem {
 
         // let modifiers set properties
         for (ModifierEntry entry : modifiers.getModifiers()) {
-          entry.getHook(ModifierHooks.PROJECTILE_LAUNCH).onProjectileLaunch(tool, entry, player, projectile, arrow, projectileData, arrowIndex == primaryIndex);
+          entry.getHook(ModifierHooks.PROJECTILE_LAUNCH).onProjectileLaunch(tool, entry, living, projectile, arrow, projectileData, arrowIndex == primaryIndex);
         }
 
         // finally, fire the projectile
         level.addFreshEntity(projectile);
-        level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.CROSSBOW_SHOOT, SoundSource.PLAYERS, 1.0F, getRandomShotPitch(angle, player.getRandom()));
+        level.playSound(null, living.getX(), living.getY(), living.getZ(), SoundEvents.CROSSBOW_SHOOT, SoundSource.PLAYERS, 1.0F, getRandomShotPitch(angle, living.getRandom()));
       }
 
       // clear the ammo, damage the bow
       tool.getPersistentData().remove(KEY_CROSSBOW_AMMO);
-      ToolDamageUtil.damageAnimated(tool, damage, player, hand);
+      ToolDamageUtil.damageAnimated(tool, damage, living, hand);
 
       // stats
-      if (player instanceof ServerPlayer serverPlayer) {
-        CriteriaTriggers.SHOT_CROSSBOW.trigger(serverPlayer, player.getItemInHand(hand));
+      if (living instanceof ServerPlayer serverPlayer) {
+        CriteriaTriggers.SHOT_CROSSBOW.trigger(serverPlayer, living.getItemInHand(hand));
         serverPlayer.awardStat(Stats.ITEM_USED.get(tool.getItem()));
       }
     }
@@ -259,9 +270,6 @@ public class ModifiableCrossbowItem extends ModifiableLauncherItem {
   public void releaseUsing(ItemStack bow, Level level, LivingEntity living, int chargeRemaining) {
     // clear zoom regardless, does not matter if the tool broke, we should not be zooming
     ScopeModifier.stopScoping(living);
-    if (!(living instanceof Player player)) {
-      return;
-    }
     ToolStack tool = ToolStack.from(bow);
     ModDataNBT persistentData = tool.getPersistentData();
     if (tool.isBroken() || persistentData.contains(KEY_CROSSBOW_AMMO, Tag.TAG_COMPOUND)) {
@@ -276,7 +284,8 @@ public class ModifiableCrossbowItem extends ModifiableLauncherItem {
     }
 
     // find ammo and store it on the bow
-    ItemStack ammo = BowAmmoModifierHook.findAmmo(tool, bow, player, getSupportedHeldProjectiles());
+    Player player = living instanceof Player p ? p : null;
+    ItemStack ammo = BowAmmoModifierHook.findAmmo(tool, bow, living, player, getSupportedHeldProjectiles());
     if (!ammo.isEmpty()) {
       level.playSound(null, living.getX(), living.getY(), living.getZ(), SoundEvents.CROSSBOW_LOADING_END, SoundSource.PLAYERS, 1.0F, 1.0F / (level.getRandom().nextFloat() * 0.5F + 1.0F) + 0.2F);
       if (!level.isClientSide) {
@@ -284,7 +293,7 @@ public class ModifiableCrossbowItem extends ModifiableLauncherItem {
         persistentData.put(KEY_CROSSBOW_AMMO, ammoNBT);
         // if the crossbow broke during loading, fire immediately
         if (tool.isBroken()) {
-          fireCrossbow(tool, player, player.getUsedItemHand(), ammoNBT);
+          fireCrossbow(tool, living, player != null && player.getAbilities().instabuild, living.getUsedItemHand(), ammoNBT);
         }
       }
     }
