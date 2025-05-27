@@ -13,7 +13,7 @@
     "large_bowstring":   "tconstruct:item/tool/longbow/large/bowstring"
   },
   "large": true,
-  "large_offset": [-3, 13],
+  "large_offset": [-7, 9],
   "modifier_roots": {
     "small": [ "tconstruct:item/tool/longbow/modifiers/" ],
     "large": [ "tconstruct:item/tool/longbow/large/modifiers/" ]
