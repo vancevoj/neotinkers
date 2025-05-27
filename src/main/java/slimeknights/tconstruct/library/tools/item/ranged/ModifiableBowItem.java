@@ -87,6 +87,9 @@ public class ModifiableBowItem extends ModifiableLauncherItem {
       return InteractionResultHolder.fail(bow);
     }
     GeneralInteractionModifierHook.startDrawtime(tool, player, 1);
+    if (hasAmmo) {
+      tool.getPersistentData().putBoolean(KEY_DRAWBACK_AMMO, true);
+    }
     player.startUsingItem(hand);
     if (!level.isClientSide) {
       level.playSound(null, player.getX(), player.getY(), player.getZ(), Sounds.LONGBOW_CHARGE.getSound(), SoundSource.PLAYERS, 0.75F, 1.0F);

@@ -50,7 +50,7 @@ public class ToolItemModelProvider extends AbstractToolItemModelProvider {
     // misc
     tool(TinkerTools.flintAndBrick, shieldBlocking, "tool");
     // bow
-    bow(TinkerTools.longbow, toolBlocking, false, "limb_bottom", "limb_top", "bowstring", "arrow");
+    bow(TinkerTools.longbow, toolBlocking, false, "limb_bottom", "limb_top", "bowstring");
     bow(TinkerTools.crossbow, toolBlocking, true, "bowstring");
     // staff
     staff(TinkerTools.skyStaff, toolBlocking);

@@ -131,18 +131,16 @@ public class ModifiableCrossbowItem extends ModifiableLauncherItem {
       }
 
       // if we have ammo, start charging
-      if (BowAmmoModifierHook.hasAmmo(tool, bow, player, getSupportedHeldProjectiles())) {
+      boolean hasAmmo = BowAmmoModifierHook.hasAmmo(tool, bow, player, getSupportedHeldProjectiles());
+      if (hasAmmo || tool.getModifiers().has(TinkerTags.Modifiers.CHARGE_EMPTY_BOW)) {
         GeneralInteractionModifierHook.startDrawtime(tool, player, 1);
+        if (hasAmmo) {
+          persistentData.putBoolean(KEY_DRAWBACK_AMMO, true);
+        }
         player.startUsingItem(hand);
         if (!level.isClientSide) {
           level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.CROSSBOW_QUICK_CHARGE_1, SoundSource.PLAYERS, 0.75F, 1.0F);
         }
-        return InteractionResultHolder.consume(bow);
-      }
-      // no ammo still lets us use some modifiers
-      if (tool.getModifiers().has(TinkerTags.Modifiers.CHARGE_EMPTY_BOW)) {
-        GeneralInteractionModifierHook.startDrawtime(tool, player, 1);
-        player.startUsingItem(hand);
         return InteractionResultHolder.consume(bow);
       }
       // can also block without ammo
