@@ -3018,6 +3018,7 @@
   "stat.tconstruct.slot.prefix.abilities": "Abilities: ",
   "stat.tconstruct.slot.prefix.souls": "Soul Slots: ",
   "stat.tconstruct.slot.prefix.defense": "Defense Slots: ",
+  "stat.tconstruct.slot.prefix.slotless": "Slotless",
 
   "stat.tconstruct.slot.display.upgrades": "upgrade",
   "stat.tconstruct.slot.display.abilities": "ability",
@@ -3293,6 +3294,8 @@
   "jei.tconstruct.time": "%s s",
   "jei.tconstruct.temperature": "%s°C",
   "jei.tconstruct.modifier_ingredient": "%s Modifier",
+  "jei.tconstruct.modifier_slot.ingredient": "Modifier Slot: %s",
+  "jei.tconstruct.modifier_slot.id": "Slot ID: %s",
 
   "jei.tconstruct.casting.basin": "Casting Basin",
   "jei.tconstruct.casting.table": "Casting Table",
@@ -3318,8 +3321,8 @@
   "jei.tconstruct.alloy.catalyst": "Not consumed",
 
   "jei.tconstruct.modifiers.title": "Modifiers",
-  "jei.tconstruct.modifiers.slot": "Modifier requires 1 %s slot to apply",
-  "jei.tconstruct.modifiers.slots": "Modifier requires %s %s slots to apply",
+  "jei.tconstruct.modifiers.slot": "Requires 1 %s slot to apply",
+  "jei.tconstruct.modifiers.slots": "Requires %s %s slots to apply",
   "jei.tconstruct.modifiers.free": "No modifier slots are required to apply",
   "jei.tconstruct.modifiers.incremental": "Recipe is incremental, you can apply part of the input for a partial effect",
   "jei.tconstruct.modifiers.level.min": "Min level: %s",

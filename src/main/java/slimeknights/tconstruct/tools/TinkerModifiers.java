@@ -777,7 +777,7 @@ public final class TinkerModifiers extends TinkerModule {
     output.accept(goldReinforcement);
     output.accept(cobaltReinforcement);
     output.accept(obsidianReinforcement);
-    creativeSlotItem.get().addVariants(output);
-    // modifier crystal is handled by tool parts
+    creativeSlotItem.get().addVariants(output::accept);
+    // modifier crystal is handled by tool parts tab
   }
 }
