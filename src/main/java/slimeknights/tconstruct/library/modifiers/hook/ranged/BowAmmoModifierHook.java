@@ -46,7 +46,8 @@ public interface BowAmmoModifierHook {
   }
 
   /**
-   * Checks if the player has ammo for the given tool
+   * Checks if the player has ammo for the given tool.
+   * TODO 1.21: consider removing in favor of {@link #getAmmo(IToolStackView, ItemStack, LivingEntity, Predicate)}.
    * @param tool       Tool instance, for running modifier hooks
    * @param bowStack   Bow stack instance, for standard ammo lookup
    * @param living     Player instance, for standard ammo lookup
@@ -65,6 +66,25 @@ public interface BowAmmoModifierHook {
       }
     }
     return false;
+  }
+
+  /**
+   * Gets ammo for the given tool without consuming it.
+   * @param tool       Tool instance, for running modifier hooks
+   * @param bow   Bow stack instance, for standard ammo lookup
+   * @param living     Player instance, for standard ammo lookup
+   * @param predicate  Predicate for finding ammo in modifiers
+   * @return  True if there is ammo either on the player or on the modifiers
+   */
+  static ItemStack getAmmo(IToolStackView tool, ItemStack bow, LivingEntity living, Predicate<ItemStack> predicate) {
+    ItemStack standardAmmo = living.getProjectile(bow);
+    for (ModifierEntry entry : tool.getModifierList()) {
+      ItemStack ammo = entry.getHook(ModifierHooks.BOW_AMMO).findAmmo(tool, entry, living, standardAmmo, predicate);
+      if (!ammo.isEmpty()) {
+        return ammo;
+      }
+    }
+    return standardAmmo;
   }
 
   /**
@@ -96,16 +116,10 @@ public interface BowAmmoModifierHook {
     return ItemStack.EMPTY;
   }
 
-  /**
-   * Finds ammo in the inventory, and consume it if not creative
-   * @param tool       Tool instance
-   * @param bow        Bow stack instance
-   * @param predicate  Predicate for valid ammo
-   * @param player     Player to search
-   * @return  Found ammo
-   */
+  /** @deprecated use {@link #consumeAmmo(IToolStackView, ItemStack, LivingEntity, Player, Predicate)} */
+  @Deprecated(forRemoval = true)
   static ItemStack findAmmo(IToolStackView tool, ItemStack bow, Player player, Predicate<ItemStack> predicate) {
-    return findAmmo(tool, bow, player, player, predicate);
+    return consumeAmmo(tool, bow, player, player, predicate);
   }
 
   /**
@@ -117,7 +131,7 @@ public interface BowAmmoModifierHook {
    * @param player     Player firing bow. If null, will not remove the fired stack from the player inventory.
    * @return  Found ammo
    */
-  static ItemStack findAmmo(IToolStackView tool, ItemStack bow, LivingEntity living, @Nullable Player player, Predicate<ItemStack> predicate) {
+  static ItemStack consumeAmmo(IToolStackView tool, ItemStack bow, LivingEntity living, @Nullable Player player, Predicate<ItemStack> predicate) {
     int projectilesDesired = 1 + (2 * tool.getModifierLevel(TinkerModifiers.multishot.getId()));
     // treat client side as creative, no need to shrink the stacks clientside
     Level level = living.level();

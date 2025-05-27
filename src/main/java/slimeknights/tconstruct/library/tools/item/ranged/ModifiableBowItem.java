@@ -1,5 +1,6 @@
 package slimeknights.tconstruct.library.tools.item.ranged;
 
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
@@ -37,8 +38,16 @@ import slimeknights.tconstruct.tools.modifiers.ability.interaction.BlockingModif
 import java.util.function.Predicate;
 
 public class ModifiableBowItem extends ModifiableLauncherItem {
-  public ModifiableBowItem(Properties properties, ToolDefinition toolDefinition) {
+  /** If true, adds the item data to the drawback model. Its a bit less efficient but produces better models. False will just set a boolean. */
+  private final boolean storeDrawingItem;
+
+  public ModifiableBowItem(Properties properties, ToolDefinition toolDefinition, boolean storeDrawingItem) {
     super(properties, toolDefinition);
+    this.storeDrawingItem = storeDrawingItem;
+  }
+
+  public ModifiableBowItem(Properties properties, ToolDefinition toolDefinition) {
+    this(properties, toolDefinition, false);
   }
 
 
@@ -70,15 +79,16 @@ public class ModifiableBowItem extends ModifiableLauncherItem {
       return InteractionResultHolder.fail(bow);
     }
 
-    boolean hasAmmo = BowAmmoModifierHook.hasAmmo(tool, bow, player, getSupportedHeldProjectiles());
+    // locate ammo as requested by the item properties
+    ItemStack ammo = BowAmmoModifierHook.getAmmo(tool, bow, player, getSupportedHeldProjectiles());
     // ask forge if it has any different opinions
-    InteractionResultHolder<ItemStack> override = ForgeEventFactory.onArrowNock(bow, level, player, hand, hasAmmo);
+    InteractionResultHolder<ItemStack> override = ForgeEventFactory.onArrowNock(bow, level, player, hand, !ammo.isEmpty());
     if (override != null) {
       return override;
     }
     // if no ammo, cannot fire
     // however, we can use a modifier if enabled
-    if (!player.getAbilities().instabuild && !hasAmmo && !tool.getModifiers().has(TinkerTags.Modifiers.CHARGE_EMPTY_BOW)) {
+    if (!player.getAbilities().instabuild && ammo.isEmpty() && !tool.getModifiers().has(TinkerTags.Modifiers.CHARGE_EMPTY_BOW)) {
       // however, we can block if enabled
       if (ModifierUtil.canPerformAction(tool, ToolActions.SHIELD_BLOCK)) {
         player.startUsingItem(hand);
@@ -87,8 +97,14 @@ public class ModifiableBowItem extends ModifiableLauncherItem {
       return InteractionResultHolder.fail(bow);
     }
     GeneralInteractionModifierHook.startDrawtime(tool, player, 1);
-    if (hasAmmo) {
-      tool.getPersistentData().putBoolean(KEY_DRAWBACK_AMMO, true);
+    // store either ammo or boolean as requested
+    if (!ammo.isEmpty()) {
+      if (storeDrawingItem) {
+        tool.getPersistentData().put(KEY_DRAWBACK_AMMO, ammo.save(new CompoundTag()));
+      } else {
+        // boolean is enough to get detected by the property override, but won't bother the model
+        tool.getPersistentData().putBoolean(KEY_DRAWBACK_AMMO, true);
+      }
     }
     player.startUsingItem(hand);
     if (!level.isClientSide) {
@@ -140,7 +156,7 @@ public class ModifiableBowItem extends ModifiableLauncherItem {
     // launch the arrow
     if (!level.isClientSide) {
       // find ammo after the return above, as otherwise we might consume ammo before
-      ItemStack ammo = BowAmmoModifierHook.findAmmo(tool, bow, living, player, getSupportedHeldProjectiles());
+      ItemStack ammo = BowAmmoModifierHook.consumeAmmo(tool, bow, living, player, getSupportedHeldProjectiles());
       // could only be empty at this point if we are creative, as hasAmmo returned true above
       if (ammo.isEmpty()) {
         ammo = new ItemStack(Items.ARROW);

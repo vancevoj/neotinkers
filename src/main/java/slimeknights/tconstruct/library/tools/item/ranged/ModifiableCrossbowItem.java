@@ -65,10 +65,21 @@ public class ModifiableCrossbowItem extends ModifiableLauncherItem {
   private static final String PROJECTILE_KEY = "item.minecraft.crossbow.projectile";
   @Getter
   private final Predicate<ItemStack> supportedHeldProjectiles;
+  /** If true, adds the item data to the drawback model. Its a bit less efficient but produces better models. False will just set a boolean. */
+  private final boolean storeDrawingItem;
 
-  public ModifiableCrossbowItem(Properties properties, ToolDefinition toolDefinition, Predicate<ItemStack> supportedHeldProjectiles) {
+  public ModifiableCrossbowItem(Properties properties, ToolDefinition toolDefinition, Predicate<ItemStack> supportedHeldProjectiles, boolean storeDrawingItem) {
     super(properties, toolDefinition);
     this.supportedHeldProjectiles = supportedHeldProjectiles;
+    this.storeDrawingItem = storeDrawingItem;
+  }
+
+  public ModifiableCrossbowItem(Properties properties, ToolDefinition toolDefinition, Predicate<ItemStack> supportedHeldProjectiles) {
+    this(properties, toolDefinition, supportedHeldProjectiles, false);
+  }
+
+  public ModifiableCrossbowItem(Properties properties, ToolDefinition toolDefinition, boolean storeDrawingItem) {
+    this(properties, toolDefinition, ARROW_OR_FIREWORK, storeDrawingItem);
   }
 
   public ModifiableCrossbowItem(Properties properties, ToolDefinition toolDefinition) {
@@ -131,11 +142,16 @@ public class ModifiableCrossbowItem extends ModifiableLauncherItem {
       }
 
       // if we have ammo, start charging
-      boolean hasAmmo = BowAmmoModifierHook.hasAmmo(tool, bow, player, getSupportedHeldProjectiles());
-      if (hasAmmo || tool.getModifiers().has(TinkerTags.Modifiers.CHARGE_EMPTY_BOW)) {
+      ItemStack ammo = BowAmmoModifierHook.getAmmo(tool, bow, player, getSupportedHeldProjectiles());
+      if (!ammo.isEmpty() || tool.getModifiers().has(TinkerTags.Modifiers.CHARGE_EMPTY_BOW)) {
         GeneralInteractionModifierHook.startDrawtime(tool, player, 1);
-        if (hasAmmo) {
-          persistentData.putBoolean(KEY_DRAWBACK_AMMO, true);
+        if (!ammo.isEmpty()) {
+          if (storeDrawingItem) {
+            persistentData.put(KEY_DRAWBACK_AMMO, ammo.save(new CompoundTag()));
+          } else {
+            // boolean is enough to get detected by the property override, but won't bother the model
+            persistentData.putBoolean(KEY_DRAWBACK_AMMO, true);
+          }
         }
         player.startUsingItem(hand);
         if (!level.isClientSide) {
@@ -292,7 +308,7 @@ public class ModifiableCrossbowItem extends ModifiableLauncherItem {
 
     // find ammo and store it on the bow
     Player player = living instanceof Player p ? p : null;
-    ItemStack ammo = BowAmmoModifierHook.findAmmo(tool, bow, living, player, getSupportedHeldProjectiles());
+    ItemStack ammo = BowAmmoModifierHook.consumeAmmo(tool, bow, living, player, getSupportedHeldProjectiles());
     if (!ammo.isEmpty()) {
       level.playSound(null, living.getX(), living.getY(), living.getZ(), SoundEvents.CROSSBOW_LOADING_END, SoundSource.PLAYERS, 1.0F, 1.0F / (level.getRandom().nextFloat() * 0.5F + 1.0F) + 0.2F);
       if (!level.isClientSide) {

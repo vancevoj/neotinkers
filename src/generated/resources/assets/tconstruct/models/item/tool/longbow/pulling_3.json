@@ -43,5 +43,18 @@
       "name": "grip",
       "index": 2
     }
-  ]
+  ],
+  "ammo": {
+    "key": "tconstruct:drawback_ammo",
+    "flip": true,
+    "left": true,
+    "small_offset": [
+      -1.0,
+      -2.0
+    ],
+    "large_offset": [
+      1.0,
+      1.0
+    ]
+  }
 }
