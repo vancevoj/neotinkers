@@ -1779,7 +1779,7 @@
 
   "material.tconstruct.amethyst_bronze": "Amethyst Bronze",
   "material.tconstruct.amethyst_bronze.flavor": "Not to be confused with bronze.",
-  "material.tconstruct.amethyst_bronze.encyclopedia": "Grants +0.5 mining speed per level to blocks that don't require tools, even ones where the tool is not effective",
+  "material.tconstruct.amethyst_bronze.encyclopedia": "Grants +1 mining speed per level to blocks that don't require tools, notably ones where the tool is not effective",
   "material.tconstruct.amethyst_bronze.ranged": "Adds +0.1 velocity per level at the cost of limiting arrow angles to 32, 16, or 8 directions at the first 3 levels respectively",
   "material.tconstruct.amethyst_bronze.armor": "Grants +2.5% attack speed per level at the cost of limiting taken knockback angles to 32, 16, 8, or 4 directions",
 
@@ -2632,7 +2632,7 @@
   "modifier.tconstruct.lacerating.description": "Causes the target to bleed, dealing additional damage",
   "modifier.tconstruct.crumbling": "Crumbling",
   "modifier.tconstruct.crumbling.flavor": "Hold yourself together!",
-  "modifier.tconstruct.crumbling.description": "Tool mines blocks that don't require a tool faster",
+  "modifier.tconstruct.crumbling.description": "Tool mines blocks that don't require a tool faster. Great for mining the wrong block!",
   "modifier.tconstruct.crumbling.mining_speed": "Crumbling Speed",
   "modifier.tconstruct.crystalbound": "Crystalbound",
   "modifier.tconstruct.crystalbound.flavor": "The way of the crystal is straight",
