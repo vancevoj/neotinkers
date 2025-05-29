@@ -125,7 +125,7 @@ public class BonkingModifier extends SlingModifier implements MeleeHitModifierHo
           }
         }
       }
-      if (modifier == activeModifier) {
+      if (isActive(tool, modifier, activeModifier)) {
         level.playSound(null, player.getX(), player.getY(), player.getZ(), Sounds.BONK.getSound(), player.getSoundSource(), 1, 1f);
       }
     }

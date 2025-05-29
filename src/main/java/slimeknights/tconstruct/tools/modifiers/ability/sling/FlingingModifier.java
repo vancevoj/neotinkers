@@ -46,7 +46,7 @@ public class FlingingModifier extends SlingModifier {
         }
       }
     }
-    if (modifier == activeModifier) {
+    if (isActive(tool, modifier, activeModifier)) {
       level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), Sounds.SLIME_SLING.getSound(), entity.getSoundSource(), 1, 0.5f);
     }
   }

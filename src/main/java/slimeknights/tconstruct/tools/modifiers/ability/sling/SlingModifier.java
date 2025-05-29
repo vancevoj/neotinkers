@@ -14,6 +14,7 @@ import slimeknights.tconstruct.library.modifiers.hook.interaction.InteractionSou
 import slimeknights.tconstruct.library.modifiers.hook.interaction.UsingToolModifierHook;
 import slimeknights.tconstruct.library.modifiers.impl.NoLevelsModifier;
 import slimeknights.tconstruct.library.module.ModuleHookMap.Builder;
+import slimeknights.tconstruct.library.tools.item.ranged.ModifiableLauncherItem;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
 import slimeknights.tconstruct.shared.TinkerAttributes;
@@ -37,7 +38,6 @@ public abstract class SlingModifier extends NoLevelsModifier implements GeneralI
     }
     return InteractionResult.PASS;
   }
-
 
   @Override
   public int getUseDuration(IToolStackView tool, ModifierEntry modifier) {
@@ -74,5 +74,11 @@ public abstract class SlingModifier extends NoLevelsModifier implements GeneralI
   /** Scales the given knockback value using the two attributes */
   public static float scaleKnockback(LivingEntity target, float knockback) {
     return (float) (knockback * target.getAttributeValue(TinkerAttributes.KNOCKBACK_MULTIPLIER.get()) * (1 - target.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE)));
+  }
+
+  /** Checks if this modifier is the one actively being used. Used for failure sound effects. */
+  public static boolean isActive(IToolStackView tool, ModifierEntry modifier, ModifierEntry activeModifier) {
+    // active modifier being us, or a bow is firing and no drawback ammo
+    return modifier == activeModifier || (activeModifier.getLevel() == 0 && !tool.getPersistentData().contains(ModifiableLauncherItem.KEY_DRAWBACK_AMMO));
   }
 }

@@ -54,7 +54,7 @@ public class SpringingModifier extends SlingModifier {
         return;
       }
     }
-    if (modifier == activeModifier) {
+    if (isActive(tool, modifier, activeModifier)) {
       level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), Sounds.SLIME_SLING.getSound(), entity.getSoundSource(), 1, 0.5f);
     }
   }
