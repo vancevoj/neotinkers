@@ -14,7 +14,7 @@
   ],
   "overrides": [
     {
-      "predicate": { "tconstruct:charging": 1 },
+      "predicate": { "tconstruct:charging": 1, "tconstruct:charge": 0.05 },
       "model": "tconstruct:item/tool/crossbow/pulling_1"
     },
     {

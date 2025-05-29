@@ -2,12 +2,12 @@
   "modifier_id": "tconstruct:scope",
   "text": [
     {
-      "text": "Enlarges distant objects as the bow draws back. Ends up a bit less than a spyglass when fully drawn."
+      "text": "Enlarges distant objects as the tool charges. Ends up less than a spyglass when fully drawn."
     }
   ],
   "more_text_space": true,
   "effects": [
-    "Single level",
+    "Maximum of 1 level",
     "Requires 1 upgrade slot"
   ]
 }

@@ -38,6 +38,9 @@ public class ModifierIds {
   // compat
   public static final ModifierId theOneProbe = id("the_one_probe");
   public static final ModifierId headlight = id("headlight");
+  // zoom
+  public static final ModifierId scope = id("scope");
+  public static final ModifierId zoom = id("zoom");
 
   // harvest
   public static final ModifierId haste = id("haste");

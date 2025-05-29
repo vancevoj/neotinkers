@@ -273,7 +273,6 @@ public class AdvancementsProvider extends GenericDataProvider {
       // helmet
       with.accept(ModifierIds.aquaAffinity);
       withL.accept(TinkerModifiers.slurping);
-      withL.accept(TinkerModifiers.zoom);
       // chestplate
       withL.accept(TinkerModifiers.ambidextrous);
       with.accept(ModifierIds.reach);

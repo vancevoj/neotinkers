@@ -643,17 +643,15 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .setTools(IntersectionIngredient.of(Ingredient.of(TinkerTags.Items.CROSSBOWS), Ingredient.of(TinkerTags.Items.INTERACTABLE_LEFT))) // this is the same recipes as dual wielding, but crossbows do not interact on left
                          .saveSalvage(consumer, prefix(TinkerModifiers.sinistral, upgradeSalvage))
                          .save(consumer, prefix(TinkerModifiers.sinistral, upgradeFolder));
-    ModifierRecipeBuilder.modifier(TinkerModifiers.scope)
-                         .setTools(ingredientFromTags(TinkerTags.Items.BOWS, TinkerTags.Items.STAFFS))
-                         .addInput(Tags.Items.STRING)
-                         .addInput(Items.SPYGLASS)
-                         .addInput(Tags.Items.STRING)
-                         .addInput(Tags.Items.DUSTS_REDSTONE)
-                         .addInput(Tags.Items.DUSTS_REDSTONE)
-                         .setSlots(SlotType.UPGRADE, 1)
-                         .setMaxLevel(1).checkTraitLevel()
-                         .saveSalvage(consumer, prefix(TinkerModifiers.scope, upgradeSalvage))
-                         .save(consumer, prefix(TinkerModifiers.scope, upgradeFolder));
+    ModifierRecipeBuilder.modifier(ModifierIds.scope)
+      .setTools(TinkerTags.Items.INTERACTABLE_CHARGE)
+      .addInput(Items.SUGAR)
+      .addInput(Items.SPYGLASS)
+      .addInput(Items.SUGAR)
+      .setSlots(SlotType.UPGRADE, 1)
+      .setMaxLevel(1).checkTraitLevel()
+      .saveSalvage(consumer, prefix(ModifierIds.scope, upgradeSalvage))
+      .save(consumer, prefix(ModifierIds.scope, upgradeFolder));
 
     /*
      * armor
@@ -867,15 +865,15 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
 
     // armor ability
     // helmet
-    ModifierRecipeBuilder.modifier(TinkerModifiers.zoom)
-                         .setTools(ingredientFromTags(TinkerTags.Items.HELMETS, TinkerTags.Items.INTERACTABLE_RIGHT, TinkerTags.Items.SHIELDS))
+    ModifierRecipeBuilder.modifier(ModifierIds.zoom)
+                         .setTools(ingredientFromTags(TinkerTags.Items.HELMETS, TinkerTags.Items.INTERACTABLE_CHARGE))
                          .addInput(Tags.Items.STRING)
                          .addInput(Items.SPYGLASS)
                          .addInput(Tags.Items.STRING)
                          .setSlots(SlotType.UPGRADE, 1)
                          .setMaxLevel(1).checkTraitLevel()
-                         .saveSalvage(consumer, prefix(TinkerModifiers.zoom, upgradeSalvage))
-                         .save(consumer, prefix(TinkerModifiers.zoom, upgradeFolder));
+                         .saveSalvage(consumer, prefix(ModifierIds.zoom, upgradeSalvage))
+                         .save(consumer, prefix(ModifierIds.zoom, upgradeFolder));
     Ingredient tanks = NoContainerIngredient.of(TinkerTags.Items.TANKS);
     ModifierRecipeBuilder.modifier(TinkerModifiers.slurping)
                          .addInput(Items.GLASS_BOTTLE)

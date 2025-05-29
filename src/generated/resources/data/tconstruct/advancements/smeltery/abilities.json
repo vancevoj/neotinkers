@@ -864,24 +864,6 @@
         ]
       },
       "trigger": "minecraft:inventory_changed"
-    },
-    "zoom": {
-      "conditions": {
-        "items": [
-          {
-            "type": "tconstruct:tool_stack",
-            "predicate": {
-              "type": "tconstruct:has_modifier",
-              "check": "upgrades",
-              "modifier": {
-                "type": "tconstruct:single",
-                "modifier": "tconstruct:zoom"
-              }
-            }
-          }
-        ]
-      },
-      "trigger": "minecraft:inventory_changed"
     }
   },
   "display": {
@@ -917,9 +899,6 @@
     ],
     [
       "slurping"
-    ],
-    [
-      "zoom"
     ],
     [
       "ambidextrous"
