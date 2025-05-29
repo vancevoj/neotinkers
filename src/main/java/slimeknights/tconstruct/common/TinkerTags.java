@@ -345,6 +345,8 @@ public class TinkerTags {
     public static final TagKey<Item> CHEST_PARTS = local("chest_parts");
     /** All material items, used to populate several lists such as books or subtypes in JEI */
     public static final TagKey<Item> TOOL_PARTS = local("parts");
+    /** Tool parts that piglins may barter to the player. Will contain random nether materials from {@link Materials#BARTERED} */
+    public static final TagKey<Item> BARTERED_PARTS = local("parts/bartered");
 
     /** Anything that can be modified in the tool station */
     public static final TagKey<Item> MODIFIABLE = local("modifiable");
@@ -678,6 +680,8 @@ public class TinkerTags {
     private static void init() {}
     /** Materials available in nether */
     public static final TagKey<IMaterial> NETHER = local("nether");
+    /** Materials bartered from piglins */
+    public static final TagKey<IMaterial> BARTERED = local("bartered");
 
     @SuppressWarnings("SameParameterValue")  // may want more tags later
     private static TagKey<IMaterial> local(String name) {

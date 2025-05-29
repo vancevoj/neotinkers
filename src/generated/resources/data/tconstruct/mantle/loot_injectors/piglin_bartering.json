@@ -45,6 +45,16 @@
           ],
           "name": "tconstruct:battlesign",
           "weight": 5
+        },
+        {
+          "type": "tconstruct:tool_part",
+          "material": {
+            "type": "tconstruct:random",
+            "allow_hidden": true,
+            "tag": "tconstruct:bartered"
+          },
+          "tag": "tconstruct:parts/bartered",
+          "weight": 8
         }
       ],
       "name": "main"

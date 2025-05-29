@@ -16,9 +16,11 @@ import slimeknights.mantle.loot.AbstractLootTableInjectionProvider;
 import slimeknights.mantle.loot.LootTableInjection;
 import slimeknights.mantle.loot.function.SetFluidLootFunction;
 import slimeknights.tconstruct.TConstruct;
+import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.common.json.ConfigEnabledCondition;
 import slimeknights.tconstruct.fluids.TinkerFluids;
 import slimeknights.tconstruct.library.json.loot.AddToolDataFunction;
+import slimeknights.tconstruct.library.json.loot.ToolPartLootEntry;
 import slimeknights.tconstruct.library.materials.RandomMaterial;
 import slimeknights.tconstruct.library.recipe.FluidValues;
 import slimeknights.tconstruct.smeltery.TinkerSmeltery;
@@ -59,6 +61,9 @@ public class LootTableInjectionProvider extends AbstractLootTableInjectionProvid
       .addToPool("main", LootItem.lootTableItem(TinkerTools.battlesign.get())
                                  .setWeight(5)
                                  .apply(ancientToolData2)
+                                 .build())
+      .addToPool("main", ToolPartLootEntry.entry(TinkerTags.Items.BARTERED_PARTS, RandomMaterial.random().tag(TinkerTags.Materials.BARTERED).allowHidden().build())
+                                 .setWeight(8) // same weight as soulspeed boots
                                  .build());
 
     // spawn chest

@@ -373,15 +373,18 @@ public class ItemTagProvider extends ItemTagsProvider {
 
     // tag for tool parts, mostly used by JEI right now
     this.tag(TinkerTags.Items.TOOL_PARTS)
-        .add(TinkerToolParts.pickHead.get(), TinkerToolParts.hammerHead.get(),
-             TinkerToolParts.smallAxeHead.get(), TinkerToolParts.broadAxeHead.get(),
-             TinkerToolParts.smallBlade.get(), TinkerToolParts.broadBlade.get(),
-             TinkerToolParts.adzeHead.get(), TinkerToolParts.largePlate.get(),
-             TinkerToolParts.toolBinding.get(), TinkerToolParts.toughBinding.get(),
-             TinkerToolParts.toolHandle.get(), TinkerToolParts.toughHandle.get(),
-             TinkerToolParts.bowLimb.get(), TinkerToolParts.bowGrip.get(), TinkerToolParts.bowstring.get(),
-             TinkerToolParts.maille.get(), TinkerToolParts.shieldCore.get(),
-             TinkerToolParts.repairKit.get()) // repair kit is not strictly a tool part, but this list just helps out JEI
+        .add(TinkerToolParts.repairKit.get()) // repair kit is not strictly a tool part, but this list just helps out JEI
+        .addTag(TinkerTags.Items.BARTERED_PARTS); // all bartered parts must be tool parts
+    this.tag(TinkerTags.Items.BARTERED_PARTS)
+        .add(
+          TinkerToolParts.pickHead.get(), TinkerToolParts.hammerHead.get(),
+          TinkerToolParts.smallAxeHead.get(), TinkerToolParts.broadAxeHead.get(),
+          TinkerToolParts.smallBlade.get(), TinkerToolParts.broadBlade.get(),
+          TinkerToolParts.adzeHead.get(), TinkerToolParts.largePlate.get(),
+          TinkerToolParts.toolBinding.get(), TinkerToolParts.toughBinding.get(),
+          TinkerToolParts.toolHandle.get(), TinkerToolParts.toughHandle.get(),
+          TinkerToolParts.bowLimb.get(), TinkerToolParts.bowGrip.get(), TinkerToolParts.bowstring.get(),
+          TinkerToolParts.maille.get(), TinkerToolParts.shieldCore.get())
         .add(TinkerToolParts.plating.values().toArray(new Item[0]));
     // tag for the part chest items
     this.tag(TinkerTags.Items.CHEST_PARTS).addTag(TinkerTags.Items.TOOL_PARTS).add(TinkerSmeltery.dummyPlating.values().toArray(new Item[0]));
