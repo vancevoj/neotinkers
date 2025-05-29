@@ -300,7 +300,7 @@ public class ItemTagProvider extends ItemTagsProvider {
 
     // shields
     addToolTags(TinkerTools.travelersShield, DURABILITY, BONUS_SLOTS, SHIELDS, INTERACTABLE_LEFT, Tags.Items.TOOLS_SHIELDS, EMBELLISHMENT_WOOD, DYEABLE);
-    addToolTags(TinkerTools.plateShield,     DURABILITY, BONUS_SLOTS, SHIELDS, INTERACTABLE_LEFT, Tags.Items.TOOLS_SHIELDS, MULTIPART_TOOL);
+    addToolTags(TinkerTools.plateShield,     DURABILITY, BONUS_SLOTS, SHIELDS, INTERACTABLE_LEFT, Tags.Items.TOOLS_SHIELDS, MULTIPART_TOOL, UNSALVAGABLE);
 
     // care about order for armor in the book
     tag(BASIC_ARMOR);
@@ -346,6 +346,7 @@ public class ItemTagProvider extends ItemTagsProvider {
     this.tag(RANGED).addTags(BOWS, STAFFS);
     this.tag(BOWS).addTags(LONGBOWS, CROSSBOWS);
     this.tag(TRADER_TOOLS).addTag(ANCIENT_TOOLS);
+    this.tag(UNSALVAGABLE).addTag(ANCIENT_TOOLS); // ancient tools lack tool parts, but may have special override recipes to salvage
     // headlight support
     this.tag(ItemTags.create(new ResourceLocation("headlight", "headlight_helmets"))).addTag(HELMETS);
 

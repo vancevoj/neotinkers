@@ -16,16 +16,13 @@ import net.minecraftforge.common.crafting.CompoundIngredient;
 import net.minecraftforge.common.crafting.DifferenceIngredient;
 import slimeknights.mantle.recipe.crafting.ShapedRetexturedRecipeBuilder;
 import slimeknights.mantle.recipe.helper.SimpleFinishedRecipe;
-import slimeknights.mantle.recipe.ingredient.SizedIngredient;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.common.data.BaseRecipeProvider;
 import slimeknights.tconstruct.fluids.TinkerFluids;
 import slimeknights.tconstruct.library.data.recipe.CraftingNBTWrapper;
 import slimeknights.tconstruct.smeltery.TinkerSmeltery;
 import slimeknights.tconstruct.tables.TinkerTables;
-import slimeknights.tconstruct.tables.recipe.PartBuilderToolRecycle;
 import slimeknights.tconstruct.tables.recipe.TinkerStationDamagingRecipeBuilder;
-import slimeknights.tconstruct.tools.TinkerTools;
 
 import java.util.function.Consumer;
 
@@ -210,18 +207,6 @@ public class TableRecipeProvider extends BaseRecipeProvider {
                                  .setSource(TinkerTags.Items.ANVIL_METAL)
                                  .setMatchAll()
                                  .build(consumer, location(folder + "scorched_forge"));
-
-    // recycling singleton
-    consumer.accept(new PartBuilderToolRecycle.Finished(
-        location(folder + "tool_recycling"),
-        SizedIngredient.of(DifferenceIngredient.of(Ingredient.of(TinkerTags.Items.MULTIPART_TOOL), Ingredient.of(TinkerTags.Items.UNSALVAGABLE))),
-        Ingredient.of(TinkerTags.Items.DEFAULT_PATTERNS)
-    ));
-    consumer.accept(new PartBuilderToolRecycle.Finished(
-        location(folder + "dagger_recycling"),
-        SizedIngredient.fromItems(2, TinkerTools.dagger),
-        Ingredient.of(TinkerTags.Items.DEFAULT_PATTERNS)
-    ));
 
     // tool repair recipe
     consumer.accept(new SimpleFinishedRecipe(location(folder + "tinker_station_repair"), TinkerTables.tinkerStationRepairSerializer.get()));
