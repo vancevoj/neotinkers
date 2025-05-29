@@ -122,6 +122,7 @@ import slimeknights.tconstruct.library.modifiers.modules.combat.LootingModule;
 import slimeknights.tconstruct.library.modifiers.modules.combat.MeleeAttributeModule;
 import slimeknights.tconstruct.library.modifiers.modules.combat.MobEffectModule;
 import slimeknights.tconstruct.library.modifiers.modules.display.DurabilityBarColorModule;
+import slimeknights.tconstruct.library.modifiers.modules.display.ModifierVariantColorModule;
 import slimeknights.tconstruct.library.modifiers.modules.display.ModifierVariantNameModule;
 import slimeknights.tconstruct.library.modifiers.modules.mining.ConditionalMiningSpeedModule;
 import slimeknights.tconstruct.library.modifiers.modules.technical.ArmorLevelModule;
@@ -183,7 +184,6 @@ import slimeknights.tconstruct.tools.modifiers.ability.interaction.FirestarterMo
 import slimeknights.tconstruct.tools.modifiers.ability.interaction.HarvestAbilityModifier;
 import slimeknights.tconstruct.tools.modifiers.ability.interaction.ShearsAbilityModifier;
 import slimeknights.tconstruct.tools.modifiers.ability.interaction.SilkyShearsAbilityModifier;
-import slimeknights.tconstruct.tools.modifiers.ability.ranged.CrystalshotModifier;
 import slimeknights.tconstruct.tools.modifiers.ability.sling.BonkingModifier;
 import slimeknights.tconstruct.tools.modifiers.ability.sling.FlingingModifier;
 import slimeknights.tconstruct.tools.modifiers.ability.sling.SpringingModifier;
@@ -272,6 +272,7 @@ import slimeknights.tconstruct.tools.modules.armor.ToolBeltModule;
 import slimeknights.tconstruct.tools.modules.interaction.ExtinguishCampfireModule;
 import slimeknights.tconstruct.tools.modules.interaction.PlaceGlowModule;
 import slimeknights.tconstruct.tools.modules.ranged.BulkQuiverModule;
+import slimeknights.tconstruct.tools.modules.ranged.CrystalshotModule;
 import slimeknights.tconstruct.tools.modules.ranged.RestrictAngleModule;
 import slimeknights.tconstruct.tools.modules.ranged.TrickQuiverModule;
 import slimeknights.tconstruct.tools.recipe.ArmorDyeingRecipe;
@@ -356,7 +357,9 @@ public final class TinkerModifiers extends TinkerModule {
   public static final StaticModifier<PunchModifier> punch = MODIFIERS.register("punch", PunchModifier::new);
   public static final StaticModifier<ImpalingModifier> impaling = MODIFIERS.register("impaling", ImpalingModifier::new);
   public static final StaticModifier<FreezingModifier> freezing = MODIFIERS.register("freezing", FreezingModifier::new);
-  public static final StaticModifier<CrystalshotModifier> crystalshot = MODIFIERS.register("crystalshot", CrystalshotModifier::new);
+  /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#crystalshot} */
+  @Deprecated(forRemoval = true)
+  public static final DynamicModifier crystalshot = MODIFIERS.registerDynamic("crystalshot");
   public static final StaticModifier<Modifier> multishot = MODIFIERS.register("multishot", Modifier::new);
   public static final StaticModifier<SinistralModifier> sinistral = MODIFIERS.register("sinistral", SinistralModifier::new);
   public static final StaticModifier<ScopeModifier> scope = MODIFIERS.register("scope", ScopeModifier::new);
@@ -663,6 +666,7 @@ public final class TinkerModifiers extends TinkerModule {
       // display
       ModifierModule.LOADER.register(getResource("durability_color"), DurabilityBarColorModule.LOADER);
       ModifierModule.LOADER.register(getResource("variant_name"), ModifierVariantNameModule.LOADER);
+      ModifierModule.LOADER.register(getResource("variant_color"), ModifierVariantColorModule.LOADER);
       // enchantment
       ModifierModule.LOADER.register(getResource("constant_enchantment"), EnchantmentModule.Constant.LOADER);
       ModifierModule.LOADER.register(getResource("main_hand_harvest_enchantment"), EnchantmentModule.MainHandHarvest.LOADER);
@@ -701,6 +705,7 @@ public final class TinkerModifiers extends TinkerModule {
       ModifierModule.LOADER.register(getResource("restrict_projectile_angle"), RestrictAngleModule.LOADER);
       ModifierModule.LOADER.register(getResource("bulk_quiver"), BulkQuiverModule.LOADER);
       ModifierModule.LOADER.register(getResource("trick_quiver"), TrickQuiverModule.LOADER);
+      ModifierModule.LOADER.register(getResource("crystalshot"), CrystalshotModule.LOADER);
       // compat
       ModifierModule.LOADER.register(getResource("the_one_probe"), TheOneProbeModule.INSTANCE.getLoader());
       ModifierModule.LOADER.register(getResource("headlight"), HeadlightModule.LOADER);

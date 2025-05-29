@@ -60,6 +60,7 @@ import slimeknights.tconstruct.library.json.variable.tool.ToolVariable;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.ModifierId;
+import slimeknights.tconstruct.library.modifiers.hook.ranged.BowAmmoModifierHook;
 import slimeknights.tconstruct.library.modifiers.impl.BasicModifier.TooltipDisplay;
 import slimeknights.tconstruct.library.modifiers.modules.armor.BlockDamageSourceModule;
 import slimeknights.tconstruct.library.modifiers.modules.armor.CoverGroundWalkerModule;
@@ -93,6 +94,7 @@ import slimeknights.tconstruct.library.modifiers.modules.combat.LootingModule;
 import slimeknights.tconstruct.library.modifiers.modules.combat.MeleeAttributeModule;
 import slimeknights.tconstruct.library.modifiers.modules.combat.MobEffectModule;
 import slimeknights.tconstruct.library.modifiers.modules.display.DurabilityBarColorModule;
+import slimeknights.tconstruct.library.modifiers.modules.display.ModifierVariantColorModule;
 import slimeknights.tconstruct.library.modifiers.modules.display.ModifierVariantNameModule;
 import slimeknights.tconstruct.library.modifiers.modules.mining.ConditionalMiningSpeedModule;
 import slimeknights.tconstruct.library.modifiers.modules.technical.ArmorLevelModule;
@@ -138,6 +140,7 @@ import slimeknights.tconstruct.tools.modules.armor.ToolBeltModule;
 import slimeknights.tconstruct.tools.modules.interaction.ExtinguishCampfireModule;
 import slimeknights.tconstruct.tools.modules.interaction.PlaceGlowModule;
 import slimeknights.tconstruct.tools.modules.ranged.BulkQuiverModule;
+import slimeknights.tconstruct.tools.modules.ranged.CrystalshotModule;
 import slimeknights.tconstruct.tools.modules.ranged.RestrictAngleModule;
 import slimeknights.tconstruct.tools.modules.ranged.TrickQuiverModule;
 
@@ -377,6 +380,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
     buildModifier(ModifierIds.quickCharge).addModule(StatBoostModule.multiplyBase(ToolStats.DRAW_SPEED).eachLevel(0.25f));
     buildModifier(ModifierIds.trueshot).addModule(StatBoostModule.add(ToolStats.ACCURACY).eachLevel(0.1f));
     buildModifier(ModifierIds.blindshot).addModule(StatBoostModule.add(ToolStats.ACCURACY).eachLevel(-0.1f));
+    // ammo
     buildModifier(ModifierIds.trickQuiver).priority(70) // before bulk quiver
       .addModule(InventoryModule.builder().pattern(pattern("tipped_arrow"))
                                 .toolItem(ItemPredicate.tag(TinkerTags.Items.CROSSBOWS).inverted())
@@ -388,7 +392,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
                                 .limitPerLevel(32).flatSlots(3))
       .addModule(TrickQuiverModule.INSTANCE)
       .addModule(InventoryMenuModule.ANY);
-    buildModifier(ModifierIds.bulkQuiver).priority(50) // after crystalshot as bulk prioritizes "inventory ammo"
+    buildModifier(ModifierIds.bulkQuiver).priority(60) // after trick quiver, before crystalshot
       .addModule(InventoryModule.builder().pattern(pattern("arrow"))
                                 .toolItem(ItemPredicate.tag(TinkerTags.Items.CROSSBOWS).inverted())
                                 .filter(TinkerPredicate.ARROW)
@@ -397,8 +401,15 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
                                 .toolItem(ItemPredicate.tag(TinkerTags.Items.CROSSBOWS))
                                 .filter(ItemPredicate.or(TinkerPredicate.ARROW, ItemPredicate.set(Items.FIREWORK_ROCKET)))
                                 .slotsPerLevel(2))
-      .addModule(BulkQuiverModule.INSTANCE)
+      .addModule(new BulkQuiverModule(true))
       .addModule(InventoryMenuModule.ANY);
+    buildModifier(ModifierIds.crystalshot).priority(50) // after bulk quiver
+      .levelDisplay(ModifierLevelDisplay.NO_LEVELS)
+      .addModule(ModifierVariantColorModule.INSTANCE)
+      .addModule(new CrystalshotModule(4, true));
+    buildModifier(ModifierIds.barebow)
+      .levelDisplay(ModifierLevelDisplay.NO_LEVELS)
+      .addModule(new VolatileFlagModule(BowAmmoModifierHook.SKIP_INVENTORY_AMMO));
 
     // armor
     buildModifier(TinkerModifiers.golden).addModule(new VolatileFlagModule(ModifiableArmorItem.PIGLIN_NEUTRAL)).levelDisplay(ModifierLevelDisplay.NO_LEVELS);

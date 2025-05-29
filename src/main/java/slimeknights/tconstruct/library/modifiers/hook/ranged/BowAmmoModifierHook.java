@@ -1,5 +1,6 @@
 package slimeknights.tconstruct.library.modifiers.hook.ranged;
 
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Inventory;
@@ -8,6 +9,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.items.ItemHandlerHelper;
+import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
@@ -18,6 +20,9 @@ import java.util.function.Predicate;
 
 /** Hook to find ammo on a bow.*/
 public interface BowAmmoModifierHook {
+  /** Volatile data key telling the tool to not fetch ammo from the inventory. */
+  ResourceLocation SKIP_INVENTORY_AMMO = TConstruct.getResource("skip_inventory_ammo");
+
   /** Default instance */
   BowAmmoModifierHook EMPTY = (tool, modifier, shooter, standardAmmo, ammoPredicate) -> ItemStack.EMPTY;
 
@@ -57,7 +62,7 @@ public interface BowAmmoModifierHook {
   static boolean hasAmmo(IToolStackView tool, ItemStack bowStack, LivingEntity living, Predicate<ItemStack> predicate) {
     // no need to ask the modifiers for ammo if we have it in the inventory, as there is no way for a modifier to say not to use ammo if its present
     // inventory search is probably a bit faster on average than modifier search as its already parsed
-    if (!living.getProjectile(bowStack).isEmpty()) {
+    if (!tool.getVolatileData().getBoolean(SKIP_INVENTORY_AMMO) && !living.getProjectile(bowStack).isEmpty()) {
       return true;
     }
     for (ModifierEntry entry : tool.getModifierList()) {
@@ -77,7 +82,7 @@ public interface BowAmmoModifierHook {
    * @return  True if there is ammo either on the player or on the modifiers
    */
   static ItemStack getAmmo(IToolStackView tool, ItemStack bow, LivingEntity living, Predicate<ItemStack> predicate) {
-    ItemStack standardAmmo = living.getProjectile(bow);
+    ItemStack standardAmmo = tool.getVolatileData().getBoolean(SKIP_INVENTORY_AMMO) ? ItemStack.EMPTY : living.getProjectile(bow);
     for (ModifierEntry entry : tool.getModifierList()) {
       ItemStack ammo = entry.getHook(ModifierHooks.BOW_AMMO).findAmmo(tool, entry, living, standardAmmo, predicate);
       if (!ammo.isEmpty()) {
@@ -138,7 +143,8 @@ public interface BowAmmoModifierHook {
     boolean creative = (player != null && player.getAbilities().instabuild) || level.isClientSide;
 
     // first search, find what ammo type we want
-    ItemStack standardAmmo = living.getProjectile(bow);
+    boolean skipInventoryAmmo = tool.getVolatileData().getBoolean(SKIP_INVENTORY_AMMO);
+    ItemStack standardAmmo = skipInventoryAmmo ? ItemStack.EMPTY : living.getProjectile(bow);
     ItemStack resultStack = ItemStack.EMPTY;
     for (ModifierEntry entry : tool.getModifierList()) {
       BowAmmoModifierHook hook = entry.getHook(ModifierHooks.BOW_AMMO);
@@ -186,7 +192,7 @@ public interface BowAmmoModifierHook {
     hasEnough:
     do {
       // if standard ammo is empty, try finding a matching stack again
-      if (standardAmmo.isEmpty()) {
+      if (!skipInventoryAmmo && standardAmmo.isEmpty()) {
         standardAmmo = findMatchingAmmo(bow, living, predicate);
       }
       // next, try asking modifiers if they have anything new again

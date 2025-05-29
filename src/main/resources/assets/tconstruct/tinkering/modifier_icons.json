@@ -64,7 +64,8 @@
   "tconstruct:severing":        "tconstruct:gui/modifiers/melee/severing",
   "tconstruct:sweeping_edge":   "tconstruct:gui/modifiers/melee/sweeping",
   "tconstruct:spilling":        "tconstruct:gui/modifiers/melee/spilling",
-  
+
+  "tconstruct:barebow":      ["minecraft:item/bow", "tconstruct:gui/modifiers/book"],
   "tconstruct:blindshot":    "tconstruct:gui/modifiers/ranged/blindshot",
   "tconstruct:freezing":     "tconstruct:gui/modifiers/ranged/freezing",
   "tconstruct:impaling":     "tconstruct:gui/modifiers/ranged/impaling",

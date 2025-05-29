@@ -137,7 +137,7 @@ public class ModifierTagProvider extends AbstractModifierTagProvider {
     this.tag(HARVEST_ABILITIES).add(TinkerModifiers.autosmelt.getId(), TinkerModifiers.exchanging.getId(), TinkerModifiers.silky.getId());
     this.tag(RANGED_ABILITIES).add(
       ModifierIds.bulkQuiver, ModifierIds.trickQuiver,
-      TinkerModifiers.crystalshot.getId(), TinkerModifiers.multishot.getId());
+      ModifierIds.crystalshot, TinkerModifiers.multishot.getId());
     this.tag(INTERACTION_ABILITIES).add(
       TinkerModifiers.bucketing.getId(), TinkerModifiers.firestarter.getId(), ModifierIds.glowing,
       ModifierIds.pathing, ModifierIds.stripping, ModifierIds.tilling,
@@ -164,7 +164,7 @@ public class ModifierTagProvider extends AbstractModifierTagProvider {
     this.tag(GENERAL_SLOTLESS).add(
       TinkerModifiers.overslime.getId(), ModifierIds.shiny, ModifierIds.worldbound,
       ModifierIds.offhanded, ModifierIds.blindshot, ModifierIds.workbench,
-      TinkerModifiers.farsighted.getId(), TinkerModifiers.nearsighted.getId(),
+      TinkerModifiers.farsighted.getId(), TinkerModifiers.nearsighted.getId(), ModifierIds.barebow,
       TinkerModifiers.dyed.getId(), TinkerModifiers.embellishment.getId(), TinkerModifiers.trim.getId());
     this.tag(BONUS_SLOTLESS).add(
       ModifierIds.draconic, ModifierIds.rebalanced,

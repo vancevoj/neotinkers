@@ -2004,6 +2004,9 @@
   "modifier.tconstruct.offhanded.2": "Nohanded",
   "modifier.tconstruct.offhanded.flavor": "Don't think about it too hard",
   "modifier.tconstruct.offhanded.description": "Disables the tools interaction abilities when the offhand is filled. Second level disables interaction abilities entirely.",
+  "modifier.tconstruct.barebow": "Barebow",
+  "modifier.tconstruct.barebow.flavor": "A historical archery discipline",
+  "modifier.tconstruct.barebow.description": "Bow will not use arrows from the inventory, though will still use arrows from quiver or crystalshot.",
 
 
   "_comment": "Durability",

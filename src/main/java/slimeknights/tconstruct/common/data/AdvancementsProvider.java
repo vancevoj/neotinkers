@@ -317,7 +317,7 @@ public class AdvancementsProvider extends GenericDataProvider {
       withL.accept(TinkerModifiers.blocking);
       withL.accept(TinkerModifiers.parrying);
       // ranged
-      withL.accept(TinkerModifiers.crystalshot);
+      with.accept(ModifierIds.crystalshot);
       withL.accept(TinkerModifiers.multishot);
       with.accept(ModifierIds.bulkQuiver);
       with.accept(ModifierIds.trickQuiver);

@@ -586,7 +586,7 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .saveSalvage(consumer, prefix(ModifierIds.trickQuiver, abilitySalvage))
                          .save(consumer, prefix(ModifierIds.trickQuiver, abilityFolder));
     BiConsumer<ItemLike,String> crystalshotRecipe = (item, variant) ->
-      SwappableModifierRecipeBuilder.modifier(TinkerModifiers.crystalshot, variant)
+      SwappableModifierRecipeBuilder.modifier(ModifierIds.crystalshot, variant)
                                     .addInput(item)
                                     .addInput(Items.BLAZE_ROD)
                                     .addInput(item)
@@ -594,14 +594,14 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                                     .addInput(TinkerMaterials.manyullyn.getIngotTag())
                                     .setTools(TinkerTags.Items.BOWS)
                                     .setSlots(SlotType.ABILITY, 1)
-                                    .save(consumer, wrap(TinkerModifiers.crystalshot, abilityFolder, "_" + variant));
+                                    .save(consumer, wrap(ModifierIds.crystalshot, abilityFolder, "_" + variant));
     crystalshotRecipe.accept(Items.AMETHYST_CLUSTER, "amethyst");
     crystalshotRecipe.accept(TinkerWorld.earthGeode.getBud(BudSize.CLUSTER), "earthslime");
     crystalshotRecipe.accept(TinkerWorld.skyGeode.getBud(BudSize.CLUSTER), "skyslime");
     crystalshotRecipe.accept(TinkerWorld.ichorGeode.getBud(BudSize.CLUSTER), "ichor");
     crystalshotRecipe.accept(TinkerWorld.enderGeode.getBud(BudSize.CLUSTER), "enderslime");
     crystalshotRecipe.accept(Items.NETHER_QUARTZ_ORE, "quartz");
-    SwappableModifierRecipeBuilder.modifier(TinkerModifiers.crystalshot, "random")
+    SwappableModifierRecipeBuilder.modifier(ModifierIds.crystalshot, "random")
                                   .addInput(Ingredient.of(TinkerWorld.earthGeode.getBud(BudSize.CLUSTER), TinkerWorld.skyGeode.getBud(BudSize.CLUSTER)))
                                   .addInput(Ingredient.of(Items.AMETHYST_CLUSTER, Items.NETHER_QUARTZ_ORE))
                                   .addInput(Ingredient.of(TinkerWorld.ichorGeode.getBud(BudSize.CLUSTER), TinkerWorld.enderGeode.getBud(BudSize.CLUSTER)))
@@ -610,11 +610,18 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                                   .setTools(TinkerTags.Items.BOWS)
                                   .setSlots(SlotType.ABILITY, 1)
                                   .allowCrystal() // random is the coolest, and happens to be the easiest to enable
-                                  .save(consumer, wrap(TinkerModifiers.crystalshot, abilityFolder, "_random"));
-    ModifierRecipeBuilder.modifier(TinkerModifiers.crystalshot)
+                                  .save(consumer, wrap(ModifierIds.crystalshot, abilityFolder, "_random"));
+    ModifierRecipeBuilder.modifier(ModifierIds.crystalshot)
                          .setSlots(SlotType.ABILITY, 1)
                          .setTools(TinkerTags.Items.BOWS)
-                         .saveSalvage(consumer, prefix(TinkerModifiers.crystalshot, abilitySalvage));
+                         .saveSalvage(consumer, prefix(ModifierIds.crystalshot, abilitySalvage));
+    ModifierRecipeBuilder.modifier(ModifierIds.barebow)
+      .setTools(TinkerTags.Items.BOWS)
+      .addInput(Tags.Items.STRING)
+      .addInput(Tags.Items.RODS_WOODEN)
+      .addInput(Tags.Items.STRING)
+      .setMaxLevel(1)
+      .save(consumer, prefix(ModifierIds.barebow, slotlessFolder));
     ModifierRecipeBuilder.modifier(TinkerModifiers.multishot)
                          .addInput(Items.PISTON)
                          .addInput(TinkerMaterials.amethystBronze.getIngotTag())
