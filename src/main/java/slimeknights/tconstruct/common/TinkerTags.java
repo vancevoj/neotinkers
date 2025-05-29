@@ -625,8 +625,10 @@ public class TinkerTags {
     public static final TagKey<Modifier> OVERSLIME_FRIEND = local("overslime_friend");
     /** Modifiers in this tag will show the wireframe hitbox on all blocks */
     public static final TagKey<Modifier> AOE_INTERACTION = local("aoe_interaction");
-    /** Modifiers in this tag will allow charging a bow that has no ammo */
-    public static final TagKey<Modifier> CHARGE_EMPTY_BOW = local("charge_empty_bow");
+    /** Modifiers in this tag will allow charging a bow that has no ammo, making the bow charge up */
+    public static final TagKey<Modifier> CHARGE_EMPTY_BOW_WITH_DRAWTIME = local("charge_empty_bow/with_drawtime");
+    /** Modifiers in this tag will allow charging a bow that has no ammo, but won't charge the bow */
+    public static final TagKey<Modifier> CHARGE_EMPTY_BOW_WITHOUT_DRAWTIME = local("charge_empty_bow/without_drawtime");
 
     // book tags - these are used to determine pages to load in resource packs
     // upgrades
