@@ -14,6 +14,7 @@ public class MaterialTagProvider extends AbstractMaterialTagProvider {
 
   @Override
   protected void addTags() {
+    tag(TinkerTags.Materials.EXCLUDE_FROM_LOOT);
     tag(TinkerTags.Materials.NETHER).add(
       // tier 1
       MaterialIds.wood, MaterialIds.flint, MaterialIds.rock, MaterialIds.bone,

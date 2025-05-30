@@ -684,6 +684,8 @@ public class TinkerTags {
     public static final TagKey<IMaterial> NETHER = local("nether");
     /** Materials bartered from piglins */
     public static final TagKey<IMaterial> BARTERED = local("bartered");
+    /** Materials not found on ancient tools or other loot sources */
+    public static final TagKey<IMaterial> EXCLUDE_FROM_LOOT = local("exclude_from_loot");
 
     @SuppressWarnings("SameParameterValue")  // may want more tags later
     private static TagKey<IMaterial> local(String name) {
