@@ -1665,15 +1665,6 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
     String folder = "tools/modifiers/slotless/";
 
     // slime staff
-    // overworld
-    woodTexture(consumer, MaterialIds.oak, Blocks.OAK_PLANKS, folder);
-    woodTexture(consumer, MaterialIds.birch, Blocks.BIRCH_PLANKS, folder);
-    woodTexture(consumer, MaterialIds.spruce, Blocks.SPRUCE_PLANKS, folder);
-    woodTexture(consumer, MaterialIds.jungle, Blocks.JUNGLE_PLANKS, folder);
-    woodTexture(consumer, MaterialIds.acacia, Blocks.ACACIA_PLANKS, folder);
-    woodTexture(consumer, MaterialIds.darkOak, Blocks.DARK_OAK_PLANKS, folder);
-    woodTexture(consumer, MaterialIds.mangrove, Blocks.MANGROVE_PLANKS, folder);
-    woodTexture(consumer, MaterialIds.cherry, Blocks.CHERRY_PLANKS, folder);
     // nether
     woodTexture(consumer, MaterialIds.crimson, Blocks.CRIMSON_PLANKS, folder);
     woodTexture(consumer, MaterialIds.warped, Blocks.WARPED_PLANKS, folder);

@@ -249,7 +249,7 @@ public class TinkerTags {
 
     /** Planks in this tag are skipped in the default wood crafting recipe as they have their own variant. Tagging your planks here will allow you to add another wood variant */
     public static final TagKey<Item> VARIANT_PLANKS = local("wood_variants/planks");
-    /** Logs in this tag are skipped in the default wood crafting recipe as they have their own variant. Tagging your planks here will allow you to add another wood variant */
+    /** Logs in this tag are skipped in the default wood crafting recipe as they have their own variant. Tagging your logs here will allow you to add another wood variant */
     public static final TagKey<Item> VARIANT_LOGS = local("wood_variants/logs");
 
     public static final TagKey<Item> SLIME_BLOCK = local("slime_block");
