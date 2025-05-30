@@ -51,7 +51,10 @@
           "material": {
             "type": "tconstruct:random",
             "allow_hidden": true,
-            "tag": "tconstruct:bartered"
+            "material": {
+              "type": "mantle:tag",
+              "tag": "tconstruct:bartered"
+            }
           },
           "tag": "tconstruct:parts/bartered",
           "weight": 8
