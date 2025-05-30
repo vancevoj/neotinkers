@@ -50,6 +50,7 @@ public abstract class RandomMaterial implements IHaveLoader {
     LOADER.register(getResource("fixed"), Fixed.LOADER);
     LOADER.register(getResource("first"), First.LOADER);
     LOADER.register(getResource("random"), Randomized.LOADER);
+    LOADER.register(getResource("random_variant"), RandomVariant.LOADER);
   }
 
   /** Creates an instance for a fixed material */
