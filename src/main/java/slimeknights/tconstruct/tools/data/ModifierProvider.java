@@ -138,6 +138,7 @@ import slimeknights.tconstruct.tools.modules.armor.LightspeedAttributeModule;
 import slimeknights.tconstruct.tools.modules.armor.RecurrentProtectionModule;
 import slimeknights.tconstruct.tools.modules.armor.ShieldStrapModule;
 import slimeknights.tconstruct.tools.modules.armor.ToolBeltModule;
+import slimeknights.tconstruct.tools.modules.interaction.BrushModule;
 import slimeknights.tconstruct.tools.modules.interaction.ExtinguishCampfireModule;
 import slimeknights.tconstruct.tools.modules.interaction.PlaceGlowModule;
 import slimeknights.tconstruct.tools.modules.ranged.BulkQuiverModule;
@@ -527,6 +528,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .levelDisplay(ModifierLevelDisplay.NO_LEVELS)
       .addModule(ToolActionTransformModule.builder(ToolActions.HOE_TILL, SoundEvents.HOE_TILL).build())
       .addModule(ToolActionWalkerTransformModule.builder(ToolActions.HOE_TILL, SoundEvents.HOE_TILL).amount(0.5f, 1));
+    buildModifier(ModifierIds.brushing).levelDisplay(ModifierLevelDisplay.NO_LEVELS).addModule(BrushModule.INSTANCE);
 
     // traits
     buildModifier(ModifierIds.smelting)
@@ -738,6 +740,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
     buildModifier(ModifierIds.piglinBruteDisguise    ).levelDisplay(ModifierLevelDisplay.SINGLE_LEVEL).addModule(new MobDisguiseModule(EntityType.PIGLIN_BRUTE));
     buildModifier(ModifierIds.zombifiedPiglinDisguise).levelDisplay(ModifierLevelDisplay.SINGLE_LEVEL).addModule(new MobDisguiseModule(EntityType.ZOMBIFIED_PIGLIN));
 
+    // TODO 1.21: remove these redirects
     // iron now gives magnetic. Steel is also just has better than irons old trait
     addRedirect(id("sturdy"), redirect(ModifierIds.ductile));
     // merged armor modifiers into standard ones

@@ -75,7 +75,7 @@ public class ModifierTagProvider extends AbstractModifierTagProvider {
       .addOptional(ModifierIds.pockets);
     tag(BLOCK_WHILE_CHARGING)
       .add(TinkerModifiers.flinging.getId(), TinkerModifiers.springing.getId(), TinkerModifiers.bonking.getId(), TinkerModifiers.warping.getId(),
-           TinkerModifiers.spitting.getId(), ModifierIds.scope, ModifierIds.zoom);
+           TinkerModifiers.spitting.getId(), ModifierIds.scope, ModifierIds.zoom, ModifierIds.brushing);
     tag(SLIME_DEFENSE)
       .add(ModifierIds.meleeProtection, ModifierIds.projectileProtection,
            ModifierIds.fireProtection, ModifierIds.magicProtection,
@@ -83,7 +83,7 @@ public class ModifierTagProvider extends AbstractModifierTagProvider {
     tag(OVERSLIME_FRIEND)
       .add(ModifierIds.overgrowth, ModifierIds.overcast, ModifierIds.overburn, ModifierIds.overlord,
            ModifierIds.overforced, ModifierIds.overslimeFriend, TinkerModifiers.overworked.getId());
-    tag(AOE_INTERACTION).add(ModifierIds.pathing, ModifierIds.stripping, ModifierIds.tilling, TinkerModifiers.splashing.getId(), TinkerModifiers.harvest.getId());
+    tag(AOE_INTERACTION).add(ModifierIds.pathing, ModifierIds.stripping, ModifierIds.tilling, ModifierIds.brushing, TinkerModifiers.splashing.getId(), TinkerModifiers.harvest.getId());
     tag(CHARGE_EMPTY_BOW_WITH_DRAWTIME).add(TinkerModifiers.flinging.getId(), TinkerModifiers.springing.getId(), TinkerModifiers.bonking.getId(), TinkerModifiers.warping.getId());
     tag(CHARGE_EMPTY_BOW_WITHOUT_DRAWTIME).add(TinkerModifiers.blocking.getId(), ModifierIds.scope, ModifierIds.zoom);
 
@@ -140,7 +140,7 @@ public class ModifierTagProvider extends AbstractModifierTagProvider {
       ModifierIds.crystalshot, TinkerModifiers.multishot.getId());
     this.tag(INTERACTION_ABILITIES).add(
       TinkerModifiers.bucketing.getId(), TinkerModifiers.firestarter.getId(), ModifierIds.glowing,
-      ModifierIds.pathing, ModifierIds.stripping, ModifierIds.tilling,
+      ModifierIds.pathing, ModifierIds.stripping, ModifierIds.tilling, ModifierIds.brushing,
       TinkerModifiers.spitting.getId(), TinkerModifiers.splashing.getId(),
       TinkerModifiers.bonking.getId(), TinkerModifiers.flinging.getId(), TinkerModifiers.springing.getId(), TinkerModifiers.warping.getId());
     // armor

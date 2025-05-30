@@ -121,6 +121,7 @@ public class ModifierIds {
   public static final ModifierId pathing = id("pathing");
   public static final ModifierId stripping = id("stripping");
   public static final ModifierId tilling = id("tilling");
+  public static final ModifierId brushing = id("brushing");
 
   // internal
   public static final ModifierId overslimeFriend = id("overslime_friend");

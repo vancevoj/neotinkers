@@ -20,6 +20,7 @@
 
     "__interaction_abilities__": null,
     "blocking":    "#755A30",
+    "brushing":    "#FC9982",
     "firestarter": "#5D342C",
     "parrying":    "#755A30",
     "pathing":     "#8a361e",

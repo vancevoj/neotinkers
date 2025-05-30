@@ -268,6 +268,7 @@ import slimeknights.tconstruct.tools.modules.armor.LightspeedAttributeModule;
 import slimeknights.tconstruct.tools.modules.armor.RecurrentProtectionModule;
 import slimeknights.tconstruct.tools.modules.armor.ShieldStrapModule;
 import slimeknights.tconstruct.tools.modules.armor.ToolBeltModule;
+import slimeknights.tconstruct.tools.modules.interaction.BrushModule;
 import slimeknights.tconstruct.tools.modules.interaction.ExtinguishCampfireModule;
 import slimeknights.tconstruct.tools.modules.interaction.PlaceGlowModule;
 import slimeknights.tconstruct.tools.modules.ranged.BulkQuiverModule;
@@ -698,6 +699,7 @@ public final class TinkerModifiers extends TinkerModule {
       ModifierModule.LOADER.register(getResource("campfire_extinguish"), ExtinguishCampfireModule.LOADER);
       ModifierModule.LOADER.register(getResource("lightspeed_attribute"), LightspeedAttributeModule.LOADER);
       ModifierModule.LOADER.register(getResource("zoom"), ZoomModule.LOADER);
+      ModifierModule.LOADER.register(getResource("brush"), BrushModule.LOADER);
       // armor
       ModifierModule.LOADER.register(getResource("depth_protection"), DepthProtectionModule.LOADER);
       ModifierModule.LOADER.register(getResource("flame_barrier"), FlameBarrierModule.LOADER);

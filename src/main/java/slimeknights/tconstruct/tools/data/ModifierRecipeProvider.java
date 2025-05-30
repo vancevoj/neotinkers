@@ -1296,6 +1296,15 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .setSlots(SlotType.ABILITY, 1)
                          .saveSalvage(consumer, prefix(ModifierIds.tilling, abilitySalvage))
                          .save(consumer, prefix(ModifierIds.tilling, abilityFolder));
+    ModifierRecipeBuilder.modifier(ModifierIds.brushing)
+      .setTools(IntersectionIngredient.of(Ingredient.of(TinkerTags.Items.DURABILITY), Ingredient.of(TinkerTags.Items.INTERACTABLE_RIGHT)))
+      .addInput(Tags.Items.FEATHERS)
+      .addInput(Tags.Items.INGOTS_COPPER)
+      .setMaxLevel(1).checkTraitLevel()
+      .setSlots(SlotType.ABILITY, 1)
+      .saveSalvage(consumer, prefix(ModifierIds.brushing, abilitySalvage))
+      .save(consumer, prefix(ModifierIds.brushing, abilityFolder));
+
     // glowing
     ModifierRecipeBuilder.modifier(ModifierIds.glowing)
                          .setTools(interactableBootsWithDurability)
