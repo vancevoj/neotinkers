@@ -1962,8 +1962,9 @@
 
   "material.tconstruct.electrum": "Electrum",
   "material.tconstruct.electrum.flavor": "Good for electronic components.",
-  "material.tconstruct.electrum.encyclopedia": "Grants +25% XP per level from blocks and monsters",
-  "material.tconstruct.electrum.ranged": "Grants +25% XP per level from monsters killed by arrows",
+  "material.tconstruct.electrum.encyclopedia": "Grants +50% XP per level from blocks and monsters",
+  "material.tconstruct.electrum.ranged": "Grants +50% XP per level from monsters killed by arrows",
+  "material.tconstruct.electrum.armor": "Grants +25% XP per level from blocks and monsters",
 
   "material.tconstruct.necronium": "Necronium",
   "material.tconstruct.necronium.flavor": "This much decay probably only leaves it with a quarter life",
