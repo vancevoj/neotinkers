@@ -242,14 +242,10 @@ import slimeknights.tconstruct.tools.modifiers.traits.skull.StrongBonesModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.skull.WildfireModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.skull.WitheredModifier;
 import slimeknights.tconstruct.tools.modifiers.upgrades.armor.SoulSpeedModifier;
-import slimeknights.tconstruct.tools.modifiers.upgrades.armor.SpringyModifier;
-import slimeknights.tconstruct.tools.modifiers.upgrades.armor.ThornsModifier;
 import slimeknights.tconstruct.tools.modifiers.upgrades.general.MagneticModifier;
-import slimeknights.tconstruct.tools.modifiers.upgrades.melee.FieryModifier;
 import slimeknights.tconstruct.tools.modifiers.upgrades.melee.PiercingModifier;
 import slimeknights.tconstruct.tools.modifiers.upgrades.melee.SeveringModifier;
 import slimeknights.tconstruct.tools.modifiers.upgrades.melee.SweepingEdgeModifier;
-import slimeknights.tconstruct.tools.modifiers.upgrades.ranged.FreezingModifier;
 import slimeknights.tconstruct.tools.modifiers.upgrades.ranged.ImpalingModifier;
 import slimeknights.tconstruct.tools.modifiers.upgrades.ranged.PunchModifier;
 import slimeknights.tconstruct.tools.modifiers.upgrades.ranged.SinistralModifier;
@@ -262,13 +258,19 @@ import slimeknights.tconstruct.tools.modules.TheOneProbeModule;
 import slimeknights.tconstruct.tools.modules.ZoomModule;
 import slimeknights.tconstruct.tools.modules.armor.DepthProtectionModule;
 import slimeknights.tconstruct.tools.modules.armor.EnderclearanceModule;
+import slimeknights.tconstruct.tools.modules.armor.FieryCounterModule;
 import slimeknights.tconstruct.tools.modules.armor.FlameBarrierModule;
+import slimeknights.tconstruct.tools.modules.armor.FreezingCounterModule;
 import slimeknights.tconstruct.tools.modules.armor.GlowWalkerModule;
 import slimeknights.tconstruct.tools.modules.armor.KineticModule;
+import slimeknights.tconstruct.tools.modules.armor.KnockbackCounterModule;
 import slimeknights.tconstruct.tools.modules.armor.LightspeedAttributeModule;
 import slimeknights.tconstruct.tools.modules.armor.RecurrentProtectionModule;
 import slimeknights.tconstruct.tools.modules.armor.ShieldStrapModule;
+import slimeknights.tconstruct.tools.modules.armor.ThornsModule;
 import slimeknights.tconstruct.tools.modules.armor.ToolBeltModule;
+import slimeknights.tconstruct.tools.modules.combat.FieryAttackModule;
+import slimeknights.tconstruct.tools.modules.combat.FreezingAttackModule;
 import slimeknights.tconstruct.tools.modules.interaction.BrushModule;
 import slimeknights.tconstruct.tools.modules.interaction.ExtinguishCampfireModule;
 import slimeknights.tconstruct.tools.modules.interaction.PlaceGlowModule;
@@ -345,7 +347,9 @@ public final class TinkerModifiers extends TinkerModule {
   // weapon
   public static final DynamicModifier knockback = MODIFIERS.registerDynamic("knockback");
   public static final DynamicModifier padded = MODIFIERS.registerDynamic("padded");
-  public static final StaticModifier<FieryModifier> fiery = MODIFIERS.register("fiery", FieryModifier::new);
+  /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#fiery} */
+  @Deprecated(forRemoval = true)
+  public static final DynamicModifier fiery = MODIFIERS.registerDynamic("fiery");
   public static final StaticModifier<SeveringModifier> severing = MODIFIERS.register("severing", SeveringModifier::new);
   public static final StaticModifier<ReflectingModifier> reflecting = MODIFIERS.register("reflecting", ReflectingModifier::new);
 
@@ -356,7 +360,9 @@ public final class TinkerModifiers extends TinkerModule {
   // ranged
   public static final StaticModifier<PunchModifier> punch = MODIFIERS.register("punch", PunchModifier::new);
   public static final StaticModifier<ImpalingModifier> impaling = MODIFIERS.register("impaling", ImpalingModifier::new);
-  public static final StaticModifier<FreezingModifier> freezing = MODIFIERS.register("freezing", FreezingModifier::new);
+  /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#freezing} */
+  @Deprecated(forRemoval = true)
+  public static final DynamicModifier freezing = MODIFIERS.registerDynamic("freezing");
   /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#crystalshot} */
   @Deprecated(forRemoval = true)
   public static final DynamicModifier crystalshot = MODIFIERS.registerDynamic("crystalshot");
@@ -373,8 +379,12 @@ public final class TinkerModifiers extends TinkerModule {
   public static final StaticModifier<DyedModifier> dyed = MODIFIERS.register("dyed", DyedModifier::new);
   public static final StaticModifier<TrimModifier> trim = MODIFIERS.register("trim", TrimModifier::new);
   // counterattack
-  public static final StaticModifier<ThornsModifier> thorns = MODIFIERS.register("thorns", ThornsModifier::new);
-  public static final StaticModifier<SpringyModifier> springy = MODIFIERS.register("springy", SpringyModifier::new);
+  /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#thorns} */
+  @Deprecated(forRemoval = true)
+  public static final DynamicModifier thorns = MODIFIERS.registerDynamic("thorns");
+  /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#springy} */
+  @Deprecated(forRemoval = true)
+  public static final DynamicModifier springy = MODIFIERS.registerDynamic("springy");
   // helmet
   public static final DynamicModifier itemFrame = MODIFIERS.registerDynamic("item_frame");
   /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#zoom} */
@@ -689,24 +699,33 @@ public final class TinkerModifiers extends TinkerModule {
       ModifierModule.LOADER.register(getResource("inventory_slot_menu"), InventorySlotMenuModule.INSTANCE.getLoader());
 
       // special
-      ModifierModule.LOADER.register(getResource("enderclearance"), EnderclearanceModule.INSTANCE.getLoader());
       ModifierModule.LOADER.register(getResource("smelting"), SmeltingModule.LOADER);
       ModifierModule.LOADER.register(getResource("melting"), MeltingModule.LOADER);
-      ModifierModule.LOADER.register(getResource("overgrowth"), OvergrowthModule.LOADER);
-      ModifierModule.LOADER.register(getResource("overburn"), OverburnModule.INSTANCE.getLoader());
       ModifierModule.LOADER.register(getResource("place_glow"), PlaceGlowModule.LOADER);
       ModifierModule.LOADER.register(getResource("glow_walker"), GlowWalkerModule.LOADER);
       ModifierModule.LOADER.register(getResource("campfire_extinguish"), ExtinguishCampfireModule.LOADER);
       ModifierModule.LOADER.register(getResource("lightspeed_attribute"), LightspeedAttributeModule.LOADER);
       ModifierModule.LOADER.register(getResource("zoom"), ZoomModule.LOADER);
       ModifierModule.LOADER.register(getResource("brush"), BrushModule.LOADER);
+      // overslime
+      ModifierModule.LOADER.register(getResource("overgrowth"), OvergrowthModule.LOADER);
+      ModifierModule.LOADER.register(getResource("overburn"), OverburnModule.INSTANCE.getLoader());
+      // combat
+      ModifierModule.LOADER.register(getResource("fiery_attack"), FieryAttackModule.LOADER);
+      ModifierModule.LOADER.register(getResource("freezing_attack"), FreezingAttackModule.LOADER);
       // armor
+      ModifierModule.LOADER.register(getResource("enderclearance"), EnderclearanceModule.LOADER);
       ModifierModule.LOADER.register(getResource("depth_protection"), DepthProtectionModule.LOADER);
       ModifierModule.LOADER.register(getResource("flame_barrier"), FlameBarrierModule.LOADER);
       ModifierModule.LOADER.register(getResource("kinetic"), KineticModule.LOADER);
       ModifierModule.LOADER.register(getResource("recurrent_protection"), RecurrentProtectionModule.LOADER);
       ModifierModule.LOADER.register(getResource("shield_strap"), ShieldStrapModule.LOADER);
       ModifierModule.LOADER.register(getResource("tool_belt"), ToolBeltModule.LOADER);
+      // counterattack
+      ModifierModule.LOADER.register(getResource("thorns"), ThornsModule.LOADER);
+      ModifierModule.LOADER.register(getResource("fiery_counter"), FieryCounterModule.LOADER);
+      ModifierModule.LOADER.register(getResource("freezing_counter"), FreezingCounterModule.LOADER);
+      ModifierModule.LOADER.register(getResource("knockback_counter"), KnockbackCounterModule.LOADER);
       // ranged
       ModifierModule.LOADER.register(getResource("restrict_projectile_angle"), RestrictAngleModule.LOADER);
       ModifierModule.LOADER.register(getResource("bulk_quiver"), BulkQuiverModule.LOADER);

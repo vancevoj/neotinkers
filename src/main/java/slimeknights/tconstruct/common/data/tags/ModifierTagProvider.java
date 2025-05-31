@@ -106,7 +106,7 @@ public class ModifierTagProvider extends AbstractModifierTagProvider {
     this.tag(MELEE_UPGRADES).add(
       TinkerModifiers.knockback.getId(), TinkerModifiers.padded.getId(),
       TinkerModifiers.severing.getId(), TinkerModifiers.necrotic.getId(), TinkerModifiers.sweeping.getId(),
-      TinkerModifiers.fiery.getId(), TinkerModifiers.freezing.getId());
+      ModifierIds.fiery, ModifierIds.freezing);
     this.tag(DAMAGE_UPGRADES).add(
       ModifierIds.sharpness, ModifierIds.pierce, ModifierIds.swiftstrike,
       ModifierIds.antiaquatic, ModifierIds.baneOfSssss, ModifierIds.cooling, ModifierIds.killager, ModifierIds.smite);
@@ -114,8 +114,8 @@ public class ModifierTagProvider extends AbstractModifierTagProvider {
     this.tag(HARVEST_UPGRADES).add(ModifierIds.haste, ModifierIds.blasting, ModifierIds.hydraulic, ModifierIds.lightspeed);
 
     this.tag(GENERAL_ARMOR_UPGRADES).add(
-      TinkerModifiers.fiery.getId(), TinkerModifiers.freezing.getId(), TinkerModifiers.thorns.getId(),
-      ModifierIds.ricochet, TinkerModifiers.springy.getId());
+      ModifierIds.fiery, ModifierIds.freezing, ModifierIds.thorns,
+      ModifierIds.ricochet, ModifierIds.springy);
     this.tag(HELMET_UPGRADES).add(TinkerModifiers.itemFrame.getId(), ModifierIds.respiration).addOptional(ModifierIds.headlight);
     this.tag(CHESTPLATE_UPGRADES).add(ModifierIds.haste, TinkerModifiers.knockback.getId());
     this.tag(LEGGING_UPGRADES).add(ModifierIds.leaping, TinkerModifiers.shieldStrap.getId(), ModifierIds.speedy, ModifierIds.swiftSneak, ModifierIds.stepUp);
@@ -124,7 +124,7 @@ public class ModifierTagProvider extends AbstractModifierTagProvider {
     this.tag(RANGED_UPGRADES).add(
       ModifierIds.pierce, ModifierIds.power, TinkerModifiers.punch.getId(), ModifierIds.quickCharge,
       TinkerModifiers.sinistral.getId(), ModifierIds.trueshot,
-      TinkerModifiers.fiery.getId(), TinkerModifiers.freezing.getId(),
+      ModifierIds.fiery, ModifierIds.freezing,
       TinkerModifiers.impaling.getId(), TinkerModifiers.necrotic.getId());
 
     // abilities

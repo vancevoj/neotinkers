@@ -32,6 +32,10 @@ public class ModifierIds {
   public static final ModifierId offhanded  = id("offhanded");
   public static final ModifierId soulbound = id("soulbound");
   public static final ModifierId smelting = id("smelting");
+  // combat
+  public static final ModifierId fiery = id("fiery");
+  public static final ModifierId freezing = id("freezing");
+  public static final ModifierId springy = id("springy");
   // general abilities
   public static final ModifierId reach = id("reach");
   public static final ModifierId glowing = id("glowing");
@@ -87,6 +91,7 @@ public class ModifierIds {
   public static final ModifierId wings = id("wings");
   public static final ModifierId knockbackResistance = id("knockback_resistance");
   // counter
+  public static final ModifierId thorns = id("thorns");
   public static final ModifierId ricochet = id("ricochet");
   // defense
   public static final ModifierId revitalizing = id("revitalizing");

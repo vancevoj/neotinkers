@@ -398,13 +398,13 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .setTools(ingredientFromTags(TinkerTags.Items.MELEE, TinkerTags.Items.RANGED))
                          .saveSalvage(consumer, prefix(TinkerModifiers.severing, upgradeSalvage))
                          .save(consumer, prefix(TinkerModifiers.severing, upgradeFolder));
-    IncrementalModifierRecipeBuilder.modifier(TinkerModifiers.fiery)
+    IncrementalModifierRecipeBuilder.modifier(ModifierIds.fiery)
                                     .setTools(ingredientFromTags(TinkerTags.Items.MELEE, TinkerTags.Items.BOWS, TinkerTags.Items.WORN_ARMOR, TinkerTags.Items.SHIELDS))
                                     .setInput(Items.BLAZE_POWDER, 1, 25)
                                     .setMaxLevel(5) // +25 seconds fire damage
                                     .setSlots(SlotType.UPGRADE, 1)
-                                    .saveSalvage(consumer, prefix(TinkerModifiers.fiery, upgradeSalvage))
-                                    .save(consumer, prefix(TinkerModifiers.fiery, upgradeFolder));
+                                    .saveSalvage(consumer, prefix(ModifierIds.fiery, upgradeSalvage))
+                                    .save(consumer, prefix(ModifierIds.fiery, upgradeFolder));
     ModifierRecipeBuilder.modifier(TinkerModifiers.necrotic)
                          .addInput(TinkerMaterials.necroticBone)
                          .addInput(TinkerWorld.congealedSlime.get(SlimeType.ICHOR))
@@ -557,13 +557,13 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .setTools(TinkerTags.Items.BOWS) // impaling on longbows sounds fun in theory, may reconsider once ricochet is coded
                          .saveSalvage(consumer, prefix(TinkerModifiers.impaling, upgradeSalvage))
                          .save(consumer, prefix(TinkerModifiers.impaling, upgradeFolder));
-    ModifierRecipeBuilder.modifier(TinkerModifiers.freezing)
+    ModifierRecipeBuilder.modifier(ModifierIds.freezing)
                          .addInput(Items.POWDER_SNOW_BUCKET)
                          .setMaxLevel(3)
                          .setSlots(SlotType.UPGRADE, 1)
                          .setTools(ingredientFromTags(TinkerTags.Items.MELEE, TinkerTags.Items.BOWS, TinkerTags.Items.WORN_ARMOR, TinkerTags.Items.SHIELDS))
-                         .saveSalvage(consumer, prefix(TinkerModifiers.freezing, upgradeSalvage))
-                         .save(consumer, prefix(TinkerModifiers.freezing, upgradeFolder));
+                         .saveSalvage(consumer, prefix(ModifierIds.freezing, upgradeSalvage))
+                         .save(consumer, prefix(ModifierIds.freezing, upgradeFolder));
     ModifierRecipeBuilder.modifier(ModifierIds.bulkQuiver)
                          .addInput(Items.LEATHER)
                          .addInput(TinkerWorld.skySlimeVine)
@@ -755,25 +755,25 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
 
     // upgrade - counterattack
     Ingredient wornOrShield = ingredientFromTags(TinkerTags.Items.WORN_ARMOR, TinkerTags.Items.SHIELDS); // held armor may include things that cannot block
-    IncrementalModifierRecipeBuilder.modifier(TinkerModifiers.thorns)
+    IncrementalModifierRecipeBuilder.modifier(ModifierIds.thorns)
                                     .setTools(wornOrShield)
                                     .setInput(Blocks.CACTUS, 1, 25)
                                     .setMaxLevel(3)
                                     .setSlots(SlotType.UPGRADE, 1)
-                                    .saveSalvage(consumer, prefix(TinkerModifiers.thorns, upgradeSalvage))
-                                    .save(consumer, prefix(TinkerModifiers.thorns, upgradeFolder));
+                                    .saveSalvage(consumer, prefix(ModifierIds.thorns, upgradeSalvage))
+                                    .save(consumer, prefix(ModifierIds.thorns, upgradeFolder));
     IncrementalModifierRecipeBuilder.modifier(ModifierIds.sticky)
                                     .setTools(ingredientFromTags(TinkerTags.Items.MELEE_WEAPON, TinkerTags.Items.WORN_ARMOR, TinkerTags.Items.SHIELDS))
                                     .setSlots(SlotType.UPGRADE, 1)
                                     .saveSalvage(consumer, prefix(ModifierIds.sticky, upgradeSalvage));
-    ModifierRecipeBuilder.modifier(TinkerModifiers.springy)
+    ModifierRecipeBuilder.modifier(ModifierIds.springy)
                          .setTools(wornOrShield)
                          .addInput(Items.PISTON)
                          .addInput(TinkerWorld.slime.get(SlimeType.ICHOR))
                          .setSlots(SlotType.UPGRADE, 1)
                          .setMaxLevel(3)
-                         .saveSalvage(consumer, prefix(TinkerModifiers.springy, upgradeSalvage))
-                         .save(consumer, prefix(TinkerModifiers.springy, upgradeFolder));
+                         .saveSalvage(consumer, prefix(ModifierIds.springy, upgradeSalvage))
+                         .save(consumer, prefix(ModifierIds.springy, upgradeFolder));
     // upgrade - helmet
     ModifierRecipeBuilder.modifier(ModifierIds.respiration)
                          .setTools(TinkerTags.Items.HELMETS)

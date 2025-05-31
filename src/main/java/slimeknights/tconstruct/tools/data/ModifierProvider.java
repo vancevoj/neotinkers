@@ -135,13 +135,19 @@ import slimeknights.tconstruct.tools.modules.TheOneProbeModule;
 import slimeknights.tconstruct.tools.modules.ZoomModule;
 import slimeknights.tconstruct.tools.modules.armor.DepthProtectionModule;
 import slimeknights.tconstruct.tools.modules.armor.EnderclearanceModule;
+import slimeknights.tconstruct.tools.modules.armor.FieryCounterModule;
 import slimeknights.tconstruct.tools.modules.armor.FlameBarrierModule;
+import slimeknights.tconstruct.tools.modules.armor.FreezingCounterModule;
 import slimeknights.tconstruct.tools.modules.armor.GlowWalkerModule;
 import slimeknights.tconstruct.tools.modules.armor.KineticModule;
+import slimeknights.tconstruct.tools.modules.armor.KnockbackCounterModule;
 import slimeknights.tconstruct.tools.modules.armor.LightspeedAttributeModule;
 import slimeknights.tconstruct.tools.modules.armor.RecurrentProtectionModule;
 import slimeknights.tconstruct.tools.modules.armor.ShieldStrapModule;
+import slimeknights.tconstruct.tools.modules.armor.ThornsModule;
 import slimeknights.tconstruct.tools.modules.armor.ToolBeltModule;
+import slimeknights.tconstruct.tools.modules.combat.FieryAttackModule;
+import slimeknights.tconstruct.tools.modules.combat.FreezingAttackModule;
 import slimeknights.tconstruct.tools.modules.interaction.BrushModule;
 import slimeknights.tconstruct.tools.modules.interaction.ExtinguishCampfireModule;
 import slimeknights.tconstruct.tools.modules.interaction.PlaceGlowModule;
@@ -419,6 +425,20 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .levelDisplay(ModifierLevelDisplay.NO_LEVELS)
       .addModule(new VolatileFlagModule(BowAmmoModifierHook.SKIP_INVENTORY_AMMO));
 
+    // combat
+    // deals 1 + rand(3) damage at 15% chance
+    buildModifier(ModifierIds.thorns).addModule(ThornsModule.builder().constantFlat(1).randomFlat(3).build());
+    buildModifier(ModifierIds.fiery)
+      .addModule(new FieryAttackModule(LevelingValue.eachLevel(5)))
+      // want fiery to be a bit to make up for being over time more so its 1+rand(6) seconds
+      .addModule(FieryCounterModule.builder().constantFlat(1).randomFlat(6).toolTag(TinkerTags.Items.ARMOR).build());
+    buildModifier(ModifierIds.freezing)
+      .addModule(new FreezingAttackModule(new LevelingValue(4, 4)))
+      .addModule(FreezingCounterModule.builder().constantFlat(2).randomFlat(6).toolTag(TinkerTags.Items.ARMOR).build());
+    buildModifier(ModifierIds.springy)
+      .addModule(KnockbackModule.builder().eachLevel(0.25f))
+      .addModule(KnockbackCounterModule.builder().constantFlat(0.5f).randomFlat(0.5f).build());
+
     // armor
     buildModifier(TinkerModifiers.golden).addModule(new VolatileFlagModule(ModifiableArmorItem.PIGLIN_NEUTRAL)).levelDisplay(ModifierLevelDisplay.NO_LEVELS);
     buildModifier(ModifierIds.wings).addModule(new VolatileFlagModule(ModifiableArmorItem.ELYTRA)).levelDisplay(ModifierLevelDisplay.NO_LEVELS);
@@ -551,7 +571,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .addModule(StatBoostModule.add(ToolStats.USE_ITEM_SPEED).eachLevel(0.1f))
       .addModule(AttributeModule.builder(TinkerAttributes.USE_ITEM_SPEED, Operation.ADDITION).slots(ARMOR_SLOTS).tooltipStyle(TooltipStyle.PERCENT).toolItem(ItemPredicate.tag(WORN_ARMOR)).eachLevel(0.05f));
     buildModifier(ModifierIds.depthProtection).addModule(DepthProtectionModule.builder().baselineHeight(64).neutralRange(32).eachLevel(1.25f));
-    buildModifier(ModifierIds.enderclearance).addModule(EnderclearanceModule.INSTANCE).levelDisplay(ModifierLevelDisplay.SINGLE_LEVEL);
+    buildModifier(ModifierIds.enderclearance).addModule(new EnderclearanceModule(LevelingValue.eachLevel(0.25f))).levelDisplay(ModifierLevelDisplay.SINGLE_LEVEL);
     // traits - tier 2
     buildModifier(ModifierIds.overgrowth).addModule(new OvergrowthModule(LevelingValue.eachLevel(0.05f)));
     buildModifier(ModifierIds.searing).addModule(ConditionalMiningSpeedModule.builder().blocks(TinkerPredicate.CAN_MELT_BLOCK).eachLevel(6f));
