@@ -728,7 +728,7 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .setTools(TinkerTags.Items.WORN_ARMOR) // allow salvage on all worn armor
                          .saveSalvage(consumer, prefix(TinkerModifiers.golden, defenseSalvage))
                          .setTools(TinkerTags.Items.GOLDEN_ARMOR)
-                         .save(consumer, prefix(TinkerModifiers.golden, defenseFolder));
+                         .save(withCondition(consumer, new TagFilledCondition<>(TinkerTags.Items.GOLDEN_ARMOR)), prefix(TinkerModifiers.golden, defenseFolder));
     IncrementalModifierRecipeBuilder.modifier(ModifierIds.turtleShell)
                                     .setInput(Items.SCUTE, 1, 5)
                                     .setSlots(SlotType.DEFENSE, 1)
