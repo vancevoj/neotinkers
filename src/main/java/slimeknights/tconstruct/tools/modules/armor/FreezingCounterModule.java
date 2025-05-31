@@ -35,7 +35,7 @@ public record FreezingCounterModule(LevelingValue chance, LevelingValue constant
 
   @Override
   public void applyEffect(IToolStackView tool, ModifierEntry modifier, float value, EquipmentContext context, Entity attacker, DamageSource source, float damageDealt) {
-    attacker.setTicksFrozen(Math.max(attacker.getTicksRequiredToFreeze(), attacker.getTicksFrozen()) + (int)value);
-    attacker.setRemainingFireTicks(0);
+    attacker.setTicksFrozen(Math.max(attacker.getTicksRequiredToFreeze(), attacker.getTicksFrozen()) + (int)(value * 20));
+    attacker.clearFire();
   }
 }

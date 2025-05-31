@@ -92,7 +92,6 @@ public interface CounterModule extends ModifierModule, OnAttackedModifierHook, C
         float value = LevelingValue.applyRandom(level, constant(), random());
         if (value > 0) {
           applyEffect(tool, modifier, value, context, attacker, source, damageDealt);
-          attacker.setSecondsOnFire(Math.round(modifier.getEffectiveLevel() * 5));
 
           // damage the armor if requested
           int durabilityUsage = durabilityUsage();
