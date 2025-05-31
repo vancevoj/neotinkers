@@ -15,6 +15,7 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import slimeknights.mantle.fluid.FluidTransferHelper;
 import slimeknights.mantle.fluid.transfer.FluidContainerTransferManager;
 import slimeknights.mantle.fluid.transfer.IFluidContainerTransfer.TransferDirection;
+import slimeknights.mantle.fluid.transfer.IFluidContainerTransfer.TransferResult;
 import slimeknights.mantle.util.sync.ValidZeroDataSlot;
 import slimeknights.tconstruct.shared.inventory.TriggeringMultiModuleContainerMenu;
 import slimeknights.tconstruct.smeltery.TinkerSmeltery;
@@ -82,10 +83,12 @@ public class HeatingStructureContainerMenu extends TriggeringMultiModuleContaine
     if (!player.level().isClientSide && tile != null) {
       ItemStack bucket = bucketContainer.getItem(0);
       if (!bucket.isEmpty() && bucketContainer.getItem(1).isEmpty()) {
-        ItemStack result = FluidTransferHelper.interactWithTankSlot(player, tile.getTank(), bucket, transferDirection);
-        bucketContainer.setItem(0, bucket);
-        bucketContainer.setItem(1, result);
-        bucketContainer.setChanged();
+        TransferResult result = FluidTransferHelper.interactWithStack(tile.getTank(), bucket, transferDirection);
+        if (result != null) {
+          bucketContainer.setItem(0, bucket);
+          bucketContainer.setItem(1, result.stack());
+          bucketContainer.setChanged();
+        }
       }
     }
   }
@@ -111,16 +114,16 @@ public class HeatingStructureContainerMenu extends TriggeringMultiModuleContaine
       }
       // transfer the fluid
       if (!player.level().isClientSide && tile != null) {
-        ItemStack result;
+        TransferResult result;
         if (id == 1) {
           // drain fuel into item
           MultitankFuelModule fuelModule = tile.getFuelModule();
-          result = FluidTransferHelper.fillFromTankSlot(player, fuelModule, held, fuelModule.getLastFluid());
+          result = FluidTransferHelper.fillStack(fuelModule, held, fuelModule.getLastFluid());
         } else {
           // drain item into fuel/tank
-          result = FluidTransferHelper.interactWithTankSlot(player, id == 2 ? tile.getFuelModule() : tile.getTank(), held, TransferDirection.EMPTY_ITEM);
+          result = FluidTransferHelper.interactWithStack(id == 2 ? tile.getFuelModule() : tile.getTank(), held, TransferDirection.EMPTY_ITEM);
         }
-        setCarried(FluidTransferHelper.getOrTransferFilled(player, held, result));
+        setCarried(FluidTransferHelper.handleUIResult(player, held, result));
       }
       return true;
     }
@@ -135,8 +138,8 @@ public class HeatingStructureContainerMenu extends TriggeringMultiModuleContaine
           ItemStack held = getCarried();
           if (!held.isEmpty()) {
             // if holding an item, fill it from the fluid
-            ItemStack result = FluidTransferHelper.fillFromTankSlot(player, tank, held, fluid);
-            setCarried(FluidTransferHelper.getOrTransferFilled(player, held, result));
+            TransferResult result = FluidTransferHelper.fillStack(tank, held, fluid);
+            setCarried(FluidTransferHelper.handleUIResult(player, held, result));
           } else {
             // switch fluid order if not holding anything
             tank.moveFluidToBottom(index);
