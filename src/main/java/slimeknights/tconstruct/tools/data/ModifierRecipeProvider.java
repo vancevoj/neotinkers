@@ -636,8 +636,6 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .addInput(TinkerMaterials.slimesteel.getIngotTag())
                          .addInput(Items.NAUTILUS_SHELL)
                          .addInput(TinkerMaterials.slimesteel.getIngotTag())
-                         .addInput(SlimeType.SKY.getSlimeballTag())
-                         .addInput(SlimeType.SKY.getSlimeballTag())
                          .setMaxLevel(1).checkTraitLevel()
                          .setSlots(SlotType.UPGRADE, 1)
                          .setTools(IntersectionIngredient.of(Ingredient.of(TinkerTags.Items.CROSSBOWS), Ingredient.of(TinkerTags.Items.INTERACTABLE_LEFT))) // this is the same recipes as dual wielding, but crossbows do not interact on left
