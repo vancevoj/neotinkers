@@ -86,8 +86,8 @@ public enum SlotIngredientRenderer implements IIngredientRenderer<SlotCount> {
     ModelManager modelManager = minecraft.getModelManager();
     // gets the model for the item, its a sepcial one that gives us texture info
     BakedModel model = minecraft.getItemRenderer().getItemModelShaper().getItemModel(TinkerModifiers.creativeSlotItem.get());
-    if (model != null && model.getOverrides() instanceof NBTKeyModel.Overrides) {
-      Material material = ((NBTKeyModel.Overrides)model.getOverrides()).getTexture(slotType == null ? "slotless" : slotType.getName());
+    if (model != null && model.getOverrides() instanceof NBTKeyModel.Overrides overrides) {
+      Material material = overrides.getTexture(slotType == null ? "slotless" : slotType.getName());
       return modelManager.getAtlas(material.atlasLocation()).getSprite(material.texture());
     } else {
       // failed to use the model, use missing texture
