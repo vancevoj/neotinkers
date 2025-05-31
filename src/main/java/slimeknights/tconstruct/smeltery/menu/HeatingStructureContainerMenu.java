@@ -45,8 +45,8 @@ public class HeatingStructureContainerMenu extends TriggeringMultiModuleContaine
       // slots for emptying/filling buckets - do first but filtered
       if (!inv.player.level().isClientSide) {
         IFluidHandler tank = structure.getTank();
-        addSlot(new BucketInputSlot(bucketContainer, 125, 46, tank, this));
-        bucketResultSlot = addSlot(new BucketResultSlot(bucketContainer, 125, 104, tank, this));
+        addSlot(new BucketInputSlot(bucketContainer, 125, 46, tank, this, inv.player));
+        bucketResultSlot = addSlot(new BucketResultSlot(bucketContainer, 125, 104, tank, this, inv.player));
       } else {
         addSlot(new BucketSlot(bucketContainer, 0, 125, 46));
         bucketResultSlot = addSlot(new ResultSlot(bucketContainer, 1, 125, 104));
@@ -85,6 +85,7 @@ public class HeatingStructureContainerMenu extends TriggeringMultiModuleContaine
       if (!bucket.isEmpty() && bucketContainer.getItem(1).isEmpty()) {
         TransferResult result = FluidTransferHelper.interactWithStack(tile.getTank(), bucket, transferDirection);
         if (result != null) {
+          FluidTransferHelper.playUISound(player, result.getSound());
           bucketContainer.setItem(0, bucket);
           bucketContainer.setItem(1, result.stack());
           bucketContainer.setChanged();
@@ -193,17 +194,22 @@ public class HeatingStructureContainerMenu extends TriggeringMultiModuleContaine
   public static class BucketInputSlot extends BucketSlot {
     private final IFluidHandler tank;
     private final TransferDirectionSupplier directionSupplier;
-    public BucketInputSlot(Container pContainer, int pX, int pY, IFluidHandler tank, TransferDirectionSupplier directionSupplier) {
+    private final Player player;
+    public BucketInputSlot(Container pContainer, int pX, int pY, IFluidHandler tank, TransferDirectionSupplier directionSupplier, Player player) {
       super(pContainer, 0, pX, pY);
       this.tank = tank;
       this.directionSupplier = directionSupplier;
+      this.player = player;
     }
 
     @Override
     public void set(ItemStack stack) {
       if (!stack.isEmpty() && container.getItem(1).isEmpty()) {
-        ItemStack result = FluidTransferHelper.interactWithTankSlot(tank, stack, directionSupplier.getTransferDirection());
-        container.setItem(1, result);
+        TransferResult result = FluidTransferHelper.interactWithStack(tank, stack, directionSupplier.getTransferDirection());
+        if (result != null) {
+          FluidTransferHelper.playUISound(player, result.getSound());
+          container.setItem(1, result.stack());
+        }
       }
       super.set(stack);
     }
@@ -225,10 +231,12 @@ public class HeatingStructureContainerMenu extends TriggeringMultiModuleContaine
   public static class BucketResultSlot extends ResultSlot {
     private final IFluidHandler tank;
     private final TransferDirectionSupplier directionSupplier;
-    public BucketResultSlot(Container pContainer, int pX, int pY, IFluidHandler tank, TransferDirectionSupplier directionSupplier) {
+    private final Player player;
+    public BucketResultSlot(Container pContainer, int pX, int pY, IFluidHandler tank, TransferDirectionSupplier directionSupplier, Player player) {
       super(pContainer, 1, pX, pY);
       this.tank = tank;
       this.directionSupplier = directionSupplier;
+      this.player = player;
     }
 
     @Override
@@ -236,8 +244,12 @@ public class HeatingStructureContainerMenu extends TriggeringMultiModuleContaine
       if (stack.isEmpty()) {
         ItemStack bucket = container.getItem(0);
         if (!bucket.isEmpty()) {
-          stack = FluidTransferHelper.interactWithTankSlot(tank, bucket, directionSupplier.getTransferDirection());
-          container.setItem(0, bucket);
+          TransferResult result = FluidTransferHelper.interactWithStack(tank, bucket, directionSupplier.getTransferDirection());
+          if (result != null) {
+            FluidTransferHelper.playUISound(player, result.getSound());
+            container.setItem(0, bucket);
+            stack = result.stack();
+          }
         }
       }
       super.set(stack);
