@@ -40,6 +40,7 @@ import net.minecraftforge.fml.loading.FMLLoader;
 import slimeknights.mantle.data.loadable.field.ContextKey;
 import slimeknights.mantle.util.JsonHelper;
 import slimeknights.mantle.util.RegistryHelper;
+import slimeknights.mantle.util.typed.TypedMap;
 import slimeknights.mantle.util.typed.TypedMapBuilder;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.json.JsonRedirect;
@@ -262,6 +263,11 @@ public class ModifierManager extends SimpleJsonResourceReloadListener {
     MinecraftForge.EVENT_BUS.post(new ModifiersLoadedEvent());
   }
 
+  /** Creates context for modifier parsing */
+  public static TypedMap createContext(ResourceLocation modifier) {
+    return TypedMapBuilder.builder().put(ContextKey.ID, modifier).put(ContextKey.DEBUG, "Modifier " + modifier).build();
+  }
+
   /** Loads a modifier from JSON */
   @Nullable
   private Modifier loadModifier(ResourceLocation key, JsonElement element, Map<ModifierId, ModifierId> redirects) {
@@ -287,7 +293,7 @@ public class ModifierManager extends SimpleJsonResourceReloadListener {
       }
 
       // fallback to actual modifier
-      Modifier modifier = ComposableModifier.LOADER.deserialize(json, TypedMapBuilder.builder().put(ContextKey.ID, key).put(ContextKey.DEBUG, "Modifier " + key).build());
+      Modifier modifier = ComposableModifier.LOADER.deserialize(json, createContext(key));
       modifier.setId(new ModifierId(key));
       return modifier;
     } catch (JsonSyntaxException e) {
