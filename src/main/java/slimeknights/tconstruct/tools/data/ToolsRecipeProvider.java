@@ -248,14 +248,14 @@ public class ToolsRecipeProvider extends BaseRecipeProvider implements IMaterial
     // plate shields don't have a real tool part for the plating, but helmet plating is nearly the same
     PartBuilderToolRecycleBuilder.tool(TinkerTools.plateShield)
       .part(TinkerToolParts.shieldCore)
-      // helmet plating is same cost as shield core and approximately same material set
-      .part(TinkerToolParts.plating.get(ArmorItem.Type.HELMET))
+      // repair kit costs 2 instead of 3, but is otherwise a good substitute
+      .part(TinkerToolParts.repairKit)
       .save(consumer, location(folder + "plate_shield"));
 
     // ancient tools are not craftable so no default recycling. Give them the canonical parts for recycling
     PartBuilderToolRecycleBuilder.tool(TinkerTools.meltingPan)
-      // again, no shield plating part. Melting pan will use an expensive part
-      .part(TinkerToolParts.plating.get(ArmorItem.Type.CHESTPLATE))
+      // again, no shield plating part; repair kit is good enough
+      .part(TinkerToolParts.repairKit)
       .part(TinkerToolParts.bowLimb)
       .save(consumer, location(folder + "melting_pan"));
     PartBuilderToolRecycleBuilder.tool(TinkerTools.warPick)
@@ -265,7 +265,7 @@ public class ToolsRecipeProvider extends BaseRecipeProvider implements IMaterial
       .save(consumer, location(folder + "war_pick"));
     PartBuilderToolRecycleBuilder.tool(TinkerTools.battlesign)
       .part(TinkerToolParts.largePlate)
-      .part(TinkerToolParts.plating.get(ArmorItem.Type.LEGGINGS))
+      .part(TinkerToolParts.repairKit)
       .save(consumer, location(folder + "battlesign"));
     PartBuilderToolRecycleBuilder.tool(TinkerTools.swasher)
       .part(TinkerToolParts.smallBlade)

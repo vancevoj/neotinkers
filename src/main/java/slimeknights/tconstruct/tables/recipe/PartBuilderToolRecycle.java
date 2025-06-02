@@ -33,7 +33,7 @@ import slimeknights.tconstruct.library.tools.definition.module.material.ToolPart
 import slimeknights.tconstruct.library.tools.helper.ModifierUtil;
 import slimeknights.tconstruct.library.tools.item.IModifiable;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
-import slimeknights.tconstruct.library.tools.part.IToolPart;
+import slimeknights.tconstruct.library.tools.part.IMaterialItem;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
 import slimeknights.tconstruct.tables.TinkerTables;
 
@@ -63,7 +63,7 @@ public class PartBuilderToolRecycle implements IPartBuilderRecipe {
     ContextKey.ID.requiredField(),
     SizedIngredient.LOADABLE.defaultField("tools", DEFAULT_TOOLS, true, r -> r.toolRequirement),
     IngredientLoadable.DISALLOW_EMPTY.requiredField("pattern", r -> r.pattern),
-    TinkerLoadables.TOOL_PART_ITEM.list(0).defaultField("parts", List.of(), r -> r.parts),
+    TinkerLoadables.MATERIAL_ITEM.list(0).defaultField("parts", List.of(), r -> r.parts),
     PartBuilderToolRecycle::new);
 
   /** Should never be needed, but just in case better than null */
@@ -72,7 +72,7 @@ public class PartBuilderToolRecycle implements IPartBuilderRecipe {
   private final ResourceLocation id;
   private final SizedIngredient toolRequirement;
   private final Ingredient pattern;
-  private final List<IToolPart> parts;
+  private final List<IMaterialItem> parts;
 
   /** @deprecated use {@link FinishedRecipe} */
   @Deprecated(forRemoval = true)
@@ -88,7 +88,7 @@ public class PartBuilderToolRecycle implements IPartBuilderRecipe {
   @Override
   public Stream<Pattern> getPatterns(IPartBuilderContainer inv) {
     // use the parts override if set
-    List<IToolPart> parts = this.parts;
+    List<? extends IMaterialItem> parts = this.parts;
     if (parts.isEmpty() && inv.getStack().getItem() instanceof IModifiable modifiable) {
       parts = ToolPartsHook.parts(modifiable.getToolDefinition());
     }
@@ -123,17 +123,17 @@ public class PartBuilderToolRecycle implements IPartBuilderRecipe {
     ToolStack tool = ToolStack.from(inv.getStack());
     // find our parts list, either set or override
     ToolDefinition definition = tool.getDefinition();
-    List<IToolPart> parts = this.parts;
+    List<? extends IMaterialItem> parts = this.parts;
     if (parts.isEmpty()) {
       parts = ToolPartsHook.parts(definition);
     }
     // ensure parts list is not greater than material count
     int materials = Math.min(ToolMaterialHook.stats(definition).size(), parts.size());
     // find part matching pattern
-    IToolPart match = null;
+    IMaterialItem match = null;
     int matchIndex = -1;
     for (int i = 0; i < materials; i++) {
-      IToolPart part = parts.get(i);
+      IMaterialItem part = parts.get(i);
       if (pattern.equals(BuiltInRegistries.ITEM.getKey(part.asItem()))) {
         matchIndex = i;
         match = part;
@@ -167,7 +167,7 @@ public class PartBuilderToolRecycle implements IPartBuilderRecipe {
 
     // find our parts list, either set or override
     ToolDefinition definition = tool.getDefinition();
-    List<IToolPart> requirements = this.parts;
+    List<? extends IMaterialItem> requirements = this.parts;
     if (requirements.isEmpty()) {
       requirements = ToolPartsHook.parts(definition);
     }
@@ -176,9 +176,9 @@ public class PartBuilderToolRecycle implements IPartBuilderRecipe {
     // find all parts that did not match the pattern
     IntList indices = new IntArrayList();
     boolean found = false;
-    List<IToolPart> parts = new ArrayList<>();
+    List<IMaterialItem> parts = new ArrayList<>();
     for (int i = 0; i < materials; i++) {
-      IToolPart part = requirements.get(i);
+      IMaterialItem part = requirements.get(i);
       if (found || !pattern.equals(BuiltInRegistries.ITEM.getKey(part.asItem()))) {
         parts.add(part);
         indices.add(i);

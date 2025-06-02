@@ -11,7 +11,7 @@ import net.minecraft.world.level.ItemLike;
 import slimeknights.mantle.recipe.data.AbstractRecipeBuilder;
 import slimeknights.mantle.recipe.ingredient.SizedIngredient;
 import slimeknights.tconstruct.common.TinkerTags;
-import slimeknights.tconstruct.library.tools.part.IToolPart;
+import slimeknights.tconstruct.library.tools.part.IMaterialItem;
 import slimeknights.tconstruct.tables.recipe.PartBuilderToolRecycle;
 
 import java.util.ArrayList;
@@ -29,7 +29,7 @@ public class PartBuilderToolRecycleBuilder extends AbstractRecipeBuilder<PartBui
   private final SizedIngredient tools;
   @Setter
   private Ingredient pattern = Ingredient.of(TinkerTags.Items.DEFAULT_PATTERNS);
-  private final List<IToolPart> parts = new ArrayList<>();
+  private final List<IMaterialItem> parts = new ArrayList<>();
 
   /** Creates a builder for the given tool */
   public static PartBuilderToolRecycleBuilder tool(ItemLike tool) {
@@ -37,13 +37,13 @@ public class PartBuilderToolRecycleBuilder extends AbstractRecipeBuilder<PartBui
   }
 
   /** Adds a part override to the builder. Order matches up to material indices */
-  public PartBuilderToolRecycleBuilder part(IToolPart part) {
+  public PartBuilderToolRecycleBuilder part(IMaterialItem part) {
     parts.add(part);
     return this;
   }
 
   /** Adds a part override to the builder */
-  public PartBuilderToolRecycleBuilder part(Supplier<? extends IToolPart> part) {
+  public PartBuilderToolRecycleBuilder part(Supplier<? extends IMaterialItem> part) {
     return part(part.get());
   }
 

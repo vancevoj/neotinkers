@@ -2,7 +2,7 @@
   "type": "tconstruct:part_builder_tool_recycling",
   "parts": [
     "tconstruct:large_plate",
-    "tconstruct:leggings_plating"
+    "tconstruct:repair_kit"
   ],
   "pattern": {
     "tag": "tconstruct:patterns/default"

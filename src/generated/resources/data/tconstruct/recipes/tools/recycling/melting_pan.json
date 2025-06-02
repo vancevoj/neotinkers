@@ -1,7 +1,7 @@
 {
   "type": "tconstruct:part_builder_tool_recycling",
   "parts": [
-    "tconstruct:chestplate_plating",
+    "tconstruct:repair_kit",
     "tconstruct:bow_limb"
   ],
   "pattern": {
