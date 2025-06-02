@@ -245,6 +245,14 @@ public class ToolsRecipeProvider extends BaseRecipeProvider implements IMaterial
     // daggers want to enforce stack size 2 when recycling to prevent dupes
     PartBuilderToolRecycleBuilder.tools(SizedIngredient.fromItems(2, TinkerTools.dagger))
       .save(consumer, location(folder + "dagger"));
+
+    // travelers gear has a part for the plating, but that would be a dupe in all cases other than boot plating
+    // plus, the boots plating won't let you recover travelers gear, so just recycle to repair kit
+    PartBuilderToolRecycleBuilder.tools(SizedIngredient.fromItems(TinkerTools.travelersGear.values().toArray(Item[]::new)))
+      // repair kit cost matches exactly
+      .part(TinkerToolParts.repairKit)
+      .save(consumer, location(folder + "travelers_gear"));
+
     // plate shields don't have a real tool part for the plating, but helmet plating is nearly the same
     PartBuilderToolRecycleBuilder.tool(TinkerTools.plateShield)
       .part(TinkerToolParts.shieldCore)
