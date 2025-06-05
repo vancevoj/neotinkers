@@ -80,7 +80,7 @@ public class MaterialCastingRecipe extends AbstractMaterialCastingRecipe impleme
         .map(recipe -> {
           List<FluidStack> fluids = resizeFluids(recipe.getFluids());
           int fluidAmount = fluids.stream().mapToInt(FluidStack::getAmount).max().orElse(0);
-          return new DisplayCastingRecipe(type, castItems, fluids, result.withMaterial(recipe.getOutput().getVariant()),
+          return new DisplayCastingRecipe(getId(), type, castItems, fluids, result.withMaterial(recipe.getOutput().getVariant()),
                                           ICastingRecipe.calcCoolingTime(recipe.getTemperature(), itemCost * fluidAmount), isConsumed());
         })
         .collect(Collectors.toList());

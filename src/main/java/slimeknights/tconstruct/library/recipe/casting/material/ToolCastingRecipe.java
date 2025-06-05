@@ -118,7 +118,7 @@ public class ToolCastingRecipe extends PartSwapCastingRecipe implements IMultiRe
             List<FluidStack> fluids = resizeFluids(recipe.getFluids());
             int fluidAmount = fluids.stream().mapToInt(FluidStack::getAmount).max().orElse(0);
             // TODO: would be nice to have a list of outputs based on the different inputs
-            return new DisplayCastingRecipe(type, castItems, fluids,
+            return new DisplayCastingRecipe(getId(), type, castItems, fluids,
                                             ToolBuildHandler.buildItemFromMaterials(result, materials.apply(recipe.getOutput())),
                                             ICastingRecipe.calcCoolingTime(recipe.getTemperature(), itemCost * fluidAmount), isConsumed());
           })

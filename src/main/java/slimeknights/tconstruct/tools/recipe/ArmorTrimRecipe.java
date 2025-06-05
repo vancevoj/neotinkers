@@ -145,8 +145,9 @@ public class ArmorTrimRecipe implements ITinkerStationRecipe, IMultiRecipe<IDisp
                                             .map(ItemStack::new).toList();
       List<ItemStack> toolInputs = RegistryHelper.getTagValueStream(BuiltInRegistries.ITEM, TinkerTags.Items.TRIM)
                                                  .map(IModifiableDisplay::getDisplayStack).toList();
+      ResourceLocation id = getId();
       displayRecipes = access.registryOrThrow(Registries.TRIM_MATERIAL).holders()
-                             .map(material -> new DisplayRecipe(toolInputs, trims, material))
+                             .map(material -> new DisplayRecipe(id, toolInputs, trims, material))
                              .collect(Collectors.toList());
     }
     return displayRecipes;
@@ -157,6 +158,8 @@ public class ArmorTrimRecipe implements ITinkerStationRecipe, IMultiRecipe<IDisp
     private final ModifierEntry RESULT = new ModifierEntry(TinkerModifiers.trim, 1);
 
     @Getter
+    private final ResourceLocation recipeId;
+    @Getter
     private final List<ItemStack> toolWithoutModifier;
     @Getter
     private final List<ItemStack> toolWithModifier;
@@ -165,7 +168,8 @@ public class ArmorTrimRecipe implements ITinkerStationRecipe, IMultiRecipe<IDisp
     @Getter
     private final Component variant;
 
-    public DisplayRecipe(List<ItemStack> tools, List<ItemStack> trim, Reference<TrimMaterial> holder) {
+    public DisplayRecipe(ResourceLocation id, List<ItemStack> tools, List<ItemStack> trim, Reference<TrimMaterial> holder) {
+      this.recipeId = id;
       TrimMaterial material = holder.get();
       toolWithoutModifier = tools;
       this.trim = trim;

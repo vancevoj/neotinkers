@@ -116,6 +116,11 @@ public abstract class AbstractModifierRecipe implements ITinkerStationRecipe, ID
   @Nullable
   protected List<SlotCount> resultSlots = null;
 
+  @Override
+  public ResourceLocation getRecipeId() {
+    return getId();
+  }
+
   /** Gets or builds the list of tool inputs */
   protected List<ItemStack> getToolInputs() {
     if (toolInputs == null) {

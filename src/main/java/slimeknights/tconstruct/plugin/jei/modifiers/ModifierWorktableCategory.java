@@ -86,4 +86,9 @@ public class ModifierWorktableCategory implements IRecipeCategory<IModifierWorkt
     // modifier input
     builder.addSlot(recipe.isModifierOutput() ? RecipeIngredientRole.OUTPUT : RecipeIngredientRole.CATALYST, 82, 16).addIngredients(TConstructJEIConstants.MODIFIER_TYPE, recipe.getModifierOptions(null));
   }
+
+  @Override
+  public ResourceLocation getRegistryName(IModifierWorktableRecipe recipe) {
+    return recipe.getId();
+  }
 }

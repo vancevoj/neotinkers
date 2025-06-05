@@ -26,6 +26,7 @@ import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.tools.TinkerModifiers;
 import slimeknights.tconstruct.tools.modifiers.slotless.OverslimeModifier;
 
+import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -129,6 +130,12 @@ public class OverslimeModifierRecipe implements ITinkerStationRecipe, IDisplayMo
   private static final ModifierEntry RESULT = new ModifierEntry(TinkerModifiers.overslime, 1);
   /** Cache of input and output tools for display */
   private List<ItemStack> toolWithoutModifier, toolWithModifier = null;
+
+  @Nullable
+  @Override
+  public ResourceLocation getRecipeId() {
+    return getId();
+  }
 
   @Override
   public int getInputCount() {

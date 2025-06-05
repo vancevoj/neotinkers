@@ -9,7 +9,6 @@ import mezz.jei.api.forge.ForgeTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.drawable.IDrawableAnimated;
-import mezz.jei.api.gui.ingredient.IRecipeSlotView;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
@@ -23,19 +22,19 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
-import slimeknights.mantle.fluid.tooltip.FluidTooltipHandler;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.client.GuiUtil;
 import slimeknights.tconstruct.library.recipe.FluidValues;
 import slimeknights.tconstruct.library.recipe.casting.IDisplayableCastingRecipe;
-import slimeknights.tconstruct.plugin.jei.util.IRecipeTooltipReplacement;
+import slimeknights.tconstruct.plugin.jei.util.FluidTooltipCallback;
 
+import javax.annotation.Nullable;
 import java.awt.Color;
 import java.util.Collections;
 import java.util.List;
 
 /** Shared base logic for the two casting recipe types */
-public abstract class AbstractCastingCategory implements IRecipeCategory<IDisplayableCastingRecipe>, IRecipeTooltipReplacement {
+public abstract class AbstractCastingCategory implements IRecipeCategory<IDisplayableCastingRecipe> {
   private static final String KEY_COOLING_TIME = TConstruct.makeTranslationKey("jei", "time");
   private static final String KEY_CAST_KEPT = TConstruct.makeTranslationKey("jei", "casting.cast_kept");
   private static final String KEY_CAST_CONSUMED = TConstruct.makeTranslationKey("jei", "casting.cast_consumed");
@@ -64,11 +63,6 @@ public abstract class AbstractCastingCategory implements IRecipeCategory<IDispla
         return guiHelper.drawableBuilder(BACKGROUND_LOC, 117, 32, 24, 17).buildAnimated(coolingTime, IDrawableAnimated.StartDirection.LEFT, false);
       }
     });
-  }
-
-  @Override
-  public boolean isHandled(IDisplayableCastingRecipe recipe) {
-    return true;
   }
 
   @Override
@@ -107,7 +101,7 @@ public abstract class AbstractCastingCategory implements IRecipeCategory<IDispla
     // tank fluids
     int capacity = FluidValues.METAL_BLOCK;
     builder.addSlot(RecipeIngredientRole.INPUT, 3, 3)
-           .addTooltipCallback(this)
+           .addTooltipCallback(FluidTooltipCallback.UNITS)
            .setFluidRenderer(capacity, false, 32, 32)
            .setOverlay(tankOverlay, 0, 0)
            .addIngredients(ForgeTypes.FLUID_STACK, recipe.getFluids());
@@ -117,13 +111,14 @@ public abstract class AbstractCastingCategory implements IRecipeCategory<IDispla
       h += 16;
     }
     builder.addSlot(RecipeIngredientRole.RENDER_ONLY, 43, 8)
-           .addTooltipCallback(this)
+           .addTooltipCallback(FluidTooltipCallback.UNITS)
            .setFluidRenderer(1, false, 6, h)
            .addIngredients(ForgeTypes.FLUID_STACK, recipe.getFluids());
   }
 
+  @Nullable
   @Override
-  public void addMiddleLines(IRecipeSlotView slot, List<Component> list) {
-    slot.getDisplayedIngredient(ForgeTypes.FLUID_STACK).ifPresent(stack -> FluidTooltipHandler.appendMaterial(stack, list));
+  public ResourceLocation getRegistryName(IDisplayableCastingRecipe recipe) {
+    return recipe.getRecipeId();
   }
 }

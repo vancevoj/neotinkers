@@ -1,12 +1,20 @@
 package slimeknights.tconstruct.library.recipe.casting;
 
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 /** Interface for casting recipes that are displayable in JEI */
 public interface IDisplayableCastingRecipe {
+  /** Gets the ID of this recipe. If this is a generated display recipe, uses the parent recipe ID */
+  @Nullable
+  default ResourceLocation getRecipeId() {
+    return null;
+  }
+
   /** If true, the recipe has a cast item */
   boolean hasCast();
 

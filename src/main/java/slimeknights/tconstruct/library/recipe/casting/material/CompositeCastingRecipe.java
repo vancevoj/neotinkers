@@ -89,7 +89,7 @@ public class CompositeCastingRecipe extends MaterialCastingRecipe {
             } else {
               inputs = List.of(result.withMaterial(inputId));
             }
-            recipes.add(new DisplayCastingRecipe(type, inputs, fluids, result.withMaterial(output.getVariant()),
+            recipes.add(new DisplayCastingRecipe(getId(), type, inputs, fluids, result.withMaterial(output.getVariant()),
                                                  ICastingRecipe.calcCoolingTime(recipe.getTemperature(), itemCost * fluids.stream().mapToInt(FluidStack::getAmount).max().orElse(0)),
                                                  isConsumed()));
           }

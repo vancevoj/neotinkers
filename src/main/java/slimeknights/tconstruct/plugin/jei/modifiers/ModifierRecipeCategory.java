@@ -40,6 +40,7 @@ import slimeknights.tconstruct.tools.TinkerTools;
 import slimeknights.tconstruct.tools.item.CreativeSlotItem;
 import slimeknights.tconstruct.tools.stats.SkullStats;
 
+import javax.annotation.Nullable;
 import java.awt.Color;
 import java.util.Collections;
 import java.util.List;
@@ -231,6 +232,11 @@ public class ModifierRecipeCategory implements IRecipeCategory<IDisplayModifierR
     builder.addInvisibleIngredients(RecipeIngredientRole.OUTPUT).addIngredients(TConstructJEIConstants.SLOT_TYPE, recipe.getResultSlots());
   }
 
+  @Nullable
+  @Override
+  public ResourceLocation getRegistryName(IDisplayModifierRecipe recipe) {
+    return recipe.getRecipeId();
+  }
 
   /* Slimeskull workaround */
   /** internal list of slimeskulls for the sake of ingredient lookup, needed since they are technically distinct but modifiers treat them as the same */

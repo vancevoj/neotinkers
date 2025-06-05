@@ -70,6 +70,12 @@ public class ItemCastingRecipe extends AbstractCastingRecipe implements IDisplay
   /* JEI */
 
   @Override
+  public ResourceLocation getRecipeId() {
+    // need a separate method as remapping makes the names mismatch
+    return getId();
+  }
+
+  @Override
   public boolean hasCast() {
     return getCast() != Ingredient.EMPTY;
   }

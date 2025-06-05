@@ -146,7 +146,8 @@ public class ArmorDyeingRecipe implements ITinkerStationRecipe, IMultiRecipe<IDi
     if (displayRecipes == null) {
       List<ItemStack> toolInputs = RegistryHelper.getTagValueStream(BuiltInRegistries.ITEM, TinkerTags.Items.DYEABLE)
                                                  .map(IModifiableDisplay::getDisplayStack).toList();
-      displayRecipes = Arrays.stream(DyeColor.values()).map(dye -> new DisplayRecipe(toolInputs, dye)).collect(Collectors.toList());
+      ResourceLocation id = getId();
+      displayRecipes = Arrays.stream(DyeColor.values()).map(dye -> new DisplayRecipe(id, toolInputs, dye)).collect(Collectors.toList());
     }
     return displayRecipes;
   }
@@ -174,6 +175,8 @@ public class ArmorDyeingRecipe implements ITinkerStationRecipe, IMultiRecipe<IDi
       return TINT_COLORS[id];
     }
 
+    @Getter
+    private final ResourceLocation recipeId;
     private final List<ItemStack> dyes;
     @Getter
     private final List<ItemStack> toolWithoutModifier;
@@ -181,15 +184,16 @@ public class ArmorDyeingRecipe implements ITinkerStationRecipe, IMultiRecipe<IDi
     private final List<ItemStack> toolWithModifier;
     @Getter
     private final Component variant;
-    public DisplayRecipe(List<ItemStack> tools, DyeColor color) {
+    public DisplayRecipe(ResourceLocation recipeId, List<ItemStack> tools, DyeColor color) {
+      this.recipeId = recipeId;
       this.toolWithoutModifier = tools;
       this.dyes = RegistryHelper.getTagValueStream(BuiltInRegistries.ITEM, color.getTag()).map(ItemStack::new).toList();
       this.variant = Component.translatable("color.minecraft." + color.getSerializedName());
 
-      ResourceLocation id = RESULT.getId();
+      ResourceLocation modID = RESULT.getId();
       int tintColor = getTintColor(color);
       List<ModifierEntry> results = List.of(RESULT);
-      toolWithModifier = tools.stream().map(stack -> IDisplayModifierRecipe.withModifiers(stack, results, data -> data.putInt(id, tintColor))).toList();
+      toolWithModifier = tools.stream().map(stack -> IDisplayModifierRecipe.withModifiers(stack, results, data -> data.putInt(modID, tintColor))).toList();
     }
 
     @Override

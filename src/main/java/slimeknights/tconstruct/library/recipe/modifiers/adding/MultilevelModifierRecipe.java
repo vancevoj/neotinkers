@@ -121,9 +121,10 @@ public class MultilevelModifierRecipe extends ModifierRecipe implements IMultiRe
       List<ItemStack> toolWithModifier = getToolWithModifier();
       List<SlotCount> resultSlots = getResultSlots();
       ModifierEntry result = getDisplayResult();
+      ResourceLocation id = getId();
       displayRecipes = Streams.concat(
         Stream.of(this),
-        levels.stream().skip(1).map(levelEntry -> new DisplayModifierRecipe(inputs, toolWithoutModifier, toolWithModifier, result, levelEntry.level, levelEntry.slots, resultSlots))
+        levels.stream().skip(1).map(levelEntry -> new DisplayModifierRecipe(id, inputs, toolWithoutModifier, toolWithModifier, result, levelEntry.level, levelEntry.slots, resultSlots))
       ).toList();
     }
 

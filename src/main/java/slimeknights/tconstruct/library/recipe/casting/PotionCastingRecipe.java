@@ -101,7 +101,7 @@ public class PotionCastingRecipe implements ICastingRecipe, IMultiRecipe<Display
       displayRecipes = ForgeRegistries.POTIONS.getValues().stream()
         .map(potion -> {
           ItemStack result = PotionUtils.setPotion(new ItemStack(this.result), potion);
-          return new DisplayCastingRecipe(getType(), bottles, fluid.getFluids().stream()
+          return new DisplayCastingRecipe(getId(), getType(), bottles, fluid.getFluids().stream()
                                                               .map(fluid -> new FluidStack(fluid.getFluid(), fluid.getAmount(), result.getTag()))
                                                               .toList(),
                                           result, coolingTime, true);

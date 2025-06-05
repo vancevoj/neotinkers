@@ -136,4 +136,9 @@ public class ToolBuildingCategory implements IRecipeCategory<ToolBuildingRecipe>
   public RecipeType<ToolBuildingRecipe> getRecipeType() {
     return TConstructJEIConstants.TOOL_BUILDING;
   }
+
+  @Override
+  public ResourceLocation getRegistryName(ToolBuildingRecipe recipe) {
+    return recipe.getId();
+  }
 }
