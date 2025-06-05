@@ -21,12 +21,12 @@ import javax.annotation.Nullable;
 
 public class OverslimeModifier extends DurabilityShieldModifier implements ToolStatsModifierHook {
   /** Stat for the overslime cap, copies the durability global multiplier on build */
-  public static final FloatToolStat OVERSLIME_STAT = ToolStats.register(new FloatToolStat(new ToolStatId(TConstruct.MOD_ID, "overslime"), 0xFF71DC85, 0, 0, Short.MAX_VALUE, TinkerTags.Items.DURABILITY) {
+  public static final FloatToolStat OVERSLIME_STAT = new FloatToolStat(new ToolStatId(TConstruct.MOD_ID, "overslime"), 0xFF71DC85, 0, 0, Short.MAX_VALUE, TinkerTags.Items.DURABILITY) {
     @Override
     public Float build(ModifierStatsBuilder parent, Object builderObj) {
       return super.build(parent, builderObj) * parent.getMultiplier(ToolStats.DURABILITY);
     }
-  });
+  };
 
   @Override
   protected void registerHooks(Builder hookBuilder) {
