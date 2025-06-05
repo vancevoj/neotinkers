@@ -19,7 +19,6 @@ import slimeknights.tconstruct.library.modifiers.hook.display.TooltipModifierHoo
 import slimeknights.tconstruct.library.modifiers.hook.mining.BlockBreakModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.mining.BreakSpeedModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.ranged.ProjectileLaunchModifierHook;
-import slimeknights.tconstruct.library.modifiers.modules.armor.ProtectionModule;
 import slimeknights.tconstruct.library.module.ModuleHookMap.Builder;
 import slimeknights.tconstruct.library.tools.context.ToolHarvestContext;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
@@ -93,27 +92,16 @@ public class MomentumModifier extends Modifier implements ProjectileLaunchModifi
 
   @Override
   public void addTooltip(IToolStackView tool, ModifierEntry modifier, @Nullable Player player, List<Component> tooltip, TooltipKey key, TooltipFlag tooltipFlag) {
-    ToolType type = ToolType.from(tool.getItem(), ToolType.NO_MELEE);
+    ToolType type = ToolType.from(tool.getItem(), ToolType.HARVEST, ToolType.RANGED);
     if (type != null) {
       float bonus;
       if (player != null && key == TooltipKey.SHIFT) {
-        bonus = getBonus(player, type, modifier) / (switch (type) {
-          default -> 128;
-          case RANGED -> 64;
-          case ARMOR -> 4;
-        });
+        bonus = getBonus(player, type, modifier) / (type == ToolType.RANGED ? 64 : 128);
       } else {
         bonus = modifier.getEffectiveLevel();
-        if (type != ToolType.ARMOR) {
-          bonus *= 0.25f;
-        }
       }
       if (bonus > 0) {
-        if (type == ToolType.ARMOR) {
-          ProtectionModule.addResistanceTooltip(tool, this, bonus * 2.5f, player, tooltip);
-        } else {
-          TooltipModifierHook.addPercentBoost(this, SPEED, bonus, tooltip);
-        }
+        TooltipModifierHook.addPercentBoost(this, SPEED, bonus, tooltip);
       }
     }
   }
