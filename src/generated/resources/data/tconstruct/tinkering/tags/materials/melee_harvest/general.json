@@ -6,6 +6,7 @@
     "tconstruct:leather",
     "tconstruct:iron",
     "tconstruct:slimewood",
+    "tconstruct:treated_wood",
     "tconstruct:osmium",
     "tconstruct:slimesteel",
     "tconstruct:pig_iron",
@@ -14,6 +15,7 @@
     "tconstruct:plated_slimewood",
     "tconstruct:electrum",
     "tconstruct:cinderslime",
-    "tconstruct:queens_slime"
+    "tconstruct:queens_slime",
+    "tconstruct:enderslime_vine"
   ]
 }

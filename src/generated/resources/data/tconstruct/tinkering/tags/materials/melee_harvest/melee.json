@@ -10,9 +10,11 @@
     "tconstruct:lead",
     "tconstruct:nahuatl",
     "tconstruct:steel",
+    "tconstruct:darkthread",
     "tconstruct:invar",
     "tconstruct:necronium",
     "tconstruct:manyullyn",
-    "tconstruct:blazing_bone"
+    "tconstruct:blazing_bone",
+    "tconstruct:enderslime_vine"
   ]
 }
