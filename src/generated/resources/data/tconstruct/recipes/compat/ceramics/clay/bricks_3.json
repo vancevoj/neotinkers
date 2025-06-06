@@ -8,8 +8,10 @@
   ],
   "ingredient": [
     {
-      "type": "forge:nbt",
-      "item": "ceramics:clay_bucket"
+      "type": "tconstruct:no_container",
+      "match": {
+        "item": "ceramics:clay_bucket"
+      }
     },
     {
       "type": "forge:nbt",

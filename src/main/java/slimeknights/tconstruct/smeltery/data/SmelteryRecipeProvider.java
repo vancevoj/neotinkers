@@ -15,7 +15,6 @@ import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionUtils;
@@ -2171,10 +2170,22 @@ public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelt
       .save(withCondition(consumer, new ItemExistsCondition(dough)), location(folder + "wheat_dough"));
 
     // ceramics compat: a lot of melting and some casting
+
+    // ceramics constants //
+    // normally its 1/8 of a bucket per lava (125mb), but we give a small discount on casting to make the slab math work out nicer (100 is divisible by 2)
+    int lavaPerBlock = FluidType.BUCKET_VOLUME / 10;
+    // normally a quarter of a glass pane, but thats 62.5, so round down to 50 for a nice number
+    int gaugeGlass = FluidValues.GLASS_PANE / 5;
+    // normally its 1 ingot per 8, we do 1 nugget giving a small discount
+    int goldPerBlock = FluidValues.NUGGET;
+
+    // ID helpers
     String ceramics = "ceramics";
     String ceramicsFolder = folder + ceramics + "/";
     Function<String,ResourceLocation> ceramicsId = name -> new ResourceLocation(ceramics, name);
-    Function<String,TagKey<Item>> ceramicsTag = name -> TagKey.create(Registries.ITEM, new ResourceLocation(ceramics, name));
+    Function<String,Ingredient> ceramicsItem = name -> ItemNameIngredient.from(new ResourceLocation(ceramics, name));
+    Function<String,Ingredient> ceramicsTag = name -> Ingredient.of(ItemTags.create(new ResourceLocation(ceramics, name)));
+    Function<String,ItemOutput> ceramicsOutput = name -> ItemNameOutput.fromName(new ResourceLocation(ceramics, name));
     Consumer<FinishedRecipe> ceramicsConsumer = withCondition(consumer, new ModLoadedCondition(ceramics));
 
     // fill clay and cracked clay buckets
@@ -2193,131 +2204,159 @@ public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelt
     String clayFolder = ceramicsFolder + "clay/";
 
     // unfired clay
-    MeltingRecipeBuilder.melting(ItemNameIngredient.from(ceramicsId.apply("unfired_clay_plate")), TinkerFluids.moltenClay, FluidValues.SLIMEBALL, 0.5f)
-                        .save(ceramicsConsumer, location(clayFolder + "clay_1"));
-    MeltingRecipeBuilder.melting(ItemNameIngredient.from(ceramicsId.apply("clay_faucet"), ceramicsId.apply("clay_channel")), TinkerFluids.moltenClay, FluidValues.SLIMEBALL * 2, 0.65f)
-                        .save(ceramicsConsumer, location(clayFolder + "clay_2"));
-    MeltingRecipeBuilder.melting(ItemNameIngredient.from(ceramicsId.apply("unfired_clay_bucket"), ceramicsId.apply("clay_cistern")), TinkerFluids.moltenClay, FluidValues.SLIMEBALL * 3, 0.9f)
-                        .save(ceramicsConsumer, location(clayFolder + "clay_3"));
+    MeltingRecipeBuilder.melting(ceramicsItem.apply("unfired_clay_plate"), TinkerFluids.moltenClay, FluidValues.BRICK, 0.5f)
+      .save(ceramicsConsumer, location(clayFolder + "clay_1"));
+    MeltingRecipeBuilder.melting(ItemNameIngredient.from(ceramicsId.apply("clay_faucet"), ceramicsId.apply("clay_channel")), TinkerFluids.moltenClay, FluidValues.BRICK * 2, 0.65f)
+      .save(ceramicsConsumer, location(clayFolder + "clay_2"));
+    MeltingRecipeBuilder.melting(ItemNameIngredient.from(ceramicsId.apply("unfired_clay_bucket"), ceramicsId.apply("clay_cistern")), TinkerFluids.moltenClay, FluidValues.BRICK * 3, 0.9f)
+      .save(ceramicsConsumer, location(clayFolder + "clay_3"));
 
     // 2 bricks
     MeltingRecipeBuilder.melting(ItemNameIngredient.from(
-      ceramicsId.apply("dark_bricks_slab"), ceramicsId.apply("dragon_bricks_slab"),
-      ceramicsId.apply("terracotta_faucet"), ceramicsId.apply("terracotta_channel")), TinkerFluids.moltenClay, FluidValues.SLIMEBALL * 2, 1.33f)
-                        .save(ceramicsConsumer, location(clayFolder + "bricks_2"));
+        ceramicsId.apply("dark_bricks_slab"), ceramicsId.apply("dragon_bricks_slab"),
+        ceramicsId.apply("terracotta_faucet"), ceramicsId.apply("terracotta_channel")
+      ), TinkerFluids.moltenClay, FluidValues.BRICK * 2, 1.33f)
+      .save(ceramicsConsumer, location(clayFolder + "bricks_2"));
     // 3 bricks
     MeltingRecipeBuilder.melting(CompoundIngredient.of(
-      Ingredient.of(ceramicsTag.apply("terracotta_cisterns")),
-      NBTNameIngredient.from(ceramicsId.apply("clay_bucket")),
-      NBTNameIngredient.from(ceramicsId.apply("cracked_clay_bucket"))),
-                                 TinkerFluids.moltenClay, FluidValues.SLIMEBALL * 3, 1.67f)
-                        .save(ceramicsConsumer, location(clayFolder + "bricks_3"));
+      ceramicsTag.apply("terracotta_cisterns"),
+      NoContainerIngredient.of(ItemNameIngredient.from(ceramicsId.apply("clay_bucket"))),
+      // can't ue no container for cracked bucket as the bucket breaks on emptying
+      NBTNameIngredient.from(ceramicsId.apply("cracked_clay_bucket"))
+    ), TinkerFluids.moltenClay, FluidValues.BRICK * 3, 1.67f)
+      .save(ceramicsConsumer, location(clayFolder + "bricks_3"));
     // 4 bricks
     MeltingRecipeBuilder.melting(ItemNameIngredient.from(
       ceramicsId.apply("dark_bricks"), ceramicsId.apply("dark_bricks_stairs"), ceramicsId.apply("dark_bricks_wall"),
       ceramicsId.apply("dragon_bricks"), ceramicsId.apply("dragon_bricks_stairs"), ceramicsId.apply("dragon_bricks_wall")
-    ), TinkerFluids.moltenClay, FluidValues.SLIMEBALL * 4, 2.0f)
-                        .save(ceramicsConsumer, location(clayFolder + "block"));
-    MeltingRecipeBuilder.melting(ItemNameIngredient.from(ceramicsId.apply("kiln")), TinkerFluids.moltenClay, FluidValues.SLIME_CONGEALED * 3 + FluidValues.SLIMEBALL * 5, 4.0f)
-                        .save(ceramicsConsumer, location(clayFolder + "kiln"));
+    ), TinkerFluids.moltenClay, FluidValues.BRICK * 4, 2.0f)
+      .save(ceramicsConsumer, location(clayFolder + "block"));
+    MeltingRecipeBuilder.melting(ceramicsItem.apply("kiln"), TinkerFluids.moltenClay, FluidValues.BRICK_BLOCK * 3 + FluidValues.BRICK * 5, 4.0f)
+      .save(ceramicsConsumer, location(clayFolder + "kiln"));
+
     // lava bricks, lava byproduct
-    MeltingRecipeBuilder.melting(ItemNameIngredient.from(ceramicsId.apply("lava_bricks_slab")), TinkerFluids.moltenClay, FluidValues.SLIMEBALL * 2, 1.33f)
-                        .addByproduct(new FluidStack(Fluids.LAVA, FluidType.BUCKET_VOLUME / 20))
-                        .save(ceramicsConsumer, location(clayFolder + "lava_bricks_slab"));
+    MeltingRecipeBuilder.melting(ceramicsItem.apply("lava_bricks_slab"), TinkerFluids.moltenClay, FluidValues.BRICK * 2, 1.33f)
+      .addByproduct(new FluidStack(Fluids.LAVA, lavaPerBlock / 2))
+      .save(ceramicsConsumer, location(clayFolder + "lava_bricks_slab"));
     MeltingRecipeBuilder.melting(ItemNameIngredient.from(
       ceramicsId.apply("lava_bricks"), ceramicsId.apply("lava_bricks_stairs"), ceramicsId.apply("lava_bricks_wall")
-    ), TinkerFluids.moltenClay, FluidValues.SLIMEBALL * 4, 2f)
-                        .addByproduct(new FluidStack(Fluids.LAVA, FluidType.BUCKET_VOLUME / 10))
-                        .save(ceramicsConsumer, location(clayFolder + "lava_bricks_block"));
+    ), TinkerFluids.moltenClay, FluidValues.BRICK_BLOCK, 2f)
+      .addByproduct(new FluidStack(Fluids.LAVA, lavaPerBlock))
+      .save(ceramicsConsumer, location(clayFolder + "lava_bricks_block"));
+
     // gauge, partially glass
-    MeltingRecipeBuilder.melting(ItemNameIngredient.from(ceramicsId.apply("terracotta_gauge")), TinkerFluids.moltenClay, FluidValues.SLIMEBALL, 1f)
-                        .addByproduct(TinkerFluids.moltenGlass.result(FluidValues.GLASS_PANE / 4))
-                        .save(ceramicsConsumer, location(clayFolder + "gauge"));
+    MeltingRecipeBuilder.melting(ceramicsItem.apply("terracotta_gauge"), TinkerFluids.moltenClay, FluidValues.BRICK, 1f)
+      .addByproduct(TinkerFluids.moltenGlass.result(gaugeGlass))
+      .save(ceramicsConsumer, location(clayFolder + "gauge"));
+
     // clay armor
-    int slimeballPart = FluidValues.SLIMEBALL / 5;
-    MeltingRecipeBuilder.melting(ItemNameIngredient.from(ceramicsId.apply("clay_helmet")), TinkerFluids.moltenClay, FluidValues.SLIMEBALL * 5, 2.25f)
-                        .setDamagable(slimeballPart)
-                        .save(ceramicsConsumer, location(clayFolder + "clay_helmet"));
-    MeltingRecipeBuilder.melting(ItemNameIngredient.from(ceramicsId.apply("clay_chestplate")), TinkerFluids.moltenClay, FluidValues.SLIMEBALL * 8, 3f)
-                        .setDamagable(slimeballPart)
-                        .save(ceramicsConsumer, location(clayFolder + "clay_chestplate"));
-    MeltingRecipeBuilder.melting(ItemNameIngredient.from(ceramicsId.apply("clay_leggings")), TinkerFluids.moltenClay, FluidValues.SLIMEBALL * 7, 2.75f)
-                        .setDamagable(slimeballPart)
-                        .save(ceramicsConsumer, location(clayFolder + "clay_leggings"));
-    MeltingRecipeBuilder.melting(ItemNameIngredient.from(ceramicsId.apply("clay_boots")), TinkerFluids.moltenClay, FluidValues.SLIMEBALL * 4, 2f)
-                        .setDamagable(slimeballPart)
-                        .save(ceramicsConsumer, location(clayFolder + "clay_boots"));
+    int brickPart = FluidValues.BRICK / 5;
+    MeltingRecipeBuilder.melting(ceramicsItem.apply("clay_helmet"), TinkerFluids.moltenClay, FluidValues.BRICK * 5, 2.25f)
+      .setDamagable(brickPart)
+      .save(ceramicsConsumer, location(clayFolder + "clay_helmet"));
+    MeltingRecipeBuilder.melting(ceramicsItem.apply("clay_chestplate"), TinkerFluids.moltenClay, FluidValues.BRICK * 8, 3f)
+      .setDamagable(brickPart)
+      .save(ceramicsConsumer, location(clayFolder + "clay_chestplate"));
+    MeltingRecipeBuilder.melting(ceramicsItem.apply("clay_leggings"), TinkerFluids.moltenClay, FluidValues.BRICK * 7, 2.75f)
+      .setDamagable(brickPart)
+      .save(ceramicsConsumer, location(clayFolder + "clay_leggings"));
+    MeltingRecipeBuilder.melting(ceramicsItem.apply("clay_boots"), TinkerFluids.moltenClay, FluidValues.BRICK * 4, 2f)
+      .setDamagable(brickPart)
+      .save(ceramicsConsumer, location(clayFolder + "clay_boots"));
 
     // melting porcelain
     String porcelainFolder = ceramicsFolder + "porcelain/";
     // unfired
-    MeltingRecipeBuilder.melting(ItemNameIngredient.from(ceramicsId.apply("unfired_porcelain")), TinkerFluids.moltenPorcelain, FluidValues.SLIMEBALL, 0.5f)
-                        .save(ceramicsConsumer, location(porcelainFolder + "unfired_1"));
-    MeltingRecipeBuilder.melting(ItemNameIngredient.from(ceramicsId.apply("unfired_faucet"), ceramicsId.apply("unfired_channel")), TinkerFluids.moltenClay, FluidValues.SLIMEBALL * 2, 0.65f)
-                        .save(ceramicsConsumer, location(porcelainFolder + "unfired_2"));
-    MeltingRecipeBuilder.melting(ItemNameIngredient.from(ceramicsId.apply("unfired_cistern")), TinkerFluids.moltenClay, FluidValues.SLIMEBALL * 3, 0.9f)
-                        .save(ceramicsConsumer, location(porcelainFolder + "unfired_3"));
-    MeltingRecipeBuilder.melting(ItemNameIngredient.from(ceramicsId.apply("unfired_porcelain_block")), TinkerFluids.moltenPorcelain, FluidValues.SLIME_CONGEALED, 1f)
-                        .save(ceramicsConsumer, location(porcelainFolder + "unfired_4"));
+    MeltingRecipeBuilder.melting(ceramicsItem.apply("unfired_porcelain"), TinkerFluids.moltenPorcelain, FluidValues.BRICK, 0.5f)
+      .save(ceramicsConsumer, location(porcelainFolder + "unfired_1"));
+    MeltingRecipeBuilder.melting(ItemNameIngredient.from(ceramicsId.apply("unfired_faucet"), ceramicsId.apply("unfired_channel")), TinkerFluids.moltenPorcelain, FluidValues.BRICK * 2, 0.65f)
+      .save(ceramicsConsumer, location(porcelainFolder + "unfired_2"));
+    MeltingRecipeBuilder.melting(ceramicsItem.apply("unfired_cistern"), TinkerFluids.moltenPorcelain, FluidValues.BRICK * 3, 0.9f)
+      .save(ceramicsConsumer, location(porcelainFolder + "unfired_3"));
+    MeltingRecipeBuilder.melting(ceramicsItem.apply("unfired_porcelain_block"), TinkerFluids.moltenPorcelain, FluidValues.BRICK_BLOCK, 1f)
+      .save(ceramicsConsumer, location(porcelainFolder + "unfired_4"));
 
     // 1 brick
-    MeltingRecipeBuilder.melting(ItemNameIngredient.from(ceramicsId.apply("porcelain_brick")), TinkerFluids.moltenPorcelain, FluidValues.SLIMEBALL, 1f)
-                        .save(ceramicsConsumer, location(porcelainFolder + "bricks_1"));
+    MeltingRecipeBuilder.melting(ceramicsItem.apply("porcelain_brick"), TinkerFluids.moltenPorcelain, FluidValues.BRICK, 1f)
+      .save(ceramicsConsumer, location(porcelainFolder + "bricks_1"));
     // 2 bricks
     MeltingRecipeBuilder.melting(ItemNameIngredient.from(
       ceramicsId.apply("porcelain_bricks_slab"), ceramicsId.apply("monochrome_bricks_slab"), ceramicsId.apply("marine_bricks_slab"), ceramicsId.apply("rainbow_bricks_slab"),
       ceramicsId.apply("porcelain_faucet"), ceramicsId.apply("porcelain_channel")
-    ), TinkerFluids.moltenPorcelain, FluidValues.SLIMEBALL * 2, 1.33f)
-                        .save(ceramicsConsumer, location(porcelainFolder + "bricks_2"));
+    ), TinkerFluids.moltenPorcelain, FluidValues.BRICK * 2, 1.33f)
+      .save(ceramicsConsumer, location(porcelainFolder + "bricks_2"));
     // 3 bricks
-    MeltingRecipeBuilder.melting(Ingredient.of(ceramicsTag.apply("porcelain_cisterns")), TinkerFluids.moltenPorcelain, FluidValues.SLIMEBALL * 3, 1.67f)
-                        .save(ceramicsConsumer, location(porcelainFolder + "bricks_3"));
+    MeltingRecipeBuilder.melting(ceramicsTag.apply("porcelain_cisterns"), TinkerFluids.moltenPorcelain, FluidValues.BRICK * 3, 1.67f)
+      .save(ceramicsConsumer, location(porcelainFolder + "bricks_3"));
     // 4 bricks
     MeltingRecipeBuilder.melting(CompoundIngredient.of(
-      Ingredient.of(ceramicsTag.apply("porcelain_block")),
-      Ingredient.of(ceramicsTag.apply("rainbow_porcelain")),
+      ceramicsTag.apply("porcelain_block"),
+      ceramicsTag.apply("rainbow_porcelain"),
       ItemNameIngredient.from(
         ceramicsId.apply("porcelain_bricks"), ceramicsId.apply("porcelain_bricks_stairs"), ceramicsId.apply("porcelain_bricks_wall"),
         ceramicsId.apply("monochrome_bricks"), ceramicsId.apply("monochrome_bricks_stairs"), ceramicsId.apply("monochrome_bricks_wall"),
         ceramicsId.apply("marine_bricks"), ceramicsId.apply("marine_bricks_stairs"), ceramicsId.apply("marine_bricks_wall"),
         ceramicsId.apply("rainbow_bricks"), ceramicsId.apply("rainbow_bricks_stairs"), ceramicsId.apply("rainbow_bricks_wall")
-      )), TinkerFluids.moltenPorcelain, FluidValues.SLIMEBALL * 4, 2.0f)
-                        .save(ceramicsConsumer, location(porcelainFolder + "blocks"));
-    // gold bricks, skipping gold byproduct as its so small and does not divide nicely
-    MeltingRecipeBuilder.melting(ItemNameIngredient.from(ceramicsId.apply("golden_bricks_slab")), TinkerFluids.moltenPorcelain, FluidValues.SLIMEBALL * 2, 1.33f)
-                        .save(ceramicsConsumer, location(porcelainFolder + "golden_bricks_slab"));
+      )), TinkerFluids.moltenPorcelain, FluidValues.BRICK * 4, 2.0f)
+      .save(ceramicsConsumer, location(porcelainFolder + "blocks"));
+
+    // gold bricks
+    MeltingRecipeBuilder.melting(ceramicsItem.apply("golden_bricks_slab"), TinkerFluids.moltenPorcelain, FluidValues.BRICK * 2, 1.33f)
+      .addByproduct(TinkerFluids.moltenGold.result(goldPerBlock / 2))
+      .save(ceramicsConsumer, location(porcelainFolder + "golden_bricks_slab"));
     MeltingRecipeBuilder.melting(ItemNameIngredient.from(
       ceramicsId.apply("golden_bricks"), ceramicsId.apply("golden_bricks_stairs"), ceramicsId.apply("golden_bricks_wall")
-    ), TinkerFluids.moltenPorcelain, FluidValues.SLIMEBALL * 4, 2f)
-                        .save(ceramicsConsumer, location(porcelainFolder + "golden_bricks_block"));
+    ), TinkerFluids.moltenPorcelain, FluidValues.BRICK * 4, 2f)
+      .addByproduct(TinkerFluids.moltenGold.result(goldPerBlock))
+      .save(ceramicsConsumer, location(porcelainFolder + "golden_bricks_block"));
+
     // gauge, partially glass
-    MeltingRecipeBuilder.melting(ItemNameIngredient.from(ceramicsId.apply("porcelain_gauge")), TinkerFluids.moltenPorcelain, FluidValues.SLIMEBALL, 1f)
-                        .addByproduct(TinkerFluids.moltenGlass.result(FluidValues.GLASS_PANE / 4))
-                        .save(ceramicsConsumer, location(porcelainFolder + "gauge"));
+    MeltingRecipeBuilder.melting(ceramicsItem.apply("porcelain_gauge"), TinkerFluids.moltenPorcelain, FluidValues.BRICK, 1f)
+      .addByproduct(TinkerFluids.moltenGlass.result(gaugeGlass))
+      .save(ceramicsConsumer, location(porcelainFolder + "gauge"));
 
     // casting bricks
     String castingFolder = ceramicsFolder + "casting/";
-    castingWithCast(ceramicsConsumer, TinkerFluids.moltenPorcelain, FluidValues.SLIMEBALL, TinkerSmeltery.ingotCast, ItemNameOutput.fromName(ceramicsId.apply("porcelain_brick")), castingFolder + "porcelain_brick");
+    castingWithCast(ceramicsConsumer, TinkerFluids.moltenPorcelain, FluidValues.BRICK, TinkerSmeltery.ingotCast, ceramicsOutput.apply("porcelain_brick"), castingFolder + "porcelain_brick");
     ItemCastingRecipeBuilder.basinRecipe(ItemNameOutput.fromName(ceramicsId.apply("white_porcelain")))
-                            .setFluidAndTime(TinkerFluids.moltenPorcelain, FluidValues.SLIME_CONGEALED)
-                            .save(ceramicsConsumer, location(castingFolder + "porcelain"));
+      .setFluidAndTime(TinkerFluids.moltenPorcelain, FluidValues.SLIME_CONGEALED)
+      .save(ceramicsConsumer, location(castingFolder + "porcelain"));
+
     // lava bricks
-    ItemCastingRecipeBuilder.basinRecipe(ItemNameOutput.fromName(ceramicsId.apply("lava_bricks")))
-                            .setCast(Blocks.BRICKS, true)
-                            .setFluidAndTime(new FluidStack(Fluids.LAVA, FluidType.BUCKET_VOLUME / 10))
-                            .save(ceramicsConsumer, location(castingFolder + "lava_bricks"));
-    ItemCastingRecipeBuilder.basinRecipe(ItemNameOutput.fromName(ceramicsId.apply("lava_bricks_slab")))
-                            .setCast(Blocks.BRICK_SLAB, true)
-                            .setFluidAndTime(new FluidStack(Fluids.LAVA, FluidType.BUCKET_VOLUME / 20))
-                            .save(ceramicsConsumer, location(castingFolder + "lava_bricks_slab"));
-    ItemCastingRecipeBuilder.basinRecipe(ItemNameOutput.fromName(ceramicsId.apply("lava_bricks_stairs")))
-                            .setCast(Blocks.BRICK_STAIRS, true)
-                            .setFluidAndTime(new FluidStack(Fluids.LAVA, FluidType.BUCKET_VOLUME / 10))
-                            .save(ceramicsConsumer, location(castingFolder + "lava_bricks_stairs"));
-    ItemCastingRecipeBuilder.basinRecipe(ItemNameOutput.fromName(ceramicsId.apply("lava_bricks_wall")))
-                            .setCast(Blocks.BRICK_WALL, true)
-                            .setFluidAndTime(new FluidStack(Fluids.LAVA, FluidType.BUCKET_VOLUME / 10))
-                            .save(ceramicsConsumer, location(castingFolder + "lava_bricks_wall"));
+    ItemCastingRecipeBuilder.basinRecipe(ceramicsOutput.apply("lava_bricks"))
+      .setCast(Blocks.BRICKS, true)
+      .setFluidAndTime(new FluidStack(Fluids.LAVA, lavaPerBlock))
+      .save(ceramicsConsumer, location(castingFolder + "lava_bricks"));
+    ItemCastingRecipeBuilder.basinRecipe(ceramicsOutput.apply("lava_bricks_slab"))
+      .setCast(Blocks.BRICK_SLAB, true)
+      .setFluidAndTime(new FluidStack(Fluids.LAVA, lavaPerBlock / 2))
+      .save(ceramicsConsumer, location(castingFolder + "lava_bricks_slab"));
+    ItemCastingRecipeBuilder.basinRecipe(ceramicsOutput.apply("lava_bricks_stairs"))
+      .setCast(Blocks.BRICK_STAIRS, true)
+      .setFluidAndTime(new FluidStack(Fluids.LAVA, lavaPerBlock))
+      .save(ceramicsConsumer, location(castingFolder + "lava_bricks_stairs"));
+    ItemCastingRecipeBuilder.basinRecipe(ceramicsOutput.apply("lava_bricks_wall"))
+      .setCast(Blocks.BRICK_WALL, true)
+      .setFluidAndTime(new FluidStack(Fluids.LAVA, lavaPerBlock))
+      .save(ceramicsConsumer, location(castingFolder + "lava_bricks_wall"));
+
+    // golden bricks
+    ItemCastingRecipeBuilder.basinRecipe(ceramicsOutput.apply("golden_bricks"))
+      .setCast(ceramicsItem.apply("porcelain_bricks"), true)
+      .setFluidAndTime(TinkerFluids.moltenGold, goldPerBlock)
+      .save(ceramicsConsumer, location(castingFolder + "golden_bricks"));
+    ItemCastingRecipeBuilder.basinRecipe(ceramicsOutput.apply("golden_bricks_slab"))
+      .setCast(ceramicsItem.apply("porcelain_bricks_slab"), true)
+      .setFluidAndTime(TinkerFluids.moltenGold, goldPerBlock / 2)
+      .save(ceramicsConsumer, location(castingFolder + "golden_bricks_slab"));
+    ItemCastingRecipeBuilder.basinRecipe(ceramicsOutput.apply("golden_bricks_stairs"))
+      .setCast(ceramicsItem.apply("porcelain_bricks_stairs"), true)
+      .setFluidAndTime(TinkerFluids.moltenGold, goldPerBlock)
+      .save(ceramicsConsumer, location(castingFolder + "golden_bricks_stairs"));
+    ItemCastingRecipeBuilder.basinRecipe(ceramicsOutput.apply("golden_bricks_wall"))
+      .setCast(ceramicsItem.apply("porcelain_bricks_wall"), true)
+      .setFluidAndTime(TinkerFluids.moltenGold, goldPerBlock)
+      .save(ceramicsConsumer, location(castingFolder + "golden_bricks_wall"));
 
     // refined glowstone composite
     Consumer<FinishedRecipe> wrapped = withCondition(consumer, tagCondition("ingots/refined_glowstone"), tagCondition("ingots/osmium"));
