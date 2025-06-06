@@ -418,6 +418,7 @@ public final class TinkerSmeltery extends TinkerModule {
     });
   }
 
+  @SuppressWarnings("removal")
   @SubscribeEvent
   void registerSerializers(RegisterEvent event) {
     if (event.getRegistryKey() == Registries.RECIPE_SERIALIZER) {

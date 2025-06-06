@@ -503,7 +503,8 @@ public class TinkerTags {
     public static final TagKey<Fluid> SMALL_GEM_TOOLTIPS = local("tooltips/gem_small");
     /** Causes the fluid to be formatted like glass in tooltips */
     public static final TagKey<Fluid> GLASS_TOOLTIPS = local("tooltips/glass");
-    /** Causes the fluid to be formatted like soup in tooltips, with bowls. Similar to slime, but no blocks */
+    /** @deprecated use {@link slimeknights.mantle.datagen.MantleTags.Fluids#SOUP} */
+    @Deprecated(forRemoval = true)
     public static final TagKey<Fluid> SOUP_TOOLTIPS = local("tooltips/soup");
 
     /** @deprecated Fluids have all been given unique effects, use {@link slimeknights.tconstruct.library.data.tinkering.AbstractFluidEffectProvider} */
