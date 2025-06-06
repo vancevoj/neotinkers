@@ -141,7 +141,7 @@ public class ModifierTagProvider extends AbstractModifierTagProvider {
     this.tag(INTERACTION_ABILITIES).add(
       TinkerModifiers.bucketing.getId(), TinkerModifiers.firestarter.getId(), ModifierIds.glowing,
       ModifierIds.pathing, ModifierIds.stripping, ModifierIds.tilling, ModifierIds.brushing,
-      TinkerModifiers.spitting.getId(), TinkerModifiers.splashing.getId(),
+      TinkerModifiers.spitting.getId(), TinkerModifiers.splashing.getId(), TinkerModifiers.slurping.getId(),
       TinkerModifiers.bonking.getId(), TinkerModifiers.flinging.getId(), TinkerModifiers.springing.getId(), TinkerModifiers.warping.getId());
     // armor
     this.tag(GENERAL_ARMOR_ABILITIES).add(ModifierIds.protection, TinkerModifiers.bursting.getId(), TinkerModifiers.wetting.getId());

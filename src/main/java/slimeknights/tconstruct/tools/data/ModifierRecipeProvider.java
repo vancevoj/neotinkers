@@ -880,7 +880,7 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .addInput(Tags.Items.INGOTS_COPPER)
                          .addInput(Tags.Items.INGOTS_COPPER)
                          .setSlots(SlotType.ABILITY, 1)
-                         .setTools(ingredientFromTags(TinkerTags.Items.HELMETS, TinkerTags.Items.STAFFS))
+                         .setTools(ingredientFromTags(TinkerTags.Items.HELMETS, TinkerTags.Items.INTERACTABLE_CHARGE))
                          .saveSalvage(consumer, prefix(TinkerModifiers.slurping, abilitySalvage))
                          .save(consumer, prefix(TinkerModifiers.slurping, abilityFolder));
     ModifierRecipeBuilder.modifier(ModifierIds.aquaAffinity)

@@ -11,6 +11,7 @@ import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.ToolActions;
 import net.minecraftforge.event.TickEvent.PlayerTickEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.fluids.FluidStack;
@@ -27,20 +28,23 @@ import slimeknights.tconstruct.library.modifiers.fluid.FluidEffects;
 import slimeknights.tconstruct.library.modifiers.hook.interaction.GeneralInteractionModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.interaction.InteractionSource;
 import slimeknights.tconstruct.library.modifiers.hook.interaction.KeybindInteractModifierHook;
+import slimeknights.tconstruct.library.modifiers.hook.interaction.UsingToolModifierHook;
 import slimeknights.tconstruct.library.modifiers.modules.build.StatBoostModule;
 import slimeknights.tconstruct.library.module.ModuleHookMap.Builder;
 import slimeknights.tconstruct.library.tools.capability.TinkerDataCapability;
 import slimeknights.tconstruct.library.tools.capability.TinkerDataCapability.TinkerDataKey;
 import slimeknights.tconstruct.library.tools.capability.fluid.ToolTankHelper;
+import slimeknights.tconstruct.library.tools.helper.ModifierUtil;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.shared.TinkerCommons;
 import slimeknights.tconstruct.shared.particle.FluidParticleData;
+import slimeknights.tconstruct.tools.modifiers.ability.interaction.BlockingModifier;
 
 import static slimeknights.tconstruct.library.tools.capability.fluid.ToolTankHelper.TANK_HELPER;
 
 /** Modifier to handle spilling recipes on helmets */
-public class SlurpingModifier extends Modifier implements KeybindInteractModifierHook, GeneralInteractionModifierHook {
+public class SlurpingModifier extends Modifier implements KeybindInteractModifierHook, GeneralInteractionModifierHook, UsingToolModifierHook {
   private static final float DEGREE_TO_RADIANS = (float)Math.PI / 180F;
   private static final TinkerDataKey<SlurpingInfo> SLURP_FINISH_TIME = TConstruct.createKey("slurping_finish");
 
@@ -49,11 +53,16 @@ public class SlurpingModifier extends Modifier implements KeybindInteractModifie
   }
 
   @Override
+  public int getPriority() {
+    return 90;
+  }
+
+  @Override
   protected void registerHooks(Builder hookBuilder) {
     super.registerHooks(hookBuilder);
     hookBuilder.addModule(ToolTankHelper.TANK_HANDLER);
     hookBuilder.addModule(StatBoostModule.add(ToolTankHelper.CAPACITY_STAT).eachLevel(FluidType.BUCKET_VOLUME));
-    hookBuilder.addHook(this, ModifierHooks.ARMOR_INTERACT, ModifierHooks.GENERAL_INTERACT);
+    hookBuilder.addHook(this, ModifierHooks.ARMOR_INTERACT, ModifierHooks.GENERAL_INTERACT, ModifierHooks.TOOL_USING);
   }
 
   /** Checks if we can slurp the given fluid */
@@ -163,22 +172,26 @@ public class SlurpingModifier extends Modifier implements KeybindInteractModifie
 
   @Override
   public UseAnim getUseAction(IToolStackView tool, ModifierEntry modifier) {
-    return UseAnim.DRINK;
+    return BlockingModifier.blockWhileCharging(tool, UseAnim.DRINK);
   }
 
   @Override
-  public void onUsingTick(IToolStackView tool, ModifierEntry modifier, LivingEntity entity, int timeLeft) {
+  public void onUsingTick(IToolStackView tool, ModifierEntry modifier, LivingEntity entity, int useDuration, int timeLeft, ModifierEntry activeModifier) {
     if (timeLeft % 4 == 0 && entity instanceof Player player) {
       FluidStack fluidStack = TANK_HELPER.getFluid(tool);
       if (!fluidStack.isEmpty()) {
         addFluidParticles(player, fluidStack, 5);
+        // add drinking sounds if blocking or using another modifier
+        if (modifier != activeModifier || ModifierUtil.canPerformAction(tool, ToolActions.SHIELD_BLOCK)) {
+          player.playSound(SoundEvents.GENERIC_DRINK, 0.5F, RANDOM.nextFloat() * 0.1f + 0.9f);
+        }
       }
     }
   }
 
   @Override
-  public void onFinishUsing(IToolStackView tool, ModifierEntry modifier, LivingEntity entity) {
-    if (entity instanceof Player player) {
+  public void beforeReleaseUsing(IToolStackView tool, ModifierEntry modifier, LivingEntity entity, int useDuration, int timeLeft, ModifierEntry activeModifier) {
+    if (useDuration - timeLeft >= getUseDuration(tool, modifier) && entity instanceof Player player) {
       finishDrinking(tool, player);
     }
   }
