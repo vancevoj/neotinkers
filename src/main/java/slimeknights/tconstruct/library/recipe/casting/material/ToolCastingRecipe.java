@@ -57,8 +57,24 @@ public class ToolCastingRecipe extends PartSwapCastingRecipe implements IMultiRe
   @Override
   public boolean matches(ICastingContainer inv, Level level) {
     ItemStack cast = inv.getStack();
-    // tool match is used for part swapping
-    return cast.getItem() == result.asItem() ? super.matches(inv, level) : this.getCast().test(cast);
+    // if the tool matches, perform part swapping
+    if (cast.getItem() == result.asItem()) {
+      return canPartSwap(inv);
+    }
+    // no tool match? need to check cast and fluid
+    if (!this.getCast().test(cast)) {
+      return false;
+    }
+    // if we have a material item input, must have exactly 2 materials, else exactly 1
+    List<MaterialStatsId> requirements = ToolMaterialHook.stats(result.getToolDefinition());
+    // must have 1 or 2 tool parts
+    int numRequirements = requirements.size();
+    if (numRequirements < 1 || numRequirements > 2) {
+      return false;
+    }
+    // last material is the part, may be index 0 or 1
+    MaterialFluidRecipe recipe = getFluidRecipe(inv);
+    return recipe != MaterialFluidRecipe.EMPTY && requirements.get(numRequirements - 1).canUseMaterial(recipe.getOutput().getId());
   }
 
   @Override

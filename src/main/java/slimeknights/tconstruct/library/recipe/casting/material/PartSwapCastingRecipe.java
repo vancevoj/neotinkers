@@ -96,10 +96,10 @@ public class PartSwapCastingRecipe extends AbstractMaterialCastingRecipe {
     return MaterialFluidRecipe.EMPTY;
   }
 
-  @Override
-  public boolean matches(ICastingContainer inv, Level level) {
+  /** Checks if part swapping is possible on this tool */
+  protected boolean canPartSwap(ICastingContainer inv) {
     ItemStack cast = inv.getStack();
-    if (!getCast().test(cast) || !(cast.getItem() instanceof IModifiable modifiable)) {
+    if (!(cast.getItem() instanceof IModifiable modifiable)) {
       return false;
     }
     // if we have a material item input, must have exactly 2 materials, else exactly 1
@@ -122,6 +122,11 @@ public class PartSwapCastingRecipe extends AbstractMaterialCastingRecipe {
   }
 
   @Override
+  public boolean matches(ICastingContainer inv, Level level) {
+    return getCast().test(inv.getStack()) && canPartSwap(inv);
+  }
+
+  @Override
   public ItemStack getResultItem(RegistryAccess registryAccess) {
     return getCast().getItems()[0].copy();
   }
@@ -133,12 +138,13 @@ public class PartSwapCastingRecipe extends AbstractMaterialCastingRecipe {
     ItemStack cast = inv.getStack();
     ToolStack original = ToolStack.from(cast);
     ToolStack tool = original.copy();
+    List<MaterialStatsId> stats = ToolMaterialHook.stats(tool.getDefinition());
+    int index = getIndex(stats);
     tool.replaceMaterial(index, material.getVariant());
     // don't repair if its a composite recipe, since those are not paying the proper repair cost
     if (fluidRecipe.getInput() == null) {
       // if its a new material, repair with the head stat
       // with the tools we have this will always be a full repair, but addon usage of this recipe may vary
-      List<MaterialStatsId> stats = ToolMaterialHook.stats(tool.getDefinition());
       float repairDurability = MaterialRepairModule.getDurability(null, material.getId(), stats.get(index));
       if (repairDurability > 0 && tool.getDamage() > 0) {
         repairDurability *= itemCost / MaterialRecipe.INGOTS_PER_REPAIR;
