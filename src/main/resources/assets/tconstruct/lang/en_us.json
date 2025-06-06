@@ -3218,10 +3218,15 @@
 
   "_comment": "Book Strings",
 
+  "book.tconstruct.material.craftable": "Part Builder",
   "book.tconstruct.material.part_builder": "Can be made in the part builder",
+  "book.tconstruct.material.castable": "Castable",
   "book.tconstruct.material.cast_from": "Can be casted from %s in casts",
+  "book.tconstruct.material.composite": "Composite",
   "book.tconstruct.material.composite_from": "Can be casted from %s on %s parts",
+  "book.tconstruct.material.skull": "Skull Crafting",
   "book.tconstruct.material.skull_from": "Can be created from casting Enderslime on a %s in a basin",
+
   "book.tconstruct.modifiers.effect": "Effects:",
   "book.tconstruct.tool.properties": "Properties:",
   "book.tconstruct.fluid_effects.entity": "Entity Effects:",

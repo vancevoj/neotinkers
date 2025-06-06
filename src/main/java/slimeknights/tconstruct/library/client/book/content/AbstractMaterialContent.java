@@ -1,6 +1,5 @@
 package slimeknights.tconstruct.library.client.book.content;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.gson.annotations.SerializedName;
 import net.minecraft.ChatFormatting;
@@ -64,8 +63,13 @@ import java.util.stream.Collectors;
 
 /** Base class for material content pages */
 public abstract class AbstractMaterialContent extends PageContent {
-  private static final Component PART_BUILDER = TConstruct.makeTranslation("book", "material.part_builder");
+  private static final List<Component> PART_BUILDER = List.of(
+    TConstruct.makeTranslation("book", "material.craftable"),
+    TConstruct.makeTranslation("book", "material.part_builder").withStyle(ChatFormatting.GRAY)
+  );
+  private static final Component CASTABLE = TConstruct.makeTranslation("book", "material.castable");
   private static final String CAST_FROM = TConstruct.makeTranslationKey("book", "material.cast_from");
+  private static final Component COMPOSITE = TConstruct.makeTranslation("book", "material.composite");
   private static final String COMPOSITE_FROM = TConstruct.makeTranslationKey("book", "material.composite_from");
 
   static final int COLUMN_MARGIN = 22;
@@ -260,7 +264,7 @@ public abstract class AbstractMaterialContent extends PageContent {
     if (getMaterial().isCraftable()) {
       ItemStack partBuilder = new ItemStack(TinkerTables.partBuilder.asItem());
       ItemElement elementItem = new TinkerItemElement(partBuilder);
-      elementItem.tooltip = ImmutableList.of(PART_BUILDER);
+      elementItem.tooltip = PART_BUILDER;
       displayTools.add(elementItem);
     }
 
@@ -273,7 +277,10 @@ public abstract class AbstractMaterialContent extends PageContent {
       FluidStack firstFluid = fluids.stream()
                                     .flatMap(recipe -> recipe.getFluids().stream())
                                     .findFirst().orElse(FluidStack.EMPTY);
-      elementItem.tooltip = ImmutableList.of(Component.translatable(CAST_FROM, firstFluid.getDisplayName()));
+      elementItem.tooltip = List.of(
+        CASTABLE,
+        Component.translatable(CAST_FROM, firstFluid.getDisplayName()).withStyle(ChatFormatting.GRAY)
+      );
       displayTools.add(elementItem);
     }
 
@@ -289,7 +296,10 @@ public abstract class AbstractMaterialContent extends PageContent {
                                                                                       .map(part -> part.withMaterial(inputId))
                                                                                       .collect(Collectors.toList()));
         FluidStack firstFluid = composite.getFluids().stream().findFirst().orElse(FluidStack.EMPTY);
-        elementItem.tooltip = ImmutableList.of(Component.translatable(COMPOSITE_FROM, firstFluid.getDisplayName(), MaterialTooltipCache.getDisplayName(inputId)));
+        elementItem.tooltip = List.of(
+          COMPOSITE,
+          Component.translatable(COMPOSITE_FROM, firstFluid.getDisplayName(), MaterialTooltipCache.getDisplayName(inputId)).withStyle(ChatFormatting.GRAY)
+        );
         displayTools.add(elementItem);
       }
     }

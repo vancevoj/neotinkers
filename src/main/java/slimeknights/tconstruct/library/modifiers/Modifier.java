@@ -216,7 +216,7 @@ public class Modifier implements IdAwareObject {
     if (descriptionList == null) {
       descriptionList = Arrays.asList(
         Component.translatable(getTranslationKey() + ".flavor").withStyle(ChatFormatting.ITALIC),
-        Component.translatable(getTranslationKey() + ".description"));
+        Component.translatable(getTranslationKey() + ".description").withStyle(ChatFormatting.GRAY));
     }
     return descriptionList;
   }
