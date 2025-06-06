@@ -268,6 +268,10 @@ public class BlockLootTableProvider extends BlockLootSubProvider {
     // casting
     this.dropSelf(TinkerSmeltery.searedBasin.get());
     this.dropSelf(TinkerSmeltery.searedTable.get());
+
+    // gauge
+    this.dropSelf(TinkerSmeltery.copperGauge.get());
+    this.dropSelf(TinkerSmeltery.obsidianGauge.get());
   }
 
   private void addFoundry() {

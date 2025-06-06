@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "C": {
+      "item": "tconstruct:obsidian_pane"
+    },
+    "G": {
+      "tag": "forge:gems/quartz"
+    }
+  },
+  "pattern": [
+    " C ",
+    "CGC",
+    " C "
+  ],
+  "result": {
+    "item": "tconstruct:obsidian_gauge"
+  },
+  "show_notification": true
+}

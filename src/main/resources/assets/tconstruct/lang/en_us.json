@@ -1155,6 +1155,9 @@
   "block.tconstruct.tank.drained": "Drained %s mb %s",
   "block.tconstruct.tank.filled": "Filled %s mb %s",
 
+  "block.tconstruct.copper_gauge": "Copper Gauge",
+  "block.tconstruct.obsidian_gauge": "Obsidian Gauge",
+
   "block.tconstruct.channel.side.in": "Set side to flow inwards",
   "block.tconstruct.channel.side.out": "Set side to flow outwards",
   "block.tconstruct.channel.side.none": "Disallowed flowing on side",

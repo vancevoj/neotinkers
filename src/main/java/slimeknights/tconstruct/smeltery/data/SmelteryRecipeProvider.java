@@ -361,6 +361,14 @@ public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelt
                        .save(consumer, location(folder + "table"));
 
     // peripherals
+    ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, TinkerSmeltery.copperGauge)
+      .define('G', Tags.Items.GLASS_PANES_COLORLESS)
+      .define('C', Tags.Items.INGOTS_COPPER)
+      .pattern(" C ")
+      .pattern("CGC")
+      .pattern(" C ")
+      .unlockedBy("has_item", has(Tags.Items.INGOTS_COPPER))
+      .save(consumer, location(folder + "gauge"));
     ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, TinkerSmeltery.searedDrain)
                        .define('#', TinkerSmeltery.searedBrick)
                        .define('C', Tags.Items.INGOTS_COPPER)
@@ -570,6 +578,9 @@ public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelt
     MeltingRecipeBuilder.melting(Ingredient.of(TinkerSmeltery.smelteryController), TinkerFluids.moltenCopper, FluidValues.INGOT * 4, 3.5f)
                         .addByproduct(TinkerFluids.searedStone.result(FluidValues.BRICK * 4))
                         .save(consumer, location("smeltery/melting/metal/copper/smeltery_controller"));
+    MeltingRecipeBuilder.melting(Ingredient.of(TinkerSmeltery.copperGauge), TinkerFluids.moltenCopper, FluidValues.INGOT, 1f)
+      .addByproduct(TinkerFluids.moltenGlass.result(FluidValues.GLASS_PANE / 5))
+      .save(consumer, location("smeltery/melting/metal/copper/gauge"));
     MeltingRecipeBuilder.melting(Ingredient.of(TinkerSmeltery.searedDrain, TinkerSmeltery.searedChute), TinkerFluids.moltenCopper, FluidValues.INGOT * 2, 2.5f)
                         .addByproduct(TinkerFluids.searedStone.result(FluidValues.BRICK * 4))
                         .save(consumer, location("smeltery/melting/metal/copper/smeltery_io"));
@@ -790,6 +801,14 @@ public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelt
 
 
     // peripherals
+    ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, TinkerSmeltery.obsidianGauge)
+      .define('G', Tags.Items.GEMS_QUARTZ)
+      .define('C', TinkerCommons.obsidianPane)
+      .pattern(" C ")
+      .pattern("CGC")
+      .pattern(" C ")
+      .unlockedBy("has_item", has(TinkerCommons.obsidianPane))
+      .save(consumer, location(folder + "gauge"));
     ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, TinkerSmeltery.scorchedDrain)
                        .define('#', TinkerSmeltery.scorchedBrick)
                        .define('C', TinkerCommons.obsidianPane)
@@ -978,6 +997,9 @@ public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelt
     MeltingRecipeBuilder.melting(Ingredient.of(TinkerSmeltery.scorchedDrain, TinkerSmeltery.scorchedChute), TinkerFluids.moltenObsidian, FluidValues.GLASS_PANE * 2, 2.5f)
                         .addByproduct(TinkerFluids.scorchedStone.result(FluidValues.BRICK * 4))
                         .save(consumer, location("smeltery/melting/obsidian/foundry_io"));
+    MeltingRecipeBuilder.melting(Ingredient.of(TinkerSmeltery.obsidianGauge), TinkerFluids.moltenObsidian, FluidValues.GLASS_PANE, 2.5f)
+      .addByproduct(TinkerFluids.moltenQuartz.result(FluidValues.GEM / 4))
+      .save(consumer, location("smeltery/melting/obsidian/gauge"));
     MeltingRecipeBuilder.melting(Ingredient.of(TinkerSmeltery.scorchedDuct), TinkerFluids.moltenGold, FluidValues.INGOT * 2, 2.5f)
                         .addByproduct(TinkerFluids.scorchedStone.result(FluidValues.BRICK * 4))
                         .save(consumer, location("smeltery/melting/metal/cobalt/scorched_duct"));

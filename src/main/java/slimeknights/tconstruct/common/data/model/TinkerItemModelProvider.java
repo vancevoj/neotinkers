@@ -63,6 +63,10 @@ public class TinkerItemModelProvider extends ItemModelProvider {
     part(TinkerToolParts.maille);
     part(TinkerToolParts.shieldCore, "armor/plate/shield/core");
 
+    // gauges
+    generated(TinkerSmeltery.copperGauge, "block/smeltery/io/gauge");
+    generated(TinkerSmeltery.obsidianGauge, "block/foundry/io/gauge");
+
     // casts //
     // basic
     basicItem(TinkerSmeltery.blankSandCast, "sand_cast/blank");

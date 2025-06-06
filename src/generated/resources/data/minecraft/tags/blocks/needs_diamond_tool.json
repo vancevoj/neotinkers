@@ -30,6 +30,7 @@
     "tconstruct:scorched_drain",
     "tconstruct:scorched_chute",
     "tconstruct:scorched_proxy_tank",
-    "tconstruct:foundry_controller"
+    "tconstruct:foundry_controller",
+    "tconstruct:obsidian_gauge"
   ]
 }

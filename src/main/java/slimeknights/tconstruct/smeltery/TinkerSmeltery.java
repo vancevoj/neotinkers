@@ -30,6 +30,7 @@ import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.registries.RegisterEvent;
 import net.minecraftforge.registries.RegistryObject;
+import slimeknights.mantle.block.GaugeBlock;
 import slimeknights.mantle.fluid.transfer.FluidContainerTransferManager;
 import slimeknights.mantle.recipe.helper.LoadableRecipeSerializer;
 import slimeknights.mantle.recipe.helper.TypeAwareRecipeSerializer;
@@ -252,6 +253,12 @@ public final class TinkerSmeltery extends TinkerModule {
   public static final ItemObject<CastingTableBlock> scorchedTable = BLOCKS.register("scorched_table", () -> new CastingTableBlock(SCORCHED_NON_SOLID, true), TOOLTIP_BLOCK_ITEM);
   public static final ItemObject<ProxyTankBlock> scorchedProxyTank = BLOCKS.register("scorched_proxy_tank", () -> new ProxyTankBlock(SCORCHED_NON_SOLID), TOOLTIP_BLOCK_ITEM);
   // utility
+  public static final ItemObject<GaugeBlock> copperGauge, obsidianGauge;
+  static {
+    Properties gaugeProperties = Properties.of().mapColor(MapColor.NONE).pushReaction(PushReaction.DESTROY).noCollission().strength(0.5F).noOcclusion().requiresCorrectToolForDrops();
+    copperGauge = BLOCKS.register("copper_gauge", () -> new GaugeBlock(gaugeProperties), TOOLTIP_BLOCK_ITEM);
+    obsidianGauge = BLOCKS.register("obsidian_gauge", () -> new GaugeBlock(gaugeProperties), TOOLTIP_BLOCK_ITEM);
+  }
   public static final ItemObject<FluidCannonBlock> searedFluidCannon = BLOCKS.register("seared_fluid_cannon", () -> new FluidCannonBlock(SEARED_NON_SOLID, FluidType.BUCKET_VOLUME * 2, 1.0f, 1.1f, 6.0f), b -> new TankItem(b, ITEM_PROPS, true));
   public static final ItemObject<FluidCannonBlock> scorchedFluidCannon = BLOCKS.register("scorched_fluid_cannon", () -> new FluidCannonBlock(SCORCHED_NON_SOLID, FluidType.BUCKET_VOLUME * 2, 2.0f, 1.5f, 7.0f), b -> new TankItem(b, ITEM_PROPS, true));
 
@@ -460,6 +467,8 @@ public final class TinkerSmeltery extends TinkerModule {
     output.accept(scorchedChute);
 
     // tanks
+    output.accept(copperGauge);
+    output.accept(obsidianGauge);
     accept(output, searedTank);
     // toss in some pre filled fuel tanks
     output.accept(TankItem.fillTank(searedTank, TankType.FUEL_TANK, Fluids.LAVA));
