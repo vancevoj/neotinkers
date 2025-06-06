@@ -10,17 +10,15 @@
       {
         "tag": "tconstruct:modifiable/durability"
       },
-      [
-        {
-          "tag": "tconstruct:modifiable/interactable/right"
+      {
+        "type": "forge:difference",
+        "base": {
+          "tag": "tconstruct:modifiable/interactable/charge"
         },
-        {
-          "tag": "tconstruct:modifiable/shields"
-        },
-        {
-          "item": "tconstruct:swasher"
+        "subtracted": {
+          "tag": "tconstruct:modifiable/ranged/bows"
         }
-      ]
+      }
     ]
   }
 }

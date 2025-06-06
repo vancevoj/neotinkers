@@ -1226,9 +1226,10 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .addInput(TinkerSmeltery.searedFluidCannon)
                          .addInput(bowLimb)
                          .setSlots(SlotType.ABILITY, 1)
-                         // swasher gets spitting to get multishot, doesn't really fit any good categories for it otherwise (but feel free to request a tag)
-                         .setTools(IntersectionIngredient.of(Ingredient.of(TinkerTags.Items.DURABILITY), CompoundIngredient.of(
-                           Ingredient.of(TinkerTags.Items.INTERACTABLE_RIGHT), Ingredient.of(TinkerTags.Items.SHIELDS), Ingredient.of(TinkerTools.swasher))
+                         // swasher gets spitting to get multishot, rest get to spit with their non-spit. No spitting with arrows
+                         .setTools(IntersectionIngredient.of(
+                           Ingredient.of(TinkerTags.Items.DURABILITY),
+                           DifferenceIngredient.of(Ingredient.of(TinkerTags.Items.INTERACTABLE_CHARGE), Ingredient.of(TinkerTags.Items.BOWS))
                          ))
                          .saveSalvage(consumer, prefix(TinkerModifiers.spitting, abilitySalvage))
                          .save(consumer, prefix(TinkerModifiers.spitting, abilityFolder));
@@ -1399,8 +1400,8 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .save(consumer, prefix(TinkerModifiers.dualWielding, abilityFolder));
     ModifierRecipeBuilder.modifier(TinkerModifiers.blocking)
                          .setTools(DifferenceIngredient.of(
-                           IntersectionIngredient.of(ingredientFromTags(TinkerTags.Items.INTERACTABLE_RIGHT, TinkerTags.Items.BOWS), Ingredient.of(TinkerTags.Items.DURABILITY)),
-                           Ingredient.of(TinkerTags.Items.PARRY)))
+                           IntersectionIngredient.of(Ingredient.of(TinkerTags.Items.INTERACTABLE_CHARGE), Ingredient.of(TinkerTags.Items.DURABILITY)),
+                           ingredientFromTags(TinkerTags.Items.PARRY, TinkerTags.Items.SHIELDS)))
                          .addInput(ItemTags.PLANKS)
                          .addInput(TinkerMaterials.steel.getIngotTag())
                          .addInput(ItemTags.PLANKS)
