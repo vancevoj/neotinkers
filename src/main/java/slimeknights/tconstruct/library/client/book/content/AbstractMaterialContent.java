@@ -48,6 +48,7 @@ import slimeknights.tconstruct.library.tools.helper.ToolBuildHandler;
 import slimeknights.tconstruct.library.tools.item.IModifiable;
 import slimeknights.tconstruct.library.tools.nbt.MaterialNBT;
 import slimeknights.tconstruct.library.tools.part.IToolPart;
+import slimeknights.tconstruct.library.utils.Util;
 import slimeknights.tconstruct.tables.TinkerTables;
 import slimeknights.tconstruct.tools.TinkerToolParts;
 
@@ -258,6 +259,21 @@ public abstract class AbstractMaterialContent extends PageContent {
     }
   }
 
+
+  /** Gets the tooltip for a material category */
+  protected static TinkerItemElement makeCategoryIcon(ItemStack item, ResourceLocation name) {
+    TinkerItemElement element = new TinkerItemElement(item);
+    name = name.withPrefix("material.category.");
+    element.tooltip = List.of(
+      Component.translatable(Util.makeTranslationKey("book", name)),
+      Component.translatable(Util.makeTranslationKey("book", name.withSuffix(".description"))).withStyle(ChatFormatting.GRAY)
+    );
+    return element;
+  }
+
+  /** Adds the material category icon */
+  protected void addCategory(List<ItemElement> displayTools, MaterialId material) {}
+
   /** Adds items to the display tools list for all relevant recipes */
   protected void addPrimaryDisplayItems(List<ItemElement> displayTools, MaterialVariantId materialId) {
     // part builder
@@ -309,6 +325,8 @@ public abstract class AbstractMaterialContent extends PageContent {
   @SuppressWarnings("deprecation")  // its the best tag lookup
   protected void addDisplayItems(ArrayList<BookElement> list, int x, MaterialVariantId materialVariant) {
     List<ItemElement> displayTools = Lists.newArrayList();
+
+    addCategory(displayTools, materialVariant.getId());
 
     // add display items
     displayTools.add(new TinkerItemElement(0, 0, 1f, getRepairStacks()));

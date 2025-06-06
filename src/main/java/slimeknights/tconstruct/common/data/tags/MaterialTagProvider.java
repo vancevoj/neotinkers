@@ -49,12 +49,12 @@ public class MaterialTagProvider extends AbstractMaterialTagProvider {
       MaterialIds.wood, MaterialIds.string, MaterialIds.vine, MaterialIds.leather,
       // tier 2
       MaterialIds.iron, MaterialIds.slimewood,
-      MaterialIds.osmium,
+      MaterialIds.treatedWood, MaterialIds.osmium,
       // tier 3
       MaterialIds.slimesteel, MaterialIds.pigIron, MaterialIds.roseGold, MaterialIds.cobalt,
       MaterialIds.platedSlimewood, MaterialIds.electrum,
       // tier 4
-      MaterialIds.cinderslime, MaterialIds.queensSlime
+      MaterialIds.cinderslime, MaterialIds.queensSlime, MaterialIds.enderslimeVine
     );
     tag(TinkerTags.Materials.HARVEST).add(
       // tier 1
@@ -66,7 +66,7 @@ public class MaterialTagProvider extends AbstractMaterialTagProvider {
       MaterialIds.amethystBronze,
       MaterialIds.bronze, MaterialIds.constantan,
       // tier 4
-      MaterialIds.hepatizon
+      MaterialIds.hepatizon, MaterialIds.ancientHide
     );
     tag(TinkerTags.Materials.MELEE).add(
       // tier 1
@@ -75,10 +75,10 @@ public class MaterialTagProvider extends AbstractMaterialTagProvider {
       MaterialIds.scorchedStone, MaterialIds.necroticBone, MaterialIds.venombone,
       MaterialIds.silver, MaterialIds.lead,
       // tier 3
-      MaterialIds.nahuatl, MaterialIds.steel,
+      MaterialIds.nahuatl, MaterialIds.steel, MaterialIds.darkthread,
       MaterialIds.invar, MaterialIds.necronium,
       // tier 4
-      MaterialIds.manyullyn, MaterialIds.blazingBone
+      MaterialIds.manyullyn, MaterialIds.blazingBone, MaterialIds.enderslimeVine
     );
 
     // ranged
@@ -88,7 +88,7 @@ public class MaterialTagProvider extends AbstractMaterialTagProvider {
       MaterialIds.string, MaterialIds.vine,
       // tier 2
       MaterialIds.slimewood, MaterialIds.necroticBone, MaterialIds.skyslimeVine,
-      MaterialIds.platinum,
+      MaterialIds.treatedWood, MaterialIds.platinum,
       // tier 3
       MaterialIds.slimesteel, MaterialIds.roseGold, MaterialIds.darkthread, MaterialIds.cobalt,
       MaterialIds.invar,

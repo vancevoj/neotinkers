@@ -3232,6 +3232,20 @@
   "book.tconstruct.fluid_effects.entity": "Entity Effects:",
   "book.tconstruct.fluid_effects.block": "Block Effects:",
 
+  "book.tconstruct.material.category.general": "General Material",
+  "book.tconstruct.material.category.general.description": "This material is good on all tools, but may not be the strongest for a task",
+  "book.tconstruct.material.category.melee": "Melee Material",
+  "book.tconstruct.material.category.melee.description": "This material is best for melee weapons for effectively fighting monsters",
+  "book.tconstruct.material.category.harvest": "Harvest Material",
+  "book.tconstruct.material.category.harvest.description": "This material is best for harvest tools for effectively mining blocks",
+
+  "book.tconstruct.material.category.balanced": "Balanced Material",
+  "book.tconstruct.material.category.balanced.description": "This material has a balance of drawspeed and velocity",
+  "book.tconstruct.material.category.light": "Light Material",
+  "book.tconstruct.material.category.light.description": "This material is ideal for high drawspeed weapons, leading to high damage per second",
+  "book.tconstruct.material.category.heavy": "Heavy Material",
+  "book.tconstruct.material.category.heavy.description": "This material is ideal for high velocity weapons, leading to high projectile damage",
+
 
   "_comment": "Commands",
 
