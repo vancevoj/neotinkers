@@ -19,10 +19,10 @@
       "mining_tier": "minecraft:iron"
     },
     "tconstruct:limb": {
-      "accuracy": -0.15,
-      "draw_speed": -0.3,
+      "accuracy": -0.3,
+      "draw_speed": 0.1,
       "durability": 530,
-      "velocity": 0.2
+      "velocity": 0.1
     },
     "tconstruct:skull": {
       "armor": 1,

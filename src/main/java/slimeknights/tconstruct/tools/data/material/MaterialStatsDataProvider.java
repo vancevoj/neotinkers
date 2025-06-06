@@ -240,7 +240,7 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
                      new LimbMaterialStats(210, -0.10f, 0.05f, 0f),
                      new GripMaterialStats(-0.2f, 0f, 0.5f));
     addMaterialStats(MaterialIds.chorus,
-                     new LimbMaterialStats(180, 0.1f, 0f, 0.1f),
+                     new LimbMaterialStats(180, -0.05f, -0.05f, 0.1f),
                      new GripMaterialStats(0.1f, -0.1f, 1.0f));
     // tier 1 - bowstring
     addMaterialStats(MaterialIds.string, StatlessMaterialStats.BOWSTRING);
@@ -284,7 +284,7 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
 
     // tier 3
     addMaterialStats(MaterialIds.slimesteel,
-                     new LimbMaterialStats(1040, -0.1f, -0.05f, 0.15f),
+                     new LimbMaterialStats(1040, -0.05f, -0.05f, 0.15f),
                      new GripMaterialStats(0.2f, -0.1f, 2.5f));
     addMaterialStats(MaterialIds.nahuatl,
                      new LimbMaterialStats(350, 0.2f, -0.15f, 0.1f),
@@ -300,7 +300,7 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
                      new LimbMaterialStats(800, 0.05f, 0.05f, 0.05f),
                      new GripMaterialStats(0.05f, 0.05f, 2.25f));
     addMaterialStats(MaterialIds.blazingBone,
-                     new LimbMaterialStats(530, -0.3f, 0.2f, -0.15f),
+                     new LimbMaterialStats(530, 0.1f, 0.1f, -0.3f),
                      new GripMaterialStats(-0.15f, -0.10f, 3f));
     // tier 3 - bowstring
     addMaterialStats(MaterialIds.darkthread, StatlessMaterialStats.BOWSTRING);
@@ -331,18 +331,18 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
 
     // tier 4
     addMaterialStats(MaterialIds.cinderslime,
-                     new LimbMaterialStats(1221, 0.1f, -0.10f, 0.1f),
+                     new LimbMaterialStats(1221, -0.2f, 0, 0.25f),
                      new GripMaterialStats(0.20f, 0.05f, 2.25f));
     addMaterialStats(MaterialIds.queensSlime,
-                     new LimbMaterialStats(1650, 0f, -0.15f, 0.2f),
+                     new LimbMaterialStats(1650, 0f, -0.15f, 0.25f),
                      new GripMaterialStats(0.35f, -0.15f, 2f));
     addMaterialStats(MaterialIds.hepatizon,
                      new LimbMaterialStats(975, 0.25f, -0.05f, -0.10f),
                      new GripMaterialStats(0.1f, 0.15f, 2.5f));
     addMaterialStats(MaterialIds.manyullyn,
-                     new LimbMaterialStats(1250, -0.35f, 0.25f, -0.15f),
+                     new LimbMaterialStats(1250, -0.35f, 0.25f, 0f),
                      new GripMaterialStats(0.1f, -0.20f, 3.5f));
-    addMaterialStats(MaterialIds.ancient, new LimbMaterialStats(745, -0.15f, 0.05f, 0.15f));
+    addMaterialStats(MaterialIds.ancient, new LimbMaterialStats(745, -0.15f, 0.1f, 0.1f));
     // tier 4 (end)
     addMaterialStats(MaterialIds.enderslimeVine, StatlessMaterialStats.BOWSTRING);
   }

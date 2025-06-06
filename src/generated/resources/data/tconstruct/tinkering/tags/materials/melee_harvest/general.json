@@ -1,0 +1,19 @@
+{
+  "values": [
+    "tconstruct:wood",
+    "tconstruct:string",
+    "tconstruct:vine",
+    "tconstruct:leather",
+    "tconstruct:iron",
+    "tconstruct:slimewood",
+    "tconstruct:osmium",
+    "tconstruct:slimesteel",
+    "tconstruct:pig_iron",
+    "tconstruct:rose_gold",
+    "tconstruct:cobalt",
+    "tconstruct:plated_slimewood",
+    "tconstruct:electrum",
+    "tconstruct:cinderslime",
+    "tconstruct:queens_slime"
+  ]
+}

@@ -688,6 +688,23 @@ public class TinkerTags {
     /** Materials not found on ancient tools or other loot sources */
     public static final TagKey<IMaterial> EXCLUDE_FROM_LOOT = local("exclude_from_loot");
 
+    // material categories
+    // melee harvest
+    /** Materials that work well at both melee and harvest tasks, often durability focused or all around */
+    public static final TagKey<IMaterial> GENERAL = local("melee_harvest/general");
+    /** Materials that work best on melee tools */
+    public static final TagKey<IMaterial> MELEE = local("melee_harvest/melee");
+    /** Materials that work well on harvest tools */
+    public static final TagKey<IMaterial> HARVEST = local("melee_harvest/harvest");
+
+    // ranged
+    /** Ranged materials with average drawspeed and velocity */
+    public static final TagKey<IMaterial> BALANCED = local("ranged/balanced");
+    /** Ranged materials that prioritize high speed or DPS */
+    public static final TagKey<IMaterial> LIGHT = local("ranged/light");
+    /** Ranged materials that maximize damage */
+    public static final TagKey<IMaterial> HEAVY = local("ranged/heavy");
+
     @SuppressWarnings("SameParameterValue")  // may want more tags later
     private static TagKey<IMaterial> local(String name) {
       return MaterialManager.getTag(getResource(name));
