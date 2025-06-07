@@ -106,14 +106,14 @@ public record SlotInChargeModule(TinkerDataKey<SlotInCharge> key) implements Hoo
       levels[index] = 0;
       // prioritize armor slots
       for (EquipmentSlot armorSlot : ModifiableArmorMaterial.ARMOR_SLOTS) {
-        if (levels[slotType.getFilterFlag()] > 0) {
+        if (levels[armorSlot.getFilterFlag()] > 0) {
           inCharge = armorSlot;
           return;
         }
       }
       // if none, find a hand slot
       for (EquipmentSlot hand : InteractionHandler.HAND_SLOTS) {
-        if (levels[slotType.getFilterFlag()] > 0) {
+        if (levels[hand.getFilterFlag()] > 0) {
           inCharge = hand;
           return;
         }
