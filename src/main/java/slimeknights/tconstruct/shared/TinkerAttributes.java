@@ -32,6 +32,8 @@ public class TinkerAttributes {
   // stat bonuses
   /** Bonus jump height in blocks */
   public static final RegistryObject<Attribute> JUMP_BOOST = ATTRIBUTES.register("generic.jump_boost", 0, 0, 100, true);
+  /** Distance you can safely fall without damage */
+  public static final RegistryObject<Attribute> SAFE_FALL_DISTANCE = ATTRIBUTES.register("generic.safe_fall_distance", 0, -10, 100, true);
   /** Number of jumps the player may perform, used by the double jump modifier. */
   public static final RegistryObject<Attribute> JUMP_COUNT = ATTRIBUTES.register("player.jump_count", 1, 1, 100, true);
 
@@ -63,6 +65,7 @@ public class TinkerAttributes {
     addToAll(event, BOUNCY);
     addToAll(event, PROTECTION_CAP);
     addToAll(event, JUMP_BOOST);
+    addToAll(event, SAFE_FALL_DISTANCE);
     addToAll(event, CROUCH_DAMAGE_MULTIPLIER);
     addToAll(event, KNOCKBACK_MULTIPLIER);
     addToAll(event, GOOD_EFFECT_DURATION);

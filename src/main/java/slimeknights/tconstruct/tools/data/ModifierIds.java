@@ -144,6 +144,7 @@ public class ModifierIds {
   public static final ModifierId scorching = id("scorching");
   public static final ModifierId antitoxin = id("antitoxin");
   public static final ModifierId airborne = id("airborne");
+  public static final ModifierId skyfall = id("skyfall");
   public static final ModifierId scorchProtection = id("scorch_protection");
   // traits - tier 2 compat
   public static final ModifierId dense = id("dense");

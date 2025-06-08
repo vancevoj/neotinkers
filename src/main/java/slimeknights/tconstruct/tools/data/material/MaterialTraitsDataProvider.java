@@ -59,6 +59,7 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     addDefaultTraits(MaterialIds.whitestone, TinkerModifiers.stoneshield);
     // tier 2 - binding
     addDefaultTraits(MaterialIds.skyslimeVine, ModifierIds.airborne);
+    addTraits(MaterialIds.skyslimeVine, ARMOR, ModifierIds.skyfall);
 
     // tier 3
     addDefaultTraits(MaterialIds.slimesteel, ModifierIds.overcast, TinkerModifiers.overslime.getId());
@@ -91,6 +92,7 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
 
     // tier 5
     addDefaultTraits(MaterialIds.enderslimeVine, TinkerModifiers.enderporting);
+    addTraits(MaterialIds.enderslimeVine, ARMOR, ModifierIds.enderclearance);
 
     // tier 2 - mod compat
     addDefaultTraits(MaterialIds.osmium, ModifierIds.dense);
