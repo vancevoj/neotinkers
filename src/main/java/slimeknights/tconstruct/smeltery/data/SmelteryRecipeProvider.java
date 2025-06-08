@@ -802,7 +802,7 @@ public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelt
 
     // peripherals
     ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, TinkerSmeltery.obsidianGauge)
-      .define('G', Tags.Items.GEMS_QUARTZ)
+      .define('G', Tags.Items.GLASS_PANES_COLORLESS)
       .define('C', TinkerCommons.obsidianPane)
       .pattern(" C ")
       .pattern("CGC")
@@ -998,7 +998,7 @@ public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelt
                         .addByproduct(TinkerFluids.scorchedStone.result(FluidValues.BRICK * 4))
                         .save(consumer, location("smeltery/melting/obsidian/foundry_io"));
     MeltingRecipeBuilder.melting(Ingredient.of(TinkerSmeltery.obsidianGauge), TinkerFluids.moltenObsidian, FluidValues.GLASS_PANE, 2.5f)
-      .addByproduct(TinkerFluids.moltenQuartz.result(FluidValues.GEM / 4))
+      .addByproduct(TinkerFluids.moltenGlass.result(FluidValues.GLASS_PANE / 5))
       .save(consumer, location("smeltery/melting/obsidian/gauge"));
     MeltingRecipeBuilder.melting(Ingredient.of(TinkerSmeltery.scorchedDuct), TinkerFluids.moltenGold, FluidValues.INGOT * 2, 2.5f)
                         .addByproduct(TinkerFluids.scorchedStone.result(FluidValues.BRICK * 4))
