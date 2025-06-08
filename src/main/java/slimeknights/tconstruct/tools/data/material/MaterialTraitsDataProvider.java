@@ -86,8 +86,8 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     addDefaultTraits(MaterialIds.blazewood, ModifierIds.flameBarrier);
     addDefaultTraits(MaterialIds.ancient, ModifierIds.vintage, ModifierIds.worldbound);
     // tier 4 - binding
-    addDefaultTraits(MaterialIds.ancientHide, ModifierIds.fortune);
-    addTraits(MaterialIds.ancientHide, ARMOR, ModifierIds.fortified);
+    addTraits(MaterialIds.ancientHide, MELEE_HARVEST, ModifierIds.fortune);
+    addDefaultTraits(MaterialIds.ancientHide, ModifierIds.fortified);
 
     // tier 5
     addDefaultTraits(MaterialIds.enderslimeVine, TinkerModifiers.enderporting);

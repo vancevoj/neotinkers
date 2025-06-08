@@ -1837,6 +1837,7 @@
   "material.tconstruct.ancient_hide": "Ancient Hide",
   "material.tconstruct.ancient_hide.flavor": "Leather tanned by the oldest of stone",
   "material.tconstruct.ancient_hide.encyclopedia": "Increases drop chances from blocks, stacking with luck",
+  "material.tconstruct.ancient_hide.ranged": "Grants an extra defense slot",
   "material.tconstruct.ancient_hide.armor": "Grants an extra defense slot",
 
   "__comment": "Tier End Materials",

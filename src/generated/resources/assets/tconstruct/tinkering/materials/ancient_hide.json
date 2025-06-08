@@ -6,6 +6,7 @@
   "generator": {
     "supported_stats": [
       "tconstruct:binding",
+      "tconstruct:bowstring",
       "tconstruct:maille",
       "tconstruct:armor_maille"
     ],

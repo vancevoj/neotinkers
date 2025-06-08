@@ -245,6 +245,7 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
     // tier 1 - bowstring
     addMaterialStats(MaterialIds.string, StatlessMaterialStats.BOWSTRING);
     addMaterialStats(MaterialIds.vine, StatlessMaterialStats.BOWSTRING);
+    addMaterialStats(MaterialIds.leather, StatlessMaterialStats.BOWSTRING);
 
     // tier 2
     addMaterialStats(MaterialIds.slimewood,
@@ -344,6 +345,7 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
                      new GripMaterialStats(0.1f, -0.20f, 3.5f));
     addMaterialStats(MaterialIds.ancient, new LimbMaterialStats(745, -0.15f, 0.1f, 0.1f));
     // tier 4 (end)
+    addMaterialStats(MaterialIds.ancientHide, StatlessMaterialStats.BOWSTRING);
     addMaterialStats(MaterialIds.enderslimeVine, StatlessMaterialStats.BOWSTRING);
   }
 

@@ -4,6 +4,7 @@
     "tconstruct:chorus",
     "tconstruct:string",
     "tconstruct:vine",
+    "tconstruct:leather",
     "tconstruct:slimewood",
     "tconstruct:necrotic_bone",
     "tconstruct:skyslime_vine",
@@ -14,6 +15,7 @@
     "tconstruct:darkthread",
     "tconstruct:cobalt",
     "tconstruct:invar",
-    "tconstruct:blazing_bone"
+    "tconstruct:blazing_bone",
+    "tconstruct:ancient_hide"
   ]
 }

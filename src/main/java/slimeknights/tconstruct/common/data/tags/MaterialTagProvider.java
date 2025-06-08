@@ -85,7 +85,7 @@ public class MaterialTagProvider extends AbstractMaterialTagProvider {
     tag(TinkerTags.Materials.BALANCED).add(
       // tier 1
       MaterialIds.wood, MaterialIds.chorus,
-      MaterialIds.string, MaterialIds.vine,
+      MaterialIds.string, MaterialIds.vine, MaterialIds.leather,
       // tier 2
       MaterialIds.slimewood, MaterialIds.necroticBone, MaterialIds.skyslimeVine,
       MaterialIds.treatedWood, MaterialIds.platinum,
@@ -93,7 +93,8 @@ public class MaterialTagProvider extends AbstractMaterialTagProvider {
       MaterialIds.slimesteel, MaterialIds.roseGold, MaterialIds.darkthread, MaterialIds.cobalt,
       MaterialIds.invar,
       // tier 4
-      MaterialIds.blazingBone
+      MaterialIds.blazingBone,
+      MaterialIds.ancientHide
     );
     tag(TinkerTags.Materials.LIGHT).add(
       // tier 1

@@ -33,7 +33,7 @@ public class MaterialDataProvider extends AbstractMaterialDataProvider {
     // tier 1 - end
     addMaterial(MaterialIds.chorus, 1, ORDER_END,     true);
     // tier 1 - binding
-    addMaterial(MaterialIds.string,  1, ORDER_BINDING, true);
+    addMaterial(MaterialIds.string,  1, ORDER_BINDING - 2, true); // earlier order so its the first in stat type
     addMaterial(MaterialIds.leather, 1, ORDER_BINDING, true);
     addMaterial(MaterialIds.vine,    1, ORDER_BINDING, true);
 

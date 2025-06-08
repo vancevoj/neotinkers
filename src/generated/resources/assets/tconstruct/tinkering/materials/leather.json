@@ -7,6 +7,7 @@
     "supported_stats": [
       "tconstruct:repair_kit",
       "tconstruct:binding",
+      "tconstruct:bowstring",
       "tconstruct:maille",
       "tconstruct:armor_maille"
     ],
