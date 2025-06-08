@@ -51,6 +51,7 @@ import slimeknights.tconstruct.library.recipe.ingredient.NoContainerIngredient;
 import slimeknights.tconstruct.library.recipe.ingredient.ToolHookIngredient;
 import slimeknights.tconstruct.library.recipe.modifiers.adding.IncrementalModifierRecipeBuilder;
 import slimeknights.tconstruct.library.recipe.modifiers.adding.ModifierRecipeBuilder;
+import slimeknights.tconstruct.library.recipe.modifiers.adding.MultilevelModifierRecipeBuilder;
 import slimeknights.tconstruct.library.recipe.modifiers.adding.OverslimeModifierRecipeBuilder;
 import slimeknights.tconstruct.library.recipe.modifiers.adding.SwappableModifierRecipe.VariantFormatter;
 import slimeknights.tconstruct.library.recipe.modifiers.adding.SwappableModifierRecipeBuilder;
@@ -156,17 +157,19 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
   }
 
   private void addModifierRecipes(Consumer<FinishedRecipe> consumer) {
-    // upgrades
+    // modifiers
     String upgradeFolder = "tools/modifiers/upgrade/";
     String abilityFolder = "tools/modifiers/ability/";
     String slotlessFolder = "tools/modifiers/slotless/";
-    String upgradeSalvage = "tools/modifiers/salvage/upgrade/";
-    String abilitySalvage = "tools/modifiers/salvage/ability/";
     String defenseFolder = "tools/modifiers/defense/";
-    String defenseSalvage = "tools/modifiers/salvage/defense/";
     String compatFolder = "tools/modifiers/compat/";
-    String compatSalvage = "tools/modifiers/salvage/compat/";
     String worktableFolder = "tools/modifiers/worktable/";
+    // salvage
+    String salvageFolder = "tools/modifiers/salvage/";
+    String upgradeSalvage = salvageFolder + "upgrade/";
+    String abilitySalvage = salvageFolder + "ability/";
+    String defenseSalvage = salvageFolder + "defense/";
+    String compatSalvage = salvageFolder + "compat/";
 
     /*
      * durability
@@ -799,12 +802,22 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
     // leaping lets you disable skyslime geodes in case you don't like fun
     // if you are disabling both, you have a ton of recipes to fix anyways
     IncrementalModifierRecipeBuilder.modifier(ModifierIds.leaping)
-                                    .setTools(TinkerTags.Items.LEGGINGS)
-                                    .setInput(TinkerWorld.skyGeode.asItem(), 1, 36)
-                                    .setMaxLevel(2)
-                                    .setSlots(SlotType.UPGRADE, 1)
-                                    .saveSalvage(consumer, prefix(ModifierIds.leaping, upgradeSalvage))
-                                    .save(consumer, prefix(ModifierIds.leaping, upgradeFolder));
+      .setTools(TinkerTags.Items.LEGGINGS)
+      .setInput(TinkerWorld.skyGeode.asItem(), 1, 36)
+      .setMaxLevel(1)
+      .setSlots(SlotType.UPGRADE, 1)
+      .save(consumer, prefix(ModifierIds.leaping, upgradeFolder));
+    IncrementalModifierRecipeBuilder.modifier(ModifierIds.leaping)
+      .setTools(TinkerTags.Items.LEGGINGS)
+      .setInput(TinkerWorld.skyGeode.getBlock(), 1, 18)
+      .exactLevel(2)
+      .setSlots(SlotType.ABILITY, 1)
+      .save(consumer, prefix(ModifierIds.leaping, abilityFolder));
+    MultilevelModifierRecipeBuilder.modifier(ModifierIds.leaping)
+      .setTools(TinkerTags.Items.LEGGINGS)
+      .addLevelRange(SlotType.UPGRADE, 1, 1, 1)
+      .addLevelRange(SlotType.ABILITY, 1, 2, 2)
+      .saveSalvage(consumer, prefix(ModifierIds.leaping, salvageFolder));
     ModifierRecipeBuilder.modifier(ModifierIds.stepUp)
                          .setTools(TinkerTags.Items.LEGGINGS)
                          .addInput(Items.LEATHER)

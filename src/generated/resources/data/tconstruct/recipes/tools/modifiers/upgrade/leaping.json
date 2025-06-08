@@ -5,9 +5,7 @@
   "input": {
     "item": "tconstruct:sky_slime_crystal"
   },
-  "level": {
-    "max": 2
-  },
+  "level": 1,
   "needed_per_level": 36,
   "result": "tconstruct:leaping",
   "slots": {
