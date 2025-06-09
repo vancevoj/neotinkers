@@ -60,6 +60,8 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     // tier 2 - binding
     addDefaultTraits(MaterialIds.skyslimeVine, ModifierIds.airborne);
     addTraits(MaterialIds.skyslimeVine, ARMOR, ModifierIds.skyfall);
+    addDefaultTraits(MaterialIds.weepingVine, ModifierIds.flamestance);
+    addDefaultTraits(MaterialIds.twistingVine, ModifierIds.entangled);
 
     // tier 3
     addDefaultTraits(MaterialIds.slimesteel, ModifierIds.overcast, TinkerModifiers.overslime.getId());

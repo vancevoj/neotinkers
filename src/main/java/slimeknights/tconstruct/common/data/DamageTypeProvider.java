@@ -10,6 +10,7 @@ import slimeknights.tconstruct.library.modifiers.fluid.entity.DamageFluidEffect.
 
 import static slimeknights.tconstruct.TConstruct.prefix;
 import static slimeknights.tconstruct.common.TinkerDamageTypes.BLEEDING;
+import static slimeknights.tconstruct.common.TinkerDamageTypes.ENTANGLED;
 import static slimeknights.tconstruct.common.TinkerDamageTypes.EXPLOSION;
 import static slimeknights.tconstruct.common.TinkerDamageTypes.FLUID_COLD;
 import static slimeknights.tconstruct.common.TinkerDamageTypes.FLUID_FIRE;
@@ -39,6 +40,7 @@ public class DamageTypeProvider implements RegistrySetBuilder.RegistryBootstrap<
     context.register(SMELTERY_MAGIC, new DamageType(prefix("smeltery_magic"), DamageScaling.NEVER, 0.1f, DamageEffects.BURNING));
     context.register(PIERCING, new DamageType(prefix("piercing"), 0.1f));
     context.register(BLEEDING, new DamageType(prefix("bleed"), DamageScaling.NEVER, 0.1f));
+    context.register(ENTANGLED, new DamageType(prefix("entangled"), DamageScaling.NEVER, 0.1f));
     context.register(SELF_DESTRUCT, new DamageType(prefix("self_destruct"), DamageScaling.NEVER, 0.1f));
     context.register(MELEE_ARROW, new DamageType("arrow", 0.1f));
     register(context, EXPLOSION, new DamageType("explosion", DamageScaling.NEVER, 0.1f));

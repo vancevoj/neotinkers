@@ -36,6 +36,8 @@ public final class MaterialIds {
   public static final MaterialId whitestone = id("whitestone");
   // tier 2 - bindings
   public static final MaterialId skyslimeVine = id("skyslime_vine");
+  public static final MaterialId weepingVine = id("weeping_vine");
+  public static final MaterialId twistingVine = id("twisting_vine");
   // tier 3
   public static final MaterialId slimesteel = id("slimesteel");
   public static final MaterialId amethystBronze = id("amethyst_bronze");

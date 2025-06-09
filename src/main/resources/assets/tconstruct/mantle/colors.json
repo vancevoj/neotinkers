@@ -217,6 +217,8 @@
     "tanned":        "#C65C35",
     "tasty":         "#F0A8A4",
     "vintage":       "#7E6059",
+    "flamestance":   "#C53439",
+    "entangled":     "#14B485",
 
     "__traits_melee__": null,
     "airborne":     "#00F4DA",
@@ -338,6 +340,8 @@
     "whitestone":      "#CDC68B",
     "whitestone.end":  "#CDC68B",
     "skyslime_vine":   "#00F4DA",
+    "weeping_vine":    "#C53439",
+    "twisting_vine":   "#14B485",
     "__tier_2_slimewood__": null,
     "slimewood":             "#82c873",
     "slimewood.composite":   "#92BE6D",

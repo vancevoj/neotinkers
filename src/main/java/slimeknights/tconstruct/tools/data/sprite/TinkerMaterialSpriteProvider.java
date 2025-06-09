@@ -196,6 +196,14 @@ public class TinkerMaterialSpriteProvider extends AbstractMaterialSpriteProvider
       .statType(StatlessMaterialStats.BINDING.getIdentifier(), StatlessMaterialStats.BOWSTRING.getIdentifier()).maille()
       .fallbacks("primitive", "cloth")
       .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF2F5351).addARGB(102, 0xFF3C6A68).addARGB(140, 0xFF4F918F).addARGB(178, 0xFF63ACAB).addARGB(216, 0xFF6DBEBD).addARGB(255, 0xFF82D7D5).build());
+    buildMaterial(MaterialIds.weepingVine)
+      .statType(StatlessMaterialStats.BINDING.getIdentifier(), StatlessMaterialStats.BOWSTRING.getIdentifier()).maille()
+      .fallbacks("primitive", "cloth")
+      .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF5A0000).addARGB(102, 0xFF6A0400).addARGB(140, 0xFF7B0000).addARGB(178, 0xFFA42429).addARGB(216, 0xFFC53439).addARGB(255, 0xFFFF6500).build());
+    buildMaterial(MaterialIds.twistingVine)
+      .statType(StatlessMaterialStats.BINDING.getIdentifier(), StatlessMaterialStats.BOWSTRING.getIdentifier()).maille()
+      .fallbacks("primitive", "cloth")
+      .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF13544E).addARGB(102, 0xFF16615B).addARGB(140, 0xFF167E86).addARGB(178, 0xFF119B85).addARGB(216, 0xFF14B485).addARGB(255, 0xFF18CC96).build());
     buildMaterial(MaterialIds.slimesteel)
       .meleeHarvest().ranged().armor()
       .fallbacks("slime_metal", "metal")

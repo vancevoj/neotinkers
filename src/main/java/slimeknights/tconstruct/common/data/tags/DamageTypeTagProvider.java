@@ -11,6 +11,7 @@ import java.util.concurrent.CompletableFuture;
 
 import static net.minecraft.tags.DamageTypeTags.AVOIDS_GUARDIAN_THORNS;
 import static net.minecraft.tags.DamageTypeTags.BYPASSES_ARMOR;
+import static net.minecraft.tags.DamageTypeTags.BYPASSES_EFFECTS;
 import static net.minecraft.tags.DamageTypeTags.BYPASSES_ENCHANTMENTS;
 import static net.minecraft.tags.DamageTypeTags.IS_EXPLOSION;
 import static net.minecraft.tags.DamageTypeTags.IS_FALL;
@@ -31,6 +32,7 @@ import static net.minecraft.world.damagesource.DamageTypes.STING;
 import static net.minecraft.world.damagesource.DamageTypes.WITHER;
 import static net.minecraft.world.damagesource.DamageTypes.WITHER_SKULL;
 import static slimeknights.tconstruct.common.TinkerDamageTypes.BLEEDING;
+import static slimeknights.tconstruct.common.TinkerDamageTypes.ENTANGLED;
 import static slimeknights.tconstruct.common.TinkerDamageTypes.EXPLOSION;
 import static slimeknights.tconstruct.common.TinkerDamageTypes.FLUID_COLD;
 import static slimeknights.tconstruct.common.TinkerDamageTypes.FLUID_FIRE;
@@ -62,8 +64,9 @@ public class DamageTypeTagProvider extends DamageTypeTagsProvider {
     tag(IS_EXPLOSION).add(SELF_DESTRUCT).add(EXPLOSION.values()).add(MOB_EXPLOSION.values());
     tag(IS_FREEZING).add(FLUID_COLD.values());
     tag(WITCH_RESISTANT_TO).add(SMELTERY_MAGIC).add(FLUID_MAGIC.values());
-    tag(BYPASSES_ARMOR).add(PIERCING, SELF_DESTRUCT, BLEEDING).add(WATER.values()).add(FLUID_SPIKE.values());
+    tag(BYPASSES_ARMOR).add(PIERCING, SELF_DESTRUCT, BLEEDING, ENTANGLED).add(WATER.values()).add(FLUID_SPIKE.values());
     tag(BYPASSES_ENCHANTMENTS).add(BLEEDING);
+    tag(BYPASSES_EFFECTS).add(ENTANGLED);
     tag(AVOIDS_GUARDIAN_THORNS).add(BLEEDING);
     // whole reason these are a pair is so we can tag one as projectile
     tag(IS_PROJECTILE).add(FLUID_IMPACT.ranged(), FLUID_FIRE.ranged(), FLUID_COLD.ranged(), FLUID_MAGIC.ranged(), WATER.ranged(), FLUID_SPIKE.ranged(), EXPLOSION.ranged(), MOB_EXPLOSION.ranged());

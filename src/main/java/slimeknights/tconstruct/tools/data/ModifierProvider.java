@@ -46,6 +46,7 @@ import slimeknights.tconstruct.library.json.predicate.HasMobEffectPredicate;
 import slimeknights.tconstruct.library.json.predicate.TinkerPredicate;
 import slimeknights.tconstruct.library.json.predicate.tool.HasModifierPredicate;
 import slimeknights.tconstruct.library.json.predicate.tool.ToolContextPredicate;
+import slimeknights.tconstruct.library.json.predicate.tool.ToolStackPredicate;
 import slimeknights.tconstruct.library.json.variable.block.BlockVariable;
 import slimeknights.tconstruct.library.json.variable.entity.AttributeEntityVariable;
 import slimeknights.tconstruct.library.json.variable.entity.ConditionalEntityVariable;
@@ -128,6 +129,7 @@ import slimeknights.tconstruct.tools.data.material.MaterialIds;
 import slimeknights.tconstruct.tools.item.CrystalshotItem;
 import slimeknights.tconstruct.tools.logic.ModifierEvents;
 import slimeknights.tconstruct.tools.modifiers.slotless.OverslimeModifier;
+import slimeknights.tconstruct.tools.modules.DamageOnUnequipModule;
 import slimeknights.tconstruct.tools.modules.HeadlightModule;
 import slimeknights.tconstruct.tools.modules.MeltingModule;
 import slimeknights.tconstruct.tools.modules.OverburnModule;
@@ -589,6 +591,44 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .levelDisplay(ModifierLevelDisplay.NO_LEVELS)
       .addModule(AttributeModule.builder(ForgeMod.ENTITY_GRAVITY.get(), Operation.MULTIPLY_TOTAL).flat(-0.2f))
       .addModule(AttributeModule.builder(TinkerAttributes.SAFE_FALL_DISTANCE.get(), Operation.ADDITION).flat(1));
+
+    buildModifier(ModifierIds.flamestance)
+      .levelDisplay(ModifierLevelDisplay.NO_LEVELS)
+      .addModule(ConditionalMeleeDamageModule.builder()
+        .formula()
+        .customVariable("temperature", new EntityMeleeVariable(EntityVariable.BIOME_TEMPERATURE, WhichEntity.ATTACKER, 2.0f))
+        .constant(0.5f).subtract() // range is now -1 to 1.5, which is a solid range for melee damage boosts
+        .variable(MULTIPLIER).multiply() // no need to multiply by levels, this never goes past level 1
+        .variable(VALUE).add()
+        .build())
+      .addModule(ConditionalStatModule.stat(ToolStats.PROJECTILE_DAMAGE)
+        .formula()
+        .customVariable("temperature", new EntityConditionalStatVariable(EntityVariable.BIOME_TEMPERATURE, 2.0f))
+        .constant(0.5f).subtract() // range is now -1 to 1.5
+        .constant(0.5f).multiply() // move range to be -0.5 to 0.75, bit more reasonable power ranges
+        .variable(MULTIPLIER).multiply() // no need to multiply by levels, this never goes past level 1
+        .variable(VALUE).add()
+        .build())
+      .addModule(ProtectionModule.builder()
+        .toolItem(ItemPredicate.tag(TinkerTags.Items.ARMOR))
+        .formula()
+        .customVariable("temperature", new EntityProtectionVariable(EntityVariable.BIOME_TEMPERATURE, EntityProtectionVariable.WhichEntity.TARGET, 2.0f))
+        .constant(0.5f).subtract() // range is now -1 to 1.5, effective -4% to +6%
+        .variable(VALUE).add() // its a single level modifier, no need to worry about anything else!
+        .build());
+
+    buildModifier(ModifierIds.entangled)
+      .levelDisplay(ModifierLevelDisplay.NO_LEVELS)
+      // harvest: +6 is a bit better than haste
+      .addModule(StatBoostModule.add(ToolStats.MINING_SPEED).flat(6))
+      // armor: +15% knockback resistance, making it stronger than anvil
+      .addModule(StatBoostModule.add(ToolStats.KNOCKBACK_RESISTANCE).flat(0.15f))
+      // ranged: +10% drawspeed is on par with netherite, hard to get elsewhere
+      .addModule(StatBoostModule.add(ToolStats.DRAW_SPEED).flat(0.15f))
+      // downside: don't take it off, damage more for armor
+      .addModule(new DamageOnUnequipModule(1, ModifierCondition.ANY_TOOL.with(ToolStackPredicate.tag(TinkerTags.Items.WORN_ARMOR).inverted())))
+      .addModule(new DamageOnUnequipModule(2, ModifierCondition.ANY_TOOL.with(ToolStackPredicate.tag(TinkerTags.Items.WORN_ARMOR))));
+
     buildModifier(ModifierIds.antitoxin)
       .addModule(ConditionalMeleeDamageModule.builder()
         .attacker(new HasMobEffectPredicate(MobEffects.POISON))

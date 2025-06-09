@@ -105,6 +105,8 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
                      StatlessMaterialStats.BINDING);
     // tier 2 - bindings
     addMaterialStats(MaterialIds.skyslimeVine, StatlessMaterialStats.BINDING);
+    addMaterialStats(MaterialIds.weepingVine, StatlessMaterialStats.BINDING);
+    addMaterialStats(MaterialIds.twistingVine, StatlessMaterialStats.BINDING);
 
     // tier 2 (mod integration)
     addMaterialStats(MaterialIds.osmium,
@@ -262,6 +264,8 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
                      new GripMaterialStats(-0.3f, 0.1f, 2.25f));
     // tier 2 - bowstring
     addMaterialStats(MaterialIds.skyslimeVine, StatlessMaterialStats.BOWSTRING);
+    addMaterialStats(MaterialIds.weepingVine, StatlessMaterialStats.BOWSTRING);
+    addMaterialStats(MaterialIds.twistingVine, StatlessMaterialStats.BOWSTRING);
 
     // tier 2 - compat
     addMaterialStats(MaterialIds.platinum,
@@ -361,6 +365,8 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
     addMaterialStats(MaterialIds.slimewood, StatlessMaterialStats.SHIELD_CORE);
     addMaterialStats(MaterialIds.slimeskin, StatlessMaterialStats.MAILLE);
     addMaterialStats(MaterialIds.skyslimeVine, StatlessMaterialStats.MAILLE);
+    addMaterialStats(MaterialIds.weepingVine, StatlessMaterialStats.MAILLE);
+    addMaterialStats(MaterialIds.twistingVine, StatlessMaterialStats.MAILLE);
     addArmorShieldStats(MaterialIds.iron,          PlatingMaterialStats.builder().durabilityFactor(15).armor(2, 4, 5, 2), StatlessMaterialStats.MAILLE);
     addArmorShieldStats(MaterialIds.gold,          PlatingMaterialStats.builder().durabilityFactor( 7).armor(1, 3, 4, 1), StatlessMaterialStats.MAILLE);
     addArmorShieldStats(MaterialIds.searedStone,   PlatingMaterialStats.builder().durabilityFactor(14).armor(1, 3, 4, 2).knockbackResistance(0.1f), StatlessMaterialStats.MAILLE);

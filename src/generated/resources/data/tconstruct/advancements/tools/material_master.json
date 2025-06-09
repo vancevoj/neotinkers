@@ -421,6 +421,20 @@
       },
       "trigger": "minecraft:inventory_changed"
     },
+    "twisting_vine": {
+      "conditions": {
+        "items": [
+          {
+            "type": "tconstruct:tool_stack",
+            "predicate": {
+              "type": "tconstruct:has_material",
+              "material": "tconstruct:twisting_vine"
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
     "vine": {
       "conditions": {
         "items": [
@@ -429,6 +443,20 @@
             "predicate": {
               "type": "tconstruct:has_material",
               "material": "tconstruct:vine"
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "weeping_vine": {
+      "conditions": {
+        "items": [
+          {
+            "type": "tconstruct:tool_stack",
+            "predicate": {
+              "type": "tconstruct:has_material",
+              "material": "tconstruct:weeping_vine"
             }
           }
         ]
@@ -530,6 +558,12 @@
     ],
     [
       "skyslime_vine"
+    ],
+    [
+      "weeping_vine"
+    ],
+    [
+      "twisting_vine"
     ],
     [
       "whitestone"

@@ -50,6 +50,8 @@ public class MaterialDataProvider extends AbstractMaterialDataProvider {
     addMaterial(MaterialIds.whitestone, 2, ORDER_END, true);
     // tier 2 - binding
     addMaterial(MaterialIds.skyslimeVine, 2, ORDER_BINDING, true);
+    addMaterial(MaterialIds.weepingVine,  2, ORDER_BINDING, true);
+    addMaterial(MaterialIds.twistingVine, 2, ORDER_BINDING, true);
     // bloodbone reworked into venombone
     addRedirect(new MaterialId(TConstruct.MOD_ID, "bloodbone"), redirect(MaterialIds.venombone));
 

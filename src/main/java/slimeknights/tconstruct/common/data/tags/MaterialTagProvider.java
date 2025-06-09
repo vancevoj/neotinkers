@@ -60,7 +60,7 @@ public class MaterialTagProvider extends AbstractMaterialTagProvider {
       // tier 1
       MaterialIds.rock, MaterialIds.copper,
       // tier 2
-      MaterialIds.searedStone, MaterialIds.whitestone, MaterialIds.skyslimeVine,
+      MaterialIds.searedStone, MaterialIds.whitestone, MaterialIds.skyslimeVine, MaterialIds.twistingVine,
       MaterialIds.tungsten, MaterialIds.platinum,
       // tier 3
       MaterialIds.amethystBronze,
@@ -72,7 +72,7 @@ public class MaterialTagProvider extends AbstractMaterialTagProvider {
       // tier 1
       MaterialIds.flint, MaterialIds.bone, MaterialIds.chorus,
       // tier 2
-      MaterialIds.scorchedStone, MaterialIds.necroticBone, MaterialIds.venombone,
+      MaterialIds.scorchedStone, MaterialIds.necroticBone, MaterialIds.venombone, MaterialIds.weepingVine,
       MaterialIds.silver, MaterialIds.lead,
       // tier 3
       MaterialIds.nahuatl, MaterialIds.steel, MaterialIds.darkthread,
@@ -100,7 +100,7 @@ public class MaterialTagProvider extends AbstractMaterialTagProvider {
       // tier 1
       MaterialIds.bamboo, MaterialIds.bone,
       // tier 2
-      MaterialIds.venombone,
+      MaterialIds.venombone, MaterialIds.twistingVine,
       MaterialIds.aluminum, MaterialIds.tungsten,
       // tier 3
       MaterialIds.nahuatl,
@@ -112,7 +112,7 @@ public class MaterialTagProvider extends AbstractMaterialTagProvider {
       // tier 1
       MaterialIds.copper,
       // tier 2
-      MaterialIds.iron,
+      MaterialIds.iron, MaterialIds.weepingVine,
       MaterialIds.silver, MaterialIds.lead,
       // tier 3
       MaterialIds.amethystBronze, MaterialIds.steel,

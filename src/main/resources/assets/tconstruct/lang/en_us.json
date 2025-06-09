@@ -1174,6 +1174,8 @@
   "death.attack.tconstruct.self_destruct.player": "%1$s self destructed whilst fighting %2$s",
   "death.attack.tconstruct.piercing": "%1$s was pierced by %2$s",
   "death.attack.tconstruct.piercing.item": "%1$s was pierced by %2$s using %3$s",
+  "death.attack.tconstruct.entangled": "%1$s could not let go of their tool",
+  "death.attack.tconstruct.entangled.player": "%1$s could not let go of their tool whilst fighting %2$s",
 
   "death.attack.tconstruct.fluid.impact": "%1$s was pummeled by %2$s",
   "death.attack.tconstruct.fluid.impact.item": "%1$s was pummeled by %2$s using %3$s",
@@ -1764,6 +1766,18 @@
   "material.tconstruct.skyslime_vine.encyclopedia": "Cancels out the mining speed reduction when not on the ground",
   "material.tconstruct.skyslime_vine.ranged": "Grants +0.5 accuracy when not on the ground or a ladder",
   "material.tconstruct.skyslime_vine.armor": "Reduces gravity by 20% per piece",
+
+  "material.tconstruct.weeping_vine": "Weeping Vine",
+  "material.tconstruct.weeping_vine.flavor": "Channel the heat.",
+  "material.tconstruct.weeping_vine.encyclopedia": "Grants up to +1.5 melee damage in hot biomes, but lose up to -1 melee damage in cold biomes.",
+  "material.tconstruct.weeping_vine.ranged": "Grants +0.75 power in hot biomes, but lose up to -0.5 power in cold biomes",
+  "material.tconstruct.weeping_vine.armor": "Grants up to +6% protection in hot biomes, but lose up to -4% protection in cold biomes",
+
+  "material.tconstruct.twisting_vine": "Twisting Vine",
+  "material.tconstruct.twisting_vine.flavor": "Eat the spores!",
+  "material.tconstruct.twisting_vine.encyclopedia": "Grants +6 mining speed at the cost of taking 1 damage when you put down the tool",
+  "material.tconstruct.twisting_vine.ranged": "Grants +15% draw speed speed at the cost of taking 1 damage when you put down the tool",
+  "material.tconstruct.twisting_vine.armor": "Grants +15% knockback resistance at the cost of taking 2 damage when you remove the armor",
 
 
   "__comment": "Tier 3 Materials",
@@ -2633,6 +2647,15 @@
   "modifier.tconstruct.skyfall": "Skyfall",
   "modifier.tconstruct.skyfall.flavor": "Falling with style!",
   "modifier.tconstruct.skyfall.description": "Reduces the effect of gravity",
+  "modifier.tconstruct.flamestance": "Flamestance",
+  "modifier.tconstruct.flamestance.flavor": "Power of Fire!",
+  "modifier.tconstruct.flamestance.description": "Increases power and protection in hot biomes, but reduces it in cold biomes",
+  "modifier.tconstruct.flamestance.attack_damage": "Flamestance Damage",
+  "modifier.tconstruct.flamestance.projectile_damage": "Flamestance Power",
+  "modifier.tconstruct.flamestance.resistance": "Flamestance Resistance",
+  "modifier.tconstruct.entangled": "Entangled",
+  "modifier.tconstruct.entangled.flavor": "Symbiotic!",
+  "modifier.tconstruct.entangled.description": "Increases speed and knockback resistance at the cost of taking damage when unequipping",
 
   "__comment": "Tier 3 Traits",
   "modifier.tconstruct.overcast": "Overcast",

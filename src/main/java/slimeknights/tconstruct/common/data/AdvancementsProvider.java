@@ -147,6 +147,8 @@ public class AdvancementsProvider extends GenericDataProvider {
       with.accept(MaterialIds.slimewood);
       with.accept(MaterialIds.slimeskin);
       with.accept(MaterialIds.skyslimeVine);
+      with.accept(MaterialIds.weepingVine);
+      with.accept(MaterialIds.twistingVine);
       with.accept(MaterialIds.whitestone);
       // tier 3
       with.accept(MaterialIds.roseGold);

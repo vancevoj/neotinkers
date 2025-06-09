@@ -52,6 +52,8 @@ public class MaterialRenderInfoProvider extends AbstractMaterialRenderInfoProvid
     buildRenderInfo(MaterialIds.endstone);
     redirect(MaterialIds.whitestone, MaterialIds.endstone);
     buildRenderInfo(MaterialIds.skyslimeVine).color(0x00F4DA).fallbacks("vine");
+    buildRenderInfo(MaterialIds.weepingVine);
+    buildRenderInfo(MaterialIds.twistingVine);
     // slimewood
     redirect(MaterialIds.slimewood, MaterialIds.greenheart);
     buildRenderInfo(MaterialIds.greenheart);
