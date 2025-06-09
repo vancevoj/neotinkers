@@ -1,5 +1,7 @@
 package slimeknights.tconstruct.library.modifiers.modules.behavior;
 
+import lombok.Setter;
+import lombok.experimental.Accessors;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -7,9 +9,14 @@ import net.minecraft.world.item.TooltipFlag;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import slimeknights.mantle.client.TooltipKey;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
+import slimeknights.mantle.data.predicate.IJsonPredicate;
+import slimeknights.mantle.data.predicate.entity.LivingEntityPredicate;
 import slimeknights.tconstruct.library.json.math.FormulaLoadable;
 import slimeknights.tconstruct.library.json.math.ModifierFormula;
 import slimeknights.tconstruct.library.json.math.ModifierFormula.FallbackFormula;
+import slimeknights.tconstruct.library.json.variable.VariableFormula;
+import slimeknights.tconstruct.library.json.variable.stat.ConditionalStatFormula;
+import slimeknights.tconstruct.library.json.variable.stat.ConditionalStatVariable;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.hook.behavior.ToolDamageModifierHook;
@@ -32,16 +39,20 @@ import static slimeknights.tconstruct.TConstruct.RANDOM;
  * @param formula    Formula to use
  * @param condition  Condition for this module to run
  */
-public record ReduceToolDamageModule(ModifierFormula formula, ModifierCondition<IToolStackView> condition) implements ModifierModule, ToolDamageModifierHook, TooltipModifierHook, ConditionalModule<IToolStackView> {
+public record ReduceToolDamageModule(IJsonPredicate<LivingEntity> holder, ConditionalStatFormula formula, ModifierCondition<IToolStackView> condition) implements ModifierModule, ToolDamageModifierHook, TooltipModifierHook, ConditionalModule<IToolStackView> {
   private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<ReduceToolDamageModule>defaultHooks(ModifierHooks.TOOL_DAMAGE, ModifierHooks.TOOLTIP);
   /** Formula instance for the loader */
   private static final FormulaLoadable FORMULA = new FormulaLoadable(FallbackFormula.IDENTITY, "level");
   /** Loader instance */
-  public static final RecordLoadable<ReduceToolDamageModule> LOADER = RecordLoadable.create(FORMULA.directField(ReduceToolDamageModule::formula), ModifierCondition.TOOL_FIELD, ReduceToolDamageModule::new);
+  public static final RecordLoadable<ReduceToolDamageModule> LOADER = RecordLoadable.create(
+    LivingEntityPredicate.LOADER.defaultField("entity", ReduceToolDamageModule::holder),
+    ConditionalStatFormula.IDENTITY_LOADER.directField(ReduceToolDamageModule::formula),
+    ModifierCondition.TOOL_FIELD,
+    ReduceToolDamageModule::new);
 
   /** Creates a builder instance */
-  public static FormulaLoadable.Builder<ReduceToolDamageModule> builder() {
-    return FORMULA.builder(ReduceToolDamageModule::new);
+  public static Builder builder() {
+    return new Builder();
   }
 
   /** @apiNote Internal constructor, use {@link #builder()} */
@@ -51,11 +62,6 @@ public record ReduceToolDamageModule(ModifierFormula formula, ModifierCondition<
   @Override
   public List<ModuleHook<?>> getDefaultHooks() {
     return DEFAULT_HOOKS;
-  }
-
-  /** Gets the percentage to reduce tool damage */
-  private float getPercent(ModifierEntry modifier) {
-    return formula.apply(formula.processLevel(modifier));
   }
 
   /**
@@ -86,7 +92,7 @@ public record ReduceToolDamageModule(ModifierFormula formula, ModifierCondition<
   @Override
   public int onDamageTool(IToolStackView tool, ModifierEntry modifier, int amount, @Nullable LivingEntity holder) {
     if (this.condition.matches(tool, modifier)) {
-      return reduceDamage(amount, getPercent(modifier));
+      return reduceDamage(amount, formula.apply(tool, modifier, holder, 0, 1));
     }
     return amount;
   }
@@ -94,12 +100,38 @@ public record ReduceToolDamageModule(ModifierFormula formula, ModifierCondition<
   @Override
   public void addTooltip(IToolStackView tool, ModifierEntry modifier, @Nullable Player player, List<Component> tooltip, TooltipKey tooltipKey, TooltipFlag tooltipFlag) {
     if (this.condition.matches(tool, modifier)) {
-      tooltip.add(modifier.getModifier().applyStyle(Component.literal(Util.PERCENT_FORMAT.format(getPercent(modifier)) + " ").append(modifier.getModifier().getDisplayName())));
+      float percent = formula.apply(tool, modifier, tooltipKey == TooltipKey.SHIFT ? player : null, 0, 1);
+      if (percent > 0) {
+        tooltip.add(modifier.getModifier().applyStyle(Component.literal(Util.PERCENT_FORMAT.format(percent) + " ").append(modifier.getModifier().getDisplayName())));
+      }
     }
   }
 
   @Override
   public RecordLoadable<ReduceToolDamageModule> getLoader() {
     return LOADER;
+  }
+
+
+  @Setter
+  @Accessors(fluent = true)
+  public static class Builder extends VariableFormula.Builder<Builder,ReduceToolDamageModule, ConditionalStatVariable> {
+    private IJsonPredicate<LivingEntity> holder = LivingEntityPredicate.ANY;
+
+    private Builder() {
+      super(ConditionalStatFormula.VARIABLES);
+    }
+
+    /** @deprecated Has no effect */
+    @Deprecated(forRemoval = true)
+    @Override
+    public Builder percent() {
+      return this;
+    }
+
+    @Override
+    protected ReduceToolDamageModule build(ModifierFormula formula) {
+      return new ReduceToolDamageModule(holder, new ConditionalStatFormula(formula, variables, percent), condition);
+    }
   }
 }
