@@ -532,7 +532,10 @@ public class ToolInventoryCapability extends InventoryModifierHookIterator<Modif
         NetworkHooks.openScreen(serverPlayer, new SimpleMenuProvider(
           (id, inventory, p) -> new ToolContainerMenu(id, inventory, stack, handler, slotIndex),
           TooltipUtil.getDisplayName(stack, tool, definition)
-        ), buf -> buf.writeVarInt(slotIndex));
+        ), buf -> {
+          buf.writeVarInt(slotIndex);
+          buf.writeItem(stack);
+        });
       }
       return InteractionResult.sidedSuccess(player.level().isClientSide);
     }

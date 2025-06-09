@@ -83,7 +83,8 @@ public class ToolContainerMenu extends AbstractContainerMenu {
   /** Creates a new instance of this container on the client side */
   public static ToolContainerMenu forClient(int id, Inventory inventory, FriendlyByteBuf buffer) {
     int slotIndex = buffer.readVarInt();
-    ItemStack stack = inventory.player.getInventory().getItem(slotIndex);
+    ItemStack stack = buffer.readItem();
+    inventory.setItem(slotIndex, stack);
     IItemHandler handler = stack.getCapability(ForgeCapabilities.ITEM_HANDLER).filter(cap -> cap instanceof IItemHandlerModifiable).orElse(EmptyItemHandler.INSTANCE);
     return new ToolContainerMenu(TinkerTools.toolContainer.get(), id, inventory, stack, handler, slotIndex);
   }
