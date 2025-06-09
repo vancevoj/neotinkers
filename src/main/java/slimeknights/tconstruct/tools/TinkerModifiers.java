@@ -51,6 +51,8 @@ import slimeknights.tconstruct.library.json.variable.melee.MeleeVariable;
 import slimeknights.tconstruct.library.json.variable.mining.BlockLightVariable;
 import slimeknights.tconstruct.library.json.variable.mining.BlockMiningSpeedVariable;
 import slimeknights.tconstruct.library.json.variable.mining.MiningSpeedVariable;
+import slimeknights.tconstruct.library.json.variable.protection.EntityProtectionVariable;
+import slimeknights.tconstruct.library.json.variable.protection.ProtectionVariable;
 import slimeknights.tconstruct.library.json.variable.stat.ConditionalStatVariable;
 import slimeknights.tconstruct.library.json.variable.stat.EntityConditionalStatVariable;
 import slimeknights.tconstruct.library.json.variable.tool.ConditionalToolVariable;
@@ -771,6 +773,9 @@ public final class TinkerModifiers extends TinkerModule {
       MiningSpeedVariable.LOADER.register(getResource("constant"), MiningSpeedVariable.Constant.LOADER);
       MiningSpeedVariable.LOADER.register(getResource("block"), BlockMiningSpeedVariable.LOADER);
       MiningSpeedVariable.LOADER.register(getResource("block_light"), BlockLightVariable.LOADER);
+      // protection
+      ProtectionVariable.LOADER.register(getResource("constant"), ProtectionVariable.Constant.LOADER);
+      ProtectionVariable.LOADER.register(getResource("entity"), EntityProtectionVariable.LOADER);
     }
   }
 

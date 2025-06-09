@@ -1,6 +1,7 @@
 package slimeknights.tconstruct.library.json.predicate;
 
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ArrowItem;
 import net.minecraft.world.level.block.BushBlock;
@@ -46,6 +47,11 @@ public class TinkerPredicate {
       return predicate == LivingEntityPredicate.ANY;
     }
     return predicate.matches(entity);
+  }
+
+  /** Helper for dealing with the common case of matching an entity with a living entity predicate. */
+  public static boolean matches(IJsonPredicate<LivingEntity> predicate, @Nullable Entity entity) {
+    return predicate == LivingEntityPredicate.ANY || entity instanceof LivingEntity living && predicate.matches(living);
   }
 
   /** Checks if the condition matches in a tooltip context */
