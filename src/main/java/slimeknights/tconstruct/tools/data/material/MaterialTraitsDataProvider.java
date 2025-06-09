@@ -107,8 +107,8 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     // tier 3 - mod compat
     addDefaultTraits(MaterialIds.steel, ModifierIds.ductile);
     addDefaultTraits(MaterialIds.bronze, ModifierIds.maintained);
-    addDefaultTraits(MaterialIds.constantan, TinkerModifiers.temperate);
-    addDefaultTraits(MaterialIds.invar, TinkerModifiers.invariant);
+    addDefaultTraits(MaterialIds.constantan, ModifierIds.temperate);
+    addDefaultTraits(MaterialIds.invar, ModifierIds.invariant);
     addDefaultTraits(MaterialIds.necronium, TinkerModifiers.decay);
     addDefaultTraits(MaterialIds.electrum, ModifierIds.experienced);
     addDefaultTraits(MaterialIds.platedSlimewood, TinkerModifiers.overworked, TinkerModifiers.overslime);

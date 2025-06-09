@@ -164,6 +164,8 @@ public class ModifierIds {
   // traits - tier 3 compat
   public static final ModifierId maintained = id("maintained");
   public static final ModifierId ductile = id("ductile");
+  public static final ModifierId temperate = id("temperate");
+  public static final ModifierId invariant = id("invariant");
   // traits - tier 4
   public static final ModifierId overburn = id("overburn");
   public static final ModifierId overlord = id("overlord");

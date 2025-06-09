@@ -50,6 +50,7 @@ import slimeknights.tconstruct.library.json.variable.melee.EntityMeleeVariable;
 import slimeknights.tconstruct.library.json.variable.melee.MeleeVariable;
 import slimeknights.tconstruct.library.json.variable.mining.BlockLightVariable;
 import slimeknights.tconstruct.library.json.variable.mining.BlockMiningSpeedVariable;
+import slimeknights.tconstruct.library.json.variable.mining.BlockTemperatureVariable;
 import slimeknights.tconstruct.library.json.variable.mining.MiningSpeedVariable;
 import slimeknights.tconstruct.library.json.variable.protection.EntityProtectionVariable;
 import slimeknights.tconstruct.library.json.variable.protection.ProtectionVariable;
@@ -220,12 +221,10 @@ import slimeknights.tconstruct.tools.modifiers.traits.general.TannedModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.general.TastyModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.harvest.DwarvenModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.harvest.MomentumModifier;
-import slimeknights.tconstruct.tools.modifiers.traits.harvest.TemperateModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.melee.ConductingModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.melee.DecayModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.melee.EnderferenceModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.melee.InsatiableModifier;
-import slimeknights.tconstruct.tools.modifiers.traits.melee.InvariantModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.melee.LaceratingModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.melee.NecroticModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.ranged.HolyModifier;
@@ -478,8 +477,12 @@ public final class TinkerModifiers extends TinkerModule {
   public static final StaticModifier<HolyModifier> holy = MODIFIERS.register("holy", HolyModifier::new);
   public static final StaticModifier<OlympicModifier> olympic = MODIFIERS.register("olympic", OlympicModifier::new);
   // traits - mod compat tier 3
-  public static final StaticModifier<TemperateModifier> temperate = MODIFIERS.register("temperate", TemperateModifier::new);
-  public static final StaticModifier<InvariantModifier> invariant = MODIFIERS.register("invariant", InvariantModifier::new);
+  /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#temperate} */
+  @Deprecated(forRemoval = true)
+  public static final DynamicModifier temperate = MODIFIERS.registerDynamic("temperate");
+  /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#invariant} */
+  @Deprecated(forRemoval = true)
+  public static final DynamicModifier invariant = MODIFIERS.registerDynamic("invariant");
   public static final StaticModifier<DecayModifier> decay = MODIFIERS.register("decay", DecayModifier::new);
   public static final StaticModifier<Modifier> overworked = MODIFIERS.register("overworked", Modifier::new);
   // experienced is also an upgrade
@@ -758,6 +761,7 @@ public final class TinkerModifiers extends TinkerModule {
       EntityVariable.LOADER.register(getResource("attribute"), AttributeEntityVariable.LOADER);
       EntityVariable.LOADER.register(getResource("effect_level"), EntityEffectLevelVariable.LOADER);
       EntityVariable.LOADER.register(getResource("light"), EntityLightVariable.LOADER);
+      EntityVariable.LOADER.register(getResource("biome_temperature"), EntityVariable.BIOME_TEMPERATURE.getLoader());
       // tool
       ToolVariable.LOADER.register(getResource("constant"), ToolVariable.Constant.LOADER);
       ToolVariable.register(getResource("tool_conditional"), ConditionalToolVariable.LOADER);
@@ -773,6 +777,7 @@ public final class TinkerModifiers extends TinkerModule {
       MiningSpeedVariable.LOADER.register(getResource("constant"), MiningSpeedVariable.Constant.LOADER);
       MiningSpeedVariable.LOADER.register(getResource("block"), BlockMiningSpeedVariable.LOADER);
       MiningSpeedVariable.LOADER.register(getResource("block_light"), BlockLightVariable.LOADER);
+      MiningSpeedVariable.LOADER.register(getResource("biome_temperature"), BlockTemperatureVariable.LOADER);
       // protection
       ProtectionVariable.LOADER.register(getResource("constant"), ProtectionVariable.Constant.LOADER);
       ProtectionVariable.LOADER.register(getResource("entity"), EntityProtectionVariable.LOADER);

@@ -55,6 +55,8 @@ import slimeknights.tconstruct.library.json.variable.melee.EntityMeleeVariable;
 import slimeknights.tconstruct.library.json.variable.melee.EntityMeleeVariable.WhichEntity;
 import slimeknights.tconstruct.library.json.variable.mining.BlockLightVariable;
 import slimeknights.tconstruct.library.json.variable.mining.BlockMiningSpeedVariable;
+import slimeknights.tconstruct.library.json.variable.mining.BlockTemperatureVariable;
+import slimeknights.tconstruct.library.json.variable.protection.EntityProtectionVariable;
 import slimeknights.tconstruct.library.json.variable.stat.EntityConditionalStatVariable;
 import slimeknights.tconstruct.library.json.variable.tool.ToolStatVariable;
 import slimeknights.tconstruct.library.json.variable.tool.ToolVariable;
@@ -731,6 +733,90 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
         .nonNegative().divideFlipped()
         .variable(LEVEL).multiply()
         .constant(2).multiply().build());
+    buildModifier(ModifierIds.temperate)
+      .addModule(ConditionalMiningSpeedModule.builder()
+        .formula()
+        .customVariable("temperature", new BlockTemperatureVariable(-0.5f))
+        .constant(0.75f).subtractFlipped() // (0.75 - temperature)
+        .nonNegative() // bonus > 0
+        .variable(LEVEL).multiply() // * level
+        .constant(7.5f / 1.25f).multiply() // * 7.5 / 1.25
+        .variable(MULTIPLIER).multiply() // * multiplier
+        .variable(VALUE).add() // + baseValue
+        .build())
+      .addModule(ConditionalStatModule.stat(ToolStats.DRAW_SPEED)
+        .formula()
+        .customVariable("temperature", new EntityConditionalStatVariable(EntityVariable.BIOME_TEMPERATURE, -0.5f))
+        .constant(0.75f).subtractFlipped() // (0.75 - temperature)
+        .nonNegative() // bonus > 0
+        .variable(LEVEL).multiply() // * level
+        .constant(0.15f / 1.25f).multiply() // * 0.15 / 1.25
+        .variable(MULTIPLIER).multiply() // * multiplier
+        .variable(VALUE).add() // + baseValue
+        .build())
+      .addModule(ProtectionModule.builder()
+        .toolItem(ItemPredicate.tag(TinkerTags.Items.ARMOR))
+        .formula()
+        .customVariable("temperature", new EntityProtectionVariable(EntityVariable.BIOME_TEMPERATURE, EntityProtectionVariable.WhichEntity.TARGET, 0.75f))
+        .constant(0.75f).subtractFlipped() // (0.75 - temperature)
+        .nonNegative() // bonus > 0
+        .variable(LEVEL).multiply() // * level, 1.25 is equivelent to 5%
+        .variable(VALUE).add() // + baseValue
+        .build())
+      .addModule(ReduceToolDamageModule.builder().toolContext(noUnbreakable)
+        .reinforcedTooltip()
+        .formula()
+        .customVariable("temperature", new EntityConditionalStatVariable(EntityVariable.BIOME_TEMPERATURE, 2.0f))
+        .constant(0.75f).subtract() // (temperature - 0.75)
+        .nonNegative() // bonus > 0
+        .variable(LEVEL).multiply() // * level
+        .constant(2 / 1.25f).multiply() // * 2 / 1.25
+        .duplicate().duplicate() // now have 3 copies of bonus
+        // bonus < 5
+        .constant(11).subtractFlipped() // (bonus - 11)
+        .multiply() // bonus * (bonus - 11)
+        .constant(0.025f).multiply() // * 0.025
+        .swap() // our hard work is now bottom of stack, bonus is back on top
+        // bonus >= 5
+        .duplicate()
+        .constant(5).greaterThanOrEqual()
+        .swap()
+        .constant(5).subtract() // (bonus - 5)
+        .constant(0.05f).multiply() // * 0.05
+        .constant(0.75f).add() // + 0.75
+        .multiply()
+        .max() // we calculated two different formulas, take the larger. Effectively does piecewise on level >= 5 vs level < 5
+        .build());
+    buildModifier(ModifierIds.invariant)
+      .addModule(ConditionalMeleeDamageModule.builder()
+        .formula()
+        .customVariable("temperature", new EntityMeleeVariable(EntityVariable.BIOME_TEMPERATURE, WhichEntity.ATTACKER, 0.75f))
+        .constant(0.75f).subtract().abs()
+        .constant(1.25f).subtractFlipped() // 1.25 - abs(temperature - 0.75)
+        .variable(LEVEL).multiply() // * level
+        .constant(1.6f / 1.25f).multiply() // * 1.6 / 1.25
+        .variable(MULTIPLIER).multiply() // * multiplier
+        .variable(VALUE).add() // + baseValue
+        .build())
+      .addModule(ConditionalStatModule.stat(ToolStats.ACCURACY)
+        .formula()
+        .customVariable("temperature", new EntityConditionalStatVariable(EntityVariable.BIOME_TEMPERATURE, 0.75f))
+        .constant(0.75f).subtract().abs()
+        .constant(1.25f).subtractFlipped()
+        .variable(LEVEL).multiply()
+        .constant(0.15f / 1.25f).multiply()
+        .variable(MULTIPLIER).multiply()
+        .variable(VALUE).add()
+        .build())
+      .addModule(ProtectionModule.builder()
+        .toolItem(ItemPredicate.tag(TinkerTags.Items.ARMOR))
+        .formula()
+        .customVariable("temperature", new EntityProtectionVariable(EntityVariable.BIOME_TEMPERATURE, EntityProtectionVariable.WhichEntity.TARGET, 0.75f))
+        .constant(0.75f).subtract().abs()
+        .constant(1.25f).subtractFlipped()
+        .variable(LEVEL).multiply()
+        .variable(VALUE).add()
+        .build());
     // traits - tier 4
     buildModifier(ModifierIds.overburn).addModules(OverburnModule.INSTANCE, StatBoostModule.add(ToolTankHelper.CAPACITY_STAT).flat(FluidType.BUCKET_VOLUME), ToolTankHelper.TANK_HANDLER);
     buildModifier(ModifierIds.overlord)

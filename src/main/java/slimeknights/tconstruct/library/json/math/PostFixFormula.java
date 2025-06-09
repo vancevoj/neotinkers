@@ -214,6 +214,32 @@ public record PostFixFormula(List<StackOperation> operations, int numArguments) 
       return operation(PostFixOperator.DUPLICATE);
     }
 
+    // logical operators
+    public T equal() {
+      return operation(PostFixOperator.EQUAL);
+    }
+    public T notEqual() {
+      return operation(PostFixOperator.NOT_EQUAL);
+    }
+    public T greaterThan() {
+      return operation(PostFixOperator.GREATER_THAN);
+    }
+    public T greaterThanOrEqual() {
+      return operation(PostFixOperator.GREATER_THAN_EQUAL);
+    }
+    public T lessThan() {
+      return operation(PostFixOperator.LESS_THAN);
+    }
+    public T lessThanOrEqual() {
+      return operation(PostFixOperator.LESS_THAN_EQUAL);
+    }
+    public T equalEpsilon() {
+      return operation(PostFixOperator.EQUAL_EPS);
+    }
+    public T notEqualEpsilon() {
+      return operation(PostFixOperator.EQUAL_EPS);
+    }
+
     /** Validates and builds the formula */
     public PostFixFormula buildFormula() {
       PostFixFormula formula = new PostFixFormula(operations.build(), variableNames.length);

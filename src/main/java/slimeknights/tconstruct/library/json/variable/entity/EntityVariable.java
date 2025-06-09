@@ -1,5 +1,6 @@
 package slimeknights.tconstruct.library.json.variable.entity;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.LivingEntity;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.data.registry.GenericLoaderRegistry;
@@ -40,6 +41,11 @@ public interface EntityVariable extends IHaveLoader {
   EntityVariable HEALTH = simple(LivingEntity::getHealth);
   /** Gets the height of the entities feet */
   EntityVariable HEIGHT = simple(entity -> (float)entity.getY());
+  /** Gets the temperature of the biome containing the entity. */
+  EntityVariable BIOME_TEMPERATURE = simple(entity -> {
+    BlockPos pos = entity.blockPosition();
+    return entity.level().getBiome(pos).value().getTemperature(pos);
+  });
 
 
   /** Constant value instance for this object */

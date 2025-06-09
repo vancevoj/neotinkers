@@ -8,6 +8,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.TooltipFlag;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import slimeknights.mantle.client.TooltipKey;
+import slimeknights.mantle.data.loadable.primitive.BooleanLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.data.predicate.IJsonPredicate;
 import slimeknights.mantle.data.predicate.entity.LivingEntityPredicate;
@@ -17,6 +18,7 @@ import slimeknights.tconstruct.library.json.math.ModifierFormula.FallbackFormula
 import slimeknights.tconstruct.library.json.variable.VariableFormula;
 import slimeknights.tconstruct.library.json.variable.stat.ConditionalStatFormula;
 import slimeknights.tconstruct.library.json.variable.stat.ConditionalStatVariable;
+import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.hook.behavior.ToolDamageModifierHook;
@@ -37,9 +39,11 @@ import static slimeknights.tconstruct.TConstruct.RANDOM;
 /**
  * Module which reduces damage on a tool by a given percentage
  * @param formula    Formula to use
+ * @param holder     Condition on entity holding the tool
  * @param condition  Condition for this module to run
+ * @param reinforcedTooltip  If true, tooltip shows a custom lang key for reduction instead of just the modifier name
  */
-public record ReduceToolDamageModule(IJsonPredicate<LivingEntity> holder, ConditionalStatFormula formula, ModifierCondition<IToolStackView> condition) implements ModifierModule, ToolDamageModifierHook, TooltipModifierHook, ConditionalModule<IToolStackView> {
+public record ReduceToolDamageModule(IJsonPredicate<LivingEntity> holder, ConditionalStatFormula formula, boolean reinforcedTooltip, ModifierCondition<IToolStackView> condition) implements ModifierModule, ToolDamageModifierHook, TooltipModifierHook, ConditionalModule<IToolStackView> {
   private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<ReduceToolDamageModule>defaultHooks(ModifierHooks.TOOL_DAMAGE, ModifierHooks.TOOLTIP);
   /** Formula instance for the loader */
   private static final FormulaLoadable FORMULA = new FormulaLoadable(FallbackFormula.IDENTITY, "level");
@@ -47,6 +51,7 @@ public record ReduceToolDamageModule(IJsonPredicate<LivingEntity> holder, Condit
   public static final RecordLoadable<ReduceToolDamageModule> LOADER = RecordLoadable.create(
     LivingEntityPredicate.LOADER.defaultField("entity", ReduceToolDamageModule::holder),
     ConditionalStatFormula.IDENTITY_LOADER.directField(ReduceToolDamageModule::formula),
+    BooleanLoadable.INSTANCE.defaultField("reinforced_tooltip", false, false, ReduceToolDamageModule::reinforcedTooltip),
     ModifierCondition.TOOL_FIELD,
     ReduceToolDamageModule::new);
 
@@ -98,11 +103,13 @@ public record ReduceToolDamageModule(IJsonPredicate<LivingEntity> holder, Condit
   }
 
   @Override
-  public void addTooltip(IToolStackView tool, ModifierEntry modifier, @Nullable Player player, List<Component> tooltip, TooltipKey tooltipKey, TooltipFlag tooltipFlag) {
-    if (this.condition.matches(tool, modifier)) {
-      float percent = formula.apply(tool, modifier, tooltipKey == TooltipKey.SHIFT ? player : null, 0, 1);
+  public void addTooltip(IToolStackView tool, ModifierEntry entry, @Nullable Player player, List<Component> tooltip, TooltipKey tooltipKey, TooltipFlag tooltipFlag) {
+    if (this.condition.matches(tool, entry)) {
+      float percent = formula.apply(tool, entry, tooltipKey == TooltipKey.SHIFT ? player : null, 0, 1);
       if (percent > 0) {
-        tooltip.add(modifier.getModifier().applyStyle(Component.literal(Util.PERCENT_FORMAT.format(percent) + " ").append(modifier.getModifier().getDisplayName())));
+        Modifier modifier = entry.getModifier();
+        Component name = reinforcedTooltip ? Component.translatable(modifier.getTranslationKey() + ".reinforced") : modifier.getDisplayName();
+        tooltip.add(modifier.applyStyle(Component.literal(Util.PERCENT_FORMAT.format(percent) + " ").append(name)));
       }
     }
   }
@@ -117,6 +124,7 @@ public record ReduceToolDamageModule(IJsonPredicate<LivingEntity> holder, Condit
   @Accessors(fluent = true)
   public static class Builder extends VariableFormula.Builder<Builder,ReduceToolDamageModule, ConditionalStatVariable> {
     private IJsonPredicate<LivingEntity> holder = LivingEntityPredicate.ANY;
+    private boolean reinforcedTooltip = false;
 
     private Builder() {
       super(ConditionalStatFormula.VARIABLES);
@@ -129,9 +137,15 @@ public record ReduceToolDamageModule(IJsonPredicate<LivingEntity> holder, Condit
       return this;
     }
 
+    /** Sets the tooltip style to suffix the lang key for the tooltip instead of using the modifier name */
+    public Builder reinforcedTooltip() {
+      this.reinforcedTooltip = true;
+      return this;
+    }
+
     @Override
     protected ReduceToolDamageModule build(ModifierFormula formula) {
-      return new ReduceToolDamageModule(holder, new ConditionalStatFormula(formula, variables, percent), condition);
+      return new ReduceToolDamageModule(holder, new ConditionalStatFormula(formula, variables, percent), reinforcedTooltip, condition);
     }
   }
 }
