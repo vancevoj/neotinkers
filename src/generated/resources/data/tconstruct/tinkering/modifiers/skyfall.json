@@ -13,7 +13,8 @@
         "legs",
         "chest",
         "head"
-      ]
+      ],
+      "tooltip_style": "percent"
     },
     {
       "type": "tconstruct:attribute",
