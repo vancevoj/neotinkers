@@ -100,7 +100,7 @@ public class MaterialTagProvider extends AbstractMaterialTagProvider {
       // tier 3
       MaterialIds.slimesteel, MaterialIds.roseGold, MaterialIds.darkthread, MaterialIds.cobalt,
       // tier 4
-      MaterialIds.blazingBone, MaterialIds.ancientHide
+      MaterialIds.blazingBone, MaterialIds.ancientHide, MaterialIds.enderslimeVine
     ).addOptional(
       // tier 2
       MaterialIds.treatedWood, MaterialIds.platinum,

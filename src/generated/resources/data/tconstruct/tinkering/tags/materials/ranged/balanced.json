@@ -14,6 +14,7 @@
     "tconstruct:cobalt",
     "tconstruct:blazing_bone",
     "tconstruct:ancient_hide",
+    "tconstruct:enderslime_vine",
     {
       "id": "tconstruct:treated_wood",
       "required": false
