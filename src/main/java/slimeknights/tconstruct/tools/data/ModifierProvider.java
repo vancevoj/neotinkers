@@ -597,15 +597,15 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .addModule(ConditionalMeleeDamageModule.builder()
         .formula()
         .customVariable("temperature", new EntityMeleeVariable(EntityVariable.BIOME_TEMPERATURE, WhichEntity.ATTACKER, 2.0f))
-        .constant(0.5f).subtract() // range is now -1 to 1.5, which is a solid range for melee damage boosts
+        .constant(0.75f).subtract() // range is now -1.25 to 1.25, which is a solid range for melee damage boosts
         .variable(MULTIPLIER).multiply() // no need to multiply by levels, this never goes past level 1
         .variable(VALUE).add()
         .build())
       .addModule(ConditionalStatModule.stat(ToolStats.PROJECTILE_DAMAGE)
         .formula()
         .customVariable("temperature", new EntityConditionalStatVariable(EntityVariable.BIOME_TEMPERATURE, 2.0f))
-        .constant(0.5f).subtract() // range is now -1 to 1.5
-        .constant(0.5f).multiply() // move range to be -0.5 to 0.75, bit more reasonable power ranges
+        .constant(0.75f).subtract() // range is now -1.25 to 1.25
+        .constant(0.6f).divide() // move range to be -0.75 to 0.75, bit more reasonable power ranges
         .variable(MULTIPLIER).multiply() // no need to multiply by levels, this never goes past level 1
         .variable(VALUE).add()
         .build())
@@ -613,7 +613,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
         .toolItem(ItemPredicate.tag(TinkerTags.Items.ARMOR))
         .formula()
         .customVariable("temperature", new EntityProtectionVariable(EntityVariable.BIOME_TEMPERATURE, EntityProtectionVariable.WhichEntity.TARGET, 2.0f))
-        .constant(0.5f).subtract() // range is now -1 to 1.5, effective -4% to +6%
+        .constant(0.75f).subtract() // range is now -1.25 to 1.25, effective -5% to 5%
         .variable(VALUE).add() // its a single level modifier, no need to worry about anything else!
         .build());
 
@@ -622,7 +622,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       // harvest: +6 is a bit better than haste
       .addModule(StatBoostModule.add(ToolStats.MINING_SPEED).flat(6))
       // armor: +15% knockback resistance, making it stronger than anvil
-      .addModule(StatBoostModule.add(ToolStats.KNOCKBACK_RESISTANCE).flat(0.15f))
+      .addModule(StatBoostModule.add(ToolStats.KNOCKBACK_RESISTANCE).flat(0.10f))
       // ranged: +10% drawspeed is on par with netherite, hard to get elsewhere
       .addModule(StatBoostModule.add(ToolStats.DRAW_SPEED).flat(0.15f))
       // downside: don't take it off, damage more for armor

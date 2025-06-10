@@ -5,7 +5,7 @@
       "type": "tconstruct:conditional_melee_damage",
       "formula": [
         "$temperature",
-        0.5,
+        0.75,
         "-",
         "$multiplier",
         "*",
@@ -26,10 +26,10 @@
       "type": "tconstruct:conditional_stat",
       "formula": [
         "$temperature",
-        0.5,
+        0.75,
         "-",
-        0.5,
-        "*",
+        0.6,
+        "/",
         "$multiplier",
         "*",
         "$value",
@@ -50,7 +50,7 @@
       "damage_source": "mantle:can_protect",
       "formula": [
         "$temperature",
-        0.5,
+        0.75,
         "-",
         "$protection",
         "+"

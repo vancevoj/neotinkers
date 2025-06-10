@@ -9,7 +9,7 @@
     },
     {
       "type": "tconstruct:stat_boost",
-      "flat": 0.15,
+      "flat": 0.1,
       "operation": "add",
       "stat": "tconstruct:knockback_resistance"
     },

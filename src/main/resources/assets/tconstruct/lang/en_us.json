@@ -1769,15 +1769,15 @@
 
   "material.tconstruct.weeping_vine": "Weeping Vine",
   "material.tconstruct.weeping_vine.flavor": "Channel the heat.",
-  "material.tconstruct.weeping_vine.encyclopedia": "Grants up to +1.5 melee damage in hot biomes, but lose up to -1 melee damage in cold biomes.",
-  "material.tconstruct.weeping_vine.ranged": "Grants +0.75 power in hot biomes, but lose up to -0.5 power in cold biomes",
-  "material.tconstruct.weeping_vine.armor": "Grants up to +6% protection in hot biomes, but lose up to -4% protection in cold biomes",
+  "material.tconstruct.weeping_vine.encyclopedia": "Grants up to +1.25 melee damage in hot biomes, but lose up to -1.25 melee damage in cold biomes.",
+  "material.tconstruct.weeping_vine.ranged": "Grants +0.75 power in hot biomes, but lose up to -0.75 power in cold biomes",
+  "material.tconstruct.weeping_vine.armor": "Grants up to +5% protection in hot biomes, but lose up to -5% protection in cold biomes",
 
   "material.tconstruct.twisting_vine": "Twisting Vine",
   "material.tconstruct.twisting_vine.flavor": "Eat the spores!",
   "material.tconstruct.twisting_vine.encyclopedia": "Grants +6 mining speed at the cost of taking 1 damage when you put down the tool",
   "material.tconstruct.twisting_vine.ranged": "Grants +15% draw speed speed at the cost of taking 1 damage when you put down the tool",
-  "material.tconstruct.twisting_vine.armor": "Grants +15% knockback resistance at the cost of taking 2 damage when you remove the armor",
+  "material.tconstruct.twisting_vine.armor": "Grants +10% knockback resistance at the cost of taking 2 damage when you remove the armor",
 
 
   "__comment": "Tier 3 Materials",
