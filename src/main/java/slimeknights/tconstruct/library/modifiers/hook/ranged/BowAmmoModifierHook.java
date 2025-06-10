@@ -50,27 +50,16 @@ public interface BowAmmoModifierHook {
     ammo.shrink(needed);
   }
 
-  /**
-   * Checks if the player has ammo for the given tool.
-   * TODO 1.21: consider removing in favor of {@link #getAmmo(IToolStackView, ItemStack, LivingEntity, Predicate)}.
-   * @param tool       Tool instance, for running modifier hooks
-   * @param bowStack   Bow stack instance, for standard ammo lookup
-   * @param living     Player instance, for standard ammo lookup
-   * @param predicate  Predicate for finding ammo in modifiers
-   * @return  True if there is ammo either on the player or on the modifiers
-   */
+  /** @deprecated use {@link #getAmmo(IToolStackView, ItemStack, LivingEntity, Predicate)} */
+  @Deprecated(forRemoval = true)
+  static boolean hasAmmo(IToolStackView tool, ItemStack bowStack, Player player, Predicate<ItemStack> predicate) {
+    return !getAmmo(tool, bowStack, player, predicate).isEmpty();
+  }
+
+  /** @deprecated use {@link #getAmmo(IToolStackView, ItemStack, LivingEntity, Predicate)} */
+  @Deprecated(forRemoval = true)
   static boolean hasAmmo(IToolStackView tool, ItemStack bowStack, LivingEntity living, Predicate<ItemStack> predicate) {
-    // no need to ask the modifiers for ammo if we have it in the inventory, as there is no way for a modifier to say not to use ammo if its present
-    // inventory search is probably a bit faster on average than modifier search as its already parsed
-    if (!tool.getVolatileData().getBoolean(SKIP_INVENTORY_AMMO) && !living.getProjectile(bowStack).isEmpty()) {
-      return true;
-    }
-    for (ModifierEntry entry : tool.getModifierList()) {
-      if (!entry.getHook(ModifierHooks.BOW_AMMO).findAmmo(tool, entry, living, ItemStack.EMPTY, predicate).isEmpty()) {
-        return true;
-      }
-    }
-    return false;
+    return !getAmmo(tool, bowStack, living, predicate).isEmpty();
   }
 
   /**

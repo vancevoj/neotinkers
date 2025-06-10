@@ -131,7 +131,7 @@ public class ModifiableBowItem extends ModifiableLauncherItem {
     boolean creative = player != null && player.getAbilities().instabuild;
     // its a little redundant to search for ammo twice, but otherwise we risk shrinking the stack before we know if we can fire
     // also helps blocking, as you can block without ammo
-    boolean hasAmmo = creative || BowAmmoModifierHook.hasAmmo(tool, bow, living, getSupportedHeldProjectiles());
+    boolean hasAmmo = creative || !BowAmmoModifierHook.getAmmo(tool, bow, living, getSupportedHeldProjectiles()).isEmpty();
 
     // ask forge its thoughts on shooting
     int chargeTime = duration - timeLeft;
