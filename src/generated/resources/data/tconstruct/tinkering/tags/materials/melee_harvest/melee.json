@@ -7,15 +7,27 @@
     "tconstruct:necrotic_bone",
     "tconstruct:venombone",
     "tconstruct:weeping_vine",
-    "tconstruct:silver",
-    "tconstruct:lead",
     "tconstruct:nahuatl",
     "tconstruct:steel",
     "tconstruct:darkthread",
-    "tconstruct:invar",
-    "tconstruct:necronium",
     "tconstruct:manyullyn",
     "tconstruct:blazing_bone",
-    "tconstruct:enderslime_vine"
+    "tconstruct:enderslime_vine",
+    {
+      "id": "tconstruct:silver",
+      "required": false
+    },
+    {
+      "id": "tconstruct:lead",
+      "required": false
+    },
+    {
+      "id": "tconstruct:invar",
+      "required": false
+    },
+    {
+      "id": "tconstruct:necronium",
+      "required": false
+    }
   ]
 }

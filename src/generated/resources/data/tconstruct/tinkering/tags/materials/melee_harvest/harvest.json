@@ -6,12 +6,24 @@
     "tconstruct:whitestone",
     "tconstruct:skyslime_vine",
     "tconstruct:twisting_vine",
-    "tconstruct:tungsten",
-    "tconstruct:platinum",
     "tconstruct:amethyst_bronze",
-    "tconstruct:bronze",
-    "tconstruct:constantan",
     "tconstruct:hepatizon",
-    "tconstruct:ancient_hide"
+    "tconstruct:ancient_hide",
+    {
+      "id": "tconstruct:tungsten",
+      "required": false
+    },
+    {
+      "id": "tconstruct:platinum",
+      "required": false
+    },
+    {
+      "id": "tconstruct:bronze",
+      "required": false
+    },
+    {
+      "id": "tconstruct:constantan",
+      "required": false
+    }
   ]
 }

@@ -6,16 +6,28 @@
     "tconstruct:leather",
     "tconstruct:iron",
     "tconstruct:slimewood",
-    "tconstruct:treated_wood",
-    "tconstruct:osmium",
     "tconstruct:slimesteel",
     "tconstruct:pig_iron",
     "tconstruct:rose_gold",
     "tconstruct:cobalt",
-    "tconstruct:plated_slimewood",
-    "tconstruct:electrum",
     "tconstruct:cinderslime",
     "tconstruct:queens_slime",
-    "tconstruct:enderslime_vine"
+    "tconstruct:enderslime_vine",
+    {
+      "id": "tconstruct:treated_wood",
+      "required": false
+    },
+    {
+      "id": "tconstruct:osmium",
+      "required": false
+    },
+    {
+      "id": "tconstruct:plated_slimewood",
+      "required": false
+    },
+    {
+      "id": "tconstruct:electrum",
+      "required": false
+    }
   ]
 }

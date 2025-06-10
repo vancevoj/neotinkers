@@ -4,13 +4,28 @@
     "tconstruct:bone",
     "tconstruct:venombone",
     "tconstruct:twisting_vine",
-    "tconstruct:aluminum",
-    "tconstruct:tungsten",
     "tconstruct:nahuatl",
-    "tconstruct:necronium",
-    "tconstruct:constantan",
-    "tconstruct:plated_slimewood",
     "tconstruct:hepatizon",
-    "tconstruct:queens_slime"
+    "tconstruct:queens_slime",
+    {
+      "id": "tconstruct:aluminum",
+      "required": false
+    },
+    {
+      "id": "tconstruct:tungsten",
+      "required": false
+    },
+    {
+      "id": "tconstruct:necronium",
+      "required": false
+    },
+    {
+      "id": "tconstruct:constantan",
+      "required": false
+    },
+    {
+      "id": "tconstruct:plated_slimewood",
+      "required": false
+    }
   ]
 }

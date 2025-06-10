@@ -49,36 +49,45 @@ public class MaterialTagProvider extends AbstractMaterialTagProvider {
       MaterialIds.wood, MaterialIds.string, MaterialIds.vine, MaterialIds.leather,
       // tier 2
       MaterialIds.iron, MaterialIds.slimewood,
-      MaterialIds.treatedWood, MaterialIds.osmium,
       // tier 3
       MaterialIds.slimesteel, MaterialIds.pigIron, MaterialIds.roseGold, MaterialIds.cobalt,
-      MaterialIds.platedSlimewood, MaterialIds.electrum,
       // tier 4
       MaterialIds.cinderslime, MaterialIds.queensSlime, MaterialIds.enderslimeVine
+    ).addOptional(
+      // tier 2
+      MaterialIds.treatedWood, MaterialIds.osmium,
+      // tier 3
+      MaterialIds.platedSlimewood, MaterialIds.electrum
     );
     tag(TinkerTags.Materials.HARVEST).add(
       // tier 1
       MaterialIds.rock, MaterialIds.copper,
       // tier 2
       MaterialIds.searedStone, MaterialIds.whitestone, MaterialIds.skyslimeVine, MaterialIds.twistingVine,
-      MaterialIds.tungsten, MaterialIds.platinum,
       // tier 3
       MaterialIds.amethystBronze,
-      MaterialIds.bronze, MaterialIds.constantan,
       // tier 4
       MaterialIds.hepatizon, MaterialIds.ancientHide
+    ).addOptional(
+      // tier 2
+      MaterialIds.tungsten, MaterialIds.platinum,
+      // tier 3
+      MaterialIds.bronze, MaterialIds.constantan
     );
     tag(TinkerTags.Materials.MELEE).add(
       // tier 1
       MaterialIds.flint, MaterialIds.bone, MaterialIds.chorus,
       // tier 2
       MaterialIds.scorchedStone, MaterialIds.necroticBone, MaterialIds.venombone, MaterialIds.weepingVine,
-      MaterialIds.silver, MaterialIds.lead,
       // tier 3
       MaterialIds.nahuatl, MaterialIds.steel, MaterialIds.darkthread,
-      MaterialIds.invar, MaterialIds.necronium,
       // tier 4
       MaterialIds.manyullyn, MaterialIds.blazingBone, MaterialIds.enderslimeVine
+    ).addOptional(
+      // tier 2
+      MaterialIds.silver, MaterialIds.lead,
+      // tier 3
+      MaterialIds.invar, MaterialIds.necronium
     );
 
     // ranged
@@ -88,37 +97,45 @@ public class MaterialTagProvider extends AbstractMaterialTagProvider {
       MaterialIds.string, MaterialIds.vine, MaterialIds.leather,
       // tier 2
       MaterialIds.slimewood, MaterialIds.necroticBone, MaterialIds.skyslimeVine,
-      MaterialIds.treatedWood, MaterialIds.platinum,
       // tier 3
       MaterialIds.slimesteel, MaterialIds.roseGold, MaterialIds.darkthread, MaterialIds.cobalt,
-      MaterialIds.invar,
       // tier 4
-      MaterialIds.blazingBone,
-      MaterialIds.ancientHide
+      MaterialIds.blazingBone, MaterialIds.ancientHide
+    ).addOptional(
+      // tier 2
+      MaterialIds.treatedWood, MaterialIds.platinum,
+      // tier 3
+      MaterialIds.invar
     );
     tag(TinkerTags.Materials.LIGHT).add(
       // tier 1
       MaterialIds.bamboo, MaterialIds.bone,
       // tier 2
       MaterialIds.venombone, MaterialIds.twistingVine,
-      MaterialIds.aluminum, MaterialIds.tungsten,
       // tier 3
       MaterialIds.nahuatl,
-      MaterialIds.necronium, MaterialIds.constantan, MaterialIds.platedSlimewood,
       // tier 4
       MaterialIds.hepatizon, MaterialIds.queensSlime
+    ).addOptional(
+      // tier 2
+      MaterialIds.aluminum, MaterialIds.tungsten,
+      // tier 3
+      MaterialIds.necronium, MaterialIds.constantan, MaterialIds.platedSlimewood
     );
     tag(TinkerTags.Materials.HEAVY).add(
       // tier 1
       MaterialIds.copper,
       // tier 2
       MaterialIds.iron, MaterialIds.weepingVine,
-      MaterialIds.silver, MaterialIds.lead,
       // tier 3
       MaterialIds.amethystBronze, MaterialIds.steel,
-      MaterialIds.bronze, MaterialIds.electrum,
       // tier 4
       MaterialIds.manyullyn, MaterialIds.cinderslime
+    ).addOptional(
+      // tier 2
+      MaterialIds.silver, MaterialIds.lead,
+      // tier 3
+      MaterialIds.bronze, MaterialIds.electrum
     );
   }
 

@@ -8,14 +8,23 @@
     "tconstruct:slimewood",
     "tconstruct:necrotic_bone",
     "tconstruct:skyslime_vine",
-    "tconstruct:treated_wood",
-    "tconstruct:platinum",
     "tconstruct:slimesteel",
     "tconstruct:rose_gold",
     "tconstruct:darkthread",
     "tconstruct:cobalt",
-    "tconstruct:invar",
     "tconstruct:blazing_bone",
-    "tconstruct:ancient_hide"
+    "tconstruct:ancient_hide",
+    {
+      "id": "tconstruct:treated_wood",
+      "required": false
+    },
+    {
+      "id": "tconstruct:platinum",
+      "required": false
+    },
+    {
+      "id": "tconstruct:invar",
+      "required": false
+    }
   ]
 }
