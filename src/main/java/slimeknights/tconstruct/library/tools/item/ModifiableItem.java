@@ -34,6 +34,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.common.ToolAction;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import slimeknights.mantle.client.SafeClientAccess;
+import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.hook.behavior.AttributesModifierHook;
@@ -103,6 +104,14 @@ public class ModifiableItem extends TieredItem implements IModifiableDisplay {
     return true;
   }
 
+  @Nullable
+  @Override
+  public EquipmentSlot getEquipmentSlot(ItemStack stack) {
+    if (stack.is(TinkerTags.Items.SHIELDS)) {
+      return EquipmentSlot.OFFHAND;
+    }
+    return null;
+  }
 
   /* Enchanting */
 
