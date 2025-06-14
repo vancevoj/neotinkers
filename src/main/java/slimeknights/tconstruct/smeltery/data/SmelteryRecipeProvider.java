@@ -43,7 +43,6 @@ import slimeknights.mantle.recipe.data.ConsumerWrapperBuilder;
 import slimeknights.mantle.recipe.data.ICommonRecipeHelper;
 import slimeknights.mantle.recipe.data.ItemNameIngredient;
 import slimeknights.mantle.recipe.data.ItemNameOutput;
-import slimeknights.mantle.recipe.data.NBTNameIngredient;
 import slimeknights.mantle.recipe.helper.ItemOutput;
 import slimeknights.mantle.recipe.ingredient.EntityIngredient;
 import slimeknights.mantle.recipe.ingredient.FluidIngredient;
@@ -361,7 +360,7 @@ public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelt
                        .save(consumer, location(folder + "table"));
 
     // peripherals
-    ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, TinkerSmeltery.copperGauge)
+    ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, TinkerSmeltery.copperGauge, 4)
       .define('G', Tags.Items.GLASS_PANES_COLORLESS)
       .define('C', Tags.Items.INGOTS_COPPER)
       .pattern(" C ")
@@ -801,7 +800,7 @@ public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelt
 
 
     // peripherals
-    ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, TinkerSmeltery.obsidianGauge)
+    ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, TinkerSmeltery.obsidianGauge, 4)
       .define('G', Tags.Items.GLASS_PANES_COLORLESS)
       .define('C', TinkerCommons.obsidianPane)
       .pattern(" C ")
@@ -2211,9 +2210,9 @@ public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelt
     Consumer<FinishedRecipe> ceramicsConsumer = withCondition(consumer, new ModLoadedCondition(ceramics));
 
     // fill clay and cracked clay buckets
-    ContainerFillingRecipeBuilder.tableRecipe(ceramicsId.apply("clay_bucket"), FluidType.BUCKET_VOLUME)
+    ContainerFillingRecipeBuilder.tableRecipe(ceramicsId.apply("empty_clay_bucket"), FluidType.BUCKET_VOLUME)
                                  .save(ceramicsConsumer, location(ceramicsFolder + "filling_clay_bucket"));
-    ContainerFillingRecipeBuilder.tableRecipe(ceramicsId.apply("cracked_clay_bucket"), FluidType.BUCKET_VOLUME)
+    ContainerFillingRecipeBuilder.tableRecipe(ceramicsId.apply("empty_cracked_clay_bucket"), FluidType.BUCKET_VOLUME)
                                  .save(ceramicsConsumer, location(ceramicsFolder + "filling_cracked_clay_bucket"));
 
     // porcelain for ceramics
@@ -2242,9 +2241,9 @@ public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelt
     // 3 bricks
     MeltingRecipeBuilder.melting(CompoundIngredient.of(
       ceramicsTag.apply("terracotta_cisterns"),
-      NoContainerIngredient.of(ItemNameIngredient.from(ceramicsId.apply("clay_bucket"))),
+      ceramicsItem.apply("empty_clay_bucket"),
       // can't ue no container for cracked bucket as the bucket breaks on emptying
-      NBTNameIngredient.from(ceramicsId.apply("cracked_clay_bucket"))
+      ceramicsItem.apply("empty_cracked_clay_bucket")
     ), TinkerFluids.moltenClay, FluidValues.BRICK * 3, 1.67f)
       .save(ceramicsConsumer, location(clayFolder + "bricks_3"));
     // 4 bricks

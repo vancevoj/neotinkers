@@ -8,17 +8,13 @@
   ],
   "ingredient": [
     {
-      "type": "tconstruct:no_container",
-      "match": {
-        "item": "ceramics:clay_bucket"
-      }
-    },
-    {
-      "type": "forge:nbt",
-      "item": "ceramics:cracked_clay_bucket"
-    },
-    {
       "tag": "ceramics:terracotta_cisterns"
+    },
+    {
+      "item": "ceramics:empty_clay_bucket"
+    },
+    {
+      "item": "ceramics:empty_cracked_clay_bucket"
     }
   ],
   "result": {
