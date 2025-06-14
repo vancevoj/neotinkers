@@ -605,7 +605,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
         .formula()
         .customVariable("temperature", new EntityConditionalStatVariable(EntityVariable.BIOME_TEMPERATURE, 2.0f))
         .constant(0.75f).subtract() // range is now -1.25 to 1.25
-        .constant(0.6f).divide() // move range to be -0.75 to 0.75, bit more reasonable power ranges
+        .constant(0.6f).multiply() // move range to be -0.75 to 0.75, bit more reasonable power ranges
         .variable(MULTIPLIER).multiply() // no need to multiply by levels, this never goes past level 1
         .variable(VALUE).add()
         .build())
