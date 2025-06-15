@@ -42,7 +42,7 @@ public record FreezingAttackModule(LevelingValue time) implements ModifierModule
   /** Sets the target on fire */
   private void freeze(ModifierEntry modifier, Entity target) {
     if (target.canFreeze()) {
-      target.setTicksFrozen(Math.max(target.getTicksRequiredToFreeze(), target.getTicksFrozen()) + (int)(time.compute(modifier.getEffectiveLevel()) * 20));
+      target.setTicksFrozen(Math.max(target.getTicksRequiredToFreeze(), target.getTicksFrozen()) + (int)(time.compute(modifier.getEffectiveLevel()) * 40));
       target.setRemainingFireTicks(0);
     }
   }
