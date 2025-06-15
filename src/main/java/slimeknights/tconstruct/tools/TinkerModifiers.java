@@ -214,6 +214,7 @@ import slimeknights.tconstruct.tools.modifiers.slotless.OverslimeModifier;
 import slimeknights.tconstruct.tools.modifiers.slotless.StatOverrideModifier;
 import slimeknights.tconstruct.tools.modifiers.slotless.TrimModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.DamageSpeedTradeModifier;
+import slimeknights.tconstruct.tools.modifiers.traits.FrostshieldModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.general.EnderportingModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.general.SolarPoweredModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.general.StoneshieldModifier;
@@ -455,6 +456,7 @@ public final class TinkerModifiers extends TinkerModule {
   // traits - tier 1
   public static final StaticModifier<DamageSpeedTradeModifier> jagged = MODIFIERS.register("jagged", () -> new DamageSpeedTradeModifier(0.005f));
   public static final StaticModifier<DamageSpeedTradeModifier> stonebound = MODIFIERS.register("stonebound", () -> new DamageSpeedTradeModifier(-0.005f));
+  public static final StaticModifier<FrostshieldModifier> frostshield = MODIFIERS.register("frostshield", FrostshieldModifier::new);
   // traits - tier 1 nether
   public static final StaticModifier<NecroticModifier> necrotic = MODIFIERS.register("necrotic", NecroticModifier::new);
   // traits - tier 1 nether

@@ -18,6 +18,7 @@ import slimeknights.tconstruct.library.tools.nbt.ModDataNBT;
 
 import javax.annotation.Nullable;
 
+// TODO: turn into an abstract module?
 public abstract class DurabilityShieldModifier extends Modifier implements ToolDamageModifierHook, ValidateModifierHook, ModifierRemovalHook, DurabilityDisplayModifierHook {
   @Override
   protected void registerHooks(Builder hookBuilder) {

@@ -23,6 +23,8 @@ public final class MaterialIds {
   public static final MaterialId string = id("string");
   public static final MaterialId leather = id("leather");
   public static final MaterialId vine = id("vine");
+  // tier 1 - shield cores
+  public static final MaterialId ice = id("ice");
   // tier 2
   public static final MaterialId iron = id("iron");
   public static final MaterialId searedStone = id("seared_stone");

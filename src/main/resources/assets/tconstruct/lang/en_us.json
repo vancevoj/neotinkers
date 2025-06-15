@@ -1657,6 +1657,10 @@
   "material.tconstruct.bamboo.ranged": "Movement penalty when drawing back the bow is reduced by 10%",
   "material.tconstruct.bamboo.armor": "Movement penalty when using the shield is reduced by 10%",
 
+  "material.tconstruct.ice": "Ice",
+  "material.tconstruct.ice.flavor": "Chill!",
+  "material.tconstruct.ice.armor": "Converts taken cold damage into durability shield.",
+
   "material.tconstruct.rock": "Rock",
   "material.tconstruct.rock.stone":      "Stone",
   "material.tconstruct.rock.andesite":   "Andesite",
@@ -2741,6 +2745,9 @@
   "modifier.tconstruct.stoneshield": "Stoneshield",
   "modifier.tconstruct.stoneshield.flavor": "Masterful stonebending",
   "modifier.tconstruct.stoneshield.description": "Mined stone has a chance to protect the tool from future damage",
+  "modifier.tconstruct.frostshield": "Frostshield",
+  "modifier.tconstruct.frostshield.flavor": "Repurposing the cold",
+  "modifier.tconstruct.frostshield.description": "Converts cold damage into protection from durability loss",
   "modifier.tconstruct.featherweight": "Featherweight",
   "modifier.tconstruct.featherweight.flavor": "Light as a feather",
   "modifier.tconstruct.featherweight.description": "Tool is so easy to use, it has higher drawspeed and accuracy. Armor makes it easier to use bows and shields but is not highly defensive",

@@ -1,0 +1,29 @@
+{
+  "color": "FF74ABFE",
+  "generator": {
+    "supported_stats": [
+      "tconstruct:shield_core"
+    ],
+    "transformer": {
+      "type": "tconstruct:grey_to_sprite",
+      "palette": [
+        {
+          "color": "FF000000",
+          "grey": 0
+        },
+        {
+          "grey": 63,
+          "path": "minecraft:block/blue_ice"
+        },
+        {
+          "grey": 102,
+          "path": "minecraft:block/packed_ice"
+        },
+        {
+          "grey": 140,
+          "path": "minecraft:block/ice"
+        }
+      ]
+    }
+  }
+}

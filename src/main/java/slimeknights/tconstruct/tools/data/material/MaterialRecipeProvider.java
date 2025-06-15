@@ -8,6 +8,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.crafting.DifferenceIngredient;
 import net.minecraftforge.common.crafting.conditions.OrCondition;
@@ -15,6 +16,7 @@ import net.minecraftforge.fluids.FluidType;
 import slimeknights.mantle.datagen.MantleTags;
 import slimeknights.mantle.recipe.condition.TagCombinationCondition;
 import slimeknights.mantle.recipe.condition.TagFilledCondition;
+import slimeknights.mantle.recipe.helper.FluidOutput;
 import slimeknights.mantle.recipe.helper.ItemOutput;
 import slimeknights.mantle.recipe.ingredient.FluidIngredient;
 import slimeknights.tconstruct.common.TinkerTags;
@@ -23,6 +25,7 @@ import slimeknights.tconstruct.fluids.TinkerFluids;
 import slimeknights.tconstruct.library.data.recipe.IMaterialRecipeHelper;
 import slimeknights.tconstruct.library.recipe.FluidValues;
 import slimeknights.tconstruct.library.recipe.casting.material.MaterialFluidRecipeBuilder;
+import slimeknights.tconstruct.library.recipe.melting.MaterialMeltingRecipeBuilder;
 import slimeknights.tconstruct.shared.TinkerCommons;
 import slimeknights.tconstruct.shared.TinkerMaterials;
 import slimeknights.tconstruct.shared.block.SlimeType;
@@ -96,6 +99,9 @@ public class MaterialRecipeProvider extends BaseRecipeProvider implements IMater
     materialRecipe(consumer, MaterialIds.leather, Ingredient.of(Tags.Items.LEATHER), 1, 1, folder + "leather");
     materialRecipe(consumer, MaterialIds.leather, Ingredient.of(Items.RABBIT_HIDE),  1, 2, folder + "rabbit_hide");
     materialRecipe(consumer, MaterialIds.vine,    Ingredient.of(Items.VINE),         1, 1, folder + "vine");
+    materialRecipe(consumer, MaterialIds.ice,     Ingredient.of(Blocks.ICE),         1, 9, folder + "ice/unpacked");
+    materialRecipe(consumer, MaterialIds.ice,     Ingredient.of(Blocks.PACKED_ICE),  1, 1, folder + "ice/packed");
+    materialRecipe(consumer, MaterialIds.ice,     Ingredient.of(Blocks.BLUE_ICE),    9, 1, folder + "ice/blue");
 
     // tier 2
     metalMaterialRecipe(consumer, MaterialIds.iron, folder, "iron", false);
@@ -180,6 +186,9 @@ public class MaterialRecipeProvider extends BaseRecipeProvider implements IMater
     String folder = "tools/materials/";
 
     // melting and casting
+    // tier 1
+    MaterialMeltingRecipeBuilder.material(MaterialIds.ice, 10, FluidOutput.fromFluid(Fluids.WATER, FluidType.BUCKET_VOLUME * 9))
+      .save(consumer, location(folder + "melting/ice"));
     // tier 2
     materialMeltingCasting(consumer, MaterialIds.iron,          TinkerFluids.moltenIron,    folder);
     materialMeltingCasting(consumer, MaterialIds.copper,        TinkerFluids.moltenCopper,  folder);

@@ -82,7 +82,7 @@ public class OverslimeModifier extends DurabilityShieldModifier implements ToolS
   public int getDurabilityRGB(IToolStackView tool, ModifierEntry modifier) {
     if (getShield(tool) > 0) {
       // just always display light blue, not much point in color changing really
-      return 0x00D0FF;
+      return 0x00A0FF;
     }
     return -1;
   }

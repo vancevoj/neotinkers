@@ -262,6 +262,7 @@
     "kinetic":              "#9261cc",
     "recurrent_protection": "#60496b",
     "skyfall":              "#00F4DA",
+    "frostshield":          "#AAFFFF",
 
     "__traits_slimeskull__": null,
     "boon_of_sssss":    "#605448",
@@ -328,6 +329,7 @@
     "string":        "#FFFFFF",
     "leather":       "#C65C35",
     "vine":          "#48B518",
+    "ice":           "#74ABFE",
 
     "__tier_2__": null,
     "iron":            "#D8D8D8",

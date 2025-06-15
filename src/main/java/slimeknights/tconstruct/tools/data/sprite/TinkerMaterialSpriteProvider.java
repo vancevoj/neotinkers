@@ -85,6 +85,13 @@ public class TinkerMaterialSpriteProvider extends AbstractMaterialSpriteProvider
       .ranged().shieldCore().statType(WOOD)
       .fallbacks("wood", "stick", "primitive")
       .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF3D5A1F).addARGB(102, 0xFF456317).addARGB(140, 0xFF507516).addARGB(178, 0xFF5E8A24).addARGB(216, 0xFF8AAE60).addARGB(255, 0xFF97C463).build());
+    buildMaterial(MaterialIds.ice)
+      .shieldCore()
+      .transformer(GreyToSpriteTransformer.builderFromBlack()
+        .addTexture(63, new ResourceLocation("block/blue_ice"))
+        .addTexture(102, new ResourceLocation("block/packed_ice"))
+        .addTexture(140, new ResourceLocation("block/ice"))
+        .build());
     // tier 1 - stone
     buildMaterial(MaterialIds.stone)
       .meleeHarvest()
