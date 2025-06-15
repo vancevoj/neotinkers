@@ -11,7 +11,6 @@ import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.ToolActions;
 import net.minecraftforge.event.TickEvent.PlayerTickEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.fluids.FluidStack;
@@ -34,12 +33,10 @@ import slimeknights.tconstruct.library.module.ModuleHookMap.Builder;
 import slimeknights.tconstruct.library.tools.capability.TinkerDataCapability;
 import slimeknights.tconstruct.library.tools.capability.TinkerDataCapability.TinkerDataKey;
 import slimeknights.tconstruct.library.tools.capability.fluid.ToolTankHelper;
-import slimeknights.tconstruct.library.tools.helper.ModifierUtil;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.shared.TinkerCommons;
 import slimeknights.tconstruct.shared.particle.FluidParticleData;
-import slimeknights.tconstruct.tools.modifiers.ability.interaction.BlockingModifier;
 
 import static slimeknights.tconstruct.library.tools.capability.fluid.ToolTankHelper.TANK_HELPER;
 
@@ -54,7 +51,7 @@ public class SlurpingModifier extends Modifier implements KeybindInteractModifie
 
   @Override
   public int getPriority() {
-    return 90;
+    return 40;
   }
 
   @Override
@@ -172,17 +169,36 @@ public class SlurpingModifier extends Modifier implements KeybindInteractModifie
 
   @Override
   public UseAnim getUseAction(IToolStackView tool, ModifierEntry modifier) {
-    return BlockingModifier.blockWhileCharging(tool, UseAnim.DRINK);
+    return UseAnim.DRINK;
   }
 
   @Override
   public void onUsingTick(IToolStackView tool, ModifierEntry modifier, LivingEntity entity, int useDuration, int timeLeft, ModifierEntry activeModifier) {
-    if (timeLeft % 4 == 0 && entity instanceof Player player) {
-      FluidStack fluidStack = TANK_HELPER.getFluid(tool);
-      if (!fluidStack.isEmpty()) {
-        addFluidParticles(player, fluidStack, 5);
+    // mark the tool with whether we can drink; don't play particles if simulate does nothing
+    int useTime = useDuration - timeLeft;
+    boolean notActive = modifier != activeModifier;
+    if (notActive && useTime == 0 && entity instanceof Player player) {
+      FluidStack fluid = TANK_HELPER.getFluid(tool);
+      if (!fluid.isEmpty() && slurp(fluid, modifier.getEffectiveLevel(), player, FluidAction.SIMULATE) > 0) {
+        tool.getPersistentData().putBoolean(getId(), true);
+      }
+    }
+
+    // if we reached the end, finish drinking; don't have to release the current use
+    int duration = getUseDuration(tool, modifier);
+    if (notActive && useTime == duration) {
+      if (entity instanceof Player player) {
+        finishDrinking(tool, player);
+      }
+      tool.getPersistentData().remove(getId());
+    }
+    // if we have not finished drinking, and we can drink, play effects
+    else if (useTime < duration && useTime % 4 == 0 && (!notActive || tool.getPersistentData().getBoolean(getId())) && entity instanceof Player player) {
+      FluidStack fluid = TANK_HELPER.getFluid(tool);
+      if (!fluid.isEmpty()) {
+        addFluidParticles(player, fluid, 5);
         // add drinking sounds if blocking or using another modifier
-        if (modifier != activeModifier || ModifierUtil.canPerformAction(tool, ToolActions.SHIELD_BLOCK)) {
+        if (notActive) {
           player.playSound(SoundEvents.GENERIC_DRINK, 0.5F, RANDOM.nextFloat() * 0.1f + 0.9f);
         }
       }
@@ -191,9 +207,10 @@ public class SlurpingModifier extends Modifier implements KeybindInteractModifie
 
   @Override
   public void beforeReleaseUsing(IToolStackView tool, ModifierEntry modifier, LivingEntity entity, int useDuration, int timeLeft, ModifierEntry activeModifier) {
-    if (useDuration - timeLeft >= getUseDuration(tool, modifier) && entity instanceof Player player) {
+    if (useDuration - timeLeft == getUseDuration(tool, modifier) && entity instanceof Player player) {
       finishDrinking(tool, player);
     }
+    tool.getPersistentData().remove(getId());
   }
 
   private record SlurpingInfo(FluidStack fluid, int finishTime) {}
