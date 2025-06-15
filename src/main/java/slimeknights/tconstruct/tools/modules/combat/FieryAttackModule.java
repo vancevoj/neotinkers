@@ -43,7 +43,7 @@ public record FieryAttackModule(LevelingValue time) implements ModifierModule, P
 
   /** Sets the target on fire */
   private void setFire(ModifierEntry modifier, Entity target) {
-    target.setSecondsOnFire(Math.round(modifier.getEffectiveLevel()));
+    target.setSecondsOnFire(Math.round(time.compute(modifier.getEffectiveLevel())));
   }
 
   @Override
