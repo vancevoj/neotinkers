@@ -30,6 +30,7 @@ import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.crafting.CompoundIngredient;
 import net.minecraftforge.common.crafting.ConditionalRecipe;
 import net.minecraftforge.common.crafting.DifferenceIngredient;
+import net.minecraftforge.common.crafting.conditions.AndCondition;
 import net.minecraftforge.common.crafting.conditions.ICondition;
 import net.minecraftforge.common.crafting.conditions.ItemExistsCondition;
 import net.minecraftforge.common.crafting.conditions.ModLoadedCondition;
@@ -1898,23 +1899,33 @@ public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelt
                       .save(wrapped, prefix(TinkerFluids.moltenConstantan, folder));
 
     // pewter
-    wrapped = withCondition(consumer, tagCondition("ingots/pewter"), tagCondition("ingots/lead"));
+    ICondition lead = tagCondition("ingots/lead");
+    ICondition tin = tagCondition("ingots/tin");
+    wrapped = withCondition(consumer, tagCondition("ingots/pewter"));
     ConditionalRecipe.builder()
-                     // when available, alloy pewter with tin
-                     // we mainly add it to support Edilon which uses iron to reduce ores, but the author thinks tin is fine balance wise
-                     .addCondition(tagCondition("ingots/tin"))
-                     .addRecipe(
-                       // ratio from Allomancy mod
-                       AlloyRecipeBuilder.alloy(TinkerFluids.moltenPewter, FluidValues.INGOT * 3)
-                                         .addInput(TinkerFluids.moltenTin.ingredient(FluidValues.INGOT * 2))
-                                         .addInput(TinkerFluids.moltenLead.ingredient(FluidValues.INGOT))::save)
-                     .addCondition(TrueCondition.INSTANCE) // fallback
-                     .addRecipe(
-                       // ratio from Edilon mod
-                       AlloyRecipeBuilder.alloy(TinkerFluids.moltenPewter, FluidValues.INGOT * 2)
-                                         .addInput(TinkerFluids.moltenIron.ingredient(FluidValues.INGOT))
-                                         .addInput(TinkerFluids.moltenLead.ingredient(FluidValues.INGOT))::save)
-                     .build(wrapped, prefix(TinkerFluids.moltenPewter, folder));
+      // if we have both tin and lead, do the combined recipe. Ratio is from Metalborn/Allomancy
+      .addCondition(new AndCondition(lead, tin))
+      // ratio from Metalborn/Allomancy
+      .addRecipe(AlloyRecipeBuilder.alloy(TinkerFluids.moltenPewter, FluidValues.INGOT * 3)
+        .addInput(TinkerFluids.moltenTin.ingredient(FluidValues.INGOT * 2))
+        .addInput(TinkerFluids.moltenLead.ingredient(FluidValues.INGOT))::save)
+
+      // otherwise, substitute iron for the missing part
+      // metalborn does pewter without lead
+      .addCondition(tin)
+      // ratio from Metalborn
+      .addRecipe(AlloyRecipeBuilder.alloy(TinkerFluids.moltenPewter, FluidValues.INGOT * 4)
+        .addInput(TinkerFluids.moltenTin.ingredient(FluidValues.INGOT * 3))
+        .addInput(TinkerFluids.moltenIron.ingredient(FluidValues.INGOT))::save)
+
+      // Edilon does pewter without tin
+      .addCondition(lead)
+      // ratio from Edilon mod
+      .addRecipe(AlloyRecipeBuilder.alloy(TinkerFluids.moltenPewter, FluidValues.INGOT * 2)
+        .addInput(TinkerFluids.moltenIron.ingredient(FluidValues.INGOT))
+        .addInput(TinkerFluids.moltenLead.ingredient(FluidValues.INGOT))::save)
+
+      .build(wrapped, prefix(TinkerFluids.moltenPewter, folder));
 
     // thermal alloys
     Function<String,ICondition> fluidTagLoaded = name -> new TagFilledCondition<>(Registries.FLUID, commonResource(name));
