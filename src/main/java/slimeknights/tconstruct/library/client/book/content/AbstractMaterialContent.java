@@ -81,9 +81,12 @@ public abstract class AbstractMaterialContent extends PageContent {
   private transient List<ItemStack> repairStacks;
   private transient IMaterial material;
 
+  public String title = "";
   @SerializedName("material")
-  public String materialName;
-  public boolean detailed;
+  public String materialName = "";
+  public boolean detailed = false;
+  @SerializedName("show_all_tools")
+  public boolean showAllTools = false;
 
   public AbstractMaterialContent(MaterialVariantId materialVariant, boolean detailed) {
     this.materialName = materialVariant.toString();
@@ -151,7 +154,10 @@ public abstract class AbstractMaterialContent extends PageContent {
   @Nonnull
   @Override
   public String getTitle() {
-    return getTitleComponent().getString();
+    if (title.isEmpty()) {
+      return getTitleComponent().getString();
+    }
+    return title;
   }
 
   /** Gets the title of this page to display in the index */
@@ -343,14 +349,19 @@ public abstract class AbstractMaterialContent extends PageContent {
           MaterialNBT.Builder materials = MaterialNBT.builder();
           boolean usedMaterial = false;
           for (MaterialStatsId part : requirements) {
-            // if any stat type of the tool is not supported by this page, skip the whole tool
-            if (!supportsStatType(part)) {
+            // by default, give up if the tool contains any parts of another stat type. Mostly filters out ancient tools
+            // but by request we can keep those visible
+            boolean supported = supportsStatType(part);
+            if (!showAllTools && !supported) {
               continue toolLoop;
             }
+
             // if the stat type is not supported by the material, substitute
             if (part.canUseMaterial(materialId)) {
               materials.add(materialVariant);
-              usedMaterial = true;
+              if (supported) {
+                usedMaterial = true;
+              }
             } else {
               materials.add(MaterialRegistry.firstWithStatType(part));
             }

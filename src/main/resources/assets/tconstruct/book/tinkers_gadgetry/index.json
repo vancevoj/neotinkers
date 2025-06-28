@@ -52,7 +52,7 @@
         }
       }
     },
-    "data": "no-load",
+    "data": "sections/ancient.json",
     "extraData": { "tconstruct:load_tools": { "tag": "tconstruct:modifiable/ancient", "path": "ancient", "sort": false }}
   },
   {
