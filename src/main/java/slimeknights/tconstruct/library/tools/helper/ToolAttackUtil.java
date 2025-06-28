@@ -1,7 +1,5 @@
 package slimeknights.tconstruct.library.tools.helper;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Multimap;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
@@ -19,7 +17,6 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
-import net.minecraft.world.entity.ai.attributes.AttributeMap;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -31,7 +28,6 @@ import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.entity.PartEntity;
 import net.minecraftforge.event.entity.player.CriticalHitEvent;
 import slimeknights.mantle.util.OffhandCooldownTracker;
-import slimeknights.mantle.util.SingleKeyMultimap;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
@@ -44,6 +40,8 @@ import slimeknights.tconstruct.library.tools.stat.ToolStats;
 import slimeknights.tconstruct.library.utils.Util;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -83,36 +81,48 @@ public class ToolAttackUtil {
     if (slotType == EquipmentSlot.MAINHAND || holder.level().isClientSide) {
       return (float) holder.getAttributeValue(Attributes.ATTACK_DAMAGE);
     }
+    // fetch attribute instance
+    AttributeInstance instance = holder.getAttribute(Attributes.ATTACK_DAMAGE);
+    if (instance == null) {
+      return (float) holder.getAttributeBaseValue(Attributes.ATTACK_DAMAGE);
+    }
 
-    // first, get a map of existing damage modifiers to exclude
+    // first, remove all main hand modifiers, but store them to add back
     ItemStack mainStack = holder.getMainHandItem();
-    Multimap<Attribute,AttributeModifier> mainModifiers = null;
+    Collection<AttributeModifier> mainModifiers = List.of();
     if (!mainStack.isEmpty()) {
-      mainModifiers = new SingleKeyMultimap<>(Attributes.ATTACK_DAMAGE, holder.getMainHandItem().getAttributeModifiers(EquipmentSlot.MAINHAND).get(Attributes.ATTACK_DAMAGE));
+      mainModifiers = mainStack.getAttributeModifiers(EquipmentSlot.MAINHAND).get(Attributes.ATTACK_DAMAGE);
+      for (AttributeModifier modifier : mainModifiers) {
+        instance.removeModifier(modifier);
+      }
     }
 
     // next, build a list of damage modifiers from the offhand stack, handled directly as it saves parsing the tool twice and lets us simplify by filtering
-    ImmutableList.Builder<AttributeModifier> listBuilder = ImmutableList.builder();
-    listBuilder.add(new AttributeModifier(OFFHAND_DAMAGE_MODIFIER_UUID, "tconstruct.tool.offhand_attack_damage", tool.getStats().get(ToolStats.ATTACK_DAMAGE), AttributeModifier.Operation.ADDITION));
+    List<AttributeModifier> offhandAttributes = new ArrayList<>();
+    offhandAttributes.add(new AttributeModifier(OFFHAND_DAMAGE_MODIFIER_UUID, "tconstruct.tool.offhand_attack_damage", tool.getStats().get(ToolStats.ATTACK_DAMAGE), AttributeModifier.Operation.ADDITION));
     BiConsumer<Attribute, AttributeModifier> attributeConsumer = (attribute, modifier) -> {
       if (attribute == Attributes.ATTACK_DAMAGE) {
-        listBuilder.add(modifier);
+        offhandAttributes.add(modifier);
       }
     };
     for (ModifierEntry entry : tool.getModifierList()) {
       entry.getHook(ModifierHooks.ATTRIBUTES).addAttributes(tool, entry, EquipmentSlot.MAINHAND, attributeConsumer);
     }
-    Multimap<Attribute,AttributeModifier> offhandModifiers = new SingleKeyMultimap<>(Attributes.ATTACK_DAMAGE, listBuilder.build());
+    for (AttributeModifier modifier : offhandAttributes) {
+      instance.addTransientModifier(modifier);
+    }
 
-    // remove the old, add the new
-    AttributeMap modifiers = holder.getAttributes();
-    if (mainModifiers != null) modifiers.removeAttributeModifiers(mainModifiers);
-    modifiers.addTransientAttributeModifiers(offhandModifiers);
     // fetch damage using these temporary modifiers
-    float damage = (float) holder.getAttributeValue(Attributes.ATTACK_DAMAGE);
+    float damage = (float) instance.getValue();
+
     // revert modifiers to the original state
-    modifiers.removeAttributeModifiers(offhandModifiers);
-    if (mainModifiers != null) modifiers.addTransientAttributeModifiers(mainModifiers);
+    for (AttributeModifier modifier : offhandAttributes) {
+      instance.removeModifier(modifier);
+    }
+    for (AttributeModifier modifier : mainModifiers) {
+      instance.addTransientModifier(modifier);
+    }
+
     return damage;
   }
 
