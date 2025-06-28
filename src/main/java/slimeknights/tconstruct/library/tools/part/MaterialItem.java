@@ -100,7 +100,11 @@ public class MaterialItem extends Item implements IMaterialItem {
   public String getCreatorModId(ItemStack stack) {
     MaterialVariantId material = getMaterial(stack);
     if (!IMaterial.UNKNOWN_ID.equals(material)) {
-      return material.getId().getNamespace();
+      String namespace = material.getId().getNamespace();
+      // skip if it's a tinkers material; we want addon tool parts to prefer showing their mod ID as end users mistake those for us
+      if (!TConstruct.MOD_ID.equals(namespace)) {
+        return namespace;
+      }
     }
     return BuiltInRegistries.ITEM.getKey(this).getNamespace();
   }
