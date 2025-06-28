@@ -448,7 +448,7 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                                     .save(consumer, prefix(ModifierIds.baneOfSssss, upgradeFolder));
     IncrementalModifierRecipeBuilder.modifier(ModifierIds.antiaquatic)
                                     .setTools(TinkerTags.Items.MELEE)
-                                    .setInput(Items.PUFFERFISH, 1, 20)
+                                    .setInput(Items.PUFFERFISH, 1, 5)
                                     .setMaxLevel(5) // +12.5 fish damage
                                     .setSlots(SlotType.UPGRADE, 1)
                                     .saveSalvage(consumer, prefix(ModifierIds.antiaquatic, upgradeSalvage))
