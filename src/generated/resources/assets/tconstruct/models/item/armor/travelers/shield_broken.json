@@ -14,11 +14,11 @@
   ],
   "parts": [
     {
-      "name": "base"
-    },
-    {
       "name": "wood",
       "index": 0
+    },
+    {
+      "name": "base"
     }
   ]
 }
