@@ -359,6 +359,7 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
     addMaterialStats(MaterialIds.bamboo, StatlessMaterialStats.SHIELD_CORE);
     addMaterialStats(MaterialIds.chorus, StatlessMaterialStats.SHIELD_CORE);
     addMaterialStats(MaterialIds.ice, StatlessMaterialStats.SHIELD_CORE);
+    addMaterialStats(MaterialIds.cactus, StatlessMaterialStats.SHIELD_CORE);
     addArmorShieldStats(MaterialIds.copper, PlatingMaterialStats.builder().durabilityFactor(13).armor(1, 2, 3, 1), StatlessMaterialStats.MAILLE);
     addMaterialStats(MaterialIds.leather, StatlessMaterialStats.MAILLE);
     addMaterialStats(MaterialIds.vine, StatlessMaterialStats.MAILLE);

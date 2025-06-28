@@ -329,6 +329,7 @@
     "string":        "#FFFFFF",
     "leather":       "#C65C35",
     "vine":          "#48B518",
+    "cactus":        "#649832",
     "ice":           "#74ABFE",
 
     "__tier_2__": null,

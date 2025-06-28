@@ -1661,6 +1661,10 @@
   "material.tconstruct.ice.flavor": "Chill!",
   "material.tconstruct.ice.armor": "Converts taken cold damage into durability shield.",
 
+  "material.tconstruct.cactus": "Cactus",
+  "material.tconstruct.cactus.flavor": "A spiky shield spikes serious stabbers.",
+  "material.tconstruct.cactus.armor": "Adds a 15% chance to deal 1-4 damage on counterattacks, or a 30% chance when blocking.",
+
   "material.tconstruct.rock": "Rock",
   "material.tconstruct.rock.stone":      "Stone",
   "material.tconstruct.rock.andesite":   "Andesite",

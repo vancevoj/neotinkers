@@ -1686,6 +1686,7 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
     woodTexture(consumer, MaterialIds.blazewood, TinkerMaterials.blazewood, folder);
     woodTexture(consumer, MaterialIds.nahuatl, TinkerMaterials.nahuatl, folder);
     woodTexture(consumer, MaterialIds.bamboo, Blocks.BAMBOO, folder);
+    woodTexture(consumer, MaterialIds.cactus, Blocks.CACTUS, folder);
     // compat
     TagKey<Item> treatedWood = getItemTag(COMMON, "treated_wood");
     SwappableModifierRecipeBuilder.modifier(TinkerModifiers.embellishment, MaterialIds.treatedWood.toString())

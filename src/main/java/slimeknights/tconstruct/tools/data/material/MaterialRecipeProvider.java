@@ -99,6 +99,7 @@ public class MaterialRecipeProvider extends BaseRecipeProvider implements IMater
     materialRecipe(consumer, MaterialIds.leather, Ingredient.of(Tags.Items.LEATHER), 1, 1, folder + "leather");
     materialRecipe(consumer, MaterialIds.leather, Ingredient.of(Items.RABBIT_HIDE),  1, 2, folder + "rabbit_hide");
     materialRecipe(consumer, MaterialIds.vine,    Ingredient.of(Items.VINE),         1, 1, folder + "vine");
+    materialRecipe(consumer, MaterialIds.cactus,  Ingredient.of(Blocks.BLUE_ICE),    1, 1, folder + "cactus");
     materialRecipe(consumer, MaterialIds.ice,     Ingredient.of(Blocks.ICE),         1, 9, folder + "ice/unpacked");
     materialRecipe(consumer, MaterialIds.ice,     Ingredient.of(Blocks.PACKED_ICE),  1, 1, folder + "ice/packed");
     materialRecipe(consumer, MaterialIds.ice,     Ingredient.of(Blocks.BLUE_ICE),    9, 1, folder + "ice/blue");

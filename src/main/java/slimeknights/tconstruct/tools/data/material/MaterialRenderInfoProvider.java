@@ -27,6 +27,7 @@ public class MaterialRenderInfoProvider extends AbstractMaterialRenderInfoProvid
     buildRenderInfo(MaterialIds.leather).color(0xC65C35);
     buildRenderInfo(MaterialIds.vine).color(0x48B518).fallbacks("vine");
     buildRenderInfo(MaterialIds.ice).color(0x74ABFE);
+    buildRenderInfo(MaterialIds.cactus).color(0x649832);
     // tier 1 - wood
     buildRenderInfo(MaterialIds.wood).color(0x876627).fallbacks("wood", "stick", "primitive");
     buildRenderInfo(MaterialIds.crimson);
