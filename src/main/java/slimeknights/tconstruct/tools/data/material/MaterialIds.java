@@ -112,13 +112,29 @@ public final class MaterialIds {
    */
   public static final MaterialVariantId basalt  = create(flint, "basalt");
   // wood
+  /** @deprecated use {@link #wood} */
+  @Deprecated(forRemoval = true)
   public static final MaterialVariantId oak      = create(wood, "oak");
+  /** @deprecated use {@link #wood} */
+  @Deprecated(forRemoval = true)
   public static final MaterialVariantId spruce   = create(wood, "spruce");
+  /** @deprecated use {@link #wood} */
+  @Deprecated(forRemoval = true)
   public static final MaterialVariantId birch    = create(wood, "birch");
+  /** @deprecated use {@link #wood} */
+  @Deprecated(forRemoval = true)
   public static final MaterialVariantId jungle   = create(wood, "jungle");
+  /** @deprecated use {@link #wood} */
+  @Deprecated(forRemoval = true)
   public static final MaterialVariantId acacia   = create(wood, "acacia");
+  /** @deprecated use {@link #wood} */
+  @Deprecated(forRemoval = true)
   public static final MaterialVariantId darkOak  = create(wood, "dark_oak");
+  /** @deprecated use {@link #wood} */
+  @Deprecated(forRemoval = true)
   public static final MaterialVariantId mangrove = create(wood, "mangrove");
+  /** @deprecated use {@link #wood} */
+  @Deprecated(forRemoval = true)
   public static final MaterialVariantId cherry   = create(wood, "cherry");
   public static final MaterialVariantId crimson  = create(wood, "crimson");
   public static final MaterialVariantId warped   = create(wood, "warped");
