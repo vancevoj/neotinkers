@@ -48,6 +48,7 @@ public class TinkerPartSpriteProvider extends AbstractPartSpriteProvider {
     buildTool("armor/travelers/vest"   ).disallowAnimated().addBreakablePart("metal", PlatingMaterialStats.CHESTPLATE.getId());
     buildTool("armor/travelers/pants"  ).disallowAnimated().addBreakablePart("metal", PlatingMaterialStats.LEGGINGS.getId());
     buildTool("armor/travelers/boots"  ).disallowAnimated().addBreakablePart("metal", PlatingMaterialStats.BOOTS.getId());
+    buildTool("armor/travelers/shield" ).addBreakablePart("wood", StatlessMaterialStats.SHIELD_CORE.getIdentifier());
 
     // plate textures
     addPart("maille", StatlessMaterialStats.MAILLE.getIdentifier());
@@ -67,10 +68,6 @@ public class TinkerPartSpriteProvider extends AbstractPartSpriteProvider {
       // withLarge wants to use a subfolder, easier to just add another part than special casing
       .addBreakablePart("plating_large", PlatingMaterialStats.SHIELD.getId())
       .addBreakablePart("core_large", StatlessMaterialStats.SHIELD_CORE.getIdentifier());
-
-    // shield textures
-    addSprite("armor/travelers/shield_modifiers/tconstruct_embellishment", WOOD);
-    addSprite("armor/travelers/shield_modifiers/broken/tconstruct_embellishment", WOOD);
 
     // staff
     addSprite("staff/modifiers/tconstruct_embellishment", WOOD);

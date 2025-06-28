@@ -1,6 +1,22 @@
 {
   "modules": [
     {
+      "type": "tconstruct:material_stats",
+      "primary_part": 0,
+      "stat_types": [
+        "tconstruct:shield_core"
+      ]
+    },
+    {
+      "type": "tconstruct:default_materials",
+      "materials": [
+        {
+          "type": "tconstruct:fixed",
+          "material": "tconstruct:wood"
+        }
+      ]
+    },
+    {
       "type": "tconstruct:base_stats",
       "stats": {
         "tconstruct:block_amount": 10.0,
@@ -14,7 +30,7 @@
       "slots": {
         "abilities": 1,
         "defense": 2,
-        "upgrades": 3
+        "upgrades": 2
       }
     },
     {
@@ -23,9 +39,9 @@
       "material": "tconstruct:leather"
     },
     {
-      "type": "tconstruct:material_repair",
-      "durability": 100,
-      "material": "tconstruct:wood"
+      "type": "tconstruct:statless_part_repair",
+      "part_index": 0,
+      "repair_amount": 100
     },
     {
       "type": "tconstruct:traits",

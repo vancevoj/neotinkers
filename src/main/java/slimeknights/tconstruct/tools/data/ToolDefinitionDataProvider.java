@@ -38,6 +38,7 @@ import slimeknights.tconstruct.library.tools.definition.module.material.Material
 import slimeknights.tconstruct.library.tools.definition.module.material.MaterialTraitsModule;
 import slimeknights.tconstruct.library.tools.definition.module.material.PartStatsModule;
 import slimeknights.tconstruct.library.tools.definition.module.material.PartsModule;
+import slimeknights.tconstruct.library.tools.definition.module.material.StatlessPartRepairModule;
 import slimeknights.tconstruct.library.tools.definition.module.mining.IsEffectiveModule;
 import slimeknights.tconstruct.library.tools.definition.module.mining.MaxTierModule;
 import slimeknights.tconstruct.library.tools.definition.module.mining.MiningSpeedModifierModule;
@@ -566,17 +567,19 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
       .module(ToolTraitsModule.builder().trait(TinkerModifiers.tanned).build())
       .module(ArmorItem.Type.BOOTS, ToolTraitsModule.builder().trait(ModifierIds.snowBoots).build());
     define(ArmorDefinitions.TRAVELERS_SHIELD)
+      .module(MaterialStatsModule.stats().stat(StatlessMaterialStats.SHIELD_CORE.getIdentifier()).build())
+      .module(DefaultMaterialsModule.builder().material(MaterialIds.wood).build())
       .module(new SetStatsModule(StatsNBT.builder()
         .set(ToolStats.DURABILITY, 200)
         .set(ToolStats.BLOCK_AMOUNT, 10)
         .set(ToolStats.BLOCK_ANGLE, 90)
         .set(ToolStats.USE_ITEM_SPEED, 0.8f).build()))
       .module(ToolSlotsModule.builder()
-        .slots(SlotType.UPGRADE, 3)
+        .slots(SlotType.UPGRADE, 2)
         .slots(SlotType.DEFENSE, 2)
         .slots(SlotType.ABILITY, 1).build())
       .module(MaterialRepairModule.of(MaterialIds.leather, 200))
-      .module(MaterialRepairModule.of(MaterialIds.wood, 100))
+      .module(new StatlessPartRepairModule(0, 100))
       .module(ToolTraitsModule.builder().trait(TinkerModifiers.blocking).trait(TinkerModifiers.tanned).build())
       .module(shieldInteraction);
 

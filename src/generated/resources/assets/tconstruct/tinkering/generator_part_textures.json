@@ -72,14 +72,6 @@
       "stat_type": "tconstruct:armor_maille"
     },
     {
-      "path": "tconstruct:item/tool/armor/travelers/shield_modifiers/tconstruct_embellishment",
-      "stat_type": "tconstruct:wood"
-    },
-    {
-      "path": "tconstruct:item/tool/armor/travelers/shield_modifiers/broken/tconstruct_embellishment",
-      "stat_type": "tconstruct:wood"
-    },
-    {
       "path": "tconstruct:item/tool/staff/modifiers/tconstruct_embellishment",
       "stat_type": "tconstruct:wood"
     },
@@ -181,6 +173,14 @@
       "allow_animated": false,
       "path": "tconstruct:item/tool/armor/travelers/boots/metal_broken",
       "stat_type": "tconstruct:plating_boots"
+    },
+    {
+      "path": "tconstruct:item/tool/armor/travelers/shield/wood",
+      "stat_type": "tconstruct:shield_core"
+    },
+    {
+      "path": "tconstruct:item/tool/armor/travelers/shield/wood_broken",
+      "stat_type": "tconstruct:shield_core"
     },
     {
       "allow_animated": false,

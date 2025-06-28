@@ -42,6 +42,7 @@ import slimeknights.tconstruct.tools.TinkerToolParts;
 import slimeknights.tconstruct.tools.TinkerTools;
 import slimeknights.tconstruct.tools.data.material.MaterialIds;
 import slimeknights.tconstruct.tools.stats.PlatingMaterialStats;
+import slimeknights.tconstruct.tools.stats.StatlessMaterialStats;
 import slimeknights.tconstruct.world.TinkerHeadType;
 import slimeknights.tconstruct.world.TinkerWorld;
 
@@ -175,13 +176,14 @@ public class ToolsRecipeProvider extends BaseRecipeProvider implements IMaterial
       .unlockedBy("has_item", has(Tags.Items.LEATHER))
       .save(shapedMaterial, location(armorFolder + "travelers_boots"));
     ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, TinkerTools.travelersShield)
-                       .pattern(" w ")
-                       .pattern("wlw")
-                       .pattern(" w ")
+                       .pattern(" p ")
+                       .pattern("lwl")
+                       .pattern(" p ")
                        .define('l', Tags.Items.LEATHER)
-                       .define('w', TinkerTables.pattern)
+                       .define('p', TinkerTables.pattern)
+                       .define('w', MaterialValueIngredient.of(new MaterialStatTypePredicate(StatlessMaterialStats.SHIELD_CORE.getIdentifier()), 1))
                        .unlockedBy("has_item", has(Tags.Items.LEATHER))
-                       .save(consumer, location(armorFolder + "travelers_shield"));
+                       .save(shapedMaterial, location(armorFolder + "travelers_shield"));
     PartSwapCastingRecipeBuilder.tableRecipe(Ingredient.of(TinkerTools.travelersGear.values().toArray(new Item[0])), 2)
       .save(consumer, location(armorFolder + "travelers_swapping"));
 
