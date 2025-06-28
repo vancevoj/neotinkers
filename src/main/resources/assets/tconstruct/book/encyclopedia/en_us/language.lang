@@ -11,7 +11,7 @@ tools.tconstruct.ichor_staff=Ichor
 tools.tconstruct.ender_staff=Enderslime
 armor=Armor
 
-materials_harvest=Melee Harvest Materials
+materials_harvest=General Materials
 materials_harvest.subtext=Materials used for creating melee weapons or harvest tools.
 materials_ranged=Ranged Materials
 materials_ranged.subtext=Materials used for creating ranged weapons.
