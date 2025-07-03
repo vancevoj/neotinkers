@@ -67,12 +67,12 @@ public class CustomExplosion extends Explosion {
     Set<BlockPos> set = new HashSet<>();
     // loop over a hollowed out 16x cube
     for (int rayX = 0; rayX < RAY_COUNT; rayX++) {
-      double stepX = rayX * 2.0 / MAX_RAY - 1;
       for (int rayY = 0; rayY < RAY_COUNT; rayY++) {
-        double stepY = rayY * 2.0 / MAX_RAY - 1;
         for (int rayZ = 0; rayZ < RAY_COUNT; rayZ++) {
           if (rayX == 0 || rayX == MAX_RAY || rayY == 0 || rayY == MAX_RAY || rayZ == 0 || rayZ == MAX_RAY) {
             // determine direction to go, then step in 0.3 unit vector increments
+            double stepX = rayX * 2.0 / MAX_RAY - 1;
+            double stepY = rayY * 2.0 / MAX_RAY - 1;
             double stepZ = rayZ * 2.0 / MAX_RAY - 1;
             double stepScale = 0.3f / Math.sqrt(stepX * stepX + stepY * stepY + stepZ * stepZ);
             stepX *= stepScale;
