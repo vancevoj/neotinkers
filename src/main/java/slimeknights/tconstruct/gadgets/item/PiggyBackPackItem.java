@@ -53,7 +53,7 @@ public class PiggyBackPackItem extends TooltipItem {
     }
 
     // try carrying the entity
-    if (this.pickupEntity(playerIn, target)) {
+    if (pickupEntity(playerIn, target)) {
       // unequip old armor
       if (chestArmor.getItem() != this) {
         ItemHandlerHelper.giveItemToPlayer(playerIn, chestArmor);
@@ -74,12 +74,27 @@ public class PiggyBackPackItem extends TooltipItem {
     return InteractionResult.CONSUME;
   }
 
-  private boolean pickupEntity(Player player, Entity target) {
+  /**
+   * Checks if the passed entity is a vehicle of the other
+   * @param entity           Entity to query
+   * @param possibleVehicle  Possible vehicle of the entity
+   * @return  True if it's a vehicle, or a vehicle of a vehicle
+   */
+  private static boolean isVehicle(Entity entity, Entity possibleVehicle) {
+    for (Entity vehicle = entity.getVehicle(); vehicle != null; vehicle = vehicle.getVehicle()) {
+      if (vehicle == possibleVehicle) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  private static boolean pickupEntity(Player player, Entity target) {
     if (player.getCommandSenderWorld().isClientSide || target.getType().is(TinkerTags.EntityTypes.PIGGYBACKPACK_BLACKLIST)) {
       return false;
     }
     // silly players, clicking on entities they're already carrying or riding
-    if (target.getVehicle() == player || player.getVehicle() == target) {
+    if (isVehicle(player, target) || isVehicle(target, player)) {
       return false;
     }
 
