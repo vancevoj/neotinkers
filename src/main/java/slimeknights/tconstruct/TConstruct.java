@@ -108,7 +108,6 @@ public class TConstruct {
     bus.register(new TinkerCommons());
     bus.register(new TinkerMaterials());
     bus.register(new TinkerEffects());
-    bus.register(new TinkerFluids());
     bus.register(new TinkerGadgets());
     bus.register(new TinkerAttributes());
     // world
@@ -121,6 +120,7 @@ public class TConstruct {
     bus.register(new TinkerTools());
     // smeltery
     bus.register(new TinkerSmeltery());
+    bus.register(new TinkerFluids());
 
     // init deferred registers
     TinkerModule.initRegisters();
