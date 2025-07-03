@@ -78,7 +78,7 @@ public record PlaceBlockFluidEffect(@Nullable Block block, @Nullable SoundEvent 
         }
       }
       // no block was found, means we either lack an entity or are holding nothing
-      if (block == null) {
+      if (block == null || context.placeRestricted(stack)) {
         return 0;
       }
       // build the context

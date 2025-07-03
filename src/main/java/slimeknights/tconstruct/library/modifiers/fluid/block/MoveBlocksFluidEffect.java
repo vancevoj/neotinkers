@@ -65,6 +65,9 @@ public record MoveBlocksFluidEffect(boolean push, SoundEvent sound) implements F
   @Override
   public float apply(FluidStack fluid, EffectLevel level, FluidEffectContext.Block context, FluidAction action) {
     if (level.isFull()) {
+      if (context.breakRestricted()) {
+        return 0;
+      }
       // first step is to find how many blocks we can move
       BlockPos pos = context.getBlockPos();
       Level world = context.getLevel();
