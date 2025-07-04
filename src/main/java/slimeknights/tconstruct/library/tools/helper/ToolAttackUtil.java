@@ -222,6 +222,8 @@ public class ToolAttackUtil {
     if (damage <= 0) {
       return !isExtraAttack;
     }
+    // checked immediately in case anything else changes damage
+    boolean isMagic = damage > baseDamage;
 
     // forge patches in the knockback attribute for use on players
     // vanilla halves the knockback attribute later, we half it in all our hooks, so halving the attribute makes it equivelent
@@ -253,8 +255,8 @@ public class ToolAttackUtil {
           criticalModifier = hitResult.getDamageModifier();
         }
       }
-      if (isCritical) {
-        damage *= criticalModifier;
+      if (isCritical && criticalModifier != 1) {
+        damage += baseDamage * (criticalModifier - 1);
       }
     }
 
@@ -262,7 +264,6 @@ public class ToolAttackUtil {
     // removed: fire aspect check, replaced by before damage lower
 
     // apply cutoff and cooldown, store if damage was above base for magic particles
-    boolean isMagic = damage > baseDamage;
     if (cooldown < 1) {
       damage *= (0.2f + cooldown * cooldown * 0.8f);
     }
