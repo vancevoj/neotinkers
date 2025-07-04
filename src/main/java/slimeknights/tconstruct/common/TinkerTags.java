@@ -463,6 +463,8 @@ public class TinkerTags {
     public static final TagKey<Item> DYEABLE = local("modifiable/dyeable");
     /** Armor items that support trim */
     public static final TagKey<Item> TRIM = local("modifiable/armor/trim");
+    /** Tools to blacklist from default part recycling recipes. May still be recyclable in other recipes */
+    public static final TagKey<Item> UNRECYCLABLE = local("modifiable/unrecyclable");
     /** Tools to blacklist from default salvage recipes. May still be salvagable in other recipes */
     public static final TagKey<Item> UNSALVAGABLE = local("modifiable/unsalvageable");
 

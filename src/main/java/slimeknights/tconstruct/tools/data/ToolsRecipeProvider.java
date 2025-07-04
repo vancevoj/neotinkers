@@ -242,7 +242,7 @@ public class ToolsRecipeProvider extends BaseRecipeProvider implements IMaterial
     String folder = "tools/recycling/";
 
     // main recycling recipe - uses tool definition for parts list
-    PartBuilderToolRecycleBuilder.tools(SizedIngredient.of(DifferenceIngredient.of(Ingredient.of(TinkerTags.Items.MULTIPART_TOOL), Ingredient.of(TinkerTags.Items.UNSALVAGABLE))))
+    PartBuilderToolRecycleBuilder.tools(SizedIngredient.of(DifferenceIngredient.of(Ingredient.of(TinkerTags.Items.MULTIPART_TOOL), Ingredient.of(TinkerTags.Items.UNRECYCLABLE))))
         .save(consumer, location(folder + "general"));
     // daggers want to enforce stack size 2 when recycling to prevent dupes
     PartBuilderToolRecycleBuilder.tools(SizedIngredient.fromItems(2, TinkerTools.dagger))

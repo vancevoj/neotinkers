@@ -95,6 +95,7 @@ import static slimeknights.tconstruct.common.TinkerTags.Items.SWORD;
 import static slimeknights.tconstruct.common.TinkerTags.Items.TRADER_TOOLS;
 import static slimeknights.tconstruct.common.TinkerTags.Items.TRIM;
 import static slimeknights.tconstruct.common.TinkerTags.Items.UNARMED;
+import static slimeknights.tconstruct.common.TinkerTags.Items.UNRECYCLABLE;
 import static slimeknights.tconstruct.common.TinkerTags.Items.UNSALVAGABLE;
 import static slimeknights.tconstruct.common.TinkerTags.Items.WORN_ARMOR;
 
@@ -300,7 +301,7 @@ public class ItemTagProvider extends ItemTagsProvider {
 
     // shields
     addToolTags(TinkerTools.travelersShield, DURABILITY, BONUS_SLOTS, SHIELDS, INTERACTABLE_LEFT, Tags.Items.TOOLS_SHIELDS, SINGLEPART_TOOL, DYEABLE);
-    addToolTags(TinkerTools.plateShield,     DURABILITY, BONUS_SLOTS, SHIELDS, INTERACTABLE_LEFT, Tags.Items.TOOLS_SHIELDS, MULTIPART_TOOL, UNSALVAGABLE);
+    addToolTags(TinkerTools.plateShield,     DURABILITY, BONUS_SLOTS, SHIELDS, INTERACTABLE_LEFT, Tags.Items.TOOLS_SHIELDS, MULTIPART_TOOL, UNRECYCLABLE);
 
     // care about order for armor in the book
     tag(BASIC_ARMOR);
@@ -346,7 +347,8 @@ public class ItemTagProvider extends ItemTagsProvider {
     this.tag(RANGED).addTags(BOWS, STAFFS);
     this.tag(BOWS).addTags(LONGBOWS, CROSSBOWS);
     this.tag(TRADER_TOOLS).addTag(ANCIENT_TOOLS);
-    this.tag(UNSALVAGABLE).addTag(ANCIENT_TOOLS); // ancient tools lack tool parts, but may have special override recipes to salvage
+    // TODO 1.21: consider dropping unsalvagable from this tag
+    this.tag(UNRECYCLABLE).addTags(UNSALVAGABLE, ANCIENT_TOOLS); // ancient tools lack tool parts, but may have special override recipes to salvage
     // headlight support
     this.tag(ItemTags.create(new ResourceLocation("headlight", "headlight_helmets"))).addTag(HELMETS);
 
