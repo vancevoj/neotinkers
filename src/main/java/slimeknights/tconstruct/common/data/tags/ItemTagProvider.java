@@ -38,6 +38,8 @@ import slimeknights.tconstruct.tools.TinkerToolParts;
 import slimeknights.tconstruct.tools.TinkerTools;
 import slimeknights.tconstruct.world.TinkerHeadType;
 import slimeknights.tconstruct.world.TinkerWorld;
+import slimeknights.tconstruct.world.block.DirtType;
+import slimeknights.tconstruct.world.block.FoliageType;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
@@ -67,6 +69,7 @@ import static slimeknights.tconstruct.common.TinkerTags.Items.HARVEST_PRIMARY;
 import static slimeknights.tconstruct.common.TinkerTags.Items.HELD;
 import static slimeknights.tconstruct.common.TinkerTags.Items.HELD_ARMOR;
 import static slimeknights.tconstruct.common.TinkerTags.Items.HELMETS;
+import static slimeknights.tconstruct.common.TinkerTags.Items.HIDDEN_IN_RECIPE_VIEWERS;
 import static slimeknights.tconstruct.common.TinkerTags.Items.INTERACTABLE;
 import static slimeknights.tconstruct.common.TinkerTags.Items.INTERACTABLE_ARMOR;
 import static slimeknights.tconstruct.common.TinkerTags.Items.INTERACTABLE_CHARGE;
@@ -201,6 +204,31 @@ public class ItemTagProvider extends ItemTagsProvider {
       TinkerMaterials.steel.getIngot(), TinkerMaterials.cobalt.getIngot(), TinkerMaterials.manyullyn.getIngot(), TinkerMaterials.hepatizon.getIngot(), TinkerMaterials.cinderslime.getIngot(), TinkerMaterials.queensSlime.getIngot(),
       TinkerWorld.earthGeode.asItem(), TinkerWorld.skyGeode.asItem(), TinkerWorld.ichorGeode.asItem(), TinkerWorld.enderGeode.asItem()
     );
+
+    // items to fully hide from JEI
+    IntrinsicTagAppender<Item> hidden = tag(HIDDEN_IN_RECIPE_VIEWERS);
+    hidden.add(
+      // internal item for modifiers
+      TinkerTools.crystalshotItem.asItem(),
+      // unused future fluids
+      TinkerFluids.moltenSoulsteel.asItem(), TinkerFluids.moltenKnightslime.asItem(),
+      // why do we still have silky jewels around?
+      TinkerModifiers.silkyJewel.get(), TinkerModifiers.silkyJewelBlock.asItem()
+    );
+    // unused future material items
+    TinkerMaterials.soulsteel.forEach(item -> hidden.add(item.asItem()));
+    TinkerMaterials.knightslime.forEach(item -> hidden.add(item.asItem()));
+    // ichor foliage
+    hidden.add(
+      TinkerWorld.slimeLeaves.get(FoliageType.ICHOR).asItem(),
+      TinkerWorld.slimeTallGrass.get(FoliageType.ICHOR).asItem(),
+      TinkerWorld.slimeFern.get(FoliageType.ICHOR).asItem(),
+      TinkerWorld.slimeSapling.get(FoliageType.ICHOR).asItem(),
+      TinkerWorld.slimeGrassSeeds.get(FoliageType.ICHOR).asItem()
+    );
+    for (DirtType dirtType : DirtType.values()) {
+      hidden.add(TinkerWorld.slimeGrass.get(dirtType).get(FoliageType.ICHOR).asItem());
+    }
   }
 
   private void addWorld() {

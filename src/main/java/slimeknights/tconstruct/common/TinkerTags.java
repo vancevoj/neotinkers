@@ -479,6 +479,9 @@ public class TinkerTags {
     /** Tag meaning necronium is available */
     public static final TagKey<Item> URANIUM_INGOTS = common("ingots/uranium");
 
+    /** Fluids in this tag won't show in JEI */
+    public static final TagKey<Item> HIDDEN_IN_RECIPE_VIEWERS = hiddenFromRecipeViewers(Registries.ITEM);
+
     /** Makes a tag in the tinkers domain */
     private static TagKey<Item> local(String name) {
       return TagKey.create(Registries.ITEM, getResource(name));

@@ -408,8 +408,10 @@ public class JEIPlugin implements IModPlugin {
     List<ItemStack> addItems = new ArrayList<>();
     Consumer<ItemStack> addItem = addItems::add;
     // shown via the modifiers
+    removeItems.add(new ItemStack(TinkerModifiers.modifierCrystal));
     ModifierCrystalItem.addVariants(removeItem);
     // shown via modifier slots
+    removeItems.add(new ItemStack(TinkerModifiers.creativeSlotItem));
     TinkerModifiers.creativeSlotItem.get().addVariants(removeItem);
 
     // fluids can be clutter so remove them by default
