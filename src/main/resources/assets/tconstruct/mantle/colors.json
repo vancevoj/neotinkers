@@ -82,11 +82,11 @@
 
 
     "__defense__": null,
-    "blast_protection":      "#443753",
+    "blast_protection":      "#9277B2",
     "magic_protection":      "#F4D362",
     "projectile_protection": "#D8D8D8",
     "melee_protection":      "#2376DD",
-    "fire_protection":       "#4F4A47",
+    "fire_protection":       "#7F7772",
     "scorch_protection":     "#5B4C43",
     "golden":                "#FFD83E",
     "knockback_resistance":  "#4A4A4A",

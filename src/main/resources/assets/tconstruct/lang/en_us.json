@@ -951,7 +951,7 @@
   "item.tconstruct.diamond_item_frame": "Diamond Item Frame",
   "item.tconstruct.manyullyn_item_frame": "Manyullyn Item Frame",
   "item.tconstruct.netherite_item_frame": "Netherite Item Frame",
-  "entity.tconstruct.fancy_item_frame": "Fancy Item Frame",
+  "entity.tconstruct.item_frame": "Fancy Item Frame",
 
   "item.tconstruct.glow_ball": "Glowball",
   "item.tconstruct.glow_ball.tooltip": "Not suited for consumption.",
@@ -1784,7 +1784,7 @@
   "material.tconstruct.twisting_vine": "Twisting Vine",
   "material.tconstruct.twisting_vine.flavor": "Eat the spores!",
   "material.tconstruct.twisting_vine.encyclopedia": "Grants +6 mining speed at the cost of taking 1 damage when you put down the tool",
-  "material.tconstruct.twisting_vine.ranged": "Grants +15% draw speed speed at the cost of taking 1 damage when you put down the tool",
+  "material.tconstruct.twisting_vine.ranged": "Grants +15% draw speed at the cost of taking 1 damage when you put down the tool",
   "material.tconstruct.twisting_vine.armor": "Grants +10% knockback resistance at the cost of taking 2 damage when you remove the armor",
 
 
@@ -2207,7 +2207,7 @@
   "modifier.tconstruct.sinistral.description": "When in main hand, crossbow fires when attacking instead of interacting and will not load while sneaking.",
   "modifier.tconstruct.scope": "Scope",
   "modifier.tconstruct.scope.flavor": "360 with scope does not sound as cool",
-  "modifier.tconstruct.scope.description": "Zoom in on the target when charging the bow.",
+  "modifier.tconstruct.scope.description": "Zoom in on the target when charging the tool.",
 
   "_comment": "Armor",
   "modifier.tconstruct.knockback_resistance": "Knockback Resistance",
@@ -2481,7 +2481,7 @@
   "modifier.tconstruct.parrying.description": "Briefly block after attacking, allowing for deflection of many attacks",
   "modifier.tconstruct.flinging": "Flinging",
   "modifier.tconstruct.flinging.flavor": "Earth leaving",
-  "modifier.tconstruct.flinging.description": "Charge up, aim low, and fling away from the targeted block!\nUse bouncy if you value your life.",
+  "modifier.tconstruct.flinging.description": "Charge up, aim low, and fling away from the targeted block! Use bouncy if you value your life.",
   "modifier.tconstruct.springing": "Springing",
   "modifier.tconstruct.springing.flavor": "Sky leaping",
   "modifier.tconstruct.springing.description": "Charge up, aim high, and launch back into the air!",
@@ -2663,7 +2663,7 @@
   "modifier.tconstruct.flamestance.resistance": "Flamestance Resistance",
   "modifier.tconstruct.entangled": "Entangled",
   "modifier.tconstruct.entangled.flavor": "Symbiotic!",
-  "modifier.tconstruct.entangled.description": "Increases speed and knockback resistance at the cost of taking damage when unequipping",
+  "modifier.tconstruct.entangled.description": "Increases speed or knockback resistance at the cost of taking damage when unequipping",
 
   "__comment": "Tier 3 Traits",
   "modifier.tconstruct.overcast": "Overcast",
@@ -3166,7 +3166,7 @@
   "recipe.tconstruct.modifier_set_worktable.empty": "Tool has no applicable modifiers",
 
   "recipe.tconstruct.remove_modifier.modifiers": "Remove Modifiers",
-  "recipe.tconstruct.remove_modifier.description": "Select a modifier to remove, slots will be returned but any item cost is lost. Fluid will be consumed from the input, and the container returned.",
+  "recipe.tconstruct.remove_modifier.description": "Select a modifier to remove. Modifier slots will be returned. Fluid will be consumed from the input, and the container returned.",
   "recipe.tconstruct.remove_modifier.no_modifiers": "Tool does not have any modifiers removable by this recipe",
 
   "recipe.tconstruct.modifier_sorting.title": "Sort Modifiers",
@@ -3189,7 +3189,7 @@
   "recipe.tconstruct.extract_modifier.abilities": "Extract Ability",
   "recipe.tconstruct.extract_modifier.defense": "Extract Defense",
   "recipe.tconstruct.extract_modifier.modifiers": "Extract Modifier",
-  "recipe.tconstruct.extract_modifier.description": "Select a modifier to extract onto a modifier crystal, slots will be returned but any item cost is lost.",
+  "recipe.tconstruct.extract_modifier.description": "Select a modifier to extract onto a modifier crystal. Modifier slots will be returned.",
   "recipe.tconstruct.extract_modifier.no_modifiers": "Tool does not have any modifiers extractable with this recipe",
 
   "recipe.tconstruct.enchantment_converting.description.lost": "Select a modifier of the given type from the enchanted book to extract as a modifier crystal. The enchanted item will be lost.",

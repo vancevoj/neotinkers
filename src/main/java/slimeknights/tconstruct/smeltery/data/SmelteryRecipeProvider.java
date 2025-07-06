@@ -1023,7 +1023,7 @@ public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelt
     PotionCastingRecipeBuilder.tableRecipe(Items.SPLASH_POTION)
                               .setBottle(TinkerTags.Items.SPLASH_BOTTLE)
                               .setFluid(potionBottle)
-                              .save(consumer, location(folder + "filling/lingerng_bottle"));
+                              .save(consumer, location(folder + "filling/lingering_bottle"));
     PotionCastingRecipeBuilder.tableRecipe(Items.LINGERING_POTION)
                               .setBottle(TinkerTags.Items.LINGERING_BOTTLE)
                               .setFluid(potionBottle)
