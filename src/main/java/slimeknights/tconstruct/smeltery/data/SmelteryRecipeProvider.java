@@ -2229,7 +2229,7 @@ public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelt
     // fill clay and cracked clay buckets
     ContainerFillingRecipeBuilder.tableRecipe(ceramicsId.apply("empty_clay_bucket"), FluidType.BUCKET_VOLUME)
                                  .save(ceramicsConsumer, location(ceramicsFolder + "filling_clay_bucket"));
-    ContainerFillingRecipeBuilder.tableRecipe(ceramicsId.apply("empty_cracked_clay_bucket"), FluidType.BUCKET_VOLUME)
+    ContainerFillingRecipeBuilder.tableRecipe(ceramicsId.apply("cracked_empty_clay_bucket"), FluidType.BUCKET_VOLUME)
                                  .save(ceramicsConsumer, location(ceramicsFolder + "filling_cracked_clay_bucket"));
 
     // porcelain for ceramics
