@@ -2555,7 +2555,7 @@ public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelt
                             .setCast(Items.GLASS_BOTTLE, true)
                             .save(consumer, location(colorFolder + "bottle"));
     ItemCastingRecipeBuilder.basinRecipe(TinkerWorld.slimeDirt.get(slimeType.asDirt()))
-                            .setFluidAndTime(fluid, FluidValues.SLIME_CONGEALED)
+                            .setFluidAndTime(fluid, FluidValues.SLIMEBALL * 2)
                             .setCast(Blocks.DIRT, true)
                             .save(consumer, location(colorFolder + "dirt"));
   }
