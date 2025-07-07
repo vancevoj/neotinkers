@@ -59,7 +59,7 @@ public class TinkerMaterialSpriteProvider extends AbstractMaterialSpriteProvider
     buildMaterial(MaterialIds.leather)
       .fallbacks("cloth")
       .repairKit().statType(StatlessMaterialStats.BINDING, StatlessMaterialStats.BOWSTRING).maille()
-      .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF3D1C10).addARGB(102, 0xFF542716).addARGB(140, 0xFF893B25).addARGB(178, 0xFF9E492A).addARGB(216, 0xFFC65C35).addARGB(255, 0xFFD76B43).build());
+      .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF21150D).addARGB(102, 0xFF342115).addARGB(120, 0xFF472C1B).addARGB(140, 0xFF553521).addARGB(178, 0xFF72482E).addARGB(216, 0xFF955E3B).addARGB(255, 0xFFA36E4E).build());
     buildMaterial(MaterialIds.string)
       .statType(StatlessMaterialStats.BINDING, StatlessMaterialStats.BOWSTRING).repairKit()
       .fallbacks("primitive")
