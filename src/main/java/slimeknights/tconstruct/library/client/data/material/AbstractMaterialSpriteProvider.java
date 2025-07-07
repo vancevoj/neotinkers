@@ -16,6 +16,7 @@ import slimeknights.tconstruct.library.client.materials.MaterialGeneratorInfo;
 import slimeknights.tconstruct.library.materials.MaterialRegistry;
 import slimeknights.tconstruct.library.materials.definition.MaterialId;
 import slimeknights.tconstruct.library.materials.definition.MaterialVariantId;
+import slimeknights.tconstruct.library.materials.stats.IMaterialStats;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatType;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
 import slimeknights.tconstruct.tools.data.sprite.TinkerPartSpriteProvider;
@@ -28,6 +29,7 @@ import slimeknights.tconstruct.tools.stats.StatlessMaterialStats;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
@@ -158,6 +160,30 @@ public abstract class AbstractMaterialSpriteProvider {
     /** Adds a stat type as supported */
     public MaterialSpriteInfoBuilder statType(MaterialStatsId... statsId) {
       statTypes.add(statsId);
+      return this;
+    }
+
+    /** Adds a stat type as supported */
+    public MaterialSpriteInfoBuilder statType(IMaterialStats... stats) {
+      for (IMaterialStats stat : stats) {
+        statTypes.add(stat.getIdentifier());
+      }
+      return this;
+    }
+
+    /** Adds a stat type as supported */
+    public MaterialSpriteInfoBuilder statType(MaterialStatType<?>... stats) {
+      for (MaterialStatType<?> stat : stats) {
+        statTypes.add(stat.getId());
+      }
+      return this;
+    }
+
+    /** Adds a stat type as supported */
+    public MaterialSpriteInfoBuilder statType(List<? extends MaterialStatType<?>> stats) {
+      for (MaterialStatType<?> stat : stats) {
+        statTypes.add(stat.getId());
+      }
       return this;
     }
 

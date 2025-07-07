@@ -555,7 +555,7 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
     );
     defineArmor(ArmorDefinitions.TRAVELERS)
       .modules(slots -> MaterialStatsModule.armorStats(slots).plating(0.75f))
-      .module(DefaultMaterialsModule.builder().material(MaterialIds.roseGold).build())
+      .module(DefaultMaterialsModule.builder().material(MaterialIds.roseGold).material(MaterialIds.leather).build())
       .modules(slots -> MultiplyStatsModule.armor(slots)
         .set(ArmorItem.Type.CHESTPLATE, ToolStats.ATTACK_DAMAGE, 0.55f)
         .setAll(ToolStats.DURABILITY, 0.75f))
@@ -567,7 +567,7 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
       .module(ToolTraitsModule.builder().trait(TinkerModifiers.tanned).build())
       .module(ArmorItem.Type.BOOTS, ToolTraitsModule.builder().trait(ModifierIds.snowBoots).build());
     define(ArmorDefinitions.TRAVELERS_SHIELD)
-      .module(MaterialStatsModule.stats().stat(StatlessMaterialStats.SHIELD_CORE.getIdentifier()).build())
+      .module(MaterialStatsModule.stats().stat(StatlessMaterialStats.SHIELD_CORE).build())
       .module(DefaultMaterialsModule.builder().material(MaterialIds.wood).build())
       .module(new SetStatsModule(StatsNBT.builder()
         .set(ToolStats.DURABILITY, 200)
@@ -600,8 +600,8 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
     // plate shield
     define(ArmorDefinitions.PLATE_SHIELD)
       .module(MaterialStatsModule.stats()
-        .stat(StatlessMaterialStats.SHIELD_CORE.getIdentifier())
-        .stat(PlatingMaterialStats.SHIELD.getId())
+        .stat(StatlessMaterialStats.SHIELD_CORE)
+        .stat(PlatingMaterialStats.SHIELD)
         .primaryPart(1).build())
       .module(new PartsModule(List.of(TinkerToolParts.shieldCore.get())))
       .module(plateMaterials)
@@ -677,7 +677,7 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
       .module(MaterialStatsModule.stats()
         .stat(HeadMaterialStats.ID)
         .stat(LimbMaterialStats.ID)
-        .stat(StatlessMaterialStats.BOWSTRING.getIdentifier())
+        .stat(StatlessMaterialStats.BOWSTRING)
         .build())
       .module(ancientThreeParts)
       // ancient tools when rebalanced get both heads
@@ -693,7 +693,7 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
     define(ToolDefinitions.BATTLESIGN)
       .module(MaterialStatsModule.stats()
         .stat(HeadMaterialStats.ID)
-        .stat(PlatingMaterialStats.SHIELD.getId())
+        .stat(PlatingMaterialStats.SHIELD)
         .build())
       .module(ancientTwoParts)
       // ancient tools when rebalanced get both heads
