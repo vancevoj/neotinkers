@@ -18,10 +18,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Objects;
 import java.util.Spliterator;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
+
+import static java.util.Objects.requireNonNullElse;
 
 /**
  * All the materials contained within the tool. Determines a portion of the modifiers, along with the stats.
@@ -113,16 +114,15 @@ public class MaterialNBT implements Iterable<MaterialVariant> {
       return EMPTY;
     }
     ListTag listNBT = (ListTag) nbt;
-    if (listNBT.getElementType() != Tag.TAG_STRING) {
+    if (listNBT.getElementType() != Tag.TAG_STRING || listNBT.isEmpty()) {
       return EMPTY;
     }
 
     List<MaterialVariant> materials = listNBT.stream()
-                                             .map(tag -> MaterialVariantId.tryParse(tag.getAsString()))
-                                             .filter(Objects::nonNull)
-                                             .map(MaterialVariant::of)
-                                             .collect(Collectors.toList());
-
+      // if any material ID fails to parse (invalid string), replace with unknown
+      .map(tag -> requireNonNullElse(MaterialVariantId.tryParse(tag.getAsString()), IMaterial.UNKNOWN_ID))
+      .map(MaterialVariant::of)
+      .toList();
     return new MaterialNBT(materials);
   }
 
@@ -173,6 +173,17 @@ public class MaterialNBT implements Iterable<MaterialVariant> {
     /** Adds a material to the builder */
     public Builder add(IMaterial material) {
       return add(MaterialVariant.of(material));
+    }
+
+    /** Adds all materials from the given list */
+    public Builder addAll(List<MaterialVariant> existing) {
+      builder.addAll(existing);
+      return this;
+    }
+
+    /** Adds all materials from the given NBT */
+    public Builder addAll(MaterialNBT existing) {
+      return addAll(existing.list);
     }
 
     /** Builds the final list */

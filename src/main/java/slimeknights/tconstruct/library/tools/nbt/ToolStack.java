@@ -28,6 +28,7 @@ import slimeknights.tconstruct.library.tools.context.ToolRebuildContext;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinition;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinitionData;
 import slimeknights.tconstruct.library.tools.definition.module.ToolHooks;
+import slimeknights.tconstruct.library.tools.definition.module.material.MissingMaterialsToolHook;
 import slimeknights.tconstruct.library.tools.helper.TooltipUtil;
 import slimeknights.tconstruct.library.tools.item.IModifiable;
 import slimeknights.tconstruct.library.tools.stat.ModifierStatsBuilder;
@@ -637,12 +638,14 @@ public class ToolStack implements IToolStackView {
   public void ensureHasData() {
     // if we try initializing before datapacks load we will get garbage data
     if (definition.isDataLoaded()) {
+      // check if missing materials; either means we have none or too few. Note this automatically handles the missing NBT
+      MissingMaterialsToolHook missingMaterials = definition.getHook(ToolHooks.MISSING_MATERIALS);
+      boolean needsMaterials = definition.hasMaterials() && missingMaterials.needsMaterials(definition, getMaterials());
       // build data if we either lack data (signified by no stats) or we lack materials but expect them
-      boolean needsMaterials = definition.hasMaterials() && !nbt.contains(TAG_MATERIALS, Tag.TAG_LIST);
       if (needsMaterials || !isInitialized(nbt)) {
         // randomize materials if missing
         if (needsMaterials) {
-          setMaterialsRaw(definition.getHook(ToolHooks.MISSING_MATERIALS).fillMaterials(definition, RandomSource.create()));
+          setMaterialsRaw(missingMaterials.fillMaterials(definition, getMaterials(), RandomSource.create()));
         }
         rebuildStats();
       }
