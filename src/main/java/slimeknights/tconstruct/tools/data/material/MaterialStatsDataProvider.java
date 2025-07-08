@@ -410,6 +410,15 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
   private void addMisc() {
     // travelers gear
     addMaterialStats(MaterialIds.leather, StatlessMaterialStats.REPAIR_KIT);
+    addMaterialStats(MaterialIds.slimeskin, StatlessMaterialStats.REPAIR_KIT);
+    addMaterialStats(MaterialIds.skyslimeVine, StatlessMaterialStats.REPAIR_KIT);
+    addMaterialStats(MaterialIds.ichorskin, StatlessMaterialStats.REPAIR_KIT);
+    addMaterialStats(MaterialIds.enderslimeVine, StatlessMaterialStats.REPAIR_KIT);
+    addMaterialStats(MaterialIds.ancientHide, StatlessMaterialStats.REPAIR_KIT);
+    // travelers's shield
+    addMaterialStats(MaterialIds.ice, StatlessMaterialStats.REPAIR_KIT);
+    addMaterialStats(MaterialIds.cactus, StatlessMaterialStats.REPAIR_KIT);
+    addMaterialStats(MaterialIds.blazewood, StatlessMaterialStats.REPAIR_KIT);
     // slimeskull
     addMaterialStats(MaterialIds.glass,        new SkullStats( 90, 0));
     addMaterialStats(MaterialIds.enderPearl,   new SkullStats(180, 0));

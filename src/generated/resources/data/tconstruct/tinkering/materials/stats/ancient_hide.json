@@ -3,6 +3,7 @@
     "tconstruct:binding": {},
     "tconstruct:bowstring": {},
     "tconstruct:cuirass": {},
-    "tconstruct:maille": {}
+    "tconstruct:maille": {},
+    "tconstruct:repair_kit": {}
   }
 }

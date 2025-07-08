@@ -220,6 +220,7 @@ public abstract class AbstractMaterialSpriteProvider {
     public MaterialSpriteInfoBuilder cuirass() {
       statType(StatlessMaterialStats.CUIRASS.getIdentifier());
       statType(TinkerPartSpriteProvider.ARMOR_CUIRASS);
+      repairKit(); // used by traveler's gear
       return this;
     }
 
@@ -242,7 +243,9 @@ public abstract class AbstractMaterialSpriteProvider {
 
     /** Makes this work as the wood part for a shield */
     public MaterialSpriteInfoBuilder shieldCore() {
-      return statType(StatlessMaterialStats.SHIELD_CORE.getIdentifier());
+      statType(StatlessMaterialStats.SHIELD_CORE.getIdentifier());
+      repairKit(); // used by traveler's shields
+      return this;
     }
 
     /** Builds a material sprite info */
