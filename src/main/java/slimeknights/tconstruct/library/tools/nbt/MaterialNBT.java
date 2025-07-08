@@ -48,6 +48,11 @@ public class MaterialNBT implements Iterable<MaterialVariant> {
     return new MaterialNBT(Arrays.stream(materials).map(MaterialVariant::of).toList());
   }
 
+  /** Creates a new material NBT */
+  public static MaterialNBT of(MaterialVariant... materials) {
+    return new MaterialNBT(List.of(materials));
+  }
+
   /** Creates a builder for this NBT */
   public static Builder builder() {
     return new Builder();
@@ -70,6 +75,11 @@ public class MaterialNBT implements Iterable<MaterialVariant> {
     return list.size();
   }
 
+  /** Checks if the internal list is empty */
+  public boolean isEmpty() {
+    return list.isEmpty();
+  }
+
   /**
    * Creates a copy of this material list with the material at the given index substituted
    * @param index        Index to replace. Can be greater than the material list size
@@ -77,7 +87,7 @@ public class MaterialNBT implements Iterable<MaterialVariant> {
    * @return  Copy of NBt with the new material
    * @throws IndexOutOfBoundsException  If the index is invalid
    */
-  public MaterialNBT replaceMaterial(int index, MaterialVariantId replacement) {
+  public MaterialNBT replaceMaterial(int index, MaterialVariant replacement) {
     if (index < 0) {
       throw new IndexOutOfBoundsException("Material index is out of bounds");
     }
@@ -86,7 +96,7 @@ public class MaterialNBT implements Iterable<MaterialVariant> {
     ArrayList<MaterialVariant> list = new ArrayList<>(Math.max(size, index + 1));
     for (int i = 0; i < size; i++) {
       if (i == index) {
-        list.add(MaterialVariant.of(replacement));
+        list.add(replacement);
       } else {
         list.add(this.list.get(i));
       }
@@ -98,10 +108,21 @@ public class MaterialNBT implements Iterable<MaterialVariant> {
       for (int i = size; i < index; i++) {
         list.add(MaterialVariant.of(IMaterial.UNKNOWN, ""));
       }
-      list.add(MaterialVariant.of(replacement));
+      list.add(replacement);
     }
 
     return new MaterialNBT(list);
+  }
+
+  /**
+   * Creates a copy of this material list with the material at the given index substituted
+   * @param index        Index to replace. Can be greater than the material list size
+   * @param replacement  New material for that index
+   * @return  Copy of NBt with the new material
+   * @throws IndexOutOfBoundsException  If the index is invalid
+   */
+  public MaterialNBT replaceMaterial(int index, MaterialVariantId replacement) {
+    return replaceMaterial(index, MaterialVariant.of(replacement));
   }
 
   /**
@@ -154,6 +175,7 @@ public class MaterialNBT implements Iterable<MaterialVariant> {
   public Spliterator<MaterialVariant> spliterator() {
     return list.spliterator();
   }
+
 
   /** Builder for material NBT */
   public static class Builder {

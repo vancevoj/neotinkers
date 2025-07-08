@@ -329,7 +329,7 @@ public class ItemTagProvider extends ItemTagsProvider {
 
     // shields
     addToolTags(TinkerTools.travelersShield, DURABILITY, BONUS_SLOTS, SHIELDS, INTERACTABLE_LEFT, Tags.Items.TOOLS_SHIELDS, SINGLEPART_TOOL, DYEABLE);
-    addToolTags(TinkerTools.plateShield,     DURABILITY, BONUS_SLOTS, SHIELDS, INTERACTABLE_LEFT, Tags.Items.TOOLS_SHIELDS, MULTIPART_TOOL, UNRECYCLABLE);
+    addToolTags(TinkerTools.plateShield,     DURABILITY, BONUS_SLOTS, SHIELDS, INTERACTABLE_LEFT, Tags.Items.TOOLS_SHIELDS, SINGLEPART_TOOL, UNRECYCLABLE);
 
     // care about order for armor in the book
     tag(BASIC_ARMOR);

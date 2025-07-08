@@ -17,6 +17,7 @@ import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.common.config.Config;
 import slimeknights.tconstruct.library.materials.MaterialRegistry;
+import slimeknights.tconstruct.library.materials.definition.MaterialVariant;
 import slimeknights.tconstruct.library.materials.definition.MaterialVariantId;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
@@ -467,6 +468,16 @@ public class ToolStack implements IToolStackView {
   public void setMaterials(MaterialNBT materials) {
     setMaterialsRaw(materials);
     rebuildStats();
+  }
+
+  /**
+   * Replaces the material at the given index
+   * @param index        Index to replace
+   * @param replacement  New material
+   * @throws IndexOutOfBoundsException  If the index is invalid
+   */
+  public void replaceMaterial(int index, MaterialVariant replacement) {
+    setMaterials(getMaterials().replaceMaterial(index, replacement));
   }
 
   /**
