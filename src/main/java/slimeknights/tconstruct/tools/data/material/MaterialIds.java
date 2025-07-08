@@ -158,6 +158,9 @@ public final class MaterialIds {
   public static final MaterialVariantId skyroot            = create(slimewood, "skyroot");
   public static final MaterialVariantId bloodshroom        = create(slimewood, "bloodshroom");
   public static final MaterialVariantId enderbark          = create(slimewood, "enderbark");
+  // slime vines
+  public static final MaterialVariantId skySlimeskin = create(skyslimeVine, "slimeskin");
+  public static final MaterialVariantId enderSlimeskin = create(enderslimeVine, "slimeskin");
   // oxidized
   public static final MaterialVariantId oxidizedIron = create(iron, "oxidized");
   public static final MaterialVariantId oxidizedCopper = create(copper, "oxidized");

@@ -7,6 +7,8 @@
     "supported_stats": [
       "tconstruct:binding",
       "tconstruct:bowstring",
+      "tconstruct:cuirass",
+      "tconstruct:armor_cuirass",
       "tconstruct:maille",
       "tconstruct:armor_maille"
     ],

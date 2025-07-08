@@ -266,6 +266,7 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
     addMaterialStats(MaterialIds.skyslimeVine, StatlessMaterialStats.BOWSTRING);
     addMaterialStats(MaterialIds.weepingVine, StatlessMaterialStats.BOWSTRING);
     addMaterialStats(MaterialIds.twistingVine, StatlessMaterialStats.BOWSTRING);
+    addMaterialStats(MaterialIds.slimeskin, StatlessMaterialStats.BOWSTRING);
 
     // tier 2 - compat
     addMaterialStats(MaterialIds.platinum,
@@ -366,7 +367,7 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
     // tier 2
     addMaterialStats(MaterialIds.slimewood, StatlessMaterialStats.SHIELD_CORE);
     addMaterialStats(MaterialIds.slimeskin, StatlessMaterialStats.MAILLE, StatlessMaterialStats.CUIRASS);
-    addMaterialStats(MaterialIds.skyslimeVine, StatlessMaterialStats.MAILLE);
+    addMaterialStats(MaterialIds.skyslimeVine, StatlessMaterialStats.MAILLE, StatlessMaterialStats.CUIRASS);
     addMaterialStats(MaterialIds.weepingVine, StatlessMaterialStats.MAILLE);
     addMaterialStats(MaterialIds.twistingVine, StatlessMaterialStats.MAILLE);
     addArmorShieldStats(MaterialIds.iron,          PlatingMaterialStats.builder().durabilityFactor(15).armor(2, 4, 5, 2), StatlessMaterialStats.MAILLE);
@@ -402,7 +403,7 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
     addArmorShieldStats(MaterialIds.manyullyn,   PlatingMaterialStats.builder().durabilityFactor(35).armor(2, 5, 7, 2).toughness(3).knockbackResistance(0.05f), StatlessMaterialStats.MAILLE);
     addArmorShieldStats(MaterialIds.ancient,     PlatingMaterialStats.builder().durabilityFactor(25).armor(2, 4, 6, 2).knockbackResistance(0.15f));
     addMaterialStats(MaterialIds.ancientHide, StatlessMaterialStats.MAILLE, StatlessMaterialStats.CUIRASS);
-    addMaterialStats(MaterialIds.enderslimeVine, StatlessMaterialStats.MAILLE);
+    addMaterialStats(MaterialIds.enderslimeVine, StatlessMaterialStats.MAILLE, StatlessMaterialStats.CUIRASS);
   }
 
   private void addMisc() {

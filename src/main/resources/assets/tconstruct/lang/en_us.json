@@ -1771,6 +1771,7 @@
   "material.tconstruct.rose_gold.skull_encyclopedia": "Boosts health by 1 heart, plus an additional heart per piece of golden armor.",
 
   "material.tconstruct.skyslime_vine": "Slimy Vine",
+  "material.tconstruct.skyslime_vine.slimeskin": "Slimeskin",
   "material.tconstruct.skyslime_vine.flavor": "Float like a butterfly, sting like a bee.",
   "material.tconstruct.skyslime_vine.encyclopedia": "Cancels out the mining speed reduction when not on the ground",
   "material.tconstruct.skyslime_vine.ranged": "Grants +0.5 accuracy when not on the ground or a ladder",
@@ -1870,6 +1871,7 @@
   "material.tconstruct.knightslime": "Knightslime",
 
   "material.tconstruct.enderslime_vine": "Slimy Vine",
+  "material.tconstruct.enderslime_vine.slimeskin": "Slimeskin",
   "material.tconstruct.enderslime_vine.flavor": "The End?",
   "material.tconstruct.enderslime_vine.encyclopedia": "Teleports the holder to the location of mined blocks or swaps the holder with attacked monsters",
   "material.tconstruct.enderslime_vine.ranged": "Teleports the holder to the location of arrows that land in blocks or swaps the holder with monsters hit by arrows",

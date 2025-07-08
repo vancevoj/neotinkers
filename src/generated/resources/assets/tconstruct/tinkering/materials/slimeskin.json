@@ -2,6 +2,7 @@
   "color": "FF56CF4C",
   "generator": {
     "supported_stats": [
+      "tconstruct:bowstring",
       "tconstruct:cuirass",
       "tconstruct:armor_cuirass",
       "tconstruct:maille",
