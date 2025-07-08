@@ -52,6 +52,7 @@ public final class MaterialIds {
   public static final MaterialId steel = id("steel");
   // tier 3 - bindings
   public static final MaterialId darkthread = id("darkthread");
+  public static final MaterialId ichorskin = id("ichorskin");
   // tier 4
   public static final MaterialId manyullyn = id("manyullyn");
   public static final MaterialId hepatizon = id("hepatizon");

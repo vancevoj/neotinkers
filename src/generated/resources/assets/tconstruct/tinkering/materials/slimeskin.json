@@ -1,5 +1,8 @@
 {
   "color": "FF56CF4C",
+  "fallbacks": [
+    "cloth"
+  ],
   "generator": {
     "supported_stats": [
       "tconstruct:bowstring",

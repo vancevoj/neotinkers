@@ -69,6 +69,7 @@ public class MaterialDataProvider extends AbstractMaterialDataProvider {
     addMaterial(MaterialIds.cobalt, 3, ORDER_NETHER, false);
     // tier 3 - binding
     addMaterial(MaterialIds.darkthread, 3, ORDER_BINDING, false);
+    addMaterial(MaterialIds.ichorskin,  3, ORDER_BINDING, false);
 
     // tier 4
     addMaterial(MaterialIds.queensSlime, 4, ORDER_GENERAL, false);

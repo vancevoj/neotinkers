@@ -208,6 +208,7 @@
     "overcast":      "#27C6C6",
     "overgrowth":    "#82c873",
     "overlord":      "#236c45",
+    "overshield":    "#ff970d",
     "overworked":    "#E6D08D",
     "preserved":     "#673C29",
     "solar_powered": "#48B518",
@@ -362,6 +363,7 @@
     "cobalt":          "#2376dd",
     "darkthread":      "#3B2754",
     "steel":           "#67718C",
+    "ichorskin":       "#ff970d",
 
     "__tier_4__": null,
     "cinderslime":  "#B80000",
