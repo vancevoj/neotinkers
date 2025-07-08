@@ -91,15 +91,15 @@ public class MaterialRecipeProvider extends BaseRecipeProvider implements IMater
     materialRecipe(consumer, MaterialIds.flint,      Ingredient.of(Items.FLINT),                 1, 1, folder + "flint");
     materialRecipe(consumer, MaterialIds.basalt,     Ingredient.of(TinkerTags.Items.BASALT),     1, 1, folder + "flint_basalt");
     // other tier 1
-    materialRecipe(consumer, MaterialIds.bone,         Ingredient.of(Tags.Items.BONES),              1, 1, folder + "bone");
-    materialRecipe(consumer, MaterialIds.chorus,       Ingredient.of(Items.POPPED_CHORUS_FRUIT),     1, 4, folder + "chorus_popped");
+    materialRecipe(consumer, MaterialIds.bone,         Ingredient.of(Tags.Items.BONES),          1, 1, folder + "bone");
+    materialRecipe(consumer, MaterialIds.chorus,       Ingredient.of(Items.POPPED_CHORUS_FRUIT), 1, 1, folder + "chorus_popped");
     metalMaterialRecipe(consumer, MaterialIds.copper, folder, "copper", false);
     // tier 1 binding
     materialRecipe(consumer, MaterialIds.string,  Ingredient.of(Tags.Items.STRING),  1, 4, folder + "string");
     materialRecipe(consumer, MaterialIds.leather, Ingredient.of(Tags.Items.LEATHER), 1, 1, folder + "leather");
     materialRecipe(consumer, MaterialIds.leather, Ingredient.of(Items.RABBIT_HIDE),  1, 2, folder + "rabbit_hide");
     materialRecipe(consumer, MaterialIds.vine,    Ingredient.of(Items.VINE),         1, 1, folder + "vine");
-    materialRecipe(consumer, MaterialIds.cactus,  Ingredient.of(Blocks.BLUE_ICE),    1, 1, folder + "cactus");
+    materialRecipe(consumer, MaterialIds.cactus,  Ingredient.of(Blocks.CACTUS),      1, 1, folder + "cactus");
     materialRecipe(consumer, MaterialIds.ice,     Ingredient.of(Blocks.ICE),         1, 9, folder + "ice/unpacked");
     materialRecipe(consumer, MaterialIds.ice,     Ingredient.of(Blocks.PACKED_ICE),  1, 1, folder + "ice/packed");
     materialRecipe(consumer, MaterialIds.ice,     Ingredient.of(Blocks.BLUE_ICE),    9, 1, folder + "ice/blue");
