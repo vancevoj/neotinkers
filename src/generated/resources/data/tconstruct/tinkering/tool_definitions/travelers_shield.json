@@ -9,6 +9,12 @@
       ]
     },
     {
+      "type": "tconstruct:tool_parts",
+      "parts": [
+        "tconstruct:shield_core"
+      ]
+    },
+    {
       "type": "tconstruct:default_materials",
       "materials": [
         {

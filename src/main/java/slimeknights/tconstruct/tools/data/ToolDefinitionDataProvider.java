@@ -572,6 +572,7 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
         .stat(StatlessMaterialStats.SHIELD_CORE)
         .stat(StatlessMaterialStats.CUIRASS)
         .build())
+      .module(new PartsModule(List.of(TinkerToolParts.shieldCore.get())))
       .module(DefaultMaterialsModule.builder().material(MaterialIds.wood).build())
       .module(new SetStatsModule(StatsNBT.builder()
         .set(ToolStats.DURABILITY, 200)
