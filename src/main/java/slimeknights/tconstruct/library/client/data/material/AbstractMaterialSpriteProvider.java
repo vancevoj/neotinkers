@@ -216,6 +216,13 @@ public abstract class AbstractMaterialSpriteProvider {
       return this;
     }
 
+    /** Adds stat types for maille */
+    public MaterialSpriteInfoBuilder cuirass() {
+      statType(StatlessMaterialStats.CUIRASS.getIdentifier());
+      statType(TinkerPartSpriteProvider.ARMOR_CUIRASS);
+      return this;
+    }
+
     /** Adds all plating stat types */
     public MaterialSpriteInfoBuilder plating() {
       statType(TinkerPartSpriteProvider.ARMOR_PLATING);

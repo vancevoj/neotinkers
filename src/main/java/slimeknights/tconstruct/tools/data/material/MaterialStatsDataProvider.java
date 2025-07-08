@@ -361,11 +361,11 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
     addMaterialStats(MaterialIds.ice, StatlessMaterialStats.SHIELD_CORE);
     addMaterialStats(MaterialIds.cactus, StatlessMaterialStats.SHIELD_CORE);
     addArmorShieldStats(MaterialIds.copper, PlatingMaterialStats.builder().durabilityFactor(13).armor(1, 2, 3, 1), StatlessMaterialStats.MAILLE);
-    addMaterialStats(MaterialIds.leather, StatlessMaterialStats.MAILLE);
+    addMaterialStats(MaterialIds.leather, StatlessMaterialStats.MAILLE, StatlessMaterialStats.CUIRASS);
     addMaterialStats(MaterialIds.vine, StatlessMaterialStats.MAILLE);
     // tier 2
     addMaterialStats(MaterialIds.slimewood, StatlessMaterialStats.SHIELD_CORE);
-    addMaterialStats(MaterialIds.slimeskin, StatlessMaterialStats.MAILLE);
+    addMaterialStats(MaterialIds.slimeskin, StatlessMaterialStats.MAILLE, StatlessMaterialStats.CUIRASS);
     addMaterialStats(MaterialIds.skyslimeVine, StatlessMaterialStats.MAILLE);
     addMaterialStats(MaterialIds.weepingVine, StatlessMaterialStats.MAILLE);
     addMaterialStats(MaterialIds.twistingVine, StatlessMaterialStats.MAILLE);
@@ -401,7 +401,7 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
     addArmorShieldStats(MaterialIds.hepatizon,   PlatingMaterialStats.builder().durabilityFactor(32).armor(2, 5, 7, 2).toughness(2).knockbackResistance(0.10f), StatlessMaterialStats.MAILLE);
     addArmorShieldStats(MaterialIds.manyullyn,   PlatingMaterialStats.builder().durabilityFactor(35).armor(2, 5, 7, 2).toughness(3).knockbackResistance(0.05f), StatlessMaterialStats.MAILLE);
     addArmorShieldStats(MaterialIds.ancient,     PlatingMaterialStats.builder().durabilityFactor(25).armor(2, 4, 6, 2).knockbackResistance(0.15f));
-    addMaterialStats(MaterialIds.ancientHide, StatlessMaterialStats.MAILLE);
+    addMaterialStats(MaterialIds.ancientHide, StatlessMaterialStats.MAILLE, StatlessMaterialStats.CUIRASS);
     addMaterialStats(MaterialIds.enderslimeVine, StatlessMaterialStats.MAILLE);
   }
 

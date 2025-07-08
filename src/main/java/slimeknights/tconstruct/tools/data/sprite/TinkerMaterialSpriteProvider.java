@@ -36,7 +36,7 @@ public class TinkerMaterialSpriteProvider extends AbstractMaterialSpriteProvider
       .meleeHarvest().ranged()
       // not using the helper to avoid catching armor models
       .statType(PlatingMaterialStats.TYPES)
-      .statType(StatlessMaterialStats.BOWSTRING, StatlessMaterialStats.SHIELD_CORE, StatlessMaterialStats.MAILLE)
+      .statType(StatlessMaterialStats.BOWSTRING, StatlessMaterialStats.SHIELD_CORE, StatlessMaterialStats.MAILLE, StatlessMaterialStats.CUIRASS)
       .colorMapper(GreyToColorMapping.builder().addARGB(63, 0xFF000000).addARGB(102, 0xFF222222).addARGB(103, 0x00000000).build());
 
     // tier 1
@@ -58,7 +58,7 @@ public class TinkerMaterialSpriteProvider extends AbstractMaterialSpriteProvider
       .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF050505).addARGB(102, 0xFF0E0E0E).addARGB(140, 0xFF151515).addARGB(178, 0xFF1F1F1F).addARGB(216, 0xFF292929).addARGB(255, 0xFF343434).build());
     buildMaterial(MaterialIds.leather)
       .fallbacks("cloth")
-      .repairKit().statType(StatlessMaterialStats.BINDING, StatlessMaterialStats.BOWSTRING).maille()
+      .repairKit().statType(StatlessMaterialStats.BINDING, StatlessMaterialStats.BOWSTRING).cuirass().maille()
       .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF21150D).addARGB(102, 0xFF342115).addARGB(120, 0xFF472C1B).addARGB(140, 0xFF553521).addARGB(178, 0xFF72482E).addARGB(216, 0xFF955E3B).addARGB(255, 0xFFA36E4E).build());
     buildMaterial(MaterialIds.string)
       .statType(StatlessMaterialStats.BINDING, StatlessMaterialStats.BOWSTRING).repairKit()
@@ -189,7 +189,7 @@ public class TinkerMaterialSpriteProvider extends AbstractMaterialSpriteProvider
       .fallbacks("slime_wood", "wood", "stick", "primitive")
       .variant(false) // default texture for slimewood
       .colorMapper(greenSlime);
-    buildMaterial(MaterialIds.slimeskin).maille().colorMapper(greenSlime);
+    buildMaterial(MaterialIds.slimeskin).cuirass().maille().colorMapper(greenSlime);
     buildPlanks(MaterialIds.skyroot)
       .fallbacks("slime_wood", "wood", "stick", "primitive")
       .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF007E8C).addARGB(102, 0xFF008796).addARGB(140, 0xFF0090A3).addARGB(178, 0xFF00A2AE).addARGB(216, 0xFF00B4B8).addARGB(234, 0xFF10CFCC).addARGB(255, 0xFF23DDD9).build());
@@ -314,7 +314,7 @@ public class TinkerMaterialSpriteProvider extends AbstractMaterialSpriteProvider
       .colorMapper(ancientDebrisPalette);
     buildMaterial(MaterialIds.ancientHide)
       .fallbacks("cloth")
-      .statType(StatlessMaterialStats.BINDING, StatlessMaterialStats.BOWSTRING).maille()
+      .statType(StatlessMaterialStats.BINDING, StatlessMaterialStats.BOWSTRING).cuirass().maille()
       .colorMapper(ancientDebrisPalette);
     buildMaterial(MaterialIds.enderslimeVine)
       .statType(StatlessMaterialStats.BINDING, StatlessMaterialStats.BOWSTRING).maille()

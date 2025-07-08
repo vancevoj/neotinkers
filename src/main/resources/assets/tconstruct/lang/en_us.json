@@ -3001,6 +3001,7 @@
   "stat.tconstruct.plating_shield": "Shield Plating",
   "stat.tconstruct.shield_core": "Shield Core",
   "stat.tconstruct.maille": "Maille",
+  "stat.tconstruct.cuirass": "Cuirass",
   "tool_stat.tconstruct.armor": "Armor: ",
   "tool_stat.tconstruct.armor.description": "How much this protects you when worn.",
   "tool_stat.tconstruct.armor_toughness": "Armor Toughness: ",

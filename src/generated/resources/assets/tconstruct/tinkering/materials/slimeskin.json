@@ -2,6 +2,8 @@
   "color": "FF56CF4C",
   "generator": {
     "supported_stats": [
+      "tconstruct:cuirass",
+      "tconstruct:armor_cuirass",
       "tconstruct:maille",
       "tconstruct:armor_maille"
     ],

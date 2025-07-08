@@ -554,7 +554,9 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
       ModifierPredicate.or(new SingleModifierPredicate(TinkerModifiers.blocking.getId()), ModifierPredicate.tag(TinkerTags.Modifiers.BLOCK_WHILE_CHARGING))
     );
     defineArmor(ArmorDefinitions.TRAVELERS)
-      .modules(slots -> MaterialStatsModule.armorStats(slots).plating(0.75f))
+      .modules(slots -> MaterialStatsModule.armorStats(slots)
+        .plating(0.75f)
+        .stat(StatlessMaterialStats.CUIRASS, 1))
       .module(DefaultMaterialsModule.builder().material(MaterialIds.roseGold).material(MaterialIds.leather).build())
       .modules(slots -> MultiplyStatsModule.armor(slots)
         .set(ArmorItem.Type.CHESTPLATE, ToolStats.ATTACK_DAMAGE, 0.55f)
@@ -563,11 +565,13 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
         .slots(SlotType.UPGRADE, 2)
         .slots(SlotType.DEFENSE, 2)
         .slots(SlotType.ABILITY, 1).build())
-      .module(MaterialRepairModule.armor(MaterialIds.leather).durabilityFactor(7.5f))
-      .module(ToolTraitsModule.builder().trait(TinkerModifiers.tanned).build())
+      .module(StatlessPartRepairModule.armor(1).durabilityFactor(7.5f))
       .module(ArmorItem.Type.BOOTS, ToolTraitsModule.builder().trait(ModifierIds.snowBoots).build());
     define(ArmorDefinitions.TRAVELERS_SHIELD)
-      .module(MaterialStatsModule.stats().stat(StatlessMaterialStats.SHIELD_CORE).build())
+      .module(MaterialStatsModule.stats()
+        .stat(StatlessMaterialStats.SHIELD_CORE)
+        .stat(StatlessMaterialStats.CUIRASS)
+        .build())
       .module(DefaultMaterialsModule.builder().material(MaterialIds.wood).build())
       .module(new SetStatsModule(StatsNBT.builder()
         .set(ToolStats.DURABILITY, 200)
@@ -578,9 +582,9 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
         .slots(SlotType.UPGRADE, 2)
         .slots(SlotType.DEFENSE, 2)
         .slots(SlotType.ABILITY, 1).build())
-      .module(MaterialRepairModule.of(MaterialIds.leather, 200))
       .module(new StatlessPartRepairModule(0, 100))
-      .module(ToolTraitsModule.builder().trait(TinkerModifiers.blocking).trait(TinkerModifiers.tanned).build())
+      .module(new StatlessPartRepairModule(1, 200))
+      .module(ToolTraitsModule.builder().trait(TinkerModifiers.blocking).build())
       .module(shieldInteraction);
 
     // plate armor
