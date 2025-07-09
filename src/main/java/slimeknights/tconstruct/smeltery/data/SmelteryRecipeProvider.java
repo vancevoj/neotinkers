@@ -2281,7 +2281,7 @@ public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelt
       ceramicsTag.apply("terracotta_cisterns"),
       ceramicsItem.apply("empty_clay_bucket"),
       // can't ue no container for cracked bucket as the bucket breaks on emptying
-      ceramicsItem.apply("empty_cracked_clay_bucket")
+      ceramicsItem.apply("cracked_empty_clay_bucket")
     ), TinkerFluids.moltenClay, FluidValues.BRICK * 3, 1.67f)
       .save(ceramicsConsumer, location(clayFolder + "bricks_3"));
     // 4 bricks
