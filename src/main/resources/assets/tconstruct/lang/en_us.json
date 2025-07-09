@@ -886,6 +886,14 @@
   "item.tconstruct.molten_refined_obsidian_bucket": "Molten Refined Obsidian Bucket",
   "fluid.tconstruct.molten_refined_obsidian.fluid_effect": "Molten refined obsidian maximizes damage against armored targets.",
 
+  "_comment": "Metalborn Alloys",
+
+  "block.tconstruct.molten_nicrosil_fluid": "Molten Nicrosil",
+  "fluid.tconstruct.molten_nicrosil": "Molten Nicrosil",
+  "fluid.tconstruct.flowing_molten_nicrosil": "Flowing Molten Nicrosil",
+  "item.tconstruct.molten_nicrosil_bucket": "Molten Nicrosil Bucket",
+  "fluid.tconstruct.molten_nicrosil.fluid_effect": "Nicrosil has an innate pull on magic, seems like a waste to use it like this.",
+
 
   "_comment": "Fluid effect contents",
   "fluid_effect.tconstruct.separator": "%s and %s",

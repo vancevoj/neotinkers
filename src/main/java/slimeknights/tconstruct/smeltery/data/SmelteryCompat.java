@@ -39,7 +39,9 @@ public enum SmelteryCompat {
   SIGNALUM(TinkerFluids.moltenSignalum, false),
   // mekanism alloys
   REFINED_GLOWSTONE(TinkerFluids.moltenRefinedGlowstone, false),
-  REFINED_OBSIDIAN (TinkerFluids.moltenRefinedObsidian, false);
+  REFINED_OBSIDIAN (TinkerFluids.moltenRefinedObsidian, false),
+  // metalborn
+  NICROSIL(TinkerFluids.moltenNicrosil, false);
 
   @Getter
   private final String name = this.name().toLowerCase(Locale.US);
