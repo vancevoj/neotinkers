@@ -482,15 +482,13 @@ public class JEIPlugin implements IModPlugin {
     // hide compat that is not present
     compatLoop:
     for (SmelteryCompat compat : SmelteryCompat.values()) {
-      if (!tagExists("ingots/" + compat.getName())) {
-        // if the alt tag exists then still show the fluid
-        for (String name : compat.getAltTags()) {
-          if (tagExists("ingots/" + name)) {
-            continue compatLoop;
-          }
+      // if none of the tags exist, remove the fluid
+      for (String name : compat.getTags()) {
+        if (tagExists("ingots/" + name)) {
+          continue compatLoop;
         }
-        removeFluid(manager, compat.getFluid().get());
       }
+      removeFluid(manager, compat.getFluid().get());
     }
     if (!ModList.get().isLoaded("ceramics")) {
       removeFluid(manager, TinkerFluids.moltenPorcelain.get());

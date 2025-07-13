@@ -5,6 +5,7 @@ import net.minecraftforge.fluids.ForgeFlowingFluid;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import slimeknights.mantle.registration.object.FluidObject;
 import slimeknights.tconstruct.fluids.TinkerFluids;
+import slimeknights.tconstruct.library.utils.Util;
 
 import java.util.Locale;
 
@@ -50,25 +51,26 @@ public enum SmelteryCompat {
   private final boolean isOre;
   /** If any of these tags contains no values, skips */
   @Getter
-  private final String[] altTags;
+  private final String[] tags;
 
   SmelteryCompat(FluidObject<? extends ForgeFlowingFluid> fluid, boolean isOre) {
     this.fluid = fluid;
     this.isOre = isOre;
-    this.altTags = new String[0];
+    this.tags = new String[] { this.name };
   }
 
   /** Byproducts means its an ore, no byproucts are alloys */
   SmelteryCompat(FluidObject<? extends ForgeFlowingFluid> fluid, String... altTags) {
     this.fluid = fluid;
     this.isOre = false;
-    this.altTags = altTags;
+    this.tags = Util.append(altTags, name);
   }
 
-  /** @deprecated use {@link #getAltTags()} */
+  /** @deprecated use {@link #getTags()} */
   @Deprecated(forRemoval = true)
   public String getAltTag() {
-    return altTags.length == 0 ? "" : altTags[0];
+    // only 1 tag means just the name, we don't want that
+    return tags.length < 2 ? "" : tags[0];
   }
 
   /** Gets teh fluid for this compat */
