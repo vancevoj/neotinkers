@@ -166,6 +166,7 @@ public class MaterialRecipeProvider extends BaseRecipeProvider implements IMater
     metalMaterialRecipe(consumer, MaterialIds.bronze, folder, "bronze", true);
     metalMaterialRecipe(consumer, MaterialIds.constantan, folder, "constantan", true);
     metalMaterialRecipe(consumer, MaterialIds.invar, folder, "invar", true);
+    metalMaterialRecipe(consumer, MaterialIds.pewter, folder, "pewter", true);
     materialRecipe(withCondition(consumer, tagCondition("ingots/uranium")), MaterialIds.necronium, Ingredient.of(TinkerMaterials.necroniumBone), 1, 1, folder + "necronium");
     metalMaterialRecipe(consumer, MaterialIds.electrum, folder, "electrum", true);
     // no plated slimewood, use repair kits
@@ -268,6 +269,10 @@ public class MaterialRecipeProvider extends BaseRecipeProvider implements IMater
     compatMeltingCasting(consumer, MaterialIds.invar,          TinkerFluids.moltenInvar,      "nickel", folder);
     compatMeltingCasting(consumer, MaterialIds.electrum,       TinkerFluids.moltenElectrum,   "silver", folder);
     compatMeltingCasting(consumer, MaterialIds.bronze,         TinkerFluids.moltenBronze,     "tin", folder);
+    // pewter has two different ores that let it appear, tin and lead
+    materialMeltingCasting(
+      withCondition(consumer, new OrCondition(tagCondition("ingots/pewter"), tagCondition("ingots/tin"), tagCondition("ingots/lead"))),
+      MaterialIds.pewter,TinkerFluids.moltenPewter, folder);
     materialMeltingComposite(withCondition(consumer, tagCondition("ingots/uranium")), MaterialIds.necroticBone, MaterialIds.necronium, TinkerFluids.moltenUranium, FluidValues.INGOT, folder);
     materialMeltingComposite(withCondition(consumer, new OrCondition(tagCondition("ingots/brass"), tagCondition("ingots/zinc"))),
                              MaterialIds.slimewood, MaterialIds.platedSlimewood, TinkerFluids.moltenBrass, FluidValues.INGOT, folder);

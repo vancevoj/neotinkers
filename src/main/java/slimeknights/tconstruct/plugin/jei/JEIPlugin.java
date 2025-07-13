@@ -480,12 +480,13 @@ public class JEIPlugin implements IModPlugin {
 
     // fluid hiding, buckets are hidden via the creative tab logic
     // hide compat that is not present
+    compatLoop:
     for (SmelteryCompat compat : SmelteryCompat.values()) {
       if (!tagExists("ingots/" + compat.getName())) {
         // if the alt tag exists then still show the fluid
-        if (!compat.getAltTag().isEmpty()) {
-          if (tagExists("ingots/" + compat.getAltTag())) {
-            continue;
+        for (String name : compat.getAltTags()) {
+          if (tagExists("ingots/" + name)) {
+            continue compatLoop;
           }
         }
         removeFluid(manager, compat.getFluid().get());
