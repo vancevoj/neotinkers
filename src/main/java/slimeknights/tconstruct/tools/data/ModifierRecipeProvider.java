@@ -923,6 +923,7 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                                     .setTools(TinkerTags.Items.CHESTPLATES)
                                     .setInput(TinkerWorld.ichorGeode.asItem(), 1, 72)
                                     .setSlots(SlotType.ABILITY, 1)
+                                    .setMaxLevel(2)
                                     .saveSalvage(consumer, prefix(ModifierIds.strength, abilitySalvage))
                                     .save(consumer, prefix(ModifierIds.strength, abilityFolder));
     ModifierRecipeBuilder.modifier(ModifierIds.wings)
@@ -942,6 +943,7 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .addInput(Items.LEATHER)
                          .addInput(Items.LEATHER)
                          .setSlots(SlotType.ABILITY, 1)
+                         .setMaxLevel(2)
                          .saveSalvage(consumer, prefix(ModifierIds.pockets, abilitySalvage))
                          .save(consumer, prefix(ModifierIds.pockets, abilityFolder));
     ModifierRecipeBuilder.modifier(TinkerModifiers.shieldStrap)
@@ -1019,6 +1021,7 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .addInput(Items.PHANTOM_MEMBRANE)
                          .addInput(Items.PHANTOM_MEMBRANE)
                          .setSlots(SlotType.ABILITY, 1)
+                         .setMaxLevel(2)
                          .saveSalvage(consumer, prefix(ModifierIds.doubleJump, abilitySalvage))
                          .save(consumer, prefix(ModifierIds.doubleJump, abilityFolder));
     ModifierRecipeBuilder.modifier(ModifierIds.bouncy)
@@ -1272,6 +1275,7 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .addInput(SlimeType.ENDER.getSlimeballTag())
                          .addInput(SlimeType.ENDER.getSlimeballTag())
                          .setSlots(SlotType.ABILITY, 1)
+                         .setMaxLevel(2)
                          .saveSalvage(consumer, prefix(ModifierIds.reach, abilitySalvage))
                          .save(consumer, prefix(ModifierIds.reach, abilityFolder));
     // block transformers
