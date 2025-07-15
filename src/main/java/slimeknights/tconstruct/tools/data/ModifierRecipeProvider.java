@@ -524,7 +524,7 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                                     .save(consumer, prefix(ModifierIds.power, upgradeFolder));
     IncrementalModifierRecipeBuilder.modifier(ModifierIds.quickCharge)
                                     .setTools(ingredientFromTags(TinkerTags.Items.CROSSBOWS, TinkerTags.Items.STAFFS))
-                                    .setInput(Items.SUNFLOWER, 1, 5)
+                                    .setInput(Items.MAGMA_CREAM, 1, 5)
                                     .setMaxLevel(4)
                                     .setSlots(SlotType.UPGRADE, 1)
                                     .saveSalvage(consumer, prefix(ModifierIds.quickCharge, upgradeSalvage))
