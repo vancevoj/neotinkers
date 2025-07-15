@@ -95,6 +95,7 @@ import slimeknights.tconstruct.plugin.jei.partbuilder.PatternIngredientHelper;
 import slimeknights.tconstruct.plugin.jei.partbuilder.PatternIngredientRenderer;
 import slimeknights.tconstruct.plugin.jei.transfer.CraftingStationTransferInfo;
 import slimeknights.tconstruct.plugin.jei.transfer.TinkerStationTransferInfo;
+import slimeknights.tconstruct.plugin.jei.transfer.ToolInventoryTransferInfo;
 import slimeknights.tconstruct.plugin.jei.util.GuiContainerTankHandler;
 import slimeknights.tconstruct.plugin.jei.util.PotionSubtypeInterpreter;
 import slimeknights.tconstruct.plugin.jei.util.ToolPartSubtypeInterpreter;
@@ -372,6 +373,7 @@ public class JEIPlugin implements IModPlugin {
     registration.addRecipeTransferHandler(new CraftingStationTransferInfo());
     registration.addRecipeTransferHandler(new TinkerStationTransferInfo<>(TConstructJEIConstants.MODIFIERS));
     registration.addRecipeTransferHandler(new TinkerStationTransferInfo<>(TConstructJEIConstants.TOOL_BUILDING));
+    registration.addRecipeTransferHandler(new ToolInventoryTransferInfo(registration.getTransferHelper()), RecipeTypes.CRAFTING);
   }
 
   /**
