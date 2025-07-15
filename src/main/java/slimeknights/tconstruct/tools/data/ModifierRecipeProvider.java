@@ -9,8 +9,6 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.alchemy.PotionUtils;
-import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Blocks;
@@ -19,7 +17,6 @@ import net.minecraftforge.common.Tags.Fluids;
 import net.minecraftforge.common.crafting.CompoundIngredient;
 import net.minecraftforge.common.crafting.DifferenceIngredient;
 import net.minecraftforge.common.crafting.IntersectionIngredient;
-import net.minecraftforge.common.crafting.PartialNBTIngredient;
 import net.minecraftforge.fluids.FluidType;
 import slimeknights.mantle.data.predicate.IJsonPredicate;
 import slimeknights.mantle.recipe.condition.TagFilledCondition;
@@ -1590,7 +1587,7 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
     IJsonPredicate<ModifierId> blacklist = ModifierPredicate.tag(TinkerTags.Modifiers.INVISIBLE_INK_BLACKLIST).inverted();
     ModifierSetWorktableRecipeBuilder.setAdding(hiddenModifiers)
                                      .modifierPredicate(blacklist)
-                                     .addInput(PartialNBTIngredient.of(Items.POTION, PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.INVISIBILITY).getOrCreateTag()))
+                                     .addInput(FluidContainerIngredient.fromIngredient(TinkerFluids.skySlime.ingredient(FluidValues.BOTTLE), Ingredient.of(TinkerFluids.slimeBottle.get(SlimeType.SKY))))
                                      .save(consumer, location(worktableFolder + "invisible_ink_adding"));
     ModifierSetWorktableRecipeBuilder.setRemoving(hiddenModifiers)
                                      .modifierPredicate(blacklist)
