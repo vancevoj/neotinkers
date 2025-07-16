@@ -190,19 +190,25 @@ public class TConstruct {
   /** Handles missing mappings of all types */
   private static void missingMappings(MissingMappingsEvent event) {
     RegistrationHelper.handleMissingMappings(event, MOD_ID, Registries.BLOCK, name -> switch (name) {
+      // silky jewel removal
+      case "silky_jewel_block" -> Blocks.EMERALD_BLOCK;
+      // piglin heads are vanilla
       case "piglin_head" -> Blocks.PIGLIN_HEAD;
       case "piglin_wall_head" -> Blocks.PIGLIN_WALL_HEAD;
       default -> null;
     });
-    RegistrationHelper.handleMissingMappings(event, MOD_ID, Registries.ITEM, name -> {
-      return switch (name) {
-        case "piglin_head" -> Items.PIGLIN_HEAD;
-        case "round_plate" -> TinkerToolParts.adzeHead.get();
-        case "round_plate_cast" -> TinkerSmeltery.adzeHeadCast.get();
-        case "round_plate_sand_cast" -> TinkerSmeltery.adzeHeadCast.getSand();
-        case "round_plate_red_sand_cast" -> TinkerSmeltery.adzeHeadCast.getRedSand();
-        default -> null;
-      };
+    RegistrationHelper.handleMissingMappings(event, MOD_ID, Registries.ITEM, name -> switch (name) {
+      // silky jewel removal
+      case "silky_jewel" -> Items.EMERALD;
+      case "silky_jewel_block" -> Items.EMERALD_BLOCK;
+      // piglin heads are vanilla
+      case "piglin_head" -> Items.PIGLIN_HEAD;
+      // round plate rename
+      case "round_plate" -> TinkerToolParts.adzeHead.get();
+      case "round_plate_cast" -> TinkerSmeltery.adzeHeadCast.get();
+      case "round_plate_sand_cast" -> TinkerSmeltery.adzeHeadCast.getSand();
+      case "round_plate_red_sand_cast" -> TinkerSmeltery.adzeHeadCast.getRedSand();
+      default -> null;
     });
   }
 
