@@ -20,6 +20,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.client.GuiUtil;
@@ -40,6 +41,9 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
 
 public class ModifierRecipeCategory implements IRecipeCategory<IDisplayModifierRecipe> {
   protected static final ResourceLocation BACKGROUND_LOC = TConstruct.getResource("textures/gui/jei/tinker_station.png");
@@ -69,6 +73,7 @@ public class ModifierRecipeCategory implements IRecipeCategory<IDisplayModifierR
     }
     this.requirements = helper.createDrawable(BACKGROUND_LOC, 128, 17, 16, 16);
     this.incremental = helper.createDrawable(BACKGROUND_LOC, 128, 33, 16, 16);
+    clearSlimeskullCache();
   }
 
   @Override
@@ -189,10 +194,7 @@ public class ModifierRecipeCategory implements IRecipeCategory<IDisplayModifierR
     // hack: if a single part tool is in the recipe, add variants of it as invisible ingredients
     for (ItemStack stack : toolWithoutModifier) {
       if (stack.is(TinkerTags.Items.SINGLEPART_TOOL) && stack.getItem() instanceof IModifiable modifiable) {
-        List<ItemStack> variants = new ArrayList<>();
-        // TODO: for double part tools (e.g. travelers), this does leave out a lot of materials. But the size of options will quicky explode. Worth fixing?
-        ToolBuildHandler.addVariants(variants::add, modifiable, "");
-        builder.addInvisibleIngredients(RecipeIngredientRole.CATALYST).addItemStacks(variants);
+        builder.addInvisibleIngredients(RecipeIngredientRole.CATALYST).addItemStacks(getLookupTools(modifiable));
       }
     }
 
@@ -235,7 +237,26 @@ public class ModifierRecipeCategory implements IRecipeCategory<IDisplayModifierR
     return recipe.getRecipeId();
   }
 
-  /** @deprecated Was never called, no longer needed */
-  @Deprecated(forRemoval = true)
-  public static void clearSlimeskullCache() {}
+
+  /* Single part tools hack */
+  /** Cache of each list of lookup items for each tool */
+  private static final Map<IModifiable,List<ItemStack>> LOOKUP_CACHE = new ConcurrentHashMap<>();
+  /** Function to compute lookup items for each tool */
+  private static final Function<IModifiable,List<ItemStack>> LOOKUP_GETTER = modifiable -> {
+    List<ItemStack> variants = new ArrayList<>();
+    // TODO: for double part tools (e.g. travelers), this does leave out a lot of materials. But the size of options will quicky explode. Worth fixing?
+    ToolBuildHandler.addVariants(variants::add, modifiable, "");
+    return variants;
+  };
+
+  /** Gets the tools for lookup for single part tools */
+  private static List<ItemStack> getLookupTools(IModifiable modifiable) {
+    return LOOKUP_CACHE.computeIfAbsent(modifiable, LOOKUP_GETTER);
+  }
+
+  /** TODO 1.21: rename to be more appropiate */
+  @Internal
+  public static void clearSlimeskullCache() {
+    LOOKUP_CACHE.clear();
+  }
 }
