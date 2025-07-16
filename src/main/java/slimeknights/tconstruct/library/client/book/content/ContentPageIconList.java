@@ -17,6 +17,9 @@ import slimeknights.tconstruct.library.client.book.elements.PageIconLinkElement;
 import java.util.ArrayList;
 import java.util.List;
 
+/** @deprecated use {@link slimeknights.mantle.client.book.data.content.ContentPageIconList} */
+@SuppressWarnings("removal")
+@Deprecated(forRemoval = true)
 public class ContentPageIconList extends PageContent {
 
   protected final int width;
@@ -131,6 +134,8 @@ public class ContentPageIconList extends PageContent {
     }
   }
 
+  /** @deprecated use {@link slimeknights.mantle.client.book.data.content.ContentPageIconList#getPagesNeededForItemCount(int, SectionData, String, String)} */
+  @Deprecated(forRemoval = true)
   public static List<ContentPageIconList> getPagesNeededForItemCount(int count, SectionData data, String title, String subText) {
     List<ContentPageIconList> listPages = new ArrayList<>();
     List<PageData> newPages = new ArrayList<>();
