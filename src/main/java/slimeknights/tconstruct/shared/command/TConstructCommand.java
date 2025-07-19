@@ -2,6 +2,7 @@ package slimeknights.tconstruct.shared.command;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
+import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
@@ -24,6 +25,7 @@ import slimeknights.tconstruct.shared.command.subcommand.ModifierUsageCommand;
 import slimeknights.tconstruct.shared.command.subcommand.ModifiersCommand;
 import slimeknights.tconstruct.shared.command.subcommand.SlotsCommand;
 import slimeknights.tconstruct.shared.command.subcommand.StatsCommand;
+import slimeknights.tconstruct.shared.command.subcommand.generate.RemoveRecipesCommand;
 
 import java.util.function.Consumer;
 
@@ -56,6 +58,7 @@ public class TConstructCommand {
   /** Event listener to register the Mantle command */
   private static void registerCommand(RegisterCommandsEvent event) {
     LiteralArgumentBuilder<CommandSourceStack> builder = Commands.literal(TConstruct.MOD_ID);
+    CommandBuildContext context = event.getBuildContext();
 
     // sub commands
     register(builder, "modifiers", ModifiersCommand::register);
@@ -67,6 +70,9 @@ public class TConstructCommand {
       register(b, "modifier_priority", ModifierPriorityCommand::register);
     });
     register(builder, "generate_part_textures", GeneratePartTexturesCommand::register);
+    register(builder, "generate", b -> {
+      register(b, "remove_recipes", command -> RemoveRecipesCommand.register(command, context));
+    });
 
     // register final command
     event.getDispatcher().register(builder);

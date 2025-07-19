@@ -3323,6 +3323,7 @@
 
   "_comment": "Commands",
 
+  "command.tconstruct.item.not_found": "Unknown item %s",
   "command.tconstruct.slot_type.not_found": "Unknown slot type %s",
   "command.tconstruct.fluid.not_found": "Unknown fluid %s",
   "command.tconstruct.stat_type.not_found": "Unknown tool stat %s",
@@ -3331,6 +3332,7 @@
   "command.tconstruct.material.not_found": "Unknown material %s",
   "command.tconstruct.modifier.not_found": "Unknown modifier %s",
   "command.tconstruct.modifier_hook.not_found": "Unknown modifier hook %s",
+
   "command.tconstruct.modifier_usage": "Successfully printed modifier usage to the game log",
   "command.tconstruct.modifier_priority": "Successfully printed modifier priorities to the game log",
 
@@ -3384,6 +3386,8 @@
   "command.tconstruct.generate_part_textures.finish": "Successfully generated %s part textures in %s s at %s",
   "command.tconstruct.generate_part_textures.no_materials": "No material's have generator info, nothing to generate",
   "command.tconstruct.generate_part_textures.no_parts": "No part sprites present in resource packs",
+
+  "command.tconstruct.generate.remove_recipes": "Successfully removed %s recipes in %s seconds. Run /reload to activate pack at %s",
 
 
   "_comment": "JEI Strings",
