@@ -4,6 +4,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ArrowItem;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.BushBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour.BlockStateBase;
 import slimeknights.mantle.client.TooltipKey;
@@ -12,6 +13,7 @@ import slimeknights.mantle.data.predicate.block.BlockPredicate;
 import slimeknights.mantle.data.predicate.damage.DamageSourcePredicate;
 import slimeknights.mantle.data.predicate.entity.LivingEntityPredicate;
 import slimeknights.mantle.data.predicate.item.ItemPredicate;
+import slimeknights.mantle.fluid.transfer.FluidContainerTransferManager;
 import slimeknights.tconstruct.library.modifiers.hook.armor.OnAttackedModifierHook;
 import slimeknights.tconstruct.library.recipe.melting.MeltingRecipeLookup;
 
@@ -29,6 +31,8 @@ public class TinkerPredicate {
 
   /** Predicate matching any arrows */
   public static ItemPredicate ARROW = ItemPredicate.simple(item -> item instanceof ArrowItem);
+  /** Checks if the given item has a fluid transfer. TODO: make this not require item stack creation in Mantle */
+  public static ItemPredicate MAY_HAVE_FLUID = ItemPredicate.simple(item -> FluidContainerTransferManager.INSTANCE.mayHaveTransfer(new ItemStack(item)));
 
   /** Predicate matching blocks that block motion */
   public static BlockPredicate BLOCKS_MOTION = BlockPredicate.simple(BlockStateBase::blocksMotion);

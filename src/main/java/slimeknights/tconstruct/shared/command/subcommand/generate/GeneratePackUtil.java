@@ -1,5 +1,6 @@
 package slimeknights.tconstruct.shared.command.subcommand.generate;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.minecraft.SharedConstants;
 import net.minecraft.network.chat.ClickEvent;
@@ -40,6 +41,25 @@ public class GeneratePackUtil {
     return getDatapackPath(server, PACK_NAME);
   }
 
+  /**
+   * Saves the given JSON element
+   * @param path     JSON to save
+   * @param element  Path to save it
+   */
+  public static boolean saveJson(JsonElement element, Path path) {
+    try {
+      Files.createDirectories(path.getParent());
+      String json = JsonHelper.DEFAULT_GSON.toJson(element);
+      try (BufferedWriter bufferedwriter = Files.newBufferedWriter(path)) {
+        bufferedwriter.write(json);
+      }
+      return true;
+    } catch (IOException e) {
+      TConstruct.LOG.error("Couldn't create JSON at {}", path, e);
+      return false;
+    }
+  }
+
   /** Creates a mcmeta to make a valid pack */
   public static void saveMcmeta(Path folder, PackType packType, String description) {
     Path path = folder.resolve("pack.mcmeta");
@@ -48,15 +68,7 @@ public class GeneratePackUtil {
     pack.addProperty("description", description);
     pack.addProperty("pack_format", SharedConstants.getCurrentVersion().getPackVersion(packType));
     meta.add("pack", pack);
-    try {
-      Files.createDirectories(path.getParent());
-      String json = JsonHelper.DEFAULT_GSON.toJson(meta);
-      try (BufferedWriter bufferedwriter = Files.newBufferedWriter(path)) {
-        bufferedwriter.write(json);
-      }
-    } catch (IOException e) {
-      TConstruct.LOG.error("Couldn't create pack.mcmeta", e);
-    }
+    saveJson(meta, path);
   }
 
   /** Creates a mcmeta to make the server datapack */

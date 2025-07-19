@@ -1,0 +1,26 @@
+{
+  "ignore": "mantle:any",
+  "inputs": {
+    "type": "mantle:inverted",
+    "inverted_type": "tconstruct:may_have_fluid"
+  },
+  "melt": {
+    "type": "mantle:and",
+    "predicates": [
+      {
+        "type": "mantle:inverted",
+        "inverted_type": "mantle:tag",
+        "tag": "tconstruct:modifiable"
+      },
+      {
+        "type": "mantle:inverted",
+        "inverted_type": "mantle:tag",
+        "tag": "forge:books"
+      },
+      {
+        "type": "mantle:inverted",
+        "inverted_type": "tconstruct:may_have_fluid"
+      }
+    ]
+  }
+}

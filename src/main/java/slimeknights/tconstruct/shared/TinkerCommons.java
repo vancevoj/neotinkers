@@ -199,6 +199,7 @@ public final class TinkerCommons extends TinkerModule {
       LivingEntityPredicate.LOADER.register(getResource("has_effect"), HasMobEffectPredicate.LOADER);
       LivingEntityPredicate.LOADER.register(getResource("block_at_feet"), BlockAtFeetEntityPredicate.LOADER);
       ItemPredicate.LOADER.register(getResource("arrow"), TinkerPredicate.ARROW.getLoader());
+      ItemPredicate.LOADER.register(getResource("may_have_fluid"), TinkerPredicate.MAY_HAVE_FLUID.getLoader());
       ItemPredicate.LOADER.register(getResource("can_melt"), TinkerPredicate.CAN_MELT_ITEM.getLoader());
       BlockPredicate.LOADER.register(getResource("blocks_motion"), TinkerPredicate.BLOCKS_MOTION.getLoader());
       BlockPredicate.LOADER.register(getResource("can_be_replaced"), TinkerPredicate.CAN_BE_REPLACED.getLoader());
