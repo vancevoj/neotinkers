@@ -7,12 +7,15 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
+import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.datafixers.util.Either;
 import lombok.RequiredArgsConstructor;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.ResourceArgument;
+import net.minecraft.commands.arguments.ResourceLocationArgument;
 import net.minecraft.commands.arguments.ResourceOrTagKeyArgument;
 import net.minecraft.core.Holder;
 import net.minecraft.core.RegistryAccess;
@@ -64,11 +67,21 @@ import static slimeknights.mantle.util.JsonHelper.DEFAULT_GSON;
 
 /** Command to generate recipes that disable smelting ingots in a furnace */
 public class RemoveRecipesCommand {
+  /** Translation key for successfully removing recipes */
   private static final String KEY_SUCCESS = TConstruct.makeTranslationKey("command", "generate.remove_recipes");
+  /** Error on invalid item or tag ID */
   private static final DynamicCommandExceptionType ITEM_NOT_FOUND = new DynamicCommandExceptionType(id -> TConstruct.makeTranslation("command", "item.not_found", id));
+  /** Error on invalid preset */
   private static final DynamicCommandExceptionType PRESET_NOT_FOUND = new DynamicCommandExceptionType(id -> TConstruct.makeTranslation("command", "generate.remove_recipes.preset_not_found", id));
+  /** Error when failing to save a single recipe */
+  private static final DynamicCommandExceptionType FAILED_SAVE = new DynamicCommandExceptionType(id -> TConstruct.makeTranslation("command", "generate.remove_recipes.failed_id", id));
+  /** Loadable for saving a list of recipe types */
   public static final Loadable<List<RecipeType<?>>> RECIPE_TYPES = TinkerLoadables.RECIPE_TYPE.list(ArrayLoadable.COMPACT);
+  /** Key for {@link ContextItemPredicate} for the castable item predicate */
   public static final String KEY_CASTABLE_ITEM = "castable_item";
+  /** Suggestion builder for recipe IDs */
+  private static final SuggestionProvider<CommandSourceStack> SUGGESTS_RECIPES = (context, builder)
+    -> SharedSuggestionProvider.suggestResource(context.getSource().getRecipeManager().getRecipeIds(), builder);
 
   /**
    * Registers this sub command with the root command
@@ -81,16 +94,19 @@ public class RemoveRecipesCommand {
       .then(Commands.literal("preset")
         .then(Commands.argument("preset", StringArgumentType.word())
           .executes(RemoveRecipesCommand::runPreset)))
-      .then(Commands.literal("by_result")
+      .then(Commands.literal("result")
         .then(Commands.argument("recipe_type", ResourceArgument.resource(context, Registries.RECIPE_TYPE))
           .then(Commands.argument("result", ResourceOrTagKeyArgument.resourceOrTagKey(Registries.ITEM))
             .executes(RemoveRecipesCommand::runByResult)
             .then(Commands.argument("input", ResourceOrTagKeyArgument.resourceOrTagKey(Registries.ITEM))
               .executes(RemoveRecipesCommand::runResultInput)))))
-      .then(Commands.literal("by_input")
+      .then(Commands.literal("input")
         .then(Commands.argument("recipe_type", ResourceArgument.resource(context, Registries.RECIPE_TYPE))
           .then(Commands.argument("input", ResourceOrTagKeyArgument.resourceOrTagKey(Registries.ITEM))
-            .executes(RemoveRecipesCommand::runByInput))));
+            .executes(RemoveRecipesCommand::runByInput))))
+      .then(Commands.literal("id")
+        .then(Commands.argument("recipe", ResourceLocationArgument.id()).suggests(SUGGESTS_RECIPES)
+          .executes(RemoveRecipesCommand::byId)));
   }
 
   /** Gets the item predicate */
@@ -168,7 +184,6 @@ public class RemoveRecipesCommand {
     throw PRESET_NOT_FOUND.create(preset);
   }
 
-
   /** Runs the command */
   @SuppressWarnings("unchecked")  // not like we are using the generics at all
   private static <C extends Container, T extends Recipe<C>> int run(CommandContext<CommandSourceStack> context, List<RecipeType<?>> recipeTypes, @Nullable Predicate<Item> removeResult, @Nullable Predicate<Item> removeInput, long startTime) {
@@ -228,6 +243,38 @@ public class RemoveRecipesCommand {
     float time = (System.nanoTime() - startTime) / 1000000f;
     context.getSource().sendSuccess(() -> Component.translatable(KEY_SUCCESS, successFinal, time, GeneratePackUtil.getOutputComponent(pack)), true);
     return successes;
+  }
+
+  /** Removes a recipe by ID */
+  private static int byId(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+    long startTime = System.nanoTime();
+    ResourceLocation id = ResourceLocationArgument.getId(context, "recipe");
+
+    // determine the path for the resulting datapack
+    Path pack = GeneratePackUtil.getDatapackPath(context.getSource().getServer());
+    GeneratePackUtil.saveMcmeta(pack);
+
+    // create the object for removing recipes
+    JsonObject json = new JsonObject();
+    json.add("conditions", CraftingHelper.serialize(new ICondition[]{FalseCondition.INSTANCE}));
+    String jsonString = DEFAULT_GSON.toJson(json);
+
+    Path data = pack.resolve(PackType.SERVER_DATA.getDirectory());
+    Path path = data.resolve(id.getNamespace() + "/recipes/" + id.getPath() + ".json");
+    try {
+      Files.createDirectories(path.getParent());
+      try (BufferedWriter writer = Files.newBufferedWriter(path)) {
+        writer.write(jsonString);
+      }
+    } catch(IOException e){
+      TConstruct.LOG.error("Couldn't save recipe {}", id, e);
+      throw FAILED_SAVE.create(id);
+    }
+
+    // send success
+    float time = (System.nanoTime() - startTime) / 1000000f;
+    context.getSource().sendSuccess(() -> Component.translatable(KEY_SUCCESS, 1, time, GeneratePackUtil.getOutputComponent(pack)), true);
+    return 1;
   }
 
   /**

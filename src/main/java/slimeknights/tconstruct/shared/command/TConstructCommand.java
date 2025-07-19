@@ -81,7 +81,7 @@ public class TConstructCommand {
     register(builder, "generate_part_textures", GeneratePartTexturesCommand::register);
     register(builder, "generate", b -> {
       register(b, "melting_recipes", context, GenerateMeltingRecipesCommand::register);
-      register(b, "remove_recipes", context, RemoveRecipesCommand::register);
+      register(b, "remove_recipe", context, RemoveRecipesCommand::register);
     });
 
     // register final command
