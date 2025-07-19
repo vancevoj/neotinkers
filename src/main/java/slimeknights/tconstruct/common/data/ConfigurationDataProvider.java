@@ -5,15 +5,23 @@ import net.minecraft.data.CachedOutput;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.PackOutput.Target;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraftforge.common.Tags;
 import slimeknights.mantle.data.GenericDataProvider;
 import slimeknights.mantle.data.predicate.IJsonPredicate;
 import slimeknights.mantle.data.predicate.item.ItemPredicate;
 import slimeknights.tconstruct.common.TinkerTags;
+import slimeknights.tconstruct.library.json.predicate.ContextItemPredicate;
 import slimeknights.tconstruct.library.json.predicate.TinkerPredicate;
 import slimeknights.tconstruct.shared.command.subcommand.generate.GenerateMeltingRecipesCommand;
+import slimeknights.tconstruct.shared.command.subcommand.generate.RemoveRecipesCommand;
+import slimeknights.tconstruct.smeltery.TinkerSmeltery;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
@@ -26,6 +34,7 @@ public class ConfigurationDataProvider extends GenericDataProvider {
 
   @Override
   public CompletableFuture<?> run(CachedOutput output) {
+    // config for which items to generate melting recipes for and which items to ignore
     JsonObject meltingRecipes = config(GenerateMeltingRecipesCommand.MELTING_CONFIGURATION);
     item(meltingRecipes, "melt", ItemPredicate.and(
       ItemPredicate.tag(TinkerTags.Items.MODIFIABLE).inverted(),
@@ -34,6 +43,45 @@ public class ConfigurationDataProvider extends GenericDataProvider {
     ));
     item(meltingRecipes, "inputs", TinkerPredicate.MAY_HAVE_FLUID.inverted());
     item(meltingRecipes, "ignore", ItemPredicate.ANY);
+
+    // recipe removal preset that makes ingots not smeltable in furnaces
+    JsonObject removeIngots = removePreset("ingot_smelting");
+    item(removeIngots, "result", ItemPredicate.and(
+      ItemPredicate.tag(Tags.Items.INGOTS),
+      ItemPredicate.set(Items.BRICK, TinkerSmeltery.searedBrick.get(), TinkerSmeltery.scorchedBrick.get()).inverted(),
+      new ContextItemPredicate(RemoveRecipesCommand.KEY_CASTABLE_ITEM)
+    ));
+    item(removeIngots, "input", ItemPredicate.ANY);
+    recipeType(removeIngots, RecipeType.SMELTING, RecipeType.BLASTING);
+
+    // preset to remove vanilla tool crafting
+    JsonObject removeVanillaTools = removePreset("vanilla_tools");
+    item(removeVanillaTools, "result", ItemPredicate.and(
+      ItemPredicate.or(
+        ItemPredicate.tag(ItemTags.PICKAXES),
+        ItemPredicate.tag(ItemTags.AXES),
+        ItemPredicate.tag(ItemTags.SHOVELS),
+        ItemPredicate.tag(ItemTags.SWORDS),
+        ItemPredicate.tag(ItemTags.HOES),
+        ItemPredicate.tag(Tags.Items.TOOLS_SHIELDS),
+        ItemPredicate.tag(Tags.Items.TOOLS_BOWS),
+        ItemPredicate.tag(Tags.Items.TOOLS_CROSSBOWS),
+        ItemPredicate.tag(Tags.Items.ARMORS),
+        ItemPredicate.set(Items.FLINT_AND_STEEL, Items.SHEARS, Items.BRUSH)
+      ),
+      ItemPredicate.tag(TinkerTags.Items.MODIFIABLE).inverted()
+    ));
+    item(removeVanillaTools, "input", ItemPredicate.ANY);
+    recipeType(removeVanillaTools, RecipeType.CRAFTING);
+
+    // preset to remove netherite smithing
+    JsonObject removeNetheriteSmithing = removePreset("netherite_smithing");
+    item(removeNetheriteSmithing, "result", ItemPredicate.set(
+      Items.NETHERITE_PICKAXE, Items.NETHERITE_AXE, Items.NETHERITE_SHOVEL, Items.NETHERITE_SWORD, Items.NETHERITE_HOE,
+      Items.NETHERITE_HELMET, Items.NETHERITE_CHESTPLATE, Items.NETHERITE_LEGGINGS, Items.NETHERITE_BOOTS
+    ));
+    item(removeNetheriteSmithing, "input", ItemPredicate.ANY);
+    recipeType(removeNetheriteSmithing, RecipeType.SMITHING);
 
     // save all JSON
     return allOf(configuration.entrySet().stream().map(entry -> saveJson(output, entry.getKey(), entry.getValue())));
@@ -50,8 +98,18 @@ public class ConfigurationDataProvider extends GenericDataProvider {
     return configuration.computeIfAbsent(location.withPath(path.substring(0, path.length() - ".json".length())), p -> new JsonObject());
   }
 
+  /** Gets or creates a config object for a recipe removal preset */
+  private JsonObject removePreset(String name) {
+    return config(RemoveRecipesCommand.presetLocation(name));
+  }
+
   /** Adds an item predicate */
   private static void item(JsonObject json, String key, IJsonPredicate<Item> value) {
     json.add(key, ItemPredicate.LOADER.serialize(value));
+  }
+
+  /** Adds recipe types */
+  private static void recipeType(JsonObject json, RecipeType<?>... types) {
+    json.add("recipe_type", RemoveRecipesCommand.RECIPE_TYPES.serialize(List.of(types)));
   }
 }
