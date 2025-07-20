@@ -1,5 +1,6 @@
 package slimeknights.tconstruct.common.data;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.PackOutput;
@@ -43,6 +44,7 @@ public class ConfigurationDataProvider extends GenericDataProvider {
     ));
     item(meltingRecipes, "inputs", TinkerPredicate.MAY_HAVE_FLUID.inverted());
     item(meltingRecipes, "ignore", ItemPredicate.ANY);
+    meltingRecipes.add("skip_recipes", new JsonArray());
 
     // recipe removal preset that makes ingots not smeltable in furnaces
     JsonObject removeIngots = removePreset("ingot_smelting");

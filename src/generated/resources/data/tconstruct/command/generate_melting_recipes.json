@@ -22,5 +22,6 @@
         "inverted_type": "tconstruct:may_have_fluid"
       }
     ]
-  }
+  },
+  "skip_recipes": []
 }

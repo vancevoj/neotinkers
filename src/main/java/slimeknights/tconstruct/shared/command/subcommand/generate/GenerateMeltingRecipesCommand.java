@@ -5,6 +5,7 @@ import com.google.gson.JsonParseException;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import lombok.RequiredArgsConstructor;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
@@ -57,8 +58,14 @@ import java.util.function.Function;
 
 /** Generates melting recipes based on crafting recipes */
 public class GenerateMeltingRecipesCommand {
+  /** Location of the config JSON file */
   public static final ResourceLocation MELTING_CONFIGURATION = TConstruct.getResource("command/generate_melting_recipes.json");
+  /** KEY for successfully running command */
   private static final String KEY_SUCCESS = TConstruct.makeTranslationKey("command", "generate.melting_recipes");
+  /** Error on invalid config JSON */
+  private static final SimpleCommandExceptionType CONFIG_INVALID = new SimpleCommandExceptionType(TConstruct.makeTranslation("command", "generate.melting_recipes.invalid_config"));
+  /** Recipes to skip when considering melting */
+  private static final Loadable<List<ResourceLocation>> SKIP_RECIPES = Loadables.RESOURCE_LOCATION.list(0);
 
   /**
    * Registers this sub command with the root command
@@ -85,21 +92,27 @@ public class GenerateMeltingRecipesCommand {
 
     // load in configuration from JSON, gives far more control than command arguments can fit and lets us ship a default
     // anything matching this may receive a recipe
-    IJsonPredicate<Item> melt = ItemPredicate.ANY;
-    IJsonPredicate<Item> inputs = ItemPredicate.ANY;
-    IJsonPredicate<Item> ignore = ItemPredicate.ANY;
+    IJsonPredicate<Item> melt;
+    IJsonPredicate<Item> inputs;
+    IJsonPredicate<Item> ignore;
+    List<ResourceLocation> skipRecipes;
     Optional<Resource> resource = level.getServer().getResourceManager().getResource(MELTING_CONFIGURATION);
-    if (resource.isPresent()) {
-      JsonObject configuration = JsonHelper.getJson(resource.get(), MELTING_CONFIGURATION);
-      if (configuration != null) {
-        try {
-          melt = ItemPredicate.LOADER.getOrDefault(configuration, "melt");
-          inputs = ItemPredicate.LOADER.getOrDefault(configuration, "inputs");
-          ignore = ItemPredicate.LOADER.getOrDefault(configuration, "ignore");
-        } catch (JsonParseException e) {
-          TConstruct.LOG.error("Failed to parse configuration {} from pack '{}'", MELTING_CONFIGURATION, resource.get().sourcePackId(), e);
+    config: {
+      if (resource.isPresent()) {
+        JsonObject configuration = JsonHelper.getJson(resource.get(), MELTING_CONFIGURATION);
+        if (configuration != null) {
+          try {
+            melt = ItemPredicate.LOADER.getOrDefault(configuration, "melt");
+            inputs = ItemPredicate.LOADER.getOrDefault(configuration, "inputs");
+            ignore = ItemPredicate.LOADER.getOrDefault(configuration, "ignore");
+            skipRecipes = SKIP_RECIPES.getOrDefault(configuration, "skip_recipes", List.of());
+            break config;
+          } catch (JsonParseException e) {
+            TConstruct.LOG.error("Failed to parse configuration {} from pack '{}'", MELTING_CONFIGURATION, resource.get().sourcePackId(), e);
+          }
         }
       }
+      throw CONFIG_INVALID.create();
     }
 
     // iterate all recipes for the type storing recipes that craft the tag
@@ -122,6 +135,10 @@ public class GenerateMeltingRecipesCommand {
     // iterate all recipes and try adding a melting recipe
     MeltingCache cache = new MeltingCache();
     for (Recipe<?> recipe : level.getRecipeManager().getAllRecipesFor((RecipeType<T>) recipeType.get())) {
+      // skip any recipes that are specifically blacklisted
+      if (skipRecipes.contains(recipe.getId())) {
+        continue;
+      }
       ItemStack resultStack = recipe.getResultItem(access);
       // don't bother with results that have NBT unless its a damagable item, in which case we ignore NBT and hope for the best
       // also skip anything already meltable
