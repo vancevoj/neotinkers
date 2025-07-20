@@ -249,13 +249,14 @@ public class GenerateMeltingRecipesCommand {
     MeltingRecipeLookup.freeze();
 
     // add all new recipes
-    Comparator<MeltingResult> sizeComparator = Comparator.<MeltingResult,Integer>comparing(r -> r.fluid.getAmount()).reversed();
+    Comparator<MeltingResult> resultComparator = Comparator.comparing(MeltingResult::temperature).reversed()
+      .thenComparing(Comparator.comparing((MeltingResult r) -> r.fluid.getAmount()).reversed());
     for (Entry<Item,List<MeltingResult>> entry : newRecipes.entrySet()) {
       Item result = entry.getKey();
       List<MeltingResult> fluids = entry.getValue();
       if (!fluids.isEmpty()) {
         // make the biggest output the main output
-        fluids.sort(sizeComparator);
+        fluids.sort(resultComparator);
 
         // first is the result
         MeltingResult first = fluids.get(0);
