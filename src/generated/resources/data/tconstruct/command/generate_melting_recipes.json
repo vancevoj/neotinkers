@@ -17,7 +17,7 @@
         "type": "mantle:tag",
         "tag": "forge:dyes"
       },
-      "tconstruct:may_have_fluid"
+      "tconstruct:has_container"
     ]
   },
   "skip_recipes": []
