@@ -22,20 +22,32 @@ import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.Container;
+import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidType;
+import net.minecraftforge.fluids.capability.IFluidHandlerItem;
+import net.minecraftforge.fluids.capability.templates.FluidTank;
 import org.apache.commons.lang3.mutable.MutableInt;
 import slimeknights.mantle.command.MantleCommand;
+import slimeknights.mantle.data.loadable.Loadable;
 import slimeknights.mantle.data.loadable.Loadables;
 import slimeknights.mantle.data.predicate.IJsonPredicate;
 import slimeknights.mantle.data.predicate.item.ItemPredicate;
+import slimeknights.mantle.fluid.transfer.FluidContainerTransferManager;
+import slimeknights.mantle.fluid.transfer.IFluidContainerTransfer;
+import slimeknights.mantle.fluid.transfer.IFluidContainerTransfer.TransferDirection;
+import slimeknights.mantle.fluid.transfer.IFluidContainerTransfer.TransferResult;
 import slimeknights.mantle.recipe.helper.FluidOutput;
 import slimeknights.mantle.util.JsonHelper;
+import slimeknights.mantle.util.LogicHelper;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.recipe.melting.MeltingRecipeBuilder;
 import slimeknights.tconstruct.library.recipe.melting.MeltingRecipeLookup;
@@ -293,6 +305,11 @@ public class GenerateMeltingRecipesCommand {
       return new MeltingResult(fluid, tag, meltingFluid.temperature());
     }
 
+    /** Creates a transfer from a fluid stack instance */
+    public static MeltingResult from(FluidStack fluid) {
+      return new MeltingResult(fluid, null, fluid.getFluid().getFluidType().getTemperature(fluid) - 300);
+    }
+
     /** Creates a copy of this with the given amount */
     private MeltingResult withAmount(int amount) {
       if (amount <= 0) {
@@ -407,7 +424,37 @@ public class GenerateMeltingRecipesCommand {
   @RequiredArgsConstructor
   private static class MeltingCache {
     private final Map<Item, MeltingResult> cache = new HashMap<>();
-    private final Function<Item, MeltingResult> getter = item -> MeltingResult.from(MeltingRecipeLookup.findFluid(item));
+    private final Function<Item, MeltingResult> getter = item -> {
+      ItemStack stack = new ItemStack(item);
+      IFluidContainerTransfer transfer = FluidContainerTransferManager.INSTANCE.getTransfer(stack, FluidStack.EMPTY);
+      if (transfer != null) {
+        FluidTank tank = new FluidTank(10000);
+        TransferResult transferResult = transfer.transfer(stack, FluidStack.EMPTY, tank, TransferDirection.EMPTY_ITEM);
+        if (transferResult != null) {
+          return MeltingResult.from(transferResult.fluid());
+        }
+      }
+      // handle buckets directly as its faster
+      if (item instanceof BucketItem bucket) {
+        Fluid fluid = bucket.getFluid();
+        if (fluid != Fluids.EMPTY) {
+          return MeltingResult.from(new FluidStack(fluid, FluidType.BUCKET_VOLUME));
+        }
+      }
+      // fluid capability check
+      try {
+        IFluidHandlerItem capability = LogicHelper.orElseNull(stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM));
+        if (capability != null) {
+          FluidStack contained = capability.getFluidInTank(0);
+          if (!contained.isEmpty()) {
+            return MeltingResult.from(contained);
+          }
+        }
+      } catch (Exception e) {
+        TConstruct.LOG.error("Failed to read fluid handler capability from {}", item, e);
+      }
+      return MeltingResult.from(MeltingRecipeLookup.findFluid(item));
+    };
 
     /** Gets the value from the cache */
     public MeltingResult get(Item item) {

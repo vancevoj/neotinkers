@@ -37,12 +37,13 @@ public class ConfigurationDataProvider extends GenericDataProvider {
   public CompletableFuture<?> run(CachedOutput output) {
     // config for which items to generate melting recipes for and which items to ignore
     JsonObject meltingRecipes = config(GenerateMeltingRecipesCommand.MELTING_CONFIGURATION);
-    item(meltingRecipes, "melt", ItemPredicate.and(
-      ItemPredicate.tag(TinkerTags.Items.MODIFIABLE).inverted(),
-      ItemPredicate.tag(TinkerTags.Items.BOOKS).inverted(),
-      TinkerPredicate.MAY_HAVE_FLUID.inverted()
-    ));
-    item(meltingRecipes, "inputs", TinkerPredicate.MAY_HAVE_FLUID.inverted());
+    item(meltingRecipes, "melt", ItemPredicate.or(
+      ItemPredicate.tag(TinkerTags.Items.MODIFIABLE),
+      ItemPredicate.tag(TinkerTags.Items.BOOKS),
+      ItemPredicate.tag(Tags.Items.DYES),
+      TinkerPredicate.MAY_HAVE_FLUID
+    ).inverted());
+    item(meltingRecipes, "inputs", ItemPredicate.ANY);
     item(meltingRecipes, "ignore", ItemPredicate.ANY);
     meltingRecipes.add("skip_recipes", new JsonArray());
 

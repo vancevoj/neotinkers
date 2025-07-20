@@ -1,26 +1,23 @@
 {
   "ignore": "mantle:any",
-  "inputs": {
-    "type": "mantle:inverted",
-    "inverted_type": "tconstruct:may_have_fluid"
-  },
+  "inputs": "mantle:any",
   "melt": {
-    "type": "mantle:and",
+    "type": "mantle:inverted",
+    "inverted_type": "mantle:or",
     "predicates": [
       {
-        "type": "mantle:inverted",
-        "inverted_type": "mantle:tag",
+        "type": "mantle:tag",
         "tag": "tconstruct:modifiable"
       },
       {
-        "type": "mantle:inverted",
-        "inverted_type": "mantle:tag",
+        "type": "mantle:tag",
         "tag": "forge:books"
       },
       {
-        "type": "mantle:inverted",
-        "inverted_type": "tconstruct:may_have_fluid"
-      }
+        "type": "mantle:tag",
+        "tag": "forge:dyes"
+      },
+      "tconstruct:may_have_fluid"
     ]
   },
   "skip_recipes": []
