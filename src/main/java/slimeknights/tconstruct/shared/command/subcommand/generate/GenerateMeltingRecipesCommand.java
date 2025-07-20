@@ -307,7 +307,7 @@ public class GenerateMeltingRecipesCommand {
 
     /** Creates a transfer from a fluid stack instance */
     public static MeltingResult from(FluidStack fluid) {
-      return new MeltingResult(fluid, null, fluid.getFluid().getFluidType().getTemperature(fluid) - 300);
+      return new MeltingResult(fluid, null, Math.max(100, fluid.getFluid().getFluidType().getTemperature(fluid) - 300));
     }
 
     /** Creates a copy of this with the given amount */
