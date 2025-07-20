@@ -155,7 +155,7 @@ public class GenerateMeltingRecipesCommand {
       // don't bother with results that have NBT unless its a damagable item, in which case we ignore NBT and hope for the best
       // also skip anything already meltable
       Item result = resultStack.getItem();
-      if ((resultStack.hasTag() && !result.canBeDepleted()) || !melt.matches(result) || MeltingRecipeLookup.canMelt(result)) {
+      if (resultStack.isEmpty() || (resultStack.hasTag() && !result.canBeDepleted()) || !melt.matches(result) || MeltingRecipeLookup.canMelt(result)) {
         continue;
       }
       List<MeltingResult> fluids = new ArrayList<>();
@@ -164,7 +164,7 @@ public class GenerateMeltingRecipesCommand {
       ingredientSearch: {
         for (Ingredient ingredient : recipe.getIngredients()) {
           // skip empty ingredients, just saves some steps really
-          if (ingredient == Ingredient.EMPTY) {
+          if (ingredient.isEmpty()) {
             continue;
           }
           // for each ingredient, convert it into the smallest fluid. If we have multiple or anything invalid, give up
@@ -173,7 +173,7 @@ public class GenerateMeltingRecipesCommand {
           for (ItemStack stack : ingredient.getItems()) {
             // if the ingredient has NBT, nothing we can do here
             // also skip if the item is disallowed as an input
-            if (stack.hasTag() || !inputs.matches(stack.getItem())) {
+            if (stack.isEmpty() || stack.hasTag() || !inputs.matches(stack.getItem())) {
               break ingredientSearch;
             }
             // first, try getting its fluid
