@@ -1,6 +1,5 @@
 package slimeknights.tconstruct.shared.command.subcommand.generate;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -40,7 +39,6 @@ import net.minecraftforge.common.crafting.conditions.FalseCondition;
 import net.minecraftforge.common.crafting.conditions.ICondition;
 import slimeknights.mantle.command.MantleCommand;
 import slimeknights.mantle.data.loadable.Loadable;
-import slimeknights.mantle.data.loadable.Loadables;
 import slimeknights.mantle.data.loadable.array.ArrayLoadable;
 import slimeknights.mantle.data.predicate.IJsonPredicate;
 import slimeknights.mantle.data.predicate.item.ItemPredicate;
@@ -296,15 +294,12 @@ public class RemoveRecipesCommand {
           // if it's an item casting, check if it's a tag
           if (recipe instanceof ItemCastingRecipe itemCasting) {
             // not a better way right now to check if it's a tag output, so just serialize then fetch the tag from JSON
-            JsonElement element = itemCasting.getResult().serialize(false);
-            if (element.isJsonObject()) {
-              JsonObject json = element.getAsJsonObject();
-              if (json.has("tag")) {
-                for (Holder<Item> holder : BuiltInRegistries.ITEM.getTagOrEmpty(Loadables.ITEM_TAG.getIfPresent(json, "tag"))) {
-                  builder.add(holder.get());
-                }
-                continue;
+            TagKey<Item> tag = itemCasting.getResult().getTag();
+            if (tag != null) {
+              for (Holder<Item> holder : BuiltInRegistries.ITEM.getTagOrEmpty(tag)) {
+                builder.add(holder.get());
               }
+              continue;
             }
           }
           // not a tag output? add the single item

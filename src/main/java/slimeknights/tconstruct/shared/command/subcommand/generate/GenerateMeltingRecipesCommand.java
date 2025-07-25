@@ -295,15 +295,7 @@ public class GenerateMeltingRecipesCommand {
       if (fluid.isEmpty()) {
         return EMPTY;
       }
-      TagKey<Fluid> tag = null;
-
-      // if it's a tag output, fetch the tag
-      JsonObject json = new JsonObject();
-      output.serialize(json);
-      if (json.has("tag")) {
-        tag = Loadables.FLUID_TAG.getIfPresent(json, "tag");
-      }
-      return new MeltingResult(fluid, tag, meltingFluid.temperature());
+      return new MeltingResult(fluid, output.getTag(), meltingFluid.temperature());
     }
 
     /** Creates a transfer from a fluid stack instance */
@@ -324,7 +316,7 @@ public class GenerateMeltingRecipesCommand {
     /** Creates a fluid output for this object */
     public FluidOutput toOutput() {
       if (tag != null) {
-        return FluidOutput.fromTag(tag, fluid.getAmount());
+        return FluidOutput.fromTag(tag, fluid.getAmount(), fluid.getTag());
       }
       return FluidOutput.fromStack(fluid);
     }
