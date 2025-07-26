@@ -15,7 +15,6 @@ import slimeknights.mantle.data.GenericDataProvider;
 import slimeknights.mantle.data.predicate.IJsonPredicate;
 import slimeknights.mantle.data.predicate.item.ItemPredicate;
 import slimeknights.tconstruct.common.TinkerTags;
-import slimeknights.tconstruct.library.json.predicate.ContextItemPredicate;
 import slimeknights.tconstruct.library.json.predicate.TinkerPredicate;
 import slimeknights.tconstruct.shared.command.subcommand.generate.GenerateMeltingRecipesCommand;
 import slimeknights.tconstruct.shared.command.subcommand.generate.RemoveRecipesCommand;
@@ -52,7 +51,7 @@ public class ConfigurationDataProvider extends GenericDataProvider {
     item(removeIngots, "result", ItemPredicate.and(
       ItemPredicate.tag(Tags.Items.INGOTS),
       ItemPredicate.set(Items.BRICK, TinkerSmeltery.searedBrick.get(), TinkerSmeltery.scorchedBrick.get()).inverted(),
-      new ContextItemPredicate(RemoveRecipesCommand.KEY_CASTABLE_ITEM)
+      TinkerPredicate.CASTABLE
     ));
     item(removeIngots, "input", ItemPredicate.ANY);
     recipeType(removeIngots, RecipeType.SMELTING, RecipeType.BLASTING);

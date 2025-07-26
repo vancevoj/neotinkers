@@ -15,6 +15,7 @@ import slimeknights.mantle.data.predicate.damage.DamageSourcePredicate;
 import slimeknights.mantle.data.predicate.entity.LivingEntityPredicate;
 import slimeknights.mantle.data.predicate.item.ItemPredicate;
 import slimeknights.tconstruct.library.modifiers.hook.armor.OnAttackedModifierHook;
+import slimeknights.tconstruct.library.recipe.casting.CastingRecipeLookup;
 import slimeknights.tconstruct.library.recipe.melting.MeltingRecipeLookup;
 
 import javax.annotation.Nullable;
@@ -36,6 +37,8 @@ public class TinkerPredicate {
   /** Predicate matching any items with a remainder after crafting. */
   @SuppressWarnings("deprecation")
   public static ItemPredicate HAS_CONTAINER = ItemPredicate.simple(Item::hasCraftingRemainingItem);
+  /** Predicate matching any items with a remainder after crafting. */
+  public static ItemPredicate CASTABLE = ItemPredicate.simple(CastingRecipeLookup::isCastable);
 
   /** Predicate matching blocks that block motion */
   public static BlockPredicate BLOCKS_MOTION = BlockPredicate.simple(BlockStateBase::blocksMotion);

@@ -56,7 +56,6 @@ import slimeknights.tconstruct.library.json.condition.TagIntersectionPresentCond
 import slimeknights.tconstruct.library.json.condition.TagNotEmptyCondition;
 import slimeknights.tconstruct.library.json.loot.TagPreferenceLootEntry;
 import slimeknights.tconstruct.library.json.predicate.BlockAtFeetEntityPredicate;
-import slimeknights.tconstruct.library.json.predicate.ContextItemPredicate;
 import slimeknights.tconstruct.library.json.predicate.HarvestTierPredicate;
 import slimeknights.tconstruct.library.json.predicate.HasMobEffectPredicate;
 import slimeknights.tconstruct.library.json.predicate.TinkerPredicate;
@@ -205,7 +204,7 @@ public final class TinkerCommons extends TinkerModule {
       ItemPredicate.LOADER.register(getResource("bucket"), TinkerPredicate.BUCKET.getLoader());
       ItemPredicate.LOADER.register(getResource("has_container"), TinkerPredicate.HAS_CONTAINER.getLoader());
       ItemPredicate.LOADER.register(getResource("can_melt"), TinkerPredicate.CAN_MELT_ITEM.getLoader());
-      ItemPredicate.LOADER.register(getResource("context"), ContextItemPredicate.LOADER);
+      ItemPredicate.LOADER.register(getResource("castable"), TinkerPredicate.CASTABLE.getLoader());
       // block
       BlockPredicate.LOADER.register(getResource("blocks_motion"), TinkerPredicate.BLOCKS_MOTION.getLoader());
       BlockPredicate.LOADER.register(getResource("can_be_replaced"), TinkerPredicate.CAN_BE_REPLACED.getLoader());

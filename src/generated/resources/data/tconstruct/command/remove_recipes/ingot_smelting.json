@@ -20,10 +20,7 @@
           "tconstruct:scorched_brick"
         ]
       },
-      {
-        "type": "tconstruct:context",
-        "key": "castable_item"
-      }
+      "tconstruct:castable"
     ]
   }
 }

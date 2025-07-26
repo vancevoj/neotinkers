@@ -8,7 +8,6 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.datafixers.util.Either;
-import lombok.RequiredArgsConstructor;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -18,7 +17,6 @@ import net.minecraft.commands.arguments.ResourceLocationArgument;
 import net.minecraft.commands.arguments.ResourceOrTagKeyArgument;
 import net.minecraft.core.Holder;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
@@ -33,7 +31,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.level.Level;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.conditions.FalseCondition;
 import net.minecraftforge.common.crafting.conditions.ICondition;
@@ -45,10 +42,6 @@ import slimeknights.mantle.data.predicate.item.ItemPredicate;
 import slimeknights.mantle.util.JsonHelper;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.json.TinkerLoadables;
-import slimeknights.tconstruct.library.json.predicate.ContextItemPredicate;
-import slimeknights.tconstruct.library.recipe.TinkerRecipeTypes;
-import slimeknights.tconstruct.library.recipe.casting.ICastingRecipe;
-import slimeknights.tconstruct.library.recipe.casting.ItemCastingRecipe;
 
 import javax.annotation.Nullable;
 import java.io.BufferedWriter;
@@ -58,7 +51,6 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.function.Predicate;
 
 import static slimeknights.mantle.util.JsonHelper.DEFAULT_GSON;
@@ -75,8 +67,6 @@ public class RemoveRecipesCommand {
   private static final DynamicCommandExceptionType FAILED_SAVE = new DynamicCommandExceptionType(id -> TConstruct.makeTranslation("command", "generate.remove_recipes.failed_id", id));
   /** Loadable for saving a list of recipe types */
   public static final Loadable<List<RecipeType<?>>> RECIPE_TYPES = TinkerLoadables.RECIPE_TYPE.list(ArrayLoadable.COMPACT);
-  /** Key for {@link ContextItemPredicate} for the castable item predicate */
-  public static final String KEY_CASTABLE_ITEM = "castable_item";
   /** Suggestion builder for recipe IDs */
   private static final SuggestionProvider<CommandSourceStack> SUGGESTS_RECIPES = (context, builder)
     -> SharedSuggestionProvider.suggestResource(context.getSource().getRecipeManager().getRecipeIds(), builder);
@@ -154,24 +144,17 @@ public class RemoveRecipesCommand {
       JsonObject json = JsonHelper.getJson(resource.get(), presetLocation);
       if (json != null) {
         try {
-          // load in preset context, note this is lazily initialized so it only parses recipes if needed
-          ContextItemPredicate.provideContext(KEY_CASTABLE_ITEM, new CastingPredicate(level));
-
           // parse the preset
           IJsonPredicate<Item> remove = ItemPredicate.LOADER.getOrDefault(json, "result");
           IJsonPredicate<Item> input = ItemPredicate.LOADER.getOrDefault(json, "input");
           List<RecipeType<?>> recipeTypes = RECIPE_TYPES.getIfPresent(json, "recipe_type");
 
           // run command
-          int result = run(context, recipeTypes,
+          return run(context, recipeTypes,
             // map any to null to allow quick evaluation
             remove == ItemPredicate.ANY ? null : remove::matches,
             input == ItemPredicate.ANY ? null : input::matches,
             startTime);
-
-          // clear context to prevent a level leak
-          ContextItemPredicate.removeContext(KEY_CASTABLE_ITEM);
-          return result;
         } catch (RuntimeException e) {
           TConstruct.LOG.error("Failed to parse preset {} from pack '{}'", presetLocation, resource.get().sourcePackId(), e);
         }
@@ -273,46 +256,5 @@ public class RemoveRecipesCommand {
     float time = (System.nanoTime() - startTime) / 1000000f;
     context.getSource().sendSuccess(() -> Component.translatable(KEY_SUCCESS, 1, time, GeneratePackUtil.getOutputComponent(pack)), true);
     return 1;
-  }
-
-  /**
-   * Lazily loaded predicate matching any castable item.
-   * FIXME: this is a pretty big hack, is there a better way to do this? Probably requires a cache builder plus an API way to get the tag from an output.
-   */
-  @RequiredArgsConstructor
-  private static class CastingPredicate implements Predicate<Item> {
-    private final Level level;
-    private Set<Item> items = null;
-
-    /** Gets the set of matching items */
-    private Set<Item> getItems() {
-      if (items == null) {
-        List<Item> builder = new ArrayList<>();
-        RegistryAccess access = level.registryAccess();
-        for (ICastingRecipe recipe : level.getRecipeManager().getAllRecipesFor(TinkerRecipeTypes.CASTING_TABLE.get())) {
-          ItemStack result = recipe.getResultItem(access);
-          // if it's an item casting, check if it's a tag
-          if (recipe instanceof ItemCastingRecipe itemCasting) {
-            // not a better way right now to check if it's a tag output, so just serialize then fetch the tag from JSON
-            TagKey<Item> tag = itemCasting.getResult().getTag();
-            if (tag != null) {
-              for (Holder<Item> holder : BuiltInRegistries.ITEM.getTagOrEmpty(tag)) {
-                builder.add(holder.get());
-              }
-              continue;
-            }
-          }
-          // not a tag output? add the single item
-          builder.add(result.getItem());
-        }
-        items = Set.copyOf(builder);
-      }
-      return items;
-    }
-
-    @Override
-    public boolean test(Item item) {
-      return getItems().contains(item);
-    }
   }
 }
