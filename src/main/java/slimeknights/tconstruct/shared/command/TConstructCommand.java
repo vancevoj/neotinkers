@@ -18,6 +18,7 @@ import slimeknights.tconstruct.shared.command.argument.ModifierArgument;
 import slimeknights.tconstruct.shared.command.argument.ModifierHookArgument;
 import slimeknights.tconstruct.shared.command.argument.SlotTypeArgument;
 import slimeknights.tconstruct.shared.command.argument.ToolStatArgument;
+import slimeknights.tconstruct.shared.command.subcommand.GenerateMeltingRecipesCommand;
 import slimeknights.tconstruct.shared.command.subcommand.GeneratePartTexturesCommand;
 import slimeknights.tconstruct.shared.command.subcommand.MaterialsCommand;
 import slimeknights.tconstruct.shared.command.subcommand.ModifierPriorityCommand;
@@ -25,10 +26,7 @@ import slimeknights.tconstruct.shared.command.subcommand.ModifierUsageCommand;
 import slimeknights.tconstruct.shared.command.subcommand.ModifiersCommand;
 import slimeknights.tconstruct.shared.command.subcommand.SlotsCommand;
 import slimeknights.tconstruct.shared.command.subcommand.StatsCommand;
-import slimeknights.tconstruct.shared.command.subcommand.generate.GenerateMeltingRecipesCommand;
-import slimeknights.tconstruct.shared.command.subcommand.generate.RemoveRecipesCommand;
 
-import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 public class TConstructCommand {
@@ -57,13 +55,6 @@ public class TConstructCommand {
     root.then(subCommand);
   }
 
-  /** Registers a sub command for the root Mantle command */
-  private static void register(LiteralArgumentBuilder<CommandSourceStack> root, String name, CommandBuildContext context, BiConsumer<LiteralArgumentBuilder<CommandSourceStack>,CommandBuildContext> consumer) {
-    LiteralArgumentBuilder<CommandSourceStack> subCommand = Commands.literal(name);
-    consumer.accept(subCommand, context);
-    root.then(subCommand);
-  }
-
   /** Event listener to register the Mantle command */
   private static void registerCommand(RegisterCommandsEvent event) {
     LiteralArgumentBuilder<CommandSourceStack> builder = Commands.literal(TConstruct.MOD_ID);
@@ -79,10 +70,7 @@ public class TConstructCommand {
       register(b, "modifier_priority", ModifierPriorityCommand::register);
     });
     register(builder, "generate_part_textures", GeneratePartTexturesCommand::register);
-    register(builder, "generate", b -> {
-      register(b, "melting_recipes", context, GenerateMeltingRecipesCommand::register);
-      register(b, "remove_recipe", context, RemoveRecipesCommand::register);
-    });
+    register(builder, "generate_melting_recipes", b -> GenerateMeltingRecipesCommand.register(b, context));
 
     // register final command
     event.getDispatcher().register(builder);

@@ -11,13 +11,14 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraftforge.common.Tags;
+import slimeknights.mantle.command.RemoveRecipesCommand;
 import slimeknights.mantle.data.GenericDataProvider;
 import slimeknights.mantle.data.predicate.IJsonPredicate;
 import slimeknights.mantle.data.predicate.item.ItemPredicate;
+import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.json.predicate.TinkerPredicate;
-import slimeknights.tconstruct.shared.command.subcommand.generate.GenerateMeltingRecipesCommand;
-import slimeknights.tconstruct.shared.command.subcommand.generate.RemoveRecipesCommand;
+import slimeknights.tconstruct.shared.command.subcommand.GenerateMeltingRecipesCommand;
 import slimeknights.tconstruct.smeltery.TinkerSmeltery;
 
 import java.util.LinkedHashMap;
@@ -102,7 +103,7 @@ public class ConfigurationDataProvider extends GenericDataProvider {
 
   /** Gets or creates a config object for a recipe removal preset */
   private JsonObject removePreset(String name) {
-    return config(RemoveRecipesCommand.presetLocation(name));
+    return config(RemoveRecipesCommand.PRESETS.idToFile(TConstruct.getResource(name)));
   }
 
   /** Adds an item predicate */

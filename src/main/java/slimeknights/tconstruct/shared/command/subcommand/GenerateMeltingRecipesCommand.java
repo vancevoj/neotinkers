@@ -1,4 +1,4 @@
-package slimeknights.tconstruct.shared.command.subcommand.generate;
+package slimeknights.tconstruct.shared.command.subcommand;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
@@ -36,6 +36,7 @@ import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 import org.apache.commons.lang3.mutable.MutableInt;
+import slimeknights.mantle.command.GeneratePackHelper;
 import slimeknights.mantle.command.MantleCommand;
 import slimeknights.mantle.data.loadable.Loadable;
 import slimeknights.mantle.data.loadable.Loadables;
@@ -99,8 +100,8 @@ public class GenerateMeltingRecipesCommand {
 
     // determine the path for the resulting datapack
     ServerLevel level = context.getSource().getLevel();
-    Path pack = GeneratePackUtil.getDatapackPath(level.getServer());
-    GeneratePackUtil.saveMcmeta(pack);
+    Path pack = GeneratePackHelper.getDatapackPath(level.getServer());
+    GeneratePackHelper.saveMcmeta(pack);
 
     // load in configuration from JSON, gives far more control than command arguments can fit and lets us ship a default
     // anything matching this may receive a recipe
@@ -135,7 +136,7 @@ public class GenerateMeltingRecipesCommand {
     Consumer<FinishedRecipe> consumer = recipe -> {
       ResourceLocation id = recipe.getId();
       Path path = data.resolve(id.getNamespace() + "/recipes/" + id.getPath() + ".json");
-      if (GeneratePackUtil.saveJson(recipe.serializeRecipe(), path)) {
+      if (GeneratePackHelper.saveJson(recipe.serializeRecipe(), path)) {
         successes.increment();
       }
     };
@@ -279,7 +280,7 @@ public class GenerateMeltingRecipesCommand {
 
     // print success
     float time = (System.nanoTime() - startTime) / 1000000f;
-    context.getSource().sendSuccess(() -> Component.translatable(KEY_SUCCESS, successes.intValue(), time, GeneratePackUtil.getOutputComponent(pack)), true);
+    context.getSource().sendSuccess(() -> Component.translatable(KEY_SUCCESS, successes.intValue(), time, GeneratePackHelper.getOutputComponent(pack)), true);
     return successes.intValue();
   }
 
