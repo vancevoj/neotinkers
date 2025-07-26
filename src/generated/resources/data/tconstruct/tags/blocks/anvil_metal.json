@@ -56,6 +56,10 @@
     {
       "id": "#forge:storage_blocks/nicrosil",
       "required": false
+    },
+    {
+      "id": "#forge:storage_blocks/duralumin",
+      "required": false
     }
   ]
 }

@@ -264,6 +264,7 @@ public class FluidEffectProvider extends AbstractFluidEffectProvider {
     compatMetal(TinkerFluids.moltenRefinedObsidian).spikeDamage(3).addEffect(FluidMobEffect.builder().effect(TinkerEffects.bleeding.get(), 20 * 2, 1), TimeAction.SET);
     // metalborn compat
     compatMetal(TinkerFluids.moltenNicrosil).magicDamage(3).addEffect(FluidMobEffect.builder().effect(TinkerEffects.experienced.get(), 20 * 5, 1), TimeAction.SET);
+    compatMetal(TinkerFluids.moltenDuralumin).magicDamage(3).addEffect(FluidMobEffect.builder().effect(MobEffects.INVISIBILITY, 20 * 5, 1), TimeAction.SET);
 
     // immersive engineering compat
     // ethanol - burns

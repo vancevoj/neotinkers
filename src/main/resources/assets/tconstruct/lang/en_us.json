@@ -893,6 +893,12 @@
   "item.tconstruct.molten_nicrosil_bucket": "Molten Nicrosil Bucket",
   "fluid.tconstruct.molten_nicrosil.fluid_effect": "Nicrosil has an innate pull on magic, seems like a waste to use it like this.",
 
+  "block.tconstruct.molten_duralumin_fluid": "Molten Duralumin",
+  "fluid.tconstruct.molten_duralumin": "Molten Duralumin",
+  "fluid.tconstruct.flowing_molten_duralumin": "Flowing Molten Duralumin",
+  "item.tconstruct.molten_duralumin_bucket": "Molten Duralumin Bucket",
+  "fluid.tconstruct.molten_duralumin.fluid_effect": "Disconnects you from the world.",
+
 
   "_comment": "Fluid effect contents",
   "fluid_effect.tconstruct.separator": "%s and %s",

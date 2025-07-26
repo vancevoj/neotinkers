@@ -102,6 +102,7 @@ public class FluidTextureProvider extends AbstractFluidTextureProvider {
     compatAlloy(TinkerFluids.moltenRefinedGlowstone);
     // metalborn
     compatAlloy(TinkerFluids.moltenNicrosil);
+    compatAlloy(TinkerFluids.moltenDuralumin);
   }
 
 
