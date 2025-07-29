@@ -193,7 +193,7 @@ public class ItemTagProvider extends ItemTagsProvider {
     // beacons are happy to accept any expensive ingots
     this.tag(ItemTags.BEACON_PAYMENT_ITEMS)
         .addTags(TinkerMaterials.steel.getIngotTag(), TinkerMaterials.cobalt.getIngotTag(), TinkerMaterials.queensSlime.getIngotTag(),
-                 TinkerMaterials.manyullyn.getIngotTag(), TinkerMaterials.hepatizon.getIngotTag());
+                 TinkerMaterials.manyullyn.getIngotTag(), TinkerMaterials.hepatizon.getIngotTag(), TinkerMaterials.cinderslime.getIngotTag());
 
     this.copy(TinkerTags.Blocks.COPPER_PLATFORMS, TinkerTags.Items.COPPER_PLATFORMS);
 
