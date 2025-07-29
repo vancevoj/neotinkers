@@ -86,6 +86,9 @@ public class SkySlimeEntity extends ArmoredSlimeEntity {
     // sky slime spawns with tinkers armor, high chance of travelers, low chance of plate
     // vanilla logic but simplified down to just helmets
     float multiplier = difficulty.getSpecialMultiplier();
+    if (this.random.nextFloat() < 0.15f) {
+      setMetal(true);
+    }
     if (this.random.nextFloat() < 0.15F * multiplier) {
       // start by randomizing the plate maille, but always use steel plating
       IModifiable helmetItem = TinkerTools.plateArmor.get(ArmorItem.Type.HELMET);

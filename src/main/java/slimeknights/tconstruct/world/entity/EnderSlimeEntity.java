@@ -52,7 +52,9 @@ public class EnderSlimeEntity extends ArmoredSlimeEntity {
   protected void populateDefaultEquipmentSlots(RandomSource random, DifficultyInstance difficulty) {
     // ender slime spawns with slimeskulls with a random material
     // vanilla logic but simplified down to just helmets
-    float multiplier = difficulty.getSpecialMultiplier();
+    if (this.random.nextFloat() < 0.15f) {
+      setMetal(true);
+    }
     if (this.random.nextFloat() < 0.15F * difficulty.getSpecialMultiplier()) {
       // 2.5% chance of plate
       ItemStack helmet = new ItemStack(TinkerTools.slimesuit.get(ArmorItem.Type.HELMET));
