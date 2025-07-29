@@ -156,6 +156,7 @@ import slimeknights.tconstruct.tools.modules.interaction.BrushModule;
 import slimeknights.tconstruct.tools.modules.interaction.ExtinguishCampfireModule;
 import slimeknights.tconstruct.tools.modules.interaction.PlaceGlowModule;
 import slimeknights.tconstruct.tools.modules.ranged.BulkQuiverModule;
+import slimeknights.tconstruct.tools.modules.ranged.HolyArrowModule;
 import slimeknights.tconstruct.tools.modules.ranged.RestrictAngleModule;
 import slimeknights.tconstruct.tools.modules.ranged.TrickQuiverModule;
 
@@ -727,6 +728,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
         .subtract().build());
     buildModifier(ModifierIds.consecrated).addModule(ProtectionModule.builder().attacker(new MobTypePredicate(MobType.UNDEAD)).eachLevel(1.25f));
     buildModifier(ModifierIds.preserved).addModules(StatBoostModule.multiplyBase(ToolStats.DURABILITY).eachLevel(0.15f), RepairModule.builder().eachLevel(0.15f));
+    buildModifier(ModifierIds.holy).addModule(new HolyArrowModule(LevelingValue.flat(0.75f)));
 
     // traits - tier 3
     buildModifier(ModifierIds.overcast)

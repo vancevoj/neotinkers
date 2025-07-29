@@ -106,7 +106,7 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     addTraits(MaterialIds.platinum, RANGED,        TinkerModifiers.olympic);
     addDefaultTraits(MaterialIds.lead, ModifierIds.heavy);
     addTraits(MaterialIds.silver, MELEE_HARVEST, ModifierIds.smite);
-    addTraits(MaterialIds.silver, RANGED, TinkerModifiers.holy);
+    addTraits(MaterialIds.silver, RANGED, ModifierIds.holy);
     addTraits(MaterialIds.silver, ARMOR, ModifierIds.consecrated);
     addDefaultTraits(MaterialIds.treatedWood, ModifierIds.preserved);
     // tier 3 - mod compat

@@ -226,7 +226,6 @@ import slimeknights.tconstruct.tools.modifiers.traits.melee.EnderferenceModifier
 import slimeknights.tconstruct.tools.modifiers.traits.melee.InsatiableModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.melee.LaceratingModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.melee.NecroticModifier;
-import slimeknights.tconstruct.tools.modifiers.traits.ranged.HolyModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.ranged.OlympicModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.skull.BoonOfSssssModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.skull.BreathtakingModifier;
@@ -277,6 +276,7 @@ import slimeknights.tconstruct.tools.modules.interaction.BrushModule;
 import slimeknights.tconstruct.tools.modules.interaction.ExtinguishCampfireModule;
 import slimeknights.tconstruct.tools.modules.interaction.PlaceGlowModule;
 import slimeknights.tconstruct.tools.modules.ranged.BulkQuiverModule;
+import slimeknights.tconstruct.tools.modules.ranged.HolyArrowModule;
 import slimeknights.tconstruct.tools.modules.ranged.RestrictAngleModule;
 import slimeknights.tconstruct.tools.modules.ranged.TrickQuiverModule;
 import slimeknights.tconstruct.tools.recipe.ArmorDyeingRecipe;
@@ -468,7 +468,9 @@ public final class TinkerModifiers extends TinkerModule {
 
   // traits - mod compat tier 2
   public static final StaticModifier<StoneshieldModifier> stoneshield = MODIFIERS.register("stoneshield", StoneshieldModifier::new);
-  public static final StaticModifier<HolyModifier> holy = MODIFIERS.register("holy", HolyModifier::new);
+  /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#holy} */
+  @Deprecated(forRemoval = true)
+  public static final DynamicModifier holy = MODIFIERS.registerDynamic("holy");
   public static final StaticModifier<OlympicModifier> olympic = MODIFIERS.register("olympic", OlympicModifier::new);
   // traits - mod compat tier 3
   /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#temperate} */
@@ -732,6 +734,7 @@ public final class TinkerModifiers extends TinkerModule {
       ModifierModule.LOADER.register(getResource("bulk_quiver"), BulkQuiverModule.LOADER);
       ModifierModule.LOADER.register(getResource("trick_quiver"), TrickQuiverModule.LOADER);
       ModifierModule.LOADER.register(getResource("infinity"), InfinityModule.LOADER);
+      ModifierModule.LOADER.register(getResource("holy_arrow"), HolyArrowModule.LOADER);
       // compat
       ModifierModule.LOADER.register(getResource("the_one_probe"), TheOneProbeModule.INSTANCE.getLoader());
       ModifierModule.LOADER.register(getResource("headlight"), HeadlightModule.LOADER);
