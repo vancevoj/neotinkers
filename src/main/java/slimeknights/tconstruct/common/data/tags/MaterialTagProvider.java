@@ -82,7 +82,7 @@ public class MaterialTagProvider extends AbstractMaterialTagProvider {
       // tier 3
       MaterialIds.nahuatl, MaterialIds.steel, MaterialIds.darkthread,
       // tier 4
-      MaterialIds.manyullyn, MaterialIds.blazingBone, MaterialIds.enderslimeVine
+      MaterialIds.manyullyn, MaterialIds.blazingBone, MaterialIds.knightmetal
     ).addOptional(
       // tier 2
       MaterialIds.silver, MaterialIds.lead,
@@ -130,7 +130,7 @@ public class MaterialTagProvider extends AbstractMaterialTagProvider {
       // tier 3
       MaterialIds.amethystBronze, MaterialIds.steel,
       // tier 4
-      MaterialIds.manyullyn, MaterialIds.cinderslime
+      MaterialIds.manyullyn, MaterialIds.cinderslime, MaterialIds.knightmetal
     ).addOptional(
       // tier 2
       MaterialIds.silver, MaterialIds.lead,

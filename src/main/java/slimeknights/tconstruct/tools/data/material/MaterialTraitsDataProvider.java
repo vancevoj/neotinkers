@@ -88,6 +88,8 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     addTraits(MaterialIds.hepatizon, ARMOR, ModifierIds.recurrentProtection);
     addDefaultTraits(MaterialIds.manyullyn, TinkerModifiers.insatiable);
     addTraits(MaterialIds.manyullyn, ARMOR, ModifierIds.kinetic);
+    addDefaultTraits(MaterialIds.knightmetal, ModifierIds.valiant);
+    addTraits(MaterialIds.knightmetal, ARMOR, ModifierIds.stalwart);
     addDefaultTraits(MaterialIds.blazingBone, TinkerModifiers.conducting);
     addDefaultTraits(MaterialIds.blazewood, ModifierIds.flameBarrier);
     addDefaultTraits(MaterialIds.ancient, ModifierIds.vintage, ModifierIds.worldbound);
