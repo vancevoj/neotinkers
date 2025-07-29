@@ -67,6 +67,7 @@ public class FluidTagProvider extends FluidTagsProvider {
     fluidTag(TinkerFluids.moltenSoulsteel);
     fluidTag(TinkerFluids.moltenNetherite);
     // end alloys
+    fluidTag(TinkerFluids.moltenKnightmetal);
     fluidTag(TinkerFluids.moltenKnightslime);
     // compat ores
     fluidTag(TinkerFluids.moltenTin);
@@ -152,6 +153,7 @@ public class FluidTagProvider extends FluidTagsProvider {
         TinkerFluids.moltenInvar.getLocalTag(), TinkerFluids.moltenConstantan.getLocalTag(),
         // tier 4
         TinkerFluids.moltenManyullyn.getLocalTag(), TinkerFluids.moltenHepatizon.getLocalTag(), TinkerFluids.moltenNetherite.getLocalTag(),
+        TinkerFluids.moltenKnightmetal.getLocalTag(),
         // thermal alloys
         TinkerFluids.moltenLumium.getLocalTag(), TinkerFluids.moltenEnderium.getLocalTag(),
         // mekanism alloys
@@ -182,7 +184,7 @@ public class FluidTagProvider extends FluidTagsProvider {
         // base alloys
         TinkerFluids.moltenSlimesteel.getTag(), TinkerFluids.moltenAmethystBronze.getTag(), TinkerFluids.moltenRoseGold.getTag(), TinkerFluids.moltenPigIron.getTag(),
         TinkerFluids.moltenManyullyn.getTag(), TinkerFluids.moltenHepatizon.getTag(), TinkerFluids.moltenQueensSlime.getTag(), TinkerFluids.moltenNetherite.getTag(),
-        TinkerFluids.moltenSoulsteel.getTag(), TinkerFluids.moltenKnightslime.getTag(),
+        TinkerFluids.moltenSoulsteel.getTag(), TinkerFluids.moltenKnightmetal.getTag(), TinkerFluids.moltenKnightslime.getTag(),
         // compat ores
         TinkerFluids.moltenTin.getTag(), TinkerFluids.moltenAluminum.getTag(), TinkerFluids.moltenLead.getTag(), TinkerFluids.moltenSilver.getTag(),
         TinkerFluids.moltenNickel.getTag(), TinkerFluids.moltenZinc.getTag(), TinkerFluids.moltenPlatinum.getTag(),

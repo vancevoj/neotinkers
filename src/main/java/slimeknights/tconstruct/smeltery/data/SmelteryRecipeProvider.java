@@ -2173,6 +2173,7 @@ public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelt
     metal(consumer, TinkerFluids.moltenHepatizon  ).metal();
     metal(consumer, TinkerFluids.moltenCinderslime).metal();
     metal(consumer, TinkerFluids.moltenQueensSlime).metal();
+    metal(consumer, TinkerFluids.moltenKnightmetal).metal();
 
     // compat ores
     metal(consumer, TinkerFluids.moltenTin     ).ore(Byproduct.NICKEL, Byproduct.COPPER).optional().metal().dust().oreberry().plate().gear().coin().common(TOOLS_COMPLEMENT).common(ARMOR);

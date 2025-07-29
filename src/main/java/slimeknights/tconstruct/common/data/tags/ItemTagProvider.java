@@ -160,6 +160,7 @@ public class ItemTagProvider extends ItemTagsProvider {
     addMetalTags(TinkerMaterials.hepatizon);
     addMetalTags(TinkerMaterials.soulsteel);
     // tier 5
+    addMetalTags(TinkerMaterials.knightmetal);
     addMetalTags(TinkerMaterials.knightslime);
     this.copy(Tags.Blocks.STORAGE_BLOCKS, Tags.Items.STORAGE_BLOCKS);
 
