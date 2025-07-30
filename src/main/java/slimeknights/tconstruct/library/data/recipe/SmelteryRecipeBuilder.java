@@ -368,6 +368,12 @@ public class SmelteryRecipeBuilder {
     return this;
   }
 
+  /** Adds a recipe for melting an metal item with the metal prefix in the name */
+  public SmelteryRecipeBuilder metalMelting(float scale, String domain, String path, boolean damagable) {
+    itemMelting((int)(baseUnit * scale), domain + '_' + path, (float)Math.sqrt(scale), new ResourceLocation(domain, name.getPath() + '_' + path), damagable);
+    return this;
+  }
+
   /** Adds a recipe melting a tag item */
   public SmelteryRecipeBuilder melting(float scale, String output, ResourceLocation tagName, float factor, boolean damagable, boolean forceOptional) {
     assert baseUnit != 0;

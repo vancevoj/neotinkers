@@ -2173,7 +2173,18 @@ public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelt
     metal(consumer, TinkerFluids.moltenHepatizon  ).metal();
     metal(consumer, TinkerFluids.moltenCinderslime).metal();
     metal(consumer, TinkerFluids.moltenQueensSlime).metal();
-    metal(consumer, TinkerFluids.moltenKnightmetal).metal();
+    String tf = "twilightforest";
+    metal(consumer, TinkerFluids.moltenKnightmetal).metal().common(AXES, LEGGINGS_PLUS)
+      .metalMelting(4, tf, "ring", false)
+      .metalMelting(2, tf, "sword", true)
+      .metalMelting(5, tf, "helmet", true)
+      .metalMelting(8, tf, "chestplate", true)
+      .itemMelting(16, tf, "block_and_chain", true)
+      // leggings and shields covered
+      .metalMelting(4, tf, "boots", true)
+      // not using a traditional ore recipe as there isn't a reasonable byproduct, plus crafting a 3x3 doesn't feel like enough for a 3 nugget bonus
+      .melting(1, "raw", "raw_materials", false, true)
+      .itemMelting(1/9f, tf, "armor_shard", false);
 
     // compat ores
     metal(consumer, TinkerFluids.moltenTin     ).ore(Byproduct.NICKEL, Byproduct.COPPER).optional().metal().dust().oreberry().plate().gear().coin().common(TOOLS_COMPLEMENT).common(ARMOR);

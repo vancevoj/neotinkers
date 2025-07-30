@@ -571,6 +571,7 @@ public class ItemTagProvider extends ItemTagsProvider {
     // melting tags //
     // ores
     Function<String,ResourceLocation> ie = path -> new ResourceLocation("immersiveengineering", path);
+    String tf = "twilightforest";
     moltenTools(TinkerFluids.moltenCopper).add(1, Items.BRUSH).toolTags().toolsComplement();
     moltenTools(TinkerFluids.moltenIron).minecraft()
       .add(1, Items.FLINT_AND_STEEL, Items.SHIELD)
@@ -588,6 +589,9 @@ public class ItemTagProvider extends ItemTagsProvider {
                                               .add(7, true, ie.apply("armor_steel_leggings"))
       .armorTag(4, "boots"      ).add(4, true, ie.apply("armor_steel_boots"));
     moltenTools(TinkerFluids.moltenNetherite).minecraft();
+    moltenTools(TinkerFluids.moltenKnightmetal)
+      .optionalMetal(3, tf, "axe", "pickaxe")
+      .optionalMetal(7, tf, "leggings", "shield");
     // gems
     moltenTools(TinkerFluids.moltenDiamond).minecraft().excavatorSpikeMaul().crowbar();
     // mod ores
