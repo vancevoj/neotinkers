@@ -84,7 +84,7 @@ public class AnimatedGreyToSpriteTransformer extends GreyToSpriteTransformer {
       try {
         meta = READER.readMetadata(metaPath);
       } catch (IOException ex) {
-        throw new IllegalStateException("Failed to load required image", ex);
+        throw new IllegalStateException("Failed to load required image metadata", ex);
       }
     }
     return meta;
