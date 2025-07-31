@@ -9,13 +9,16 @@ import net.minecraft.network.chat.Component;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import slimeknights.mantle.command.argument.TagSourceArgument;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.registration.ArgumentTypeDeferredRegister;
+import slimeknights.tconstruct.library.materials.MaterialRegistry;
 import slimeknights.tconstruct.shared.command.argument.MaterialArgument;
 import slimeknights.tconstruct.shared.command.argument.MaterialStatsArgument;
 import slimeknights.tconstruct.shared.command.argument.MaterialVariantArgument;
 import slimeknights.tconstruct.shared.command.argument.ModifierArgument;
 import slimeknights.tconstruct.shared.command.argument.ModifierHookArgument;
+import slimeknights.tconstruct.shared.command.argument.ModifierTagSource;
 import slimeknights.tconstruct.shared.command.argument.SlotTypeArgument;
 import slimeknights.tconstruct.shared.command.argument.ToolStatArgument;
 import slimeknights.tconstruct.shared.command.subcommand.GenerateMeltingRecipesCommand;
@@ -43,6 +46,9 @@ public class TConstructCommand {
     ARGUMENT_TYPE.registerSingleton("material_variant", MaterialVariantArgument.class, MaterialVariantArgument::material);
     ARGUMENT_TYPE.registerSingleton("material_stat", MaterialStatsArgument.class, MaterialStatsArgument::stats);
     ARGUMENT_TYPE.registerSingleton("modifier_hook", ModifierHookArgument.class, ModifierHookArgument::modifierHook);
+
+    TagSourceArgument.registerCustom(ModifierTagSource.INSTANCE);
+    TagSourceArgument.registerCustom(MaterialRegistry.getTagSource());
 
     // add command listener
     MinecraftForge.EVENT_BUS.addListener(TConstructCommand::registerCommand);
