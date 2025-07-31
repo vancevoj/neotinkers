@@ -42,6 +42,7 @@ import slimeknights.tconstruct.library.modifiers.fluid.GroupCost;
 import slimeknights.tconstruct.library.modifiers.fluid.TimeAction;
 import slimeknights.tconstruct.library.modifiers.fluid.block.BlockInteractFluidEffect;
 import slimeknights.tconstruct.library.modifiers.fluid.block.BreakBlockFluidEffect;
+import slimeknights.tconstruct.library.modifiers.fluid.block.MeltBlockFluidEffect;
 import slimeknights.tconstruct.library.modifiers.fluid.block.MobEffectCloudFluidEffect;
 import slimeknights.tconstruct.library.modifiers.fluid.block.MoveBlocksFluidEffect;
 import slimeknights.tconstruct.library.modifiers.fluid.block.OffsetBlockFluidEffect;
@@ -308,6 +309,10 @@ public class FluidEffectProvider extends AbstractFluidEffectProvider {
         .offsetBlockEffect(TinkerPredicate.CAN_BE_REPLACED, new SetBlockFluidEffect(concreteSprayed))
         .addEntityEffect(concreteFeet).offsetBlockEffect(concreteFeet);
     }
+
+    // twilight forest compat
+    addFluid(TinkerFluids.fieryLiquid, FluidValues.SIP).metalCondition("fiery")
+        .addBlockEffect(new MeltBlockFluidEffect(BlockPredicate.ANY, FluidValues.INGOT, 1500));
 
     // potion fluid compat
     // standard potion is 250 mb, but we want a smaller number. divide into 5 pieces at 25% a piece (so healing is 1 health), means you gain 25% per potion

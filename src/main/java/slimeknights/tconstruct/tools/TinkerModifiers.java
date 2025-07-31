@@ -64,6 +64,7 @@ import slimeknights.tconstruct.library.modifiers.fluid.FluidEffect;
 import slimeknights.tconstruct.library.modifiers.fluid.FluidEffectManager;
 import slimeknights.tconstruct.library.modifiers.fluid.block.BlockInteractFluidEffect;
 import slimeknights.tconstruct.library.modifiers.fluid.block.BreakBlockFluidEffect;
+import slimeknights.tconstruct.library.modifiers.fluid.block.MeltBlockFluidEffect;
 import slimeknights.tconstruct.library.modifiers.fluid.block.MobEffectCloudFluidEffect;
 import slimeknights.tconstruct.library.modifiers.fluid.block.MoveBlocksFluidEffect;
 import slimeknights.tconstruct.library.modifiers.fluid.block.OffsetBlockFluidEffect;
@@ -629,6 +630,7 @@ public final class TinkerModifiers extends TinkerModule {
       FluidEffect.BLOCK_EFFECTS.register(getResource("potion_cloud"), PotionCloudFluidEffect.LOADER);
       FluidEffect.BLOCK_EFFECTS.register(getResource("move_block"), MoveBlocksFluidEffect.LOADER);
       FluidEffect.BLOCK_EFFECTS.register(getResource("interact"), BlockInteractFluidEffect.INSTANCE.getLoader());
+      FluidEffect.BLOCK_EFFECTS.register(getResource("melt_block"), MeltBlockFluidEffect.LOADER);
       // shared
       FluidEffect.registerGeneral(getResource("drop_item"), DropItemFluidEffect.LOADER);
       FluidEffect.registerGeneral(getResource("explosion"), ExplosionFluidEffect.LOADER);

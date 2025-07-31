@@ -914,6 +914,7 @@
   "fluid.tconstruct.fiery_liquid": "Fiery Liquid",
   "fluid.tconstruct.flowing_fiery_liquid": "Flowing Fiery Liquid",
   "item.tconstruct.fiery_liquid_bucket": "Fiery Liquid Bucket",
+  "fluid.tconstruct.fiery_liquid.fluid_effect": "You might think this is a fantastic deal, so many extra ingots! But remember, fiery is really hard to get.",
 
 
   "_comment": "Fluid effect contents",
@@ -964,6 +965,7 @@
   "fluid_effect.tconstruct.potion_cloud": "Lingering potion cloud",
   "fluid_effect.tconstruct.move_block.push": "Pushes block",
   "fluid_effect.tconstruct.move_block.pull": "Pulls block",
+  "fluid_effect.tconstruct.melt_block": "Melts block into liquid",
 
   "fluid_effect.tconstruct.drop_item": "Drops %s",
   "fluid_effect.tconstruct.explosion": "Power %s explosion",
