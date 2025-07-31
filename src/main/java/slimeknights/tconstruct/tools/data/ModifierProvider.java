@@ -900,7 +900,6 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
         .variable(VALUE).add()
         .build())
       .addModule(new ValiantArrowModule(LevelingValue.eachLevel(0.25f)));
-    // TODO: ranged
     buildModifier(ModifierIds.stalwart)
       .addModule(ProtectionModule.builder()
         .formula()
@@ -908,6 +907,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
         .constant(1.25f).multiply()
         .variable(VALUE).add()
         .build());
+    buildModifier(ModifierIds.temperedProtection).addModule(ProtectionModule.builder().attacker(LivingEntityPredicate.ON_FIRE).eachLevel(1.25f));
 
     // traits - slimeskull
     buildModifier(ModifierIds.mithridatism).addModule(new EffectImmunityModule(MobEffects.POISON)).levelDisplay(ModifierLevelDisplay.NO_LEVELS);

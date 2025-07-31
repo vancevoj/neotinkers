@@ -121,6 +121,9 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     addDefaultTraits(MaterialIds.necronium, TinkerModifiers.decay);
     addDefaultTraits(MaterialIds.electrum, ModifierIds.experienced);
     addDefaultTraits(MaterialIds.platedSlimewood, TinkerModifiers.overworked, TinkerModifiers.overslime);
+    // tier 4 - mod compat
+    addDefaultTraits(MaterialIds.fiery, TinkerModifiers.autosmelt);
+    addTraits(MaterialIds.fiery, ARMOR, ModifierIds.temperedProtection);
 
     // slimeskull
     addTraits(MaterialIds.glass,        SkullStats.ID, TinkerModifiers.selfDestructive.getId(), ModifierIds.creeperDisguise);

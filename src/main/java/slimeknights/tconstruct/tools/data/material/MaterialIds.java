@@ -84,6 +84,8 @@ public final class MaterialIds {
   public static final MaterialId electrum = id("electrum");
   public static final MaterialId pewter = id("pewter");
   public static final MaterialId platedSlimewood = id("plated_slimewood");
+  // twilight forest
+  public static final MaterialId fiery = id("fiery");
 
   // plate
   public static final MaterialId gold = id("gold");

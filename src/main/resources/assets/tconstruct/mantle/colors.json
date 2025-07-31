@@ -267,6 +267,7 @@
     "skyfall":              "#00F4DA",
     "vital_protection":     "#999483",
     "frostshield":          "#AAFFFF",
+    "tempered_protection":  "#893D14",
 
     "__traits_slimeskull__": null,
     "boon_of_sssss":    "#605448",
@@ -402,6 +403,9 @@
     "necronium":        "#7F9374",
     "electrum":         "#D9C25F",
     "plated_slimewood": "#E6D08D",
+
+    "__tier_4_integration__": null,
+    "fiery": "#893D14",
 
     "__plate__": null,
     "obsidian":  "#443753",

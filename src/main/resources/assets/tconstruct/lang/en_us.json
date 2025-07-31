@@ -2057,6 +2057,15 @@
   "material.tconstruct.plated_slimewood.encyclopedia": "Grants +100% to all methods of restoring overslime",
 
 
+  "_comment": "Tier 4 Integration Materials",
+
+  "material.tconstruct.fiery": "Fiery",
+  "material.tconstruct.fiery.flavor": "Metal of the traveling slime, also found from armored Twilight creates.",
+  "material.tconstruct.fiery.encyclopedia": "Tool automatically smelts all drops. Higher levels have a 25% chance of extra smelted drops",
+  "material.tconstruct.fiery.ranged": "Arrows automatically smelts all drops. Higher levels have a 25% chance of extra smelted drops",
+  "material.tconstruct.fiery.armor": "Increases protection by 5% per level against on fire attackers",
+
+
   "_comment": "Modifiers",
 
   "key.categories.tconstruct": "Tinkers' Construct",
@@ -2792,6 +2801,10 @@
   "modifier.tconstruct.flame_barrier.flavor": "Thermoshielding!",
   "modifier.tconstruct.flame_barrier.description": "Increases protection while on fire",
   "modifier.tconstruct.flame_barrier.resistance": "Barrier Resistance",
+  "modifier.tconstruct.tempered_protection": "Tempered Protection",
+  "modifier.tconstruct.tempered_protection.flavor": "Resists the flames!",
+  "modifier.tconstruct.tempered_protection.description": "Reduces damage from attackers who are on fire",
+  "modifier.tconstruct.tempered_protection.resistance": "Resistance",
 
   "__comment": "Tier 5 Traits",
   "modifier.tconstruct.enderporting": "Enderporting",
