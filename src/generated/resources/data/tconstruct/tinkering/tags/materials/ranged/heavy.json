@@ -7,7 +7,6 @@
     "tconstruct:steel",
     "tconstruct:manyullyn",
     "tconstruct:cinderslime",
-    "tconstruct:knightmetal",
     {
       "id": "tconstruct:silver",
       "required": false

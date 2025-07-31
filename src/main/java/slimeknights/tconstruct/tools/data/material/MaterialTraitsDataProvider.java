@@ -88,8 +88,6 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     addTraits(MaterialIds.hepatizon, ARMOR, ModifierIds.recurrentProtection);
     addDefaultTraits(MaterialIds.manyullyn, TinkerModifiers.insatiable);
     addTraits(MaterialIds.manyullyn, ARMOR, ModifierIds.kinetic);
-    addDefaultTraits(MaterialIds.knightmetal, ModifierIds.valiant);
-    addTraits(MaterialIds.knightmetal, ARMOR, ModifierIds.stalwart);
     addDefaultTraits(MaterialIds.blazingBone, TinkerModifiers.conducting);
     addDefaultTraits(MaterialIds.blazewood, ModifierIds.flameBarrier);
     addDefaultTraits(MaterialIds.ancient, ModifierIds.vintage, ModifierIds.worldbound);
@@ -97,7 +95,9 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     addTraits(MaterialIds.ancientHide, MELEE_HARVEST, ModifierIds.fortune);
     addDefaultTraits(MaterialIds.ancientHide, ModifierIds.fortified);
 
-    // tier 5
+    // tier 4 (end)
+    addDefaultTraits(MaterialIds.knightmetal, ModifierIds.valiant);
+    addTraits(MaterialIds.knightmetal, ARMOR, ModifierIds.stalwart);
     addDefaultTraits(MaterialIds.enderslimeVine, TinkerModifiers.enderporting);
     addTraits(MaterialIds.enderslimeVine, ARMOR, ModifierIds.enderclearance);
 
