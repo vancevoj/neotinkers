@@ -910,6 +910,11 @@
   "item.tconstruct.molten_duralumin_bucket": "Molten Duralumin Bucket",
   "fluid.tconstruct.molten_duralumin.fluid_effect": "Disconnects you from the world.",
 
+  "block.tconstruct.fiery_liquid": "Fiery Liquid",
+  "fluid.tconstruct.fiery_liquid": "Fiery Liquid",
+  "fluid.tconstruct.flowing_fiery_liquid": "Flowing Fiery Liquid",
+  "item.tconstruct.fiery_liquid_bucket": "Fiery Liquid Bucket",
+
 
   "_comment": "Fluid effect contents",
   "fluid_effect.tconstruct.separator": "%s and %s",

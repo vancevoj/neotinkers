@@ -61,6 +61,10 @@
     {
       "id": "#forge:storage_blocks/duralumin",
       "required": false
+    },
+    {
+      "id": "#forge:storage_blocks/fiery",
+      "required": false
     }
   ]
 }

@@ -97,6 +97,8 @@ public class FluidTagProvider extends FluidTagsProvider {
     // metalborn compat alloys
     fluidTag(TinkerFluids.moltenNicrosil);
     fluidTag(TinkerFluids.moltenDuralumin);
+    // twilight compat fluids
+    fluidTag(TinkerFluids.fieryLiquid);
     // unplacable fluids
     fluidTag(TinkerFluids.honey);
     fluidTag(TinkerFluids.beetrootSoup);
@@ -176,6 +178,7 @@ public class FluidTagProvider extends FluidTagsProvider {
     // tooltips //
     this.tag(TinkerTags.Fluids.GLASS_TOOLTIPS).addTags(TinkerFluids.moltenGlass.getTag(), TinkerFluids.liquidSoul.getTag(), TinkerFluids.moltenObsidian.getTag());
     this.tag(TinkerTags.Fluids.SLIME_TOOLTIPS).addTags(TinkerFluids.magma.getTag(), TinkerFluids.moltenEnder.getTag(), TinkerTags.Fluids.SLIME);
+    this.tag(TinkerTags.Fluids.BOTTLE_TOOLTIPS).addTags(TinkerFluids.venom.getTag(), TinkerFluids.fieryLiquid.getTag());
     this.tag(TinkerTags.Fluids.CLAY_TOOLTIPS).addTags(TinkerFluids.moltenClay.getTag(), TinkerFluids.moltenPorcelain.getTag(), TinkerFluids.searedStone.getTag(), TinkerFluids.scorchedStone.getTag());
     this.tag(TinkerTags.Fluids.METAL_TOOLTIPS).addTags(
         // vanilla ores

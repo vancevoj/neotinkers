@@ -2215,6 +2215,21 @@ public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelt
     // embers provides their own fluid. so we just have to add the recipes
     TagKey<Fluid> dawnstone = getFluidTag(COMMON, "molten_dawnstone");
     metal(withCondition(consumer, new TagFilledCondition<>(dawnstone)), "dawnstone", dawnstone).temperature(900).optional().metal().plate();
+
+    // fiery doesn't have a molten form, rather its composite the whole way
+    fluid(consumer, "fiery", TinkerFluids.fieryLiquid).optional()
+      .baseUnit(FluidValues.BOTTLE).damageUnit(FluidValues.SIP).unitByproducts(Byproduct.IRON)
+      // block and ingot
+      .melting(9, "block", "storage_blocks", 3.0f, false, false)
+      .blockCasting(9, Ingredient.of(Tags.Items.STORAGE_BLOCKS_IRON), false)
+      .meltingCasting(1, "ingot", "iron", 1, false)
+      // armor and tools
+      .metalMelting(3, tf, "pickaxe", true)
+      .metalMelting(2, tf, "sword", true)
+      .metalMelting(5, tf, "helmet", true)
+      .metalMelting(8, tf, "chestplate", true)
+      .metalMelting(7, tf, "leggings", true)
+      .metalMelting(4, tf, "boots", true);
   }
 
   private void addCompatRecipes(Consumer<FinishedRecipe> consumer) {

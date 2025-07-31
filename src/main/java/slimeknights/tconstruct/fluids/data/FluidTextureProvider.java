@@ -104,6 +104,8 @@ public class FluidTextureProvider extends AbstractFluidTextureProvider {
     // metalborn
     compatAlloy(TinkerFluids.moltenNicrosil);
     compatAlloy(TinkerFluids.moltenDuralumin);
+    // twilight
+    slime(TinkerFluids.fieryLiquid, "fiery");
   }
 
 
