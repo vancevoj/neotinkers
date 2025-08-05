@@ -14,7 +14,8 @@ public class MaterialTagProvider extends AbstractMaterialTagProvider {
 
   @Override
   protected void addTags() {
-    tag(TinkerTags.Materials.EXCLUDE_FROM_LOOT);
+    // fiery is obtained through specific progression in TF, better to not add a progression bypass
+    tag(TinkerTags.Materials.EXCLUDE_FROM_LOOT).addOptional(MaterialIds.fiery);
     tag(TinkerTags.Materials.NETHER).add(
       // tier 1
       MaterialIds.wood, MaterialIds.flint, MaterialIds.rock, MaterialIds.bone,

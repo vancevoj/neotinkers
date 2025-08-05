@@ -5,6 +5,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
+import slimeknights.mantle.data.predicate.IJsonPredicate;
 import slimeknights.tconstruct.library.json.LevelingValue;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.modules.util.ModifierCondition;
@@ -12,7 +13,7 @@ import slimeknights.tconstruct.library.tools.context.EquipmentContext;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 
 /** Module implementing thorns */
-public record ThornsModule(LevelingValue chance, LevelingValue constant, LevelingValue random, int durabilityUsage, ModifierCondition<IToolStackView> condition) implements CounterModule {
+public record ThornsModule(LevelingValue chance, LevelingValue constant, LevelingValue random, int durabilityUsage, IJsonPredicate<LivingEntity> defender, IJsonPredicate<LivingEntity> attacker, ModifierCondition<IToolStackView> condition) implements CounterModule {
   public static final RecordLoadable<ThornsModule> LOADER = CounterModule.makeLoader("damage", ThornsModule::new);
 
   /** @apiNote use {@link #builder()} */
