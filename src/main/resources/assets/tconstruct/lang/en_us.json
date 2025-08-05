@@ -1209,6 +1209,8 @@
   "death.attack.tconstruct.piercing.item": "%1$s was pierced by %2$s using %3$s",
   "death.attack.tconstruct.entangled": "%1$s could not let go of their tool",
   "death.attack.tconstruct.entangled.player": "%1$s could not let go of their tool whilst fighting %2$s",
+  "death.attack.tconstruct.shock": "%1$s was shocked trying to hurt %2$s",
+  "death.attack.tconstruct.shock.item": "%1$s was shocked by %3$s trying to hurt %2$s",
 
   "death.attack.tconstruct.fluid.impact": "%1$s was pummeled by %2$s",
   "death.attack.tconstruct.fluid.impact.item": "%1$s was pummeled by %2$s using %3$s",
@@ -2044,9 +2046,9 @@
 
   "material.tconstruct.electrum": "Electrum",
   "material.tconstruct.electrum.flavor": "Good for electronic components.",
-  "material.tconstruct.electrum.encyclopedia": "Grants +50% XP per level from blocks and monsters",
-  "material.tconstruct.electrum.ranged": "Grants +50% XP per level from monsters killed by arrows",
-  "material.tconstruct.electrum.armor": "Grants +25% XP per level from blocks and monsters",
+  "material.tconstruct.electrum.encyclopedia": "Deals +2 damage per level against targets in water, or +1 damage per level against targets in rain",
+  "material.tconstruct.electrum.ranged": "Grants +1 power per level against targets in water, or +0.5 power per level against targets in rain",
+  "material.tconstruct.electrum.armor": "Has a 20% chance per level to apply 2 to 5 damage to attackers in water, or a 10% chance per level for attackers in rain",
 
   "material.tconstruct.necronium": "Necronium",
   "material.tconstruct.necronium.flavor": "This much decay probably only leaves it with a quarter life",
@@ -2875,6 +2877,11 @@
   "modifier.tconstruct.invariant.attack_damage": "Neutral Damage",
   "modifier.tconstruct.invariant.accuracy": "Neutral Accuracy",
   "modifier.tconstruct.invariant.resistance": "Invariant Resistance",
+  "modifier.tconstruct.shock": "Shock",
+  "modifier.tconstruct.shock.flavor": "Electrifying",
+  "modifier.tconstruct.shock.description": "Does more damage to targets in water, and damages",
+  "modifier.tconstruct.shock.attack_damage": "Shock Damage",
+  "modifier.tconstruct.shock.projectile_damage": "Shock Damage",
   "modifier.tconstruct.decay": "Decay",
   "modifier.tconstruct.decay.flavor": "Radioactive Withering",
   "modifier.tconstruct.decay.description": "Causes targets to wither away, but may also cause the holder to wither",

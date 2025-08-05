@@ -119,7 +119,7 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     addDefaultTraits(MaterialIds.pewter, ModifierIds.raging);
     addTraits(MaterialIds.pewter, ARMOR, ModifierIds.vitalProtection);
     addDefaultTraits(MaterialIds.necronium, TinkerModifiers.decay);
-    addDefaultTraits(MaterialIds.electrum, ModifierIds.experienced);
+    addDefaultTraits(MaterialIds.electrum, ModifierIds.shock);
     addDefaultTraits(MaterialIds.platedSlimewood, TinkerModifiers.overworked, TinkerModifiers.overslime);
     // tier 4 - mod compat
     addDefaultTraits(MaterialIds.fiery, TinkerModifiers.autosmelt);

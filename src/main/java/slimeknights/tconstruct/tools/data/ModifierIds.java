@@ -170,6 +170,7 @@ public class ModifierIds {
   public static final ModifierId ductile = id("ductile");
   public static final ModifierId temperate = id("temperate");
   public static final ModifierId invariant = id("invariant");
+  public static final ModifierId shock = id("shock");
   public static final ModifierId raging = id("raging");
   public static final ModifierId vitalProtection = id("vital_protection");
   // traits - tier 4

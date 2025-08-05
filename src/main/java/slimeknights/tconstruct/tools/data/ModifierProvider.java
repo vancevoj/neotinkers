@@ -434,7 +434,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
 
     // combat
     // deals 1 + rand(3) damage at 15% chance
-    buildModifier(ModifierIds.thorns).addModule(ThornsModule.builder().constantFlat(1).randomFlat(3).build());
+    buildModifier(ModifierIds.thorns).addModule(ThornsModule.type(DamageTypes.THORNS).constantFlat(1).randomFlat(3).build());
     buildModifier(ModifierIds.fiery)
       .addModule(new FieryAttackModule(LevelingValue.eachLevel(5)))
       // want fiery to be a bit to make up for being over time more so its 1+rand(6) seconds
@@ -872,6 +872,26 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
         .variable(LEVEL).multiply()
         .variable(VALUE).add()
         .build());
+    buildModifier(ModifierIds.shock)
+      .addModule(ConditionalMeleeDamageModule.builder()
+        .formula()
+        .customVariable("water", new EntityMeleeVariable(EntityVariable.WATER, WhichEntity.TARGET, 2))
+        .variable(LEVEL).multiply()
+        .variable(MULTIPLIER).multiply()
+        .variable(VALUE).add()
+        .build())
+      .addModule(ConditionalPowerModule.builder()
+        .formula()
+        .customVariable("water", new EntityPowerVariable(EntityVariable.WATER, WhichEntity.TARGET, 2))
+        .constant(2).divide()
+        .variable(LEVEL).multiply()
+        .variable(MULTIPLIER).multiply()
+        .variable(VALUE).add()
+        .build())
+      // double the chance if in water
+      .addModule(ThornsModule.type(TinkerDamageTypes.SHOCK).chanceLeveling(0.2f).constantFlat(2).randomFlat(3).toolTag(ARMOR).attacker(LivingEntityPredicate.or(LivingEntityPredicate.EYES_IN_WATER, LivingEntityPredicate.FEET_IN_WATER)).build())
+      // single chance in rain, if in both the chance grows more!
+      .addModule(ThornsModule.type(TinkerDamageTypes.SHOCK).chanceLeveling(0.1f).constantFlat(2).randomFlat(3).toolTag(ARMOR).attacker(LivingEntityPredicate.RAINING).build());
     // traits - tier 4
     buildModifier(ModifierIds.overburn).addModules(OverburnModule.INSTANCE, StatBoostModule.add(ToolTankHelper.CAPACITY_STAT).flat(FluidType.BUCKET_VOLUME), ToolTankHelper.TANK_HANDLER);
     buildModifier(ModifierIds.overlord)
