@@ -57,6 +57,7 @@ import slimeknights.tconstruct.library.json.variable.melee.EntityMeleeVariable.W
 import slimeknights.tconstruct.library.json.variable.mining.BlockLightVariable;
 import slimeknights.tconstruct.library.json.variable.mining.BlockMiningSpeedVariable;
 import slimeknights.tconstruct.library.json.variable.mining.BlockTemperatureVariable;
+import slimeknights.tconstruct.library.json.variable.power.EntityPowerVariable;
 import slimeknights.tconstruct.library.json.variable.protection.EntityProtectionVariable;
 import slimeknights.tconstruct.library.json.variable.stat.EntityConditionalStatVariable;
 import slimeknights.tconstruct.library.json.variable.tool.ToolStatVariable;
@@ -94,6 +95,7 @@ import slimeknights.tconstruct.library.modifiers.modules.build.SwappableSlotModu
 import slimeknights.tconstruct.library.modifiers.modules.build.SwappableToolTraitsModule;
 import slimeknights.tconstruct.library.modifiers.modules.build.VolatileFlagModule;
 import slimeknights.tconstruct.library.modifiers.modules.combat.ConditionalMeleeDamageModule;
+import slimeknights.tconstruct.library.modifiers.modules.combat.ConditionalPowerModule;
 import slimeknights.tconstruct.library.modifiers.modules.combat.KnockbackModule;
 import slimeknights.tconstruct.library.modifiers.modules.combat.LootingModule;
 import slimeknights.tconstruct.library.modifiers.modules.combat.MeleeAttributeModule;
@@ -157,10 +159,8 @@ import slimeknights.tconstruct.tools.modules.interaction.BrushModule;
 import slimeknights.tconstruct.tools.modules.interaction.ExtinguishCampfireModule;
 import slimeknights.tconstruct.tools.modules.interaction.PlaceGlowModule;
 import slimeknights.tconstruct.tools.modules.ranged.BulkQuiverModule;
-import slimeknights.tconstruct.tools.modules.ranged.HolyArrowModule;
 import slimeknights.tconstruct.tools.modules.ranged.RestrictAngleModule;
 import slimeknights.tconstruct.tools.modules.ranged.TrickQuiverModule;
-import slimeknights.tconstruct.tools.modules.ranged.ValiantArrowModule;
 
 import static slimeknights.tconstruct.common.TinkerTags.Items.ARMOR;
 import static slimeknights.tconstruct.common.TinkerTags.Items.HARVEST;
@@ -730,7 +730,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
         .subtract().build());
     buildModifier(ModifierIds.consecrated).addModule(ProtectionModule.builder().attacker(new MobTypePredicate(MobType.UNDEAD)).eachLevel(1.25f));
     buildModifier(ModifierIds.preserved).addModules(StatBoostModule.multiplyBase(ToolStats.DURABILITY).eachLevel(0.15f), RepairModule.builder().eachLevel(0.15f));
-    buildModifier(ModifierIds.holy).addModule(new HolyArrowModule(LevelingValue.flat(0.75f)));
+    buildModifier(ModifierIds.holy).addModule(ConditionalPowerModule.builder().target(new MobTypePredicate(MobType.UNDEAD)).eachLevel(0.75f));
 
     // traits - tier 3
     buildModifier(ModifierIds.overcast)
@@ -891,15 +891,22 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .addModule(AttributeModule.builder(Attributes.ATTACK_SPEED, Operation.MULTIPLY_TOTAL).slots(EquipmentSlot.OFFHAND).toolItem(ItemPredicate.tag(TinkerTags.Items.HELD_ARMOR)).eachLevel(-0.1f))
       .addModule(AttributeModule.builder(Attributes.MOVEMENT_SPEED, Operation.MULTIPLY_TOTAL).slots(ARMOR_SLOTS).eachLevel(-0.1f))
       .addModule(AttributeModule.builder(ForgeMod.ENTITY_GRAVITY, Operation.MULTIPLY_TOTAL).tooltipStyle(TooltipStyle.PERCENT).eachLevel(0.1f));
+    EntityVariable equipmentCount = new EquipmentCountEntityVariable(ARMOR_SLOTS);
     buildModifier(ModifierIds.valiant)
       .addModule(ConditionalMeleeDamageModule.builder()
         .formula()
-        .customVariable("equipment", new EntityMeleeVariable(new EquipmentCountEntityVariable(ARMOR_SLOTS), WhichEntity.TARGET, 4))
+        .customVariable("equipment", new EntityMeleeVariable(equipmentCount, WhichEntity.TARGET, 4))
         .constant(0.5f).multiply()
         .variable(MULTIPLIER).multiply()
         .variable(VALUE).add()
         .build())
-      .addModule(new ValiantArrowModule(LevelingValue.eachLevel(0.25f)));
+      .addModule(ConditionalPowerModule.builder()
+        .formula()
+        .customVariable("equipment", new EntityPowerVariable(equipmentCount, WhichEntity.TARGET, 4))
+        .constant(0.25f).multiply()
+        .variable(MULTIPLIER).multiply()
+        .variable(VALUE).add()
+        .build());
     buildModifier(ModifierIds.stalwart)
       .addModule(ProtectionModule.builder()
         .formula()
