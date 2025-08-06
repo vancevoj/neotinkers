@@ -90,8 +90,6 @@ public class MaterialRenderInfoProvider extends AbstractMaterialRenderInfoProvid
 
     // tier 2 compat
     buildRenderInfo(MaterialIds.osmium).color(0xC1E6F4).fallbacks("metal");
-    buildRenderInfo(MaterialIds.tungsten).color(0x6F6F62).fallbacks("metal");
-    buildRenderInfo(MaterialIds.platinum).color(0xA3E7FE).fallbacks("metal");
     buildRenderInfo(MaterialIds.silver).color(0xDAF3ED).fallbacks("metal");
     buildRenderInfo(MaterialIds.lead).color(0x696579).fallbacks("metal");
     buildRenderInfo(MaterialIds.whitestoneComposite, MaterialIds.whitestone).color(0xE0E9EC).fallbacks("rock");

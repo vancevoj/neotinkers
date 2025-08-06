@@ -113,25 +113,17 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
                      new HeadMaterialStats(500, 4.5f, IRON, 2.0f),
                      HandleMaterialStats.multipliers().durability(1.2f).attackSpeed(0.9f).miningSpeed(0.9f).build(),
                      StatlessMaterialStats.BINDING);
-    addMaterialStats(MaterialIds.tungsten,
-                     new HeadMaterialStats(350, 6.5f, IRON, 1.75f),
-                     HandleMaterialStats.multipliers().durability(0.9f).miningSpeed(1.1f).attackSpeed(0.9f).attackDamage(1.1f).build(),
-                     StatlessMaterialStats.BINDING);
-    addMaterialStats(MaterialIds.platinum,
-                     new HeadMaterialStats(400, 7.0f, IRON, 1.5f),
-                     HandleMaterialStats.multipliers().durability(1.05f).miningSpeed(1.05f).attackSpeed(0.95f).build(),
-                     StatlessMaterialStats.BINDING);
     addMaterialStats(MaterialIds.silver,
                      new HeadMaterialStats(300, 5.5f, IRON, 2.25f),
                      HandleMaterialStats.multipliers().durability(0.9f).miningSpeed(1.05f).attackSpeed(1.1f).build(),
                      StatlessMaterialStats.BINDING);
     addMaterialStats(MaterialIds.lead,
-                     new HeadMaterialStats(200, 5f, IRON, 2.5f),
-                     HandleMaterialStats.multipliers().durability(0.9f).attackSpeed(0.95f).attackDamage(1.15f).build(),
+                     new HeadMaterialStats(200, 6.5f, IRON, 1.75f),
+                     HandleMaterialStats.multipliers().durability(0.9f).miningSpeed(1.1f).attackSpeed(0.9f).attackDamage(1.1f).build(),
                      StatlessMaterialStats.BINDING);
     addMaterialStats(MaterialIds.treatedWood,
       new HeadMaterialStats(300, 3.5f, IRON, 1.5f),
-      HandleMaterialStats.multipliers().durability(1.2f).attackSpeed(0.9f).miningSpeed(0.9f).build(),
+      HandleMaterialStats.multipliers().durability(1.25f).attackDamage(0.9f).miningSpeed(0.9f).build(),
       StatlessMaterialStats.BINDING);
 
     // tier 3
@@ -162,14 +154,14 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
                      new HeadMaterialStats(800, 6.5f, DIAMOND, 2.25f),
                      HandleMaterialStats.multipliers().durability(1.05f).miningSpeed(1.05f).attackSpeed(1.05f).build(),
                      StatlessMaterialStats.BINDING);
-    // tier 3 - binding
-    addMaterialStats(MaterialIds.darkthread, StatlessMaterialStats.BINDING);
-
-    // tier 3 (mod integration)
     addMaterialStats(MaterialIds.steel,
                      new HeadMaterialStats(775, 6f, DIAMOND, 2.75f),
                      HandleMaterialStats.multipliers().durability(1.05f).miningSpeed(1.05f).attackSpeed(1.05f).build(),
                      StatlessMaterialStats.BINDING);
+    // tier 3 - binding
+    addMaterialStats(MaterialIds.darkthread, StatlessMaterialStats.BINDING);
+
+    // tier 3 (mod integration)
     addMaterialStats(MaterialIds.bronze,
                      new HeadMaterialStats(760, 6.5f, DIAMOND, 2.25f),
                      HandleMaterialStats.multipliers().durability(1.10f).miningSpeed(1.05f).build(),
@@ -283,21 +275,15 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
     addMaterialStats(MaterialIds.slimeskin, StatlessMaterialStats.BOWSTRING);
 
     // tier 2 - compat
-    addMaterialStats(MaterialIds.platinum,
-                     new LimbMaterialStats(400, -0.05f, 0, 0.1f),
-                     new GripMaterialStats(0.05f, 0.05f, 1.5f));
     addMaterialStats(MaterialIds.aluminum,
                      new LimbMaterialStats(225, 0.15f, -0.15f, -0.05f),
                      new GripMaterialStats(-0.15f, 0.15f, 2f));
-    addMaterialStats(MaterialIds.tungsten,
-                     new LimbMaterialStats(350, 0.2f, -0.3f, 0),
-                     new GripMaterialStats(-0.1f, 0.1f, 1.75f));
     addMaterialStats(MaterialIds.silver,
-                     new LimbMaterialStats(300, -0.15f, 0.1f, -0.1f),
+                     new LimbMaterialStats(300, -0.05f, 0, 0.1f),
                      new GripMaterialStats(-0.1f, -0.05f, 2.25f));
     addMaterialStats(MaterialIds.lead,
                      new LimbMaterialStats(200, -0.3f, 0.15f, -0.05f),
-                     new GripMaterialStats(-0.1f, -0.1f, 2.5f));
+                     new GripMaterialStats(-0.1f, 0.1f, 1.75f));
     addMaterialStats(MaterialIds.treatedWood,
       new LimbMaterialStats(300, 0.05f, -0.1f, 0.05f),
       new GripMaterialStats(0.3f, -0.15f, 1.5f));
@@ -402,10 +388,9 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
     addArmorShieldStats(MaterialIds.scorchedStone, PlatingMaterialStats.builder().durabilityFactor(10).armor(1, 4, 5, 2).knockbackResistance(0.05f), StatlessMaterialStats.MAILLE);
     // tier 2 - compat
     addArmorShieldStats(MaterialIds.osmium,   PlatingMaterialStats.builder().durabilityFactor(25).armor(1, 3, 5, 2).knockbackResistance(0.05f), StatlessMaterialStats.MAILLE);
-    addArmorShieldStats(MaterialIds.tungsten, PlatingMaterialStats.builder().durabilityFactor(20).armor(2, 4, 6, 2), StatlessMaterialStats.MAILLE);
-    addArmorShieldStats(MaterialIds.aluminum, PlatingMaterialStats.builder().durabilityFactor(13).armor(1, 3, 4, 1).knockbackResistance(0.1f), StatlessMaterialStats.MAILLE);
+    addArmorShieldStats(MaterialIds.aluminum, PlatingMaterialStats.builder().durabilityFactor(13).armor(2, 6, 4, 2), StatlessMaterialStats.MAILLE);
     addArmorShieldStats(MaterialIds.silver,   PlatingMaterialStats.builder().durabilityFactor(18).armor(1, 4, 5, 2).knockbackResistance(0.05f), StatlessMaterialStats.MAILLE);
-    addArmorShieldStats(MaterialIds.lead,     PlatingMaterialStats.builder().durabilityFactor(12).armor(1, 3, 4, 2).knockbackResistance(0.05f), StatlessMaterialStats.MAILLE);
+    addArmorShieldStats(MaterialIds.lead,     PlatingMaterialStats.builder().durabilityFactor(12).armor(1, 3, 4, 2).knockbackResistance(0.1f), StatlessMaterialStats.MAILLE);
     addMaterialStats(MaterialIds.treatedWood, StatlessMaterialStats.SHIELD_CORE);
     // tier 3
     addMaterialStats(MaterialIds.nahuatl, StatlessMaterialStats.SHIELD_CORE);

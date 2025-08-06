@@ -37,6 +37,7 @@ import slimeknights.mantle.data.predicate.entity.LivingEntityPredicate;
 import slimeknights.mantle.data.predicate.entity.MobTypePredicate;
 import slimeknights.mantle.data.predicate.item.ItemPredicate;
 import slimeknights.tconstruct.TConstruct;
+import slimeknights.tconstruct.common.TinkerDamageTypes;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.data.tinkering.AbstractModifierProvider;
 import slimeknights.tconstruct.library.json.LevelingInt;
@@ -692,16 +693,12 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
 
     // traits - tier 2 compat
     buildModifier(ModifierIds.lustrous);
-    buildModifier(ModifierIds.sharpweight)
-      .addModule(StatBoostModule.multiplyBase(ToolStats.MINING_SPEED).eachLevel(0.15f))
-      .addModule(StatBoostModule.multiplyBase(ToolStats.DRAW_SPEED).eachLevel(0.1f))
-      .addModule(StatBoostModule.add(ToolStats.ARMOR_TOUGHNESS).eachLevel(2))
-      .addModule(AttributeModule.builder(Attributes.MOVEMENT_SPEED, Operation.MULTIPLY_BASE).eachLevel(-0.1f))
-      .addModule(AttributeModule.builder(ForgeMod.ENTITY_GRAVITY, Operation.MULTIPLY_TOTAL).tooltipStyle(TooltipStyle.PERCENT).eachLevel(0.05f));
+    addRedirect(id("sharpweight"), redirect(ModifierIds.heavy));
     buildModifier(ModifierIds.heavy)
-      .addModule(StatBoostModule.multiplyBase(ToolStats.ATTACK_DAMAGE).eachLevel(0.15f))
-      .addModule(StatBoostModule.multiplyBase(ToolStats.PROJECTILE_DAMAGE).eachLevel(0.10f))
+      .addModule(StatBoostModule.multiplyBase(ToolStats.MINING_SPEED).eachLevel(0.15f))
+      .addModule(StatBoostModule.multiplyBase(ToolStats.ACCURACY).eachLevel(0.10f))
       .addModule(StatBoostModule.add(ToolStats.KNOCKBACK_RESISTANCE).eachLevel(0.15f))
+      .addModule(AttributeModule.builder(Attributes.KNOCKBACK_RESISTANCE, Operation.MULTIPLY_BASE).toolItem(ItemPredicate.tag(ARMOR).inverted()).eachLevel(0.1f))
       .addModule(AttributeModule.builder(Attributes.MOVEMENT_SPEED, Operation.MULTIPLY_BASE).eachLevel(-0.1f))
       .addModule(AttributeModule.builder(ForgeMod.ENTITY_GRAVITY, Operation.MULTIPLY_TOTAL).tooltipStyle(TooltipStyle.PERCENT).eachLevel(0.05f));
     buildModifier(ModifierIds.featherweight)
@@ -872,6 +869,12 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
         .variable(LEVEL).multiply()
         .variable(VALUE).add()
         .build());
+    buildModifier(ModifierIds.solid)
+      .addModule(StatBoostModule.multiplyBase(ToolStats.ATTACK_DAMAGE).eachLevel(0.15f))
+      .addModule(StatBoostModule.add(ToolStats.PROJECTILE_DAMAGE).eachLevel(0.75f))
+      .addModule(ProtectionModule.builder().toolTag(ARMOR).eachLevel(1.25f))
+      .addModule(AttributeModule.builder(Attributes.MOVEMENT_SPEED, Operation.MULTIPLY_BASE).eachLevel(-0.1f))
+      .addModule(AttributeModule.builder(ForgeMod.ENTITY_GRAVITY, Operation.MULTIPLY_TOTAL).tooltipStyle(TooltipStyle.PERCENT).eachLevel(0.05f));
     buildModifier(ModifierIds.shock)
       .addModule(ConditionalMeleeDamageModule.builder()
         .formula()

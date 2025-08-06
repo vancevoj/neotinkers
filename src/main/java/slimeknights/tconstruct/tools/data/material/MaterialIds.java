@@ -71,7 +71,11 @@ public final class MaterialIds {
   // tier 2 (mod integration)
   public static final MaterialId treatedWood = id("treated_wood");
   public static final MaterialId osmium = id("osmium");
+  /** @deprecated removing material, use alternative or recreate in your addon */
+  @Deprecated(forRemoval = true)
   public static final MaterialId tungsten = id("tungsten");
+  /** @deprecated removing material, use alternative or recreate in your addon */
+  @Deprecated(forRemoval = true)
   public static final MaterialId platinum = id("platinum");
   public static final MaterialId silver = id("silver");
   public static final MaterialId lead = id("lead");

@@ -232,7 +232,6 @@
     "necrotic":     "#4D4D4D",
     "raging":       "#999483",
     "scorching":    "#5B4C43",
-    "sharpweight":  "#D1C08B",
     "shock":        "#D9C25F",
     "temperate":    "#9C5643",
 
@@ -243,6 +242,7 @@
     "heavy":        "#575E79",
     "insatiable":   "#9261cc",
     "invariant":    "#A3B1A8",
+    "solid":        "#A3B1A8",
     "lacerating":   "#601cc4",
     "maintained":   "#D58F36",
     "searing":      "#4F4A47",
@@ -386,8 +386,6 @@
 
     "__tier_2_integration__": null,
     "osmium":     "#BED3CD",
-    "tungsten":   "#D1C08B",
-    "platinum":   "#A3E7FE",
     "silver":     "#D3DFE8",
     "lead":       "#575E79",
     "whitestone.aluminum": "#E0E9EC",

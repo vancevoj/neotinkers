@@ -163,8 +163,6 @@ public class MaterialRecipeProvider extends BaseRecipeProvider implements IMater
 
     // tier 2 (mod compat)
     metalMaterialRecipe(consumer, MaterialIds.osmium, folder, "osmium", true);
-    metalMaterialRecipe(consumer, MaterialIds.tungsten, folder, "tungsten", true);
-    metalMaterialRecipe(consumer, MaterialIds.platinum, folder, "platinum", true);
     metalMaterialRecipe(consumer, MaterialIds.silver, folder, "silver", true);
     metalMaterialRecipe(consumer, MaterialIds.lead, folder, "lead", true);
     materialRecipe(withCondition(consumer, tagCondition("treated_wood")),  MaterialIds.treatedWood, Ingredient.of(getItemTag(COMMON, "treated_wood")), 1, 1, folder + "treated_wood");
@@ -258,8 +256,6 @@ public class MaterialRecipeProvider extends BaseRecipeProvider implements IMater
 
     // tier 2 compat
     compatMeltingCasting(consumer, MaterialIds.osmium,   TinkerFluids.moltenOsmium,   folder);
-    compatMeltingCasting(consumer, MaterialIds.tungsten, TinkerFluids.moltenTungsten, folder);
-    compatMeltingCasting(consumer, MaterialIds.platinum, TinkerFluids.moltenPlatinum, folder);
     compatMeltingCasting(consumer, MaterialIds.silver,   TinkerFluids.moltenSilver,   folder);
     compatMeltingCasting(consumer, MaterialIds.lead,     TinkerFluids.moltenLead,     folder);
     compatMeltingCasting(consumer, MaterialIds.aluminum, TinkerFluids.moltenAluminum, folder);

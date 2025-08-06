@@ -103,9 +103,6 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
 
     // tier 2 - mod compat
     addDefaultTraits(MaterialIds.osmium, ModifierIds.dense);
-    addDefaultTraits(MaterialIds.tungsten, ModifierIds.sharpweight);
-    addTraits(MaterialIds.platinum, MELEE_HARVEST, ModifierIds.lustrous);
-    addTraits(MaterialIds.platinum, RANGED,        TinkerModifiers.olympic);
     addDefaultTraits(MaterialIds.lead, ModifierIds.heavy);
     addTraits(MaterialIds.silver, MELEE_HARVEST, ModifierIds.smite);
     addTraits(MaterialIds.silver, RANGED, ModifierIds.holy);
@@ -115,7 +112,7 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     addDefaultTraits(MaterialIds.steel, ModifierIds.ductile);
     addDefaultTraits(MaterialIds.bronze, ModifierIds.maintained);
     addDefaultTraits(MaterialIds.constantan, ModifierIds.temperate);
-    addDefaultTraits(MaterialIds.invar, ModifierIds.invariant);
+    addDefaultTraits(MaterialIds.invar, ModifierIds.solid);
     addDefaultTraits(MaterialIds.pewter, ModifierIds.raging);
     addTraits(MaterialIds.pewter, ARMOR, ModifierIds.vitalProtection);
     addDefaultTraits(MaterialIds.necronium, TinkerModifiers.decay);

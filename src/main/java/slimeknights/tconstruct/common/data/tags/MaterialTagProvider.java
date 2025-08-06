@@ -73,7 +73,7 @@ public class MaterialTagProvider extends AbstractMaterialTagProvider {
       MaterialIds.hepatizon, MaterialIds.ancientHide
     ).addOptional(
       // tier 2
-      MaterialIds.tungsten, MaterialIds.platinum,
+      MaterialIds.lead,
       // tier 3
       MaterialIds.bronze, MaterialIds.constantan
     );
@@ -88,7 +88,7 @@ public class MaterialTagProvider extends AbstractMaterialTagProvider {
       MaterialIds.manyullyn, MaterialIds.blazingBone, MaterialIds.knightmetal
     ).addOptional(
       // tier 2
-      MaterialIds.silver, MaterialIds.lead,
+      MaterialIds.silver,
       // tier 3
       MaterialIds.invar, MaterialIds.pewter, MaterialIds.necronium
     );
@@ -106,7 +106,7 @@ public class MaterialTagProvider extends AbstractMaterialTagProvider {
       MaterialIds.blazingBone, MaterialIds.ancientHide, MaterialIds.enderslimeVine
     ).addOptional(
       // tier 2
-      MaterialIds.treatedWood, MaterialIds.platinum,
+      MaterialIds.treatedWood, MaterialIds.silver,
       // tier 3
       MaterialIds.invar, MaterialIds.pewter
     );
@@ -121,7 +121,7 @@ public class MaterialTagProvider extends AbstractMaterialTagProvider {
       MaterialIds.hepatizon, MaterialIds.queensSlime, MaterialIds.knightmetal
     ).addOptional(
       // tier 2
-      MaterialIds.aluminum, MaterialIds.tungsten,
+      MaterialIds.aluminum,
       // tier 3
       MaterialIds.necronium, MaterialIds.constantan, MaterialIds.platedSlimewood
     );
@@ -136,7 +136,7 @@ public class MaterialTagProvider extends AbstractMaterialTagProvider {
       MaterialIds.manyullyn, MaterialIds.cinderslime
     ).addOptional(
       // tier 2
-      MaterialIds.silver, MaterialIds.lead,
+      MaterialIds.lead,
       // tier 3
       MaterialIds.bronze, MaterialIds.electrum,
       // tier 4

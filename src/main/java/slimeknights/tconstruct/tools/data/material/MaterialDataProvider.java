@@ -91,12 +91,10 @@ public class MaterialDataProvider extends AbstractMaterialDataProvider {
     //addMaterialNoFluid(MaterialIds.endstone, 2, ORDER_END, true, 0xe0d890);
 
     // tier 2 (mod integration)
-    addCompatMetalMaterial(MaterialIds.osmium,     2, ORDER_COMPAT + ORDER_GENERAL);
-    addCompatMetalMaterial(MaterialIds.tungsten,   2, ORDER_COMPAT + ORDER_HARVEST);
-    addCompatMetalMaterial(MaterialIds.platinum,   2, ORDER_COMPAT + ORDER_HARVEST);
-    addCompatMetalMaterial(MaterialIds.silver,     2, ORDER_COMPAT + ORDER_WEAPON);
-    addCompatMetalMaterial(MaterialIds.lead,       2, ORDER_COMPAT + ORDER_WEAPON);
-    addCompatMetalMaterial(MaterialIds.aluminum,   2, ORDER_COMPAT + ORDER_RANGED);
+    addCompatMetalMaterial(MaterialIds.osmium,   2, ORDER_COMPAT + ORDER_GENERAL);
+    addCompatMetalMaterial(MaterialIds.lead,     2, ORDER_COMPAT + ORDER_HARVEST);
+    addCompatMetalMaterial(MaterialIds.silver,   2, ORDER_COMPAT + ORDER_WEAPON);
+    addCompatMetalMaterial(MaterialIds.aluminum, 2, ORDER_COMPAT + ORDER_RANGED);
     // treated wood comes from treated wood or creosote oil
     addMaterial(MaterialIds.treatedWood, 2, ORDER_COMPAT + ORDER_GENERAL, true, false,
       new OrCondition(ConfigEnabledCondition.FORCE_INTEGRATION_MATERIALS, tagExistsCondition("treated_wood"), new TagFilledCondition<>(FluidTags.create(commonResource("creosote")))));
@@ -130,6 +128,19 @@ public class MaterialDataProvider extends AbstractMaterialDataProvider {
     addMaterial(MaterialIds.phantom,    1, ORDER_REPAIR, true);
 
     // rose gold is most comparable to chain as you can use the extra slot for reinforced
-    addRedirect(new MaterialId(TConstruct.MOD_ID, "chain"), redirect(MaterialIds.roseGold));
+    addRedirect(id("chain"), redirect(MaterialIds.roseGold));
+    addRedirect(id("platinum"), redirect(MaterialIds.searedStone));
+    addRedirect(id("tungsten"),
+      conditionalRedirect(MaterialIds.lead, tagExistsCondition("ingots/lead")),
+      conditionalRedirect(MaterialIds.invar, new OrCondition(tagExistsCondition("ingots/invar"), tagExistsCondition("ingots/nickel"))),
+      redirect(MaterialIds.iron));
+  }
+  /**
+   * Creates a new material ID
+   * @param name  ID name
+   * @return  Material ID object
+   */
+  private static MaterialId id(String name) {
+    return new MaterialId(TConstruct.MOD_ID, name);
   }
 }
