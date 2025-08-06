@@ -2216,9 +2216,9 @@ public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelt
     metal(withCondition(consumer, new TagFilledCondition<>(dawnstone)), "dawnstone", dawnstone).temperature(900).optional().metal().plate();
     // twilight forest
     CommonRecipe tfLeggings = new ToolItemMelting(7, tf, "leggings");
+    CommonRecipe tfShovel = new ToolItemMelting(1, tf, "shovel");
     metal(consumer, TinkerFluids.moltenSteeleaf).optional().metal()
-      .common(AXES, SWORD, tfHelmet, tfChestplate, tfLeggings, tfBoots)
-      .toolItemMelting(1, tf, "shovel");
+      .common(AXES, SWORD, tfShovel, tfHelmet, tfChestplate, tfLeggings, tfBoots);
     // fiery doesn't have a molten form, rather its composite the whole way
     fluid(consumer, "fiery", TinkerFluids.fieryLiquid).optional()
       .baseUnit(FluidValues.BOTTLE).damageUnit(FluidValues.SIP).unitByproducts(Byproduct.IRON)
@@ -2229,6 +2229,14 @@ public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelt
       // armor and tools
       .common(tfSword, tfHelmet, tfChestplate, tfLeggings, tfBoots)
       .metalMelting(3, tf, "pickaxe", true);
+    fluid(consumer, "ironwood", TinkerFluids.moltenIron).optional()
+      .baseUnit(FluidValues.INGOT).damageUnit(FluidValues.NUGGET).unitByproducts(Byproduct.TINY_GOLD)
+      // block and ingot melting
+      .melting(9, "block", "storage_blocks", 3.0f, false, false)
+      .melting(1, "ingot", 1f, false)
+      .melting(1, "raw", "raw_materials", false, false)
+      // armor and tools
+      .common(AXES, SWORD, tfShovel, tfHelmet, tfChestplate, tfLeggings, tfBoots);
   }
 
   private void addCompatRecipes(Consumer<FinishedRecipe> consumer) {

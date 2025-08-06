@@ -20,6 +20,7 @@ public enum Byproduct implements IByproduct {
   IRON      (true, TinkerFluids.moltenIron),
   GOLD      (true, TinkerFluids.moltenGold),
   SMALL_GOLD("gold", true, TinkerFluids.moltenGold, FluidValues.NUGGET * 3, FluidValues.NUGGET, OreRateType.METAL),
+  TINY_GOLD ("gold", true, TinkerFluids.moltenGold, FluidValues.NUGGET, FluidValues.NUGGET, OreRateType.NONE),
   COBALT    (true, TinkerFluids.moltenCobalt),
   STEEL     (true, TinkerFluids.moltenSteel),
   DEBRIS    ("netherite_scrap", true, TinkerFluids.moltenDebris, FluidValues.INGOT, FluidValues.NUGGET, OreRateType.METAL),
