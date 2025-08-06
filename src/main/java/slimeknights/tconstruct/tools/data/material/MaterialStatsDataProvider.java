@@ -125,6 +125,11 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
       new HeadMaterialStats(300, 3.5f, STONE, 1.5f),
       HandleMaterialStats.multipliers().durability(1.25f).attackDamage(0.9f).miningSpeed(0.9f).build(),
       StatlessMaterialStats.BINDING);
+    addMaterialStats(MaterialIds.ironwood,
+      new HeadMaterialStats(512, 6.5f, IRON, 2f),
+      HandleMaterialStats.multipliers().durability(1.15f).attackSpeed(0.95f).build(),
+      StatlessMaterialStats.BINDING);
+
 
     // tier 3
     // vanilla diamond: 1561, 8f, DIAMOND, 3f
@@ -287,6 +292,9 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
     addMaterialStats(MaterialIds.treatedWood,
       new LimbMaterialStats(300, 0.05f, -0.1f, 0.05f),
       new GripMaterialStats(0.25f, -0.15f, 1.5f));
+    addMaterialStats(MaterialIds.ironwood,
+      new LimbMaterialStats(512, 0.05f, 0.05f, -0.15f),
+      new GripMaterialStats(0.15f, -0.15f, 2f));
 
     // tier 3
     addMaterialStats(MaterialIds.slimesteel,
@@ -392,6 +400,7 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
     addArmorShieldStats(MaterialIds.silver,   PlatingMaterialStats.builder().durabilityFactor(18).armor(1, 4, 5, 2).knockbackResistance(0.05f), StatlessMaterialStats.MAILLE);
     addArmorShieldStats(MaterialIds.lead,     PlatingMaterialStats.builder().durabilityFactor(12).armor(1, 3, 4, 2).knockbackResistance(0.1f), StatlessMaterialStats.MAILLE);
     addMaterialStats(MaterialIds.treatedWood, StatlessMaterialStats.SHIELD_CORE);
+    addMaterialStats(MaterialIds.ironwood, StatlessMaterialStats.SHIELD_CORE, StatlessMaterialStats.MAILLE);
     // tier 3
     addMaterialStats(MaterialIds.nahuatl, StatlessMaterialStats.SHIELD_CORE);
     addMaterialStats(MaterialIds.ichorskin, StatlessMaterialStats.MAILLE, StatlessMaterialStats.CUIRASS);

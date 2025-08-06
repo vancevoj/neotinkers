@@ -55,8 +55,10 @@ public class MaterialTagProvider extends AbstractMaterialTagProvider {
       // tier 4
       MaterialIds.cinderslime, MaterialIds.queensSlime, MaterialIds.enderslimeVine
     ).addOptional(
+      // tier 1
+      MaterialIds.treatedWood,
       // tier 2
-      MaterialIds.treatedWood, MaterialIds.osmium,
+      MaterialIds.osmium, MaterialIds.ironwood,
       // tier 3
       MaterialIds.platedSlimewood, MaterialIds.electrum,
       // tier 4
@@ -105,8 +107,10 @@ public class MaterialTagProvider extends AbstractMaterialTagProvider {
       // tier 4
       MaterialIds.blazingBone, MaterialIds.ancientHide, MaterialIds.enderslimeVine
     ).addOptional(
+      // tier 1
+      MaterialIds.treatedWood,
       // tier 2
-      MaterialIds.treatedWood, MaterialIds.silver,
+      MaterialIds.silver, MaterialIds.ironwood,
       // tier 3
       MaterialIds.invar, MaterialIds.pewter
     );

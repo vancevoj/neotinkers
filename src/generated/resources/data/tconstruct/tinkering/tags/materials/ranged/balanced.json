@@ -24,6 +24,10 @@
       "required": false
     },
     {
+      "id": "tconstruct:ironwood",
+      "required": false
+    },
+    {
       "id": "tconstruct:invar",
       "required": false
     },

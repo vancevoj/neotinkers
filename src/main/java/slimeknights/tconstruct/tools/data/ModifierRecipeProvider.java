@@ -1695,6 +1695,12 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
       .setTools(TinkerTags.Items.EMBELLISHMENT_WOOD)
       .addInput(treatedWood).addInput(TinkerTables.pattern).addInput(treatedWood)
       .save(withCondition(consumer, new TagFilledCondition<>(treatedWood)), wrap(TinkerModifiers.embellishment, folder, "/wood/treated"));
+    TagKey<Item> ironwood = getItemTag(COMMON, "ingots/ironwood");
+    SwappableModifierRecipeBuilder.modifier(TinkerModifiers.embellishment, MaterialIds.ironwood.toString())
+      .variantFormatter(VariantFormatter.MATERIAL)
+      .setTools(TinkerTags.Items.EMBELLISHMENT_WOOD)
+      .addInput(ironwood).addInput(TinkerTables.pattern).addInput(ironwood)
+      .save(withCondition(consumer, new TagFilledCondition<>(ironwood)), wrap(TinkerModifiers.embellishment, folder, "/wood/ironwood"));
 
     // cosmetics //
     consumer.accept(new SimpleFinishedRecipe(location(folder + "dyeing"), TinkerModifiers.armorDyeingSerializer.get()));

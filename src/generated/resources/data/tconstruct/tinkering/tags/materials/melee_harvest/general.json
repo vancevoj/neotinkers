@@ -22,6 +22,10 @@
       "required": false
     },
     {
+      "id": "tconstruct:ironwood",
+      "required": false
+    },
+    {
       "id": "tconstruct:plated_slimewood",
       "required": false
     },

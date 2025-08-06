@@ -391,8 +391,9 @@
     "whitestone.aluminum": "#E0E9EC",
     "whitestone.tin": "#E0E9EC",
     "whitestone.zinc": "#E0E9EC",
-    "aluminum":   "#CDD5D8",
+    "aluminum":     "#CDD5D8",
     "treated_wood": "#673C29",
+    "ironwood":     "#B9B3AC",
 
     "__tier_3_integration__": null,
     "bronze":           "#D58F36",
