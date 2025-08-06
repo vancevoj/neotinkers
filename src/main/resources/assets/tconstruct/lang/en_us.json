@@ -910,6 +910,12 @@
   "item.tconstruct.molten_duralumin_bucket": "Molten Duralumin Bucket",
   "fluid.tconstruct.molten_duralumin.fluid_effect": "Disconnects you from the world.",
 
+  "block.tconstruct.molten_steeleaf": "Molten Steeleaf",
+  "fluid.tconstruct.molten_steeleaf": "Molten Steeleaf",
+  "fluid.tconstruct.flowing_molten_steeleaf": "Flowing Molten Steeleaf",
+  "item.tconstruct.molten_steeleaf_bucket": "Molten Steeleaf Bucket",
+  "fluid.tconstruct.molten_steeleaf.fluid_effect": "Funny thing about luck is it really doesn't do much, mostly helps you fish.",
+
   "block.tconstruct.fiery_liquid": "Fiery Liquid",
   "fluid.tconstruct.fiery_liquid": "Fiery Liquid",
   "fluid.tconstruct.flowing_fiery_liquid": "Flowing Fiery Liquid",

@@ -199,6 +199,7 @@ public final class TinkerFluids extends TinkerModule {
   public static final FlowingFluidObject<ForgeFlowingFluid> moltenNicrosil = FLUIDS.register("molten_nicrosil").type(hot("molten_nicrosil").temperature(1400).lightLevel(14)).block(createBurning(MapColor.SNOW, 12, 10, 6f)).bucket().commonTag().flowing();
   public static final FlowingFluidObject<ForgeFlowingFluid> moltenDuralumin = FLUIDS.register("molten_duralumin").type(hot("molten_duralumin").temperature(925).lightLevel(10)).block(createBurning(MapColor.COLOR_LIGHT_GREEN, 10, 10, 6f)).bucket().commonTag().flowing();
   // twilight
+  public static final FlowingFluidObject<ForgeFlowingFluid> moltenSteeleaf = FLUIDS.register("molten_steeleaf").type(hot("molten_steeleaf").temperature(1334).lightLevel(10)).block(createBurning(MapColor.COLOR_GREEN, 10, 10, 6f)).bucket().flowing();
   public static final FlowingFluidObject<ForgeFlowingFluid> fieryLiquid = FLUIDS.register("fiery_liquid").type(hot("fiery_liquid").temperature(1800).lightLevel(15)).block(createBurning(MapColor.CRIMSON_HYPHAE, 15, 20, 6f)).bucket().flowing();
 
   // fluid data serializer
@@ -361,6 +362,7 @@ public final class TinkerFluids extends TinkerModule {
       DispenserBlock.registerBehavior(moltenRefinedObsidian, dispenseBucket);
       DispenserBlock.registerBehavior(moltenNicrosil, dispenseBucket);
       DispenserBlock.registerBehavior(moltenDuralumin, dispenseBucket);
+      DispenserBlock.registerBehavior(moltenSteeleaf, dispenseBucket);
       DispenserBlock.registerBehavior(fieryLiquid, dispenseBucket);
 
       // brew congealed slime into bottles to get slime bottles, easy melting
@@ -462,6 +464,7 @@ public final class TinkerFluids extends TinkerModule {
     acceptMolten(output, moltenRefinedObsidian);
     acceptMolten(output, moltenNicrosil);
     acceptMolten(output, moltenDuralumin);
+    acceptMolten(output, moltenSteeleaf);
     acceptCompat(output, fieryLiquid, "fiery");
     BuiltInRegistries.POTION.holders().filter(holder -> {
       Potion potion = holder.get();

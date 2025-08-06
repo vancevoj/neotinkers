@@ -608,6 +608,9 @@ public class ItemTagProvider extends ItemTagsProvider {
     // special alloys
     moltenTools(TinkerFluids.moltenRefinedGlowstone).toolTags().leggingsPaxel();
     moltenTools(TinkerFluids.moltenRefinedObsidian).toolTags().leggingsPaxel();
+    moltenTools(TinkerFluids.moltenSteeleaf)
+      .optionalMetal(2, tf, "sword", "hoe")
+      .optionalMetal(3, tf, "axe", "pickaxe");
   }
 
   @Override

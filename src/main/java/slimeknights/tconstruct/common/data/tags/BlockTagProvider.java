@@ -30,6 +30,7 @@ import slimeknights.tconstruct.shared.block.ClearStainedGlassBlock.GlassColor;
 import slimeknights.tconstruct.shared.block.SlimeType;
 import slimeknights.tconstruct.smeltery.TinkerSmeltery;
 import slimeknights.tconstruct.smeltery.data.SmelteryCompat;
+import slimeknights.tconstruct.smeltery.data.SmelteryCompat.CompatType;
 import slimeknights.tconstruct.tables.TinkerTables;
 import slimeknights.tconstruct.world.TinkerHeadType;
 import slimeknights.tconstruct.world.TinkerWorld;
@@ -150,7 +151,7 @@ public class BlockTagProvider extends BlockTagsProvider {
         .addTag(TinkerMaterials.knightmetal.getBlockTag())
         .addTag(Tags.Blocks.STORAGE_BLOCKS_NETHERITE);
     for (SmelteryCompat compat : SmelteryCompat.values()) {
-      if (!compat.isOre()) {
+      if (compat.getType() == CompatType.ALLOY) {
         builder.addOptionalTag(commonResource("storage_blocks/" + compat.getName()));
       }
     }

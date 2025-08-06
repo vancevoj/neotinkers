@@ -468,8 +468,7 @@ public class SmelteryRecipeBuilder {
 
   /** Adds a recipe for melting a tool from the given mod, automatically prefixing the metal into the name */
   public SmelteryRecipeBuilder toolItemMelting(int cost, String domain, String path) {
-    itemMelting(cost, domain + '_' + path, (float)Math.sqrt(cost), new ResourceLocation(domain, this.name.getPath() + '_' + path), true);
-    return this;
+    return metalMelting(cost, domain, path, true);
   }
 
   /** Adds a recipe melting a tool with the given cost using the common tools tag. See {@link #melting(float, String, String, boolean, boolean)} for armor as names are less standard */

@@ -2174,14 +2174,13 @@ public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelt
     metal(consumer, TinkerFluids.moltenCinderslime).metal();
     metal(consumer, TinkerFluids.moltenQueensSlime).metal();
     String tf = "twilightforest";
-    metal(consumer, TinkerFluids.moltenKnightmetal).metal().common(AXES, LEGGINGS_PLUS)
+    CommonRecipe tfHelmet     = new ToolItemMelting(5, tf, "helmet");
+    CommonRecipe tfChestplate = new ToolItemMelting(8, tf, "chestplate");
+    CommonRecipe tfBoots      = new ToolItemMelting(4, tf, "boots");
+    CommonRecipe tfSword      = new ToolItemMelting(2, tf, "sword");
+    metal(consumer, TinkerFluids.moltenKnightmetal).metal().common(AXES, tfHelmet, tfChestplate, LEGGINGS_PLUS, tfBoots, tfSword)
       .metalMelting(4, tf, "ring", false)
-      .metalMelting(2, tf, "sword", true)
-      .metalMelting(5, tf, "helmet", true)
-      .metalMelting(8, tf, "chestplate", true)
       .itemMelting(16, tf, "block_and_chain", true)
-      // leggings and shields covered
-      .metalMelting(4, tf, "boots", true)
       // not using a traditional ore recipe as there isn't a reasonable byproduct, plus crafting a 3x3 doesn't feel like enough for a 3 nugget bonus
       .melting(1, "raw", "raw_materials", false, true)
       .itemMelting(1/9f, tf, "armor_shard", false);
@@ -2215,7 +2214,11 @@ public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelt
     // embers provides their own fluid. so we just have to add the recipes
     TagKey<Fluid> dawnstone = getFluidTag(COMMON, "molten_dawnstone");
     metal(withCondition(consumer, new TagFilledCondition<>(dawnstone)), "dawnstone", dawnstone).temperature(900).optional().metal().plate();
-
+    // twilight forest
+    CommonRecipe tfLeggings = new ToolItemMelting(7, tf, "leggings");
+    metal(consumer, TinkerFluids.moltenSteeleaf).optional().metal()
+      .common(AXES, SWORD, tfHelmet, tfChestplate, tfLeggings, tfBoots)
+      .toolItemMelting(1, tf, "shovel");
     // fiery doesn't have a molten form, rather its composite the whole way
     fluid(consumer, "fiery", TinkerFluids.fieryLiquid).optional()
       .baseUnit(FluidValues.BOTTLE).damageUnit(FluidValues.SIP).unitByproducts(Byproduct.IRON)
@@ -2224,12 +2227,8 @@ public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelt
       .blockCasting(9, Ingredient.of(Tags.Items.STORAGE_BLOCKS_IRON), false)
       .meltingCasting(1, "ingot", "iron", 1, false)
       // armor and tools
-      .metalMelting(3, tf, "pickaxe", true)
-      .metalMelting(2, tf, "sword", true)
-      .metalMelting(5, tf, "helmet", true)
-      .metalMelting(8, tf, "chestplate", true)
-      .metalMelting(7, tf, "leggings", true)
-      .metalMelting(4, tf, "boots", true);
+      .common(tfSword, tfHelmet, tfChestplate, tfLeggings, tfBoots)
+      .metalMelting(3, tf, "pickaxe", true);
   }
 
   private void addCompatRecipes(Consumer<FinishedRecipe> consumer) {
