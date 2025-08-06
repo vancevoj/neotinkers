@@ -462,6 +462,19 @@ public class ItemTagProvider extends ItemTagsProvider {
     this.copy(TinkerTags.Blocks.BLACKSTONE, TinkerTags.Items.BLACKSTONE);
     this.copy(TinkerTags.Blocks.DEEPSLATE,  TinkerTags.Items.DEEPSLATE);
     this.copy(TinkerTags.Blocks.BASALT,     TinkerTags.Items.BASALT);
+
+    // twilight forest trophies
+    Function<String,ResourceLocation> trophy = name -> new ResourceLocation("twilightforest", name + "_trophy");
+    this.tag(TinkerTags.Items.BOSS_TROPHIES)
+      .addOptional(trophy.apply("naga"))
+      .addOptional(trophy.apply("lich"))
+      .addOptional(trophy.apply("minoshroom"))
+      .addOptional(trophy.apply("hydra"))
+      .addOptional(trophy.apply("knight_phantom"))
+      .addOptional(trophy.apply("ur_ghast"))
+      .addOptional(trophy.apply("alpha_yeti"))
+      .addOptional(trophy.apply("snow_queen"))
+      .addOptional(trophy.apply("quest_ram"));
   }
 
   private void addSmeltery() {

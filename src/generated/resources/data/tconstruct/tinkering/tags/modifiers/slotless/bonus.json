@@ -5,6 +5,10 @@
     "tconstruct:harmonious",
     "tconstruct:recapitated",
     "tconstruct:resurrected",
-    "tconstruct:writable"
+    "tconstruct:writable",
+    {
+      "id": "tconstruct:embossed",
+      "required": false
+    }
   ]
 }

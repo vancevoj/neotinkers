@@ -1468,6 +1468,11 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .addInput(Items.END_CRYSTAL)
                          .setMaxLevel(1)
                          .save(consumer, prefix(ModifierIds.resurrected, slotlessFolder));
+    ModifierRecipeBuilder.modifier(ModifierIds.embossed)
+      .setTools(TinkerTags.Items.BONUS_SLOTS)
+      .addInput(TinkerTags.Items.BOSS_TROPHIES)
+      .setMaxLevel(1)
+      .save(withCondition(consumer, new TagFilledCondition<>(TinkerTags.Items.BOSS_TROPHIES)), prefix(ModifierIds.embossed, slotlessFolder));
     ModifierRecipeBuilder.modifier(ModifierIds.draconic)
                          .setTools(TinkerTags.Items.BONUS_SLOTS)
                          .addInput(Items.DRAGON_HEAD)
