@@ -175,6 +175,8 @@ public class MaterialRecipeProvider extends BaseRecipeProvider implements IMater
     materialRecipe(withCondition(consumer, tagCondition("ingots/uranium")), MaterialIds.necronium, Ingredient.of(TinkerMaterials.necroniumBone), 1, 1, folder + "necronium");
     metalMaterialRecipe(consumer, MaterialIds.electrum, folder, "electrum", true);
     // no plated slimewood, use repair kits
+    // tier 4 (mod integration)
+    metalMaterialRecipe(consumer, MaterialIds.fiery, folder, "fiery", true);
 
     // slimeskull
     metalMaterialRecipe(consumer, MaterialIds.gold, folder, "gold", false);
