@@ -968,8 +968,8 @@
   "fluid_effect.tconstruct.freeze.set": "%d seconds freeze",
   "fluid_effect.tconstruct.award_stat.add": "+%s %s",
   "fluid_effect.tconstruct.award_stat.subtract": "-%s %s",
-  "fluid_effect.tconstruct.add_breath.add": "+%d Breath",
-  "fluid_effect.tconstruct.add_breath.subtract": "-%d Breath",
+  "fluid_effect.tconstruct.add_breath.add": "+%s Breath Bubbles",
+  "fluid_effect.tconstruct.add_breath.subtract": "-%s Breath Bubbles",
   "fluid_effect.tconstruct.push_entity.push": "Pushes target",
   "fluid_effect.tconstruct.push_entity.pull": "Pulls target",
 

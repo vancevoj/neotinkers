@@ -215,7 +215,7 @@ public class FluidEffectProvider extends AbstractFluidEffectProvider {
 
     // metals, lose reference to mistborn (though a true fan would probably get angry at how much I stray from the source)
     // copper/bronze - air/rest
-    addMetal(TinkerFluids.moltenCopper).fireDamage(1).addEntityEffect(new AddBreathFluidEffect(80));
+    addMetal(TinkerFluids.moltenCopper).fireDamage(1).addEntityEffect(new AddBreathFluidEffect(90));
     compatMetal(TinkerFluids.moltenBronze, "tin").fireDamage(3).addEntityEffect(new AwardStatFluidEffect(Stats.TIME_SINCE_REST, - 2000));
     addMetal(TinkerFluids.moltenAmethystBronze).fireDamage(3).addEntityEffect(new AwardStatFluidEffect(Stats.TIME_SINCE_REST, 2000));
     // iron/steel - pull/push
@@ -235,7 +235,7 @@ public class FluidEffectProvider extends AbstractFluidEffectProvider {
     compatMetal(TinkerFluids.moltenChromium).magicDamage(2).addEffect(FluidMobEffect.builder().effect(MobEffects.LUCK, 20 * 5, 1), TimeAction.SET);
     compatMetal(TinkerFluids.moltenNicrosil).magicDamage(3).addEffect(FluidMobEffect.builder().effect(TinkerEffects.experienced.get(), 20 * 5, 1), TimeAction.SET);
     // cadmium/bendalloy - breath/energy
-    compatMetal(TinkerFluids.moltenCadmium).fireDamage(2).addEntityEffect(new AddBreathFluidEffect(-80));
+    compatMetal(TinkerFluids.moltenCadmium).fireDamage(2).addEntityEffect(new AddBreathFluidEffect(-90));
     compatMetal(TinkerFluids.moltenBendalloy).fireDamage(3).addEffect(FluidMobEffect.builder().effect(MobEffects.SATURATION, 20 * 5, 1), TimeAction.SET);
     // aluminum/duralumin/silver - remove effects/you
     compatMetal(TinkerFluids.moltenAluminum).magicDamage(2).addEntityEffect(new CureEffectsFluidEffect(Items.MILK_BUCKET));
