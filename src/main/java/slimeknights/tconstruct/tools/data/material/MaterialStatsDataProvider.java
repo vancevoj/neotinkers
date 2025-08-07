@@ -188,8 +188,8 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
                      HandleMaterialStats.multipliers().durability(0.8f).attackSpeed(1.15f).attackDamage(1.1f).build(),
                      StatlessMaterialStats.BINDING);
     addMaterialStats(MaterialIds.electrum,
-                     new HeadMaterialStats(225, 8.5f, IRON, 1.5f),
-                     HandleMaterialStats.multipliers().durability(0.8f).attackSpeed(1.15f).miningSpeed(1.15f).build(),
+                     new HeadMaterialStats(225, 8f, IRON, 1.5f),
+                     HandleMaterialStats.multipliers().durability(0.65f).attackSpeed(1.15f).miningSpeed(1.15f).build(),
                      StatlessMaterialStats.BINDING);
     addMaterialStats(MaterialIds.platedSlimewood,
                      new HeadMaterialStats(595, 5.0f, DIAMOND, 2.0f),
@@ -308,7 +308,7 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
                      new GripMaterialStats(0f, 0.1f, 1.5f));
     addMaterialStats(MaterialIds.roseGold,
                      new LimbMaterialStats(175, 0.15f, -0.25f, 0.15f),
-                     new GripMaterialStats(-0.4f, 0.25f, 1.0f),
+                     new GripMaterialStats(-0.3f, 0.25f, 1.0f),
                      StatlessMaterialStats.BOWSTRING);
     addMaterialStats(MaterialIds.cobalt,
                      new LimbMaterialStats(800, 0.05f, 0.05f, 0.05f),
@@ -340,7 +340,7 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
                      new GripMaterialStats(0.1f, 0f, 2.25f));
     addMaterialStats(MaterialIds.electrum,
                      new LimbMaterialStats(225, -0.25f, 0.1f, 0.15f),
-                     new GripMaterialStats(-0.2f, 0.2f, 1.5f));
+                     new GripMaterialStats(-0.35f, 0.2f, 1.5f));
     addMaterialStats(MaterialIds.platedSlimewood,
                      new LimbMaterialStats(595, 0.15f, -0.15f, 0),
                      new GripMaterialStats(0.25f, -0.1f, 2f));
