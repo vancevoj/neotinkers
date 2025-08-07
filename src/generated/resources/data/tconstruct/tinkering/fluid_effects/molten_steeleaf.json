@@ -4,7 +4,7 @@
       "type": "tconstruct:mob_effect_cloud",
       "effects": [
         {
-          "effect": "minecraft:luck",
+          "effect": "tconstruct:experienced",
           "level": 1,
           "time": 100
         }
@@ -38,7 +38,7 @@
     {
       "type": "tconstruct:mob_effect",
       "action": "set",
-      "effect": "minecraft:luck",
+      "effect": "tconstruct:experienced",
       "level": 1,
       "time": 100
     }

@@ -311,7 +311,7 @@ public class FluidEffectProvider extends AbstractFluidEffectProvider {
     }
 
     // twilight forest compat
-    compatMetal(TinkerFluids.moltenSteeleaf).magicDamage(2).addEffect(FluidMobEffect.builder().effect(MobEffects.LUCK, 20 * 5, 1), TimeAction.SET);
+    compatMetal(TinkerFluids.moltenSteeleaf).magicDamage(2).addEffect(FluidMobEffect.builder().effect(TinkerEffects.experienced.get(), 20 * 5, 1), TimeAction.SET);
     addFluid(TinkerFluids.fieryLiquid, FluidValues.SIP).metalCondition("fiery")
         .addBlockEffect(new MeltBlockFluidEffect(BlockPredicate.ANY, FluidValues.INGOT, 1500));
 

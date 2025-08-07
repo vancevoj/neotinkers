@@ -123,7 +123,7 @@
     "__upgrades__": null,
     "diamond":       "#8cf4e2",
     "emerald":       "#41f384",
-    "experienced":   "#e8db49",
+    "experienced":   "#59B057",
     "fireprimer":    "#4A281D",
     "magnetic":      "#720000",
     "netherite":     "#8E7C7F",
@@ -404,6 +404,7 @@
     "necronium":        "#7F9374",
     "electrum":         "#D9C25F",
     "plated_slimewood": "#E6D08D",
+    "steeleaf":         "#6DA25E",
 
     "__tier_4_integration__": null,
     "fiery": "#893D14",

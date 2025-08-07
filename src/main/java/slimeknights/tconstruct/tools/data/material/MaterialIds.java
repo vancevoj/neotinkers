@@ -90,6 +90,7 @@ public final class MaterialIds {
   public static final MaterialId platedSlimewood = id("plated_slimewood");
   // twilight forest
   public static final MaterialId ironwood = id("ironwood");
+  public static final MaterialId steeleaf = id("steeleaf");
   public static final MaterialId fiery = id("fiery");
 
   // plate

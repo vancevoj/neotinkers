@@ -914,7 +914,7 @@
   "fluid.tconstruct.molten_steeleaf": "Molten Steeleaf",
   "fluid.tconstruct.flowing_molten_steeleaf": "Flowing Molten Steeleaf",
   "item.tconstruct.molten_steeleaf_bucket": "Molten Steeleaf Bucket",
-  "fluid.tconstruct.molten_steeleaf.fluid_effect": "Funny thing about luck is it really doesn't do much, mostly helps you fish.",
+  "fluid.tconstruct.molten_steeleaf.fluid_effect": "Useful both for you and your target to maximize gained experience.",
 
   "block.tconstruct.fiery_liquid": "Fiery Liquid",
   "fluid.tconstruct.fiery_liquid": "Fiery Liquid",
@@ -2056,6 +2056,12 @@
   "material.tconstruct.plated_slimewood": "Plated Slimewood",
   "material.tconstruct.plated_slimewood.flavor": "All the shininess of brass with the squish of slime",
   "material.tconstruct.plated_slimewood.encyclopedia": "Grants +100% to all methods of restoring overslime",
+
+  "material.tconstruct.steeleaf": "Steeleaf",
+  "material.tconstruct.steeleaf.flavor": "Is it a leaf?",
+  "material.tconstruct.steeleaf.encyclopedia": "Grants +50% XP per level from blocks and monsters",
+  "material.tconstruct.steeleaf.ranged": "Grants +50% XP per level from monsters killed by arrows",
+  "material.tconstruct.steeleaf.armor": "Grants +25% XP per level from blocks and monsters",
 
 
   "_comment": "Tier 4 Integration Materials",

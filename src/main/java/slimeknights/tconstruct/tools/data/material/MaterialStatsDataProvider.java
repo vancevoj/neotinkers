@@ -195,6 +195,10 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
                      new HeadMaterialStats(595, 5.0f, DIAMOND, 2.0f),
                      HandleMaterialStats.multipliers().durability(1.25f).miningSpeed(0.9f).attackSpeed(0.9f).attackDamage(1.05f).build(),
                      StatlessMaterialStats.BINDING);
+    addMaterialStats(MaterialIds.steeleaf,
+      new HeadMaterialStats(200, 8, IRON, 3),
+      HandleMaterialStats.multipliers().durability(0.65f).attackSpeed(1.15f).miningSpeed(1.15f).build(),
+      StatlessMaterialStats.BINDING);
 
     // tier 4
     // vanilla netherite: 2031, 9f, NETHERITE, 4f
@@ -344,6 +348,9 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
     addMaterialStats(MaterialIds.platedSlimewood,
                      new LimbMaterialStats(595, 0.15f, -0.15f, 0),
                      new GripMaterialStats(0.25f, -0.1f, 2f));
+    addMaterialStats(MaterialIds.steeleaf,
+      new LimbMaterialStats(200, 0, 0, 0.15f),
+      new GripMaterialStats(-0.35f, 0, 2.75f));
 
 
     // tier 4
@@ -417,6 +424,7 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
     addArmorShieldStats(MaterialIds.invar,      PlatingMaterialStats.builder().durabilityFactor(24).armor(1, 3, 5, 2).knockbackResistance(0.1f), StatlessMaterialStats.MAILLE);
     addArmorShieldStats(MaterialIds.pewter,     PlatingMaterialStats.builder().durabilityFactor(16).armor(2, 5, 7, 2), StatlessMaterialStats.MAILLE);
     addArmorShieldStats(MaterialIds.electrum,   PlatingMaterialStats.builder().durabilityFactor(14).armor(1, 3, 4, 2), StatlessMaterialStats.MAILLE);
+    addArmorShieldStats(MaterialIds.steeleaf,   PlatingMaterialStats.builder().durabilityFactor(10).armor(2, 5, 7, 2), StatlessMaterialStats.MAILLE);
     // tier 4
     addMaterialStats(MaterialIds.blazewood, StatlessMaterialStats.SHIELD_CORE);
     addArmorShieldStats(MaterialIds.cinderslime, PlatingMaterialStats.builder().durabilityFactor(42).armor(2, 5, 7, 2).knockbackResistance(0.10f), StatlessMaterialStats.MAILLE);

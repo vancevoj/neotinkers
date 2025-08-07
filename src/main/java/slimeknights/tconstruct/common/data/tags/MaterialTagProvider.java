@@ -60,7 +60,7 @@ public class MaterialTagProvider extends AbstractMaterialTagProvider {
       // tier 2
       MaterialIds.osmium, MaterialIds.ironwood,
       // tier 3
-      MaterialIds.platedSlimewood, MaterialIds.electrum,
+      MaterialIds.platedSlimewood, MaterialIds.electrum, MaterialIds.steeleaf,
       // tier 4
       MaterialIds.fiery
     );
@@ -112,7 +112,7 @@ public class MaterialTagProvider extends AbstractMaterialTagProvider {
       // tier 2
       MaterialIds.silver, MaterialIds.ironwood,
       // tier 3
-      MaterialIds.invar, MaterialIds.pewter
+      MaterialIds.invar, MaterialIds.pewter, MaterialIds.steeleaf
     );
     tag(TinkerTags.Materials.LIGHT).add(
       // tier 1

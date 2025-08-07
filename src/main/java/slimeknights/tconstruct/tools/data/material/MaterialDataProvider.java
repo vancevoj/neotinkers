@@ -105,6 +105,7 @@ public class MaterialDataProvider extends AbstractMaterialDataProvider {
     addCompatMetalMaterial(MaterialIds.pewter,          3, ORDER_COMPAT + ORDER_WEAPON,  "pewter", "tin", "lead");
     addCompatMaterial     (MaterialIds.necronium,       3, ORDER_COMPAT + ORDER_WEAPON, true, "ingots/uranium");
     addCompatMetalMaterial(MaterialIds.platedSlimewood, 3, ORDER_COMPAT + ORDER_SPECIAL, "brass", "zinc");
+    addCompatMetalMaterial(MaterialIds.steeleaf,        3, ORDER_COMPAT + ORDER_SPECIAL);
     // tier 4 (mod integration)
     addCompatMetalMaterial(MaterialIds.fiery,           4, ORDER_COMPAT + ORDER_END);
 
