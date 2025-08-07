@@ -216,8 +216,8 @@ public class FluidEffectProvider extends AbstractFluidEffectProvider {
     // metals, lose reference to mistborn (though a true fan would probably get angry at how much I stray from the source)
     // copper/bronze - air/rest
     addMetal(TinkerFluids.moltenCopper).fireDamage(1).addEntityEffect(new AddBreathFluidEffect(90));
-    compatMetal(TinkerFluids.moltenBronze, "tin").fireDamage(3).addEntityEffect(new AwardStatFluidEffect(Stats.TIME_SINCE_REST, - 2000));
-    addMetal(TinkerFluids.moltenAmethystBronze).fireDamage(3).addEntityEffect(new AwardStatFluidEffect(Stats.TIME_SINCE_REST, 2000));
+    compatMetal(TinkerFluids.moltenBronze, "tin").fireDamage(3).addEntityEffect(new AwardStatFluidEffect(Stats.TIME_SINCE_REST, -6000));
+    addMetal(TinkerFluids.moltenAmethystBronze).fireDamage(3).addEntityEffect(new AwardStatFluidEffect(Stats.TIME_SINCE_REST, 6000));
     // iron/steel - pull/push
     addMetal(TinkerFluids.moltenIron).fireDamage(2f).addEffect(FluidMobEffect.builder().effect(TinkerEffects.magnetic.get(), 20 * 5, 2), TimeAction.SET);
     addMetal(TinkerFluids.moltenSteel).fireDamage(2f).addEffect(FluidMobEffect.builder().effect(TinkerEffects.repulsive.get(), 20 * 5, 2), TimeAction.SET);
