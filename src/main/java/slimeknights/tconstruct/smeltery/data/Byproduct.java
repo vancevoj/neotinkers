@@ -25,6 +25,7 @@ public enum Byproduct implements IByproduct {
   STEEL     (true, TinkerFluids.moltenSteel),
   DEBRIS    ("netherite_scrap", true, TinkerFluids.moltenDebris, FluidValues.INGOT, FluidValues.NUGGET, OreRateType.METAL),
   // compat metals
+  ALUMINUM(false, TinkerFluids.moltenAluminum),
   TIN     (false, TinkerFluids.moltenTin),
   SILVER  (false, TinkerFluids.moltenSilver),
   NICKEL  (false, TinkerFluids.moltenNickel),

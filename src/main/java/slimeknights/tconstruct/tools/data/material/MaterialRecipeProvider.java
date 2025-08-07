@@ -20,6 +20,7 @@ import slimeknights.mantle.recipe.condition.TagFilledCondition;
 import slimeknights.mantle.recipe.helper.FluidOutput;
 import slimeknights.mantle.recipe.helper.ItemOutput;
 import slimeknights.mantle.recipe.ingredient.FluidIngredient;
+import slimeknights.mantle.registration.object.FluidObject;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.common.data.BaseRecipeProvider;
 import slimeknights.tconstruct.fluids.TinkerFluids;
@@ -263,9 +264,12 @@ public class MaterialRecipeProvider extends BaseRecipeProvider implements IMater
     compatMeltingCasting(consumer, MaterialIds.silver,   TinkerFluids.moltenSilver,   folder);
     compatMeltingCasting(consumer, MaterialIds.lead,     TinkerFluids.moltenLead,     folder);
     compatMeltingCasting(consumer, MaterialIds.aluminum, TinkerFluids.moltenAluminum, folder);
-    materialComposite(withCondition(consumer, tagCondition("ingots/aluminum")), MaterialIds.rock, MaterialIds.whitestoneAluminum, TinkerFluids.moltenAluminum, FluidValues.INGOT, folder, "whitestone_from_aluminum");
-    materialComposite(withCondition(consumer, tagCondition("ingots/tin")),      MaterialIds.rock, MaterialIds.whitestoneTin,      TinkerFluids.moltenTin,      FluidValues.INGOT, folder, "whitestone_from_tin");
-    materialComposite(withCondition(consumer, tagCondition("ingots/zinc")),     MaterialIds.rock, MaterialIds.whitestoneZinc,     TinkerFluids.moltenZinc,     FluidValues.INGOT, folder, "whitestone_from_zinc");
+    whitestoneCasting(consumer, TinkerFluids.moltenAluminum, folder);
+    whitestoneCasting(consumer, TinkerFluids.moltenTin,      folder);
+    whitestoneCasting(consumer, TinkerFluids.moltenZinc,     folder);
+    whitestoneCasting(consumer, TinkerFluids.moltenNickel,   folder);
+    whitestoneCasting(consumer, TinkerFluids.moltenChromium, folder);
+    whitestoneCasting(consumer, TinkerFluids.moltenCadmium,  folder);
     TagKey<Fluid> creosote = getFluidTag(COMMON, "creosote");
     MaterialFluidRecipeBuilder.material(MaterialIds.treatedWood)
       .setInputId(MaterialIds.wood)
@@ -300,5 +304,11 @@ public class MaterialRecipeProvider extends BaseRecipeProvider implements IMater
     materialMeltingCasting(consumer, MaterialIds.enderPearl, TinkerFluids.moltenEnder, FluidValues.SLIMEBALL, folder);
     materialMeltingCasting(consumer, MaterialIds.glass, TinkerFluids.moltenGlass, FluidValues.GLASS_BLOCK, folder);
     materialMeltingCasting(consumer, MaterialIds.enderslime, TinkerFluids.enderSlime, FluidValues.SLIMEBALL, folder);
+  }
+
+  /** Adds a  */
+  private void whitestoneCasting(Consumer<FinishedRecipe> consumer, FluidObject<?> fluid, String folder) {
+    String name = TinkerFluids.withoutMolten(fluid);
+    materialComposite(withCondition(consumer, tagCondition("ingots/" + name)), MaterialIds.rock, MaterialIds.whitestoneComposite, fluid, FluidValues.INGOT, folder, "whitestone_from_" + name);
   }
 }

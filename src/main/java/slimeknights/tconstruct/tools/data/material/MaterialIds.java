@@ -160,8 +160,14 @@ public final class MaterialIds {
   // whitestone
   public static final MaterialVariantId endstone            = create(whitestone, "end");
   public static final MaterialVariantId whitestoneComposite = create(whitestone, "composite");
+  /** @deprecated use {@link #whitestoneComposite} */
+  @Deprecated
   public static final MaterialVariantId whitestoneAluminum  = create(whitestone, "aluminum");
+  /** @deprecated use {@link #whitestoneComposite} */
+  @Deprecated
   public static final MaterialVariantId whitestoneTin       = create(whitestone, "tin");
+  /** @deprecated use {@link #whitestoneComposite} */
+  @Deprecated
   public static final MaterialVariantId whitestoneZinc      = create(whitestone, "zinc");
   // slimewood
   public static final MaterialVariantId slimewoodComposite = create(slimewood, "composite");

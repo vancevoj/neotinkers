@@ -1911,8 +1911,8 @@ public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelt
       // if we have both tin and lead, do the combined recipe. Ratio is from Metalborn/Allomancy
       .addCondition(new AndCondition(lead, tin))
       // ratio from Metalborn/Allomancy
-      .addRecipe(AlloyRecipeBuilder.alloy(TinkerFluids.moltenPewter, FluidValues.INGOT * 3)
-        .addInput(TinkerFluids.moltenTin.ingredient(FluidValues.INGOT * 2))
+      .addRecipe(AlloyRecipeBuilder.alloy(TinkerFluids.moltenPewter, FluidValues.INGOT * 4)
+        .addInput(TinkerFluids.moltenTin.ingredient(FluidValues.INGOT * 3))
         .addInput(TinkerFluids.moltenLead.ingredient(FluidValues.INGOT))::save)
 
       // otherwise, substitute iron for the missing part
@@ -1966,22 +1966,34 @@ public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelt
                       .save(wrapped, prefix(TinkerFluids.moltenRefinedObsidian, folder));
 
     // nicrosil
-    // TODO: consider adding chromium as an option
-    wrapped = withCondition(consumer, tagCondition("ingots/nicrosil"), tagCondition("ingots/tin"));
+    wrapped = withCondition(consumer, tagCondition("ingots/nicrosil"));
     ConditionalRecipe.builder()
-      // if we have both tin and lead, do the combined recipe. Ratio is from Metalborn/Allomancy
-      .addCondition(tagCondition("ingots/nickel"))
-      // ratio from Metalborn - if nickel is present use that in high amounts
+      // if we have both chromium and nickel, can do the proper recipe
+      .addCondition(new AndCondition(tagCondition("ingots/chromium"), tagCondition("ingots/nickel")))
+      .addRecipe(AlloyRecipeBuilder.alloy(TinkerFluids.moltenNicrosil, FluidValues.INGOT * 4)
+        .addInput(TinkerFluids.moltenNickel.ingredient(FluidValues.INGOT * 2))
+        .addInput(TinkerFluids.moltenChromium.ingredient(FluidValues.INGOT))
+        .addInput(TinkerFluids.moltenQuartz.ingredient(FluidValues.GEM))::save)
+
+      // if chromium is missing, sub in tin per metalborn, can do the proper recipe
+      .addCondition(new AndCondition(tagCondition("ingots/tin"), tagCondition("ingots/nickel")))
       .addRecipe(AlloyRecipeBuilder.alloy(TinkerFluids.moltenNicrosil, FluidValues.INGOT * 4)
         .addInput(TinkerFluids.moltenNickel.ingredient(FluidValues.INGOT * 2))
         .addInput(TinkerFluids.moltenTin.ingredient(FluidValues.INGOT))
         .addInput(TinkerFluids.moltenQuartz.ingredient(FluidValues.GEM))::save)
 
-      // otherwise, just use tin and quartz
-      .addCondition(TrueCondition.INSTANCE)
-      // ratio from Metalborn - if nickel is absent
-      .addRecipe(AlloyRecipeBuilder.alloy(TinkerFluids.moltenNicrosil, FluidValues.INGOT * 2)
-        .addInput(TinkerFluids.moltenTin.ingredient(FluidValues.INGOT))
+      // nickel missing? use more chromium and sub in a bit of iron
+      .addCondition(tagCondition("ingots/chromium"))
+      .addRecipe(AlloyRecipeBuilder.alloy(TinkerFluids.moltenNicrosil, FluidValues.INGOT * 4)
+        .addInput(TinkerFluids.moltenChromium.ingredient(FluidValues.INGOT * 2))
+        .addInput(TinkerFluids.moltenIron.ingredient(FluidValues.INGOT))
+        .addInput(TinkerFluids.moltenQuartz.ingredient(FluidValues.GEM))::save)
+
+      // no nickel or chromium? just use tin and iron per metalborn
+      .addCondition(tagCondition("ingots/tin"))
+      .addRecipe(AlloyRecipeBuilder.alloy(TinkerFluids.moltenNicrosil, FluidValues.INGOT * 4)
+        .addInput(TinkerFluids.moltenTin.ingredient(FluidValues.INGOT * 2))
+        .addInput(TinkerFluids.moltenIron.ingredient(FluidValues.INGOT))
         .addInput(TinkerFluids.moltenQuartz.ingredient(FluidValues.GEM))::save)
 
       .build(wrapped, prefix(TinkerFluids.moltenNicrosil, folder));
@@ -1992,6 +2004,14 @@ public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelt
       .addInput(TinkerFluids.moltenAluminum.ingredient(FluidValues.INGOT * 3))
       .addInput(TinkerFluids.moltenCopper.ingredient(FluidValues.INGOT))
       .save(wrapped, prefix(TinkerFluids.moltenDuralumin, folder));
+
+    // bendalloy
+    wrapped = withCondition(consumer, tagCondition("ingots/bendalloy"), tagCondition("ingots/tin"), tagCondition("ingots/lead"), tagCondition("ingots/cadmium"));
+    AlloyRecipeBuilder.alloy(TinkerFluids.moltenBendalloy, FluidValues.INGOT * 4)
+      .addInput(TinkerFluids.moltenTin.ingredient(FluidValues.INGOT * 2))
+      .addInput(TinkerFluids.moltenLead.ingredient(FluidValues.INGOT))
+      .addInput(TinkerFluids.moltenCadmium.ingredient(FluidValues.INGOT))
+      .save(wrapped, prefix(TinkerFluids.moltenBendalloy, folder));
   }
 
   private void addEntityMeltingRecipes(Consumer<FinishedRecipe> consumer) {
@@ -2194,6 +2214,8 @@ public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelt
     metal(consumer, TinkerFluids.moltenZinc    ).ore(Byproduct.TIN, Byproduct.COPPER   ).optional().metal().dust().oreberry().plate().gear().geore();
     metal(consumer, TinkerFluids.moltenPlatinum).ore(Byproduct.GOLD                    ).optional().metal().dust();
     metal(consumer, TinkerFluids.moltenTungsten).ore(Byproduct.PLATINUM, Byproduct.GOLD).optional().metal().dust();
+    metal(consumer, TinkerFluids.moltenChromium).ore(Byproduct.ALUMINUM, Byproduct.IRON).optional().metal().dust();
+    metal(consumer, TinkerFluids.moltenCadmium ).ore(Byproduct.LEAD, Byproduct.COPPER  ).optional().metal().dust();
     metal(consumer, TinkerFluids.moltenOsmium  ).ore(Byproduct.IRON                    ).optional().metal().dust().oreberry().common(TOOLS).common(MEKANISM_ARMOR);
     metal(consumer, TinkerFluids.moltenUranium ).ore(Byproduct.LEAD, Byproduct.COPPER  ).optional().metal().dust().oreberry().plate().gear().coin().sheetmetal();
     // compat alloys
@@ -2211,6 +2233,7 @@ public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelt
     metal(consumer, TinkerFluids.moltenRefinedGlowstone).optional().metal().common(TOOLS).common(MEKANISM_ARMOR);
     metal(consumer, TinkerFluids.moltenNicrosil).optional().metal();
     metal(consumer, TinkerFluids.moltenDuralumin).optional().metal();
+    metal(consumer, TinkerFluids.moltenBendalloy).optional().metal();
     // embers provides their own fluid. so we just have to add the recipes
     TagKey<Fluid> dawnstone = getFluidTag(COMMON, "molten_dawnstone");
     metal(withCondition(consumer, new TagFilledCondition<>(dawnstone)), "dawnstone", dawnstone).temperature(900).optional().metal().plate();

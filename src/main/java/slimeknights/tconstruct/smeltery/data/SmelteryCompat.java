@@ -27,6 +27,8 @@ public enum SmelteryCompat {
   TUNGSTEN(TinkerFluids.moltenTungsten, CompatType.ORE),
   OSMIUM  (TinkerFluids.moltenOsmium,   CompatType.ORE),
   URANIUM (TinkerFluids.moltenUranium,  CompatType.ORE),
+  CHROMIUM(TinkerFluids.moltenChromium, CompatType.ORE),
+  CADMIUM (TinkerFluids.moltenCadmium,  CompatType.ORE),
   // alloys
   BRONZE    (TinkerFluids.moltenBronze, "tin"),
   BRASS     (TinkerFluids.moltenBrass, "zinc"),
@@ -41,9 +43,10 @@ public enum SmelteryCompat {
   // mekanism alloys
   REFINED_GLOWSTONE(TinkerFluids.moltenRefinedGlowstone, CompatType.ALLOY),
   REFINED_OBSIDIAN (TinkerFluids.moltenRefinedObsidian,  CompatType.ALLOY),
-  // metalborn
+  // cosmere
   NICROSIL(TinkerFluids.moltenNicrosil,   CompatType.ALLOY),
   DURALUMIN(TinkerFluids.moltenDuralumin, CompatType.ALLOY),
+  BENDALLOY(TinkerFluids.moltenBendalloy, CompatType.ALLOY),
   // twilight
   STEELEAF(TinkerFluids.moltenSteeleaf, CompatType.NONE),
   FIERY   (TinkerFluids.fieryLiquid,    CompatType.ALLOY);

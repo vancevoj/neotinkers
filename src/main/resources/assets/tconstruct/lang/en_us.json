@@ -819,6 +819,19 @@
   "item.tconstruct.molten_uranium_bucket": "Molten Uranium Bucket",
   "fluid.tconstruct.molten_uranium.fluid_effect": "Radioactive decay from molten uranium isn't safe to be around, so dump it on your enemies.",
 
+  "block.tconstruct.molten_chromium_fluid": "Molten Chromium",
+  "fluid.tconstruct.molten_chromium": "Molten Chromium",
+  "fluid.tconstruct.flowing_molten_chromium": "Flowing Molten Chromium",
+  "item.tconstruct.molten_chromium_bucket": "Molten Chromium Bucket",
+  "fluid.tconstruct.molten_chromium.fluid_effect": "If only luck was actually a useful effect, this fluid would be great to drink!",
+
+  "block.tconstruct.molten_cadmium_fluid": "Molten Cadmium",
+  "fluid.tconstruct.molten_cadmium": "Molten Cadmium",
+  "fluid.tconstruct.flowing_molten_cadmium": "Flowing Molten Cadmium",
+  "item.tconstruct.molten_cadmium_bucket": "Molten Cadmium Bucket",
+  "fluid.tconstruct.molten_cadmium.fluid_effect": "Perfect for underwater fights.",
+
+
   "_comment": "Compat Alloys",
 
   "block.tconstruct.molten_bronze_fluid": "Molten Bronze",
@@ -896,7 +909,7 @@
   "item.tconstruct.molten_refined_obsidian_bucket": "Molten Refined Obsidian Bucket",
   "fluid.tconstruct.molten_refined_obsidian.fluid_effect": "Molten refined obsidian maximizes damage against armored targets.",
 
-  "_comment": "Metalborn Alloys",
+  "_comment": "Cosmere Alloys",
 
   "block.tconstruct.molten_nicrosil_fluid": "Molten Nicrosil",
   "fluid.tconstruct.molten_nicrosil": "Molten Nicrosil",
@@ -909,6 +922,14 @@
   "fluid.tconstruct.flowing_molten_duralumin": "Flowing Molten Duralumin",
   "item.tconstruct.molten_duralumin_bucket": "Molten Duralumin Bucket",
   "fluid.tconstruct.molten_duralumin.fluid_effect": "Disconnects you from the world.",
+
+  "block.tconstruct.molten_bendalloy_fluid": "Molten Bendalloy",
+  "fluid.tconstruct.molten_bendalloy": "Molten Bendalloy",
+  "fluid.tconstruct.flowing_molten_bendalloy": "Flowing Molten Bendalloy",
+  "item.tconstruct.molten_bendalloy_bucket": "Molten Bendalloy Bucket",
+  "fluid.tconstruct.molten_bendalloy.fluid_effect": "A perfect snack for the middle of a battle.",
+
+  "_comment": "Twilight Forest Alloys",
 
   "block.tconstruct.molten_steeleaf": "Molten Steeleaf",
   "fluid.tconstruct.molten_steeleaf": "Molten Steeleaf",
