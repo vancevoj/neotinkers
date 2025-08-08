@@ -31,6 +31,9 @@ public enum Byproduct implements IByproduct {
   NICKEL  (false, TinkerFluids.moltenNickel),
   LEAD    (false, TinkerFluids.moltenLead),
   PLATINUM(false, TinkerFluids.moltenPlatinum),
+  ZINC    (false, TinkerFluids.moltenZinc),
+  CHROMIUM(false, TinkerFluids.moltenChromium),
+  CADMIUM (false, TinkerFluids.moltenCadmium),
   // gems
   DIAMOND(true, TinkerFluids.moltenDiamond, FluidValues.GEM, FluidValues.GEM_SHARD, OreRateType.GEM),
   SMALL_DIAMOND("diamond", true, TinkerFluids.moltenDiamond, FluidValues.GEM_SHARD, FluidValues.GEM_SHARD, OreRateType.GEM); // quarter diamond is comparable to third of an ingot

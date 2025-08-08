@@ -502,6 +502,12 @@ public class SmelteryRecipeBuilder {
     return this;
   }
 
+  /** Adds a raw ore recipe with the given byproducts */
+  public SmelteryRecipeBuilder rawOre(IByproduct... byproducts) {
+    this.oreByproducts = byproducts;
+    return rawOre();
+  }
+
   /** Adds the sparse ore recipe at the given scale. Automatcally called by {@link #metal()} and {@link #gem(int)}, so only needed if doing unusual things. */
   public SmelteryRecipeBuilder sparseOre(float scale) {
     oreMelting(scale, "ores/", Tags.Items.ORE_RATES_SPARSE, 1.5f, "ore_sparse", false);
