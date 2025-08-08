@@ -693,6 +693,15 @@ public class SmelteryRecipeBuilder {
     }
   }
 
+  /** Consumer for melting a specific tool from a mod with the metal prefix */
+  public record MetalMelting(float cost, String domain, String name) implements CommonRecipe {
+    @Override
+    public void accept(SmelteryRecipeBuilder builder) {
+      builder.metalMelting(cost, domain, name, false);
+    }
+  }
+
+
   /* Common tool melting */
 
   // common
