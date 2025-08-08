@@ -1085,7 +1085,7 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
      */
     ModifierRecipeBuilder.modifier(ModifierIds.gilded)
                          .setTools(TinkerTags.Items.BONUS_SLOTS)
-                         .addInput(Items.GOLDEN_APPLE)
+                         .addInput(Blocks.GILDED_BLACKSTONE)
                          .setSlots(SlotType.ABILITY, 1)
                          .saveSalvage(consumer, prefix(ModifierIds.gilded, abilitySalvage))
                          .save(consumer, prefix(ModifierIds.gilded, abilityFolder));
@@ -1463,11 +1463,11 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .addInput(SizedIngredient.of(DifferenceIngredient.of(Ingredient.of(Tags.Items.HEADS), Ingredient.of(Items.DRAGON_HEAD))))
                          .setMaxLevel(1)
                          .save(consumer, prefix(ModifierIds.recapitated, slotlessFolder));
-    ModifierRecipeBuilder.modifier(ModifierIds.resurrected)
+    ModifierRecipeBuilder.modifier(ModifierIds.forecast)
                          .setTools(TinkerTags.Items.BONUS_SLOTS)
-                         .addInput(Items.END_CRYSTAL)
+                         .addInput(ingredientFromTags(Tags.Items.ORES_DIAMOND, Tags.Items.ORES_EMERALD, TinkerTags.Items.ORES_COBALT))
                          .setMaxLevel(1)
-                         .save(consumer, prefix(ModifierIds.resurrected, slotlessFolder));
+                         .save(consumer, prefix(ModifierIds.forecast, slotlessFolder));
     ModifierRecipeBuilder.modifier(ModifierIds.embossed)
       .setTools(TinkerTags.Items.BONUS_SLOTS)
       .addInput(TinkerTags.Items.BOSS_TROPHIES)
@@ -1480,52 +1480,51 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .save(consumer, wrap(ModifierIds.draconic, slotlessFolder, "_from_head"));
     ModifierRecipeBuilder.modifier(ModifierIds.draconic)
                          .setTools(TinkerTags.Items.BONUS_SLOTS)
-                         .addInput(Blocks.WITHER_ROSE)
+                         .addInput(Items.DRAGON_BREATH)
                          .addInput(TinkerModifiers.dragonScale)
-                         .addInput(Blocks.WITHER_ROSE)
+                         .addInput(Items.DRAGON_BREATH)
                          .addInput(TinkerModifiers.dragonScale)
                          .addInput(TinkerModifiers.dragonScale)
                          .setMaxLevel(1)
                          .disallowCrystal()
                          .save(consumer, wrap(ModifierIds.draconic, slotlessFolder, "_from_scales"));
     // rebalanced
-    Ingredient rebalancedCommon = Ingredient.of(TinkerModifiers.dragonScale, Blocks.GILDED_BLACKSTONE);
     SwappableModifierRecipeBuilder.modifier(ModifierIds.rebalanced, SlotType.UPGRADE.getName())
-                                  .setTools(TinkerTags.Items.BONUS_SLOTS)
-                                  .addInput(rebalancedCommon)
-                                  .addInput(TinkerMaterials.roseGold.getIngotTag())
-                                  .addInput(rebalancedCommon)
-                                  .addInput(TinkerWorld.skyGeode.getBlock())
-                                  .addInput(TinkerWorld.skyGeode.getBlock())
-                                  .disallowCrystal()
-                                  .save(consumer, wrap(ModifierIds.rebalanced, slotlessFolder, "_" + SlotType.UPGRADE.getName()));
+      .setTools(TinkerTags.Items.BONUS_SLOTS)
+      .addInput(TinkerMaterials.roseGold.getNuggetTag())
+      .addInput(Items.END_CRYSTAL)
+      .addInput(TinkerMaterials.roseGold.getNuggetTag())
+      .addInput(TinkerWorld.skyGeode.getBlock())
+      .addInput(TinkerWorld.skyGeode.getBlock())
+      .disallowCrystal()
+      .save(consumer, wrap(ModifierIds.rebalanced, slotlessFolder, "_" + SlotType.UPGRADE.getName()));
     SwappableModifierRecipeBuilder.modifier(ModifierIds.rebalanced, SlotType.DEFENSE.getName())
-                                  .setTools(IntersectionIngredient.of(ingredientFromTags(TinkerTags.Items.ARMOR, TinkerTags.Items.HELD), Ingredient.of(TinkerTags.Items.BONUS_SLOTS)))
-                                  .addInput(rebalancedCommon)
-                                  .addInput(TinkerMaterials.cobalt.getIngotTag())
-                                  .addInput(rebalancedCommon)
-                                  .addInput(TinkerWorld.earthGeode.getBlock())
-                                  .addInput(TinkerWorld.earthGeode.getBlock())
-                                  .disallowCrystal()
-                                  .save(consumer, wrap(ModifierIds.rebalanced, slotlessFolder, "_" + SlotType.DEFENSE.getName()));
+      .setTools(IntersectionIngredient.of(ingredientFromTags(TinkerTags.Items.ARMOR, TinkerTags.Items.HELD), Ingredient.of(TinkerTags.Items.BONUS_SLOTS)))
+      .addInput(TinkerMaterials.cobalt.getNuggetTag())
+      .addInput(Items.END_CRYSTAL)
+      .addInput(TinkerMaterials.cobalt.getNuggetTag())
+      .addInput(TinkerWorld.earthGeode.getBlock())
+      .addInput(TinkerWorld.earthGeode.getBlock())
+      .disallowCrystal()
+      .save(consumer, wrap(ModifierIds.rebalanced, slotlessFolder, "_" + SlotType.DEFENSE.getName()));
     SwappableModifierRecipeBuilder.modifier(ModifierIds.rebalanced, SlotType.ABILITY.getName())
-                                  .setTools(TinkerTags.Items.BONUS_SLOTS)
-                                  .addInput(rebalancedCommon)
-                                  .addInput(TinkerMaterials.queensSlime.getIngotTag())
-                                  .addInput(rebalancedCommon)
-                                  .addInput(TinkerWorld.ichorGeode.getBlock())
-                                  .addInput(TinkerWorld.ichorGeode.getBlock())
-                                  .disallowCrystal()
-                                  .save(consumer, wrap(ModifierIds.rebalanced, slotlessFolder, "_" + SlotType.ABILITY.getName()));
+      .setTools(TinkerTags.Items.BONUS_SLOTS)
+      .addInput(TinkerMaterials.queensSlime.getNuggetTag())
+      .addInput(Items.END_CRYSTAL)
+      .addInput(TinkerMaterials.queensSlime.getNuggetTag())
+      .addInput(TinkerWorld.ichorGeode.getBlock())
+      .addInput(TinkerWorld.ichorGeode.getBlock())
+      .disallowCrystal()
+      .save(consumer, wrap(ModifierIds.rebalanced, slotlessFolder, "_" + SlotType.ABILITY.getName()));
     SwappableModifierRecipeBuilder.modifier(ModifierIds.rebalanced, "traits")
-                                  .setTools(ToolHookIngredient.of(TinkerTags.Items.BONUS_SLOTS, ToolHooks.REBALANCED_TRAIT))
-                                  .addInput(rebalancedCommon)
-                                  .addInput(TinkerMaterials.manyullyn.getIngotTag())
-                                  .addInput(rebalancedCommon)
-                                  .addInput(TinkerWorld.enderGeode.getBlock())
-                                  .addInput(TinkerWorld.enderGeode.getBlock())
-                                  .disallowCrystal()
-                                  .save(consumer, wrap(ModifierIds.rebalanced, slotlessFolder, "_traits"));
+      .setTools(ToolHookIngredient.of(TinkerTags.Items.BONUS_SLOTS, ToolHooks.REBALANCED_TRAIT))
+      .addInput(TinkerMaterials.manyullyn.getNuggetTag())
+      .addInput(Items.END_CRYSTAL)
+      .addInput(TinkerMaterials.manyullyn.getNuggetTag())
+      .addInput(TinkerWorld.enderGeode.getBlock())
+      .addInput(TinkerWorld.enderGeode.getBlock())
+      .disallowCrystal()
+      .save(consumer, wrap(ModifierIds.rebalanced, slotlessFolder, "_traits"));
 
     // removal
     ModifierRemovalRecipeBuilder.removal()
