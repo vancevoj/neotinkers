@@ -25,20 +25,13 @@ import java.util.stream.Collectors;
 /** Base data generator for use in addons */
 @SuppressWarnings({"unused", "SameParameterValue"})  // API
 public abstract class AbstractMaterialTraitDataProvider extends GenericDataProvider {
-  private static final Gson GSON = (new GsonBuilder())
-    .registerTypeAdapter(ModifierEntry.class, ModifierEntry.LOADABLE)
-    .registerTypeAdapter(ResourceLocation.class, new ResourceLocation.Serializer())
-    .setPrettyPrinting()
-    .disableHtmlEscaping()
-    .create();
-
   /** Map of material ID to builder, there is at most one builder for each ID */
   private final Map<MaterialId,MaterialTraits.Builder> allMaterialTraits = new HashMap<>();
   /* Materials data provider for validation */
   private final AbstractMaterialDataProvider materials;
 
   public AbstractMaterialTraitDataProvider(PackOutput packOutput, AbstractMaterialDataProvider materials) {
-    super(packOutput, Target.DATA_PACK, MaterialTraitsManager.FOLDER, GSON);
+    super(packOutput, Target.DATA_PACK, MaterialTraitsManager.FOLDER, MaterialTraitsManager.GSON);
     this.materials = materials;
   }
 

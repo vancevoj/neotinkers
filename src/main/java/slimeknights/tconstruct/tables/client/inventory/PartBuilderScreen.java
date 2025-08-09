@@ -255,9 +255,11 @@ public class PartBuilderScreen extends BaseTabbedScreen<PartBuilderBlockEntity,P
         List<ModifierEntry> traits = MaterialRegistry.getInstance().getTraits(id, stat.getIdentifier());
         if (!traits.isEmpty()) {
           for (ModifierEntry trait : traits) {
-            Modifier mod = trait.getModifier();
-            stats.add(mod.getDisplayName(trait.getLevel()));
-            tips.add(mod.getDescription(trait.getLevel()));
+            if (trait.isBound()) {
+              Modifier mod = trait.getModifier();
+              stats.add(mod.getDisplayName(trait.getLevel()));
+              tips.add(mod.getDescription(trait.getLevel()));
+            }
           }
         }
 
