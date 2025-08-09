@@ -2,9 +2,12 @@ package slimeknights.tconstruct.tools.client;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.multiplayer.MultiPlayerGameMode;
+import net.minecraft.client.renderer.ItemInHandRenderer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
@@ -13,7 +16,9 @@ import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.MapItem;
 import net.minecraft.world.level.GameType;
+import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent.LoggingOut;
 import net.minecraftforge.client.event.ComputeFovModifierEvent;
@@ -24,6 +29,7 @@ import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
+import org.joml.Matrix4f;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.config.Config;
 import slimeknights.tconstruct.library.client.Icons;
@@ -40,6 +46,7 @@ import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.utils.Orientation2D;
 import slimeknights.tconstruct.library.utils.Orientation2D.Orientation1D;
 import slimeknights.tconstruct.tools.TinkerModifiers;
+import slimeknights.tconstruct.tools.modules.armor.MinimapModule;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -121,6 +128,10 @@ public class ModifierClientEvents {
 
   /** Cache of the current item to render */
   private static final int SLOT_BACKGROUND_SIZE = 22;
+  /** Size of the border around the map */
+  private static final int MAP_PADDING = 7;
+  /** Total map size */
+  private static final int MAP_SIZE = 2 * MAP_PADDING + 128;
 
   @Nonnull
   private static ItemStack nextOffhand = ItemStack.EMPTY;
@@ -168,92 +179,133 @@ public class ModifierClientEvents {
 
   /** Render the item in the first shield slot */
   @SubscribeEvent
-  static void renderHotbar(RenderGuiOverlayEvent.Post event) {
+  public static void renderHotbar(RenderGuiOverlayEvent.Post event) {
     Minecraft mc = Minecraft.getInstance();
-    if (mc.options.hideGui) {
-      return;
-    }
-    if (event.getOverlay() != VanillaGuiOverlay.HOTBAR.type()) {
+    Player player = mc.player;
+    if (mc.options.hideGui || mc.screen != null || event.getOverlay() != VanillaGuiOverlay.HOTBAR.type() || player == null || player != mc.getCameraEntity()) {
       return;
     }
     boolean renderShield = Config.CLIENT.renderShieldSlotItem.get() && !nextOffhand.isEmpty();
     boolean renderItemFrame = Config.CLIENT.renderItemFrame.get() && !itemFrames.isEmpty();
-    if (!renderItemFrame && !renderShield) {
+    // fetch map stack instance
+    float mapScale = Config.CLIENT.mapScale.get().floatValue();
+    ItemStack map = ItemStack.EMPTY;
+    if (mapScale > 0) {
+      TinkerDataCapability.Holder data = TinkerDataCapability.getData(player);
+      if (data != null) {
+        map = data.get(MinimapModule.MAP, ItemStack.EMPTY);
+      }
+    }
+    if (!renderItemFrame && !renderShield && map.isEmpty()) {
       return;
     }
-    MultiPlayerGameMode playerController = Minecraft.getInstance().gameMode;
+    MultiPlayerGameMode playerController = mc.gameMode;
     if (playerController != null && playerController.getPlayerMode() != GameType.SPECTATOR) {
-      Player player = Minecraft.getInstance().player;
-      if (player != null && player == mc.getCameraEntity()) {
-        RenderSystem.enableBlend();
-        RenderSystem.defaultBlendFunc();
+      RenderSystem.enableBlend();
+      RenderSystem.defaultBlendFunc();
 
-        int scaledWidth = mc.getWindow().getGuiScaledWidth();
-        int scaledHeight = mc.getWindow().getGuiScaledHeight();
-        GuiGraphics graphics = event.getGuiGraphics();
-        float partialTicks = event.getPartialTick();
+      int scaledWidth = mc.getWindow().getGuiScaledWidth();
+      int scaledHeight = mc.getWindow().getGuiScaledHeight();
+      GuiGraphics graphics = event.getGuiGraphics();
+      float partialTicks = event.getPartialTick();
 
-        // want just above the normal hotbar item
-        if (renderShield) {
-          int x = scaledWidth / 2 + (player.getMainArm().getOpposite() == HumanoidArm.LEFT ? -117 : 101);
-          int y = scaledHeight - 38;
-          graphics.blit(Icons.ICONS, x - 3, y - 3, player.getOffhandItem().isEmpty() ? 211 : 189, 0, SLOT_BACKGROUND_SIZE, SLOT_BACKGROUND_SIZE, 256, 256);
-          mc.gui.renderSlot(graphics, x, y, partialTicks, player, nextOffhand, 11);
+      // want just above the normal hotbar item
+      if (renderShield) {
+        int x = scaledWidth / 2 + (player.getMainArm().getOpposite() == HumanoidArm.LEFT ? -117 : 101);
+        int y = scaledHeight - 38;
+        graphics.blit(Icons.ICONS, x - 3, y - 3, player.getOffhandItem().isEmpty() ? 211 : 189, 0, SLOT_BACKGROUND_SIZE, SLOT_BACKGROUND_SIZE, 256, 256);
+        mc.gui.renderSlot(graphics, x, y, partialTicks, player, nextOffhand, 11);
+      }
+
+      if (renderItemFrame) {
+        // determine how many items need to be rendered
+        int columns = Config.CLIENT.itemsPerRow.get();
+        int count = itemFrames.size();
+        // need to split items over multiple lines potentially
+        int rows = count / columns;
+        int inLastRow = count % columns;
+        // if we have an exact number, means we should have full in last row
+        if (inLastRow == 0) {
+          inLastRow = columns;
+        } else {
+          // we have an incomplete row that was not counted
+          rows++;
+        }
+        // determine placement of the items
+        Orientation2D location = Config.CLIENT.itemFrameLocation.get();
+        Orientation1D xOrientation = location.getX();
+        Orientation1D yOrientation = location.getY();
+        int xStart = xOrientation.align(scaledWidth - SLOT_BACKGROUND_SIZE * columns) + Config.CLIENT.itemFrameXOffset.get();
+        int yStart = yOrientation.align(scaledHeight - SLOT_BACKGROUND_SIZE * rows) + Config.CLIENT.itemFrameYOffset.get();
+
+        // draw backgrounds
+        RenderSystem.setShaderTexture(0, Icons.ICONS);
+        int lastRow = rows - 1;
+        for (int r = 0; r < lastRow; r++) {
+          for (int c = 0; c < columns; c++) {
+            graphics.blit(Icons.ICONS, xStart + c * SLOT_BACKGROUND_SIZE, yStart + r * SLOT_BACKGROUND_SIZE, 167, 0, SLOT_BACKGROUND_SIZE, SLOT_BACKGROUND_SIZE, 256, 256);
+          }
+        }
+        // last row will be aligned in the direction of x orientation (center, left, or right)
+        int lastRowOffset = xOrientation.align((columns - inLastRow) * 2) * SLOT_BACKGROUND_SIZE / 2;
+        for (int c = 0; c < inLastRow; c++) {
+          graphics.blit(Icons.ICONS, xStart + c * SLOT_BACKGROUND_SIZE + lastRowOffset, yStart + lastRow * SLOT_BACKGROUND_SIZE, 167, 0, SLOT_BACKGROUND_SIZE, SLOT_BACKGROUND_SIZE, 256, 256);
         }
 
-        if (renderItemFrame) {
-          // determine how many items need to be rendered
-          int columns = Config.CLIENT.itemsPerRow.get();
-          int count = itemFrames.size();
-          // need to split items over multiple lines potentially
-          int rows = count / columns;
-          int inLastRow = count % columns;
-          // if we have an exact number, means we should have full in last row
-          if (inLastRow == 0) {
-            inLastRow = columns;
-          } else {
-            // we have an incomplete row that was not counted
-            rows++;
-          }
-          // determine placement of the items
-          Orientation2D location = Config.CLIENT.itemFrameLocation.get();
-          Orientation1D xOrientation = location.getX();
-          Orientation1D yOrientation = location.getY();
-          int xStart = xOrientation.align(scaledWidth - SLOT_BACKGROUND_SIZE * columns) + Config.CLIENT.itemFrameXOffset.get();
-          int yStart = yOrientation.align(scaledHeight - SLOT_BACKGROUND_SIZE * rows) + Config.CLIENT.itemFrameYOffset.get();
-
-          // draw backgrounds
-          RenderSystem.setShaderTexture(0, Icons.ICONS);
-          int lastRow = rows - 1;
-          for (int r = 0; r < lastRow; r++) {
-            for (int c = 0; c < columns; c++) {
-              graphics.blit(Icons.ICONS, xStart + c * SLOT_BACKGROUND_SIZE, yStart + r * SLOT_BACKGROUND_SIZE, 167, 0, SLOT_BACKGROUND_SIZE, SLOT_BACKGROUND_SIZE, 256, 256);
-            }
-          }
-          // last row will be aligned in the direction of x orientation (center, left, or right)
-          int lastRowOffset = xOrientation.align((columns - inLastRow) * 2) * SLOT_BACKGROUND_SIZE / 2;
-          for (int c = 0; c < inLastRow; c++) {
-            graphics.blit(Icons.ICONS, xStart + c * SLOT_BACKGROUND_SIZE + lastRowOffset, yStart + lastRow * SLOT_BACKGROUND_SIZE, 167, 0, SLOT_BACKGROUND_SIZE, SLOT_BACKGROUND_SIZE, 256, 256);
-          }
-
-          // draw items
-          int i = 0;
-          xStart += 3; yStart += 3; // offset from item start instead of frame start
-          for (int r = 0; r < lastRow; r++) {
-            for (int c = 0; c < columns; c++) {
-              mc.gui.renderSlot(graphics, xStart + c * SLOT_BACKGROUND_SIZE, yStart + r * SLOT_BACKGROUND_SIZE, partialTicks, player, itemFrames.get(i), i);
-              i++;
-            }
-          }
-          // align last row
-          for (int c = 0; c < inLastRow; c++) {
-            mc.gui.renderSlot(graphics, xStart + c * SLOT_BACKGROUND_SIZE + lastRowOffset, yStart + lastRow * SLOT_BACKGROUND_SIZE, partialTicks, player, itemFrames.get(i), i);
+        // draw items
+        int i = 0;
+        xStart += 3; yStart += 3; // offset from item start instead of frame start
+        for (int r = 0; r < lastRow; r++) {
+          for (int c = 0; c < columns; c++) {
+            mc.gui.renderSlot(graphics, xStart + c * SLOT_BACKGROUND_SIZE, yStart + r * SLOT_BACKGROUND_SIZE, partialTicks, player, itemFrames.get(i), i);
             i++;
           }
         }
-
-        RenderSystem.disableBlend();
+        // align last row
+        for (int c = 0; c < inLastRow; c++) {
+          mc.gui.renderSlot(graphics, xStart + c * SLOT_BACKGROUND_SIZE + lastRowOffset, yStart + lastRow * SLOT_BACKGROUND_SIZE, partialTicks, player, itemFrames.get(i), i);
+          i++;
+        }
       }
+
+      // render map
+      if (!map.isEmpty() && mc.level != null) {
+        MapItemSavedData data = MapItem.getSavedData(map, mc.level);
+        Integer index = MapItem.getMapId(map);
+
+        // determine placement of the map
+        Orientation2D location = Config.CLIENT.mapLocation.get();
+        Orientation1D xOrientation = location.getX();
+        Orientation1D yOrientation = location.getY();
+        int size = (int) (MAP_SIZE * mapScale);
+        int xStart = xOrientation.align(scaledWidth - size) + Config.CLIENT.mapXOffset.get();
+        int yStart = yOrientation.align(scaledHeight - size) + Config.CLIENT.mapYOffset.get();
+
+        // setup renderer
+        PoseStack poseStack = graphics.pose();
+        poseStack.pushPose();
+        float padding = MAP_PADDING * mapScale;
+        poseStack.translate(xStart + padding, yStart + padding, 0);
+        poseStack.scale(mapScale, mapScale, -1);
+
+        // draw background
+        int light = 0xF000F0;
+        MultiBufferSource buffer = graphics.bufferSource();
+        VertexConsumer consumer = buffer.getBuffer(data == null ? ItemInHandRenderer.MAP_BACKGROUND : ItemInHandRenderer.MAP_BACKGROUND_CHECKERBOARD);
+        Matrix4f matrix = poseStack.last().pose();
+        consumer.vertex(matrix,  -7, 135, 0).color(255, 255, 255, 255).uv(0, 1).uv2(light).endVertex();
+        consumer.vertex(matrix, 135, 135, 0).color(255, 255, 255, 255).uv(1, 1).uv2(light).endVertex();
+        consumer.vertex(matrix, 135,  -7, 0).color(255, 255, 255, 255).uv(1, 0).uv2(light).endVertex();
+        consumer.vertex(matrix,  -7,  -7, 0).color(255, 255, 255, 255).uv(0, 0).uv2(light).endVertex();
+
+        // draw map if present
+        if (data != null && index != null) {
+          Minecraft.getInstance().gameRenderer.getMapRenderer().render(poseStack, buffer, index, data, false, light);
+        }
+        poseStack.popPose();
+      }
+
+      RenderSystem.disableBlend();
     }
   }
 }

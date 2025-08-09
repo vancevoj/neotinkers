@@ -2398,6 +2398,11 @@
   "modifier.tconstruct.item_frame": "Item Frame",
   "modifier.tconstruct.item_frame.flavor": "I see everything",
   "modifier.tconstruct.item_frame.description": "Adds inventory slots to the helmet for items to observe. Perfect for clocks and compasses",
+  "modifier.tconstruct.minimap": "Minimap",
+  "modifier.tconstruct.minimap.flavor": "Explorer's dream",
+  "modifier.tconstruct.minimap.description": "Adds inventory slot to the helmet to fill in a map",
+  "modifier.tconstruct.minimap.disabled": "Minimap: Disabled",
+  "modifier.tconstruct.minimap.selected": "Minimap: Selected %s #%s from slot %s",
 
   "_comment": "Armor - chestplate",
   "modifier.tconstruct.armor_power": "Power",

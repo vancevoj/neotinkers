@@ -150,6 +150,7 @@ import slimeknights.tconstruct.tools.modules.armor.GlowWalkerModule;
 import slimeknights.tconstruct.tools.modules.armor.KineticModule;
 import slimeknights.tconstruct.tools.modules.armor.KnockbackCounterModule;
 import slimeknights.tconstruct.tools.modules.armor.LightspeedAttributeModule;
+import slimeknights.tconstruct.tools.modules.armor.MinimapModule;
 import slimeknights.tconstruct.tools.modules.armor.OvershieldModule;
 import slimeknights.tconstruct.tools.modules.armor.RecurrentProtectionModule;
 import slimeknights.tconstruct.tools.modules.armor.ShieldStrapModule;
@@ -495,6 +496,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
     buildModifier(ModifierIds.respiration).addModule(EnchantmentModule.builder(Enchantments.RESPIRATION).constant());
     buildModifier(ModifierIds.aquaAffinity).addModule(EnchantmentModule.builder(Enchantments.AQUA_AFFINITY).constant()).levelDisplay(ModifierLevelDisplay.NO_LEVELS);
     buildModifier(TinkerModifiers.itemFrame).addModule(InventoryModule.builder().pattern(pattern("item_frame")).flatLimit(1).slotsPerLevel(1));
+    buildModifier(ModifierIds.minimap).addModule(InventoryModule.builder().pattern(pattern("map")).filter(TinkerPredicate.MAP).flatLimit(1).slotsPerLevel(3)).addModule(MinimapModule.INSTANCE);
     // chestplate
     buildModifier(ModifierIds.strength).addModule(AttributeModule.builder(Attributes.ATTACK_DAMAGE, Operation.MULTIPLY_TOTAL).slots(armorSlots).eachLevel(0.1f));
     // leggings
