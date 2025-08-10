@@ -169,7 +169,7 @@ public class PartBuilderScreen extends BaseTabbedScreen<PartBuilderBlockEntity,P
       } else if (mouseX >= x && mouseY >= y && mouseX < x + PATTERN_SIZE && mouseY < y + PATTERN_SIZE) {
         v += 2 * PATTERN_SIZE;
       }
-      graphics.blit(BACKGROUND, x, y, 176, v, PATTERN_SIZE, PATTERN_SIZE);
+      graphics.blit(BACKGROUND, x, y, PATTERN_U, v, PATTERN_SIZE, PATTERN_SIZE);
     }
   }
 
@@ -194,7 +194,6 @@ public class PartBuilderScreen extends BaseTabbedScreen<PartBuilderBlockEntity,P
 
   @Override
   public void updateDisplay() {
-    // fixes the case where we added an item and lost recipes
     if (canScroll()) {
       // if we can still scroll, make sure the scroll bar is in a valid position
       this.recipeIndexOffset = Math.min(this.recipeIndexOffset, getPartRecipeCount() - MAX_PATTERN);
@@ -357,7 +356,7 @@ public class PartBuilderScreen extends BaseTabbedScreen<PartBuilderBlockEntity,P
       int barStart = this.cornerY + SLIDER_TOP;
       int barEnd = barStart + BAR_HEIGHT;
       this.sliderProgress = Mth.clamp(((float) mouseY - barStart - 7.5f) / (barEnd - barStart - SLIDER_TOP), 0, 1);
-      this.recipeIndexOffset = (int) ((this.sliderProgress * this.getHiddenRows()) + 0.5) * 4;
+      this.recipeIndexOffset = Math.round(this.sliderProgress * this.getHiddenRows()) * 4;
       return true;
     } else {
       return super.mouseDragged(mouseX, mouseY, clickedMouseButton, timeSinceLastClick, unknown);
