@@ -25,6 +25,7 @@ import net.minecraftforge.client.event.ClientPlayerNetworkEvent.LoggingOut;
 import net.minecraftforge.client.event.ComputeFovModifierEvent;
 import net.minecraftforge.client.event.RenderGuiOverlayEvent;
 import net.minecraftforge.client.event.RenderHandEvent;
+import net.minecraftforge.client.extensions.common.IClientMobEffectExtensions;
 import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -182,11 +183,13 @@ public class ModifierClientEvents {
   private static int getEffectOffset(Player player) {
     boolean hasBeneficial = false;
     for (MobEffectInstance instance : player.getActiveEffects()) {
-      if (instance.getEffect().isBeneficial()) {
-        hasBeneficial = true;
-      } else {
-        // negative effects means offset two rows
-        return 52;
+      if (IClientMobEffectExtensions.of(instance).isVisibleInGui(instance)) {
+        if (instance.getEffect().isBeneficial()) {
+          hasBeneficial = true;
+        } else {
+          // negative effects means offset two rows
+          return 52;
+        }
       }
     }
     // if we found a positive effect, only need one row. Otherwise none
