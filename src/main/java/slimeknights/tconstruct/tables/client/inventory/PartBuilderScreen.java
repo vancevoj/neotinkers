@@ -194,10 +194,14 @@ public class PartBuilderScreen extends BaseTabbedScreen<PartBuilderBlockEntity,P
 
   @Override
   public void updateDisplay() {
-    // if we can no longer scroll, reset scrollbar progress
     // fixes the case where we added an item and lost recipes
-    if (!canScroll()) {
-      this.sliderProgress = 0.0F;
+    if (canScroll()) {
+      // if we can still scroll, make sure the scroll bar is in a valid position
+      this.recipeIndexOffset = Math.min(this.recipeIndexOffset, getPartRecipeCount() - MAX_PATTERN);
+      this.sliderProgress = this.recipeIndexOffset / 4f / this.getHiddenRows();
+    } else {
+      // if we can no longer scroll, reset scrollbar progress
+      this.sliderProgress = 0;
       this.recipeIndexOffset = 0;
     }
 
