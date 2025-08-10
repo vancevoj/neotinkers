@@ -11,6 +11,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.player.Player;
@@ -177,6 +178,21 @@ public class ModifierClientEvents {
     }
   }
 
+  /** Gets the offset to apply for potion effects on the player */
+  private static int getEffectOffset(Player player) {
+    boolean hasBeneficial = false;
+    for (MobEffectInstance instance : player.getActiveEffects()) {
+      if (instance.getEffect().isBeneficial()) {
+        hasBeneficial = true;
+      } else {
+        // negative effects means offset two rows
+        return 52;
+      }
+    }
+    // if we found a positive effect, only need one row. Otherwise none
+    return hasBeneficial ? 26 : 0;
+  }
+
   /** Render the item in the first shield slot */
   @SubscribeEvent
   public static void renderHotbar(RenderGuiOverlayEvent.Post event) {
@@ -217,6 +233,52 @@ public class ModifierClientEvents {
         mc.gui.renderSlot(graphics, x, y, partialTicks, player, nextOffhand, 11);
       }
 
+      // render map
+      Orientation2D mapLocation = null;
+      int mapOffset = 0;
+      if (!map.isEmpty() && mc.level != null) {
+        MapItemSavedData data = MapItem.getSavedData(map, mc.level);
+        Integer index = MapItem.getMapId(map);
+
+        // determine placement of the map
+        mapLocation = Config.CLIENT.mapLocation.get();
+        Orientation1D xOrientation = mapLocation.getX();
+        Orientation1D yOrientation = mapLocation.getY();
+        mapOffset = (int) (MAP_SIZE * mapScale);
+        int xStart = xOrientation.align(scaledWidth - mapOffset) + Config.CLIENT.mapXOffset.get();
+        int yStart = yOrientation.align(scaledHeight - mapOffset) + Config.CLIENT.mapYOffset.get();
+
+        // if top right, compute potion offset
+        if (mapLocation == Orientation2D.TOP_RIGHT) {
+          int effectOffset = getEffectOffset(player);
+          yStart += effectOffset;
+          mapOffset += effectOffset;
+        }
+
+        // setup renderer
+        PoseStack poseStack = graphics.pose();
+        poseStack.pushPose();
+        float padding = MAP_PADDING * mapScale;
+        poseStack.translate(xStart + padding, yStart + padding, 0);
+        poseStack.scale(mapScale, mapScale, -1);
+
+        // draw background
+        int light = 0xF000F0;
+        MultiBufferSource buffer = graphics.bufferSource();
+        VertexConsumer consumer = buffer.getBuffer(data == null ? ItemInHandRenderer.MAP_BACKGROUND : ItemInHandRenderer.MAP_BACKGROUND_CHECKERBOARD);
+        Matrix4f matrix = poseStack.last().pose();
+        consumer.vertex(matrix,  -7, 135, 0).color(255, 255, 255, 255).uv(0, 1).uv2(light).endVertex();
+        consumer.vertex(matrix, 135, 135, 0).color(255, 255, 255, 255).uv(1, 1).uv2(light).endVertex();
+        consumer.vertex(matrix, 135,  -7, 0).color(255, 255, 255, 255).uv(1, 0).uv2(light).endVertex();
+        consumer.vertex(matrix,  -7,  -7, 0).color(255, 255, 255, 255).uv(0, 0).uv2(light).endVertex();
+
+        // draw map if present
+        if (data != null && index != null) {
+          Minecraft.getInstance().gameRenderer.getMapRenderer().render(poseStack, buffer, index, data, false, light);
+        }
+        poseStack.popPose();
+      }
+
       if (renderItemFrame) {
         // determine how many items need to be rendered
         int columns = Config.CLIENT.itemsPerRow.get();
@@ -237,6 +299,19 @@ public class ModifierClientEvents {
         Orientation1D yOrientation = location.getY();
         int xStart = xOrientation.align(scaledWidth - SLOT_BACKGROUND_SIZE * columns) + Config.CLIENT.itemFrameXOffset.get();
         int yStart = yOrientation.align(scaledHeight - SLOT_BACKGROUND_SIZE * rows) + Config.CLIENT.itemFrameYOffset.get();
+        // if the map and item frame are at the same spot, offset item frame below
+        if (location == mapLocation) {
+          switch (yOrientation) {
+            case START -> yStart += mapOffset;
+            // add in an extra half set of the slots as we don't want to center it since the map took center
+            case MIDDLE -> yStart += (mapOffset + SLOT_BACKGROUND_SIZE * rows) / 2;
+            case END -> yStart -= mapOffset;
+          }
+        }
+        // handle potions as well, though its already been handled in the map offset if present
+        else if (location == Orientation2D.TOP_RIGHT) {
+          yStart += getEffectOffset(player);
+        }
 
         // draw backgrounds
         RenderSystem.setShaderTexture(0, Icons.ICONS);
@@ -266,43 +341,6 @@ public class ModifierClientEvents {
           mc.gui.renderSlot(graphics, xStart + c * SLOT_BACKGROUND_SIZE + lastRowOffset, yStart + lastRow * SLOT_BACKGROUND_SIZE, partialTicks, player, itemFrames.get(i), i);
           i++;
         }
-      }
-
-      // render map
-      if (!map.isEmpty() && mc.level != null) {
-        MapItemSavedData data = MapItem.getSavedData(map, mc.level);
-        Integer index = MapItem.getMapId(map);
-
-        // determine placement of the map
-        Orientation2D location = Config.CLIENT.mapLocation.get();
-        Orientation1D xOrientation = location.getX();
-        Orientation1D yOrientation = location.getY();
-        int size = (int) (MAP_SIZE * mapScale);
-        int xStart = xOrientation.align(scaledWidth - size) + Config.CLIENT.mapXOffset.get();
-        int yStart = yOrientation.align(scaledHeight - size) + Config.CLIENT.mapYOffset.get();
-
-        // setup renderer
-        PoseStack poseStack = graphics.pose();
-        poseStack.pushPose();
-        float padding = MAP_PADDING * mapScale;
-        poseStack.translate(xStart + padding, yStart + padding, 0);
-        poseStack.scale(mapScale, mapScale, -1);
-
-        // draw background
-        int light = 0xF000F0;
-        MultiBufferSource buffer = graphics.bufferSource();
-        VertexConsumer consumer = buffer.getBuffer(data == null ? ItemInHandRenderer.MAP_BACKGROUND : ItemInHandRenderer.MAP_BACKGROUND_CHECKERBOARD);
-        Matrix4f matrix = poseStack.last().pose();
-        consumer.vertex(matrix,  -7, 135, 0).color(255, 255, 255, 255).uv(0, 1).uv2(light).endVertex();
-        consumer.vertex(matrix, 135, 135, 0).color(255, 255, 255, 255).uv(1, 1).uv2(light).endVertex();
-        consumer.vertex(matrix, 135,  -7, 0).color(255, 255, 255, 255).uv(1, 0).uv2(light).endVertex();
-        consumer.vertex(matrix,  -7,  -7, 0).color(255, 255, 255, 255).uv(0, 0).uv2(light).endVertex();
-
-        // draw map if present
-        if (data != null && index != null) {
-          Minecraft.getInstance().gameRenderer.getMapRenderer().render(poseStack, buffer, index, data, false, light);
-        }
-        poseStack.popPose();
       }
 
       RenderSystem.disableBlend();

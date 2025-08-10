@@ -354,7 +354,7 @@ public class Config {
             .defineInRange("scale", 0.75f, 0, 100);
           this.mapLocation = builder
             .comment("Location of the minimap on the screen.")
-            .defineEnum("location", Orientation2D.TOP_RIGHT);
+            .defineEnum("location", Orientation2D.TOP_LEFT);
         }
         builder.pop();
 
