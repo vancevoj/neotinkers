@@ -183,7 +183,7 @@ public class ModifierClientEvents {
   private static int getEffectOffset(Player player) {
     boolean hasBeneficial = false;
     for (MobEffectInstance instance : player.getActiveEffects()) {
-      if (IClientMobEffectExtensions.of(instance).isVisibleInGui(instance)) {
+      if (instance.showIcon() && IClientMobEffectExtensions.of(instance).isVisibleInGui(instance)) {
         if (instance.getEffect().isBeneficial()) {
           hasBeneficial = true;
         } else {
