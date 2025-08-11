@@ -126,28 +126,33 @@ public enum MinimapModule implements ModifierModule, EquipmentChangeModifierHook
   @Override
   public boolean startInteract(IToolStackView tool, ModifierEntry modifier, Player player, EquipmentSlot slot, TooltipKey keyModifier) {
     if (keyModifier == TooltipKey.NORMAL || keyModifier == TooltipKey.CONTROL) {
-      if (!player.level().isClientSide) {
-        // first, increment the number
-        ModDataNBT data = tool.getPersistentData();
-        InventoryModifierHook inventory = modifier.getHook(ToolInventoryCapability.HOOK);
-        int totalSlots = inventory.getSlots(tool, modifier);
-        // support going 1 above max to disable the map
-        int newSelected = (data.getInt(SELECTED_SLOT) + 1) % (totalSlots + 1);
-        // skip over empty slots; helps when you don't use the full space
-        while (newSelected < totalSlots && inventory.getStack(tool, modifier, newSelected).isEmpty()) {
-          newSelected++;
-        }
-        data.putInt(SELECTED_SLOT, newSelected);
-
-        // display a message about what is now selected
-        if (newSelected == totalSlots) {
-          player.displayClientMessage(DISABLED, true);
-        } else {
-          ItemStack selectedStack = inventory.getStack(tool, modifier, newSelected);
-          player.displayClientMessage(Component.translatable(SELECTED, selectedStack.getHoverName(), MapItem.getMapId(selectedStack), newSelected + 1), true);
-        }
+      // first, find the new number
+      ModDataNBT data = tool.getPersistentData();
+      InventoryModifierHook inventory = modifier.getHook(ToolInventoryCapability.HOOK);
+      int totalSlots = inventory.getSlots(tool, modifier);
+      int current = data.getInt(SELECTED_SLOT);
+      // support going 1 above max to disable the map
+      int newSelected = (current + 1) % (totalSlots + 1);
+      // skip over empty slots; helps when you don't use the full space
+      while (newSelected < totalSlots && inventory.getStack(tool, modifier, newSelected).isEmpty()) {
+        newSelected++;
       }
-      return true;
+
+      // only mark as doing something if we changed something
+      if (newSelected != current) {
+        if (!player.level().isClientSide) {
+          data.putInt(SELECTED_SLOT, newSelected);
+
+          // display a message about what is now selected
+          if (newSelected == totalSlots) {
+            player.displayClientMessage(DISABLED, true);
+          } else {
+            ItemStack selectedStack = inventory.getStack(tool, modifier, newSelected);
+            player.displayClientMessage(Component.translatable(SELECTED, selectedStack.getHoverName(), MapItem.getMapId(selectedStack), newSelected + 1), true);
+          }
+        }
+        return true;
+      }
     }
     return false;
   }
