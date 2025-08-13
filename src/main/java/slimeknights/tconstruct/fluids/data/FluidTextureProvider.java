@@ -120,14 +120,15 @@ public class FluidTextureProvider extends AbstractFluidTextureProvider {
     return texture(fluid).wrapId("fluid/", "/", false, false);
   }
 
-  /** Creates a texture using the fluid's ID in the given folder */
-  private FluidTexture.Builder folder(FluidObject<?> fluid, String folder) {
-    return texture(fluid).wrapId("fluid/"+folder+"/", "/", false, false);
-  }
-
   /** Creates a texture using the given fixed name in the fluid folder */
   private FluidTexture.Builder named(FluidObject<?> fluid, String name) {
-    return texture(fluid).textures(getResource("fluid/"+name+"/"), false, false);
+    return texture(fluid).root(getResource("fluid/"+name+"/"))
+      .still().flowing().camera().cameraOpacity(0.75f);
+  }
+
+  /** Creates a texture using the fluid's ID in the given folder */
+  private FluidTexture.Builder folder(FluidObject<?> fluid, String folder) {
+    return named(fluid, folder + '/' + fluid.getId().getPath());
   }
 
   /** Creates a texture in the slime folder using the ID */

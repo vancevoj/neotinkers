@@ -1,4 +1,6 @@
 {
+  "camera": "tconstruct:fluid/molten/compat_ore/osmium/camera",
+  "camera_opacity": 0.75,
   "color": "FFFFFFFF",
   "flowing": "tconstruct:fluid/molten/compat_ore/osmium/flowing",
   "still": "tconstruct:fluid/molten/compat_ore/osmium/still"

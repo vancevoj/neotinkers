@@ -1,4 +1,6 @@
 {
+  "camera": "tconstruct:fluid/slime/venom/camera",
+  "camera_opacity": 0.75,
   "color": "FFFFFFFF",
   "flowing": "tconstruct:fluid/slime/venom/flowing",
   "still": "tconstruct:fluid/slime/venom/still"

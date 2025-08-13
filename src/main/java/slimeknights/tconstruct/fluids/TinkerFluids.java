@@ -42,6 +42,7 @@ import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.registries.RegistryObject;
 import slimeknights.mantle.fluid.UnplaceableFluid;
+import slimeknights.mantle.fluid.texture.FluidTextureCameraProvider;
 import slimeknights.mantle.registration.RegistrationHelper;
 import slimeknights.mantle.registration.object.EnumObject;
 import slimeknights.mantle.registration.object.FlowingFluidObject;
@@ -257,7 +258,9 @@ public final class TinkerFluids extends TinkerModule {
     PackOutput packOutput = generator.getPackOutput();
     boolean client = event.includeClient();
     generator.addProvider(client, new FluidTooltipProvider(packOutput));
-    generator.addProvider(client, new FluidTextureProvider(packOutput));
+    FluidTextureProvider textureProvider = new FluidTextureProvider(packOutput);
+    generator.addProvider(client, textureProvider);
+    generator.addProvider(client, new FluidTextureCameraProvider(packOutput, event.getExistingFileHelper(), textureProvider));
     generator.addProvider(client, new FluidBucketModelProvider(packOutput, TConstruct.MOD_ID));
     generator.addProvider(client, new FluidBlockstateModelProvider(packOutput, TConstruct.MOD_ID));
   }

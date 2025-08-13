@@ -1,4 +1,6 @@
 {
+  "camera": "tconstruct:fluid/molten/alloy/slimesteel/camera",
+  "camera_opacity": 0.75,
   "color": "FFFFFFFF",
   "flowing": "tconstruct:fluid/molten/alloy/slimesteel/flowing",
   "still": "tconstruct:fluid/molten/alloy/slimesteel/still"

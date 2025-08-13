@@ -1,4 +1,6 @@
 {
+  "camera": "tconstruct:fluid/molten/alloy/knightslime/camera",
+  "camera_opacity": 0.75,
   "color": "FFFFFFFF",
   "flowing": "tconstruct:fluid/molten/alloy/knightslime/flowing",
   "still": "tconstruct:fluid/molten/alloy/knightslime/still"

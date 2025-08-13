@@ -1,4 +1,6 @@
 {
+  "camera": "tconstruct:fluid/molten/compat_alloy/constantan/camera",
+  "camera_opacity": 0.75,
   "color": "FFFFFFFF",
   "flowing": "tconstruct:fluid/molten/compat_alloy/constantan/flowing",
   "still": "tconstruct:fluid/molten/compat_alloy/constantan/still"

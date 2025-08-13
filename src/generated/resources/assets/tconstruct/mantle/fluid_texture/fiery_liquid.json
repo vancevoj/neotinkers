@@ -1,4 +1,6 @@
 {
+  "camera": "tconstruct:fluid/slime/fiery/camera",
+  "camera_opacity": 0.75,
   "color": "FFFFFFFF",
   "flowing": "tconstruct:fluid/slime/fiery/flowing",
   "still": "tconstruct:fluid/slime/fiery/still"
