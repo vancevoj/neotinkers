@@ -12,7 +12,7 @@ import java.util.Locale;
 import java.util.function.Supplier;
 
 /** @deprecated use {@link slimeknights.mantle.registration.deferred.PotionDeferredRegister} */
-@Deprecated
+@Deprecated(forRemoval = true)
 public class PotionDeferredRegister extends DeferredRegisterWrapper<Potion> {
   public PotionDeferredRegister(String modID) {
     super(Registries.POTION, modID);
