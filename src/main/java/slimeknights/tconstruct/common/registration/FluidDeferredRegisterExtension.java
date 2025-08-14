@@ -2,7 +2,7 @@ package slimeknights.tconstruct.common.registration;
 
 import slimeknights.mantle.registration.deferred.FluidDeferredRegister;
 
-// TODO: move to Mantle?
+/** Extension of the fluid register to add a few common tinkers fluid behaviors. */
 public class FluidDeferredRegisterExtension extends FluidDeferredRegister {
   public FluidDeferredRegisterExtension(String modID) {
     super(modID);
