@@ -41,6 +41,7 @@ import net.minecraftforge.fluids.ForgeFlowingFluid;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.registries.RegistryObject;
+import slimeknights.mantle.fluid.InvertedFluid;
 import slimeknights.mantle.fluid.UnplaceableFluid;
 import slimeknights.mantle.fluid.texture.FluidTextureCameraProvider;
 import slimeknights.mantle.registration.RegistrationHelper;
@@ -108,7 +109,7 @@ public final class TinkerFluids extends TinkerModule {
   public static final FlowingFluidObject<SlimeFluid> skySlime   = FLUIDS.registerSlime("sky_slime"  ).type(slime("sky_slime"  ).temperature(310)).bucket().block(createEffect(MapColor.DIAMOND, 0, () -> new MobEffectInstance(TinkerEffects.ricochet.get(), 5*20))).flowing(SlimeFluid.Source::new, SlimeFluid.Flowing::new);
   public static final FlowingFluidObject<SlimeFluid> enderSlime = FLUIDS.registerSlime("ender_slime").type(slime("ender_slime").temperature(370)).bucket().block(createEffect(MapColor.COLOR_PURPLE, 0, () -> new MobEffectInstance(TinkerEffects.enderference.get(), 5 * 20))).flowing(SlimeFluid.Source::new, SlimeFluid.Flowing::new);
   public static final FlowingFluidObject<SlimeFluid> magma      = FLUIDS.registerSlime("magma").type(slime("magma").temperature(600).lightLevel(3)).bucket().commonTag().block(createBurning(MapColor.NETHER, 3, 8, 3f)).flowing(SlimeFluid.Source::new, SlimeFluid.Flowing::new);
-  public static final FluidObject<UnplaceableFluid> ichor       = FLUIDS.registerSlime("ichor").type(slime("ichor").temperature(1000).density(-1600)).bucket().unplacable();
+  public static final FlowingFluidObject<InvertedFluid> ichor   = FLUIDS.registerSlime("ichor").invertedType(slime("ichor").temperature(1000).density(-1600)).bucket().block(MapColor.COLOR_ORANGE, 0).invertedFlowing();
   public static final EnumObject<SlimeType, Fluid> slime = new EnumObject.Builder<SlimeType, Fluid>(SlimeType.class).put(SlimeType.EARTH, earthSlime).put(SlimeType.SKY, skySlime).put(SlimeType.ENDER, enderSlime).put(SlimeType.ICHOR, ichor).build();
   // bottles of slime
   public static final EnumObject<SlimeType, Item> slimeBottle = ITEMS.registerEnum(SlimeType.values(), "slime_bottle", type -> new FluidContainerFoodItem(
@@ -162,7 +163,7 @@ public final class TinkerFluids extends TinkerModule {
 
   public static final FlowingFluidObject<ForgeFlowingFluid> moltenManyullyn   = FLUIDS.registerMetal("molten_manyullyn").type(hot("molten_manyullyn").temperature(1500).lightLevel(11)).block(createBurning(MapColor.COLOR_PURPLE, 11, 10, 8f)).bucket().commonTag().flowing();
   public static final FlowingFluidObject<ForgeFlowingFluid> moltenHepatizon   = FLUIDS.registerMetal("molten_hepatizon").type(hot("molten_hepatizon").temperature(1700).lightLevel(8)).block(createBurning(MapColor.TERRACOTTA_BLUE, 8, 10, 7f)).bucket().commonTag().flowing();
-  public static final FluidObject<UnplaceableFluid>         moltenCinderslime = FLUIDS.registerMetal("molten_cinderslime").type(hot("molten_cinderslime").temperature(1350).lightLevel(SlimeType.ICHOR.getLightLevel()).density(-2000)).bucket().unplacable();
+  public static final FlowingFluidObject<InvertedFluid>     moltenCinderslime = FLUIDS.registerMetal("molten_cinderslime").invertedType(hot("molten_cinderslime").temperature(1350).lightLevel(10).density(-2000)).burningBlock(MapColor.COLOR_RED, 10, 10, 7f).bucket().invertedFlowing();
   public static final FlowingFluidObject<ForgeFlowingFluid> moltenQueensSlime = FLUIDS.registerMetal("molten_queens_slime").type(hot("molten_queens_slime").temperature(1450).lightLevel(9)).block(createBurning(MapColor.COLOR_GREEN, 9, 10, 6f)).bucket().flowing();
   public static final FlowingFluidObject<ForgeFlowingFluid> moltenSoulsteel   = FLUIDS.registerMetal("molten_soulsteel").type(hot("molten_soulsteel").temperature(1500).lightLevel(6)).block(createBurning(MapColor.COLOR_BROWN, 6, 10, 7f)).bucket().flowing();
   public static final FlowingFluidObject<ForgeFlowingFluid> moltenNetherite   = FLUIDS.registerMetal("molten_netherite").type(hot("molten_netherite").temperature(1550).lightLevel(14)).block(createBurning(MapColor.COLOR_BLACK, 14, 10, 10f)).bucket().commonTag().flowing();
