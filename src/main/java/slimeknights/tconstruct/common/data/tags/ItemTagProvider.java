@@ -104,6 +104,8 @@ import static slimeknights.tconstruct.common.TinkerTags.Items.WORN_ARMOR;
 
 @SuppressWarnings("unchecked")
 public class ItemTagProvider extends ItemTagsProvider {
+  /** Twlight forest uncrafting table blacklist */
+  private static final TagKey<Item> BANNED_UNCRAFTABLE = ItemTags.create(new ResourceLocation("twilightforest", "banned_uncraftables"));
   private final Function<ResourceLocation,IntrinsicTagAppender<Item>> MAKE_TAG = tag -> tag(ItemTags.create(tag));
 
   public ItemTagProvider(PackOutput output, CompletableFuture<Provider> lookupProvider, CompletableFuture<TagLookup<Block>> blockTagProvider, ExistingFileHelper existingFileHelper) {
@@ -464,7 +466,8 @@ public class ItemTagProvider extends ItemTagsProvider {
     this.copy(TinkerTags.Blocks.DEEPSLATE,  TinkerTags.Items.DEEPSLATE);
     this.copy(TinkerTags.Blocks.BASALT,     TinkerTags.Items.BASALT);
 
-    // twilight forest trophies
+    // twilight forest
+    this.tag(BANNED_UNCRAFTABLE).addTag(MODIFIABLE);
     Function<String,ResourceLocation> trophy = name -> new ResourceLocation("twilightforest", name + "_trophy");
     this.tag(TinkerTags.Items.BOSS_TROPHIES)
       .addOptional(trophy.apply("naga"))
