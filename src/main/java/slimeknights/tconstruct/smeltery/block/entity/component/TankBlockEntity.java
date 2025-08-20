@@ -18,6 +18,7 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import slimeknights.tconstruct.common.multiblock.IMasterLogic;
 import slimeknights.tconstruct.library.client.model.ModelProperties;
 import slimeknights.tconstruct.library.fluid.FluidTankAnimated;
 import slimeknights.tconstruct.library.utils.NBTTags;
@@ -131,6 +132,16 @@ public class TankBlockEntity extends SmelteryComponentBlockEntity implements ITa
     }
   }
 
+  @Override
+  public void onLoad() {
+    super.onLoad();
+    if (level != null && !level.isClientSide) {
+      BlockPos masterPos = getMasterPos();
+      if (masterPos != null && level.getBlockEntity(masterPos) instanceof IMasterLogic master) {
+        master.onServantLoad(this);
+      }
+    }
+  }
 
   /*
    * NBT
