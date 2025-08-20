@@ -20,6 +20,7 @@ import slimeknights.mantle.data.loadable.Loadable;
 import slimeknights.mantle.data.loadable.Loadables;
 import slimeknights.mantle.data.loadable.array.ArrayLoadable;
 import slimeknights.mantle.data.loadable.primitive.FloatLoadable;
+import slimeknights.mantle.data.loadable.primitive.IntLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.data.predicate.IJsonPredicate;
 import slimeknights.mantle.data.predicate.item.ItemPredicate;
@@ -37,7 +38,7 @@ import java.util.Collections;
 import java.util.List;
 
 /** JSON object representing equipment replacement encoded in JSON */
-public record MobEquipment(EquipmentSlot slot, IJsonPredicate<Item> match, ItemOutput tool, List<RandomMaterial> materials, Fluid fluid, float chance) {
+public record MobEquipment(EquipmentSlot slot, IJsonPredicate<Item> match, ItemOutput tool, List<RandomMaterial> materials, Fluid fluid, float chance, int priority) {
   public static final RecordLoadable<MobEquipment> LOADABLE = RecordLoadable.create(
     TinkerLoadables.EQUIPMENT_SLOT.requiredField("slot", MobEquipment::slot),
     ItemPredicate.LOADER.defaultField("match", MobEquipment::match),
@@ -45,6 +46,7 @@ public record MobEquipment(EquipmentSlot slot, IJsonPredicate<Item> match, ItemO
     RandomMaterial.LOADER.list(0).defaultField("materials", List.of(), false, MobEquipment::materials),
     Loadables.FLUID.defaultField("fluid", Fluids.EMPTY, false, MobEquipment::fluid),
     FloatLoadable.PERCENT.defaultField("chance", 0.05f, true, MobEquipment::chance),
+    IntLoadable.FROM_ZERO.defaultField("priority", 100, true, MobEquipment::priority),
     MobEquipment::new);
   /** Loadable for the list of entries in JSON */
   public static final Loadable<List<MobEquipment>> LIST_LOADABLE = LOADABLE.list(ArrayLoadable.COMPACT);
@@ -147,6 +149,8 @@ public record MobEquipment(EquipmentSlot slot, IJsonPredicate<Item> match, ItemO
       private Fluid fluid = Fluids.EMPTY;
       /** Chance the tool is given to the entity */
       private float chance = 0.05f;
+      /** Order this entry applies if multiple entries are on the same target. Higher numbers run earlier. */
+      private int priority = 100;
 
       /** Sets the tool item */
       public SlotBuilder tool(ItemOutput tool) {
@@ -173,7 +177,7 @@ public record MobEquipment(EquipmentSlot slot, IJsonPredicate<Item> match, ItemO
 
       /** Builds the final equipment */
       private MobEquipment build() {
-        return new MobEquipment(slot, match, tool, materials, fluid, chance);
+        return new MobEquipment(slot, match, tool, materials, fluid, chance, priority);
       }
 
       /** Finishes this slot */

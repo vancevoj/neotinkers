@@ -27,6 +27,7 @@ import slimeknights.mantle.util.typed.TypedMapBuilder;
 import slimeknights.tconstruct.TConstruct;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -109,7 +110,7 @@ public class MobEquipmentManager extends SimpleJsonResourceReloadListener {
 
     // build the final map
     this.replacements = parsed.entrySet().stream()
-      .collect(Collectors.toMap(Entry::getKey, e -> List.copyOf(e.getValue())));
+      .collect(Collectors.toMap(Entry::getKey, e -> e.getValue().stream().sorted(Comparator.comparing(MobEquipment::priority).reversed()).toList()));
 
     TConstruct.LOG.info("Loaded {} mob equipment replacements targeting {} mobs in {} ms", loaded, replacements.size(), (System.nanoTime() - time) / 1000000f);
   }

@@ -20,6 +20,7 @@
         "type": "tconstruct:ancient"
       }
     ],
+    "priority": 100,
     "slot": "mainhand",
     "tool": "tconstruct:swasher"
   }
