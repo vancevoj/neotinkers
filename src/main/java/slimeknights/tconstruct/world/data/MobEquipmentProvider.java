@@ -5,14 +5,11 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.material.Fluids;
-import slimeknights.mantle.data.predicate.IJsonPredicate;
 import slimeknights.mantle.data.predicate.item.ItemPredicate;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.data.tinkering.AbstractMobEquipmentProvider;
-import slimeknights.tconstruct.library.json.predicate.material.MaterialPredicate;
 import slimeknights.tconstruct.library.materials.RandomMaterial;
-import slimeknights.tconstruct.library.materials.definition.MaterialVariantId;
 import slimeknights.tconstruct.tools.TinkerTools;
 
 /** Provider for custom mob equipment */
@@ -23,8 +20,7 @@ public class MobEquipmentProvider extends AbstractMobEquipmentProvider {
 
   @Override
   protected void addEquipment() {
-    IJsonPredicate<MaterialVariantId> includeInLoot = MaterialPredicate.tag(TinkerTags.Materials.EXCLUDE_FROM_LOOT).inverted();
-    RandomMaterial random = RandomMaterial.random().allowHidden().material(includeInLoot).build();
+    RandomMaterial random = RandomMaterial.ancient();
 
     // piglins spawn with battle signs
     equip(TinkerTags.EntityTypes.PIGLINS)

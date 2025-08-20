@@ -55,7 +55,7 @@ public class LootTableInjectionProvider extends AbstractLootTableInjectionProvid
 
     // bartering
     IJsonPredicate<MaterialVariantId> includeInLoot = MaterialPredicate.tag(TinkerTags.Materials.EXCLUDE_FROM_LOOT).inverted();
-    RandomMaterial random = RandomMaterial.random().allowHidden().material(includeInLoot).build();
+    RandomMaterial random = RandomMaterial.ancient();
     AddToolDataFunction.Builder ancientToolData2 = AddToolDataFunction.builder().addMaterial(random).addMaterial(random);
     injectGameplay("piglin_bartering")
       .addToPool("main", LootItem.lootTableItem(TinkerSmeltery.scorchedLantern).setWeight(20)
