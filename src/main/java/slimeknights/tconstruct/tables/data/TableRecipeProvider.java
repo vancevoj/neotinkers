@@ -269,10 +269,11 @@ public class TableRecipeProvider extends BaseRecipeProvider {
       .result(rod, Items.STICK, 3)
       .result(string, Items.STRING, 3)
       .save(consumer, location(folder + "bow"));
+    Pattern ingot = new Pattern(TConstruct.MOD_ID, "ingot");
     PartBuilderRecycleBuilder.tool(Items.CROSSBOW)
       .result(rod, Items.STICK, 3)
       .result(string, Items.STRING, 2)
-      .result(new Pattern(TConstruct.MOD_ID, "ingot"), Tags.Items.INGOTS_IRON, 1)
+      .result(ingot, Tags.Items.INGOTS_IRON, 1)
       .save(consumer, location(folder + "crossbow"));
     PartBuilderRecycleBuilder.tool(Items.FISHING_ROD)
       .result(rod, Items.STICK, 3)
@@ -326,53 +327,53 @@ public class TableRecipeProvider extends BaseRecipeProvider {
     // ironwood armor and tools
     TagKey<Item> ironwoodIngot = ItemTags.create(Mantle.commonResource("ingots/ironwood"));
     PartBuilderRecycleBuilder.tool(ItemNameIngredient.from(tf.apply("ironwood_pickaxe"), tf.apply("ironwood_axe")))
-      .result(scale, ironwoodIngot, 3)
+      .result(ingot, ironwoodIngot, 3)
       .save(tfConsumer, location(folder + "twilightforest/ironwood_axe"));
     PartBuilderRecycleBuilder.tool(ItemNameIngredient.from(tf.apply("ironwood_sword"), tf.apply("ironwood_hoe")))
-      .result(scale, ironwoodIngot, 2)
+      .result(ingot, ironwoodIngot, 2)
       .save(tfConsumer, location(folder + "twilightforest/ironwood_sword"));
     PartBuilderRecycleBuilder.tool(ItemNameIngredient.from(tf.apply("ironwood_shovel")))
-      .result(scale, ironwoodIngot, 1)
+      .result(ingot, ironwoodIngot, 1)
       .save(tfConsumer, location(folder + "twilightforest/ironwood_shovel"));
     PartBuilderRecycleBuilder.tool(ItemNameIngredient.from(tf.apply("ironwood_helmet")))
-      .result(scale, ironwoodIngot, 5)
+      .result(ingot, ironwoodIngot, 5)
       .save(tfConsumer, location(folder + "twilightforest/ironwood_helmet"));
     PartBuilderRecycleBuilder.tool(ItemNameIngredient.from(tf.apply("ironwood_chestplate")))
-      .result(scale, ironwoodIngot, 8)
+      .result(ingot, ironwoodIngot, 8)
       .save(tfConsumer, location(folder + "twilightforest/ironwood_chestplate"));
     PartBuilderRecycleBuilder.tool(ItemNameIngredient.from(tf.apply("ironwood_leggings")))
-      .result(scale, ironwoodIngot, 7)
+      .result(ingot, ironwoodIngot, 7)
       .save(tfConsumer, location(folder + "twilightforest/ironwood_leggings"));
     PartBuilderRecycleBuilder.tool(ItemNameIngredient.from(tf.apply("ironwood_boots")))
-      .result(scale, ironwoodIngot, 4)
+      .result(ingot, ironwoodIngot, 4)
       .save(tfConsumer, location(folder + "twilightforest/ironwood_boots"));
     // arctic
     ResourceLocation arcticFur = tf.apply("arctic_fur");
     PartBuilderRecycleBuilder.tool(ItemNameIngredient.from(tf.apply("arctic_helmet")))
-      .result(scale, ItemNameOutput.fromName(arcticFur, 5))
+      .result(leather, ItemNameOutput.fromName(arcticFur, 5))
       .save(tfConsumer, location(folder + "twilightforest/arctic_helmet"));
     PartBuilderRecycleBuilder.tool(ItemNameIngredient.from(tf.apply("arctic_chestplate")))
-      .result(scale, ItemNameOutput.fromName(arcticFur, 8))
+      .result(leather, ItemNameOutput.fromName(arcticFur, 8))
       .save(tfConsumer, location(folder + "twilightforest/arctic_chestplate"));
     PartBuilderRecycleBuilder.tool(ItemNameIngredient.from(tf.apply("arctic_leggings")))
-      .result(scale, ItemNameOutput.fromName(arcticFur, 7))
+      .result(leather, ItemNameOutput.fromName(arcticFur, 7))
       .save(tfConsumer, location(folder + "twilightforest/arctic_leggings"));
     PartBuilderRecycleBuilder.tool(ItemNameIngredient.from(tf.apply("arctic_boots")))
-      .result(scale, ItemNameOutput.fromName(arcticFur, 4))
+      .result(leather, ItemNameOutput.fromName(arcticFur, 4))
       .save(tfConsumer, location(folder + "twilightforest/arctic_boots"));
     // arctic
     ResourceLocation alphaYetiFur = tf.apply("alpha_yeti_fur");
     PartBuilderRecycleBuilder.tool(ItemNameIngredient.from(tf.apply("yeti_helmet")))
-      .result(scale, ItemNameOutput.fromName(alphaYetiFur, 5))
+      .result(leather, ItemNameOutput.fromName(alphaYetiFur, 5))
       .save(tfConsumer, location(folder + "twilightforest/yeti_helmet"));
     PartBuilderRecycleBuilder.tool(ItemNameIngredient.from(tf.apply("yeti_chestplate")))
-      .result(scale, ItemNameOutput.fromName(alphaYetiFur, 8))
+      .result(leather, ItemNameOutput.fromName(alphaYetiFur, 8))
       .save(tfConsumer, location(folder + "twilightforest/yeti_chestplate"));
     PartBuilderRecycleBuilder.tool(ItemNameIngredient.from(tf.apply("yeti_leggings")))
-      .result(scale, ItemNameOutput.fromName(alphaYetiFur, 7))
+      .result(leather, ItemNameOutput.fromName(alphaYetiFur, 7))
       .save(tfConsumer, location(folder + "twilightforest/yeti_leggings"));
     PartBuilderRecycleBuilder.tool(ItemNameIngredient.from(tf.apply("yeti_boots")))
-      .result(scale, ItemNameOutput.fromName(alphaYetiFur, 4))
+      .result(leather, ItemNameOutput.fromName(alphaYetiFur, 4))
       .save(tfConsumer, location(folder + "twilightforest/yeti_boots"));
   }
 }

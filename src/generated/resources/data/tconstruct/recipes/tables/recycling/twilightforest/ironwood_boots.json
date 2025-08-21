@@ -10,7 +10,7 @@
     "tag": "tconstruct:patterns/default"
   },
   "results": {
-    "tconstruct:scale": {
+    "tconstruct:ingot": {
       "count": 4,
       "tag": "forge:ingots/ironwood"
     }
