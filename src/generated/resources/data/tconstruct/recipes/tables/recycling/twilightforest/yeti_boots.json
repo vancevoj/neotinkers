@@ -1,0 +1,21 @@
+{
+  "type": "tconstruct:part_builder_recycling",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "twilightforest"
+    }
+  ],
+  "pattern": {
+    "tag": "tconstruct:patterns/default"
+  },
+  "results": {
+    "tconstruct:scale": {
+      "count": 4,
+      "item": "twilightforest:alpha_yeti_fur"
+    }
+  },
+  "tool": {
+    "item": "twilightforest:yeti_boots"
+  }
+}

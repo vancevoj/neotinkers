@@ -8,13 +8,20 @@ import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Component.Serializer;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.crafting.CompoundIngredient;
 import net.minecraftforge.common.crafting.DifferenceIngredient;
+import net.minecraftforge.common.crafting.conditions.ModLoadedCondition;
+import slimeknights.mantle.Mantle;
 import slimeknights.mantle.recipe.crafting.ShapedRetexturedRecipeBuilder;
+import slimeknights.mantle.recipe.data.ItemNameIngredient;
+import slimeknights.mantle.recipe.data.ItemNameOutput;
 import slimeknights.mantle.recipe.helper.SimpleFinishedRecipe;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.TinkerTags;
@@ -28,6 +35,7 @@ import slimeknights.tconstruct.tables.TinkerTables;
 import slimeknights.tconstruct.tables.recipe.TinkerStationDamagingRecipeBuilder;
 
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 public class TableRecipeProvider extends BaseRecipeProvider {
 
@@ -287,5 +295,69 @@ public class TableRecipeProvider extends BaseRecipeProvider {
     PartBuilderRecycleBuilder.tool(Items.TURTLE_HELMET)
       .result(scale, Items.SCUTE, 5)
       .save(consumer, location(folder + "turtle_helmet"));
+
+    // twilight forest
+    String tfId = "twilightforest";
+    Function<String,ResourceLocation> tf = name -> new ResourceLocation(tfId, name);
+    Consumer<FinishedRecipe> tfConsumer = withCondition(consumer, new ModLoadedCondition(tfId));
+    // naga scale armor
+    ResourceLocation nagaScale = tf.apply("naga_scale");
+    PartBuilderRecycleBuilder.tool(ItemNameIngredient.from(tf.apply("naga_chestplate")))
+      .result(scale, ItemNameOutput.fromName(nagaScale, 8))
+      .save(tfConsumer, location(folder + "twilightforest/naga_chestplate"));
+    PartBuilderRecycleBuilder.tool(ItemNameIngredient.from(tf.apply("naga_leggings")))
+      .result(scale, ItemNameOutput.fromName(nagaScale, 7))
+      .save(tfConsumer, location(folder + "twilightforest/naga_leggings"));
+    // ironwood armor and tools
+    TagKey<Item> ironwoodIngot = ItemTags.create(Mantle.commonResource("ingots/ironwood"));
+    PartBuilderRecycleBuilder.tool(ItemNameIngredient.from(tf.apply("ironwood_pickaxe"), tf.apply("ironwood_axe")))
+      .result(scale, ironwoodIngot, 3)
+      .save(tfConsumer, location(folder + "twilightforest/ironwood_axe"));
+    PartBuilderRecycleBuilder.tool(ItemNameIngredient.from(tf.apply("ironwood_sword"), tf.apply("ironwood_hoe")))
+      .result(scale, ironwoodIngot, 2)
+      .save(tfConsumer, location(folder + "twilightforest/ironwood_sword"));
+    PartBuilderRecycleBuilder.tool(ItemNameIngredient.from(tf.apply("ironwood_shovel")))
+      .result(scale, ironwoodIngot, 1)
+      .save(tfConsumer, location(folder + "twilightforest/ironwood_shovel"));
+    PartBuilderRecycleBuilder.tool(ItemNameIngredient.from(tf.apply("ironwood_helmet")))
+      .result(scale, ironwoodIngot, 5)
+      .save(tfConsumer, location(folder + "twilightforest/ironwood_helmet"));
+    PartBuilderRecycleBuilder.tool(ItemNameIngredient.from(tf.apply("ironwood_chestplate")))
+      .result(scale, ironwoodIngot, 8)
+      .save(tfConsumer, location(folder + "twilightforest/ironwood_chestplate"));
+    PartBuilderRecycleBuilder.tool(ItemNameIngredient.from(tf.apply("ironwood_leggings")))
+      .result(scale, ironwoodIngot, 7)
+      .save(tfConsumer, location(folder + "twilightforest/ironwood_leggings"));
+    PartBuilderRecycleBuilder.tool(ItemNameIngredient.from(tf.apply("ironwood_boots")))
+      .result(scale, ironwoodIngot, 4)
+      .save(tfConsumer, location(folder + "twilightforest/ironwood_boots"));
+    // arctic
+    ResourceLocation arcticFur = tf.apply("arctic_fur");
+    PartBuilderRecycleBuilder.tool(ItemNameIngredient.from(tf.apply("arctic_helmet")))
+      .result(scale, ItemNameOutput.fromName(arcticFur, 5))
+      .save(tfConsumer, location(folder + "twilightforest/arctic_helmet"));
+    PartBuilderRecycleBuilder.tool(ItemNameIngredient.from(tf.apply("arctic_chestplate")))
+      .result(scale, ItemNameOutput.fromName(arcticFur, 8))
+      .save(tfConsumer, location(folder + "twilightforest/arctic_chestplate"));
+    PartBuilderRecycleBuilder.tool(ItemNameIngredient.from(tf.apply("arctic_leggings")))
+      .result(scale, ItemNameOutput.fromName(arcticFur, 7))
+      .save(tfConsumer, location(folder + "twilightforest/arctic_leggings"));
+    PartBuilderRecycleBuilder.tool(ItemNameIngredient.from(tf.apply("arctic_boots")))
+      .result(scale, ItemNameOutput.fromName(arcticFur, 4))
+      .save(tfConsumer, location(folder + "twilightforest/arctic_boots"));
+    // arctic
+    ResourceLocation alphaYetiFur = tf.apply("alpha_yeti_fur");
+    PartBuilderRecycleBuilder.tool(ItemNameIngredient.from(tf.apply("yeti_helmet")))
+      .result(scale, ItemNameOutput.fromName(alphaYetiFur, 5))
+      .save(tfConsumer, location(folder + "twilightforest/yeti_helmet"));
+    PartBuilderRecycleBuilder.tool(ItemNameIngredient.from(tf.apply("yeti_chestplate")))
+      .result(scale, ItemNameOutput.fromName(alphaYetiFur, 8))
+      .save(tfConsumer, location(folder + "twilightforest/yeti_chestplate"));
+    PartBuilderRecycleBuilder.tool(ItemNameIngredient.from(tf.apply("yeti_leggings")))
+      .result(scale, ItemNameOutput.fromName(alphaYetiFur, 7))
+      .save(tfConsumer, location(folder + "twilightforest/yeti_leggings"));
+    PartBuilderRecycleBuilder.tool(ItemNameIngredient.from(tf.apply("yeti_boots")))
+      .result(scale, ItemNameOutput.fromName(alphaYetiFur, 4))
+      .save(tfConsumer, location(folder + "twilightforest/yeti_boots"));
   }
 }
