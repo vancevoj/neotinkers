@@ -1,0 +1,19 @@
+{
+  "type": "tconstruct:part_builder_recycling",
+  "pattern": {
+    "tag": "tconstruct:patterns/default"
+  },
+  "results": {
+    "tconstruct:bowstring": {
+      "count": 3,
+      "item": "minecraft:string"
+    },
+    "tconstruct:rod": {
+      "count": 3,
+      "item": "minecraft:stick"
+    }
+  },
+  "tool": {
+    "item": "minecraft:bow"
+  }
+}

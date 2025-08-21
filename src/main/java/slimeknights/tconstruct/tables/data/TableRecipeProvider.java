@@ -264,6 +264,20 @@ public class TableRecipeProvider extends BaseRecipeProvider {
     PartBuilderRecycleBuilder.tool(Items.WOODEN_SHOVEL)
       .result(rod, Items.STICK, 4)
       .save(consumer, location(folder + "wooden_shovel"));
+    Pattern string = new Pattern(TConstruct.MOD_ID, "bowstring");
+    PartBuilderRecycleBuilder.tool(Items.BOW)
+      .result(rod, Items.STICK, 3)
+      .result(string, Items.STRING, 3)
+      .save(consumer, location(folder + "bow"));
+    PartBuilderRecycleBuilder.tool(Items.CROSSBOW)
+      .result(rod, Items.STICK, 3)
+      .result(string, Items.STRING, 2)
+      .result(new Pattern(TConstruct.MOD_ID, "ingot"), Tags.Items.INGOTS_IRON, 1)
+      .save(consumer, location(folder + "crossbow"));
+    PartBuilderRecycleBuilder.tool(Items.FISHING_ROD)
+      .result(rod, Items.STICK, 3)
+      .result(string, Items.STRING, 2)
+      .save(consumer, location(folder + "fishing_rod"));
     // stone
     Pattern block = new Pattern(TConstruct.MOD_ID, "block");
     PartBuilderRecycleBuilder.tool(Items.STONE_PICKAXE, Items.STONE_AXE)
