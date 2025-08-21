@@ -19,6 +19,7 @@ import net.minecraftforge.common.crafting.DifferenceIngredient;
 import net.minecraftforge.common.crafting.IntersectionIngredient;
 import net.minecraftforge.fluids.FluidType;
 import slimeknights.mantle.data.predicate.IJsonPredicate;
+import slimeknights.mantle.datagen.MantleTags;
 import slimeknights.mantle.recipe.condition.TagFilledCondition;
 import slimeknights.mantle.recipe.data.ItemNameIngredient;
 import slimeknights.mantle.recipe.helper.ItemOutput;
@@ -1223,9 +1224,9 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .saveSalvage(consumer, prefix(TinkerModifiers.spilling, abilitySalvage))
                          .save(consumer, prefix(TinkerModifiers.spilling, abilityFolder));
     ModifierRecipeBuilder.modifier(TinkerModifiers.splashing)
-                         .addInput(TinkerFluids.splashBottle)
+                         .addInput(MantleTags.Items.SPLASH_BOTTLE)
                          .addInput(tanks)
-                         .addInput(TinkerFluids.splashBottle)
+                         .addInput(MantleTags.Items.SPLASH_BOTTLE)
                          .addInput(Tags.Items.INGOTS_COPPER)
                          .addInput(Tags.Items.INGOTS_COPPER)
                          .setSlots(SlotType.ABILITY, 1)
