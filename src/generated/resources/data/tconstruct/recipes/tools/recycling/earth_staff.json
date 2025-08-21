@@ -1,7 +1,7 @@
 {
   "type": "tconstruct:part_builder_recycling",
   "pattern": {
-    "tag": "tconstruct:patterns/default"
+    "item": "tconstruct:venom_bottle"
   },
   "results": {
     "tconstruct:block": {

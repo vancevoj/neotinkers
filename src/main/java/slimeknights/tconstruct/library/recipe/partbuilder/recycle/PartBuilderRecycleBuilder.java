@@ -12,7 +12,7 @@ import net.minecraft.world.level.ItemLike;
 import slimeknights.mantle.data.loadable.Loadables;
 import slimeknights.mantle.recipe.data.AbstractRecipeBuilder;
 import slimeknights.mantle.recipe.helper.ItemOutput;
-import slimeknights.tconstruct.common.TinkerTags;
+import slimeknights.tconstruct.fluids.TinkerFluids;
 import slimeknights.tconstruct.library.recipe.partbuilder.Pattern;
 
 import java.util.HashMap;
@@ -28,7 +28,7 @@ import java.util.function.Consumer;
 public class PartBuilderRecycleBuilder extends AbstractRecipeBuilder<PartBuilderRecycleBuilder> {
   private final Ingredient tool;
   @Setter
-  private Ingredient pattern = Ingredient.of(TinkerTags.Items.DEFAULT_PATTERNS);
+  private Ingredient pattern = Ingredient.of(TinkerFluids.venomBottle);
   private final Map<Pattern, ItemOutput> results = new HashMap<>();
 
   /** Creates a builder for the given tool */

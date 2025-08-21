@@ -7,7 +7,7 @@
     }
   ],
   "pattern": {
-    "tag": "tconstruct:patterns/default"
+    "item": "tconstruct:venom_bottle"
   },
   "results": {
     "tconstruct:maille": {
