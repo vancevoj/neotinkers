@@ -3300,7 +3300,9 @@
   "recipe.tconstruct.remove_modifier.no_modifiers": "Tool does not have any modifiers removable by this recipe",
 
   "recipe.tconstruct.modifier_sorting.title": "Sort Modifiers",
-  "recipe.tconstruct.modifier_sorting.description": "Select a modifier to swap its location with the next modifier in the list. Does not consume items to swap.",
+  "recipe.tconstruct.modifier_sorting.description": "Select a modifier to swap its location with an adjacent modifier on the tool. Does not consume items to swap.",
+  "recipe.tconstruct.modifier_sorting.description.forward": "Select a modifier to swap its location with the previous modifier in the list. Does not consume items to swap.",
+  "recipe.tconstruct.modifier_sorting.description.reversed": "Select a modifier to swap its location with the previous modifier in the list. Does not consume items to swap.",
   "recipe.tconstruct.modifier_sorting.not_enough_modifiers": "Tool needs at least two modifiers to sort",
 
   "recipe.tconstruct.invisible_modifiers.adding.title": "Invisible Ink",
