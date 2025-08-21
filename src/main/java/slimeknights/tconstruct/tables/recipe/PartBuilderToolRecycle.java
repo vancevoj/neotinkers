@@ -54,7 +54,7 @@ public class PartBuilderToolRecycle implements IPartBuilderRecipe {
   /** General instructions for recycling */
   private static final List<Component> INSTRUCTIONS = Collections.singletonList(TConstruct.makeTranslation("recipe", "tool_recycling.info"));
   /** Error for trying to recycle a tool that cannot be */
-  private static final List<Component> NO_MODIFIERS = Collections.singletonList(TConstruct.makeTranslation("recipe", "tool_recycling.no_modifiers").withStyle(ChatFormatting.RED));
+  public static final List<Component> NO_MODIFIERS = Collections.singletonList(TConstruct.makeTranslation("recipe", "tool_recycling.no_modifiers").withStyle(ChatFormatting.RED));
   /** Default tool field */
   public static final SizedIngredient DEFAULT_TOOLS = SizedIngredient.fromTag(TinkerTags.Items.MULTIPART_TOOL);
 
@@ -66,8 +66,6 @@ public class PartBuilderToolRecycle implements IPartBuilderRecipe {
     TinkerLoadables.MATERIAL_ITEM.list(0).defaultField("parts", List.of(), r -> r.parts),
     PartBuilderToolRecycle::new);
 
-  /** Should never be needed, but just in case better than null */
-  private static final Pattern ERROR = new Pattern(TConstruct.MOD_ID, "missingno");
   @Getter
   private final ResourceLocation id;
   private final SizedIngredient toolRequirement;
@@ -82,7 +80,7 @@ public class PartBuilderToolRecycle implements IPartBuilderRecipe {
 
   @Override
   public Pattern getPattern() {
-    return ERROR;
+    return MISSING;
   }
 
   @Override

@@ -16,10 +16,13 @@ import net.minecraftforge.common.crafting.CompoundIngredient;
 import net.minecraftforge.common.crafting.DifferenceIngredient;
 import slimeknights.mantle.recipe.crafting.ShapedRetexturedRecipeBuilder;
 import slimeknights.mantle.recipe.helper.SimpleFinishedRecipe;
+import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.common.data.BaseRecipeProvider;
 import slimeknights.tconstruct.fluids.TinkerFluids;
 import slimeknights.tconstruct.library.data.recipe.CraftingNBTWrapper;
+import slimeknights.tconstruct.library.recipe.partbuilder.Pattern;
+import slimeknights.tconstruct.library.recipe.partbuilder.recycle.PartBuilderRecycleBuilder;
 import slimeknights.tconstruct.smeltery.TinkerSmeltery;
 import slimeknights.tconstruct.tables.TinkerTables;
 import slimeknights.tconstruct.tables.recipe.TinkerStationDamagingRecipeBuilder;
@@ -39,6 +42,12 @@ public class TableRecipeProvider extends BaseRecipeProvider {
 
   @Override
   protected void buildRecipes(Consumer<FinishedRecipe> consumer) {
+    this.tableRecipes(consumer);
+    this.damageRecipes(consumer);
+    this.recyclingRecipes(consumer);
+  }
+
+  private void tableRecipes(Consumer<FinishedRecipe> consumer) {
     String folder = "tables/";
     // pattern
     ShapedRecipeBuilder.shaped(RecipeCategory.MISC, TinkerTables.pattern, 3)
@@ -212,9 +221,11 @@ public class TableRecipeProvider extends BaseRecipeProvider {
     consumer.accept(new SimpleFinishedRecipe(location(folder + "tinker_station_repair"), TinkerTables.tinkerStationRepairSerializer.get()));
     consumer.accept(new SimpleFinishedRecipe(location(folder + "tinker_station_part_swapping"), TinkerTables.tinkerStationPartSwappingSerializer.get()));
     consumer.accept(new SimpleFinishedRecipe(location(folder + "crafting_table_repair"), TinkerTables.craftingTableRepairSerializer.get()));
+  }
 
+  private void damageRecipes(Consumer<FinishedRecipe> consumer) {
     // tool damaging
-    String damageFolder = folder + "tinker_station_damaging/";
+    String damageFolder = "tables/tinker_station_damaging/";
     TinkerStationDamagingRecipeBuilder.damage(Ingredient.of(TinkerFluids.magmaBottle), 20)
       .save(consumer, location(damageFolder + "magma_bottle"));
     TinkerStationDamagingRecipeBuilder.damage(Ingredient.of(TinkerFluids.magma), 100)
@@ -227,5 +238,54 @@ public class TableRecipeProvider extends BaseRecipeProvider {
       .save(consumer, location(damageFolder + "lava_bucket"));
     TinkerStationDamagingRecipeBuilder.damage(Ingredient.of(TinkerFluids.blazingBlood), 2500)
       .save(consumer, location(damageFolder + "blazing_bucket"));
+  }
+
+  private void recyclingRecipes(Consumer<FinishedRecipe> consumer) {
+    // recipes for recycling vanilla tools
+    String folder = "tables/recycling/";
+    Pattern block = new Pattern(TConstruct.MOD_ID, "block");
+
+    // default tools, though skip anything that contains metal
+    // wood
+    PartBuilderRecycleBuilder.tool(Items.WOODEN_PICKAXE, Items.WOODEN_AXE)
+      .result(block, Items.OAK_PLANKS, 3)
+      .save(consumer, location(folder + "wooden_axe"));
+    PartBuilderRecycleBuilder.tool(Items.WOODEN_SWORD, Items.WOODEN_HOE)
+      .result(block, Items.OAK_PLANKS, 2)
+      .save(consumer, location(folder + "wooden_sword"));
+    PartBuilderRecycleBuilder.tool(Items.WOODEN_SHOVEL)
+      .result(block, Items.OAK_PLANKS, 1)
+      .save(consumer, location(folder + "wooden_shovel"));
+    // stone
+    PartBuilderRecycleBuilder.tool(Items.STONE_PICKAXE, Items.STONE_AXE)
+      .result(block, Items.COBBLESTONE, 3)
+      .save(consumer, location(folder + "stone_axe"));
+    PartBuilderRecycleBuilder.tool(Items.STONE_SWORD, Items.STONE_HOE)
+      .result(block, Items.COBBLESTONE, 2)
+      .save(consumer, location(folder + "stone_sword"));
+    PartBuilderRecycleBuilder.tool(Items.STONE_SHOVEL)
+      .result(block, Items.COBBLESTONE, 1)
+      .save(consumer, location(folder + "stone_shovel"));
+
+    // leather armor
+    Pattern leather = new Pattern(TConstruct.MOD_ID, "maille");
+    PartBuilderRecycleBuilder.tool(Items.LEATHER_HELMET)
+      .result(leather, Items.LEATHER, 5)
+      .save(consumer, location(folder + "leather_helmet"));
+    PartBuilderRecycleBuilder.tool(Items.LEATHER_CHESTPLATE)
+      .result(leather, Items.LEATHER, 8)
+      .save(consumer, location(folder + "leather_chestplate"));
+    PartBuilderRecycleBuilder.tool(Items.LEATHER_LEGGINGS, Items.LEATHER_HORSE_ARMOR)
+      .result(leather, Items.LEATHER, 7)
+      .save(consumer, location(folder + "leather_leggings"));
+    PartBuilderRecycleBuilder.tool(Items.LEATHER_BOOTS)
+      .result(leather, Items.LEATHER, 4)
+      .save(consumer, location(folder + "leather_boots"));
+
+    // turtle shell
+    Pattern scale = new Pattern(TConstruct.MOD_ID, "scale");
+    PartBuilderRecycleBuilder.tool(Items.TURTLE_HELMET)
+      .result(scale, Items.SCUTE, 5)
+      .save(consumer, location(folder + "turtle_helmet"));
   }
 }

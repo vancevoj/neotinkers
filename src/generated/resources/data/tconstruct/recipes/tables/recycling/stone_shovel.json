@@ -1,0 +1,12 @@
+{
+  "type": "tconstruct:part_builder_recycling",
+  "pattern": {
+    "tag": "tconstruct:patterns/default"
+  },
+  "results": {
+    "tconstruct:block": "minecraft:cobblestone"
+  },
+  "tool": {
+    "item": "minecraft:stone_shovel"
+  }
+}

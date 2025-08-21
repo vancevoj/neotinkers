@@ -288,6 +288,11 @@
   "pattern.tconstruct.gem": "Gem",
   "pattern.tconstruct.rod": "Rod",
 
+  "pattern.tconstruct.block": "Block",
+  "pattern.tconstruct.shard": "Shard",
+  "pattern.tconstruct.crystal": "Crystal",
+  "pattern.tconstruct.scale": "Scale",
+
   "pattern.tconstruct.gear": "Gear",
   "pattern.tconstruct.plate": "Small Plate",
   "pattern.tconstruct.coin": "Coin",
@@ -3338,6 +3343,10 @@
   "recipe.tconstruct.tool_recycling": "Tool Recycling",
   "recipe.tconstruct.tool_recycling.info": "Select which part to salvage from this tool. There is a chance based on the tool's remaining durability to salvage a second part.",
   "recipe.tconstruct.tool_recycling.no_modifiers": "A tool cannot be recycled if it contains any upgrades or abilities, those must be removed first.",
+  "recipe.tconstruct.recycling": "Recycling",
+  "recipe.tconstruct.recycling.info": "Select which item to salvage. Based on the durability, may be able to salvage unselected items.",
+  "recipe.tconstruct.recycling.not_enough_durability": "Item does not have enough durability to salvage anything.",
+  "recipe.tconstruct.recycling.no_enchantments": "A tool cannot be recycled if it is enchanted, use the grindstone to remove them first.",
 
 
   "_comment": "GUIs Messages",

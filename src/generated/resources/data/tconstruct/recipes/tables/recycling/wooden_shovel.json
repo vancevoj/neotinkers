@@ -1,0 +1,12 @@
+{
+  "type": "tconstruct:part_builder_recycling",
+  "pattern": {
+    "tag": "tconstruct:patterns/default"
+  },
+  "results": {
+    "tconstruct:block": "minecraft:oak_planks"
+  },
+  "tool": {
+    "item": "minecraft:wooden_shovel"
+  }
+}

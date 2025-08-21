@@ -32,6 +32,8 @@ import slimeknights.tconstruct.library.recipe.casting.material.PartSwapCastingRe
 import slimeknights.tconstruct.library.recipe.ingredient.MaterialIngredient;
 import slimeknights.tconstruct.library.recipe.ingredient.MaterialValueIngredient;
 import slimeknights.tconstruct.library.recipe.material.ShapedMaterialConsumerBuilder;
+import slimeknights.tconstruct.library.recipe.partbuilder.Pattern;
+import slimeknights.tconstruct.library.recipe.partbuilder.recycle.PartBuilderRecycleBuilder;
 import slimeknights.tconstruct.library.recipe.partbuilder.recycle.PartBuilderToolRecycleBuilder;
 import slimeknights.tconstruct.library.recipe.tinkerstation.building.ToolBuildingRecipeBuilder;
 import slimeknights.tconstruct.library.tools.nbt.MaterialIdNBT;
@@ -276,6 +278,37 @@ public class ToolsRecipeProvider extends BaseRecipeProvider implements IMaterial
       // repair kit costs 2 instead of 3, but is otherwise a good substitute
       .part(TinkerToolParts.repairKit)
       .save(consumer, location(folder + "plate_shield"));
+
+    // crafting table tool recycling
+    // flint and brick loses the brick as we don't know if you used seared or scorched
+    PartBuilderRecycleBuilder.tool(TinkerTools.flintAndBrick)
+      .result(new Pattern(TConstruct.MOD_ID, "shard"), Items.FLINT, 1)
+      .save(consumer, location(folder + "flint_and_brick"));
+    // slimestaff
+    Pattern log = new Pattern(TConstruct.MOD_ID, "block");
+    Pattern ingot = new Pattern(TConstruct.MOD_ID, "ingot");
+    Pattern crystal = new Pattern(TConstruct.MOD_ID, "crystal");
+    PartBuilderRecycleBuilder.tool(TinkerTools.earthStaff)
+      .result(crystal, TinkerWorld.earthGeode, 2)
+      .result(log, TinkerWorld.skyroot.getLog(), 2)
+      .result(ingot, TinkerMaterials.roseGold.getIngotTag(), 1)
+      .save(consumer, location(folder + "earth_staff"));
+    PartBuilderRecycleBuilder.tool(TinkerTools.skyStaff)
+      .result(crystal, TinkerWorld.skyGeode, 2)
+      .result(log, TinkerWorld.greenheart.getLog(), 2)
+      .result(ingot, TinkerMaterials.cobalt.getIngotTag(), 1)
+      .save(consumer, location(folder + "sky_staff"));
+    PartBuilderRecycleBuilder.tool(TinkerTools.ichorStaff)
+      .result(crystal, TinkerWorld.ichorGeode, 2)
+      .result(log, TinkerWorld.bloodshroom.getLog(), 2)
+      .result(ingot, TinkerMaterials.queensSlime.getIngotTag(), 1)
+      .save(consumer, location(folder + "ichor_staff"));
+    PartBuilderRecycleBuilder.tool(TinkerTools.enderStaff)
+      .result(crystal, TinkerWorld.enderGeode, 2)
+      .result(log, TinkerWorld.enderbark.getLog(), 2)
+      .result(ingot, Tags.Items.INGOTS_NETHERITE, 1)
+      .save(consumer, location(folder + "ender_staff"));
+
 
     // ancient tools are not craftable so no default recycling. Give them the canonical parts for recycling
     PartBuilderToolRecycleBuilder.tool(TinkerTools.meltingPan)
