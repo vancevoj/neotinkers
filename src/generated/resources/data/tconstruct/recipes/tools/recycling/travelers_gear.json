@@ -1,7 +1,8 @@
 {
   "type": "tconstruct:part_builder_tool_recycling",
   "parts": [
-    "tconstruct:repair_kit"
+    "tconstruct:repair_kit",
+    "tconstruct:maille"
   ],
   "pattern": {
     "tag": "tconstruct:patterns/default"

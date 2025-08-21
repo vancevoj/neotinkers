@@ -13,6 +13,8 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.crafting.DifferenceIngredient;
+import net.minecraftforge.common.crafting.conditions.ModLoadedCondition;
+import slimeknights.mantle.recipe.data.ItemNameIngredient;
 import slimeknights.mantle.recipe.helper.ItemOutput;
 import slimeknights.mantle.recipe.ingredient.SizedIngredient;
 import slimeknights.tconstruct.TConstruct;
@@ -39,7 +41,6 @@ import slimeknights.tconstruct.library.recipe.tinkerstation.building.ToolBuildin
 import slimeknights.tconstruct.library.tools.nbt.MaterialIdNBT;
 import slimeknights.tconstruct.shared.TinkerMaterials;
 import slimeknights.tconstruct.smeltery.TinkerSmeltery;
-import slimeknights.tconstruct.tables.TinkerTables;
 import slimeknights.tconstruct.tools.TinkerToolParts;
 import slimeknights.tconstruct.tools.TinkerTools;
 import slimeknights.tconstruct.tools.data.material.MaterialIds;
@@ -190,11 +191,9 @@ public class ToolsRecipeProvider extends BaseRecipeProvider implements IMaterial
       .index(1)
       .save(consumer, location(armorFolder + "travelers_boots_leather"));
     ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, TinkerTools.travelersShield)
-                       .pattern(" p ")
-                       .pattern("lwl")
-                       .pattern(" p ")
+                       .pattern("wl")
+                       .pattern("lw")
                        .define('l', Tags.Items.LEATHER)
-                       .define('p', TinkerTables.pattern)
                        .define('w', MaterialValueIngredient.of(new MaterialStatTypePredicate(StatlessMaterialStats.SHIELD_CORE.getIdentifier()), 1))
                        .unlockedBy("has_item", has(Tags.Items.LEATHER))
                        .save(shapedMaterial, location(armorFolder + "travelers_shield"));
@@ -270,7 +269,14 @@ public class ToolsRecipeProvider extends BaseRecipeProvider implements IMaterial
     PartBuilderToolRecycleBuilder.tools(SizedIngredient.fromItems(TinkerTools.travelersGear.values().toArray(Item[]::new)))
       // repair kit cost matches exactly
       .part(TinkerToolParts.repairKit)
+      // bit of a material loss on some travelers pieces, but better than no recycling, right?
+      .part(TinkerToolParts.maille)
       .save(consumer, location(folder + "travelers_gear"));
+    PartBuilderToolRecycleBuilder.tool(TinkerTools.travelersShield)
+      // repair kit cost matches exactly; would give you a shield core but that costs 4
+      .part(TinkerToolParts.repairKit)
+      .part(TinkerToolParts.maille)
+      .save(consumer, location(folder + "travelers_shield"));
 
     // plate shields don't have a real tool part for the plating, but helmet plating is nearly the same
     PartBuilderToolRecycleBuilder.tool(TinkerTools.plateShield)
@@ -330,6 +336,11 @@ public class ToolsRecipeProvider extends BaseRecipeProvider implements IMaterial
       .part(TinkerToolParts.toolHandle)
       .part(TinkerToolParts.bowGrip)
       .save(consumer, location(folder + "swasher"));
+    PartBuilderToolRecycleBuilder.tools(SizedIngredient.of(ItemNameIngredient.from(TinkerTools.minotaurAxe.getId())))
+      .part(TinkerToolParts.smallAxeHead)
+      .part(TinkerToolParts.smallAxeHead)
+      .part(TinkerToolParts.toolHandle)
+      .save(withCondition(consumer, new ModLoadedCondition("twilightforest")), location(folder + "minotaur_axe"));
   }
 
   private void addPartRecipes(Consumer<FinishedRecipe> consumer) {
