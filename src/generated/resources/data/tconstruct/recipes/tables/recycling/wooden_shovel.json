@@ -4,7 +4,10 @@
     "tag": "tconstruct:patterns/default"
   },
   "results": {
-    "tconstruct:block": "minecraft:oak_planks"
+    "tconstruct:rod": {
+      "count": 4,
+      "item": "minecraft:stick"
+    }
   },
   "tool": {
     "item": "minecraft:wooden_shovel"

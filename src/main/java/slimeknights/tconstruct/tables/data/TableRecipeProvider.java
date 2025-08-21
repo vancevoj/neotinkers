@@ -251,20 +251,21 @@ public class TableRecipeProvider extends BaseRecipeProvider {
   private void recyclingRecipes(Consumer<FinishedRecipe> consumer) {
     // recipes for recycling vanilla tools
     String folder = "tables/recycling/";
-    Pattern block = new Pattern(TConstruct.MOD_ID, "block");
 
     // default tools, though skip anything that contains metal
     // wood
+    Pattern rod = new Pattern(TConstruct.MOD_ID, "rod");
     PartBuilderRecycleBuilder.tool(Items.WOODEN_PICKAXE, Items.WOODEN_AXE)
-      .result(block, Items.OAK_PLANKS, 3)
+      .result(rod, Items.STICK, 8)
       .save(consumer, location(folder + "wooden_axe"));
     PartBuilderRecycleBuilder.tool(Items.WOODEN_SWORD, Items.WOODEN_HOE)
-      .result(block, Items.OAK_PLANKS, 2)
+      .result(rod, Items.STICK, 5)
       .save(consumer, location(folder + "wooden_sword"));
     PartBuilderRecycleBuilder.tool(Items.WOODEN_SHOVEL)
-      .result(block, Items.OAK_PLANKS, 1)
+      .result(rod, Items.STICK, 4)
       .save(consumer, location(folder + "wooden_shovel"));
     // stone
+    Pattern block = new Pattern(TConstruct.MOD_ID, "block");
     PartBuilderRecycleBuilder.tool(Items.STONE_PICKAXE, Items.STONE_AXE)
       .result(block, Items.COBBLESTONE, 3)
       .save(consumer, location(folder + "stone_axe"));
