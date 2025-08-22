@@ -1113,6 +1113,7 @@
   "item.tconstruct.battlesign": "Battlesign",
   "item.tconstruct.war_pick": "War Pick",
   "item.tconstruct.swasher": "Swasher",
+  "item.tconstruct.minotaur_axe": "Minotaur Axe",
   
   "item.tconstruct.travelers_helmet": "Traveler's Goggles",
   "item.tconstruct.travelers_chestplate": "Traveler's Vest",
@@ -2249,6 +2250,10 @@
   "modifier.tconstruct.swiftstrike.5": "Swiftesteststrike",
   "modifier.tconstruct.swiftstrike.flavor": "Magic!",
   "modifier.tconstruct.swiftstrike.description": "Magic purple gems make the weapon lighter and easier to swing!",
+  "modifier.tconstruct.charge_attack": "Charge Attack",
+  "modifier.tconstruct.charge_attack.flavor": "Zoomies",
+  "modifier.tconstruct.charge_attack.description": "Deals bonus damage while sprinting",
+  "modifier.tconstruct.charge_attack.attack_damage": "Charging Damage",
 
 
   "_comment": "Ranged",

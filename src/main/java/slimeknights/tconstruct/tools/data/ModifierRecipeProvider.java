@@ -491,7 +491,7 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                                     .save(consumer, wrap(ModifierIds.sharpness, upgradeFolder, "_from_block"));
     IncrementalModifierRecipeBuilder.modifier(TinkerModifiers.sweeping)
                                     .setTools(TinkerTags.Items.SWORD)
-                                    .setInput(Blocks.CHAIN, 1, 18) // every 9 is 11 ingots, so this is 22 ingots
+                                    .setInput(Blocks.CHAIN, 1, 5) // 5% per chain, costing 55 nuggets, or just above 6 ingots
                                     .setMaxLevel(3) // goes 25%, 50%, 75%
                                     .setSlots(SlotType.UPGRADE, 1)
                                     .saveSalvage(consumer, prefix(TinkerModifiers.sweeping, upgradeSalvage))
@@ -847,7 +847,7 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
     // upgrade - boots
     IncrementalModifierRecipeBuilder.modifier(ModifierIds.featherFalling)
                                     .setTools(TinkerTags.Items.BOOTS)
-                                    .setInput(Items.FEATHER, 1, 15)
+                                    .setInput(Items.FEATHER, 1, 5) // 3% per feather
                                     .setSlots(SlotType.UPGRADE, 1)
                                     .setMaxLevel(4)
                                     .saveSalvage(consumer, prefix(ModifierIds.featherFalling, upgradeSalvage))
