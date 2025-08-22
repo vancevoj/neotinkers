@@ -192,11 +192,9 @@ public class LootTableInjectionProvider extends AbstractLootTableInjectionProvid
       .setWeight(1) // TF tends to use 1 for its weight
       .apply(ancientToolData3)
       .build();
-    inject("labyrinth_vault", new ResourceLocation(tf, "chests/labyrinth_vault"), tfLoaded)
+    inject("labyrinth_room", new ResourceLocation(tf, "chests/labyrinth_room"), tfLoaded)
       .addToPool("pool1", minotaurAxe)
       .addToPool("pool2", minotaurAxe);
-    inject("labyrinth_room", new ResourceLocation(tf, "chests/labyrinth_room"), tfLoaded)
-      .addToPool("pool1", minotaurAxe);
   }
 
   @Override
