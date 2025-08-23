@@ -290,6 +290,11 @@ public class TableRecipeProvider extends BaseRecipeProvider {
     PartBuilderRecycleBuilder.tool(Items.STONE_SHOVEL)
       .result(block, Items.COBBLESTONE, 1)
       .save(consumer, location(folder + "stone_shovel"));
+    // while you can melt it, flint and steel is literally just two items with nothing connecting them, so let the part builder recycle them
+    PartBuilderRecycleBuilder.tool(Items.FLINT_AND_STEEL)
+      .result(new Pattern(TConstruct.MOD_ID, "shard"), Items.FLINT, 1)
+      .result(ingot, Items.IRON_INGOT, 1)
+      .save(consumer, location(folder + "flint_and_steel"));
 
     // leather armor
     Pattern leather = new Pattern(TConstruct.MOD_ID, "maille");
