@@ -102,6 +102,7 @@ import slimeknights.tconstruct.library.modifiers.modules.capacity.CapacityBarMod
 import slimeknights.tconstruct.library.modifiers.modules.capacity.DamageToCapacityModule;
 import slimeknights.tconstruct.library.modifiers.modules.capacity.DurabilityShieldModule;
 import slimeknights.tconstruct.library.modifiers.modules.capacity.LootToCapacityModule;
+import slimeknights.tconstruct.library.modifiers.modules.capacity.OverslimeModule;
 import slimeknights.tconstruct.library.modifiers.modules.combat.ConditionalMeleeDamageModule;
 import slimeknights.tconstruct.library.modifiers.modules.combat.ConditionalPowerModule;
 import slimeknights.tconstruct.library.modifiers.modules.combat.KnockbackModule;
@@ -138,7 +139,6 @@ import slimeknights.tconstruct.tools.TinkerTools;
 import slimeknights.tconstruct.tools.data.material.MaterialIds;
 import slimeknights.tconstruct.tools.item.CrystalshotItem;
 import slimeknights.tconstruct.tools.logic.ModifierEvents;
-import slimeknights.tconstruct.tools.modifiers.slotless.OverslimeModifier;
 import slimeknights.tconstruct.tools.modules.DamageOnUnequipModule;
 import slimeknights.tconstruct.tools.modules.HeadlightModule;
 import slimeknights.tconstruct.tools.modules.MeltingModule;
@@ -295,7 +295,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .addModule(new DurabilityBarColorModule(0xffffff))
       .addModule(ReduceToolDamageModule.builder().flat(1.0f));
     buildModifier(ModifierIds.tank).addModules(StatBoostModule.add(ToolTankHelper.CAPACITY_STAT).eachLevel(FluidType.BUCKET_VOLUME), ToolTankHelper.TANK_HANDLER);
-    buildModifier(ModifierIds.overforced).addModule(StatBoostModule.add(OverslimeModifier.OVERSLIME_STAT).eachLevel(75));
+    buildModifier(ModifierIds.overforced).addModule(StatBoostModule.add(OverslimeModule.OVERSLIME_STAT).eachLevel(75));
     buildModifier(ModifierIds.soulbound).levelDisplay(ModifierLevelDisplay.NO_LEVELS).addModule(new VolatileFlagModule(ModifierEvents.SOULBOUND));
     // zooming
     buildModifier(ModifierIds.scope).levelDisplay(ModifierLevelDisplay.NO_LEVELS).addModule(ZoomModule.SCOPE);
@@ -755,8 +755,8 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
 
     // traits - tier 3
     buildModifier(ModifierIds.overcast)
-      .addModule(StatBoostModule.add(OverslimeModifier.OVERSLIME_STAT).eachLevel(25))
-      .addModule(StatBoostModule.multiplyBase(OverslimeModifier.OVERSLIME_STAT).eachLevel(0.5f));
+      .addModule(StatBoostModule.add(OverslimeModule.OVERSLIME_STAT).eachLevel(25))
+      .addModule(StatBoostModule.multiplyBase(OverslimeModule.OVERSLIME_STAT).eachLevel(0.5f));
     buildModifier(ModifierIds.crumbling).addModule(ConditionalMiningSpeedModule.builder().blocks(BlockPredicate.REQUIRES_TOOL.inverted()).allowIneffective().eachLevel(1f));
     buildModifier(ModifierIds.enhanced).priority(60).addModule(UPGRADE);
     buildModifier(ModifierIds.crystalbound).addModule(RestrictAngleModule.INSTANCE).addModule(StatBoostModule.add(ToolStats.VELOCITY).eachLevel(0.1f));
@@ -922,7 +922,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
     // traits - tier 4
     buildModifier(ModifierIds.overburn).addModules(OverburnModule.INSTANCE, StatBoostModule.add(ToolTankHelper.CAPACITY_STAT).flat(FluidType.BUCKET_VOLUME), ToolTankHelper.TANK_HANDLER);
     buildModifier(ModifierIds.overlord)
-      .addModule(StatCopyModule.builder(OverslimeModifier.OVERSLIME_STAT, ToolStats.DURABILITY).eachLevel(0.1f))
+      .addModule(StatCopyModule.builder(OverslimeModule.OVERSLIME_STAT, ToolStats.DURABILITY).eachLevel(0.1f))
       .addModule(StatBoostModule.multiplyBase(ToolStats.DURABILITY).levelRange(1, 6).eachLevel(-0.15f))
       .addModule(StatBoostModule.multiplyBase(ToolStats.DURABILITY).minLevel(7).flat(-0.99999f)); // once the level gets too high, just reduce it to almost nothing, should land at 1
     buildModifier(ModifierIds.fortified).priority(60).addModule(ModifierSlotModule.slot(SlotType.DEFENSE).eachLevel(1));
