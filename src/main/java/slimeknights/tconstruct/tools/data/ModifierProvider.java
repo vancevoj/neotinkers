@@ -49,6 +49,7 @@ import slimeknights.tconstruct.library.json.RandomLevelingValue;
 import slimeknights.tconstruct.library.json.predicate.HasMobEffectPredicate;
 import slimeknights.tconstruct.library.json.predicate.TinkerPredicate;
 import slimeknights.tconstruct.library.json.predicate.tool.HasModifierPredicate;
+import slimeknights.tconstruct.library.json.predicate.tool.PersistentDataPredicate;
 import slimeknights.tconstruct.library.json.predicate.tool.ToolContextPredicate;
 import slimeknights.tconstruct.library.json.predicate.tool.ToolStackPredicate;
 import slimeknights.tconstruct.library.json.variable.block.BlockVariable;
@@ -64,6 +65,8 @@ import slimeknights.tconstruct.library.json.variable.mining.BlockTemperatureVari
 import slimeknights.tconstruct.library.json.variable.power.EntityPowerVariable;
 import slimeknights.tconstruct.library.json.variable.protection.EntityProtectionVariable;
 import slimeknights.tconstruct.library.json.variable.stat.EntityConditionalStatVariable;
+import slimeknights.tconstruct.library.json.variable.tool.ModDataSource;
+import slimeknights.tconstruct.library.json.variable.tool.ModDataVariable;
 import slimeknights.tconstruct.library.json.variable.tool.ToolStatVariable;
 import slimeknights.tconstruct.library.json.variable.tool.ToolVariable;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
@@ -101,7 +104,9 @@ import slimeknights.tconstruct.library.modifiers.modules.build.VolatileFlagModul
 import slimeknights.tconstruct.library.modifiers.modules.capacity.CapacityBarModule;
 import slimeknights.tconstruct.library.modifiers.modules.capacity.DamageToCapacityModule;
 import slimeknights.tconstruct.library.modifiers.modules.capacity.DurabilityShieldModule;
+import slimeknights.tconstruct.library.modifiers.modules.capacity.LaunchCapacityModule;
 import slimeknights.tconstruct.library.modifiers.modules.capacity.LootToCapacityModule;
+import slimeknights.tconstruct.library.modifiers.modules.capacity.MiningCapacityModule;
 import slimeknights.tconstruct.library.modifiers.modules.capacity.OverslimeModule;
 import slimeknights.tconstruct.library.modifiers.modules.combat.ConditionalMeleeDamageModule;
 import slimeknights.tconstruct.library.modifiers.modules.combat.ConditionalPowerModule;
@@ -130,6 +135,7 @@ import slimeknights.tconstruct.library.tools.capability.inventory.ToolInventoryC
 import slimeknights.tconstruct.library.tools.definition.module.ToolHooks;
 import slimeknights.tconstruct.library.tools.item.IModifiable;
 import slimeknights.tconstruct.library.tools.item.armor.ModifiableArmorItem;
+import slimeknights.tconstruct.library.tools.item.ranged.ModifiableCrossbowItem;
 import slimeknights.tconstruct.library.tools.nbt.IToolContext;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
 import slimeknights.tconstruct.shared.TinkerAttributes;
@@ -444,6 +450,21 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
     buildModifier(ModifierIds.barebow)
       .levelDisplay(ModifierLevelDisplay.NO_LEVELS)
       .addModule(new VolatileFlagModule(BowAmmoModifierHook.SKIP_INVENTORY_AMMO));
+    buildModifier(ModifierIds.warCharge)
+      .levelDisplay(ModifierLevelDisplay.NO_LEVELS)
+      .addModule(new CapacityBarModule(LevelingInt.flat(25), null))
+      // if we have ammo, charge up while mining blocks
+      .addModule(new MiningCapacityModule(LevelingInt.flat(1), null, ModifierCondition.ANY_TOOL.with(ToolStackPredicate.context(new PersistentDataPredicate(ModifiableCrossbowItem.KEY_CROSSBOW_AMMO)))))
+      // upon launch, reset charge
+      .addModule(new LaunchCapacityModule(LevelingInt.flat(0), null, ModifierCondition.ANY_TOOL))
+      // boost velocity from charge
+      .addModule(ConditionalStatModule.stat(ToolStats.VELOCITY)
+        .formula()
+        .customVariable("charge", new ModDataVariable(ModifierIds.warCharge, ModDataSource.PERSISTENT))
+        // gain 0.01 velocity per block mined, up to 25% velocity from 25 blocks
+        .constant(0.01f).multiply()
+        .variable(MULTIPLIER).multiply()
+        .variable(VALUE).add().build());
 
     // combat
     // deals 1 + rand(3) damage at 15% chance

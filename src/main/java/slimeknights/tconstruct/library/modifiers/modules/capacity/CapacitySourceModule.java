@@ -2,7 +2,9 @@ package slimeknights.tconstruct.library.modifiers.modules.capacity;
 
 import slimeknights.mantle.data.loadable.field.LoadableField;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
+import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.ModifierId;
+import slimeknights.tconstruct.library.modifiers.hook.special.CapacityBarHook;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 
 import javax.annotation.Nullable;
@@ -23,5 +25,23 @@ public interface CapacitySourceModule {
       return tool.getModifier(owner);
     }
     return entry;
+  }
+
+  /**
+   * Applies the given amount and multiplier
+   * @param tool       Tool to apply
+   * @param modifier   Bar modifier instance
+   * @param amount     Amount from the source
+   * @param grant      Multiplier for the amount. If positive, adds the amount. If negative, removes it. If 0, resets the bar to 0.
+   */
+  static void apply(IToolStackView tool, ModifierEntry modifier, int amount, int grant) {
+    CapacityBarHook bar = modifier.getHook(ModifierHooks.CAPACITY_BAR);
+    if (grant == 0) {
+      bar.setAmount(tool, modifier, 0);
+    } else if (grant > 0) {
+      bar.addAmount(tool, modifier, amount * grant);
+    } else {
+      bar.removeAmount(tool, modifier, -amount * grant);
+    }
   }
 }

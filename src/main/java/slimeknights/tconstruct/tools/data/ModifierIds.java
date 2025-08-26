@@ -82,6 +82,7 @@ public class ModifierIds {
   public static final ModifierId trickQuiver = id("trick_quiver");
   public static final ModifierId crystalshot = id("crystalshot");
   public static final ModifierId barebow = id("barebow");
+  public static final ModifierId warCharge = id("war_charge");
 
   // armor
   public static final ModifierId protection = id("protection");

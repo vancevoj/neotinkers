@@ -2307,6 +2307,10 @@
   "modifier.tconstruct.scope": "Scope",
   "modifier.tconstruct.scope.flavor": "360 with scope does not sound as cool",
   "modifier.tconstruct.scope.description": "Zoom in on the target when charging the tool.",
+  "modifier.tconstruct.war_charge": "War Charge",
+  "modifier.tconstruct.war_charge.flavor": "Potential energy",
+  "modifier.tconstruct.war_charge.description": "Mining blocks while loaded increases the velocity of the next shot",
+  "modifier.tconstruct.war_charge.velocity": "Velocity",
 
   "_comment": "Armor",
   "modifier.tconstruct.knockback_resistance": "Knockback Resistance",

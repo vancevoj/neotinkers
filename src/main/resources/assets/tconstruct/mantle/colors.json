@@ -223,6 +223,7 @@
     "vintage":       "#7E6059",
     "flamestance":   "#C53439",
     "entangled":     "#14B485",
+    "war_charge":    "#A1A1A1",
 
     "__traits_melee__": null,
     "airborne":     "#00F4DA",

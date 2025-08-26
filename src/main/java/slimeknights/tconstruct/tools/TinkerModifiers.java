@@ -126,7 +126,9 @@ import slimeknights.tconstruct.library.modifiers.modules.build.VolatileFlagModul
 import slimeknights.tconstruct.library.modifiers.modules.capacity.CapacityBarModule;
 import slimeknights.tconstruct.library.modifiers.modules.capacity.DamageToCapacityModule;
 import slimeknights.tconstruct.library.modifiers.modules.capacity.DurabilityShieldModule;
+import slimeknights.tconstruct.library.modifiers.modules.capacity.LaunchCapacityModule;
 import slimeknights.tconstruct.library.modifiers.modules.capacity.LootToCapacityModule;
+import slimeknights.tconstruct.library.modifiers.modules.capacity.MiningCapacityModule;
 import slimeknights.tconstruct.library.modifiers.modules.combat.ConditionalMeleeDamageModule;
 import slimeknights.tconstruct.library.modifiers.modules.combat.ConditionalPowerModule;
 import slimeknights.tconstruct.library.modifiers.modules.combat.KnockbackModule;
@@ -710,6 +712,8 @@ public final class TinkerModifiers extends TinkerModule {
       ModifierModule.LOADER.register(getResource("durability_shield"), DurabilityShieldModule.LOADER);
       ModifierModule.LOADER.register(getResource("loot_to_capacity"), LootToCapacityModule.LOADER);
       ModifierModule.LOADER.register(getResource("damage_to_capacity"), DamageToCapacityModule.LOADER);
+      ModifierModule.LOADER.register(getResource("launch_capacity"), LaunchCapacityModule.LOADER);
+      ModifierModule.LOADER.register(getResource("mining_capacity"), MiningCapacityModule.LOADER);
       // technical
       ModifierModule.LOADER.register(getResource("armor_level"), ArmorLevelModule.LOADER);
       ModifierModule.LOADER.register(getResource("max_armor_stat"), MaxArmorStatModule.LOADER);
