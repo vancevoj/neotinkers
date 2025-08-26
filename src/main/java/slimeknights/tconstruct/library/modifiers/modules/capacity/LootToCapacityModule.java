@@ -1,8 +1,13 @@
 package slimeknights.tconstruct.library.modifiers.modules.capacity;
 
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.storage.loot.LootContext;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import slimeknights.mantle.data.loadable.common.IngredientLoadable;
 import slimeknights.mantle.data.loadable.primitive.IntLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
@@ -14,6 +19,8 @@ import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.ModifierId;
 import slimeknights.tconstruct.library.modifiers.hook.behavior.ProcessLootModifierHook;
 import slimeknights.tconstruct.library.modifiers.modules.ModifierModule;
+import slimeknights.tconstruct.library.modifiers.modules.util.ModifierCondition;
+import slimeknights.tconstruct.library.modifiers.modules.util.ModifierCondition.ConditionalModule;
 import slimeknights.tconstruct.library.module.HookProvider;
 import slimeknights.tconstruct.library.module.ModuleHook;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
@@ -23,14 +30,18 @@ import java.util.Iterator;
 import java.util.List;
 
 /** Module that restores capacity by consuming items from loot, used for stoneshield. */
-public record LootToCapacityModule(Ingredient consume, int amount, LevelingValue chance, @Nullable ModifierId owner) implements ModifierModule, ProcessLootModifierHook, CapacitySourceModule {
+public record LootToCapacityModule(Ingredient consume, int amount, LevelingValue chance, @Nullable ModifierId owner, ModifierCondition<IToolStackView> condition) implements ModifierModule, ProcessLootModifierHook, CapacitySourceModule, ConditionalModule<IToolStackView> {
   private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<LootToCapacityModule>defaultHooks(ModifierHooks.PROCESS_LOOT);
   public static final RecordLoadable<LootToCapacityModule> LOADER = RecordLoadable.create(
     IngredientLoadable.DISALLOW_EMPTY.requiredField("consume", LootToCapacityModule::consume),
     IntLoadable.FROM_ONE.requiredField("amount", LootToCapacityModule::amount),
     LevelingValue.LOADABLE.requiredField("chance", LootToCapacityModule::chance),
-    OWNER_FIELD,
+    OWNER_FIELD, ModifierCondition.TOOL_FIELD,
     LootToCapacityModule::new);
+
+  /** @apiNote use {@link #consume(Ingredient)} */
+  @Internal
+  public LootToCapacityModule {}
 
   @Override
   public RecordLoadable<? extends IHaveLoader> getLoader() {
@@ -44,6 +55,9 @@ public record LootToCapacityModule(Ingredient consume, int amount, LevelingValue
 
   @Override
   public void processLoot(IToolStackView tool, ModifierEntry modifier, List<ItemStack> generatedLoot, LootContext context) {
+    if (!condition.matches(tool, modifier)) {
+      return;
+    }
     Iterator<ItemStack> iterator = generatedLoot.iterator();
     int addedShield = 0;
     // chance per level of consuming each stone
@@ -79,6 +93,27 @@ public record LootToCapacityModule(Ingredient consume, int amount, LevelingValue
     if (addedShield > 0) {
       ModifierEntry barModifier = barModifier(tool, modifier);
       barModifier.getHook(ModifierHooks.CAPACITY_BAR).addAmount(tool, barModifier, addedShield * amount);
+    }
+  }
+
+
+  /* Builder */
+
+  /** Creates a builder for the given ingredient */
+  public static Builder consume(Ingredient consume) {
+    return new Builder(consume);
+  }
+
+  @Accessors(fluent = true)
+  @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+  public static class Builder extends CapacitySourceModule.Builder<Builder> implements LevelingValue.Builder<LootToCapacityModule>  {
+    private final Ingredient consume;
+    @Setter
+    private int amount;
+
+    @Override
+    public LootToCapacityModule amount(float flat, float eachLevel) {
+      return new LootToCapacityModule(consume, amount, new LevelingValue(flat, eachLevel), owner, condition);
     }
   }
 }

@@ -455,9 +455,9 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .levelDisplay(ModifierLevelDisplay.NO_LEVELS)
       .addModule(new CapacityBarModule(LevelingInt.flat(25), null))
       // if we have ammo, charge up while mining blocks
-      .addModule(new MiningCapacityModule(LevelingInt.flat(1), null, ModifierCondition.ANY_TOOL.with(ToolStackPredicate.context(new PersistentDataPredicate(ModifiableCrossbowItem.KEY_CROSSBOW_AMMO)))))
+      .addModule(MiningCapacityModule.builder().toolContext(new PersistentDataPredicate(ModifiableCrossbowItem.KEY_CROSSBOW_AMMO)).flat(1))
       // upon launch, reset charge
-      .addModule(new LaunchCapacityModule(LevelingInt.flat(0), null, ModifierCondition.ANY_TOOL))
+      .addModule(LaunchCapacityModule.builder().flat(0))
       // boost velocity from charge
       .addModule(ConditionalStatModule.stat(ToolStats.VELOCITY)
         .formula()
@@ -622,13 +622,13 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .priority(175) // higher than overslime, to ensure this is removed first
       .addModule(new CapacityBarModule(LevelingInt.eachLevel(100), ToolStats.DURABILITY))
       .addModule(new DurabilityShieldModule(0xAAFFFF))
-      .addModule(new DamageToCapacityModule(DamageSourcePredicate.tag(DamageTypeTags.IS_FREEZING), LevelingValue.flat(1), true, null));
+      .addModule(DamageToCapacityModule.source(DamageSourcePredicate.tag(DamageTypeTags.IS_FREEZING)).reduceDamage().flat(1));
     // traits - tier 2
     buildModifier(ModifierIds.stoneshield)
       .priority(175) // higher than overslime, to ensure this is removed first
       .addModule(new CapacityBarModule(LevelingInt.eachLevel(100), ToolStats.DURABILITY))
       .addModule(new DurabilityShieldModule(0x7F7F7F))
-      .addModule(new LootToCapacityModule(Ingredient.of(TinkerTags.Items.STONESHIELDS), 3, LevelingValue.eachLevel(0.2f), null));
+      .addModule(LootToCapacityModule.consume(Ingredient.of(TinkerTags.Items.STONESHIELDS)).amount(3).eachLevel(0.2f));
     buildModifier(ModifierIds.barkskin)
       .levelDisplay(ModifierLevelDisplay.NO_LEVELS)
       .priority(200) // higher than all other forms of durability shields

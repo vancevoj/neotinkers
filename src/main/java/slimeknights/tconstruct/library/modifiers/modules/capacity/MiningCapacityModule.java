@@ -1,5 +1,9 @@
 package slimeknights.tconstruct.library.modifiers.modules.capacity;
 
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.Accessors;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.tconstruct.library.json.LevelingInt;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
@@ -25,6 +29,10 @@ public record MiningCapacityModule(LevelingInt grant, @Nullable ModifierId owner
     OWNER_FIELD, ModifierCondition.TOOL_FIELD,
     MiningCapacityModule::new);
 
+  /** @apiNote use {@link #builder()} */
+  @Internal
+  public MiningCapacityModule {}
+
   @Override
   public RecordLoadable<MiningCapacityModule> getLoader() {
     return LOADER;
@@ -39,6 +47,23 @@ public record MiningCapacityModule(LevelingInt grant, @Nullable ModifierId owner
   public void finishHarvest(IToolStackView tool, ModifierEntry modifier, ToolHarvestContext context, int harvested) {
     if (condition.matches(tool, modifier)) {
       CapacitySourceModule.apply(tool, barModifier(tool, modifier), harvested, grant.compute(modifier.getEffectiveLevel()));
+    }
+  }
+
+
+  /* Builder */
+
+  /** Creates a new builder instance */
+  public static Builder builder() {
+    return new Builder();
+  }
+
+  @Accessors(fluent = true)
+  @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+  public static class Builder extends CapacitySourceModule.Builder<Builder> implements LevelingInt.Builder<MiningCapacityModule>  {
+    @Override
+    public MiningCapacityModule amount(int flat, int eachLevel) {
+      return new MiningCapacityModule(new LevelingInt(flat, eachLevel), owner, condition);
     }
   }
 }

@@ -1,10 +1,13 @@
 package slimeknights.tconstruct.library.modifiers.modules.capacity;
 
+import lombok.Setter;
+import lombok.experimental.Accessors;
 import slimeknights.mantle.data.loadable.field.LoadableField;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.ModifierId;
 import slimeknights.tconstruct.library.modifiers.hook.special.CapacityBarHook;
+import slimeknights.tconstruct.library.modifiers.modules.util.ModuleBuilder;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 
 import javax.annotation.Nullable;
@@ -43,5 +46,13 @@ public interface CapacitySourceModule {
     } else {
       bar.removeAmount(tool, modifier, -amount * grant);
     }
+  }
+
+  /** Builder handling the owner */
+  @Setter
+  @Accessors(fluent = true)
+  class Builder<B extends Builder<B>> extends ModuleBuilder.Stack<B> {
+    @Nullable
+    protected ModifierId owner = null;
   }
 }

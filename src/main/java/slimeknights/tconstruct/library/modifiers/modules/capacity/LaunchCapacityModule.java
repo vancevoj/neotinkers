@@ -1,8 +1,12 @@
 package slimeknights.tconstruct.library.modifiers.modules.capacity;
 
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.Accessors;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.tconstruct.library.json.LevelingInt;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
@@ -28,6 +32,10 @@ public record LaunchCapacityModule(LevelingInt grant, @Nullable ModifierId owner
     OWNER_FIELD, ModifierCondition.TOOL_FIELD,
     LaunchCapacityModule::new);
 
+  /** @apiNote use {@link #builder()} */
+  @Internal
+  public LaunchCapacityModule {}
+
   @Override
   public RecordLoadable<LaunchCapacityModule> getLoader() {
     return LOADER;
@@ -40,6 +48,25 @@ public record LaunchCapacityModule(LevelingInt grant, @Nullable ModifierId owner
 
   @Override
   public void onProjectileLaunch(IToolStackView tool, ModifierEntry modifier, LivingEntity shooter, Projectile projectile, @Nullable AbstractArrow arrow, ModDataNBT persistentData, boolean primary) {
-    CapacitySourceModule.apply(tool, barModifier(tool, modifier), 1, grant.compute(modifier.getEffectiveLevel()));
+    if (condition.matches(tool, modifier)) {
+      CapacitySourceModule.apply(tool, barModifier(tool, modifier), 1, grant.compute(modifier.getEffectiveLevel()));
+    }
+  }
+
+
+  /* Builder */
+
+  /** Creates a new builder instance */
+  public static Builder builder() {
+    return new Builder();
+  }
+
+  @Accessors(fluent = true)
+  @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+  public static class Builder extends CapacitySourceModule.Builder<Builder> implements LevelingInt.Builder<LaunchCapacityModule>  {
+    @Override
+    public LaunchCapacityModule amount(int flat, int eachLevel) {
+      return new LaunchCapacityModule(new LevelingInt(flat, eachLevel), owner, condition);
+    }
   }
 }

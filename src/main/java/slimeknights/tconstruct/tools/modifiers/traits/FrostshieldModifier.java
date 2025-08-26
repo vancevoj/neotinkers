@@ -3,7 +3,6 @@ package slimeknights.tconstruct.tools.modifiers.traits;
 import net.minecraft.tags.DamageTypeTags;
 import slimeknights.mantle.data.predicate.damage.DamageSourcePredicate;
 import slimeknights.tconstruct.library.json.LevelingInt;
-import slimeknights.tconstruct.library.json.LevelingValue;
 import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.modules.capacity.CapacityBarModule;
 import slimeknights.tconstruct.library.modifiers.modules.capacity.DamageToCapacityModule;
@@ -19,7 +18,7 @@ public class FrostshieldModifier extends Modifier {
     super.registerHooks(hookBuilder);
     hookBuilder.addModule(new CapacityBarModule(LevelingInt.eachLevel(100), ToolStats.DURABILITY));
     hookBuilder.addModule(new DurabilityShieldModule(0xAAFFFF));
-    hookBuilder.addModule(new DamageToCapacityModule(DamageSourcePredicate.tag(DamageTypeTags.IS_FREEZING), LevelingValue.flat(1), true, null));
+    hookBuilder.addModule(DamageToCapacityModule.source(DamageSourcePredicate.tag(DamageTypeTags.IS_FREEZING)).reduceDamage().flat(1));
   }
 
 

@@ -3,7 +3,6 @@ package slimeknights.tconstruct.tools.modifiers.traits.general;
 import net.minecraft.world.item.crafting.Ingredient;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.json.LevelingInt;
-import slimeknights.tconstruct.library.json.LevelingValue;
 import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.modules.capacity.CapacityBarModule;
 import slimeknights.tconstruct.library.modifiers.modules.capacity.DurabilityShieldModule;
@@ -19,7 +18,7 @@ public class StoneshieldModifier extends Modifier {
     super.registerHooks(hookBuilder);
     hookBuilder.addModule(new CapacityBarModule(LevelingInt.eachLevel(100), ToolStats.DURABILITY));
     hookBuilder.addModule(new DurabilityShieldModule(0x7F7F7F));
-    hookBuilder.addModule(new LootToCapacityModule(Ingredient.of(TinkerTags.Items.STONESHIELDS), 3, LevelingValue.eachLevel(0.2f), null));
+    hookBuilder.addModule(LootToCapacityModule.consume(Ingredient.of(TinkerTags.Items.STONESHIELDS)).amount(3).eachLevel(0.2f));
   }
 
   @Override
