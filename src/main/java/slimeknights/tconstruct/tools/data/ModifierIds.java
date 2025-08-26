@@ -144,6 +144,7 @@ public class ModifierIds {
   public static final ModifierId unburdened = id("unburdened");
   public static final ModifierId depthProtection = id("depth_protection");
   public static final ModifierId enderclearance = id("enderclearance");
+  public static final ModifierId frostshield = id("frostshield");
   // traits - tier 2
   public static final ModifierId overgrowth = id("overgrowth");
   public static final ModifierId searing = id("searing");
@@ -154,6 +155,7 @@ public class ModifierIds {
   public static final ModifierId skyfall = id("skyfall");
   public static final ModifierId flamestance = id("flamestance");
   public static final ModifierId entangled = id("entangled");
+  public static final ModifierId stoneshield = id("stoneshield");
   // traits - tier 2 compat
   public static final ModifierId dense = id("dense");
   public static final ModifierId lustrous = id("lustrous");

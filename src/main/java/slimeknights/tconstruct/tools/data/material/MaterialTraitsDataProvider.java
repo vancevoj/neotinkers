@@ -30,7 +30,7 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     addDefaultTraits(MaterialIds.flint, TinkerModifiers.jagged);
     addDefaultTraits(MaterialIds.bone, ModifierIds.pierce);
     addDefaultTraits(MaterialIds.bamboo, ModifierIds.unburdened);
-    addDefaultTraits(MaterialIds.ice, TinkerModifiers.frostshield);
+    addDefaultTraits(MaterialIds.ice, ModifierIds.frostshield);
     addDefaultTraits(MaterialIds.cactus, ModifierIds.thorns);
     // tier 1 - end
     addDefaultTraits(MaterialIds.chorus, TinkerModifiers.enderference);
@@ -58,7 +58,7 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     addDefaultTraits(MaterialIds.scorchedStone, ModifierIds.scorching);
     addTraits(MaterialIds.scorchedStone, ARMOR, ModifierIds.scorchProtection);
     // tier 2 - end
-    addDefaultTraits(MaterialIds.whitestone, TinkerModifiers.stoneshield);
+    addDefaultTraits(MaterialIds.whitestone, ModifierIds.stoneshield);
     // tier 2 - binding
     addDefaultTraits(MaterialIds.skyslimeVine, ModifierIds.airborne);
     addTraits(MaterialIds.skyslimeVine, ARMOR, ModifierIds.skyfall);

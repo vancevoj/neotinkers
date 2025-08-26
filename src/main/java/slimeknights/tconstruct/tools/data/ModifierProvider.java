@@ -2,6 +2,7 @@ package slimeknights.tconstruct.tools.data;
 
 import net.minecraft.data.PackOutput;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
@@ -15,6 +16,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.Tiers;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.LightLayer;
@@ -96,6 +98,10 @@ import slimeknights.tconstruct.library.modifiers.modules.build.StatCopyModule;
 import slimeknights.tconstruct.library.modifiers.modules.build.SwappableSlotModule;
 import slimeknights.tconstruct.library.modifiers.modules.build.SwappableToolTraitsModule;
 import slimeknights.tconstruct.library.modifiers.modules.build.VolatileFlagModule;
+import slimeknights.tconstruct.library.modifiers.modules.capacity.CapacityBarModule;
+import slimeknights.tconstruct.library.modifiers.modules.capacity.DamageToCapacityModule;
+import slimeknights.tconstruct.library.modifiers.modules.capacity.DurabilityShieldModule;
+import slimeknights.tconstruct.library.modifiers.modules.capacity.LootToCapacityModule;
 import slimeknights.tconstruct.library.modifiers.modules.combat.ConditionalMeleeDamageModule;
 import slimeknights.tconstruct.library.modifiers.modules.combat.ConditionalPowerModule;
 import slimeknights.tconstruct.library.modifiers.modules.combat.KnockbackModule;
@@ -589,7 +595,18 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .addModule(AttributeModule.builder(TinkerAttributes.USE_ITEM_SPEED, Operation.ADDITION).slots(ARMOR_SLOTS).tooltipStyle(TooltipStyle.PERCENT).toolItem(ItemPredicate.tag(WORN_ARMOR)).eachLevel(0.05f));
     buildModifier(ModifierIds.depthProtection).addModule(DepthProtectionModule.builder().baselineHeight(64).neutralRange(32).eachLevel(1.25f));
     buildModifier(ModifierIds.enderclearance).addModule(new EnderclearanceModule(LevelingValue.eachLevel(0.25f))).levelDisplay(ModifierLevelDisplay.SINGLE_LEVEL);
+    buildModifier(ModifierIds.frostshield)
+      .levelDisplay(ModifierLevelDisplay.SINGLE_LEVEL)
+      .priority(175) // higher than overslime, to ensure this is removed first
+      .addModule(new CapacityBarModule(LevelingInt.eachLevel(100), ToolStats.DURABILITY))
+      .addModule(new DurabilityShieldModule(0xAAFFFF))
+      .addModule(new DamageToCapacityModule(DamageSourcePredicate.tag(DamageTypeTags.IS_FREEZING), LevelingValue.flat(1), true, null));
     // traits - tier 2
+    buildModifier(ModifierIds.stoneshield)
+      .priority(175) // higher than overslime, to ensure this is removed first
+      .addModule(new CapacityBarModule(LevelingInt.eachLevel(100), ToolStats.DURABILITY))
+      .addModule(new DurabilityShieldModule(0x7F7F7F))
+      .addModule(new LootToCapacityModule(Ingredient.of(TinkerTags.Items.STONESHIELDS), 3, LevelingValue.eachLevel(0.2f), null));
     buildModifier(ModifierIds.overgrowth).addModule(new OvergrowthModule(LevelingValue.eachLevel(0.05f)));
     buildModifier(ModifierIds.searing).addModule(ConditionalMiningSpeedModule.builder().blocks(TinkerPredicate.CAN_MELT_BLOCK).eachLevel(6f));
     buildModifier(ModifierIds.scorching).addModule(ConditionalMeleeDamageModule.builder().target(LivingEntityPredicate.ON_FIRE).eachLevel(2f));

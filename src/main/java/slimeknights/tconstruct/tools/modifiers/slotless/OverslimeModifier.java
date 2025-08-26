@@ -75,12 +75,12 @@ public class OverslimeModifier extends DurabilityShieldModifier implements ToolS
   @Override
   public Boolean showDurabilityBar(IToolStackView tool, ModifierEntry modifier) {
     // only show as fully repaired if overslime is full
-    return getShield(tool) < getShieldCapacity(tool, modifier) ? true : null;
+    return getAmount(tool) < getCapacity(tool, modifier) ? true : null;
   }
 
   @Override
   public int getDurabilityRGB(IToolStackView tool, ModifierEntry modifier) {
-    if (getShield(tool) > 0) {
+    if (getAmount(tool) > 0) {
       // just always display light blue, not much point in color changing really
       return 0x00A0FF;
     }

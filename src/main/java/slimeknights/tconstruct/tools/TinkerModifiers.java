@@ -122,6 +122,10 @@ import slimeknights.tconstruct.library.modifiers.modules.build.StatCopyModule;
 import slimeknights.tconstruct.library.modifiers.modules.build.SwappableSlotModule;
 import slimeknights.tconstruct.library.modifiers.modules.build.SwappableToolTraitsModule;
 import slimeknights.tconstruct.library.modifiers.modules.build.VolatileFlagModule;
+import slimeknights.tconstruct.library.modifiers.modules.capacity.CapacityBarModule;
+import slimeknights.tconstruct.library.modifiers.modules.capacity.DamageToCapacityModule;
+import slimeknights.tconstruct.library.modifiers.modules.capacity.DurabilityShieldModule;
+import slimeknights.tconstruct.library.modifiers.modules.capacity.LootToCapacityModule;
 import slimeknights.tconstruct.library.modifiers.modules.combat.ConditionalMeleeDamageModule;
 import slimeknights.tconstruct.library.modifiers.modules.combat.ConditionalPowerModule;
 import slimeknights.tconstruct.library.modifiers.modules.combat.KnockbackModule;
@@ -217,10 +221,8 @@ import slimeknights.tconstruct.tools.modifiers.slotless.OverslimeModifier;
 import slimeknights.tconstruct.tools.modifiers.slotless.StatOverrideModifier;
 import slimeknights.tconstruct.tools.modifiers.slotless.TrimModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.DamageSpeedTradeModifier;
-import slimeknights.tconstruct.tools.modifiers.traits.FrostshieldModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.general.EnderportingModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.general.SolarPoweredModifier;
-import slimeknights.tconstruct.tools.modifiers.traits.general.StoneshieldModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.general.TannedModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.general.TastyModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.harvest.DwarvenModifier;
@@ -452,7 +454,9 @@ public final class TinkerModifiers extends TinkerModule {
   // traits - tier 1
   public static final StaticModifier<DamageSpeedTradeModifier> jagged = MODIFIERS.register("jagged", () -> new DamageSpeedTradeModifier(0.005f));
   public static final StaticModifier<DamageSpeedTradeModifier> stonebound = MODIFIERS.register("stonebound", () -> new DamageSpeedTradeModifier(-0.005f));
-  public static final StaticModifier<FrostshieldModifier> frostshield = MODIFIERS.register("frostshield", FrostshieldModifier::new);
+  /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#frostshield} */
+  @Deprecated(forRemoval = true)
+  public static final DynamicModifier frostshield = MODIFIERS.registerDynamic("frostshield");
   // traits - tier 1 nether
   public static final StaticModifier<NecroticModifier> necrotic = MODIFIERS.register("necrotic", NecroticModifier::new);
   // traits - tier 1 nether
@@ -472,7 +476,9 @@ public final class TinkerModifiers extends TinkerModule {
   public static final StaticModifier<EnderportingModifier> enderporting = MODIFIERS.register("enderporting", EnderportingModifier::new);
 
   // traits - mod compat tier 2
-  public static final StaticModifier<StoneshieldModifier> stoneshield = MODIFIERS.register("stoneshield", StoneshieldModifier::new);
+  /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#stoneshield} */
+  @Deprecated(forRemoval = true)
+  public static final DynamicModifier stoneshield = MODIFIERS.registerDynamic("stoneshield");
   /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#holy} */
   @Deprecated(forRemoval = true)
   public static final DynamicModifier holy = MODIFIERS.registerDynamic("holy");
@@ -698,6 +704,11 @@ public final class TinkerModifiers extends TinkerModule {
       ModifierModule.LOADER.register(getResource("armor_looting"), LootingModule.Armor.LOADER);
       // mining
       ModifierModule.LOADER.register(getResource("conditional_mining_speed"), ConditionalMiningSpeedModule.LOADER);
+      // capacity
+      ModifierModule.LOADER.register(getResource("capacity_bar"), CapacityBarModule.LOADER);
+      ModifierModule.LOADER.register(getResource("durability_shield"), DurabilityShieldModule.LOADER);
+      ModifierModule.LOADER.register(getResource("loot_to_capacity"), LootToCapacityModule.LOADER);
+      ModifierModule.LOADER.register(getResource("damage_to_capacity"), DamageToCapacityModule.LOADER);
       // technical
       ModifierModule.LOADER.register(getResource("armor_level"), ArmorLevelModule.LOADER);
       ModifierModule.LOADER.register(getResource("max_armor_stat"), MaxArmorStatModule.LOADER);
