@@ -58,6 +58,7 @@ import slimeknights.tconstruct.library.json.variable.protection.ProtectionVariab
 import slimeknights.tconstruct.library.json.variable.stat.ConditionalStatVariable;
 import slimeknights.tconstruct.library.json.variable.stat.EntityConditionalStatVariable;
 import slimeknights.tconstruct.library.json.variable.tool.ConditionalToolVariable;
+import slimeknights.tconstruct.library.json.variable.tool.ModDataVariable;
 import slimeknights.tconstruct.library.json.variable.tool.ToolStatVariable;
 import slimeknights.tconstruct.library.json.variable.tool.ToolVariable;
 import slimeknights.tconstruct.library.modifiers.Modifier;
@@ -786,6 +787,7 @@ public final class TinkerModifiers extends TinkerModule {
       ToolVariable.register(getResource("tool_conditional"), ConditionalToolVariable.LOADER);
       ToolVariable.register(getResource("tool_durability"), ToolVariable.CURRENT_DURABILITY.getLoader());
       ToolVariable.register(getResource("tool_stat"), ToolStatVariable.LOADER);
+      ToolVariable.register(getResource("mod_data"), ModDataVariable.LOADER);
       // stat
       ConditionalStatVariable.LOADER.register(getResource("constant"), ConditionalStatVariable.Constant.LOADER);
       ConditionalStatVariable.register(getResource("entity"), EntityConditionalStatVariable.LOADER);
