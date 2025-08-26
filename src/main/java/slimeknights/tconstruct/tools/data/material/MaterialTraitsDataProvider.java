@@ -108,7 +108,7 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     addTraits(MaterialIds.silver, RANGED, ModifierIds.holy);
     addTraits(MaterialIds.silver, ARMOR, ModifierIds.consecrated);
     addDefaultTraits(MaterialIds.treatedWood, ModifierIds.preserved);
-    addDefaultTraits(MaterialIds.ironwood, ModifierIds.reinforced);
+    addDefaultTraits(MaterialIds.ironwood, ModifierIds.deciduous);
     // tier 3 - mod compat
     addDefaultTraits(MaterialIds.steel, ModifierIds.ductile);
     addDefaultTraits(MaterialIds.bronze, ModifierIds.maintained);

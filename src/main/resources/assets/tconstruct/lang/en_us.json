@@ -2036,7 +2036,8 @@
 
   "material.tconstruct.ironwood": "Ironwood",
   "material.tconstruct.ironwood.flavor": "Is it wood?",
-  "material.tconstruct.ironwood.encyclopedia": "Reduces the chance for the tool to take damage. Has a 75% chance of taking damage at level 1, 55% chance at level 2, 40% at level 3, and 30% at level 4.",
+  "material.tconstruct.ironwood.encyclopedia": "When losing durability, tool loses 1 extra durability to share durability with a random tool in the hotbar or offhand. Target gains 1 barkskin plus 1 per level.",
+  "material.tconstruct.ironwood.armor": "When losing durability, tool loses 1 extra durability to share durability with a random equipped armor. Target gains 1 barkskin plus 1 per level.",
 
 
   "__comment": "Tier 3 Integration Materials",
@@ -2894,7 +2895,13 @@
   "modifier.tconstruct.consecrated.resistance": "Undead Resistance",
   "modifier.tconstruct.preserved": "Preserved",
   "modifier.tconstruct.preserved.flavor":  "A nice oil finish",
-  "modifier.tconstruct.preserved.description": "Makes the tool more durability and easier to repair",
+  "modifier.tconstruct.preserved.description": "Makes the tool more durable and easier to repair",
+  "modifier.tconstruct.deciduous": "Deciduous",
+  "modifier.tconstruct.deciduous.flavor":  "Shedding bark",
+  "modifier.tconstruct.deciduous.description": "Shares some of its durability with other tools when taking damage",
+  "modifier.tconstruct.barkskin": "Barkskin",
+  "modifier.tconstruct.barkskin.flavor":  "Shed bark",
+  "modifier.tconstruct.barkskin.description": "Tool uses barkskin instead of durability until it runs out",
 
 
   "__comment": "Tier 3 Mod Compat Traits",

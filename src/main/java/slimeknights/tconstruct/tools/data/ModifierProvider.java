@@ -150,6 +150,7 @@ import slimeknights.tconstruct.tools.modules.HeadlightModule;
 import slimeknights.tconstruct.tools.modules.MeltingModule;
 import slimeknights.tconstruct.tools.modules.OverburnModule;
 import slimeknights.tconstruct.tools.modules.OvergrowthModule;
+import slimeknights.tconstruct.tools.modules.ShareDurabilityModule;
 import slimeknights.tconstruct.tools.modules.SmeltingModule;
 import slimeknights.tconstruct.tools.modules.TheOneProbeModule;
 import slimeknights.tconstruct.tools.modules.ZoomModule;
@@ -628,6 +629,12 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .addModule(new CapacityBarModule(LevelingInt.eachLevel(100), ToolStats.DURABILITY))
       .addModule(new DurabilityShieldModule(0x7F7F7F))
       .addModule(new LootToCapacityModule(Ingredient.of(TinkerTags.Items.STONESHIELDS), 3, LevelingValue.eachLevel(0.2f), null));
+    buildModifier(ModifierIds.barkskin)
+      .levelDisplay(ModifierLevelDisplay.NO_LEVELS)
+      .priority(200) // higher than all other forms of durability shields
+      .addModule(new CapacityBarModule(LevelingInt.flat(100), ToolStats.DURABILITY))
+      .addModule(new DurabilityShieldModule(0xB9B3AC));
+    buildModifier(ModifierIds.deciduous).priority(250).addModule(new ShareDurabilityModule(ModifierIds.barkskin, new LevelingInt(1, 1), LevelingInt.flat(1)));
     buildModifier(ModifierIds.overgrowth).addModule(new OvergrowthModule(LevelingValue.eachLevel(0.05f)));
     buildModifier(ModifierIds.searing).addModule(ConditionalMiningSpeedModule.builder().blocks(TinkerPredicate.CAN_MELT_BLOCK).eachLevel(6f));
     buildModifier(ModifierIds.scorching).addModule(ConditionalMeleeDamageModule.builder().target(LivingEntityPredicate.ON_FIRE).eachLevel(2f));
