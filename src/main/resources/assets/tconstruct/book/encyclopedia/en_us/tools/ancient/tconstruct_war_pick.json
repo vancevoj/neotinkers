@@ -1,7 +1,7 @@
 {
   "tool": "tconstruct:war_pick",
   "text": [
-    { "text": "The war pick is a crossbow effective at mining pickaxe blocks. Found in mineshafts, pillager posts, zombie villagers, and a gift from weaponsmiths. " },
+    { "text": "The war pick is a crossbow effective at mining pickaxe blocks. Found in mineshafts, pillager posts, vindicators, zombie villagers, and a gift from weaponsmiths. " },
     { "text": "Mining blocks when loaded grants +0.01 velocity per mined block, up to +0.25. Expanders increase circular mining radius." }
   ],
   "properties": [
