@@ -7,6 +7,7 @@ import net.minecraft.client.color.item.ItemColors;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.client.player.Input;
+import net.minecraft.client.renderer.entity.FishingHookRenderer;
 import net.minecraft.client.renderer.entity.ItemEntityRenderer;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.server.packs.PackType;
@@ -129,6 +130,8 @@ public class ToolClientEvents extends ClientEventBase {
   static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
     event.registerEntityRenderer(TinkerTools.indestructibleItem.get(), ItemEntityRenderer::new);
     event.registerEntityRenderer(TinkerTools.crystalshotEntity.get(), CrystalshotRenderer::new);
+    // TODO: custom renderer?
+    event.registerEntityRenderer(TinkerTools.fishingHook.get(), FishingHookRenderer::new);
     event.registerEntityRenderer(TinkerModifiers.fluidSpitEntity.get(), FluidEffectProjectileRenderer::new);
   }
 

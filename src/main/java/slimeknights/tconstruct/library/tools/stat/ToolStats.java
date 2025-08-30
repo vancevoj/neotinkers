@@ -79,6 +79,11 @@ public class ToolStats {
   /** Base damage of the projectile, boosted by enchantments such as power. Assumes the arrow itself does 2 damage, so we boost on top of that */
   public static final FloatToolStat PROJECTILE_DAMAGE = register(new FloatToolStat(name("projectile_damage"), 0xFFD76464, 2f, 0f, 1024f, TinkerTags.Items.RANGED));
 
+  // fishing
+  /** Luck bonus applied to fishing rods */
+  public static final FloatToolStat SEA_LUCK = register(new FloatToolStat(name("sea_luck"), 0xFF345EC3, 0, 0, 1024f, TinkerTags.Items.INTERACTABLE));
+  /** Floored value will reduce fishing time by 5 seconds */
+  public static final FloatToolStat LURE = register(new FloatToolStat(name("lure"), 0xFFCBCC18, 0, 0, 5, TinkerTags.Items.INTERACTABLE));
 
   /**
    * Gets the tool stat for the given name

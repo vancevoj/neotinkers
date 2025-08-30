@@ -173,6 +173,7 @@ import slimeknights.tconstruct.tools.modules.combat.FieryAttackModule;
 import slimeknights.tconstruct.tools.modules.combat.FreezingAttackModule;
 import slimeknights.tconstruct.tools.modules.interaction.BrushModule;
 import slimeknights.tconstruct.tools.modules.interaction.ExtinguishCampfireModule;
+import slimeknights.tconstruct.tools.modules.interaction.FishingModule;
 import slimeknights.tconstruct.tools.modules.interaction.PlaceGlowModule;
 import slimeknights.tconstruct.tools.modules.ranged.BulkQuiverModule;
 import slimeknights.tconstruct.tools.modules.ranged.PunchModule;
@@ -600,6 +601,8 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .addModule(ToolActionWalkerTransformModule.builder(ToolActions.HOE_TILL, SoundEvents.HOE_TILL).amount(0.5f, 1));
     buildModifier(ModifierIds.brushing).levelDisplay(ModifierLevelDisplay.NO_LEVELS).addModule(BrushModule.INSTANCE);
 
+    // fishing
+    buildModifier(ModifierIds.fishing).levelDisplay(ModifierLevelDisplay.NO_LEVELS).addModule(FishingModule.INSTANCE);
     // traits
     buildModifier(ModifierIds.smelting)
       .priority(110) // want to be higher than bonking and alike

@@ -136,6 +136,8 @@ public class ModifierIds {
   public static final ModifierId tilling = id("tilling");
   public static final ModifierId brushing = id("brushing");
 
+  // fishing
+  public static final ModifierId fishing = id("fishing");
   // internal
   public static final ModifierId overslimeFriend = id("overslime_friend");
   public static final ModifierId snowBoots = id("snow_boots");

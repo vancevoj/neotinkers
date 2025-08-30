@@ -1238,6 +1238,8 @@
   "death.attack.tconstruct.knightmetal.player": "%1$s was skewered by Knightmetal escaping %2$s",
   "death.attack.tconstruct.self_destruct": "%1$s self destructed",
   "death.attack.tconstruct.self_destruct.player": "%1$s self destructed whilst fighting %2$s",
+  "death.attack.tconstruct.fishing_hook": "%1$s was impaled by %2$s's fish hook",
+  "death.attack.tconstruct.fishing_hook.item": "%1$s was impaled by %2$s's fish hook from %3$s",
   "death.attack.tconstruct.piercing": "%1$s was pierced by %2$s",
   "death.attack.tconstruct.piercing.item": "%1$s was pierced by %2$s using %3$s",
   "death.attack.tconstruct.entangled": "%1$s could not let go of their tool",
@@ -2600,6 +2602,9 @@
   "modifier.tconstruct.warping": "Warping",
   "modifier.tconstruct.warping.flavor": "Ender transporting",
   "modifier.tconstruct.warping.description": "Charge up, aim at a wall, and warp to the other side!",
+  "modifier.tconstruct.fishing": "Fishing",
+  "modifier.tconstruct.fishing.flavor": "Obligatory fishing minigame",
+  "modifier.tconstruct.fishing.description": "Tool can cast a fishing bobber projectile, which potentially damages foes.",
 
   "_comment": "Fluids",
   "modifier.tconstruct.melting": "Melting",
@@ -3178,6 +3183,11 @@
   "tool_stat.tconstruct.block_amount.description": "Maximum amount of damage blocked by this shield per attack.",
   "tool_stat.tconstruct.block_angle": "Block Angle: ",
   "tool_stat.tconstruct.block_angle.description": "Total angle of protection in front when shielding out of a max 360 degrees. Any attacks from an angle beyond this are not blocked.",
+
+  "tool_stat.tconstruct.sea_luck": "Sea Luck: ",
+  "tool_stat.tconstruct.sea_luck.description": "Increases the chance of good rewards from fishing.",
+  "tool_stat.tconstruct.lure": "Lure: ",
+  "tool_stat.tconstruct.lure.description": "Reduces the time it takes to catch fish.",
 
   "tool_stat.tconstruct.overslime": "Overslime Capacity: ",
   "tool_stat.tconstruct.overslime.description": "Maximum amount of overslime allowed on this tool.",

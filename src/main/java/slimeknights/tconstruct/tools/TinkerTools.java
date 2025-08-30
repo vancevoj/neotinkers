@@ -115,6 +115,7 @@ import slimeknights.tconstruct.tools.data.material.MaterialStatsDataProvider;
 import slimeknights.tconstruct.tools.data.material.MaterialTraitsDataProvider;
 import slimeknights.tconstruct.tools.data.sprite.TinkerMaterialSpriteProvider;
 import slimeknights.tconstruct.tools.data.sprite.TinkerPartSpriteProvider;
+import slimeknights.tconstruct.tools.entity.CombatFishingHook;
 import slimeknights.tconstruct.tools.item.CrystalshotItem;
 import slimeknights.tconstruct.tools.item.CrystalshotItem.CrystalshotEntity;
 import slimeknights.tconstruct.tools.item.ModifiableSwordItem;
@@ -229,6 +230,9 @@ public final class TinkerTools extends TinkerModule {
                       .sized(0.5F, 0.5F)
                       .clientTrackingRange(4)
                       .updateInterval(20));
+  public static final RegistryObject<EntityType<CombatFishingHook>> fishingHook = ENTITIES.register("fishing_bobber", () ->
+    EntityType.Builder.<CombatFishingHook>of(CombatFishingHook::new, MobCategory.MISC).noSave().noSummon().sized(0.25F, 0.25F).clientTrackingRange(4).updateInterval(5));
+
 
   /* Containers */
   public static final RegistryObject<MenuType<ToolContainerMenu>> toolContainer = MENUS.register("tool_container", ToolContainerMenu::forClient);
