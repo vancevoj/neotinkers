@@ -541,14 +541,14 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                                     .setInput(Items.DIRT, 1, 10)
                                     .setTools(TinkerTags.Items.RANGED)
                                     .save(consumer, prefix(ModifierIds.blindshot, slotlessFolder));
-    ModifierRecipeBuilder.modifier(TinkerModifiers.punch)
+    ModifierRecipeBuilder.modifier(ModifierIds.punch)
                          .addInput(Items.PISTON)
                          .addInput(TinkerWorld.slime.get(SlimeType.SKY))
                          .setMaxLevel(5) // vanilla caps at 2, that is boring
                          .setSlots(SlotType.UPGRADE, 1)
                          .setTools(TinkerTags.Items.RANGED)
-                         .saveSalvage(consumer, prefix(TinkerModifiers.punch, upgradeSalvage))
-                         .save(consumer, prefix(TinkerModifiers.punch, upgradeFolder));
+                         .saveSalvage(consumer, prefix(ModifierIds.punch, upgradeSalvage))
+                         .save(consumer, prefix(ModifierIds.punch, upgradeFolder));
     ModifierRecipeBuilder.modifier(TinkerModifiers.impaling)
                          .addInput(Items.POINTED_DRIPSTONE)
                          .addInput(Items.POINTED_DRIPSTONE)

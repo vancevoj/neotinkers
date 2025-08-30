@@ -256,7 +256,6 @@ import slimeknights.tconstruct.tools.modifiers.upgrades.melee.PiercingModifier;
 import slimeknights.tconstruct.tools.modifiers.upgrades.melee.SeveringModifier;
 import slimeknights.tconstruct.tools.modifiers.upgrades.melee.SweepingEdgeModifier;
 import slimeknights.tconstruct.tools.modifiers.upgrades.ranged.ImpalingModifier;
-import slimeknights.tconstruct.tools.modifiers.upgrades.ranged.PunchModifier;
 import slimeknights.tconstruct.tools.modifiers.upgrades.ranged.SinistralModifier;
 import slimeknights.tconstruct.tools.modules.DamageOnUnequipModule;
 import slimeknights.tconstruct.tools.modules.HeadlightModule;
@@ -288,6 +287,7 @@ import slimeknights.tconstruct.tools.modules.interaction.BrushModule;
 import slimeknights.tconstruct.tools.modules.interaction.ExtinguishCampfireModule;
 import slimeknights.tconstruct.tools.modules.interaction.PlaceGlowModule;
 import slimeknights.tconstruct.tools.modules.ranged.BulkQuiverModule;
+import slimeknights.tconstruct.tools.modules.ranged.PunchModule;
 import slimeknights.tconstruct.tools.modules.ranged.RestrictAngleModule;
 import slimeknights.tconstruct.tools.modules.ranged.TrickQuiverModule;
 import slimeknights.tconstruct.tools.recipe.ArmorDyeingRecipe;
@@ -363,7 +363,9 @@ public final class TinkerModifiers extends TinkerModule {
   public static final StaticModifier<SweepingEdgeModifier> sweeping = MODIFIERS.register("sweeping_edge", SweepingEdgeModifier::new);
 
   // ranged
-  public static final StaticModifier<PunchModifier> punch = MODIFIERS.register("punch", PunchModifier::new);
+  /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#punch} */
+  @Deprecated(forRemoval = true)
+  public static final DynamicModifier punch = MODIFIERS.registerDynamic("punch");
   public static final StaticModifier<ImpalingModifier> impaling = MODIFIERS.register("impaling", ImpalingModifier::new);
   /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#freezing} */
   @Deprecated(forRemoval = true)
@@ -760,6 +762,7 @@ public final class TinkerModifiers extends TinkerModule {
       ModifierModule.LOADER.register(getResource("bulk_quiver"), BulkQuiverModule.LOADER);
       ModifierModule.LOADER.register(getResource("trick_quiver"), TrickQuiverModule.LOADER);
       ModifierModule.LOADER.register(getResource("infinity"), InfinityModule.LOADER);
+      ModifierModule.LOADER.register(getResource("punch"), PunchModule.LOADER);
       // compat
       ModifierModule.LOADER.register(getResource("the_one_probe"), TheOneProbeModule.INSTANCE.getLoader());
       ModifierModule.LOADER.register(getResource("headlight"), HeadlightModule.LOADER);

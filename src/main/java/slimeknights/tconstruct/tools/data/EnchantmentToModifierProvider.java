@@ -49,7 +49,7 @@ public class EnchantmentToModifierProvider extends AbstractEnchantmentToModifier
 
     // ranged
     add(Enchantments.POWER_ARROWS, ModifierIds.power);
-    add(Enchantments.PUNCH_ARROWS, TinkerModifiers.punch.getId());
+    add(Enchantments.PUNCH_ARROWS, ModifierIds.punch);
     add(Enchantments.FLAMING_ARROWS, ModifierIds.fiery);
     add(Enchantments.INFINITY_ARROWS, ModifierIds.crystalshot);
     add(Enchantments.MULTISHOT, TinkerModifiers.multishot.getId());

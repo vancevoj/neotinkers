@@ -122,7 +122,7 @@ public class ModifierTagProvider extends AbstractModifierTagProvider {
     this.tag(BOOT_UPGRADES).add(ModifierIds.depthStrider, ModifierIds.featherFalling, ModifierIds.lightspeed, TinkerModifiers.soulspeed.getId());
 
     this.tag(RANGED_UPGRADES).add(
-      ModifierIds.pierce, ModifierIds.power, TinkerModifiers.punch.getId(), ModifierIds.quickCharge,
+      ModifierIds.pierce, ModifierIds.power, ModifierIds.punch, ModifierIds.quickCharge,
       TinkerModifiers.sinistral.getId(), ModifierIds.trueshot,
       ModifierIds.fiery, ModifierIds.freezing,
       TinkerModifiers.impaling.getId(), TinkerModifiers.necrotic.getId());
