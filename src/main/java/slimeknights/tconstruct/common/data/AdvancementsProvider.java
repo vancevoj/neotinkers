@@ -327,7 +327,7 @@ public class AdvancementsProvider extends GenericDataProvider {
       with.accept(ModifierIds.trickQuiver);
       // fluid
       withL.accept(TinkerModifiers.spitting);
-      withL.accept(TinkerModifiers.spilling);
+      with.accept(ModifierIds.spilling);
       withL.accept(TinkerModifiers.splashing);
       withL.accept(TinkerModifiers.bursting);
     });

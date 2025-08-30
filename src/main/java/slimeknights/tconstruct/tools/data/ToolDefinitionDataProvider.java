@@ -752,7 +752,7 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
       // traits
       .module(ToolTraitsModule.builder()
         .trait(TinkerModifiers.spitting)
-        .trait(TinkerModifiers.spilling)
+        .trait(ModifierIds.spilling)
         .trait(TinkerModifiers.silkyShears).build())
       // behavior
       .module(ToolActionsModule.of(ToolActions.SWORD_DIG))

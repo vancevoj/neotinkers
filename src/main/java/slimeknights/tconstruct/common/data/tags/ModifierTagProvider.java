@@ -134,7 +134,7 @@ public class ModifierTagProvider extends AbstractModifierTagProvider {
       ModifierIds.luck, TinkerModifiers.melting.getId());
     this.tag(MELEE_ABILITIES).add(
       TinkerModifiers.blocking.getId(), TinkerModifiers.parrying.getId(),
-      TinkerModifiers.dualWielding.getId(), TinkerModifiers.spilling.getId());
+      TinkerModifiers.dualWielding.getId(), ModifierIds.spilling);
     this.tag(HARVEST_ABILITIES).add(TinkerModifiers.autosmelt.getId(), TinkerModifiers.exchanging.getId(), TinkerModifiers.silky.getId());
     this.tag(RANGED_ABILITIES).add(
       ModifierIds.bulkQuiver, ModifierIds.trickQuiver,
