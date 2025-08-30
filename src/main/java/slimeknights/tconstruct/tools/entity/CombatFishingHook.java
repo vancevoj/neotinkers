@@ -59,8 +59,7 @@ public class CombatFishingHook extends FishingHook implements ProjectileWithKnoc
     float ySin = Mth.sin(xAngle);
     Vec3 deltaMovement = new Vec3(-dx, Mth.clamp(-ySin / yCos, -5f, 5f), -dz);
     double length = deltaMovement.length();
-    // TODO: inaccuracy
-    double maxRandom = 0.0103365 * inaccuracy;
+    double maxRandom = 0.03 * inaccuracy * inaccuracy;
     deltaMovement = deltaMovement.multiply(
       velocity / length + this.random.triangle(0.5, maxRandom),
       velocity / length + this.random.triangle(0.5, maxRandom),
@@ -99,7 +98,7 @@ public class CombatFishingHook extends FishingHook implements ProjectileWithKnoc
           living.setLastHurtMob(target);
         }
         // setup damage
-        int damage = Mth.ceil(Mth.clamp(this.impactVelocity * this.power, 0, Integer.MAX_VALUE));
+        float damage = Mth.ceil(Mth.clamp(this.impactVelocity * this.power * 10, 0, Integer.MAX_VALUE)) / 10f;
         DamageSource source = CombatHelper.damageSource(TinkerDamageTypes.FISHING_HOOK, this, owner);
         LivingEntity targetLiving = target instanceof LivingEntity l ? l : null;
         // don't want to apply default knockback, we will apply our own later in the opposite direction
