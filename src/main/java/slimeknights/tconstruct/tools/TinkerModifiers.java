@@ -257,6 +257,7 @@ import slimeknights.tconstruct.tools.modifiers.upgrades.melee.SweepingEdgeModifi
 import slimeknights.tconstruct.tools.modifiers.upgrades.ranged.ImpalingModifier;
 import slimeknights.tconstruct.tools.modifiers.upgrades.ranged.SinistralModifier;
 import slimeknights.tconstruct.tools.modules.DamageOnUnequipModule;
+import slimeknights.tconstruct.tools.modules.DurabilityAsCapacityModule;
 import slimeknights.tconstruct.tools.modules.HeadlightModule;
 import slimeknights.tconstruct.tools.modules.MeltingModule;
 import slimeknights.tconstruct.tools.modules.OverburnModule;
@@ -716,6 +717,7 @@ public final class TinkerModifiers extends TinkerModule {
       ModifierModule.LOADER.register(getResource("conditional_mining_speed"), ConditionalMiningSpeedModule.LOADER);
       // capacity
       ModifierModule.LOADER.register(getResource("capacity_bar"), CapacityBarModule.LOADER);
+      ModifierModule.LOADER.register(getResource("durability_as_capacity"), DurabilityAsCapacityModule.LOADER);
       ModifierModule.LOADER.register(getResource("durability_shield"), DurabilityShieldModule.LOADER);
       ModifierModule.LOADER.register(getResource("loot_to_capacity"), LootToCapacityModule.LOADER);
       ModifierModule.LOADER.register(getResource("damage_to_capacity"), DamageToCapacityModule.LOADER);
