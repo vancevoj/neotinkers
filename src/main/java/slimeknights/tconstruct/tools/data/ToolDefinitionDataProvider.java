@@ -464,6 +464,21 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
       .module(new MultiplyStatsModule(MultiplierNBT.builder()
         .set(ToolStats.DURABILITY, 1.5f).build())) // gets effectively 2x durability from having 2 heads
       .largeToolStartingSlots();
+    // fishing rods are also ranged
+    define(ToolDefinitions.FISHING_ROD)
+      // parts
+      .module(PartStatsModule.parts()
+        .part(bowLimb)
+        .part(bowstring).build())
+      .module(defaultTwoParts)
+      // stats
+      .module(new SetStatsModule(StatsNBT.builder()
+        .set(ToolStats.DURABILITY, 70) // gives just about twice the durability as a vanilla rod to wood to make up for damaging on cast and reel
+        .set(ToolStats.ATTACK_SPEED, 2.0f)
+        .build()))
+      .module(ToolSlotsModule.builder().slots(SlotType.ABILITY, 1).slots(SlotType.UPGRADE, 4).build())
+      // traits
+      .module(ToolTraitsModule.builder().trait(ModifierIds.fishing).build());
 
     // special
     define(ToolDefinitions.FLINT_AND_BRICK)

@@ -461,6 +461,8 @@ public class TinkerTags {
     public static final TagKey<Item> CROSSBOWS = local("modifiable/ranged/crossbows");
     /** Modifiable items support special staff modifiers, is a subtag of ranged. */
     public static final TagKey<Item> STAFFS = local("modifiable/staffs");
+    /** Modifiable items that support fishing modifiers. */
+    public static final TagKey<Item> FISHING_RODS = local("modifiable/fishing_rods");
 
     /** Tools that can receive wood based embellishments */
     public static final TagKey<Item> EMBELLISHMENT_WOOD = local("modifiable/embellishment/wood");

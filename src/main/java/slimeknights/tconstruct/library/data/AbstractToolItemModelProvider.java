@@ -250,6 +250,15 @@ public abstract class AbstractToolItemModelProvider extends GenericDataProvider 
     armor(name, armor, ArmorItem.Type.values(), textures);
   }
 
+  /** Creates models for fishing rods cast and broken */
+  protected void fishingRod(IdAwareObject tool, String[] castParts, String[] brokenParts) throws IOException {
+    ResourceLocation id = tool.getId();
+    String name = id.getPath();
+    JsonObject base = readJson(id);
+    transformTool("tool/" + name + "/cast",   base, "", false, "cast", castParts);
+    transformTool("tool/" + name + "/broken", base, "", false, "broken", brokenParts);
+  }
+
   /* Helpers */
 
   /** Reads a JSON file */

@@ -174,6 +174,7 @@ public class ToolClientEvents extends ClientEventBase {
       // bow
       TinkerItemProperties.registerCrossbowProperties(TinkerTools.crossbow);
       TinkerItemProperties.registerToolProperties(TinkerTools.longbow);
+      TinkerItemProperties.registerToolProperties(TinkerTools.fishingRod);
       // misc
       TinkerItemProperties.registerToolProperties(TinkerTools.flintAndBrick);
       TinkerItemProperties.registerToolProperties(TinkerTools.skyStaff);
@@ -232,6 +233,7 @@ public class ToolClientEvents extends ClientEventBase {
     // bow
     registerItemColors(colors, TinkerTools.crossbow);
     registerItemColors(colors, TinkerTools.longbow);
+    registerItemColors(colors, TinkerTools.fishingRod);
     // ancient
     registerItemColors(colors, TinkerTools.meltingPan);
     registerItemColors(colors, TinkerTools.warPick);

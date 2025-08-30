@@ -1,0 +1,23 @@
+{
+  "loader": "tconstruct:tool",
+  "parent": "tconstruct:item/base/rod",
+  "textures": {
+    "rod":    "tconstruct:item/tool/fishing_rod/rod",
+    "string": "tconstruct:item/tool/fishing_rod/string"
+  },
+  "modifier_roots": [ "tconstruct:item/tool/fishing_rod/modifiers/" ],
+  "parts": [
+    { "name": "rod",    "index": 0 },
+    { "name": "string", "index": 1 }
+  ],
+  "overrides": [
+    {
+      "predicate": { "tconstruct:cast": 1 },
+      "model": "tconstruct:item/tool/fishing_rod/cast"
+    },
+    {
+      "predicate": { "tconstruct:broken": 1 },
+      "model": "tconstruct:item/tool/fishing_rod/broken"
+    }
+  ]
+}

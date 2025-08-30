@@ -64,6 +64,7 @@ import static slimeknights.tconstruct.common.TinkerTags.Items.DYEABLE;
 import static slimeknights.tconstruct.common.TinkerTags.Items.EMBELLISHMENT_SLIME;
 import static slimeknights.tconstruct.common.TinkerTags.Items.EMBELLISHMENT_WOOD;
 import static slimeknights.tconstruct.common.TinkerTags.Items.FANTASTIC_ARMOR;
+import static slimeknights.tconstruct.common.TinkerTags.Items.FISHING_RODS;
 import static slimeknights.tconstruct.common.TinkerTags.Items.GADGETRY_ARMOR;
 import static slimeknights.tconstruct.common.TinkerTags.Items.HARVEST;
 import static slimeknights.tconstruct.common.TinkerTags.Items.HARVEST_PRIMARY;
@@ -311,8 +312,9 @@ public class ItemTagProvider extends ItemTagsProvider {
     addToolTags(TinkerTools.sword,   MULTIPART_TOOL, DURABILITY, HARVEST, MELEE_PRIMARY, INTERACTABLE_RIGHT, SWORD, SMALL_TOOLS, BONUS_SLOTS, ItemTags.SWORDS, AOE);
     addToolTags(TinkerTools.cleaver, MULTIPART_TOOL, DURABILITY, HARVEST, MELEE_PRIMARY, INTERACTABLE_RIGHT, SWORD, BROAD_TOOLS, BONUS_SLOTS, ItemTags.SWORDS, AOE);
     // bow
-    addToolTags(TinkerTools.crossbow, MULTIPART_TOOL, DURABILITY, MELEE_WEAPON, CROSSBOWS, INTERACTABLE_LEFT, SMALL_TOOLS, BONUS_SLOTS, Tags.Items.TOOLS_CROSSBOWS);
-    addToolTags(TinkerTools.longbow,  MULTIPART_TOOL, DURABILITY, MELEE_WEAPON, LONGBOWS,  INTERACTABLE_LEFT, BROAD_TOOLS, BONUS_SLOTS, Tags.Items.TOOLS_BOWS);
+    addToolTags(TinkerTools.crossbow,   MULTIPART_TOOL, DURABILITY, MELEE_WEAPON, CROSSBOWS,   INTERACTABLE_LEFT, SMALL_TOOLS, BONUS_SLOTS, Tags.Items.TOOLS_CROSSBOWS);
+    addToolTags(TinkerTools.longbow,    MULTIPART_TOOL, DURABILITY, MELEE_WEAPON, LONGBOWS,    INTERACTABLE_LEFT, BROAD_TOOLS, BONUS_SLOTS, Tags.Items.TOOLS_BOWS);
+    addToolTags(TinkerTools.fishingRod, MULTIPART_TOOL, DURABILITY, MELEE_WEAPON, FISHING_RODS, INTERACTABLE_LEFT, SMALL_TOOLS, BONUS_SLOTS, Tags.Items.TOOLS_FISHING_RODS);
     // specialized
     addToolTags(TinkerTools.flintAndBrick, DURABILITY, MELEE_WEAPON, INTERACTABLE_RIGHT, AOE, SMALL_TOOLS, BONUS_SLOTS);
     addToolTags(TinkerTools.skyStaff,      DURABILITY, STAFFS, SPECIAL_TOOLS, HELD_ARMOR, INTERACTABLE_DUAL, AOE, DYEABLE, EMBELLISHMENT_WOOD, BONUS_SLOTS);
@@ -379,7 +381,7 @@ public class ItemTagProvider extends ItemTagsProvider {
     this.tag(HELD_ARMOR).addTag(SHIELDS);
     this.tag(ARMOR).addTags(WORN_ARMOR, HELD_ARMOR);
     this.tag(AOE).addTag(BOOTS); // boot walk modifiers
-    this.tag(RANGED).addTags(BOWS, STAFFS);
+    this.tag(RANGED).addTags(BOWS, STAFFS, FISHING_RODS);
     this.tag(BOWS).addTags(LONGBOWS, CROSSBOWS);
     // TODO 1.21: consider dropping unsalvagable from this tag
     this.tag(UNRECYCLABLE).addTags(UNSALVAGABLE, ANCIENT_TOOLS); // ancient tools lack tool parts, but may have special override recipes to salvage

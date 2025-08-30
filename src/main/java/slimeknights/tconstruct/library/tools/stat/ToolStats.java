@@ -81,9 +81,9 @@ public class ToolStats {
 
   // fishing
   /** Luck bonus applied to fishing rods */
-  public static final FloatToolStat SEA_LUCK = register(new FloatToolStat(name("sea_luck"), 0xFF345EC3, 0, 0, 1024f, TinkerTags.Items.INTERACTABLE));
+  public static final FloatToolStat SEA_LUCK = register(new FloatToolStat(name("sea_luck"), 0xFF345EC3, 0, 0, 1024f, TinkerTags.Items.FISHING_RODS));
   /** Floored value will reduce fishing time by 5 seconds */
-  public static final FloatToolStat LURE = register(new FloatToolStat(name("lure"), 0xFFCBCC18, 0, 0, 5, TinkerTags.Items.INTERACTABLE));
+  public static final FloatToolStat LURE = register(new FloatToolStat(name("lure"), 0xFFCBCC18, 0, 0, 5, TinkerTags.Items.FISHING_RODS));
 
   /**
    * Gets the tool stat for the given name
