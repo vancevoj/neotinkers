@@ -43,7 +43,6 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.function.BiConsumer;
 import java.util.function.DoubleSupplier;
@@ -310,13 +309,10 @@ public class ToolAttackUtil {
     // set hand for proper looting context
     ModifierLootingHandler.setLootingSlot(attackerLiving, sourceSlot);
 
-    // prevent knockback if needed
-    Optional<AttributeInstance> knockbackModifier = getKnockbackAttribute(targetLiving);
     // if knockback is below the vanilla amount, we need to prevent knockback, the remainder will be applied later
-    boolean canceledKnockback = false;
+    AttributeInstance knockbackModifier = null;
     if (knockback < 0.4f) {
-      canceledKnockback = true;
-      knockbackModifier.ifPresent(ToolAttackUtil::disableKnockback);
+      knockbackModifier = disableKnockback(targetLiving);
     } else if (targetLiving != null) {
       // we will apply 0.4 of the knockback in the attack hook, need to apply the remainder ourself
       knockback -= 0.4f;
@@ -338,9 +334,7 @@ public class ToolAttackUtil {
     ModifierLootingHandler.setLootingSlot(attackerLiving, EquipmentSlot.MAINHAND);
 
     // reset knockback if needed
-    if (canceledKnockback) {
-      knockbackModifier.ifPresent(ToolAttackUtil::enableKnockback);
-    }
+    enableKnockback(knockbackModifier);
 
     // if we failed to hit, fire failure hooks
     if (!didHit) {
@@ -478,21 +472,27 @@ public class ToolAttackUtil {
     }
   }
 
-  /** Gets the knockback attribute instance if the modifier is not already present */
-  private static Optional<AttributeInstance> getKnockbackAttribute(@Nullable LivingEntity living) {
-    return Optional.ofNullable(living)
-                   .map(e -> e.getAttribute(Attributes.KNOCKBACK_RESISTANCE))
-                   .filter(attribute -> !attribute.hasModifier(ANTI_KNOCKBACK_MODIFIER));
-  }
-
-  /** Enable the anti-knockback modifier */
-  private static void disableKnockback(AttributeInstance instance) {
-    instance.addTransientModifier(ANTI_KNOCKBACK_MODIFIER);
+  /**
+   * Disables knockback on the given entity.
+   * @return Attribute instance to enable knockback later with {@link #enableKnockback(AttributeInstance)}, or null if no knockback was disabled.
+   */
+  @Nullable
+  public static AttributeInstance disableKnockback(@Nullable LivingEntity living) {
+    if (living != null) {
+      AttributeInstance instance = living.getAttribute(Attributes.KNOCKBACK_RESISTANCE);
+      if (instance != null && !instance.hasModifier(ANTI_KNOCKBACK_MODIFIER)) {
+        instance.addTransientModifier(ANTI_KNOCKBACK_MODIFIER);
+        return instance;
+      }
+    }
+    return null;
   }
 
   /** Disables the anti knockback modifier */
-  private static void enableKnockback(AttributeInstance instance) {
-    instance.removeModifier(ANTI_KNOCKBACK_MODIFIER);
+  public static void enableKnockback(@Nullable AttributeInstance instance) {
+    if (instance != null) {
+      instance.removeModifier(ANTI_KNOCKBACK_MODIFIER);
+    }
   }
 
   /**
@@ -506,13 +506,13 @@ public class ToolAttackUtil {
    */
   @SuppressWarnings("UnusedReturnValue")
   public static boolean attackEntitySecondary(DamageSource source, float damage, Entity target, @Nullable LivingEntity living, boolean noKnockback) {
-    Optional<AttributeInstance> knockbackResistance = getKnockbackAttribute(living);
+    AttributeInstance knockbackResistance = null;
     // store last damage before secondary attack
     float oldLastDamage = living == null ? 0 : living.lastHurt;
 
     // prevent knockback in secondary attacks, if requested
     if (noKnockback) {
-      knockbackResistance.ifPresent(ToolAttackUtil::disableKnockback);
+      knockbackResistance = disableKnockback(living);
     }
 
     // set hurt resistance time to 0 because we always want to deal damage in traits
@@ -527,7 +527,7 @@ public class ToolAttackUtil {
 
     // remove no knockback marker
     if (noKnockback) {
-      knockbackResistance.ifPresent(ToolAttackUtil::enableKnockback);
+      enableKnockback(knockbackResistance);
     }
 
     return hit;
