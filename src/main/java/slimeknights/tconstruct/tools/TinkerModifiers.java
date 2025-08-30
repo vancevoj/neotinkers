@@ -129,6 +129,7 @@ import slimeknights.tconstruct.library.modifiers.modules.capacity.DurabilityShie
 import slimeknights.tconstruct.library.modifiers.modules.capacity.LaunchCapacityModule;
 import slimeknights.tconstruct.library.modifiers.modules.capacity.LootToCapacityModule;
 import slimeknights.tconstruct.library.modifiers.modules.capacity.MiningCapacityModule;
+import slimeknights.tconstruct.library.modifiers.modules.capacity.TimeToCapacityModule;
 import slimeknights.tconstruct.library.modifiers.modules.combat.ConditionalMeleeDamageModule;
 import slimeknights.tconstruct.library.modifiers.modules.combat.ConditionalPowerModule;
 import slimeknights.tconstruct.library.modifiers.modules.combat.KnockbackModule;
@@ -721,6 +722,7 @@ public final class TinkerModifiers extends TinkerModule {
       ModifierModule.LOADER.register(getResource("durability_shield"), DurabilityShieldModule.LOADER);
       ModifierModule.LOADER.register(getResource("loot_to_capacity"), LootToCapacityModule.LOADER);
       ModifierModule.LOADER.register(getResource("damage_to_capacity"), DamageToCapacityModule.LOADER);
+      ModifierModule.LOADER.register(getResource("time_to_capacity"), TimeToCapacityModule.LOADER);
       ModifierModule.LOADER.register(getResource("launch_capacity"), LaunchCapacityModule.LOADER);
       ModifierModule.LOADER.register(getResource("mining_capacity"), MiningCapacityModule.LOADER);
       // technical
