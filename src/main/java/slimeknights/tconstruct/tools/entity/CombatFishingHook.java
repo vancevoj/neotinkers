@@ -25,11 +25,17 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.ToolActions;
 import slimeknights.mantle.util.CombatHelper;
 import slimeknights.tconstruct.common.TinkerDamageTypes;
+import slimeknights.tconstruct.common.TinkerTags;
+import slimeknights.tconstruct.library.modifiers.ModifierEntry;
+import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.entity.ProjectileWithKnockback;
 import slimeknights.tconstruct.library.modifiers.entity.ProjectileWithPower;
 import slimeknights.tconstruct.library.tools.helper.ToolAttackUtil;
+import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
+import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.tools.TinkerTools;
 
 /** Fishing hook that deals damage and can be used as a grappling hook */
@@ -131,16 +137,42 @@ public class CombatFishingHook extends FishingHook implements ProjectileWithKnoc
         // setup damage
         float damage = Mth.ceil(Mth.clamp(this.impactVelocity * this.power * 10, 0, Integer.MAX_VALUE)) / 10f;
         DamageSource source = CombatHelper.damageSource(TinkerDamageTypes.FISHING_HOOK, this, owner);
-        LivingEntity targetLiving = target instanceof LivingEntity l ? l : null;
+        LivingEntity targetLiving = ToolAttackUtil.getLivingEntity(target);
         // don't want to apply default knockback, we will apply our own later in the opposite direction
         AttributeInstance knockback = ToolAttackUtil.disableKnockback(targetLiving);
         // actually hurt the entity
+        float oldHealth = targetLiving != null ? targetLiving.getHealth() : 0;
         if (target.hurt(source, damage)) {
           if (!this.level().isClientSide && owner instanceof LivingEntity ownerLiving) {
             if (targetLiving != null) {
               EnchantmentHelper.doPostHurtEffects(targetLiving, owner);
             }
             EnchantmentHelper.doPostDamageEffects(ownerLiving, target);
+
+            // run modifier hook
+            modifierHook: {
+              // find out which stack was used
+              ItemStack stack = ownerLiving.getMainHandItem();
+              if (!stack.canPerformAction(ToolActions.FISHING_ROD_CAST)) {
+                stack = ownerLiving.getOffhandItem();
+                if (!stack.canPerformAction(ToolActions.FISHING_ROD_CAST)) {
+                  break modifierHook;
+                }
+              }
+              // if it's a modifiable item, run the hook
+              if (stack.is(TinkerTags.Items.MODIFIABLE)) {
+                // calculate how much damage we actually did
+                float damageDealt = damage;
+                if (targetLiving != null) {
+                  damageDealt = oldHealth - targetLiving.getHealth();
+                }
+                // actually run the hook
+                IToolStackView tool = ToolStack.from(stack);
+                for (ModifierEntry modifier : tool.getModifiers()) {
+                  modifier.getHook(ModifierHooks.TOOL_PROJECTILE_HIT).onToolProjectileHit(tool, modifier, this, ownerLiving, target, targetLiving, damageDealt);
+                }
+              }
+            }
           }
         }
         ToolAttackUtil.enableKnockback(knockback);
