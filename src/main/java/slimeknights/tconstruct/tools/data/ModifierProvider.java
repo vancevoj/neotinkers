@@ -374,7 +374,9 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
     // the air check on weapon looting is for projectiles which use an item of air in their tool context
     LootingModule WEAPON_LOOTING = LootingModule.builder().toolItem(ItemPredicate.or(ItemPredicate.set(Items.AIR), ItemPredicate.tag(MELEE))).weapon();
     LootingModule ARMOR_LOOTING = LootingModule.builder().toolItem(armor).armor(ARMOR_SLOTS);
-    buildModifier(ModifierIds.luck).levelDisplay(new UniqueForLevels(3)).addModules(CONSTANT_FORTUNE, ARMOR_FORTUNE, WEAPON_LOOTING, ARMOR_LOOTING);
+    buildModifier(ModifierIds.luck).levelDisplay(new UniqueForLevels(3))
+      .addModules(CONSTANT_FORTUNE, ARMOR_FORTUNE, WEAPON_LOOTING, ARMOR_LOOTING)
+      .addModule(StatBoostModule.add(ToolStats.SEA_LUCK).eachLevel(1));
     buildModifier(ModifierIds.fortune).addModules(CONSTANT_FORTUNE, ARMOR_FORTUNE);
     buildModifier(ModifierIds.looting).addModules(WEAPON_LOOTING, ARMOR_LOOTING);
     // note that the held tool bonus is hardcoded to 50% based on this modifier ID
@@ -603,6 +605,8 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
 
     // fishing
     buildModifier(ModifierIds.fishing).levelDisplay(ModifierLevelDisplay.NO_LEVELS).addModule(FishingModule.INSTANCE);
+    buildModifier(ModifierIds.lure).addModule(StatBoostModule.add(ToolStats.LURE).eachLevel(1));
+
     // traits
     buildModifier(ModifierIds.smelting)
       .priority(110) // want to be higher than bonking and alike

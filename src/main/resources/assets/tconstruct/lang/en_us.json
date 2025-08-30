@@ -2533,7 +2533,7 @@
   "modifier.tconstruct.luck.2": "Luckier",
   "modifier.tconstruct.luck.3": "Luckiest",
   "modifier.tconstruct.luck.flavor": "Flashy!",
-  "modifier.tconstruct.luck.description": "Gives you more nice things when mining or killing mobs!",
+  "modifier.tconstruct.luck.description": "Gives you more nice things when mining, killing mobs, or fishing using this tool or wearing this armor!",
   "modifier.tconstruct.fortune": "Fortune",
   "modifier.tconstruct.fortune.flavor": "Luck of the Ores!",
   "modifier.tconstruct.fortune.description": "Gives you more nice things when mining!",
@@ -2607,6 +2607,9 @@
   "modifier.tconstruct.fishing": "Fishing",
   "modifier.tconstruct.fishing.flavor": "Obligatory fishing minigame",
   "modifier.tconstruct.fishing.description": "Tool can cast a fishing bobber projectile, which potentially damages foes.",
+  "modifier.tconstruct.lure": "Lure",
+  "modifier.tconstruct.lure.flavor": "Tasty worms",
+  "modifier.tconstruct.lure.description": "Reduces the time it takes to catch fish",
 
   "_comment": "Fluids",
   "modifier.tconstruct.melting": "Melting",

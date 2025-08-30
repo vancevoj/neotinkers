@@ -138,6 +138,8 @@ public class ModifierIds {
 
   // fishing
   public static final ModifierId fishing = id("fishing");
+  public static final ModifierId lure = id("lure");
+
   // internal
   public static final ModifierId overslimeFriend = id("overslime_friend");
   public static final ModifierId snowBoots = id("snow_boots");

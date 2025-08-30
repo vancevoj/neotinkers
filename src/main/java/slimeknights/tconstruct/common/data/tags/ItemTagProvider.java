@@ -367,7 +367,7 @@ public class ItemTagProvider extends ItemTagsProvider {
     this.tag(MELEE_WEAPON).addTags(MELEE_PRIMARY, SWORD, PARRY);
     this.tag(MELEE).addTags(MELEE_WEAPON, UNARMED);
     // modifier helper tags
-    this.tag(LOOT_CAPABLE_TOOL).addTag(MELEE).addTag(HARVEST);
+    this.tag(LOOT_CAPABLE_TOOL).addTags(MELEE, HARVEST, FISHING_RODS);
     this.tag(UNARMED).addTag(CHESTPLATES);
     this.tag(INTERACTABLE_RIGHT).addTags(INTERACTABLE_DUAL);
     this.tag(INTERACTABLE_LEFT).addTag(INTERACTABLE_DUAL);

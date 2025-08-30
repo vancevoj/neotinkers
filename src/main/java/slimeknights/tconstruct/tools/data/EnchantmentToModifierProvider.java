@@ -56,6 +56,10 @@ public class EnchantmentToModifierProvider extends AbstractEnchantmentToModifier
     add(Enchantments.QUICK_CHARGE, ModifierIds.quickCharge);
     add(Enchantments.PIERCING, TinkerModifiers.impaling.getId());
 
+    // fishing
+    add(Enchantments.FISHING_LUCK, ModifierIds.luck);
+    add(Enchantments.FISHING_SPEED, ModifierIds.lure);
+
     // tag compat
     // upgrade
     addCompat(ModifierIds.experienced);
