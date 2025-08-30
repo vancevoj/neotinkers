@@ -22,6 +22,7 @@ import slimeknights.mantle.registration.object.IdAwareObject;
 import slimeknights.tconstruct.library.tools.item.ranged.ModifiableCrossbowItem;
 import slimeknights.tconstruct.library.tools.item.ranged.ModifiableLauncherItem;
 
+import javax.annotation.Nullable;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Arrays;
@@ -61,10 +62,12 @@ public abstract class AbstractToolItemModelProvider extends GenericDataProvider 
   /* Model types */
 
   /** Creates models for blocking and broken for the given tool */
-  protected void tool(IdAwareObject tool, JsonObject properties, String... brokenParts) throws IOException {
+  protected void tool(IdAwareObject tool, @Nullable JsonObject properties, String... brokenParts) throws IOException {
     ResourceLocation id = tool.getId();
     String name = id.getPath();
-    withDisplay("tool/" + name + "/blocking", id, properties);
+    if (properties != null) {
+      withDisplay("tool/" + name + "/blocking", id, properties);
+    }
     transformTool("tool/" + name + "/broken", readJson(id), "", false, "broken", brokenParts);
   }
 
