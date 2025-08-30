@@ -7,7 +7,6 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.FishingHook;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
@@ -63,28 +62,23 @@ public enum FishingModule implements ModifierModule, GeneralInteractionModifierH
     return toolAction == ToolActions.FISHING_ROD_CAST;
   }
 
-  /** Retrieves the cast fishing hook */
-  private static void retrieve(IToolStackView tool, ItemStack rod, Player player, EquipmentSlot slot, FishingHook fishing) {
-    // due to fishing rod buggy behavior, chance we end up retrieving someone else's cast, so keep this logic 1 to 1 with vanilla
-    Level level = player.level();
-    if (!level.isClientSide) {
-      ToolDamageUtil.damageAnimated(tool, fishing.retrieve(rod), player, slot);
-    }
-
-    level.playSound( null, player.getX(), player.getY(), player.getZ(), SoundEvents.FISHING_BOBBER_RETRIEVE, SoundSource.NEUTRAL, 1, 0.4f / (level.getRandom().nextFloat() * 0.4f + 0.8f));
-    player.gameEvent(GameEvent.ITEM_INTERACT_FINISH);
-
-    // we apply cooldown as this is a weapon, don't want to let you spam it
-    player.getCooldowns().addCooldown(tool.getItem(), (int)(20 / ConditionalStatModifierHook.getModifiedStat(tool, player, ToolStats.DRAW_SPEED)));
-  }
-
   @Override
   public InteractionResult onToolUse(IToolStackView tool, ModifierEntry modifier, Player player, InteractionHand hand, InteractionSource source) {
     if (source != InteractionSource.ARMOR && !tool.isBroken() && tool.getHook(ToolHooks.INTERACTION).canInteract(tool, modifier.getId(), source)) {
       Level level = player.level();
       if (player.fishing != null) {
         ItemStack stack = player.getItemInHand(hand);
-        retrieve(tool, stack, player, Util.getSlotType(hand), player.fishing);
+        // due to fishing rod buggy behavior, chance we end up retrieving someone else's cast, so keep this logic 1 to 1 with vanilla
+        Level level1 = player.level();
+        if (!level1.isClientSide) {
+          ToolDamageUtil.damageAnimated(tool, player.fishing.retrieve(stack), player, Util.getSlotType(hand));
+        }
+
+        level1.playSound( null, player.getX(), player.getY(), player.getZ(), SoundEvents.FISHING_BOBBER_RETRIEVE, SoundSource.NEUTRAL, 1, 0.4f / (level1.getRandom().nextFloat() * 0.4f + 0.8f));
+        player.gameEvent(GameEvent.ITEM_INTERACT_FINISH);
+
+        // we apply cooldown as this is a weapon, don't want to let you spam it
+        player.getCooldowns().addCooldown(tool.getItem(), (int)(20 / ConditionalStatModifierHook.getModifiedStat(tool, player, ToolStats.DRAW_SPEED)));
       } else {
         level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.FISHING_BOBBER_THROW, SoundSource.NEUTRAL, 0.5f, 0.4f / (level.getRandom().nextFloat() * 0.4f + 0.8f));
         if (!level.isClientSide) {
@@ -125,10 +119,9 @@ public enum FishingModule implements ModifierModule, GeneralInteractionModifierH
   @Override
   public void onUnequip(IToolStackView tool, ModifierEntry modifier, EquipmentChangeContext context) {
     // if actively fishing, switching to a new rod means we need to retrieve to prevent a cheese
-    if (context.getEntity() instanceof Player player && player.fishing != null && context.getReplacement().canPerformAction(ToolActions.FISHING_ROD_CAST)) {
+    if (context.getEntity() instanceof Player player && player.fishing != null) {
       IToolStackView replacement = context.getReplacementTool();
       if (replacement == null || !replacement.getModifiers().equals(tool.getModifiers())) {
-//        retrieve(tool, context.getOriginal(), player, context.getChangedSlot(), player.fishing);
         player.fishing.discard();
       }
     }
@@ -140,7 +133,6 @@ public enum FishingModule implements ModifierModule, GeneralInteractionModifierH
     // so just retrieve it to prevent a cheese
     // there is technically an issue with us inheriting someone elses bobber, but thats just a worse version of our bobber, so not really a cheese
     if (slotType == EquipmentSlot.OFFHAND && context.getChangedSlot() == EquipmentSlot.MAINHAND && context.getEntity() instanceof Player player && player.fishing != null && !context.getOriginal().canPerformAction(ToolActions.FISHING_ROD_CAST) && context.getReplacement().canPerformAction(ToolActions.FISHING_ROD_CAST)) {
-//      retrieve(tool, player.getItemBySlot(slotType), player, slotType, player.fishing);
       player.fishing.discard();
     }
   }
