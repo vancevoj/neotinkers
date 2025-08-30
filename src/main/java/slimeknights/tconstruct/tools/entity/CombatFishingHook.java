@@ -2,17 +2,27 @@ package slimeknights.tconstruct.tools.entity;
 
 import lombok.Getter;
 import lombok.Setter;
+import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.FishingHook;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import slimeknights.mantle.util.CombatHelper;
@@ -25,6 +35,7 @@ import slimeknights.tconstruct.tools.TinkerTools;
 /** Fishing hook that deals damage and can be used as a grappling hook */
 public class CombatFishingHook extends FishingHook implements ProjectileWithKnockback, ProjectileWithPower {
   private static final float PI = (float) Math.PI;
+  private static final EntityDataAccessor<Float> GRAPPLE = SynchedEntityData.defineId(CombatFishingHook.class, EntityDataSerializers.FLOAT);
 
   /** Damage dealt by the fishing hook */
   @Getter @Setter
@@ -33,14 +44,18 @@ public class CombatFishingHook extends FishingHook implements ProjectileWithKnoc
   private float knockback = 0;
   /** Velocity at the time the projectile hit the entity, used for damage calculations */
   private double impactVelocity = 1;
+  /** Last block state hit by the bobber, used for grapling to freeze the projectile in the block */
+  private BlockState wallState = null;
 
   public CombatFishingHook(EntityType<? extends FishingHook> pEntityType, Level pLevel) {
     super(pEntityType, pLevel);
+    setGrapple(0);
   }
 
   // set velocity to 0.6 for vanilla behavior
   public CombatFishingHook(Player player, Level level, int luck, int lure, float velocity, float inaccuracy) {
     super(TinkerTools.fishingHook.get(), level, luck, lure);
+    setGrapple(0);
     this.setOwner(player);
     float xRot = player.getXRot();
     float yRot = player.getYRot();
@@ -72,8 +87,24 @@ public class CombatFishingHook extends FishingHook implements ProjectileWithKnoc
   }
 
   @Override
+  protected void defineSynchedData() {
+    super.defineSynchedData();
+    this.entityData.define(GRAPPLE, 0f);
+  }
+
+  @Override
   public void addKnockback(float amount) {
     this.knockback += amount;
+  }
+
+  /** Sets the grapple level, causing the hook to pull the player when retrieved */
+  public void setGrapple(float amount) {
+    this.entityData.set(GRAPPLE, amount);
+  }
+
+  /** Gets the current grapple amount */
+  public float getGrapple() {
+    return entityData.get(GRAPPLE);
   }
 
 
@@ -117,6 +148,83 @@ public class CombatFishingHook extends FishingHook implements ProjectileWithKnoc
       // pull the target, bonus pulling if we have punch
       Vec3 knockback = new Vec3(owner.getX() - this.getX(), owner.getY() - this.getY(), owner.getZ() - this.getZ()).scale(0.1 + 0.05 * this.knockback);
       target.setDeltaMovement(target.getDeltaMovement().add(knockback));
+    }
+  }
+
+
+  /* Grappling */
+
+  @Override
+  public int retrieve(ItemStack stack) {
+    Entity owner = this.getOwner();
+    float grapple = getGrapple();
+    if (grapple > 0 && (this.onGround() || wallState != null) && owner != null) {
+      // pull the owner, bonus pulling if we have knockback
+      Vec3 knockback = new Vec3(this.getX() - owner.getX(), this.getY() - owner.getY(), this.getZ() - owner.getZ()).scale(grapple);
+      owner.push(knockback.x, knockback.y, knockback.z);
+      if (owner instanceof ServerPlayer player) {
+        player.connection.send(new ClientboundSetEntityMotionPacket(player.getId(), player.getDeltaMovement()));
+      }
+      return Math.max(2, super.retrieve(stack));
+    }
+    return super.retrieve(stack);
+  }
+
+  @Override
+  protected void onHitBlock(BlockHitResult result) {
+    super.onHitBlock(result);
+    // TODO: this isn't super consistent at sticking in the walls
+    if (getGrapple() > 0) {
+      this.setOnGround(true);
+      this.wallState = level().getBlockState(result.getBlockPos());
+      Vec3 hit = result.getLocation();
+      Vec3 offset = hit.subtract(this.getX(), this.getY(), this.getZ());
+      this.setDeltaMovement(offset);
+      this.setPosRaw(hit.x, hit.y, hit.z);
+    }
+  }
+
+  /** Checks if we should start falling */
+  private boolean shouldFall() {
+    return wallState != null && level().noCollision((new AABB(position(), position())).inflate(0.06D));
+  }
+
+  /** Makes us fall out of the connected block */
+  private void startFalling() {
+    this.wallState = null;
+    Vec3 velocity = this.getDeltaMovement();
+    this.setDeltaMovement(velocity.multiply(this.random.nextFloat() * 0.2F, this.random.nextFloat() * 0.2F, this.random.nextFloat() * 0.2F));
+    this.life = 0;
+  }
+
+  @Override
+  public void move(MoverType type, Vec3 pos) {
+    // ignore gravity and other motions if in the wall currently
+    if (type == MoverType.SELF && wallState != null) {
+      if (wallState != level().getBlockState(blockPosition()) && shouldFall()) {
+        startFalling();
+      } else {
+        return;
+      }
+    }
+    // normal movement if not in a wall
+    super.move(type, pos);
+    // if someone else pushed us, reset movement
+    if (type != MoverType.SELF && this.shouldFall()) {
+      this.startFalling();
+    }
+  }
+
+  @Override
+  public void tick() {
+    // if in the wall, continue ticking life
+    int oldLife = this.life;
+    super.tick();
+    if (this.wallState != null && !level().isClientSide) {
+      this.life = oldLife + 1;
+      if (this.life >= 1200) {
+        this.discard();
+      }
     }
   }
 }

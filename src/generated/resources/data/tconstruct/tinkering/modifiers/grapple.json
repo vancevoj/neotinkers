@@ -1,0 +1,10 @@
+{
+  "level_display": "tconstruct:no_levels",
+  "modules": [
+    {
+      "type": "tconstruct:grapple",
+      "flat": 0.18
+    }
+  ],
+  "tooltip_display": "always"
+}

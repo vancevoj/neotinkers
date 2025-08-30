@@ -37,6 +37,7 @@
   "tconstruct:warping":   "tconstruct:gui/modifiers/held/warping",
 
   "tconstruct:lure":    "tconstruct:gui/modifiers/ranged/lure",
+  "tconstruct:grapple": "tconstruct:gui/modifiers/ranged/grapple",
 
   "tconstruct:exchanging":  "tconstruct:gui/modifiers/harvest/exchanging",
   "tconstruct:expanded":    "tconstruct:gui/modifiers/harvest/expanded",

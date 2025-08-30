@@ -663,6 +663,15 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
       .setMaxLevel(3)
       .saveSalvage(consumer, prefix(ModifierIds.lure, upgradeSalvage))
       .save(consumer, prefix(ModifierIds.lure, upgradeFolder));
+    ModifierRecipeBuilder.modifier(ModifierIds.grapple)
+      .setTools(TinkerTags.Items.FISHING_RODS)
+      .addInput(Items.CHAIN)
+      .addInput(Items.CHAIN)
+      .addInput(TinkerMaterials.cinderslime.getIngotTag())
+      .setSlots(SlotType.ABILITY, 1)
+      .setMaxLevel(1).checkTraitLevel()
+      .saveSalvage(consumer, prefix(ModifierIds.grapple, abilitySalvage))
+      .save(consumer, prefix(ModifierIds.grapple, abilityFolder));
 
     /*
      * armor

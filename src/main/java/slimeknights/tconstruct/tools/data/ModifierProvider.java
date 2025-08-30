@@ -176,6 +176,7 @@ import slimeknights.tconstruct.tools.modules.interaction.ExtinguishCampfireModul
 import slimeknights.tconstruct.tools.modules.interaction.FishingModule;
 import slimeknights.tconstruct.tools.modules.interaction.PlaceGlowModule;
 import slimeknights.tconstruct.tools.modules.ranged.BulkQuiverModule;
+import slimeknights.tconstruct.tools.modules.ranged.GrappleModule;
 import slimeknights.tconstruct.tools.modules.ranged.PunchModule;
 import slimeknights.tconstruct.tools.modules.ranged.RestrictAngleModule;
 import slimeknights.tconstruct.tools.modules.ranged.TrickQuiverModule;
@@ -606,6 +607,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
     // fishing
     buildModifier(ModifierIds.fishing).levelDisplay(ModifierLevelDisplay.NO_LEVELS).addModule(FishingModule.INSTANCE);
     buildModifier(ModifierIds.lure).addModule(StatBoostModule.add(ToolStats.LURE).eachLevel(1));
+    buildModifier(ModifierIds.grapple).levelDisplay(ModifierLevelDisplay.NO_LEVELS).addModule(new GrappleModule(LevelingValue.flat(0.18f), ModifierCondition.ANY_TOOL));
 
     // traits
     buildModifier(ModifierIds.smelting)
