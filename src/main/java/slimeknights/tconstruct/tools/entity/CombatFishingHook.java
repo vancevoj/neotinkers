@@ -41,7 +41,9 @@ import slimeknights.tconstruct.tools.TinkerTools;
 /** Fishing hook that deals damage and can be used as a grappling hook */
 public class CombatFishingHook extends FishingHook implements ProjectileWithKnockback, ProjectileWithPower {
   private static final float PI = (float) Math.PI;
-  private static final EntityDataAccessor<Float> GRAPPLE = SynchedEntityData.defineId(CombatFishingHook.class, EntityDataSerializers.FLOAT);
+  /** Force to apply for grapple. Will be divided by the square root of the desired distance. */
+  private static final float GRAPPLE_STRENGTH = 0.58f;
+  private static final EntityDataAccessor<Boolean> GRAPPLE = SynchedEntityData.defineId(CombatFishingHook.class, EntityDataSerializers.BOOLEAN);
 
   /** Damage dealt by the fishing hook */
   @Getter @Setter
@@ -55,13 +57,13 @@ public class CombatFishingHook extends FishingHook implements ProjectileWithKnoc
 
   public CombatFishingHook(EntityType<? extends FishingHook> pEntityType, Level pLevel) {
     super(pEntityType, pLevel);
-    setGrapple(0);
+    setGrapple(false);
   }
 
   // set velocity to 0.6 for vanilla behavior
   public CombatFishingHook(Player player, Level level, int luck, int lure, float velocity, float inaccuracy) {
     super(TinkerTools.fishingHook.get(), level, luck, lure);
-    setGrapple(0);
+    setGrapple(false);
     this.setOwner(player);
     float xRot = player.getXRot();
     float yRot = player.getYRot();
@@ -95,7 +97,7 @@ public class CombatFishingHook extends FishingHook implements ProjectileWithKnoc
   @Override
   protected void defineSynchedData() {
     super.defineSynchedData();
-    this.entityData.define(GRAPPLE, 0f);
+    this.entityData.define(GRAPPLE, false);
   }
 
   @Override
@@ -104,12 +106,12 @@ public class CombatFishingHook extends FishingHook implements ProjectileWithKnoc
   }
 
   /** Sets the grapple level, causing the hook to pull the player when retrieved */
-  public void setGrapple(float amount) {
-    this.entityData.set(GRAPPLE, amount);
+  public void setGrapple(boolean value) {
+    this.entityData.set(GRAPPLE, value);
   }
 
   /** Gets the current grapple amount */
-  public float getGrapple() {
+  public boolean isGrapple() {
     return entityData.get(GRAPPLE);
   }
 
@@ -189,10 +191,11 @@ public class CombatFishingHook extends FishingHook implements ProjectileWithKnoc
   @Override
   public int retrieve(ItemStack stack) {
     Entity owner = this.getOwner();
-    float grapple = getGrapple();
-    if (grapple > 0 && (this.onGround() || wallState != null) && owner != null) {
+    if (isGrapple() && (this.onGround() || wallState != null) && owner != null) {
       // pull the owner, bonus pulling if we have knockback
-      Vec3 knockback = new Vec3(this.getX() - owner.getX(), this.getY() - owner.getY(), this.getZ() - owner.getZ()).scale(grapple);
+      Vec3 knockback = new Vec3(this.getX() - owner.getX(), this.getY() - owner.getY(), this.getZ() - owner.getZ());
+      // goal is dividing the scale by the square root of the length, computed as the negative 4th root of the length squared to reduce sqrt calls.
+      knockback = knockback.scale(GRAPPLE_STRENGTH * Math.pow(knockback.lengthSqr(), -0.25f));
       owner.push(knockback.x, knockback.y, knockback.z);
       if (owner instanceof ServerPlayer player) {
         player.connection.send(new ClientboundSetEntityMotionPacket(player.getId(), player.getDeltaMovement()));
@@ -206,7 +209,7 @@ public class CombatFishingHook extends FishingHook implements ProjectileWithKnoc
   protected void onHitBlock(BlockHitResult result) {
     super.onHitBlock(result);
     // TODO: this isn't super consistent at sticking in the walls
-    if (getGrapple() > 0) {
+    if (isGrapple()) {
       this.setOnGround(true);
       this.wallState = level().getBlockState(result.getBlockPos());
       Vec3 hit = result.getLocation();

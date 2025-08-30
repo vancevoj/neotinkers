@@ -2,8 +2,7 @@
   "level_display": "tconstruct:no_levels",
   "modules": [
     {
-      "type": "tconstruct:grapple",
-      "flat": 0.18
+      "type": "tconstruct:grapple"
     }
   ],
   "tooltip_display": "always"

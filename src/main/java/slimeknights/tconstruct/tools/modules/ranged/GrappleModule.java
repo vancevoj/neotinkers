@@ -5,7 +5,6 @@ import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.data.registry.GenericLoaderRegistry.IHaveLoader;
-import slimeknights.tconstruct.library.json.LevelingValue;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.hook.ranged.ProjectileLaunchModifierHook;
@@ -22,9 +21,9 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 /** Module implementing the grapple modifier */
-public record GrappleModule(LevelingValue amount, ModifierCondition<IToolStackView> condition) implements ModifierModule, ProjectileLaunchModifierHook, ConditionalModule<IToolStackView> {
+public record GrappleModule(ModifierCondition<IToolStackView> condition) implements ModifierModule, ProjectileLaunchModifierHook, ConditionalModule<IToolStackView> {
   private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<GrappleModule>defaultHooks(ModifierHooks.PROJECTILE_LAUNCH);
-  public static final RecordLoadable<GrappleModule> LOADER = RecordLoadable.create(LevelingValue.LOADABLE.directField(GrappleModule::amount), ModifierCondition.TOOL_FIELD, GrappleModule::new);
+  public static final RecordLoadable<GrappleModule> LOADER = RecordLoadable.create(ModifierCondition.TOOL_FIELD, GrappleModule::new);
 
   @Override
   public RecordLoadable<? extends IHaveLoader> getLoader() {
@@ -39,7 +38,7 @@ public record GrappleModule(LevelingValue amount, ModifierCondition<IToolStackVi
   @Override
   public void onProjectileLaunch(IToolStackView tool, ModifierEntry modifier, LivingEntity shooter, Projectile projectile, @Nullable AbstractArrow arrow, ModDataNBT persistentData, boolean primary) {
     if (condition.matches(tool, modifier) && projectile instanceof CombatFishingHook hook) {
-      hook.setGrapple(hook.getGrapple() + this.amount.compute(modifier.getEffectiveLevel()));
+      hook.setGrapple(true);
     }
   }
 }
