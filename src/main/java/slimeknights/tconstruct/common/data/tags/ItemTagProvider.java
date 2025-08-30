@@ -605,7 +605,7 @@ public class ItemTagProvider extends ItemTagsProvider {
     moltenTools(TinkerFluids.moltenSteel).toolTags().leggingsPaxel().crowbar()
       .toolTag(1, "shovel")
       .add(1, true, ie.apply("shovel_steel"))
-      .add(2, true, ie.apply("sword_steel")).add(3, true, ie.apply("hoe_steel"))
+      .add(2, true, ie.apply("sword_steel")).add(2, true, ie.apply("hoe_steel"))
       .add(3, true, ie.apply("axe_steel")).add(3, true, ie.apply("pickaxe_steel"))
       .armorTag(5, "helmets"    ).add(5, true, ie.apply("armor_steel_helmet"))
       .armorTag(8, "chestplates").add(8, true, ie.apply("armor_steel_chestplate"))
