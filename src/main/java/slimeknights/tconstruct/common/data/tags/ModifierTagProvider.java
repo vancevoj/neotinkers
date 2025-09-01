@@ -71,7 +71,7 @@ public class ModifierTagProvider extends AbstractModifierTagProvider {
       .add(TinkerModifiers.bucketing.getId(), TinkerModifiers.splashing.getId(),
            ModifierIds.glowing, TinkerModifiers.firestarter.getId(),
            ModifierIds.stripping, ModifierIds.tilling, ModifierIds.pathing,
-           TinkerModifiers.shears.getId(), TinkerModifiers.harvest.getId())
+           TinkerModifiers.shears.getId(), TinkerModifiers.harvest.getId(), ModifierIds.fishing)
       .addOptional(ModifierIds.pockets);
     tag(BLOCK_WHILE_CHARGING)
       .add(TinkerModifiers.flinging.getId(), TinkerModifiers.springing.getId(), TinkerModifiers.bonking.getId(), TinkerModifiers.warping.getId(),

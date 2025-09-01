@@ -62,11 +62,11 @@ public abstract class AbstractToolItemModelProvider extends GenericDataProvider 
   /* Model types */
 
   /** Creates models for blocking and broken for the given tool */
-  protected void tool(IdAwareObject tool, @Nullable JsonObject properties, String... brokenParts) throws IOException {
+  protected void tool(IdAwareObject tool, @Nullable JsonObject blocking, String... brokenParts) throws IOException {
     ResourceLocation id = tool.getId();
     String name = id.getPath();
-    if (properties != null) {
-      withDisplay("tool/" + name + "/blocking", id, properties);
+    if (blocking != null) {
+      withDisplay("tool/" + name + "/blocking", id, blocking);
     }
     transformTool("tool/" + name + "/broken", readJson(id), "", false, "broken", brokenParts);
   }
@@ -254,12 +254,18 @@ public abstract class AbstractToolItemModelProvider extends GenericDataProvider 
   }
 
   /** Creates models for fishing rods cast and broken */
-  protected void fishingRod(IdAwareObject tool, String[] castParts, String[] brokenParts) throws IOException {
+  @SuppressWarnings("SameParameterValue") // API
+  protected void fishingRod(IdAwareObject tool, @Nullable JsonObject blocking, String[] castParts, String[] brokenParts) throws IOException {
     ResourceLocation id = tool.getId();
     String name = id.getPath();
     JsonObject base = readJson(id);
-    transformTool("tool/" + name + "/cast",   base, "", false, "cast", castParts);
+    String cast = "tool/" + name + "/cast";
+    transformTool(cast,   base, "", false, "cast", castParts);
     transformTool("tool/" + name + "/broken", base, "", false, "broken", brokenParts);
+    if (blocking != null) {
+      withDisplay("tool/" + name + "/blocking", id, blocking);
+      withDisplay("tool/" + name + "/blocking_cast", resource(cast), blocking);
+    }
   }
 
   /* Helpers */

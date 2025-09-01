@@ -32,6 +32,7 @@ import slimeknights.tconstruct.library.tools.definition.module.build.ToolTraitsM
 import slimeknights.tconstruct.library.tools.definition.module.build.VolatileFlagModule;
 import slimeknights.tconstruct.library.tools.definition.module.interaction.DualOptionInteraction;
 import slimeknights.tconstruct.library.tools.definition.module.interaction.PreferenceSetInteraction;
+import slimeknights.tconstruct.library.tools.definition.module.interaction.ToggleableSetInteraction;
 import slimeknights.tconstruct.library.tools.definition.module.material.DefaultMaterialsModule;
 import slimeknights.tconstruct.library.tools.definition.module.material.MaterialRepairModule;
 import slimeknights.tconstruct.library.tools.definition.module.material.MaterialStatsModule;
@@ -478,7 +479,9 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
         .build()))
       .module(ToolSlotsModule.builder().slots(SlotType.ABILITY, 1).slots(SlotType.UPGRADE, 4).build())
       // traits
-      .module(ToolTraitsModule.builder().trait(ModifierIds.fishing).build());
+      .module(ToolTraitsModule.builder().trait(ModifierIds.fishing).build())
+      // put fishing on right click, everything else on left, but support toggling
+      .module(new ToggleableSetInteraction(new SingleModifierPredicate(ModifierIds.fishing)));
 
     // special
     define(ToolDefinitions.FLINT_AND_BRICK)

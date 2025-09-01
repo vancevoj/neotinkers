@@ -2,7 +2,7 @@
   "tool": "tconstruct:fishing_rod",
   "text": [
     { "text": "The Fishing Rod is a short-distance ranged weapon, damaging monsters reeled in on the reusable fishing hook. In addition to combat, the fishing rod is also useful for fishing." },
-    { "text": "When using interaction modifiers, the fishing rod acts on left click.", "paragraph": true }
+    { "text": "When using interaction modifiers, by default the fishing rod acts on left click, though a modifier worktable can change that.", "paragraph": true }
   ],
   "properties": [
     "+70 Durability",

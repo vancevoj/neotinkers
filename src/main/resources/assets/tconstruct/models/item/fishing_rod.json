@@ -12,8 +12,16 @@
   ],
   "overrides": [
     {
+      "predicate": { "tconstruct:charging": 2 },
+      "model": "tconstruct:item/tool/fishing_rod/blocking"
+    },
+    {
       "predicate": { "tconstruct:cast": 1 },
       "model": "tconstruct:item/tool/fishing_rod/cast"
+    },
+    {
+      "predicate": { "tconstruct:cast": 1, "tconstruct:charging": 2 },
+      "model": "tconstruct:item/tool/fishing_rod/blocking_cast"
     },
     {
       "predicate": { "tconstruct:broken": 1 },

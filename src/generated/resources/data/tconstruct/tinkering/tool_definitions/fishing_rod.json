@@ -43,6 +43,13 @@
           "name": "tconstruct:fishing"
         }
       ]
+    },
+    {
+      "type": "tconstruct:toggleable_set_interaction",
+      "interact_modifiers": {
+        "type": "tconstruct:single",
+        "modifier": "tconstruct:fishing"
+      }
     }
   ]
 }

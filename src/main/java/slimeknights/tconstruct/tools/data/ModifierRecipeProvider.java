@@ -58,7 +58,6 @@ import slimeknights.tconstruct.library.recipe.tinkerstation.repairing.ModifierRe
 import slimeknights.tconstruct.library.recipe.worktable.ModifierSetWorktableRecipeBuilder;
 import slimeknights.tconstruct.library.tools.SlotType;
 import slimeknights.tconstruct.library.tools.definition.module.ToolHooks;
-import slimeknights.tconstruct.library.tools.definition.module.interaction.DualOptionInteraction;
 import slimeknights.tconstruct.shared.TinkerCommons;
 import slimeknights.tconstruct.shared.TinkerMaterials;
 import slimeknights.tconstruct.shared.block.SlimeType;
@@ -71,6 +70,7 @@ import slimeknights.tconstruct.tools.data.material.MaterialIds;
 import slimeknights.tconstruct.tools.recipe.EnchantmentConvertingRecipeBuilder;
 import slimeknights.tconstruct.tools.recipe.ModifierRemovalRecipeBuilder;
 import slimeknights.tconstruct.tools.recipe.ModifierSortingRecipeBuilder;
+import slimeknights.tconstruct.tools.recipe.ToggleInteractionWorktableRecipeBuilder;
 import slimeknights.tconstruct.world.TinkerHeadType;
 import slimeknights.tconstruct.world.TinkerWorld;
 import slimeknights.tconstruct.world.block.FoliageType;
@@ -1629,18 +1629,10 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                                      .save(consumer, location(worktableFolder + "invisible_ink_removing"));
 
     // swapping hands
-    IJsonPredicate<ModifierId> whitelist = ModifierPredicate.tag(TinkerTags.Modifiers.DUAL_INTERACTION);
-    ModifierSetWorktableRecipeBuilder.setAdding(DualOptionInteraction.KEY)
-                                     .modifierPredicate(whitelist)
-                                     .setTools(TinkerTags.Items.INTERACTABLE_DUAL)
-                                     .addInput(Items.LEVER)
-                                     .save(consumer, location(worktableFolder + "attack_modifier_setting"));
-    ModifierSetWorktableRecipeBuilder.setRemoving(DualOptionInteraction.KEY)
-                                     .modifierPredicate(whitelist)
-                                     .setTools(TinkerTags.Items.INTERACTABLE_DUAL)
-                                     .addInput(Items.LEVER)
-                                     .addInput(Items.LEVER)
-                                     .save(consumer, location(worktableFolder + "attack_modifier_clearing"));
+    ToggleInteractionWorktableRecipeBuilder.builder()
+      .tools(Ingredient.of(TinkerTags.Items.INTERACTABLE_DUAL))
+      .addInput(Items.LEVER)
+      .save(consumer, location(worktableFolder + "toggle_interaction_modifier"));
 
     // conversion
     for (boolean matchBook : new boolean[]{false, true}) {
