@@ -78,16 +78,17 @@ public enum FishingModule implements ModifierModule, GeneralInteractionModifierH
       if (player.fishing != null) {
         ItemStack stack = player.getItemInHand(hand);
         // due to fishing rod buggy behavior, chance we end up retrieving someone else's cast, so keep this logic 1 to 1 with vanilla
-        Level level1 = player.level();
-        if (!level1.isClientSide) {
-          ToolDamageUtil.damageAnimated(tool, player.fishing.retrieve(stack), player, Util.getSlotType(hand));
+        if (!level.isClientSide) {
+          int damage = player.fishing.retrieve(stack);
+          if (damage > 0) {
+            ToolDamageUtil.damageAnimated(tool, damage, player, Util.getSlotType(hand));
+            // we apply cooldown as this is a weapon, don't want to let you spam it. But only need the cooldown if something happened
+            player.getCooldowns().addCooldown(tool.getItem(), (int)(20 / ConditionalStatModifierHook.getModifiedStat(tool, player, ToolStats.DRAW_SPEED)));
+          }
         }
 
-        level1.playSound( null, player.getX(), player.getY(), player.getZ(), SoundEvents.FISHING_BOBBER_RETRIEVE, SoundSource.NEUTRAL, 1, 0.4f / (level1.getRandom().nextFloat() * 0.4f + 0.8f));
+        level.playSound( null, player.getX(), player.getY(), player.getZ(), SoundEvents.FISHING_BOBBER_RETRIEVE, SoundSource.NEUTRAL, 1, 0.4f / (level.getRandom().nextFloat() * 0.4f + 0.8f));
         player.gameEvent(GameEvent.ITEM_INTERACT_FINISH);
-
-        // we apply cooldown as this is a weapon, don't want to let you spam it
-        player.getCooldowns().addCooldown(tool.getItem(), (int)(20 / ConditionalStatModifierHook.getModifiedStat(tool, player, ToolStats.DRAW_SPEED)));
       } else {
         level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.FISHING_BOBBER_THROW, SoundSource.NEUTRAL, 0.5f, 0.4f / (level.getRandom().nextFloat() * 0.4f + 0.8f));
         if (!level.isClientSide) {
