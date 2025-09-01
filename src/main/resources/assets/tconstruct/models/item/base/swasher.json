@@ -21,6 +21,11 @@
       "rotation": [ 0, 90, -25 ],
       "translation": [ 1.13, 3.2, -1.0 ],
       "scale": [ 0.68, 0.68, 0.68 ]
+    },
+    "tconstruct:thrown": {
+      "rotation": [ 0, 180, 270 ],
+      "scale": [ 1, 1, 1 ],
+      "translation": [ 0, 0, 0 ]
     }
   }
 }

@@ -10,7 +10,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.inventory.InventoryMenu;
-import net.minecraft.world.item.ItemDisplayContext;
+import slimeknights.tconstruct.library.TinkerItemDisplays;
 import slimeknights.tconstruct.tools.entity.ThrownTool;
 
 /** Renderer for {@link ThrownTool} */
@@ -26,8 +26,8 @@ public class ThrownToolRenderer extends EntityRenderer<ThrownTool> {
     poseStack.pushPose();
     poseStack.mulPose(Axis.YP.rotationDegrees(Mth.lerp(partialTicks, entity.yRotO, entity.getYRot()) - 90));
     poseStack.mulPose(Axis.ZP.rotationDegrees(Mth.lerp(partialTicks, entity.xRotO, entity.getXRot()) + 225));
-    poseStack.translate(0.375, -0.375, 0);
-    this.itemRenderer.renderStatic(entity.getToolItem(), ItemDisplayContext.FIXED, packedLight, OverlayTexture.NO_OVERLAY, poseStack, buffer, entity.level(), entity.getId());
+    poseStack.translate(0.2, -0.2, 0);
+    this.itemRenderer.renderStatic(entity.getToolItem(), TinkerItemDisplays.THROWN, packedLight, OverlayTexture.NO_OVERLAY, poseStack, buffer, entity.level(), entity.getId());
     poseStack.popPose();
     super.render(entity, yaw, partialTicks, poseStack, buffer, packedLight);
   }

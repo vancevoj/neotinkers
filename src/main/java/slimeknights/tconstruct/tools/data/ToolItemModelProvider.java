@@ -71,8 +71,7 @@ public class ToolItemModelProvider extends AbstractToolItemModelProvider {
     // ancient
     charged(TinkerTools.meltingPan, shieldBlocking, "head");
     bow(TinkerTools.warPick, toolBlocking, new CrossbowAmmo(new Vec2(1, -1), false, true), "bowstring");
-    // battlesign has custom properties for blocking, so that is just written directly
-    transformTool("tool/battlesign/broken", readJson(TinkerTools.battlesign.getId()), "", false, "broken", "head");
+    tool(TinkerTools.battlesign, null, "head");
     pulling(TinkerTools.swasher, readJson(getResource("base/swasher_blocking")), AmmoType.NONE, "blade", 2, "barrel");
     tool(TinkerTools.minotaurAxe, toolBlocking, "front");
   }
