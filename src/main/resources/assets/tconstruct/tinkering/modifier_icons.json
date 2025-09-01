@@ -36,6 +36,7 @@
   "tconstruct:bonking":   "tconstruct:gui/modifiers/held/bonking",
   "tconstruct:warping":   "tconstruct:gui/modifiers/held/warping",
 
+  "tconstruct:fishing": ["minecraft:item/fishing_rod", "tconstruct:gui/modifiers/book"],
   "tconstruct:lure":    "tconstruct:gui/modifiers/ranged/lure",
   "tconstruct:grapple": "tconstruct:gui/modifiers/ranged/grapple",
 
