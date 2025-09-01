@@ -62,7 +62,7 @@ public class ToolItemModelProvider extends AbstractToolItemModelProvider {
     }, true, true), "limb_bottom", "limb_top", "bowstring");
     bow(TinkerTools.crossbow, toolBlocking, new CrossbowAmmo(new Vec2(-1, -1), true, false), "bowstring");
     String[] rodParts = { "string" };
-    fishingRod(TinkerTools.fishingRod, readJson(getResource("base/fishing_rod_blocking")), rodParts, rodParts);
+    fishingRod(TinkerTools.fishingRod, readJson(getResource("tool/fishing_rod/blocking_display")), rodParts, rodParts);
     // staff
     staff(TinkerTools.skyStaff, toolBlocking);
     staff(TinkerTools.earthStaff, toolBlocking);
@@ -72,7 +72,7 @@ public class ToolItemModelProvider extends AbstractToolItemModelProvider {
     charged(TinkerTools.meltingPan, shieldBlocking, "head");
     bow(TinkerTools.warPick, toolBlocking, new CrossbowAmmo(new Vec2(1, -1), false, true), "bowstring");
     tool(TinkerTools.battlesign, null, "head");
-    pulling(TinkerTools.swasher, readJson(getResource("base/swasher_blocking")), AmmoType.NONE, "blade", 2, "barrel");
+    pulling(TinkerTools.swasher, readJson(getResource("tool/swasher/blocking_display")), AmmoType.NONE, "blade", 2, "barrel");
     tool(TinkerTools.minotaurAxe, toolBlocking, "front");
   }
 
