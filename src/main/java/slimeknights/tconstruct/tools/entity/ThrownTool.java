@@ -17,6 +17,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import slimeknights.tconstruct.library.tools.IndestructibleItemEntity;
+import slimeknights.tconstruct.library.tools.helper.ModifierUtil;
 import slimeknights.tconstruct.library.tools.helper.ToolAttackUtil;
 import slimeknights.tconstruct.library.tools.helper.ToolDamageUtil;
 import slimeknights.tconstruct.library.tools.item.ModifiableItem;
@@ -24,6 +25,7 @@ import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.tools.TinkerModifiers;
 import slimeknights.tconstruct.tools.TinkerTools;
+import slimeknights.tconstruct.tools.data.ModifierIds;
 
 import javax.annotation.Nullable;
 
@@ -52,6 +54,7 @@ public class ThrownTool extends ThrownTrident {
     // trident - stack constructor
     this.tridentItem = stack.copyWithCount(1);
     this.entityData.set(STACK, tridentItem);
+    this.entityData.set(ID_LOYALTY, (byte) tool.getModifiers().getLevel(ModifierIds.loyalty));
     // TODO: find loyalty on the tool somewhere, maybe just the modifier ID?
     this.entityData.set(ID_FOIL, tool.getVolatileData().getBoolean(ModifiableItem.SHINY));
     this.charge = charge;
@@ -61,11 +64,6 @@ public class ThrownTool extends ThrownTrident {
   public boolean isChanneling() {
     // TODO: hardcode to channeling modifier perhaps?
     return false;
-  }
-
-  /** Setter for loyalty modifier */
-  public void setLoyalty(int loyalty) {
-    this.entityData.set(ID_LOYALTY, (byte) loyalty);
   }
 
   @Override
@@ -162,6 +160,7 @@ public class ThrownTool extends ThrownTrident {
     // update the tool to sync to client, if its set
     if (tag.contains("Trident", CompoundTag.TAG_COMPOUND)) {
       this.entityData.set(STACK, tridentItem);
+      this.entityData.set(ID_LOYALTY, (byte) ModifierUtil.getModifierLevel(tridentItem, ModifierIds.loyalty));
     }
   }
 }

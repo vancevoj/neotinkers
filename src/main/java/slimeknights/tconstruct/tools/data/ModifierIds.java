@@ -137,6 +137,7 @@ public class ModifierIds {
   public static final ModifierId tilling = id("tilling");
   public static final ModifierId brushing = id("brushing");
   public static final ModifierId throwing = id("throwing");
+  public static final ModifierId loyalty = id("loyalty");
 
   // fishing
   public static final ModifierId fishing = id("fishing");

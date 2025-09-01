@@ -612,6 +612,8 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .addModule(ToolActionWalkerTransformModule.builder(ToolActions.HOE_TILL, SoundEvents.HOE_TILL).amount(0.5f, 1));
     buildModifier(ModifierIds.brushing).levelDisplay(ModifierLevelDisplay.NO_LEVELS).addModule(BrushModule.INSTANCE);
     buildModifier(ModifierIds.throwing).levelDisplay(ModifierLevelDisplay.NO_LEVELS).addModule(ThrowingModule.INSTANCE);
+    // mostly hardcoded at this time
+    buildModifier(ModifierIds.loyalty).addModule(ModifierRequirementsModule.builder().requireModifier(ModifierIds.throwing, 1).modifierKey(ModifierIds.loyalty).build());
 
     // fishing
     buildModifier(ModifierIds.fishing).levelDisplay(ModifierLevelDisplay.NO_LEVELS).addModule(FishingModule.INSTANCE);
