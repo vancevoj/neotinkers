@@ -75,6 +75,7 @@ import slimeknights.tconstruct.library.tools.definition.module.build.ToolActions
 import slimeknights.tconstruct.library.tools.definition.module.build.ToolSlotsModule;
 import slimeknights.tconstruct.library.tools.definition.module.build.ToolTraitsModule;
 import slimeknights.tconstruct.library.tools.definition.module.build.VolatileFlagModule;
+import slimeknights.tconstruct.library.tools.definition.module.interaction.AttackInteraction;
 import slimeknights.tconstruct.library.tools.definition.module.interaction.DualOptionInteraction;
 import slimeknights.tconstruct.library.tools.definition.module.interaction.PreferenceSetInteraction;
 import slimeknights.tconstruct.library.tools.definition.module.interaction.ToggleableSetInteraction;
@@ -299,6 +300,7 @@ public final class TinkerTools extends TinkerModule {
       ToolModule.LOADER.register(getResource("circle_melee"), CircleWeaponAttack.LOADER);
       ToolModule.LOADER.register(getResource("melee_particle"), ParticleWeaponAttack.LOADER);
       // generic tool modules
+      ToolModule.LOADER.register(getResource("attack_interaction"), AttackInteraction.LOADER);
       ToolModule.LOADER.register(getResource("dual_option_interaction"), DualOptionInteraction.LOADER);
       ToolModule.LOADER.register(getResource("preference_set_interaction"), PreferenceSetInteraction.LOADER);
       ToolModule.LOADER.register(getResource("toggleable_set_interaction"), ToggleableSetInteraction.LOADER);
