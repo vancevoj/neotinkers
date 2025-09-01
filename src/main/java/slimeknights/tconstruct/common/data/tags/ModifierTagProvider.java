@@ -75,7 +75,7 @@ public class ModifierTagProvider extends AbstractModifierTagProvider {
       .addOptional(ModifierIds.pockets);
     tag(BLOCK_WHILE_CHARGING)
       .add(TinkerModifiers.flinging.getId(), TinkerModifiers.springing.getId(), TinkerModifiers.bonking.getId(), TinkerModifiers.warping.getId(),
-           TinkerModifiers.spitting.getId(), ModifierIds.scope, ModifierIds.zoom, ModifierIds.brushing);
+           TinkerModifiers.spitting.getId(), ModifierIds.scope, ModifierIds.zoom, ModifierIds.brushing, ModifierIds.throwing);
     tag(SLIME_DEFENSE)
       .add(ModifierIds.meleeProtection, ModifierIds.projectileProtection,
            ModifierIds.fireProtection, ModifierIds.magicProtection,

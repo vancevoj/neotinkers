@@ -21,14 +21,17 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.entity.PartEntity;
 import net.minecraftforge.event.entity.player.CriticalHitEvent;
+import slimeknights.mantle.util.CombatHelper;
 import slimeknights.mantle.util.OffhandCooldownTracker;
 import slimeknights.tconstruct.TConstruct;
+import slimeknights.tconstruct.common.TinkerDamageTypes;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
@@ -157,6 +160,19 @@ public class ToolAttackUtil {
   }
 
   /**
+   * Gets a living entity from the given entity, getting the parent if needed
+   * @param entity  Entity instance
+   * @return  Living entity, or null if its not living
+   */
+  @Nullable
+  public static LivingEntity getLivingEntity(Entity entity) {
+    if (entity instanceof PartEntity<?> part) {
+      entity = part.getParent();
+    }
+    return entity instanceof LivingEntity living ? living : null;
+  }
+
+  /**
    * General version of attackEntity. Applies cooldowns but has no projectile entity
    */
   public static boolean attackEntity(ItemStack stack, Player attacker, Entity targetEntity) {
@@ -177,24 +193,21 @@ public class ToolAttackUtil {
   }
 
   /**
-   * Gets a living entity from the given entity, getting the parent if needed
-   * @param entity  Entity instance
-   * @return  Living entity, or null if its not living
+   * Base attack logic, used by normal attacks, projectiles, and extra attacks.
+   * Based on {@link Player#attack(Entity)}
    */
-  @Nullable
-  public static LivingEntity getLivingEntity(Entity entity) {
-    if (entity instanceof PartEntity<?> part) {
-      entity = part.getParent();
-    }
-    return entity instanceof LivingEntity living ? living : null;
+  public static boolean attackEntity(IToolStackView tool, LivingEntity attackerLiving, InteractionHand hand,
+                                     Entity targetEntity, DoubleSupplier cooldownFunction, boolean isExtraAttack, EquipmentSlot sourceSlot) {
+    return attackEntity(tool, attackerLiving, hand, targetEntity, cooldownFunction, isExtraAttack, sourceSlot, null);
   }
 
   /**
    * Base attack logic, used by normal attacks, projectiles, and extra attacks.
    * Based on {@link Player#attack(Entity)}
    */
-  public static boolean attackEntity(IToolStackView tool, LivingEntity attackerLiving, InteractionHand hand,
-                                     Entity targetEntity, DoubleSupplier cooldownFunction, boolean isExtraAttack, EquipmentSlot sourceSlot) {
+  public static boolean attackEntity(IToolStackView tool, LivingEntity attackerLiving, InteractionHand hand, Entity targetEntity,
+                                     DoubleSupplier cooldownFunction, boolean isExtraAttack, EquipmentSlot sourceSlot,
+                                     @Nullable Projectile projectile) {
     // broken? give to vanilla
     if (tool.isBroken() || !tool.hasTag(TinkerTags.Items.MELEE)) {
       return false;
@@ -230,7 +243,7 @@ public class ToolAttackUtil {
                          && !attackerLiving.isPassenger() && targetLiving != null && !attackerLiving.isSprinting();
 
     // shared context for all modifier hooks
-    ToolAttackContext context = new ToolAttackContext(attackerLiving, attackerPlayer, hand, sourceSlot, targetEntity, targetLiving, isCritical, cooldown, isExtraAttack);
+    ToolAttackContext context = new ToolAttackContext(attackerLiving, attackerPlayer, hand, sourceSlot, targetEntity, targetLiving, isCritical, cooldown, isExtraAttack, projectile);
 
     // calculate actual damage
     // boost damage from traits
@@ -324,7 +337,9 @@ public class ToolAttackUtil {
 
     // removed: sword special attack check and logic, replaced by this
     boolean didHit;
-    if (isExtraAttack) {
+    if (projectile != null) {
+      didHit = targetEntity.hurt(CombatHelper.damageSource(TinkerDamageTypes.THROWN_TOOL, projectile, attackerLiving), damage);
+    } else if (isExtraAttack) {
       didHit = dealDefaultDamage(attackerLiving, targetEntity, damage);
     } else {
       didHit = MeleeHitToolHook.dealDamage(tool, context, damage);

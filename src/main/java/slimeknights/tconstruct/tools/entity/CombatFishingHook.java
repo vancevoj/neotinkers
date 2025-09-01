@@ -149,7 +149,6 @@ public class CombatFishingHook extends FishingHook implements ProjectileWithKnoc
             if (targetLiving != null) {
               EnchantmentHelper.doPostHurtEffects(targetLiving, owner);
             }
-            EnchantmentHelper.doPostDamageEffects(ownerLiving, target);
 
             // run modifier hook
             modifierHook: {
