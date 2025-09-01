@@ -180,8 +180,13 @@ public class CombatFishingHook extends FishingHook implements ProjectileWithKnoc
         ToolAttackUtil.enableKnockback(knockback);
       }
       // pull the target, bonus pulling if we have punch
-      Vec3 knockback = new Vec3(owner.getX() - this.getX(), owner.getY() - this.getY(), owner.getZ() - this.getZ()).scale(0.1 + 0.05 * this.knockback);
-      target.setDeltaMovement(target.getDeltaMovement().add(knockback));
+      Vec3 knockback = new Vec3(owner.getX() - this.getX(), owner.getY() - this.getY(), owner.getZ() - this.getZ());
+      float scale = 0.1f;
+      if (this.knockback > 0) {
+        // use the normalized distance for the punch bonus, keep the original 0.1 as scale of total for vanilla consistency
+        scale += this.knockback * 0.25f * Mth.invSqrt(knockback.lengthSqr());
+      }
+      target.setDeltaMovement(target.getDeltaMovement().add(knockback.scale(scale)));
     }
   }
 
