@@ -616,7 +616,10 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
     // fishing
     buildModifier(ModifierIds.fishing).levelDisplay(ModifierLevelDisplay.NO_LEVELS).addModule(FishingModule.INSTANCE);
     buildModifier(ModifierIds.lure).addModule(StatBoostModule.add(ToolStats.LURE).eachLevel(1));
-    buildModifier(ModifierIds.grapple).levelDisplay(ModifierLevelDisplay.NO_LEVELS).addModule(new GrappleModule(ModifierCondition.ANY_TOOL));
+    buildModifier(ModifierIds.grapple)
+      .levelDisplay(ModifierLevelDisplay.NO_LEVELS)
+      .addModule(new GrappleModule(ModifierCondition.ANY_TOOL))
+      .addModule(ModifierRequirementsModule.builder().requireModifier(ModifierIds.fishing, 1).modifierKey(ModifierIds.grapple).build());
 
     // traits
     buildModifier(ModifierIds.smelting)
