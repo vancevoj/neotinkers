@@ -595,7 +595,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
     buildModifier(ModifierIds.pathing)
       .levelDisplay(ModifierLevelDisplay.NO_LEVELS)
       .addModule(ShowOffhandModule.DISALLOW_BROKEN)
-      .addModule(ExtinguishCampfireModule.INSTANCE)
+      .addModule(ExtinguishCampfireModule.INSTANCE, ModifierHooks.BLOCK_INTERACT, ModifierHooks.AOE_HIGHLIGHT)
       .addModule(ToolActionTransformModule.builder(ToolActions.SHOVEL_FLATTEN, SoundEvents.SHOVEL_FLATTEN).requireGround().build())
       .addModule(ToolActionWalkerTransformModule.builder(ToolActions.SHOVEL_FLATTEN, SoundEvents.SHOVEL_FLATTEN).amount(0.5f, 1));
     buildModifier(ModifierIds.stripping)
