@@ -22,8 +22,10 @@ import slimeknights.tconstruct.library.modifiers.hook.interaction.InteractionSou
 import slimeknights.tconstruct.library.modifiers.modules.ModifierModule;
 import slimeknights.tconstruct.library.module.HookProvider;
 import slimeknights.tconstruct.library.module.ModuleHook;
+import slimeknights.tconstruct.library.tools.capability.PersistentDataCapability;
 import slimeknights.tconstruct.library.tools.helper.ModifierUtil;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
+import slimeknights.tconstruct.library.tools.nbt.ModDataNBT;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
 import slimeknights.tconstruct.tools.entity.ThrownTool;
 import slimeknights.tconstruct.tools.modifiers.ability.interaction.BlockingModifier;
@@ -89,6 +91,13 @@ public enum ThrowingModule implements ModifierModule, GeneralInteractionModifier
         if (player.getAbilities().instabuild) {
           thrown.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
         }
+
+        // alert modifiers we are leaving, though most of these won't have much impact
+        ModDataNBT arrowData = PersistentDataCapability.getOrWarn(thrown);
+        for (ModifierEntry entry : tool.getModifierList()) {
+          entry.getHook(ModifierHooks.PROJECTILE_THROWN).onProjectileLaunch(tool, entry, entity, ItemStack.EMPTY, thrown, null, arrowData, true);
+        }
+
         // don't run projectile hooks, as the projectile has the tool already for that. Throwing runs melee hooks
         level.addFreshEntity(thrown);
         level.playSound(null, thrown, SoundEvents.TRIDENT_THROW, SoundSource.PLAYERS, 1, 1);

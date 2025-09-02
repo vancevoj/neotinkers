@@ -170,7 +170,7 @@ public class CombatFishingHook extends FishingHook implements ProjectileWithKnoc
                 // actually run the hook
                 IToolStackView tool = ToolStack.from(stack);
                 for (ModifierEntry modifier : tool.getModifiers()) {
-                  modifier.getHook(ModifierHooks.TOOL_PROJECTILE_HIT).onToolProjectileHit(tool, modifier, this, ownerLiving, target, targetLiving, damageDealt);
+                  modifier.getHook(ModifierHooks.LAUNCHER_HIT).onToolProjectileHit(tool, modifier, this, ownerLiving, target, targetLiving, damageDealt);
                 }
               }
             }

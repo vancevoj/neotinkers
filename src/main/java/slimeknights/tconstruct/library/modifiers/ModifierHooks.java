@@ -53,9 +53,9 @@ import slimeknights.tconstruct.library.modifiers.hook.mining.BreakSpeedModifierH
 import slimeknights.tconstruct.library.modifiers.hook.mining.HarvestEnchantmentsModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.mining.RemoveBlockModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.ranged.BowAmmoModifierHook;
+import slimeknights.tconstruct.library.modifiers.hook.ranged.LauncherHitModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.ranged.ProjectileHitModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.ranged.ProjectileLaunchModifierHook;
-import slimeknights.tconstruct.library.modifiers.hook.ranged.ToolProjectileHitModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.special.BlockTransformModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.special.CapacityBarHook;
 import slimeknights.tconstruct.library.modifiers.hook.special.PlantHarvestModifierHook;
@@ -264,11 +264,19 @@ public class ModifierHooks {
   /* Ranged */
 
   /** Hook for firing arrows or other projectiles to modify the entity post firing */
-  public static final ModuleHook<ProjectileLaunchModifierHook> PROJECTILE_LAUNCH = register("projectile_launch", ProjectileLaunchModifierHook.class, ProjectileLaunchModifierHook.AllMerger::new, (tool, modifier, shooter, projectile, arrow, persistentData, primary) -> {});
+  public static final ModuleHook<ProjectileLaunchModifierHook> PROJECTILE_LAUNCH;
+  /** Hook for throwing a projectile that will not be firing {@link #PROJECTILE_HIT} later. */
+  public static final ModuleHook<ProjectileLaunchModifierHook> PROJECTILE_THROWN;
+  static {
+    ProjectileLaunchModifierHook defaultInstance = (tool, modifier, shooter, projectile, arrow, persistentData, primary) -> {};
+    Function<Collection<ProjectileLaunchModifierHook>,ProjectileLaunchModifierHook> merger = ProjectileLaunchModifierHook.AllMerger::new;
+    PROJECTILE_LAUNCH = register("projectile_launch", ProjectileLaunchModifierHook.class, merger, defaultInstance);
+    PROJECTILE_THROWN = register("projectile_thrown", ProjectileLaunchModifierHook.class, merger, defaultInstance);
+  }
   /** Hook called when an arrow hits an entity or block */
   public static final ModuleHook<ProjectileHitModifierHook> PROJECTILE_HIT = register("projectile_hit", ProjectileHitModifierHook.class, ProjectileHitModifierHook.AllMerger::new, new ProjectileHitModifierHook() {});
-  /** Hook called when a tool that is a projectile hits an entity */
-  public static final ModuleHook<ToolProjectileHitModifierHook> TOOL_PROJECTILE_HIT = register("tool_projectile_hit", ToolProjectileHitModifierHook.class, ToolProjectileHitModifierHook.AllMerger::new, (tool, modifier, projectile, attacker, target, livingTarget, damageDealt) -> {});
+  /** Hook called when a projectile hits an entity with context on the tool that launched it. Allows modifiers such as melting or spilling to work. */
+  public static final ModuleHook<LauncherHitModifierHook> LAUNCHER_HIT = register("launcher_hit", LauncherHitModifierHook.class, LauncherHitModifierHook.AllMerger::new, (tool, modifier, projectile, attacker, target, livingTarget, damageDealt) -> {});
   /** Hook called when a bow is looking for ammo. Does not support merging multiple hooks on one modifier */
   public static final ModuleHook<BowAmmoModifierHook> BOW_AMMO = register("bow_ammo", BowAmmoModifierHook.class, BowAmmoModifierHook.EMPTY);
 

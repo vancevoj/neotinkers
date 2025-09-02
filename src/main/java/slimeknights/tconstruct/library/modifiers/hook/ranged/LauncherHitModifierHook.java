@@ -14,7 +14,7 @@ import java.util.Collection;
  * Unlike {@link ProjectileHitModifierHook}, we know the tool that caused the action.
  * Unlike {@link slimeknights.tconstruct.library.modifiers.hook.combat.MeleeHitModifierHook}, we have a projectile involved.
  */
-public interface ToolProjectileHitModifierHook {
+public interface LauncherHitModifierHook {
   /**
    * Called when a tool projectile successfully hits an entity.
    * @param tool          Tool linked to the projectile
@@ -28,10 +28,10 @@ public interface ToolProjectileHitModifierHook {
   void onToolProjectileHit(IToolStackView tool, ModifierEntry modifier, Projectile projectile, LivingEntity attacker, Entity target, @Nullable LivingEntity livingTarget, float damageDealt);
 
   /** Merger that runs each hook one after another */
-  record AllMerger(Collection<ToolProjectileHitModifierHook> modules) implements ToolProjectileHitModifierHook {
+  record AllMerger(Collection<LauncherHitModifierHook> modules) implements LauncherHitModifierHook {
     @Override
     public void onToolProjectileHit(IToolStackView tool, ModifierEntry modifier, Projectile projectile, LivingEntity attacker, Entity target, @Nullable LivingEntity livingTarget, float damageDealt) {
-      for (ToolProjectileHitModifierHook module : modules) {
+      for (LauncherHitModifierHook module : modules) {
         module.onToolProjectileHit(tool, modifier, projectile, attacker, target, livingTarget, damageDealt);
       }
     }
