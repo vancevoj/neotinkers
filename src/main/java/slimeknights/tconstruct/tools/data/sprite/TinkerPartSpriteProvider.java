@@ -132,6 +132,7 @@ public class TinkerPartSpriteProvider extends AbstractPartSpriteProvider {
     buildTool("fishing_rod")
       .addLimb("rod")
       .addBreakableBowstring("string").addBowstring("string_cast");
+    buildTool("javelin").withLarge().addBreakableHead("head").addLimb("guard").addHandle("handle").addGrip("grip");
 
     // ancient tools
     buildTool("melting_pan").skipVariants().addBreakablePart("head", PlatingMaterialStats.SHIELD.getId()).addLimb("handle");

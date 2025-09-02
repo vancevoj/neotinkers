@@ -156,6 +156,13 @@ public class StationSlotLayoutProvider extends AbstractStationSlotLayoutProvider
       .addInputItem(TinkerToolParts.bowLimb,   28, 38)
       .addInputItem(TinkerToolParts.bowstring, 50, 38)
       .build();
+    defineModifiable(TinkerTools.javelin)
+      .sortIndex(SORT_RANGED + SORT_LARGE)
+      .addInputItem(TinkerToolParts.smallBlade, 45, 26)
+      .addInputItem(TinkerToolParts.toolHandle,  7, 62)
+      .addInputItem(TinkerToolParts.bowLimb,    45, 46)
+      .addInputItem(TinkerToolParts.bowGrip,    25, 46)
+      .build();
     // use a single button for all plate armor, its all the same recipe and a single description is suitable
     define(TConstruct.getResource("plate_armor"))
       .sortIndex(SORT_ARMOR)

@@ -1103,6 +1103,7 @@
   "item.tconstruct.crossbow": "Crossbow",
   "item.tconstruct.longbow": "Longbow",
   "item.tconstruct.fishing_rod": "Fishing Rod",
+  "item.tconstruct.javelin": "Javelin",
 
   "item.tconstruct.flint_and_brick": "Flint and Brick",
   "item.tconstruct.sky_staff": "Skyslime Staff",
@@ -1212,6 +1213,7 @@
   "item.tconstruct.crossbow.description": "The Crossbow is a light ranged weapon, capable of quickly firing arrows and fireworks.",
   "item.tconstruct.longbow.description": "The Longbow is a broad ranged weapon, capable of firing arrows with precision over long distances.",
   "item.tconstruct.fishing_rod.description": "The Fishing Rod is a light ranged weapon, capable of short distance attacks without requiring ammo. It also can be used to fish if you're into that.",
+  "item.tconstruct.javelin.description": "The Javelin is a hybrid melee/ranged weapon, ideal for both melee combat along with throwing for ranged damage. Just be careful after throwing as you will be without a weapon.",
 
   "gui.tconstruct.plate_armor": "Plate Armor",
   "gui.tconstruct.plate_armor.description": "Plate armor is a highly defensive armor set with limited ability slots.",

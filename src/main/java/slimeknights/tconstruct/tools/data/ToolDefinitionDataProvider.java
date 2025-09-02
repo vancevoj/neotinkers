@@ -480,6 +480,22 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
       .module(ToolTraitsModule.builder().trait(ModifierIds.fishing).build())
       // put fishing on right click, everything else on left, but support toggling
       .module(new ToggleableSetInteraction(new SingleModifierPredicate(ModifierIds.fishing)));
+    // javelins are melee and ranged
+    define(ToolDefinitions.JAVELIN)
+      // parts
+      .module(PartStatsModule.parts()
+        .part(smallBlade)
+        .part(toolHandle)
+        .part(bowLimb)
+        .part(bowGrip).build())
+      .module(defaultFourParts)
+      // stats
+      .module(new SetStatsModule(StatsNBT.builder()
+        .set(ToolStats.ATTACK_DAMAGE, 3f)
+        .set(ToolStats.ATTACK_SPEED, 1.1f).build()))
+      .largeToolStartingSlots()
+      // traits
+      .module(ToolTraitsModule.builder().trait(ModifierIds.throwing).build());
 
     // special
     define(ToolDefinitions.FLINT_AND_BRICK)

@@ -181,6 +181,7 @@ public final class TinkerTools extends TinkerModule {
   public static final ItemObject<ModifiableCrossbowItem> crossbow = ITEMS.register("crossbow", () -> new ModifiableCrossbowItem(UNSTACKABLE_PROPS, ToolDefinitions.CROSSBOW));
   public static final ItemObject<ModifiableBowItem> longbow = ITEMS.register("longbow", () -> new ModifiableBowItem(UNSTACKABLE_PROPS, ToolDefinitions.LONGBOW, true));
   public static final ItemObject<ModifiableItem> fishingRod = ITEMS.register("fishing_rod", () -> new ModifiableItem(UNSTACKABLE_PROPS, ToolDefinitions.FISHING_ROD));
+  public static final ItemObject<ModifiableItem> javelin = ITEMS.register("javelin", () -> new ModifiableItem(UNSTACKABLE_PROPS, ToolDefinitions.JAVELIN));
 
   public static final ItemObject<ModifiableItem> flintAndBrick = ITEMS.register("flint_and_brick", () -> new ModifiableItem(UNSTACKABLE_PROPS, ToolDefinitions.FLINT_AND_BRICK));
   public static final ItemObject<ModifiableItem> skyStaff = ITEMS.register("sky_staff", () -> new ModifiableItem(UNSTACKABLE_PROPS, ToolDefinitions.SKY_STAFF));
@@ -390,6 +391,7 @@ public final class TinkerTools extends TinkerModule {
     acceptTool(output, crossbow);
     acceptTool(output, longbow);
     acceptTool(output, fishingRod);
+    acceptTool(output, javelin);
 
     // ancient tools
     acceptTool(output, meltingPan);
