@@ -235,10 +235,12 @@ public class ToolAttackUtil {
     // determine cooldown
     float cooldown = (float)cooldownFunction.getAsDouble();
     boolean fullyCharged = cooldown > 0.9f;
+    // many contexts such as critical want to skip both extra attacks (AOE) and projectiles
+    boolean mainAttack = !isExtraAttack && projectile == null;
 
     // calculate if it's a critical hit
     // that is, in the air, not blind, targeting living, and not sprinting
-    boolean isCritical = !isExtraAttack && fullyCharged && attackerLiving.fallDistance > 0.0F && !attackerLiving.onGround() && !attackerLiving.onClimbable()
+    boolean isCritical = mainAttack && fullyCharged && attackerLiving.fallDistance > 0.0F && !attackerLiving.onGround() && !attackerLiving.onClimbable()
                          && !attackerLiving.isInWater() && !attackerLiving.hasEffect(MobEffects.BLINDNESS)
                          && !attackerLiving.isPassenger() && targetLiving != null && !attackerLiving.isSprinting();
 
@@ -255,7 +257,7 @@ public class ToolAttackUtil {
 
     // no damage? do nothing
     if (damage <= 0) {
-      return !isExtraAttack;
+      return mainAttack;
     }
     // checked immediately in case anything else changes damage
     boolean isMagic = damage > baseDamage;
@@ -281,7 +283,7 @@ public class ToolAttackUtil {
     // knockback moved lower
 
     // apply critical boost
-    if (!isExtraAttack) {
+    if (mainAttack) {
       float criticalModifier = isCritical ? 1.5f : 1.0f;
       if (attackerPlayer != null) {
         CriticalHitEvent hitResult = ForgeHooks.getCriticalHit(attackerPlayer, targetEntity, isCritical, isCritical ? 1.5F : 1.0F);
@@ -353,7 +355,7 @@ public class ToolAttackUtil {
 
     // if we failed to hit, fire failure hooks
     if (!didHit) {
-      if (!isExtraAttack) {
+      if (mainAttack) {
         level.playSound(null, attackerLiving.getX(), attackerLiving.getY(), attackerLiving.getZ(), SoundEvents.PLAYER_ATTACK_NODAMAGE, attackerLiving.getSoundSource(), 1.0F, 1.0F);
       }
       // alert modifiers nothing was hit, mainly used for fiery
@@ -361,7 +363,7 @@ public class ToolAttackUtil {
         entry.getHook(ModifierHooks.MELEE_HIT).failedMeleeHit(tool, entry, context, damage);
       }
 
-      return !isExtraAttack;
+      return mainAttack;
     }
 
     // determine damage actually dealt
@@ -430,7 +432,7 @@ public class ToolAttackUtil {
     // final attack hooks
     if (attackerPlayer != null) {
       if (targetLiving != null) {
-        if (!level.isClientSide && !isExtraAttack) {
+        if (!level.isClientSide && mainAttack) {
           ItemStack held = attackerLiving.getItemBySlot(sourceSlot);
           if (!held.isEmpty()) {
             held.hurtEnemy(targetLiving, attackerPlayer);
@@ -442,7 +444,7 @@ public class ToolAttackUtil {
       attackerPlayer.causeFoodExhaustion(0.1F);
 
       // add usage stat
-      if (!isExtraAttack) {
+      if (mainAttack) {
         attackerPlayer.awardStat(Stats.ITEM_USED.get(tool.getItem()));
       }
     }

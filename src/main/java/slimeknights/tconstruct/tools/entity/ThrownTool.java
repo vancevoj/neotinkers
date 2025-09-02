@@ -120,7 +120,7 @@ public class ThrownTool extends ThrownTrident {
       // OFFHAND slot is a bit of a hack, ensures the damage is fetched from the tool instead of the attribute, and any hooks detect the tool properly
       IToolStackView tool = getTool();
       // isExtraAttack bypasses a lot of main hit behaviors, like critical and sounds
-      if (ToolAttackUtil.attackEntity(tool, owner, InteractionHand.OFF_HAND, target, () -> charge, true, EquipmentSlot.OFFHAND, this)) {
+      if (ToolAttackUtil.attackEntity(tool, owner, InteractionHand.OFF_HAND, target, () -> charge, false, EquipmentSlot.OFFHAND, this)) {
         if (target.getType() == EntityType.ENDERMAN && tool.getModifiers().getLevel(TinkerModifiers.enderference.getId()) == 0) {
           // restore held item
           owner.setItemInHand(InteractionHand.OFF_HAND, offhand);
