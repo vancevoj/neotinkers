@@ -13,13 +13,16 @@ import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.data.loadable.record.SingletonLoader;
+import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
+import slimeknights.tconstruct.library.modifiers.hook.build.ConditionalStatModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.interaction.GeneralInteractionModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.interaction.InteractionSource;
 import slimeknights.tconstruct.library.modifiers.modules.ModifierModule;
 import slimeknights.tconstruct.library.module.HookProvider;
 import slimeknights.tconstruct.library.module.ModuleHook;
+import slimeknights.tconstruct.library.tools.helper.ModifierUtil;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
 import slimeknights.tconstruct.tools.entity.ThrownTool;
@@ -61,9 +64,10 @@ public enum ThrowingModule implements ModifierModule, GeneralInteractionModifier
 
   @Override
   public InteractionResult onToolUse(IToolStackView tool, ModifierEntry modifier, Player player, InteractionHand hand, InteractionSource source) {
-    if (!tool.isBroken() && source == InteractionSource.RIGHT_CLICK) {
-      // use attack speed instead of drawspeed for the length of time to throw it
-      tool.getPersistentData().putInt(KEY_DRAWTIME, (int)Math.ceil(30f / tool.getStats().get(ToolStats.ATTACK_SPEED)));
+    // can't throw something with no melee stats, will do nothing
+    if (!tool.isBroken() && source == InteractionSource.RIGHT_CLICK && tool.hasTag(TinkerTags.Items.MELEE_WEAPON)) {
+      // use attack speed together with drawspeed to ensure you are not making insanely slow weapons and throwing to bypass
+      tool.getPersistentData().putInt(KEY_DRAWTIME, (int)Math.ceil(30f / (tool.getStats().get(ToolStats.ATTACK_SPEED) * ConditionalStatModifierHook.getModifiedStat(tool, player, ToolStats.PROJECTILE_DAMAGE))));
       GeneralInteractionModifierHook.startUsing(tool, modifier.getId(), player, hand);
       return InteractionResult.CONSUME;
     }
@@ -81,7 +85,7 @@ public enum ThrowingModule implements ModifierModule, GeneralInteractionModifier
         // unlike the trident, we actually consider how long you charged for, and change the power of the projectile
         float charge = GeneralInteractionModifierHook.getToolCharge(tool, chargeTime);
         ThrownTool thrown = new ThrownTool(level, player, stack, tool, charge);
-        thrown.shootFromRotation(player, player.getXRot(), player.getYRot(), 0, charge * 2.5f, 1);
+        thrown.shootFromRotation(player, player.getXRot(), player.getYRot(), 0, charge * ConditionalStatModifierHook.getModifiedStat(tool, entity, ToolStats.VELOCITY) * 2, ModifierUtil.getInaccuracy(tool, entity));
         if (player.getAbilities().instabuild) {
           thrown.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
         }
