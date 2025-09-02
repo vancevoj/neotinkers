@@ -22,6 +22,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
@@ -101,6 +102,10 @@ public class ToolAttackUtil {
       for (AttributeModifier modifier : mainModifiers) {
         instance.removeModifier(modifier);
       }
+    // when a tool is thrown from the main hand at a close distance target, sometimes the game hasn't yet cleared its attributes
+    // so manually remove the base damage attribute. It shouldn't be around for empty stacks anyways so no need to restore it
+    } else if (attribute == Attributes.ATTACK_DAMAGE) {
+      instance.removeModifier(Item.BASE_ATTACK_DAMAGE_UUID);
     }
 
     // next, build a list of damage modifiers from the offhand stack, handled directly as it saves parsing the tool twice and lets us simplify by filtering
