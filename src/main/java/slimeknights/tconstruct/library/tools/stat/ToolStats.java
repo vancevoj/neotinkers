@@ -77,7 +77,7 @@ public class ToolStats {
   /** Starting velocity of the projectile launched from a ranged weapon */
   public static final FloatToolStat ACCURACY = register(new FloatToolStat(name("accuracy"), 0xFF8547CC, 0.75f, 0.1f, 1f, TinkerTags.Items.RANGED));
   /** Base damage of the projectile, boosted by enchantments such as power. Assumes the arrow itself does 2 damage, so we boost on top of that */
-  public static final FloatToolStat PROJECTILE_DAMAGE = register(new FloatToolStat(name("projectile_damage"), 0xFFD76464, 2f, 0f, 1024f, TinkerTags.Items.RANGED));
+  public static final FloatToolStat PROJECTILE_DAMAGE = register(new FloatToolStat(name("projectile_damage"), 0xFFD76464, 2f, 0f, 1024f, TinkerTags.Items.LAUNCHERS));
 
   // fishing
   /** Luck bonus applied to fishing rods */

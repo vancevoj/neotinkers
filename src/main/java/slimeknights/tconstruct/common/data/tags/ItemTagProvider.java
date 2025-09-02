@@ -78,6 +78,7 @@ import static slimeknights.tconstruct.common.TinkerTags.Items.INTERACTABLE_CHARG
 import static slimeknights.tconstruct.common.TinkerTags.Items.INTERACTABLE_DUAL;
 import static slimeknights.tconstruct.common.TinkerTags.Items.INTERACTABLE_LEFT;
 import static slimeknights.tconstruct.common.TinkerTags.Items.INTERACTABLE_RIGHT;
+import static slimeknights.tconstruct.common.TinkerTags.Items.LAUNCHERS;
 import static slimeknights.tconstruct.common.TinkerTags.Items.LEGGINGS;
 import static slimeknights.tconstruct.common.TinkerTags.Items.LONGBOWS;
 import static slimeknights.tconstruct.common.TinkerTags.Items.LOOT_CAPABLE_TOOL;
@@ -325,7 +326,7 @@ public class ItemTagProvider extends ItemTagsProvider {
     addToolTags(TinkerTools.meltingPan, MULTIPART_TOOL, DURABILITY, ANCIENT_TOOLS, TRADER_TOOLS, HARVEST_PRIMARY, STAFFS, HELD_ARMOR, INTERACTABLE_DUAL, AOE, BONUS_SLOTS);
     addToolTags(TinkerTools.warPick,    MULTIPART_TOOL, DURABILITY, ANCIENT_TOOLS, TRADER_TOOLS, HARVEST_PRIMARY, STONE_HARVEST, MELEE_WEAPON, HELD, AOE, CLUSTER_MAX_HARVESTABLES, CROSSBOWS, BONUS_SLOTS, ItemTags.PICKAXES, Tags.Items.TOOLS_CROSSBOWS);
     addToolTags(TinkerTools.battlesign, MULTIPART_TOOL, DURABILITY, ANCIENT_TOOLS, TRADER_TOOLS, MELEE_PRIMARY, SHIELDS, BONUS_SLOTS, Tags.Items.TOOLS_SHIELDS);
-    addToolTags(TinkerTools.swasher,    MULTIPART_TOOL, DURABILITY, ANCIENT_TOOLS, TRADER_TOOLS, HARVEST, MELEE_PRIMARY, RANGED, HELD, BONUS_SLOTS, ItemTags.SWORDS, STAFFS, INTERACTABLE_CHARGE);
+    addToolTags(TinkerTools.swasher,    MULTIPART_TOOL, DURABILITY, ANCIENT_TOOLS, TRADER_TOOLS, HARVEST, MELEE_PRIMARY, LAUNCHERS, HELD, BONUS_SLOTS, ItemTags.SWORDS, STAFFS, INTERACTABLE_CHARGE);
     optionalToolTags(TinkerTools.minotaurAxe, MULTIPART_TOOL, DURABILITY, ANCIENT_TOOLS, HARVEST_PRIMARY, MELEE_PRIMARY, INTERACTABLE_RIGHT, AOE, BONUS_SLOTS, ItemTags.AXES);
 
     // armor
@@ -381,7 +382,8 @@ public class ItemTagProvider extends ItemTagsProvider {
     this.tag(HELD_ARMOR).addTag(SHIELDS);
     this.tag(ARMOR).addTags(WORN_ARMOR, HELD_ARMOR);
     this.tag(AOE).addTag(BOOTS); // boot walk modifiers
-    this.tag(RANGED).addTags(BOWS, STAFFS, FISHING_RODS);
+    this.tag(LAUNCHERS).addTags(BOWS, STAFFS, FISHING_RODS);
+    this.tag(RANGED).addTags(LAUNCHERS);
     this.tag(BOWS).addTags(LONGBOWS, CROSSBOWS);
     // TODO 1.21: consider dropping unsalvagable from this tag
     this.tag(UNRECYCLABLE).addTags(UNSALVAGABLE, ANCIENT_TOOLS); // ancient tools lack tool parts, but may have special override recipes to salvage
