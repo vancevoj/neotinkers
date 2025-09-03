@@ -1241,6 +1241,18 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .setTools(ingredientFromTags(TinkerTags.Items.HARVEST, TinkerTags.Items.FISHING_RODS))
                          .saveSalvage(consumer, prefix(TinkerModifiers.autosmelt, abilitySalvage))
                          .save(consumer, prefix(TinkerModifiers.autosmelt, abilityFolder));
+    ModifierRecipeBuilder.modifier(ModifierIds.channeling)
+      .addInput(Blocks.LIGHTNING_ROD)
+      .addInput(Blocks.CREEPER_HEAD)
+      .addInput(Blocks.LIGHTNING_ROD)
+      .addInput(Blocks.LIGHTNING_ROD)
+      .addInput(Blocks.LIGHTNING_ROD)
+      .setMaxLevel(1).checkTraitLevel()
+      .setSlots(SlotType.ABILITY, 1)
+      .setTools(ingredientFromTags(TinkerTags.Items.MELEE, TinkerTags.Items.FISHING_RODS))
+      .saveSalvage(consumer, prefix(ModifierIds.channeling, abilitySalvage))
+      .save(consumer, prefix(ModifierIds.channeling, abilityFolder));
+
     // fluid stuff
     ModifierRecipeBuilder.modifier(TinkerModifiers.melting)
                          .addInput(Items.BLAZE_ROD)

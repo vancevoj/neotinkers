@@ -2616,6 +2616,9 @@
   "modifier.tconstruct.returning.flavor": "Like a magic magnet",
   "modifier.tconstruct.returning.description": "Causes the thrown tool to return to you after hitting a target.",
   "modifier.tconstruct.returning.requirements": "Returning requires Throwing",
+  "modifier.tconstruct.channeling": "Channeling",
+  "modifier.tconstruct.channeling.flavor": "Ka-chow!",
+  "modifier.tconstruct.channeling.description": "Causes lightning to strike the target of attacks during storms.",
 
   "modifier.tconstruct.fishing": "Fishing",
   "modifier.tconstruct.fishing.flavor": "Obligatory fishing minigame",

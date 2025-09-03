@@ -1,0 +1,13 @@
+{
+  "modifier_id": "tconstruct:channeling",
+  "text": [
+    {
+      "text": "Like Mjolnir!"
+    }
+  ],
+  "effects": [
+    "Causes lightning to strike after attacks during storms",
+    "Single level",
+    "Requires 1 ability slot"
+  ]
+}

@@ -27,6 +27,7 @@ import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.tools.TinkerModifiers;
 import slimeknights.tconstruct.tools.TinkerTools;
+import slimeknights.tconstruct.tools.data.ModifierIds;
 
 import javax.annotation.Nullable;
 
@@ -64,8 +65,7 @@ public class ThrownTool extends ThrownTrident {
 
   @Override
   public boolean isChanneling() {
-    // TODO: hardcode to channeling modifier perhaps?
-    return false;
+    return !tridentItem.isEmpty() && getTool().getModifiers().getLevel(ModifierIds.channeling) > 0;
   }
 
   @Override
@@ -141,8 +141,9 @@ public class ThrownTool extends ThrownTrident {
       // back off from the target
       this.setDeltaMovement(this.getDeltaMovement().multiply(-0.01, -0.1, -0.01));
       // play sound
-      // TODO: change this sound for channeling?
-      this.playSound(SoundEvents.TRIDENT_HIT, 1.0f, 1.0f);
+      if (tool.getModifiers().getLevel(ModifierIds.channeling) == 0) {
+        this.playSound(SoundEvents.TRIDENT_HIT, 1.0f, 1.0f);
+      }
     }
   }
 
