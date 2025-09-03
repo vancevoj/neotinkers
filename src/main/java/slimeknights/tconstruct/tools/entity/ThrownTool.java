@@ -8,7 +8,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
@@ -17,6 +16,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import slimeknights.tconstruct.library.tools.IndestructibleItemEntity;
+import slimeknights.tconstruct.library.tools.context.ToolAttackContext;
 import slimeknights.tconstruct.library.tools.helper.ModifierUtil;
 import slimeknights.tconstruct.library.tools.helper.ToolAttackUtil;
 import slimeknights.tconstruct.library.tools.helper.ToolDamageUtil;
@@ -115,23 +115,26 @@ public class ThrownTool extends ThrownTrident {
       Entity target = pResult.getEntity();
       // hack: swap the offhand for the tool so any relevant modifier hooks (notably looting) see the right thing
       ItemStack offhand = owner.getOffhandItem();
-      owner.setItemInHand(InteractionHand.OFF_HAND, tridentItem);
 
-      // OFFHAND slot is a bit of a hack, ensures the damage is fetched from the tool instead of the attribute, and any hooks detect the tool properly
       IToolStackView tool = getTool();
-      // isExtraAttack bypasses a lot of main hit behaviors, like critical and sounds
-      if (ToolAttackUtil.attackEntity(tool, owner, InteractionHand.OFF_HAND, target, () -> charge, false, EquipmentSlot.OFFHAND, this)) {
-        if (target.getType() == EntityType.ENDERMAN && tool.getModifiers().getLevel(TinkerModifiers.enderference.getId()) == 0) {
-          // restore held item
-          owner.setItemInHand(InteractionHand.OFF_HAND, offhand);
-          return;
+      if (ToolAttackUtil.canPerformAttack(tool) && ToolAttackUtil.isAttackable(owner, target)) {
+        // does not actually matter which slot we use, just need the tool there to ensure hooks are properly run
+        owner.setItemInHand(InteractionHand.OFF_HAND, tridentItem);
+        // TODO: consider whether redundant sound is fine
+        if (ToolAttackUtil.performAttack(tool, ToolAttackContext.attacker(owner).target(target).hand(InteractionHand.OFF_HAND).applyStats(tool).cooldown(charge).projectile(this).build())) {
+          if (target.getType() == EntityType.ENDERMAN && tool.getModifiers().getLevel(TinkerModifiers.enderference.getId()) == 0) {
+            // restore held item
+            owner.setItemInHand(InteractionHand.OFF_HAND, offhand);
+            return;
+          }
+          if (target instanceof LivingEntity living) {
+            this.doPostHurtEffects(living);
+          }
         }
-        if (target instanceof LivingEntity living) {
-          this.doPostHurtEffects(living);
-        }
+
+        // restore held item
+        owner.setItemInHand(InteractionHand.OFF_HAND, offhand);
       }
-      // restore held item
-      owner.setItemInHand(InteractionHand.OFF_HAND, offhand);
 
       // back off from the target
       this.setDeltaMovement(this.getDeltaMovement().multiply(-0.01, -0.1, -0.01));
