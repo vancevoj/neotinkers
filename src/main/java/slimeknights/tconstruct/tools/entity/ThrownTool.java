@@ -68,6 +68,9 @@ public class ThrownTool extends ThrownTrident {
     return !tridentItem.isEmpty() && getTool().getModifiers().getLevel(ModifierIds.channeling) > 0;
   }
 
+
+  /* Despawn */
+
   @Override
   public void tickDespawn() {
     // if no pickup, despawn in 1 minute
@@ -85,6 +88,22 @@ public class ThrownTool extends ThrownTrident {
       }
     }
   }
+
+  @Override
+  protected void onBelowWorld() {
+    // don't discard tools below world if they have loyalty
+    if (pickup == Pickup.ALLOWED && this.entityData.get(ID_LOYALTY) != 0) {
+      // ensure it returns
+      dealtDamage = true;
+      // we don't damage the tool on throw, so instead damage it when it hits a block or an entity
+      if (!tridentItem.isEmpty()) {
+        ToolDamageUtil.damage(getTool(), 1, getOwner() instanceof LivingEntity l ? l : null, tridentItem);
+      }
+    } else {
+      super.onBelowWorld();
+    }
+  }
+
 
   /* Combat */
 
