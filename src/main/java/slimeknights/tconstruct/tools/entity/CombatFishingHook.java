@@ -2,6 +2,7 @@ package slimeknights.tconstruct.tools.entity;
 
 import lombok.Getter;
 import lombok.Setter;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -197,7 +198,7 @@ public class CombatFishingHook extends FishingHook implements ProjectileWithKnoc
                 // actually run the hook
                 IToolStackView tool = ToolStack.from(stack);
                 for (ModifierEntry modifier : tool.getModifiers()) {
-                  modifier.getHook(ModifierHooks.LAUNCHER_HIT).onToolProjectileHit(tool, modifier, this, ownerLiving, target, targetLiving, damageDealt);
+                  modifier.getHook(ModifierHooks.LAUNCHER_HIT).onLauncherHitEntity(tool, modifier, this, ownerLiving, target, targetLiving, damageDealt);
                 }
               }
             }
@@ -222,14 +223,24 @@ public class CombatFishingHook extends FishingHook implements ProjectileWithKnoc
   @Override
   public int retrieve(ItemStack stack) {
     Entity owner = this.getOwner();
-    if (isGrapple() && (this.onGround() || wallState != null) && owner != null) {
-      // pull the owner, bonus pulling if we have knockback
-      Vec3 knockback = new Vec3(this.getX() - owner.getX(), this.getY() - owner.getY(), this.getZ() - owner.getZ());
-      // goal is dividing the scale by the square root of the length, computed as the negative 4th root of the length squared to reduce sqrt calls.
-      knockback = knockback.scale(GRAPPLE_STRENGTH * Math.pow(knockback.lengthSqr(), -0.25f));
-      owner.push(knockback.x, knockback.y, knockback.z);
-      if (owner instanceof ServerPlayer player) {
-        player.connection.send(new ClientboundSetEntityMotionPacket(player.getId(), player.getDeltaMovement()));
+    if (this.onGround() || wallState != null) {
+      if (owner != null && isGrapple()) {
+        // pull the owner, bonus pulling if we have knockback
+        Vec3 knockback = new Vec3(this.getX() - owner.getX(), this.getY() - owner.getY(), this.getZ() - owner.getZ());
+        // goal is dividing the scale by the square root of the length, computed as the negative 4th root of the length squared to reduce sqrt calls.
+        knockback = knockback.scale(GRAPPLE_STRENGTH * Math.pow(knockback.lengthSqr(), -0.25f));
+        owner.push(knockback.x, knockback.y, knockback.z);
+        if (owner instanceof ServerPlayer player) {
+          player.connection.send(new ClientboundSetEntityMotionPacket(player.getId(), player.getDeltaMovement()));
+        }
+      }
+      // run modifier hook
+      if (owner instanceof LivingEntity living && stack.is(TinkerTags.Items.MODIFIABLE)) {
+        IToolStackView tool = ToolStack.from(stack);
+        BlockPos pos = blockPosition();
+        for (ModifierEntry entry : tool.getModifiers()) {
+          entry.getHook(ModifierHooks.LAUNCHER_HIT).onLauncherHitBlock(tool, entry, this, living, pos);
+        }
       }
       return Math.max(2, super.retrieve(stack));
     }
