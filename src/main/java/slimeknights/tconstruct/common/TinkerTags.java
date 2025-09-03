@@ -391,6 +391,8 @@ public class TinkerTags {
     public static final TagKey<Item> INTERACTABLE_RIGHT = local("modifiable/interactable/right");
     /** Tools that can charge up interaction. Includes anything in {@link #INTERACTABLE_RIGHT}, {@link #BOWS}, or {@link #SHIELDS} */
     public static final TagKey<Item> INTERACTABLE_CHARGE = local("modifiable/interactable/charge");
+    /** Tools that can charge up interaction, using a modifier for their main action. Like {@link #INTERACTABLE_CHARGE} but excludes bows. */
+    public static final TagKey<Item> INTERACTABLE_CHARGE_MODIFIER = local("modifiable/interactable/charge/modifier");
     /** Tools that can interact on left click */
     public static final TagKey<Item> INTERACTABLE_LEFT = local("modifiable/interactable/left");
     /** Tools that can interact when worn as armor */
@@ -641,6 +643,8 @@ public class TinkerTags {
     public static final TagKey<Modifier> EXTRACT_MODIFIER_BLACKLIST = local("extract_blacklist/tools");
     /** Blacklist for modifiers that cannot be extracted via the slotless recipe */
     public static final TagKey<Modifier> EXTRACT_SLOTLESS_BLACKLIST = local("extract_blacklist/slotless");
+    /** Blacklist for modifiers that cannot be extracted via the upgrade recipe */
+    public static final TagKey<Modifier> EXTRACT_UPGRADE_BLACKLIST = local("extract_blacklist/upgrade");
     /** Modifiers that support blocking while charging, for the sake of shields */
     public static final TagKey<Modifier> BLOCK_WHILE_CHARGING = local("block_while_charging");
     /** Modifiers that can be used on both left and right click. Does not care about armor modifiers */

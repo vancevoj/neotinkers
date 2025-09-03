@@ -102,6 +102,7 @@ import slimeknights.tconstruct.library.modifiers.modules.build.StatCopyModule;
 import slimeknights.tconstruct.library.modifiers.modules.build.SwappableSlotModule;
 import slimeknights.tconstruct.library.modifiers.modules.build.SwappableToolTraitsModule;
 import slimeknights.tconstruct.library.modifiers.modules.build.VolatileFlagModule;
+import slimeknights.tconstruct.library.modifiers.modules.build.VolatileIntModule;
 import slimeknights.tconstruct.library.modifiers.modules.capacity.CapacityBarModule;
 import slimeknights.tconstruct.library.modifiers.modules.capacity.DamageToCapacityModule;
 import slimeknights.tconstruct.library.modifiers.modules.capacity.DurabilityShieldModule;
@@ -145,6 +146,7 @@ import slimeknights.tconstruct.tools.TinkerModifiers;
 import slimeknights.tconstruct.tools.TinkerToolActions;
 import slimeknights.tconstruct.tools.TinkerTools;
 import slimeknights.tconstruct.tools.data.material.MaterialIds;
+import slimeknights.tconstruct.tools.entity.ThrownTool;
 import slimeknights.tconstruct.tools.item.CrystalshotItem;
 import slimeknights.tconstruct.tools.logic.ModifierEvents;
 import slimeknights.tconstruct.tools.modules.DamageOnUnequipModule;
@@ -614,7 +616,9 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
     buildModifier(ModifierIds.brushing).levelDisplay(ModifierLevelDisplay.NO_LEVELS).addModule(BrushModule.INSTANCE);
     buildModifier(ModifierIds.throwing).levelDisplay(ModifierLevelDisplay.NO_LEVELS).addModule(ThrowingModule.INSTANCE);
     // mostly hardcoded at this time
-    buildModifier(ModifierIds.loyalty).addModule(ModifierRequirementsModule.builder().requireModifier(ModifierIds.throwing, 1).modifierKey(ModifierIds.loyalty).build());
+    buildModifier(ModifierIds.returning)
+      .addModule(new VolatileIntModule(ThrownTool.LOYALTY, LevelingInt.eachLevel(1)))
+      .addModule(ModifierRequirementsModule.builder().requireModifier(ModifierIds.throwing, 1).modifierKey(ModifierIds.returning).build());
 
     // fishing
     buildModifier(ModifierIds.fishing).levelDisplay(ModifierLevelDisplay.NO_LEVELS).addModule(FishingModule.INSTANCE);

@@ -24,6 +24,7 @@ import static slimeknights.tconstruct.common.TinkerTags.Modifiers.DEFENSE;
 import static slimeknights.tconstruct.common.TinkerTags.Modifiers.DUAL_INTERACTION;
 import static slimeknights.tconstruct.common.TinkerTags.Modifiers.EXTRACT_MODIFIER_BLACKLIST;
 import static slimeknights.tconstruct.common.TinkerTags.Modifiers.EXTRACT_SLOTLESS_BLACKLIST;
+import static slimeknights.tconstruct.common.TinkerTags.Modifiers.EXTRACT_UPGRADE_BLACKLIST;
 import static slimeknights.tconstruct.common.TinkerTags.Modifiers.GEMS;
 import static slimeknights.tconstruct.common.TinkerTags.Modifiers.GENERAL_ABILITIES;
 import static slimeknights.tconstruct.common.TinkerTags.Modifiers.GENERAL_ARMOR_ABILITIES;
@@ -62,9 +63,10 @@ public class ModifierTagProvider extends AbstractModifierTagProvider {
       .add(TinkerModifiers.embellishment.getId(), TinkerModifiers.dyed.getId(), TinkerModifiers.trim.getId(), TinkerModifiers.creativeSlot.getId(), TinkerModifiers.statOverride.getId())
       .addOptional(ModifierIds.shiny, TinkerModifiers.golden.getId());
     tag(EXTRACT_MODIFIER_BLACKLIST)
-      .add(TinkerModifiers.embellishment.getId(), TinkerModifiers.dyed.getId(), TinkerModifiers.trim.getId(), TinkerModifiers.creativeSlot.getId(), TinkerModifiers.statOverride.getId(), ModifierIds.rebalanced);
+      .add(TinkerModifiers.embellishment.getId(), TinkerModifiers.dyed.getId(), TinkerModifiers.trim.getId(), TinkerModifiers.creativeSlot.getId(), TinkerModifiers.statOverride.getId(), ModifierIds.rebalanced, ModifierIds.returning);
     // blacklist modifiers that are not really slotless, they just have a slotless recipe
     tag(EXTRACT_SLOTLESS_BLACKLIST).add(ModifierIds.luck, ModifierIds.toolBelt);
+    tag(EXTRACT_UPGRADE_BLACKLIST).add(ModifierIds.returning);
 
     // modifiers in this tag support both left click and right click interaction
     tag(DUAL_INTERACTION)
@@ -134,7 +136,8 @@ public class ModifierTagProvider extends AbstractModifierTagProvider {
       ModifierIds.luck, TinkerModifiers.melting.getId());
     this.tag(MELEE_ABILITIES).add(
       TinkerModifiers.blocking.getId(), TinkerModifiers.parrying.getId(),
-      TinkerModifiers.dualWielding.getId(), ModifierIds.spilling);
+      TinkerModifiers.dualWielding.getId(), ModifierIds.spilling,
+      ModifierIds.throwing, ModifierIds.returning);
     this.tag(HARVEST_ABILITIES).add(TinkerModifiers.autosmelt.getId(), TinkerModifiers.exchanging.getId(), TinkerModifiers.silky.getId());
     this.tag(RANGED_ABILITIES).add(
       ModifierIds.bulkQuiver, ModifierIds.trickQuiver,

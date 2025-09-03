@@ -1,0 +1,17 @@
+{
+  "modifier_id": "tconstruct:throwing",
+  "text": [
+    {
+      "text": "Allows throwing a melee weapon to perform its effects at a distance."
+    },
+    {
+      "text": "All modifiers function as normal, though the tool ignores any player attributes, typically leading to 1 less damage. Throw speed is based on attack speed times drawspeed, with velocity determining the distance.",
+      "paragraph": true
+    }
+  ],
+  "more_text_space": true,
+  "effects": [
+    "Maximum of 1 level",
+    "Requires 1 ability slot"
+  ]
+}

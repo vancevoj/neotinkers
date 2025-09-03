@@ -4,6 +4,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
@@ -15,6 +16,7 @@ import net.minecraft.world.entity.projectile.ThrownTrident;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
+import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.tools.IndestructibleItemEntity;
 import slimeknights.tconstruct.library.tools.context.ToolAttackContext;
 import slimeknights.tconstruct.library.tools.helper.ModifierUtil;
@@ -25,7 +27,6 @@ import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.tools.TinkerModifiers;
 import slimeknights.tconstruct.tools.TinkerTools;
-import slimeknights.tconstruct.tools.data.ModifierIds;
 
 import javax.annotation.Nullable;
 
@@ -33,6 +34,8 @@ import javax.annotation.Nullable;
 public class ThrownTool extends ThrownTrident {
   /** Key to sync the stack to the client */
   protected static final EntityDataAccessor<ItemStack> STACK = SynchedEntityData.defineId(ThrownTool.class, EntityDataSerializers.ITEM_STACK);
+  /** Volatile integer key for the loyalty level */
+  public static final ResourceLocation LOYALTY = TConstruct.getResource("loyalty");
 
   @Nullable
   private IToolStackView tool = null;
@@ -54,8 +57,7 @@ public class ThrownTool extends ThrownTrident {
     // trident - stack constructor
     this.tridentItem = stack.copyWithCount(1);
     this.entityData.set(STACK, tridentItem);
-    this.entityData.set(ID_LOYALTY, (byte) tool.getModifiers().getLevel(ModifierIds.loyalty));
-    // TODO: find loyalty on the tool somewhere, maybe just the modifier ID?
+    this.entityData.set(ID_LOYALTY, (byte) tool.getVolatileData().getInt(LOYALTY));
     this.entityData.set(ID_FOIL, tool.getVolatileData().getBoolean(ModifiableItem.SHINY));
     this.charge = charge;
   }
@@ -163,7 +165,7 @@ public class ThrownTool extends ThrownTrident {
     // update the tool to sync to client, if its set
     if (tag.contains("Trident", CompoundTag.TAG_COMPOUND)) {
       this.entityData.set(STACK, tridentItem);
-      this.entityData.set(ID_LOYALTY, (byte) ModifierUtil.getModifierLevel(tridentItem, ModifierIds.loyalty));
+      this.entityData.set(ID_LOYALTY, (byte) ModifierUtil.getVolatileInt(tridentItem, LOYALTY));
     }
   }
 }

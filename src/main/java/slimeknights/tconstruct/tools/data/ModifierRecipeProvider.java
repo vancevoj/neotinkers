@@ -680,6 +680,33 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
       .saveSalvage(consumer, prefix(ModifierIds.collecting, abilitySalvage))
       .save(consumer, prefix(ModifierIds.collecting, abilityFolder));
 
+    // throwing
+    Ingredient chargeableNotBows = IntersectionIngredient.of(
+      Ingredient.of(TinkerTags.Items.DURABILITY),
+      Ingredient.of(TinkerTags.Items.INTERACTABLE_CHARGE_MODIFIER)
+    );
+    ModifierRecipeBuilder.modifier(ModifierIds.throwing)
+      .setTools(chargeableNotBows)
+      .addInput(Items.TRIDENT)
+      .setSlots(SlotType.ABILITY, 1)
+      .setMaxLevel(1).checkTraitLevel()
+      .saveSalvage(consumer, prefix(ModifierIds.throwing, abilitySalvage))
+      .save(consumer, prefix(ModifierIds.throwing, abilityFolder));
+    ModifierRecipeBuilder.modifier(ModifierIds.returning)
+      .setTools(chargeableNotBows)
+      .addInput(Items.TOTEM_OF_UNDYING)
+      .setSlots(SlotType.ABILITY, 1)
+      .setMaxLevel(1).checkTraitLevel()
+      .saveSalvage(consumer, prefix(ModifierIds.returning, abilitySalvage))
+      .save(consumer, prefix(ModifierIds.returning, abilityFolder));
+    ModifierRecipeBuilder.modifier(ModifierIds.returning)
+      .setTools(chargeableNotBows)
+      .addInput(Items.CLOCK)
+      .setSlots(SlotType.UPGRADE, 1)
+      .setLevelRange(2, 4)
+      .saveSalvage(consumer, wrap(ModifierIds.returning, upgradeSalvage, "_faster"))
+      .save(consumer, wrap(ModifierIds.returning, upgradeFolder, "_faster"));
+
     /*
      * armor
      */
@@ -1277,10 +1304,7 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .addInput(bowLimb)
                          .setSlots(SlotType.ABILITY, 1)
                          // swasher gets spitting to get multishot, rest get to spit with their non-spit. No spitting with arrows
-                         .setTools(IntersectionIngredient.of(
-                           Ingredient.of(TinkerTags.Items.DURABILITY),
-                           DifferenceIngredient.of(Ingredient.of(TinkerTags.Items.INTERACTABLE_CHARGE), Ingredient.of(TinkerTags.Items.BOWS))
-                         ))
+                         .setTools(chargeableNotBows)
                          .saveSalvage(consumer, prefix(TinkerModifiers.spitting, abilitySalvage))
                          .save(consumer, prefix(TinkerModifiers.spitting, abilityFolder));
     ModifierRecipeBuilder.modifier(ModifierIds.tank)
@@ -1652,7 +1676,8 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
       EnchantmentConvertingRecipeBuilder.converting("upgrades", matchBook)
                                         .addInput(TinkerWorld.skyGeode.asItem())
                                         .addInput(Tags.Items.GEMS_LAPIS, 3)
-                                        .modifierPredicate(new SlotTypeModifierPredicate(SlotType.UPGRADE))
+                                        .modifierPredicate(ModifierPredicate.and(new SlotTypeModifierPredicate(SlotType.UPGRADE),
+                                          ModifierPredicate.tag(TinkerTags.Modifiers.EXTRACT_UPGRADE_BLACKLIST).inverted()))
                                         .save(consumer, location(worktableFolder + "enchantment_converting/upgrade" + suffix));
       EnchantmentConvertingRecipeBuilder.converting("defense", matchBook)
                                         .addInput(TinkerWorld.earthGeode.asItem())

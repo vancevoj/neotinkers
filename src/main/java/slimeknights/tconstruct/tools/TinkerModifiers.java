@@ -123,6 +123,7 @@ import slimeknights.tconstruct.library.modifiers.modules.build.StatCopyModule;
 import slimeknights.tconstruct.library.modifiers.modules.build.SwappableSlotModule;
 import slimeknights.tconstruct.library.modifiers.modules.build.SwappableToolTraitsModule;
 import slimeknights.tconstruct.library.modifiers.modules.build.VolatileFlagModule;
+import slimeknights.tconstruct.library.modifiers.modules.build.VolatileIntModule;
 import slimeknights.tconstruct.library.modifiers.modules.capacity.CapacityBarModule;
 import slimeknights.tconstruct.library.modifiers.modules.capacity.DamageToCapacityModule;
 import slimeknights.tconstruct.library.modifiers.modules.capacity.DurabilityShieldModule;
@@ -699,6 +700,7 @@ public final class TinkerModifiers extends TinkerModule {
       ModifierModule.LOADER.register(getResource("set_stat"), SetStatModule.LOADER);
       ModifierModule.LOADER.register(getResource("trait"), ModifierTraitModule.LOADER);
       ModifierModule.LOADER.register(getResource("volatile_flag"), VolatileFlagModule.LOADER);
+      ModifierModule.LOADER.register(getResource("volatile_int"), VolatileIntModule.LOADER);
       // combat
       ModifierModule.LOADER.register(getResource("conditional_melee_damage"), ConditionalMeleeDamageModule.LOADER);
       ModifierModule.LOADER.register(getResource("conditional_power"), ConditionalPowerModule.LOADER);

@@ -1,0 +1,14 @@
+{
+  "modifier_id": "tconstruct:returning",
+  "text": [
+    {
+      "text": "Like Mjolnir!"
+    }
+  ],
+  "effects": [
+    "Causes thrown tool to return after a short time",
+    "Higher levels return faster",
+    "Requires 1 ability slot for first level",
+    "Consecutive levels require 1 upgrade slot using a cheaper recipe"
+  ]
+}
