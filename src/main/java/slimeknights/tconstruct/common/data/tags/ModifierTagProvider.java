@@ -15,6 +15,7 @@ import static slimeknights.tconstruct.common.TinkerTags.Modifiers.BLOCK_WHILE_CH
 import static slimeknights.tconstruct.common.TinkerTags.Modifiers.BONUS_SLOTLESS;
 import static slimeknights.tconstruct.common.TinkerTags.Modifiers.BOOT_ABILITIES;
 import static slimeknights.tconstruct.common.TinkerTags.Modifiers.BOOT_UPGRADES;
+import static slimeknights.tconstruct.common.TinkerTags.Modifiers.CHANNELING;
 import static slimeknights.tconstruct.common.TinkerTags.Modifiers.CHARGE_EMPTY_BOW_WITHOUT_DRAWTIME;
 import static slimeknights.tconstruct.common.TinkerTags.Modifiers.CHARGE_EMPTY_BOW_WITH_DRAWTIME;
 import static slimeknights.tconstruct.common.TinkerTags.Modifiers.CHESTPLATE_ABILITIES;
@@ -59,6 +60,7 @@ public class ModifierTagProvider extends AbstractModifierTagProvider {
   @Override
   protected void addTags() {
     tag(GEMS).addOptional(ModifierIds.diamond, ModifierIds.emerald);
+    tag(CHANNELING).add(ModifierIds.throwing, ModifierIds.fishing);
     tag(INVISIBLE_INK_BLACKLIST)
       .add(TinkerModifiers.embellishment.getId(), TinkerModifiers.dyed.getId(), TinkerModifiers.trim.getId(), TinkerModifiers.creativeSlot.getId(), TinkerModifiers.statOverride.getId())
       .addOptional(ModifierIds.shiny, TinkerModifiers.golden.getId());

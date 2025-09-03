@@ -13,6 +13,7 @@
   "effects": [
     "Requires 1 ability slot for first level",
     "Consecutive levels require 1 upgrade slot using a cheaper recipe",
-    "Maximum of 4 levels"
+    "Maximum of 4 levels",
+    "Requires throwing"
   ]
 }

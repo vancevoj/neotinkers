@@ -12,8 +12,9 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import slimeknights.mantle.data.loadable.mapping.SimpleRecordLoadable;
+import slimeknights.mantle.data.loadable.primitive.EnumLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
-import slimeknights.mantle.data.loadable.record.SingletonLoader;
 import slimeknights.mantle.data.registry.GenericLoaderRegistry.IHaveLoader;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
@@ -30,10 +31,11 @@ import java.util.List;
 
 /** Module causing a lighting strike at the target position */
 public enum ChannelingModule implements ModifierModule, MeleeHitModifierHook, LauncherHitModifierHook {
-  INSTANCE;
+  MELEE,
+  PROJECTILE;
 
   private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<ChannelingModule>defaultHooks(ModifierHooks.MELEE_HIT, ModifierHooks.LAUNCHER_HIT);
-  public static final RecordLoadable<ChannelingModule> LOADER = new SingletonLoader<>(INSTANCE);
+  public static final RecordLoadable<ChannelingModule> LOADER = new SimpleRecordLoadable<>(new EnumLoadable<>(ChannelingModule.class), "apply", null, false);
 
   @Override
   public RecordLoadable<? extends IHaveLoader> getLoader() {
@@ -62,7 +64,7 @@ public enum ChannelingModule implements ModifierModule, MeleeHitModifierHook, La
 
   @Override
   public void afterMeleeHit(IToolStackView tool, ModifierEntry modifier, ToolAttackContext context, float damageDealt) {
-    if (context.isFullyCharged()) {
+    if (context.isFullyCharged() && (this == MELEE || context.isProjectile())) {
       tryStrike(context.getLevel(), context.getPlayerAttacker(), context.getTarget().blockPosition());
     }
   }

@@ -492,7 +492,6 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
     buildModifier(ModifierIds.springy)
       .addModule(KnockbackModule.builder().eachLevel(0.25f))
       .addModule(KnockbackCounterModule.builder().constantFlat(0.5f).randomFlat(0.5f).build());
-    buildModifier(ModifierIds.channeling).levelDisplay(ModifierLevelDisplay.NO_LEVELS).addModule(ChannelingModule.INSTANCE);
 
     // fluid
     buildModifier(ModifierIds.spilling)
@@ -617,10 +616,16 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .addModule(ToolActionWalkerTransformModule.builder(ToolActions.HOE_TILL, SoundEvents.HOE_TILL).amount(0.5f, 1));
     buildModifier(ModifierIds.brushing).levelDisplay(ModifierLevelDisplay.NO_LEVELS).addModule(BrushModule.INSTANCE);
     buildModifier(ModifierIds.throwing).levelDisplay(ModifierLevelDisplay.NO_LEVELS).addModule(ThrowingModule.INSTANCE);
-    // mostly hardcoded at this time
     buildModifier(ModifierIds.returning)
       .addModule(new VolatileIntModule(ThrownTool.LOYALTY, LevelingInt.eachLevel(1)))
       .addModule(ModifierRequirementsModule.builder().requireModifier(ModifierIds.throwing, 1).modifierKey(ModifierIds.returning).build());
+    buildModifier(ModifierIds.channeling)
+      .levelDisplay(ModifierLevelDisplay.NO_LEVELS)
+      .addModule(new ChannelingModule(0.15f, 0.65f, 1.0f, false))
+      .addModule(ModifierRequirementsModule.builder()
+        .requireModifier(TinkerTags.Modifiers.CHANNELING, 1)
+        .displayModifier(ModifierIds.throwing, 1)
+        .modifierKey(ModifierIds.channeling).build());
 
     // fishing
     buildModifier(ModifierIds.fishing).levelDisplay(ModifierLevelDisplay.NO_LEVELS).addModule(FishingModule.INSTANCE);

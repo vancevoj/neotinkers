@@ -8,6 +8,7 @@
   "effects": [
     "Causes lightning to strike after attacks during storms",
     "Single level",
-    "Requires 1 ability slot"
+    "Requires 1 ability slot",
+    "Requires throwing or fishing"
   ]
 }

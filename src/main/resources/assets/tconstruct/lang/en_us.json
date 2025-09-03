@@ -2619,6 +2619,7 @@
   "modifier.tconstruct.channeling": "Channeling",
   "modifier.tconstruct.channeling.flavor": "Ka-chow!",
   "modifier.tconstruct.channeling.description": "Causes lightning to strike the target of attacks during storms.",
+  "modifier.tconstruct.channeling.requirements": "Channeling requires Throwing or Fishing",
 
   "modifier.tconstruct.fishing": "Fishing",
   "modifier.tconstruct.fishing.flavor": "Obligatory fishing minigame",
