@@ -59,34 +59,43 @@ public class ModifierTagProvider extends AbstractModifierTagProvider {
 
   @Override
   protected void addTags() {
-    tag(GEMS).addOptional(ModifierIds.diamond, ModifierIds.emerald);
+    tag(GEMS).add(ModifierIds.diamond, ModifierIds.emerald);
     tag(CHANNELING).add(ModifierIds.throwing, ModifierIds.fishing);
-    tag(INVISIBLE_INK_BLACKLIST)
-      .add(TinkerModifiers.embellishment.getId(), TinkerModifiers.dyed.getId(), TinkerModifiers.trim.getId(), TinkerModifiers.creativeSlot.getId(), TinkerModifiers.statOverride.getId())
-      .addOptional(ModifierIds.shiny, TinkerModifiers.golden.getId());
-    tag(EXTRACT_MODIFIER_BLACKLIST)
-      .add(TinkerModifiers.embellishment.getId(), TinkerModifiers.dyed.getId(), TinkerModifiers.trim.getId(), TinkerModifiers.creativeSlot.getId(), TinkerModifiers.statOverride.getId(), ModifierIds.rebalanced, ModifierIds.returning);
+    tag(INVISIBLE_INK_BLACKLIST).add(
+      TinkerModifiers.embellishment.getId(), TinkerModifiers.dyed.getId(), TinkerModifiers.trim.getId(),
+      TinkerModifiers.creativeSlot.getId(), TinkerModifiers.statOverride.getId(),
+      ModifierIds.shiny, TinkerModifiers.golden.getId()
+    );
+    tag(EXTRACT_MODIFIER_BLACKLIST).add(
+      TinkerModifiers.embellishment.getId(), TinkerModifiers.dyed.getId(), TinkerModifiers.trim.getId(),
+      TinkerModifiers.creativeSlot.getId(), TinkerModifiers.statOverride.getId(),
+      ModifierIds.rebalanced, ModifierIds.returning
+    );
     // blacklist modifiers that are not really slotless, they just have a slotless recipe
     tag(EXTRACT_SLOTLESS_BLACKLIST).add(ModifierIds.luck, ModifierIds.toolBelt);
     tag(EXTRACT_UPGRADE_BLACKLIST).add(ModifierIds.returning);
 
     // modifiers in this tag support both left click and right click interaction
-    tag(DUAL_INTERACTION)
-      .add(TinkerModifiers.bucketing.getId(), TinkerModifiers.splashing.getId(),
-           ModifierIds.glowing, TinkerModifiers.firestarter.getId(),
-           ModifierIds.stripping, ModifierIds.tilling, ModifierIds.pathing,
-           TinkerModifiers.shears.getId(), TinkerModifiers.harvest.getId(), ModifierIds.fishing)
-      .addOptional(ModifierIds.pockets);
-    tag(BLOCK_WHILE_CHARGING)
-      .add(TinkerModifiers.flinging.getId(), TinkerModifiers.springing.getId(), TinkerModifiers.bonking.getId(), TinkerModifiers.warping.getId(),
-           TinkerModifiers.spitting.getId(), ModifierIds.scope, ModifierIds.zoom, ModifierIds.brushing, ModifierIds.throwing);
-    tag(SLIME_DEFENSE)
-      .add(ModifierIds.meleeProtection, ModifierIds.projectileProtection,
-           ModifierIds.fireProtection, ModifierIds.magicProtection,
-           ModifierIds.blastProtection);
-    tag(OVERSLIME_FRIEND)
-      .add(ModifierIds.overgrowth, ModifierIds.overcast, ModifierIds.overshield, ModifierIds.overburn, ModifierIds.overlord,
-           ModifierIds.overforced, ModifierIds.overslimeFriend, TinkerModifiers.overworked.getId());
+    tag(DUAL_INTERACTION).add(
+      TinkerModifiers.bucketing.getId(), TinkerModifiers.splashing.getId(),
+      ModifierIds.glowing, TinkerModifiers.firestarter.getId(),
+      ModifierIds.stripping, ModifierIds.tilling, ModifierIds.pathing,
+      TinkerModifiers.shears.getId(), TinkerModifiers.harvest.getId(), ModifierIds.fishing,
+      ModifierIds.pockets
+    );
+    tag(BLOCK_WHILE_CHARGING).add(
+      TinkerModifiers.flinging.getId(), TinkerModifiers.springing.getId(), TinkerModifiers.bonking.getId(), TinkerModifiers.warping.getId(),
+      TinkerModifiers.spitting.getId(), ModifierIds.scope, ModifierIds.zoom, ModifierIds.brushing, ModifierIds.throwing
+    );
+    tag(SLIME_DEFENSE).add(
+      ModifierIds.meleeProtection, ModifierIds.projectileProtection,
+      ModifierIds.fireProtection, ModifierIds.magicProtection,
+      ModifierIds.blastProtection
+    );
+    tag(OVERSLIME_FRIEND).add(
+      ModifierIds.overgrowth, ModifierIds.overcast, ModifierIds.overshield, ModifierIds.overburn, ModifierIds.overlord,
+      ModifierIds.overforced, ModifierIds.overslimeFriend, TinkerModifiers.overworked.getId()
+    );
     tag(AOE_INTERACTION).add(ModifierIds.pathing, ModifierIds.stripping, ModifierIds.tilling, ModifierIds.brushing, TinkerModifiers.splashing.getId(), TinkerModifiers.harvest.getId());
     tag(CHARGE_EMPTY_BOW_WITH_DRAWTIME).add(TinkerModifiers.flinging.getId(), TinkerModifiers.springing.getId(), TinkerModifiers.bonking.getId(), TinkerModifiers.warping.getId());
     tag(CHARGE_EMPTY_BOW_WITHOUT_DRAWTIME).add(TinkerModifiers.blocking.getId(), ModifierIds.scope, ModifierIds.zoom);
