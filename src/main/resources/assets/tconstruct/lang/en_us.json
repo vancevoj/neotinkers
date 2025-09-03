@@ -2627,6 +2627,10 @@
   "modifier.tconstruct.grapple.flavor": "Pull the blocks to you",
   "modifier.tconstruct.grapple.description": "Allows you to pull yourself towards blocks grabbed by the fishing hook",
   "modifier.tconstruct.grapple.requirements": "Grapple requires Fishing",
+  "modifier.tconstruct.collecting": "Collecting",
+  "modifier.tconstruct.collecting.flavor": "Yoink!",
+  "modifier.tconstruct.collecting.description": "Allows the fishing hook to collect hooked items, XP, arrows, and thrown weapons.",
+  "modifier.tconstruct.collecting.requirements": "Collecting requires Fishing",
 
   "_comment": "Fluids",
   "modifier.tconstruct.melting": "Melting",

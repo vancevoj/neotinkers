@@ -1,12 +1,18 @@
 {
-  "level_display": "tconstruct:default",
+  "level_display": "tconstruct:no_levels",
   "modules": [
+    {
+      "type": "tconstruct:tool_actions",
+      "tool_actions": [
+        "item_hook"
+      ]
+    },
     {
       "type": "tconstruct:requirements",
       "display_modifiers": [
         {
           "level": 1,
-          "name": "tconstruct:throwing"
+          "name": "tconstruct:fishing"
         }
       ],
       "requirement": {
@@ -14,10 +20,10 @@
         "check": "all",
         "modifier": {
           "type": "tconstruct:single",
-          "modifier": "tconstruct:throwing"
+          "modifier": "tconstruct:fishing"
         }
       },
-      "translation_key": "modifier.tconstruct.loyalty.requirements"
+      "translation_key": "modifier.tconstruct.collecting.requirements"
     }
   ],
   "tooltip_display": "always"

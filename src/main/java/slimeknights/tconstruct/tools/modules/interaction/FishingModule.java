@@ -39,6 +39,7 @@ import slimeknights.tconstruct.library.tools.nbt.ModDataNBT;
 import slimeknights.tconstruct.library.tools.nbt.ModifierNBT;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
 import slimeknights.tconstruct.library.utils.Util;
+import slimeknights.tconstruct.tools.TinkerToolActions;
 import slimeknights.tconstruct.tools.entity.CombatFishingHook;
 
 import javax.annotation.Nullable;
@@ -102,6 +103,12 @@ public enum FishingModule implements ModifierModule, GeneralInteractionModifierH
           // copy tool data to the bobber for modifier hooks
           ModifierNBT modifiers = tool.getModifiers();
           hook.getCapability(EntityModifierCapability.CAPABILITY).ifPresent(cap -> cap.setModifiers(modifiers));
+          if (ModifierUtil.canPerformAction(tool, TinkerToolActions.GRAPPLE_HOOK)) {
+            hook.setGrapple();
+          }
+          if (ModifierUtil.canPerformAction(tool, TinkerToolActions.ITEM_HOOK)) {
+            hook.setCollecting();
+          }
 
           // fetch the persistent data for the hook as modifiers may want to store data
           ModDataNBT arrowData = PersistentDataCapability.getOrWarn(hook);

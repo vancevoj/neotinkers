@@ -16,6 +16,7 @@ import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.FishingHook;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
@@ -44,6 +45,7 @@ public class CombatFishingHook extends FishingHook implements ProjectileWithKnoc
   /** Force to apply for grapple. Will be divided by the square root of the desired distance. */
   private static final float GRAPPLE_STRENGTH = 0.58f;
   private static final EntityDataAccessor<Boolean> GRAPPLE = SynchedEntityData.defineId(CombatFishingHook.class, EntityDataSerializers.BOOLEAN);
+  private static final EntityDataAccessor<Boolean> COLLECTING = SynchedEntityData.defineId(CombatFishingHook.class, EntityDataSerializers.BOOLEAN);
 
   /** Damage dealt by the fishing hook */
   @Getter @Setter
@@ -57,13 +59,11 @@ public class CombatFishingHook extends FishingHook implements ProjectileWithKnoc
 
   public CombatFishingHook(EntityType<? extends FishingHook> pEntityType, Level pLevel) {
     super(pEntityType, pLevel);
-    setGrapple(false);
   }
 
   // set velocity to 0.6 for vanilla behavior
   public CombatFishingHook(Player player, Level level, int luck, int lure, float velocity, float inaccuracy) {
     super(TinkerTools.fishingHook.get(), level, luck, lure);
-    setGrapple(false);
     this.setOwner(player);
     float xRot = player.getXRot();
     float yRot = player.getYRot();
@@ -98,6 +98,7 @@ public class CombatFishingHook extends FishingHook implements ProjectileWithKnoc
   protected void defineSynchedData() {
     super.defineSynchedData();
     this.entityData.define(GRAPPLE, false);
+    this.entityData.define(COLLECTING, false);
   }
 
   @Override
@@ -105,18 +106,33 @@ public class CombatFishingHook extends FishingHook implements ProjectileWithKnoc
     this.knockback += amount;
   }
 
-  /** Sets the grapple level, causing the hook to pull the player when retrieved */
-  public void setGrapple(boolean value) {
-    this.entityData.set(GRAPPLE, value);
+  /** Enables grapple functionality */
+  public void setGrapple() {
+    this.entityData.set(GRAPPLE, true);
+  }
+
+  /** Enables collecting functionality */
+  public void setCollecting() {
+    this.entityData.set(COLLECTING, true);
   }
 
   /** Gets the current grapple amount */
-  public boolean isGrapple() {
+  private boolean isGrapple() {
     return entityData.get(GRAPPLE);
+  }
+
+  /** Gets the current grapple amount */
+  private boolean isCollecting() {
+    return entityData.get(COLLECTING);
   }
 
 
   /* Damage and knockback */
+
+  @Override
+  protected boolean canHitEntity(Entity target) {
+    return super.canHitEntity(target) || (isCollecting() && (target.getType().is(TinkerTags.EntityTypes.COLLECTABLES) || target instanceof AbstractArrow));
+  }
 
   @Override
   protected void onHitEntity(EntityHitResult result) {
@@ -129,9 +145,20 @@ public class CombatFishingHook extends FishingHook implements ProjectileWithKnoc
   protected void pullEntity(Entity target) {
     Entity owner = this.getOwner();
     if (owner != null) {
-      // TODO: probably want a modifier that prevents damage
-      // TODO: consider a tag for the immune entities instead of just the instance of check
-      if (power > 0 && !(target instanceof ItemEntity)) {
+      // if requested, collect the targeted item
+      // include arrows directly for modded arrow compat
+      boolean collectable = target.getType().is(TinkerTags.EntityTypes.COLLECTABLES) || target instanceof ItemEntity || target instanceof AbstractArrow;
+      if (collectable && isCollecting()) {
+        if (owner instanceof Player player) {
+          target.playerTouch(player);
+          if (target.isRemoved()) {
+            return;
+          }
+        }
+      }
+
+      // don't damage anything thats a collectable, mainly affects items
+      if (power > 0 && !collectable) {
         // mark target hurt
         if (owner instanceof LivingEntity living) {
           living.setLastHurtMob(target);

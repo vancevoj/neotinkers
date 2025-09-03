@@ -33,6 +33,7 @@
     "fishing":     "#C6A271",
     "lure":        "#F7CD36",
     "grapple":     "#B80000",
+    "collecting":  "#67718C",
 
     "__sling_abilities__": null,
     "flinging":  "#01cd4e",
