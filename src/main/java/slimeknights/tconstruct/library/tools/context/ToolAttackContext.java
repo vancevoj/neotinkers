@@ -10,6 +10,7 @@ import lombok.experimental.Accessors;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -17,7 +18,9 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.level.Level;
+import slimeknights.mantle.util.CombatHelper;
 import slimeknights.mantle.util.OffhandCooldownTracker;
+import slimeknights.tconstruct.common.TinkerDamageTypes;
 import slimeknights.tconstruct.library.tools.helper.ModifierUtil;
 import slimeknights.tconstruct.library.tools.helper.ToolAttackUtil;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
@@ -105,6 +108,17 @@ public class ToolAttackContext {
   /** Gets the level for this context */
   public Level getLevel() {
     return attacker.level();
+  }
+
+  /** Creates a damage source from the given context */
+  public DamageSource makeDamageSource() {
+    if (projectile != null) {
+      return CombatHelper.damageSource(TinkerDamageTypes.THROWN_TOOL, projectile, attacker);
+    }
+    if (playerAttacker != null) {
+      return attacker.damageSources().playerAttack(playerAttacker);
+    }
+    return attacker.damageSources().mobAttack(attacker);
   }
 
 

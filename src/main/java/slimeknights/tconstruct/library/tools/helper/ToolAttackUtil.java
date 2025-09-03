@@ -28,10 +28,8 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.entity.PartEntity;
 import net.minecraftforge.event.entity.player.CriticalHitEvent;
-import slimeknights.mantle.util.CombatHelper;
 import slimeknights.mantle.util.OffhandCooldownTracker;
 import slimeknights.tconstruct.TConstruct;
-import slimeknights.tconstruct.common.TinkerDamageTypes;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
@@ -136,14 +134,6 @@ public class ToolAttackUtil {
       }
     }
     return criticalModifier;
-  }
-
-  /** Performs a standard attack */
-  public static boolean dealDefaultDamage(LivingEntity attacker, Entity target, float damage) {
-    if (attacker instanceof Player player) {
-      return target.hurt(attacker.damageSources().playerAttack(player), damage);
-    }
-    return target.hurt(attacker.damageSources().mobAttack(attacker), damage);
   }
 
   /**
@@ -265,10 +255,8 @@ public class ToolAttackUtil {
     Projectile projectile = context.getProjectile();
     Entity targetEntity = context.getTarget();
     boolean isExtraAttack = context.isExtraAttack();
-    if (projectile != null) {
-      didHit = targetEntity.hurt(CombatHelper.damageSource(TinkerDamageTypes.THROWN_TOOL, projectile, attackerLiving), damage);
-    } else if (isExtraAttack) {
-      didHit = dealDefaultDamage(attackerLiving, targetEntity, damage);
+    if (isExtraAttack) {
+      didHit = targetEntity.hurt(context.makeDamageSource(), damage);
     } else {
       didHit = MeleeHitToolHook.dealDamage(tool, context, damage);
     }
@@ -514,6 +502,15 @@ public class ToolAttackUtil {
     }
     // TODO 1.21: consider inlining this method as its only used once
     return getSlotAttribute(tool, holder, slotType, Attributes.ATTACK_DAMAGE, tool.getStats().get(ToolStats.ATTACK_DAMAGE));
+  }
+
+  /** @deprecated use {@link ToolAttackContext#makeDamageSource()} */
+  @Deprecated(forRemoval = true)
+  public static boolean dealDefaultDamage(LivingEntity attacker, Entity target, float damage) {
+    if (attacker instanceof Player player) {
+      return target.hurt(attacker.damageSources().playerAttack(player), damage);
+    }
+    return target.hurt(attacker.damageSources().mobAttack(attacker), damage);
   }
 
   /** @deprecated use {@link #performAttack(IToolStackView, ToolAttackContext)} */

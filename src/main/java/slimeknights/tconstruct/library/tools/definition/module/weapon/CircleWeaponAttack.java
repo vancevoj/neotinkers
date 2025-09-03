@@ -61,7 +61,8 @@ public record CircleWeaponAttack(float diameter) implements MeleeHitToolHook, To
       }
 
       level.playSound(null, attacker.getX(), attacker.getY(), attacker.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, attacker.getSoundSource(), 1.0F, 1.0F);
-      if (attacker instanceof Player player) {
+      Player player = context.getPlayerAttacker();
+      if (!context.isProjectile() && player != null) {
         player.sweepAttack();
       }
     }
