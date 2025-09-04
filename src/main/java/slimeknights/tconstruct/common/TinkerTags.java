@@ -588,6 +588,8 @@ public class TinkerTags {
     /** Things that can be collected using {@link net.minecraft.world.entity.Entity#playerTouch(Player)} using a fishing rod. */
     public static final TagKey<EntityType<?>> COLLECTABLES = common("collectables");
 
+    /** Projectiles with this tag will not be discarded by any relevant modifiers. */
+    public static final TagKey<EntityType<?>> REUSABLE_AMMO = common("reusable_ammo");
     /** Projectiles with this tag cannot be reflected */
     public static final TagKey<EntityType<?>> REFLECTING_BLACKLIST = common("reflecting/blacklist");
     /** Projectiles with this tag cannot be reflected */
