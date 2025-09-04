@@ -701,6 +701,7 @@ public class TinkerTags {
     public static final TagKey<Modifier> SLOTLESS = local("slotless");
     public static final TagKey<Modifier> GENERAL_SLOTLESS = local("slotless/general");
     public static final TagKey<Modifier> BONUS_SLOTLESS = local("slotless/bonus");
+    public static final TagKey<Modifier> COSMETIC_SLOTLESS = local("slotless/cosmetic");
 
     // JEI
     public static final TagKey<Modifier> HIDDEN_FROM_RECIPE_VIEWERS = hiddenFromRecipeViewers(ModifierManager.REGISTRY_KEY);

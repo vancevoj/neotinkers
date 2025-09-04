@@ -20,6 +20,7 @@ import static slimeknights.tconstruct.common.TinkerTags.Modifiers.CHARGE_EMPTY_B
 import static slimeknights.tconstruct.common.TinkerTags.Modifiers.CHARGE_EMPTY_BOW_WITH_DRAWTIME;
 import static slimeknights.tconstruct.common.TinkerTags.Modifiers.CHESTPLATE_ABILITIES;
 import static slimeknights.tconstruct.common.TinkerTags.Modifiers.CHESTPLATE_UPGRADES;
+import static slimeknights.tconstruct.common.TinkerTags.Modifiers.COSMETIC_SLOTLESS;
 import static slimeknights.tconstruct.common.TinkerTags.Modifiers.DAMAGE_UPGRADES;
 import static slimeknights.tconstruct.common.TinkerTags.Modifiers.DEFENSE;
 import static slimeknights.tconstruct.common.TinkerTags.Modifiers.DUAL_INTERACTION;
@@ -106,7 +107,7 @@ public class ModifierTagProvider extends AbstractModifierTagProvider {
     this.tag(ABILITIES).addTag(GENERAL_ABILITIES, INTERACTION_ABILITIES, MELEE_ABILITIES, HARVEST_ABILITIES, ARMOR_ABILITIES, RANGED_ABILITIES);
     this.tag(ARMOR_ABILITIES).addTag(GENERAL_ARMOR_ABILITIES, HELMET_ABILITIES, CHESTPLATE_ABILITIES, LEGGING_ABILITIES, BOOT_ABILITIES, SHIELD_ABILITIES);
     this.tag(DEFENSE).addTag(PROTECTION_DEFENSE, SPECIAL_DEFENSE);
-    this.tag(SLOTLESS).addTag(GENERAL_SLOTLESS, BONUS_SLOTLESS);
+    this.tag(SLOTLESS).addTag(GENERAL_SLOTLESS, BONUS_SLOTLESS, COSMETIC_SLOTLESS);
 
     // upgrades
     this.tag(GENERAL_UPGRADES).add(
@@ -178,14 +179,17 @@ public class ModifierTagProvider extends AbstractModifierTagProvider {
 
     // slotless
     this.tag(GENERAL_SLOTLESS).add(
-      TinkerModifiers.overslime.getId(), ModifierIds.shiny, ModifierIds.worldbound,
-      ModifierIds.offhanded, ModifierIds.blindshot, ModifierIds.underbowed, ModifierIds.workbench,
-      TinkerModifiers.farsighted.getId(), TinkerModifiers.nearsighted.getId(), ModifierIds.barebow,
-      TinkerModifiers.dyed.getId(), TinkerModifiers.embellishment.getId(), TinkerModifiers.trim.getId());
+      TinkerModifiers.overslime.getId(), ModifierIds.worldbound,
+      ModifierIds.offhanded, ModifierIds.workbench,
+      ModifierIds.blindshot, ModifierIds.underbowed, ModifierIds.barebow);
     this.tag(BONUS_SLOTLESS).add(
       ModifierIds.draconic, ModifierIds.rebalanced,
       ModifierIds.harmonious, ModifierIds.recapitated, ModifierIds.forecast, ModifierIds.writable)
       .addOptional(ModifierIds.embossed);
+    this.tag(COSMETIC_SLOTLESS).add(
+      ModifierIds.shiny,
+      TinkerModifiers.dyed.getId(), TinkerModifiers.embellishment.getId(), TinkerModifiers.trim.getId(),
+      TinkerModifiers.farsighted.getId(), TinkerModifiers.nearsighted.getId());
   }
 
   @Override

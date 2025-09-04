@@ -1,17 +1,11 @@
 {
   "values": [
     "tconstruct:overslime",
-    "tconstruct:shiny",
     "tconstruct:worldbound",
     "tconstruct:offhanded",
+    "tconstruct:workbench",
     "tconstruct:blindshot",
     "tconstruct:underbowed",
-    "tconstruct:workbench",
-    "tconstruct:farsighted",
-    "tconstruct:nearsighted",
-    "tconstruct:barebow",
-    "tconstruct:dyed",
-    "tconstruct:embellishment",
-    "tconstruct:trim"
+    "tconstruct:barebow"
   ]
 }
