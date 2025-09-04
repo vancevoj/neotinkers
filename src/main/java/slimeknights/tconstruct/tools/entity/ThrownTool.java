@@ -160,8 +160,8 @@ public class ThrownTool extends ThrownTrident {
       // back off from the target
       this.setDeltaMovement(this.getDeltaMovement().multiply(-0.01, -0.1, -0.01));
       // play sound
-      if (tool.getModifiers().getLevel(ModifierIds.channeling) == 0) {
-        this.playSound(SoundEvents.TRIDENT_HIT, 1.0f, 1.0f);
+      if (!level().isClientSide && tool.getModifiers().getLevel(ModifierIds.channeling) == 0) {
+        this.playSound(tool.isBroken() ? SoundEvents.ITEM_BREAK : SoundEvents.TRIDENT_HIT, 1.0f, 1.0f);
       }
     }
   }

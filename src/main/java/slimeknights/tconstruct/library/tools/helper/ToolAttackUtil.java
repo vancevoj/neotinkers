@@ -372,7 +372,12 @@ public class ToolAttackUtil {
       if (!tool.hasTag(TinkerTags.Items.MELEE_PRIMARY)) {
         durabilityLost *= 2;
       }
-      ToolDamageUtil.damageAnimated(tool, durabilityLost, attackerLiving, sourceSlot);
+      // don't do the full damage animation for broken projectiles as it's not next to you, so that's weird
+      if (projectile != null) {
+        ToolDamageUtil.damage(tool, durabilityLost, attackerLiving, attackerLiving.getItemBySlot(sourceSlot));
+      } else {
+        ToolDamageUtil.damageAnimated(tool, durabilityLost, attackerLiving, sourceSlot);
+      }
     }
 
     return true;
