@@ -12,8 +12,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import slimeknights.mantle.data.loadable.mapping.SimpleRecordLoadable;
-import slimeknights.mantle.data.loadable.primitive.EnumLoadable;
+import slimeknights.mantle.data.loadable.primitive.BooleanLoadable;
+import slimeknights.mantle.data.loadable.primitive.FloatLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.data.registry.GenericLoaderRegistry.IHaveLoader;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
@@ -30,12 +30,14 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 /** Module causing a lighting strike at the target position */
-public enum ChannelingModule implements ModifierModule, MeleeHitModifierHook, LauncherHitModifierHook {
-  MELEE,
-  PROJECTILE;
-
+public record ChannelingModule(float clearChance, float rainChance, float thunderChance, boolean allowMelee) implements ModifierModule, MeleeHitModifierHook, LauncherHitModifierHook {
   private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<ChannelingModule>defaultHooks(ModifierHooks.MELEE_HIT, ModifierHooks.LAUNCHER_HIT);
-  public static final RecordLoadable<ChannelingModule> LOADER = new SimpleRecordLoadable<>(new EnumLoadable<>(ChannelingModule.class), "apply", null, false);
+  public static final RecordLoadable<ChannelingModule> LOADER = RecordLoadable.create(
+    FloatLoadable.PERCENT.requiredField("chance_clear", ChannelingModule::clearChance),
+    FloatLoadable.PERCENT.requiredField("chance_rain", ChannelingModule::rainChance),
+    FloatLoadable.PERCENT.requiredField("chance_thunder", ChannelingModule::thunderChance),
+    BooleanLoadable.INSTANCE.requiredField("allow_melee", ChannelingModule::allowMelee),
+    ChannelingModule::new);
 
   @Override
   public RecordLoadable<? extends IHaveLoader> getLoader() {
@@ -48,23 +50,35 @@ public enum ChannelingModule implements ModifierModule, MeleeHitModifierHook, La
   }
 
   /** Attempts to summon lightning at the target */
-  private static void tryStrike(Level level, @Nullable LivingEntity attacker, BlockPos target) {
-    if (level instanceof ServerLevel && level.isThundering() && level.canSeeSky(target)) {
-      LightningBolt lightning = EntityType.LIGHTNING_BOLT.create(level);
-      if (lightning != null) {
-        lightning.moveTo(Vec3.atBottomCenterOf(target));
-        if (attacker instanceof ServerPlayer player) {
-          lightning.setCause(player);
+  private void tryStrike(Level level, @Nullable LivingEntity attacker, BlockPos target) {
+    if (level instanceof ServerLevel && level.canSeeSky(target)) {
+      // select chance based on weather
+      float chance;
+      if (level.isThundering()) {
+        chance = thunderChance;
+      } else if (level.isRaining()) {
+        chance = rainChance;
+      } else {
+        chance = clearChance;
+      }
+      // if the chance passes, spawn lightning
+      if (chance >= 1 || level.random.nextFloat() < chance) {
+        LightningBolt lightning = EntityType.LIGHTNING_BOLT.create(level);
+        if (lightning != null) {
+          lightning.moveTo(Vec3.atBottomCenterOf(target));
+          if (attacker instanceof ServerPlayer player) {
+            lightning.setCause(player);
+          }
+          level.addFreshEntity(lightning);
+          level.playSound(null, target, SoundEvents.TRIDENT_THUNDER, SoundSource.NEUTRAL, 5, 1);
         }
-        level.addFreshEntity(lightning);
-        level.playSound(null, target, SoundEvents.TRIDENT_THUNDER, SoundSource.NEUTRAL, 5, 1);
       }
     }
   }
 
   @Override
   public void afterMeleeHit(IToolStackView tool, ModifierEntry modifier, ToolAttackContext context, float damageDealt) {
-    if (context.isFullyCharged() && (this == MELEE || context.isProjectile())) {
+    if (context.isFullyCharged() && (allowMelee || context.isProjectile())) {
       tryStrike(context.getLevel(), context.getPlayerAttacker(), context.getTarget().blockPosition());
     }
   }

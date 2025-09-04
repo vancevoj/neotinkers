@@ -2,7 +2,7 @@
   "modifier_id": "tconstruct:channeling",
   "text": [
     {
-      "text": "During storms, lightning will strike the target exposed to the sky."
+      "text": "Adds a chance for lightning to strike thrown tools and fishing hooks based on the weather. In clear skies, has a 15% chance; 65% chance in the rain; and 100% chance in thunder storms."
     }
   ],
   "more_text_space": true,
