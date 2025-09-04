@@ -97,7 +97,7 @@ public class ModifierTagProvider extends AbstractModifierTagProvider {
       ModifierIds.overforced, ModifierIds.overslimeFriend, TinkerModifiers.overworked.getId()
     );
     tag(AOE_INTERACTION).add(ModifierIds.pathing, ModifierIds.stripping, ModifierIds.tilling, ModifierIds.brushing, TinkerModifiers.splashing.getId(), TinkerModifiers.harvest.getId());
-    tag(CHARGE_EMPTY_BOW_WITH_DRAWTIME).add(TinkerModifiers.flinging.getId(), TinkerModifiers.springing.getId(), TinkerModifiers.bonking.getId(), TinkerModifiers.warping.getId());
+    tag(CHARGE_EMPTY_BOW_WITH_DRAWTIME).add(TinkerModifiers.flinging.getId(), TinkerModifiers.springing.getId(), TinkerModifiers.bonking.getId(), TinkerModifiers.warping.getId(), ModifierIds.throwing);
     tag(CHARGE_EMPTY_BOW_WITHOUT_DRAWTIME).add(TinkerModifiers.blocking.getId(), ModifierIds.scope, ModifierIds.zoom);
 
     // book tags

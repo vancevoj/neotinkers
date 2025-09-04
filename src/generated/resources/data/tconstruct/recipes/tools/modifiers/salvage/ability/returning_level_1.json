@@ -12,7 +12,7 @@
         "tag": "tconstruct:modifiable/durability"
       },
       {
-        "tag": "tconstruct:modifiable/interactable/charge/modifier"
+        "tag": "tconstruct:modifiable/interactable/charge"
       }
     ]
   }

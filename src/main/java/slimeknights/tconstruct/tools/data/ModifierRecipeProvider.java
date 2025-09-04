@@ -681,13 +681,13 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
       .save(consumer, prefix(ModifierIds.collecting, abilityFolder));
 
     // throwing
-    Ingredient chargeableNotBows = IntersectionIngredient.of(
+    Ingredient chargable = IntersectionIngredient.of(
       Ingredient.of(TinkerTags.Items.DURABILITY),
-      Ingredient.of(TinkerTags.Items.INTERACTABLE_CHARGE_MODIFIER)
+      Ingredient.of(TinkerTags.Items.INTERACTABLE_CHARGE)
     );
     Ingredient bowLimb = MaterialIngredient.of(TinkerToolParts.bowLimb.get());
     ModifierRecipeBuilder.modifier(ModifierIds.throwing)
-      .setTools(chargeableNotBows)
+      .setTools(chargable)
       .addInput(bowLimb)
       .addInput(TinkerMaterials.cinderslime.getIngotTag())
       .addInput(MaterialIngredient.of(TinkerToolParts.bowGrip.get()))
@@ -696,7 +696,7 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
       .saveSalvage(consumer, prefix(ModifierIds.throwing, abilitySalvage))
       .save(consumer, prefix(ModifierIds.throwing, abilityFolder));
     MultilevelModifierRecipeBuilder.modifier(ModifierIds.returning)
-      .setTools(chargeableNotBows)
+      .setTools(chargable)
       .addInput(Items.ENDER_PEARL)
       .addInput(Items.CLOCK)
       .addInput(Items.ENDER_PEARL)
@@ -1313,7 +1313,10 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .addInput(bowLimb)
                          .setSlots(SlotType.ABILITY, 1)
                          // swasher gets spitting to get multishot, rest get to spit with their non-spit. No spitting with arrows
-                         .setTools(chargeableNotBows)
+                         .setTools(IntersectionIngredient.of(
+                           Ingredient.of(TinkerTags.Items.DURABILITY),
+                           Ingredient.of(TinkerTags.Items.INTERACTABLE_CHARGE_MODIFIER)
+                         ))
                          .saveSalvage(consumer, prefix(TinkerModifiers.spitting, abilitySalvage))
                          .save(consumer, prefix(TinkerModifiers.spitting, abilityFolder));
     ModifierRecipeBuilder.modifier(ModifierIds.tank)
