@@ -2269,7 +2269,10 @@
 
   "modifier.tconstruct.power": "Power",
   "modifier.tconstruct.power.flavor": "The power within becomes the power without",
-  "modifier.tconstruct.power.description": "Boosts damage of arrows",
+  "modifier.tconstruct.power.description": "Boosts damage of arrows and other launched projectiles",
+  "modifier.tconstruct.underbowed": "Underbowed",
+  "modifier.tconstruct.underbowed.flavor": "The power without becomes the power within",
+  "modifier.tconstruct.underbowed.description": "Reduces the power of the launcher",
   "modifier.tconstruct.quick_charge": "Quick Charge",
   "modifier.tconstruct.quick_charge.flavor": "For when you are tired of all the extra fees",
   "modifier.tconstruct.quick_charge.description": "Increases drawspeed of ranged weapons",

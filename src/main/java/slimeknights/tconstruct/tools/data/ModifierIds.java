@@ -77,6 +77,7 @@ public class ModifierIds {
 
   // ranged
   public static final ModifierId power = id("power");
+  public static final ModifierId underbowed = id("underbowed");
   public static final ModifierId punch = id("punch");
   public static final ModifierId quickCharge = id("quick_charge");
   public static final ModifierId trueshot = id("trueshot");
