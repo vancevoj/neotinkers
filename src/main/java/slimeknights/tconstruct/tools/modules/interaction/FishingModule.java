@@ -74,7 +74,8 @@ public enum FishingModule implements ModifierModule, GeneralInteractionModifierH
 
   @Override
   public InteractionResult onToolUse(IToolStackView tool, ModifierEntry modifier, Player player, InteractionHand hand, InteractionSource source) {
-    if (source != InteractionSource.ARMOR && !tool.isBroken() && tool.getHook(ToolHooks.INTERACTION).canInteract(tool, modifier.getId(), source)) {
+    // disallow casting if the main hand can cast. Only comes up if the main hand is doing left click fishing; vanilla limitations means we can't support that
+    if (source != InteractionSource.ARMOR && !tool.isBroken() && tool.getHook(ToolHooks.INTERACTION).canInteract(tool, modifier.getId(), source) && (hand == InteractionHand.MAIN_HAND || !player.getMainHandItem().canPerformAction(ToolActions.FISHING_ROD_CAST))) {
       Level level = player.level();
       if (player.fishing != null) {
         ItemStack stack = player.getItemInHand(hand);
