@@ -9,6 +9,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -36,6 +37,7 @@ import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.entity.ProjectileWithKnockback;
 import slimeknights.tconstruct.library.modifiers.entity.ProjectileWithPower;
 import slimeknights.tconstruct.library.tools.helper.ToolAttackUtil;
+import slimeknights.tconstruct.library.tools.helper.ToolDamageUtil;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.tools.TinkerTools;
@@ -130,9 +132,25 @@ public class CombatFishingHook extends FishingHook implements ProjectileWithKnoc
 
   /* Damage and knockback */
 
-  @Override
-  protected boolean canHitEntity(Entity target) {
-    return super.canHitEntity(target) || (isCollecting() && (target.getType().is(TinkerTags.EntityTypes.COLLECTABLES) || target instanceof AbstractArrow));
+  /** Damages the rod if locatable */
+  private void damageRod() {
+    // we damage on both cast and release to prevent some cheese with some modifiers and swapping items post cast
+    if (!level().isClientSide && getOwner() instanceof LivingEntity living) {
+      ItemStack stack = living.getMainHandItem();
+      InteractionHand hand = InteractionHand.MAIN_HAND;
+      // must be able to cast
+      if (!stack.canPerformAction(ToolActions.FISHING_ROD_CAST)) {
+        stack = living.getOffhandItem();
+        if (!stack.canPerformAction(ToolActions.FISHING_ROD_CAST)) {
+          return;
+        }
+        hand = InteractionHand.OFF_HAND;
+      }
+      // must be modifiable
+      if (stack.is(TinkerTags.Items.MODIFIABLE)) {
+        ToolDamageUtil.damageAnimated(ToolStack.from(stack), 1, living, hand);
+      }
+    }
   }
 
   @Override
@@ -140,6 +158,12 @@ public class CombatFishingHook extends FishingHook implements ProjectileWithKnoc
     super.onHitEntity(result);
     // store the impact velocity to scale our damage later
     impactVelocity = this.getDeltaMovement().length();
+    damageRod();
+  }
+
+  @Override
+  protected boolean canHitEntity(Entity target) {
+    return super.canHitEntity(target) || (target.isAlive() && isCollecting() && (target.getType().is(TinkerTags.EntityTypes.COLLECTABLES) || target instanceof AbstractArrow));
   }
 
   @Override
@@ -242,9 +266,11 @@ public class CombatFishingHook extends FishingHook implements ProjectileWithKnoc
           entry.getHook(ModifierHooks.LAUNCHER_HIT).onLauncherHitBlock(tool, entry, this, living, pos);
         }
       }
-      return Math.max(2, super.retrieve(stack));
+      // do at least 2 damage, but not more than 3, practically this should always be 2
+      return Mth.clamp(super.retrieve(stack), 2, 3);
     }
-    return super.retrieve(stack);
+    // deal 3 damage for mob hooking instead of 5
+    return Math.min(super.retrieve(stack), 3);
   }
 
   @Override

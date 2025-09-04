@@ -118,9 +118,6 @@ public enum FishingModule implements ModifierModule, GeneralInteractionModifierH
             entry.getHook(ModifierHooks.PROJECTILE_LAUNCH).onProjectileLaunch(tool, entry, player, ItemStack.EMPTY, hook, null, arrowData, true);
           }
           level.addFreshEntity(hook);
-
-          // we damage on both cast and release to prevent some cheese with some modifiers and swapping items post cast
-          ToolDamageUtil.damageAnimated(tool, 1, player, hand);
         }
 
         player.awardStat(Stats.ITEM_USED.get(tool.getItem()));
