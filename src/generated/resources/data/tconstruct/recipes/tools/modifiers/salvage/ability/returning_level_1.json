@@ -1,18 +1,9 @@
 {
-  "type": "tconstruct:modifier",
-  "allow_crystal": true,
-  "inputs": [
-    {
-      "item": "minecraft:clock"
-    }
-  ],
-  "level": {
-    "max": 4,
-    "min": 2
-  },
-  "result": "tconstruct:returning",
+  "type": "tconstruct:modifier_salvage",
+  "level": 1,
+  "modifier": "tconstruct:returning",
   "slots": {
-    "upgrades": 1
+    "abilities": 1
   },
   "tools": {
     "type": "forge:intersection",

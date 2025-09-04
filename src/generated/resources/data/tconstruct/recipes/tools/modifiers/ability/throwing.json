@@ -4,7 +4,15 @@
   "check_trait_level": true,
   "inputs": [
     {
-      "item": "minecraft:trident"
+      "type": "tconstruct:material",
+      "item": "tconstruct:bow_limb"
+    },
+    {
+      "tag": "forge:ingots/cinderslime"
+    },
+    {
+      "type": "tconstruct:material",
+      "item": "tconstruct:bow_grip"
     }
   ],
   "level": 1,
