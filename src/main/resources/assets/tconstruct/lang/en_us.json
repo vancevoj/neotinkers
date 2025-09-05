@@ -2044,8 +2044,8 @@
 
   "material.tconstruct.ironwood": "Ironwood",
   "material.tconstruct.ironwood.flavor": "Is it wood?",
-  "material.tconstruct.ironwood.encyclopedia": "When losing durability, tool loses 1 extra durability to share durability with a random tool in the hotbar or offhand. Target gains 1 barkskin plus 1 per level.",
-  "material.tconstruct.ironwood.armor": "When losing durability, tool loses 1 extra durability to share durability with a random equipped armor. Target gains 1 barkskin plus 1 per level.",
+  "material.tconstruct.ironwood.encyclopedia": "When losing 1 durability, tool loses 1 extra durability (bypassing modifiers) to share durability with a random tool in the hotbar or offhand. Target gains 1 barkskin plus 1 per level.",
+  "material.tconstruct.ironwood.armor": "When losing 1 durability, tool loses 1 extra durability (bypassing modifiers) to share durability with a random equipped armor. Target gains 1 barkskin plus 1 per level.",
 
 
   "__comment": "Tier 3 Integration Materials",
@@ -2932,6 +2932,7 @@
   "modifier.tconstruct.holy": "Holy",
   "modifier.tconstruct.holy.flavor": "Die, Fowl Creature!",
   "modifier.tconstruct.holy.description": "Arrows deal bonus damage against undead",
+  "modifier.tconstruct.holy.projectile_damage": "Undead Damage",
   "modifier.tconstruct.consecrated": "Consecrated",
   "modifier.tconstruct.consecrated.flavor": "Die, Fowl Creature!",
   "modifier.tconstruct.consecrated.description": "Take less damage from the undead",
