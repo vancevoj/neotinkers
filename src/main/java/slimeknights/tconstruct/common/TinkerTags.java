@@ -643,8 +643,6 @@ public class TinkerTags {
     private static void init() {}
     /** Gem modifiers, one of which is needed for netherite */
     public static final TagKey<Modifier> GEMS = local("gems");
-    /** Modifiers allowing access to the channeling modifier */
-    public static final TagKey<Modifier> CHANNELING = local("channeling");
     /** Blacklist for modifiers that cannot be hidden with invisible ink */
     public static final TagKey<Modifier> INVISIBLE_INK_BLACKLIST = local("invisible_ink_blacklist");
     /** Blacklist for modifiers that cannot be extracted via the general recipe */

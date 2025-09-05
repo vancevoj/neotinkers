@@ -693,13 +693,12 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
       .save(consumer, prefix(ModifierIds.collecting, abilityFolder));
 
     // throwing
-    Ingredient chargable = IntersectionIngredient.of(
-      Ingredient.of(TinkerTags.Items.DURABILITY),
-      Ingredient.of(TinkerTags.Items.INTERACTABLE_CHARGE)
-    );
     Ingredient bowLimb = MaterialIngredient.of(TinkerToolParts.bowLimb.get());
     ModifierRecipeBuilder.modifier(ModifierIds.throwing)
-      .setTools(chargable)
+      .setTools(IntersectionIngredient.of(
+        Ingredient.of(TinkerTags.Items.DURABILITY),
+        Ingredient.of(TinkerTags.Items.INTERACTABLE_CHARGE)
+      ))
       .addInput(bowLimb)
       .addInput(TinkerMaterials.cinderslime.getIngotTag())
       .addInput(MaterialIngredient.of(TinkerToolParts.bowGrip.get()))
@@ -708,7 +707,7 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
       .saveSalvage(consumer, prefix(ModifierIds.throwing, abilitySalvage))
       .save(consumer, prefix(ModifierIds.throwing, abilityFolder));
     MultilevelModifierRecipeBuilder.modifier(ModifierIds.returning)
-      .setTools(chargable)
+      .setTools(TinkerTags.Items.MELEE_WEAPON)
       .addInput(Items.ENDER_PEARL)
       .addInput(Items.CLOCK)
       .addInput(Items.ENDER_PEARL)
@@ -1259,7 +1258,7 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
       .addInput(Blocks.LIGHTNING_ROD)
       .setMaxLevel(1).checkTraitLevel()
       .setSlots(SlotType.ABILITY, 1)
-      .setTools(ingredientFromTags(TinkerTags.Items.MELEE, TinkerTags.Items.FISHING_RODS))
+      .setTools(ingredientFromTags(TinkerTags.Items.MELEE_WEAPON, TinkerTags.Items.FISHING_RODS))
       .saveSalvage(consumer, prefix(ModifierIds.channeling, abilitySalvage))
       .save(consumer, prefix(ModifierIds.channeling, abilityFolder));
 

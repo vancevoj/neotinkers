@@ -605,16 +605,8 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .addModule(ToolActionWalkerTransformModule.builder(ToolActions.HOE_TILL, SoundEvents.HOE_TILL).amount(0.5f, 1));
     buildModifier(ModifierIds.brushing).levelDisplay(ModifierLevelDisplay.NO_LEVELS).addModule(BrushModule.INSTANCE);
     buildModifier(ModifierIds.throwing).levelDisplay(ModifierLevelDisplay.NO_LEVELS).addModule(ThrowingModule.INSTANCE);
-    buildModifier(ModifierIds.returning)
-      .addModule(new VolatileIntModule(ThrownTool.LOYALTY, LevelingInt.eachLevel(1)))
-      .addModule(ModifierRequirementsModule.builder().requireModifier(ModifierIds.throwing, 1).modifierKey(ModifierIds.returning).build());
-    buildModifier(ModifierIds.channeling)
-      .levelDisplay(ModifierLevelDisplay.NO_LEVELS)
-      .addModule(new ChannelingModule(0.15f, 0.65f, 1.0f, false))
-      .addModule(ModifierRequirementsModule.builder()
-        .requireModifier(TinkerTags.Modifiers.CHANNELING, 1)
-        .displayModifier(ModifierIds.throwing, 1)
-        .modifierKey(ModifierIds.channeling).build());
+    buildModifier(ModifierIds.returning).addModule(new VolatileIntModule(ThrownTool.LOYALTY, LevelingInt.eachLevel(1)));
+    buildModifier(ModifierIds.channeling).levelDisplay(ModifierLevelDisplay.NO_LEVELS).addModule(new ChannelingModule(0.15f, 0.65f, 1.0f, false));
     buildModifier(ModifierIds.ballista).levelDisplay(ModifierLevelDisplay.NO_LEVELS).addModule(new VolatileFlagModule(ModifiableBowItem.KEY_BALLISTA));
 
     // fishing
