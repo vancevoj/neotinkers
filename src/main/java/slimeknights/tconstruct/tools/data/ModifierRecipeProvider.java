@@ -591,6 +591,15 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .saveSalvage(consumer, prefix(ModifierIds.trickQuiver, abilitySalvage))
                          .setTools(IntersectionIngredient.of(Ingredient.of(TinkerTags.Items.BOWS), Ingredient.of(TinkerTags.Items.INTERACTABLE)))
                          .save(consumer, prefix(ModifierIds.trickQuiver, abilityFolder));
+    ModifierRecipeBuilder.modifier(ModifierIds.ballista)
+      .addInput(TinkerMaterials.hepatizon.getIngotTag())
+      .addInput(Items.CHAIN)
+      .addInput(TinkerMaterials.hepatizon.getIngotTag())
+      .setSlots(SlotType.ABILITY, 1)
+      .setMaxLevel(1).checkTraitLevel()
+      .setTools(TinkerTags.Items.BALLISTAS)
+      .saveSalvage(consumer, prefix(ModifierIds.ballista, abilitySalvage))
+      .save(consumer, prefix(ModifierIds.ballista, abilityFolder));
     BiConsumer<ItemLike,String> crystalshotRecipe = (item, variant) ->
       SwappableModifierRecipeBuilder.modifier(ModifierIds.crystalshot, variant)
                                     .addInput(item)

@@ -140,6 +140,7 @@ public class ModifierIds {
   public static final ModifierId brushing = id("brushing");
   public static final ModifierId throwing = id("throwing");
   public static final ModifierId returning = id("returning");
+  public static final ModifierId ballista = id("ballista");
 
   // fishing
   public static final ModifierId fishing = id("fishing");

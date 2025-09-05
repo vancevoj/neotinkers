@@ -2291,6 +2291,7 @@
   "modifier.tconstruct.freezing": "Freezing",
   "modifier.tconstruct.freezing.flavor": "Alright, everyone. Chill!",
   "modifier.tconstruct.freezing.description": "Causes melee attacks, fired arrows, and counterattacks to freeze the target",
+
   "modifier.tconstruct.bulk_quiver": "Bulk Quiver",
   "modifier.tconstruct.bulk_quiver.flavor": "Holding arrows is overrated",
   "modifier.tconstruct.bulk_quiver.description": "Allows the bow to pull arrows from its own inventory when you run out of arrows, access by sneaking and attacking",
@@ -2323,6 +2324,9 @@
   "modifier.tconstruct.war_charge.flavor": "Potential energy",
   "modifier.tconstruct.war_charge.description": "Mining blocks while loaded increases the velocity of the next shot",
   "modifier.tconstruct.war_charge.velocity": "Velocity",
+  "modifier.tconstruct.ballista": "Ballista",
+  "modifier.tconstruct.ballista.flavor": "The better longbow ammo",
+  "modifier.tconstruct.ballista.description": "Allows the bow to fire melee from your other hand.",
 
   "_comment": "Armor",
   "modifier.tconstruct.knockback_resistance": "Knockback Resistance",
