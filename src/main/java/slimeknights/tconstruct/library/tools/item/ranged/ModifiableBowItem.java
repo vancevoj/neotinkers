@@ -96,7 +96,7 @@ public class ModifiableBowItem extends ModifiableLauncherItem {
   /* Arrow launching */
 
   /** Checks if the given tool is a ballista */
-  private static boolean isBallista(IToolStackView tool) {
+  public static boolean isBallista(IToolStackView tool) {
     return tool.hasTag(TinkerTags.Items.BALLISTAS) && tool.getVolatileData().getBoolean(KEY_BALLISTA);
   }
 

@@ -185,6 +185,7 @@ import slimeknights.tconstruct.tools.modules.interaction.PlaceGlowModule;
 import slimeknights.tconstruct.tools.modules.interaction.ThrowingModule;
 import slimeknights.tconstruct.tools.modules.ranged.BulkQuiverModule;
 import slimeknights.tconstruct.tools.modules.ranged.PunchModule;
+import slimeknights.tconstruct.tools.modules.ranged.QuiverInventoryModule;
 import slimeknights.tconstruct.tools.modules.ranged.RestrictAngleModule;
 import slimeknights.tconstruct.tools.modules.ranged.TrickQuiverModule;
 
@@ -437,25 +438,11 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
     buildModifier(ModifierIds.blindshot).addModule(StatBoostModule.add(ToolStats.ACCURACY).eachLevel(-0.1f));
     // ammo
     buildModifier(ModifierIds.trickQuiver).priority(70) // before bulk quiver
-      .addModule(InventoryModule.builder().pattern(pattern("tipped_arrow"))
-                                .toolItem(ItemPredicate.tag(TinkerTags.Items.CROSSBOWS).inverted())
-                                .filter(TinkerPredicate.ARROW)
-                                .limitPerLevel(32).flatSlots(3))
-      .addModule(InventoryModule.builder().pattern(pattern("tipped_arrow"))
-                                .toolItem(ItemPredicate.tag(TinkerTags.Items.CROSSBOWS))
-                                .filter(ItemPredicate.or(TinkerPredicate.ARROW, ItemPredicate.set(Items.FIREWORK_ROCKET)))
-                                .limitPerLevel(32).flatSlots(3))
+      .addModule(QuiverInventoryModule.builder().pattern(pattern("tipped_arrow")).limitPerLevel(32).flatSlots(3))
       .addModule(TrickQuiverModule.INSTANCE)
       .addModule(InventoryMenuModule.ANY);
     buildModifier(ModifierIds.bulkQuiver).priority(60) // after trick quiver, before crystalshot
-      .addModule(InventoryModule.builder().pattern(pattern("arrow"))
-                                .toolItem(ItemPredicate.tag(TinkerTags.Items.CROSSBOWS).inverted())
-                                .filter(TinkerPredicate.ARROW)
-                                .slotsPerLevel(2))
-      .addModule(InventoryModule.builder().pattern(pattern("arrow"))
-                                .toolItem(ItemPredicate.tag(TinkerTags.Items.CROSSBOWS))
-                                .filter(ItemPredicate.or(TinkerPredicate.ARROW, ItemPredicate.set(Items.FIREWORK_ROCKET)))
-                                .slotsPerLevel(2))
+      .addModule(QuiverInventoryModule.builder().pattern(pattern("arrow")).slotsPerLevel(2))
       .addModule(new BulkQuiverModule(true))
       .addModule(InventoryMenuModule.ANY);
     buildModifier(ModifierIds.crystalshot).priority(50) // after bulk quiver
