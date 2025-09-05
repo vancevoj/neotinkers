@@ -132,10 +132,10 @@ public class FluidEffectProvider extends AbstractFluidEffectProvider {
     FluidMobEffect returningEffect = new FluidMobEffect(TinkerEffects.returning.get(), 7*20, 1, null);
     addSlime(TinkerFluids.enderSlime)
       .addEntityEffects(FluidMobEffect.builder().effect(MobEffects.MOVEMENT_SLOWDOWN, 20*5).buildEntity(TimeAction.ADD))
+      // if returning, extend it, need to do this first as otherwise we extend ourself
+      .addEntityEffect(hasReturning, new MobEffectFluidEffect(returningEffect, TimeAction.ADD))
       // if no returning, give returning then teleport
       .addEntityEffect(hasReturning.inverted(), SequenceFluidEffect.entities().effect(new MobEffectFluidEffect(returningEffect, TimeAction.SET)).effect(FluidEffect.TELEPORT).build())
-      // if returning, extend it
-      .addEntityEffect(hasReturning, new MobEffectFluidEffect(returningEffect, TimeAction.ADD))
       .addBlockEffect(SequenceFluidEffect.blocks().effect(new BreakBlockFluidEffect(0)).effect(new PlaceBlockFluidEffect(null)).build());
 
     // slimelike - miscelaneous //
