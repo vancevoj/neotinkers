@@ -4,11 +4,11 @@
     {
       "type": "tconstruct:quiver_inventory",
       "limit": {
-        "each_level": 32
+        "flat": 32
       },
       "pattern": "tconstruct:tipped_arrow",
       "slots": {
-        "flat": 3
+        "each_level": 3
       }
     },
     {

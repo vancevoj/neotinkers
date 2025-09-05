@@ -2299,7 +2299,6 @@
   "modifier.tconstruct.trick_quiver.flavor": "Be cool like Hawkeye",
   "modifier.tconstruct.trick_quiver.description": "Gives the bow three toggleable arrow slots. Select the slot by attacking, or access them by sneaking and attacking",
   "modifier.tconstruct.trick_quiver.disabled": "Trick Quiver: Disabled",
-  "modifier.tconstruct.trick_quiver.empty": "Trick Quiver: No arrows in slot %s, using standard arrows",
   "modifier.tconstruct.trick_quiver.selected": "Trick Quiver: Selected %s from slot %s",
   "modifier.tconstruct.crystalshot": "Crystalshot",
   "modifier.tconstruct.crystalshot.flavor": "Holding arrows is overrated",

@@ -438,7 +438,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
     buildModifier(ModifierIds.blindshot).addModule(StatBoostModule.add(ToolStats.ACCURACY).eachLevel(-0.1f));
     // ammo
     buildModifier(ModifierIds.trickQuiver).priority(70) // before bulk quiver
-      .addModule(QuiverInventoryModule.builder().pattern(pattern("tipped_arrow")).limitPerLevel(32).flatSlots(3))
+      .addModule(QuiverInventoryModule.builder().pattern(pattern("tipped_arrow")).flatLimit(32).slotsPerLevel(3))
       .addModule(TrickQuiverModule.INSTANCE)
       .addModule(InventoryMenuModule.ANY);
     buildModifier(ModifierIds.bulkQuiver).priority(60) // after trick quiver, before crystalshot
