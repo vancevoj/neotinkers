@@ -67,6 +67,7 @@ import slimeknights.tconstruct.library.json.variable.protection.EntityProtection
 import slimeknights.tconstruct.library.json.variable.stat.EntityConditionalStatVariable;
 import slimeknights.tconstruct.library.json.variable.tool.ModDataSource;
 import slimeknights.tconstruct.library.json.variable.tool.ModDataVariable;
+import slimeknights.tconstruct.library.json.variable.tool.StatMultiplierVariable;
 import slimeknights.tconstruct.library.json.variable.tool.ToolStatVariable;
 import slimeknights.tconstruct.library.json.variable.tool.ToolVariable;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
@@ -646,6 +647,66 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .addModule(new CapacityBarModule(LevelingInt.eachLevel(100), ToolStats.DURABILITY))
       .addModule(new DurabilityShieldModule(0xAAFFFF))
       .addModule(DamageToCapacityModule.source(DamageSourcePredicate.tag(DamageTypeTags.IS_FREEZING)).reduceDamage().flat(1));
+    buildModifier(ModifierIds.stonebound)
+      .addModule(ConditionalMiningSpeedModule.builder()
+        .percent()
+        .formula()
+        // square root of the lost durability, though stat multiplier reduces the effectiveness
+        .customVariable("lost", ToolVariable.CURRENT_DAMAGE)
+        .customVariable("max", new StatMultiplierVariable(ToolStats.DURABILITY))
+        .divide().sqrt()
+        // multiply effect by level of trait
+        .variable(LEVEL).multiply()
+        // we get a percent per value remaining
+        .constant(0.01f).multiply()
+        .constant(1).add()
+        // multiply into the final value
+        .variable(VALUE).multiply().build())
+      .addModule(ConditionalMeleeDamageModule.builder()
+        .percent()
+        .formula()
+        // square root of the lost durability, though stat multiplier reduces the effectiveness
+        .customVariable("lost", ToolVariable.CURRENT_DAMAGE)
+        .customVariable("max", new StatMultiplierVariable(ToolStats.DURABILITY))
+        .divide().sqrt()
+        // multiply effect by level of trait
+        .variable(LEVEL).multiply()
+        // we lose half a percent per value remaining
+        .constant(-0.005f).multiply()
+        .constant(1).add()
+        // multiply into the final value
+        .variable(VALUE).multiply().build());
+    // same as stonebound with the signs flipped
+    buildModifier(ModifierIds.jagged)
+      .addModule(ConditionalMeleeDamageModule.builder()
+        .percent()
+        .formula()
+        // square root of the lost durability, though stat multiplier reduces the effectiveness
+        .customVariable("lost", ToolVariable.CURRENT_DAMAGE)
+        .customVariable("max", new StatMultiplierVariable(ToolStats.DURABILITY))
+        .divide().sqrt()
+        // multiply effect by level of trait
+        .variable(LEVEL).multiply()
+        // we gain half a percent per value remaining
+        .constant(0.005f).multiply()
+        .constant(1).add()
+        // multiply into the final value
+        .variable(VALUE).multiply().build())
+      .addModule(ConditionalMiningSpeedModule.builder()
+        .percent()
+        .formula()
+        // square root of the lost durability, though stat multiplier reduces the effectiveness
+        .customVariable("lost", ToolVariable.CURRENT_DAMAGE)
+        .customVariable("max", new StatMultiplierVariable(ToolStats.DURABILITY))
+        .divide().sqrt()
+        // multiply effect by level of trait
+        .variable(LEVEL).multiply()
+        // we lose a percent per value remaining
+        .constant(-0.01f).multiply()
+        .constant(1).add()
+        // multiply into the final value
+        .variable(VALUE).multiply().build());
+
     // traits - tier 2
     buildModifier(ModifierIds.stoneshield)
       .priority(175) // higher than overslime, to ensure this is removed first

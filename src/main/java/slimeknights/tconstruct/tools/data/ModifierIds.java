@@ -154,6 +154,8 @@ public class ModifierIds {
 
   // traits - tier 1
   public static final ModifierId cultivated = id("cultivated");
+  public static final ModifierId stonebound = id("stonebound");
+  public static final ModifierId jagged = id("jagged");
   public static final ModifierId stringy = id("stringy");
   public static final ModifierId unburdened = id("unburdened");
   public static final ModifierId depthProtection = id("depth_protection");
