@@ -35,6 +35,7 @@ import slimeknights.mantle.data.predicate.damage.DamageSourcePredicate;
 import slimeknights.mantle.data.predicate.damage.DamageTypePredicate;
 import slimeknights.mantle.data.predicate.damage.SourceAttackerPredicate;
 import slimeknights.mantle.data.predicate.entity.HasEnchantmentEntityPredicate;
+import slimeknights.mantle.data.predicate.entity.HasMobEffectPredicate;
 import slimeknights.mantle.data.predicate.entity.LivingEntityPredicate;
 import slimeknights.mantle.data.predicate.entity.MobTypePredicate;
 import slimeknights.mantle.data.predicate.item.ItemPredicate;
@@ -46,7 +47,6 @@ import slimeknights.tconstruct.library.data.tinkering.AbstractModifierProvider;
 import slimeknights.tconstruct.library.json.LevelingInt;
 import slimeknights.tconstruct.library.json.LevelingValue;
 import slimeknights.tconstruct.library.json.RandomLevelingValue;
-import slimeknights.tconstruct.library.json.predicate.HasMobEffectPredicate;
 import slimeknights.tconstruct.library.json.predicate.TinkerPredicate;
 import slimeknights.tconstruct.library.json.predicate.tool.HasModifierPredicate;
 import slimeknights.tconstruct.library.json.predicate.tool.PersistentDataPredicate;
@@ -427,7 +427,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .addModule(MeleeAttributeModule.builder(Attributes.ARMOR, Operation.ADDITION).eachLevel(-1))
       // use a mob effect to make this work on ranged, to ensure it automatically cancels
       .addModule(MobEffectModule.builder(TinkerEffects.pierce.get()).level(RandomLevelingValue.perLevel(0, 1)).time(RandomLevelingValue.flat(2)).build(), ModifierHooks.PROJECTILE_HIT);
-    buildModifier(ModifierIds.chargeAttack).levelDisplay(ModifierLevelDisplay.NO_LEVELS).addModule(ConditionalMeleeDamageModule.builder().attacker(TinkerPredicate.SPRINTING).flat(7));
+    buildModifier(ModifierIds.chargeAttack).levelDisplay(ModifierLevelDisplay.NO_LEVELS).addModule(ConditionalMeleeDamageModule.builder().attacker(LivingEntityPredicate.SPRINTING).flat(7));
 
     // ranged
     buildModifier(ModifierIds.power).addModule(StatBoostModule.add(ToolStats.PROJECTILE_DAMAGE).amount(0.5f, 0.5f));

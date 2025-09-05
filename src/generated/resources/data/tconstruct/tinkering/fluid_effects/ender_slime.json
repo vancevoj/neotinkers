@@ -40,7 +40,7 @@
       "target": {
         "type": "mantle:inverted",
         "effect": "tconstruct:returning",
-        "inverted_type": "tconstruct:has_effect"
+        "inverted_type": "mantle:has_effect"
       }
     },
     {
@@ -53,7 +53,7 @@
         "time": 140
       },
       "target": {
-        "type": "tconstruct:has_effect",
+        "type": "mantle:has_effect",
         "effect": "tconstruct:returning"
       }
     }

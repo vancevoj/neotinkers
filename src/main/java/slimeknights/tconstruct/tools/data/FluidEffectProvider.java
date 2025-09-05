@@ -21,6 +21,8 @@ import net.minecraftforge.common.crafting.conditions.ModLoadedCondition;
 import net.minecraftforge.fluids.FluidType;
 import slimeknights.mantle.data.predicate.IJsonPredicate;
 import slimeknights.mantle.data.predicate.block.BlockPredicate;
+import slimeknights.mantle.data.predicate.entity.BlockAtEntityPredicate;
+import slimeknights.mantle.data.predicate.entity.HasMobEffectPredicate;
 import slimeknights.mantle.data.predicate.entity.LivingEntityPredicate;
 import slimeknights.mantle.recipe.data.FluidNameIngredient;
 import slimeknights.mantle.recipe.helper.ItemOutput;
@@ -32,9 +34,7 @@ import slimeknights.tconstruct.common.data.FakeRegistryEntry;
 import slimeknights.tconstruct.fluids.TinkerFluids;
 import slimeknights.tconstruct.library.data.tinkering.AbstractFluidEffectProvider;
 import slimeknights.tconstruct.library.json.LevelingValue;
-import slimeknights.tconstruct.library.json.predicate.BlockAtFeetEntityPredicate;
 import slimeknights.tconstruct.library.json.predicate.HarvestTierPredicate;
-import slimeknights.tconstruct.library.json.predicate.HasMobEffectPredicate;
 import slimeknights.tconstruct.library.json.predicate.TinkerPredicate;
 import slimeknights.tconstruct.library.modifiers.fluid.FluidEffect;
 import slimeknights.tconstruct.library.modifiers.fluid.FluidMobEffect;
@@ -89,7 +89,7 @@ public class FluidEffectProvider extends AbstractFluidEffectProvider {
     addFluid(Fluids.WATER, FluidValues.SIP)
       .addDamage(LivingEntityPredicate.WATER_SENSITIVE, 2f, TinkerDamageTypes.WATER)
       .addEntityEffect(FluidEffect.EXTINGUISH_FIRE)
-      .addBlockEffect(BlockPredicate.or(TinkerPredicate.BLOCKS_MOTION, BlockPredicate.tag(TinkerTags.Blocks.UNREPLACABLE_BY_LIQUID)).inverted(), new BreakBlockFluidEffect(0));
+      .addBlockEffect(BlockPredicate.or(BlockPredicate.BLOCKS_MOTION, BlockPredicate.tag(TinkerTags.Blocks.UNREPLACABLE_BY_LIQUID)).inverted(), new BreakBlockFluidEffect(0));
     addFluid(TinkerFluids.powderedSnow, FluidType.BUCKET_VOLUME / 10)
       .coldDamage(2f)
       .addEntityEffect(new FreezeFluidEffect(TimeAction.ADD, 80))
@@ -309,8 +309,8 @@ public class FluidEffectProvider extends AbstractFluidEffectProvider {
       Block concreteSprayed = FakeRegistryEntry.block(new ResourceLocation(ie, "concrete_sprayed"));
       AreaMobEffectFluidEffect concreteFeet = new AreaMobEffectFluidEffect(new FluidMobEffect(FakeRegistryEntry.effect(new ResourceLocation(ie, "concrete_feet")), MobEffectInstance.INFINITE_DURATION, 1), TimeAction.SET, GroupCost.MAX);
       compatFluid(ie, "concrete", 100)
-        .addEntityEffect(new BlockAtFeetEntityPredicate(TinkerPredicate.CAN_BE_REPLACED), new SetBlockFluidEffect(concreteSprayed))
-        .offsetBlockEffect(TinkerPredicate.CAN_BE_REPLACED, new SetBlockFluidEffect(concreteSprayed))
+        .addEntityEffect(new BlockAtEntityPredicate(BlockPredicate.CAN_BE_REPLACED, 0), new SetBlockFluidEffect(concreteSprayed))
+        .offsetBlockEffect(BlockPredicate.CAN_BE_REPLACED, new SetBlockFluidEffect(concreteSprayed))
         .addEntityEffect(concreteFeet).offsetBlockEffect(concreteFeet);
     }
 
