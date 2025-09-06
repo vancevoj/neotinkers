@@ -43,6 +43,7 @@ public class ThrownTool extends ThrownTrident {
   private IToolStackView tool = null;
   private float charge = 1;
   private float multiplier = 1;
+  private boolean noDespawn = false;
 
   public ThrownTool(EntityType<? extends ThrownTrident> type, Level level) {
     super(type, level);
@@ -59,11 +60,17 @@ public class ThrownTool extends ThrownTrident {
     }
     // trident - stack constructor
     this.tridentItem = stack.copyWithCount(1);
-    this.entityData.set(STACK, tridentItem);
-    this.entityData.set(ID_LOYALTY, (byte) ModifierUtil.getVolatileInt(stack, LOYALTY));
-    this.entityData.set(ID_FOIL, ModifierUtil.checkVolatileFlag(stack, ModifiableItem.SHINY));
     this.charge = charge;
     this.multiplier = multiplier;
+    updateFromStack();
+  }
+
+  /** Sets any relevant properties from the stack */
+  private void updateFromStack() {
+    this.entityData.set(STACK, tridentItem);
+    this.entityData.set(ID_LOYALTY, (byte) ModifierUtil.getVolatileInt(tridentItem, LOYALTY));
+    this.entityData.set(ID_FOIL, ModifierUtil.checkVolatileFlag(tridentItem, ModifiableItem.SHINY));
+    this.noDespawn = ModifierUtil.checkVolatileFlag(tridentItem, IndestructibleItemEntity.INDESTRUCTIBLE_ENTITY);
   }
 
   @Override
@@ -83,7 +90,7 @@ public class ThrownTool extends ThrownTrident {
         this.discard();
       }
       // if its worldbound or loyalty, don't despawn
-    } else if (this.entityData.get(ID_LOYALTY) == 0 && getTool().getVolatileData().getBoolean(IndestructibleItemEntity.INDESTRUCTIBLE_ENTITY)) {
+    } else if (!noDespawn && this.entityData.get(ID_LOYALTY) == 0) {
       // otherwise despawn in 5 minutes like a normal item. Like seriously mojang, why does your rare enchanted trident despawn in 1 minute?
       this.life += 1;
       if (this.life >= 6000) {
@@ -200,8 +207,7 @@ public class ThrownTool extends ThrownTrident {
     super.readAdditionalSaveData(tag);
     // update the tool to sync to client, if its set
     if (tag.contains("Trident", CompoundTag.TAG_COMPOUND)) {
-      this.entityData.set(STACK, tridentItem);
-      this.entityData.set(ID_LOYALTY, (byte) ModifierUtil.getVolatileInt(tridentItem, LOYALTY));
+      updateFromStack();
     }
     this.charge = tag.getFloat(KEY_CHARGE);
     this.multiplier = tag.getFloat(KEY_MULTIPLIER);
