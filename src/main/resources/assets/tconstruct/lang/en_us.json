@@ -1082,6 +1082,9 @@
   "item.tconstruct.tool.id_format": "%s (%s)",
   "item.tconstruct.tool.material_separator": "-",
 
+  "entity.tconstruct.thrown_tool": "Thrown Tool",
+  "entity.tconstruct.fishing_bobber": "Fishing Bobber",
+
   "item.tconstruct.pickaxe": "Pickaxe",
   "item.tconstruct.sledge_hammer": "Sledge Hammer",
   "item.tconstruct.vein_hammer": "Vein Hammer",
