@@ -25,6 +25,7 @@ import slimeknights.tconstruct.library.tools.helper.ToolDamageUtil;
 import slimeknights.tconstruct.library.tools.item.ModifiableItem;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
+import slimeknights.tconstruct.library.tools.stat.ToolStats;
 import slimeknights.tconstruct.tools.TinkerModifiers;
 import slimeknights.tconstruct.tools.TinkerTools;
 import slimeknights.tconstruct.tools.data.ModifierIds;
@@ -41,12 +42,13 @@ public class ThrownTool extends ThrownTrident {
   @Nullable
   private IToolStackView tool = null;
   private float charge = 1;
+  private float multiplier = 1;
 
   public ThrownTool(EntityType<? extends ThrownTrident> type, Level level) {
     super(type, level);
   }
 
-  public ThrownTool(Level level, LivingEntity shooter, ItemStack stack, float charge) {
+  public ThrownTool(Level level, LivingEntity shooter, ItemStack stack, float charge, float multiplier) {
     this(TinkerTools.thrownTool.get(), level);
     // AbstractArrow - positional constructor
     this.setPos(shooter.getX(), shooter.getEyeY() - 0.1, shooter.getZ());
@@ -61,6 +63,7 @@ public class ThrownTool extends ThrownTrident {
     this.entityData.set(ID_LOYALTY, (byte) ModifierUtil.getVolatileInt(stack, LOYALTY));
     this.entityData.set(ID_FOIL, ModifierUtil.checkVolatileFlag(stack, ModifiableItem.SHINY));
     this.charge = charge;
+    this.multiplier = multiplier;
   }
 
   @Override
@@ -117,6 +120,7 @@ public class ThrownTool extends ThrownTrident {
 
   @Override
   public void tick() {
+    // TODO: consider expiry time for loyalty
     if (!dealtDamage && inGroundTime > 4) {
       // we don't damage the tool on throw, so instead damage it when it hits a block or an entity
       if (!tridentItem.isEmpty()) {
@@ -142,7 +146,7 @@ public class ThrownTool extends ThrownTrident {
         // does not actually matter which slot we use, just need the tool there to ensure hooks are properly run
         owner.setItemInHand(InteractionHand.OFF_HAND, tridentItem);
         // TODO: consider whether redundant sound is fine
-        if (ToolAttackUtil.performAttack(tool, ToolAttackContext.attacker(owner).target(target).hand(InteractionHand.OFF_HAND).applyStats(tool).cooldown(charge).projectile(this).build())) {
+        if (ToolAttackUtil.performAttack(tool, ToolAttackContext.attacker(owner).target(target).hand(InteractionHand.OFF_HAND).baseDamage(tool.getStats().get(ToolStats.ATTACK_DAMAGE) * multiplier).cooldown(charge).projectile(this).build())) {
           if (target.getType() == EntityType.ENDERMAN && tool.getModifiers().getLevel(TinkerModifiers.enderference.getId()) == 0) {
             // restore held item
             owner.setItemInHand(InteractionHand.OFF_HAND, offhand);
@@ -179,6 +183,18 @@ public class ThrownTool extends ThrownTrident {
     return this.entityData.get(STACK);
   }
 
+
+  /* NBT */
+  private static final String KEY_CHARGE = "charge";
+  private static final String KEY_MULTIPLIER = "multiplier";
+
+  @Override
+  public void addAdditionalSaveData(CompoundTag tag) {
+    super.addAdditionalSaveData(tag);
+    tag.putFloat(KEY_CHARGE, this.charge);
+    tag.putFloat(KEY_MULTIPLIER, this.multiplier);
+  }
+
   @Override
   public void readAdditionalSaveData(CompoundTag tag) {
     super.readAdditionalSaveData(tag);
@@ -187,5 +203,7 @@ public class ThrownTool extends ThrownTrident {
       this.entityData.set(STACK, tridentItem);
       this.entityData.set(ID_LOYALTY, (byte) ModifierUtil.getVolatileInt(tridentItem, LOYALTY));
     }
+    this.charge = tag.getFloat(KEY_CHARGE);
+    this.multiplier = tag.getFloat(KEY_MULTIPLIER);
   }
 }

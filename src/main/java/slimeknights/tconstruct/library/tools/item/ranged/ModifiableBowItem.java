@@ -224,7 +224,7 @@ public class ModifiableBowItem extends ModifiableLauncherItem {
       for (int arrowIndex = 0; arrowIndex < ammo.getCount(); arrowIndex++) {
         AbstractArrow arrow;
         if (thrownTool) {
-          arrow = new ThrownTool(level, living, ammo, charge);
+          arrow = new ThrownTool(level, living, ammo, charge, velocity);
         } else {
           arrow = arrowItem.createArrow(level, ammo, living);
         }
