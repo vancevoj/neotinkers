@@ -241,7 +241,7 @@ public class ModifiableBowItem extends ModifiableLauncherItem {
 
         // just store all modifiers on the tool for simplicity
         ModifierNBT modifiers = tool.getModifiers();
-        arrow.getCapability(EntityModifierCapability.CAPABILITY).ifPresent(cap -> cap.setModifiers(modifiers));
+        EntityModifierCapability.getCapability(arrow).addModifiers(modifiers);
 
         // fetch the persistent data for the arrow as modifiers may want to store data
         ModDataNBT arrowData = PersistentDataCapability.getOrWarn(arrow);
