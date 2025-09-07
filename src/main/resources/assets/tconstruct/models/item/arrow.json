@@ -7,6 +7,7 @@
     "feather": "tconstruct:item/tool/ammo/arrow_feather"
   },
   "modifier_roots": [ "tconstruct:item/tool/ammo/arrow_modifiers/" ],
+  "first_modifiers": [ "tconstruct:dyed" ],
   "parts": [
     { "name": "shaft", "index": 1 },
     { "name": "head",  "index": 0 },
