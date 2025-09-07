@@ -34,7 +34,7 @@ public class TinkerMaterialSpriteProvider extends AbstractMaterialSpriteProvider
   protected void addAllMaterials() {
     // unknown: just do a black border, make sure it stands out when data is missing
     buildMaterial(IMaterial.UNKNOWN_ID)
-      .meleeHarvest().ranged()
+      .meleeHarvest().ranged().arrowHead().arrowShaft()
       // not using the helper to avoid catching armor models
       .statType(PlatingMaterialStats.TYPES)
       .statType(StatlessMaterialStats.SHIELD_CORE, StatlessMaterialStats.MAILLE, StatlessMaterialStats.CUIRASS)
