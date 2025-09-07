@@ -294,12 +294,13 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .addInput(Items.ENCHANTED_GOLDEN_APPLE)
                          .setMaxLevel(1)
                          .save(consumer, prefix(ModifierIds.shiny, slotlessFolder));
+    Ingredient sighted = ingredientFromTags(TinkerTags.Items.HELD, TinkerTags.Items.ARMOR);
     IncrementalModifierRecipeBuilder.modifier(TinkerModifiers.farsighted)
-                                    .setTools(TinkerTags.Items.MODIFIABLE)
+                                    .setTools(sighted)
                                     .setInput(Tags.Items.CROPS_CARROT, 1, 45)
                                     .save(consumer, prefix(TinkerModifiers.farsighted, upgradeFolder));
     IncrementalModifierRecipeBuilder.modifier(TinkerModifiers.nearsighted)
-                                    .setTools(TinkerTags.Items.MODIFIABLE)
+                                    .setTools(sighted)
                                     .setInput(Items.INK_SAC, 1, 45)
                                     .save(consumer, prefix(TinkerModifiers.nearsighted, upgradeFolder));
     ModifierRecipeBuilder.modifier(ModifierIds.offhanded)
@@ -697,6 +698,7 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
     ModifierRecipeBuilder.modifier(ModifierIds.throwing)
       .setTools(IntersectionIngredient.of(
         Ingredient.of(TinkerTags.Items.DURABILITY),
+        Ingredient.of(TinkerTags.Items.MELEE_WEAPON),
         Ingredient.of(TinkerTags.Items.INTERACTABLE_CHARGE)
       ))
       .addInput(bowLimb)

@@ -1056,6 +1056,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
         .formula()
         .customVariable("equipment", new EntityMeleeVariable(equipmentCount, WhichEntity.TARGET, 4))
         .constant(0.5f).multiply()
+        .variable(LEVEL).multiply()
         .variable(MULTIPLIER).multiply()
         .variable(VALUE).add()
         .build())

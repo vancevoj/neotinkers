@@ -372,13 +372,13 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
     // tier 4 (end)
     addMaterialStats(MaterialIds.knightmetal,
       new LimbMaterialStats(512, 0.2f, 0.05f, -0.1f),
-      new GripMaterialStats(1.0f, 0.1f, 3.0f));
+      new GripMaterialStats(0, 0.1f, 3.0f));
     addMaterialStats(MaterialIds.enderslimeVine, StatlessMaterialStats.BOWSTRING);
 
     // tier 4 (compat)
     addMaterialStats(MaterialIds.fiery,
       new LimbMaterialStats(1024, -0.25f, 0.2f, -0.05f),
-      new GripMaterialStats(1.0f, 0.05f, 3.5f));
+      new GripMaterialStats(0, 0.05f, 3.5f));
   }
 
   private void addArmor() {
