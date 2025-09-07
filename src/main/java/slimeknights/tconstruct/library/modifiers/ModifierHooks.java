@@ -267,10 +267,13 @@ public class ModifierHooks {
   public static final ModuleHook<ProjectileLaunchModifierHook> PROJECTILE_LAUNCH;
   /** Hook for throwing a projectile that will not be firing {@link #PROJECTILE_HIT} later. */
   public static final ModuleHook<ProjectileLaunchModifierHook> PROJECTILE_THROWN;
+  /** Hook for when a projectile is launched, but called with the projectile tool rather than the launcher */
+  public static final ModuleHook<ProjectileLaunchModifierHook> PROJECTILE_SHOT;
   static {
     ProjectileLaunchModifierHook defaultInstance = (tool, modifier, shooter, projectile, arrow, persistentData, primary) -> {};
     Function<Collection<ProjectileLaunchModifierHook>,ProjectileLaunchModifierHook> merger = ProjectileLaunchModifierHook.AllMerger::new;
     PROJECTILE_LAUNCH = register("projectile_launch", ProjectileLaunchModifierHook.class, merger, defaultInstance);
+    PROJECTILE_SHOT = register("projectile_shot", ProjectileLaunchModifierHook.class, merger, defaultInstance);
     PROJECTILE_THROWN = register("projectile_thrown", ProjectileLaunchModifierHook.class, merger, defaultInstance);
   }
   /** Hook called when an arrow hits an entity or block */

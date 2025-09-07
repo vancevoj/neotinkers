@@ -35,7 +35,7 @@ import slimeknights.tconstruct.tools.data.ModifierIds;
 import javax.annotation.Nullable;
 
 /** Based on {@link net.minecraft.world.entity.projectile.ThrownTrident} for throwing a modifiable weapon. */
-public class ThrownTool extends ThrownTrident {
+public class ThrownTool extends ThrownTrident implements ToolProjectile {
   /** Key to sync the stack to the client */
   protected static final EntityDataAccessor<ItemStack> STACK = SynchedEntityData.defineId(ThrownTool.class, EntityDataSerializers.ITEM_STACK);
   /** Volatile integer key for the loyalty level */
@@ -196,8 +196,8 @@ public class ThrownTool extends ThrownTrident {
     this.entityData.define(STACK, ItemStack.EMPTY);
   }
 
-  /** Gets the tool for display. Use {@link #getPickupItem()} for pickup. */
-  public ItemStack getToolItem() {
+  @Override
+  public ItemStack getDisplayTool() {
     return this.entityData.get(STACK);
   }
 

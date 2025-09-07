@@ -304,7 +304,7 @@ public class TooltipUtil {
   }
 
   /**
-   * Gets the  default information for the given tool stack
+   * Gets the armor information for the given tool stack
    *
    * @param tool      the tool stack
    * @param tooltip   Tooltip list
@@ -332,6 +332,26 @@ public class TooltipUtil {
     }
     return builder.getTooltips();
   }
+
+  /**
+   * Gets the ammo information for the given tool stack
+   *
+   * @param tool      the tool stack
+   * @param tooltip   Tooltip list
+   * @param flag      Tooltip flag
+   * @return List from the parameter after filling
+   */
+  public static List<Component> getAmmoStats(IToolStackView tool, @Nullable Player player, List<Component> tooltip, TooltipKey key, TooltipFlag flag) {
+    TooltipBuilder builder = new TooltipBuilder(tool, tooltip);
+    builder.add(ToolStats.PROJECTILE_DAMAGE);
+    builder.add(ToolStats.ACCURACY);
+    builder.addAllFreeSlots();
+    for (ModifierEntry entry : tool.getModifierList()) {
+      entry.getHook(ModifierHooks.TOOLTIP).addTooltip(tool, entry, player, tooltip, key, flag);
+    }
+    return builder.getTooltips();
+  }
+
 
   /**
    * Gets the tooltip of the components list of a tool

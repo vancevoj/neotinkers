@@ -1082,6 +1082,7 @@
   "item.tconstruct.tool.id_format": "%s (%s)",
   "item.tconstruct.tool.material_separator": "-",
 
+  "entity.tconstruct.arrow": "Arrow",
   "entity.tconstruct.thrown_tool": "Thrown Tool",
   "entity.tconstruct.fishing_bobber": "Fishing Bobber",
 

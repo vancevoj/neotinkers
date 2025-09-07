@@ -133,6 +133,8 @@ public class ToolClientEvents extends ClientEventBase {
     event.registerEntityRenderer(TinkerTools.crystalshotEntity.get(), CrystalshotRenderer::new);
     // TODO: custom renderer?
     event.registerEntityRenderer(TinkerTools.fishingHook.get(), FishingHookRenderer::new);
+    // TODO: config option for vanilla style renderer
+    event.registerEntityRenderer(TinkerTools.materialArrow.get(), ThrownToolRenderer::new);
     event.registerEntityRenderer(TinkerTools.thrownTool.get(), ThrownToolRenderer::new);
     event.registerEntityRenderer(TinkerModifiers.fluidSpitEntity.get(), FluidEffectProjectileRenderer::new);
   }
