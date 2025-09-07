@@ -27,10 +27,12 @@ import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.minecraftforge.common.ToolAction;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import slimeknights.mantle.client.SafeClientAccess;
 import slimeknights.tconstruct.TConstruct;
+import slimeknights.tconstruct.library.client.item.ModifiableItemClientExtension;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.hook.behavior.AttributesModifierHook;
@@ -352,7 +354,7 @@ public abstract class ModifiableLauncherItem extends ProjectileWeaponItem implem
   }
 
 
-  /* Display items */
+  /* Display */
 
   @Override
   public ItemStack getRenderTool() {
@@ -360,6 +362,11 @@ public abstract class ModifiableLauncherItem extends ProjectileWeaponItem implem
       toolForRendering = ToolBuildHandler.buildToolForRendering(this, this.getToolDefinition());
     }
     return toolForRendering;
+  }
+
+  @Override
+  public void initializeClient(Consumer<IClientItemExtensions> consumer) {
+    consumer.accept(ModifiableItemClientExtension.INSTANCE);
   }
 
 
