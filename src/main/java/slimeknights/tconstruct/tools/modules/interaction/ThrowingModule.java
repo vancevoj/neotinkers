@@ -71,7 +71,7 @@ public enum ThrowingModule implements ModifierModule, GeneralInteractionModifier
     // can't throw something with no melee stats, will do nothing
     if (!tool.isBroken() && source == InteractionSource.RIGHT_CLICK && tool.hasTag(TinkerTags.Items.MELEE_WEAPON)) {
       // use attack speed together with drawspeed to ensure you are not making insanely slow weapons and throwing to bypass
-      tool.getPersistentData().putInt(KEY_DRAWTIME, (int)Math.ceil(30f / (tool.getStats().get(ToolStats.ATTACK_SPEED) * ConditionalStatModifierHook.getModifiedStat(tool, player, ToolStats.PROJECTILE_DAMAGE))));
+      tool.getPersistentData().putInt(KEY_DRAWTIME, (int)Math.ceil(20f / (tool.getStats().get(ToolStats.ATTACK_SPEED) * ConditionalStatModifierHook.getModifiedStat(tool, player, ToolStats.DRAW_SPEED))));
       GeneralInteractionModifierHook.startUsing(tool, modifier.getId(), player, hand);
       return InteractionResult.CONSUME;
     }
