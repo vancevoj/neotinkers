@@ -24,6 +24,7 @@ import slimeknights.tconstruct.library.recipe.tinkerstation.ITinkerStationContai
 import slimeknights.tconstruct.library.recipe.tinkerstation.ITinkerStationRecipe;
 import slimeknights.tconstruct.library.tools.definition.module.material.ToolPartsHook;
 import slimeknights.tconstruct.library.tools.item.IModifiable;
+import slimeknights.tconstruct.library.tools.item.IModifiableDisplay;
 import slimeknights.tconstruct.library.tools.layout.LayoutSlot;
 import slimeknights.tconstruct.library.tools.layout.StationSlotLayoutLoader;
 import slimeknights.tconstruct.library.tools.nbt.LazyToolStack;
@@ -66,6 +67,7 @@ public class ToolBuildingRecipe implements ITinkerStationRecipe {
   protected final List<Ingredient> ingredients;
   protected List<LayoutSlot> layoutSlots;
   protected List<List<ItemStack>> allToolParts;
+  protected ItemStack displayOutput;
   public static final int X_OFFSET = -6;
   public static final int Y_OFFSET = -15;
   public static final int SLOT_SIZE = 18;
@@ -75,7 +77,7 @@ public class ToolBuildingRecipe implements ITinkerStationRecipe {
    * Typically matches the output definition ID, but some tool recipes share a single layout.
    */
   public ResourceLocation getLayoutSlotId() {
-    return Objects.requireNonNullElse(layoutSlot, getOutput().getToolDefinition().getId());
+    return Objects.requireNonNullElse(layoutSlot, output.getToolDefinition().getId());
   }
 
   /** Gets the layout slots so we know where go position item slots for guis */
@@ -101,7 +103,7 @@ public class ToolBuildingRecipe implements ITinkerStationRecipe {
 
   /** Gets the tool parts for this tool */
   public List<IToolPart> getToolParts() {
-    return ToolPartsHook.parts(getOutput().getToolDefinition());
+    return ToolPartsHook.parts(output.getToolDefinition());
   }
 
   /**
@@ -117,6 +119,17 @@ public class ToolBuildingRecipe implements ITinkerStationRecipe {
         .toList();
     }
     return allToolParts;
+  }
+
+  /** Gets the result to display */
+  public ItemStack getDisplayOutput() {
+    if (displayOutput == null) {
+      displayOutput = output instanceof IModifiableDisplay modifiable ? modifiable.getRenderTool() : output.asItem().getDefaultInstance();
+      if (outputCount > 1) {
+        displayOutput = displayOutput.copyWithCount(outputCount);
+      }
+    }
+    return displayOutput;
   }
 
   /** Gets the additional recipe requirements beyond the tool parts */
