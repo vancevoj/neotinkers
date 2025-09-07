@@ -312,6 +312,7 @@
   "pattern.tconstruct.small_blade": "Small Blade",
   "pattern.tconstruct.adze_head": "Adze Head",
   "pattern.tconstruct.bow_limb": "Bow Limb",
+  "pattern.tconstruct.arrow_head": "Arrow Head",
 
   "_comment": "Large Head Patterns",
 
@@ -333,6 +334,7 @@
   "pattern.tconstruct.tool_handle": "Tool Handle",
   "pattern.tconstruct.tough_handle": "Tough Handle",
   "pattern.tconstruct.bow_grip": "Bow Grip",
+  "pattern.tconstruct.arrow_shaft": "Arrow Shaft",
 
 
   "_comment": "Tinkers Gold Casts",
@@ -1181,6 +1183,8 @@
   "item.tconstruct.bow_limb": "Bow Limb",
   "item.tconstruct.bow_grip": "Bow Grip",
   "item.tconstruct.bowstring": "Bowstring",
+  "item.tconstruct.arrow_head": "Arrow Head",
+  "item.tconstruct.arrow_shaft": "Arrow Shaft",
 
   "item.tconstruct.helmet_plating": "Helmet Plating",
   "item.tconstruct.chestplate_plating": "Chest Plating",

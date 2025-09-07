@@ -420,9 +420,12 @@ public class ItemTagProvider extends ItemTagsProvider {
     copy(TinkerTags.Blocks.CHRYSOPHILITE_ORES, TinkerTags.Items.CHRYSOPHILITE_ORES);
 
     // tag for tool parts, mostly used by JEI right now
-    this.tag(TinkerTags.Items.TOOL_PARTS)
-        .add(TinkerToolParts.repairKit.get()) // repair kit is not strictly a tool part, but this list just helps out JEI
-        .addTag(TinkerTags.Items.BARTERED_PARTS); // all bartered parts must be tool parts
+    this.tag(TinkerTags.Items.TOOL_PARTS).add(
+      // arrow part bartering is weird as they have such low tiers
+      TinkerToolParts.arrowHead.get(), TinkerToolParts.arrowShaft.get(),
+      // repair kit is not strictly a tool part, but this list just helps out JEI
+      TinkerToolParts.repairKit.get()
+    ).addTag(TinkerTags.Items.BARTERED_PARTS); // all bartered parts must be tool parts
     this.tag(TinkerTags.Items.BARTERED_PARTS)
         .add(
           TinkerToolParts.pickHead.get(), TinkerToolParts.hammerHead.get(),
