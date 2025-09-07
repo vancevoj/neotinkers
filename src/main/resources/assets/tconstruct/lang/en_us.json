@@ -2030,6 +2030,7 @@
   "material.tconstruct.silver.armor": "Reduces damage from undead by 5% per level",
 
   "material.tconstruct.whitestone": "End Stone",
+  "material.tconstruct.whitestone.composite": "Whitestone",
   "material.tconstruct.whitestone.aluminum": "Whitestone",
   "material.tconstruct.whitestone.tin": "Whitestone",
   "material.tconstruct.whitestone.zinc": "Whitestone",

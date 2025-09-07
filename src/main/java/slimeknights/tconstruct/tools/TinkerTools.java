@@ -75,6 +75,10 @@ import slimeknights.tconstruct.library.tools.definition.module.build.ToolActions
 import slimeknights.tconstruct.library.tools.definition.module.build.ToolSlotsModule;
 import slimeknights.tconstruct.library.tools.definition.module.build.ToolTraitsModule;
 import slimeknights.tconstruct.library.tools.definition.module.build.VolatileFlagModule;
+import slimeknights.tconstruct.library.tools.definition.module.display.FixedMaterialToolName;
+import slimeknights.tconstruct.library.tools.definition.module.display.MaterialToolNameModule;
+import slimeknights.tconstruct.library.tools.definition.module.display.StatTypesToolNameModule;
+import slimeknights.tconstruct.library.tools.definition.module.display.UniqueMaterialToolName;
 import slimeknights.tconstruct.library.tools.definition.module.interaction.AttackInteraction;
 import slimeknights.tconstruct.library.tools.definition.module.interaction.DualOptionInteraction;
 import slimeknights.tconstruct.library.tools.definition.module.interaction.PreferenceSetInteraction;
@@ -310,6 +314,11 @@ public final class TinkerTools extends TinkerModule {
       ToolModule.LOADER.register(getResource("toggleable_set_interaction"), ToggleableSetInteraction.LOADER);
       // special tool modules
       ToolModule.LOADER.register(getResource("melting_fluid_effective"), MeltingFluidEffectiveModule.LOADER);
+      // display name
+      ToolModule.LOADER.register(getResource("material_name"), MaterialToolNameModule.LOADER);
+      ToolModule.LOADER.register(getResource("stat_types_name"), StatTypesToolNameModule.LOADER);
+      ToolModule.LOADER.register(getResource("fixed_material_name"), FixedMaterialToolName.LOADER);
+      ToolModule.LOADER.register(getResource("unique_material_name"), UniqueMaterialToolName.LOADER);
       // tool predicates
       ToolContextPredicate.LOADER.register(getResource("has_upgrades"), ToolContextPredicate.HAS_UPGRADES.getLoader());
       ToolContextPredicate.LOADER.register(getResource("has_modifier"), HasModifierPredicate.LOADER);

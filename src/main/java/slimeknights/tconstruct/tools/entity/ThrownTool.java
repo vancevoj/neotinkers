@@ -20,10 +20,10 @@ import net.minecraft.world.phys.EntityHitResult;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.tools.IndestructibleItemEntity;
 import slimeknights.tconstruct.library.tools.context.ToolAttackContext;
+import slimeknights.tconstruct.library.tools.definition.module.display.ToolNameHook;
 import slimeknights.tconstruct.library.tools.helper.ModifierUtil;
 import slimeknights.tconstruct.library.tools.helper.ToolAttackUtil;
 import slimeknights.tconstruct.library.tools.helper.ToolDamageUtil;
-import slimeknights.tconstruct.library.tools.helper.TooltipUtil;
 import slimeknights.tconstruct.library.tools.item.ModifiableItem;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
@@ -86,7 +86,7 @@ public class ThrownTool extends ThrownTrident {
       return super.getDisplayName();
     }
     IToolStackView tool = getTool();
-    return TooltipUtil.getDisplayName(tridentItem, tool, tool.getDefinition());
+    return ToolNameHook.getName(tool.getDefinition(), tridentItem, tool);
   }
 
 
