@@ -1,5 +1,6 @@
 {
   "values": [
-    "tconstruct:dagger"
+    "tconstruct:dagger",
+    "tconstruct:arrow"
   ]
 }

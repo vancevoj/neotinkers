@@ -48,6 +48,7 @@ import java.util.function.Function;
 
 import static net.minecraft.tags.ItemTags.CLUSTER_MAX_HARVESTABLES;
 import static slimeknights.mantle.Mantle.commonResource;
+import static slimeknights.tconstruct.common.TinkerTags.Items.AMMO;
 import static slimeknights.tconstruct.common.TinkerTags.Items.ANCIENT_TOOLS;
 import static slimeknights.tconstruct.common.TinkerTags.Items.AOE;
 import static slimeknights.tconstruct.common.TinkerTags.Items.ARMOR;
@@ -320,6 +321,7 @@ public class ItemTagProvider extends ItemTagsProvider {
     addToolTags(TinkerTools.longbow,    MULTIPART_TOOL, DURABILITY, MELEE_WEAPON, LONGBOWS,     INTERACTABLE_LEFT,  BROAD_TOOLS, BONUS_SLOTS, Tags.Items.TOOLS_BOWS, BALLISTAS);
     addToolTags(TinkerTools.fishingRod, MULTIPART_TOOL, DURABILITY, MELEE_WEAPON, FISHING_RODS, INTERACTABLE_DUAL,  SMALL_TOOLS, BONUS_SLOTS, Tags.Items.TOOLS_FISHING_RODS);
     addToolTags(TinkerTools.javelin,    MULTIPART_TOOL, DURABILITY, MELEE_PRIMARY, RANGED,      INTERACTABLE_RIGHT, BROAD_TOOLS, BONUS_SLOTS, Tags.Items.TOOLS_TRIDENTS);
+    addToolTags(TinkerTools.arrow,      MULTIPART_TOOL, AMMO, UNSALVAGABLE, ItemTags.ARROWS);
     // specialized
     addToolTags(TinkerTools.flintAndBrick, DURABILITY, MELEE_WEAPON, INTERACTABLE_RIGHT, AOE, SMALL_TOOLS, BONUS_SLOTS);
     addToolTags(TinkerTools.skyStaff,      DURABILITY, STAFFS, SPECIAL_TOOLS, HELD_ARMOR, INTERACTABLE_DUAL, AOE, DYEABLE, EMBELLISHMENT_WOOD, BONUS_SLOTS);
@@ -399,7 +401,7 @@ public class ItemTagProvider extends ItemTagsProvider {
 
     // general
     this.tag(MULTIPART_TOOL).addTag(SINGLEPART_TOOL);
-    this.tag(MODIFIABLE).addTags(MULTIPART_TOOL, DURABILITY, MELEE, HARVEST, AOE, HELD, BONUS_SLOTS);
+    this.tag(MODIFIABLE).addTags(MULTIPART_TOOL, DURABILITY, MELEE, HARVEST, RANGED, AMMO, AOE, HELD, BONUS_SLOTS);
     // disable parry mod on our items, we have our own modifier for that
     this.tag(TagKey.create(Registries.ITEM, new ResourceLocation("parry", "excluded_shields"))).addTag(HELD);
 

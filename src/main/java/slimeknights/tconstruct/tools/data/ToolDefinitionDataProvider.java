@@ -69,6 +69,8 @@ import slimeknights.tconstruct.tools.stats.StatlessMaterialStats;
 import java.util.List;
 
 import static slimeknights.tconstruct.tools.TinkerToolParts.adzeHead;
+import static slimeknights.tconstruct.tools.TinkerToolParts.arrowHead;
+import static slimeknights.tconstruct.tools.TinkerToolParts.arrowShaft;
 import static slimeknights.tconstruct.tools.TinkerToolParts.bowGrip;
 import static slimeknights.tconstruct.tools.TinkerToolParts.bowLimb;
 import static slimeknights.tconstruct.tools.TinkerToolParts.bowstring;
@@ -519,6 +521,14 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
       .largeToolStartingSlots()
       // traits
       .module(ToolTraitsModule.builder().trait(ModifierIds.throwing).build());
+    define(ToolDefinitions.ARROW)
+      // parts
+      .module(PartStatsModule.parts()
+        .part(arrowHead)
+        .part(arrowShaft).build())
+      .module(defaultTwoParts)
+      // display the arrow head, despite not being repairable
+      .module(FixedMaterialToolName.FIRST);
 
     // special
     define(ToolDefinitions.FLINT_AND_BRICK)

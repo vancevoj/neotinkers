@@ -99,6 +99,11 @@ public class ToolsRecipeProvider extends BaseRecipeProvider implements IMaterial
     toolBuilding(consumer, TinkerTools.longbow, folder);
     toolBuilding(consumer, TinkerTools.fishingRod, folder);
     toolBuilding(consumer, TinkerTools.javelin, folder);
+    // ammo
+    ToolBuildingRecipeBuilder.toolBuildingRecipe(TinkerTools.arrow.get())
+      .outputSize(4)
+      .addExtraRequirement(Ingredient.of(Items.FEATHER))
+      .save(consumer, prefix(TinkerTools.arrow, folder));
 
     // specialized
     ShapelessRecipeBuilder.shapeless(RecipeCategory.TOOLS, TinkerTools.flintAndBrick)

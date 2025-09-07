@@ -100,6 +100,7 @@ import slimeknights.tconstruct.library.tools.definition.module.weapon.SweepWeapo
 import slimeknights.tconstruct.library.tools.helper.ModifierLootingHandler;
 import slimeknights.tconstruct.library.tools.helper.ToolBuildHandler;
 import slimeknights.tconstruct.library.tools.item.IModifiable;
+import slimeknights.tconstruct.library.tools.item.ModifiableArrowItem;
 import slimeknights.tconstruct.library.tools.item.ModifiableItem;
 import slimeknights.tconstruct.library.tools.item.armor.ModifiableArmorItem;
 import slimeknights.tconstruct.library.tools.item.armor.MultilayerArmorItem;
@@ -187,6 +188,7 @@ public final class TinkerTools extends TinkerModule {
   public static final ItemObject<ModifiableBowItem> longbow = ITEMS.register("longbow", () -> new ModifiableBowItem(UNSTACKABLE_PROPS, ToolDefinitions.LONGBOW, true));
   public static final ItemObject<ModifiableItem> fishingRod = ITEMS.register("fishing_rod", () -> new ModifiableItem(UNSTACKABLE_PROPS, ToolDefinitions.FISHING_ROD));
   public static final ItemObject<ModifiableItem> javelin = ITEMS.register("javelin", () -> new ModifiableItem(UNSTACKABLE_PROPS, ToolDefinitions.JAVELIN));
+  public static final ItemObject<ModifiableArrowItem> arrow = ITEMS.register("arrow", () -> new ModifiableArrowItem(ITEM_PROPS, ToolDefinitions.ARROW));
 
   public static final ItemObject<ModifiableItem> flintAndBrick = ITEMS.register("flint_and_brick", () -> new ModifiableItem(UNSTACKABLE_PROPS, ToolDefinitions.FLINT_AND_BRICK));
   public static final ItemObject<ModifiableItem> skyStaff = ITEMS.register("sky_staff", () -> new ModifiableItem(UNSTACKABLE_PROPS, ToolDefinitions.SKY_STAFF));
@@ -403,6 +405,7 @@ public final class TinkerTools extends TinkerModule {
     acceptTool(output, longbow);
     acceptTool(output, fishingRod);
     acceptTool(output, javelin);
+    acceptTool(output, arrow);
 
     // ancient tools
     acceptTool(output, meltingPan);

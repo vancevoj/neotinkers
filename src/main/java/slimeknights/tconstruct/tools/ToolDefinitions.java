@@ -33,6 +33,8 @@ public final class ToolDefinitions {
   public static final ToolDefinition LONGBOW = ToolDefinition.create(TinkerTools.longbow);
   public static final ToolDefinition FISHING_ROD = ToolDefinition.create(TinkerTools.fishingRod);
   public static final ToolDefinition JAVELIN = ToolDefinition.create(TinkerTools.javelin);
+  // ammo
+  public static final ToolDefinition ARROW = ToolDefinition.create(TinkerTools.arrow);
 
   // special
   public static final ToolDefinition FLINT_AND_BRICK = ToolDefinition.create(TinkerTools.flintAndBrick);

@@ -240,6 +240,7 @@ public class ToolClientEvents extends ClientEventBase {
     registerItemColors(colors, TinkerTools.longbow);
     registerItemColors(colors, TinkerTools.fishingRod);
     registerItemColors(colors, TinkerTools.javelin);
+    registerItemColors(colors, TinkerTools.arrow);
     // ancient
     registerItemColors(colors, TinkerTools.meltingPan);
     registerItemColors(colors, TinkerTools.warPick);

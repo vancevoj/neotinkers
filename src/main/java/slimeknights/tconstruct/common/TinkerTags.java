@@ -473,6 +473,9 @@ public class TinkerTags {
     /** Modifiable items that support fishing modifiers. */
     public static final TagKey<Item> FISHING_RODS = local("modifiable/fishing_rods");
 
+    /** Items in this tag have a primary purpose of being ammo */
+    public static final TagKey<Item> AMMO = local("modifiable/ammo");
+
     /** Tools that can receive wood based embellishments */
     public static final TagKey<Item> EMBELLISHMENT_WOOD = local("modifiable/embellishment/wood");
     /** Tools that can receive slime based embellishments */
