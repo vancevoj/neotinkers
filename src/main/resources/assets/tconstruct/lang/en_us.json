@@ -3221,6 +3221,8 @@
 
   "stat.tconstruct.binding": "Binding",
   "stat.tconstruct.bowstring": "Bowstring",
+  "stat.tconstruct.arrow_head": "Arrow Head",
+  "stat.tconstruct.arrow_shaft": "Arrow Shaft",
   "tool_stat.tconstruct.extra.no_stats": "No stats",
 
   "tool_stat.tconstruct.block_amount": "Block Amount: ",
