@@ -32,6 +32,7 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
   protected void addMaterialStats() {
     addMeleeHarvest();
     addRanged();
+    addAmmo();
     addArmor();
     addMisc();
   }
@@ -381,6 +382,16 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
       new GripMaterialStats(0, 0.05f, 3.5f));
   }
 
+  private void addAmmo() {
+    // tier 1
+    addMaterialStats(MaterialIds.bone, StatlessMaterialStats.ARROW_SHAFT);
+    addMaterialStats(MaterialIds.chorus, StatlessMaterialStats.ARROW_SHAFT);
+    // tier 2
+    addMaterialStats(MaterialIds.ice, StatlessMaterialStats.ARROW_HEAD);
+    addMaterialStats(MaterialIds.skyslime, StatlessMaterialStats.ARROW_HEAD);
+    addMaterialStats(MaterialIds.necroticBone, StatlessMaterialStats.ARROW_SHAFT);
+  }
+
   private void addArmor() {
     // tier 1
     addMaterialStats(MaterialIds.wood, StatlessMaterialStats.SHIELD_CORE);
@@ -472,7 +483,6 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
     addMaterialStats(MaterialIds.phantom, StatlessMaterialStats.REPAIR_KIT);
     // slimesuit embellishments
     addMaterialStats(MaterialIds.earthslime);
-    addMaterialStats(MaterialIds.skyslime);
     addMaterialStats(MaterialIds.blood);
     addMaterialStats(MaterialIds.magma);
     addMaterialStats(MaterialIds.ichor);

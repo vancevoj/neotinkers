@@ -54,6 +54,8 @@ public class MaterialDataProvider extends AbstractMaterialDataProvider {
     addMaterial(MaterialIds.skyslimeVine, 2, ORDER_BINDING, true);
     addMaterial(MaterialIds.weepingVine,  2, ORDER_BINDING, true);
     addMaterial(MaterialIds.twistingVine, 2, ORDER_BINDING, true);
+    // tier 2 - ammo
+    addMaterial(MaterialIds.skyslime, 2, ORDER_REPAIR, true);
     // bloodbone reworked into venombone
     addRedirect(new MaterialId(TConstruct.MOD_ID, "bloodbone"), redirect(MaterialIds.venombone));
 
@@ -116,7 +118,6 @@ public class MaterialDataProvider extends AbstractMaterialDataProvider {
     addMaterial(MaterialIds.enderPearl,  2, ORDER_REPAIR, false);
     // slimesuit - textures
     addMaterial(MaterialIds.earthslime, 1, ORDER_REPAIR, true);
-    addMaterial(MaterialIds.skyslime,   1, ORDER_REPAIR, true);
     addMaterial(MaterialIds.blood,      2, ORDER_REPAIR, true);
     addMaterial(MaterialIds.magma,      2, ORDER_REPAIR, true);
     addMaterial(MaterialIds.ichor,      3, ORDER_REPAIR, true);

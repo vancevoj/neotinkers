@@ -8,6 +8,7 @@ import slimeknights.tconstruct.tools.data.ModifierIds;
 import slimeknights.tconstruct.tools.stats.PlatingMaterialStats;
 import slimeknights.tconstruct.tools.stats.SkullStats;
 
+import static slimeknights.tconstruct.library.materials.MaterialRegistry.AMMO;
 import static slimeknights.tconstruct.library.materials.MaterialRegistry.ARMOR;
 import static slimeknights.tconstruct.library.materials.MaterialRegistry.MELEE_HARVEST;
 import static slimeknights.tconstruct.library.materials.MaterialRegistry.RANGED;
@@ -29,8 +30,10 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     addDefaultTraits(MaterialIds.rock, ModifierIds.stonebound);
     addDefaultTraits(MaterialIds.flint, ModifierIds.jagged);
     addDefaultTraits(MaterialIds.bone, ModifierIds.pierce);
+    addTraits(MaterialIds.bone, AMMO, TinkerModifiers.impaling);
     addDefaultTraits(MaterialIds.bamboo, ModifierIds.unburdened);
     addDefaultTraits(MaterialIds.ice, ModifierIds.frostshield);
+    addTraits(MaterialIds.ice, AMMO, ModifierIds.freezing);
     addDefaultTraits(MaterialIds.cactus, ModifierIds.thorns);
     // tier 1 - end
     addDefaultTraits(MaterialIds.chorus, TinkerModifiers.enderference);
@@ -64,6 +67,8 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     addTraits(MaterialIds.skyslimeVine, ARMOR, ModifierIds.skyfall);
     addDefaultTraits(MaterialIds.weepingVine, ModifierIds.flamestance);
     addDefaultTraits(MaterialIds.twistingVine, ModifierIds.entangled);
+    // tier 2 - ammo
+    addTraits(MaterialIds.skyslime, AMMO, ModifierIds.punch);
 
     // tier 3
     addDefaultTraits(MaterialIds.slimesteel, ModifierIds.overcast, TinkerModifiers.overslime.getId());
@@ -141,7 +146,6 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     addTraits(MaterialIds.pigIron,      SkullStats.ID, TinkerModifiers.revenge.getId(), ModifierIds.zombifiedPiglinDisguise);
     // slimesuit
     noTraits(MaterialIds.earthslime);
-    noTraits(MaterialIds.skyslime);
     noTraits(MaterialIds.blood);
     noTraits(MaterialIds.magma);
     noTraits(MaterialIds.ichor);
