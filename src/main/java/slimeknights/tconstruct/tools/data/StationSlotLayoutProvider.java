@@ -170,6 +170,11 @@ public class StationSlotLayoutProvider extends AbstractStationSlotLayoutProvider
       .addInputItem(TinkerToolParts.arrowShaft,      33, 42)
       .addInputItem(Patterns.FEATHER, Items.FEATHER, 15, 60)
       .build();
+    defineModifiable(TinkerTools.shuriken)
+      .sortIndex(SORT_AMMO)
+      .addInputItem(TinkerToolParts.arrowHead, 28, 38)
+      .addInputItem(TinkerToolParts.arrowHead, 50, 38)
+      .build();
     // use a single button for all plate armor, its all the same recipe and a single description is suitable
     define(TConstruct.getResource("plate_armor"))
       .sortIndex(SORT_ARMOR)

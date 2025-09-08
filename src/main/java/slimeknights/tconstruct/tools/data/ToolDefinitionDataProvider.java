@@ -29,6 +29,7 @@ import slimeknights.tconstruct.library.tools.definition.module.build.ToolSlotsMo
 import slimeknights.tconstruct.library.tools.definition.module.build.ToolTraitsModule;
 import slimeknights.tconstruct.library.tools.definition.module.build.VolatileFlagModule;
 import slimeknights.tconstruct.library.tools.definition.module.display.FixedMaterialToolName;
+import slimeknights.tconstruct.library.tools.definition.module.display.MaterialToolNameModule;
 import slimeknights.tconstruct.library.tools.definition.module.display.UniqueMaterialToolName;
 import slimeknights.tconstruct.library.tools.definition.module.interaction.AttackInteraction;
 import slimeknights.tconstruct.library.tools.definition.module.interaction.DualOptionInteraction;
@@ -529,6 +530,18 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
       .module(defaultTwoParts)
       // display the arrow head, despite not being repairable
       .module(FixedMaterialToolName.FIRST);
+    define(ToolDefinitions.SHURIKEN)
+      // parts
+      .module(PartStatsModule.parts()
+        .part(arrowHead)
+        .part(arrowHead).build())
+      .module(defaultTwoParts)
+      // stats
+      .module(new SetStatsModule(StatsNBT.builder()
+        .set(ToolStats.PROJECTILE_DAMAGE, 4f)
+        .set(ToolStats.WATER_INERTIA, 0.8f).build()))
+      // display both heads
+      .module(MaterialToolNameModule.ALL);
 
     // special
     define(ToolDefinitions.FLINT_AND_BRICK)

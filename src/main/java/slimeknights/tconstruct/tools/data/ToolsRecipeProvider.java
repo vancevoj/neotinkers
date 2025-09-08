@@ -104,6 +104,9 @@ public class ToolsRecipeProvider extends BaseRecipeProvider implements IMaterial
       .outputSize(4)
       .addExtraRequirement(Ingredient.of(Items.FEATHER))
       .save(consumer, prefix(TinkerTools.arrow, folder));
+    ToolBuildingRecipeBuilder.toolBuildingRecipe(TinkerTools.shuriken.get())
+      .outputSize(4)
+      .save(consumer, prefix(TinkerTools.shuriken, folder));
 
     // specialized
     ShapelessRecipeBuilder.shapeless(RecipeCategory.TOOLS, TinkerTools.flintAndBrick)

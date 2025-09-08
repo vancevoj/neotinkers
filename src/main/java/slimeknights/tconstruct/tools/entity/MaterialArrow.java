@@ -68,7 +68,10 @@ public class MaterialArrow extends AbstractArrow implements ToolProjectile {
     return tool;
   }
 
-  /** Called when the arrow is created to set initial properties */
+  /**
+   * Called when the arrow is created to set initial properties.
+   * @see ThrownShuriken#onCreate(ItemStack, LivingEntity)
+   */
   public void onCreate(ItemStack stack, LivingEntity shooter) {
     setStack(stack);
     if (!stack.isEmpty()) {
@@ -80,6 +83,7 @@ public class MaterialArrow extends AbstractArrow implements ToolProjectile {
     }
   }
 
+  /** @see ThrownShuriken#shoot(double, double, double, float, float)  */
   @Override
   public void shoot(double pX, double pY, double pZ, float velocity, float inaccuracy) {
     if (!stack.isEmpty() && getOwner() instanceof LivingEntity shooter) {

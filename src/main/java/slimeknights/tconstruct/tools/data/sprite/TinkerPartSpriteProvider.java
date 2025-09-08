@@ -135,7 +135,9 @@ public class TinkerPartSpriteProvider extends AbstractPartSpriteProvider {
     buildTool("javelin").withLarge().addBreakableHead("head").addLimb("guard").addHandle("handle").addGrip("grip");
     buildTool("ammo")
       // arrow
-      .addArrowHead("arrow_head").addPart("arrow_shaft", StatlessMaterialStats.ARROW_SHAFT);
+      .addArrowHead("arrow_head").addPart("arrow_shaft", StatlessMaterialStats.ARROW_SHAFT)
+      // shuriken
+      .addArrowHead("shuriken_top").addArrowHead("shuriken_bottom");
 
     // ancient tools
     buildTool("melting_pan").skipVariants().addBreakablePart("head", PlatingMaterialStats.SHIELD.getId()).addLimb("handle");

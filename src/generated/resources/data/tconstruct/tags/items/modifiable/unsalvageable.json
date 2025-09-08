@@ -1,6 +1,7 @@
 {
   "values": [
     "tconstruct:dagger",
-    "tconstruct:arrow"
+    "tconstruct:arrow",
+    "tconstruct:shuriken"
   ]
 }
