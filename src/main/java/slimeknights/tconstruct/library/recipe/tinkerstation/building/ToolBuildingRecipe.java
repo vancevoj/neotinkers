@@ -3,6 +3,7 @@ package slimeknights.tconstruct.library.recipe.tinkerstation.building;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -184,7 +185,13 @@ public class ToolBuildingRecipe implements ITinkerStationRecipe {
     List<MaterialVariant> materials = IntStream.range(0, ToolPartsHook.parts(output.getToolDefinition()).size())
                                                .mapToObj(i -> MaterialVariant.of(IMaterialItem.getMaterialFromStack(inv.getInput(i))))
                                                .toList();
-    return LazyToolStack.success(ToolStack.createTool(output.asItem(), output.getToolDefinition(), new MaterialNBT(materials)), outputCount);
+    ToolStack tool = ToolStack.createTool(output.asItem(), output.getToolDefinition(), new MaterialNBT(materials));
+    // validate the tool, lets people have traits reject each other or do weird slot shenanigans
+    Component error = tool.tryValidate();
+    if (error != null) {
+      return RecipeResult.failure(error);
+    }
+    return LazyToolStack.success(tool, Math.min(output.asItem().getMaxStackSize(), outputCount));
   }
 
   @Deprecated
