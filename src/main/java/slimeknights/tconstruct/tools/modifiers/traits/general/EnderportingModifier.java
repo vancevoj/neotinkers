@@ -6,6 +6,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.AbstractArrow.Pickup;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
@@ -117,9 +118,14 @@ public class EnderportingModifier extends NoLevelsModifier implements PlantHarve
     }
   }
 
+  /** Checks if the given projectile allows teleporting */
+  private static boolean canTeleport(ModDataNBT persistentData, Projectile projectile) {
+    return !persistentData.getBoolean(SECONDARY_ARROW) && (!(projectile instanceof AbstractArrow arrow) || arrow.pickup == Pickup.ALLOWED);
+  }
+
   @Override
   public boolean onProjectileHitEntity(ModifierNBT modifiers, ModDataNBT persistentData, ModifierEntry modifier, Projectile projectile, EntityHitResult hit, @Nullable LivingEntity attacker, @Nullable LivingEntity target) {
-    if (attacker != null && attacker != target && !persistentData.getBoolean(SECONDARY_ARROW)) {
+    if (attacker != null && attacker != target && canTeleport(persistentData, projectile)) {
       Entity hitEntity = hit.getEntity();
       Vec3 oldPosition = attacker.position();
       if (attacker.level() == projectile.level() && tryTeleport(attacker, hitEntity.getX(), hitEntity.getY(), hitEntity.getZ()) && target != null) {
@@ -131,7 +137,7 @@ public class EnderportingModifier extends NoLevelsModifier implements PlantHarve
 
   @Override
   public void onProjectileHitBlock(ModifierNBT modifiers, ModDataNBT persistentData, ModifierEntry modifier, Projectile projectile, BlockHitResult hit, @Nullable LivingEntity attacker) {
-    if (attacker != null && !persistentData.getBoolean(SECONDARY_ARROW)) {
+    if (attacker != null && canTeleport(persistentData, projectile)) {
       BlockPos target = hit.getBlockPos().relative(hit.getDirection());
       // attempt the teleport, if successful and the projectile is not reusable then discard it
       if (attacker.level() == projectile.level() && tryTeleport(attacker, target.getX() + 0.5f, target.getY(), target.getZ() + 0.5f) && !projectile.getType().is(TinkerTags.EntityTypes.REUSABLE_AMMO)) {
