@@ -3,6 +3,7 @@ package slimeknights.tconstruct.tools.data.material;
 import net.minecraft.data.PackOutput;
 import slimeknights.tconstruct.library.data.material.AbstractMaterialDataProvider;
 import slimeknights.tconstruct.library.data.material.AbstractMaterialTraitDataProvider;
+import slimeknights.tconstruct.library.modifiers.ModifierId;
 import slimeknights.tconstruct.tools.TinkerModifiers;
 import slimeknights.tconstruct.tools.data.ModifierIds;
 import slimeknights.tconstruct.tools.stats.PlatingMaterialStats;
@@ -30,6 +31,7 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     addTraits(MaterialIds.wood, AMMO, ModifierIds.economical);
     addDefaultTraits(MaterialIds.rock, ModifierIds.stonebound);
     addDefaultTraits(MaterialIds.flint, ModifierIds.jagged);
+    addTraits(MaterialIds.flint, AMMO, new ModifierId[0]); // TODO: flint trait
     addDefaultTraits(MaterialIds.bone, ModifierIds.pierce);
     addTraits(MaterialIds.bone, AMMO, ModifierIds.arrowPierce);
     addDefaultTraits(MaterialIds.bamboo, ModifierIds.unburdened);
