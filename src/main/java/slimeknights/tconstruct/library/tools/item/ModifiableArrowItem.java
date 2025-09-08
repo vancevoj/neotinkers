@@ -18,7 +18,6 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import slimeknights.mantle.client.SafeClientAccess;
 import slimeknights.mantle.client.TooltipKey;
-import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
 import slimeknights.tconstruct.library.modifiers.hook.interaction.InventoryTickModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.interaction.SlotStackModifierHook;
 import slimeknights.tconstruct.library.modifiers.modules.build.RarityModule;
@@ -32,17 +31,12 @@ import slimeknights.tconstruct.library.tools.helper.TooltipUtil;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.tools.entity.MaterialArrow;
-import slimeknights.tconstruct.tools.stats.StatlessMaterialStats;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.function.Predicate;
 
 /** Modifiable item that is usable as arrows in a bow */
 public class ModifiableArrowItem extends ArrowItem implements IModifiableDisplay {
-  /** Predicate making arrow heads show in the display name without being repairable. */
-  public static final Predicate<MaterialStatsId> SHOW_ARROW_HEADS = StatlessMaterialStats.ARROW_HEAD.getIdentifier()::equals;
-
   /** Tool definition for the given tool */
   @Getter
   private final ToolDefinition toolDefinition;
