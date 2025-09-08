@@ -488,6 +488,8 @@ public class TinkerTags {
     public static final TagKey<Item> UNRECYCLABLE = local("modifiable/unrecyclable");
     /** Tools to blacklist from default salvage recipes. May still be salvagable in other recipes */
     public static final TagKey<Item> UNSALVAGABLE = local("modifiable/unsalvageable");
+    /** Tools to blacklist from part swapping */
+    public static final TagKey<Item> UNSWAPPABLE = local("modifiable/unswappable");
 
     /** Tag so mods like thermal know our scyhtes can harvest */
     public static final TagKey<Item> SCYTHES = common("tools/scythe");
