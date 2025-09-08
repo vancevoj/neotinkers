@@ -115,6 +115,7 @@ public class MaterialRenderInfoProvider extends AbstractMaterialRenderInfoProvid
     buildRenderInfo(MaterialIds.fiery).color(0x893D14).fallbacks("metal").luminosity(15);
 
     // ammo
+    buildRenderInfo(MaterialIds.amethyst);
     buildRenderInfo(MaterialIds.skyslime);
     buildRenderInfo(MaterialIds.blaze);
     buildRenderInfo(MaterialIds.enderPearl);

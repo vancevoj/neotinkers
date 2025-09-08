@@ -55,6 +55,7 @@ public class MaterialDataProvider extends AbstractMaterialDataProvider {
     addMaterial(MaterialIds.weepingVine,  2, ORDER_BINDING, true);
     addMaterial(MaterialIds.twistingVine, 2, ORDER_BINDING, true);
     // tier 2 - ammo
+    addMaterial(MaterialIds.amethyst,   2, ORDER_REPAIR, false);
     addMaterial(MaterialIds.skyslime,   2, ORDER_REPAIR, true);
     addMaterial(MaterialIds.blaze,      2, ORDER_REPAIR, true);
     addMaterial(MaterialIds.enderPearl, 2, ORDER_REPAIR, false);

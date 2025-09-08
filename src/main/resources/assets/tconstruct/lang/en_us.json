@@ -1875,6 +1875,8 @@
   "material.tconstruct.twisting_vine.ranged": "Grants +15% draw speed at the cost of taking 1 damage when you put down the tool",
   "material.tconstruct.twisting_vine.armor": "Grants +10% knockback resistance at the cost of taking 2 damage when you remove the armor",
 
+  "material.tconstruct.amethyst": "Amethyst",
+
   "material.tconstruct.skyslime": "Skyslime",
 
   "material.tconstruct.blaze": "Blaze",
@@ -2861,7 +2863,7 @@
   "modifier.tconstruct.crumbling.mining_speed": "Crumbling Speed",
   "modifier.tconstruct.crystalbound": "Crystalbound",
   "modifier.tconstruct.crystalbound.flavor": "The way of the crystal is straight",
-  "modifier.tconstruct.crystalbound.description": "Bows gain bonus velocity, but arrow angle is restricted",
+  "modifier.tconstruct.crystalbound.description": "Gains bonus damage potential, but arrow angle is restricted",
   "modifier.tconstruct.crystalstrike": "Crystalstrike",
   "modifier.tconstruct.crystalstrike.flavor": "Speed of the crystal comes at a cost",
   "modifier.tconstruct.crystalstrike.description": "Increases attack speed but also restricts knockback angles",
