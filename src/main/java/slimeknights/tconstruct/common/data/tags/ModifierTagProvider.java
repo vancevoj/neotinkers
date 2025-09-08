@@ -137,7 +137,7 @@ public class ModifierTagProvider extends AbstractModifierTagProvider {
       ModifierIds.pierce, ModifierIds.power, ModifierIds.punch, ModifierIds.quickCharge,
       TinkerModifiers.sinistral.getId(), ModifierIds.trueshot,
       ModifierIds.fiery, ModifierIds.freezing,
-      TinkerModifiers.impaling.getId(), TinkerModifiers.necrotic.getId(),
+      ModifierIds.arrowPierce, TinkerModifiers.necrotic.getId(),
       ModifierIds.lure);
 
     // abilities

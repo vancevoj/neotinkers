@@ -554,15 +554,15 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .setTools(TinkerTags.Items.LAUNCHERS)
                          .saveSalvage(consumer, prefix(ModifierIds.punch, upgradeSalvage))
                          .save(consumer, prefix(ModifierIds.punch, upgradeFolder));
-    ModifierRecipeBuilder.modifier(TinkerModifiers.impaling)
+    ModifierRecipeBuilder.modifier(ModifierIds.arrowPierce)
                          .addInput(Items.POINTED_DRIPSTONE)
                          .addInput(Items.POINTED_DRIPSTONE)
                          .addInput(Items.POINTED_DRIPSTONE)
                          .setMaxLevel(4) // same max as vanilla
                          .setSlots(SlotType.UPGRADE, 1)
-                         .setTools(TinkerTags.Items.BOWS) // impaling on longbows sounds fun in theory, may reconsider once ricochet is coded
-                         .saveSalvage(consumer, prefix(TinkerModifiers.impaling, upgradeSalvage))
-                         .save(consumer, prefix(TinkerModifiers.impaling, upgradeFolder));
+                         .setTools(TinkerTags.Items.BOWS) // pierce on longbows sounds fun in theory, may reconsider once ricochet is coded
+                         .saveSalvage(consumer, prefix(ModifierIds.arrowPierce, upgradeSalvage))
+                         .save(consumer, prefix(ModifierIds.arrowPierce, upgradeFolder));
     ModifierRecipeBuilder.modifier(ModifierIds.freezing)
                          .addInput(Items.POWDER_SNOW_BUCKET)
                          .setMaxLevel(3)

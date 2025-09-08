@@ -30,7 +30,7 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     addDefaultTraits(MaterialIds.rock, ModifierIds.stonebound);
     addDefaultTraits(MaterialIds.flint, ModifierIds.jagged);
     addDefaultTraits(MaterialIds.bone, ModifierIds.pierce);
-    addTraits(MaterialIds.bone, AMMO, TinkerModifiers.impaling);
+    addTraits(MaterialIds.bone, AMMO, ModifierIds.arrowPierce);
     addDefaultTraits(MaterialIds.bamboo, ModifierIds.unburdened);
     addTraits(MaterialIds.bamboo, AMMO, ModifierIds.woodwind);
     addDefaultTraits(MaterialIds.cactus, ModifierIds.thorns);
