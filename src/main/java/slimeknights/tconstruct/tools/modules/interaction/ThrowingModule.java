@@ -89,7 +89,7 @@ public enum ThrowingModule implements ModifierModule, GeneralInteractionModifier
         // unlike the trident, we actually consider how long you charged for, and change the power of the projectile
         float charge = GeneralInteractionModifierHook.getToolCharge(tool, chargeTime);
         float velocity = ConditionalStatModifierHook.getModifiedStat(tool, entity, ToolStats.VELOCITY);
-        ThrownTool thrown = new ThrownTool(level, player, stack, charge, velocity);
+        ThrownTool thrown = new ThrownTool(level, player, stack, charge, velocity, ConditionalStatModifierHook.getModifiedStat(tool, entity, ToolStats.WATER_INERTIA));
         thrown.shootFromRotation(player, player.getXRot(), player.getYRot(), 0, charge * velocity * 2, ModifierUtil.getInaccuracy(tool, entity));
         if (player.getAbilities().instabuild) {
           thrown.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;

@@ -124,6 +124,10 @@ public class MaterialRecipeProvider extends BaseRecipeProvider implements IMater
     materialRecipe(consumer, MaterialIds.enderPearl, Ingredient.of(Tags.Items.ENDER_PEARLS),            1, 1, folder + "ender_pearl");
     materialRecipe(consumer, MaterialIds.amethyst,   Ingredient.of(Tags.Items.GEMS_AMETHYST),           1, 1, folder + "amethyst/gem");
     materialRecipe(consumer, MaterialIds.amethyst,   Ingredient.of(Tags.Items.STORAGE_BLOCKS_AMETHYST), 4, 1, ItemOutput.fromItem(Items.AMETHYST_SHARD), folder + "amethyst/block");
+    materialRecipe(consumer, MaterialIds.prismarine, Ingredient.of(Tags.Items.DUSTS_PRISMARINE), 1, 1, folder + "prismarine/shard");
+    materialRecipe(consumer, MaterialIds.prismarine, Ingredient.of(Blocks.PRISMARINE),        4, 1, ItemOutput.fromItem(Items.PRISMARINE_SHARD), folder + "prismarine/block");
+    materialRecipe(consumer, MaterialIds.prismarine, Ingredient.of(Blocks.PRISMARINE_BRICKS), 9, 1, ItemOutput.fromItem(Items.PRISMARINE_BRICKS),folder + "prismarine/bricks");
+    materialRecipe(consumer, MaterialIds.prismarine, Ingredient.of(Blocks.PRISMARINE),        8, 1, ItemOutput.fromItem(Items.DARK_PRISMARINE),  folder + "prismarine/dark");
 
     materialRecipe(consumer, MaterialIds.skyslimeVine, Ingredient.of(TinkerWorld.skySlimeVine), 1, 1, folder + "skyslime_vine");
     materialRecipe(consumer, MaterialIds.weepingVine,  Ingredient.of(Items.WEEPING_VINES), 1, 1, folder + "weeping_vine");

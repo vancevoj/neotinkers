@@ -177,6 +177,7 @@
 
     "__ranged_upgrades__": null,
     "blindshot":    "#966C4A",
+    "fins":         "#7CB3A4",
     "freezing":     "#BEF0F0",
     "impaling":     "#F6E2CD",
     "power":        "#EAA727",
@@ -436,6 +437,7 @@
 
     "__ammo__": null,
     "amethyst":    "#B38EF1",
+    "prismarine":  "#7CB3A4",
     "skyslime":    "#01cbcd",
     "ender_pearl": "#349988",
     "blaze":       "#FFC100",

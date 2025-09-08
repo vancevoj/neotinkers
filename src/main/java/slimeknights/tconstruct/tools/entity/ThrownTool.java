@@ -38,6 +38,8 @@ import javax.annotation.Nullable;
 public class ThrownTool extends ThrownTrident implements ToolProjectile {
   /** Key to sync the stack to the client */
   protected static final EntityDataAccessor<ItemStack> STACK = SynchedEntityData.defineId(ThrownTool.class, EntityDataSerializers.ITEM_STACK);
+  /** Movement speed in water */
+  protected static final EntityDataAccessor<Float> WATER_INERTIA = SynchedEntityData.defineId(ThrownTool.class, EntityDataSerializers.FLOAT);
   /** Volatile integer key for the loyalty level */
   public static final ResourceLocation LOYALTY = TConstruct.getResource("loyalty");
 
@@ -51,7 +53,7 @@ public class ThrownTool extends ThrownTrident implements ToolProjectile {
     super(type, level);
   }
 
-  public ThrownTool(Level level, LivingEntity shooter, ItemStack stack, float charge, float multiplier) {
+  public ThrownTool(Level level, LivingEntity shooter, ItemStack stack, float charge, float multiplier, float waterInertia) {
     this(TinkerTools.thrownTool.get(), level);
     // AbstractArrow - positional constructor
     this.setPos(shooter.getX(), shooter.getEyeY() - 0.1, shooter.getZ());
@@ -64,6 +66,7 @@ public class ThrownTool extends ThrownTrident implements ToolProjectile {
     this.tridentItem = stack.copyWithCount(1);
     this.charge = charge;
     this.multiplier = multiplier;
+    this.entityData.set(WATER_INERTIA, waterInertia);
     updateFromStack();
   }
 
@@ -73,6 +76,11 @@ public class ThrownTool extends ThrownTrident implements ToolProjectile {
     this.entityData.set(ID_LOYALTY, (byte) ModifierUtil.getVolatileInt(tridentItem, LOYALTY));
     this.entityData.set(ID_FOIL, ModifierUtil.checkVolatileFlag(tridentItem, ModifiableItem.SHINY));
     this.noDespawn = ModifierUtil.checkVolatileFlag(tridentItem, IndestructibleItemEntity.INDESTRUCTIBLE_ENTITY);
+  }
+
+  @Override
+  protected float getWaterInertia() {
+    return entityData.get(WATER_INERTIA);
   }
 
   @Override
@@ -194,6 +202,7 @@ public class ThrownTool extends ThrownTrident implements ToolProjectile {
   protected void defineSynchedData() {
     super.defineSynchedData();
     this.entityData.define(STACK, ItemStack.EMPTY);
+    this.entityData.define(WATER_INERTIA, 0.6f);
   }
 
   @Override
@@ -205,12 +214,14 @@ public class ThrownTool extends ThrownTrident implements ToolProjectile {
   /* NBT */
   private static final String KEY_CHARGE = "charge";
   private static final String KEY_MULTIPLIER = "multiplier";
+  private static final String KEY_WATER_INERTIA = "water_inertia";
 
   @Override
   public void addAdditionalSaveData(CompoundTag tag) {
     super.addAdditionalSaveData(tag);
     tag.putFloat(KEY_CHARGE, this.charge);
     tag.putFloat(KEY_MULTIPLIER, this.multiplier);
+    tag.putFloat(KEY_WATER_INERTIA, this.entityData.get(WATER_INERTIA));
   }
 
   @Override
@@ -222,5 +233,6 @@ public class ThrownTool extends ThrownTrident implements ToolProjectile {
     }
     this.charge = tag.getFloat(KEY_CHARGE);
     this.multiplier = tag.getFloat(KEY_MULTIPLIER);
+    this.entityData.set(WATER_INERTIA, tag.getFloat(KEY_WATER_INERTIA));
   }
 }

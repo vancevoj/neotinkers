@@ -116,6 +116,7 @@ public class MaterialRenderInfoProvider extends AbstractMaterialRenderInfoProvid
 
     // ammo
     buildRenderInfo(MaterialIds.amethyst);
+    buildRenderInfo(MaterialIds.prismarine);
     buildRenderInfo(MaterialIds.skyslime);
     buildRenderInfo(MaterialIds.blaze);
     buildRenderInfo(MaterialIds.enderPearl);

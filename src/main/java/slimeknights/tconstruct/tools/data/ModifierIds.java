@@ -41,6 +41,7 @@ public class ModifierIds {
   public static final ModifierId freezing = id("freezing");
   public static final ModifierId springy = id("springy");
   public static final ModifierId spilling = id("spilling");
+  public static final ModifierId fins = id("fins");
   public static final ModifierId channeling = id("channeling");
   // general abilities
   public static final ModifierId reach = id("reach");

@@ -1263,6 +1263,15 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
       .setTools(ingredientFromTags(TinkerTags.Items.MELEE_WEAPON, TinkerTags.Items.FISHING_RODS))
       .saveSalvage(consumer, prefix(ModifierIds.channeling, abilitySalvage))
       .save(consumer, prefix(ModifierIds.channeling, abilityFolder));
+    ModifierRecipeBuilder.modifier(ModifierIds.fins)
+      .addInput(ItemTags.FISHES)
+      .addInput(Blocks.PRISMARINE_BRICKS)
+      .addInput(ItemTags.FISHES)
+      .setMaxLevel(1).checkTraitLevel()
+      .setSlots(SlotType.UPGRADE, 1)
+      .setTools(TinkerTags.Items.MELEE_WEAPON)
+      .saveSalvage(consumer, prefix(ModifierIds.fins, upgradeSalvage))
+      .save(consumer, prefix(ModifierIds.fins, upgradeFolder));
 
     // fluid stuff
     ModifierRecipeBuilder.modifier(TinkerModifiers.melting)

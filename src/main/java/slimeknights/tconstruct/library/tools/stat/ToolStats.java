@@ -79,6 +79,8 @@ public class ToolStats {
   public static final FloatToolStat ACCURACY = register(new FloatToolStat(name("accuracy"), 0xFF8547CC, 0.75f, 0.1f, 1f, ItemPredicate.or(ItemPredicate.tag(TinkerTags.Items.RANGED), ItemPredicate.tag(TinkerTags.Items.AMMO))));
   /** Base damage of the projectile, boosted by enchantments such as power. Assumes the arrow itself does 2 damage, so we boost on top of that */
   public static final FloatToolStat PROJECTILE_DAMAGE = register(new FloatToolStat(name("projectile_damage"), 0xFFD76464, 2f, 0f, 1024f, ItemPredicate.or(ItemPredicate.tag(TinkerTags.Items.LAUNCHERS), ItemPredicate.tag(TinkerTags.Items.AMMO))));
+  /** Projectile movement speed reduction while underwater */
+  public static final FloatToolStat WATER_INERTIA = register(new FloatToolStat(name("water_inertia"), 0xFF5A82F3, 0.6f, 0.01f, 0.99f, ItemPredicate.or(ItemPredicate.tag(TinkerTags.Items.MELEE_WEAPON), ItemPredicate.tag(TinkerTags.Items.AMMO))));
 
   // fishing
   /** Luck bonus applied to fishing rods */

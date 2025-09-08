@@ -213,10 +213,13 @@ public class ModifiableBowItem extends ModifiableLauncherItem {
       ArrowItem arrowItem = ammo.getItem() instanceof ArrowItem arrow ? arrow : (ArrowItem)Items.ARROW;
       // shenanigans: if the ammo is a melee tool, fire that using the thrown tool projectile
       boolean thrownTool = ammo.is(TinkerTags.Items.BALLISTA_AMMO);
+      float waterInertia = 0.6f;
       SoundEvent sound = SoundEvents.ARROW_SHOOT;
       if (thrownTool) {
         sound = SoundEvents.TRIDENT_THROW;
-        power *= ToolStack.from(ammo).getStats().get(ToolStats.ATTACK_SPEED) / 1.5f;
+        IToolStackView thrown = ToolStack.from(ammo);
+        power *= thrown.getStats().get(ToolStats.ATTACK_SPEED) / 1.5f;
+        waterInertia = ConditionalStatModifierHook.getModifiedStat(thrown, living, ToolStats.WATER_INERTIA);
       }
       float inaccuracy = ModifierUtil.getInaccuracy(tool, living);
       float startAngle = getAngleStart(ammo.getCount());
@@ -224,7 +227,7 @@ public class ModifiableBowItem extends ModifiableLauncherItem {
       for (int arrowIndex = 0; arrowIndex < ammo.getCount(); arrowIndex++) {
         AbstractArrow arrow;
         if (thrownTool) {
-          arrow = new ThrownTool(level, living, ammo, charge, velocity);
+          arrow = new ThrownTool(level, living, ammo, charge, velocity, waterInertia);
         } else {
           arrow = arrowItem.createArrow(level, ammo, living);
         }

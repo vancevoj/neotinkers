@@ -1877,6 +1877,8 @@
 
   "material.tconstruct.amethyst": "Amethyst",
 
+  "material.tconstruct.prismarine": "Prismarine",
+
   "material.tconstruct.skyslime": "Skyslime",
 
   "material.tconstruct.blaze": "Blaze",
@@ -2646,6 +2648,9 @@
   "modifier.tconstruct.channeling": "Channeling",
   "modifier.tconstruct.channeling.flavor": "Ka-chow!",
   "modifier.tconstruct.channeling.description": "Causes lightning to strike the target of tool projectiles during storms.",
+  "modifier.tconstruct.fins": "Fins",
+  "modifier.tconstruct.fins.flavor": "Splash!",
+  "modifier.tconstruct.fins.description": "Allows the tool as a projectile to move freely underwater.",
 
   "modifier.tconstruct.fishing": "Fishing",
   "modifier.tconstruct.fishing.flavor": "Obligatory fishing minigame",

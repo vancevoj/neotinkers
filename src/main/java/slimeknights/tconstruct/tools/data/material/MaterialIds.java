@@ -42,6 +42,7 @@ public final class MaterialIds {
   public static final MaterialId twistingVine = id("twisting_vine");
   // tier 2 - ammo
   public static final MaterialId amethyst = id("amethyst");
+  public static final MaterialId prismarine = id("prismarine");
   public static final MaterialId skyslime = id("skyslime");
   public static final MaterialId blaze = id("blaze");
   public static final MaterialId enderPearl = id("ender_pearl");

@@ -184,6 +184,10 @@ public class TinkerMaterialSpriteProvider extends AbstractMaterialSpriteProvider
       .arrowHead()
       .fallbacks("crystal", "rock")
       .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF54398A).addARGB(102, 0xFF6F4FAB).addARGB(140, 0xFF8D6ACC).addARGB(178, 0xFFCFA0F3).addARGB(216, 0xFFFECBE6).addARGB(255, 0xFFFFFDD5).build());
+    buildMaterial(MaterialIds.prismarine)
+      .arrowHead()
+      .fallbacks("rock")
+      .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF2E6053).addARGB(102, 0xFF43806E).addARGB(140, 0xFF539882).addARGB(178, 0xFF7CB3A4).addARGB(216, 0xFF91C2AC).addARGB(255, 0xFFA4D1C2).build());
     buildMaterial(MaterialIds.quartz)
       .arrowHead()
       .fallbacks("crystal", "rock")
