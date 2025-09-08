@@ -27,6 +27,7 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
   protected void addMaterialTraits() {
     // tier 1
     addDefaultTraits(MaterialIds.wood, ModifierIds.cultivated);
+    addTraits(MaterialIds.wood, AMMO, ModifierIds.economical);
     addDefaultTraits(MaterialIds.rock, ModifierIds.stonebound);
     addDefaultTraits(MaterialIds.flint, ModifierIds.jagged);
     addDefaultTraits(MaterialIds.bone, ModifierIds.pierce);

@@ -27,6 +27,7 @@ import slimeknights.tconstruct.library.modifiers.hook.build.ConditionalStatModif
 import slimeknights.tconstruct.library.modifiers.hook.build.ModifierRemovalHook;
 import slimeknights.tconstruct.library.modifiers.hook.build.ModifierTraitHook;
 import slimeknights.tconstruct.library.modifiers.hook.build.RawDataModifierHook;
+import slimeknights.tconstruct.library.modifiers.hook.build.ToolCraftModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.build.ToolStatsModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.build.ValidateModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.build.VolatileDataModifierHook;
@@ -165,6 +166,9 @@ public class ModifierHooks {
 
 
   /* Tool Building */
+
+  /** Hook called on tool crafting to allow modifying the amount crafted */
+  public static final ModuleHook<ToolCraftModifierHook> TOOL_CRAFT = register("tool_craft", ToolCraftModifierHook.class, ToolCraftModifierHook.ComposeMerger::new, (context, modifier, amount) -> amount);
 
   /** Hook for adding raw unconditional stats to a tool */
   public static final ModuleHook<ToolStatsModifierHook> TOOL_STATS = register("modifier_stats", ToolStatsModifierHook.class, ToolStatsModifierHook.AllMerger::new, (context, modifier, builder) -> {});

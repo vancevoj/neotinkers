@@ -2758,6 +2758,9 @@
   "modifier.tconstruct.cultivated": "Cultivated",
   "modifier.tconstruct.cultivated.flavor": "Economical!",
   "modifier.tconstruct.cultivated.description": "Tool practically grows more material when repairing",
+  "modifier.tconstruct.economical": "Economical",
+  "modifier.tconstruct.economical.flavor": "Ecological!",
+  "modifier.tconstruct.economical.description": "Doubles the number of arrows crafted",
   "modifier.tconstruct.jagged": "Jagged",
   "modifier.tconstruct.jagged.flavor": "Broken edges make it sharp!",
   "modifier.tconstruct.jagged.description": "Every point durability lost increases damage, but decreases mining speed",
@@ -3382,6 +3385,7 @@
   "gui.tconstruct.manual.cycle.recipes": "Cycle to other recipes",
 
   "recipe.tconstruct.tool_repair.fully_repaired": "Tool is not damaged",
+  "recipe.tconstruct.tool_build.no_count": "One of the traits prevented this tool from being crafted.",
   "recipe.tconstruct.damaging.broken": "Tool is already broken",
   "recipe.tconstruct.overslime.at_capacity": "Tool has no more space for overslime",
 

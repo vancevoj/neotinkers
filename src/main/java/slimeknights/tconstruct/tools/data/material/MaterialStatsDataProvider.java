@@ -384,6 +384,7 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
 
   private void addAmmo() {
     // tier 1
+    addMaterialStats(MaterialIds.wood, StatlessMaterialStats.ARROW_SHAFT);
     addMaterialStats(MaterialIds.bone, StatlessMaterialStats.ARROW_SHAFT);
     addMaterialStats(MaterialIds.bamboo, StatlessMaterialStats.ARROW_SHAFT);
     addMaterialStats(MaterialIds.chorus, StatlessMaterialStats.ARROW_SHAFT);

@@ -19,6 +19,8 @@ import slimeknights.mantle.util.LogicHelper;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.json.TinkerLoadables;
 import slimeknights.tconstruct.library.materials.definition.MaterialVariant;
+import slimeknights.tconstruct.library.modifiers.ModifierEntry;
+import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.recipe.RecipeResult;
 import slimeknights.tconstruct.library.recipe.material.MaterialRecipeCache;
 import slimeknights.tconstruct.library.recipe.tinkerstation.ITinkerStationContainer;
@@ -47,6 +49,7 @@ import java.util.stream.IntStream;
 
 @RequiredArgsConstructor
 public class ToolBuildingRecipe implements ITinkerStationRecipe {
+  protected static final RecipeResult<LazyToolStack> NO_COUNT = RecipeResult.failure(TConstruct.makeTranslationKey("recipe", "tool_build.no_count"));
   public static final RecordLoadable<ToolBuildingRecipe> LOADER = RecordLoadable.create(
     ContextKey.ID.requiredField(),
     LoadableRecipeSerializer.RECIPE_GROUP,
@@ -186,12 +189,20 @@ public class ToolBuildingRecipe implements ITinkerStationRecipe {
                                                .mapToObj(i -> MaterialVariant.of(IMaterialItem.getMaterialFromStack(inv.getInput(i))))
                                                .toList();
     ToolStack tool = ToolStack.createTool(output.asItem(), output.getToolDefinition(), new MaterialNBT(materials));
+    // ammo modifier hook
+    int count = outputCount;
+    for (ModifierEntry entry : tool.getModifiers()) {
+      count = entry.getHook(ModifierHooks.TOOL_CRAFT).onToolCraft(tool, entry, count);
+      if (count <= 0) {
+        return NO_COUNT;
+      }
+    }
     // validate the tool, lets people have traits reject each other or do weird slot shenanigans
     Component error = tool.tryValidate();
     if (error != null) {
       return RecipeResult.failure(error);
     }
-    return LazyToolStack.success(tool, Math.min(output.asItem().getMaxStackSize(), outputCount));
+    return LazyToolStack.success(tool, Math.min(output.asItem().getMaxStackSize(), count));
   }
 
   @Deprecated
