@@ -25,7 +25,6 @@ public final class MaterialIds {
   public static final MaterialId vine = id("vine");
   // tier 1 - shield cores
   public static final MaterialId cactus = id("cactus");
-  public static final MaterialId ice = id("ice");
   // tier 2
   public static final MaterialId iron = id("iron");
   public static final MaterialId searedStone = id("seared_stone");
@@ -53,6 +52,8 @@ public final class MaterialIds {
   // tier 3 - bindings
   public static final MaterialId darkthread = id("darkthread");
   public static final MaterialId ichorskin = id("ichorskin");
+  // tier 3 - shield cores
+  public static final MaterialId ice = id("ice");
   // tier 4
   public static final MaterialId manyullyn = id("manyullyn");
   public static final MaterialId hepatizon = id("hepatizon");

@@ -107,9 +107,6 @@ public class MaterialRecipeProvider extends BaseRecipeProvider implements IMater
     materialRecipe(consumer, MaterialIds.leather, Ingredient.of(Items.RABBIT_HIDE),  1, 2, folder + "rabbit_hide");
     materialRecipe(consumer, MaterialIds.vine,    Ingredient.of(Items.VINE),         1, 1, folder + "vine");
     materialRecipe(consumer, MaterialIds.cactus,  Ingredient.of(Blocks.CACTUS),      1, 1, folder + "cactus");
-    materialRecipe(consumer, MaterialIds.ice,     Ingredient.of(Blocks.ICE),         1, 9, folder + "ice/unpacked");
-    materialRecipe(consumer, MaterialIds.ice,     Ingredient.of(Blocks.PACKED_ICE),  1, 1, folder + "ice/packed");
-    materialRecipe(consumer, MaterialIds.ice,     Ingredient.of(Blocks.BLUE_ICE),    9, 1, folder + "ice/blue");
 
     // tier 2
     metalMaterialRecipe(consumer, MaterialIds.iron, folder, "iron", false);
@@ -143,6 +140,9 @@ public class MaterialRecipeProvider extends BaseRecipeProvider implements IMater
     metalMaterialRecipe(consumer, MaterialIds.amethystBronze, folder, "amethyst_bronze", false);
     metalMaterialRecipe(consumer, MaterialIds.pigIron, folder, "pig_iron", false);
     materialRecipe(consumer, MaterialIds.obsidian, Ingredient.of(Items.OBSIDIAN), 1, 1, folder + "obsidian");
+    materialRecipe(consumer, MaterialIds.ice, Ingredient.of(Blocks.ICE),        1, 9, folder + "ice/unpacked");
+    materialRecipe(consumer, MaterialIds.ice, Ingredient.of(Blocks.PACKED_ICE), 1, 1, folder + "ice/packed");
+    materialRecipe(consumer, MaterialIds.ice, Ingredient.of(Blocks.BLUE_ICE),   9, 1, folder + "ice/blue");
 
     // tier 2 (nether)
     // tier 3 (nether)
@@ -191,6 +191,7 @@ public class MaterialRecipeProvider extends BaseRecipeProvider implements IMater
     materialRecipe(consumer, MaterialIds.enderPearl,  Ingredient.of(Tags.Items.ENDER_PEARLS),                 1, 1, folder + "ender_pearl");
     materialRecipe(consumer, MaterialIds.rottenFlesh, Ingredient.of(Items.ROTTEN_FLESH),                      1, 1, folder + "rotten_flesh");
     // slimesuit
+    // TODO: use enderslime crystals for repair instead?
     materialRecipe(consumer, MaterialIds.enderslime, Ingredient.of(TinkerCommons.slimeball.get(SlimeType.ENDER)),    1, 1, folder + "enderslime/ball");
     materialRecipe(consumer, MaterialIds.enderslime, Ingredient.of(TinkerWorld.congealedSlime.get(SlimeType.ENDER)), 4, 1, folder + "enderslime/congealed");
     materialRecipe(consumer, MaterialIds.enderslime, Ingredient.of(TinkerWorld.slime.get(SlimeType.ENDER)),          9, 1, folder + "enderslime/block");
@@ -201,9 +202,6 @@ public class MaterialRecipeProvider extends BaseRecipeProvider implements IMater
     String folder = "tools/materials/";
 
     // melting and casting
-    // tier 1
-    MaterialMeltingRecipeBuilder.material(MaterialIds.ice, 10, FluidOutput.fromFluid(Fluids.WATER, FluidType.BUCKET_VOLUME * 9))
-      .save(consumer, location(folder + "melting/ice"));
     // tier 2
     materialMeltingCasting(consumer, MaterialIds.iron,          TinkerFluids.moltenIron,    folder);
     materialMeltingCasting(consumer, MaterialIds.copper,        TinkerFluids.moltenCopper,  folder);
@@ -248,6 +246,8 @@ public class MaterialRecipeProvider extends BaseRecipeProvider implements IMater
     materialComposite(consumer,        MaterialIds.string, MaterialIds.roseGold,   TinkerFluids.moltenRoseGold, FluidValues.INGOT, folder);
     materialMeltingComposite(consumer, MaterialIds.wood,   MaterialIds.nahuatl,    TinkerFluids.moltenObsidian, FluidValues.GLASS_BLOCK, folder);
     materialMeltingComposite(consumer, MaterialIds.string, MaterialIds.darkthread, TinkerFluids.moltenObsidian, FluidValues.GLASS_PANE, folder);
+    MaterialMeltingRecipeBuilder.material(MaterialIds.ice, 10, FluidOutput.fromFluid(Fluids.WATER, FluidType.BUCKET_VOLUME * 9))
+      .save(consumer, location(folder + "melting/ice"));
 
     // tier 4
     materialMeltingCasting(consumer, MaterialIds.cinderslime, TinkerFluids.moltenCinderslime, folder);

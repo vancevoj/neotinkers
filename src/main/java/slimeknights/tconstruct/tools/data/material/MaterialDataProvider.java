@@ -36,8 +36,8 @@ public class MaterialDataProvider extends AbstractMaterialDataProvider {
     addMaterial(MaterialIds.string,  1, ORDER_BINDING - 2, true); // earlier order so its the first in stat type
     addMaterial(MaterialIds.leather, 1, ORDER_BINDING, true);
     addMaterial(MaterialIds.vine,    1, ORDER_BINDING, true);
-    addMaterial(MaterialIds.ice,     1, ORDER_BINDING, true);
-    addMaterial(MaterialIds.cactus,  1, ORDER_BINDING, true);
+    // tier 1 - shield cores
+    addMaterial(MaterialIds.cactus, 1, ORDER_BINDING, true);
 
     // tier 2
     addMaterial(MaterialIds.iron,        2, ORDER_GENERAL, false);
@@ -72,6 +72,8 @@ public class MaterialDataProvider extends AbstractMaterialDataProvider {
     // tier 3 - binding
     addMaterial(MaterialIds.darkthread, 3, ORDER_BINDING, false);
     addMaterial(MaterialIds.ichorskin,  3, ORDER_BINDING, false);
+    // tier 3 - shield cores
+    addMaterial(MaterialIds.ice, 3, ORDER_BINDING, true);
 
     // tier 4
     addMaterial(MaterialIds.queensSlime, 4, ORDER_GENERAL, false);

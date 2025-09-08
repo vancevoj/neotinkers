@@ -32,8 +32,6 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     addDefaultTraits(MaterialIds.bone, ModifierIds.pierce);
     addTraits(MaterialIds.bone, AMMO, TinkerModifiers.impaling);
     addDefaultTraits(MaterialIds.bamboo, ModifierIds.unburdened);
-    addDefaultTraits(MaterialIds.ice, ModifierIds.frostshield);
-    addTraits(MaterialIds.ice, AMMO, ModifierIds.freezing);
     addDefaultTraits(MaterialIds.cactus, ModifierIds.thorns);
     // tier 1 - end
     addDefaultTraits(MaterialIds.chorus, TinkerModifiers.enderference);
@@ -85,6 +83,8 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     // tier 3 - binding
     addDefaultTraits(MaterialIds.darkthread, ModifierIds.looting);
     addDefaultTraits(MaterialIds.ichorskin, ModifierIds.overshield, TinkerModifiers.overslime.getId());
+    addDefaultTraits(MaterialIds.ice, ModifierIds.frostshield);
+    addTraits(MaterialIds.ice, AMMO, ModifierIds.freezing);
 
     // tier 4
     addDefaultTraits(MaterialIds.cinderslime, ModifierIds.overburn, TinkerModifiers.overslime.getId());
