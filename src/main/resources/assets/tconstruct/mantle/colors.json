@@ -267,6 +267,7 @@
     "crystalbound":  "#C687BD",
     "featherweight": "#CDD5D8",
     "unburdened":    "#8AAE60",
+    "woodwind":      "#8AAE60",
     "holy":          "#D3DFE8",
     "olympic":       "#A3E7FE",
 
@@ -432,15 +433,19 @@
     "brass":     "#E6D08D",
     "uranium":   "#A3B1A8",
 
+    "__ammo__": null,
+    "skyslime":    "#01cbcd",
+    "ender_pearl": "#349988",
+    "blaze":       "#FFC100",
+    "quartz":      "#EAE5DE",
+
     "__slimeskull__": null,
     "gold":         "#FDF55F",
     "glass":        "#D0EAE9",
     "rotten_flesh": "#6F4D1B",
-    "ender_pearl":  "#349988",
 
     "__slimesuit__": null,
     "earthslime": "#01cd4e",
-    "skyslime":   "#01cbcd",
     "blood":      "#b50101",
     "magma":      "#652828",
     "ichor":      "#ff970d",

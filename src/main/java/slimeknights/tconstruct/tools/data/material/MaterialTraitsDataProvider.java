@@ -32,6 +32,7 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     addDefaultTraits(MaterialIds.bone, ModifierIds.pierce);
     addTraits(MaterialIds.bone, AMMO, TinkerModifiers.impaling);
     addDefaultTraits(MaterialIds.bamboo, ModifierIds.unburdened);
+    addTraits(MaterialIds.bamboo, AMMO, ModifierIds.woodwind);
     addDefaultTraits(MaterialIds.cactus, ModifierIds.thorns);
     // tier 1 - end
     addDefaultTraits(MaterialIds.chorus, TinkerModifiers.enderference);
@@ -67,6 +68,8 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     addDefaultTraits(MaterialIds.twistingVine, ModifierIds.entangled);
     // tier 2 - ammo
     addTraits(MaterialIds.skyslime, AMMO, ModifierIds.punch);
+    addDefaultTraits(MaterialIds.blaze, ModifierIds.fiery);
+    addTraits(MaterialIds.enderPearl, AMMO, TinkerModifiers.enderporting);
 
     // tier 3
     addDefaultTraits(MaterialIds.slimesteel, ModifierIds.overcast, TinkerModifiers.overslime.getId());
@@ -85,6 +88,8 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     addDefaultTraits(MaterialIds.ichorskin, ModifierIds.overshield, TinkerModifiers.overslime.getId());
     addDefaultTraits(MaterialIds.ice, ModifierIds.frostshield);
     addTraits(MaterialIds.ice, AMMO, ModifierIds.freezing);
+    // tier 3 - ammo
+    addTraits(MaterialIds.quartz, AMMO, ModifierIds.power);
 
     // tier 4
     addDefaultTraits(MaterialIds.cinderslime, ModifierIds.overburn, TinkerModifiers.overslime.getId());

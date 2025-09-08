@@ -385,12 +385,16 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
   private void addAmmo() {
     // tier 1
     addMaterialStats(MaterialIds.bone, StatlessMaterialStats.ARROW_SHAFT);
+    addMaterialStats(MaterialIds.bamboo, StatlessMaterialStats.ARROW_SHAFT);
     addMaterialStats(MaterialIds.chorus, StatlessMaterialStats.ARROW_SHAFT);
     // tier 2
     addMaterialStats(MaterialIds.skyslime, StatlessMaterialStats.ARROW_HEAD);
+    addMaterialStats(MaterialIds.enderPearl, StatlessMaterialStats.ARROW_HEAD);
     addMaterialStats(MaterialIds.necroticBone, StatlessMaterialStats.ARROW_SHAFT);
+    addMaterialStats(MaterialIds.blaze, StatlessMaterialStats.ARROW_SHAFT);
     // tier 3
     addMaterialStats(MaterialIds.ice, StatlessMaterialStats.ARROW_HEAD);
+    addMaterialStats(MaterialIds.quartz, StatlessMaterialStats.ARROW_HEAD);
   }
 
   private void addArmor() {

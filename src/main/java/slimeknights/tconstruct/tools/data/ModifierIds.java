@@ -161,6 +161,7 @@ public class ModifierIds {
   public static final ModifierId depthProtection = id("depth_protection");
   public static final ModifierId enderclearance = id("enderclearance");
   public static final ModifierId frostshield = id("frostshield");
+  public static final ModifierId woodwind = id("woodwind");
   // traits - tier 2
   public static final ModifierId overgrowth = id("overgrowth");
   public static final ModifierId searing = id("searing");

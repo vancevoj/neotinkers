@@ -40,6 +40,10 @@ public final class MaterialIds {
   public static final MaterialId skyslimeVine = id("skyslime_vine");
   public static final MaterialId weepingVine = id("weeping_vine");
   public static final MaterialId twistingVine = id("twisting_vine");
+  // tier 2 - ammo
+  public static final MaterialId skyslime = id("skyslime");
+  public static final MaterialId blaze = id("blaze");
+  public static final MaterialId enderPearl = id("ender_pearl");
   // tier 3
   public static final MaterialId slimesteel = id("slimesteel");
   public static final MaterialId amethystBronze = id("amethyst_bronze");
@@ -54,6 +58,8 @@ public final class MaterialIds {
   public static final MaterialId ichorskin = id("ichorskin");
   // tier 3 - shield cores
   public static final MaterialId ice = id("ice");
+  // tier 3 - ammo
+  public static final MaterialId quartz = id("quartz");
   // tier 4
   public static final MaterialId manyullyn = id("manyullyn");
   public static final MaterialId hepatizon = id("hepatizon");
@@ -99,14 +105,12 @@ public final class MaterialIds {
   public static final MaterialId obsidian = id("obsidian");
   // slimeskull
   public static final MaterialId glass = id("glass");
-  public static final MaterialId enderPearl = id("ender_pearl");
   public static final MaterialId rottenFlesh = id("rotten_flesh");
   // slimesuit
   public static final MaterialId enderslime = id("enderslime");
   public static final MaterialId phantom = id("phantom");
   // slimesuit - textures
   public static final MaterialId earthslime = id("earthslime");
-  public static final MaterialId skyslime = id("skyslime");
   public static final MaterialId ichor = id("ichor");
   public static final MaterialId blood = id("blood");
   public static final MaterialId magma = id("magma");
