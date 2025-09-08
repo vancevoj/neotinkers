@@ -436,6 +436,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
 
     // ranged
     buildModifier(ModifierIds.power).addModule(StatBoostModule.add(ToolStats.PROJECTILE_DAMAGE).amount(0.5f, 0.5f));
+    buildModifier(ModifierIds.keen).addModule(StatBoostModule.add(ToolStats.PROJECTILE_DAMAGE).eachLevel(0.5f));
     buildModifier(ModifierIds.underbowed).addModule(StatBoostModule.add(ToolStats.PROJECTILE_DAMAGE).eachLevel(-1));
     buildModifier(ModifierIds.punch).addModule(new PunchModule(LevelingValue.eachLevel(1), ModifierCondition.ANY_TOOL));
     buildModifier(ModifierIds.arrowPierce).addModule(new ArrowPierceModule(LevelingInt.eachLevel(1), ModifierCondition.ANY_TOOL));
@@ -617,7 +618,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
     buildModifier(ModifierIds.fins)
       .levelDisplay(ModifierLevelDisplay.SINGLE_LEVEL)
       .addModule(StatBoostModule.add(ToolStats.WATER_INERTIA).eachLevel(0.4f))
-      .addModule(ConditionalPowerModule.builder().minLevel(2).target(LivingEntityPredicate.UNDERWATER).eachLevel(2));
+      .addModule(ConditionalPowerModule.builder().minLevel(2).target(LivingEntityPredicate.UNDERWATER).eachLevel(1));
 
     // fishing
     buildModifier(ModifierIds.fishing).levelDisplay(ModifierLevelDisplay.NO_LEVELS).addModule(FishingModule.INSTANCE);
@@ -885,7 +886,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
     buildModifier(ModifierIds.crystalbound)
       .addModule(RestrictAngleModule.INSTANCE)
       .addModule(StatBoostModule.add(ToolStats.VELOCITY).eachLevel(0.1f))
-      .addModule(StatBoostModule.add(ToolStats.PROJECTILE_DAMAGE).toolTag(TinkerTags.Items.AMMO).eachLevel(2));
+      .addModule(StatBoostModule.add(ToolStats.PROJECTILE_DAMAGE).toolTag(TinkerTags.Items.AMMO).eachLevel(1));
     buildModifier(ModifierIds.crystalstrike)
       .addModule(AttributeModule.builder(Attributes.ATTACK_SPEED, Operation.MULTIPLY_TOTAL).eachLevel(0.025f))
       .addModule(new ArmorLevelModule(TinkerDataKeys.CRYSTALSTRIKE, false, TinkerTags.Items.HELD_ARMOR));

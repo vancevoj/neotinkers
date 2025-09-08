@@ -94,7 +94,7 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     addDefaultTraits(MaterialIds.ice, ModifierIds.frostshield);
     addTraits(MaterialIds.ice, AMMO, ModifierIds.freezing);
     // tier 3 - ammo
-    addTraits(MaterialIds.quartz, AMMO, ModifierIds.power);
+    addTraits(MaterialIds.quartz, AMMO, ModifierIds.keen);
     addTraits(MaterialIds.ichor, AMMO, ModifierIds.spectral);
 
     // tier 4

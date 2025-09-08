@@ -9,7 +9,7 @@
     },
     {
       "type": "tconstruct:conditional_power",
-      "each_level": 2.0,
+      "each_level": 1.0,
       "modifier_level": {
         "min": 2
       },
