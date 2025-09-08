@@ -404,7 +404,7 @@ public class TinkerMaterialSpriteProvider extends AbstractMaterialSpriteProvider
       .statType(SLIMESUIT)
       .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(140, 0xFFCA4E06).addARGB(155, 0xFFE66410).addARGB(170, 0xFF411616).addARGB(193, 0xFF501B1B).addARGB(216, 0xFF652828).addARGB(236, 0xFF411616).build());
     IColorMapping ichor = GreyToColorMapping.builderFromBlack().addARGB(63, 0xFFB04000).addARGB(102, 0xFFD35200).addARGB(140, 0xFFEC5E00).addARGB(178, 0xFFFF8324).addARGB(216, 0xFFFFB97C).addARGB(255, 0xFFFFFFFF).build();
-    buildMaterial(MaterialIds.ichor).statType(SLIMESUIT).colorMapper(ichor);
+    buildMaterial(MaterialIds.ichor).statType(SLIMESUIT).arrowHead().colorMapper(ichor);
     buildMaterial(MaterialIds.ichorskin).fallbacks("cloth").cuirass().maille().colorMapper(ichor);
     buildMaterial(MaterialIds.clay)
       .statType(SLIMESUIT)

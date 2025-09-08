@@ -79,6 +79,7 @@ public class MaterialDataProvider extends AbstractMaterialDataProvider {
     addMaterial(MaterialIds.ice, 3, ORDER_BINDING, true);
     // tier 3 - ammo
     addMaterial(MaterialIds.quartz, 3, ORDER_REPAIR, false);
+    addMaterial(MaterialIds.ichor,  3, ORDER_REPAIR, true);
 
     // tier 4
     addMaterial(MaterialIds.queensSlime, 4, ORDER_GENERAL, false);
@@ -126,7 +127,6 @@ public class MaterialDataProvider extends AbstractMaterialDataProvider {
     addMaterial(MaterialIds.earthslime, 1, ORDER_REPAIR, true);
     addMaterial(MaterialIds.blood,      2, ORDER_REPAIR, true);
     addMaterial(MaterialIds.magma,      2, ORDER_REPAIR, true);
-    addMaterial(MaterialIds.ichor,      3, ORDER_REPAIR, true);
     addMaterial(MaterialIds.enderslime, 4, ORDER_REPAIR, true);
     addMaterial(MaterialIds.clay,       1, ORDER_REPAIR, true);
     addMaterial(MaterialIds.honey,      1, ORDER_REPAIR, true);

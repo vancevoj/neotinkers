@@ -91,6 +91,7 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     addTraits(MaterialIds.ice, AMMO, ModifierIds.freezing);
     // tier 3 - ammo
     addTraits(MaterialIds.quartz, AMMO, ModifierIds.power);
+    addTraits(MaterialIds.ichor, AMMO, ModifierIds.spectral);
 
     // tier 4
     addDefaultTraits(MaterialIds.cinderslime, ModifierIds.overburn, TinkerModifiers.overslime.getId());
@@ -154,7 +155,6 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     noTraits(MaterialIds.earthslime);
     noTraits(MaterialIds.blood);
     noTraits(MaterialIds.magma);
-    noTraits(MaterialIds.ichor);
     noTraits(MaterialIds.enderslime);
     noTraits(MaterialIds.clay);
     noTraits(MaterialIds.honey);

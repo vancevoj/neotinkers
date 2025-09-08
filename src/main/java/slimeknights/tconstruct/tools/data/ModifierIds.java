@@ -196,6 +196,7 @@ public class ModifierIds {
   public static final ModifierId lightweight = id("lightweight");
   public static final ModifierId crystalbound = id("crystalbound");
   public static final ModifierId crystalstrike = id("crystalstrike");
+  public static final ModifierId spectral = id("spectral");
   // traits - tier 3 compat
   public static final ModifierId maintained = id("maintained");
   public static final ModifierId ductile = id("ductile");

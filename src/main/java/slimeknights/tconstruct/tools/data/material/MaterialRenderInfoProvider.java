@@ -120,6 +120,7 @@ public class MaterialRenderInfoProvider extends AbstractMaterialRenderInfoProvid
     buildRenderInfo(MaterialIds.blaze);
     buildRenderInfo(MaterialIds.enderPearl);
     buildRenderInfo(MaterialIds.quartz);
+    buildRenderInfo(MaterialIds.ichor);
 
     // plate
     buildRenderInfo(MaterialIds.gold).color(0xFDF55F).fallbacks("metal");
@@ -131,7 +132,6 @@ public class MaterialRenderInfoProvider extends AbstractMaterialRenderInfoProvid
     buildRenderInfo(MaterialIds.earthslime);
     buildRenderInfo(MaterialIds.blood);
     buildRenderInfo(MaterialIds.magma);
-    buildRenderInfo(MaterialIds.ichor);
     buildRenderInfo(MaterialIds.enderslime);
     buildRenderInfo(MaterialIds.clay);
     buildRenderInfo(MaterialIds.honey);

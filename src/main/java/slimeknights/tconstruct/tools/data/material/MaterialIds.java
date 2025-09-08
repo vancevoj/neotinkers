@@ -61,6 +61,7 @@ public final class MaterialIds {
   public static final MaterialId ice = id("ice");
   // tier 3 - ammo
   public static final MaterialId quartz = id("quartz");
+  public static final MaterialId ichor = id("ichor");
   // tier 4
   public static final MaterialId manyullyn = id("manyullyn");
   public static final MaterialId hepatizon = id("hepatizon");
@@ -112,7 +113,6 @@ public final class MaterialIds {
   public static final MaterialId phantom = id("phantom");
   // slimesuit - textures
   public static final MaterialId earthslime = id("earthslime");
-  public static final MaterialId ichor = id("ichor");
   public static final MaterialId blood = id("blood");
   public static final MaterialId magma = id("magma");
   public static final MaterialId clay = id("clay");

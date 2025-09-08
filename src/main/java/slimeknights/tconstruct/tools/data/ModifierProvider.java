@@ -186,6 +186,7 @@ import slimeknights.tconstruct.tools.modules.interaction.PlaceGlowModule;
 import slimeknights.tconstruct.tools.modules.interaction.ThrowingModule;
 import slimeknights.tconstruct.tools.modules.ranged.ArrowPierceModule;
 import slimeknights.tconstruct.tools.modules.ranged.BulkQuiverModule;
+import slimeknights.tconstruct.tools.modules.ranged.ProjectilePlaceGlowModule;
 import slimeknights.tconstruct.tools.modules.ranged.PunchModule;
 import slimeknights.tconstruct.tools.modules.ranged.QuiverInventoryModule;
 import slimeknights.tconstruct.tools.modules.ranged.RestrictAngleModule;
@@ -292,7 +293,8 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .levelDisplay(ModifierLevelDisplay.SINGLE_LEVEL)
       .addModule(ShowOffhandModule.DISALLOW_BROKEN)
       .addModule(new PlaceGlowModule(5))
-      .addModule(new GlowWalkerModule(new LevelingValue(2, 1), 3, 5));
+      .addModule(new GlowWalkerModule(new LevelingValue(2, 1), 3, 5))
+      .addModule(ProjectilePlaceGlowModule.ANY);
     buildModifier(TinkerModifiers.melting)
       .levelDisplay(ModifierLevelDisplay.PLUSES)
       .addModule(ToolTankHelper.TANK_HANDLER)
@@ -881,6 +883,9 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
     buildModifier(ModifierIds.crystalstrike)
       .addModule(AttributeModule.builder(Attributes.ATTACK_SPEED, Operation.MULTIPLY_TOTAL).eachLevel(0.025f))
       .addModule(new ArmorLevelModule(TinkerDataKeys.CRYSTALSTRIKE, false, TinkerTags.Items.HELD_ARMOR));
+    buildModifier(ModifierIds.spectral)
+      .addModule(MobEffectModule.builder(MobEffects.GLOWING).time(RandomLevelingValue.perLevel(0, 200)).build())
+      .addModule(ProjectilePlaceGlowModule.BLOCKS);
     // traits - tier 3 nether
     buildModifier(ModifierIds.lightweight)
       .addModule(StatBoostModule.multiplyBase(ToolStats.ATTACK_SPEED).eachLevel(0.07f))

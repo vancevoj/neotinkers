@@ -396,6 +396,7 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
     // tier 3
     addMaterialStats(MaterialIds.ice, StatlessMaterialStats.ARROW_HEAD);
     addMaterialStats(MaterialIds.quartz, StatlessMaterialStats.ARROW_HEAD);
+    addMaterialStats(MaterialIds.ichor, StatlessMaterialStats.ARROW_HEAD);
   }
 
   private void addArmor() {
@@ -491,7 +492,6 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
     addMaterialStats(MaterialIds.earthslime);
     addMaterialStats(MaterialIds.blood);
     addMaterialStats(MaterialIds.magma);
-    addMaterialStats(MaterialIds.ichor);
     addMaterialStats(MaterialIds.clay);
     addMaterialStats(MaterialIds.honey);
   }
