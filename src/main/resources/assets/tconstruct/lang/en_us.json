@@ -3442,6 +3442,7 @@
   "recipe.tconstruct.enchantment_converting.too_few": "Need to provide more inputs to convert an enchantment of a higher level",
 
   "recipe.tconstruct.part_swapping.too_many_parts": "Table is too small to swap parts on this tool",
+  "recipe.tconstruct.part_swapping.too_few_inputs": "Tool stack size is too small to perform this part swap",
 
   "recipe.tconstruct.modifier.not_enough_slot": "Need at least 1 %s slot to add this modifier",
   "recipe.tconstruct.modifier.not_enough_slots": "Need at least %s %s slots to add this modifier",
