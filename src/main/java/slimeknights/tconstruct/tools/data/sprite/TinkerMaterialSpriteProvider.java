@@ -287,7 +287,7 @@ public class TinkerMaterialSpriteProvider extends AbstractMaterialSpriteProvider
       .fallbacks("primitive")
       .colorMapper(obsidianPalette);
     buildMaterial(MaterialIds.steeleaf)
-      .meleeHarvest().ranged().armor()
+      .meleeHarvest().ranged().armor().arrowHead()
       .fallbacks("metal_contrast", "metal", "contrast")
       .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF1E3214).addARGB(102, 0xFF27401D).addARGB(140, 0xFF416230).addARGB(178, 0xFF52873A).addARGB(216, 0xFF6DA25E).addARGB(255, 0xFF83BF72).build());
 

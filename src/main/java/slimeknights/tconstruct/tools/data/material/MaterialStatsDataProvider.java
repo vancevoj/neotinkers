@@ -397,6 +397,7 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
     addMaterialStats(MaterialIds.enderPearl, StatlessMaterialStats.ARROW_HEAD);
     addMaterialStats(MaterialIds.necroticBone, StatlessMaterialStats.ARROW_SHAFT);
     addMaterialStats(MaterialIds.blaze, StatlessMaterialStats.ARROW_SHAFT);
+    addMaterialStats(MaterialIds.steeleaf, StatlessMaterialStats.ARROW_HEAD);
     // tier 3
     addMaterialStats(MaterialIds.ice, StatlessMaterialStats.ARROW_HEAD);
     addMaterialStats(MaterialIds.quartz, StatlessMaterialStats.ARROW_HEAD);
