@@ -44,6 +44,7 @@ import slimeknights.tconstruct.library.recipe.tinkerstation.building.ToolBuildin
 import slimeknights.tconstruct.library.tools.nbt.MaterialIdNBT;
 import slimeknights.tconstruct.shared.TinkerMaterials;
 import slimeknights.tconstruct.smeltery.TinkerSmeltery;
+import slimeknights.tconstruct.tables.TinkerTables;
 import slimeknights.tconstruct.tools.TinkerToolParts;
 import slimeknights.tconstruct.tools.TinkerTools;
 import slimeknights.tconstruct.tools.data.material.MaterialIds;
@@ -109,6 +110,12 @@ public class ToolsRecipeProvider extends BaseRecipeProvider implements IMaterial
     ToolBuildingRecipeBuilder.toolBuildingRecipe(TinkerTools.shuriken.get())
       .outputSize(4)
       .save(consumer, prefix(TinkerTools.shuriken, folder));
+    ToolBuildingRecipeBuilder.toolBuildingRecipe(TinkerTools.arrow.get())
+      .addExtraRequirement(Ingredient.of(Items.ARROW))
+      .noParts()
+      .addExtraMaterial(MaterialIds.flint).addExtraMaterial(MaterialIds.wood)
+      .layoutSlot(TinkerTables.tinkerStation.getId())
+      .save(consumer, wrap(TinkerTools.arrow, folder, "_from_vanilla"));
 
     // specialized
     ShapelessRecipeBuilder.shapeless(RecipeCategory.TOOLS, TinkerTools.flintAndBrick)
