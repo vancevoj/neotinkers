@@ -43,6 +43,7 @@ public final class MaterialIds {
   // tier 2 - ammo
   public static final MaterialId amethyst = id("amethyst");
   public static final MaterialId prismarine = id("prismarine");
+  public static final MaterialId earthslime = id("earthslime");
   public static final MaterialId skyslime = id("skyslime");
   public static final MaterialId blaze = id("blaze");
   public static final MaterialId enderPearl = id("ender_pearl");
@@ -113,7 +114,6 @@ public final class MaterialIds {
   public static final MaterialId enderslime = id("enderslime");
   public static final MaterialId phantom = id("phantom");
   // slimesuit - textures
-  public static final MaterialId earthslime = id("earthslime");
   public static final MaterialId blood = id("blood");
   public static final MaterialId magma = id("magma");
   public static final MaterialId clay = id("clay");

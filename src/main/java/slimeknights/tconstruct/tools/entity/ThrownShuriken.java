@@ -191,8 +191,12 @@ public class ThrownShuriken extends Projectile implements ToolProjectile, Projec
     Level level = level();
     if (!level.isClientSide) {
       if (knockback > 0 && target instanceof LivingEntity living) {
-        Vec3 motion = this.getDeltaMovement().normalize();
-        living.knockback(knockback * 0.5f, -motion.x, -motion.z);
+        // knockback logic based on arrows
+        double resistance = Math.max(0, 1 - living.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE));
+        Vec3 motion = this.getDeltaMovement().multiply(1, 0, 1).normalize().scale(knockback * 0.6 * resistance);
+        if (motion.lengthSqr() > 0) {
+          target.push(motion.x, 0.1f, motion.z);
+        }
       }
       level.broadcastEntityEvent(this, (byte) 3); // TODO: find the proper constant for this event ID
       this.discard();

@@ -117,6 +117,7 @@ public class MaterialRenderInfoProvider extends AbstractMaterialRenderInfoProvid
     // ammo
     buildRenderInfo(MaterialIds.amethyst);
     buildRenderInfo(MaterialIds.prismarine);
+    buildRenderInfo(MaterialIds.earthslime);
     buildRenderInfo(MaterialIds.skyslime);
     buildRenderInfo(MaterialIds.blaze);
     buildRenderInfo(MaterialIds.enderPearl);
@@ -130,7 +131,6 @@ public class MaterialRenderInfoProvider extends AbstractMaterialRenderInfoProvid
     buildRenderInfo(MaterialIds.glass);
     buildRenderInfo(MaterialIds.rottenFlesh);
     // slimesuit
-    buildRenderInfo(MaterialIds.earthslime);
     buildRenderInfo(MaterialIds.blood);
     buildRenderInfo(MaterialIds.magma);
     buildRenderInfo(MaterialIds.enderslime);

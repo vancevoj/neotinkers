@@ -392,6 +392,7 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
     // tier 2
     addMaterialStats(MaterialIds.amethyst, StatlessMaterialStats.ARROW_HEAD);
     addMaterialStats(MaterialIds.prismarine, StatlessMaterialStats.ARROW_HEAD);
+    addMaterialStats(MaterialIds.earthslime, StatlessMaterialStats.ARROW_HEAD);
     addMaterialStats(MaterialIds.skyslime, StatlessMaterialStats.ARROW_HEAD);
     addMaterialStats(MaterialIds.enderPearl, StatlessMaterialStats.ARROW_HEAD);
     addMaterialStats(MaterialIds.necroticBone, StatlessMaterialStats.ARROW_SHAFT);
@@ -492,7 +493,6 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
     addMaterialStats(MaterialIds.enderslime, StatlessMaterialStats.REPAIR_KIT);
     addMaterialStats(MaterialIds.phantom, StatlessMaterialStats.REPAIR_KIT);
     // slimesuit embellishments
-    addMaterialStats(MaterialIds.earthslime);
     addMaterialStats(MaterialIds.blood);
     addMaterialStats(MaterialIds.magma);
     addMaterialStats(MaterialIds.clay);

@@ -72,6 +72,7 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     // tier 2 - ammo
     addTraits(MaterialIds.amethyst, AMMO, ModifierIds.crystalbound);
     addTraits(MaterialIds.prismarine, AMMO, ModifierIds.fins);
+    addTraits(MaterialIds.earthslime, AMMO, ModifierIds.drawback);
     addTraits(MaterialIds.skyslime, AMMO, ModifierIds.punch);
     addDefaultTraits(MaterialIds.blaze, ModifierIds.fiery);
     addTraits(MaterialIds.enderPearl, AMMO, TinkerModifiers.enderporting);

@@ -396,7 +396,7 @@ public class TinkerMaterialSpriteProvider extends AbstractMaterialSpriteProvider
       .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF6F516C).addARGB(102, 0xFF7E627B).addARGB(140, 0xFF958C79).addARGB(178, 0xFFA99B87).addARGB(216, 0xFFC3B9A1).addARGB(255, 0xFFDCD9C0).build());
     // slimesuit embellishments
     buildMaterial(MaterialIds.earthslime)
-      .statType(SLIMESUIT)
+      .statType(SLIMESUIT).arrowHead()
       .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF34532F).addARGB(102, 0xFF406D3B).addARGB(140, 0xFF508049).addARGB(178, 0xFF71AC63).addARGB(216, 0xFF8CD782).addARGB(255, 0xFFFFFFFF).build());
     buildMaterial(MaterialIds.skyslime)
       .statType(SLIMESUIT).arrowHead()

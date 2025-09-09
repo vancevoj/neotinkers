@@ -298,6 +298,7 @@ import slimeknights.tconstruct.tools.modules.ranged.ProjectilePlaceGlowModule;
 import slimeknights.tconstruct.tools.modules.ranged.PunchModule;
 import slimeknights.tconstruct.tools.modules.ranged.QuiverInventoryModule;
 import slimeknights.tconstruct.tools.modules.ranged.RestrictAngleModule;
+import slimeknights.tconstruct.tools.modules.ranged.ReversePunchModule;
 import slimeknights.tconstruct.tools.modules.ranged.TrickQuiverModule;
 import slimeknights.tconstruct.tools.recipe.ArmorDyeingRecipe;
 import slimeknights.tconstruct.tools.recipe.ArmorTrimRecipe;
@@ -792,6 +793,7 @@ public final class TinkerModifiers extends TinkerModule {
       ModifierModule.LOADER.register(getResource("quiver_inventory"), QuiverInventoryModule.LOADER);
       ModifierModule.LOADER.register(getResource("infinity"), InfinityModule.LOADER);
       ModifierModule.LOADER.register(getResource("punch"), PunchModule.LOADER);
+      ModifierModule.LOADER.register(getResource("reverse_punch"), ReversePunchModule.LOADER);
       ModifierModule.LOADER.register(getResource("arrow_pierce"), ArrowPierceModule.LOADER);
       // compat
       ModifierModule.LOADER.register(getResource("the_one_probe"), TheOneProbeModule.INSTANCE.getLoader());

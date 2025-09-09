@@ -191,6 +191,7 @@ import slimeknights.tconstruct.tools.modules.ranged.ProjectilePlaceGlowModule;
 import slimeknights.tconstruct.tools.modules.ranged.PunchModule;
 import slimeknights.tconstruct.tools.modules.ranged.QuiverInventoryModule;
 import slimeknights.tconstruct.tools.modules.ranged.RestrictAngleModule;
+import slimeknights.tconstruct.tools.modules.ranged.ReversePunchModule;
 import slimeknights.tconstruct.tools.modules.ranged.TrickQuiverModule;
 
 import static slimeknights.tconstruct.common.TinkerTags.Items.ARMOR;
@@ -439,6 +440,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
     buildModifier(ModifierIds.keen).addModule(StatBoostModule.add(ToolStats.PROJECTILE_DAMAGE).eachLevel(0.5f));
     buildModifier(ModifierIds.underbowed).addModule(StatBoostModule.add(ToolStats.PROJECTILE_DAMAGE).eachLevel(-1));
     buildModifier(ModifierIds.punch).addModule(new PunchModule(LevelingValue.eachLevel(1), ModifierCondition.ANY_TOOL));
+    buildModifier(ModifierIds.drawback).addModule(new ReversePunchModule(LevelingValue.eachLevel(0.6f)));
     buildModifier(ModifierIds.arrowPierce).addModule(new ArrowPierceModule(LevelingInt.eachLevel(1), ModifierCondition.ANY_TOOL));
     buildModifier(ModifierIds.quickCharge).addModule(StatBoostModule.multiplyBase(ToolStats.DRAW_SPEED).eachLevel(0.25f));
     buildModifier(ModifierIds.trueshot).addModule(StatBoostModule.add(ToolStats.ACCURACY).eachLevel(0.1f));
