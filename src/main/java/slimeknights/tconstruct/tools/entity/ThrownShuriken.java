@@ -11,6 +11,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.ItemStack;
@@ -36,6 +37,8 @@ import slimeknights.tconstruct.library.tools.nbt.ModDataNBT;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
 import slimeknights.tconstruct.tools.TinkerTools;
+
+import javax.annotation.Nullable;
 
 /** Modifiable shuriken entity */
 public class ThrownShuriken extends Projectile implements ToolProjectile, ProjectileWithPower, ProjectileWithKnockback {
@@ -94,22 +97,25 @@ public class ThrownShuriken extends Projectile implements ToolProjectile, Projec
    * Called when the arrow is created to set initial properties.
    * @see MaterialArrow#onCreate(ItemStack, LivingEntity)
    */
-  public void onCreate(ItemStack stack, LivingEntity shooter) {
-    setStack(stack);
-    if (!stack.isEmpty()) {
-      // initialize arrow stats
-      IToolStackView tool = getTool();
-      EntityModifierCapability.getCapability(this).addModifiers(tool.getModifiers());
-      this.power = ConditionalStatModifierHook.getModifiedStat(tool, shooter, ToolStats.PROJECTILE_DAMAGE);
-      this.entityData.set(WATER_INERTIA, ConditionalStatModifierHook.getModifiedStat(tool, shooter, ToolStats.WATER_INERTIA));
+  public void onCreate(ItemStack stack, @Nullable LivingEntity shooter) {
+    if (stack.isEmpty()) {
+      setStack(ItemStack.EMPTY);
+      return;
     }
+    setStack(stack);
+    // initialize arrow stats
+    IToolStackView tool = getTool();
+    EntityModifierCapability.getCapability(this).addModifiers(tool.getModifiers());
+    this.power = ConditionalStatModifierHook.getModifiedStat(tool, shooter, ToolStats.PROJECTILE_DAMAGE);
+    this.entityData.set(WATER_INERTIA, ConditionalStatModifierHook.getModifiedStat(tool, shooter, ToolStats.WATER_INERTIA));
   }
 
   /** @see MaterialArrow#shoot(double, double, double, float, float)  */
   @Override
   public void shoot(double pX, double pY, double pZ, float velocity, float inaccuracy) {
-    if (!stack.isEmpty() && getOwner() instanceof LivingEntity shooter) {
+    if (!stack.isEmpty()) {
       IToolStackView tool = getTool();
+      LivingEntity shooter = ModifierUtil.asLiving(getOwner());
       // apply accuracy, no need to compute this earlier nor store it
       inaccuracy *= ModifierUtil.getInaccuracy(tool, shooter);
 
@@ -119,7 +125,7 @@ public class ThrownShuriken extends Projectile implements ToolProjectile, Projec
       // run modifier hooks from the arrow's perspective
       ModDataNBT arrowData = PersistentDataCapability.getOrWarn(this);
       for (ModifierEntry entry : tool.getModifiers()) {
-        entry.getHook(ModifierHooks.PROJECTILE_SHOT).onProjectileLaunch(tool, entry, shooter, stack, this, null, arrowData, true);
+        entry.getHook(ModifierHooks.PROJECTILE_SHOT).onProjectileShoot(tool, entry, shooter, stack, this, null, arrowData, true);
       }
     } else {
       super.shoot(pX, pY, pZ, velocity, inaccuracy);

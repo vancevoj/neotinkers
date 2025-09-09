@@ -14,6 +14,7 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTab.ItemDisplayParameters;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.data.ExistingFileHelper;
@@ -132,6 +133,8 @@ import slimeknights.tconstruct.tools.item.CrystalshotItem.CrystalshotEntity;
 import slimeknights.tconstruct.tools.item.ModifiableSwordItem;
 import slimeknights.tconstruct.tools.item.SlimeskullItem;
 import slimeknights.tconstruct.tools.logic.EquipmentChangeWatcher;
+import slimeknights.tconstruct.tools.logic.ModifiableArrowDispenserBehavior;
+import slimeknights.tconstruct.tools.logic.ModifiableShurikenDispenserBehavior;
 import slimeknights.tconstruct.tools.menu.ToolContainerMenu;
 import slimeknights.tconstruct.tools.modules.MeltingFluidEffectiveModule;
 
@@ -268,6 +271,10 @@ public final class TinkerTools extends TinkerModule {
     for (ConfigurableAction action : Config.COMMON.toolTweaks) {
       event.enqueueWork(action);
     }
+    event.enqueueWork(() -> {
+      DispenserBlock.registerBehavior(TinkerTools.arrow.get(), ModifiableArrowDispenserBehavior.INSTANCE);
+      DispenserBlock.registerBehavior(TinkerTools.shuriken.get(), ModifiableShurikenDispenserBehavior.INSTANCE);
+    });
     ModifierHooks.init();
     ToolHooks.init();
   }

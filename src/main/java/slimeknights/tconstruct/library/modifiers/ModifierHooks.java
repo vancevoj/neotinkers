@@ -57,6 +57,7 @@ import slimeknights.tconstruct.library.modifiers.hook.ranged.BowAmmoModifierHook
 import slimeknights.tconstruct.library.modifiers.hook.ranged.LauncherHitModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.ranged.ProjectileHitModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.ranged.ProjectileLaunchModifierHook;
+import slimeknights.tconstruct.library.modifiers.hook.ranged.ProjectileShootModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.special.BlockTransformModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.special.CapacityBarHook;
 import slimeknights.tconstruct.library.modifiers.hook.special.PlantHarvestModifierHook;
@@ -270,15 +271,15 @@ public class ModifierHooks {
   /** Hook for firing arrows or other projectiles to modify the entity post firing */
   public static final ModuleHook<ProjectileLaunchModifierHook> PROJECTILE_LAUNCH;
   /** Hook for throwing a projectile that will not be firing {@link #PROJECTILE_HIT} later. */
-  public static final ModuleHook<ProjectileLaunchModifierHook> PROJECTILE_THROWN;
+  public static final ModuleHook<ProjectileShootModifierHook> PROJECTILE_THROWN;
   /** Hook for when a projectile is launched, but called with the projectile tool rather than the launcher */
-  public static final ModuleHook<ProjectileLaunchModifierHook> PROJECTILE_SHOT;
+  public static final ModuleHook<ProjectileShootModifierHook> PROJECTILE_SHOT;
   static {
     ProjectileLaunchModifierHook defaultInstance = (tool, modifier, shooter, projectile, arrow, persistentData, primary) -> {};
-    Function<Collection<ProjectileLaunchModifierHook>,ProjectileLaunchModifierHook> merger = ProjectileLaunchModifierHook.AllMerger::new;
-    PROJECTILE_LAUNCH = register("projectile_launch", ProjectileLaunchModifierHook.class, merger, defaultInstance);
-    PROJECTILE_SHOT = register("projectile_shot", ProjectileLaunchModifierHook.class, merger, defaultInstance);
-    PROJECTILE_THROWN = register("projectile_thrown", ProjectileLaunchModifierHook.class, merger, defaultInstance);
+    Function<Collection<ProjectileShootModifierHook>,ProjectileShootModifierHook> merger = ProjectileShootModifierHook.AllMerger::new;
+    PROJECTILE_LAUNCH = register("projectile_launch", ProjectileLaunchModifierHook.class, ProjectileLaunchModifierHook.AllMerger::new, defaultInstance);
+    PROJECTILE_SHOT = register("projectile_shot", ProjectileShootModifierHook.class, merger, defaultInstance);
+    PROJECTILE_THROWN = register("projectile_thrown", ProjectileShootModifierHook.class, merger, defaultInstance);
   }
   /** Hook called when an arrow hits an entity or block */
   public static final ModuleHook<ProjectileHitModifierHook> PROJECTILE_HIT = register("projectile_hit", ProjectileHitModifierHook.class, ProjectileHitModifierHook.AllMerger::new, new ProjectileHitModifierHook() {});

@@ -2,6 +2,7 @@ package slimeknights.tconstruct.tools.modules.ranged;
 
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -38,15 +39,19 @@ public record ReversePunchModule(LevelingValue amount) implements ModifierModule
   @Override
   public boolean onProjectileHitEntity(ModifierNBT modifiers, ModDataNBT persistentData, ModifierEntry modifier, Projectile projectile, EntityHitResult hit, @Nullable LivingEntity attacker, @Nullable LivingEntity target) {
     if (target != null) {
-      // apply requested amount, but also cancel out the base knockback living entities receive when attacked
-      float amount = this.amount.compute(modifier.getEffectiveLevel()) + 0.8f;
+      // apply requested amount
+      float amount = this.amount.compute(modifier.getEffectiveLevel());
+      // reverse out the base knockback living entities receive when attacked, only applies to projectiles with owners or arrows though
+      if (projectile.getOwner() != null || projectile instanceof AbstractArrow) {
+        amount += 0.8f;
+      }
       // apply knockback attribute
       amount *= Math.max(0, 1 - target.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE));
 
       // knockback logic based on arrows
       Vec3 motion = projectile.getDeltaMovement().multiply(1, 0, 1).normalize().scale(amount);
       if (motion.lengthSqr() > 0) {
-        hit.getEntity().push(-motion.x, 0.1f, -motion.z);
+        target.push(-motion.x, 0.1f, -motion.z);
       }
     }
     return false;

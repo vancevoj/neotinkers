@@ -23,6 +23,8 @@ import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
 import slimeknights.tconstruct.tools.TinkerTools;
 
+import javax.annotation.Nullable;
+
 /** Arrow with material variants */
 public class MaterialArrow extends AbstractArrow implements ToolProjectile {
   /** Key to sync the stack to the client */
@@ -72,23 +74,27 @@ public class MaterialArrow extends AbstractArrow implements ToolProjectile {
    * Called when the arrow is created to set initial properties.
    * @see ThrownShuriken#onCreate(ItemStack, LivingEntity)
    */
-  public void onCreate(ItemStack stack, LivingEntity shooter) {
-    setStack(stack);
-    if (!stack.isEmpty()) {
-      // initialize arrow stats
-      IToolStackView tool = getTool();
-      EntityModifierCapability.getCapability(this).addModifiers(tool.getModifiers());
-      setBaseDamage(ConditionalStatModifierHook.getModifiedStat(tool, shooter, ToolStats.PROJECTILE_DAMAGE));
-      this.entityData.set(WATER_INERTIA, ConditionalStatModifierHook.getModifiedStat(tool, shooter, ToolStats.WATER_INERTIA));
+  public void onCreate(ItemStack stack, @Nullable LivingEntity shooter) {
+    if (stack.isEmpty()) {
+      setStack(ItemStack.EMPTY);
+      return;
     }
+    stack = stack.copyWithCount(1);
+    setStack(stack);
+    // initialize arrow stats
+    IToolStackView tool = getTool();
+    EntityModifierCapability.getCapability(this).addModifiers(tool.getModifiers());
+    setBaseDamage(ConditionalStatModifierHook.getModifiedStat(tool, shooter, ToolStats.PROJECTILE_DAMAGE));
+    this.entityData.set(WATER_INERTIA, ConditionalStatModifierHook.getModifiedStat(tool, shooter, ToolStats.WATER_INERTIA));
   }
 
   /** @see ThrownShuriken#shoot(double, double, double, float, float)  */
   @Override
   public void shoot(double pX, double pY, double pZ, float velocity, float inaccuracy) {
-    if (!stack.isEmpty() && getOwner() instanceof LivingEntity shooter) {
+    if (!stack.isEmpty()) {
       IToolStackView tool = getTool();
       // apply accuracy, no need to compute this earlier nor store it
+      LivingEntity shooter = ModifierUtil.asLiving(getOwner());
       inaccuracy *= ModifierUtil.getInaccuracy(tool, shooter);
 
       // shoot with new information
@@ -97,7 +103,7 @@ public class MaterialArrow extends AbstractArrow implements ToolProjectile {
       // run modifier hooks from the arrow's perspective
       ModDataNBT arrowData = PersistentDataCapability.getOrWarn(this);
       for (ModifierEntry entry : tool.getModifiers()) {
-        entry.getHook(ModifierHooks.PROJECTILE_SHOT).onProjectileLaunch(tool, entry, shooter, stack, this, this, arrowData, true);
+        entry.getHook(ModifierHooks.PROJECTILE_SHOT).onProjectileShoot(tool, entry, shooter, stack, this, this, arrowData, true);
       }
     } else {
       super.shoot(pX, pY, pZ, velocity, inaccuracy);
