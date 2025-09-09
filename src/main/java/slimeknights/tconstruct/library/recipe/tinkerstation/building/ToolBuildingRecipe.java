@@ -101,33 +101,9 @@ public class ToolBuildingRecipe implements ITinkerStationRecipe {
     this(id, group, output, outputCount, layoutSlot, ingredients, null, List.of());
   }
 
-  /**
-   * Gets the ID of the station slot layout for displaying this recipe.
-   * Typically matches the output definition ID, but some tool recipes share a single layout.
-   */
-  public ResourceLocation getLayoutSlotId() {
-    return Objects.requireNonNullElse(layoutSlot, output.getToolDefinition().getId());
-  }
-
-  /** Gets the layout slots so we know where go position item slots for guis */
-  public List<LayoutSlot> getLayoutSlots() {
-    if (layoutSlots == null) {
-      layoutSlots = StationSlotLayoutLoader.getInstance().get(getLayoutSlotId()).getInputSlots();
-      if (layoutSlots.isEmpty()) {
-        // fallback to tinker station or anvil
-        layoutSlots = StationSlotLayoutLoader.getInstance().get(TConstruct.getResource(requiresAnvil() ? "tinkers_anvil" : "tinker_station")).getInputSlots();
-      }
-      int missingSlots = getAllToolParts().size() + getExtraRequirements().size() - layoutSlots.size();
-      // check layout slots if its too small
-      if (missingSlots > 0) {
-        TConstruct.LOG.error(String.format("Tool part count is greater than layout slot count for %s!", getId()));
-        layoutSlots = new ArrayList<>(layoutSlots);
-        for (int additionalSlot = 0; additionalSlot < missingSlots; additionalSlot++) {
-          layoutSlots.add(new LayoutSlot(null, null, additionalSlot * SLOT_SIZE - X_OFFSET, -Y_OFFSET, null));
-        }
-      }
-    }
-    return layoutSlots;
+  @Override
+  public RecipeSerializer<?> getSerializer() {
+    return TinkerTables.toolBuildingRecipeSerializer.get();
   }
 
   /** Gets the tool parts for this tool */
@@ -138,77 +114,9 @@ public class ToolBuildingRecipe implements ITinkerStationRecipe {
     return ToolPartsHook.parts(output.getToolDefinition());
   }
 
-  /**
-   * Gets all tool parts as and all its variants for JEI input lookups.
-   */
-  public List<List<ItemStack>> getAllToolParts() {
-    if (allToolParts == null) {
-      allToolParts = getToolParts().stream()
-        .map(part -> MaterialRecipeCache.getAllVariants().stream()
-          .filter(mat -> part.canUseMaterial(mat.getId()))
-          .map(part::withMaterial)
-          .toList())
-        .toList();
-    }
-    return allToolParts;
-  }
-
-  /** Gets the result to display */
-  public ItemStack getDisplayOutput() {
-    if (displayOutput == null) {
-      // apply extra materials
-      if (!this.materials.isEmpty()) {
-        // first, determine if we need them; our parts list applies first
-        // if not, saves effort using the default render material
-        int offset = getToolParts().size();
-        int materialCount = ToolMaterialHook.stats(output.getToolDefinition()).size();
-        if (offset < materialCount) {
-          List<MaterialVariantId> list = new ArrayList<>(materialCount);
-          // fill in all provided parts with render materials
-          for (int i = 0; i < offset; i++) {
-            list.add(ToolBuildHandler.getRenderMaterial(i));
-          }
-          // finally, if the original size was too small, append to the end
-          int max = Math.min(materialCount - offset, materials.size());
-          for (int i = 0; i < max; i++) {
-            list.add(materials.get(i));
-          }
-          // if we have only real materials, make a proper tool
-          if (offset == 0) {
-            displayOutput = ToolBuildHandler.buildItemFromMaterials(output, new MaterialNBT(list.stream().map(MaterialVariant::of).toList()));
-            displayOutput.setCount(outputCount);
-          } else {
-            // not a full list? mark it for display with just the materials on the end
-            displayOutput = new MaterialIdNBT(list).updateStack(new ItemStack(output, outputCount));
-            displayOutput.getOrCreateTag().putBoolean(TooltipUtil.KEY_DISPLAY, true);
-          }
-        }
-      }
-      // if the materials override did not make a tool successfully, make one now
-      if (displayOutput == null) {
-        displayOutput = output instanceof IModifiableDisplay modifiable ? modifiable.getRenderTool() : output.asItem().getDefaultInstance();
-        // apply output count
-        if (outputCount > 1) {
-          displayOutput = displayOutput.copyWithCount(outputCount);
-        }
-      }
-    }
-    return displayOutput;
-  }
-
   /** Gets the additional recipe requirements beyond the tool parts */
   public List<Ingredient> getExtraRequirements() {
     return ingredients;
-  }
-
-  /** Helper to determine if an anvil is required */
-  public boolean requiresAnvil() {
-    return getToolParts().size() + getExtraRequirements().size() >= 4;
-  }
-
-  @Override
-  public RecipeSerializer<?> getSerializer() {
-    return TinkerTables.toolBuildingRecipeSerializer.get();
   }
 
   @Override
@@ -283,6 +191,104 @@ public class ToolBuildingRecipe implements ITinkerStationRecipe {
     }
     return LazyToolStack.success(tool, Math.min(output.asItem().getMaxStackSize(), count));
   }
+
+
+  /* JEI */
+
+  /** Helper to determine if an anvil is required */
+  public boolean requiresAnvil() {
+    return getToolParts().size() + getExtraRequirements().size() >= 4;
+  }
+
+  /**
+   * Gets the ID of the station slot layout for displaying this recipe.
+   * Typically matches the output definition ID, but some tool recipes share a single layout.
+   */
+  public ResourceLocation getLayoutSlotId() {
+    return Objects.requireNonNullElse(layoutSlot, output.getToolDefinition().getId());
+  }
+
+  /**
+   * Gets all tool parts as and all its variants for JEI input lookups.
+   */
+  public List<List<ItemStack>> getAllToolParts() {
+    if (allToolParts == null) {
+      allToolParts = getToolParts().stream()
+        .map(part -> MaterialRecipeCache.getAllVariants().stream()
+          .filter(mat -> part.canUseMaterial(mat.getId()))
+          .map(part::withMaterial)
+          .toList())
+        .toList();
+    }
+    return allToolParts;
+  }
+
+  /** Gets the layout slots so we know where go position item slots for guis */
+  public List<LayoutSlot> getLayoutSlots() {
+    if (layoutSlots == null) {
+      layoutSlots = StationSlotLayoutLoader.getInstance().get(getLayoutSlotId()).getInputSlots();
+      if (layoutSlots.isEmpty()) {
+        // fallback to tinker station or anvil
+        layoutSlots = StationSlotLayoutLoader.getInstance().get(TConstruct.getResource(requiresAnvil() ? "tinkers_anvil" : "tinker_station")).getInputSlots();
+      }
+      int missingSlots = getAllToolParts().size() + getExtraRequirements().size() - layoutSlots.size();
+      // check layout slots if its too small
+      if (missingSlots > 0) {
+        TConstruct.LOG.error(String.format("Tool part count is greater than layout slot count for %s!", getId()));
+        layoutSlots = new ArrayList<>(layoutSlots);
+        for (int additionalSlot = 0; additionalSlot < missingSlots; additionalSlot++) {
+          layoutSlots.add(new LayoutSlot(null, null, additionalSlot * SLOT_SIZE - X_OFFSET, -Y_OFFSET, null));
+        }
+      }
+    }
+    return layoutSlots;
+  }
+
+  /** Gets the result to display */
+  public ItemStack getDisplayOutput() {
+    if (displayOutput == null) {
+      // apply extra materials
+      if (!this.materials.isEmpty()) {
+        // first, determine if we need them; our parts list applies first
+        // if not, saves effort using the default render material
+        int offset = getToolParts().size();
+        int materialCount = ToolMaterialHook.stats(output.getToolDefinition()).size();
+        if (offset < materialCount) {
+          List<MaterialVariantId> list = new ArrayList<>(materialCount);
+          // fill in all provided parts with render materials
+          for (int i = 0; i < offset; i++) {
+            list.add(ToolBuildHandler.getRenderMaterial(i));
+          }
+          // finally, if the original size was too small, append to the end
+          int max = Math.min(materialCount - offset, materials.size());
+          for (int i = 0; i < max; i++) {
+            list.add(materials.get(i));
+          }
+          // if we have only real materials, make a proper tool
+          if (offset == 0) {
+            displayOutput = ToolBuildHandler.buildItemFromMaterials(output, new MaterialNBT(list.stream().map(MaterialVariant::of).toList()));
+            displayOutput.setCount(outputCount);
+          } else {
+            // not a full list? mark it for display with just the materials on the end
+            displayOutput = new MaterialIdNBT(list).updateStack(new ItemStack(output, outputCount));
+            displayOutput.getOrCreateTag().putBoolean(TooltipUtil.KEY_DISPLAY, true);
+          }
+        }
+      }
+      // if the materials override did not make a tool successfully, make one now
+      if (displayOutput == null) {
+        displayOutput = output instanceof IModifiableDisplay modifiable ? modifiable.getRenderTool() : output.asItem().getDefaultInstance();
+        // apply output count
+        if (outputCount > 1) {
+          displayOutput = displayOutput.copyWithCount(outputCount);
+        }
+      }
+    }
+    return displayOutput;
+  }
+
+
+  /* Unused */
 
   @Deprecated
   @Override
