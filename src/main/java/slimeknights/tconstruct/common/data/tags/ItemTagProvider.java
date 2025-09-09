@@ -587,6 +587,9 @@ public class ItemTagProvider extends ItemTagsProvider {
     addCast.accept(TinkerSmeltery.bootsPlatingCast);
     addCast.accept(TinkerSmeltery.mailleCast);
 
+    // arrow patterns are basically a gold cast
+    goldCasts.add(TinkerSmeltery.arrowCast.get());
+
     // add all casts to a common tag
     this.tag(TinkerTags.Items.CASTS)
         .addTags(TinkerTags.Items.GOLD_CASTS, TinkerTags.Items.SAND_CASTS, TinkerTags.Items.RED_SAND_CASTS, TinkerTags.Items.TABLE_EMPTY_CASTS, TinkerTags.Items.BASIN_EMPTY_CASTS);

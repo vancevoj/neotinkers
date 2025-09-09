@@ -374,6 +374,8 @@
 
   "item.tconstruct.tool_binding_cast": "Tool Binding Gold Cast",
   "item.tconstruct.tough_binding_cast": "Tough Collar Gold Cast",
+  "item.tconstruct.arrow_cast": "Arrow Gold Pattern",
+  "item.tconstruct.arrow_cast.tooltip": "Reusable pattern for making arrow heads and shafts in the part builder",
 
   "_comment": "Tool Handle Gold Casts",
 
