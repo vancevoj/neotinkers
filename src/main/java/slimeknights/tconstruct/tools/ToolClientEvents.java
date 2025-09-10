@@ -56,6 +56,7 @@ import slimeknights.tconstruct.library.client.modifiers.MaterialModifierModel;
 import slimeknights.tconstruct.library.client.modifiers.ModifierModelManager;
 import slimeknights.tconstruct.library.client.modifiers.ModifierModelManager.ModifierModelRegistrationEvent;
 import slimeknights.tconstruct.library.client.modifiers.NormalModifierModel;
+import slimeknights.tconstruct.library.client.modifiers.PotionModifierModel;
 import slimeknights.tconstruct.library.client.modifiers.TankModifierModel;
 import slimeknights.tconstruct.library.client.modifiers.TrimModifierModel;
 import slimeknights.tconstruct.library.client.particle.AttackParticle;
@@ -126,6 +127,7 @@ public class ToolClientEvents extends ClientEventBase {
     event.registerModel(getResource("material"), MaterialModifierModel.UNBAKED_INSTANCE);
     event.registerModel(getResource("dyed"), DyedModifierModel.UNBAKED_INSTANCE);
     event.registerModel(getResource("trim"), TrimModifierModel.UNBAKED_INSTANCE);
+    event.registerModel(getResource("potion"), PotionModifierModel.UNBAKED_INSTANCE);
   }
 
   @SubscribeEvent
