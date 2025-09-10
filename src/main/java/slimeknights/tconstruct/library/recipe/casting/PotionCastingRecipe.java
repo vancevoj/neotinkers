@@ -8,6 +8,7 @@ import net.minecraft.world.Container;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
@@ -113,6 +114,7 @@ public class PotionCastingRecipe implements ICastingRecipe, IMultiRecipe<Display
       // create a subrecipe for every potion variant
       List<ItemStack> bottles = List.of(bottle.getItems());
       displayRecipes = ForgeRegistries.POTIONS.getValues().stream()
+        .filter(potion -> potion != Potions.EMPTY)
         .map(potion -> {
           ItemStack result = PotionUtils.setPotion(new ItemStack(this.result), potion);
           return new DisplayCastingRecipe(getId(), getType(), bottles, fluid.getFluids().stream()

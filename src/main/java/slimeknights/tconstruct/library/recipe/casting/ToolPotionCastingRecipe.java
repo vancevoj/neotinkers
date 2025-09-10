@@ -7,6 +7,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.fluids.FluidStack;
@@ -79,6 +80,7 @@ public class ToolPotionCastingRecipe extends PotionCastingRecipe {
         .map(stack -> IDisplayModifierRecipe.withModifiers(IModifiableDisplay.getDisplayStack(stack), List.of(new ModifierEntry(modifier, 1))))
         .toList();
       displayRecipes = ForgeRegistries.POTIONS.getValues().stream()
+        .filter(potion -> potion != Potions.EMPTY)
         .map(potion -> {
           // add the potion to the tool list
           String id = Loadables.POTION.getString(potion);
