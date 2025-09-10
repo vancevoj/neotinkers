@@ -377,12 +377,12 @@ public class TinkerMaterialSpriteProvider extends AbstractMaterialSpriteProvider
 //    buildMaterial(MaterialIds.brass).fallbacks("metal").colorMapper(brassPalette);
 //    buildMaterial(MaterialIds.uranium).fallbacks("metal").colorMapper(uraniumPalette);
 
-    // wool for arrow heads
+    // wool for arrows
     for (DyeColor color : DyeColor.values()) {
       String name = color.getName();
       buildMaterial(MaterialVariantId.create(MaterialIds.wool, name))
         .variant(color != DyeColor.WHITE)
-        .arrowHead()
+        .arrowHead().arrowShaft()
         .transformer(transformerFromSprite(new ResourceLocation("block/" + name + "_wool"), 0, 0));
     }
 

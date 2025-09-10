@@ -2,7 +2,8 @@
   "color": "FF158991",
   "generator": {
     "supported_stats": [
-      "tconstruct:arrow_head"
+      "tconstruct:arrow_head",
+      "tconstruct:arrow_shaft"
     ],
     "transformer": {
       "type": "tconstruct:grey_to_sprite",
