@@ -403,6 +403,8 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
     addMaterialStats(MaterialIds.ice, StatlessMaterialStats.ARROW_HEAD);
     addMaterialStats(MaterialIds.quartz, StatlessMaterialStats.ARROW_HEAD);
     addMaterialStats(MaterialIds.ichor, StatlessMaterialStats.ARROW_HEAD);
+    // tier 4
+    addMaterialStats(MaterialIds.dragonScale, StatlessMaterialStats.ARROW_HEAD);
   }
 
   private void addArmor() {
@@ -460,6 +462,7 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
     // tier 4 (end)
     addArmorShieldStats(MaterialIds.knightmetal, PlatingMaterialStats.builder().durabilityFactor(20).armor(2, 5, 7, 2).toughness(2).knockbackResistance(0.05f), StatlessMaterialStats.MAILLE);
     addMaterialStats(MaterialIds.enderslimeVine, StatlessMaterialStats.MAILLE, StatlessMaterialStats.CUIRASS);
+    addMaterialStats(MaterialIds.dragonScale, StatlessMaterialStats.MAILLE);
     // tier 4 (compat)
     addArmorShieldStats(MaterialIds.fiery, PlatingMaterialStats.builder().durabilityFactor(25).armor(3, 6, 8, 3).toughness(1.5f), StatlessMaterialStats.MAILLE);
   }

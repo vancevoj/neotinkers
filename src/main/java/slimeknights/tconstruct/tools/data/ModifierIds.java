@@ -224,6 +224,7 @@ public class ModifierIds {
   public static final ModifierId vintage = id("vintage");
   public static final ModifierId valiant = id("valiant");
   public static final ModifierId stalwart = id("stalwart");
+  public static final ModifierId dragonshot = id("dragonshot");
   // traits - tier 4 compat
   public static final ModifierId temperedProtection = id("tempered_protection");
 

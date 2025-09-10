@@ -97,6 +97,8 @@ public class MaterialDataProvider extends AbstractMaterialDataProvider {
     // tier 4 - binding
     addMaterial(MaterialIds.ancientHide, 4, ORDER_BINDING, false);
     addMaterial(MaterialIds.ancient,     4, ORDER_NETHER,  false, true, null);
+    // tier 4 - ammo
+    addMaterial(MaterialIds.dragonScale, 4, ORDER_REPAIR, true);
 
     // tier 5 binding, temporarily in book 4
     addMaterial(MaterialIds.enderslimeVine, 4, ORDER_BINDING, true);

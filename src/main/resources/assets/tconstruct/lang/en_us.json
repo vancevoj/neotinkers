@@ -1953,6 +1953,10 @@
 
   "material.tconstruct.quartz": "Quartz",
 
+  "material.tconstruct.dragon_scale": "Dragon Scale",
+  "material.tconstruct.dragon_scale.flavor": "With this armor, even dragons will fear me!",
+  "material.tconstruct.dragon_scale.armor": "Grants +10% resistance while airborne, and boosts attack damage by 5% per level based on the highest piece.",
+
   "material.tconstruct.manyullyn": "Manyullyn",
   "material.tconstruct.manyullyn.flavor": "The metal that most Tinkers will never pronounce right. Also known as a star cutting material.",
   "material.tconstruct.manyullyn.encyclopedia": "Grants up to +2 damage per level, with the damage increasing linearly over 8 consecutive hits",
@@ -2968,6 +2972,10 @@
   "modifier.tconstruct.tempered_protection.flavor": "Resists the flames!",
   "modifier.tconstruct.tempered_protection.description": "Reduces damage from attackers who are on fire",
   "modifier.tconstruct.tempered_protection.resistance": "Resistance",
+  "modifier.tconstruct.dragonshot": "Dragonshot",
+  "modifier.tconstruct.dragonshot.flavor": "Weapon of a dragon",
+  "modifier.tconstruct.dragonshot.description": "Does extra damage when shot from the air",
+  "modifier.tconstruct.dragonshot.projectile_damage": "Airborne Damage",
 
   "__comment": "Tier 5 Traits",
   "modifier.tconstruct.enderporting": "Enderporting",

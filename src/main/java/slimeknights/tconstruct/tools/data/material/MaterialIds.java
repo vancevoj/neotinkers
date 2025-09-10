@@ -74,12 +74,13 @@ public final class MaterialIds {
   public static final MaterialId blazingBone = id("blazing_bone");
   public static final MaterialId blazewood = id("blazewood");
   public static final MaterialId knightmetal = id("knightmetal");
+  public static final MaterialId ancient = id("ancient");
   //public static final MaterialId soulsteel = id("soulsteel");
   // tier 4 - bindings
   public static final MaterialId ancientHide = id("ancient_hide");
-  public static final MaterialId ancient = id("ancient");
-  // tier 5 - bindings
   public static final MaterialId enderslimeVine = id("enderslime_vine");
+  // tier 4 - ammo
+  public static final MaterialId dragonScale = id("dragon_scale");
 
   // tier 2 (mod integration)
   public static final MaterialId treatedWood = id("treated_wood");

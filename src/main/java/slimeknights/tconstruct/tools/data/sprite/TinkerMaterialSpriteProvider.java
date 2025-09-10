@@ -377,6 +377,10 @@ public class TinkerMaterialSpriteProvider extends AbstractMaterialSpriteProvider
 //    buildMaterial(MaterialIds.brass).fallbacks("metal").colorMapper(brassPalette);
 //    buildMaterial(MaterialIds.uranium).fallbacks("metal").colorMapper(uraniumPalette);
 
+    buildMaterial(MaterialIds.dragonScale)
+      .arrowHead().maille()
+      .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF0B090C).addARGB(102, 0xFF161417).addARGB(140, 0xFF221F22).addARGB(178, 0xFF2A282B).addARGB(216, 0xFF393738).addARGB(255, 0xFF474747).build());
+
     // wool for arrows
     for (DyeColor color : DyeColor.values()) {
       String name = color.getName();
