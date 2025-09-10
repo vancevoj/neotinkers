@@ -202,16 +202,29 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .setSlots(SlotType.UPGRADE, 1)
                          .saveSalvage(consumer, prefix(ModifierIds.diamond, upgradeSalvage))
                          .save(consumer, prefix(ModifierIds.diamond, upgradeFolder));
+    Ingredient multiuse = DifferenceIngredient.of(Ingredient.of(TinkerTags.Items.MODIFIABLE), Ingredient.of(TinkerTags.Items.SINGLE_USE));
     ModifierRecipeBuilder.modifier(ModifierIds.worldbound)
-                         .addInput(TinkerTags.Items.INGOTS_NETHERITE_SCRAP)
-                         .setMaxLevel(1)
-                         .save(consumer, prefix(ModifierIds.worldbound, slotlessFolder));
+      .setTools(multiuse)
+      .addInput(TinkerTags.Items.INGOTS_NETHERITE_SCRAP)
+      .setMaxLevel(1)
+      .save(consumer, prefix(ModifierIds.worldbound, slotlessFolder));
+    ModifierRecipeBuilder.modifier(ModifierIds.worldbound)
+      .setTools(TinkerTags.Items.SINGLE_USE)
+      .addInput(TinkerTags.Items.NUGGETS_NETHERITE_SCRAP)
+      .setMaxLevel(1)
+      .save(consumer, wrap(ModifierIds.worldbound, slotlessFolder, "_ammo"));
     ModifierRecipeBuilder.modifier(ModifierIds.soulbound)
-                         .addInput(Ingredient.of(Items.ECHO_SHARD))
-                         .setSlots(SlotType.UPGRADE, 1)
-                         .setMaxLevel(1)
-                         .saveSalvage(consumer, prefix(ModifierIds.soulbound, upgradeSalvage))
-                         .save(consumer, prefix(ModifierIds.soulbound, upgradeFolder));
+      .setTools(multiuse)
+      .addInput(Items.ECHO_SHARD)
+      .setSlots(SlotType.UPGRADE, 1)
+      .setMaxLevel(1)
+      .saveSalvage(consumer, prefix(ModifierIds.soulbound, upgradeSalvage))
+      .save(consumer, prefix(ModifierIds.soulbound, upgradeFolder));
+    ModifierRecipeBuilder.modifier(ModifierIds.soulbound)
+      .setTools(TinkerTags.Items.SINGLE_USE)
+      .addInput(Items.DRAGON_BREATH)
+      .setMaxLevel(1)
+      .save(consumer, wrap(ModifierIds.soulbound, slotlessFolder, "_ammo"));
     ModifierRecipeBuilder.modifier(ModifierIds.netherite)
                          .setTools(TinkerTags.Items.DURABILITY)
                          .addInput(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE)
