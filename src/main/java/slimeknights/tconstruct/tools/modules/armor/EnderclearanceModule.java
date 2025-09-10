@@ -52,7 +52,7 @@ public record EnderclearanceModule(LevelingValue chance) implements ModifierModu
   public void afterMeleeHit(IToolStackView tool, ModifierEntry modifier, ToolAttackContext context, float damageDealt) {
     LivingEntity entity = context.getLivingTarget();
     if (entity != null) {
-      TeleportHelper.randomNearbyTeleport(entity, EnderclearanceTeleportEvent.TELEPORT_FACTORY);
+      TeleportHelper.randomNearbyTeleport(entity, (e, x, y, z) -> new EnderclearanceTeleportEvent(e, x, y, z, modifier));
     }
   }
 
@@ -62,7 +62,7 @@ public record EnderclearanceModule(LevelingValue chance) implements ModifierModu
     if (isDirectDamage && source.getEntity() instanceof LivingEntity attacker) {
       float level = CounterModule.getLevel(tool, modifier, slotType, context.getEntity());
       if (TConstruct.RANDOM.nextFloat() < chance.compute(level)) {
-        TeleportHelper.randomNearbyTeleport(attacker, EnderclearanceTeleportEvent.TELEPORT_FACTORY);
+        TeleportHelper.randomNearbyTeleport(attacker, (e, x, y, z) -> new EnderclearanceTeleportEvent(e, x, y, z, modifier));
       }
     }
   }
@@ -70,7 +70,7 @@ public record EnderclearanceModule(LevelingValue chance) implements ModifierModu
   @Override
   public boolean onProjectileHitEntity(ModifierNBT modifiers, ModDataNBT persistentData, ModifierEntry modifier, Projectile projectile, EntityHitResult hit, @Nullable LivingEntity attacker, @Nullable LivingEntity target) {
     if (target != null) {
-      TeleportHelper.randomNearbyTeleport(target, EnderclearanceTeleportEvent.TELEPORT_FACTORY);
+      TeleportHelper.randomNearbyTeleport(target, (e, x, y, z) -> new EnderclearanceTeleportEvent(e, x, y, z, modifier));
     }
     return false;
   }
