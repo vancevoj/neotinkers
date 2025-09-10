@@ -192,6 +192,7 @@ import slimeknights.tconstruct.tools.modules.ranged.PunchModule;
 import slimeknights.tconstruct.tools.modules.ranged.QuiverInventoryModule;
 import slimeknights.tconstruct.tools.modules.ranged.RestrictAngleModule;
 import slimeknights.tconstruct.tools.modules.ranged.ReversePunchModule;
+import slimeknights.tconstruct.tools.modules.ranged.TippedModule;
 import slimeknights.tconstruct.tools.modules.ranged.TrickQuiverModule;
 
 import static slimeknights.tconstruct.common.TinkerTags.Items.ARMOR;
@@ -720,6 +721,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
         .constant(1).add()
         // multiply into the final value
         .variable(VALUE).multiply().build());
+    buildModifier(ModifierIds.tipped).levelDisplay(ModifierLevelDisplay.SINGLE_LEVEL).addModule(TippedModule.INSTANCE);
 
     // traits - tier 2
     buildModifier(ModifierIds.stoneshield)

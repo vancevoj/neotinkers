@@ -44,6 +44,7 @@ import slimeknights.tconstruct.library.modifiers.ModifierId;
 import slimeknights.tconstruct.library.modifiers.util.LazyModifier;
 import slimeknights.tconstruct.library.recipe.FluidValues;
 import slimeknights.tconstruct.library.recipe.casting.ItemCastingRecipeBuilder;
+import slimeknights.tconstruct.library.recipe.casting.PotionCastingRecipeBuilder;
 import slimeknights.tconstruct.library.recipe.ingredient.MaterialIngredient;
 import slimeknights.tconstruct.library.recipe.ingredient.NoContainerIngredient;
 import slimeknights.tconstruct.library.recipe.ingredient.ToolHookIngredient;
@@ -1620,6 +1621,13 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
       .addInput(TinkerWorld.enderGeode.getBlock())
       .disallowCrystal()
       .save(consumer, wrap(ModifierIds.rebalanced, slotlessFolder, "_traits"));
+
+    // tipping arrows and shurikens
+    PotionCastingRecipeBuilder.tableRecipe(ModifierIds.tipped)
+      .setBottle(TinkerTags.Items.AMMO)
+      .setCoolingTime(20)
+      .setFluid(TinkerFluids.potion.ingredient(FluidValues.BOTTLE / 10))
+      .save(consumer, location(slotlessFolder + "ammo_tipping"));
 
     // removal
     ModifierRemovalRecipeBuilder.removal()
