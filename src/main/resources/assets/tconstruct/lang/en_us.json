@@ -1865,7 +1865,7 @@
   "material.tconstruct.skyslime_vine.slimeskin": "Slimeskin",
   "material.tconstruct.skyslime_vine.flavor": "Float like a butterfly, sting like a bee.",
   "material.tconstruct.skyslime_vine.encyclopedia": "Cancels out the mining speed reduction when not on the ground",
-  "material.tconstruct.skyslime_vine.ranged": "Grants +0.5 accuracy when not on the ground or a ladder",
+  "material.tconstruct.skyslime_vine.ranged": "Grants +0.1 velocity when not on the ground or a ladder",
   "material.tconstruct.skyslime_vine.armor": "Reduces gravity by 20% per piece",
 
   "material.tconstruct.weeping_vine": "Weeping Vine",
@@ -2883,7 +2883,7 @@
   "modifier.tconstruct.airborne": "Airborne",
   "modifier.tconstruct.airborne.flavor": "Take to the skies!",
   "modifier.tconstruct.airborne.description": "Tool no longer is penalized when mining in the air and gains a projectile accuracy bonus",
-  "modifier.tconstruct.airborne.accuracy": "Airborne Accuracy",
+  "modifier.tconstruct.airborne.velocity": "Airborne Velocity",
   "modifier.tconstruct.skyfall": "Skyfall",
   "modifier.tconstruct.skyfall.flavor": "Falling with style!",
   "modifier.tconstruct.skyfall.description": "Reduces the effect of gravity",
