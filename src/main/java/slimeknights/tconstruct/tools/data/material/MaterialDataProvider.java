@@ -38,6 +38,8 @@ public class MaterialDataProvider extends AbstractMaterialDataProvider {
     addMaterial(MaterialIds.vine,    1, ORDER_BINDING, true);
     // tier 1 - shield cores
     addMaterial(MaterialIds.cactus, 1, ORDER_BINDING, true);
+    // tier 1 - ammo
+    addMaterial(MaterialIds.wool, 1, ORDER_BINDING, true);
 
     // tier 2
     addMaterial(MaterialIds.iron,        2, ORDER_GENERAL, false);

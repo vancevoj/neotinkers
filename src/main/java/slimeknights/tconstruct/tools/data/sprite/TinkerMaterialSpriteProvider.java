@@ -1,6 +1,7 @@
 package slimeknights.tconstruct.tools.data.sprite;
 
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.DyeColor;
 import slimeknights.tconstruct.library.client.data.material.AbstractMaterialSpriteProvider;
 import slimeknights.tconstruct.library.client.data.spritetransformer.FramesSpriteTransformer;
 import slimeknights.tconstruct.library.client.data.spritetransformer.GreyToColorMapping;
@@ -376,6 +377,14 @@ public class TinkerMaterialSpriteProvider extends AbstractMaterialSpriteProvider
 //    buildMaterial(MaterialIds.brass).fallbacks("metal").colorMapper(brassPalette);
 //    buildMaterial(MaterialIds.uranium).fallbacks("metal").colorMapper(uraniumPalette);
 
+    // wool for arrow heads
+    for (DyeColor color : DyeColor.values()) {
+      String name = color.getName();
+      buildMaterial(MaterialVariantId.create(MaterialIds.wool, name))
+        .variant(color != DyeColor.WHITE)
+        .arrowHead()
+        .transformer(transformerFromSprite(new ResourceLocation("block/" + name + "_wool"), 0, 0));
+    }
 
     // slimeskull
     buildMaterial(MaterialIds.glass)
