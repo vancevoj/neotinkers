@@ -235,9 +235,9 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .save(consumer, prefix(ModifierIds.netherite, upgradeFolder));
 
     // overslime
+    Ingredient overslimeTools = Ingredient.of(TinkerTags.Items.DURABILITY);
     for (SlimeType type : SlimeType.values()) {
       int amount;
-      Ingredient tool = Ingredient.of(TinkerTags.Items.DURABILITY);
       switch (type) {
         // earth is common and easy to get
         case EARTH -> amount = 20;
@@ -248,7 +248,6 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
         // ender is late game, but easier to farm than ichor
         case ENDER -> {
           amount = 80;
-          tool = DifferenceIngredient.of(tool, Ingredient.of(TinkerTools.slimesuit.values().toArray(Item[]::new)));
         }
         // unhandled -> update
         default -> {
@@ -258,18 +257,18 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
       String name = type.getSerializedName();
       // ball and bottle - base amount
       OverslimeModifierRecipeBuilder.modifier(TinkerCommons.slimeball.get(type), amount)
-        .setTools(tool)
+        .setTools(overslimeTools)
         .save(consumer, location(slotlessFolder + "overslime/" + name + "_ball"));
       OverslimeModifierRecipeBuilder.modifier(TinkerFluids.slimeBottle.get(type), amount)
         .saveCrafting(consumer, location(slotlessFolder + "overslime/" + name + "_bottle_crafting_table"))
         .save(consumer, location(slotlessFolder + "overslime/" + name + "_bottle"));
       // congealed: 4x
       OverslimeModifierRecipeBuilder.modifier(TinkerWorld.congealedSlime.get(type), amount * 4)
-        .setTools(tool)
+        .setTools(overslimeTools)
         .save(consumer, location(slotlessFolder + "overslime/" + name + "_congealed"));
       // block: 9x
       OverslimeModifierRecipeBuilder.modifier(TinkerWorld.slime.get(type), amount * 9)
-        .setTools(tool)
+        .setTools(overslimeTools)
         .save(consumer, location(slotlessFolder + "overslime/" + name + "_block"));
     }
 
@@ -305,7 +304,7 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .saveSalvage(consumer, prefix(TinkerModifiers.magnetic, upgradeSalvage));
     // no salvage so we can potentially grant shiny in another way without being an apple farm, and no recipe as that leaves nothing to salvage
     ModifierRecipeBuilder.modifier(ModifierIds.shiny)
-                         .addInput(Items.ENCHANTED_GOLDEN_APPLE)
+                         .addInput(Ingredient.of(Items.ENCHANTED_GOLDEN_APPLE, Items.NETHER_STAR))
                          .setMaxLevel(1)
                          .save(consumer, prefix(ModifierIds.shiny, slotlessFolder));
     Ingredient sighted = ingredientFromTags(TinkerTags.Items.HELD, TinkerTags.Items.ARMOR);

@@ -2016,6 +2016,9 @@
   "material.tconstruct.enderslime_vine.ranged": "Teleports the holder to the location of arrows that land in blocks or swaps the holder with monsters hit by arrows",
   "material.tconstruct.enderslime_vine.armor": "Has a 25% chance per piece of randomly teleporting attackers away",
 
+  "material.tconstruct.ichor":      "Ichor",
+  "material.tconstruct.enderslime": "Enderslime",
+
   "__comment": "Slimesuit materials",
   "material.tconstruct.glass": "Glass",
   "material.tconstruct.glass.skull_flavor": "Whose nice things are being destroyed now, creeper?",
@@ -2043,8 +2046,6 @@
   "material.tconstruct.netherite":  "Netherite",
   "material.tconstruct.blood":      "Blood",
   "material.tconstruct.magma":      "Magma",
-  "material.tconstruct.ichor":      "Ichor",
-  "material.tconstruct.enderslime": "Enderslime",
   "material.tconstruct.clay":       "Clay",
   "material.tconstruct.honey":      "Honey",
   "material.tconstruct.venom":      "Venom",

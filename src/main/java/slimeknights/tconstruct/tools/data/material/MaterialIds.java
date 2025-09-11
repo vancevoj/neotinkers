@@ -80,6 +80,7 @@ public final class MaterialIds {
   public static final MaterialId ancientHide = id("ancient_hide");
   public static final MaterialId enderslimeVine = id("enderslime_vine");
   // tier 4 - ammo
+  public static final MaterialId enderslime = id("enderslime");
   public static final MaterialId dragonScale = id("dragon_scale");
 
   // tier 2 (mod integration)
@@ -114,7 +115,6 @@ public final class MaterialIds {
   public static final MaterialId glass = id("glass");
   public static final MaterialId rottenFlesh = id("rotten_flesh");
   // slimesuit
-  public static final MaterialId enderslime = id("enderslime");
   public static final MaterialId phantom = id("phantom");
   // slimesuit - textures
   public static final MaterialId blood = id("blood");

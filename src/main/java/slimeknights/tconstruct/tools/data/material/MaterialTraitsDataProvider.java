@@ -113,6 +113,8 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     addDefaultTraits(MaterialIds.ancientHide, ModifierIds.fortified);
     addTraits(MaterialIds.dragonScale, ARMOR, ModifierIds.dragonborn);
     addTraits(MaterialIds.dragonScale, AMMO, ModifierIds.dragonshot);
+    // tier 4 - ammo
+    addTraits(MaterialIds.enderslime, AMMO, ModifierIds.enderclearance);
 
     // tier 4 (end)
     addDefaultTraits(MaterialIds.knightmetal, ModifierIds.valiant);
@@ -160,10 +162,8 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     addTraits(MaterialIds.roseGold,     SkullStats.ID, TinkerModifiers.goldGuard.getId(), ModifierIds.piglinBruteDisguise, TinkerModifiers.golden.getId());
     addTraits(MaterialIds.pigIron,      SkullStats.ID, TinkerModifiers.revenge.getId(), ModifierIds.zombifiedPiglinDisguise);
     // slimesuit
-    noTraits(MaterialIds.earthslime);
     noTraits(MaterialIds.blood);
     noTraits(MaterialIds.magma);
-    noTraits(MaterialIds.enderslime);
     noTraits(MaterialIds.clay);
     noTraits(MaterialIds.honey);
     noTraits(MaterialIds.phantom);

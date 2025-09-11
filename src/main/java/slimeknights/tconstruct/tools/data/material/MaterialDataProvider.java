@@ -99,6 +99,7 @@ public class MaterialDataProvider extends AbstractMaterialDataProvider {
     addMaterial(MaterialIds.ancient,     4, ORDER_NETHER,  false, true, null);
     // tier 4 - ammo
     addMaterial(MaterialIds.dragonScale, 4, ORDER_REPAIR, true);
+    addMaterial(MaterialIds.enderslime,  4, ORDER_REPAIR, true);
 
     // tier 5 binding, temporarily in book 4
     addMaterial(MaterialIds.enderslimeVine, 4, ORDER_BINDING, true);
@@ -132,7 +133,6 @@ public class MaterialDataProvider extends AbstractMaterialDataProvider {
     // slimesuit - textures
     addMaterial(MaterialIds.blood,      2, ORDER_REPAIR, true);
     addMaterial(MaterialIds.magma,      2, ORDER_REPAIR, true);
-    addMaterial(MaterialIds.enderslime, 4, ORDER_REPAIR, true);
     addMaterial(MaterialIds.clay,       1, ORDER_REPAIR, true);
     addMaterial(MaterialIds.honey,      1, ORDER_REPAIR, true);
     //addMaterial(MaterialIds.venom,      3, ORDER_REPAIR, true);

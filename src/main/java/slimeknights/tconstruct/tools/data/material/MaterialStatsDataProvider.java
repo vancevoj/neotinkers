@@ -404,6 +404,7 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
     addMaterialStats(MaterialIds.quartz, StatlessMaterialStats.ARROW_HEAD);
     addMaterialStats(MaterialIds.ichor, StatlessMaterialStats.ARROW_HEAD);
     // tier 4
+    addMaterialStats(MaterialIds.enderslime, StatlessMaterialStats.ARROW_HEAD);
     addMaterialStats(MaterialIds.dragonScale, StatlessMaterialStats.ARROW_HEAD);
   }
 
