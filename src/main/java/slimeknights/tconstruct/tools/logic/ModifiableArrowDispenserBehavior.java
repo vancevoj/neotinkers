@@ -6,7 +6,7 @@ import net.minecraft.world.entity.projectile.AbstractArrow.Pickup;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import slimeknights.tconstruct.tools.entity.MaterialArrow;
+import slimeknights.tconstruct.tools.entity.ModifiableArrow;
 
 /** Dispenser behavior for a modifiable arrow item */
 public class ModifiableArrowDispenserBehavior extends AbstractProjectileDispenseBehavior {
@@ -16,7 +16,7 @@ public class ModifiableArrowDispenserBehavior extends AbstractProjectileDispense
 
   @Override
   protected Projectile getProjectile(Level level, Position position, ItemStack stack) {
-    MaterialArrow arrow = new MaterialArrow(level, position.x(), position.y(), position.z());
+    ModifiableArrow arrow = new ModifiableArrow(level, position.x(), position.y(), position.z());
     arrow.onCreate(stack, null);
     arrow.pickup = Pickup.ALLOWED;
     return arrow;

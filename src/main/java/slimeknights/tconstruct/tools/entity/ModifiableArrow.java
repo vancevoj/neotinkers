@@ -26,24 +26,24 @@ import slimeknights.tconstruct.tools.TinkerTools;
 import javax.annotation.Nullable;
 
 /** Arrow with material variants */
-public class MaterialArrow extends AbstractArrow implements ToolProjectile {
+public class ModifiableArrow extends AbstractArrow implements ToolProjectile {
   /** Key to sync the stack to the client */
-  protected static final EntityDataAccessor<ItemStack> STACK = SynchedEntityData.defineId(MaterialArrow.class, EntityDataSerializers.ITEM_STACK);
+  protected static final EntityDataAccessor<ItemStack> STACK = SynchedEntityData.defineId(ModifiableArrow.class, EntityDataSerializers.ITEM_STACK);
   /** Movement speed in water */
-  protected static final EntityDataAccessor<Float> WATER_INERTIA = SynchedEntityData.defineId(MaterialArrow.class, EntityDataSerializers.FLOAT);
+  protected static final EntityDataAccessor<Float> WATER_INERTIA = SynchedEntityData.defineId(ModifiableArrow.class, EntityDataSerializers.FLOAT);
 
   private ItemStack stack = ItemStack.EMPTY;
   private IToolStackView tool = null;
   private boolean noDespawn = false;
-  public MaterialArrow(EntityType<? extends AbstractArrow> type, Level level) {
+  public ModifiableArrow(EntityType<? extends AbstractArrow> type, Level level) {
     super(type, level);
   }
 
-  public MaterialArrow(Level level, double pX, double pY, double pZ) {
+  public ModifiableArrow(Level level, double pX, double pY, double pZ) {
     super(TinkerTools.materialArrow.get(), pX, pY, pZ, level);
   }
 
-  public MaterialArrow(Level level, LivingEntity shooter) {
+  public ModifiableArrow(Level level, LivingEntity shooter) {
     super(TinkerTools.materialArrow.get(), shooter, level);
   }
 

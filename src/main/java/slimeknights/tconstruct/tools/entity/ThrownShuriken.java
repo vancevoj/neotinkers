@@ -95,7 +95,7 @@ public class ThrownShuriken extends Projectile implements ToolProjectile, Projec
 
   /**
    * Called when the arrow is created to set initial properties.
-   * @see MaterialArrow#onCreate(ItemStack, LivingEntity)
+   * @see ModifiableArrow#onCreate(ItemStack, LivingEntity)
    */
   public void onCreate(ItemStack stack, @Nullable LivingEntity shooter) {
     if (stack.isEmpty()) {
@@ -110,7 +110,7 @@ public class ThrownShuriken extends Projectile implements ToolProjectile, Projec
     this.entityData.set(WATER_INERTIA, ConditionalStatModifierHook.getModifiedStat(tool, shooter, ToolStats.WATER_INERTIA));
   }
 
-  /** @see MaterialArrow#shoot(double, double, double, float, float)  */
+  /** @see ModifiableArrow#shoot(double, double, double, float, float)  */
   @Override
   public void shoot(double pX, double pY, double pZ, float velocity, float inaccuracy) {
     if (!stack.isEmpty()) {

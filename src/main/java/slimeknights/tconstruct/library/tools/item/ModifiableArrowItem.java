@@ -30,7 +30,7 @@ import slimeknights.tconstruct.library.tools.helper.ToolBuildHandler;
 import slimeknights.tconstruct.library.tools.helper.TooltipUtil;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
-import slimeknights.tconstruct.tools.entity.MaterialArrow;
+import slimeknights.tconstruct.tools.entity.ModifiableArrow;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -53,7 +53,7 @@ public class ModifiableArrowItem extends ArrowItem implements IModifiableDisplay
 
   @Override
   public AbstractArrow createArrow(Level level, ItemStack stack, LivingEntity shooter) {
-    MaterialArrow arrow = new MaterialArrow(level, shooter);
+    ModifiableArrow arrow = new ModifiableArrow(level, shooter);
     arrow.onCreate(stack, shooter);
     return arrow;
   }
