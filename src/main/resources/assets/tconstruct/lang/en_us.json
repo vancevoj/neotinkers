@@ -1912,6 +1912,10 @@
   "material.tconstruct.ender_pearl.skull_flavor": "Endermen know how to stay away from harm, and scientists. They have been ignoring my interview requests for weeks!",
   "material.tconstruct.ender_pearl.skull_encyclopedia": "Teleports automatically when attacked by a projectile, and randomly from melee. Has a 15 second cooldown",
 
+  "material.tconstruct.glass": "Glass",
+  "material.tconstruct.glass.skull_flavor": "Whose nice things are being destroyed now, creeper?",
+  "material.tconstruct.glass.skull_encyclopedia": "Holding the helmet interact key while sneaking causes the wearer to explode",
+
 
   "__comment": "Tier 3 Materials",
   "material.tconstruct.slimesteel": "Slimesteel",
@@ -2019,11 +2023,8 @@
   "material.tconstruct.ichor":      "Ichor",
   "material.tconstruct.enderslime": "Enderslime",
 
-  "__comment": "Slimesuit materials",
-  "material.tconstruct.glass": "Glass",
-  "material.tconstruct.glass.skull_flavor": "Whose nice things are being destroyed now, creeper?",
-  "material.tconstruct.glass.skull_encyclopedia": "Holding the helmet interact key while sneaking causes the wearer to explode",
 
+  "__comment": "Slimesuit materials",
 
   "material.tconstruct.rotten_flesh": "Rotten Flesh",
   "material.tconstruct.rotten_flesh.skull_flavor": "This is fine",
@@ -2727,6 +2728,10 @@
   "modifier.tconstruct.spitting": "Spitting",
   "modifier.tconstruct.spitting.flavor": "Become the better llama",
   "modifier.tconstruct.spitting.description": "Can charge the tool to launch fluid projectiles from the tank, applying the effect to the target. Affected by bow stats.",
+  "modifier.tconstruct.smashing": "Smashing",
+  "modifier.tconstruct.smashing.flavor": "Shattered",
+  "modifier.tconstruct.smashing.description": "Projectile breaks on hitting an entity, applying the effect of the filled fluid to them.",
+  "modifier.tconstruct.smashing.empty_to_swap": "Cannot increase the capacity of smashing unless empty",
 
   "_comment": "Bonus modifier slots",
   "modifier.tconstruct.creative_slot": "Creative Slot",

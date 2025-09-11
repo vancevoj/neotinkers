@@ -277,6 +277,7 @@
     "drawback":      "#01cd4e",
     "tipped":        "#696969",
     "dragonshot":    "#474747",
+    "smashing":      "#D0EAE9",
 
     "__traits_armor__": null,
     "consecrated":          "#D3DFE8",
@@ -469,10 +470,10 @@
     "quartz":      "#EAE5DE",
     "ichor":       "#ff970d",
     "enderslime":  "#af4cf6",
+    "glass":        "#D0EAE9",
 
     "__slimeskull__": null,
     "gold":         "#FDF55F",
-    "glass":        "#D0EAE9",
     "rotten_flesh": "#6F4D1B",
 
     "__slimesuit__": null,

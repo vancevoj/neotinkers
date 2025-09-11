@@ -180,9 +180,10 @@ public class ModifierIds {
   public static final ModifierId flamestance = id("flamestance");
   public static final ModifierId entangled = id("entangled");
   public static final ModifierId stoneshield = id("stoneshield");
+  public static final ModifierId smashing = id("smashing");
+  // traits - tier 2 compat
   public static final ModifierId deciduous = id("deciduous");
   public static final ModifierId barkskin = id("barkskin");
-  // traits - tier 2 compat
   public static final ModifierId dense = id("dense");
   public static final ModifierId lustrous = id("lustrous");
   /** @deprecated use {@link #heavy} */

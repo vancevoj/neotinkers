@@ -49,6 +49,7 @@ public final class MaterialIds {
   public static final MaterialId skyslime = id("skyslime");
   public static final MaterialId blaze = id("blaze");
   public static final MaterialId enderPearl = id("ender_pearl");
+  public static final MaterialId glass = id("glass");
   // tier 3
   public static final MaterialId slimesteel = id("slimesteel");
   public static final MaterialId amethystBronze = id("amethyst_bronze");
@@ -112,7 +113,6 @@ public final class MaterialIds {
   public static final MaterialId gold = id("gold");
   public static final MaterialId obsidian = id("obsidian");
   // slimeskull
-  public static final MaterialId glass = id("glass");
   public static final MaterialId rottenFlesh = id("rotten_flesh");
   // slimesuit
   public static final MaterialId phantom = id("phantom");
