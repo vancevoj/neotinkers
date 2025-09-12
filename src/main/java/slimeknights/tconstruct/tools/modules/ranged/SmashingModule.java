@@ -8,18 +8,22 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
+import slimeknights.mantle.client.TooltipKey;
 import slimeknights.mantle.data.loadable.Loadables;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.data.loadable.record.SingletonLoader;
+import slimeknights.mantle.util.TranslationHelper;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
@@ -31,6 +35,7 @@ import slimeknights.tconstruct.library.modifiers.hook.build.ModifierRemovalHook;
 import slimeknights.tconstruct.library.modifiers.hook.build.ValidateModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.build.VolatileDataModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.display.DisplayNameModifierHook;
+import slimeknights.tconstruct.library.modifiers.hook.display.TooltipModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.ranged.ProjectileHitModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.ranged.ProjectileLaunchModifierHook;
 import slimeknights.tconstruct.library.modifiers.modules.ModifierModule;
@@ -46,22 +51,22 @@ import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.ModDataNBT;
 import slimeknights.tconstruct.library.tools.nbt.ModifierNBT;
 import slimeknights.tconstruct.library.tools.nbt.ToolDataNBT;
-import slimeknights.tconstruct.library.utils.Util;
 
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Objects;
 
 /** Module that allows arrows to perform fluid effect on hit */
-public enum SmashingModule implements ModifierModule, FluidModifierHook, ProjectileLaunchModifierHook.NoShooter, ProjectileHitModifierHook, VolatileDataModifierHook, ValidateModifierHook, ModifierRemovalHook, DisplayNameModifierHook {
+public enum SmashingModule implements ModifierModule, FluidModifierHook, ProjectileLaunchModifierHook.NoShooter, ProjectileHitModifierHook, VolatileDataModifierHook, ValidateModifierHook, ModifierRemovalHook, DisplayNameModifierHook, TooltipModifierHook {
   INSTANCE;
 
   private static final ResourceLocation KEY_FLUID = TConstruct.getResource("smashing_fluid");
   private static final ResourceLocation KEY_AMOUNT = TConstruct.getResource("smashing_amount");
   private static final ResourceLocation KEY_FLUID_TAG = TConstruct.getResource("smashing_fluid_tag");
   private static final ResourceLocation KEY_USED = TConstruct.getResource("smashing_used");
+  private static final String FORMAT = TConstruct.makeTranslationKey("modifier", "smashing.format");
   private static final Component EMPTY_TO_SWAP = TConstruct.makeTranslation("modifier", "smashing.empty_to_swap");
-  private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<SmashingModule>defaultHooks(ToolFluidCapability.HOOK, ModifierHooks.PROJECTILE_LAUNCH, ModifierHooks.PROJECTILE_SHOT, ModifierHooks.PROJECTILE_HIT, ModifierHooks.VOLATILE_DATA, ModifierHooks.VALIDATE, ModifierHooks.REMOVE, ModifierHooks.DISPLAY_NAME);
+  private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<SmashingModule>defaultHooks(ToolFluidCapability.HOOK, ModifierHooks.PROJECTILE_LAUNCH, ModifierHooks.PROJECTILE_SHOT, ModifierHooks.PROJECTILE_HIT, ModifierHooks.VOLATILE_DATA, ModifierHooks.VALIDATE, ModifierHooks.REMOVE, ModifierHooks.DISPLAY_NAME, ModifierHooks.TOOLTIP);
   public static final RecordLoadable<SmashingModule> LOADER = new SingletonLoader<>(INSTANCE);
 
   @Override
@@ -368,13 +373,26 @@ public enum SmashingModule implements ModifierModule, FluidModifierHook, Project
     IModDataView data = tool.getPersistentData();
     Fluid fluid = getFluid(data);
     if (fluid != Fluids.EMPTY) {
-      int amount = getAmount(entry, fluid);
-      if (amount > 0) {
-        return entry.getModifier().applyStyle(new FluidStack(fluid, amount, getFluidTag(data)).getDisplayName().copy().append(": ")
-          .append(Component.translatable(ToolTankHelper.MB_FORMAT, Util.COMMA_FORMAT.format(amount))));
-      }
+      // formats as <name> <level> (<fluid>)
+      return Component.translatable(FORMAT, name,
+        new FluidStack(fluid, FluidValues.BOTTLE, getFluidTag(data)).getDisplayName()
+      ).withStyle(name.getStyle());
     }
     return name;
+  }
+
+  @Override
+  public void addTooltip(IToolStackView tool, ModifierEntry modifier, @Nullable Player player, List<Component> tooltip, TooltipKey tooltipKey, TooltipFlag tooltipFlag) {
+    IModDataView data = tool.getPersistentData();
+    Fluid fluid = getFluid(data);
+    if (fluid != Fluids.EMPTY) {
+      int amount = getAmount(modifier, fluid);
+      if (amount > 0) {
+        // formats as <fluid>: <amount> mb
+        tooltip.add(modifier.getModifier().applyStyle(new FluidStack(fluid, amount, getFluidTag(data)).getDisplayName().copy()
+          .append(": ").append(Component.translatable(ToolTankHelper.MB_FORMAT, TranslationHelper.COMMA_FORMAT.format(amount)))));
+      }
+    }
   }
 
 

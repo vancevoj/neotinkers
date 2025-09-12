@@ -4,7 +4,6 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -21,6 +20,7 @@ import net.minecraft.world.phys.EntityHitResult;
 import slimeknights.mantle.client.TooltipKey;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.data.loadable.record.SingletonLoader;
+import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
@@ -45,6 +45,7 @@ import java.util.List;
 public enum TippedModule implements ModifierModule, ProjectileLaunchModifierHook, ProjectileHitModifierHook, ModifierRemovalHook, DisplayNameModifierHook, TooltipModifierHook {
   INSTANCE;
 
+  private static final String FORMAT = TConstruct.makeTranslationKey("modifier", "tipped.format");
   private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<TippedModule>defaultHooks(ModifierHooks.PROJECTILE_LAUNCH, ModifierHooks.PROJECTILE_SHOT, ModifierHooks.PROJECTILE_THROWN, ModifierHooks.PROJECTILE_HIT, ModifierHooks.DISPLAY_NAME, ModifierHooks.TOOLTIP, ModifierHooks.REMOVE);
   public static final RecordLoadable<TippedModule> LOADER = new SingletonLoader<>(INSTANCE);
 
@@ -138,13 +139,11 @@ public enum TippedModule implements ModifierModule, ProjectileLaunchModifierHook
       if (id != null) {
         Potion potion = BuiltInRegistries.POTION.get(id);
         if (potion != Potions.EMPTY) {
-          MutableComponent component = Component.translatable(potion.getName("item.minecraft.potion.effect."));
-          int level = entry.getLevel();
-          // skip level on instantaneous as it's not true
-          if (level > 1) {
-            component = component.append(" ").append(RomanNumeralHelper.getNumeral(entry.getLevel()));
-          }
-          return component.withStyle(style -> style.withColor(PotionUtils.getColor(potion)));
+          // formats as Tipped <level> (<potion>)
+          return Component.translatable(FORMAT,
+            RomanNumeralHelper.getNumeral(entry.getLevel()),
+            Component.translatable(potion.getName("item.minecraft.potion.effect."))
+          ).withStyle(style -> style.withColor(PotionUtils.getColor(potion)));
         }
       }
     }
