@@ -6,6 +6,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -81,7 +82,7 @@ public enum TippedModule implements ModifierModule, ProjectileLaunchModifierHook
 
   /** Gets the divisor for the duration */
   private static int getDivisor(ModifierEntry modifier) {
-    return 1 << Math.min(4 - modifier.intEffectiveLevel(), 0);
+    return 1 << Math.max(4 - modifier.intEffectiveLevel(), 0);
   }
 
   @Override
@@ -90,12 +91,20 @@ public enum TippedModule implements ModifierModule, ProjectileLaunchModifierHook
     if (target != null && persistentData.contains(key, Tag.TAG_STRING)) {
       ResourceLocation id = ResourceLocation.tryParse(persistentData.getString(key));
       if (id != null) {
-        Entity entity = projectile.getEffectSource();
+        Entity source = projectile.getEffectSource();
         int divisor = getDivisor(modifier);
+        int oldHurtTime = target.invulnerableTime;
+        target.invulnerableTime = 0;
         // not a problem if the ID is invalid, will just do nothing
         for (MobEffectInstance instance : BuiltInRegistries.POTION.get(id).getEffects()) {
-          target.addEffect(new MobEffectInstance(instance.getEffect(), Math.max(instance.mapDuration(i -> i / divisor), 1), instance.getAmplifier(), instance.isAmbient(), instance.isVisible()), entity);
+          MobEffect effect = instance.getEffect();
+          if (effect.isInstantenous()) {
+            effect.applyInstantenousEffect(source, projectile, target, instance.getAmplifier(), 1f / (divisor * 0.75f));
+          } else {
+            target.addEffect(new MobEffectInstance(instance.getEffect(), Math.max(instance.mapDuration(i -> i / divisor), 1), instance.getAmplifier(), instance.isAmbient(), instance.isVisible()), source);
+          }
         }
+        target.invulnerableTime = oldHurtTime;
       }
     }
     return false;
@@ -132,7 +141,7 @@ public enum TippedModule implements ModifierModule, ProjectileLaunchModifierHook
           MutableComponent component = Component.translatable(potion.getName("item.minecraft.potion.effect."));
           int level = entry.getLevel();
           // skip level on instantaneous as it's not true
-          if (level > 1 && !potion.hasInstantEffects()) {
+          if (level > 1) {
             component = component.append(" ").append(RomanNumeralHelper.getNumeral(entry.getLevel()));
           }
           return component.withStyle(style -> style.withColor(PotionUtils.getColor(potion)));
