@@ -102,7 +102,11 @@
     "data": "no-load",
     "extraData": { "tconstruct:material_tier": { "type": "tconstruct:melee_harvest", "detailed": true }},
     "icon": {
-      "item": "minecraft:stone"
+      "item": {
+        "type": "forge:nbt",
+        "item": "tconstruct:pick_head",
+        "nbt": { "Material": "tconstruct:ui_render#extra_large" }
+      }
     }
   },
   {
@@ -110,7 +114,11 @@
     "data": "no-load",
     "extraData": { "tconstruct:material_tier": { "type": "tconstruct:ranged", "detailed": true }},
     "icon": {
-      "item": "minecraft:bamboo"
+      "item": {
+        "type": "forge:nbt",
+        "item": "tconstruct:bow_limb",
+        "nbt": { "Material": "tconstruct:ui_render#handle" }
+      }
     }
   },
   {
@@ -118,7 +126,11 @@
     "data": "no-load",
     "extraData": { "tconstruct:material_tier": { "type": "tconstruct:ammo", "detailed": true }},
     "icon": {
-      "item": "minecraft:blaze_rod"
+      "item": {
+        "type": "forge:nbt",
+        "item": "tconstruct:arrow_head",
+        "nbt": { "Material": "tconstruct:ui_render#head" }
+      }
     }
   },
   {
@@ -126,7 +138,11 @@
     "data": "no-load",
     "extraData": { "tconstruct:material_tier": { "type": "tconstruct:armor", "detailed": true } },
     "icon": {
-      "item": "minecraft:gold_ingot"
+      "item": {
+        "type": "forge:nbt",
+        "item": "tconstruct:leggings_plating",
+        "nbt": { "Material": "tconstruct:ui_render#large" }
+      }
     }
   },
   {
