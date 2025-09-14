@@ -60,9 +60,15 @@ import java.util.Objects;
 public enum SmashingModule implements ModifierModule, FluidModifierHook, ProjectileLaunchModifierHook.NoShooter, ProjectileHitModifierHook, VolatileDataModifierHook, ValidateModifierHook, ModifierRemovalHook, DisplayNameModifierHook, TooltipModifierHook {
   INSTANCE;
 
+  /** Key storing current fluid */
   private static final ResourceLocation KEY_FLUID = TConstruct.getResource("smashing_fluid");
-  private static final ResourceLocation KEY_AMOUNT = TConstruct.getResource("smashing_amount");
+  /** Key storing current fluid tag, if present */
   private static final ResourceLocation KEY_FLUID_TAG = TConstruct.getResource("smashing_fluid_tag");
+  /** Key storing amount, only used on projectile data */
+  private static final ResourceLocation KEY_AMOUNT = TConstruct.getResource("smashing_amount");
+  /** Key storing validation constant, ensures part swapping doesn't cause issues. Used only on the tool. */
+  private static final ResourceLocation KEY_VALIDATE = TConstruct.getResource("smashing_validate");
+  /** Projectile boolean marking that a fluid effect happened */
   private static final ResourceLocation KEY_USED = TConstruct.getResource("smashing_used");
   private static final String FORMAT = TConstruct.makeTranslationKey("modifier", "smashing.format");
   private static final Component EMPTY_TO_SWAP = TConstruct.makeTranslation("modifier", "smashing.empty_to_swap");
@@ -116,10 +122,19 @@ public enum SmashingModule implements ModifierModule, FluidModifierHook, Project
   /** Removes the fluid from the tool */
   private static void clearFluid(ModDataNBT data) {
     data.remove(KEY_FLUID);
+    data.remove(KEY_VALIDATE);
     data.remove(KEY_AMOUNT);
     data.remove(KEY_FLUID_TAG);
   }
 
+  /** Gets the amount to store in NBT to ensure no funny business with part swapping causes dupes */
+  private static int getValidationAmount(IToolStackView tool, ModifierEntry modifier) {
+    int level = modifier.getLevel();
+    for (ModifierEntry entry : tool.getModifiers()) {
+      level = entry.getHook(ModifierHooks.TOOL_CRAFT).onToolCraft(tool, modifier, level);
+    }
+    return level;
+  }
 
   /* Tank filling/draining */
 
@@ -143,7 +158,7 @@ public enum SmashingModule implements ModifierModule, FluidModifierHook, Project
       // we don't actually store the amount, its up to the modifier to determine that
       data.putString(KEY_FLUID, Loadables.FLUID.getString(resource.getFluid()));
       // we want to store a fixed size, but its possible part swapping changes our capacity, so keep track of our capacity at the time of storing
-      data.putInt(KEY_AMOUNT, modifier.getLevel());
+      data.putInt(KEY_VALIDATE, getValidationAmount(tool, modifier));
       CompoundTag tag = resource.getTag();
       if (tag != null) {
         data.put(KEY_FLUID_TAG, tag.copy());
@@ -251,12 +266,12 @@ public enum SmashingModule implements ModifierModule, FluidModifierHook, Project
     ModDataNBT data = tool.getPersistentData();
     if (data.contains(KEY_FLUID, Tag.TAG_STRING)) {
       // if our new level is larger, error to prevent a fluid dupe
-      int level = modifier.getLevel();
-      if (data.getInt(KEY_AMOUNT) < level) {
+      int level = getValidationAmount(tool, modifier);
+      if (data.getInt(KEY_VALIDATE) < level) {
         return EMPTY_TO_SWAP;
       }
       // delete some fluid to match new level
-      data.putInt(KEY_AMOUNT, level);
+      data.putInt(KEY_VALIDATE, level);
     }
     return null;
   }
@@ -407,7 +422,7 @@ public enum SmashingModule implements ModifierModule, FluidModifierHook, Project
       if (fluid != Fluids.EMPTY) {
         int amount = getAmount(fluid);
         if (amount > 0) {
-          return new FluidStack(fluid, amount * data.getInt(KEY_AMOUNT), getFluidTag(data));
+          return new FluidStack(fluid, amount, getFluidTag(data));
         }
       }
       return FluidStack.EMPTY;
@@ -425,7 +440,7 @@ public enum SmashingModule implements ModifierModule, FluidModifierHook, Project
       IModDataView data = tool.getPersistentData();
       Fluid fluid = SmashingModule.getFluid(data);
       if (fluid != Fluids.EMPTY) {
-        return getAmount(fluid) * data.getInt(KEY_AMOUNT);
+        return getAmount(fluid);
       }
       return FluidValues.BOTTLE;
     }
