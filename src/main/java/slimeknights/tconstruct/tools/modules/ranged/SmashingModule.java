@@ -131,7 +131,7 @@ public enum SmashingModule implements ModifierModule, FluidModifierHook, Project
   private static int getValidationAmount(IToolStackView tool, ModifierEntry modifier) {
     int level = modifier.getLevel();
     for (ModifierEntry entry : tool.getModifiers()) {
-      level = entry.getHook(ModifierHooks.TOOL_CRAFT).onToolCraft(tool, modifier, level);
+      level = entry.getHook(ModifierHooks.CRAFT_COUNT).modifyCraftCount(tool, modifier, level);
     }
     return level;
   }

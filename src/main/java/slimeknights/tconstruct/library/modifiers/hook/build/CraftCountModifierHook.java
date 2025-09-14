@@ -9,9 +9,9 @@ import java.util.Collection;
  * Hook for when a tool is crafted.
  * @see ValidateModifierHook
  */
-public interface ToolCraftModifierHook {
+public interface CraftCountModifierHook {
   /**
-   * Called when a tool is crafted to let you change the amount crafted or add persistent data.
+   * Called when a tool is crafted to let you change the amount crafted. This hook is also called on part swap and related places to prevent dupes, so applying on craft sideeffects is discouraged.
    * Note this hook is only called on crafting in the tinker station or anvil. Tools crafted by other means (such as casting) will not call it, nor will tool modifications.
    * Hook is really only intended to be used by ammo, such as arrows.
    * @param tool    Tool instance
@@ -19,14 +19,14 @@ public interface ToolCraftModifierHook {
    * @param amount  Amount crafted
    * @return  New amount crafted.
    */
-  int onToolCraft(IToolStackView tool, ModifierEntry entry, int amount);
+  int modifyCraftCount(IToolStackView tool, ModifierEntry entry, int amount);
 
   /** Merger running each hook */
-  record ComposeMerger(Collection<ToolCraftModifierHook> modules) implements ToolCraftModifierHook {
+  record ComposeMerger(Collection<CraftCountModifierHook> modules) implements CraftCountModifierHook {
     @Override
-    public int onToolCraft(IToolStackView tool, ModifierEntry entry, int amount) {
-      for (ToolCraftModifierHook module : modules) {
-        amount = module.onToolCraft(tool, entry, amount);
+    public int modifyCraftCount(IToolStackView tool, ModifierEntry entry, int amount) {
+      for (CraftCountModifierHook module : modules) {
+        amount = module.modifyCraftCount(tool, entry, amount);
         if (amount <= 0) {
           return 0;
         }

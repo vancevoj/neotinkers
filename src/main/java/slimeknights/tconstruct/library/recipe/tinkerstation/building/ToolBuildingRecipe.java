@@ -177,7 +177,7 @@ public class ToolBuildingRecipe implements ITinkerStationRecipe {
     if (parts > 0) {
       // apply tool craft hook for remaining traits
       for (ModifierEntry entry : tool.getModifiers()) {
-        count = entry.getHook(ModifierHooks.TOOL_CRAFT).onToolCraft(tool, entry, count);
+        count = entry.getHook(ModifierHooks.CRAFT_COUNT).modifyCraftCount(tool, entry, count);
         if (count <= 0) {
           return NO_COUNT;
         }

@@ -5,7 +5,7 @@ import slimeknights.mantle.data.registry.GenericLoaderRegistry.IHaveLoader;
 import slimeknights.tconstruct.library.json.LevelingValue;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
-import slimeknights.tconstruct.library.modifiers.hook.build.ToolCraftModifierHook;
+import slimeknights.tconstruct.library.modifiers.hook.build.CraftCountModifierHook;
 import slimeknights.tconstruct.library.modifiers.modules.ModifierModule;
 import slimeknights.tconstruct.library.modifiers.modules.util.ModifierCondition;
 import slimeknights.tconstruct.library.modifiers.modules.util.ModifierCondition.ConditionalModule;
@@ -16,9 +16,9 @@ import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import java.util.List;
 
 /** Module for changing how much ammo is crafted in an ammo modifier. Note this cannot increase the result above the tool stack size. */
-public record ToolCraftCountModule(LevelingValue multiplier, ModifierCondition<IToolStackView> condition) implements ModifierModule, ToolCraftModifierHook, ConditionalModule<IToolStackView> {
-  private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<ToolCraftCountModule>defaultHooks(ModifierHooks.TOOL_CRAFT);
-  public static final RecordLoadable<ToolCraftCountModule> LOADER = RecordLoadable.create(LevelingValue.LOADABLE.requiredField("multiplier", ToolCraftCountModule::multiplier), ModifierCondition.TOOL_FIELD, ToolCraftCountModule::new);
+public record CraftCountModule(LevelingValue multiplier, ModifierCondition<IToolStackView> condition) implements ModifierModule, CraftCountModifierHook, ConditionalModule<IToolStackView> {
+  private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<CraftCountModule>defaultHooks(ModifierHooks.CRAFT_COUNT);
+  public static final RecordLoadable<CraftCountModule> LOADER = RecordLoadable.create(LevelingValue.LOADABLE.requiredField("multiplier", CraftCountModule::multiplier), ModifierCondition.TOOL_FIELD, CraftCountModule::new);
 
   @Override
   public RecordLoadable<? extends IHaveLoader> getLoader() {
@@ -31,7 +31,7 @@ public record ToolCraftCountModule(LevelingValue multiplier, ModifierCondition<I
   }
 
   @Override
-  public int onToolCraft(IToolStackView tool, ModifierEntry entry, int amount) {
+  public int modifyCraftCount(IToolStackView tool, ModifierEntry entry, int amount) {
     if (condition.matches(tool, entry)) {
       amount *= multiplier.compute(entry.getEffectiveLevel());
     }
