@@ -63,10 +63,7 @@
         }
       }
     },
-    "data": "no-load",
-    "extraData": {
-      "tconstruct:load_tools": { "tag": "tconstruct:modifiable/broad", "path": "tools" }
-    }
+    "data": "sections/tools.json"
   },
   {
     "name": "armor",

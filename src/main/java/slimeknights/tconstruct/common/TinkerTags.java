@@ -472,6 +472,10 @@ public class TinkerTags {
     public static final TagKey<Item> STAFFS = local("modifiable/staffs");
     /** Modifiable items that support fishing modifiers. */
     public static final TagKey<Item> FISHING_RODS = local("modifiable/fishing_rods");
+    /** Ranged tools to show in materials and you and the encyclopedia. */
+    public static final TagKey<Item> SMALL_RANGED = local("modifiable/ranged/small");
+    /** Ranged tools to show in mighty smelting and the encyclopedia. */
+    public static final TagKey<Item> BROAD_RANGED = local("modifiable/ranged/broad");
 
     /** Items in this tag have a primary purpose of being ammo */
     public static final TagKey<Item> AMMO = local("modifiable/ammo");

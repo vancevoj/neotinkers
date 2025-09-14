@@ -48,9 +48,6 @@
           ]
         }
       }
-    },
-    "extraData": {
-      "tconstruct:load_tools": { "tag": "tconstruct:modifiable/small", "path": "tools" }
     }
   },
   {
