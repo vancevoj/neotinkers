@@ -4,7 +4,8 @@
     "data": "sections/intro.json",
     "icon": {
       "item": "minecraft:paper"
-    }
+    },
+    "extraData": { "mantle:index": { "hidden": true }}
   },
   {
     "name": "tools",
@@ -22,77 +23,6 @@
             "tconstruct:ui_render#handle",
             "tconstruct:ui_render#extra"
           ]
-        }
-      }
-    }
-  },
-  {
-    "name": "armor",
-    "data": "sections/armor.json",
-    "icon": {
-      "item": {
-        "type": "forge:nbt",
-        "item": "tconstruct:plate_chestplate",
-        "nbt": {
-          "tic_broken": false,
-          "tic_display": true,
-          "Damage": 0,
-          "tic_materials": [
-            "tconstruct:ui_render#extra",
-            "tconstruct:ui_render#head"
-          ]
-        }
-      }
-    }
-  },
-  {
-    "name": "upgrades",
-    "data": "sections/upgrades.json",
-    "icon": {
-      "item": {
-        "type": "forge:nbt",
-        "item": "tconstruct:creative_slot",
-        "nbt": {
-          "slot": "upgrades"
-        }
-      }
-    }
-  },
-  {
-    "name": "defense",
-    "data": "sections/defense.json",
-    "icon": {
-      "item": {
-        "type": "forge:nbt",
-        "item": "tconstruct:creative_slot",
-        "nbt": {
-          "slot": "defense"
-        }
-      }
-    }
-  },
-  {
-    "name": "slotless",
-    "data": "sections/slotless.json",
-    "icon": {
-      "item": {
-        "type": "forge:nbt",
-        "item": "tconstruct:creative_slot",
-        "nbt": {
-          "slot": "slotless"
-        }
-      }
-    }
-  },
-  {
-    "name": "abilities",
-    "data": "sections/abilities.json",
-    "icon": {
-      "item": {
-        "type": "forge:nbt",
-        "item": "tconstruct:creative_slot",
-        "nbt": {
-          "slot": "abilities"
         }
       }
     }
@@ -130,6 +60,25 @@
         "type": "forge:nbt",
         "item": "tconstruct:arrow_head",
         "nbt": { "Material": "tconstruct:ui_render#head" }
+      }
+    }
+  },
+  {
+    "name": "armor",
+    "data": "sections/armor.json",
+    "icon": {
+      "item": {
+        "type": "forge:nbt",
+        "item": "tconstruct:plate_chestplate",
+        "nbt": {
+          "tic_broken": false,
+          "tic_display": true,
+          "Damage": 0,
+          "tic_materials": [
+            "tconstruct:ui_render#extra",
+            "tconstruct:ui_render#head"
+          ]
+        }
       }
     }
   },
@@ -190,6 +139,58 @@
     }},
     "icon": {
       "item": "tconstruct:molten_iron_bucket"
+    }
+  },
+  {
+    "name": "upgrades",
+    "data": "sections/upgrades.json",
+    "icon": {
+      "item": {
+        "type": "forge:nbt",
+        "item": "tconstruct:creative_slot",
+        "nbt": {
+          "slot": "upgrades"
+        }
+      }
+    }
+  },
+  {
+    "name": "defense",
+    "data": "sections/defense.json",
+    "icon": {
+      "item": {
+        "type": "forge:nbt",
+        "item": "tconstruct:creative_slot",
+        "nbt": {
+          "slot": "defense"
+        }
+      }
+    }
+  },
+  {
+    "name": "slotless",
+    "data": "sections/slotless.json",
+    "icon": {
+      "item": {
+        "type": "forge:nbt",
+        "item": "tconstruct:creative_slot",
+        "nbt": {
+          "slot": "slotless"
+        }
+      }
+    }
+  },
+  {
+    "name": "abilities",
+    "data": "sections/abilities.json",
+    "icon": {
+      "item": {
+        "type": "forge:nbt",
+        "item": "tconstruct:creative_slot",
+        "nbt": {
+          "slot": "abilities"
+        }
+      }
     }
   }
 ]
