@@ -14,7 +14,7 @@ public class ModifierIds {
   public static final ModifierId harmonious  = id("harmonious");
   public static final ModifierId forecast = id("forecast");
   /** @deprecated use {@link #forecast} */
-  @Deprecated(forRemoval = true)
+  @Deprecated
   public static final ModifierId resurrected = id("resurrected");
   public static final ModifierId embossed    = id("embossed");
   public static final ModifierId rebalanced  = id("rebalanced");
