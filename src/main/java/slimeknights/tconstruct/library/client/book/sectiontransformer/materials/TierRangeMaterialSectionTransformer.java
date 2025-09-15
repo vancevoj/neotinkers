@@ -30,6 +30,7 @@ import slimeknights.tconstruct.library.materials.stats.IMaterialStats;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
@@ -114,7 +115,7 @@ public class TierRangeMaterialSectionTransformer extends BookTransformer {
   }
 
   /** Helper to add a page to the section */
-  private static PageData addPageStatic(SectionData data, String name, ResourceLocation type, PageContent content) {
+  private static PageData createPage(SectionData data, String name, ResourceLocation type, PageContent content) {
     PageData page = new PageData(true);
     page.source = data.source;
     page.parent = data;
@@ -122,9 +123,6 @@ public class TierRangeMaterialSectionTransformer extends BookTransformer {
     page.type = type;
     page.content = content;
     page.load();
-
-    data.pages.add(page);
-
     return page;
   }
 
@@ -151,15 +149,19 @@ public class TierRangeMaterialSectionTransformer extends BookTransformer {
     ListIterator<ContentPageIconList> iter = listPages.listIterator();
     ContentPageIconList overview = iter.next();
 
+    List<PageData> newPages = new ArrayList<>(materialList.size());
     for (IMaterial material : materialList) {
       MaterialId materialId = material.getIdentifier();
       AbstractMaterialContent contentMaterial = pageCreator.apply(materialId);
-      PageData page = addPageStatic(sectionData, materialId.toString(), contentMaterial.getId(), contentMaterial);
+      PageData page = createPage(sectionData, materialId.toString(), contentMaterial.getId(), contentMaterial);
+      newPages.add(page);
 
       SizedBookElement icon = new ItemElement(0, 0, 1f, contentMaterial.getDisplayStacks());
       while (!overview.addLink(icon, contentMaterial.getTitleComponent(), page)) {
         overview = iter.next();
       }
     }
+    // insert new pages at the beginning after index, ensures its before any padding from the next section
+    sectionData.pages.addAll(listPages.size(), newPages);
   }
 }
