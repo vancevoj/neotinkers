@@ -179,7 +179,8 @@ public class ModifiableBowItem extends ModifiableLauncherItem {
       case FLAG_NO_BALLISTA -> getSupportedHeldProjectiles();
       default -> isBallista(tool) ? getSupportedBallistaAmmo() : getSupportedHeldProjectiles();
     };
-    boolean hasAmmo = creative || !BowAmmoModifierHook.getAmmo(tool, bow, living, ammoPredicate).isEmpty();
+    ItemStack foundAmmo = BowAmmoModifierHook.getAmmo(tool, bow, living, ammoPredicate);
+    boolean hasAmmo = creative || !foundAmmo.isEmpty();
 
     // ask forge its thoughts on shooting
     int chargeTime = duration - timeLeft;
@@ -203,7 +204,7 @@ public class ModifiableBowItem extends ModifiableLauncherItem {
     // launch the arrow
     if (!level.isClientSide) {
       // filter ammo based on request from current ballista settings
-      ItemStack ammo = BowAmmoModifierHook.consumeAmmo(tool, bow, living, player, ammoPredicate);
+      ItemStack ammo = BowAmmoModifierHook.consumeAmmo(tool, bow, living, player, ammoPredicate, foundAmmo.is(TinkerTags.Items.BALLISTA_AMMO) ? 1 : BowAmmoModifierHook.getDesiredProjectiles(tool));
       // could only be empty at this point if we are creative, as hasAmmo returned true above
       if (ammo.isEmpty()) {
         ammo = new ItemStack(Items.ARROW);
