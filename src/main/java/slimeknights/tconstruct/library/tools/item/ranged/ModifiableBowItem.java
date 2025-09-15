@@ -241,7 +241,9 @@ public class ModifiableBowItem extends ModifiableLauncherItem {
       if (thrownTool) {
         sound = SoundEvents.TRIDENT_THROW;
         IToolStackView thrown = ToolStack.from(ammo);
-        power *= thrown.getStats().get(ToolStats.ATTACK_SPEED) / 1.5f;
+        float thrownVelocity = ConditionalStatModifierHook.getModifiedStat(thrown, living, ToolStats.VELOCITY);
+        power *= thrownVelocity * ConditionalStatModifierHook.getModifiedStat(thrown, living, ToolStats.DRAW_SPEED) * thrown.getStats().get(ToolStats.ATTACK_SPEED) / 1.5f;
+        velocity *= thrownVelocity;
         waterInertia = ConditionalStatModifierHook.getModifiedStat(thrown, living, ToolStats.WATER_INERTIA);
       }
       float inaccuracy = ModifierUtil.getInaccuracy(tool, living);
