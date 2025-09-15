@@ -1,6 +1,8 @@
 package slimeknights.tconstruct.tools.entity;
 
+import lombok.Setter;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -11,6 +13,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.ThrownTrident;
@@ -48,6 +51,8 @@ public class ThrownTool extends ThrownTrident implements ToolProjectile {
   private float charge = 1;
   private float multiplier = 1;
   private boolean noDespawn = false;
+  @Setter
+  private int originalSlot = -1;
 
   public ThrownTool(EntityType<? extends ThrownTrident> type, Level level) {
     super(type, level);
@@ -196,6 +201,39 @@ public class ThrownTool extends ThrownTrident implements ToolProjectile {
     }
   }
 
+
+  /* returning to slot */
+
+  /**
+   * Handles returning the item to the player.
+   * Unlike {@link Inventory#add(ItemStack)}, supports adding to the offhand/armor slots, and does not overwrite existing tool stacks in the slot.
+   */
+  private boolean addToInventory(Player player) {
+    ItemStack pickup = getPickupItem();
+    Inventory inventory = player.getInventory();
+    if (originalSlot != -1) {
+      ItemStack current = inventory.getItem(originalSlot);
+      if (current.isEmpty()) {
+        inventory.setItem(originalSlot, pickup);
+        return true;
+      } else if (current.getCount() < current.getMaxStackSize() && ItemStack.isSameItemSameTags(current, pickup)) {
+        current.grow(1);
+        return true;
+      }
+    }
+    return inventory.add(pickup);
+  }
+
+  @Override
+  protected boolean tryPickup(Player player) {
+    return switch (this.pickup) {
+      case ALLOWED -> addToInventory(player);
+      case CREATIVE_ONLY -> player.getAbilities().instabuild;
+      default -> this.isNoPhysics() && this.ownedBy(player) && addToInventory(player);
+    };
+  }
+
+
   /* Client */
 
   @Override
@@ -215,6 +253,7 @@ public class ThrownTool extends ThrownTrident implements ToolProjectile {
   private static final String KEY_CHARGE = "charge";
   private static final String KEY_MULTIPLIER = "multiplier";
   private static final String KEY_WATER_INERTIA = "water_inertia";
+  private static final String KEY_ORIGINAL_SLOT = "original_slot";
 
   @Override
   public void addAdditionalSaveData(CompoundTag tag) {
@@ -222,6 +261,9 @@ public class ThrownTool extends ThrownTrident implements ToolProjectile {
     tag.putFloat(KEY_CHARGE, this.charge);
     tag.putFloat(KEY_MULTIPLIER, this.multiplier);
     tag.putFloat(KEY_WATER_INERTIA, this.entityData.get(WATER_INERTIA));
+    if (this.originalSlot != -1) {
+      tag.putInt(KEY_ORIGINAL_SLOT, this.originalSlot);
+    }
   }
 
   @Override
@@ -234,5 +276,10 @@ public class ThrownTool extends ThrownTrident implements ToolProjectile {
     this.charge = tag.getFloat(KEY_CHARGE);
     this.multiplier = tag.getFloat(KEY_MULTIPLIER);
     this.entityData.set(WATER_INERTIA, tag.getFloat(KEY_WATER_INERTIA));
+    if (tag.contains(KEY_ORIGINAL_SLOT, Tag.TAG_ANY_NUMERIC)) {
+      this.originalSlot = tag.getInt(KEY_ORIGINAL_SLOT);
+    } else {
+      this.originalSlot = -1;
+    }
   }
 }
