@@ -99,6 +99,7 @@ public class MaterialDataProvider extends AbstractMaterialDataProvider {
     addMaterial(MaterialIds.ancientHide, 4, ORDER_BINDING, false);
     addMaterial(MaterialIds.ancient,     4, ORDER_NETHER,  false, true, null);
     // tier 4 - ammo
+    addMaterial(MaterialIds.shulker,     4, ORDER_REPAIR, true);
     addMaterial(MaterialIds.dragonScale, 4, ORDER_REPAIR, true);
     addMaterial(MaterialIds.enderslime,  4, ORDER_REPAIR, true);
 

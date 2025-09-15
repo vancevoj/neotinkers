@@ -71,7 +71,7 @@ public class TinkerMaterialSpriteProvider extends AbstractMaterialSpriteProvider
       .fallbacks("primitive", "cloth")
       .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF143306).addARGB(102, 0xFF183D08).addARGB(140, 0xFF1F4E0A).addARGB(178, 0xFF265F0D).addARGB(216, 0xFF2E730F).addARGB(255, 0xFF3A9313).build());
     buildMaterial(MaterialIds.chorus)
-      .meleeHarvest().ranged().shieldCore().arrowShaft()
+      .meleeHarvest().ranged().shieldCore().arrowHead().arrowShaft()
       .fallbacks("rock")
       .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF4F2A4F).addARGB(102, 0xFF593559).addARGB(140, 0xFF643C64).addARGB(178, 0xFF774D77).addARGB(216, 0xFF8F648F).addARGB(255, 0xFFA47CA4).build());
     // tier 1 - wood

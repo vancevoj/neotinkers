@@ -452,6 +452,8 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
     buildModifier(ModifierIds.trueshot).addModule(StatBoostModule.add(ToolStats.ACCURACY).eachLevel(0.1f));
     buildModifier(ModifierIds.blindshot).addModule(StatBoostModule.add(ToolStats.ACCURACY).eachLevel(-0.1f));
     buildModifier(ModifierIds.dragonshot).addModule(ConditionalStatModule.stat(ToolStats.PROJECTILE_DAMAGE).holder(TinkerPredicate.AIRBORNE).eachLevel(1));
+    buildModifier(ModifierIds.reclaim).levelDisplay(ModifierLevelDisplay.NO_LEVELS).addModule(new VolatileFlagModule(IndestructibleItemEntity.INDESTRUCTIBLE_ENTITY));
+
     // ammo
     buildModifier(ModifierIds.trickQuiver).priority(70) // before bulk quiver
       .addModule(QuiverInventoryModule.builder().pattern(pattern("tipped_arrow")).flatLimit(32).slotsPerLevel(3))

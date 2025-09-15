@@ -133,6 +133,7 @@ public class MaterialRenderInfoProvider extends AbstractMaterialRenderInfoProvid
     buildRenderInfo(MaterialIds.quartz);
     buildRenderInfo(MaterialIds.ichor);
     buildRenderInfo(MaterialIds.dragonScale);
+    redirect(MaterialIds.shulker, MaterialIds.chorus);
 
     // plate
     buildRenderInfo(MaterialIds.gold).color(0xFDF55F).fallbacks("metal");

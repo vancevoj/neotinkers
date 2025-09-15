@@ -81,6 +81,7 @@ public final class MaterialIds {
   public static final MaterialId ancientHide = id("ancient_hide");
   public static final MaterialId enderslimeVine = id("enderslime_vine");
   // tier 4 - ammo
+  public static final MaterialId shulker = id("shulker");
   public static final MaterialId enderslime = id("enderslime");
   public static final MaterialId dragonScale = id("dragon_scale");
 

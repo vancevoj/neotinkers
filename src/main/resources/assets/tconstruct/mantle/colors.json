@@ -279,6 +279,7 @@
     "tipped":        "#696969",
     "dragonshot":    "#474747",
     "smashing":      "#D0EAE9",
+    "reclaim":       "#8F648F",
 
     "__traits_armor__": null,
     "consecrated":          "#D3DFE8",
@@ -423,6 +424,7 @@
     "ancient_hide": "#7E6059",
     "ancient":      "#654740",
     "dragon_scale": "#474747",
+    "shulker":      "#8F648F",
 
     "__tier_5__": null,
     "enderslime_vine": "#a92dff",

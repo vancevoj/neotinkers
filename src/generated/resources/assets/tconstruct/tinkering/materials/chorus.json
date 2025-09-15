@@ -12,6 +12,7 @@
       "tconstruct:limb",
       "tconstruct:grip",
       "tconstruct:shield_core",
+      "tconstruct:arrow_head",
       "tconstruct:arrow_shaft"
     ],
     "transformer": {

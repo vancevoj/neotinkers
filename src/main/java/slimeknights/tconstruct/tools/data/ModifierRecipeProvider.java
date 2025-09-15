@@ -208,11 +208,6 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
       .addInput(TinkerTags.Items.INGOTS_NETHERITE_SCRAP)
       .setMaxLevel(1)
       .save(consumer, prefix(ModifierIds.worldbound, slotlessFolder));
-    ModifierRecipeBuilder.modifier(ModifierIds.worldbound)
-      .setTools(TinkerTags.Items.SINGLE_USE)
-      .addInput(TinkerTags.Items.NUGGETS_NETHERITE_SCRAP)
-      .setMaxLevel(1)
-      .save(consumer, wrap(ModifierIds.worldbound, slotlessFolder, "_ammo"));
     ModifierRecipeBuilder.modifier(ModifierIds.soulbound)
       .setTools(multiuse)
       .addInput(Items.ECHO_SHARD)

@@ -1935,7 +1935,7 @@
 
   "material.tconstruct.glass": "Glass",
   "material.tconstruct.glass.flavor": "Shatters on impact!",
-  "material.tconstruct.glass.ammo": "Decreases projectile damage by 0.75 per level, but gives it a tank. Upon impact, applies fluid effects from the fluid in the tank.",
+  "material.tconstruct.glass.ammo": "Decreases projectile damage by 0.75 per level, but gives it a tank. Upon impact, applies fluid effects from the fluid in the tank. Breaks upon hitting a block when filled.",
   "material.tconstruct.glass.skull_flavor": "Whose nice things are being destroyed now, creeper?",
   "material.tconstruct.glass.skull_encyclopedia": "Holding the helmet interact key while sneaking causes the wearer to explode",
 
@@ -1986,6 +1986,10 @@
   "material.tconstruct.dragon_scale.flavor": "With this, even dragons will fear me!",
   "material.tconstruct.dragon_scale.armor": "Grants +10% resistance while airborne, and boosts attack damage by 5% per level based on the highest piece.",
   "material.tconstruct.dragon_scale.ammo": "Increases projectile damage by 1 per level if launched while in mid air.",
+
+  "material.tconstruct.shulker": "Shulker Shell",
+  "material.tconstruct.shulker.flavor": "Unbreakable shuriken!",
+  "material.tconstruct.shulker.ammo": "Allows collecting projectiles that hit entities instead of just blocks, making them infinitely reusable. Item will additionally not despawn.",
 
   "material.tconstruct.manyullyn": "Manyullyn",
   "material.tconstruct.manyullyn.flavor": "The metal that most Tinkers will never pronounce right. Also known as a star cutting material.",
@@ -3020,6 +3024,9 @@
   "modifier.tconstruct.dragonshot.flavor": "Weapon of a dragon",
   "modifier.tconstruct.dragonshot.description": "Does extra damage when shot from the air",
   "modifier.tconstruct.dragonshot.projectile_damage": "Airborne Damage",
+  "modifier.tconstruct.reclaim": "Reclaim",
+  "modifier.tconstruct.reclaim.flavor": "Reduce, reuse, recycle",
+  "modifier.tconstruct.reclaim.description": "After hitting the target, projectile will bounce off and can be collected to reuse.",
 
   "__comment": "Tier 5 Traits",
   "modifier.tconstruct.enderporting": "Enderporting",

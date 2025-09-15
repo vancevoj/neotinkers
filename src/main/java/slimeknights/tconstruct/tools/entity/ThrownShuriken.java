@@ -29,6 +29,7 @@ import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.entity.ProjectileWithKnockback;
 import slimeknights.tconstruct.library.modifiers.entity.ProjectileWithPower;
 import slimeknights.tconstruct.library.modifiers.hook.build.ConditionalStatModifierHook;
+import slimeknights.tconstruct.library.tools.IndestructibleItemEntity;
 import slimeknights.tconstruct.library.tools.capability.EntityModifierCapability;
 import slimeknights.tconstruct.library.tools.capability.PersistentDataCapability;
 import slimeknights.tconstruct.library.tools.helper.ModifierUtil;
@@ -54,6 +55,7 @@ public class ThrownShuriken extends Projectile implements ToolProjectile, Projec
 
   private ItemStack stack = ItemStack.EMPTY;
   private IToolStackView tool = null;
+  private boolean reclaim = false;
   @Getter
   private float power = 4;
   private float knockback = 0;
@@ -81,6 +83,7 @@ public class ThrownShuriken extends Projectile implements ToolProjectile, Projec
   private void setStack(ItemStack stack) {
     this.stack = stack;
     this.entityData.set(STACK, stack);
+    this.reclaim = ModifierUtil.checkVolatileFlag(stack, IndestructibleItemEntity.INDESTRUCTIBLE_ENTITY);
   }
 
   /**
@@ -204,7 +207,11 @@ public class ThrownShuriken extends Projectile implements ToolProjectile, Projec
           target.push(motion.x, 0.1f, motion.z);
         }
       }
-      level.broadcastEntityEvent(this, (byte) 3); // TODO: find the proper constant for this event ID
+      if (reclaim && !this.isRemoved()) {
+        this.spawnAtLocation(stack.copy());
+      } else {
+        level.broadcastEntityEvent(this, (byte) 3); // TODO: find the proper constant for this event ID
+      }
       this.discard();
     }
   }
@@ -267,6 +274,7 @@ public class ThrownShuriken extends Projectile implements ToolProjectile, Projec
   /* NBT */
   private static final String KEY_STACK = "stack";
   private static final String KEY_WATER_INERTIA = "water_inertia";
+  private static final String KEY_DEALT_DAMAGE = "dealt_damage";
 
   @Override
   public void addAdditionalSaveData(CompoundTag tag) {
