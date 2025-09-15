@@ -10,6 +10,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.AbstractArrow.Pickup;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -289,15 +290,18 @@ public enum SmashingModule implements ModifierModule, FluidModifierHook, Project
 
   @Override
   public void onProjectileShoot(IToolStackView tool, ModifierEntry modifier, @Nullable LivingEntity shooter, ItemStack ammo, Projectile projectile, @Nullable AbstractArrow arrow, ModDataNBT persistentData, boolean primary) {
-    ModDataNBT toolData = tool.getPersistentData();
-    Fluid fluid = getFluid(toolData);
-    if (fluid != Fluids.EMPTY) {
-      int amount = getAmount(modifier, fluid);
-      if (amount > 0) {
-        persistentData.putString(KEY_FLUID, toolData.getString(KEY_FLUID));
-        persistentData.putInt(KEY_AMOUNT, amount);
-        if (toolData.contains(KEY_FLUID_TAG, Tag.TAG_COMPOUND)) {
-          persistentData.put(KEY_FLUID_TAG, toolData.getCompound(KEY_FLUID_TAG));
+    // if firing an arrow via multishot, don't fill the extra projectiles with fluid to prevent some dupes with effects
+    if (arrow == null || arrow.pickup == Pickup.ALLOWED || shooter instanceof Player player && player.getAbilities().instabuild) {
+      ModDataNBT toolData = tool.getPersistentData();
+      Fluid fluid = getFluid(toolData);
+      if (fluid != Fluids.EMPTY) {
+        int amount = getAmount(modifier, fluid);
+        if (amount > 0) {
+          persistentData.putString(KEY_FLUID, toolData.getString(KEY_FLUID));
+          persistentData.putInt(KEY_AMOUNT, amount);
+          if (toolData.contains(KEY_FLUID_TAG, Tag.TAG_COMPOUND)) {
+            persistentData.put(KEY_FLUID_TAG, toolData.getCompound(KEY_FLUID_TAG));
+          }
         }
       }
     }
