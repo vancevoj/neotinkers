@@ -23,7 +23,7 @@ import java.util.List;
 
 /** Module applying projectile knockback in the opposite direction of punch */
 public record ReversePunchModule(LevelingValue amount) implements ModifierModule, ProjectileHitModifierHook {
-  private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<ReversePunchModule>defaultHooks(ModifierHooks.PROJECTILE_HIT);
+  private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<ReversePunchModule>defaultHooks(ModifierHooks.PROJECTILE_HIT, ModifierHooks.PROJECTILE_HIT_CLIENT);
   public static final RecordLoadable<ReversePunchModule> LOADER = RecordLoadable.create(LevelingValue.LOADABLE.directField(ReversePunchModule::amount), ReversePunchModule::new);
 
   @Override
