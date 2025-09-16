@@ -400,17 +400,20 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
     addMaterialStats(MaterialIds.slimewood, StatlessMaterialStats.ARROW_SHAFT);
     addMaterialStats(MaterialIds.necroticBone, StatlessMaterialStats.ARROW_SHAFT);
     addMaterialStats(MaterialIds.blaze, StatlessMaterialStats.ARROW_SHAFT);
+    addMaterialStats(MaterialIds.venombone, StatlessMaterialStats.ARROW_SHAFT);
     addMaterialStats(MaterialIds.steeleaf, StatlessMaterialStats.ARROW_HEAD);
     // tier 3
     addMaterialStats(MaterialIds.ice, StatlessMaterialStats.ARROW_HEAD);
     addMaterialStats(MaterialIds.quartz, StatlessMaterialStats.ARROW_HEAD);
     addMaterialStats(MaterialIds.ichor, StatlessMaterialStats.ARROW_HEAD);
     addMaterialStats(MaterialIds.glowstone, StatlessMaterialStats.ARROW_HEAD);
+    addMaterialStats(MaterialIds.necronium, StatlessMaterialStats.ARROW_SHAFT);
     // tier 4
     addMaterialStats(MaterialIds.enderslime, StatlessMaterialStats.ARROW_HEAD);
     addMaterialStats(MaterialIds.dragonScale, StatlessMaterialStats.ARROW_HEAD);
     addMaterialStats(MaterialIds.shulker, StatlessMaterialStats.ARROW_HEAD);
     addMaterialStats(MaterialIds.blazewood, StatlessMaterialStats.ARROW_SHAFT);
+    addMaterialStats(MaterialIds.blazingBone, StatlessMaterialStats.ARROW_SHAFT);
   }
 
   private void addArmor() {

@@ -59,6 +59,7 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     addTraits(MaterialIds.slimewood, AMMO, new ModifierEntry(ModifierIds.bounce, 2));
     addDefaultTraits(MaterialIds.slimeskin, ModifierIds.overgrowth, TinkerModifiers.overslime.getId());
     addDefaultTraits(MaterialIds.venombone, ModifierIds.antitoxin);
+    addTraits(MaterialIds.venombone, AMMO, ModifierIds.venom);
     addDefaultTraits(MaterialIds.aluminum, ModifierIds.featherweight);
     // tier 2 - nether
     addDefaultTraits(MaterialIds.necroticBone, TinkerModifiers.necrotic);
@@ -110,6 +111,7 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     addDefaultTraits(MaterialIds.manyullyn, TinkerModifiers.insatiable);
     addTraits(MaterialIds.manyullyn, ARMOR, ModifierIds.kinetic);
     addDefaultTraits(MaterialIds.blazingBone, TinkerModifiers.conducting);
+    addTraits(MaterialIds.blazingBone, AMMO, ModifierIds.conductive);
     addDefaultTraits(MaterialIds.blazewood, ModifierIds.spectral);
     addDefaultTraits(MaterialIds.ancient, ModifierIds.vintage, ModifierIds.worldbound);
     // tier 4 - binding
@@ -144,6 +146,7 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     addDefaultTraits(MaterialIds.pewter, ModifierIds.raging);
     addTraits(MaterialIds.pewter, ARMOR, ModifierIds.vitalProtection);
     addDefaultTraits(MaterialIds.necronium, TinkerModifiers.decay);
+    addTraits(MaterialIds.necronium, AMMO, new ModifierEntry(TinkerModifiers.decay, 2));
     addDefaultTraits(MaterialIds.electrum, ModifierIds.shock);
     addDefaultTraits(MaterialIds.platedSlimewood, TinkerModifiers.overworked, TinkerModifiers.overslime);
     addDefaultTraits(MaterialIds.steeleaf, ModifierIds.experienced);

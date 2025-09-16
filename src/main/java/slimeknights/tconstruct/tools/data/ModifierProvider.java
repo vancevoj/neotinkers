@@ -810,6 +810,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .addModule(new DamageOnUnequipModule(1, ModifierCondition.ANY_TOOL.with(ToolStackPredicate.tag(TinkerTags.Items.WORN_ARMOR).inverted())))
       .addModule(new DamageOnUnequipModule(2, ModifierCondition.ANY_TOOL.with(ToolStackPredicate.tag(TinkerTags.Items.WORN_ARMOR))));
 
+    buildModifier(ModifierIds.venom).priority(150).addModule(MobEffectModule.builder(TinkerEffects.venom).time(RandomLevelingValue.random(5 * 20, 5 * 20)).chance(LevelingValue.flat(0.15f)).build());
     buildModifier(ModifierIds.antitoxin)
       .addModule(ConditionalMeleeDamageModule.builder()
         .attacker(new HasMobEffectPredicate(MobEffects.POISON))
@@ -1087,6 +1088,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
     buildModifier(ModifierIds.fortified).priority(60).addModule(ModifierSlotModule.slot(SlotType.DEFENSE).eachLevel(1));
     buildModifier(ModifierIds.kinetic).addModule(KineticModule.INSTANCE);
     buildModifier(ModifierIds.recurrentProtection).addModule(new RecurrentProtectionModule(LevelingValue.flat(0.5f), LevelingInt.eachLevel(5 * 20)));
+    buildModifier(ModifierIds.conductive).priority(150).addModule(MobEffectModule.builder(TinkerEffects.conductive).time(RandomLevelingValue.random(5 * 20, 5 * 20)).chance(LevelingValue.flat(0.15f)).build());
     buildModifier(ModifierIds.flameBarrier).addModule(new FlameBarrierModule(LevelingValue.eachLevel(1.875f)));
     buildModifier(ModifierIds.vintage)
       .addModule(ModifierSlotModule.slot(SlotType.ABILITY).eachLevel(1))

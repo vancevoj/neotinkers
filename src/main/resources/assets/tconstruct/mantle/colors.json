@@ -251,9 +251,9 @@
     "temperate":    "#9C5643",
     "deciduous":    "#B9B3AC",
     "barkskin":     "#B9B3AC",
+    "conducting":   "#DBCC0B",
 
     "__traits_harvest__": null,
-    "conducting":   "#DBCC0B",
     "crumbling":    "#C687BD",
     "decay":        "#7F9374",
     "heavy":        "#575E79",
@@ -282,6 +282,8 @@
     "reclaim":       "#8F648F",
     "bounce":        "#82c873",
     "rebound":       "#ff970d",
+    "venom":         "#A2935E",
+    "conductive":    "#DBCC0B",
 
     "__traits_armor__": null,
     "consecrated":          "#D3DFE8",

@@ -44,6 +44,7 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import slimeknights.mantle.data.predicate.damage.DamageSourcePredicate;
 import slimeknights.tconstruct.TConstruct;
+import slimeknights.tconstruct.common.TinkerEffect;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.common.config.Config;
 import slimeknights.tconstruct.common.network.TinkerNetwork;
@@ -74,6 +75,7 @@ import slimeknights.tconstruct.library.tools.nbt.ModifierNBT;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.library.utils.BlockSideHitListener;
 import slimeknights.tconstruct.shared.TinkerAttributes;
+import slimeknights.tconstruct.shared.TinkerEffects;
 import slimeknights.tconstruct.tools.TinkerModifiers;
 import slimeknights.tconstruct.tools.network.SyncProjectileModifiersPacket;
 
@@ -261,6 +263,21 @@ public class ToolEvents {
     float modifierValue = 0;
     float originalDamage = event.getAmount();
 
+    // conducting - boosts damage from fire
+    if (source.is(TinkerTags.DamageTypes.FIRE_PROTECTION)) {
+      int level = TinkerEffect.getLevel(entity, TinkerEffects.conductive);
+      if (level > 0) {
+        originalDamage *= Math.pow(2, level);
+      }
+    }
+    // venom - boosts damage from magic
+    if (source.is(TinkerTags.DamageTypes.MAGIC_PROTECTION)) {
+      int level = TinkerEffect.getLevel(entity, TinkerEffects.venom);
+      if (level > 0) {
+        originalDamage *= Math.pow(2, level);
+      }
+    }
+
     // run shulking global damage "boost", its a bit hardcoded Java wise to make it softcoded in JSON
     Entity attacker = event.getSource().getEntity();
     if (attacker != null && attacker.isCrouching()) {
@@ -270,6 +287,8 @@ public class ToolEvents {
         originalDamage *= crouchMultiplier;
       }
     }
+    // ensure any changes made so far apply, though we may change it again
+    event.setAmount(originalDamage);
 
     // for our own armor, we have boosts from modifiers to consider
     if (context.hasModifiableArmor()) {

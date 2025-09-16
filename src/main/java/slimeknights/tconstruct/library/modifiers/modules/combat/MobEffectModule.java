@@ -41,6 +41,7 @@ import slimeknights.tconstruct.tools.modules.armor.CounterModule;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.function.Supplier;
 
 import static slimeknights.tconstruct.TConstruct.RANDOM;
 
@@ -61,6 +62,11 @@ public record MobEffectModule(IJsonPredicate<LivingEntity> target, MobEffect eff
   /** Creates a builder instance */
   public static MobEffectModule.Builder builder(MobEffect effect) {
     return new Builder(effect);
+  }
+
+  /** Creates a builder instance */
+  public static MobEffectModule.Builder builder(Supplier<? extends MobEffect> effect) {
+    return new Builder(effect.get());
   }
   
   /** @apiNote Internal constructor, use {@link #builder(MobEffect)} */
@@ -86,12 +92,11 @@ public record MobEffectModule(IJsonPredicate<LivingEntity> target, MobEffect eff
   public void onAttacked(IToolStackView tool, ModifierEntry modifier, EquipmentContext context, EquipmentSlot slotType, DamageSource source, float amount, boolean isDirectDamage) {
     Entity attacker = source.getEntity();
     if (isDirectDamage && tool.hasTag(TinkerTags.Items.ARMOR) && attacker instanceof LivingEntity living) {
-      // 15% chance of working per level
       LivingEntity defender = context.getEntity();
       float scaledLevel = CounterModule.getLevel(tool, modifier, slotType, defender);
       float chance = this.chance.compute(scaledLevel);
       if (chance >= 1 || RANDOM.nextFloat() < chance) {
-        applyEffect(living, modifier.getEffectiveLevel());
+        applyEffect(living, scaledLevel);
         ToolDamageUtil.damageAnimated(tool, 1, defender, slotType);
       }
     }
