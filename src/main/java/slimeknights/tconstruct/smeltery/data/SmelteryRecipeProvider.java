@@ -1333,19 +1333,19 @@ public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelt
                             .setCast(Items.ENDER_EYE, true)
                             .save(consumer, location(folder + "obsidian/chest"));
     ItemCastingRecipeBuilder.basinRecipe(TinkerMaterials.nahuatl)
-                            .setFluidAndTime(TinkerFluids.moltenObsidian, FluidType.BUCKET_VOLUME)
+                            .setFluidAndTime(TinkerFluids.moltenObsidian, FluidValues.GLASS_PANE)
                             .setCast(ItemTags.PLANKS, true)
                             .save(consumer, location(folder + "obsidian/nahuatl"));
     ItemCastingRecipeBuilder.basinRecipe(TinkerMaterials.nahuatl.getSlab())
-                            .setFluidAndTime(TinkerFluids.moltenObsidian, FluidType.BUCKET_VOLUME / 2)
+                            .setFluidAndTime(TinkerFluids.moltenObsidian, FluidValues.GLASS_PANE / 2)
                             .setCast(ItemTags.WOODEN_SLABS, true)
                             .save(consumer, location(folder + "obsidian/nahuatl_slab"));
     ItemCastingRecipeBuilder.basinRecipe(TinkerMaterials.nahuatl.getStairs())
-                            .setFluidAndTime(TinkerFluids.moltenObsidian, FluidType.BUCKET_VOLUME)
+                            .setFluidAndTime(TinkerFluids.moltenObsidian, FluidValues.GLASS_PANE)
                             .setCast(ItemTags.WOODEN_STAIRS, true)
                             .save(consumer, location(folder + "obsidian/nahuatl_stairs"));
     ItemCastingRecipeBuilder.basinRecipe(TinkerMaterials.nahuatl.getFence())
-                            .setFluidAndTime(TinkerFluids.moltenObsidian, FluidType.BUCKET_VOLUME)
+                            .setFluidAndTime(TinkerFluids.moltenObsidian, FluidValues.GLASS_PANE)
                             .setCast(ItemTags.WOODEN_FENCES, true)
                             .save(consumer, location(folder + "obsidian/nahuatl_fence"));
     // overworld stones from quartz
