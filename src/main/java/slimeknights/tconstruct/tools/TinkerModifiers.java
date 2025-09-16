@@ -52,6 +52,7 @@ import slimeknights.tconstruct.library.json.variable.mining.BlockMiningSpeedVari
 import slimeknights.tconstruct.library.json.variable.mining.BlockTemperatureVariable;
 import slimeknights.tconstruct.library.json.variable.mining.MiningSpeedVariable;
 import slimeknights.tconstruct.library.json.variable.power.EntityPowerVariable;
+import slimeknights.tconstruct.library.json.variable.power.PersistentDataPowerVariable;
 import slimeknights.tconstruct.library.json.variable.power.PowerVariable;
 import slimeknights.tconstruct.library.json.variable.protection.EntityProtectionVariable;
 import slimeknights.tconstruct.library.json.variable.protection.ProtectionVariable;
@@ -849,6 +850,7 @@ public final class TinkerModifiers extends TinkerModule {
       // power
       PowerVariable.LOADER.register(getResource("constant"), PowerVariable.Constant.LOADER);
       PowerVariable.LOADER.register(getResource("entity"), EntityPowerVariable.LOADER);
+      PowerVariable.LOADER.register(getResource("persistent_data"), PersistentDataPowerVariable.LOADER);
       // mining speed
       MiningSpeedVariable.LOADER.register(getResource("constant"), MiningSpeedVariable.Constant.LOADER);
       MiningSpeedVariable.LOADER.register(getResource("block"), BlockMiningSpeedVariable.LOADER);

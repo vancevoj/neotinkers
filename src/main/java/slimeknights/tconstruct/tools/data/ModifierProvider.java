@@ -63,6 +63,7 @@ import slimeknights.tconstruct.library.json.variable.mining.BlockLightVariable;
 import slimeknights.tconstruct.library.json.variable.mining.BlockMiningSpeedVariable;
 import slimeknights.tconstruct.library.json.variable.mining.BlockTemperatureVariable;
 import slimeknights.tconstruct.library.json.variable.power.EntityPowerVariable;
+import slimeknights.tconstruct.library.json.variable.power.PersistentDataPowerVariable;
 import slimeknights.tconstruct.library.json.variable.protection.EntityProtectionVariable;
 import slimeknights.tconstruct.library.json.variable.stat.EntityConditionalStatVariable;
 import slimeknights.tconstruct.library.json.variable.tool.ModDataSource;
@@ -453,6 +454,13 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
     buildModifier(ModifierIds.trueshot).addModule(StatBoostModule.add(ToolStats.ACCURACY).eachLevel(0.1f));
     buildModifier(ModifierIds.blindshot).addModule(StatBoostModule.add(ToolStats.ACCURACY).eachLevel(-0.1f));
     buildModifier(ModifierIds.dragonshot).addModule(ConditionalStatModule.stat(ToolStats.PROJECTILE_DAMAGE).holder(TinkerPredicate.AIRBORNE).eachLevel(1));
+    buildModifier(ModifierIds.rebound).addModule(ConditionalPowerModule.builder()
+      .formula()
+      .customVariable("bounces", new PersistentDataPowerVariable(ModifierIds.bounce, 1))
+      .constant(0.5f).multiply()
+      .variable(LEVEL).multiply()
+      .variable(MULTIPLIER).multiply()
+      .variable(VALUE).add().build());
     buildModifier(ModifierIds.reclaim).levelDisplay(ModifierLevelDisplay.NO_LEVELS).addModule(new VolatileFlagModule(IndestructibleItemEntity.INDESTRUCTIBLE_ENTITY));
 
     // ammo

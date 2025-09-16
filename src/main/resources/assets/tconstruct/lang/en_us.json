@@ -2033,6 +2033,14 @@
   "material.tconstruct.blazewood.flavor": "The flame protects the flame",
   "material.tconstruct.blazewood.encyclopedia": "Grants +0.5% protection against non-fire damage per second of fire, up to +7.5% from lava's 15 seconds. Bonus reduced by fire resistance.",
 
+  "material.tconstruct.ichor": "Ichor",
+  "material.tconstruct.ichor.flavor": "Skipping stones",
+  "material.tconstruct.ichor.ammo": "Projectile will bounce upon hitting a block up to 1 time, plus 2 per level. Increases power by 0.5 per bounce per level before hitting the target. ",
+
+  "material.tconstruct.glowstone": "Glowstone",
+  "material.tconstruct.glowstone.flavor": "Brightest day, blackest night, no cave will escape my light!",
+  "material.tconstruct.glowstone.ammo": "Causes the target to glow for 10 seconds per level. If it hits a block, places a permanent light source.",
+
   "material.tconstruct.soulsteel": "Soulsteel",
 
   "material.tconstruct.ancient_hide": "Ancient Hide",
@@ -2050,10 +2058,6 @@
   "material.tconstruct.enderslime_vine.encyclopedia": "Teleports the holder to the location of mined blocks or swaps the holder with attacked monsters",
   "material.tconstruct.enderslime_vine.ranged": "Teleports the holder to the location of arrows that land in blocks or swaps the holder with monsters hit by arrows",
   "material.tconstruct.enderslime_vine.armor": "Has a 25% chance per piece of randomly teleporting attackers away",
-
-  "material.tconstruct.ichor": "Ichor",
-  "material.tconstruct.ichor.flavor": "Brightest day, blackest night, no cave will escape my light!",
-  "material.tconstruct.ichor.ammo": "Causes the target to glow for 10 seconds per level. If it hits a block, places a permanent light source.",
 
   "material.tconstruct.enderslime": "Enderslime",
   "material.tconstruct.enderslime.flavor": "Zwooop",
@@ -2909,6 +2913,10 @@
   "modifier.tconstruct.bounce": "Bounce",
   "modifier.tconstruct.bounce.flavor": "Ricocheting!",
   "modifier.tconstruct.bounce.description": "Causes arrows to bounce off blocks they hit, perfect for trick shots!",
+  "modifier.tconstruct.rebound": "Rebound",
+  "modifier.tconstruct.rebound.flavor": "Trickshot!",
+  "modifier.tconstruct.rebound.description": "Increases power based on how many times the projectile bounces.",
+  "modifier.tconstruct.rebound.projectile_damage": "Rebound Damage",
   "modifier.tconstruct.raging": "Raging",
   "modifier.tconstruct.raging.flavor": "A desperate solution!",
   "modifier.tconstruct.raging.description": "Tool does more damage when the holder's health is low",

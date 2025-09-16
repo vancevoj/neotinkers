@@ -131,7 +131,8 @@ public class MaterialRenderInfoProvider extends AbstractMaterialRenderInfoProvid
     buildRenderInfo(MaterialIds.blaze);
     buildRenderInfo(MaterialIds.enderPearl);
     buildRenderInfo(MaterialIds.quartz);
-    buildRenderInfo(MaterialIds.ichor);
+    buildRenderInfo(MaterialIds.ichor).luminosity(10);
+    buildRenderInfo(MaterialIds.glowstone).luminosity(15);
     buildRenderInfo(MaterialIds.dragonScale);
     redirect(MaterialIds.shulker, MaterialIds.chorus);
 

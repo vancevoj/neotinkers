@@ -66,6 +66,7 @@ public final class MaterialIds {
   public static final MaterialId ice = id("ice");
   // tier 3 - ammo
   public static final MaterialId quartz = id("quartz");
+  public static final MaterialId glowstone = id("glowstone");
   public static final MaterialId ichor = id("ichor");
   // tier 4
   public static final MaterialId manyullyn = id("manyullyn");

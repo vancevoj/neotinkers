@@ -193,6 +193,10 @@ public class TinkerMaterialSpriteProvider extends AbstractMaterialSpriteProvider
       .arrowHead()
       .fallbacks("crystal", "rock")
       .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF6F5D5A).addARGB(102, 0xFF897B73).addARGB(140, 0xFFB6A48E).addARGB(178, 0xFFD4CABA).addARGB(216, 0xFFEAE5DE).addARGB(255, 0xFFF7F5F2).build());
+    buildMaterial(MaterialIds.glowstone)
+      .arrowHead()
+      .fallbacks("crystal", "rock")
+      .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF5A391C).addARGB(102, 0xFF7E4821).addARGB(140, 0xFFB47140).addARGB(178, 0xFFEBAA4E).addARGB(216, 0xFFFFBC5E).addARGB(255, 0xFFF9D49C).build());
     // tier 2 - slimewood
     IColorMapping greenSlime = GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF229630).addARGB(102, 0xFF24A033).addARGB(140, 0xFF27AB37).addARGB(178, 0xFF3EBD42).addARGB(216, 0xFF56CF4C).addARGB(234, 0xFF6FEA60).addARGB(255, 0xFF82F86D).build();
     buildPlanks(MaterialIds.greenheart).arrowShaft()

@@ -99,7 +99,8 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     addTraits(MaterialIds.ice, AMMO, ModifierIds.freezing);
     // tier 3 - ammo
     addTraits(MaterialIds.quartz, AMMO, ModifierIds.keen);
-    addTraits(MaterialIds.ichor, AMMO, ModifierIds.spectral);
+    addTraits(MaterialIds.ichor, AMMO, ModifierIds.rebound, ModifierIds.bounce);
+    addTraits(MaterialIds.glowstone, AMMO, ModifierIds.spectral);
 
     // tier 4
     addDefaultTraits(MaterialIds.cinderslime, ModifierIds.overburn, TinkerModifiers.overslime.getId());

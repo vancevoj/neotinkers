@@ -83,8 +83,9 @@ public class MaterialDataProvider extends AbstractMaterialDataProvider {
     // tier 3 - shield cores
     addMaterial(MaterialIds.ice, 3, ORDER_BINDING, true);
     // tier 3 - ammo
-    addMaterial(MaterialIds.quartz, 3, ORDER_REPAIR, false);
-    addMaterial(MaterialIds.ichor,  3, ORDER_REPAIR, true);
+    addMaterial(MaterialIds.quartz,    3, ORDER_REPAIR, false);
+    addMaterial(MaterialIds.ichor,     3, ORDER_REPAIR, true);
+    addMaterial(MaterialIds.glowstone, 3, ORDER_REPAIR, true);
 
     // tier 4
     addMaterial(MaterialIds.queensSlime, 4, ORDER_GENERAL, false);
