@@ -2032,7 +2032,8 @@
 
   "material.tconstruct.blazewood": "Blazewood",
   "material.tconstruct.blazewood.flavor": "The flame protects the flame",
-  "material.tconstruct.blazewood.encyclopedia": "Grants +0.5% protection against non-fire damage per second of fire, up to +7.5% from lava's 15 seconds. Bonus reduced by fire resistance.",
+  "material.tconstruct.blazewood.encyclopedia": "Inflicts the attacker with 10 seconds of glowing, or 20 seconds when blocking.",
+  "material.tconstruct.blazewood.ammo": "Causes the target to glow for 10 seconds. If it hits a block, places a permanent light source at the cost of the arrow.",
 
   "material.tconstruct.ichor": "Ichor",
   "material.tconstruct.ichor.flavor": "Skipping stones",
@@ -2040,7 +2041,7 @@
 
   "material.tconstruct.glowstone": "Glowstone",
   "material.tconstruct.glowstone.flavor": "Brightest day, blackest night, no cave will escape my light!",
-  "material.tconstruct.glowstone.ammo": "Causes the target to glow for 10 seconds per level. If it hits a block, places a permanent light source.",
+  "material.tconstruct.glowstone.ammo": "Causes the target to glow for 10 seconds per level. If it hits a block, places a permanent light source at the cost of the projectile.",
 
   "material.tconstruct.soulsteel": "Soulsteel",
 

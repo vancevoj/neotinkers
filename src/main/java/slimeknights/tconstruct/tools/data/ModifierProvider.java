@@ -920,7 +920,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .addModule(AttributeModule.builder(Attributes.ATTACK_SPEED, Operation.MULTIPLY_TOTAL).eachLevel(0.025f))
       .addModule(new ArmorLevelModule(TinkerDataKeys.CRYSTALSTRIKE, false, TinkerTags.Items.HELD_ARMOR));
     buildModifier(ModifierIds.spectral).priority(60) // after bounce, before enderference
-      .addModule(MobEffectModule.builder(MobEffects.GLOWING).time(RandomLevelingValue.perLevel(0, 200)).build())
+      .addModule(MobEffectModule.builder(MobEffects.GLOWING).chance(LevelingValue.flat(1)).time(RandomLevelingValue.perLevel(0, 200)).build())
       .addModule(ProjectilePlaceGlowModule.BLOCKS);
     // traits - tier 3 nether
     buildModifier(ModifierIds.lightweight)

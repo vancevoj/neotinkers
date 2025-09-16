@@ -339,7 +339,7 @@ public class TinkerMaterialSpriteProvider extends AbstractMaterialSpriteProvider
       .arrowShaft()
       .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF953300).addARGB(102, 0xFFAE3C00).addARGB(140, 0xFFB36B19).addARGB(178, 0xFFB9931C).addARGB(216, 0xFFFFC100).addARGB(255, 0xFFFFF87E).build());
     buildMaterial(MaterialIds.blazewood)
-      .shieldCore().statType(WOOD)
+      .shieldCore().arrowShaft().statType(WOOD)
       .fallbacks("wood", "stick")
       .transformer(transformerFromSprite(getResource("block/wood/blazewood"), 7, 0));
     IColorMapping ancientDebrisPalette = GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF24110B).addARGB(102, 0xFF411E15).addARGB(140, 0xFF4A281D).addARGB(178, 0xFF654740).addARGB(216, 0xFF7E6059).addARGB(255, 0xFF95867E).build();

@@ -110,7 +110,7 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     addDefaultTraits(MaterialIds.manyullyn, TinkerModifiers.insatiable);
     addTraits(MaterialIds.manyullyn, ARMOR, ModifierIds.kinetic);
     addDefaultTraits(MaterialIds.blazingBone, TinkerModifiers.conducting);
-    addDefaultTraits(MaterialIds.blazewood, ModifierIds.flameBarrier);
+    addDefaultTraits(MaterialIds.blazewood, ModifierIds.spectral);
     addDefaultTraits(MaterialIds.ancient, ModifierIds.vintage, ModifierIds.worldbound);
     // tier 4 - binding
     addTraits(MaterialIds.ancientHide, MELEE_HARVEST, ModifierIds.fortune);

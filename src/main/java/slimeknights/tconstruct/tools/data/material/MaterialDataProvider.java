@@ -93,12 +93,12 @@ public class MaterialDataProvider extends AbstractMaterialDataProvider {
     addMaterial(MaterialIds.hepatizon,   4, ORDER_HARVEST, false);
     addMaterial(MaterialIds.manyullyn,   4, ORDER_WEAPON,  false);
     addMaterial(MaterialIds.blazingBone, 4, ORDER_SPECIAL, true);
-    addMaterial(MaterialIds.blazewood,   4, ORDER_RANGED,  true);
     addMaterial(MaterialIds.knightmetal, 4, ORDER_END,     false);
     //addMetalMaterial(MaterialIds.soulsteel, 4, ORDER_SPECIAL, false, 0x6a5244);
     // tier 4 - binding
     addMaterial(MaterialIds.ancientHide, 4, ORDER_BINDING, false);
     addMaterial(MaterialIds.ancient,     4, ORDER_NETHER,  false, true, null);
+    addMaterial(MaterialIds.blazewood,   4, ORDER_BINDING, true);
     // tier 4 - ammo
     addMaterial(MaterialIds.shulker,     4, ORDER_REPAIR, true);
     addMaterial(MaterialIds.dragonScale, 4, ORDER_REPAIR, true);
