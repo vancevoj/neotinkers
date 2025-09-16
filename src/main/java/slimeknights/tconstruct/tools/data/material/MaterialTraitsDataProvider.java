@@ -3,6 +3,7 @@ package slimeknights.tconstruct.tools.data.material;
 import net.minecraft.data.PackOutput;
 import slimeknights.tconstruct.library.data.material.AbstractMaterialDataProvider;
 import slimeknights.tconstruct.library.data.material.AbstractMaterialTraitDataProvider;
+import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.tools.TinkerModifiers;
 import slimeknights.tconstruct.tools.data.ModifierIds;
 import slimeknights.tconstruct.tools.stats.PlatingMaterialStats;
@@ -55,6 +56,7 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     addDefaultTraits(MaterialIds.searedStone, ModifierIds.searing);
     addTraits(MaterialIds.searedStone, ARMOR, ModifierIds.fireProtection);
     addDefaultTraits(MaterialIds.slimewood, ModifierIds.overgrowth, TinkerModifiers.overslime.getId());
+    addTraits(MaterialIds.slimewood, AMMO, new ModifierEntry(ModifierIds.bounce, 2));
     addDefaultTraits(MaterialIds.slimeskin, ModifierIds.overgrowth, TinkerModifiers.overslime.getId());
     addDefaultTraits(MaterialIds.venombone, ModifierIds.antitoxin);
     addDefaultTraits(MaterialIds.aluminum, ModifierIds.featherweight);

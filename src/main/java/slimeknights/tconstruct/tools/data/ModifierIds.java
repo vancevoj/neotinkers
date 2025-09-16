@@ -181,6 +181,7 @@ public class ModifierIds {
   public static final ModifierId entangled = id("entangled");
   public static final ModifierId stoneshield = id("stoneshield");
   public static final ModifierId smashing = id("smashing");
+  public static final ModifierId bounce = id("bounce");
   // traits - tier 2 compat
   public static final ModifierId deciduous = id("deciduous");
   public static final ModifierId barkskin = id("barkskin");

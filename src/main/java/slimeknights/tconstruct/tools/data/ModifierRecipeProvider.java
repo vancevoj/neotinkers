@@ -570,6 +570,14 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .setTools(TinkerTags.Items.BOWS) // pierce on longbows sounds fun in theory, may reconsider once ricochet is coded
                          .saveSalvage(consumer, prefix(ModifierIds.arrowPierce, upgradeSalvage))
                          .save(consumer, prefix(ModifierIds.arrowPierce, upgradeFolder));
+    ModifierRecipeBuilder.modifier(ModifierIds.bounce)
+      .addInput(Items.PISTON)
+      .addInput(TinkerWorld.slime.get(SlimeType.ICHOR))
+      .setMaxLevel(3) // 7 bounces is more than you will ever need
+      .setSlots(SlotType.UPGRADE, 1)
+      .setTools(TinkerTags.Items.LONGBOWS)
+      .saveSalvage(consumer, prefix(ModifierIds.bounce, upgradeSalvage))
+      .save(consumer, prefix(ModifierIds.bounce, upgradeFolder));
     ModifierRecipeBuilder.modifier(ModifierIds.freezing)
                          .addInput(Items.POWDER_SNOW_BUCKET)
                          .setMaxLevel(3)

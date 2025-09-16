@@ -296,6 +296,7 @@ import slimeknights.tconstruct.tools.modules.interaction.PlaceGlowModule;
 import slimeknights.tconstruct.tools.modules.interaction.ThrowingModule;
 import slimeknights.tconstruct.tools.modules.ranged.ArrowPierceModule;
 import slimeknights.tconstruct.tools.modules.ranged.BulkQuiverModule;
+import slimeknights.tconstruct.tools.modules.ranged.ProjectileBounceModule;
 import slimeknights.tconstruct.tools.modules.ranged.ProjectilePlaceGlowModule;
 import slimeknights.tconstruct.tools.modules.ranged.PunchModule;
 import slimeknights.tconstruct.tools.modules.ranged.QuiverInventoryModule;
@@ -769,6 +770,7 @@ public final class TinkerModifiers extends TinkerModule {
       ModifierModule.LOADER.register(getResource("projectile_place_glow"), ProjectilePlaceGlowModule.LOADER);
       ModifierModule.LOADER.register(getResource("craft_count"), CraftCountModule.LOADER);
       ModifierModule.LOADER.register(getResource("tipped"), TippedModule.LOADER);
+      ModifierModule.LOADER.register(getResource("projectile_bounce"), ProjectileBounceModule.LOADER);
       // overslime
       ModifierModule.LOADER.register(getResource("overgrowth"), OvergrowthModule.LOADER);
       ModifierModule.LOADER.register(getResource("overburn"), OverburnModule.INSTANCE.getLoader());

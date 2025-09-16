@@ -195,18 +195,18 @@ public class TinkerMaterialSpriteProvider extends AbstractMaterialSpriteProvider
       .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF6F5D5A).addARGB(102, 0xFF897B73).addARGB(140, 0xFFB6A48E).addARGB(178, 0xFFD4CABA).addARGB(216, 0xFFEAE5DE).addARGB(255, 0xFFF7F5F2).build());
     // tier 2 - slimewood
     IColorMapping greenSlime = GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF229630).addARGB(102, 0xFF24A033).addARGB(140, 0xFF27AB37).addARGB(178, 0xFF3EBD42).addARGB(216, 0xFF56CF4C).addARGB(234, 0xFF6FEA60).addARGB(255, 0xFF82F86D).build();
-    buildPlanks(MaterialIds.greenheart)
+    buildPlanks(MaterialIds.greenheart).arrowShaft()
       .fallbacks("slime_wood", "wood", "stick", "primitive")
       .variant(false) // default texture for slimewood
       .colorMapper(greenSlime);
     buildMaterial(MaterialIds.slimeskin).fallbacks("cloth").statType(StatlessMaterialStats.BOWSTRING).cuirass().maille().colorMapper(greenSlime);
-    buildPlanks(MaterialIds.skyroot)
+    buildPlanks(MaterialIds.skyroot).arrowShaft()
       .fallbacks("slime_wood", "wood", "stick", "primitive")
       .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF007E8C).addARGB(102, 0xFF008796).addARGB(140, 0xFF0090A3).addARGB(178, 0xFF00A2AE).addARGB(216, 0xFF00B4B8).addARGB(234, 0xFF10CFCC).addARGB(255, 0xFF23DDD9).build());
-    buildPlanks(MaterialIds.bloodshroom)
+    buildPlanks(MaterialIds.bloodshroom).arrowShaft()
       .fallbacks("slime_wood", "wood", "stick", "primitive")
       .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF7F0000).addARGB(102, 0xFF890000).addARGB(140, 0xFF960000).addARGB(178, 0xFF9B0000).addARGB(216, 0xFFC10000).addARGB(234, 0xFFD50000).addARGB(255, 0xFFDD0000).build());
-    buildPlanks(MaterialIds.enderbark)
+    buildPlanks(MaterialIds.enderbark).arrowShaft()
       .fallbacks("slime_wood", "wood", "stick", "primitive")
       .transformer(transformerFromSprite(getResource("block/wood/enderbark/planks"), 1, 0xFF594D59));
 

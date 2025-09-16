@@ -188,6 +188,7 @@ import slimeknights.tconstruct.tools.modules.interaction.PlaceGlowModule;
 import slimeknights.tconstruct.tools.modules.interaction.ThrowingModule;
 import slimeknights.tconstruct.tools.modules.ranged.ArrowPierceModule;
 import slimeknights.tconstruct.tools.modules.ranged.BulkQuiverModule;
+import slimeknights.tconstruct.tools.modules.ranged.ProjectileBounceModule;
 import slimeknights.tconstruct.tools.modules.ranged.ProjectilePlaceGlowModule;
 import slimeknights.tconstruct.tools.modules.ranged.PunchModule;
 import slimeknights.tconstruct.tools.modules.ranged.QuiverInventoryModule;
@@ -601,6 +602,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .addModule(ReplaceBlockWalkerModule.builder().replaceAlways(BlockPropertiesPredicate.block(Blocks.WATER).matches(LiquidBlock.LEVEL, 0).build(), Blocks.FROSTED_ICE.defaultBlockState()).amount(2, 1));
     buildModifier(ModifierIds.snowdrift).priority(90).levelDisplay(ModifierLevelDisplay.NO_LEVELS).addModule(CoverGroundWalkerModule.block(Blocks.SNOW).amount(0.5f, 1));
     buildModifier(ModifierIds.bouncy).levelDisplay(ModifierLevelDisplay.NO_LEVELS).addModule(AttributeModule.builder(TinkerAttributes.BOUNCY.get(), Operation.ADDITION).tooltipStyle(TooltipStyle.NONE).flat(1));
+    buildModifier(ModifierIds.bounce).addModule(new ProjectileBounceModule(new LevelingInt(-1, 2)));
     buildModifier(ModifierIds.doubleJump).levelDisplay(new UniqueForLevels(4, false)).addModule(AttributeModule.builder(TinkerAttributes.JUMP_COUNT.get(), Operation.ADDITION).slots(ARMOR_SLOTS).tooltipStyle(TooltipStyle.NONE).eachLevel(1));
     // shield
     buildModifier(ModifierIds.boundless)
