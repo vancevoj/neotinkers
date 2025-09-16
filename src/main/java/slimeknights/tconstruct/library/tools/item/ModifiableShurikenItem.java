@@ -61,7 +61,7 @@ public class ModifiableShurikenItem extends Item implements IModifiableDisplay {
     player.getCooldowns().addCooldown(stack.getItem(), 10);
     if (!level.isClientSide()) {
       ThrownShuriken shuriken = new ThrownShuriken(level, player);
-      shuriken.onCreate(stack.copyWithCount(1), player);
+      shuriken.onCreate(stack, player);
       shuriken.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 1.5F, 1.0F);
       level.addFreshEntity(shuriken);
     }

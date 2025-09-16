@@ -105,6 +105,7 @@ public class ThrownShuriken extends Projectile implements ToolProjectile, Projec
       setStack(ItemStack.EMPTY);
       return;
     }
+    stack = stack.copyWithCount(1);
     setStack(stack);
     // initialize arrow stats
     IToolStackView tool = getTool();
