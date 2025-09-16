@@ -16,5 +16,6 @@
       "target": "blocks"
     }
   ],
+  "priority": 60,
   "tooltip_display": "always"
 }
