@@ -50,7 +50,7 @@ import java.util.List;
  * @param modifierLevel Modifier level condition
  */
 public record ConditionalPowerModule(IJsonPredicate<LivingEntity> target, IJsonPredicate<LivingEntity> holder, PowerFormula formula, IntRange modifierLevel) implements ModifierModule, ProjectileLaunchModifierHook, ProjectileHitModifierHook, ConditionalStatTooltip {
-  private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<ConditionalPowerModule>defaultHooks(ModifierHooks.PROJECTILE_LAUNCH, ModifierHooks.PROJECTILE_HIT, ModifierHooks.TOOLTIP);
+  private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<ConditionalPowerModule>defaultHooks(ModifierHooks.PROJECTILE_LAUNCH, ModifierHooks.PROJECTILE_SHOT, ModifierHooks.PROJECTILE_HIT, ModifierHooks.TOOLTIP);
   public static final RecordLoadable<ConditionalPowerModule> LOADER = RecordLoadable.create(
     LivingEntityPredicate.LOADER.defaultField("target", ConditionalPowerModule::target),
     LivingEntityPredicate.LOADER.defaultField("holder", ConditionalPowerModule::holder),
@@ -97,18 +97,26 @@ public record ConditionalPowerModule(IJsonPredicate<LivingEntity> target, IJsonP
 
   @Override
   public boolean onProjectileHitEntity(ModifierNBT modifiers, ModDataNBT persistentData, ModifierEntry modifier, Projectile projectile, EntityHitResult hit, @Nullable LivingEntity attacker, @Nullable LivingEntity target) {
-    if (modifierLevel.test(modifier.getLevel()) && TinkerPredicate.matches(this.target, target) && TinkerPredicate.matches(this.holder, attacker)) {
-      float multiplier = 1;
-      if (persistentData.contains(AMMO_MULTIPLIER, Tag.TAG_ANY_NUMERIC)) {
-        multiplier += persistentData.getFloat(AMMO_MULTIPLIER);
-      }
-      if (persistentData.contains(BOW_MULTIPLIER, Tag.TAG_ANY_NUMERIC)) {
-        multiplier += persistentData.getFloat(BOW_MULTIPLIER);
-      }
-      if (projectile instanceof AbstractArrow arrow) {
-        arrow.setBaseDamage(formula.apply(modifiers, persistentData, modifier, projectile, hit, attacker, target, arrow.getBaseDamage(), multiplier));
-      } else if (projectile instanceof ProjectileWithPower withPower) {
-        withPower.setPower(formula.apply(modifiers, persistentData, modifier, projectile, hit, attacker, target, withPower.getPower(), multiplier));
+    ResourceLocation key = modifier.getId();
+    // if we already boosted power from an entity, don't boost again
+    // minimizes issues with projectile bounces and piercing
+    if (modifierLevel.test(modifier.getLevel()) && !persistentData.getBoolean(key)) {
+      // as soon as we attempt to boost, mark this modifier as having run
+      // means the second entity will not get to apply its boost if the first did not apply it
+      persistentData.putBoolean(key, true);
+      if (TinkerPredicate.matches(this.target, target) && TinkerPredicate.matches(this.holder, attacker)) {
+        float multiplier = 1;
+        if (persistentData.contains(AMMO_MULTIPLIER, Tag.TAG_ANY_NUMERIC)) {
+          multiplier *= persistentData.getFloat(AMMO_MULTIPLIER);
+        }
+        if (persistentData.contains(BOW_MULTIPLIER, Tag.TAG_ANY_NUMERIC)) {
+          multiplier *= persistentData.getFloat(BOW_MULTIPLIER);
+        }
+        if (projectile instanceof AbstractArrow arrow) {
+          arrow.setBaseDamage(formula.apply(modifiers, persistentData, modifier, projectile, hit, attacker, target, arrow.getBaseDamage(), multiplier));
+        } else if (projectile instanceof ProjectileWithPower withPower) {
+          withPower.setPower(formula.apply(modifiers, persistentData, modifier, projectile, hit, attacker, target, withPower.getPower(), multiplier));
+        }
       }
     }
     return false;
