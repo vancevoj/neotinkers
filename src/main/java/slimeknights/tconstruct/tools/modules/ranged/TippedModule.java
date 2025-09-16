@@ -12,6 +12,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionUtils;
@@ -42,7 +43,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 /** Module allowing arrows to be tipped, applying their effect to the target */
-public enum TippedModule implements ModifierModule, ProjectileLaunchModifierHook, ProjectileHitModifierHook, ModifierRemovalHook, DisplayNameModifierHook, TooltipModifierHook {
+public enum TippedModule implements ModifierModule, ProjectileLaunchModifierHook.NoShooter, ProjectileHitModifierHook, ModifierRemovalHook, DisplayNameModifierHook, TooltipModifierHook {
   INSTANCE;
 
   private static final String FORMAT = TConstruct.makeTranslationKey("modifier", "tipped.format");
@@ -63,7 +64,7 @@ public enum TippedModule implements ModifierModule, ProjectileLaunchModifierHook
   /* Data */
 
   @Override
-  public void onProjectileLaunch(IToolStackView tool, ModifierEntry modifier, LivingEntity shooter, Projectile projectile, @Nullable AbstractArrow arrow, ModDataNBT persistentData, boolean primary) {
+  public void onProjectileShoot(IToolStackView tool, ModifierEntry modifier, @Nullable LivingEntity shooter, ItemStack ammo, Projectile projectile, @Nullable AbstractArrow arrow, ModDataNBT persistentData, boolean primary) {
     ResourceLocation key = modifier.getId();
     IModDataView toolData = tool.getPersistentData();
     if (toolData.contains(key, Tag.TAG_STRING)) {
