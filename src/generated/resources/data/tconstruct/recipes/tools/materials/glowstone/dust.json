@@ -4,6 +4,6 @@
     "tag": "forge:dusts/glowstone"
   },
   "material": "tconstruct:glowstone",
-  "needed": 4,
+  "needed": 1,
   "value": 1
 }
