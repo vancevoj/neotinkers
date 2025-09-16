@@ -95,12 +95,14 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
   @Override
   protected void addToolDefinitions() {
     RandomMaterial tier1Material = RandomMaterial.random().tier(1).build();
-    RandomMaterial randomMaterial = RandomMaterial.random().allowHidden().build();
+    RandomMaterial anyMaterial = RandomMaterial.random().allowHidden().build();
+    RandomMaterial nonHiddenMaterial = RandomMaterial.random().build();
     DefaultMaterialsModule defaultTwoParts = DefaultMaterialsModule.builder().material(tier1Material, tier1Material).build();
     DefaultMaterialsModule defaultThreeParts = DefaultMaterialsModule.builder().material(tier1Material, tier1Material, tier1Material).build();
     DefaultMaterialsModule defaultFourParts = DefaultMaterialsModule.builder().material(tier1Material, tier1Material, tier1Material, tier1Material).build();
-    DefaultMaterialsModule ancientTwoParts = DefaultMaterialsModule.builder().material(randomMaterial, randomMaterial).build();
-    DefaultMaterialsModule ancientThreeParts = DefaultMaterialsModule.builder().material(randomMaterial, randomMaterial, randomMaterial).build();
+    DefaultMaterialsModule ancientTwoParts = DefaultMaterialsModule.builder().material(anyMaterial, anyMaterial).build();
+    DefaultMaterialsModule ancientThreeParts = DefaultMaterialsModule.builder().material(anyMaterial, anyMaterial, anyMaterial).build();
+    DefaultMaterialsModule ammoParts = DefaultMaterialsModule.builder().material(nonHiddenMaterial).build();
 
     // pickaxes
     define(ToolDefinitions.PICKAXE)
@@ -527,7 +529,7 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
       .module(PartStatsModule.parts()
         .part(arrowHead)
         .part(arrowShaft).build())
-      .module(defaultTwoParts)
+      .module(ammoParts)
       // display the arrow head, despite not being repairable
       .module(FixedMaterialToolName.FIRST);
     define(ToolDefinitions.SHURIKEN)
@@ -535,7 +537,7 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
       .module(PartStatsModule.parts()
         .part(arrowHead)
         .part(arrowHead).build())
-      .module(defaultTwoParts)
+      .module(ammoParts)
       // stats
       .module(new SetStatsModule(StatsNBT.builder()
         .set(ToolStats.PROJECTILE_DAMAGE, 1.5f)
@@ -718,7 +720,7 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
       .module(ArmorItem.Type.BOOTS, MaterialRepairModule.of(MaterialIds.leather, ArmorItem.Type.BOOTS, 42))
       // stats
       .module(ArmorItem.Type.HELMET, MaterialStatsModule.stats().stat(SkullStats.ID, 1).build())
-      .module(ArmorItem.Type.HELMET, DefaultMaterialsModule.builder().material(randomMaterial).build())
+      .module(ArmorItem.Type.HELMET, DefaultMaterialsModule.builder().material(anyMaterial).build())
       .module(ArmorItem.Type.HELMET, slimeTraits.build())
       // traits
       .module(ArmorItem.Type.CHESTPLATE, slimeTraits.copy().trait(ModifierIds.wings).build())
