@@ -463,10 +463,10 @@ public class ToolEvents {
         case BLOCK -> {
           BlockHitResult blockHit = (BlockHitResult)hit;
           for (ModifierEntry entry : modifiers.getModifiers()) {
-            // TODO 1.21: consider bringing back canceling to this hook
-            // we can't cancel the event as on Forge that does nothing while Neo will prevent the block hit
-            // Forge wants us to set the impact result to "cancel" it, but that will cause Neo to crash.
-            entry.getHook(hook).onProjectileHitsBlock(modifiers, nbt, entry, projectile, blockHit, attacker);
+            if (entry.getHook(hook).onProjectileHitsBlock(modifiers, nbt, entry, projectile, blockHit, attacker)) {
+              event.setCanceled(true);
+              break;
+            }
           }
         }
       }

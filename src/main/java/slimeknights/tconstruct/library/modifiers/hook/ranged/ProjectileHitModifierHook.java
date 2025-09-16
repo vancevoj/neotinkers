@@ -33,25 +33,41 @@ public interface ProjectileHitModifierHook {
 
   /**
    * Called when a projectile hits a block.
-   * TODO 1.21: bring back canceling behavior once we no longer have to deal with inconsistent APIs on Neo vs Forge?
    * @param modifiers       Modifiers from the tool firing this arrow
    * @param persistentData  Persistent data on the entity
    * @param modifier        Modifier triggering this hook
    * @param projectile      Projectile that hit the entity
    * @param hit             Hit result
    * @param attacker        Living entity who fired the projectile, null if non-living or not fired
+   * @deprecated Call
    */
+  @Deprecated
   default void onProjectileHitBlock(ModifierNBT modifiers, ModDataNBT persistentData, ModifierEntry modifier, Projectile projectile, BlockHitResult hit, @Nullable LivingEntity attacker) {}
+
+  /**
+   * Called when a projectile hits a block.
+   * @param modifiers       Modifiers from the tool firing this arrow
+   * @param persistentData  Persistent data on the entity
+   * @param modifier        Modifier triggering this hook
+   * @param projectile      Projectile that hit the entity
+   * @param hit             Hit result
+   * @param owner           Living entity who fired the projectile, null if non-living or not fired
+   */
+  default boolean onProjectileHitsBlock(ModifierNBT modifiers, ModDataNBT persistentData, ModifierEntry modifier, Projectile projectile, BlockHitResult hit, @Nullable LivingEntity owner) {
+    onProjectileHitBlock(modifiers, persistentData, modifier, projectile, hit, owner);
+    return false;
+  }
 
   /** Merger that runs all hooks and returns true if any did */
   record AllMerger(Collection<ProjectileHitModifierHook> modules) implements ProjectileHitModifierHook {
     @Override
     public boolean onProjectileHitEntity(ModifierNBT modifiers, ModDataNBT persistentData, ModifierEntry modifier, Projectile projectile, EntityHitResult hit, @Nullable LivingEntity attacker, @Nullable LivingEntity target) {
-      boolean ret = false;
       for (ProjectileHitModifierHook module : modules) {
-        ret |= module.onProjectileHitEntity(modifiers, persistentData, modifier, projectile, hit, attacker, target);
+        if (module.onProjectileHitEntity(modifiers, persistentData, modifier, projectile, hit, attacker, target)) {
+          return true;
+        }
       }
-      return ret;
+      return false;
     }
 
     @Override
@@ -59,6 +75,16 @@ public interface ProjectileHitModifierHook {
       for (ProjectileHitModifierHook module : modules) {
         module.onProjectileHitBlock(modifiers, persistentData, modifier, projectile, hit, attacker);
       }
+    }
+
+    @Override
+    public boolean onProjectileHitsBlock(ModifierNBT modifiers, ModDataNBT persistentData, ModifierEntry modifier, Projectile projectile, BlockHitResult hit, @Nullable LivingEntity owner) {
+      for (ProjectileHitModifierHook module : modules) {
+        if (module.onProjectileHitsBlock(modifiers, persistentData, modifier, projectile, hit, owner)) {
+          return true;
+        }
+      }
+      return false;
     }
   }
 }
