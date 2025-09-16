@@ -222,7 +222,7 @@ public class ModifiableBowItem extends ModifiableLauncherItem {
           }
         }
       } else {
-        // TODO: reconsider multishot on longbows, it kinda sucks anyways
+        // TODO: remove multishot logic? or keep it around for addons?
         desiredProjectiles = BowAmmoModifierHook.getDesiredProjectiles(tool);
       }
       // filter ammo based on request from current ballista settings

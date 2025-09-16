@@ -567,8 +567,9 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .addInput(Items.POINTED_DRIPSTONE)
                          .setMaxLevel(4) // same max as vanilla
                          .setSlots(SlotType.UPGRADE, 1)
-                         .setTools(TinkerTags.Items.BOWS) // pierce on longbows sounds fun in theory, may reconsider once ricochet is coded
+                         .setTools(TinkerTags.Items.BOWS) // salvage for old recipe
                          .saveSalvage(consumer, prefix(ModifierIds.arrowPierce, upgradeSalvage))
+                         .setTools(TinkerTags.Items.CROSSBOWS)
                          .save(consumer, prefix(ModifierIds.arrowPierce, upgradeFolder));
     ModifierRecipeBuilder.modifier(ModifierIds.bounce)
       .addInput(Items.PISTON)
@@ -659,8 +660,9 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .addInput(SlimeType.ICHOR.getSlimeballTag())
                          .addInput(SlimeType.ICHOR.getSlimeballTag())
                          .setSlots(SlotType.ABILITY, 1)
-                         .setTools(TinkerTags.Items.BOWS)
+                         .setTools(TinkerTags.Items.BOWS) // allow salvaging multishot from an older bow
                          .saveSalvage(consumer, prefix(TinkerModifiers.multishot, abilitySalvage))
+                         .setTools(TinkerTags.Items.CROSSBOWS) // crossbow exclusive now
                          .save(consumer, prefix(TinkerModifiers.multishot, abilityFolder));
     ModifierRecipeBuilder.modifier(TinkerModifiers.sinistral)
                          .addInput(TinkerMaterials.slimesteel.getIngotTag())
