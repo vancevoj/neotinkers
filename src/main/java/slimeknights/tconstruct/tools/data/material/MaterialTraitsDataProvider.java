@@ -117,6 +117,7 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     addDefaultTraits(MaterialIds.ancientHide, ModifierIds.fortified);
     addTraits(MaterialIds.dragonScale, ARMOR, ModifierIds.dragonborn);
     addTraits(MaterialIds.dragonScale, AMMO, ModifierIds.dragonshot);
+    addTraits(MaterialIds.shulker, ARMOR, ModifierIds.shulking);
     addTraits(MaterialIds.shulker, AMMO, ModifierIds.reclaim);
     // tier 4 - ammo
     addTraits(MaterialIds.enderslime, AMMO, ModifierIds.enderclearance);

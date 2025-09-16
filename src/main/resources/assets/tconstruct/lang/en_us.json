@@ -1989,7 +1989,8 @@
   "material.tconstruct.dragon_scale.ammo": "Increases projectile damage by 1 per level if launched while in mid air.",
 
   "material.tconstruct.shulker": "Shulker Shell",
-  "material.tconstruct.shulker.flavor": "Unbreakable shuriken!",
+  "material.tconstruct.shulker.flavor": "Unbreakable!",
+  "material.tconstruct.shulker.armor": "Grants +10% resistance while sneaking, but decreases attack damage by 10% per level while sneaking.",
   "material.tconstruct.shulker.ammo": "Allows collecting projectiles that hit entities instead of just blocks, making them infinitely reusable. Item will additionally not despawn.",
 
   "material.tconstruct.manyullyn": "Manyullyn",
