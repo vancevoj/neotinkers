@@ -390,7 +390,7 @@ public class TinkerMaterialSpriteProvider extends AbstractMaterialSpriteProvider
       String name = color.getName();
       buildMaterial(MaterialVariantId.create(MaterialIds.wool, name))
         .variant(color != DyeColor.WHITE)
-        .arrowHead().arrowShaft()
+        .arrowHead()
         .transformer(transformerFromSprite(new ResourceLocation("block/" + name + "_wool"), 0, 0));
     }
 
