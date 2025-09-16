@@ -281,8 +281,17 @@ public class ModifierHooks {
     PROJECTILE_SHOT = register("projectile_shot", ProjectileShootModifierHook.class, merger, defaultInstance);
     PROJECTILE_THROWN = register("projectile_thrown", ProjectileShootModifierHook.class, merger, defaultInstance);
   }
-  /** Hook called when an arrow hits an entity or block */
-  public static final ModuleHook<ProjectileHitModifierHook> PROJECTILE_HIT = register("projectile_hit", ProjectileHitModifierHook.class, ProjectileHitModifierHook.AllMerger::new, new ProjectileHitModifierHook() {});
+  /** Hook called when an arrow hits an entity or block on the serverside. TODO 1.21: run this hook on the client too. */
+  public static final ModuleHook<ProjectileHitModifierHook> PROJECTILE_HIT;
+  /** Hook called when an arrow hits an entity or block on the clientside. Separate from {@link #PROJECTILE_HIT} to prevent a breaking change. TODO 1.21: merge into {@link #PROJECTILE_LAUNCH} */
+  public static final ModuleHook<ProjectileHitModifierHook> PROJECTILE_HIT_CLIENT;
+  static {
+    ProjectileHitModifierHook defaultInstance = new ProjectileHitModifierHook() {};
+    Function<Collection<ProjectileHitModifierHook>,ProjectileHitModifierHook> merger = ProjectileHitModifierHook.AllMerger::new;
+    PROJECTILE_HIT = register("projectile_hit", ProjectileHitModifierHook.class, merger, defaultInstance);
+    PROJECTILE_HIT_CLIENT = register("projectile_hit_client", ProjectileHitModifierHook.class, merger, defaultInstance);
+  }
+
   /** Hook called when a projectile hits an entity with context on the tool that launched it. Allows modifiers such as melting or spilling to work. */
   public static final ModuleHook<LauncherHitModifierHook> LAUNCHER_HIT = register("launcher_hit", LauncherHitModifierHook.class, LauncherHitModifierHook.AllMerger::new, new LauncherHitModifierHook() {});
   /** Hook called when a bow is looking for ammo. Does not support merging multiple hooks on one modifier */

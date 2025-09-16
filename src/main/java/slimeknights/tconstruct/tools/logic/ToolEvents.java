@@ -46,6 +46,7 @@ import slimeknights.mantle.data.predicate.damage.DamageSourcePredicate;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.common.config.Config;
+import slimeknights.tconstruct.common.network.TinkerNetwork;
 import slimeknights.tconstruct.library.events.TinkerToolEvent.ToolHarvestEvent;
 import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
@@ -53,8 +54,10 @@ import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.hook.armor.ModifyDamageModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.armor.OnAttackedModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.armor.ProtectionModifierHook;
+import slimeknights.tconstruct.library.modifiers.hook.ranged.ProjectileHitModifierHook;
 import slimeknights.tconstruct.library.modifiers.modules.armor.MobDisguiseModule;
 import slimeknights.tconstruct.library.modifiers.modules.technical.ArmorStatModule;
+import slimeknights.tconstruct.library.module.ModuleHook;
 import slimeknights.tconstruct.library.tools.capability.EntityModifierCapability;
 import slimeknights.tconstruct.library.tools.capability.PersistentDataCapability;
 import slimeknights.tconstruct.library.tools.capability.TinkerDataCapability;
@@ -72,6 +75,7 @@ import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.library.utils.BlockSideHitListener;
 import slimeknights.tconstruct.shared.TinkerAttributes;
 import slimeknights.tconstruct.tools.TinkerModifiers;
+import slimeknights.tconstruct.tools.network.SyncProjectileModifiersPacket;
 
 import java.util.List;
 import java.util.Objects;
@@ -416,6 +420,15 @@ public class ToolEvents {
     }
   }
 
+  /** Syncs arrow modifier list to the client */
+  @SubscribeEvent
+  static void projectileSync(PlayerEvent.StartTracking event) {
+    Entity entity = event.getTarget();
+    if (entity instanceof Projectile) {
+      TinkerNetwork.getInstance().sendTo(new SyncProjectileModifiersPacket(entity), event.getEntity());
+    }
+  }
+
   /** Implements projectile hit hook */
   @SuppressWarnings("removal")  // can't update without losing Neo compat
   @SubscribeEvent
@@ -428,6 +441,7 @@ public class ToolEvents {
       HitResult.Type type = hit.getType();
       // extract a firing entity as that is a common need
       LivingEntity attacker = projectile.getOwner() instanceof LivingEntity l ? l : null;
+      ModuleHook<ProjectileHitModifierHook> hook = projectile.level().isClientSide ? ModifierHooks.PROJECTILE_HIT_CLIENT : ModifierHooks.PROJECTILE_HIT;
       switch(type) {
         case ENTITY -> {
           EntityHitResult entityHit = (EntityHitResult)hit;
@@ -437,7 +451,7 @@ public class ToolEvents {
             // extract a living target as that is the most common need
             LivingEntity target = ToolAttackUtil.getLivingEntity(entityHit.getEntity());
             for (ModifierEntry entry : modifiers.getModifiers()) {
-              if (entry.getHook(ModifierHooks.PROJECTILE_HIT).onProjectileHitEntity(modifiers, nbt, entry, projectile, entityHit, attacker, target)) {
+              if (entry.getHook(hook).onProjectileHitEntity(modifiers, nbt, entry, projectile, entityHit, attacker, target)) {
                 // on forge, this means the cancelled entity won't be hit again if its a piercing arrow
                 // on neo, they will get processed again next frame. Is this something we need to work around?
                 event.setCanceled(true);
@@ -452,7 +466,7 @@ public class ToolEvents {
             // TODO 1.21: consider bringing back canceling to this hook
             // we can't cancel the event as on Forge that does nothing while Neo will prevent the block hit
             // Forge wants us to set the impact result to "cancel" it, but that will cause Neo to crash.
-            entry.getHook(ModifierHooks.PROJECTILE_HIT).onProjectileHitBlock(modifiers, nbt, entry, projectile, blockHit, attacker);
+            entry.getHook(hook).onProjectileHitsBlock(modifiers, nbt, entry, projectile, blockHit, attacker);
           }
         }
       }
