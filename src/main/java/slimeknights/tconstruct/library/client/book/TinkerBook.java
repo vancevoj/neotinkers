@@ -6,6 +6,7 @@ import slimeknights.mantle.client.book.BookLoader;
 import slimeknights.mantle.client.book.data.BookData;
 import slimeknights.mantle.client.book.repository.FileRepository;
 import slimeknights.mantle.client.book.transformer.BookTransformer;
+import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.client.book.content.AmmoMaterialContent;
 import slimeknights.tconstruct.library.client.book.content.ArmorMaterialContent;
 import slimeknights.tconstruct.library.client.book.content.ContentMaterialSkull;
@@ -112,7 +113,8 @@ public class TinkerBook extends BookData {
       }),
       HELMET.getId(), CHESTPLATE.getId(), LEGGINGS.getId(), BOOTS.getId(), SHIELD.getId(),
       StatlessMaterialStats.MAILLE.getIdentifier(), StatlessMaterialStats.SHIELD_CORE.getIdentifier());
-    TierRangeMaterialSectionTransformer.registerMaterialType(getResource("skull"), ContentMaterialSkull::new, SkullStats.ID);
+    TierRangeMaterialSectionTransformer.registerMaterialType(getResource("skull"), ContentMaterialSkull::new,
+      Comparator.comparing(TierRangeMaterialSectionTransformer.tagOrder(TinkerTags.Materials.SLIMESKULL)), SkullStats.ID);
 
     // add transformers that load modifiers from tags
     ToolSectionTransformer armorTransformer = new ToolSectionTransformer("armor");

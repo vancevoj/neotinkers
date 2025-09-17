@@ -753,6 +753,10 @@ public class TinkerTags {
     /** Ranged materials that maximize damage */
     public static final TagKey<IMaterial> HEAVY = local("ranged/heavy");
 
+    // slimeskull
+    /** Materials that are a slimeskull. Mostly used for a sort order in books rather than having gameplay function. */
+    public static final TagKey<IMaterial> SLIMESKULL = local("slimeskull");
+
     @SuppressWarnings("SameParameterValue")  // may want more tags later
     private static TagKey<IMaterial> local(String name) {
       return MaterialManager.getTag(getResource(name));

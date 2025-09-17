@@ -194,4 +194,13 @@ public class TierRangeMaterialSectionTransformer extends BookTransformer {
   public static Function<IMaterial,Boolean> hasStatType(IMaterialStats statType) {
     return hasStatType(statType.getIdentifier());
   }
+
+  /** Creates a feature extractor for a comparator that sorts based on tag order */
+  public static Function<IMaterial,Integer> tagOrder(TagKey<IMaterial> tag) {
+    return mat -> {
+      List<IMaterial> values = MaterialRegistry.getInstance().getTagValues(tag);
+      int index = values.indexOf(mat);
+      return index == -1 ? values.size() : index;
+    };
+  }
 }
