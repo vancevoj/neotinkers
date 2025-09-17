@@ -1826,7 +1826,7 @@
   "material.tconstruct.iron.flavor": "Ironic. He could save others from death, but not himself.",
   "material.tconstruct.iron.encyclopedia": "Causes mining blocks and hitting mobs to attract nearby items.",
   "material.tconstruct.iron.ranged": "Causes firing arrows to attract nearby items to the holder.",
-  "material.tconstruct.iron.armor": "Reduces damage from projectiles by 10% per level, and grants 5% knockback resistance times the max level.",
+  "material.tconstruct.iron.armor": "Reduces damage from projectiles by 8% per level, and grants 5% knockback resistance times the max level.",
   "material.tconstruct.iron.skull_flavor": "Violation of quarantine",
   "material.tconstruct.iron.skull_encyclopedia": "Melee attacks copy all negative status effects from the wearer to the target",
 
@@ -1994,7 +1994,7 @@
   "material.tconstruct.cobalt.flavor": "Coblat. The material of the Red Army.",
   "material.tconstruct.cobalt.encyclopedia": "Boosts mining and attack speed by 7% per level",
   "material.tconstruct.cobalt.ranged": "Boosts drawspeed and velocity by 5% per level",
-  "material.tconstruct.cobalt.armor": "Reduces damage from melee attacks by 10% per level, and boosts movement speed when using items by 5% per max level",
+  "material.tconstruct.cobalt.armor": "Reduces damage from melee attacks by 8% per level, and boosts movement speed when using items by 5% per max level",
 
   "material.tconstruct.quartz": "Quartz",
   "material.tconstruct.quartz.flavor": "Sharp!",
