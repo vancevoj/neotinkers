@@ -14,6 +14,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
@@ -30,6 +31,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.ProjectileImpactEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
@@ -466,9 +468,19 @@ public class ToolEvents {
           EntityHitResult entityHit = (EntityHitResult)hit;
           // cancel all effects on endermen unless we have enderference, endermen like to teleport away
           // yes, hardcoded to enderference, if you need your own enderference for whatever reason, talk to us
-          if (entityHit.getEntity().getType() != EntityType.ENDERMAN || modifiers.getLevel(TinkerModifiers.enderference.getId()) > 0) {
+          Entity entity = entityHit.getEntity();
+          if (entity.getType() != EntityType.ENDERMAN || modifiers.getLevel(TinkerModifiers.enderference.getId()) > 0) {
             // extract a living target as that is the most common need
-            LivingEntity target = ToolAttackUtil.getLivingEntity(entityHit.getEntity());
+            LivingEntity target = ToolAttackUtil.getLivingEntity(entity);
+
+            // ensure we are not blocking, that means projectile shouldn't hit
+            if (target != null && target.isBlocking() && (!(projectile instanceof AbstractArrow arrow) || arrow.getPierceLevel() == 0)) {
+              Vec3 direction = projectile.position().vectorTo(target.position()).normalize();
+              direction = new Vec3(direction.x, 0.0D, direction.z);
+              if (direction.dot(target.getViewVector(1.0F)) < 0.0D) {
+                return;
+              }
+            }
             for (ModifierEntry entry : modifiers.getModifiers()) {
               if (entry.getHook(hook).onProjectileHitEntity(modifiers, nbt, entry, projectile, entityHit, attacker, target)) {
                 // on forge, this means the cancelled entity won't be hit again if its a piercing arrow
