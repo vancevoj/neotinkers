@@ -1953,7 +1953,7 @@
   "material.tconstruct.nahuatl": "Nahuatl",
   "material.tconstruct.nahuatl.flavor": "This is not an obsidian part, if it was it would say \"Obsidian.\"",
   "material.tconstruct.nahuatl.encyclopedia": "Has a 50% chance of doing up to 5 damage over time, more damage at higher levels",
-  "material.tconstruct.nahuatl.armor": "Has a 25% chance per level of doing up to 5 damage over time",
+  "material.tconstruct.nahuatl.armor": "Has a 25% chance per level (50% if blocking) of doing up to 5 damage over time",
 
   "material.tconstruct.amethyst_bronze": "Amethyst Bronze",
   "material.tconstruct.amethyst_bronze.flavor": "Not to be confused with bronze.",
