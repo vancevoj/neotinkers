@@ -60,6 +60,7 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     addDefaultTraits(MaterialIds.slimeskin, ModifierIds.overgrowth, TinkerModifiers.overslime.getId());
     addDefaultTraits(MaterialIds.venombone, ModifierIds.antitoxin);
     addTraits(MaterialIds.venombone, AMMO, ModifierIds.venom);
+    addTraits(MaterialIds.venombone, ARMOR, ModifierIds.venom);
     addDefaultTraits(MaterialIds.aluminum, ModifierIds.featherweight);
     // tier 2 - nether
     addDefaultTraits(MaterialIds.necroticBone, TinkerModifiers.necrotic);
@@ -112,6 +113,7 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     addTraits(MaterialIds.manyullyn, ARMOR, ModifierIds.kinetic);
     addDefaultTraits(MaterialIds.blazingBone, TinkerModifiers.conducting);
     addTraits(MaterialIds.blazingBone, AMMO, ModifierIds.conductive);
+    addTraits(MaterialIds.blazingBone, ARMOR, ModifierIds.conductive);
     addDefaultTraits(MaterialIds.blazewood, ModifierIds.spectral);
     addDefaultTraits(MaterialIds.ancient, ModifierIds.vintage, ModifierIds.worldbound);
     // tier 4 - binding

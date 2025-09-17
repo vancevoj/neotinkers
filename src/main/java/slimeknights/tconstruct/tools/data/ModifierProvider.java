@@ -438,9 +438,13 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
     buildModifier(ModifierIds.pierce)
       // less than sharpness, but pierces 1 armor
       .addModule(StatBoostModule.add(ToolStats.ATTACK_DAMAGE).eachLevel(0.5f))
-      .addModule(MeleeAttributeModule.builder(Attributes.ARMOR, Operation.ADDITION).eachLevel(-1))
-      // use a mob effect to make this work on ranged, to ensure it automatically cancels
-      .addModule(MobEffectModule.builder(TinkerEffects.pierce.get()).level(RandomLevelingValue.perLevel(0, 1)).time(RandomLevelingValue.flat(2)).build(), ModifierHooks.PROJECTILE_HIT);
+      // effect is applied post hit, so skip armor cancel if effect is present. TODO: maybe apply effect in a before hook instead?
+      .addModule(MeleeAttributeModule.builder(Attributes.ARMOR, Operation.ADDITION).target(new HasMobEffectPredicate(TinkerEffects.pierce.get()).inverted()).eachLevel(-1))
+      .addModule(MobEffectModule.builder(TinkerEffects.pierce)
+        // apply effect for 5 seconds, canceling 1 armor per level
+        .level(RandomLevelingValue.perLevel(0, 1)).time(RandomLevelingValue.flat(5 * 20))
+        // 100% chance on armor
+        .chance(LevelingValue.flat(1)).build());
     buildModifier(ModifierIds.chargeAttack).levelDisplay(ModifierLevelDisplay.NO_LEVELS).addModule(ConditionalMeleeDamageModule.builder().attacker(LivingEntityPredicate.SPRINTING).flat(7));
 
     // ranged

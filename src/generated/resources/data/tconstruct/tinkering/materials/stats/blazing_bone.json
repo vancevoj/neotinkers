@@ -25,6 +25,7 @@
       "durability": 530,
       "velocity": 0.1
     },
+    "tconstruct:shield_core": {},
     "tconstruct:skull": {
       "armor": 1,
       "durability": 205

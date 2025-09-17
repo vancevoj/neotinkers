@@ -12,6 +12,12 @@
         "name": "tconstruct:venom"
       }
     ],
+    "tconstruct:armor": [
+      {
+        "level": 1,
+        "name": "tconstruct:venom"
+      }
+    ],
     "tconstruct:skull": [
       {
         "level": 1,
