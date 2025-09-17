@@ -196,9 +196,9 @@ public class ThrownShuriken extends Projectile implements ToolProjectile, Projec
   @Override
   protected void onHitEntity(EntityHitResult result) {
     Entity target = result.getEntity();
-    target.hurt(damageSources().thrown(this, this.getOwner()), power);
+    boolean hit = target.hurt(damageSources().thrown(this, this.getOwner()), power);
 
-    if (knockback > 0 && target instanceof LivingEntity living) {
+    if (hit && knockback > 0 && target instanceof LivingEntity living) {
       // knockback logic based on arrows
       double resistance = Math.max(0, 1 - living.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE));
       Vec3 motion = this.getDeltaMovement().multiply(1, 0, 1).normalize().scale(knockback * 0.6 * resistance);
@@ -209,7 +209,7 @@ public class ThrownShuriken extends Projectile implements ToolProjectile, Projec
 
     Level level = level();
     if (!level.isClientSide) {
-      if (reclaim && !this.isRemoved()) {
+      if ((!hit || reclaim) && !this.isRemoved()) {
         this.spawnAtLocation(stack.copy());
       } else {
         level.broadcastEntityEvent(this, (byte) 3); // TODO: find the proper constant for this event ID
