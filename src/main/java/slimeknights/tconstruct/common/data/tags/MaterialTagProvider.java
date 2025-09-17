@@ -152,7 +152,7 @@ public class MaterialTagProvider extends AbstractMaterialTagProvider {
       // creeper
       MaterialIds.glass,
       // zombie
-      MaterialIds.rottenFlesh, MaterialIds.iron, MaterialIds.copper,
+      MaterialIds.leather, MaterialIds.iron, MaterialIds.copper,
       // spider
       MaterialIds.string, MaterialIds.darkthread,
       // skeleton

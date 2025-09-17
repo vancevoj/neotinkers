@@ -47,6 +47,7 @@ public class MaterialDataProvider extends AbstractMaterialDataProvider {
     addMaterial(MaterialIds.venombone,   2, ORDER_WEAPON,  true);
     addMaterial(MaterialIds.slimewood,   2, ORDER_SPECIAL, true);
     addMaterial(MaterialIds.slimeskin,   2, ORDER_BINDING, false);
+    addMaterial(MaterialIds.gold,        2, ORDER_REPAIR, false);
     // tier 2 - nether
     addMaterial(MaterialIds.scorchedStone, 2, ORDER_NETHER, false);
     addMaterial(MaterialIds.necroticBone,  2, ORDER_NETHER, true);
@@ -129,9 +130,6 @@ public class MaterialDataProvider extends AbstractMaterialDataProvider {
     // tier 4 (mod integration)
     addCompatMetalMaterial(MaterialIds.fiery,           4, ORDER_COMPAT + ORDER_END);
 
-    // slimeskull - put in the most appropriate tier
-    addMaterial(MaterialIds.gold,        2, ORDER_REPAIR, false);
-    addMaterial(MaterialIds.rottenFlesh, 1, ORDER_REPAIR, true);
     // slimesuit - textures
     addMaterial(MaterialIds.blood,      2, ORDER_REPAIR, true);
     addMaterial(MaterialIds.magma,      2, ORDER_REPAIR, true);
@@ -143,6 +141,8 @@ public class MaterialDataProvider extends AbstractMaterialDataProvider {
 
     // rose gold is most comparable to chain as you can use the extra slot for reinforced
     addRedirect(id("chain"), redirect(MaterialIds.roseGold));
+    // zombies now use leather instead of flesh for their skull
+    addRedirect(id("rotten_flesh"), redirect(MaterialIds.leather));
     addRedirect(id("platinum"), redirect(MaterialIds.searedStone));
     addRedirect(id("tungsten"),
       conditionalRedirect(MaterialIds.lead, tagExistsCondition("ingots/lead")),

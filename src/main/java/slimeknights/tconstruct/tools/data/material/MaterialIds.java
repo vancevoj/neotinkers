@@ -114,7 +114,8 @@ public final class MaterialIds {
   // plate
   public static final MaterialId gold = id("gold");
   public static final MaterialId obsidian = id("obsidian");
-  // slimeskull
+  /** @deprecated use {@link #leather} */
+  @Deprecated(forRemoval = true)
   public static final MaterialId rottenFlesh = id("rotten_flesh");
   // slimesuit
   public static final MaterialId phantom = id("phantom");

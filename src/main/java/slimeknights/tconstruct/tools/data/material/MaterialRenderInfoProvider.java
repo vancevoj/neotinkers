@@ -139,8 +139,6 @@ public class MaterialRenderInfoProvider extends AbstractMaterialRenderInfoProvid
     // plate
     buildRenderInfo(MaterialIds.gold).color(0xFDF55F).fallbacks("metal");
     buildRenderInfo(MaterialIds.obsidian);
-    // slimeskull
-    buildRenderInfo(MaterialIds.rottenFlesh);
     // slimesuit
     buildRenderInfo(MaterialIds.blood);
     buildRenderInfo(MaterialIds.magma);
