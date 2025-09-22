@@ -51,12 +51,12 @@ import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.common.config.Config;
 import slimeknights.tconstruct.common.network.TinkerNetwork;
 import slimeknights.tconstruct.library.events.TinkerToolEvent.ToolHarvestEvent;
-import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.hook.armor.ModifyDamageModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.armor.OnAttackedModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.armor.ProtectionModifierHook;
+import slimeknights.tconstruct.library.modifiers.hook.mining.BreakSpeedContext;
 import slimeknights.tconstruct.library.modifiers.hook.ranged.ProjectileHitModifierHook;
 import slimeknights.tconstruct.library.modifiers.modules.armor.MobDisguiseModule;
 import slimeknights.tconstruct.library.modifiers.modules.technical.ArmorStatModule;
@@ -67,6 +67,7 @@ import slimeknights.tconstruct.library.tools.capability.TinkerDataCapability;
 import slimeknights.tconstruct.library.tools.capability.TinkerDataKeys;
 import slimeknights.tconstruct.library.tools.context.EquipmentContext;
 import slimeknights.tconstruct.library.tools.definition.ModifiableArmorMaterial;
+import slimeknights.tconstruct.library.tools.definition.module.mining.IsEffectiveToolHook;
 import slimeknights.tconstruct.library.tools.helper.ArmorUtil;
 import slimeknights.tconstruct.library.tools.helper.ModifierUtil;
 import slimeknights.tconstruct.library.tools.helper.ToolAttackUtil;
@@ -87,7 +88,6 @@ import java.util.Objects;
 /**
  * Event subscriber for tool events
  */
-@SuppressWarnings("unused")
 @EventBusSubscriber(modid = TConstruct.MOD_ID, bus = Bus.FORGE)
 public class ToolEvents {
   @SuppressWarnings("removal")
@@ -102,17 +102,25 @@ public class ToolEvents {
       if (!tool.isBroken()) {
         List<ModifierEntry> modifiers = tool.getModifierList();
         if (!modifiers.isEmpty()) {
-          // modifiers using additive boosts may want info on the original boosts provided
-          float miningSpeedModifier = Modifier.getMiningModifier(player);
-          boolean isEffective = stack.isCorrectToolForDrops(event.getState());
-          Direction direction = BlockSideHitListener.getSideHit(player);
+          // build context
+          BreakSpeedContext context = new BreakSpeedContext.Event(
+            event,
+            BlockSideHitListener.getSideHit(event.getEntity()),
+            IsEffectiveToolHook.isEffective(tool, event.getState()),
+            BreakSpeedContext.getMiningModifier(event.getEntity())
+          );
+
+          // run each modifier hook
+          float speed = event.getNewSpeed();
           for (ModifierEntry entry : tool.getModifierList()) {
-            entry.getHook(ModifierHooks.BREAK_SPEED).onBreakSpeed(tool, entry, event, direction, isEffective, miningSpeedModifier);
+            speed = entry.getHook(ModifierHooks.BREAK_SPEED).modifyBreakSpeed(tool, entry, context, speed);
             // if any modifier cancels mining, stop right here
-            if (event.isCanceled()) {
-              return;
+            if (speed < 0 || event.isCanceled()) {
+              break;
             }
           }
+          // update the speed
+          event.setNewSpeed(speed);
         }
       }
     }
