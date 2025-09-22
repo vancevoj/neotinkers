@@ -16,6 +16,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
@@ -47,6 +48,7 @@ import slimeknights.tconstruct.library.tools.stat.ToolStats;
 import slimeknights.tconstruct.tools.TinkerModifiers;
 import slimeknights.tconstruct.tools.TinkerTools;
 import slimeknights.tconstruct.tools.data.ModifierIds;
+import slimeknights.tconstruct.tools.modifiers.upgrades.general.MagneticModifier;
 
 import javax.annotation.Nullable;
 
@@ -64,6 +66,7 @@ public class ThrownTool extends ThrownTrident implements ToolProjectile {
   private float charge = 1;
   private float multiplier = 1;
   private boolean noDespawn = false;
+  private int magnet = 0;
   @Setter
   private int originalSlot = -1;
   private boolean hitBlock = false;
@@ -95,6 +98,9 @@ public class ThrownTool extends ThrownTrident implements ToolProjectile {
     this.entityData.set(ID_LOYALTY, (byte) ModifierUtil.getVolatileInt(tridentItem, LOYALTY));
     this.entityData.set(ID_FOIL, ModifierUtil.checkVolatileFlag(tridentItem, ModifiableItem.SHINY));
     this.noDespawn = ModifierUtil.checkVolatileFlag(tridentItem, IndestructibleItemEntity.INDESTRUCTIBLE_ENTITY);
+    if (!level().isClientSide) {
+      this.magnet = ModifierUtil.getModifierLevel(tridentItem, TinkerModifiers.magnetic.getId());
+    }
   }
 
   @Override
@@ -174,6 +180,11 @@ public class ThrownTool extends ThrownTrident implements ToolProjectile {
       dealtDamage = true;
     }
     super.tick();
+
+    // magnet
+    if (magnet > 0) {
+      MagneticModifier.applyVelocity(level(), position(), magnet - 1, ItemEntity.class, 3, 0.05f, 32);
+    }
   }
 
   @Override
