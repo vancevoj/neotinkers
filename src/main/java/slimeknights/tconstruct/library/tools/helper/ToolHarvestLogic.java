@@ -10,6 +10,7 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.GameType;
@@ -34,6 +35,7 @@ import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.library.utils.BlockSideHitListener;
 import slimeknights.tconstruct.library.utils.Util;
 
+import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.Objects;
 
@@ -255,7 +257,7 @@ public class ToolHarvestLogic {
       player.setItemInHand(InteractionHand.MAIN_HAND, stack);
     } else {
       // run standard breaking logic
-      runBlockBreak(stack, tool, state, pos, sideHit, serverPlayer);
+      runBlockBreak(stack, tool, state, pos, sideHit, serverPlayer, null);
     }
     return true;
   }
@@ -269,13 +271,13 @@ public class ToolHarvestLogic {
    * @param player   Player breaking the block
    * @return Number of blocks broken
    */
-  public static int runBlockBreak(ItemStack stack, IToolStackView tool, BlockState state, BlockPos pos, Direction sideHit, ServerPlayer player) {
+  public static int runBlockBreak(ItemStack stack, IToolStackView tool, BlockState state, BlockPos pos, Direction sideHit, ServerPlayer player, @Nullable Projectile projectile) {
     // create contexts
     ServerLevel world = player.serverLevel();
 
     // add in harvest info
     // must not be broken, and the tool definition must be effective
-    ToolHarvestContext context = new ToolHarvestContext(world, player, state, pos, sideHit,
+    ToolHarvestContext context = new ToolHarvestContext(world, player, projectile, state, pos, sideHit,
                                                         !player.isCreative() && state.canHarvestBlock(world, pos, player),
                                                         IsEffectiveToolHook.isEffective(tool, state));
     // tell modifiers we are about to harvest, lets them add for instance modifiers conditioned on harvesting

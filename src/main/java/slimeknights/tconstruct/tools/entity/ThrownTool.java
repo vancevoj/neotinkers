@@ -262,7 +262,7 @@ public class ThrownTool extends ThrownTrident implements ToolProjectile {
               // hack: swap the mainhand for the tool so relevant modifier hooks (notably loot tables) run correctly
               ItemStack mainhand = owner.getMainHandItem();
               owner.setItemInHand(InteractionHand.MAIN_HAND, tridentItem);
-              int harvested = ToolHarvestLogic.runBlockBreak(tridentItem, tool, state, pos, result.getDirection(), owner);
+              int harvested = ToolHarvestLogic.runBlockBreak(tridentItem, tool, state, pos, result.getDirection(), owner, this);
               owner.setItemInHand(InteractionHand.MAIN_HAND, mainhand);
 
               // if we broke anything, back off and skip standard stick in block logic
