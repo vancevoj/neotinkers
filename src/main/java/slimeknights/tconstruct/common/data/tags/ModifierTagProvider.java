@@ -146,8 +146,7 @@ public class ModifierTagProvider extends AbstractModifierTagProvider {
       ModifierIds.luck, TinkerModifiers.melting.getId());
     this.tag(MELEE_ABILITIES).add(
       TinkerModifiers.blocking.getId(), TinkerModifiers.parrying.getId(),
-      TinkerModifiers.dualWielding.getId(), ModifierIds.spilling,
-      ModifierIds.throwing);
+      TinkerModifiers.dualWielding.getId(), ModifierIds.spilling);
     this.tag(HARVEST_ABILITIES).add(TinkerModifiers.autosmelt.getId(), TinkerModifiers.exchanging.getId(), TinkerModifiers.silky.getId());
     this.tag(RANGED_ABILITIES).add(
       ModifierIds.bulkQuiver, ModifierIds.trickQuiver,
@@ -158,7 +157,8 @@ public class ModifierTagProvider extends AbstractModifierTagProvider {
       TinkerModifiers.bucketing.getId(), TinkerModifiers.firestarter.getId(), ModifierIds.glowing,
       ModifierIds.pathing, ModifierIds.stripping, ModifierIds.tilling, ModifierIds.brushing,
       TinkerModifiers.spitting.getId(), TinkerModifiers.splashing.getId(), TinkerModifiers.slurping.getId(),
-      TinkerModifiers.bonking.getId(), TinkerModifiers.flinging.getId(), TinkerModifiers.springing.getId(), TinkerModifiers.warping.getId());
+      TinkerModifiers.bonking.getId(), TinkerModifiers.flinging.getId(), TinkerModifiers.springing.getId(), TinkerModifiers.warping.getId(),
+      ModifierIds.throwing);
     // armor
     this.tag(GENERAL_ARMOR_ABILITIES).add(ModifierIds.protection, TinkerModifiers.bursting.getId(), TinkerModifiers.wetting.getId());
     this.tag(HELMET_ABILITIES).add(ModifierIds.aquaAffinity, TinkerModifiers.slurping.getId());

@@ -715,8 +715,8 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
     ModifierRecipeBuilder.modifier(ModifierIds.throwing)
       .setTools(IntersectionIngredient.of(
         Ingredient.of(TinkerTags.Items.DURABILITY),
-        Ingredient.of(TinkerTags.Items.MELEE_WEAPON),
-        Ingredient.of(TinkerTags.Items.INTERACTABLE_CHARGE)
+        Ingredient.of(TinkerTags.Items.INTERACTABLE_CHARGE),
+        ingredientFromTags(TinkerTags.Items.MELEE_WEAPON, TinkerTags.Items.HARVEST)
       ))
       .addInput(bowLimb)
       .addInput(TinkerMaterials.cinderslime.getIngotTag())
@@ -726,7 +726,7 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
       .saveSalvage(consumer, prefix(ModifierIds.throwing, abilitySalvage))
       .save(consumer, prefix(ModifierIds.throwing, abilityFolder));
     MultilevelModifierRecipeBuilder.modifier(ModifierIds.returning)
-      .setTools(TinkerTags.Items.MELEE_WEAPON)
+      .setTools(ingredientFromTags(TinkerTags.Items.MELEE_WEAPON, TinkerTags.Items.HARVEST))
       .addInput(Items.ENDER_PEARL)
       .addInput(Items.CLOCK)
       .addInput(Items.ENDER_PEARL)

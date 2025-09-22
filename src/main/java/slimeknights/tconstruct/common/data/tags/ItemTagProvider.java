@@ -378,8 +378,8 @@ public class ItemTagProvider extends ItemTagsProvider {
     // melee nesting - currently most all sub-tags are held exclusive as they revolve around tool damage or having an item in hand
     this.tag(MELEE_WEAPON).addTags(MELEE_PRIMARY, SWORD, PARRY);
     // by default, this tag just redirects to melee weapon, but you can reconfigure it to suit your pack
-    this.tag(BALLISTA_AMMO).addTag(MELEE_WEAPON);
-    this.tag(MELEE).addTags(MELEE_WEAPON, UNARMED, BALLISTA_AMMO);
+    this.tag(BALLISTA_AMMO).addTags(MELEE_WEAPON, HARVEST);
+    this.tag(MELEE).addTags(MELEE_WEAPON, UNARMED);
     // modifier helper tags
     this.tag(LOOT_CAPABLE_TOOL).addTags(MELEE, HARVEST, FISHING_RODS);
     this.tag(UNARMED).addTag(CHESTPLATES);

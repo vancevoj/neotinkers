@@ -49,7 +49,7 @@ public class TinkerTags {
   }
 
   /** Creates a tag that hides things from JEI */
-  @SuppressWarnings("SameParameterValue")
+  @SuppressWarnings({"SameParameterValue", "removal"}) // there really is no benefit to migrating to new constructors early; just lose Neo compat
   private static <R> TagKey<R> hiddenFromRecipeViewers(ResourceKey<? extends Registry<R>> registry) {
     return TagKey.create(registry, new ResourceLocation("c", "hidden_from_recipe_viewers"));
   }
@@ -412,8 +412,6 @@ public class TinkerTags {
     public static final TagKey<Item> UNARMED = local("modifiable/melee/unarmed");
     /** Modifiable items that can parry, cannot receive blocking */
     public static final TagKey<Item> PARRY = local("modifiable/melee/parry");
-    /** Melee weapons that support being fired using bows with the ballisa modifier. */
-    public static final TagKey<Item> BALLISTA_AMMO = local("modifiable/melee/ballista_ammo");
 
     /** Modifiable items that can break blocks. Items in this tag support the {@link ToolStats#MINING_SPEED} and {@link ToolStats#HARVEST_TIER} stats. */
     public static final TagKey<Item> HARVEST = local("modifiable/harvest");
@@ -479,6 +477,8 @@ public class TinkerTags {
 
     /** Items in this tag have a primary purpose of being ammo */
     public static final TagKey<Item> AMMO = local("modifiable/ammo");
+    /** Tools that support being fired using bows with the ballisa modifier. */
+    public static final TagKey<Item> BALLISTA_AMMO = local("modifiable/ballista_ammo");
     /** Items in this tag have some cheaper modifier recipes since they are not reusable */
     public static final TagKey<Item> SINGLE_USE = local("modifiable/single_use");
 

@@ -6,8 +6,10 @@
     }
   ],
   "effects": [
-    "Allows throwing your weapon",
-    "Weapon must be retrieved",
+    "Allows throwing tools",
+    "Hit monsters for damage!",
+    "Hitting effective blocks may break them!",
+    "Must retrieve manually",
     "Single level",
     "Requires 1 ability slot"
   ]
