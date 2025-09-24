@@ -242,7 +242,10 @@ public class ModifiableBowItem extends ModifiableLauncherItem {
         sound = SoundEvents.TRIDENT_THROW;
         IToolStackView thrown = ToolStack.from(ammo);
         float thrownVelocity = ConditionalStatModifierHook.getModifiedStat(thrown, living, ToolStats.VELOCITY);
-        power *= thrownVelocity * ConditionalStatModifierHook.getModifiedStat(thrown, living, ToolStats.DRAW_SPEED) * thrown.getStats().get(ToolStats.ATTACK_SPEED) / 1.5f;
+        power *= thrownVelocity * ConditionalStatModifierHook.getModifiedStat(thrown, living, ToolStats.DRAW_SPEED) / 1.5f;
+        if (ammo.is(TinkerTags.Items.MELEE_WEAPON)) {
+          power *= thrown.getStats().get(ToolStats.ATTACK_SPEED);
+        }
         velocity *= thrownVelocity;
         waterInertia = ConditionalStatModifierHook.getModifiedStat(thrown, living, ToolStats.WATER_INERTIA);
       }

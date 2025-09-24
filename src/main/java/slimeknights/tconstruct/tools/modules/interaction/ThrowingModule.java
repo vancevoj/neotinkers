@@ -70,9 +70,13 @@ public enum ThrowingModule implements ModifierModule, GeneralInteractionModifier
   @Override
   public InteractionResult onToolUse(IToolStackView tool, ModifierEntry modifier, Player player, InteractionHand hand, InteractionSource source) {
     // can't throw something with no melee stats, will do nothing
-    if (!tool.isBroken() && source == InteractionSource.RIGHT_CLICK && tool.hasTag(TinkerTags.Items.MELEE_WEAPON)) {
+    if (!tool.isBroken() && source == InteractionSource.RIGHT_CLICK) {
+      float speed = ConditionalStatModifierHook.getModifiedStat(tool, player, ToolStats.DRAW_SPEED);
+      if (tool.hasTag(TinkerTags.Items.MELEE_WEAPON)) {
+        speed *= tool.getStats().get(ToolStats.ATTACK_SPEED);
+      }
       // use attack speed together with drawspeed to ensure you are not making insanely slow weapons and throwing to bypass
-      tool.getPersistentData().putInt(KEY_DRAWTIME, (int)Math.ceil(20f / (tool.getStats().get(ToolStats.ATTACK_SPEED) * ConditionalStatModifierHook.getModifiedStat(tool, player, ToolStats.DRAW_SPEED))));
+      tool.getPersistentData().putInt(KEY_DRAWTIME, (int)Math.ceil(20f / speed));
       GeneralInteractionModifierHook.startUsing(tool, modifier.getId(), player, hand);
       return InteractionResult.CONSUME;
     }
