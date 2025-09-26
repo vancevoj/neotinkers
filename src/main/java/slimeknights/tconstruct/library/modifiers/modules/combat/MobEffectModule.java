@@ -91,7 +91,7 @@ public record MobEffectModule(IJsonPredicate<LivingEntity> target, MobEffect eff
   @Override
   public void onAttacked(IToolStackView tool, ModifierEntry modifier, EquipmentContext context, EquipmentSlot slotType, DamageSource source, float amount, boolean isDirectDamage) {
     Entity attacker = source.getEntity();
-    if (isDirectDamage && tool.hasTag(TinkerTags.Items.ARMOR) && attacker instanceof LivingEntity living) {
+    if (isDirectDamage && tool.hasTag(TinkerTags.Items.ARMOR) && condition.matches(tool, modifier) && attacker instanceof LivingEntity living) {
       LivingEntity defender = context.getEntity();
       float scaledLevel = CounterModule.getLevel(tool, modifier, slotType, defender);
       float chance = this.chance.compute(scaledLevel);
@@ -104,12 +104,16 @@ public record MobEffectModule(IJsonPredicate<LivingEntity> target, MobEffect eff
 
   @Override
   public void afterMeleeHit(IToolStackView tool, ModifierEntry modifier, ToolAttackContext context, float damageDealt) {
-    applyEffect(context.getLivingTarget(), modifier.getEffectiveLevel());
+    if (condition.matches(tool, modifier)) {
+      applyEffect(context.getLivingTarget(), modifier.getEffectiveLevel());
+    }
   }
 
   @Override
   public boolean onProjectileHitEntity(ModifierNBT modifiers, ModDataNBT persistentData, ModifierEntry modifier, Projectile projectile, EntityHitResult hit, @Nullable LivingEntity attacker, @Nullable LivingEntity target) {
-    applyEffect(target, modifier.getEffectiveLevel());
+    if (condition.modifierLevel().test(modifier.getLevel())) {
+      applyEffect(target, modifier.getEffectiveLevel());
+    }
     return false;
   }
 
