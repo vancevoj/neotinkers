@@ -125,6 +125,7 @@
   "tconstruct:ambidextrous":  "tconstruct:gui/modifiers/armor/ambidextrous",
   "tconstruct:reach":    "tconstruct:gui/modifiers/armor/reach",
   "tconstruct:strength": "tconstruct:gui/modifiers/armor/strength",
+  "tconstruct:sleeves":  "tconstruct:gui/modifiers/armor/sleeves",
 
   "tconstruct:bursting":      "tconstruct:gui/modifiers/armor/bursting",
   "tconstruct:depth_strider": "tconstruct:gui/modifiers/armor/depth_strider",

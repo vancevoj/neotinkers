@@ -6,11 +6,13 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -345,6 +347,8 @@ public class TinkerTags {
     public static final TagKey<Item> AUTOSMELT_BLACKLIST = local("autosmelt_blacklist");
     /** Items which should not be duplicated from higher levels of autosmelt */
     public static final TagKey<Item> AUTOSMELT_PLUS_BLACKLIST = common("autosmelt_plus_blacklist");
+    /** Items that can be thrown from sleeves. Item must implement {@link Item#use(Level, Player, InteractionHand)} */
+    public static final TagKey<Item> THROWABLE = local("throwable");
 
     /*
      * Tool tags

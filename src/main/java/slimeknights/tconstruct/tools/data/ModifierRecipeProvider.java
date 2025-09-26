@@ -1022,6 +1022,15 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .setSlots(SlotType.ABILITY, 2)
                          .saveSalvage(consumer, prefix(ModifierIds.wings, abilitySalvage))
                          .save(consumer, prefix(ModifierIds.wings, abilityFolder));
+    ModifierRecipeBuilder.modifier(TinkerModifiers.sleeves)
+      .setTools(TinkerTags.Items.CHESTPLATES)
+      .addInput(TinkerModifiers.silkyCloth)
+      .addInput(TinkerMaterials.cinderslime.getIngotTag())
+      .addInput(TinkerModifiers.silkyCloth)
+      .setSlots(SlotType.UPGRADE, 1)
+      .setMaxLevel(3)
+      .saveSalvage(consumer, prefix(TinkerModifiers.sleeves, upgradeSalvage))
+      .save(consumer, prefix(TinkerModifiers.sleeves, upgradeFolder));
 
     // leggings
     ModifierRecipeBuilder.modifier(ModifierIds.pockets)

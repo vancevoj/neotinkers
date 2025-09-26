@@ -114,7 +114,7 @@ import static slimeknights.tconstruct.common.TinkerTags.Items.UNSALVAGABLE;
 import static slimeknights.tconstruct.common.TinkerTags.Items.UNSWAPPABLE;
 import static slimeknights.tconstruct.common.TinkerTags.Items.WORN_ARMOR;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked", "removal"})
 public class ItemTagProvider extends ItemTagsProvider {
   /** Twlight forest uncrafting table blacklist */
   private static final TagKey<Item> BANNED_UNCRAFTABLE = ItemTags.create(new ResourceLocation("twilightforest", "banned_uncraftables"));
@@ -468,6 +468,10 @@ public class ItemTagProvider extends ItemTagsProvider {
              Items.YELLOW_SHULKER_BOX, Items.LIME_SHULKER_BOX, Items.PINK_SHULKER_BOX, Items.GRAY_SHULKER_BOX,
              Items.LIGHT_GRAY_SHULKER_BOX, Items.CYAN_SHULKER_BOX, Items.PURPLE_SHULKER_BOX, Items.BLUE_SHULKER_BOX,
              Items.BROWN_SHULKER_BOX, Items.GREEN_SHULKER_BOX, Items.RED_SHULKER_BOX, Items.BLACK_SHULKER_BOX);
+    this.tag(TinkerTags.Items.THROWABLE)
+      .add(Items.SNOWBALL, Items.EGG, Items.ENDER_PEARL, Items.SPLASH_POTION, Items.LINGERING_POTION, Items.EXPERIENCE_BOTTLE)
+      .add(TinkerGadgets.efln.get(), TinkerGadgets.flintShuriken.get(), TinkerGadgets.quartzShuriken.get(), TinkerGadgets.glowBall.get())
+      .addTag(THROWN_AMMO);
 
     this.tag(TinkerTags.Items.VARIANT_PLANKS)
         .add(Items.CRIMSON_PLANKS, Items.WARPED_PLANKS)
@@ -493,7 +497,8 @@ public class ItemTagProvider extends ItemTagsProvider {
 
     // twilight forest
     this.tag(BANNED_UNCRAFTABLE).addTag(MODIFIABLE);
-    Function<String,ResourceLocation> trophy = name -> new ResourceLocation("twilightforest", name + "_trophy");
+    String tf = "twilightforest";
+    Function<String,ResourceLocation> trophy = name -> new ResourceLocation(tf, name + "_trophy");
     this.tag(TinkerTags.Items.BOSS_TROPHIES)
       .addOptional(trophy.apply("naga"))
       .addOptional(trophy.apply("lich"))
@@ -504,6 +509,8 @@ public class ItemTagProvider extends ItemTagsProvider {
       .addOptional(trophy.apply("alpha_yeti"))
       .addOptional(trophy.apply("snow_queen"))
       .addOptional(trophy.apply("quest_ram"));
+    this.tag(TinkerTags.Items.THROWABLE)
+      .addOptional(new ResourceLocation(tf, "ice_bomb"));
   }
 
   private void addSmeltery() {
