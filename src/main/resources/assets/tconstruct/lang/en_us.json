@@ -2732,6 +2732,7 @@
   "modifier.tconstruct.fins": "Fins",
   "modifier.tconstruct.fins.flavor": "Splash!",
   "modifier.tconstruct.fins.description": "Allows the tool as a projectile to move freely underwater.",
+  "modifier.tconstruct.fins.projectile_damage": "Underwater Damage",
 
   "modifier.tconstruct.fishing": "Fishing",
   "modifier.tconstruct.fishing.flavor": "Obligatory fishing minigame",
