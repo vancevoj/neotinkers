@@ -169,6 +169,7 @@ public class ModifierIds {
   public static final ModifierId frostshield = id("frostshield");
   public static final ModifierId woodwind = id("woodwind");
   public static final ModifierId soft = id("soft");
+  public static final ModifierId spike = id("spike");
   // traits - tier 2
   public static final ModifierId overgrowth = id("overgrowth");
   public static final ModifierId searing = id("searing");

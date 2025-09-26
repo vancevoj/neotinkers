@@ -37,6 +37,7 @@ import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.ModDataNBT;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
+import slimeknights.tconstruct.tools.TinkerToolActions;
 import slimeknights.tconstruct.tools.TinkerTools;
 
 import javax.annotation.Nullable;
@@ -152,8 +153,14 @@ public class ThrownShuriken extends Projectile implements ToolProjectile, Projec
       }
     }
 
-    if (hit.getType() != HitResult.Type.MISS && !teleported && !ForgeEventFactory.onProjectileImpact(this, hit)) {
-      this.onHit(hit);
+    HitResult.Type type = hit.getType();
+    if (type != HitResult.Type.MISS && !teleported) {
+      if (!stack.isEmpty() && type == HitResult.Type.ENTITY && ModifierUtil.canPerformAction(getTool(), TinkerToolActions.SHIELD_DISABLE)) {
+        ModifierUtil.disableShield(((EntityHitResult)hit).getEntity());
+      }
+      if (!ForgeEventFactory.onProjectileImpact(this, hit)) {
+        this.onHit(hit);
+      }
     }
 
     // update position

@@ -454,6 +454,9 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
     buildModifier(ModifierIds.punch).addModule(new PunchModule(LevelingValue.eachLevel(1), ModifierCondition.ANY_TOOL));
     buildModifier(ModifierIds.drawback).addModule(new ReversePunchModule(LevelingValue.eachLevel(0.6f)));
     buildModifier(ModifierIds.arrowPierce).addModule(new ArrowPierceModule(LevelingInt.eachLevel(1), ModifierCondition.ANY_TOOL));
+    buildModifier(ModifierIds.spike).levelDisplay(ModifierLevelDisplay.NO_LEVELS)
+      .addModule(new ToolActionsModule(TinkerToolActions.SHIELD_DISABLE))
+      .addModule(new ArrowPierceModule(LevelingInt.flat(1), ModifierCondition.ANY_TOOL));
     buildModifier(ModifierIds.quickCharge).addModule(StatBoostModule.multiplyBase(ToolStats.DRAW_SPEED).eachLevel(0.25f));
     buildModifier(ModifierIds.trueshot).addModule(StatBoostModule.add(ToolStats.ACCURACY).eachLevel(0.1f));
     buildModifier(ModifierIds.blindshot).addModule(StatBoostModule.add(ToolStats.ACCURACY).eachLevel(-0.1f));
@@ -645,7 +648,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
     buildModifier(ModifierIds.ballista).levelDisplay(ModifierLevelDisplay.NO_LEVELS).addModule(new VolatileFlagModule(ModifiableBowItem.KEY_BALLISTA));
     buildModifier(ModifierIds.fins)
       .levelDisplay(ModifierLevelDisplay.SINGLE_LEVEL)
-      .addModule(StatBoostModule.add(ToolStats.WATER_INERTIA).flat(0.4f))
+      .addModule(StatBoostModule.add(ToolStats.WATER_INERTIA).flat(0.5f))
       .addModule(ConditionalPowerModule.builder().target(LivingEntityPredicate.UNDERWATER).eachLevel(1));
 
     // fishing
@@ -675,7 +678,9 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
     buildModifier(ModifierIds.cultivated).addModule(RepairModule.builder().eachLevel(0.5f));
     buildModifier(ModifierIds.economical).levelDisplay(ModifierLevelDisplay.NO_LEVELS).addModule(new CraftCountModule(LevelingInt.flat(2), ModifierCondition.ANY_TOOL));
     buildModifier(ModifierIds.stringy).addModule(MaterialRepairModule.material(MaterialIds.string).constant(140));
-    buildModifier(ModifierIds.woodwind).addModule(StatBoostModule.add(ToolStats.ACCURACY).eachLevel(0.25f)); // TODO: can we make it play a bamboo sound?
+    buildModifier(ModifierIds.woodwind) // TODO: can we make it play a bamboo sound?
+      .addModule(StatBoostModule.add(ToolStats.ACCURACY).eachLevel(0.25f))
+      .addModule(StatBoostModule.add(ToolStats.VELOCITY).eachLevel(0.25f));
     buildModifier(ModifierIds.unburdened)
       .addModule(StatBoostModule.add(ToolStats.USE_ITEM_SPEED).eachLevel(0.1f))
       .addModule(AttributeModule.builder(TinkerAttributes.USE_ITEM_SPEED, Operation.ADDITION).slots(ARMOR_SLOTS).tooltipStyle(TooltipStyle.PERCENT).toolItem(ItemPredicate.tag(WORN_ARMOR)).eachLevel(0.05f));
