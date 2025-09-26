@@ -5,9 +5,10 @@
     { "text": "This makes them easy to use, but limits their potential.", "paragraph": true }
   ],
   "properties": [
+    "1.5 Velocity",
     "1.5 Projectile Damage",
     "200% Damage Multiplier",
     "0.75 Accuracy",
-    "2 Material Traits"
+    "2 Head Trait"
   ]
 }

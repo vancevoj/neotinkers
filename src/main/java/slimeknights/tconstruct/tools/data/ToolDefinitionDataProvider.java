@@ -547,6 +547,22 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
         .set(ToolStats.PROJECTILE_DAMAGE, 2f).build()))
       // display both heads
       .module(MaterialToolNameModule.ALL);
+    define(ToolDefinitions.THROWING_AXE)
+      // parts
+      .module(PartStatsModule.parts()
+        .part(arrowHead)
+        .part(arrowShaft).build())
+      .module(ammoParts)
+      // stats
+      .module(new SetStatsModule(StatsNBT.builder()
+        .set(ToolStats.PROJECTILE_DAMAGE, 1.5f)
+        .set(ToolStats.VELOCITY, 0.75f)
+        .set(ToolStats.ACCURACY, 0.5f)
+        .set(ToolStats.WATER_INERTIA, 0.5f).build()))
+      .module(new MultiplyStatsModule(MultiplierNBT.builder()
+        .set(ToolStats.PROJECTILE_DAMAGE, 3f).build()))
+      // display just the head
+      .module(FixedMaterialToolName.FIRST);
 
     // special
     define(ToolDefinitions.FLINT_AND_BRICK)
