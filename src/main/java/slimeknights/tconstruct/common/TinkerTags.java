@@ -477,6 +477,8 @@ public class TinkerTags {
 
     /** Items in this tag have a primary purpose of being ammo */
     public static final TagKey<Item> AMMO = local("modifiable/ammo");
+    /** Ammo that is thrown directly, instead of using a launcher. */
+    public static final TagKey<Item> THROWN_AMMO = local("modifiable/ammo/thrown");
     /** Tools that support being fired using bows with the ballisa modifier. */
     public static final TagKey<Item> BALLISTA_AMMO = local("modifiable/ballista_ammo");
     /** Items in this tag have some cheaper modifier recipes since they are not reusable */

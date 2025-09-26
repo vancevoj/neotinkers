@@ -43,14 +43,9 @@ import javax.annotation.Nullable;
 
 /** Modifiable shuriken entity */
 public class ThrownShuriken extends Projectile implements ToolProjectile, ProjectileWithPower, ProjectileWithKnockback {
-
-  /**
-   * Key to sync the stack to the client
-   */
+  /** Key to sync the stack to the client */
   protected static final EntityDataAccessor<ItemStack> STACK = SynchedEntityData.defineId(ThrownShuriken.class, EntityDataSerializers.ITEM_STACK);
-  /**
-   * Movement speed in water
-   */
+  /** Movement speed in water */
   protected static final EntityDataAccessor<Float> WATER_INERTIA = SynchedEntityData.defineId(ThrownShuriken.class, EntityDataSerializers.FLOAT);
 
   private ItemStack stack = ItemStack.EMPTY;
@@ -100,11 +95,7 @@ public class ThrownShuriken extends Projectile implements ToolProjectile, Projec
    * Called when the arrow is created to set initial properties.
    * @see ModifiableArrow#onCreate(ItemStack, LivingEntity)
    */
-  public void onCreate(ItemStack stack, @Nullable LivingEntity shooter) {
-    if (stack.isEmpty()) {
-      setStack(ItemStack.EMPTY);
-      return;
-    }
+  public IToolStackView onCreate(ItemStack stack, @Nullable LivingEntity shooter) {
     stack = stack.copyWithCount(1);
     setStack(stack);
     // initialize arrow stats
@@ -112,6 +103,7 @@ public class ThrownShuriken extends Projectile implements ToolProjectile, Projec
     EntityModifierCapability.getCapability(this).addModifiers(tool.getModifiers());
     this.power = ConditionalStatModifierHook.getModifiedStat(tool, shooter, ToolStats.PROJECTILE_DAMAGE);
     this.entityData.set(WATER_INERTIA, ConditionalStatModifierHook.getModifiedStat(tool, shooter, ToolStats.WATER_INERTIA));
+    return tool;
   }
 
   /** @see ModifiableArrow#shoot(double, double, double, float, float)  */
