@@ -10,7 +10,7 @@
     {
       "type": "tconstruct:melee_attribute",
       "attribute": "minecraft:generic.armor",
-      "each_level": -1.0,
+      "each_level": -2.0,
       "operation": "addition",
       "target": {
         "type": "mantle:inverted",
@@ -25,7 +25,7 @@
       },
       "effect": "tconstruct:pierce",
       "level": {
-        "per_level": 1.0
+        "per_level": 2.0
       },
       "time": {
         "flat": 100.0
