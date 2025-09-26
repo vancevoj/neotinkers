@@ -9,10 +9,12 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.fluids.FluidStack;
 import slimeknights.mantle.data.loadable.field.ContextKey;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
+import slimeknights.mantle.data.predicate.IJsonPredicate;
 import slimeknights.mantle.recipe.IMultiRecipe;
 import slimeknights.mantle.recipe.helper.LoadableRecipeSerializer;
 import slimeknights.mantle.recipe.helper.TypeAwareRecipeSerializer;
 import slimeknights.tconstruct.library.json.TinkerLoadables;
+import slimeknights.tconstruct.library.json.predicate.material.MaterialPredicate;
 import slimeknights.tconstruct.library.materials.MaterialRegistry;
 import slimeknights.tconstruct.library.materials.definition.IMaterial;
 import slimeknights.tconstruct.library.materials.definition.MaterialVariant;
@@ -32,6 +34,7 @@ import slimeknights.tconstruct.library.tools.part.IMaterialItem;
 
 import java.util.List;
 import java.util.function.BiFunction;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -41,20 +44,28 @@ public class ToolCastingRecipe extends PartSwapCastingRecipe implements IMultiRe
     LoadableRecipeSerializer.TYPED_SERIALIZER.requiredField(),
     ContextKey.ID.requiredField(), LoadableRecipeSerializer.RECIPE_GROUP, CAST_FIELD, ITEM_COST_FIELD,
     TinkerLoadables.MODIFIABLE_ITEM.requiredField("result", r -> r.result),
+    MATERIALS_FIELD,
     ToolCastingRecipe::new);
 
   private final IModifiable result;
-  public ToolCastingRecipe(TypeAwareRecipeSerializer<?> serializer, ResourceLocation id, String group, Ingredient cast, int itemCost, IModifiable result) {
-    super(serializer, id, group, cast, itemCost, -1);
+
+  public ToolCastingRecipe(TypeAwareRecipeSerializer<?> serializer, ResourceLocation id, String group, Ingredient cast, int itemCost, IModifiable result, IJsonPredicate<MaterialVariantId> materials) {
+    super(serializer, id, group, cast, itemCost, -1, materials);
     this.result = result;
     CastingRecipeLookup.registerCastable(result);
+  }
+
+  /** @deprecated use {@link #ToolCastingRecipe(TypeAwareRecipeSerializer, ResourceLocation, String, Ingredient, int, IModifiable, IJsonPredicate)} */
+  @Deprecated(forRemoval = true)
+  public ToolCastingRecipe(TypeAwareRecipeSerializer<?> serializer, ResourceLocation id, String group, Ingredient cast, int itemCost, IModifiable result) {
+    this(serializer, id, group, cast, itemCost, result, MaterialPredicate.ANY);
   }
 
   @Override
   protected MaterialFluidRecipe getFluidRecipe(ICastingContainer inv) {
     // if its not part swapping, original lookup is best
     if (inv.getStack().getItem() != result.asItem()) {
-      return MaterialCastingLookup.getCastingFluid(inv.getFluid());
+      return MaterialCastingLookup.getCastingFluid(inv.getFluid(), materials);
     }
     return super.getFluidRecipe(inv);
   }
@@ -142,23 +153,27 @@ public class ToolCastingRecipe extends PartSwapCastingRecipe implements IMultiRe
         List<ItemStack> castsWithTool = Streams.concat(casts.stream(), Stream.of(partSwapDisplay)).toList();
 
         // start building recipes
+        Predicate<MaterialFluidRecipe> validRecipe = recipe -> {
+          MaterialVariant output = recipe.getOutput();
+          return recipe.isVisible() && requirement.canUseMaterial(output.getId()) && this.materials.matches(output.getVariant());
+        };
         multiRecipes = Stream.concat(
           // show recipes for creating the tool from all castable fluids
           MaterialCastingLookup.getAllCastingFluids().stream()
-            .filter(recipe -> recipe.isVisible() && requirement.canUseMaterial(recipe.getOutput().getId()))
+            .filter(validRecipe)
             .map(recipe -> {
               List<FluidStack> fluids = resizeFluids(recipe.getFluids());
               return new DisplayCastingRecipe(getId(), getType(), castsWithTool, fluids, materials.apply(recipe.getOutput(), castsWithTool),
                 ICastingRecipe.calcCoolingTime(recipe.getTemperature(), itemCost * getFluidAmount(fluids)), isConsumed());
             }),
-            // all composite fluids become special composite swapping recipes
-            MaterialCastingLookup.getAllCompositeFluids().stream()
-              .filter(recipe -> recipe.isVisible() && requirement.canUseMaterial(recipe.getOutput().getId()))
-              .map(recipe -> {
-                List<FluidStack> fluids = resizeFluids(recipe.getFluids());
-                return new DisplayCastingRecipe(getId(), getType(), materials.apply(recipe.getInput(), casts), fluids, materials.apply(recipe.getOutput(), casts),
-                  ICastingRecipe.calcCoolingTime(recipe.getTemperature(), itemCost * getFluidAmount(fluids)), isConsumed());
-              })
+          // all composite fluids become special composite swapping recipes
+          MaterialCastingLookup.getAllCompositeFluids().stream()
+            .filter(validRecipe)
+            .map(recipe -> {
+              List<FluidStack> fluids = resizeFluids(recipe.getFluids());
+              return new DisplayCastingRecipe(getId(), getType(), materials.apply(recipe.getInput(), casts), fluids, materials.apply(recipe.getOutput(), casts),
+                ICastingRecipe.calcCoolingTime(recipe.getTemperature(), itemCost * getFluidAmount(fluids)), isConsumed());
+            })
           )
           .collect(Collectors.toList());
       }
