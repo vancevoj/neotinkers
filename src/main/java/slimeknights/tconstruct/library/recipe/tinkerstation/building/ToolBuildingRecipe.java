@@ -125,15 +125,33 @@ public class ToolBuildingRecipe implements ITinkerStationRecipe {
       return false;
     }
     List<IToolPart> parts = getToolParts();
-    int requiredInputs = parts.size() + ingredients.size();
+    int partSize = parts.size();
+    int requiredInputs = partSize + ingredients.size();
     int maxInputs = inv.getInputCount();
     // disallow if we have no inputs, or if we have too few slots
     if (requiredInputs == 0 || requiredInputs > maxInputs) {
       return false;
     }
+
+    // if we are crafting the tool using a single non-part input, allow matching it in any slot
+    if (requiredInputs == 1 && partSize == 0) {
+      Ingredient ingredient = ingredients.get(0);
+      boolean found = false;
+      for (int i = 0; i < maxInputs; i++) {
+        ItemStack stack = inv.getInput(i);
+        if (!stack.isEmpty()) {
+          // if we already found our input, or this stack doesn't match, recipe failed
+          if (found || !ingredient.test(stack)) {
+            return false;
+          }
+          found = true;
+        }
+      }
+      return found;
+    }
+
     // each part must match the given slot
     int i;
-    int partSize = parts.size();
     for (i = 0; i < partSize; i++) {
       if (parts.get(i).asItem() != inv.getInput(i).getItem()) {
         return false;
