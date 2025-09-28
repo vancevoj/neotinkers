@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
  */
 public abstract class AbstractMaterialCastingRecipe extends AbstractCastingRecipe {
   protected static final LoadableField<Integer,AbstractMaterialCastingRecipe> ITEM_COST_FIELD = IntLoadable.FROM_ONE.requiredField("item_cost", r -> r.itemCost);
-  protected static final LoadableField<IJsonPredicate<MaterialVariantId>,AbstractMaterialCastingRecipe> MATERIALS_FIELD = MaterialPredicate.LOADER.defaultField("materials", r -> r.materials);
+  protected static final LoadableField<IJsonPredicate<MaterialVariantId>,AbstractMaterialCastingRecipe> MATERIALS_FIELD = MaterialPredicate.LOADER.defaultField("allowed_materials", r -> r.materials);
 
   @Getter
   private final RecipeSerializer<?> serializer;

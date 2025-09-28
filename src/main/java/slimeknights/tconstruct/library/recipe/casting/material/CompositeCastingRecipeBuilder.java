@@ -30,7 +30,7 @@ public class CompositeCastingRecipeBuilder extends AbstractRecipeBuilder<Composi
   private MaterialStatsId castingStatConflict = null;
   private final TypeAwareRecipeSerializer<? extends CompositeCastingRecipe> serializer;
   @Setter
-  private IJsonPredicate<MaterialVariantId> materials = MaterialPredicate.ANY;
+  private IJsonPredicate<MaterialVariantId> allowedMaterials = MaterialPredicate.ANY;
 
   public static CompositeCastingRecipeBuilder basin(IMaterialItem result, int itemCost) {
     return composite(result, itemCost, TinkerSmeltery.basinCompositeSerializer.get());
@@ -48,7 +48,7 @@ public class CompositeCastingRecipeBuilder extends AbstractRecipeBuilder<Composi
   @Override
   public void save(Consumer<FinishedRecipe> consumer, ResourceLocation id) {
     ResourceLocation advancementId = this.buildOptionalAdvancement(id, "casting");
-    consumer.accept(new LoadableFinishedRecipe<>(new CompositeCastingRecipe(serializer, id, group, itemCost, result, materials, castingStatConflict), CompositeCastingRecipe.LOADER, advancementId));
+    consumer.accept(new LoadableFinishedRecipe<>(new CompositeCastingRecipe(serializer, id, group, itemCost, result, allowedMaterials, castingStatConflict), CompositeCastingRecipe.LOADER, advancementId));
   }
 
   private class Finished extends AbstractFinishedRecipe {

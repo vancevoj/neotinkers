@@ -37,7 +37,7 @@ public class MaterialCastingRecipeBuilder extends AbstractRecipeBuilder<Material
   private boolean consumed = false;
   private boolean switchSlots = false;
   @Setter
-  private IJsonPredicate<MaterialVariantId> materials = MaterialPredicate.ANY;
+  private IJsonPredicate<MaterialVariantId> allowedMaterials = MaterialPredicate.ANY;
 
   /**
    * Creates a new material casting recipe for an basin recipe
@@ -128,9 +128,9 @@ public class MaterialCastingRecipeBuilder extends AbstractRecipeBuilder<Material
     }
     ResourceLocation advancementId = this.buildOptionalAdvancement(id, "casting");
     if (result != null) {
-      consumer.accept(new LoadableFinishedRecipe<>(new MaterialCastingRecipe(recipeSerializer, id, group, cast, itemCost, result, materials, consumed, switchSlots), MaterialCastingRecipe.LOADER, advancementId));
+      consumer.accept(new LoadableFinishedRecipe<>(new MaterialCastingRecipe(recipeSerializer, id, group, cast, itemCost, result, allowedMaterials, consumed, switchSlots), MaterialCastingRecipe.LOADER, advancementId));
     } else if (resultTool != null) {
-      consumer.accept(new LoadableFinishedRecipe<>(new ToolCastingRecipe(recipeSerializer, id, group, cast, itemCost, resultTool, materials), ToolCastingRecipe.LOADER, advancementId));
+      consumer.accept(new LoadableFinishedRecipe<>(new ToolCastingRecipe(recipeSerializer, id, group, cast, itemCost, resultTool, allowedMaterials), ToolCastingRecipe.LOADER, advancementId));
     } else {
       throw new IllegalArgumentException("Must have either result or result tool");
     }
