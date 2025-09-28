@@ -62,29 +62,37 @@ public enum SleevesModule implements ModifierModule, GeneralInteractionModifierH
   @Override
   public InteractionResult onToolUse(IToolStackView tool, ModifierEntry modifier, Player player, InteractionHand hand, InteractionSource source) {
     if (tool.getHook(ToolHooks.INTERACTION).canInteract(tool, modifier.getId(), source)) {
-      if (player.isCrouching()) {
-        return selectNext(tool, modifier, player, SELECTED_SLOT) ? InteractionResult.SUCCESS : InteractionResult.PASS;
-      } else {
+      if (!player.isCrouching()) {
         InventoryModifierHook inventory = modifier.getHook(ToolInventoryCapability.HOOK);
         int selected = tool.getPersistentData().getInt(SELECTED_SLOT);
         ItemStack ammo = inventory.getStack(tool, modifier, selected);
-        if (!ammo.isEmpty() && !player.getCooldowns().isOnCooldown(ammo.getItem())) {
-          // to use the item, we need it in the hand, but something else might be there, so temporarily swap
-          ItemStack held = player.getItemInHand(hand);
-          player.setItemInHand(hand, ammo);
-          // use the item
-          InteractionResultHolder<ItemStack> result = ammo.use(player.level(), player, hand);
-          // restore original hand item
-          player.setItemInHand(hand, held);
-          // ensure the use action did not start us using items
-          if (player.isUsingItem()) {
-            player.stopUsingItem();
+        // if we have nothing, fallback to the slot toggle
+        if (!ammo.isEmpty()) {
+          if (!player.getCooldowns().isOnCooldown(ammo.getItem())) {
+            // to use the item, we need it in the hand, but something else might be there, so temporarily swap
+            ItemStack held = player.getItemInHand(hand);
+            player.setItemInHand(hand, ammo);
+            // use the item
+            InteractionResultHolder<ItemStack> result = ammo.use(player.level(), player, hand);
+            // restore original hand item
+            player.setItemInHand(hand, held);
+            // ensure the use action did not start us using items
+            if (player.isUsingItem()) {
+              player.stopUsingItem();
+            }
+            // handle result
+            inventory.setStack(tool, modifier, selected, result.getObject());
+            return result.getResult();
+          } else {
+            // toggle if we just were unable to use the item
+            return InteractionResult.PASS;
           }
-          // handle result
-          inventory.setStack(tool, modifier, selected, result.getObject());
-          return result.getResult();
+          // don't toggle if set to disable
+        } else if (selected == inventory.getSlots(tool, modifier)) {
+          return InteractionResult.PASS;
         }
       }
+      return selectNext(tool, modifier, player, SELECTED_SLOT) ? InteractionResult.SUCCESS : InteractionResult.PASS;
     }
     return InteractionResult.PASS;
   }
