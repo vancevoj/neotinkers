@@ -33,6 +33,7 @@ import slimeknights.tconstruct.library.recipe.FluidValues;
 import slimeknights.tconstruct.library.recipe.casting.ItemCastingRecipeBuilder;
 import slimeknights.tconstruct.library.recipe.casting.material.MaterialCastingRecipeBuilder;
 import slimeknights.tconstruct.library.recipe.casting.material.PartSwapCastingRecipeBuilder;
+import slimeknights.tconstruct.library.recipe.casting.material.ToolCastingRecipe.CastPurpose;
 import slimeknights.tconstruct.library.recipe.ingredient.MaterialIngredient;
 import slimeknights.tconstruct.library.recipe.ingredient.MaterialValueIngredient;
 import slimeknights.tconstruct.library.recipe.material.ShapedMaterialConsumerBuilder;
@@ -232,7 +233,7 @@ public class ToolsRecipeProvider extends BaseRecipeProvider implements IMaterial
     // plate armor
     TinkerTools.plateArmor.forEach(item -> toolBuilding(consumer, item, armorFolder, Patterns.PLATE_ARMOR));
     MaterialCastingRecipeBuilder.tableRecipe(TinkerTools.plateShield.get())
-                                .setCast(MaterialIngredient.of(TinkerToolParts.shieldCore), true)
+                                .setCast(MaterialIngredient.of(TinkerToolParts.shieldCore), CastPurpose.FIRST_MATERIAL)
                                 .setItemCost(3)
                                 .save(consumer, location(armorFolder + "plate_shield"));
     PartSwapCastingRecipeBuilder.tableRecipe(Ingredient.of(TinkerTools.plateArmor.get(ArmorItem.Type.HELMET)), 3)
