@@ -1,4 +1,4 @@
-package slimeknights.tconstruct.tools.modules;
+package slimeknights.tconstruct.tools.modules.durability;
 
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.data.loadable.record.SingletonLoader;

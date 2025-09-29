@@ -1,4 +1,4 @@
-package slimeknights.tconstruct.tools.modules;
+package slimeknights.tconstruct.tools.modules.durability;
 
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;

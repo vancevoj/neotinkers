@@ -1,4 +1,4 @@
-package slimeknights.tconstruct.tools.modules.ranged;
+package slimeknights.tconstruct.tools.modules.ranged.bow;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;

@@ -1,4 +1,4 @@
-package slimeknights.tconstruct.tools.modules.ranged;
+package slimeknights.tconstruct.tools.modules.ranged.ammo;
 
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.BuiltInRegistries;

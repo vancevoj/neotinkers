@@ -1,4 +1,4 @@
-package slimeknights.tconstruct.tools.modules;
+package slimeknights.tconstruct.tools.modules.combat;
 
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;

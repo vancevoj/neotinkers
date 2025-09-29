@@ -1,4 +1,4 @@
-package slimeknights.tconstruct.tools.modules.ranged;
+package slimeknights.tconstruct.tools.modules.ranged.common;
 
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.LivingEntity;

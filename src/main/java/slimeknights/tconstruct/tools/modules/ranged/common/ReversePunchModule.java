@@ -1,4 +1,4 @@
-package slimeknights.tconstruct.tools.modules.ranged;
+package slimeknights.tconstruct.tools.modules.ranged.common;
 
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
