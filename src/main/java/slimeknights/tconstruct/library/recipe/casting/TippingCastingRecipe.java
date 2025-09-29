@@ -15,6 +15,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import slimeknights.mantle.data.loadable.Loadables;
 import slimeknights.mantle.data.loadable.common.IngredientLoadable;
 import slimeknights.mantle.data.loadable.field.ContextKey;
+import slimeknights.mantle.data.loadable.field.LoadableField;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.recipe.helper.LoadableRecipeSerializer;
 import slimeknights.mantle.recipe.helper.TypeAwareRecipeSerializer;
@@ -30,17 +31,16 @@ import java.util.Arrays;
 import java.util.List;
 
 /** Casting recipe applying a potion to a tool */
-public class ToolPotionCastingRecipe extends PotionCastingRecipe {
-  public static final RecordLoadable<ToolPotionCastingRecipe> LOADER = RecordLoadable.create(
+public class TippingCastingRecipe extends PotionCastingRecipe {
+  protected static final LoadableField<Ingredient, PotionCastingRecipe> TOOL_FIELD = IngredientLoadable.DISALLOW_EMPTY.requiredField("tools", r -> r.bottle);
+  public static final RecordLoadable<TippingCastingRecipe> LOADER = RecordLoadable.create(
     LoadableRecipeSerializer.TYPED_SERIALIZER.requiredField(), ContextKey.ID.requiredField(), LoadableRecipeSerializer.RECIPE_GROUP,
-    IngredientLoadable.DISALLOW_EMPTY.requiredField("tools", r -> r.bottle),
-    FLUID_FIELD,
-    COOLING_TIME_FIELD,
+    TOOL_FIELD, FLUID_FIELD, COOLING_TIME_FIELD,
     ModifierId.PARSER.requiredField("modifier", r -> r.modifier),
-    ToolPotionCastingRecipe::new);
+    TippingCastingRecipe::new);
 
   private final ModifierId modifier;
-  public ToolPotionCastingRecipe(TypeAwareRecipeSerializer<?> serializer, ResourceLocation id, String group, Ingredient tool, FluidIngredient fluid, int coolingTime, ModifierId modifier) {
+  public TippingCastingRecipe(TypeAwareRecipeSerializer<?> serializer, ResourceLocation id, String group, Ingredient tool, FluidIngredient fluid, int coolingTime, ModifierId modifier) {
     super(serializer, id, group, tool, fluid, Items.AIR, coolingTime);
     this.modifier = modifier;
   }

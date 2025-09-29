@@ -1648,7 +1648,7 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
       .save(consumer, wrap(ModifierIds.rebalanced, slotlessFolder, "_traits"));
 
     // tipping arrows and shurikens
-    PotionCastingRecipeBuilder.tableRecipe(ModifierIds.tipped)
+    PotionCastingRecipeBuilder.tableTipping(ModifierIds.tipped)
       .setBottle(TinkerTags.Items.AMMO)
       .setCoolingTime(20)
       .setFluid(TinkerFluids.potion.ingredient(FluidValues.BOTTLE / 5))
