@@ -18,6 +18,7 @@ import net.minecraftforge.common.crafting.DifferenceIngredient;
 import net.minecraftforge.common.crafting.conditions.ModLoadedCondition;
 import slimeknights.mantle.recipe.data.ItemNameIngredient;
 import slimeknights.mantle.recipe.helper.ItemOutput;
+import slimeknights.mantle.recipe.ingredient.PotionDisplayIngredient;
 import slimeknights.mantle.recipe.ingredient.SizedIngredient;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.TinkerTags;
@@ -123,6 +124,13 @@ public class ToolsRecipeProvider extends BaseRecipeProvider implements IMaterial
       .addExtraMaterial(MaterialIds.flint).addExtraMaterial(MaterialIds.wood)
       .layoutSlot(TinkerTables.tinkerStation.getId())
       .save(consumer, wrap(TinkerTools.arrow, folder, "_from_vanilla"));
+    ToolBuildingRecipeBuilder.toolBuildingRecipe(TinkerTools.arrow.get())
+      .addExtraRequirement(PotionDisplayIngredient.of(Items.TIPPED_ARROW))
+      .noParts()
+      .addExtraMaterial(MaterialIds.flint).addExtraMaterial(MaterialIds.wood)
+      .tippedModifier(ModifierIds.tipped)
+      .layoutSlot(TinkerTables.tinkerStation.getId())
+      .save(consumer, wrap(TinkerTools.arrow, folder, "_from_tipped"));
 
     // specialized
     ShapelessRecipeBuilder.shapeless(RecipeCategory.TOOLS, TinkerTools.flintAndBrick)
