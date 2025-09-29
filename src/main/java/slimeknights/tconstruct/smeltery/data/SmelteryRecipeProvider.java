@@ -47,6 +47,7 @@ import slimeknights.mantle.recipe.data.ItemNameOutput;
 import slimeknights.mantle.recipe.helper.ItemOutput;
 import slimeknights.mantle.recipe.ingredient.EntityIngredient;
 import slimeknights.mantle.recipe.ingredient.FluidIngredient;
+import slimeknights.mantle.recipe.ingredient.PotionDisplayIngredient;
 import slimeknights.mantle.registration.object.FluidObject;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.TinkerTags;
@@ -1034,6 +1035,11 @@ public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelt
                               .setFluid(TinkerFluids.potion.ingredient(FluidValues.BOTTLE / 5))
                               .setCoolingTime(20)
                               .save(consumer, location(folder + "filling/tipped_arrow"));
+    ItemCastingRecipeBuilder.tableRecipe(Items.ARROW)
+      .setCast(PotionDisplayIngredient.of(Items.TIPPED_ARROW), true)
+      .setFluid(MantleTags.Fluids.WATER, FluidValues.BOTTLE / 5)
+      .setCoolingTime(1)
+      .save(consumer, location(folder + "filling/tipped_arrow_clean"));
     // tank filling - seared
     ContainerFillingRecipeBuilder.basinRecipe(TinkerSmeltery.searedTank.get(TankType.INGOT_TANK), FluidValues.INGOT)
                                  .save(consumer, location(folder + "filling/seared_ingot_tank"));
