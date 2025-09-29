@@ -6,6 +6,9 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed;
 import slimeknights.mantle.data.registry.IdAwareComponentRegistry;
@@ -61,13 +64,16 @@ import slimeknights.tconstruct.library.modifiers.hook.ranged.LauncherHitModifier
 import slimeknights.tconstruct.library.modifiers.hook.ranged.ProjectileHitModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.ranged.ProjectileLaunchModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.ranged.ProjectileShootModifierHook;
+import slimeknights.tconstruct.library.modifiers.hook.ranged.ScheduledProjectileTaskModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.special.BlockTransformModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.special.CapacityBarHook;
 import slimeknights.tconstruct.library.modifiers.hook.special.PlantHarvestModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.special.ShearsModifierHook;
 import slimeknights.tconstruct.library.module.ModuleHook;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
+import slimeknights.tconstruct.library.tools.nbt.ModDataNBT;
 import slimeknights.tconstruct.library.utils.RestrictedCompoundTag;
+import slimeknights.tconstruct.library.utils.Schedule.Scheduler;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
@@ -307,6 +313,16 @@ public class ModifierHooks {
   public static final ModuleHook<LauncherHitModifierHook> LAUNCHER_HIT = register("launcher_hit", LauncherHitModifierHook.class, LauncherHitModifierHook.AllMerger::new, new LauncherHitModifierHook() {});
   /** Hook called when a bow is looking for ammo. Does not support merging multiple hooks on one modifier */
   public static final ModuleHook<BowAmmoModifierHook> BOW_AMMO = register("bow_ammo", BowAmmoModifierHook.class, BowAmmoModifierHook.EMPTY);
+
+  /** Hook for scheduling tasks to happen later in a projectile's lifetime. Only works on modifiable projectiles, launchers such as bows will never use this hook. */
+  public static final ModuleHook<ScheduledProjectileTaskModifierHook> SCHEDULE_PROJECTILE_TASK = register("schedule_projectile_task", ScheduledProjectileTaskModifierHook.class, ScheduledProjectileTaskModifierHook.ScheduleMerger::new, new ScheduledProjectileTaskModifierHook() {
+    @Override
+    public void scheduleProjectileTask(IToolStackView tool, ModifierEntry modifier, ItemStack ammo, Projectile projectile, @Nullable AbstractArrow arrow, ModDataNBT persistentData, Scheduler scheduler) {}
+
+    @Override
+    public void onScheduledProjectileTask(IToolStackView tool, ModifierEntry modifier, ItemStack ammo, Projectile projectile, @Nullable AbstractArrow arrow, ModDataNBT persistentData, int task) {}
+  });
+
 
   /* Misc Armor */
 

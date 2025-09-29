@@ -15,6 +15,7 @@ import net.minecraft.world.phys.Vec3;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.hook.build.ConditionalStatModifierHook;
+import slimeknights.tconstruct.library.modifiers.hook.ranged.ScheduledProjectileTaskModifierHook;
 import slimeknights.tconstruct.library.tools.IndestructibleItemEntity;
 import slimeknights.tconstruct.library.tools.capability.EntityModifierCapability;
 import slimeknights.tconstruct.library.tools.capability.PersistentDataCapability;
@@ -23,6 +24,7 @@ import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.ModDataNBT;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
+import slimeknights.tconstruct.library.utils.Schedule;
 import slimeknights.tconstruct.tools.TinkerTools;
 
 import javax.annotation.Nullable;
@@ -38,6 +40,9 @@ public class ModifiableArrow extends AbstractArrow implements ToolProjectile {
   private IToolStackView tool = null;
   private boolean reclaim = false;
   private boolean dealtDamage = false;
+  /** Tasks queued by modifiers */
+  private Schedule tasks = Schedule.EMPTY;
+
   public ModifiableArrow(EntityType<? extends AbstractArrow> type, Level level) {
     super(type, level);
   }
@@ -108,11 +113,22 @@ public class ModifiableArrow extends AbstractArrow implements ToolProjectile {
       for (ModifierEntry entry : tool.getModifiers()) {
         entry.getHook(ModifierHooks.PROJECTILE_SHOT).onProjectileShoot(tool, entry, shooter, stack, this, this, arrowData, true);
       }
+
+      // schedule tasks
+      this.tasks = ScheduledProjectileTaskModifierHook.createSchedule(tool, stack, this, this, arrowData);
     } else {
       super.shoot(pX, pY, pZ, velocity, inaccuracy);
     }
   }
 
+  @Override
+  public void tick() {
+    super.tick();
+    // check if any tasks are ready
+    if (!tasks.isEmpty() && !stack.isEmpty()) {
+      ScheduledProjectileTaskModifierHook.checkSchedule(getTool(), stack, this, this, PersistentDataCapability.getOrWarn(this), tasks);
+    }
+  }
 
   /* Stats */
 
@@ -206,6 +222,7 @@ public class ModifiableArrow extends AbstractArrow implements ToolProjectile {
   private static final String KEY_STACK = "stack";
   private static final String KEY_WATER_INERTIA = "water_inertia";
   private static final String KEY_DEALT_DAMAGE = "dealt_damage";
+  private static final String KEY_TASKS = "tasks";
 
   @Override
   public void addAdditionalSaveData(CompoundTag tag) {
@@ -213,6 +230,9 @@ public class ModifiableArrow extends AbstractArrow implements ToolProjectile {
     tag.put(KEY_STACK, this.stack.save(new CompoundTag()));
     tag.putFloat(KEY_WATER_INERTIA, this.entityData.get(WATER_INERTIA));
     tag.putBoolean(KEY_DEALT_DAMAGE, dealtDamage);
+    if (!this.tasks.isEmpty()) {
+      tag.put(KEY_TASKS, this.tasks.serialize());
+    }
   }
 
   @Override
@@ -223,5 +243,8 @@ public class ModifiableArrow extends AbstractArrow implements ToolProjectile {
     }
     this.entityData.set(WATER_INERTIA, tag.getFloat(KEY_WATER_INERTIA));
     this.dealtDamage = tag.getBoolean(KEY_DEALT_DAMAGE);
+    if (tag.contains(KEY_TASKS, CompoundTag.TAG_COMPOUND)) {
+      this.tasks = Schedule.deserialize(tag.getList(KEY_TASKS, CompoundTag.TAG_COMPOUND));
+    }
   }
 }
