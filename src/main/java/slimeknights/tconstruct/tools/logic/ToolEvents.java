@@ -482,15 +482,16 @@ public class ToolEvents {
             LivingEntity target = ToolAttackUtil.getLivingEntity(entity);
 
             // ensure we are not blocking, that means projectile shouldn't hit
+            boolean notBlocked = true;
             if (target != null && target.isBlocking() && (!(projectile instanceof AbstractArrow arrow) || arrow.getPierceLevel() == 0)) {
               Vec3 direction = projectile.position().vectorTo(target.position()).normalize();
               direction = new Vec3(direction.x, 0.0D, direction.z);
               if (direction.dot(target.getViewVector(1.0F)) < 0.0D) {
-                return;
+                notBlocked = false;
               }
             }
             for (ModifierEntry entry : modifiers.getModifiers()) {
-              if (entry.getHook(hook).onProjectileHitEntity(modifiers, nbt, entry, projectile, entityHit, attacker, target)) {
+              if (entry.getHook(hook).onProjectileHitEntity(modifiers, nbt, entry, projectile, entityHit, attacker, target, notBlocked)) {
                 // on forge, this means the cancelled entity won't be hit again if its a piercing arrow
                 // on neo, they will get processed again next frame. Is this something we need to work around?
                 event.setCanceled(true);

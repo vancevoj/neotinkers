@@ -308,7 +308,7 @@ public enum SmashingModule implements ModifierModule, FluidModifierHook, Project
   }
 
   @Override
-  public boolean onProjectileHitEntity(ModifierNBT modifiers, ModDataNBT persistentData, ModifierEntry modifier, Projectile projectile, EntityHitResult hit, @Nullable LivingEntity attacker, @Nullable LivingEntity target) {
+  public boolean onProjectileHitEntity(ModifierNBT modifiers, ModDataNBT persistentData, ModifierEntry modifier, Projectile projectile, EntityHitResult hit, @Nullable LivingEntity attacker, @Nullable LivingEntity target, boolean notBlocked) {
     // find our fluid and ensure it affects blocks
     Fluid fluid = getFluid(persistentData);
     if (fluid != Fluids.EMPTY) {
