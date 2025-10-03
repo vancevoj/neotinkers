@@ -34,6 +34,8 @@ import slimeknights.mantle.registration.object.BuildingBlockObject;
 import slimeknights.mantle.registration.object.FenceBuildingBlockObject;
 import slimeknights.mantle.registration.object.WoodBlockObject;
 import slimeknights.tconstruct.TConstruct;
+import slimeknights.tconstruct.common.registration.GeodeItemObject;
+import slimeknights.tconstruct.common.registration.GeodeItemObject.BudSize;
 import slimeknights.tconstruct.shared.TinkerCommons;
 import slimeknights.tconstruct.shared.TinkerMaterials;
 import slimeknights.tconstruct.shared.block.ClearStainedGlassBlock.GlassColor;
@@ -45,6 +47,7 @@ import java.util.function.Function;
 
 import static net.minecraft.world.level.block.state.properties.BlockStateProperties.FACING;
 import static net.minecraftforge.client.model.generators.ModelProvider.BLOCK_FOLDER;
+import static slimeknights.tconstruct.TConstruct.getResource;
 
 @SuppressWarnings({"UnusedReturnValue", "SameParameterValue"})
 public class TinkerBlockStateProvider extends BlockStateProvider {
@@ -72,20 +75,20 @@ public class TinkerBlockStateProvider extends BlockStateProvider {
     });
 
     // clear glass
-    glassBlock(TinkerCommons.clearGlass.get(), TinkerCommons.clearGlassPane.get(), "clear_glass/", TConstruct.getResource("block/clear_glass"), -1, true, null);
-    ResourceLocation clearStainedGlass = TConstruct.getResource("block/clear_stained_glass");
+    glassBlock(TinkerCommons.clearGlass.get(), TinkerCommons.clearGlassPane.get(), "clear_glass/", getResource("block/clear_glass"), -1, true, null);
+    ResourceLocation clearStainedGlass = getResource("block/clear_stained_glass");
     RenderType translucent = RenderType.translucent();
     for (GlassColor color : GlassColor.values()) {
       glassBlock(TinkerCommons.clearStainedGlass.get(color), TinkerCommons.clearStainedGlassPane.get(color), "clear_glass/" + color.getSerializedName() + "/", clearStainedGlass, 0xFF000000 | color.getColor(), false, translucent);
     }
-    glassBlock(TinkerCommons.soulGlass.get(), TinkerCommons.soulGlassPane.get(), "soul_glass/", TConstruct.getResource("block/soul_glass"), -1, false, translucent);
+    glassBlock(TinkerCommons.soulGlass.get(), TinkerCommons.soulGlassPane.get(), "soul_glass/", getResource("block/soul_glass"), -1, false, translucent);
     // smeltery glass - share a common top texture
-    glassBlock(TinkerSmeltery.searedGlass.get(),     TinkerSmeltery.searedGlassPane.get(),     "smeltery/glass/", TConstruct.getResource("block/smeltery/seared_glass"), -1, true, null);
+    glassBlock(TinkerSmeltery.searedGlass.get(),     TinkerSmeltery.searedGlassPane.get(),     "smeltery/glass/", getResource("block/smeltery/seared_glass"), -1, true, null);
     glassBlock(TinkerSmeltery.searedSoulGlass.get(), TinkerSmeltery.searedSoulGlassPane.get(), "smeltery/soul_glass/",
-               TConstruct.getResource("block/smeltery/soul_glass"), TConstruct.getResource("block/smeltery/seared_glass_top"), -1, true, translucent);
-    glassBlock(TinkerSmeltery.scorchedGlass.get(),     TinkerSmeltery.scorchedGlassPane.get(),     "foundry/glass/", TConstruct.getResource("block/foundry/glass"), -1, true, null);
+               getResource("block/smeltery/soul_glass"), getResource("block/smeltery/seared_glass_top"), -1, true, translucent);
+    glassBlock(TinkerSmeltery.scorchedGlass.get(),     TinkerSmeltery.scorchedGlassPane.get(),     "foundry/glass/", getResource("block/foundry/glass"), -1, true, null);
     glassBlock(TinkerSmeltery.scorchedSoulGlass.get(), TinkerSmeltery.scorchedSoulGlassPane.get(), "foundry/soul_glass/",
-               TConstruct.getResource("block/foundry/soul_glass"), TConstruct.getResource("block/foundry/glass_top"), -1, true, translucent);
+               getResource("block/foundry/soul_glass"), getResource("block/foundry/glass_top"), -1, true, translucent);
     // obsidian pane
     ResourceLocation obsidian = new ResourceLocation("block/obsidian");
     paneBlock(TinkerCommons.obsidianPane.get(), "obsidian_pane/", obsidian, obsidian, false, -1, false, RenderType.solid());
@@ -93,6 +96,12 @@ public class TinkerBlockStateProvider extends BlockStateProvider {
     // shards
     bud(TinkerWorld.steelCluster.get(), "block/geode/steel_cluster", blockTexture("geode/steel_cluster"));
     bud(TinkerWorld.knightmetalCluster.get(), "block/geode/knightmetal_cluster", blockTexture("geode/knightmetal_cluster"));
+
+    // geodes
+    geode(TinkerWorld.earthGeode, "earth");
+    geode(TinkerWorld.skyGeode,   "sky");
+    geode(TinkerWorld.ichorGeode, "ichor");
+    geode(TinkerWorld.enderGeode, "ender");
   }
 
 
@@ -100,12 +109,12 @@ public class TinkerBlockStateProvider extends BlockStateProvider {
 
   /** Creates a texture in the block folder */
   protected ResourceLocation blockTexture(String path) {
-    return new ResourceLocation(TConstruct.MOD_ID, BLOCK_FOLDER + "/" + path);
+    return getResource(BLOCK_FOLDER + "/" + path);
   }
 
   /** Creates a texture in the block folder */
   protected ResourceLocation itemTexture(String path) {
-    return new ResourceLocation(TConstruct.MOD_ID, ModelProvider.ITEM_FOLDER + "/" + path);
+    return getResource(ModelProvider.ITEM_FOLDER + "/" + path);
   }
 
   /** Creates all models for a building block object */
@@ -383,6 +392,9 @@ public class TinkerBlockStateProvider extends BlockStateProvider {
     itemModels().withExistingParent(itemName(block), "minecraft:block/button_inventory").texture("texture", texture);
   }
 
+
+  /* Geode */
+
   /** Adds a model with rotations for a bud block */
   public void bud(Block block, String location, ResourceLocation texture) {
     ModelFile bud = models().cross(location, texture).renderType(RenderType.cutout().name);
@@ -395,12 +407,29 @@ public class TinkerBlockStateProvider extends BlockStateProvider {
       .partialState().with(FACING, Direction.WEST ).modelForState().modelFile(bud).rotationX(90).rotationY(270).addModel();
   }
 
+  /** Adds all models for a geode */
+  public void geode(GeodeItemObject geode, String type) {
+    basicItem(geode, "materials/");
+    for (BudSize size : BudSize.values()) {
+      String name = size.getName();
+      if (size != BudSize.CLUSTER) {
+        name += "_bud";
+      }
+      Block bud = geode.getBud(size);
+      ResourceLocation texture = blockTexture("geode/" + type + '/' + name);
+      bud(bud, "block/geode/" + type + '/' + name, texture);
+      itemModels().withExistingParent(itemName(bud), getResource("item/base/geode/" + name)).texture("layer0", texture);
+    }
+    basicBlock(geode.getBlock(), "block/geode/" + type + "/block", blockTexture("geode/" + type + "/block"));
+    basicBlock(geode.getBudding(), "block/geode/" + type + "/budding", blockTexture("geode/" + type + "/budding"));
+  }
+
 
   /* Panes and glass */
 
   /** Creates a pane model using the TConstruct templates */
   private BlockModelBuilder paneModel(String baseName, String variant, ResourceLocation pane, @Nullable ResourceLocation edge, @Nullable RenderType renderType, boolean connected, int tint) {
-    BlockModelBuilder builder = models().withExistingParent(BLOCK_FOLDER + "/" + baseName + variant, TConstruct.getResource("block/template/pane/" + variant));
+    BlockModelBuilder builder = models().withExistingParent(BLOCK_FOLDER + "/" + baseName + variant, getResource("block/template/pane/" + variant));
     builder.texture("pane", pane);
     if (edge != null) {
       builder.texture("edge", edge);
