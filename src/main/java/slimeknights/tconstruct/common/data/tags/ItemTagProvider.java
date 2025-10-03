@@ -160,6 +160,9 @@ public class ItemTagProvider extends ItemTagsProvider {
     this.tag(TinkerTags.Items.NUGGETS_NETHERITE).add(TinkerMaterials.netheriteNugget.get());
     this.tag(TinkerTags.Items.NUGGETS_NETHERITE_SCRAP).add(TinkerMaterials.debrisNugget.get());
 
+    this.tag(TinkerTags.Items.STEEL_SHARD).add(TinkerWorld.steelShard.get());
+    this.tag(TinkerTags.Items.KNIGHTMETAL_SHARD).add(TinkerWorld.knightmetalShard.get());
+
     // ores
     addMetalTags(TinkerMaterials.steel);
     addMetalTags(TinkerMaterials.cobalt);
@@ -511,6 +514,7 @@ public class ItemTagProvider extends ItemTagsProvider {
       .addOptional(trophy.apply("quest_ram"));
     this.tag(TinkerTags.Items.THROWABLE)
       .addOptional(new ResourceLocation(tf, "ice_bomb"));
+    this.tag(TinkerTags.Items.KNIGHTMETAL_SHARD).addOptional(new ResourceLocation(tf, "armor_shard"));
   }
 
   private void addSmeltery() {

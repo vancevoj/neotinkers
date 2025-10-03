@@ -27,7 +27,6 @@ import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import net.minecraftforge.registries.ForgeRegistries;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.shared.TinkerCommons;
-import slimeknights.tconstruct.shared.TinkerMaterials;
 import slimeknights.tconstruct.shared.block.SlimeType;
 import slimeknights.tconstruct.smeltery.TinkerSmeltery;
 import slimeknights.tconstruct.world.TinkerWorld;
@@ -52,8 +51,8 @@ public class EntityLootTableProvider extends EntityLootSubProvider {
 
   @Override
   public void generate() {
-    this.add(TinkerWorld.skySlimeEntity.get(), dropSlimeballs(SlimeType.SKY, TinkerMaterials.steel.getNugget()));
-    this.add(TinkerWorld.enderSlimeEntity.get(), dropSlimeballs(SlimeType.ENDER, TinkerMaterials.knightmetal.getNugget()));
+    this.add(TinkerWorld.skySlimeEntity.get(), dropSlimeballs(SlimeType.SKY, TinkerWorld.steelShard.get()));
+    this.add(TinkerWorld.enderSlimeEntity.get(), dropSlimeballs(SlimeType.ENDER, TinkerWorld.knightmetalShard.get()));
     this.add(TinkerWorld.terracubeEntity.get(),
                            LootTable.lootTable().withPool(LootPool.lootPool()
                                                                    .setRolls(ConstantValue.exactly(1))

@@ -43,6 +43,7 @@ import slimeknights.tconstruct.world.TinkerWorld;
 import javax.annotation.Nullable;
 import java.util.function.Function;
 
+import static net.minecraft.world.level.block.state.properties.BlockStateProperties.FACING;
 import static net.minecraftforge.client.model.generators.ModelProvider.BLOCK_FOLDER;
 
 @SuppressWarnings({"UnusedReturnValue", "SameParameterValue"})
@@ -88,6 +89,10 @@ public class TinkerBlockStateProvider extends BlockStateProvider {
     // obsidian pane
     ResourceLocation obsidian = new ResourceLocation("block/obsidian");
     paneBlock(TinkerCommons.obsidianPane.get(), "obsidian_pane/", obsidian, obsidian, false, -1, false, RenderType.solid());
+
+    // shards
+    bud(TinkerWorld.steelCluster.get(), "block/geode/steel_cluster", blockTexture("geode/steel_cluster"));
+    bud(TinkerWorld.knightmetalCluster.get(), "block/geode/knightmetal_cluster", blockTexture("geode/knightmetal_cluster"));
   }
 
 
@@ -183,7 +188,12 @@ public class TinkerBlockStateProvider extends BlockStateProvider {
 
   /** Creates a model for a generated item with 1 layer */
   protected ItemModelBuilder basicItem(ResourceLocation item, String texturePrefix) {
-    return itemModels().getBuilder(item.toString()).parent(GENERATED).texture("layer0", itemTexture(texturePrefix + item.getPath()));
+    return generated(item, itemTexture(texturePrefix + item.getPath()));
+  }
+
+  /** Creates a model for a generated item with 1 layer */
+  protected ItemModelBuilder generated(ResourceLocation item, ResourceLocation texture) {
+    return itemModels().getBuilder(item.toString()).parent(GENERATED).texture("layer0", texture);
   }
 
   /**
@@ -371,6 +381,18 @@ public class TinkerBlockStateProvider extends BlockStateProvider {
     ModelFile button = models().button(location, texture);
     buttonBlock(block, button, models().buttonPressed(location + "_pressed", texture));
     itemModels().withExistingParent(itemName(block), "minecraft:block/button_inventory").texture("texture", texture);
+  }
+
+  /** Adds a model with rotations for a bud block */
+  public void bud(Block block, String location, ResourceLocation texture) {
+    ModelFile bud = models().cross(location, texture).renderType(RenderType.cutout().name);
+    getVariantBuilder(block)
+      .partialState().with(FACING, Direction.UP   ).modelForState().modelFile(bud).addModel()
+      .partialState().with(FACING, Direction.DOWN ).modelForState().modelFile(bud).rotationX(180).addModel()
+      .partialState().with(FACING, Direction.NORTH).modelForState().modelFile(bud).rotationX(90).addModel()
+      .partialState().with(FACING, Direction.EAST ).modelForState().modelFile(bud).rotationX(90).rotationY(90).addModel()
+      .partialState().with(FACING, Direction.SOUTH).modelForState().modelFile(bud).rotationX(90).rotationY(180).addModel()
+      .partialState().with(FACING, Direction.WEST ).modelForState().modelFile(bud).rotationX(90).rotationY(270).addModel();
   }
 
 
