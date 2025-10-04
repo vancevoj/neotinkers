@@ -12,6 +12,10 @@
     { "name": "string", "index": 1 },
     { "name": "hook",   "index": 2 }
   ],
+  "first_modifiers": [
+    { "name": "tconstruct:tipped", "forced": true },
+    { "name": "tconstruct:tank_handler", "forced": true }
+  ],
   "overrides": [
     {
       "predicate": { "tconstruct:charging": 2 },
