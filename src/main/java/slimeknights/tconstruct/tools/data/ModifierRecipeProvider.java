@@ -1653,6 +1653,11 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
       .setCoolingTime(20)
       .setFluid(TinkerFluids.potion.ingredient(FluidValues.BOTTLE / 5))
       .save(consumer, location(slotlessFolder + "ammo_tipping"));
+    PotionCastingRecipeBuilder.tableTipping(ModifierIds.tipped)
+      .setBottle(TinkerTags.Items.FISHING_RODS)
+      .setCoolingTime(20)
+      .setFluid(TinkerFluids.potion.ingredient(FluidValues.BOTTLE))
+      .save(consumer, location(slotlessFolder + "fishing_rod_tipping"));
 
     // removal
     ModifierRemovalRecipeBuilder.removal()

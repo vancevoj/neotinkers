@@ -1,7 +1,10 @@
 package slimeknights.tconstruct.library.modifiers.modules.build;
 
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
 import slimeknights.mantle.data.loadable.primitive.BooleanLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
+import slimeknights.tconstruct.library.json.predicate.tool.ToolContextPredicate;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.ModifierId;
@@ -36,6 +39,11 @@ public record ModifierTraitModule(ModifierEntry modifier, boolean fixedLevel, Mo
 
   public ModifierTraitModule(ModifierId id, int level, boolean fixedLevel) {
     this(id, level, fixedLevel, ModifierCondition.ANY_CONTEXT);
+  }
+
+  /** Common usecase of a modifier only applied to specificly tagged tools */
+  public static ModifierTraitModule tagCondition(ModifierId id, TagKey<Item> tag) {
+    return new ModifierTraitModule(id, 1, false, ModifierCondition.ANY_CONTEXT.with(ToolContextPredicate.tag(tag)));
   }
 
   @Override
