@@ -238,6 +238,7 @@ public class ModifierIds {
   public static final ModifierId stalwart = id("stalwart");
   public static final ModifierId dragonshot = id("dragonshot");
   public static final ModifierId reclaim = id("reclaim");
+  public static final ModifierId hover = id("hover");
   // traits - tier 4 compat
   public static final ModifierId temperedProtection = id("tempered_protection");
 

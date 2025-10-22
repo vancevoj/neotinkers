@@ -79,6 +79,7 @@ public final class MaterialIds {
   public static final MaterialId knightmetal = id("knightmetal");
   public static final MaterialId knightly = id("knightly");
   public static final MaterialId ancient = id("ancient");
+  public static final MaterialId endRod = id("end_rod");
   //public static final MaterialId soulsteel = id("soulsteel");
   // tier 4 - bindings
   public static final MaterialId ancientHide = id("ancient_hide");

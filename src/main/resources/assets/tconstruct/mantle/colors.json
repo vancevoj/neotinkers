@@ -287,6 +287,7 @@
     "smashing":      "#D0EAE9",
     "smashing_ammo": "#D0EAE9",
     "reclaim":       "#8F648F",
+    "hover":         "#FFF6F6",
     "bounce":        "#82c873",
     "rebound":       "#ff970d",
     "venom":         "#A2935E",
@@ -439,6 +440,7 @@
     "ancient":      "#654740",
     "dragon_scale": "#474747",
     "shulker":      "#8F648F",
+    "end_rod":      "#FFF6F6",
 
     "__tier_5__": null,
     "enderslime_vine": "#a92dff",

@@ -134,6 +134,7 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     addDefaultTraits(MaterialIds.knightly, ModifierIds.valiant);
     addDefaultTraits(MaterialIds.enderslimeVine, TinkerModifiers.enderporting);
     addTraits(MaterialIds.enderslimeVine, ARMOR, ModifierIds.enderclearance);
+    addDefaultTraits(MaterialIds.endRod, ModifierIds.hover);
 
     // tier 2 - mod compat
     addDefaultTraits(MaterialIds.osmium, ModifierIds.dense);

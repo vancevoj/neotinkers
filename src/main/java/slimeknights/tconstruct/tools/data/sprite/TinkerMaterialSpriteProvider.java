@@ -356,6 +356,9 @@ public class TinkerMaterialSpriteProvider extends AbstractMaterialSpriteProvider
       .statType(StatlessMaterialStats.BINDING, StatlessMaterialStats.BOWSTRING).cuirass().maille()
       .fallbacks("primitive", "cloth")
       .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF6300B0).addARGB(102, 0xFF790CC9).addARGB(140, 0xFF9727DD).addARGB(178, 0xFFA936ED).addARGB(216, 0xFFBF58F7).addARGB(255, 0xFFD37CFF).build());
+    buildMaterial(MaterialIds.endRod)
+      .arrowShaft()
+      .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFFF6E2CD).addARGB(102, 0xFFF6EACD).addARGB(140, 0xFFFFF2D5).addARGB(178, 0xFFFFF6F6).addARGB(216, 0xFFFFF6F6).addARGB(255, 0xFFFFFFFF).build());
 
     // plate
     buildMaterial(MaterialIds.gold)

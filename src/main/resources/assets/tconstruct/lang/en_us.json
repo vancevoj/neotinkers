@@ -2095,6 +2095,10 @@
   "material.tconstruct.knightly.flavor": "Shard of the traveling slime, sharper when unrefined.",
   "material.tconstruct.knightly.ammo": "Grants +0.25 damage per level per piece of armor worn by the target (before velocity)",
 
+  "material.tconstruct.end_rod": "End Rod",
+  "material.tconstruct.end_rod.flavor": "Arrow end's justify its means.",
+  "material.tconstruct.end_rod.ammo": "Projectile ignores gravity fort hte first second of its life",
+
   "material.tconstruct.knightslime": "Knightslime",
 
   "material.tconstruct.enderslime_vine": "Slimy Vine",
@@ -3096,6 +3100,9 @@
   "modifier.tconstruct.reclaim": "Reclaim",
   "modifier.tconstruct.reclaim.flavor": "Reduce, reuse, recycle",
   "modifier.tconstruct.reclaim.description": "After hitting the target, projectile will bounce off and can be collected to reuse.",
+  "modifier.tconstruct.hover": "Hover",
+  "modifier.tconstruct.hover.flavor": "Free like the wind!",
+  "modifier.tconstruct.hover.description": "Projectile briefly ignores gravity after firing.",
 
   "__comment": "Tier 5 Traits",
   "modifier.tconstruct.enderporting": "Enderporting",
