@@ -94,6 +94,7 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     // tier 3 - nether
     addDefaultTraits(MaterialIds.cobalt, ModifierIds.lightweight);
     addTraits(MaterialIds.cobalt, ARMOR, ModifierIds.meleeProtection);
+    addDefaultTraits(MaterialIds.steel, ModifierIds.ductile);
     // tier 3 - binding
     addDefaultTraits(MaterialIds.darkthread, ModifierIds.looting);
     addDefaultTraits(MaterialIds.ichorskin, ModifierIds.overshield, TinkerModifiers.overslime.getId());
@@ -103,6 +104,7 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     addTraits(MaterialIds.quartz, AMMO, ModifierIds.keen);
     addTraits(MaterialIds.ichor, AMMO, ModifierIds.rebound, ModifierIds.bounce);
     addTraits(MaterialIds.glowstone, AMMO, ModifierIds.spectral);
+    addDefaultTraits(MaterialIds.magnetite, ModifierIds.attractive);
 
     // tier 4
     addDefaultTraits(MaterialIds.cinderslime, ModifierIds.overburn, TinkerModifiers.overslime.getId());
@@ -142,7 +144,6 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     addDefaultTraits(MaterialIds.treatedWood, ModifierIds.preserved);
     addDefaultTraits(MaterialIds.ironwood, ModifierIds.deciduous);
     // tier 3 - mod compat
-    addDefaultTraits(MaterialIds.steel, ModifierIds.ductile);
     addDefaultTraits(MaterialIds.bronze, ModifierIds.maintained);
     addDefaultTraits(MaterialIds.constantan, ModifierIds.temperate);
     addDefaultTraits(MaterialIds.invar, ModifierIds.solid);

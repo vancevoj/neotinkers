@@ -2165,6 +2165,10 @@
   "material.tconstruct.steel.ranged": "Grants +10% durability and +5% projectile power per level",
   "material.tconstruct.steel.armor": "Grants +10% durability and +1 toughness per level",
 
+  "material.tconstruct.magnetite": "Magnetite",
+  "material.tconstruct.magnetite.flavor": "Naturally occurring magnetism",
+  "material.tconstruct.magnetite.ammo": "Attracts mobs within a radius of 3 blocks per level towards the place the projectile hits",
+
   "material.tconstruct.bronze": "Bronze",
   "material.tconstruct.bronze.flavor": "Not to be confused with amethyst bronze.",
   "material.tconstruct.bronze.encyclopedia": "Grants +6 mining speed per level at full durability, 0 boost below 50% durability",
@@ -3031,6 +3035,9 @@
   "modifier.tconstruct.tasty": "Tasty",
   "modifier.tconstruct.tasty.flavor": "Om Nom Nom",
   "modifier.tconstruct.tasty.description": "Smells so good, you cannot resist taking a few bites of your tool",
+  "modifier.tconstruct.attractive": "Attractive",
+  "modifier.tconstruct.attractive.flavor": "That's a really nice arrow",
+  "modifier.tconstruct.attractive.description": "Draws in mobs near where the projectile hits.",
 
   "death.attack.tconstruct.bleed": "%1$s bled to death",
   "death.attack.tconstruct.bleed.item": "%1$s bled to death from injuries caused by %2$s",

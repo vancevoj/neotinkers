@@ -304,6 +304,7 @@ import slimeknights.tconstruct.tools.modules.ranged.ammo.SmashingModule;
 import slimeknights.tconstruct.tools.modules.ranged.ammo.TippedModule;
 import slimeknights.tconstruct.tools.modules.ranged.bow.QuiverInventoryModule;
 import slimeknights.tconstruct.tools.modules.ranged.common.ArrowPierceModule;
+import slimeknights.tconstruct.tools.modules.ranged.common.ProjectileAttractMobsModule;
 import slimeknights.tconstruct.tools.modules.ranged.common.ProjectileBounceModule;
 import slimeknights.tconstruct.tools.modules.ranged.common.ProjectilePlaceGlowModule;
 import slimeknights.tconstruct.tools.modules.ranged.common.PunchModule;
@@ -812,6 +813,7 @@ public final class TinkerModifiers extends TinkerModule {
       ModifierModule.LOADER.register(getResource("reverse_punch"), ReversePunchModule.LOADER);
       ModifierModule.LOADER.register(getResource("arrow_pierce"), ArrowPierceModule.LOADER);
       ModifierModule.LOADER.register(getResource("projectile_gravity"), ProjectileGravityModule.LOADER);
+      ModifierModule.LOADER.register(getResource("projectile_attract_mobs"), ProjectileAttractMobsModule.LOADER);
       // compat
       ModifierModule.LOADER.register(getResource("the_one_probe"), TheOneProbeModule.INSTANCE.getLoader());
       ModifierModule.LOADER.register(getResource("headlight"), HeadlightModule.LOADER);

@@ -196,6 +196,7 @@ import slimeknights.tconstruct.tools.modules.ranged.ammo.SmashingModule;
 import slimeknights.tconstruct.tools.modules.ranged.ammo.TippedModule;
 import slimeknights.tconstruct.tools.modules.ranged.bow.QuiverInventoryModule;
 import slimeknights.tconstruct.tools.modules.ranged.common.ArrowPierceModule;
+import slimeknights.tconstruct.tools.modules.ranged.common.ProjectileAttractMobsModule;
 import slimeknights.tconstruct.tools.modules.ranged.common.ProjectileBounceModule;
 import slimeknights.tconstruct.tools.modules.ranged.common.ProjectilePlaceGlowModule;
 import slimeknights.tconstruct.tools.modules.ranged.common.PunchModule;
@@ -471,6 +472,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .variable(MULTIPLIER).multiply()
       .variable(VALUE).add().build());
     buildModifier(ModifierIds.reclaim).levelDisplay(ModifierLevelDisplay.NO_LEVELS).addModule(new VolatileFlagModule(IndestructibleItemEntity.INDESTRUCTIBLE_ENTITY));
+    buildModifier(ModifierIds.attractive).addModule(new ProjectileAttractMobsModule(LevelingValue.eachLevel(3), LevelingValue.flat(0.5f)));
 
     // ammo
     buildModifier(ModifierIds.trickQuiver).priority(70) // before bulk quiver

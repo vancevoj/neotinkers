@@ -56,6 +56,7 @@ public final class MaterialIds {
   public static final MaterialId nahuatl = id("nahuatl");
   public static final MaterialId pigIron = id("pig_iron");
   public static final MaterialId roseGold = id("rose_gold");
+  public static final MaterialId magnetite = id("magnetite");
   // tier 3 (nether)
   public static final MaterialId cobalt = id("cobalt");
   public static final MaterialId steel = id("steel");

@@ -213,9 +213,10 @@ public class ModifierIds {
   public static final ModifierId spectral = id("spectral");
   public static final ModifierId keen = id("keen");
   public static final ModifierId rebound = id("rebound");
+  public static final ModifierId ductile = id("ductile");
+  public static final ModifierId attractive = id("attractive");
   // traits - tier 3 compat
   public static final ModifierId maintained = id("maintained");
-  public static final ModifierId ductile = id("ductile");
   public static final ModifierId temperate = id("temperate");
   /** @deprecated no longer used. Make a copy if you need it */
   @Deprecated

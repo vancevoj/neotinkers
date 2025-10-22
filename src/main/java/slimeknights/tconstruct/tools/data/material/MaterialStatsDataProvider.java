@@ -408,6 +408,7 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
     addMaterialStats(MaterialIds.ichor, StatlessMaterialStats.ARROW_HEAD);
     addMaterialStats(MaterialIds.glowstone, StatlessMaterialStats.ARROW_HEAD);
     addMaterialStats(MaterialIds.necronium, StatlessMaterialStats.ARROW_SHAFT);
+    addMaterialStats(MaterialIds.magnetite, StatlessMaterialStats.ARROW_HEAD);
     // tier 4
     addMaterialStats(MaterialIds.enderslime, StatlessMaterialStats.ARROW_HEAD);
     addMaterialStats(MaterialIds.dragonScale, StatlessMaterialStats.ARROW_HEAD);

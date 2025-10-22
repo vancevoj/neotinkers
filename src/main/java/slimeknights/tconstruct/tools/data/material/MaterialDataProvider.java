@@ -87,6 +87,7 @@ public class MaterialDataProvider extends AbstractMaterialDataProvider {
     addMaterial(MaterialIds.quartz,    3, ORDER_REPAIR, false);
     addMaterial(MaterialIds.ichor,     3, ORDER_REPAIR, true);
     addMaterial(MaterialIds.glowstone, 3, ORDER_REPAIR, true);
+    addMaterial(MaterialIds.magnetite, 3, ORDER_REPAIR, true);
 
     // tier 4
     addMaterial(MaterialIds.queensSlime, 4, ORDER_GENERAL, false);

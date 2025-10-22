@@ -279,6 +279,7 @@
     "olympic":       "#A3E7FE",
     "spectral":      "#F9D49C",
     "keen":          "#EAE5DE",
+    "attractive":    "#67718C",
     "drawback":      "#01cd4e",
     "tipped":        "#696969",
     "dragonshot":    "#474747",
@@ -422,6 +423,7 @@
     "cobalt":          "#2376dd",
     "darkthread":      "#3B2754",
     "steel":           "#67718C",
+    "magnetite":       "#67718C",
     "ichorskin":       "#ff970d",
 
     "__tier_4__": null,
