@@ -138,7 +138,7 @@ public class ModifierTagProvider extends AbstractModifierTagProvider {
       TinkerModifiers.sinistral.getId(), ModifierIds.trueshot,
       ModifierIds.fiery, ModifierIds.freezing,
       ModifierIds.arrowPierce, ModifierIds.bounce, TinkerModifiers.necrotic.getId(),
-      ModifierIds.lure, ModifierIds.fins);
+      ModifierIds.lure, ModifierIds.collecting, ModifierIds.fins);
 
     // abilities
     this.tag(GENERAL_ABILITIES).add(
@@ -151,7 +151,7 @@ public class ModifierTagProvider extends AbstractModifierTagProvider {
     this.tag(RANGED_ABILITIES).add(
       ModifierIds.bulkQuiver, ModifierIds.trickQuiver,
       ModifierIds.crystalshot, TinkerModifiers.multishot.getId(), ModifierIds.ballista,
-      ModifierIds.grapple, ModifierIds.collecting,
+      ModifierIds.grapple,
       ModifierIds.channeling, ModifierIds.returning);
     this.tag(INTERACTION_ABILITIES).add(
       TinkerModifiers.bucketing.getId(), TinkerModifiers.firestarter.getId(), ModifierIds.glowing,

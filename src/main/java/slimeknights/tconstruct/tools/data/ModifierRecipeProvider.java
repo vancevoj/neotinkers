@@ -705,10 +705,10 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
     ModifierRecipeBuilder.modifier(ModifierIds.collecting)
       .setTools(TinkerTags.Items.FISHING_RODS)
       .addInput(Blocks.HOPPER)
-      .setSlots(SlotType.ABILITY, 1)
+      .setSlots(SlotType.UPGRADE, 1)
       .setMaxLevel(1).checkTraitLevel()
-      .saveSalvage(consumer, prefix(ModifierIds.collecting, abilitySalvage))
-      .save(consumer, prefix(ModifierIds.collecting, abilityFolder));
+      .saveSalvage(consumer, prefix(ModifierIds.collecting, upgradeSalvage))
+      .save(consumer, prefix(ModifierIds.collecting, upgradeFolder));
 
     // throwing
     Ingredient bowLimb = MaterialIngredient.of(TinkerToolParts.bowLimb.get());
