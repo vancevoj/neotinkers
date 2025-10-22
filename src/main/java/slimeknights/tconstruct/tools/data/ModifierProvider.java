@@ -1137,6 +1137,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
         .formula()
         .customVariable("equipment", new EntityPowerVariable(equipmentCount, WhichEntity.TARGET, 4))
         .constant(0.25f).multiply()
+        .variable(LEVEL).multiply()
         .variable(MULTIPLIER).multiply()
         .variable(VALUE).add()
         .build());

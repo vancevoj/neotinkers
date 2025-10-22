@@ -135,6 +135,7 @@ public class MaterialRenderInfoProvider extends AbstractMaterialRenderInfoProvid
     buildRenderInfo(MaterialIds.glowstone).luminosity(15);
     buildRenderInfo(MaterialIds.dragonScale);
     redirect(MaterialIds.shulker, MaterialIds.chorus);
+    redirect(MaterialIds.knightly, MaterialIds.knightmetal);
 
     // plate
     buildRenderInfo(MaterialIds.gold).color(0xFDF55F).fallbacks("metal");

@@ -104,6 +104,7 @@ public class MaterialDataProvider extends AbstractMaterialDataProvider {
     addMaterial(MaterialIds.shulker,     4, ORDER_REPAIR, true);
     addMaterial(MaterialIds.dragonScale, 4, ORDER_REPAIR, true);
     addMaterial(MaterialIds.enderslime,  4, ORDER_REPAIR, true);
+    addMaterial(MaterialIds.knightly,    4, ORDER_REPAIR, true);
 
     // tier 5 binding, temporarily in book 4
     addMaterial(MaterialIds.enderslimeVine, 4, ORDER_BINDING, true);

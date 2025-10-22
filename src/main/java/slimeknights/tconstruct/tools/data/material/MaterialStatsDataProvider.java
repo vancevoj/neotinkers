@@ -414,6 +414,7 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
     addMaterialStats(MaterialIds.shulker, StatlessMaterialStats.ARROW_HEAD);
     addMaterialStats(MaterialIds.blazewood, StatlessMaterialStats.ARROW_SHAFT);
     addMaterialStats(MaterialIds.blazingBone, StatlessMaterialStats.ARROW_SHAFT);
+    addMaterialStats(MaterialIds.knightly, StatlessMaterialStats.ARROW_HEAD);
   }
 
   private void addArmor() {

@@ -76,6 +76,7 @@ public final class MaterialIds {
   public static final MaterialId blazingBone = id("blazing_bone");
   public static final MaterialId blazewood = id("blazewood");
   public static final MaterialId knightmetal = id("knightmetal");
+  public static final MaterialId knightly = id("knightly");
   public static final MaterialId ancient = id("ancient");
   //public static final MaterialId soulsteel = id("soulsteel");
   // tier 4 - bindings
