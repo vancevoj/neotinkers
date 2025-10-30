@@ -18,6 +18,7 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
 import slimeknights.mantle.client.TooltipKey;
@@ -37,6 +38,7 @@ import slimeknights.tconstruct.library.modifiers.hook.build.ValidateModifierHook
 import slimeknights.tconstruct.library.modifiers.hook.build.VolatileDataModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.display.DisplayNameModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.display.TooltipModifierHook;
+import slimeknights.tconstruct.library.modifiers.hook.ranged.ProjectileFuseModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.ranged.ProjectileHitModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.ranged.ProjectileLaunchModifierHook;
 import slimeknights.tconstruct.library.modifiers.modules.ModifierModule;
@@ -58,7 +60,7 @@ import java.util.List;
 import java.util.Objects;
 
 /** Module that allows arrows to perform fluid effect on hit */
-public enum SmashingModule implements ModifierModule, FluidModifierHook, ProjectileLaunchModifierHook.NoShooter, ProjectileHitModifierHook, VolatileDataModifierHook, ValidateModifierHook, ModifierRemovalHook, DisplayNameModifierHook, TooltipModifierHook {
+public enum SmashingModule implements ModifierModule, FluidModifierHook, ProjectileLaunchModifierHook.NoShooter, ProjectileHitModifierHook, ProjectileFuseModifierHook, VolatileDataModifierHook, ValidateModifierHook, ModifierRemovalHook, DisplayNameModifierHook, TooltipModifierHook {
   INSTANCE;
 
   /** Key storing current fluid */
@@ -73,7 +75,7 @@ public enum SmashingModule implements ModifierModule, FluidModifierHook, Project
   private static final ResourceLocation KEY_USED = TConstruct.getResource("smashing_used");
   private static final String FORMAT = TConstruct.makeTranslationKey("modifier", "smashing.format");
   private static final Component EMPTY_TO_SWAP = TConstruct.makeTranslation("modifier", "smashing.empty_to_swap");
-  private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<SmashingModule>defaultHooks(ToolFluidCapability.HOOK, ModifierHooks.PROJECTILE_LAUNCH, ModifierHooks.PROJECTILE_SHOT, ModifierHooks.PROJECTILE_HIT, ModifierHooks.VOLATILE_DATA, ModifierHooks.VALIDATE, ModifierHooks.REMOVE, ModifierHooks.DISPLAY_NAME, ModifierHooks.TOOLTIP);
+  private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<SmashingModule>defaultHooks(ToolFluidCapability.HOOK, ModifierHooks.PROJECTILE_LAUNCH, ModifierHooks.PROJECTILE_SHOT, ModifierHooks.PROJECTILE_HIT, ModifierHooks.PROJECTILE_FUSE, ModifierHooks.VOLATILE_DATA, ModifierHooks.VALIDATE, ModifierHooks.REMOVE, ModifierHooks.DISPLAY_NAME, ModifierHooks.TOOLTIP);
   public static final RecordLoadable<SmashingModule> LOADER = new SingletonLoader<>(INSTANCE);
 
   @Override
@@ -385,6 +387,45 @@ public enum SmashingModule implements ModifierModule, FluidModifierHook, Project
     if (used || persistentData.getBoolean(KEY_USED)) {
       projectile.playSound(SoundEvents.SPLASH_POTION_BREAK);
       projectile.discard();
+    }
+  }
+
+  @Override
+  public void onProjectileFuseFinish(IToolStackView tool, ModifierEntry modifier, ItemStack ammo, Projectile projectile, @Nullable AbstractArrow arrow, ModDataNBT persistentData) {
+    Fluid fluid = getFluid(persistentData);
+    boolean used = false;
+    if (fluid != Fluids.EMPTY) {
+      int amount = persistentData.getInt(KEY_AMOUNT);
+      if (amount > 0) {
+        FluidEffects effects = FluidEffectManager.INSTANCE.find(fluid);
+        if (effects.hasBlockEffects()) {
+          // apply the effect at the location of the projectile
+          Vec3 position = projectile.position();
+          int drained = effects.applyToBlock(
+            new FluidStack(fluid, amount, getFluidTag(persistentData)),
+            modifier.getEffectiveLevel(),
+            FluidEffectContext.builder(projectile.level()).user(projectile.getOwner()).projectile(projectile).location(position)
+              .block(new BlockHitResult(position, projectile.getDirection(), projectile.blockPosition(), false)),
+            FluidAction.EXECUTE
+          );
+          // drain the fluid
+          if (drained > 0) {
+            int remaining = amount - drained;
+            used = true;
+            if (remaining > 0) {
+              persistentData.putInt(KEY_AMOUNT, remaining);
+            } else {
+              clearFluid(persistentData);
+            }
+          }
+        }
+      } else {
+        clearFluid(persistentData);
+      }
+    }
+    // if the arrow is stopping, discard it to prevent a fluid dupe
+    if (used || persistentData.getBoolean(KEY_USED)) {
+      projectile.playSound(SoundEvents.SPLASH_POTION_BREAK);
     }
   }
 

@@ -2088,7 +2088,7 @@
 
   "material.tconstruct.magma": "Magma",
   "material.tconstruct.magma.flavor": "Flame out",
-  "material.tconstruct.magma.ammo": "Projectile will disappear half a second after launch.",
+  "material.tconstruct.magma.ammo": "Projectile will disappear half a second after launch, causing some traits to run in the air.",
 
   "material.tconstruct.glowstone": "Glowstone",
   "material.tconstruct.glowstone.flavor": "Brightest day, blackest night, no cave will escape my light!",

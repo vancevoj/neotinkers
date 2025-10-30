@@ -52,16 +52,24 @@ public record ProjectileFuseModule(SimpleParticleType particle, LevelingInt time
 
   @Override
   public void onScheduledProjectileTask(IToolStackView tool, ModifierEntry modifier, ItemStack ammo, Projectile projectile, @Nullable AbstractArrow arrow, ModDataNBT persistentData, int task) {
-    if (task == 0 && !projectile.level().isClientSide && !projectile.isRemoved()) {
-      // TODO: modifier hook to run on fuse expiry
-      // if its reusable, don't discard, but rather zero momentum
-      if (projectile.getType().is(TinkerTags.EntityTypes.REUSABLE_AMMO)) {
-        projectile.setDeltaMovement(Vec3.ZERO);
-      } else {
-        projectile.discard();
+    if (task == 0 && !projectile.isRemoved()) {
+      // alert other modifiers that the projectile is gone, lets some of them perform an early action
+      for (ModifierEntry entry : tool.getModifiers()) {
+        entry.getHook(ModifierHooks.PROJECTILE_FUSE).onProjectileFuseFinish(tool, entry, ammo, projectile, arrow, persistentData);
+      }
+
+      if (!projectile.level().isClientSide) {
+        // fuse animation
         Vec3 position = projectile.position();
         if (projectile.level() instanceof ServerLevel level) {
           level.sendParticles(particle, position.x, position.y, position.z, 10, 0.0D, 0.0D, 0.0D, 0.1f);
+        }
+
+        // if its reusable, don't discard, but rather zero momentum
+        if (projectile.getType().is(TinkerTags.EntityTypes.REUSABLE_AMMO)) {
+          projectile.setDeltaMovement(Vec3.ZERO);
+        } else {
+          projectile.discard();
         }
       }
     }
