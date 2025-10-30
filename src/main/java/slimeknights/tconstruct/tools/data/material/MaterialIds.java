@@ -27,6 +27,7 @@ public final class MaterialIds {
   public static final MaterialId cactus = id("cactus");
   // tier 1 - ammo
   public static final MaterialId wool = id("wool");
+  public static final MaterialId feather = id("feather");
   // tier 2
   public static final MaterialId iron = id("iron");
   public static final MaterialId searedStone = id("seared_stone");

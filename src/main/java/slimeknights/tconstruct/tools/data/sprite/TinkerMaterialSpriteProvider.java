@@ -31,6 +31,7 @@ public class TinkerMaterialSpriteProvider extends AbstractMaterialSpriteProvider
     return "Tinkers' Construct Materials";
   }
 
+  @SuppressWarnings("removal")
   @Override
   protected void addAllMaterials() {
     // unknown: just do a black border, make sure it stands out when data is missing
@@ -391,10 +392,13 @@ public class TinkerMaterialSpriteProvider extends AbstractMaterialSpriteProvider
     // wool for arrows
     for (DyeColor color : DyeColor.values()) {
       String name = color.getName();
-      buildMaterial(MaterialVariantId.create(MaterialIds.wool, name))
-        .variant(color != DyeColor.WHITE)
-        .arrowHead()
-        .transformer(transformerFromSprite(new ResourceLocation("block/" + name + "_wool"), 0, 0));
+      MaterialSpriteInfoBuilder builder = buildMaterial(MaterialVariantId.create(MaterialIds.wool, name));
+      builder.arrowHead().transformer(transformerFromSprite(new ResourceLocation("block/" + name + "_wool"), 0, 0));
+      if (color == DyeColor.WHITE) {
+        builder.fletching();
+      } else {
+        builder.variant(true);
+      }
     }
 
     // slimeskull

@@ -44,10 +44,12 @@ public class MaterialRenderInfoProvider extends AbstractMaterialRenderInfoProvid
     buildRenderInfo(MaterialIds.deepslate);
     buildRenderInfo(MaterialIds.blackstone);
     // tier 1 - wool
-    redirect(MaterialIds.wool, MaterialVariantId.create(MaterialIds.wool, DyeColor.WHITE.getName()));
+    MaterialVariantId whiteWool = MaterialVariantId.create(MaterialIds.wool, DyeColor.WHITE.getName());
+    redirect(MaterialIds.wool, whiteWool);
     for (DyeColor color : DyeColor.values()) {
       buildRenderInfo(MaterialVariantId.create(MaterialIds.wool, color.getName()));
     }
+    redirect(MaterialIds.feather, whiteWool);
 
     // tier 2
     buildRenderInfo(MaterialIds.iron).color(0xD8D8D8).fallbacks("metal");

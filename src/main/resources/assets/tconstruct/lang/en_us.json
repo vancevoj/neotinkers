@@ -344,6 +344,7 @@
   "pattern.tconstruct.tough_handle": "Tough Handle",
   "pattern.tconstruct.bow_grip": "Bow Grip",
   "pattern.tconstruct.arrow_shaft": "Arrow Shaft",
+  "pattern.tconstruct.fletching": "Arrow Fletching",
   "pattern.tconstruct.arrow_part": "Arrow Head or Shaft",
 
 
@@ -385,7 +386,7 @@
   "item.tconstruct.tool_binding_cast": "Tool Binding Gold Cast",
   "item.tconstruct.tough_binding_cast": "Tough Collar Gold Cast",
   "item.tconstruct.arrow_cast": "Arrow Gold Pattern",
-  "item.tconstruct.arrow_cast.tooltip": "Reusable pattern for making arrow heads and shafts in the part builder",
+  "item.tconstruct.arrow_cast.tooltip": "Reusable pattern for making arrow parts in the part builder",
 
   "_comment": "Tool Handle Gold Casts",
 
@@ -1201,6 +1202,7 @@
   "item.tconstruct.bowstring": "Bowstring",
   "item.tconstruct.arrow_head": "Arrow Head",
   "item.tconstruct.arrow_shaft": "Arrow Shaft",
+  "item.tconstruct.fletching": "Arrow Fletching",
 
   "item.tconstruct.helmet_plating": "Helmet Plating",
   "item.tconstruct.chestplate_plating": "Chest Plating",
@@ -1932,6 +1934,10 @@
   "material.tconstruct.wool.black": "Black Wool",
   "material.tconstruct.wool.flavor": "Woolooloo",
   "material.tconstruct.wool.ammo": "Multiplies the projectile damage by 0. Note damage may still be increased by bow power, and it may still aggravate mobs.",
+
+  "material.tconstruct.feather": "Feather",
+  "material.tconstruct.feather.flavor": "The traditional arrow fletching",
+  "material.tconstruct.feather.ammo": "Has no special effect, but unlike other fletching choices lacks a downside.",
 
   "material.tconstruct.amethyst": "Amethyst",
   "material.tconstruct.amethyst.flavor": "Protects you from bad aim, provided you were aiming straight ahead",
@@ -3424,6 +3430,7 @@
   "stat.tconstruct.bowstring": "Bowstring",
   "stat.tconstruct.arrow_head": "Arrow Head",
   "stat.tconstruct.arrow_shaft": "Arrow Shaft",
+  "stat.tconstruct.fletching": "Arrow Fletching",
   "tool_stat.tconstruct.extra.no_stats": "No stats",
 
   "tool_stat.tconstruct.block_amount": "Block Amount: ",

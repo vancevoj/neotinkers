@@ -77,6 +77,7 @@ import static slimeknights.tconstruct.tools.TinkerToolParts.bowLimb;
 import static slimeknights.tconstruct.tools.TinkerToolParts.bowstring;
 import static slimeknights.tconstruct.tools.TinkerToolParts.broadAxeHead;
 import static slimeknights.tconstruct.tools.TinkerToolParts.broadBlade;
+import static slimeknights.tconstruct.tools.TinkerToolParts.fletching;
 import static slimeknights.tconstruct.tools.TinkerToolParts.hammerHead;
 import static slimeknights.tconstruct.tools.TinkerToolParts.largePlate;
 import static slimeknights.tconstruct.tools.TinkerToolParts.pickHead;
@@ -529,8 +530,9 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
       // parts
       .module(PartStatsModule.parts()
         .part(arrowHead)
-        .part(arrowShaft).build())
-      .module(ammoParts)
+        .part(arrowShaft)
+        .part(fletching).build())
+      .module(DefaultMaterialsModule.builder().material(nonHiddenMaterial, nonHiddenMaterial, nonHiddenMaterial).build())
       // display the arrow head, despite not being repairable
       .module(FixedMaterialToolName.FIRST);
     define(ToolDefinitions.SHURIKEN)
