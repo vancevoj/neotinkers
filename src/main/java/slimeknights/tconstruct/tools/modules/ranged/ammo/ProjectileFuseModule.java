@@ -16,8 +16,10 @@ import slimeknights.tconstruct.library.modifiers.hook.ranged.ScheduledProjectile
 import slimeknights.tconstruct.library.modifiers.modules.ModifierModule;
 import slimeknights.tconstruct.library.module.HookProvider;
 import slimeknights.tconstruct.library.module.ModuleHook;
+import slimeknights.tconstruct.library.tools.capability.EntityModifierCapability;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.ModDataNBT;
+import slimeknights.tconstruct.library.tools.nbt.ModifierNBT;
 import slimeknights.tconstruct.library.utils.Schedule.Scheduler;
 
 import javax.annotation.Nullable;
@@ -54,8 +56,10 @@ public record ProjectileFuseModule(SimpleParticleType particle, LevelingInt time
   public void onScheduledProjectileTask(IToolStackView tool, ModifierEntry modifier, ItemStack ammo, Projectile projectile, @Nullable AbstractArrow arrow, ModDataNBT persistentData, int task) {
     if (task == 0 && !projectile.isRemoved()) {
       // alert other modifiers that the projectile is gone, lets some of them perform an early action
-      for (ModifierEntry entry : tool.getModifiers()) {
-        entry.getHook(ModifierHooks.PROJECTILE_FUSE).onProjectileFuseFinish(tool, entry, ammo, projectile, arrow, persistentData);
+      // include bow modifiers here, as it adds a bit more flexibility
+      ModifierNBT modifiers = EntityModifierCapability.getOrEmpty(projectile);
+      for (ModifierEntry entry : modifiers) {
+        entry.getHook(ModifierHooks.PROJECTILE_FUSE).onProjectileFuseFinish(modifiers, persistentData, entry, ammo, projectile, arrow);
       }
 
       if (!projectile.level().isClientSide) {
