@@ -241,6 +241,11 @@ public class ModifierIds {
   public static final ModifierId hover = id("hover");
   // traits - tier 4 compat
   public static final ModifierId temperedProtection = id("tempered_protection");
+  // traits - fletching
+  public static final ModifierId cheap = id("cheap");
+  public static final ModifierId weak = id("weak");
+  public static final ModifierId erratic = id("erratic");
+  public static final ModifierId fuse = id("fuse");
 
   // traits - slimeskull
   public static final ModifierId mithridatism = id("mithridatism");

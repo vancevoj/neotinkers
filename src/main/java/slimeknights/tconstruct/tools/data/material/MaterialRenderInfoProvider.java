@@ -30,6 +30,9 @@ public class MaterialRenderInfoProvider extends AbstractMaterialRenderInfoProvid
     buildRenderInfo(MaterialIds.vine).color(0x48B518).fallbacks("vine");
     buildRenderInfo(MaterialIds.ice).color(0x74ABFE);
     buildRenderInfo(MaterialIds.cactus).color(0x649832);
+    // tier 1 - ammo
+    buildRenderInfo(MaterialIds.paper);
+    redirect(MaterialIds.leaves, MaterialIds.vine);
     // tier 1 - wood
     buildRenderInfo(MaterialIds.wood).color(0x876627).fallbacks("wood", "stick", "primitive");
     buildRenderInfo(MaterialIds.crimson);
@@ -72,6 +75,11 @@ public class MaterialRenderInfoProvider extends AbstractMaterialRenderInfoProvid
     buildRenderInfo(MaterialIds.bloodshroom);
     buildRenderInfo(MaterialIds.enderbark);
     buildRenderInfo(MaterialIds.slimeskin);
+    // slimeball
+    redirect(MaterialIds.slimeball, MaterialIds.earthslime);
+    redirect(MaterialVariantId.create(MaterialIds.slimeball, "sky"),   MaterialIds.skyslime);
+    redirect(MaterialVariantId.create(MaterialIds.slimeball, "ichor"), MaterialIds.ichor);
+    redirect(MaterialVariantId.create(MaterialIds.slimeball, "ender"), MaterialIds.enderslime);
 
     // tier 3
     buildRenderInfo(MaterialIds.slimesteel).color(0x46ECE7).fallbacks("slime_metal", "metal");
@@ -134,6 +142,7 @@ public class MaterialRenderInfoProvider extends AbstractMaterialRenderInfoProvid
     buildRenderInfo(MaterialIds.enderPearl);
     buildRenderInfo(MaterialIds.quartz);
     buildRenderInfo(MaterialIds.ichor).luminosity(10);
+    buildRenderInfo(MaterialIds.magma).luminosity(5);
     buildRenderInfo(MaterialIds.glowstone).luminosity(15);
     buildRenderInfo(MaterialIds.dragonScale);
     buildRenderInfo(MaterialIds.endRod);
@@ -146,7 +155,6 @@ public class MaterialRenderInfoProvider extends AbstractMaterialRenderInfoProvid
     buildRenderInfo(MaterialIds.obsidian);
     // slimesuit
     buildRenderInfo(MaterialIds.blood);
-    buildRenderInfo(MaterialIds.magma);
     buildRenderInfo(MaterialIds.clay);
     buildRenderInfo(MaterialIds.honey);
     buildRenderInfo(MaterialIds.phantom);

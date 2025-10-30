@@ -40,7 +40,9 @@ public class MaterialDataProvider extends AbstractMaterialDataProvider {
     addMaterial(MaterialIds.cactus, 1, ORDER_BINDING, true);
     // tier 1 - ammo
     addMaterial(MaterialIds.wool,    1, ORDER_BINDING, true);
-    addMaterial(MaterialIds.feather, 1, ORDER_BINDING, true);
+    addMaterial(MaterialIds.feather, 1, ORDER_GENERAL, true); // want to ensure its first
+    addMaterial(MaterialIds.leaves,  1, ORDER_BINDING, true);
+    addMaterial(MaterialIds.paper,   1, ORDER_BINDING, true);
 
     // tier 2
     addMaterial(MaterialIds.iron,        2, ORDER_GENERAL, false);
@@ -66,6 +68,7 @@ public class MaterialDataProvider extends AbstractMaterialDataProvider {
     addMaterial(MaterialIds.blaze,      2, ORDER_REPAIR, true);
     addMaterial(MaterialIds.enderPearl, 2, ORDER_REPAIR, false);
     addMaterial(MaterialIds.glass,      2, ORDER_REPAIR, false);
+    addMaterial(MaterialIds.slimeball,  2, ORDER_REPAIR, true);
     // bloodbone reworked into venombone
     addRedirect(new MaterialId(TConstruct.MOD_ID, "bloodbone"), redirect(MaterialIds.venombone));
 
@@ -89,6 +92,7 @@ public class MaterialDataProvider extends AbstractMaterialDataProvider {
     addMaterial(MaterialIds.ichor,     3, ORDER_REPAIR, true);
     addMaterial(MaterialIds.glowstone, 3, ORDER_REPAIR, true);
     addMaterial(MaterialIds.magnetite, 3, ORDER_REPAIR, true);
+    addMaterial(MaterialIds.magma,     3, ORDER_REPAIR, true);
 
     // tier 4
     addMaterial(MaterialIds.queensSlime, 4, ORDER_GENERAL, false);
@@ -136,13 +140,12 @@ public class MaterialDataProvider extends AbstractMaterialDataProvider {
     addCompatMetalMaterial(MaterialIds.fiery,           4, ORDER_COMPAT + ORDER_END);
 
     // slimesuit - textures
-    addMaterial(MaterialIds.blood,      2, ORDER_REPAIR, true);
-    addMaterial(MaterialIds.magma,      2, ORDER_REPAIR, true);
-    addMaterial(MaterialIds.clay,       1, ORDER_REPAIR, true);
-    addMaterial(MaterialIds.honey,      1, ORDER_REPAIR, true);
+    addMaterial(MaterialIds.blood, 2, ORDER_REPAIR, true);
+    addMaterial(MaterialIds.clay,  1, ORDER_REPAIR, true);
+    addMaterial(MaterialIds.honey, 1, ORDER_REPAIR, true);
     //addMaterial(MaterialIds.venom,      3, ORDER_REPAIR, true);
     // slimesuit - repair
-    addMaterial(MaterialIds.phantom,    1, ORDER_REPAIR, true);
+    addMaterial(MaterialIds.phantom, 1, ORDER_REPAIR, true);
 
     // rose gold is most comparable to chain as you can use the extra slot for reinforced
     addRedirect(id("chain"), redirect(MaterialIds.roseGold));

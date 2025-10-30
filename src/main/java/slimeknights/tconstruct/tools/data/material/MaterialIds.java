@@ -28,6 +28,8 @@ public final class MaterialIds {
   // tier 1 - ammo
   public static final MaterialId wool = id("wool");
   public static final MaterialId feather = id("feather");
+  public static final MaterialId leaves = id("leaves");
+  public static final MaterialId paper = id("paper");
   // tier 2
   public static final MaterialId iron = id("iron");
   public static final MaterialId searedStone = id("seared_stone");
@@ -51,6 +53,8 @@ public final class MaterialIds {
   public static final MaterialId blaze = id("blaze");
   public static final MaterialId enderPearl = id("ender_pearl");
   public static final MaterialId glass = id("glass");
+  // tier 2 - ammo slimeballs
+  public static final MaterialId slimeball = id("slimeball");
   // tier 3
   public static final MaterialId slimesteel = id("slimesteel");
   public static final MaterialId amethystBronze = id("amethyst_bronze");
@@ -70,6 +74,7 @@ public final class MaterialIds {
   public static final MaterialId quartz = id("quartz");
   public static final MaterialId glowstone = id("glowstone");
   public static final MaterialId ichor = id("ichor");
+  public static final MaterialId magma = id("magma");
   // tier 4
   public static final MaterialId manyullyn = id("manyullyn");
   public static final MaterialId hepatizon = id("hepatizon");
@@ -125,7 +130,6 @@ public final class MaterialIds {
   public static final MaterialId phantom = id("phantom");
   // slimesuit - textures
   public static final MaterialId blood = id("blood");
-  public static final MaterialId magma = id("magma");
   public static final MaterialId clay = id("clay");
   public static final MaterialId honey = id("honey");
 

@@ -1,7 +1,6 @@
 package slimeknights.tconstruct.tools.modules;
 
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
-import slimeknights.mantle.data.registry.GenericLoaderRegistry.IHaveLoader;
 import slimeknights.tconstruct.library.json.LevelingValue;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
@@ -20,8 +19,12 @@ public record CraftCountModule(LevelingValue multiplier, ModifierCondition<ITool
   private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<CraftCountModule>defaultHooks(ModifierHooks.CRAFT_COUNT);
   public static final RecordLoadable<CraftCountModule> LOADER = RecordLoadable.create(LevelingValue.LOADABLE.requiredField("multiplier", CraftCountModule::multiplier), ModifierCondition.TOOL_FIELD, CraftCountModule::new);
 
+  public CraftCountModule(LevelingValue multiplier) {
+    this(multiplier, ModifierCondition.ANY_TOOL);
+  }
+
   @Override
-  public RecordLoadable<? extends IHaveLoader> getLoader() {
+  public RecordLoadable<CraftCountModule> getLoader() {
     return LOADER;
   }
 
