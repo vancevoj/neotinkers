@@ -695,7 +695,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
 
     // traits - tier 1
     buildModifier(ModifierIds.cultivated).addModule(RepairModule.builder().eachLevel(0.5f));
-    buildModifier(ModifierIds.economical).levelDisplay(ModifierLevelDisplay.NO_LEVELS).addModule(new CraftCountModule(LevelingInt.flat(2), ModifierCondition.ANY_TOOL));
+    buildModifier(ModifierIds.economical).levelDisplay(ModifierLevelDisplay.NO_LEVELS).addModule(new CraftCountModule(LevelingValue.flat(2), ModifierCondition.ANY_TOOL));
     buildModifier(ModifierIds.stringy).addModule(MaterialRepairModule.material(MaterialIds.string).constant(140));
     buildModifier(ModifierIds.woodwind) // TODO: can we make it play a bamboo sound?
       .addModule(StatBoostModule.add(ToolStats.ACCURACY).eachLevel(0.25f))

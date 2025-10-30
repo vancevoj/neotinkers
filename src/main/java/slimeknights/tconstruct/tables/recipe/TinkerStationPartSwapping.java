@@ -99,13 +99,14 @@ public class TinkerStationPartSwapping implements ITinkerStationRecipe {
 
   /** Gets the max stack size for the given tool, calling the modifier hook */
   private static int maxStackSize(IToolStackView tool, int count) {
+    float newCount = count;
     for (ModifierEntry entry : tool.getModifiers()) {
-      count = entry.getHook(ModifierHooks.CRAFT_COUNT).modifyCraftCount(tool, entry, count);
-      if (count <= 0) {
+      newCount = entry.getHook(ModifierHooks.CRAFT_COUNT).modifyCraftCount(tool, entry, newCount);
+      if (newCount <= 0) {
         return 0;
       }
     }
-    return count;
+    return (int) newCount;
   }
 
   /** Gets the max stack size for the given tool, calling the modifier hook */

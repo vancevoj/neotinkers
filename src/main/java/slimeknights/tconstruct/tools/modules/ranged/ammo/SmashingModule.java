@@ -129,8 +129,8 @@ public enum SmashingModule implements ModifierModule, FluidModifierHook, Project
   }
 
   /** Gets the amount to store in NBT to ensure no funny business with part swapping causes dupes */
-  private static int getValidationAmount(IToolStackView tool, ModifierEntry modifier) {
-    int level = modifier.getLevel();
+  private static float getValidationAmount(IToolStackView tool, ModifierEntry modifier) {
+    float level = modifier.getEffectiveLevel();
     for (ModifierEntry entry : tool.getModifiers()) {
       level = entry.getHook(ModifierHooks.CRAFT_COUNT).modifyCraftCount(tool, modifier, level);
     }
@@ -159,7 +159,7 @@ public enum SmashingModule implements ModifierModule, FluidModifierHook, Project
       // we don't actually store the amount, its up to the modifier to determine that
       data.putString(KEY_FLUID, Loadables.FLUID.getString(resource.getFluid()));
       // we want to store a fixed size, but its possible part swapping changes our capacity, so keep track of our capacity at the time of storing
-      data.putInt(KEY_VALIDATE, getValidationAmount(tool, modifier));
+      data.putFloat(KEY_VALIDATE, getValidationAmount(tool, modifier));
       CompoundTag tag = resource.getTag();
       if (tag != null) {
         data.put(KEY_FLUID_TAG, tag.copy());
@@ -267,12 +267,12 @@ public enum SmashingModule implements ModifierModule, FluidModifierHook, Project
     ModDataNBT data = tool.getPersistentData();
     if (data.contains(KEY_FLUID, Tag.TAG_STRING)) {
       // if our new level is larger, error to prevent a fluid dupe
-      int level = getValidationAmount(tool, modifier);
+      float level = getValidationAmount(tool, modifier);
       if (data.getInt(KEY_VALIDATE) < level) {
         return EMPTY_TO_SWAP;
       }
       // delete some fluid to match new level
-      data.putInt(KEY_VALIDATE, level);
+      data.putFloat(KEY_VALIDATE, level);
     }
     return null;
   }
