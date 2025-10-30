@@ -116,7 +116,10 @@ public class TinkerStationPartSwapping implements ITinkerStationRecipe {
 
   @Override
   public int shrinkToolSlotBy(LazyToolStack result, ITinkerStationContainer inv) {
-    return maxStackSize(inv.getTinkerable(), result.getSize());
+    // if the output is shrinking, we want to ensure we take the minumum amount needed for that output
+    // for example, if its reducing by 50%, just consuming the full amount might consume 3 arrows to produce 1 (instead of 2 to produce 1)
+    int outputMax = maxStackSize(result.getTool());
+    return maxStackSize(inv.getTinkerable(), result.getSize() * maxStackSize / outputMax);
   }
 
   @Override
