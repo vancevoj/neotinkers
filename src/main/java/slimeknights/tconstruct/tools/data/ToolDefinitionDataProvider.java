@@ -102,7 +102,7 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
     DefaultMaterialsModule defaultFourParts = DefaultMaterialsModule.builder().material(tier1Material, tier1Material, tier1Material, tier1Material).build();
     DefaultMaterialsModule ancientTwoParts = DefaultMaterialsModule.builder().material(anyMaterial, anyMaterial).build();
     DefaultMaterialsModule ancientThreeParts = DefaultMaterialsModule.builder().material(anyMaterial, anyMaterial, anyMaterial).build();
-    DefaultMaterialsModule ammoParts = DefaultMaterialsModule.builder().material(nonHiddenMaterial).build();
+    DefaultMaterialsModule ammoParts = DefaultMaterialsModule.builder().material(nonHiddenMaterial, nonHiddenMaterial).build();
 
     // pickaxes
     define(ToolDefinitions.PICKAXE)
