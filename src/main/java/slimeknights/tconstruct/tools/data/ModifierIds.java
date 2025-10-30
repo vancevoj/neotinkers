@@ -80,7 +80,6 @@ public class ModifierIds {
 
   // ranged
   public static final ModifierId power = id("power");
-  public static final ModifierId underbowed = id("underbowed");
   public static final ModifierId punch = id("punch");
   public static final ModifierId drawback = id("drawback");
   // TODO 1.20 - change ID to arrow_pierce

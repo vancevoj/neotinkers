@@ -180,7 +180,7 @@ public class ModifierTagProvider extends AbstractModifierTagProvider {
     this.tag(GENERAL_SLOTLESS).add(
       TinkerModifiers.overslime.getId(), ModifierIds.worldbound,
       ModifierIds.offhanded, ModifierIds.workbench,
-      ModifierIds.blindshot, ModifierIds.underbowed, ModifierIds.barebow);
+      ModifierIds.blindshot, ModifierIds.barebow);
     this.tag(BONUS_SLOTLESS).add(
       ModifierIds.draconic, ModifierIds.rebalanced,
       ModifierIds.harmonious, ModifierIds.recapitated, ModifierIds.forecast, ModifierIds.writable)
