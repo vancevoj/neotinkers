@@ -688,6 +688,10 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .levelDisplay(ModifierLevelDisplay.NO_LEVELS)
       .addModule(new ToolActionsModule(TinkerToolActions.ITEM_HOOK))
       .addModule(ModifierRequirementsModule.builder().requireModifier(ModifierIds.fishing, 1).modifierKey(ModifierIds.collecting).build());
+    buildModifier(ModifierIds.drillAttack)
+      .levelDisplay(ModifierLevelDisplay.NO_LEVELS)
+      .addModule(new ToolActionsModule(TinkerToolActions.DRILL_ATTACK))
+      .addModule(ModifierRequirementsModule.builder().requireModifier(TinkerTags.Modifiers.DRILL_ATTACKS, 1).modifierKey(ModifierIds.drillAttack).build());
 
     // traits
     buildModifier(ModifierIds.smelting)

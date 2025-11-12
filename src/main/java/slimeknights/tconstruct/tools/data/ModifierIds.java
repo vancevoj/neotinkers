@@ -45,6 +45,7 @@ public class ModifierIds {
   public static final ModifierId fins = id("fins");
   public static final ModifierId finsAmmo = id("fins_ammo");
   public static final ModifierId channeling = id("channeling");
+  public static final ModifierId drillAttack = id("drill_attack");
   // general abilities
   public static final ModifierId reach = id("reach");
   public static final ModifierId glowing = id("glowing");

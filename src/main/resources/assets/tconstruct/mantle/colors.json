@@ -49,6 +49,7 @@
     "silky_shears":     "#A64F3F",
     "silky_aoe_shears": "#A64F3F",
     "harvest":          "#CDB159",
+    "drill_attack":     "#A08D71",
 
     "__ranged_abilities__": null,
     "bulk_quiver":   "#C65C35",
@@ -170,8 +171,8 @@
     "knockback":     "#BC9862",
     "looting":       "#503572",
     "padded":        "#ffffff",
-    "pierce":        "#D1D37A",
-    "piercing":      "#D1D37A",
+    "pierce":        "#A08D71",
+    "piercing":      "#A08D71",
     "severing":      "#BB8972",
     "sharpness":     "#EAE5DE",
     "smite":         "#CC9720",

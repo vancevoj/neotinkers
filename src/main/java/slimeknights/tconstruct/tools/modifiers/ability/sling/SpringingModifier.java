@@ -16,6 +16,7 @@ import slimeknights.tconstruct.library.tools.helper.ModifierUtil;
 import slimeknights.tconstruct.library.tools.helper.ToolDamageUtil;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.utils.SlimeBounceHandler;
+import slimeknights.tconstruct.tools.TinkerToolActions;
 
 /** Add velocity in the direction you face */
 public class SpringingModifier extends SlingModifier {
@@ -56,6 +57,10 @@ public class SpringingModifier extends SlingModifier {
           player.causeFoodExhaustion(0.2F);
           player.getCooldowns().addCooldown(tool.getItem(), 3);
           ToolDamageUtil.damageAnimated(tool, 1, entity);
+        }
+        // apply drill attack if the modifier is present
+        if (ModifierUtil.canPerformAction(tool, TinkerToolActions.DRILL_ATTACK)) {
+          player.startAutoSpinAttack(20);
         }
         return;
       }

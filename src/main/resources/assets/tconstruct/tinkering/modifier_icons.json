@@ -40,6 +40,7 @@
   "tconstruct:lure":       "tconstruct:gui/modifiers/ranged/lure",
   "tconstruct:grapple":    "tconstruct:gui/modifiers/ranged/grapple",
   "tconstruct:collecting": ["minecraft:item/hopper", "tconstruct:gui/modifiers/book"],
+  "tconstruct:drill_attack": "tconstruct:gui/modifiers/held/drill_attack",
 
   "tconstruct:throwing": ["minecraft:item/trident", "tconstruct:gui/modifiers/book"],
   "tconstruct:returning": ["tconstruct:gui/modifiers/ranged/returning", "tconstruct:gui/modifiers/book"],

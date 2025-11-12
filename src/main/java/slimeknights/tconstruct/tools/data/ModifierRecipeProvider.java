@@ -698,6 +698,16 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
       .setMaxLevel(1).checkTraitLevel()
       .saveSalvage(consumer, prefix(ModifierIds.grapple, abilitySalvage))
       .save(consumer, prefix(ModifierIds.grapple, abilityFolder));
+    ModifierRecipeBuilder.modifier(ModifierIds.drillAttack)
+      // allow on anything that might get springing, flinging, or grapple
+      .setTools(ingredientFromTags(TinkerTags.Items.INTERACTABLE_CHARGE, TinkerTags.Items.FISHING_RODS))
+      .addInput(TinkerMaterials.blazingBone)
+      .addInput(Items.POINTED_DRIPSTONE)
+      .addInput(TinkerMaterials.blazingBone)
+      .setSlots(SlotType.ABILITY, 1)
+      .setMaxLevel(1).checkTraitLevel()
+      .saveSalvage(consumer, prefix(ModifierIds.drillAttack, abilitySalvage))
+      .save(consumer, prefix(ModifierIds.drillAttack, abilityFolder));
     ModifierRecipeBuilder.modifier(ModifierIds.collecting)
       .setTools(TinkerTags.Items.FISHING_RODS)
       .addInput(Blocks.HOPPER)

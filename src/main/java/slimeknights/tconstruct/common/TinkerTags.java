@@ -687,6 +687,8 @@ public class TinkerTags {
     public static final TagKey<Modifier> CHARGE_EMPTY_BOW_WITH_DRAWTIME = local("charge_empty_bow/with_drawtime");
     /** Modifiers in this tag will allow charging a bow that has no ammo, but won't charge the bow */
     public static final TagKey<Modifier> CHARGE_EMPTY_BOW_WITHOUT_DRAWTIME = local("charge_empty_bow/without_drawtime");
+    /** Movement modifiers that can activate the drill attack */
+    public static final TagKey<Modifier> DRILL_ATTACKS = local("drill_attacks");
 
     // book tags - these are used to determine pages to load in resource packs
     // upgrades

@@ -2780,6 +2780,11 @@
   "modifier.tconstruct.warping.flavor": "Ender transporting",
   "modifier.tconstruct.warping.description": "Charge up, aim at a wall, and warp to the other side!",
 
+  "modifier.tconstruct.drill_attack": "Drill Attack",
+  "modifier.tconstruct.drill_attack.flavor": "Dizzying!",
+  "modifier.tconstruct.drill_attack.description": "Melees any hit enemies during your tool's movement.",
+  "modifier.tconstruct.drill_attack.requirements": "Requires springing, flinging, or grapple.",
+
   "modifier.tconstruct.throwing": "Throwing",
   "modifier.tconstruct.throwing.flavor": "Cooler than tridents!",
   "modifier.tconstruct.throwing.description": "Allows throwing the tool to do melee damage at a distance.",
