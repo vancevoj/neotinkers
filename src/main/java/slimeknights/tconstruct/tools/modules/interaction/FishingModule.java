@@ -125,8 +125,10 @@ public enum FishingModule implements ModifierModule, GeneralInteractionModifierH
         player.gameEvent(GameEvent.ITEM_INTERACT_START);
       }
 
-
-      return InteractionResult.sidedSuccess(level.isClientSide);
+      if (level.isClientSide) {
+        OffhandCooldownTracker.swingHand(player, hand, false);
+      }
+      return InteractionResult.CONSUME;
     }
     return InteractionResult.PASS;
   }
