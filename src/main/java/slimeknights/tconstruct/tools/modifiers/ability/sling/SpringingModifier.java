@@ -37,7 +37,7 @@ public class SpringingModifier extends SlingModifier {
 
       float f = getForce(tool, modifier, player, timeLeft, true) * 1.05f;
       if (f > 0) {
-        Vec3 look = player.getLookAngle().add(0, 1, 0).normalize();
+        Vec3 look = player.getLookAngle().add(0, Math.max(0, 0.5 - f * 0.1), 0).normalize();
         float inaccuracy = ModifierUtil.getInaccuracy(tool, player) * 0.0075f;
         RandomSource random = player.getRandom();
         f = scaleKnockback(player, f);
