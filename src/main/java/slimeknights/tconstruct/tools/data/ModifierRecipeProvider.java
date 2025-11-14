@@ -1653,6 +1653,10 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
       .addInput(TinkerWorld.enderGeode.getBlock())
       .disallowCrystal()
       .save(consumer, wrap(ModifierIds.rebalanced, slotlessFolder, "_traits"));
+    ModifierRecipeBuilder.modifier(ModifierIds.redirected)
+      .setTools(ToolHookIngredient.of(TinkerTags.Items.AMMO, ToolHooks.REBALANCED_TRAIT))
+      .addInput(Items.DRAGON_BREATH)
+      .save(consumer, prefix(ModifierIds.redirected, slotlessFolder));
 
     // tipping arrows and shurikens
     PotionCastingRecipeBuilder.tableTipping(ModifierIds.tipped)

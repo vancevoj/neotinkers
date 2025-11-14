@@ -243,6 +243,9 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .addModule(new SwappableSlotModule.BonusSlot(null, SlotType.ABILITY, SlotType.UPGRADE, -1, ModifierCondition.ANY_CONTEXT.with(ancientTool.inverted())))
       .addModule(new SwappableSlotModule.BonusSlot(null, SlotType.ABILITY, SlotType.ABILITY, -1, ModifierCondition.ANY_CONTEXT.with(ancientTool)))
       .addModule(new SwappableToolTraitsModule(null, "traits", ToolHooks.REBALANCED_TRAIT));
+    buildModifier(ModifierIds.redirected)
+      .tooltipDisplay(TooltipDisplay.TINKER_STATION).levelDisplay(ModifierLevelDisplay.NO_LEVELS)
+      .addModule(new SwappableToolTraitsModule(null, "", ToolHooks.REBALANCED_TRAIT));
     // resurrected replaced with forecast
     buildModifier(ModifierIds.resurrected)
       .tooltipDisplay(TooltipDisplay.TINKER_STATION).levelDisplay(ModifierLevelDisplay.SINGLE_LEVEL).addModule(UPGRADE)

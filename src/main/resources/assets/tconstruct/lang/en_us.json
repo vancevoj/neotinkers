@@ -2908,6 +2908,9 @@
   "modifier.tconstruct.rebalanced.souls": "Soul",
   "modifier.tconstruct.rebalanced.defense": "Defense",
   "modifier.tconstruct.rebalanced.traits": "Trait",
+  "modifier.tconstruct.redirected": "Redirected",
+  "modifier.tconstruct.redirected.flavor": "Sent the arrow back",
+  "modifier.tconstruct.redirected.description": "Grants the projectile an extra copy of its head trait.",
 
   "__comment": "Three more +1 upgrade modifiers for modpacks",
   "modifier.tconstruct.red_extra_upgrade": "Red Extra Upgrade",

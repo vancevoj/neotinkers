@@ -158,6 +158,7 @@
   "tconstruct:forecast":    ["tconstruct:gui/modifiers/forecast", "tconstruct:gui/modifiers/plus"],
   "tconstruct:embossed":    ["tconstruct:gui/modifiers/embossed", "tconstruct:gui/modifiers/plus"],
   "tconstruct:rebalanced":  ["minecraft:item/end_crystal", "tconstruct:gui/modifiers/plus"],
+  "tconstruct:redirected":  ["minecraft:item/dragon_breath", "tconstruct:gui/modifiers/plus"],
   "tconstruct:draconic":    ["tconstruct:gui/modifiers/draconic", "tconstruct:gui/modifiers/plus"],
 
   "tconstruct:golden":        ["minecraft:item/golden_chestplate", "tconstruct:gui/modifiers/book"],

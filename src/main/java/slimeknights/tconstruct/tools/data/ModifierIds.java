@@ -18,6 +18,7 @@ public class ModifierIds {
   public static final ModifierId resurrected = id("resurrected");
   public static final ModifierId embossed    = id("embossed");
   public static final ModifierId rebalanced  = id("rebalanced");
+  public static final ModifierId redirected  = id("redirected");
   public static final ModifierId gilded      = id("gilded");
   public static final ModifierId draconic    = id("draconic");
 
