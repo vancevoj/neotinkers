@@ -738,6 +738,7 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
       .addInput(Items.ENDER_PEARL)
       .addLevel(SlotType.ABILITY, 1, 1)
       .addLevelRange(SlotType.UPGRADE, 1, 2, 4)
+      .checkTraitLevel()
       .saveSalvage(consumer, prefix(ModifierIds.returning, abilitySalvage))
       .save(consumer, prefix(ModifierIds.returning, abilityFolder));
 
