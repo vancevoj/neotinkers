@@ -217,7 +217,7 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
       .save(consumer, prefix(ModifierIds.soulbound, upgradeFolder));
     ModifierRecipeBuilder.modifier(ModifierIds.soulbound)
       .setTools(TinkerTags.Items.SINGLE_USE)
-      .addInput(Items.DRAGON_BREATH)
+      .addInput(Items.SCULK_VEIN)
       .setMaxLevel(1)
       .save(consumer, wrap(ModifierIds.soulbound, slotlessFolder, "_ammo"));
     ModifierRecipeBuilder.modifier(ModifierIds.netherite)
