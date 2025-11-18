@@ -12,6 +12,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
@@ -47,13 +48,18 @@ public class TinkerTags {
     Materials.init();
     DamageTypes.init();
     MenuTypes.init();
+    Potions.init();
     MinecraftForge.EVENT_BUS.addListener(EventPriority.NORMAL, false, TagsUpdatedEvent.class, event -> tagsLoaded = true);
   }
 
+  /** Resource location of the hidden from recipe tags used in JEI. */
+  @SuppressWarnings("removal")
+  public static final ResourceLocation HIDDEN_FROM_RECIPE_VIEWERS = new ResourceLocation("c", "hidden_from_recipe_viewers");
+
   /** Creates a tag that hides things from JEI */
-  @SuppressWarnings({"SameParameterValue", "removal"}) // there really is no benefit to migrating to new constructors early; just lose Neo compat
+  @SuppressWarnings("SameParameterValue") // there really is no benefit to migrating to new constructors early; just lose Neo compat
   private static <R> TagKey<R> hiddenFromRecipeViewers(ResourceKey<? extends Registry<R>> registry) {
-    return TagKey.create(registry, new ResourceLocation("c", "hidden_from_recipe_viewers"));
+    return TagKey.create(registry, HIDDEN_FROM_RECIPE_VIEWERS);
   }
 
   public static class Blocks {
@@ -800,5 +806,12 @@ public class TinkerTags {
 
     /** Any menus that support being closed in favor of the tool inventory */
     public static final TagKey<MenuType<?>> TOOL_INVENTORY_REPLACEMENTS = TagKey.create(Registries.MENU, getResource("tool_inventory_replacements"));
+  }
+
+  public static class Potions {
+    private static void init() {}
+
+    /** Any potion variants in this tag will be hidden from the variants of the potion fluid shown in JEI. */
+    public static final TagKey<Potion> HIDDEN_FLUID = TagKey.create(Registries.POTION, getResource("hide_in_fluid"));
   }
 }
