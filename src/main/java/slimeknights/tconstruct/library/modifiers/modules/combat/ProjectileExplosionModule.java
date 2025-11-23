@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -35,13 +34,13 @@ import slimeknights.tconstruct.gadgets.entity.EFLNExplosion;
 import slimeknights.tconstruct.library.json.LevelingValue;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
-import slimeknights.tconstruct.library.modifiers.entity.ProjectileWithPower;
 import slimeknights.tconstruct.library.modifiers.fluid.entity.DamageFluidEffect.DamageTypePair;
 import slimeknights.tconstruct.library.modifiers.hook.ranged.ProjectileFuseModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.ranged.ProjectileHitModifierHook;
 import slimeknights.tconstruct.library.modifiers.modules.ModifierModule;
 import slimeknights.tconstruct.library.module.HookProvider;
 import slimeknights.tconstruct.library.module.ModuleHook;
+import slimeknights.tconstruct.library.tools.helper.ModifierUtil;
 import slimeknights.tconstruct.library.tools.helper.ToolDamageUtil;
 import slimeknights.tconstruct.library.tools.nbt.ModDataNBT;
 import slimeknights.tconstruct.library.tools.nbt.ModifierNBT;
@@ -99,17 +98,7 @@ public record ProjectileExplosionModule(LevelingValue radius, LevelingValue knoc
     if (radius > 0.5f && !projectile.getType().is(TinkerTags.EntityTypes.REUSABLE_AMMO)) {
       Level world = projectile.level();
       if (!world.isClientSide) {
-        // locate power of the projectile
-        float power = 0;
-        if (projectile instanceof AbstractArrow arrow) {
-          power = (float) arrow.getBaseDamage();
-        } else if (projectile instanceof ProjectileWithPower withPower) {
-          power = withPower.getPower();
-        }
-        // arrows and fishing bobbers use the velocity to boost damage
-        if (projectile.getType().is(TinkerTags.EntityTypes.VELOCITY_SCALED_AMMO)) {
-          power = Mth.ceil(Mth.clamp(power * projectile.getDeltaMovement().length(), 0, Integer.MAX_VALUE));
-        }
+        float power = ModifierUtil.getPower(projectile);
         // figure out who to blame for the damage
         Entity cause = projectile.getOwner();
         DamageTypePair damageType = (cause != null ? TinkerDamageTypes.MOB_EXPLOSION : TinkerDamageTypes.EXPLOSION);

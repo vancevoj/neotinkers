@@ -8,7 +8,6 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.phys.EntityHitResult;
@@ -26,6 +25,7 @@ import slimeknights.tconstruct.library.modifiers.hook.ranged.ProjectileHitModifi
 import slimeknights.tconstruct.library.module.ModuleHookMap.Builder;
 import slimeknights.tconstruct.library.tools.context.EquipmentContext;
 import slimeknights.tconstruct.library.tools.context.ToolAttackContext;
+import slimeknights.tconstruct.library.tools.helper.ModifierUtil;
 import slimeknights.tconstruct.library.tools.helper.ToolDamageUtil;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.ModDataNBT;
@@ -63,10 +63,11 @@ public class NecroticModifier extends Modifier implements ProjectileHitModifierH
     if (target != null && attacker != null) {
       float percent = 0.05f * modifier.getEffectiveLevel();
       if (percent > 0) {
-        if (projectile instanceof AbstractArrow arrow && arrow.isCritArrow()) {
-          // we don't actually know how much damage will be dealt, so just guess by using the standard formula
-          // to prevent healing too much, limit by the target's health. Will let you life steal ignoring armor, but eh, only so much we can do efficiently
-          attacker.heal((float)(percent * Math.min(target.getHealth(), arrow.getBaseDamage() * arrow.getDeltaMovement().length())));
+        // we don't actually know how much damage will be dealt, so just grab the projectile power, scaled by velocity if needed
+        // to prevent healing too much, limit by the target's health. Will let you life steal ignoring armor, but eh, only so much we can do efficiently
+        float power = ModifierUtil.getPower(projectile);
+        if (power > 0) {
+          attacker.heal(percent * Math.min(target.getHealth(), power));
           attacker.level().playSound(null, attacker.getX(), attacker.getY(), attacker.getZ(), Sounds.NECROTIC_HEAL.getSound(), SoundSource.PLAYERS, 1.0f, 1.0f);
         }
       }
