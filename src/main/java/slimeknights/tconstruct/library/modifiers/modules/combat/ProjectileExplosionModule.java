@@ -6,6 +6,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
@@ -27,8 +28,10 @@ import slimeknights.mantle.data.loadable.primitive.EnumLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.data.registry.GenericLoaderRegistry.IHaveLoader;
 import slimeknights.mantle.util.CombatHelper;
+import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.TinkerDamageTypes;
 import slimeknights.tconstruct.common.TinkerTags;
+import slimeknights.tconstruct.gadgets.entity.EFLNExplosion;
 import slimeknights.tconstruct.library.json.LevelingValue;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
@@ -65,6 +68,8 @@ public record ProjectileExplosionModule(LevelingValue radius, LevelingValue knoc
     BooleanLoadable.INSTANCE.defaultField("place_fire", false, ProjectileExplosionModule::placeFire),
     new EnumLoadable<>(Explosion.BlockInteraction.class).requiredField("block_interaction", ProjectileExplosionModule::blockInteraction),
     ProjectileExplosionModule::new);
+  /** Datakey for EFLN style explosions, works underwater */
+  public static final ResourceLocation EFLN = TConstruct.getResource("efln");
 
   /** Use the builder via {@link #radius(float, float)}, directly calling the constructor is subject to break when we add new features. */
   @Internal
@@ -86,7 +91,7 @@ public record ProjectileExplosionModule(LevelingValue radius, LevelingValue knoc
   }
 
   /** Triggers the explosion at the given location */
-  private boolean explode(ModifierEntry modifier, Projectile projectile, Vec3 location) {
+  private boolean explode(ModifierEntry modifier, Projectile projectile, ModDataNBT persistentData, Vec3 location) {
     float level = modifier.getEffectiveLevel();
     float radius = this.radius.computeForLevel(level);
     // limit to non-reusable ammo, mostly ensures ballisa doesn't explode as the damage will be wrong
@@ -133,14 +138,24 @@ public record ProjectileExplosionModule(LevelingValue radius, LevelingValue knoc
         // discard projectile so it doesn't explode again
         projectile.discard();
 
-
+        // if marked, use EFLN style explosion
+        // controlled by persistent data so another modifier can set this, we use fins
+        CustomExplosion explosion;
+        if (persistentData.getBoolean(EFLN)) {
+          explosion = new EFLNExplosion(
+            world, location, radius + 0.5f, projectile,
+            power, damageSource, knockback.computeForScale(level),
+            placeFire, blockInteraction
+          );
+        } else {
+          explosion = new CustomExplosion(
+            world, location, radius, projectile, null,
+            power, damageSource, knockback.computeForScale(level), null,
+            placeFire, blockInteraction
+          );
+        }
         // cause the explosion
-        new CustomExplosion(
-          // source is projectile, if null set no source to prevent the user from being immune to the explosion
-          world, location, radius, projectile, null,
-          power, damageSource, knockback.computeForScale(level), null,
-          placeFire, blockInteraction
-        ).handleServer();
+       explosion.handleServer();
       }
       return true;
     }
@@ -149,17 +164,17 @@ public record ProjectileExplosionModule(LevelingValue radius, LevelingValue knoc
 
   @Override
   public boolean onProjectileHitsBlock(ModifierNBT modifiers, ModDataNBT persistentData, ModifierEntry modifier, Projectile projectile, BlockHitResult hit, @Nullable LivingEntity owner) {
-    return explode(modifier, projectile, hit.getLocation());
+    return explode(modifier, projectile, persistentData, hit.getLocation());
   }
 
   @Override
   public boolean onProjectileHitEntity(ModifierNBT modifiers, ModDataNBT persistentData, ModifierEntry modifier, Projectile projectile, EntityHitResult hit, @Nullable LivingEntity attacker, @Nullable LivingEntity target, boolean notBlocked) {
-    return explode(modifier, projectile, hit.getLocation());
+    return explode(modifier, projectile, persistentData, hit.getLocation());
   }
 
   @Override
   public void onProjectileFuseFinish(ModifierNBT modifiers, ModDataNBT persistentData, ModifierEntry modifier, ItemStack ammo, Projectile projectile, @Nullable AbstractArrow arrow) {
-    explode(modifier, projectile, projectile.position());
+    explode(modifier, projectile, persistentData, projectile.position());
   }
 
   @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
