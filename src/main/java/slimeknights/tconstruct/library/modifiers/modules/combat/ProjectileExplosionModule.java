@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -19,6 +20,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.ToolActions;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import slimeknights.mantle.data.loadable.primitive.BooleanLoadable;
 import slimeknights.mantle.data.loadable.primitive.EnumLoadable;
@@ -37,10 +39,13 @@ import slimeknights.tconstruct.library.modifiers.hook.ranged.ProjectileHitModifi
 import slimeknights.tconstruct.library.modifiers.modules.ModifierModule;
 import slimeknights.tconstruct.library.module.HookProvider;
 import slimeknights.tconstruct.library.module.ModuleHook;
+import slimeknights.tconstruct.library.tools.helper.ToolDamageUtil;
 import slimeknights.tconstruct.library.tools.nbt.ModDataNBT;
 import slimeknights.tconstruct.library.tools.nbt.ModifierNBT;
+import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
 import slimeknights.tconstruct.library.utils.CustomExplosion;
+import slimeknights.tconstruct.tools.TinkerTools;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -104,6 +109,26 @@ public record ProjectileExplosionModule(LevelingValue radius, LevelingValue knoc
         Entity cause = projectile.getOwner();
         DamageTypePair damageType = (cause != null ? TinkerDamageTypes.MOB_EXPLOSION : TinkerDamageTypes.EXPLOSION);
         DamageSource damageSource = CombatHelper.damageSource(damageType.ranged(), projectile, cause);
+
+        // damage fishing rods, since they are supposed to damage on retrieve
+        // if you need this for your custom projectile, let us know and we can dehardcode it
+        damageRod:
+        if (projectile.getType() == TinkerTools.fishingHook.get() && projectile.getOwner() instanceof LivingEntity living) {
+          ItemStack stack = living.getMainHandItem();
+          InteractionHand hand = InteractionHand.MAIN_HAND;
+          // must be able to cast
+          if (!stack.canPerformAction(ToolActions.FISHING_ROD_CAST)) {
+            stack = living.getOffhandItem();
+            if (!stack.canPerformAction(ToolActions.FISHING_ROD_CAST)) {
+              break damageRod;
+            }
+            hand = InteractionHand.OFF_HAND;
+          }
+          // must be modifiable
+          if (stack.is(TinkerTags.Items.MODIFIABLE)) {
+            ToolDamageUtil.damageAnimated(ToolStack.from(stack), 2 + 3 * modifier.getLevel(), living, hand);
+          }
+        }
 
         // discard projectile so it doesn't explode again
         projectile.discard();
