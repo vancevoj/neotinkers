@@ -53,6 +53,7 @@ public final class MaterialIds {
   public static final MaterialId blaze = id("blaze");
   public static final MaterialId enderPearl = id("ender_pearl");
   public static final MaterialId glass = id("glass");
+  public static final MaterialId gunpowder = id("gunpowder");
   // tier 2 - ammo slimeballs
   public static final MaterialId slimeball = id("slimeball");
   // tier 3

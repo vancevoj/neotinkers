@@ -216,6 +216,7 @@ public class ModifierIds {
   public static final ModifierId rebound = id("rebound");
   public static final ModifierId ductile = id("ductile");
   public static final ModifierId attractive = id("attractive");
+  public static final ModifierId explosive = id("explosive");
   // traits - tier 3 compat
   public static final ModifierId maintained = id("maintained");
   public static final ModifierId temperate = id("temperate");

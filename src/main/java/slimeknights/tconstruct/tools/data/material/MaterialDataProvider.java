@@ -69,6 +69,7 @@ public class MaterialDataProvider extends AbstractMaterialDataProvider {
     addMaterial(MaterialIds.enderPearl, 2, ORDER_REPAIR, false);
     addMaterial(MaterialIds.glass,      2, ORDER_REPAIR, false);
     addMaterial(MaterialIds.slimeball,  2, ORDER_REPAIR, true);
+    addMaterial(MaterialIds.gunpowder,  2, ORDER_REPAIR, true);
     // bloodbone reworked into venombone
     addRedirect(new MaterialId(TConstruct.MOD_ID, "bloodbone"), redirect(MaterialIds.venombone));
 

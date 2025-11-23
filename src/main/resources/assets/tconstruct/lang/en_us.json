@@ -1955,6 +1955,10 @@
   "material.tconstruct.prismarine.flavor": "Weapon of the sea",
   "material.tconstruct.prismarine.ammo": "Lets the ammo move freely underwater and grants +1 projectile damage per level to underwater targets. Fishing rods instead gain a level of lure.",
 
+  "material.tconstruct.gunpowder": "Gunpowder",
+  "material.tconstruct.gunpowder.flavor": "Explosive!",
+  "material.tconstruct.gunpowder.ammo": "Causes the arrow to explode at a radius of 1 plus 1 per level. Explosion damage is based on projectile power.",
+
   "material.tconstruct.earthslime": "Earthslime",
   "material.tconstruct.earthslime.flavor": "To me!",
   "material.tconstruct.earthslime.ammo": "Causes the target to be knocked back in the opposite direction.",
@@ -2740,6 +2744,9 @@
   "modifier.tconstruct.spectral": "Spectral",
   "modifier.tconstruct.spectral.flavor": "Shine brighter!",
   "modifier.tconstruct.spectral.description": "Causes the target of the projectile to glow, be it a block or entity",
+  "modifier.tconstruct.explosive": "Explosive",
+  "modifier.tconstruct.explosive.flavor": "Bomb!",
+  "modifier.tconstruct.explosive.description": "Causes the arrow to explode upon hitting the target",
   "modifier.tconstruct.exchanging": "Exchanging",
   "modifier.tconstruct.exchanging.flavor": "The Ole Switcheroo!",
   "modifier.tconstruct.exchanging.description": "Blocks broken by this tool are replaced by the block in the offhand if possible",

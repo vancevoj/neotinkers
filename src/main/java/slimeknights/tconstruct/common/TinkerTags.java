@@ -25,6 +25,7 @@ import slimeknights.tconstruct.library.materials.definition.IMaterial;
 import slimeknights.tconstruct.library.materials.definition.MaterialManager;
 import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierManager;
+import slimeknights.tconstruct.library.modifiers.modules.combat.ProjectileExplosionModule;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
 
 import static slimeknights.mantle.Mantle.commonResource;
@@ -625,6 +626,8 @@ public class TinkerTags {
     public static final TagKey<EntityType<?>> REFLECTING_BLACKLIST = common("reflecting/blacklist");
     /** Projectiles with this tag cannot be reflected */
     public static final TagKey<EntityType<?>> REFLECTING_PRESERVE_OWNER = common("reflecting/preserve_owner");
+    /** Projectiles with this tag have their power scaled by velocity. Used by {@link ProjectileExplosionModule}. */
+    public static final TagKey<EntityType<?>> VELOCITY_SCALED_AMMO = common("velocity_scaled_ammo");
 
     private static TagKey<EntityType<?>> local(String name) {
       return TagKey.create(Registries.ENTITY_TYPE, getResource(name));

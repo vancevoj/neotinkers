@@ -144,6 +144,7 @@ public class MaterialRenderInfoProvider extends AbstractMaterialRenderInfoProvid
     buildRenderInfo(MaterialIds.ichor).luminosity(10);
     buildRenderInfo(MaterialIds.magma).luminosity(5);
     buildRenderInfo(MaterialIds.glowstone).luminosity(15);
+    buildRenderInfo(MaterialIds.gunpowder);
     buildRenderInfo(MaterialIds.dragonScale);
     buildRenderInfo(MaterialIds.endRod);
     redirect(MaterialIds.magnetite, MaterialIds.steel);
