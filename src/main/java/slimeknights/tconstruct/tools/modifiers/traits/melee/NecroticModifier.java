@@ -45,7 +45,7 @@ public class NecroticModifier extends Modifier implements ProjectileHitModifierH
 
   @Override
   public void afterMeleeHit(IToolStackView tool, ModifierEntry modifier, ToolAttackContext context, float damageDealt) {
-    if (context.isFullyCharged() && context.isCritical() && damageDealt > 0) {
+    if (context.isFullyCharged() && context.isCritical() && damageDealt > 0 && !context.getTarget().getType().is(TinkerTags.EntityTypes.NECROTIC_BLACKLIST)) {
       // heals a percentage of damage dealt, using same rate as reinforced
       float percent = 0.05f * modifier.getEffectiveLevel();
       if (percent > 0) {
@@ -60,7 +60,7 @@ public class NecroticModifier extends Modifier implements ProjectileHitModifierH
 
   @Override
   public boolean onProjectileHitEntity(ModifierNBT modifiers, ModDataNBT persistentData, ModifierEntry modifier, Projectile projectile, EntityHitResult hit, @Nullable LivingEntity attacker, @Nullable LivingEntity target) {
-    if (target != null && attacker != null) {
+    if (target != null && attacker != null && !target.getType().is(TinkerTags.EntityTypes.NECROTIC_BLACKLIST)) {
       float percent = 0.05f * modifier.getEffectiveLevel();
       if (percent > 0) {
         // we don't actually know how much damage will be dealt, so just grab the projectile power, scaled by velocity if needed

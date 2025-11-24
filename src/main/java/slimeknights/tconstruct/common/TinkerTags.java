@@ -626,6 +626,9 @@ public class TinkerTags {
     /** Projectiles with this tag cannot be reflected */
     public static final TagKey<EntityType<?>> REFLECTING_PRESERVE_OWNER = common("reflecting/preserve_owner");
 
+    /** Entities that will not heal you using necrotic */
+    public static final TagKey<EntityType<?>> NECROTIC_BLACKLIST = common("necrotic_blacklist");
+
     private static TagKey<EntityType<?>> local(String name) {
       return TagKey.create(Registries.ENTITY_TYPE, getResource(name));
     }
