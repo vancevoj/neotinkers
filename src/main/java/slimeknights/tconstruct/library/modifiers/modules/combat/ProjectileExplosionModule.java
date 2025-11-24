@@ -35,13 +35,13 @@ import slimeknights.tconstruct.gadgets.entity.EFLNExplosion;
 import slimeknights.tconstruct.library.json.LevelingValue;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
+import slimeknights.tconstruct.library.modifiers.entity.ProjectileWithPower;
 import slimeknights.tconstruct.library.modifiers.fluid.entity.DamageFluidEffect.DamageTypePair;
 import slimeknights.tconstruct.library.modifiers.hook.ranged.ProjectileFuseModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.ranged.ProjectileHitModifierHook;
 import slimeknights.tconstruct.library.modifiers.modules.ModifierModule;
 import slimeknights.tconstruct.library.module.HookProvider;
 import slimeknights.tconstruct.library.module.ModuleHook;
-import slimeknights.tconstruct.library.tools.helper.ModifierUtil;
 import slimeknights.tconstruct.library.tools.helper.ToolDamageUtil;
 import slimeknights.tconstruct.library.tools.nbt.ModDataNBT;
 import slimeknights.tconstruct.library.tools.nbt.ModifierNBT;
@@ -100,7 +100,7 @@ public record ProjectileExplosionModule(LevelingValue radius, float eflnBonus, L
     if (radius > 0.5f && !projectile.getType().is(TinkerTags.EntityTypes.REUSABLE_AMMO)) {
       Level world = projectile.level();
       if (!world.isClientSide) {
-        float power = ModifierUtil.getProjectileDamage(projectile);
+        float power = ProjectileWithPower.getDamage(projectile);
         // figure out who to blame for the damage
         Entity cause = projectile.getOwner();
         DamageTypePair damageType = (cause != null ? TinkerDamageTypes.MOB_EXPLOSION : TinkerDamageTypes.EXPLOSION);

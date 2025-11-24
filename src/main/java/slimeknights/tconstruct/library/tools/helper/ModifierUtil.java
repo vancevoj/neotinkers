@@ -6,7 +6,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -14,8 +13,6 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.AbstractArrow;
-import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
@@ -24,7 +21,6 @@ import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.ModifierId;
-import slimeknights.tconstruct.library.modifiers.entity.ProjectileWithPower;
 import slimeknights.tconstruct.library.modifiers.hook.build.ConditionalStatModifierHook;
 import slimeknights.tconstruct.library.tools.definition.module.ToolHooks;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
@@ -194,17 +190,6 @@ public final class ModifierUtil {
   /** Calculates inaccuracy from the conditional tool stat. */
   public static float getInaccuracy(IToolStackView tool, @Nullable LivingEntity living) {
     return 3 * (1 / ConditionalStatModifierHook.getModifiedStat(tool, living, ToolStats.ACCURACY) - 1);
-  }
-
-  /** Gets the power for the given projectile */
-  public static float getProjectileDamage(Projectile projectile) {
-    if (projectile instanceof AbstractArrow arrow) {
-      return (float) Mth.ceil(Mth.clamp(arrow.getBaseDamage() * projectile.getDeltaMovement().length(), 0, Integer.MAX_VALUE));
-    }
-    if (projectile instanceof ProjectileWithPower withPower) {
-      return withPower.getDamage();
-    }
-    return 0;
   }
 
   /** Interface used for {@link #foodConsumer} */
