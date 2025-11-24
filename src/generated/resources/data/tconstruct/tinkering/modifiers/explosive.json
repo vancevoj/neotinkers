@@ -4,6 +4,7 @@
     {
       "type": "tconstruct:projectile_explosion",
       "block_interaction": "destroy",
+      "efln_bonus": 0.5,
       "knockback": {
         "flat": 1.0
       },

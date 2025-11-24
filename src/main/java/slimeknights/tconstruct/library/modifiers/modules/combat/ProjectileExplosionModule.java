@@ -24,6 +24,7 @@ import net.minecraftforge.common.ToolActions;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import slimeknights.mantle.data.loadable.primitive.BooleanLoadable;
 import slimeknights.mantle.data.loadable.primitive.EnumLoadable;
+import slimeknights.mantle.data.loadable.primitive.FloatLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.data.registry.GenericLoaderRegistry.IHaveLoader;
 import slimeknights.mantle.util.CombatHelper;
@@ -59,10 +60,11 @@ import java.util.List;
  * @param placeFire          If true, the explosion places fire
  * @param blockInteraction   Block interaction behavior.
  */
-public record ProjectileExplosionModule(LevelingValue radius, LevelingValue knockback, boolean placeFire, Explosion.BlockInteraction blockInteraction) implements ModifierModule, ProjectileHitModifierHook, ProjectileFuseModifierHook {
+public record ProjectileExplosionModule(LevelingValue radius, float eflnBonus, LevelingValue knockback, boolean placeFire, Explosion.BlockInteraction blockInteraction) implements ModifierModule, ProjectileHitModifierHook, ProjectileFuseModifierHook {
   private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<ProjectileExplosionModule>defaultHooks(ModifierHooks.PROJECTILE_HIT, ModifierHooks.PROJECTILE_HIT_CLIENT, ModifierHooks.PROJECTILE_FUSE);
   public static final RecordLoadable<ProjectileExplosionModule> LOADER = RecordLoadable.create(
     LevelingValue.LOADABLE.requiredField("radius", ProjectileExplosionModule::radius),
+    FloatLoadable.FROM_ZERO.defaultField("efln_bonus", 0f, false, ProjectileExplosionModule::eflnBonus),
     LevelingValue.LOADABLE.defaultField("knockback", LevelingValue.flat(1), true, ProjectileExplosionModule::knockback),
     BooleanLoadable.INSTANCE.defaultField("place_fire", false, ProjectileExplosionModule::placeFire),
     new EnumLoadable<>(Explosion.BlockInteraction.class).requiredField("block_interaction", ProjectileExplosionModule::blockInteraction),
@@ -132,7 +134,7 @@ public record ProjectileExplosionModule(LevelingValue radius, LevelingValue knoc
         CustomExplosion explosion;
         if (persistentData.getBoolean(EFLN)) {
           explosion = new EFLNExplosion(
-            world, location, radius + 0.5f, projectile,
+            world, location, radius + eflnBonus, projectile,
             power, damageSource, knockback.computeForScale(level),
             placeFire, blockInteraction
           );
@@ -174,6 +176,8 @@ public record ProjectileExplosionModule(LevelingValue radius, LevelingValue knoc
   public static class Builder {
     /** Explosion distance from target */
     private final LevelingValue radius;
+    /** Explosion distance from target */
+    private float eflnBonus = 0;
     /** Explosion knockback multiplier for entities */
     private LevelingValue knockback = LevelingValue.flat(1f);
     /** If true, explosion places fires */
@@ -199,7 +203,7 @@ public record ProjectileExplosionModule(LevelingValue radius, LevelingValue knoc
     /** Builds the final effect */
     @CheckReturnValue
     public ProjectileExplosionModule build() {
-      return new ProjectileExplosionModule(radius, knockback, placeFire, blockInteraction);
+      return new ProjectileExplosionModule(radius, eflnBonus, knockback, placeFire, blockInteraction);
     }
   }
 }

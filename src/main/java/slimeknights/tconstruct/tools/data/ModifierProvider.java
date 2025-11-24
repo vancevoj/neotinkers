@@ -971,7 +971,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .addModule(MobEffectModule.builder(MobEffects.GLOWING).chance(LevelingValue.flat(1)).time(RandomLevelingValue.perLevel(0, 200)).build())
       .addModule(ProjectilePlaceGlowModule.BLOCKS);
     buildModifier(ModifierIds.explosive).priority(75) // after bounce, before spectral
-      .addModule(ProjectileExplosionModule.radius(1, 1).blockInteraction(BlockInteraction.DESTROY).build());
+      .addModule(ProjectileExplosionModule.radius(1, 1).eflnBonus(0.5f).blockInteraction(BlockInteraction.DESTROY).build());
     // traits - tier 3 nether
     buildModifier(ModifierIds.lightweight)
       .addModule(StatBoostModule.multiplyBase(ToolStats.ATTACK_SPEED).eachLevel(0.07f))
