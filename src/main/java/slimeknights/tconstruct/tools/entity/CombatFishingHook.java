@@ -134,6 +134,19 @@ public class CombatFishingHook extends FishingHook implements ProjectileWithKnoc
     return entityData.get(COLLECTING);
   }
 
+  @Override
+  public float getDamage() {
+    double velocity;
+    if (getHookedIn() != null) {
+      velocity = this.impactVelocity;
+    } else {
+      velocity = getDeltaMovement().length();
+    }
+    // round to the nearest 0.1
+    // we start by multiplying by 20 to make the damage approximately 2/3 of a bow (as bows multiply velocity by 3)
+    return Mth.ceil(Mth.clamp(velocity * this.power * 20, 0, Integer.MAX_VALUE)) / 10f;
+  }
+
 
   /* Damage and knockback */
 
@@ -193,9 +206,7 @@ public class CombatFishingHook extends FishingHook implements ProjectileWithKnoc
         if (owner instanceof LivingEntity living) {
           living.setLastHurtMob(target);
         }
-        // setup damage, round to the nearest 0.1
-        // we start by multiplying by 20 to make the damage approximately 2/3 of a bow (as bows multiply velocity by 3)
-        float damage = Mth.ceil(Mth.clamp(this.impactVelocity * this.power * 20, 0, Integer.MAX_VALUE)) / 10f;
+        float damage = getDamage();
         DamageSource source = CombatHelper.damageSource(TinkerDamageTypes.FISHING_HOOK, this, owner);
         LivingEntity targetLiving = ToolAttackUtil.getLivingEntity(target);
         // don't want to apply default knockback, we will apply our own later in the opposite direction

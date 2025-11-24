@@ -42,7 +42,6 @@ public class EntityTypeTagProvider extends EntityTypeTagsProvider {
     this.tag(TinkerTags.EntityTypes.REUSABLE_AMMO).add(EntityType.TRIDENT, TinkerTools.thrownTool.get());
     this.tag(TinkerTags.EntityTypes.REFLECTING_BLACKLIST);
     this.tag(TinkerTags.EntityTypes.REFLECTING_PRESERVE_OWNER).add(EntityType.FISHING_BOBBER, TinkerTools.fishingHook.get());
-    this.tag(TinkerTags.EntityTypes.VELOCITY_SCALED_AMMO).add(EntityType.ARROW, TinkerTools.materialArrow.get(), TinkerTools.fishingHook.get());
     this.tag(TinkerTags.EntityTypes.COLLECTABLES).add(
       EntityType.ARROW, EntityType.SPECTRAL_ARROW,
       EntityType.TRIDENT, TinkerTools.thrownTool.get(),

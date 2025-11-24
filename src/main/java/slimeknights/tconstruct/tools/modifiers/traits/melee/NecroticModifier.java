@@ -65,7 +65,7 @@ public class NecroticModifier extends Modifier implements ProjectileHitModifierH
       if (percent > 0) {
         // we don't actually know how much damage will be dealt, so just grab the projectile power, scaled by velocity if needed
         // to prevent healing too much, limit by the target's health. Will let you life steal ignoring armor, but eh, only so much we can do efficiently
-        float power = ModifierUtil.getPower(projectile);
+        float power = ModifierUtil.getProjectileDamage(projectile);
         if (power > 0) {
           attacker.heal(percent * Math.min(target.getHealth(), power));
           attacker.level().playSound(null, attacker.getX(), attacker.getY(), attacker.getZ(), Sounds.NECROTIC_HEAL.getSound(), SoundSource.PLAYERS, 1.0f, 1.0f);

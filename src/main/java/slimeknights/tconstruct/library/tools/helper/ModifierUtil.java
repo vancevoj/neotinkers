@@ -197,18 +197,14 @@ public final class ModifierUtil {
   }
 
   /** Gets the power for the given projectile */
-  public static float getPower(Projectile projectile) {
-    float power = 0;
+  public static float getProjectileDamage(Projectile projectile) {
     if (projectile instanceof AbstractArrow arrow) {
-      power = (float) arrow.getBaseDamage();
-    } else if (projectile instanceof ProjectileWithPower withPower) {
-      power = withPower.getPower();
+      return (float) Mth.ceil(Mth.clamp(arrow.getBaseDamage() * projectile.getDeltaMovement().length(), 0, Integer.MAX_VALUE));
     }
-    // arrows and fishing bobbers use the velocity to boost damage
-    if (projectile.getType().is(TinkerTags.EntityTypes.VELOCITY_SCALED_AMMO)) {
-      power = Mth.ceil(Mth.clamp(power * projectile.getDeltaMovement().length(), 0, Integer.MAX_VALUE));
+    if (projectile instanceof ProjectileWithPower withPower) {
+      return withPower.getDamage();
     }
-    return power;
+    return 0;
   }
 
   /** Interface used for {@link #foodConsumer} */

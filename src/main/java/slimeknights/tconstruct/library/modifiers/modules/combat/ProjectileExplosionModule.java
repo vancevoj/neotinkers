@@ -98,7 +98,7 @@ public record ProjectileExplosionModule(LevelingValue radius, LevelingValue knoc
     if (radius > 0.5f && !projectile.getType().is(TinkerTags.EntityTypes.REUSABLE_AMMO)) {
       Level world = projectile.level();
       if (!world.isClientSide) {
-        float power = ModifierUtil.getPower(projectile);
+        float power = ModifierUtil.getProjectileDamage(projectile);
         // figure out who to blame for the damage
         Entity cause = projectile.getOwner();
         DamageTypePair damageType = (cause != null ? TinkerDamageTypes.MOB_EXPLOSION : TinkerDamageTypes.EXPLOSION);
