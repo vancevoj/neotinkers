@@ -87,7 +87,7 @@ public enum FishingModule implements ModifierModule, GeneralInteractionModifierH
           if (damage > 0) {
             ToolDamageUtil.damageAnimated(tool, damage, player, Util.getSlotType(hand));
             // we apply cooldown as this is a weapon, don't want to let you spam it. But only need the cooldown if something happened
-            player.getCooldowns().addCooldown(tool.getItem(), (int)(20 / ConditionalStatModifierHook.getModifiedStat(tool, player, ToolStats.DRAW_SPEED)));
+            ModifierUtil.addCooldown(tool, player);
           }
         }
 
