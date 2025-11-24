@@ -315,7 +315,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .addModule(ShowOffhandModule.DISALLOW_BROKEN)
       .addModule(new PlaceGlowModule(5))
       .addModule(new GlowWalkerModule(new LevelingValue(2, 1), 3, 5))
-      .addModule(ProjectilePlaceGlowModule.ANY);
+      .addModule(new ProjectilePlaceGlowModule(5, true, true));
     buildModifier(TinkerModifiers.melting)
       .levelDisplay(ModifierLevelDisplay.PLUSES)
       .addModule(ToolTankHelper.TANK_HANDLER)
@@ -969,7 +969,8 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .addModule(new ArmorLevelModule(TinkerDataKeys.CRYSTALSTRIKE, false, TinkerTags.Items.HELD_ARMOR));
     buildModifier(ModifierIds.spectral).priority(60) // after explosive, before enderference
       .addModule(MobEffectModule.builder(MobEffects.GLOWING).chance(LevelingValue.flat(1)).time(RandomLevelingValue.perLevel(0, 200)).build())
-      .addModule(ProjectilePlaceGlowModule.BLOCKS);
+      // damage is for fishing rods
+      .addModule(new ProjectilePlaceGlowModule(5, true, false));
     buildModifier(ModifierIds.explosive).priority(75) // after bounce, before spectral
       .addModule(ProjectileExplosionModule.radius(1, 1).eflnBonus(0.5f).blockInteraction(BlockInteraction.DESTROY).build());
     // traits - tier 3 nether
