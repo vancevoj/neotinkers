@@ -24,7 +24,7 @@ public class MaterialDataProvider extends AbstractMaterialDataProvider {
   @Override
   protected void addMaterials() {
     // tier 1
-    addMaterial(MaterialIds.wood,   1, ORDER_GENERAL, true);
+    addMaterial(MaterialIds.wood,   0, ORDER_GENERAL, true);
     addMaterial(MaterialIds.rock,   1, ORDER_HARVEST, true);
     addMaterial(MaterialIds.flint,  1, ORDER_WEAPON,  true);
     addMaterial(MaterialIds.copper, 1, ORDER_SPECIAL, true);
@@ -33,14 +33,14 @@ public class MaterialDataProvider extends AbstractMaterialDataProvider {
     // tier 1 - end
     addMaterial(MaterialIds.chorus, 1, ORDER_END,     true);
     // tier 1 - binding
-    addMaterial(MaterialIds.string,  1, ORDER_BINDING - 2, true); // earlier order so its the first in stat type
+    addMaterial(MaterialIds.string,  0, ORDER_GENERAL, true);
     addMaterial(MaterialIds.leather, 1, ORDER_BINDING, true);
     addMaterial(MaterialIds.vine,    1, ORDER_BINDING, true);
     // tier 1 - shield cores
     addMaterial(MaterialIds.cactus, 1, ORDER_BINDING, true);
     // tier 1 - ammo
+    addMaterial(MaterialIds.feather, 0, ORDER_GENERAL, true);
     addMaterial(MaterialIds.wool,    1, ORDER_BINDING, true);
-    addMaterial(MaterialIds.feather, 1, ORDER_GENERAL, true); // want to ensure its first
     addMaterial(MaterialIds.leaves,  1, ORDER_BINDING, true);
     addMaterial(MaterialIds.paper,   1, ORDER_BINDING, true);
 
