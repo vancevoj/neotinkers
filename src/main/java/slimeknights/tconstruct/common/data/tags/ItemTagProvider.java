@@ -500,7 +500,7 @@ public class ItemTagProvider extends ItemTagsProvider {
     this.copy(TinkerTags.Blocks.BASALT,     TinkerTags.Items.BASALT);
 
     // twilight forest
-    this.tag(BANNED_UNCRAFTABLE).addTag(MODIFIABLE);
+    this.tag(BANNED_UNCRAFTABLE).addTag(MODIFIABLE).add(TinkerTables.tinkersAnvil.asItem(), TinkerTables.scorchedAnvil.asItem(), TinkerTables.modifierWorktable.asItem());
     String tf = "twilightforest";
     Function<String,ResourceLocation> trophy = name -> new ResourceLocation(tf, name + "_trophy");
     this.tag(TinkerTags.Items.BOSS_TROPHIES)
