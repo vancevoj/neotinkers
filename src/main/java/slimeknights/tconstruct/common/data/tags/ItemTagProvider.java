@@ -631,11 +631,12 @@ public class ItemTagProvider extends ItemTagsProvider {
     String tf = "twilightforest";
     moltenTools(TinkerFluids.moltenCopper).add(1, Items.BRUSH).toolTags().toolsComplement();
     moltenTools(TinkerFluids.moltenIron).minecraft()
-      .add(1, Items.FLINT_AND_STEEL, Items.SHIELD)
+      .add(1, Items.FLINT_AND_STEEL, Items.SHIELD).fdKnife()
       .add(2, Items.SHEARS)
       .add(2, true, ie.apply("hammer"))
       .crowbar().excavatorSpikeMaul();
     moltenTools(TinkerFluids.moltenGold).minecraft("golden")
+      .add(1, true,  new ResourceLocation("farmers_delight", "golden_knife"))
       .add(4, false, new ResourceLocation("golden_boots"))
       .add(4, true,  new ResourceLocation(tf, "gold_minotaur_axe"));
     moltenTools(TinkerFluids.moltenSteel).toolTags().leggingsPaxel().crowbar()
@@ -647,12 +648,12 @@ public class ItemTagProvider extends ItemTagsProvider {
       .armorTag(8, "chestplates").add(8, true, ie.apply("armor_steel_chestplate"))
                                               .add(7, true, ie.apply("armor_steel_leggings"))
       .armorTag(4, "boots"      ).add(4, true, ie.apply("armor_steel_boots"));
-    moltenTools(TinkerFluids.moltenNetherite).minecraft();
+    moltenTools(TinkerFluids.moltenNetherite).minecraft().fdKnife();
     moltenTools(TinkerFluids.moltenKnightmetal)
       .optionalMetal(3, tf, "axe", "pickaxe")
       .optionalMetal(7, tf, "leggings", "shield");
     // gems
-    moltenTools(TinkerFluids.moltenDiamond).minecraft().excavatorSpikeMaul().crowbar()
+    moltenTools(TinkerFluids.moltenDiamond).minecraft().excavatorSpikeMaul().crowbar().fdKnife()
       .add(4, false, new ResourceLocation("diamond_boots"))
       .add(4, true,  new ResourceLocation(tf, "diamond_minotaur_axe"));
     // mod ores
