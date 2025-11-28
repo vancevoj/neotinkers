@@ -34,7 +34,7 @@ public class MaterialDataProvider extends AbstractMaterialDataProvider {
     addMaterial(MaterialIds.chorus, 1, ORDER_END,     true);
     // tier 1 - binding
     addMaterial(MaterialIds.string,  0, ORDER_GENERAL, true);
-    addMaterial(MaterialIds.leather, 1, ORDER_BINDING, true);
+    addMaterial(MaterialIds.leather, 0, ORDER_BINDING, true);
     addMaterial(MaterialIds.vine,    1, ORDER_BINDING, true);
     // tier 1 - shield cores
     addMaterial(MaterialIds.cactus, 1, ORDER_BINDING, true);
