@@ -253,6 +253,7 @@ public class ItemTagProvider extends ItemTagsProvider {
 
   private void addWorld() {
     IntrinsicTagAppender<Item> heads = this.tag(Tags.Items.HEADS);
+    heads.add(Items.PIGLIN_HEAD);
     TinkerWorld.heads.forEach(head -> heads.add(head.asItem()));
 
     this.copy(TinkerTags.Blocks.SLIME_BLOCK, TinkerTags.Items.SLIME_BLOCK);
