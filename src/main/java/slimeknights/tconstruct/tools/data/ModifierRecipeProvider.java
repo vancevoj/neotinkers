@@ -155,6 +155,7 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                                .save(consumer, prefix(TinkerModifiers.tasty, folder));
   }
 
+  @SuppressWarnings("removal")
   private void addModifierRecipes(Consumer<FinishedRecipe> consumer) {
     // modifiers
     String upgradeFolder = "tools/modifiers/upgrade/";
@@ -1681,15 +1682,19 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
       .save(consumer, location(slotlessFolder + "fishing_rod_tip_clearing"));
 
     // removal
+    IJsonPredicate<ModifierId> removable = ModifierPredicate.tag(TinkerTags.Modifiers.REMOVE_MODIFIER_BLACKLIST).inverted();
     ModifierRemovalRecipeBuilder.removal()
-                                .addInput(Blocks.WET_SPONGE)
-                                .addLeftover(Blocks.SPONGE)
-                                .save(consumer, location(worktableFolder + "remove_modifier_sponge"));
+      .addInput(Blocks.WET_SPONGE)
+      .addLeftover(Blocks.SPONGE)
+      .modifierPredicate(removable)
+      .save(consumer, location(worktableFolder + "remove_modifier_sponge"));
     ModifierRemovalRecipeBuilder.removal()
-                                .addInput(CompoundIngredient.of(FluidContainerIngredient.fromFluid(TinkerFluids.venom),
-                                                                 FluidContainerIngredient.fromIngredient(TinkerFluids.venom.ingredient(FluidValues.BOTTLE),
-                                                                                                         Ingredient.of(TinkerFluids.venomBottle))))
-                                .save(consumer, location(worktableFolder + "remove_modifier_venom"));
+      .addInput(CompoundIngredient.of(
+        FluidContainerIngredient.fromFluid(TinkerFluids.venom),
+        FluidContainerIngredient.fromIngredient(TinkerFluids.venom.ingredient(FluidValues.BOTTLE), Ingredient.of(TinkerFluids.venomBottle)))
+      )
+      .modifierPredicate(removable)
+      .save(consumer, location(worktableFolder + "remove_modifier_venom"));
     // modifier extracting: sponge + crystal
     IJsonPredicate<ModifierId> extractBlacklist = ModifierPredicate.tag(TinkerTags.Modifiers.EXTRACT_MODIFIER_BLACKLIST).inverted();
     for (boolean dagger : new boolean[]{false, true}) {

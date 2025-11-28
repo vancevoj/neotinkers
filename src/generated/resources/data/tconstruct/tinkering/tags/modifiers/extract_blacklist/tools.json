@@ -3,9 +3,8 @@
     "tconstruct:embellishment",
     "tconstruct:dyed",
     "tconstruct:trim",
-    "tconstruct:creative_slot",
-    "tconstruct:stat_override",
     "tconstruct:rebalanced",
-    "tconstruct:redirected"
+    "tconstruct:redirected",
+    "#tconstruct:remove_blacklist"
   ]
 }

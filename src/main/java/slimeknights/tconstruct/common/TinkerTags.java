@@ -208,6 +208,7 @@ public class TinkerTags {
     // misc compat
     public static final TagKey<Block> BUDDING = common("budding");
     // ceramics compat
+    @SuppressWarnings("removal")
     public static final TagKey<Block> CISTERN_CONNECTIONS = TagKey.create(Registries.BLOCK, new ResourceLocation("ceramics", "cistern_connections"));
 
     /** Makes a tag in the tinkers domain */
@@ -675,6 +676,8 @@ public class TinkerTags {
     public static final TagKey<Modifier> GEMS = local("gems");
     /** Blacklist for modifiers that cannot be hidden with invisible ink */
     public static final TagKey<Modifier> INVISIBLE_INK_BLACKLIST = local("invisible_ink_blacklist");
+    /** Blacklist for modifiers that cannot be removed via the general recipe */
+    public static final TagKey<Modifier> REMOVE_MODIFIER_BLACKLIST = local("remove_blacklist");
     /** Blacklist for modifiers that cannot be extracted via the general recipe */
     public static final TagKey<Modifier> EXTRACT_MODIFIER_BLACKLIST = local("extract_blacklist/tools");
     /** Blacklist for modifiers that cannot be extracted via the slotless recipe */

@@ -47,6 +47,7 @@ import static slimeknights.tconstruct.common.TinkerTags.Modifiers.OVERSLIME_FRIE
 import static slimeknights.tconstruct.common.TinkerTags.Modifiers.PROTECTION_DEFENSE;
 import static slimeknights.tconstruct.common.TinkerTags.Modifiers.RANGED_ABILITIES;
 import static slimeknights.tconstruct.common.TinkerTags.Modifiers.RANGED_UPGRADES;
+import static slimeknights.tconstruct.common.TinkerTags.Modifiers.REMOVE_MODIFIER_BLACKLIST;
 import static slimeknights.tconstruct.common.TinkerTags.Modifiers.SHIELD_ABILITIES;
 import static slimeknights.tconstruct.common.TinkerTags.Modifiers.SLIME_DEFENSE;
 import static slimeknights.tconstruct.common.TinkerTags.Modifiers.SLOTLESS;
@@ -66,11 +67,11 @@ public class ModifierTagProvider extends AbstractModifierTagProvider {
       TinkerModifiers.creativeSlot.getId(), TinkerModifiers.statOverride.getId(),
       ModifierIds.shiny, TinkerModifiers.golden.getId()
     );
+    tag(REMOVE_MODIFIER_BLACKLIST).add(TinkerModifiers.creativeSlot.getId(), TinkerModifiers.statOverride.getId());
     tag(EXTRACT_MODIFIER_BLACKLIST).add(
       TinkerModifiers.embellishment.getId(), TinkerModifiers.dyed.getId(), TinkerModifiers.trim.getId(),
-      TinkerModifiers.creativeSlot.getId(), TinkerModifiers.statOverride.getId(),
       ModifierIds.rebalanced, ModifierIds.redirected
-    );
+    ).addTag(REMOVE_MODIFIER_BLACKLIST);
     // blacklist modifiers that are not really slotless, they just have a slotless recipe
     tag(EXTRACT_SLOTLESS_BLACKLIST).add(ModifierIds.luck, ModifierIds.toolBelt);
     tag(EXTRACT_UPGRADE_BLACKLIST);
