@@ -4,7 +4,8 @@
     "data": "sections/intro.json",
     "icon": {
       "item": "tconstruct:sky_slime_ball"
-    }
+    },
+    "extraData": { "mantle:index": { "hidden": true }}
   },
   {
     "name": "gadgets",
@@ -14,6 +15,14 @@
     }
   },
   {
+    "name": "staffs",
+    "icon": {
+      "item": "tconstruct:sky_staff"
+    },
+    "data": "no-load",
+    "extraData": { "tconstruct:load_tools": { "tag": "tconstruct:modifiable/special", "path": "staffs", "sort": false }}
+  },
+  {
     "name": "exploration",
     "data": "sections/exploration.json",
     "icon": {
@@ -21,12 +30,40 @@
     }
   },
   {
-    "name": "staffs",
-    "icon": {
-      "item": "tconstruct:sky_staff"
-    },
+    "name": "melee_harvest_materials",
     "data": "no-load",
-    "extraData": { "tconstruct:load_tools": { "tag": "tconstruct:modifiable/special", "path": "staffs", "sort": false }}
+    "extraData": { "tconstruct:material_tier": { "type": "tconstruct:melee_harvest", "tag": "tconstruct:book/distant" } },
+    "icon": {
+      "item": {
+        "type": "forge:nbt",
+        "item": "tconstruct:broad_blade",
+        "nbt": { "Material": "tconstruct:knightmetal" }
+      }
+    }
+  },
+  {
+    "name": "ranged_materials",
+    "data": "no-load",
+    "extraData": { "tconstruct:material_tier": { "type": "tconstruct:ranged", "tag": "tconstruct:book/distant" } },
+    "icon": {
+      "item": {
+        "type": "forge:nbt",
+        "item": "tconstruct:bowstring",
+        "nbt": { "Material": "tconstruct:enderslime_vine" }
+      }
+    }
+  },
+  {
+    "name": "armor_materials",
+    "data": "no-load",
+    "extraData": { "tconstruct:material_tier": { "type": "tconstruct:armor", "tag": "tconstruct:book/distant" } },
+    "icon": {
+      "item": {
+        "type": "forge:nbt",
+        "item": "tconstruct:maille",
+        "nbt": { "Material": "tconstruct:dragon_scale" }
+      }
+    }
   },
   {
     "name": "ancient_tools",

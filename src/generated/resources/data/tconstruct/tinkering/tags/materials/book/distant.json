@@ -1,0 +1,16 @@
+{
+  "values": [
+    "tconstruct:knightmetal",
+    "tconstruct:knightly",
+    "tconstruct:enderslime_vine",
+    "tconstruct:enderslime",
+    "tconstruct:end_rod",
+    "tconstruct:shulker",
+    "tconstruct:dragon_scale",
+    "tconstruct:ancient",
+    {
+      "id": "tconstruct:fiery",
+      "required": false
+    }
+  ]
+}

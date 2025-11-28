@@ -760,6 +760,12 @@ public class TinkerTags {
     /** Materials not found on ancient tools or other loot sources */
     public static final TagKey<IMaterial> EXCLUDE_FROM_LOOT = local("exclude_from_loot");
 
+    // tags for book material lists
+    /** Materials gated behind blazing blood, typically tier 4. Will show in Fantastic Foundry. */
+    public static final TagKey<IMaterial> BLAZING_BLOOD = local("book/blazing_blood");
+    /** Materials found from late game exploration such as the end. */
+    public static final TagKey<IMaterial> DISTANT = local("book/distant");
+
     // material categories
     // melee harvest
     /** Materials that work well at both melee and harvest tasks, often durability focused or all around */

@@ -54,11 +54,11 @@
   {
     "name": "armor_materials",
     "data": "no-load",
-    "extraData": { "tconstruct:material_tier": { "type": "tconstruct:armor", "tier": { "min": 1, "max": 2 } } },
+    "extraData": { "tconstruct:material_tier": { "type": "tconstruct:armor", "tier": { "min": 0, "max": 2 } } },
     "icon": {
       "item": {
         "type": "forge:nbt",
-        "item": "tconstruct:maille",
+        "item": "tconstruct:leggings_plating",
         "nbt": { "Material": "tconstruct:gold" }
       }
     }

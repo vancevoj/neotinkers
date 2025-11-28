@@ -2116,7 +2116,7 @@
   "__comment": "Tier End Materials",
 
   "material.tconstruct.knightmetal": "Knightmetal",
-  "material.tconstruct.knightmetal.flavor": "Metal of the traveling slime, also found from armored Twilight creates.",
+  "material.tconstruct.knightmetal.flavor": "Metal of the traveling slime, also found from armored Twilight creatures.",
   "material.tconstruct.knightmetal.encyclopedia": "Grants +0.5 damage per level per piece of armor worn by the target",
   "material.tconstruct.knightmetal.ranged": "Grants +0.25 damage per level per piece of armor worn by the target (before velocity)",
   "material.tconstruct.knightmetal.armor": "Increases protection by 5% per level per item in the attacker's arms",
@@ -2252,7 +2252,7 @@
   "_comment": "Tier 4 Integration Materials",
 
   "material.tconstruct.fiery": "Fiery",
-  "material.tconstruct.fiery.flavor": "Metal of the traveling slime, also found from armored Twilight creates.",
+  "material.tconstruct.fiery.flavor": "The hottest new metal, forged to perfection.",
   "material.tconstruct.fiery.encyclopedia": "Tool automatically smelts all drops. Higher levels have a 25% chance of extra smelted drops",
   "material.tconstruct.fiery.ranged": "Arrows automatically smelts all drops. Higher levels have a 25% chance of extra smelted drops",
   "material.tconstruct.fiery.armor": "Increases protection by 5% per level against on fire attackers",
