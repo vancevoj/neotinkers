@@ -755,8 +755,11 @@ public class TinkerTags {
 
   public static class Materials {
     private static void init() {}
-    /** Materials available in nether */
+    /** Materials available in nether. */
     public static final TagKey<IMaterial> NETHER = local("nether");
+    /** Materials that cannot be obtained without going to the nether. */
+    public static final TagKey<IMaterial> NETHER_GATED = local("nether/gated");
+
     /** Materials bartered from piglins */
     public static final TagKey<IMaterial> BARTERED = local("bartered");
     /** Materials not found on ancient tools or other loot sources */

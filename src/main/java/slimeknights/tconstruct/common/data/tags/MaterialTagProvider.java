@@ -19,18 +19,30 @@ public class MaterialTagProvider extends AbstractMaterialTagProvider {
     tag(TinkerTags.Materials.NETHER).add(
       // tier 1
       MaterialIds.wood, MaterialIds.flint, MaterialIds.rock, MaterialIds.bone,
-      MaterialIds.leather, MaterialIds.vine, MaterialIds.string,
+      MaterialIds.leather, MaterialIds.string,
       // tier 2
-      MaterialIds.gold,
-      MaterialIds.scorchedStone, MaterialIds.slimewood, MaterialIds.necroticBone,
+      MaterialIds.gold, MaterialIds.slimewood,
       // tier 3
-      MaterialIds.nahuatl, MaterialIds.obsidian, MaterialIds.darkthread,
-      MaterialIds.cobalt, MaterialIds.steel,
+      MaterialIds.nahuatl, MaterialIds.obsidian, MaterialIds.darkthread, MaterialIds.steel,
       // tier 4
-      MaterialIds.manyullyn, MaterialIds.cinderslime,
+      MaterialIds.ancient
+    ).addTag(TinkerTags.Materials.NETHER_GATED);
+
+    // things that *require* nether access to craft
+    tag(TinkerTags.Materials.NETHER_GATED).add(
+      // tier 1
+      MaterialIds.twistingVine, MaterialIds.weepingVine,
+      // tier 2
+      MaterialIds.scorchedStone, MaterialIds.necroticBone,
+      // tier 3
+      MaterialIds.cobalt,
+      // tier 4
+      MaterialIds.manyullyn, MaterialIds.hepatizon, MaterialIds.cinderslime,
       MaterialIds.queensSlime, MaterialIds.blazingBone, MaterialIds.blazewood,
-      MaterialIds.ancientHide, MaterialIds.ancient
-    );
+      MaterialIds.ancientHide,
+      // ammo
+      MaterialIds.glowstone, MaterialIds.ichor, MaterialIds.quartz, MaterialIds.blaze, MaterialIds.magma
+    ).addOptional(MaterialIds.necronium);
 
     // all materials to show in materials and you for ammo, kept to 9 options
     tag(TinkerTags.Materials.BASIC_AMMO).add(
