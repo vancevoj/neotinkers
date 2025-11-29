@@ -15,6 +15,7 @@ import slimeknights.mantle.registration.object.ItemObject;
 import slimeknights.mantle.registration.object.MetalItemObject;
 import slimeknights.tconstruct.common.TinkerModule;
 import slimeknights.tconstruct.common.TinkerTags;
+import slimeknights.tconstruct.library.json.predicate.material.ConditionMaterialPredicate;
 import slimeknights.tconstruct.library.json.predicate.material.MaterialDefinitionPredicate;
 import slimeknights.tconstruct.library.json.predicate.material.MaterialIdPredicate;
 import slimeknights.tconstruct.library.json.predicate.material.MaterialPredicate;
@@ -81,6 +82,7 @@ public final class TinkerMaterials extends TinkerModule {
       MaterialPredicate.LOADER.register(getResource("not_hidden"), MaterialDefinitionPredicate.NOT_HIDDEN.getLoader());
       MaterialPredicate.LOADER.register(getResource("registered"), MaterialDefinitionPredicate.REGISTERED.getLoader());
       MaterialPredicate.LOADER.register(getResource("tier"), MaterialTierPredicate.LOADER);
+      MaterialPredicate.LOADER.register(getResource("condition"), ConditionMaterialPredicate.LOADER);
     }
   }
 

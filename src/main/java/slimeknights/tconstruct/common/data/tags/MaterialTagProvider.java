@@ -34,7 +34,14 @@ public class MaterialTagProvider extends AbstractMaterialTagProvider {
 
     // tier 4 is split into several parts in different books
     tag(TinkerTags.Materials.BLAZING_BLOOD).add(MaterialIds.manyullyn, MaterialIds.hepatizon, MaterialIds.queensSlime, MaterialIds.cinderslime, MaterialIds.blazingBone, MaterialIds.blazewood, MaterialIds.ancientHide);
-    tag(TinkerTags.Materials.DISTANT).add(MaterialIds.knightmetal, MaterialIds.knightly, MaterialIds.enderslimeVine, MaterialIds.enderslime, MaterialIds.endRod, MaterialIds.shulker, MaterialIds.dragonScale, MaterialIds.ancient).addOptional(MaterialIds.fiery);
+    tag(TinkerTags.Materials.DISTANT).add(
+      // tiers 1-2
+      MaterialIds.chorus, MaterialIds.whitestone,
+      // tier 4
+      MaterialIds.knightmetal, MaterialIds.knightly, MaterialIds.enderslimeVine, MaterialIds.ancient,
+      // ammo and maille
+      MaterialIds.shulker, MaterialIds.dragonScale, MaterialIds.enderslime, MaterialIds.endRod
+    ).addOptional(MaterialIds.ironwood, MaterialIds.steeleaf, MaterialIds.fiery);
 
     // materials bartered by piglins
     tag(TinkerTags.Materials.BARTERED).add(

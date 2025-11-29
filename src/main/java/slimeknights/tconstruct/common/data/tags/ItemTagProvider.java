@@ -476,6 +476,13 @@ public class ItemTagProvider extends ItemTagsProvider {
       .add(Items.SNOWBALL, Items.EGG, Items.ENDER_PEARL, Items.SPLASH_POTION, Items.LINGERING_POTION, Items.EXPERIENCE_BOTTLE, Items.ENDER_EYE, Items.FIREWORK_ROCKET)
       .add(TinkerGadgets.efln.get(), TinkerGadgets.flintShuriken.get(), TinkerGadgets.quartzShuriken.get(), TinkerGadgets.glowBall.get())
       .addTag(THROWN_AMMO);
+    this.tag(TinkerTags.Items.WHITESTONE_INGOTS)
+      .addOptionalTag(commonResource("ingots/aluminum"))
+      .addOptionalTag(commonResource("ingots/tin"))
+      .addOptionalTag(commonResource("ingots/zinc"))
+      .addOptionalTag(commonResource("ingots/nickel"))
+      .addOptionalTag(commonResource("ingots/chromium"))
+      .addOptionalTag(commonResource("ingots/cadmium"));
 
     this.tag(TinkerTags.Items.VARIANT_PLANKS)
         .add(Items.CRIMSON_PLANKS, Items.WARPED_PLANKS)

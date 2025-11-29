@@ -290,6 +290,8 @@ public class TinkerTags {
     public static final TagKey<Item> INGOTS_NETHERITE_SCRAP = common("ingots/netherite_scrap");
     public static final TagKey<Item> NUGGETS_NETHERITE_SCRAP = common("nuggets/netherite_scrap");
     public static final TagKey<Item> NUGGETS_COPPER = common("nuggets/copper");
+    /** Ingots in this tag will make the whitestone composite variant show in the books. */
+    public static final TagKey<Item> WHITESTONE_INGOTS = local("whitestone_ingots");
 
     public static final TagKey<Item> CASTS = local("casts");
     public static final TagKey<Item> GOLD_CASTS = local("casts/gold");
