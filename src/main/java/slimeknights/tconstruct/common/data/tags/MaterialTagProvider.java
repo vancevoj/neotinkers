@@ -32,6 +32,16 @@ public class MaterialTagProvider extends AbstractMaterialTagProvider {
       MaterialIds.ancientHide, MaterialIds.ancient
     );
 
+    // all materials to show in materials and you for ammo, kept to 9 options
+    tag(TinkerTags.Materials.BASIC_AMMO).add(
+      // head
+      MaterialIds.flint, MaterialIds.wool, MaterialIds.glass,
+      // shaft
+      MaterialIds.wood, MaterialIds.bamboo, MaterialIds.bone,
+      // fletching
+      MaterialIds.feather, MaterialIds.paper, MaterialIds.leaves
+    );
+
     // tier 4 is split into several parts in different books
     tag(TinkerTags.Materials.BLAZING_BLOOD).add(MaterialIds.manyullyn, MaterialIds.hepatizon, MaterialIds.queensSlime, MaterialIds.cinderslime, MaterialIds.blazingBone, MaterialIds.blazewood, MaterialIds.ancientHide);
     tag(TinkerTags.Materials.DISTANT).add(

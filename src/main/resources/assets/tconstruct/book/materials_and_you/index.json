@@ -33,7 +33,7 @@
   {
     "name": "ammo_materials",
     "data": "no-load",
-    "extraData": { "tconstruct:material_tier": { "type": "tconstruct:ammo" } },
+    "extraData": { "tconstruct:material_tier": { "type": "tconstruct:ammo", "tag": "tconstruct:book/basic_ammo" }},
     "icon": {
       "item": {
         "type": "forge:nbt",

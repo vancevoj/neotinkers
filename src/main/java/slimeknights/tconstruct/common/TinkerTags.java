@@ -763,6 +763,8 @@ public class TinkerTags {
     public static final TagKey<IMaterial> EXCLUDE_FROM_LOOT = local("exclude_from_loot");
 
     // tags for book material lists
+    /** Ammo materials to show in materials and you. Used instead of tiers due to non-standard ammo behavior. */
+    public static final TagKey<IMaterial> BASIC_AMMO = local("book/basic_ammo");
     /** Materials gated behind blazing blood, typically tier 4. Will show in Fantastic Foundry. */
     public static final TagKey<IMaterial> BLAZING_BLOOD = local("book/blazing_blood");
     /** Materials found from late game exploration such as the end. */
