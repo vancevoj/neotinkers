@@ -7,6 +7,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import com.mojang.blaze3d.platform.NativeImage;
 import lombok.extern.log4j.Log4j2;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -59,6 +60,7 @@ import java.util.stream.Collectors;
 @Log4j2
 public class ClientGeneratePartTexturesCommand {
   private static final String SUCCESS_KEY = TConstruct.makeTranslationKey("command", "generate_part_textures.finish");
+  private static final String FAILURE_KEY = TConstruct.makeTranslationKey("command", "generate_part_textures.failure");
   private static final Component NO_PARTS = TConstruct.makeTranslation("command", "generate_part_textures.no_parts");
   private static final Component NO_MATERIALS = TConstruct.makeTranslation("command", "generate_part_textures.no_materials");
   /** Path to add the data */
@@ -161,6 +163,9 @@ public class ClientGeneratePartTexturesCommand {
     } catch (Exception e) {
       long deltaTime = System.nanoTime() - time;
       log.error("Failed to generate part textures after {} ms", deltaTime / 1000000f, e);
+      if (Minecraft.getInstance().player != null) {
+        Minecraft.getInstance().player.displayClientMessage(Component.translatable(FAILURE_KEY, (deltaTime / 1000000) / 1000f, e.getMessage()).withStyle(ChatFormatting.RED), false);
+      }
     }
   }
 
@@ -302,13 +307,11 @@ public class ClientGeneratePartTexturesCommand {
             MaterialSpriteInfo info = RegistryDataMapLoader.parseData("Material Generator Info", jsons, location, json, null, SPRITE_LOADER, context);
             MaterialSpriteInfo oldInfo = builder.putIfAbsent(info.getTexture(), info);
             if (oldInfo != null) {
-              TConstruct.LOG.error("Received multiple generators for texture " + info.getTexture() + ": " + oldInfo.getTransformer() + ", " + info.getTransformer());
+              TConstruct.LOG.error("Received multiple generators for texture {}: {}, {}", info.getTexture(), oldInfo.getTransformer(), info.getTransformer());
             }
           }
         } catch (JsonSyntaxException e) {
           log.error("Failed to read tool part texture generator info for {}", id, e);
-        } catch (Exception e) {
-          // NO-OP, that is a resource pack bug, not our job
         }
       }
     }
