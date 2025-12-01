@@ -329,6 +329,7 @@ public final class TinkerTools extends TinkerModule {
       ToolModule.LOADER.register(getResource("default_materials"), DefaultMaterialsModule.LOADER);
       ToolModule.LOADER.register(getResource("statless_part_repair"), StatlessPartRepairModule.LOADER);
       // aoe
+      AreaOfEffectIterator.LOADER.register(getResource("empty"), AreaOfEffectIterator.EMPTY.getLoader());
       AreaOfEffectIterator.register(getResource("box_aoe"), BoxAOEIterator.LOADER);
       AreaOfEffectIterator.register(getResource("circle_aoe"), CircleAOEIterator.LOADER);
       AreaOfEffectIterator.register(getResource("tree_aoe"), TreeAOEIterator.LOADER);
