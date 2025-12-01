@@ -16,8 +16,12 @@ import slimeknights.mantle.client.book.repository.BookRepository;
 import slimeknights.mantle.client.book.transformer.BookTransformer;
 import slimeknights.mantle.client.screen.book.element.ItemElement;
 import slimeknights.mantle.client.screen.book.element.SizedBookElement;
+import slimeknights.mantle.data.loadable.field.ContextKey;
 import slimeknights.mantle.data.predicate.IJsonPredicate;
+import slimeknights.mantle.util.DataLoadedConditionContext;
 import slimeknights.mantle.util.JsonHelper;
+import slimeknights.mantle.util.typed.TypedMap;
+import slimeknights.mantle.util.typed.TypedMapBuilder;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.client.book.content.AbstractMaterialContent;
 import slimeknights.tconstruct.library.json.IntRange;
@@ -50,6 +54,7 @@ import java.util.stream.Stream;
 public class TierRangeMaterialSectionTransformer extends BookTransformer {
   private static final ResourceLocation KEY = TConstruct.getResource("material_tier");
   private static final IntRange TIER = new IntRange(0, Short.MAX_VALUE);
+  private static final TypedMap CONTEXT = TypedMapBuilder.builder().put(ContextKey.CONDITION_CONTEXT, DataLoadedConditionContext.INSTANCE).build();
 
   private static final Map<ResourceLocation,MaterialType> MATERIAL_TYPES = new HashMap<>();
 
@@ -80,7 +85,7 @@ public class TierRangeMaterialSectionTransformer extends BookTransformer {
           // load in predicate
           IJsonPredicate<MaterialVariantId> predicate = MaterialPredicate.ANY;
           if (json.has("predicate")) {
-            predicate = MaterialPredicate.LOADER.getIfPresent(json, "predicate");
+            predicate = MaterialPredicate.LOADER.getIfPresent(json, "predicate", CONTEXT);
           } else if (json.has("tag")) {
             // shortcut for simple tag predicates
             predicate = MaterialPredicate.tag(TinkerLoadables.MATERIAL_TAGS.getIfPresent(json, "tag"));
