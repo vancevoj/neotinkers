@@ -694,6 +694,7 @@ public final class TinkerModifiers extends TinkerModule {
       ModifierLevelDisplay.LOADER.register(getResource("unique"), UniqueForLevels.LOADER);
 
       // modifier modules //
+      ModifierModule.LOADER.register(getResource("empty"), ModifierModule.EMPTY.getLoader());
       // armor
       ModifierModule.LOADER.register(getResource("max_armor_attribute"), MaxArmorAttributeModule.LOADER);
       ModifierModule.LOADER.register(getResource("effect_immunity"), EffectImmunityModule.LOADER);

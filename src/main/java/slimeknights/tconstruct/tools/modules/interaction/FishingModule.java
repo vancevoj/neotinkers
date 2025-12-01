@@ -16,7 +16,6 @@ import net.minecraftforge.common.ToolAction;
 import net.minecraftforge.common.ToolActions;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.data.loadable.record.SingletonLoader;
-import slimeknights.mantle.data.registry.GenericLoaderRegistry.IHaveLoader;
 import slimeknights.mantle.util.OffhandCooldownTracker;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
@@ -55,7 +54,7 @@ public enum FishingModule implements ModifierModule, GeneralInteractionModifierH
   public static final RecordLoadable<FishingModule> LOADER = new SingletonLoader<>(INSTANCE);
 
   @Override
-  public RecordLoadable<? extends IHaveLoader> getLoader() {
+  public RecordLoadable<FishingModule> getLoader() {
     return LOADER;
   }
 
