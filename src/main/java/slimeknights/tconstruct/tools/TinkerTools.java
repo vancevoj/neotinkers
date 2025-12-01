@@ -307,6 +307,7 @@ public final class TinkerTools extends TinkerModule {
       ToolStats.register(ToolTankHelper.CAPACITY_STAT);
       ToolStats.register(ToolEnergyCapability.MAX_STAT);
 
+      ToolModule.LOADER.register(getResource("empty"), ToolModule.EMPTY.getLoader());
       // tool definition components
       ToolModule.LOADER.register(getResource("base_stats"), SetStatsModule.LOADER);
       ToolModule.LOADER.register(getResource("multiply_stats"), MultiplyStatsModule.LOADER);
