@@ -119,7 +119,7 @@ public final class TinkerMaterials extends TinkerModule {
     // fake storage items make more sense here than tool parts
     Consumer<ItemStack> consumer = output::accept;
     TinkerToolParts.fakeIngot.get().addVariants(consumer, "");
-    TinkerToolParts.fakeStorageBlock.get().addVariants(consumer, "");
+    TinkerToolParts.fakeStorageBlockItem.get().addVariants(consumer, "");
     // future: soulsteel
     // future: knightslime
   }

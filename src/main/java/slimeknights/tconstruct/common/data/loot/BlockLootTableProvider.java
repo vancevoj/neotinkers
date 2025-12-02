@@ -40,6 +40,7 @@ import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.registration.GeodeItemObject;
 import slimeknights.tconstruct.common.registration.GeodeItemObject.BudSize;
 import slimeknights.tconstruct.gadgets.TinkerGadgets;
+import slimeknights.tconstruct.library.tools.part.IMaterialItem;
 import slimeknights.tconstruct.library.utils.NBTTags;
 import slimeknights.tconstruct.shared.TinkerCommons;
 import slimeknights.tconstruct.shared.TinkerMaterials;
@@ -48,6 +49,7 @@ import slimeknights.tconstruct.shared.block.SlimeType;
 import slimeknights.tconstruct.smeltery.TinkerSmeltery;
 import slimeknights.tconstruct.tables.TinkerTables;
 import slimeknights.tconstruct.tables.block.entity.chest.TinkersChestBlockEntity;
+import slimeknights.tconstruct.tools.TinkerToolParts;
 import slimeknights.tconstruct.world.TinkerWorld;
 import slimeknights.tconstruct.world.block.DirtType;
 import slimeknights.tconstruct.world.block.FoliageType;
@@ -146,6 +148,9 @@ public class BlockLootTableProvider extends BlockLootSubProvider {
     this.dropTable(TinkerTables.tinkersAnvil.get());
     this.dropTable(TinkerTables.modifierWorktable.get());
     this.dropTable(TinkerTables.scorchedAnvil.get());
+    // copy material
+    this.add(TinkerToolParts.fakeStorageBlock.get(), block -> droppingWithFunctions(block, builder ->
+      builder.apply(CopyNbtFunction.copyData(ContextNbtProvider.BLOCK_ENTITY).copy(IMaterialItem.MATERIAL_TAG, IMaterialItem.MATERIAL_TAG))));
   }
 
   private void addWorld() {

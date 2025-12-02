@@ -164,7 +164,7 @@ public class ToolClientEvents extends ClientEventBase {
     event.enqueueWork(() -> {
       // fake ingot showing in the book is a little nicer than the repair kits
       AbstractMaterialContent.registerFallbackPart(TinkerToolParts.fakeIngot);
-      AbstractMaterialContent.registerFallbackPart(TinkerToolParts.fakeStorageBlock);
+      AbstractMaterialContent.registerFallbackPart(TinkerToolParts.fakeStorageBlockItem);
       // screens
       MenuScreens.register(TinkerTools.toolContainer.get(), ToolContainerScreen::new);
 

@@ -17,8 +17,17 @@ public class FakeIngotItem extends RepairKitItem {
   /** Cache of whether tag is present for each ingot */
   private final Object2BooleanArrayMap<MaterialId> missingItemCache = new Object2BooleanArrayMap<>();
   /** Getter to resolve the tag */
-  private final Predicate<MaterialId> missingItemGetter = material -> {
-    float amount = getRepairAmount();
+  private final Predicate<MaterialId> missingItemGetter = material -> hasItem(material, getRepairAmount());
+
+  private final TagKey<IMaterial> validMaterials;
+  public FakeIngotItem(Properties properties, int value, TagKey<IMaterial> validMaterials) {
+    super(properties, value);
+    this.validMaterials = validMaterials;
+    RecipeCacheInvalidator.addReloadListener(client -> missingItemCache.clear());
+  }
+
+  /** Checks if an item exists with the given amount */
+  public static boolean hasItem(MaterialId material, float amount) {
     // if we have a match, it's not missing
     for (MaterialRecipe recipe : MaterialRecipeCache.getRecipes(material)) {
       if (recipe.getValue() / (float) recipe.getNeeded() == amount) {
@@ -26,13 +35,6 @@ public class FakeIngotItem extends RepairKitItem {
       }
     }
     return true;
-  };
-
-  private final TagKey<IMaterial> validMaterials;
-  public FakeIngotItem(Properties properties, int value, TagKey<IMaterial> validMaterials) {
-    super(properties, value);
-    this.validMaterials = validMaterials;
-    RecipeCacheInvalidator.addReloadListener(client -> missingItemCache.clear());
   }
 
   @Override

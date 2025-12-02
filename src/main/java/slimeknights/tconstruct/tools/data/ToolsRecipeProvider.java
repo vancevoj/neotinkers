@@ -394,14 +394,14 @@ public class ToolsRecipeProvider extends BaseRecipeProvider implements IMaterial
     partRecipes(consumer, TinkerToolParts.repairKit, TinkerSmeltery.repairKitCast, 2, partFolder, castFolder);
     partCasting(consumer, TinkerToolParts.fakeIngot.get(), TinkerSmeltery.ingotCast, 1, partFolder);
     // fake storage items
-    MaterialCastingRecipeBuilder.basinRecipe(TinkerToolParts.fakeStorageBlock.get())
+    MaterialCastingRecipeBuilder.basinRecipe(TinkerToolParts.fakeStorageBlockItem.get())
       .setItemCost(9)
       .save(consumer, location(partFolder + "fake_storage_block_casting"));
-    CompositeCastingRecipeBuilder.basin(TinkerToolParts.fakeStorageBlock.get(), 9)
+    CompositeCastingRecipeBuilder.basin(TinkerToolParts.fakeStorageBlockItem.get(), 9)
       .save(consumer, location(partFolder + "fake_storage_block_composite"));
     // ingot to block
     ShapedRecipeBuilder.shaped(RecipeCategory.MISC, TinkerToolParts.fakeStorageBlock)
-      .define('#', MaterialIngredient.of(TinkerToolParts.fakeIngot.get(), new MaterialHasPartPredicate(TinkerToolParts.fakeStorageBlock.get())))
+      .define('#', MaterialIngredient.of(TinkerToolParts.fakeIngot.get(), new MaterialHasPartPredicate(TinkerToolParts.fakeStorageBlockItem.get())))
       .pattern("###")
       .pattern("###")
       .pattern("###")

@@ -32,6 +32,7 @@ import slimeknights.tconstruct.smeltery.TinkerSmeltery;
 import slimeknights.tconstruct.smeltery.data.SmelteryCompat;
 import slimeknights.tconstruct.smeltery.data.SmelteryCompat.CompatType;
 import slimeknights.tconstruct.tables.TinkerTables;
+import slimeknights.tconstruct.tools.TinkerToolParts;
 import slimeknights.tconstruct.world.TinkerHeadType;
 import slimeknights.tconstruct.world.TinkerWorld;
 import slimeknights.tconstruct.world.block.DirtType;
@@ -207,7 +208,7 @@ public class BlockTagProvider extends BlockTagsProvider {
     this.tag(Tags.Blocks.ORES_IN_GROUND_NETHERRACK).add(TinkerWorld.cobaltOre.get());
     this.tag(Tags.Blocks.ORE_RATES_SINGULAR).add(TinkerWorld.cobaltOre.get());
     this.tag(TinkerTags.Blocks.RAW_BLOCK_COBALT).add(TinkerWorld.rawCobaltBlock.get());
-    this.tag(Tags.Blocks.STORAGE_BLOCKS).addTag(TinkerTags.Blocks.RAW_BLOCK_COBALT);
+    this.tag(Tags.Blocks.STORAGE_BLOCKS).addTag(TinkerTags.Blocks.RAW_BLOCK_COBALT).add(TinkerToolParts.fakeStorageBlock.get());
 
     // allow the enderman to hold more blocks
     IntrinsicTagAppender<Block> endermanHoldable = this.tag(BlockTags.ENDERMAN_HOLDABLE);
@@ -429,7 +430,10 @@ public class BlockTagProvider extends BlockTagsProvider {
     // materials
     tagBlocks(MINEABLE_WITH_AXE, NEEDS_IRON_TOOL, TinkerMaterials.blazewood);
     tagBlocks(MINEABLE_WITH_AXE, NEEDS_DIAMOND_TOOL, TinkerMaterials.nahuatl);
-    tagBlocks(MINEABLE_WITH_PICKAXE, NEEDS_IRON_TOOL, TinkerWorld.cobaltOre, TinkerWorld.rawCobaltBlock, TinkerMaterials.steel, TinkerMaterials.cobalt, TinkerMaterials.slimesteel, TinkerMaterials.cinderslime, TinkerMaterials.amethystBronze, TinkerMaterials.roseGold, TinkerMaterials.pigIron);
+    tagBlocks(MINEABLE_WITH_PICKAXE, NEEDS_IRON_TOOL,
+      TinkerWorld.cobaltOre, TinkerWorld.rawCobaltBlock, TinkerMaterials.steel, TinkerMaterials.cobalt,
+      TinkerMaterials.slimesteel, TinkerMaterials.cinderslime, TinkerMaterials.amethystBronze,
+      TinkerMaterials.roseGold, TinkerMaterials.pigIron, TinkerToolParts.fakeStorageBlock);
     tagBlocks(MINEABLE_WITH_PICKAXE, NEEDS_DIAMOND_TOOL, TinkerMaterials.queensSlime, TinkerMaterials.manyullyn, TinkerMaterials.hepatizon, TinkerMaterials.soulsteel);
     tagBlocks(MINEABLE_WITH_PICKAXE, NEEDS_NETHERITE_TOOL, TinkerMaterials.knightmetal, TinkerMaterials.knightslime);
 
