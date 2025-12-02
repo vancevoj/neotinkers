@@ -120,8 +120,8 @@ public class ShapedMaterialRecipe extends ShapedRecipe {
     return findMaterial(inventory) != null;
   }
 
-  /** Sets the material for the given stack */
-  public void setMaterial(ItemStack stack, MaterialVariantId material) {
+  /** Common logic to this and {@link ShapedPartRecipe} */
+  public static void setMaterial(ItemStack stack, MaterialVariantId material, List<MaterialVariantId> extraMaterials) {
     if (extraMaterials.isEmpty() && stack.getItem() instanceof IMaterialItem materialItem) {
       materialItem.setMaterial(stack, material);
     } else {
@@ -132,6 +132,11 @@ public class ShapedMaterialRecipe extends ShapedRecipe {
       }
       ToolStack.from(stack).setMaterials(builder.build());
     }
+  }
+
+  /** Sets the material for the given stack */
+  public void setMaterial(ItemStack stack, MaterialVariantId material) {
+    setMaterial(stack, material, extraMaterials);
   }
 
   @Override
