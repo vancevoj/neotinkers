@@ -8,8 +8,10 @@ import mezz.jei.api.gui.ingredient.ICraftingGridHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.category.extensions.vanilla.crafting.ICraftingCategoryExtension;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import org.jetbrains.annotations.Nullable;
 import slimeknights.mantle.Mantle;
 import slimeknights.mantle.client.SafeClientAccess;
 import slimeknights.tconstruct.library.recipe.ingredient.MaterialValueIngredient;
@@ -44,6 +46,21 @@ public class ShapedMaterialExtension implements ICraftingCategoryExtension {
     }
     List<Ingredient> inputs = recipe.getIngredients();
     this.materialSlots = IntStream.range(0, inputs.size()).filter(i -> inputs.get(i) instanceof MaterialValueIngredient).toArray();
+  }
+
+  @Override
+  public int getWidth() {
+    return recipe.getWidth();
+  }
+
+  @Override
+  public int getHeight() {
+    return recipe.getHeight();
+  }
+
+  @Override
+  public @Nullable ResourceLocation getRegistryName() {
+    return recipe.getId();
   }
 
   @Override
