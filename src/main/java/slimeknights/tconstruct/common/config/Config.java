@@ -171,7 +171,7 @@ public class Config {
         this.allowIngotlessAlloys = builder
           .comment("If true, integration alloy materials will be enabled if any of their components is present, allowing creating them from their molten liquid forms.",
             "If false, they will only be only be present if another mod adds an ingot.",
-            "This config option is provided as while most players prefer the additional materials, some players dislike having no ingot for a material, forcing repair kits for repair.")
+            "This config option is provided as while most players prefer the additional materials, some dislike having no proper ingot. Note we do have NBT ingots for these materials.")
           .worldRestart()
           .define("allowIngotlessAlloys", true);
         chemthrowerShotValue = builder
