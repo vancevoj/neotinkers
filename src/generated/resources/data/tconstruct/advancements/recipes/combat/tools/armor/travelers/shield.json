@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:tools/armor/travelers_shield"
+        "recipe": "tconstruct:tools/armor/travelers/shield"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -26,7 +26,7 @@
   ],
   "rewards": {
     "recipes": [
-      "tconstruct:tools/armor/travelers_shield"
+      "tconstruct:tools/armor/travelers/shield"
     ]
   },
   "sends_telemetry_event": false

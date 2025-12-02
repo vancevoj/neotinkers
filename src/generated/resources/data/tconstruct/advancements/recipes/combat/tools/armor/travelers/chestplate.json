@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:tools/armor/travelers_goggles"
+        "recipe": "tconstruct:tools/armor/travelers/chestplate"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -26,7 +26,7 @@
   ],
   "rewards": {
     "recipes": [
-      "tconstruct:tools/armor/travelers_goggles"
+      "tconstruct:tools/armor/travelers/chestplate"
     ]
   },
   "sends_telemetry_event": false

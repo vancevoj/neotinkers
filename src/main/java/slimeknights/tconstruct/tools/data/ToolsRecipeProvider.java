@@ -178,6 +178,7 @@ public class ToolsRecipeProvider extends BaseRecipeProvider implements IMaterial
                        .save(consumer, prefix(TinkerTools.enderStaff, folder));
 
     // travelers gear
+    String travelersFolder = armorFolder + "travelers/";
     Consumer<FinishedRecipe> shapedMaterial = ShapedMaterialConsumerBuilder.wrap().material(MaterialIds.leather).build(consumer);
     Function<MaterialStatsId,Ingredient> materialsCosting = type -> MaterialValueIngredient.of(MaterialPredicate.and(MaterialPredicate.or(MaterialPredicate.CASTABLE, MaterialPredicate.COMPOSITE), new MaterialStatTypePredicate(type)), 1);
     ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, TinkerTools.travelersGear.get(ArmorItem.Type.HELMET))
@@ -188,10 +189,7 @@ public class ToolsRecipeProvider extends BaseRecipeProvider implements IMaterial
       .define('l', Tags.Items.LEATHER)
       .define('g', Tags.Items.GLASS_PANES_COLORLESS)
       .unlockedBy("has_item", has(Tags.Items.LEATHER))
-      .save(shapedMaterial, location(armorFolder + "travelers_goggles"));
-    PartSwapCastingRecipeBuilder.tableRecipe(Ingredient.of(TinkerTools.travelersGear.get(ArmorItem.Type.HELMET)), 3)
-      .index(1)
-      .save(consumer, location(armorFolder + "travelers_goggles_leather"));
+      .save(shapedMaterial, location(travelersFolder + "goggles"));
     ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, TinkerTools.travelersGear.get(ArmorItem.Type.CHESTPLATE))
       .pattern("l l")
       .pattern("lcl")
@@ -199,10 +197,7 @@ public class ToolsRecipeProvider extends BaseRecipeProvider implements IMaterial
       .define('c', materialsCosting.apply(PlatingMaterialStats.CHESTPLATE.getId()))
       .define('l', Tags.Items.LEATHER)
       .unlockedBy("has_item", has(Tags.Items.LEATHER))
-      .save(shapedMaterial, location(armorFolder + "travelers_chestplate"));
-    PartSwapCastingRecipeBuilder.tableRecipe(Ingredient.of(TinkerTools.travelersGear.get(ArmorItem.Type.CHESTPLATE)), 6)
-      .index(1)
-      .save(consumer, location(armorFolder + "travelers_chestplate_leather"));
+      .save(shapedMaterial, location(travelersFolder + "chestplate"));
     ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, TinkerTools.travelersGear.get(ArmorItem.Type.LEGGINGS))
       .pattern("lll")
       .pattern("c c")
@@ -210,47 +205,58 @@ public class ToolsRecipeProvider extends BaseRecipeProvider implements IMaterial
       .define('c', materialsCosting.apply(PlatingMaterialStats.LEGGINGS.getId()))
       .define('l', Tags.Items.LEATHER)
       .unlockedBy("has_item", has(Tags.Items.LEATHER))
-      .save(shapedMaterial, location(armorFolder + "travelers_pants"));
-    PartSwapCastingRecipeBuilder.tableRecipe(Ingredient.of(TinkerTools.travelersGear.get(ArmorItem.Type.LEGGINGS)), 5)
-      .index(1)
-      .save(consumer, location(armorFolder + "travelers_pants_leather"));
+      .save(shapedMaterial, location(travelersFolder + "pants"));
     ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, TinkerTools.travelersGear.get(ArmorItem.Type.BOOTS))
       .pattern("c c")
       .pattern("l l")
       .define('c', materialsCosting.apply(PlatingMaterialStats.BOOTS.getId()))
       .define('l', Tags.Items.LEATHER)
       .unlockedBy("has_item", has(Tags.Items.LEATHER))
-      .save(shapedMaterial, location(armorFolder + "travelers_boots"));
-    PartSwapCastingRecipeBuilder.tableRecipe(Ingredient.of(TinkerTools.travelersGear.get(ArmorItem.Type.BOOTS)), 2)
-      .index(1)
-      .save(consumer, location(armorFolder + "travelers_boots_leather"));
+      .save(shapedMaterial, location(travelersFolder + "boots"));
+    
+
     ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, TinkerTools.travelersShield)
                        .pattern("wl")
                        .pattern("lw")
                        .define('l', Tags.Items.LEATHER)
                        .define('w', MaterialValueIngredient.of(new MaterialStatTypePredicate(StatlessMaterialStats.SHIELD_CORE.getIdentifier()), 1))
                        .unlockedBy("has_item", has(Tags.Items.LEATHER))
-                       .save(shapedMaterial, location(armorFolder + "travelers_shield"));
+                       .save(shapedMaterial, location(travelersFolder + "shield"));
+
+    // travelers part swapping
+    PartSwapCastingRecipeBuilder.tableRecipe(Ingredient.of(TinkerTools.travelersGear.get(ArmorItem.Type.HELMET)), 3)
+      .index(1)
+      .save(consumer, location(travelersFolder + "goggles_leather"));
+    PartSwapCastingRecipeBuilder.tableRecipe(Ingredient.of(TinkerTools.travelersGear.get(ArmorItem.Type.CHESTPLATE)), 6)
+      .index(1)
+      .save(consumer, location(travelersFolder + "chestplate_leather"));
+    PartSwapCastingRecipeBuilder.tableRecipe(Ingredient.of(TinkerTools.travelersGear.get(ArmorItem.Type.LEGGINGS)), 5)
+      .index(1)
+      .save(consumer, location(travelersFolder + "pants_leather"));
+    PartSwapCastingRecipeBuilder.tableRecipe(Ingredient.of(TinkerTools.travelersGear.get(ArmorItem.Type.BOOTS)), 2)
+      .index(1)
+      .save(consumer, location(travelersFolder + "boots_leather"));
     PartSwapCastingRecipeBuilder.tableRecipe(Ingredient.of(TinkerTools.travelersShield), 2)
       .index(1)
-      .save(consumer, location(armorFolder + "travelers_shield_leather"));
+      .save(consumer, location(travelersFolder + "shield_leather"));
     PartSwapCastingRecipeBuilder.tableRecipe(Ingredient.of(TinkerTools.travelersGear.values().toArray(new Item[0])), 2)
-      .save(consumer, location(armorFolder + "travelers_swapping_metal"));
+      .save(consumer, location(travelersFolder + "swapping_metal"));
 
     // plate armor
-    TinkerTools.plateArmor.forEach(item -> toolBuilding(consumer, item, armorFolder, Patterns.PLATE_ARMOR));
+    String plateFolder = armorFolder + "plate/";
+    TinkerTools.plateArmor.forEach(item -> toolBuilding(consumer, item, plateFolder, Patterns.PLATE_ARMOR));
     MaterialCastingRecipeBuilder.tableRecipe(TinkerTools.plateShield.get())
                                 .setCast(MaterialIngredient.of(TinkerToolParts.shieldCore), CastPurpose.FIRST_MATERIAL)
                                 .setItemCost(3)
-                                .save(consumer, location(armorFolder + "plate_shield"));
+                                .save(consumer, location(plateFolder + "plate_shield"));
     PartSwapCastingRecipeBuilder.tableRecipe(Ingredient.of(TinkerTools.plateArmor.get(ArmorItem.Type.HELMET)), 3)
-      .save(consumer, location(armorFolder + "plate_helmet_swapping"));
+      .save(consumer, location(plateFolder + "helmet_swapping"));
     PartSwapCastingRecipeBuilder.tableRecipe(Ingredient.of(TinkerTools.plateArmor.get(ArmorItem.Type.CHESTPLATE)), 6)
-      .save(consumer, location(armorFolder + "plate_chestplate_swapping"));
+      .save(consumer, location(plateFolder + "chestplate_swapping"));
     PartSwapCastingRecipeBuilder.tableRecipe(Ingredient.of(TinkerTools.plateArmor.get(ArmorItem.Type.LEGGINGS)), 5)
-      .save(consumer, location(armorFolder + "plate_leggings_swapping"));
+      .save(consumer, location(plateFolder + "leggings_swapping"));
     PartSwapCastingRecipeBuilder.tableRecipe(Ingredient.of(TinkerTools.plateArmor.get(ArmorItem.Type.BOOTS)), 2)
-      .save(consumer, location(armorFolder + "plate_boots_swapping"));
+      .save(consumer, location(plateFolder + "boots_swapping"));
 
     // slimeskull
     slimeskullCasting(consumer, MaterialIds.glass,        Items.CREEPER_HEAD,          armorFolder);

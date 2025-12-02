@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:tools/armor/travelers_pants"
+        "recipe": "tconstruct:tools/armor/travelers/goggles"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -26,7 +26,7 @@
   ],
   "rewards": {
     "recipes": [
-      "tconstruct:tools/armor/travelers_pants"
+      "tconstruct:tools/armor/travelers/goggles"
     ]
   },
   "sends_telemetry_event": false
