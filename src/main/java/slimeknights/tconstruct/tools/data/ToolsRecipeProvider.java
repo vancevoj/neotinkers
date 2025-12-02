@@ -26,12 +26,14 @@ import slimeknights.tconstruct.common.data.BaseRecipeProvider;
 import slimeknights.tconstruct.fluids.TinkerFluids;
 import slimeknights.tconstruct.library.data.recipe.IMaterialRecipeHelper;
 import slimeknights.tconstruct.library.data.recipe.IToolRecipeHelper;
+import slimeknights.tconstruct.library.json.predicate.material.MaterialHasPartPredicate;
 import slimeknights.tconstruct.library.json.predicate.material.MaterialPredicate;
 import slimeknights.tconstruct.library.json.predicate.material.MaterialStatTypePredicate;
 import slimeknights.tconstruct.library.materials.definition.MaterialId;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
 import slimeknights.tconstruct.library.recipe.FluidValues;
 import slimeknights.tconstruct.library.recipe.casting.ItemCastingRecipeBuilder;
+import slimeknights.tconstruct.library.recipe.casting.material.CompositeCastingRecipeBuilder;
 import slimeknights.tconstruct.library.recipe.casting.material.MaterialCastingRecipeBuilder;
 import slimeknights.tconstruct.library.recipe.casting.material.PartSwapCastingRecipeBuilder;
 import slimeknights.tconstruct.library.recipe.casting.material.ToolCastingRecipe.CastPurpose;
@@ -391,6 +393,26 @@ public class ToolsRecipeProvider extends BaseRecipeProvider implements IMaterial
     String castFolder = "smeltery/casts/";
     partRecipes(consumer, TinkerToolParts.repairKit, TinkerSmeltery.repairKitCast, 2, partFolder, castFolder);
     partCasting(consumer, TinkerToolParts.fakeIngot.get(), TinkerSmeltery.ingotCast, 1, partFolder);
+    // fake storage items
+    MaterialCastingRecipeBuilder.basinRecipe(TinkerToolParts.fakeStorageBlock.get())
+      .setItemCost(9)
+      .save(consumer, location(partFolder + "fake_storage_block_casting"));
+    CompositeCastingRecipeBuilder.basin(TinkerToolParts.fakeStorageBlock.get(), 9)
+      .save(consumer, location(partFolder + "fake_storage_block_composite"));
+    // ingot to block
+    ShapedRecipeBuilder.shaped(RecipeCategory.MISC, TinkerToolParts.fakeStorageBlock)
+      .define('#', MaterialIngredient.of(TinkerToolParts.fakeIngot.get(), new MaterialHasPartPredicate(TinkerToolParts.fakeStorageBlock.get())))
+      .pattern("###")
+      .pattern("###")
+      .pattern("###")
+      .unlockedBy("has_item", has(TinkerToolParts.fakeIngot))
+      .save(MaterialsConsumerBuilder.shaped("#").build(consumer), location(partFolder + "fake_ingot_to_block"));
+    // block to ingot
+    ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, TinkerToolParts.fakeIngot, 9)
+      .requires(MaterialIngredient.of(TinkerToolParts.fakeStorageBlock, new MaterialHasPartPredicate(TinkerToolParts.fakeIngot.get())))
+      .unlockedBy("has_item", has(TinkerToolParts.fakeStorageBlock))
+      .save(MaterialsConsumerBuilder.shapeless(1).build(consumer), location(partFolder + "fake_block_to_ingots"));
+
     // head
     partRecipes(consumer, TinkerToolParts.pickHead,     TinkerSmeltery.pickHeadCast,     2, partFolder, castFolder);
     partRecipes(consumer, TinkerToolParts.hammerHead,   TinkerSmeltery.hammerHeadCast,   8, partFolder, castFolder);

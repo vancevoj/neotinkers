@@ -21,32 +21,13 @@
       "required": false
     },
     {
-      "id": "tconstruct:bronze",
-      "required": false
-    },
-    {
-      "id": "tconstruct:constantan",
-      "required": false
-    },
-    {
-      "id": "tconstruct:invar",
-      "required": false
-    },
-    {
-      "id": "tconstruct:electrum",
-      "required": false
-    },
-    {
-      "id": "tconstruct:pewter",
-      "required": false
-    },
-    {
       "id": "tconstruct:steeleaf",
       "required": false
     },
     {
       "id": "tconstruct:fiery",
       "required": false
-    }
+    },
+    "#tconstruct:compatibility_metals/alloys"
   ]
 }

@@ -766,7 +766,9 @@ public class TinkerTags {
     public static final TagKey<IMaterial> EXCLUDE_FROM_LOOT = local("exclude_from_loot");
 
     /** Materials acting as compatability metals. Will allow them to use {@link slimeknights.tconstruct.tools.TinkerToolParts#fakeIngot} assuming they lack an ingot. */
-    public static final TagKey<IMaterial> COMPATABILITY_METAL = local("compatibility_metal");
+    public static final TagKey<IMaterial> COMPATABILITY_METALS = local("compatibility_metals");
+    /** Materials acting as compatability alloys. Will allow them to use {@link slimeknights.tconstruct.tools.TinkerToolParts#fakeStorageBlock}. */
+    public static final TagKey<IMaterial> COMPATABILITY_ALLOYS = local("compatibility_metals/alloys");
 
     // tags for book material lists
     /** Ammo materials to show in materials and you. Used instead of tiers due to non-standard ammo behavior. */

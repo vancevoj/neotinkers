@@ -1181,6 +1181,7 @@
   "item.tconstruct.repair_kit": "Repair Kit",
   "item.tconstruct.repair_kit.tooltip": "Use on a tool in the inventory to repair it the equivalent of %s ingots",
   "item.tconstruct.fake_ingot": "Ingot",
+  "item.tconstruct.fake_storage_block": "Block",
 
   "item.tconstruct.pick_head": "Pick Head",
   "item.tconstruct.hammer_head": "Hammer Head",

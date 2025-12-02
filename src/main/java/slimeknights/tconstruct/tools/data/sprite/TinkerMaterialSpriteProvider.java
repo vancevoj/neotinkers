@@ -19,6 +19,7 @@ import slimeknights.tconstruct.tools.stats.StatlessMaterialStats;
 import static slimeknights.tconstruct.TConstruct.getResource;
 import static slimeknights.tconstruct.tools.data.sprite.TinkerPartSpriteProvider.INGOT;
 import static slimeknights.tconstruct.tools.data.sprite.TinkerPartSpriteProvider.SLIMESUIT;
+import static slimeknights.tconstruct.tools.data.sprite.TinkerPartSpriteProvider.STORAGE_BLOCK;
 import static slimeknights.tconstruct.tools.data.sprite.TinkerPartSpriteProvider.WOOD;
 
 /**
@@ -253,19 +254,19 @@ public class TinkerMaterialSpriteProvider extends AbstractMaterialSpriteProvider
       .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF1B202D).addARGB(102, 0xFF252C3D).addARGB(140, 0xFF323847).addARGB(178, 0xFF3E4453).addARGB(216, 0xFF495065).addARGB(255, 0xFF67718C).build());
 //      .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF222626).addARGB(102, 0xFF393D3D).addARGB(140, 0xFF515454).addARGB(178, 0xFF6A6D6D).addARGB(216, 0xFF898C8C).addARGB(255, 0xFFADAFAF).build());
     buildMaterial(MaterialIds.bronze)
-      .meleeHarvest().ranged().armor().statType(INGOT)
+      .meleeHarvest().ranged().armor().statType(INGOT, STORAGE_BLOCK)
       .fallbacks("metal")
       .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF3F261B).addARGB(102, 0xFF563221).addARGB(140, 0xFF7A4C35).addARGB(178, 0xFFA06A48).addARGB(216, 0xFFC48C5E).addARGB(255, 0xFFDDAF73).build());
     buildMaterial(MaterialIds.constantan)
-      .meleeHarvest().ranged().armor().statType(INGOT)
+      .meleeHarvest().ranged().armor().statType(INGOT, STORAGE_BLOCK)
       .fallbacks("metal")
       .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF5B3027).addARGB(102, 0xFF723E31).addARGB(140, 0xFFA35647).addARGB(178, 0xFFCD6E59).addARGB(216, 0xFFF6866C).addARGB(255, 0xFFFFA986).build());
     buildMaterial(MaterialIds.invar)
-      .meleeHarvest().ranged().armor().statType(INGOT)
+      .meleeHarvest().ranged().armor().statType(INGOT, STORAGE_BLOCK)
       .fallbacks("metal")
       .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF4A666A).addARGB(102, 0xFF5C7C7B).addARGB(140, 0xFF859792).addARGB(178, 0xFFA3B1A8).addARGB(216, 0xFFC5CCC3).addARGB(255, 0xFFE1E7E5).build());
     buildMaterial(MaterialIds.pewter)
-      .meleeHarvest().ranged().armor().statType(INGOT)
+      .meleeHarvest().ranged().armor().statType(INGOT, STORAGE_BLOCK)
       .fallbacks("metal")
       .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF2C281A).addARGB(102, 0xFF4E4A3C).addARGB(140, 0xFF686456).addARGB(178, 0xFF797567).addARGB(216, 0xFF999483).addARGB(255, 0xFFCCC5AF).build());
     IColorMapping uraniumPalette = GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF363D2F).addARGB(102, 0xFF48543F).addARGB(140, 0xFF5F7050).addARGB(178, 0xFF728762).addARGB(216, 0xFF88A075).addARGB(255, 0xFF9EBF8B).build();
@@ -274,7 +275,7 @@ public class TinkerMaterialSpriteProvider extends AbstractMaterialSpriteProvider
       .fallbacks("bone", "metal")
       .colorMapper(uraniumPalette);
     buildMaterial(MaterialIds.electrum)
-      .meleeHarvest().ranged().armor().statType(INGOT)
+      .meleeHarvest().ranged().armor().statType(INGOT, STORAGE_BLOCK)
       .fallbacks("metal")
       .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF605626).addARGB(102, 0xFF7C7031).addARGB(140, 0xFFB2A03E).addARGB(178, 0xFFD6C044).addARGB(216, 0xFFF2DE60).addARGB(255, 0xFFFFF2A3).build());
     IColorMapping brassPalette = GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF563B1F).addARGB(102, 0xFF775633).addARGB(140, 0xFFA0763E).addARGB(178, 0xFFCCA353).addARGB(216, 0xFFEDD578).addARGB(255, 0xFFFCF7AE).build();

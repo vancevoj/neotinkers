@@ -53,7 +53,9 @@ public final class TinkerToolParts extends TinkerModule {
   // repair kits
   public static final ItemObject<RepairKitItem> repairKit = ITEMS.register("repair_kit", () -> new RepairKitItem(ITEM_PROPS));
   /** Fake ingot tool part for the sake of compat materials that lack an ingot form. Mainly used for compat alloys such as bronze which can be activated by their components. */
-  public static final ItemObject<FakeIngotItem> fakeIngot = ITEMS.register("fake_ingot", () -> new FakeIngotItem(ITEM_PROPS, 1, TinkerTags.Materials.COMPATABILITY_METAL));
+  public static final ItemObject<FakeIngotItem> fakeIngot = ITEMS.register("fake_ingot", () -> new FakeIngotItem(ITEM_PROPS, 1, TinkerTags.Materials.COMPATABILITY_METALS));
+  /** Fake block tool part for the sake of compat materials that lack an ingot form. Mainly used for compat alloys such as bronze which can be activated by their components. */
+  public static final ItemObject<FakeIngotItem> fakeStorageBlock = ITEMS.register("fake_storage_block", () -> new FakeIngotItem(ITEM_PROPS, 9, TinkerTags.Materials.COMPATABILITY_ALLOYS));
 
   // rock
   public static final ItemObject<ToolPartItem> pickHead = ITEMS.register("pick_head", () -> new ToolPartItem(ITEM_PROPS, HeadMaterialStats.ID));
