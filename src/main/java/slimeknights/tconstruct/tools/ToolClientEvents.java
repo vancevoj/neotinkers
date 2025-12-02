@@ -49,6 +49,7 @@ import slimeknights.tconstruct.library.client.book.content.AbstractMaterialConte
 import slimeknights.tconstruct.library.client.materials.MaterialTooltipCache;
 import slimeknights.tconstruct.library.client.model.DynamicTextureLoader;
 import slimeknights.tconstruct.library.client.model.TinkerItemProperties;
+import slimeknights.tconstruct.library.client.model.tools.MaterialBlockModel;
 import slimeknights.tconstruct.library.client.model.tools.MaterialModel;
 import slimeknights.tconstruct.library.client.model.tools.ToolModel;
 import slimeknights.tconstruct.library.client.modifiers.DyedModifierModel;
@@ -118,6 +119,7 @@ public class ToolClientEvents extends ClientEventBase {
   static void registerModelLoaders(RegisterGeometryLoaders event) {
     event.register("material", MaterialModel.LOADER);
     event.register("tool", ToolModel.LOADER);
+    event.register("material_block", MaterialBlockModel.LOADER);
   }
 
   @SubscribeEvent
