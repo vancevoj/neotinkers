@@ -3,6 +3,7 @@ package slimeknights.tconstruct.tools.item;
 import it.unimi.dsi.fastutil.objects.Object2BooleanArrayMap;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
+import slimeknights.tconstruct.common.recipe.RecipeCacheInvalidator;
 import slimeknights.tconstruct.library.materials.IMaterialRegistry;
 import slimeknights.tconstruct.library.materials.MaterialRegistry;
 import slimeknights.tconstruct.library.materials.definition.IMaterial;
@@ -25,6 +26,7 @@ public class FakeStorageBlockItem extends MaterialBlockItem implements IRepairKi
     super(block, properties);
     this.repairAmount = repairAmount;
     this.validMaterials = validMaterials;
+    RecipeCacheInvalidator.addReloadListener(client -> missingItemCache.clear());
   }
 
   @Override
