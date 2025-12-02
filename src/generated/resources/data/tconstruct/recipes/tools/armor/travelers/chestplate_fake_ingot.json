@@ -1,0 +1,30 @@
+{
+  "type": "tconstruct:crafting_shaped_parts",
+  "category": "equipment",
+  "extra_materials": [
+    "tconstruct:leather"
+  ],
+  "key": {
+    "c": {
+      "type": "tconstruct:material",
+      "item": "tconstruct:fake_ingot",
+      "material": {
+        "type": "tconstruct:stat_type",
+        "stat_type": "tconstruct:plating_chestplate"
+      }
+    },
+    "l": {
+      "tag": "forge:leather"
+    }
+  },
+  "parts": "c",
+  "pattern": [
+    "l l",
+    "lcl",
+    "lcl"
+  ],
+  "result": {
+    "item": "tconstruct:travelers_chestplate"
+  },
+  "show_notification": true
+}

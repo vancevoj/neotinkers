@@ -4,6 +4,7 @@
     "tconstruct:arrow_shaft",
     "tconstruct:fletching",
     "tconstruct:repair_kit",
+    "tconstruct:fake_ingot",
     "#tconstruct:parts/bartered"
   ]
 }

@@ -45,6 +45,7 @@ import slimeknights.tconstruct.common.network.TinkerNetwork;
 import slimeknights.tconstruct.library.client.armor.AbstractArmorModel;
 import slimeknights.tconstruct.library.client.armor.ArmorModelManager;
 import slimeknights.tconstruct.library.client.armor.texture.TrimArmorTextureSupplier;
+import slimeknights.tconstruct.library.client.book.content.AbstractMaterialContent;
 import slimeknights.tconstruct.library.client.materials.MaterialTooltipCache;
 import slimeknights.tconstruct.library.client.model.DynamicTextureLoader;
 import slimeknights.tconstruct.library.client.model.TinkerItemProperties;
@@ -159,6 +160,8 @@ public class ToolClientEvents extends ClientEventBase {
 
     // keybinds
     event.enqueueWork(() -> {
+      // fake ingot showing in the book is a little nicer than the repair kits
+      AbstractMaterialContent.registerFallbackPart(TinkerToolParts.fakeIngot);
       // screens
       MenuScreens.register(TinkerTools.toolContainer.get(), ToolContainerScreen::new);
 

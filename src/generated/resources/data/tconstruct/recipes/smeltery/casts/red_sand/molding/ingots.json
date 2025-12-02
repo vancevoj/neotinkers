@@ -3,8 +3,14 @@
   "material": {
     "tag": "tconstruct:casts/red_sand"
   },
-  "pattern": {
-    "tag": "forge:ingots"
-  },
+  "pattern": [
+    {
+      "type": "tconstruct:material",
+      "item": "tconstruct:fake_ingot"
+    },
+    {
+      "tag": "forge:ingots"
+    }
+  ],
   "result": "tconstruct:ingot_red_sand_cast"
 }

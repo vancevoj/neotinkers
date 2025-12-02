@@ -180,41 +180,51 @@ public class ToolsRecipeProvider extends BaseRecipeProvider implements IMaterial
     // travelers gear
     String travelersFolder = armorFolder + "travelers/";
     Consumer<FinishedRecipe> shapedMaterial = ShapedMaterialConsumerBuilder.wrap().material(MaterialIds.leather).build(consumer);
-    Function<MaterialStatsId,Ingredient> materialsCosting = type -> MaterialValueIngredient.of(MaterialPredicate.and(MaterialPredicate.or(MaterialPredicate.CASTABLE, MaterialPredicate.COMPOSITE), new MaterialStatTypePredicate(type)), 1);
-    ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, TinkerTools.travelersGear.get(ArmorItem.Type.HELMET))
-      .pattern("l l")
-      .pattern("glg")
-      .pattern("c c")
-      .define('c', materialsCosting.apply(PlatingMaterialStats.HELMET.getId()))
-      .define('l', Tags.Items.LEATHER)
-      .define('g', Tags.Items.GLASS_PANES_COLORLESS)
-      .unlockedBy("has_item", has(Tags.Items.LEATHER))
-      .save(shapedMaterial, location(travelersFolder + "goggles"));
-    ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, TinkerTools.travelersGear.get(ArmorItem.Type.CHESTPLATE))
-      .pattern("l l")
-      .pattern("lcl")
-      .pattern("lcl")
-      .define('c', materialsCosting.apply(PlatingMaterialStats.CHESTPLATE.getId()))
-      .define('l', Tags.Items.LEATHER)
-      .unlockedBy("has_item", has(Tags.Items.LEATHER))
-      .save(shapedMaterial, location(travelersFolder + "chestplate"));
-    ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, TinkerTools.travelersGear.get(ArmorItem.Type.LEGGINGS))
-      .pattern("lll")
-      .pattern("c c")
-      .pattern("l l")
-      .define('c', materialsCosting.apply(PlatingMaterialStats.LEGGINGS.getId()))
-      .define('l', Tags.Items.LEATHER)
-      .unlockedBy("has_item", has(Tags.Items.LEATHER))
-      .save(shapedMaterial, location(travelersFolder + "pants"));
-    ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, TinkerTools.travelersGear.get(ArmorItem.Type.BOOTS))
-      .pattern("c c")
-      .pattern("l l")
-      .define('c', materialsCosting.apply(PlatingMaterialStats.BOOTS.getId()))
-      .define('l', Tags.Items.LEATHER)
-      .unlockedBy("has_item", has(Tags.Items.LEATHER))
-      .save(shapedMaterial, location(travelersFolder + "boots"));
-    
+    Consumer<FinishedRecipe> shapedPart = ShapedMaterialConsumerBuilder.wrap().material(MaterialIds.leather).parts("c").build(consumer);
+    Function<MaterialStatsId,Ingredient> travelersMaterial = type -> MaterialValueIngredient.of(MaterialPredicate.and(MaterialPredicate.or(MaterialPredicate.CASTABLE, MaterialPredicate.COMPOSITE), new MaterialStatTypePredicate(type)), 1);
+    Function<MaterialStatsId,Ingredient> travelersPart = type -> MaterialIngredient.of(Ingredient.of(TinkerToolParts.fakeIngot), new MaterialStatTypePredicate(type));
+    record TravelersRecipe(Consumer<FinishedRecipe> consumer, Function<MaterialStatsId,Ingredient> ingredient, String suffix) {}
 
+    // each travelers gear recipe needs a variant from the material items and a variant from the fake ingot
+    // allows things such as bronze or pewter to craft into travelers when they lack a proper ingot
+    for (TravelersRecipe variant : new TravelersRecipe[]{
+      new TravelersRecipe(shapedMaterial, travelersMaterial, ""),
+      new TravelersRecipe(shapedPart, travelersPart, "_fake_ingot")
+    }) {
+      ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, TinkerTools.travelersGear.get(ArmorItem.Type.HELMET))
+        .pattern("l l")
+        .pattern("glg")
+        .pattern("c c")
+        .define('c', variant.ingredient.apply(PlatingMaterialStats.HELMET.getId()))
+        .define('l', Tags.Items.LEATHER)
+        .define('g', Tags.Items.GLASS_PANES_COLORLESS)
+        .unlockedBy("has_item", has(Tags.Items.LEATHER))
+        .save(variant.consumer, location(travelersFolder + "goggles" + variant.suffix));
+      ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, TinkerTools.travelersGear.get(ArmorItem.Type.CHESTPLATE))
+        .pattern("l l")
+        .pattern("lcl")
+        .pattern("lcl")
+        .define('c', variant.ingredient.apply(PlatingMaterialStats.CHESTPLATE.getId()))
+        .define('l', Tags.Items.LEATHER)
+        .unlockedBy("has_item", has(Tags.Items.LEATHER))
+        .save(variant.consumer, location(travelersFolder + "chestplate" + variant.suffix));
+      ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, TinkerTools.travelersGear.get(ArmorItem.Type.LEGGINGS))
+        .pattern("lll")
+        .pattern("c c")
+        .pattern("l l")
+        .define('c', variant.ingredient.apply(PlatingMaterialStats.LEGGINGS.getId()))
+        .define('l', Tags.Items.LEATHER)
+        .unlockedBy("has_item", has(Tags.Items.LEATHER))
+        .save(variant.consumer, location(travelersFolder + "pants" + variant.suffix));
+      ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, TinkerTools.travelersGear.get(ArmorItem.Type.BOOTS))
+        .pattern("c c")
+        .pattern("l l")
+        .define('c', variant.ingredient.apply(PlatingMaterialStats.BOOTS.getId()))
+        .define('l', Tags.Items.LEATHER)
+        .unlockedBy("has_item", has(Tags.Items.LEATHER))
+        .save(variant.consumer, location(travelersFolder + "boots" + variant.suffix));
+    }
+    // shield needs no special variants, no compat shield cores exist
     ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, TinkerTools.travelersShield)
                        .pattern("wl")
                        .pattern("lw")
@@ -387,6 +397,7 @@ public class ToolsRecipeProvider extends BaseRecipeProvider implements IMaterial
     String partFolder = "tools/parts/";
     String castFolder = "smeltery/casts/";
     partRecipes(consumer, TinkerToolParts.repairKit, TinkerSmeltery.repairKitCast, 2, partFolder, castFolder);
+    partCasting(consumer, TinkerToolParts.fakeIngot.get(), TinkerSmeltery.ingotCast, 1, partFolder);
     // head
     partRecipes(consumer, TinkerToolParts.pickHead,     TinkerSmeltery.pickHeadCast,     2, partFolder, castFolder);
     partRecipes(consumer, TinkerToolParts.hammerHead,   TinkerSmeltery.hammerHeadCast,   8, partFolder, castFolder);

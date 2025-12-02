@@ -77,6 +77,18 @@ public class MaterialTagProvider extends AbstractMaterialTagProvider {
       MaterialIds.ancientHide, MaterialIds.ancient
     ).addOptional(MaterialIds.necronium);
 
+    // tag all compat materials
+    tag(TinkerTags.Materials.COMPATABILITY_METAL).addOptional(
+      // tier 2
+      MaterialIds.silver, MaterialIds.lead, MaterialIds.aluminum,
+      MaterialIds.osmium, MaterialIds.ironwood,
+      // tier 3
+      MaterialIds.bronze, MaterialIds.constantan, MaterialIds.invar,
+      MaterialIds.electrum, MaterialIds.pewter, MaterialIds.steeleaf,
+      // tier 4
+      MaterialIds.fiery
+    );
+
     // material categories
     // melee harvest
     tag(TinkerTags.Materials.GENERAL).add(

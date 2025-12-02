@@ -61,7 +61,10 @@ public class RepairKitItem extends MaterialItem implements IRepairKitItem {
         tooltip.add((Component.translatable(ToolPartItem.MATERIAL_KEY, materialVariant.toString())).withStyle(ChatFormatting.DARK_GRAY));
       }
     }
-    tooltip.add(Component.translatable(TOOLTIP_KEY, TranslationHelper.COMMA_FORMAT.format(getRepairAmount())).withStyle(ChatFormatting.GRAY));
+    // tooltip is about inventory repair
+    if (canRepairInCraftingTable()) {
+      tooltip.add(Component.translatable(TOOLTIP_KEY, TranslationHelper.COMMA_FORMAT.format(getRepairAmount())).withStyle(ChatFormatting.GRAY));
+    }
   }
 
   @Override
@@ -75,7 +78,7 @@ public class RepairKitItem extends MaterialItem implements IRepairKitItem {
   @Override
   public boolean overrideStackedOnOther(ItemStack stack, Slot slot, ClickAction action, Player player) {
     // stacking on a tool repairs the tool, if the material is valid
-    if (action == ClickAction.SECONDARY && slot.allowModification(player)) {
+    if (canRepairInCraftingTable() && action == ClickAction.SECONDARY && slot.allowModification(player)) {
       // tool must be modifiable, if so block interactions beyond repair
       ItemStack toolItem = slot.getItem();
       if (!toolItem.isEmpty() && toolItem.is(TinkerTags.Items.MODIFIABLE)) {

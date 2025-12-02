@@ -26,6 +26,7 @@ import slimeknights.tconstruct.library.recipe.ingredient.MaterialValueIngredient
 import slimeknights.tconstruct.shared.block.KnightMetalBlock;
 import slimeknights.tconstruct.shared.block.OrientableBlock;
 import slimeknights.tconstruct.shared.block.SlimesteelBlock;
+import slimeknights.tconstruct.tools.TinkerToolParts;
 
 import static slimeknights.tconstruct.TConstruct.getResource;
 
@@ -110,6 +111,7 @@ public final class TinkerMaterials extends TinkerModule {
     accept(output, hepatizon);
     output.accept(netheriteNugget);
     accept(output, knightmetal);
+    TinkerToolParts.fakeIngot.get().addVariants(output::accept, "");
     // future: soulsteel
     // future: knightslime
   }
