@@ -11,6 +11,8 @@ import slimeknights.mantle.client.SafeClientAccess;
 import slimeknights.tconstruct.library.recipe.ingredient.MaterialValueIngredient;
 import slimeknights.tconstruct.library.recipe.material.MaterialRecipeCache;
 import slimeknights.tconstruct.library.recipe.material.ShapedMaterialRecipe;
+import slimeknights.tconstruct.plugin.jei.material.MaterialsCraftingExtension;
+import slimeknights.tconstruct.plugin.jei.material.ShapedMaterialsExtension;
 
 import java.util.List;
 import java.util.Objects;
@@ -19,7 +21,7 @@ import java.util.stream.IntStream;
 /**
  * Logic to show {@link ShapedMaterialRecipe} in JEI
  * @deprecated use {@link ShapedMaterialsExtension}
- **/
+ */
 @Deprecated
 public class ShapedMaterialExtension implements ICraftingCategoryExtension {
   private final ShapedMaterialRecipe recipe;
@@ -61,6 +63,6 @@ public class ShapedMaterialExtension implements ICraftingCategoryExtension {
 
   @Override
   public void setRecipe(IRecipeLayoutBuilder builder, ICraftingGridHelper craftingGridHelper, IFocusGroup focusGroup) {
-    ShapedMaterialsExtension.setRecipe(builder, craftingGridHelper, recipe, result, plainResult, materialSlots);
+    MaterialsCraftingExtension.setRecipe(this, builder, craftingGridHelper, recipe, result, plainResult, materialSlots);
   }
 }

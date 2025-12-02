@@ -34,7 +34,7 @@ import java.util.Map;
  * Shaped recipe with a number of {@link slimeknights.tconstruct.library.recipe.ingredient.MaterialIngredient} and
  * {@link slimeknights.tconstruct.library.recipe.ingredient.MaterialValueIngredient} to set the materials of the result.
  */
-public class ShapedMaterialsRecipe extends ShapedRecipe {
+public class ShapedMaterialsRecipe extends ShapedRecipe implements MaterialsCraftingTableRecipe {
   /** List of tool parts to search for in the final recipe */
   @Getter
   private final List<Ingredient> parts;
@@ -53,18 +53,23 @@ public class ShapedMaterialsRecipe extends ShapedRecipe {
     this.extraMaterials = extraMaterials;
   }
 
+  @Override
+  public int getPartCount() {
+    return parts.size();
+  }
+
   /**
    * Finds materials for each of the parts
    * @return Array of all matched materials. Array will have no null entries, though the array may be null if no match was found.
    */
   @Nullable
-  private MaterialVariantId[] findMaterials(CraftingContainer inventory) {
+  static MaterialVariantId[] findMaterials(CraftingContainer inventory, List<Ingredient> parts, int partCount, boolean checkRepeats) {
     // want one material for each
-    MaterialVariantId[] materials = new MaterialVariantId[parts.size()];
+    MaterialVariantId[] materials = new MaterialVariantId[partCount];
     for (int i = 0; i < inventory.getContainerSize(); i++) {
       ItemStack stack = inventory.getItem(i);
       if (!stack.isEmpty()) {
-        for (int p = 0; p < parts.size(); p++) {
+        for (int p = 0; p < partCount; p++) {
           MaterialVariantId current = materials[p];
           // if we have not found the material yet, or repeats are considered the same material, test the ingredient
           if ((current == null || checkRepeats) && parts.get(p).test(stack)) {
@@ -93,7 +98,7 @@ public class ShapedMaterialsRecipe extends ShapedRecipe {
       }
     }
     // ensure we found all materials needed
-    for (int p = 0; p < parts.size(); p++) {
+    for (int p = 0; p < partCount; p++) {
       if (materials[p] == null) {
         return null;
       }
@@ -107,7 +112,7 @@ public class ShapedMaterialsRecipe extends ShapedRecipe {
       return false;
     }
     // ensure all part materials matched and we found all parts
-    return findMaterials(inventory) != null;
+    return findMaterials(inventory, parts, parts.size(), checkRepeats) != null;
   }
 
   /** Common logic to this and {@link ShapedMaterialsRecipe} */
@@ -125,14 +130,14 @@ public class ShapedMaterialsRecipe extends ShapedRecipe {
   }
 
   /** Sets the material for the given stack */
+  @Override
   public void setMaterial(ItemStack stack, MaterialVariantId material) {
     setMaterial(stack, material, extraMaterials);
   }
 
-  @Override
-  public ItemStack assemble(CraftingContainer inventory, RegistryAccess registryAccess) {
-    ItemStack stack = super.assemble(inventory, registryAccess);
-    MaterialVariantId[] materials = findMaterials(inventory);
+  /** Assembles the item with material information */
+  static ItemStack assemble(ItemStack stack, CraftingContainer inventory, List<Ingredient> parts, int partCount, boolean checkRepeats, List<MaterialVariantId> extraMaterials) {
+    MaterialVariantId[] materials = findMaterials(inventory, parts, partCount, checkRepeats);
     if (materials != null) {
       // if the result is a tool part, and we only have the one material, set its material
       if (materials.length == 1 && extraMaterials.isEmpty() && stack.getItem() instanceof IMaterialItem materialItem) {
@@ -148,6 +153,11 @@ public class ShapedMaterialsRecipe extends ShapedRecipe {
       ToolStack.from(stack).setMaterials(builder.build());
     }
     return stack;
+  }
+
+  @Override
+  public ItemStack assemble(CraftingContainer inventory, RegistryAccess registryAccess) {
+    return assemble(super.assemble(inventory, registryAccess), inventory, parts, parts.size(), checkRepeats, extraMaterials);
   }
 
   @Override

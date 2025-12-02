@@ -2,8 +2,6 @@ package slimeknights.tconstruct.library.recipe.material;
 
 import com.google.gson.JsonObject;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.experimental.Accessors;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -17,12 +15,10 @@ import java.util.List;
 import java.util.function.Consumer;
 
 /** Special variant of {@link ConsumerWrapperBuilder} for {@link ShapedMaterialRecipe} */
+@Deprecated
 @NoArgsConstructor(staticName = "wrap")
 public class ShapedMaterialConsumerBuilder {
   private final List<MaterialVariantId> materials = new ArrayList<>();
-  @Setter
-  @Accessors(fluent = true)
-  private String parts = "";
 
   /** Adds a material to the builder */
   public ShapedMaterialConsumerBuilder material(MaterialVariantId material) {
@@ -32,10 +28,10 @@ public class ShapedMaterialConsumerBuilder {
 
   /** Builds the wrapped consumer */
   public Consumer<FinishedRecipe> build(Consumer<FinishedRecipe> consumer) {
-    return (recipe) -> consumer.accept(new Wrapped(recipe, materials, parts));
+    return (recipe) -> consumer.accept(new Wrapped(recipe, materials));
   }
 
-  private record Wrapped(FinishedRecipe original, List<MaterialVariantId> materials, String parts) implements FinishedRecipe {
+  private record Wrapped(FinishedRecipe original, List<MaterialVariantId> materials) implements FinishedRecipe {
     @Override
     public ResourceLocation getId() {
       return original.getId();
@@ -43,7 +39,7 @@ public class ShapedMaterialConsumerBuilder {
 
     @Override
     public RecipeSerializer<?> getType() {
-      return parts.isEmpty() ? TinkerTables.shapedMaterialRecipeSerializer.get() : TinkerTables.shapedMaterialsRecipeSerializer.get();
+      return TinkerTables.shapedMaterialRecipeSerializer.get();
     }
 
     @Override
@@ -51,9 +47,6 @@ public class ShapedMaterialConsumerBuilder {
       original.serializeRecipeData(json);
       if (!materials.isEmpty()) {
         json.add(ShapedMaterialRecipe.Serializer.MATERIAL_FIELD.key(), ShapedMaterialRecipe.Serializer.EXTRA_MATERIALS.serialize(materials));
-      }
-      if (!parts.isEmpty()) {
-        json.addProperty("parts", parts);
       }
     }
 
