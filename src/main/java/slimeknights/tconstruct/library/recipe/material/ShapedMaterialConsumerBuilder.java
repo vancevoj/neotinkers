@@ -43,7 +43,7 @@ public class ShapedMaterialConsumerBuilder {
 
     @Override
     public RecipeSerializer<?> getType() {
-      return parts.isEmpty() ? TinkerTables.shapedMaterialRecipeSerializer.get() : TinkerTables.shapedPartRecipeSerializer.get();
+      return parts.isEmpty() ? TinkerTables.shapedMaterialRecipeSerializer.get() : TinkerTables.shapedMaterialsRecipeSerializer.get();
     }
 
     @Override

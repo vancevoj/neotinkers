@@ -1,31 +1,26 @@
 package slimeknights.tconstruct.plugin.jei;
 
-import com.google.common.collect.Streams;
-import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
-import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
 import mezz.jei.api.gui.ingredient.ICraftingGridHelper;
 import mezz.jei.api.recipe.IFocusGroup;
-import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.category.extensions.vanilla.crafting.ICraftingCategoryExtension;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.ShapedRecipe;
-import slimeknights.mantle.Mantle;
 import slimeknights.mantle.client.SafeClientAccess;
 import slimeknights.tconstruct.library.recipe.ingredient.MaterialValueIngredient;
 import slimeknights.tconstruct.library.recipe.material.MaterialRecipeCache;
 import slimeknights.tconstruct.library.recipe.material.ShapedMaterialRecipe;
 
-import javax.annotation.Nullable;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
-/** Logic to show {@link ShapedMaterialRecipe} in JEI */
+/**
+ * Logic to show {@link ShapedMaterialRecipe} in JEI
+ * @deprecated use {@link ShapedMaterialsExtension}
+ **/
+@Deprecated
 public class ShapedMaterialExtension implements ICraftingCategoryExtension {
   private final ShapedMaterialRecipe recipe;
   private final ItemStack plainResult;
@@ -64,58 +59,8 @@ public class ShapedMaterialExtension implements ICraftingCategoryExtension {
     return recipe.getId();
   }
 
-  /** Sets the recipe in the builder */
-  public static void setRecipe(IRecipeLayoutBuilder builder, ICraftingGridHelper craftingGridHelper, ShapedRecipe recipe, List<ItemStack> result, ItemStack plainResult, @Nullable int[] materialSlots) {
-    builder.addInvisibleIngredients(RecipeIngredientRole.OUTPUT).addItemStack(plainResult);
-
-    // apply ingredient stacks
-    List<List<ItemStack>> inputStacks = recipe.getIngredients().stream().map(ingredient -> List.of(ingredient.getItems())).toList();
-    int width = recipe.getWidth();
-    int height = recipe.getHeight();
-    List<IRecipeSlotBuilder> inputs = craftingGridHelper.createAndSetInputs(builder, VanillaTypes.ITEM_STACK, inputStacks, width, height);
-    IRecipeSlotBuilder output = craftingGridHelper.createAndSetOutputs(builder, result);
-    if (inputs.size() != 9) {
-      Mantle.logger.error("Failed to create focus link for {} as the layout {} is not 3x3", recipe.getId(), builder.getClass().getName());
-    } else if (materialSlots != null) {
-      // apply focus links
-      builder.createFocusLink(Streams.concat(
-        Stream.of(output),
-        Arrays.stream(materialSlots).mapToObj(i -> inputs.get(getCraftingIndex(i, width, height)))
-      ).toArray(IRecipeSlotBuilder[]::new));
-    }
-  }
-
   @Override
   public void setRecipe(IRecipeLayoutBuilder builder, ICraftingGridHelper craftingGridHelper, IFocusGroup focusGroup) {
-    setRecipe(builder, craftingGridHelper, recipe, result, plainResult, materialSlots);
-  }
-
-  /** Borrowed from {@link ICraftingGridHelper} implementation. TODO: make mantle variant public */
-  private static int getCraftingIndex(int i, int width, int height) {
-    int index;
-    if (width == 1) {
-      if (height == 3) {
-        index = (i * 3) + 1;
-      } else if (height == 2) {
-        index = (i * 3) + 1;
-      } else {
-        index = 4;
-      }
-    } else if (height == 1) {
-      index = i + 3;
-    } else if (width == 2) {
-      index = i;
-      if (i > 1) {
-        index++;
-        if (i > 3) {
-          index++;
-        }
-      }
-    } else if (height == 2) {
-      index = i + 3;
-    } else {
-      index = i;
-    }
-    return index;
+    ShapedMaterialsExtension.setRecipe(builder, craftingGridHelper, recipe, result, plainResult, materialSlots);
   }
 }
