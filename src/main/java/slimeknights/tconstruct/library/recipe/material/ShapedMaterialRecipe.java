@@ -21,13 +21,14 @@ import slimeknights.tconstruct.library.materials.definition.MaterialVariantId;
 import slimeknights.tconstruct.library.recipe.ingredient.MaterialValueIngredient;
 import slimeknights.tconstruct.library.tools.nbt.MaterialNBT;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
+import slimeknights.tconstruct.library.tools.part.IMaterialItem;
 import slimeknights.tconstruct.tables.TinkerTables;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
 /**
- * Shaped recipe with a number of {@link slimeknights.tconstruct.library.recipe.ingredient.MaterialValueIngredient} to set the material of the result
+ * Shaped recipe with a number of {@link slimeknights.tconstruct.library.recipe.ingredient.MaterialValueIngredient} to set the material of the result.
  */
 public class ShapedMaterialRecipe extends ShapedRecipe {
   private MaterialValueIngredient material;
@@ -121,12 +122,16 @@ public class ShapedMaterialRecipe extends ShapedRecipe {
 
   /** Sets the material for the given stack */
   public void setMaterial(ItemStack stack, MaterialVariantId material) {
-    MaterialNBT.Builder builder = MaterialNBT.builder();
-    builder.add(material);
-    for (MaterialVariantId extraMaterial : extraMaterials) {
-      builder.add(extraMaterial);
+    if (extraMaterials.isEmpty() && stack.getItem() instanceof IMaterialItem materialItem) {
+      materialItem.setMaterial(stack, material);
+    } else {
+      MaterialNBT.Builder builder = MaterialNBT.builder();
+      builder.add(material);
+      for (MaterialVariantId extraMaterial : extraMaterials) {
+        builder.add(extraMaterial);
+      }
+      ToolStack.from(stack).setMaterials(builder.build());
     }
-    ToolStack.from(stack).setMaterials(builder.build());
   }
 
   @Override
