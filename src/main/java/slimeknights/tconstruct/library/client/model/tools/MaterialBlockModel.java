@@ -163,7 +163,7 @@ public class MaterialBlockModel implements IUnbakedGeometry<MaterialBlockModel> 
           replacements.put(name, new Material(sprite.atlasLocation(), sprite.contents().name()));
           // if we have a transform, save that with the name too
           if (tinted.color() != -1 || tinted.emissivity() > 0) {
-            tints.put(name, tinted);
+            tints.put('#' + name, tinted);
           }
         }
       }
