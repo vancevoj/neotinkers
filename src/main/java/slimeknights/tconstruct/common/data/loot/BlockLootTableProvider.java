@@ -144,12 +144,11 @@ public class BlockLootTableProvider extends BlockLootSubProvider {
     this.dropTable(TinkerTables.craftingStation.get());
     this.dropTable(TinkerTables.partBuilder.get());
     this.dropTable(TinkerTables.tinkerStation.get());
-    this.dropTable(TinkerTables.tinkersAnvil.get());
+    this.dropAnvil(TinkerTables.tinkersAnvil.get());
     this.dropTable(TinkerTables.modifierWorktable.get());
-    this.dropTable(TinkerTables.scorchedAnvil.get());
+    this.dropAnvil(TinkerTables.scorchedAnvil.get());
     // copy material
-    this.add(TinkerToolParts.fakeStorageBlock.get(), block -> droppingWithFunctions(block, builder ->
-      builder.apply(CopyNbtFunction.copyData(ContextNbtProvider.BLOCK_ENTITY).copy(IMaterialItem.MATERIAL_TAG, IMaterialItem.MATERIAL_TAG))));
+    this.add(TinkerToolParts.fakeStorageBlock.get(), block -> droppingWithFunctions(block, builder -> builder.apply(COPY_MATERIAL)));
   }
 
   private void addWorld() {
@@ -409,13 +408,23 @@ public class BlockLootTableProvider extends BlockLootSubProvider {
 
   /** Copies a material block texture */
   private final LootItemFunction.Builder COPY_NAME = CopyNameFunction.copyName(CopyNameFunction.NameSource.BLOCK_ENTITY);
+  /** Copies a material block texture */
+  private final LootItemFunction.Builder COPY_MATERIAL = CopyNbtFunction.copyData(ContextNbtProvider.BLOCK_ENTITY).copy(IMaterialItem.MATERIAL_TAG, IMaterialItem.MATERIAL_TAG);
   /** Properties for a standard table */
   private final Function<Block, LootTable.Builder> ADD_TABLE = block -> droppingWithFunctions(block, (builder) ->
     builder.apply(COPY_NAME).apply(RetexturedLootFunction::new));
+  /** Properties for a tinkers anvil table */
+  private final Function<Block, LootTable.Builder> ADD_ANVIL = block -> droppingWithFunctions(block, (builder) ->
+    builder.apply(COPY_NAME).apply(RetexturedLootFunction::new)).apply(COPY_MATERIAL);
 
   /** Registers a block that drops with its own texture stored in NBT */
   private void dropTable(Block table) {
     this.add(table, ADD_TABLE);
+  }
+
+  /** Registers a block that drops with its own texture stored in NBT */
+  private void dropAnvil(Block table) {
+    this.add(table, ADD_ANVIL);
   }
 
   /** Registers drops for a cluster */

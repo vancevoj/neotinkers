@@ -3,6 +3,7 @@ package slimeknights.tconstruct.tables;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTab.ItemDisplayParameters;
 import net.minecraft.world.item.Item;
@@ -34,6 +35,7 @@ import slimeknights.tconstruct.library.recipe.partbuilder.PartRecipe;
 import slimeknights.tconstruct.library.recipe.partbuilder.recycle.PartBuilderRecycle;
 import slimeknights.tconstruct.library.recipe.tinkerstation.building.ToolBuildingRecipe;
 import slimeknights.tconstruct.library.tools.layout.StationSlotLayoutLoader;
+import slimeknights.tconstruct.library.tools.part.IMaterialItem;
 import slimeknights.tconstruct.shared.TinkerCommons;
 import slimeknights.tconstruct.shared.block.TableBlock;
 import slimeknights.tconstruct.tables.block.ChestBlock;
@@ -51,6 +53,7 @@ import slimeknights.tconstruct.tables.block.entity.table.ModifierWorktableBlockE
 import slimeknights.tconstruct.tables.block.entity.table.PartBuilderBlockEntity;
 import slimeknights.tconstruct.tables.block.entity.table.TinkerStationBlockEntity;
 import slimeknights.tconstruct.tables.data.TableRecipeProvider;
+import slimeknights.tconstruct.tables.item.AnvilBlockItem;
 import slimeknights.tconstruct.tables.item.TinkersChestBlockItem;
 import slimeknights.tconstruct.tables.menu.CraftingStationContainerMenu;
 import slimeknights.tconstruct.tables.menu.ModifierWorktableContainerMenu;
@@ -62,7 +65,10 @@ import slimeknights.tconstruct.tables.recipe.PartBuilderToolRecycle;
 import slimeknights.tconstruct.tables.recipe.TinkerStationDamagingRecipe;
 import slimeknights.tconstruct.tables.recipe.TinkerStationPartSwapping;
 import slimeknights.tconstruct.tables.recipe.TinkerStationRepairRecipe;
+import slimeknights.tconstruct.tools.TinkerToolParts;
 
+import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
@@ -100,8 +106,9 @@ public final class TinkerTables extends TinkerModule {
   public static final ItemObject<TableBlock> tinkersAnvil, scorchedAnvil;
   static {
     Block.Properties METAL_TABLE = builder(MapColor.COLOR_GRAY, SoundType.ANVIL).pushReaction(PushReaction.BLOCK).requiresCorrectToolForDrops().strength(5.0F, 1200.0F).noOcclusion();
-    tinkersAnvil = BLOCKS.register("tinkers_anvil", () -> new TinkersAnvilBlock(METAL_TABLE, 6), BLOCK_ITEM);
-    scorchedAnvil = BLOCKS.register("scorched_anvil", () -> new ScorchedAnvilBlock(METAL_TABLE, 6), BLOCK_ITEM);
+    Function<Block, BlockItem> blockItem = block -> new AnvilBlockItem(block, ITEM_PROPS, TinkerToolParts.fakeStorageBlockItem);
+    tinkersAnvil = BLOCKS.register("tinkers_anvil", () -> new TinkersAnvilBlock(METAL_TABLE, 6), blockItem);
+    scorchedAnvil = BLOCKS.register("scorched_anvil", () -> new ScorchedAnvilBlock(METAL_TABLE, 6), blockItem);
   }
   /*
    * Items
@@ -196,8 +203,9 @@ public final class TinkerTables extends TinkerModule {
     RetexturedHelper.addTagVariants(variants, partBuilder, ItemTags.PLANKS);
     RetexturedHelper.addTagVariants(variants, tinkerStation, ItemTags.PLANKS);
     // anvil variants use their own config prop as the variants are less obvious
-    RetexturedHelper.addTagVariants(variants, tinkersAnvil, TinkerTags.Items.ANVIL_METAL);
-    RetexturedHelper.addTagVariants(variants, scorchedAnvil, TinkerTags.Items.ANVIL_METAL);
+    Consumer<ItemStack> consumer = output::accept;
+    ((IMaterialItem) tinkersAnvil.asItem()).addVariants(consumer, "");
+    ((IMaterialItem) scorchedAnvil.asItem()).addVariants(consumer, "");
     RetexturedHelper.addTagVariants(variants, modifierWorktable, TinkerTags.Items.WORKSTATION_ROCK);
   }
 }

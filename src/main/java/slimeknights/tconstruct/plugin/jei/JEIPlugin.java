@@ -320,9 +320,7 @@ public class JEIPlugin implements IModPlugin {
     registry.registerSubtypeInterpreter(VanillaTypes.ITEM_STACK, TinkerTables.craftingStation.asItem(), tables);
     registry.registerSubtypeInterpreter(VanillaTypes.ITEM_STACK, TinkerTables.partBuilder.asItem(), tables);
     registry.registerSubtypeInterpreter(VanillaTypes.ITEM_STACK, TinkerTables.tinkerStation.asItem(), tables);
-    registry.registerSubtypeInterpreter(VanillaTypes.ITEM_STACK, TinkerTables.tinkersAnvil.asItem(), tables);
     registry.registerSubtypeInterpreter(VanillaTypes.ITEM_STACK, TinkerTables.modifierWorktable.asItem(), tables);
-    registry.registerSubtypeInterpreter(VanillaTypes.ITEM_STACK, TinkerTables.scorchedAnvil.asItem(), tables);
     registry.registerSubtypeInterpreter(VanillaTypes.ITEM_STACK, TinkerSmeltery.smelteryController.asItem(), tables);
     registry.registerSubtypeInterpreter(VanillaTypes.ITEM_STACK, TinkerSmeltery.searedDrain.asItem(), tables);
     registry.registerSubtypeInterpreter(VanillaTypes.ITEM_STACK, TinkerSmeltery.searedDuct.asItem(), tables);
@@ -331,6 +329,22 @@ public class JEIPlugin implements IModPlugin {
     registry.registerSubtypeInterpreter(VanillaTypes.ITEM_STACK, TinkerSmeltery.scorchedDrain.asItem(), tables);
     registry.registerSubtypeInterpreter(VanillaTypes.ITEM_STACK, TinkerSmeltery.scorchedDuct.asItem(), tables);
     registry.registerSubtypeInterpreter(VanillaTypes.ITEM_STACK, TinkerSmeltery.scorchedChute.asItem(), tables);
+
+    // anvils have both texture and material blocks
+    IIngredientSubtypeInterpreter<ItemStack> anvils = (stack, context) -> {
+      if (context == UidContext.Ingredient) {
+        String name = RetexturedHelper.getTextureName(stack);
+        if (!name.isEmpty()) {
+          return '#' + name;
+        }
+        return ToolPartSubtypeInterpreter.INSTANCE.apply(stack, UidContext.Ingredient);
+      }
+      return IIngredientSubtypeInterpreter.NONE;
+    };
+    registry.registerSubtypeInterpreter(VanillaTypes.ITEM_STACK, TinkerTables.tinkersAnvil.asItem(), anvils);
+    registry.registerSubtypeInterpreter(VanillaTypes.ITEM_STACK, TinkerTables.scorchedAnvil.asItem(), anvils);
+
+    // potions
     registry.registerSubtypeInterpreter(VanillaTypes.ITEM_STACK, TinkerFluids.potion.asItem(), (PotionSubtypeInterpreter<ItemStack>)ItemStack::getTag);
     registry.registerSubtypeInterpreter(ForgeTypes.FLUID_STACK, TinkerFluids.potion.get(), (PotionSubtypeInterpreter<FluidStack>)FluidStack::getTag);
 
@@ -467,8 +481,11 @@ public class JEIPlugin implements IModPlugin {
     cleanupRetexturedBlock(cleanupItem, showTables, TinkerTables.modifierWorktable, TinkerTags.Items.WORKSTATION_ROCK);
     // anvils
     boolean showAnvils = Config.CLIENT.showAllAnvilVariants.get();
-    cleanupRetexturedBlock(cleanupItem, showAnvils, TinkerTables.tinkersAnvil, TinkerTags.Items.ANVIL_METAL);
-    cleanupRetexturedBlock(cleanupItem, showAnvils, TinkerTables.scorchedAnvil, TinkerTags.Items.ANVIL_METAL);
+    if (!showAnvils) {
+      Consumer<ItemStack> consumer = removeItems::add;
+      ((IMaterialItem) TinkerTables.tinkersAnvil.asItem()).addVariants(consumer, "");
+      ((IMaterialItem) TinkerTables.scorchedAnvil.asItem()).addVariants(consumer, "");
+    }
     // smeltery
     boolean showSmeltery = Config.CLIENT.showAllSmelteryVariants.get();
     cleanupRetexturedBlock(cleanupItem, showSmeltery, TinkerSmeltery.smelteryController, TinkerTags.Items.SEARED_BLOCKS);
