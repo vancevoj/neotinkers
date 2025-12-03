@@ -21,6 +21,7 @@ import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer.Bui
 import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
 import net.minecraft.world.level.storage.loot.functions.CopyNameFunction;
 import net.minecraft.world.level.storage.loot.functions.CopyNbtFunction;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.predicates.BonusLevelTableCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
@@ -130,16 +131,14 @@ public class BlockLootTableProvider extends BlockLootSubProvider {
     // chests
     // tinker chest - name and color
     this.add(TinkerTables.tinkersChest.get(), block -> droppingWithFunctions(block, builder ->
-      builder.apply(CopyNameFunction.copyName(CopyNameFunction.NameSource.BLOCK_ENTITY))
-             .apply(CopyNbtFunction.copyData(ContextNbtProvider.BLOCK_ENTITY).copy(TinkersChestBlockEntity.TAG_CHEST_COLOR, "display.color"))));
+      builder.apply(COPY_NAME).apply(CopyNbtFunction.copyData(ContextNbtProvider.BLOCK_ENTITY).copy(TinkersChestBlockEntity.TAG_CHEST_COLOR, "display.color"))));
     // part chest - just name
     this.add(TinkerTables.partChest.get(), block ->
       droppingWithFunctions(block, builder ->
-        builder.apply(CopyNameFunction.copyName(CopyNameFunction.NameSource.BLOCK_ENTITY))));
+        builder.apply(COPY_NAME)));
     // cast chest - name and inventory
     this.add(TinkerTables.castChest.get(), block -> droppingWithFunctions(block, builder ->
-      builder.apply(CopyNameFunction.copyName(CopyNameFunction.NameSource.BLOCK_ENTITY))
-             .apply(CopyNbtFunction.copyData(ContextNbtProvider.BLOCK_ENTITY).copy("Items", "TinkerData.Items"))));
+      builder.apply(COPY_NAME).apply(CopyNbtFunction.copyData(ContextNbtProvider.BLOCK_ENTITY).copy("Items", "TinkerData.Items"))));
 
     // tables with legs
     this.dropTable(TinkerTables.craftingStation.get());
@@ -261,8 +260,7 @@ public class BlockLootTableProvider extends BlockLootSubProvider {
     this.dropTable(TinkerSmeltery.searedDuct.get());
 
     Function<Block, LootTable.Builder> dropTank = block -> droppingWithFunctions(block, builder ->
-      builder.apply(CopyNameFunction.copyName(CopyNameFunction.NameSource.BLOCK_ENTITY))
-             .apply(CopyNbtFunction.copyData(ContextNbtProvider.BLOCK_ENTITY).copy(NBTTags.TANK, NBTTags.TANK)));
+      builder.apply(COPY_NAME).apply(CopyNbtFunction.copyData(ContextNbtProvider.BLOCK_ENTITY).copy(NBTTags.TANK, NBTTags.TANK)));
     TinkerSmeltery.searedTank.forEach(block -> this.add(block, dropTank));
     this.add(TinkerSmeltery.searedFluidCannon.get(), dropTank);
     this.add(TinkerSmeltery.scorchedFluidCannon.get(), dropTank);
@@ -305,7 +303,7 @@ public class BlockLootTableProvider extends BlockLootSubProvider {
     this.dropTable(TinkerSmeltery.scorchedDuct.get());
 
     Function<Block, LootTable.Builder> dropTank = block -> droppingWithFunctions(block, builder ->
-      builder.apply(CopyNameFunction.copyName(CopyNameFunction.NameSource.BLOCK_ENTITY))
+      builder.apply(COPY_NAME)
              .apply(CopyNbtFunction.copyData(ContextNbtProvider.BLOCK_ENTITY).copy(NBTTags.TANK, NBTTags.TANK)));
     TinkerSmeltery.scorchedTank.forEach(block -> this.add(block, dropTank));
     this.add(TinkerSmeltery.scorchedLantern.get(), dropTank);
@@ -409,8 +407,11 @@ public class BlockLootTableProvider extends BlockLootSubProvider {
     this.dropSelf(object.getHangingSign());
   }
 
+  /** Copies a material block texture */
+  private final LootItemFunction.Builder COPY_NAME = CopyNameFunction.copyName(CopyNameFunction.NameSource.BLOCK_ENTITY);
+  /** Properties for a standard table */
   private final Function<Block, LootTable.Builder> ADD_TABLE = block -> droppingWithFunctions(block, (builder) ->
-    builder.apply(CopyNameFunction.copyName(CopyNameFunction.NameSource.BLOCK_ENTITY)).apply(RetexturedLootFunction::new));
+    builder.apply(COPY_NAME).apply(RetexturedLootFunction::new));
 
   /** Registers a block that drops with its own texture stored in NBT */
   private void dropTable(Block table) {
