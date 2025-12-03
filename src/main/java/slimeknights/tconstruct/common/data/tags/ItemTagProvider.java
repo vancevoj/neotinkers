@@ -634,7 +634,9 @@ public class ItemTagProvider extends ItemTagsProvider {
         .addTag(TinkerTags.Items.SCORCHED_TANKS);
 
     // blacklist for proxy tank - mostly to encourage you to use the better suited casting tank
-    this.tag(TinkerTags.Items.PROXY_TANK_BLACKLIST).add(Items.BUCKET, Items.GLASS_BOTTLE, Items.BOWL, TinkerSmeltery.copperCan.get());
+    this.tag(TinkerTags.Items.PROXY_TANK_BLACKLIST)
+      .add(Items.BUCKET, Items.GLASS_BOTTLE, Items.BOWL, TinkerSmeltery.copperCan.get())
+      .addTag(TinkerTags.Items.AMMO); // ammo has exact size tanks, unlike other modifiable items that have variable sized
 
     // melting tags //
     // ores
