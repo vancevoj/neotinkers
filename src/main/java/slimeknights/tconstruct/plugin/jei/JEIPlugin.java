@@ -402,11 +402,10 @@ public class JEIPlugin implements IModPlugin {
 
   /** Removes any retextured variants that shouldn't show */
   private static void cleanupRetexturedBlock(Predicate<ItemStack> remover, boolean showAll, ItemLike item, TagKey<Item> tag) {
-    if (showAll) {
-      remover.test(new ItemStack(item));
-    } else {
+    if (!showAll) {
       RetexturedHelper.addTagVariants(remover, item, tag);
     }
+    // do not remove blank if not showing all as that removes all anvils from the catalyst display due to recipe context
   }
 
   @Override

@@ -2,8 +2,8 @@
   "loader": "mantle:retextured",
   "parent": "block/block",
   "textures": {
-    "particle": "minecraft:block/gilded_blackstone",
-    "top":      "minecraft:block/gilded_blackstone",
+    "particle": "tconstruct:block/storage/ardite_top",
+    "top":      "tconstruct:block/storage/ardite_top",
     "base":     "tconstruct:block/table/scorched_anvil_base",
     "upper":    "tconstruct:block/table/scorched_anvil_base_upper"
   },
