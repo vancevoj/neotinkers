@@ -127,7 +127,7 @@ public class MaterialItem extends Item implements IMaterialItem {
         return namespace;
       }
     }
-    return BuiltInRegistries.ITEM.getKey(self.asItem()).getNamespace();
+    return BuiltInRegistries.ITEM.getKey(stack.getItem()).getNamespace();
   }
 
   @Nullable

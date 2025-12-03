@@ -33,6 +33,13 @@ public class MaterialBlockItem extends BlockItem implements IMaterialItem {
   @Override
   public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
     MaterialItem.appendHoverText(this, stack, tooltip, flag);
+    super.appendHoverText(stack, level, tooltip, flag);
+  }
+
+  @Nullable
+  @Override
+  public String getCreatorModId(ItemStack stack) {
+    return MaterialItem.getCreatorModId(this, stack);
   }
 
   @Override
