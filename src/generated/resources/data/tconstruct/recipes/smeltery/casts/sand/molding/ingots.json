@@ -5,11 +5,17 @@
   },
   "pattern": [
     {
-      "type": "tconstruct:material",
-      "item": "tconstruct:fake_ingot"
+      "type": "forge:difference",
+      "base": {
+        "tag": "forge:ingots"
+      },
+      "subtracted": {
+        "item": "tconstruct:fake_ingot"
+      }
     },
     {
-      "tag": "forge:ingots"
+      "type": "tconstruct:material",
+      "item": "tconstruct:fake_ingot"
     }
   ],
   "result": "tconstruct:ingot_sand_cast"

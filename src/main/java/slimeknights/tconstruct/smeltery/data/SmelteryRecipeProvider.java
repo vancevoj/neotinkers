@@ -1289,7 +1289,12 @@ public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelt
 
 
     String castFolder = "smeltery/casts/";
-    this.castCreation(consumer, CompoundIngredient.of(Ingredient.of(Tags.Items.INGOTS), MaterialIngredient.of(TinkerToolParts.fakeIngot.get())), TinkerSmeltery.ingotCast, castFolder, "ingots");
+    this.castCreation(consumer, CompoundIngredient.of(
+      // fake ingots are in the ingot tag, but you get the default "missing" ingot from that
+      // so subtract it out and replace with the material version for nicer display
+      DifferenceIngredient.of(Ingredient.of(Tags.Items.INGOTS), Ingredient.of(TinkerToolParts.fakeIngot)),
+      MaterialIngredient.of(TinkerToolParts.fakeIngot)
+    ), TinkerSmeltery.ingotCast, castFolder, "ingots");
     this.castCreation(consumer, Tags.Items.NUGGETS, TinkerSmeltery.nuggetCast, castFolder);
     this.castCreation(consumer, Tags.Items.GEMS, TinkerSmeltery.gemCast, castFolder);
     this.castCreation(consumer, Tags.Items.RODS, TinkerSmeltery.rodCast, castFolder);

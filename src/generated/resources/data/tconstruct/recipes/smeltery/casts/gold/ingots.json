@@ -2,11 +2,17 @@
   "type": "tconstruct:casting_table",
   "cast": [
     {
-      "type": "tconstruct:material",
-      "item": "tconstruct:fake_ingot"
+      "type": "forge:difference",
+      "base": {
+        "tag": "forge:ingots"
+      },
+      "subtracted": {
+        "item": "tconstruct:fake_ingot"
+      }
     },
     {
-      "tag": "forge:ingots"
+      "type": "tconstruct:material",
+      "item": "tconstruct:fake_ingot"
     }
   ],
   "cast_consumed": true,
