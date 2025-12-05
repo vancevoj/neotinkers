@@ -14,6 +14,7 @@ import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
 import slimeknights.mantle.Mantle;
 import slimeknights.mantle.client.SafeClientAccess;
+import slimeknights.mantle.plugin.jei.MantleJEIConstants;
 import slimeknights.tconstruct.library.recipe.material.MaterialRecipeCache;
 import slimeknights.tconstruct.library.recipe.material.MaterialsCraftingTableRecipe;
 import slimeknights.tconstruct.library.recipe.material.ShapelessMaterialsRecipe;
@@ -108,7 +109,7 @@ public class MaterialsCraftingExtension<T extends CraftingRecipe & MaterialsCraf
       int finalHeight = height;
       builder.createFocusLink(Streams.concat(
         Stream.of(output),
-        Arrays.stream(materialSlots).mapToObj(i -> inputs.get(getCraftingIndex(i, finalWidth, finalHeight)))
+        Arrays.stream(materialSlots).mapToObj(i -> inputs.get(MantleJEIConstants.getCraftingIndex(i, finalWidth, finalHeight)))
       ).toArray(IRecipeSlotBuilder[]::new));
     }
   }
@@ -116,35 +117,6 @@ public class MaterialsCraftingExtension<T extends CraftingRecipe & MaterialsCraf
   @Override
   public void setRecipe(IRecipeLayoutBuilder builder, ICraftingGridHelper craftingGridHelper, IFocusGroup focuses) {
     setRecipe(this, builder, craftingGridHelper, recipe, result, plainResult, materialSlots);
-  }
-
-  /** Borrowed from {@link ICraftingGridHelper} implementation. TODO: make mantle variant public */
-  private static int getCraftingIndex(int i, int width, int height) {
-    int index;
-    if (width == 1) {
-      if (height == 3) {
-        index = (i * 3) + 1;
-      } else if (height == 2) {
-        index = (i * 3) + 1;
-      } else {
-        index = 4;
-      }
-    } else if (height == 1) {
-      index = i + 3;
-    } else if (width == 2) {
-      index = i;
-      if (i > 1) {
-        index++;
-        if (i > 3) {
-          index++;
-        }
-      }
-    } else if (height == 2) {
-      index = i + 3;
-    } else {
-      index = i;
-    }
-    return index;
   }
 
   /** Gets the width and height of the grid for a shapeless recipe. */
