@@ -306,9 +306,8 @@ public class MaterialBlockModel implements IUnbakedGeometry<MaterialBlockModel> 
 
     @Override
     protected void fetchMaterials(MaterialIdNBT materials, Function<Material, TextureAtlasSprite> spriteGetter, Map<String, Material> replacements, Map<String, TintedSprite> tints) {
-      List<MaterialVariantId> list = materials.getMaterials();
-      for (int i = 0; i < list.size(); i++) {
-        fetchMaterial(list.get(i), parts.get(i), spriteGetter, replacements, tints);
+      for (int i = 0; i < parts.size(); i++) {
+        fetchMaterial(materials.getMaterial(i), parts.get(i), spriteGetter, replacements, tints);
       }
     }
 
