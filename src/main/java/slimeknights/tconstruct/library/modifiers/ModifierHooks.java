@@ -210,8 +210,19 @@ public class ModifierHooks {
     public void removeRawData(IToolStackView tool, Modifier modifier, RestrictedCompoundTag tag) {}
   });
 
-  /** Hook called to give a modifier a chance to clean up data while on the tool and to reject the current tool state */
-  public static final ModuleHook<ValidateModifierHook> VALIDATE = register("validate", ValidateModifierHook.class, ValidateModifierHook.AllMerger::new, (tool, modifier) -> null);
+  /**
+   * Hook called to give a modifier a chance to clean up data while on the tool and to reject the current tool state.
+   * TOD0 1.21: rename to disambiguate from {@link #VALIDATE_UPGRADE}.
+   */
+  public static final ModuleHook<ValidateModifierHook> VALIDATE;
+  /** Same as {@link #VALIDATE}, but only called on modifiers in {@link slimeknights.tconstruct.library.tools.nbt.ToolStack#getUpgrades()}. */
+  public static final ModuleHook<ValidateModifierHook> VALIDATE_UPGRADE;
+  static {
+    Function<Collection<ValidateModifierHook>,ValidateModifierHook> merger = ValidateModifierHook.AllMerger::new;
+    ValidateModifierHook defaultInstance = (tool, modifier) -> null;
+    VALIDATE = register("validate", ValidateModifierHook.class, merger, defaultInstance);
+    VALIDATE_UPGRADE = register("validate_upgrade", ValidateModifierHook.class, merger, defaultInstance);
+  }
 
   /** Hook called when a modifier is removed to give it a chance to clean up data */
   public static final ModuleHook<ModifierRemovalHook> REMOVE = register("remove", ModifierRemovalHook.class, ModifierRemovalHook.FirstMerger::new, (tool, modifier) -> null);
