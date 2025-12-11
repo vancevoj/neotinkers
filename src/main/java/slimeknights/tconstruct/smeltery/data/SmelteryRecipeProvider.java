@@ -107,6 +107,7 @@ import static slimeknights.tconstruct.library.data.recipe.SmelteryRecipeBuilder.
 import static slimeknights.tconstruct.library.data.recipe.SmelteryRecipeBuilder.SWORD;
 import static slimeknights.tconstruct.library.data.recipe.SmelteryRecipeBuilder.TOOLS;
 
+@SuppressWarnings("removal")
 public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelteryRecipeHelper, ICommonRecipeHelper {
   public SmelteryRecipeProvider(PackOutput packOutput) {
     super(packOutput);
@@ -247,6 +248,14 @@ public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelt
                        .pattern(" b ")
                        .unlockedBy("has_item", has(TinkerSmeltery.searedBrick))
                        .save(consumer, prefix(TinkerSmeltery.searedGlass, folder));
+    ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, TinkerSmeltery.searedLamp)
+      .define('b', TinkerSmeltery.searedBrick)
+      .define('G', Blocks.GLOWSTONE)
+      .pattern(" b ")
+      .pattern("bGb")
+      .pattern(" b ")
+      .unlockedBy("has_item", has(Blocks.GLOWSTONE))
+      .save(consumer, prefix(TinkerSmeltery.searedLamp, folder));
     ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, TinkerSmeltery.searedGlassPane, 16)
                        .define('#', TinkerSmeltery.searedGlass)
                        .pattern("###")
@@ -460,6 +469,10 @@ public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelt
                             .setFluidAndTime(TinkerFluids.searedStone, FluidValues.BRICK_BLOCK)
                             .setCast(Tags.Items.GLASS_COLORLESS, true)
                             .save(consumer, location(castingFolder + "glass"));
+    ItemCastingRecipeBuilder.basinRecipe(TinkerSmeltery.searedLamp)
+      .setFluidAndTime(TinkerFluids.searedStone, FluidValues.BRICK_BLOCK)
+      .setCast(Blocks.GLOWSTONE, true)
+      .save(consumer, location(castingFolder + "lamp"));
     ItemCastingRecipeBuilder.basinRecipe(TinkerSmeltery.searedSoulGlass)
                             .setFluidAndTime(TinkerFluids.searedStone, FluidValues.BRICK_BLOCK)
                             .setCast(TinkerCommons.soulGlass, true)
@@ -681,6 +694,14 @@ public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelt
                        .pattern(" b ")
                        .unlockedBy("has_item", has(TinkerSmeltery.scorchedBrick))
                        .save(consumer, prefix(TinkerSmeltery.scorchedGlass, folder));
+    ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, TinkerSmeltery.scorchedLamp)
+      .define('b', TinkerSmeltery.scorchedBrick)
+      .define('G', Blocks.GLOWSTONE)
+      .pattern(" b ")
+      .pattern("bGb")
+      .pattern(" b ")
+      .unlockedBy("has_item", has(Blocks.GLOWSTONE))
+      .save(consumer, prefix(TinkerSmeltery.scorchedLamp, folder));
     ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, TinkerSmeltery.scorchedSoulGlass)
                        .define('b', TinkerSmeltery.scorchedBrick)
                        .define('G', TinkerCommons.soulGlass)
@@ -892,6 +913,10 @@ public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelt
                             .setFluidAndTime(TinkerFluids.moltenQuartz, FluidValues.GEM)
                             .setCast(TinkerSmeltery.scorchedBricks, true)
                             .save(consumer, location(castingFolder + "glass"));
+    ItemCastingRecipeBuilder.basinRecipe(TinkerSmeltery.scorchedLamp)
+      .setFluidAndTime(TinkerFluids.scorchedStone, FluidValues.BRICK_BLOCK)
+      .setCast(Blocks.GLOWSTONE, true)
+      .save(consumer, location(castingFolder + "lamp"));
     ItemCastingRecipeBuilder.basinRecipe(TinkerSmeltery.scorchedSoulGlass)
                             .setFluidAndTime(TinkerFluids.scorchedStone, FluidValues.BRICK_BLOCK)
                             .setCast(TinkerCommons.soulGlass, true)

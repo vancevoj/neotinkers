@@ -248,6 +248,7 @@ public class BlockLootTableProvider extends BlockLootSubProvider {
     this.dropSelf(TinkerSmeltery.searedCrackedBricks.get());
     this.dropSelf(TinkerSmeltery.searedFancyBricks.get());
     this.dropSelf(TinkerSmeltery.searedTriangleBricks.get());
+    this.dropSelf(TinkerSmeltery.searedLamp.get());
     this.dropSelf(TinkerSmeltery.searedLadder.get());
     this.dropSelf(TinkerSmeltery.searedGlass.get());
     this.dropSelf(TinkerSmeltery.searedSoulGlass.get());
@@ -291,6 +292,7 @@ public class BlockLootTableProvider extends BlockLootSubProvider {
     this.registerFenceBuildingLootTables(TinkerSmeltery.scorchedBricks);
     this.dropSelf(TinkerSmeltery.chiseledScorchedBricks.get());
     this.registerBuildingLootTables(TinkerSmeltery.scorchedRoad);
+    this.dropSelf(TinkerSmeltery.scorchedLamp.get());
     this.dropSelf(TinkerSmeltery.scorchedLadder.get());
     this.dropSelf(TinkerSmeltery.scorchedGlass.get());
     this.dropSelf(TinkerSmeltery.scorchedSoulGlass.get());

@@ -1381,6 +1381,8 @@
 
   "block.tconstruct.seared_ladder": "Seared Ladder",
   "block.tconstruct.seared_ladder.tooltip": "Climbable Smeltery block.",
+  "block.tconstruct.seared_lamp": "Seared Lamp",
+  "block.tconstruct.seared_lamp.tooltip": "Smeltery block that emits light.",
 
   "block.tconstruct.seared_fuel_tank": "Seared Fuel Tank",
   "block.tconstruct.seared_fuel_tank.tooltip": "Heart of the Smeltery.\nRetains liquid when broken.",
@@ -1472,6 +1474,8 @@
 
   "block.tconstruct.scorched_ladder": "Scorched Ladder",
   "block.tconstruct.scorched_ladder.tooltip": "Climbable Foundry block.",
+  "block.tconstruct.scorched_lamp": "Scorched Lamp",
+  "block.tconstruct.scorched_lamp.tooltip": "Foundry block that emits light.",
 
   "block.tconstruct.scorched_fuel_tank": "Scorched Fuel Tank",
   "block.tconstruct.scorched_fuel_tank.tooltip": "Heart of the Foundry.\nRetains liquid when broken.",

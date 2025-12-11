@@ -172,6 +172,7 @@ public final class TinkerSmeltery extends TinkerModule {
     searedFancyBricks = BLOCKS.register("seared_fancy_bricks", searedBlock, TOOLTIP_BLOCK_ITEM);
     searedTriangleBricks = BLOCKS.register("seared_triangle_bricks", searedBlock, TOOLTIP_BLOCK_ITEM);
   }
+  public static final ItemObject<Block> searedLamp = BLOCKS.register("seared_lamp", () -> new SearedBlock(searedSolidProps(1).lightLevel(state -> 15), false), TOOLTIP_BLOCK_ITEM);
 
   // scorched blocks
   public static final ItemObject<Block> scorchedStone, polishedScorchedStone, chiseledScorchedBricks;
@@ -187,6 +188,7 @@ public final class TinkerSmeltery extends TinkerModule {
     scorchedRoad = BLOCKS.registerBuilding("scorched_road", block, TOOLTIP_BLOCK_ITEM);
     chiseledScorchedBricks = BLOCKS.register("chiseled_scorched_bricks", block, TOOLTIP_BLOCK_ITEM);
   }
+  public static final ItemObject<Block> scorchedLamp = BLOCKS.register("scorched_lamp", () -> new SearedBlock(scorchedSolidProps(1).lightLevel(state -> 15), false), TOOLTIP_BLOCK_ITEM);
 
   // glass
   public static final ItemObject<SearedGlassBlock> searedGlass, scorchedGlass;
@@ -308,9 +310,9 @@ public final class TinkerSmeltery extends TinkerModule {
     set.addAll(searedCobble.values());
     set.addAll(searedBricks.values());
     set.addAll(searedPaver.values());
-    set.add(searedCrackedBricks.get(), searedFancyBricks.get(), searedTriangleBricks.get(), searedLadder.get(), searedGlass.get(), searedSoulGlass.get(), searedTintedGlass.get());
+    set.add(searedCrackedBricks.get(), searedFancyBricks.get(), searedTriangleBricks.get(), searedLadder.get(), searedLamp.get(), searedGlass.get(), searedSoulGlass.get(), searedTintedGlass.get());
     // scorched
-    set.add(scorchedStone.get(), polishedScorchedStone.get(), chiseledScorchedBricks.get(), scorchedLadder.get(), scorchedGlass.get(), scorchedSoulGlass.get(), scorchedTintedGlass.get());
+    set.add(scorchedStone.get(), polishedScorchedStone.get(), chiseledScorchedBricks.get(), scorchedLadder.get(), scorchedLamp.get(), scorchedGlass.get(), scorchedSoulGlass.get(), scorchedTintedGlass.get());
     set.addAll(scorchedBricks.values());
     set.addAll(scorchedRoad.values());
   });
@@ -530,6 +532,7 @@ public final class TinkerSmeltery extends TinkerModule {
     output.accept(searedTriangleBricks);
     accept(output, searedCobble);
     accept(output, searedPaver);
+    output.accept(searedLamp);
     output.accept(searedLadder);
     output.accept(searedGlass);
     output.accept(searedTintedGlass);
@@ -543,6 +546,7 @@ public final class TinkerSmeltery extends TinkerModule {
     output.accept(scorchedStone);
     output.accept(polishedScorchedStone);
     accept(output, scorchedRoad);
+    output.accept(scorchedLamp);
     output.accept(scorchedLadder);
     output.accept(scorchedGlass);
     output.accept(scorchedTintedGlass);
