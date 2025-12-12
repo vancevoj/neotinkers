@@ -36,7 +36,7 @@ import slimeknights.tconstruct.library.utils.Util;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class NecroticModifier extends Modifier implements ProjectileHitModifierHook, MeleeHitModifierHook, MonsterMeleeHitModifierHook.RedirectAfter, OnAttackedModifierHook, TooltipModifierHook {
+public class NecroticModifier extends Modifier implements ProjectileHitModifierHook, MeleeHitModifierHook, MonsterMeleeHitModifierHook, OnAttackedModifierHook, TooltipModifierHook {
   private static final Component LIFE_STEAL = TConstruct.makeTranslation("modifier", "necrotic.lifesteal");
 
   @Override
@@ -45,17 +45,24 @@ public class NecroticModifier extends Modifier implements ProjectileHitModifierH
   }
 
   @Override
-  public void afterMeleeHit(IToolStackView tool, ModifierEntry modifier, ToolAttackContext context, float damageDealt) {
-    if (context.isFullyCharged() && context.isCritical() && damageDealt > 0 && !context.getTarget().getType().is(TinkerTags.EntityTypes.NECROTIC_BLACKLIST)) {
+  public void onMonsterMeleeHit(IToolStackView tool, ModifierEntry modifier, ToolAttackContext context, float damage) {
+    if (damage > 0 && !context.getTarget().getType().is(TinkerTags.EntityTypes.NECROTIC_BLACKLIST)) {
       // heals a percentage of damage dealt, using same rate as reinforced
       float percent = 0.05f * modifier.getEffectiveLevel();
       if (percent > 0) {
         LivingEntity attacker = context.getAttacker();
-        attacker.heal(percent * damageDealt);
+        attacker.heal(percent * damage);
         attacker.level().playSound(null, attacker.getX(), attacker.getY(), attacker.getZ(), Sounds.NECROTIC_HEAL.getSound(), SoundSource.PLAYERS, 1.0f, 1.0f);
         // take a bit of extra damage to heal
         ToolDamageUtil.damageAnimated(tool, modifier.getLevel(), attacker, context.getSlotType());
       }
+    }
+  }
+
+  @Override
+  public void afterMeleeHit(IToolStackView tool, ModifierEntry modifier, ToolAttackContext context, float damageDealt) {
+    if (context.isFullyCharged() && context.isCritical()) {
+      onMonsterMeleeHit(tool, modifier, context, damageDealt);
     }
   }
 
