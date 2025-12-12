@@ -26,7 +26,6 @@ public class Config {
    * Common specific configuration
    */
   public static class Common {
-
     public final BooleanValue shouldSpawnWithTinkersBook;
     public final List<ConfigurableAction> toolTweaks;
 
@@ -51,6 +50,7 @@ public class Config {
     // compatability
     public final BooleanValue allowIngotlessAlloys;
     public final DoubleValue chemthrowerShotValue;
+    public final BooleanValue allowMonsterMeleeModifiers;
 
     // debug
     public final BooleanValue forceIntegrationMaterials;
@@ -180,6 +180,10 @@ public class Config {
             "IE launches 8 projectiles per tick while consuming the value in their config, so dividing it by 8 makes them comparable to our projectiles.",
             "However, keeping it as a separate config option gives pack makers more control over how strong TiC ends up in the chemthrower.")
           .defineInRange("immersive_engineering_chemthrower_shot_value", 1.25, 0, Integer.MAX_VALUE);
+        this.allowMonsterMeleeModifiers = builder
+          .comment("If true, monsters will run melee modifiers when attacking with a modifiable weapon. Provided to work around potential issues with addons allowing more monsters to use tools.",
+            "Note that if its just a specific mob or damage source that has an issue, there are tag blacklists.")
+          .define("allowMonsterMeleeModifiers", true);
       }
       builder.pop();
 
