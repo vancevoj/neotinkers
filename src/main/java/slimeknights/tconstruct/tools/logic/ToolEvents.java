@@ -274,6 +274,32 @@ public class ToolEvents {
     float modifierValue = 0;
     float originalDamage = event.getAmount();
 
+    Entity attacker = source.getEntity();
+    if (attacker instanceof LivingEntity living) {
+      // boost damage based on monster's melee weapon
+      if (Config.COMMON.allowMonsterMeleeModifiers.get() && !source.isIndirect() && !source.is(TinkerTags.DamageTypes.MELEE_MODIFIER_BLACKLIST) && !living.getType().is(TinkerTags.EntityTypes.MELEE_MODIFIER_BLACKLIST)) {
+        ItemStack weapon = living.getMainHandItem();
+        if (!weapon.isEmpty() && weapon.is(TinkerTags.Items.MELEE_WEAPON)) {
+          IToolStackView tool = ToolStack.from(weapon);
+          // already know the player is null
+          ToolAttackContext meleeContext = ToolAttackContext.attacker(living, null).target(entity).applyAttributes().build();
+          float baseDamage = originalDamage;
+          for (ModifierEntry entry : tool.getModifiers()) {
+            originalDamage = entry.getHook(ModifierHooks.MONSTER_MELEE_DAMAGE).getMeleeDamage(tool, entry, meleeContext, baseDamage, originalDamage);
+          }
+        }
+      }
+
+      // run shulking global damage "boost", its a bit hardcoded Java wise to make it softcoded in JSON
+      if (attacker.isCrouching()) {
+        double crouchMultiplier = living.getAttributeValue(TinkerAttributes.CROUCH_DAMAGE_MULTIPLIER.get());
+        crouchMultiplier += ArmorStatModule.getStat(attacker, TinkerDataKeys.CROUCH_DAMAGE);
+        if (crouchMultiplier != 0) {
+          originalDamage *= crouchMultiplier;
+        }
+      }
+    }
+
     // conducting - boosts damage from fire
     if (source.is(TinkerTags.DamageTypes.FIRE_PROTECTION)) {
       int level = TinkerEffect.getLevel(entity, TinkerEffects.conductive);
@@ -288,32 +314,7 @@ public class ToolEvents {
         originalDamage *= Math.pow(2, level);
       }
     }
-
-    Entity attacker = source.getEntity();
-    if (attacker instanceof LivingEntity living) {
-      // run shulking global damage "boost", its a bit hardcoded Java wise to make it softcoded in JSON
-      if (attacker.isCrouching()) {
-        double crouchMultiplier = living.getAttributeValue(TinkerAttributes.CROUCH_DAMAGE_MULTIPLIER.get());
-        crouchMultiplier += ArmorStatModule.getStat(attacker, TinkerDataKeys.CROUCH_DAMAGE);
-        if (crouchMultiplier != 0) {
-          originalDamage *= crouchMultiplier;
-        }
-      }
-
-      // boost damage based on monster's melee weapon
-      if (Config.COMMON.allowMonsterMeleeModifiers.get() && !source.isIndirect() && !source.is(TinkerTags.DamageTypes.MELEE_MODIFIER_BLACKLIST) && !living.getType().is(TinkerTags.EntityTypes.MELEE_MODIFIER_BLACKLIST)) {
-        ItemStack weapon = living.getMainHandItem();
-        if (!weapon.isEmpty() && weapon.is(TinkerTags.Items.MELEE_WEAPON)) {
-          IToolStackView tool = ToolStack.from(weapon);
-          // already know the player is null
-          ToolAttackContext meleeContext = ToolAttackContext.attacker(living, null).target(entity).applyAttributes().build();
-          float baseDamage = originalDamage;
-          for (ModifierEntry entry : tool.getModifiers()) {
-            originalDamage = entry.getHook(ModifierHooks.MONSTER_MELEE_DAMAGE).getMeleeDamage(tool, entry, meleeContext, baseDamage, originalDamage);
-          }
-        }
-      }
-    }
+    
     // ensure any changes made so far apply, though we may change it again
     event.setAmount(originalDamage);
 
