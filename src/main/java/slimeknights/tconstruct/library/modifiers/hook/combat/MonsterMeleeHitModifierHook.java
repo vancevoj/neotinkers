@@ -25,7 +25,7 @@ public interface MonsterMeleeHitModifierHook {
    * @param tool       Tool used to attack
    * @param modifier   Modifier level
    * @param context    Attack context
-   * @param damage     Amount of damage to deal
+   * @param damage     Amount of damage to deal. Should match exactly to the damage that will be taken, but has not been dealt yet.
    */
   void onMonsterMeleeHit(IToolStackView tool, ModifierEntry modifier, ToolAttackContext context, float damage);
 

@@ -419,6 +419,9 @@ public class ToolEvents {
       }
     }
 
+    // for remaining code, ensure amount is not more than they will take
+    amount = Math.min(amount, entity.getHealth());
+
     // apply post hit modifier effects. Done regardless of damage dealt - don't care if absorption took it all
     if (Config.COMMON.allowMonsterMeleeModifiers.get() && !source.isIndirect() && !source.is(TinkerTags.DamageTypes.MELEE_MODIFIER_BLACKLIST)) {
       Entity attacker = event.getSource().getEntity();
