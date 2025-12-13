@@ -2081,8 +2081,8 @@
 
   "material.tconstruct.blazing_bone": "Blazing Bone",
   "material.tconstruct.blazing_bone.flavor": "Harness the full power of the Nether Fortress - bone and blaze",
-  "material.tconstruct.blazing_bone.encyclopedia": "Grants +1% damage per second of fire, up to +15% from lava's 15 seconds. Bonus reduced by fire resistance.",
-  "material.tconstruct.blazing_bone.ranged": "Grants +1% arrow damage per second of fire, up to +15% from lava's 15 seconds. Bonus reduced by fire resistance.",
+  "material.tconstruct.blazing_bone.encyclopedia": "Grants +1% damage per second of fire, up to +20% from 10+ seconds. Bonus reduced by fire resistance.",
+  "material.tconstruct.blazing_bone.ranged": "Grants +1% arrow damage per second of fire, up to +20% from 10+ seconds. Bonus reduced by fire resistance.",
   "material.tconstruct.blazing_bone.armor": "Has a 15% chance on hit to cause attackers to take 200% fire damage for the next 5 to 10 seconds (or up to 15 seconds if blocking).",
   "material.tconstruct.blazing_bone.ammo": "Causes the target to take 200% fire damage for the next 5 to 10 seconds.",
   "material.tconstruct.blazing_bone.skull_flavor": "I told them this is technically firespit, not firebreath, but apparently I don't get to decide the names for things I invent",
