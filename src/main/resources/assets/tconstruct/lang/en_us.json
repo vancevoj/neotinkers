@@ -2006,7 +2006,7 @@
 
   "material.tconstruct.nahuatl": "Nahuatl",
   "material.tconstruct.nahuatl.flavor": "This is not an obsidian part, if it was it would say \"Obsidian.\"",
-  "material.tconstruct.nahuatl.encyclopedia": "Has a 50% chance of doing up to 5 damage over time, more damage at higher levels",
+  "material.tconstruct.nahuatl.encyclopedia": "Causes 1 damage per second over time for 2 seconds per level. Consecutive hits add instead of replacing the time.",
   "material.tconstruct.nahuatl.armor": "Has a 25% chance per level (50% if blocking) of doing up to 5 damage over time",
 
   "material.tconstruct.obsidian":   "Obsidian",
