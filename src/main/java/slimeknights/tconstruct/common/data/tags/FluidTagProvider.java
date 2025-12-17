@@ -5,6 +5,7 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.FluidTagsProvider;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import slimeknights.mantle.datagen.MantleTags;
@@ -121,6 +122,11 @@ public class FluidTagProvider extends FluidTagsProvider {
 
     fluidTag(TinkerFluids.potion);
     fluidTag(TinkerFluids.powderedSnow);
+
+    // drowned want fluids that work nice in water, while wither skeletons want to complement the withering
+    // both need to act as a swasher tutorial though
+    tag(TinkerTags.Fluids.DROWNED_SWASHER).add(Fluids.LAVA, TinkerFluids.powderedSnow.get(), TinkerFluids.moltenGlass.get(), TinkerFluids.moltenObsidian.get());
+    tag(TinkerTags.Fluids.WITHER_SKELETON_SWASHER).add(Fluids.LAVA, TinkerFluids.blazingBlood.get(), TinkerFluids.liquidSoul.get(), TinkerFluids.magma.get());
 
     // tag local tags with the chemthrower, do not include forge tags as its on other mods to choose how they want to support IE
     // block effects - mostly mining

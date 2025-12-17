@@ -2,7 +2,7 @@
   "entity": "minecraft:drowned",
   "equip": {
     "chance": 0.05,
-    "fluid": "minecraft:lava",
+    "fluid": "tconstruct:swasher/drowned",
     "match": {
       "type": "mantle:set",
       "items": [

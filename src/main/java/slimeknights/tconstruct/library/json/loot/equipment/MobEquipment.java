@@ -4,6 +4,9 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
@@ -33,18 +36,19 @@ import slimeknights.tconstruct.library.tools.definition.ToolDefinition;
 import slimeknights.tconstruct.library.tools.definition.module.material.ToolMaterialHook;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 /** JSON object representing equipment replacement encoded in JSON */
-public record MobEquipment(EquipmentSlot slot, IJsonPredicate<Item> match, ItemOutput tool, List<RandomMaterial> materials, Fluid fluid, float chance, int priority) {
+public record MobEquipment(EquipmentSlot slot, IJsonPredicate<Item> match, ItemOutput tool, List<RandomMaterial> materials, @Nullable TagKey<Fluid> fluid, float chance, int priority) {
   public static final RecordLoadable<MobEquipment> LOADABLE = RecordLoadable.create(
     TinkerLoadables.EQUIPMENT_SLOT.requiredField("slot", MobEquipment::slot),
     ItemPredicate.LOADER.defaultField("match", MobEquipment::match),
     ItemOutput.Loadable.REQUIRED_STACK.requiredField("tool", MobEquipment::tool),
     RandomMaterial.LOADER.list(0).defaultField("materials", List.of(), false, MobEquipment::materials),
-    Loadables.FLUID.defaultField("fluid", Fluids.EMPTY, false, MobEquipment::fluid),
+    Loadables.FLUID_TAG.nullableField("fluid", MobEquipment::fluid),
     FloatLoadable.PERCENT.defaultField("chance", 0.05f, true, MobEquipment::chance),
     IntLoadable.FROM_ZERO.defaultField("priority", 100, true, MobEquipment::priority),
     MobEquipment::new);
@@ -96,18 +100,26 @@ public record MobEquipment(EquipmentSlot slot, IJsonPredicate<Item> match, ItemO
       if (replacement.is(TinkerTags.Items.MODIFIABLE)) {
         ToolStack tool = ToolStack.from(replacement);
         ToolDefinition definition = tool.getDefinition();
+        RandomSource random = mob.getRandom();
         if (definition.hasMaterials() && !materials.isEmpty()) {
-          tool.setMaterials(RandomMaterial.build(ToolMaterialHook.stats(definition), materials, mob.getRandom()));
+          tool.setMaterials(RandomMaterial.build(ToolMaterialHook.stats(definition), materials, random));
         } else {
           tool.rebuildStats();
         }
         // if requested, fill with fluid
-        if (fluid != Fluids.EMPTY) {
+        if (fluid != null) {
           // fill with between 0mb and the max amount
           int capacity = ToolTankHelper.TANK_HELPER.getCapacity(tool);
-          int amount = mob.getRandom().nextInt(capacity + 1);
+          int amount = random.nextInt(capacity + 1);
           if (amount > 0) {
-            ToolTankHelper.TANK_HELPER.setFluid(tool, new FluidStack(fluid, amount));
+            // select fluid from tag
+            Fluid fluid = BuiltInRegistries.FLUID.getTag(this.fluid)
+              .flatMap(tag -> tag.getRandomElement(random))
+              .map(Holder::get)
+              .orElse(Fluids.EMPTY);
+            if (fluid != Fluids.EMPTY) {
+              ToolTankHelper.TANK_HELPER.setFluid(tool, new FluidStack(fluid, amount));
+            }
           }
         }
       }
@@ -145,8 +157,9 @@ public record MobEquipment(EquipmentSlot slot, IJsonPredicate<Item> match, ItemO
       private ItemOutput tool = null;
       /** List of materials to assign to the tool */
       private final List<RandomMaterial> materials = new ArrayList<>();
-      /** Fluid to fill the tool with */
-      private Fluid fluid = Fluids.EMPTY;
+      /** Tool will be filled with a random fluid from the passed tag. If null, no fluid is used. */
+      @Nullable
+      private TagKey<Fluid> fluid = null;
       /** Chance the tool is given to the entity */
       private float chance = 0.05f;
       /** Order this entry applies if multiple entries are on the same target. Higher numbers run earlier. */

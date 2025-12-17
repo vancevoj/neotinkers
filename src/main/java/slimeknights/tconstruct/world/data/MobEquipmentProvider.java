@@ -5,14 +5,12 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.common.crafting.conditions.ModLoadedCondition;
 import slimeknights.mantle.data.predicate.item.ItemPredicate;
 import slimeknights.mantle.recipe.data.ItemNameOutput;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.common.data.FakeRegistryEntry;
-import slimeknights.tconstruct.fluids.TinkerFluids;
 import slimeknights.tconstruct.library.data.tinkering.AbstractMobEquipmentProvider;
 import slimeknights.tconstruct.library.materials.RandomMaterial;
 import slimeknights.tconstruct.tools.TinkerTools;
@@ -36,19 +34,18 @@ public class MobEquipmentProvider extends AbstractMobEquipmentProvider {
       .match(ItemPredicate.set(Items.GOLDEN_SWORD, Items.GOLDEN_AXE))
       .tool(TinkerTools.battlesign)
       .material(random, random);
-    // drowned spawn with swashers filled with lava
+    // want different fluid lists for wither skeletons vs drowned
     equip(EntityType.DROWNED)
       .slot(EquipmentSlot.MAINHAND)
       // only replace empty hand
       .match(ItemPredicate.set(Items.AIR))
       .tool(TinkerTools.swasher)
-      .fluid(Fluids.LAVA)
+      .fluid(TinkerTags.Fluids.DROWNED_SWASHER)
       .material(random, random, random);
-    // wither skeletons spawn with swashers containing hepatizon for wither
     equip(EntityType.WITHER_SKELETON)
       .slot(EquipmentSlot.MAINHAND)
       .tool(TinkerTools.swasher)
-      .fluid(TinkerFluids.moltenHepatizon.get())
+      .fluid(TinkerTags.Fluids.WITHER_SKELETON_SWASHER)
       .material(random, random, random);
     // zombies spawn with melting pans
     equip("melting_pan", List.of(EntityType.ZOMBIE, EntityType.ZOMBIE_VILLAGER, EntityType.HUSK))

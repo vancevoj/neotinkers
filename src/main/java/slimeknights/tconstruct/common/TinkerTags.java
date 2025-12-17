@@ -564,6 +564,11 @@ public class TinkerTags {
     @Deprecated(forRemoval = true)
     public static final TagKey<Fluid> SOUP_TOOLTIPS = local("tooltips/soup");
 
+    /** Fluids found in swashers the hands of drowned */
+    public static final TagKey<Fluid> DROWNED_SWASHER = local("swasher/drowned");
+    /** Fluids found in swashers the hands of wither skeletons */
+    public static final TagKey<Fluid> WITHER_SKELETON_SWASHER = local("swasher/wither_skeleton");
+
     /** @deprecated Fluids have all been given unique effects, use {@link slimeknights.tconstruct.library.data.tinkering.AbstractFluidEffectProvider} */
     @Deprecated(forRemoval = true)
     public static final TagKey<Fluid> CLAY_SPILLING = local("spilling/clay");

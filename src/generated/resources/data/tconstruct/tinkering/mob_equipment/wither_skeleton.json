@@ -2,7 +2,7 @@
   "entity": "minecraft:wither_skeleton",
   "equip": {
     "chance": 0.05,
-    "fluid": "tconstruct:molten_hepatizon",
+    "fluid": "tconstruct:swasher/wither_skeleton",
     "materials": [
       {
         "type": "tconstruct:ancient"
