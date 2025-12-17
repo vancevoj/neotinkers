@@ -895,7 +895,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
         // 1/10 effect for each health lost below 10
         .constant(10).divide().percentClamp()
         // get 1 power bonus per level, so 0.1 power per lost health
-        .variable(LEVEL).multiply().constant(1).multiply().variable(MULTIPLIER).multiply()
+        .variable(LEVEL).multiply().variable(MULTIPLIER).multiply()
         // finally, add in base damage
         .variable(VALUE).add().build());
     buildModifier(ModifierIds.vitalProtection)
