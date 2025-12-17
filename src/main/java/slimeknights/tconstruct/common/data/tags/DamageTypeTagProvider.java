@@ -53,8 +53,8 @@ import static slimeknights.tconstruct.common.TinkerTags.DamageTypes.BLAST_PROTEC
 import static slimeknights.tconstruct.common.TinkerTags.DamageTypes.FALL_PROTECTION;
 import static slimeknights.tconstruct.common.TinkerTags.DamageTypes.FIRE_PROTECTION;
 import static slimeknights.tconstruct.common.TinkerTags.DamageTypes.MAGIC_PROTECTION;
-import static slimeknights.tconstruct.common.TinkerTags.DamageTypes.MELEE_MODIFIER_BLACKLIST;
 import static slimeknights.tconstruct.common.TinkerTags.DamageTypes.MELEE_PROTECTION;
+import static slimeknights.tconstruct.common.TinkerTags.DamageTypes.MODIFIER_WHITELIST;
 import static slimeknights.tconstruct.common.TinkerTags.DamageTypes.PROJECTILE_PROTECTION;
 
 public class DamageTypeTagProvider extends DamageTypeTagsProvider {
@@ -77,7 +77,8 @@ public class DamageTypeTagProvider extends DamageTypeTagsProvider {
     tag(IS_PROJECTILE).add(THROWN_TOOL, FISHING_HOOK, FLUID_IMPACT.ranged(), FLUID_FIRE.ranged(), FLUID_COLD.ranged(), FLUID_MAGIC.ranged(), WATER.ranged(), FLUID_SPIKE.ranged(), EXPLOSION.ranged(), MOB_EXPLOSION.ranged());
 
     // modifiers
-    tag(MELEE_MODIFIER_BLACKLIST).add(PIERCING).addTag(AVOIDS_GUARDIAN_THORNS);
+    tag(MODIFIER_WHITELIST).add(MOB_ATTACK, MOB_ATTACK_NO_AGGRO);
+
     // protection modifier tags
     tag(MELEE_PROTECTION).add(PLAYER_ATTACK, MOB_ATTACK, MOB_ATTACK_NO_AGGRO, CRAMMING, STING);
     tag(PROJECTILE_PROTECTION).addTag(IS_PROJECTILE).add(FALLING_ANVIL, FALLING_BLOCK, FALLING_STALACTITE);

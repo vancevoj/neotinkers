@@ -34,7 +34,7 @@ public class EntityTypeTagProvider extends EntityTypeTagsProvider {
     this.tag(TinkerTags.EntityTypes.PIGGYBACKPACK_BLACKLIST);
 
     // players use tool daamge util
-    this.tag(TinkerTags.EntityTypes.MELEE_MODIFIER_BLACKLIST).add(EntityType.PLAYER);
+    this.tag(TinkerTags.EntityTypes.DAMAGE_MODIFIER_BLACKLIST).add(EntityType.PLAYER);
 
     this.tag(TinkerTags.EntityTypes.CREEPERS).add(EntityType.CREEPER);
     this.tag(TinkerTags.EntityTypes.RARE_MOBS).add(EntityType.WITHER, EntityType.ENDER_DRAGON, EntityType.ELDER_GUARDIAN, EntityType.EVOKER, EntityType.PLAYER);

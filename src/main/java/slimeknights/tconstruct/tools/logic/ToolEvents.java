@@ -277,7 +277,7 @@ public class ToolEvents {
     Entity attacker = source.getEntity();
     if (attacker instanceof LivingEntity living) {
       // boost damage based on monster's melee weapon
-      if (Config.COMMON.allowMonsterMeleeModifiers.get() && !source.isIndirect() && !source.is(TinkerTags.DamageTypes.MELEE_MODIFIER_BLACKLIST) && !living.getType().is(TinkerTags.EntityTypes.MELEE_MODIFIER_BLACKLIST)) {
+      if (Config.COMMON.allowMonsterMeleeModifiers.get() && source.is(TinkerTags.DamageTypes.MODIFIER_WHITELIST) && !living.getType().is(TinkerTags.EntityTypes.DAMAGE_MODIFIER_BLACKLIST)) {
         ItemStack weapon = living.getMainHandItem();
         if (!weapon.isEmpty() && weapon.is(TinkerTags.Items.MELEE_WEAPON)) {
           IToolStackView tool = ToolStack.from(weapon);
@@ -423,9 +423,9 @@ public class ToolEvents {
     amount = Math.min(amount, entity.getHealth());
 
     // apply post hit modifier effects. Done regardless of damage dealt - don't care if absorption took it all
-    if (Config.COMMON.allowMonsterMeleeModifiers.get() && !source.isIndirect() && !source.is(TinkerTags.DamageTypes.MELEE_MODIFIER_BLACKLIST)) {
+    if (Config.COMMON.allowMonsterMeleeModifiers.get() && source.is(TinkerTags.DamageTypes.MODIFIER_WHITELIST)) {
       Entity attacker = event.getSource().getEntity();
-      if (attacker != null && !attacker.getType().is(TinkerTags.EntityTypes.MELEE_MODIFIER_BLACKLIST) && attacker instanceof LivingEntity living) {
+      if (attacker != null && !attacker.getType().is(TinkerTags.EntityTypes.DAMAGE_MODIFIER_BLACKLIST) && attacker instanceof LivingEntity living) {
         ItemStack weapon = living.getMainHandItem();
         if (!weapon.isEmpty() && weapon.is(TinkerTags.Items.MELEE_WEAPON)) {
           // already know we are not a player

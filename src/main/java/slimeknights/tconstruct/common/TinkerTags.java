@@ -609,9 +609,9 @@ public class TinkerTags {
 
     /**
      * Entities in this tag either run proper hooks to use a melee weapon on left click or cause issues with our melee modifier logic.
-     * Anything not in this tag will attempt the fallback behavior which applys effects during damage events.
+     * Anything not in this tag will attempt the fallback behavior which apply effects during damage events.
      */
-    public static final TagKey<EntityType<?>> MELEE_MODIFIER_BLACKLIST = local("melee_modifier_blacklist");
+    public static final TagKey<EntityType<?>> DAMAGE_MODIFIER_BLACKLIST = local("damage_modifier_blacklist");
 
     public static final TagKey<EntityType<?>> MELTING_SHOW = local("melting/show_in_default");
     public static final TagKey<EntityType<?>> MELTING_HIDE = local("melting/hide_in_default");
@@ -831,8 +831,8 @@ public class TinkerTags {
     /** Damage types reduced by the feather falling modifier */
     public static final TagKey<DamageType> FALL_PROTECTION = local("protection/fall");
 
-    /** Damage types that will not apply monster melee effects. Only necessary to tag damage types that use direct damage. Must tag any recursive damage effects. */
-    public static final TagKey<DamageType> MELEE_MODIFIER_BLACKLIST = local("melee_modifier_blacklist");
+    /** Damage types that can use modifiers. */
+    public static final TagKey<DamageType> MODIFIER_WHITELIST = local("modifier_whitelist");
 
     private static TagKey<DamageType> local(String name) {
       return TagKey.create(Registries.DAMAGE_TYPE, getResource(name));
