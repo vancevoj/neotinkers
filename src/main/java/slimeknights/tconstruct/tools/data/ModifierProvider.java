@@ -633,7 +633,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .addModule(new VolatileFlagModule(ToolInventoryCapability.CRAFTING_TABLE));
     // boots
     buildModifier(ModifierIds.depthStrider).addModule(EnchantmentModule.builder(Enchantments.DEPTH_STRIDER).constant());
-    buildModifier(ModifierIds.featherFalling).addModule(ProtectionModule.builder().source(DamageSourcePredicate.tag(TinkerTags.DamageTypes.FALL_PROTECTION)).eachLevel(3.75f));
+    buildModifier(ModifierIds.featherFalling).addModule(ProtectionModule.builder().source(DamageSourcePredicate.tag(TinkerTags.DamageTypes.FALL_PROTECTION)).eachLevel(4f));
     buildModifier(ModifierIds.longFall)
       .levelDisplay(ModifierLevelDisplay.NO_LEVELS)
       .addModule(ModifierRequirementsModule.builder().requireModifier(ModifierIds.featherFalling, 4).modifierKey(ModifierIds.longFall).build())

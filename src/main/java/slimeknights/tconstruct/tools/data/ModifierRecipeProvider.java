@@ -361,22 +361,32 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                                     .disallowCrystal()
                                     .setSlots(SlotType.UPGRADE, 1)
                                     .save(consumer, wrap(ModifierIds.hydraulic, upgradeFolder, "_from_bricks"));
-    IncrementalModifierRecipeBuilder.modifier(ModifierIds.lightspeed)
-                                    .setTools(ingredientFromTags(TinkerTags.Items.HARVEST, TinkerTags.Items.BOOTS))
-                                    .setInput(Tags.Items.DUSTS_GLOWSTONE, 1, 64)
-                                    .setMaxLevel(5) // +45 mining speed at max, conditionally
-                                                    // 45% running speed at max, conditionally
-                                    .setSlots(SlotType.UPGRADE, 1)
-                                    .saveSalvage(consumer, prefix(ModifierIds.lightspeed, upgradeSalvage))
-                                    .save(consumer, wrap(ModifierIds.lightspeed, upgradeFolder, "_from_dust"));
-    IncrementalModifierRecipeBuilder.modifier(ModifierIds.lightspeed)
-                                    .setTools(ingredientFromTags(TinkerTags.Items.HARVEST, TinkerTags.Items.BOOTS))
-                                    .setInput(Blocks.GLOWSTONE, 4, 64)
-                                    .setLeftover(Items.GLOWSTONE_DUST)
-                                    .setMaxLevel(5)
-                                    .disallowCrystal()
-                                    .setSlots(SlotType.UPGRADE, 1)
-                                    .save(consumer, wrap(ModifierIds.lightspeed, upgradeFolder, "_from_block"));
+    IncrementalModifierRecipeBuilder lightspeed = IncrementalModifierRecipeBuilder.modifier(ModifierIds.lightspeed)
+      .setInput(Tags.Items.DUSTS_GLOWSTONE, 1, 64)
+      .setMaxLevel(5) // +45 mining speed at max, conditionally
+      .setSlots(SlotType.UPGRADE, 1)
+      .setTools(ingredientFromTags(TinkerTags.Items.HARVEST, TinkerTags.Items.BOOTS))
+      .saveSalvage(consumer, prefix(ModifierIds.lightspeed, upgradeSalvage));
+    lightspeed
+      .setTools(TinkerTags.Items.HARVEST)
+      .save(consumer, wrap(ModifierIds.lightspeed, upgradeFolder, "_harvest_from_dust"));
+    lightspeed
+      .setMaxLevel(3) // 27% running speed at max, conditionally
+      .setTools(TinkerTags.Items.BOOTS)
+      .save(consumer, wrap(ModifierIds.lightspeed, upgradeFolder, "_boots_from_dust"));
+    lightspeed = IncrementalModifierRecipeBuilder.modifier(ModifierIds.lightspeed)
+      .setInput(Blocks.GLOWSTONE, 4, 64)
+      .setLeftover(Items.GLOWSTONE_DUST)
+      .disallowCrystal()
+      .setSlots(SlotType.UPGRADE, 1);
+    lightspeed
+      .setMaxLevel(5)
+      .setTools(TinkerTags.Items.HARVEST)
+      .save(consumer, wrap(ModifierIds.lightspeed, upgradeFolder, "_harvest_from_block"));
+    lightspeed
+      .setMaxLevel(3)
+      .setTools(TinkerTags.Items.BOOTS)
+      .save(consumer, wrap(ModifierIds.lightspeed, upgradeFolder, "_boots_from_block"));
 
     /*
      * weapon
@@ -937,7 +947,7 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
     // upgrade - boots
     IncrementalModifierRecipeBuilder.modifier(ModifierIds.featherFalling)
                                     .setTools(TinkerTags.Items.BOOTS)
-                                    .setInput(Items.FEATHER, 1, 15) // 1% per feather
+                                    .setInput(Items.FEATHER, 1, 16) // 1% per feather
                                     .setSlots(SlotType.UPGRADE, 1)
                                     .setMaxLevel(4)
                                     .saveSalvage(consumer, prefix(ModifierIds.featherFalling, upgradeSalvage))
@@ -1170,10 +1180,10 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .addInput(Items.PISTON)
                          .addInput(TinkerWorld.slime.get(SlimeType.SKY))
                          .addInput(TinkerWorld.slime.get(SlimeType.SKY))
-                         .setSlots(SlotType.ABILITY, 1)
+                         .setSlots(SlotType.UPGRADE, 1)
                          .setMaxLevel(1).checkTraitLevel()
-                         .saveSalvage(consumer, prefix(ModifierIds.longFall, abilitySalvage))
-                         .save(consumer, prefix(ModifierIds.longFall, abilityFolder));
+                         .saveSalvage(consumer, prefix(ModifierIds.longFall, upgradeSalvage))
+                         .save(consumer, prefix(ModifierIds.longFall, upgradeFolder));
 
     // transform ingredients
     Ingredient bootsWithDuraibility = IntersectionIngredient.of(Ingredient.of(TinkerTags.Items.BOOTS), Ingredient.of(TinkerTags.Items.DURABILITY));

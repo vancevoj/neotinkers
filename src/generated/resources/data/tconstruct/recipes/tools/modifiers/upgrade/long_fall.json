@@ -22,7 +22,7 @@
   "level": 1,
   "result": "tconstruct:long_fall",
   "slots": {
-    "abilities": 1
+    "upgrades": 1
   },
   "tools": {
     "tag": "tconstruct:modifiable/armor/boots"

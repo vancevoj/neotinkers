@@ -7,7 +7,7 @@
         "type": "mantle:tag",
         "tag": "tconstruct:protection/fall"
       },
-      "each_level": 3.75
+      "each_level": 4.0
     }
   ],
   "tooltip_display": "always"
