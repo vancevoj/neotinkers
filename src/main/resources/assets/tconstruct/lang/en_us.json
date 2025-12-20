@@ -287,7 +287,7 @@
 
   "item.tconstruct.copper_can": "Copper Can",
   "item.tconstruct.copper_can.tooltip": "Stackable container holding 1 ingot of fluid",
-  "item.tconstruct.copper_can.contents": "Contains: 1 ingot %s",
+  "item.tconstruct.copper_can.contents": "%s: 1 ingot",
 
 
   "_comment": "Tinkers Patterns",
@@ -1394,6 +1394,7 @@
   "block.tconstruct.seared_ingot_gauge.tooltip": "Ideal for metals, holding 48 ingots of fluid.\nRetains liquid when broken.",
   "block.tconstruct.seared_lantern": "Seared Lantern",
   "block.tconstruct.seared_lantern.tooltip": "Ideal for decoration, holding 50mb of fluid.\nRetains liquid when broken.",
+  "item.tconstruct.tank.fluid_id": "Fluid ID: %s",
 
   "block.tconstruct.seared_faucet": "Seared Faucet",
   "block.tconstruct.seared_faucet.tooltip": "Drains liquids from Smelteries and Tanks",
