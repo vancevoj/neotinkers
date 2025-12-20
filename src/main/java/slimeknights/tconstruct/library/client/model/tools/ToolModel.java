@@ -4,7 +4,6 @@ import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -51,6 +50,7 @@ import org.joml.Vector3f;
 import slimeknights.mantle.client.model.util.ColoredBlockModel;
 import slimeknights.mantle.client.model.util.MantleItemLayerModel;
 import slimeknights.mantle.data.loadable.Loadable;
+import slimeknights.mantle.data.loadable.Loadables;
 import slimeknights.mantle.data.loadable.mapping.CompactLoadable;
 import slimeknights.mantle.data.loadable.primitive.BooleanLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
@@ -85,7 +85,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
-import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -195,12 +194,11 @@ public class ToolModel implements IUnbakedGeometry<ToolModel> {
       // large model requires an object
       if (isLarge) {
         JsonObject modifierRoots = GsonHelper.getAsJsonObject(json, "modifier_roots");
-        BiFunction<JsonElement,String,ResourceLocation> parser = (element, string) -> new ResourceLocation(GsonHelper.convertToString(element, string));
-        smallModifierRoots = JsonHelper.parseList(modifierRoots, "small", parser);
-        largeModifierRoots = JsonHelper.parseList(modifierRoots, "large", parser);
+        smallModifierRoots = JsonHelper.parseList(modifierRoots, "small", Loadables.RESOURCE_LOCATION);
+        largeModifierRoots = JsonHelper.parseList(modifierRoots, "large", Loadables.RESOURCE_LOCATION);
       } else {
         // small requires an array
-        smallModifierRoots = JsonHelper.parseList(json, "modifier_roots", (element, string) -> new ResourceLocation(GsonHelper.convertToString(element, string)));
+        smallModifierRoots = JsonHelper.parseList(json, "modifier_roots", Loadables.RESOURCE_LOCATION);
       }
     }
     // fetch data related to ammo display
@@ -333,7 +331,7 @@ public class ToolModel implements IUnbakedGeometry<ToolModel> {
 
   /** Makes a model builder for the given context and overrides */
   private static IModelBuilder<?> makeModelBuilder(IGeometryBakingContext context, ItemOverrides overrides, TextureAtlasSprite particle) {
-    return IModelBuilder.of(context.useAmbientOcclusion(), context.useBlockLight(), context.isGui3d(), context.getTransforms(), overrides, particle, MantleItemLayerModel.getDefaultRenderType(context));
+    return IModelBuilder.of(context.useAmbientOcclusion(), false, false, context.getTransforms(), overrides, particle, MantleItemLayerModel.getDefaultRenderType(context));
   }
 
   /**
