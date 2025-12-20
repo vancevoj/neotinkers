@@ -1,18 +1,24 @@
 package slimeknights.tconstruct.library.data.tinkering;
 
+import com.google.gson.JsonObject;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.PackOutput.Target;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.ItemLike;
+import net.minecraftforge.common.crafting.CraftingHelper;
+import net.minecraftforge.common.crafting.conditions.ICondition;
 import slimeknights.mantle.data.GenericDataProvider;
 import slimeknights.tconstruct.library.recipe.partbuilder.Pattern;
 import slimeknights.tconstruct.library.tools.item.IModifiableDisplay;
 import slimeknights.tconstruct.library.tools.layout.StationSlotLayout;
 import slimeknights.tconstruct.library.tools.layout.StationSlotLayoutLoader;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
@@ -35,7 +41,7 @@ public abstract class AbstractStationSlotLayoutProvider extends GenericDataProvi
   /** Index for armor */
   protected static final int SORT_ARMOR = 15;
 
-  private final Map<ResourceLocation,StationSlotLayout.Builder> allLayouts = new HashMap<>();
+  private final Map<ResourceLocation,SerializeLayout> allLayouts = new HashMap<>();
 
   public AbstractStationSlotLayoutProvider(PackOutput packOutput) {
     super(packOutput, Target.DATA_PACK, StationSlotLayoutLoader.FOLDER, StationSlotLayoutLoader.GSON);
@@ -48,7 +54,14 @@ public abstract class AbstractStationSlotLayoutProvider extends GenericDataProvi
 
   /** Defines the given ID as a general layout */
   protected StationSlotLayout.Builder define(ResourceLocation id) {
-    return allLayouts.computeIfAbsent(id, i -> StationSlotLayout.builder());
+    return allLayouts.computeIfAbsent(id, i -> new SerializeLayout()).builder;
+  }
+
+  /** Defines the given ID as a general layout with conditions. */
+  protected StationSlotLayout.Builder define(ResourceLocation id, ICondition... conditions) {
+    SerializeLayout layout = allLayouts.computeIfAbsent(id, i -> new SerializeLayout());
+    Collections.addAll(layout.conditions, conditions);
+    return layout.builder;
   }
 
   /** Defines the given ID as a item layout */
@@ -76,6 +89,22 @@ public abstract class AbstractStationSlotLayoutProvider extends GenericDataProvi
   @Override
   public CompletableFuture<?> run(CachedOutput cache) {
     addLayouts();
-    return allOf(allLayouts.entrySet().stream().map(entry -> saveJson(cache, entry.getKey(), entry.getValue().build())));
+    return allOf(allLayouts.entrySet().stream().map(entry -> saveJson(cache, entry.getKey(), entry.getValue().serialize())));
+  }
+
+  /** Stores the pair of conditions and builder. */
+  private record SerializeLayout(StationSlotLayout.Builder builder, List<ICondition> conditions) {
+    public SerializeLayout() {
+      this(StationSlotLayout.builder(), new ArrayList<>());
+    }
+
+    /** Serializes the given builder to JSON */
+    public JsonObject serialize() {
+      JsonObject json = StationSlotLayoutLoader.GSON.toJsonTree(builder.build()).getAsJsonObject();
+      if (!conditions.isEmpty()) {
+        json.add("conditions", CraftingHelper.serialize(conditions.toArray(ICondition[]::new)));
+      }
+      return json;
+    }
   }
 }
