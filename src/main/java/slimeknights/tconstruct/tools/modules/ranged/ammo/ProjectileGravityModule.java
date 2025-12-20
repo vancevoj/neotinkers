@@ -25,7 +25,7 @@ import java.util.List;
  * @param delay  Delay until the projectile receives gravity.
  */
 public record ProjectileGravityModule(LevelingInt delay) implements ModifierModule, ProjectileShootModifierHook, ScheduledProjectileTaskModifierHook {
-  private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<ProjectileGravityModule>defaultHooks(ModifierHooks.PROJECTILE_SHOT, ModifierHooks.SCHEDULE_PROJECTILE_TASK);
+  private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<ProjectileGravityModule>defaultHooks(ModifierHooks.PROJECTILE_SHOT, ModifierHooks.PROJECTILE_THROWN, ModifierHooks.SCHEDULE_PROJECTILE_TASK);
   public static final RecordLoadable<ProjectileGravityModule> LOADER = RecordLoadable.create(LevelingInt.LOADABLE.directField(ProjectileGravityModule::delay), ProjectileGravityModule::new);
 
   @Override

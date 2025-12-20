@@ -31,6 +31,7 @@ import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.hook.mining.BreakSpeedContext;
+import slimeknights.tconstruct.library.modifiers.hook.ranged.ScheduledProjectileTaskModifierHook;
 import slimeknights.tconstruct.library.tools.IndestructibleItemEntity;
 import slimeknights.tconstruct.library.tools.context.ToolAttackContext;
 import slimeknights.tconstruct.library.tools.definition.module.ToolHooks;
@@ -42,9 +43,11 @@ import slimeknights.tconstruct.library.tools.helper.ToolDamageUtil;
 import slimeknights.tconstruct.library.tools.helper.ToolHarvestLogic;
 import slimeknights.tconstruct.library.tools.item.ModifiableItem;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
+import slimeknights.tconstruct.library.tools.nbt.ModDataNBT;
 import slimeknights.tconstruct.library.tools.nbt.ModifierNBT;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
+import slimeknights.tconstruct.library.utils.Schedule;
 import slimeknights.tconstruct.tools.TinkerModifiers;
 import slimeknights.tconstruct.tools.TinkerTools;
 import slimeknights.tconstruct.tools.data.ModifierIds;
@@ -70,6 +73,8 @@ public class ThrownTool extends ThrownTrident implements ToolProjectile {
   @Setter
   private int originalSlot = -1;
   private boolean hitBlock = false;
+  /** Tasks queued by modifiers */
+  private Schedule tasks = Schedule.EMPTY;
 
   public ThrownTool(EntityType<? extends ThrownTrident> type, Level level) {
     super(type, level);
@@ -101,6 +106,15 @@ public class ThrownTool extends ThrownTrident implements ToolProjectile {
     if (!level().isClientSide) {
       this.magnet = ModifierUtil.getModifierLevel(tridentItem, TinkerModifiers.magnetic.getId());
     }
+  }
+
+  /** Called after {@link #shoot(double, double, double, float, float)} but before the first tick of hte projectile to do final setup. */
+  public void onRelease(LivingEntity entity, ModDataNBT arrowData) {
+    IToolStackView tool = getTool();
+    for (ModifierEntry entry : tool.getModifierList()) {
+      entry.getHook(ModifierHooks.PROJECTILE_THROWN).onProjectileShoot(tool, entry, entity, tridentItem, this, null, arrowData, true);
+    }
+    this.tasks = ScheduledProjectileTaskModifierHook.createSchedule(tool, tridentItem, this, null, arrowData);
   }
 
   @Override
@@ -184,6 +198,11 @@ public class ThrownTool extends ThrownTrident implements ToolProjectile {
     // magnet
     if (magnet > 0) {
       MagneticModifier.applyVelocity(level(), position(), magnet - 1, ItemEntity.class, 3, 0.05f, 32);
+    }
+
+    // check if any tasks are ready
+    if (!tasks.isEmpty() && !tridentItem.isEmpty()) {
+      ScheduledProjectileTaskModifierHook.checkSchedule(getTool(), tridentItem, this, null, tasks);
     }
   }
 
@@ -346,6 +365,7 @@ public class ThrownTool extends ThrownTrident implements ToolProjectile {
   private static final String KEY_WATER_INERTIA = "water_inertia";
   private static final String KEY_ORIGINAL_SLOT = "original_slot";
   private static final String KEY_HIT_BLOCK = "hit_block";
+  private static final String KEY_TASKS = "tasks";
 
   @Override
   public void addAdditionalSaveData(CompoundTag tag) {
@@ -356,6 +376,9 @@ public class ThrownTool extends ThrownTrident implements ToolProjectile {
     tag.putBoolean(KEY_HIT_BLOCK, hitBlock);
     if (this.originalSlot != -1) {
       tag.putInt(KEY_ORIGINAL_SLOT, this.originalSlot);
+    }
+    if (!this.tasks.isEmpty()) {
+      tag.put(KEY_TASKS, this.tasks.serialize());
     }
   }
 
@@ -374,6 +397,9 @@ public class ThrownTool extends ThrownTrident implements ToolProjectile {
       this.originalSlot = tag.getInt(KEY_ORIGINAL_SLOT);
     } else {
       this.originalSlot = -1;
+    }
+    if (tag.contains(KEY_TASKS, CompoundTag.TAG_LIST)) {
+      this.tasks = Schedule.deserialize(tag.getList(KEY_TASKS, CompoundTag.TAG_COMPOUND));
     }
   }
 }

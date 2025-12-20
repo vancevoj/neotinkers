@@ -28,7 +28,6 @@ import slimeknights.tconstruct.library.tools.capability.PersistentDataCapability
 import slimeknights.tconstruct.library.tools.helper.ModifierUtil;
 import slimeknights.tconstruct.library.tools.item.ranged.ModifiableLauncherItem;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
-import slimeknights.tconstruct.library.tools.nbt.ModDataNBT;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
 import slimeknights.tconstruct.tools.entity.ThrownTool;
 import slimeknights.tconstruct.tools.modifiers.ability.interaction.BlockingModifier;
@@ -106,10 +105,7 @@ public enum ThrowingModule implements ModifierModule, GeneralInteractionModifier
         }
 
         // alert modifiers we are leaving, though most of these won't have much impact
-        ModDataNBT arrowData = PersistentDataCapability.getOrWarn(thrown);
-        for (ModifierEntry entry : tool.getModifierList()) {
-          entry.getHook(ModifierHooks.PROJECTILE_THROWN).onProjectileShoot(tool, entry, entity, ItemStack.EMPTY, thrown, null, arrowData, true);
-        }
+        thrown.onRelease(entity, PersistentDataCapability.getOrWarn(thrown));
 
         // don't run projectile hooks, as the projectile has the tool already for that. Throwing runs melee hooks
         level.addFreshEntity(thrown);

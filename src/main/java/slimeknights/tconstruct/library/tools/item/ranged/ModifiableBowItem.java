@@ -288,6 +288,13 @@ public class ModifiableBowItem extends ModifiableLauncherItem {
         for (ModifierEntry entry : modifiers.getModifiers()) {
           entry.getHook(ModifierHooks.PROJECTILE_LAUNCH).onProjectileLaunch(tool, entry, living, ammo, arrow, arrow, arrowData, arrowIndex == primaryIndex);
         }
+
+        // allow ballista to run a few remaining hooks if present
+        if (thrownTool) {
+          // know the cast is valid as we created the instance above
+          ((ThrownTool) arrow).onRelease(living, arrowData);
+        }
+
         level.addFreshEntity(arrow);
         level.playSound(null, living.getX(), living.getY(), living.getZ(), sound, SoundSource.PLAYERS, 1.0F, 1.0F / (level.getRandom().nextFloat() * 0.4F + 1.2F) + charge * 0.5F + (angle / 10f));
       }

@@ -240,7 +240,7 @@ public class ModifiableArrow extends AbstractArrow implements ToolProjectile {
     }
     this.entityData.set(WATER_INERTIA, tag.getFloat(KEY_WATER_INERTIA));
     this.dealtDamage = tag.getBoolean(KEY_DEALT_DAMAGE);
-    if (tag.contains(KEY_TASKS, CompoundTag.TAG_COMPOUND)) {
+    if (tag.contains(KEY_TASKS, CompoundTag.TAG_LIST)) {
       this.tasks = Schedule.deserialize(tag.getList(KEY_TASKS, CompoundTag.TAG_COMPOUND));
     }
   }

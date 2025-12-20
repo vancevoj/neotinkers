@@ -306,7 +306,7 @@ public class ThrownShuriken extends Projectile implements ToolProjectile, Projec
       setStack(ItemStack.of(tag.getCompound(KEY_STACK)));
     }
     this.entityData.set(WATER_INERTIA, tag.getFloat(KEY_WATER_INERTIA));
-    if (tag.contains(KEY_TASKS, CompoundTag.TAG_COMPOUND)) {
+    if (tag.contains(KEY_TASKS, CompoundTag.TAG_LIST)) {
       this.tasks = Schedule.deserialize(tag.getList(KEY_TASKS, CompoundTag.TAG_COMPOUND));
     }
   }
