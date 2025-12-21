@@ -34,18 +34,22 @@ public class TintedArmorTexture implements ArmorTexture {
     this(texture, color, 0);
   }
 
+  /** Applies luminosity to the given lightmap color. Assumes that {@code luminosity} is between 1 and 15. */
+  public static int applyLuminosity(int packedLight, int luminosity) {
+    // if full bright, skip some math
+    if (luminosity >= 15) {
+      return TintedArmorTexture.MAX_LIGHT;
+    }
+    // inlined version of methods from LightTexture
+    return Math.max(luminosity, (packedLight & 0xFFFF) >> 4) << 4
+      | Math.max(luminosity, packedLight >> 20 & 0xFFFF) << 20;
+  }
+
   @Override
   public void renderTexture(Model model, PoseStack matrices, MultiBufferSource bufferSource, int packedLight, int packedOverlay, float red, float green, float blue, float alpha, boolean hasGlint) {
     VertexConsumer buffer = ItemRenderer.getArmorFoilBuffer(bufferSource, RenderType.armorCutoutNoCull(texture), false, hasGlint);
     if (luminosity > 0) {
-      // if full bright, skip some math
-      if (luminosity >= 15) {
-        packedLight = MAX_LIGHT;
-      } else {
-        // inlined version of methods from LightTexture
-        packedLight = Math.max(luminosity, (packedLight & 0xFFFF) >> 4) << 4
-          | Math.max(luminosity, packedLight >> 20 & 0xFFFF) << 20;
-      }
+      packedLight = applyLuminosity(packedLight, luminosity);
     }
     AbstractArmorModel.renderColored(model, matrices, buffer, packedLight, packedOverlay, color, red, green, blue, alpha);
   }

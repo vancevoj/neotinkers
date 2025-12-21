@@ -3,6 +3,7 @@ package slimeknights.tconstruct.tools.entity;
 import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -32,6 +33,8 @@ import net.minecraftforge.common.ToolActions;
 import slimeknights.mantle.util.CombatHelper;
 import slimeknights.tconstruct.common.TinkerDamageTypes;
 import slimeknights.tconstruct.common.TinkerTags;
+import slimeknights.tconstruct.library.materials.definition.IMaterial;
+import slimeknights.tconstruct.library.materials.definition.MaterialVariantId;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.entity.ProjectileWithKnockback;
@@ -42,6 +45,8 @@ import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.tools.TinkerTools;
 
+import java.util.Objects;
+
 /** Fishing hook that deals damage and can be used as a grappling hook */
 public class CombatFishingHook extends FishingHook implements ProjectileWithKnockback, ProjectileWithPower {
   private static final float PI = (float) Math.PI;
@@ -49,6 +54,7 @@ public class CombatFishingHook extends FishingHook implements ProjectileWithKnoc
   private static final float GRAPPLE_STRENGTH = 0.58f;
   private static final EntityDataAccessor<Byte> GRAPPLE = SynchedEntityData.defineId(CombatFishingHook.class, EntityDataSerializers.BYTE);
   private static final EntityDataAccessor<Boolean> COLLECTING = SynchedEntityData.defineId(CombatFishingHook.class, EntityDataSerializers.BOOLEAN);
+  private static final EntityDataAccessor<MaterialVariantId> MATERIAL = SynchedEntityData.defineId(CombatFishingHook.class, MaterialVariantId.DATA_ACCESSOR);
 
   /** Damage dealt by the fishing hook */
   @Getter @Setter
@@ -102,6 +108,17 @@ public class CombatFishingHook extends FishingHook implements ProjectileWithKnoc
     super.defineSynchedData();
     this.entityData.define(GRAPPLE, (byte) GrappleType.NONE.ordinal());
     this.entityData.define(COLLECTING, false);
+    this.entityData.define(MATERIAL, IMaterial.UNKNOWN_ID);
+  }
+
+  /** Gets the currently displayed material */
+  public MaterialVariantId getMaterial() {
+    return this.entityData.get(MATERIAL);
+  }
+
+  /** Gets the currently displayed material */
+  public void setMaterial(MaterialVariantId material) {
+    this.entityData.set(MATERIAL, material);
   }
 
   @Override
@@ -363,4 +380,22 @@ public class CombatFishingHook extends FishingHook implements ProjectileWithKnoc
 
   /** Grappling behavior options */
   public enum GrappleType { NONE, DASH, DRILL }
+
+
+  /* NBT */
+  private static final String TAG_MATERIAL = "material";
+
+  @Override
+  public void addAdditionalSaveData(CompoundTag tag) {
+    super.addAdditionalSaveData(tag);
+    tag.putString(TAG_MATERIAL, getMaterial().toString());
+  }
+
+  @Override
+  public void readAdditionalSaveData(CompoundTag tag) {
+    super.readAdditionalSaveData(tag);
+    if (tag.contains(TAG_MATERIAL)) {
+      setMaterial(Objects.requireNonNullElse(MaterialVariantId.tryParse(tag.getString(TAG_MATERIAL)), IMaterial.UNKNOWN_ID));
+    }
+  }
 }

@@ -7,7 +7,6 @@ import net.minecraft.client.color.item.ItemColors;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.client.player.Input;
-import net.minecraft.client.renderer.entity.FishingHookRenderer;
 import net.minecraft.client.renderer.entity.ItemEntityRenderer;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.server.packs.PackType;
@@ -77,6 +76,7 @@ import slimeknights.tconstruct.tools.client.FluidEffectProjectileRenderer;
 import slimeknights.tconstruct.tools.client.OverslimeModifierModel;
 import slimeknights.tconstruct.tools.client.SlimeskullArmorModel;
 import slimeknights.tconstruct.tools.client.ToolContainerScreen;
+import slimeknights.tconstruct.tools.client.material.CombatFishingHookRenderer;
 import slimeknights.tconstruct.tools.client.material.ThrownShurikenRenderer;
 import slimeknights.tconstruct.tools.client.material.ThrownToolRenderer;
 import slimeknights.tconstruct.tools.item.ModifierCrystalItem;
@@ -139,9 +139,8 @@ public class ToolClientEvents extends ClientEventBase {
   static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
     event.registerEntityRenderer(TinkerTools.indestructibleItem.get(), ItemEntityRenderer::new);
     event.registerEntityRenderer(TinkerTools.crystalshotEntity.get(), CrystalshotRenderer::new);
-    // TODO: custom renderer?
-    event.registerEntityRenderer(TinkerTools.fishingHook.get(), FishingHookRenderer::new);
-    // TODO: config option for vanilla style renderer
+    event.registerEntityRenderer(TinkerTools.fishingHook.get(), CombatFishingHookRenderer::new);
+    // TODO: config option for vanilla style renderer?
     event.registerEntityRenderer(TinkerTools.materialArrow.get(), ThrownToolRenderer::new);
     event.registerEntityRenderer(TinkerTools.thrownShuriken.get(), ThrownShurikenRenderer::new);
     event.registerEntityRenderer(TinkerTools.thrownTool.get(), ThrownToolRenderer::new);

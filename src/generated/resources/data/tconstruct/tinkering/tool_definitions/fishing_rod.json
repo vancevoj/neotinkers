@@ -10,6 +10,11 @@
       "primary_part": 0
     },
     {
+      "type": "tconstruct:volatile_int",
+      "flag": "tconstruct:hook_material",
+      "value": 2
+    },
+    {
       "type": "tconstruct:default_materials",
       "materials": [
         {

@@ -2,6 +2,7 @@ package slimeknights.tconstruct.tools.modules.interaction;
 
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
@@ -17,6 +18,7 @@ import net.minecraftforge.common.ToolActions;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.data.loadable.record.SingletonLoader;
 import slimeknights.mantle.util.OffhandCooldownTracker;
+import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.hook.armor.EquipmentChangeModifierHook;
@@ -51,6 +53,7 @@ public enum FishingModule implements ModifierModule, GeneralInteractionModifierH
   INSTANCE;
 
   private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<FishingModule>defaultHooks(ModifierHooks.GENERAL_INTERACT, ModifierHooks.TOOL_ACTION, ModifierHooks.EQUIPMENT_CHANGE, ModifierHooks.DISPLAY_NAME);
+  public static final ResourceLocation HOOK_MATERIAL = TConstruct.getResource("hook_material");
   public static final RecordLoadable<FishingModule> LOADER = new SingletonLoader<>(INSTANCE);
 
   @Override
@@ -101,6 +104,8 @@ public enum FishingModule implements ModifierModule, GeneralInteractionModifierH
           float inaccuracy = ModifierUtil.getInaccuracy(tool, player);
           CombatFishingHook hook = new CombatFishingHook(player, level, (int) luck, (int) lure, velocity, inaccuracy);
           hook.setPower(ConditionalStatModifierHook.getModifiedStat(tool, player, ToolStats.PROJECTILE_DAMAGE));
+          // apply material for the renderer
+          hook.setMaterial(tool.getMaterial(tool.getVolatileData().getInt(HOOK_MATERIAL)).getVariant());
 
           // copy tool data to the bobber for modifier hooks
           ModifierNBT modifiers = tool.getModifiers();

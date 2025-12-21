@@ -45,6 +45,8 @@ public class TinkerPartSpriteProvider extends AbstractPartSpriteProvider {
     addPart("repair_kit", StatlessMaterialStats.REPAIR_KIT.getIdentifier());
     addPart("ingot", INGOT);
     addTexture("block/storage/fallback", STORAGE_BLOCK);
+    // fishing hook is an arrow head
+    addTexture("tinker_armor/fishing_hook/material", StatlessMaterialStats.ARROW_HEAD.getIdentifier());
 
     // travelers textures
     addTexture("tinker_armor/travelers/metal_armor", ARMOR_PLATING).disallowAnimated();
