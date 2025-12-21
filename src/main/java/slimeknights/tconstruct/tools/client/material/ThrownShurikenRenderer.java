@@ -1,4 +1,4 @@
-package slimeknights.tconstruct.tools.client;
+package slimeknights.tconstruct.tools.client.material;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;

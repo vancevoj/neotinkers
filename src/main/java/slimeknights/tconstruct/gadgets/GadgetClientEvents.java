@@ -13,7 +13,7 @@ import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.ClientEventBase;
 import slimeknights.tconstruct.gadgets.client.FancyItemFrameRenderer;
 import slimeknights.tconstruct.gadgets.entity.shuriken.ShurikenEntityBase;
-import slimeknights.tconstruct.tools.client.ThrownShurikenRenderer;
+import slimeknights.tconstruct.tools.client.material.ThrownShurikenRenderer;
 
 @SuppressWarnings("unused")
 @EventBusSubscriber(modid=TConstruct.MOD_ID, value=Dist.CLIENT, bus=Bus.MOD)

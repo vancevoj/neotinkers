@@ -2,7 +2,7 @@ package slimeknights.tconstruct.gadgets.client;
 
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import slimeknights.tconstruct.gadgets.entity.shuriken.ShurikenEntityBase;
-import slimeknights.tconstruct.tools.client.ThrownShurikenRenderer;
+import slimeknights.tconstruct.tools.client.material.ThrownShurikenRenderer;
 
 /** @deprecated use {@link ThrownShurikenRenderer} */
 @Deprecated(forRemoval = true)
