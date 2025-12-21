@@ -16,6 +16,7 @@ import net.minecraft.world.entity.SlotAccess;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
 import net.minecraft.world.inventory.Slot;
@@ -69,6 +70,8 @@ public class ModifiableArmorItem extends ArmorItem implements IModifiableDisplay
   public static final ResourceLocation ELYTRA = TConstruct.getResource("elyta");
   /** Volatile flag for a boot item to walk on powdered snow. Cold immunity is handled through a tag */
   public static final ResourceLocation SNOW_BOOTS = TConstruct.getResource("snow_boots");
+  /** Volatile flag for an item to act as an enderman mask, stopping them from getting angry. */
+  public static final ResourceLocation ENDERMASK = TConstruct.getResource("endermask");
 
   @Getter
   private final ToolDefinition toolDefinition;
@@ -98,6 +101,11 @@ public class ModifiableArmorItem extends ArmorItem implements IModifiableDisplay
   @Override
   public boolean canWalkOnPowderedSnow(ItemStack stack, LivingEntity wearer) {
     return type == Type.BOOTS && ModifierUtil.checkVolatileFlag(stack, SNOW_BOOTS);
+  }
+
+  @Override
+  public boolean isEnderMask(ItemStack stack, Player player, EnderMan endermanEntity) {
+    return type == Type.HELMET && ModifierUtil.checkVolatileFlag(stack, ENDERMASK);
   }
 
   @Override

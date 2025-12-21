@@ -96,6 +96,7 @@ import slimeknights.tconstruct.world.entity.EnderSlimeEntity;
 import slimeknights.tconstruct.world.entity.SkySlimeEntity;
 import slimeknights.tconstruct.world.entity.SlimePlacementPredicate;
 import slimeknights.tconstruct.world.entity.TerracubeEntity;
+import slimeknights.tconstruct.world.item.EndermanHeadItem;
 import slimeknights.tconstruct.world.item.SlimeGrassSeedItem;
 import slimeknights.tconstruct.world.worldgen.trees.SlimeTree;
 
@@ -272,9 +273,9 @@ public final class TinkerWorld extends TinkerModule {
   public static final ResourceKey<BiomeModifier> spawnEnderGeode = key(ForgeRegistries.Keys.BIOME_MODIFIERS, "ender_geode");
 
   // heads
-  public static final EnumObject<TinkerHeadType,SkullBlock>               heads     = BLOCKS.registerEnumNoItem(TinkerHeadType.values(), "head", TinkerWorld::makeHead);
-  public static final EnumObject<TinkerHeadType,WallSkullBlock>           wallHeads = BLOCKS.registerEnumNoItem(TinkerHeadType.values(), "wall_head", TinkerWorld::makeWallHead);
-  public static final EnumObject<TinkerHeadType,StandingAndWallBlockItem> headItems = ITEMS.registerEnum(TinkerHeadType.values(), "head", type -> new StandingAndWallBlockItem(heads.get(type), wallHeads.get(type), new Item.Properties().rarity(Rarity.UNCOMMON), Direction.DOWN));
+  public static final EnumObject<TinkerHeadType,SkullBlock> heads = BLOCKS.registerEnumNoItem(TinkerHeadType.values(), "head", TinkerWorld::makeHead);
+  public static final EnumObject<TinkerHeadType,WallSkullBlock> wallHeads = BLOCKS.registerEnumNoItem(TinkerHeadType.values(), "wall_head", TinkerWorld::makeWallHead);
+  public static final EnumObject<TinkerHeadType,StandingAndWallBlockItem> headItems = ITEMS.registerEnum(TinkerHeadType.values(), "head", TinkerWorld::makeHeadItem);
 
   /*
    * Entities
@@ -516,5 +517,14 @@ public final class TinkerWorld extends TinkerModule {
       return new PiglinWallHeadBlock(type, props);
     }
     return new WallSkullBlock(type, props);
+  }
+
+  /** Creates a skull wall block for the given head type */
+  private static StandingAndWallBlockItem makeHeadItem(TinkerHeadType type) {
+    Item.Properties properties = new Item.Properties().rarity(Rarity.UNCOMMON);
+    if (type == TinkerHeadType.ENDERMAN) {
+      return new EndermanHeadItem(heads.get(type), wallHeads.get(type), properties, Direction.DOWN);
+    }
+    return new StandingAndWallBlockItem(heads.get(type), wallHeads.get(type), properties, Direction.DOWN);
   }
 }
