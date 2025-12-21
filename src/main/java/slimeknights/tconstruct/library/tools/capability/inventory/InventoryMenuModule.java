@@ -74,7 +74,8 @@ public enum InventoryMenuModule implements ModifierModule, KeybindInteractModifi
 
   @Override
   public InteractionResult onToolUse(IToolStackView tool, ModifierEntry modifier, Player player, InteractionHand hand, InteractionSource source) {
-    if (player.isCrouching() && tool.getHook(ToolHooks.INTERACTION).canInteract(tool, modifier.getId(), source)) {
+    if ((requiredKey == TooltipKey.UNKNOWN || requiredKey == (player.isCrouching() ? TooltipKey.SHIFT : TooltipKey.NORMAL))
+      && tool.getHook(ToolHooks.INTERACTION).canInteract(tool, modifier.getId(), source)) {
       EquipmentSlot slot = source.getSlot(hand);
       return ToolInventoryCapability.tryOpenContainer(player.getItemBySlot(slot), tool, player, slot);
     }
