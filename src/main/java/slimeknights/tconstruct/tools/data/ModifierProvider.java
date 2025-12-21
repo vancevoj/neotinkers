@@ -119,7 +119,6 @@ import slimeknights.tconstruct.library.modifiers.modules.combat.ConditionalMelee
 import slimeknights.tconstruct.library.modifiers.modules.combat.ConditionalPowerModule;
 import slimeknights.tconstruct.library.modifiers.modules.combat.KnockbackModule;
 import slimeknights.tconstruct.library.modifiers.modules.combat.LootingModule;
-import slimeknights.tconstruct.library.modifiers.modules.combat.MeleeAttributeModule;
 import slimeknights.tconstruct.library.modifiers.modules.combat.MobEffectModule;
 import slimeknights.tconstruct.library.modifiers.modules.combat.ProjectileExplosionModule;
 import slimeknights.tconstruct.library.modifiers.modules.display.DurabilityBarColorModule;
@@ -129,6 +128,7 @@ import slimeknights.tconstruct.library.modifiers.modules.display.ModifierVariant
 import slimeknights.tconstruct.library.modifiers.modules.mining.ConditionalMiningSpeedModule;
 import slimeknights.tconstruct.library.modifiers.modules.technical.ArmorLevelModule;
 import slimeknights.tconstruct.library.modifiers.modules.util.ModifierCondition;
+import slimeknights.tconstruct.library.modifiers.modules.util.ProjectilePredicate;
 import slimeknights.tconstruct.library.modifiers.util.ModifierLevelDisplay;
 import slimeknights.tconstruct.library.modifiers.util.ModifierLevelDisplay.UniqueForLevels;
 import slimeknights.tconstruct.library.recipe.modifiers.adding.SwappableModifierRecipe.VariantFormatter;
@@ -419,9 +419,9 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
 
     /// attack
     buildModifier(TinkerModifiers.knockback)
-      // do not boost chestplate attacks twice, thats a bit too much knockback for the cost
-      .addModule(KnockbackModule.builder().toolItem(ItemPredicate.tag(TinkerTags.Items.CHESTPLATES).inverted()).eachLevel(0.5f))
-      .addModule(AttributeModule.builder(Attributes.ATTACK_KNOCKBACK, Operation.ADDITION).slots(armorSlots).eachLevel(1));
+      // attributes are better for monster usage. However, projectiles don't run attributes, so run a projectile only knockback module
+      .addModule(KnockbackModule.builder().projectile(ProjectilePredicate.PROJECTILE).eachLevel(0.5f))
+      .addModule(AttributeModule.builder(Attributes.ATTACK_KNOCKBACK, Operation.ADDITION).slots(armorMainHand).eachLevel(1));
     buildModifier(TinkerModifiers.padded)
       .priority(75) // run after knockback
       .addModule(KnockbackModule.builder().formula()
@@ -447,11 +447,9 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       new MobTypePredicate(MobType.ILLAGER),
       LivingEntityPredicate.LOADER.tag(TinkerTags.EntityTypes.KILLAGERS))).eachLevel(2.0f));
     buildModifier(ModifierIds.pierce)
-      // less than sharpness, but pierces 1 armor
+      // less damage than sharpness, but pierces 2 armor
       .addModule(StatBoostModule.add(ToolStats.ATTACK_DAMAGE).eachLevel(0.5f))
-      // effect is applied post hit, so skip armor cancel if effect is present. TODO: maybe apply effect in a before hook instead?
-      .addModule(MeleeAttributeModule.builder(Attributes.ARMOR, Operation.ADDITION).target(new HasMobEffectPredicate(TinkerEffects.pierce.get()).inverted()).eachLevel(-2))
-      .addModule(MobEffectModule.builder(TinkerEffects.pierce)
+      .addModule(MobEffectModule.builder(TinkerEffects.pierce).applyBeforeMelee(true)
         // apply effect for 5 seconds, canceling 2 armor per level
         .level(RandomLevelingValue.perLevel(0, 2)).time(RandomLevelingValue.flat(5 * 20))
         // 100% chance on armor

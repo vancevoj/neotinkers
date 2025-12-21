@@ -8,18 +8,8 @@
       "stat": "tconstruct:attack_damage"
     },
     {
-      "type": "tconstruct:melee_attribute",
-      "attribute": "minecraft:generic.armor",
-      "each_level": -2.0,
-      "operation": "addition",
-      "target": {
-        "type": "mantle:inverted",
-        "effect": "tconstruct:pierce",
-        "inverted_type": "mantle:has_effect"
-      }
-    },
-    {
       "type": "tconstruct:mob_effect",
+      "apply_before_melee": true,
       "chance": {
         "flat": 1.0
       },
