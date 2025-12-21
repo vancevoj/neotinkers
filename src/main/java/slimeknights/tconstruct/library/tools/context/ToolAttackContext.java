@@ -246,7 +246,7 @@ public class ToolAttackContext {
     /** Sets the base damage and knockback based on the player attributes. */
     public Builder applyAttributes() {
       baseDamage = (float) attacker.getAttributeValue(Attributes.ATTACK_DAMAGE);
-      baseKnockback = (float) attacker.getAttributeValue(Attributes.ATTACK_KNOCKBACK);
+      baseKnockback = (float) attacker.getAttributeValue(Attributes.ATTACK_KNOCKBACK) / 2;
       return this;
     }
 
