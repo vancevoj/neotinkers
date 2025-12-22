@@ -867,7 +867,7 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
         .stat(HandleMaterialStats.ID).build())
       .module(ancientThreeParts)
       // ancient tools when rebalanced get both heads
-      .module(new MaterialTraitsModule(PlatingMaterialStats.SHIELD.getId(), 1), ToolHooks.REBALANCED_TRAIT)
+      .module(new MaterialTraitsModule(HeadMaterialStats.ID, 1), ToolHooks.REBALANCED_TRAIT)
       // stats
       .module(new SetStatsModule(StatsNBT.builder()
         .set(ToolStats.ATTACK_DAMAGE, 3.0f)
