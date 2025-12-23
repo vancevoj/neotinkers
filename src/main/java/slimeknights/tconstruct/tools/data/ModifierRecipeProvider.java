@@ -947,11 +947,22 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
     // upgrade - boots
     IncrementalModifierRecipeBuilder.modifier(ModifierIds.featherFalling)
                                     .setTools(TinkerTags.Items.BOOTS)
-                                    .setInput(Items.FEATHER, 1, 16) // 1% per feather
+                                    .setInput(Items.FEATHER, 1, 25) // 1% per feather
                                     .setSlots(SlotType.UPGRADE, 1)
-                                    .setMaxLevel(4)
+                                    .setMaxLevel(2)
                                     .saveSalvage(consumer, prefix(ModifierIds.featherFalling, upgradeSalvage))
                                     .save(consumer, prefix(ModifierIds.featherFalling, upgradeFolder));
+    ModifierRecipeBuilder.modifier(ModifierIds.longFall)
+      .setTools(TinkerTags.Items.BOOTS)
+      .addInput(Items.PISTON)
+      .addInput(Items.PHANTOM_MEMBRANE)
+      .addInput(Items.PISTON)
+      .addInput(TinkerWorld.slime.get(SlimeType.ICHOR))
+      .addInput(TinkerWorld.slime.get(SlimeType.ICHOR))
+      .setSlots(SlotType.UPGRADE, 1)
+      .setMaxLevel(1).checkTraitLevel()
+      .saveSalvage(consumer, prefix(ModifierIds.longFall, upgradeSalvage))
+      .save(consumer, prefix(ModifierIds.longFall, upgradeFolder));
     ModifierRecipeBuilder.modifier(TinkerModifiers.soulspeed)
                          .setTools(TinkerTags.Items.BOOTS)
                          .addInput(Items.MAGMA_BLOCK)
@@ -1173,17 +1184,6 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .setMaxLevel(1)
                          .saveSalvage(consumer, prefix(ModifierIds.snowdrift, abilitySalvage))
                          .save(consumer, prefix(ModifierIds.snowdrift, abilityFolder));
-    ModifierRecipeBuilder.modifier(ModifierIds.longFall)
-                         .setTools(TinkerTags.Items.BOOTS)
-                         .addInput(Items.PISTON)
-                         .addInput(Blocks.BLACK_WOOL)
-                         .addInput(Items.PISTON)
-                         .addInput(TinkerWorld.slime.get(SlimeType.SKY))
-                         .addInput(TinkerWorld.slime.get(SlimeType.SKY))
-                         .setSlots(SlotType.UPGRADE, 1)
-                         .setMaxLevel(1).checkTraitLevel()
-                         .saveSalvage(consumer, prefix(ModifierIds.longFall, upgradeSalvage))
-                         .save(consumer, prefix(ModifierIds.longFall, upgradeFolder));
 
     // transform ingredients
     Ingredient bootsWithDuraibility = IntersectionIngredient.of(Ingredient.of(TinkerTags.Items.BOOTS), Ingredient.of(TinkerTags.Items.DURABILITY));

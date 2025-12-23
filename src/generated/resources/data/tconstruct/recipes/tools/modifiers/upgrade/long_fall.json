@@ -7,16 +7,16 @@
       "item": "minecraft:piston"
     },
     {
-      "item": "minecraft:black_wool"
+      "item": "minecraft:phantom_membrane"
     },
     {
       "item": "minecraft:piston"
     },
     {
-      "item": "tconstruct:sky_slime"
+      "item": "tconstruct:ichor_slime"
     },
     {
-      "item": "tconstruct:sky_slime"
+      "item": "tconstruct:ichor_slime"
     }
   ],
   "level": 1,
