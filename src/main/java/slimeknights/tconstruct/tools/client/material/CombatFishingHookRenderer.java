@@ -131,8 +131,8 @@ public class CombatFishingHookRenderer extends EntityRenderer<CombatFishingHook>
         Vec3 point = this.entityRenderDispatcher.camera.getNearPlane().getPointOnPlane(sideOffset * 0.525f, -0.1f);
         point = point.scale(fov);
         float attackSin = Mth.sin(Mth.sqrt(player.getAttackAnim(partialTicks)) * (float)Math.PI);
-        point = point.yRot(attackSin * 0.5F);
-        point = point.xRot(-attackSin * 0.7F);
+        point = point.yRot(attackSin * 0.5f);
+        point = point.xRot(-attackSin * 0.7f);
         playerXo = Mth.lerp(partialTicks, player.xo, player.getX()) + point.x;
         playerYo = Mth.lerp(partialTicks, player.yo, player.getY()) + point.y;
         playerZo = Mth.lerp(partialTicks, player.zo, player.getZ()) + point.z;
@@ -145,12 +145,12 @@ public class CombatFishingHookRenderer extends EntityRenderer<CombatFishingHook>
         playerXo = Mth.lerp(partialTicks, player.xo, player.getX()) - rotationCos * scaledSide - rotationSin * 0.8D;
         playerYo = player.yo + player.getEyeHeight() + (player.getY() - player.yo) * (double)partialTicks - 0.45D;
         playerZo = Mth.lerp(partialTicks, player.zo, player.getZ()) - rotationSin * scaledSide + rotationCos * 0.8D;
-        eyeHeight = player.isCrouching() ? -0.1875F : 0.0F;
+        eyeHeight = player.isCrouching() ? -0.1875f : 0f;
       }
 
       // render the string
       float hookXOff = (float)(playerXo - Mth.lerp(partialTicks, hook.xo, hook.getX()));
-      float hookYOff = (float)(playerYo - Mth.lerp(partialTicks, hook.yo, hook.getY()) + 0.25D) + eyeHeight;
+      float hookYOff = (float)(playerYo - Mth.lerp(partialTicks, hook.yo, hook.getY()) - 0.25D) + eyeHeight;
       float hookZOff = (float)(playerZo - Mth.lerp(partialTicks, hook.zo, hook.getZ()));
       consumer = buffer.getBuffer(RenderType.lineStrip());
       lastPose = poseStack.last();
