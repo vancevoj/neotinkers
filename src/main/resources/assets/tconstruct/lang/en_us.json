@@ -2664,6 +2664,7 @@
   "modifier.tconstruct.long_fall": "Long Fall",
   "modifier.tconstruct.long_fall.flavor": "Foot-based suit of armor",
   "modifier.tconstruct.long_fall.description": "Neutralizes all fall damage",
+  "modifier.tconstruct.long_fall.resistance": "Fall Resistance",
   "modifier.tconstruct.long_fall.requirements": "Long Fall requires Feather Falling II to apply",
   "modifier.tconstruct.soulspeed": "Soulspeed",
   "modifier.tconstruct.soulspeed.flavor": "Spooky",
