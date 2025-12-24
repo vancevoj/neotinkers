@@ -75,6 +75,8 @@ public record MeleeAttributeModule(String unique, Attribute attribute, UUID uuid
       if (target != null) {
         AttributeInstance instance = target.getAttribute(attribute);
         if (instance != null) {
+          // ensure we don't already have the modifier from someone misusing melee hooks or simultaneous attacks
+          instance.removeModifier(uuid);
           instance.addTransientModifier(new AttributeModifier(uuid, unique, amount.compute(modifier.getEffectiveLevel()), operation));
         }
       }
