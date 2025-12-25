@@ -2127,7 +2127,7 @@
   "material.tconstruct.knightmetal.flavor": "Metal of the traveling slime, also found from armored Twilight creatures.",
   "material.tconstruct.knightmetal.encyclopedia": "Grants +0.5 damage per level per piece of armor worn by the target",
   "material.tconstruct.knightmetal.ranged": "Grants +0.25 damage per level per piece of armor worn by the target (before velocity)",
-  "material.tconstruct.knightmetal.armor": "Increases protection by 5% per level per item in the attacker's arms",
+  "material.tconstruct.knightmetal.armor": "Increases protection by 4% per level per item in the attacker's arms",
 
   "material.tconstruct.knightly": "Knightly",
   "material.tconstruct.knightly.flavor": "Shard of the traveling slime, sharper when unrefined.",
