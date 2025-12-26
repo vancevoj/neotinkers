@@ -252,7 +252,7 @@ public class WorldgenProvider {
     register(context, configuredLargeCobaltOre, Feature.ORE, new OreConfiguration(netherrack, cobaltOre, 6));
 
     // geodes
-    configureGeode(context, configuredEarthGeode, earthGeode, BlockStateProvider.simple(Blocks.CALCITE), BlockStateProvider.simple(Blocks.CLAY), null,
+    configureGeode(context, configuredEarthGeode, earthGeode, BlockStateProvider.simple(Blocks.CALCITE), BlockStateProvider.simple(Blocks.CLAY), TinkerWorld.steelCluster,
                    new GeodeLayerSettings(1.7D, 2.2D, 3.2D, 5.2D), new GeodeCrackSettings(0.95D, 2.0D, 2), UniformInt.of(6, 9), UniformInt.of(3, 4), UniformInt.of(1, 2), 16, 1);
     configureGeode(context, configuredSkyGeode, skyGeode, BlockStateProvider.simple(Blocks.CALCITE), BlockStateProvider.simple(Blocks.MOSSY_COBBLESTONE), TinkerWorld.steelCluster,
                    new GeodeLayerSettings(1.5D, 2.0D, 3.0D, 4.5D), new GeodeCrackSettings(0.55D, 0.5D, 2), UniformInt.of(3, 4), ConstantInt.of(2), ConstantInt.of(1), 8, 3);
