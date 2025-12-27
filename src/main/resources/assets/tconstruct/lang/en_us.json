@@ -3127,6 +3127,7 @@
   "modifier.tconstruct.insatiable.flavor": "Taste For Blood!",
   "modifier.tconstruct.insatiable.description": "During combat you deal more and more damage every time you hit an enemy",
   "modifier.tconstruct.insatiable.attack_damage": "Momentum Damage",
+  "modifier.tconstruct.insatiable.projectile_damage": "Momentum Power",
   "modifier.tconstruct.kinetic": "Kinetic",
   "modifier.tconstruct.kinetic.flavor": "No pain no gain!",
   "modifier.tconstruct.kinetic.description": "During combat you deal more and more damage every time you take a hit",
