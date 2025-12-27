@@ -140,6 +140,7 @@ import static slimeknights.tconstruct.world.TinkerWorld.spawnEnderGeode;
 import static slimeknights.tconstruct.world.TinkerWorld.spawnIchorGeode;
 import static slimeknights.tconstruct.world.TinkerWorld.spawnOverworldSlime;
 import static slimeknights.tconstruct.world.TinkerWorld.spawnSkyGeode;
+import static slimeknights.tconstruct.world.TinkerWorld.spawnTerracube;
 
 /** Provider for all our worldgen datapack registry stuff */
 public class WorldgenProvider {
@@ -341,6 +342,7 @@ public class WorldgenProvider {
     context.register(spawnEnderGeode, new AddFeaturesBiomeModifier(and(end, not(direct(biomes.getOrThrow(Biomes.THE_END)))), direct(placed.getOrThrow(TinkerWorld.placedEnderGeode)), Decoration.LOCAL_MODIFICATIONS));
     // spawns
     context.register(spawnOverworldSlime, new AddSpawnsBiomeModifier(overworld, List.of(new SpawnerData(TinkerWorld.skySlimeEntity.get(), 100, 2, 4))));
+    context.register(spawnTerracube,      new AddSpawnsBiomeModifier(overworld, List.of(new SpawnerData(TinkerWorld.terracubeEntity.get(), 10, 2, 4))));
     context.register(spawnEndSlime,       new AddSpawnsBiomeModifier(end,       List.of(new SpawnerData(TinkerWorld.enderSlimeEntity.get(), 10, 2, 4))));
   }
 
