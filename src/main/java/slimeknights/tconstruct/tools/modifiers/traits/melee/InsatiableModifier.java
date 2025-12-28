@@ -88,12 +88,13 @@ public class InsatiableModifier extends Modifier implements ProjectileHitModifie
       if (tool.hasTag(type.getTag())) {
         float level = modifier.getEffectiveLevel();
         float bonus = level * 2.5f;
-        INumericToolStat<?> stat = type == ToolType.MELEE ? ToolStats.ATTACK_DAMAGE : ToolStats.PROJECTILE_DAMAGE;
         // if not in the tinker station, show the realized bonus instead of the max bonus
         if (player != null && key == TooltipKey.SHIFT) {
-          bonus = getEffect(player, type) * level * tool.getMultiplier(stat) / 2;
+          bonus = getEffect(player, type) * level / 2;
         }
         if (bonus > 0) {
+          INumericToolStat<?> stat = type == ToolType.MELEE ? ToolStats.ATTACK_DAMAGE : ToolStats.PROJECTILE_DAMAGE;
+          bonus *= tool.getMultiplier(stat);
           // ranged gets half the bonus of melee
           if (type == ToolType.RANGED) {
             bonus /= 2;
