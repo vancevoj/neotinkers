@@ -6,7 +6,7 @@
         "items": [
           {
             "items": [
-              "tconstruct:raw_cobalt"
+              "tconstruct:knightmetal_shard"
             ]
           }
         ]
@@ -15,7 +15,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:common/materials/cobalt_ingot_smelting"
+        "recipe": "tconstruct:common/materials/knightmetal_nugget_smelting"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -28,7 +28,7 @@
   ],
   "rewards": {
     "recipes": [
-      "tconstruct:common/materials/cobalt_ingot_smelting"
+      "tconstruct:common/materials/knightmetal_nugget_smelting"
     ]
   },
   "sends_telemetry_event": false
