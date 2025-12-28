@@ -2265,8 +2265,8 @@
 
   "material.tconstruct.fiery": "Fiery",
   "material.tconstruct.fiery.flavor": "The hottest new metal, forged to perfection.",
-  "material.tconstruct.fiery.encyclopedia": "Tool automatically smelts all drops. Higher levels have a 25% chance of extra smelted drops",
-  "material.tconstruct.fiery.ranged": "Arrows automatically smelts all drops. Higher levels have a 25% chance of extra smelted drops",
+  "material.tconstruct.fiery.encyclopedia": "Tool automatically smelts all drops. Higher levels have a 20% chance of an extra smelted drops per level",
+  "material.tconstruct.fiery.ranged": "Arrows automatically smelts all drops. Higher levels have a 20% chance of an extra smelted drops per level",
   "material.tconstruct.fiery.armor": "Increases protection by 5% per level against on fire attackers",
 
 
