@@ -2206,7 +2206,7 @@
   "__comment": "Tier 3 Integration Materials",
   "material.tconstruct.steel": "Steel",
   "material.tconstruct.steel.flavor": "Basically 90% of material science",
-  "material.tconstruct.steel.encyclopedia": "Grants +10% durability and +8% melee damage per level",
+  "material.tconstruct.steel.encyclopedia": "Grants +10% durability and +5% melee damage per level",
   "material.tconstruct.steel.ranged": "Grants +10% durability and +5% projectile power per level",
   "material.tconstruct.steel.armor": "Grants +10% durability and +1 toughness per level",
 

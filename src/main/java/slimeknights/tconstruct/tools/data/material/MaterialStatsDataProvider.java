@@ -162,7 +162,7 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
                      StatlessMaterialStats.BINDING);
     addMaterialStats(MaterialIds.steel,
                      new HeadMaterialStats(775, 6f, DIAMOND, 2.75f),
-                     HandleMaterialStats.multipliers().durability(1.05f).miningSpeed(1.05f).attackSpeed(1.05f).build(),
+                     HandleMaterialStats.multipliers().durability(1.05f).miningSpeed(1.05f).attackDamage(1.05f).build(),
                      StatlessMaterialStats.BINDING);
     // tier 3 - binding
     addMaterialStats(MaterialIds.darkthread, StatlessMaterialStats.BINDING);
