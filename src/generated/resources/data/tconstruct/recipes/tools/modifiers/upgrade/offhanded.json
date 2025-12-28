@@ -17,6 +17,6 @@
   },
   "result": "tconstruct:offhanded",
   "tools": {
-    "tag": "tconstruct:modifiable/interactable/right"
+    "tag": "tconstruct:modifiable/interactable/charge/modifier"
   }
 }

@@ -312,7 +312,7 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                                     .setInput(Items.INK_SAC, 1, 45)
                                     .save(consumer, prefix(TinkerModifiers.nearsighted, upgradeFolder));
     ModifierRecipeBuilder.modifier(ModifierIds.offhanded)
-                         .setTools(TinkerTags.Items.INTERACTABLE_RIGHT)
+                         .setTools(TinkerTags.Items.INTERACTABLE_CHARGE_MODIFIER)
                          .addInput(Items.LEATHER)
                          .addInput(Items.FIRE_CHARGE)
                          .addInput(SlimeType.ICHOR.getSlimeballTag())
