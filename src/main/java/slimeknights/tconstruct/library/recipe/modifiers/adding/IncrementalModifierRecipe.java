@@ -108,6 +108,12 @@ public class IncrementalModifierRecipe extends AbstractModifierRecipe {
       tool.addModifierAmount(modifier, getAvailableAmount(inv, input, amountPerInput), neededPerLevel);
     }
 
+    // ensure no modifier problems
+    Component toolValidation = tool.tryValidate();
+    if (toolValidation != null) {
+      return RecipeResult.failure(toolValidation);
+    }
+
     // successfully added the modifier
     return success(tool, inv);
   }
