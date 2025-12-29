@@ -61,7 +61,7 @@ public class MomentumModifier extends Modifier implements ProjectileLaunchModifi
   public void onBreakSpeed(IToolStackView tool, ModifierEntry modifier, BreakSpeed event, Direction sideHit, boolean isEffective, float miningSpeedModifier) {
     if (isEffective) {
       // 25% boost per level at max
-      event.setNewSpeed(event.getNewSpeed() * (1 + getBonus(event.getEntity(), ToolType.HARVEST, modifier) / 128f));
+      event.setNewSpeed(event.getNewSpeed() * (1 + getBonus(event.getEntity(), ToolType.HARVEST, modifier) / 40f));
     }
   }
 
@@ -69,7 +69,7 @@ public class MomentumModifier extends Modifier implements ProjectileLaunchModifi
   public float modifyBreakSpeed(IToolStackView tool, ModifierEntry modifier, BreakSpeedContext context, float speed) {
     if (context.isEffective()) {
       // 25% boost per level at max
-      speed *= 1 + getBonus(context.player(), ToolType.HARVEST, modifier) / 128f;
+      speed *= 1 + getBonus(context.player(), ToolType.HARVEST, modifier) / 40f;
     }
     return speed;
   }
@@ -77,25 +77,26 @@ public class MomentumModifier extends Modifier implements ProjectileLaunchModifi
   @Override
   public void afterBlockBreak(IToolStackView tool, ModifierEntry modifier, ToolHarvestContext context) {
     if (context.canHarvest() && context.isEffective() && !context.isAOE()) {
-      // funny duration formula from 1.12, guess it makes faster tools have a slightly shorter effect
-      int duration = (int) ((10f / tool.getStats().get(ToolStats.MINING_SPEED)) * 1.5f * 20f);
-      // 32 blocks gets you to max, effect is stronger at higher levels
-      applyEffect(context.getLiving(), ToolType.HARVEST, duration, 31);
+      // grant the effect for 5 seconds, though grant a longer effect if the blocks hardness is particularly high compared to our mining speed
+      int duration = Math.max(5*20, (int) (2.5f * 20f * context.getState().getDestroySpeed(context.getWorld(), context.getPos()) / tool.getStats().get(ToolStats.MINING_SPEED)));
+      // 10 blocks gets you to max, effect is stronger at higher levels
+      applyEffect(context.getLiving(), ToolType.HARVEST, duration, 9);
     }
   }
 
   @Override
   public void onProjectileLaunch(IToolStackView tool, ModifierEntry modifier, LivingEntity shooter, Projectile projectile, @Nullable AbstractArrow arrow, ModDataNBT persistentData, boolean primary) {
     if (primary && (arrow == null || arrow.isCritArrow())) {
-      // 16 arrows gets you to max
-      applyEffect(shooter, ToolType.RANGED, 5*20, 15);
+      // 10 arrows gets you to max
+      applyEffect(shooter, ToolType.RANGED, 10*20, 9);
     }
   }
 
   @Override
   public float modifyStat(IToolStackView tool, ModifierEntry modifier, LivingEntity living, FloatToolStat stat, float baseValue, float multiplier) {
     if (stat == ToolStats.DRAW_SPEED) {
-      return baseValue * (1 + getBonus(living, ToolType.RANGED, modifier) / 64f);
+      // +25% at max level
+      return baseValue * (1 + getBonus(living, ToolType.RANGED, modifier) / 40f);
     }
     return baseValue;
   }
@@ -106,9 +107,10 @@ public class MomentumModifier extends Modifier implements ProjectileLaunchModifi
     if (type != null) {
       float bonus;
       if (player != null && key == TooltipKey.SHIFT) {
-        bonus = getBonus(player, type, modifier) / (type == ToolType.RANGED ? 64 : 128);
+        bonus = getBonus(player, type, modifier) / 40f;
       } else {
-        bonus = modifier.getEffectiveLevel();
+        // 25% per level for both of them
+        bonus = modifier.getEffectiveLevel() * 0.25f;
       }
       if (bonus > 0) {
         TooltipModifierHook.addPercentBoost(this, SPEED, bonus, tooltip);
