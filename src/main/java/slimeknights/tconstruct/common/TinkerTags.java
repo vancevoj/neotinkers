@@ -633,6 +633,8 @@ public class TinkerTags {
 
     /** Things that can be collected using {@link net.minecraft.world.entity.Entity#playerTouch(Player)} using a fishing rod. */
     public static final TagKey<EntityType<?>> COLLECTABLES = common("collectables");
+    /** {@link #COLLECTABLES} that should be discarded when they fail to collect. For example, arrows due to creative only pickup. */
+    public static final TagKey<EntityType<?>> DISCARDABLE_COLLECTABLES = common("collectables/discardable");
 
     /** Projectiles with this tag will not be discarded by any relevant modifiers. */
     public static final TagKey<EntityType<?>> REUSABLE_AMMO = common("reusable_ammo");

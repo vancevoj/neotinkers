@@ -211,7 +211,12 @@ public class CombatFishingHook extends FishingHook implements ProjectileWithKnoc
       if (collectable && isCollecting()) {
         if (owner instanceof Player player) {
           target.playerTouch(player);
+          // if removed, we are done here
           if (target.isRemoved()) {
+            return;
+            // if not removed but it's on the list to discard on failed pickup, discard and als be done
+          } else if (target.getType().is(TinkerTags.EntityTypes.DISCARDABLE_COLLECTABLES)) {
+            target.discard();
             return;
           }
         }
