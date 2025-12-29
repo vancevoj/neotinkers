@@ -18,7 +18,6 @@ import slimeknights.tconstruct.library.materials.json.MaterialStatJson;
 import slimeknights.tconstruct.library.utils.Util;
 
 import javax.annotation.Nullable;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -161,8 +160,9 @@ public class MaterialStatsManager extends MergingJsonDataLoader<Map<ResourceLoca
 
     log.debug("Loaded stats for materials:{}",
               Util.toIndentedStringList(materialToStatsPerType.entrySet().stream()
-                                                              .map(entry -> String.format("%s - %s", entry.getKey(), Arrays.toString(entry.getValue().keySet().toArray())))
-                                                              .collect(Collectors.toList())));
+                .sorted(Entry.comparingByKey())
+                .map(entry -> String.format("%s - [%s]", entry.getKey(), entry.getValue().keySet().stream().sorted().map(Object::toString).collect(Collectors.joining(", "))))
+                .collect(Collectors.toList())));
     onLoaded.run();
   }
 
@@ -171,7 +171,7 @@ public class MaterialStatsManager extends MergingJsonDataLoader<Map<ResourceLoca
     long time = System.nanoTime();
     super.onResourceManagerReload(manager);
     log.info("{} stats loaded for {} materials in {} ms",
-             materialToStatsPerType.values().stream().mapToInt(stats -> stats.keySet().size()).sum(),
+             materialToStatsPerType.values().stream().mapToInt(Map::size).sum(),
              materialToStatsPerType.size(), (System.nanoTime() - time) / 1000000f);
   }
 
