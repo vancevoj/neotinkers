@@ -16,13 +16,13 @@
     {
       "type": "tconstruct:stat_boost",
       "each_level": 0.03,
-      "operation": "multiply_base",
+      "operation": "add",
       "stat": "tconstruct:draw_speed"
     },
     {
       "type": "tconstruct:stat_boost",
       "each_level": 0.03,
-      "operation": "multiply_base",
+      "operation": "add",
       "stat": "tconstruct:velocity"
     }
   ],

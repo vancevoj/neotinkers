@@ -2043,7 +2043,7 @@
   "material.tconstruct.cobalt": "Cobalt",
   "material.tconstruct.cobalt.flavor": "Coblat. The material of the Red Army.",
   "material.tconstruct.cobalt.encyclopedia": "Boosts mining and attack speed by 7% per level",
-  "material.tconstruct.cobalt.ranged": "Boosts drawspeed and velocity by 5% per level",
+  "material.tconstruct.cobalt.ranged": "Boosts drawspeed and velocity by 3% per level",
   "material.tconstruct.cobalt.armor": "Reduces damage from melee attacks by 8% per level, and boosts movement speed when using items by 5% per max level",
 
   "material.tconstruct.quartz": "Quartz",
@@ -2207,7 +2207,7 @@
   "material.tconstruct.steel": "Steel",
   "material.tconstruct.steel.flavor": "Basically 90% of material science",
   "material.tconstruct.steel.encyclopedia": "Grants +10% durability and +5% melee damage per level",
-  "material.tconstruct.steel.ranged": "Grants +10% durability and +5% projectile power per level",
+  "material.tconstruct.steel.ranged": "Grants +10% durability and +0.25 projectile power per level",
   "material.tconstruct.steel.armor": "Grants +10% durability and +1 toughness per level",
 
   "material.tconstruct.magnetite": "Magnetite",
@@ -2217,7 +2217,7 @@
   "material.tconstruct.bronze": "Bronze",
   "material.tconstruct.bronze.flavor": "Not to be confused with amethyst bronze.",
   "material.tconstruct.bronze.encyclopedia": "Grants +6 mining speed per level at full durability, 0 boost below 50% durability",
-  "material.tconstruct.bronze.ranged": "Grants +0.05 velocity per level at full durability, 0 boost below 50% durability",
+  "material.tconstruct.bronze.ranged": "Grants +0.1 velocity per level at full durability, 0 boost below 50% durability",
   "material.tconstruct.bronze.armor": "Boosts toughness by 2 per level when at full durability, but boost drops to 0 below 50% durability",
 
   "material.tconstruct.constantan": "Constantan",
@@ -3062,7 +3062,7 @@
   "modifier.tconstruct.vintage.description": "Tool gains an ability slot at the cost of some mobility.",
   "modifier.tconstruct.airborne": "Airborne",
   "modifier.tconstruct.airborne.flavor": "Take to the skies!",
-  "modifier.tconstruct.airborne.description": "Tool no longer is penalized when mining in the air and gains a projectile accuracy bonus",
+  "modifier.tconstruct.airborne.description": "Tool no longer is penalized when mining in the air and gains a projectile velocity bonus",
   "modifier.tconstruct.airborne.velocity": "Airborne Velocity",
   "modifier.tconstruct.skyfall": "Skyfall",
   "modifier.tconstruct.skyfall.flavor": "Falling with style!",

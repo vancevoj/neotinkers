@@ -821,7 +821,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
     buildModifier(ModifierIds.airborne)
       // 400% boost means 5x mining speed
       .addModule(ConditionalMiningSpeedModule.builder().holder(LivingEntityPredicate.ON_GROUND.inverted()).percent().allowIneffective().flat(4), ModifierHooks.BREAK_SPEED)
-      // accuracy gets a 0.1 boost under the stricter version of in air (no boost just for being on a ladder)
+      // velocity gets a 0.1 boost under the stricter version of in air (no boost just for being on a ladder)
       .addModule(ConditionalStatModule.stat(ToolStats.VELOCITY).holder(TinkerPredicate.AIRBORNE).flat(0.1f));
     buildModifier(ModifierIds.skyfall)
       .levelDisplay(ModifierLevelDisplay.NO_LEVELS)
@@ -929,14 +929,14 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
     addRedirect(id("sharpweight"), redirect(ModifierIds.heavy));
     buildModifier(ModifierIds.heavy)
       .addModule(StatBoostModule.multiplyBase(ToolStats.MINING_SPEED).eachLevel(0.15f))
-      .addModule(StatBoostModule.multiplyBase(ToolStats.ACCURACY).eachLevel(0.10f))
+      .addModule(StatBoostModule.add(ToolStats.ACCURACY).eachLevel(0.10f))
       .addModule(StatBoostModule.add(ToolStats.KNOCKBACK_RESISTANCE).eachLevel(0.15f))
       .addModule(AttributeModule.builder(Attributes.KNOCKBACK_RESISTANCE, Operation.MULTIPLY_BASE).toolItem(ItemPredicate.tag(ARMOR).inverted()).eachLevel(0.1f))
       .addModule(AttributeModule.builder(Attributes.MOVEMENT_SPEED, Operation.MULTIPLY_BASE).eachLevel(-0.1f))
       .addModule(AttributeModule.builder(ForgeMod.ENTITY_GRAVITY, Operation.MULTIPLY_TOTAL).tooltipStyle(TooltipStyle.PERCENT).eachLevel(0.05f));
     buildModifier(ModifierIds.featherweight)
-      .addModule(StatBoostModule.multiplyBase(ToolStats.DRAW_SPEED).eachLevel(0.07f))
-      .addModule(StatBoostModule.multiplyBase(ToolStats.ACCURACY).eachLevel(0.07f))
+      .addModule(StatBoostModule.add(ToolStats.DRAW_SPEED).eachLevel(0.07f))
+      .addModule(StatBoostModule.add(ToolStats.ACCURACY).eachLevel(0.07f))
       .addModule(ProtectionModule.builder().eachLevel(-1.25f))
       .addModule(AttributeModule.builder(TinkerAttributes.USE_ITEM_SPEED, Operation.ADDITION).tooltipStyle(TooltipStyle.PERCENT).toolItem(ItemPredicate.tag(ARMOR)).eachLevel(0.1f));
     buildModifier(ModifierIds.dense)
@@ -985,12 +985,12 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
     buildModifier(ModifierIds.lightweight)
       .addModule(StatBoostModule.multiplyBase(ToolStats.ATTACK_SPEED).eachLevel(0.07f))
       .addModule(StatBoostModule.multiplyBase(ToolStats.MINING_SPEED).eachLevel(0.07f))
-      .addModule(StatBoostModule.multiplyBase(ToolStats.DRAW_SPEED).eachLevel(0.03f))
-      .addModule(StatBoostModule.multiplyBase(ToolStats.VELOCITY).eachLevel(0.03f));
+      .addModule(StatBoostModule.add(ToolStats.DRAW_SPEED).eachLevel(0.03f))
+      .addModule(StatBoostModule.add(ToolStats.VELOCITY).eachLevel(0.03f));
     buildModifier(ModifierIds.ductile)
       .addModule(StatBoostModule.multiplyBase(ToolStats.DURABILITY).eachLevel(0.1f))
       .addModule(StatBoostModule.multiplyBase(ToolStats.ATTACK_DAMAGE).eachLevel(0.05f))
-      .addModule(StatBoostModule.multiplyBase(ToolStats.PROJECTILE_DAMAGE).eachLevel(0.05f))
+      .addModule(StatBoostModule.add(ToolStats.PROJECTILE_DAMAGE).eachLevel(0.25f))
       .addModule(StatBoostModule.add(ToolStats.ARMOR_TOUGHNESS).eachLevel(1));
     buildModifier(ModifierIds.overshield).levelDisplay(ModifierLevelDisplay.NO_LEVELS).addModule(new OvershieldModule(1.25f, 5));
     // traits - tier 3 compat
@@ -1014,7 +1014,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
         .customVariable("durability").subtractFlipped()
         .nonNegative().divideFlipped()
         .variable(LEVEL).multiply()
-        .constant(0.05f).multiply()
+        .constant(0.1f).multiply()
         .variable(MULTIPLIER).multiply()
         .variable(VALUE).add().build())
       .addModule(AttributeModule.builder(Attributes.ARMOR_TOUGHNESS, Operation.ADDITION)
