@@ -2571,6 +2571,7 @@
   "modifier.tconstruct.blockade": "Blockade",
   "modifier.tconstruct.blockade.flavor": "Aids blocking",
   "modifier.tconstruct.blockade.description": "Increases the maximum amount of damage this tool can block",
+  "modifier.tconstruct.blockade.requirements": "Blockade requires blocking or parrying",
   "modifier.tconstruct.boundless": "Boundless",
   "modifier.tconstruct.boundless.flavor": "Increasing your limits",
   "modifier.tconstruct.boundless.description": "Increases the maximum percentage of protection from any source",
