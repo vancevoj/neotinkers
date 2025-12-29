@@ -3836,6 +3836,7 @@
   "command.tconstruct.generate_part_textures.no_materials": "No material's have generator info, nothing to generate",
   "command.tconstruct.generate_part_textures.no_parts": "No part sprites present in resource packs",
 
+  "command.tconstruct.generate_hidden_fluids": "Successfully added %s entries to fluid tag '%s'. Run /reload to activate pack at %s.",
   "command.tconstruct.generate.melting_recipes": "Successfully generated %s melting recipes in %s seconds. Run /reload to activate pack at %s",
 
 
