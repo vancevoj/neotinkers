@@ -213,6 +213,7 @@
     "sticky":           "#ffffff",
     "swift_sneak":      "#009295",
     "thorns":           "#9FA76D",
+    "blockade":         "#9277B2",
 
 
     "__traits__": null,
@@ -479,7 +480,7 @@
     "fiery": "#893D14",
 
     "__plate__": null,
-    "obsidian":  "#443753",
+    "obsidian":  "#9277B2",
     "netherite": "#4C4143",
     "nickel":    "#EBF1DE",
     "tin":       "#A1C6C2",

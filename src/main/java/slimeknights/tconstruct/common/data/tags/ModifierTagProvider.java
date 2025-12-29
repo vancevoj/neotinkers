@@ -130,7 +130,7 @@ public class ModifierTagProvider extends AbstractModifierTagProvider {
 
     this.tag(GENERAL_ARMOR_UPGRADES).add(
       ModifierIds.fiery, ModifierIds.freezing, ModifierIds.thorns,
-      ModifierIds.ricochet, ModifierIds.springy);
+      ModifierIds.ricochet, ModifierIds.springy, ModifierIds.blockade);
     this.tag(HELMET_UPGRADES).add(TinkerModifiers.itemFrame.getId(), ModifierIds.respiration, ModifierIds.minimap).addOptional(ModifierIds.headlight);
     this.tag(CHESTPLATE_UPGRADES).add(ModifierIds.haste, TinkerModifiers.knockback.getId(), TinkerModifiers.sleeves.getId());
     this.tag(LEGGING_UPGRADES).add(ModifierIds.leaping, TinkerModifiers.shieldStrap.getId(), ModifierIds.speedy, ModifierIds.swiftSneak, ModifierIds.stepUp);

@@ -800,6 +800,13 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .setMaxLevel(1)
                          .saveSalvage(consumer, prefix(ModifierIds.protection, abilitySalvage))
                          .save(consumer, prefix(ModifierIds.protection, abilityFolder));
+    IncrementalModifierRecipeBuilder.modifier(ModifierIds.blockade)
+      .setInput(TinkerCommons.obsidianPane, 1, 10)
+      .setSlots(SlotType.UPGRADE, 1)
+      .setTools(IntersectionIngredient.of(Ingredient.of(TinkerTags.Items.INTERACTABLE_CHARGE), Ingredient.of(TinkerTags.Items.DURABILITY)))
+      .setMaxLevel(3)
+      .saveSalvage(consumer, prefix(ModifierIds.blockade, upgradeSalvage))
+      .save(consumer, prefix(ModifierIds.blockade, upgradeFolder));
     ModifierRecipeBuilder.modifier(ModifierIds.boundless)
                          .addInput(TinkerCommons.obsidianPane, 4)
                          .addInput(Items.WRITABLE_BOOK)
