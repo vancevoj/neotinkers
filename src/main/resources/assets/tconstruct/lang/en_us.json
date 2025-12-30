@@ -2042,7 +2042,7 @@
   "__comment": "Tier Nether Materials",
   "material.tconstruct.cobalt": "Cobalt",
   "material.tconstruct.cobalt.flavor": "Coblat. The material of the Red Army.",
-  "material.tconstruct.cobalt.encyclopedia": "Boosts mining and attack speed by 7% per level",
+  "material.tconstruct.cobalt.encyclopedia": "Boosts mining and attack speed by 8% per level",
   "material.tconstruct.cobalt.ranged": "Boosts drawspeed and velocity by 3% per level",
   "material.tconstruct.cobalt.armor": "Reduces damage from melee attacks by 8% per level, and boosts movement speed when using items by 5% per max level",
 
@@ -2217,7 +2217,7 @@
   "material.tconstruct.bronze": "Bronze",
   "material.tconstruct.bronze.flavor": "Not to be confused with amethyst bronze.",
   "material.tconstruct.bronze.encyclopedia": "Grants +6 mining speed per level at full durability, 0 boost below 50% durability",
-  "material.tconstruct.bronze.ranged": "Grants +0.1 velocity per level at full durability, 0 boost below 50% durability",
+  "material.tconstruct.bronze.ranged": "Grants +0.08 velocity per level at full durability, 0 boost below 50% durability",
   "material.tconstruct.bronze.armor": "Boosts toughness by 2 per level when at full durability, but boost drops to 0 below 50% durability",
 
   "material.tconstruct.constantan": "Constantan",

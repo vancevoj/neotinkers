@@ -983,8 +983,8 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .addModule(ProjectileExplosionModule.radius(1, 1).eflnBonus(0.5f).blockInteraction(BlockInteraction.DESTROY).build());
     // traits - tier 3 nether
     buildModifier(ModifierIds.lightweight)
-      .addModule(StatBoostModule.multiplyBase(ToolStats.ATTACK_SPEED).eachLevel(0.07f))
-      .addModule(StatBoostModule.multiplyBase(ToolStats.MINING_SPEED).eachLevel(0.07f))
+      .addModule(StatBoostModule.multiplyBase(ToolStats.ATTACK_SPEED).eachLevel(0.08f))
+      .addModule(StatBoostModule.multiplyBase(ToolStats.MINING_SPEED).eachLevel(0.08f))
       .addModule(StatBoostModule.add(ToolStats.DRAW_SPEED).eachLevel(0.03f))
       .addModule(StatBoostModule.add(ToolStats.VELOCITY).eachLevel(0.03f));
     buildModifier(ModifierIds.ductile)
@@ -1014,7 +1014,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
         .customVariable("durability").subtractFlipped()
         .nonNegative().divideFlipped()
         .variable(LEVEL).multiply()
-        .constant(0.1f).multiply()
+        .constant(0.08f).multiply()
         .variable(MULTIPLIER).multiply()
         .variable(VALUE).add().build())
       .addModule(AttributeModule.builder(Attributes.ARMOR_TOUGHNESS, Operation.ADDITION)
