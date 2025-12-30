@@ -704,7 +704,7 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
       .setTools(TinkerTags.Items.FISHING_RODS)
       .addInput(Items.CHAIN)
       .addInput(Items.CHAIN)
-      .addInput(TinkerMaterials.cinderslime.getIngotTag())
+      .addInput(TinkerMaterials.slimesteel.getIngotTag())
       .setSlots(SlotType.ABILITY, 1)
       .setMaxLevel(1).checkTraitLevel()
       .saveSalvage(consumer, prefix(ModifierIds.grapple, abilitySalvage))
