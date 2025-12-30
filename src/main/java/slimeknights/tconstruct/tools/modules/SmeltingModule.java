@@ -30,6 +30,7 @@ import slimeknights.tconstruct.library.json.TinkerLoadables;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.ModifierId;
+import slimeknights.tconstruct.library.modifiers.entity.ProjectileWithPower;
 import slimeknights.tconstruct.library.modifiers.hook.armor.OnAttackedModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.combat.MeleeHitModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.combat.MonsterMeleeHitModifierHook;
@@ -237,7 +238,15 @@ public record SmeltingModule(RecipeType<? extends AbstractCookingRecipe> recipeT
   @Override
   public void onProjectileLaunch(IToolStackView tool, ModifierEntry modifier, LivingEntity shooter, Projectile projectile, @Nullable AbstractArrow arrow, ModDataNBT persistentData, boolean primary) {
     // arrow launch cook by arrow power
-    cookItems(tool, modifier, shooter, arrow == null ? ToolStats.PROJECTILE_DAMAGE.getDefaultValue() : (float)arrow.getBaseDamage());
+    float amount;
+    if (arrow != null) {
+      amount = (float) arrow.getBaseDamage();
+    } else if (projectile instanceof ProjectileWithPower withPower) {
+      amount = withPower.getPower();
+    } else {
+      amount = ToolStats.PROJECTILE_DAMAGE.getDefaultValue();
+    }
+    cookItems(tool, modifier, shooter, amount);
   }
 
   @Override
