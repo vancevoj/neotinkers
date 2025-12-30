@@ -181,7 +181,6 @@ public class MaterialRecipeProvider extends BaseRecipeProvider implements IMater
     materialRecipe(consumer, MaterialIds.magnetite, Ingredient.of(TinkerTags.Items.STEEL_SHARD), 1, 1, folder + "magnetite");
     materialRecipe(consumer, MaterialIds.gunpowder, Ingredient.of(Tags.Items.GUNPOWDER), 1, 4, folder + "gunpowder");
 
-    // tier 2 (nether)
     // tier 3 (nether)
     metalMaterialRecipe(consumer, MaterialIds.cobalt, folder, "cobalt", false);
     metalMaterialRecipe(consumer, MaterialIds.steel,  folder, "steel",  false);
