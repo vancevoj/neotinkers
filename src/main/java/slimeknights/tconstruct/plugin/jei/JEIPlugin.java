@@ -139,7 +139,9 @@ public class JEIPlugin implements IModPlugin {
   /** Recipes that are meant as jokes and tend to confuse players, so are hidden */
   private static final ResourceLocation[] EASTER_EGG_RECIPES = {
     TConstruct.getResource("tables/tinkers_forge"),
-    TConstruct.getResource("tables/scorched_forge")
+    TConstruct.getResource("tables/scorched_forge"),
+    TConstruct.getResource("tables/seared_forge_material"),
+    TConstruct.getResource("tables/scorched_forge_material")
   };
   public static IModIdHelper modIdHelper;
 

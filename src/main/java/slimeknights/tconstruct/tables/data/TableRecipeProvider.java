@@ -250,6 +250,25 @@ public class TableRecipeProvider extends BaseRecipeProvider {
       .pattern("sss")
       .unlockedBy("has_item", has(TinkerToolParts.fakeStorageBlock))
       .save(materialConsumer, wrap(TinkerTables.scorchedAnvil, folder, "_material"));
+    materialConsumer = MaterialsConsumerBuilder.shaped("m").build(toolForge);
+    ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, TinkerTables.tinkersAnvil)
+      .define('m', MaterialIngredient.of(TinkerToolParts.fakeStorageBlock))
+      .define('s', TinkerTags.Items.SEARED_BLOCKS)
+      .define('t', TinkerTables.tinkerStation)
+      .pattern("sss")
+      .pattern("mtm")
+      .pattern("m m")
+      .unlockedBy("has_item", has(TinkerToolParts.fakeStorageBlock))
+      .save(materialConsumer, location(folder + "seared_forge_material"));
+    ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, TinkerTables.scorchedAnvil)
+      .define('m', MaterialIngredient.of(TinkerToolParts.fakeStorageBlock))
+      .define('s', TinkerTags.Items.SCORCHED_BLOCKS)
+      .define('t', TinkerTables.tinkerStation)
+      .pattern("sss")
+      .pattern("mtm")
+      .pattern("m m")
+      .unlockedBy("has_item", has(TinkerToolParts.fakeStorageBlock))
+      .save(materialConsumer, location(folder + "scorched_forge_material"));
 
     // part swapping
     TinkerStationPartSwappingBuilder.tools(DifferenceIngredient.of(Ingredient.of(TinkerTags.Items.MULTIPART_TOOL), Ingredient.of(TinkerTags.Items.UNSWAPPABLE)))
