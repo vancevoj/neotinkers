@@ -1158,10 +1158,13 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .addModule(AttributeModule.builder(Attributes.MOVEMENT_SPEED, Operation.MULTIPLY_TOTAL).slots(ARMOR_SLOTS).eachLevel(-0.1f))
       .addModule(AttributeModule.builder(ForgeMod.ENTITY_GRAVITY, Operation.MULTIPLY_TOTAL).tooltipStyle(TooltipStyle.PERCENT).eachLevel(0.1f));
     EntityVariable equipmentCount = new EquipmentCountEntityVariable(ARMOR_SLOTS);
+    // multiply valiant bonus by 4 for entities with fewer armor slots (slimes basically)
+    EntityVariable smallArmor = new ConditionalEntityVariable(LivingEntityPredicate.tag(TinkerTags.EntityTypes.SMALL_ARMOR), 4, 1);
     buildModifier(ModifierIds.valiant)
       .addModule(ConditionalMeleeDamageModule.builder()
         .formula()
         .customVariable("equipment", new EntityMeleeVariable(equipmentCount, WhichEntity.TARGET, 4))
+        .customVariable("small_armor", new EntityMeleeVariable(smallArmor, WhichEntity.TARGET, 1)).multiply()
         .constant(0.5f).multiply()
         .variable(LEVEL).multiply()
         .variable(MULTIPLIER).multiply()
@@ -1170,6 +1173,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .addModule(ConditionalPowerModule.builder()
         .formula()
         .customVariable("equipment", new EntityPowerVariable(equipmentCount, WhichEntity.TARGET, 4))
+        .customVariable("small_armor", new EntityPowerVariable(smallArmor, WhichEntity.TARGET, 1)).multiply()
         .constant(0.25f).multiply()
         .variable(LEVEL).multiply()
         .variable(MULTIPLIER).multiply()
