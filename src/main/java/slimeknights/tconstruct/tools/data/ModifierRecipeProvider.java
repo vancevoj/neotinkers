@@ -319,11 +319,12 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .setMaxLevel(2)
                          .save(consumer, prefix(ModifierIds.offhanded, upgradeFolder));
     ModifierRecipeBuilder.modifier(ModifierIds.smelting)
-                         .setTools(ingredientFromTags(TinkerTags.Items.INTERACTABLE, TinkerTags.Items.WORN_ARMOR))
-                         .addInput(Blocks.CAMPFIRE)
-                         .setSlots(SlotType.UPGRADE, 1)
-                         .saveSalvage(consumer, prefix(ModifierIds.smelting, upgradeSalvage))
-                         .save(consumer, prefix(ModifierIds.smelting, upgradeFolder));
+      .setTools(ingredientFromTags(TinkerTags.Items.INTERACTABLE, TinkerTags.Items.WORN_ARMOR))
+      .addInput(Blocks.CAMPFIRE)
+      .setSlots(SlotType.UPGRADE, 1)
+      .setMaxLevel(4)
+      .saveSalvage(consumer, prefix(ModifierIds.smelting, upgradeSalvage))
+      .save(consumer, prefix(ModifierIds.smelting, upgradeFolder));
 
     /*
      * Speed

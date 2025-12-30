@@ -606,7 +606,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .addModule(InventoryModule.builder().pattern(pattern("tool_belt")).slots(3, 1))
       .addModule(new ToolBeltModule(TooltipKey.NORMAL, TooltipKey.CONTROL))
       .addModule(InventoryMenuModule.SHIFT);
-    buildModifier(TinkerModifiers.shieldStrap).priority(95)
+    buildModifier(TinkerModifiers.shieldStrap).priority(120)
       .addModule(InventoryModule.builder().pattern(pattern("shield_plus")).slotsPerLevel(1))
       .addModule(new ShieldStrapModule(TooltipKey.NORMAL))
       .addModule(InventoryMenuModule.SHIFT)
@@ -713,7 +713,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .priority(110) // want to be higher than bonking and alike
       .levelDisplay(ModifierLevelDisplay.SINGLE_LEVEL)
       .addModule(InventoryMenuModule.SHIFT)
-      .addModule(new SmeltingModule(RecipeType.SMELTING, 10, InventoryModule.builder().pattern(pattern("fire")).flatLimit(1).slotsPerLevel(1)));
+      .addModule(new SmeltingModule(RecipeType.SMELTING, 10, InventoryModule.builder().pattern(pattern("fire")).slotsPerLevel(1)));
 
     // internal
     buildModifier(ModifierIds.overslimeFriend).tooltipDisplay(TooltipDisplay.NEVER);

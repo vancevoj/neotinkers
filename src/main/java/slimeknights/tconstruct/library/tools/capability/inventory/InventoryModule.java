@@ -15,7 +15,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import slimeknights.mantle.data.loadable.Loadables;
 import slimeknights.mantle.data.loadable.field.LoadableField;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.data.predicate.IJsonPredicate;
@@ -64,7 +63,7 @@ public class InventoryModule implements ModifierModule, InventoryModifierHook, V
   /** NBT key to store the slot for a stack */
   public static final String TAG_SLOT = "Slot";
   // fields
-  protected static final LoadableField<ResourceLocation,InventoryModule> KEY_FIELD = Loadables.RESOURCE_LOCATION.nullableField("key", InventoryModule::key);
+  protected static final LoadableField<ResourceLocation,? super InventoryModule> KEY_FIELD = ModuleWithKey.FIELD;
   protected static final LoadableField<LevelingInt, InventoryModule> SLOTS_FIELD = LevelingInt.LOADABLE.requiredField("slots", InventoryModule::slots);
   protected static final LoadableField<LevelingInt, InventoryModule> LIMIT_FIELD = LevelingInt.LOADABLE.defaultField("limit", LevelingInt.flat(64), InventoryModule::slotLimit);
   protected static final LoadableField<IJsonPredicate<Item>, InventoryModule> FILTER_FIELD = ItemPredicate.LOADER.defaultField("filter", InventoryModule::filter);
@@ -349,6 +348,17 @@ public class InventoryModule implements ModifierModule, InventoryModifierHook, V
 
     protected Builder() {}
 
+    /** Copies properties from the given module, excluding slots which is terminal. */
+    public Builder from(InventoryModule inventory) {
+      this.key = inventory.key;
+      this.slotLimit = inventory.slotLimit;
+      this.filter = inventory.filter;
+      this.pattern = inventory.pattern;
+      this.validationLevel = inventory.validationLevel;
+      this.condition = inventory.condition;
+      return this;
+    }
+
     /** Sets the base slot limit */
     public Builder flatLimit(int limit) {
       return slotLimit(LevelingInt.flat(limit));
@@ -360,8 +370,13 @@ public class InventoryModule implements ModifierModule, InventoryModifierHook, V
     }
 
     /** Builds the final instance */
+    public InventoryModule slots(LevelingInt slots) {
+      return new InventoryModule(key, slots, slotLimit, filter, pattern, condition, validationLevel);
+    }
+
+    /** Builds the final instance */
     public InventoryModule slots(int base, int perLevel) {
-      return new InventoryModule(key, new LevelingInt(base, perLevel), slotLimit, filter, pattern, condition, validationLevel);
+      return slots(new LevelingInt(base, perLevel));
     }
 
     /** Builds the final instance */
