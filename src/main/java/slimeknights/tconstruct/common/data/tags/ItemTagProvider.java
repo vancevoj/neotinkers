@@ -212,9 +212,16 @@ public class ItemTagProvider extends ItemTagsProvider {
     this.tag(ItemTags.PIGLIN_REPELLENTS).add(TinkerWorld.headItems.get(TinkerHeadType.ZOMBIFIED_PIGLIN));
 
     // beacons are happy to accept any expensive ingots
-    this.tag(ItemTags.BEACON_PAYMENT_ITEMS)
-        .addTags(TinkerMaterials.steel.getIngotTag(), TinkerMaterials.cobalt.getIngotTag(), TinkerMaterials.queensSlime.getIngotTag(),
-                 TinkerMaterials.manyullyn.getIngotTag(), TinkerMaterials.hepatizon.getIngotTag(), TinkerMaterials.cinderslime.getIngotTag());
+    // mirrors the block list
+    this.tag(ItemTags.BEACON_PAYMENT_ITEMS).addTags(
+      // ores
+      TinkerMaterials.steel.getIngotTag(), TinkerMaterials.cobalt.getIngotTag(),
+      // tier 3
+      TinkerMaterials.slimesteel.getIngotTag(),
+      // tier 4
+      TinkerMaterials.cinderslime.getIngotTag(), TinkerMaterials.queensSlime.getIngotTag(),
+      TinkerMaterials.manyullyn.getIngotTag(), TinkerMaterials.hepatizon.getIngotTag(),
+      TinkerMaterials.knightmetal.getIngotTag());
 
     this.copy(TinkerTags.Blocks.COPPER_PLATFORMS, TinkerTags.Items.COPPER_PLATFORMS);
 
