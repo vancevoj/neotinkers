@@ -50,6 +50,7 @@ import slimeknights.tconstruct.library.recipe.ingredient.NoContainerIngredient;
 import slimeknights.tconstruct.library.recipe.ingredient.ToolHookIngredient;
 import slimeknights.tconstruct.library.recipe.modifiers.adding.IncrementalModifierRecipeBuilder;
 import slimeknights.tconstruct.library.recipe.modifiers.adding.ModifierRecipeBuilder;
+import slimeknights.tconstruct.library.recipe.modifiers.adding.MultilevelIncrementalModifierRecipeBuilder;
 import slimeknights.tconstruct.library.recipe.modifiers.adding.MultilevelModifierRecipeBuilder;
 import slimeknights.tconstruct.library.recipe.modifiers.adding.OverslimeModifierRecipeBuilder;
 import slimeknights.tconstruct.library.recipe.modifiers.adding.SwappableModifierRecipe.VariantFormatter;
@@ -240,16 +241,14 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
         // sky is tinkers specialty
         case SKY -> amount = 50;
         // ichor is hard to farm
-          case ICHOR -> amount = 100;
+        case ICHOR -> amount = 100;
         // ender is late game, but easier to farm than ichor
-        case ENDER -> {
-          amount = 80;
-        }
+        case ENDER -> amount = 80;
         // unhandled -> update
         default -> {
           continue;
         }
-      };
+      }
       String name = type.getSerializedName();
       // ball and bottle - base amount
       OverslimeModifierRecipeBuilder.modifier(TinkerCommons.slimeball.get(type), amount)
@@ -914,25 +913,22 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
       .save(consumer, prefix(ModifierIds.minimap, upgradeFolder));
     // upgrade - leggings
     hasteRecipes(consumer, ModifierIds.speedy, Ingredient.of(TinkerTags.Items.LEGGINGS), 3, upgradeFolder, upgradeSalvage);
-    // leaping lets you disable skyslime geodes in case you don't like fun
-    // if you are disabling both, you have a ton of recipes to fix anyways
-    IncrementalModifierRecipeBuilder.modifier(ModifierIds.leaping)
+    // leaping changes slot type on level 2
+    MultilevelIncrementalModifierRecipeBuilder.modifier(ModifierIds.leaping)
       .setTools(TinkerTags.Items.LEGGINGS)
-      .setInput(TinkerWorld.skyGeode.asItem(), 1, 36)
-      .setMaxLevel(1)
-      .setSlots(SlotType.UPGRADE, 1)
-      .save(consumer, prefix(ModifierIds.leaping, upgradeFolder));
-    IncrementalModifierRecipeBuilder.modifier(ModifierIds.leaping)
-      .setTools(TinkerTags.Items.LEGGINGS)
-      .setInput(TinkerWorld.skyGeode.getBlock(), 1, 18)
-      .exactLevel(2)
-      .setSlots(SlotType.ABILITY, 1)
-      .save(consumer, prefix(ModifierIds.leaping, abilityFolder));
-    MultilevelModifierRecipeBuilder.modifier(ModifierIds.leaping)
-      .setTools(TinkerTags.Items.LEGGINGS)
+      .setInput(TinkerWorld.skyGeode, 1, 36)
       .addLevelRange(SlotType.UPGRADE, 1, 1, 1)
       .addLevelRange(SlotType.ABILITY, 1, 2, 2)
-      .saveSalvage(consumer, prefix(ModifierIds.leaping, salvageFolder));
+      .saveSalvage(consumer, prefix(ModifierIds.leaping, salvageFolder))
+      .save(consumer, wrap(ModifierIds.leaping, upgradeFolder, "_from_crystal"));
+    MultilevelIncrementalModifierRecipeBuilder.modifier(ModifierIds.leaping)
+      .setTools(TinkerTags.Items.LEGGINGS)
+      .setInput(TinkerWorld.skyGeode.getBlock(), 4, 36)
+      .setLeftover(TinkerWorld.skyGeode)
+      .addLevelRange(SlotType.UPGRADE, 1, 1, 1)
+      .addLevelRange(SlotType.ABILITY, 1, 2, 2)
+      .disallowCrystal()
+      .save(consumer, wrap(ModifierIds.leaping, upgradeFolder, "_from_block"));
     ModifierRecipeBuilder.modifier(ModifierIds.stepUp)
                          .setTools(TinkerTags.Items.LEGGINGS)
                          .addInput(Items.LEATHER)
