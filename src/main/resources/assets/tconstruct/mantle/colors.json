@@ -118,6 +118,8 @@
     "shiny":         "#FFA3EF",
     "worldbound":    "#7E6059",
     "redirected":    "#EED2E6",
+    "offhanded":     "#7E627B",
+    "blunted":       "#FABF29",
 
     "__slotless_extra_slot__": null,
     "writable":    "#ffffff",
@@ -141,7 +143,6 @@
     "fireprimer":    "#4A281D",
     "magnetic":      "#720000",
     "netherite":     "#8E7C7F",
-    "offhanded":     "#7E627B",
     "overforced":    "#2759C4",
     "reinforced":    "#41f384",
     "smelting":      "#FFBC5E",

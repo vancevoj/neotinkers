@@ -317,6 +317,13 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .addInput(SlimeType.ICHOR.getSlimeballTag())
                          .setMaxLevel(2)
                          .save(consumer, prefix(ModifierIds.offhanded, upgradeFolder));
+    ModifierRecipeBuilder.modifier(ModifierIds.blunted)
+      .setTools(TinkerTags.Items.INTERACTABLE_LEFT)
+      .addInput(Items.HONEYCOMB)
+      .addInput(Items.FEATHER)
+      .addInput(Items.HONEYCOMB)
+      .setMaxLevel(1).checkTraitLevel()
+      .save(consumer, prefix(ModifierIds.blunted, slotlessFolder));
     ModifierRecipeBuilder.modifier(ModifierIds.smelting)
       .setTools(ingredientFromTags(TinkerTags.Items.INTERACTABLE, TinkerTags.Items.WORN_ARMOR))
       .addInput(Blocks.CAMPFIRE)

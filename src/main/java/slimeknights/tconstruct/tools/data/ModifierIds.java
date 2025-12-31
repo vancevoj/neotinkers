@@ -35,6 +35,7 @@ public class ModifierIds {
   public static final ModifierId sticky     = id("sticky");
   public static final ModifierId tank       = id("tank");
   public static final ModifierId offhanded  = id("offhanded");
+  public static final ModifierId blunted    = id("blunted");
   public static final ModifierId soulbound = id("soulbound");
   public static final ModifierId smelting = id("smelting");
   // combat

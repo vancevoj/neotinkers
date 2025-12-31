@@ -30,6 +30,7 @@
   "tconstruct:stripping":   "tconstruct:gui/modifiers/held/stripping",
   "tconstruct:tilling":     "tconstruct:gui/modifiers/held/tilling",
   "tconstruct:offhanded":   "tconstruct:gui/modifiers/held/offhanded",
+  "tconstruct:blunted":     "tconstruct:gui/modifiers/held/blunted",
 
   "tconstruct:flinging":  "tconstruct:gui/modifiers/held/flinging",
   "tconstruct:springing": "tconstruct:gui/modifiers/held/springing",
