@@ -525,7 +525,8 @@ public class TinkerTags {
     public static final TagKey<Item> LINGERING_BOTTLE = common("bottles/lingering");
 
     // compat tags
-    /** Tag meaning necronium is available */
+    /** @deprecated necronium bones now show based on {@link slimeknights.tconstruct.tools.data.material.MaterialIds#necronium} */
+    @Deprecated(forRemoval = true)
     public static final TagKey<Item> URANIUM_INGOTS = common("ingots/uranium");
     /** Tag of trophies from bosses, to grant an additional upgrade slot to tools. Meant for Twilight Forest boss trophies, but suppose you can add other bosses that are not easily farmed. */
     public static final TagKey<Item> BOSS_TROPHIES = local("boss_trophies");
