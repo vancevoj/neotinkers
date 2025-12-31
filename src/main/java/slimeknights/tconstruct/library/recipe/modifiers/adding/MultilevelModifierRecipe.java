@@ -113,12 +113,13 @@ public class MultilevelModifierRecipe extends ModifierRecipe implements IMultiRe
     }
     if (displayRecipes == null) {
       // this instance is a proper display recipe for the first level entry, for the rest build display instances with unique requirements keys
-      DisplayModifierRecipe.Builder builder = DisplayModifierRecipe
-        .result(getDisplayResult()).id(getId()).ingredients(inputs).resultSlots(getResultSlots())
+      DisplayModifierRecipe.Builder builder = DisplayModifierRecipe.builder().id(getId()).ingredients(inputs).resultSlots(getResultSlots())
         .toolWithoutModifier(getToolWithoutModifier()).toolWithModifier(getToolWithModifier());
       displayRecipes = Streams.concat(
         Stream.of(this),
-        levels.stream().skip(1).map(levelEntry -> builder.copy().level(levelEntry.level).slots(levelEntry.slots).build())
+        levels.stream().skip(1).map(levelEntry -> builder.copy()
+          .result(new ModifierEntry(result, levelEntry.level.min()))
+          .level(levelEntry.level).slots(levelEntry.slots).build())
       ).toList();
     }
 

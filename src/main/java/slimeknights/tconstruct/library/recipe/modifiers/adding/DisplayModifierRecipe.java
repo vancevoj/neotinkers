@@ -40,19 +40,19 @@ public class DisplayModifierRecipe implements IDisplayModifierRecipe {
   @Getter
   private final boolean incremental;
 
-  /** @deprecated use {@link #result(ModifierEntry)} */
+  /** @deprecated use {@link #builder()} */
   @Deprecated(forRemoval = true)
   public DisplayModifierRecipe(@Nullable ResourceLocation id, List<SizedIngredient> inputs, List<ItemStack> toolWithoutModifier, List<ItemStack> toolWithModifier, ModifierEntry displayResult, IntRange level, @Nullable SlotCount slots, List<SlotCount> resultSlots) {
     this(id, resolve(inputs), toolWithoutModifier, toolWithModifier, displayResult, level, slots, resultSlots, false);
   }
 
-  /** @deprecated use {@link #result(ModifierEntry)} */
+  /** @deprecated use {@link #builder()} */
   @Deprecated(forRemoval = true)
   public DisplayModifierRecipe(List<SizedIngredient> inputs, List<ItemStack> toolWithoutModifier, List<ItemStack> toolWithModifier, ModifierEntry displayResult, IntRange level, @Nullable SlotCount slots, List<SlotCount> resultSlots) {
     this(null, inputs, toolWithoutModifier, toolWithModifier, displayResult, level, slots, resultSlots);
   }
 
-  /** @deprecated use {@link #result(ModifierEntry)} */
+  /** @deprecated use {@link #builder()} */
   @Deprecated(forRemoval = true)
   public DisplayModifierRecipe(List<SizedIngredient> inputs, List<ItemStack> toolWithoutModifier, List<ItemStack> toolWithModifier, ModifierEntry displayResult, IntRange level, @Nullable SlotCount slots) {
     this(inputs, toolWithoutModifier, toolWithModifier, displayResult, level, slots, List.of());
@@ -72,8 +72,8 @@ public class DisplayModifierRecipe implements IDisplayModifierRecipe {
   }
 
   /** Creates a new builder instance */
-  public static Builder result(ModifierEntry displayResult) {
-    return new Builder(displayResult);
+  public static Builder builder() {
+    return new Builder();
   }
 
 
@@ -87,7 +87,7 @@ public class DisplayModifierRecipe implements IDisplayModifierRecipe {
   @Accessors(fluent = true)
   @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
   public static class Builder {
-    private final ModifierEntry displayResult;
+    private ModifierEntry result = ModifierEntry.EMPTY;
     @Nullable
     private ResourceLocation id = null;
     private List<List<ItemStack>> inputs = List.of();
@@ -101,15 +101,16 @@ public class DisplayModifierRecipe implements IDisplayModifierRecipe {
 
     /** Creates a copy of this builder with the same properties */
     public Builder copy() {
-      Builder copy = new Builder(displayResult);
-      copy.id = id;
-      copy.inputs = inputs;
-      copy.toolWithoutModifier = toolWithoutModifier;
-      copy.toolWithModifier = toolWithModifier;
-      copy.level = level;
-      copy.slots = slots;
-      copy.resultSlots = resultSlots;
-      copy.incremental = incremental;
+      Builder copy = new Builder();
+      copy.id = this.id;
+      copy.inputs = this.inputs;
+      copy.toolWithoutModifier = this.toolWithoutModifier;
+      copy.toolWithModifier = this.toolWithModifier;
+      copy.level = this.level;
+      copy.slots = this.slots;
+      copy.result = this.result;
+      copy.resultSlots = this.resultSlots;
+      copy.incremental = this.incremental;
       return copy;
     }
 
@@ -125,6 +126,9 @@ public class DisplayModifierRecipe implements IDisplayModifierRecipe {
 
     /** Builds the final recipe */
     public DisplayModifierRecipe build() {
+      if (result == ModifierEntry.EMPTY) {
+        throw new IllegalStateException("Must set result");
+      }
       if (inputs.isEmpty()) {
         throw new IllegalStateException("Must set inputs");
       }
@@ -134,7 +138,7 @@ public class DisplayModifierRecipe implements IDisplayModifierRecipe {
       if (toolWithModifier.isEmpty()) {
         throw new IllegalStateException("Must set tools with modifier");
       }
-      return new DisplayModifierRecipe(id, inputs, toolWithoutModifier, toolWithModifier, displayResult, level, slots, resultSlots, incremental);
+      return new DisplayModifierRecipe(id, inputs, toolWithoutModifier, toolWithModifier, result, level, slots, resultSlots, incremental);
     }
   }
 }

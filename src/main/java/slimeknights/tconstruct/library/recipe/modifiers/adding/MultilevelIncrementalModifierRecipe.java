@@ -10,6 +10,7 @@ import slimeknights.mantle.data.loadable.field.ContextKey;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.recipe.IMultiRecipe;
 import slimeknights.mantle.recipe.helper.ItemOutput;
+import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierId;
 import slimeknights.tconstruct.library.recipe.RecipeResult;
 import slimeknights.tconstruct.library.recipe.modifiers.adding.MultilevelModifierRecipe.LevelEntry;
@@ -106,12 +107,14 @@ public class MultilevelIncrementalModifierRecipe extends IncrementalModifierReci
   public List<IDisplayModifierRecipe> getRecipes(RegistryAccess access) {
     if (displayRecipes == null) {
       // this instance is a proper display recipe for the first level entry, for the rest build display instances with unique requirements keys
-      DisplayModifierRecipe.Builder builder = DisplayModifierRecipe
-        .result(getDisplayResult()).id(getId()).inputs(getInputs()).resultSlots(getResultSlots()).incremental()
+      DisplayModifierRecipe.Builder builder = DisplayModifierRecipe.builder()
+        .id(getId()).inputs(getInputs()).resultSlots(getResultSlots()).incremental()
         .toolWithoutModifier(getToolWithoutModifier()).toolWithModifier(getToolWithModifier());
       displayRecipes = Streams.concat(
         Stream.of(this),
-        levels.stream().skip(1).map(levelEntry -> builder.copy().level(levelEntry.level()).slots(levelEntry.slots()).build())
+        levels.stream().skip(1).map(levelEntry -> builder.copy()
+          .result(new ModifierEntry(result, levelEntry.level().min()))
+          .level(levelEntry.level()).slots(levelEntry.slots()).build())
       ).toList();
     }
     return displayRecipes;
