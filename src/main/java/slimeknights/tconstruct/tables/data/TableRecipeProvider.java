@@ -95,12 +95,12 @@ public class TableRecipeProvider extends BaseRecipeProvider {
     // station with log texture
     ShapedRetexturedRecipeBuilder.fromShaped(
       ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, TinkerTables.craftingStation)
-                         .define('p', TinkerTables.pattern)
-                         .define('w', ItemTags.LOGS)
-                         .pattern("p")
-                         .pattern("w")
-                         .unlockedBy("has_item", has(TinkerTables.pattern)))
-      .setSource(ItemTags.LOGS)
+        .define('p', TinkerTables.pattern)
+        .define('w', ItemTags.LOGS)
+        .pattern("p")
+        .pattern("w")
+        .unlockedBy("has_item", has(TinkerTables.pattern)))
+      .setSource('w')
       .build(consumer, wrap(TinkerTables.craftingStation, folder, "_from_logs"));
 
     // part builder
@@ -111,7 +111,7 @@ public class TableRecipeProvider extends BaseRecipeProvider {
         .pattern("pp")
         .pattern("ww")
         .unlockedBy("has_item", has(TinkerTables.pattern)))
-      .setSource(TinkerTags.Items.PLANKLIKE)
+      .setSource('w')
       .setMatchAll()
       .build(consumer, prefix(TinkerTables.partBuilder, folder));
 
@@ -124,7 +124,7 @@ public class TableRecipeProvider extends BaseRecipeProvider {
         .pattern("w w")
         .pattern("w w")
         .unlockedBy("has_item", has(TinkerTables.pattern)))
-      .setSource(TinkerTags.Items.PLANKLIKE)
+      .setSource('w')
       .setMatchAll()
       .build(consumer, prefix(TinkerTables.tinkerStation, folder));
 
@@ -164,16 +164,16 @@ public class TableRecipeProvider extends BaseRecipeProvider {
 
     // modifier worktable
     ShapedRetexturedRecipeBuilder.fromShaped(
-                                   ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, TinkerTables.modifierWorktable)
-                                                      .define('r', TinkerTags.Items.WORKSTATION_ROCK)
-                                                      .define('s', TinkerTags.Items.SEARED_BLOCKS)
-                                                      .pattern("sss")
-                                                      .pattern("r r")
-                                                      .pattern("r r")
-                                                      .unlockedBy("has_item", has(TinkerTags.Items.SEARED_BLOCKS)))
-                                 .setSource(TinkerTags.Items.WORKSTATION_ROCK)
-                                 .setMatchAll()
-                                 .build(consumer, prefix(TinkerTables.modifierWorktable, folder));
+      ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, TinkerTables.modifierWorktable)
+        .define('r', TinkerTags.Items.WORKSTATION_ROCK)
+        .define('s', TinkerTags.Items.SEARED_BLOCKS)
+        .pattern("sss")
+        .pattern("r r")
+        .pattern("r r")
+        .unlockedBy("has_item", has(TinkerTags.Items.SEARED_BLOCKS)))
+      .setSource('r')
+      .setMatchAll()
+      .build(consumer, prefix(TinkerTables.modifierWorktable, folder));
 
     // tinker anvil
     ShapedRetexturedRecipeBuilder.fromShaped(
@@ -184,18 +184,18 @@ public class TableRecipeProvider extends BaseRecipeProvider {
         .pattern(" s ")
         .pattern("sss")
         .unlockedBy("has_item", has(TinkerTags.Items.ANVIL_METAL)))
-      .setSource(TinkerTags.Items.ANVIL_METAL)
+      .setSource('m')
       .setMatchAll()
       .build(consumer, prefix(TinkerTables.tinkersAnvil, folder));
     ShapedRetexturedRecipeBuilder.fromShaped(
-        ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, TinkerTables.scorchedAnvil)
-          .define('m', TinkerTags.Items.ANVIL_METAL)
-          .define('s', TinkerTags.Items.SCORCHED_BLOCKS)
-          .pattern("mmm")
-          .pattern(" s ")
-          .pattern("sss")
-          .unlockedBy("has_item", has(TinkerTags.Items.ANVIL_METAL)))
-      .setSource(TinkerTags.Items.ANVIL_METAL)
+      ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, TinkerTables.scorchedAnvil)
+        .define('m', TinkerTags.Items.ANVIL_METAL)
+        .define('s', TinkerTags.Items.SCORCHED_BLOCKS)
+        .pattern("mmm")
+        .pattern(" s ")
+        .pattern("sss")
+        .unlockedBy("has_item", has(TinkerTags.Items.ANVIL_METAL)))
+      .setSource('m')
       .setMatchAll()
       .build(consumer, prefix(TinkerTables.scorchedAnvil, folder));
 
@@ -210,26 +210,26 @@ public class TableRecipeProvider extends BaseRecipeProvider {
     }
     ShapedRetexturedRecipeBuilder.fromShaped(
       ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, TinkerTables.tinkersAnvil)
-                         .define('m', TinkerTags.Items.ANVIL_METAL)
-                         .define('s', TinkerTags.Items.SEARED_BLOCKS)
-                         .define('t', TinkerTables.tinkerStation)
-                         .pattern("sss")
-                         .pattern("mtm")
-                         .pattern("m m")
-                         .unlockedBy("has_item", has(TinkerTags.Items.ANVIL_METAL)))
-      .setSource(TinkerTags.Items.ANVIL_METAL)
+        .define('m', TinkerTags.Items.ANVIL_METAL)
+        .define('s', TinkerTags.Items.SEARED_BLOCKS)
+        .define('t', TinkerTables.tinkerStation)
+        .pattern("sss")
+        .pattern("mtm")
+        .pattern("m m")
+        .unlockedBy("has_item", has(TinkerTags.Items.ANVIL_METAL)))
+      .setSource('m')
       .setMatchAll()
       .build(toolForge, location(folder + "tinkers_forge"));
     ShapedRetexturedRecipeBuilder.fromShaped(
-        ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, TinkerTables.scorchedAnvil)
-          .define('m', TinkerTags.Items.ANVIL_METAL)
-          .define('s', TinkerTags.Items.SCORCHED_BLOCKS)
-          .define('t', TinkerTables.tinkerStation)
-          .pattern("sss")
-          .pattern("mtm")
-          .pattern("m m")
-          .unlockedBy("has_item", has(TinkerTags.Items.ANVIL_METAL)))
-      .setSource(TinkerTags.Items.ANVIL_METAL)
+      ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, TinkerTables.scorchedAnvil)
+        .define('m', TinkerTags.Items.ANVIL_METAL)
+        .define('s', TinkerTags.Items.SCORCHED_BLOCKS)
+        .define('t', TinkerTables.tinkerStation)
+        .pattern("sss")
+        .pattern("mtm")
+        .pattern("m m")
+        .unlockedBy("has_item", has(TinkerTags.Items.ANVIL_METAL)))
+      .setSource('m')
       .setMatchAll()
       .build(toolForge, location(folder + "scorched_forge"));
 

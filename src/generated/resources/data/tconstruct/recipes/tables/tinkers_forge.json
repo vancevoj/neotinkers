@@ -27,7 +27,5 @@
     }
   },
   "show_notification": true,
-  "texture": {
-    "tag": "tconstruct:anvil_metal"
-  }
+  "texture": "m"
 }
