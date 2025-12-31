@@ -77,21 +77,21 @@ public class BlockTagProvider extends BlockTagsProvider {
   private void addCommon() {
     // ores
     addMetalTags(TinkerMaterials.cobalt, true);
-    addMetalTags(TinkerMaterials.steel, false);
+    addMetalTags(TinkerMaterials.steel, true);
     // tier 3
-    addMetalTags(TinkerMaterials.slimesteel, false);
-    addMetalTags(TinkerMaterials.amethystBronze, false);
-    addMetalTags(TinkerMaterials.roseGold, false);
-    addMetalTags(TinkerMaterials.pigIron, false);
+    addMetalTags(TinkerMaterials.slimesteel, true); // beacon: skyslime and seared stone are expensive enough
+    addMetalTags(TinkerMaterials.amethystBronze, false); // not beacon: mostly copper and amethyst
+    addMetalTags(TinkerMaterials.roseGold, false); // not beacon: 50% copper
+    addMetalTags(TinkerMaterials.pigIron, false); // not beacon: 50% food
     // tier 4
-    addMetalTags(TinkerMaterials.cinderslime, false);
+    addMetalTags(TinkerMaterials.cinderslime, true); // beacon: ichor and scorched stone are expensive enough
     addMetalTags(TinkerMaterials.queensSlime, true);
     addMetalTags(TinkerMaterials.manyullyn, true);
     addMetalTags(TinkerMaterials.hepatizon, true);
     addMetalTags(TinkerMaterials.soulsteel, true);
     // tier 5
     addMetalTags(TinkerMaterials.knightmetal, true);
-    addMetalTags(TinkerMaterials.knightslime, false);
+    addMetalTags(TinkerMaterials.knightslime, true);
 
     // glass
     IntrinsicTagAppender<Block> silicaPanes = tag(TinkerTags.Blocks.GLASS_PANES_SILICA);
