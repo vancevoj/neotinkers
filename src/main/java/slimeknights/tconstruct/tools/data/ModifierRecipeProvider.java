@@ -305,18 +305,18 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
     IncrementalModifierRecipeBuilder.modifier(TinkerModifiers.farsighted)
                                     .setTools(sighted)
                                     .setInput(Tags.Items.CROPS_CARROT, 1, 45)
-                                    .save(consumer, prefix(TinkerModifiers.farsighted, upgradeFolder));
+                                    .save(consumer, prefix(TinkerModifiers.farsighted, slotlessFolder));
     IncrementalModifierRecipeBuilder.modifier(TinkerModifiers.nearsighted)
                                     .setTools(sighted)
                                     .setInput(Items.INK_SAC, 1, 45)
-                                    .save(consumer, prefix(TinkerModifiers.nearsighted, upgradeFolder));
+                                    .save(consumer, prefix(TinkerModifiers.nearsighted, slotlessFolder));
     ModifierRecipeBuilder.modifier(ModifierIds.offhanded)
                          .setTools(TinkerTags.Items.INTERACTABLE_CHARGE_MODIFIER)
                          .addInput(Items.LEATHER)
                          .addInput(Items.FIRE_CHARGE)
                          .addInput(SlimeType.ICHOR.getSlimeballTag())
                          .setMaxLevel(2)
-                         .save(consumer, prefix(ModifierIds.offhanded, upgradeFolder));
+                         .save(consumer, prefix(ModifierIds.offhanded, slotlessFolder));
     ModifierRecipeBuilder.modifier(ModifierIds.blunted)
       .setTools(TinkerTags.Items.INTERACTABLE_LEFT)
       .addInput(Items.HONEYCOMB)
