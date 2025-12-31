@@ -15,7 +15,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.common.Tags;
-import net.minecraftforge.common.crafting.CompoundIngredient;
 import net.minecraftforge.common.crafting.DifferenceIngredient;
 import net.minecraftforge.common.crafting.conditions.ModLoadedCondition;
 import slimeknights.mantle.Mantle;
@@ -86,8 +85,7 @@ public class TableRecipeProvider extends BaseRecipeProvider {
     // crafting station -> crafting table upgrade
     ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, TinkerTables.craftingStation)
       .define('p', TinkerTables.pattern)
-      .define('w', DifferenceIngredient.of(CompoundIngredient.of(Ingredient.of(TinkerTags.Items.WORKBENCHES), Ingredient.of(TinkerTags.Items.TABLES)),
-                                           Ingredient.of(TinkerTables.craftingStation.get())))
+      .define('w', DifferenceIngredient.of(Ingredient.of(TinkerTags.Items.WORKBENCHES), Ingredient.of(TinkerTables.craftingStation.get())))
       .pattern("p")
       .pattern("w")
       .unlockedBy("has_item", has(TinkerTables.pattern))
@@ -102,6 +100,15 @@ public class TableRecipeProvider extends BaseRecipeProvider {
         .unlockedBy("has_item", has(TinkerTables.pattern)))
       .setSource('w')
       .build(consumer, wrap(TinkerTables.craftingStation, folder, "_from_logs"));
+    ShapedRetexturedRecipeBuilder.fromShaped(
+      ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, TinkerTables.craftingStation)
+        .define('p', TinkerTables.pattern)
+        .define('w', DifferenceIngredient.of(Ingredient.of(TinkerTags.Items.TABLES), Ingredient.of(TinkerTables.craftingStation.get())))
+        .pattern("p")
+        .pattern("w")
+        .unlockedBy("has_item", has(TinkerTables.pattern)))
+      .setSource('w')
+      .build(consumer, wrap(TinkerTables.craftingStation, folder, "_from_tables"));
 
     // part builder
     ShapedRetexturedRecipeBuilder.fromShaped(
