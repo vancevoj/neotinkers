@@ -86,7 +86,8 @@ public class MaterialTagProvider extends AbstractMaterialTagProvider {
       MaterialIds.steeleaf,
       // tier 4
       MaterialIds.fiery
-    ).addTag(TinkerTags.Materials.COMPATABILITY_ALLOYS);
+    ).addTag(TinkerTags.Materials.COMPATABILITY_BLOCKS);
+    tag(TinkerTags.Materials.COMPATABILITY_BLOCKS).addTag(TinkerTags.Materials.COMPATABILITY_ALLOYS);
     tag(TinkerTags.Materials.COMPATABILITY_ALLOYS).addOptional(MaterialIds.bronze, MaterialIds.constantan, MaterialIds.invar, MaterialIds.electrum, MaterialIds.pewter);
 
     // material categories

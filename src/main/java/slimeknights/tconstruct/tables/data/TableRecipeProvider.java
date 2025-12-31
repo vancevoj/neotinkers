@@ -28,6 +28,7 @@ import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.common.data.BaseRecipeProvider;
 import slimeknights.tconstruct.fluids.TinkerFluids;
 import slimeknights.tconstruct.library.data.recipe.CraftingNBTWrapper;
+import slimeknights.tconstruct.library.json.predicate.material.MaterialPredicate;
 import slimeknights.tconstruct.library.recipe.ingredient.MaterialIngredient;
 import slimeknights.tconstruct.library.recipe.material.MaterialsConsumerBuilder;
 import slimeknights.tconstruct.library.recipe.partbuilder.Pattern;
@@ -234,8 +235,9 @@ public class TableRecipeProvider extends BaseRecipeProvider {
 
     // material recipes - for the material fallbacks
     Consumer<FinishedRecipe> materialConsumer = MaterialsConsumerBuilder.shaped("m").build(consumer);
+    Ingredient fakeStorageBlock = MaterialIngredient.of(TinkerToolParts.fakeStorageBlock, MaterialPredicate.tag(TinkerTags.Materials.COMPATABILITY_ALLOYS));
     ShapedRecipeBuilder.shaped(RecipeCategory.MISC, TinkerTables.tinkersAnvil)
-      .define('m', MaterialIngredient.of(TinkerToolParts.fakeStorageBlock))
+      .define('m', fakeStorageBlock)
       .define('s', TinkerTags.Items.SEARED_BLOCKS)
       .pattern("mmm")
       .pattern(" s ")
@@ -243,7 +245,7 @@ public class TableRecipeProvider extends BaseRecipeProvider {
       .unlockedBy("has_item", has(TinkerToolParts.fakeStorageBlock))
       .save(materialConsumer, wrap(TinkerTables.tinkersAnvil, folder, "_material"));
     ShapedRecipeBuilder.shaped(RecipeCategory.MISC, TinkerTables.scorchedAnvil)
-      .define('m', MaterialIngredient.of(TinkerToolParts.fakeStorageBlock))
+      .define('m', fakeStorageBlock)
       .define('s', TinkerTags.Items.SCORCHED_BLOCKS)
       .pattern("mmm")
       .pattern(" s ")
@@ -252,7 +254,7 @@ public class TableRecipeProvider extends BaseRecipeProvider {
       .save(materialConsumer, wrap(TinkerTables.scorchedAnvil, folder, "_material"));
     materialConsumer = MaterialsConsumerBuilder.shaped("m").build(toolForge);
     ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, TinkerTables.tinkersAnvil)
-      .define('m', MaterialIngredient.of(TinkerToolParts.fakeStorageBlock))
+      .define('m', fakeStorageBlock)
       .define('s', TinkerTags.Items.SEARED_BLOCKS)
       .define('t', TinkerTables.tinkerStation)
       .pattern("sss")
@@ -261,7 +263,7 @@ public class TableRecipeProvider extends BaseRecipeProvider {
       .unlockedBy("has_item", has(TinkerToolParts.fakeStorageBlock))
       .save(materialConsumer, location(folder + "seared_forge_material"));
     ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, TinkerTables.scorchedAnvil)
-      .define('m', MaterialIngredient.of(TinkerToolParts.fakeStorageBlock))
+      .define('m', fakeStorageBlock)
       .define('s', TinkerTags.Items.SCORCHED_BLOCKS)
       .define('t', TinkerTables.tinkerStation)
       .pattern("sss")

@@ -781,7 +781,9 @@ public class TinkerTags {
 
     /** Materials acting as compatability metals. Will allow them to use {@link slimeknights.tconstruct.tools.TinkerToolParts#fakeIngot} assuming they lack an ingot. */
     public static final TagKey<IMaterial> COMPATABILITY_METALS = local("compatibility_metals");
-    /** Materials acting as compatability alloys. Will allow them to use {@link slimeknights.tconstruct.tools.TinkerToolParts#fakeStorageBlock}. */
+    /** Materials acting as compatability metals with a block form. Will allow them to use {@link slimeknights.tconstruct.tools.TinkerToolParts#fakeStorageBlock}. */
+    public static final TagKey<IMaterial> COMPATABILITY_BLOCKS = local("compatibility_metals/blocks");
+    /** Materials acting as compatability alloys. Will allow them to use {@link slimeknights.tconstruct.tables.TinkerTables#tinkersAnvil}. Typically, the same as {@link #COMPATABILITY_BLOCKS}, though left separate for datapack flexibility. */
     public static final TagKey<IMaterial> COMPATABILITY_ALLOYS = local("compatibility_metals/alloys");
 
     // tags for book material lists
