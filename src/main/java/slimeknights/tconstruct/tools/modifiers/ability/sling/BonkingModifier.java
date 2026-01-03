@@ -133,8 +133,8 @@ public class BonkingModifier extends SlingModifier implements MeleeHitModifierHo
 
             // spawn the bonk particle
             ToolAttackUtil.spawnAttackParticle(TinkerTools.bonkAttackParticle.get(), player, 0.6d);
-            if (player instanceof ServerPlayer playerMP) {
-              TinkerNetwork.getInstance().sendVanillaPacket(new ClientboundSetEntityMotionPacket(player), playerMP);
+            if (target instanceof ServerPlayer playerMP) {
+              TinkerNetwork.getInstance().sendVanillaPacket(new ClientboundSetEntityMotionPacket(target), playerMP);
             }
 
             // modifier callbacks
