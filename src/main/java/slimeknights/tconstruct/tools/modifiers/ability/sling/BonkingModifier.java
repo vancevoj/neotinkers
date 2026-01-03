@@ -25,6 +25,7 @@ import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.hook.build.ConditionalStatModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.combat.MeleeDamageModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.combat.MeleeHitModifierHook;
+import slimeknights.tconstruct.library.modifiers.hook.interaction.EntityInteractionModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.interaction.GeneralInteractionModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.interaction.InteractionSource;
 import slimeknights.tconstruct.library.modifiers.hook.special.sling.SlingAngleModifierHook;
@@ -104,7 +105,7 @@ public class BonkingModifier extends SlingModifier implements MeleeHitModifierHo
           BlockHitResult mop = ModifiableItem.blockRayTrace(level, player, ClipContext.Fluid.NONE);
           if (mop.getType() != HitResult.Type.BLOCK || targetDist < mop.getBlockPos().distToCenterSqr(start)) {
             // melee tools also do damage as a treat
-            if (tool.hasTag(TinkerTags.Items.MELEE) && ToolAttackUtil.isAttackable(entity, target)) {
+            if (tool.hasTag(TinkerTags.Items.MELEE) && !tool.getVolatileData().getBoolean(EntityInteractionModifierHook.NO_MELEE) && ToolAttackUtil.isAttackable(entity, target)) {
               ModDataNBT data = tool.getPersistentData();
               data.putBoolean(IS_BONKING, true);
               InteractionHand hand = player.getUsedItemHand();
