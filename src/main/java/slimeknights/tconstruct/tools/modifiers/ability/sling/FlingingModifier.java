@@ -12,6 +12,7 @@ import slimeknights.tconstruct.common.Sounds;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.hook.special.sling.SlingAngleModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.special.sling.SlingForceModifierHook;
+import slimeknights.tconstruct.library.modifiers.hook.special.sling.SlingLaunchModifierHook;
 import slimeknights.tconstruct.library.tools.helper.ModifierUtil;
 import slimeknights.tconstruct.library.tools.helper.ToolDamageUtil;
 import slimeknights.tconstruct.library.tools.item.ModifiableItem;
@@ -44,6 +45,10 @@ public class FlingingModifier extends SlingModifier {
           ));
           player.push(angle.x * force, angle.y * force, angle.z * force);
           SlimeBounceHandler.addBounceHandler(player);
+
+          // modifier callbacks
+          SlingLaunchModifierHook.afterSlingLaunch(tool, entity, entity, modifier, force, multiplier, angle);
+
           if (!level.isClientSide) {
             level.playSound(null, player.getX(), player.getY(), player.getZ(), Sounds.SLIME_SLING.getSound(), player.getSoundSource(), 1, 1);
             player.causeFoodExhaustion(0.2F);

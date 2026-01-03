@@ -29,6 +29,7 @@ import slimeknights.tconstruct.library.modifiers.hook.interaction.GeneralInterac
 import slimeknights.tconstruct.library.modifiers.hook.interaction.InteractionSource;
 import slimeknights.tconstruct.library.modifiers.hook.special.sling.SlingAngleModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.special.sling.SlingForceModifierHook;
+import slimeknights.tconstruct.library.modifiers.hook.special.sling.SlingLaunchModifierHook;
 import slimeknights.tconstruct.library.module.ModuleHookMap.Builder;
 import slimeknights.tconstruct.library.tools.context.ToolAttackContext;
 import slimeknights.tconstruct.library.tools.helper.ModifierUtil;
@@ -134,6 +135,9 @@ public class BonkingModifier extends SlingModifier implements MeleeHitModifierHo
             if (player instanceof ServerPlayer playerMP) {
               TinkerNetwork.getInstance().sendVanillaPacket(new ClientboundSetEntityMotionPacket(player), playerMP);
             }
+
+            // modifier callbacks
+            SlingLaunchModifierHook.afterSlingLaunch(tool, entity, target, modifier, force, multiplier, angle);
 
             // cooldowns and stuff
             level.playSound(null, player.getX(), player.getY(), player.getZ(), Sounds.BONK.getSound(), player.getSoundSource(), 1, 0.5f);

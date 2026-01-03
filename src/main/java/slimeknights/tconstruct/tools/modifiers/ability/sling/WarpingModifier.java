@@ -13,6 +13,7 @@ import slimeknights.tconstruct.library.events.teleport.SlingModifierTeleportEven
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.hook.special.sling.SlingAngleModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.special.sling.SlingForceModifierHook;
+import slimeknights.tconstruct.library.modifiers.hook.special.sling.SlingLaunchModifierHook;
 import slimeknights.tconstruct.library.tools.helper.ModifierUtil;
 import slimeknights.tconstruct.library.tools.helper.ToolDamageUtil;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
@@ -67,6 +68,9 @@ public class WarpingModifier extends SlingModifier {
           MinecraftForge.EVENT_BUS.post(event);
           if (!event.isCanceled()) {
             player.teleportTo(event.getTargetX(), event.getTargetY(), event.getTargetZ());
+
+            // only called if we successfully teleport
+            SlingLaunchModifierHook.afterSlingLaunch(tool, entity, entity, modifier, force, multiplier, angle);
 
             // particle effect from EnderPearlEntity
             for (int i = 0; i < 32; ++i) {

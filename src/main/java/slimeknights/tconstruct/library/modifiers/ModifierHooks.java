@@ -73,6 +73,7 @@ import slimeknights.tconstruct.library.modifiers.hook.special.PlantHarvestModifi
 import slimeknights.tconstruct.library.modifiers.hook.special.ShearsModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.special.sling.SlingAngleModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.special.sling.SlingForceModifierHook;
+import slimeknights.tconstruct.library.modifiers.hook.special.sling.SlingLaunchModifierHook;
 import slimeknights.tconstruct.library.module.ModuleHook;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.ModDataNBT;
@@ -356,6 +357,8 @@ public class ModifierHooks {
   public static final ModuleHook<SlingForceModifierHook> SLING_FORCE = register("sling_force", SlingForceModifierHook.class, SlingForceModifierHook.ComposeMerger::new, (tool, modifier, holder, target, slingSource, force, multiplier) -> force);
   /** Hook called when {@link slimeknights.tconstruct.tools.modifiers.ability.sling.SlingModifier} is calculating the angle for the effect. */
   public static final ModuleHook<SlingAngleModifierHook> SLING_ANGLE = register("sling_angle", SlingAngleModifierHook.class, SlingAngleModifierHook.ComposeMerger::new, (tool, modifier, holder, target, slingSource, power, multiplier, angle) -> angle);
+  /** Hook called after {@link slimeknights.tconstruct.tools.modifiers.ability.sling.SlingModifier} moved the targeted entity. */
+  public static final ModuleHook<SlingLaunchModifierHook> SLING_LAUNCH = register("sling_launch", SlingLaunchModifierHook.class, SlingLaunchModifierHook.AllMerger::new, (tool, modifier, holder, target, slingSource, force, multiplier, angle) -> {});
 
 
   /* Misc Armor */
