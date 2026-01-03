@@ -6,6 +6,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.UseAnim;
+import slimeknights.tconstruct.common.config.Config;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.hook.build.ConditionalStatModifierHook;
@@ -84,7 +85,10 @@ public abstract class SlingModifier extends NoLevelsModifier implements GeneralI
 
   /** Scales the given knockback value using the two attributes */
   public static float scaleKnockback(LivingEntity target, float knockback) {
-    return (float) (knockback * target.getAttributeValue(TinkerAttributes.KNOCKBACK_MULTIPLIER.get()) * (1 - target.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE)));
+    if (Config.COMMON.syncKnockbackResistance.get()) {
+      return (float) (knockback * target.getAttributeValue(TinkerAttributes.KNOCKBACK_MULTIPLIER.get()) * (1 - target.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE)));
+    }
+    return knockback;
   }
 
   /** Checks if this modifier is the one actively being used. Used for failure sound effects. */

@@ -28,6 +28,7 @@ public class Config {
   public static class Common {
     public final BooleanValue shouldSpawnWithTinkersBook;
     public final List<ConfigurableAction> toolTweaks;
+    public final BooleanValue syncKnockbackResistance;
 
     // recipes
     public final BooleanValue addGravelToFlintRecipe;
@@ -76,6 +77,11 @@ public class Config {
                                          "If true, extends the applicable slots for the blast protection enchantment to work better with shields. Will not impact gameplay with the vanilla enchantment.\nIf false, blast protection on a shield will not reduce explosion knockback.",
                                          () -> Enchantments.BLAST_PROTECTION.slots = EquipmentSlot.values()));
       toolTweaks = actions.build();
+
+      this.syncKnockbackResistance = builder
+        .comment("If true, makes the knockback resistance attribute sync its value to client side. This allows modifiers such as springing and flinging to work properly.",
+          "If false, will disable those modifier's response to knockback entirely to avoid desyncs or unexpected behavior if another mod enables the sync. This includes it's benefit from increased knockback.")
+        .define("syncKnockbackResistance", true);
 
       this.repairKitAmount = builder
         .comment("Amount of durability restored by a repair kit in terms of ingots. Does not affect the cost to create the kit, that is controlled by JSON.")
