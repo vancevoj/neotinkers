@@ -25,7 +25,8 @@ import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import java.util.List;
 
 /**
- * Module to multiply force of a sling modifier. Allows adding additional bonuses beyond those provided by {@link slimeknights.tconstruct.library.tools.stat.ToolStats#PROJECTILE_DAMAGE}
+ * Module to multiply force of a sling modifier. Allows adding additional bonuses beyond those provided by {@link slimeknights.tconstruct.library.tools.stat.ToolStats#PROJECTILE_DAMAGE}, conditioned on the modifier causing the sling.
+ * Does not support formulas with custom variables, for that functionality see {@link slimeknights.tconstruct.library.modifiers.modules.behavior.ConditionalStatModule} or {@link ConditionalPowerModule}.
  * @param target     Filter on entities to receive knockback
  * @param formula    Formula to compute the force multiplier
  */
