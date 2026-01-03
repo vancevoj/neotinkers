@@ -6,6 +6,7 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.RegistryObject;
 import slimeknights.mantle.registration.deferred.AttributeDeferredRegister;
@@ -72,11 +73,16 @@ public class TinkerAttributes {
     addToAll(event, KNOCKBACK_MULTIPLIER);
     addToAll(event, GOOD_EFFECT_DURATION);
     addToAll(event, BAD_EFFECT_DURATION);
+  }
 
-    // make knockback resistance syncable, as we need that info clientside
-    if (Config.COMMON.syncKnockbackResistance.get()) {
-      Attributes.KNOCKBACK_RESISTANCE.setSyncable(true);
-    }
+  @SubscribeEvent
+  void commonSetup(FMLCommonSetupEvent event) {
+    event.enqueueWork(() -> {
+      // make knockback resistance syncable, as we need that info clientside
+      if (Config.COMMON.syncKnockbackResistance.get()) {
+        Attributes.KNOCKBACK_RESISTANCE.setSyncable(true);
+      }
+    });
   }
 
   /** Adds an attribute to all entities */
