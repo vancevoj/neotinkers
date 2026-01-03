@@ -50,6 +50,7 @@ import slimeknights.tconstruct.library.json.LevelingInt;
 import slimeknights.tconstruct.library.json.LevelingValue;
 import slimeknights.tconstruct.library.json.RandomLevelingValue;
 import slimeknights.tconstruct.library.json.predicate.TinkerPredicate;
+import slimeknights.tconstruct.library.json.predicate.modifier.ModifierPredicate;
 import slimeknights.tconstruct.library.json.predicate.tool.HasModifierPredicate;
 import slimeknights.tconstruct.library.json.predicate.tool.PersistentDataPredicate;
 import slimeknights.tconstruct.library.json.predicate.tool.ToolContextPredicate;
@@ -122,6 +123,7 @@ import slimeknights.tconstruct.library.modifiers.modules.combat.KnockbackModule;
 import slimeknights.tconstruct.library.modifiers.modules.combat.LootingModule;
 import slimeknights.tconstruct.library.modifiers.modules.combat.MobEffectModule;
 import slimeknights.tconstruct.library.modifiers.modules.combat.ProjectileExplosionModule;
+import slimeknights.tconstruct.library.modifiers.modules.combat.SlingForceModule;
 import slimeknights.tconstruct.library.modifiers.modules.display.DurabilityBarColorModule;
 import slimeknights.tconstruct.library.modifiers.modules.display.MaterialVariantColorModule;
 import slimeknights.tconstruct.library.modifiers.modules.display.ModifierVariantColorModule;
@@ -420,16 +422,22 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
 
 
     /// attack
+    IJsonPredicate<ModifierId> knockbackSlings = ModifierPredicate.tag(TinkerTags.Modifiers.KNOCKBACK_SLINGS);
     buildModifier(TinkerModifiers.knockback)
       // attributes are better for monster usage. However, projectiles don't run attributes, so run a projectile only knockback module
       .addModule(KnockbackModule.builder().projectile(ProjectilePredicate.PROJECTILE).eachLevel(0.5f))
+      .addModule(SlingForceModule.builder().sling(knockbackSlings).eachLevel(0.25f)) // you get 50% of power as force, so we want half of that for knockback
       .addModule(AttributeModule.builder(Attributes.ATTACK_KNOCKBACK, Operation.ADDITION).slots(armorMainHand).eachLevel(1));
     buildModifier(TinkerModifiers.padded)
       .priority(75) // run after knockback
       .addModule(KnockbackModule.builder().formula()
         .variable(VALUE)
         .constant(2).variable(LEVEL).power() // 2^LEVEL
-        .divide().build()); // KNOCKBACK / 2^LEVEL
+        .divide().build()) // KNOCKBACK / 2^LEVEL
+      .addModule(SlingForceModule.builder().sling(knockbackSlings).formula()
+        .variable(VALUE)
+        .constant(2).variable(LEVEL).power() // 2^LEVEL
+        .divide().build()); // FORCE / 2^LEVEL
     buildModifier(ModifierIds.sticky)
       .addModule(MobEffectModule.builder(MobEffects.MOVEMENT_SLOWDOWN).level(RandomLevelingValue.perLevel(0, 0.5f)).time(RandomLevelingValue.random(20, 10)).build());
 

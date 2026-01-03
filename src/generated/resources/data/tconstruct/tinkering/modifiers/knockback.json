@@ -7,6 +7,14 @@
       "each_level": 0.5
     },
     {
+      "type": "tconstruct:sling_force",
+      "each_level": 0.25,
+      "sling": {
+        "type": "tconstruct:tag",
+        "tag": "tconstruct:knockback_slings"
+      }
+    },
+    {
       "type": "tconstruct:attribute",
       "attribute": "minecraft:generic.attack_knockback",
       "each_level": 1.0,

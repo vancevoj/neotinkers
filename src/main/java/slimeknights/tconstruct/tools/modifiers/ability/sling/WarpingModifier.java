@@ -11,6 +11,8 @@ import net.minecraftforge.common.MinecraftForge;
 import slimeknights.tconstruct.common.Sounds;
 import slimeknights.tconstruct.library.events.teleport.SlingModifierTeleportEvent;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
+import slimeknights.tconstruct.library.modifiers.hook.special.sling.SlingAngleModifierHook;
+import slimeknights.tconstruct.library.modifiers.hook.special.sling.SlingForceModifierHook;
 import slimeknights.tconstruct.library.tools.helper.ModifierUtil;
 import slimeknights.tconstruct.library.tools.helper.ToolDamageUtil;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
@@ -21,14 +23,21 @@ public class WarpingModifier extends SlingModifier {
   public void beforeReleaseUsing(IToolStackView tool, ModifierEntry modifier, LivingEntity entity, int useDuration, int timeLeft, ModifierEntry activeModifier) {
     Level level = entity.level();
     if (!level.isClientSide && entity instanceof ServerPlayer player) {
-      float f = getForce(tool, modifier, entity, timeLeft, false) * 6;
-      if (f > 0) {
+      float charge = getCharge(tool, modifier, timeLeft);
+      if (charge > 0) {
+        float multiplier = charge * 6;
+        float force = SlingForceModifierHook.modifySlingForce(tool, entity, entity, modifier, getPower(tool, entity) * multiplier, multiplier);
         Vec3 look = player.getLookAngle();
         float inaccuracy = ModifierUtil.getInaccuracy(tool, player) * 0.0075f;
         RandomSource random = player.getRandom();
-        double offX = (look.x + random.nextGaussian() * inaccuracy) * f;
-        double offY = (look.y + random.nextGaussian() * inaccuracy) * f + 1; // add extra to help with bad collisions
-        double offZ = (look.z + random.nextGaussian() * inaccuracy) * f;
+        Vec3 angle = SlingAngleModifierHook.modifySlingAngle(tool, entity, entity, modifier, force, multiplier, new Vec3(
+          look.x + random.nextGaussian() * inaccuracy,
+          look.y + random.nextGaussian() * inaccuracy,
+          look.z + random.nextGaussian() * inaccuracy
+        ));
+        double offX = angle.x * force;
+        double offY = angle.y * force + 1; // add extra to help with bad collisions
+        double offZ = angle.z * force;
 
         // find teleport target
         BlockPos furthestPos = null;

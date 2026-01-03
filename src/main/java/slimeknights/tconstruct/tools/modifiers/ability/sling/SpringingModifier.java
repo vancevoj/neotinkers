@@ -12,6 +12,8 @@ import slimeknights.tconstruct.common.Sounds;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.hook.interaction.GeneralInteractionModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.interaction.InteractionSource;
+import slimeknights.tconstruct.library.modifiers.hook.special.sling.SlingAngleModifierHook;
+import slimeknights.tconstruct.library.modifiers.hook.special.sling.SlingForceModifierHook;
 import slimeknights.tconstruct.library.tools.helper.ModifierUtil;
 import slimeknights.tconstruct.library.tools.helper.ToolDamageUtil;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
@@ -35,16 +37,20 @@ public class SpringingModifier extends SlingModifier {
     if (entity instanceof Player player && !player.isFallFlying()) {
       player.causeFoodExhaustion(0.2F);
 
-      float f = getForce(tool, modifier, player, timeLeft, true) * 1.05f;
-      if (f > 0) {
-        Vec3 look = player.getLookAngle().add(0, Math.max(0, 0.5 - f * 0.1), 0).normalize();
+      float charge = getCharge(tool, modifier, timeLeft);
+      if (charge > 0) {
         float inaccuracy = ModifierUtil.getInaccuracy(tool, player) * 0.0075f;
         RandomSource random = player.getRandom();
-        f = scaleKnockback(player, f);
-        player.push(
-          (look.x + random.nextGaussian() * inaccuracy) * f,
-          (look.y + random.nextGaussian() * inaccuracy) * f / 2f,
-          (look.z + random.nextGaussian() * inaccuracy) * f);
+        float multiplier = scaleKnockback(player, charge * 1.05f);
+        float force = SlingForceModifierHook.modifySlingForce(tool, entity, entity, modifier, getPower(tool, player) * multiplier, multiplier);
+        Vec3 look = player.getLookAngle().add(0, Math.max(0, 0.5 - force * 0.1), 0).normalize();
+        // run the hook to adjust motion
+        Vec3 angle = SlingAngleModifierHook.modifySlingAngle(tool, entity, entity, modifier, force, multiplier, new Vec3(
+          (look.x + random.nextGaussian() * inaccuracy),
+          (look.y + random.nextGaussian() * inaccuracy) / 2f,
+          (look.z + random.nextGaussian() * inaccuracy)
+        ));
+        player.push(force * angle.x, force * angle.y, force * angle.z);
 
         // if on the ground, get off the ground so jumping is not required before springing
         if (player.onGround()) {

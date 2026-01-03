@@ -27,6 +27,8 @@ import slimeknights.tconstruct.library.modifiers.hook.combat.MeleeDamageModifier
 import slimeknights.tconstruct.library.modifiers.hook.combat.MeleeHitModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.interaction.GeneralInteractionModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.interaction.InteractionSource;
+import slimeknights.tconstruct.library.modifiers.hook.special.sling.SlingAngleModifierHook;
+import slimeknights.tconstruct.library.modifiers.hook.special.sling.SlingForceModifierHook;
 import slimeknights.tconstruct.library.module.ModuleHookMap.Builder;
 import slimeknights.tconstruct.library.tools.context.ToolAttackContext;
 import slimeknights.tconstruct.library.tools.helper.ModifierUtil;
@@ -85,8 +87,8 @@ public class BonkingModifier extends SlingModifier implements MeleeHitModifierHo
   public void beforeReleaseUsing(IToolStackView tool, ModifierEntry modifier, LivingEntity entity, int useDuration, int timeLeft, ModifierEntry activeModifier) {
     Level level = entity.level();
     if (!level.isClientSide && (entity instanceof Player player)) {
-      float f = getForce(tool, modifier, player, timeLeft, true);
-      if (f > 0) {
+      float charge = getCharge(tool, modifier, timeLeft);
+      if (charge > 0) {
         Vec3 start = player.getEyePosition(1F);
         Vec3 look = player.getLookAngle();
         Vec3 direction = start.add(look.x * RANGE, look.y * RANGE, look.z * RANGE);
@@ -105,7 +107,7 @@ public class BonkingModifier extends SlingModifier implements MeleeHitModifierHo
               ModDataNBT data = tool.getPersistentData();
               data.putBoolean(IS_BONKING, true);
               InteractionHand hand = player.getUsedItemHand();
-              ToolAttackContext.Builder builder = ToolAttackContext.attacker(entity).target(target).hand(hand).cooldown(Math.min(1, f)).extraAttack();
+              ToolAttackContext.Builder builder = ToolAttackContext.attacker(entity).target(target).hand(hand).cooldown(Math.min(1, charge)).extraAttack();
               if (hand == InteractionHand.MAIN_HAND) {
                 builder.applyAttributes();
               } else {
@@ -118,7 +120,14 @@ public class BonkingModifier extends SlingModifier implements MeleeHitModifierHo
             // send it flying
             float inaccuracy = ModifierUtil.getInaccuracy(tool, player) * 0.0075f;
             RandomSource random = player.getRandom();
-            target.knockback(f * 3, -look.x + random.nextGaussian() * inaccuracy, -look.z + random.nextGaussian() * inaccuracy);
+            float multiplier = charge * 3;
+            float force = SlingForceModifierHook.modifySlingForce(tool, entity, target, modifier, getPower(tool, player) * multiplier, multiplier);
+            Vec3 angle = SlingAngleModifierHook.modifySlingAngle(tool, entity, target, modifier, force, multiplier, new Vec3(
+              (-look.x + random.nextGaussian() * inaccuracy),
+              0,
+              (-look.z + random.nextGaussian() * inaccuracy)
+            ));
+            target.knockback(force, angle.x, angle.z);
 
             // spawn the bonk particle
             ToolAttackUtil.spawnAttackParticle(TinkerTools.bonkAttackParticle.get(), player, 0.6d);

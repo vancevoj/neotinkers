@@ -10,6 +10,8 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import slimeknights.tconstruct.common.Sounds;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
+import slimeknights.tconstruct.library.modifiers.hook.special.sling.SlingAngleModifierHook;
+import slimeknights.tconstruct.library.modifiers.hook.special.sling.SlingForceModifierHook;
 import slimeknights.tconstruct.library.tools.helper.ModifierUtil;
 import slimeknights.tconstruct.library.tools.helper.ToolDamageUtil;
 import slimeknights.tconstruct.library.tools.item.ModifiableItem;
@@ -27,15 +29,20 @@ public class FlingingModifier extends SlingModifier {
       BlockHitResult mop = ModifiableItem.blockRayTrace(level, player, ClipContext.Fluid.NONE);
       if (mop.getType() == HitResult.Type.BLOCK) {
         // we fling the inverted player look vector
-        float f = getForce(tool, modifier, entity, timeLeft, true) * 4;
-        if (f > 0) {
+        float charge = getCharge(tool, modifier, timeLeft);
+        if (charge > 0) {
           Vec3 vec = player.getLookAngle().normalize();
           float inaccuracy = ModifierUtil.getInaccuracy(tool, player) * 0.0075f;
           RandomSource random = player.getRandom();
-          f = scaleKnockback(player, f);
-          player.push((vec.x + random.nextGaussian() * inaccuracy) * -f,
-                      (vec.y + random.nextGaussian() * inaccuracy) * -f / 3f,
-                      (vec.z + random.nextGaussian() * inaccuracy) * -f);
+          float multiplier = scaleKnockback(player, charge * 4);
+          float force = SlingForceModifierHook.modifySlingForce(tool, entity, entity, modifier, getPower(tool, player) * multiplier, multiplier);
+          // run the hook to adjust motion
+          Vec3 angle = SlingAngleModifierHook.modifySlingAngle(tool, entity, entity, modifier, force, multiplier, new Vec3(
+            -(vec.x + random.nextGaussian() * inaccuracy),
+            -(vec.y + random.nextGaussian() * inaccuracy) / 3f,
+            -(vec.z + random.nextGaussian() * inaccuracy)
+          ));
+          player.push(angle.x * force, angle.y * force, angle.z * force);
           SlimeBounceHandler.addBounceHandler(player);
           if (!level.isClientSide) {
             level.playSound(null, player.getX(), player.getY(), player.getZ(), Sounds.SLIME_SLING.getSound(), player.getSoundSource(), 1, 1);
