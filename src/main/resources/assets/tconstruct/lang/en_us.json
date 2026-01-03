@@ -1160,6 +1160,7 @@
   "item.tconstruct.slime_chestplate": "Slimelytra",
   "item.tconstruct.slime_leggings": "Slimeshell",
   "item.tconstruct.slime_boots": "Slimeboots",
+  "item.tconstruct.slime_helmet.material.tconstruct.ui_render.head": "Any Slimeskull",
   "item.tconstruct.slime_helmet.material.tconstruct.glass":         "Creeper Slimeskull",
   "item.tconstruct.slime_helmet.material.tconstruct.ender_pearl":   "Enderman Slimeskull",
   "item.tconstruct.slime_helmet.material.tconstruct.bone":          "Skeleton Slimeskull",
