@@ -1,13 +1,14 @@
 {
   "type": "tconstruct:melting",
-  "ingredient": [
+  "byproducts": [
     {
-      "item": "tconstruct:scorched_basin"
-    },
-    {
-      "item": "tconstruct:scorched_table"
+      "amount": 40,
+      "tag": "forge:molten_gold"
     }
   ],
+  "ingredient": {
+    "item": "tconstruct:scorched_table"
+  },
   "result": {
     "amount": 1750,
     "fluid": "tconstruct:scorched_stone"
