@@ -105,7 +105,9 @@ public class BonkingModifier extends SlingModifier implements MeleeHitModifierHo
           BlockHitResult mop = ModifiableItem.blockRayTrace(level, player, ClipContext.Fluid.NONE);
           if (mop.getType() != HitResult.Type.BLOCK || targetDist < mop.getBlockPos().distToCenterSqr(start)) {
             // melee tools also do damage as a treat
+            boolean didBonk = false;
             if (tool.hasTag(TinkerTags.Items.MELEE) && !tool.getVolatileData().getBoolean(EntityInteractionModifierHook.NO_MELEE) && ToolAttackUtil.isAttackable(entity, target)) {
+              didBonk = true;
               ModDataNBT data = tool.getPersistentData();
               data.putBoolean(IS_BONKING, true);
               InteractionHand hand = player.getUsedItemHand();
@@ -124,31 +126,40 @@ public class BonkingModifier extends SlingModifier implements MeleeHitModifierHo
             RandomSource random = player.getRandom();
             float multiplier = charge * 3;
             float force = SlingForceModifierHook.modifySlingForce(tool, entity, target, modifier, getPower(tool, player) * multiplier, multiplier);
-            Vec3 angle = SlingAngleModifierHook.modifySlingAngle(tool, entity, target, modifier, force, multiplier, new Vec3(
-              (-look.x + random.nextGaussian() * inaccuracy),
-              0,
-              (-look.z + random.nextGaussian() * inaccuracy)
-            ));
-            target.knockback(force, angle.x, angle.z);
-
-            // spawn the bonk particle
-            ToolAttackUtil.spawnAttackParticle(TinkerTools.bonkAttackParticle.get(), player, 0.6d);
-            if (target instanceof ServerPlayer playerMP) {
-              TinkerNetwork.getInstance().sendVanillaPacket(new ClientboundSetEntityMotionPacket(target), playerMP);
+            Vec3 angle = Vec3.ZERO;
+            if (force > 0) {
+              // skip the bonk if we lack force, but the attack is fine
+              angle = SlingAngleModifierHook.modifySlingAngle(tool, entity, target, modifier, force, multiplier, new Vec3(
+                (-look.x + random.nextGaussian() * inaccuracy),
+                0,
+                (-look.z + random.nextGaussian() * inaccuracy)
+              ));
+              target.knockback(force, angle.x, angle.z);
+              if (target instanceof ServerPlayer playerMP) {
+                TinkerNetwork.getInstance().sendVanillaPacket(new ClientboundSetEntityMotionPacket(target), playerMP);
+              }
+              didBonk = true;
             }
 
-            // modifier callbacks
-            SlingLaunchModifierHook.afterSlingLaunch(tool, entity, target, modifier, force, multiplier, angle);
+            // if we dealt damage or knockback, apply bonk effects
+            if (didBonk) {
+              // spawn the bonk particle
+              ToolAttackUtil.spawnAttackParticle(TinkerTools.bonkAttackParticle.get(), player, 0.6d);
 
-            // cooldowns and stuff
-            level.playSound(null, player.getX(), player.getY(), player.getZ(), Sounds.BONK.getSound(), player.getSoundSource(), 1, 0.5f);
-            player.causeFoodExhaustion(0.2F);
-            player.getCooldowns().addCooldown(tool.getItem(), 3);
-            ToolDamageUtil.damageAnimated(tool, 1, entity);
-            return;
+              // modifier callbacks
+              SlingLaunchModifierHook.afterSlingLaunch(tool, entity, target, modifier, force, multiplier, angle);
+
+              // cooldowns and stuff
+              level.playSound(null, player.getX(), player.getY(), player.getZ(), Sounds.BONK.getSound(), player.getSoundSource(), 1, 0.5f);
+              player.causeFoodExhaustion(0.2F);
+              player.getCooldowns().addCooldown(tool.getItem(), 3);
+              ToolDamageUtil.damageAnimated(tool, 1, entity);
+              return;
+            }
           }
         }
       }
+      // play failure sound
       if (isActive(tool, modifier, activeModifier)) {
         level.playSound(null, player.getX(), player.getY(), player.getZ(), Sounds.BONK.getSound(), player.getSoundSource(), 1, 1f);
       }

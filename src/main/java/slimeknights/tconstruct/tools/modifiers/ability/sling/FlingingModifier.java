@@ -29,40 +29,46 @@ public class FlingingModifier extends SlingModifier {
       // check if player was targeting a block
       BlockHitResult mop = ModifiableItem.blockRayTrace(level, player, ClipContext.Fluid.NONE);
       if (mop.getType() == HitResult.Type.BLOCK) {
-        // we fling the inverted player look vector
+        // must be sufficiently charged, not have too much knockback resistance, and not have any modifier zeroing its force
         float charge = getCharge(tool, modifier, timeLeft);
         if (charge > 0) {
-          Vec3 vec = player.getLookAngle().normalize();
-          float inaccuracy = ModifierUtil.getInaccuracy(tool, player) * 0.0075f;
-          RandomSource random = player.getRandom();
           float multiplier = scaleKnockback(player, charge * 4);
-          float force = SlingForceModifierHook.modifySlingForce(tool, entity, entity, modifier, getPower(tool, player) * multiplier, multiplier);
-          // run the hook to adjust motion
-          Vec3 angle = SlingAngleModifierHook.modifySlingAngle(tool, entity, entity, modifier, force, multiplier, new Vec3(
-            -(vec.x + random.nextGaussian() * inaccuracy),
-            -(vec.y + random.nextGaussian() * inaccuracy) / 3f,
-            -(vec.z + random.nextGaussian() * inaccuracy)
-          ));
-          player.push(angle.x * force, angle.y * force, angle.z * force);
-          SlimeBounceHandler.addBounceHandler(player);
+          if (multiplier > 0) {
+            float force = SlingForceModifierHook.modifySlingForce(tool, entity, entity, modifier, getPower(tool, player) * multiplier, multiplier);
+            if (force > 0) {
+              Vec3 vec = player.getLookAngle().normalize();
+              float inaccuracy = ModifierUtil.getInaccuracy(tool, player) * 0.0075f;
+              RandomSource random = player.getRandom();
 
-          // modifier callbacks
-          SlingLaunchModifierHook.afterSlingLaunch(tool, entity, entity, modifier, force, multiplier, angle);
+              // we fling the inverted player look vector
+              Vec3 angle = SlingAngleModifierHook.modifySlingAngle(tool, entity, entity, modifier, force, multiplier, new Vec3(
+                -(vec.x + random.nextGaussian() * inaccuracy),
+                -(vec.y + random.nextGaussian() * inaccuracy) / 3f,
+                -(vec.z + random.nextGaussian() * inaccuracy)
+              ));
+              player.push(angle.x * force, angle.y * force, angle.z * force);
+              SlimeBounceHandler.addBounceHandler(player);
 
-          if (!level.isClientSide) {
-            level.playSound(null, player.getX(), player.getY(), player.getZ(), Sounds.SLIME_SLING.getSound(), player.getSoundSource(), 1, 1);
-            player.causeFoodExhaustion(0.2F);
-            player.getCooldowns().addCooldown(tool.getItem(), 3);
-            ToolDamageUtil.damageAnimated(tool, 1, entity);
+              // modifier callbacks
+              SlingLaunchModifierHook.afterSlingLaunch(tool, entity, entity, modifier, force, multiplier, angle);
+
+              if (!level.isClientSide) {
+                level.playSound(null, player.getX(), player.getY(), player.getZ(), Sounds.SLIME_SLING.getSound(), player.getSoundSource(), 1, 1);
+                player.causeFoodExhaustion(0.2F);
+                player.getCooldowns().addCooldown(tool.getItem(), 3);
+                ToolDamageUtil.damageAnimated(tool, 1, entity);
+              }
+              // apply drill attack if the modifier is present
+              if (ModifierUtil.canPerformAction(tool, TinkerToolActions.DRILL_ATTACK)) {
+                player.startAutoSpinAttack(20);
+              }
+              return;
+            }
           }
-          // apply drill attack if the modifier is present
-          if (ModifierUtil.canPerformAction(tool, TinkerToolActions.DRILL_ATTACK)) {
-            player.startAutoSpinAttack(20);
-          }
-          return;
         }
       }
     }
+    // play failure sound
     if (isActive(tool, modifier, activeModifier)) {
       level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), Sounds.SLIME_SLING.getSound(), entity.getSoundSource(), 1, 0.5f);
     }

@@ -39,6 +39,9 @@ public interface SlingForceModifierHook {
   static float modifySlingForce(IToolStackView tool, LivingEntity holder, LivingEntity target, ModifierEntry slingSource, float force, float multiplier) {
     for (ModifierEntry entry : tool.getModifiers()) {
       force = entry.getHook(ModifierHooks.SLING_FORCE).modifySlingForce(tool, entry, holder, target, slingSource, force, multiplier);
+      if (force <= 0) {
+        return 0;
+      }
     }
     return force;
   }
