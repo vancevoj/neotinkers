@@ -3,6 +3,18 @@
     "#minecraft:witch_resistant_to",
     "minecraft:wither",
     "minecraft:wither_skull",
-    "minecraft:dragon_breath"
+    "minecraft:dragon_breath",
+    {
+      "id": "twlightforest:haunt",
+      "required": false
+    },
+    {
+      "id": "twlightforest:ominous_fire",
+      "required": false
+    },
+    {
+      "id": "twlightforest:twilight_scepter",
+      "required": false
+    }
   ]
 }

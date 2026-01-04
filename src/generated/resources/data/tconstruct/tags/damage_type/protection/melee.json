@@ -4,6 +4,42 @@
     "minecraft:mob_attack",
     "minecraft:mob_attack_no_aggro",
     "minecraft:cramming",
-    "minecraft:sting"
+    "minecraft:sting",
+    {
+      "id": "twlightforest:ghast_tear",
+      "required": false
+    },
+    {
+      "id": "twlightforest:hydra_bite",
+      "required": false
+    },
+    {
+      "id": "twlightforest:squish",
+      "required": false
+    },
+    {
+      "id": "twlightforest:axing",
+      "required": false
+    },
+    {
+      "id": "twlightforest:slam",
+      "required": false
+    },
+    {
+      "id": "twlightforest:yeeted",
+      "required": false
+    },
+    {
+      "id": "twlightforest:ant",
+      "required": false
+    },
+    {
+      "id": "twlightforest:clamped",
+      "required": false
+    },
+    {
+      "id": "twlightforest:spiked",
+      "required": false
+    }
   ]
 }

@@ -1,8 +1,12 @@
 package slimeknights.tconstruct.common.data.tags;
 
 import net.minecraft.core.HolderLookup.Provider;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.DamageTypeTagsProvider;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.damagesource.DamageType;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.Nullable;
 import slimeknights.tconstruct.TConstruct;
@@ -58,6 +62,7 @@ import static slimeknights.tconstruct.common.TinkerTags.DamageTypes.MELEE_PROTEC
 import static slimeknights.tconstruct.common.TinkerTags.DamageTypes.MODIFIER_WHITELIST;
 import static slimeknights.tconstruct.common.TinkerTags.DamageTypes.PROJECTILE_PROTECTION;
 
+@SuppressWarnings("removal")
 public class DamageTypeTagProvider extends DamageTypeTagsProvider {
   public DamageTypeTagProvider(PackOutput packOutput, CompletableFuture<Provider> lookup, @Nullable ExistingFileHelper existingFileHelper) {
     super(packOutput, lookup, TConstruct.MOD_ID, existingFileHelper);
@@ -87,5 +92,22 @@ public class DamageTypeTagProvider extends DamageTypeTagsProvider {
     tag(BLAST_PROTECTION).addTag(IS_EXPLOSION);
     tag(MAGIC_PROTECTION).addTag(WITCH_RESISTANT_TO).add(WITHER, WITHER_SKULL, DRAGON_BREATH);
     tag(FALL_PROTECTION).addTag(IS_FALL).add(FLY_INTO_WALL);
+
+    // TF support
+    String tf = "twlightforest";
+    addOptional(MODIFIER_WHITELIST, tf, "axing", "slam", "ant");
+    addOptional(MELEE_PROTECTION, tf, "ghast_tear", "hydra_bite", "squish", "axing", "slam", "yeeted", "ant", "clamped", "spiked");
+    addOptional(MAGIC_PROTECTION, tf, "haunt", "ominous_fire", "twilight_scepter");
+    addOptional(PROJECTILE_PROTECTION, tf, "falling_ice");
+    // anything "magic" is good against lich shields, so tag our magic fluids
+    tag(TagKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(tf, "breaks_lich_shields"))).add(FLUID_MAGIC.values());
+  }
+
+  /** Adds the given IDs from the given domain to the tag as optional entries. */
+  private void addOptional(TagKey<DamageType> tag, String domain, String... names) {
+    TagAppender<DamageType> appender = tag(tag);
+    for (String name : names) {
+      appender.addOptional(new ResourceLocation(domain, name));
+    }
   }
 }
