@@ -346,10 +346,8 @@ public class TooltipUtil {
   public static List<Component> getAmmoStats(IToolStackView tool, @Nullable Player player, List<Component> tooltip, TooltipKey key, TooltipFlag flag) {
     TooltipBuilder builder = new TooltipBuilder(tool, tooltip);
     builder.add(ToolStats.PROJECTILE_DAMAGE);
+    builder.add(ToolStats.VELOCITY);
     builder.add(ToolStats.ACCURACY);
-    if (tool.hasTag(TinkerTags.Items.THROWN_AMMO)) {
-      builder.add(ToolStats.VELOCITY);
-    }
     builder.addAllFreeSlots();
     for (ModifierEntry entry : tool.getModifierList()) {
       entry.getHook(ModifierHooks.TOOLTIP).addTooltip(tool, entry, player, tooltip, key, flag);
