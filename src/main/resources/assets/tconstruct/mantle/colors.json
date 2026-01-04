@@ -301,6 +301,7 @@
     "venom":         "#A2935E",
     "conductive":    "#DBCC0B",
     "spike":         "#E8E5D2",
+    "spiny":         "#649832",
 
     "__traits_armor__": null,
     "consecrated":          "#D3DFE8",

@@ -251,6 +251,9 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
     addMaterialStats(MaterialIds.bamboo,
                      new LimbMaterialStats(70, 0.1f, -0.05f, -0.05f),
                      new GripMaterialStats(-0.05f, 0.05f, 0.75f));
+    addMaterialStats(MaterialIds.cactus,
+      new LimbMaterialStats(110, -0.05f, 0.05f, -0.10f),
+      new GripMaterialStats(-0.1f, -0.05f, 1.5f));
     addMaterialStats(MaterialIds.bone,
                      new LimbMaterialStats(100, 0.05f, -0.05f, 0.05f),
                      new GripMaterialStats(-0.25f, 0.05f, 1.25f));
@@ -390,6 +393,7 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
     addMaterialStats(MaterialIds.bone, StatlessMaterialStats.ARROW_SHAFT);
     addMaterialStats(MaterialIds.bamboo, StatlessMaterialStats.ARROW_SHAFT);
     addMaterialStats(MaterialIds.chorus, StatlessMaterialStats.ARROW_SHAFT);
+    addMaterialStats(MaterialIds.cactus, StatlessMaterialStats.ARROW_SHAFT);
     addMaterialStats(MaterialIds.feather, StatlessMaterialStats.FLETCHING);
     addMaterialStats(MaterialIds.leaves, StatlessMaterialStats.FLETCHING);
     addMaterialStats(MaterialIds.paper, StatlessMaterialStats.FLETCHING);
@@ -502,7 +506,6 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
     addMaterialStats(MaterialIds.ancientHide, StatlessMaterialStats.REPAIR_KIT);
     // travelers's shield
     addMaterialStats(MaterialIds.ice, StatlessMaterialStats.REPAIR_KIT);
-    addMaterialStats(MaterialIds.cactus, StatlessMaterialStats.REPAIR_KIT);
     addMaterialStats(MaterialIds.blazewood, StatlessMaterialStats.REPAIR_KIT);
     // slimeskull
     addMaterialStats(MaterialIds.glass,        new SkullStats( 90, 0));

@@ -47,6 +47,7 @@ import static slimeknights.tconstruct.common.TinkerDamageTypes.SELF_DESTRUCT;
 import static slimeknights.tconstruct.common.TinkerDamageTypes.SHOCK;
 import static slimeknights.tconstruct.common.TinkerDamageTypes.SMELTERY_HEAT;
 import static slimeknights.tconstruct.common.TinkerDamageTypes.SMELTERY_MAGIC;
+import static slimeknights.tconstruct.common.TinkerDamageTypes.SPINY;
 import static slimeknights.tconstruct.common.TinkerDamageTypes.THROWN_TOOL;
 import static slimeknights.tconstruct.common.TinkerDamageTypes.WATER;
 import static slimeknights.tconstruct.common.TinkerTags.DamageTypes.BLAST_PROTECTION;
@@ -69,9 +70,9 @@ public class DamageTypeTagProvider extends DamageTypeTagsProvider {
     tag(IS_EXPLOSION).add(SELF_DESTRUCT).add(EXPLOSION.values()).add(MOB_EXPLOSION.values());
     tag(IS_FREEZING).add(FLUID_COLD.values());
     tag(WITCH_RESISTANT_TO).add(SMELTERY_MAGIC).add(FLUID_MAGIC.values());
-    tag(BYPASSES_ARMOR).add(PIERCING, SELF_DESTRUCT, BLEEDING, ENTANGLED).add(WATER.values()).add(FLUID_SPIKE.values());
+    tag(BYPASSES_ARMOR).add(PIERCING, SELF_DESTRUCT, BLEEDING, ENTANGLED, SPINY).add(WATER.values()).add(FLUID_SPIKE.values());
     tag(BYPASSES_ENCHANTMENTS).add(BLEEDING);
-    tag(BYPASSES_EFFECTS).add(ENTANGLED);
+    tag(BYPASSES_EFFECTS).add(ENTANGLED, SPINY);
     tag(AVOIDS_GUARDIAN_THORNS).add(BLEEDING, SHOCK);
     // whole reason these are a pair is so we can tag one as projectile
     tag(IS_PROJECTILE).add(THROWN_TOOL, FISHING_HOOK, FLUID_IMPACT.ranged(), FLUID_FIRE.ranged(), FLUID_COLD.ranged(), FLUID_MAGIC.ranged(), WATER.ranged(), FLUID_SPIKE.ranged(), EXPLOSION.ranged(), MOB_EXPLOSION.ranged());

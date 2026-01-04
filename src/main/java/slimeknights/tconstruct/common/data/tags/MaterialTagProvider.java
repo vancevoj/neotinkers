@@ -49,7 +49,7 @@ public class MaterialTagProvider extends AbstractMaterialTagProvider {
       // head
       MaterialIds.flint, MaterialIds.wool, MaterialIds.glass,
       // shaft
-      MaterialIds.wood, MaterialIds.bamboo, MaterialIds.bone,
+      MaterialIds.wood, MaterialIds.bamboo, MaterialIds.cactus,
       // fletching
       MaterialIds.feather, MaterialIds.paper, MaterialIds.leaves
     );
@@ -178,7 +178,7 @@ public class MaterialTagProvider extends AbstractMaterialTagProvider {
     );
     tag(TinkerTags.Materials.HEAVY).add(
       // tier 1
-      MaterialIds.copper,
+      MaterialIds.copper, MaterialIds.cactus,
       // tier 2
       MaterialIds.iron, MaterialIds.weepingVine,
       // tier 3

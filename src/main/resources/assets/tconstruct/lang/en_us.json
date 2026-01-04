@@ -1286,6 +1286,8 @@
   "death.attack.tconstruct.piercing.item": "%1$s was pierced by %2$s using %3$s",
   "death.attack.tconstruct.entangled": "%1$s could not let go of their tool",
   "death.attack.tconstruct.entangled.player": "%1$s could not let go of their tool whilst fighting %2$s",
+  "death.attack.tconstruct.spiny": "%1$s was killed by a splinter",
+  "death.attack.tconstruct.spiny.player": "%1$s was killed by a splinter whilst fighting %2$s",
   "death.attack.tconstruct.shock": "%1$s was shocked trying to hurt %2$s",
   "death.attack.tconstruct.shock.item": "%1$s was shocked by %3$s trying to hurt %2$s",
 
@@ -1784,6 +1786,8 @@
 
   "material.tconstruct.cactus": "Cactus",
   "material.tconstruct.cactus.flavor": "A spiky shield spikes serious stabbers.",
+  "material.tconstruct.cactus.ranged": "Adds +0.1 velocity per level at the cost of losing 1 health per level when firing arrows.",
+  "material.tconstruct.cactus.ammo": "Adds +0.1 velocity per level and +0.5 power to thrown ammo at the cost of losing 1 health per level when launched.",
   "material.tconstruct.cactus.armor": "Adds a 15% chance to deal 1-4 damage on counterattacks, or a 30% chance when blocking.",
 
   "material.tconstruct.rock": "Rock",
@@ -2995,6 +2999,9 @@
   "modifier.tconstruct.woodwind": "Woodwind",
   "modifier.tconstruct.woodwind.flavor": "Song of air",
   "modifier.tconstruct.woodwind.description": "Moves more freely in the wind, granting a large accuracy bonus, plus a velocity bonus to thrown ammo. Some even claim to hear music as it flies.",
+  "modifier.tconstruct.spiny": "Spiny",
+  "modifier.tconstruct.spiny.flavor": "The pain makes you strong!",
+  "modifier.tconstruct.spiny.description": "Boosts the projectile's damage, but damages you when used.",
   "modifier.tconstruct.soft": "Soft",
   "modifier.tconstruct.soft.flavor": "Friendly weapon",
   "modifier.tconstruct.soft.description": "Reduces the projectile power to 0.",

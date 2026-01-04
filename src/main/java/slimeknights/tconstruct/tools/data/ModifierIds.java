@@ -176,6 +176,7 @@ public class ModifierIds {
   public static final ModifierId woodwind = id("woodwind");
   public static final ModifierId soft = id("soft");
   public static final ModifierId spike = id("spike");
+  public static final ModifierId spiny = id("spiny");
   // traits - tier 2
   public static final ModifierId overgrowth = id("overgrowth");
   public static final ModifierId searing = id("searing");

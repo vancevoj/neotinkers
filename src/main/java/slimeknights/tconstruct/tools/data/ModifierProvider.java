@@ -186,6 +186,7 @@ import slimeknights.tconstruct.tools.modules.armor.SleevesModule;
 import slimeknights.tconstruct.tools.modules.armor.ThornsModule;
 import slimeknights.tconstruct.tools.modules.armor.ToolBeltModule;
 import slimeknights.tconstruct.tools.modules.combat.ChannelingModule;
+import slimeknights.tconstruct.tools.modules.combat.DamageOnShootModule;
 import slimeknights.tconstruct.tools.modules.combat.FieryAttackModule;
 import slimeknights.tconstruct.tools.modules.combat.FreezingAttackModule;
 import slimeknights.tconstruct.tools.modules.combat.SpillingModule;
@@ -740,6 +741,10 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
     buildModifier(ModifierIds.unburdened)
       .addModule(StatBoostModule.add(ToolStats.USE_ITEM_SPEED).eachLevel(0.1f))
       .addModule(AttributeModule.builder(TinkerAttributes.USE_ITEM_SPEED, Operation.ADDITION).slots(ARMOR_SLOTS).tooltipStyle(TooltipStyle.PERCENT).toolItem(ItemPredicate.tag(WORN_ARMOR)).eachLevel(0.05f));
+    buildModifier(ModifierIds.spiny)
+      .addModule(StatBoostModule.add(ToolStats.VELOCITY).eachLevel(0.1f))
+      .addModule(StatBoostModule.add(ToolStats.PROJECTILE_DAMAGE).toolTag(TinkerTags.Items.THROWN_AMMO).eachLevel(0.5f))
+      .addModule(new DamageOnShootModule(1, TinkerDamageTypes.SPINY, ModifierCondition.ANY_TOOL));
     buildModifier(ModifierIds.depthProtection).addModule(DepthProtectionModule.builder().baselineHeight(64).neutralRange(32).eachLevel(1.25f));
     buildModifier(ModifierIds.enderclearance).addModule(new EnderclearanceModule(LevelingValue.eachLevel(0.25f), new LevelingInt(8, 8), LevelingInt.flat(16)));
     buildModifier(ModifierIds.frostshield)

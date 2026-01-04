@@ -99,7 +99,7 @@ public class TinkerMaterialSpriteProvider extends AbstractMaterialSpriteProvider
         .addTexture(140, new ResourceLocation("block/ice"))
         .build());
     buildMaterial(MaterialIds.cactus)
-      .shieldCore().statType(WOOD)
+      .ranged().arrowShaft().shieldCore().statType(WOOD)
       .fallbacks("wood", "stick")
       .transformer(transformerFromSprite(getResource("generator/cactus"), 0, 0));
     // tier 1 - stone

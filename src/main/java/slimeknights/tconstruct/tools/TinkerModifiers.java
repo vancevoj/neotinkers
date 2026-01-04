@@ -289,6 +289,7 @@ import slimeknights.tconstruct.tools.modules.armor.SleevesModule;
 import slimeknights.tconstruct.tools.modules.armor.ThornsModule;
 import slimeknights.tconstruct.tools.modules.armor.ToolBeltModule;
 import slimeknights.tconstruct.tools.modules.combat.ChannelingModule;
+import slimeknights.tconstruct.tools.modules.combat.DamageOnShootModule;
 import slimeknights.tconstruct.tools.modules.combat.FieryAttackModule;
 import slimeknights.tconstruct.tools.modules.combat.FreezingAttackModule;
 import slimeknights.tconstruct.tools.modules.combat.SpillingModule;
@@ -781,6 +782,7 @@ public final class TinkerModifiers extends TinkerModule {
       ModifierModule.LOADER.register(getResource("fishing"), FishingModule.LOADER);
       ModifierModule.LOADER.register(getResource("throwing"), ThrowingModule.LOADER);
       ModifierModule.LOADER.register(getResource("damage_on_unequip"), DamageOnUnequipModule.LOADER);
+      ModifierModule.LOADER.register(getResource("damage_on_shoot"), DamageOnShootModule.LOADER);
       ModifierModule.LOADER.register(getResource("share_durability"), ShareDurabilityModule.LOADER);
       ModifierModule.LOADER.register(getResource("projectile_place_glow"), ProjectilePlaceGlowModule.LOADER);
       ModifierModule.LOADER.register(getResource("craft_count"), CraftCountModule.LOADER);
