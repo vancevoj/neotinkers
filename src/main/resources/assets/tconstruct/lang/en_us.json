@@ -1928,9 +1928,9 @@
 
   "material.tconstruct.twisting_vine": "Twisting Vine",
   "material.tconstruct.twisting_vine.flavor": "Eat the spores!",
-  "material.tconstruct.twisting_vine.encyclopedia": "Grants +6 mining speed at the cost of taking 1 damage when you put down the tool",
-  "material.tconstruct.twisting_vine.ranged": "Grants +15% draw speed at the cost of taking 1 damage when you put down the tool",
-  "material.tconstruct.twisting_vine.armor": "Grants +10% knockback resistance at the cost of taking 2 damage when you remove the armor",
+  "material.tconstruct.twisting_vine.encyclopedia": "Grants +6 mining speed at the cost of losing 1 health when you put down the tool",
+  "material.tconstruct.twisting_vine.ranged": "Grants +15% draw speed at the cost of losing 1 health when you put down the tool",
+  "material.tconstruct.twisting_vine.armor": "Grants +10% knockback resistance at the cost of losing 2 health when you remove the armor",
 
   "material.tconstruct.wool": "Wool",
   "material.tconstruct.wool.white": "White Wool",
