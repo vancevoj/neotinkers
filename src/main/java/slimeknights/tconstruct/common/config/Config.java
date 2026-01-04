@@ -29,6 +29,7 @@ public class Config {
     public final BooleanValue shouldSpawnWithTinkersBook;
     public final List<ConfigurableAction> toolTweaks;
     public final BooleanValue syncKnockbackResistance;
+    public final EnumValue<ToolSyncType> toolInventorySync;
 
     // recipes
     public final BooleanValue addGravelToFlintRecipe;
@@ -87,11 +88,13 @@ public class Config {
         .comment("Amount of durability restored by a repair kit in terms of ingots. Does not affect the cost to create the kit, that is controlled by JSON.")
         .defineInRange("repairKitAmount", 2f, 0f, Short.MAX_VALUE);
 
-//      this.chestsKeepInventory = builder
-//        .comment("Pattern and Part chests keep their inventory when harvested.")
-//        .translation("tconstruct.configgui.chestsKeepInventory")
-//        .worldRestart()
-//        .define("chestsKeepInventory", true);
+      this.toolInventorySync = builder
+        .comment("Method of syncing on opening a tool inventory. Options:",
+          "FULL_STACK: syncs the entire tool item stack to client. May cause issues with packet size if too many tools are inside the tool, but best for laggy servers.",
+          "MINIMAL (default): syncs the minimal info to prevent an inventory desync if the client lost the stack.",
+          "DISABLED: syncs nothing. May cause inventory desync issues if the client lost the tool.")
+        .defineEnum("toolInventorySync", ToolSyncType.MINIMAL);
+
       builder.pop(); // gameplay
 
       builder.comment("Options related to recipes, limited options as a datapack allows most recipes to be modified").push("recipes");
@@ -139,7 +142,7 @@ public class Config {
         this.foundryOreRate = new OreRate(builder, 9, 4);
         builder.pop();
 
-        builder.comment("Byprouct rates when melting in the foundry").push("foundry_byproduct");
+        builder.comment("Byproduct rates when melting in the foundry").push("foundry_byproduct");
         this.foundryByproductRate = new OreRate(builder, 3, 4);
         builder.pop();
       }
@@ -408,6 +411,13 @@ public class Config {
   public static void init() {
     ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.commonSpec);
     ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, Config.clientSpec);
+  }
+
+  /** Method of syncing the tool inventory on open to prevent desyncs down the line. */
+  public enum ToolSyncType {
+    FULL_STACK,
+    MINIMAL,
+    DISABLED;
   }
 
   /** Configuration for an ore rate, such as melter or foundry */
