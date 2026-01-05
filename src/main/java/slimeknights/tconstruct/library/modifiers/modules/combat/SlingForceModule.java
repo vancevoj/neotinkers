@@ -7,10 +7,11 @@ import org.jetbrains.annotations.ApiStatus.Internal;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.data.predicate.IJsonPredicate;
 import slimeknights.mantle.data.predicate.entity.LivingEntityPredicate;
-import slimeknights.tconstruct.library.json.math.FormulaLoadable;
 import slimeknights.tconstruct.library.json.math.ModifierFormula;
-import slimeknights.tconstruct.library.json.math.ModifierFormula.FallbackFormula;
 import slimeknights.tconstruct.library.json.predicate.modifier.ModifierPredicate;
+import slimeknights.tconstruct.library.json.variable.VariableFormula;
+import slimeknights.tconstruct.library.json.variable.stat.ConditionalStatFormula;
+import slimeknights.tconstruct.library.json.variable.stat.ConditionalStatVariable;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.ModifierId;
@@ -30,17 +31,14 @@ import java.util.List;
  * @param target     Filter on entities to receive knockback
  * @param formula    Formula to compute the force multiplier
  */
-public record SlingForceModule(IJsonPredicate<LivingEntity> target, IJsonPredicate<LivingEntity> holder, IJsonPredicate<ModifierId> sling, ModifierFormula formula, ModifierCondition<IToolStackView> condition) implements ModifierModule, SlingForceModifierHook, ConditionalModule<IToolStackView> {
+public record SlingForceModule(IJsonPredicate<LivingEntity> target, IJsonPredicate<LivingEntity> holder, IJsonPredicate<ModifierId> sling, ConditionalStatFormula formula, ModifierCondition<IToolStackView> condition) implements ModifierModule, SlingForceModifierHook, ConditionalModule<IToolStackView> {
   private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<SlingForceModule>defaultHooks(ModifierHooks.SLING_FORCE);
-  /** Setup for the formula */
-  private static final FormulaLoadable FORMULA = new FormulaLoadable(FallbackFormula.BOOST, "level", "force", "multiplier");
-
   /** Loader instance */
   public static final RecordLoadable<SlingForceModule> LOADER = RecordLoadable.create(
     LivingEntityPredicate.LOADER.defaultField("target", SlingForceModule::target),
     LivingEntityPredicate.LOADER.defaultField("holder", SlingForceModule::target),
     ModifierPredicate.LOADER.defaultField("sling", SlingForceModule::sling),
-    FORMULA.directField(SlingForceModule::formula),
+    ConditionalStatFormula.LOADER.directField(SlingForceModule::formula),
     ModifierCondition.TOOL_FIELD,
     SlingForceModule::new);
 
@@ -56,7 +54,7 @@ public record SlingForceModule(IJsonPredicate<LivingEntity> target, IJsonPredica
   @Override
   public float modifySlingForce(IToolStackView tool, ModifierEntry modifier, LivingEntity holder, LivingEntity target, ModifierEntry slingSource, float force, float multiplier) {
   if (this.condition.matches(tool, modifier) && this.target.matches(target) && this.holder.matches(holder) && this.sling.matches(slingSource.getId())) {
-      return formula.apply(formula.processLevel(modifier), force, multiplier);
+      return formula.apply(tool, modifier, holder, force, multiplier);
     }
     return force;
   }
@@ -77,18 +75,18 @@ public record SlingForceModule(IJsonPredicate<LivingEntity> target, IJsonPredica
   /** Builder class */
   @Setter
   @Accessors(fluent = true)
-  public static class Builder extends ModifierFormula.Builder<Builder, SlingForceModule> {
+  public static class Builder extends VariableFormula.Builder<Builder,SlingForceModule, ConditionalStatVariable> {
     private IJsonPredicate<LivingEntity> target = LivingEntityPredicate.ANY;
     private IJsonPredicate<LivingEntity> holder = LivingEntityPredicate.ANY;
     private IJsonPredicate<ModifierId> sling = ModifierPredicate.ANY;
 
     private Builder() {
-      super(FORMULA.variables());
+      super(ConditionalStatFormula.VARIABLES);
     }
 
     @Override
     protected SlingForceModule build(ModifierFormula formula) {
-      return new SlingForceModule(target, holder, sling, formula, condition);
+      return new SlingForceModule(target, holder, sling, new ConditionalStatFormula(formula, variables, percent), condition);
     }
   }
 }

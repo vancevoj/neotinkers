@@ -9,6 +9,7 @@
     {
       "type": "tconstruct:sling_force",
       "each_level": 0.25,
+      "percent": false,
       "sling": {
         "type": "tconstruct:tag",
         "tag": "tconstruct:knockback_slings"
