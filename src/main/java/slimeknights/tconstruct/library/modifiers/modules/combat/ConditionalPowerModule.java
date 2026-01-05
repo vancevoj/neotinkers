@@ -125,7 +125,7 @@ public record ConditionalPowerModule(IJsonPredicate<LivingEntity> target, IJsonP
 
   @Override
   public float modifySlingForce(IToolStackView tool, ModifierEntry modifier, LivingEntity holder, LivingEntity target, ModifierEntry slingSource, float force, float multiplier) {
-    if (modifierLevel.test(modifier.getLevel()) && this.holder.matches(holder) && this.target.matches(target)) {
+    if (modifierLevel.test(modifier.getLevel()) && ToolStats.PROJECTILE_DAMAGE.supports(tool.getItem()) && this.holder.matches(holder) && this.target.matches(target)) {
       return formula.apply(tool.getModifiers(), tool.getPersistentData(), modifier, null, null, holder, target, force, multiplier * tool.getMultiplier(ToolStats.PROJECTILE_DAMAGE));
     }
     return force;
