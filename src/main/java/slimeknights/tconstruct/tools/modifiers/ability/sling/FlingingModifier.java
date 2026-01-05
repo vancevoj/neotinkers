@@ -32,38 +32,36 @@ public class FlingingModifier extends SlingModifier {
         // must be sufficiently charged, not have too much knockback resistance, and not have any modifier zeroing its force
         float charge = getCharge(tool, modifier, timeLeft);
         if (charge > 0) {
-          float multiplier = scaleKnockback(player, charge * 4);
-          if (multiplier > 0) {
-            float force = SlingForceModifierHook.modifySlingForce(tool, entity, entity, modifier, getPower(tool, player) * multiplier, multiplier);
-            if (force > 0) {
-              Vec3 vec = player.getLookAngle().normalize();
-              float inaccuracy = ModifierUtil.getInaccuracy(tool, player) * 0.0075f;
-              RandomSource random = player.getRandom();
+          float multiplier = charge * 4;
+          float force = SlingForceModifierHook.modifySlingForce(tool, entity, entity, modifier, getPower(tool, player) * multiplier, multiplier);
+          if (force > 0) {
+            Vec3 vec = player.getLookAngle().normalize();
+            float inaccuracy = ModifierUtil.getInaccuracy(tool, player) * 0.0075f;
+            RandomSource random = player.getRandom();
 
-              // we fling the inverted player look vector
-              Vec3 angle = SlingAngleModifierHook.modifySlingAngle(tool, entity, entity, modifier, force, multiplier, new Vec3(
-                -(vec.x + random.nextGaussian() * inaccuracy),
-                -(vec.y + random.nextGaussian() * inaccuracy) / 3f,
-                -(vec.z + random.nextGaussian() * inaccuracy)
-              ));
-              player.push(angle.x * force, angle.y * force, angle.z * force);
-              SlimeBounceHandler.addBounceHandler(player);
+            // we fling the inverted player look vector
+            Vec3 angle = SlingAngleModifierHook.modifySlingAngle(tool, entity, entity, modifier, force, multiplier, new Vec3(
+              -(vec.x + random.nextGaussian() * inaccuracy),
+              -(vec.y + random.nextGaussian() * inaccuracy) / 3f,
+              -(vec.z + random.nextGaussian() * inaccuracy)
+            ));
+            player.push(angle.x * force, angle.y * force, angle.z * force);
+            SlimeBounceHandler.addBounceHandler(player);
 
-              // modifier callbacks
-              SlingLaunchModifierHook.afterSlingLaunch(tool, entity, entity, modifier, force, multiplier, angle);
+            // modifier callbacks
+            SlingLaunchModifierHook.afterSlingLaunch(tool, entity, entity, modifier, force, multiplier, angle);
 
-              if (!level.isClientSide) {
-                level.playSound(null, player.getX(), player.getY(), player.getZ(), Sounds.SLIME_SLING.getSound(), player.getSoundSource(), 1, 1);
-                player.causeFoodExhaustion(0.2F);
-                player.getCooldowns().addCooldown(tool.getItem(), 3);
-                ToolDamageUtil.damageAnimated(tool, 1, entity);
-              }
-              // apply drill attack if the modifier is present
-              if (ModifierUtil.canPerformAction(tool, TinkerToolActions.DRILL_ATTACK)) {
-                player.startAutoSpinAttack(20);
-              }
-              return;
+            if (!level.isClientSide) {
+              level.playSound(null, player.getX(), player.getY(), player.getZ(), Sounds.SLIME_SLING.getSound(), player.getSoundSource(), 1, 1);
+              player.causeFoodExhaustion(0.2F);
+              player.getCooldowns().addCooldown(tool.getItem(), 3);
+              ToolDamageUtil.damageAnimated(tool, 1, entity);
             }
+            // apply drill attack if the modifier is present
+            if (ModifierUtil.canPerformAction(tool, TinkerToolActions.DRILL_ATTACK)) {
+              player.startAutoSpinAttack(20);
+            }
+            return;
           }
         }
       }

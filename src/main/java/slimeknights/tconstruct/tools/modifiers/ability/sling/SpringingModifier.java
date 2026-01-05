@@ -41,43 +41,41 @@ public class SpringingModifier extends SlingModifier {
       // must be sufficiently charged, not have too much knockback resistance, and not have any modifier zeroing its force
       float charge = getCharge(tool, modifier, timeLeft);
       if (charge > 0) {
-        float multiplier = scaleKnockback(player, charge * 1.05f);
-        if (multiplier > 0) {
-          float force = SlingForceModifierHook.modifySlingForce(tool, entity, entity, modifier, getPower(tool, player) * multiplier, multiplier);
-          if (force > 0) {
-            Vec3 look = player.getLookAngle().add(0, Math.max(0, 0.5 - force * 0.1), 0).normalize();
+        float multiplier = charge * 1.05f;
+        float force = SlingForceModifierHook.modifySlingForce(tool, entity, entity, modifier, getPower(tool, player) * multiplier, multiplier);
+        if (force > 0) {
+          Vec3 look = player.getLookAngle().add(0, Math.max(0, 0.5 - force * 0.1), 0).normalize();
 
-            // fling in the direction the player looks
-            RandomSource random = player.getRandom();
-            float inaccuracy = ModifierUtil.getInaccuracy(tool, player) * 0.0075f;
-            Vec3 angle = SlingAngleModifierHook.modifySlingAngle(tool, entity, entity, modifier, force, multiplier, new Vec3(
-              (look.x + random.nextGaussian() * inaccuracy),
-              (look.y + random.nextGaussian() * inaccuracy) / 2f,
-              (look.z + random.nextGaussian() * inaccuracy)
-            ));
-            player.push(force * angle.x, force * angle.y, force * angle.z);
+          // fling in the direction the player looks
+          RandomSource random = player.getRandom();
+          float inaccuracy = ModifierUtil.getInaccuracy(tool, player) * 0.0075f;
+          Vec3 angle = SlingAngleModifierHook.modifySlingAngle(tool, entity, entity, modifier, force, multiplier, new Vec3(
+            (look.x + random.nextGaussian() * inaccuracy),
+            (look.y + random.nextGaussian() * inaccuracy) / 2f,
+            (look.z + random.nextGaussian() * inaccuracy)
+          ));
+          player.push(force * angle.x, force * angle.y, force * angle.z);
 
-            // if on the ground, get off the ground so jumping is not required before springing
-            if (player.onGround()) {
-              player.move(MoverType.SELF, new Vec3(0, 1.3f, 0));
-            }
-
-            // after sling callback
-            SlingLaunchModifierHook.afterSlingLaunch(tool, entity, entity, modifier, force, multiplier, angle);
-
-            SlimeBounceHandler.addBounceHandler(player);
-            if (!level.isClientSide) {
-              level.playSound(null, player.getX(), player.getY(), player.getZ(), Sounds.SLIME_SLING.getSound(), player.getSoundSource(), 1, 1);
-              player.causeFoodExhaustion(0.2F);
-              player.getCooldowns().addCooldown(tool.getItem(), 3);
-              ToolDamageUtil.damageAnimated(tool, 1, entity);
-            }
-            // apply drill attack if the modifier is present
-            if (ModifierUtil.canPerformAction(tool, TinkerToolActions.DRILL_ATTACK)) {
-              player.startAutoSpinAttack(20);
-            }
-            return;
+          // if on the ground, get off the ground so jumping is not required before springing
+          if (player.onGround()) {
+            player.move(MoverType.SELF, new Vec3(0, 1.3f, 0));
           }
+
+          // after sling callback
+          SlingLaunchModifierHook.afterSlingLaunch(tool, entity, entity, modifier, force, multiplier, angle);
+
+          SlimeBounceHandler.addBounceHandler(player);
+          if (!level.isClientSide) {
+            level.playSound(null, player.getX(), player.getY(), player.getZ(), Sounds.SLIME_SLING.getSound(), player.getSoundSource(), 1, 1);
+            player.causeFoodExhaustion(0.2F);
+            player.getCooldowns().addCooldown(tool.getItem(), 3);
+            ToolDamageUtil.damageAnimated(tool, 1, entity);
+          }
+          // apply drill attack if the modifier is present
+          if (ModifierUtil.canPerformAction(tool, TinkerToolActions.DRILL_ATTACK)) {
+            player.startAutoSpinAttack(20);
+          }
+          return;
         }
       }
     }

@@ -56,6 +56,7 @@ import slimeknights.tconstruct.library.json.predicate.tool.PersistentDataPredica
 import slimeknights.tconstruct.library.json.predicate.tool.ToolContextPredicate;
 import slimeknights.tconstruct.library.json.predicate.tool.ToolStackPredicate;
 import slimeknights.tconstruct.library.json.variable.block.BlockVariable;
+import slimeknights.tconstruct.library.json.variable.entity.AttributeEntityVariable;
 import slimeknights.tconstruct.library.json.variable.entity.ConditionalEntityVariable;
 import slimeknights.tconstruct.library.json.variable.entity.EntityEffectLevelVariable;
 import slimeknights.tconstruct.library.json.variable.entity.EntityVariable;
@@ -71,6 +72,7 @@ import slimeknights.tconstruct.library.json.variable.protection.EntityProtection
 import slimeknights.tconstruct.library.json.variable.stat.EntityConditionalStatVariable;
 import slimeknights.tconstruct.library.json.variable.tool.ModDataSource;
 import slimeknights.tconstruct.library.json.variable.tool.ModDataVariable;
+import slimeknights.tconstruct.library.json.variable.tool.ModifierLevelVariable;
 import slimeknights.tconstruct.library.json.variable.tool.StatMultiplierVariable;
 import slimeknights.tconstruct.library.json.variable.tool.ToolStatVariable;
 import slimeknights.tconstruct.library.json.variable.tool.ToolVariable;
@@ -423,22 +425,50 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
 
 
     /// attack
-    IJsonPredicate<ModifierId> knockbackSlings = ModifierPredicate.tag(TinkerTags.Modifiers.KNOCKBACK_SLINGS);
     buildModifier(TinkerModifiers.knockback)
       // attributes are better for monster usage. However, projectiles don't run attributes, so run a projectile only knockback module
       .addModule(KnockbackModule.builder().projectile(ProjectilePredicate.PROJECTILE).eachLevel(0.5f))
-      .addModule(SlingForceModule.builder().sling(knockbackSlings).eachLevel(0.25f)) // you get 50% of power as force, so we want half of that for knockback
-      .addModule(AttributeModule.builder(Attributes.ATTACK_KNOCKBACK, Operation.ADDITION).slots(armorMainHand).eachLevel(1));
+      .addModule(AttributeModule.builder(Attributes.ATTACK_KNOCKBACK, Operation.ADDITION).slots(armorMainHand).eachLevel(1))
+      // springing and slinging add in their attributes here to further boost knockback
+      .addModule(SlingForceModule.builder().sling(ModifierPredicate.tag(TinkerTags.Modifiers.SELF_KNOCKBACK_SLINGS))
+        .formula()
+        // 0.25 per level, that makes each level like adding 1 level of the power modifier (after the first)
+        .constant(0.25f).variable(LEVEL).multiply()
+        .variable(MULTIPLIER).multiply() // cooldown and sling properties
+        // knockback resistance reduces the knockback bonus
+        .constant(1)
+        .customVariable("knockback_resistance", new EntityConditionalStatVariable(new AttributeEntityVariable(Attributes.KNOCKBACK_RESISTANCE), 0))
+        .subtract().multiply()
+        // knockback multiplier is a simple multiplier, though we skip if the knockback sync is disabled
+        .customVariable("knockback_multiplier", new EntityConditionalStatVariable(new AttributeEntityVariable(TinkerAttributes.KNOCKBACK_MULTIPLIER), 1))
+        .multiply()
+        // padded level reduces just knockback, not a good way to not hardcode this so knockback handles it
+        // goal is knockback / 2^PADDED, note if PADDED is absent this gives knockback / 2^0 = knockback / 1
+        .constant(2)
+        .customVariable("padded", ModifierLevelVariable.modifier(TinkerModifiers.padded.getId()))
+        .power().divide()
+        // finally, add to the base effect
+        .variable(VALUE).add().build())
+      // bonking does the same but without the attributes
+      .addModule(SlingForceModule.builder().sling(ModifierPredicate.tag(TinkerTags.Modifiers.TARGET_KNOCKBACK_SLINGS))
+        .formula()
+        // 0.25 per level, that makes each level like adding 1 level of the power modifier (after the first)
+        .constant(0.25f).variable(LEVEL).multiply()
+        .variable(MULTIPLIER).multiply() // cooldown and sling properties
+        // padded level reduces just knockback, not a good way to not hardcode this so knockback handles it
+        // goal is knockback / 2^PADDED, note if PADDED is absent this gives knockback / 2^0 = knockback / 1
+        .constant(2)
+        .customVariable("padded", ModifierLevelVariable.modifier(TinkerModifiers.padded.getId()))
+        .power().divide()
+        // finally, add to the base effect
+        .variable(VALUE).add().build());
     buildModifier(TinkerModifiers.padded)
       .priority(75) // run after knockback
       .addModule(KnockbackModule.builder().formula()
         .variable(VALUE)
         .constant(2).variable(LEVEL).power() // 2^LEVEL
-        .divide().build()) // KNOCKBACK / 2^LEVEL
-      .addModule(SlingForceModule.builder().sling(knockbackSlings).formula()
-        .variable(VALUE)
-        .constant(2).variable(LEVEL).power() // 2^LEVEL
-        .divide().build()); // FORCE / 2^LEVEL
+        .divide().build()); // KNOCKBACK / 2^LEVEL
+      // sling is handled by knockback module
     buildModifier(ModifierIds.sticky)
       .addModule(MobEffectModule.builder(MobEffects.MOVEMENT_SLOWDOWN).level(RandomLevelingValue.perLevel(0, 0.5f)).time(RandomLevelingValue.random(20, 10)).build());
 

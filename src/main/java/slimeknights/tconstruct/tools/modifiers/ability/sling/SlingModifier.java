@@ -3,10 +3,8 @@ package slimeknights.tconstruct.tools.modifiers.ability.sling;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.UseAnim;
-import slimeknights.tconstruct.common.config.Config;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.hook.build.ConditionalStatModifierHook;
@@ -18,7 +16,6 @@ import slimeknights.tconstruct.library.module.ModuleHookMap.Builder;
 import slimeknights.tconstruct.library.tools.item.ranged.ModifiableLauncherItem;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
-import slimeknights.tconstruct.shared.TinkerAttributes;
 import slimeknights.tconstruct.tools.TinkerModifiers;
 import slimeknights.tconstruct.tools.modifiers.ability.interaction.BlockingModifier;
 
@@ -83,11 +80,10 @@ public abstract class SlingModifier extends NoLevelsModifier implements GeneralI
     return force;
   }
 
-  /** Scales the given knockback value using the two attributes */
+  /** @deprecated handled by the knockback modifier now. Feel free to recreate if you need it though. */
+  @SuppressWarnings("unused")
+  @Deprecated(forRemoval = true)
   public static float scaleKnockback(LivingEntity target, float knockback) {
-    if (Config.COMMON.syncKnockbackResistance.get()) {
-      return (float) (knockback * target.getAttributeValue(TinkerAttributes.KNOCKBACK_MULTIPLIER.get()) * (1 - target.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE)));
-    }
     return knockback;
   }
 

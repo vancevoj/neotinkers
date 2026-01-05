@@ -7,15 +7,6 @@
       "each_level": 0.5
     },
     {
-      "type": "tconstruct:sling_force",
-      "each_level": 0.25,
-      "percent": false,
-      "sling": {
-        "type": "tconstruct:tag",
-        "tag": "tconstruct:knockback_slings"
-      }
-    },
-    {
       "type": "tconstruct:attribute",
       "attribute": "minecraft:generic.attack_knockback",
       "each_level": 1.0,
@@ -27,6 +18,86 @@
         "chest",
         "head"
       ]
+    },
+    {
+      "type": "tconstruct:sling_force",
+      "formula": [
+        0.25,
+        "$level",
+        "*",
+        "$multiplier",
+        "*",
+        1.0,
+        "$knockback_resistance",
+        "-",
+        "*",
+        "$knockback_multiplier",
+        "*",
+        2.0,
+        "$padded",
+        "^",
+        "/",
+        "$value",
+        "+"
+      ],
+      "percent": false,
+      "sling": {
+        "type": "tconstruct:tag",
+        "tag": "tconstruct:knockback_slings/self"
+      },
+      "variables": {
+        "knockback_multiplier": {
+          "type": "tconstruct:entity",
+          "attribute": "tconstruct:generic.knockback_multiplier",
+          "entity_type": "tconstruct:attribute",
+          "fallback": 1.0
+        },
+        "knockback_resistance": {
+          "type": "tconstruct:entity",
+          "attribute": "minecraft:generic.knockback_resistance",
+          "entity_type": "tconstruct:attribute",
+          "fallback": 0.0
+        },
+        "padded": {
+          "type": "tconstruct:modifier_level",
+          "check": "all",
+          "modifier": {
+            "type": "tconstruct:single",
+            "modifier": "tconstruct:padded"
+          }
+        }
+      }
+    },
+    {
+      "type": "tconstruct:sling_force",
+      "formula": [
+        0.25,
+        "$level",
+        "*",
+        "$multiplier",
+        "*",
+        2.0,
+        "$padded",
+        "^",
+        "/",
+        "$value",
+        "+"
+      ],
+      "percent": false,
+      "sling": {
+        "type": "tconstruct:tag",
+        "tag": "tconstruct:knockback_slings/target"
+      },
+      "variables": {
+        "padded": {
+          "type": "tconstruct:modifier_level",
+          "check": "all",
+          "modifier": {
+            "type": "tconstruct:single",
+            "modifier": "tconstruct:padded"
+          }
+        }
+      }
     }
   ],
   "tooltip_display": "always"

@@ -39,7 +39,6 @@ import static slimeknights.tconstruct.common.TinkerTags.Modifiers.HELMET_ABILITI
 import static slimeknights.tconstruct.common.TinkerTags.Modifiers.HELMET_UPGRADES;
 import static slimeknights.tconstruct.common.TinkerTags.Modifiers.INTERACTION_ABILITIES;
 import static slimeknights.tconstruct.common.TinkerTags.Modifiers.INVISIBLE_INK_BLACKLIST;
-import static slimeknights.tconstruct.common.TinkerTags.Modifiers.KNOCKBACK_SLINGS;
 import static slimeknights.tconstruct.common.TinkerTags.Modifiers.LEGGING_ABILITIES;
 import static slimeknights.tconstruct.common.TinkerTags.Modifiers.LEGGING_UPGRADES;
 import static slimeknights.tconstruct.common.TinkerTags.Modifiers.MELEE_ABILITIES;
@@ -49,10 +48,12 @@ import static slimeknights.tconstruct.common.TinkerTags.Modifiers.PROTECTION_DEF
 import static slimeknights.tconstruct.common.TinkerTags.Modifiers.RANGED_ABILITIES;
 import static slimeknights.tconstruct.common.TinkerTags.Modifiers.RANGED_UPGRADES;
 import static slimeknights.tconstruct.common.TinkerTags.Modifiers.REMOVE_MODIFIER_BLACKLIST;
+import static slimeknights.tconstruct.common.TinkerTags.Modifiers.SELF_KNOCKBACK_SLINGS;
 import static slimeknights.tconstruct.common.TinkerTags.Modifiers.SHIELD_ABILITIES;
 import static slimeknights.tconstruct.common.TinkerTags.Modifiers.SLIME_DEFENSE;
 import static slimeknights.tconstruct.common.TinkerTags.Modifiers.SLOTLESS;
 import static slimeknights.tconstruct.common.TinkerTags.Modifiers.SPECIAL_DEFENSE;
+import static slimeknights.tconstruct.common.TinkerTags.Modifiers.TARGET_KNOCKBACK_SLINGS;
 import static slimeknights.tconstruct.common.TinkerTags.Modifiers.UPGRADES;
 
 public class ModifierTagProvider extends AbstractModifierTagProvider {
@@ -102,7 +103,8 @@ public class ModifierTagProvider extends AbstractModifierTagProvider {
     tag(CHARGE_EMPTY_BOW_WITH_DRAWTIME).add(TinkerModifiers.flinging.getId(), TinkerModifiers.springing.getId(), TinkerModifiers.bonking.getId(), TinkerModifiers.warping.getId(), ModifierIds.throwing);
     tag(CHARGE_EMPTY_BOW_WITHOUT_DRAWTIME).add(TinkerModifiers.blocking.getId(), ModifierIds.scope, ModifierIds.zoom);
     tag(DRILL_ATTACKS).add(TinkerModifiers.flinging.getId(), TinkerModifiers.springing.getId(), ModifierIds.grapple);
-    tag(KNOCKBACK_SLINGS).add(TinkerModifiers.flinging.getId(), TinkerModifiers.springing.getId(), TinkerModifiers.bonking.getId());
+    tag(SELF_KNOCKBACK_SLINGS).add(TinkerModifiers.flinging.getId(), TinkerModifiers.springing.getId());
+    tag(TARGET_KNOCKBACK_SLINGS).add(TinkerModifiers.bonking.getId());
 
     // book tags
     this.tag(UPGRADES).addTag(GENERAL_UPGRADES, MELEE_UPGRADES, DAMAGE_UPGRADES, HARVEST_UPGRADES, ARMOR_UPGRADES, RANGED_UPGRADES);

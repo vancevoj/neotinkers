@@ -81,7 +81,7 @@ public class Config {
 
       this.syncKnockbackResistance = builder
         .comment("If true, makes the knockback resistance attribute sync its value to client side. This allows modifiers such as springing and flinging to work properly.",
-          "If false, will disable those modifier's response to knockback entirely to avoid desyncs or unexpected behavior if another mod enables the sync. This includes it's benefit from increased knockback.")
+          "If false, knockback resistance will not sync so will hopefully be 0 client side. Can be disabled in case another mod relied on it not syncing.")
         .define("syncKnockbackResistance", true);
 
       this.repairKitAmount = builder
