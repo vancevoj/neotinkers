@@ -1385,17 +1385,18 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .saveSalvage(consumer, prefix(TinkerModifiers.bursting, abilitySalvage))
                          .save(consumer, prefix(TinkerModifiers.bursting, abilityFolder));
     ModifierRecipeBuilder.modifier(TinkerModifiers.spitting)
-                         .addInput(bowLimb)
-                         .addInput(TinkerSmeltery.searedFluidCannon)
-                         .addInput(bowLimb)
-                         .setSlots(SlotType.ABILITY, 1)
-                         // swasher gets spitting to get multishot, rest get to spit with their non-spit. No spitting with arrows
-                         .setTools(IntersectionIngredient.of(
-                           Ingredient.of(TinkerTags.Items.DURABILITY),
-                           Ingredient.of(TinkerTags.Items.INTERACTABLE_CHARGE_MODIFIER)
-                         ))
-                         .saveSalvage(consumer, prefix(TinkerModifiers.spitting, abilitySalvage))
-                         .save(consumer, prefix(TinkerModifiers.spitting, abilityFolder));
+      .addInput(bowLimb)
+      .addInput(TinkerSmeltery.searedFluidCannon)
+      .addInput(bowLimb)
+      .setSlots(SlotType.ABILITY, 1)
+      .setMaxLevel(3).checkTraitLevel()
+      // swasher gets spitting to get multishot, rest get to spit with their non-spit. No spitting with arrows
+      .setTools(IntersectionIngredient.of(
+        Ingredient.of(TinkerTags.Items.DURABILITY),
+        Ingredient.of(TinkerTags.Items.INTERACTABLE_CHARGE_MODIFIER)
+      ))
+      .saveSalvage(consumer, prefix(TinkerModifiers.spitting, abilitySalvage))
+      .save(consumer, prefix(TinkerModifiers.spitting, abilityFolder));
     ModifierRecipeBuilder.modifier(ModifierIds.tank)
                          .addInput(tanks)
                          .setSlots(SlotType.UPGRADE, 1)
