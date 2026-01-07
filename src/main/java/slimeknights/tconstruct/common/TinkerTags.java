@@ -682,6 +682,9 @@ public class TinkerTags {
     /** Biomes the enderslime island can spawn in, generally the outer end islands */
     public static final TagKey<Biome> ENDERSLIME_ISLANDS = local("islands/enderslime");
 
+    /** Common tag for biomes that do not spawn monsters, to exclude terracube spawns there. */
+    public static final TagKey<Biome> NO_DEFAULT_MONSTERS = TagKey.create(Registries.BIOME, commonResource("no_default_monsters"));
+
     private static TagKey<Biome> local(String name) {
       return TagKey.create(Registries.BIOME, getResource(name));
     }
