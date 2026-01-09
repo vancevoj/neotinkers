@@ -111,6 +111,7 @@
   "item.tconstruct.cobalt_nugget": "Cobalt Nugget",
 
   "block.tconstruct.steel_block": "Block of Steel",
+  "block.tconstruct.steel_block.tooltip": "Can be used as beacon base",
   "item.tconstruct.steel_ingot": "Steel Ingot",
   "item.tconstruct.steel_nugget": "Steel Nugget",
 
@@ -118,6 +119,7 @@
   "__comment": "Tier 3 Metals",
 
   "block.tconstruct.slimesteel_block": "Block of Slimesteel",
+  "block.tconstruct.slimesteel_block.tooltip": "Can be used as beacon base",
   "item.tconstruct.slimesteel_ingot": "Slimesteel Ingot",
   "item.tconstruct.slimesteel_nugget": "Slimesteel Nugget",
 
@@ -147,6 +149,7 @@
   "item.tconstruct.hepatizon_nugget": "Hepatizon Nugget",
 
   "block.tconstruct.cinderslime_block": "Block of Cinderslime",
+  "block.tconstruct.cinderslime_block.tooltip": "Can be used as beacon base",
   "item.tconstruct.cinderslime_ingot": "Cinderslime Ingot",
   "item.tconstruct.cinderslime_nugget": "Cinderslime Nugget",
 
