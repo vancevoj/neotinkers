@@ -2048,7 +2048,7 @@
   "material.tconstruct.cobalt": "Cobalt",
   "material.tconstruct.cobalt.flavor": "Coblat. The material of the Red Army.",
   "material.tconstruct.cobalt.encyclopedia": "Boosts mining and attack speed by 8% per level",
-  "material.tconstruct.cobalt.ranged": "Boosts drawspeed and velocity by 3% per level",
+  "material.tconstruct.cobalt.ranged": "Boosts drawspeed and velocity by +0.03 per level",
   "material.tconstruct.cobalt.armor": "Reduces damage from melee attacks by 8% per level, and boosts movement speed when using items by 5% per max level",
 
   "material.tconstruct.quartz": "Quartz",
@@ -2176,7 +2176,7 @@
   "material.tconstruct.lead": "Lead",
   "material.tconstruct.lead.flavor": "Could try and make a sandwich out of this.",
   "material.tconstruct.lead.encyclopedia": "Grants +15% mining speed, +10% knockback resistance, -10% movement speed, and +5% gravity per level",
-  "material.tconstruct.lead.ranged": "Grants +10% accuracy, +10% knockback resistance, -10% movement speed, and +5% gravity per level",
+  "material.tconstruct.lead.ranged": "Grants +0.1 accuracy, +10% knockback resistance, -10% movement speed, and +5% gravity per level",
   "material.tconstruct.lead.armor": "Grants +15% knockback resistance, -10% movement speed, and +5% gravity per level",
 
   "material.tconstruct.silver": "Silver",
@@ -2195,7 +2195,7 @@
 
   "material.tconstruct.aluminum": "Aluminum",
   "material.tconstruct.aluminum.flavor": "Found most commonly in ashmounds.",
-  "material.tconstruct.aluminum.ranged": "Grants +7% drawspeed and accuracy at the cost of 5% loss of protection",
+  "material.tconstruct.aluminum.ranged": "Grants +0.07 drawspeed and accuracy at the cost of 5% loss of protection",
   "material.tconstruct.aluminum.armor": "Grants +5% use item speed at the cost of 5% loss of protection",
 
   "material.tconstruct.treated_wood": "Treated Wood",
