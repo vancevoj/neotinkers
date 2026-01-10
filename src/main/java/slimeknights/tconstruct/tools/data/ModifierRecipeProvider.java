@@ -452,10 +452,6 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                                     .setSlots(SlotType.UPGRADE, 1)
                                     .saveSalvage(consumer, prefix(ModifierIds.pierce, upgradeSalvage))
                                     .save(consumer, prefix(ModifierIds.pierce, upgradeFolder));
-    IncrementalModifierRecipeBuilder.modifier(TinkerModifiers.piercing)
-                                    .setTools(ingredientFromTags(TinkerTags.Items.MELEE_WEAPON, TinkerTags.Items.BOWS))
-                                    .setSlots(SlotType.UPGRADE, 1)
-                                    .saveSalvage(consumer, prefix(TinkerModifiers.piercing, upgradeSalvage));
     IncrementalModifierRecipeBuilder.modifier(ModifierIds.smite)
                                     .setTools(TinkerTags.Items.MELEE)
                                     .setInput(Items.GLISTERING_MELON_SLICE, 1, 5)
@@ -878,10 +874,6 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                                     .setSlots(SlotType.UPGRADE, 1)
                                     .saveSalvage(consumer, prefix(ModifierIds.thorns, upgradeSalvage))
                                     .save(consumer, prefix(ModifierIds.thorns, upgradeFolder));
-    IncrementalModifierRecipeBuilder.modifier(ModifierIds.sticky)
-                                    .setTools(ingredientFromTags(TinkerTags.Items.MELEE_WEAPON, TinkerTags.Items.WORN_ARMOR, TinkerTags.Items.SHIELDS))
-                                    .setSlots(SlotType.UPGRADE, 1)
-                                    .saveSalvage(consumer, prefix(ModifierIds.sticky, upgradeSalvage));
     ModifierRecipeBuilder.modifier(ModifierIds.springy)
                          .setTools(wornOrShield)
                          .addInput(Items.PISTON)

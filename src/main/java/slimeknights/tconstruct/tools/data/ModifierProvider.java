@@ -228,6 +228,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
     super(packOutput);
   }
 
+  @SuppressWarnings("removal")
   @Override
   protected void addModifiers() {
     EquipmentSlot[] handSlots = {EquipmentSlot.MAINHAND, EquipmentSlot.OFFHAND};
