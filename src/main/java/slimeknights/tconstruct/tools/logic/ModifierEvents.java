@@ -30,6 +30,7 @@ import net.minecraftforge.event.entity.player.CriticalHitEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.level.BlockEvent.BreakEvent;
 import net.minecraftforge.eventbus.api.Event.Result;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
@@ -205,7 +206,7 @@ public class ModifierEvents {
   /* Soulbound */
 
   /** Called when the player dies to store the item in the original inventory */
-  @SubscribeEvent
+  @SubscribeEvent(priority = EventPriority.HIGH)
   static void onPlayerDropItems(LivingDropsEvent event) {
     // only care about real players with keep inventory off
     LivingEntity entity = event.getEntity();
@@ -254,7 +255,7 @@ public class ModifierEvents {
   }
 
   /** Called when the new player is created to fetch the soulbound item from the old */
-  @SubscribeEvent
+  @SubscribeEvent(priority = EventPriority.HIGH)
   static void onPlayerClone(PlayerEvent.Clone event) {
     if (!event.isWasDeath()) {
       return;
