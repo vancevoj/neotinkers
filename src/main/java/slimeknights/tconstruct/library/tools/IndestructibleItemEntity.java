@@ -1,6 +1,5 @@
 package slimeknights.tconstruct.library.tools;
 
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.resources.ResourceLocation;
@@ -45,20 +44,10 @@ public class IndestructibleItemEntity extends ItemEntity {
 
   /** Copies the pickup delay from another entity */
   public void setPickupDelayFrom(Entity reference) {
-    if (reference instanceof ItemEntity) {
-      short pickupDelay = this.getPickupDelay((ItemEntity) reference);
-      this.setPickUpDelay(pickupDelay);
+    if (reference instanceof ItemEntity itemEntity) {
+      this.setPickUpDelay(itemEntity.pickupDelay);
     }
     setDeltaMovement(reference.getDeltaMovement());
-  }
-
-  /**
-   * workaround for private access on pickup delay. We simply read it from the items NBT representation ;)
-   */
-  private short getPickupDelay(ItemEntity reference) {
-    CompoundTag tag = new CompoundTag();
-    reference.addAdditionalSaveData(tag);
-    return tag.getShort("PickupDelay");
   }
 
   @Override
