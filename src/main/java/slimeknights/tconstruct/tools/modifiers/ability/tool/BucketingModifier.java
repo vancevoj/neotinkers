@@ -83,7 +83,7 @@ public class BucketingModifier extends Modifier implements BlockInteractionModif
    */
   private static boolean cannotContainFluid(Level world, BlockPos pos, BlockState state, Fluid fluid) {
     Block block = state.getBlock();
-    return !state.canBeReplaced(fluid) && !(block instanceof LiquidBlockContainer container && container.canPlaceLiquid(world, pos, state, fluid));
+    return !(block instanceof LiquidBlockContainer container && container.canPlaceLiquid(world, pos, state, fluid));
   }
 
   @Override
@@ -180,7 +180,7 @@ public class BucketingModifier extends Modifier implements BlockInteractionModif
     if (cannotContainFluid(world, target, existing, fluidStack.getFluid())) {
       target = offset;
       existing = world.getBlockState(target);
-      if (cannotContainFluid(world, target, existing, fluidStack.getFluid())) {
+      if (!existing.isAir() && !existing.canBeReplaced(fluid) && cannotContainFluid(world, target, existing, fluidStack.getFluid())) {
         return InteractionResult.PASS;
       }
     }
