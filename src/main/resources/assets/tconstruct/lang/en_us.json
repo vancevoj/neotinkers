@@ -1979,6 +1979,10 @@
   "material.tconstruct.gunpowder.flavor": "Explosive!",
   "material.tconstruct.gunpowder.ammo": "Causes the arrow to explode at a radius of 1 plus 1 per level. Explosion damage is based on projectile power.",
 
+  "material.tconstruct.redstone": "Redstone",
+  "material.tconstruct.redstone.flavor": "Speedy!",
+  "material.tconstruct.redstone.ammo": "Grants +10% velocity per level to arrows, and +20% velocity per level to thrown projectiles.",
+
   "material.tconstruct.earthslime": "Earthslime",
   "material.tconstruct.earthslime.flavor": "To me!",
   "material.tconstruct.earthslime.ammo": "Causes the target to be knocked back in the opposite direction.",
@@ -2774,7 +2778,10 @@
   "modifier.tconstruct.spectral.description": "Causes the target of the projectile to glow, be it a block or entity",
   "modifier.tconstruct.explosive": "Explosive",
   "modifier.tconstruct.explosive.flavor": "Bomb!",
-  "modifier.tconstruct.explosive.description": "Causes the arrow to explode upon hitting the target",
+  "modifier.tconstruct.explosive.description": "Causes the projectile to explode upon hitting the target",
+  "modifier.tconstruct.supercharged": "Supercharged",
+  "modifier.tconstruct.supercharged.flavor": "Zooom!",
+  "modifier.tconstruct.supercharged.description": "Causes the projectile to move quicker, potentially dealing more damage",
   "modifier.tconstruct.exchanging": "Exchanging",
   "modifier.tconstruct.exchanging.flavor": "The Ole Switcheroo!",
   "modifier.tconstruct.exchanging.description": "Blocks broken by this tool are replaced by the block in the offhand if possible",

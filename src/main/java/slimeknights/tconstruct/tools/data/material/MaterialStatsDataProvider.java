@@ -411,6 +411,7 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
     addMaterialStats(MaterialIds.steeleaf, StatlessMaterialStats.ARROW_HEAD);
     addMaterialStats(MaterialIds.slimeball, StatlessMaterialStats.FLETCHING);
     addMaterialStats(MaterialIds.gunpowder, StatlessMaterialStats.ARROW_HEAD);
+    addMaterialStats(MaterialIds.redstone, StatlessMaterialStats.ARROW_HEAD);
     // tier 3
     addMaterialStats(MaterialIds.ice, StatlessMaterialStats.ARROW_HEAD);
     addMaterialStats(MaterialIds.quartz, StatlessMaterialStats.ARROW_HEAD);

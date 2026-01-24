@@ -776,6 +776,9 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .addModule(StatBoostModule.add(ToolStats.VELOCITY).eachLevel(0.1f))
       .addModule(StatBoostModule.add(ToolStats.PROJECTILE_DAMAGE).toolTag(TinkerTags.Items.THROWN_AMMO).eachLevel(0.5f))
       .addModule(new DamageOnShootModule(1, TinkerDamageTypes.SPINY, ModifierCondition.ANY_TOOL));
+    buildModifier(ModifierIds.supercharged)
+      .addModule(StatBoostModule.add(ToolStats.VELOCITY).eachLevel(0.1f))
+      .addModule(StatBoostModule.add(ToolStats.VELOCITY).toolTag(TinkerTags.Items.THROWN_AMMO).eachLevel(0.1f));
     buildModifier(ModifierIds.depthProtection).addModule(DepthProtectionModule.builder().baselineHeight(64).neutralRange(32).eachLevel(1.25f));
     buildModifier(ModifierIds.enderclearance).addModule(new EnderclearanceModule(LevelingValue.eachLevel(0.25f), new LevelingInt(8, 8), LevelingInt.flat(16)));
     buildModifier(ModifierIds.frostshield)

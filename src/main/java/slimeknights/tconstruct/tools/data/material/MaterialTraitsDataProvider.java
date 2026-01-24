@@ -87,6 +87,7 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     addTraits(MaterialIds.glass, AMMO, ModifierIds.amorphous, ModifierIds.smashingAmmo, ModifierIds.spillingRod);
     addTraits(MaterialIds.slimeball, AMMO, ModifierIds.erratic);
     addTraits(MaterialIds.gunpowder, AMMO, ModifierIds.explosive);
+    addTraits(MaterialIds.redstone, AMMO, ModifierIds.supercharged);
 
     // tier 3
     addDefaultTraits(MaterialIds.slimesteel, ModifierIds.overcast, TinkerModifiers.overslime.getId());
