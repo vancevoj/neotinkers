@@ -195,6 +195,7 @@ import slimeknights.tconstruct.tools.modules.combat.DamageOnShootModule;
 import slimeknights.tconstruct.tools.modules.combat.FieryAttackModule;
 import slimeknights.tconstruct.tools.modules.combat.FreezingAttackModule;
 import slimeknights.tconstruct.tools.modules.combat.SpillingModule;
+import slimeknights.tconstruct.tools.modules.combat.SweepingEdgeModule;
 import slimeknights.tconstruct.tools.modules.durability.ShareDurabilityModule;
 import slimeknights.tconstruct.tools.modules.interaction.BrushModule;
 import slimeknights.tconstruct.tools.modules.interaction.ExtinguishCampfireModule;
@@ -472,6 +473,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
         .variable(VALUE)
         .constant(2).variable(LEVEL).power() // 2^LEVEL
         .divide().build()); // FORCE / 2^LEVEL
+    buildModifier(ModifierIds.sweeping).addModule(new SweepingEdgeModule(LevelingValue.eachLevel(0.25f)));
     buildModifier(ModifierIds.sticky)
       .addModule(MobEffectModule.builder(MobEffects.MOVEMENT_SLOWDOWN).level(RandomLevelingValue.perLevel(0, 0.5f)).time(RandomLevelingValue.random(20, 10)).build());
 

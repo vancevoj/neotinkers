@@ -127,7 +127,7 @@ public class ModifierTagProvider extends AbstractModifierTagProvider {
 
     this.tag(MELEE_UPGRADES).add(
       ModifierIds.knockback, ModifierIds.padded,
-      TinkerModifiers.severing.getId(), TinkerModifiers.necrotic.getId(), TinkerModifiers.sweeping.getId(),
+      TinkerModifiers.severing.getId(), TinkerModifiers.necrotic.getId(), ModifierIds.sweeping,
       ModifierIds.fiery, ModifierIds.freezing);
     this.tag(DAMAGE_UPGRADES).add(
       ModifierIds.sharpness, ModifierIds.pierce, ModifierIds.swiftstrike,

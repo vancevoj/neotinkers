@@ -511,13 +511,13 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                                     .disallowCrystal()
                                     .setSlots(SlotType.UPGRADE, 1)
                                     .save(consumer, wrap(ModifierIds.sharpness, upgradeFolder, "_from_block"));
-    IncrementalModifierRecipeBuilder.modifier(TinkerModifiers.sweeping)
+    IncrementalModifierRecipeBuilder.modifier(ModifierIds.sweeping)
                                     .setTools(TinkerTags.Items.SWORD)
                                     .setInput(Blocks.CHAIN, 1, 5) // 5% per chain, costing 55 nuggets, or just above 6 ingots
                                     .setMaxLevel(3) // goes 25%, 50%, 75%
                                     .setSlots(SlotType.UPGRADE, 1)
-                                    .saveSalvage(consumer, prefix(TinkerModifiers.sweeping, upgradeSalvage))
-                                    .save(consumer, prefix(TinkerModifiers.sweeping, upgradeFolder));
+                                    .saveSalvage(consumer, prefix(ModifierIds.sweeping, upgradeSalvage))
+                                    .save(consumer, prefix(ModifierIds.sweeping, upgradeFolder));
     // swiftstrike works on blocks too, we are nice
     IncrementalModifierRecipeBuilder.modifier(ModifierIds.swiftstrike)
                                     .setTools(TinkerTags.Items.MELEE_WEAPON)

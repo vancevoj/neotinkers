@@ -39,7 +39,7 @@ public class EnchantmentToModifierProvider extends AbstractEnchantmentToModifier
     add(Enchantments.KNOCKBACK, ModifierIds.knockback);
     add(Enchantments.FIRE_ASPECT, ModifierIds.fiery);
     add(Enchantments.MOB_LOOTING, ModifierIds.luck);
-    add(Enchantments.SWEEPING_EDGE, TinkerModifiers.sweeping.getId());
+    add(Enchantments.SWEEPING_EDGE, ModifierIds.sweeping);
     add(Enchantments.IMPALING, ModifierIds.antiaquatic);
 
     // harvest

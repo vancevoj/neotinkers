@@ -64,6 +64,7 @@ import slimeknights.tconstruct.library.json.variable.tool.ModifierLevelVariable;
 import slimeknights.tconstruct.library.json.variable.tool.StatMultiplierVariable;
 import slimeknights.tconstruct.library.json.variable.tool.ToolStatVariable;
 import slimeknights.tconstruct.library.json.variable.tool.ToolVariable;
+import slimeknights.tconstruct.library.modifiers.FakeModifier;
 import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierManager;
 import slimeknights.tconstruct.library.modifiers.fluid.FluidEffect;
@@ -184,6 +185,7 @@ import slimeknights.tconstruct.shared.TinkerEffects;
 import slimeknights.tconstruct.tables.TinkerTables;
 import slimeknights.tconstruct.tools.data.EnchantmentToModifierProvider;
 import slimeknights.tconstruct.tools.data.FluidEffectProvider;
+import slimeknights.tconstruct.tools.data.ModifierIds;
 import slimeknights.tconstruct.tools.data.ModifierProvider;
 import slimeknights.tconstruct.tools.data.ModifierRecipeProvider;
 import slimeknights.tconstruct.tools.entity.FluidEffectProjectile;
@@ -290,6 +292,7 @@ import slimeknights.tconstruct.tools.modules.combat.DamageOnShootModule;
 import slimeknights.tconstruct.tools.modules.combat.FieryAttackModule;
 import slimeknights.tconstruct.tools.modules.combat.FreezingAttackModule;
 import slimeknights.tconstruct.tools.modules.combat.SpillingModule;
+import slimeknights.tconstruct.tools.modules.combat.SweepingEdgeModule;
 import slimeknights.tconstruct.tools.modules.durability.DurabilityAsCapacityModule;
 import slimeknights.tconstruct.tools.modules.durability.ShareDurabilityModule;
 import slimeknights.tconstruct.tools.modules.interaction.BrushModule;
@@ -390,7 +393,9 @@ public final class TinkerModifiers extends TinkerModule {
   // damage boost
   @Deprecated(forRemoval = true)
   public static final StaticModifier<PiercingModifier> piercing = MODIFIERS.register("piercing", PiercingModifier::new);
-  public static final StaticModifier<SweepingEdgeModifier> sweeping = MODIFIERS.register("sweeping_edge", SweepingEdgeModifier::new);
+  /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#sweeping} */
+  @Deprecated(forRemoval = true)
+  public static final StaticModifier<SweepingEdgeModifier> sweeping = new FakeModifier<>(ModifierIds.sweeping, SweepingEdgeModifier::new);
 
   // ranged
   /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#punch} */
@@ -824,6 +829,7 @@ public final class TinkerModifiers extends TinkerModule {
       ModifierModule.LOADER.register(getResource("spilling"), SpillingModule.LOADER);
       ModifierModule.LOADER.register(getResource("channeling"), ChannelingModule.LOADER);
       ModifierModule.LOADER.register(getResource("smashing"), SmashingModule.LOADER);
+      ModifierModule.LOADER.register(getResource("sweeping_edge"), SweepingEdgeModule.LOADER);
       // armor
       ModifierModule.LOADER.register(getResource("enderclearance"), EnderclearanceModule.LOADER);
       ModifierModule.LOADER.register(getResource("depth_protection"), DepthProtectionModule.LOADER);

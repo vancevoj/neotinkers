@@ -52,6 +52,7 @@ public class ModifierIds {
   public static final ModifierId drillAttack = id("drill_attack");
   public static final ModifierId knockback = id("knockback");
   public static final ModifierId padded = id("padded");
+  public static final ModifierId sweeping = id("sweeping_edge");
   // general abilities
   public static final ModifierId reach = id("reach");
   public static final ModifierId glowing = id("glowing");
