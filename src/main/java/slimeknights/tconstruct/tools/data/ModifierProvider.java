@@ -45,6 +45,7 @@ import slimeknights.mantle.recipe.condition.TagFilledCondition;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.TinkerDamageTypes;
 import slimeknights.tconstruct.common.TinkerTags;
+import slimeknights.tconstruct.common.TinkerTags.Modifiers;
 import slimeknights.tconstruct.library.data.tinkering.AbstractModifierProvider;
 import slimeknights.tconstruct.library.json.LevelingInt;
 import slimeknights.tconstruct.library.json.LevelingValue;
@@ -72,7 +73,6 @@ import slimeknights.tconstruct.library.json.variable.protection.EntityProtection
 import slimeknights.tconstruct.library.json.variable.stat.EntityConditionalStatVariable;
 import slimeknights.tconstruct.library.json.variable.tool.ModDataSource;
 import slimeknights.tconstruct.library.json.variable.tool.ModDataVariable;
-import slimeknights.tconstruct.library.json.variable.tool.ModifierLevelVariable;
 import slimeknights.tconstruct.library.json.variable.tool.StatMultiplierVariable;
 import slimeknights.tconstruct.library.json.variable.tool.ToolStatVariable;
 import slimeknights.tconstruct.library.json.variable.tool.ToolVariable;
@@ -443,11 +443,6 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
         // knockback multiplier is a simple multiplier, though we skip if the knockback sync is disabled
         .customVariable("knockback_multiplier", new EntityConditionalStatVariable(new AttributeEntityVariable(TinkerAttributes.KNOCKBACK_MULTIPLIER), 1))
         .multiply()
-        // padded level reduces just knockback, not a good way to not hardcode this so knockback handles it
-        // goal is knockback / 2^PADDED, note if PADDED is absent this gives knockback / 2^0 = knockback / 1
-        .constant(2)
-        .customVariable("padded", ModifierLevelVariable.modifier(TinkerModifiers.padded.getId()))
-        .power().divide()
         // finally, add to the base effect
         .variable(VALUE).add().build())
       // bonking does the same but without the attributes
@@ -456,11 +451,6 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
         // 0.25 per level, that makes each level like adding 1 level of the power modifier (after the first)
         .constant(0.25f).variable(LEVEL).multiply()
         .variable(MULTIPLIER).multiply() // cooldown and sling properties
-        // padded level reduces just knockback, not a good way to not hardcode this so knockback handles it
-        // goal is knockback / 2^PADDED, note if PADDED is absent this gives knockback / 2^0 = knockback / 1
-        .constant(2)
-        .customVariable("padded", ModifierLevelVariable.modifier(TinkerModifiers.padded.getId()))
-        .power().divide()
         // finally, add to the base effect
         .variable(VALUE).add().build());
     buildModifier(TinkerModifiers.padded)
@@ -468,8 +458,11 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .addModule(KnockbackModule.builder().formula()
         .variable(VALUE)
         .constant(2).variable(LEVEL).power() // 2^LEVEL
-        .divide().build()); // KNOCKBACK / 2^LEVEL
-      // sling is handled by knockback module
+        .divide().build()) // KNOCKBACK / 2^LEVEL
+      .addModule(SlingForceModule.builder().sling(ModifierPredicate.tag(Modifiers.KNOCKBACK_SLINGS)).formula()
+        .variable(VALUE)
+        .constant(2).variable(LEVEL).power() // 2^LEVEL
+        .divide().build()); // FORCE / 2^LEVEL
     buildModifier(ModifierIds.sticky)
       .addModule(MobEffectModule.builder(MobEffects.MOVEMENT_SLOWDOWN).level(RandomLevelingValue.perLevel(0, 0.5f)).time(RandomLevelingValue.random(20, 10)).build());
 

@@ -721,6 +721,8 @@ public class TinkerTags {
     public static final TagKey<Modifier> CHARGE_EMPTY_BOW_WITHOUT_DRAWTIME = local("charge_empty_bow/without_drawtime");
     /** Movement modifiers that can activate the drill attack */
     public static final TagKey<Modifier> DRILL_ATTACKS = local("drill_attacks");
+    /** Sling modifiers that get a bonus from knockback. */
+    public static final TagKey<Modifier> KNOCKBACK_SLINGS = local("knockback_slings");
     /** Sling modifiers that get a bonus from knockback, targeting yourself (so should add in attributes). */
     public static final TagKey<Modifier> SELF_KNOCKBACK_SLINGS = local("knockback_slings/self");
     /** Sling modifiers that get a bonus from knockback, targeting someone else (so attributes are automatically applied). */
