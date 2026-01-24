@@ -52,6 +52,7 @@ public class ModifierIds {
   // general abilities
   public static final ModifierId reach = id("reach");
   public static final ModifierId glowing = id("glowing");
+  public static final ModifierId autosmelt = id("autosmelt");
   // compat
   public static final ModifierId theOneProbe = id("the_one_probe");
   public static final ModifierId headlight = id("headlight");

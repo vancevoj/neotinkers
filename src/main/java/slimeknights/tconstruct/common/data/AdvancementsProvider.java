@@ -288,7 +288,7 @@ public class AdvancementsProvider extends GenericDataProvider {
       with.accept(ModifierIds.spilling);
 
       // harvest
-      withL.accept(TinkerModifiers.autosmelt);
+      with.accept(ModifierIds.autosmelt);
       withL.accept(TinkerModifiers.exchanging);
       withL.accept(TinkerModifiers.silky);
 

@@ -41,7 +41,7 @@ public class EnchantmentTagProvider extends TagsProvider<Enchantment> {
     modifierTag(ModifierIds.revitalizing, "ensorcellation:vitality");
 
     // ability
-    modifierTag(TinkerModifiers.autosmelt.getId(), "cyclic:auto_smelt", "ensorcellation:smelting");
+    modifierTag(ModifierIds.autosmelt, "cyclic:auto_smelt", "ensorcellation:smelting");
     modifierTag(ModifierIds.doubleJump, "cyclic:launch", "walljump:doublejump");
     modifierTag(TinkerModifiers.expanded.getId(), "cyclic:excavate", "ensorcellation:excavating", "ensorcellation:furrowing");
     modifierTag(ModifierIds.luck, "ensorcellation:hunter");

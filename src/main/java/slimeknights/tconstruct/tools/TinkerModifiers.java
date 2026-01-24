@@ -210,7 +210,6 @@ import slimeknights.tconstruct.tools.modifiers.ability.sling.BonkingModifier;
 import slimeknights.tconstruct.tools.modifiers.ability.sling.FlingingModifier;
 import slimeknights.tconstruct.tools.modifiers.ability.sling.SpringingModifier;
 import slimeknights.tconstruct.tools.modifiers.ability.sling.WarpingModifier;
-import slimeknights.tconstruct.tools.modifiers.ability.tool.AutosmeltModifier;
 import slimeknights.tconstruct.tools.modifiers.ability.tool.BucketingModifier;
 import slimeknights.tconstruct.tools.modifiers.ability.tool.DuelWieldingModifier;
 import slimeknights.tconstruct.tools.modifiers.ability.tool.ExchangingModifier;
@@ -264,6 +263,7 @@ import slimeknights.tconstruct.tools.modifiers.upgrades.melee.PiercingModifier;
 import slimeknights.tconstruct.tools.modifiers.upgrades.melee.SeveringModifier;
 import slimeknights.tconstruct.tools.modifiers.upgrades.melee.SweepingEdgeModifier;
 import slimeknights.tconstruct.tools.modifiers.upgrades.ranged.SinistralModifier;
+import slimeknights.tconstruct.tools.modules.AutosmeltModule;
 import slimeknights.tconstruct.tools.modules.CraftCountModule;
 import slimeknights.tconstruct.tools.modules.DamageOnUnequipModule;
 import slimeknights.tconstruct.tools.modules.HeadlightModule;
@@ -451,7 +451,9 @@ public final class TinkerModifiers extends TinkerModule {
   public static final StaticModifier<DuelWieldingModifier> dualWielding = MODIFIERS.register("dual_wielding", DuelWieldingModifier::new);
   // harvest
   public static final DynamicModifier silky = MODIFIERS.registerDynamic("silky");
-  public static final StaticModifier<AutosmeltModifier> autosmelt = MODIFIERS.register("autosmelt", AutosmeltModifier::new);
+  /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#autosmelt} */
+  @Deprecated(forRemoval = true)
+  public static final StaticModifier<?> autosmelt = MODIFIERS.registerDynamic("autosmelt");
   public static final StaticModifier<Modifier> expanded = MODIFIERS.register("expanded", Modifier::new);
   public static final StaticModifier<ExchangingModifier> exchanging = MODIFIERS.register("exchanging", ExchangingModifier::new);
 
@@ -774,6 +776,7 @@ public final class TinkerModifiers extends TinkerModule {
 
       // special
       ModifierModule.LOADER.register(getResource("smelting"), SmeltingModule.LOADER);
+      ModifierModule.LOADER.register(getResource("autosmelt"), AutosmeltModule.LOADER);
       ModifierModule.LOADER.register(getResource("melting"), MeltingModule.LOADER);
       ModifierModule.LOADER.register(getResource("place_glow"), PlaceGlowModule.LOADER);
       ModifierModule.LOADER.register(getResource("glow_walker"), GlowWalkerModule.LOADER);

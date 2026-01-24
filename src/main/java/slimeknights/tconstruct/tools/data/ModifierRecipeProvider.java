@@ -1288,7 +1288,7 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .setTools(TinkerTags.Items.HARVEST)
                          .saveSalvage(consumer, prefix(TinkerModifiers.exchanging, abilitySalvage))
                          .save(consumer, prefix(TinkerModifiers.exchanging, abilityFolder));
-    ModifierRecipeBuilder.modifier(TinkerModifiers.autosmelt)
+    ModifierRecipeBuilder.modifier(ModifierIds.autosmelt)
                          .addInput(Tags.Items.RAW_MATERIALS)
                          .addInput(Blocks.BLAST_FURNACE)
                          .addInput(Tags.Items.INGOTS)
@@ -1297,8 +1297,8 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .setMaxLevel(1)
                          .setSlots(SlotType.ABILITY, 1)
                          .setTools(ingredientFromTags(TinkerTags.Items.HARVEST, TinkerTags.Items.FISHING_RODS))
-                         .saveSalvage(consumer, prefix(TinkerModifiers.autosmelt, abilitySalvage))
-                         .save(consumer, prefix(TinkerModifiers.autosmelt, abilityFolder));
+                         .saveSalvage(consumer, prefix(ModifierIds.autosmelt, abilitySalvage))
+                         .save(consumer, prefix(ModifierIds.autosmelt, abilityFolder));
     ModifierRecipeBuilder.modifier(ModifierIds.channeling)
       .addInput(Blocks.LIGHTNING_ROD)
       .addInput(Blocks.CREEPER_HEAD)

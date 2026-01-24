@@ -162,6 +162,7 @@ import slimeknights.tconstruct.tools.data.material.MaterialIds;
 import slimeknights.tconstruct.tools.entity.ThrownTool;
 import slimeknights.tconstruct.tools.item.CrystalshotItem;
 import slimeknights.tconstruct.tools.logic.ModifierEvents;
+import slimeknights.tconstruct.tools.modules.AutosmeltModule;
 import slimeknights.tconstruct.tools.modules.CraftCountModule;
 import slimeknights.tconstruct.tools.modules.DamageOnUnequipModule;
 import slimeknights.tconstruct.tools.modules.HeadlightModule;
@@ -330,6 +331,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .addModule(StatBoostModule.add(ToolTankHelper.CAPACITY_STAT).eachLevel(FluidType.BUCKET_VOLUME))
       // give a bonus 500 degrees and a bonus 3 nuggets and 50% of a gem at level 2
       .addModule(MeltingModule.builder().temperature(new LevelingInt(500, 500)).nuggetsPerMetal(new LevelingInt(9, 3)).shardsPerGem(new LevelingInt(6, 2)).build());
+    buildModifier(ModifierIds.autosmelt).levelDisplay(ModifierLevelDisplay.PLUSES).addModule(new AutosmeltModule(0.2f, RecipeType.SMELTING));
     IJsonPredicate<IToolContext> noUnbreakable = HasModifierPredicate.hasModifier(TinkerModifiers.unbreakable.getId(), 1).inverted();
     buildModifier(ModifierIds.reinforced)
       // level 0 to 5: 0.025 * LEVEL * (11 - LEVEL)
