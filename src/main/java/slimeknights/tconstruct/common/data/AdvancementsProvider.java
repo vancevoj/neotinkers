@@ -290,7 +290,7 @@ public class AdvancementsProvider extends GenericDataProvider {
       // harvest
       with.accept(ModifierIds.autosmelt);
       withL.accept(TinkerModifiers.exchanging);
-      withL.accept(TinkerModifiers.silky);
+      with.accept(ModifierIds.silky);
 
       // ranged
       with.accept(ModifierIds.bulkQuiver);

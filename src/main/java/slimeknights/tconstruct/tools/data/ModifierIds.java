@@ -71,6 +71,7 @@ public class ModifierIds {
   public static final ModifierId looting = id("looting");
   public static final ModifierId fortune = id("fortune");
   public static final ModifierId experienced = id("experienced");
+  public static final ModifierId silky = id("silky");
 
   // damage boost
   public static final ModifierId sharpness   = id("sharpness");
@@ -150,6 +151,8 @@ public class ModifierIds {
   public static final ModifierId tilling = id("tilling");
   public static final ModifierId brushing = id("brushing");
   public static final ModifierId harvest = id("harvest");
+  public static final ModifierId shears = id("shears");
+  public static final ModifierId silkyShears = id("silky_shears");
 
   // throwing
   public static final ModifierId throwing = id("throwing");

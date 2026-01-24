@@ -333,7 +333,7 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
       // traits
       .module(ToolTraitsModule.builder()
         .trait(ModifierIds.tilling)
-        .trait(TinkerModifiers.shears)
+        .trait(ModifierIds.shears)
         .trait(ModifierIds.harvest).build())
       // harvest
       .module(ToolActionsModule.of(ToolActions.HOE_DIG))
@@ -362,7 +362,7 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
       // traits
       .module(ToolTraitsModule.builder()
         .trait(ModifierIds.tilling)
-        .trait(TinkerModifiers.aoeSilkyShears)
+        .trait(ModifierIds.silkyShears, 2)
         .trait(ModifierIds.harvest).build())
       // behavior
       .module(scytheHarvest)
@@ -394,7 +394,7 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
       .module(ToolTraitsModule.builder()
         .trait(TinkerModifiers.padded, 1)
         .trait(TinkerModifiers.offhandAttack)
-        .trait(TinkerModifiers.silkyShears).build())
+        .trait(ModifierIds.silkyShears).build())
       // behavior
       .module(ToolActionsModule.of(ToolActions.SWORD_DIG, ToolActions.HOE_DIG))
       .module(IsEffectiveModule.tag(TinkerTags.Blocks.MINABLE_WITH_DAGGER))
@@ -423,7 +423,7 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
         .set(ToolStats.DURABILITY, 1.1f).build()))
       .smallToolStartingSlots()
       // traits
-      .module(ToolTraitsModule.builder().trait(TinkerModifiers.silkyShears).build())
+      .module(ToolTraitsModule.builder().trait(ModifierIds.silkyShears).build())
       .module(ToolActionsModule.of(ToolActions.SWORD_DIG))
       // behavior
       .module(swordHarvest)
@@ -452,7 +452,7 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
       // traits
       .module(ToolTraitsModule.builder()
         .trait(TinkerModifiers.severing, 2)
-        .trait(TinkerModifiers.aoeSilkyShears).build())
+        .trait(ModifierIds.silkyShears, 2).build())
       // behavior
       .module(ToolActionsModule.of(ToolActions.SWORD_DIG))
       .module(swordHarvest)
@@ -851,7 +851,7 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
       .module(ToolTraitsModule.builder()
         .trait(TinkerModifiers.spitting)
         .trait(ModifierIds.spilling)
-        .trait(TinkerModifiers.silkyShears).build())
+        .trait(ModifierIds.silkyShears).build())
       // behavior
       .module(ToolActionsModule.of(ToolActions.SWORD_DIG))
       .module(swordHarvest)

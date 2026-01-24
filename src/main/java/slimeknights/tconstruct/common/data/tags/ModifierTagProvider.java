@@ -84,7 +84,8 @@ public class ModifierTagProvider extends AbstractModifierTagProvider {
       TinkerModifiers.bucketing.getId(), TinkerModifiers.splashing.getId(),
       ModifierIds.glowing, TinkerModifiers.firestarter.getId(),
       ModifierIds.stripping, ModifierIds.tilling, ModifierIds.pathing,
-      TinkerModifiers.shears.getId(), ModifierIds.harvest, ModifierIds.fishing,
+      ModifierIds.shears, ModifierIds.silkyShears,
+      ModifierIds.harvest, ModifierIds.fishing,
       ModifierIds.pockets
     );
     tag(BLOCK_WHILE_CHARGING).add(
@@ -156,7 +157,7 @@ public class ModifierTagProvider extends AbstractModifierTagProvider {
     this.tag(MELEE_ABILITIES).add(
       TinkerModifiers.blocking.getId(), TinkerModifiers.parrying.getId(),
       TinkerModifiers.dualWielding.getId(), ModifierIds.spilling);
-    this.tag(HARVEST_ABILITIES).add(ModifierIds.autosmelt, TinkerModifiers.exchanging.getId(), TinkerModifiers.silky.getId());
+    this.tag(HARVEST_ABILITIES).add(ModifierIds.autosmelt, TinkerModifiers.exchanging.getId(), ModifierIds.silky);
     this.tag(RANGED_ABILITIES).add(
       ModifierIds.bulkQuiver, ModifierIds.trickQuiver,
       ModifierIds.crystalshot, TinkerModifiers.multishot.getId(), ModifierIds.ballista,

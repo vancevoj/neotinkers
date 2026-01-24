@@ -1266,7 +1266,7 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .saveSalvage(consumer, prefix(ModifierIds.luck, abilitySalvage));
 
     // silky: all the cloth
-    ModifierRecipeBuilder.modifier(TinkerModifiers.silky)
+    ModifierRecipeBuilder.modifier(ModifierIds.silky)
                          .addInput(TinkerModifiers.silkyCloth)
                          .addInput(TinkerModifiers.silkyCloth)
                          .addInput(TinkerModifiers.silkyCloth)
@@ -1275,8 +1275,8 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .setMaxLevel(1).checkTraitLevel()
                          .setSlots(SlotType.ABILITY, 1)
                          .setTools(TinkerTags.Items.HARVEST)
-                         .saveSalvage(consumer, prefix(TinkerModifiers.silky, abilitySalvage))
-                         .save(consumer, prefix(TinkerModifiers.silky, abilityFolder));
+                         .saveSalvage(consumer, prefix(ModifierIds.silky, abilitySalvage))
+                         .save(consumer, prefix(ModifierIds.silky, abilityFolder));
     ModifierRecipeBuilder.modifier(TinkerModifiers.exchanging)
                          .addInput(Items.STICKY_PISTON)
                          .addInput(TinkerMaterials.hepatizon.getIngotTag())

@@ -44,7 +44,7 @@ public class EnchantmentToModifierProvider extends AbstractEnchantmentToModifier
 
     // harvest
     add(Enchantments.BLOCK_EFFICIENCY, ModifierIds.haste);
-    add(Enchantments.SILK_TOUCH, TinkerModifiers.silky.getId());
+    add(Enchantments.SILK_TOUCH, ModifierIds.silky);
     add(Enchantments.BLOCK_FORTUNE, ModifierIds.luck);
 
     // ranged

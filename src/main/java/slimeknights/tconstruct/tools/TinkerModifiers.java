@@ -203,8 +203,6 @@ import slimeknights.tconstruct.tools.modifiers.ability.fluid.SplashingModifier;
 import slimeknights.tconstruct.tools.modifiers.ability.fluid.WettingModifier;
 import slimeknights.tconstruct.tools.modifiers.ability.interaction.BlockingModifier;
 import slimeknights.tconstruct.tools.modifiers.ability.interaction.FirestarterModifier;
-import slimeknights.tconstruct.tools.modifiers.ability.interaction.ShearsAbilityModifier;
-import slimeknights.tconstruct.tools.modifiers.ability.interaction.SilkyShearsAbilityModifier;
 import slimeknights.tconstruct.tools.modifiers.ability.sling.BonkingModifier;
 import slimeknights.tconstruct.tools.modifiers.ability.sling.FlingingModifier;
 import slimeknights.tconstruct.tools.modifiers.ability.sling.SpringingModifier;
@@ -300,6 +298,7 @@ import slimeknights.tconstruct.tools.modules.interaction.ExtinguishCampfireModul
 import slimeknights.tconstruct.tools.modules.interaction.FishingModule;
 import slimeknights.tconstruct.tools.modules.interaction.HarvestModule;
 import slimeknights.tconstruct.tools.modules.interaction.PlaceGlowModule;
+import slimeknights.tconstruct.tools.modules.interaction.ShearsModule;
 import slimeknights.tconstruct.tools.modules.interaction.ThrowingModule;
 import slimeknights.tconstruct.tools.modules.ranged.BulkQuiverModule;
 import slimeknights.tconstruct.tools.modules.ranged.RestrictAngleModule;
@@ -450,6 +449,8 @@ public final class TinkerModifiers extends TinkerModule {
   // weapon
   public static final StaticModifier<DuelWieldingModifier> dualWielding = MODIFIERS.register("dual_wielding", DuelWieldingModifier::new);
   // harvest
+  /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#silky} */
+  @Deprecated(forRemoval = true)
   public static final DynamicModifier silky = MODIFIERS.registerDynamic("silky");
   /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#autosmelt} */
   @Deprecated(forRemoval = true)
@@ -482,9 +483,15 @@ public final class TinkerModifiers extends TinkerModule {
 
 
   // internal abilities
-  public static final StaticModifier<ShearsAbilityModifier> shears = MODIFIERS.register("shears", () -> new ShearsAbilityModifier(0, 70));
-  public static final StaticModifier<SilkyShearsAbilityModifier> silkyShears = MODIFIERS.register("silky_shears", () -> new SilkyShearsAbilityModifier(0, 70));
-  public static final StaticModifier<SilkyShearsAbilityModifier> aoeSilkyShears = MODIFIERS.register("silky_aoe_shears", () -> new SilkyShearsAbilityModifier(1, 70));
+  /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#shears} */
+  @Deprecated(forRemoval = true)
+  public static final StaticModifier<?> shears = MODIFIERS.registerDynamic("shears");
+  /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#silkyShears} */
+  @Deprecated(forRemoval = true)
+  public static final StaticModifier<?> silkyShears = MODIFIERS.registerDynamic("silky_shears");
+  /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#silkyShears} at level 2 */
+  @Deprecated(forRemoval = true)
+  public static final StaticModifier<?> aoeSilkyShears = MODIFIERS.registerDynamic("silky_aoe_shears");
   /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#jagged} */
   @Deprecated(forRemoval = true)
   public static final StaticModifier<?> harvest = MODIFIERS.registerDynamic("harvest");
@@ -796,6 +803,7 @@ public final class TinkerModifiers extends TinkerModule {
       ModifierModule.LOADER.register(getResource("harvest"), HarvestModule.LOADER);
       ModifierModule.LOADER.register(getResource("place_glow"), PlaceGlowModule.LOADER);
       ModifierModule.LOADER.register(getResource("projectile_place_glow"), ProjectilePlaceGlowModule.LOADER);
+      ModifierModule.LOADER.register(getResource("shears"), ShearsModule.LOADER);
       ModifierModule.LOADER.register(getResource("throwing"), ThrowingModule.LOADER);
       // overslime
       ModifierModule.LOADER.register(getResource("overgrowth"), OvergrowthModule.LOADER);
