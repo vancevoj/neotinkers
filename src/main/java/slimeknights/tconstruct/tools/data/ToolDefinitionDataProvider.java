@@ -334,7 +334,7 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
       .module(ToolTraitsModule.builder()
         .trait(ModifierIds.tilling)
         .trait(TinkerModifiers.shears)
-        .trait(TinkerModifiers.harvest).build())
+        .trait(ModifierIds.harvest).build())
       // harvest
       .module(ToolActionsModule.of(ToolActions.HOE_DIG))
       .module(scytheHarvest)
@@ -363,7 +363,7 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
       .module(ToolTraitsModule.builder()
         .trait(ModifierIds.tilling)
         .trait(TinkerModifiers.aoeSilkyShears)
-        .trait(TinkerModifiers.harvest).build())
+        .trait(ModifierIds.harvest).build())
       // behavior
       .module(scytheHarvest)
       .module(BoxAOEIterator.builder(1, 1, 2).addExpansion(1, 1, 0).addDepth(2).build())

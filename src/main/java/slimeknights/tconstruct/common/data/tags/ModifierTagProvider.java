@@ -84,7 +84,7 @@ public class ModifierTagProvider extends AbstractModifierTagProvider {
       TinkerModifiers.bucketing.getId(), TinkerModifiers.splashing.getId(),
       ModifierIds.glowing, TinkerModifiers.firestarter.getId(),
       ModifierIds.stripping, ModifierIds.tilling, ModifierIds.pathing,
-      TinkerModifiers.shears.getId(), TinkerModifiers.harvest.getId(), ModifierIds.fishing,
+      TinkerModifiers.shears.getId(), ModifierIds.harvest, ModifierIds.fishing,
       ModifierIds.pockets
     );
     tag(BLOCK_WHILE_CHARGING).add(
@@ -100,7 +100,7 @@ public class ModifierTagProvider extends AbstractModifierTagProvider {
       ModifierIds.overgrowth, ModifierIds.overcast, ModifierIds.overshield, ModifierIds.overburn, ModifierIds.overlord,
       ModifierIds.overforced, ModifierIds.overslimeFriend, TinkerModifiers.overworked.getId()
     );
-    tag(AOE_INTERACTION).add(ModifierIds.pathing, ModifierIds.stripping, ModifierIds.tilling, ModifierIds.brushing, TinkerModifiers.splashing.getId(), TinkerModifiers.harvest.getId());
+    tag(AOE_INTERACTION).add(ModifierIds.pathing, ModifierIds.stripping, ModifierIds.tilling, ModifierIds.brushing, TinkerModifiers.splashing.getId(), ModifierIds.harvest);
     tag(CHARGE_EMPTY_BOW_WITH_DRAWTIME).add(TinkerModifiers.flinging.getId(), TinkerModifiers.springing.getId(), TinkerModifiers.bonking.getId(), TinkerModifiers.warping.getId(), ModifierIds.throwing);
     tag(CHARGE_EMPTY_BOW_WITHOUT_DRAWTIME).add(TinkerModifiers.blocking.getId(), ModifierIds.scope, ModifierIds.zoom);
     tag(DRILL_ATTACKS).add(TinkerModifiers.flinging.getId(), TinkerModifiers.springing.getId(), ModifierIds.grapple);
