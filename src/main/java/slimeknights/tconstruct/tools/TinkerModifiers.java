@@ -97,7 +97,6 @@ import slimeknights.tconstruct.library.modifiers.fluid.general.ExplosionFluidEff
 import slimeknights.tconstruct.library.modifiers.fluid.general.ScalingFluidEffect;
 import slimeknights.tconstruct.library.modifiers.fluid.general.SequenceFluidEffect;
 import slimeknights.tconstruct.library.modifiers.fluid.general.SetBlockFluidEffect;
-import slimeknights.tconstruct.library.modifiers.impl.SingleLevelModifier;
 import slimeknights.tconstruct.library.modifiers.modules.ModifierModule;
 import slimeknights.tconstruct.library.modifiers.modules.armor.BlockDamageSourceModule;
 import slimeknights.tconstruct.library.modifiers.modules.armor.CoverGroundWalkerModule;
@@ -402,7 +401,9 @@ public final class TinkerModifiers extends TinkerModule {
   /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#crystalshot} */
   @Deprecated(forRemoval = true)
   public static final DynamicModifier crystalshot = MODIFIERS.registerDynamic("crystalshot");
-  public static final StaticModifier<Modifier> multishot = MODIFIERS.register("multishot", Modifier::new);
+  /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#multishot} (modifier) or {@link slimeknights.tconstruct.library.modifiers.hook.ranged.BowAmmoModifierHook#MULTISHOT} (querying) */
+  @Deprecated(forRemoval = true)
+  public static final StaticModifier<?> multishot = MODIFIERS.registerDynamic("multishot");
   public static final StaticModifier<SinistralModifier> sinistral = MODIFIERS.register("sinistral", SinistralModifier::new);
   /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#scope} */
   @Deprecated(forRemoval = true)
@@ -455,7 +456,9 @@ public final class TinkerModifiers extends TinkerModule {
   /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#autosmelt} */
   @Deprecated(forRemoval = true)
   public static final StaticModifier<?> autosmelt = MODIFIERS.registerDynamic("autosmelt");
-  public static final StaticModifier<Modifier> expanded = MODIFIERS.register("expanded", Modifier::new);
+  /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#expanded} (modifier) or {@link slimeknights.tconstruct.library.tools.item.IModifiable#EXPANDED} (querying) */
+  @Deprecated(forRemoval = true)
+  public static final StaticModifier<?> expanded = MODIFIERS.registerDynamic("expanded");
   public static final StaticModifier<ExchangingModifier> exchanging = MODIFIERS.register("exchanging", ExchangingModifier::new);
 
   public static final StaticModifier<Modifier> energyHandler = MODIFIERS.register("energy_handler", EnergyHandlerModifier::new);
@@ -472,7 +475,9 @@ public final class TinkerModifiers extends TinkerModule {
   
   // right click abilities
   public static final StaticModifier<FirestarterModifier> firestarter = MODIFIERS.register("firestarter", () -> new FirestarterModifier(Modifier.DEFAULT_PRIORITY));
-  public static final StaticModifier<SingleLevelModifier> fireprimer = MODIFIERS.register("fireprimer", SingleLevelModifier::new);
+  /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#fireprimer} (modifier), or {@link slimeknights.tconstruct.library.tools.item.IModifiable#EXPANDED} (querying) */
+  @Deprecated(forRemoval = true)
+  public static final StaticModifier<?> fireprimer = MODIFIERS.registerDynamic("fireprimer");
   public static final StaticModifier<BlockingModifier> blocking = MODIFIERS.register("blocking", BlockingModifier::new);
   public static final StaticModifier<ParryingModifier> parrying = MODIFIERS.register("parrying", ParryingModifier::new);
   // slings

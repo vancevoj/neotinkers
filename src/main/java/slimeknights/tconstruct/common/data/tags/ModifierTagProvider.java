@@ -122,7 +122,7 @@ public class ModifierTagProvider extends AbstractModifierTagProvider {
       ModifierIds.diamond, ModifierIds.emerald, ModifierIds.netherite,
       ModifierIds.reinforced, ModifierIds.overforced, ModifierIds.soulbound,
       ModifierIds.experienced, TinkerModifiers.magnetic.getId(), ModifierIds.scope, ModifierIds.zoom,
-      ModifierIds.tank, ModifierIds.smelting, TinkerModifiers.fireprimer.getId())
+      ModifierIds.tank, ModifierIds.smelting, ModifierIds.fireprimer)
         .addOptional(ModifierIds.theOneProbe);
 
     this.tag(MELEE_UPGRADES).add(
@@ -152,7 +152,7 @@ public class ModifierTagProvider extends AbstractModifierTagProvider {
 
     // abilities
     this.tag(GENERAL_ABILITIES).add(
-      TinkerModifiers.expanded.getId(), ModifierIds.gilded, TinkerModifiers.unbreakable.getId(),
+      ModifierIds.expanded, ModifierIds.gilded, TinkerModifiers.unbreakable.getId(),
       ModifierIds.luck, TinkerModifiers.melting.getId());
     this.tag(MELEE_ABILITIES).add(
       TinkerModifiers.blocking.getId(), TinkerModifiers.parrying.getId(),
@@ -160,7 +160,7 @@ public class ModifierTagProvider extends AbstractModifierTagProvider {
     this.tag(HARVEST_ABILITIES).add(ModifierIds.autosmelt, TinkerModifiers.exchanging.getId(), ModifierIds.silky);
     this.tag(RANGED_ABILITIES).add(
       ModifierIds.bulkQuiver, ModifierIds.trickQuiver,
-      ModifierIds.crystalshot, TinkerModifiers.multishot.getId(), ModifierIds.ballista,
+      ModifierIds.crystalshot, ModifierIds.multishot, ModifierIds.ballista,
       ModifierIds.grapple,
       ModifierIds.channeling, ModifierIds.returning);
     this.tag(INTERACTION_ABILITIES).add(

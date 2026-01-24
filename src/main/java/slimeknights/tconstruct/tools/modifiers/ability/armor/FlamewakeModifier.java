@@ -14,8 +14,8 @@ import slimeknights.tconstruct.library.modifiers.impl.NoLevelsModifier;
 import slimeknights.tconstruct.library.modifiers.modules.armor.ArmorWalkRadiusModule;
 import slimeknights.tconstruct.library.module.ModuleHookMap.Builder;
 import slimeknights.tconstruct.library.tools.helper.ToolDamageUtil;
+import slimeknights.tconstruct.library.tools.item.IModifiable;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
-import slimeknights.tconstruct.tools.TinkerModifiers;
 
 public class FlamewakeModifier extends NoLevelsModifier implements ArmorWalkRadiusModule<Void> {
   @Override
@@ -26,7 +26,7 @@ public class FlamewakeModifier extends NoLevelsModifier implements ArmorWalkRadi
 
   @Override
   public float getRadius(IToolStackView tool, ModifierEntry modifier) {
-    return 1.5f + tool.getModifierLevel(TinkerModifiers.expanded.getId());
+    return 1.5f + tool.getVolatileData().getInt(IModifiable.EXPANDED);
   }
 
   @Override

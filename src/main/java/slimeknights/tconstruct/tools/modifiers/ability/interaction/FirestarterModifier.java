@@ -43,9 +43,9 @@ import slimeknights.tconstruct.library.tools.definition.module.ToolHooks;
 import slimeknights.tconstruct.library.tools.definition.module.aoe.AreaOfEffectIterator;
 import slimeknights.tconstruct.library.tools.definition.module.aoe.CircleAOEIterator;
 import slimeknights.tconstruct.library.tools.helper.ToolDamageUtil;
+import slimeknights.tconstruct.library.tools.item.IModifiable;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.utils.Util;
-import slimeknights.tconstruct.tools.TinkerModifiers;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
@@ -158,7 +158,7 @@ public class FirestarterModifier extends NoLevelsModifier implements EntityInter
     }
 
     // AOE selection logic, get boosted from both fireprimer (unique modifer) and expanded
-    int range = tool.getModifierLevel(TinkerModifiers.fireprimer.getId()) + tool.getModifierLevel(TinkerModifiers.expanded.getId());
+    int range = tool.getVolatileData().getInt(IModifiable.EXPANDED);
     Iterable<BlockPos> targets = Collections.emptyList();
     if (range > 0) {
       targets = CircleAOEIterator.calculate(tool, targetContext, 1 + range, true, AreaOfEffectIterator.AOEMatchType.TRANSFORM);

@@ -39,6 +39,7 @@ public class ModifierIds {
   public static final ModifierId blunted    = id("blunted");
   public static final ModifierId soulbound = id("soulbound");
   public static final ModifierId smelting = id("smelting");
+  public static final ModifierId fireprimer = id("fireprimer");
   // combat
   public static final ModifierId fiery = id("fiery");
   public static final ModifierId freezing = id("freezing");
@@ -53,6 +54,7 @@ public class ModifierIds {
   public static final ModifierId reach = id("reach");
   public static final ModifierId glowing = id("glowing");
   public static final ModifierId autosmelt = id("autosmelt");
+  public static final ModifierId expanded = id("expanded");
   // compat
   public static final ModifierId theOneProbe = id("the_one_probe");
   public static final ModifierId headlight = id("headlight");
@@ -98,6 +100,7 @@ public class ModifierIds {
   public static final ModifierId crystalshot = id("crystalshot");
   public static final ModifierId barebow = id("barebow");
   public static final ModifierId warCharge = id("war_charge");
+  public static final ModifierId multishot = id("multishot");
 
   // armor
   public static final ModifierId protection = id("protection");

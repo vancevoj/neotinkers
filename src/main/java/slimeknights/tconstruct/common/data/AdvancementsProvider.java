@@ -275,7 +275,7 @@ public class AdvancementsProvider extends GenericDataProvider {
 
       // sorted like the modifier tag provider tags
       // general
-      withL.accept(TinkerModifiers.expanded);
+      with.accept(ModifierIds.expanded);
       with.accept(ModifierIds.gilded);
       with.accept(ModifierIds.luck);
       withL.accept(TinkerModifiers.unbreakable);
@@ -296,7 +296,7 @@ public class AdvancementsProvider extends GenericDataProvider {
       with.accept(ModifierIds.bulkQuiver);
       with.accept(ModifierIds.trickQuiver);
       with.accept(ModifierIds.crystalshot);
-      withL.accept(TinkerModifiers.multishot);
+      with.accept(ModifierIds.multishot);
       with.accept(ModifierIds.ballista);
       // fishing
       with.accept(ModifierIds.grapple);

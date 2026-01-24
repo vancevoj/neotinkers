@@ -15,6 +15,7 @@ import slimeknights.tconstruct.library.module.ModuleHook;
 import slimeknights.tconstruct.library.tools.context.ToolAttackContext;
 import slimeknights.tconstruct.library.tools.definition.module.ToolHooks;
 import slimeknights.tconstruct.library.tools.definition.module.ToolModule;
+import slimeknights.tconstruct.library.tools.item.IModifiable;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.tools.TinkerModifiers;
 
@@ -42,7 +43,7 @@ public record SweepWeaponAttack(float range) implements MeleeHitToolHook, ToolMo
     LivingEntity attacker = context.getAttacker();
     if (context.isFullyCharged() && !attacker.isSprinting() && !context.isCritical() && !context.isProjectile() && attacker.onGround() && (attacker.walkDist - attacker.walkDistO) < attacker.getSpeed()) {
       // loop through all nearby entities
-      double range = this.range + tool.getModifierLevel(TinkerModifiers.expanded.getId());
+      double range = this.range + tool.getVolatileData().getInt(IModifiable.EXPANDED);
       double rangeSq = (2 + range); // TODO: why do we add 2 here? should that not be defined in the datagen?
       rangeSq *= rangeSq;
       // if the modifier is missing, sweeping damage will be 0, so easiest to let it fully control this

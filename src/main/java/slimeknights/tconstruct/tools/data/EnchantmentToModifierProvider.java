@@ -52,7 +52,7 @@ public class EnchantmentToModifierProvider extends AbstractEnchantmentToModifier
     add(Enchantments.PUNCH_ARROWS, ModifierIds.punch);
     add(Enchantments.FLAMING_ARROWS, ModifierIds.fiery);
     add(Enchantments.INFINITY_ARROWS, ModifierIds.crystalshot);
-    add(Enchantments.MULTISHOT, TinkerModifiers.multishot.getId());
+    add(Enchantments.MULTISHOT, ModifierIds.multishot);
     add(Enchantments.QUICK_CHARGE, ModifierIds.quickCharge);
     add(Enchantments.PIERCING, ModifierIds.arrowPierce);
 
@@ -86,9 +86,9 @@ public class EnchantmentToModifierProvider extends AbstractEnchantmentToModifier
     // ability
     addCompat(ModifierIds.autosmelt);
     addCompat(ModifierIds.doubleJump);
-    addCompat(TinkerModifiers.expanded.getId());
+    addCompat(ModifierIds.expanded);
     addCompat(ModifierIds.luck);
-    addCompat(TinkerModifiers.multishot.getId());
+    addCompat(ModifierIds.multishot);
     addCompat(ModifierIds.reach);
     addCompat(ModifierIds.tilling);
     addCompat(TinkerModifiers.reflecting.getId());

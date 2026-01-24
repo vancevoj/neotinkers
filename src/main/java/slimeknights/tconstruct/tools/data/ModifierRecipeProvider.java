@@ -663,7 +663,7 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
       .addInput(Tags.Items.STRING)
       .setMaxLevel(1)
       .save(consumer, prefix(ModifierIds.barebow, slotlessFolder));
-    ModifierRecipeBuilder.modifier(TinkerModifiers.multishot)
+    ModifierRecipeBuilder.modifier(ModifierIds.multishot)
                          .addInput(Items.PISTON)
                          .addInput(TinkerMaterials.amethystBronze.getIngotTag())
                          .addInput(Items.PISTON)
@@ -671,9 +671,9 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .addInput(SlimeType.ICHOR.getSlimeballTag())
                          .setSlots(SlotType.ABILITY, 1)
                          .setTools(TinkerTags.Items.BOWS) // allow salvaging multishot from an older bow
-                         .saveSalvage(consumer, prefix(TinkerModifiers.multishot, abilitySalvage))
+                         .saveSalvage(consumer, prefix(ModifierIds.multishot, abilitySalvage))
                          .setTools(TinkerTags.Items.CROSSBOWS) // crossbow exclusive now
-                         .save(consumer, prefix(TinkerModifiers.multishot, abilityFolder));
+                         .save(consumer, prefix(ModifierIds.multishot, abilityFolder));
     ModifierRecipeBuilder.modifier(TinkerModifiers.sinistral)
                          .addInput(TinkerMaterials.slimesteel.getIngotTag())
                          .addInput(Items.NAUTILUS_SHELL)
@@ -1396,7 +1396,7 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .saveSalvage(consumer, prefix(ModifierIds.tank, upgradeSalvage))
                          .save(consumer, prefix(ModifierIds.tank, upgradeFolder));
     // expanders
-    ModifierRecipeBuilder.modifier(TinkerModifiers.expanded)
+    ModifierRecipeBuilder.modifier(ModifierIds.expanded)
                          .addInput(Items.PISTON)
                          .addInput(TinkerMaterials.amethystBronze.getIngotTag())
                          .addInput(Items.PISTON)
@@ -1404,8 +1404,8 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .addInput(SlimeType.ICHOR.getSlimeballTag())
                          .setSlots(SlotType.ABILITY, 1)
                          .setTools(TinkerTags.Items.AOE)
-                         .saveSalvage(consumer, prefix(TinkerModifiers.expanded, abilitySalvage))
-                         .save(consumer, prefix(TinkerModifiers.expanded, abilityFolder));
+                         .saveSalvage(consumer, prefix(ModifierIds.expanded, abilitySalvage))
+                         .save(consumer, prefix(ModifierIds.expanded, abilityFolder));
     // reach expander
     ModifierRecipeBuilder.modifier(ModifierIds.reach)
                          .setTools(TinkerTags.Items.CHESTPLATES)
@@ -1478,14 +1478,14 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .setSlots(SlotType.ABILITY, 1)
                          .saveSalvage(consumer, prefix(TinkerModifiers.firestarter, abilitySalvage))
                          .save(consumer, prefix(TinkerModifiers.firestarter, abilityFolder));
-    ModifierRecipeBuilder.modifier(TinkerModifiers.fireprimer)
+    ModifierRecipeBuilder.modifier(ModifierIds.fireprimer)
                          .setTools(Ingredient.of(TinkerTools.flintAndBrick))
                          .addInput(TinkerMaterials.steel.getIngotTag())
                          .addInput(Items.FLINT)
                          .setMaxLevel(1)
                          .setSlots(SlotType.UPGRADE, 1)
-                         .saveSalvage(consumer, prefix(TinkerModifiers.fireprimer, upgradeSalvage))
-                         .save(consumer, prefix(TinkerModifiers.fireprimer, upgradeFolder));
+                         .saveSalvage(consumer, prefix(ModifierIds.fireprimer, upgradeSalvage))
+                         .save(consumer, prefix(ModifierIds.fireprimer, upgradeFolder));
     // slings
     Ingredient blockWhileCharging = IntersectionIngredient.of(Ingredient.of(TinkerTags.Items.DURABILITY), Ingredient.of(TinkerTags.Items.INTERACTABLE_CHARGE));
     ModifierRecipeBuilder.modifier(TinkerModifiers.flinging)
