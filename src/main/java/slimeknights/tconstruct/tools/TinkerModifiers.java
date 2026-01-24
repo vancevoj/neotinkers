@@ -375,7 +375,11 @@ public final class TinkerModifiers extends TinkerModule {
   public static final StaticModifier<NearsightedModifier> nearsighted = MODIFIERS.register("nearsighted", NearsightedModifier::new);
 
   // weapon
+  /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#knockback} */
+  @Deprecated(forRemoval = true)
   public static final DynamicModifier knockback = MODIFIERS.registerDynamic("knockback");
+  /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#padded} */
+  @Deprecated(forRemoval = true)
   public static final DynamicModifier padded = MODIFIERS.registerDynamic("padded");
   /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#fiery} */
   @Deprecated(forRemoval = true)

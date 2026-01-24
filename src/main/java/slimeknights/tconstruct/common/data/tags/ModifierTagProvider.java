@@ -126,7 +126,7 @@ public class ModifierTagProvider extends AbstractModifierTagProvider {
         .addOptional(ModifierIds.theOneProbe);
 
     this.tag(MELEE_UPGRADES).add(
-      TinkerModifiers.knockback.getId(), TinkerModifiers.padded.getId(),
+      ModifierIds.knockback, ModifierIds.padded,
       TinkerModifiers.severing.getId(), TinkerModifiers.necrotic.getId(), TinkerModifiers.sweeping.getId(),
       ModifierIds.fiery, ModifierIds.freezing);
     this.tag(DAMAGE_UPGRADES).add(
@@ -139,7 +139,7 @@ public class ModifierTagProvider extends AbstractModifierTagProvider {
       ModifierIds.fiery, ModifierIds.freezing, ModifierIds.thorns,
       ModifierIds.ricochet, ModifierIds.springy, ModifierIds.blockade);
     this.tag(HELMET_UPGRADES).add(TinkerModifiers.itemFrame.getId(), ModifierIds.respiration, ModifierIds.minimap).addOptional(ModifierIds.headlight);
-    this.tag(CHESTPLATE_UPGRADES).add(ModifierIds.haste, TinkerModifiers.knockback.getId(), TinkerModifiers.sleeves.getId());
+    this.tag(CHESTPLATE_UPGRADES).add(ModifierIds.haste, ModifierIds.knockback, TinkerModifiers.sleeves.getId());
     this.tag(LEGGING_UPGRADES).add(ModifierIds.leaping, TinkerModifiers.shieldStrap.getId(), ModifierIds.speedy, ModifierIds.swiftSneak, ModifierIds.stepUp);
     this.tag(BOOT_UPGRADES).add(ModifierIds.depthStrider, ModifierIds.featherFalling, ModifierIds.longFall, ModifierIds.lightspeed, TinkerModifiers.soulspeed.getId());
 

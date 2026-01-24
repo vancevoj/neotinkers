@@ -435,7 +435,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
 
 
     /// attack
-    buildModifier(TinkerModifiers.knockback)
+    buildModifier(ModifierIds.knockback)
       // attributes are better for monster usage. However, projectiles don't run attributes, so run a projectile only knockback module
       .addModule(KnockbackModule.builder().projectile(ProjectilePredicate.PROJECTILE).eachLevel(0.5f))
       .addModule(AttributeModule.builder(Attributes.ATTACK_KNOCKBACK, Operation.ADDITION).slots(armorMainHand).eachLevel(1))
@@ -462,7 +462,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
         .variable(MULTIPLIER).multiply() // cooldown and sling properties
         // finally, add to the base effect
         .variable(VALUE).add().build());
-    buildModifier(TinkerModifiers.padded)
+    buildModifier(ModifierIds.padded)
       .priority(75) // run after knockback
       .addModule(KnockbackModule.builder().formula()
         .variable(VALUE)

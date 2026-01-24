@@ -249,7 +249,7 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
       .largeToolStartingSlots()
       // traits
       .module(ToolTraitsModule.builder()
-        .trait(TinkerModifiers.knockback, 2)
+        .trait(ModifierIds.knockback, 2)
         .trait(ModifierIds.pathing).build())
       // harvest
       .module(ToolActionsModule.of(ToolActions.SHOVEL_DIG))
@@ -392,7 +392,7 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
       .smallToolStartingSlots()
       // traits
       .module(ToolTraitsModule.builder()
-        .trait(TinkerModifiers.padded, 1)
+        .trait(ModifierIds.padded, 1)
         .trait(TinkerModifiers.offhandAttack)
         .trait(ModifierIds.silkyShears).build())
       // behavior
@@ -830,7 +830,7 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
       .module(ToolTraitsModule.builder()
         .trait(TinkerModifiers.blocking)
         .trait(TinkerModifiers.bonking)
-        .trait(TinkerModifiers.knockback).build())
+        .trait(ModifierIds.knockback).build())
       .module(new ParticleWeaponAttack(TinkerTools.bonkAttackParticle.get()));
     // swasher
     define(ToolDefinitions.SWASHER)

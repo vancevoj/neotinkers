@@ -36,7 +36,7 @@ public class EnchantmentToModifierProvider extends AbstractEnchantmentToModifier
     add(Enchantments.SHARPNESS, ModifierIds.sharpness);
     add(Enchantments.SMITE, ModifierIds.smite);
     add(Enchantments.BANE_OF_ARTHROPODS, ModifierIds.baneOfSssss);
-    add(Enchantments.KNOCKBACK, TinkerModifiers.knockback.getId());
+    add(Enchantments.KNOCKBACK, ModifierIds.knockback);
     add(Enchantments.FIRE_ASPECT, ModifierIds.fiery);
     add(Enchantments.MOB_LOOTING, ModifierIds.luck);
     add(Enchantments.SWEEPING_EDGE, TinkerModifiers.sweeping.getId());

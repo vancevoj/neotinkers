@@ -398,23 +398,23 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
     /*
      * weapon
      */
-    ModifierRecipeBuilder.modifier(TinkerModifiers.knockback)
+    ModifierRecipeBuilder.modifier(ModifierIds.knockback)
                          .addInput(Items.PISTON)
                          .addInput(TinkerWorld.slime.get(SlimeType.EARTH))
                          .setMaxLevel(3) // max +2.5 knockback points (knockback 5) (whatever that number means in vanilla)
                          .setSlots(SlotType.UPGRADE, 1)
                          .setTools(ingredientFromTags(TinkerTags.Items.MELEE, TinkerTags.Items.CHESTPLATES))
-                         .saveSalvage(consumer, prefix(TinkerModifiers.knockback, upgradeSalvage))
-                         .save(consumer, prefix(TinkerModifiers.knockback, upgradeFolder));
-    ModifierRecipeBuilder.modifier(TinkerModifiers.padded)
+                         .saveSalvage(consumer, prefix(ModifierIds.knockback, upgradeSalvage))
+                         .save(consumer, prefix(ModifierIds.knockback, upgradeFolder));
+    ModifierRecipeBuilder.modifier(ModifierIds.padded)
                          .addInput(Items.LEATHER)
                          .addInput(ItemTags.WOOL)
                          .addInput(Items.LEATHER)
                          .setMaxLevel(3) // max 12.5% knockback, or 6.25% on the dagger
                          .setSlots(SlotType.UPGRADE, 1)
                          .setTools(TinkerTags.Items.MELEE)
-                         .saveSalvage(consumer, prefix(TinkerModifiers.padded, upgradeSalvage))
-                         .save(consumer, prefix(TinkerModifiers.padded, upgradeFolder));
+                         .saveSalvage(consumer, prefix(ModifierIds.padded, upgradeSalvage))
+                         .save(consumer, prefix(ModifierIds.padded, upgradeFolder));
     ModifierRecipeBuilder.modifier(TinkerModifiers.severing)
                          .addInput(TinkerTags.Items.WITHER_BONES)
                          .addInput(Items.LIGHTNING_ROD)

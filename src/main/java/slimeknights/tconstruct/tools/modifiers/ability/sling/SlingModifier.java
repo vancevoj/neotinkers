@@ -62,6 +62,7 @@ public abstract class SlingModifier extends NoLevelsModifier implements GeneralI
   }
 
   /** @deprecated use {@link #getCharge(IToolStackView, ModifierEntry, int)} and {@link #getPower(IToolStackView, LivingEntity)} */
+  @SuppressWarnings("removal")
   @Deprecated(forRemoval = true)
   protected float getForce(IToolStackView tool, ModifierEntry entry, LivingEntity living, int timeLeft, boolean applyKnockback) {
     float charge = getCharge(tool, entry, timeLeft);
