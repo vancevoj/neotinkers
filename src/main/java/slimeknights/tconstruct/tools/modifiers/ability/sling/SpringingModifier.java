@@ -28,8 +28,9 @@ public class SpringingModifier extends SlingModifier {
   public InteractionResult onToolUse(IToolStackView tool, ModifierEntry modifier, Player player, InteractionHand hand, InteractionSource source) {
     if (!tool.isBroken() && source == InteractionSource.RIGHT_CLICK) {
       GeneralInteractionModifierHook.startUsingWithDrawtime(tool, modifier.getId(), player, hand, 1f);
+      return InteractionResult.SUCCESS;
     }
-    return InteractionResult.SUCCESS;
+    return InteractionResult.PASS;
   }
 
   @Override
