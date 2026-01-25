@@ -1534,7 +1534,7 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .save(consumer, prefix(TinkerModifiers.warping, abilityFolder));
 
     // unbreakable
-    ModifierRecipeBuilder.modifier(TinkerModifiers.unbreakable)
+    ModifierRecipeBuilder.modifier(ModifierIds.unbreakable)
                          .setTools(TinkerTags.Items.DURABILITY)
                          .addInput(Items.SHULKER_SHELL)
                          .addInput(Items.DRAGON_BREATH)
@@ -1543,8 +1543,8 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .addInput(Tags.Items.INGOTS_NETHERITE)
                          .setMaxLevel(1).checkTraitLevel()
                          .setSlots(SlotType.ABILITY, 1)
-                         .saveSalvage(consumer, prefix(TinkerModifiers.unbreakable, abilitySalvage))
-                         .save(consumer, prefix(TinkerModifiers.unbreakable, abilityFolder));
+                         .saveSalvage(consumer, prefix(ModifierIds.unbreakable, abilitySalvage))
+                         .save(consumer, prefix(ModifierIds.unbreakable, abilityFolder));
     // weapon
     ModifierRecipeBuilder.modifier(TinkerModifiers.dualWielding)
                          .addInput(TinkerMaterials.slimesteel.getIngotTag())

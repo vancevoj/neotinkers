@@ -278,7 +278,7 @@ public class AdvancementsProvider extends GenericDataProvider {
       with.accept(ModifierIds.expanded);
       with.accept(ModifierIds.gilded);
       with.accept(ModifierIds.luck);
-      withL.accept(TinkerModifiers.unbreakable);
+      with.accept(ModifierIds.unbreakable);
       withL.accept(TinkerModifiers.melting);
 
       // melee

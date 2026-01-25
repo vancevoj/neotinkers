@@ -462,6 +462,8 @@ public final class TinkerModifiers extends TinkerModule {
   public static final StaticModifier<FlamewakeModifier> flamewake = MODIFIERS.register("flamewake", FlamewakeModifier::new);
 
   // abilities
+  /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#unbreakable} */
+  @Deprecated(forRemoval = true)
   public static final DynamicModifier unbreakable = MODIFIERS.registerDynamic("unbreakable");
   // weapon
   public static final StaticModifier<DuelWieldingModifier> dualWielding = MODIFIERS.register("dual_wielding", DuelWieldingModifier::new);

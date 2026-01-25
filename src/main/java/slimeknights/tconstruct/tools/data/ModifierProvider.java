@@ -343,7 +343,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       // give a bonus 500 degrees and a bonus 3 nuggets and 50% of a gem at level 2
       .addModule(MeltingModule.builder().temperature(new LevelingInt(500, 500)).nuggetsPerMetal(new LevelingInt(9, 3)).shardsPerGem(new LevelingInt(6, 2)).build());
     buildModifier(ModifierIds.autosmelt).levelDisplay(ModifierLevelDisplay.PLUSES).addModule(new AutosmeltModule(0.2f, RecipeType.SMELTING));
-    IJsonPredicate<IToolContext> noUnbreakable = HasModifierPredicate.hasModifier(TinkerModifiers.unbreakable.getId(), 1).inverted();
+    IJsonPredicate<IToolContext> noUnbreakable = HasModifierPredicate.hasModifier(ModifierIds.unbreakable, 1).inverted();
     buildModifier(ModifierIds.reinforced)
       // level 0 to 5: 0.025 * LEVEL * (11 - LEVEL)
       .addModule(ReduceToolDamageModule.builder().toolContext(noUnbreakable).maxLevel(5).formula()
@@ -353,9 +353,9 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       // level 6+: 0.5 + level * 0.05
       .addModule(ReduceToolDamageModule.builder().toolContext(noUnbreakable).minLevel(6).amount(0.5f, 0.05f));
     // unbreakable priority is after overslime but before standard modifiers like dense
-    buildModifier(TinkerModifiers.unbreakable)
+    buildModifier(ModifierIds.unbreakable)
       .levelDisplay(ModifierLevelDisplay.NO_LEVELS).priority(125)
-      .addModule(ModifierRequirementsModule.builder().requireModifier(ModifierIds.netherite, 1).requireModifier(ModifierIds.reinforced, 5).modifierKey(TinkerModifiers.unbreakable).build())
+      .addModule(ModifierRequirementsModule.builder().requireModifier(ModifierIds.netherite, 1).requireModifier(ModifierIds.reinforced, 5).modifierKey(ModifierIds.unbreakable).build())
       .addModule(new DurabilityBarColorModule(0xffffff))
       .addModule(ReduceToolDamageModule.builder().flat(1.0f));
     buildModifier(ModifierIds.tank).addModules(StatBoostModule.add(ToolTankHelper.CAPACITY_STAT).eachLevel(FluidType.BUCKET_VOLUME), ToolTankHelper.TANK_HANDLER);
