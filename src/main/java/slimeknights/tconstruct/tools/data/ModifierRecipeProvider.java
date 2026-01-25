@@ -666,7 +666,7 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
       .save(consumer, prefix(ModifierIds.barebow, slotlessFolder));
     ModifierRecipeBuilder.modifier(ModifierIds.multishot)
                          .addInput(Items.PISTON)
-                         .addInput(TinkerMaterials.amethystBronze.getIngotTag())
+                         .addInput(TinkerMaterials.steel.getIngotTag())
                          .addInput(Items.PISTON)
                          .addInput(SlimeType.ICHOR.getSlimeballTag())
                          .addInput(SlimeType.ICHOR.getSlimeballTag())
