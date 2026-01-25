@@ -202,7 +202,6 @@ import slimeknights.tconstruct.tools.modifiers.ability.fluid.SlurpingModifier;
 import slimeknights.tconstruct.tools.modifiers.ability.fluid.SpittingModifier;
 import slimeknights.tconstruct.tools.modifiers.ability.fluid.SplashingModifier;
 import slimeknights.tconstruct.tools.modifiers.ability.fluid.WettingModifier;
-import slimeknights.tconstruct.tools.modifiers.ability.interaction.BlockingModifier;
 import slimeknights.tconstruct.tools.modifiers.ability.interaction.FirestarterModifier;
 import slimeknights.tconstruct.tools.modifiers.ability.sling.BonkingModifier;
 import slimeknights.tconstruct.tools.modifiers.ability.sling.FlingingModifier;
@@ -285,6 +284,7 @@ import slimeknights.tconstruct.tools.modules.armor.SleevesModule;
 import slimeknights.tconstruct.tools.modules.armor.SoulSpeedTooltipModule;
 import slimeknights.tconstruct.tools.modules.armor.ThornsModule;
 import slimeknights.tconstruct.tools.modules.armor.ToolBeltModule;
+import slimeknights.tconstruct.tools.modules.combat.BlockingModule;
 import slimeknights.tconstruct.tools.modules.combat.ChannelingModule;
 import slimeknights.tconstruct.tools.modules.combat.DamageOnShootModule;
 import slimeknights.tconstruct.tools.modules.combat.FieryAttackModule;
@@ -496,7 +496,9 @@ public final class TinkerModifiers extends TinkerModule {
   /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#fireprimer} (modifier), or {@link slimeknights.tconstruct.library.tools.item.IModifiable#EXPANDED} (querying) */
   @Deprecated(forRemoval = true)
   public static final StaticModifier<?> fireprimer = MODIFIERS.registerDynamic("fireprimer");
-  public static final StaticModifier<BlockingModifier> blocking = MODIFIERS.register("blocking", BlockingModifier::new);
+  /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#blocking} */
+  @Deprecated(forRemoval = true)
+  public static final StaticModifier<?> blocking = MODIFIERS.registerDynamic("blocking");
   public static final StaticModifier<ParryingModifier> parrying = MODIFIERS.register("parrying", ParryingModifier::new);
   // slings
   public static final StaticModifier<FlingingModifier> flinging = MODIFIERS.register("flinging", FlingingModifier::new);
@@ -842,6 +844,7 @@ public final class TinkerModifiers extends TinkerModule {
       ModifierModule.LOADER.register(getResource("smashing"), SmashingModule.LOADER);
       ModifierModule.LOADER.register(getResource("sweeping_edge"), SweepingEdgeModule.LOADER);
       ModifierModule.LOADER.register(getResource("severing"), SeveringModule.LOADER);
+      ModifierModule.LOADER.register(getResource("blocking"), BlockingModule.LOADER);
       // armor
       ModifierModule.LOADER.register(getResource("enderclearance"), EnderclearanceModule.LOADER);
       ModifierModule.LOADER.register(getResource("depth_protection"), DepthProtectionModule.LOADER);

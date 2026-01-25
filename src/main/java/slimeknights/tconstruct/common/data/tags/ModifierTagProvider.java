@@ -103,7 +103,7 @@ public class ModifierTagProvider extends AbstractModifierTagProvider {
     );
     tag(AOE_INTERACTION).add(ModifierIds.pathing, ModifierIds.stripping, ModifierIds.tilling, ModifierIds.brushing, TinkerModifiers.splashing.getId(), ModifierIds.harvest);
     tag(CHARGE_EMPTY_BOW_WITH_DRAWTIME).add(TinkerModifiers.flinging.getId(), TinkerModifiers.springing.getId(), TinkerModifiers.bonking.getId(), TinkerModifiers.warping.getId(), ModifierIds.throwing);
-    tag(CHARGE_EMPTY_BOW_WITHOUT_DRAWTIME).add(TinkerModifiers.blocking.getId(), ModifierIds.scope, ModifierIds.zoom);
+    tag(CHARGE_EMPTY_BOW_WITHOUT_DRAWTIME).add(ModifierIds.blocking, ModifierIds.scope, ModifierIds.zoom);
     tag(DRILL_ATTACKS).add(TinkerModifiers.flinging.getId(), TinkerModifiers.springing.getId(), ModifierIds.grapple);
     tag(SELF_KNOCKBACK_SLINGS).add(TinkerModifiers.flinging.getId(), TinkerModifiers.springing.getId());
     tag(TARGET_KNOCKBACK_SLINGS).add(TinkerModifiers.bonking.getId());
@@ -155,7 +155,7 @@ public class ModifierTagProvider extends AbstractModifierTagProvider {
       ModifierIds.expanded, ModifierIds.gilded, ModifierIds.unbreakable,
       ModifierIds.luck, TinkerModifiers.melting.getId());
     this.tag(MELEE_ABILITIES).add(
-      TinkerModifiers.blocking.getId(), TinkerModifiers.parrying.getId(),
+      ModifierIds.blocking, TinkerModifiers.parrying.getId(),
       TinkerModifiers.dualWielding.getId(), ModifierIds.spilling);
     this.tag(HARVEST_ABILITIES).add(ModifierIds.autosmelt, TinkerModifiers.exchanging.getId(), ModifierIds.silky);
     this.tag(RANGED_ABILITIES).add(

@@ -1556,7 +1556,7 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .setTools(DifferenceIngredient.of(IntersectionIngredient.of(Ingredient.of(TinkerTags.Items.MELEE_WEAPON), Ingredient.of(TinkerTags.Items.INTERACTABLE_RIGHT)), Ingredient.of(TinkerTools.dagger)))
                          .saveSalvage(consumer, prefix(TinkerModifiers.dualWielding, abilitySalvage))
                          .save(consumer, prefix(TinkerModifiers.dualWielding, abilityFolder));
-    ModifierRecipeBuilder.modifier(TinkerModifiers.blocking)
+    ModifierRecipeBuilder.modifier(ModifierIds.blocking)
                          .setTools(DifferenceIngredient.of(
                            IntersectionIngredient.of(Ingredient.of(TinkerTags.Items.INTERACTABLE_CHARGE), Ingredient.of(TinkerTags.Items.DURABILITY)),
                            ingredientFromTags(TinkerTags.Items.PARRY, TinkerTags.Items.SHIELDS)))
@@ -1567,8 +1567,8 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .addInput(ItemTags.PLANKS)
                          .setMaxLevel(1).checkTraitLevel()
                          .setSlots(SlotType.ABILITY, 1)
-                         .saveSalvage(consumer, prefix(TinkerModifiers.blocking, abilitySalvage))
-                         .save(consumer, prefix(TinkerModifiers.blocking, abilityFolder));
+                         .saveSalvage(consumer, prefix(ModifierIds.blocking, abilitySalvage))
+                         .save(consumer, prefix(ModifierIds.blocking, abilityFolder));
     ModifierRecipeBuilder.modifier(TinkerModifiers.parrying)
                          .setTools(TinkerTags.Items.PARRY)
                          .addInput(ItemTags.PLANKS)

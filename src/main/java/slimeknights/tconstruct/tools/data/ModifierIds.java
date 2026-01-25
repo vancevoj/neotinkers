@@ -151,6 +151,7 @@ public class ModifierIds {
   public static final ModifierId bouncy = id("bouncy");
   public static final ModifierId doubleJump = id("double_jump");
   // shield
+  public static final ModifierId blocking = id("blocking");
   public static final ModifierId blockade = id("blockade");
   public static final ModifierId boundless = id("boundless");
   public static final ModifierId reflecting = id("reflecting");

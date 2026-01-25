@@ -282,7 +282,7 @@ public class AdvancementsProvider extends GenericDataProvider {
       withL.accept(TinkerModifiers.melting);
 
       // melee
-      withL.accept(TinkerModifiers.blocking);
+      with.accept(ModifierIds.blocking);
       withL.accept(TinkerModifiers.parrying);
       withL.accept(TinkerModifiers.dualWielding);
       with.accept(ModifierIds.spilling);

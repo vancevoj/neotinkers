@@ -13,11 +13,11 @@ import slimeknights.tconstruct.library.modifiers.hook.interaction.InteractionSou
 import slimeknights.tconstruct.library.modifiers.hook.interaction.UsingToolModifierHook;
 import slimeknights.tconstruct.library.modifiers.impl.NoLevelsModifier;
 import slimeknights.tconstruct.library.module.ModuleHookMap.Builder;
+import slimeknights.tconstruct.library.tools.helper.ModifierUtil;
 import slimeknights.tconstruct.library.tools.item.ranged.ModifiableLauncherItem;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
 import slimeknights.tconstruct.tools.TinkerModifiers;
-import slimeknights.tconstruct.tools.modifiers.ability.interaction.BlockingModifier;
 
 /**
  * Shared logic for all slinging modifiers
@@ -44,7 +44,7 @@ public abstract class SlingModifier extends NoLevelsModifier implements GeneralI
 
   @Override
   public UseAnim getUseAction(IToolStackView tool, ModifierEntry modifier) {
-    return BlockingModifier.blockWhileCharging(tool, UseAnim.BOW);
+    return ModifierUtil.blockWhileCharging(tool, UseAnim.BOW);
   }
 
   /** Gets the current charge amount for this tool */

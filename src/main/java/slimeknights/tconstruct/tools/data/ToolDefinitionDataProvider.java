@@ -690,7 +690,7 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
         .slots(SlotType.ABILITY, 1).build())
       .module(new StatlessPartRepairModule(0, 100))
       .module(new StatlessPartRepairModule(1, 200))
-      .module(ToolTraitsModule.builder().trait(TinkerModifiers.blocking).build())
+      .module(ToolTraitsModule.builder().trait(ModifierIds.blocking).build())
       .module(AttackInteraction.INSTANCE)
       // display the shield core as the material, despite not being repairable
       .module(FixedMaterialToolName.FIRST);
@@ -723,7 +723,7 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
         .set(ToolStats.BLOCK_AMOUNT, 100)
         .set(ToolStats.BLOCK_ANGLE, 180).build()))
       .module(plateSlots)
-      .module(ToolTraitsModule.builder().trait(TinkerModifiers.blocking).build())
+      .module(ToolTraitsModule.builder().trait(ModifierIds.blocking).build())
       .module(AttackInteraction.INSTANCE)
       // faster display name logic
       .module(new FixedMaterialToolName(1));
@@ -828,7 +828,7 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
         .slots(SlotType.ABILITY, 1).build())
       // traits
       .module(ToolTraitsModule.builder()
-        .trait(TinkerModifiers.blocking)
+        .trait(ModifierIds.blocking)
         .trait(TinkerModifiers.bonking)
         .trait(ModifierIds.knockback).build())
       .module(new ParticleWeaponAttack(TinkerTools.bonkAttackParticle.get()));
