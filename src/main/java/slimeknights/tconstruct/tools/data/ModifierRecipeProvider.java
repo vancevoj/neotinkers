@@ -73,6 +73,7 @@ import slimeknights.tconstruct.tools.recipe.EnchantmentConvertingRecipeBuilder;
 import slimeknights.tconstruct.tools.recipe.ModifierRemovalRecipeBuilder;
 import slimeknights.tconstruct.tools.recipe.ModifierSortingRecipeBuilder;
 import slimeknights.tconstruct.tools.recipe.ToggleInteractionWorktableRecipeBuilder;
+import slimeknights.tconstruct.tools.recipe.severing.SpecialSeveringRecipeBuilder;
 import slimeknights.tconstruct.world.TinkerHeadType;
 import slimeknights.tconstruct.world.TinkerWorld;
 import slimeknights.tconstruct.world.block.FoliageType;
@@ -1912,17 +1913,19 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
 												 .save(consumer, location(folder + "zombie_head"));
     SeveringRecipeBuilder.severing(EntityIngredient.of(EntityType.SKELETON), Items.SKELETON_SKULL)
 												 .save(consumer, location(folder + "skeleton_skull"));
-    SeveringRecipeBuilder.severing(EntityIngredient.of(EntityType.WITHER_SKELETON, EntityType.WITHER), Items.WITHER_SKELETON_SKULL)
-												 .save(consumer, location(folder + "wither_skeleton_skull"));
+    SeveringRecipeBuilder.severing(EntityIngredient.of(EntityType.WITHER_SKELETON), Items.WITHER_SKELETON_SKULL)
+      .save(consumer, location(folder + "wither_skeleton_skull"));
+    SeveringRecipeBuilder.severing(EntityIngredient.of(EntityType.WITHER), Items.WITHER_SKELETON_SKULL).rareMob()
+      .save(consumer, location(folder + "wither_salvage"));
     SeveringRecipeBuilder.severing(EntityIngredient.of(EntityType.CREEPER), Items.CREEPER_HEAD)
 												 .save(consumer, location(folder + "creeper_head"));
     SeveringRecipeBuilder.severing(EntityIngredient.of(EntityType.PIGLIN), Items.PIGLIN_HEAD)
                          .save(consumer, location(folder + "piglin_head"));
-    consumer.accept(new SimpleFinishedRecipe(location(folder + "player_head"), TinkerModifiers.playerBeheadingSerializer.get()));
-    consumer.accept(new SimpleFinishedRecipe(location(folder + "snow_golem_head"), TinkerModifiers.snowGolemBeheadingSerializer.get()));
+    SpecialSeveringRecipeBuilder.serializer(TinkerModifiers.playerBeheadingSerializer).rareMob().save(consumer, location(folder + "player_head"));
+    SpecialSeveringRecipeBuilder.serializer(TinkerModifiers.snowGolemBeheadingSerializer).save(consumer, location(folder + "snow_golem_head"));
     SeveringRecipeBuilder.severing(EntityIngredient.of(EntityType.IRON_GOLEM), Blocks.CARVED_PUMPKIN)
                          .save(consumer, location(folder + "iron_golem_head"));
-    SeveringRecipeBuilder.severing(EntityIngredient.of(EntityType.ENDER_DRAGON), Items.DRAGON_HEAD)
+    SeveringRecipeBuilder.severing(EntityIngredient.of(EntityType.ENDER_DRAGON), Items.DRAGON_HEAD).rareMob()
                          .save(consumer, location(folder + "ender_dragon_head"));
     TinkerWorld.headItems.forEach((type, head) ->
       SeveringRecipeBuilder.severing(EntityIngredient.of(type.getType()), head)
@@ -1977,13 +1980,13 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .noChildOutput()
                          .save(consumer, location(folder + "chicken_feather"));
     // beshrooming
-    consumer.accept(new SimpleFinishedRecipe(location(folder + "mooshroom_shroom"), TinkerModifiers.mooshroomDemushroomingSerializer.get()));
+    SpecialSeveringRecipeBuilder.serializer(TinkerModifiers.mooshroomDemushroomingSerializer).save(consumer, location(folder + "mooshroom_shroom"));
     // beshelling
     SeveringRecipeBuilder.severing(EntityIngredient.of(EntityType.TURTLE), Items.TURTLE_HELMET)
                          .setChildOutput(ItemOutput.fromItem(Items.SCUTE))
                          .save(consumer, location(folder + "turtle_shell"));
     // befleecing
-    consumer.accept(new SimpleFinishedRecipe(location(folder + "sheep_wool"), TinkerModifiers.sheepShearing.get()));
+    SpecialSeveringRecipeBuilder.serializer(TinkerModifiers.sheepShearing).save(consumer, location(folder + "sheep_wool"));
   }
 
   /** Adds recipes for a plate armor texture with a custom tag */

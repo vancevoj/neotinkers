@@ -627,7 +627,8 @@ public class TinkerTags {
     public static final TagKey<EntityType<?>> PIGLINS = common("piglins");
     /** Entities in this tag take more damage from killager */
     public static final TagKey<EntityType<?>> KILLAGERS = local("killagers");
-    /** Mobs that rarely spawn, boosts drop rate of severing */
+    /** @deprecated use the chance fields on the severing recipe to adjust rates. */
+    @Deprecated(forRemoval = true)
     public static final TagKey<EntityType<?>> RARE_MOBS = local("rare_mobs");
     /** Mobs that get the 4x protection boost due to only 1 armor piece */
     public static final TagKey<EntityType<?>> SMALL_ARMOR = common("small_armor");
