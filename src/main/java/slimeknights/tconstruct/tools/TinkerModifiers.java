@@ -225,8 +225,6 @@ import slimeknights.tconstruct.tools.modifiers.loot.ModifierBonusLootFunction;
 import slimeknights.tconstruct.tools.modifiers.slotless.CreativeSlotModifier;
 import slimeknights.tconstruct.tools.modifiers.slotless.DyedModifier;
 import slimeknights.tconstruct.tools.modifiers.slotless.EmbellishmentModifier;
-import slimeknights.tconstruct.tools.modifiers.slotless.FarsightedModifier;
-import slimeknights.tconstruct.tools.modifiers.slotless.NearsightedModifier;
 import slimeknights.tconstruct.tools.modifiers.slotless.OverslimeModifier;
 import slimeknights.tconstruct.tools.modifiers.slotless.StatOverrideModifier;
 import slimeknights.tconstruct.tools.modifiers.slotless.TrimModifier;
@@ -265,6 +263,7 @@ import slimeknights.tconstruct.tools.modifiers.upgrades.ranged.SinistralModifier
 import slimeknights.tconstruct.tools.modules.AutosmeltModule;
 import slimeknights.tconstruct.tools.modules.CraftCountModule;
 import slimeknights.tconstruct.tools.modules.DamageOnUnequipModule;
+import slimeknights.tconstruct.tools.modules.FovModule;
 import slimeknights.tconstruct.tools.modules.HeadlightModule;
 import slimeknights.tconstruct.tools.modules.MeltingModule;
 import slimeknights.tconstruct.tools.modules.OverburnModule;
@@ -375,8 +374,12 @@ public final class TinkerModifiers extends TinkerModule {
    */
   public static final StaticModifier<OverslimeModifier> overslime = MODIFIERS.register("overslime", OverslimeModifier::new);
   public static final StaticModifier<MagneticModifier> magnetic = MODIFIERS.register("magnetic", MagneticModifier::new);
-  public static final StaticModifier<FarsightedModifier> farsighted = MODIFIERS.register("farsighted", FarsightedModifier::new);
-  public static final StaticModifier<NearsightedModifier> nearsighted = MODIFIERS.register("nearsighted", NearsightedModifier::new);
+  /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#farsighted} */
+  @Deprecated(forRemoval = true)
+  public static final StaticModifier<?> farsighted = MODIFIERS.registerDynamic("farsighted");
+  /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#nearsighted} */
+  @Deprecated(forRemoval = true)
+  public static final StaticModifier<?> nearsighted = MODIFIERS.registerDynamic("nearsighted");
 
   // weapon
   /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#knockback} */
@@ -806,6 +809,7 @@ public final class TinkerModifiers extends TinkerModule {
       ModifierModule.LOADER.register(getResource("glow_walker"), GlowWalkerModule.LOADER);
       ModifierModule.LOADER.register(getResource("lightspeed_attribute"), LightspeedAttributeModule.LOADER);
       ModifierModule.LOADER.register(getResource("zoom"), ZoomModule.LOADER);
+      ModifierModule.LOADER.register(getResource("fov"), FovModule.LOADER);
       ModifierModule.LOADER.register(getResource("damage_on_unequip"), DamageOnUnequipModule.LOADER);
       ModifierModule.LOADER.register(getResource("damage_on_shoot"), DamageOnShootModule.LOADER);
       ModifierModule.LOADER.register(getResource("share_durability"), ShareDurabilityModule.LOADER);

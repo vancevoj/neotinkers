@@ -198,7 +198,7 @@ public class ModifierTagProvider extends AbstractModifierTagProvider {
     this.tag(COSMETIC_SLOTLESS).add(
       ModifierIds.shiny,
       TinkerModifiers.dyed.getId(), TinkerModifiers.embellishment.getId(), TinkerModifiers.trim.getId(),
-      TinkerModifiers.farsighted.getId(), TinkerModifiers.nearsighted.getId());
+      ModifierIds.farsighted, ModifierIds.nearsighted);
   }
 
   @Override

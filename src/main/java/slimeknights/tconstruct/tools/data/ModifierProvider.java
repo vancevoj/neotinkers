@@ -167,6 +167,8 @@ import slimeknights.tconstruct.tools.logic.ModifierEvents;
 import slimeknights.tconstruct.tools.modules.AutosmeltModule;
 import slimeknights.tconstruct.tools.modules.CraftCountModule;
 import slimeknights.tconstruct.tools.modules.DamageOnUnequipModule;
+import slimeknights.tconstruct.tools.modules.FovModule;
+import slimeknights.tconstruct.tools.modules.FovModule.FovAction;
 import slimeknights.tconstruct.tools.modules.HeadlightModule;
 import slimeknights.tconstruct.tools.modules.MeltingModule;
 import slimeknights.tconstruct.tools.modules.OverburnModule;
@@ -361,6 +363,8 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
     // zooming
     buildModifier(ModifierIds.scope).levelDisplay(ModifierLevelDisplay.NO_LEVELS).addModule(ZoomModule.SCOPE);
     buildModifier(ModifierIds.zoom).levelDisplay(ModifierLevelDisplay.NO_LEVELS).addModule(ZoomModule.SPYGLASS);
+    buildModifier(ModifierIds.farsighted).addModule(new FovModule(LevelingValue.eachLevel(0.05f), FovAction.DECREASE));
+    buildModifier(ModifierIds.nearsighted).addModule(new FovModule(LevelingValue.eachLevel(0.05f), FovAction.INCREASE));
     // compat
     buildModifier(ModifierIds.theOneProbe, modLoaded("theoneprobe")).levelDisplay(ModifierLevelDisplay.NO_LEVELS).addModule(TheOneProbeModule.INSTANCE);
     buildModifier(ModifierIds.headlight, modLoaded("headlight"))

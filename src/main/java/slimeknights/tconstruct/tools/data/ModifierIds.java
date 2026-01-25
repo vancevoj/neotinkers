@@ -64,6 +64,8 @@ public class ModifierIds {
   // zoom
   public static final ModifierId scope = id("scope");
   public static final ModifierId zoom = id("zoom");
+  public static final ModifierId farsighted = id("farsighted");
+  public static final ModifierId nearsighted = id("nearsighted");
 
   // harvest
   public static final ModifierId haste = id("haste");

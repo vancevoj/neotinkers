@@ -302,14 +302,14 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .setMaxLevel(1)
                          .save(consumer, prefix(ModifierIds.shiny, slotlessFolder));
     Ingredient sighted = ingredientFromTags(TinkerTags.Items.HELD, TinkerTags.Items.ARMOR);
-    IncrementalModifierRecipeBuilder.modifier(TinkerModifiers.farsighted)
+    IncrementalModifierRecipeBuilder.modifier(ModifierIds.farsighted)
                                     .setTools(sighted)
                                     .setInput(Tags.Items.CROPS_CARROT, 1, 45)
-                                    .save(consumer, prefix(TinkerModifiers.farsighted, slotlessFolder));
-    IncrementalModifierRecipeBuilder.modifier(TinkerModifiers.nearsighted)
+                                    .save(consumer, prefix(ModifierIds.farsighted, slotlessFolder));
+    IncrementalModifierRecipeBuilder.modifier(ModifierIds.nearsighted)
                                     .setTools(sighted)
                                     .setInput(Items.INK_SAC, 1, 45)
-                                    .save(consumer, prefix(TinkerModifiers.nearsighted, slotlessFolder));
+                                    .save(consumer, prefix(ModifierIds.nearsighted, slotlessFolder));
     ModifierRecipeBuilder.modifier(ModifierIds.offhanded)
                          .setTools(TinkerTags.Items.INTERACTABLE_CHARGE_MODIFIER)
                          .addInput(Items.LEATHER)
