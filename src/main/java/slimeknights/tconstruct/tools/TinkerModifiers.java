@@ -253,7 +253,6 @@ import slimeknights.tconstruct.tools.modifiers.traits.skull.SelfDestructiveModif
 import slimeknights.tconstruct.tools.modifiers.traits.skull.StrongBonesModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.skull.WildfireModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.skull.WitheredModifier;
-import slimeknights.tconstruct.tools.modifiers.upgrades.armor.SoulSpeedModifier;
 import slimeknights.tconstruct.tools.modifiers.upgrades.general.MagneticModifier;
 import slimeknights.tconstruct.tools.modifiers.upgrades.melee.PiercingModifier;
 import slimeknights.tconstruct.tools.modifiers.upgrades.melee.SeveringModifier;
@@ -284,6 +283,7 @@ import slimeknights.tconstruct.tools.modules.armor.OvershieldModule;
 import slimeknights.tconstruct.tools.modules.armor.RecurrentProtectionModule;
 import slimeknights.tconstruct.tools.modules.armor.ShieldStrapModule;
 import slimeknights.tconstruct.tools.modules.armor.SleevesModule;
+import slimeknights.tconstruct.tools.modules.armor.SoulSpeedTooltipModule;
 import slimeknights.tconstruct.tools.modules.armor.ThornsModule;
 import slimeknights.tconstruct.tools.modules.armor.ToolBeltModule;
 import slimeknights.tconstruct.tools.modules.combat.ChannelingModule;
@@ -450,7 +450,9 @@ public final class TinkerModifiers extends TinkerModule {
   public static final StaticModifier<WettingModifier> wetting = MODIFIERS.register("wetting", WettingModifier::new);
 
   // boots
-  public static final StaticModifier<SoulSpeedModifier> soulspeed = MODIFIERS.register("soulspeed", SoulSpeedModifier::new);
+  /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#soulspeed} */
+  @Deprecated(forRemoval = true)
+  public static final StaticModifier<?> soulspeed = MODIFIERS.registerDynamic("soulspeed");
   /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#doubleJump} */
   @Deprecated(forRemoval = true)
   public static final DynamicModifier doubleJump = MODIFIERS.registerDynamic("double_jump");
@@ -847,6 +849,7 @@ public final class TinkerModifiers extends TinkerModule {
       ModifierModule.LOADER.register(getResource("tool_belt"), ToolBeltModule.LOADER);
       ModifierModule.LOADER.register(getResource("minimap"), MinimapModule.LOADER);
       ModifierModule.LOADER.register(getResource("sleeves"), SleevesModule.LOADER);
+      ModifierModule.LOADER.register(getResource("soulspeed_tooltip"), SoulSpeedTooltipModule.LOADER);
       // counterattack
       ModifierModule.LOADER.register(getResource("thorns"), ThornsModule.LOADER);
       ModifierModule.LOADER.register(getResource("fiery_counter"), FieryCounterModule.LOADER);

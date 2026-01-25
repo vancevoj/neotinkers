@@ -966,15 +966,15 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
       .setMaxLevel(1).checkTraitLevel()
       .saveSalvage(consumer, prefix(ModifierIds.longFall, upgradeSalvage))
       .save(consumer, prefix(ModifierIds.longFall, upgradeFolder));
-    ModifierRecipeBuilder.modifier(TinkerModifiers.soulspeed)
+    ModifierRecipeBuilder.modifier(ModifierIds.soulspeed)
                          .setTools(TinkerTags.Items.BOOTS)
                          .addInput(Items.MAGMA_BLOCK)
                          .addInput(Items.CRYING_OBSIDIAN)
                          .addInput(Items.MAGMA_BLOCK)
                          .setSlots(SlotType.UPGRADE, 1)
                          .setMaxLevel(3)
-                         .saveSalvage(consumer, prefix(TinkerModifiers.soulspeed, upgradeSalvage))
-                         .save(consumer, prefix(TinkerModifiers.soulspeed, upgradeFolder));
+                         .saveSalvage(consumer, prefix(ModifierIds.soulspeed, upgradeSalvage))
+                         .save(consumer, prefix(ModifierIds.soulspeed, upgradeFolder));
     ModifierRecipeBuilder.modifier(ModifierIds.depthStrider)
                          .setTools(TinkerTags.Items.BOOTS)
                          .addInput(ItemTags.FISHES)

@@ -142,6 +142,7 @@ public class ModifierIds {
   public static final ModifierId craftingTable = id("crafting_table");
   // boots
   public static final ModifierId depthStrider = id("depth_strider");
+  public static final ModifierId soulspeed = id("soulspeed");
   public static final ModifierId featherFalling = id("feather_falling");
   public static final ModifierId longFall = id("long_fall");
   public static final ModifierId frostWalker = id("frost_walker");
