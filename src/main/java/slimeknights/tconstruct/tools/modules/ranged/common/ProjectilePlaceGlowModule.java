@@ -76,8 +76,7 @@ public record ProjectilePlaceGlowModule(int damage, boolean blocks, boolean enti
   public boolean onProjectileHitsBlock(ModifierNBT modifiers, ModDataNBT persistentData, ModifierEntry modifier, Projectile projectile, BlockHitResult hit, @Nullable LivingEntity owner) {
     if (blocks) {
       Direction direction = hit.getDirection();
-      TinkerCommons.glow.get().addGlow(projectile.level(), hit.getBlockPos().relative(direction), direction.getOpposite());
-      if (!projectile.getType().is(TinkerTags.EntityTypes.REUSABLE_AMMO)) {
+      if (TinkerCommons.glow.get().addGlow(projectile.level(), hit.getBlockPos().relative(direction), direction.getOpposite()) && !projectile.getType().is(TinkerTags.EntityTypes.REUSABLE_AMMO)) {
         ModifierUtil.updateFishingRod(projectile, damage, true);
         projectile.discard();
       }
