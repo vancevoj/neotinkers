@@ -12,7 +12,9 @@ import slimeknights.mantle.data.loadable.primitive.FloatLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.data.predicate.IJsonPredicate;
 import slimeknights.tconstruct.common.Sounds;
+import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
+import slimeknights.tconstruct.library.modifiers.ModifierManager;
 import slimeknights.tconstruct.library.modifiers.hook.special.sling.SlingAngleModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.special.sling.SlingForceModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.special.sling.SlingLaunchModifierHook;
@@ -96,8 +98,8 @@ public record SlingLeapModule(float forceMultiplier, boolean leaveGround, float 
               player.causeFoodExhaustion(0.2F);
               player.getCooldowns().addCooldown(tool.getItem(), 3);
             }
-            // apply drill attack if the modifier is present
-            if (ModifierUtil.canPerformAction(tool, TinkerToolActions.DRILL_ATTACK)) {
+            // if supported, perform drill attack if the modifier is available
+            if (ModifierManager.isInTag(modifier.getId(), TinkerTags.Modifiers.DRILL_ATTACKS) && ModifierUtil.canPerformAction(tool, TinkerToolActions.DRILL_ATTACK)) {
               player.startAutoSpinAttack(20);
             }
           }
