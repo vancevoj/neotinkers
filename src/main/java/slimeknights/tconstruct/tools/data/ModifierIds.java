@@ -165,6 +165,11 @@ public class ModifierIds {
   public static final ModifierId harvest = id("harvest");
   public static final ModifierId shears = id("shears");
   public static final ModifierId silkyShears = id("silky_shears");
+  // sling
+  public static final ModifierId flinging = id("flinging");
+  public static final ModifierId springing = id("springing");
+  public static final ModifierId bonking = id("bonking");
+  public static final ModifierId warping = id("warping");
 
   // throwing
   public static final ModifierId throwing = id("throwing");

@@ -27,6 +27,7 @@ import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.ModifierId;
 import slimeknights.tconstruct.library.modifiers.hook.build.ConditionalStatModifierHook;
 import slimeknights.tconstruct.library.tools.definition.module.ToolHooks;
+import slimeknights.tconstruct.library.tools.item.ranged.ModifiableLauncherItem;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
@@ -208,6 +209,12 @@ public final class ModifierUtil {
   /** Causes cooldown on the given tool based on its draw speed stat. */
   public static void addCooldown(IToolStackView tool, Player player) {
     player.getCooldowns().addCooldown(tool.getItem(), (int)(20 / ConditionalStatModifierHook.getModifiedStat(tool, player, ToolStats.DRAW_SPEED)));
+  }
+
+  /** Checks if this modifier is the one actively being used. Used for failure sound effects. */
+  public static boolean isActiveModifier(IToolStackView tool, ModifierEntry modifier, ModifierEntry activeModifier) {
+    // active modifier being us, or a bow is firing and no drawback ammo
+    return modifier == activeModifier || (activeModifier.getLevel() == 0 && !tool.getPersistentData().contains(ModifiableLauncherItem.KEY_DRAWBACK_AMMO));
   }
 
   /**

@@ -203,10 +203,6 @@ import slimeknights.tconstruct.tools.modifiers.ability.fluid.SpittingModifier;
 import slimeknights.tconstruct.tools.modifiers.ability.fluid.SplashingModifier;
 import slimeknights.tconstruct.tools.modifiers.ability.fluid.WettingModifier;
 import slimeknights.tconstruct.tools.modifiers.ability.interaction.FirestarterModifier;
-import slimeknights.tconstruct.tools.modifiers.ability.sling.BonkingModifier;
-import slimeknights.tconstruct.tools.modifiers.ability.sling.FlingingModifier;
-import slimeknights.tconstruct.tools.modifiers.ability.sling.SpringingModifier;
-import slimeknights.tconstruct.tools.modifiers.ability.sling.WarpingModifier;
 import slimeknights.tconstruct.tools.modifiers.ability.tool.BucketingModifier;
 import slimeknights.tconstruct.tools.modifiers.ability.tool.DuelWieldingModifier;
 import slimeknights.tconstruct.tools.modifiers.ability.tool.ExchangingModifier;
@@ -301,6 +297,9 @@ import slimeknights.tconstruct.tools.modules.interaction.HarvestModule;
 import slimeknights.tconstruct.tools.modules.interaction.PlaceGlowModule;
 import slimeknights.tconstruct.tools.modules.interaction.ShearsModule;
 import slimeknights.tconstruct.tools.modules.interaction.ThrowingModule;
+import slimeknights.tconstruct.tools.modules.interaction.sling.SlingKnockbackModule;
+import slimeknights.tconstruct.tools.modules.interaction.sling.SlingLeapModule;
+import slimeknights.tconstruct.tools.modules.interaction.sling.SlingTeleportModule;
 import slimeknights.tconstruct.tools.modules.ranged.BulkQuiverModule;
 import slimeknights.tconstruct.tools.modules.ranged.RestrictAngleModule;
 import slimeknights.tconstruct.tools.modules.ranged.TrickQuiverModule;
@@ -501,10 +500,18 @@ public final class TinkerModifiers extends TinkerModule {
   public static final StaticModifier<?> blocking = MODIFIERS.registerDynamic("blocking");
   public static final StaticModifier<ParryingModifier> parrying = MODIFIERS.register("parrying", ParryingModifier::new);
   // slings
-  public static final StaticModifier<FlingingModifier> flinging = MODIFIERS.register("flinging", FlingingModifier::new);
-  public static final StaticModifier<SpringingModifier> springing = MODIFIERS.register("springing", SpringingModifier::new);
-  public static final StaticModifier<BonkingModifier> bonking = MODIFIERS.register("bonking", BonkingModifier::new);
-  public static final StaticModifier<WarpingModifier> warping = MODIFIERS.register("warping", WarpingModifier::new);
+  /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#flinging} */
+  @Deprecated(forRemoval = true)
+  public static final StaticModifier<?> flinging = MODIFIERS.registerDynamic("flinging");
+  /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#springing} */
+  @Deprecated(forRemoval = true)
+  public static final StaticModifier<?> springing = MODIFIERS.registerDynamic("springing");
+  /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#bonking} */
+  @Deprecated(forRemoval = true)
+  public static final StaticModifier<?> bonking = MODIFIERS.registerDynamic("bonking");
+  /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#warping} */
+  @Deprecated(forRemoval = true)
+  public static final StaticModifier<?> warping = MODIFIERS.registerDynamic("warping");
 
 
   // internal abilities
@@ -835,6 +842,10 @@ public final class TinkerModifiers extends TinkerModule {
       ModifierModule.LOADER.register(getResource("projectile_place_glow"), ProjectilePlaceGlowModule.LOADER);
       ModifierModule.LOADER.register(getResource("shears"), ShearsModule.LOADER);
       ModifierModule.LOADER.register(getResource("throwing"), ThrowingModule.LOADER);
+      // sling
+      ModifierModule.LOADER.register(getResource("sling_leap"), SlingLeapModule.LOADER);
+      ModifierModule.LOADER.register(getResource("sling_knockback"), SlingKnockbackModule.LOADER);
+      ModifierModule.LOADER.register(getResource("sling_teleport"), SlingTeleportModule.LOADER);
       // overslime
       ModifierModule.LOADER.register(getResource("overgrowth"), OvergrowthModule.LOADER);
       ModifierModule.LOADER.register(getResource("overburn"), OverburnModule.INSTANCE.getLoader());

@@ -14,14 +14,13 @@ import slimeknights.tconstruct.library.modifiers.hook.interaction.UsingToolModif
 import slimeknights.tconstruct.library.modifiers.impl.NoLevelsModifier;
 import slimeknights.tconstruct.library.module.ModuleHookMap.Builder;
 import slimeknights.tconstruct.library.tools.helper.ModifierUtil;
-import slimeknights.tconstruct.library.tools.item.ranged.ModifiableLauncherItem;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
 import slimeknights.tconstruct.tools.TinkerModifiers;
+import slimeknights.tconstruct.tools.modules.interaction.sling.SlingModule;
 
-/**
- * Shared logic for all slinging modifiers
- */
+/** @deprecated use {@link SlingModule} */
+@Deprecated(forRemoval = true)
 public abstract class SlingModifier extends NoLevelsModifier implements GeneralInteractionModifierHook, UsingToolModifierHook {
   @Override
   protected void registerHooks(Builder builder) {
@@ -49,16 +48,12 @@ public abstract class SlingModifier extends NoLevelsModifier implements GeneralI
 
   /** Gets the current charge amount for this tool */
   protected float getCharge(IToolStackView tool, ModifierEntry entry, int timeLeft) {
-    int chargeTime = getUseDuration(tool, entry) - timeLeft;
-    if (chargeTime < 0) {
-      return 0;
-    }
-    return GeneralInteractionModifierHook.getToolCharge(tool, chargeTime);
+    return GeneralInteractionModifierHook.getToolCharge(tool, getUseDuration(tool, entry) - timeLeft);
   }
 
   /** Gets the scaled power to apply as a force multiplier. This is equivalent to 50% of power times velocity. */
   protected float getPower(IToolStackView tool, LivingEntity living) {
-    return ConditionalStatModifierHook.getModifiedStat(tool, living, ToolStats.PROJECTILE_DAMAGE) / 2f * ConditionalStatModifierHook.getModifiedStat(tool, living, ToolStats.VELOCITY);
+    return SlingModule.getPower(tool, living);
   }
 
   /** @deprecated use {@link #getCharge(IToolStackView, ModifierEntry, int)} and {@link #getPower(IToolStackView, LivingEntity)} */
@@ -90,7 +85,6 @@ public abstract class SlingModifier extends NoLevelsModifier implements GeneralI
 
   /** Checks if this modifier is the one actively being used. Used for failure sound effects. */
   public static boolean isActive(IToolStackView tool, ModifierEntry modifier, ModifierEntry activeModifier) {
-    // active modifier being us, or a bow is firing and no drawback ammo
-    return modifier == activeModifier || (activeModifier.getLevel() == 0 && !tool.getPersistentData().contains(ModifiableLauncherItem.KEY_DRAWBACK_AMMO));
+    return ModifierUtil.isActiveModifier(tool, modifier, activeModifier);
   }
 }

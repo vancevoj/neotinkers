@@ -211,6 +211,9 @@ import slimeknights.tconstruct.tools.modules.interaction.HarvestModule;
 import slimeknights.tconstruct.tools.modules.interaction.PlaceGlowModule;
 import slimeknights.tconstruct.tools.modules.interaction.ShearsModule;
 import slimeknights.tconstruct.tools.modules.interaction.ThrowingModule;
+import slimeknights.tconstruct.tools.modules.interaction.sling.SlingKnockbackModule;
+import slimeknights.tconstruct.tools.modules.interaction.sling.SlingLeapModule;
+import slimeknights.tconstruct.tools.modules.interaction.sling.SlingTeleportModule;
 import slimeknights.tconstruct.tools.modules.ranged.BulkQuiverModule;
 import slimeknights.tconstruct.tools.modules.ranged.RestrictAngleModule;
 import slimeknights.tconstruct.tools.modules.ranged.TrickQuiverModule;
@@ -759,6 +762,13 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
     buildModifier(ModifierIds.silkyShears).priority(70).levelDisplay(ModifierLevelDisplay.PLUSES)
       .addModule(new ShearsModule(0, 1, 1, silky));
     buildModifier(TinkerModifiers.aoeSilkyShears.getId()).priority(70).addModule(new ShearsModule(1, 0, 1, silky));
+    // slings
+    buildModifier(ModifierIds.flinging).levelDisplay(ModifierLevelDisplay.NO_LEVELS)
+      .addModule(new SlingLeapModule(-4, false, 1.5f, 3, false, LivingEntityPredicate.and(LivingEntityPredicate.ON_GROUND, TinkerPredicate.TARGETING_BLOCK), ModifierCondition.ANY_TOOL));
+    buildModifier(ModifierIds.springing).levelDisplay(ModifierLevelDisplay.NO_LEVELS)
+      .addModule(new SlingLeapModule(1.05f, true, 1.0f, 2, true, TinkerPredicate.ELYTRA_FLYING.inverted(), ModifierCondition.ANY_TOOL));
+    buildModifier(ModifierIds.bonking).levelDisplay(ModifierLevelDisplay.NO_LEVELS).addModule(new SlingKnockbackModule(3, 1.5f, 1.5f, LivingEntityPredicate.ANY, ModifierCondition.ANY_TOOL));
+    buildModifier(ModifierIds.warping).levelDisplay(ModifierLevelDisplay.NO_LEVELS).addModule(new SlingTeleportModule(6, 1.5f, LivingEntityPredicate.ANY, ModifierCondition.ANY_TOOL));
 
     // fishing
     buildModifier(ModifierIds.fishing).levelDisplay(ModifierLevelDisplay.NO_LEVELS).addModule(FishingModule.INSTANCE);
