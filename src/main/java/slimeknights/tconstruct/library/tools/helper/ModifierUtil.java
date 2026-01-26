@@ -243,7 +243,9 @@ public final class ModifierUtil {
           }
           // damage the rod
           if (damage > 0) {
-            ToolDamageUtil.damageAnimated(tool, damage, living, hand);
+            // if we are applying cooldown, means this is a full retraction from block so this was primary damage
+            // no cooldown is done on secondary effects like entity hitting
+            ToolDamageUtil.damageAnimated(tool, damage, living, hand, !applyCooldown);
           }
         }
         return hand;

@@ -117,7 +117,7 @@ public interface BlockTransformModule extends ModifierModule, BlockInteractionMo
             }
 
             // stop if the tool broke
-            if (ToolDamageUtil.damage(tool, 1, player, context.getItemInHand())) {
+            if (ToolDamageUtil.damage(tool, 1, player, stack)) {
               if (player != null) {
                 player.broadcastBreakEvent(context.getHand());
               }

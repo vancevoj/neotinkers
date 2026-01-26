@@ -189,6 +189,7 @@ public class ModifierIds {
   public static final ModifierId jagged = id("jagged");
   public static final ModifierId tipped = id("tipped");
   public static final ModifierId stringy = id("stringy");
+  public static final ModifierId tanned = id("tanned");
   public static final ModifierId unburdened = id("unburdened");
   public static final ModifierId depthProtection = id("depth_protection");
   public static final ModifierId enderclearance = id("enderclearance");

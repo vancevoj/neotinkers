@@ -202,6 +202,8 @@ import slimeknights.tconstruct.tools.modules.combat.SeveringModule;
 import slimeknights.tconstruct.tools.modules.combat.SpillingModule;
 import slimeknights.tconstruct.tools.modules.combat.SweepingEdgeModule;
 import slimeknights.tconstruct.tools.modules.durability.ShareDurabilityModule;
+import slimeknights.tconstruct.tools.modules.durability.ToolDamageRangeModule;
+import slimeknights.tconstruct.tools.modules.durability.ToolDamageRangeModule.ApplyRangeWhen;
 import slimeknights.tconstruct.tools.modules.interaction.BrushModule;
 import slimeknights.tconstruct.tools.modules.interaction.ExtinguishCampfireModule;
 import slimeknights.tconstruct.tools.modules.interaction.FishingModule;
@@ -792,6 +794,10 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
     buildModifier(ModifierIds.economical).levelDisplay(ModifierLevelDisplay.NO_LEVELS).addModule(new CraftCountModule(LevelingValue.flat(2)));
     buildModifier(ModifierIds.cheap).levelDisplay(ModifierLevelDisplay.NO_LEVELS).addModule(new CraftCountModule(LevelingValue.flat(0.5f), ModifierCondition.ANY_TOOL));
     buildModifier(ModifierIds.stringy).addModule(MaterialRepairModule.material(MaterialIds.string).constant(140));
+    buildModifier(ModifierIds.tanned).levelDisplay(ModifierLevelDisplay.NO_LEVELS)
+      .priority(200) // higher priority than stoneshield, overslime, and reinforced
+      .addModule(new ToolDamageRangeModule(0, 1, ApplyRangeWhen.PRIMARY)) // primary damage is reduced to 1
+      .addModule(new ToolDamageRangeModule(0, 0, ApplyRangeWhen.SECONDARY)); // secondary damage is ignored
     buildModifier(ModifierIds.woodwind) // TODO: can we make it play a bamboo sound?
       .addModule(StatBoostModule.add(ToolStats.ACCURACY).eachLevel(0.5f))
       .addModule(StatBoostModule.add(ToolStats.VELOCITY).toolTag(TinkerTags.Items.THROWN_AMMO).eachLevel(0.25f));

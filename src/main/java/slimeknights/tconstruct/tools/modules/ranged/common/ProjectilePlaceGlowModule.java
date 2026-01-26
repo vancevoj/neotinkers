@@ -57,7 +57,7 @@ public record ProjectilePlaceGlowModule(int damage, boolean blocks, boolean enti
     // deal damage to the bow if it added glowing to its arrow
     // don't damage fishing hooks though, we will do that on hit
     if (primary && damage > 0 && projectile.getType() != TinkerTools.fishingHook.get()) {
-      ToolDamageUtil.damageAnimated(tool, damage, shooter, shooter.getUsedItemHand());
+      ToolDamageUtil.damageAnimated(tool, damage, shooter, shooter.getUsedItemHand(), true);
     }
   }
 

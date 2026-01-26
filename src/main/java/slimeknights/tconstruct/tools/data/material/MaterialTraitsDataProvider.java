@@ -47,7 +47,7 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     addTraits(MaterialIds.chorus, ARMOR, ModifierIds.enderclearance);
     // tier 1 - binding
     addDefaultTraits(MaterialIds.string, ModifierIds.stringy);
-    addDefaultTraits(MaterialIds.leather, TinkerModifiers.tanned);
+    addDefaultTraits(MaterialIds.leather, ModifierIds.tanned);
     addDefaultTraits(MaterialIds.vine, TinkerModifiers.solarPowered);
     addTraits(MaterialIds.gold, ARMOR, TinkerModifiers.golden.getId(), ModifierIds.magicProtection);
     addTraits(MaterialIds.gold, PlatingMaterialStats.SHIELD.getId(), ModifierIds.magicProtection);

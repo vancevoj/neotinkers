@@ -228,7 +228,6 @@ import slimeknights.tconstruct.tools.modifiers.slotless.StatOverrideModifier;
 import slimeknights.tconstruct.tools.modifiers.slotless.TrimModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.general.EnderportingModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.general.SolarPoweredModifier;
-import slimeknights.tconstruct.tools.modifiers.traits.general.TannedModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.general.TastyModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.harvest.DwarvenModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.harvest.MomentumModifier;
@@ -294,6 +293,7 @@ import slimeknights.tconstruct.tools.modules.combat.SpillingModule;
 import slimeknights.tconstruct.tools.modules.combat.SweepingEdgeModule;
 import slimeknights.tconstruct.tools.modules.durability.DurabilityAsCapacityModule;
 import slimeknights.tconstruct.tools.modules.durability.ShareDurabilityModule;
+import slimeknights.tconstruct.tools.modules.durability.ToolDamageRangeModule;
 import slimeknights.tconstruct.tools.modules.interaction.BrushModule;
 import slimeknights.tconstruct.tools.modules.interaction.ExtinguishCampfireModule;
 import slimeknights.tconstruct.tools.modules.interaction.FishingModule;
@@ -541,7 +541,9 @@ public final class TinkerModifiers extends TinkerModule {
   // traits - tier 1 nether
   public static final StaticModifier<EnderferenceModifier> enderference = MODIFIERS.register("enderference", EnderferenceModifier::new);
   // traits - tier 1 bindings
-  public static final StaticModifier<TannedModifier> tanned = MODIFIERS.register("tanned", TannedModifier::new);
+  /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#tanned} */
+  @Deprecated(forRemoval = true)
+  public static final StaticModifier<?> tanned = MODIFIERS.registerDynamic("tanned");
   public static final StaticModifier<SolarPoweredModifier> solarPowered = MODIFIERS.register("solar_powered", SolarPoweredModifier::new);
   // traits - tier 2
   public static final StaticModifier<DwarvenModifier> dwarven = MODIFIERS.register("dwarven", DwarvenModifier::new);
@@ -823,6 +825,7 @@ public final class TinkerModifiers extends TinkerModule {
       ModifierModule.LOADER.register(getResource("craft_count"), CraftCountModule.LOADER);
       ModifierModule.LOADER.register(getResource("tipped"), TippedModule.LOADER);
       ModifierModule.LOADER.register(getResource("projectile_bounce"), ProjectileBounceModule.LOADER);
+      ModifierModule.LOADER.register(getResource("tool_damage_range"), ToolDamageRangeModule.LOADER);
       // interaction
       ModifierModule.LOADER.register(getResource("brush"), BrushModule.LOADER);
       ModifierModule.LOADER.register(getResource("campfire_extinguish"), ExtinguishCampfireModule.LOADER);
