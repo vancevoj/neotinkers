@@ -1191,7 +1191,7 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
 
     // transform ingredients
     Ingredient bootsWithDuraibility = IntersectionIngredient.of(Ingredient.of(TinkerTags.Items.BOOTS), Ingredient.of(TinkerTags.Items.DURABILITY));
-    ModifierRecipeBuilder.modifier(TinkerModifiers.flamewake)
+    ModifierRecipeBuilder.modifier(ModifierIds.flamewake)
                          .setTools(bootsWithDuraibility)
                          .addInput(Items.FLINT)
                          .addInput(TinkerTags.Items.INGOTS_NETHERITE_SCRAP)
@@ -1200,8 +1200,8 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .addInput(Items.FLINT)
                          .setMaxLevel(1)
                          .setSlots(SlotType.ABILITY, 1)
-                         .saveSalvage(consumer, prefix(TinkerModifiers.flamewake, abilitySalvage))
-                         .save(consumer, prefix(TinkerModifiers.flamewake, abilityFolder));
+                         .saveSalvage(consumer, prefix(ModifierIds.flamewake, abilitySalvage))
+                         .save(consumer, prefix(ModifierIds.flamewake, abilityFolder));
 
     /*
      * ability
@@ -1471,14 +1471,14 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .setSlots(SlotType.ABILITY, 1)
                          .saveSalvage(consumer, prefix(ModifierIds.glowing, abilitySalvage))
                          .save(consumer, prefix(ModifierIds.glowing, abilityFolder));
-    ModifierRecipeBuilder.modifier(TinkerModifiers.firestarter)
+    ModifierRecipeBuilder.modifier(ModifierIds.firestarter)
                          .setTools(interactableWithDurability)
                          .addInput(TinkerMaterials.steel.getIngotTag())
                          .addInput(Items.FLINT)
                          .setMaxLevel(1).checkTraitLevel()
                          .setSlots(SlotType.ABILITY, 1)
-                         .saveSalvage(consumer, prefix(TinkerModifiers.firestarter, abilitySalvage))
-                         .save(consumer, prefix(TinkerModifiers.firestarter, abilityFolder));
+                         .saveSalvage(consumer, prefix(ModifierIds.firestarter, abilitySalvage))
+                         .save(consumer, prefix(ModifierIds.firestarter, abilityFolder));
     ModifierRecipeBuilder.modifier(ModifierIds.fireprimer)
                          .setTools(Ingredient.of(TinkerTools.flintAndBrick))
                          .addInput(TinkerMaterials.steel.getIngotTag())

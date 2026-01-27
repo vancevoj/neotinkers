@@ -57,6 +57,8 @@ public class ModifierIds {
   // general abilities
   public static final ModifierId reach = id("reach");
   public static final ModifierId glowing = id("glowing");
+  public static final ModifierId firestarter = id("firestarter");
+  public static final ModifierId flamewake = id("flamewake"); // TODO: consider merging into firestarter, the rest do it
   public static final ModifierId autosmelt = id("autosmelt");
   public static final ModifierId expanded = id("expanded");
   // compat

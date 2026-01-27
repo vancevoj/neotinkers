@@ -82,7 +82,7 @@ public class ModifierTagProvider extends AbstractModifierTagProvider {
     // modifiers in this tag support both left click and right click interaction
     tag(DUAL_INTERACTION).add(
       TinkerModifiers.bucketing.getId(), TinkerModifiers.splashing.getId(),
-      ModifierIds.glowing, TinkerModifiers.firestarter.getId(),
+      ModifierIds.glowing, ModifierIds.firestarter,
       ModifierIds.stripping, ModifierIds.tilling, ModifierIds.pathing,
       ModifierIds.shears, ModifierIds.silkyShears,
       ModifierIds.harvest, ModifierIds.fishing,
@@ -164,7 +164,7 @@ public class ModifierTagProvider extends AbstractModifierTagProvider {
       ModifierIds.grapple,
       ModifierIds.channeling, ModifierIds.returning);
     this.tag(INTERACTION_ABILITIES).add(
-      TinkerModifiers.bucketing.getId(), TinkerModifiers.firestarter.getId(), ModifierIds.glowing,
+      TinkerModifiers.bucketing.getId(), ModifierIds.firestarter, ModifierIds.glowing,
       ModifierIds.pathing, ModifierIds.stripping, ModifierIds.tilling, ModifierIds.brushing,
       TinkerModifiers.spitting.getId(), TinkerModifiers.splashing.getId(), TinkerModifiers.slurping.getId(),
       ModifierIds.bonking, ModifierIds.flinging, ModifierIds.springing, ModifierIds.warping,
@@ -176,7 +176,7 @@ public class ModifierTagProvider extends AbstractModifierTagProvider {
     this.tag(LEGGING_ABILITIES).add(ModifierIds.pockets, ModifierIds.soulBelt, ModifierIds.toolBelt, ModifierIds.craftingTable);
     this.tag(BOOT_ABILITIES).add(
       ModifierIds.bouncy, ModifierIds.doubleJump,
-      TinkerModifiers.flamewake.getId(), ModifierIds.snowdrift, ModifierIds.tilling, ModifierIds.pathing, ModifierIds.frostWalker, ModifierIds.glowing);
+      ModifierIds.flamewake, ModifierIds.snowdrift, ModifierIds.tilling, ModifierIds.pathing, ModifierIds.frostWalker, ModifierIds.glowing);
     this.tag(SHIELD_ABILITIES).add(ModifierIds.boundless, ModifierIds.reflecting);
 
     // defense

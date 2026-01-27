@@ -307,7 +307,7 @@ public class AdvancementsProvider extends GenericDataProvider {
 
       // interaction
       withL.accept(TinkerModifiers.bucketing);
-      withL.accept(TinkerModifiers.firestarter);
+      with.accept(ModifierIds.firestarter);
       with.accept(ModifierIds.glowing);
       with.accept(ModifierIds.pathing);
       with.accept(ModifierIds.stripping);
@@ -343,7 +343,7 @@ public class AdvancementsProvider extends GenericDataProvider {
       // boots
       with.accept(ModifierIds.bouncy);
       with.accept(ModifierIds.doubleJump);
-      withL.accept(TinkerModifiers.flamewake);
+      with.accept(ModifierIds.flamewake);
       with.accept(ModifierIds.frostWalker);
       with.accept(ModifierIds.snowdrift);
       // shield

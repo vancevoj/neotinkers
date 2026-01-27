@@ -197,13 +197,11 @@ import slimeknights.tconstruct.tools.item.ModifierCrystalItem;
 import slimeknights.tconstruct.tools.modifiers.EnergyHandlerModifier;
 import slimeknights.tconstruct.tools.modifiers.ModifierLootModifier;
 import slimeknights.tconstruct.tools.modifiers.ability.armor.AmbidextrousModifier;
-import slimeknights.tconstruct.tools.modifiers.ability.armor.FlamewakeModifier;
 import slimeknights.tconstruct.tools.modifiers.ability.fluid.BurstingModifier;
 import slimeknights.tconstruct.tools.modifiers.ability.fluid.SlurpingModifier;
 import slimeknights.tconstruct.tools.modifiers.ability.fluid.SpittingModifier;
 import slimeknights.tconstruct.tools.modifiers.ability.fluid.SplashingModifier;
 import slimeknights.tconstruct.tools.modifiers.ability.fluid.WettingModifier;
-import slimeknights.tconstruct.tools.modifiers.ability.interaction.FirestarterModifier;
 import slimeknights.tconstruct.tools.modifiers.ability.tool.BucketingModifier;
 import slimeknights.tconstruct.tools.modifiers.ability.tool.DuelWieldingModifier;
 import slimeknights.tconstruct.tools.modifiers.ability.tool.ExchangingModifier;
@@ -266,6 +264,7 @@ import slimeknights.tconstruct.tools.modules.ZoomModule;
 import slimeknights.tconstruct.tools.modules.armor.DepthProtectionModule;
 import slimeknights.tconstruct.tools.modules.armor.EnderclearanceModule;
 import slimeknights.tconstruct.tools.modules.armor.FieryCounterModule;
+import slimeknights.tconstruct.tools.modules.armor.FireWalkerModule;
 import slimeknights.tconstruct.tools.modules.armor.FlameBarrierModule;
 import slimeknights.tconstruct.tools.modules.armor.FreezingCounterModule;
 import slimeknights.tconstruct.tools.modules.armor.GlowWalkerModule;
@@ -295,6 +294,7 @@ import slimeknights.tconstruct.tools.modules.interaction.BrushModule;
 import slimeknights.tconstruct.tools.modules.interaction.ExtinguishCampfireModule;
 import slimeknights.tconstruct.tools.modules.interaction.FishingModule;
 import slimeknights.tconstruct.tools.modules.interaction.HarvestModule;
+import slimeknights.tconstruct.tools.modules.interaction.PlaceFireModule;
 import slimeknights.tconstruct.tools.modules.interaction.PlaceGlowModule;
 import slimeknights.tconstruct.tools.modules.interaction.ShearsModule;
 import slimeknights.tconstruct.tools.modules.interaction.ThrowingModule;
@@ -459,7 +459,9 @@ public final class TinkerModifiers extends TinkerModule {
   /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#bouncy} */
   @Deprecated(forRemoval = true)
   public static final DynamicModifier bouncy = MODIFIERS.registerDynamic("bouncy");
-  public static final StaticModifier<FlamewakeModifier> flamewake = MODIFIERS.register("flamewake", FlamewakeModifier::new);
+  /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#flamewake} */
+  @Deprecated(forRemoval = true)
+  public static final StaticModifier<?> flamewake = MODIFIERS.registerDynamic("flamewake");
 
   // abilities
   /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#unbreakable} */
@@ -492,7 +494,9 @@ public final class TinkerModifiers extends TinkerModule {
   public static final StaticModifier<SplashingModifier> splashing = MODIFIERS.register("splashing", SplashingModifier::new);
   
   // right click abilities
-  public static final StaticModifier<FirestarterModifier> firestarter = MODIFIERS.register("firestarter", () -> new FirestarterModifier(Modifier.DEFAULT_PRIORITY));
+  /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#firestarter} */
+  @Deprecated(forRemoval = true)
+  public static final StaticModifier<?> firestarter = MODIFIERS.registerDynamic("firestarter");
   /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#fireprimer} (modifier), or {@link slimeknights.tconstruct.library.tools.item.IModifiable#EXPANDED} (querying) */
   @Deprecated(forRemoval = true)
   public static final StaticModifier<?> fireprimer = MODIFIERS.registerDynamic("fireprimer");
@@ -825,6 +829,7 @@ public final class TinkerModifiers extends TinkerModule {
       ModifierModule.LOADER.register(getResource("autosmelt"), AutosmeltModule.LOADER);
       ModifierModule.LOADER.register(getResource("melting"), MeltingModule.LOADER);
       ModifierModule.LOADER.register(getResource("glow_walker"), GlowWalkerModule.LOADER);
+      ModifierModule.LOADER.register(getResource("fire_walker"), FireWalkerModule.LOADER);
       ModifierModule.LOADER.register(getResource("lightspeed_attribute"), LightspeedAttributeModule.LOADER);
       ModifierModule.LOADER.register(getResource("zoom"), ZoomModule.LOADER);
       ModifierModule.LOADER.register(getResource("fov"), FovModule.LOADER);
@@ -841,6 +846,7 @@ public final class TinkerModifiers extends TinkerModule {
       ModifierModule.LOADER.register(getResource("fishing"), FishingModule.LOADER);
       ModifierModule.LOADER.register(getResource("harvest"), HarvestModule.LOADER);
       ModifierModule.LOADER.register(getResource("place_glow"), PlaceGlowModule.LOADER);
+      ModifierModule.LOADER.register(getResource("place_fire"), PlaceFireModule.LOADER);
       ModifierModule.LOADER.register(getResource("projectile_place_glow"), ProjectilePlaceGlowModule.LOADER);
       ModifierModule.LOADER.register(getResource("shears"), ShearsModule.LOADER);
       ModifierModule.LOADER.register(getResource("throwing"), ThrowingModule.LOADER);

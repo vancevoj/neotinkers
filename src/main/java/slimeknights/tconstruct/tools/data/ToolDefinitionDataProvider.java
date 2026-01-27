@@ -580,7 +580,7 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
       .module(new ToolSlotsModule(ImmutableMap.of(SlotType.UPGRADE, 1)))
       // traits
       .module(ToolTraitsModule.builder()
-        .trait(TinkerModifiers.firestarter)
+        .trait(ModifierIds.firestarter)
         .trait(ModifierIds.fiery)
         .trait(ModifierIds.scorching).build())
       .module(ToolTraitsModule.builder().trait(ModifierIds.scorching).build(), ToolHooks.REBALANCED_TRAIT)
