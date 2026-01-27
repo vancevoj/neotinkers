@@ -25,7 +25,7 @@ public class TastyModifier extends Modifier implements ProcessLootModifierHook {
   @Override
   protected void registerHooks(Builder hookBuilder) {
     hookBuilder.addHook(this, ModifierHooks.PROCESS_LOOT);
-    hookBuilder.addModule(new EdibleModule(TinkerCommons.bacon, LevelingInt.eachLevel(15), LevelingValue.eachLevel(0.15f)));
+    hookBuilder.addModule(new EdibleModule(TinkerCommons.bacon, LevelingInt.flat(16), LevelingInt.eachLevel(15), LevelingValue.eachLevel(0.15f)));
     hookBuilder.addModule(StatBoostModule.add(EdibleModule.HUNGER).eachLevel(1));
     hookBuilder.addModule(StatBoostModule.add(EdibleModule.SATURATION).flat(0.4f));
   }

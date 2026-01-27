@@ -10,6 +10,9 @@
         "each_level": 5,
         "flat": 5
       },
+      "duration": {
+        "flat": 16
+      },
       "representative_item": "tconstruct:bacon"
     },
     {
@@ -25,5 +28,6 @@
       "stat": "tconstruct:saturation"
     }
   ],
+  "priority": 40,
   "tooltip_display": "always"
 }
