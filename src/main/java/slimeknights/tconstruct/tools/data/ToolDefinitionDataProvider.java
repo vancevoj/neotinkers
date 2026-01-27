@@ -849,7 +849,7 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
       .smallToolStartingSlots()
       // traits
       .module(ToolTraitsModule.builder()
-        .trait(TinkerModifiers.spitting)
+        .trait(ModifierIds.spitting)
         .trait(ModifierIds.spilling)
         .trait(ModifierIds.silkyShears).build())
       // behavior

@@ -199,9 +199,6 @@ import slimeknights.tconstruct.tools.modifiers.EnergyHandlerModifier;
 import slimeknights.tconstruct.tools.modifiers.ModifierLootModifier;
 import slimeknights.tconstruct.tools.modifiers.ability.armor.AmbidextrousModifier;
 import slimeknights.tconstruct.tools.modifiers.ability.fluid.BurstingModifier;
-import slimeknights.tconstruct.tools.modifiers.ability.fluid.SlurpingModifier;
-import slimeknights.tconstruct.tools.modifiers.ability.fluid.SpittingModifier;
-import slimeknights.tconstruct.tools.modifiers.ability.fluid.SplashingModifier;
 import slimeknights.tconstruct.tools.modifiers.ability.fluid.WettingModifier;
 import slimeknights.tconstruct.tools.modifiers.ability.tool.DuelWieldingModifier;
 import slimeknights.tconstruct.tools.modifiers.ability.tool.ExchangingModifier;
@@ -297,6 +294,9 @@ import slimeknights.tconstruct.tools.modules.interaction.HarvestModule;
 import slimeknights.tconstruct.tools.modules.interaction.PlaceFireModule;
 import slimeknights.tconstruct.tools.modules.interaction.PlaceGlowModule;
 import slimeknights.tconstruct.tools.modules.interaction.ShearsModule;
+import slimeknights.tconstruct.tools.modules.interaction.SlurpingModule;
+import slimeknights.tconstruct.tools.modules.interaction.SpittingModule;
+import slimeknights.tconstruct.tools.modules.interaction.SplashingModule;
 import slimeknights.tconstruct.tools.modules.interaction.TankInteractionModule;
 import slimeknights.tconstruct.tools.modules.interaction.ThrowingModule;
 import slimeknights.tconstruct.tools.modules.interaction.sling.SlingKnockbackModule;
@@ -442,7 +442,9 @@ public final class TinkerModifiers extends TinkerModule {
   /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#zoom} */
   @Deprecated(forRemoval = true)
   public static final DynamicModifier zoom = MODIFIERS.registerDynamic("zoom");
-  public static final StaticModifier<SlurpingModifier> slurping = MODIFIERS.register("slurping", SlurpingModifier::new);
+  /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#slurping} */
+  @Deprecated(forRemoval = true)
+  public static final StaticModifier<?> slurping = MODIFIERS.registerDynamic("slurping");
   // chestplate
   public static final DynamicModifier sleeves = MODIFIERS.registerDynamic("sleeves");
   public static final StaticModifier<AmbidextrousModifier> ambidextrous = MODIFIERS.register("ambidextrous", AmbidextrousModifier::new);
@@ -492,9 +494,13 @@ public final class TinkerModifiers extends TinkerModule {
   /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#spilling} */
   @Deprecated(forRemoval = true)
   public static final DynamicModifier spilling = MODIFIERS.registerDynamic("spilling");
-  public static final StaticModifier<SpittingModifier> spitting = MODIFIERS.register("spitting", SpittingModifier::new);
+  /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#spitting} */
+  @Deprecated(forRemoval = true)
+  public static final StaticModifier<?> spitting = MODIFIERS.registerDynamic("spitting");
   public static final StaticModifier<BurstingModifier> bursting = MODIFIERS.register("bursting", BurstingModifier::new);
-  public static final StaticModifier<SplashingModifier> splashing = MODIFIERS.register("splashing", SplashingModifier::new);
+  /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#splashing} */
+  @Deprecated(forRemoval = true)
+  public static final StaticModifier<?> splashing = MODIFIERS.registerDynamic("splashing");
   
   // right click abilities
   /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#firestarter} */
@@ -858,6 +864,9 @@ public final class TinkerModifiers extends TinkerModule {
       ModifierModule.LOADER.register(getResource("projectile_place_glow"), ProjectilePlaceGlowModule.LOADER);
       ModifierModule.LOADER.register(getResource("shears"), ShearsModule.LOADER);
       ModifierModule.LOADER.register(getResource("throwing"), ThrowingModule.LOADER);
+      ModifierModule.LOADER.register(getResource("spitting"), SpittingModule.LOADER);
+      ModifierModule.LOADER.register(getResource("splashing"), SplashingModule.LOADER);
+      ModifierModule.LOADER.register(getResource("slurping"), SlurpingModule.LOADER);
       // sling
       ModifierModule.LOADER.register(getResource("sling_leap"), SlingLeapModule.LOADER);
       ModifierModule.LOADER.register(getResource("sling_knockback"), SlingKnockbackModule.LOADER);

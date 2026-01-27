@@ -1008,7 +1008,7 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .saveSalvage(consumer, prefix(ModifierIds.zoom, upgradeSalvage))
                          .save(consumer, prefix(ModifierIds.zoom, upgradeFolder));
     Ingredient tanks = NoContainerIngredient.of(TinkerTags.Items.TANKS);
-    ModifierRecipeBuilder.modifier(TinkerModifiers.slurping)
+    ModifierRecipeBuilder.modifier(ModifierIds.slurping)
                          .addInput(Items.GLASS_BOTTLE)
                          .addInput(tanks)
                          .addInput(Items.GLASS_BOTTLE)
@@ -1016,8 +1016,8 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .addInput(Tags.Items.INGOTS_COPPER)
                          .setSlots(SlotType.ABILITY, 1)
                          .setTools(ingredientFromTags(TinkerTags.Items.HELMETS, TinkerTags.Items.INTERACTABLE_CHARGE))
-                         .saveSalvage(consumer, prefix(TinkerModifiers.slurping, abilitySalvage))
-                         .save(consumer, prefix(TinkerModifiers.slurping, abilityFolder));
+                         .saveSalvage(consumer, prefix(ModifierIds.slurping, abilitySalvage))
+                         .save(consumer, prefix(ModifierIds.slurping, abilityFolder));
     ModifierRecipeBuilder.modifier(ModifierIds.aquaAffinity)
                          .addInput(Blocks.PRISMARINE_BRICKS)
                          .addInput(Items.HEART_OF_THE_SEA)
@@ -1357,7 +1357,7 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .setTools(TinkerTags.Items.MELEE)
                          .saveSalvage(consumer, prefix(ModifierIds.spilling, abilitySalvage))
                          .save(consumer, prefix(ModifierIds.spilling, abilityFolder));
-    ModifierRecipeBuilder.modifier(TinkerModifiers.splashing)
+    ModifierRecipeBuilder.modifier(ModifierIds.splashing)
                          .addInput(MantleTags.Items.SPLASH_BOTTLE)
                          .addInput(tanks)
                          .addInput(MantleTags.Items.SPLASH_BOTTLE)
@@ -1365,8 +1365,8 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .addInput(Tags.Items.INGOTS_COPPER)
                          .setSlots(SlotType.ABILITY, 1)
                          .setTools(IntersectionIngredient.of(Ingredient.of(TinkerTags.Items.DURABILITY), Ingredient.of(TinkerTags.Items.INTERACTABLE)))
-                         .saveSalvage(consumer, prefix(TinkerModifiers.splashing, abilitySalvage))
-                         .save(consumer, prefix(TinkerModifiers.splashing, abilityFolder));
+                         .saveSalvage(consumer, prefix(ModifierIds.splashing, abilitySalvage))
+                         .save(consumer, prefix(ModifierIds.splashing, abilityFolder));
     ModifierRecipeBuilder.modifier(TinkerModifiers.bursting)
                          .addInput(Blocks.CACTUS)
                          .addInput(tanks)
@@ -1377,7 +1377,7 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .setTools(ingredientFromTags(TinkerTags.Items.CHESTPLATES, TinkerTags.Items.SHIELDS))
                          .saveSalvage(consumer, prefix(TinkerModifiers.bursting, abilitySalvage))
                          .save(consumer, prefix(TinkerModifiers.bursting, abilityFolder));
-    ModifierRecipeBuilder.modifier(TinkerModifiers.spitting)
+    ModifierRecipeBuilder.modifier(ModifierIds.spitting)
       .addInput(bowLimb)
       .addInput(TinkerSmeltery.searedFluidCannon)
       .addInput(bowLimb)
@@ -1388,8 +1388,8 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
         Ingredient.of(TinkerTags.Items.DURABILITY),
         Ingredient.of(TinkerTags.Items.INTERACTABLE_CHARGE_MODIFIER)
       ))
-      .saveSalvage(consumer, prefix(TinkerModifiers.spitting, abilitySalvage))
-      .save(consumer, prefix(TinkerModifiers.spitting, abilityFolder));
+      .saveSalvage(consumer, prefix(ModifierIds.spitting, abilitySalvage))
+      .save(consumer, prefix(ModifierIds.spitting, abilityFolder));
     ModifierRecipeBuilder.modifier(ModifierIds.tank)
                          .addInput(tanks)
                          .setSlots(SlotType.UPGRADE, 1)
