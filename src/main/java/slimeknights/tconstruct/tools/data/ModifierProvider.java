@@ -96,6 +96,7 @@ import slimeknights.tconstruct.library.modifiers.modules.armor.ToolActionWalkerT
 import slimeknights.tconstruct.library.modifiers.modules.behavior.AttributeModule;
 import slimeknights.tconstruct.library.modifiers.modules.behavior.AttributeModule.TooltipStyle;
 import slimeknights.tconstruct.library.modifiers.modules.behavior.ConditionalStatModule;
+import slimeknights.tconstruct.library.modifiers.modules.behavior.EdibleModule;
 import slimeknights.tconstruct.library.modifiers.modules.behavior.InfinityModule;
 import slimeknights.tconstruct.library.modifiers.modules.behavior.MaterialRepairModule;
 import slimeknights.tconstruct.library.modifiers.modules.behavior.ReduceToolDamageModule;
@@ -159,6 +160,7 @@ import slimeknights.tconstruct.library.tools.nbt.IToolContext;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
 import slimeknights.tconstruct.shared.TinkerAttributes;
+import slimeknights.tconstruct.shared.TinkerCommons;
 import slimeknights.tconstruct.shared.TinkerEffects;
 import slimeknights.tconstruct.tools.TinkerModifiers;
 import slimeknights.tconstruct.tools.TinkerToolActions;
@@ -1083,6 +1085,10 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .addModule(StatBoostModule.multiplyBase(OverslimeModule.OVERSLIME_STAT).eachLevel(0.5f));
     buildModifier(ModifierIds.crumbling).addModule(ConditionalMiningSpeedModule.builder().blocks(BlockPredicate.REQUIRES_TOOL.inverted()).allowIneffective().eachLevel(1f));
     buildModifier(ModifierIds.enhanced).priority(60).addModule(UPGRADE);
+    buildModifier(ModifierIds.tasty)
+      .addModule(new EdibleModule(TinkerCommons.bacon, new LevelingInt(5, 5), LevelingValue.eachLevel(0.15f)))
+      .addModule(StatBoostModule.add(EdibleModule.HUNGER).eachLevel(1))
+      .addModule(StatBoostModule.add(EdibleModule.SATURATION).flat(0.6f));
     buildModifier(ModifierIds.crystalbound)
       .addModule(RestrictAngleModule.INSTANCE)
       .addModule(StatBoostModule.add(ToolStats.VELOCITY).toolTag(TinkerTags.Items.RANGED).eachLevel(0.1f))

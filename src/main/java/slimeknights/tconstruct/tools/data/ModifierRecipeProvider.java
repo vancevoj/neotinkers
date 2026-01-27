@@ -153,8 +153,8 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
 
     // modifier repair
     // pig iron - from bacon, only in the tinker station
-    ModifierRepairRecipeBuilder.repair(TinkerModifiers.tasty, Ingredient.of(TinkerCommons.bacon), 25)
-                               .save(consumer, prefix(TinkerModifiers.tasty, folder));
+    ModifierRepairRecipeBuilder.repair(ModifierIds.tasty, Ingredient.of(TinkerCommons.bacon), 25)
+                               .save(consumer, prefix(ModifierIds.tasty, folder));
   }
 
   @SuppressWarnings("removal")

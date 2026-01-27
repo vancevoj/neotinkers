@@ -240,6 +240,7 @@ public class ModifierIds {
   public static final ModifierId overshield = id("overshield");
   public static final ModifierId crumbling = id("crumbling");
   public static final ModifierId enhanced = id("enhanced");
+  public static final ModifierId tasty = id("tasty");
   public static final ModifierId lightweight = id("lightweight");
   public static final ModifierId crystalbound = id("crystalbound");
   public static final ModifierId crystalstrike = id("crystalstrike");

@@ -109,6 +109,7 @@ import slimeknights.tconstruct.library.modifiers.modules.armor.ReplaceBlockWalke
 import slimeknights.tconstruct.library.modifiers.modules.armor.ToolActionWalkerTransformModule;
 import slimeknights.tconstruct.library.modifiers.modules.behavior.AttributeModule;
 import slimeknights.tconstruct.library.modifiers.modules.behavior.ConditionalStatModule;
+import slimeknights.tconstruct.library.modifiers.modules.behavior.EdibleModule;
 import slimeknights.tconstruct.library.modifiers.modules.behavior.InfinityModule;
 import slimeknights.tconstruct.library.modifiers.modules.behavior.MaterialRepairModule;
 import slimeknights.tconstruct.library.modifiers.modules.behavior.ReduceToolDamageModule;
@@ -222,7 +223,6 @@ import slimeknights.tconstruct.tools.modifiers.slotless.StatOverrideModifier;
 import slimeknights.tconstruct.tools.modifiers.slotless.TrimModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.general.EnderportingModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.general.SolarPoweredModifier;
-import slimeknights.tconstruct.tools.modifiers.traits.general.TastyModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.harvest.DwarvenModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.harvest.MomentumModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.melee.ConductingModifier;
@@ -564,7 +564,9 @@ public final class TinkerModifiers extends TinkerModule {
   public static final StaticModifier<DwarvenModifier> dwarven = MODIFIERS.register("dwarven", DwarvenModifier::new);
   // traits - tier 3
   public static final StaticModifier<LaceratingModifier> lacerating = MODIFIERS.register("lacerating", LaceratingModifier::new);
-  public static final StaticModifier<TastyModifier> tasty = MODIFIERS.register("tasty", TastyModifier::new);
+  /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#tasty} */
+  @Deprecated(forRemoval = true)
+  public static final StaticModifier<?> tasty = MODIFIERS.registerDynamic("tasty");
   public static final StaticModifier<MomentumModifier> momentum = MODIFIERS.register("momentum", MomentumModifier::new);
   public static final StaticModifier<InsatiableModifier> insatiable = MODIFIERS.register("insatiable", InsatiableModifier::new);
   public static final StaticModifier<ConductingModifier> conducting = MODIFIERS.register("conducting", ConductingModifier::new);
@@ -772,6 +774,7 @@ public final class TinkerModifiers extends TinkerModule {
       ModifierModule.LOADER.register(getResource("show_offhand"), ShowOffhandModule.LOADER);
       ModifierModule.LOADER.register(getResource("tool_actions"), ToolActionsModule.LOADER);
       ModifierModule.LOADER.register(getResource("tool_action_transform"), ToolActionTransformModule.LOADER);
+      ModifierModule.LOADER.register(getResource("edible"), EdibleModule.LOADER);
       // build
       ModifierModule.LOADER.register(getResource("conditional_stat"), ConditionalStatModule.LOADER);
       ModifierModule.LOADER.register(getResource("modifier_slot"), ModifierSlotModule.LOADER);

@@ -2038,8 +2038,8 @@
 
   "material.tconstruct.pig_iron": "Pig Iron",
   "material.tconstruct.pig_iron.flavor": "The absolute best material, no debates.",
-  "material.tconstruct.pig_iron.encyclopedia": "Can be eaten to restore 1 hunger per level at 0.6 saturation",
-  "material.tconstruct.pig_iron.armor": "Grants a 15% chance per level of eating the armor for 1 hunger per level at 0.6 saturation",
+  "material.tconstruct.pig_iron.encyclopedia": "Can be eaten to restore 1 hunger per level at 0.6 saturation at the cost of durability",
+  "material.tconstruct.pig_iron.armor": "Grants a 15% chance per level of eating the armor for 1 hunger per level at 0.6 saturation at the cost of durability",
   "material.tconstruct.pig_iron.skull_flavor": "You won't like me when I'm angry!",
   "material.tconstruct.pig_iron.skull_encyclopedia": "Grants 15 seconds of strength when damaged by another mob",
 

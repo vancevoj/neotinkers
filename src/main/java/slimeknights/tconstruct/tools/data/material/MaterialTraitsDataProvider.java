@@ -96,7 +96,7 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     addTraits(MaterialIds.amethystBronze, ARMOR, ModifierIds.crystalstrike);
     addDefaultTraits(MaterialIds.nahuatl, TinkerModifiers.lacerating);
     addDefaultTraits(MaterialIds.roseGold, ModifierIds.enhanced);
-    addDefaultTraits(MaterialIds.pigIron, TinkerModifiers.tasty);
+    addDefaultTraits(MaterialIds.pigIron, ModifierIds.tasty);
     addTraits(MaterialIds.obsidian, ARMOR, ModifierIds.blastProtection);
     // tier 3 - nether
     addDefaultTraits(MaterialIds.cobalt, ModifierIds.lightweight);
