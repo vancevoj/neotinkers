@@ -829,7 +829,7 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
       // traits
       .module(ToolTraitsModule.builder()
         .trait(ModifierIds.blocking)
-        .trait(TinkerModifiers.bonking)
+        .trait(ModifierIds.bonking)
         .trait(ModifierIds.knockback).build())
       .module(new ParticleWeaponAttack(TinkerTools.bonkAttackParticle.get()));
     // swasher

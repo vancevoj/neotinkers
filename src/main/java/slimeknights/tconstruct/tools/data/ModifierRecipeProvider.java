@@ -1489,7 +1489,7 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .save(consumer, prefix(ModifierIds.fireprimer, upgradeFolder));
     // slings
     Ingredient blockWhileCharging = IntersectionIngredient.of(Ingredient.of(TinkerTags.Items.DURABILITY), Ingredient.of(TinkerTags.Items.INTERACTABLE_CHARGE));
-    ModifierRecipeBuilder.modifier(TinkerModifiers.flinging)
+    ModifierRecipeBuilder.modifier(ModifierIds.flinging)
                          .setTools(blockWhileCharging)
                          .addInput(Tags.Items.STRING)
                          .addInput(TinkerWorld.earthGeode.asItem())
@@ -1498,9 +1498,9 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .addInput(TinkerWorld.congealedSlime.get(SlimeType.EARTH))
                          .setMaxLevel(1).checkTraitLevel()
                          .setSlots(SlotType.ABILITY, 1)
-                         .saveSalvage(consumer, prefix(TinkerModifiers.flinging, abilitySalvage))
-                         .save(consumer, prefix(TinkerModifiers.flinging, abilityFolder));
-    ModifierRecipeBuilder.modifier(TinkerModifiers.springing)
+                         .saveSalvage(consumer, prefix(ModifierIds.flinging, abilitySalvage))
+                         .save(consumer, prefix(ModifierIds.flinging, abilityFolder));
+    ModifierRecipeBuilder.modifier(ModifierIds.springing)
                          .setTools(blockWhileCharging)
                          .addInput(Tags.Items.FEATHERS)
                          .addInput(TinkerWorld.skyGeode.asItem())
@@ -1509,9 +1509,9 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .addInput(TinkerWorld.congealedSlime.get(SlimeType.SKY))
                          .setMaxLevel(1).checkTraitLevel()
                          .setSlots(SlotType.ABILITY, 1)
-                         .saveSalvage(consumer, prefix(TinkerModifiers.springing, abilitySalvage))
-                         .save(consumer, prefix(TinkerModifiers.springing, abilityFolder));
-    ModifierRecipeBuilder.modifier(TinkerModifiers.bonking)
+                         .saveSalvage(consumer, prefix(ModifierIds.springing, abilitySalvage))
+                         .save(consumer, prefix(ModifierIds.springing, abilityFolder));
+    ModifierRecipeBuilder.modifier(ModifierIds.bonking)
                          .setTools(blockWhileCharging)
                          .addInput(Tags.Items.INGOTS_IRON)
                          .addInput(TinkerWorld.ichorGeode.asItem())
@@ -1520,9 +1520,9 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .addInput(TinkerWorld.congealedSlime.get(SlimeType.ICHOR))
                          .setMaxLevel(1).checkTraitLevel()
                          .setSlots(SlotType.ABILITY, 1)
-                         .saveSalvage(consumer, prefix(TinkerModifiers.bonking, abilitySalvage))
-                         .save(consumer, prefix(TinkerModifiers.bonking, abilityFolder));
-    ModifierRecipeBuilder.modifier(TinkerModifiers.warping)
+                         .saveSalvage(consumer, prefix(ModifierIds.bonking, abilitySalvage))
+                         .save(consumer, prefix(ModifierIds.bonking, abilityFolder));
+    ModifierRecipeBuilder.modifier(ModifierIds.warping)
                          .setTools(blockWhileCharging)
                          .addInput(Tags.Items.ENDER_PEARLS)
                          .addInput(TinkerWorld.enderGeode.asItem())
@@ -1531,8 +1531,8 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .addInput(TinkerWorld.congealedSlime.get(SlimeType.ENDER))
                          .setMaxLevel(1).checkTraitLevel()
                          .setSlots(SlotType.ABILITY, 1)
-                         .saveSalvage(consumer, prefix(TinkerModifiers.warping, abilitySalvage))
-                         .save(consumer, prefix(TinkerModifiers.warping, abilityFolder));
+                         .saveSalvage(consumer, prefix(ModifierIds.warping, abilitySalvage))
+                         .save(consumer, prefix(ModifierIds.warping, abilityFolder));
 
     // unbreakable
     ModifierRecipeBuilder.modifier(ModifierIds.unbreakable)

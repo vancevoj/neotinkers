@@ -318,10 +318,10 @@ public class AdvancementsProvider extends GenericDataProvider {
       withL.accept(TinkerModifiers.splashing);
       withL.accept(TinkerModifiers.slurping);
       // staff
-      withL.accept(TinkerModifiers.bonking);
-      withL.accept(TinkerModifiers.flinging);
-      withL.accept(TinkerModifiers.springing);
-      withL.accept(TinkerModifiers.warping);
+      with.accept(ModifierIds.bonking);
+      with.accept(ModifierIds.flinging);
+      with.accept(ModifierIds.springing);
+      with.accept(ModifierIds.warping);
       with.accept(ModifierIds.drillAttack);
 
       // armor
@@ -348,7 +348,7 @@ public class AdvancementsProvider extends GenericDataProvider {
       with.accept(ModifierIds.snowdrift);
       // shield
       with.accept(ModifierIds.boundless);
-      withL.accept(TinkerModifiers.reflecting);
+      with.accept(ModifierIds.reflecting);
     });
 
     // foundry path

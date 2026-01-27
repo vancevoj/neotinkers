@@ -89,7 +89,7 @@ public class ModifierTagProvider extends AbstractModifierTagProvider {
       ModifierIds.pockets
     );
     tag(BLOCK_WHILE_CHARGING).add(
-      TinkerModifiers.flinging.getId(), TinkerModifiers.springing.getId(), TinkerModifiers.bonking.getId(), TinkerModifiers.warping.getId(),
+      ModifierIds.flinging, ModifierIds.springing, ModifierIds.bonking, ModifierIds.warping,
       TinkerModifiers.spitting.getId(), ModifierIds.scope, ModifierIds.zoom, ModifierIds.brushing, ModifierIds.throwing
     );
     tag(SLIME_DEFENSE).add(
@@ -102,11 +102,11 @@ public class ModifierTagProvider extends AbstractModifierTagProvider {
       ModifierIds.overforced, ModifierIds.overslimeFriend, TinkerModifiers.overworked.getId()
     );
     tag(AOE_INTERACTION).add(ModifierIds.pathing, ModifierIds.stripping, ModifierIds.tilling, ModifierIds.brushing, TinkerModifiers.splashing.getId(), ModifierIds.harvest);
-    tag(CHARGE_EMPTY_BOW_WITH_DRAWTIME).add(TinkerModifiers.flinging.getId(), TinkerModifiers.springing.getId(), TinkerModifiers.bonking.getId(), TinkerModifiers.warping.getId(), ModifierIds.throwing);
+    tag(CHARGE_EMPTY_BOW_WITH_DRAWTIME).add(ModifierIds.flinging, ModifierIds.springing, ModifierIds.bonking, ModifierIds.warping, ModifierIds.throwing);
     tag(CHARGE_EMPTY_BOW_WITHOUT_DRAWTIME).add(ModifierIds.blocking, ModifierIds.scope, ModifierIds.zoom);
-    tag(DRILL_ATTACKS).add(TinkerModifiers.flinging.getId(), TinkerModifiers.springing.getId(), ModifierIds.grapple);
-    tag(SELF_KNOCKBACK_SLINGS).add(TinkerModifiers.flinging.getId(), TinkerModifiers.springing.getId());
-    tag(TARGET_KNOCKBACK_SLINGS).add(TinkerModifiers.bonking.getId());
+    tag(DRILL_ATTACKS).add(ModifierIds.flinging, ModifierIds.springing, ModifierIds.grapple);
+    tag(SELF_KNOCKBACK_SLINGS).add(ModifierIds.flinging, ModifierIds.springing);
+    tag(TARGET_KNOCKBACK_SLINGS).add(ModifierIds.bonking);
     tag(KNOCKBACK_SLINGS).addTag(SELF_KNOCKBACK_SLINGS, TARGET_KNOCKBACK_SLINGS);
 
     // book tags
@@ -167,7 +167,7 @@ public class ModifierTagProvider extends AbstractModifierTagProvider {
       TinkerModifiers.bucketing.getId(), TinkerModifiers.firestarter.getId(), ModifierIds.glowing,
       ModifierIds.pathing, ModifierIds.stripping, ModifierIds.tilling, ModifierIds.brushing,
       TinkerModifiers.spitting.getId(), TinkerModifiers.splashing.getId(), TinkerModifiers.slurping.getId(),
-      TinkerModifiers.bonking.getId(), TinkerModifiers.flinging.getId(), TinkerModifiers.springing.getId(), TinkerModifiers.warping.getId(),
+      ModifierIds.bonking, ModifierIds.flinging, ModifierIds.springing, ModifierIds.warping,
       ModifierIds.throwing, ModifierIds.drillAttack);
     // armor
     this.tag(GENERAL_ARMOR_ABILITIES).add(ModifierIds.protection, TinkerModifiers.bursting.getId(), TinkerModifiers.wetting.getId());
@@ -177,7 +177,7 @@ public class ModifierTagProvider extends AbstractModifierTagProvider {
     this.tag(BOOT_ABILITIES).add(
       ModifierIds.bouncy, ModifierIds.doubleJump,
       TinkerModifiers.flamewake.getId(), ModifierIds.snowdrift, ModifierIds.tilling, ModifierIds.pathing, ModifierIds.frostWalker, ModifierIds.glowing);
-    this.tag(SHIELD_ABILITIES).add(ModifierIds.boundless, TinkerModifiers.reflecting.getId());
+    this.tag(SHIELD_ABILITIES).add(ModifierIds.boundless, ModifierIds.reflecting);
 
     // defense
     this.tag(PROTECTION_DEFENSE).add(
