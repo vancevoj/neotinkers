@@ -202,7 +202,6 @@ import slimeknights.tconstruct.tools.modifiers.ability.fluid.SlurpingModifier;
 import slimeknights.tconstruct.tools.modifiers.ability.fluid.SpittingModifier;
 import slimeknights.tconstruct.tools.modifiers.ability.fluid.SplashingModifier;
 import slimeknights.tconstruct.tools.modifiers.ability.fluid.WettingModifier;
-import slimeknights.tconstruct.tools.modifiers.ability.tool.BucketingModifier;
 import slimeknights.tconstruct.tools.modifiers.ability.tool.DuelWieldingModifier;
 import slimeknights.tconstruct.tools.modifiers.ability.tool.ExchangingModifier;
 import slimeknights.tconstruct.tools.modifiers.ability.tool.OffhandAttackModifier;
@@ -291,12 +290,14 @@ import slimeknights.tconstruct.tools.modules.durability.DurabilityAsCapacityModu
 import slimeknights.tconstruct.tools.modules.durability.ShareDurabilityModule;
 import slimeknights.tconstruct.tools.modules.durability.ToolDamageRangeModule;
 import slimeknights.tconstruct.tools.modules.interaction.BrushModule;
+import slimeknights.tconstruct.tools.modules.interaction.BucketModule;
 import slimeknights.tconstruct.tools.modules.interaction.ExtinguishCampfireModule;
 import slimeknights.tconstruct.tools.modules.interaction.FishingModule;
 import slimeknights.tconstruct.tools.modules.interaction.HarvestModule;
 import slimeknights.tconstruct.tools.modules.interaction.PlaceFireModule;
 import slimeknights.tconstruct.tools.modules.interaction.PlaceGlowModule;
 import slimeknights.tconstruct.tools.modules.interaction.ShearsModule;
+import slimeknights.tconstruct.tools.modules.interaction.TankInteractionModule;
 import slimeknights.tconstruct.tools.modules.interaction.ThrowingModule;
 import slimeknights.tconstruct.tools.modules.interaction.sling.SlingKnockbackModule;
 import slimeknights.tconstruct.tools.modules.interaction.sling.SlingLeapModule;
@@ -485,7 +486,9 @@ public final class TinkerModifiers extends TinkerModule {
   // fluid abilities
   public static final StaticModifier<Modifier> tankHandler = MODIFIERS.register("tank_handler", () -> ModuleHookMap.builder().addModule(new TankModule(ToolTankHelper.TANK_HELPER)).modifier().levelDisplay(ModifierLevelDisplay.NO_LEVELS).priority(300).build());
   public static final DynamicModifier melting = MODIFIERS.registerDynamic("melting");
-  public static final StaticModifier<BucketingModifier> bucketing = MODIFIERS.register("bucketing", BucketingModifier::new);
+  /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#bucketing} */
+  @Deprecated(forRemoval = true)
+  public static final StaticModifier<?> bucketing = MODIFIERS.registerDynamic("bucketing");
   /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#spilling} */
   @Deprecated(forRemoval = true)
   public static final DynamicModifier spilling = MODIFIERS.registerDynamic("spilling");
@@ -847,6 +850,8 @@ public final class TinkerModifiers extends TinkerModule {
       ModifierModule.LOADER.register(getResource("harvest"), HarvestModule.LOADER);
       ModifierModule.LOADER.register(getResource("place_glow"), PlaceGlowModule.LOADER);
       ModifierModule.LOADER.register(getResource("place_fire"), PlaceFireModule.LOADER);
+      ModifierModule.LOADER.register(getResource("bucket"), BucketModule.LOADER);
+      ModifierModule.LOADER.register(getResource("tank_interaction"), TankInteractionModule.LOADER);
       ModifierModule.LOADER.register(getResource("projectile_place_glow"), ProjectilePlaceGlowModule.LOADER);
       ModifierModule.LOADER.register(getResource("shears"), ShearsModule.LOADER);
       ModifierModule.LOADER.register(getResource("throwing"), ThrowingModule.LOADER);

@@ -81,7 +81,7 @@ public class ModifierTagProvider extends AbstractModifierTagProvider {
 
     // modifiers in this tag support both left click and right click interaction
     tag(DUAL_INTERACTION).add(
-      TinkerModifiers.bucketing.getId(), TinkerModifiers.splashing.getId(),
+      ModifierIds.bucketing, TinkerModifiers.splashing.getId(),
       ModifierIds.glowing, ModifierIds.firestarter,
       ModifierIds.stripping, ModifierIds.tilling, ModifierIds.pathing,
       ModifierIds.shears, ModifierIds.silkyShears,
@@ -164,7 +164,7 @@ public class ModifierTagProvider extends AbstractModifierTagProvider {
       ModifierIds.grapple,
       ModifierIds.channeling, ModifierIds.returning);
     this.tag(INTERACTION_ABILITIES).add(
-      TinkerModifiers.bucketing.getId(), ModifierIds.firestarter, ModifierIds.glowing,
+      ModifierIds.bucketing, ModifierIds.firestarter, ModifierIds.glowing,
       ModifierIds.pathing, ModifierIds.stripping, ModifierIds.tilling, ModifierIds.brushing,
       TinkerModifiers.spitting.getId(), TinkerModifiers.splashing.getId(), TinkerModifiers.slurping.getId(),
       ModifierIds.bonking, ModifierIds.flinging, ModifierIds.springing, ModifierIds.warping,

@@ -1335,7 +1335,7 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .saveSalvage(consumer, prefix(TinkerModifiers.melting, abilitySalvage))
                          .save(consumer, prefix(TinkerModifiers.melting, abilityFolder));
     SizedIngredient faucets = SizedIngredient.fromItems(TinkerSmeltery.searedFaucet, TinkerSmeltery.scorchedFaucet); // no salvage as don't want conversion between seared and scorched
-    ModifierRecipeBuilder.modifier(TinkerModifiers.bucketing)
+    ModifierRecipeBuilder.modifier(ModifierIds.bucketing)
                          .addInput(faucets)
                          .addInput(Items.BUCKET)
                          .addInput(faucets)
@@ -1344,8 +1344,8 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .setMaxLevel(1)
                          .setSlots(SlotType.ABILITY, 1)
                          .setTools(TinkerTags.Items.INTERACTABLE)
-                         .saveSalvage(consumer, prefix(TinkerModifiers.bucketing, abilitySalvage))
-                         .save(consumer, prefix(TinkerModifiers.bucketing, abilityFolder));
+                         .saveSalvage(consumer, prefix(ModifierIds.bucketing, abilitySalvage))
+                         .save(consumer, prefix(ModifierIds.bucketing, abilityFolder));
     SizedIngredient channels = SizedIngredient.fromItems(TinkerSmeltery.searedChannel, TinkerSmeltery.scorchedChannel);
     ModifierRecipeBuilder.modifier(ModifierIds.spilling)
                          .addInput(channels)

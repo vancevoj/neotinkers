@@ -40,6 +40,7 @@ import slimeknights.mantle.data.predicate.entity.HasEnchantmentEntityPredicate;
 import slimeknights.mantle.data.predicate.entity.HasMobEffectPredicate;
 import slimeknights.mantle.data.predicate.entity.LivingEntityPredicate;
 import slimeknights.mantle.data.predicate.entity.MobTypePredicate;
+import slimeknights.mantle.data.predicate.fluid.FluidPredicate;
 import slimeknights.mantle.data.predicate.item.ItemPredicate;
 import slimeknights.mantle.recipe.condition.TagFilledCondition;
 import slimeknights.tconstruct.TConstruct;
@@ -81,6 +82,7 @@ import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.ModifierId;
 import slimeknights.tconstruct.library.modifiers.hook.interaction.EntityInteractionModifierHook;
+import slimeknights.tconstruct.library.modifiers.hook.interaction.InteractionSource;
 import slimeknights.tconstruct.library.modifiers.hook.ranged.BowAmmoModifierHook;
 import slimeknights.tconstruct.library.modifiers.impl.BasicModifier.TooltipDisplay;
 import slimeknights.tconstruct.library.modifiers.modules.armor.BlockDamageSourceModule;
@@ -207,12 +209,14 @@ import slimeknights.tconstruct.tools.modules.durability.ShareDurabilityModule;
 import slimeknights.tconstruct.tools.modules.durability.ToolDamageRangeModule;
 import slimeknights.tconstruct.tools.modules.durability.ToolDamageRangeModule.ApplyRangeWhen;
 import slimeknights.tconstruct.tools.modules.interaction.BrushModule;
+import slimeknights.tconstruct.tools.modules.interaction.BucketModule;
 import slimeknights.tconstruct.tools.modules.interaction.ExtinguishCampfireModule;
 import slimeknights.tconstruct.tools.modules.interaction.FishingModule;
 import slimeknights.tconstruct.tools.modules.interaction.HarvestModule;
 import slimeknights.tconstruct.tools.modules.interaction.PlaceFireModule;
 import slimeknights.tconstruct.tools.modules.interaction.PlaceGlowModule;
 import slimeknights.tconstruct.tools.modules.interaction.ShearsModule;
+import slimeknights.tconstruct.tools.modules.interaction.TankInteractionModule;
 import slimeknights.tconstruct.tools.modules.interaction.ThrowingModule;
 import slimeknights.tconstruct.tools.modules.interaction.sling.SlingKnockbackModule;
 import slimeknights.tconstruct.tools.modules.interaction.sling.SlingLeapModule;
@@ -351,6 +355,14 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .addModule(PlaceFireModule.INSTANCE)
       .addModule(ShowOffhandModule.DISALLOW_BROKEN).addModule(ShowInteractionSourceModule.INSTANCE);
     buildModifier(ModifierIds.flamewake).levelDisplay(ModifierLevelDisplay.SINGLE_LEVEL).addModule(new FireWalkerModule(new LevelingValue(1.5f, 1)));
+    buildModifier(ModifierIds.bucketing)
+      .levelDisplay(ModifierLevelDisplay.NO_LEVELS)
+      .addModule(ToolTankHelper.TANK_HANDLER)
+      .addModule(StatBoostModule.add(ToolTankHelper.CAPACITY_STAT).flat(FluidType.BUCKET_VOLUME))
+      .addModule(new BucketModule(FluidPredicate.ANY))
+      // TODO: move this to the standard tank handler modifier?
+      .addModule(new TankInteractionModule(InteractionSource.ARMOR))
+      .addModule(ShowOffhandModule.ALLOW_BROKEN).addModule(ShowInteractionSourceModule.INSTANCE);
     buildModifier(TinkerModifiers.melting)
       .levelDisplay(ModifierLevelDisplay.PLUSES)
       .addModule(ToolTankHelper.TANK_HANDLER)
