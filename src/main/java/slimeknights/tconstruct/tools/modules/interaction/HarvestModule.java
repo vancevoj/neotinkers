@@ -2,8 +2,6 @@ package slimeknights.tconstruct.tools.modules.interaction;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
@@ -24,7 +22,6 @@ import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.events.TinkerToolEvent.ToolHarvestEvent;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
-import slimeknights.tconstruct.library.modifiers.hook.display.DisplayNameModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.interaction.AreaOfEffectHighlightModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.interaction.BlockInteractionModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.interaction.InteractionSource;
@@ -42,7 +39,7 @@ import java.util.Iterator;
 import java.util.List;
 
 /** Implements the harvesting modifier, using tool's AOE. */
-public enum HarvestModule implements ModifierModule, BlockInteractionModifierHook, AreaOfEffectHighlightModifierHook, DisplayNameModifierHook {
+public enum HarvestModule implements ModifierModule, BlockInteractionModifierHook, AreaOfEffectHighlightModifierHook {
   INSTANCE;
 
   private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<HarvestModule>defaultHooks(ModifierHooks.BLOCK_INTERACT, ModifierHooks.AOE_HIGHLIGHT);
@@ -56,11 +53,6 @@ public enum HarvestModule implements ModifierModule, BlockInteractionModifierHoo
   @Override
   public List<ModuleHook<?>> getDefaultHooks() {
     return DEFAULT_HOOKS;
-  }
-
-  @Override
-  public Component getDisplayName(IToolStackView tool, ModifierEntry entry, Component name, @Nullable RegistryAccess access) {
-    return InteractionSource.formatModifierName(tool, entry.getModifier(), name);
   }
 
   @Override

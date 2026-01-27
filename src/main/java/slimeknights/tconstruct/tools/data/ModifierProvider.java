@@ -131,6 +131,7 @@ import slimeknights.tconstruct.library.modifiers.modules.display.DurabilityBarCo
 import slimeknights.tconstruct.library.modifiers.modules.display.MaterialVariantColorModule;
 import slimeknights.tconstruct.library.modifiers.modules.display.ModifierVariantColorModule;
 import slimeknights.tconstruct.library.modifiers.modules.display.ModifierVariantNameModule;
+import slimeknights.tconstruct.library.modifiers.modules.display.ShowInteractionSourceModule;
 import slimeknights.tconstruct.library.modifiers.modules.mining.ConditionalMiningSpeedModule;
 import slimeknights.tconstruct.library.modifiers.modules.technical.ArmorLevelModule;
 import slimeknights.tconstruct.library.modifiers.modules.util.ModifierCondition;
@@ -339,10 +340,10 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
     buildModifier(ModifierIds.fireprimer).addModule(new VolatileIntModule(IModifiable.EXPANDED, LevelingInt.flat(1))).levelDisplay(ModifierLevelDisplay.NO_LEVELS);
     buildModifier(ModifierIds.glowing)
       .levelDisplay(ModifierLevelDisplay.SINGLE_LEVEL)
-      .addModule(ShowOffhandModule.DISALLOW_BROKEN)
       .addModule(new PlaceGlowModule(5))
       .addModule(new GlowWalkerModule(new LevelingValue(2, 1), 3, 5))
-      .addModule(new ProjectilePlaceGlowModule(5, true, true));
+      .addModule(new ProjectilePlaceGlowModule(5, true, true))
+      .addModule(ShowOffhandModule.DISALLOW_BROKEN).addModule(ShowInteractionSourceModule.INSTANCE);
     buildModifier(TinkerModifiers.melting)
       .levelDisplay(ModifierLevelDisplay.PLUSES)
       .addModule(ToolTankHelper.TANK_HANDLER)
@@ -725,23 +726,25 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
     // interaction
     buildModifier(ModifierIds.pathing)
       .levelDisplay(ModifierLevelDisplay.NO_LEVELS)
-      .addModule(ShowOffhandModule.DISALLOW_BROKEN)
-      .addModule(ExtinguishCampfireModule.INSTANCE, ModifierHooks.BLOCK_INTERACT, ModifierHooks.AOE_HIGHLIGHT)
+      .addModule(ExtinguishCampfireModule.INSTANCE)
       .addModule(ToolActionTransformModule.builder(ToolActions.SHOVEL_FLATTEN, SoundEvents.SHOVEL_FLATTEN).requireGround().build())
-      .addModule(ToolActionWalkerTransformModule.builder(ToolActions.SHOVEL_FLATTEN, SoundEvents.SHOVEL_FLATTEN).amount(0.5f, 1));
+      .addModule(ToolActionWalkerTransformModule.builder(ToolActions.SHOVEL_FLATTEN, SoundEvents.SHOVEL_FLATTEN).amount(0.5f, 1))
+      .addModule(ShowOffhandModule.DISALLOW_BROKEN).addModule(ShowInteractionSourceModule.INSTANCE);
     buildModifier(ModifierIds.stripping)
       .levelDisplay(ModifierLevelDisplay.NO_LEVELS)
-      .addModule(ShowOffhandModule.DISALLOW_BROKEN)
       .addModule(ToolActionTransformModule.builder(ToolActions.AXE_STRIP, SoundEvents.AXE_STRIP).build())
       .addModule(ToolActionTransformModule.builder(ToolActions.AXE_SCRAPE, SoundEvents.AXE_SCRAPE).eventId(LevelEvent.PARTICLES_SCRAPE).build())
-      .addModule(ToolActionTransformModule.builder(ToolActions.AXE_WAX_OFF, SoundEvents.AXE_WAX_OFF).eventId(LevelEvent.PARTICLES_WAX_OFF).build());
+      .addModule(ToolActionTransformModule.builder(ToolActions.AXE_WAX_OFF, SoundEvents.AXE_WAX_OFF).eventId(LevelEvent.PARTICLES_WAX_OFF).build())
+      .addModule(ShowOffhandModule.DISALLOW_BROKEN).addModule(ShowInteractionSourceModule.INSTANCE);
     buildModifier(ModifierIds.tilling)
-      .addModule(ShowOffhandModule.DISALLOW_BROKEN)
       .levelDisplay(ModifierLevelDisplay.NO_LEVELS)
       .addModule(ToolActionTransformModule.builder(ToolActions.HOE_TILL, SoundEvents.HOE_TILL).build())
-      .addModule(ToolActionWalkerTransformModule.builder(ToolActions.HOE_TILL, SoundEvents.HOE_TILL).amount(0.5f, 1));
+      .addModule(ToolActionWalkerTransformModule.builder(ToolActions.HOE_TILL, SoundEvents.HOE_TILL).amount(0.5f, 1))
+      .addModule(ShowOffhandModule.DISALLOW_BROKEN).addModule(ShowInteractionSourceModule.INSTANCE);
     buildModifier(ModifierIds.brushing).levelDisplay(ModifierLevelDisplay.NO_LEVELS).addModule(BrushModule.INSTANCE);
-    buildModifier(ModifierIds.harvest).priority(70).levelDisplay(ModifierLevelDisplay.NO_LEVELS).addModule(ShowOffhandModule.DISALLOW_BROKEN).addModule(HarvestModule.INSTANCE);
+    buildModifier(ModifierIds.harvest).priority(70).levelDisplay(ModifierLevelDisplay.NO_LEVELS)
+      .addModule(HarvestModule.INSTANCE)
+      .addModule(ShowOffhandModule.DISALLOW_BROKEN).addModule(ShowInteractionSourceModule.INSTANCE);
     buildModifier(ModifierIds.throwing).levelDisplay(ModifierLevelDisplay.NO_LEVELS).addModule(ThrowingModule.INSTANCE);
     buildModifier(ModifierIds.returning).addModule(new VolatileIntModule(ThrownTool.LOYALTY, LevelingInt.eachLevel(1)));
     buildModifier(ModifierIds.channeling).levelDisplay(ModifierLevelDisplay.NO_LEVELS).addModule(new ChannelingModule(0.15f, 0.65f, 1.0f, false));
@@ -757,10 +760,12 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
     // shears
     buildModifier(ModifierIds.shears).priority(70).levelDisplay(ModifierLevelDisplay.PLUSES)
       .addModule(ShowOffhandModule.DISALLOW_BROKEN)
-      .addModule(new ShearsModule(0, 1, 1));
+      .addModule(new ShearsModule(0, 1, 1))
+      .addModule(ShowInteractionSourceModule.INSTANCE);
     ModifierCondition<IToolStackView> silky = ModifierCondition.ANY_TOOL.with(ToolStackPredicate.context(new HasModifierPredicate(ModifierIds.silky, ModifierEntry.VALID_LEVEL, ModifierCheck.ALL)));
     buildModifier(ModifierIds.silkyShears).priority(70).levelDisplay(ModifierLevelDisplay.PLUSES)
-      .addModule(new ShearsModule(0, 1, 1, silky));
+      .addModule(new ShearsModule(0, 1, 1, silky))
+      .addModule(ShowInteractionSourceModule.INSTANCE);
     buildModifier(TinkerModifiers.aoeSilkyShears.getId()).priority(70).addModule(new ShearsModule(1, 0, 1, silky));
     // slings
     buildModifier(ModifierIds.flinging).levelDisplay(ModifierLevelDisplay.NO_LEVELS)
@@ -771,7 +776,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
     buildModifier(ModifierIds.warping).levelDisplay(ModifierLevelDisplay.NO_LEVELS).addModule(new SlingTeleportModule(6, 1.5f, LivingEntityPredicate.ANY, ModifierCondition.ANY_TOOL));
 
     // fishing
-    buildModifier(ModifierIds.fishing).levelDisplay(ModifierLevelDisplay.NO_LEVELS).addModule(FishingModule.INSTANCE);
+    buildModifier(ModifierIds.fishing).levelDisplay(ModifierLevelDisplay.NO_LEVELS).addModule(FishingModule.INSTANCE).addModule(ShowInteractionSourceModule.INSTANCE);
     buildModifier(ModifierIds.lure).addModule(StatBoostModule.add(ToolStats.LURE).eachLevel(1));
     // lure on prismarine arrows should only apply to fishing rods
     buildModifier(ModifierIds.lureRod).tooltipDisplay(TooltipDisplay.NEVER).addModule(ModifierTraitModule.tagCondition(ModifierIds.lure, TinkerTags.Items.FISHING_RODS));

@@ -2,11 +2,14 @@
   "level_display": "tconstruct:no_levels",
   "modules": [
     {
+      "type": "tconstruct:harvest"
+    },
+    {
       "type": "tconstruct:show_offhand",
       "mode": "disallow_broken"
     },
     {
-      "type": "tconstruct:harvest"
+      "type": "tconstruct:show_interaction_source"
     }
   ],
   "priority": 70,

@@ -1,7 +1,5 @@
 package slimeknights.tconstruct.tools.modules.interaction;
 
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -24,7 +22,6 @@ import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.hook.behavior.ToolActionModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.combat.ArmorLootingModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.combat.LootingModifierHook;
-import slimeknights.tconstruct.library.modifiers.hook.display.DisplayNameModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.interaction.EntityInteractionModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.interaction.InteractionSource;
 import slimeknights.tconstruct.library.modifiers.modules.ModifierModule;
@@ -40,11 +37,10 @@ import slimeknights.tconstruct.library.tools.item.IModifiable;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.utils.Util;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
 /** Module implementing shearing on kamas, scythes, and swords */
-public record ShearsModule(float flatBonus, float perLevelBonus, float expandedBonus, ModifierCondition<IToolStackView> condition) implements ModifierModule, EntityInteractionModifierHook, ToolActionModifierHook, DisplayNameModifierHook, ConditionalModule<IToolStackView> {
+public record ShearsModule(float flatBonus, float perLevelBonus, float expandedBonus, ModifierCondition<IToolStackView> condition) implements ModifierModule, EntityInteractionModifierHook, ToolActionModifierHook, ConditionalModule<IToolStackView> {
   private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<ShearsModule>defaultHooks(ModifierHooks.ENTITY_INTERACT, ModifierHooks.TOOL_ACTION);
   public static final RecordLoadable<ShearsModule> LOADER = RecordLoadable.create(
     FloatLoadable.FROM_ZERO.defaultField("flat", 0f, ShearsModule::flatBonus),
@@ -65,11 +61,6 @@ public record ShearsModule(float flatBonus, float perLevelBonus, float expandedB
   @Override
   public List<ModuleHook<?>> getDefaultHooks() {
     return DEFAULT_HOOKS;
-  }
-
-  @Override
-  public Component getDisplayName(IToolStackView tool, ModifierEntry entry, Component name, @Nullable RegistryAccess access) {
-    return InteractionSource.formatModifierName(tool, entry.getModifier(), name);
   }
 
   @Override

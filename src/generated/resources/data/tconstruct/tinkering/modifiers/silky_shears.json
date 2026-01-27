@@ -13,6 +13,9 @@
           "modifier": "tconstruct:silky"
         }
       }
+    },
+    {
+      "type": "tconstruct:show_interaction_source"
     }
   ],
   "priority": 70,

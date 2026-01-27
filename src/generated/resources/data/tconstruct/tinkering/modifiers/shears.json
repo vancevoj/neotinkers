@@ -9,6 +9,9 @@
       "type": "tconstruct:shears",
       "expanded": 1.0,
       "per_level": 1.0
+    },
+    {
+      "type": "tconstruct:show_interaction_source"
     }
   ],
   "priority": 70,
