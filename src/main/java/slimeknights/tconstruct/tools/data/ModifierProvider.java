@@ -62,6 +62,7 @@ import slimeknights.tconstruct.library.json.variable.block.BlockVariable;
 import slimeknights.tconstruct.library.json.variable.entity.AttributeEntityVariable;
 import slimeknights.tconstruct.library.json.variable.entity.ConditionalEntityVariable;
 import slimeknights.tconstruct.library.json.variable.entity.EntityEffectLevelVariable;
+import slimeknights.tconstruct.library.json.variable.entity.EntityLightVariable;
 import slimeknights.tconstruct.library.json.variable.entity.EntityVariable;
 import slimeknights.tconstruct.library.json.variable.entity.EquipmentCountEntityVariable;
 import slimeknights.tconstruct.library.json.variable.melee.EntityMeleeVariable;
@@ -931,6 +932,11 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
         .constant(1).add()
         // multiply into the final value
         .variable(VALUE).multiply().build());
+    buildModifier(ModifierIds.solarPowered).priority(185) // after tanned, before stoneshield
+      .addModule(ReduceToolDamageModule.builder().reinforcedTooltip().formula()
+        .customVariable("light", new EntityConditionalStatVariable(new EntityLightVariable(LightLayer.SKY), 15))
+        .constant(0.05f).multiply()
+        .build());
     buildModifier(ModifierIds.tipped).levelDisplay(ModifierLevelDisplay.SINGLE_LEVEL).addModule(TippedModule.INSTANCE);
     buildModifier(ModifierIds.soft)
       .levelDisplay(ModifierLevelDisplay.NO_LEVELS)

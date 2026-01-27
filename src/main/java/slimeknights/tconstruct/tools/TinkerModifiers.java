@@ -219,7 +219,6 @@ import slimeknights.tconstruct.tools.modifiers.slotless.OverslimeModifier;
 import slimeknights.tconstruct.tools.modifiers.slotless.StatOverrideModifier;
 import slimeknights.tconstruct.tools.modifiers.slotless.TrimModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.general.EnderportingModifier;
-import slimeknights.tconstruct.tools.modifiers.traits.general.SolarPoweredModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.harvest.DwarvenModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.harvest.MomentumModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.melee.ConductingModifier;
@@ -565,7 +564,9 @@ public final class TinkerModifiers extends TinkerModule {
   /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#tanned} */
   @Deprecated(forRemoval = true)
   public static final StaticModifier<?> tanned = MODIFIERS.registerDynamic("tanned");
-  public static final StaticModifier<SolarPoweredModifier> solarPowered = MODIFIERS.register("solar_powered", SolarPoweredModifier::new);
+  /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#solarPowered} */
+  @Deprecated(forRemoval = true)
+  public static final StaticModifier<?> solarPowered = MODIFIERS.registerDynamic("solar_powered");
   // traits - tier 2
   public static final StaticModifier<DwarvenModifier> dwarven = MODIFIERS.register("dwarven", DwarvenModifier::new);
   // traits - tier 3

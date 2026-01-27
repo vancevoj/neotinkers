@@ -3024,6 +3024,7 @@
   "modifier.tconstruct.solar_powered": "Solar Powered",
   "modifier.tconstruct.solar_powered.flavor": "Good for the environment",
   "modifier.tconstruct.solar_powered.description": "Tool resists damage in sunlight",
+  "modifier.tconstruct.solar_powered.reinforced": "Solar Reinforced",
 
   "__comment": "Tier 2 Traits",
   "modifier.tconstruct.sturdy": "Sturdy",
