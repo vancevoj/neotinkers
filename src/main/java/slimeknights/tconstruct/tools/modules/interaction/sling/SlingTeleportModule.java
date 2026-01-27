@@ -16,7 +16,6 @@ import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.hook.special.sling.SlingAngleModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.special.sling.SlingForceModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.special.sling.SlingLaunchModifierHook;
-import slimeknights.tconstruct.library.modifiers.modules.ModifierModule;
 import slimeknights.tconstruct.library.modifiers.modules.util.ModifierCondition;
 import slimeknights.tconstruct.library.tools.helper.ModifierUtil;
 import slimeknights.tconstruct.library.tools.helper.ToolDamageUtil;
@@ -31,7 +30,7 @@ public record SlingTeleportModule(float forceMultiplier, float drawtimeMultiplie
   public static final RecordLoadable<SlingTeleportModule> LOADER = RecordLoadable.create(FORCE_FIELD, DRAWTIME_FIELD, TARGET_FIELD, ModifierCondition.TOOL_FIELD, SlingTeleportModule::new);
 
   @Override
-  public RecordLoadable<? extends ModifierModule> getLoader() {
+  public RecordLoadable<SlingTeleportModule> getLoader() {
     return LOADER;
   }
 

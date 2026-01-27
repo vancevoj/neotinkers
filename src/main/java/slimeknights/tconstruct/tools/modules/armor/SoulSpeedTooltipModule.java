@@ -33,7 +33,7 @@ public enum SoulSpeedTooltipModule implements ModifierModule, TooltipModifierHoo
   public static final RecordLoadable<SoulSpeedTooltipModule> LOADER = new SingletonLoader<>(INSTANCE);
 
   @Override
-  public RecordLoadable<? extends ModifierModule> getLoader() {
+  public RecordLoadable<SoulSpeedTooltipModule> getLoader() {
     return LOADER;
   }
 

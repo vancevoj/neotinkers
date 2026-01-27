@@ -28,7 +28,7 @@ public enum SeveringModule implements ModifierModule, ProcessLootModifierHook {
   public static final RecordLoadable<SeveringModule> LOADER = new SingletonLoader<>(INSTANCE);
 
   @Override
-  public RecordLoadable<? extends ModifierModule> getLoader() {
+  public RecordLoadable<SeveringModule> getLoader() {
     return LOADER;
   }
 

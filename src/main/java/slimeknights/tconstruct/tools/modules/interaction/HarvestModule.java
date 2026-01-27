@@ -46,7 +46,7 @@ public enum HarvestModule implements ModifierModule, BlockInteractionModifierHoo
   public static final RecordLoadable<HarvestModule> LOADER = new SingletonLoader<>(INSTANCE);
 
   @Override
-  public RecordLoadable<? extends ModifierModule> getLoader() {
+  public RecordLoadable<HarvestModule> getLoader() {
     return LOADER;
   }
 

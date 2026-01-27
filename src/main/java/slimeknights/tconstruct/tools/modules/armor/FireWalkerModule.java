@@ -23,7 +23,7 @@ public record FireWalkerModule(LevelingValue radius) implements ModifierModule, 
   public static final RecordLoadable<FireWalkerModule> LOADER = RecordLoadable.create(LevelingValue.LOADABLE.requiredField("radius", FireWalkerModule::radius), FireWalkerModule::new);
 
   @Override
-  public RecordLoadable<? extends ModifierModule> getLoader() {
+  public RecordLoadable<FireWalkerModule> getLoader() {
     return LOADER;
   }
 

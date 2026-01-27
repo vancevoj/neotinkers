@@ -54,7 +54,7 @@ public record ShearsModule(float flatBonus, float perLevelBonus, float expandedB
   }
 
   @Override
-  public RecordLoadable<? extends ModifierModule> getLoader() {
+  public RecordLoadable<ShearsModule> getLoader() {
     return LOADER;
   }
 

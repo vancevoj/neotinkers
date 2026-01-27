@@ -56,7 +56,7 @@ public record BucketModule(IJsonPredicate<Fluid> fluids) implements ModifierModu
   public static final RecordLoadable<BucketModule> LOADER = RecordLoadable.create(FluidPredicate.LOADER.defaultField("fluids", BucketModule::fluids), BucketModule::new);
 
   @Override
-  public RecordLoadable<? extends ModifierModule> getLoader() {
+  public RecordLoadable<BucketModule> getLoader() {
     return LOADER;
   }
 

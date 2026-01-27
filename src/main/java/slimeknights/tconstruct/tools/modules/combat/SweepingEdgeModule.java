@@ -29,7 +29,7 @@ public record SweepingEdgeModule(LevelingValue value) implements ModifierModule,
   public static final RecordLoadable<SweepingEdgeModule> LOADER = RecordLoadable.create(LevelingValue.LOADABLE.directField(SweepingEdgeModule::value), SweepingEdgeModule::new);
 
   @Override
-  public RecordLoadable<? extends ModifierModule> getLoader() {
+  public RecordLoadable<SweepingEdgeModule> getLoader() {
     return LOADER;
   }
 

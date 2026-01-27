@@ -24,7 +24,7 @@ public enum ShowInteractionSourceModule implements ModifierModule, DisplayNameMo
   public static final RecordLoadable<ShowInteractionSourceModule> LOADER = new SingletonLoader<>(INSTANCE);
 
   @Override
-  public RecordLoadable<? extends ModifierModule> getLoader() {
+  public RecordLoadable<ShowInteractionSourceModule> getLoader() {
     return LOADER;
   }
 

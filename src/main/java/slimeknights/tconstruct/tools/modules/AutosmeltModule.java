@@ -57,7 +57,7 @@ public class AutosmeltModule implements ModifierModule, ProcessLootModifierHook 
   }
 
   @Override
-  public RecordLoadable<? extends ModifierModule> getLoader() {
+  public RecordLoadable<AutosmeltModule> getLoader() {
     return LOADER;
   }
 

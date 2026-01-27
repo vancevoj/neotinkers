@@ -27,7 +27,7 @@ public record FovModule(LevelingValue value, FovAction action) implements Modifi
     FovModule::new);
 
   @Override
-  public RecordLoadable<? extends ModifierModule> getLoader() {
+  public RecordLoadable<FovModule> getLoader() {
     return LOADER;
   }
 

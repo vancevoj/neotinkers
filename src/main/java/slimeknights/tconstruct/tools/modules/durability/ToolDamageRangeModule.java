@@ -43,7 +43,7 @@ public record ToolDamageRangeModule(int min, int max, ApplyRangeWhen when, IJson
   }
 
   @Override
-  public RecordLoadable<? extends ModifierModule> getLoader() {
+  public RecordLoadable<ToolDamageRangeModule> getLoader() {
     return LOADER;
   }
 

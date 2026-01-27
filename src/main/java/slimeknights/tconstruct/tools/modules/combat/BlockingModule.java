@@ -28,7 +28,7 @@ public enum BlockingModule implements ModifierModule, GeneralInteractionModifier
   public static final RecordLoadable<BlockingModule> LOADER = new SingletonLoader<>(INSTANCE);
 
   @Override
-  public RecordLoadable<? extends ModifierModule> getLoader() {
+  public RecordLoadable<BlockingModule> getLoader() {
     return LOADER;
   }
 

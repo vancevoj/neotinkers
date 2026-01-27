@@ -61,7 +61,7 @@ public enum PlaceFireModule implements ModifierModule, EntityInteractionModifier
   private static final ToolAction LIGHT_CAMPFIRE = ToolAction.get("light_campfire");
 
   @Override
-  public RecordLoadable<? extends ModifierModule> getLoader() {
+  public RecordLoadable<PlaceFireModule> getLoader() {
     return LOADER;
   }
 
