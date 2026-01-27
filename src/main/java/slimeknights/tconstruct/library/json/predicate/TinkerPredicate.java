@@ -33,8 +33,6 @@ public class TinkerPredicate {
 
   /** Entities that are in the air, notably does not count you as airborne if swimming, riding, or climbing */
   public static LivingEntityPredicate AIRBORNE = LivingEntityPredicate.simple(entity -> !entity.onGround() && !entity.onClimbable() && !entity.isInWater() && !entity.isPassenger());
-  /** Entities that are actively using an elytra */
-  public static LivingEntityPredicate ELYTRA_FLYING = LivingEntityPredicate.simple(LivingEntity::isFallFlying);
   /** Players that are targeting a block */
   public static LivingEntityPredicate TARGETING_BLOCK = LivingEntityPredicate.simple(living -> {
     if (living instanceof Player player) {

@@ -10,7 +10,7 @@
       "leave_ground": true,
       "target": {
         "type": "mantle:inverted",
-        "inverted_type": "tconstruct:elytra_flying"
+        "inverted_type": "mantle:elytra_flying"
       }
     }
   ],
