@@ -176,7 +176,7 @@ public class ToolAttackUtil {
   }
 
   /**
-   * Tool attack logic.
+   * Tool attack logic. Based on {@link Player#attack(Entity)}
    * Preconditions: {@link #canPerformAttack(IToolStackView)} and {@link #isAttackable(LivingEntity, Entity)} are kept separate to reduce effort creating the context when not needed.
    */
   public static boolean performAttack(IToolStackView tool, ToolAttackContext context) {
