@@ -208,6 +208,9 @@ import slimeknights.tconstruct.tools.modules.combat.FreezingAttackModule;
 import slimeknights.tconstruct.tools.modules.combat.SeveringModule;
 import slimeknights.tconstruct.tools.modules.combat.SpillingModule;
 import slimeknights.tconstruct.tools.modules.combat.SweepingEdgeModule;
+import slimeknights.tconstruct.tools.modules.cosmetic.DyeModule;
+import slimeknights.tconstruct.tools.modules.cosmetic.EmbellishmentModule;
+import slimeknights.tconstruct.tools.modules.cosmetic.TrimModule;
 import slimeknights.tconstruct.tools.modules.durability.ShareDurabilityModule;
 import slimeknights.tconstruct.tools.modules.durability.ToolDamageRangeModule;
 import slimeknights.tconstruct.tools.modules.durability.ToolDamageRangeModule.ApplyRangeWhen;
@@ -1353,6 +1356,11 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .levelDisplay(ModifierLevelDisplay.SINGLE_LEVEL)
       .addModule(new MobDisguiseModule(EntityType.ENDERMAN))
       .addModule(new VolatileFlagModule(ModifiableArmorItem.ENDERMASK));
+
+    // cosmetic
+    buildModifier(TinkerModifiers.dyed.getId()).levelDisplay(ModifierLevelDisplay.NO_LEVELS).addModule(DyeModule.INSTANCE);
+    buildModifier(TinkerModifiers.embellishment.getId()).levelDisplay(ModifierLevelDisplay.NO_LEVELS).addModule(EmbellishmentModule.INSTANCE);
+    buildModifier(TinkerModifiers.trim.getId()).levelDisplay(ModifierLevelDisplay.NO_LEVELS).addModule(new TrimModule());
 
     // TODO 1.21: remove these redirects
     // iron now gives magnetic. Steel is also just has better than irons old trait

@@ -213,11 +213,8 @@ import slimeknights.tconstruct.tools.modifiers.loot.ChrysophiliteLootCondition;
 import slimeknights.tconstruct.tools.modifiers.loot.HasModifierLootCondition;
 import slimeknights.tconstruct.tools.modifiers.loot.ModifierBonusLootFunction;
 import slimeknights.tconstruct.tools.modifiers.slotless.CreativeSlotModifier;
-import slimeknights.tconstruct.tools.modifiers.slotless.DyedModifier;
-import slimeknights.tconstruct.tools.modifiers.slotless.EmbellishmentModifier;
 import slimeknights.tconstruct.tools.modifiers.slotless.OverslimeModifier;
 import slimeknights.tconstruct.tools.modifiers.slotless.StatOverrideModifier;
-import slimeknights.tconstruct.tools.modifiers.slotless.TrimModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.general.EnderportingModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.harvest.DwarvenModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.harvest.MomentumModifier;
@@ -282,6 +279,9 @@ import slimeknights.tconstruct.tools.modules.combat.FreezingAttackModule;
 import slimeknights.tconstruct.tools.modules.combat.SeveringModule;
 import slimeknights.tconstruct.tools.modules.combat.SpillingModule;
 import slimeknights.tconstruct.tools.modules.combat.SweepingEdgeModule;
+import slimeknights.tconstruct.tools.modules.cosmetic.DyeModule;
+import slimeknights.tconstruct.tools.modules.cosmetic.EmbellishmentModule;
+import slimeknights.tconstruct.tools.modules.cosmetic.TrimModule;
 import slimeknights.tconstruct.tools.modules.durability.DurabilityAsCapacityModule;
 import slimeknights.tconstruct.tools.modules.durability.ShareDurabilityModule;
 import slimeknights.tconstruct.tools.modules.durability.ToolDamageRangeModule;
@@ -416,10 +416,10 @@ public final class TinkerModifiers extends TinkerModule {
   public static final StaticModifier<GoldGuardModifier> goldGuard = MODIFIERS.register("gold_guard", GoldGuardModifier::new);
   public static final StaticModifier<RevengeModifier> revenge = MODIFIERS.register("revenge", RevengeModifier::new);
 
-  // slotless - cosmetic
-  public static final StaticModifier<EmbellishmentModifier> embellishment = MODIFIERS.register("embellishment", EmbellishmentModifier::new);
-  public static final StaticModifier<DyedModifier> dyed = MODIFIERS.register("dyed", DyedModifier::new);
-  public static final StaticModifier<TrimModifier> trim = MODIFIERS.register("trim", TrimModifier::new);
+  // slotless - cosmetic - used as defaults for rendering modules
+  public static final StaticModifier<?> embellishment = MODIFIERS.registerDynamic("embellishment");
+  public static final StaticModifier<?> dyed = MODIFIERS.registerDynamic("dyed");
+  public static final StaticModifier<?> trim = MODIFIERS.registerDynamic("trim");
 
   // used in client renderer
   public static final DynamicModifier itemFrame = MODIFIERS.registerDynamic("item_frame");
@@ -939,6 +939,10 @@ public final class TinkerModifiers extends TinkerModule {
       ModifierModule.LOADER.register(getResource("projectile_gravity"), ProjectileGravityModule.LOADER);
       ModifierModule.LOADER.register(getResource("projectile_fuse"), ProjectileFuseModule.LOADER);
       ModifierModule.LOADER.register(getResource("projectile_attract_mobs"), ProjectileAttractMobsModule.LOADER);
+      // cosmetic
+      ModifierModule.LOADER.register(getResource("dye"), DyeModule.LOADER);
+      ModifierModule.LOADER.register(getResource("embellishment"), EmbellishmentModule.LOADER);
+      ModifierModule.LOADER.register(getResource("trim"), TrimModule.LOADER);
       // compat
       ModifierModule.LOADER.register(getResource("the_one_probe"), TheOneProbeModule.INSTANCE.getLoader());
       ModifierModule.LOADER.register(getResource("headlight"), HeadlightModule.LOADER);
