@@ -84,6 +84,7 @@ public class FluidEffectProvider extends AbstractFluidEffectProvider {
     super(packOutput, TConstruct.MOD_ID);
   }
 
+  @SuppressWarnings("removal")
   @Override
   protected void addFluids() {
     // cheap //

@@ -451,6 +451,7 @@ public final class TinkerModifiers extends TinkerModule {
   /** Use API from {@link slimeknights.tconstruct.library.modifiers.modules.capacity.OverslimeModule} */
   public static final StaticModifier<OverslimeModifier> overslime = MODIFIERS.register("overslime", OverslimeModifier::new);
   /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#sweeping} */
+  @SuppressWarnings("removal")
   @Deprecated(forRemoval = true)
   public static final StaticModifier<SweepingEdgeModifier> sweeping = new FakeModifier<>(new ModifierId(TConstruct.MOD_ID, "sweeping_edge"), SweepingEdgeModifier::new);
   /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#expanded} (modifier) or {@link slimeknights.tconstruct.library.tools.item.IModifiable#EXPANDED} (querying) */
@@ -460,6 +461,7 @@ public final class TinkerModifiers extends TinkerModule {
 
   // modifiers pending removal - reimplement if you need them
   /** @deprecated Piercing now removes armor instead of ignoring armor. See {@link SpillingModule} for a similar effect. */
+  @SuppressWarnings("removal")
   @Deprecated(forRemoval = true)
   public static final StaticModifier<PiercingModifier> piercing = MODIFIERS.register("piercing", PiercingModifier::new);
   /** @deprecated Platinum was removed. */
