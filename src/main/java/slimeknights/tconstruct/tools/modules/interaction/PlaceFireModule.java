@@ -26,6 +26,7 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraftforge.common.ToolAction;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.data.loadable.record.SingletonLoader;
+import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.hook.behavior.ToolActionModifierHook;
@@ -188,7 +189,9 @@ public enum PlaceFireModule implements ModifierModule, EntityInteractionModifier
   @Nullable
   @Override
   public Boolean removeBlock(IToolStackView tool, ModifierEntry modifier, ToolHarvestContext context) {
-    if (context.getState().is(Blocks.FIRE) && tool.getHook(ToolHooks.INTERACTION).canInteract(tool, modifier.getId(), InteractionSource.LEFT_CLICK)) {
+    // if we have left click modifiers active, ensure we don't break the block on left click
+    // otherwise our newly placed block is immediately removed
+    if (context.getState().is(Blocks.FIRE) && tool.hasTag(TinkerTags.Items.INTERACTABLE_LEFT) && tool.getHook(ToolHooks.INTERACTION).canInteract(tool, modifier.getId(), InteractionSource.LEFT_CLICK)) {
       return false;
     }
     return null;
