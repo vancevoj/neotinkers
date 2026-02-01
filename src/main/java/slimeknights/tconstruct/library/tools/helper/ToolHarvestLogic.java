@@ -238,8 +238,7 @@ public class ToolHarvestLogic {
     }*/
 
     // client can run normal block breaking
-    // if its not harvest, skip our hooks as well
-    if (player.level().isClientSide || !stack.is(TinkerTags.Items.HARVEST) || !(player instanceof ServerPlayer serverPlayer)) {
+    if (player.level().isClientSide || !(player instanceof ServerPlayer serverPlayer)) {
       return false;
     }
 

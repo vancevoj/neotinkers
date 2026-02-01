@@ -103,7 +103,7 @@ public class EnderportingModifier extends NoLevelsModifier implements PlantHarve
 
   @Override
   public void finishHarvest(IToolStackView tool, ModifierEntry modifier, ToolHarvestContext context, int harvested) {
-    if (harvested > 0 && context.canHarvest()) {
+    if (harvested > 0 && context.canHarvest() && tool.hasTag(TinkerTags.Items.HARVEST)) {
       BlockPos pos = context.getPos();
       LivingEntity living = context.getLiving();
       if (tryTeleport(modifier, living, pos.getX() + 0.5f, pos.getY(), pos.getZ() + 0.5f)) {
