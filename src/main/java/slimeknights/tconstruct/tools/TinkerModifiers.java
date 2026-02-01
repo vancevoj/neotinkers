@@ -973,6 +973,7 @@ public final class TinkerModifiers extends TinkerModule {
       EntityVariable.LOADER.register(getResource("equipment_count"), EquipmentCountEntityVariable.LOADER);
       EntityVariable.LOADER.register(getResource("biome_temperature"), EntityVariable.BIOME_TEMPERATURE.getLoader());
       EntityVariable.LOADER.register(getResource("water"), EntityVariable.WATER.getLoader());
+      EntityVariable.LOADER.register(getResource("armor_coverage"), EntityVariable.ARMOR_COVERAGE.getLoader());
       // tool
       ToolVariable.LOADER.register(getResource("constant"), ToolVariable.Constant.LOADER);
       ToolVariable.register(getResource("tool_conditional"), ConditionalToolVariable.LOADER);
