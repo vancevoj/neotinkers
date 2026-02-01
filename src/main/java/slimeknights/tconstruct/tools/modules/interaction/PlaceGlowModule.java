@@ -35,11 +35,6 @@ public record PlaceGlowModule(int damage) implements ModifierModule, BlockIntera
     PlaceGlowModule::new);
 
   @Override
-  public Integer getPriority() {
-    return 70;
-  }
-
-  @Override
   public RecordLoadable<PlaceGlowModule> getLoader() {
     return LOADER;
   }
