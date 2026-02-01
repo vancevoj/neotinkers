@@ -535,11 +535,11 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       new MobTypePredicate(MobType.ILLAGER),
       LivingEntityPredicate.LOADER.tag(TinkerTags.EntityTypes.KILLAGERS))).eachLevel(2.0f));
     buildModifier(ModifierIds.pierce)
-      // less damage than sharpness, but pierces 2 armor
+      // less damage than sharpness, but pierces 1 armor
       .addModule(StatBoostModule.add(ToolStats.ATTACK_DAMAGE).eachLevel(0.5f))
       .addModule(MobEffectModule.builder(TinkerEffects.pierce).applyBeforeMelee(true)
-        // apply effect for 5 seconds, canceling 2 armor per level
-        .level(RandomLevelingValue.perLevel(0, 2)).time(RandomLevelingValue.flat(5 * 20))
+        // apply effect for 4 seconds, canceling 1 armor per level
+        .level(RandomLevelingValue.perLevel(0, 1)).time(RandomLevelingValue.flat(4 * 20))
         // 100% chance on armor
         .chance(LevelingValue.flat(1)).build());
     buildModifier(ModifierIds.chargeAttack).levelDisplay(ModifierLevelDisplay.NO_LEVELS).addModule(ConditionalMeleeDamageModule.builder().attacker(LivingEntityPredicate.SPRINTING).flat(7));

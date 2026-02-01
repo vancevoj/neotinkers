@@ -1812,9 +1812,9 @@
 
   "material.tconstruct.bone": "Bone",
   "material.tconstruct.bone.flavor": "I am the bone of my sword",
-  "material.tconstruct.bone.encyclopedia": "Increases melee damage by 0.5 and grants 2 armor pierce per level for 5 seconds",
-  "material.tconstruct.bone.ranged": "Arrows apply 2 armor pierce per level for 5 seconds",
-  "material.tconstruct.bone.armor": "Has a 15% chance when hit for attackers receive 2 armor pierce per level for 5 seconds (or 10 seconds if blocking).",
+  "material.tconstruct.bone.encyclopedia": "Increases melee damage by 0.5 and grants 1 armor pierce per level for 4 seconds",
+  "material.tconstruct.bone.ranged": "Arrows apply 1 armor pierce per level for 4 seconds",
+  "material.tconstruct.bone.armor": "Has a 15% chance when hit for attackers receive 1 armor pierce per level for 4 seconds (or 8 seconds if blocking).",
   "material.tconstruct.bone.ammo": "Causes the arrow to pierce through the first target it hits, while thrown projectiles disable shields.",
   "material.tconstruct.bone.skull_flavor": "Got Milk?",
   "material.tconstruct.bone.skull_encyclopedia": "Grants resistance for 1 minute after drinking milk",
