@@ -221,7 +221,7 @@ public class FluidTagProvider extends FluidTagsProvider {
         TinkerFluids.moltenNicrosil.getTag(), TinkerFluids.moltenDuralumin.getTag(), TinkerFluids.moltenBendalloy.getTag(),
         // Twilight alloys
         TinkerFluids.moltenSteeleaf.getTag()
-    ).add(TinkerFluids.moltenCinderslime.get());
+    );
 
     this.tag(TinkerTags.Fluids.LARGE_GEM_TOOLTIPS).addTags(TinkerFluids.moltenEmerald.getTag(), TinkerFluids.moltenDiamond.getTag());
     this.tag(TinkerTags.Fluids.SMALL_GEM_TOOLTIPS).addTags(TinkerFluids.moltenQuartz.getTag(), TinkerFluids.moltenAmethyst.getTag());
