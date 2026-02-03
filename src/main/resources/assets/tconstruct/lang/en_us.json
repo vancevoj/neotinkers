@@ -2034,7 +2034,7 @@
   "material.tconstruct.amethyst_bronze.flavor": "Not to be confused with bronze.",
   "material.tconstruct.amethyst_bronze.encyclopedia": "Grants +1 mining speed per level to blocks that don't require tools, notably ones where the tool is not effective",
   "material.tconstruct.amethyst_bronze.ranged": "Adds +0.1 velocity per level at the cost of limiting arrow angles to 32, 16, or 8 directions at the first 3 levels respectively",
-  "material.tconstruct.amethyst_bronze.armor": "Grants +2.5% attack speed per level at the cost of limiting taken knockback angles to 32, 16, 8, or 4 directions",
+  "material.tconstruct.amethyst_bronze.armor": "Grants +5% attack speed per level at the cost of +5% duration on negative effects and limiting taken knockback angles to 32, 16, 8, or 4 directions",
 
   "material.tconstruct.pig_iron": "Pig Iron",
   "material.tconstruct.pig_iron.flavor": "The absolute best material, no debates.",
@@ -2086,7 +2086,7 @@
 
   "material.tconstruct.ichorskin": "Ichorskin",
   "material.tconstruct.ichorskin.flavor": "Ichor definately does not have skin",
-  "material.tconstruct.ichorskin.encyclopedia": "Consumes up to 5 overslime to reduce damage by 1% per overslime consumed (up to 5%).",
+  "material.tconstruct.ichorskin.encyclopedia": "Grants +5% movement speed, +2.5% attack speed, and +7.5% mining speed",
 
   "material.tconstruct.cinderslime": "Cinderslime",
   "material.tconstruct.cinderslime.flavor": "Cast it into the fire!",
@@ -3108,6 +3108,9 @@
   "modifier.tconstruct.overshield.flavor": "Slimeshield!",
   "modifier.tconstruct.overshield.description": "Consumes overslime to reduce all sources of damage",
   "modifier.tconstruct.overshield.resistance": "Overshield",
+  "modifier.tconstruct.godspeed": "Skyfall",
+  "modifier.tconstruct.godspeed.flavor": "Gotta go fast!",
+  "modifier.tconstruct.godspeed.description": "Increases movement, attack, and mining speed",
   "modifier.tconstruct.lacerating": "Lacerating",
   "modifier.tconstruct.lacerating.flavor": "Sharp Edges!",
   "modifier.tconstruct.lacerating.description": "Causes the target to bleed, dealing additional damage",
@@ -3120,7 +3123,7 @@
   "modifier.tconstruct.crystalbound.description": "Gains bonus damage potential, but arrow angle is restricted",
   "modifier.tconstruct.crystalstrike": "Crystalstrike",
   "modifier.tconstruct.crystalstrike.flavor": "Speed of the crystal comes at a cost",
-  "modifier.tconstruct.crystalstrike.description": "Increases attack speed but also restricts knockback angles",
+  "modifier.tconstruct.crystalstrike.description": "Increases attack speed but negative effects last longer",
   "modifier.tconstruct.lightweight": "Lightweight",
   "modifier.tconstruct.lightweight.flavor": "Like a Shardblade!",
   "modifier.tconstruct.lightweight.description": "Tool is incredibly light for its size, allowing you to attack, mine, and launch projectiles faster",

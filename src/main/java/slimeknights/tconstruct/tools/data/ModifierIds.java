@@ -242,6 +242,7 @@ public class ModifierIds {
   // traits - tier 3
   public static final ModifierId overcast = id("overcast");
   public static final ModifierId overshield = id("overshield");
+  public static final ModifierId godspeed = id("godspeed");
   public static final ModifierId crumbling = id("crumbling");
   public static final ModifierId enhanced = id("enhanced");
   public static final ModifierId tasty = id("tasty");
