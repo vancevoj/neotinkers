@@ -231,7 +231,6 @@
     "overcast":      "#27C6C6",
     "overgrowth":    "#82c873",
     "overlord":      "#236c45",
-    "overshield":    "#ff970d",
     "overworked":    "#E6D08D",
     "preserved":     "#673C29",
     "solar_powered": "#48B518",
@@ -318,6 +317,7 @@
     "vital_protection":     "#999483",
     "frostshield":          "#AAFFFF",
     "tempered_protection":  "#893D14",
+    "overshield":           "#B771FF",
 
     "__traits_slimeskull__": null,
     "boon_of_sssss":    "#605448",
@@ -447,6 +447,7 @@
     "manyullyn":    "#9261cc",
     "knightmetal":  "#C4D6AE",
     "knightly":     "#C4D6AE",
+    "knightslime":  "#B771FF",
     "blazing_bone": "#DBCC0B",
     "blazewood":    "#DBCC0B",
     "ancient_hide": "#7E6059",

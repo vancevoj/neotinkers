@@ -1145,7 +1145,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .addModule(StatBoostModule.multiplyBase(ToolStats.ATTACK_DAMAGE).eachLevel(0.05f))
       .addModule(StatBoostModule.add(ToolStats.PROJECTILE_DAMAGE).eachLevel(0.25f))
       .addModule(StatBoostModule.add(ToolStats.ARMOR_TOUGHNESS).eachLevel(1));
-    buildModifier(ModifierIds.overshield).levelDisplay(ModifierLevelDisplay.NO_LEVELS).addModule(new OvershieldModule(1.25f, 5));
+    buildModifier(ModifierIds.overshield).addModule(new OvershieldModule(LevelingValue.eachLevel(1.25f), LevelingInt.eachLevel(5)));
     // traits - tier 3 compat
     buildModifier(ModifierIds.maintained)
       .addModule(ConditionalMiningSpeedModule.builder()

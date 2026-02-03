@@ -60,7 +60,7 @@ public class MaterialTagProvider extends AbstractMaterialTagProvider {
       // tiers 1-2
       MaterialIds.chorus, MaterialIds.whitestone,
       // tier 4
-      MaterialIds.knightmetal, MaterialIds.knightly, MaterialIds.enderslimeVine, MaterialIds.ancient,
+      MaterialIds.knightmetal, MaterialIds.knightly, MaterialIds.knightslime, MaterialIds.enderslimeVine, MaterialIds.ancient,
       // ammo and maille
       MaterialIds.shulker, MaterialIds.dragonScale, MaterialIds.enderslime, MaterialIds.endRod
     ).addOptional(MaterialIds.ironwood, MaterialIds.steeleaf, MaterialIds.fiery);

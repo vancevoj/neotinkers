@@ -139,6 +139,7 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     // tier 4 (end)
     addDefaultTraits(MaterialIds.knightmetal, ModifierIds.valiant);
     addTraits(MaterialIds.knightmetal, ARMOR, ModifierIds.stalwart);
+    addTraits(MaterialIds.knightslime, ARMOR, ModifierIds.overshield, TinkerModifiers.overslime.getId());
     addDefaultTraits(MaterialIds.knightly, ModifierIds.valiant);
     addDefaultTraits(MaterialIds.enderslimeVine, TinkerModifiers.enderporting);
     addTraits(MaterialIds.enderslimeVine, ARMOR, ModifierIds.enderclearance);

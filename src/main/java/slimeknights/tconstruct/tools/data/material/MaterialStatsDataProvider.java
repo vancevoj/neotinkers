@@ -493,6 +493,7 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
     addMaterialStats(MaterialIds.ancientHide, StatlessMaterialStats.MAILLE, StatlessMaterialStats.CUIRASS);
     // tier 4 (end)
     addArmorShieldStats(MaterialIds.knightmetal, PlatingMaterialStats.builder().durabilityFactor(20).armor(2, 5, 7, 2).toughness(2).knockbackResistance(0.05f), StatlessMaterialStats.MAILLE);
+    addArmorShieldStats(MaterialIds.knightslime, PlatingMaterialStats.builder().durabilityFactor(47).armor(2, 5, 7, 2).toughness(1).knockbackResistance(0.10f), StatlessMaterialStats.MAILLE);
     addMaterialStats(MaterialIds.enderslimeVine, StatlessMaterialStats.MAILLE, StatlessMaterialStats.CUIRASS);
     addMaterialStats(MaterialIds.dragonScale, StatlessMaterialStats.MAILLE);
     addMaterialStats(MaterialIds.shulker, StatlessMaterialStats.MAILLE);

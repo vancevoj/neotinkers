@@ -163,6 +163,11 @@
   "item.tconstruct.knightmetal_ingot": "Knightmetal Ingot",
   "item.tconstruct.knightmetal_nugget": "Knightmetal Nugget",
 
+  "block.tconstruct.knightslime_block": "Block of Knightslime",
+  "item.tconstruct.knightslime_ingot": "Knightslime Ingot",
+  "item.tconstruct.knightslime_ingot.tooltip": "Can be used as spiky beacon base",
+  "item.tconstruct.knightslime_nugget": "Knightslime Nugget",
+
   "block.tconstruct.soulsteel_block": "Block of Soulsteel",
   "block.tconstruct.soulsteel_block.tooltip": "Can be used as beacon base",
   "item.tconstruct.soulsteel_ingot": "Soulsteel Ingot",
@@ -174,11 +179,6 @@
 
 
   "__comment": "Tier 5 Metals",
-
-  "block.tconstruct.knightslime_block": "Block of Knightslime",
-  "item.tconstruct.knightslime_ingot": "Knightslime Ingot",
-  "item.tconstruct.knightslime_ingot.tooltip": "Slimy yet metallic but also stone? Fascinating!",
-  "item.tconstruct.knightslime_nugget": "Knightslime Nugget",
 
   "item.tconstruct.materials_and_you": "Materials and You",
   "item.tconstruct.materials_and_you.tooltip": "The introduction book into tools and materials\nby Selena",
@@ -2154,6 +2154,8 @@
   "material.tconstruct.end_rod.ammo": "Projectile ignores gravity for the first second of its life",
 
   "material.tconstruct.knightslime": "Knightslime",
+  "material.tconstruct.knightslime.flavor": "Slimy yet metallic but also stone? Fascinating!",
+  "material.tconstruct.knightslime.armor": "Consumes up to 5 overslime per level to reduce damage by 1% per overslime consumed (up to 5% per level).",
 
   "material.tconstruct.enderslime_vine": "Slimy Vine",
   "material.tconstruct.enderslime_vine.slimeskin": "Slimeskin",
@@ -3104,10 +3106,6 @@
   "modifier.tconstruct.overcast": "Overcast",
   "modifier.tconstruct.overcast.flavor": "Thick Coverage!",
   "modifier.tconstruct.overcast.description": "Overslime can be made extra thick on this tool",
-  "modifier.tconstruct.overshield": "Overshield",
-  "modifier.tconstruct.overshield.flavor": "Slimeshield!",
-  "modifier.tconstruct.overshield.description": "Consumes overslime to reduce all sources of damage",
-  "modifier.tconstruct.overshield.resistance": "Overshield",
   "modifier.tconstruct.godspeed": "Skyfall",
   "modifier.tconstruct.godspeed.flavor": "Gotta go fast!",
   "modifier.tconstruct.godspeed.description": "Increases movement, attack, and mining speed",
@@ -3144,6 +3142,10 @@
   "modifier.tconstruct.overlord": "Overlord",
   "modifier.tconstruct.overlord.flavor": "Regal!",
   "modifier.tconstruct.overlord.description": "Tool takes some of the durability as new overslime subjects",
+  "modifier.tconstruct.overshield": "Overshield",
+  "modifier.tconstruct.overshield.flavor": "Slimeshield!",
+  "modifier.tconstruct.overshield.description": "Consumes overslime to reduce all sources of damage",
+  "modifier.tconstruct.overshield.resistance": "Overshield",
   "modifier.tconstruct.momentum": "Momentum",
   "modifier.tconstruct.momentum.flavor": "Not Fast Enough, Gotta Go Faster!",
   "modifier.tconstruct.momentum.description": "Mining blocks and firing arrows increases your speed, as long as you keep going",

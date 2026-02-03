@@ -1,0 +1,14 @@
+{
+  "perStat": {
+    "tconstruct:armor": [
+      {
+        "level": 1,
+        "name": "tconstruct:overshield"
+      },
+      {
+        "level": 1,
+        "name": "tconstruct:overslime"
+      }
+    ]
+  }
+}
