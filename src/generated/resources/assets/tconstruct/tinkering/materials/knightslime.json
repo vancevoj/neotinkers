@@ -7,13 +7,18 @@
   ],
   "generator": {
     "supported_stats": [
+      "tconstruct:head",
+      "tconstruct:handle",
+      "tconstruct:binding",
+      "tconstruct:repair_kit",
+      "tconstruct:limb",
+      "tconstruct:grip",
       "tconstruct:armor_plating",
       "tconstruct:plating_helmet",
       "tconstruct:plating_chestplate",
       "tconstruct:plating_leggings",
       "tconstruct:plating_boots",
       "tconstruct:plating_shield",
-      "tconstruct:repair_kit",
       "tconstruct:maille",
       "tconstruct:armor_maille"
     ],

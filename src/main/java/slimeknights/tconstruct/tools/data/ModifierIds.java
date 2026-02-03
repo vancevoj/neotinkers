@@ -269,6 +269,7 @@ public class ModifierIds {
   public static final ModifierId overburn = id("overburn");
   public static final ModifierId overlord = id("overlord");
   public static final ModifierId overshield = id("overshield");
+  public static final ModifierId overwield = id("overwield");
   public static final ModifierId recurrentProtection = id("recurrent_protection");
   public static final ModifierId fortified = id("fortified");
   public static final ModifierId kinetic = id("kinetic");

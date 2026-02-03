@@ -2155,6 +2155,8 @@
 
   "material.tconstruct.knightslime": "Knightslime",
   "material.tconstruct.knightslime.flavor": "Slimy yet metallic but also stone? Fascinating!",
+  "material.tconstruct.knightslime.encyclopedia": "Consumes 1 overslime per level (or 5 per level on broad tools) to grant +8 mining speed per level.",
+  "material.tconstruct.knightslime.ranged": "Consumes 1 overslime per level to grant +0.1 velocity per level.",
   "material.tconstruct.knightslime.armor": "Consumes up to 5 overslime per level to reduce damage by 1% per overslime consumed (up to 5% per level).",
 
   "material.tconstruct.enderslime_vine": "Slimy Vine",
@@ -3146,6 +3148,11 @@
   "modifier.tconstruct.overshield.flavor": "Slimeshield!",
   "modifier.tconstruct.overshield.description": "Consumes overslime to reduce all sources of damage",
   "modifier.tconstruct.overshield.resistance": "Overshield",
+  "modifier.tconstruct.overwield": "Overwield",
+  "modifier.tconstruct.overwield.flavor": "Slimebronze!",
+  "modifier.tconstruct.overwield.description": "Consumes overslime to boost mining speed and projectile velocity",
+  "modifier.tconstruct.overwield.mining_speed": "Overwield Speed",
+  "modifier.tconstruct.overwield.velocity": "Overwield Velocity",
   "modifier.tconstruct.momentum": "Momentum",
   "modifier.tconstruct.momentum.flavor": "Not Fast Enough, Gotta Go Faster!",
   "modifier.tconstruct.momentum.description": "Mining blocks and firing arrows increases your speed, as long as you keep going",

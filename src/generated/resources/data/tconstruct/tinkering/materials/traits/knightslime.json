@@ -1,4 +1,14 @@
 {
+  "default": [
+    {
+      "level": 1,
+      "name": "tconstruct:overwield"
+    },
+    {
+      "level": 1,
+      "name": "tconstruct:overslime"
+    }
+  ],
   "perStat": {
     "tconstruct:armor": [
       {
