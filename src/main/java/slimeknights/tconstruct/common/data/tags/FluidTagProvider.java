@@ -135,7 +135,9 @@ public class FluidTagProvider extends FluidTagsProvider {
         // small gem
         TinkerFluids.moltenAmethyst.getLocalTag(), TinkerFluids.moltenQuartz.getLocalTag(),
         // large gem
-        TinkerFluids.moltenEmerald.getLocalTag(), TinkerFluids.moltenDiamond.getLocalTag(), TinkerFluids.moltenDebris.getLocalTag()
+        TinkerFluids.moltenEmerald.getLocalTag(), TinkerFluids.moltenDiamond.getLocalTag(), TinkerFluids.moltenDebris.getLocalTag(),
+        // twilight forest
+        TinkerFluids.fieryLiquid.getLocalTag()
       );
     // entity effects - most of these have block effects, but we don't want the clouds triggering mostly
     this.tag(TinkerTags.Fluids.CHEMTHROWER_ENTITY_EFFECTS)
@@ -173,7 +175,9 @@ public class FluidTagProvider extends FluidTagsProvider {
         // mekanism alloys
         TinkerFluids.moltenRefinedGlowstone.getLocalTag(), TinkerFluids.moltenRefinedObsidian.getLocalTag(),
         // cosmere alloys
-        TinkerFluids.moltenNicrosil.getLocalTag(), TinkerFluids.moltenDuralumin.getLocalTag(), TinkerFluids.moltenBendalloy.getLocalTag()
+        TinkerFluids.moltenNicrosil.getLocalTag(), TinkerFluids.moltenDuralumin.getLocalTag(), TinkerFluids.moltenBendalloy.getLocalTag(),
+        // twilight forest
+        TinkerFluids.moltenSteeleaf.getLocalTag()
       );
     // both effects - all the neat slimes
     this.tag(TinkerTags.Fluids.CHEMTHROWER_BOTH_EFFECTS)
