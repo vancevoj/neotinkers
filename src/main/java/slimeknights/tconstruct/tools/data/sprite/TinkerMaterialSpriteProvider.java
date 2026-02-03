@@ -315,7 +315,7 @@ public class TinkerMaterialSpriteProvider extends AbstractMaterialSpriteProvider
     buildMaterial(MaterialIds.cinderslime)
       .meleeHarvest().ranged().armor()
       .fallbacks("slime_metal", "metal")
-      .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF4A0000).addARGB(102, 0xFF5D0000).addARGB(140, 0xFF820000).addARGB(178, 0xFFA00000).addARGB(216, 0xFFB80000).addARGB(255, 0xFFE82323).build());
+      .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF4A0000).addARGB(102, 0xFF5D0000).addARGB(140, 0xFFA00000).addARGB(178, 0xFFB80000).addARGB(216, 0xFFE82323).addARGB(255, 0xFFFF5E28).build());
     buildMaterial(MaterialIds.hepatizon)
       .meleeHarvest().ranged().armor()
       .fallbacks("metal")

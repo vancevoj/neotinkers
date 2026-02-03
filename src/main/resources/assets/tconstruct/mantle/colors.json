@@ -227,7 +227,7 @@
     "enhanced":      "#F7CDBB",
     "fortified":     "#7E6059",
     "lightweight":   "#2882d4",
-    "overburn":      "#B80000",
+    "overburn":      "#E82323",
     "overcast":      "#27C6C6",
     "overgrowth":    "#82c873",
     "overlord":      "#236c45",
@@ -441,7 +441,7 @@
     "ichorskin":       "#ff970d",
 
     "__tier_4__": null,
-    "cinderslime":  "#B80000",
+    "cinderslime":  "#E82323",
     "queens_slime": "#236c45",
     "hepatizon":    "#60496b",
     "manyullyn":    "#9261cc",
