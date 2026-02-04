@@ -258,6 +258,7 @@ import slimeknights.tconstruct.tools.modules.armor.EnderclearanceModule;
 import slimeknights.tconstruct.tools.modules.armor.FieryCounterModule;
 import slimeknights.tconstruct.tools.modules.armor.FireWalkerModule;
 import slimeknights.tconstruct.tools.modules.armor.FlameBarrierModule;
+import slimeknights.tconstruct.tools.modules.armor.FlatReductionModule;
 import slimeknights.tconstruct.tools.modules.armor.FreezingCounterModule;
 import slimeknights.tconstruct.tools.modules.armor.GlowWalkerModule;
 import slimeknights.tconstruct.tools.modules.armor.KineticModule;
@@ -919,6 +920,7 @@ public final class TinkerModifiers extends TinkerModule {
       ModifierModule.LOADER.register(getResource("flame_barrier"), FlameBarrierModule.LOADER);
       ModifierModule.LOADER.register(getResource("kinetic"), KineticModule.LOADER);
       ModifierModule.LOADER.register(getResource("recurrent_protection"), RecurrentProtectionModule.LOADER);
+      ModifierModule.LOADER.register(getResource("flat_reduction"), FlatReductionModule.LOADER);
       ModifierModule.LOADER.register(getResource("shield_strap"), ShieldStrapModule.LOADER);
       ModifierModule.LOADER.register(getResource("tool_belt"), ToolBeltModule.LOADER);
       ModifierModule.LOADER.register(getResource("minimap"), MinimapModule.LOADER);

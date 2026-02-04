@@ -187,6 +187,7 @@ import slimeknights.tconstruct.tools.modules.armor.EnderclearanceModule;
 import slimeknights.tconstruct.tools.modules.armor.FieryCounterModule;
 import slimeknights.tconstruct.tools.modules.armor.FireWalkerModule;
 import slimeknights.tconstruct.tools.modules.armor.FlameBarrierModule;
+import slimeknights.tconstruct.tools.modules.armor.FlatReductionModule;
 import slimeknights.tconstruct.tools.modules.armor.FreezingCounterModule;
 import slimeknights.tconstruct.tools.modules.armor.GlowWalkerModule;
 import slimeknights.tconstruct.tools.modules.armor.KineticModule;
@@ -1346,7 +1347,6 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .addModule(AttributeModule.builder(Attributes.MOVEMENT_SPEED, Operation.MULTIPLY_TOTAL).slots(ARMOR_SLOTS).eachLevel(-0.1f))
       .addModule(AttributeModule.builder(ForgeMod.ENTITY_GRAVITY, Operation.MULTIPLY_TOTAL).tooltipStyle(TooltipStyle.PERCENT).eachLevel(0.1f));
     // multiply valiant bonus by 4 for entities with fewer armor slots (slimes basically)
-    EntityVariable smallArmor = new ConditionalEntityVariable(LivingEntityPredicate.tag(TinkerTags.EntityTypes.SMALL_ARMOR), 4, 1);
     buildModifier(ModifierIds.valiant)
       .addModule(ConditionalMeleeDamageModule.builder()
         .formula()
@@ -1372,6 +1372,26 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
         .variable(VALUE).add()
         .build());
     buildModifier(ModifierIds.temperedProtection).addModule(ProtectionModule.builder().attacker(LivingEntityPredicate.ON_FIRE).eachLevel(1.25f));
+    buildModifier(ModifierIds.ambush)
+      .addModule(ConditionalStatModule.stat(ToolStats.PROJECTILE_DAMAGE).holder(TinkerPredicate.FULL_HEALTH).eachLevel(0.5f))
+      .addModule(ConditionalPowerModule.builder().target(TinkerPredicate.FULL_HEALTH).eachLevel(0.25f))
+      .addModule(ConditionalMeleeDamageModule.builder()
+        .formula()
+        // +1 damage if you are at full health
+        .customVariable("attacker_full", new EntityMeleeVariable(new ConditionalEntityVariable(TinkerPredicate.FULL_HEALTH, 1, 0), WhichEntity.ATTACKER, 1))
+        // +0.6 damage if target is at full health
+        .customVariable("target_full", new EntityMeleeVariable(new ConditionalEntityVariable(TinkerPredicate.FULL_HEALTH, 0.6f, 0), WhichEntity.TARGET, 0.6f))
+        .add()
+        .variable(LEVEL).multiply()
+        .variable(MULTIPLIER).multiply()
+        .variable(VALUE).add()
+        .build());
+    buildModifier(ModifierIds.warded)
+      .addModule(FlatReductionModule.builder()
+        .holder(TinkerPredicate.FULL_HEALTH)
+        .minimum(LevelingValue.flat(1))
+        .eachLevel(0.5f),
+        ModifierHooks.MODIFY_DAMAGE, ModifierHooks.TOOLTIP);
 
     // traits - slimeskull
     buildModifier(ModifierIds.mithridatism).addModule(new EffectImmunityModule(MobEffects.POISON)).levelDisplay(ModifierLevelDisplay.NO_LEVELS);

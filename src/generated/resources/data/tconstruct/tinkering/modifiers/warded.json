@@ -1,0 +1,21 @@
+{
+  "level_display": "tconstruct:default",
+  "modules": [
+    {
+      "type": "tconstruct:flat_reduction",
+      "damage_source": "mantle:can_protect",
+      "holder": "tconstruct:full_health",
+      "hooks": [
+        "tconstruct:modify_damage",
+        "tconstruct:tooltip"
+      ],
+      "minimum": {
+        "flat": 1.0
+      },
+      "reduction": {
+        "each_level": 0.5
+      }
+    }
+  ],
+  "tooltip_display": "always"
+}

@@ -119,8 +119,8 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     addDefaultTraits(MaterialIds.queensSlime, ModifierIds.overlord, TinkerModifiers.overslime.getId());
     addDefaultTraits(MaterialIds.hepatizon, TinkerModifiers.momentum);
     addTraits(MaterialIds.hepatizon, ARMOR, ModifierIds.recurrentProtection);
-    addDefaultTraits(MaterialIds.manyullyn, TinkerModifiers.insatiable);
-    addTraits(MaterialIds.manyullyn, ARMOR, ModifierIds.kinetic);
+    addDefaultTraits(MaterialIds.manyullyn, ModifierIds.ambush);
+    addTraits(MaterialIds.manyullyn, ARMOR, ModifierIds.warded);
     addDefaultTraits(MaterialIds.blazingBone, TinkerModifiers.conducting);
     addTraits(MaterialIds.blazingBone, AMMO, ModifierIds.conductive);
     addTraits(MaterialIds.blazingBone, ARMOR, ModifierIds.conductive);

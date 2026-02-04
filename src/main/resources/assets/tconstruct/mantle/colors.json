@@ -246,6 +246,7 @@
 
     "__traits_melee__": null,
     "airborne":     "#00F4DA",
+    "ambush":       "#9261cc",
     "antitoxin":    "#A2935E",
     "dwarven":      "#E77C56",
     "enderference": "#8F648F",
@@ -312,6 +313,7 @@
     "flame_barrier":        "#DBCC0B",
     "godspeed":             "#ff970d",
     "kinetic":              "#9261cc",
+    "warded":               "#9261cc",
     "recurrent_protection": "#60496b",
     "stalwart":             "#C4D6AE",
     "skyfall":              "#00F4DA",
