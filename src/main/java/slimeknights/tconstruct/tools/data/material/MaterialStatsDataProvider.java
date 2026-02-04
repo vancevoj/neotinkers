@@ -242,6 +242,10 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
       new HeadMaterialStats(1024, 8, NETHERITE, 3.5f),
       HandleMaterialStats.multipliers().miningSpeed(1.15f).attackSpeed(0.9f).attackDamage(1.15f).build(),
       StatlessMaterialStats.BINDING);
+    addMaterialStats(MaterialIds.nicrosil,
+      new HeadMaterialStats(816, 6f, NETHERITE, 3.16f),
+      HandleMaterialStats.multipliers().durability(1.16f).miningSpeed(0.92f).attackSpeed(0.16f).attackDamage(0.92f).build(),
+      StatlessMaterialStats.BINDING);
   }
 
   private void addRanged() {
@@ -393,6 +397,9 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
     addMaterialStats(MaterialIds.fiery,
       new LimbMaterialStats(1024, -0.25f, 0.2f, -0.05f),
       new GripMaterialStats(0, 0.05f, 3.5f));
+    addMaterialStats(MaterialIds.nicrosil,
+      new LimbMaterialStats(816, 0.16f, -0.08f, 0),
+      new GripMaterialStats(0.16f, -0.16f, 3.16f));
   }
 
   private void addAmmo() {
@@ -506,6 +513,7 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
     addMaterialStats(MaterialIds.shulker, StatlessMaterialStats.MAILLE);
     // tier 4 (compat)
     addArmorShieldStats(MaterialIds.fiery, PlatingMaterialStats.builder().durabilityFactor(25).armor(3, 6, 8, 3).toughness(1.5f), StatlessMaterialStats.MAILLE);
+    addArmorShieldStats(MaterialIds.nicrosil, PlatingMaterialStats.builder().durabilityFactor(28).armor(2, 5, 7, 2).knockbackResistance(0.16f), StatlessMaterialStats.MAILLE);
   }
 
   private void addMisc() {

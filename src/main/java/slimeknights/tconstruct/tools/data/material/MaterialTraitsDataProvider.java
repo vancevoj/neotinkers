@@ -169,6 +169,8 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     // tier 4 - mod compat
     addDefaultTraits(MaterialIds.fiery, ModifierIds.autosmelt);
     addTraits(MaterialIds.fiery, ARMOR, ModifierIds.temperedProtection);
+    addDefaultTraits(MaterialIds.nicrosil, TinkerModifiers.insatiable);
+    addTraits(MaterialIds.nicrosil, ARMOR, ModifierIds.kinetic);
 
     // slimeskull
     addTraits(MaterialIds.glass,        SkullStats.ID, TinkerModifiers.selfDestructive.getId(), ModifierIds.creeperDisguise);

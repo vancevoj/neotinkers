@@ -2285,6 +2285,12 @@
   "material.tconstruct.fiery.ranged": "Arrows automatically smelts all drops. Higher levels have a 20% chance of an extra smelted drops per level",
   "material.tconstruct.fiery.armor": "Increases protection by 5% per level against on fire attackers",
 
+  "material.tconstruct.nicrosil": "Nicrosil",
+  "material.tconstruct.nicrosil.flavor": "Stores investiture.",
+  "material.tconstruct.nicrosil.encyclopedia": "Grants up to +2.5 damage per level, with the damage increasing by +0.5 per level per hit over 5 consecutive hits",
+  "material.tconstruct.nicrosil.ranged": "Arrows gain up to +1.25 power per level, with the damage increasing by +0.25 per level per hit over 5 consecutive arrow hits",
+  "material.tconstruct.nicrosil.armor": "Temporarily boosts melee damage by 1 after taking damage, capping at the total level across all armor",
+
 
   "_comment": "Modifiers",
 
