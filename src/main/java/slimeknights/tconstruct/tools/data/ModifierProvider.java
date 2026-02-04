@@ -122,6 +122,7 @@ import slimeknights.tconstruct.library.modifiers.modules.capacity.DamageToCapaci
 import slimeknights.tconstruct.library.modifiers.modules.capacity.DurabilityShieldModule;
 import slimeknights.tconstruct.library.modifiers.modules.capacity.LaunchCapacityModule;
 import slimeknights.tconstruct.library.modifiers.modules.capacity.LootToCapacityModule;
+import slimeknights.tconstruct.library.modifiers.modules.capacity.MeleeCapacityModule;
 import slimeknights.tconstruct.library.modifiers.modules.capacity.MiningCapacityModule;
 import slimeknights.tconstruct.library.modifiers.modules.capacity.OverslimeModule;
 import slimeknights.tconstruct.library.modifiers.modules.combat.ConditionalMeleeDamageModule;
@@ -1146,37 +1147,54 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .addModule(StatBoostModule.multiplyBase(ToolStats.ATTACK_DAMAGE).eachLevel(0.05f))
       .addModule(StatBoostModule.add(ToolStats.PROJECTILE_DAMAGE).eachLevel(0.25f))
       .addModule(StatBoostModule.add(ToolStats.ARMOR_TOUGHNESS).eachLevel(1));
-    buildModifier(ModifierIds.overshield).addModule(new OvershieldModule(LevelingValue.eachLevel(1.25f), LevelingInt.eachLevel(5)));
+    buildModifier(ModifierIds.overshield).addModule(new OvershieldModule(LevelingValue.eachLevel(1.25f), LevelingInt.eachLevel(2)));
     ModifierId overslime = TinkerModifiers.overslime.getId();
     buildModifier(ModifierIds.overwield)
       // small tools consume 1 per mining operation
-      .addModule(ConditionalMiningSpeedModule.builder()
-        .toolItem(ItemPredicate.tag(TinkerTags.Items.BROAD_TOOLS).inverted())
+      .addModule(ConditionalMiningSpeedModule.builder().percent().toolItem(ItemPredicate.tag(TinkerTags.Items.BROAD_TOOLS).inverted())
         .formula()
         .customVariable("overslime", new ModDataVariable(overslime, ModDataSource.PERSISTENT))
         .variable(LEVEL).min() // must have 1 overslime per level
-        .constant(8).multiply() // 8 per level
-        .variable(MULTIPLIER).multiply()
-        .variable(VALUE).add()
+        .constant(0.2f).multiply() // effectively grants +6 mining speed when base is 30
+        .variable(VALUE).multiply()
         .build())
-      .addModule(MiningCapacityModule.builder().toolItem(ItemPredicate.tag(TinkerTags.Items.BROAD_TOOLS).inverted()).before(true).owner(overslime).eachLevel(-1))
+      .addModule(MiningCapacityModule.builder()
+        .toolItem(ItemPredicate.and(ItemPredicate.tag(TinkerTags.Items.HARVEST), ItemPredicate.tag(TinkerTags.Items.BROAD_TOOLS).inverted()))
+        .before(true).owner(overslime).eachLevel(-1))
       // broad tools consume 5 per mining operation, same amount consumed with AOE
-      .addModule(ConditionalMiningSpeedModule.builder()
-        .toolTag(TinkerTags.Items.BROAD_TOOLS)
+      .addModule(ConditionalMiningSpeedModule.builder().percent().toolTag(TinkerTags.Items.BROAD_TOOLS)
         .formula()
         .customVariable("overslime", new ModDataVariable(overslime, ModDataSource.PERSISTENT))
         .constant(5).variable(LEVEL).multiply().min() // must have 5 overslime per level
         .constant(5).divide() // scale between 0 and 5
-        .constant(8).multiply() // 8 per level
-        .variable(MULTIPLIER).multiply()
-        .variable(VALUE).add()
+        .constant(0.2f).multiply()
+        .variable(VALUE).multiply()
         .build())
       .addModule(MiningCapacityModule.builder().toolTag(TinkerTags.Items.BROAD_TOOLS).before(true).owner(overslime).eachLevel(-5))
+      // melee weapons get +15% attack speed when slimed
+      .addModule(AttributeModule.builder(Attributes.ATTACK_SPEED, Operation.MULTIPLY_TOTAL)
+        .slots(EquipmentSlot.MAINHAND)
+        .formula()
+        .customVariable("overslime", new ModDataVariable(overslime, ModDataSource.PERSISTENT))
+        .variable(LEVEL).min() // must have 1 overslime per level
+        .constant(0.15f).multiply()
+        .build()
+      )
+      .addModule(MeleeCapacityModule.builder().before(true).owner(overslime).eachLevel(-1))
+      // ranged: +6% velocity and drawspeed
       .addModule(ConditionalStatModule.stat(ToolStats.VELOCITY)
         .formula()
         .customVariable("overslime", new ModDataVariable(overslime, ModDataSource.PERSISTENT))
         .variable(LEVEL).min() // must have 1 overslime per level
-        .constant(0.1f).multiply() // +10% velocity per level
+        .constant(0.06f).multiply()
+        .variable(MULTIPLIER).multiply()
+        .variable(VALUE).add()
+        .build())
+      .addModule(ConditionalStatModule.stat(ToolStats.DRAW_SPEED)
+        .formula()
+        .customVariable("overslime", new ModDataVariable(overslime, ModDataSource.PERSISTENT))
+        .variable(LEVEL).min() // must have 1 overslime per level
+        .constant(0.06f).multiply()
         .variable(MULTIPLIER).multiply()
         .variable(VALUE).add()
         .build())
