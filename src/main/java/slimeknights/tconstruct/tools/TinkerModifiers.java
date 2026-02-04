@@ -50,6 +50,7 @@ import slimeknights.tconstruct.library.json.variable.melee.MeleeVariable;
 import slimeknights.tconstruct.library.json.variable.mining.BlockLightVariable;
 import slimeknights.tconstruct.library.json.variable.mining.BlockMiningSpeedVariable;
 import slimeknights.tconstruct.library.json.variable.mining.BlockTemperatureVariable;
+import slimeknights.tconstruct.library.json.variable.mining.EffectiveMiningSpeedVariable;
 import slimeknights.tconstruct.library.json.variable.mining.MiningSpeedVariable;
 import slimeknights.tconstruct.library.json.variable.power.EntityPowerVariable;
 import slimeknights.tconstruct.library.json.variable.power.PersistentDataPowerVariable;
@@ -1002,6 +1003,7 @@ public final class TinkerModifiers extends TinkerModule {
       MiningSpeedVariable.LOADER.register(getResource("block"), BlockMiningSpeedVariable.LOADER);
       MiningSpeedVariable.LOADER.register(getResource("block_light"), BlockLightVariable.LOADER);
       MiningSpeedVariable.LOADER.register(getResource("biome_temperature"), BlockTemperatureVariable.LOADER);
+      MiningSpeedVariable.LOADER.register(getResource("effective"), EffectiveMiningSpeedVariable.LOADER);
       // protection
       ProtectionVariable.LOADER.register(getResource("constant"), ProtectionVariable.Constant.LOADER);
       ProtectionVariable.LOADER.register(getResource("entity"), EntityProtectionVariable.LOADER);
