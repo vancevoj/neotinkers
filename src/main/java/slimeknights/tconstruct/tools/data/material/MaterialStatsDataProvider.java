@@ -303,7 +303,7 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
                      new LimbMaterialStats(300, -0.05f, 0, 0.1f),
                      new GripMaterialStats(-0.1f, -0.05f, 2.25f));
     addMaterialStats(MaterialIds.lead,
-                     new LimbMaterialStats(200, -0.3f, 0.15f, -0.05f),
+                     new LimbMaterialStats(200, -0.20f, 0.15f, -0.05f),
                      new GripMaterialStats(-0.1f, 0.1f, 1.75f));
     addMaterialStats(MaterialIds.treatedWood,
       new LimbMaterialStats(300, 0.05f, -0.1f, 0.05f),
@@ -317,10 +317,10 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
                      new LimbMaterialStats(1040, -0.05f, -0.05f, 0.15f),
                      new GripMaterialStats(0.2f, -0.1f, 2.5f));
     addMaterialStats(MaterialIds.nahuatl,
-                     new LimbMaterialStats(350, 0.2f, -0.15f, 0.1f),
+                     new LimbMaterialStats(350, 0.2f, -0.15f, 0.05f),
                      new GripMaterialStats(-0.1f, -0.15f, 3f));
     addMaterialStats(MaterialIds.amethystBronze,
-                     new LimbMaterialStats(720, -0.25f, 0.15f, -0.1f),
+                     new LimbMaterialStats(720, -0.15f, 0.15f, -0.05f),
                      new GripMaterialStats(0f, 0.1f, 1.5f));
     addMaterialStats(MaterialIds.roseGold,
                      new LimbMaterialStats(175, 0.15f, -0.25f, 0.15f),
@@ -343,22 +343,22 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
                      new LimbMaterialStats(630, -0.15f, -0.1f, 0.2f),
                      new GripMaterialStats(0, 0.05f, 2.5f));
     addMaterialStats(MaterialIds.pewter,
-      new LimbMaterialStats(316, 0.1f, -0.05f, -0.2f),
-      new GripMaterialStats(-0.2f, 0.15f, 3.0f));
+      new LimbMaterialStats(316, 0.1f, 0.05f, -0.2f),
+      new GripMaterialStats(-0.25f, 0, 3.0f));
     addMaterialStats(MaterialIds.necronium,
                      new LimbMaterialStats(357, 0.15f, -0.1f, -0.05f),
                      new GripMaterialStats(-0.2f, 0.15f, 2.75f));
     addMaterialStats(MaterialIds.constantan,
-                     new LimbMaterialStats(675, 0.2f, -0.05f, -0.25f),
+                     new LimbMaterialStats(675, 0.2f, -0.05f, -0.2f),
                      new GripMaterialStats(-0.05f, 0.1f, 1.75f));
     addMaterialStats(MaterialIds.steel,
-                     new LimbMaterialStats(775, -0.3f, 0.2f, -0.1f),
+                     new LimbMaterialStats(775, -0.2f, 0.2f, -0.1f),
                      new GripMaterialStats(0.05f, -0.05f, 2.75f));
     addMaterialStats(MaterialIds.bronze,
-                     new LimbMaterialStats(760, -0.2f, 0.15f, -0.2f),
+                     new LimbMaterialStats(760, -0.1f, 0.15f, -0.1f),
                      new GripMaterialStats(0.1f, 0f, 2.25f));
     addMaterialStats(MaterialIds.electrum,
-                     new LimbMaterialStats(225, -0.25f, 0.1f, 0.15f),
+                     new LimbMaterialStats(225, -0.25f, 0.1f, 0.1f),
                      new GripMaterialStats(-0.35f, 0.2f, 1.5f));
     addMaterialStats(MaterialIds.platedSlimewood,
                      new LimbMaterialStats(595, 0.15f, -0.15f, 0),
@@ -379,23 +379,23 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
                      new LimbMaterialStats(975, 0.25f, -0.05f, -0.10f),
                      new GripMaterialStats(0.1f, 0.15f, 2.5f));
     addMaterialStats(MaterialIds.manyullyn,
-                     new LimbMaterialStats(1250, -0.35f, 0.25f, 0f),
+                     new LimbMaterialStats(1250, -0.20f, 0.25f, 0f),
                      new GripMaterialStats(0.1f, -0.20f, 3.5f));
-    addMaterialStats(MaterialIds.ancient, new LimbMaterialStats(745, -0.15f, 0.1f, 0.1f));
+    addMaterialStats(MaterialIds.ancient, new LimbMaterialStats(745, -0.05f, 0.1f, 0.1f));
     addMaterialStats(MaterialIds.ancientHide, StatlessMaterialStats.BOWSTRING);
 
     // tier 4 (end)
     addMaterialStats(MaterialIds.knightmetal,
-      new LimbMaterialStats(512, 0.2f, 0.05f, -0.1f),
+      new LimbMaterialStats(512, 0.15f, 0.05f, -0.1f),
       new GripMaterialStats(0, 0.1f, 3.0f));
     addMaterialStats(MaterialIds.knightslime,
-      new LimbMaterialStats(1047, 0, 0.15f, -0.2f),
+      new LimbMaterialStats(1047, 0, 0.15f, -0.15f),
       new GripMaterialStats(-0.05f, 0.1f, 3.25f));
     addMaterialStats(MaterialIds.enderslimeVine, StatlessMaterialStats.BOWSTRING);
 
     // tier 4 (compat)
     addMaterialStats(MaterialIds.fiery,
-      new LimbMaterialStats(1024, -0.25f, 0.2f, -0.05f),
+      new LimbMaterialStats(1024, -0.1f, 0.2f, -0.05f),
       new GripMaterialStats(0, 0.05f, 3.5f));
     addMaterialStats(MaterialIds.nicrosil,
       new LimbMaterialStats(816, 0.16f, -0.08f, 0),
