@@ -7,8 +7,6 @@
       "formula": [
         "$protection",
         "$level",
-        2.0,
-        "/",
         "-",
         1.0,
         "max",

@@ -1409,8 +1409,8 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
         .tooltipValue(100) // valid up to 200 levels!
         .holder(TinkerPredicate.FULL_HEALTH)
         .formula()
-        // start with value - 0.5*level
-        .variable(VALUE).variable(LEVEL).constant(2).divide().subtract()
+        // reduce 1 damage per level
+        .variable(VALUE).variable(LEVEL).subtract()
         // don't let that drop below 1
         .constant(1).max()
         // if that raised the value, use the original

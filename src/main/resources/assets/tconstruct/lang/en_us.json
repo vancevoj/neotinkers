@@ -2076,7 +2076,7 @@
   "material.tconstruct.manyullyn.flavor": "The metal that most Tinkers will never pronounce right. Also known as a star cutting material.",
   "material.tconstruct.manyullyn.encyclopedia": "Grants +1 damage per level when at full health, and +0.6 damage per level when the target is at full health",
   "material.tconstruct.manyullyn.ranged": "Projectiles gain +0.5 power per level when at full health, and +0.25 power per level when the target is at full health",
-  "material.tconstruct.manyullyn.armor": "When at full health, take 0.5 less damage per level after armor and enchantments, down to a minimum of 1",
+  "material.tconstruct.manyullyn.armor": "When at full health, take 1 less damage per level after armor and enchantments, down to a minimum of 1",
 
   "material.tconstruct.hepatizon": "Hepatizon",
   "material.tconstruct.hepatizon.flavor": "He-pa-ti-zon - boil it, mash it, put it in a stew.",
