@@ -101,6 +101,7 @@ import slimeknights.tconstruct.library.modifiers.fluid.general.ScalingFluidEffec
 import slimeknights.tconstruct.library.modifiers.fluid.general.SequenceFluidEffect;
 import slimeknights.tconstruct.library.modifiers.fluid.general.SetBlockFluidEffect;
 import slimeknights.tconstruct.library.modifiers.modules.ModifierModule;
+import slimeknights.tconstruct.library.modifiers.modules.armor.AdjustDamageModule;
 import slimeknights.tconstruct.library.modifiers.modules.armor.BlockDamageSourceModule;
 import slimeknights.tconstruct.library.modifiers.modules.armor.CoverGroundWalkerModule;
 import slimeknights.tconstruct.library.modifiers.modules.armor.EffectImmunityModule;
@@ -260,7 +261,6 @@ import slimeknights.tconstruct.tools.modules.armor.EnderclearanceModule;
 import slimeknights.tconstruct.tools.modules.armor.FieryCounterModule;
 import slimeknights.tconstruct.tools.modules.armor.FireWalkerModule;
 import slimeknights.tconstruct.tools.modules.armor.FlameBarrierModule;
-import slimeknights.tconstruct.tools.modules.armor.FlatReductionModule;
 import slimeknights.tconstruct.tools.modules.armor.FreezingCounterModule;
 import slimeknights.tconstruct.tools.modules.armor.GlowWalkerModule;
 import slimeknights.tconstruct.tools.modules.armor.KineticModule;
@@ -801,6 +801,7 @@ public final class TinkerModifiers extends TinkerModule {
       ModifierModule.LOADER.register(getResource("block_damage"), BlockDamageSourceModule.LOADER);
       ModifierModule.LOADER.register(getResource("cover_ground"), CoverGroundWalkerModule.LOADER);
       ModifierModule.LOADER.register(getResource("protection"), ProtectionModule.LOADER);
+      ModifierModule.LOADER.register(getResource("adjust_damage"), AdjustDamageModule.LOADER);
       ModifierModule.LOADER.register(getResource("replace_fluid"), ReplaceBlockWalkerModule.LOADER);
       ModifierModule.LOADER.register(getResource("tool_action_walk_transform"), ToolActionWalkerTransformModule.LOADER);
       // behavior
@@ -923,7 +924,6 @@ public final class TinkerModifiers extends TinkerModule {
       ModifierModule.LOADER.register(getResource("flame_barrier"), FlameBarrierModule.LOADER);
       ModifierModule.LOADER.register(getResource("kinetic"), KineticModule.LOADER);
       ModifierModule.LOADER.register(getResource("recurrent_protection"), RecurrentProtectionModule.LOADER);
-      ModifierModule.LOADER.register(getResource("flat_reduction"), FlatReductionModule.LOADER);
       ModifierModule.LOADER.register(getResource("shield_strap"), ShieldStrapModule.LOADER);
       ModifierModule.LOADER.register(getResource("tool_belt"), ToolBeltModule.LOADER);
       ModifierModule.LOADER.register(getResource("minimap"), MinimapModule.LOADER);

@@ -2,19 +2,26 @@
   "level_display": "tconstruct:default",
   "modules": [
     {
-      "type": "tconstruct:flat_reduction",
+      "type": "tconstruct:adjust_damage",
       "damage_source": "mantle:can_protect",
+      "formula": [
+        "$protection",
+        "$level",
+        2.0,
+        "/",
+        "-",
+        1.0,
+        "max",
+        "$protection",
+        "min"
+      ],
       "holder": "tconstruct:full_health",
       "hooks": [
         "tconstruct:modify_damage",
         "tconstruct:tooltip"
       ],
-      "minimum": {
-        "flat": 1.0
-      },
-      "reduction": {
-        "each_level": 0.5
-      }
+      "percent": false,
+      "tooltip_value": 100.0
     }
   ],
   "tooltip_display": "always"

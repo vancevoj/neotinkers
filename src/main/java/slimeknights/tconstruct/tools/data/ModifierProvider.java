@@ -86,6 +86,7 @@ import slimeknights.tconstruct.library.modifiers.hook.interaction.EntityInteract
 import slimeknights.tconstruct.library.modifiers.hook.interaction.InteractionSource;
 import slimeknights.tconstruct.library.modifiers.hook.ranged.BowAmmoModifierHook;
 import slimeknights.tconstruct.library.modifiers.impl.BasicModifier.TooltipDisplay;
+import slimeknights.tconstruct.library.modifiers.modules.armor.AdjustDamageModule;
 import slimeknights.tconstruct.library.modifiers.modules.armor.BlockDamageSourceModule;
 import slimeknights.tconstruct.library.modifiers.modules.armor.CoverGroundWalkerModule;
 import slimeknights.tconstruct.library.modifiers.modules.armor.EffectImmunityModule;
@@ -188,7 +189,6 @@ import slimeknights.tconstruct.tools.modules.armor.EnderclearanceModule;
 import slimeknights.tconstruct.tools.modules.armor.FieryCounterModule;
 import slimeknights.tconstruct.tools.modules.armor.FireWalkerModule;
 import slimeknights.tconstruct.tools.modules.armor.FlameBarrierModule;
-import slimeknights.tconstruct.tools.modules.armor.FlatReductionModule;
 import slimeknights.tconstruct.tools.modules.armor.FreezingCounterModule;
 import slimeknights.tconstruct.tools.modules.armor.GlowWalkerModule;
 import slimeknights.tconstruct.tools.modules.armor.KineticModule;
@@ -1405,10 +1405,17 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
         .variable(VALUE).add()
         .build());
     buildModifier(ModifierIds.warded)
-      .addModule(FlatReductionModule.builder()
+      .addModule(AdjustDamageModule.builder()
+        .tooltipValue(100) // valid up to 200 levels!
         .holder(TinkerPredicate.FULL_HEALTH)
-        .minimum(LevelingValue.flat(1))
-        .eachLevel(0.5f),
+        .formula()
+        // start with value - 0.5*level
+        .variable(VALUE).variable(LEVEL).constant(2).divide().subtract()
+        // don't let that drop below 1
+        .constant(1).max()
+        // if that raised the value, use the original
+        .variable(VALUE).min()
+        .build(),
         ModifierHooks.MODIFY_DAMAGE, ModifierHooks.TOOLTIP);
 
     // traits - slimeskull

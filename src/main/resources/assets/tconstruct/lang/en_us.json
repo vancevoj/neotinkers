@@ -3184,7 +3184,7 @@
   "modifier.tconstruct.warded": "Warded",
   "modifier.tconstruct.warded.flavor": "Can't touch this!",
   "modifier.tconstruct.warded.description": "When at full health, reduces incoming damage after armor by 0.5 per level, down to a minimum of 1",
-  "modifier.tconstruct.warded.reduction": "Warded Reduction",
+  "modifier.tconstruct.warded.damage_adjustment": "Warded Damage",
   "modifier.tconstruct.valiant": "Valiant",
   "modifier.tconstruct.valiant.flavor": "Knightslayer!",
   "modifier.tconstruct.valiant.description": "Increases damage against armored targets",

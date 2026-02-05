@@ -1,4 +1,4 @@
-package slimeknights.tconstruct.tools.modules.armor;
+package slimeknights.tconstruct.library.modifiers.modules.armor;
 
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -10,12 +10,16 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.TooltipFlag;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import slimeknights.mantle.client.TooltipKey;
+import slimeknights.mantle.data.loadable.primitive.FloatLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.data.predicate.IJsonPredicate;
 import slimeknights.mantle.data.predicate.damage.DamageSourcePredicate;
 import slimeknights.mantle.data.predicate.entity.LivingEntityPredicate;
-import slimeknights.tconstruct.library.json.LevelingValue;
+import slimeknights.tconstruct.library.json.math.ModifierFormula;
 import slimeknights.tconstruct.library.json.predicate.TinkerPredicate;
+import slimeknights.tconstruct.library.json.variable.VariableFormula;
+import slimeknights.tconstruct.library.json.variable.protection.ProtectionFormula;
+import slimeknights.tconstruct.library.json.variable.protection.ProtectionVariable;
 import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
@@ -24,7 +28,6 @@ import slimeknights.tconstruct.library.modifiers.hook.display.TooltipModifierHoo
 import slimeknights.tconstruct.library.modifiers.modules.ModifierModule;
 import slimeknights.tconstruct.library.modifiers.modules.util.ModifierCondition;
 import slimeknights.tconstruct.library.modifiers.modules.util.ModifierCondition.ConditionalModule;
-import slimeknights.tconstruct.library.modifiers.modules.util.ModuleBuilder;
 import slimeknights.tconstruct.library.module.ModuleHook;
 import slimeknights.tconstruct.library.tools.context.EquipmentContext;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
@@ -35,24 +38,24 @@ import java.util.List;
 /**
  * Module preventing some damage when at full health.
  * Note this module has no default hooks. You will want to register it with {@link ModifierHooks#TOOLTIP} plus one of {@link ModifierHooks#MODIFY_HURT} or {@link ModifierHooks#MODIFY_DAMAGE}.
- * @param reduction    Flat reduction to apply when above the threshold.
- * @param minimum      Smallest amount of damage allowed after reduction.
+ * @param formula      Formula to apply for damage reduction.
  * @param holder       Condition on the entity wearing the armor.
  * @param damageSource Condition on the damage source.
+ * @param tooltipValue Value to use for computing the tooltip formula. Used since often formulas are reductions.
  * @param condition    Condition on the tool and modifier entry.
  */
-public record FlatReductionModule(LevelingValue reduction, LevelingValue minimum, IJsonPredicate<LivingEntity> holder, IJsonPredicate<DamageSource> damageSource, ModifierCondition<IToolStackView> condition) implements ModifierModule, ModifyDamageModifierHook, TooltipModifierHook, ConditionalModule<IToolStackView> {
-  public static final RecordLoadable<FlatReductionModule> LOADER = RecordLoadable.create(
-    LevelingValue.LOADABLE.requiredField("reduction", FlatReductionModule::reduction),
-    LevelingValue.LOADABLE.requiredField("minimum", FlatReductionModule::minimum),
-    LivingEntityPredicate.LOADER.defaultField("holder", FlatReductionModule::holder),
-    DamageSourcePredicate.LOADER.defaultField("damage_source", FlatReductionModule::damageSource),
+public record AdjustDamageModule(ProtectionFormula formula, IJsonPredicate<LivingEntity> holder, IJsonPredicate<DamageSource> damageSource, float tooltipValue, ModifierCondition<IToolStackView> condition) implements ModifierModule, ModifyDamageModifierHook, TooltipModifierHook, ConditionalModule<IToolStackView> {
+  public static final RecordLoadable<AdjustDamageModule> LOADER = RecordLoadable.create(
+    ProtectionFormula.DAMAGE_LOADER.directField(AdjustDamageModule::formula),
+    LivingEntityPredicate.LOADER.defaultField("holder", AdjustDamageModule::holder),
+    DamageSourcePredicate.LOADER.defaultField("damage_source", AdjustDamageModule::damageSource),
+    FloatLoadable.ANY.defaultField("tooltip_value", 1f, true, AdjustDamageModule::tooltipValue),
     ModifierCondition.TOOL_FIELD,
-    FlatReductionModule::new);
+    AdjustDamageModule::new);
 
   /** @apiNote use {@link #builder()} */
   @Internal
-  public FlatReductionModule {}
+  public AdjustDamageModule {}
 
   @Override
   public RecordLoadable<? extends ModifierModule> getLoader() {
@@ -67,12 +70,7 @@ public record FlatReductionModule(LevelingValue reduction, LevelingValue minimum
   @Override
   public float modifyDamageTaken(IToolStackView tool, ModifierEntry modifier, EquipmentContext context, EquipmentSlot slotType, DamageSource source, float amount, boolean isDirectDamage) {
     if (condition.matches(tool, modifier) && this.holder.matches(context.getEntity()) && this.damageSource.matches(source)) {
-      float level = modifier.getEffectiveLevel();
-      // don't reduce below the minumum, but make sure if it was already below we leave it there
-      float minimum = this.minimum.compute(level);
-      if (amount > minimum) {
-        amount = Math.max(minimum, amount - reduction.compute(level));
-      }
+      amount = formula.apply(tool, modifier, context, context.getEntity(), slotType, source, amount);
     }
     return amount;
   }
@@ -80,10 +78,16 @@ public record FlatReductionModule(LevelingValue reduction, LevelingValue minimum
   @Override
   public void addTooltip(IToolStackView tool, ModifierEntry entry, @Nullable Player player, List<Component> tooltip, TooltipKey tooltipKey, TooltipFlag tooltipFlag) {
     if (condition.matches(tool, entry) && TinkerPredicate.matchesInTooltip(holder, player, tooltipKey)) {
-      float reduction = this.reduction.compute(entry.getEffectiveLevel());
+      // using tooltip value then subtracting it later ensures we produce a proper offset within the allowed range
+      float reduction = formula.apply(tool, entry, null, tooltipKey == TooltipKey.SHIFT ? player : null, null, null, tooltipValue) - tooltipValue;
       if (reduction != 0) {
         Modifier modifier = entry.getModifier();
-        TooltipModifierHook.addFlatBoost(modifier, Component.translatable(modifier.getTranslationKey() + ".reduction"), reduction, tooltip);
+        Component name = Component.translatable(modifier.getTranslationKey() + ".damage_adjustment");
+        if (formula.percent()) {
+          TooltipModifierHook.addPercentBoost(modifier, name, reduction, tooltip);
+        } else {
+          TooltipModifierHook.addFlatBoost(modifier, name, reduction, tooltip);
+        }
       }
     }
   }
@@ -98,14 +102,24 @@ public record FlatReductionModule(LevelingValue reduction, LevelingValue minimum
 
   @Setter
   @Accessors(fluent = true)
-  public static class Builder extends ModuleBuilder.Stack<Builder> implements LevelingValue.Builder<FlatReductionModule> {
-    private LevelingValue minimum = LevelingValue.ZERO;
+  public static class Builder extends VariableFormula.Builder<Builder, AdjustDamageModule, ProtectionVariable> {
     private IJsonPredicate<LivingEntity> holder = LivingEntityPredicate.ANY;
-    private IJsonPredicate<DamageSource> damageSource = DamageSourcePredicate.CAN_PROTECT;
+    private IJsonPredicate<DamageSource> source = DamageSourcePredicate.CAN_PROTECT;
+    private float tooltipValue = 1;
+
+    private Builder() {
+      super(ProtectionFormula.VARIABLES);
+    }
+
+    /** Sets the source to the given sources anded together */
+    @SafeVarargs
+    public final Builder sources(IJsonPredicate<DamageSource>... sources) {
+      return source(DamageSourcePredicate.and(sources));
+    }
 
     @Override
-    public FlatReductionModule amount(float flat, float eachLevel) {
-      return new FlatReductionModule(new LevelingValue(flat, eachLevel), minimum, holder, damageSource, condition);
+    protected AdjustDamageModule build(ModifierFormula formula) {
+      return new AdjustDamageModule(new ProtectionFormula(formula, variables, percent), holder, source, tooltipValue, condition);
     }
   }
 }
