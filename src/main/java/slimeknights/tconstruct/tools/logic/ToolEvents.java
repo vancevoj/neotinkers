@@ -66,6 +66,7 @@ import slimeknights.tconstruct.library.tools.capability.PersistentDataCapability
 import slimeknights.tconstruct.library.tools.capability.TinkerDataCapability;
 import slimeknights.tconstruct.library.tools.capability.TinkerDataKeys;
 import slimeknights.tconstruct.library.tools.context.EquipmentContext;
+import slimeknights.tconstruct.library.tools.context.EquipmentIterator.EquipmentEntry;
 import slimeknights.tconstruct.library.tools.context.ToolAttackContext;
 import slimeknights.tconstruct.library.tools.definition.ModifiableArmorMaterial;
 import slimeknights.tconstruct.library.tools.definition.module.mining.IsEffectiveToolHook;
@@ -334,13 +335,9 @@ public class ToolEvents {
 
       // next, determine how much tinkers armor wants to change it
       // note that armor modifiers can choose to block "absolute damage" if they wish, currently just starving damage I think
-      for (EquipmentSlot slotType : EquipmentSlot.values()) {
-        IToolStackView tool = context.getValidTool(slotType);
-        if (tool != null && !tool.isBroken()) {
-          for (ModifierEntry entry : tool.getModifierList()) {
-            modifierValue = entry.getHook(ModifierHooks.PROTECTION).getProtectionModifier(tool, entry, context, slotType, source, modifierValue);
-          }
-        }
+      for (EquipmentEntry entry : context.iterateTools()) {
+        ModifierEntry modifier = entry.modifier();
+        modifierValue = modifier.getHook(ModifierHooks.PROTECTION).getProtectionModifier(entry.tool(), modifier, context, entry.slot(), source, modifierValue);
       }
 
       // give slimes a 4x armor boost
