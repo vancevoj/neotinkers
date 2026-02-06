@@ -1155,7 +1155,8 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
         .formula()
         .customVariable("overslime", new ModDataVariable(overslime, ModDataSource.PERSISTENT))
         .variable(LEVEL).min() // must have 1 overslime per level
-        .constant(0.2f).multiply() // effectively grants +6 mining speed when base is 30
+        .constant(0.2f).multiply() // +20% per level, effectively grants +6 mining speed when base is 30
+        .constant(1).add() // want 120%, not 20% when we apply it
         .variable(VALUE).multiply()
         .build())
       .addModule(MiningCapacityModule.builder()
@@ -1168,6 +1169,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
         .constant(5).variable(LEVEL).multiply().min() // must have 5 overslime per level
         .constant(5).divide() // scale between 0 and 5
         .constant(0.2f).multiply()
+        .constant(1).add() // want 120%, not 20% when we apply it
         .variable(VALUE).multiply()
         .build())
       .addModule(MiningCapacityModule.builder().toolTag(TinkerTags.Items.BROAD_TOOLS).before(true).owner(overslime).eachLevel(-5))
