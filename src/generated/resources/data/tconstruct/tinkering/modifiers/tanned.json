@@ -3,12 +3,12 @@
   "modules": [
     {
       "type": "tconstruct:tool_damage_range",
-      "apply_when": "primary",
+      "durability_type": "primary",
       "max": 1
     },
     {
       "type": "tconstruct:tool_damage_range",
-      "apply_when": "secondary",
+      "durability_type": "secondary",
       "max": 0
     }
   ],

@@ -24,6 +24,7 @@ import slimeknights.tconstruct.library.json.RandomLevelingValue;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.hook.armor.OnAttackedModifierHook;
+import slimeknights.tconstruct.library.modifiers.hook.behavior.ToolDamageModifierHook.DurabilityType;
 import slimeknights.tconstruct.library.modifiers.hook.combat.MeleeHitModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.combat.MonsterMeleeHitModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.ranged.ProjectileHitModifierHook;
@@ -100,7 +101,7 @@ public record MobEffectModule(IJsonPredicate<LivingEntity> target, MobEffect eff
       float chance = this.chance.compute(scaledLevel);
       if (chance >= 1 || RANDOM.nextFloat() < chance) {
         applyEffect(living, scaledLevel);
-        ToolDamageUtil.damageAnimated(tool, 1, defender, slotType, true);
+        ToolDamageUtil.damageAnimated(tool, 1, defender, slotType, DurabilityType.SECONDARY);
       }
     }
   }

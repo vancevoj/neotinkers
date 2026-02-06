@@ -11,6 +11,7 @@ import net.minecraft.world.item.ItemStack;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
+import slimeknights.tconstruct.library.modifiers.hook.behavior.ToolDamageModifierHook.DurabilityType;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
@@ -97,17 +98,17 @@ public class ToolDamageUtil {
    * @param amount  Amount to damage
    * @param entity  Entity for criteria updates, if null no updates run
    * @param stack   Stack to use for criteria updates, if null uses main hand stack
-   * @param secondary  If true, this is not the primary source of damage for this action. Used by some modifiers such as tanned.
+   * @param type    Type of durability loss being applied
    * @return true if the tool broke when damaging
    */
-  public static boolean damage(IToolStackView tool, int amount, @Nullable LivingEntity entity, @Nullable ItemStack stack, boolean secondary) {
+  public static boolean damage(IToolStackView tool, int amount, @Nullable LivingEntity entity, @Nullable ItemStack stack, DurabilityType type) {
     if (amount <= 0 || tool.isBroken() || tool.isUnbreakable() || !tool.hasTag(TinkerTags.Items.DURABILITY)) {
       return false;
     }
 
     // try each modifier
     for (ModifierEntry entry : tool.getModifierList()) {
-      amount = entry.getHook(ModifierHooks.TOOL_DAMAGE).onDamageTool(tool, entry, amount, entity, stack, secondary);
+      amount = entry.getHook(ModifierHooks.TOOL_DAMAGE).onDamageTool(tool, entry, amount, entity, stack, type);
       // if no more damage, done
       if (amount <= 0) {
         return false;
@@ -124,7 +125,7 @@ public class ToolDamageUtil {
    * @return true if the tool broke when damaging
    */
   public static boolean damage(IToolStackView tool, int amount, @Nullable LivingEntity entity, @Nullable ItemStack stack) {
-    return damage(tool, amount, entity, stack, false);
+    return damage(tool, amount, entity, stack, DurabilityType.PRIMARY);
   }
 
   /**
@@ -133,11 +134,11 @@ public class ToolDamageUtil {
    * @param amount  Amount of damage
    * @param entity  Entity for animation
    * @param slot    Slot containing the stack
-   * @param secondary  If true, this is not the primary source of damage for this action. Used by some modifiers such as tanned.
+   * @param type    Type of durability loss being applied
    * @return true if the tool broke.
    */
-  public static boolean damageAnimated(IToolStackView tool, int amount, LivingEntity entity, EquipmentSlot slot, boolean secondary) {
-    if (damage(tool, amount, entity, entity.getItemBySlot(slot), secondary)) {
+  public static boolean damageAnimated(IToolStackView tool, int amount, LivingEntity entity, EquipmentSlot slot, DurabilityType type) {
+    if (damage(tool, amount, entity, entity.getItemBySlot(slot), type)) {
       entity.broadcastBreakEvent(slot);
       return true;
     }
@@ -153,7 +154,7 @@ public class ToolDamageUtil {
    * @return true if the tool broke.
    */
   public static boolean damageAnimated(IToolStackView tool, int amount, LivingEntity entity, EquipmentSlot slot) {
-    return damageAnimated(tool, amount, entity, slot, false);
+    return damageAnimated(tool, amount, entity, slot, DurabilityType.PRIMARY);
   }
 
 
@@ -163,11 +164,11 @@ public class ToolDamageUtil {
    * @param amount  Amount of damage
    * @param entity  Entity for animation
    * @param hand    Hand containing the stack
-   * @param secondary  If true, this is not the primary source of damage for this action. Used by some modifiers such as tanned.
+   * @param type    Type of durability loss being applied
    * @return true if the tool broke when damaging
    */
-  public static boolean damageAnimated(IToolStackView tool, int amount, LivingEntity entity, InteractionHand hand, boolean secondary) {
-    if (damage(tool, amount, entity, entity.getItemInHand(hand), secondary)) {
+  public static boolean damageAnimated(IToolStackView tool, int amount, LivingEntity entity, InteractionHand hand, DurabilityType type) {
+    if (damage(tool, amount, entity, entity.getItemInHand(hand), type)) {
       entity.broadcastBreakEvent(hand);
       // TODO: why don't we fire ForgeEventFactory.onPlayerDestroyItem here?
       return true;
@@ -184,7 +185,7 @@ public class ToolDamageUtil {
    * @return true if the tool broke when damaging
    */
   public static boolean damageAnimated(IToolStackView tool, int amount, LivingEntity entity, InteractionHand hand) {
-    return damageAnimated(tool, amount, entity, hand, false);
+    return damageAnimated(tool, amount, entity, hand, DurabilityType.PRIMARY);
   }
 
   /**

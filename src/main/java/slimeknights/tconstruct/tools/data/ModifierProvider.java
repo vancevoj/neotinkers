@@ -82,6 +82,7 @@ import slimeknights.tconstruct.library.json.variable.tool.ToolVariable;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.ModifierId;
+import slimeknights.tconstruct.library.modifiers.hook.behavior.ToolDamageModifierHook.DurabilityType;
 import slimeknights.tconstruct.library.modifiers.hook.interaction.EntityInteractionModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.interaction.InteractionSource;
 import slimeknights.tconstruct.library.modifiers.hook.ranged.BowAmmoModifierHook;
@@ -215,7 +216,6 @@ import slimeknights.tconstruct.tools.modules.cosmetic.EmbellishmentModule;
 import slimeknights.tconstruct.tools.modules.cosmetic.TrimModule;
 import slimeknights.tconstruct.tools.modules.durability.ShareDurabilityModule;
 import slimeknights.tconstruct.tools.modules.durability.ToolDamageRangeModule;
-import slimeknights.tconstruct.tools.modules.durability.ToolDamageRangeModule.ApplyRangeWhen;
 import slimeknights.tconstruct.tools.modules.interaction.BrushModule;
 import slimeknights.tconstruct.tools.modules.interaction.BucketModule;
 import slimeknights.tconstruct.tools.modules.interaction.ExtinguishCampfireModule;
@@ -855,8 +855,8 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
     buildModifier(ModifierIds.stringy).addModule(MaterialRepairModule.material(MaterialIds.string).constant(140));
     buildModifier(ModifierIds.tanned).levelDisplay(ModifierLevelDisplay.NO_LEVELS)
       .priority(200) // higher priority than stoneshield, overslime, and reinforced
-      .addModule(new ToolDamageRangeModule(0, 1, ApplyRangeWhen.PRIMARY)) // primary damage is reduced to 1
-      .addModule(new ToolDamageRangeModule(0, 0, ApplyRangeWhen.SECONDARY)); // secondary damage is ignored
+      .addModule(new ToolDamageRangeModule(0, 1, DurabilityType.PRIMARY)) // primary damage is reduced to 1
+      .addModule(new ToolDamageRangeModule(0, 0, DurabilityType.SECONDARY)); // secondary damage is ignored
     buildModifier(ModifierIds.woodwind) // TODO: can we make it play a bamboo sound?
       .addModule(StatBoostModule.add(ToolStats.ACCURACY).eachLevel(0.5f))
       .addModule(StatBoostModule.add(ToolStats.VELOCITY).toolTag(TinkerTags.Items.THROWN_AMMO).eachLevel(0.25f));

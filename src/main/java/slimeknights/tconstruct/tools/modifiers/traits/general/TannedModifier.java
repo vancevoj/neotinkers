@@ -31,7 +31,7 @@ public class TannedModifier extends NoLevelsModifier implements ToolDamageModifi
   }
 
   @Override
-  public int onDamageTool(IToolStackView tool, ModifierEntry modifier, int amount, @Nullable LivingEntity holder, @Nullable ItemStack stack, boolean secondary) {
-    return amount >= 1 && !secondary ? 1 : 0;
+  public int onDamageTool(IToolStackView tool, ModifierEntry modifier, int amount, @Nullable LivingEntity holder, @Nullable ItemStack stack, DurabilityType type) {
+    return amount >= 1 && type != DurabilityType.SECONDARY ? 1 : 0;
   }
 }

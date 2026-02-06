@@ -15,6 +15,7 @@ import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.json.LevelingValue;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
+import slimeknights.tconstruct.library.modifiers.hook.behavior.ToolDamageModifierHook.DurabilityType;
 import slimeknights.tconstruct.library.modifiers.modules.technical.SlotInChargeModule;
 import slimeknights.tconstruct.library.modifiers.modules.technical.SlotInChargeModule.SlotInCharge;
 import slimeknights.tconstruct.library.modifiers.modules.util.ModifierCondition;
@@ -111,7 +112,7 @@ public record KnockbackCounterModule(TinkerDataKey<SlotInCharge> slotInCharge, L
             }
             // all tools that contributed get damaged, consistency with other counter modules
             if (durabilityUsage > 0 && newBonus > 0) {
-              ToolDamageUtil.damageAnimated(bouncingTool, durabilityUsage, defender, bouncingSlot, true);
+              ToolDamageUtil.damageAnimated(bouncingTool, durabilityUsage, defender, bouncingSlot, DurabilityType.SECONDARY);
             }
           }
         }

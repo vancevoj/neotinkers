@@ -21,6 +21,7 @@ import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.events.teleport.EnderportingTeleportEvent;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
+import slimeknights.tconstruct.library.modifiers.hook.behavior.ToolDamageModifierHook.DurabilityType;
 import slimeknights.tconstruct.library.modifiers.hook.combat.MeleeHitModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.combat.MonsterMeleeHitModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.mining.BlockHarvestModifierHook;
@@ -95,7 +96,7 @@ public class EnderportingModifier extends NoLevelsModifier implements PlantHarve
         Vec3 oldPosition = attacker.position();
         if (tryTeleport(modifier, attacker, target.getX(), target.getY(), target.getZ())) {
           tryTeleport(modifier, target, oldPosition.x, oldPosition.y, oldPosition.z);
-          ToolDamageUtil.damageAnimated(tool, 2, attacker, context.getSlotType(), true);
+          ToolDamageUtil.damageAnimated(tool, 2, attacker, context.getSlotType(), DurabilityType.SECONDARY);
         }
       }
     }
@@ -107,7 +108,7 @@ public class EnderportingModifier extends NoLevelsModifier implements PlantHarve
       BlockPos pos = context.getPos();
       LivingEntity living = context.getLiving();
       if (tryTeleport(modifier, living, pos.getX() + 0.5f, pos.getY(), pos.getZ() + 0.5f)) {
-        ToolDamageUtil.damageAnimated(tool, 2, living, EquipmentSlot.MAINHAND, true);
+        ToolDamageUtil.damageAnimated(tool, 2, living, EquipmentSlot.MAINHAND, DurabilityType.SECONDARY);
       }
     }
   }
@@ -118,7 +119,7 @@ public class EnderportingModifier extends NoLevelsModifier implements PlantHarve
     if (context.getClickedPos().equals(pos)) {
       LivingEntity living = context.getPlayer();
       if (living != null && tryTeleport(modifier, living, pos.getX() + 0.5f, pos.getY(), pos.getZ() + 0.5f)) {
-        ToolDamageUtil.damageAnimated(tool, 2, living, context.getHand(), true);
+        ToolDamageUtil.damageAnimated(tool, 2, living, context.getHand(), DurabilityType.SECONDARY);
       }
     }
   }
@@ -174,7 +175,7 @@ public class EnderportingModifier extends NoLevelsModifier implements PlantHarve
       // damage on shoot as we won't have tool context once the arrow lands
       // don't damage fishing hooks though, we will do that on hit
       if (projectile.getType() != TinkerTools.fishingHook.get()){
-        ToolDamageUtil.damageAnimated(tool, 10, shooter, shooter.getUsedItemHand(), true);
+        ToolDamageUtil.damageAnimated(tool, 10, shooter, shooter.getUsedItemHand(), DurabilityType.SECONDARY);
       }
     } else {
       persistentData.putBoolean(SECONDARY_ARROW, true);

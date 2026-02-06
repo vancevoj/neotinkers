@@ -22,6 +22,7 @@ import slimeknights.tconstruct.library.json.predicate.TinkerPredicate;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.hook.armor.OnAttackedModifierHook;
+import slimeknights.tconstruct.library.modifiers.hook.behavior.ToolDamageModifierHook.DurabilityType;
 import slimeknights.tconstruct.library.modifiers.modules.ModifierModule;
 import slimeknights.tconstruct.library.modifiers.modules.util.ModifierCondition;
 import slimeknights.tconstruct.library.modifiers.modules.util.ModifierCondition.ConditionalModule;
@@ -111,7 +112,7 @@ public interface CounterModule extends ModifierModule, OnAttackedModifierHook, C
           // damage the armor if requested
           int durabilityUsage = durabilityUsage();
           if (durabilityUsage > 0) {
-            ToolDamageUtil.damageAnimated(tool, durabilityUsage, defender, slotType, true);
+            ToolDamageUtil.damageAnimated(tool, durabilityUsage, defender, slotType, DurabilityType.SECONDARY);
           }
         }
       }

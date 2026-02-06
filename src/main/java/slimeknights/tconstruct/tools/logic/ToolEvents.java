@@ -56,6 +56,7 @@ import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.hook.armor.ModifyDamageModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.armor.OnAttackedModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.armor.ProtectionModifierHook;
+import slimeknights.tconstruct.library.modifiers.hook.behavior.ToolDamageModifierHook.DurabilityType;
 import slimeknights.tconstruct.library.modifiers.hook.mining.BreakSpeedContext;
 import slimeknights.tconstruct.library.modifiers.hook.ranged.ProjectileHitModifierHook;
 import slimeknights.tconstruct.library.modifiers.modules.armor.MobDisguiseModule;
@@ -379,7 +380,7 @@ public class ToolEvents {
             IToolStackView tool = context.getToolInSlot(slotType);
             if (tool != null && (!source.is(DamageTypeTags.IS_FIRE) || !tool.getItem().isFireResistant())) {
               // mark this as secondary damage so modifiers like tanned can avoid taking damage twice
-              ToolDamageUtil.damageAnimated(tool, damageMissed, entity, slotType, true);
+              ToolDamageUtil.damageAnimated(tool, damageMissed, entity, slotType, DurabilityType.SECONDARY);
             } else {
               // if not our armor, damage using vanilla like logic
               ItemStack armorStack = entity.getItemBySlot(slotType);

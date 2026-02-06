@@ -25,6 +25,7 @@ import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.ModifierId;
+import slimeknights.tconstruct.library.modifiers.hook.behavior.ToolDamageModifierHook.DurabilityType;
 import slimeknights.tconstruct.library.modifiers.hook.build.ConditionalStatModifierHook;
 import slimeknights.tconstruct.library.tools.definition.module.ToolHooks;
 import slimeknights.tconstruct.library.tools.item.ranged.ModifiableLauncherItem;
@@ -252,7 +253,7 @@ public final class ModifierUtil {
           if (damage > 0) {
             // if we are applying cooldown, means this is a full retraction from block so this was primary damage
             // no cooldown is done on secondary effects like entity hitting
-            ToolDamageUtil.damageAnimated(tool, damage, living, hand, !applyCooldown);
+            ToolDamageUtil.damageAnimated(tool, damage, living, hand, applyCooldown ? DurabilityType.PRIMARY : DurabilityType.SECONDARY);
           }
         }
         return hand;

@@ -3,7 +3,6 @@ package slimeknights.tconstruct.tools.modules.durability;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
-import slimeknights.mantle.data.loadable.primitive.EnumLoadable;
 import slimeknights.mantle.data.loadable.primitive.IntLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.data.predicate.IJsonPredicate;
@@ -21,6 +20,7 @@ import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Module to set a minimum or a maximum amount of damage for a tool to take each operation.
@@ -28,18 +28,18 @@ import java.util.List;
  * @param max  Maximum amount of damage the tool can take. Use {@link Integer#MAX_VALUE} for no max.
  * @param condition  Condition of when this module applies
  */
-public record ToolDamageRangeModule(int min, int max, ApplyRangeWhen when, IJsonPredicate<LivingEntity> holder, ModifierCondition<IToolStackView> condition) implements ModifierModule, ToolDamageModifierHook, ConditionalModule<IToolStackView> {
+public record ToolDamageRangeModule(int min, int max, Set<DurabilityType> types, IJsonPredicate<LivingEntity> holder, ModifierCondition<IToolStackView> condition) implements ModifierModule, ToolDamageModifierHook, ConditionalModule<IToolStackView> {
   private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<ToolDamageRangeModule>defaultHooks(ModifierHooks.TOOL_DAMAGE);
   public static final RecordLoadable<ToolDamageRangeModule> LOADER = RecordLoadable.create(
     IntLoadable.FROM_ZERO.defaultField("min", 0, ToolDamageRangeModule::min),
     IntLoadable.FROM_ZERO.defaultField("max", Integer.MAX_VALUE, ToolDamageRangeModule::max),
-    new EnumLoadable<>(ApplyRangeWhen.class).defaultField("apply_when", ApplyRangeWhen.ALWAYS, ToolDamageRangeModule::when),
+    DurabilityType.SET_LOADABLE.defaultField("durability_type", Set.of(), ToolDamageRangeModule::types),
     LivingEntityPredicate.LOADER.defaultField("holder", ToolDamageRangeModule::holder),
     ModifierCondition.TOOL_FIELD,
     ToolDamageRangeModule::new);
 
-  public ToolDamageRangeModule(int min, int max, ApplyRangeWhen when) {
-    this(min, max, when, LivingEntityPredicate.ANY, ModifierCondition.ANY_TOOL);
+  public ToolDamageRangeModule(int min, int max, DurabilityType... types) {
+    this(min, max, Set.of(types), LivingEntityPredicate.ANY, ModifierCondition.ANY_TOOL);
   }
 
   @Override
@@ -52,14 +52,15 @@ public record ToolDamageRangeModule(int min, int max, ApplyRangeWhen when, IJson
     return DEFAULT_HOOKS;
   }
 
+  @Deprecated
   @Override
   public int onDamageTool(IToolStackView tool, ModifierEntry modifier, int amount, @Nullable LivingEntity holder) {
-    return onDamageTool(tool, modifier, amount, holder, null, false);
+    return onDamageTool(tool, modifier, amount, holder, null, DurabilityType.PRIMARY);
   }
 
   @Override
-  public int onDamageTool(IToolStackView tool, ModifierEntry modifier, int amount, @Nullable LivingEntity holder, @Nullable ItemStack stack, boolean secondary) {
-    if (condition.matches(tool, modifier) && (when == ApplyRangeWhen.ALWAYS || secondary && when == ApplyRangeWhen.SECONDARY) && TinkerPredicate.matches(this.holder, holder)) {
+  public int onDamageTool(IToolStackView tool, ModifierEntry modifier, int amount, @Nullable LivingEntity holder, @Nullable ItemStack stack, DurabilityType type) {
+    if (condition.matches(tool, modifier) && DurabilityType.matches(this.types, type) && TinkerPredicate.matches(this.holder, holder)) {
       // if the range is closed, all actions deal that
       if (min == max) {
         return min;
@@ -68,14 +69,5 @@ public record ToolDamageRangeModule(int min, int max, ApplyRangeWhen when, IJson
       return Mth.clamp(amount, min, max);
     }
     return amount;
-  }
-
-  public enum ApplyRangeWhen {
-    /** Range is always applied */
-    ALWAYS,
-    /** Range is only applied to primary damage sources */
-    PRIMARY,
-    /** Range is only applied to secondary damage sources */
-    SECONDARY;
   }
 }
