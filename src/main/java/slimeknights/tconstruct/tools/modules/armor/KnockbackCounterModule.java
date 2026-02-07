@@ -91,6 +91,7 @@ public record KnockbackCounterModule(TinkerDataKey<SlotInCharge> slotInCharge, L
       if (defender.isUsingItem()) {
         EquipmentSlot checkSlot = Util.getSlotType(defender.getUsedItemHand());
         IToolStackView blockingTool = context.getValidTool(checkSlot);
+        // TODO: CounterModule.isBlocking?
         if (blockingTool != null && ModifierUtil.canPerformAction(blockingTool, ToolActions.SHIELD_BLOCK) && defender.getItemBySlot(checkSlot).getUseDuration() - defender.getUseItemRemainingTicks() >= 5) {
           blockingSlot = checkSlot;
         }
