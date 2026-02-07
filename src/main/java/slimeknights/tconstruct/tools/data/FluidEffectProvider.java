@@ -266,7 +266,7 @@ public class FluidEffectProvider extends AbstractFluidEffectProvider {
     addMetal(TinkerFluids.moltenHepatizon).coldDamage(4).addEffect(FluidMobEffect.builder().effect(MobEffects.WITHER, 20 * 8, 1), TimeAction.SET);
     addMetal(TinkerFluids.moltenNetherite).impactDamage(5).addEffect(FluidMobEffect.builder().effect(MobEffects.BLINDNESS, 20 * 5, 1), TimeAction.SET);
     // tinkers end
-    addMetal(TinkerFluids.moltenKnightmetal).spikeDamage(4).addEffect(FluidMobEffect.builder().effect(TinkerEffects.pierce.get(), 20 * 5, 2), TimeAction.SET);
+    addMetal(TinkerFluids.moltenKnightmetal).spikeDamage(3).addEffect(FluidMobEffect.builder().effect(TinkerEffects.pierce.get(), 20 * 5, 2), TimeAction.SET);
     // thermal compat
     compatFluid("glowstone", FluidValues.GEM).addEffect(FluidMobEffect.builder().effect(MobEffects.GLOWING, 20 * 10), TimeAction.ADD).addBlockEffect(new PlaceBlockFluidEffect(TinkerCommons.glow.get()));
     compatFluid("redstone", FluidValues.GEM).addEffect(ExplosionFluidEffect.radius(1, 0.5f).knockback(LevelingValue.eachLevel(-2)).ignoreBlocks().build());
