@@ -2206,7 +2206,7 @@
 
   "material.tconstruct.aluminum": "Aluminum",
   "material.tconstruct.aluminum.flavor": "Found most commonly in ashmounds.",
-  "material.tconstruct.aluminum.ranged": "Grants +0.07 drawspeed and accuracy at the cost of 5% loss of protection",
+  "material.tconstruct.aluminum.ranged": "Grants +0.05 drawspeed and accuracy",
   "material.tconstruct.aluminum.armor": "Grants +5% use item speed at the cost of 5% loss of protection",
 
   "material.tconstruct.treated_wood": "Treated Wood",

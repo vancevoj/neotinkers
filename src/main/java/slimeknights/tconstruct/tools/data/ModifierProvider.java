@@ -1085,9 +1085,9 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .addModule(AttributeModule.builder(Attributes.MOVEMENT_SPEED, Operation.MULTIPLY_BASE).eachLevel(-0.1f))
       .addModule(AttributeModule.builder(ForgeMod.ENTITY_GRAVITY, Operation.MULTIPLY_TOTAL).tooltipStyle(TooltipStyle.PERCENT).eachLevel(0.05f));
     buildModifier(ModifierIds.featherweight)
-      .addModule(StatBoostModule.add(ToolStats.DRAW_SPEED).eachLevel(0.07f))
-      .addModule(StatBoostModule.add(ToolStats.ACCURACY).eachLevel(0.07f))
-      .addModule(ProtectionModule.builder().eachLevel(-1.25f))
+      .addModule(StatBoostModule.add(ToolStats.DRAW_SPEED).eachLevel(0.05f))
+      .addModule(StatBoostModule.add(ToolStats.ACCURACY).eachLevel(0.05f))
+      .addModule(ProtectionModule.builder().toolTag(TinkerTags.Items.ARMOR).eachLevel(-1.25f))
       .addModule(AttributeModule.builder(TinkerAttributes.USE_ITEM_SPEED, Operation.ADDITION).tooltipStyle(TooltipStyle.PERCENT).toolItem(ItemPredicate.tag(ARMOR)).eachLevel(0.1f));
     buildModifier(ModifierIds.dense)
       // from 0 to 5, repair formula is FACTOR * (1 - 0.025 * LEVEL * (11 - LEVEL))
