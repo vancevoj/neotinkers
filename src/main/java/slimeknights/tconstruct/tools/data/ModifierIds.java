@@ -293,6 +293,7 @@ public class ModifierIds {
 
   // traits - slimeskull
   public static final ModifierId mithridatism = id("mithridatism");
+  public static final ModifierId dragonheart = id("dragonheart");
 
   // unused for now, will be reassigned later
 

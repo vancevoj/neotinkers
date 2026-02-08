@@ -1166,6 +1166,7 @@
   "item.tconstruct.slime_helmet.material.tconstruct.ui_render.head": "Any Slimeskull",
   "item.tconstruct.slime_helmet.material.tconstruct.glass":         "Creeper Slimeskull",
   "item.tconstruct.slime_helmet.material.tconstruct.ender_pearl":   "Enderman Slimeskull",
+  "item.tconstruct.slime_helmet.material.tconstruct.dragon_scale":  "Dragon Slimeskull",
   "item.tconstruct.slime_helmet.material.tconstruct.bone":          "Skeleton Slimeskull",
   "item.tconstruct.slime_helmet.material.tconstruct.venombone":     "Stray Slimeskull",
   "item.tconstruct.slime_helmet.material.tconstruct.necrotic_bone": "Wither Skeleton Slimeskull",
@@ -2066,6 +2067,8 @@
   "material.tconstruct.dragon_scale.flavor": "With this, even dragons will fear me!",
   "material.tconstruct.dragon_scale.armor": "Grants +10% resistance while airborne, and boosts attack damage by 5% per level based on the highest piece.",
   "material.tconstruct.dragon_scale.ammo": "Increases projectile damage by 1 per level if launched while in mid air.",
+  "material.tconstruct.dragon_scale.skull_flavor": "No one shotting!",
+  "material.tconstruct.dragon_scale.skull_encyclopedia": "Prevents you from taking more damage than your max health - 2 in a single hit.",
 
   "material.tconstruct.shulker": "Shulker Shell",
   "material.tconstruct.shulker.flavor": "Unbreakable!",
@@ -3354,6 +3357,9 @@
   "modifier.tconstruct.revenge": "Revenge",
   "modifier.tconstruct.revenge.flavor": "Perfect for counterattacks",
   "modifier.tconstruct.revenge.description": "Makes you stronger after you are attacked",
+  "modifier.tconstruct.dragonheart": "Dragonheart",
+  "modifier.tconstruct.dragonheart.flavor": "Soul of the dragon",
+  "modifier.tconstruct.dragonheart.description": "Potentially saves you from lethal damage",
 
   "modifier.tconstruct.creeper_disguise": "Creeper Disguise",
   "modifier.tconstruct.creeper_disguise.flavor": "Kinda Creepy",
