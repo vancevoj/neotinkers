@@ -640,6 +640,8 @@ public class TinkerTags {
 
     /** Projectiles with this tag will not be discarded by any relevant modifiers. */
     public static final TagKey<EntityType<?>> REUSABLE_AMMO = common("reusable_ammo");
+    /** {@link net.minecraft.world.entity.projectile.AbstractArrow} with this tag will not run the enderference override. Ensures we run the proper damaging logic for weird arrows like tridents. */
+    public static final TagKey<EntityType<?>> ENDERFERENCE_ARROW_BLACKLIST = common("enderference_arrow_blacklist");
     /** Projectiles with this tag cannot be reflected */
     public static final TagKey<EntityType<?>> REFLECTING_BLACKLIST = common("reflecting/blacklist");
     /** Projectiles with this tag cannot be reflected */

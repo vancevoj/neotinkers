@@ -50,6 +50,7 @@ import slimeknights.tconstruct.library.tools.nbt.ModifierNBT;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
 import slimeknights.tconstruct.library.utils.Schedule;
+import slimeknights.tconstruct.shared.TinkerEffects;
 import slimeknights.tconstruct.tools.TinkerModifiers;
 import slimeknights.tconstruct.tools.TinkerTools;
 import slimeknights.tconstruct.tools.data.ModifierIds;
@@ -234,14 +235,8 @@ public class ThrownTool extends ThrownTrident implements ToolProjectile {
             owner.setItemInHand(InteractionHand.OFF_HAND, tridentItem);
           }
           // TODO: consider whether redundant sound is fine
-          if (ToolAttackUtil.performAttack(tool, ToolAttackContext.attacker(owner).target(target).hand(InteractionHand.OFF_HAND).baseDamage(tool.getStats().get(ToolStats.ATTACK_DAMAGE) * multiplier).cooldown(charge).projectile(this).build())) {
-            if (target.getType() == EntityType.ENDERMAN && tool.getModifiers().getLevel(TinkerModifiers.enderference.getId()) == 0) {
-              // restore held item
-              if (notSelf) {
-                owner.setItemInHand(InteractionHand.OFF_HAND, offhand);
-              }
-              return;
-            }
+          ToolAttackContext context = ToolAttackContext.attacker(owner).target(target).hand(InteractionHand.OFF_HAND).baseDamage(tool.getStats().get(ToolStats.ATTACK_DAMAGE) * multiplier).cooldown(charge).projectile(this).build();
+          if (ToolAttackUtil.performAttack(tool, context)) {
             if (target instanceof LivingEntity living) {
               this.doPostHurtEffects(living);
             }
@@ -250,6 +245,11 @@ public class ThrownTool extends ThrownTrident implements ToolProjectile {
           // restore held item
           if (notSelf) {
             owner.setItemInHand(InteractionHand.OFF_HAND, offhand);
+          }
+
+          // cancel post hit logic if it hit an enderman with no enderference
+          if (!TinkerEffects.canHitWithProjectile(context.getLivingTarget())) {
+            return;
           }
         }
       }
