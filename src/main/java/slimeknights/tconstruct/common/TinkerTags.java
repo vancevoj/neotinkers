@@ -734,8 +734,16 @@ public class TinkerTags {
     // durability tags - used by modifiers to change behavior
     /** Modifiers in this tag bypass the tanned modifier, which reduces durability costs to 1. */
     public static final TagKey<Modifier> BYPASS_TANNED = local("durability/bypass_tanned");
+    /** Modifiers in this tag bypass reinforced and unbreakable, preventing cancelling of damage. Other variants of precentage durability reduction may not use this. */
+    public static final TagKey<Modifier> BYPASS_REINFORCED = local("durability/bypass_reinforced");
     /** Modifiers in this tag have their durability cost reduced to 0 by tanned. Implication is they are an additional application part of the original. */
     public static final TagKey<Modifier> SECONDARY_DURABILITY = local("durability/secondary");
+    /** Modifiers in this tag bypass all forms of extra durability bars, including overslime, stoneshield, frostshield, etc. */
+    public static final TagKey<Modifier> BYPASS_EXTRA_DURABILITY = local("durability/bypass_extra_bar");
+    /** Modifiers in this tag bypass overslime for durability consumption. */
+    public static final TagKey<Modifier> BYPASS_OVERSLIME = local("durability/bypass_overslime");
+    /** Modifiers in this tag bypass frostshield for durability consumption. */
+    public static final TagKey<Modifier> BYPASS_FROSTSHIELD = local("durability/bypass_frostshield");
 
     // book tags - these are used to determine pages to load in resource packs
     // upgrades

@@ -382,20 +382,27 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .addModule(MeltingModule.builder().temperature(new LevelingInt(500, 500)).nuggetsPerMetal(new LevelingInt(9, 3)).shardsPerGem(new LevelingInt(6, 2)).build());
     buildModifier(ModifierIds.autosmelt).levelDisplay(ModifierLevelDisplay.PLUSES).addModule(new AutosmeltModule(0.2f, RecipeType.SMELTING));
     IJsonPredicate<IToolContext> noUnbreakable = HasModifierPredicate.hasModifier(ModifierIds.unbreakable, 1).inverted();
+    IJsonPredicate<ModifierId> allowReinforced = ModifierPredicate.tag(TinkerTags.Modifiers.BYPASS_REINFORCED).inverted();
     buildModifier(ModifierIds.reinforced)
       // level 0 to 5: 0.025 * LEVEL * (11 - LEVEL)
-      .addModule(ReduceToolDamageModule.builder().toolContext(noUnbreakable).maxLevel(5).formula()
-                                       .constant(0.025f).variable(LEVEL).multiply() // 0.025 * level
-                                       .constant(11).variable(LEVEL).subtract()     // 11 - level
-                                       .multiply().build())
+      .addModule(ReduceToolDamageModule.builder().maxLevel(5)
+        .toolContext(noUnbreakable)
+        .cause(allowReinforced)
+        .formula()
+        .constant(0.025f).variable(LEVEL).multiply() // 0.025 * level
+        .constant(11).variable(LEVEL).subtract()     // 11 - level
+        .multiply().build())
       // level 6+: 0.5 + level * 0.05
-      .addModule(ReduceToolDamageModule.builder().toolContext(noUnbreakable).minLevel(6).amount(0.5f, 0.05f));
+      .addModule(ReduceToolDamageModule.builder().minLevel(6)
+        .toolContext(noUnbreakable)
+        .cause(allowReinforced)
+        .amount(0.5f, 0.05f));
     // unbreakable priority is after overslime but before standard modifiers like dense
     buildModifier(ModifierIds.unbreakable)
       .levelDisplay(ModifierLevelDisplay.NO_LEVELS).priority(125)
       .addModule(ModifierRequirementsModule.builder().requireModifier(ModifierIds.netherite, 1).requireModifier(ModifierIds.reinforced, 5).modifierKey(ModifierIds.unbreakable).build())
       .addModule(new DurabilityBarColorModule(0xffffff))
-      .addModule(ReduceToolDamageModule.builder().flat(1.0f));
+      .addModule(ReduceToolDamageModule.builder().cause(allowReinforced).flat(1.0f));
     buildModifier(ModifierIds.tank).addModules(StatBoostModule.add(ToolTankHelper.CAPACITY_STAT).eachLevel(FluidType.BUCKET_VOLUME), ToolTankHelper.TANK_HANDLER);
     buildModifier(ModifierIds.overforced).addModule(StatBoostModule.add(OverslimeModule.OVERSLIME_STAT).eachLevel(75));
     buildModifier(ModifierIds.soulbound).levelDisplay(ModifierLevelDisplay.NO_LEVELS).addModule(new VolatileFlagModule(ModifierEvents.SOULBOUND));
@@ -876,7 +883,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .levelDisplay(ModifierLevelDisplay.SINGLE_LEVEL)
       .priority(175) // higher than overslime, to ensure this is removed first
       .addModule(new CapacityBarModule(LevelingInt.eachLevel(100), ToolStats.DURABILITY))
-      .addModule(new DurabilityShieldModule(0xAAFFFF))
+      .addModule(new DurabilityShieldModule(0xAAFFFF, ModifierPredicate.tag(TinkerTags.Modifiers.BYPASS_FROSTSHIELD).inverted()))
       .addModule(DamageToCapacityModule.source(DamageSourcePredicate.tag(DamageTypeTags.IS_FREEZING)).reduceDamage().flat(1));
     buildModifier(ModifierIds.stonebound)
       .addModule(ConditionalMiningSpeedModule.builder()
@@ -1268,6 +1275,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
         .build())
       .addModule(ReduceToolDamageModule.builder().toolContext(noUnbreakable)
         .reinforcedTooltip()
+        .cause(allowReinforced)
         .formula()
         .customVariable("temperature", new EntityConditionalStatVariable(EntityVariable.BIOME_TEMPERATURE, 2.0f))
         .constant(0.75f).subtract() // (temperature - 0.75)

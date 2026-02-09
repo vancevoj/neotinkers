@@ -15,6 +15,10 @@ import static slimeknights.tconstruct.common.TinkerTags.Modifiers.BLOCK_WHILE_CH
 import static slimeknights.tconstruct.common.TinkerTags.Modifiers.BONUS_SLOTLESS;
 import static slimeknights.tconstruct.common.TinkerTags.Modifiers.BOOT_ABILITIES;
 import static slimeknights.tconstruct.common.TinkerTags.Modifiers.BOOT_UPGRADES;
+import static slimeknights.tconstruct.common.TinkerTags.Modifiers.BYPASS_EXTRA_DURABILITY;
+import static slimeknights.tconstruct.common.TinkerTags.Modifiers.BYPASS_FROSTSHIELD;
+import static slimeknights.tconstruct.common.TinkerTags.Modifiers.BYPASS_OVERSLIME;
+import static slimeknights.tconstruct.common.TinkerTags.Modifiers.BYPASS_REINFORCED;
 import static slimeknights.tconstruct.common.TinkerTags.Modifiers.BYPASS_TANNED;
 import static slimeknights.tconstruct.common.TinkerTags.Modifiers.CHARGE_EMPTY_BOW_WITHOUT_DRAWTIME;
 import static slimeknights.tconstruct.common.TinkerTags.Modifiers.CHARGE_EMPTY_BOW_WITH_DRAWTIME;
@@ -122,6 +126,10 @@ public class ModifierTagProvider extends AbstractModifierTagProvider {
       // special effects
       TinkerModifiers.necrotic.getId(), TinkerModifiers.enderporting.getId()
     );
+    tag(BYPASS_REINFORCED).add(ModifierIds.glowing);
+    tag(BYPASS_EXTRA_DURABILITY);
+    tag(BYPASS_OVERSLIME).addTag(BYPASS_EXTRA_DURABILITY).add(ModifierIds.glowing);
+    tag(BYPASS_FROSTSHIELD).addTag(BYPASS_EXTRA_DURABILITY).add(ModifierIds.glowing);
 
     // book tags
     this.tag(UPGRADES).addTag(GENERAL_UPGRADES, MELEE_UPGRADES, DAMAGE_UPGRADES, HARVEST_UPGRADES, ARMOR_UPGRADES, RANGED_UPGRADES);
