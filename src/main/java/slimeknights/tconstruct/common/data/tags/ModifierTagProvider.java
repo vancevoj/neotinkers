@@ -124,7 +124,7 @@ public class ModifierTagProvider extends AbstractModifierTagProvider {
       ModifierIds.thorns, ModifierIds.fiery, ModifierIds.freezing, ModifierIds.springy,
       ModifierIds.pierce, ModifierIds.venom, ModifierIds.conductive, ModifierIds.shock,
       // special effects
-      TinkerModifiers.necrotic.getId(), TinkerModifiers.enderporting.getId()
+      ModifierIds.necrotic, ModifierIds.restore, TinkerModifiers.enderporting.getId()
     );
     tag(BYPASS_REINFORCED).add(ModifierIds.glowing);
     tag(BYPASS_EXTRA_DURABILITY);
@@ -149,7 +149,7 @@ public class ModifierTagProvider extends AbstractModifierTagProvider {
 
     this.tag(MELEE_UPGRADES).add(
       ModifierIds.knockback, ModifierIds.padded,
-      TinkerModifiers.severing.getId(), TinkerModifiers.necrotic.getId(), ModifierIds.sweeping,
+      TinkerModifiers.severing.getId(), ModifierIds.necrotic, ModifierIds.sweeping,
       ModifierIds.fiery, ModifierIds.freezing);
     this.tag(DAMAGE_UPGRADES).add(
       ModifierIds.sharpness, ModifierIds.pierce, ModifierIds.swiftstrike,
@@ -169,7 +169,7 @@ public class ModifierTagProvider extends AbstractModifierTagProvider {
       ModifierIds.pierce, ModifierIds.power, ModifierIds.punch, ModifierIds.quickCharge,
       TinkerModifiers.sinistral.getId(), ModifierIds.trueshot,
       ModifierIds.fiery, ModifierIds.freezing,
-      ModifierIds.arrowPierce, ModifierIds.bounce, TinkerModifiers.necrotic.getId(),
+      ModifierIds.arrowPierce, ModifierIds.bounce, ModifierIds.necrotic,
       ModifierIds.lure, ModifierIds.collecting, ModifierIds.fins);
 
     // abilities

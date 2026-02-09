@@ -38,7 +38,6 @@ import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.ModDataNBT;
 import slimeknights.tconstruct.library.tools.nbt.ModifierNBT;
 import slimeknights.tconstruct.library.utils.TeleportHelper;
-import slimeknights.tconstruct.tools.TinkerTools;
 
 import javax.annotation.Nullable;
 
@@ -171,11 +170,7 @@ public class EnderportingModifier extends NoLevelsModifier implements PlantHarve
   @Override
   public void onProjectileLaunch(IToolStackView tool, ModifierEntry modifier, LivingEntity shooter, Projectile projectile, @Nullable AbstractArrow arrow, ModDataNBT persistentData, boolean primary) {
     if (primary) {
-      // damage on shoot as we won't have tool context once the arrow lands
-      // don't damage fishing hooks though, we will do that on hit
-      if (projectile.getType() != TinkerTools.fishingHook.get()) {
-        ToolDamageUtil.damageAnimated(tool, 10, shooter, shooter.getUsedItemHand(), modifier.getId());
-      }
+      ToolDamageUtil.damageLauncher(tool, 10, shooter, projectile, modifier.getId());
     } else {
       persistentData.putBoolean(SECONDARY_ARROW, true);
     }

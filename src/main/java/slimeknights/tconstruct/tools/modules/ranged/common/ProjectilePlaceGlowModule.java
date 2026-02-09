@@ -23,7 +23,6 @@ import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.ModDataNBT;
 import slimeknights.tconstruct.library.tools.nbt.ModifierNBT;
 import slimeknights.tconstruct.shared.TinkerCommons;
-import slimeknights.tconstruct.tools.TinkerTools;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -56,8 +55,8 @@ public record ProjectilePlaceGlowModule(int damage, boolean blocks, boolean enti
   public void onProjectileLaunch(IToolStackView tool, ModifierEntry modifier, LivingEntity shooter, Projectile projectile, @Nullable AbstractArrow arrow, ModDataNBT persistentData, boolean primary) {
     // deal damage to the bow if it added glowing to its arrow
     // don't damage fishing hooks though, we will do that on hit
-    if (primary && damage > 0 && projectile.getType() != TinkerTools.fishingHook.get()) {
-      ToolDamageUtil.damageAnimated(tool, damage, shooter, shooter.getUsedItemHand(), modifier.getId());
+    if (primary && damage > 0) {
+      ToolDamageUtil.damageLauncher(tool, damage, shooter, projectile, modifier.getId());
     }
   }
 

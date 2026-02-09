@@ -42,6 +42,7 @@ public class ModifierIds {
   public static final ModifierId smelting = id("smelting");
   public static final ModifierId fireprimer = id("fireprimer");
   // combat
+  public static final ModifierId necrotic = id("necrotic");
   public static final ModifierId fiery = id("fiery");
   public static final ModifierId freezing = id("freezing");
   public static final ModifierId springy = id("springy");
@@ -226,6 +227,7 @@ public class ModifierIds {
   public static final ModifierId smashingAmmo = id("smashing_ammo");
   public static final ModifierId bounce = id("bounce");
   public static final ModifierId venom = id("venom");
+  public static final ModifierId restore = id("restore");
   // traits - tier 2 compat
   public static final ModifierId deciduous = id("deciduous");
   public static final ModifierId barkskin = id("barkskin");

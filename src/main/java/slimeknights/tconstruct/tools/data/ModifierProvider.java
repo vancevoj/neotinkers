@@ -198,6 +198,7 @@ import slimeknights.tconstruct.tools.modules.armor.LightspeedAttributeModule;
 import slimeknights.tconstruct.tools.modules.armor.MinimapModule;
 import slimeknights.tconstruct.tools.modules.armor.OvershieldModule;
 import slimeknights.tconstruct.tools.modules.armor.RecurrentProtectionModule;
+import slimeknights.tconstruct.tools.modules.armor.RestoreLostHealthModule;
 import slimeknights.tconstruct.tools.modules.armor.ShieldStrapModule;
 import slimeknights.tconstruct.tools.modules.armor.SleevesModule;
 import slimeknights.tconstruct.tools.modules.armor.SoulSpeedTooltipModule;
@@ -208,6 +209,7 @@ import slimeknights.tconstruct.tools.modules.combat.ChannelingModule;
 import slimeknights.tconstruct.tools.modules.combat.DamageOnShootModule;
 import slimeknights.tconstruct.tools.modules.combat.FieryAttackModule;
 import slimeknights.tconstruct.tools.modules.combat.FreezingAttackModule;
+import slimeknights.tconstruct.tools.modules.combat.LifestealModule;
 import slimeknights.tconstruct.tools.modules.combat.SeveringModule;
 import slimeknights.tconstruct.tools.modules.combat.SpillingModule;
 import slimeknights.tconstruct.tools.modules.combat.SweepingEdgeModule;
@@ -1076,10 +1078,11 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
         // finally, add in base damage
         .variable(VALUE).add().build());
 
-    // traits - tier 2
     buildModifier(ModifierIds.scorchProtection)
       .addModule(EnchantmentModule.builder(Enchantments.FIRE_PROTECTION).protection())
       .addModule(ProtectionModule.builder().sources(DamageSourcePredicate.CAN_PROTECT, SourceAttackerPredicate.causing(LivingEntityPredicate.FIRE_IMMUNE)).eachLevel(1.25f));
+    buildModifier(ModifierIds.necrotic).addModule(LifestealModule.builder().eachLevel(0.05f));
+    buildModifier(ModifierIds.restore).levelDisplay(ModifierLevelDisplay.SINGLE_LEVEL).addModule(RestoreLostHealthModule.builder().toolTag(TinkerTags.Items.ARMOR).eachLevel(0.25f));
 
     // traits - tier 2 compat
     buildModifier(ModifierIds.lustrous);

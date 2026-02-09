@@ -7,6 +7,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
@@ -15,6 +16,7 @@ import slimeknights.tconstruct.library.modifiers.ModifierId;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
+import slimeknights.tconstruct.tools.TinkerTools;
 
 import javax.annotation.Nullable;
 import java.util.function.Consumer;
@@ -196,6 +198,23 @@ public class ToolDamageUtil {
    */
   public static boolean damageAnimated(IToolStackView tool, int amount, LivingEntity entity) {
     return damageAnimated(tool, amount, entity, entity.isUsingItem() ? entity.getUsedItemHand() : InteractionHand.MAIN_HAND);
+  }
+
+  /**
+   * Calls {@link #damageAnimated(IToolStackView, int, LivingEntity, InteractionHand, ModifierId)} for a projectile launcher in a launch hook.
+   * Avoids damaging fishing rods, which will be damaged in the on hit hook.
+   * @param tool        Tool to damage
+   * @param modifier    Modifier damaging the tool
+   * @param amount      Amount to damage the tool
+   * @param entity      Entity damaging the tool
+   * @param projectile  Projectile that was launched. If a fishing hook damage is canceled.
+   * @return True if the tool broke.
+   */
+  public static boolean damageLauncher(IToolStackView tool, int amount, LivingEntity entity, Projectile projectile, ModifierId modifier) {
+    if (projectile.getType() != TinkerTools.fishingHook.get()) {
+      return ToolDamageUtil.damageAnimated(tool, amount, entity, entity.getUsedItemHand(), modifier);
+    }
+    return false;
   }
 
   /** Implements {@link net.minecraft.world.item.Item#damageItem(ItemStack, int, LivingEntity, Consumer)} for a modifiable item */

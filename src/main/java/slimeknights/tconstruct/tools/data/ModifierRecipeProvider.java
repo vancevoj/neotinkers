@@ -433,15 +433,15 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                                     .setSlots(SlotType.UPGRADE, 1)
                                     .saveSalvage(consumer, prefix(ModifierIds.fiery, upgradeSalvage))
                                     .save(consumer, prefix(ModifierIds.fiery, upgradeFolder));
-    ModifierRecipeBuilder.modifier(TinkerModifiers.necrotic)
+    ModifierRecipeBuilder.modifier(ModifierIds.necrotic)
                          .addInput(TinkerMaterials.necroticBone)
                          .addInput(TinkerWorld.congealedSlime.get(SlimeType.ICHOR))
                          .addInput(Items.GHAST_TEAR)
                          .setMaxLevel(5) // +50% chance of heal, combine with +40% from traits for +90% total
                          .setSlots(SlotType.UPGRADE, 1)
                          .setTools(ingredientFromTags(TinkerTags.Items.MELEE, TinkerTags.Items.BOWS, TinkerTags.Items.FISHING_RODS))
-                         .saveSalvage(consumer, prefix(TinkerModifiers.necrotic, upgradeSalvage))
-                         .save(consumer, prefix(TinkerModifiers.necrotic, upgradeFolder));
+                         .saveSalvage(consumer, prefix(ModifierIds.necrotic, upgradeSalvage))
+                         .save(consumer, prefix(ModifierIds.necrotic, upgradeFolder));
 
     /*
      * damage boost

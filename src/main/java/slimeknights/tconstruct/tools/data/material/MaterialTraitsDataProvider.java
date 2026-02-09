@@ -67,7 +67,8 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     addTraits(MaterialIds.venombone, ARMOR, ModifierIds.venom);
     addDefaultTraits(MaterialIds.aluminum, ModifierIds.featherweight);
     // tier 2 - nether
-    addDefaultTraits(MaterialIds.necroticBone, TinkerModifiers.necrotic);
+    addDefaultTraits(MaterialIds.necroticBone, ModifierIds.necrotic);
+    addTraits(MaterialIds.necroticBone, ARMOR, ModifierIds.restore);
     addDefaultTraits(MaterialIds.scorchedStone, ModifierIds.scorching);
     addTraits(MaterialIds.scorchedStone, ARMOR, ModifierIds.scorchProtection);
     // tier 2 - end

@@ -226,7 +226,6 @@ import slimeknights.tconstruct.tools.modifiers.traits.melee.DecayModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.melee.EnderferenceModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.melee.InsatiableModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.melee.LaceratingModifier;
-import slimeknights.tconstruct.tools.modifiers.traits.melee.NecroticModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.ranged.OlympicModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.skull.BoonOfSssssModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.skull.BreathtakingModifier;
@@ -269,6 +268,7 @@ import slimeknights.tconstruct.tools.modules.armor.LightspeedAttributeModule;
 import slimeknights.tconstruct.tools.modules.armor.MinimapModule;
 import slimeknights.tconstruct.tools.modules.armor.OvershieldModule;
 import slimeknights.tconstruct.tools.modules.armor.RecurrentProtectionModule;
+import slimeknights.tconstruct.tools.modules.armor.RestoreLostHealthModule;
 import slimeknights.tconstruct.tools.modules.armor.ShieldStrapModule;
 import slimeknights.tconstruct.tools.modules.armor.SleevesModule;
 import slimeknights.tconstruct.tools.modules.armor.SoulSpeedTooltipModule;
@@ -279,6 +279,7 @@ import slimeknights.tconstruct.tools.modules.combat.ChannelingModule;
 import slimeknights.tconstruct.tools.modules.combat.DamageOnShootModule;
 import slimeknights.tconstruct.tools.modules.combat.FieryAttackModule;
 import slimeknights.tconstruct.tools.modules.combat.FreezingAttackModule;
+import slimeknights.tconstruct.tools.modules.combat.LifestealModule;
 import slimeknights.tconstruct.tools.modules.combat.SeveringModule;
 import slimeknights.tconstruct.tools.modules.combat.SpillingModule;
 import slimeknights.tconstruct.tools.modules.combat.SweepingEdgeModule;
@@ -377,7 +378,6 @@ public final class TinkerModifiers extends TinkerModule {
 
   // upgrades
   public static final StaticModifier<MagneticModifier> magnetic = MODIFIERS.register("magnetic", MagneticModifier::new);
-  public static final StaticModifier<NecroticModifier> necrotic = MODIFIERS.register("necrotic", NecroticModifier::new);
   public static final StaticModifier<SinistralModifier> sinistral = MODIFIERS.register("sinistral", SinistralModifier::new);
 
   // abilities
@@ -496,6 +496,9 @@ public final class TinkerModifiers extends TinkerModule {
   /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#scope} */
   @Deprecated(forRemoval = true)
   public static final DynamicModifier scope = MODIFIERS.registerDynamic("scope");
+  /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#necrotic} */
+  @Deprecated(forRemoval = true)
+  public static final StaticModifier<?> necrotic = MODIFIERS.registerDynamic("necrotic");
 
   // combat upgrades
   /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#fiery} */
@@ -918,6 +921,7 @@ public final class TinkerModifiers extends TinkerModule {
       ModifierModule.LOADER.register(getResource("sweeping_edge"), SweepingEdgeModule.LOADER);
       ModifierModule.LOADER.register(getResource("severing"), SeveringModule.LOADER);
       ModifierModule.LOADER.register(getResource("blocking"), BlockingModule.LOADER);
+      ModifierModule.LOADER.register(getResource("lifesteal"), LifestealModule.LOADER);
       // armor
       ModifierModule.LOADER.register(getResource("enderclearance"), EnderclearanceModule.LOADER);
       ModifierModule.LOADER.register(getResource("depth_protection"), DepthProtectionModule.LOADER);
@@ -929,6 +933,7 @@ public final class TinkerModifiers extends TinkerModule {
       ModifierModule.LOADER.register(getResource("minimap"), MinimapModule.LOADER);
       ModifierModule.LOADER.register(getResource("sleeves"), SleevesModule.LOADER);
       ModifierModule.LOADER.register(getResource("soulspeed_tooltip"), SoulSpeedTooltipModule.LOADER);
+      ModifierModule.LOADER.register(getResource("restore_lost_health"), RestoreLostHealthModule.LOADER);
       // counterattack
       ModifierModule.LOADER.register(getResource("thorns"), ThornsModule.LOADER);
       ModifierModule.LOADER.register(getResource("fiery_counter"), FieryCounterModule.LOADER);
