@@ -106,12 +106,12 @@
   "block.tconstruct.raw_cobalt_block": "Block of Raw Cobalt",
 
   "block.tconstruct.cobalt_block": "Block of Cobalt",
-  "block.tconstruct.cobalt_block.tooltip": "Can be used as beacon base",
+  "block.tconstruct.cobalt_block.tooltip": "Can be used as a beacon base",
   "item.tconstruct.cobalt_ingot": "Cobalt Ingot",
   "item.tconstruct.cobalt_nugget": "Cobalt Nugget",
 
   "block.tconstruct.steel_block": "Block of Steel",
-  "block.tconstruct.steel_block.tooltip": "Can be used as beacon base",
+  "block.tconstruct.steel_block.tooltip": "Can be used as a beacon base",
   "item.tconstruct.steel_ingot": "Steel Ingot",
   "item.tconstruct.steel_nugget": "Steel Nugget",
 
@@ -119,7 +119,7 @@
   "__comment": "Tier 3 Metals",
 
   "block.tconstruct.slimesteel_block": "Block of Slimesteel",
-  "block.tconstruct.slimesteel_block.tooltip": "Can be used as beacon base",
+  "block.tconstruct.slimesteel_block.tooltip": "Can be used as a transparent beacon base",
   "item.tconstruct.slimesteel_ingot": "Slimesteel Ingot",
   "item.tconstruct.slimesteel_nugget": "Slimesteel Nugget",
 
@@ -139,22 +139,22 @@
   "__comment": "Tier 4 Metals",
 
   "block.tconstruct.manyullyn_block": "Block of Manyullyn",
-  "block.tconstruct.manyullyn_block.tooltip": "Can be used as beacon base",
+  "block.tconstruct.manyullyn_block.tooltip": "Can be used as a beacon base",
   "item.tconstruct.manyullyn_ingot": "Manyullyn Ingot",
   "item.tconstruct.manyullyn_nugget": "Manyullyn Nugget",
 
   "block.tconstruct.hepatizon_block": "Block of Hepatizon",
-  "block.tconstruct.hepatizon_block.tooltip": "Can be used as beacon base",
+  "block.tconstruct.hepatizon_block.tooltip": "Can be used as a beacon base",
   "item.tconstruct.hepatizon_ingot": "Hepatizon Ingot",
   "item.tconstruct.hepatizon_nugget": "Hepatizon Nugget",
 
   "block.tconstruct.cinderslime_block": "Block of Cinderslime",
-  "block.tconstruct.cinderslime_block.tooltip": "Can be used as beacon base",
+  "block.tconstruct.cinderslime_block.tooltip": "Can be used as a transparent beacon base",
   "item.tconstruct.cinderslime_ingot": "Cinderslime Ingot",
   "item.tconstruct.cinderslime_nugget": "Cinderslime Nugget",
 
   "block.tconstruct.queens_slime_block": "Block of Queen's Slime",
-  "block.tconstruct.queens_slime_block.tooltip": "Can be used as beacon base",
+  "block.tconstruct.queens_slime_block.tooltip": "Can be used as a beacon base",
   "item.tconstruct.queens_slime_ingot": "Queen's Slime Ingot",
   "item.tconstruct.queens_slime_nugget": "Queen's Slime Nugget",
 
@@ -164,12 +164,12 @@
   "item.tconstruct.knightmetal_nugget": "Knightmetal Nugget",
 
   "block.tconstruct.knightslime_block": "Block of Knightslime",
+  "block.tconstruct.knightslime_block.tooltip": "Can be used as a transparent beacon base",
   "item.tconstruct.knightslime_ingot": "Knightslime Ingot",
-  "item.tconstruct.knightslime_ingot.tooltip": "Can be used as spiky beacon base",
   "item.tconstruct.knightslime_nugget": "Knightslime Nugget",
 
   "block.tconstruct.soulsteel_block": "Block of Soulsteel",
-  "block.tconstruct.soulsteel_block.tooltip": "Can be used as beacon base",
+  "block.tconstruct.soulsteel_block.tooltip": "Can be used as a beacon base",
   "item.tconstruct.soulsteel_ingot": "Soulsteel Ingot",
   "item.tconstruct.soulsteel_nugget": "Soulsteel Nugget",
 
@@ -2150,7 +2150,7 @@
 
   "material.tconstruct.knightly": "Knightly",
   "material.tconstruct.knightly.flavor": "Shard of the traveling slime, sharper when unrefined.",
-  "material.tconstruct.knightly.ammo": "Grants +0.25 damage per level per piece of armor worn by the target (before velocity)",
+  "material.tconstruct.knightly.ammo": "Grants +0.2 damage per level per piece of armor worn by the target (before velocity)",
 
   "material.tconstruct.end_rod": "End Rod",
   "material.tconstruct.end_rod.flavor": "Arrow end's justify its means.",
@@ -2745,7 +2745,7 @@
   "modifier.tconstruct.unbreakable.requirements": "Unbreakable requires Netherite and Reinforced V to apply",
   "modifier.tconstruct.dual_wielding": "Dual Wielding",
   "modifier.tconstruct.dual_wielding.flavor": "Double action!",
-  "modifier.tconstruct.dual_wielding.description": "Can attack from the offhand, provided the main hand can also dual wield. Tools with dual wielding have reduced stats",
+  "modifier.tconstruct.dual_wielding.description": "Can attack from the offhand. Tools with dual wielding have reduced stats",
 
   "_comment": "Loot",
   "modifier.tconstruct.silky": "Silky",
@@ -4011,7 +4011,7 @@
   "advancements.tconstruct.foundry.alloyer.title": "Basic Alloyer",
   "advancements.tconstruct.foundry.alloyer.description": "Create a basic alloying setup using an alloyer, a fuel tank, some ingot tanks, a casting table, a casting basin, and a faucet",
   "advancements.tconstruct.foundry.structure.title": "The Fantastic Foundry",
-  "advancements.tconstruct.foundry.structure.description": "Craft a founry controller from alloyed obsidian, build a foundry, and open the foundry UI",
+  "advancements.tconstruct.foundry.structure.description": "Craft a foundry controller from alloyed obsidian, build a foundry, and open the foundry UI",
   "advancements.tconstruct.foundry.blaze.title": "Blazing Blood",
   "advancements.tconstruct.foundry.blaze.description": "Fill a tank with blazing blood",
   "advancements.tconstruct.foundry.plate_armor.title": "Plate Armor",
