@@ -1150,7 +1150,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .addModule(StatBoostModule.add(ToolStats.ARMOR_TOUGHNESS).eachLevel(1));
     buildModifier(ModifierIds.overshield).addModule(new OvershieldModule(LevelingValue.eachLevel(1.25f), LevelingInt.eachLevel(2)));
     ModifierId overslime = TinkerModifiers.overslime.getId();
-    buildModifier(ModifierIds.overwield)
+    buildModifier(ModifierIds.overwield).priority(75) // run later than other conditionals
       // small tools consume 1 per mining operation
       .addModule(ConditionalMiningSpeedModule.builder().percent().toolItem(ItemPredicate.tag(TinkerTags.Items.BROAD_TOOLS).inverted())
         .formula()
