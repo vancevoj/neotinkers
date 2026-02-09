@@ -12,7 +12,6 @@ import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
-import slimeknights.tconstruct.library.modifiers.hook.behavior.ToolDamageModifierHook.DurabilityType;
 import slimeknights.tconstruct.library.modifiers.hook.ranged.ProjectileHitModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.ranged.ProjectileLaunchModifierHook;
 import slimeknights.tconstruct.library.modifiers.modules.ModifierModule;
@@ -58,7 +57,7 @@ public record ProjectilePlaceGlowModule(int damage, boolean blocks, boolean enti
     // deal damage to the bow if it added glowing to its arrow
     // don't damage fishing hooks though, we will do that on hit
     if (primary && damage > 0 && projectile.getType() != TinkerTools.fishingHook.get()) {
-      ToolDamageUtil.damageAnimated(tool, damage, shooter, shooter.getUsedItemHand(), DurabilityType.SECONDARY);
+      ToolDamageUtil.damageAnimated(tool, damage, shooter, shooter.getUsedItemHand(), modifier.getId());
     }
   }
 
@@ -67,7 +66,7 @@ public record ProjectilePlaceGlowModule(int damage, boolean blocks, boolean enti
     if (entities) {
       TinkerCommons.glow.get().addGlow(projectile.level(), hit.getEntity().blockPosition(), Direction.DOWN);
       if (damage > 0) {
-        ModifierUtil.updateFishingRod(projectile, damage, false);
+        ModifierUtil.updateFishingRod(projectile, damage, false, modifier.getId());
       }
     }
     return false;
@@ -78,7 +77,7 @@ public record ProjectilePlaceGlowModule(int damage, boolean blocks, boolean enti
     if (blocks) {
       Direction direction = hit.getDirection();
       if (TinkerCommons.glow.get().addGlow(projectile.level(), hit.getBlockPos().relative(direction), direction.getOpposite()) && !projectile.getType().is(TinkerTags.EntityTypes.REUSABLE_AMMO)) {
-        ModifierUtil.updateFishingRod(projectile, damage, true);
+        ModifierUtil.updateFishingRod(projectile, damage, true, modifier.getId());
         projectile.discard();
       }
     }

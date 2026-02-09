@@ -731,6 +731,12 @@ public class TinkerTags {
     /** Sling modifiers that get a bonus from knockback, targeting someone else (so attributes are automatically applied). */
     public static final TagKey<Modifier> TARGET_KNOCKBACK_SLINGS = local("knockback_slings/target");
 
+    // durability tags - used by modifiers to change behavior
+    /** Modifiers in this tag bypass the tanned modifier, which reduces durability costs to 1. */
+    public static final TagKey<Modifier> BYPASS_TANNED = local("durability/bypass_tanned");
+    /** Modifiers in this tag have their durability cost reduced to 0 by tanned. Implication is they are an additional application part of the original. */
+    public static final TagKey<Modifier> SECONDARY_DURABILITY = local("durability/secondary");
+
     // book tags - these are used to determine pages to load in resource packs
     // upgrades
     public static final TagKey<Modifier> UPGRADES = local("upgrades");

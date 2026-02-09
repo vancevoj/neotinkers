@@ -83,7 +83,6 @@ import slimeknights.tconstruct.library.json.variable.tool.ToolVariable;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.ModifierId;
-import slimeknights.tconstruct.library.modifiers.hook.behavior.ToolDamageModifierHook.DurabilityType;
 import slimeknights.tconstruct.library.modifiers.hook.interaction.EntityInteractionModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.interaction.InteractionSource;
 import slimeknights.tconstruct.library.modifiers.hook.ranged.BowAmmoModifierHook;
@@ -856,8 +855,8 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
     buildModifier(ModifierIds.stringy).addModule(MaterialRepairModule.material(MaterialIds.string).constant(140));
     buildModifier(ModifierIds.tanned).levelDisplay(ModifierLevelDisplay.NO_LEVELS)
       .priority(200) // higher priority than stoneshield, overslime, and reinforced
-      .addModule(new ToolDamageRangeModule(0, 1, DurabilityType.PRIMARY)) // primary damage is reduced to 1
-      .addModule(new ToolDamageRangeModule(0, 0, DurabilityType.SECONDARY)); // secondary damage is ignored
+      .addModule(new ToolDamageRangeModule(0, 1, ModifierPredicate.tag(TinkerTags.Modifiers.BYPASS_TANNED).inverted())) // primary damage is reduced to 1
+      .addModule(new ToolDamageRangeModule(0, 0, ModifierPredicate.tag(TinkerTags.Modifiers.SECONDARY_DURABILITY))); // secondary damage is ignored
     buildModifier(ModifierIds.woodwind) // TODO: can we make it play a bamboo sound?
       .addModule(StatBoostModule.add(ToolStats.ACCURACY).eachLevel(0.5f))
       .addModule(StatBoostModule.add(ToolStats.VELOCITY).toolTag(TinkerTags.Items.THROWN_AMMO).eachLevel(0.25f));
@@ -1132,7 +1131,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .addModule(AttributeModule.builder(TinkerAttributes.BAD_EFFECT_DURATION, Operation.MULTIPLY_TOTAL).tooltipStyle(TooltipStyle.PERCENT).eachLevel(0.05f))
       .addModule(new ArmorLevelModule(TinkerDataKeys.CRYSTALSTRIKE, false, TinkerTags.Items.HELD_ARMOR));
     buildModifier(ModifierIds.spectral).priority(60) // after explosive, before enderference
-      .addModule(MobEffectModule.builder(MobEffects.GLOWING).chance(LevelingValue.flat(1)).time(RandomLevelingValue.perLevel(0, 200)).build())
+      .addModule(MobEffectModule.builder(MobEffects.GLOWING).chance(LevelingValue.flat(1)).counterDurabilityUsage(0).time(RandomLevelingValue.perLevel(0, 200)).build())
       // damage is for fishing rods
       .addModule(new ProjectilePlaceGlowModule(5, true, false));
     buildModifier(ModifierIds.explosive).priority(75) // after bounce, before spectral
