@@ -68,6 +68,7 @@ import slimeknights.tconstruct.library.modifiers.modules.armor.EffectImmunityMod
 import slimeknights.tconstruct.library.modifiers.modules.technical.ArmorLevelModule;
 import slimeknights.tconstruct.library.modifiers.modules.technical.ArmorStatModule;
 import slimeknights.tconstruct.library.tools.capability.EntityModifierCapability;
+import slimeknights.tconstruct.library.tools.capability.PersistentDataCapability;
 import slimeknights.tconstruct.library.tools.capability.TinkerDataCapability;
 import slimeknights.tconstruct.library.tools.capability.TinkerDataCapability.TinkerDataKey;
 import slimeknights.tconstruct.library.tools.capability.TinkerDataKeys;
@@ -75,6 +76,7 @@ import slimeknights.tconstruct.library.tools.helper.ModifierLootingHandler;
 import slimeknights.tconstruct.library.tools.helper.ModifierUtil;
 import slimeknights.tconstruct.library.tools.helper.ToolDamageUtil;
 import slimeknights.tconstruct.library.tools.item.ranged.ModifiableBowItem;
+import slimeknights.tconstruct.library.tools.nbt.ModDataNBT;
 import slimeknights.tconstruct.library.tools.nbt.ModifierNBT;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
@@ -92,6 +94,8 @@ import java.util.Optional;
 public class ModifierEvents {
   /** Multiplier for experience drops from events */
   private static final TinkerDataKey<Float> PROJECTILE_EXPERIENCE = TConstruct.createKey("projectile_experience");
+  /** Volatile data float for amount of experience granted per level. Used by both projectiles and held tools. */
+  public static final ResourceLocation EXPERIENCE = TConstruct.getResource("experience");
   /** Volatile data flag making a modifier grant the tool soulbound */
   public static final ResourceLocation SOULBOUND = TConstruct.getResource("soulbound");
   /** Volatile data int for making a modifier on a shield grant reflecting */
@@ -157,7 +161,11 @@ public class ModifierEvents {
     if (source != null && source.getDirectEntity() instanceof Projectile projectile) {
       ModifierNBT modifiers = EntityModifierCapability.getOrEmpty(projectile);
       if (!modifiers.isEmpty()) {
-        event.getEntity().getCapability(TinkerDataCapability.CAPABILITY).ifPresent(data -> data.put(PROJECTILE_EXPERIENCE, modifiers.getEntry(ModifierIds.experienced).getEffectiveLevel()));
+        TinkerDataCapability.Holder data = TinkerDataCapability.getData(event.getEntity());
+        if (data != null) {
+          ModDataNBT projectileData = PersistentDataCapability.getOrWarn(projectile);
+          data.put(PROJECTILE_EXPERIENCE, projectileData.getFloat(EXPERIENCE));
+        }
       }
     }
     // this is the latest we can add slot markers to the items so we can return them to slots
@@ -206,24 +214,26 @@ public class ModifierEvents {
     // boost entity experience if they are under the effects of experienced
     LivingEntity entity = event.getEntity();
     MobEffectInstance instance = entity.getEffect(TinkerEffects.experienced.get());
-    double armorMultiplier = 1 + (instance != null ? instance.getAmplifier() : 0);
+    double multiplier = 1 + (instance != null ? instance.getAmplifier() : 0);
 
     // always add armor boost, unfortunately no good way to stop shield stuff here
     Player player = event.getAttackingPlayer();
     if (player != null) {
-      armorMultiplier *= player.getAttributeValue(TinkerAttributes.EXPERIENCE_MULTIPLIER.get()) + ArmorStatModule.getStat(player, TinkerDataKeys.EXPERIENCE);
+      multiplier += player.getAttributeValue(TinkerAttributes.EXPERIENCE_MULTIPLIER.get()) + ArmorStatModule.getStat(player, TinkerDataKeys.EXPERIENCE);
     }
     // if the target was killed by an experienced arrow, use that level
-    float projectileBoost = entity.getCapability(TinkerDataCapability.CAPABILITY).resolve().map(data -> data.get(PROJECTILE_EXPERIENCE)).orElse(-1f);
-    if (projectileBoost >= 0) {
-      event.setDroppedExperience((int) (event.getDroppedExperience() * armorMultiplier + projectileBoost * 0.5));
-      // experienced being zero means it was our arrow, but it was not modified with experienced. Being -1 means no projectile was involved, so boost by hand
+    TinkerDataCapability.Holder data = TinkerDataCapability.getData(entity);
+    Float projectileBoost = data != null ? data.get(PROJECTILE_EXPERIENCE) : null;
+    if (projectileBoost != null) {
+      multiplier += projectileBoost;
+    // being -1 means no projectile was involved, so boost by held tool
     } else if (player != null) {
-      // not an arrow, just use the player's experienced level
       ToolStack tool = Modifier.getHeldTool(player, ModifierLootingHandler.getLootingSlot(player));
-      double multiplier = armorMultiplier + (tool != null ? tool.getModifier(ModifierIds.experienced).getEffectiveLevel() : 0) * 0.5;
-      event.setDroppedExperience((int) (event.getDroppedExperience() * multiplier));
+      if (tool != null) {
+        multiplier += tool.getVolatileData().getFloat(EXPERIENCE);
+      }
     }
+    event.setDroppedExperience((int) (event.getDroppedExperience() * multiplier));
   }
 
   /** Boosts critical hit damage */
