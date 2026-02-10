@@ -821,12 +821,12 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .addModule(ToolTankHelper.TANK_HANDLER)
       .addModule(StatBoostModule.add(ToolTankHelper.CAPACITY_STAT).eachLevel(FluidType.BUCKET_VOLUME));
     buildModifier(ModifierIds.splashing)
-      .addModule(SplashingModule.INSTANCE)
+      .addModule(new SplashingModule(LevelingValue.eachLevel(1)))
       .addModule(ToolTankHelper.TANK_HANDLER)
       .addModule(StatBoostModule.add(ToolTankHelper.CAPACITY_STAT).eachLevel(FluidType.BUCKET_VOLUME))
       .addModule(ShowOffhandModule.DISALLOW_BROKEN).addModule(ShowInteractionSourceModule.INSTANCE);
     buildModifier(ModifierIds.slurping).priority(40)
-      .addModule(new SlurpingModule(LevelingInt.flat(21)))
+      .addModule(new SlurpingModule(LevelingValue.eachLevel(1), LevelingInt.flat(21)))
       .addModule(ToolTankHelper.TANK_HANDLER)
       .addModule(StatBoostModule.add(ToolTankHelper.CAPACITY_STAT).eachLevel(FluidType.BUCKET_VOLUME));
 
