@@ -4,7 +4,7 @@
     {
       "type": "tconstruct:restore_lost_health",
       "chance": {
-        "flat": 0.15
+        "flat": 0.25
       },
       "durability_usage": {
         "each_level": 1

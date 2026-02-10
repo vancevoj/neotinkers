@@ -22,7 +22,7 @@ import slimeknights.tconstruct.library.json.predicate.TinkerPredicate;
 import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
-import slimeknights.tconstruct.library.modifiers.hook.armor.OnAttackedModifierHook;
+import slimeknights.tconstruct.library.modifiers.hook.armor.ModifyDamageModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.display.TooltipModifierHook;
 import slimeknights.tconstruct.library.modifiers.modules.ModifierModule;
 import slimeknights.tconstruct.library.modifiers.modules.util.ModifierCondition;
@@ -47,8 +47,8 @@ import java.util.List;
  * @param defender         Condition on the defender who will heal.
  * @param condition        Condition on the tool and modifier level.
  */
-public record RestoreLostHealthModule(LevelingValue percent, LevelingInt durabilityUsage, LevelingValue chance, IJsonPredicate<LivingEntity> attacker, IJsonPredicate<LivingEntity> defender, ModifierCondition<IToolStackView> condition) implements ModifierModule, OnAttackedModifierHook, TooltipModifierHook, ConditionalModule<IToolStackView> {
-  private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<RestoreLostHealthModule>defaultHooks(ModifierHooks.ON_ATTACKED, ModifierHooks.TOOLTIP);
+public record RestoreLostHealthModule(LevelingValue percent, LevelingInt durabilityUsage, LevelingValue chance, IJsonPredicate<LivingEntity> attacker, IJsonPredicate<LivingEntity> defender, ModifierCondition<IToolStackView> condition) implements ModifierModule, ModifyDamageModifierHook, TooltipModifierHook, ConditionalModule<IToolStackView> {
+  private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<RestoreLostHealthModule>defaultHooks(ModifierHooks.MODIFY_DAMAGE, ModifierHooks.TOOLTIP);
   public static final RecordLoadable<RestoreLostHealthModule> LOADER = RecordLoadable.create(
     LevelingValue.LOADABLE.requiredField("percentage", RestoreLostHealthModule::percent),
     LevelingInt.LOADABLE.requiredField("durability_usage", RestoreLostHealthModule::durabilityUsage),
@@ -69,7 +69,12 @@ public record RestoreLostHealthModule(LevelingValue percent, LevelingInt durabil
   }
 
   @Override
-  public void onAttacked(IToolStackView tool, ModifierEntry modifier, EquipmentContext context, EquipmentSlot slotType, DamageSource source, float amount, boolean isDirectDamage) {
+  public Integer getPriority() {
+    return 10;
+  }
+
+  @Override
+  public float modifyDamageTaken(IToolStackView tool, ModifierEntry modifier, EquipmentContext context, EquipmentSlot slotType, DamageSource source, float amount, boolean isDirectDamage) {
     // works like vanilla, if multiple pieces have it we get the highest effect
     LivingEntity defender = context.getEntity();
     if (condition.matches(tool, modifier) && this.defender.matches(defender) && TinkerPredicate.matches(this.attacker, source.getEntity())) {
@@ -91,6 +96,7 @@ public record RestoreLostHealthModule(LevelingValue percent, LevelingInt durabil
         }
       }
     }
+    return amount;
   }
 
   @Override
@@ -103,6 +109,8 @@ public record RestoreLostHealthModule(LevelingValue percent, LevelingInt durabil
       }
     }
   }
+
+
   /* Builder */
 
   public static Builder builder() {
@@ -113,7 +121,7 @@ public record RestoreLostHealthModule(LevelingValue percent, LevelingInt durabil
   @Accessors(fluent = true)
   public static class Builder extends ModuleBuilder.Stack<Builder> implements LevelingValue.Builder<RestoreLostHealthModule> {
     private LevelingInt durabilityUsage = LevelingInt.eachLevel(1);
-    private LevelingValue chance = LevelingValue.flat(0.15f);
+    private LevelingValue chance = LevelingValue.flat(0.25f);
     private IJsonPredicate<LivingEntity> attacker = LivingEntityPredicate.ANY;
     private IJsonPredicate<LivingEntity> defender = LivingEntityPredicate.ANY;
 
