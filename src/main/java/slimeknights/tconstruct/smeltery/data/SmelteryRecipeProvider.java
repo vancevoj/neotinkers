@@ -2036,7 +2036,7 @@ public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelt
         .addInput(TinkerFluids.moltenQuartz.ingredient(FluidValues.GEM))::save)
 
       // if chromium is missing, sub in diamond per metalborn
-      .addCondition(new AndCondition(tagCondition("ingots/tin"), tagCondition("ingots/nickel")))
+      .addCondition(new AndCondition(tagCondition("ingots/nickel")))
       .addRecipe(AlloyRecipeBuilder.alloy(TinkerFluids.moltenNicrosil, FluidValues.INGOT * 4)
         .addInput(TinkerFluids.moltenNickel.ingredient(FluidValues.INGOT * 2))
         .addInput(TinkerFluids.moltenDiamond.ingredient(FluidValues.GEM))
