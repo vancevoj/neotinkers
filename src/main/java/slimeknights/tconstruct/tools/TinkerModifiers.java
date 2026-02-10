@@ -271,7 +271,7 @@ import slimeknights.tconstruct.tools.modules.armor.RecurrentProtectionModule;
 import slimeknights.tconstruct.tools.modules.armor.RestoreLostHealthModule;
 import slimeknights.tconstruct.tools.modules.armor.ShieldStrapModule;
 import slimeknights.tconstruct.tools.modules.armor.SleevesModule;
-import slimeknights.tconstruct.tools.modules.armor.SoulSpeedTooltipModule;
+import slimeknights.tconstruct.tools.modules.armor.SoulSpeedModule;
 import slimeknights.tconstruct.tools.modules.armor.ThornsModule;
 import slimeknights.tconstruct.tools.modules.armor.ToolBeltModule;
 import slimeknights.tconstruct.tools.modules.combat.BlockingModule;
@@ -932,7 +932,7 @@ public final class TinkerModifiers extends TinkerModule {
       ModifierModule.LOADER.register(getResource("tool_belt"), ToolBeltModule.LOADER);
       ModifierModule.LOADER.register(getResource("minimap"), MinimapModule.LOADER);
       ModifierModule.LOADER.register(getResource("sleeves"), SleevesModule.LOADER);
-      ModifierModule.LOADER.register(getResource("soulspeed_tooltip"), SoulSpeedTooltipModule.LOADER);
+      ModifierModule.LOADER.register(getResource("soulspeed"), SoulSpeedModule.LOADER);
       ModifierModule.LOADER.register(getResource("restore_lost_health"), RestoreLostHealthModule.LOADER);
       // counterattack
       ModifierModule.LOADER.register(getResource("thorns"), ThornsModule.LOADER);

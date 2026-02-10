@@ -5,6 +5,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import slimeknights.mantle.data.loadable.primitive.FloatLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.tconstruct.TConstruct;
+import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 
 /**
  * Represents a float value that has a part that scales with level and a part that does not scale.
@@ -24,6 +25,11 @@ public record LevelingValue(float flat, float eachLevel) {
   /** Computes the value for the given level */
   public float compute(float level) {
     return this.flat + this.eachLevel * level;
+  }
+
+  /** Computes for the given modifier entry */
+  public float compute(ModifierEntry entry) {
+    return compute(entry.getEffectiveLevel());
   }
 
   /** Computes the value for the given level but returns 0 if level is 0 */
