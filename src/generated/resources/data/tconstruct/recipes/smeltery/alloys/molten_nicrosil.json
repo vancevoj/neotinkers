@@ -64,8 +64,8 @@
             "tag": "forge:molten_nickel"
           },
           {
-            "amount": 90,
-            "tag": "forge:molten_tin"
+            "amount": 100,
+            "tag": "tconstruct:molten_diamond"
           },
           {
             "amount": 100,
@@ -124,8 +124,8 @@
             "tag": "forge:molten_tin"
           },
           {
-            "amount": 90,
-            "tag": "forge:molten_iron"
+            "amount": 100,
+            "tag": "tconstruct:molten_diamond"
           },
           {
             "amount": 100,
