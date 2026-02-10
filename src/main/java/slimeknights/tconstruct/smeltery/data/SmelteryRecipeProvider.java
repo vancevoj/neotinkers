@@ -1247,7 +1247,7 @@ public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelt
     castingWithCast(consumer, TinkerFluids.blazingBlood, FluidType.BUCKET_VOLUME / 10, TinkerSmeltery.rodCast, Items.BLAZE_ROD, folder + "blaze/rod");
     ItemCastingRecipeBuilder.tableRecipe(Items.MAGMA_CREAM)
                             .setFluidAndTime(TinkerFluids.blazingBlood, FluidType.BUCKET_VOLUME / 20)
-                            .setCast(Tags.Items.SLIMEBALLS, true)
+                            .setCast(SlimeType.EARTH.getSlimeballTag(), true)
                             .save(consumer, location(folder + "blaze/cream"));
     ItemCastingRecipeBuilder.basinRecipe(Blocks.MAGMA_BLOCK)
                             .setFluidAndTime(TinkerFluids.blazingBlood, FluidType.BUCKET_VOLUME / 5)
