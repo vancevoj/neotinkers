@@ -79,7 +79,7 @@ public record MobEffectModule(IJsonPredicate<LivingEntity> target, MobEffect eff
   public MobEffectModule {}
 
   /** Applies the effect for the given level */
-  private void applyEffect(@Nullable LivingEntity target, float scaledLevel) {
+  private void applyEffect(@Nullable LivingEntity target, float scaledLevel, @Nullable Entity cause) {
     if (target == null || !this.target.matches(target)) {
       return;
     }
@@ -89,7 +89,7 @@ public record MobEffectModule(IJsonPredicate<LivingEntity> target, MobEffect eff
     }
     float duration = this.time.computeValue(scaledLevel);
     if (duration > 0) {
-      target.addEffect(new MobEffectInstance(effect, (int)duration, level));
+      target.addEffect(new MobEffectInstance(effect, (int)duration, level), cause);
     }
   }
 
@@ -101,7 +101,7 @@ public record MobEffectModule(IJsonPredicate<LivingEntity> target, MobEffect eff
       float scaledLevel = CounterModule.getLevel(tool, modifier, slotType, defender);
       float chance = this.chance.compute(scaledLevel);
       if (chance >= 1 || RANDOM.nextFloat() < chance) {
-        applyEffect(living, scaledLevel);
+        applyEffect(living, scaledLevel, defender);
         if (counterDurabilityUsage > 0) {
           ToolDamageUtil.damageAnimated(tool, counterDurabilityUsage, defender, slotType, modifier.getId());
         }
@@ -112,7 +112,7 @@ public record MobEffectModule(IJsonPredicate<LivingEntity> target, MobEffect eff
   @Override
   public float beforeMeleeHit(IToolStackView tool, ModifierEntry modifier, ToolAttackContext context, float damage, float baseKnockback, float knockback) {
     if (applyBeforeMelee && condition.matches(tool, modifier)) {
-      applyEffect(context.getLivingTarget(), modifier.getEffectiveLevel());
+      applyEffect(context.getLivingTarget(), modifier.getEffectiveLevel(), context.getAttacker());
     }
     return knockback;
   }
@@ -120,21 +120,21 @@ public record MobEffectModule(IJsonPredicate<LivingEntity> target, MobEffect eff
   @Override
   public void afterMeleeHit(IToolStackView tool, ModifierEntry modifier, ToolAttackContext context, float damageDealt) {
     if (!applyBeforeMelee && condition.matches(tool, modifier)) {
-      applyEffect(context.getLivingTarget(), modifier.getEffectiveLevel());
+      applyEffect(context.getLivingTarget(), modifier.getEffectiveLevel(), context.getAttacker());
     }
   }
 
   @Override
   public void onMonsterMeleeHit(IToolStackView tool, ModifierEntry modifier, ToolAttackContext context, float damage) {
     if (condition.matches(tool, modifier)) {
-      applyEffect(context.getLivingTarget(), modifier.getEffectiveLevel());
+      applyEffect(context.getLivingTarget(), modifier.getEffectiveLevel(), context.getAttacker());
     }
   }
 
   @Override
   public boolean onProjectileHitEntity(ModifierNBT modifiers, ModDataNBT persistentData, ModifierEntry modifier, Projectile projectile, EntityHitResult hit, @Nullable LivingEntity attacker, @Nullable LivingEntity target) {
     if (condition.modifierLevel().test(modifier.getLevel())) {
-      applyEffect(target, modifier.getEffectiveLevel());
+      applyEffect(target, modifier.getEffectiveLevel(), projectile.getEffectSource());
     }
     return false;
   }

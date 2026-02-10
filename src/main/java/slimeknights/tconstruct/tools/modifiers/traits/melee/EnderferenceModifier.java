@@ -43,7 +43,7 @@ public class EnderferenceModifier extends Modifier implements ProjectileHitModif
     LivingEntity entity = context.getLivingTarget();
     if (entity != null) {
       // hack: do not want them teleporting from this hit
-      TinkerEffects.enderference.get().apply(entity, 1, 0, true);
+      entity.addEffect(new MobEffectInstance(TinkerEffects.enderference.get(), 1, 0), context.getAttacker());
     }
     return knockback;
   }
@@ -61,7 +61,7 @@ public class EnderferenceModifier extends Modifier implements ProjectileHitModif
     LivingEntity entity = context.getLivingTarget();
     if (entity != null) {
       // 5 seconds of interference per level, affect all entities as players may teleport too
-      entity.addEffect(new MobEffectInstance(TinkerEffects.enderference.get(), modifier.getLevel() * 100, 0, false, true, true));
+      entity.addEffect(new MobEffectInstance(TinkerEffects.enderference.get(), modifier.getLevel() * 100, 0), context.getAttacker());
     }
   }
 
@@ -70,9 +70,10 @@ public class EnderferenceModifier extends Modifier implements ProjectileHitModif
     // this works like vanilla, damage is capped due to the hurt immunity mechanics, so if multiple pieces apply thorns between us and vanilla, damage is capped at 4
     if (isDirectDamage && tool.hasTag(TinkerTags.Items.ARMOR) && source.getEntity() instanceof LivingEntity attacker) {
       // 15% chance of working per level, doubled bonus on shields
-      float level = CounterModule.getLevel(tool, modifier, slotType, context.getEntity());
+      LivingEntity defender = context.getEntity();
+      float level = CounterModule.getLevel(tool, modifier, slotType, defender);
       if (RANDOM.nextFloat() < (level * 0.25f)) {
-        attacker.addEffect(new MobEffectInstance(TinkerEffects.enderference.get(), modifier.getLevel() * 100, 0, false, true, true));
+        attacker.addEffect(new MobEffectInstance(TinkerEffects.enderference.get(), modifier.getLevel() * 100, 0, false, true, true), defender);
       }
     }
   }
@@ -80,7 +81,7 @@ public class EnderferenceModifier extends Modifier implements ProjectileHitModif
   @Override
   public boolean onProjectileHitEntity(ModifierNBT modifiers, ModDataNBT persistentData, ModifierEntry modifier, Projectile projectile, EntityHitResult hit, @Nullable LivingEntity attacker, @Nullable LivingEntity target) {
     if (target != null) {
-      target.addEffect(new MobEffectInstance(TinkerEffects.enderference.get(), modifier.getLevel() * 100, 0, false, true, true));
+      target.addEffect(new MobEffectInstance(TinkerEffects.enderference.get(), modifier.getLevel() * 100, 0, false, true, true), projectile.getEffectSource());
     }
     return false;
   }

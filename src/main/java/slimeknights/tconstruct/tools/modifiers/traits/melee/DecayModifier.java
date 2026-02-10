@@ -47,14 +47,15 @@ public class DecayModifier extends Modifier implements ProjectileLaunchModifierH
       // note the time of each effect is calculated independently
 
       // 25% chance to poison yourself
+      LivingEntity attacker = context.getAttacker();
       if (RANDOM.nextInt(3) == 0) {
-        context.getAttacker().addEffect(makeDecayEffect(modifier.getLevel()));
+        attacker.addEffect(makeDecayEffect(modifier.getLevel()));
       }
 
       // always poison the target, means it works twice as often as lacerating
       LivingEntity target = context.getLivingTarget();
       if (target != null && target.isAlive()) {
-        target.addEffect(makeDecayEffect(modifier.getLevel()));
+        target.addEffect(makeDecayEffect(modifier.getLevel()), attacker);
       }
     }
   }
@@ -63,7 +64,7 @@ public class DecayModifier extends Modifier implements ProjectileLaunchModifierH
   public boolean onProjectileHitEntity(ModifierNBT modifiers, ModDataNBT persistentData, ModifierEntry modifier, Projectile projectile, EntityHitResult hit, @Nullable LivingEntity attacker, @Nullable LivingEntity target) {
     if (target != null && (!(projectile instanceof AbstractArrow arrow) || arrow.isCritArrow())) {
       // always poison the target, means it works twice as often as lacerating
-      target.addEffect(makeDecayEffect(modifier.getLevel()));
+      target.addEffect(makeDecayEffect(modifier.getLevel()), projectile.getEffectSource());
     }
     return false;
   }
@@ -88,7 +89,7 @@ public class DecayModifier extends Modifier implements ProjectileLaunchModifierH
         chance *= 2;
       }
       if (chance >= 1 || RANDOM.nextFloat() < chance) {
-        attacker.addEffect(makeDecayEffect(modifier.getLevel()));
+        attacker.addEffect(makeDecayEffect(modifier.getLevel()), defender);
       }
 
       // 10% chance of poisoning you too, independently generated time
