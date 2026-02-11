@@ -294,10 +294,12 @@ public class ModifierIds {
   public static final ModifierId fuse = id("fuse");
 
   // traits - slimeskull
-  public static final ModifierId mithridatism = id("mithridatism");
+  public static final ModifierId boonOfSssss = id("boon_of_sssss");
+  public static final ModifierId balmOfSssss = id("balm_of_sssss");
   public static final ModifierId dragonheart = id("dragonheart");
-
-  // unused for now, will be reassigned later
+  /** @deprecated cave spider's trait was switched to {@link #balmOfSssss}. Reimplement if you need this functionality */
+  @Deprecated(forRemoval = true)
+  public static final ModifierId mithridatism = id("mithridatism");
 
   // mob disguises
   public static final ModifierId creeperDisguise         = id("creeper_disguise");

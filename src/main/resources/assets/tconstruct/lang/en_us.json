@@ -2049,7 +2049,7 @@
   "material.tconstruct.darkthread.encyclopedia": "Increases drop chances from mobs, stacking with luck",
   "material.tconstruct.darkthread.ranged": "Increases drop chances from mobs killed by arrows",
   "material.tconstruct.darkthread.skull_flavor": "Perfect for battles of wits, when you have to decide and drink to find out who is right.",
-  "material.tconstruct.darkthread.skull_encyclopedia": "Makes the wearer immune to poison, though will not remove existing poison",
+  "material.tconstruct.darkthread.skull_encyclopedia": "Reduces the duration of incoming negative effects by 20%",
 
 
   "__comment": "Tier Nether Materials",
@@ -3336,6 +3336,9 @@
   "modifier.tconstruct.boon_of_sssss": "Boon of Sssss",
   "modifier.tconstruct.boon_of_sssss.flavor": "The potions are strong with this one",
   "modifier.tconstruct.boon_of_sssss.description": "Increases duration of positive effects",
+  "modifier.tconstruct.balm_of_sssss": "Balm of Sssss",
+  "modifier.tconstruct.balm_of_sssss.flavor": "The potions are weak with this one",
+  "modifier.tconstruct.balm_of_sssss.description": "Decreases duration of negative effects",
   "modifier.tconstruct.mithridatism": "Mithridatism",
   "modifier.tconstruct.mithridatism.flavor": "Gradual Immunity",
   "modifier.tconstruct.mithridatism.description": "Immune to becoming poisoned, if only it worked on existing poison...",

@@ -269,7 +269,7 @@ public class ModifierEvents {
   @SubscribeEvent
   static void onPotionStart(MobEffectEvent.Added event) {
     MobEffectInstance newEffect = event.getEffectInstance();
-    if (!newEffect.getCurativeItems().isEmpty()) {
+    if (!newEffect.isInfiniteDuration() && !newEffect.getCurativeItems().isEmpty()) {
       // use two different stats based on whether the effect is beneficial
       boolean beneficial = newEffect.getEffect().isBeneficial();
       LivingEntity entity = event.getEntity();
@@ -277,11 +277,7 @@ public class ModifierEvents {
                         + ArmorStatModule.getStat(entity, beneficial ? TinkerDataKeys.GOOD_EFFECT_DURATION : TinkerDataKeys.BAD_EFFECT_DURATION);
       if (multiplier != 1) {
         // adjust duration as requested
-        int duration = (int)(newEffect.getDuration() * multiplier);
-        if (duration < 0) {
-          duration = 0;
-        }
-        newEffect.duration = duration;
+        newEffect.duration = Math.max(1, (int)(newEffect.getDuration() * multiplier));
       }
     }
   }

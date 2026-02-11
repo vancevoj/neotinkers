@@ -184,7 +184,7 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     material(MaterialIds.necroticBone).addTraits(SkullStats.ID, new ModifierEntry(ModifierIds.restore, 2)).addTraits(SkullStats.ID, ModifierIds.witherSkeletonDisguise);
     // spider
     material(MaterialIds.string).addTraits(SkullStats.ID, ModifierIds.boonOfSssss, ModifierIds.spiderDisguise);
-    material(MaterialIds.darkthread).addTraits(SkullStats.ID, ModifierIds.mithridatism, ModifierIds.caveSpiderDisguise);
+    material(MaterialIds.darkthread).addTraits(SkullStats.ID, ModifierIds.balmOfSssss, ModifierIds.caveSpiderDisguise);
     // zombie
     material(MaterialIds.leather).addTraits(SkullStats.ID, new ModifierEntry(ModifierIds.consecrated, 2)).addTraits(SkullStats.ID, ModifierIds.zombieDisguise);
     material(MaterialIds.iron).addTraits(SkullStats.ID, TinkerModifiers.plague.getId(), ModifierIds.huskDisguise);
