@@ -1827,7 +1827,7 @@
   "material.tconstruct.necrotic_bone.armor": "Has a 15% chance when hit to heal over time 50% of damage received after armor.",
   "material.tconstruct.necrotic_bone.ammo": "Heals 5% per level of damage dealt from successful hits",
   "material.tconstruct.necrotic_bone.skull_flavor": "Spooky Scary Skeleton!",
-  "material.tconstruct.necrotic_bone.skull_encyclopedia": "Melee attacks cause withering. After drinking milk the effect becomes faster",
+  "material.tconstruct.necrotic_bone.skull_encyclopedia": "Has a 15% chance when hit to heal over time 100% of damage received after armor",
 
   "material.tconstruct.chorus": "Chorus",
   "material.tconstruct.chorus.flavor": "Not just the endermen, but the enderwomen, and the enderchildren",
@@ -1845,8 +1845,8 @@
   "material.tconstruct.leather": "Leather",
   "material.tconstruct.leather.flavor": "Killed a cow, tanned it's hide.",
   "material.tconstruct.leather.encyclopedia": "Prevents the tool from taking more than 1 damage in an action",
-  "material.tconstruct.leather.skull_flavor": "This is fine",
-  "material.tconstruct.leather.skull_encyclopedia": "Melee attacks increase the targets fire time based on the wearer's fire time",
+  "material.tconstruct.leather.skull_flavor": "How do you do, fellow zombies?",
+  "material.tconstruct.leather.skull_encyclopedia": "Reduces damage from undead by 10%",
 
 
   "material.tconstruct.vine": "Vine",
@@ -1881,8 +1881,8 @@
   "material.tconstruct.copper.encyclopedia": "Grants bonus mining speed at lower depth, +6 per 64 blocks below 64",
   "material.tconstruct.copper.ranged": "Grants bonus velocity at lower depth, +0.05 per 64 blocks below 64",
   "material.tconstruct.copper.armor": "Grants bonus protection at lower depth, +5% per 64 blocks below 64",
-  "material.tconstruct.copper.skull_flavor": "Knocks the wind right out of them",
-  "material.tconstruct.copper.skull_encyclopedia": "Melee attacks steal 3 seconds of air from the target",
+  "material.tconstruct.copper.skull_flavor": "No drowning here!",
+  "material.tconstruct.copper.skull_encyclopedia": "Grants an extra 30 seconds of air underwater",
 
   "material.tconstruct.gold": "Gold",
   "material.tconstruct.gold.flavor": "Piglins love it.",

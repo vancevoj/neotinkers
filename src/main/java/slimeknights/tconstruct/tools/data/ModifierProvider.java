@@ -1085,8 +1085,11 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .addModule(ProtectionModule.builder().sources(DamageSourcePredicate.CAN_PROTECT, SourceAttackerPredicate.causing(LivingEntityPredicate.FIRE_IMMUNE)).eachLevel(1.25f));
     buildModifier(ModifierIds.necrotic).addModule(LifestealModule.builder().eachLevel(0.05f));
     buildModifier(ModifierIds.restore).priority(25) // after warded, only restore your actual taken damage
-      .levelDisplay(ModifierLevelDisplay.SINGLE_LEVEL)
-      .addModule(RestoreLostHealthModule.builder().toolTag(TinkerTags.Items.ARMOR).eachLevel(0.25f));
+      .levelDisplay(new ModifierLevelDisplay.LevelCap(3, ModifierLevelDisplay.SINGLE_LEVEL))
+      // 15% at 50% then 1005
+      .addModule(RestoreLostHealthModule.builder().toolTag(TinkerTags.Items.ARMOR).maxLevel(2).eachLevel(0.5f))
+      // stop at 25% for level 3, slimeskull exclusive
+      .addModule(RestoreLostHealthModule.builder().toolTag(TinkerTags.Items.ARMOR).minLevel(3).chance(LevelingValue.flat(0.25f)).flat(1));
 
     // traits - tier 2 compat
     buildModifier(ModifierIds.lustrous);

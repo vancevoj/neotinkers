@@ -14,8 +14,8 @@
     ],
     "tconstruct:skull": [
       {
-        "level": 1,
-        "name": "tconstruct:withered"
+        "level": 2,
+        "name": "tconstruct:restore"
       },
       {
         "level": 1,
