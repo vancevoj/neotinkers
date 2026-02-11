@@ -92,6 +92,7 @@ public record ProjectileExplosionModule(LevelingValue radius, float eflnBonus, L
     float radius = this.radius.computeForLevel(level);
     // limit to non-reusable ammo, mostly ensures ballisa doesn't explode as the damage will be wrong
     // TODO: consider dedicated tag blacklist
+    // TODO: disable entirely if reusable?
     if (radius > 0.5f && !projectile.getType().is(TinkerTags.EntityTypes.REUSABLE_AMMO)) {
       Level world = projectile.level();
       if (!world.isClientSide) {
@@ -106,6 +107,7 @@ public record ProjectileExplosionModule(LevelingValue radius, float eflnBonus, L
         ModifierUtil.updateFishingRod(projectile, 2 + 3 * modifier.getLevel(), true, modifier.getId());
 
         // discard projectile so it doesn't explode again
+        // TODO: reusable?
         projectile.discard();
 
         // if marked, use EFLN style explosion

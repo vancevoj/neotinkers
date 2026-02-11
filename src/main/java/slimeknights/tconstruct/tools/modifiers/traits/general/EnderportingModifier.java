@@ -146,6 +146,7 @@ public class EnderportingModifier extends NoLevelsModifier implements PlantHarve
     if (attacker != null && canTeleport(persistentData)) {
       BlockPos target = hit.getBlockPos().relative(hit.getDirection());
       // attempt the teleport, if successful and the projectile is not reusable then discard it
+      // TODO: preserve reusable arrows?
       if (attacker.level() == projectile.level() && tryTeleport(modifier, attacker, target.getX() + 0.5f, target.getY(), target.getZ() + 0.5f) && !projectile.getType().is(TinkerTags.EntityTypes.REUSABLE_AMMO)) {
         ModifierUtil.updateFishingRod(projectile, 10, true);
         projectile.discard();

@@ -62,6 +62,7 @@ import slimeknights.tconstruct.library.json.predicate.TinkerPredicate;
 import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
+import slimeknights.tconstruct.library.modifiers.entity.ReusableProjectile;
 import slimeknights.tconstruct.library.modifiers.hook.build.ConditionalStatModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.interaction.GeneralInteractionModifierHook;
 import slimeknights.tconstruct.library.modifiers.modules.armor.EffectImmunityModule;
@@ -429,9 +430,11 @@ public class ModifierEvents {
       }
 
       // enderference //
+      // TODO: this is a lot of code to make enderference work. A mixin would likely be better and provide better compatability
       // endermen are hardcoded to not take arrow damage, so disagree by reimplementing arrow damage right here
       // blacklist lets us not run on tridents or thrown tools. Former does not work with enderference, latter does so internally
-      if (TinkerEffects.needsEnderferenceOverride(target) && !projectile.getType().is(TinkerTags.EntityTypes.ENDERFERENCE_ARROW_BLACKLIST) && projectile instanceof AbstractArrow arrow) {
+      EntityType<?> projectileType = projectile.getType();
+      if (TinkerEffects.needsEnderferenceOverride(target) && !projectileType.is(TinkerTags.EntityTypes.ENDERFERENCE_ARROW_BLACKLIST) && projectile instanceof AbstractArrow arrow) {
         // first, give up if we reached pierce capacity, and ensure list are created
         if (arrow.getPierceLevel() > 0) {
           if (arrow.piercingIgnoreEntityIds == null) {
@@ -441,7 +444,7 @@ public class ModifierEvents {
             arrow.piercedAndKilledEntities = Lists.newArrayListWithCapacity(5);
           }
           if (arrow.piercingIgnoreEntityIds.size() >= arrow.getPierceLevel() + 1) {
-            arrow.discard();
+            ReusableProjectile.discard(projectile);
             event.setCanceled(true);
             return;
           }
@@ -504,7 +507,7 @@ public class ModifierEvents {
 
           arrow.playSound(arrow.soundEvent, 1.0F, 1.2F / (target.getRandom().nextFloat() * 0.2F + 0.9F));
           if (arrow.getPierceLevel() <= 0) {
-            arrow.discard();
+            ReusableProjectile.discard(projectile);
           }
         } else {
           // reset fire and drop the arrow
@@ -517,7 +520,7 @@ public class ModifierEvents {
               arrow.spawnAtLocation(arrow.getPickupItem(), 0.1F);
             }
 
-            arrow.discard();
+            ReusableProjectile.discard(projectile);
           }
         }
         // cancel event so arrow does not bounce
