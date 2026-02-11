@@ -18,5 +18,6 @@
       }
     }
   ],
+  "priority": 25,
   "tooltip_display": "always"
 }

@@ -1824,7 +1824,7 @@
   "material.tconstruct.necrotic_bone.flavor": "Do you have a bone to pick with me?",
   "material.tconstruct.necrotic_bone.encyclopedia": "Heals 5% per level of damage dealt from critical hits",
   "material.tconstruct.necrotic_bone.ranged": "Heals 5% per level of damage dealt from successful arrow hits",
-  "material.tconstruct.necrotic_bone.armor": "Has a 25% chance when hit to heal over time 25% of damage received.",
+  "material.tconstruct.necrotic_bone.armor": "Has a 15% chance when hit to heal over time 50% of damage received after armor.",
   "material.tconstruct.necrotic_bone.ammo": "Heals 5% per level of damage dealt from successful hits",
   "material.tconstruct.necrotic_bone.skull_flavor": "Spooky Scary Skeleton!",
   "material.tconstruct.necrotic_bone.skull_encyclopedia": "Melee attacks cause withering. After drinking milk the effect becomes faster",

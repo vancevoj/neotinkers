@@ -121,7 +121,7 @@ public record RestoreLostHealthModule(LevelingValue percent, LevelingInt durabil
   @Accessors(fluent = true)
   public static class Builder extends ModuleBuilder.Stack<Builder> implements LevelingValue.Builder<RestoreLostHealthModule> {
     private LevelingInt durabilityUsage = LevelingInt.eachLevel(1);
-    private LevelingValue chance = LevelingValue.flat(0.25f);
+    private LevelingValue chance = LevelingValue.flat(0.15f);
     private IJsonPredicate<LivingEntity> attacker = LivingEntityPredicate.ANY;
     private IJsonPredicate<LivingEntity> defender = LivingEntityPredicate.ANY;
 

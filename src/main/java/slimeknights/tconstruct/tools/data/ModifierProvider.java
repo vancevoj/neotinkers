@@ -1084,7 +1084,9 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .addModule(EnchantmentModule.builder(Enchantments.FIRE_PROTECTION).protection())
       .addModule(ProtectionModule.builder().sources(DamageSourcePredicate.CAN_PROTECT, SourceAttackerPredicate.causing(LivingEntityPredicate.FIRE_IMMUNE)).eachLevel(1.25f));
     buildModifier(ModifierIds.necrotic).addModule(LifestealModule.builder().eachLevel(0.05f));
-    buildModifier(ModifierIds.restore).levelDisplay(ModifierLevelDisplay.SINGLE_LEVEL).addModule(RestoreLostHealthModule.builder().toolTag(TinkerTags.Items.ARMOR).eachLevel(0.25f));
+    buildModifier(ModifierIds.restore).priority(25) // after warded, only restore your actual taken damage
+      .levelDisplay(ModifierLevelDisplay.SINGLE_LEVEL)
+      .addModule(RestoreLostHealthModule.builder().toolTag(TinkerTags.Items.ARMOR).eachLevel(0.25f));
 
     // traits - tier 2 compat
     buildModifier(ModifierIds.lustrous);
@@ -1419,7 +1421,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
         .variable(MULTIPLIER).multiply()
         .variable(VALUE).add()
         .build());
-    buildModifier(ModifierIds.warded)
+    buildModifier(ModifierIds.warded).priority(50) // after dragonheart, before restore
       .addModule(AdjustDamageModule.builder()
         .tooltipValue(100) // valid up to 200 levels!
         .holder(TinkerPredicate.FULL_HEALTH)
