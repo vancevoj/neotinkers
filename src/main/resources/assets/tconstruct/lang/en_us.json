@@ -2204,8 +2204,8 @@
   "material.tconstruct.whitestone.aluminum": "Whitestone",
   "material.tconstruct.whitestone.tin": "Whitestone",
   "material.tconstruct.whitestone.zinc": "Whitestone",
-  "material.tconstruct.whitestone.flavor": "Take your useless white metals or rocks and make a useful tool",
-  "material.tconstruct.whitestone.encyclopedia": "Mining stone has a 20% per level of granting +3 stoneshield",
+  "material.tconstruct.whitestone.flavor": "Take your useless white metals and rocks and make a useful tool",
+  "material.tconstruct.whitestone.encyclopedia": "Mining stone has a 20% chance per level of consuming the stone to grant +3 stoneshield",
 
   "material.tconstruct.aluminum": "Aluminum",
   "material.tconstruct.aluminum.flavor": "Found most commonly in ashmounds.",
