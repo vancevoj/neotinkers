@@ -70,7 +70,6 @@ public record ProjectileFuseModule(SimpleParticleType particle, LevelingInt time
         }
 
         // if it's reusable, don't discard, but rather zero momentum
-        // TODO: fuse side-effects may behave unexpectedly for reusable fuses as they normally want to discard but don't in fuse
         if (ReusableProjectile.isSingleUse(projectile)) {
           projectile.discard();
         } else {
