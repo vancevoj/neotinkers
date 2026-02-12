@@ -646,6 +646,8 @@ public class TinkerTags {
     public static final TagKey<EntityType<?>> REFLECTING_BLACKLIST = common("reflecting/blacklist");
     /** Projectiles with this tag cannot be reflected */
     public static final TagKey<EntityType<?>> REFLECTING_PRESERVE_OWNER = common("reflecting/preserve_owner");
+    /** Common tag of fishing bobbers. Note we don't use this so we don't bother adding vanilla to it. */
+    public static final TagKey<EntityType<?>> BOBBERS = common("bobber");
 
     /** Entities that will not heal you using necrotic */
     public static final TagKey<EntityType<?>> NECROTIC_BLACKLIST = common("necrotic_blacklist");
