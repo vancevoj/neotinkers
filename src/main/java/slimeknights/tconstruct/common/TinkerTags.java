@@ -629,10 +629,14 @@ public class TinkerTags {
     public static final TagKey<EntityType<?>> DAMAGE_MODIFIER_BLACKLIST = local("damage_modifier_blacklist");
     /** Entities in this tag are unabled to be picked up by the piggybackpack */
     public static final TagKey<EntityType<?>> PIGGYBACKPACK_BLACKLIST = local("piggybackpack_blacklist");
-    /** Projectiles with this tag will not be discarded by any relevant modifiers. */
-    public static final TagKey<EntityType<?>> REUSABLE_AMMO = common("reusable_ammo");
     /** Mobs that get the 4x protection boost due to only 1 armor piece */
     public static final TagKey<EntityType<?>> SMALL_ARMOR = common("small_armor");
+
+    // projectile logic
+    /** Projectiles with this tag will not be discarded by any relevant modifiers. */
+    public static final TagKey<EntityType<?>> REUSABLE_AMMO = common("reusable_ammo");
+    /** Trident like entities, to ensure they are preserved in the related hooks. */
+    public static final TagKey<EntityType<?>> TRIDENTS = common("tridents");
 
 
     // modifiers

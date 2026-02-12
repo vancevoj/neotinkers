@@ -20,6 +20,7 @@ import static slimeknights.tconstruct.common.TinkerTags.EntityTypes.DISCARDABLE_
 import static slimeknights.tconstruct.common.TinkerTags.EntityTypes.NECROTIC_BLACKLIST;
 import static slimeknights.tconstruct.common.TinkerTags.EntityTypes.REFLECTING_BLACKLIST;
 import static slimeknights.tconstruct.common.TinkerTags.EntityTypes.REFLECTING_PRESERVE_OWNER;
+import static slimeknights.tconstruct.common.TinkerTags.EntityTypes.TRIDENTS;
 
 @SuppressWarnings("unchecked")
 public class EntityTypeTagProvider extends EntityTypeTagsProvider {
@@ -53,14 +54,15 @@ public class EntityTypeTagProvider extends EntityTypeTagsProvider {
     this.tag(TinkerTags.EntityTypes.SMALL_ARMOR).addTag(TinkerTags.EntityTypes.SLIMES);
 
     // projectile logic
-    this.tag(TinkerTags.EntityTypes.REUSABLE_AMMO).add(EntityType.TRIDENT, TinkerTools.thrownTool.get());
+    this.tag(TRIDENTS).add(EntityType.TRIDENT, TinkerTools.thrownTool.get());
+    this.tag(TinkerTags.EntityTypes.REUSABLE_AMMO).addTag(TRIDENTS);
 
 
     // modifiers
     this.tag(TinkerTags.EntityTypes.KILLAGERS).addTags(TinkerTags.EntityTypes.VILLAGERS, TinkerTags.EntityTypes.ILLAGERS).add(EntityType.IRON_GOLEM, EntityType.RAVAGER);
     this.tag(TinkerTags.EntityTypes.BACON_PRODUCER).add(EntityType.PIG, EntityType.PIGLIN, EntityType.HOGLIN);
     // in theory this could just be reusable ammo, but it seems better to keep separate
-    this.tag(TinkerTags.EntityTypes.ENDERFERENCE_ARROW_BLACKLIST).add(EntityType.TRIDENT, TinkerTools.thrownTool.get());
+    this.tag(TinkerTags.EntityTypes.ENDERFERENCE_ARROW_BLACKLIST).addTag(TRIDENTS);
     // prevent dummy from healing you with necrotic
     this.tag(NECROTIC_BLACKLIST)
       .addOptional(new ResourceLocation("dummmmmmy", "target_dummy"))
@@ -72,10 +74,9 @@ public class EntityTypeTagProvider extends EntityTypeTagsProvider {
 
     // collecting - TODO 1.21: remove legacy tags
     this.tag(COLLECTABLES).add(
-        EntityType.TRIDENT, TinkerTools.thrownTool.get(),
         EntityType.ITEM, TinkerTools.indestructibleItem.get(),
         EntityType.EXPERIENCE_ORB
-      ).addTag(DISCARDABLE_COLLECTABLES)
+      ).addTags(TRIDENTS, DISCARDABLE_COLLECTABLES)
       .addOptionalTag(commonResource(COLLECTABLES.location().getPath()));
     this.tag(DISCARDABLE_COLLECTABLES).add(EntityType.ARROW, EntityType.SPECTRAL_ARROW, TinkerTools.materialArrow.get())
       .addOptionalTag(commonResource(DISCARDABLE_COLLECTABLES.location().getPath()));
