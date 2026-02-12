@@ -5,6 +5,10 @@
     "minecraft:item",
     "tconstruct:indestructible_item",
     "minecraft:experience_orb",
-    "#forge:collectables/discardable"
+    "#tconstruct:collectables/discardable",
+    {
+      "id": "#forge:collectables",
+      "required": false
+    }
   ]
 }
