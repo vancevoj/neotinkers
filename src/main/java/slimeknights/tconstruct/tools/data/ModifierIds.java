@@ -94,6 +94,7 @@ public class ModifierIds {
   public static final ModifierId killager    = id("killager");
   public static final ModifierId cooling     = id("cooling");
   public static final ModifierId pierce      = id("pierce");
+  public static final ModifierId piercingGuard = id("piercing_guard");
   public static final ModifierId chargeAttack = id("charge_attack");
 
   // ranged

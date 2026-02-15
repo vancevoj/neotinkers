@@ -848,9 +848,12 @@ public final class TinkerModifiers extends TinkerModule {
       ModifierModule.LOADER.register(getResource("conditional_power"), ConditionalPowerModule.LOADER);
       ModifierModule.LOADER.register(getResource("knockback"), KnockbackModule.LOADER);
       ModifierModule.LOADER.register(getResource("melee_attribute"), MeleeAttributeModule.LOADER);
-      ModifierModule.LOADER.register(getResource("mob_effect"), MobEffectModule.LOADER);
       ModifierModule.LOADER.register(getResource("projectile_explosion"), ProjectileExplosionModule.LOADER);
       ModifierModule.LOADER.register(getResource("sling_force"), SlingForceModule.LOADER);
+      // mob effect
+      ModifierModule.LOADER.register(getResource("mob_effect"), MobEffectModule.LOADER);
+      ModifierModule.LOADER.register(getResource("weapon_mob_effect"), MobEffectModule.Weapon.LOADER);
+      ModifierModule.LOADER.register(getResource("counter_mob_effect"), MobEffectModule.ArmorCounter.LOADER);
       // display
       ModifierModule.LOADER.register(getResource("durability_color"), DurabilityBarColorModule.LOADER);
       ModifierModule.LOADER.register(getResource("variant_name"), ModifierVariantNameModule.LOADER);

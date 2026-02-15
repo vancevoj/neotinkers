@@ -16,6 +16,8 @@ import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 public record LevelingValue(float flat, float eachLevel) {
   /** Leveling value with all zeros set */
   public static final LevelingValue ZERO = new LevelingValue(0f, 0f);
+  /** Leveling value of 1 with no leveling */
+  public static final LevelingValue ONE = new LevelingValue(1f, 0f);
   /** Loadable instance for parsing */
   public static final RecordLoadable<LevelingValue> LOADABLE = RecordLoadable.create(
     FloatLoadable.ANY.defaultField("flat", 0f, LevelingValue::flat),

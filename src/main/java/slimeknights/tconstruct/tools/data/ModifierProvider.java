@@ -545,18 +545,20 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
     IJsonPredicate<LivingEntity> baneSssssPredicate = LivingEntityPredicate.or(new MobTypePredicate(MobType.ARTHROPOD), LivingEntityPredicate.tag(TinkerTags.EntityTypes.CREEPERS));
     buildModifier(ModifierIds.baneOfSssss)
       .addModule(ConditionalMeleeDamageModule.builder().target(baneSssssPredicate).eachLevel(2.0f))
-      .addModule(MobEffectModule.builder(MobEffects.MOVEMENT_SLOWDOWN).level(RandomLevelingValue.flat(4)).time(RandomLevelingValue.random(20, 10)).target(baneSssssPredicate).build(), ModifierHooks.MELEE_HIT, ModifierHooks.MONSTER_MELEE_HIT);
+      .addModule(MobEffectModule.builder(MobEffects.MOVEMENT_SLOWDOWN).level(RandomLevelingValue.flat(4)).time(RandomLevelingValue.random(20, 10)).target(baneSssssPredicate).buildWeapon(), ModifierHooks.MELEE_HIT, ModifierHooks.MONSTER_MELEE_HIT);
     buildModifier(ModifierIds.killager).addModule(ConditionalMeleeDamageModule.builder().target(LivingEntityPredicate.or(
       new MobTypePredicate(MobType.ILLAGER),
       LivingEntityPredicate.LOADER.tag(TinkerTags.EntityTypes.KILLAGERS))).eachLevel(2.0f));
+    MobEffectModule.Builder pierceBuilder = MobEffectModule.builder(TinkerEffects.pierce).applyBeforeMelee(true)
+      // apply effect for 4 seconds, canceling 1 armor per level
+      .level(RandomLevelingValue.perLevel(0, 1)).time(RandomLevelingValue.flat(4 * 20))
+      // 100% chance on armor
+      .chance(LevelingValue.ONE);
     buildModifier(ModifierIds.pierce)
       // less damage than sharpness, but pierces 1 armor
       .addModule(StatBoostModule.add(ToolStats.ATTACK_DAMAGE).eachLevel(0.5f))
-      .addModule(MobEffectModule.builder(TinkerEffects.pierce).applyBeforeMelee(true)
-        // apply effect for 4 seconds, canceling 1 armor per level
-        .level(RandomLevelingValue.perLevel(0, 1)).time(RandomLevelingValue.flat(4 * 20))
-        // 100% chance on armor
-        .chance(LevelingValue.flat(1)).build());
+      .addModule(pierceBuilder.buildWeapon());
+    buildModifier(ModifierIds.piercingGuard).addModule(pierceBuilder.toolTag(TinkerTags.Items.ARMOR).buildCounter());
     buildModifier(ModifierIds.chargeAttack).levelDisplay(ModifierLevelDisplay.NO_LEVELS).addModule(ConditionalMeleeDamageModule.builder().attacker(LivingEntityPredicate.SPRINTING).flat(7));
 
     // ranged
@@ -678,6 +680,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .addModule(MaxArmorAttributeModule.builder(TinkerAttributes.BAD_EFFECT_DURATION, Operation.MULTIPLY_BASE).heldTag(TinkerTags.Items.HELD).eachLevel(-0.05f))
       .addModule(ProtectionModule.builder().sources(DamageSourcePredicate.CAN_PROTECT, DamageSourcePredicate.tag(TinkerTags.DamageTypes.MAGIC_PROTECTION)).eachLevel(2.5f));
     buildModifier(ModifierIds.turtleShell)
+      // TODO: max level attribute module?
       .addModule(AttributeModule.builder(ForgeMod.SWIM_SPEED.get(), Operation.MULTIPLY_TOTAL).slots(armorSlots).eachLevel(0.05f))
       .addModule(ProtectionModule.builder()
                                  .toolItem(ItemPredicate.or(ItemPredicate.tag(TinkerTags.Items.HELMETS), ItemPredicate.tag(TinkerTags.Items.CHESTPLATES)))
@@ -1028,7 +1031,10 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .addModule(new DamageOnUnequipModule(1, ModifierCondition.ANY_TOOL.with(ToolStackPredicate.tag(TinkerTags.Items.WORN_ARMOR).inverted())))
       .addModule(new DamageOnUnequipModule(2, ModifierCondition.ANY_TOOL.with(ToolStackPredicate.tag(TinkerTags.Items.WORN_ARMOR))));
 
-    buildModifier(ModifierIds.venom).priority(150).addModule(MobEffectModule.builder(TinkerEffects.venom).time(RandomLevelingValue.random(5 * 20, 5 * 20)).chance(LevelingValue.flat(0.15f)).build());
+    MobEffectModule.Builder venomBuilder = MobEffectModule.builder(TinkerEffects.venom).time(RandomLevelingValue.random(5 * 20, 5 * 20));
+    buildModifier(ModifierIds.venom).priority(150)
+      .addModule(venomBuilder.buildWeapon())
+      .addModule(venomBuilder.chance(LevelingValue.flat(0.15f)).buildCounter());
     buildModifier(ModifierIds.antitoxin)
       .addModule(ConditionalMeleeDamageModule.builder()
         .attacker(new HasMobEffectPredicate(MobEffects.POISON))
@@ -1149,8 +1155,10 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .addModule(AttributeModule.builder(Attributes.ATTACK_SPEED, Operation.MULTIPLY_TOTAL).tooltipStyle(TooltipStyle.PERCENT).eachLevel(0.05f))
       .addModule(AttributeModule.builder(TinkerAttributes.BAD_EFFECT_DURATION, Operation.MULTIPLY_TOTAL).tooltipStyle(TooltipStyle.PERCENT).eachLevel(0.05f))
       .addModule(new ArmorLevelModule(TinkerDataKeys.CRYSTALSTRIKE, false, TinkerTags.Items.HELD_ARMOR));
+    MobEffectModule.Builder spectralBuilder = MobEffectModule.builder(MobEffects.GLOWING).chance(LevelingValue.flat(1)).counterDurabilityUsage(0).time(RandomLevelingValue.perLevel(0, 200));
     buildModifier(ModifierIds.spectral).priority(60) // after explosive, before enderference
-      .addModule(MobEffectModule.builder(MobEffects.GLOWING).chance(LevelingValue.flat(1)).counterDurabilityUsage(0).time(RandomLevelingValue.perLevel(0, 200)).build())
+      .addModule(spectralBuilder.buildWeapon())
+      .addModule(spectralBuilder.buildCounter())
       // damage is for fishing rods
       .addModule(new ProjectilePlaceGlowModule(5, true, false));
     buildModifier(ModifierIds.explosive).priority(75) // after bounce, before spectral
@@ -1375,7 +1383,10 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
     buildModifier(ModifierIds.fortified).priority(60).addModule(ModifierSlotModule.slot(SlotType.DEFENSE).eachLevel(1));
     buildModifier(ModifierIds.kinetic).addModule(KineticModule.INSTANCE);
     buildModifier(ModifierIds.recurrentProtection).addModule(new RecurrentProtectionModule(LevelingValue.flat(0.5f), LevelingInt.eachLevel(5 * 20)));
-    buildModifier(ModifierIds.conductive).priority(150).addModule(MobEffectModule.builder(TinkerEffects.conductive).time(RandomLevelingValue.random(5 * 20, 5 * 20)).chance(LevelingValue.flat(0.15f)).build());
+    MobEffectModule.Builder conductiveBuilder = MobEffectModule.builder(TinkerEffects.conductive).time(RandomLevelingValue.random(5 * 20, 5 * 20));
+    buildModifier(ModifierIds.conductive).priority(150)
+      .addModule(conductiveBuilder.buildWeapon())
+      .addModule(conductiveBuilder.chance(LevelingValue.flat(0.15f)).buildCounter());
     buildModifier(ModifierIds.flameBarrier).addModule(new FlameBarrierModule(LevelingValue.eachLevel(1.875f)));
     buildModifier(ModifierIds.vintage)
       .addModule(ModifierSlotModule.slot(SlotType.ABILITY).eachLevel(1))
