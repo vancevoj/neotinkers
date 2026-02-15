@@ -130,9 +130,9 @@ public interface MobEffectModule extends ModifierModule, ConditionalModule<ITool
     private IJsonPredicate<LivingEntity> target = LivingEntityPredicate.ANY;
     /** Entity using the weapon. Unused for non-combat effects. */
     private IJsonPredicate<LivingEntity> holder = LivingEntityPredicate.ANY;
-    /** Effect time in ticks. */
-    private RandomLevelingValue level = RandomLevelingValue.flat(1);
     /** Effect level, starting from 1. */
+    private RandomLevelingValue level = RandomLevelingValue.flat(1);
+    /** Effect time in ticks. */
     private RandomLevelingValue time = RandomLevelingValue.flat(0);
     /** Chance of applying the effect. */
     private LevelingValue chance = null;

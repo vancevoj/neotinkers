@@ -28,13 +28,12 @@ public class ModifierIds {
   public static final ModifierId netherite = id("netherite");
 
   // general
+  public static final ModifierId magnetic = id("magnetic");
   public static final ModifierId reinforced = id("reinforced");
   public static final ModifierId unbreakable = id("unbreakable");
   public static final ModifierId overforced = id("overforced");
   public static final ModifierId worldbound = id("worldbound");
   public static final ModifierId shiny      = id("shiny");
-  @Deprecated(forRemoval = true)
-  public static final ModifierId sticky     = id("sticky");
   public static final ModifierId tank       = id("tank");
   public static final ModifierId offhanded  = id("offhanded");
   public static final ModifierId blunted    = id("blunted");
@@ -55,6 +54,9 @@ public class ModifierIds {
   public static final ModifierId knockback = id("knockback");
   public static final ModifierId padded = id("padded");
   public static final ModifierId sweeping = id("sweeping_edge");
+  /** @deprecated no longer used. Make a copy if you need it */
+  @Deprecated(forRemoval = true)
+  public static final ModifierId sticky     = id("sticky");
   // general abilities
   public static final ModifierId reach = id("reach");
   public static final ModifierId glowing = id("glowing");

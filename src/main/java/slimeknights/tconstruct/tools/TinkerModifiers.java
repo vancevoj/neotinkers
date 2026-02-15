@@ -236,7 +236,6 @@ import slimeknights.tconstruct.tools.modifiers.traits.skull.SelfDestructiveModif
 import slimeknights.tconstruct.tools.modifiers.traits.skull.StrongBonesModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.skull.WildfireModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.skull.WitheredModifier;
-import slimeknights.tconstruct.tools.modifiers.upgrades.general.MagneticModifier;
 import slimeknights.tconstruct.tools.modifiers.upgrades.melee.PiercingModifier;
 import slimeknights.tconstruct.tools.modifiers.upgrades.melee.SweepingEdgeModifier;
 import slimeknights.tconstruct.tools.modifiers.upgrades.ranged.SinistralModifier;
@@ -374,7 +373,6 @@ public final class TinkerModifiers extends TinkerModule {
    */
 
   // upgrades
-  public static final StaticModifier<MagneticModifier> magnetic = MODIFIERS.register("magnetic", MagneticModifier::new);
   public static final StaticModifier<SinistralModifier> sinistral = MODIFIERS.register("sinistral", SinistralModifier::new);
 
   // abilities
@@ -485,6 +483,9 @@ public final class TinkerModifiers extends TinkerModule {
   public static final StaticModifier<?> nearsighted = MODIFIERS.registerDynamic("nearsighted");
 
   // upgrades
+  /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#magnetic} */
+  @Deprecated(forRemoval = true)
+  public static final StaticModifier<?> magnetic = MODIFIERS.registerDynamic("magnetic");
   /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#knockback} */
   @Deprecated(forRemoval = true)
   public static final DynamicModifier knockback = MODIFIERS.registerDynamic("knockback");

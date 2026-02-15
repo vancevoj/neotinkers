@@ -280,24 +280,24 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .setTools(ingredientFromTags(TinkerTags.Items.MELEE, TinkerTags.Items.HARVEST, TinkerTags.Items.LAUNCHERS, TinkerTags.Items.LEGGINGS))
                          .saveSalvage(consumer, prefix(ModifierIds.experienced, upgradeSalvage))
                          .save(consumer, prefix(ModifierIds.experienced, upgradeFolder));
-    ModifierRecipeBuilder.modifier(TinkerModifiers.magnetic)
+    ModifierRecipeBuilder.modifier(ModifierIds.magnetic)
                          .addInput(Items.COMPASS)
                          .setMaxLevel(5)
                          .setSlots(SlotType.UPGRADE, 1)
                          .setTools(ingredientFromTags(TinkerTags.Items.MELEE_WEAPON, TinkerTags.Items.HARVEST))
-                         .save(consumer, prefix(TinkerModifiers.magnetic, upgradeFolder));
+                         .save(consumer, prefix(ModifierIds.magnetic, upgradeFolder));
     // armor has a max level of 1 per piece, so 4 total
-    ModifierRecipeBuilder.modifier(TinkerModifiers.magnetic)
+    ModifierRecipeBuilder.modifier(ModifierIds.magnetic)
                          .addInput(Items.COMPASS)
                          .setMaxLevel(1)
                          .setSlots(SlotType.UPGRADE, 1)
                          .setTools(TinkerTags.Items.WORN_ARMOR) // TODO: reconsider for shields
-                         .save(consumer, wrap(TinkerModifiers.magnetic, upgradeFolder, "_armor"));
+                         .save(consumer, wrap(ModifierIds.magnetic, upgradeFolder, "_armor"));
     // salvage supports either
-    ModifierRecipeBuilder.modifier(TinkerModifiers.magnetic)
+    ModifierRecipeBuilder.modifier(ModifierIds.magnetic)
                          .setSlots(SlotType.UPGRADE, 1)
                          .setTools(ingredientFromTags(TinkerTags.Items.MELEE_WEAPON, TinkerTags.Items.HARVEST, TinkerTags.Items.WORN_ARMOR))
-                         .saveSalvage(consumer, prefix(TinkerModifiers.magnetic, upgradeSalvage));
+                         .saveSalvage(consumer, prefix(ModifierIds.magnetic, upgradeSalvage));
     ModifierRecipeBuilder.modifier(ModifierIds.shiny)
                          .addInput(Ingredient.of(Items.ENCHANTED_GOLDEN_APPLE, Items.NETHER_STAR))
                          .setMaxLevel(1)

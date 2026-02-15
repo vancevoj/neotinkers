@@ -38,6 +38,7 @@ import net.minecraftforge.event.entity.ProjectileImpactEvent;
 import net.minecraftforge.event.entity.ProjectileImpactEvent.ImpactResult;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
+import net.minecraftforge.event.entity.living.LivingEvent.LivingTickEvent;
 import net.minecraftforge.event.entity.living.LivingExperienceDropEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.event.entity.living.LivingGetProjectileEvent;
@@ -85,6 +86,7 @@ import slimeknights.tconstruct.library.utils.SlimeBounceHandler;
 import slimeknights.tconstruct.shared.TinkerAttributes;
 import slimeknights.tconstruct.shared.TinkerEffects;
 import slimeknights.tconstruct.tools.data.ModifierIds;
+import slimeknights.tconstruct.tools.modifiers.effect.MagneticEffect;
 import slimeknights.tconstruct.tools.modules.ranged.RestrictAngleModule;
 
 import java.util.List;
@@ -95,6 +97,7 @@ import java.util.Optional;
 public class ModifierEvents {
   /** Multiplier for experience drops from events */
   private static final TinkerDataKey<Float> PROJECTILE_EXPERIENCE = TConstruct.createKey("projectile_experience");
+  // TODO: move following to TinkerDataKeys?
   /** Volatile data float for amount of experience granted per level. Used by both projectiles and held tools. */
   public static final ResourceLocation EXPERIENCE = TConstruct.getResource("experience");
   /** Volatile data flag making a modifier grant the tool soulbound */
@@ -533,6 +536,18 @@ public class ModifierEvents {
   static void onTeleport(EntityTeleportEvent event) {
     if (event.getEntity() instanceof LivingEntity living && living.hasEffect(TinkerEffects.enderference.get())) {
       event.setCanceled(true);
+    }
+  }
+
+  /** Called to perform the magnet for armor */
+  @SubscribeEvent
+  static void onLivingTick(LivingTickEvent event) {
+    LivingEntity entity = event.getEntity();
+    if (!entity.isSpectator() && (entity.tickCount & 1) == 0) {
+      int level = ArmorLevelModule.getLevel(entity, TinkerDataKeys.MAGNET);
+      if (level > 0) {
+        MagneticEffect.applyMagnet(entity, level - 1);
+      }
     }
   }
 }

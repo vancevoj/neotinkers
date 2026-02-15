@@ -353,6 +353,11 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .addModule(new VolatileFlagModule(IModifiable.NO_INTERACTION, new ModifierCondition<>(ToolContextPredicate.ANY, ModifierEntry.VALID_LEVEL.min(2))))
       .levelDisplay(new UniqueForLevels(2));
     buildModifier(ModifierIds.blunted).addModule(new VolatileFlagModule(EntityInteractionModifierHook.NO_MELEE)).levelDisplay(ModifierLevelDisplay.NO_LEVELS);
+    buildModifier(ModifierIds.magnetic)
+      .addModule(MobEffectModule.builder(TinkerEffects.magnetic).time(RandomLevelingValue.flat(40)).buildToolUsage())
+      .addModule(new VolatileIntModule(ThrownTool.MAGNET, LevelingInt.eachLevel(1)))
+      .addModule(new ArmorLevelModule(TinkerDataKeys.MAGNET, false, null));
+
     // general abilities
     buildModifier(ModifierIds.reach)
       .addModule(AttributeModule.builder(ForgeMod.BLOCK_REACH.get(), Operation.ADDITION).eachLevel(1))

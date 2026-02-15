@@ -54,7 +54,7 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     addTraits(MaterialIds.gold, PlatingMaterialStats.SHIELD.getId(), ModifierIds.magicProtection);
 
     // tier 2
-    addDefaultTraits(MaterialIds.iron, TinkerModifiers.magnetic);
+    addDefaultTraits(MaterialIds.iron, ModifierIds.magnetic);
     addTraits(MaterialIds.iron, ARMOR, ModifierIds.projectileProtection);
     addDefaultTraits(MaterialIds.copper, TinkerModifiers.dwarven);
     addTraits(MaterialIds.copper, ARMOR, ModifierIds.depthProtection);
