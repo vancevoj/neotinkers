@@ -20,6 +20,7 @@ import slimeknights.mantle.data.loadable.primitive.BooleanLoadable;
 import slimeknights.mantle.data.loadable.primitive.IntLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.data.predicate.IJsonPredicate;
+import slimeknights.mantle.data.predicate.damage.DamageSourcePredicate;
 import slimeknights.mantle.data.predicate.entity.LivingEntityPredicate;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.json.LevelingValue;
@@ -28,10 +29,12 @@ import slimeknights.tconstruct.library.json.predicate.TinkerPredicate;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.hook.armor.OnAttackedModifierHook;
+import slimeknights.tconstruct.library.modifiers.hook.combat.DamageDealtModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.combat.MeleeHitModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.combat.MonsterMeleeHitModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.ranged.ProjectileHitModifierHook;
 import slimeknights.tconstruct.library.modifiers.modules.ModifierModule;
+import slimeknights.tconstruct.library.modifiers.modules.util.BooleanPredicate;
 import slimeknights.tconstruct.library.modifiers.modules.util.ModifierCondition;
 import slimeknights.tconstruct.library.modifiers.modules.util.ModifierCondition.ConditionalModule;
 import slimeknights.tconstruct.library.modifiers.modules.util.ModuleBuilder;
@@ -128,6 +131,12 @@ public interface MobEffectModule extends ModifierModule, ConditionalModule<ITool
     /** Amount of durability spent applying this modifier to counter-attacks. TODO 1.21: rename to {@code durabilityUsage} */
     private int counterDurabilityUsage = 1;
 
+    // armor attack
+    /** Direct damage condition for the armor attack */
+    private BooleanPredicate directDamage = BooleanPredicate.ALWAYS;
+    /** Damage source condition for applying on armor attack */
+    private IJsonPredicate<DamageSource> damageSource = DamageSourcePredicate.ANY;
+
 
     /** Builds the effect */
     private ModifierMobEffect buildEffect() {
@@ -142,6 +151,11 @@ public interface MobEffectModule extends ModifierModule, ConditionalModule<ITool
     /** Builds the finished modifier */
     public ArmorCounter buildCounter() {
       return new ArmorCounter(buildEffect(), requireNonNullElse(chance, LevelingValue.eachLevel(0.15f)), holder, counterDurabilityUsage, condition);
+    }
+
+    /** Builds the finished modifier */
+    public ArmorAttack buildArmorAttack() {
+      return new ArmorAttack(buildEffect(), requireNonNullElse(chance, LevelingValue.ONE), holder, directDamage, damageSource, condition);
     }
 
     /** Builds the finished modifier */
@@ -304,6 +318,40 @@ public interface MobEffectModule extends ModifierModule, ConditionalModule<ITool
     @Override
     public RecordLoadable<ArmorCounter> getLoader() {
       return LOADER;
+    }
+  }
+
+  /** Module for dealing damage with any weapon while wearing this as armor. */
+  record ArmorAttack(ModifierMobEffect effect, LevelingValue chance, IJsonPredicate<LivingEntity> holder, BooleanPredicate directDamage, IJsonPredicate<DamageSource> damageSource, ModifierCondition<IToolStackView> condition) implements Combat, DamageDealtModifierHook {
+    private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<ArmorAttack>defaultHooks(ModifierHooks.DAMAGE_DEALT);
+    public static final RecordLoadable<ArmorAttack> LOADER = RecordLoadable.create(
+      EFFECT_FIELD, CHANCE_FIELD, HOLDER_FIELD,
+      BooleanPredicate.LOADABLE.defaultField("direct_damage", BooleanPredicate.ALWAYS, ArmorAttack::directDamage),
+      DamageSourcePredicate.LOADER.defaultField("damage_source", ArmorAttack::damageSource),
+      ModifierCondition.TOOL_FIELD, ArmorAttack::new);
+
+    /** @apiNote use {@link Builder#buildArmorAttack()} */
+    @Internal
+    public ArmorAttack {}
+
+    @Override
+    public RecordLoadable<? extends MobEffectModule> getLoader() {
+      return LOADER;
+    }
+
+    @Override
+    public List<ModuleHook<?>> getDefaultHooks() {
+      return DEFAULT_HOOKS;
+    }
+
+    @Override
+    public void onDamageDealt(IToolStackView tool, ModifierEntry modifier, EquipmentContext context, EquipmentSlot slotType, LivingEntity target, DamageSource source, float amount, boolean isDirectDamage) {
+      if (this.directDamage.test(isDirectDamage) && condition.matches(tool, modifier) && this.damageSource.matches(source) && checkChance(modifier)) {
+        LivingEntity holder = context.getEntity();
+        if (this.holder.matches(holder)) {
+          effect.applyEffect(target, modifier, holder);
+        }
+      }
     }
   }
 

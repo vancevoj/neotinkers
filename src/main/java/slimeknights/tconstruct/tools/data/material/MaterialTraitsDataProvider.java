@@ -181,7 +181,7 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     material(MaterialIds.dragonScale).addTraits(SkullStats.ID, ModifierIds.dragonheart);
     // skeleton
     material(MaterialIds.bone).addTraits(SkullStats.ID, TinkerModifiers.strongBones.getId(), ModifierIds.skeletonDisguise);
-    material(MaterialIds.venombone).addTraits(SkullStats.ID, TinkerModifiers.frosttouch.getId(), ModifierIds.strayDisguise);
+    material(MaterialIds.venombone).addTraits(SkullStats.ID, ModifierIds.slowBones, ModifierIds.strayDisguise);
     material(MaterialIds.necroticBone).addTraits(SkullStats.ID, new ModifierEntry(ModifierIds.restore, 2)).addTraits(SkullStats.ID, ModifierIds.witherSkeletonDisguise);
     // spider
     material(MaterialIds.string).addTraits(SkullStats.ID, ModifierIds.boonOfSssss, ModifierIds.spiderDisguise);

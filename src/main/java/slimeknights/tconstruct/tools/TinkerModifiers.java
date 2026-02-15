@@ -230,7 +230,6 @@ import slimeknights.tconstruct.tools.modifiers.traits.skull.BreathtakingModifier
 import slimeknights.tconstruct.tools.modifiers.traits.skull.ChrysophiliteModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.skull.EnderdodgingModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.skull.FirebreathModifier;
-import slimeknights.tconstruct.tools.modifiers.traits.skull.FrosttouchModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.skull.GoldGuardModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.skull.PlagueModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.skull.RevengeModifier;
@@ -407,7 +406,6 @@ public final class TinkerModifiers extends TinkerModule {
   public static final StaticModifier<SelfDestructiveModifier> selfDestructive = MODIFIERS.register("self_destructive", SelfDestructiveModifier::new);
   public static final StaticModifier<EnderdodgingModifier> enderdodging = MODIFIERS.register("enderdodging", EnderdodgingModifier::new);
   public static final StaticModifier<StrongBonesModifier> strongBones = MODIFIERS.register("strong_bones", StrongBonesModifier::new);
-  public static final StaticModifier<FrosttouchModifier> frosttouch = MODIFIERS.register("frosttouch", FrosttouchModifier::new);
   public static final StaticModifier<PlagueModifier> plague = MODIFIERS.register("plague", PlagueModifier::new);
   public static final StaticModifier<FirebreathModifier> firebreath = MODIFIERS.register("firebreath", FirebreathModifier::new);
   public static final StaticModifier<ChrysophiliteModifier> chrysophilite = MODIFIERS.register("chrysophilite", ChrysophiliteModifier::new);
@@ -656,6 +654,9 @@ public final class TinkerModifiers extends TinkerModule {
   /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#boonOfSssss} */
   @Deprecated(forRemoval = true)
   public static final StaticModifier<?> boonOfSssss = MODIFIERS.registerDynamic("boon_of_sssss");
+  /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#slowBones} */
+  @Deprecated(forRemoval = true)
+  public static final StaticModifier<?> frosttouch = MODIFIERS.registerDynamic("frosttouch");
 
 
   /*
@@ -854,6 +855,7 @@ public final class TinkerModifiers extends TinkerModule {
       ModifierModule.LOADER.register(getResource("mob_effect"), MobEffectModule.LOADER);
       ModifierModule.LOADER.register(getResource("weapon_mob_effect"), MobEffectModule.Weapon.LOADER);
       ModifierModule.LOADER.register(getResource("counter_mob_effect"), MobEffectModule.ArmorCounter.LOADER);
+      ModifierModule.LOADER.register(getResource("armor_attack_mob_effect"), MobEffectModule.ArmorAttack.LOADER);
       // display
       ModifierModule.LOADER.register(getResource("durability_color"), DurabilityBarColorModule.LOADER);
       ModifierModule.LOADER.register(getResource("variant_name"), ModifierVariantNameModule.LOADER);

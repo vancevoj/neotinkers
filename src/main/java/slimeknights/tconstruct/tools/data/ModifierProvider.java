@@ -1459,6 +1459,9 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .addModule(new ReduceEffectOnUnequipModule(MobEffectCategory.BENEFICIAL, LevelingValue.eachLevel(0.2f), ModifierCondition.ANY_TOOL));
     buildModifier(ModifierIds.balmOfSssss).levelDisplay(ModifierLevelDisplay.SINGLE_LEVEL)
       .addModule(AttributeModule.builder(TinkerAttributes.BAD_EFFECT_DURATION, Operation.MULTIPLY_BASE).tooltipStyle(TooltipStyle.PERCENT).eachLevel(0.2f));
+    buildModifier(ModifierIds.slowBones).levelDisplay(ModifierLevelDisplay.SINGLE_LEVEL)
+      .addModule(new EffectImmunityModule(MobEffects.MOVEMENT_SLOWDOWN))
+      .addModule(MobEffectModule.builder(MobEffects.MOVEMENT_SLOWDOWN).damageSource(DamageSourcePredicate.tag(DamageTypeTags.IS_PROJECTILE)).time(RandomLevelingValue.flat(300)).level(RandomLevelingValue.perLevel(0, 2)).buildArmorAttack());
     buildModifier(ModifierIds.dragonheart).levelDisplay(ModifierLevelDisplay.SINGLE_LEVEL)
       .addModule(AdjustDamageModule.builder()
         .holder(EntityVariableRangePredicate.min(new AttributeEntityVariable(Attributes.MAX_HEALTH), 2, false))
@@ -1501,6 +1504,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
     addRedirect(id("path_maker"), redirect(ModifierIds.pathing));
     addRedirect(id("plowing"), redirect(ModifierIds.tilling));
     addRedirect(id("lightspeed_armor"), redirect(ModifierIds.lightspeed));
+    addRedirect(TinkerModifiers.frosttouch.getId(), redirect(ModifierIds.slowBones));
   }
 
   @Override

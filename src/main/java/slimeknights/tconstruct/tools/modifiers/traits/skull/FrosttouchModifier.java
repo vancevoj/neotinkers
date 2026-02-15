@@ -15,6 +15,8 @@ import slimeknights.tconstruct.library.tools.context.EquipmentContext;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.tools.TinkerModifiers;
 
+/** @deprecated use {@link slimeknights.tconstruct.library.modifiers.modules.combat.MobEffectModule.ArmorAttack} */
+@Deprecated(forRemoval = true)
 public class FrosttouchModifier extends NoLevelsModifier implements DamageDealtModifierHook {
   @Override
   protected void registerHooks(Builder hookBuilder) {
