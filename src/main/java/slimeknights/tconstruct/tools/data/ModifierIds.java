@@ -261,6 +261,7 @@ public class ModifierIds {
   // traits - tier 3 compat
   public static final ModifierId maintained = id("maintained");
   public static final ModifierId temperate = id("temperate");
+  public static final ModifierId decay = id("decay");
   /** @deprecated no longer used. Make a copy if you need it */
   @Deprecated
   public static final ModifierId invariant = id("invariant");

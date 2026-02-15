@@ -162,8 +162,8 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     addDefaultTraits(MaterialIds.invar, ModifierIds.solid);
     addDefaultTraits(MaterialIds.pewter, ModifierIds.raging);
     addTraits(MaterialIds.pewter, ARMOR, ModifierIds.vitalProtection);
-    addDefaultTraits(MaterialIds.necronium, TinkerModifiers.decay);
-    addTraits(MaterialIds.necronium, AMMO, new ModifierEntry(TinkerModifiers.decay, 2));
+    addDefaultTraits(MaterialIds.necronium, ModifierIds.decay);
+    addTraits(MaterialIds.necronium, AMMO, new ModifierEntry(ModifierIds.decay, 2));
     addDefaultTraits(MaterialIds.electrum, ModifierIds.shock);
     addDefaultTraits(MaterialIds.platedSlimewood, TinkerModifiers.overworked, TinkerModifiers.overslime);
     addDefaultTraits(MaterialIds.steeleaf, ModifierIds.experienced);

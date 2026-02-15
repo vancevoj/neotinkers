@@ -1374,6 +1374,16 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .addModule(ThornsModule.type(TinkerDamageTypes.SHOCK).chanceLeveling(0.2f).constantFlat(2).randomFlat(3).toolTag(ARMOR).attacker(LivingEntityPredicate.or(LivingEntityPredicate.EYES_IN_WATER, LivingEntityPredicate.FEET_IN_WATER)).build())
       // single chance in rain, if in both the chance grows more!
       .addModule(ThornsModule.type(TinkerDamageTypes.SHOCK).chanceLeveling(0.1f).constantFlat(2).randomFlat(3).toolTag(ARMOR).attacker(LivingEntityPredicate.RAINING).build());
+    // apply 6 seconds of wither, for comparison wither skeletons apply 10. Higher levels make it deal more damage, not just faster
+    MobEffectModule.Builder decayBuilder = MobEffectModule.builder(MobEffects.WITHER).level(RandomLevelingValue.perLevel(0, 1)).time(RandomLevelingValue.flat(120));
+    buildModifier(ModifierIds.decay)
+      .addModule(decayBuilder.buildWeapon())
+      // 25% chance to also wither yourself, though limit that to standard usages of the tool (melee and launch, not blocks)
+      .addModule(decayBuilder.chance(LevelingValue.flat(0.25f)).buildToolUsage(), ModifierHooks.MELEE_HIT, ModifierHooks.MONSTER_MELEE_HIT, ModifierHooks.PROJECTILE_LAUNCH, ModifierHooks.PROJECTILE_SHOT, ModifierHooks.PROJECTILE_THROWN, ModifierHooks.SLING_LAUNCH)
+      // on counter, 50% chance of 10 seconds of wither 2, 10% chance of you taking 10 seconds of wither 1
+      .addModule(MobEffectModule.builder(MobEffects.WITHER).level(RandomLevelingValue.flat(2)).time(RandomLevelingValue.flat(120)).chance(LevelingValue.eachLevel(0.5f)).buildCounter())
+      .addModule(MobEffectModule.builder(MobEffects.WITHER).level(RandomLevelingValue.flat(1)).time(RandomLevelingValue.flat(120)).chance(LevelingValue.eachLevel(0.1f)).targetSelf(true).counterDurabilityUsage(0).buildCounter());
+
     // traits - tier 4
     buildModifier(ModifierIds.overburn).addModules(OverburnModule.INSTANCE, StatBoostModule.add(ToolTankHelper.CAPACITY_STAT).flat(FluidType.BUCKET_VOLUME), ToolTankHelper.TANK_HANDLER);
     buildModifier(ModifierIds.overlord)

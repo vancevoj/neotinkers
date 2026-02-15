@@ -221,7 +221,6 @@ import slimeknights.tconstruct.tools.modifiers.traits.general.EnderportingModifi
 import slimeknights.tconstruct.tools.modifiers.traits.harvest.DwarvenModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.harvest.MomentumModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.melee.ConductingModifier;
-import slimeknights.tconstruct.tools.modifiers.traits.melee.DecayModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.melee.EnderferenceModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.melee.InsatiableModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.melee.LaceratingModifier;
@@ -395,7 +394,6 @@ public final class TinkerModifiers extends TinkerModule {
   public static final DynamicModifier golden = MODIFIERS.registerDynamic("golden");
   // traits - tier 3
   public static final StaticModifier<LaceratingModifier> lacerating = MODIFIERS.register("lacerating", LaceratingModifier::new);
-  public static final StaticModifier<DecayModifier> decay = MODIFIERS.register("decay", DecayModifier::new);
   public static final StaticModifier<Modifier> overworked = MODIFIERS.register("overworked", Modifier::new);
   // traits - tier 4
   public static final StaticModifier<MomentumModifier> momentum = MODIFIERS.register("momentum", MomentumModifier::new);
@@ -649,6 +647,9 @@ public final class TinkerModifiers extends TinkerModule {
   /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#temperate} */
   @Deprecated(forRemoval = true)
   public static final DynamicModifier temperate = MODIFIERS.registerDynamic("temperate");
+  /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#decay} */
+  @Deprecated(forRemoval = true)
+  public static final StaticModifier<?> decay = MODIFIERS.registerDynamic("decay");
 
   // traits - slimeskull
   /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#boonOfSssss} */
@@ -855,6 +856,7 @@ public final class TinkerModifiers extends TinkerModule {
       ModifierModule.LOADER.register(getResource("mob_effect"), MobEffectModule.LOADER);
       ModifierModule.LOADER.register(getResource("weapon_mob_effect"), MobEffectModule.Weapon.LOADER);
       ModifierModule.LOADER.register(getResource("counter_mob_effect"), MobEffectModule.ArmorCounter.LOADER);
+      ModifierModule.LOADER.register(getResource("tool_usage_mob_effect"), MobEffectModule.ToolUsage.LOADER);
       ModifierModule.LOADER.register(getResource("armor_attack_mob_effect"), MobEffectModule.ArmorAttack.LOADER);
       // display
       ModifierModule.LOADER.register(getResource("durability_color"), DurabilityBarColorModule.LOADER);

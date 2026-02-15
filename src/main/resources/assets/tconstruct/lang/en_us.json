@@ -2265,8 +2265,8 @@
 
   "material.tconstruct.necronium": "Necronium",
   "material.tconstruct.necronium.flavor": "This much decay probably only leaves it with a quarter life",
-  "material.tconstruct.necronium.encyclopedia": "Causes at least 5 seconds of wither, to your target and at a 25% chance to you",
-  "material.tconstruct.necronium.armor": "Has a 50% chance when hit (or 100% chance if blocking) to wither the attacker for at least 5 seconds, plus a 10% chance to wither you",
+  "material.tconstruct.necronium.encyclopedia": "Causes 6 seconds of wither at the modifier level, to your target and at a 25% chance to you",
+  "material.tconstruct.necronium.armor": "Has a 50% chance when hit (or 100% chance if blocking) to wither the attacker for 6 seconds, plus a 10% chance to wither you",
 
   "material.tconstruct.plated_slimewood": "Plated Slimewood",
   "material.tconstruct.plated_slimewood.flavor": "All the shininess of brass with the squish of slime",
@@ -3315,7 +3315,7 @@
   "modifier.tconstruct.shock.projectile_damage": "Shock Power",
   "modifier.tconstruct.decay": "Decay",
   "modifier.tconstruct.decay.flavor": "Radioactive Withering",
-  "modifier.tconstruct.decay.description": "Causes targets to wither away, but may also cause the holder to wither",
+  "modifier.tconstruct.decay.description": "Causes targets to wither away, but may also wither you",
   "modifier.tconstruct.overworked": "Overworked",
   "modifier.tconstruct.overworked.flavor": "Underpaid",
   "modifier.tconstruct.overworked.description": "Increases amount of overslime restored from all sources",

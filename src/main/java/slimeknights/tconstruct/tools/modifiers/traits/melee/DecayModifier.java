@@ -27,6 +27,8 @@ import slimeknights.tconstruct.tools.modules.armor.CounterModule;
 
 import javax.annotation.Nullable;
 
+/** @deprecated use {@link slimeknights.tconstruct.library.modifiers.modules.combat.MobEffectModule} with its various forms. */
+@Deprecated(forRemoval = true)
 public class DecayModifier extends Modifier implements ProjectileLaunchModifierHook, ProjectileHitModifierHook, MeleeHitModifierHook, MonsterMeleeHitModifierHook.RedirectAfter, OnAttackedModifierHook {
   /* gets the effect for the given level, including a random time */
   private static MobEffectInstance makeDecayEffect(int level) {
