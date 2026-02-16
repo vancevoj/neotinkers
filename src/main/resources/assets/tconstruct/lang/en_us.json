@@ -2042,7 +2042,7 @@
   "material.tconstruct.pig_iron.encyclopedia": "Can be eaten to restore 1 hunger per level at 0.6 saturation at the cost of durability",
   "material.tconstruct.pig_iron.armor": "Grants a 15% chance per level of eating the armor for 1 hunger per level at 0.6 saturation at the cost of durability",
   "material.tconstruct.pig_iron.skull_flavor": "You won't like me when I'm angry!",
-  "material.tconstruct.pig_iron.skull_encyclopedia": "Grants 15 seconds of strength when damaged by another mob",
+  "material.tconstruct.pig_iron.skull_encyclopedia": "Grants 10 seconds of strength when damaged by another mob",
 
   "material.tconstruct.darkthread": "Darkthread",
   "material.tconstruct.darkthread.flavor": "Come to the dark side, we have sowing",

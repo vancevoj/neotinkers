@@ -230,7 +230,6 @@ import slimeknights.tconstruct.tools.modifiers.traits.skull.EnderdodgingModifier
 import slimeknights.tconstruct.tools.modifiers.traits.skull.FirebreathModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.skull.GoldGuardModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.skull.PlagueModifier;
-import slimeknights.tconstruct.tools.modifiers.traits.skull.RevengeModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.skull.SelfDestructiveModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.skull.StrongBonesModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.skull.WildfireModifier;
@@ -239,6 +238,7 @@ import slimeknights.tconstruct.tools.modifiers.upgrades.melee.PiercingModifier;
 import slimeknights.tconstruct.tools.modifiers.upgrades.melee.SweepingEdgeModifier;
 import slimeknights.tconstruct.tools.modifiers.upgrades.ranged.SinistralModifier;
 import slimeknights.tconstruct.tools.modules.AutosmeltModule;
+import slimeknights.tconstruct.tools.modules.ClearEffectOnUnequipModule;
 import slimeknights.tconstruct.tools.modules.CraftCountModule;
 import slimeknights.tconstruct.tools.modules.DamageOnUnequipModule;
 import slimeknights.tconstruct.tools.modules.FovModule;
@@ -404,7 +404,6 @@ public final class TinkerModifiers extends TinkerModule {
   public static final StaticModifier<FirebreathModifier> firebreath = MODIFIERS.register("firebreath", FirebreathModifier::new);
   public static final StaticModifier<ChrysophiliteModifier> chrysophilite = MODIFIERS.register("chrysophilite", ChrysophiliteModifier::new);
   public static final StaticModifier<GoldGuardModifier> goldGuard = MODIFIERS.register("gold_guard", GoldGuardModifier::new);
-  public static final StaticModifier<RevengeModifier> revenge = MODIFIERS.register("revenge", RevengeModifier::new);
 
   // slotless - cosmetic - used as defaults for rendering modules
   public static final StaticModifier<?> embellishment = MODIFIERS.registerDynamic("embellishment");
@@ -660,6 +659,9 @@ public final class TinkerModifiers extends TinkerModule {
   /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#slowBones} */
   @Deprecated(forRemoval = true)
   public static final StaticModifier<?> frosttouch = MODIFIERS.registerDynamic("frosttouch");
+  /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#revenge} */
+  @Deprecated(forRemoval = true)
+  public static final StaticModifier<?> revenge = MODIFIERS.registerDynamic("revenge");
 
 
   /*
@@ -905,6 +907,7 @@ public final class TinkerModifiers extends TinkerModule {
       ModifierModule.LOADER.register(getResource("damage_on_unequip"), DamageOnUnequipModule.LOADER);
       ModifierModule.LOADER.register(getResource("damage_on_shoot"), DamageOnShootModule.LOADER);
       ModifierModule.LOADER.register(getResource("reduce_effect_on_unequip"), ReduceEffectOnUnequipModule.LOADER);
+      ModifierModule.LOADER.register(getResource("clear_effect_on_unequip"), ClearEffectOnUnequipModule.LOADER);
       ModifierModule.LOADER.register(getResource("share_durability"), ShareDurabilityModule.LOADER);
       ModifierModule.LOADER.register(getResource("craft_count"), CraftCountModule.LOADER);
       ModifierModule.LOADER.register(getResource("tipped"), TippedModule.LOADER);

@@ -143,6 +143,7 @@ import slimeknights.tconstruct.library.modifiers.modules.display.ModifierVariant
 import slimeknights.tconstruct.library.modifiers.modules.display.ShowInteractionSourceModule;
 import slimeknights.tconstruct.library.modifiers.modules.mining.ConditionalMiningSpeedModule;
 import slimeknights.tconstruct.library.modifiers.modules.technical.ArmorLevelModule;
+import slimeknights.tconstruct.library.modifiers.modules.util.BooleanPredicate;
 import slimeknights.tconstruct.library.modifiers.modules.util.ModifierCondition;
 import slimeknights.tconstruct.library.modifiers.modules.util.ProjectilePredicate;
 import slimeknights.tconstruct.library.modifiers.util.ModifierLevelDisplay;
@@ -176,6 +177,7 @@ import slimeknights.tconstruct.tools.entity.ThrownTool;
 import slimeknights.tconstruct.tools.item.CrystalshotItem;
 import slimeknights.tconstruct.tools.logic.ModifierEvents;
 import slimeknights.tconstruct.tools.modules.AutosmeltModule;
+import slimeknights.tconstruct.tools.modules.ClearEffectOnUnequipModule;
 import slimeknights.tconstruct.tools.modules.CraftCountModule;
 import slimeknights.tconstruct.tools.modules.DamageOnUnequipModule;
 import slimeknights.tconstruct.tools.modules.FovModule;
@@ -1481,6 +1483,9 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
     buildModifier(ModifierIds.slowBones).levelDisplay(ModifierLevelDisplay.SINGLE_LEVEL)
       .addModule(new EffectImmunityModule(MobEffects.MOVEMENT_SLOWDOWN))
       .addModule(MobEffectModule.builder(MobEffects.MOVEMENT_SLOWDOWN).damageSource(DamageSourcePredicate.tag(DamageTypeTags.IS_PROJECTILE)).time(RandomLevelingValue.flat(300)).level(RandomLevelingValue.perLevel(0, 2)).buildArmorAttack());
+    buildModifier(ModifierIds.revenge).levelDisplay(ModifierLevelDisplay.SINGLE_LEVEL)
+      .addModule(MobEffectModule.builder(MobEffects.DAMAGE_BOOST).time(RandomLevelingValue.perLevel(0, 200)).counterDurabilityUsage(0).targetSelf(true).directDamage(BooleanPredicate.ALWAYS).damageSource(SourceAttackerPredicate.causing(LivingEntityPredicate.ANY)).buildCounter())
+      .addModule(new ClearEffectOnUnequipModule(MobEffects.DAMAGE_BOOST, ModifierCondition.ANY_TOOL));
     buildModifier(ModifierIds.dragonheart).levelDisplay(ModifierLevelDisplay.SINGLE_LEVEL)
       .addModule(AdjustDamageModule.builder()
         .holder(EntityVariableRangePredicate.min(new AttributeEntityVariable(Attributes.MAX_HEALTH), 2, false))

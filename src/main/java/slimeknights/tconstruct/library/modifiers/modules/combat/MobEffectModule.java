@@ -135,23 +135,24 @@ public interface MobEffectModule extends ModifierModule, ConditionalModule<ITool
     /** Effect time in ticks. */
     private RandomLevelingValue time = RandomLevelingValue.flat(0);
     /** Chance of applying the effect. */
+    @Nullable
     private LevelingValue chance = null;
 
     // weapon
     /** Applies the effect before melee hit instead of after. */
     private boolean applyBeforeMelee = false;
 
+    // armor
+    /** Direct damage condition for the armor attack */
+    @Nullable
+    private BooleanPredicate directDamage = null;
+    /** Damage source condition for applying on armor attack */
+    private IJsonPredicate<DamageSource> damageSource = DamageSourcePredicate.ANY;
     // counter
     /** Amount of durability spent applying this modifier to counter-attacks. TODO 1.21: rename to {@code durabilityUsage} */
     private int counterDurabilityUsage = 1;
     /** If true, the counter module targets ourselves instead of the attacker. For non-counter modules, {@link #buildToolUsage()} will target yourself. */
     private boolean targetSelf = false;
-
-    // armor attack
-    /** Direct damage condition for the armor attack */
-    private BooleanPredicate directDamage = BooleanPredicate.ALWAYS;
-    /** Damage source condition for applying on armor attack */
-    private IJsonPredicate<DamageSource> damageSource = DamageSourcePredicate.ANY;
 
     // tool usage
     /** Predicate for whether to apply the effect to AOE tool usages. */
@@ -172,12 +173,12 @@ public interface MobEffectModule extends ModifierModule, ConditionalModule<ITool
 
     /** Effect targets the entity attacking us */
     public ArmorCounter buildCounter() {
-      return new ArmorCounter(buildEffect(), requireNonNullElse(chance, LevelingValue.eachLevel(0.15f)), holder, counterDurabilityUsage, targetSelf, condition);
+      return new ArmorCounter(buildEffect(), requireNonNullElse(chance, LevelingValue.eachLevel(0.15f)), holder, requireNonNullElse(directDamage, BooleanPredicate.TRUE), damageSource, counterDurabilityUsage, targetSelf, condition);
     }
 
     /** Effect targets entities attacked by us while wearing this as armor */
     public ArmorAttack buildArmorAttack() {
-      return new ArmorAttack(buildEffect(), requireNonNullElse(chance, LevelingValue.ONE), holder, directDamage, damageSource, condition);
+      return new ArmorAttack(buildEffect(), requireNonNullElse(chance, LevelingValue.ONE), holder, requireNonNullElse(directDamage, BooleanPredicate.ALWAYS), damageSource, condition);
     }
 
     /** Effect targets ourselves after using the tool */
@@ -313,21 +314,32 @@ public interface MobEffectModule extends ModifierModule, ConditionalModule<ITool
       return false;
     }
 
+    /** Condition on the direct damage parameter. */
+    default BooleanPredicate directDamage() {
+      return BooleanPredicate.TRUE;
+    }
+
+    /** Condition on the direct damage source. */
+    default IJsonPredicate<DamageSource> damageSource() {
+      return DamageSourcePredicate.ANY;
+    }
+
     @Override
     default void onAttacked(IToolStackView tool, ModifierEntry modifier, EquipmentContext context, EquipmentSlot slotType, DamageSource source, float amount, boolean isDirectDamage) {
-      if (isDirectDamage && condition().matches(tool, modifier)) {
+      if (directDamage().test(isDirectDamage) && condition().matches(tool, modifier) && damageSource().matches(source)) {
         LivingEntity defender = context.getEntity();
+        Entity sourceEntity = source.getEntity();
         float scaledLevel = CounterModule.getLevel(tool, modifier, slotType, defender);
-        if (checkChance(scaledLevel)) {
+        if (sourceEntity != defender && checkChance(scaledLevel)) {
           // target self if requested
           boolean applied = false;
           if (targetSelf()) {
             // repurpose holder to refer to attacker, as target is now self. makes the JSON a bit weird, but is more flexible
-            if (TinkerPredicate.matches(holder(), source.getEntity())) {
+            if (TinkerPredicate.matches(holder(), sourceEntity)) {
               effect().applyEffect(defender, modifier, null);
               applied = true;
             }
-          } else if (holder().matches(defender) && source.getEntity() instanceof LivingEntity attacker) {
+          } else if (holder().matches(defender) && sourceEntity instanceof LivingEntity attacker) {
             effect().applyEffect(attacker, scaledLevel, defender);
             applied = true;
           }
@@ -342,10 +354,12 @@ public interface MobEffectModule extends ModifierModule, ConditionalModule<ITool
   }
 
   /** Implementation for counter-attacks from armor */
-  record ArmorCounter(ModifierMobEffect effect, LevelingValue chance, IJsonPredicate<LivingEntity> holder, int durabilityUsage, boolean targetSelf, ModifierCondition<IToolStackView> condition) implements CounterCommon {
+  record ArmorCounter(ModifierMobEffect effect, LevelingValue chance, IJsonPredicate<LivingEntity> holder, BooleanPredicate directDamage, IJsonPredicate<DamageSource> damageSource, int durabilityUsage, boolean targetSelf, ModifierCondition<IToolStackView> condition) implements CounterCommon {
     private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<ArmorCounter>defaultHooks(ModifierHooks.ON_ATTACKED);
     public static final RecordLoadable<ArmorCounter> LOADER = RecordLoadable.create(
       EFFECT_FIELD, CHANCE_FIELD, HOLDER_FIELD,
+      BooleanPredicate.LOADABLE.defaultField("direct_damage", BooleanPredicate.TRUE, ArmorCounter::directDamage),
+      DamageSourcePredicate.LOADER.defaultField("damage_source", ArmorCounter::damageSource),
       IntLoadable.FROM_ZERO.defaultField("durability_usage", 1, ArmorCounter::durabilityUsage),
       BooleanLoadable.INSTANCE.defaultField("target_self", false, false, ArmorCounter::targetSelf),
       ModifierCondition.TOOL_FIELD, ArmorCounter::new);
@@ -392,7 +406,7 @@ public interface MobEffectModule extends ModifierModule, ConditionalModule<ITool
     public void onDamageDealt(IToolStackView tool, ModifierEntry modifier, EquipmentContext context, EquipmentSlot slotType, LivingEntity target, DamageSource source, float amount, boolean isDirectDamage) {
       if (this.directDamage.test(isDirectDamage) && condition.matches(tool, modifier) && this.damageSource.matches(source) && checkChance(modifier)) {
         LivingEntity holder = context.getEntity();
-        if (this.holder.matches(holder)) {
+        if (holder != target && this.holder.matches(holder)) {
           effect.applyEffect(target, modifier, holder);
         }
       }

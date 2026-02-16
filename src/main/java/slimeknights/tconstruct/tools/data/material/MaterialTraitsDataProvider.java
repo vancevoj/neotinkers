@@ -195,7 +195,7 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     material(MaterialIds.blazingBone).addTraits(SkullStats.ID, TinkerModifiers.firebreath.getId(), ModifierIds.blazeDisguise);
     material(MaterialIds.gold).addTraits(SkullStats.ID, TinkerModifiers.chrysophilite.getId(), ModifierIds.piglinDisguise, TinkerModifiers.golden.getId());
     material(MaterialIds.roseGold).addTraits(SkullStats.ID, TinkerModifiers.goldGuard.getId(), ModifierIds.piglinBruteDisguise, TinkerModifiers.golden.getId());
-    material(MaterialIds.pigIron).addTraits(SkullStats.ID, TinkerModifiers.revenge.getId(), ModifierIds.zombifiedPiglinDisguise);
+    material(MaterialIds.pigIron).addTraits(SkullStats.ID, ModifierIds.revenge, ModifierIds.zombifiedPiglinDisguise);
     // slimesuit
     noTraits(MaterialIds.blood);
     noTraits(MaterialIds.clay);
