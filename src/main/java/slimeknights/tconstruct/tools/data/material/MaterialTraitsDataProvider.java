@@ -44,7 +44,7 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     addTraits(MaterialIds.paper, AMMO, ModifierIds.weak);
     addTraits(MaterialIds.leaves, AMMO, ModifierIds.cheap);
     // tier 1 - end
-    addDefaultTraits(MaterialIds.chorus, TinkerModifiers.enderference);
+    addDefaultTraits(MaterialIds.chorus, ModifierIds.enderference);
     addTraits(MaterialIds.chorus, ARMOR, ModifierIds.enderclearance);
     // tier 1 - binding
     addDefaultTraits(MaterialIds.string, ModifierIds.stringy);

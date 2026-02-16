@@ -221,7 +221,6 @@ import slimeknights.tconstruct.tools.modifiers.traits.general.EnderportingModifi
 import slimeknights.tconstruct.tools.modifiers.traits.harvest.DwarvenModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.harvest.MomentumModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.melee.ConductingModifier;
-import slimeknights.tconstruct.tools.modifiers.traits.melee.EnderferenceModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.melee.InsatiableModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.melee.LaceratingModifier;
 import slimeknights.tconstruct.tools.modifiers.traits.ranged.OlympicModifier;
@@ -386,7 +385,6 @@ public final class TinkerModifiers extends TinkerModule {
   public static final StaticModifier<ParryingModifier> parrying = MODIFIERS.register("parrying", ParryingModifier::new);
 
   // traits - tier 1
-  public static final StaticModifier<EnderferenceModifier> enderference = MODIFIERS.register("enderference", EnderferenceModifier::new);
   public static final StaticModifier<DwarvenModifier> dwarven = MODIFIERS.register("dwarven", DwarvenModifier::new);
   // traits - tier 2
   public static final DynamicModifier golden = MODIFIERS.registerDynamic("golden");
@@ -632,6 +630,9 @@ public final class TinkerModifiers extends TinkerModule {
   /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#frostshield} */
   @Deprecated(forRemoval = true)
   public static final DynamicModifier frostshield = MODIFIERS.registerDynamic("frostshield");
+  /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#enderference} */
+  @Deprecated(forRemoval = true)
+  public static final StaticModifier<?> enderference = MODIFIERS.registerDynamic("enderference");
 
   // traits - tier 2
   /** @deprecated use {@link slimeknights.tconstruct.tools.data.ModifierIds#stoneshield} */

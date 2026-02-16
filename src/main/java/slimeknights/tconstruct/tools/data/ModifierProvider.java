@@ -968,6 +968,10 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .levelDisplay(ModifierLevelDisplay.NO_LEVELS)
       .addModule(new MaterialVariantColorModule(MaterialIds.wool))
       .addModule(StatBoostModule.multiplyAll(ToolStats.PROJECTILE_DAMAGE).flat(-1));
+    buildModifier(ModifierIds.enderference)
+      .addModule(new VolatileFlagModule(TinkerEffects.ENDERFERENCE_KEY), ModifierHooks.PROJECTILE_LAUNCH, ModifierHooks.PROJECTILE_SHOT, ModifierHooks.PROJECTILE_THROWN)
+      .addModule(MobEffectModule.builder(TinkerEffects.enderference).applyBeforeMelee(true).time(RandomLevelingValue.flat(100)).buildWeapon())
+      .addModule(MobEffectModule.builder(TinkerEffects.enderference).time(RandomLevelingValue.flat(100)).toolTag(TinkerTags.Items.ARMOR).chance(LevelingValue.eachLevel(0.25f)).buildCounter());
 
     // traits - tier 2
     buildModifier(ModifierIds.stoneshield)
