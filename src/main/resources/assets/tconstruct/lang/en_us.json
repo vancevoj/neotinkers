@@ -3174,7 +3174,7 @@
   "modifier.tconstruct.momentum.flavor": "Not Fast Enough, Gotta Go Faster!",
   "modifier.tconstruct.momentum.description": "Mining blocks and firing arrows increases your speed, as long as you keep going",
   "modifier.tconstruct.momentum.speed": "Momentum Speed",
-  "modifier.tconstruct.recurrent_protection": "Recurrent Protection",
+  "modifier.tconstruct.recurrent_protection": "Recurrent",
   "modifier.tconstruct.recurrent_protection.flavor": "Won't fool me twice!",
   "modifier.tconstruct.recurrent_protection.description": "Taking damage temporarily boosts your protection",
   "modifier.tconstruct.recurrent_protection.resistance": "Recurrent Resistance",
