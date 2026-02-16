@@ -1827,7 +1827,7 @@
   "material.tconstruct.necrotic_bone.armor": "Has a 15% chance when hit to heal over time 50% of damage received after armor.",
   "material.tconstruct.necrotic_bone.ammo": "Heals 5% per level of damage dealt from successful hits",
   "material.tconstruct.necrotic_bone.skull_flavor": "Spooky Scary Skeleton!",
-  "material.tconstruct.necrotic_bone.skull_encyclopedia": "Has a 15% chance when hit to heal over time 100% of damage received after armor",
+  "material.tconstruct.necrotic_bone.skull_encyclopedia": "Has a 15% chance when hit to heal over time 50% of damage received after armor",
 
   "material.tconstruct.chorus": "Chorus",
   "material.tconstruct.chorus.flavor": "Not just the endermen, but the enderwomen, and the enderchildren",

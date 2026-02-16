@@ -1106,9 +1106,9 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
     buildModifier(ModifierIds.restore).priority(25) // after warded, only restore your actual taken damage
       .levelDisplay(new ModifierLevelDisplay.LevelCap(3, ModifierLevelDisplay.SINGLE_LEVEL))
       // 15% at 50% then 1005
-      .addModule(RestoreLostHealthModule.builder().toolTag(TinkerTags.Items.ARMOR).maxLevel(2).eachLevel(0.5f))
+      .addModule(RestoreLostHealthModule.builder().toolTag(TinkerTags.Items.ARMOR).maxLevel(2).effectLevel(LevelingInt.eachLevel(1)).flat(0.5f))
       // stop at 25% for level 3, slimeskull exclusive
-      .addModule(RestoreLostHealthModule.builder().toolTag(TinkerTags.Items.ARMOR).minLevel(3).chance(LevelingValue.flat(0.25f)).flat(1));
+      .addModule(RestoreLostHealthModule.builder().toolTag(TinkerTags.Items.ARMOR).minLevel(3).effectLevel(LevelingInt.flat(3)).flat(0.5f));
 
     // traits - tier 2 compat
     buildModifier(ModifierIds.lustrous);

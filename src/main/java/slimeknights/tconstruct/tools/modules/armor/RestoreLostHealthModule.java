@@ -41,16 +41,18 @@ import java.util.List;
 /**
  * Module which
  * @param percent          Percentage of health to steal.
+ * @param effectLevel      Level of regeneration to apply.
  * @param durabilityUsage  Amount of durability to use when stealing health.
  * @param chance           Chance of applying.
  * @param attacker         Condition on the attacker that dealt the damage.
  * @param defender         Condition on the defender who will heal.
  * @param condition        Condition on the tool and modifier level.
  */
-public record RestoreLostHealthModule(LevelingValue percent, LevelingInt durabilityUsage, LevelingValue chance, IJsonPredicate<LivingEntity> attacker, IJsonPredicate<LivingEntity> defender, ModifierCondition<IToolStackView> condition) implements ModifierModule, ModifyDamageModifierHook, TooltipModifierHook, ConditionalModule<IToolStackView> {
+public record RestoreLostHealthModule(LevelingValue percent, LevelingInt effectLevel, LevelingInt durabilityUsage, LevelingValue chance, IJsonPredicate<LivingEntity> attacker, IJsonPredicate<LivingEntity> defender, ModifierCondition<IToolStackView> condition) implements ModifierModule, ModifyDamageModifierHook, TooltipModifierHook, ConditionalModule<IToolStackView> {
   private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<RestoreLostHealthModule>defaultHooks(ModifierHooks.MODIFY_DAMAGE, ModifierHooks.TOOLTIP);
   public static final RecordLoadable<RestoreLostHealthModule> LOADER = RecordLoadable.create(
     LevelingValue.LOADABLE.requiredField("percentage", RestoreLostHealthModule::percent),
+    LevelingInt.LOADABLE.requiredField("effect_level", RestoreLostHealthModule::effectLevel),
     LevelingInt.LOADABLE.requiredField("durability_usage", RestoreLostHealthModule::durabilityUsage),
     LevelingValue.LOADABLE.requiredField("chance", RestoreLostHealthModule::chance),
     LivingEntityPredicate.LOADER.defaultField("attacker", RestoreLostHealthModule::attacker),
@@ -80,12 +82,13 @@ public record RestoreLostHealthModule(LevelingValue percent, LevelingInt durabil
     if (condition.matches(tool, modifier) && this.defender.matches(defender) && TinkerPredicate.matches(this.attacker, source.getEntity())) {
       // no shield doubling as shields prevent the damage, better than any healing
       float level = modifier.getEffectiveLevel();
-      if (defender.getRandom().nextFloat() < this.chance.compute(level)) {
+      int effectLevel = this.effectLevel.compute(level);
+      if (effectLevel > 0 && defender.getRandom().nextFloat() < this.chance.compute(level)) {
         // heals slowly over time
         int heal = (int)(this.percent.compute(level) * amount);
         if (heal > 0) {
-          // regen restores 1 health every 50 ticks
-          defender.addEffect(new MobEffectInstance(MobEffects.REGENERATION, heal * 50));
+          // regen restores 1 health every 50 ticks at level 1, restores faster at higher levels
+          defender.addEffect(new MobEffectInstance(MobEffects.REGENERATION, heal * (50 >> (effectLevel - 1))));
           defender.level().playSound(null, defender.getX(), defender.getY(), defender.getZ(), Sounds.NECROTIC_HEAL.getSound(), SoundSource.PLAYERS, 1.0f, 1.0f);
 
           // extra damage for running based on level
@@ -122,6 +125,7 @@ public record RestoreLostHealthModule(LevelingValue percent, LevelingInt durabil
   public static class Builder extends ModuleBuilder.Stack<Builder> implements LevelingValue.Builder<RestoreLostHealthModule> {
     private LevelingInt durabilityUsage = LevelingInt.eachLevel(1);
     private LevelingValue chance = LevelingValue.flat(0.15f);
+    private LevelingInt effectLevel = LevelingInt.flat(1);
     private IJsonPredicate<LivingEntity> attacker = LivingEntityPredicate.ANY;
     private IJsonPredicate<LivingEntity> defender = LivingEntityPredicate.ANY;
 
@@ -129,7 +133,7 @@ public record RestoreLostHealthModule(LevelingValue percent, LevelingInt durabil
 
     @Override
     public RestoreLostHealthModule amount(float flat, float eachLevel) {
-      return new RestoreLostHealthModule(new LevelingValue(flat, eachLevel), durabilityUsage, chance, attacker, defender, condition);
+      return new RestoreLostHealthModule(new LevelingValue(flat, eachLevel), effectLevel, durabilityUsage, chance, attacker, defender, condition);
     }
   }
 }
