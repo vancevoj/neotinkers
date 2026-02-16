@@ -3,6 +3,9 @@
   "modules": [
     {
       "type": "tconstruct:counter_mob_effect",
+      "chance": {
+        "flat": 1.0
+      },
       "damage_source": {
         "type": "mantle:attacker",
         "entity_type": "mantle:any",
