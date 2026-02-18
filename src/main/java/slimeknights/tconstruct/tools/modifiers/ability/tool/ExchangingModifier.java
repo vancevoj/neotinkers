@@ -44,47 +44,49 @@ public class ExchangingModifier extends NoLevelsModifier implements RemoveBlockM
   @Nullable
   @Override
   public Boolean removeBlock(IToolStackView tool, ModifierEntry modifier, ToolHarvestContext context) {
-    // We check the offhand first
-    ItemStack item = context.getLiving().getOffhandItem();
-    BlockState state = context.getState();
-    Level world = context.getWorld();
-    BlockPos pos = context.getPos();
+    // We check the offhand first for a block provider
     LivingEntity entity = context.getLiving();
-    if (item.isEmpty()) return null;
+    ItemStack item = entity.getOffhandItem();
 
-    BlockItemProviderCapability blockProvider = BlockItemProviderCapability.getBlockProvider(item);
-    ItemStack backingStack = blockProvider == null ? ItemStack.EMPTY : blockProvider.getBlockItemStack(item, entity);
+    // if empty, skip trying to fetch the capability
+    BlockItemProviderCapability blockProvider = null;
+    ItemStack backingStack = ItemStack.EMPTY;
     BlockItem blockItem = null;
-
-    // blockProvider != null is technically always true, but this makes the static analysis happy as it doesn't know that ItemStack.EMPTY.getItem() instanceof BlockItem is always false.
-    if (blockProvider != null) {
-      blockItem = BlockItemProviderCapability.verifyBlockItem(backingStack, blockProvider);
+    if (!item.isEmpty()) {
+      blockProvider = BlockItemProviderCapability.getBlockProvider(item);
+      if (blockProvider != null) {
+        backingStack = blockProvider.getBlockItemStack(item, entity);
+        blockItem = BlockItemProviderCapability.verifyBlockItem(backingStack, blockProvider);
+      }
     }
 
     // if the thing in our offhand cannot provide at all or cannot currently provide then check
     // the mainhand next (this tool), in case we have glowing or a similar modifier to provide blocks.
     if (blockItem == null) {
-      item = context.getLiving().getMainHandItem();
+      item = entity.getMainHandItem();
       // skip forges cap system and go to the tinkers hook because we know this is a tinkers tool
       blockProvider = new ToolBlockItemProviderHook.CapabilityImpl(tool);
       backingStack = blockProvider.getBlockItemStack(item, entity);
       blockItem = BlockItemProviderCapability.verifyBlockItem(backingStack, blockProvider);
 
-      // nothing could provide
+      // nothing could provide, no replacing
       if (blockItem == null) return null;
     }
 
-    // immediately do a defensive copy of the stack.
+    // immediately do a defensive copy of the stack, modifiers notably rely on the same instance existing later
     ItemStack fakeStack = backingStack.copyWithCount(1);
 
     // if we are an adventure mode player, check if we are allowed to place it.
     // Note that we check the mined position as the block we are placing 'against', which could be considered variance against vanilla but it is the block that make the most sense here.
+    Level world = context.getWorld();
+    BlockPos pos = context.getPos();
     if (entity instanceof Player player && !player.mayBuild() && !fakeStack.hasAdventureModePlaceTagForBlock(BuiltInRegistries.BLOCK, new BlockInWorld(world, pos, false))) {
       return null;
     }
 
     // from this point on, we are in charge of breaking the block, start by harvesting it so piglins get mad and stuff
     Player player = context.getPlayer();
+    BlockState state = context.getState();
     if (player != null) {
       state.getBlock().playerWillDestroy(world, pos, state, player);
     }
