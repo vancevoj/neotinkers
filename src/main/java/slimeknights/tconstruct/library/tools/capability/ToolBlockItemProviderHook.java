@@ -3,6 +3,7 @@ package slimeknights.tconstruct.library.tools.capability;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
@@ -39,17 +40,18 @@ public interface ToolBlockItemProviderHook {
     boolean consumeBlockItem(IToolStackView tool, ItemStack toolStack, ModifierEntry modifier, ItemStack backingStack, @Nullable LivingEntity entity);
 
     record CapabilityImpl(IToolStackView tool) implements BlockItemProviderCapability {
-
         @Override
         public ItemStack getBlockItemStack(ItemStack capStack, @Nullable LivingEntity entity) {
             for (ModifierEntry entry : tool.getModifiers()) {
                 ToolBlockItemProviderHook hook = entry.getHook(ModifierHooks.BLOCK_ITEM_PROVIDER);
-                ItemStack item = hook.getBlockItemStack(tool, entry, entity);
-                if (!item.isEmpty()) {
-                    if (!(item.getItem() instanceof BlockItem)) {
-                        TConstruct.LOG.warn("ToolBlockItemProviderHook implementation tried to return a non-empty, non-blockitem stack! Hook: {}, Hook Class: {}, Provided Item: {}", hook, hook.getClass().getName(), BuiltInRegistries.ITEM.getId(item.getItem()));
+                ItemStack stack = hook.getBlockItemStack(tool, entry, entity);
+                if (!stack.isEmpty()) {
+                    Item item = stack.getItem();
+                    if (item instanceof BlockItem) {
+                        return stack;
+                    } else {
+                        TConstruct.LOG.warn("ToolBlockItemProviderHook implementation tried to return a non-empty, non-blockitem stack! Hook: {}, Hook Class: {}, Provided Item: {}", hook, hook.getClass().getName(), BuiltInRegistries.ITEM.getId(item));
                     }
-                    return item;
                 }
             }
             return ItemStack.EMPTY;
@@ -58,8 +60,7 @@ public interface ToolBlockItemProviderHook {
         @Override
         public void consume(ItemStack capStack, ItemStack backingStack, @Nullable LivingEntity entity) {
             for (ModifierEntry entry : tool.getModifiers()) {
-                ToolBlockItemProviderHook provider = entry.getModifier().getHooks().getOrNull(ModifierHooks.BLOCK_ITEM_PROVIDER);
-                if (provider != null && provider.consumeBlockItem(tool, capStack, entry, backingStack, entity)) {
+                if (entry.getHook(ModifierHooks.BLOCK_ITEM_PROVIDER).consumeBlockItem(tool, capStack, entry, backingStack, entity)) {
                     return;
                 }
             }
