@@ -184,6 +184,7 @@ import slimeknights.tconstruct.library.tools.capability.TinkerDataCapability;
 import slimeknights.tconstruct.library.tools.capability.TinkerDataKeys;
 import slimeknights.tconstruct.library.tools.capability.fluid.TankModule;
 import slimeknights.tconstruct.library.tools.capability.fluid.ToolTankHelper;
+import slimeknights.tconstruct.library.tools.capability.BlockItemProviderCapability;
 import slimeknights.tconstruct.library.tools.capability.inventory.InventoryMenuModule;
 import slimeknights.tconstruct.library.tools.capability.inventory.InventoryModule;
 import slimeknights.tconstruct.library.tools.capability.inventory.InventorySlotMenuModule;
@@ -197,6 +198,7 @@ import slimeknights.tconstruct.tools.entity.FluidEffectProjectile;
 import slimeknights.tconstruct.tools.item.CreativeSlotItem;
 import slimeknights.tconstruct.tools.item.DragonScaleItem;
 import slimeknights.tconstruct.tools.item.ModifierCrystalItem;
+import slimeknights.tconstruct.library.modifiers.modules.behavior.BlockItemProviderModule;
 import slimeknights.tconstruct.tools.modifiers.EnergyHandlerModifier;
 import slimeknights.tconstruct.tools.modifiers.ModifierLootModifier;
 import slimeknights.tconstruct.tools.modifiers.ability.armor.AmbidextrousModifier;
@@ -685,7 +687,7 @@ public final class TinkerModifiers extends TinkerModule {
   /** @deprecated use {@link TinkerEffects#pierce} */
   @Deprecated(forRemoval = true)
   public static final RegistryObject<TinkerEffect> pierceEffect = TinkerEffects.pierce;
-  
+
   // cooldown
   public static final RegistryObject<TinkerEffect> teleportCooldownEffect = MOB_EFFECTS.register("teleport_cooldown", () -> new NoMilkEffect(MobEffectCategory.HARMFUL, 0xCC00FA, true));
   public static final RegistryObject<TinkerEffect> fireballCooldownEffect = MOB_EFFECTS.register("fireball_cooldown", () -> new NoMilkEffect(MobEffectCategory.HARMFUL, 0xFC9600, true));
@@ -912,6 +914,7 @@ public final class TinkerModifiers extends TinkerModule {
       ModifierModule.LOADER.register(getResource("craft_count"), CraftCountModule.LOADER);
       ModifierModule.LOADER.register(getResource("tipped"), TippedModule.LOADER);
       ModifierModule.LOADER.register(getResource("projectile_bounce"), ProjectileBounceModule.LOADER);
+      ModifierModule.LOADER.register(getResource("block_item_provider"), BlockItemProviderModule.LOADER);
       ModifierModule.LOADER.register(getResource("tool_damage_range"), ToolDamageRangeModule.LOADER);
       // interaction
       ModifierModule.LOADER.register(getResource("brush"), BrushModule.LOADER);
@@ -1044,6 +1047,7 @@ public final class TinkerModifiers extends TinkerModule {
     TinkerDataCapability.register();
     PersistentDataCapability.register();
     EntityModifierCapability.register();
+    BlockItemProviderCapability.register();
     // by default, we support modifying projectiles (arrows or fireworks mainly, but maybe other stuff). other entities may come in the future
     EntityModifierCapability.registerEntityPredicate(entity -> entity instanceof Projectile);
   }

@@ -13,6 +13,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -176,6 +177,7 @@ import slimeknights.tconstruct.tools.data.material.MaterialIds;
 import slimeknights.tconstruct.tools.entity.ThrownTool;
 import slimeknights.tconstruct.tools.item.CrystalshotItem;
 import slimeknights.tconstruct.tools.logic.ModifierEvents;
+import slimeknights.tconstruct.library.modifiers.modules.behavior.BlockItemProviderModule;
 import slimeknights.tconstruct.tools.modules.AutosmeltModule;
 import slimeknights.tconstruct.tools.modules.ClearEffectOnUnequipModule;
 import slimeknights.tconstruct.tools.modules.CraftCountModule;
@@ -372,7 +374,8 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .addModule(new PlaceGlowModule(5))
       .addModule(new GlowWalkerModule(new LevelingValue(2, 1), 3, 5))
       .addModule(new ProjectilePlaceGlowModule(5, true, true))
-      .addModule(ShowOffhandModule.DISALLOW_BROKEN).addModule(ShowInteractionSourceModule.INSTANCE);
+      .addModule(ShowOffhandModule.DISALLOW_BROKEN).addModule(ShowInteractionSourceModule.INSTANCE)
+      .addModule(new BlockItemProviderModule(new ItemStack(TinkerCommons.glowBlock.asItem()), 5, ModifierCondition.ANY_TOOL.with(ToolStackPredicate.tag(TinkerTags.Items.HELD))));
     buildModifier(ModifierIds.firestarter)
       .levelDisplay(ModifierLevelDisplay.NO_LEVELS)
       .addModule(PlaceFireModule.INSTANCE)
