@@ -8,7 +8,6 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed;
@@ -138,7 +137,7 @@ public class ModifierHooks {
     }
 
     @Override
-    public boolean consumeBlockItem(IToolStackView tool, ItemStack toolStack, ModifierEntry modifier, ItemStack backingStack, @Nullable LivingEntity entity) {
+    public boolean consumeBlockItem(IToolStackView tool, ModifierEntry modifier, ItemStack backingStack, @Nullable LivingEntity entity) {
       return false;
     }
   });

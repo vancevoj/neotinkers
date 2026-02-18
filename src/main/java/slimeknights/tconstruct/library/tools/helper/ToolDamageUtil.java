@@ -81,12 +81,21 @@ public class ToolDamageUtil {
     if (amount > 0) {
       // criteria updates
       int newDamage = damage + amount;
-      // TODO: needed?
       if (entity instanceof ServerPlayer player) {
+        // if not given the stack, find it on the player
         if (stack == null) {
-          stack = entity.getMainHandItem();
+          stack = ItemStack.EMPTY;
+          for (EquipmentSlot slot : EquipmentSlot.values()) {
+            ItemStack slotStack = player.getItemBySlot(slot);
+            if (tool.isSameStack(slotStack)) {
+              stack = slotStack;
+            }
+          }
         }
-        CriteriaTriggers.ITEM_DURABILITY_CHANGED.trigger(player, stack, newDamage);
+        // if we have a stack, update the criteria
+        if (!stack.isEmpty()) {
+          CriteriaTriggers.ITEM_DURABILITY_CHANGED.trigger(player, stack, newDamage);
+        }
       }
 
       tool.setDamage(newDamage);
@@ -194,10 +203,37 @@ public class ToolDamageUtil {
    * Damages the tool in the main hand and sends the break animation if it broke
    * @param tool    Tool to damage
    * @param amount  Amount of damage
-   * @param entity  Entity for animation
+   * @param entity  Entity for animation. If null animation is skipped.
+   * @param cause   Modifier damaging the tool
+   * @return true if the tool broke when damaging
    */
-  public static boolean damageAnimated(IToolStackView tool, int amount, LivingEntity entity) {
-    return damageAnimated(tool, amount, entity, entity.isUsingItem() ? entity.getUsedItemHand() : InteractionHand.MAIN_HAND);
+  public static boolean damageAnimated(IToolStackView tool, int amount, @Nullable LivingEntity entity, ModifierId cause) {
+    // try to locate the passed stack among all equipment slots
+    if (entity != null) {
+      for (EquipmentSlot slot : EquipmentSlot.values()) {
+        ItemStack stack = entity.getItemBySlot(slot);
+        if (tool.isSameStack(stack)) {
+          if (damage(tool, amount, entity, stack, cause)) {
+            entity.broadcastBreakEvent(slot);
+            return true;
+          }
+          return false;
+        }
+      }
+    }
+    // did not find in any of the slots? just skip the animation/stack
+    return damage(tool, amount, entity, ItemStack.EMPTY);
+  }
+
+  /**
+   * Damages the tool in the main hand and sends the break animation if it broke
+   * @param tool    Tool to damage
+   * @param amount  Amount of damage
+   * @param entity  Entity for animation
+   * @return true if the tool broke when damaging
+   */
+  public static boolean damageAnimated(IToolStackView tool, int amount, @Nullable LivingEntity entity) {
+    return damageAnimated(tool, amount, entity, ModifierId.EMPTY);
   }
 
   /**

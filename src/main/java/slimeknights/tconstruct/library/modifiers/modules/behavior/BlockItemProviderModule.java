@@ -1,7 +1,6 @@
 package slimeknights.tconstruct.library.modifiers.modules.behavior;
 
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -58,18 +57,13 @@ public record BlockItemProviderModule(ItemStack item, int damage, ModifierCondit
     }
 
     @Override
-    public boolean consumeBlockItem(IToolStackView tool, ItemStack toolStack, ModifierEntry modifier, ItemStack backingStack, @Nullable LivingEntity entity) {
+    public boolean consumeBlockItem(IToolStackView tool, ModifierEntry modifier, ItemStack backingStack, @Nullable LivingEntity entity) {
         // if this is not our item, then we did not provide it so we should avoid consuming
         if (item != backingStack) return false;
 
         // we did provide it, so damage and show animation if possible
-        if (ToolDamageUtil.damage(tool, damage, entity, toolStack) && entity != null) {
-            for (EquipmentSlot slot : EquipmentSlot.values()) {
-                if (entity.getItemBySlot(slot) == toolStack) {
-                    entity.broadcastBreakEvent(slot);
-                    break;
-                }
-            }
+        if (damage > 0) {
+            ToolDamageUtil.damageAnimated(tool, damage, entity, modifier.getId());
         }
         return true;
     }

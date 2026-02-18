@@ -22,22 +22,23 @@ public interface ToolBlockItemProviderHook {
      * <br>
      * <br>
      * <b>The returned stack must have {@link ItemStack#getItem} return an instance of {@link BlockItem}, or be {@link ItemStack#EMPTY}!</b>
-     * @param tool The tool that this hook is attached to, as a tool stack view
-     * @param modifier The modifier that provided this hook
-     * @param entity The entity holding this tool. May be null if there is no entity
-     * @return the {@link BlockItem} that this provides, or {@code null} if this cannot provide more block items (for example if the stack has been depleted)
+     * @param tool      The tool that this hook is attached to, as a tool stack view
+     * @param modifier  The modifier that provided this hook
+     * @param entity    The entity holding this tool. May be null if there is no entity
+     * @return stack containing a {@link BlockItem} that this provides, or {@link ItemStack#EMPTY} if this cannot provide more block items (for example if the stack has been depleted)
      */
     ItemStack getBlockItemStack(IToolStackView tool, ModifierEntry modifier, @Nullable LivingEntity entity);
 
     /**
      * Consume a block from this provider. For example may decrease a contained stacks size or remove fluid from the stack's tank.
-     * @param tool The tool that this hook is attached to, as a tool stack view
-     * @param toolStack The tool that this hook is attached to
-     * @param modifier The modifier that provided this hook
-     * @param entity The entity holding this tool. May be null if there is no entity
-     * @return {@code true} if this hook consumed, otherwise {@code false} indicating that another modifier needs
+     *
+     * @param tool         The tool that this hook is attached to, as a tool stack view
+     * @param modifier     The modifier that provided this hook
+     * @param backingStack Stack that was returned by {@link #getBlockItemStack(IToolStackView, ModifierEntry, LivingEntity)}. Should be validated to be your stack before you consume.
+     * @param entity       The entity holding this tool. May be null if there is no entity
+     * @return {@code true} if this hook consumed, otherwise {@code false} indicating that another modifier needs to consume.
      */
-    boolean consumeBlockItem(IToolStackView tool, ItemStack toolStack, ModifierEntry modifier, ItemStack backingStack, @Nullable LivingEntity entity);
+    boolean consumeBlockItem(IToolStackView tool, ModifierEntry modifier, ItemStack backingStack, @Nullable LivingEntity entity);
 
     record CapabilityImpl(IToolStackView tool) implements BlockItemProviderCapability {
         @Override
@@ -60,7 +61,7 @@ public interface ToolBlockItemProviderHook {
         @Override
         public void consume(ItemStack capStack, ItemStack backingStack, @Nullable LivingEntity entity) {
             for (ModifierEntry entry : tool.getModifiers()) {
-                if (entry.getHook(ModifierHooks.BLOCK_ITEM_PROVIDER).consumeBlockItem(tool, capStack, entry, backingStack, entity)) {
+                if (entry.getHook(ModifierHooks.BLOCK_ITEM_PROVIDER).consumeBlockItem(tool, entry, backingStack, entity)) {
                     return;
                 }
             }

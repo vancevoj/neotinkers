@@ -422,7 +422,7 @@ public class ModifierEvents {
                 level.playSound(null, target.blockPosition(), SoundEvents.SHIELD_BLOCK, SoundSource.PLAYERS, 1.0F, 1.5F + level.random.nextFloat() * 0.4F);
                 event.setImpactResult(ImpactResult.SKIP_ENTITY);
                 // damage the shield, and stop using it if needed
-                if (ToolDamageUtil.damageAnimated(tool, 3, target)) {
+                if (ToolDamageUtil.damageAnimated(tool, 3, target, target.getUsedItemHand())) {
                   target.stopUsingItem();
                   entity.playSound(SoundEvents.SHIELD_BREAK, 0.8F, 0.8F + entity.level().random.nextFloat() * 0.4F);
                 }
