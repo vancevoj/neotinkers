@@ -4,10 +4,11 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import slimeknights.mantle.data.loadable.common.ItemStackLoadable;
 import slimeknights.mantle.data.loadable.primitive.IntLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
-import slimeknights.tconstruct.library.json.TinkerLoadables;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.modules.ModifierModule;
@@ -30,14 +31,16 @@ import java.util.List;
 public record BlockItemProviderModule(ItemStack item, int damage, ModifierCondition<IToolStackView> condition) implements ModifierModule, ToolBlockItemProviderHook, ModifierCondition.ConditionalModule<IToolStackView> {
     private static final List<ModuleHook<?>> DEFAULT_HOOKS = List.of(ModifierHooks.BLOCK_ITEM_PROVIDER);
     public static final RecordLoadable<BlockItemProviderModule> LOADER = RecordLoadable.create(
-            TinkerLoadables.BLOCK_ITEM.flatComap(ItemStack::new, (i, e) -> {
-                if (i.getItem() instanceof BlockItem item)
-                    return item;
-                throw e.create(String.format("Expected item %s to be instance of BlockItem, but was %s instead", BuiltInRegistries.ITEM.getKey(i.getItem()), i.getItem().getClass().getName()));
-            }).requiredField("item", BlockItemProviderModule::item),
-            IntLoadable.FROM_ZERO.defaultField("tool_damage", 1, BlockItemProviderModule::damage),
-            ModifierCondition.TOOL_FIELD,
-            BlockItemProviderModule::new);
+      ItemStackLoadable.REQUIRED_ITEM_NBT.validate((stack, error) -> {
+        Item item = stack.getItem();
+        if (item instanceof BlockItem) {
+          return stack;
+        }
+        throw error.create(String.format("Expected item %s to be instance of BlockItem, but was %s instead", BuiltInRegistries.ITEM.getKey(item), item.getClass().getName()));
+      }).requiredField("item", BlockItemProviderModule::item),
+      IntLoadable.FROM_ZERO.defaultField("tool_damage", 1, BlockItemProviderModule::damage),
+      ModifierCondition.TOOL_FIELD,
+      BlockItemProviderModule::new);
 
     @Override
     public RecordLoadable<BlockItemProviderModule> getLoader() {
@@ -49,7 +52,6 @@ public record BlockItemProviderModule(ItemStack item, int damage, ModifierCondit
         return DEFAULT_HOOKS;
     }
 
-    @Nullable
     @Override
     public ItemStack getBlockItemStack(IToolStackView tool, ModifierEntry modifier, @Nullable LivingEntity entity) {
         return !tool.isBroken() && condition.matches(tool, modifier) ? item : ItemStack.EMPTY;
