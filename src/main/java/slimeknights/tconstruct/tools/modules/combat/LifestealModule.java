@@ -116,7 +116,7 @@ public record LifestealModule(LevelingValue percent, LevelingInt durabilityUsage
 
   @Override
   public boolean onProjectileHitEntity(ModifierNBT modifiers, ModDataNBT persistentData, ModifierEntry modifier, Projectile projectile, EntityHitResult hit, @Nullable LivingEntity attacker, @Nullable LivingEntity target, boolean notBlocked) {
-    if (target != null && attacker != null && !target.getType().is(TinkerTags.EntityTypes.NECROTIC_BLACKLIST) && this.attacker.matches(attacker) && this.target.matches(target)) {
+    if (notBlocked && target != null && attacker != null && !target.getType().is(TinkerTags.EntityTypes.NECROTIC_BLACKLIST) && this.attacker.matches(attacker) && this.target.matches(target)) {
       float level = modifier.getEffectiveLevel();
       float percent = this.percent.compute(modifier.getEffectiveLevel());
       if (percent > 0) {

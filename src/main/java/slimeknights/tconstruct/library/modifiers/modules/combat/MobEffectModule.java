@@ -201,6 +201,8 @@ public interface MobEffectModule extends ModifierModule, ConditionalModule<ITool
       RandomLevelingValue.LOADABLE.requiredField("time", ModifierMobEffect::time),
       LivingEntityPredicate.LOADER.defaultField("target", ModifierMobEffect::target),
       ModifierMobEffect::new);
+    // TODO: curative effects?
+    // TODO: visibility?
 
     /** Applies the effect for the given level */
     public void applyEffect(@Nullable LivingEntity target, float scaledLevel, @Nullable Entity cause) {
@@ -456,7 +458,7 @@ public interface MobEffectModule extends ModifierModule, ConditionalModule<ITool
 
     @Override
     public boolean onProjectileHitEntity(ModifierNBT modifiers, ModDataNBT persistentData, ModifierEntry modifier, Projectile projectile, EntityHitResult hit, @Nullable LivingEntity attacker, @Nullable LivingEntity target, boolean notBlocked) {
-      if (isAoe.test(false) && isProjectile.test(true) && condition.modifierLevel().test(modifier.getLevel()) && checkChance(modifier)) {
+      if (notBlocked && isAoe.test(false) && isProjectile.test(true) && condition.modifierLevel().test(modifier.getLevel()) && checkChance(modifier)) {
         effect.applyEffect(attacker, modifier, null);
       }
       return false;
