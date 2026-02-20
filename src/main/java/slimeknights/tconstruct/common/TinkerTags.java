@@ -457,6 +457,10 @@ public class TinkerTags {
     /** @deprecated After migrating travelers to have a material, doing away with golden armor on slimesuit. If you still want this on your armor, we recommend adding a new recipe */
     @Deprecated(forRemoval = true)
     public static final TagKey<Item> GOLDEN_ARMOR = local("modifiable/armor/golden");
+    /** Items in this tag use an alternative recipe for recapitated to prevent conflict with skull part swapping. */
+    public static final TagKey<Item> SKULLS = local("modifiable/skulls");
+    /** Items that support skull based part swapping on index 0, and thus disallow rebalanced using just a skull. */
+    public static final TagKey<Item> SWAPPABLE_SKULLS = local("modifiable/skulls/swappable");
 
     // armor book tags
     /** Full list of armor shown in the encyclopedia, can add to directly to show only in the encyclopedia */

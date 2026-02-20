@@ -99,11 +99,13 @@ import static slimeknights.tconstruct.common.TinkerTags.Items.RANGED;
 import static slimeknights.tconstruct.common.TinkerTags.Items.SHIELDS;
 import static slimeknights.tconstruct.common.TinkerTags.Items.SINGLEPART_TOOL;
 import static slimeknights.tconstruct.common.TinkerTags.Items.SINGLE_USE;
+import static slimeknights.tconstruct.common.TinkerTags.Items.SKULLS;
 import static slimeknights.tconstruct.common.TinkerTags.Items.SMALL_RANGED;
 import static slimeknights.tconstruct.common.TinkerTags.Items.SMALL_TOOLS;
 import static slimeknights.tconstruct.common.TinkerTags.Items.SPECIAL_TOOLS;
 import static slimeknights.tconstruct.common.TinkerTags.Items.STAFFS;
 import static slimeknights.tconstruct.common.TinkerTags.Items.STONE_HARVEST;
+import static slimeknights.tconstruct.common.TinkerTags.Items.SWAPPABLE_SKULLS;
 import static slimeknights.tconstruct.common.TinkerTags.Items.SWORD;
 import static slimeknights.tconstruct.common.TinkerTags.Items.THROWN_AMMO;
 import static slimeknights.tconstruct.common.TinkerTags.Items.TOOL_PARTS;
@@ -360,7 +362,7 @@ public class ItemTagProvider extends ItemTagsProvider {
     tag(TRIM).add(TinkerTools.travelersGear.get(ArmorItem.Type.CHESTPLATE), TinkerTools.travelersGear.get(ArmorItem.Type.LEGGINGS), TinkerTools.travelersGear.get(ArmorItem.Type.BOOTS));
     addArmorTags(TinkerTools.plateArmor,    MULTIPART_TOOL, DURABILITY, BONUS_SLOTS, TRIM);
     addArmorTags(TinkerTools.slimesuit,     DURABILITY, BONUS_SLOTS, TRIM, EMBELLISHMENT_SLIME);
-    addToolTags(TinkerTools.slimesuit.get(ArmorItem.Type.HELMET), SINGLEPART_TOOL);
+    addToolTags(TinkerTools.slimesuit.get(ArmorItem.Type.HELMET), SINGLEPART_TOOL, SWAPPABLE_SKULLS);
 
     // shields
     addToolTags(TinkerTools.travelersShield, DURABILITY, BONUS_SLOTS, SHIELDS, INTERACTABLE_LEFT, Tags.Items.TOOLS_SHIELDS, SINGLEPART_TOOL, UNRECYCLABLE, DYEABLE);
@@ -410,6 +412,7 @@ public class ItemTagProvider extends ItemTagsProvider {
     this.tag(WORN_ARMOR).addTags(BOOTS, LEGGINGS, CHESTPLATES, HELMETS);
     this.tag(HELD_ARMOR).addTag(SHIELDS);
     this.tag(ARMOR).addTags(WORN_ARMOR, HELD_ARMOR);
+    this.tag(SKULLS).addTag(SWAPPABLE_SKULLS);
     this.tag(AOE).addTag(BOOTS); // boot walk modifiers
     this.tag(LAUNCHERS).addTags(BOWS, STAFFS, FISHING_RODS);
     this.tag(RANGED).addTags(LAUNCHERS, SMALL_RANGED, BROAD_RANGED);

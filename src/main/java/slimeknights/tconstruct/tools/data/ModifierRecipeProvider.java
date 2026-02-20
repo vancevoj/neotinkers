@@ -1603,11 +1603,19 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .addInput(ItemTags.MUSIC_DISCS)
                          .setMaxLevel(1)
                          .save(consumer, prefix(ModifierIds.harmonious, slotlessFolder));
+    Ingredient bonusNoSkull = DifferenceIngredient.of(Ingredient.of(TinkerTags.Items.BONUS_SLOTS), Ingredient.of(TinkerTags.Items.SKULLS));
+    SizedIngredient standardSkulls = SizedIngredient.of(DifferenceIngredient.of(Ingredient.of(Tags.Items.HEADS), Ingredient.of(Items.DRAGON_HEAD)));
     ModifierRecipeBuilder.modifier(ModifierIds.recapitated)
-                         .setTools(TinkerTags.Items.BONUS_SLOTS)
-                         .addInput(SizedIngredient.of(DifferenceIngredient.of(Ingredient.of(Tags.Items.HEADS), Ingredient.of(Items.DRAGON_HEAD))))
-                         .setMaxLevel(1)
-                         .save(consumer, prefix(ModifierIds.recapitated, slotlessFolder));
+      .setTools(bonusNoSkull)
+      .addInput(standardSkulls)
+      .setMaxLevel(1)
+      .save(consumer, prefix(ModifierIds.recapitated, slotlessFolder));
+    Ingredient bonusSkulls = IntersectionIngredient.of(Ingredient.of(TinkerTags.Items.BONUS_SLOTS), Ingredient.of(TinkerTags.Items.SKULLS));
+    ModifierRecipeBuilder.modifier(ModifierIds.recapitated)
+      .setTools(bonusSkulls)
+      .addInput(standardSkulls).addInput(Tags.Items.SLIMEBALLS)
+      .setMaxLevel(1)
+      .save(consumer, wrap(ModifierIds.recapitated, slotlessFolder, "_for_skull"));
     ModifierRecipeBuilder.modifier(ModifierIds.forecast)
                          .setTools(TinkerTags.Items.BONUS_SLOTS)
                          .addInput(ingredientFromTags(Tags.Items.ORES_DIAMOND, Tags.Items.ORES_EMERALD, TinkerTags.Items.ORES_COBALT))
@@ -1619,10 +1627,15 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
       .setMaxLevel(1)
       .save(withCondition(consumer, new TagFilledCondition<>(TinkerTags.Items.BOSS_TROPHIES)), prefix(ModifierIds.embossed, slotlessFolder));
     ModifierRecipeBuilder.modifier(ModifierIds.draconic)
-                         .setTools(TinkerTags.Items.BONUS_SLOTS)
-                         .addInput(Items.DRAGON_HEAD)
-                         .setMaxLevel(1)
-                         .save(consumer, wrap(ModifierIds.draconic, slotlessFolder, "_from_head"));
+      .setTools(bonusNoSkull)
+      .addInput(Items.DRAGON_HEAD)
+      .setMaxLevel(1)
+      .save(consumer, wrap(ModifierIds.draconic, slotlessFolder, "_from_head"));
+    ModifierRecipeBuilder.modifier(ModifierIds.draconic)
+      .setTools(bonusSkulls)
+      .addInput(Items.DRAGON_HEAD).addInput(Tags.Items.SLIMEBALLS)
+      .setMaxLevel(1)
+      .save(consumer, wrap(ModifierIds.draconic, slotlessFolder, "_for_skull"));
     ModifierRecipeBuilder.modifier(ModifierIds.draconic)
                          .setTools(TinkerTags.Items.BONUS_SLOTS)
                          .addInput(Items.DRAGON_BREATH)
