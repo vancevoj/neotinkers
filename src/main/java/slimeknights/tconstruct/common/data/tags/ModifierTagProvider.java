@@ -79,7 +79,7 @@ public class ModifierTagProvider extends AbstractModifierTagProvider {
     tag(REMOVE_MODIFIER_BLACKLIST).add(TinkerModifiers.creativeSlot.getId(), TinkerModifiers.statOverride.getId());
     tag(EXTRACT_MODIFIER_BLACKLIST).add(
       TinkerModifiers.embellishment.getId(), TinkerModifiers.dyed.getId(), TinkerModifiers.trim.getId(),
-      ModifierIds.rebalanced, ModifierIds.redirected
+      ModifierIds.rebalanced, TinkerModifiers.overslime.getId()
     ).addTag(REMOVE_MODIFIER_BLACKLIST);
     // blacklist modifiers that are not really slotless, they just have a slotless recipe
     tag(EXTRACT_SLOTLESS_BLACKLIST).add(ModifierIds.luck, ModifierIds.toolBelt);
