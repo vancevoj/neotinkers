@@ -32,6 +32,6 @@
       "tool_damage": 5
     }
   ],
-  "priority": 60,
+  "priority": 10,
   "tooltip_display": "always"
 }

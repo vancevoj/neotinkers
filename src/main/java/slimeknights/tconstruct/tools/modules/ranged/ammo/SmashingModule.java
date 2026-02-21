@@ -88,6 +88,12 @@ public enum SmashingModule implements ModifierModule, FluidModifierHook, Project
     return DEFAULT_HOOKS;
   }
 
+  @Override
+  public Integer getPriority() {
+    // after bounce, before explosive
+    return 50;
+  }
+
 
   /* Tank helpers */
 

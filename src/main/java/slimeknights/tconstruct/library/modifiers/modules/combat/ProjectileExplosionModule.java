@@ -77,6 +77,12 @@ public record ProjectileExplosionModule(LevelingValue radius, float eflnBonus, L
   }
 
   @Override
+  public Integer getPriority() {
+    // run late as we cancel all future interactions entirely
+    return 25;
+  }
+
+  @Override
   public RecordLoadable<ProjectileExplosionModule> getLoader() {
     return LOADER;
   }

@@ -13,7 +13,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -100,6 +99,7 @@ import slimeknights.tconstruct.library.modifiers.modules.armor.ReplaceBlockWalke
 import slimeknights.tconstruct.library.modifiers.modules.armor.ToolActionWalkerTransformModule;
 import slimeknights.tconstruct.library.modifiers.modules.behavior.AttributeModule;
 import slimeknights.tconstruct.library.modifiers.modules.behavior.AttributeModule.TooltipStyle;
+import slimeknights.tconstruct.library.modifiers.modules.behavior.BlockItemProviderModule;
 import slimeknights.tconstruct.library.modifiers.modules.behavior.ConditionalStatModule;
 import slimeknights.tconstruct.library.modifiers.modules.behavior.EdibleModule;
 import slimeknights.tconstruct.library.modifiers.modules.behavior.InfinityModule;
@@ -177,7 +177,6 @@ import slimeknights.tconstruct.tools.data.material.MaterialIds;
 import slimeknights.tconstruct.tools.entity.ThrownTool;
 import slimeknights.tconstruct.tools.item.CrystalshotItem;
 import slimeknights.tconstruct.tools.logic.ModifierEvents;
-import slimeknights.tconstruct.library.modifiers.modules.behavior.BlockItemProviderModule;
 import slimeknights.tconstruct.tools.modules.AutosmeltModule;
 import slimeknights.tconstruct.tools.modules.ClearEffectOnUnequipModule;
 import slimeknights.tconstruct.tools.modules.CraftCountModule;
@@ -597,7 +596,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .variable(MULTIPLIER).multiply()
       .variable(VALUE).add().build());
     buildModifier(ModifierIds.reclaim).levelDisplay(ModifierLevelDisplay.NO_LEVELS).addModule(new VolatileFlagModule(IndestructibleItemEntity.INDESTRUCTIBLE_ENTITY));
-    buildModifier(ModifierIds.attractive).addModule(new ProjectileAttractMobsModule(LevelingValue.eachLevel(3), LevelingValue.flat(0.5f)));
+    buildModifier(ModifierIds.attractive).priority(125).addModule(new ProjectileAttractMobsModule(LevelingValue.eachLevel(3), LevelingValue.flat(0.5f)));
     buildModifier(ModifierIds.hover).levelDisplay(ModifierLevelDisplay.NO_LEVELS).addModule(new ProjectileGravityModule(LevelingInt.flat(20)));
     buildModifier(ModifierIds.fuse).levelDisplay(ModifierLevelDisplay.NO_LEVELS).addModule(new ProjectileFuseModule(ParticleTypes.FLAME, LevelingInt.flat(10)));
 
@@ -1170,13 +1169,12 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .addModule(AttributeModule.builder(TinkerAttributes.BAD_EFFECT_DURATION, Operation.MULTIPLY_TOTAL).tooltipStyle(TooltipStyle.PERCENT).eachLevel(0.05f))
       .addModule(new ArmorLevelModule(TinkerDataKeys.CRYSTALSTRIKE, false, TinkerTags.Items.HELD_ARMOR));
     MobEffectModule.Builder spectralBuilder = MobEffectModule.builder(MobEffects.GLOWING).chance(LevelingValue.flat(1)).counterDurabilityUsage(0).time(RandomLevelingValue.perLevel(0, 200));
-    buildModifier(ModifierIds.spectral).priority(60) // after explosive, before enderference
+    buildModifier(ModifierIds.spectral).priority(10) // run late so we don't cancel another effect by deleting the projectile
       .addModule(spectralBuilder.buildWeapon())
       .addModule(spectralBuilder.buildCounter())
       // damage is for fishing rods
       .addModule(new ProjectilePlaceGlowModule(5, true, false));
-    buildModifier(ModifierIds.explosive).priority(75) // after bounce, before spectral
-      .addModule(ProjectileExplosionModule.radius(1, 1).eflnBonus(0.5f).blockInteraction(BlockInteraction.DESTROY).build());
+    buildModifier(ModifierIds.explosive).addModule(ProjectileExplosionModule.radius(1, 1).eflnBonus(0.5f).blockInteraction(BlockInteraction.DESTROY).build());
     // traits - tier 3 nether
     buildModifier(ModifierIds.lightweight)
       .addModule(StatBoostModule.multiplyBase(ToolStats.ATTACK_SPEED).eachLevel(0.08f))
