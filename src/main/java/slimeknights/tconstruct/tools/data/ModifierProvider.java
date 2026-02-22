@@ -1481,9 +1481,6 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .addModule(new ReduceEffectOnUnequipModule(MobEffectCategory.BENEFICIAL, LevelingValue.eachLevel(0.2f), ModifierCondition.ANY_TOOL));
     buildModifier(ModifierIds.balmOfSssss).levelDisplay(ModifierLevelDisplay.SINGLE_LEVEL)
       .addModule(AttributeModule.builder(TinkerAttributes.BAD_EFFECT_DURATION, Operation.MULTIPLY_BASE).tooltipStyle(TooltipStyle.PERCENT).eachLevel(0.2f));
-    buildModifier(ModifierIds.slowBones).levelDisplay(ModifierLevelDisplay.SINGLE_LEVEL)
-      .addModule(new EffectImmunityModule(MobEffects.MOVEMENT_SLOWDOWN))
-      .addModule(MobEffectModule.builder(MobEffects.MOVEMENT_SLOWDOWN).damageSource(DamageSourcePredicate.tag(DamageTypeTags.IS_PROJECTILE)).time(RandomLevelingValue.flat(300)).level(RandomLevelingValue.perLevel(0, 2)).buildArmorAttack());
     buildModifier(ModifierIds.revenge).levelDisplay(ModifierLevelDisplay.SINGLE_LEVEL)
       .addModule(MobEffectModule.builder(MobEffects.DAMAGE_BOOST).time(RandomLevelingValue.perLevel(0, 200)).chance(LevelingValue.ONE).counterDurabilityUsage(0).targetSelf(true).directDamage(BooleanPredicate.ALWAYS).damageSource(SourceAttackerPredicate.causing(LivingEntityPredicate.ANY)).buildCounter())
       .addModule(new ClearEffectOnUnequipModule(MobEffects.DAMAGE_BOOST, ModifierCondition.ANY_TOOL));
@@ -1497,6 +1494,19 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
         .variable(LEVEL).constant(2).multiply().subtract()
         .constant(1).max().min()
         .build(), ModifierHooks.MODIFY_DAMAGE);
+    // bones
+    buildModifier(ModifierIds.slowBones).levelDisplay(ModifierLevelDisplay.SINGLE_LEVEL)
+      .addModule(new EffectImmunityModule(MobEffects.MOVEMENT_SLOWDOWN))
+      .addModule(MobEffectModule.builder(MobEffects.MOVEMENT_SLOWDOWN).damageSource(DamageSourcePredicate.tag(DamageTypeTags.IS_PROJECTILE)).time(RandomLevelingValue.flat(300)).level(RandomLevelingValue.perLevel(0, 2)).buildArmorAttack());
+    buildModifier(ModifierIds.magicBones).levelDisplay(ModifierLevelDisplay.SINGLE_LEVEL)
+      .addModule(new EffectImmunityModule(TinkerEffects.venom))
+      .addModule(MobEffectModule.builder(TinkerEffects.venom).damageSource(DamageSourcePredicate.tag(DamageTypeTags.IS_PROJECTILE)).time(RandomLevelingValue.random(5 * 20, 5 * 20)).buildArmorAttack());
+    buildModifier(ModifierIds.flamingBones).levelDisplay(ModifierLevelDisplay.SINGLE_LEVEL)
+      .addModule(new EffectImmunityModule(TinkerEffects.conductive))
+      .addModule(MobEffectModule.builder(TinkerEffects.conductive).damageSource(DamageSourcePredicate.tag(TinkerTags.DamageTypes.MELEE_PROTECTION)).time(RandomLevelingValue.random(5 * 20, 5 * 20)).buildArmorAttack());
+    buildModifier(ModifierIds.decayedBones).levelDisplay(ModifierLevelDisplay.SINGLE_LEVEL)
+      .addModule(new EffectImmunityModule(MobEffects.WITHER))
+      .addModule(MobEffectModule.builder(MobEffects.WITHER).damageSource(DamageSourcePredicate.tag(TinkerTags.DamageTypes.MELEE_PROTECTION)).time(RandomLevelingValue.flat(120)).buildArmorAttack());
 
     // mob disguise
     buildModifier(ModifierIds.creeperDisguise        ).levelDisplay(ModifierLevelDisplay.SINGLE_LEVEL).addModule(new MobDisguiseModule(EntityType.CREEPER));

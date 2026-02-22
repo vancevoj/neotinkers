@@ -181,7 +181,7 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     material(MaterialIds.dragonScale).addTraits(SkullStats.ID, ModifierIds.dragonheart);
     // skeleton
     material(MaterialIds.bone).addTraits(SkullStats.ID, TinkerModifiers.strongBones.getId(), ModifierIds.skeletonDisguise);
-    material(MaterialIds.venombone).addTraits(SkullStats.ID, ModifierIds.slowBones, ModifierIds.strayDisguise);
+    material(MaterialIds.ice).addTraits(SkullStats.ID, ModifierIds.slowBones, ModifierIds.strayDisguise);
     material(MaterialIds.necroticBone).addTraits(SkullStats.ID, new ModifierEntry(ModifierIds.restore, 2)).addTraits(SkullStats.ID, ModifierIds.witherSkeletonDisguise);
     // spider
     material(MaterialIds.string).addTraits(SkullStats.ID, ModifierIds.boonOfSssss, ModifierIds.spiderDisguise);
@@ -191,11 +191,14 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     material(MaterialIds.iron).addTraits(SkullStats.ID, TinkerModifiers.plague.getId(), ModifierIds.huskDisguise);
     material(MaterialIds.copper).addTraits(SkullStats.ID, new ModifierEntry(ModifierIds.respiration, 2)).addTraits(SkullStats.ID, ModifierIds.drownedDisguise);
     // nether
-    // TODO 1.21: use MaterialIds.blazeRod instead
-    material(MaterialIds.blazingBone).addTraits(SkullStats.ID, TinkerModifiers.firebreath.getId(), ModifierIds.blazeDisguise);
+    material(MaterialIds.blaze).addTraits(SkullStats.ID, TinkerModifiers.firebreath.getId(), ModifierIds.blazeDisguise);
     material(MaterialIds.gold).addTraits(SkullStats.ID, TinkerModifiers.chrysophilite.getId(), ModifierIds.piglinDisguise, TinkerModifiers.golden.getId());
     material(MaterialIds.roseGold).addTraits(SkullStats.ID, TinkerModifiers.goldGuard.getId(), ModifierIds.piglinBruteDisguise, TinkerModifiers.golden.getId());
     material(MaterialIds.pigIron).addTraits(SkullStats.ID, ModifierIds.revenge, ModifierIds.zombifiedPiglinDisguise);
+    // crafted
+    material(MaterialIds.venombone).addTraits(SkullStats.ID, ModifierIds.magicBones, ModifierIds.skeletonDisguise);
+    material(MaterialIds.blazingBone).addTraits(SkullStats.ID, ModifierIds.flamingBones, ModifierIds.witherSkeletonDisguise);
+    material(MaterialIds.necronium).addTraits(SkullStats.ID, ModifierIds.decayedBones, ModifierIds.witherSkeletonDisguise);
     // slimesuit
     noTraits(MaterialIds.blood);
     noTraits(MaterialIds.clay);

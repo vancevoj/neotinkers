@@ -527,22 +527,32 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
     // travelers's shield
     addMaterialStats(MaterialIds.ice, StatlessMaterialStats.REPAIR_KIT);
     addMaterialStats(MaterialIds.blazewood, StatlessMaterialStats.REPAIR_KIT);
+
     // slimeskull
     addMaterialStats(MaterialIds.glass,        new SkullStats( 90, 0));
     addMaterialStats(MaterialIds.enderPearl,   new SkullStats(180, 0));
+    addMaterialStats(MaterialIds.blaze,        new SkullStats(150, 0));
+    addMaterialStats(MaterialIds.dragonScale,  new SkullStats(120, 0));
+    // skeleton
     addMaterialStats(MaterialIds.bone,         new SkullStats(100, 0));
-    addMaterialStats(MaterialIds.venombone,    new SkullStats(175, 1));
+    addMaterialStats(MaterialIds.ice,          new SkullStats( 75, 0));
     addMaterialStats(MaterialIds.necroticBone, new SkullStats(125, 0));
+    // spider
     addMaterialStats(MaterialIds.string,       new SkullStats(140, 0));
     addMaterialStats(MaterialIds.darkthread,   new SkullStats(200, 1));
+    // zombie
     addMaterialStats(MaterialIds.leather,      new SkullStats(150, 2));
     addMaterialStats(MaterialIds.iron,         new SkullStats(165, 2));
     addMaterialStats(MaterialIds.copper,       new SkullStats(145, 2));
-    addMaterialStats(MaterialIds.blazingBone,  new SkullStats(205, 1));
+    // piglin
     addMaterialStats(MaterialIds.gold,         new SkullStats(125, 0));
     addMaterialStats(MaterialIds.roseGold,     new SkullStats(175, 1));
     addMaterialStats(MaterialIds.pigIron,      new SkullStats(150, 2));
-    addMaterialStats(MaterialIds.dragonScale,  new SkullStats(120, 0));
+    // crafted
+    addMaterialStats(MaterialIds.venombone,    new SkullStats(175, 1));
+    addMaterialStats(MaterialIds.blazingBone,  new SkullStats(205, 1));
+    addMaterialStats(MaterialIds.necronium,    new SkullStats(157, 1));
+
     // slimesuit
     addMaterialStats(MaterialIds.enderslime, StatlessMaterialStats.REPAIR_KIT);
     addMaterialStats(MaterialIds.phantom, StatlessMaterialStats.REPAIR_KIT);

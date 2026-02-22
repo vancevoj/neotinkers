@@ -2,7 +2,7 @@
   "type": "tconstruct:fixed_material_swapping",
   "index": 0,
   "ingredient": {
-    "item": "tconstruct:blaze_head"
+    "item": "tconstruct:blazing_bone_head"
   },
   "material": "tconstruct:blazing_bone",
   "max_stack_size": 16,

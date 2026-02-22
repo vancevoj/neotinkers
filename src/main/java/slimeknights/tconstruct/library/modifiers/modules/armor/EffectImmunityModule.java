@@ -21,6 +21,7 @@ import slimeknights.tconstruct.library.tools.context.EquipmentChangeContext;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 /**
  * Module for armor modifiers that makes the wearer immune to a mob effect
@@ -35,6 +36,10 @@ public record EffectImmunityModule(MobEffect effect, ModifierCondition<IToolStac
 
   public EffectImmunityModule(MobEffect effect) {
     this(effect, ModifierCondition.ANY_TOOL);
+  }
+
+  public EffectImmunityModule(Supplier<? extends MobEffect> effect) {
+    this(effect.get());
   }
 
   @Override

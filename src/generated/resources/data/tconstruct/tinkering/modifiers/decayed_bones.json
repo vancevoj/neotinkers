@@ -1,0 +1,24 @@
+{
+  "level_display": "tconstruct:single_level",
+  "modules": [
+    {
+      "type": "tconstruct:effect_immunity",
+      "effect": "minecraft:wither"
+    },
+    {
+      "type": "tconstruct:armor_attack_mob_effect",
+      "damage_source": {
+        "type": "mantle:tag",
+        "tag": "tconstruct:protection/melee"
+      },
+      "effect": "minecraft:wither",
+      "level": {
+        "flat": 1.0
+      },
+      "time": {
+        "flat": 120.0
+      }
+    }
+  ],
+  "tooltip_display": "always"
+}

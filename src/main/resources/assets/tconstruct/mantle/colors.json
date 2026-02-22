@@ -331,6 +331,9 @@
     "enderdodging":     "#CC00FA",
     "firebreath":       "#FC9600",
     "slow_bones":       "#C5D6D5",
+    "magic_bones":      "#A2935E",
+    "flaming_bones":    "#DBCC0B",
+    "decayed_bones":    "#7F9374",
     "gold_guard":       "#F5DA2A",
     "mithridatism":     "#153A34",
     "plague":           "#59503B",
@@ -339,6 +342,7 @@
     "strong_bones":     "#D3D3D3",
     "wildfire":         "#487532",
     "withered":         "#343434",
+    "dragonheart":      "#707070",
 
     "__traits_slimeskull_disguise__": null,
     "creeper_disguise":          "#95D78E",

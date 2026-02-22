@@ -4,5 +4,17 @@
       "level": 1,
       "name": "tconstruct:fiery"
     }
-  ]
+  ],
+  "perStat": {
+    "tconstruct:skull": [
+      {
+        "level": 1,
+        "name": "tconstruct:firebreath"
+      },
+      {
+        "level": 1,
+        "name": "tconstruct:blaze_disguise"
+      }
+    ]
+  }
 }

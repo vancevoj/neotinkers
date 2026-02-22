@@ -266,22 +266,29 @@ public class ToolsRecipeProvider extends BaseRecipeProvider implements IMaterial
       .save(consumer, location(plateFolder + "boots_swapping"));
 
     // slimeskull
-    slimeskull(consumer, MaterialIds.glass,        Items.CREEPER_HEAD,          armorFolder);
+    slimeskull(consumer, MaterialIds.glass,       Items.CREEPER_HEAD, armorFolder);
+    slimeskull(consumer, MaterialIds.dragonScale, Items.DRAGON_HEAD,  armorFolder);
+    slimeskull(consumer, MaterialIds.enderPearl, TinkerWorld.heads.get(TinkerHeadType.ENDERMAN), armorFolder);
+    slimeskull(consumer, MaterialIds.blaze,      TinkerWorld.heads.get(TinkerHeadType.BLAZE),    armorFolder);
+    // zombie
+    slimeskull(consumer, MaterialIds.leather, Items.ZOMBIE_HEAD, armorFolder);
+    slimeskull(consumer, MaterialIds.iron,   TinkerWorld.heads.get(TinkerHeadType.HUSK),    armorFolder);
+    slimeskull(consumer, MaterialIds.copper, TinkerWorld.heads.get(TinkerHeadType.DROWNED), armorFolder);
+    // spider
+    slimeskull(consumer, MaterialIds.string,     TinkerWorld.heads.get(TinkerHeadType.SPIDER),      armorFolder);
+    slimeskull(consumer, MaterialIds.darkthread, TinkerWorld.heads.get(TinkerHeadType.CAVE_SPIDER), armorFolder);
+    // skeleton
     slimeskull(consumer, MaterialIds.bone,         Items.SKELETON_SKULL,        armorFolder);
     slimeskull(consumer, MaterialIds.necroticBone, Items.WITHER_SKELETON_SKULL, armorFolder);
-    slimeskull(consumer, MaterialIds.leather,      Items.ZOMBIE_HEAD,           armorFolder);
-    slimeskull(consumer, MaterialIds.gold,         Items.PIGLIN_HEAD,           armorFolder);
-    slimeskull(consumer, MaterialIds.dragonScale,  Items.DRAGON_HEAD,           armorFolder);
-    slimeskull(consumer, MaterialIds.enderPearl,  TinkerWorld.heads.get(TinkerHeadType.ENDERMAN),         armorFolder);
-    // TODO 1.20: switch this to bogged, perhaps use a new bone type for stray
-    slimeskull(consumer, MaterialIds.venombone,   TinkerWorld.heads.get(TinkerHeadType.STRAY),            armorFolder);
-    slimeskull(consumer, MaterialIds.string,      TinkerWorld.heads.get(TinkerHeadType.SPIDER),           armorFolder);
-    slimeskull(consumer, MaterialIds.darkthread,  TinkerWorld.heads.get(TinkerHeadType.CAVE_SPIDER),      armorFolder);
-    slimeskull(consumer, MaterialIds.iron,        TinkerWorld.heads.get(TinkerHeadType.HUSK),             armorFolder);
-    slimeskull(consumer, MaterialIds.copper,      TinkerWorld.heads.get(TinkerHeadType.DROWNED),          armorFolder);
-    slimeskull(consumer, MaterialIds.blazingBone, TinkerWorld.heads.get(TinkerHeadType.BLAZE),            armorFolder);
-    slimeskull(consumer, MaterialIds.roseGold,    TinkerWorld.heads.get(TinkerHeadType.PIGLIN_BRUTE),     armorFolder);
-    slimeskull(consumer, MaterialIds.pigIron,     TinkerWorld.heads.get(TinkerHeadType.ZOMBIFIED_PIGLIN), armorFolder);
+    slimeskull(consumer, MaterialIds.ice, TinkerWorld.heads.get(TinkerHeadType.STRAY), armorFolder);
+    // piglin
+    slimeskull(consumer, MaterialIds.gold, Items.PIGLIN_HEAD, armorFolder);
+    slimeskull(consumer, MaterialIds.roseGold, TinkerWorld.heads.get(TinkerHeadType.PIGLIN_BRUTE),     armorFolder);
+    slimeskull(consumer, MaterialIds.pigIron, TinkerWorld.heads.get(TinkerHeadType.ZOMBIFIED_PIGLIN), armorFolder);
+    // crafted
+    slimeskull(consumer, MaterialIds.venombone,   TinkerWorld.heads.get(TinkerHeadType.VENOMBONE),        armorFolder);
+    slimeskull(consumer, MaterialIds.blazingBone, TinkerWorld.heads.get(TinkerHeadType.BLAZING_BONE),     armorFolder);
+    slimeskull(consumer, MaterialIds.necronium,   TinkerWorld.heads.get(TinkerHeadType.NECRONIUM),        armorFolder);
 
     // slimelytra
     ItemCastingRecipeBuilder.basinRecipe(TinkerTools.slimesuit.get(ArmorItem.Type.CHESTPLATE))
