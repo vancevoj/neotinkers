@@ -526,7 +526,7 @@ public class BlockTagProvider extends BlockTagsProvider {
     tag(TinkerTags.Blocks.MINABLE_WITH_DAGGER).addTags(MINEABLE_WITH_HOE, TinkerTags.Blocks.MINABLE_WITH_SWORD);
 
     // melting pan blacklist, basically anything that feels gross due to unsupported melting recipe
-    tagBlocks(MINEABLE_MELTING_BLACKLIST, TinkerSmeltery.searedMelter, TinkerSmeltery.smelteryController, TinkerSmeltery.foundryController, TinkerSmeltery.searedLantern, TinkerSmeltery.scorchedLantern, TinkerSmeltery.searedFluidCannon, TinkerSmeltery.scorchedFluidCannon, TinkerSmeltery.searedCastingTank);
+    tagBlocks(MINEABLE_MELTING_BLACKLIST, TinkerSmeltery.searedMelter, TinkerSmeltery.smelteryController, TinkerSmeltery.foundryController, TinkerSmeltery.searedLantern, TinkerSmeltery.scorchedLantern, TinkerSmeltery.searedFluidCannon, TinkerSmeltery.scorchedFluidCannon, TinkerSmeltery.searedCastingTank, TinkerSmeltery.scorchedProxyTank);
     tagBlocks(MINEABLE_MELTING_BLACKLIST, TinkerSmeltery.searedTank, TinkerSmeltery.scorchedTank);
 
     // copy of blocks list from FlowingFluid#canHoldFLuid
