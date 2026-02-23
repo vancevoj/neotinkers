@@ -58,7 +58,7 @@ body:
       
         * **Be useful to the base mod.** Suggest existing features or [roadmap plans](https://slimeknights.github.io/docs/roadmap/) that would use this. We do not like adding APIs we do not use.
         * **Be useful to many addons.** This solves a common problem that many addons will encounter, or enables better compatability between addons.
-        * **Requires changes to the base mod.** This is not possible to be added in an addon without mixins. If this is the only criteria met, include a mimimumal version of the suggestion that meets your needs.
+        * **Requires changes to the base mod.** This is not possible to be added in an addon without mixins. If this is the only criteria met, include alongside your suggest a minimal changes needed for an addon to do the rest.
 
   - type: textarea
     id: problem
