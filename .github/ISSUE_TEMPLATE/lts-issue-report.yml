@@ -1,6 +1,6 @@
-name: 1.18 Issue Report
-description: Report an issue with 1.18, currently long term support
-labels: [1.18, Bug, Unreviewed]
+name: LTS Issue Report
+description: Report an issue with long term support versions 1.18-1.19. Anything older than 1.18 is not supported.
+labels: [Bug, Unreviewed]
 body:
   - type: markdown
     attributes:
@@ -22,7 +22,7 @@ body:
     id: minecraft-version
     attributes:
       label: Minecraft Version
-      value: 1.18.2
+      value: 1.19.2
     validations:
       required: true
   - type: input
