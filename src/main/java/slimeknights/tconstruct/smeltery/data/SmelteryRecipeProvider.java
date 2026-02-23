@@ -451,12 +451,14 @@ public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelt
                        .save(consumer, location(folder + "heater"));
     // fluid cannon
     ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, TinkerSmeltery.searedFluidCannon)
-                       .define('T', similarTanks)
-                       .define('C', Tags.Items.INGOTS_COPPER)
-                       .pattern("CTC")
-                       .pattern("CCC")
-                       .unlockedBy("has_item", has(Tags.Items.INGOTS_COPPER))
-                       .save(consumer, location(folder + "fluid_cannon"));
+      .define('R', Tags.Items.DUSTS_REDSTONE)
+      .define('T', similarTanks)
+      .define('C', Tags.Items.INGOTS_COPPER)
+      .pattern(" R ")
+      .pattern("CTC")
+      .pattern("CCC")
+      .unlockedBy("has_item", has(Tags.Items.INGOTS_COPPER))
+      .save(consumer, location(folder + "fluid_cannon"));
 
     // casting
     String castingFolder = "smeltery/casting/seared/";
@@ -899,12 +901,14 @@ public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelt
                        .save(consumer, location(folder + "alloyer"));
     // fluid cannon
     ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, TinkerSmeltery.scorchedFluidCannon)
-                       .define('T', similarTanks)
-                       .define('C', TinkerMaterials.cobalt.getIngotTag())
-                       .pattern("CTC")
-                       .pattern("CCC")
-                       .unlockedBy("has_item", has(TinkerMaterials.cobalt.getIngotTag()))
-                       .save(consumer, location(folder + "fluid_cannon"));
+      .define('R', Tags.Items.DUSTS_REDSTONE)
+      .define('T', similarTanks)
+      .define('C', TinkerMaterials.cobalt.getIngotTag())
+      .pattern(" R ")
+      .pattern("CTC")
+      .pattern("CCC")
+      .unlockedBy("has_item", has(TinkerMaterials.cobalt.getIngotTag()))
+      .save(consumer, location(folder + "fluid_cannon"));
 
     // casting
     String castingFolder = "smeltery/casting/scorched/";
