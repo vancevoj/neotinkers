@@ -1,4 +1,4 @@
-name: LTS Issue Report
+name: LTS Bug Report
 description: Report an issue with long term support versions 1.18-1.19. Anything older than 1.18 is not supported.
 labels: [Bug, Unreviewed]
 body:
