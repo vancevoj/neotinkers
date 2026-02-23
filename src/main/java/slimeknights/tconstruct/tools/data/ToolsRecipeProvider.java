@@ -351,13 +351,13 @@ public class ToolsRecipeProvider extends BaseRecipeProvider implements IMaterial
     Pattern crystal = new Pattern(TConstruct.MOD_ID, "crystal");
     PartBuilderRecycleBuilder.tool(TinkerTools.earthStaff)
       .result(crystal, TinkerWorld.earthGeode, 2)
-      .result(log, TinkerWorld.skyroot.getLog(), 2)
-      .result(ingot, TinkerMaterials.roseGold.getIngotTag(), 1)
+      .result(log, TinkerWorld.greenheart.getLog(), 2)
+      .result(ingot, TinkerMaterials.cobalt.getIngotTag(), 1)
       .save(consumer, location(folder + "earth_staff"));
     PartBuilderRecycleBuilder.tool(TinkerTools.skyStaff)
       .result(crystal, TinkerWorld.skyGeode, 2)
-      .result(log, TinkerWorld.greenheart.getLog(), 2)
-      .result(ingot, TinkerMaterials.cobalt.getIngotTag(), 1)
+      .result(log, TinkerWorld.skyroot.getLog(), 2)
+      .result(ingot, TinkerMaterials.roseGold.getIngotTag(), 1)
       .save(consumer, location(folder + "sky_staff"));
     PartBuilderRecycleBuilder.tool(TinkerTools.ichorStaff)
       .result(crystal, TinkerWorld.ichorGeode, 2)
