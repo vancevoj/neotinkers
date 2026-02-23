@@ -182,7 +182,7 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     // skeleton
     material(MaterialIds.bone).addTraits(SkullStats.ID, TinkerModifiers.strongBones.getId(), ModifierIds.skeletonDisguise);
     material(MaterialIds.ice).addTraits(SkullStats.ID, ModifierIds.slowBones, ModifierIds.strayDisguise);
-    material(MaterialIds.necroticBone).addTraits(SkullStats.ID, new ModifierEntry(ModifierIds.restore, 2)).addTraits(SkullStats.ID, ModifierIds.witherSkeletonDisguise);
+    material(MaterialIds.necroticBone).addTraits(SkullStats.ID, ModifierIds.rebuff, ModifierIds.witherSkeletonDisguise);
     // spider
     material(MaterialIds.string).addTraits(SkullStats.ID, ModifierIds.boonOfSssss, ModifierIds.spiderDisguise);
     material(MaterialIds.darkthread).addTraits(SkullStats.ID, ModifierIds.balmOfSssss, ModifierIds.caveSpiderDisguise);

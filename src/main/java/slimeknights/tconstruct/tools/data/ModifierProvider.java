@@ -1105,12 +1105,11 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .addModule(EnchantmentModule.builder(Enchantments.FIRE_PROTECTION).protection())
       .addModule(ProtectionModule.builder().sources(DamageSourcePredicate.CAN_PROTECT, SourceAttackerPredicate.causing(LivingEntityPredicate.FIRE_IMMUNE)).eachLevel(1.25f));
     buildModifier(ModifierIds.necrotic).addModule(LifestealModule.builder().eachLevel(0.05f));
-    buildModifier(ModifierIds.restore).priority(25) // after warded, only restore your actual taken damage
-      .levelDisplay(new ModifierLevelDisplay.LevelCap(3, ModifierLevelDisplay.SINGLE_LEVEL))
-      // 15% at 50% then 1005
-      .addModule(RestoreLostHealthModule.builder().toolTag(TinkerTags.Items.ARMOR).maxLevel(2).effectLevel(LevelingInt.eachLevel(1)).flat(0.5f))
-      // stop at 25% for level 3, slimeskull exclusive
-      .addModule(RestoreLostHealthModule.builder().toolTag(TinkerTags.Items.ARMOR).minLevel(3).effectLevel(LevelingInt.flat(3)).flat(0.5f));
+    buildModifier(ModifierIds.restore).levelDisplay(ModifierLevelDisplay.SINGLE_LEVEL)
+      .addModule(RestoreLostHealthModule.builder().toolTag(TinkerTags.Items.ARMOR).flat(0.25f), ModifierHooks.MODIFY_HURT, ModifierHooks.TOOLTIP);
+    buildModifier(ModifierIds.rebuff).priority(25) // after warded, only restore your actual taken damage
+      .levelDisplay(ModifierLevelDisplay.SINGLE_LEVEL)
+      .addModule(RestoreLostHealthModule.builder().toolTag(TinkerTags.Items.ARMOR).chance(LevelingValue.ONE).effectLevel(LevelingInt.eachLevel(1)).flat(0.5f));
 
     // traits - tier 2 compat
     buildModifier(ModifierIds.lustrous);

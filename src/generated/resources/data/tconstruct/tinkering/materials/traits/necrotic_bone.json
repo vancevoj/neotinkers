@@ -14,8 +14,8 @@
     ],
     "tconstruct:skull": [
       {
-        "level": 2,
-        "name": "tconstruct:restore"
+        "level": 1,
+        "name": "tconstruct:rebuff"
       },
       {
         "level": 1,

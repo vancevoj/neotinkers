@@ -232,6 +232,7 @@ public class ModifierIds {
   public static final ModifierId bounce = id("bounce");
   public static final ModifierId venom = id("venom");
   public static final ModifierId restore = id("restore");
+  public static final ModifierId rebuff = id("rebuff");
   // traits - tier 2 compat
   public static final ModifierId deciduous = id("deciduous");
   public static final ModifierId barkskin = id("barkskin");
