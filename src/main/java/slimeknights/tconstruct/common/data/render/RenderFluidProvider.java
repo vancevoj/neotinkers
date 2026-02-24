@@ -61,6 +61,7 @@ public class RenderFluidProvider extends BlockStateDataMapProvider<List<FluidCub
     // fluid cannon
     block(TinkerSmeltery.searedFluidCannon.get()).variant(halfTank);
     block(TinkerSmeltery.scorchedFluidCannon.get()).variant(halfTank);
+    block(TinkerSmeltery.endFluidCannon.get()).variant(halfTank);
 
     // tanks
     String tank = "templates/tank";

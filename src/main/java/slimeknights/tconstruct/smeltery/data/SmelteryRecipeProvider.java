@@ -157,6 +157,16 @@ public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelt
     MoldingRecipeBuilder.moldingTable(TinkerSmeltery.blankRedSandCast)
                         .setMaterial(TinkerTags.Items.RED_SAND_CASTS)
                         .save(consumer, location("smeltery/red_sand_cast_pickup"));
+
+    ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, TinkerSmeltery.endFluidCannon)
+      .define('R', Tags.Items.DUSTS_REDSTONE)
+      .define('T', Items.SHULKER_SHELL)
+      .define('C', TinkerMaterials.knightmetal.getIngotTag())
+      .pattern(" R ")
+      .pattern("CTC")
+      .pattern("CCC")
+      .unlockedBy("has_item", has(TinkerMaterials.knightmetal.getIngotTag()))
+      .save(consumer, location("smeltery/end_fluid_cannon"));
   }
 
   private void addSmelteryRecipes(Consumer<FinishedRecipe> consumer) {
@@ -1775,6 +1785,10 @@ public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelt
     MeltingRecipeBuilder.melting(Ingredient.of(Blocks.BEACON), TinkerFluids.moltenObsidian, FluidValues.GLASS_BLOCK * 3)
                         .addByproduct(TinkerFluids.moltenGlass.result(FluidValues.GLASS_BLOCK * 5))
                         .save(consumer, location(folder + "obsidian/beacon"));
+
+    // knightmetal recycling
+    MeltingRecipeBuilder.melting(Ingredient.of(TinkerSmeltery.endFluidCannon), TinkerFluids.moltenKnightmetal, FluidValues.INGOT * 5, 2.5f)
+      .save(consumer, location(folder + "metal/knightmetal/fluid_cannon"));
 
     // ender
     MeltingRecipeBuilder.melting(Ingredient.of(Items.END_CRYSTAL), TinkerFluids.moltenEnder, FluidValues.SLIMEBALL)
