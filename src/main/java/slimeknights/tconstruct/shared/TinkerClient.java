@@ -32,6 +32,7 @@ import slimeknights.tconstruct.library.client.armor.texture.DyedArmorTextureSupp
 import slimeknights.tconstruct.library.client.armor.texture.FirstArmorTextureSupplier;
 import slimeknights.tconstruct.library.client.armor.texture.FixedArmorTextureSupplier;
 import slimeknights.tconstruct.library.client.armor.texture.MaterialArmorTextureSupplier;
+import slimeknights.tconstruct.library.client.armor.texture.MaterialHasFallbackTextureSupplier;
 import slimeknights.tconstruct.library.client.armor.texture.TrimArmorTextureSupplier;
 import slimeknights.tconstruct.library.client.book.TinkerBook;
 import slimeknights.tconstruct.library.client.data.spritetransformer.FramesSpriteTransformer;
@@ -80,6 +81,7 @@ public class TinkerClient {
     ArmorTextureSupplier.LOADER.register(getResource("material"), MaterialArmorTextureSupplier.Material.LOADER);
     ArmorTextureSupplier.LOADER.register(getResource("persistent_data"), MaterialArmorTextureSupplier.PersistentData.LOADER);
     ArmorTextureSupplier.LOADER.register(getResource("trim"), TrimArmorTextureSupplier.LOADER);
+    ArmorTextureSupplier.LOADER.register(getResource("material_has_fallback"), MaterialHasFallbackTextureSupplier.LOADER);
   }
 
   @SubscribeEvent

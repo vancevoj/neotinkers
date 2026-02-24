@@ -10,6 +10,7 @@
     "tconstruct:item/tool/armor/plate/helmet/modifiers/"
   ],
   "first_modifiers": [
+    "tconstruct:dyed",
     "tconstruct:trim"
   ],
   "parts": [

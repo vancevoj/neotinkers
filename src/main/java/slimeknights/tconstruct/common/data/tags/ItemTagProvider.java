@@ -360,7 +360,7 @@ public class ItemTagProvider extends ItemTagsProvider {
     addArmorTags(TinkerTools.travelersGear, SINGLEPART_TOOL, DURABILITY, BONUS_SLOTS, DYEABLE, ItemTags.FREEZE_IMMUNE_WEARABLES);
     // no trim for travelers helmet, not enough texture
     tag(TRIM).add(TinkerTools.travelersGear.get(ArmorItem.Type.CHESTPLATE), TinkerTools.travelersGear.get(ArmorItem.Type.LEGGINGS), TinkerTools.travelersGear.get(ArmorItem.Type.BOOTS));
-    addArmorTags(TinkerTools.plateArmor,    MULTIPART_TOOL, DURABILITY, BONUS_SLOTS, TRIM);
+    addArmorTags(TinkerTools.plateArmor,    MULTIPART_TOOL, DURABILITY, BONUS_SLOTS, DYEABLE, TRIM);
     addArmorTags(TinkerTools.slimesuit,     DURABILITY, BONUS_SLOTS, TRIM, EMBELLISHMENT_SLIME);
     addToolTags(TinkerTools.slimesuit.get(ArmorItem.Type.HELMET), SINGLEPART_TOOL, SWAPPABLE_SKULLS);
 
