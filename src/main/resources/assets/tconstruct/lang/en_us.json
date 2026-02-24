@@ -2570,7 +2570,7 @@
   "modifier.tconstruct.embellishment.flavor": "Redecorate!",
   "modifier.tconstruct.embellishment.description": "Armor appearance changed to match a different material",
   "modifier.tconstruct.dyed": "Dyed",
-  "modifier.tconstruct.dyed.formatted": "Dyed #%s",
+  "modifier.tconstruct.dyed.formatted": "Dyed %s",
   "modifier.tconstruct.dyed.flavor": "Redecorate!",
   "modifier.tconstruct.dyed.description": "Armor appearance changed to match a different material",
   "modifier.tconstruct.trim": "Armor Trim",
