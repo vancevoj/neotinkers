@@ -42,6 +42,9 @@ import java.util.concurrent.CompletableFuture;
 public abstract class AbstractModifierModelMapProvider extends GenericDataProvider {
   private final Map<ResourceLocation, Builder> models = new HashMap<>();
 
+  /** Argument for {@code largeSeparator} to disable large textures entirely. */
+  protected static final char SMALL = '\0';
+
   private final String modId;
   public AbstractModifierModelMapProvider(PackOutput output, String modId) {
     super(output, Target.RESOURCE_PACK, ModifierModelMapManager.FOLDER);
@@ -164,6 +167,12 @@ public abstract class AbstractModifierModelMapProvider extends GenericDataProvid
 
     /* Common models */
 
+    /** Gets the large modifiers folder */
+    @Nullable
+    private static String largeFolder(String folder, char largeSeparator) {
+      return largeSeparator != SMALL ? folder + "/large" + largeSeparator + "modifiers" : null;
+    }
+
     /** Adds a basic modifier in the given folder */
     public Builder luminosity(int light, ModifierId modifier, String texture, @Nullable String largeTexture) {
       return modifier(modifier, new NormalModifierModel(toolMaterial(texture), largeTexture != null ? toolMaterial(largeTexture) : null, -1, light));
@@ -179,9 +188,9 @@ public abstract class AbstractModifierModelMapProvider extends GenericDataProvid
     }
 
     /** Adds a basic modifier in the default folder */
-    public Builder luminosity(int light, boolean large, ModifierId... modifiers) {
+    public Builder luminosity(int light, char largeSeparator, ModifierId... modifiers) {
       String path = id.getPath();
-      return luminosity(light, path + "/modifiers", large ? path + "/large_modifiers" : null, modifiers);
+      return luminosity(light, path + "/modifiers", largeFolder(path, largeSeparator), modifiers);
     }
 
     /** Adds a basic modifier in the given folder */
@@ -195,8 +204,8 @@ public abstract class AbstractModifierModelMapProvider extends GenericDataProvid
     }
 
     /** Adds a basic modifier in the default folder */
-    public Builder basic(boolean large, ModifierId... modifiers) {
-      return luminosity(0, large, modifiers);
+    public Builder basic(char largeSeparator, ModifierId... modifiers) {
+      return luminosity(0, largeSeparator, modifiers);
     }
 
     /** Adds a basic modifier in the given folder using just the modifier path as the name */
@@ -237,9 +246,9 @@ public abstract class AbstractModifierModelMapProvider extends GenericDataProvid
     }
 
     /** Adds models for a tank, with a partial and full state */
-    public Builder fluid(ModifierId modifier, boolean large) {
+    public Builder fluid(ModifierId modifier, char largeSeparator) {
       String path = id.getPath();
-      return fluid(path + "/modifiers", large ? path + "/large_modifiers" : null, modifier);
+      return fluid(path + "/modifiers", largeFolder(path, largeSeparator), modifier);
     }
 
     /** Adds models for a tank, with a partial and full state */
@@ -258,9 +267,9 @@ public abstract class AbstractModifierModelMapProvider extends GenericDataProvid
     }
 
     /** Adds models for a tank, with a partial and full state */
-    public Builder tank(boolean large) {
+    public Builder tank(char largeSeparator) {
       String path = id.getPath();
-      return tank(path + "/modifiers", large ? path + "/large_modifiers" : null);
+      return tank(path + "/modifiers", largeFolder(path, largeSeparator));
     }
 
     /** Creates a model for smashing on a small tool */
@@ -288,9 +297,9 @@ public abstract class AbstractModifierModelMapProvider extends GenericDataProvid
     }
 
     /** Adds the embellishment model to the tool */
-    public Builder embellishment(boolean large) {
+    public Builder embellishment(char largeSeparator) {
       String path = id.getPath();
-      return embellishment(path + "/modifiers", large ? path + "/large_modifiers" : null);
+      return embellishment(path + "/modifiers", largeFolder(path, largeSeparator));
     }
 
 
