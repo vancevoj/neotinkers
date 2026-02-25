@@ -96,6 +96,7 @@ public class TinkerClient {
     ArmorTextureSupplier.LOADER.register(getResource("material_has_fallback"), MaterialHasFallbackTextureSupplier.LOADER);
 
     // modifier models
+    ModifierModel.LOADER.register(getResource("empty"), ModifierModel.EMPTY.getLoader());
     ModifierModel.LOADER.register(getResource("compound"), CompoundModifierModel.LOADER);
     ModifierModel.LOADER.register(getResource("conditional"), ConditionalModifierModel.LOADER);
     ModifierModel.LOADER.register(getResource("trait"), TraitModel.LOADER);

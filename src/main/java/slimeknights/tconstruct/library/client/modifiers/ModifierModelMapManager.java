@@ -30,6 +30,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 /**
  * Manager for getting modifier models
@@ -128,10 +129,7 @@ public class ModifierModelMapManager extends MergingJsonDataLoader<Builder> {
         // for simplicity, treat an array as a compound
         model = CompoundModifierModel.create(CompoundModifierModel.LIST_LOADABLE.convert(value, key.toString(), context.apply(id, key)));
       }
-      // model may be empty if a load condition failed
-      if (model != ModifierModel.EMPTY) {
-        map.put(key, model);
-      }
+      map.put(key, model);
     } catch (JsonSyntaxException e) {
       TConstruct.LOG.error("Failed to parse modifier model map {} for {} {}", id, errorPrefix, key, e);
     }
@@ -169,6 +167,9 @@ public class ModifierModelMapManager extends MergingJsonDataLoader<Builder> {
     TConstruct.LOG.info("{} modifier model maps in {} ms", this.models.size(), (System.nanoTime() - time) / 1000000f);
   }
 
+  /** Predicate for removing empty modifier models */
+  private static final Predicate<Entry<?,? extends IBakedModifierModel>> IS_EMPTY = entry -> entry.getValue() == ModifierModel.EMPTY;
+
   /** Gets a map of modifier models for the given tool */
   public ModifierModelMap getModelsForTool(Function<Material, TextureAtlasSprite> spriteGetter, List<ResourceLocation> options) {
     if (options.isEmpty()) {
@@ -190,6 +191,9 @@ public class ModifierModelMapManager extends MergingJsonDataLoader<Builder> {
           modifiers.putAll(optionMap.modifiers());
         }
       }
+      // remove empty models, we might have some if we were overriding for something like broken
+      constant.entrySet().removeIf(IS_EMPTY);
+      modifiers.entrySet().removeIf(IS_EMPTY);
       modelMap = ModifierModelMap.create(constant, modifiers);
     }
     // validate all model textures

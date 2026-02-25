@@ -9,6 +9,7 @@ import net.minecraft.world.inventory.InventoryMenu;
 import slimeknights.mantle.data.loadable.Loadables;
 import slimeknights.mantle.data.loadable.primitive.StringLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
+import slimeknights.mantle.data.loadable.record.SingletonLoader;
 import slimeknights.mantle.data.registry.GenericLoaderRegistry;
 import slimeknights.mantle.data.registry.GenericLoaderRegistry.IHaveLoader;
 import slimeknights.mantle.util.ItemLayerPixels;
@@ -23,18 +24,18 @@ import java.util.function.Function;
 
 /** Represents a model defined for the given tool */
 public interface ModifierModel extends IBakedModifierModel, IHaveLoader {
-  ModifierModel EMPTY = new ModifierModel() {
+  ModifierModel EMPTY = SingletonLoader.singleton(loader -> new ModifierModel() {
     @Override
     public void addQuads(IToolStackView tool, ModifierEntry modifier, Function<Material, TextureAtlasSprite> spriteGetter, Transformation transforms, boolean isLarge, int startTintIndex, Consumer<Collection<BakedQuad>> quadConsumer, @Nullable ItemLayerPixels pixels) {}
 
     @Override
     public RecordLoadable<? extends ModifierModel> getLoader() {
-      throw new UnsupportedOperationException("Empty modifier models cannot be serialized.");
+      return loader;
     }
 
     @Override
     public void validate(Function<Material, TextureAtlasSprite> spriteGetter) {}
-  };
+  });
 
   /** Loader for registering modifier models */
   GenericLoaderRegistry<ModifierModel> LOADER = new GenericLoaderRegistry<>("Modifier Model", EMPTY, true);
