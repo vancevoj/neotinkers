@@ -69,11 +69,8 @@ public class ModifierModelMapManager extends MergingJsonDataLoader<Builder> {
     // null means discard this model
     if (value.isJsonNull()) {
       map.remove(key);
-      // objects are a model to parse
-    } else if (value.isJsonObject() || value.isJsonArray()) {
-      map.put(key, value.getAsJsonObject());
     } else {
-      TConstruct.LOG.error("Invalid entry for {} {} while parsing modifier models {}: expected null, a JSON object, or a JSON array", errorPrefix, key, id);
+      map.put(key, value);
     }
   }
 
@@ -123,11 +120,11 @@ public class ModifierModelMapManager extends MergingJsonDataLoader<Builder> {
     try {
       // if it's an object, it's a single model
       ModifierModel model;
-      if (value.isJsonObject()) {
-        model = ModifierModel.LOADER.deserialize(value.getAsJsonObject(), context.apply(id, key));
-      } else {
+      if (value.isJsonArray()) {
         // for simplicity, treat an array as a compound
         model = CompoundModifierModel.create(CompoundModifierModel.LIST_LOADABLE.convert(value, key.toString(), context.apply(id, key)));
+      } else {
+        model = ModifierModel.LOADER.convert(value, key.toString(), context.apply(id, key));
       }
       map.put(key, model);
     } catch (JsonSyntaxException e) {
