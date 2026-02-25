@@ -6,8 +6,8 @@
     "metal": "tconstruct:item/tool/armor/travelers/boots/metal_broken"
   },
   "modifier_maps": [
-    "tconstruct:travelers_boots/broken",
-    "tconstruct:travelers_boots"
+    "tconstruct:travelers/boots_broken",
+    "tconstruct:travelers/boots"
   ],
   "first_modifiers": [
     "tconstruct:dyed",

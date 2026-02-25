@@ -7,8 +7,8 @@
     "metal": "tconstruct:item/tool/armor/travelers/goggles/metal_broken"
   },
   "modifier_maps": [
-    "tconstruct:travelers_helmet/broken",
-    "tconstruct:travelers_helmet"
+    "tconstruct:travelers/goggles_broken",
+    "tconstruct:travelers/goggles"
   ],
   "first_modifiers": [
     "tconstruct:dyed"

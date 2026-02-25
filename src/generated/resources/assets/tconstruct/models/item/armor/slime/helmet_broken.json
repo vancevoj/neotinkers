@@ -6,8 +6,8 @@
     "skull": "tconstruct:item/tool/armor/slime/helmet_skull"
   },
   "modifier_maps": [
-    "tconstruct:slime_helmet/broken",
-    "tconstruct:slime_helmet"
+    "tconstruct:slime/skull_broken",
+    "tconstruct:slime/skull"
   ],
   "parts": [
     {

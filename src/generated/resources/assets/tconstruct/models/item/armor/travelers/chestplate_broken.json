@@ -6,8 +6,8 @@
     "metal": "tconstruct:item/tool/armor/travelers/vest/metal_broken"
   },
   "modifier_maps": [
-    "tconstruct:travelers_chestplate/broken",
-    "tconstruct:travelers_chestplate"
+    "tconstruct:travelers/vest_broken",
+    "tconstruct:travelers/vest"
   ],
   "first_modifiers": [
     "tconstruct:dyed",

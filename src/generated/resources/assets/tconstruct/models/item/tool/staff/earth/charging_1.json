@@ -7,8 +7,8 @@
   },
   "large": true,
   "modifier_maps": [
-    "tconstruct:earth_staff/1",
-    "tconstruct:earth_staff",
+    "tconstruct:staff/earth/1",
+    "tconstruct:staff/earth",
     "tconstruct:staff"
   ],
   "modifier_roots": {

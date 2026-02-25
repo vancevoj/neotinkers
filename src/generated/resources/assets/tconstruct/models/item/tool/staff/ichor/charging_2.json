@@ -7,8 +7,8 @@
   },
   "large": true,
   "modifier_maps": [
-    "tconstruct:ichor_staff/2",
-    "tconstruct:ichor_staff",
+    "tconstruct:staff/ichor/2",
+    "tconstruct:staff/ichor",
     "tconstruct:staff"
   ],
   "modifier_roots": {

@@ -7,8 +7,8 @@
   },
   "large": true,
   "modifier_maps": [
-    "tconstruct:ender_staff/broken",
-    "tconstruct:ender_staff",
+    "tconstruct:staff/ender/broken",
+    "tconstruct:staff/ender",
     "tconstruct:staff/broken",
     "tconstruct:staff"
   ],

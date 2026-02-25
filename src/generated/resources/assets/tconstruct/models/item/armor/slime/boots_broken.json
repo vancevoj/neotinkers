@@ -5,8 +5,8 @@
     "tool": "tconstruct:item/tool/armor/slime/boots_broken"
   },
   "modifier_maps": [
-    "tconstruct:slime_boots/broken",
-    "tconstruct:slime_boots"
+    "tconstruct:slime/boot_broken",
+    "tconstruct:slime/boot"
   ],
   "first_modifiers": [
     "tconstruct:embellishment",

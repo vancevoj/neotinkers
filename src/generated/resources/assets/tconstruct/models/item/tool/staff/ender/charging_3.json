@@ -7,8 +7,8 @@
   },
   "large": true,
   "modifier_maps": [
-    "tconstruct:ender_staff/3",
-    "tconstruct:ender_staff",
+    "tconstruct:staff/ender/3",
+    "tconstruct:staff/ender",
     "tconstruct:staff"
   ],
   "modifier_roots": {

@@ -7,8 +7,8 @@
   },
   "large": true,
   "modifier_maps": [
-    "tconstruct:sky_staff/5",
-    "tconstruct:sky_staff",
+    "tconstruct:staff/sky/5",
+    "tconstruct:staff/sky",
     "tconstruct:staff"
   ],
   "modifier_roots": {

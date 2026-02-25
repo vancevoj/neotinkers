@@ -7,8 +7,8 @@
   },
   "large": true,
   "modifier_maps": [
-    "tconstruct:sky_staff/broken",
-    "tconstruct:sky_staff",
+    "tconstruct:staff/sky/broken",
+    "tconstruct:staff/sky",
     "tconstruct:staff/broken",
     "tconstruct:staff"
   ],

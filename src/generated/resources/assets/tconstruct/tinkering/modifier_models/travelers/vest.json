@@ -2,7 +2,7 @@
   "modifiers": {
     "tconstruct:dyed": {
       "type": "tconstruct:dyed",
-      "texture": "tconstruct:item/tool/armor/travelers/boots/modifiers/tconstruct_dyed"
+      "texture": "tconstruct:item/tool/armor/travelers/vest/modifiers/dyed"
     },
     "tconstruct:trim": {
       "type": "tconstruct:trim"

@@ -6,8 +6,8 @@
     "maille": "tconstruct:item/tool/armor/plate/helmet/maille_broken"
   },
   "modifier_maps": [
-    "tconstruct:plate_helmet/broken",
-    "tconstruct:plate_helmet"
+    "tconstruct:plate/helmet_broken",
+    "tconstruct:plate/helmet"
   ],
   "first_modifiers": [
     "tconstruct:dyed",

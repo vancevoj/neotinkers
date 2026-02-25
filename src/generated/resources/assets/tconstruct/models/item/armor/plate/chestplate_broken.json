@@ -6,8 +6,8 @@
     "maille": "tconstruct:item/tool/armor/plate/chestplate/maille_broken"
   },
   "modifier_maps": [
-    "tconstruct:plate_chestplate/broken",
-    "tconstruct:plate_chestplate"
+    "tconstruct:plate/chestplate_broken",
+    "tconstruct:plate/chestplate"
   ],
   "first_modifiers": [
     "tconstruct:dyed",

@@ -97,7 +97,7 @@ public abstract class AbstractModifierModelMapProvider extends GenericDataProvid
 
   /** Adds the given model to the tool variant */
   protected Builder tool(ResourceLocation tool, String variant) {
-    return tool(tool.withSuffix('/' + variant), tool);
+    return tool(tool.withSuffix(variant), tool);
   }
 
   /** Adds the given model to the tool */
@@ -121,18 +121,10 @@ public abstract class AbstractModifierModelMapProvider extends GenericDataProvid
   }
 
 
-  /* Specialized helpers */
-
-  /** Adds trim to the entire enum object */
-  protected void trim(EnumObject<?, ? extends Item> armor) {
-    armor.forEach(item -> tool(item).trim());
-  }
-
   /** Converts the modifier into a texture suffix */
   protected static String suffix(ModifierId modifier) {
     return modifier.getNamespace() + '_' + modifier.getPath();
   }
-
 
   /** Builder for adding modifier models */
   @RequiredArgsConstructor(access = AccessLevel.PRIVATE)

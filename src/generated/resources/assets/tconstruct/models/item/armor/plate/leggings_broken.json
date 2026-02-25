@@ -6,8 +6,8 @@
     "maille": "tconstruct:item/tool/armor/plate/leggings/maille_broken"
   },
   "modifier_maps": [
-    "tconstruct:plate_leggings/broken",
-    "tconstruct:plate_leggings"
+    "tconstruct:plate/leggings_broken",
+    "tconstruct:plate/leggings"
   ],
   "first_modifiers": [
     "tconstruct:dyed",

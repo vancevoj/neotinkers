@@ -8,8 +8,8 @@
     "large_core": "tconstruct:item/tool/armor/plate/shield/core_large_broken"
   },
   "modifier_maps": [
-    "tconstruct:plate_shield/broken",
-    "tconstruct:plate_shield"
+    "tconstruct:plate/shield_broken",
+    "tconstruct:plate/shield"
   ],
   "modifier_roots": {
     "small": [

@@ -4,7 +4,7 @@
   "textures": {
     "tool": "tconstruct:item/tool/armor/slime/wings"
   },
-  "modifier_maps": ["tconstruct:slime_chestplate"],
+  "modifier_maps": ["tconstruct:slime/wings"],
   "first_modifiers": [ "tconstruct:embellishment", "tconstruct:trim" ],
   "overrides": [
     {

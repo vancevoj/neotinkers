@@ -2,8 +2,6 @@ package slimeknights.tconstruct.tools.data.client;
 
 import net.minecraft.data.PackOutput;
 import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.Item;
-import slimeknights.mantle.registration.object.IdAwareObject;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.client.modifiers.DyedModifierModel;
 import slimeknights.tconstruct.library.client.modifiers.MaterialModifierModel;
@@ -27,36 +25,29 @@ public class ModifierModelMapProvider extends AbstractModifierModelMapProvider {
     ModifierId dyed = TinkerModifiers.dyed.getId();
     for (ArmorItem.Type type : ArmorItem.Type.values()) {
       String root = "armor/plate/" + type.getName() + "/maille";
-      Item item = TinkerTools.plateArmor.get(type);
+      String item = "plate/" + type.getName();
       tool(item).modifier(dyed, new MaterialHasFallbackModifierModel(1,
         new DyedModifierModel(toolMaterial(root + "_metal"), null),
         new DyedModifierModel(toolMaterial(root), null),
         "metal"
       )).trim();
-      tool(item, "broken").modifier(dyed, new MaterialHasFallbackModifierModel(1,
+      tool(item + "_broken").modifier(dyed, new MaterialHasFallbackModifierModel(1,
         new DyedModifierModel(toolMaterial(root + "_broken_metal"), null),
         new DyedModifierModel(toolMaterial(root + "_broken"), null),
         "metal"
       ));
     }
     // travelers
-    travelersDyed(ArmorItem.Type.HELMET, "goggles");
-    travelersDyed(ArmorItem.Type.CHESTPLATE, "vest");
-    travelersDyed(ArmorItem.Type.LEGGINGS, "pants");
-    travelersDyed(ArmorItem.Type.BOOTS, "boots");
-    travelersDyed(TinkerTools.travelersShield.get(), "shield");
-    for (ArmorItem.Type type : ArmorItem.Type.values()) {
-      // helmets don't have trim
-      if (type != ArmorItem.Type.HELMET) {
-        tool(TinkerTools.travelersGear.get(type)).trim();
-      }
-    }
+    travelers("goggles", false);
+    travelers("vest", true);
+    travelers("pants", true);
+    travelers("boots", true);
+    travelers("shield", false);
     // slimesuit
-    slimeEmbellishment(ArmorItem.Type.HELMET, "skull");
-    slimeEmbellishment(ArmorItem.Type.CHESTPLATE, "wings");
-    slimeEmbellishment(ArmorItem.Type.LEGGINGS, "shell");
-    slimeEmbellishment(ArmorItem.Type.BOOTS, "boot");
-    trim(TinkerTools.slimesuit);
+    slime("skull");
+    slime("wings");
+    slime("shell");
+    slime("boot");
 
     // ammo
     tool(TinkerTools.arrow).tipped("ammo/arrow_modifiers/tipped").smashing("ammo/arrow_modifiers/smashing")
@@ -65,23 +56,23 @@ public class ModifierModelMapProvider extends AbstractModifierModelMapProvider {
     tool(TinkerTools.throwingAxe).tipped("ammo/axe_modifiers/tipped").smashing("ammo/axe_modifiers/smashing");
     // fishing rods just have tipped
     tool(TinkerTools.fishingRod).tipped("fishing_rod/modifiers/tipped").fluid().compact(ModifierIds.tank);
-    tool(TinkerTools.fishingRod, "broken").constant("tipped", ModifierModel.EMPTY);
-    tool(TinkerTools.fishingRod, "cast").constant("tipped", ModifierModel.EMPTY);
+    tool(TinkerTools.fishingRod, "/broken").constant("tipped", ModifierModel.EMPTY);
+    tool(TinkerTools.fishingRod, "/cast").constant("tipped", ModifierModel.EMPTY);
 
     // tanks
     tool(TinkerTools.meltingPan).fluid();
     tool(TinkerTools.swasher).fluid();
 
     // staffs
-    tool("staff").large(
+    tool("staff").basic(true,
       ModifierIds.diamond, ModifierIds.emerald, ModifierIds.netherite,
       ModifierIds.firestarter,
       ModifierIds.overforced, ModifierIds.reinforced, ModifierIds.unbreakable
     ).tank(true).embellishment(true).fluid(ModifierIds.bucketing, true);
-    staffDyed(TinkerTools.earthStaff, "earth");
-    staffDyed(TinkerTools.skyStaff, "sky");
-    staffDyed(TinkerTools.ichorStaff, "ichor");
-    staffDyed(TinkerTools.enderStaff, "ender");
+    staffDyed("earth");
+    staffDyed("sky");
+    staffDyed("ichor");
+    staffDyed("ender");
   }
 
   @Override
@@ -90,37 +81,37 @@ public class ModifierModelMapProvider extends AbstractModifierModelMapProvider {
   }
 
   /** Adds dyed textures for travelers gear */
-  private void travelersDyed(Item item, String name) {
+  private void travelers(String name, boolean trim) {
     String root = "armor/travelers/" + name + "/modifiers/";
     ModifierId dyed = TinkerModifiers.dyed.getId();
-    tool(item).modifier(dyed, new DyedModifierModel(toolMaterial(root + "tconstruct_dyed"), null));
-    tool(item, "broken").modifier(dyed, new DyedModifierModel(toolMaterial(root + "broken/tconstruct_dyed"), null));
+    String item = "travelers/" + name;
+    Builder b = tool(item).modifier(dyed, new DyedModifierModel(toolMaterial(root + "dyed"), null));
+    if (trim) {
+      b.trim();
+    }
+    tool(item + "_broken").modifier(dyed, new DyedModifierModel(toolMaterial(root + "dyed_broken"), null));
   }
 
   /** Adds dyed textures for travelers gear */
-  private void travelersDyed(ArmorItem.Type type, String name) {
-    travelersDyed(TinkerTools.travelersGear.get(type), name);
-  }
-
-  /** Adds dyed textures for travelers gear */
-  private void slimeEmbellishment(ArmorItem.Type type, String name) {
+  private void slime(String name) {
     String root = "armor/slime/" + name + "_modifiers/";
     ModifierId embellishment = TinkerModifiers.embellishment.getId();
-    Item item = TinkerTools.slimesuit.get(type);
-    tool(item).modifier(embellishment, new MaterialModifierModel(toolMaterial(root + "tconstruct_embellishment"), null));
-    tool(item, "broken").modifier(embellishment, new MaterialModifierModel(toolMaterial(root + "broken/tconstruct_embellishment"), null));
+    String item = "slime/" + name;
+    tool(item).trim().modifier(embellishment, new MaterialModifierModel(toolMaterial(root + "tconstruct_embellishment"), null));
+    tool(item + "_broken").modifier(embellishment, new MaterialModifierModel(toolMaterial(root + "broken/tconstruct_embellishment"), null));
   }
 
   /** Adds dyed textures to a staff */
-  private void staffDyed(IdAwareObject staff, String name) {
+  private void staffDyed(String name) {
+    String staff = "staff/" + name;
     String small = "staff/modifiers/" + name + "/dyed";
     String large = "staff/large_modifiers/" + name + "/dyed";
     ModifierId dyed = TinkerModifiers.dyed.getId();
     tool(staff).modifier(dyed, new DyedModifierModel(toolMaterial(small), toolMaterial(large)));
-    tool(staff, "broken").modifier(dyed, new DyedModifierModel(toolMaterial(small + "_broken"), toolMaterial(large + "_broken")));
+    tool(staff + "/broken").modifier(dyed, new DyedModifierModel(toolMaterial(small + "_broken"), toolMaterial(large + "_broken")));
     for (int i = 1; i <= 5; i++) {
       String variant = Integer.toString(i);
-      tool(staff, variant).modifier(dyed, new DyedModifierModel(toolMaterial(small + '_' + variant), toolMaterial(large + '_' + variant)));
+      tool(staff + '/' + variant).modifier(dyed, new DyedModifierModel(toolMaterial(small + '_' + variant), toolMaterial(large + '_' + variant)));
     }
   }
 }

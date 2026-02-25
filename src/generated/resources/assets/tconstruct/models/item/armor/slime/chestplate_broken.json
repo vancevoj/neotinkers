@@ -5,8 +5,8 @@
     "tool": "tconstruct:item/tool/armor/slime/wings_broken"
   },
   "modifier_maps": [
-    "tconstruct:slime_chestplate/broken",
-    "tconstruct:slime_chestplate"
+    "tconstruct:slime/wings_broken",
+    "tconstruct:slime/wings"
   ],
   "first_modifiers": [
     "tconstruct:embellishment",
