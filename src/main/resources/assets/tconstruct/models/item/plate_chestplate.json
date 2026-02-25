@@ -5,6 +5,7 @@
     "plating": "tconstruct:item/tool/armor/plate/chestplate/plating",
     "maille":  "tconstruct:item/tool/armor/plate/chestplate/maille"
   },
+  "modifier_maps": ["tconstruct:plate_chestplate"],
   "modifier_roots": [ "tconstruct:item/tool/armor/plate/chestplate/modifiers/" ],
   "first_modifiers": [ "tconstruct:dyed", "tconstruct:trim" ],
   "parts": [

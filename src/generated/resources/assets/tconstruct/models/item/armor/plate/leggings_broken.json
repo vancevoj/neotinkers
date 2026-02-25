@@ -5,6 +5,10 @@
     "plating": "tconstruct:item/tool/armor/plate/leggings/plating_broken",
     "maille": "tconstruct:item/tool/armor/plate/leggings/maille_broken"
   },
+  "modifier_maps": [
+    "tconstruct:plate_leggings/broken",
+    "tconstruct:plate_leggings"
+  ],
   "modifier_roots": [
     "tconstruct:item/tool/armor/plate/leggings/modifiers/broken/",
     "tconstruct:item/tool/armor/plate/leggings/modifiers/"

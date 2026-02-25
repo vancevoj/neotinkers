@@ -126,6 +126,7 @@ import slimeknights.tconstruct.tools.data.StationSlotLayoutProvider;
 import slimeknights.tconstruct.tools.data.ToolDefinitionDataProvider;
 import slimeknights.tconstruct.tools.data.ToolItemModelProvider;
 import slimeknights.tconstruct.tools.data.ToolsRecipeProvider;
+import slimeknights.tconstruct.tools.data.client.ModifierModelMapProvider;
 import slimeknights.tconstruct.tools.data.material.MaterialDataProvider;
 import slimeknights.tconstruct.tools.data.material.MaterialIds;
 import slimeknights.tconstruct.tools.data.material.MaterialRecipeProvider;
@@ -399,6 +400,7 @@ public final class TinkerTools extends TinkerModule {
     generator.addProvider(client, new MaterialPaletteDebugGenerator(packOutput, TConstruct.MOD_ID, materialSprites));
     generator.addProvider(client, new ArmorModelProvider(packOutput));
     generator.addProvider(client, new TinkerTrimMaterialPaletteGenerator(packOutput, existingFileHelper, materialSprites));
+    generator.addProvider(client, new ModifierModelMapProvider(packOutput));
   }
 
   /** Adds all relevant items to the creative tab */

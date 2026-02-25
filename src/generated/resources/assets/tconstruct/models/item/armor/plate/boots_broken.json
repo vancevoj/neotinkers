@@ -5,6 +5,10 @@
     "plating": "tconstruct:item/tool/armor/plate/boots/plating_broken",
     "maille": "tconstruct:item/tool/armor/plate/boots/maille_broken"
   },
+  "modifier_maps": [
+    "tconstruct:plate_boots/broken",
+    "tconstruct:plate_boots"
+  ],
   "modifier_roots": [
     "tconstruct:item/tool/armor/plate/boots/modifiers/broken/",
     "tconstruct:item/tool/armor/plate/boots/modifiers/"

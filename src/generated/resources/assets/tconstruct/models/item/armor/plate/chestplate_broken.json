@@ -5,6 +5,10 @@
     "plating": "tconstruct:item/tool/armor/plate/chestplate/plating_broken",
     "maille": "tconstruct:item/tool/armor/plate/chestplate/maille_broken"
   },
+  "modifier_maps": [
+    "tconstruct:plate_chestplate/broken",
+    "tconstruct:plate_chestplate"
+  ],
   "modifier_roots": [
     "tconstruct:item/tool/armor/plate/chestplate/modifiers/broken/",
     "tconstruct:item/tool/armor/plate/chestplate/modifiers/"

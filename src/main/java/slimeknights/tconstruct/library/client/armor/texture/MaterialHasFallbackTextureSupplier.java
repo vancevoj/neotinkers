@@ -10,7 +10,6 @@ import slimeknights.mantle.data.loadable.array.ArrayLoadable;
 import slimeknights.mantle.data.loadable.primitive.IntLoadable;
 import slimeknights.mantle.data.loadable.primitive.StringLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
-import slimeknights.tconstruct.library.client.materials.MaterialRenderInfo;
 import slimeknights.tconstruct.library.client.materials.MaterialRenderInfoLoader;
 import slimeknights.tconstruct.library.materials.definition.MaterialVariantId;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
@@ -53,14 +52,7 @@ public class MaterialHasFallbackTextureSupplier implements ArmorTextureSupplier,
   public Boolean apply(String string) {
     MaterialVariantId material = MaterialVariantId.tryParse(string);
     if (material != null) {
-      MaterialRenderInfo info = MaterialRenderInfoLoader.INSTANCE.getRenderInfo(material).orElse(null);
-      if (info != null) {
-        for (String fallback : info.fallbacks()) {
-          if (this.fallback.contains(fallback)) {
-            return true;
-          }
-        }
-      }
+      return MaterialRenderInfoLoader.INSTANCE.hasFallback(material, fallback);
     }
     return false;
   }
