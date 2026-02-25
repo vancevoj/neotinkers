@@ -1,6 +1,10 @@
 package slimeknights.tconstruct.library.data;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
 import net.minecraft.client.resources.model.Material;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.PackOutput;
@@ -12,9 +16,14 @@ import slimeknights.mantle.data.loadable.Loadables;
 import slimeknights.mantle.registration.object.IdAwareObject;
 import slimeknights.tconstruct.library.client.modifiers.ModifierModelMapManager;
 import slimeknights.tconstruct.library.client.modifiers.NormalModifierModel;
+import slimeknights.tconstruct.library.client.modifiers.PotionModifierModel;
 import slimeknights.tconstruct.library.client.modifiers.model.CompoundModifierModel;
+import slimeknights.tconstruct.library.client.modifiers.model.FluidModifierModel;
 import slimeknights.tconstruct.library.client.modifiers.model.ModifierModel;
+import slimeknights.tconstruct.library.client.modifiers.model.TankModifierModel;
+import slimeknights.tconstruct.library.client.modifiers.model.TraitModel;
 import slimeknights.tconstruct.library.modifiers.ModifierId;
+import slimeknights.tconstruct.tools.data.ModifierIds;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -67,7 +76,7 @@ public abstract class AbstractModifierModelMapProvider extends GenericDataProvid
 
   /** Gets the builder for the given tool */
   protected Builder tool(ResourceLocation tool) {
-    return this.models.computeIfAbsent(tool, id -> new Builder());
+    return this.models.computeIfAbsent(tool, Builder::new);
   }
 
   /** Adds the given model to the tool variant */
@@ -96,11 +105,11 @@ public abstract class AbstractModifierModelMapProvider extends GenericDataProvid
   }
 
   /** Builder for adding modifier models */
-  protected static class Builder {
+  @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+  protected class Builder {
     private final Map<String, ModifierModel> constant = new LinkedHashMap<>();
     private final Map<ModifierId, ModifierModel> modifiers = new LinkedHashMap<>();
-
-    private Builder() {}
+    private final ResourceLocation id;
 
     /** Merges the variable arguments */
     private static ModifierModel merge(ModifierModel model, ModifierModel... models) {
@@ -130,6 +139,40 @@ public abstract class AbstractModifierModelMapProvider extends GenericDataProvid
       }
       return this;
     }
+
+
+    /* Common models */
+
+    /** Adds a basic modifier in the given folder */
+    public Builder basic(ModifierId modifier, String folder) {
+      return modifier(modifier, new NormalModifierModel(toolMaterial(folder + '/' + modifier.getNamespace() + '_' + modifier.getPath()), null));
+    }
+
+    /** Adds a basic modifier in the default folder */
+    public Builder basic(ModifierId modifier) {
+      return basic(modifier, id.getPath() + "/modifiers");
+    }
+
+    /** Creates a model for a constant tank on a small tool */
+    public Builder fluid(String folder) {
+      return constant("fluid", new TankModifierModel(toolMaterial(folder + "/fluid_partial"), toolMaterial(folder + "/fluid_full"), null, null, 0));
+    }
+
+    /** Creates a model for a constant tank on a small tool */
+    public Builder fluid() {
+      return fluid(id.getPath());
+    }
+
+    /** Creates a model for tipping a small tool */
+    public Builder tipped(String texture) {
+      return constant("tipped", new TraitModel(ModifierIds.tipped, new PotionModifierModel(toolMaterial(texture), null)));
+    }
+
+    /** Creates a model for smashing on a small tool */
+    public Builder smashing(String texture) {
+      return constant("smashing", new TraitModel(ModifierIds.smashing, new FluidModifierModel.Smashing(toolMaterial(texture), null)));
+    }
+
 
     /** Checks if this file has anything */
     private boolean isEmpty() {

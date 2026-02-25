@@ -1,0 +1,16 @@
+{
+  "constant": {
+    "smashing": {
+      "type": "tconstruct:trait",
+      "modifier": "tconstruct:smashing",
+      "texture": "tconstruct:item/tool/ammo/axe_modifiers/tconstruct_smashing_full",
+      "trait_type": "tconstruct:smashing"
+    },
+    "tipped": {
+      "type": "tconstruct:trait",
+      "modifier": "tconstruct:tipped",
+      "texture": "tconstruct:item/tool/ammo/axe_modifiers/tconstruct_tipped",
+      "trait_type": "tconstruct:potion"
+    }
+  }
+}
