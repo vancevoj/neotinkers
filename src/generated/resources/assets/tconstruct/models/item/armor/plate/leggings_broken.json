@@ -9,10 +9,6 @@
     "tconstruct:plate_leggings/broken",
     "tconstruct:plate_leggings"
   ],
-  "modifier_roots": [
-    "tconstruct:item/tool/armor/plate/leggings/modifiers/broken/",
-    "tconstruct:item/tool/armor/plate/leggings/modifiers/"
-  ],
   "first_modifiers": [
     "tconstruct:dyed",
     "tconstruct:trim"

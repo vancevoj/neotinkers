@@ -13,16 +13,19 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import slimeknights.mantle.data.GenericDataProvider;
 import slimeknights.mantle.data.loadable.Loadables;
+import slimeknights.mantle.registration.object.EnumObject;
 import slimeknights.mantle.registration.object.IdAwareObject;
 import slimeknights.tconstruct.library.client.modifiers.ModifierModelMapManager;
 import slimeknights.tconstruct.library.client.modifiers.NormalModifierModel;
 import slimeknights.tconstruct.library.client.modifiers.PotionModifierModel;
+import slimeknights.tconstruct.library.client.modifiers.TrimModifierModel;
 import slimeknights.tconstruct.library.client.modifiers.model.CompoundModifierModel;
 import slimeknights.tconstruct.library.client.modifiers.model.FluidModifierModel;
 import slimeknights.tconstruct.library.client.modifiers.model.ModifierModel;
 import slimeknights.tconstruct.library.client.modifiers.model.TankModifierModel;
 import slimeknights.tconstruct.library.client.modifiers.model.TraitModel;
 import slimeknights.tconstruct.library.modifiers.ModifierId;
+import slimeknights.tconstruct.tools.TinkerModifiers;
 import slimeknights.tconstruct.tools.data.ModifierIds;
 
 import java.util.ArrayList;
@@ -104,6 +107,15 @@ public abstract class AbstractModifierModelMapProvider extends GenericDataProvid
     return tool(Loadables.ITEM.getKey(tool), variant);
   }
 
+
+  /* Specialized helpers */
+
+  /** Adds trim to the entire enum object */
+  protected void trim(EnumObject<?, ? extends Item> armor) {
+    armor.forEach(item -> tool(item).trim());
+  }
+
+
   /** Builder for adding modifier models */
   @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
   protected class Builder {
@@ -171,6 +183,11 @@ public abstract class AbstractModifierModelMapProvider extends GenericDataProvid
     /** Creates a model for smashing on a small tool */
     public Builder smashing(String texture) {
       return constant("smashing", new TraitModel(ModifierIds.smashing, new FluidModifierModel.Smashing(toolMaterial(texture), null)));
+    }
+
+    /** Adds the trim model to the tool */
+    public Builder trim() {
+      return modifier(TinkerModifiers.trim.getId(), TrimModifierModel.INSTANCE);
     }
 
 

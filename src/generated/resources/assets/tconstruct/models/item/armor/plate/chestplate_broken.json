@@ -9,10 +9,6 @@
     "tconstruct:plate_chestplate/broken",
     "tconstruct:plate_chestplate"
   ],
-  "modifier_roots": [
-    "tconstruct:item/tool/armor/plate/chestplate/modifiers/broken/",
-    "tconstruct:item/tool/armor/plate/chestplate/modifiers/"
-  ],
   "first_modifiers": [
     "tconstruct:dyed",
     "tconstruct:trim"

@@ -9,10 +9,6 @@
     "tconstruct:plate_helmet/broken",
     "tconstruct:plate_helmet"
   ],
-  "modifier_roots": [
-    "tconstruct:item/tool/armor/plate/helmet/modifiers/broken/",
-    "tconstruct:item/tool/armor/plate/helmet/modifiers/"
-  ],
   "first_modifiers": [
     "tconstruct:dyed",
     "tconstruct:trim"

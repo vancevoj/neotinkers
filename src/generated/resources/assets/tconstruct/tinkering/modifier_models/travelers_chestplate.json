@@ -1,0 +1,11 @@
+{
+  "modifiers": {
+    "tconstruct:dyed": {
+      "type": "tconstruct:dyed",
+      "texture": "tconstruct:item/tool/armor/travelers/vest/modifiers/tconstruct_dyed"
+    },
+    "tconstruct:trim": {
+      "type": "tconstruct:trim"
+    }
+  }
+}
