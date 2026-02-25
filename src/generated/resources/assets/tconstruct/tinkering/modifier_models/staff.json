@@ -56,6 +56,7 @@
       }
     ],
     "tconstruct:unbreakable": {
+      "luminosity": 2,
       "texture": "tconstruct:item/tool/staff/modifiers/tconstruct_unbreakable",
       "texture_large": "tconstruct:item/tool/staff/large_modifiers/tconstruct_unbreakable"
     }

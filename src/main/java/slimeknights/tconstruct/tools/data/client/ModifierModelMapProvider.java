@@ -21,6 +21,20 @@ public class ModifierModelMapProvider extends AbstractModifierModelMapProvider {
 
   @Override
   protected void addModels() {
+    // small
+    tool(TinkerTools.pickaxe).basic(false,
+      ModifierIds.diamond, ModifierIds.emerald, ModifierIds.netherite,
+      ModifierIds.reinforced, ModifierIds.overforced, ModifierIds.magnetic, ModifierIds.soulbound,
+      ModifierIds.experienced, ModifierIds.luck, TinkerModifiers.severing.getId(), ModifierIds.silky,
+      ModifierIds.sharpness, ModifierIds.smite, ModifierIds.antiaquatic, ModifierIds.baneOfSssss, ModifierIds.cooling,
+      ModifierIds.knockback, ModifierIds.necrotic,
+      ModifierIds.blasting, ModifierIds.hydraulic
+    ).fluid(ModifierIds.bucketing, false).tank(false)
+      .luminosity(7, false, ModifierIds.haste)
+      .luminosity(15, false, ModifierIds.lightspeed, ModifierIds.glowing)
+      .luminosity(10, false, ModifierIds.fiery)
+      .luminosity(2, false, ModifierIds.unbreakable);
+
     // plate armor
     ModifierId dyed = TinkerModifiers.dyed.getId();
     for (ArmorItem.Type type : ArmorItem.Type.values()) {
@@ -67,8 +81,9 @@ public class ModifierModelMapProvider extends AbstractModifierModelMapProvider {
     tool("staff").basic(true,
       ModifierIds.diamond, ModifierIds.emerald, ModifierIds.netherite,
       ModifierIds.firestarter,
-      ModifierIds.overforced, ModifierIds.reinforced, ModifierIds.unbreakable
-    ).tank(true).embellishment(true).fluid(ModifierIds.bucketing, true);
+      ModifierIds.overforced, ModifierIds.reinforced
+    ).tank(true).embellishment(true).fluid(ModifierIds.bucketing, true)
+      .luminosity(2, true, ModifierIds.unbreakable);
     staffDyed("earth");
     staffDyed("sky");
     staffDyed("ichor");

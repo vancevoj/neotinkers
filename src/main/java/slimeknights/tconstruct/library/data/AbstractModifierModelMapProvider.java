@@ -13,7 +13,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import slimeknights.mantle.data.GenericDataProvider;
 import slimeknights.mantle.data.loadable.Loadables;
-import slimeknights.mantle.registration.object.EnumObject;
 import slimeknights.mantle.registration.object.IdAwareObject;
 import slimeknights.tconstruct.library.client.modifiers.MaterialModifierModel;
 import slimeknights.tconstruct.library.client.modifiers.ModifierModelMapManager;
@@ -166,32 +165,38 @@ public abstract class AbstractModifierModelMapProvider extends GenericDataProvid
     /* Common models */
 
     /** Adds a basic modifier in the given folder */
-    public Builder basic(ModifierId modifier, String texture, @Nullable String largeTexture) {
-      return modifier(modifier, new NormalModifierModel(toolMaterial(texture), largeTexture != null ? toolMaterial(largeTexture) : null));
+    public Builder luminosity(int light, ModifierId modifier, String texture, @Nullable String largeTexture) {
+      return modifier(modifier, new NormalModifierModel(toolMaterial(texture), largeTexture != null ? toolMaterial(largeTexture) : null, -1, light));
     }
 
     /** Adds a basic modifier in the given folder */
-    public Builder basic(String folder, @Nullable String largeFolder, ModifierId... modifiers) {
+    public Builder luminosity(int light, String folder, @Nullable String largeFolder, ModifierId... modifiers) {
       for (ModifierId modifier : modifiers) {
         String suffix = '/' + suffix(modifier);
-        basic(modifier, folder + suffix, largeFolder != null ? largeFolder + suffix : null);
+        luminosity(light, modifier, folder + suffix, largeFolder != null ? largeFolder + suffix : null);
       }
       return this;
     }
 
+    /** Adds a basic modifier in the default folder */
+    public Builder luminosity(int light, boolean large, ModifierId... modifiers) {
+      String path = id.getPath();
+      return luminosity(light, path + "/modifiers", large ? path + "/large_modifiers" : null, modifiers);
+    }
+
     /** Adds a basic modifier in the given folder */
-    public Builder basic(String folder, ModifierId... modifiers) {
-      return basic(folder, null, modifiers);
+    public Builder basic(ModifierId modifier, String texture, @Nullable String largeTexture) {
+      return luminosity(0, modifier, texture, largeTexture);
+    }
+
+    /** Adds a basic modifier in the given folder */
+    public Builder basic(String folder, @Nullable String largeFolder, ModifierId... modifiers) {
+      return luminosity(0, folder, largeFolder, modifiers);
     }
 
     /** Adds a basic modifier in the default folder */
-    public Builder basic(ModifierId... modifiers) {
-      return basic(id.getPath() + "/modifiers", modifiers);
-    }
-
-    /** Adds a basic modifier in the default folder */
-    public Builder large(ModifierId... modifiers) {
-      return basic(id.getPath() + "/modifiers", id.getPath() + "/large_modifiers", modifiers);
+    public Builder basic(boolean large, ModifierId... modifiers) {
+      return luminosity(0, large, modifiers);
     }
 
     /** Adds a basic modifier in the given folder using just the modifier path as the name */
