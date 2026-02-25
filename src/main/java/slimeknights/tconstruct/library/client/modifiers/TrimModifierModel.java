@@ -15,8 +15,11 @@ import net.minecraft.world.item.armortrim.TrimMaterial;
 import net.minecraft.world.level.Level;
 import slimeknights.mantle.client.model.util.MantleItemLayerModel;
 import slimeknights.mantle.data.loadable.common.ColorLoadable;
+import slimeknights.mantle.data.loadable.record.RecordLoadable;
+import slimeknights.mantle.data.loadable.record.SingletonLoader;
 import slimeknights.mantle.util.ItemLayerPixels;
 import slimeknights.tconstruct.TConstruct;
+import slimeknights.tconstruct.library.client.modifiers.model.ModifierModel;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.tools.modules.cosmetic.TrimModule;
@@ -28,10 +31,15 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-/** Modifier model adding trim overlays to an item */
+/**
+ * Modifier model adding trim overlays to an item
+ * TODO 1.21: move to {@link slimeknights.tconstruct.library.modifiers.modules}
+ */
 @SuppressWarnings("removal")
-public enum TrimModifierModel implements IBakedModifierModel {
+public enum TrimModifierModel implements ModifierModel {
   INSTANCE;
+
+  public static final RecordLoadable<TrimModifierModel> LOADER = new SingletonLoader<>(INSTANCE);
 
   private record TrimTexture(@Nullable TextureAtlasSprite sprite, int color) {
     public static final TrimTexture EMPTY = new TrimTexture(null, -1);
@@ -48,10 +56,10 @@ public enum TrimModifierModel implements IBakedModifierModel {
     }
   }
 
-  /** Constant unbaked model instance, as they are all the same */
+  /** @deprecated legacy system, use {@link #LOADER} */
+  @Deprecated
   public static final IUnbakedModifierModel UNBAKED_INSTANCE = (smallGetter, largeGetter) -> {
     // if we are loading the model, then we are reloading resources
-    // TODO: clear cache on datapack reload
     for (ArmorItem.Type type : ArmorItem.Type.values()) {
       TEXTURE_CACHE[type.ordinal()].clear();
     }
@@ -59,8 +67,27 @@ public enum TrimModifierModel implements IBakedModifierModel {
   };
 
   @Override
+  public RecordLoadable<? extends ModifierModel> getLoader() {
+    return LOADER;
+  }
+
+  @Override
+  public void validate(Function<Material, TextureAtlasSprite> spriteGetter) {
+    // TODO: clear cache on datapack reload
+    // TODO: better spot to clear cache? this just means some redundant clears during original baking
+    for (ArmorItem.Type type : ArmorItem.Type.values()) {
+      TEXTURE_CACHE[type.ordinal()].clear();
+    }
+  }
+
+  @Nullable
+  @Override
   public Object getCacheKey(IToolStackView tool, ModifierEntry modifier) {
-    return tool.getPersistentData().getString(TrimModule.materialKey(modifier.getId()));
+    String key = tool.getPersistentData().getString(TrimModule.materialKey(modifier.getId()));
+    if (key.isEmpty()) {
+      return null;
+    }
+    return key;
   }
 
   @Override

@@ -43,10 +43,17 @@ import slimeknights.tconstruct.library.client.data.spritetransformer.ISpriteTran
 import slimeknights.tconstruct.library.client.data.spritetransformer.OffsettingSpriteTransformer;
 import slimeknights.tconstruct.library.client.data.spritetransformer.RecolorSpriteTransformer;
 import slimeknights.tconstruct.library.client.materials.MaterialRenderInfoLoader;
+import slimeknights.tconstruct.library.client.modifiers.DyedModifierModel;
+import slimeknights.tconstruct.library.client.modifiers.MaterialModifierModel;
 import slimeknights.tconstruct.library.client.modifiers.ModifierIconManager;
+import slimeknights.tconstruct.library.client.modifiers.NormalModifierModel;
+import slimeknights.tconstruct.library.client.modifiers.PotionModifierModel;
+import slimeknights.tconstruct.library.client.modifiers.TrimModifierModel;
 import slimeknights.tconstruct.library.client.modifiers.model.CompoundModifierModel;
 import slimeknights.tconstruct.library.client.modifiers.model.ConditionalModifierModel;
+import slimeknights.tconstruct.library.client.modifiers.model.FluidModifierModel;
 import slimeknights.tconstruct.library.client.modifiers.model.ModifierModel;
+import slimeknights.tconstruct.library.client.modifiers.model.TankModifierModel;
 
 import java.util.function.Consumer;
 
@@ -85,8 +92,18 @@ public class TinkerClient {
     ArmorTextureSupplier.LOADER.register(getResource("persistent_data"), MaterialArmorTextureSupplier.PersistentData.LOADER);
     ArmorTextureSupplier.LOADER.register(getResource("trim"), TrimArmorTextureSupplier.LOADER);
     ArmorTextureSupplier.LOADER.register(getResource("material_has_fallback"), MaterialHasFallbackTextureSupplier.LOADER);
+
+    // modifier models
     ModifierModel.LOADER.register(getResource("compound"), CompoundModifierModel.LOADER);
     ModifierModel.LOADER.register(getResource("conditional"), ConditionalModifierModel.LOADER);
+    ModifierModel.LOADER.register(getResource("basic"), NormalModifierModel.LOADER);
+    ModifierModel.LOADER.register(getResource("dyed"), DyedModifierModel.LOADER);
+    ModifierModel.LOADER.register(getResource("material"), MaterialModifierModel.LOADER);
+    ModifierModel.LOADER.register(getResource("potion"), PotionModifierModel.LOADER);
+    ModifierModel.LOADER.register(getResource("trim"), TrimModifierModel.LOADER);
+    ModifierModel.LOADER.register(getResource("fluid"), FluidModifierModel.Tank.LOADER);
+    ModifierModel.LOADER.register(getResource("smashing"), FluidModifierModel.Smashing.LOADER);
+    ModifierModel.LOADER.register(getResource("tank"), TankModifierModel.LOADER);
   }
 
   @SubscribeEvent
