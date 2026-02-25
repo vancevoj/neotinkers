@@ -165,32 +165,39 @@ public class ModifierModelMapManager extends MergingJsonDataLoader<Builder> {
   }
 
   /** Predicate for removing empty modifier models */
-  private static final Predicate<Entry<?,? extends IBakedModifierModel>> IS_EMPTY = entry -> entry.getValue() == ModifierModel.EMPTY;
+  private static final Predicate<Entry<?,? extends IBakedModifierModel>> EMPTY_ENTRY = entry -> entry.getValue() == ModifierModel.EMPTY;
+  /** Predicate for removing empty modifier maps */
+  private static final Predicate<ModifierModelMap> NOT_EMPTY_MAP = map -> !map.isEmpty();
 
   /** Gets a map of modifier models for the given tool */
   public ModifierModelMap getModelsForTool(Function<Material, TextureAtlasSprite> spriteGetter, List<ResourceLocation> options) {
+    // quick exit: no options
     if (options.isEmpty()) {
       return ModifierModelMap.EMPTY;
     }
-    // first, load in the map
-    ModifierModelMap modelMap;
+    // fetch options, filter to just those that exist
+    List<ModifierModelMap> maps = options.stream().map(id -> this.models.getOrDefault(id, ModifierModelMap.EMPTY)).filter(NOT_EMPTY_MAP).toList();
+    if (maps.isEmpty()) {
+      return ModifierModelMap.EMPTY;
+    }
     // if only one is requested, reuse that instance
-    if (options.size() == 1) {
-      modelMap = this.models.getOrDefault(options.get(0), ModifierModelMap.EMPTY);
+    ModifierModelMap modelMap;
+    if (maps.size() == 1) {
+      modelMap = maps.get(0);
     } else {
       Map<String, ModifierModel> constant = new LinkedHashMap<>();
       Map<ModifierId, IBakedModifierModel> modifiers = new HashMap<>();
       // loop backwards as we want the first that appears to take priority
-      for (int i = options.size() - 1; i >= 0; i--) {
-        ModifierModelMap optionMap = this.models.get(options.get(i));
+      for (int i = maps.size() - 1; i >= 0; i--) {
+        ModifierModelMap optionMap = maps.get(i);
         if (optionMap != null) {
           constant.putAll(optionMap.constant());
           modifiers.putAll(optionMap.modifiers());
         }
       }
       // remove empty models, we might have some if we were overriding for something like broken
-      constant.entrySet().removeIf(IS_EMPTY);
-      modifiers.entrySet().removeIf(IS_EMPTY);
+      constant.entrySet().removeIf(EMPTY_ENTRY);
+      modifiers.entrySet().removeIf(EMPTY_ENTRY);
       modelMap = ModifierModelMap.create(constant, modifiers);
     }
     // validate all model textures
