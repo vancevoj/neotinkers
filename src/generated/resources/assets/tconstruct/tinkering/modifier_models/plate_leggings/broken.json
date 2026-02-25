@@ -5,11 +5,11 @@
       "fallback": "metal",
       "if_false": {
         "type": "tconstruct:dyed",
-        "texture": "tconstruct:armor/plate/leggings/maille_broken"
+        "texture": "tconstruct:item/tool/armor/plate/leggings/maille_broken"
       },
       "if_true": {
         "type": "tconstruct:dyed",
-        "texture": "tconstruct:armor/plate/leggings/maille_broken_metal"
+        "texture": "tconstruct:item/tool/armor/plate/leggings/maille_broken_metal"
       },
       "index": 1
     }
