@@ -58,11 +58,12 @@ public class ModifierModelMapProvider extends AbstractModifierModelMapProvider {
     trim(TinkerTools.slimesuit);
 
     // ammo
-    tool(TinkerTools.arrow).tipped("ammo/arrow_modifiers/tconstruct_tipped").smashing("ammo/arrow_modifiers/tconstruct_smashing_full");
-    tool(TinkerTools.shuriken).tipped("ammo/shuriken_modifiers/tconstruct_tipped").smashing("ammo/shuriken_modifiers/tconstruct_smashing_full");
-    tool(TinkerTools.throwingAxe).tipped("ammo/axe_modifiers/tconstruct_tipped").smashing("ammo/axe_modifiers/tconstruct_smashing_full");
+    tool(TinkerTools.arrow).tipped("ammo/arrow_modifiers/tipped").smashing("ammo/arrow_modifiers/smashing")
+      .modifier(dyed, new DyedModifierModel(toolMaterial("ammo/arrow_modifiers/dyed"), null));
+    tool(TinkerTools.shuriken).tipped("ammo/shuriken_modifiers/tipped").smashing("ammo/shuriken_modifiers/smashing");
+    tool(TinkerTools.throwingAxe).tipped("ammo/axe_modifiers/tipped").smashing("ammo/axe_modifiers/smashing");
     // fishing rods just have tipped
-    tool(TinkerTools.fishingRod).tipped("fishing_rod/modifiers/tconstruct_tipped").fluid().basic(ModifierIds.tank);
+    tool(TinkerTools.fishingRod).tipped("fishing_rod/modifiers/tipped").fluid().compact(ModifierIds.tank);
     tool(TinkerTools.fishingRod, "broken").constant("tipped", ModifierModel.EMPTY);
     tool(TinkerTools.fishingRod, "cast").constant("tipped", ModifierModel.EMPTY);
 

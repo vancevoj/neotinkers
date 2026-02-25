@@ -23,10 +23,12 @@ import slimeknights.tconstruct.library.client.modifiers.model.ModifierModel;
 import slimeknights.tconstruct.library.modifiers.ModifierId;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.function.BiFunction;
@@ -173,10 +175,20 @@ public class ModifierModelMapManager extends MergingJsonDataLoader<Builder> {
     TConstruct.LOG.info("{} modifier model maps in {} ms", this.models.size(), (System.nanoTime() - time) / 1000000f);
   }
 
+
+  /* Helpers */
+
+  /** Models in this blacklist are skipped from the legacy system. Used to prevent singletons that don't check textures from causing legacy warnings on every tools */
+  private static final Set<IUnbakedModifierModel> LEGACY_BLACKLIST = new HashSet<>();
   /** Predicate for removing empty modifier models */
   private static final Predicate<Entry<?,? extends IBakedModifierModel>> EMPTY_ENTRY = entry -> entry.getValue() == ModifierModel.EMPTY;
   /** Predicate for removing empty modifier maps */
   private static final Predicate<ModifierModelMap> NOT_EMPTY_MAP = map -> !map.isEmpty();
+
+  /** Blacklists the given model from being included in the legacy system */
+  public static void legacyBlacklist(IUnbakedModifierModel model) {
+    LEGACY_BLACKLIST.add(model);
+  }
 
   /** Gets a map of modifier models for the given tool */
   public ModifierModelMap getModelsForTool(Function<Material, TextureAtlasSprite> spriteGetter, List<ResourceLocation> options) {
@@ -227,7 +239,7 @@ public class ModifierModelMapManager extends MergingJsonDataLoader<Builder> {
     if (smallRoots.isEmpty() && largeRoots.isEmpty()) {
       return models;
     }
-    Map<ModifierId, IBakedModifierModel> legacy = ModifierModelManager.getModelsForTool(spriteGetter, smallRoots, largeRoots, models.modifiers().keySet());
+    Map<ModifierId, IBakedModifierModel> legacy = ModifierModelManager.getModelsForTool(spriteGetter, smallRoots, largeRoots, models.modifiers().keySet(), LEGACY_BLACKLIST);
     // nothing on the old system? nothing to do
     if (legacy.isEmpty()) {
       return models;

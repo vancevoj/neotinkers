@@ -3,14 +3,20 @@
     "smashing": {
       "type": "tconstruct:trait",
       "modifier": "tconstruct:smashing",
-      "texture": "tconstruct:item/tool/ammo/arrow_modifiers/tconstruct_smashing_full",
+      "texture": "tconstruct:item/tool/ammo/arrow_modifiers/smashing",
       "trait_type": "tconstruct:smashing"
     },
     "tipped": {
       "type": "tconstruct:trait",
       "modifier": "tconstruct:tipped",
-      "texture": "tconstruct:item/tool/ammo/arrow_modifiers/tconstruct_tipped",
+      "texture": "tconstruct:item/tool/ammo/arrow_modifiers/tipped",
       "trait_type": "tconstruct:potion"
+    }
+  },
+  "modifiers": {
+    "tconstruct:dyed": {
+      "type": "tconstruct:dyed",
+      "texture": "tconstruct:item/tool/ammo/arrow_modifiers/dyed"
     }
   }
 }

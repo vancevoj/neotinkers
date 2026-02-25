@@ -156,13 +156,34 @@ public abstract class AbstractModifierModelMapProvider extends GenericDataProvid
     /* Common models */
 
     /** Adds a basic modifier in the given folder */
-    public Builder basic(ModifierId modifier, String folder) {
-      return modifier(modifier, new NormalModifierModel(toolMaterial(folder + '/' + modifier.getNamespace() + '_' + modifier.getPath()), null));
+    public Builder basic(ModifierId modifier, String texture) {
+      return modifier(modifier, new NormalModifierModel(toolMaterial(texture), null));
+    }
+
+    /** Adds a basic modifier in the given folder */
+    public Builder basic(String folder, ModifierId... modifiers) {
+      for (ModifierId modifier : modifiers) {
+        basic(modifier, folder + '/' + modifier.getNamespace() + '_' + modifier.getPath());
+      }
+      return this;
     }
 
     /** Adds a basic modifier in the default folder */
-    public Builder basic(ModifierId modifier) {
-      return basic(modifier, id.getPath() + "/modifiers");
+    public Builder basic(ModifierId... modifiers) {
+      return basic(id.getPath() + "/modifiers", modifiers);
+    }
+
+    /** Adds a basic modifier in the given folder using just the modifier path as the name */
+    public Builder compact(String folder, ModifierId... modifiers) {
+      for (ModifierId modifier : modifiers) {
+        return basic(modifier, folder + '/' + modifier.getPath());
+      }
+      return this;
+    }
+
+    /** Adds a basic modifier in the default folder */
+    public Builder compact(ModifierId... modifiers) {
+      return compact(id.getPath() + "/modifiers", modifiers);
     }
 
     /** Creates a model for a constant tank on a small tool */
