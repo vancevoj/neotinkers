@@ -26,7 +26,7 @@ import java.util.concurrent.CompletableFuture;
 
 /** Data provider for modifier model maps */
 public abstract class AbstractModifierModelMapProvider extends GenericDataProvider {
-  private final Map<ResourceLocation, Map<ModifierId, ModifierModel>> models = new HashMap<>();
+  private final Map<ResourceLocation, Builder> models = new HashMap<>();
 
   private final String modId;
   public AbstractModifierModelMapProvider(PackOutput output, String modId) {
@@ -53,56 +53,106 @@ public abstract class AbstractModifierModelMapProvider extends GenericDataProvid
   /** Adds all models */
   protected abstract void addModels();
 
-  /** Adds the given model to the tool */
-  protected void model(ResourceLocation tool, ModifierId modifier, ModifierModel model, ModifierModel... models) {
-    if (models.length > 0) {
-      List<ModifierModel> modelList = new ArrayList<>(models.length + 1);
-      modelList.add(model);
-      Collections.addAll(modelList, models);
-      model = new CompoundModifierModel(modelList);
-    }
-    ModifierModel existing = this.models.computeIfAbsent(tool, loc -> new LinkedHashMap<>()).putIfAbsent(modifier, model);
-    if (existing != null) {
-      throw new IllegalArgumentException("Duplicate modifier model for " + modifier + ", already had " + existing);
-    }
-  }
-
-  /** Adds the given model to the tool variant */
-  protected void model(ResourceLocation tool, String variant, ModifierId modifier, ModifierModel model, ModifierModel... models) {
-    model(tool.withSuffix('/' + variant), modifier, model, models);
-  }
-
-  /** Adds the given model to the tool */
-  protected void model(IdAwareObject tool, ModifierId modifier, ModifierModel model, ModifierModel... models) {
-    model(tool.getId(), modifier, model, models);
-  }
-
-  /** Adds the given model to the tool variant */
-  protected void model(IdAwareObject tool, String variant, ModifierId modifier, ModifierModel model, ModifierModel... models) {
-    model(tool.getId(), variant, modifier, model, models);
-  }
-
-  /** Adds the given model to the tool */
-  protected void model(Item tool, ModifierId modifier, ModifierModel model, ModifierModel... models) {
-    model(Loadables.ITEM.getKey(tool), modifier, model, models);
-  }
-
-  /** Adds the given model to the tool variant */
-  protected void model(Item tool, String variant, ModifierId modifier, ModifierModel model, ModifierModel... models) {
-    model(Loadables.ITEM.getKey(tool), variant, modifier, model, models);
-  }
-
   @Override
   public CompletableFuture<?> run(CachedOutput output) {
     addModels();
     return allOf(models.entrySet().stream()
       .filter(file -> !file.getValue().isEmpty())
-      .map(file -> {
-        JsonObject json = new JsonObject();
-        for (Entry<ModifierId, ModifierModel> entry : file.getValue().entrySet()) {
-          json.add(entry.getKey().toString(), ModifierModel.LOADER.serialize(entry.getValue()));
+      .map(file -> saveJson(output, file.getKey(), file.getValue().build())));
+  }
+
+
+  /* Builder */
+
+  /** Gets the builder for the given tool */
+  protected Builder tool(ResourceLocation tool) {
+    return this.models.computeIfAbsent(tool, id -> new Builder());
+  }
+
+  /** Adds the given model to the tool variant */
+  protected Builder tool(ResourceLocation tool, String variant) {
+    return tool(tool.withSuffix('/' + variant));
+  }
+
+  /** Adds the given model to the tool */
+  protected Builder tool(IdAwareObject tool) {
+    return tool(tool.getId());
+  }
+
+  /** Adds the given model to the tool variant */
+  protected Builder tool(IdAwareObject tool, String variant) {
+    return tool(tool.getId(), variant);
+  }
+
+  /** Adds the given model to the tool */
+  protected Builder tool(Item tool) {
+    return tool(Loadables.ITEM.getKey(tool));
+  }
+
+  /** Adds the given model to the tool variant */
+  protected Builder tool(Item tool, String variant) {
+    return tool(Loadables.ITEM.getKey(tool), variant);
+  }
+
+  /** Builder for adding modifier models */
+  protected static class Builder {
+    private final Map<String, ModifierModel> constant = new LinkedHashMap<>();
+    private final Map<ModifierId, ModifierModel> modifiers = new LinkedHashMap<>();
+
+    private Builder() {}
+
+    /** Merges the variable arguments */
+    private static ModifierModel merge(ModifierModel model, ModifierModel... models) {
+      if (models.length > 0) {
+        List<ModifierModel> modelList = new ArrayList<>(models.length + 1);
+        modelList.add(model);
+        Collections.addAll(modelList, models);
+        return new CompoundModifierModel(modelList);
+      }
+      return model;
+    }
+
+    /** Adds a new fixed model that always shows */
+    public Builder constant(String id, ModifierModel model, ModifierModel... models) {
+      ModifierModel existing = constant.putIfAbsent(id, merge(model, models));
+      if (existing != null) {
+        throw new IllegalArgumentException("Duplicate constant model: " + id + ", previous " + existing);
+      }
+      return this;
+    }
+
+    /** Adds a new modifier model that shows when the given crafted modifier is present */
+    public Builder modifier(ModifierId id, ModifierModel model, ModifierModel... models) {
+      ModifierModel existing = modifiers.putIfAbsent(id, merge(model, models));
+      if (existing != null) {
+        throw new IllegalArgumentException("Duplicate modifier: " + id + ", previous " + existing);
+      }
+      return this;
+    }
+
+    /** Checks if this file has anything */
+    private boolean isEmpty() {
+      return constant.isEmpty() && modifiers.isEmpty();
+    }
+
+    /** Builds the final JSON */
+    private JsonObject build() {
+      JsonObject json = new JsonObject();
+      if (!this.constant.isEmpty()) {
+        JsonObject constant = new JsonObject();
+        for (Entry<String, ModifierModel> entry : this.constant.entrySet()) {
+          constant.add(entry.getKey(), ModifierModel.LOADER.serialize(entry.getValue()));
         }
-        return saveJson(output, file.getKey(), json);
-      }));
+        json.add("constant", constant);
+      }
+      if (!this.modifiers.isEmpty()) {
+        JsonObject modifiers = new JsonObject();
+        for (Entry<ModifierId, ModifierModel> entry : this.modifiers.entrySet()) {
+          modifiers.add(entry.getKey().toString(), ModifierModel.LOADER.serialize(entry.getValue()));
+        }
+        json.add("modifiers", modifiers);
+      }
+      return json;
+    }
   }
 }

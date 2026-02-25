@@ -23,12 +23,12 @@ public class ModifierModelMapProvider extends AbstractModifierModelMapProvider {
     for (ArmorItem.Type type : ArmorItem.Type.values()) {
       String root = "armor/plate/" + type.getName() + "/maille";
       Item item = TinkerTools.plateArmor.get(type);
-      model(item, dyed, new MaterialHasFallbackModifierModel(1,
+      tool(item).modifier(dyed, new MaterialHasFallbackModifierModel(1,
         new DyedModifierModel(toolMaterial(root + "_metal"), null),
         new DyedModifierModel(toolMaterial(root), null),
         "metal"
       ));
-      model(item, "broken", dyed, new MaterialHasFallbackModifierModel(1,
+      tool(item, "broken").modifier(dyed, new MaterialHasFallbackModifierModel(1,
         new DyedModifierModel(material(root + "_broken_metal"), null),
         new DyedModifierModel(material(root + "_broken"), null),
         "metal"

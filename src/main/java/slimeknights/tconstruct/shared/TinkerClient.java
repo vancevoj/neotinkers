@@ -55,6 +55,7 @@ import slimeknights.tconstruct.library.client.modifiers.model.FluidModifierModel
 import slimeknights.tconstruct.library.client.modifiers.model.MaterialHasFallbackModifierModel;
 import slimeknights.tconstruct.library.client.modifiers.model.ModifierModel;
 import slimeknights.tconstruct.library.client.modifiers.model.TankModifierModel;
+import slimeknights.tconstruct.library.client.modifiers.model.TraitModel;
 
 import java.util.function.Consumer;
 
@@ -97,6 +98,7 @@ public class TinkerClient {
     // modifier models
     ModifierModel.LOADER.register(getResource("compound"), CompoundModifierModel.LOADER);
     ModifierModel.LOADER.register(getResource("conditional"), ConditionalModifierModel.LOADER);
+    ModifierModel.LOADER.register(getResource("trait"), TraitModel.LOADER);
     ModifierModel.LOADER.register(getResource("basic"), NormalModifierModel.LOADER);
     ModifierModel.LOADER.register(getResource("dyed"), DyedModifierModel.LOADER);
     ModifierModel.LOADER.register(getResource("material"), MaterialModifierModel.LOADER);
