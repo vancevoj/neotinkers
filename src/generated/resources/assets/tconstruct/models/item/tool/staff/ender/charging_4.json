@@ -6,6 +6,11 @@
     "large_tool": "tconstruct:item/tool/staff/ender_large_4"
   },
   "large": true,
+  "modifier_maps": [
+    "tconstruct:ender_staff/4",
+    "tconstruct:ender_staff",
+    "tconstruct:staff"
+  ],
   "modifier_roots": {
     "small": [
       "tconstruct:item/tool/staff/modifiers/ender/4/",

@@ -6,6 +6,11 @@
     "large_tool": "tconstruct:item/tool/staff/ichor_large_2"
   },
   "large": true,
+  "modifier_maps": [
+    "tconstruct:ichor_staff/2",
+    "tconstruct:ichor_staff",
+    "tconstruct:staff"
+  ],
   "modifier_roots": {
     "small": [
       "tconstruct:item/tool/staff/modifiers/ichor/2/",

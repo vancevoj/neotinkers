@@ -3,6 +3,7 @@ package slimeknights.tconstruct.tools.data.client;
 import net.minecraft.data.PackOutput;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
+import slimeknights.mantle.registration.object.IdAwareObject;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.client.modifiers.DyedModifierModel;
 import slimeknights.tconstruct.library.client.modifiers.MaterialModifierModel;
@@ -70,6 +71,17 @@ public class ModifierModelMapProvider extends AbstractModifierModelMapProvider {
     // tanks
     tool(TinkerTools.meltingPan).fluid();
     tool(TinkerTools.swasher).fluid();
+
+    // staffs
+    tool("staff").large(
+      ModifierIds.diamond, ModifierIds.emerald, ModifierIds.netherite,
+      ModifierIds.firestarter,
+      ModifierIds.overforced, ModifierIds.reinforced, ModifierIds.unbreakable
+    ).tank(true).embellishment(true).fluid(ModifierIds.bucketing, true);
+    staffDyed(TinkerTools.earthStaff, "earth");
+    staffDyed(TinkerTools.skyStaff, "sky");
+    staffDyed(TinkerTools.ichorStaff, "ichor");
+    staffDyed(TinkerTools.enderStaff, "ender");
   }
 
   @Override
@@ -97,5 +109,18 @@ public class ModifierModelMapProvider extends AbstractModifierModelMapProvider {
     Item item = TinkerTools.slimesuit.get(type);
     tool(item).modifier(embellishment, new MaterialModifierModel(toolMaterial(root + "tconstruct_embellishment"), null));
     tool(item, "broken").modifier(embellishment, new MaterialModifierModel(toolMaterial(root + "broken/tconstruct_embellishment"), null));
+  }
+
+  /** Adds dyed textures to a staff */
+  private void staffDyed(IdAwareObject staff, String name) {
+    String small = "staff/modifiers/" + name + "/dyed";
+    String large = "staff/large_modifiers/" + name + "/dyed";
+    ModifierId dyed = TinkerModifiers.dyed.getId();
+    tool(staff).modifier(dyed, new DyedModifierModel(toolMaterial(small), toolMaterial(large)));
+    tool(staff, "broken").modifier(dyed, new DyedModifierModel(toolMaterial(small + "_broken"), toolMaterial(large + "_broken")));
+    for (int i = 1; i <= 5; i++) {
+      String variant = Integer.toString(i);
+      tool(staff, variant).modifier(dyed, new DyedModifierModel(toolMaterial(small + '_' + variant), toolMaterial(large + '_' + variant)));
+    }
   }
 }

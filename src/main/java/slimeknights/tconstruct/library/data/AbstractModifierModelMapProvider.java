@@ -15,6 +15,7 @@ import slimeknights.mantle.data.GenericDataProvider;
 import slimeknights.mantle.data.loadable.Loadables;
 import slimeknights.mantle.registration.object.EnumObject;
 import slimeknights.mantle.registration.object.IdAwareObject;
+import slimeknights.tconstruct.library.client.modifiers.MaterialModifierModel;
 import slimeknights.tconstruct.library.client.modifiers.ModifierModelMapManager;
 import slimeknights.tconstruct.library.client.modifiers.NormalModifierModel;
 import slimeknights.tconstruct.library.client.modifiers.PotionModifierModel;
@@ -28,6 +29,7 @@ import slimeknights.tconstruct.library.modifiers.ModifierId;
 import slimeknights.tconstruct.tools.TinkerModifiers;
 import slimeknights.tconstruct.tools.data.ModifierIds;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -78,13 +80,24 @@ public abstract class AbstractModifierModelMapProvider extends GenericDataProvid
   /* Builder */
 
   /** Gets the builder for the given tool */
+  protected Builder tool(ResourceLocation tool, ResourceLocation base) {
+    return this.models.computeIfAbsent(tool, id -> new Builder(base));
+  }
+
+  /** Gets the builder for the given tool */
   protected Builder tool(ResourceLocation tool) {
-    return this.models.computeIfAbsent(tool, Builder::new);
+    return tool(tool, tool);
+  }
+
+  /** Gets the builder for the given tool */
+  @SuppressWarnings("removal")
+  protected Builder tool(String tool) {
+    return tool(new ResourceLocation(modId, tool));
   }
 
   /** Adds the given model to the tool variant */
   protected Builder tool(ResourceLocation tool, String variant) {
-    return tool(tool.withSuffix('/' + variant));
+    return tool(tool.withSuffix('/' + variant), tool);
   }
 
   /** Adds the given model to the tool */
@@ -113,6 +126,11 @@ public abstract class AbstractModifierModelMapProvider extends GenericDataProvid
   /** Adds trim to the entire enum object */
   protected void trim(EnumObject<?, ? extends Item> armor) {
     armor.forEach(item -> tool(item).trim());
+  }
+
+  /** Converts the modifier into a texture suffix */
+  protected static String suffix(ModifierId modifier) {
+    return modifier.getNamespace() + '_' + modifier.getPath();
   }
 
 
@@ -156,16 +174,22 @@ public abstract class AbstractModifierModelMapProvider extends GenericDataProvid
     /* Common models */
 
     /** Adds a basic modifier in the given folder */
-    public Builder basic(ModifierId modifier, String texture) {
-      return modifier(modifier, new NormalModifierModel(toolMaterial(texture), null));
+    public Builder basic(ModifierId modifier, String texture, @Nullable String largeTexture) {
+      return modifier(modifier, new NormalModifierModel(toolMaterial(texture), largeTexture != null ? toolMaterial(largeTexture) : null));
+    }
+
+    /** Adds a basic modifier in the given folder */
+    public Builder basic(String folder, @Nullable String largeFolder, ModifierId... modifiers) {
+      for (ModifierId modifier : modifiers) {
+        String suffix = '/' + suffix(modifier);
+        basic(modifier, folder + suffix, largeFolder != null ? largeFolder + suffix : null);
+      }
+      return this;
     }
 
     /** Adds a basic modifier in the given folder */
     public Builder basic(String folder, ModifierId... modifiers) {
-      for (ModifierId modifier : modifiers) {
-        basic(modifier, folder + '/' + modifier.getNamespace() + '_' + modifier.getPath());
-      }
-      return this;
+      return basic(folder, null, modifiers);
     }
 
     /** Adds a basic modifier in the default folder */
@@ -173,10 +197,15 @@ public abstract class AbstractModifierModelMapProvider extends GenericDataProvid
       return basic(id.getPath() + "/modifiers", modifiers);
     }
 
+    /** Adds a basic modifier in the default folder */
+    public Builder large(ModifierId... modifiers) {
+      return basic(id.getPath() + "/modifiers", id.getPath() + "/large_modifiers", modifiers);
+    }
+
     /** Adds a basic modifier in the given folder using just the modifier path as the name */
     public Builder compact(String folder, ModifierId... modifiers) {
       for (ModifierId modifier : modifiers) {
-        return basic(modifier, folder + '/' + modifier.getPath());
+        return basic(modifier, folder + '/' + modifier.getPath(), null);
       }
       return this;
     }
@@ -196,9 +225,45 @@ public abstract class AbstractModifierModelMapProvider extends GenericDataProvid
       return fluid(id.getPath());
     }
 
-    /** Creates a model for tipping a small tool */
-    public Builder tipped(String texture) {
-      return constant("tipped", new TraitModel(ModifierIds.tipped, new PotionModifierModel(toolMaterial(texture), null)));
+    /** Adds models for a tank, with a partial and full state */
+    public Builder fluid(String folder, @Nullable String largeFolder, ModifierId modifier) {
+      String name = suffix(modifier);
+      Material tank = toolMaterial(folder + '/' + name);
+      Material full = toolMaterial(folder + '/' + name + "_full");
+      if (largeFolder != null) {
+        return modifier(modifier,
+          new FluidModifierModel.Tank(full, toolMaterial(largeFolder + '/' + name + "_full")),
+          new NormalModifierModel(tank, toolMaterial(largeFolder + '/' + name)));
+      } else {
+        return modifier(modifier, new FluidModifierModel.Tank(full, null), new NormalModifierModel(tank, null));
+      }
+    }
+
+    /** Adds models for a tank, with a partial and full state */
+    public Builder fluid(ModifierId modifier, boolean large) {
+      String path = id.getPath();
+      return fluid(path + "/modifiers", large ? path + "/large_modifiers" : null, modifier);
+    }
+
+    /** Adds models for a tank, with a partial and full state */
+    public Builder tank(String folder, @Nullable String largeFolder) {
+      String name = suffix(ModifierIds.tank);
+      Material tank = toolMaterial(folder + '/' + name);
+      Material partial = toolMaterial(folder + '/' + name + "_partial");
+      Material full = toolMaterial(folder + '/' + name + "_full");
+      if (largeFolder != null) {
+        return modifier(ModifierIds.tank,
+          new TankModifierModel(partial, full, toolMaterial(largeFolder + '/' + name + "_partial"), toolMaterial(largeFolder + '/' + name + "_full"), 0),
+          new NormalModifierModel(tank, toolMaterial(largeFolder + '/' + name)));
+      } else {
+        return modifier(ModifierIds.tank, new TankModifierModel(partial, full, null, null, 0), new NormalModifierModel(tank, null));
+      }
+    }
+
+    /** Adds models for a tank, with a partial and full state */
+    public Builder tank(boolean large) {
+      String path = id.getPath();
+      return tank(path + "/modifiers", large ? path + "/large_modifiers" : null);
     }
 
     /** Creates a model for smashing on a small tool */
@@ -206,11 +271,33 @@ public abstract class AbstractModifierModelMapProvider extends GenericDataProvid
       return constant("smashing", new TraitModel(ModifierIds.smashing, new FluidModifierModel.Smashing(toolMaterial(texture), null)));
     }
 
+    /** Creates a model for tipping a small tool */
+    public Builder tipped(String texture) {
+      return constant("tipped", new TraitModel(ModifierIds.tipped, new PotionModifierModel(toolMaterial(texture), null)));
+    }
+
+    /* Cosmetic */
+
     /** Adds the trim model to the tool */
     public Builder trim() {
       return modifier(TinkerModifiers.trim.getId(), TrimModifierModel.INSTANCE);
     }
 
+    /** Adds the embellishment model to the tool */
+    public Builder embellishment(String folder, @Nullable String largeFolder) {
+      ModifierId embellishment = TinkerModifiers.embellishment.getId();
+      String name = '/' + suffix(embellishment);
+      return modifier(embellishment, new MaterialModifierModel(toolMaterial(folder + name), largeFolder != null ? toolMaterial(largeFolder + name) : null));
+    }
+
+    /** Adds the embellishment model to the tool */
+    public Builder embellishment(boolean large) {
+      String path = id.getPath();
+      return embellishment(path + "/modifiers", large ? path + "/large_modifiers" : null);
+    }
+
+
+    /* Building */
 
     /** Checks if this file has anything */
     private boolean isEmpty() {

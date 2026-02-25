@@ -6,6 +6,12 @@
     "large_tool": "tconstruct:item/tool/staff/earth_large_broken"
   },
   "large": true,
+  "modifier_maps": [
+    "tconstruct:earth_staff/broken",
+    "tconstruct:earth_staff",
+    "tconstruct:staff/broken",
+    "tconstruct:staff"
+  ],
   "modifier_roots": {
     "small": [
       "tconstruct:item/tool/staff/modifiers/earth/broken/",
