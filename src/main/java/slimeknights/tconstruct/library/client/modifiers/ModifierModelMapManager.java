@@ -218,7 +218,7 @@ public class ModifierModelMapManager extends MergingJsonDataLoader<Builder> {
     if (smallRoots.isEmpty() && largeRoots.isEmpty()) {
       return models;
     }
-    Map<ModifierId, IBakedModifierModel> legacy = ModifierModelManager.getModelsForTool(spriteGetter, smallRoots, largeRoots);
+    Map<ModifierId, IBakedModifierModel> legacy = ModifierModelManager.getModelsForTool(spriteGetter, smallRoots, largeRoots, models.modifiers().keySet());
     // nothing on the old system? nothing to do
     if (legacy.isEmpty()) {
       return models;
@@ -232,7 +232,7 @@ public class ModifierModelMapManager extends MergingJsonDataLoader<Builder> {
     Map<ModifierId, IBakedModifierModel> builder = new HashMap<>(models.modifiers());
     boolean hasLegacy = false;
     for (Entry<ModifierId, IBakedModifierModel> entry : legacy.entrySet()) {
-      if (builder.putIfAbsent(entry.getKey(), entry.getValue()) != null) {
+      if (builder.putIfAbsent(entry.getKey(), entry.getValue()) == null) {
         hasLegacy = true;
       }
     }
