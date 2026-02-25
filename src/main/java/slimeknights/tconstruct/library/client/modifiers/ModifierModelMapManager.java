@@ -239,7 +239,7 @@ public class ModifierModelMapManager extends MergingJsonDataLoader<Builder> {
     if (smallRoots.isEmpty() && largeRoots.isEmpty()) {
       return models;
     }
-    Map<ModifierId, IBakedModifierModel> legacy = ModifierModelManager.getModelsForTool(spriteGetter, smallRoots, largeRoots, models.modifiers().keySet(), LEGACY_BLACKLIST);
+    Map<ModifierId, IBakedModifierModel> legacy = ModifierModelManager.getModelsForTool(spriteGetter, smallRoots, largeRoots, models.modifiers().keySet(), options.isEmpty() ? Set.of() : LEGACY_BLACKLIST);
     // nothing on the old system? nothing to do
     if (legacy.isEmpty()) {
       return models;
