@@ -32,10 +32,12 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
- * Class handling the loading of modifier models
+ * Class handling the loading of modifier models.
+ * @deprecated use {@link ModifierModelMapManager}
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Log4j2
+@Deprecated
 public class ModifierModelManager implements IEarlySafeManagerReloadListener {
   /** Modifier file to load, has merging behavior but forge prevents multiple mods from loading the same file */
   private static final String VISIBLE_MODIFIERS = "tinkering/modifiers.json";

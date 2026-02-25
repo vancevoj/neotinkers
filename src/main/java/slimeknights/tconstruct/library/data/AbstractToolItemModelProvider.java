@@ -343,12 +343,17 @@ public abstract class AbstractToolItemModelProvider extends GenericDataProvider 
     // update parts that we were told to update
     suffixTextures(transformed, suffix, updateTextures);
     // add modifier roots
-    if (GsonHelper.getAsBoolean(transformed, "large", false)) {
-      JsonObject roots = transformed.getAsJsonObject("modifier_roots");
-      roots.add("small", copyAndSuffixRoot(roots.getAsJsonArray("small"), suffix + '/', allRoots));
-      roots.add("large", copyAndSuffixRoot(roots.getAsJsonArray("large"), suffix + '/', allRoots));
-    } else {
-      transformed.add("modifier_roots", copyAndSuffixRoot(transformed.getAsJsonArray("modifier_roots"), suffix + '/', allRoots));
+    if (transformed.has("modifier_roots")) {
+      if (GsonHelper.getAsBoolean(transformed, "large", false)) {
+        JsonObject roots = transformed.getAsJsonObject("modifier_roots");
+        roots.add("small", copyAndSuffixRoot(roots.getAsJsonArray("small"), suffix + '/', allRoots));
+        roots.add("large", copyAndSuffixRoot(roots.getAsJsonArray("large"), suffix + '/', allRoots));
+      } else {
+        transformed.add("modifier_roots", copyAndSuffixRoot(transformed.getAsJsonArray("modifier_roots"), suffix + '/', allRoots));
+      }
+    }
+    if (transformed.has("modifier_maps")) {
+      transformed.add("modifier_maps", copyAndSuffixRoot(transformed.getAsJsonArray("modifier_maps"), '/' + suffix, allRoots));
     }
     // delete overrides, no need to nest them
     transformed.remove("overrides");

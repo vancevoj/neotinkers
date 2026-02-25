@@ -56,6 +56,7 @@ import slimeknights.tconstruct.library.client.modifiers.FluidModifierModel;
 import slimeknights.tconstruct.library.client.modifiers.MaterialModifierModel;
 import slimeknights.tconstruct.library.client.modifiers.ModifierModelManager;
 import slimeknights.tconstruct.library.client.modifiers.ModifierModelManager.ModifierModelRegistrationEvent;
+import slimeknights.tconstruct.library.client.modifiers.ModifierModelMapManager;
 import slimeknights.tconstruct.library.client.modifiers.NormalModifierModel;
 import slimeknights.tconstruct.library.client.modifiers.PotionModifierModel;
 import slimeknights.tconstruct.library.client.modifiers.TankModifierModel;
@@ -106,6 +107,7 @@ public class ToolClientEvents extends ClientEventBase {
   @SubscribeEvent
   static void addResourceListener(RegisterClientReloadListenersEvent manager) {
     ModifierModelManager.init(manager);
+    manager.registerReloadListener(ModifierModelMapManager.INSTANCE);
     MaterialTooltipCache.init(manager);
     DynamicTextureLoader.init(manager);
     manager.registerReloadListener(MODIFIER_RELOAD_LISTENER);

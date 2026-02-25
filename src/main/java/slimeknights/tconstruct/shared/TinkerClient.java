@@ -44,6 +44,9 @@ import slimeknights.tconstruct.library.client.data.spritetransformer.OffsettingS
 import slimeknights.tconstruct.library.client.data.spritetransformer.RecolorSpriteTransformer;
 import slimeknights.tconstruct.library.client.materials.MaterialRenderInfoLoader;
 import slimeknights.tconstruct.library.client.modifiers.ModifierIconManager;
+import slimeknights.tconstruct.library.client.modifiers.model.CompoundModifierModel;
+import slimeknights.tconstruct.library.client.modifiers.model.ConditionalModifierModel;
+import slimeknights.tconstruct.library.client.modifiers.model.ModifierModel;
 
 import java.util.function.Consumer;
 
@@ -82,6 +85,8 @@ public class TinkerClient {
     ArmorTextureSupplier.LOADER.register(getResource("persistent_data"), MaterialArmorTextureSupplier.PersistentData.LOADER);
     ArmorTextureSupplier.LOADER.register(getResource("trim"), TrimArmorTextureSupplier.LOADER);
     ArmorTextureSupplier.LOADER.register(getResource("material_has_fallback"), MaterialHasFallbackTextureSupplier.LOADER);
+    ModifierModel.LOADER.register(getResource("compound"), CompoundModifierModel.LOADER);
+    ModifierModel.LOADER.register(getResource("conditional"), ConditionalModifierModel.LOADER);
   }
 
   @SubscribeEvent
