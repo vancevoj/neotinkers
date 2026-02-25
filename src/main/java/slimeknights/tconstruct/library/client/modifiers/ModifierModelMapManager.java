@@ -3,6 +3,7 @@ package slimeknights.tconstruct.library.client.modifiers;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
+import net.minecraft.ResourceLocationException;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.Material;
 import net.minecraft.resources.ResourceLocation;
@@ -116,6 +117,7 @@ public class ModifierModelMapManager extends MergingJsonDataLoader<Builder> {
   }
 
   /** Parses the given model from the map */
+  @SuppressWarnings("removal")
   private static <T> void parseModel(Map<T, ModifierModel> map, T key, JsonElement value, String errorPrefix, ResourceLocation id, BiFunction<ResourceLocation, T,TypedMap> context) {
     try {
       // if it's an object, it's a single model
@@ -123,11 +125,18 @@ public class ModifierModelMapManager extends MergingJsonDataLoader<Builder> {
       if (value.isJsonArray()) {
         // for simplicity, treat an array as a compound
         model = CompoundModifierModel.create(CompoundModifierModel.LIST_LOADABLE.convert(value, key.toString(), context.apply(id, key)));
+      } else if (value.isJsonPrimitive()) {
+        model = new NormalModifierModel(ModifierModel.blockAtlas(new ResourceLocation(value.getAsString())), null);
       } else {
-        model = ModifierModel.LOADER.convert(value, key.toString(), context.apply(id, key));
+        JsonObject json = value.getAsJsonObject();
+        if (!json.has("type")) {
+          model = NormalModifierModel.LOADER.deserialize(json, context.apply(id, key));
+        } else {
+          model = ModifierModel.LOADER.deserialize(json, context.apply(id, key));
+        }
       }
       map.put(key, model);
-    } catch (JsonSyntaxException e) {
+    } catch (JsonSyntaxException | ResourceLocationException e) {
       TConstruct.LOG.error("Failed to parse modifier model map {} for {} {}", id, errorPrefix, key, e);
     }
   }

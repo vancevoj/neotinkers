@@ -11,6 +11,7 @@ import slimeknights.mantle.data.GenericDataProvider;
 import slimeknights.mantle.data.loadable.Loadables;
 import slimeknights.mantle.registration.object.IdAwareObject;
 import slimeknights.tconstruct.library.client.modifiers.ModifierModelMapManager;
+import slimeknights.tconstruct.library.client.modifiers.NormalModifierModel;
 import slimeknights.tconstruct.library.client.modifiers.model.CompoundModifierModel;
 import slimeknights.tconstruct.library.client.modifiers.model.ModifierModel;
 import slimeknights.tconstruct.library.modifiers.ModifierId;
@@ -135,20 +136,38 @@ public abstract class AbstractModifierModelMapProvider extends GenericDataProvid
       return constant.isEmpty() && modifiers.isEmpty();
     }
 
+    /** Serializes the model to JSON */
+    private static JsonElement serialize(ModifierModel model) {
+      // serialize compound as an array
+      if (model instanceof CompoundModifierModel compound) {
+        return CompoundModifierModel.LIST_LOADABLE.serialize(compound.models());
+      }
+      if (model.getLoader() == NormalModifierModel.LOADER) {
+        NormalModifierModel basic = (NormalModifierModel) model;
+        Material small = basic.small();
+        if (small != null && basic.large() == null && basic.luminosity() == 0 && basic.color() == -1) {
+          return new JsonPrimitive(small.texture().toString());
+        }
+        // type of objects is optional as long as its basic, leave it out so large tools are not as big
+        return NormalModifierModel.LOADER.serialize(basic);
+      }
+      return ModifierModel.LOADER.serialize(model);
+    }
+
     /** Builds the final JSON */
     private JsonObject build() {
       JsonObject json = new JsonObject();
       if (!this.constant.isEmpty()) {
         JsonObject constant = new JsonObject();
         for (Entry<String, ModifierModel> entry : this.constant.entrySet()) {
-          constant.add(entry.getKey(), ModifierModel.LOADER.serialize(entry.getValue()));
+          constant.add(entry.getKey(), serialize(entry.getValue()));
         }
         json.add("constant", constant);
       }
       if (!this.modifiers.isEmpty()) {
         JsonObject modifiers = new JsonObject();
         for (Entry<ModifierId, ModifierModel> entry : this.modifiers.entrySet()) {
-          modifiers.add(entry.getKey().toString(), ModifierModel.LOADER.serialize(entry.getValue()));
+          modifiers.add(entry.getKey().toString(), serialize(entry.getValue()));
         }
         json.add("modifiers", modifiers);
       }
