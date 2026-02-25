@@ -7,9 +7,11 @@
     },
     "tipped": {
       "type": "tconstruct:trait",
-      "modifier": "tconstruct:tipped",
-      "texture": "tconstruct:item/tool/fishing_rod/modifiers/tipped",
-      "trait_type": "tconstruct:potion"
+      "model": {
+        "type": "tconstruct:potion",
+        "texture": "tconstruct:item/tool/fishing_rod/modifiers/tipped"
+      },
+      "modifier": "tconstruct:tipped"
     }
   },
   "modifiers": {

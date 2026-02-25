@@ -2,15 +2,19 @@
   "constant": {
     "smashing": {
       "type": "tconstruct:trait",
-      "modifier": "tconstruct:smashing",
-      "texture": "tconstruct:item/tool/ammo/shuriken_modifiers/smashing",
-      "trait_type": "tconstruct:smashing"
+      "model": {
+        "type": "tconstruct:smashing",
+        "texture": "tconstruct:item/tool/ammo/shuriken_modifiers/smashing"
+      },
+      "modifier": "tconstruct:smashing"
     },
     "tipped": {
       "type": "tconstruct:trait",
-      "modifier": "tconstruct:tipped",
-      "texture": "tconstruct:item/tool/ammo/shuriken_modifiers/tipped",
-      "trait_type": "tconstruct:potion"
+      "model": {
+        "type": "tconstruct:potion",
+        "texture": "tconstruct:item/tool/ammo/shuriken_modifiers/tipped"
+      },
+      "modifier": "tconstruct:tipped"
     }
   }
 }

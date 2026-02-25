@@ -23,7 +23,7 @@ import java.util.function.Function;
 public record TraitModel(ModifierId modifier, ModifierModel nested) implements ModifierModel {
   public static final RecordLoadable<TraitModel> LOADER = RecordLoadable.create(
     ModifierId.PARSER.requiredField("modifier", TraitModel::modifier),
-    ModifierModel.LOADER.directField("trait_type", TraitModel::nested),
+    ModifierModel.LOADER.requiredField("model", TraitModel::nested),
     TraitModel::new);
 
   @Override
