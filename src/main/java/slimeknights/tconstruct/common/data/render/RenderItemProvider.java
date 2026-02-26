@@ -111,8 +111,8 @@ public class RenderItemProvider extends BlockStateDataMapProvider<List<RenderIte
       .variant(fluidCannonDown).when(FACING, Direction.DOWN);
     block(TinkerSmeltery.endFluidCannon)
       .variant(fluidCannon).end()
-      .variant(fluidCannonUp).when(FACING, Direction.UP).end()
-      .variant(fluidCannonDown).when(FACING, Direction.DOWN);
+      .variant(List.of(itemBuilder.center(8, 15, 8).x(270).build())).when(FACING, Direction.UP).end()
+      .variant(List.of(itemBuilder.center(8, 1, 8).x(90).build())).when(FACING, Direction.DOWN);
 
     // proxy tank
     block(TinkerSmeltery.scorchedProxyTank).variant(List.of(RenderItem.builder().size(12f).transform(TinkerItemDisplays.MELTER).center(8, 9, 8).build())).end();
