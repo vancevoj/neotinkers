@@ -185,7 +185,7 @@ public class BlockTagProvider extends BlockTagsProvider {
     this.tag(TinkerTags.Blocks.HARVESTABLE_STACKABLE)
         .add(Blocks.SUGAR_CANE, Blocks.KELP_PLANT);
     this.tag(TinkerTags.Blocks.HARVESTABLE_CROPS)
-        .add(Blocks.NETHER_WART)
+        .add(Blocks.NETHER_WART, Blocks.SWEET_BERRY_BUSH) // berry bushes prefer interact, but can do crops if missing player
         .addTag(BlockTags.CROPS)
         .addOptionalTag(commonResource("crops"));
     this.tag(TinkerTags.Blocks.HARVESTABLE_INTERACT)

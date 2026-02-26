@@ -439,7 +439,7 @@ public class ItemTagProvider extends ItemTagsProvider {
     // carrots and potatoes are not seeds in vanilla, so make a tag with them
     this.tag(TinkerTags.Items.SEEDS)
         .addTag(Tags.Items.SEEDS)
-        .add(Items.CARROT, Items.POTATO, Items.NETHER_WART);
+        .add(Items.CARROT, Items.POTATO, Items.NETHER_WART, Items.SWEET_BERRIES);
 
     // tags for modifiers
     copy(TinkerTags.Blocks.CHRYSOPHILITE_ORES, TinkerTags.Items.CHRYSOPHILITE_ORES);
