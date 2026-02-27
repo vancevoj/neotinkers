@@ -28,6 +28,12 @@ public interface ModifierModel extends IBakedModifierModel, IHaveLoader {
     @Override
     public void addQuads(IToolStackView tool, ModifierEntry modifier, Function<Material, TextureAtlasSprite> spriteGetter, Transformation transforms, boolean isLarge, int startTintIndex, Consumer<Collection<BakedQuad>> quadConsumer, @Nullable ItemLayerPixels pixels) {}
 
+    @Nullable
+    @Override
+    public Object getCacheKey(IToolStackView tool, ModifierEntry modifier) {
+      return null;
+    }
+
     @Override
     public RecordLoadable<? extends ModifierModel> getLoader() {
       return loader;
