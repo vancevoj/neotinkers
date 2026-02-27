@@ -34,6 +34,80 @@ public class ModifierModelMapProvider extends AbstractModifierModelMapProvider {
       .luminosity(15, SMALL, ModifierIds.lightspeed, ModifierIds.glowing)
       .luminosity(10, SMALL, ModifierIds.fiery)
       .luminosity(2, SMALL, ModifierIds.unbreakable);
+    tool(TinkerTools.pickadze).basic(SMALL,
+        ModifierIds.emerald, ModifierIds.netherite,
+        ModifierIds.reinforced, ModifierIds.overforced, ModifierIds.magnetic, ModifierIds.soulbound,
+        ModifierIds.experienced, ModifierIds.luck, ModifierIds.silky,
+        ModifierIds.smite, ModifierIds.antiaquatic, ModifierIds.baneOfSssss, ModifierIds.cooling,
+        ModifierIds.knockback, ModifierIds.necrotic,
+        ModifierIds.blasting, ModifierIds.hydraulic
+      ).fluid(ModifierIds.bucketing, SMALL).tank(SMALL)
+      .luminosity(7, SMALL, ModifierIds.haste)
+      .luminosity(15, SMALL, ModifierIds.lightspeed, ModifierIds.glowing)
+      .luminosity(10, SMALL, ModifierIds.fiery)
+      .luminosity(2, SMALL, ModifierIds.unbreakable);
+    tool(TinkerTools.mattock).basic(SMALL,
+        ModifierIds.diamond, ModifierIds.emerald, ModifierIds.netherite,
+        ModifierIds.reinforced, ModifierIds.overforced, ModifierIds.magnetic, ModifierIds.soulbound,
+        ModifierIds.experienced, ModifierIds.luck, TinkerModifiers.severing.getId(), ModifierIds.silky,
+        ModifierIds.sharpness, ModifierIds.smite, ModifierIds.antiaquatic, ModifierIds.baneOfSssss, ModifierIds.cooling,
+        ModifierIds.knockback, ModifierIds.necrotic,
+        ModifierIds.blasting, ModifierIds.hydraulic
+      ).fluid(ModifierIds.bucketing, SMALL).tank(SMALL)
+      .luminosity(7, SMALL, ModifierIds.haste)
+      .luminosity(15, SMALL, ModifierIds.lightspeed, ModifierIds.glowing)
+      .luminosity(10, SMALL, ModifierIds.fiery)
+      .luminosity(2, SMALL, ModifierIds.unbreakable);
+    tool(TinkerTools.handAxe).basic(SMALL,
+        ModifierIds.diamond, ModifierIds.emerald, ModifierIds.netherite,
+        ModifierIds.reinforced, ModifierIds.overforced, ModifierIds.magnetic, ModifierIds.soulbound,
+        ModifierIds.experienced, ModifierIds.luck, TinkerModifiers.severing.getId(), ModifierIds.silky,
+        ModifierIds.sharpness, ModifierIds.smite, ModifierIds.antiaquatic, ModifierIds.baneOfSssss, ModifierIds.cooling,
+        ModifierIds.knockback, ModifierIds.necrotic,
+        ModifierIds.blasting, ModifierIds.hydraulic
+      ).fluid(ModifierIds.bucketing, SMALL).tank(SMALL)
+      .luminosity(7, SMALL, ModifierIds.haste)
+      .luminosity(15, SMALL, ModifierIds.lightspeed, ModifierIds.glowing)
+      .luminosity(10, SMALL, ModifierIds.fiery)
+      .luminosity(2, SMALL, ModifierIds.unbreakable);
+    tool(TinkerTools.kama).basic(SMALL,
+        ModifierIds.diamond, ModifierIds.emerald, ModifierIds.netherite,
+        ModifierIds.reinforced, ModifierIds.overforced, ModifierIds.magnetic, ModifierIds.soulbound,
+        ModifierIds.experienced, ModifierIds.luck, TinkerModifiers.severing.getId(), ModifierIds.silky,
+        ModifierIds.sharpness, ModifierIds.smite, ModifierIds.antiaquatic, ModifierIds.baneOfSssss, ModifierIds.cooling,
+        ModifierIds.knockback, ModifierIds.necrotic,
+        ModifierIds.blasting, ModifierIds.hydraulic
+      ).fluid(ModifierIds.bucketing, SMALL).tank(SMALL)
+      .luminosity(7, SMALL, ModifierIds.haste)
+      .luminosity(15, SMALL, ModifierIds.lightspeed, ModifierIds.glowing)
+      .luminosity(10, SMALL, ModifierIds.fiery)
+      .luminosity(2, SMALL, ModifierIds.unbreakable);
+    // weapon
+    tool(TinkerTools.dagger).basic(SMALL,
+        ModifierIds.diamond, ModifierIds.emerald, ModifierIds.netherite,
+        ModifierIds.reinforced, ModifierIds.overforced, ModifierIds.magnetic,
+        ModifierIds.experienced, ModifierIds.luck, ModifierIds.silky,
+        ModifierIds.sharpness, ModifierIds.smite, ModifierIds.antiaquatic, ModifierIds.baneOfSssss, ModifierIds.cooling,
+        ModifierIds.knockback,
+        ModifierIds.blasting, ModifierIds.hydraulic
+      ).fluid(ModifierIds.bucketing, SMALL).tank(SMALL)
+      .luminosity(7, SMALL, ModifierIds.haste)
+      .luminosity(15, SMALL, ModifierIds.lightspeed)
+      .luminosity(10, SMALL, ModifierIds.fiery)
+      .luminosity(2, SMALL, ModifierIds.unbreakable);
+    tool(TinkerTools.sword).basic(SMALL,
+        ModifierIds.diamond, ModifierIds.emerald, ModifierIds.netherite,
+        ModifierIds.reinforced, ModifierIds.overforced, ModifierIds.magnetic, ModifierIds.soulbound,
+        ModifierIds.experienced, ModifierIds.luck, TinkerModifiers.severing.getId(), ModifierIds.silky,
+        ModifierIds.sharpness, ModifierIds.smite, ModifierIds.antiaquatic, ModifierIds.baneOfSssss, ModifierIds.cooling,
+        ModifierIds.knockback, ModifierIds.necrotic,
+        ModifierIds.blasting, ModifierIds.hydraulic
+      ).fluid(ModifierIds.bucketing, SMALL).tank(SMALL)
+      .luminosity(7, SMALL, ModifierIds.haste)
+      .luminosity(15, SMALL, ModifierIds.lightspeed, ModifierIds.glowing)
+      .luminosity(10, SMALL, ModifierIds.fiery)
+      .luminosity(2, SMALL, ModifierIds.unbreakable);
+
     // broad
     tool(TinkerTools.sledgeHammer).basic('/',
         ModifierIds.diamond, ModifierIds.emerald, ModifierIds.netherite,
@@ -49,6 +123,108 @@ public class ModifierModelMapProvider extends AbstractModifierModelMapProvider {
       .luminosity(15, SMALL, ModifierIds.glowing)
       .luminosity(10, '/', ModifierIds.fiery)
       .luminosity(2, '/', ModifierIds.unbreakable);
+    tool(TinkerTools.veinHammer).basic('/',
+        ModifierIds.diamond, ModifierIds.emerald, ModifierIds.netherite,
+        ModifierIds.reinforced, ModifierIds.overforced, ModifierIds.magnetic,
+        ModifierIds.experienced, ModifierIds.luck, ModifierIds.silky,
+        ModifierIds.sharpness, ModifierIds.smite, ModifierIds.antiaquatic, ModifierIds.baneOfSssss, ModifierIds.cooling,
+        ModifierIds.knockback,
+        ModifierIds.blasting, ModifierIds.hydraulic
+      ).fluid(ModifierIds.bucketing, '/').tank('/')
+      .luminosity(7, '/', ModifierIds.haste)
+      .luminosity(15, '/', ModifierIds.lightspeed)
+      .luminosity(10, '/', ModifierIds.fiery)
+      .luminosity(2, '/', ModifierIds.unbreakable);
+    tool(TinkerTools.excavator).basic('/',
+        ModifierIds.diamond, ModifierIds.emerald, ModifierIds.netherite,
+        ModifierIds.reinforced, ModifierIds.overforced, ModifierIds.magnetic,
+        ModifierIds.experienced, ModifierIds.luck, ModifierIds.silky,
+        ModifierIds.sharpness, ModifierIds.smite, ModifierIds.antiaquatic, ModifierIds.baneOfSssss, ModifierIds.cooling,
+        ModifierIds.knockback,
+        ModifierIds.blasting, ModifierIds.hydraulic
+      ).basic(SMALL, ModifierIds.soulbound, TinkerModifiers.severing.getId(), ModifierIds.necrotic)
+      .fluid(ModifierIds.bucketing, '/').tank('/')
+      .luminosity(7, '/', ModifierIds.haste)
+      .luminosity(15, '/', ModifierIds.lightspeed)
+      .luminosity(15, SMALL, ModifierIds.glowing)
+      .luminosity(10, '/', ModifierIds.fiery)
+      .luminosity(2, '/', ModifierIds.unbreakable);
+    tool(TinkerTools.broadAxe).basic('/',
+        ModifierIds.diamond, ModifierIds.emerald, ModifierIds.netherite,
+        ModifierIds.reinforced, ModifierIds.overforced, ModifierIds.magnetic,
+        ModifierIds.experienced, ModifierIds.luck, ModifierIds.silky,
+        ModifierIds.sharpness, ModifierIds.smite, ModifierIds.antiaquatic, ModifierIds.baneOfSssss, ModifierIds.cooling,
+        ModifierIds.knockback,
+        ModifierIds.blasting, ModifierIds.hydraulic
+      ).basic(SMALL, ModifierIds.soulbound, TinkerModifiers.severing.getId(), ModifierIds.necrotic)
+      .fluid(ModifierIds.bucketing, '/').tank('/')
+      .luminosity(7, '/', ModifierIds.haste)
+      .luminosity(15, '/', ModifierIds.lightspeed)
+      .luminosity(15, SMALL, ModifierIds.glowing)
+      .luminosity(10, '/', ModifierIds.fiery)
+      .luminosity(2, '/', ModifierIds.unbreakable);
+    tool(TinkerTools.scythe).basic('/',
+        ModifierIds.diamond, ModifierIds.emerald, ModifierIds.netherite,
+        ModifierIds.reinforced, ModifierIds.overforced, ModifierIds.magnetic,
+        ModifierIds.experienced, ModifierIds.luck, ModifierIds.silky,
+        ModifierIds.sharpness, ModifierIds.smite, ModifierIds.antiaquatic, ModifierIds.baneOfSssss, ModifierIds.cooling,
+        ModifierIds.knockback,
+        ModifierIds.blasting, ModifierIds.hydraulic
+      ).basic(SMALL, ModifierIds.soulbound, TinkerModifiers.severing.getId(), ModifierIds.necrotic)
+      .fluid(ModifierIds.bucketing, '/').tank('/')
+      .luminosity(7, '/', ModifierIds.haste)
+      .luminosity(15, '/', ModifierIds.lightspeed)
+      .luminosity(15, SMALL, ModifierIds.glowing)
+      .luminosity(10, '/', ModifierIds.fiery)
+      .luminosity(2, '/', ModifierIds.unbreakable);
+    // weapon
+    tool(TinkerTools.cleaver).basic('/',
+        ModifierIds.diamond, ModifierIds.emerald, ModifierIds.netherite,
+        ModifierIds.reinforced, ModifierIds.overforced, ModifierIds.magnetic,
+        ModifierIds.experienced, ModifierIds.luck, ModifierIds.silky,
+        ModifierIds.sharpness, ModifierIds.smite, ModifierIds.antiaquatic, ModifierIds.baneOfSssss, ModifierIds.cooling,
+        ModifierIds.knockback,
+        ModifierIds.blasting, ModifierIds.hydraulic
+      ).basic(SMALL, ModifierIds.soulbound, TinkerModifiers.severing.getId(), ModifierIds.necrotic)
+      .fluid(ModifierIds.bucketing, '/').tank('/')
+      .luminosity(7, '/', ModifierIds.haste)
+      .luminosity(15, '/', ModifierIds.lightspeed)
+      .luminosity(15, SMALL, ModifierIds.glowing)
+      .luminosity(10, '/', ModifierIds.fiery)
+      .luminosity(2, '/', ModifierIds.unbreakable);
+    tool(TinkerTools.javelin).basic('/',
+        ModifierIds.diamond, ModifierIds.emerald, ModifierIds.netherite,
+        ModifierIds.reinforced, ModifierIds.overforced, ModifierIds.magnetic,
+        ModifierIds.experienced, ModifierIds.luck, ModifierIds.silky,
+        ModifierIds.sharpness, ModifierIds.smite, ModifierIds.antiaquatic, ModifierIds.baneOfSssss, ModifierIds.cooling,
+        ModifierIds.knockback,
+        ModifierIds.blasting, ModifierIds.hydraulic
+      ).fluid(ModifierIds.bucketing, '/').tank('/')
+      .luminosity(7, '/', ModifierIds.haste)
+      .luminosity(15, '/', ModifierIds.lightspeed)
+      .luminosity(10, '/', ModifierIds.fiery)
+      .luminosity(2, '/', ModifierIds.unbreakable);
+
+    // ancient tools
+    tool(TinkerTools.battlesign).basic(SMALL,
+        ModifierIds.diamond, ModifierIds.emerald, ModifierIds.netherite,
+        ModifierIds.reinforced, ModifierIds.overforced, ModifierIds.magnetic, ModifierIds.soulbound,
+        ModifierIds.experienced, ModifierIds.luck, TinkerModifiers.severing.getId(), ModifierIds.silky,
+        ModifierIds.sharpness, ModifierIds.smite, ModifierIds.antiaquatic, ModifierIds.baneOfSssss, ModifierIds.cooling,
+        ModifierIds.knockback, ModifierIds.necrotic,
+        ModifierIds.blasting, ModifierIds.hydraulic
+      ).fluid(ModifierIds.bucketing, SMALL).tank(SMALL)
+      .luminosity(7, SMALL, ModifierIds.haste)
+      .luminosity(15, SMALL, ModifierIds.lightspeed, ModifierIds.glowing)
+      .luminosity(10, SMALL, ModifierIds.fiery)
+      .luminosity(2, SMALL, ModifierIds.unbreakable);
+
+    // misc
+    tool(TinkerTools.flintAndBrick).basic(SMALL,
+      ModifierIds.diamond, ModifierIds.emerald, ModifierIds.netherite,
+      ModifierIds.reinforced, ModifierIds.overforced
+    ).luminosity(15, SMALL, ModifierIds.glowing)
+      .luminosity(2, SMALL, ModifierIds.unbreakable);
 
     // plate armor
     ModifierId dyed = TinkerModifiers.dyed.getId();
