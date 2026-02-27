@@ -47,11 +47,11 @@ public enum EnergyAsCapacityModule implements ModifierModule, CapacityBarHook {
 
   @Override
   public void addAmount(IToolStackView tool, ModifierEntry modifier, int amount) {
-    ToolEnergyCapability.setEnergy(tool, ToolEnergyCapability.getEnergy(tool) + amount);
+    ToolEnergyCapability.addEnergy(tool, amount);
   }
 
   @Override
   public void removeAmount(IToolStackView tool, ModifierEntry modifier, int amount) {
-    ToolEnergyCapability.setEnergy(tool, ToolEnergyCapability.getEnergy(tool) - amount);
+    ToolEnergyCapability.addEnergy(tool, -amount);
   }
 }
