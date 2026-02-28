@@ -1185,6 +1185,7 @@
   "item.tconstruct.slime_helmet.material.tconstruct.venombone":     "Venombone Slimeskull",
   "item.tconstruct.slime_helmet.material.tconstruct.blazing_bone":  "Blazing Bone Slimeskull",
   "item.tconstruct.slime_helmet.material.tconstruct.necronium":     "Necronium Slimeskull",
+  "item.tconstruct.slime_helmet.material.tconstruct.knightmetal":   "Knightmetal Slimeskull",
 
   "item.tconstruct.crystalshot": "Crystalshot",
   "entity.tconstruct.crystalshot": "Crystalshot",
@@ -2159,6 +2160,8 @@
   "material.tconstruct.knightmetal.encyclopedia": "Grants +0.4 damage per level per piece of armor worn by the target",
   "material.tconstruct.knightmetal.ranged": "Grants +0.2 damage per level per piece of armor worn by the target (before velocity)",
   "material.tconstruct.knightmetal.armor": "Increases protection by 4% per level per item in the attacker's arms",
+  "material.tconstruct.knightmetal.skull_flavor": "Properly llama",
+  "material.tconstruct.knightmetal.skull_encyclopedia": "Allows shooting fluid projectiles from your helmet by holding and releasing the helmet interact key. Takes about 2 seconds to reach full charge.",
 
   "material.tconstruct.knightly": "Knightly",
   "material.tconstruct.knightly.flavor": "Shard of the traveling slime, sharper when unrefined.",

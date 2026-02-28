@@ -59,6 +59,7 @@ public class WorldClientEvents extends ClientEventBase {
 
   @SubscribeEvent
   static void registerRenderers(EntityRenderersEvent.RegisterLayerDefinitions event) {
+    // TODO: do we really need a separate copy of each head for each mob, or can we reuse them?
     Supplier<LayerDefinition> normalHead = Lazy.of(SkullModel::createMobHeadLayer);
     Supplier<LayerDefinition> customHead = Lazy.of(() -> SkullModelHelper.createHeadLayer(0, 0, 32, 16));
     Supplier<LayerDefinition> headOverlayCustom = Lazy.of(() -> SkullModelHelper.createHeadHatLayer(0, 16, 32, 32));
@@ -84,6 +85,7 @@ public class WorldClientEvents extends ClientEventBase {
     registerLayerDefinition(event, TinkerHeadType.VENOMBONE, customHead);
     registerLayerDefinition(event, TinkerHeadType.BLAZING_BONE, customHead);
     registerLayerDefinition(event, TinkerHeadType.NECRONIUM, customHead);
+    event.registerLayerDefinition(SkullModelHelper.FLUID_CANNON, headOverlayCustom);
   }
 
   @SubscribeEvent
@@ -133,6 +135,7 @@ public class WorldClientEvents extends ClientEventBase {
       registerHeadModel(TinkerHeadType.VENOMBONE,    MaterialIds.venombone,   TConstruct.getResource("textures/entity/skull/venombone.png"));
       registerHeadModel(TinkerHeadType.BLAZING_BONE, MaterialIds.blazingBone, TConstruct.getResource("textures/entity/skull/blazing_bone.png"));
       registerHeadModel(TinkerHeadType.NECRONIUM,    MaterialIds.necronium,   TConstruct.getResource("textures/entity/skull/necronium.png"));
+      SlimeskullArmorModel.registerHeadModel(MaterialIds.knightmetal, SkullModelHelper.FLUID_CANNON, TConstruct.getResource("textures/entity/skull/fluid_cannon.png"));
     });
   }
 

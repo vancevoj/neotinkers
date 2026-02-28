@@ -119,8 +119,16 @@ public interface GeneralInteractionModifierHook {
    * @param living    Entity using the tool, used for the vanilla hook
    * @param speedFactor  Additional factor to multiply drawtime by, after considering {@link ToolStats#DRAW_SPEED}
    */
+  static int startDrawing(IToolStackView tool, LivingEntity living, float speedFactor) {
+    int drawtime = (int)Math.ceil(20f * speedFactor / ConditionalStatModifierHook.getModifiedStat(tool, living, ToolStats.DRAW_SPEED));
+    tool.getPersistentData().putInt(KEY_DRAWTIME, drawtime);
+    return drawtime;
+  }
+
+  /** @deprecated use {@link #startDrawing(IToolStackView, LivingEntity, float)} */
+  @Deprecated(forRemoval = true)
   static void startDrawtime(IToolStackView tool, LivingEntity living, float speedFactor) {
-    tool.getPersistentData().putInt(KEY_DRAWTIME, (int)Math.ceil(20f * speedFactor / ConditionalStatModifierHook.getModifiedStat(tool, living, ToolStats.DRAW_SPEED)));
+    startDrawing(tool, living, speedFactor);
   }
 
   /**
@@ -132,7 +140,7 @@ public interface GeneralInteractionModifierHook {
    * @param speedFactor  Additional factor to multiply drawtime by, after considering {@link ToolStats#DRAW_SPEED}
    */
   static void startUsingWithDrawtime(IToolStackView tool, ModifierId modifier, LivingEntity living, InteractionHand hand, float speedFactor) {
-    startDrawtime(tool, living, speedFactor);
+    startDrawing(tool, living, speedFactor);
     startUsing(tool, modifier, living, hand);
   }
 

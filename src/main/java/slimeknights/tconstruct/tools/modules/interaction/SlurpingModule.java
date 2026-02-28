@@ -97,7 +97,7 @@ public record SlurpingModule(LevelingValue strength, LevelingInt duration) imple
   }
 
   /** Adds the given number of fluid particles */
-  private static void addFluidParticles(LivingEntity entity, FluidStack fluid, int count) {
+  public static void addFluidParticles(LivingEntity entity, FluidStack fluid, int count) {
     for(int i = 0; i < count; ++i) {
       RandomSource random = entity.getRandom();
       Vec3 motion = new Vec3((random.nextFloat() - 0.5D) * 0.1D, random.nextFloat() * 0.1D + 0.1D, 0.0D);

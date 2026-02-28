@@ -214,7 +214,7 @@ public class MaterialTagProvider extends AbstractMaterialTagProvider {
       // misc
       MaterialIds.blaze, MaterialIds.enderPearl, MaterialIds.dragonScale,
       // crafted
-      MaterialIds.venombone, MaterialIds.blazingBone
+      MaterialIds.venombone, MaterialIds.blazingBone, MaterialIds.knightmetal
     ).addOptional(MaterialIds.necronium);
   }
 

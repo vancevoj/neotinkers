@@ -530,8 +530,9 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
 
     // slimeskull
     addMaterialStats(MaterialIds.glass,        new SkullStats( 90, 0));
-    addMaterialStats(MaterialIds.enderPearl,   new SkullStats(180, 0));
     addMaterialStats(MaterialIds.blaze,        new SkullStats(150, 0));
+    // end
+    addMaterialStats(MaterialIds.enderPearl,   new SkullStats(180, 0));
     addMaterialStats(MaterialIds.dragonScale,  new SkullStats(120, 0));
     // skeleton
     addMaterialStats(MaterialIds.bone,         new SkullStats(100, 0));
@@ -552,6 +553,7 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
     addMaterialStats(MaterialIds.venombone,    new SkullStats(175, 1));
     addMaterialStats(MaterialIds.blazingBone,  new SkullStats(205, 1));
     addMaterialStats(MaterialIds.necronium,    new SkullStats(157, 1));
+    addMaterialStats(MaterialIds.knightmetal,  new SkullStats(220, 1));
 
     // slimesuit
     addMaterialStats(MaterialIds.enderslime, StatlessMaterialStats.REPAIR_KIT);

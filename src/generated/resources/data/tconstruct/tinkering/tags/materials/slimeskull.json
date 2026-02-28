@@ -17,6 +17,7 @@
     "tconstruct:dragon_scale",
     "tconstruct:venombone",
     "tconstruct:blazing_bone",
+    "tconstruct:knightmetal",
     {
       "id": "tconstruct:necronium",
       "required": false
