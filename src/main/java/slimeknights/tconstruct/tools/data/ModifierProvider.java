@@ -213,6 +213,7 @@ import slimeknights.tconstruct.tools.modules.armor.ToolBeltModule;
 import slimeknights.tconstruct.tools.modules.combat.BlockingModule;
 import slimeknights.tconstruct.tools.modules.combat.ChannelingModule;
 import slimeknights.tconstruct.tools.modules.combat.DamageOnShootModule;
+import slimeknights.tconstruct.tools.modules.combat.FieryArmorAttackModule;
 import slimeknights.tconstruct.tools.modules.combat.FieryAttackModule;
 import slimeknights.tconstruct.tools.modules.combat.FreezingAttackModule;
 import slimeknights.tconstruct.tools.modules.combat.LifestealModule;
@@ -1506,6 +1507,11 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
     buildModifier(ModifierIds.decayedBones).levelDisplay(ModifierLevelDisplay.SINGLE_LEVEL)
       .addModule(new EffectImmunityModule(MobEffects.WITHER))
       .addModule(MobEffectModule.builder(MobEffects.WITHER).damageSource(DamageSourcePredicate.tag(TinkerTags.DamageTypes.MELEE_PROTECTION)).time(RandomLevelingValue.flat(120)).buildArmorAttack());
+    buildModifier(ModifierIds.fireborn).levelDisplay(ModifierLevelDisplay.SINGLE_LEVEL)
+      // immune to being on fire specifically
+      .addModule(new BlockDamageSourceModule(new DamageTypePredicate(DamageTypes.ON_FIRE), ModifierCondition.ANY_TOOL))
+      // all attacks now cause fire. Bit niche
+      .addModule(new FieryArmorAttackModule(LevelingInt.eachLevel(5), DamageSourcePredicate.ANY));
 
     // mob disguise
     buildModifier(ModifierIds.creeperDisguise        ).levelDisplay(ModifierLevelDisplay.SINGLE_LEVEL).addModule(new MobDisguiseModule(EntityType.CREEPER));

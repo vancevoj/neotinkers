@@ -556,6 +556,7 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
     // slimesuit
     addMaterialStats(MaterialIds.enderslime, StatlessMaterialStats.REPAIR_KIT);
     addMaterialStats(MaterialIds.phantom, StatlessMaterialStats.REPAIR_KIT);
+    addMaterialStats(MaterialIds.blaze, StatlessMaterialStats.REPAIR_KIT);
     // slimesuit embellishments
     addMaterialStats(MaterialIds.blood);
     addMaterialStats(MaterialIds.clay);

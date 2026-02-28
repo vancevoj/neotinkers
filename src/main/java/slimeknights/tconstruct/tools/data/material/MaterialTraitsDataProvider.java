@@ -191,7 +191,7 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     material(MaterialIds.iron).addTraits(SkullStats.ID, TinkerModifiers.plague.getId(), ModifierIds.huskDisguise);
     material(MaterialIds.copper).addTraits(SkullStats.ID, new ModifierEntry(ModifierIds.respiration, 2)).addTraits(SkullStats.ID, ModifierIds.drownedDisguise);
     // nether
-    material(MaterialIds.blaze).addTraits(SkullStats.ID, TinkerModifiers.firebreath.getId(), ModifierIds.blazeDisguise);
+    material(MaterialIds.blaze).addTraits(SkullStats.ID, ModifierIds.fireborn, ModifierIds.blazeDisguise);
     material(MaterialIds.gold).addTraits(SkullStats.ID, TinkerModifiers.chrysophilite.getId(), ModifierIds.piglinDisguise, TinkerModifiers.golden.getId());
     material(MaterialIds.roseGold).addTraits(SkullStats.ID, TinkerModifiers.goldGuard.getId(), ModifierIds.piglinBruteDisguise, TinkerModifiers.golden.getId());
     material(MaterialIds.pigIron).addTraits(SkullStats.ID, ModifierIds.revenge, ModifierIds.zombifiedPiglinDisguise);

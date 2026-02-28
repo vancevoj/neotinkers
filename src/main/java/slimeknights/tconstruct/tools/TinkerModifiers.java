@@ -275,6 +275,7 @@ import slimeknights.tconstruct.tools.modules.armor.ToolBeltModule;
 import slimeknights.tconstruct.tools.modules.combat.BlockingModule;
 import slimeknights.tconstruct.tools.modules.combat.ChannelingModule;
 import slimeknights.tconstruct.tools.modules.combat.DamageOnShootModule;
+import slimeknights.tconstruct.tools.modules.combat.FieryArmorAttackModule;
 import slimeknights.tconstruct.tools.modules.combat.FieryAttackModule;
 import slimeknights.tconstruct.tools.modules.combat.FreezingAttackModule;
 import slimeknights.tconstruct.tools.modules.combat.LifestealModule;
@@ -943,6 +944,7 @@ public final class TinkerModifiers extends TinkerModule {
       ModifierModule.LOADER.register(getResource("overshield"), OvershieldModule.LOADER);
       // combat
       ModifierModule.LOADER.register(getResource("fiery_attack"), FieryAttackModule.LOADER);
+      ModifierModule.LOADER.register(getResource("fiery_armor_attack"), FieryArmorAttackModule.LOADER);
       ModifierModule.LOADER.register(getResource("freezing_attack"), FreezingAttackModule.LOADER);
       ModifierModule.LOADER.register(getResource("spilling"), SpillingModule.LOADER);
       ModifierModule.LOADER.register(getResource("channeling"), ChannelingModule.LOADER);
