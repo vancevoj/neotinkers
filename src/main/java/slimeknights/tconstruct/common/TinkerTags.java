@@ -481,18 +481,27 @@ public class TinkerTags {
     public static final TagKey<Item> RANGED = local("modifiable/ranged");
     /** Modifiable items that launch a projectile, as opposed to being the projectile. Additionally includes {@link ToolStats#PROJECTILE_DAMAGE} for its launch power. */
     public static final TagKey<Item> LAUNCHERS = local("modifiable/ranged/launcher");
+    // subclasses
     /** Any modifiable ranged items that are a bow, includes crosbows and longbows */
     public static final TagKey<Item> BOWS = local("modifiable/ranged/bows");
     /** Any modifiable bows that fire arrows on release */
     public static final TagKey<Item> LONGBOWS = local("modifiable/ranged/longbows");
-    /** Bows supporting the ballista modifier. In code, only {@link slimeknights.tconstruct.library.tools.item.ranged.ModifiableBowItem} implements this functionality. */
-    public static final TagKey<Item> BALLISTAS = local("modifiable/ranged/ballistas");
     /** Any modifiable bows that store an arrow then fire on next use */
     public static final TagKey<Item> CROSSBOWS = local("modifiable/ranged/crossbows");
     /** Modifiable items support special staff modifiers, is a subtag of ranged. */
     public static final TagKey<Item> STAFFS = local("modifiable/staffs");
     /** Modifiable items that support fishing modifiers. */
     public static final TagKey<Item> FISHING_RODS = local("modifiable/fishing_rods");
+    // specific modifiers
+    /** Ranged items supporting the power upgrade */
+    public static final TagKey<Item> RANGED_POWER = local("modifiable/ranged/power");
+    /** Ranged items supporting the quick charge upgrade */
+    public static final TagKey<Item> RANGED_QUICK_CHARGE = local("modifiable/ranged/quick_charge");
+    /** Ranged items supporting the bounce upgrade */
+    public static final TagKey<Item> RANGED_BOUNCE = local("modifiable/ranged/bounce");
+    /** Bows supporting the ballista modifier. In code, only {@link slimeknights.tconstruct.library.tools.item.ranged.ModifiableBowItem} implements this functionality. */
+    public static final TagKey<Item> BALLISTAS = local("modifiable/ranged/ballistas");
+    // book
     /** Ranged tools to show in materials and you and the encyclopedia. */
     public static final TagKey<Item> SMALL_RANGED = local("modifiable/ranged/small");
     /** Ranged tools to show in mighty smelting and the encyclopedia. */

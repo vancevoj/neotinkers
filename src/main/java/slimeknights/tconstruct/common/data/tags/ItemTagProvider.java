@@ -96,6 +96,9 @@ import static slimeknights.tconstruct.common.TinkerTags.Items.MULTIPART_TOOL;
 import static slimeknights.tconstruct.common.TinkerTags.Items.PARRY;
 import static slimeknights.tconstruct.common.TinkerTags.Items.PUNY_ARMOR;
 import static slimeknights.tconstruct.common.TinkerTags.Items.RANGED;
+import static slimeknights.tconstruct.common.TinkerTags.Items.RANGED_BOUNCE;
+import static slimeknights.tconstruct.common.TinkerTags.Items.RANGED_POWER;
+import static slimeknights.tconstruct.common.TinkerTags.Items.RANGED_QUICK_CHARGE;
 import static slimeknights.tconstruct.common.TinkerTags.Items.SHIELDS;
 import static slimeknights.tconstruct.common.TinkerTags.Items.SINGLEPART_TOOL;
 import static slimeknights.tconstruct.common.TinkerTags.Items.SINGLE_USE;
@@ -353,7 +356,7 @@ public class ItemTagProvider extends ItemTagsProvider {
     addToolTags(TinkerTools.meltingPan, MULTIPART_TOOL, DURABILITY, ANCIENT_TOOLS, TRADER_TOOLS, HARVEST_PRIMARY, STAFFS, HELD_ARMOR, INTERACTABLE_DUAL, AOE, BONUS_SLOTS);
     addToolTags(TinkerTools.warPick,    MULTIPART_TOOL, DURABILITY, ANCIENT_TOOLS, TRADER_TOOLS, HARVEST_PRIMARY, STONE_HARVEST, MELEE_WEAPON, HELD, AOE, CLUSTER_MAX_HARVESTABLES, CROSSBOWS, BONUS_SLOTS, ItemTags.PICKAXES, Tags.Items.TOOLS_CROSSBOWS);
     addToolTags(TinkerTools.battlesign, MULTIPART_TOOL, DURABILITY, ANCIENT_TOOLS, TRADER_TOOLS, MELEE_PRIMARY, SHIELDS, BONUS_SLOTS, Tags.Items.TOOLS_SHIELDS);
-    addToolTags(TinkerTools.swasher,    MULTIPART_TOOL, DURABILITY, ANCIENT_TOOLS, TRADER_TOOLS, HARVEST, MELEE_PRIMARY, LAUNCHERS, HELD, BONUS_SLOTS, ItemTags.SWORDS, STAFFS, INTERACTABLE_CHARGE_MODIFIER);
+    addToolTags(TinkerTools.swasher,    MULTIPART_TOOL, DURABILITY, ANCIENT_TOOLS, TRADER_TOOLS, HARVEST, MELEE_PRIMARY, LAUNCHERS, HELD, BONUS_SLOTS, ItemTags.SWORDS, RANGED_POWER, RANGED_QUICK_CHARGE, RANGED_BOUNCE, INTERACTABLE_CHARGE_MODIFIER);
     optionalToolTags(TinkerTools.minotaurAxe, MULTIPART_TOOL, DURABILITY, ANCIENT_TOOLS, HARVEST_PRIMARY, MELEE_PRIMARY, INTERACTABLE_RIGHT, AOE, BONUS_SLOTS, ItemTags.AXES);
 
     // armor
@@ -417,6 +420,9 @@ public class ItemTagProvider extends ItemTagsProvider {
     this.tag(LAUNCHERS).addTags(BOWS, STAFFS, FISHING_RODS);
     this.tag(RANGED).addTags(LAUNCHERS, SMALL_RANGED, BROAD_RANGED);
     this.tag(BOWS).addTags(LONGBOWS, CROSSBOWS);
+    this.tag(RANGED_POWER).addTags(LONGBOWS, STAFFS, FISHING_RODS);
+    this.tag(RANGED_QUICK_CHARGE).addTags(CROSSBOWS, STAFFS, FISHING_RODS);
+    this.tag(RANGED_BOUNCE).addTags(LONGBOWS, STAFFS);
     // TODO 1.21: consider dropping unsalvagable from this tag
     this.tag(UNRECYCLABLE).addTags(UNSALVAGABLE, ANCIENT_TOOLS); // ancient tools lack tool parts, but may have special override recipes to salvage
     // headlight support

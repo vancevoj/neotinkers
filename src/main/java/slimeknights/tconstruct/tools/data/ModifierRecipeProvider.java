@@ -540,19 +540,19 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
      * ranged
      */
     IncrementalModifierRecipeBuilder.modifier(ModifierIds.power)
-                                    .setTools(ingredientFromTags(TinkerTags.Items.LONGBOWS, TinkerTags.Items.STAFFS, TinkerTags.Items.FISHING_RODS))
-                                    .setInput(TinkerWorld.ichorGeode.asItem(), 1, 72)
-                                    .setSlots(SlotType.UPGRADE, 1)
-                                    .setMaxLevel(5)
-                                    .saveSalvage(consumer, prefix(ModifierIds.power, upgradeSalvage))
-                                    .save(consumer, prefix(ModifierIds.power, upgradeFolder));
+      .setTools(TinkerTags.Items.RANGED_POWER)
+      .setInput(TinkerWorld.ichorGeode.asItem(), 1, 72)
+      .setSlots(SlotType.UPGRADE, 1)
+      .setMaxLevel(5)
+      .saveSalvage(consumer, prefix(ModifierIds.power, upgradeSalvage))
+      .save(consumer, prefix(ModifierIds.power, upgradeFolder));
     IncrementalModifierRecipeBuilder.modifier(ModifierIds.quickCharge)
-                                    .setTools(ingredientFromTags(TinkerTags.Items.CROSSBOWS, TinkerTags.Items.STAFFS, TinkerTags.Items.FISHING_RODS))
-                                    .setInput(Items.MAGMA_CREAM, 1, 5)
-                                    .setMaxLevel(4)
-                                    .setSlots(SlotType.UPGRADE, 1)
-                                    .saveSalvage(consumer, prefix(ModifierIds.quickCharge, upgradeSalvage))
-                                    .save(consumer, prefix(ModifierIds.quickCharge, upgradeFolder));
+      .setTools(TinkerTags.Items.RANGED_QUICK_CHARGE)
+      .setInput(Items.MAGMA_CREAM, 1, 5)
+      .setMaxLevel(4)
+      .setSlots(SlotType.UPGRADE, 1)
+      .saveSalvage(consumer, prefix(ModifierIds.quickCharge, upgradeSalvage))
+      .save(consumer, prefix(ModifierIds.quickCharge, upgradeFolder));
     IncrementalModifierRecipeBuilder.modifier(ModifierIds.trueshot)
                                     .setInput(Items.TARGET, 1, 10)
                                     .setSlots(SlotType.UPGRADE, 1)
@@ -587,7 +587,7 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
       .addInput(TinkerWorld.slime.get(SlimeType.ICHOR))
       .setMaxLevel(3) // 7 bounces is more than you will ever need
       .setSlots(SlotType.UPGRADE, 1)
-      .setTools(TinkerTags.Items.LONGBOWS)
+      .setTools(TinkerTags.Items.RANGED_BOUNCE)
       .saveSalvage(consumer, prefix(ModifierIds.bounce, upgradeSalvage))
       .save(consumer, prefix(ModifierIds.bounce, upgradeFolder));
     ModifierRecipeBuilder.modifier(ModifierIds.freezing)
