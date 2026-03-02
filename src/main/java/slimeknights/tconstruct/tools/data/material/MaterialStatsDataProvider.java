@@ -244,7 +244,7 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
       StatlessMaterialStats.BINDING);
     addMaterialStats(MaterialIds.nicrosil,
       new HeadMaterialStats(816, 6f, NETHERITE, 3.16f),
-      HandleMaterialStats.multipliers().durability(1.16f).miningSpeed(0.92f).attackSpeed(0.16f).attackDamage(0.92f).build(),
+      HandleMaterialStats.multipliers().durability(1.16f).miningSpeed(0.92f).attackSpeed(1.16f).attackDamage(0.92f).build(),
       StatlessMaterialStats.BINDING);
   }
 
