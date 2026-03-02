@@ -196,6 +196,7 @@ import slimeknights.tconstruct.tools.data.EnchantmentToModifierProvider;
 import slimeknights.tconstruct.tools.data.FluidEffectProvider;
 import slimeknights.tconstruct.tools.data.ModifierProvider;
 import slimeknights.tconstruct.tools.data.ModifierRecipeProvider;
+import slimeknights.tconstruct.tools.entity.CustomFireball;
 import slimeknights.tconstruct.tools.entity.FluidEffectProjectile;
 import slimeknights.tconstruct.tools.item.CreativeSlotItem;
 import slimeknights.tconstruct.tools.item.DragonScaleItem;
@@ -291,6 +292,7 @@ import slimeknights.tconstruct.tools.modules.durability.ToolDamageRangeModule;
 import slimeknights.tconstruct.tools.modules.interaction.BrushModule;
 import slimeknights.tconstruct.tools.modules.interaction.BucketModule;
 import slimeknights.tconstruct.tools.modules.interaction.ExtinguishCampfireModule;
+import slimeknights.tconstruct.tools.modules.interaction.FireballModule;
 import slimeknights.tconstruct.tools.modules.interaction.FishingModule;
 import slimeknights.tconstruct.tools.modules.interaction.HarvestModule;
 import slimeknights.tconstruct.tools.modules.interaction.PlaceFireModule;
@@ -370,6 +372,7 @@ public final class TinkerModifiers extends TinkerModule {
   // entity
   public static final RegistryObject<EntityType<FluidEffectProjectile>> fluidSpitEntity = ENTITIES.register("fluid_spit", () ->
     EntityType.Builder.<FluidEffectProjectile>of(FluidEffectProjectile::new, MobCategory.MISC).sized(0.25F, 0.25F).clientTrackingRange(4).updateInterval(10).setShouldReceiveVelocityUpdates(false));
+  public static final RegistryObject<EntityType<CustomFireball>> fireball = ENTITIES.register("fireball", () -> EntityType.Builder.<CustomFireball>of(CustomFireball::new, MobCategory.MISC).sized(0.3125F, 0.3125F).clientTrackingRange(4).updateInterval(10));
 
   /*
    * Modifiers
@@ -405,7 +408,6 @@ public final class TinkerModifiers extends TinkerModule {
   public static final StaticModifier<EnderdodgingModifier> enderdodging = MODIFIERS.register("enderdodging", EnderdodgingModifier::new);
   public static final StaticModifier<StrongBonesModifier> strongBones = MODIFIERS.register("strong_bones", StrongBonesModifier::new);
   public static final StaticModifier<PlagueModifier> plague = MODIFIERS.register("plague", PlagueModifier::new);
-  public static final StaticModifier<FirebreathModifier> firebreath = MODIFIERS.register("firebreath", FirebreathModifier::new);
   public static final StaticModifier<ChrysophiliteModifier> chrysophilite = MODIFIERS.register("chrysophilite", ChrysophiliteModifier::new);
   public static final StaticModifier<GoldGuardModifier> goldGuard = MODIFIERS.register("gold_guard", GoldGuardModifier::new);
 
@@ -473,6 +475,9 @@ public final class TinkerModifiers extends TinkerModule {
   /** @deprecated wither skeleton's trait was switched to {@link slimeknights.tconstruct.tools.data.ModifierIds#restore}. Reimplement if you need its behavior. */
   @Deprecated(forRemoval = true)
   public static final StaticModifier<WitheredModifier> withered = MODIFIERS.register("withered", WitheredModifier::new);
+  /** @deprecated blazes trait was switched to {@link slimeknights.tconstruct.tools.data.ModifierIds#fireborn} and helmet projectile was switched to {@link slimeknights.tconstruct.tools.data.ModifierIds#spitting} */
+  @Deprecated(forRemoval = true)
+  public static final StaticModifier<FirebreathModifier> firebreath = MODIFIERS.register("firebreath", FirebreathModifier::new);
 
   // fields that have been relocated to ModifierIds
   // slotless
@@ -934,6 +939,7 @@ public final class TinkerModifiers extends TinkerModule {
       ModifierModule.LOADER.register(getResource("spitting"), SpittingModule.LOADER);
       ModifierModule.LOADER.register(getResource("splashing"), SplashingModule.LOADER);
       ModifierModule.LOADER.register(getResource("slurping"), SlurpingModule.LOADER);
+      ModifierModule.LOADER.register(getResource("fireball"), FireballModule.LOADER);
       // sling
       ModifierModule.LOADER.register(getResource("sling_leap"), SlingLeapModule.LOADER);
       ModifierModule.LOADER.register(getResource("sling_knockback"), SlingKnockbackModule.LOADER);
