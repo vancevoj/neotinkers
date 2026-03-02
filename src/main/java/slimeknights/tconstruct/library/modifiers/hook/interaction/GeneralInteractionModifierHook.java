@@ -113,6 +113,16 @@ public interface GeneralInteractionModifierHook {
     living.startUsingItem(hand);
   }
 
+  /** Gets the drawtime for the passed tool. */
+  static int getDrawtime(IToolStackView tool, LivingEntity living, float speedFactor) {
+    return (int)Math.ceil(20f * speedFactor / ConditionalStatModifierHook.getModifiedStat(tool, living, ToolStats.DRAW_SPEED));
+  }
+
+  /** Causes cooldown on the given tool based on its draw speed stat. */
+  static void addCooldown(IToolStackView tool, Player player, float speedFactor) {
+    player.getCooldowns().addCooldown(tool.getItem(), getDrawtime(tool, player, speedFactor));
+  }
+
   /**
    * Use in {@link net.minecraft.world.item.Item#use(Level, Player, InteractionHand)} or {@link #onToolUse(IToolStackView, ModifierEntry, Player, InteractionHand, InteractionSource)} to setup draw time for {@link slimeknights.tconstruct.library.client.model.TinkerItemProperties}.
    * @param tool      Tool being used
@@ -120,7 +130,7 @@ public interface GeneralInteractionModifierHook {
    * @param speedFactor  Additional factor to multiply drawtime by, after considering {@link ToolStats#DRAW_SPEED}
    */
   static int startDrawing(IToolStackView tool, LivingEntity living, float speedFactor) {
-    int drawtime = (int)Math.ceil(20f * speedFactor / ConditionalStatModifierHook.getModifiedStat(tool, living, ToolStats.DRAW_SPEED));
+    int drawtime = getDrawtime(tool, living, speedFactor);
     tool.getPersistentData().putInt(KEY_DRAWTIME, drawtime);
     return drawtime;
   }
