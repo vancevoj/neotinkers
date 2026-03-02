@@ -352,6 +352,8 @@ public class TinkerTags {
     /** @deprecated Modifier using this tag is planned for removal. See {@link slimeknights.tconstruct.tools.modules.interaction.FireballModule} for replacement. */
     @Deprecated
     public static final TagKey<Item> FIREBALLS = local("fireballs");
+    /** Items that can be consumed for a blaze slimeskull to shoot a fireball */
+    public static final TagKey<Item> SLIMEBALL_AMMO = local("slimeball_ammo");
     /** Items in this tag cannot be placed inside tool inventories */
     public static final TagKey<Item> TOOL_INVENTORY_BLACKLIST = local("inventory_blacklist");
     /** List of blocks that should produce bonus gold nugget drops from the chrysophilite modifier. Will only drop bonus if the block does not drop itself */

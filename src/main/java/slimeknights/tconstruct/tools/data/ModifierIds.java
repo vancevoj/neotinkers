@@ -114,6 +114,8 @@ public class ModifierIds {
   public static final ModifierId barebow = id("barebow");
   public static final ModifierId warCharge = id("war_charge");
   public static final ModifierId multishot = id("multishot");
+  public static final ModifierId slimeball = id("slimeball");
+  public static final ModifierId sliver = id("sliver");
 
   // armor
   public static final ModifierId protection = id("protection");

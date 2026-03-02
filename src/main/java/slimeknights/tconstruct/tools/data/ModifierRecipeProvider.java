@@ -618,6 +618,16 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .saveSalvage(consumer, prefix(ModifierIds.trickQuiver, abilitySalvage))
                          .setTools(IntersectionIngredient.of(Ingredient.of(TinkerTags.Items.BOWS), Ingredient.of(TinkerTags.Items.INTERACTABLE)))
                          .save(consumer, prefix(ModifierIds.trickQuiver, abilityFolder));
+    ModifierRecipeBuilder.modifier(ModifierIds.sliver)
+      .addInput(TinkerModifiers.silkyCloth)
+      .addInput(TinkerWorld.skySlimeVine)
+      .addInput(TinkerModifiers.silkyCloth)
+      .addInput(TinkerWorld.skySlimeVine)
+      .addInput(TinkerWorld.skySlimeVine)
+      .setSlots(SlotType.ABILITY, 1)
+      .setTools(Ingredient.of(TinkerTags.Items.STAFFS))
+      .saveSalvage(consumer, prefix(ModifierIds.sliver, abilitySalvage))
+      .save(consumer, prefix(ModifierIds.sliver, abilityFolder));
     ModifierRecipeBuilder.modifier(ModifierIds.ballista)
       .addInput(TinkerMaterials.hepatizon.getIngotTag())
       .addInput(Items.CHAIN)
@@ -1390,6 +1400,18 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
       ))
       .saveSalvage(consumer, prefix(ModifierIds.spitting, abilitySalvage))
       .save(consumer, prefix(ModifierIds.spitting, abilityFolder));
+    ModifierRecipeBuilder.modifier(ModifierIds.slimeball)
+      .addInput(TinkerWorld.skySlimeVine)
+      .addInput(TinkerMaterials.slimesteel.getIngotTag())
+      .addInput(TinkerWorld.skySlimeVine)
+      .addInput(TinkerTags.Items.SLIMY_LOGS)
+      .addInput(TinkerTags.Items.SLIMY_LOGS)
+      .setSlots(SlotType.ABILITY, 1)
+      .setMaxLevel(1).checkTraitLevel()
+      // staff exclusive ranged option, though notably melting pan is a staff
+      .setTools(TinkerTags.Items.STAFFS)
+      .saveSalvage(consumer, prefix(ModifierIds.slimeball, abilitySalvage))
+      .save(consumer, prefix(ModifierIds.slimeball, abilityFolder));
     ModifierRecipeBuilder.modifier(ModifierIds.tank)
                          .addInput(tanks)
                          .setSlots(SlotType.UPGRADE, 1)

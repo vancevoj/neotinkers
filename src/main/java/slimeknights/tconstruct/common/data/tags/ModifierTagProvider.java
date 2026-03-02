@@ -92,6 +92,7 @@ public class ModifierTagProvider extends AbstractModifierTagProvider {
       ModifierIds.stripping, ModifierIds.tilling, ModifierIds.pathing,
       ModifierIds.shears, ModifierIds.silkyShears,
       ModifierIds.harvest, ModifierIds.fishing,
+      ModifierIds.slimeball, ModifierIds.sliver,
       ModifierIds.pockets
     );
     tag(BLOCK_WHILE_CHARGING).add(
@@ -184,7 +185,8 @@ public class ModifierTagProvider extends AbstractModifierTagProvider {
       ModifierIds.bulkQuiver, ModifierIds.trickQuiver,
       ModifierIds.crystalshot, ModifierIds.multishot, ModifierIds.ballista,
       ModifierIds.grapple,
-      ModifierIds.channeling, ModifierIds.returning);
+      ModifierIds.channeling, ModifierIds.returning,
+      ModifierIds.slimeball, ModifierIds.sliver);
     this.tag(INTERACTION_ABILITIES).add(
       ModifierIds.bucketing, ModifierIds.firestarter, ModifierIds.glowing,
       ModifierIds.pathing, ModifierIds.stripping, ModifierIds.tilling, ModifierIds.brushing,

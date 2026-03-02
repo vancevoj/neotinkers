@@ -45,6 +45,7 @@ import slimeknights.mantle.data.predicate.fluid.FluidPredicate;
 import slimeknights.mantle.data.predicate.item.ItemPredicate;
 import slimeknights.mantle.recipe.condition.TagFilledCondition;
 import slimeknights.tconstruct.TConstruct;
+import slimeknights.tconstruct.common.Sounds;
 import slimeknights.tconstruct.common.TinkerDamageTypes;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.common.TinkerTags.Modifiers;
@@ -170,6 +171,7 @@ import slimeknights.tconstruct.library.tools.stat.ToolStats;
 import slimeknights.tconstruct.shared.TinkerAttributes;
 import slimeknights.tconstruct.shared.TinkerCommons;
 import slimeknights.tconstruct.shared.TinkerEffects;
+import slimeknights.tconstruct.shared.block.SlimeType;
 import slimeknights.tconstruct.tools.TinkerModifiers;
 import slimeknights.tconstruct.tools.TinkerToolActions;
 import slimeknights.tconstruct.tools.TinkerTools;
@@ -228,6 +230,7 @@ import slimeknights.tconstruct.tools.modules.durability.ToolDamageRangeModule;
 import slimeknights.tconstruct.tools.modules.interaction.BrushModule;
 import slimeknights.tconstruct.tools.modules.interaction.BucketModule;
 import slimeknights.tconstruct.tools.modules.interaction.ExtinguishCampfireModule;
+import slimeknights.tconstruct.tools.modules.interaction.FireballModule;
 import slimeknights.tconstruct.tools.modules.interaction.FishingModule;
 import slimeknights.tconstruct.tools.modules.interaction.HarvestModule;
 import slimeknights.tconstruct.tools.modules.interaction.PlaceFireModule;
@@ -633,6 +636,23 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
         .constant(0.01f).multiply()
         .variable(MULTIPLIER).multiply()
         .variable(VALUE).add().build());
+    // slimeball
+    buildModifier(ModifierIds.slimeball).levelDisplay(ModifierLevelDisplay.NO_LEVELS)
+      .addModule(FireballModule.builder()
+        .damageType(TinkerDamageTypes.FLUID_IMPACT)
+        .sound(Sounds.SLIMY_BOUNCE.getSound())
+        .modifier(ModifierIds.bounce).damageMultiplier(1.5f)
+        .fireball(SlimeType.EARTH.getSlimeballTag()).modifier(new ModifierEntry(ModifierIds.drawback, 2)).damageMultiplier(0.67f).end()
+        .fireball(SlimeType.SKY.getSlimeballTag()  ).damageType(TinkerDamageTypes.FLUID_COLD).modifier(ModifierIds.freezing).end()
+        .fireball(SlimeType.ICHOR.getSlimeballTag()).damageType(TinkerDamageTypes.FLUID_FIRE).modifier(ModifierIds.fiery).end()
+        .fireball(SlimeType.ENDER.getSlimeballTag()).damageType(TinkerDamageTypes.FLUID_MAGIC).modifier(ModifierIds.enderclearance).end()
+        .fireball(Items.MAGMA_CREAM).damageType(TinkerDamageTypes.MOB_EXPLOSION).modifier(ModifierIds.explosive).end()
+        .build());
+    buildModifier(ModifierIds.sliver).priority(70) // after slimeball
+      .addModule(InventoryModule.builder().pattern(pattern("slimeball")).filter(ItemPredicate.tag(TinkerTags.Items.SLIMEBALL_AMMO)).flatLimit(32).slotsPerLevel(3))
+      .addModule(TrickQuiverModule.INSTANCE)
+      .addModule(InventoryMenuModule.ANY)
+      .addModule(ModifierRequirementsModule.builder().requireModifier(ModifierIds.slimeball, 1).modifierKey(ModifierIds.sliver).build());
 
     // combat
     // deals 1 + rand(3) damage at 15% chance

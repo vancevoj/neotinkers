@@ -299,6 +299,8 @@ public class AdvancementsProvider extends GenericDataProvider {
       with.accept(ModifierIds.crystalshot);
       with.accept(ModifierIds.multishot);
       with.accept(ModifierIds.ballista);
+      with.accept(ModifierIds.slimeball);
+      with.accept(ModifierIds.sliver);
       // fishing
       with.accept(ModifierIds.grapple);
       // throwing
