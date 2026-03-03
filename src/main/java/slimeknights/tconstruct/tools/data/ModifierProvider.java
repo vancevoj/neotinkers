@@ -710,8 +710,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .addModule(MaxArmorAttributeModule.builder(TinkerAttributes.BAD_EFFECT_DURATION, Operation.MULTIPLY_BASE).heldTag(TinkerTags.Items.HELD).eachLevel(-0.05f))
       .addModule(ProtectionModule.builder().sources(DamageSourcePredicate.CAN_PROTECT, DamageSourcePredicate.tag(TinkerTags.DamageTypes.MAGIC_PROTECTION)).eachLevel(2.5f));
     buildModifier(ModifierIds.turtleShell)
-      // TODO: max level attribute module?
-      .addModule(AttributeModule.builder(ForgeMod.SWIM_SPEED.get(), Operation.MULTIPLY_TOTAL).slots(armorSlots).eachLevel(0.05f))
+      .addModule(MaxArmorAttributeModule.builder(ForgeMod.SWIM_SPEED.get(), Operation.MULTIPLY_TOTAL).heldTag(TinkerTags.Items.HELD).eachLevel(0.1f))
       .addModule(ProtectionModule.builder()
                                  .toolItem(ItemPredicate.or(ItemPredicate.tag(TinkerTags.Items.HELMETS), ItemPredicate.tag(TinkerTags.Items.CHESTPLATES)))
                                  .entity(LivingEntityPredicate.EYES_IN_WATER).eachLevel(2.5f))
