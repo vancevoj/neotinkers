@@ -8,11 +8,11 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.common.data.SpriteSourceProvider;
 import slimeknights.tconstruct.TConstruct;
-import slimeknights.tconstruct.library.client.modifiers.TrimModifierModel;
+import slimeknights.tconstruct.library.client.modifiers.model.TrimModifierModel;
+import slimeknights.tconstruct.library.client.modifiers.model.TrimModifierModel.Armor;
 import slimeknights.tconstruct.tools.data.material.MaterialIds;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -50,11 +50,11 @@ public class TinkerSpriteSourceProvider extends SpriteSourceProvider {
       .addSource(directory("gui/tinker_pattern"))
       // trim armor icons
       .addSource(new PalettedPermutations(
-        List.of(TrimModifierModel.TRIM_TEXTURES),
+        Arrays.stream(Armor.values()).map(Armor::getRoot).toList(),
         trimPalette, materialMap));
     // add untinted trim textures, we use them as fallbacks
-    for (ResourceLocation name : TrimModifierModel.TRIM_TEXTURES) {
-      blocks.addSource(new SingleFile(name, Optional.empty()));
+    for (Armor armor : TrimModifierModel.Armor.values()) {
+      blocks.addSource(new SingleFile(armor.getRoot(), Optional.empty()));
     }
     // add armor trims in our materials
     atlas(new ResourceLocation("armor_trims"))

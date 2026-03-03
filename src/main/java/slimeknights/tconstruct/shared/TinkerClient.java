@@ -46,10 +46,8 @@ import slimeknights.tconstruct.library.client.materials.MaterialRenderInfoLoader
 import slimeknights.tconstruct.library.client.modifiers.DyedModifierModel;
 import slimeknights.tconstruct.library.client.modifiers.MaterialModifierModel;
 import slimeknights.tconstruct.library.client.modifiers.ModifierIconManager;
-import slimeknights.tconstruct.library.client.modifiers.ModifierModelMapManager;
 import slimeknights.tconstruct.library.client.modifiers.NormalModifierModel;
 import slimeknights.tconstruct.library.client.modifiers.PotionModifierModel;
-import slimeknights.tconstruct.library.client.modifiers.TrimModifierModel;
 import slimeknights.tconstruct.library.client.modifiers.model.CompoundModifierModel;
 import slimeknights.tconstruct.library.client.modifiers.model.ConditionalModifierModel;
 import slimeknights.tconstruct.library.client.modifiers.model.FluidModifierModel;
@@ -57,6 +55,7 @@ import slimeknights.tconstruct.library.client.modifiers.model.MaterialHasFallbac
 import slimeknights.tconstruct.library.client.modifiers.model.ModifierModel;
 import slimeknights.tconstruct.library.client.modifiers.model.TankModifierModel;
 import slimeknights.tconstruct.library.client.modifiers.model.TraitModel;
+import slimeknights.tconstruct.library.client.modifiers.model.TrimModifierModel;
 
 import java.util.function.Consumer;
 
@@ -105,12 +104,11 @@ public class TinkerClient {
     ModifierModel.LOADER.register(getResource("dyed"), DyedModifierModel.LOADER);
     ModifierModel.LOADER.register(getResource("material"), MaterialModifierModel.LOADER);
     ModifierModel.LOADER.register(getResource("potion"), PotionModifierModel.LOADER);
-    ModifierModel.LOADER.register(getResource("trim"), TrimModifierModel.LOADER);
+    ModifierModel.LOADER.register(getResource("armor_trim"), TrimModifierModel.Armor.LOADER);
+    ModifierModel.LOADER.register(getResource("custom_trim"), TrimModifierModel.Custom.LOADER);
     ModifierModel.LOADER.register(getResource("fluid"), FluidModifierModel.LOADER);
     ModifierModel.LOADER.register(getResource("tank"), TankModifierModel.LOADER);
     ModifierModel.LOADER.register(getResource("material_has_fallback"), MaterialHasFallbackModifierModel.LOADER);
-    // trim shows up as valid on every tool, skip to reduce memory overhead on tools using the new system - add it using the new system if you want it
-    ModifierModelMapManager.legacyBlacklist(TrimModifierModel.UNBAKED_INSTANCE);
   }
 
   @SubscribeEvent

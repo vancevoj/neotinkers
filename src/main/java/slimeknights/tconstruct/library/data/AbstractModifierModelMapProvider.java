@@ -10,6 +10,7 @@ import net.minecraft.data.CachedOutput;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.PackOutput.Target;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
 import slimeknights.mantle.data.GenericDataProvider;
 import slimeknights.mantle.data.loadable.Loadables;
@@ -18,12 +19,12 @@ import slimeknights.tconstruct.library.client.modifiers.MaterialModifierModel;
 import slimeknights.tconstruct.library.client.modifiers.ModifierModelMapManager;
 import slimeknights.tconstruct.library.client.modifiers.NormalModifierModel;
 import slimeknights.tconstruct.library.client.modifiers.PotionModifierModel;
-import slimeknights.tconstruct.library.client.modifiers.TrimModifierModel;
 import slimeknights.tconstruct.library.client.modifiers.model.CompoundModifierModel;
 import slimeknights.tconstruct.library.client.modifiers.model.FluidModifierModel;
 import slimeknights.tconstruct.library.client.modifiers.model.ModifierModel;
 import slimeknights.tconstruct.library.client.modifiers.model.TankModifierModel;
 import slimeknights.tconstruct.library.client.modifiers.model.TraitModel;
+import slimeknights.tconstruct.library.client.modifiers.model.TrimModifierModel;
 import slimeknights.tconstruct.library.modifiers.ModifierId;
 import slimeknights.tconstruct.tools.TinkerModifiers;
 import slimeknights.tconstruct.tools.data.ModifierIds;
@@ -286,8 +287,18 @@ public abstract class AbstractModifierModelMapProvider extends GenericDataProvid
     /* Cosmetic */
 
     /** Adds the trim model to the tool */
-    public Builder trim() {
-      return modifier(TinkerModifiers.trim.getId(), TrimModifierModel.INSTANCE);
+    public Builder trim(ArmorItem.Type type) {
+      return modifier(TinkerModifiers.trim.getId(), TrimModifierModel.Armor.values()[type.ordinal()]);
+    }
+
+    /** Creates a custom trim in the given folder, using the given name for the large variant. */
+    public Builder customTrim(String folder, @Nullable String largeTexture) {
+      return modifier(TinkerModifiers.trim.getId(), new TrimModifierModel.Custom(toolMaterial(folder + "/trim").texture(), largeTexture != null ? toolMaterial(folder + '/' + largeTexture).texture() : null));
+    }
+
+    /** Creates a custom trim in the default folder, using the given name for the large variant */
+    public Builder customTrim(@Nullable String largeTexture) {
+      return customTrim(id.getPath(), largeTexture);
     }
 
     /** Adds the embellishment model to the tool */

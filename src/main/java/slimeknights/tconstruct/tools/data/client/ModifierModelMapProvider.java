@@ -13,6 +13,8 @@ import slimeknights.tconstruct.tools.TinkerModifiers;
 import slimeknights.tconstruct.tools.TinkerTools;
 import slimeknights.tconstruct.tools.data.ModifierIds;
 
+import javax.annotation.Nullable;
+
 /** Provider for modifier models on tools */
 public class ModifierModelMapProvider extends AbstractModifierModelMapProvider {
   public ModifierModelMapProvider(PackOutput output) {
@@ -235,7 +237,7 @@ public class ModifierModelMapProvider extends AbstractModifierModelMapProvider {
         new DyedModifierModel(toolMaterial(root + "_metal"), null),
         new DyedModifierModel(toolMaterial(root), null),
         "metal"
-      )).trim();
+      )).trim(type);
       tool(item + "_broken").modifier(dyed, new MaterialHasFallbackModifierModel(1,
         new DyedModifierModel(toolMaterial(root + "_broken_metal"), null),
         new DyedModifierModel(toolMaterial(root + "_broken"), null),
@@ -243,16 +245,16 @@ public class ModifierModelMapProvider extends AbstractModifierModelMapProvider {
       ));
     }
     // travelers
-    travelers("goggles", false);
-    travelers("vest", true);
-    travelers("pants", true);
-    travelers("boots", true);
-    travelers("shield", false);
+    travelers("goggles", null);
+    travelers("vest", ArmorItem.Type.CHESTPLATE);
+    travelers("pants", ArmorItem.Type.LEGGINGS);
+    travelers("boots", ArmorItem.Type.BOOTS);
+    travelers("shield", null);
     // slimesuit
-    slime("skull");
-    slime("wings");
-    slime("shell");
-    slime("boot");
+    slime("skull", ArmorItem.Type.HELMET);
+    slime("wings", ArmorItem.Type.CHESTPLATE);
+    slime("shell", ArmorItem.Type.LEGGINGS);
+    slime("boot",  ArmorItem.Type.BOOTS);
 
     // ammo
     tool(TinkerTools.arrow).tipped("ammo/arrow_modifiers/tipped").smashing("ammo/arrow_modifiers/smashing")
@@ -287,23 +289,23 @@ public class ModifierModelMapProvider extends AbstractModifierModelMapProvider {
   }
 
   /** Adds dyed textures for travelers gear */
-  private void travelers(String name, boolean trim) {
+  private void travelers(String name, @Nullable ArmorItem.Type type) {
     String root = "armor/travelers/" + name + "/modifiers/";
     ModifierId dyed = TinkerModifiers.dyed.getId();
     String item = "travelers/" + name;
     Builder b = tool(item).modifier(dyed, new DyedModifierModel(toolMaterial(root + "dyed"), null));
-    if (trim) {
-      b.trim();
+    if (type != null) {
+      b.trim(type);
     }
     tool(item + "_broken").modifier(dyed, new DyedModifierModel(toolMaterial(root + "dyed_broken"), null));
   }
 
   /** Adds dyed textures for travelers gear */
-  private void slime(String name) {
+  private void slime(String name, ArmorItem.Type type) {
     String root = "armor/slime/" + name + "_modifiers/";
     ModifierId embellishment = TinkerModifiers.embellishment.getId();
     String item = "slime/" + name;
-    tool(item).trim().modifier(embellishment, new MaterialModifierModel(toolMaterial(root + "tconstruct_embellishment"), null));
+    tool(item).trim(type).modifier(embellishment, new MaterialModifierModel(toolMaterial(root + "tconstruct_embellishment"), null));
     tool(item + "_broken").modifier(embellishment, new MaterialModifierModel(toolMaterial(root + "broken/tconstruct_embellishment"), null));
   }
 

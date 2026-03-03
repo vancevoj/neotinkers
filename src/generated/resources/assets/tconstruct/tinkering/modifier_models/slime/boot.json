@@ -5,7 +5,8 @@
       "texture": "tconstruct:item/tool/armor/slime/boot_modifiers/tconstruct_embellishment"
     },
     "tconstruct:trim": {
-      "type": "tconstruct:trim"
+      "type": "tconstruct:armor_trim",
+      "slot": "boots"
     }
   }
 }

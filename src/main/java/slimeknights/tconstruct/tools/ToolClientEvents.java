@@ -133,7 +133,9 @@ public class ToolClientEvents extends ClientEventBase {
     event.registerModel(getResource("tank"), TankModifierModel.UNBAKED_INSTANCE);
     event.registerModel(getResource("material"), MaterialModifierModel.UNBAKED_INSTANCE);
     event.registerModel(getResource("dyed"), DyedModifierModel.UNBAKED_INSTANCE);
+    // trim shows up as valid on every tool, skip to reduce memory overhead on tools using the new system - add it using the new system if you want it
     event.registerModel(getResource("trim"), TrimModifierModel.UNBAKED_INSTANCE);
+    ModifierModelMapManager.legacyBlacklist(TrimModifierModel.UNBAKED_INSTANCE);
     event.registerModel(getResource("potion"), PotionModifierModel.UNBAKED_INSTANCE);
     event.registerModel(getResource("smashing_fluid"), new FluidModifierModel.Unbaked(SmashingModule.TANK_HELPER));
   }
