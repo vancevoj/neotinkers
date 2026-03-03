@@ -5,8 +5,8 @@
       "texture": "tconstruct:item/tool/armor/slime/wings_modifiers/tconstruct_embellishment"
     },
     "tconstruct:trim": {
-      "type": "tconstruct:armor_trim",
-      "slot": "chestplate"
+      "type": "tconstruct:custom_trim",
+      "root": "tconstruct:item/tool/armor/slime/wings_trim"
     }
   }
 }
