@@ -15,6 +15,8 @@ public record LevelingInt(int flat, int eachLevel) {
   public static final LevelingInt ZERO = new LevelingInt(0, 0);
   /** Instance that returns one regardless */
   public static final LevelingInt ONE = new LevelingInt(1, 0);
+  /** Instance that returns the passed level */
+  public static final LevelingInt LEVEL = new LevelingInt(0, 1);
   /** Loadable instance for parsing */
   public static final RecordLoadable<LevelingInt> LOADABLE = RecordLoadable.create(
       IntLoadable.ANY_SHORT.defaultField("flat", 0, LevelingInt::flat),

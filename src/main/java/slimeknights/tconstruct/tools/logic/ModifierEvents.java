@@ -1,6 +1,7 @@
 package slimeknights.tconstruct.tools.logic;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Multiset;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
@@ -11,6 +12,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -150,11 +152,17 @@ public class ModifierEvents {
   /** Prevents effects on the entity */
   @SubscribeEvent
   static void isPotionApplicable(MobEffectEvent.Applicable event) {
-    event.getEntity().getCapability(TinkerDataCapability.CAPABILITY).ifPresent(data -> {
-      if (data.computeIfAbsent(EffectImmunityModule.EFFECT_IMMUNITY).contains(event.getEffectInstance().getEffect())) {
-        event.setResult(Result.DENY);
+    TinkerDataCapability.Holder data = TinkerDataCapability.getData(event.getEntity());
+    if (data != null) {
+      Multiset<MobEffect> multiset = data.get(EffectImmunityModule.EFFECT_IMMUNITY);
+      if (multiset != null) {
+        // only grant immunity if the amount is high enough
+        MobEffectInstance effectInstance = event.getEffectInstance();
+        if (multiset.count(effectInstance.getEffect()) > effectInstance.getAmplifier()) {
+          event.setResult(Result.DENY);
+        }
       }
-    });
+    };
   }
 
   /** Called when the player dies to store the item in the original inventory */

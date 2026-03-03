@@ -3,7 +3,10 @@
   "modules": [
     {
       "type": "tconstruct:effect_immunity",
-      "effect": "minecraft:slowness"
+      "effect": "minecraft:slowness",
+      "max_level": {
+        "each_level": 1
+      }
     },
     {
       "type": "tconstruct:armor_attack_mob_effect",

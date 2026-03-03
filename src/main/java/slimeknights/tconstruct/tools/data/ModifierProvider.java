@@ -1515,16 +1515,16 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
         .build(), ModifierHooks.MODIFY_DAMAGE);
     // bones
     buildModifier(ModifierIds.slowBones).levelDisplay(ModifierLevelDisplay.SINGLE_LEVEL)
-      .addModule(new EffectImmunityModule(MobEffects.MOVEMENT_SLOWDOWN))
+      .addModule(new EffectImmunityModule(MobEffects.MOVEMENT_SLOWDOWN, LevelingInt.LEVEL))
       .addModule(MobEffectModule.builder(MobEffects.MOVEMENT_SLOWDOWN).damageSource(DamageSourcePredicate.tag(DamageTypeTags.IS_PROJECTILE)).time(RandomLevelingValue.flat(300)).level(RandomLevelingValue.perLevel(0, 2)).buildArmorAttack());
     buildModifier(ModifierIds.magicBones).levelDisplay(ModifierLevelDisplay.SINGLE_LEVEL)
-      .addModule(new EffectImmunityModule(TinkerEffects.venom))
+      .addModule(new EffectImmunityModule(TinkerEffects.venom, LevelingInt.LEVEL))
       .addModule(MobEffectModule.builder(TinkerEffects.venom).damageSource(DamageSourcePredicate.tag(DamageTypeTags.IS_PROJECTILE)).time(RandomLevelingValue.random(5 * 20, 5 * 20)).buildArmorAttack());
     buildModifier(ModifierIds.flamingBones).levelDisplay(ModifierLevelDisplay.SINGLE_LEVEL)
-      .addModule(new EffectImmunityModule(TinkerEffects.conductive))
+      .addModule(new EffectImmunityModule(TinkerEffects.conductive, LevelingInt.LEVEL))
       .addModule(MobEffectModule.builder(TinkerEffects.conductive).damageSource(DamageSourcePredicate.tag(TinkerTags.DamageTypes.MELEE_PROTECTION)).time(RandomLevelingValue.random(5 * 20, 5 * 20)).buildArmorAttack());
     buildModifier(ModifierIds.decayedBones).levelDisplay(ModifierLevelDisplay.SINGLE_LEVEL)
-      .addModule(new EffectImmunityModule(MobEffects.WITHER))
+      .addModule(new EffectImmunityModule(MobEffects.WITHER, LevelingInt.LEVEL))
       .addModule(MobEffectModule.builder(MobEffects.WITHER).damageSource(DamageSourcePredicate.tag(TinkerTags.DamageTypes.MELEE_PROTECTION)).time(RandomLevelingValue.flat(120)).buildArmorAttack());
     buildModifier(ModifierIds.fireborn).levelDisplay(ModifierLevelDisplay.SINGLE_LEVEL)
       // immune to being on fire specifically
