@@ -3,8 +3,8 @@
     "tconstruct:bucketing": [
       {
         "type": "tconstruct:fluid",
-        "texture": "tconstruct:item/tool/staff/modifiers/tconstruct_bucketing_full",
-        "texture_large": "tconstruct:item/tool/staff/large_modifiers/tconstruct_bucketing_full"
+        "mask": "tconstruct:item/tool/staff/modifiers/tconstruct_bucketing_full",
+        "mask_large": "tconstruct:item/tool/staff/large_modifiers/tconstruct_bucketing_full"
       },
       {
         "type": "tconstruct:basic",

@@ -23,7 +23,6 @@ import slimeknights.tconstruct.library.client.model.FluidContainerModel;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.tools.capability.fluid.ToolTankHelper;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
-import slimeknights.tconstruct.tools.modules.ranged.ammo.SmashingModule;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
@@ -32,25 +31,32 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 /** Model for a fluid in a tool. */
-public interface FluidModifierModel extends SimpleModifierModel {
+public record FluidModifierModel(Material small, @Nullable Material large, ToolTankHelper tankHelper) implements SimpleModifierModel {
+  public static final RecordLoadable<FluidModifierModel> LOADER = RecordLoadable.create(
+    ModifierModel.MATERIAL_LOADABLE.requiredField("mask", FluidModifierModel::small),
+    ModifierModel.MATERIAL_LOADABLE.nullableField("mask_large", FluidModifierModel::large),
+    ToolTankHelper.LOADABLE.defaultField("tank_helper", ToolTankHelper.TANK_HELPER, false, FluidModifierModel::tankHelper),
+    FluidModifierModel::new);
+
   /** Location used for baking dynamic models, name does not matter so just using a constant */
-  ResourceLocation BAKE_LOCATION = TConstruct.getResource("dynamic_fluid_model");
+  private static final ResourceLocation BAKE_LOCATION = TConstruct.getResource("dynamic_fluid_model");
   /**
    * The vanilla model bakery uses an orgin of 0.5,0.5,0.5, and forges dynamic fluid code uses the vanilla model bakery. (see{@link net.minecraft.client.renderer.block.model.FaceBakery} {@code #rotateVertexBy()} for vanilla bakery)
    * However, item layer wants an origin of 0,0,0, which is what we expect in our tool models. So cancel out the origin.
    */
-  Vector3f ORIGIN = new Vector3f(-0.5f, -0.5f, -0.5f);
+  private static final Vector3f ORIGIN = new Vector3f(-0.5f, -0.5f, -0.5f);
 
-
-  /** Gets the tool tank helper for the given model */
-  ToolTankHelper tankHelper();
+  /** Instance with default tank helper */
+  public FluidModifierModel(Material small, @Nullable Material large) {
+    this(small, large, ToolTankHelper.TANK_HELPER);
+  }
 
   /** Cache key for {@link #getCacheKey(IToolStackView, ModifierEntry)} */
-  record CacheKey(Fluid fluid, @Nullable CompoundTag tag) {}
+  private record CacheKey(Fluid fluid, @Nullable CompoundTag tag) {}
 
   @Nullable
   @Override
-  default Object getCacheKey(IToolStackView tool, ModifierEntry modifier) {
+  public Object getCacheKey(IToolStackView tool, ModifierEntry modifier) {
     FluidStack fluid = tankHelper().getFluid(tool);
     if (!fluid.isEmpty()) {
       return new CacheKey(fluid.getFluid(), fluid.getTag());
@@ -59,7 +65,12 @@ public interface FluidModifierModel extends SimpleModifierModel {
   }
 
   @Override
-  default void addQuads(IToolStackView tool, ModifierEntry modifier, Function<Material, TextureAtlasSprite> spriteGetter, Transformation transforms, boolean isLarge, int startTintIndex, Consumer<Collection<BakedQuad>> quadConsumer, @Nullable ItemLayerPixels pixels) {
+  public RecordLoadable<FluidModifierModel> getLoader() {
+    return LOADER;
+  }
+
+  @Override
+  public void addQuads(IToolStackView tool, ModifierEntry modifier, Function<Material, TextureAtlasSprite> spriteGetter, Transformation transforms, boolean isLarge, int startTintIndex, Consumer<Collection<BakedQuad>> quadConsumer, @Nullable ItemLayerPixels pixels) {
     // ensure template exists
     Material template = isLarge ? large() : small();
     if (template != null) {
@@ -72,7 +83,7 @@ public interface FluidModifierModel extends SimpleModifierModel {
   }
 
   /** Adds quads for the given fluid */
-  static void addQuads(FluidStack fluid, Material template, Function<Material,TextureAtlasSprite> spriteGetter, Transformation transforms, Consumer<Collection<BakedQuad>> quadConsumer) {
+  public static void addQuads(FluidStack fluid, Material template, Function<Material,TextureAtlasSprite> spriteGetter, Transformation transforms, Consumer<Collection<BakedQuad>> quadConsumer) {
     // must have texture for the proper state
     // fluid properties
     IClientFluidTypeExtensions attributes = IClientFluidTypeExtensions.of(fluid.getFluid());
@@ -93,35 +104,5 @@ public interface FluidModifierModel extends SimpleModifierModel {
       ColoredBlockModel.applyColorQuadTransformer(color).processInPlace(fluidQuads);
     }
     quadConsumer.accept(fluidQuads);
-  }
-
-  /** Implementation for the standard tank */
-  record Tank(Material small, @Nullable Material large) implements FluidModifierModel {
-    public static final RecordLoadable<Tank> LOADER = SimpleModifierModel.loader(Tank::new);
-
-    @Override
-    public RecordLoadable<Tank> getLoader() {
-      return LOADER;
-    }
-
-    @Override
-    public ToolTankHelper tankHelper() {
-      return ToolTankHelper.TANK_HELPER;
-    }
-  }
-
-  /** Implementation for the smashing modifier */
-  record Smashing(Material small, @Nullable Material large) implements FluidModifierModel {
-    public static final RecordLoadable<Smashing> LOADER = SimpleModifierModel.loader(Smashing::new);
-
-    @Override
-    public RecordLoadable<Smashing> getLoader() {
-      return LOADER;
-    }
-
-    @Override
-    public ToolTankHelper tankHelper() {
-      return SmashingModule.TANK_HELPER;
-    }
   }
 }

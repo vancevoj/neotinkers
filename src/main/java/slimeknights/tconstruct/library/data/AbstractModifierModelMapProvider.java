@@ -27,6 +27,7 @@ import slimeknights.tconstruct.library.client.modifiers.model.TraitModel;
 import slimeknights.tconstruct.library.modifiers.ModifierId;
 import slimeknights.tconstruct.tools.TinkerModifiers;
 import slimeknights.tconstruct.tools.data.ModifierIds;
+import slimeknights.tconstruct.tools.modules.ranged.ammo.SmashingModule;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -238,10 +239,10 @@ public abstract class AbstractModifierModelMapProvider extends GenericDataProvid
       Material full = toolMaterial(folder + '/' + name + "_full");
       if (largeFolder != null) {
         return modifier(modifier,
-          new FluidModifierModel.Tank(full, toolMaterial(largeFolder + '/' + name + "_full")),
+          new FluidModifierModel(full, toolMaterial(largeFolder + '/' + name + "_full")),
           new NormalModifierModel(tank, toolMaterial(largeFolder + '/' + name)));
       } else {
-        return modifier(modifier, new FluidModifierModel.Tank(full, null), new NormalModifierModel(tank, null));
+        return modifier(modifier, new FluidModifierModel(full, null), new NormalModifierModel(tank, null));
       }
     }
 
@@ -274,7 +275,7 @@ public abstract class AbstractModifierModelMapProvider extends GenericDataProvid
 
     /** Creates a model for smashing on a small tool */
     public Builder smashing(String texture) {
-      return constant("smashing", new TraitModel(ModifierIds.smashing, new FluidModifierModel.Smashing(toolMaterial(texture), null)));
+      return constant("smashing", new TraitModel(ModifierIds.smashing, new FluidModifierModel(toolMaterial(texture), null, SmashingModule.TANK_HELPER)));
     }
 
     /** Creates a model for tipping a small tool */

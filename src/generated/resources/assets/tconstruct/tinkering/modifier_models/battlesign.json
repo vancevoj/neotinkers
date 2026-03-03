@@ -6,7 +6,7 @@
     "tconstruct:bucketing": [
       {
         "type": "tconstruct:fluid",
-        "texture": "tconstruct:item/tool/battlesign/modifiers/tconstruct_bucketing_full"
+        "mask": "tconstruct:item/tool/battlesign/modifiers/tconstruct_bucketing_full"
       },
       {
         "type": "tconstruct:basic",

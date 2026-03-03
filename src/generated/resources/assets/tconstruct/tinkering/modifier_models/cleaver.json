@@ -15,8 +15,8 @@
     "tconstruct:bucketing": [
       {
         "type": "tconstruct:fluid",
-        "texture": "tconstruct:item/tool/cleaver/modifiers/tconstruct_bucketing_full",
-        "texture_large": "tconstruct:item/tool/cleaver/large/modifiers/tconstruct_bucketing_full"
+        "mask": "tconstruct:item/tool/cleaver/modifiers/tconstruct_bucketing_full",
+        "mask_large": "tconstruct:item/tool/cleaver/large/modifiers/tconstruct_bucketing_full"
       },
       {
         "type": "tconstruct:basic",

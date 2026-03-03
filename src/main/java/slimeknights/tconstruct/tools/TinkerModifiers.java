@@ -1049,6 +1049,10 @@ public final class TinkerModifiers extends TinkerModule {
       // protection
       ProtectionVariable.LOADER.register(getResource("constant"), ProtectionVariable.Constant.LOADER);
       ProtectionVariable.LOADER.register(getResource("entity"), EntityProtectionVariable.LOADER);
+
+      // tank helper
+      ToolTankHelper.LOADABLE.register(getResource("tank"), ToolTankHelper.TANK_HELPER);
+      ToolTankHelper.LOADABLE.register(getResource("smashing"), SmashingModule.TANK_HELPER);
     }
   }
 
