@@ -2004,6 +2004,10 @@
   "material.tconstruct.skyslime.flavor": "Away from me!",
   "material.tconstruct.skyslime.ammo": "Increases the knockback of the projectile.",
 
+  "material.tconstruct.turtle": "Turtle",
+  "material.tconstruct.turtle.flavor": "Baby turtle, do do do",
+  "material.tconstruct.turtle.armor": "Grants +10% resistance while underwater, and increases swim speed by 5% per level based on the highest piece.",
+
   "material.tconstruct.blaze": "Blaze",
   "material.tconstruct.blaze.flavor": "Burn it all",
   "material.tconstruct.blaze.ammo": "Causes arrows to ignite, burning targets for 5 seconds per level.",
