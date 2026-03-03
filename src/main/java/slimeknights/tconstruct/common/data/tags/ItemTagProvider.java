@@ -240,7 +240,7 @@ public class ItemTagProvider extends ItemTagsProvider {
     this.tag(ItemTags.TRIM_MATERIALS).add(
       TinkerMaterials.slimesteel.getIngot(), TinkerMaterials.amethystBronze.getIngot(), TinkerMaterials.pigIron.getIngot(), TinkerMaterials.roseGold.getIngot(),
       TinkerMaterials.steel.getIngot(), TinkerMaterials.cobalt.getIngot(), TinkerMaterials.manyullyn.getIngot(), TinkerMaterials.hepatizon.getIngot(), TinkerMaterials.cinderslime.getIngot(), TinkerMaterials.queensSlime.getIngot(),
-      TinkerMaterials.knightmetal.getIngot(),
+      TinkerMaterials.knightmetal.getIngot(), TinkerMaterials.knightslime.getIngot(),
       TinkerWorld.earthGeode.asItem(), TinkerWorld.skyGeode.asItem(), TinkerWorld.ichorGeode.asItem(), TinkerWorld.enderGeode.asItem()
     );
 
