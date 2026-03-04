@@ -2145,6 +2145,12 @@
 
   "material.tconstruct.soulsteel": "Soulsteel",
 
+  "material.tconstruct.jeweled_hide": "Jeweled Hide",
+  "material.tconstruct.jeweled_hide.flavor": "Leather tanned using pure gemstones",
+  "material.tconstruct.jeweled_hide.encyclopedia": "Increases drop chances from blocks, stacking with luck",
+  "material.tconstruct.jeweled_hide.ranged": "Increases the quality of loot from fishing, stacking with luck",
+  "material.tconstruct.jeweled_hide.armor": "Increases max health by 1 heart",
+
   "material.tconstruct.ancient_hide": "Ancient Hide",
   "material.tconstruct.ancient_hide.flavor": "Leather tanned by the oldest of stone",
   "material.tconstruct.ancient_hide.encyclopedia": "Increases drop chances from blocks, stacking with luck",
@@ -2790,7 +2796,7 @@
   "modifier.tconstruct.luck.description": "Gives you more nice things when mining, killing mobs, or fishing using this tool or wearing this armor!",
   "modifier.tconstruct.fortune": "Fortune",
   "modifier.tconstruct.fortune.flavor": "Luck of the Ores!",
-  "modifier.tconstruct.fortune.description": "Gives you more nice things when mining!",
+  "modifier.tconstruct.fortune.description": "Gives you more nice things when mining or fishing!",
   "modifier.tconstruct.looting": "Looting",
   "modifier.tconstruct.looting.flavor": "Luck of the Mobs!",
   "modifier.tconstruct.looting.description": "Gives you more nice things when killing mobs!",

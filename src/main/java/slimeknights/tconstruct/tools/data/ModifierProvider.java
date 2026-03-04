@@ -490,15 +490,15 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .addModule(EnchantmentModule.builder(Enchantments.SILK_TOUCH).toolItem(armor).armorHarvest(ARMOR_SLOTS));
     buildModifier(TinkerModifiers.severing.getId()).addModule(SeveringModule.INSTANCE);
     EnchantmentModule CONSTANT_FORTUNE = EnchantmentModule.builder(Enchantments.BLOCK_FORTUNE).toolItem(harvest).constant();
+    StatBoostModule SEA_LUCK = StatBoostModule.add(ToolStats.SEA_LUCK).eachLevel(1);
     EnchantmentModule ARMOR_FORTUNE = EnchantmentModule.builder(Enchantments.BLOCK_FORTUNE).toolItem(armor).armorHarvest(ARMOR_SLOTS);
     // note chestplates will have both modules, but will get ignored due to setting the looting slot
     // the air check on weapon looting is for projectiles which use an item of air in their tool context
     LootingModule WEAPON_LOOTING = LootingModule.builder().toolItem(ItemPredicate.or(ItemPredicate.set(Items.AIR), ItemPredicate.tag(MELEE))).weapon();
     LootingModule ARMOR_LOOTING = LootingModule.builder().toolItem(armor).armor(ARMOR_SLOTS);
     buildModifier(ModifierIds.luck).levelDisplay(new UniqueForLevels(3))
-      .addModules(CONSTANT_FORTUNE, ARMOR_FORTUNE, WEAPON_LOOTING, ARMOR_LOOTING)
-      .addModule(StatBoostModule.add(ToolStats.SEA_LUCK).eachLevel(1));
-    buildModifier(ModifierIds.fortune).addModules(CONSTANT_FORTUNE, ARMOR_FORTUNE);
+      .addModules(CONSTANT_FORTUNE, ARMOR_FORTUNE, WEAPON_LOOTING, ARMOR_LOOTING, SEA_LUCK);
+    buildModifier(ModifierIds.fortune).addModules(CONSTANT_FORTUNE, ARMOR_FORTUNE, SEA_LUCK);
     buildModifier(ModifierIds.looting).addModules(WEAPON_LOOTING, ARMOR_LOOTING);
     buildModifier(ModifierIds.experienced)
       .addModule(new VolatileFloatModule(ModifierEvents.EXPERIENCE, LevelingValue.eachLevel(0.5f)), ModifierHooks.VOLATILE_DATA, ModifierHooks.PROJECTILE_LAUNCH)
@@ -690,7 +690,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
     buildModifier(ModifierIds.ricochet).addModule(AttributeModule.builder(TinkerAttributes.KNOCKBACK_MULTIPLIER, Operation.MULTIPLY_BASE).eachLevel(0.2f));
 
     // defense
-    buildModifier(ModifierIds.revitalizing).addModule(AttributeModule.builder(Attributes.MAX_HEALTH, Operation.ADDITION).slots(armorSlots).eachLevel(2));
+    buildModifier(ModifierIds.revitalizing).addModule(AttributeModule.builder(Attributes.MAX_HEALTH, Operation.ADDITION).eachLevel(2));
     // protection
     buildModifier(ModifierIds.protection).addModule(ProtectionModule.builder().eachLevel(1.25f));
     buildModifier(ModifierIds.meleeProtection)
