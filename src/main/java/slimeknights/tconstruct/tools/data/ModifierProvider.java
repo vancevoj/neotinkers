@@ -212,6 +212,7 @@ import slimeknights.tconstruct.tools.modules.armor.SleevesModule;
 import slimeknights.tconstruct.tools.modules.armor.SoulSpeedModule;
 import slimeknights.tconstruct.tools.modules.armor.ThornsModule;
 import slimeknights.tconstruct.tools.modules.armor.ToolBeltModule;
+import slimeknights.tconstruct.tools.modules.armor.UpdateHealthModule;
 import slimeknights.tconstruct.tools.modules.combat.BlockingModule;
 import slimeknights.tconstruct.tools.modules.combat.ChannelingModule;
 import slimeknights.tconstruct.tools.modules.combat.DamageOnShootModule;
@@ -690,7 +691,12 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
     buildModifier(ModifierIds.ricochet).addModule(AttributeModule.builder(TinkerAttributes.KNOCKBACK_MULTIPLIER, Operation.MULTIPLY_BASE).eachLevel(0.2f));
 
     // defense
-    buildModifier(ModifierIds.revitalizing).addModule(AttributeModule.builder(Attributes.MAX_HEALTH, Operation.ADDITION).eachLevel(2));
+    buildModifier(ModifierIds.revitalizing)
+      .addModule(AttributeModule.builder(Attributes.MAX_HEALTH, Operation.ADDITION).tooltipStyle(TooltipStyle.BOOST).eachLevel(2))
+      // on armor, only update if we are over max
+      .addModule(new UpdateHealthModule(LevelingValue.ZERO, armorSlots))
+      // in hand, restore new health immediately and drop it immediately, fits better with shield swapping
+      .addModule(new UpdateHealthModule(LevelingValue.eachLevel(2), handSlots));
     // protection
     buildModifier(ModifierIds.protection).addModule(ProtectionModule.builder().eachLevel(1.25f));
     buildModifier(ModifierIds.meleeProtection)
