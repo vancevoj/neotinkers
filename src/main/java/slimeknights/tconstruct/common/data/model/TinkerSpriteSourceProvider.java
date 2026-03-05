@@ -58,7 +58,8 @@ public class TinkerSpriteSourceProvider extends SpriteSourceProvider {
     addVanilla(vanillaMaterials, TrimMaterials.AMETHYST);
     // custom armor "modifier" textures that use the trim materials
     List<ResourceLocation> customItemTrims = Stream.of(
-      "item/tool/armor/travelers/goggles/trim",
+      "item/tool/armor/travelers/goggles/trim", "item/tool/armor/travelers/shield/trim",
+      "item/tool/armor/plate/shield/trim", "item/tool/armor/plate/shield/trim_large",
       "item/tool/armor/slime/wings_trim"
     ).map(TConstruct::getResource).toList();
 

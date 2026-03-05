@@ -245,6 +245,8 @@ public class ModifierModelMapProvider extends AbstractModifierModelMapProvider {
         "metal"
       ));
     }
+    tool("plate/shield").customTrim("armor/plate/shield", "trim_large");
+
     // travelers
     travelers("goggles", null);
     travelers("vest", ArmorItem.Type.CHESTPLATE);
@@ -252,6 +254,8 @@ public class ModifierModelMapProvider extends AbstractModifierModelMapProvider {
     travelers("boots", ArmorItem.Type.BOOTS);
     travelers("shield", null);
     tool("travelers/goggles").customTrim("armor/travelers/goggles", null);
+    tool("travelers/shield").customTrim("armor/travelers/shield", null);
+
     // slimesuit
     slime("skull", ArmorItem.Type.HELMET);
     slime("wings", null);
