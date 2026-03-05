@@ -1560,7 +1560,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
     // cosmetic
     buildModifier(TinkerModifiers.dyed.getId()).tooltipDisplay(TooltipDisplay.TINKER_STATION).levelDisplay(ModifierLevelDisplay.NO_LEVELS).addModule(DyeModule.INSTANCE);
     buildModifier(TinkerModifiers.embellishment.getId()).tooltipDisplay(TooltipDisplay.TINKER_STATION).levelDisplay(ModifierLevelDisplay.NO_LEVELS).addModule(EmbellishmentModule.INSTANCE);
-    buildModifier(TinkerModifiers.trim.getId()).tooltipDisplay(TooltipDisplay.TINKER_STATION).levelDisplay(ModifierLevelDisplay.NO_LEVELS).addModule(new TrimModule());
+    buildModifier(TinkerModifiers.trim.getId()).tooltipDisplay(TooltipDisplay.TINKER_STATION).levelDisplay(ModifierLevelDisplay.NO_LEVELS).addModule(new TrimModule()).addModule(ModifierSlotModule.slot(SlotType.DEFENSE).eachLevel(1));
 
     // TODO 1.21: remove these redirects
     // iron now gives magnetic. Steel is also just has better than irons old trait
