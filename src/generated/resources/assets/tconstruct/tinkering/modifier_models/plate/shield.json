@@ -1,9 +1,0 @@
-{
-  "modifiers": {
-    "tconstruct:trim": {
-      "type": "tconstruct:custom_trim",
-      "root": "tconstruct:item/tool/armor/plate/shield/trim",
-      "root_large": "tconstruct:item/tool/armor/plate/shield/trim_large"
-    }
-  }
-}
