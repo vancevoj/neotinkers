@@ -2595,6 +2595,10 @@
   "modifier.tconstruct.trim.formatted": "%s (%s)",
   "modifier.tconstruct.trim.flavor": "Complex detailing!",
   "modifier.tconstruct.trim.description": "Additional armor detailing using expensive patterns",
+  "modifier.tconstruct.banner": "Banner",
+  "modifier.tconstruct.banner.flavor": "Decorative!",
+  "modifier.tconstruct.banner.description": "Shows the banner on the shield",
+  "modifier.tconstruct.banner.hold_shift": "Hold shift to view patterns",
 
   "_comment": "Armor - Protection",
   "modifier.tconstruct.protection": "Protection",
