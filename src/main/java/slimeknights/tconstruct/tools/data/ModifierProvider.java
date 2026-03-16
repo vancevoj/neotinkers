@@ -851,12 +851,12 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .addModule(ShowInteractionSourceModule.INSTANCE);
     buildModifier(TinkerModifiers.aoeSilkyShears.getId()).priority(70).addModule(new ShearsModule(1, 0, 1, silky));
     // slings
-    buildModifier(ModifierIds.flinging).levelDisplay(ModifierLevelDisplay.NO_LEVELS)
-      .addModule(new SlingLeapModule(-4, false, 1.5f, 3, false, LivingEntityPredicate.and(LivingEntityPredicate.ON_GROUND, TinkerPredicate.TARGETING_BLOCK), ModifierCondition.ANY_TOOL));
-    buildModifier(ModifierIds.springing).levelDisplay(ModifierLevelDisplay.NO_LEVELS)
-      .addModule(new SlingLeapModule(1.05f, true, 1.0f, 2, true, LivingEntityPredicate.ELYTRA_FLYING.inverted(), ModifierCondition.ANY_TOOL));
-    buildModifier(ModifierIds.bonking).levelDisplay(ModifierLevelDisplay.NO_LEVELS).addModule(new SlingKnockbackModule(3, 1.5f, 1.5f, LivingEntityPredicate.ANY, ModifierCondition.ANY_TOOL));
-    buildModifier(ModifierIds.warping).levelDisplay(ModifierLevelDisplay.NO_LEVELS).addModule(new SlingTeleportModule(6, 1.5f, LivingEntityPredicate.ANY, ModifierCondition.ANY_TOOL));
+    buildModifier(ModifierIds.flinging).levelDisplay(ModifierLevelDisplay.SINGLE_LEVEL)
+      .addModule(new SlingLeapModule(new LevelingValue(-2, -2), false, 1.5f, 3, false, LivingEntityPredicate.and(LivingEntityPredicate.ON_GROUND, TinkerPredicate.TARGETING_BLOCK), ModifierCondition.ANY_TOOL));
+    buildModifier(ModifierIds.springing).levelDisplay(ModifierLevelDisplay.SINGLE_LEVEL)
+      .addModule(new SlingLeapModule(LevelingValue.eachLevel(1.05f), true, 1.0f, 2, true, LivingEntityPredicate.ELYTRA_FLYING.inverted(), ModifierCondition.ANY_TOOL));
+    buildModifier(ModifierIds.bonking).levelDisplay(ModifierLevelDisplay.SINGLE_LEVEL).addModule(new SlingKnockbackModule(new LevelingValue(1, 2), 1.5f, 1.5f, LivingEntityPredicate.ANY, ModifierCondition.ANY_TOOL));
+    buildModifier(ModifierIds.warping).levelDisplay(ModifierLevelDisplay.SINGLE_LEVEL).addModule(new SlingTeleportModule(new LevelingValue(2, 4), 1.5f, LivingEntityPredicate.ANY, ModifierCondition.ANY_TOOL));
     // fluid interaction
     buildModifier(ModifierIds.spitting).priority(120) // want to run before sling modifiers so we can sling spit, and before throwing so we use our tank first
       .addModule(new SpittingModule(LevelingInt.eachLevel(1)))

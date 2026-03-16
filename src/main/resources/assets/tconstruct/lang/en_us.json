@@ -2020,7 +2020,7 @@
   "material.tconstruct.ender_pearl.flavor": "The safer way to pearl",
   "material.tconstruct.ender_pearl.ammo": "Causes you to teleport to the location the projectile lands, destroying it. If it hits a monster, swaps places.",
   "material.tconstruct.ender_pearl.skull_flavor": "Endermen know how to stay away from harm, and scientists. They have been ignoring my interview requests for weeks!",
-  "material.tconstruct.ender_pearl.skull_encyclopedia": "Teleports automatically when attacked by a projectile, and randomly from melee. Has a 15 second cooldown",
+  "material.tconstruct.ender_pearl.skull_encyclopedia": "Allows teleporting a short distance in the direction you face by holding then releasing the helmet keybind",
 
   "material.tconstruct.glass": "Glass",
   "material.tconstruct.glass.flavor": "Shatters on impact!",
