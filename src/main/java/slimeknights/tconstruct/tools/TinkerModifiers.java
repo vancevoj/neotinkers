@@ -211,6 +211,7 @@ import slimeknights.tconstruct.tools.modifiers.ability.tool.ExchangingModifier;
 import slimeknights.tconstruct.tools.modifiers.ability.tool.OffhandAttackModifier;
 import slimeknights.tconstruct.tools.modifiers.ability.tool.ParryingModifier;
 import slimeknights.tconstruct.tools.modifiers.effect.BleedingEffect;
+import slimeknights.tconstruct.tools.modifiers.effect.HelmetChargingEffect;
 import slimeknights.tconstruct.tools.modifiers.effect.MagneticEffect;
 import slimeknights.tconstruct.tools.modifiers.effect.NoMilkEffect;
 import slimeknights.tconstruct.tools.modifiers.effect.RepulsiveEffect;
@@ -699,6 +700,8 @@ public final class TinkerModifiers extends TinkerModule {
   @Deprecated(forRemoval = true)
   public static final RegistryObject<TinkerEffect> pierceEffect = TinkerEffects.pierce;
 
+  /** Effect for rendering the helmet charging icon in the GUI */
+  public static final RegistryObject<HelmetChargingEffect> helmetCharging = MOB_EFFECTS.register("helmet_charging", HelmetChargingEffect::new);
   // cooldown
   public static final RegistryObject<TinkerEffect> teleportCooldownEffect = MOB_EFFECTS.register("teleport_cooldown", () -> new NoMilkEffect(MobEffectCategory.HARMFUL, 0xCC00FA, true));
   public static final RegistryObject<TinkerEffect> fireballCooldownEffect = MOB_EFFECTS.register("fireball_cooldown", () -> new NoMilkEffect(MobEffectCategory.HARMFUL, 0xFC9600, true));
