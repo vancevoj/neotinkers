@@ -64,6 +64,7 @@ public record ShieldBannerModifierSpriteSource(int cropX, int cropY, int cropWid
 
   @Override
   public void run(ResourceManager manager, Output output) {
+    // TODO 1.21: will have to copy textures over using a folder search since these are datapack controlled
     for (Entry<ResourceKey<BannerPattern>, Material> entry : Sheets.SHIELD_MATERIALS.entrySet()) {
       ResourceLocation input = TEXTURE_ID_CONVERTER.idToFile(entry.getValue().texture());
       Optional<Resource> resource = manager.getResource(input);

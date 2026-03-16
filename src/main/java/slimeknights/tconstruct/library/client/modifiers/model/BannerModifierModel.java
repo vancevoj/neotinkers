@@ -81,6 +81,7 @@ public record BannerModifierModel(@Nullable ResourceLocation smallPrefix, @Nulla
           int color = tag.getInt(BannerModule.KEY_COLOR);
           if (pattern != null) {
             // why must holders be such a pain?
+            // TODO 1.21: will need to switch from using the ID to using the asset root for the texture
             pattern.unwrapKey().ifPresent(id -> {
               TextureAtlasSprite sprite = spriteGetter.apply(ModifierModel.blockAtlas(prefix.withSuffix(MaterialRenderInfo.getSuffix(id.location()))));
               // skip if sprite is missing - deals with modded patterns that we haven't made textures for
