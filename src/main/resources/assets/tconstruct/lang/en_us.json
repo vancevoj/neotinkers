@@ -3373,7 +3373,7 @@
   "modifier.tconstruct.self_destructive.description": "Can explode by interacting with the helmet while sneaking",
   "modifier.tconstruct.enderdodging": "Enderdodging",
   "modifier.tconstruct.enderdodging.flavor": "Agility of an enderman",
-  "modifier.tconstruct.enderdodging.description": "Allows dodging projectiles by teleporting, and randomly escape attacks by teleporting",
+  "modifier.tconstruct.enderdodging.description": "Adds a chance of dodging attacks by teleporting, with a higher chance on projectiles",
   "modifier.tconstruct.strong_bones": "Strong Bones",
   "modifier.tconstruct.strong_bones.flavor": "Got Milk?",
   "modifier.tconstruct.strong_bones.description": "Drinking milk temporarily boosts resistance",
