@@ -20,11 +20,15 @@
             "grey": 63
           },
           {
-            "color": "FF406D3B",
+            "color": "FF477A42",
             "grey": 102
           },
           {
             "color": "FF508049",
+            "grey": 127
+          },
+          {
+            "color": "FF57914F",
             "grey": 140
           },
           {
@@ -32,11 +36,15 @@
             "grey": 178
           },
           {
+            "color": "FF76BE6D",
+            "grey": 193
+          },
+          {
             "color": "FF8CD782",
             "grey": 216
           },
           {
-            "color": "FFFFFFFF",
+            "color": "FFC9FECE",
             "grey": 255
           }
         ]
