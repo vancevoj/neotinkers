@@ -230,7 +230,7 @@ public class ModifierClientEvents {
   public static void renderHotbar(RenderGuiOverlayEvent.Post event) {
     Minecraft mc = Minecraft.getInstance();
     Player player = mc.player;
-    if (mc.options.hideGui || (mc.screen != null && mc.screen.isPauseScreen()) && event.getOverlay() != VanillaGuiOverlay.HOTBAR.type() || player == null || player != mc.getCameraEntity()) {
+    if (mc.options.hideGui || (mc.screen != null && mc.screen.isPauseScreen()) || event.getOverlay() != VanillaGuiOverlay.HOTBAR.type() || player == null || player != mc.getCameraEntity()) {
       return;
     }
     boolean renderShield = Config.CLIENT.renderShieldSlotItem.get() && !nextOffhand.isEmpty();
@@ -383,8 +383,6 @@ public class ModifierClientEvents {
           i++;
         }
       }
-
-      RenderSystem.disableBlend();
     }
   }
 }
