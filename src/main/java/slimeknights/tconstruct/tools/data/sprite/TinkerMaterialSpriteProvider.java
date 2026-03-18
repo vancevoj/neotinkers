@@ -325,7 +325,7 @@ public class TinkerMaterialSpriteProvider extends AbstractMaterialSpriteProvider
     ResourceLocation knightslime = getResource("generator/knightslime");
     buildMaterial(MaterialIds.knightslime)
       .meleeHarvest().ranged().armor()
-      .fallbacks("metal_contrast", "slime_metal", "metal")
+      .fallbacks("metal_contrast", "contrast", "slime_metal", "metal")
       .transformer(GreyToSpriteTransformer.builderFromBlack().addARGB(25, 0xFF191919).addTexture(26, knightslime).addTexture(102, knightslime).addARGB(140, 0xFF02040C).addARGB(178, 0xFF152237).addARGB(216, 0xFF243366).addARGB(255, 0xFF2C3E7B).build());
     ResourceLocation fiery = getResource("generator/fiery");
     buildMaterial(MaterialIds.fiery)
