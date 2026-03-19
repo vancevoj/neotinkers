@@ -6,10 +6,14 @@
         "name": "tconstruct:enderclearance"
       }
     ],
-    "tconstruct:armor": [
+    "tconstruct:slime": [
       {
         "level": 1,
         "name": "tconstruct:enderdodging"
+      },
+      {
+        "level": 1,
+        "name": "tconstruct:overslime"
       }
     ]
   }

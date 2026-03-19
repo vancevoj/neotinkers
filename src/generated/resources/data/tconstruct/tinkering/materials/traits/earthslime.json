@@ -10,6 +10,10 @@
       {
         "level": 1,
         "name": "tconstruct:overgrowth"
+      },
+      {
+        "level": 1,
+        "name": "tconstruct:overslime"
       }
     ]
   }

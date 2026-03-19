@@ -10,6 +10,14 @@
       {
         "level": 1,
         "name": "tconstruct:skyfall"
+      },
+      {
+        "level": 1,
+        "name": "tconstruct:overslime"
+      },
+      {
+        "level": 1,
+        "name": "tconstruct:overslime_friend"
       }
     ]
   }
