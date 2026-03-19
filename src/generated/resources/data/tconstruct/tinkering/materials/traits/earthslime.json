@@ -5,6 +5,12 @@
         "level": 1,
         "name": "tconstruct:drawback"
       }
+    ],
+    "tconstruct:slime": [
+      {
+        "level": 1,
+        "name": "tconstruct:overgrowth"
+      }
     ]
   }
 }

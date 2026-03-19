@@ -302,6 +302,8 @@ public class ModifierIds {
   public static final ModifierId erratic = id("erratic");
   public static final ModifierId fuse = id("fuse");
 
+  // traits - slimesuit
+  public static final ModifierId reverted = id("reverted");
   // traits - slimeskull
   public static final ModifierId boonOfSssss = id("boon_of_sssss");
   public static final ModifierId balmOfSssss = id("balm_of_sssss");

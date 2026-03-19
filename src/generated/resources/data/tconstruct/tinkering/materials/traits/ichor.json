@@ -9,6 +9,12 @@
         "level": 1,
         "name": "tconstruct:bounce"
       }
+    ],
+    "tconstruct:slime": [
+      {
+        "level": 1,
+        "name": "tconstruct:godspeed"
+      }
     ]
   }
 }

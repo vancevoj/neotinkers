@@ -9,6 +9,7 @@ import slimeknights.tconstruct.tools.stats.HeadMaterialStats;
 import slimeknights.tconstruct.tools.stats.LimbMaterialStats;
 import slimeknights.tconstruct.tools.stats.PlatingMaterialStats;
 import slimeknights.tconstruct.tools.stats.SkullStats;
+import slimeknights.tconstruct.tools.stats.SlimeStats;
 import slimeknights.tconstruct.tools.stats.StatlessMaterialStats;
 
 import static net.minecraft.world.item.Tiers.DIAMOND;
@@ -34,6 +35,7 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
     addRanged();
     addAmmo();
     addArmor();
+    addSlimesuit();
     addMisc();
   }
 
@@ -520,24 +522,21 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
     addArmorShieldStats(MaterialIds.nicrosil, PlatingMaterialStats.builder().durabilityFactor(28).armor(2, 5, 7, 2).knockbackResistance(0.16f), StatlessMaterialStats.MAILLE);
   }
 
-  private void addMisc() {
-    // travelers gear
-    addMaterialStats(MaterialIds.leather, StatlessMaterialStats.REPAIR_KIT);
-    addMaterialStats(MaterialIds.slimeskin, StatlessMaterialStats.REPAIR_KIT);
-    addMaterialStats(MaterialIds.skyslimeVine, StatlessMaterialStats.REPAIR_KIT);
-    addMaterialStats(MaterialIds.ichorskin, StatlessMaterialStats.REPAIR_KIT);
-    addMaterialStats(MaterialIds.enderslimeVine, StatlessMaterialStats.REPAIR_KIT);
-    addMaterialStats(MaterialIds.jeweledHide, StatlessMaterialStats.REPAIR_KIT);
-    addMaterialStats(MaterialIds.ancientHide, StatlessMaterialStats.REPAIR_KIT);
-    // travelers's shield
-    addMaterialStats(MaterialIds.ice, StatlessMaterialStats.REPAIR_KIT);
-    addMaterialStats(MaterialIds.blazewood, StatlessMaterialStats.REPAIR_KIT);
+  private void addSlimesuit() {
+    // slime
+    addMaterialStats(MaterialIds.earthslime, new SlimeStats( 50, 100)); // 150
+    addMaterialStats(MaterialIds.skyslime,   new SlimeStats( 75, 150)); // 225
+    addMaterialStats(MaterialIds.ichor,      new SlimeStats(175, 125)); // 300
+    addMaterialStats(MaterialIds.enderslime, new SlimeStats(100, 225)); // 325
+    addMaterialStats(MaterialIds.magma,      new SlimeStats(125,  50)); // 175
+    // migration
+    addMaterialStats(MaterialIds.blood,      new SlimeStats(150, 125)); // 275
 
     // slimeskull
     addMaterialStats(MaterialIds.glass,        new SkullStats( 90, 0));
     addMaterialStats(MaterialIds.blaze,        new SkullStats(150, 0));
     // end
-    addMaterialStats(MaterialIds.enderPearl,   new SkullStats(180, 0));
+    addMaterialStats(MaterialIds.enderPearl,   new SkullStats(250, 0));
     addMaterialStats(MaterialIds.dragonScale,  new SkullStats(120, 0));
     // skeleton
     addMaterialStats(MaterialIds.bone,         new SkullStats(100, 0));
@@ -560,13 +559,25 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
     addMaterialStats(MaterialIds.necronium,    new SkullStats(157, 1));
     addMaterialStats(MaterialIds.knightmetal,  new SkullStats(220, 1));
 
-    // slimesuit
-    addMaterialStats(MaterialIds.enderslime, StatlessMaterialStats.REPAIR_KIT);
+    // slimelytra - repair
     addMaterialStats(MaterialIds.phantom, StatlessMaterialStats.REPAIR_KIT);
-    addMaterialStats(MaterialIds.blaze, StatlessMaterialStats.REPAIR_KIT);
-    // slimesuit embellishments
-    addMaterialStats(MaterialIds.blood);
+
+    // embellishments - TODO migrate to slimesuit slime materials
     addMaterialStats(MaterialIds.clay);
     addMaterialStats(MaterialIds.honey);
+  }
+
+  private void addMisc() {
+    // travelers gear
+    addMaterialStats(MaterialIds.leather, StatlessMaterialStats.REPAIR_KIT);
+    addMaterialStats(MaterialIds.slimeskin, StatlessMaterialStats.REPAIR_KIT);
+    addMaterialStats(MaterialIds.skyslimeVine, StatlessMaterialStats.REPAIR_KIT);
+    addMaterialStats(MaterialIds.ichorskin, StatlessMaterialStats.REPAIR_KIT);
+    addMaterialStats(MaterialIds.enderslimeVine, StatlessMaterialStats.REPAIR_KIT);
+    addMaterialStats(MaterialIds.jeweledHide, StatlessMaterialStats.REPAIR_KIT);
+    addMaterialStats(MaterialIds.ancientHide, StatlessMaterialStats.REPAIR_KIT);
+    // travelers's shield
+    addMaterialStats(MaterialIds.ice, StatlessMaterialStats.REPAIR_KIT);
+    addMaterialStats(MaterialIds.blazewood, StatlessMaterialStats.REPAIR_KIT);
   }
 }

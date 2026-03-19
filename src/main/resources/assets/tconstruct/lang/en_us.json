@@ -3486,6 +3486,9 @@
   "modifier.tconstruct.overslime_friend": "Overslime Friend",
   "modifier.tconstruct.snow_boots": "Snow Boots",
 
+  "modifier.tconstruct.reverted": "Reverted",
+  "modifier.tconstruct.reverted.flavor": "We need to go back!",
+
 
   "_comment": "Potion effects",
   "effect.tconstruct.experienced": "Experienced",
@@ -3594,6 +3597,8 @@
   "tool_stat.tconstruct.armor_toughness.description": "How much this armor resists high damage blows.",
   "tool_stat.tconstruct.knockback_resistance": "Knockback Resist: ",
   "tool_stat.tconstruct.knockback_resistance.description": "How much this armor reduces knockback.",
+
+  "stat.tconstruct.slime": "Slime",
 
   "stat.tconstruct.handle": "Handle",
   "tool_stat.tconstruct.handle.durability.description": "The total durability of the tool will be multiplied by this.",

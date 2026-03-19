@@ -30,6 +30,7 @@ import slimeknights.tconstruct.tools.stats.HeadMaterialStats;
 import slimeknights.tconstruct.tools.stats.LimbMaterialStats;
 import slimeknights.tconstruct.tools.stats.PlatingMaterialStats;
 import slimeknights.tconstruct.tools.stats.SkullStats;
+import slimeknights.tconstruct.tools.stats.SlimeStats;
 import slimeknights.tconstruct.tools.stats.StatlessMaterialStats;
 
 import java.util.Collection;
@@ -132,6 +133,7 @@ public final class MaterialRegistry {
     registry.registerStatType(StatlessMaterialStats.FLETCHING.getType(), AMMO);
     // misc
     registry.registerStatType(StatlessMaterialStats.REPAIR_KIT.getType());
+    registry.registerStatType(SlimeStats.TYPE);
     registry.registerStatType(SkullStats.TYPE);
   }
 

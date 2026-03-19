@@ -1548,6 +1548,9 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       // all attacks now cause fire. Bit niche
       .addModule(new FieryArmorAttackModule(LevelingInt.eachLevel(5), DamageSourcePredicate.ANY));
 
+    // internal modifier to restore older slots to slimesuit
+    buildModifier(ModifierIds.reverted).levelDisplay(ModifierLevelDisplay.NO_LEVELS);
+
     // mob disguise
     buildModifier(ModifierIds.creeperDisguise        ).levelDisplay(ModifierLevelDisplay.SINGLE_LEVEL).addModule(new MobDisguiseModule(EntityType.CREEPER));
     buildModifier(ModifierIds.skeletonDisguise       ).levelDisplay(ModifierLevelDisplay.SINGLE_LEVEL).addModule(new MobDisguiseModule(EntityType.SKELETON));

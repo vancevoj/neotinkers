@@ -326,6 +326,7 @@
     "overshield":           "#B771FF",
     "restore":              "#4D4D4D",
     "piercing_guard":       "#E8E5D2",
+    "reverted":             "#b50101",
 
     "__traits_slimeskull__": null,
     "boon_of_sssss":    "#605448",

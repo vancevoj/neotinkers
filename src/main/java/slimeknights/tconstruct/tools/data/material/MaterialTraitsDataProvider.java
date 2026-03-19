@@ -8,6 +8,7 @@ import slimeknights.tconstruct.tools.TinkerModifiers;
 import slimeknights.tconstruct.tools.data.ModifierIds;
 import slimeknights.tconstruct.tools.stats.PlatingMaterialStats;
 import slimeknights.tconstruct.tools.stats.SkullStats;
+import slimeknights.tconstruct.tools.stats.SlimeStats;
 
 import static slimeknights.tconstruct.library.materials.MaterialRegistry.AMMO;
 import static slimeknights.tconstruct.library.materials.MaterialRegistry.ARMOR;
@@ -84,7 +85,9 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     addTraits(MaterialIds.amethyst, AMMO, ModifierIds.crystalbound);
     addTraits(MaterialIds.prismarine, AMMO, ModifierIds.finsAmmo, ModifierIds.lureRod);
     addTraits(MaterialIds.earthslime, AMMO, ModifierIds.drawback);
+    addTraits(MaterialIds.earthslime, SlimeStats.ID, ModifierIds.overgrowth);
     addTraits(MaterialIds.skyslime, AMMO, ModifierIds.punch);
+    addTraits(MaterialIds.skyslime, SlimeStats.ID, ModifierIds.skyfall);
     addDefaultTraits(MaterialIds.blaze, ModifierIds.fiery);
     addTraits(MaterialIds.enderPearl, AMMO, TinkerModifiers.enderporting);
     addTraits(MaterialIds.glass, AMMO, ModifierIds.amorphous, ModifierIds.smashingAmmo, ModifierIds.spillingRod);
@@ -113,9 +116,11 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     // tier 3 - ammo
     addTraits(MaterialIds.quartz, AMMO, ModifierIds.keen);
     addTraits(MaterialIds.ichor, AMMO, ModifierIds.rebound, ModifierIds.bounce);
+    addTraits(MaterialIds.ichor, SlimeStats.ID, ModifierIds.godspeed);
     addTraits(MaterialIds.glowstone, AMMO, ModifierIds.spectral);
     addDefaultTraits(MaterialIds.magnetite, ModifierIds.attractive);
     addTraits(MaterialIds.magma, AMMO, ModifierIds.fuse);
+    addTraits(MaterialIds.magma, SlimeStats.ID, ModifierIds.fireProtection);
 
     // tier 4
     addDefaultTraits(MaterialIds.cinderslime, ModifierIds.overburn, TinkerModifiers.overslime.getId());
@@ -140,6 +145,7 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     addTraits(MaterialIds.shulker, AMMO, ModifierIds.reclaim);
     // tier 4 - ammo
     addTraits(MaterialIds.enderslime, AMMO, ModifierIds.enderclearance);
+    addTraits(MaterialIds.enderslime, ARMOR, ModifierIds.enderdodging);
 
     // tier 4 (end)
     addDefaultTraits(MaterialIds.knightmetal, ModifierIds.valiant);
@@ -150,6 +156,9 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     addDefaultTraits(MaterialIds.enderslimeVine, TinkerModifiers.enderporting);
     addTraits(MaterialIds.enderslimeVine, ARMOR, ModifierIds.enderclearance);
     addDefaultTraits(MaterialIds.endRod, ModifierIds.hover);
+
+    // migration of old slimesuits
+    addTraits(MaterialIds.blood, SlimeStats.ID, ModifierIds.reverted);
 
     // tier 2 - mod compat
     addDefaultTraits(MaterialIds.osmium, ModifierIds.dense);
@@ -204,7 +213,6 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     material(MaterialIds.necronium).addTraits(SkullStats.ID, ModifierIds.decayedBones, ModifierIds.witherSkeletonDisguise);
     material(MaterialIds.knightmetal).addTraits(SkullStats.ID, ModifierIds.spitting);
     // slimesuit
-    noTraits(MaterialIds.blood);
     noTraits(MaterialIds.clay);
     noTraits(MaterialIds.honey);
     noTraits(MaterialIds.phantom);

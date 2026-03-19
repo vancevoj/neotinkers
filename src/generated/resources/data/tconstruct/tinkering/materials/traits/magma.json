@@ -5,6 +5,12 @@
         "level": 1,
         "name": "tconstruct:fuse"
       }
+    ],
+    "tconstruct:slime": [
+      {
+        "level": 1,
+        "name": "tconstruct:fire_protection"
+      }
     ]
   }
 }
