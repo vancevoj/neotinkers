@@ -290,19 +290,19 @@ public class ToolsRecipeProvider extends BaseRecipeProvider implements IMaterial
     // slimelytra
     MaterialCastingRecipeBuilder.basinRecipe(TinkerTools.slimesuit.get(ArmorItem.Type.CHESTPLATE))
       .setCast(Items.ELYTRA, CastPurpose.CONSUMED)
-      .setItemCost(32)
+      .setItemCost(8)
       .save(consumer, location(armorFolder + "slimelytra"));
 
     // slimeshell
     MaterialCastingRecipeBuilder.basinRecipe(TinkerTools.slimesuit.get(ArmorItem.Type.LEGGINGS))
       .setCast(Items.SHULKER_SHELL, CastPurpose.CONSUMED)
-      .setItemCost(28)
+      .setItemCost(7)
       .save(consumer, location(armorFolder + "slimeshell"));
 
     // boots
     MaterialCastingRecipeBuilder.basinRecipe(TinkerTools.slimesuit.get(ArmorItem.Type.BOOTS))
       .setCast(Items.RABBIT_FOOT, CastPurpose.CONSUMED)
-      .setItemCost(16)
+      .setItemCost(4)
       .save(consumer, location(armorFolder + "slime_boots"));
   }
 
@@ -478,7 +478,7 @@ public class ToolsRecipeProvider extends BaseRecipeProvider implements IMaterial
     MaterialCastingRecipeBuilder.basinRecipe(TinkerTools.slimesuit.get(ArmorItem.Type.HELMET))
       .setCast(skull, CastPurpose.CONSUMED_OFFSET)
       .addExtraMaterial(material)
-      .setItemCost(20)
+      .setItemCost(5)
       .save(consumer, location(folder + "slime_skull/" + material.getPath()));
     MaterialSwappingRecipeBuilder.tools(TinkerTags.Items.SWAPPABLE_SKULLS)
       .index(0).material(material, skull).repairValue((int) (MaterialRecipe.INGOTS_PER_REPAIR * 2))

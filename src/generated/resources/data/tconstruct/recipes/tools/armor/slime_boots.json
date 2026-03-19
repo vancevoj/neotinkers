@@ -4,6 +4,6 @@
     "item": "minecraft:rabbit_foot"
   },
   "cast_purpose": "consumed",
-  "item_cost": 16,
+  "item_cost": 4,
   "result": "tconstruct:slime_boots"
 }

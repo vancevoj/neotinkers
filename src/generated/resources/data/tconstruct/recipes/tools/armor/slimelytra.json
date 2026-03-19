@@ -4,6 +4,6 @@
     "item": "minecraft:elytra"
   },
   "cast_purpose": "consumed",
-  "item_cost": 32,
+  "item_cost": 8,
   "result": "tconstruct:slime_chestplate"
 }

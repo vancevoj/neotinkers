@@ -4,6 +4,6 @@
     "item": "minecraft:shulker_shell"
   },
   "cast_purpose": "consumed",
-  "item_cost": 28,
+  "item_cost": 7,
   "result": "tconstruct:slime_leggings"
 }
