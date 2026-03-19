@@ -95,6 +95,7 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     addTraits(MaterialIds.slimeball, AMMO, ModifierIds.erratic);
     addTraits(MaterialIds.gunpowder, AMMO, ModifierIds.explosive);
     addTraits(MaterialIds.redstone, AMMO, ModifierIds.supercharged);
+    addTraits(MaterialIds.clay, SlimeStats.ID, ModifierIds.forming);
 
     // tier 3
     addDefaultTraits(MaterialIds.slimesteel, ModifierIds.overcast, TinkerModifiers.overslime.getId());
@@ -214,7 +215,6 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     material(MaterialIds.necronium).addTraits(SkullStats.ID, ModifierIds.decayedBones, ModifierIds.witherSkeletonDisguise);
     material(MaterialIds.knightmetal).addTraits(SkullStats.ID, ModifierIds.spitting);
     // slimesuit
-    noTraits(MaterialIds.clay);
     noTraits(MaterialIds.honey);
     noTraits(MaterialIds.phantom);
   }

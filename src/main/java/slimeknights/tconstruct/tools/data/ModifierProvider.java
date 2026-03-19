@@ -1049,6 +1049,10 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .addModule(TeleportDodgeModule.builder().damageSource(isProjectile).chance(new LevelingValue(0.1f, 0.1f)).flat(10 * 20))
       // entity caused damage: 10% chance per piece, 15% when rebalanced. 10 second cooldown
       .addModule(TeleportDodgeModule.builder().damageSource(DamageSourcePredicate.and(DamageSourcePredicate.HAS_ENTITY, isProjectile.inverted())).chance(new LevelingValue(0.05f, 0.05f)).flat(10 * 20));
+    buildModifier(ModifierIds.forming)
+      .levelDisplay(ModifierLevelDisplay.SINGLE_LEVEL)
+      .addModule(StatBoostModule.add(ToolStats.ARMOR).eachLevel(1))
+      .addModule(StatBoostModule.add(ToolStats.KNOCKBACK_RESISTANCE).eachLevel(0.05f));
 
     buildModifier(ModifierIds.flamestance)
       .levelDisplay(ModifierLevelDisplay.NO_LEVELS)

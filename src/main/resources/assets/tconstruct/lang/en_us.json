@@ -2204,8 +2204,10 @@
 
   "__comment": "Slimesuit materials",
 
+  "material.tconstruct.clay": "Clay",
+  "material.tconstruct.clay.flavor": "All natural!",
+
   "material.tconstruct.blood":   "Blood",
-  "material.tconstruct.clay":    "Clay",
   "material.tconstruct.honey":   "Honey",
   "material.tconstruct.phantom": "Phantom Membrane",
 
@@ -3157,6 +3159,9 @@
   "modifier.tconstruct.skyfall": "Skyfall",
   "modifier.tconstruct.skyfall.flavor": "Falling with style!",
   "modifier.tconstruct.skyfall.description": "Reduces the effect of gravity",
+  "modifier.tconstruct.forming": "Self-Forming",
+  "modifier.tconstruct.forming.flavor": "Absorbs attacks",
+  "modifier.tconstruct.forming.description": "Increases armor and knockback resistance",
   "modifier.tconstruct.flamestance": "Flamestance",
   "modifier.tconstruct.flamestance.flavor": "Power of Fire!",
   "modifier.tconstruct.flamestance.description": "Increases power and protection in hot biomes, but reduces it in cold biomes",

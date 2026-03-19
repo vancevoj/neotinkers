@@ -162,6 +162,8 @@ public class MaterialRecipeProvider extends BaseRecipeProvider implements IMater
       materialRecipe(consumer, MaterialVariantId.create(MaterialIds.slimeball, name), Ingredient.of(type.getSlimeballTag()), 1, 1, folder + "slimeball/" + name);
     }
     materialRecipe(consumer, MaterialIds.magma, Ingredient.of(Items.MAGMA_CREAM),1, 1, folder + "magma");
+    materialRecipe(consumer, MaterialIds.clay, Ingredient.of(Items.CLAY_BALL),   1, 1, folder + "clay_ball");
+    materialRecipe(consumer, MaterialIds.clay, Ingredient.of(Blocks.CLAY),       4, 1, folder + "clay_block");
 
     // tier 3
     metalMaterialRecipe(consumer, MaterialIds.slimesteel, folder, "slimesteel", false);
@@ -349,6 +351,7 @@ public class MaterialRecipeProvider extends BaseRecipeProvider implements IMater
 
     // slimesuit
     materialMeltingCasting(consumer, MaterialIds.gold, TinkerFluids.moltenGold, folder);
+    materialMeltingCasting(consumer, MaterialIds.clay,       TinkerFluids.moltenClay,  FluidValues.BRICK,    folder);
     materialMeltingCasting(consumer, MaterialIds.enderPearl, TinkerFluids.moltenEnder, FluidValues.SLIMEBALL, folder);
     materialMeltingCasting(consumer, MaterialIds.glass, TinkerFluids.moltenGlass, FluidValues.GLASS_PANE, folder);
     materialMeltingCasting(consumer, MaterialIds.enderslime, TinkerFluids.enderSlime, FluidValues.SLIMEBALL, folder);
