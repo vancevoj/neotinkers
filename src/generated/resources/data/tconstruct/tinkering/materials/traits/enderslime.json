@@ -5,6 +5,12 @@
         "level": 1,
         "name": "tconstruct:enderclearance"
       }
+    ],
+    "tconstruct:armor": [
+      {
+        "level": 1,
+        "name": "tconstruct:enderdodging"
+      }
     ]
   }
 }
