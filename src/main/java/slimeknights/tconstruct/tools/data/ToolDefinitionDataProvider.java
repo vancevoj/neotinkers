@@ -732,6 +732,7 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
 
     // slime suit
     RandomMaterial blood = RandomMaterial.fixed(MaterialIds.blood);
+    MaterialTraitsModule slimeTraitAt0 = new MaterialTraitsModule(SlimeStats.ID, 0);
     defineArmor(ArmorDefinitions.SLIMESUIT)
       // materials
       // helmet - slime and skull
@@ -770,6 +771,11 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
         .trait(ModifierIds.bouncy)
         .trait(ModifierIds.leaping, 1).build())
       .module(ArmorItem.Type.BOOTS, ToolTraitsModule.builder().trait(ModifierIds.leaping, 1).build(), ToolHooks.REBALANCED_TRAIT)
+      // armor trim
+      .module(ArmorItem.Type.HELMET, new MaterialTraitsModule(SlimeStats.ID, 1), ToolHooks.TRIM_TRAIT)
+      .module(ArmorItem.Type.CHESTPLATE, slimeTraitAt0, ToolHooks.TRIM_TRAIT)
+      .module(ArmorItem.Type.LEGGINGS, slimeTraitAt0, ToolHooks.TRIM_TRAIT)
+      .module(ArmorItem.Type.BOOTS, slimeTraitAt0, ToolHooks.TRIM_TRAIT)
       // display name - helmet displays a name for each material
       .module(ArmorItem.Type.HELMET, UniqueMaterialToolName.FIRST)
       // rest just ignore materials for now. TODO: can we swap out the second part to do e.g. "Ichorskull", "Magmaskull", "Slimeskull"?

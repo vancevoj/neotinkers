@@ -32,6 +32,14 @@
       }
     },
     {
+      "type": "tconstruct:material_traits",
+      "hooks": [
+        "tconstruct:trim_trait"
+      ],
+      "material_index": 1,
+      "stat_type": "tconstruct:slime"
+    },
+    {
       "type": "tconstruct:unique_material_name",
       "index": 0
     }
