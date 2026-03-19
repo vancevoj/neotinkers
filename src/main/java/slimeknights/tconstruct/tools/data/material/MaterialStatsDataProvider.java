@@ -531,6 +531,8 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
     addMaterialStats(MaterialIds.magma,      new SlimeStats(125,  50)); // 175
     // migration
     addMaterialStats(MaterialIds.blood,      new SlimeStats(150, 125)); // 275
+    // pseudo-slime
+    addMaterialStats(MaterialIds.enderPearl, new SlimeStats(250, 0));
 
     // slimeskull
     addMaterialStats(MaterialIds.glass,        new SkullStats( 90, 0));

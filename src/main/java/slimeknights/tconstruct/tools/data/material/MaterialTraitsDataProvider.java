@@ -90,6 +90,7 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     addTraits(MaterialIds.skyslime, SlimeStats.ID, ModifierIds.skyfall);
     addDefaultTraits(MaterialIds.blaze, ModifierIds.fiery);
     addTraits(MaterialIds.enderPearl, AMMO, TinkerModifiers.enderporting);
+    addTraits(MaterialIds.enderPearl, SlimeStats.ID, ModifierIds.magicProtection);
     addTraits(MaterialIds.glass, AMMO, ModifierIds.amorphous, ModifierIds.smashingAmmo, ModifierIds.spillingRod);
     addTraits(MaterialIds.slimeball, AMMO, ModifierIds.erratic);
     addTraits(MaterialIds.gunpowder, AMMO, ModifierIds.explosive);

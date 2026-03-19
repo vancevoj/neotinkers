@@ -416,7 +416,7 @@ public class TinkerMaterialSpriteProvider extends AbstractMaterialSpriteProvider
       .repairKit().arrowHead().fallbacks("crystal")
       .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF7BAEB7).addARGB(102, 0xFFA8D0D9).addARGB(140, 0x00000000).addARGB(216, 0x00000000).addARGB(255, 0xFFD0EAE9).build());
     buildMaterial(MaterialIds.enderPearl)
-      .repairKit().arrowHead().fallbacks("rock")
+      .repairKit().arrowHead().fallbacks("rock").slime()
       .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF032620).addARGB(102, 0xFF0C3730).addARGB(140, 0xFF0B4D42).addARGB(178, 0xFF105E51).addARGB(216, 0xFF349988).addARGB(255, 0xFF8CF4E2).build());
     // slimesuit
     buildMaterial(MaterialIds.phantom)
