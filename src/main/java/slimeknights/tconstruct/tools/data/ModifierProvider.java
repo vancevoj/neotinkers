@@ -903,7 +903,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
 
     // internal
     buildModifier(ModifierIds.overslimeFriend).tooltipDisplay(TooltipDisplay.NEVER);
-    buildModifier(ModifierIds.snowBoots).addModule(new VolatileFlagModule(ModifiableArmorItem.SNOW_BOOTS)).tooltipDisplay(TooltipDisplay.NEVER);
+    buildModifier(ModifierIds.snowBoots).addModule(new VolatileFlagModule(ModifiableArmorItem.SNOW_BOOTS)).levelDisplay(ModifierLevelDisplay.NO_LEVELS);
 
     // traits - tier 1
     buildModifier(ModifierIds.cultivated).addModule(RepairModule.builder().eachLevel(0.5f));

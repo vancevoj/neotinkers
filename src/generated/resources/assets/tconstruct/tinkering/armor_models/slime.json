@@ -2,7 +2,7 @@
   "layers": [
     {
       "type": "tconstruct:material",
-      "index": 0,
+      "index": 1,
       "prefix": "tconstruct:slime/"
     },
     "tconstruct:trim"

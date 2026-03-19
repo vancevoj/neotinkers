@@ -2,6 +2,9 @@
   "stats": {
     "tconstruct:arrow_head": {},
     "tconstruct:maille": {},
+    "tconstruct:shell": {
+      "repair_amount": 100
+    },
     "tconstruct:skull": {
       "armor": 0,
       "durability": 120

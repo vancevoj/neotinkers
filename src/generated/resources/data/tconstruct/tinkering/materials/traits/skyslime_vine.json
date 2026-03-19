@@ -19,6 +19,12 @@
         "level": 1,
         "name": "tconstruct:overslime_friend"
       }
+    ],
+    "tconstruct:laces": [
+      {
+        "level": 1,
+        "name": "tconstruct:leaping"
+      }
     ]
   }
 }

@@ -3090,6 +3090,9 @@
   "modifier.tconstruct.tanned": "Tanned",
   "modifier.tconstruct.tanned.flavor": "Become a master leatherworker",
   "modifier.tconstruct.tanned.description": "Tool no longer takes double or more damage from certain actions",
+  "modifier.tconstruct.snow_boots": "Snow Step",
+  "modifier.tconstruct.snow_boots.flavor": "Snowshoeing",
+  "modifier.tconstruct.snow_boots.description": "Allows walking on top of powdered snow",
   "modifier.tconstruct.solar_powered": "Solar Powered",
   "modifier.tconstruct.solar_powered.flavor": "Good for the environment",
   "modifier.tconstruct.solar_powered.description": "Tool resists damage in sunlight",
@@ -3489,7 +3492,6 @@
 
   "_comment": "Internal modifiers",
   "modifier.tconstruct.overslime_friend": "Overslime Friend",
-  "modifier.tconstruct.snow_boots": "Snow Boots",
 
   "modifier.tconstruct.reverted": "Reverted",
   "modifier.tconstruct.reverted.flavor": "We need to go back!",
@@ -3576,6 +3578,8 @@
   "tool_stat.tconstruct.attack_speed.description": "Base value for melee attack speed calculations.\nRoughly is number of full strength attacks per second.",
   "tool_stat.tconstruct.durability": "Durability: ",
   "tool_stat.tconstruct.durability.description": "The base-value for durability calculations.\nUsually an integral part to the overall durability of a tool.",
+  "tool_stat.tconstruct.durability.repair": "Repair Value: ",
+  "tool_stat.tconstruct.durability.repair.description": "Amount repaired per unit when repairing using this part.",
   "tool_stat.tconstruct.use_item_speed": "Use Item Speed: ",
   "tool_stat.tconstruct.use_item_speed.description": "Movement speed multiplier when using an item, such as a bow or a shield.",
 
@@ -3605,6 +3609,8 @@
   "tool_stat.tconstruct.knockback_resistance.description": "How much this armor reduces knockback.",
 
   "stat.tconstruct.slime": "Slime",
+  "stat.tconstruct.shell": "Shell",
+  "stat.tconstruct.laces": "Laces",
 
   "stat.tconstruct.handle": "Handle",
   "tool_stat.tconstruct.handle.durability.description": "The total durability of the tool will be multiplied by this.",

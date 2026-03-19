@@ -3,7 +3,10 @@
   "cast": {
     "item": "minecraft:shulker_shell"
   },
-  "cast_purpose": "consumed",
+  "cast_purpose": "consumed_offset",
+  "extra_materials": [
+    "tconstruct:shulker"
+  ],
   "item_cost": 7,
   "result": "tconstruct:slime_leggings"
 }

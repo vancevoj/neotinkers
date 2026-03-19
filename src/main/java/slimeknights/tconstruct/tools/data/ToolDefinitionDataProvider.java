@@ -67,6 +67,7 @@ import slimeknights.tconstruct.tools.stats.HandleMaterialStats;
 import slimeknights.tconstruct.tools.stats.HeadMaterialStats;
 import slimeknights.tconstruct.tools.stats.LimbMaterialStats;
 import slimeknights.tconstruct.tools.stats.PlatingMaterialStats;
+import slimeknights.tconstruct.tools.stats.RepairStats;
 import slimeknights.tconstruct.tools.stats.SkullStats;
 import slimeknights.tconstruct.tools.stats.SlimeStats;
 import slimeknights.tconstruct.tools.stats.StatlessMaterialStats;
@@ -732,7 +733,7 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
 
     // slime suit
     RandomMaterial blood = RandomMaterial.fixed(MaterialIds.blood);
-    MaterialTraitsModule slimeTraitAt0 = new MaterialTraitsModule(SlimeStats.ID, 0);
+    MaterialTraitsModule slimeTraitAt1 = new MaterialTraitsModule(SlimeStats.ID, 1);
     defineArmor(ArmorDefinitions.SLIMESUIT)
       // materials
       // helmet - slime and skull
@@ -740,13 +741,14 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
       .module(ArmorItem.Type.HELMET, DefaultMaterialsModule.builder().material(anyMaterial, blood).build())
       // chestplate - slime, bone TODO
       .module(ArmorItem.Type.CHESTPLATE, MaterialStatsModule.stats().stat(SlimeStats.ID, 1.6f).primaryPart(-1).build())
+      .module(ArmorItem.Type.CHESTPLATE, DefaultMaterialsModule.builder().material(blood).build())
       .module(ArmorItem.Type.CHESTPLATE, new MultiplyStatsModule(MultiplierNBT.builder().set(ToolStats.ATTACK_DAMAGE, 0.4f).build()))
-      // leggings - slime, shell TODO
-      .module(ArmorItem.Type.LEGGINGS, MaterialStatsModule.stats().stat(SlimeStats.ID, 1.5f).primaryPart(-1).build())
-      // boots - slime, laces TODO
-      .module(ArmorItem.Type.BOOTS, MaterialStatsModule.stats().stat(SlimeStats.ID, 1.3f).primaryPart(-1).build())
-      // non-helmet just have 1 material to default, for now...
-      .module(DefaultMaterialsModule.builder().material(blood).build(), ArmorItem.Type.CHESTPLATE, ArmorItem.Type.LEGGINGS, ArmorItem.Type.BOOTS)
+      // leggings - shell and slime
+      .module(ArmorItem.Type.LEGGINGS, MaterialStatsModule.stats().stat(RepairStats.SHELL.getId()).stat(SlimeStats.ID, 1.5f).build())
+      .module(ArmorItem.Type.LEGGINGS, DefaultMaterialsModule.builder().material(RandomMaterial.fixed(MaterialIds.shulker), blood).build())
+      // boots - laces and slime
+      .module(ArmorItem.Type.BOOTS, MaterialStatsModule.stats().stat(RepairStats.LACES.getId()).stat(SlimeStats.ID, 1.3f).build())
+      .module(ArmorItem.Type.BOOTS, DefaultMaterialsModule.builder().material(RandomMaterial.fixed(MaterialIds.skyslimeVine), blood).build())
       // slots
       .module(ToolSlotsModule.builder()
         .slots(SlotType.UPGRADE, 3)
@@ -759,23 +761,15 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
         ArmorItem.Type.CHESTPLATE)
       // repair - TODO: replace with specific stat types on each
       .module(ArmorItem.Type.CHESTPLATE, MaterialRepairModule.of(MaterialIds.phantom, ArmorItem.Type.CHESTPLATE, 42))
-      .module(ArmorItem.Type.LEGGINGS, MaterialRepairModule.of(MaterialIds.chorus, ArmorItem.Type.LEGGINGS, 42))
-      .module(ArmorItem.Type.BOOTS, MaterialRepairModule.of(MaterialIds.leather, ArmorItem.Type.BOOTS, 42))
       // traits
       .module(ArmorItem.Type.CHESTPLATE, ToolTraitsModule.builder().trait(ModifierIds.wings).build())
-      .module(ArmorItem.Type.LEGGINGS, ToolTraitsModule.builder()
-        .trait(ModifierIds.pockets, 1)
-        .trait(ModifierIds.shulking, 1).build())
-      .module(ArmorItem.Type.LEGGINGS, ToolTraitsModule.builder().trait(ModifierIds.shulking, 1).build(), ToolHooks.REBALANCED_TRAIT)
-      .module(ArmorItem.Type.BOOTS, ToolTraitsModule.builder()
-        .trait(ModifierIds.bouncy)
-        .trait(ModifierIds.leaping, 1).build())
-      .module(ArmorItem.Type.BOOTS, ToolTraitsModule.builder().trait(ModifierIds.leaping, 1).build(), ToolHooks.REBALANCED_TRAIT)
+      .module(ArmorItem.Type.LEGGINGS, ToolTraitsModule.builder().trait(ModifierIds.pockets, 1).build())
+      .module(ArmorItem.Type.BOOTS, ToolTraitsModule.builder().trait(ModifierIds.bouncy).build())
       // armor trim
-      .module(ArmorItem.Type.HELMET, new MaterialTraitsModule(SlimeStats.ID, 1), ToolHooks.TRIM_TRAIT)
-      .module(ArmorItem.Type.CHESTPLATE, slimeTraitAt0, ToolHooks.TRIM_TRAIT)
-      .module(ArmorItem.Type.LEGGINGS, slimeTraitAt0, ToolHooks.TRIM_TRAIT)
-      .module(ArmorItem.Type.BOOTS, slimeTraitAt0, ToolHooks.TRIM_TRAIT)
+      .module(ArmorItem.Type.HELMET, slimeTraitAt1, ToolHooks.TRIM_TRAIT)
+      .module(ArmorItem.Type.CHESTPLATE, new MaterialTraitsModule(SlimeStats.ID, 0), ToolHooks.TRIM_TRAIT)
+      .module(ArmorItem.Type.LEGGINGS, slimeTraitAt1, ToolHooks.TRIM_TRAIT)
+      .module(ArmorItem.Type.BOOTS, slimeTraitAt1, ToolHooks.TRIM_TRAIT)
       // display name - helmet displays a name for each material
       .module(ArmorItem.Type.HELMET, UniqueMaterialToolName.FIRST)
       // rest just ignore materials for now. TODO: can we swap out the second part to do e.g. "Ichorskull", "Magmaskull", "Slimeskull"?

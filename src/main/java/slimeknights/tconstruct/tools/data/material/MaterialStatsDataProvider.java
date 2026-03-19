@@ -8,6 +8,7 @@ import slimeknights.tconstruct.tools.stats.HandleMaterialStats;
 import slimeknights.tconstruct.tools.stats.HeadMaterialStats;
 import slimeknights.tconstruct.tools.stats.LimbMaterialStats;
 import slimeknights.tconstruct.tools.stats.PlatingMaterialStats;
+import slimeknights.tconstruct.tools.stats.RepairStats;
 import slimeknights.tconstruct.tools.stats.SkullStats;
 import slimeknights.tconstruct.tools.stats.SlimeStats;
 import slimeknights.tconstruct.tools.stats.StatlessMaterialStats;
@@ -561,6 +562,21 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
     addMaterialStats(MaterialIds.blazingBone,  new SkullStats(205, 1));
     addMaterialStats(MaterialIds.necronium,    new SkullStats(157, 1));
     addMaterialStats(MaterialIds.knightmetal,  new SkullStats(220, 1));
+
+    // slimeshell
+    addMaterialStats(MaterialIds.turtle, RepairStats.shell(150));
+    addMaterialStats(MaterialIds.shulker, RepairStats.shell(250));
+    addMaterialStats(MaterialIds.dragonScale, RepairStats.shell(100));
+
+    // slime boots
+    addMaterialStats(MaterialIds.leather, RepairStats.laces(97));
+    addMaterialStats(MaterialIds.vine, RepairStats.laces(75));
+    addMaterialStats(MaterialIds.skyslimeVine, RepairStats.laces(150));
+    // TODO: darkthread
+    // TODO: twisting vine
+    addMaterialStats(MaterialIds.weepingVine, RepairStats.laces(90));
+    // TODO: jeweled hide
+    addMaterialStats(MaterialIds.enderslimeVine, RepairStats.laces(180));
 
     // slimelytra - repair
     addMaterialStats(MaterialIds.phantom, StatlessMaterialStats.REPAIR_KIT);
