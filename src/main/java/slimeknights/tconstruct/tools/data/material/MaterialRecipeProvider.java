@@ -245,6 +245,7 @@ public class MaterialRecipeProvider extends BaseRecipeProvider implements IMater
     // tier 2
     materialMeltingCasting(consumer, MaterialIds.iron,          TinkerFluids.moltenIron,    folder);
     materialMeltingCasting(consumer, MaterialIds.copper,        TinkerFluids.moltenCopper,  folder);
+    materialMeltingCasting(consumer, MaterialIds.gold,          TinkerFluids.moltenGold,    folder);
     materialMeltingCasting(consumer, MaterialIds.searedStone,   TinkerFluids.searedStone,   FluidValues.BRICK, folder);
     materialMeltingCasting(consumer, MaterialIds.scorchedStone, TinkerFluids.scorchedStone, FluidValues.BRICK, folder);
     // half a clay is 1 seared brick per grout amounts
@@ -349,12 +350,17 @@ public class MaterialRecipeProvider extends BaseRecipeProvider implements IMater
       withCondition(consumer, new OrCondition(tagCondition("ingots/nicrosil"), tagCondition("ingots/tin"), tagCondition("ingots/nickel"), tagCondition("ingots/chromium"))),
       MaterialIds.nicrosil, TinkerFluids.moltenNicrosil, folder);
 
-    // slimesuit
-    materialMeltingCasting(consumer, MaterialIds.gold, TinkerFluids.moltenGold, folder);
+    // slimesuit - slime
+    materialMeltingCasting(consumer, MaterialIds.earthslime, TinkerFluids.earthSlime, FluidValues.SLIMEBALL, folder);
+    materialMeltingCasting(consumer, MaterialIds.skyslime,   TinkerFluids.skySlime,   FluidValues.SLIMEBALL, folder);
+    materialMeltingCasting(consumer, MaterialIds.ichor,      TinkerFluids.ichor,      FluidValues.SLIMEBALL, folder);
+    materialMeltingCasting(consumer, MaterialIds.enderslime, TinkerFluids.enderSlime, FluidValues.SLIMEBALL, folder);
+    materialMeltingCasting(consumer, MaterialIds.magma,      TinkerFluids.magma,      FluidValues.SLIMEBALL, folder);
+    // slimesuit - pseudoslime
     materialMeltingCasting(consumer, MaterialIds.clay,       TinkerFluids.moltenClay,  FluidValues.BRICK,    folder);
     materialMeltingCasting(consumer, MaterialIds.enderPearl, TinkerFluids.moltenEnder, FluidValues.SLIMEBALL, folder);
+    // slimesuit - repair kits
     materialMeltingCasting(consumer, MaterialIds.glass, TinkerFluids.moltenGlass, FluidValues.GLASS_PANE, folder);
-    materialMeltingCasting(consumer, MaterialIds.enderslime, TinkerFluids.enderSlime, FluidValues.SLIMEBALL, folder);
   }
 
   /** Adds a  */
