@@ -236,8 +236,9 @@ public final class TinkerTools extends TinkerModule {
   public static final EnumObject<ArmorItem.Type,ModifiableArmorItem> travelersGear = ITEMS.registerEnum("travelers", ArmorItem.Type.values(), type -> new MultilayerArmorItem(ArmorDefinitions.TRAVELERS, type, UNSTACKABLE_PROPS));
   public static final EnumObject<ArmorItem.Type,ModifiableArmorItem> plateArmor = ITEMS.registerEnum("plate", ArmorItem.Type.values(), type -> new MultilayerArmorItem(ArmorDefinitions.PLATE, type, UNSTACKABLE_PROPS));
   public static final EnumObject<ArmorItem.Type,ModifiableArmorItem> slimesuit = new EnumObject.Builder<ArmorItem.Type,ModifiableArmorItem>(ArmorItem.Type.class)
-    .putAll(ITEMS.registerEnum("slime", new ArmorItem.Type[] {ArmorItem.Type.BOOTS, ArmorItem.Type.LEGGINGS, ArmorItem.Type.CHESTPLATE}, type -> new MultilayerArmorItem(ArmorDefinitions.SLIMESUIT, type, UNSTACKABLE_PROPS)))
     .put(ArmorItem.Type.HELMET, ITEMS.register("slime_helmet", () -> new SlimeskullItem(ArmorDefinitions.SLIMESUIT, UNSTACKABLE_PROPS)))
+    .put(ArmorItem.Type.CHESTPLATE, ITEMS.register("slime_chestplate", () -> new MultilayerArmorItem(ArmorDefinitions.SLIMESUIT, ArmorItem.Type.CHESTPLATE, UNSTACKABLE_PROPS, TConstruct.getResource("slimelytra"))))
+    .putAll(ITEMS.registerEnum("slime", new ArmorItem.Type[] {ArmorItem.Type.LEGGINGS, ArmorItem.Type.BOOTS}, type -> new MultilayerArmorItem(ArmorDefinitions.SLIMESUIT, type, UNSTACKABLE_PROPS)))
     .build();
 
 
