@@ -9,7 +9,6 @@
     "tconstruct:maille": {},
     "tconstruct:repair_kit": {},
     "tconstruct:skull": {
-      "armor": 2,
       "durability": 150
     }
   }
