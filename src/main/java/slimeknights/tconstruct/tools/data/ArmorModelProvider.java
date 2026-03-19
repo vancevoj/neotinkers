@@ -12,7 +12,6 @@ import slimeknights.tconstruct.library.client.data.AbstractArmorModelProvider;
 import slimeknights.tconstruct.library.modifiers.ModifierId;
 import slimeknights.tconstruct.tools.ArmorDefinitions;
 import slimeknights.tconstruct.tools.TinkerModifiers;
-import slimeknights.tconstruct.tools.data.material.MaterialIds;
 
 public class ArmorModelProvider extends AbstractArmorModelProvider {
   public ArmorModelProvider(PackOutput packOutput) {
@@ -41,9 +40,7 @@ public class ArmorModelProvider extends AbstractArmorModelProvider {
       TrimArmorTextureSupplier.INSTANCE
     });
     addModel(ArmorDefinitions.SLIMESUIT, name -> new ArmorTextureSupplier[] {
-      new FirstArmorTextureSupplier(
-        new MaterialArmorTextureSupplier.PersistentData(name, "/", TinkerModifiers.embellishment.getId()),
-        FixedArmorTextureSupplier.builder(name, "/").materialSuffix(MaterialIds.enderslime).build()),
+      new MaterialArmorTextureSupplier.Material(name, "/", 0),
       TrimArmorTextureSupplier.INSTANCE
     });
   }
