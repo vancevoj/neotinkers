@@ -1,10 +1,14 @@
 {
   "modules": [
     {
-      "type": "tconstruct:base_stats",
-      "stats": {
-        "tconstruct:durability": 672.0
-      }
+      "type": "tconstruct:material_stats",
+      "primary_part": -1,
+      "stat_types": [
+        {
+          "scale": 1.6,
+          "stat": "tconstruct:slime"
+        }
+      ]
     },
     {
       "type": "tconstruct:multiply_stats",
@@ -13,16 +17,20 @@
       }
     },
     {
+      "type": "tconstruct:default_materials",
+      "materials": [
+        {
+          "type": "tconstruct:fixed",
+          "material": "tconstruct:blood"
+        }
+      ]
+    },
+    {
       "type": "tconstruct:modifier_slots",
       "slots": {
         "abilities": 1,
-        "upgrades": 5
+        "upgrades": 4
       }
-    },
-    {
-      "type": "tconstruct:material_repair",
-      "durability": 67,
-      "material": "tconstruct:enderslime"
     },
     {
       "type": "tconstruct:material_repair",
@@ -34,13 +42,12 @@
       "traits": [
         {
           "level": 1,
-          "name": "tconstruct:overslime_friend"
-        },
-        {
-          "level": 1,
           "name": "tconstruct:wings"
         }
       ]
+    },
+    {
+      "type": "tconstruct:item_name"
     }
   ]
 }

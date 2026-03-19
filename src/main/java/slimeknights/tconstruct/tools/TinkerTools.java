@@ -84,6 +84,7 @@ import slimeknights.tconstruct.library.tools.definition.module.build.VolatileFla
 import slimeknights.tconstruct.library.tools.definition.module.build.VolatileIntModule;
 import slimeknights.tconstruct.library.tools.definition.module.display.FixedMaterialToolName;
 import slimeknights.tconstruct.library.tools.definition.module.display.MaterialToolNameModule;
+import slimeknights.tconstruct.library.tools.definition.module.display.SimpleToolName;
 import slimeknights.tconstruct.library.tools.definition.module.display.StatTypesToolNameModule;
 import slimeknights.tconstruct.library.tools.definition.module.display.UniqueMaterialToolName;
 import slimeknights.tconstruct.library.tools.definition.module.interaction.AttackInteraction;
@@ -358,6 +359,7 @@ public final class TinkerTools extends TinkerModule {
       // special tool modules
       ToolModule.LOADER.register(getResource("melting_fluid_effective"), MeltingFluidEffectiveModule.LOADER);
       // display name
+      ToolModule.LOADER.register(getResource("item_name"), SimpleToolName.ITEM.getLoader());
       ToolModule.LOADER.register(getResource("material_name"), MaterialToolNameModule.LOADER);
       ToolModule.LOADER.register(getResource("stat_types_name"), StatTypesToolNameModule.LOADER);
       ToolModule.LOADER.register(getResource("fixed_material_name"), FixedMaterialToolName.LOADER);

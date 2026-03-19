@@ -1,22 +1,30 @@
 {
   "modules": [
     {
-      "type": "tconstruct:base_stats",
-      "stats": {
-        "tconstruct:durability": 630.0
-      }
+      "type": "tconstruct:material_stats",
+      "primary_part": -1,
+      "stat_types": [
+        {
+          "scale": 1.5,
+          "stat": "tconstruct:slime"
+        }
+      ]
+    },
+    {
+      "type": "tconstruct:default_materials",
+      "materials": [
+        {
+          "type": "tconstruct:fixed",
+          "material": "tconstruct:blood"
+        }
+      ]
     },
     {
       "type": "tconstruct:modifier_slots",
       "slots": {
-        "abilities": 1,
-        "upgrades": 5
+        "abilities": 2,
+        "upgrades": 3
       }
-    },
-    {
-      "type": "tconstruct:material_repair",
-      "durability": 62,
-      "material": "tconstruct:enderslime"
     },
     {
       "type": "tconstruct:material_repair",
@@ -26,10 +34,6 @@
     {
       "type": "tconstruct:traits",
       "traits": [
-        {
-          "level": 1,
-          "name": "tconstruct:overslime_friend"
-        },
         {
           "level": 1,
           "name": "tconstruct:pockets"
@@ -51,6 +55,9 @@
           "name": "tconstruct:shulking"
         }
       ]
+    },
+    {
+      "type": "tconstruct:item_name"
     }
   ]
 }

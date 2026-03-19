@@ -14,6 +14,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -1549,7 +1550,14 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .addModule(new FieryArmorAttackModule(LevelingInt.eachLevel(5), DamageSourcePredicate.ANY));
 
     // internal modifier to restore older slots to slimesuit
-    buildModifier(ModifierIds.reverted).levelDisplay(ModifierLevelDisplay.NO_LEVELS);
+    IJsonPredicate<IToolContext> notSlimelytra = ToolContextPredicate.set(TinkerTools.slimesuit.get(ArmorItem.Type.CHESTPLATE)).inverted();
+    buildModifier(ModifierIds.reverted)
+      .levelDisplay(ModifierLevelDisplay.NO_LEVELS)
+      // slimelytra just lost an upgrade slot
+      .addModule(ModifierSlotModule.slot(SlotType.UPGRADE).flat(1))
+      // other types lost 2 upgrades and gained 1 ability slot, so this material is effectively just guilded
+      .addModule(ModifierSlotModule.slot(SlotType.UPGRADE).toolContext(notSlimelytra).flat(1))
+      .addModule(ModifierSlotModule.slot(SlotType.ABILITY).toolContext(notSlimelytra).flat(-1));
 
     // mob disguise
     buildModifier(ModifierIds.creeperDisguise        ).levelDisplay(ModifierLevelDisplay.SINGLE_LEVEL).addModule(new MobDisguiseModule(EntityType.CREEPER));

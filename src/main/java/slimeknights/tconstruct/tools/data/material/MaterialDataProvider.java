@@ -118,7 +118,7 @@ public class MaterialDataProvider extends AbstractMaterialDataProvider {
     addMaterial(MaterialIds.knightly,    4, ORDER_REPAIR, true);
     addMaterial(MaterialIds.endRod,      4, ORDER_REPAIR, true);
 
-    // tier 5 binding, temporarily in book 4
+    // tier 4
     addMaterial(MaterialIds.enderslimeVine, 4, ORDER_BINDING, true);
 
     // tier 2 (mod integration)
@@ -145,11 +145,10 @@ public class MaterialDataProvider extends AbstractMaterialDataProvider {
     addCompatMetalMaterial(MaterialIds.fiery,           4, ORDER_COMPAT + ORDER_END);
     addCompatAlloy(MaterialIds.nicrosil, 4, ORDER_COMPAT + ORDER_WEAPON,  new OrCondition(tagExistsCondition("ingots/tin"), tagExistsCondition("ingots/nickel"), tagExistsCondition("ingots/chromium")));
 
-    // slimesuit - textures
-    addMaterial(MaterialIds.blood, 2, ORDER_REPAIR, true);
+    // slimesuit
     addMaterial(MaterialIds.clay,  1, ORDER_REPAIR, true);
     addMaterial(MaterialIds.honey, 1, ORDER_REPAIR, true);
-    //addMaterial(MaterialIds.venom,      3, ORDER_REPAIR, true);
+    addMaterial(MaterialIds.blood, 5, ORDER_REPAIR, false, true, null);
     // slimesuit - repair
     addMaterial(MaterialIds.phantom, 1, ORDER_REPAIR, true);
 
