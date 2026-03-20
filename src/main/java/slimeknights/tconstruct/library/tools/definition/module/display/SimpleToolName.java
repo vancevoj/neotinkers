@@ -16,12 +16,13 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 /** Tool name singleton implementations */
-public enum SimpleToolName implements ToolModule, ToolNameHook {
+public enum SimpleToolName implements ToolModule, ToolNameHook.FromDefault {
   /** Displays the tool using the simple translation of the item, ignoring materials. */
   ITEM {
     @Override
-    public Component getDisplayName(ToolDefinition definition, ItemStack stack, @Nullable IToolStackView tool) {
-      return Component.translatable(stack.getItem().getDescriptionId());
+    public Component getDisplayName(ToolDefinition definition, ItemStack stack, @Nullable IToolStackView tool, Component name) {
+      // this one is kinda pointless if you are composing it. So I guess don't?
+      return name;
     }
   };
 
