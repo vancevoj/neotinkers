@@ -3629,6 +3629,7 @@
   "tool_stat.tconstruct.knockback_resistance.description": "How much this armor reduces knockback.",
 
   "stat.tconstruct.slime": "Slime",
+  "stat.tconstruct.skull": "Skull",
   "stat.tconstruct.shell": "Shell",
   "stat.tconstruct.laces": "Laces",
 
@@ -3684,7 +3685,6 @@
   "tool_stat.tconstruct.max_energy.description": "Maximum amount of energy that can be stord in this tool",
 
   "stat.tconstruct.repair_kit": "Repair Kit",
-  "stat.tconstruct.skull": "Slimeskull",
 
   "stat.tconstruct.harvest_tier.minecraft.wood": "Wood",
   "stat.tconstruct.harvest_tier.minecraft.gold": "Gold",
