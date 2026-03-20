@@ -49,7 +49,12 @@
       "stat_type": "tconstruct:slime"
     },
     {
-      "type": "tconstruct:item_name"
+      "type": "tconstruct:unique_material_name",
+      "index": 1
+    },
+    {
+      "type": "tconstruct:fixed_material_name",
+      "index": 0
     }
   ]
 }

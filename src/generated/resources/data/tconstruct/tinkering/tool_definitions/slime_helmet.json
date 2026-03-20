@@ -41,7 +41,12 @@
     },
     {
       "type": "tconstruct:unique_material_name",
-      "index": 0
+      "index": 1
+    },
+    {
+      "type": "tconstruct:custom_material_name",
+      "index": 0,
+      "suffix": "skull"
     }
   ]
 }

@@ -29,9 +29,9 @@ import slimeknights.tconstruct.library.tools.definition.module.build.ToolSlotsMo
 import slimeknights.tconstruct.library.tools.definition.module.build.ToolTraitsModule;
 import slimeknights.tconstruct.library.tools.definition.module.build.VolatileFlagModule;
 import slimeknights.tconstruct.library.tools.definition.module.build.VolatileIntModule;
+import slimeknights.tconstruct.library.tools.definition.module.display.CustomMaterialName;
 import slimeknights.tconstruct.library.tools.definition.module.display.FixedMaterialToolName;
 import slimeknights.tconstruct.library.tools.definition.module.display.MaterialToolNameModule;
-import slimeknights.tconstruct.library.tools.definition.module.display.SimpleToolName;
 import slimeknights.tconstruct.library.tools.definition.module.display.UniqueMaterialToolName;
 import slimeknights.tconstruct.library.tools.definition.module.interaction.AttackInteraction;
 import slimeknights.tconstruct.library.tools.definition.module.interaction.DualOptionInteraction;
@@ -770,10 +770,15 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
       .module(ArmorItem.Type.CHESTPLATE, new MaterialTraitsModule(SlimeStats.ID, 0), ToolHooks.TRIM_TRAIT)
       .module(ArmorItem.Type.LEGGINGS, slimeTraitAt1, ToolHooks.TRIM_TRAIT)
       .module(ArmorItem.Type.BOOTS, slimeTraitAt1, ToolHooks.TRIM_TRAIT)
-      // display name - helmet displays a name for each material
-      .module(ArmorItem.Type.HELMET, UniqueMaterialToolName.FIRST)
-      // rest just ignore materials for now. TODO: can we swap out the second part to do e.g. "Ichorskull", "Magmaskull", "Slimeskull"?
-      .module(SimpleToolName.ITEM, ArmorItem.Type.CHESTPLATE, ArmorItem.Type.LEGGINGS, ArmorItem.Type.BOOTS);
+      // display name
+      // start with a variant of the base based on the tool type - Slimeskull, Magmaskull, etc.
+      .module(UniqueMaterialToolName.SECOND, ArmorItem.Type.HELMET, ArmorItem.Type.LEGGINGS, ArmorItem.Type.BOOTS)
+      // for helmets, we want mob names for the material
+      .module(ArmorItem.Type.HELMET, new CustomMaterialName(0, "skull"))
+      // for non-helmets, we want the direct mateiral name
+      .module(FixedMaterialToolName.FIRST, ArmorItem.Type.LEGGINGS, ArmorItem.Type.BOOTS)
+      // chestplates just do unique on the first, nothing else
+      .module(ArmorItem.Type.CHESTPLATE, UniqueMaterialToolName.FIRST);
 
     // ancient
     // melting pan

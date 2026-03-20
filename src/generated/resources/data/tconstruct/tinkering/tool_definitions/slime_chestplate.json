@@ -55,7 +55,8 @@
       "stat_type": "tconstruct:slime"
     },
     {
-      "type": "tconstruct:item_name"
+      "type": "tconstruct:unique_material_name",
+      "index": 0
     }
   ]
 }
