@@ -2110,7 +2110,7 @@
   "material.tconstruct.dragon_scale.skull_flavor": "No one shotting!",
   "material.tconstruct.dragon_scale.skull_encyclopedia": "Prevents you from taking more damage than your max health - 2 in a single hit.",
 
-  "material.tconstruct.shulker": "Shulker Shell",
+  "material.tconstruct.shulker": "Shulker",
   "material.tconstruct.shulker.flavor": "Unbreakable!",
   "material.tconstruct.shulker.armor": "Grants +10% resistance while sneaking, but decreases attack damage by 10% per level while sneaking.",
   "material.tconstruct.shulker.ammo": "Allows collecting projectiles that hit entities instead of just blocks, making them infinitely reusable. Item will additionally not despawn.",
