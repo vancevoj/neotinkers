@@ -759,7 +759,7 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
         .slots(SlotType.UPGRADE, 4)
         .slots(SlotType.ABILITY, 1).build(),
         ArmorItem.Type.CHESTPLATE)
-      // repair - TODO: replace with specific stat types on each
+      // repair
       .module(ArmorItem.Type.CHESTPLATE, MaterialRepairModule.of(MaterialIds.phantom, ArmorItem.Type.CHESTPLATE, 42))
       // traits
       .module(ArmorItem.Type.CHESTPLATE, ToolTraitsModule.builder().trait(ModifierIds.wings).build())
@@ -767,7 +767,7 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
       .module(ArmorItem.Type.BOOTS, ToolTraitsModule.builder().trait(ModifierIds.bouncy).build())
       // armor trim
       .module(ArmorItem.Type.HELMET, slimeTraitAt1, ToolHooks.TRIM_TRAIT)
-      .module(ArmorItem.Type.CHESTPLATE, new MaterialTraitsModule(SlimeStats.ID, 0), ToolHooks.TRIM_TRAIT)
+      .module(ArmorItem.Type.CHESTPLATE, new MaterialTraitsModule(SlimeStats.ID, 0), ToolHooks.REBALANCED_TRAIT, ToolHooks.TRIM_TRAIT)
       .module(ArmorItem.Type.LEGGINGS, slimeTraitAt1, ToolHooks.TRIM_TRAIT)
       .module(ArmorItem.Type.BOOTS, slimeTraitAt1, ToolHooks.TRIM_TRAIT)
       // display name

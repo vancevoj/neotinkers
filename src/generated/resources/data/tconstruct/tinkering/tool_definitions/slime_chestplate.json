@@ -49,6 +49,7 @@
     {
       "type": "tconstruct:material_traits",
       "hooks": [
+        "tconstruct:rebalanced_trait",
         "tconstruct:trim_trait"
       ],
       "material_index": 0,
