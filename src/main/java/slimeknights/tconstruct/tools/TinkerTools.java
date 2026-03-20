@@ -82,6 +82,7 @@ import slimeknights.tconstruct.library.tools.definition.module.build.ToolSlotsMo
 import slimeknights.tconstruct.library.tools.definition.module.build.ToolTraitsModule;
 import slimeknights.tconstruct.library.tools.definition.module.build.VolatileFlagModule;
 import slimeknights.tconstruct.library.tools.definition.module.build.VolatileIntModule;
+import slimeknights.tconstruct.library.tools.definition.module.display.CustomMaterialName;
 import slimeknights.tconstruct.library.tools.definition.module.display.FixedMaterialToolName;
 import slimeknights.tconstruct.library.tools.definition.module.display.MaterialToolNameModule;
 import slimeknights.tconstruct.library.tools.definition.module.display.SimpleToolName;
@@ -365,6 +366,7 @@ public final class TinkerTools extends TinkerModule {
       ToolModule.LOADER.register(getResource("stat_types_name"), StatTypesToolNameModule.LOADER);
       ToolModule.LOADER.register(getResource("fixed_material_name"), FixedMaterialToolName.LOADER);
       ToolModule.LOADER.register(getResource("unique_material_name"), UniqueMaterialToolName.LOADER);
+      ToolModule.LOADER.register(getResource("custom_material_name"), CustomMaterialName.LOADER);
       // tool predicates
       ToolContextPredicate.LOADER.register(getResource("has_upgrades"), ToolContextPredicate.HAS_UPGRADES.getLoader());
       ToolContextPredicate.LOADER.register(getResource("has_modifier"), HasModifierPredicate.LOADER);
