@@ -1616,7 +1616,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .addModule(ModifierSlotModule.slot(SlotType.UPGRADE).toolContext(notSlimelytra).flat(1))
       .addModule(ModifierSlotModule.slot(SlotType.ABILITY).toolContext(notSlimelytra).flat(-1))
       // slimeshell gets +3 slots
-      .addModule(new ModifierTraitModule(ModifierIds.pocket, 1, true, ModifierCondition.ANY_CONTEXT.with(ToolContextPredicate.set(TinkerTools.slimesuit.get(ArmorItem.Type.LEGGINGS)))));
+      .addModule(new ModifierTraitModule(ModifierIds.pocket, 1, true, ToolContextPredicate.set(TinkerTools.slimesuit.get(ArmorItem.Type.LEGGINGS))));
 
     // mob disguise
     buildModifier(ModifierIds.creeperDisguise        ).levelDisplay(ModifierLevelDisplay.SINGLE_LEVEL).addModule(new MobDisguiseModule(EntityType.CREEPER));
