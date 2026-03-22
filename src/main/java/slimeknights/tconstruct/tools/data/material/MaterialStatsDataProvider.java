@@ -550,7 +550,7 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
     addMaterialStats(MaterialIds.string,       new SkullStats(140));
     addMaterialStats(MaterialIds.darkthread,   new SkullStats(200));
     // zombie
-    addMaterialStats(MaterialIds.leather,      new SkullStats(150));
+    addMaterialStats(MaterialIds.leather,      new SkullStats( 97));
     addMaterialStats(MaterialIds.iron,         new SkullStats(165));
     addMaterialStats(MaterialIds.copper,       new SkullStats(145));
     // piglin
@@ -576,10 +576,10 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
     addMaterialStats(MaterialIds.leather, RepairStats.laces(97));
     addMaterialStats(MaterialIds.vine, RepairStats.laces(75));
     addMaterialStats(MaterialIds.skyslimeVine, RepairStats.laces(150));
-    // TODO: darkthread
-    // TODO: twisting vine
+    addMaterialStats(MaterialIds.darkthread, RepairStats.laces(200));
+    addMaterialStats(MaterialIds.twistingVine, RepairStats.laces(87));
     addMaterialStats(MaterialIds.weepingVine, RepairStats.laces(90));
-    // TODO: jeweled hide
+    addMaterialStats(MaterialIds.jeweledHide, RepairStats.laces(250));
     addMaterialStats(MaterialIds.enderslimeVine, RepairStats.laces(180));
 
     // slimelytra - repair

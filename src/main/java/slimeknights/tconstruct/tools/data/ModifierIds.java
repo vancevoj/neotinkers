@@ -86,6 +86,9 @@ public class ModifierIds {
   public static final ModifierId fortune = id("fortune");
   public static final ModifierId experienced = id("experienced");
   public static final ModifierId silky = id("silky");
+  // boot traits
+  public static final ModifierId looter = id("looter");
+  public static final ModifierId fortunate = id("fortunate");
 
   // damage boost
   public static final ModifierId sharpness   = id("sharpness");
@@ -234,6 +237,7 @@ public class ModifierIds {
   public static final ModifierId skyfall = id("skyfall");
   public static final ModifierId flamestance = id("flamestance");
   public static final ModifierId entangled = id("entangled");
+  public static final ModifierId entwined = id("entwined");
   public static final ModifierId stoneshield = id("stoneshield");
   public static final ModifierId amorphous = id("amorphous");
   public static final ModifierId smashing = id("smashing");

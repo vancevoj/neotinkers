@@ -234,10 +234,10 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     addTraits(MaterialIds.leather, laces, ModifierIds.snowBoots);
     // vine uses default
     addTraits(MaterialIds.skyslimeVine, laces, ModifierIds.leaping);
-    // TODO: darkthread
-    // TODO: twisting vine
+    addTraits(MaterialIds.darkthread, laces, ModifierIds.looter);
+    addTraits(MaterialIds.twistingVine, laces, ModifierIds.entwined);
     addTraits(MaterialIds.weepingVine, laces, ModifierIds.soulspeed);
-    // TODO: jeweled hide
+    addTraits(MaterialIds.jeweledHide, laces, ModifierIds.fortunate);
     // enderslime vine uses standard armor
 
     // slimesuit - repair
