@@ -117,7 +117,7 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     addTraits(MaterialIds.quartz, AMMO, ModifierIds.keen);
     addTraits(MaterialIds.ichor, AMMO, ModifierIds.rebound, ModifierIds.bounce);
     addTraits(MaterialIds.glowstone, AMMO, ModifierIds.spectral);
-    addDefaultTraits(MaterialIds.magnetite, ModifierIds.attractive);
+    addTraits(MaterialIds.magnetite, AMMO, ModifierIds.attractive);
     addTraits(MaterialIds.magma, AMMO, ModifierIds.fuse);
 
     // tier 4
@@ -149,7 +149,7 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     addTraits(MaterialIds.knightmetal, ARMOR, ModifierIds.stalwart);
     addDefaultTraits(MaterialIds.knightslime, ModifierIds.overwield, TinkerModifiers.overslime.getId());
     addTraits(MaterialIds.knightslime, ARMOR, ModifierIds.overshield, TinkerModifiers.overslime.getId());
-    addDefaultTraits(MaterialIds.knightly, ModifierIds.valiant);
+    addTraits(MaterialIds.knightly, AMMO, ModifierIds.valiant);
     addDefaultTraits(MaterialIds.enderslimeVine, TinkerModifiers.enderporting.getId(), ModifierIds.overslimeFriend);
     addTraits(MaterialIds.enderslimeVine, ARMOR, ModifierIds.enderclearance, ModifierIds.overslimeFriend);
     addDefaultTraits(MaterialIds.endRod, ModifierIds.hover);
@@ -219,9 +219,15 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     material(MaterialIds.knightmetal).addTraits(SkullStats.ID, ModifierIds.spitting);
 
     // slimeshell
-    // turtle uses default
-    // shulker shell uses ARMOR default
-    // dragonscale uses ARMOR default
+    MaterialStatsId shell = RepairStats.SHELL.getId();
+    // shells
+    addTraits(MaterialIds.turtle, shell, ModifierIds.turtlesGrace);
+    addTraits(MaterialIds.shulker, shell, ModifierIds.shulkerBox);
+    addTraits(MaterialIds.dragonScale, shell, ModifierIds.dragonfall);
+    // shards
+    addTraits(MaterialIds.magnetite, shell, ModifierIds.magnetic);
+    addTraits(MaterialIds.kobold, shell, ModifierIds.cobalamin);
+    addTraits(MaterialIds.knightly, shell, ModifierIds.loyal);
 
     // slimeboots
     MaterialStatsId laces = RepairStats.LACES.getId();

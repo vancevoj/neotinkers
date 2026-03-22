@@ -68,6 +68,7 @@ public final class MaterialIds {
   // tier 3 (nether)
   public static final MaterialId cobalt = id("cobalt");
   public static final MaterialId steel = id("steel");
+  public static final MaterialId kobold = id("kobold");
   // tier 3 - bindings
   public static final MaterialId darkthread = id("darkthread");
   public static final MaterialId ichorskin = id("ichorskin");

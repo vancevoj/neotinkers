@@ -29,6 +29,18 @@
           "tconstruct:slime_chestplate"
         ]
       }
+    },
+    {
+      "type": "tconstruct:trait",
+      "fixed_level": true,
+      "level": 1,
+      "name": "tconstruct:pocket",
+      "tool": {
+        "type": "mantle:set",
+        "items": [
+          "tconstruct:slime_leggings"
+        ]
+      }
     }
   ],
   "tooltip_display": "always"

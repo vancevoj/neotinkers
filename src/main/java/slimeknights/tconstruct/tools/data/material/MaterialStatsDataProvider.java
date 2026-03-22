@@ -567,6 +567,10 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
     addMaterialStats(MaterialIds.turtle, RepairStats.shell(150));
     addMaterialStats(MaterialIds.shulker, RepairStats.shell(250));
     addMaterialStats(MaterialIds.dragonScale, RepairStats.shell(100));
+    // shards
+    addMaterialStats(MaterialIds.magnetite, RepairStats.shell(435));
+    addMaterialStats(MaterialIds.kobold, RepairStats.shell(450));
+    addMaterialStats(MaterialIds.knightly, RepairStats.shell(300));
 
     // slime boots
     addMaterialStats(MaterialIds.leather, RepairStats.laces(97));
