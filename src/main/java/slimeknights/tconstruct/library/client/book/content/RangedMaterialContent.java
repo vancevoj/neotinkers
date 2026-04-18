@@ -1,6 +1,7 @@
 package slimeknights.tconstruct.library.client.book.content;
 
 import net.minecraft.resources.ResourceLocation;
+import slimeknights.mantle.client.book.data.BookData;
 import slimeknights.mantle.client.screen.book.element.ItemElement;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.TinkerTags;
@@ -72,5 +73,16 @@ public class RangedMaterialContent extends AbstractMaterialContent {
     } else if (MaterialRegistry.getInstance().isInTag(material, TinkerTags.Materials.HEAVY)) {
       displayTools.add(makeCategoryIcon(TinkerTools.longbow.get().getRenderTool(), getResource("heavy")));
     }
+  }
+
+  @Override
+  public String toHTML(BookData book) {
+    StringBuilder builder = new StringBuilder("<div class=\"row-material-stats\"><div class=\"column\">")
+      .append(getStatHTML(LimbMaterialStats.ID))
+      .append(getStatHTML(StatlessMaterialStats.BOWSTRING.getIdentifier()))
+      .append("</div>")
+      .append(getStatHTML(GripMaterialStats.ID))
+      .append("</div>");
+    return String.format(super.toHTML(book), builder);
   }
 }

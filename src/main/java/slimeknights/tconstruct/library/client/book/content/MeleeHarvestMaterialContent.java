@@ -1,6 +1,7 @@
 package slimeknights.tconstruct.library.client.book.content;
 
 import net.minecraft.resources.ResourceLocation;
+import slimeknights.mantle.client.book.data.BookData;
 import slimeknights.mantle.client.screen.book.element.ItemElement;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.materials.MaterialRegistry;
@@ -66,5 +67,16 @@ public class MeleeHarvestMaterialContent extends AbstractMaterialContent {
     } else if (MaterialRegistry.getInstance().isInTag(material, TinkerTags.Materials.HARVEST)) {
       displayTools.add(makeCategoryIcon(TinkerTools.pickaxe.get().getRenderTool(), getResource("harvest")));
     }
+  }
+
+  @Override
+  public String toHTML(BookData book) {
+    StringBuilder builder = new StringBuilder("<div class=\"row-material-stats\"><div class=\"column\">")
+      .append(getStatHTML(HeadMaterialStats.ID))
+      .append(getStatHTML(StatlessMaterialStats.BINDING.getIdentifier()))
+      .append("</div>")
+      .append(getStatHTML(HandleMaterialStats.ID))
+      .append("</div>");
+    return String.format(super.toHTML(book), builder);
   }
 }

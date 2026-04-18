@@ -7,6 +7,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
+import slimeknights.mantle.client.book.HTMLUtils;
 import slimeknights.mantle.client.book.data.BookData;
 import slimeknights.mantle.client.book.data.element.TextComponentData;
 import slimeknights.mantle.client.screen.book.BookScreen;
@@ -205,5 +206,38 @@ public class ArmorMaterialContent extends AbstractMaterialContent {
 
     // TODO: calculate actual height to properly wrap long lines?
     return y + (lineData.size() * 10) + 3;
+  }
+
+  @Override
+  public String toHTML(BookData book) {
+    List<PlatingMaterialStats> stats = TOP_DOWN_STATS.stream()
+      .flatMap(id -> MaterialRegistry.getInstance().<PlatingMaterialStats>getMaterialStats(getMaterial().getIdentifier(), id).stream())
+      .toList();
+
+    StringBuilder builder = new StringBuilder();
+
+    if (!stats.isEmpty()) {
+      builder.append("<div><div class=\"row\" style=\"gap: 32px\">")
+        .append(HTMLUtils.p(PLATING_LABEL,"font-weight: bold; padding-right: 16px"))
+        .append(HTMLUtils.p("/").repeat(stats.size() - 1))
+        .append("</div>");
+      List<TextComponentData> lineData = new ArrayList<>();
+      addStatLine(lineData, stats, ToolStats.DURABILITY, PlatingMaterialStats::durability);
+      addStatLine(lineData, stats, ToolStats.ARMOR, PlatingMaterialStats::armor);
+      addStatLine(lineData, stats, ToolStats.ARMOR_TOUGHNESS, PlatingMaterialStats::toughness);
+      addStatLine(lineData, stats, ToolStats.KNOCKBACK_RESISTANCE, stat -> stat.knockbackResistance() * 10);
+      builder.append(TextComponentData.toHTML(lineData, book)).append("</div>");
+    }
+
+    builder.append("<div class=\"row-material-stats\">")
+      .append("<div class=\"column\" style=\"gap: 12px\">")
+        .append(getStatHTML(HELMET.getId(), ARMOR_PLATING_LABEL.getString(), true))
+        .append(getStatHTML(StatlessMaterialStats.MAILLE.getIdentifier(), true))
+        .append(getStatHTML(StatlessMaterialStats.SHIELD_CORE.getIdentifier(), true))
+      .append("</div>")
+      .append(getStatHTML(SHIELD.getId(), SHIELD_LABEL.getString(), true))
+    .append("</div>");
+
+    return String.format(super.toHTML(book), builder);
   }
 }

@@ -11,6 +11,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.ForgeI18n;
 import net.minecraftforge.fluids.FluidStack;
+import slimeknights.mantle.client.book.HTMLUtils;
 import slimeknights.mantle.client.book.data.BookData;
 import slimeknights.mantle.client.book.data.content.PageContent;
 import slimeknights.mantle.client.book.data.element.TextComponentData;
@@ -121,5 +122,34 @@ public class FluidEffectContent extends PageContent {
     int group = (BookScreen.PAGE_HEIGHT - y) / 2;
     addList(list, 0, y,         group, KEY_ENTITY_EFFECTS, entity, entityComponents);
     addList(list, 0, y + group, group, KEY_BLOCK_EFFECTS,  block,  blockComponents);
+  }
+
+  @Override
+  public String toHTML(BookData book) {
+    StringBuilder builder = new StringBuilder()
+      .append(getTitleHTML())
+      .append("<div>")
+      .append(HTMLUtils.p(text, "height: 64px; padding-left: 64px"));
+
+    assert (entityComponents.isEmpty() || entity == null);
+    assert (blockComponents.isEmpty() || block == null);
+
+    liHelper(builder, KEY_ENTITY_EFFECTS, entity, entityComponents);
+    liHelper(builder, KEY_BLOCK_EFFECTS, block, blockComponents);
+
+    return builder.append("</div>").toString();
+  }
+
+  private void liHelper(StringBuilder builder, String key, @Nullable String[] strings, List<Component> components) {
+    if (components.isEmpty() && strings == null) return;
+
+    builder.append("<div style=\"height: 128px\">")
+      .append(HTMLUtils.p(I18n.get(key), "underline", null, null))
+      .append("<ul class=\"prop-list\">");
+
+    for (Component component : components) builder.append(HTMLUtils.li(component));
+    if (strings != null) for (String string : strings) builder.append(HTMLUtils.li(string));
+
+    builder.append("</ul></div>");
   }
 }

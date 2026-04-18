@@ -2,6 +2,7 @@ package slimeknights.tconstruct.library.client.book.content;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import slimeknights.mantle.client.book.data.BookData;
 import slimeknights.mantle.client.screen.book.element.ItemElement;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.client.book.elements.TinkerItemElement;
@@ -65,5 +66,16 @@ public class AmmoMaterialContent extends AbstractMaterialContent {
     ItemElement elementItem = new TinkerItemElement(new ItemStack(TinkerTables.partBuilder));
     elementItem.tooltip = PART_BUILDER;
     displayTools.add(elementItem);
+  }
+
+  @Override
+  public String toHTML(BookData book) {
+    StringBuilder builder = new StringBuilder("<div class=\"row-material-stats\"><div class=\"column\">")
+        .append(getStatHTML(StatlessMaterialStats.ARROW_HEAD.getIdentifier(), true))
+        .append(getStatHTML(StatlessMaterialStats.FLETCHING.getIdentifier(), true))
+        .append("</div>")
+        .append(getStatHTML(StatlessMaterialStats.ARROW_SHAFT.getIdentifier(), true))
+        .append("</div>");
+    return String.format(super.toHTML(book), builder);
   }
 }

@@ -7,6 +7,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import slimeknights.mantle.client.book.data.BookData;
 import slimeknights.mantle.client.screen.book.element.ItemElement;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.client.book.elements.TinkerItemElement;
@@ -126,5 +127,10 @@ public class ContentMaterialSkull extends AbstractMaterialContent {
         displayTools.add(elementItem);
       }
     }
+  }
+
+  @Override
+  public String toHTML(BookData book) {
+    return String.format(super.toHTML(book), getStatHTML(SkullStats.ID));
   }
 }

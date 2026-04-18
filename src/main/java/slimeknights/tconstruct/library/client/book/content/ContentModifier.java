@@ -11,6 +11,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.ForgeI18n;
+import slimeknights.mantle.client.book.HTMLUtils;
 import slimeknights.mantle.client.book.data.BookData;
 import slimeknights.mantle.client.book.data.content.PageContent;
 import slimeknights.mantle.client.book.data.element.ImageData;
@@ -34,6 +35,7 @@ import slimeknights.tconstruct.library.recipe.modifiers.adding.IDisplayModifierR
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -295,5 +297,31 @@ public class ContentModifier extends PageContent {
 
       this.buildAndAddRecipeDisplay(book, list, this.recipes.get(this.currentRecipe), parent);
     }
+  }
+
+  @Override
+  public String toHTML(BookData book) {
+    int rgb = modifier == null ? 0 : modifier.getColor();
+    int h = more_text_space ? BookScreen.PAGE_HEIGHT * 2 / 5 : BookScreen.PAGE_HEIGHT * 2 / 7;
+    return String.format(
+      """
+      %s
+      <div style="padding-left: 10px">
+      <div class="column" style="height: %dpx">
+      %s
+      </div>
+      <div style="width: 210px">
+      <p class="underline">%s</p>
+      <ul class="prop-list">
+      %s
+      </ul>
+      </div>
+      </div>""",
+      getTitleHTML("format-custom", "color: " + HTMLUtils.hexRGB(rgb)),
+      h * 2,
+      TextData.toHTML(text, book),
+      I18n.get(KEY_EFFECTS),
+      Arrays.stream(effects).map(HTMLUtils::parse).map(HTMLUtils::li).collect(Collectors.joining("\n"))
+    );
   }
 }

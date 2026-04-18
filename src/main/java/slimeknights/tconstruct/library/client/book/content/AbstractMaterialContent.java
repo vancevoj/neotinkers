@@ -14,6 +14,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.ForgeI18n;
 import net.minecraftforge.fluids.FluidStack;
+import slimeknights.mantle.client.book.HTMLUtils;
 import slimeknights.mantle.client.book.data.BookData;
 import slimeknights.mantle.client.book.data.content.PageContent;
 import slimeknights.mantle.client.book.data.element.TextComponentData;
@@ -52,6 +53,7 @@ import slimeknights.tconstruct.library.tools.part.IToolPart;
 import slimeknights.tconstruct.library.utils.Util;
 import slimeknights.tconstruct.tables.TinkerTables;
 import slimeknights.tconstruct.tools.TinkerToolParts;
+import slimeknights.tconstruct.tools.stats.SkullStats;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -61,9 +63,13 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
+
+import static slimeknights.tconstruct.tools.stats.PlatingMaterialStats.HELMET;
+import static slimeknights.tconstruct.tools.stats.PlatingMaterialStats.SHIELD;
 
 /** Base class for material content pages */
 public abstract class AbstractMaterialContent extends PageContent {
@@ -459,5 +465,57 @@ public abstract class AbstractMaterialContent extends PageContent {
   /** Registers a part to use for display of materials with no material recipes. If none of these parts match, the repair kit will be used. */
   public static void registerFallbackPart(Supplier<? extends IMaterialItem> part) {
     FALLBACKS.add(part);
+  }
+
+  @Override
+  public String toHTML(BookData book) {
+    int rgb = MaterialTooltipCache.getColor(getMaterialVariant()).getValue();
+
+    StringBuilder builder = new StringBuilder("\n<div class=\"page-material\">")
+      .append(getTitleHTML("format-custom", "color: " + HTMLUtils.hexRGB(rgb)))
+      .append("%s<p class=\"trait\">");
+
+    if (!detailed) builder.append("\"<span style=\"font-style: italic\">");
+    builder.append(ForgeI18n.getPattern(getTextKey(getMaterialVariant().getId())).replaceAll("%", "%%"));
+    if (!detailed) builder.append("</span>\"");
+
+    return builder.append("</p></div>").toString();
+  }
+
+  protected String getStatHTML(MaterialStatsId statsId) {
+    return getStatHTML(statsId, null, false);
+  }
+
+  protected String getStatHTML(MaterialStatsId statsId, boolean traitsOnly) {
+    return getStatHTML(statsId, null, traitsOnly);
+  }
+
+  /** Formats materials stats as HTML */
+  protected String getStatHTML(MaterialStatsId statsId, @Nullable String name, boolean traitsOnly) {
+    Optional<IMaterialStats> statsOptional = MaterialRegistry.getInstance().getMaterialStats(getMaterialVariant().getId(), statsId);
+    if (statsOptional.isEmpty()) return "";
+
+    boolean paddingLeft = !statsId.equals(HELMET.getId()) && !statsId.equals(SHIELD.getId()) && !statsId.equals(SkullStats.ID);
+    IMaterialStats stats = statsOptional.get();
+
+    StringBuilder builder = new StringBuilder("<div>\n")
+      .append(HTMLUtils.p(Objects.requireNonNullElse(name, stats.getLocalizedName().getString()), "underline", null, "font-weight: bold; padding-bottom: 2px" + (paddingLeft ? "; padding-left: 20px" : "")));
+
+    if (!traitsOnly)
+      builder.append(stats.getLocalizedInfo().stream()
+        .map(HTMLUtils::p)
+        .collect(Collectors.joining("\n")));
+
+    return builder.append(getTraitHTML(statsId))
+      .append("</div>")
+      .toString();
+  }
+
+  /** Formats materials traits as HTML */
+  protected String getTraitHTML(MaterialStatsId statsId) {
+    return MaterialRegistry.getInstance().getTraits(getMaterialVariant().getId(), statsId).stream()
+      .map(ModifierEntry::getModifier)
+      .map(m -> HTMLUtils.p(m.getDisplayName().getString(), "underline", HTMLUtils.p(m.getDescription()).replaceAll("'", "&quot;"), "color: #545454"))
+      .collect(Collectors.joining("\n"));
   }
 }
