@@ -38,6 +38,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ContentModifier extends PageContent {
   public static final ResourceLocation ID = TConstruct.getResource("modifier");
