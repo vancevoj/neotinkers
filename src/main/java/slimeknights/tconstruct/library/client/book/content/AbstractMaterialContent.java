@@ -523,8 +523,16 @@ public abstract class AbstractMaterialContent extends PageContent {
     HtmlElement root = HtmlElement.div().add(title);
     // add stats if requested
     if (addStats) {
-      for (Component stat : stats.getLocalizedInfo()) {
-        root.add(HtmlElement.p().add(HTMLUtils.toHtml(stat)));
+      List<Component> texts = stats.getLocalizedInfo();
+      List<Component> tooltips = stats.getLocalizedDescriptions();
+      int max = Math.min(texts.size(), tooltips.size());
+      for (int i = 0; i < max; i++) {
+        HtmlElement p = HtmlElement.p().add(HTMLUtils.toHtml(texts.get(i)));
+        Component tooltip = tooltips.get(i);
+        if (!tooltip.getString().isEmpty()) {
+          p.minetip(HTMLUtils.toHtml(tooltips.get(i)));
+        }
+        root.add(p);
       }
     }
     // add traits
