@@ -23,6 +23,9 @@ import slimeknights.mantle.client.screen.book.element.ImageElement;
 import slimeknights.mantle.client.screen.book.element.TextElement;
 import slimeknights.mantle.recipe.helper.RecipeHelper;
 import slimeknights.mantle.util.ItemStackList;
+import slimeknights.mantle.util.html.HtmlElement;
+import slimeknights.mantle.util.html.HtmlGroup;
+import slimeknights.mantle.util.html.HtmlSerializable;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.client.book.elements.CycleRecipeElement;
 import slimeknights.tconstruct.library.client.book.elements.TinkerItemElement;
@@ -38,7 +41,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ContentModifier extends PageContent {
   public static final ResourceLocation ID = TConstruct.getResource("modifier");
@@ -301,28 +303,19 @@ public class ContentModifier extends PageContent {
   }
 
   @Override
-  public String toHTML(BookData book) {
+  public HtmlSerializable toHTML(BookData book) {
     int rgb = modifier == null ? 0 : modifier.getColor();
     int h = more_text_space ? BookScreen.PAGE_HEIGHT * 2 / 5 : BookScreen.PAGE_HEIGHT * 2 / 7;
-    return String.format(
-      """
-      %s
-      <div style="padding-left: 10px">
-      <div class="column" style="height: %dpx">
-      %s
-      </div>
-      <div style="width: 210px">
-      <p class="underline">%s</p>
-      <ul class="prop-list">
-      %s
-      </ul>
-      </div>
-      </div>""",
-      getTitleHTML("format-custom", "color: " + HTMLUtils.hexRGB(rgb)),
-      h * 2,
-      TextData.toHTML(text, book),
-      I18n.get(KEY_EFFECTS),
-      Arrays.stream(effects).map(HTMLUtils::parse).map(HTMLUtils::li).collect(Collectors.joining("\n"))
+    return HtmlGroup.indent().add(
+      makeTitleHTML().classes("format-custom").color(rgb),
+      HtmlElement.div().style("padding-left", 10).add(
+        HtmlElement.div().classes("column").style("height", h * 2)
+          .add(TextData.toHtml(text, book)),
+        HtmlElement.div().style("width", 210)
+          .add(HtmlElement.p().classes("underline").add(I18n.get(KEY_EFFECTS)))
+          .add(HtmlElement.ul().classes("prop-list")
+            .add(Arrays.stream(effects).map(effect -> HtmlElement.li().add(HTMLUtils.parse(effect)))))
+      )
     );
   }
 }

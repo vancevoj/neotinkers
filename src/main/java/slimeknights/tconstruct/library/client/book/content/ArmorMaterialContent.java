@@ -14,6 +14,9 @@ import slimeknights.mantle.client.screen.book.BookScreen;
 import slimeknights.mantle.client.screen.book.element.BookElement;
 import slimeknights.mantle.client.screen.book.element.TextComponentElement;
 import slimeknights.mantle.client.screen.book.element.TextElement;
+import slimeknights.mantle.util.html.HtmlElement;
+import slimeknights.mantle.util.html.HtmlGroup;
+import slimeknights.mantle.util.html.HtmlSerializable;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.client.book.elements.TinkerItemElement;
 import slimeknights.tconstruct.library.client.materials.MaterialTooltipCache;
@@ -209,35 +212,40 @@ public class ArmorMaterialContent extends AbstractMaterialContent {
   }
 
   @Override
-  public String toHTML(BookData book) {
+  public HtmlSerializable makeStatsHtml(BookData book) {
+    HtmlGroup group = HtmlGroup.indent();
+
+    // add stats
     List<PlatingMaterialStats> stats = TOP_DOWN_STATS.stream()
       .flatMap(id -> MaterialRegistry.getInstance().<PlatingMaterialStats>getMaterialStats(getMaterial().getIdentifier(), id).stream())
       .toList();
-
-    StringBuilder builder = new StringBuilder();
-
     if (!stats.isEmpty()) {
-      builder.append("<div><div class=\"row\" style=\"gap: 32px\">")
-        .append(HTMLUtils.p(PLATING_LABEL,"font-weight: bold; padding-right: 16px"))
-        .append(HTMLUtils.p("/").repeat(stats.size() - 1))
-        .append("</div>");
+      HtmlElement divider = HtmlElement.div().classes("row").style("gap", 32)
+        .add(HtmlElement.p()
+          .add(HTMLUtils.toHtml(PLATING_LABEL))
+          .style("font-weight", "bold")
+          .style("padding-right", 16));
+      HtmlElement slash = HtmlElement.p().add("/");
+      for (int i = 1; i < stats.size(); i++) {
+        divider.add(slash);
+      }
       List<TextComponentData> lineData = new ArrayList<>();
       addStatLine(lineData, stats, ToolStats.DURABILITY, PlatingMaterialStats::durability);
       addStatLine(lineData, stats, ToolStats.ARMOR, PlatingMaterialStats::armor);
       addStatLine(lineData, stats, ToolStats.ARMOR_TOUGHNESS, PlatingMaterialStats::toughness);
       addStatLine(lineData, stats, ToolStats.KNOCKBACK_RESISTANCE, stat -> stat.knockbackResistance() * 10);
-      builder.append(TextComponentData.toHTML(lineData, book)).append("</div>");
+      group.add(HtmlElement.div()
+        .add(divider)
+        .add(TextComponentData.toHTML(lineData, book)));
     }
 
-    builder.append("<div class=\"row-material-stats\">")
-      .append("<div class=\"column\" style=\"gap: 12px\">")
-        .append(getStatHTML(HELMET.getId(), ARMOR_PLATING_LABEL.getString(), true))
-        .append(getStatHTML(StatlessMaterialStats.MAILLE.getIdentifier(), true))
-        .append(getStatHTML(StatlessMaterialStats.SHIELD_CORE.getIdentifier(), true))
-      .append("</div>")
-      .append(getStatHTML(SHIELD.getId(), SHIELD_LABEL.getString(), true))
-    .append("</div>");
-
-    return String.format(super.toHTML(book), builder);
+    // add traits
+    group.add(HtmlElement.div().classes("row-material-stats")
+      .add(HtmlElement.div().classes("column").style("gap", 12)
+        .add(makeStatHtml(HELMET.getId(), ARMOR_PLATING_LABEL.getString(), false, false))
+        .add(makeStatHtml(StatlessMaterialStats.MAILLE.getIdentifier(), false, true))
+        .add(makeStatHtml(StatlessMaterialStats.SHIELD_CORE.getIdentifier(), false, true)))
+      .add(makeStatHtml(SHIELD.getId(), SHIELD_LABEL.getString(), false, false)));
+    return group;
   }
 }

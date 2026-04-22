@@ -26,6 +26,9 @@ import slimeknights.mantle.client.screen.book.element.TextComponentElement;
 import slimeknights.mantle.client.screen.book.element.TextElement;
 import slimeknights.mantle.recipe.helper.RecipeHelper;
 import slimeknights.mantle.util.RegistryHelper;
+import slimeknights.mantle.util.html.HtmlElement;
+import slimeknights.mantle.util.html.HtmlGroup;
+import slimeknights.mantle.util.html.HtmlSerializable;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.client.book.elements.TinkerItemElement;
@@ -53,7 +56,6 @@ import slimeknights.tconstruct.library.tools.part.IToolPart;
 import slimeknights.tconstruct.library.utils.Util;
 import slimeknights.tconstruct.tables.TinkerTables;
 import slimeknights.tconstruct.tools.TinkerToolParts;
-import slimeknights.tconstruct.tools.stats.SkullStats;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -67,9 +69,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
-
-import static slimeknights.tconstruct.tools.stats.PlatingMaterialStats.HELMET;
-import static slimeknights.tconstruct.tools.stats.PlatingMaterialStats.SHIELD;
 
 /** Base class for material content pages */
 public abstract class AbstractMaterialContent extends PageContent {
@@ -429,7 +428,7 @@ public abstract class AbstractMaterialContent extends PageContent {
     if (I18n.exists(textKey)) {
       // using forge instead of I18n.format as that prevents % from being interpreted as a format key
       String translated = ForgeI18n.getPattern(textKey);
-      if (!detailed) {
+      if (!detailed ) {
         translated = '"' + translated + '"';
       }
       TextData flavourData = new TextData(translated);
@@ -467,55 +466,84 @@ public abstract class AbstractMaterialContent extends PageContent {
     FALLBACKS.add(part);
   }
 
+
+  /* HTML */
+
   @Override
-  public String toHTML(BookData book) {
+  public HtmlSerializable toHTML(BookData book) {
     int rgb = MaterialTooltipCache.getColor(getMaterialVariant()).getValue();
 
-    StringBuilder builder = new StringBuilder("\n<div class=\"page-material\">")
-      .append(getTitleHTML("format-custom", "color: " + HTMLUtils.hexRGB(rgb)))
-      .append("%s<p class=\"trait\">");
-
-    if (!detailed) builder.append("\"<span style=\"font-style: italic\">");
-    builder.append(ForgeI18n.getPattern(getTextKey(getMaterialVariant().getId())).replaceAll("%", "%%"));
-    if (!detailed) builder.append("</span>\"");
-
-    return builder.append("</p></div>").toString();
+    HtmlElement page = HtmlElement.div().classes("page-material")
+      .add(makeTitleHTML().classes("format-custom").color(rgb))
+      .add(makeStatsHtml(book));
+    HtmlElement description = HtmlElement.p().classes("trait");
+    String text = ForgeI18n.getPattern(getTextKey(getMaterialVariant().getId()));
+    page.add(description);
+    if (!detailed) {
+      description.style("font-style", "italic");
+      text = '"' + text + '"';
+    }
+    description.add(text);
+    return page;
   }
 
-  protected String getStatHTML(MaterialStatsId statsId) {
-    return getStatHTML(statsId, null, false);
+  /** Adds the elements for all material stats for this content. TODO 1.21: make abstract. */
+  protected HtmlSerializable makeStatsHtml(BookData data) {
+    return HtmlSerializable.EMPTY;
   }
 
-  protected String getStatHTML(MaterialStatsId statsId, boolean traitsOnly) {
-    return getStatHTML(statsId, null, traitsOnly);
+  /** Adds the element for a single stats content */
+  protected HtmlSerializable makeStatHtml(MaterialStatsId statsId) {
+    return makeStatHtml(statsId, true, true);
   }
 
-  /** Formats materials stats as HTML */
-  protected String getStatHTML(MaterialStatsId statsId, @Nullable String name, boolean traitsOnly) {
+  /** Adds the element for a single stats content */
+  protected HtmlSerializable makeStatHtml(MaterialStatsId statsId, boolean addStats, boolean hasPart) {
+    return makeStatHtml(statsId, null, addStats, hasPart);
+  }
+
+  /**
+   * Adds the element for a single stats content
+   * @param statsId      ID for the stat type.
+   * @param name         Name to use. If null, uses the localized name.
+   * @param addStats     If true, adds stat lines. If false, adds just traits.
+   * @param hasPart      If true, offsetting the element for part display.
+   * @return  Element for the stats.
+   */
+  protected HtmlSerializable makeStatHtml(MaterialStatsId statsId, @Nullable String name, boolean addStats, boolean hasPart) {
     Optional<IMaterialStats> statsOptional = MaterialRegistry.getInstance().getMaterialStats(getMaterialVariant().getId(), statsId);
-    if (statsOptional.isEmpty()) return "";
-
-    boolean paddingLeft = !statsId.equals(HELMET.getId()) && !statsId.equals(SHIELD.getId()) && !statsId.equals(SkullStats.ID);
+    if (statsOptional.isEmpty()) return HtmlSerializable.EMPTY;
     IMaterialStats stats = statsOptional.get();
 
-    StringBuilder builder = new StringBuilder("<div>\n")
-      .append(HTMLUtils.p(Objects.requireNonNullElse(name, stats.getLocalizedName().getString()), "underline", null, "font-weight: bold; padding-bottom: 2px" + (paddingLeft ? "; padding-left: 20px" : "")));
-
-    if (!traitsOnly)
-      builder.append(stats.getLocalizedInfo().stream()
-        .map(HTMLUtils::p)
-        .collect(Collectors.joining("\n")));
-
-    return builder.append(getTraitHTML(statsId))
-      .append("</div>")
-      .toString();
+    HtmlElement title = HtmlElement.p().classes("underline").style("font-weight", "bold").style("padding-bottom", 2)
+      .add(Objects.requireNonNullElse(name, stats.getLocalizedName().getString()));
+    if (hasPart) {
+      title.style("padding-left", 20);
+    }
+    HtmlElement root = HtmlElement.div().add(title);
+    // add stats if requested
+    if (addStats) {
+      for (Component stat : stats.getLocalizedInfo()) {
+        root.add(HtmlElement.p().add(HTMLUtils.toHtml(stat)));
+      }
+    }
+    // add traits
+    return root.add(makeTraitsHtml(statsId));
   }
 
   /** Formats materials traits as HTML */
-  protected String getTraitHTML(MaterialStatsId statsId) {
-    return MaterialRegistry.getInstance().getTraits(getMaterialVariant().getId(), statsId).stream()
-      .map(ModifierEntry::getModifier)
-      .map(m -> HTMLUtils.p(m.getDisplayName().getString(), "underline", HTMLUtils.p(m.getDescription()).replaceAll("'", "&quot;"), "color: #545454"))
-      .collect(Collectors.joining("\n"));
+  protected HtmlSerializable makeTraitsHtml(MaterialStatsId statsId) {
+    HtmlGroup group = HtmlGroup.indent();
+    for (ModifierEntry entry : MaterialRegistry.getInstance().getTraits(getMaterialVariant().getId(), statsId)) {
+      Modifier modifier = entry.getModifier();
+      HtmlGroup tooltip = HtmlGroup.indent();
+      for (Component component : modifier.getDescriptionList()) {
+        tooltip.add(HTMLUtils.toHtml(component));
+      }
+      group.add(HtmlElement.p().classes("underline").color(0x545454)
+        .add(modifier.getDisplayName().getString())
+        .minetip(tooltip));
+    }
+    return group;
   }
 }

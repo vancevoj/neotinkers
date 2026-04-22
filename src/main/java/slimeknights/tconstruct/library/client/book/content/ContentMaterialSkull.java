@@ -9,6 +9,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import slimeknights.mantle.client.book.data.BookData;
 import slimeknights.mantle.client.screen.book.element.ItemElement;
+import slimeknights.mantle.util.html.HtmlSerializable;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.client.book.elements.TinkerItemElement;
 import slimeknights.tconstruct.library.materials.definition.MaterialId;
@@ -130,7 +131,7 @@ public class ContentMaterialSkull extends AbstractMaterialContent {
   }
 
   @Override
-  public String toHTML(BookData book) {
-    return String.format(super.toHTML(book), getStatHTML(SkullStats.ID));
+  protected HtmlSerializable makeStatsHtml(BookData data) {
+    return makeStatHtml(SkullStats.ID, true, false);
   }
 }

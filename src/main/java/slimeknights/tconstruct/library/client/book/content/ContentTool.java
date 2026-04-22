@@ -7,7 +7,6 @@ import lombok.Getter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.inventory.CraftingContainer;
@@ -30,7 +29,11 @@ import slimeknights.mantle.client.screen.book.BookScreen;
 import slimeknights.mantle.client.screen.book.element.BookElement;
 import slimeknights.mantle.client.screen.book.element.ImageElement;
 import slimeknights.mantle.client.screen.book.element.TextElement;
+import slimeknights.mantle.data.loadable.Loadables;
 import slimeknights.mantle.util.ItemStackList;
+import slimeknights.mantle.util.html.HtmlElement;
+import slimeknights.mantle.util.html.HtmlGroup;
+import slimeknights.mantle.util.html.HtmlSerializable;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.client.book.elements.TinkerItemElement;
 import slimeknights.tconstruct.library.recipe.TinkerRecipeTypes;
@@ -45,7 +48,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -109,12 +111,12 @@ public class ContentTool extends PageContent {
 
   public ContentTool(IModifiableDisplay tool) {
     this.tool = tool;
-    this.toolName = BuiltInRegistries.ITEM.getKey(tool.asItem()).toString();
+    this.toolName = Loadables.ITEM.getKey(tool.asItem()).toString();
     this.text = new TextData[] { new TextData(ForgeI18n.getPattern(tool.asItem().getDescriptionId() + ".description"))};
   }
 
   public ContentTool(Item item) {
-    this.toolName = BuiltInRegistries.ITEM.getKey(item.asItem()).toString();
+    this.toolName = Loadables.ITEM.getKey(item.asItem()).toString();
     if (item instanceof IModifiableDisplay tool) {
       this.tool = tool;
     } else {
@@ -269,24 +271,18 @@ public class ContentTool extends PageContent {
   }
 
   @Override
-  public String toHTML(BookData book) {
-    return String.format("""
-      %s
-      <div style="padding-left: 10px">
-      <div class="column" style="height: 128px">
-      %s
-      </div>
-      <div style="width: 210px">
-      <p class="underline">%s</p>
-      <ul class="prop-list">
-      %s
-      </ul>
-      </div>
-      </div>""",
-      getTitleHTML(),
-      TextData.toHTML(text, book),
-      I18n.get(KEY_PROPERTIES),
-      Arrays.stream(properties).map(HTMLUtils::parse).map(HTMLUtils::li).collect(Collectors.joining("\n"))
+  public HtmlSerializable toHTML(BookData book) {
+    return HtmlGroup.indent().add(
+      makeTitleHTML(),
+      HtmlElement.div().style("padding-left", 10).add(
+        HtmlElement.div().classes("column").style("height", 128)
+          .add(TextData.toHtml(text, book)),
+        HtmlElement.div().style("width", 210).add(
+          HtmlElement.p().classes("underline").add(I18n.get(KEY_PROPERTIES)),
+          HtmlElement.ul().classes("prop-list")
+            .add(Arrays.stream(properties).map(prop -> HtmlElement.li().add(HTMLUtils.parse(prop))))
+        )
+      )
     );
   }
 

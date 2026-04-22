@@ -3,6 +3,8 @@ package slimeknights.tconstruct.library.client.book.content;
 import net.minecraft.resources.ResourceLocation;
 import slimeknights.mantle.client.book.data.BookData;
 import slimeknights.mantle.client.screen.book.element.ItemElement;
+import slimeknights.mantle.util.html.HtmlElement;
+import slimeknights.mantle.util.html.HtmlSerializable;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.materials.MaterialRegistry;
 import slimeknights.tconstruct.library.materials.definition.MaterialId;
@@ -70,13 +72,11 @@ public class MeleeHarvestMaterialContent extends AbstractMaterialContent {
   }
 
   @Override
-  public String toHTML(BookData book) {
-    StringBuilder builder = new StringBuilder("<div class=\"row-material-stats\"><div class=\"column\">")
-      .append(getStatHTML(HeadMaterialStats.ID))
-      .append(getStatHTML(StatlessMaterialStats.BINDING.getIdentifier()))
-      .append("</div>")
-      .append(getStatHTML(HandleMaterialStats.ID))
-      .append("</div>");
-    return String.format(super.toHTML(book), builder);
+  protected HtmlSerializable makeStatsHtml(BookData data) {
+    return HtmlElement.div().classes("row-material-stats")
+      .add(HtmlElement.div().classes("column")
+        .add(makeStatHtml(HeadMaterialStats.ID))
+        .add(makeStatHtml(StatlessMaterialStats.BINDING.getIdentifier())))
+      .add(makeStatHtml(HandleMaterialStats.ID));
   }
 }

@@ -20,6 +20,9 @@ import slimeknights.mantle.client.screen.book.BookScreen;
 import slimeknights.mantle.client.screen.book.element.BookElement;
 import slimeknights.mantle.client.screen.book.element.TextComponentElement;
 import slimeknights.mantle.client.screen.book.element.TextElement;
+import slimeknights.mantle.util.html.HtmlElement;
+import slimeknights.mantle.util.html.HtmlGroup;
+import slimeknights.mantle.util.html.HtmlSerializable;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.client.book.elements.FluidItemElement;
 import slimeknights.tconstruct.library.modifiers.fluid.FluidEffects;
@@ -125,31 +128,36 @@ public class FluidEffectContent extends PageContent {
   }
 
   @Override
-  public String toHTML(BookData book) {
-    StringBuilder builder = new StringBuilder()
-      .append(getTitleHTML())
-      .append("<div>")
-      .append(HTMLUtils.p(text, "height: 64px; padding-left: 64px"));
+  public HtmlSerializable toHTML(BookData book) {
+    HtmlElement div = HtmlElement.div()
+      .add(HtmlElement.p().add(text).style("height", 64).style("padding-left", 64));
 
-    assert (entityComponents.isEmpty() || entity == null);
-    assert (blockComponents.isEmpty() || block == null);
+    addHtmlList(div, KEY_ENTITY_EFFECTS, entity, entityComponents);
+    addHtmlList(div, KEY_BLOCK_EFFECTS, block, blockComponents);
 
-    liHelper(builder, KEY_ENTITY_EFFECTS, entity, entityComponents);
-    liHelper(builder, KEY_BLOCK_EFFECTS, block, blockComponents);
-
-    return builder.append("</div>").toString();
+    return HtmlGroup.indent().add(makeTitleHTML()).add(div);
   }
 
-  private void liHelper(StringBuilder builder, String key, @Nullable String[] strings, List<Component> components) {
+  /** Adds an effect list to the HTML */
+  private void addHtmlList(HtmlElement div, String key, @Nullable String[] strings, List<Component> components) {
     if (components.isEmpty() && strings == null) return;
 
-    builder.append("<div style=\"height: 128px\">")
-      .append(HTMLUtils.p(I18n.get(key), "underline", null, null))
-      .append("<ul class=\"prop-list\">");
+    // append hardcoded text
+    HtmlElement list = HtmlElement.ul().classes("prop-list");
+    if (strings != null) {
+      for (String string : strings) {
+        list.add(HtmlElement.li().add(string));
+      }
+    } else {
+      // append generated text
+      for (Component component : components) {
+        list.add(HtmlElement.li().add(HTMLUtils.toHtml(component)));
+      }
+    }
 
-    for (Component component : components) builder.append(HTMLUtils.li(component));
-    if (strings != null) for (String string : strings) builder.append(HTMLUtils.li(string));
-
-    builder.append("</ul></div>");
+    // add elements to final div
+    div.add(HtmlElement.div().style("height", 128).add(
+      HtmlElement.p().add(I18n.get(key)).classes("underline"), list
+    ));
   }
 }
