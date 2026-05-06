@@ -4009,6 +4009,12 @@
   "command.tconstruct.slots.success.set.multiple": "Set %s slots to %s on %s entities",
   "command.tconstruct.slots.failure.invalid_count": "Cannot add zero slots, must add a positive or a negative value",
 
+  "command.tconstruct.durability.success.add.single": "Added %s durability to %s's item",
+  "command.tconstruct.durability.success.add.multiple": "Added %s durability to %s entities",
+  "command.tconstruct.durability.success.set.single": "Set remaining durability to %s on %s's item",
+  "command.tconstruct.durability.success.set.multiple": "Set remaining durability to %s on %s entities",
+  "command.tconstruct.durability.failure.invalid_amount": "Cannot add zero durability, must add a positive or a negative value",
+
   "command.tconstruct.stats.success.bonus.modify.single": "%sIncreased by %s on %s's item",
   "command.tconstruct.stats.success.bonus.modify.multiple": "%sIncreased by %s on %s entities",
   "command.tconstruct.stats.success.bonus.set.single": "%sSet bonus to %s on %s's item",
