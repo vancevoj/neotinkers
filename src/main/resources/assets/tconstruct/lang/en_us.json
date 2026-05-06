@@ -3546,6 +3546,8 @@
 
   "_comment": "Internal modifiers",
   "modifier.tconstruct.overslime_friend": "Overslime Friend",
+  "modifier.tconstruct.overslime_friend.flavor": "Friend of the slime",
+  "modifier.tconstruct.overslime_friend.description": "Counts as a slimy material, preventing overslime from debuffing the tool",
 
   "modifier.tconstruct.reverted": "Reverted",
   "modifier.tconstruct.reverted.flavor": "We need to go back!",
