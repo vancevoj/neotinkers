@@ -86,6 +86,11 @@ public abstract class MaterialSwappingRecipe implements ITinkerStationRecipe {
 
   /** Logic to actually swap the material */
   protected RecipeResult<LazyToolStack> swapMaterial(ITinkerableContainer inv, MaterialVariantId material, int index, int partValue) {
+    return swapMaterial(inv, material, index, partValue, false);
+  }
+
+  /** Logic to actually swap the material, with an override to force swap on damaged tools (intended for manual repair logic) */
+  protected RecipeResult<LazyToolStack> swapMaterial(ITinkerableContainer inv, MaterialVariantId material, int index, int partValue, boolean mayRepair) {
     // ensure we have enough items to get a result
     ToolStack original = inv.getTinkerable();
     int shrink = maxStackSize(original);
@@ -105,8 +110,9 @@ public abstract class MaterialSwappingRecipe implements ITinkerStationRecipe {
     float repairDurability = 0;
     if (partValue > 0) {
       repairDurability = partValue * MaterialRepairModule.getDurability(null, material.getId(), statTypes.get(index));
+      mayRepair |= repairDurability > 0;
     }
-    if (!didChange && (original.getDamage() == 0 || repairDurability == 0)) {
+    if (!didChange && (original.getDamage() == 0 || !mayRepair)) {
       return RecipeResult.pass();
     }
 

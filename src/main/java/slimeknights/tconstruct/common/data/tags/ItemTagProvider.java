@@ -119,6 +119,8 @@ import static slimeknights.tconstruct.common.TinkerTags.Items.UNARMED;
 import static slimeknights.tconstruct.common.TinkerTags.Items.UNRECYCLABLE;
 import static slimeknights.tconstruct.common.TinkerTags.Items.UNSALVAGABLE;
 import static slimeknights.tconstruct.common.TinkerTags.Items.UNSWAPPABLE;
+import static slimeknights.tconstruct.common.TinkerTags.Items.UNSWAPPABLE_PARTS;
+import static slimeknights.tconstruct.common.TinkerTags.Items.UNSWAPPABLE_TOOLS;
 import static slimeknights.tconstruct.common.TinkerTags.Items.WORN_ARMOR;
 
 @SuppressWarnings({"unchecked", "removal"})
@@ -429,6 +431,8 @@ public class ItemTagProvider extends ItemTagsProvider {
     this.tag(RANGED_BOUNCE).addTags(LONGBOWS, STAFFS);
     // TODO 1.21: consider dropping unsalvagable from this tag
     this.tag(UNRECYCLABLE).addTags(UNSALVAGABLE, ANCIENT_TOOLS); // ancient tools lack tool parts, but may have special override recipes to salvage
+    this.tag(UNSWAPPABLE_TOOLS).addTag(UNSWAPPABLE);
+    this.tag(UNSWAPPABLE_PARTS).addTag(UNSWAPPABLE);
     // headlight support
     this.tag(ItemTags.create(new ResourceLocation("headlight", "headlight_helmets"))).addTag(HELMETS);
 

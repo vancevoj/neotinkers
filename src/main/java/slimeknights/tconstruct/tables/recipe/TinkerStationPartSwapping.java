@@ -67,6 +67,7 @@ public class TinkerStationPartSwapping extends MaterialSwappingRecipe {
           return false;
         }
         foundItem = true;
+        used.set(i);
         break;
       }
     }
