@@ -13,6 +13,7 @@ import slimeknights.tconstruct.library.client.data.AbstractArmorModelProvider;
 import slimeknights.tconstruct.library.modifiers.ModifierId;
 import slimeknights.tconstruct.tools.ArmorDefinitions;
 import slimeknights.tconstruct.tools.TinkerModifiers;
+import slimeknights.tconstruct.tools.item.SlimeskullItem;
 
 public class ArmorModelProvider extends AbstractArmorModelProvider {
   public ArmorModelProvider(PackOutput packOutput) {
@@ -41,6 +42,10 @@ public class ArmorModelProvider extends AbstractArmorModelProvider {
       TrimArmorTextureSupplier.INSTANCE
     });
     addModel(ArmorDefinitions.SLIMESUIT, name -> new ArmorTextureSupplier[] {
+      new MaterialArmorTextureSupplier.Material(name, "/", 1),
+      TrimArmorTextureSupplier.INSTANCE
+    });
+    addModel(SlimeskullItem.MODEL_LOCATION, name -> new ArmorTextureSupplier[] {
       new MaterialArmorTextureSupplier.Material(name, "/", 1),
       TrimArmorTextureSupplier.INSTANCE
     });
