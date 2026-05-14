@@ -218,6 +218,10 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
     material(MaterialIds.necronium).addTraits(SkullStats.ID, ModifierIds.decayedBones, ModifierIds.witherSkeletonDisguise);
     material(MaterialIds.knightmetal).addTraits(SkullStats.ID, ModifierIds.spitting);
 
+    // slimecage
+    MaterialStatsId cage = RepairStats.RIBCAGE.getId();
+    addTraits(MaterialIds.blaze, cage, ModifierIds.scorching);
+
     // slimeshell
     MaterialStatsId shell = RepairStats.SHELL.getId();
     // shells

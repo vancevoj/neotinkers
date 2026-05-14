@@ -433,7 +433,7 @@ public class TinkerMaterialSpriteProvider extends AbstractMaterialSpriteProvider
     buildMaterial(MaterialIds.skyslimeVine).statType(StatlessMaterialStats.BINDING, StatlessMaterialStats.BOWSTRING).cuirass().maille().fallbacks("primitive", "cloth").colorMapper(skyslime);
     buildMaterial(MaterialIds.ichor).slime().arrowHead().fletching().colorMapper(ichor);
     buildMaterial(MaterialIds.ichorskin).fallbacks("cloth").cuirass().maille().colorMapper(ichor);
-    buildMaterial(MaterialIds.enderslime).repairKit().arrowHead().fletching().colorMapper(enderslime);
+    buildMaterial(MaterialIds.enderslime).slime().repairKit().arrowHead().fletching().colorMapper(enderslime);
     buildMaterial(MaterialIds.enderslimeVine).statType(StatlessMaterialStats.BINDING, StatlessMaterialStats.BOWSTRING).cuirass().maille().fallbacks("primitive", "cloth").colorMapper(enderslime);
     buildMaterial(MaterialIds.magma)
       .fallbacks("contrast").slime().fletching()

@@ -53,6 +53,7 @@ public class ToolItemModelProvider extends AbstractToolItemModelProvider {
     armor("travelers", TinkerTools.travelersGear, new Type[] {Type.CHESTPLATE, Type.LEGGINGS, Type.BOOTS}, "cuirass", "metal");
     armor("plate", TinkerTools.plateArmor, "plating", "maille");
     armor("slime", TinkerTools.slimesuit, "slime");
+    armor("slime/wings", TinkerTools.slimeWings, "slime");
     // shield
     shield("travelers", TinkerTools.travelersShield, shieldBlocking, "cuirass", "wood");
     shield("plate", TinkerTools.plateShield, readJson(getResource("base/shield_large_blocking")), "plating", "core");

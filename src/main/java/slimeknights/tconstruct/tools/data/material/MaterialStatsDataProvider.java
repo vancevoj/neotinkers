@@ -563,6 +563,13 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
     addMaterialStats(MaterialIds.necronium,    new SkullStats(157));
     addMaterialStats(MaterialIds.knightmetal,  new SkullStats(220));
 
+    // slimecage
+    addMaterialStats(MaterialIds.bone,         RepairStats.ribcage(100));
+    addMaterialStats(MaterialIds.venombone,    RepairStats.ribcage(175));
+    addMaterialStats(MaterialIds.necroticBone, RepairStats.ribcage(125));
+    addMaterialStats(MaterialIds.necronium,    RepairStats.ribcage(357));
+    addMaterialStats(MaterialIds.blaze,        RepairStats.ribcage(150));
+
     // slimeshell
     addMaterialStats(MaterialIds.turtle, RepairStats.shell(150));
     addMaterialStats(MaterialIds.shulker, RepairStats.shell(250));

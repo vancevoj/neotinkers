@@ -1,0 +1,27 @@
+{
+  "type": "tconstruct:basin_tool_casting",
+  "cast": {
+    "item": "tconstruct:necronium_bone"
+  },
+  "cast_purpose": "consumed_offset",
+  "conditions": [
+    {
+      "type": "forge:or",
+      "values": [
+        {
+          "type": "tconstruct:config",
+          "prop": "force_integration_materials"
+        },
+        {
+          "type": "mantle:tag_filled",
+          "tag": "forge:ingots/uranium"
+        }
+      ]
+    }
+  ],
+  "extra_materials": [
+    "tconstruct:necronium"
+  ],
+  "item_cost": 8,
+  "result": "tconstruct:slimy_chestplate"
+}

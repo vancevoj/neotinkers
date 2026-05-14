@@ -1607,7 +1607,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .addModule(new FieryArmorAttackModule(LevelingInt.eachLevel(5), DamageSourcePredicate.ANY));
 
     // internal modifier to restore older slots to slimesuit
-    IJsonPredicate<IToolContext> notSlimelytra = ToolContextPredicate.set(TinkerTools.slimesuit.get(ArmorItem.Type.CHESTPLATE)).inverted();
+    IJsonPredicate<IToolContext> notSlimelytra = ToolContextPredicate.set(TinkerTools.slimeWings.get()).inverted();
     buildModifier(ModifierIds.reverted)
       .levelDisplay(ModifierLevelDisplay.NO_LEVELS)
       // slimelytra just lost an upgrade slot

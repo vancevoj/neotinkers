@@ -16,12 +16,14 @@ import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.crafting.CompoundIngredient;
 import net.minecraftforge.common.crafting.DifferenceIngredient;
 import net.minecraftforge.common.crafting.conditions.ModLoadedCondition;
+import net.minecraftforge.common.crafting.conditions.OrCondition;
 import slimeknights.mantle.recipe.data.ItemNameIngredient;
 import slimeknights.mantle.recipe.ingredient.PotionDisplayIngredient;
 import slimeknights.mantle.recipe.ingredient.SizedIngredient;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.common.data.BaseRecipeProvider;
+import slimeknights.tconstruct.common.json.ConfigEnabledCondition;
 import slimeknights.tconstruct.fluids.TinkerFluids;
 import slimeknights.tconstruct.library.data.recipe.IMaterialRecipeHelper;
 import slimeknights.tconstruct.library.data.recipe.IToolRecipeHelper;
@@ -290,18 +292,28 @@ public class ToolsRecipeProvider extends BaseRecipeProvider implements IMaterial
     slimeskull(consumer, MaterialIds.knightmetal, TinkerSmeltery.endFluidCannon.get(),                    armorFolder);
 
     // slimelytra
-    MaterialCastingRecipeBuilder.basinRecipe(TinkerTools.slimesuit.get(ArmorItem.Type.CHESTPLATE))
+    MaterialCastingRecipeBuilder.basinRecipe(TinkerTools.slimeWings.get())
       .setCast(Items.ELYTRA, CastPurpose.CONSUMED)
       .setItemCost(8)
       .save(consumer, location(armorFolder + "slimelytra"));
 
-    // TODO: tool part for shell?
+    // TODO: tool part for ribcage
+    // slimecage
+    slimecage(consumer, MaterialIds.bone, Items.BONE, armorFolder);
+    slimecage(consumer, MaterialIds.venombone, TinkerMaterials.venombone, armorFolder);
+    slimecage(consumer, MaterialIds.necroticBone, TinkerMaterials.necroticBone, armorFolder);
+    slimecage(consumer, MaterialIds.blaze, Ingredient.of(Tags.Items.RODS_BLAZE), armorFolder);
+    // necronium conditional as always
+    slimecage(withCondition(consumer, new OrCondition(ConfigEnabledCondition.FORCE_INTEGRATION_MATERIALS, tagCondition("ingots/uranium"))),
+      MaterialIds.necronium, TinkerMaterials.necroniumBone, armorFolder);
+
+    // TODO: tool part for shell
     // slimeshell
     slimeshell(consumer, MaterialIds.turtle, Items.TURTLE_HELMET, armorFolder);
     slimeshell(consumer, MaterialIds.shulker, Items.SHULKER_SHELL, armorFolder);
     slimeshell(consumer, MaterialIds.dragonScale, TinkerModifiers.dragonScale, armorFolder);
 
-    // TODO: tool part for laces?
+    // TODO: tool part for laces
     // slime boots
     slimeboots(consumer, MaterialIds.leather, Items.LEATHER, armorFolder);
     slimeboots(consumer, MaterialIds.vine, Blocks.VINE, armorFolder);
@@ -490,6 +502,20 @@ public class ToolsRecipeProvider extends BaseRecipeProvider implements IMaterial
     MaterialSwappingRecipeBuilder.tools(TinkerTags.Items.SWAPPABLE_SKULLS)
       .index(0).material(material, skull).repairValue((int) (MaterialRecipe.INGOTS_PER_REPAIR * 2))
       .save(consumer, location(folder + "slime_skull/swapping/" + material.getPath()));
+  }
+
+  /** Helper to create a casting recipe for a slime shell variant */
+  private void slimecage(Consumer<FinishedRecipe> consumer, MaterialId material, Ingredient bone, String folder) {
+    MaterialCastingRecipeBuilder.basinRecipe(TinkerTools.slimesuit.get(ArmorItem.Type.CHESTPLATE))
+      .setCast(bone, CastPurpose.CONSUMED_OFFSET)
+      .addExtraMaterial(material)
+      .setItemCost(8)
+      .save(consumer, location(folder + "slimecage/" + material.getPath()));
+  }
+
+  /** Helper to create a casting recipe for a slime shell variant */
+  private void slimecage(Consumer<FinishedRecipe> consumer, MaterialId material, ItemLike bone, String folder) {
+    slimecage(consumer, material, Ingredient.of(bone), folder);
   }
 
   /** Helper to create a casting recipe for a slime shell variant */
