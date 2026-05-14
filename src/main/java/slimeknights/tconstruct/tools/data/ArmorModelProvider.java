@@ -1,6 +1,7 @@
 package slimeknights.tconstruct.tools.data;
 
 import net.minecraft.data.PackOutput;
+import net.minecraft.resources.ResourceLocation;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.client.armor.texture.ArmorTextureSupplier;
 import slimeknights.tconstruct.library.client.armor.texture.DyedArmorTextureSupplier;
@@ -41,16 +42,17 @@ public class ArmorModelProvider extends AbstractArmorModelProvider {
       ),
       TrimArmorTextureSupplier.INSTANCE
     });
-    addModel(ArmorDefinitions.SLIMESUIT, name -> new ArmorTextureSupplier[] {
-      new MaterialArmorTextureSupplier.Material(name, "/", 1),
+    ResourceLocation slime = ArmorDefinitions.SLIMESUIT.getId();
+    addModel(slime,
+      new MaterialArmorTextureSupplier.Material(slime, "/", 1),
       TrimArmorTextureSupplier.INSTANCE
-    });
-    addModel(SlimeskullItem.MODEL_LOCATION, name -> new ArmorTextureSupplier[] {
-      new MaterialArmorTextureSupplier.Material(name, "/", 1),
+    );
+    addModel(SlimeskullItem.MODEL_LOCATION,
+      new MaterialArmorTextureSupplier.Material(slime, "/", 1),
       TrimArmorTextureSupplier.INSTANCE
-    });
+    );
     addModel(TConstruct.getResource("slimelytra"),
-      new MaterialArmorTextureSupplier.Material(TConstruct.getResource("slime"), "/", 0),
+      new MaterialArmorTextureSupplier.Material(slime, "/", 0),
       TrimArmorTextureSupplier.INSTANCE
     );
   }
