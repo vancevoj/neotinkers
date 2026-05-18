@@ -244,7 +244,7 @@ public abstract class AbstractMaterialSpriteProvider {
 
     /** Adds slime textures for the given material. */
     public MaterialSpriteInfoBuilder slime() {
-      return statType(SlimeStats.ID, TinkerPartSpriteProvider.SLIMESUIT);
+      return statType(SlimeStats.ID, TinkerPartSpriteProvider.SLIMESUIT).repairKit();
     }
 
     /** Makes this work as the wood part for a shield */
