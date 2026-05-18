@@ -354,6 +354,12 @@
   "pattern.tconstruct.fletching": "Arrow Fletching",
   "pattern.tconstruct.arrow_part": "Arrow Head or Shaft",
 
+  "_comment": "Slimesuit Patterns",
+
+  "pattern.tconstruct.ribcage": "Ribcage",
+  "pattern.tconstruct.shell": "Shell",
+  "pattern.tconstruct.laces": "Laces",
+
 
   "_comment": "Tinkers Gold Casts",
 
@@ -1247,6 +1253,9 @@
   "item.tconstruct.boots_plating_dummy": "Stone Boot Plating",
   "item.tconstruct.maille": "Maille",
   "item.tconstruct.shield_core": "Shield Core",
+  "item.tconstruct.ribcage": "Ribcage",
+  "item.tconstruct.shell": "Shell",
+  "item.tconstruct.laces": "Laces",
 
 
   "_conment": "Tool Descriptions",

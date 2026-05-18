@@ -368,7 +368,7 @@ public class ItemTagProvider extends ItemTagsProvider {
     // armor
     addArmorTags(TinkerTools.travelersGear, SINGLEPART_TOOL, DURABILITY, BONUS_SLOTS, DYEABLE, TRIM, ItemTags.FREEZE_IMMUNE_WEARABLES);
     addArmorTags(TinkerTools.plateArmor,    MULTIPART_TOOL, DURABILITY, BONUS_SLOTS, DYEABLE, TRIM);
-    addArmorTags(TinkerTools.slimesuit,     DURABILITY, BONUS_SLOTS, TRIM, SINGLEPART_TOOL);
+    addArmorTags(TinkerTools.slimesuit,     DURABILITY, BONUS_SLOTS, TRIM, SINGLEPART_TOOL, UNRECYCLABLE);
     addToolTags(TinkerTools.slimeWings, DURABILITY, BONUS_SLOTS, TRIM, SINGLEPART_TOOL, CHESTPLATES, Tags.Items.ARMORS_CHESTPLATES);
     addToolTags(TinkerTools.slimesuit.get(ArmorItem.Type.HELMET), SWAPPABLE_SKULLS);
 
@@ -464,6 +464,8 @@ public class ItemTagProvider extends ItemTagsProvider {
     this.tag(TinkerTags.Items.TOOL_PARTS).add(
       // arrow part bartering is weird as they have such low tiers
       TinkerToolParts.arrowHead.get(), TinkerToolParts.arrowShaft.get(), TinkerToolParts.fletching.get(),
+      // slimesuit parts are pretty niche, not much you can do with them
+      TinkerToolParts.ribcage.get(), TinkerToolParts.shell.get(), TinkerToolParts.laces.get(),
       // repair kit is not strictly a tool part, but this list just helps out JEI
       TinkerToolParts.repairKit.get(), TinkerToolParts.fakeIngot.get(), TinkerToolParts.fakeStorageBlock.asItem()
     ).addTag(TinkerTags.Items.BARTERED_PARTS); // all bartered parts must be tool parts

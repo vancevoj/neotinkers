@@ -10,7 +10,7 @@
   "overrides": [
     {
       "predicate": { "tconstruct:broken": 1 },
-      "model": "tconstruct:item/armor/slime/chestplate_broken"
+      "model": "tconstruct:item/armor/slime/wings_broken"
     }
   ]
 }

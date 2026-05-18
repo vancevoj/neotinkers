@@ -31,6 +31,12 @@
       }
     },
     {
+      "type": "tconstruct:tool_parts",
+      "parts": [
+        "tconstruct:ribcage"
+      ]
+    },
+    {
       "type": "tconstruct:modifier_slots",
       "slots": {
         "abilities": 2,

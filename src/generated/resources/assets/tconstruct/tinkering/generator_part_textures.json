@@ -351,6 +351,16 @@
     },
     {
       "allow_animated": false,
+      "path": "tconstruct:item/tool/armor/slime/chestplate/ribcage",
+      "stat_type": "tconstruct:ribcage"
+    },
+    {
+      "allow_animated": false,
+      "path": "tconstruct:item/tool/armor/slime/chestplate/ribcage_broken",
+      "stat_type": "tconstruct:ribcage"
+    },
+    {
+      "allow_animated": false,
       "path": "tconstruct:item/tool/armor/slime/leggings/slime",
       "stat_type": "tconstruct:slime"
     },
@@ -361,6 +371,16 @@
     },
     {
       "allow_animated": false,
+      "path": "tconstruct:item/tool/armor/slime/leggings/shell",
+      "stat_type": "tconstruct:shell"
+    },
+    {
+      "allow_animated": false,
+      "path": "tconstruct:item/tool/armor/slime/leggings/shell_broken",
+      "stat_type": "tconstruct:shell"
+    },
+    {
+      "allow_animated": false,
       "path": "tconstruct:item/tool/armor/slime/boots/slime",
       "stat_type": "tconstruct:slime"
     },
@@ -368,6 +388,16 @@
       "allow_animated": false,
       "path": "tconstruct:item/tool/armor/slime/boots/slime_broken",
       "stat_type": "tconstruct:slime"
+    },
+    {
+      "allow_animated": false,
+      "path": "tconstruct:item/tool/armor/slime/boots/laces",
+      "stat_type": "tconstruct:laces"
+    },
+    {
+      "allow_animated": false,
+      "path": "tconstruct:item/tool/armor/slime/boots/laces_broken",
+      "stat_type": "tconstruct:laces"
     },
     {
       "allow_animated": false,

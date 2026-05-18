@@ -250,10 +250,15 @@ public abstract class AbstractToolItemModelProvider extends GenericDataProvider 
     armor(overrideName, item.getId(), textures);
   }
 
+  /** Adds broken and blocking models for the armor item */
+  protected void armor(String name, EnumObject<ArmorItem.Type,? extends Item> armor, ArmorItem.Type slot, String... textures) throws IOException {
+    armor(name + '/' + slot.getName(), Loadables.ITEM.getKey(armor.get(slot)), textures);
+  }
+
   /** Adds broken and blocking models for the armor set */
   protected void armor(String name, EnumObject<ArmorItem.Type,? extends Item> armor, ArmorItem.Type[] types, String... textures) throws IOException {
     for (ArmorItem.Type slot : types) {
-      armor(name + '/' + slot.getName(), Loadables.ITEM.getKey(armor.get(slot)), textures);
+      armor(name, armor, slot, textures);
     }
   }
 

@@ -743,12 +743,15 @@ public class ToolDefinitionDataProvider extends AbstractToolDefinitionDataProvid
       .module(ArmorItem.Type.CHESTPLATE, MaterialStatsModule.stats().stat(RepairStats.RIBCAGE.getId()).stat(SlimeStats.ID, 1.6f).build())
       .module(ArmorItem.Type.CHESTPLATE, DefaultMaterialsModule.builder().material(ToolBuildHandler.RANDOM, blood).build())
       .module(ArmorItem.Type.CHESTPLATE, new MultiplyStatsModule(MultiplierNBT.builder().set(ToolStats.ATTACK_DAMAGE, 0.6f).build()))
+      .module(ArmorItem.Type.CHESTPLATE, new PartsModule(List.of(TinkerToolParts.ribcage.get())))
       // leggings - shell and slime
       .module(ArmorItem.Type.LEGGINGS, MaterialStatsModule.stats().stat(RepairStats.SHELL.getId()).stat(SlimeStats.ID, 1.5f).build())
       .module(ArmorItem.Type.LEGGINGS, DefaultMaterialsModule.builder().material(RandomMaterial.fixed(MaterialIds.shulker), blood).build())
+      .module(ArmorItem.Type.LEGGINGS, new PartsModule(List.of(TinkerToolParts.shell.get())))
       // boots - laces and slime
       .module(ArmorItem.Type.BOOTS, MaterialStatsModule.stats().stat(RepairStats.LACES.getId()).stat(SlimeStats.ID, 1.3f).build())
       .module(ArmorItem.Type.BOOTS, DefaultMaterialsModule.builder().material(RandomMaterial.fixed(MaterialIds.skyslimeVine), blood).build())
+      .module(ArmorItem.Type.BOOTS, new PartsModule(List.of(TinkerToolParts.laces.get())))
       // slots
       .module(ToolSlotsModule.builder()
         .slots(SlotType.UPGRADE, 3)

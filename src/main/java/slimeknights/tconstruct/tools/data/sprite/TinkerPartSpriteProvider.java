@@ -5,6 +5,7 @@ import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.client.data.material.AbstractPartSpriteProvider;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
 import slimeknights.tconstruct.tools.stats.PlatingMaterialStats;
+import slimeknights.tconstruct.tools.stats.RepairStats;
 import slimeknights.tconstruct.tools.stats.SlimeStats;
 import slimeknights.tconstruct.tools.stats.StatlessMaterialStats;
 
@@ -97,11 +98,14 @@ public class TinkerPartSpriteProvider extends AbstractPartSpriteProvider {
 
     // slimesuit textures - the armor model won't be animated, so don't animate the item
     buildTool("armor/slime").disallowAnimated()
-      .addBreakablePart("helmet/slime",     SlimeStats.ID)
-      .addBreakablePart("chestplate/slime", SlimeStats.ID)
-      .addBreakablePart("leggings/slime",   SlimeStats.ID)
-      .addBreakablePart("boots/slime",      SlimeStats.ID)
-      .addBreakablePart("wings/slime",      SlimeStats.ID);
+      .addBreakablePart("helmet/slime",       SlimeStats.ID)
+      .addBreakablePart("chestplate/slime",   SlimeStats.ID)
+      .addBreakablePart("chestplate/ribcage", RepairStats.RIBCAGE.getId())
+      .addBreakablePart("leggings/slime",     SlimeStats.ID)
+      .addBreakablePart("leggings/shell",     RepairStats.SHELL.getId())
+      .addBreakablePart("boots/slime",        SlimeStats.ID)
+      .addBreakablePart("boots/laces",        RepairStats.LACES.getId())
+      .addBreakablePart("wings/slime",        SlimeStats.ID);
     addTexture("tinker_armor/slime/armor", SLIMESUIT).disallowAnimated();
     addTexture("tinker_armor/slime/leggings", SLIMESUIT).disallowAnimated();
     addTexture("tinker_armor/slime/wings", SLIMESUIT).disallowAnimated();
