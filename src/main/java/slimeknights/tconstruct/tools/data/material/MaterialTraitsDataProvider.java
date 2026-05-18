@@ -235,6 +235,7 @@ public class MaterialTraitsDataProvider extends AbstractMaterialTraitDataProvide
 
     // slimeboots
     MaterialStatsId laces = RepairStats.LACES.getId();
+    addTraits(MaterialIds.string, laces, ModifierIds.stepUp);
     addTraits(MaterialIds.leather, laces, ModifierIds.snowBoots);
     // vine uses default
     addTraits(MaterialIds.skyslimeVine, laces, ModifierIds.leaping);

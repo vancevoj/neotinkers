@@ -67,7 +67,7 @@ public class TinkerMaterialSpriteProvider extends AbstractMaterialSpriteProvider
       .repairKit().statType(StatlessMaterialStats.BINDING, StatlessMaterialStats.BOWSTRING).cuirass().maille().laces()
       .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF21150D).addARGB(102, 0xFF342115).addARGB(120, 0xFF472C1B).addARGB(140, 0xFF553521).addARGB(178, 0xFF72482E).addARGB(216, 0xFF955E3B).addARGB(255, 0xFFA36E4E).build());
     buildMaterial(MaterialIds.string)
-      .statType(StatlessMaterialStats.BINDING, StatlessMaterialStats.BOWSTRING).repairKit()
+      .statType(StatlessMaterialStats.BINDING, StatlessMaterialStats.BOWSTRING).laces()
       .fallbacks("primitive")
       .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF2F4547).addARGB(102, 0xFF4D5859).addARGB(140, 0xFF838B8C).addARGB(178, 0xFFAFB3B5).addARGB(216, 0xFFDBDBDB).addARGB(255, 0xFFF7F7F7).build());
     buildMaterial(MaterialIds.vine)

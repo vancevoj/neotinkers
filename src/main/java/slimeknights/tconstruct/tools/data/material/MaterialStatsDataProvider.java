@@ -580,6 +580,7 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
     addMaterialStats(MaterialIds.knightly, RepairStats.shell(300));
 
     // slime boots
+    addMaterialStats(MaterialIds.string, RepairStats.laces(140));
     addMaterialStats(MaterialIds.leather, RepairStats.laces(97));
     addMaterialStats(MaterialIds.vine, RepairStats.laces(75));
     addMaterialStats(MaterialIds.skyslimeVine, RepairStats.laces(150));
