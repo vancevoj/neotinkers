@@ -999,12 +999,16 @@
   "fluid_effect.tconstruct.fire.set": "%d seconds fire",
   "fluid_effect.tconstruct.freeze.add": "+%d seconds freeze",
   "fluid_effect.tconstruct.freeze.set": "%d seconds freeze",
-  "fluid_effect.tconstruct.award_stat.add": "+%s %s",
-  "fluid_effect.tconstruct.award_stat.subtract": "-%s %s",
   "fluid_effect.tconstruct.add_breath.add": "+%s Breath Bubbles",
   "fluid_effect.tconstruct.add_breath.subtract": "-%s Breath Bubbles",
   "fluid_effect.tconstruct.push_entity.push": "Pushes target",
   "fluid_effect.tconstruct.push_entity.pull": "Pulls target",
+
+  "fluid_effect.tconstruct.award_stat.add": "+%s %s",
+  "fluid_effect.tconstruct.award_stat.subtract": "-%s %s",
+  "stat.tconstruct.stat_value": "%s %s",
+  "stat_type.tconstruct.killed": "%s kills",
+  "stat_type.tconstruct.killed_by": "Killed by %s",
 
   "fluid_effect.tconstruct.damage": "%s Damage",
   "fluid_effect.tconstruct.damage.tconstruct.fluid.impact": "%s Damage",
