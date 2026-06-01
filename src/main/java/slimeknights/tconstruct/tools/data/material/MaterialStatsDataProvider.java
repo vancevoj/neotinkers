@@ -567,6 +567,7 @@ public class MaterialStatsDataProvider extends AbstractMaterialStatsDataProvider
     addMaterialStats(MaterialIds.bone,         RepairStats.ribcage(100));
     addMaterialStats(MaterialIds.venombone,    RepairStats.ribcage(175));
     addMaterialStats(MaterialIds.necroticBone, RepairStats.ribcage(125));
+    addMaterialStats(MaterialIds.blazingBone,  RepairStats.ribcage(205));
     addMaterialStats(MaterialIds.necronium,    RepairStats.ribcage(357));
     addMaterialStats(MaterialIds.blaze,        RepairStats.ribcage(150));
 

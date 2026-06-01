@@ -1487,6 +1487,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
     buildModifier(ModifierIds.recurrentProtection).addModule(new RecurrentProtectionModule(LevelingValue.flat(0.5f), LevelingInt.eachLevel(5 * 20)));
     MobEffectModule.Builder conductiveBuilder = MobEffectModule.builder(TinkerEffects.conductive).time(RandomLevelingValue.random(5 * 20, 5 * 20));
     buildModifier(ModifierIds.conductive).priority(150)
+      // TODO: might want to separate out this trait from slimecage vs shield for the sake of shield cores not giving melee/scaling duration
       .addModule(conductiveBuilder.buildWeapon())
       .addModule(conductiveBuilder.chance(LevelingValue.flat(0.15f)).buildCounter());
     buildModifier(ModifierIds.flameBarrier).addModule(new FlameBarrierModule(LevelingValue.eachLevel(1.875f)));
