@@ -304,8 +304,6 @@ public class MaterialRecipeProvider extends BaseRecipeProvider implements IMater
     materialComposite(consumer, MaterialIds.jeweledHide, MaterialIds.leather, TinkerFluids.venom, FluidValues.SIP, folder, "jeweled_hide_cleaning");
     materialMelting(consumer, MaterialIds.ancientHide, TinkerFluids.moltenDebris, FluidValues.INGOT, folder);
     materialComposite(consumer, MaterialIds.ancientHide, MaterialIds.leather, TinkerFluids.venom, FluidValues.SIP, folder, "ancient_hide_cleaning");
-    // no casting ancient, only melting it. Smeltery Recipe Provider adds in a repair kit casting
-    materialMelting(consumer, MaterialIds.ancient, TinkerFluids.moltenDebris, FluidValues.INGOT, folder);
 
     // tier 2 compat
     compatMeltingCasting(consumer, MaterialIds.osmium,   TinkerFluids.moltenOsmium,   folder);
