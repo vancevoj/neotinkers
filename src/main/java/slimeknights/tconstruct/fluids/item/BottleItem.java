@@ -6,7 +6,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -31,22 +31,22 @@ public class BottleItem extends Item {
   }
 
   @Override
-  public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand pHand) {
+  public InteractionResult use(Level level, Player player, InteractionHand pHand) {
     ItemStack current = player.getItemInHand(pHand);
     BlockHitResult hit = getPlayerPOVHitResult(level, player, ClipContext.Fluid.SOURCE_ONLY);
     if (hit.getType() == HitResult.Type.BLOCK) {
       BlockPos pos = hit.getBlockPos();
       if (!level.mayInteract(player, pos)) {
-        return InteractionResultHolder.pass(current);
+        return InteractionResult.PASS;
       }
 
       if (level.getFluidState(pos).is(FluidTags.WATER)) {
         level.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.BOTTLE_FILL, SoundSource.NEUTRAL, 1.0F, 1.0F);
         level.gameEvent(player, GameEvent.FLUID_PICKUP, pos);
         player.awardStat(Stats.ITEM_USED.get(this));
-        return InteractionResultHolder.sidedSuccess(ItemUtils.createFilledResult(current, player, PotionContents.createItemStack(potion.asItem(), Potions.WATER)), level.isClientSide());
+        return InteractionResult.SUCCESS.heldItemTransformedTo(ItemUtils.createFilledResult(current, player, PotionContents.createItemStack(potion.asItem(), Potions.WATER)));
       }
     }
-    return InteractionResultHolder.pass(current);
+    return InteractionResult.PASS;
   }
 }

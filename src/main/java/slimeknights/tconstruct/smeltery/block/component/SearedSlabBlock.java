@@ -25,14 +25,7 @@ public class SearedSlabBlock extends SlabBlock implements EntityBlock {
     return new SmelteryComponentBlockEntity(pPos, pState);
   }
 
-  @Override
-  @Deprecated
-  public void onRemove(BlockState state, Level world, BlockPos pos, BlockState newState, boolean isMoving) {
-    if (!newState.is(this) && world.getBlockEntity(pos) instanceof SmelteryComponentBlockEntity te) {
-      te.notifyMasterOfChange(pos, newState);
-    }
-    super.onRemove(state, world, pos, newState, isMoving);
-  }
+  // removal: the master is told about the block change in SmelteryComponentBlockEntity#preRemoveSideEffects
 
   @Override
   public void setPlacedBy(Level worldIn, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {

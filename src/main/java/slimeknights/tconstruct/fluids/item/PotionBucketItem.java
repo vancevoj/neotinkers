@@ -2,8 +2,10 @@ package slimeknights.tconstruct.fluids.item;
 
 import net.minecraft.advancements.triggers.CriteriaTriggers;
 import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.effect.MobEffect;
@@ -13,27 +15,36 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.PotionItem;
-import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.item.component.Consumable;
+import net.minecraft.world.item.component.Consumables;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.FluidType;
-import net.neoforged.neoforge.fluids.capability.IFluidHandlerItem;
-import net.neoforged.neoforge.fluids.capability.wrappers.FluidBucketWrapper;
+import net.neoforged.neoforge.transfer.ItemAccessResourceHandler;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.access.ItemAccess;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
+import net.neoforged.neoforge.transfer.item.ItemResource;
+import slimeknights.tconstruct.fluids.fluids.PotionFluidType;
 import slimeknights.tconstruct.library.utils.Util;
 
-import javax.annotation.Nonnull;
-import java.util.Optional;
+import javax.annotation.Nullable;
+import java.util.Objects;
 import java.util.function.Supplier;
 
 /** Implements filling a bucket with an NBT fluid */
 public class PotionBucketItem extends PotionItem {
+  /** Use duration in ticks, 3x the duration of potion bottles */
+  private static final int USE_DURATION = 96;
+
   private final Supplier<? extends Fluid> supplier;
   public PotionBucketItem(Supplier<? extends Fluid> supplier, Properties builder) {
-    super(builder);
+    // drinking (use, animation, sounds) comes from the consumable component since 1.21.2, the effects are applied in finishUsingItem
+    super(builder.component(DataComponents.CONSUMABLE, Consumables.defaultDrink().consumeSeconds(USE_DURATION / 20f).build()));
     this.supplier = supplier;
   }
 
@@ -48,23 +59,14 @@ public class PotionBucketItem extends PotionItem {
   }
 
   @Override
-  public String getDescriptionId(ItemStack stack) {
-    String bucketKey = Potion.getName(getContents(stack).potion(), getDescriptionId() + ".effect.");
-    if (Util.canTranslate(bucketKey)) {
-      return bucketKey;
-    }
-    return super.getDescriptionId();
-  }
-
-  @Override
   public Component getName(ItemStack stack) {
-    Optional<Holder<Potion>> potion = getContents(stack).potion();
-    String bucketKey = Potion.getName(potion, getDescriptionId() + ".effect.");
+    PotionContents contents = getContents(stack);
+    String bucketKey = PotionFluidType.getPotionKey(contents, getDescriptionId() + ".effect.");
     if (Util.canTranslate(bucketKey)) {
       return Component.translatable(bucketKey);
     }
     // default to filling with the contents
-    return Component.translatable(getDescriptionId() + ".contents", Component.translatable(Potion.getName(potion, "item.minecraft.potion.effect.")));
+    return Component.translatable(getDescriptionId() + ".contents", Component.translatable(PotionFluidType.getPotionKey(contents, "item.minecraft.potion.effect.")));
   }
 
   @Override
@@ -74,21 +76,24 @@ public class PotionBucketItem extends PotionItem {
 
   @Override
   public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity living) {
+    // not calling super, as the consumable would apply the potion effects at normal strength; the final drink sound normally comes from the consumable
+    Consumable consumable = stack.get(DataComponents.CONSUMABLE);
+    if (consumable != null) {
+      consumable.emitParticlesAndSounds(living.getRandom(), living, stack, 16);
+    }
     Player player = living instanceof Player p ? p : null;
     if (player instanceof ServerPlayer serverPlayer) {
       CriteriaTriggers.CONSUME_ITEM.trigger(serverPlayer, stack);
     }
 
-    // effects are 2x duration
-    if (!level.isClientSide()) {
+    // effects are 2.5x duration
+    if (level instanceof ServerLevel serverLevel) {
       for (MobEffectInstance effect : getContents(stack).getAllEffects()) {
         Holder<MobEffect> mobEffect = effect.getEffect();
         if (mobEffect.value().isInstantaneous()) {
-          mobEffect.value().applyInstantaneousEffect(player, player, living, effect.getAmplifier(), 2.5D);
+          mobEffect.value().applyInstantaneousEffect(serverLevel, player, player, living, effect.getAmplifier(), 2.5D);
         } else {
-          MobEffectInstance newEffect = new MobEffectInstance(effect);
-          newEffect.duration = newEffect.duration * 5 / 2;
-          living.addEffect(newEffect);
+          living.addEffect(effect.withScaledDuration(2.5f));
         }
       }
     }
@@ -114,28 +119,58 @@ public class PotionBucketItem extends PotionItem {
 
   @Override
   public int getUseDuration(ItemStack pStack, LivingEntity living) {
-    return 96; // 3x duration of potion bottles
+    return USE_DURATION;
   }
 
-  /** Builds the fluid handler for the given stack, for registration in {@code RegisterCapabilitiesEvent}. */
-  public IFluidHandlerItem getFluidHandler(ItemStack stack) {
-    return new PotionBucketWrapper(stack);
+  /** Builds the fluid handler for the given item access, for registration in {@code RegisterCapabilitiesEvent}. */
+  public ResourceHandler<FluidResource> getFluidHandler(ItemAccess access) {
+    return new PotionBucketWrapper(access);
   }
 
-  public static class PotionBucketWrapper extends FluidBucketWrapper {
-    public PotionBucketWrapper(ItemStack container) {
-      super(container);
+  /**
+   * Fluid handler for a potion bucket, holding a full bucket of the potion fluid with the potion contents of the stack.
+   * Draining the bucket turns it into an empty bucket; filling an empty bucket with the potion fluid is handled by the empty bucket through {@link PotionFluidType#getBucket(FluidStack)}.
+   */
+  public static class PotionBucketWrapper extends ItemAccessResourceHandler<FluidResource> {
+    public PotionBucketWrapper(ItemAccess access) {
+      super(access, 1);
     }
 
-    @Nonnull
     @Override
-    public FluidStack getFluid() {
-      FluidStack fluid = new FluidStack(((PotionBucketItem)container.getItem()).getFluid(), FluidType.BUCKET_VOLUME);
-      PotionContents contents = container.get(DataComponents.POTION_CONTENTS);
-      if (contents != null) {
-        fluid.set(DataComponents.POTION_CONTENTS, contents);
+    protected FluidResource getResourceFrom(ItemResource accessResource, int index) {
+      if (accessResource.getItem() instanceof PotionBucketItem bucket) {
+        PotionContents contents = accessResource.get(DataComponents.POTION_CONTENTS);
+        if (contents != null) {
+          return FluidResource.of(bucket.getFluid(), DataComponentPatch.builder().set(DataComponents.POTION_CONTENTS, contents).build());
+        }
+        return FluidResource.of(bucket.getFluid());
       }
-      return fluid;
+      return FluidResource.EMPTY;
+    }
+
+    @Override
+    protected int getAmountFrom(ItemResource accessResource, int index) {
+      return getResourceFrom(accessResource, index).isEmpty() ? 0 : FluidType.BUCKET_VOLUME;
+    }
+
+    @Nullable
+    @Override
+    protected ItemResource update(ItemResource accessResource, int index, FluidResource newResource, int newAmount) {
+      if (newAmount == 0) {
+        return ItemResource.of(Items.BUCKET);
+      }
+      // only full buckets can exist
+      if (newAmount != FluidType.BUCKET_VOLUME) {
+        return ItemResource.EMPTY;
+      }
+      FluidStack stack = newResource.toStack(newAmount);
+      return ItemResource.of(stack.getFluidType().getBucket(stack));
+    }
+
+    @Override
+    protected int getCapacity(int index, FluidResource resource) {
+      Objects.checkIndex(index, size());
+      return FluidType.BUCKET_VOLUME;
     }
   }
 }

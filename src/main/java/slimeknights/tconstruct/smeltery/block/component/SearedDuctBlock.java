@@ -2,13 +2,9 @@ package slimeknights.tconstruct.smeltery.block.component;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -25,12 +21,10 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.pathfinder.PathType;
 import slimeknights.mantle.block.InventoryBlock;
 import slimeknights.mantle.block.RetexturedBlock;
-import slimeknights.mantle.util.RetexturedHelper;
 import slimeknights.tconstruct.smeltery.block.entity.component.DuctBlockEntity;
 import slimeknights.tconstruct.smeltery.block.entity.component.SmelteryComponentBlockEntity;
 
 import javax.annotation.Nullable;
-import java.util.List;
 
 /** Filtering drain block, have to reimplement either inventory block logic or seared block logic unfortunately */
 public class SearedDuctBlock extends InventoryBlock {
@@ -49,20 +43,8 @@ public class SearedDuctBlock extends InventoryBlock {
 
   /* Seared block interaction */
 
-  @SuppressWarnings("deprecation")
-  @Override
-  @Deprecated
-  public void onRemove(BlockState state, Level world, BlockPos pos, BlockState newState, boolean isMoving) {
-    if (!newState.is(this) && world.getBlockEntity(pos) instanceof SmelteryComponentBlockEntity te) {
-      te.notifyMasterOfChange(pos, newState);
-    }
-    super.onRemove(state, world, pos, newState, isMoving);
-  }
-
-  @Override
-  public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-    RetexturedHelper.addTooltip(stack, tooltip, flag);
-  }
+  // removal: the master is told about the change in SmelteryComponentBlockEntity#preRemoveSideEffects, which also drops the inventory through InventoryBlock
+  // tooltip: blocks no longer add item tooltips, the texture tooltip comes from RetexturedTooltipBlockItem
 
   @Override
   public void setPlacedBy(Level world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
@@ -71,7 +53,7 @@ public class SearedDuctBlock extends InventoryBlock {
   }
   
   @Override
-  public ItemStack getCloneItemStack(LevelReader world, BlockPos pos, BlockState state) {
+  public ItemStack getCloneItemStack(LevelReader world, BlockPos pos, BlockState state, boolean includeData) {
     return RetexturedBlock.getPickBlock(world, pos, state);
   }
 
@@ -86,7 +68,7 @@ public class SearedDuctBlock extends InventoryBlock {
   @Nullable
   @Override
   public PathType getBlockPathType(BlockState state, BlockGetter level, BlockPos pos, @Nullable Mob mob) {
-    return state.getValue(IN_STRUCTURE) ? PathType.DAMAGE_FIRE : PathType.OPEN;
+    return state.getValue(IN_STRUCTURE) ? PathType.FIRE : PathType.OPEN;
   }
 
   @Nullable

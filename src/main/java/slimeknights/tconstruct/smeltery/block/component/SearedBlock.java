@@ -44,21 +44,13 @@ public class SearedBlock extends Block implements EntityBlock {
   }
 
   @Override
-  @Deprecated
-  public void onRemove(BlockState oldState, Level world, BlockPos pos, BlockState newState, boolean isMoving) {
-    if (requiredBlockEntity || oldState.getValue(IN_STRUCTURE)) {
-      // if the block is unchanged, remove the block entity if we no longer have one
-      if (newState.is(this)) {
-        if (!requiredBlockEntity && !newState.getValue(IN_STRUCTURE)) {
-          world.removeBlockEntity(pos);
-        }
-      } else {
-        // block changed, tell the master then ditch the block entity
-        if (world.getBlockEntity(pos) instanceof SmelteryComponentBlockEntity te) {
-          te.notifyMasterOfChange(pos, newState);
-        }
-        world.removeBlockEntity(pos);
-      }
+  protected void onPlace(BlockState state, Level world, BlockPos pos, BlockState oldState, boolean isMoving) {
+    super.onPlace(state, world, pos, oldState, isMoving);
+    // if the block is unchanged, remove the block entity if we no longer have one
+    // runs before the chunk updates the block entity, so the chunk will not create a new one as newBlockEntity returns null
+    // when the block changes, the chunk removes the block entity itself, and SmelteryComponentBlockEntity#preRemoveSideEffects tells the master
+    if (!requiredBlockEntity && oldState.is(this) && oldState.getValue(IN_STRUCTURE) && !state.getValue(IN_STRUCTURE)) {
+      world.removeBlockEntity(pos);
     }
   }
 
@@ -78,6 +70,6 @@ public class SearedBlock extends Block implements EntityBlock {
   @Nullable
   @Override
   public PathType getBlockPathType(BlockState state, BlockGetter level, BlockPos pos, @Nullable Mob mob) {
-    return state.getValue(IN_STRUCTURE) ? PathType.DAMAGE_FIRE : PathType.OPEN;
+    return state.getValue(IN_STRUCTURE) ? PathType.FIRE : PathType.OPEN;
   }
 }

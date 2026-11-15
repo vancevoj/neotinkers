@@ -1,30 +1,33 @@
 package slimeknights.tconstruct.fluids;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.cauldron.CauldronInteraction;
 import net.minecraft.core.dispenser.BlockSource;
 import net.minecraft.core.dispenser.DefaultDispenseItemBehavior;
 import net.minecraft.core.dispenser.DispenseItemBehavior;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.data.DataGenerator;
-import net.minecraft.data.PackOutput;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.network.syncher.EntityDataSerializer;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.packs.PackType;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTab.ItemDisplayParameters;
 import net.minecraft.world.item.CreativeModeTab.Output;
 import net.minecraft.world.item.DispensibleContainerItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.alchemy.PotionBrewing;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
@@ -33,10 +36,9 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.pathfinder.PathType;
 import net.neoforged.neoforge.common.NeoForgeMod;
-import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.common.SoundActions;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
-import net.neoforged.neoforge.event.brewing.RegisterBrewingRecipesEvent;
+import net.neoforged.neoforge.data.event.GatherDataRegistryEntriesEvent;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.FluidType;
@@ -48,9 +50,9 @@ import slimeknights.mantle.datagen.MantleTags;
 import slimeknights.mantle.fluid.InvertedFluid;
 import slimeknights.mantle.fluid.UnplaceableFluid;
 import slimeknights.mantle.fluid.texture.FluidTextureCameraProvider;
+import slimeknights.mantle.item.BurnableBlockItem;
 import slimeknights.mantle.item.ContainerFoodItem;
 import slimeknights.mantle.item.ContainerFoodItem.FluidContainerFoodItem;
-import slimeknights.mantle.registration.RegistrationHelper;
 import slimeknights.mantle.registration.object.EnumObject;
 import slimeknights.mantle.registration.object.FlowingFluidObject;
 import slimeknights.mantle.registration.object.FluidObject;
@@ -67,9 +69,7 @@ import slimeknights.tconstruct.fluids.fluids.SlimeFluidType;
 import slimeknights.tconstruct.fluids.item.BottleItem;
 import slimeknights.tconstruct.fluids.item.MagmaBottleItem;
 import slimeknights.tconstruct.fluids.item.PotionBucketItem;
-import slimeknights.tconstruct.fluids.util.EmptyBottleIntoEmpty;
-import slimeknights.tconstruct.fluids.util.EmptyBottleIntoWater;
-import slimeknights.tconstruct.fluids.util.FillBottle;
+import slimeknights.tconstruct.fluids.util.BottleBrewingRecipe;
 import slimeknights.tconstruct.library.materials.definition.MaterialId;
 import slimeknights.tconstruct.library.recipe.FluidValues;
 import slimeknights.tconstruct.shared.TinkerEffects;
@@ -85,8 +85,6 @@ import slimeknights.tconstruct.tools.network.FluidDataSerializer;
 import slimeknights.tconstruct.world.TinkerWorld;
 
 import static slimeknights.mantle.Mantle.commonResource;
-import static slimeknights.mantle.block.fluid.BurningLiquidBlock.createBurning;
-import static slimeknights.mantle.block.fluid.MobEffectLiquidBlock.createEffect;
 
 /**
  * Contains all fluids used throughout the mod
@@ -95,8 +93,6 @@ import static slimeknights.mantle.block.fluid.MobEffectLiquidBlock.createEffect;
 public final class TinkerFluids extends TinkerModule {
   public TinkerFluids() {
     NeoForgeMod.enableMilkFluid();
-    // RegisterBrewingRecipesEvent fires on the game bus, not the mod bus
-    NeoForge.EVENT_BUS.addListener(this::registerBrewingRecipes);
   }
 
   /** Creative tab for general items, or those that lack another tab */
@@ -109,112 +105,113 @@ public final class TinkerFluids extends TinkerModule {
                                    .build());
 
   // basic
-  public static final FlowingFluidObject<BaseFlowingFluid> venom = FLUIDS.register("venom").type(slime("venom").temperature(310)).bucket().block(createEffect(MapColor.QUARTZ, 0, () -> new MobEffectInstance(MobEffects.POISON, 5*20))).flowing();
-  public static final ItemObject<Item> venomBottle = ITEMS.register("venom_bottle", () -> new FluidContainerFoodItem(new Item.Properties().food(TinkerFood.VENOM_BOTTLE).stacksTo(16).craftRemainder(Items.GLASS_BOTTLE), () -> new FluidStack(venom.get(), FluidValues.BOTTLE)));
+  public static final FlowingFluidObject<BaseFlowingFluid> venom = FLUIDS.register("venom").type(slime("venom").temperature(310)).bucket().mobEffectBlock(MapColor.QUARTZ, 0, () -> new MobEffectInstance(MobEffects.POISON, 5*20)).flowing();
+  public static final ItemObject<Item> venomBottle = ITEMS.register("venom_bottle", props -> new FluidContainerFoodItem(props, () -> new FluidStack(venom.get(), FluidValues.BOTTLE)), props -> props.food(TinkerFood.VENOM_BOTTLE, TinkerFood.VENOM_BOTTLE_USE).stacksTo(16).craftRemainder(Items.GLASS_BOTTLE));
   public static final FluidObject<UnplaceableFluid> powderedSnow = FLUIDS.register("powdered_snow").bucket(() -> Items.POWDER_SNOW_BUCKET).type(powder("powdered_snow").temperature(270)).commonTag().unplacable();
 
   // slime -  note second name parameter is forge tag name
-  public static final FlowingFluidObject<SlimeFluid> earthSlime = FLUIDS.registerSlime("earth_slime", slime("earth_slime").temperature(350)).bucket().block(createEffect(MapColor.GRASS, 0, () -> effect(TinkerEffects.bouncy, 5*20))).commonTag("slime").flowing(SlimeFluid.Source::new, SlimeFluid.Flowing::new);
-  public static final FlowingFluidObject<SlimeFluid> skySlime   = FLUIDS.registerSlime("sky_slime",   slime("sky_slime"  ).temperature(310)).bucket().block(createEffect(MapColor.DIAMOND, 0, () -> effect(TinkerEffects.ricochet, 5*20))).flowing(SlimeFluid.Source::new, SlimeFluid.Flowing::new);
-  public static final FlowingFluidObject<SlimeFluid> enderSlime = FLUIDS.registerSlime("ender_slime", slime("ender_slime").temperature(370)).bucket().block(createEffect(MapColor.COLOR_PURPLE, 0, () -> effect(TinkerEffects.enderference, 5 * 20))).flowing(SlimeFluid.Source::new, SlimeFluid.Flowing::new);
-  public static final FlowingFluidObject<SlimeFluid> magma      = FLUIDS.registerSlime("magma",       slime("magma").temperature(600).lightLevel(3)).bucket().commonTag().block(createBurning(MapColor.NETHER, 3, 8, 3f)).flowing(SlimeFluid.Source::new, SlimeFluid.Flowing::new);
+  public static final FlowingFluidObject<SlimeFluid> earthSlime = FLUIDS.registerSlime("earth_slime", slime("earth_slime").temperature(350)).bucket().mobEffectBlock(MapColor.GRASS, 0, () -> effect(TinkerEffects.bouncy, 5*20)).commonTag("slime").flowing(SlimeFluid.Source::new, SlimeFluid.Flowing::new);
+  public static final FlowingFluidObject<SlimeFluid> skySlime   = FLUIDS.registerSlime("sky_slime",   slime("sky_slime"  ).temperature(310)).bucket().mobEffectBlock(MapColor.DIAMOND, 0, () -> effect(TinkerEffects.ricochet, 5*20)).flowing(SlimeFluid.Source::new, SlimeFluid.Flowing::new);
+  public static final FlowingFluidObject<SlimeFluid> enderSlime = FLUIDS.registerSlime("ender_slime", slime("ender_slime").temperature(370)).bucket().mobEffectBlock(MapColor.COLOR_PURPLE, 0, () -> effect(TinkerEffects.enderference, 5 * 20)).flowing(SlimeFluid.Source::new, SlimeFluid.Flowing::new);
+  public static final FlowingFluidObject<SlimeFluid> magma      = FLUIDS.registerSlime("magma",       slime("magma").temperature(600).lightLevel(3)).bucket().commonTag().burningBlock(MapColor.NETHER, 3, 8, 3f).flowing(SlimeFluid.Source::new, SlimeFluid.Flowing::new);
   public static final FlowingFluidObject<InvertedFluid> ichor   = FLUIDS.registerSlime("ichor").type(() -> new SlimeFluidType.Inverted(slime("ichor").temperature(1000).density(-1600))).bucket().block(MapColor.COLOR_ORANGE, 0).invertedFlowing();
   public static final EnumObject<SlimeType, Fluid> slime = new EnumObject.Builder<SlimeType, Fluid>(SlimeType.class).put(SlimeType.EARTH, earthSlime).put(SlimeType.SKY, skySlime).put(SlimeType.ENDER, enderSlime).put(SlimeType.ICHOR, ichor).build();
   // bottles of slime
-  public static final EnumObject<SlimeType, Item> slimeBottle = ITEMS.registerEnum(SlimeType.values(), "slime_bottle", type -> new FluidContainerFoodItem(
-      new Item.Properties().food(TinkerFood.getBottle(type)).stacksTo(16).craftRemainder(Items.GLASS_BOTTLE), () -> new FluidStack(slime.get(type), FluidValues.BOTTLE)));
-  public static final ItemObject<Item> magmaBottle = ITEMS.register("magma_bottle", () -> new MagmaBottleItem(new Item.Properties().stacksTo(16).craftRemainder(Items.GLASS_BOTTLE), 15));
+  public static final EnumObject<SlimeType, Item> slimeBottle = ITEMS.registerEnum(SlimeType.values(), "slime_bottle", (type, props) -> new FluidContainerFoodItem(
+      props.food(TinkerFood.getBottle(type), TinkerFood.getBottleUse(type)), () -> new FluidStack(slime.get(type), FluidValues.BOTTLE)), props -> props.stacksTo(16).craftRemainder(Items.GLASS_BOTTLE));
+  public static final ItemObject<Item> magmaBottle = ITEMS.register("magma_bottle", props -> new MagmaBottleItem(props, 15), props -> props.stacksTo(16).craftRemainder(Items.GLASS_BOTTLE));
 
   // foods
-  public static FlowingFluidObject<BaseFlowingFluid> honey        = FLUIDS.registerSlime("honey").type(slime("honey").temperature(301)).bucket().block(createEffect(MapColor.COLOR_ORANGE, 0, () -> new MobEffectInstance(MobEffects.SLOWNESS, 5*20))).commonTag().flowing();
+  public static FlowingFluidObject<BaseFlowingFluid> honey        = FLUIDS.registerSlime("honey").type(slime("honey").temperature(301)).bucket().mobEffectBlock(MapColor.COLOR_ORANGE, 0, () -> new MobEffectInstance(MobEffects.SLOWNESS, 5*20)).commonTag().flowing();
   public static FlowingFluidObject<BaseFlowingFluid> beetrootSoup = FLUIDS.register("beetroot_soup").type(cool("beetroot_soup").temperature(400)).bucket().block(MapColor.COLOR_RED, 0).commonTag().flowing();
   public static FlowingFluidObject<BaseFlowingFluid> mushroomStew = FLUIDS.register("mushroom_stew").type(cool("mushroom_stew").temperature(400)).bucket().block(MapColor.DIRT, 0).commonTag().flowing();
   public static FlowingFluidObject<BaseFlowingFluid> rabbitStew   = FLUIDS.register("rabbit_stew").type(cool("rabbit_stew").temperature(400)).bucket().block(MapColor.PODZOL, 0).commonTag().flowing();
   public static FlowingFluidObject<BaseFlowingFluid> meatSoup     = FLUIDS.register("meat_soup").type(cool("meat_soup").temperature(400)).bucket().block(MapColor.CRIMSON_NYLIUM, 0).flowing();
-  public static final ItemObject<Item> meatSoupBowl = ITEMS.register("meat_soup", () -> new ContainerFoodItem(new Item.Properties().food(TinkerFood.MEAT_SOUP).stacksTo(1).craftRemainder(Items.BOWL)));
+  public static final ItemObject<Item> meatSoupBowl = ITEMS.register("meat_soup", ContainerFoodItem::new, props -> props.food(TinkerFood.MEAT_SOUP, TinkerFood.MEAT_SOUP_USE).stacksTo(1).craftRemainder(Items.BOWL));
 
   // potion
-  public static final FluidObject<UnplaceableFluid> potion = FLUIDS.register("potion").type(() -> new PotionFluidType(cool().descriptionId("item.minecraft.potion.effect.empty").density(1100).viscosity(1100).temperature(315).sound(SoundActions.BUCKET_FILL, SoundEvents.BOTTLE_FILL).sound(SoundActions.BUCKET_EMPTY, SoundEvents.BOTTLE_EMPTY))).bucket(fluid -> new PotionBucketItem(fluid, RegistrationHelper.BUCKET_PROPS)).commonTag().unplacable();
-  public static final ItemObject<Item> splashBottle = ITEMS.register("splash_bottle", () -> new BottleItem(Items.SPLASH_POTION, ITEM_PROPS));
-  public static final ItemObject<Item> lingeringBottle = ITEMS.register("lingering_bottle", () -> new BottleItem(Items.LINGERING_POTION, ITEM_PROPS));
+  public static final FluidObject<UnplaceableFluid> potion = FLUIDS.register("potion").type(() -> new PotionFluidType(cool().descriptionId("item.minecraft.potion.effect.empty").density(1100).viscosity(1100).temperature(315).sound(SoundActions.BUCKET_FILL, SoundEvents.BOTTLE_FILL).sound(SoundActions.BUCKET_EMPTY, SoundEvents.BOTTLE_EMPTY))).bucket(PotionBucketItem::new).commonTag().unplacable();
+  public static final ItemObject<Item> splashBottle = ITEMS.register("splash_bottle", props -> new BottleItem(Items.SPLASH_POTION, props), ITEM_PROPS);
+  public static final ItemObject<Item> lingeringBottle = ITEMS.register("lingering_bottle", props -> new BottleItem(Items.LINGERING_POTION, props), ITEM_PROPS);
 
   // base molten fluids
-  public static final FlowingFluidObject<BaseFlowingFluid> searedStone   = FLUIDS.registerStone("seared_stone").type(hot("seared_stone").temperature(900).lightLevel(6)).block(createBurning(MapColor.DEEPSLATE, 6, 8, 2f)).bucket().flowing();
-  public static final FlowingFluidObject<BaseFlowingFluid> scorchedStone = FLUIDS.registerStone("scorched_stone").type(hot("scorched_stone").temperature(800).lightLevel(4)).block(createBurning(MapColor.TERRACOTTA_BROWN, 4, 7, 2f)).bucket().flowing();
-  public static final FlowingFluidObject<BaseFlowingFluid> moltenClay    = FLUIDS.registerStone("molten_clay").type(hot("molten_clay").temperature(750).lightLevel(3)).block(createBurning(MapColor.COLOR_ORANGE, 3, 5, 2f)).bucket().flowing();
-  public static final FlowingFluidObject<BaseFlowingFluid> moltenGlass   = FLUIDS.registerGlass("molten_glass").type(hot("molten_glass").temperature(1050).lightLevel(1)).block(createBurning(MapColor.ICE, 1, 5, 2f)).bucket().flowing();
-  public static final FlowingFluidObject<BaseFlowingFluid> liquidSoul    = FLUIDS.registerGlass("liquid_soul").type(hot("liquid_soul").temperature(700).lightLevel(2)).block(createEffect(MapColor.COLOR_BROWN, 2, () -> new MobEffectInstance(MobEffects.BLINDNESS, 5 * 20))).bucket().flowing();
+  public static final FlowingFluidObject<BaseFlowingFluid> searedStone   = FLUIDS.registerStone("seared_stone").type(hot("seared_stone").temperature(900).lightLevel(6)).burningBlock(MapColor.DEEPSLATE, 6, 8, 2f).bucket().flowing();
+  public static final FlowingFluidObject<BaseFlowingFluid> scorchedStone = FLUIDS.registerStone("scorched_stone").type(hot("scorched_stone").temperature(800).lightLevel(4)).burningBlock(MapColor.TERRACOTTA_BROWN, 4, 7, 2f).bucket().flowing();
+  public static final FlowingFluidObject<BaseFlowingFluid> moltenClay    = FLUIDS.registerStone("molten_clay").type(hot("molten_clay").temperature(750).lightLevel(3)).burningBlock(MapColor.COLOR_ORANGE, 3, 5, 2f).bucket().flowing();
+  public static final FlowingFluidObject<BaseFlowingFluid> moltenGlass   = FLUIDS.registerGlass("molten_glass").type(hot("molten_glass").temperature(1050).lightLevel(1)).burningBlock(MapColor.ICE, 1, 5, 2f).bucket().flowing();
+  public static final FlowingFluidObject<BaseFlowingFluid> liquidSoul    = FLUIDS.registerGlass("liquid_soul").type(hot("liquid_soul").temperature(700).lightLevel(2)).mobEffectBlock(MapColor.COLOR_BROWN, 2, () -> new MobEffectInstance(MobEffects.BLINDNESS, 5 * 20)).bucket().flowing();
   // ceramics compat
-  public static final FlowingFluidObject<BaseFlowingFluid> moltenPorcelain = FLUIDS.registerStone("molten_porcelain").type(hot("molten_porcelain").temperature(1000).lightLevel(2)).block(createBurning(MapColor.QUARTZ, 2, 5, 2f)).bucket().flowing();
+  public static final FlowingFluidObject<BaseFlowingFluid> moltenPorcelain = FLUIDS.registerStone("molten_porcelain").type(hot("molten_porcelain").temperature(1000).lightLevel(2)).burningBlock(MapColor.QUARTZ, 2, 5, 2f).bucket().flowing();
   // fancy molten fluids
-  public static final FlowingFluidObject<BaseFlowingFluid> moltenObsidian = FLUIDS.registerStone("molten_obsidian").type(hot("molten_obsidian").temperature(1300).lightLevel(3)).block(createBurning(MapColor.COLOR_BLACK, 3, 12, 4f)).bucket().flowing();
-  public static final FlowingFluidObject<BaseFlowingFluid> moltenEnder    = FLUIDS.registerStone("molten_ender").type(hot("molten_ender").temperature(777).lightLevel(5)).block(createEffect(MapColor.PLANT, 5, () -> effect(TinkerEffects.enderference, 5 * 20))).bucket().commonTag("ender").flowing();
-  public static final FlowingFluidObject<BaseFlowingFluid> blazingBlood   = FLUIDS.register("blazing_blood").type(hot("blazing_blood").temperature(1800).lightLevel(15).density(3500)).block(createBurning(MapColor.COLOR_ORANGE, 15, 15, 5f)).bucket().flowing();
+  public static final FlowingFluidObject<BaseFlowingFluid> moltenObsidian = FLUIDS.registerStone("molten_obsidian").type(hot("molten_obsidian").temperature(1300).lightLevel(3)).burningBlock(MapColor.COLOR_BLACK, 3, 12, 4f).bucket().flowing();
+  public static final FlowingFluidObject<BaseFlowingFluid> moltenEnder    = FLUIDS.registerStone("molten_ender").type(hot("molten_ender").temperature(777).lightLevel(5)).mobEffectBlock(MapColor.PLANT, 5, () -> effect(TinkerEffects.enderference, 5 * 20)).bucket().commonTag("ender").flowing();
+  // 150% efficiency compared to lava bucket, compare to casting blaze rods, which cast into 120%. Fuel is a component since 26.3, replacing the furnace fuel event
+  public static final FlowingFluidObject<BaseFlowingFluid> blazingBlood   = FLUIDS.register("blazing_blood").type(hot("blazing_blood").temperature(1800).lightLevel(15).density(3500)).burningBlock(MapColor.COLOR_ORANGE, 15, 15, 5f).bucket((fluid, props) -> new BucketItem(fluid.get(), BurnableBlockItem.withBurnTime(props, 30000))).flowing();
 
   // ores
-  public static final FlowingFluidObject<BaseFlowingFluid> moltenEmerald  = FLUIDS.registerGem("molten_emerald").type(hot("molten_emerald").temperature(1234).lightLevel(9)).block(createBurning(MapColor.EMERALD, 9, 10, 6f)).bucket().flowing();
-  public static final FlowingFluidObject<BaseFlowingFluid> moltenQuartz   = FLUIDS.registerGem("molten_quartz").type(hot("molten_quartz").temperature(937).lightLevel(6)).block(createBurning(MapColor.QUARTZ, 6, 10, 5f)).bucket().flowing();
-  public static final FlowingFluidObject<BaseFlowingFluid> moltenAmethyst = FLUIDS.registerGem("molten_amethyst").type(hot("molten_amethyst").temperature(1250).lightLevel(11)).block(createBurning(MapColor.COLOR_PURPLE, 11, 10, 5f)).bucket().flowing();
-  public static final FlowingFluidObject<BaseFlowingFluid> moltenDiamond  = FLUIDS.registerGem("molten_diamond").type(hot("molten_diamond").temperature(1750).lightLevel(13)).block(createBurning(MapColor.DIAMOND, 13, 10, 7f)).bucket().flowing();
-  public static final FlowingFluidObject<BaseFlowingFluid> moltenDebris   = FLUIDS.registerGem("molten_debris").type(hot("molten_debris").temperature(1475).lightLevel(14)).block(createBurning(MapColor.COLOR_BLACK, 14, 10, 8f)).bucket().flowing();
+  public static final FlowingFluidObject<BaseFlowingFluid> moltenEmerald  = FLUIDS.registerGem("molten_emerald").type(hot("molten_emerald").temperature(1234).lightLevel(9)).burningBlock(MapColor.EMERALD, 9, 10, 6f).bucket().flowing();
+  public static final FlowingFluidObject<BaseFlowingFluid> moltenQuartz   = FLUIDS.registerGem("molten_quartz").type(hot("molten_quartz").temperature(937).lightLevel(6)).burningBlock(MapColor.QUARTZ, 6, 10, 5f).bucket().flowing();
+  public static final FlowingFluidObject<BaseFlowingFluid> moltenAmethyst = FLUIDS.registerGem("molten_amethyst").type(hot("molten_amethyst").temperature(1250).lightLevel(11)).burningBlock(MapColor.COLOR_PURPLE, 11, 10, 5f).bucket().flowing();
+  public static final FlowingFluidObject<BaseFlowingFluid> moltenDiamond  = FLUIDS.registerGem("molten_diamond").type(hot("molten_diamond").temperature(1750).lightLevel(13)).burningBlock(MapColor.DIAMOND, 13, 10, 7f).bucket().flowing();
+  public static final FlowingFluidObject<BaseFlowingFluid> moltenDebris   = FLUIDS.registerGem("molten_debris").type(hot("molten_debris").temperature(1475).lightLevel(14)).burningBlock(MapColor.COLOR_BLACK, 14, 10, 8f).bucket().flowing();
   // metal ores
-  public static final FlowingFluidObject<BaseFlowingFluid> moltenIron   = FLUIDS.registerMetal("molten_iron").type(hot("molten_iron").temperature(1100).lightLevel(12)).block(createBurning(MapColor.RAW_IRON, 12, 10, 5f)).bucket().commonTag().flowing();
-  public static final FlowingFluidObject<BaseFlowingFluid> moltenGold   = FLUIDS.registerMetal("molten_gold").type(hot("molten_gold").temperature(1000).lightLevel(12)).block(createBurning(MapColor.GOLD, 12, 10, 5f)).bucket().commonTag().flowing();
-  public static final FlowingFluidObject<BaseFlowingFluid> moltenCopper = FLUIDS.registerMetal("molten_copper").type(hot("molten_copper").temperature(800).lightLevel(12)).block(createBurning(MapColor.COLOR_ORANGE, 12, 10, 5f)).bucket().commonTag().flowing();
-  public static final FlowingFluidObject<BaseFlowingFluid> moltenCobalt = FLUIDS.registerMetal("molten_cobalt").type(hot("molten_cobalt").temperature(1250).lightLevel(8)).block(createBurning(MapColor.WATER, 8, 10, 6f)).bucket().commonTag().flowing();
-  public static final FlowingFluidObject<BaseFlowingFluid> moltenSteel  = FLUIDS.registerMetal("molten_steel").type(hot("molten_steel").temperature(1250).lightLevel(13)).block(createBurning(MapColor.STONE, 13, 10, 6f)).bucket().commonTag().flowing();
-  public static final FlowingFluidObject<BaseFlowingFluid> moltenKnightmetal = FLUIDS.registerMetal("molten_knightmetal").type(hot("molten_knightmetal").temperature(1600).lightLevel(10)).block(createBurning(MapColor.GRASS, 10, 10, 8f)).bucket().flowing();
+  public static final FlowingFluidObject<BaseFlowingFluid> moltenIron   = FLUIDS.registerMetal("molten_iron").type(hot("molten_iron").temperature(1100).lightLevel(12)).burningBlock(MapColor.RAW_IRON, 12, 10, 5f).bucket().commonTag().flowing();
+  public static final FlowingFluidObject<BaseFlowingFluid> moltenGold   = FLUIDS.registerMetal("molten_gold").type(hot("molten_gold").temperature(1000).lightLevel(12)).burningBlock(MapColor.GOLD, 12, 10, 5f).bucket().commonTag().flowing();
+  public static final FlowingFluidObject<BaseFlowingFluid> moltenCopper = FLUIDS.registerMetal("molten_copper").type(hot("molten_copper").temperature(800).lightLevel(12)).burningBlock(MapColor.COLOR_ORANGE, 12, 10, 5f).bucket().commonTag().flowing();
+  public static final FlowingFluidObject<BaseFlowingFluid> moltenCobalt = FLUIDS.registerMetal("molten_cobalt").type(hot("molten_cobalt").temperature(1250).lightLevel(8)).burningBlock(MapColor.WATER, 8, 10, 6f).bucket().commonTag().flowing();
+  public static final FlowingFluidObject<BaseFlowingFluid> moltenSteel  = FLUIDS.registerMetal("molten_steel").type(hot("molten_steel").temperature(1250).lightLevel(13)).burningBlock(MapColor.STONE, 13, 10, 6f).bucket().commonTag().flowing();
+  public static final FlowingFluidObject<BaseFlowingFluid> moltenKnightmetal = FLUIDS.registerMetal("molten_knightmetal").type(hot("molten_knightmetal").temperature(1600).lightLevel(10)).burningBlock(MapColor.GRASS, 10, 10, 8f).bucket().flowing();
   // alloys
-  public static final FlowingFluidObject<BaseFlowingFluid> moltenSlimesteel     = FLUIDS.registerMetal("molten_slimesteel").type(hot("molten_slimesteel").temperature(1200).lightLevel(10)).block(createBurning(MapColor.DIAMOND, 10, 10, 6f)).bucket().flowing();
-  public static final FlowingFluidObject<BaseFlowingFluid> moltenAmethystBronze = FLUIDS.registerMetal("molten_amethyst_bronze").type(hot("molten_amethyst_bronze").temperature(1120).lightLevel(12)).block(createBurning(MapColor.COLOR_MAGENTA, 12, 10, 6f)).bucket().commonTag().flowing();
-  public static final FlowingFluidObject<BaseFlowingFluid> moltenRoseGold       = FLUIDS.registerMetal("molten_rose_gold").type(hot("molten_rose_gold").temperature(850).lightLevel(12)).block(createBurning(MapColor.COLOR_PINK, 12, 10, 6f)).bucket().commonTag().flowing();
-  public static final FlowingFluidObject<BaseFlowingFluid> moltenPigIron        = FLUIDS.registerMetal("molten_pig_iron").type(hot("molten_pig_iron").temperature(1111).lightLevel(10)).block(createBurning(MapColor.TERRACOTTA_WHITE, 10, 10, 6f)).bucket().flowing();
+  public static final FlowingFluidObject<BaseFlowingFluid> moltenSlimesteel     = FLUIDS.registerMetal("molten_slimesteel").type(hot("molten_slimesteel").temperature(1200).lightLevel(10)).burningBlock(MapColor.DIAMOND, 10, 10, 6f).bucket().flowing();
+  public static final FlowingFluidObject<BaseFlowingFluid> moltenAmethystBronze = FLUIDS.registerMetal("molten_amethyst_bronze").type(hot("molten_amethyst_bronze").temperature(1120).lightLevel(12)).burningBlock(MapColor.COLOR_MAGENTA, 12, 10, 6f).bucket().commonTag().flowing();
+  public static final FlowingFluidObject<BaseFlowingFluid> moltenRoseGold       = FLUIDS.registerMetal("molten_rose_gold").type(hot("molten_rose_gold").temperature(850).lightLevel(12)).burningBlock(MapColor.COLOR_PINK, 12, 10, 6f).bucket().commonTag().flowing();
+  public static final FlowingFluidObject<BaseFlowingFluid> moltenPigIron        = FLUIDS.registerMetal("molten_pig_iron").type(hot("molten_pig_iron").temperature(1111).lightLevel(10)).burningBlock(MapColor.TERRACOTTA_WHITE, 10, 10, 6f).bucket().flowing();
 
-  public static final FlowingFluidObject<BaseFlowingFluid> moltenManyullyn   = FLUIDS.registerMetal("molten_manyullyn").type(hot("molten_manyullyn").temperature(1500).lightLevel(11)).block(createBurning(MapColor.COLOR_PURPLE, 11, 10, 8f)).bucket().commonTag().flowing();
-  public static final FlowingFluidObject<BaseFlowingFluid> moltenHepatizon   = FLUIDS.registerMetal("molten_hepatizon").type(hot("molten_hepatizon").temperature(1700).lightLevel(8)).block(createBurning(MapColor.TERRACOTTA_BLUE, 8, 10, 7f)).bucket().commonTag().flowing();
+  public static final FlowingFluidObject<BaseFlowingFluid> moltenManyullyn   = FLUIDS.registerMetal("molten_manyullyn").type(hot("molten_manyullyn").temperature(1500).lightLevel(11)).burningBlock(MapColor.COLOR_PURPLE, 11, 10, 8f).bucket().commonTag().flowing();
+  public static final FlowingFluidObject<BaseFlowingFluid> moltenHepatizon   = FLUIDS.registerMetal("molten_hepatizon").type(hot("molten_hepatizon").temperature(1700).lightLevel(8)).burningBlock(MapColor.TERRACOTTA_BLUE, 8, 10, 7f).bucket().commonTag().flowing();
   public static final FlowingFluidObject<InvertedFluid>     moltenCinderslime = FLUIDS.registerMetal("molten_cinderslime").invertedType(hot("molten_cinderslime").temperature(1350).lightLevel(10).density(-2000)).burningBlock(MapColor.COLOR_RED, 10, 10, 7f).bucket().invertedFlowing();
-  public static final FlowingFluidObject<BaseFlowingFluid> moltenQueensSlime = FLUIDS.registerMetal("molten_queens_slime").type(hot("molten_queens_slime").temperature(1450).lightLevel(9)).block(createBurning(MapColor.COLOR_GREEN, 9, 10, 6f)).bucket().flowing();
-  public static final FlowingFluidObject<BaseFlowingFluid> moltenSoulsteel   = FLUIDS.registerMetal("molten_soulsteel").type(hot("molten_soulsteel").temperature(1500).lightLevel(6)).block(createBurning(MapColor.COLOR_BROWN, 6, 10, 7f)).bucket().flowing();
-  public static final FlowingFluidObject<BaseFlowingFluid> moltenNetherite   = FLUIDS.registerMetal("molten_netherite").type(hot("molten_netherite").temperature(1550).lightLevel(14)).block(createBurning(MapColor.COLOR_BLACK, 14, 10, 10f)).bucket().commonTag().flowing();
-  public static final FlowingFluidObject<BaseFlowingFluid> moltenKnightslime = FLUIDS.registerMetal("molten_knightslime").type(hot("molten_knightslime").temperature(1425).lightLevel(12)).block(createBurning(MapColor.COLOR_MAGENTA, 12, 10, 8f)).bucket().flowing();
+  public static final FlowingFluidObject<BaseFlowingFluid> moltenQueensSlime = FLUIDS.registerMetal("molten_queens_slime").type(hot("molten_queens_slime").temperature(1450).lightLevel(9)).burningBlock(MapColor.COLOR_GREEN, 9, 10, 6f).bucket().flowing();
+  public static final FlowingFluidObject<BaseFlowingFluid> moltenSoulsteel   = FLUIDS.registerMetal("molten_soulsteel").type(hot("molten_soulsteel").temperature(1500).lightLevel(6)).burningBlock(MapColor.COLOR_BROWN, 6, 10, 7f).bucket().flowing();
+  public static final FlowingFluidObject<BaseFlowingFluid> moltenNetherite   = FLUIDS.registerMetal("molten_netherite").type(hot("molten_netherite").temperature(1550).lightLevel(14)).burningBlock(MapColor.COLOR_BLACK, 14, 10, 10f).bucket().commonTag().flowing();
+  public static final FlowingFluidObject<BaseFlowingFluid> moltenKnightslime = FLUIDS.registerMetal("molten_knightslime").type(hot("molten_knightslime").temperature(1425).lightLevel(12)).burningBlock(MapColor.COLOR_MAGENTA, 12, 10, 8f).bucket().flowing();
 
   // compat ores
-  public static final FlowingFluidObject<BaseFlowingFluid> moltenTin      = FLUIDS.registerMetal("molten_tin").type(hot("molten_tin").temperature(525).lightLevel(12)).block(createBurning(MapColor.COLOR_CYAN, 12, 10, 5f)).bucket().commonTag().flowing();
-  public static final FlowingFluidObject<BaseFlowingFluid> moltenAluminum = FLUIDS.registerMetal("molten_aluminum").type(hot("molten_aluminum").temperature(725).lightLevel(12)).block(createBurning(MapColor.METAL, 12, 10, 5f)).bucket().commonTag().flowing();
-  public static final FlowingFluidObject<BaseFlowingFluid> moltenLead     = FLUIDS.registerMetal("molten_lead").type(hot("molten_lead").temperature(630).lightLevel(12)).block(createBurning(MapColor.TERRACOTTA_BLUE, 12, 10, 5f)).bucket().commonTag().flowing();
-  public static final FlowingFluidObject<BaseFlowingFluid> moltenSilver   = FLUIDS.registerMetal("molten_silver").type(hot("molten_silver").temperature(1090).lightLevel(12)).block(createBurning(MapColor.METAL, 12, 10, 5f)).bucket().commonTag().flowing();
-  public static final FlowingFluidObject<BaseFlowingFluid> moltenNickel   = FLUIDS.registerMetal("molten_nickel").type(hot("molten_nickel").temperature(1250).lightLevel(12)).block(createBurning(MapColor.WOOD, 12, 10, 5f)).bucket().commonTag().flowing();
-  public static final FlowingFluidObject<BaseFlowingFluid> moltenZinc     = FLUIDS.registerMetal("molten_zinc").type(hot("molten_zinc").temperature(720).lightLevel(12)).block(createBurning(MapColor.TERRACOTTA_CYAN, 12, 10, 5f)).bucket().commonTag().flowing();
-  public static final FlowingFluidObject<BaseFlowingFluid> moltenPlatinum = FLUIDS.registerMetal("molten_platinum").type(hot("molten_platinum").temperature(1270).lightLevel(12)).block(createBurning(MapColor.DIAMOND, 12, 10, 5f)).bucket().commonTag().flowing();
-  public static final FlowingFluidObject<BaseFlowingFluid> moltenTungsten = FLUIDS.registerMetal("molten_tungsten").type(hot("molten_tungsten").temperature(1250).lightLevel(12)).block(createBurning(MapColor.TERRACOTTA_BLACK, 12, 10, 5f)).bucket().commonTag().flowing();
-  public static final FlowingFluidObject<BaseFlowingFluid> moltenOsmium   = FLUIDS.registerMetal("molten_osmium").type(hot("molten_osmium").temperature(1275).lightLevel(4)).block(createBurning(MapColor.CLAY, 4, 10, 5f)).bucket().commonTag().flowing();
-  public static final FlowingFluidObject<BaseFlowingFluid> moltenUranium  = FLUIDS.registerMetal("molten_uranium").type(hot("molten_uranium").temperature(1130).lightLevel(15)).block(createBurning(MapColor.TERRACOTTA_GREEN, 15, 10, 5f)).bucket().commonTag().flowing();
-  public static final FlowingFluidObject<BaseFlowingFluid> moltenChromium = FLUIDS.registerMetal("molten_chromium").type(hot("molten_chromium").temperature(1200).lightLevel(13)).block(createBurning(MapColor.COLOR_CYAN, 13, 10, 5f)).bucket().commonTag().flowing();
-  public static final FlowingFluidObject<BaseFlowingFluid> moltenCadmium  = FLUIDS.registerMetal("molten_cadmium").type(hot("molten_cadmium").temperature(594).lightLevel(10)).block(createBurning(MapColor.COLOR_BROWN, 10, 10, 5f)).bucket().commonTag().flowing();
+  public static final FlowingFluidObject<BaseFlowingFluid> moltenTin      = FLUIDS.registerMetal("molten_tin").type(hot("molten_tin").temperature(525).lightLevel(12)).burningBlock(MapColor.COLOR_CYAN, 12, 10, 5f).bucket().commonTag().flowing();
+  public static final FlowingFluidObject<BaseFlowingFluid> moltenAluminum = FLUIDS.registerMetal("molten_aluminum").type(hot("molten_aluminum").temperature(725).lightLevel(12)).burningBlock(MapColor.METAL, 12, 10, 5f).bucket().commonTag().flowing();
+  public static final FlowingFluidObject<BaseFlowingFluid> moltenLead     = FLUIDS.registerMetal("molten_lead").type(hot("molten_lead").temperature(630).lightLevel(12)).burningBlock(MapColor.TERRACOTTA_BLUE, 12, 10, 5f).bucket().commonTag().flowing();
+  public static final FlowingFluidObject<BaseFlowingFluid> moltenSilver   = FLUIDS.registerMetal("molten_silver").type(hot("molten_silver").temperature(1090).lightLevel(12)).burningBlock(MapColor.METAL, 12, 10, 5f).bucket().commonTag().flowing();
+  public static final FlowingFluidObject<BaseFlowingFluid> moltenNickel   = FLUIDS.registerMetal("molten_nickel").type(hot("molten_nickel").temperature(1250).lightLevel(12)).burningBlock(MapColor.WOOD, 12, 10, 5f).bucket().commonTag().flowing();
+  public static final FlowingFluidObject<BaseFlowingFluid> moltenZinc     = FLUIDS.registerMetal("molten_zinc").type(hot("molten_zinc").temperature(720).lightLevel(12)).burningBlock(MapColor.TERRACOTTA_CYAN, 12, 10, 5f).bucket().commonTag().flowing();
+  public static final FlowingFluidObject<BaseFlowingFluid> moltenPlatinum = FLUIDS.registerMetal("molten_platinum").type(hot("molten_platinum").temperature(1270).lightLevel(12)).burningBlock(MapColor.DIAMOND, 12, 10, 5f).bucket().commonTag().flowing();
+  public static final FlowingFluidObject<BaseFlowingFluid> moltenTungsten = FLUIDS.registerMetal("molten_tungsten").type(hot("molten_tungsten").temperature(1250).lightLevel(12)).burningBlock(MapColor.TERRACOTTA_BLACK, 12, 10, 5f).bucket().commonTag().flowing();
+  public static final FlowingFluidObject<BaseFlowingFluid> moltenOsmium   = FLUIDS.registerMetal("molten_osmium").type(hot("molten_osmium").temperature(1275).lightLevel(4)).burningBlock(MapColor.CLAY, 4, 10, 5f).bucket().commonTag().flowing();
+  public static final FlowingFluidObject<BaseFlowingFluid> moltenUranium  = FLUIDS.registerMetal("molten_uranium").type(hot("molten_uranium").temperature(1130).lightLevel(15)).burningBlock(MapColor.TERRACOTTA_GREEN, 15, 10, 5f).bucket().commonTag().flowing();
+  public static final FlowingFluidObject<BaseFlowingFluid> moltenChromium = FLUIDS.registerMetal("molten_chromium").type(hot("molten_chromium").temperature(1200).lightLevel(13)).burningBlock(MapColor.COLOR_CYAN, 13, 10, 5f).bucket().commonTag().flowing();
+  public static final FlowingFluidObject<BaseFlowingFluid> moltenCadmium  = FLUIDS.registerMetal("molten_cadmium").type(hot("molten_cadmium").temperature(594).lightLevel(10)).burningBlock(MapColor.COLOR_BROWN, 10, 10, 5f).bucket().commonTag().flowing();
 
   // compat alloys
-  public static final FlowingFluidObject<BaseFlowingFluid> moltenBronze     = FLUIDS.registerMetal("molten_bronze").type(hot("molten_bronze").temperature(1000).lightLevel(10)).block(createBurning(MapColor.TERRACOTTA_ORANGE, 10, 10, 6f)).bucket().commonTag().flowing();
-  public static final FlowingFluidObject<BaseFlowingFluid> moltenBrass      = FLUIDS.registerMetal("molten_brass").type(hot("molten_brass").temperature(905).lightLevel(10)).block(createBurning(MapColor.TERRACOTTA_YELLOW, 10, 10, 6f)).bucket().commonTag().flowing();
-  public static final FlowingFluidObject<BaseFlowingFluid> moltenElectrum   = FLUIDS.registerMetal("molten_electrum").type(hot("molten_electrum").temperature(1060).lightLevel(10)).block(createBurning(MapColor.GOLD, 10, 10, 6f)).bucket().commonTag().flowing();
-  public static final FlowingFluidObject<BaseFlowingFluid> moltenInvar      = FLUIDS.registerMetal("molten_invar").type(hot("molten_invar").temperature(1200).lightLevel(10)).block(createBurning(MapColor.GLOW_LICHEN, 10, 10, 6f)).bucket().commonTag().flowing();
-  public static final FlowingFluidObject<BaseFlowingFluid> moltenConstantan = FLUIDS.registerMetal("molten_constantan").type(hot("molten_constantan").temperature(1220).lightLevel(10)).block(createBurning(MapColor.TERRACOTTA_RED, 10, 10, 6f)).bucket().commonTag().flowing();
-  public static final FlowingFluidObject<BaseFlowingFluid> moltenPewter     = FLUIDS.registerMetal("molten_pewter").type(hot("molten_pewter").temperature(700).lightLevel(10)).block(createBurning(MapColor.COLOR_GRAY, 10, 10, 6f)).bucket().commonTag().flowing();
+  public static final FlowingFluidObject<BaseFlowingFluid> moltenBronze     = FLUIDS.registerMetal("molten_bronze").type(hot("molten_bronze").temperature(1000).lightLevel(10)).burningBlock(MapColor.TERRACOTTA_ORANGE, 10, 10, 6f).bucket().commonTag().flowing();
+  public static final FlowingFluidObject<BaseFlowingFluid> moltenBrass      = FLUIDS.registerMetal("molten_brass").type(hot("molten_brass").temperature(905).lightLevel(10)).burningBlock(MapColor.TERRACOTTA_YELLOW, 10, 10, 6f).bucket().commonTag().flowing();
+  public static final FlowingFluidObject<BaseFlowingFluid> moltenElectrum   = FLUIDS.registerMetal("molten_electrum").type(hot("molten_electrum").temperature(1060).lightLevel(10)).burningBlock(MapColor.GOLD, 10, 10, 6f).bucket().commonTag().flowing();
+  public static final FlowingFluidObject<BaseFlowingFluid> moltenInvar      = FLUIDS.registerMetal("molten_invar").type(hot("molten_invar").temperature(1200).lightLevel(10)).burningBlock(MapColor.GLOW_LICHEN, 10, 10, 6f).bucket().commonTag().flowing();
+  public static final FlowingFluidObject<BaseFlowingFluid> moltenConstantan = FLUIDS.registerMetal("molten_constantan").type(hot("molten_constantan").temperature(1220).lightLevel(10)).burningBlock(MapColor.TERRACOTTA_RED, 10, 10, 6f).bucket().commonTag().flowing();
+  public static final FlowingFluidObject<BaseFlowingFluid> moltenPewter     = FLUIDS.registerMetal("molten_pewter").type(hot("molten_pewter").temperature(700).lightLevel(10)).burningBlock(MapColor.COLOR_GRAY, 10, 10, 6f).bucket().commonTag().flowing();
 
   // mod-specific compat
   // thermal
-  public static final FlowingFluidObject<BaseFlowingFluid> moltenEnderium = FLUIDS.registerMetal("molten_enderium").type(hot("molten_enderium").temperature(1650).lightLevel(12)).block(createBurning(MapColor.COLOR_CYAN, 12, 10, 7f)).bucket().commonTag().flowing();
-  public static final FlowingFluidObject<BaseFlowingFluid> moltenLumium   = FLUIDS.registerMetal("molten_lumium").type(hot("molten_lumium").temperature(1350).lightLevel(15)).block(createBurning(MapColor.GOLD, 15, 10, 7f)).bucket().commonTag().flowing();
-  public static final FlowingFluidObject<BaseFlowingFluid> moltenSignalum = FLUIDS.registerMetal("molten_signalum").type(hot("molten_signalum").temperature(1299).lightLevel(13)).block(createBurning(MapColor.FIRE, 13, 10, 7f)).bucket().commonTag().flowing();
+  public static final FlowingFluidObject<BaseFlowingFluid> moltenEnderium = FLUIDS.registerMetal("molten_enderium").type(hot("molten_enderium").temperature(1650).lightLevel(12)).burningBlock(MapColor.COLOR_CYAN, 12, 10, 7f).bucket().commonTag().flowing();
+  public static final FlowingFluidObject<BaseFlowingFluid> moltenLumium   = FLUIDS.registerMetal("molten_lumium").type(hot("molten_lumium").temperature(1350).lightLevel(15)).burningBlock(MapColor.GOLD, 15, 10, 7f).bucket().commonTag().flowing();
+  public static final FlowingFluidObject<BaseFlowingFluid> moltenSignalum = FLUIDS.registerMetal("molten_signalum").type(hot("molten_signalum").temperature(1299).lightLevel(13)).burningBlock(MapColor.FIRE, 13, 10, 7f).bucket().commonTag().flowing();
   // mekanism
-  public static final FlowingFluidObject<BaseFlowingFluid> moltenRefinedGlowstone = FLUIDS.registerMetal("molten_refined_glowstone").type(hot("molten_refined_glowstone").temperature(1125).lightLevel(15)).block(createBurning(MapColor.COLOR_YELLOW, 15, 10, 7f)).bucket().commonTag().flowing();
-  public static final FlowingFluidObject<BaseFlowingFluid> moltenRefinedObsidian  = FLUIDS.registerMetal("molten_refined_obsidian").type(hot("molten_refined_obsidian").temperature(1775).lightLevel(7)).block(createBurning(MapColor.TERRACOTTA_BLUE, 7, 10, 7f)).bucket().commonTag().flowing();
+  public static final FlowingFluidObject<BaseFlowingFluid> moltenRefinedGlowstone = FLUIDS.registerMetal("molten_refined_glowstone").type(hot("molten_refined_glowstone").temperature(1125).lightLevel(15)).burningBlock(MapColor.COLOR_YELLOW, 15, 10, 7f).bucket().commonTag().flowing();
+  public static final FlowingFluidObject<BaseFlowingFluid> moltenRefinedObsidian  = FLUIDS.registerMetal("molten_refined_obsidian").type(hot("molten_refined_obsidian").temperature(1775).lightLevel(7)).burningBlock(MapColor.TERRACOTTA_BLUE, 7, 10, 7f).bucket().commonTag().flowing();
   // cosmere metals
-  public static final FlowingFluidObject<BaseFlowingFluid> moltenNicrosil = FLUIDS.registerMetal("molten_nicrosil").type(hot("molten_nicrosil").temperature(1400).lightLevel(14)).block(createBurning(MapColor.SNOW, 12, 10, 6f)).bucket().commonTag().flowing();
-  public static final FlowingFluidObject<BaseFlowingFluid> moltenDuralumin = FLUIDS.registerMetal("molten_duralumin").type(hot("molten_duralumin").temperature(925).lightLevel(10)).block(createBurning(MapColor.COLOR_LIGHT_GREEN, 10, 10, 6f)).bucket().commonTag().flowing();
-  public static final FlowingFluidObject<BaseFlowingFluid> moltenBendalloy = FLUIDS.registerMetal("molten_bendalloy").type(hot("molten_bendalloy").temperature(400).lightLevel(9)).block(createBurning(MapColor.SNOW, 9, 10, 6f)).bucket().commonTag().flowing();
+  public static final FlowingFluidObject<BaseFlowingFluid> moltenNicrosil = FLUIDS.registerMetal("molten_nicrosil").type(hot("molten_nicrosil").temperature(1400).lightLevel(14)).burningBlock(MapColor.SNOW, 12, 10, 6f).bucket().commonTag().flowing();
+  public static final FlowingFluidObject<BaseFlowingFluid> moltenDuralumin = FLUIDS.registerMetal("molten_duralumin").type(hot("molten_duralumin").temperature(925).lightLevel(10)).burningBlock(MapColor.COLOR_LIGHT_GREEN, 10, 10, 6f).bucket().commonTag().flowing();
+  public static final FlowingFluidObject<BaseFlowingFluid> moltenBendalloy = FLUIDS.registerMetal("molten_bendalloy").type(hot("molten_bendalloy").temperature(400).lightLevel(9)).burningBlock(MapColor.SNOW, 9, 10, 6f).bucket().commonTag().flowing();
   // twilight
-  public static final FlowingFluidObject<BaseFlowingFluid> moltenSteeleaf = FLUIDS.registerMetal("molten_steeleaf").type(hot("molten_steeleaf").temperature(1234).lightLevel(10)).block(createBurning(MapColor.COLOR_GREEN, 10, 10, 6f)).bucket().flowing();
-  public static final FlowingFluidObject<BaseFlowingFluid> fieryLiquid = FLUIDS.register("fiery_liquid").type(hot("fiery_liquid").temperature(1800).lightLevel(15)).block(createBurning(MapColor.CRIMSON_HYPHAE, 15, 20, 6f)).tickRate(30).bucket().flowing();
+  public static final FlowingFluidObject<BaseFlowingFluid> moltenSteeleaf = FLUIDS.registerMetal("molten_steeleaf").type(hot("molten_steeleaf").temperature(1234).lightLevel(10)).burningBlock(MapColor.COLOR_GREEN, 10, 10, 6f).bucket().flowing();
+  public static final FlowingFluidObject<BaseFlowingFluid> fieryLiquid = FLUIDS.register("fiery_liquid").type(hot("fiery_liquid").temperature(1800).lightLevel(15)).burningBlock(MapColor.CRIMSON_HYPHAE, 15, 20, 6f).tickRate(30).bucket().flowing();
 
   // fluid data serializer
   public static final FluidDataSerializer FLUID_DATA_SERIALIZER = new FluidDataSerializer();
@@ -273,28 +270,39 @@ public final class TinkerFluids extends TinkerModule {
   }
 
   @SubscribeEvent
-  void gatherData(final GatherDataEvent event) {
-    DataGenerator generator = event.getGenerator();
-    PackOutput packOutput = generator.getPackOutput();
-    boolean client = event.includeClient();
-    generator.addProvider(client, new FluidTooltipProvider(packOutput));
-    FluidTextureProvider textureProvider = new FluidTextureProvider(packOutput);
-    generator.addProvider(client, textureProvider);
-    generator.addProvider(client, new FluidTextureCameraProvider(packOutput, event.getExistingFileHelper(), textureProvider));
-    generator.addProvider(client, new FluidBucketModelProvider(packOutput, TConstruct.MOD_ID));
-    generator.addProvider(client, new FluidBlockstateModelProvider(packOutput, TConstruct.MOD_ID));
+  void gatherData(final GatherDataEvent.Client event) {
+    event.createProvider(output -> new FluidTooltipProvider(output));
+    FluidTextureProvider textureProvider = event.createProvider(output -> new FluidTextureProvider(output));
+    event.addProvider(new FluidTextureCameraProvider(event.getDefaultPackGenerator().getPackOutput(), event.getResourceManager(PackType.CLIENT_RESOURCES), textureProvider));
+    event.createProvider(output -> new FluidBucketModelProvider(output, TConstruct.MOD_ID));
+    event.createProvider(output -> new FluidBlockstateModelProvider(output, TConstruct.MOD_ID));
+  }
+
+  /** Adds datapack registry entries for datagen. Brewing is a datapack recipe type since 26.3, replacing the brewing recipe event. */
+  @SubscribeEvent
+  void gatherRegistries(final GatherDataRegistryEntriesEvent event) {
+    event.add(Registries.RECIPE, TinkerFluids::brewingRecipes);
+  }
+
+  /** Brewing recipes, generated as vanilla brewing recipes */
+  private static void brewingRecipes(BootstrapContext<Recipe<?>> context) {
+    // brew congealed slime into bottles to get slime bottles, easy melting
+    Ingredient bottle = Ingredient.of(Items.GLASS_BOTTLE);
+    for (SlimeType slime : SlimeType.values()) {
+      context.register(brewingKey("slime_bottle/" + slime.getSerializedName()),
+                       new BottleBrewingRecipe(bottle, Ingredient.of(TinkerWorld.congealedSlime.get(slime)), new ItemStackTemplate(TinkerFluids.slimeBottle.get(slime))));
+    }
+    context.register(brewingKey("magma_bottle"), new BottleBrewingRecipe(bottle, Ingredient.of(Blocks.MAGMA_BLOCK), new ItemStackTemplate(TinkerFluids.magmaBottle.get())));
+  }
+
+  /** Creates a recipe key for a brewing recipe */
+  private static ResourceKey<Recipe<?>> brewingKey(String name) {
+    return key(Registries.RECIPE, "brewing/" + name);
   }
 
   @SubscribeEvent
   void commonSetup(final FMLCommonSetupEvent event) {
-    event.enqueueWork(() -> {
-      CauldronInteraction.WATER.map().put(splashBottle.get(), new FillBottle(Items.SPLASH_POTION));
-      CauldronInteraction.WATER.map().put(lingeringBottle.get(), new FillBottle(Items.LINGERING_POTION));
-      CauldronInteraction.WATER.map().put(Items.SPLASH_POTION,    new EmptyBottleIntoWater(splashBottle,    CauldronInteraction.WATER.map().get(Items.SPLASH_POTION)));
-      CauldronInteraction.WATER.map().put(Items.LINGERING_POTION, new EmptyBottleIntoWater(lingeringBottle, CauldronInteraction.WATER.map().get(Items.LINGERING_POTION)));
-      CauldronInteraction.EMPTY.map().put(Items.SPLASH_POTION,    new EmptyBottleIntoEmpty(splashBottle,    CauldronInteraction.EMPTY.map().get(Items.SPLASH_POTION)));
-      CauldronInteraction.EMPTY.map().put(Items.LINGERING_POTION, new EmptyBottleIntoEmpty(lingeringBottle, CauldronInteraction.EMPTY.map().get(Items.LINGERING_POTION)));
-    });
+    // cauldron interactions for splash and lingering bottles are registered in FluidEvents
 
     // dispense buckets
     DispenseItemBehavior dispenseBucket = new DefaultDispenseItemBehavior() {
@@ -391,16 +399,6 @@ public final class TinkerFluids extends TinkerModule {
       DispenserBlock.registerBehavior(moltenSteeleaf, dispenseBucket);
       DispenserBlock.registerBehavior(fieryLiquid, dispenseBucket);
     });
-  }
-
-  /** Registers brewing recipes; brewing in 1.21 is built via the {@link RegisterBrewingRecipesEvent} builder (game bus). */
-  void registerBrewingRecipes(final RegisterBrewingRecipesEvent event) {
-    PotionBrewing.Builder builder = event.getBuilder();
-    // brew congealed slime into bottles to get slime bottles, easy melting
-    for (SlimeType slime : SlimeType.values()) {
-      builder.addRecipe(Ingredient.of(Items.GLASS_BOTTLE), Ingredient.of(TinkerWorld.congealedSlime.get(slime)), new ItemStack(TinkerFluids.slimeBottle.get(slime)));
-    }
-    builder.addRecipe(Ingredient.of(Items.GLASS_BOTTLE), Ingredient.of(Blocks.MAGMA_BLOCK), new ItemStack(TinkerFluids.magmaBottle));
   }
 
   /** Adds all relevant items to the creative tab, called by smeltery */

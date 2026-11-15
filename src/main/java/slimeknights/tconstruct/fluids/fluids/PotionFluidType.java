@@ -10,17 +10,14 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionContents;
-import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.FluidType;
-import slimeknights.mantle.fluid.texture.ClientTextureFluidType;
 import slimeknights.mantle.recipe.helper.FluidOutput;
 import slimeknights.tconstruct.fluids.TinkerFluids;
 
 import javax.annotation.Nullable;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.function.Consumer;
 
 public class PotionFluidType extends FluidType {
   public PotionFluidType(Properties properties) {
@@ -33,9 +30,20 @@ public class PotionFluidType extends FluidType {
     return contents != null ? contents : PotionContents.EMPTY;
   }
 
+  /**
+   * Gets the translation key for the given potion contents, matching {@link PotionContents#getName(String)}.
+   * Replaces the removed {@code Potion#getName(Optional, String)}.
+   * @param contents  Potion contents
+   * @param prefix    Translation key prefix
+   * @return  Translation key
+   */
+  public static String getPotionKey(PotionContents contents, String prefix) {
+    return prefix + contents.customName().or(() -> contents.potion().map(potion -> potion.value().name())).orElse("empty");
+  }
+
   @Override
   public String getDescriptionId(FluidStack stack) {
-    return Potion.getName(getContents(stack).potion(), "item.minecraft.potion.effect.");
+    return getPotionKey(getContents(stack), "item.minecraft.potion.effect.");
   }
 
   @Override
@@ -48,27 +56,7 @@ public class PotionFluidType extends FluidType {
     return itemStack;
   }
 
-  @Override
-  public void initializeClient(Consumer<IClientFluidTypeExtensions> consumer) {
-    consumer.accept(new ClientTextureFluidType(this) {
-      /**
-       * Gets the color, based on {@link PotionContents#getColor()}
-       * @param stack  Fluid stack instance
-       * @return  Color for the fluid
-       */
-      @Override
-      public int getTintColor(FluidStack stack) {
-        PotionContents contents = stack.get(DataComponents.POTION_CONTENTS);
-        if (contents == null || contents == PotionContents.EMPTY) {
-          return getTintColor();
-        }
-        if (contents.customColor().isPresent()) {
-          return contents.customColor().get() | 0xFF000000;
-        }
-        return contents.getColor() | 0xFF000000;
-      }
-    });
-  }
+  // client: the potion tint and client extension are registered in FluidClientEvents, as initializeClient no longer exists
 
   /** Creates the legacy potion tag, used for datagen serialization of potion fluid outputs */
   private static CompoundTag potionTag(Identifier location) {
@@ -94,7 +82,7 @@ public class PotionFluidType extends FluidType {
 
   /** Creates a fluid output for the given potion */
   public static FluidOutput potionResult(Holder<Potion> potion, int size) {
-    CompoundTag tag = potionTag(potion.unwrapKey().map(ResourceKey::location).orElseThrow());
+    CompoundTag tag = potionTag(potion.unwrapKey().map(ResourceKey::identifier).orElseThrow());
     return FluidOutput.fromTag(Objects.requireNonNull(TinkerFluids.potion.getCommonTag()), size, tag);
   }
 

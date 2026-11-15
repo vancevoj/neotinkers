@@ -7,7 +7,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -23,7 +23,7 @@ import java.util.function.Supplier;
 
 public record EmptyBottleIntoWater(Supplier<Item> empty, CauldronInteraction fallback) implements CauldronInteraction {
   @Override
-  public ItemInteractionResult interact(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, ItemStack stack) {
+  public InteractionResult interact(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, ItemStack stack) {
     PotionContents contents = stack.get(DataComponents.POTION_CONTENTS);
     if (state.getValue(LayeredCauldronBlock.LEVEL) == 3 || contents == null || !contents.is(Potions.WATER)) {
       return fallback.interact(state, level, pos, player, hand, stack);
@@ -36,6 +36,6 @@ public record EmptyBottleIntoWater(Supplier<Item> empty, CauldronInteraction fal
       level.playSound(null, pos, SoundEvents.BOTTLE_EMPTY, SoundSource.BLOCKS, 1.0F, 1.0F);
       level.gameEvent(null, GameEvent.FLUID_PLACE, pos);
     }
-    return ItemInteractionResult.sidedSuccess(level.isClientSide());
+    return InteractionResult.SUCCESS;
   }
 }

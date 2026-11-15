@@ -21,14 +21,14 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.pathfinder.PathComputationType;
+import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import org.joml.Vector3f;
 import slimeknights.mantle.util.BlockEntityHelper;
 import slimeknights.tconstruct.smeltery.TinkerSmeltery;
 import slimeknights.tconstruct.smeltery.block.entity.FaucetBlockEntity;
@@ -37,7 +37,7 @@ import javax.annotation.Nullable;
 import java.util.EnumMap;
 
 public class FaucetBlock extends Block implements EntityBlock {
-  public static final DirectionProperty FACING = BlockStateProperties.FACING_HOPPER;
+  public static final EnumProperty<Direction> FACING = BlockStateProperties.FACING_HOPPER;
   private static final EnumMap<Direction,VoxelShape> SHAPES = Maps.newEnumMap(ImmutableMap.of(
     Direction.DOWN,  Shapes.join(box( 4, 10,  4, 12, 16, 12), box( 6, 10,  6, 10, 16, 10), BooleanOp.ONLY_FIRST),
     Direction.NORTH, Shapes.join(box( 4,  4, 10, 12, 10, 16), box( 6,  6, 10, 10, 10, 16), BooleanOp.ONLY_FIRST),
@@ -108,9 +108,11 @@ public class FaucetBlock extends Block implements EntityBlock {
 
   @SuppressWarnings("deprecation")
   @Override
-  public void neighborChanged(BlockState state, Level world, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
+  public void neighborChanged(BlockState state, Level world, BlockPos pos, Block blockIn, @Nullable Orientation orientation, boolean isMoving) {
     if (!world.isClientSide() && world.getBlockEntity(pos) instanceof FaucetBlockEntity faucet) {
-      faucet.neighborChanged(fromPos);
+      // neighborChanged no longer knows which neighbor changed, so update both neighbors the faucet uses: the output below and the input behind
+      faucet.neighborChanged(pos.below());
+      faucet.neighborChanged(pos.relative(state.getValue(FACING).getOpposite()));
       faucet.handleRedstone(world.hasNeighborSignal(pos));
     }
   }
@@ -125,7 +127,7 @@ public class FaucetBlock extends Block implements EntityBlock {
 
   /* Display */
 
-  private static final Vector3f RED = new Vector3f(1.0F, 0.0F, 0.0F);
+  private static final int RED = 0xFF0000;
 
   /**
    * Adds particles to the faucet

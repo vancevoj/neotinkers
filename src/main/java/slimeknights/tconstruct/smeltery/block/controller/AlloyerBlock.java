@@ -11,8 +11,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.redstone.Orientation;
 import slimeknights.mantle.util.BlockEntityHelper;
-import slimeknights.tconstruct.library.utils.Util;
 import slimeknights.tconstruct.smeltery.TinkerSmeltery;
 import slimeknights.tconstruct.smeltery.block.entity.controller.AlloyerBlockEntity;
 
@@ -36,10 +36,14 @@ public class AlloyerBlock extends TinyMultiblockControllerBlock {
   }
 
   @Override
-  public void neighborChanged(BlockState state, Level world, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
-    Direction direction = Util.directionFromOffset(pos, fromPos);
-    if (direction != Direction.DOWN && world.getBlockEntity(pos) instanceof AlloyerBlockEntity te) {
-      te.neighborChanged(direction);
+  public void neighborChanged(BlockState state, Level world, BlockPos pos, Block blockIn, @Nullable Orientation orientation, boolean isMoving) {
+    // neighborChanged no longer knows which neighbor changed, so refresh every side that may hold a tank, the alloy tank rechecks them on the next tick
+    if (world.getBlockEntity(pos) instanceof AlloyerBlockEntity te) {
+      for (Direction direction : Direction.values()) {
+        if (direction != Direction.DOWN) {
+          te.neighborChanged(direction);
+        }
+      }
     }
   }
 
@@ -54,7 +58,7 @@ public class AlloyerBlock extends TinyMultiblockControllerBlock {
   }
 
   @Override
-  public boolean propagatesSkylightDown(BlockState state, BlockGetter reader, BlockPos pos) {
+  public boolean propagatesSkylightDown(BlockState state) {
     return true;
   }
 

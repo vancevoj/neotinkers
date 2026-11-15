@@ -12,9 +12,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.neoforge.capabilities.Capabilities;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
-import net.neoforged.neoforge.fluids.capability.templates.EmptyFluidHandler;
-import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
+import net.neoforged.neoforge.transfer.item.ItemResource;
 import slimeknights.mantle.fluid.FluidTransferHelper;
 import slimeknights.mantle.fluid.transfer.IFluidContainerTransfer.TransferDirection;
 import slimeknights.mantle.fluid.transfer.IFluidContainerTransfer.TransferResult;
@@ -56,7 +56,7 @@ public class AlloyerContainerMenu extends TriggeringBaseContainerMenu<AlloyerBlo
       if (world != null && world.getBlockState(down).is(TinkerTags.Blocks.FUEL_TANKS)) {
         BlockEntity te = world.getBlockEntity(down);
         if (te != null) {
-          IItemHandler handler = world.getCapability(Capabilities.Item.BLOCK, down, null);
+          ResourceHandler<ItemResource> handler = world.getCapability(Capabilities.Item.BLOCK, down, null);
           if (handler != null) {
             this.addSlot(new SmartItemHandlerSlot(handler, 0, 151, 32));
             hasFuelSlot = true;
@@ -82,7 +82,7 @@ public class AlloyerContainerMenu extends TriggeringBaseContainerMenu<AlloyerBlo
     if (id >= 0 && !held.isEmpty() && !player.isSpectator()) {
       if (!player.level().isClientSide() && tile != null) {
         int index = id / 2;
-        IFluidHandler handler;
+        ResourceHandler<FluidResource> handler;
         // first index is the internal tank
         if (index == 0) {
           handler = tile.getTank();
@@ -92,8 +92,8 @@ public class AlloyerContainerMenu extends TriggeringBaseContainerMenu<AlloyerBlo
           // index 2 and onwards is a handler tank
           handler = tile.getAlloyTank().getFluidHandler(index - 2);
         }
-        // invalid index would make the handler empty through the alloy tank
-        if (handler != EmptyFluidHandler.INSTANCE) {
+        // invalid index would make the handler empty through the alloy tank, which has no indices
+        if (handler.size() > 0) {
           // even numbers are fill, odd are drain
           TransferResult result = FluidTransferHelper.interactWithStack(handler, held, (id & 1) == 0 ? TransferDirection.FILL_ITEM : TransferDirection.EMPTY_ITEM);
           setCarried(FluidTransferHelper.handleUIResult(player, held, result));

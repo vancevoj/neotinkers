@@ -1,17 +1,15 @@
 package slimeknights.tconstruct.smeltery.block.controller;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import slimeknights.mantle.block.RetexturedBlock;
 import slimeknights.mantle.util.RetexturedHelper;
@@ -22,7 +20,6 @@ import slimeknights.tconstruct.smeltery.menu.HeatingStructureContainerMenu;
 import slimeknights.tconstruct.smeltery.network.StructureErrorPositionPacket;
 
 import javax.annotation.Nullable;
-import java.util.List;
 
 /**
  * Multiblock that displays the error from the tile entity on right click
@@ -58,17 +55,14 @@ public abstract class HeatingControllerBlock extends ControllerBlock {
     if (!world.isClientSide() && world.getBlockEntity(pos) instanceof HeatingStructureBlockEntity te) {
       MultiblockResult result = te.getStructureResult();
       if (!result.isSuccess()) {
-        player.displayClientMessage(result.getMessage(), true);
+        player.sendOverlayMessage(result.getMessage());
         TinkerNetwork.getInstance().sendTo(new StructureErrorPositionPacket(pos, result.getPos()), player);
       }
     }
     return true;
   }
 
-  @Override
-  public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-    RetexturedHelper.addTooltip(stack, tooltip, flag);
-  }
+  // tooltip: blocks no longer add item tooltips, the texture tooltip comes from RetexturedTooltipBlockItem
 
   @Override
   public void setPlacedBy(Level world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
@@ -83,17 +77,20 @@ public abstract class HeatingControllerBlock extends ControllerBlock {
     }
   }
 
-  @Deprecated
+  /**
+   * Called by the block entity when it is removed due to the block changing. Replaces the old {@code onRemove} logic, which no longer has access to the block entity.
+   * Invalidates the structure before the inventory is dropped.
+   */
   @Override
-  public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
-    if (!newState.is(this) && worldIn.getBlockEntity(pos) instanceof HeatingStructureBlockEntity te) {
-      te.invalidateStructure();
+  public void onBlockEntityRemoved(BlockState state, Level level, BlockPos pos, BlockEntity te) {
+    if (te instanceof HeatingStructureBlockEntity structure) {
+      structure.invalidateStructure();
     }
-    super.onRemove(state, worldIn, pos, newState, isMoving);
+    super.onBlockEntityRemoved(state, level, pos, te);
   }
 
   @Override
-  public ItemStack getCloneItemStack(LevelReader world, BlockPos pos, BlockState state) {
+  public ItemStack getCloneItemStack(LevelReader world, BlockPos pos, BlockState state, boolean includeData) {
     return RetexturedBlock.getPickBlock(world, pos, state);
   }
 

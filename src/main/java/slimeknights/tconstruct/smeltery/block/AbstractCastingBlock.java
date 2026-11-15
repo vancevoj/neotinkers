@@ -2,6 +2,7 @@ package slimeknights.tconstruct.smeltery.block;
 
 import lombok.Getter;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
@@ -14,6 +15,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition.Builder;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.phys.BlockHitResult;
 import slimeknights.tconstruct.shared.block.TableBlock;
 import slimeknights.tconstruct.smeltery.block.entity.CastingBlockEntity;
@@ -61,7 +63,7 @@ public abstract class AbstractCastingBlock extends TableBlock {
   @SuppressWarnings("deprecation")
   @Deprecated
   @Override
-  public void neighborChanged(BlockState state, Level world, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
+  public void neighborChanged(BlockState state, Level world, BlockPos pos, Block blockIn, @Nullable Orientation orientation, boolean isMoving) {
     if (!world.isClientSide() && world.getBlockEntity(pos) instanceof CastingBlockEntity casting) {
       casting.handleRedstone(world.hasNeighborSignal(pos));
     }
@@ -87,7 +89,7 @@ public abstract class AbstractCastingBlock extends TableBlock {
   }
 
   @Override
-  public int getAnalogOutputSignal(BlockState blockState, Level world, BlockPos pos) {
+  public int getAnalogOutputSignal(BlockState blockState, Level world, BlockPos pos, Direction direction) {
     if (world.getBlockEntity(pos) instanceof CastingBlockEntity casting) {
       return casting.getAnalogSignal();
     }

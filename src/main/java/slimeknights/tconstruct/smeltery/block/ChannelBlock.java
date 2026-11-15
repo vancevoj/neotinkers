@@ -3,6 +3,7 @@ package slimeknights.tconstruct.smeltery.block;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.RandomSource;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -13,6 +14,8 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -24,6 +27,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.pathfinder.PathComputationType;
+import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.BooleanOp;
@@ -229,7 +233,7 @@ public class ChannelBlock extends Block implements EntityBlock {
 	@SuppressWarnings("deprecation")
 	@Override
 	@Deprecated
-	public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor world, BlockPos currentPos, BlockPos facingPos) {
+	public BlockState updateShape(BlockState state, LevelReader world, ScheduledTickAccess ticks, BlockPos currentPos, Direction facing, BlockPos facingPos, BlockState facingState, RandomSource random) {
 		// down only cares about connected or not
 		if (facing == Direction.DOWN) {
 			if (state.getValue(DOWN) && facingState.isAir()) {
@@ -260,10 +264,10 @@ public class ChannelBlock extends Block implements EntityBlock {
 	private BlockState interactWithSide(BlockState state, Level world, BlockPos pos, Player player, Direction side) {
 		if (side == Direction.DOWN) {
 			if (!state.getValue(DOWN) && canConnect(world, pos, side)) {
-				player.displayClientMessage(DOWN_OUT, true);
+				player.sendOverlayMessage(DOWN_OUT);
 				return state.setValue(DOWN, true);
 			} else if (state.getValue(DOWN)) {
-				player.displayClientMessage(DOWN_NONE, true);
+				player.sendOverlayMessage(DOWN_NONE);
 				return state.setValue(DOWN, false);
 			}
 		} else {
@@ -277,7 +281,7 @@ public class ChannelBlock extends Block implements EntityBlock {
 			if (newConnect == ChannelConnection.OUT && facingState.getBlock() != this && !isFluidHandler(world, side.getOpposite(), facingPos)) {
 				newConnect = newConnect.getNext(player.isShiftKeyDown());
 			}
-			player.displayClientMessage(SIDE_CONNECTION.get(newConnect), true);
+			player.sendOverlayMessage(SIDE_CONNECTION.get(newConnect));
 			return state.setValue(prop, newConnect);
 		}
 
@@ -347,16 +351,19 @@ public class ChannelBlock extends Block implements EntityBlock {
 	@SuppressWarnings("deprecation")
 	@Override
 	@Deprecated
-	public void neighborChanged(BlockState state, Level world, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
-    super.neighborChanged(state, world, pos, blockIn, fromPos, isMoving);
+	public void neighborChanged(BlockState state, Level world, BlockPos pos, Block blockIn, @Nullable Orientation orientation, boolean isMoving) {
+    super.neighborChanged(state, world, pos, blockIn, orientation, isMoving);
     if (!world.isClientSide()) {
       boolean isPowered = world.hasNeighborSignal(pos);
       if (isPowered != state.getValue(POWERED)) {
         state = state.setValue(POWERED, isPowered).setValue(DOWN, isPowered && canConnect(world, pos, Direction.DOWN));
         world.setBlock(pos, state, Block.UPDATE_CLIENTS);
       }
+      // neighborChanged no longer knows which neighbor changed, so drop all cached neighbors; they are fetched again when needed
       if (world.getBlockEntity(pos) instanceof ChannelBlockEntity te) {
-        te.removeCachedNeighbor(Util.directionFromOffset(pos, fromPos));
+        for (Direction side : Direction.values()) {
+          te.removeCachedNeighbor(side);
+        }
       }
     }
   }

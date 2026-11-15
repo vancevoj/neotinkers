@@ -1,30 +1,24 @@
 package slimeknights.tconstruct.smeltery.block.component;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.entity.BlockEntityType.BlockEntitySupplier;
 import net.minecraft.world.level.block.state.BlockState;
 import slimeknights.mantle.block.RetexturedBlock;
-import slimeknights.mantle.util.RetexturedHelper;
 import slimeknights.tconstruct.smeltery.block.entity.component.SmelteryComponentBlockEntity;
 
 import javax.annotation.Nullable;
-import java.util.List;
 
+/**
+ * Orientable smeltery block with a texture from its item.
+ * Blocks no longer add item tooltips, so the texture tooltip comes from {@link slimeknights.tconstruct.smeltery.block.RetexturedTooltipBlockItem}.
+ */
 public class RetexturedOrientableSmelteryBlock extends OrientableSmelteryBlock {
   public RetexturedOrientableSmelteryBlock(Properties properties, BlockEntitySupplier<? extends SmelteryComponentBlockEntity> blockEntity) {
     super(properties, true, blockEntity);
-  }
-
-  @Override
-  public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-    RetexturedHelper.addTooltip(stack, tooltip, flag);
   }
 
   @Override
@@ -34,7 +28,7 @@ public class RetexturedOrientableSmelteryBlock extends OrientableSmelteryBlock {
   }
 
   @Override
-  public ItemStack getCloneItemStack(LevelReader world, BlockPos pos, BlockState state) {
+  public ItemStack getCloneItemStack(LevelReader world, BlockPos pos, BlockState state, boolean includeData) {
     return RetexturedBlock.getPickBlock(world, pos, state);
   }
 }

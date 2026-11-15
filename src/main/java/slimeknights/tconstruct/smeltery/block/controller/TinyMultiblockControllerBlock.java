@@ -3,12 +3,14 @@ package slimeknights.tconstruct.smeltery.block.controller;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import slimeknights.mantle.fluid.FluidTransferHelper;
@@ -45,7 +47,7 @@ public abstract class TinyMultiblockControllerBlock extends ControllerBlock {
 
   @Deprecated
   @Override
-  public BlockState updateShape(BlockState state, Direction direction, BlockState neighbor, LevelAccessor world, BlockPos pos, BlockPos neighborPos) {
+  public BlockState updateShape(BlockState state, LevelReader world, ScheduledTickAccess ticks, BlockPos pos, Direction direction, BlockPos neighborPos, BlockState neighbor, RandomSource random) {
     if (direction == Direction.DOWN) {
       boolean hasFuel = isValidFuelSource(neighbor);
       state = state.setValue(IN_STRUCTURE, hasFuel);
@@ -67,7 +69,7 @@ public abstract class TinyMultiblockControllerBlock extends ControllerBlock {
   @Override
   protected boolean displayStatus(Player player, Level world, BlockPos pos, BlockState state) {
     if (!world.isClientSide() && !state.getValue(IN_STRUCTURE)) {
-      player.displayClientMessage(NO_FUEL_TANK, true);
+      player.sendOverlayMessage(NO_FUEL_TANK);
     }
     return true;
   }
@@ -85,7 +87,7 @@ public abstract class TinyMultiblockControllerBlock extends ControllerBlock {
 
   @Deprecated
   @Override
-  public int getAnalogOutputSignal(BlockState blockState, Level worldIn, BlockPos pos) {
+  public int getAnalogOutputSignal(BlockState blockState, Level worldIn, BlockPos pos, Direction direction) {
     return ITankBlockEntity.getComparatorInputOverride(worldIn, pos);
   }
 

@@ -24,7 +24,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.phys.BlockHitResult;
 import slimeknights.mantle.block.InventoryBlock;
 import slimeknights.tconstruct.library.utils.NBTTags;
@@ -38,7 +39,7 @@ import javax.annotation.Nullable;
 import static slimeknights.tconstruct.smeltery.block.component.SearedTankBlock.LIGHT;
 
 public class CastingTankBlock extends InventoryBlock implements ITankBlock, EntityBlock {
-  public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
+  public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
 
   public CastingTankBlock(Properties properties) {
     super(properties);
@@ -97,7 +98,7 @@ public class CastingTankBlock extends InventoryBlock implements ITankBlock, Enti
   public void setPlacedBy(Level worldIn, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
     CompoundTag nbt = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
     if (nbt.contains(NBTTags.TANK) && worldIn.getBlockEntity(pos) instanceof CastingTankBlockEntity tank) {
-      tank.updateTank(nbt.getCompound(NBTTags.TANK));
+      tank.updateTank(nbt.getCompoundOrEmpty(NBTTags.TANK));
     }
 
     super.setPlacedBy(worldIn, pos, state, placer, stack);
@@ -108,7 +109,7 @@ public class CastingTankBlock extends InventoryBlock implements ITankBlock, Enti
   @SuppressWarnings("deprecation")
   @Deprecated
   @Override
-  public void neighborChanged(BlockState state, Level worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
+  public void neighborChanged(BlockState state, Level worldIn, BlockPos pos, Block blockIn, @Nullable Orientation orientation, boolean isMoving) {
     if (!worldIn.isClientSide() && worldIn.getBlockEntity(pos) instanceof CastingTankBlockEntity tank) {
       tank.handleRedstone(worldIn.hasNeighborSignal(pos));
     }
@@ -134,12 +135,12 @@ public class CastingTankBlock extends InventoryBlock implements ITankBlock, Enti
 
   @Deprecated
   @Override
-  public int getAnalogOutputSignal(BlockState blockState, Level worldIn, BlockPos pos) {
+  public int getAnalogOutputSignal(BlockState blockState, Level worldIn, BlockPos pos, Direction direction) {
     return ITankBlockEntity.getComparatorInputOverride(worldIn, pos);
   }
 
   @Override
-  public ItemStack getCloneItemStack(LevelReader world, BlockPos pos, BlockState state) {
+  public ItemStack getCloneItemStack(LevelReader world, BlockPos pos, BlockState state, boolean includeData) {
     return ITankBlockEntity.getCloneItemStack(new ItemStack(this), world, pos);
   }
 

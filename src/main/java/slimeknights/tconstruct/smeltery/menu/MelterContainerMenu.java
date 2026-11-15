@@ -12,8 +12,11 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.neoforge.capabilities.Capabilities;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
-import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
+import net.neoforged.neoforge.transfer.fluid.FluidUtil;
+import net.neoforged.neoforge.transfer.item.ItemResource;
 import slimeknights.mantle.fluid.FluidTransferHelper;
 import slimeknights.mantle.fluid.transfer.IFluidContainerTransfer.TransferDirection;
 import slimeknights.mantle.fluid.transfer.IFluidContainerTransfer.TransferResult;
@@ -43,7 +46,7 @@ public class MelterContainerMenu extends TriggeringBaseContainerMenu<MelterBlock
     // create slots
     if (melter != null) {
       MeltingModuleInventory inventory = melter.getItemHandler();
-      inputs = new Slot[inventory.getSlots()];
+      inputs = new Slot[inventory.size()];
       for (int i = 0; i < inputs.length; i++) {
         inputs[i] = this.addSlot(new SmartItemHandlerSlot(inventory, i, 22, 16 + (i * 18)));
       }
@@ -54,7 +57,7 @@ public class MelterContainerMenu extends TriggeringBaseContainerMenu<MelterBlock
       if (world != null && world.getBlockState(down).is(TinkerTags.Blocks.FUEL_TANKS)) {
         BlockEntity te = world.getBlockEntity(down);
         if (te != null) {
-          IItemHandler handler = world.getCapability(Capabilities.Item.BLOCK, down, null);
+          ResourceHandler<ItemResource> handler = world.getCapability(Capabilities.Item.BLOCK, down, null);
           if (handler != null) {
             this.addSlot(new SmartItemHandlerSlot(handler, 0, 151, 32));
             hasFuelSlot = true;
@@ -83,11 +86,11 @@ public class MelterContainerMenu extends TriggeringBaseContainerMenu<MelterBlock
       ItemStack held = getCarried();
       if (!held.isEmpty()) {
         if (!player.level().isClientSide() && tile != null) {
-          IFluidHandler tank = id < 2 ? tile.getTank() : tile.getFuelModule().getTank();
+          ResourceHandler<FluidResource> tank = id < 2 ? tile.getTank() : tile.getFuelModule().getTank();
           TransferResult result;
           // even means drain fluid, odd means fill
           if ((id & 1) == 0) {
-            result = FluidTransferHelper.fillStack(tank, held, tank.getFluidInTank(0));
+            result = FluidTransferHelper.fillStack(tank, held, tank.size() > 0 ? FluidUtil.getStack(tank, 0) : FluidStack.EMPTY);
           } else {
             result = FluidTransferHelper.interactWithStack(tank, held, TransferDirection.EMPTY_ITEM);
           }

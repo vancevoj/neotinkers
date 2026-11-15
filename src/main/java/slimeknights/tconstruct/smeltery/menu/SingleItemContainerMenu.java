@@ -5,7 +5,8 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.neoforge.capabilities.Capabilities;
-import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.item.ItemResource;
 import slimeknights.mantle.inventory.SmartItemHandlerSlot;
 import slimeknights.tconstruct.shared.inventory.TriggeringBaseContainerMenu;
 import slimeknights.tconstruct.smeltery.TinkerSmeltery;
@@ -21,7 +22,7 @@ public class SingleItemContainerMenu extends TriggeringBaseContainerMenu<BlockEn
     if (te != null) {
       Level world = te.getLevel();
       if (world != null) {
-        IItemHandler handler = world.getCapability(Capabilities.Item.BLOCK, te.getBlockPos(), null);
+        ResourceHandler<ItemResource> handler = world.getCapability(Capabilities.Item.BLOCK, te.getBlockPos(), null);
         if (handler != null) {
           this.addSlot(new SmartItemHandlerSlot(handler, 0, 80, 20));
         }
