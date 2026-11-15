@@ -1,5 +1,6 @@
 package slimeknights.tconstruct.library.json.predicate;
 
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -56,7 +57,8 @@ public class TinkerPredicate {
 
   /** @deprecated use {@link BlockPredicate#BLOCKS_MOTION} */
   @Deprecated
-  public static BlockPredicate BLOCKS_MOTION = BlockPredicate.simple(BlockStateBase::blocksMotion);
+  // BlockStateBase#blocksMotion was replaced by the vanilla blocks_motion tag in 26.3, same as Mantle
+  public static BlockPredicate BLOCKS_MOTION = BlockPredicate.simple(state -> state.is(BlockTags.BLOCKS_MOTION));
   /** @deprecated use {@link BlockPredicate#CAN_BE_REPLACED} */
   @Deprecated
   public static BlockPredicate CAN_BE_REPLACED = BlockPredicate.simple(BlockStateBase::canBeReplaced);

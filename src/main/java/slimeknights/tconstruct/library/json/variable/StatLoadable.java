@@ -58,7 +58,7 @@ public enum StatLoadable implements Loadable<Stat<?>> {
     Registry<T> registry = statType.getRegistry();
     Identifier name = Loadables.RESOURCE_LOCATION.convert(element, key, context);
     if (registry.containsKey(name)) {
-      T value = registry.get(name);
+      T value = registry.getValue(name);
       if (value != null) {
         return statType.get(value);
       }
@@ -161,7 +161,8 @@ public enum StatLoadable implements Loadable<Stat<?>> {
     if (registry == BuiltInRegistries.BLOCK) {
       name = ((Block) value).getName();
     } else if (registry == BuiltInRegistries.ITEM) {
-      name = ((Item) value).getDescription();
+      // Item#getDescription was removed, it was just the translated description ID
+      name = Component.translatable(((Item) value).getDescriptionId());
     } else if (registry == BuiltInRegistries.ENTITY_TYPE) {
       name = ((EntityType<?>) value).getDescription();
     // other useful registries - some mod might be using them

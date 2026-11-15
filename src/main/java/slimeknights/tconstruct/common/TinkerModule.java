@@ -21,9 +21,9 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
-import net.minecraft.world.level.storage.loot.entries.LootPoolEntryType;
-import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
-import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
+import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import com.mojang.serialization.MapCodec;
 import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
 import net.neoforged.bus.api.IEventBus;
@@ -47,8 +47,9 @@ import slimeknights.tconstruct.library.materials.definition.MaterialId;
 import slimeknights.tconstruct.library.recipe.TinkerRecipeTypes;
 
 import java.util.Optional;
+import java.util.function.BiFunction;
 import java.util.function.Function;
-import java.util.function.Supplier;
+import java.util.function.UnaryOperator;
 
 /**
  * Contains base helpers for all Tinker modules. Should not be extended by other mods, this is only for internal usage.
@@ -74,17 +75,23 @@ public abstract class TinkerModule {
   // datapacks
   protected static final SynchronizedDeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZERS = SynchronizedDeferredRegister.create(Registries.RECIPE_SERIALIZER, TConstruct.MOD_ID);
   protected static final SynchronizedDeferredRegister<MapCodec<? extends IGlobalLootModifier>> GLOBAL_LOOT_MODIFIERS = SynchronizedDeferredRegister.create(NeoForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS, TConstruct.MOD_ID);
-  protected static final SynchronizedDeferredRegister<LootItemConditionType> LOOT_CONDITIONS = SynchronizedDeferredRegister.create(Registries.LOOT_CONDITION_TYPE, TConstruct.MOD_ID);
-  protected static final SynchronizedDeferredRegister<LootItemFunctionType<?>> LOOT_FUNCTIONS = SynchronizedDeferredRegister.create(Registries.LOOT_FUNCTION_TYPE, TConstruct.MOD_ID);
-  protected static final SynchronizedDeferredRegister<LootPoolEntryType> LOOT_ENTRIES = SynchronizedDeferredRegister.create(Registries.LOOT_POOL_ENTRY_TYPE, TConstruct.MOD_ID);
+  // loot type registries hold the map codecs directly
+  protected static final SynchronizedDeferredRegister<MapCodec<? extends LootItemCondition>> LOOT_CONDITIONS = SynchronizedDeferredRegister.create(Registries.LOOT_CONDITION_TYPE, TConstruct.MOD_ID);
+  protected static final SynchronizedDeferredRegister<MapCodec<? extends LootItemFunction>> LOOT_FUNCTIONS = SynchronizedDeferredRegister.create(Registries.LOOT_FUNCTION_TYPE, TConstruct.MOD_ID);
+  protected static final SynchronizedDeferredRegister<MapCodec<? extends LootPoolEntryContainer>> LOOT_ENTRIES = SynchronizedDeferredRegister.create(Registries.LOOT_POOL_ENTRY_TYPE, TConstruct.MOD_ID);
 
   // base item properties
-  protected static final Item.Properties ITEM_PROPS = new Item.Properties();
-  protected static final Item.Properties UNSTACKABLE_PROPS = new Item.Properties().stacksTo(1);
-  protected static final Function<Block,? extends BlockItem> BLOCK_ITEM = (b) -> new BlockItem(b, ITEM_PROPS);
-  protected static final Function<Block,? extends BlockItem> TOOLTIP_BLOCK_ITEM = (b) -> new BlockTooltipItem(b, ITEM_PROPS);
-  protected static final Function<Block,? extends BlockItem> UNSTACKABLE_BLOCK_ITEM = (b) -> new BlockTooltipItem(b, UNSTACKABLE_PROPS);
-  protected static final Supplier<Item> TOOLTIP_ITEM = () -> new TooltipItem(ITEM_PROPS);
+  // each item stamps its ID into its properties before construction, so properties are operators applied to a new instance per item instead of shared instances
+  /** Default item properties, use as {@code ITEMS.register(name, props -> new X(props), ITEM_PROPS)} */
+  protected static final UnaryOperator<Item.Properties> ITEM_PROPS = UnaryOperator.identity();
+  /** Item properties with a stack size of 1 */
+  protected static final UnaryOperator<Item.Properties> UNSTACKABLE_PROPS = props -> props.stacksTo(1);
+  // block items receive properties that already have the ID and block description prefix set
+  protected static final BiFunction<Block, Item.Properties, BlockItem> BLOCK_ITEM = BlockItem::new;
+  protected static final BiFunction<Block, Item.Properties, BlockItem> TOOLTIP_BLOCK_ITEM = BlockTooltipItem::new;
+  protected static final BiFunction<Block, Item.Properties, BlockItem> UNSTACKABLE_BLOCK_ITEM = (block, props) -> new BlockTooltipItem(block, props.stacksTo(1));
+  /** Item constructor for a tooltip item, use as {@code ITEMS.register(name, TOOLTIP_ITEM, ITEM_PROPS)} */
+  protected static final Function<Item.Properties, Item> TOOLTIP_ITEM = TooltipItem::new;
 
   /** Called during construction to initialize the registers for this mod */
   public static void initRegisters(IEventBus bus) {
@@ -114,6 +121,9 @@ public abstract class TinkerModule {
    * This way it'll stick out if a block doesn't have a sound set.
    * It may be a bit less clear at first, since the actual builder methods tell you what each value means,
    * but as long as we don't statically import the enums it should be just as readable.
+   * <p>
+   * Each call returns a new instance. Blocks stamp their ID into their properties and keep them, so registration takes a supplier
+   * such as {@code () -> builder(SoundType.STONE)} rather than a shared instance.
    */
   protected static BlockBehaviour.Properties builder(SoundType soundType) {
     return Block.Properties.of().sound(soundType);
@@ -173,7 +183,7 @@ public abstract class TinkerModule {
   /** Accepts the given item if the passed tag has items */
   @SuppressWarnings({"deprecation", "SameParameterValue"})
   protected static boolean acceptIfTag(CreativeModeTab.Output output, ItemLike item, TabVisibility visibility, TagKey<Item> tagCondition) {
-    Optional<Named<Item>> tag = BuiltInRegistries.ITEM.getTag(tagCondition);
+    Optional<Named<Item>> tag = BuiltInRegistries.ITEM.get(tagCondition);
     if (tag.isPresent() && tag.get().size() > 0) {
       output.accept(item, visibility);
       return true;

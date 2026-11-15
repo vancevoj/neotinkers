@@ -9,9 +9,11 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.PositionMoveRotation;
 import net.minecraft.world.entity.Relative;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.EntityTeleportEvent;
 import slimeknights.tconstruct.common.Sounds;
@@ -20,7 +22,8 @@ import java.util.EnumSet;
 import java.util.Set;
 
 public class TeleportHelper {
-  private static final Set<Relative> PACKET_FLAGS = EnumSet.of(Relative.X, Relative.Y, Relative.Z, Relative.X_ROT, Relative.Y_ROT);
+  /** Teleport relative to the current position, keeping rotation and velocity, so the client keeps its smoothing */
+  private static final Set<Relative> PACKET_FLAGS = EnumSet.of(Relative.X, Relative.Y, Relative.Z, Relative.X_ROT, Relative.Y_ROT, Relative.DELTA_X, Relative.DELTA_Y, Relative.DELTA_Z);
 
   /** Randomly teleports an entity, mostly copied from chorus fruit */
   @CanIgnoreReturnValue
@@ -41,7 +44,8 @@ public class TeleportHelper {
 
     RandomSource random = living.getRandom();
     float minHeight = level.getMinY();
-    float maxHeight = (level instanceof ServerLevel server ? (level.getMinY() + server.getLogicalHeight()) : level.getMaxBuildHeight()) - 1;
+    // getMaxY is the inclusive top since 1.21.2, the old max build height was exclusive
+    float maxHeight = level instanceof ServerLevel server ? (level.getMinY() + server.getLogicalHeight() - 1) : level.getMaxY();
     for(int i = 0; i < chances; ++i) {
       double x = posX + (random.nextDouble() - 0.5D) * diameter;
       double y = Mth.clamp(posY + (double)(random.nextInt(diameter) - 8), minHeight, maxHeight);
@@ -53,7 +57,8 @@ public class TeleportHelper {
       level.gameEvent(GameEvent.TELEPORT, living.position(), GameEvent.Context.of(living));
       EntityTeleportEvent event = factory.create(living, x, y, z);
       NeoForge.EVENT_BUS.post(event);
-      if (!event.isCanceled() && living.randomTeleport(event.getTargetX(), event.getTargetY(), event.getTargetZ(), true)) {
+      // no blocks to avoid, same as the removed 4 argument overload; no consumed stack as we fired our own teleport event
+      if (!event.isCanceled() && living.randomTeleport(event.getTargetX(), event.getTargetY(), event.getTargetZ(), true, state -> false)) {
         SoundEvent soundevent = Sounds.SLIME_TELEPORT.getSound();
         // sound where we left
         level.playSound(null, posX, posY, posZ, soundevent, living.getSoundSource(), 1.0F, 1.0F);
@@ -70,7 +75,7 @@ public class TeleportHelper {
     Level level = entity.level();
     if (level instanceof ServerLevel serverWorld) {
       for (int i = 0; i < 32; ++i) {
-        serverWorld.sendParticles(ParticleTypes.PORTAL, entity.getX(), entity.getY() + level.random.nextDouble() * 2.0D, entity.getZ(), 1, level.random.nextGaussian(), 0.0D, level.random.nextGaussian(), 0);
+        serverWorld.sendParticles(ParticleTypes.PORTAL, entity.getX(), entity.getY() + level.getRandom().nextDouble() * 2.0D, entity.getZ(), 1, level.getRandom().nextGaussian(), 0.0D, level.getRandom().nextGaussian(), 0);
       }
     }
   }
@@ -85,7 +90,9 @@ public class TeleportHelper {
 
       // this logic only runs serverside, so need to use the server controller logic to move the player
       if (entity instanceof ServerPlayer playerMP) {
-        playerMP.connection.teleport(event.getTargetX(), event.getTargetY(), event.getTargetZ(), playerMP.getYRot(), playerMP.getXRot(), PACKET_FLAGS);
+        // relative flags now apply to the destination, so pass the offset from the current position
+        Vec3 offset = new Vec3(event.getTargetX() - playerMP.getX(), event.getTargetY() - playerMP.getY(), event.getTargetZ() - playerMP.getZ());
+        playerMP.connection.teleport(new PositionMoveRotation(offset, Vec3.ZERO, 0, 0), PACKET_FLAGS);
       } else {
         entity.setPos(event.getTargetX(), event.getTargetY(), event.getTargetZ());
       }

@@ -1,10 +1,11 @@
 package slimeknights.tconstruct.library.utils;
 
 import net.minecraft.locale.Language;
-import net.neoforged.neoforge.client.event.RegisterClientReloadListenersEvent;
+import net.neoforged.neoforge.client.event.AddClientReloadListenersEvent;
 import net.neoforged.fml.ModList;
 import org.apache.commons.lang3.text.WordUtils;
 import slimeknights.mantle.data.listener.ISafeManagerReloadListener;
+import slimeknights.tconstruct.TConstruct;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -57,7 +58,7 @@ public class DomainDisplayName {
   }
 
   /** Registers the reload listener with the resource manager */
-  public static void addResourceListener(RegisterClientReloadListenersEvent manager) {
-    manager.registerReloadListener(RELOAD_LISTENER);
+  public static void addResourceListener(AddClientReloadListenersEvent event) {
+    event.addListener(TConstruct.getResource("domain_display_name"), RELOAD_LISTENER);
   }
 }

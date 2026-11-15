@@ -5,9 +5,11 @@ import com.google.gson.JsonObject;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DynamicOps;
 import lombok.RequiredArgsConstructor;
-import net.minecraft.advancements.critereon.ItemSubPredicate;
+import net.minecraft.core.component.DataComponentGetter;
+import net.minecraft.core.component.predicates.DataComponentPredicate;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import slimeknights.mantle.data.JsonCodec;
 import slimeknights.mantle.data.predicate.IJsonPredicate;
 import slimeknights.tconstruct.TConstruct;
@@ -17,14 +19,15 @@ import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 
 /**
- * Variant of {@link ItemSubPredicate} for matching Tinker tools using a {@link ToolStackPredicate}.
+ * Item component predicate for matching Tinker tools using a {@link ToolStackPredicate}.
  * <p>
  * In 1.20 this extended the (then non-final) {@code ItemPredicate} and (de)serialized itself via the
- * legacy Forge item-predicate registry. In 1.21 {@code ItemPredicate} is a final record composed of
- * {@link ItemSubPredicate}s, so we implement {@link ItemSubPredicate} instead.
+ * legacy Forge item-predicate registry. In 1.21.1 it was an {@code ItemSubPredicate}. Since 1.21.5 item sub predicates
+ * are {@link DataComponentPredicate}s, used through {@code ItemPredicate.Builder#withComponents} with
+ * {@code DataComponentMatchers.Builder.components().partial(TYPE, predicate)}.
  */
 @RequiredArgsConstructor(staticName = "ofTool")
-public class ToolStackItemPredicate implements ItemSubPredicate {
+public class ToolStackItemPredicate implements DataComponentPredicate {
   public static final Identifier ID = TConstruct.getResource("tool_stack");
 
   /**
@@ -51,8 +54,8 @@ public class ToolStackItemPredicate implements ItemSubPredicate {
     }
   };
 
-  /** Registered sub-predicate type; the instance here must be the one put into {@code BuiltInRegistries.ITEM_SUB_PREDICATE_TYPE} (see TinkerTools). */
-  public static final ItemSubPredicate.Type<ToolStackItemPredicate> TYPE = new ItemSubPredicate.Type<>(CODEC);
+  /** Registered predicate type; the instance here must be the one put into {@code BuiltInRegistries.DATA_COMPONENT_PREDICATE_TYPE} (see TinkerTools). */
+  public static final DataComponentPredicate.Type<ToolStackItemPredicate> TYPE = new DataComponentPredicate.ConcreteType<>(CODEC);
 
   private final IJsonPredicate<IToolStackView> predicate;
 
@@ -65,9 +68,21 @@ public class ToolStackItemPredicate implements ItemSubPredicate {
     return new ToolStackItemPredicate(ToolStackPredicate.context(predicate));
   }
 
-  @Override
+  /** Checks if the given stack matches this predicate */
   public boolean matches(ItemStack stack) {
     // tag check is important to prevent accidentally modifying the NBT of non-tools
     return stack.is(Items.MODIFIABLE) && predicate.matches(ToolStack.from(stack));
+  }
+
+  @Override
+  public boolean matches(DataComponentGetter components) {
+    // tool stacks need the item, so only stacks and stack templates can match. Templates are copied to a stack so the tool stack never mutates the template
+    if (components instanceof ItemStack stack) {
+      return matches(stack);
+    }
+    if (components instanceof ItemStackTemplate template) {
+      return matches(template.create());
+    }
+    return false;
   }
 }

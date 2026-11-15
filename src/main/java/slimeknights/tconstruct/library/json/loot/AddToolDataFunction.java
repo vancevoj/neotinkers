@@ -4,12 +4,12 @@ import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import lombok.experimental.Accessors;
+import net.minecraft.core.Holder;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
-import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import slimeknights.mantle.data.loadable.LoadableCodec;
 import slimeknights.mantle.data.loadable.primitive.FloatLoadable;
@@ -21,9 +21,9 @@ import slimeknights.tconstruct.library.tools.definition.ToolDefinition;
 import slimeknights.tconstruct.library.tools.definition.module.material.ToolMaterialHook;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
-import slimeknights.tconstruct.tools.TinkerTools;
 
 import java.util.List;
+import java.util.Optional;
 
 /** Loot function to add data to a tool. */
 public class AddToolDataFunction extends LootItemConditionalFunction {
@@ -40,8 +40,8 @@ public class AddToolDataFunction extends LootItemConditionalFunction {
   /** Fixed materials on the tool, any nulls in the list will randomize */
   private final List<RandomMaterial> materials;
 
-  protected AddToolDataFunction(List<LootItemCondition> conditionsIn, float damage, List<RandomMaterial> materials) {
-    super(conditionsIn);
+  protected AddToolDataFunction(Optional<Holder<LootItemCondition>> condition, float damage, List<RandomMaterial> materials) {
+    super(condition);
     this.damage = damage;
     this.materials = materials;
   }
@@ -52,8 +52,8 @@ public class AddToolDataFunction extends LootItemConditionalFunction {
   }
 
   @Override
-  public LootItemFunctionType<AddToolDataFunction> getType() {
-    return TinkerTools.lootAddToolData.get();
+  public MapCodec<AddToolDataFunction> codec() {
+    return CODEC;
   }
 
   @Override
@@ -109,7 +109,7 @@ public class AddToolDataFunction extends LootItemConditionalFunction {
 
     @Override
     public LootItemFunction build() {
-      return new AddToolDataFunction(getConditions(), damage, materials.build());
+      return new AddToolDataFunction(getCondition(), damage, materials.build());
     }
   }
 }

@@ -23,7 +23,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Instrument;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.Tier;
+import net.minecraft.world.item.ToolMaterial;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntries;
@@ -83,9 +83,9 @@ public class TinkerLoadables {
   public static final StringLoadable<SimpleParticleType> SIMPLE_PARTICLE = instance(Loadables.PARTICLE_TYPE, SimpleParticleType.class, "Expected particle type to be instance of SimpleParticleType");
   public static final StringLoadable<BlockItem> BLOCK_ITEM = instance(Loadables.ITEM, BlockItem.class, "Expected item to be instance of BlockItem");
 
-  /** Tier loadable from the forge tier sorting registry */
-  public static final StringLoadable<Tier> TIER = Loadables.RESOURCE_LOCATION.mapChecked((id, error) -> {
-    Tier tier = HarvestTiers.byName(id);
+  /** Tier loadable from the harvest tier list, tiers are vanilla tool materials since 1.21.2 */
+  public static final StringLoadable<ToolMaterial> TIER = Loadables.RESOURCE_LOCATION.mapChecked((id, error) -> {
+    ToolMaterial tier = HarvestTiers.byName(id);
     if (tier != null) {
       return tier;
     }

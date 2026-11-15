@@ -9,9 +9,12 @@ import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.capabilities.Capabilities;
-import net.neoforged.neoforge.items.IItemHandlerModifiable;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.item.ItemResource;
+import slimeknights.mantle.inventory.SmartItemHandlerSlot;
 import slimeknights.mantle.network.packet.ISimplePacket;
 import slimeknights.mantle.network.packet.IThreadsafePacket;
 import slimeknights.tconstruct.TConstruct;
@@ -71,15 +74,18 @@ public class InventorySlotSyncPacket implements IThreadsafePacket {
             container.setItem(packet.slot, packet.itemStack);
             updated = true;
           }
-        } else if (te != null && world.getCapability(Capabilities.Item.BLOCK, packet.pos, null) instanceof IItemHandlerModifiable modifiable) {
-          if (packet.slot >= 0 && packet.slot < modifiable.getSlots()) {
-            modifiable.setStackInSlot(packet.slot, packet.itemStack);
+        } else if (te != null) {
+          ResourceHandler<ItemResource> handler = world.getCapability(Capabilities.Item.BLOCK, packet.pos, null);
+          if (handler != null && packet.slot >= 0 && packet.slot < handler.size()) {
+            // sets the slot directly when the handler supports it, otherwise replaces the contents through a transaction
+            SmartItemHandlerSlot.getModifier(handler).set(packet.slot, ItemResource.of(packet.itemStack), packet.itemStack.getCount());
             updated = true;
           }
         }
         if (updated) {
-          //noinspection ConstantConditions
-          Minecraft.getInstance().levelRenderer.blockChanged(null, packet.pos, null, null, 0);
+          // marks the sections around the block dirty for rerendering, same as the old level renderer block changed call
+          BlockState state = world.getBlockState(packet.pos);
+          world.sendBlockUpdated(packet.pos, state, state, 0);
         }
       }
     }

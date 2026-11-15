@@ -6,12 +6,10 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 import net.neoforged.neoforge.common.ModConfigSpec.BooleanValue;
 import net.neoforged.neoforge.common.conditions.ICondition;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.config.Config;
-import slimeknights.tconstruct.shared.TinkerCommons;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -55,14 +53,10 @@ public class ConfigEnabledCondition implements ICondition, LootItemCondition {
     return supplier.getAsBoolean();
   }
 
+  /** Shared by {@link ICondition} and {@link LootItemCondition}, the codec is registered in both registries */
   @Override
-  public MapCodec<? extends ICondition> codec() {
+  public MapCodec<ConfigEnabledCondition> codec() {
     return CODEC;
-  }
-
-  @Override
-  public LootItemConditionType getType() {
-    return TinkerCommons.lootConfig.get();
   }
 
   /**

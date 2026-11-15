@@ -30,7 +30,7 @@ public record BlockTemperatureVariable(float fallback) implements MiningSpeedVar
           pos = eventPos.get();
         }
       }
-      return player.level().getBiome(pos).value().getTemperature(pos);
+      return getTemperature(player, pos);
     }
     return fallback;
   }
@@ -46,9 +46,14 @@ public record BlockTemperatureVariable(float fallback) implements MiningSpeedVar
           pos = contextPos;
         }
       }
-      return player.level().getBiome(pos).value().getTemperature(pos);
+      return getTemperature(player, pos);
     }
     return fallback;
+  }
+
+  /** Gets the height adjusted biome temperature at the position, now relative to the sea level (AT) */
+  private static float getTemperature(Player player, BlockPos pos) {
+    return player.level().getBiome(pos).value().getTemperature(pos, player.level().getSeaLevel());
   }
 
   @Override

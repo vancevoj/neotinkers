@@ -2,15 +2,14 @@ package slimeknights.tconstruct.common.multiblock;
 
 import lombok.Getter;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtUtils;
-import net.minecraft.nbt.Tag;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import slimeknights.mantle.block.entity.MantleBlockEntity;
 import slimeknights.mantle.data.loadable.Loadables;
 import slimeknights.tconstruct.library.utils.TagUtil;
@@ -107,17 +106,17 @@ public class ServantTileEntity extends MantleBlockEntity implements IServantLogi
   /* NBT */
 
   /**
-   * Reads the master from NBT
-   * @param tags  NBT to read
+   * Sets the master from the read values, if both are valid
+   * @param masterPos       Master position, null if missing
+   * @param masterBlockName Master block name, null if missing
    */
-  protected void readMaster(CompoundTag tags) {
-    BlockPos masterPos = TagUtil.readOptionalPos(tags, TAG_MASTER_POS, this.worldPosition);
+  private void readMaster(@Nullable BlockPos masterPos, @Nullable String masterBlockName) {
     Block masterBlock = null;
     // if the master position is valid, get the master block
-    if (masterPos != null && tags.contains(TAG_MASTER_BLOCK, Tag.TAG_STRING)) {
-      Identifier masterBlockName = Identifier.tryParse(tags.getString(TAG_MASTER_BLOCK));
-      if (masterBlockName != null && BuiltInRegistries.BLOCK.containsKey(masterBlockName)) {
-        masterBlock = BuiltInRegistries.BLOCK.getValue(masterBlockName);
+    if (masterPos != null && masterBlockName != null) {
+      Identifier masterBlockId = Identifier.tryParse(masterBlockName);
+      if (masterBlockId != null && BuiltInRegistries.BLOCK.containsKey(masterBlockId)) {
+        masterBlock = BuiltInRegistries.BLOCK.getValue(masterBlockId);
       }
     }
     // if both valid, set
@@ -127,10 +126,26 @@ public class ServantTileEntity extends MantleBlockEntity implements IServantLogi
     }
   }
 
+  /**
+   * Reads the master from NBT
+   * @param tags  NBT to read
+   */
+  protected void readMaster(CompoundTag tags) {
+    readMaster(TagUtil.readOptionalPos(tags, TAG_MASTER_POS, this.worldPosition), tags.getString(TAG_MASTER_BLOCK).orElse(null));
+  }
+
+  /**
+   * Reads the master from a value input
+   * @param input  Input to read
+   */
+  protected void readMaster(ValueInput input) {
+    readMaster(TagUtil.readOptionalPos(input, TAG_MASTER_POS, this.worldPosition), input.getString(TAG_MASTER_BLOCK).orElse(null));
+  }
+
   @Override
-  public void loadAdditional(CompoundTag tags, HolderLookup.Provider registries) {
-    super.loadAdditional(tags, registries);
-    readMaster(tags);
+  protected void loadAdditional(ValueInput input) {
+    super.loadAdditional(input);
+    readMaster(input);
   }
 
   /**
@@ -140,15 +155,26 @@ public class ServantTileEntity extends MantleBlockEntity implements IServantLogi
   @SuppressWarnings({"UnusedReturnValue"})
   protected CompoundTag writeMaster(CompoundTag tags) {
     if (masterPos != null && masterBlock != null) {
-      tags.put(TAG_MASTER_POS, NbtUtils.writeBlockPos(masterPos.subtract(this.worldPosition)));
+      TagUtil.writeOptionalPos(tags, TAG_MASTER_POS, masterPos, this.worldPosition);
       tags.putString(TAG_MASTER_BLOCK, Loadables.BLOCK.getKey(masterBlock).toString());
     }
     return tags;
   }
 
+  /**
+   * Writes the master position and master block to the given output
+   * @param output  Output
+   */
+  protected void writeMaster(ValueOutput output) {
+    if (masterPos != null && masterBlock != null) {
+      TagUtil.writeOptionalPos(output, TAG_MASTER_POS, masterPos, this.worldPosition);
+      output.putString(TAG_MASTER_BLOCK, Loadables.BLOCK.getKey(masterBlock).toString());
+    }
+  }
+
   @Override
-  public void saveAdditional(CompoundTag tags, HolderLookup.Provider registries) {
-    super.saveAdditional(tags, registries);
-    writeMaster(tags);
+  protected void saveAdditional(ValueOutput output) {
+    super.saveAdditional(output);
+    writeMaster(output);
   }
 }

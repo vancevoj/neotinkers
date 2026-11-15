@@ -114,7 +114,7 @@ public record MobEquipment(EquipmentSlot slot, IJsonPredicate<Item> match, ItemO
           int amount = random.nextInt(capacity + 1);
           if (amount > 0) {
             // select fluid from tag
-            Fluid fluid = BuiltInRegistries.FLUID.getTag(this.fluid)
+            Fluid fluid = BuiltInRegistries.FLUID.get(this.fluid)
               .flatMap(tag -> tag.getRandomElement(random))
               .map(Holder::value)
               .orElse(Fluids.EMPTY);

@@ -8,17 +8,20 @@ import com.google.gson.JsonObject;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 import net.minecraft.core.Registry;
+import net.minecraft.resources.FileToIdConverter;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.tags.TagKey;
 import net.minecraft.tags.TagLoader;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.item.Rarity;
 import net.neoforged.neoforge.common.conditions.ICondition;
 import net.neoforged.neoforge.common.conditions.ICondition.IContext;
 import slimeknights.mantle.data.gson.ConditionSerializer;
+import slimeknights.mantle.data.gson.ResourceLocationSerializer;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.exception.TinkerJSONException;
 import slimeknights.tconstruct.library.json.JsonRedirect;
@@ -52,7 +55,9 @@ import static java.util.Objects.requireNonNullElse;
  * So if your mods name is "foobar", the location for your mods materials is "data/foobar/materials".
  */
 @Log4j2
-public class MaterialManager extends SimpleJsonResourceReloadListener {
+public class MaterialManager extends SimpleJsonResourceReloadListener<JsonElement> {
+  /** ID of the material datapack listener, use for {@link net.neoforged.neoforge.event.AddServerReloadListenersEvent#addDependency(Identifier, Identifier)} */
+  public static final Identifier LISTENER_ID = TConstruct.getResource("materials");
   /** Location of materials */
   public static final String FOLDER = "tinkering/materials/definition";
   /** Location of material tags */
@@ -62,7 +67,7 @@ public class MaterialManager extends SimpleJsonResourceReloadListener {
 
   /** GSON for loading materials */
   public static final Gson GSON = (new GsonBuilder())
-    .registerTypeAdapter(Identifier.class, new Identifier.Serializer())
+    .registerTypeAdapter(Identifier.class, ResourceLocationSerializer.resourceLocation("minecraft"))
     .registerTypeHierarchyAdapter(ICondition.class, ConditionSerializer.INSTANCE)
     .setPrettyPrinting()
     .disableHtmlEscaping()
@@ -86,7 +91,8 @@ public class MaterialManager extends SimpleJsonResourceReloadListener {
   private IContext conditionContext = IContext.EMPTY;
 
   public MaterialManager(Runnable onLoaded) {
-    super(GSON, FOLDER);
+    // materials keep their Gson parsing, the listener just provides the raw JSON
+    super(ExtraCodecs.JSON, FileToIdConverter.json(FOLDER));
     this.onLoaded = onLoaded;
   }
 
@@ -229,8 +235,8 @@ public class MaterialManager extends SimpleJsonResourceReloadListener {
 
 
     // load modifier tags
-    TagLoader<IMaterial> tagLoader = new TagLoader<>(id -> getMaterial(new MaterialId(id)), TAG_FOLDER);
-    this.tags = GenericTagUtil.mapLoaderResults(REGISTRY_KEY, tagLoader.loadAndBuild(resourceManagerIn));
+    TagLoader<IMaterial> tagLoader = new TagLoader<>((id, required) -> getMaterial(new MaterialId(id)), TAG_FOLDER);
+    this.tags = GenericTagUtil.mapLoaderResults(REGISTRY_KEY, Collections.unmodifiableMap(tagLoader.build(tagLoader.load(resourceManagerIn))));
     this.reverseTags = GenericTagUtil.reverseTags(IMaterial::getIdentifier, tags);
     log.info("Loaded {} material tags for {} materials in {} ms", tags.size(), reverseTags.size(), (System.nanoTime() - timeStep) / 1000000f);
   }

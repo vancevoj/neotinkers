@@ -15,6 +15,7 @@ import slimeknights.mantle.data.loadable.field.ContextKey;
 import slimeknights.mantle.data.registry.IdAwareComponentRegistry;
 import slimeknights.mantle.util.JsonHelper;
 import slimeknights.mantle.util.typed.TypedMapBuilder;
+import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.materials.definition.MaterialId;
 import slimeknights.tconstruct.library.materials.json.MaterialStatJson;
 import slimeknights.tconstruct.library.utils.JsonUtils;
@@ -44,6 +45,8 @@ import java.util.stream.Collectors;
  */
 @Log4j2
 public class MaterialStatsManager extends MergingJsonDataLoader<Map<Identifier,JsonObject>> {
+  /** ID of the material stats datapack listener, use for {@link net.neoforged.neoforge.event.AddServerReloadListenersEvent#addDependency(Identifier, Identifier)} */
+  public static final Identifier LISTENER_ID = TConstruct.getResource("material_stats");
   public static final String FOLDER = "tinkering/materials/stats";
 
   /** Runnable to run after loading material stats */

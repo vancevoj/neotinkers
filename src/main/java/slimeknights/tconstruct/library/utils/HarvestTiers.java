@@ -1,110 +1,95 @@
 package slimeknights.tconstruct.library.utils;
 
+import com.google.common.collect.ImmutableBiMap;
 import com.google.common.collect.Maps;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.item.Tier;
-import net.minecraft.world.item.Tiers;
+import net.minecraft.world.item.ToolMaterial;
 import net.minecraft.world.level.block.state.BlockState;
 import slimeknights.mantle.client.ResourceColorManager;
 import slimeknights.mantle.data.listener.ISafeManagerReloadListener;
 import slimeknights.tconstruct.TConstruct;
 
 import javax.annotation.Nullable;
-import java.util.Locale;
+import java.util.List;
 import java.util.Map;
 
 /**
  * Harvest level display names
+ * <p>
+ * Since 1.21.2 tiers are vanilla {@link ToolMaterial} records, which have no names or ordering, and NeoForge's tier sorting registry is gone.
+ * Vanilla materials are mapped to IDs and sorted explicitly here; materials from other mods have no ID and sort below vanilla ones.
  */
 public class HarvestTiers {
   private HarvestTiers() {}
 
+  /** Vanilla materials in harvest order, matching the 1.20.1 sorted tiers with copper (added in 1.21.9) between stone and iron */
+  private static final List<ToolMaterial> SORTED = List.of(
+    ToolMaterial.WOOD, ToolMaterial.GOLD, ToolMaterial.STONE, ToolMaterial.COPPER, ToolMaterial.IRON, ToolMaterial.DIAMOND, ToolMaterial.NETHERITE);
+  /** IDs for each vanilla material, matching the old tier enum names */
+  private static final ImmutableBiMap<ToolMaterial, Identifier> IDS = ImmutableBiMap.<ToolMaterial, Identifier>builder()
+    .put(ToolMaterial.WOOD, Identifier.withDefaultNamespace("wood"))
+    .put(ToolMaterial.GOLD, Identifier.withDefaultNamespace("gold"))
+    .put(ToolMaterial.STONE, Identifier.withDefaultNamespace("stone"))
+    .put(ToolMaterial.COPPER, Identifier.withDefaultNamespace("copper"))
+    .put(ToolMaterial.IRON, Identifier.withDefaultNamespace("iron"))
+    .put(ToolMaterial.DIAMOND, Identifier.withDefaultNamespace("diamond"))
+    .put(ToolMaterial.NETHERITE, Identifier.withDefaultNamespace("netherite"))
+    .build();
+
   /** Cache of name for each tier */
-  private static final Map<Tier, Component> harvestLevelNames = Maps.newHashMap();
+  private static final Map<ToolMaterial, Component> harvestLevelNames = Maps.newHashMap();
   /** Listener to clear name cache so we get new colors */
   public static final ISafeManagerReloadListener RELOAD_LISTENER = manager -> harvestLevelNames.clear();
 
   /**
-   * Gets a name for the given tier.
-   * <p>
-   * TODO(neoport): TierSortingRegistry was removed in 1.21 along with its name registry. Vanilla tiers are mapped to a
-   * minecraft namespaced ID by their enum name; any other tier falls back to a generic ID so a translation key still resolves.
+   * Gets the ID used for the name of the given tier. Vanilla tiers use a minecraft namespaced ID;
+   * any other tier falls back to a generic ID so a translation key still resolves.
    */
-  private static Identifier tierId(Tier tier) {
-    if (tier instanceof Tiers vanilla) {
-      return Identifier.fromNamespaceAndPath("minecraft", vanilla.name().toLowerCase(Locale.ROOT));
-    }
-    return TConstruct.getResource("unknown");
+  private static Identifier tierId(ToolMaterial tier) {
+    Identifier id = IDS.get(tier);
+    return id != null ? id : TConstruct.getResource("unknown");
   }
 
   /**
    * Gets the ID for the given tier, replacement for {@code TierSortingRegistry.getName}.
-   * <p>
-   * TODO(neoport): TierSortingRegistry removed in 1.21; only vanilla tiers have a stable ID. Returns null for unknown tiers.
+   * Only vanilla tiers have a stable ID, returns null for unknown tiers.
    */
   @Nullable
-  public static Identifier getId(Tier tier) {
-    if (tier instanceof Tiers vanilla) {
-      return Identifier.fromNamespaceAndPath("minecraft", vanilla.name().toLowerCase(Locale.ROOT));
-    }
-    return null;
+  public static Identifier getId(ToolMaterial tier) {
+    return IDS.get(tier);
   }
 
   /**
    * Gets the tier for the given ID, replacement for {@code TierSortingRegistry.byName}.
-   * <p>
-   * TODO(neoport): TierSortingRegistry removed in 1.21; only vanilla tiers are resolvable by ID. Returns null otherwise.
+   * Only vanilla tiers are resolvable by ID, returns null otherwise.
    */
   @Nullable
-  public static Tier byName(Identifier id) {
-    if ("minecraft".equals(id.getNamespace())) {
-      for (Tiers vanilla : Tiers.values()) {
-        if (vanilla.name().toLowerCase(Locale.ROOT).equals(id.getPath())) {
-          return vanilla;
-        }
-      }
-    }
-    return null;
+  public static ToolMaterial byName(Identifier id) {
+    return IDS.inverse().get(id);
   }
 
   /**
    * Checks if the given tier can harvest the given block for drops, replacement for {@code TierSortingRegistry.isCorrectTierForDrops}.
-   * <p>
-   * TODO(neoport): TierSortingRegistry removed in 1.21; cross mod tier ordering is gone. We use the vanilla incorrect-blocks tag.
+   * Cross mod tier ordering is gone, so this uses the vanilla incorrect blocks tag.
    */
-  public static boolean isCorrectTierForDrops(Tier tier, BlockState state) {
-    return !state.is(tier.getIncorrectBlocksForDrops());
+  public static boolean isCorrectTierForDrops(ToolMaterial tier, BlockState state) {
+    return !state.is(tier.incorrectBlocksForDrops());
   }
 
   /**
    * Gets a numeric sort key for a tier so the larger and smaller helpers keep working without a sorting registry.
-   * <p>
-   * Mirrors the order of {@code TierSortingRegistry.getSortedTiers()} from 1.20.1: wood, gold, stone, iron, diamond,
-   * netherite. Note this is not the order the vanilla enum declares, as {@link Tiers} declares gold between diamond and
-   * netherite despite gold having wood's harvest level, so {@code ordinal()} would sort gold above diamond.
-   * <p>
-   * TODO(neoport): TierSortingRegistry removed in 1.21, true cross mod tier ordering is no longer available. Unknown
-   * tiers sort below all vanilla tiers.
+   * Mirrors the order of {@code TierSortingRegistry.getSortedTiers()} from 1.20.1: wood, gold, stone, iron, diamond, netherite, with copper between stone and iron.
+   * Unknown tiers return -1, sorting below all vanilla tiers.
    */
-  private static int sortKey(Tier tier) {
-    if (tier instanceof Tiers vanilla) {
-      return switch (vanilla) {
-        case WOOD -> 0;
-        case GOLD -> 1;
-        case STONE -> 2;
-        case IRON -> 3;
-        case DIAMOND -> 4;
-        case NETHERITE -> 5;
-      };
-    }
-    return -1;
+  private static int sortKey(ToolMaterial tier) {
+    return SORTED.indexOf(tier);
   }
 
   /** Makes a translation key for the given name */
-  private static MutableComponent makeLevelKey(Tier tier) {
+  private static MutableComponent makeLevelKey(ToolMaterial tier) {
     String key = Util.makeTranslationKey("harvest_tier", tierId(tier));
     TextColor color = ResourceColorManager.getTextColor(key);
     return TConstruct.makeTranslation("stat", key).withStyle(style -> style.withColor(color));
@@ -115,12 +100,12 @@ public class HarvestTiers {
    * @param tier  Tier
    * @return  Level name
    */
-  public static Component getName(Tier tier) {
+  public static Component getName(ToolMaterial tier) {
     return harvestLevelNames.computeIfAbsent(tier, n ->  makeLevelKey(tier));
   }
 
   /** Gets the larger of two tiers */
-  public static Tier max(Tier a, Tier b) {
+  public static ToolMaterial max(ToolMaterial a, ToolMaterial b) {
     // note an unknown tier sorts below vanilla tiers, so the larger of an unknown tier and a vanilla one is the vanilla one
     if (sortKey(b) > sortKey(a)) {
       return b;
@@ -129,7 +114,7 @@ public class HarvestTiers {
   }
 
   /** Gets the smaller of two tiers */
-  public static Tier min(Tier a, Tier b) {
+  public static ToolMaterial min(ToolMaterial a, ToolMaterial b) {
     // note an unknown tier sorts below vanilla tiers, so the smaller of an unknown tier and a vanilla one is the unknown one
     if (sortKey(b) < sortKey(a)) {
       return b;
@@ -138,8 +123,8 @@ public class HarvestTiers {
   }
 
   /** Gets the smallest tier */
-  public static Tier minTier() {
-    // TODO(neoport): TierSortingRegistry removed in 1.21, the registry sorted list is gone so we default to the lowest vanilla tier
-    return Tiers.WOOD;
+  public static ToolMaterial minTier() {
+    // the registry sorted list is gone, so default to the lowest vanilla tier
+    return ToolMaterial.WOOD;
   }
 }

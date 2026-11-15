@@ -1,7 +1,6 @@
 package slimeknights.tconstruct.library.json.variable.entity;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
@@ -17,18 +16,13 @@ import javax.annotation.Nullable;
 public record EntityLightVariable(@Nullable LightLayer lightLayer) implements EntityVariable {
   public static final RecordLoadable<EntityLightVariable> LOADER = RecordLoadable.create(TinkerLoadables.LIGHT_LAYER.nullableField("light_layer", EntityLightVariable::lightLayer), EntityLightVariable::new);
 
-  /** Gets the skylight level, adjust for time of day. Clientside logic is based on {@link Level#updateSkyBrightness()} */
+  /**
+   * Gets the skylight level, adjust for time of day.
+   * Since 26.1 both the client and the server update the sky darkness each tick in {@link Level#updateSkyBrightness()} from the sky light environment attribute,
+   * so the client no longer needs to recompute it from rain, thunder and time of day.
+   */
   private static int getSkyLight(Level level, BlockPos pos) {
-    int light = level.getBrightness(LightLayer.SKY, pos);
-    if (level.isClientSide() && light > 0) { // optimization: no need to do float math if light is already 0
-      // TODO 26.1: should no longer be needed
-      float rain = 1 - (level.getRainLevel(1) * 5) / 16;
-      float thunder = 1 - (level.getThunderLevel(1) * 5) / 16;
-      float time = 0.5f + 2 * Mth.clamp(Mth.cos(level.getTimeOfDay(1) * ((float)Math.PI * 2)), -0.25f, 0.25f);
-      return light - (int)((1 - time * rain * thunder) * 11);
-    } else {
-      return light - level.getSkyDarken();
-    }
+    return level.getBrightness(LightLayer.SKY, pos) - level.getSkyDarken();
   }
 
   /** Gets the light level, adjusting skylight as needed */

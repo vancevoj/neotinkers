@@ -24,7 +24,7 @@ public class GenericTagUtil {
   private GenericTagUtil() {}
 
   /** Converts the results of the loader into a map from tag keys to lists */
-  public static <T> Map<TagKey<T>,List<T>> mapLoaderResults(ResourceKey<? extends Registry<T>> registry, Map<Identifier,Collection<T>> map) {
+  public static <T> Map<TagKey<T>,List<T>> mapLoaderResults(ResourceKey<? extends Registry<T>> registry, Map<Identifier,? extends Collection<T>> map) {
     return map.entrySet().stream().collect(Collectors.toUnmodifiableMap(entry -> TagKey.create(registry, entry.getKey()), entry -> List.copyOf(entry.getValue())));
   }
 

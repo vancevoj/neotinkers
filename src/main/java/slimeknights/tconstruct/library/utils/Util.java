@@ -248,9 +248,10 @@ public class Util {
     return true;
   }
 
-  /** Creates a new client block entity data packet with better generics than the vanilla method */
+  /** Creates a new client block entity data packet with better generics than the vanilla method. The block entity must be in a level. */
   public static <B extends BlockEntity> ClientboundBlockEntityDataPacket createBEPacket(B be, Function<? super B,CompoundTag> tagFunction) {
-    return new ClientboundBlockEntityDataPacket(be.getBlockPos(), be.getType(), tagFunction.apply(be));
+    // the packet constructor is private, the vanilla factory passes the block entity back so we can keep the precise type
+    return ClientboundBlockEntityDataPacket.create(be, (blockEntity, registries) -> tagFunction.apply(be));
   }
 
   /** Cache of neo forge status, to make lookups faster in hot code */

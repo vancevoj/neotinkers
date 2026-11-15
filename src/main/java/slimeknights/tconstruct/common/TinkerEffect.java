@@ -9,7 +9,12 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.extensions.common.IClientMobEffectExtensions;
+import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
+import slimeknights.tconstruct.TConstruct;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -36,7 +41,12 @@ public class TinkerEffect extends MobEffect {
 
   /* Visibility */
 
-  @Override
+  /**
+   * Creates the client extensions for this effect. Mob effects no longer have an initialize client hook,
+   * so this is called for every registered Tinker effect from {@link RegisterClientExtensionsEvent}, see {@link ClientEvents}.
+   * Override to provide custom client extensions.
+   * @param consumer  Consumer receiving the extensions
+   */
   public void initializeClient(Consumer<IClientMobEffectExtensions> consumer) {
     consumer.accept(new IClientMobEffectExtensions() {
       @Override
@@ -147,5 +157,20 @@ public class TinkerEffect extends MobEffect {
   @Deprecated(forRemoval = true)
   public int getLevel(LivingEntity entity) {
     return getAmplifier(entity, this);
+  }
+
+  /** Registers the client extensions of all Tinker effects, only loaded on the client */
+  @EventBusSubscriber(modid = TConstruct.MOD_ID, value = Dist.CLIENT)
+  static class ClientEvents {
+    private ClientEvents() {}
+
+    @SubscribeEvent
+    static void registerClientExtensions(RegisterClientExtensionsEvent event) {
+      for (MobEffect effect : BuiltInRegistries.MOB_EFFECT) {
+        if (effect instanceof TinkerEffect tinkerEffect) {
+          tinkerEffect.initializeClient(extensions -> event.registerMobEffect(extensions, tinkerEffect));
+        }
+      }
+    }
   }
 }

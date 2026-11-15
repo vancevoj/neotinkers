@@ -5,10 +5,12 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.material.MapColor;
 import net.neoforged.neoforge.registries.DeferredHolder;
+import slimeknights.mantle.registration.RegistrationHelper;
 import slimeknights.mantle.registration.deferred.BlockDeferredRegister;
 import slimeknights.tconstruct.common.registration.GeodeItemObject.BudSize;
 
 import java.util.Map;
+import java.util.function.UnaryOperator;
 
 /** Additional methods in deferred register extension */
 @SuppressWarnings("UnusedReturnValue")
@@ -22,11 +24,11 @@ public class BlockDeferredRegisterExtension extends BlockDeferredRegister {
    * @param name         Geode name
    * @param color        Color of the geode
    * @param blockSound   Sound of the block and budding block
-   * @param props        Item props
+   * @param props        Operator applied to the item properties of the shard and every block item, called once per item
    * @return The geode block
    */
-  public GeodeItemObject registerGeode(String name, MapColor color, SoundType blockSound, SoundEvent chimeSound, Map<BudSize,SoundType> clusterSounds, int baseLight, Item.Properties props) {
-    DeferredHolder<Item, Item> shard = itemRegister.register(name, () -> new Item(props));
+  public GeodeItemObject registerGeode(String name, MapColor color, SoundType blockSound, SoundEvent chimeSound, Map<BudSize,SoundType> clusterSounds, int baseLight, UnaryOperator<Item.Properties> props) {
+    DeferredHolder<Item, Item> shard = itemRegister.register(name, id -> new Item(RegistrationHelper.itemProperties(id, props)));
     return new GeodeItemObject(shard, this, color, blockSound, chimeSound, clusterSounds, baseLight, props);
   }
 }

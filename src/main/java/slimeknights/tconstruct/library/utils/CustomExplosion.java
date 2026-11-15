@@ -1,21 +1,27 @@
 package slimeknights.tconstruct.library.utils;
 
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.protocol.game.ClientboundExplodePacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.random.WeightedList;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Explosion;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.EntityBasedExplosionDamageCalculator;
 import net.minecraft.world.level.ExplosionDamageCalculator;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.Level.ExplosionInteraction;
+import net.minecraft.world.level.ServerExplosion;
+import net.minecraft.world.level.block.BaseFireBlock;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.FluidState;
@@ -25,6 +31,7 @@ import net.neoforged.neoforge.event.EventHooks;
 import slimeknights.tconstruct.library.tools.helper.ToolAttackUtil;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -32,13 +39,31 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
 
-/** Helper class for more control over explosions */
-public class CustomExplosion extends Explosion {
+/**
+ * Helper class for more control over explosions.
+ * <p>
+ * Explosions only exist on the server since 1.21.2, so this extends {@link ServerExplosion} and replaces its whole {@link #explode()},
+ * as the vanilla steps are private. The client receives the explosion through {@link #syncToClient(int)}.
+ */
+public class CustomExplosion extends ServerExplosion {
   /** Size of the hollowed out cube determining the number of rays to cast */
   private static final int RAY_COUNT = 16;
   private static final int MAX_RAY = RAY_COUNT - 1;
+  /** Max number of items merged into a single stack when dropping, matches vanilla */
+  private static final int MAX_DROPS_PER_COMBINED_STACK = 16;
   /** Default predicate for which entities to match */
   public static final Predicate<Entity> DEFAULT_ENTITY_PREDICATE = entity -> entity != null && entity.isAlive() && !entity.isSpectator();
+
+  /* Copies of the private explosion fields, for use by subclasses */
+  protected final ServerLevel level;
+  protected final double x, y, z;
+  protected final float radius;
+  @Nullable
+  protected final Entity source;
+  protected final boolean fire;
+  protected final ExplosionDamageCalculator damageCalculator;
+  /** Blocks to destroy, filled by {@link #calculateHitBlocks()} */
+  protected final List<BlockPos> toBlow = new ObjectArrayList<>();
 
   /** Maximum damage to deal; setting to 7*2*radius will match the vanilla explosion. */
   protected final float damage;
@@ -49,27 +74,53 @@ public class CustomExplosion extends Explosion {
   /** If true, explosion damage bypasses the invulnerability time */
   protected final boolean bypassInvulnerableTime;
 
-  public CustomExplosion(Level level, Vec3 location, float radius, @Nullable Entity sourceEntity, @Nullable Predicate<Entity> entityPredicate, float damage, @Nullable DamageSource damageSource, float knockback, @Nullable ExplosionDamageCalculator damageCalculator, boolean placeFire, BlockInteraction blockInteraction, boolean bypassInvulnerableTime) {
-    super(level, sourceEntity, damageSource, damageCalculator, location.x, location.y, location.z, radius, placeFire, blockInteraction,
-          ParticleTypes.EXPLOSION, ParticleTypes.EXPLOSION_EMITTER, SoundEvents.GENERIC_EXPLODE);
+  public CustomExplosion(ServerLevel level, Vec3 location, float radius, @Nullable Entity sourceEntity, @Nullable Predicate<Entity> entityPredicate, float damage, @Nullable DamageSource damageSource, float knockback, @Nullable ExplosionDamageCalculator damageCalculator, boolean placeFire, BlockInteraction blockInteraction, boolean bypassInvulnerableTime) {
+    super(level, sourceEntity, damageSource, damageCalculator, location, radius, placeFire, blockInteraction);
+    this.level = level;
+    this.x = location.x;
+    this.y = location.y;
+    this.z = location.z;
+    this.radius = radius;
+    this.source = sourceEntity;
+    this.fire = placeFire;
+    // same default as the vanilla explosion
+    this.damageCalculator = damageCalculator != null ? damageCalculator : sourceEntity != null ? new EntityBasedExplosionDamageCalculator(sourceEntity) : new ExplosionDamageCalculator();
     this.entityPredicate = Objects.requireNonNullElse(entityPredicate, DEFAULT_ENTITY_PREDICATE);
     this.damage = damage;
     this.knockback = knockback;
     this.bypassInvulnerableTime = bypassInvulnerableTime;
   }
 
-  public CustomExplosion(Level level, Vec3 location, float radius, @Nullable Entity sourceEntity, @Nullable Predicate<Entity> entityPredicate, float damage, @Nullable DamageSource damageSource, float knockback, @Nullable ExplosionDamageCalculator damageCalculator, boolean placeFire, BlockInteraction blockInteraction) {
+  public CustomExplosion(ServerLevel level, Vec3 location, float radius, @Nullable Entity sourceEntity, @Nullable Predicate<Entity> entityPredicate, float damage, @Nullable DamageSource damageSource, float knockback, @Nullable ExplosionDamageCalculator damageCalculator, boolean placeFire, BlockInteraction blockInteraction) {
     this(level, location, radius, sourceEntity, entityPredicate ,damage, damageSource, knockback, damageCalculator, placeFire, blockInteraction, false);
   }
 
-  @Override
-  public void explode() {
-    this.level.gameEvent(this.source, GameEvent.EXPLODE, center());
-    calculateHitBlocks();
-    damageAndPushEntities();
+  /** Checks if this explosion breaks blocks. Vanilla's version is private. */
+  protected boolean interactsWithBlocks() {
+    return getBlockInteraction() != BlockInteraction.KEEP;
   }
 
-  /** Calculates the list of blocks to hit; the actual block damage won't happen until {@link #finalizeExplosion(boolean)} */
+  /**
+   * Runs the explosion: hits entities, then breaks blocks and places fire.
+   * Replaces the 1.21.1 {@code explode()} plus {@code finalizeExplosion(boolean)}.
+   * @return  Number of blocks hit
+   */
+  @Override
+  public int explode() {
+    this.level.gameEvent(this.source, GameEvent.EXPLODE, center());
+    toBlow.clear();
+    calculateHitBlocks();
+    damageAndPushEntities();
+    if (interactsWithBlocks()) {
+      interactWithBlocks();
+    }
+    if (fire) {
+      createFire();
+    }
+    return toBlow.size();
+  }
+
+  /** Calculates the list of blocks to hit, adding them to {@link #toBlow}; the actual block damage happens in {@link #explode()} after damaging entities */
   protected void calculateHitBlocks() {
     // optimization: if we are not interacting with blocks, no need to calculate blocks
     if (!interactsWithBlocks() && !fire) {
@@ -95,7 +146,7 @@ public class CustomExplosion extends Explosion {
             double targetX = this.x;
             double targetY = this.y;
             double targetZ = this.z;
-            for (float power = this.radius * (0.7f + level.random.nextFloat() * 0.6f); power > 0; power -= 0.225f) {
+            for (float power = this.radius * (0.7f + level.getRandom().nextFloat() * 0.6f); power > 0; power -= 0.225f) {
               BlockPos target = BlockPos.containing(targetX, targetY, targetZ);
               BlockState block = level.getBlockState(target);
               FluidState fluid = level.getFluidState(target);
@@ -145,11 +196,12 @@ public class CustomExplosion extends Explosion {
                Math.floor(this.y + diameter + 1),
                Math.floor(this.z + diameter + 1)),
       entityPredicate);
-    EventHooks.onExplosionDetonate(this.level, this, list, diameter);
+    EventHooks.onExplosionDetonate(this.level, this, list, toBlow);
 
     // start pushing entities
     // this logic is for the most part identical to vanilla, except taking better advantage of vec3
     Vec3 center = center();
+    DamageSource damageSource = getDamageSource();
     for (Entity entity : list) {
       Vec3 dir = entity.position().subtract(center);
       double length = dir.length();
@@ -167,9 +219,9 @@ public class CustomExplosion extends Explosion {
           if (damage > 0) {
             int toDeal = (int) ((strength * strength + strength) / 2 * damage + 1);
             if (bypassInvulnerableTime) {
-              ToolAttackUtil.hurtNoInvulnerableTime(entity, this.damageSource, toDeal);
+              ToolAttackUtil.hurtNoInvulnerableTime(entity, damageSource, toDeal);
             } else {
-              entity.hurt(this.damageSource, toDeal);
+              entity.hurtServer(this.level, damageSource, toDeal);
             }
           }
 
@@ -186,7 +238,7 @@ public class CustomExplosion extends Explosion {
             entity.setDeltaMovement(entity.getDeltaMovement().add(velocity));
             if (entity instanceof Player player) {
               if (!player.isCreative() || !player.getAbilities().flying) {
-                hitPlayers.put(player, velocity);
+                getHitPlayers().put(player, velocity);
               }
             }
           }
@@ -195,37 +247,96 @@ public class CustomExplosion extends Explosion {
     }
   }
 
-  /** Runs the logic on the server, syncing to the client. Based on {@link ServerLevel#explode(Entity, DamageSource, ExplosionDamageCalculator, double, double, double, float, boolean, ExplosionInteraction)}*/
-  public void handleServer() {
-    // based on ServerLevel#explode
-    if (!level.isClientSide()) {
-      if (!EventHooks.onExplosionStart(level, this)) {
-        explode();
-        finalizeExplosion(false);
-        syncToClient();
+  /** Breaks the blocks in {@link #toBlow}, dropping their loot. Same as the private vanilla logic. */
+  protected void interactWithBlocks() {
+    List<StackCollector> stacks = new ArrayList<>();
+    List<BlockPos> targets = new ArrayList<>(toBlow);
+    net.minecraft.util.Util.shuffle(targets, this.level.getRandom());
+    for (BlockPos pos : targets) {
+      this.level.getBlockState(pos).onExplosionHit(this.level, pos, this, (stack, position) -> addOrAppendStack(stacks, stack, position));
+    }
+    for (StackCollector stack : stacks) {
+      Block.popResource(this.level, stack.pos, stack.stack);
+    }
+  }
+
+  /** Places fire on the blocks in {@link #toBlow}. Same as the private vanilla logic. */
+  protected void createFire() {
+    for (BlockPos pos : toBlow) {
+      if (this.level.getRandom().nextInt(3) == 0 && this.level.getBlockState(pos).isAir() && this.level.getBlockState(pos.below()).isSolidRender()) {
+        this.level.setBlockAndUpdate(pos, BaseFireBlock.getState(this.level, pos));
       }
     }
   }
 
-  /** Runs the logic on both sides */
-  public void doDualSide(Level level, boolean spawnParticles) {
+  /** Merges the stack into an existing drop if possible */
+  private static void addOrAppendStack(List<StackCollector> stacks, ItemStack stack, BlockPos pos) {
+    for (StackCollector collector : stacks) {
+      collector.tryMerge(stack);
+      if (stack.isEmpty()) {
+        return;
+      }
+    }
+    stacks.add(new StackCollector(pos, stack));
+  }
+
+  /** Runs the logic on the server, syncing to the client. Based on {@link ServerLevel#explode(Entity, DamageSource, ExplosionDamageCalculator, double, double, double, float, boolean, Level.ExplosionInteraction)}*/
+  public void handleServer() {
+    // based on ServerLevel#explode
     if (!EventHooks.onExplosionStart(level, this)) {
-      explode();
-      finalizeExplosion(spawnParticles);
+      syncToClient(explode());
     }
   }
 
-  /** Syncs this explosion to the client */
+  /**
+   * Runs the explosion logic. Explosions are server only since 1.21.2, so the client effects come from the explosion packet.
+   * @param level           Level running the explosion, does nothing on the client
+   * @param spawnParticles  If true, sends the explosion to the client for particles and sound
+   */
+  public void doDualSide(Level level, boolean spawnParticles) {
+    if (!level.isClientSide() && !EventHooks.onExplosionStart(this.level, this)) {
+      int blocks = explode();
+      if (spawnParticles) {
+        syncToClient(blocks);
+      }
+    }
+  }
+
+  /**
+   * Syncs this explosion to the client
+   * @param blockCount  Number of blocks hit, used by the client to pick the explosion particle
+   */
+  public void syncToClient(int blockCount) {
+    Vec3 position = center();
+    // matches the vanilla small and large explosion particles and the silent source check from ServerLevel#explode
+    boolean playSound = source == null || !source.isSilent();
+    for (ServerPlayer player : level.players()) {
+      if (player.distanceToSqr(position) < 4096.0D) {
+        player.connection.send(new ClientboundExplodePacket(position, radius, blockCount, Optional.ofNullable(getHitPlayers().get(player)),
+                                                            isSmall() ? ParticleTypes.EXPLOSION : ParticleTypes.EXPLOSION_EMITTER, SoundEvents.GENERIC_EXPLODE, WeightedList.of(), playSound));
+      }
+    }
+  }
+
+  /** @deprecated use {@link #syncToClient(int)} */
+  @Deprecated
   public void syncToClient() {
-    if (!level.isClientSide() && level instanceof ServerLevel server) {
-      // skip position sync if there are no blocks to be removed
-      List<BlockPos> toBlow = interactsWithBlocks() ? getToBlow() : List.of();
-      Vec3 position = center();
-      for (ServerPlayer player : server.players()) {
-        if (player.distanceToSqr(position) < 4096.0D) {
-          player.connection.send(new ClientboundExplodePacket(x, y, z, radius, toBlow, hitPlayers.get(player), getBlockInteraction(),
-                                                              ParticleTypes.EXPLOSION, ParticleTypes.EXPLOSION_EMITTER, SoundEvents.GENERIC_EXPLODE));
-        }
+    syncToClient(interactsWithBlocks() ? toBlow.size() : 0);
+  }
+
+  /** Item stack being combined for explosion drops */
+  private static class StackCollector {
+    private final BlockPos pos;
+    private ItemStack stack;
+
+    private StackCollector(BlockPos pos, ItemStack stack) {
+      this.pos = pos;
+      this.stack = stack;
+    }
+
+    public void tryMerge(ItemStack input) {
+      if (ItemEntity.areMergable(this.stack, input)) {
+        this.stack = ItemEntity.merge(this.stack, input, MAX_DROPS_PER_COMBINED_STACK);
       }
     }
   }

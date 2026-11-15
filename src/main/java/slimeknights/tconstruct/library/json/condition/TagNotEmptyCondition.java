@@ -9,11 +9,9 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 import net.neoforged.neoforge.common.conditions.ICondition;
 import slimeknights.mantle.util.RegistryHelper;
 import slimeknights.tconstruct.TConstruct;
-import slimeknights.tconstruct.shared.TinkerCommons;
 
 /**
  * Condition checking that a tag is non-empty, usable both as a recipe condition and a loot condition.
@@ -46,14 +44,9 @@ public class TagNotEmptyCondition<T> implements LootItemCondition, ICondition {
     return new TagNotEmptyCondition<>(TagKey.create(registry, tag));
   }
 
-  @SuppressWarnings("removal")
+  /** Codec for both the loot condition and the recipe condition, as the 26.3 loot condition registry holds codecs directly */
   @Override
-  public LootItemConditionType getType() {
-    return TinkerCommons.lootTagNotEmptyCondition.get();
-  }
-
-  @Override
-  public MapCodec<? extends ICondition> codec() {
+  public MapCodec<TagNotEmptyCondition<?>> codec() {
     return CODEC;
   }
 

@@ -1,6 +1,7 @@
 package slimeknights.tconstruct.library.events.teleport;
 
 import lombok.Getter;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.neoforged.neoforge.event.entity.EntityTeleportEvent;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
@@ -10,7 +11,8 @@ import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 public class ModifierTeleportEvent extends EntityTeleportEvent {
   private final ModifierEntry modifier;
   public ModifierTeleportEvent(Entity entity, double targetX, double targetY, double targetZ, ModifierEntry modifier) {
-    super(entity, targetX, targetY, targetZ);
+    // teleports only fire on the server, within the current dimension
+    super(entity, (ServerLevel) entity.level(), targetX, targetY, targetZ);
     this.modifier = modifier;
   }
 }

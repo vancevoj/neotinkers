@@ -1,10 +1,6 @@
 package slimeknights.tconstruct;
 
-import net.minecraft.core.HolderLookup.Provider;
-import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.DataGenerator;
-import net.minecraft.data.PackOutput;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.Identifier;
@@ -13,10 +9,8 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.neoforge.registries.RegisterEvent;
-import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.common.data.DatapackBuiltinEntriesProvider;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
+import net.neoforged.neoforge.data.event.GatherDataRegistryEntriesEvent;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
@@ -79,8 +73,6 @@ import slimeknights.tconstruct.world.data.WorldgenProvider;
 
 import java.util.Locale;
 import java.util.Random;
-import java.util.Set;
-import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 
 /**
@@ -149,45 +141,43 @@ public class TConstruct {
     StationSlotLayoutLoader.init();
   }
 
+  /**
+   * Datagen for registry entries. Since 26.3 datapack registries and the reloadable registries (loot tables, advancements, recipes)
+   * are generated from bootstraps registered here instead of as data providers.
+   */
   @SubscribeEvent
-  static void gatherData(final GatherDataEvent event) {
-    DataGenerator generator = event.getGenerator();
-    PackOutput packOutput = generator.getPackOutput();
-    ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
-    CompletableFuture<Provider> lookupProvider = event.getLookupProvider();
-    boolean server = event.includeServer();
+  static void gatherRegistries(final GatherDataRegistryEntriesEvent event) {
+    // its sometimes cleaner to splitup different registry sets to their own classes, combine them here
+    DamageTypeProvider.register(event);
+    WorldgenProvider.register(event);
+    event.add(Registries.TRIM_MATERIAL, TrimMaterialProvider::bootstrap);
+    // loot tables
+    TConstructLootTableProvider.register(event);
+    // tool advancements (data component predicate type registered by TinkerTools, see ToolStackItemPredicate)
+    event.advancement(AdvancementsProvider::new);
+  }
 
-    // its sometimes cleaner to splitup different registry sets to their own classes, combine them here into a single provider
-    RegistrySetBuilder registrySetBuilder = new RegistrySetBuilder();
-    DamageTypeProvider.register(registrySetBuilder);
-    WorldgenProvider.register(registrySetBuilder);
-    TrimMaterialProvider.register(registrySetBuilder);
-    DatapackBuiltinEntriesProvider datapackRegistryProvider = new DatapackBuiltinEntriesProvider(packOutput, lookupProvider, registrySetBuilder, Set.of(MOD_ID));
-    generator.addProvider(server, datapackRegistryProvider);
-
+  /** Server datagen. Providers taking a lookup receive the reloadable lookup, which includes the registry entries from {@link #gatherRegistries(GatherDataRegistryEntriesEvent)} */
+  @SubscribeEvent
+  static void gatherData(final GatherDataEvent.Server event) {
     // tags
-    BlockTagProvider blockTags = new BlockTagProvider(packOutput, lookupProvider, existingFileHelper);
-    generator.addProvider(server, blockTags);
-    generator.addProvider(server, new ItemTagProvider(packOutput, lookupProvider, blockTags.contentsGetter(), existingFileHelper));
-    generator.addProvider(server, new FluidTagProvider(packOutput, lookupProvider, existingFileHelper));
-    generator.addProvider(server, new EntityTypeTagProvider(packOutput, lookupProvider, existingFileHelper));
-    generator.addProvider(server, new BlockEntityTypeTagProvider(packOutput, lookupProvider, existingFileHelper));
-    generator.addProvider(server, new BiomeTagProvider(packOutput, lookupProvider, existingFileHelper));
-    generator.addProvider(server, new EnchantmentTagProvider(packOutput, lookupProvider, existingFileHelper));
-    generator.addProvider(server, new MenuTypeTagProvider(packOutput, lookupProvider, existingFileHelper));
-    generator.addProvider(server, new PotionTagProvider(packOutput, lookupProvider, existingFileHelper));
-    generator.addProvider(server, new CreativeTabTagProvider(packOutput, lookupProvider, existingFileHelper));
-    generator.addProvider(server, new InstrumentTagProvider(packOutput, lookupProvider, existingFileHelper));
-    generator.addProvider(server, new DamageTypeTagProvider(packOutput, datapackRegistryProvider.getRegistryProvider(), existingFileHelper));
+    event.createBlockAndItemTags(BlockTagProvider::new, ItemTagProvider::new);
+    event.createProvider(FluidTagProvider::new);
+    event.createProvider(EntityTypeTagProvider::new);
+    event.createProvider(BlockEntityTypeTagProvider::new);
+    event.createProvider(BiomeTagProvider::new);
+    event.createProvider(EnchantmentTagProvider::new);
+    event.createProvider(MenuTypeTagProvider::new);
+    event.createProvider(PotionTagProvider::new);
+    event.createProvider(CreativeTabTagProvider::new);
+    event.createProvider(InstrumentTagProvider::new);
+    event.createProvider(DamageTypeTagProvider::new);
 
     // other datagen
-    generator.addProvider(server, new TConstructLootTableProvider(packOutput));
-    // tool advancements (ItemSubPredicate.Type registered by TinkerTools, see SmelteryCapabilities/ToolStackItemPredicate)
-    generator.addProvider(server, new AdvancementsProvider(packOutput, datapackRegistryProvider.getRegistryProvider()));
-    generator.addProvider(server, new GlobalLootModifiersProvider(packOutput));
-    generator.addProvider(server, new LootTableInjectionProvider(packOutput));
-    generator.addProvider(server, new ConfigurationDataProvider(packOutput));
-    generator.addProvider(server, new FunctionProvider(packOutput));
+    event.createProvider(GlobalLootModifiersProvider::new);
+    event.createProvider(LootTableInjectionProvider::new);
+    event.createProvider(ConfigurationDataProvider::new);
+    event.createProvider(FunctionProvider::new);
   }
 
   /**

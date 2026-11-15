@@ -46,7 +46,8 @@ public interface EntityVariable extends IHaveLoader {
   /** Gets the temperature of the biome containing the entity. */
   EntityVariable BIOME_TEMPERATURE = simple(entity -> {
     BlockPos pos = entity.blockPosition();
-    return entity.level().getBiome(pos).value().getTemperature(pos);
+    // height adjusted temperature, now relative to the sea level (AT)
+    return entity.level().getBiome(pos).value().getTemperature(pos, entity.level().getSeaLevel());
   });
   /** Returns 2 if entity is in water, or 1 if in rain */
   EntityVariable WATER = simple(entity -> {

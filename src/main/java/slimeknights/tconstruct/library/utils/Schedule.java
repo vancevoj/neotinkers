@@ -72,7 +72,7 @@ public class Schedule {
     }
     ScheduleEntry[] entries = new ScheduleEntry[list.size()];
     for (int i = 0; i < entries.length; i++) {
-      entries[i] = ScheduleEntry.deserialize(list.getCompound(i));
+      entries[i] = ScheduleEntry.deserialize(list.getCompoundOrEmpty(i));
     }
     return new Schedule(entries);
   }
@@ -89,7 +89,7 @@ public class Schedule {
 
     /** Deserializes an entry from NBT */
     public static ScheduleEntry deserialize(CompoundTag nbt) {
-      return new ScheduleEntry(nbt.getInt("task"), nbt.getInt("time"));
+      return new ScheduleEntry(nbt.getIntOr("task", 0), nbt.getIntOr("time", 0));
     }
   }
 
