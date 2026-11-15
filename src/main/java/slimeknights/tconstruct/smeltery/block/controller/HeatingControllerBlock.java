@@ -14,7 +14,6 @@ import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import slimeknights.mantle.block.RetexturedBlock;
-import slimeknights.mantle.inventory.BaseContainerMenu;
 import slimeknights.mantle.util.RetexturedHelper;
 import slimeknights.tconstruct.common.network.TinkerNetwork;
 import slimeknights.tconstruct.smeltery.block.entity.controller.HeatingStructureBlockEntity;
@@ -39,10 +38,7 @@ public abstract class HeatingControllerBlock extends ControllerBlock {
       BlockState state = world.getBlockState(pos);
       if (state.is(this) && canOpenGui(state) && player instanceof ServerPlayer serverPlayer) {
         // same as InventoryBlock#openGui, but the open data also carries the melting slot count so the client menu gets as many slots as the server menu
-        serverPlayer.openMenu(te, buffer -> HeatingStructureContainerMenu.writeOpenData(buffer, pos, te));
-        if (serverPlayer.containerMenu instanceof BaseContainerMenu<?> menu) {
-          menu.syncOnOpen(serverPlayer);
-        }
+        HeatingStructureContainerMenu.open(serverPlayer, te);
       } else {
         super.openGui(player, world, pos);
       }

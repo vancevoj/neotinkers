@@ -3,6 +3,7 @@ package slimeknights.tconstruct.smeltery.menu;
 import lombok.Getter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
@@ -13,6 +14,7 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import slimeknights.mantle.inventory.BaseContainerMenu;
 import slimeknights.mantle.fluid.FluidTransferHelper;
 import slimeknights.mantle.fluid.transfer.FluidContainerTransferManager;
 import slimeknights.mantle.fluid.transfer.IFluidContainerTransfer.TransferDirection;
@@ -71,6 +73,19 @@ public class HeatingStructureContainerMenu extends TriggeringMultiModuleContaine
 
   public HeatingStructureContainerMenu(int id, Inventory inv, FriendlyByteBuf buf) {
     this(id, inv, readStructure(buf));
+  }
+
+  /**
+   * Opens the menu for the given structure, sending the melting slot count along with the position so the client menu matches the server menu.
+   * @param player     Player opening the menu
+   * @param structure  Structure to open
+   */
+  public static void open(ServerPlayer player, HeatingStructureBlockEntity structure) {
+    BlockPos pos = structure.getBlockPos();
+    player.openMenu(structure, buffer -> writeOpenData(buffer, pos, structure));
+    if (player.containerMenu instanceof BaseContainerMenu<?> menu) {
+      menu.syncOnOpen(player);
+    }
   }
 
   /**

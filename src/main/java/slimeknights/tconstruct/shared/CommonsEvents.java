@@ -20,6 +20,8 @@ import slimeknights.mantle.inventory.BaseContainerMenu;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.Sounds;
 import slimeknights.tconstruct.common.TinkerTags;
+import slimeknights.tconstruct.smeltery.block.entity.controller.HeatingStructureBlockEntity;
+import slimeknights.tconstruct.smeltery.menu.HeatingStructureContainerMenu;
 import slimeknights.tconstruct.world.TinkerWorld;
 
 @SuppressWarnings("unused")
@@ -64,9 +66,14 @@ public class CommonsEvents {
         event.setCanceled(true);
         if (provider != null) {
           if (player instanceof ServerPlayer serverPlayer) {
-            serverPlayer.openMenu(provider, pos);
-            if (player.containerMenu instanceof BaseContainerMenu<?> menu) {
-              menu.syncOnOpen(serverPlayer);
+            // smelteries and foundries need the melting slot count in the open data, see HeatingControllerBlock#openGui
+            if (provider instanceof HeatingStructureBlockEntity structure) {
+              HeatingStructureContainerMenu.open(serverPlayer, structure);
+            } else {
+              serverPlayer.openMenu(provider, pos);
+              if (player.containerMenu instanceof BaseContainerMenu<?> menu) {
+                menu.syncOnOpen(serverPlayer);
+              }
             }
           }
           event.setCancellationResult(InteractionResult.SUCCESS);
