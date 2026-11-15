@@ -52,7 +52,8 @@ import static slimeknights.tconstruct.tools.stats.PlatingMaterialStats.LEGGINGS;
 import static slimeknights.tconstruct.tools.stats.PlatingMaterialStats.SHIELD;
 
 /**
- * Content page for armor materials
+ * Content page for armor materials, showing all plating types, maille, and curiass.
+ * TODO 1.21: move to {@link slimeknights.tconstruct.library.client.book.content.material}.
  */
 public class ArmorMaterialContent extends AbstractMaterialContent {
   /** Page ID for using this index directly */
@@ -91,15 +92,20 @@ public class ArmorMaterialContent extends AbstractMaterialContent {
   }
 
   @Override
+  protected String translationSuffix() {
+    return "armor";
+  }
+
+  @Override
   protected String getTextKey(MaterialId material) {
+    // TODO 1.21: drop legacy key
     if (detailed) {
-      String primaryKey = String.format("material.%s.%s.armor", material.getNamespace(), material.getPath());
-      if (Util.canTranslate(primaryKey)) {
-        return primaryKey;
+      String legacyKey = "material." + material.toLanguageKey() + ".armor";
+      if (Util.canTranslate(legacyKey)) {
+        return legacyKey;
       }
-      return String.format("material.%s.%s.encyclopedia", material.getNamespace(), material.getPath());
     }
-    return String.format("material.%s.%s.flavor", material.getNamespace(), material.getPath());
+    return super.getTextKey(material);
   }
 
   @Override
@@ -246,7 +252,9 @@ public class ArmorMaterialContent extends AbstractMaterialContent {
         .add(makeStatHtml(HELMET.getId(), ARMOR_PLATING_LABEL.getString(), false, false))
         .add(makeStatHtml(StatlessMaterialStats.MAILLE.getIdentifier(), false, true))
         .add(makeStatHtml(StatlessMaterialStats.SHIELD_CORE.getIdentifier(), false, true)))
-      .add(makeStatHtml(SHIELD.getId(), SHIELD_LABEL.getString(), false, false)));
+      .add(HtmlElement.div().classes("column").style("gap", 12)
+        .add(makeStatHtml(SHIELD.getId(), SHIELD_LABEL.getString(), false, false))
+        .add(makeStatHtml(StatlessMaterialStats.CUIRASS.getIdentifier(), false, false))));
     return group;
   }
 }

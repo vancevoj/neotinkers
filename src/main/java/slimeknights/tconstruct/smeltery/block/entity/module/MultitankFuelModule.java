@@ -16,7 +16,6 @@ import javax.annotation.Nullable;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.function.Supplier;
 
 /** Fuel module that supports multiple tanks, selecting just one for the fuel result */
@@ -224,37 +223,35 @@ public class MultitankFuelModule extends FuelModule implements IFluidHandler {
 
   @Override
   public FuelInfo getFuelInfo() {
-    // if there is no position, means we have not yet consumed fuel. Just fetch the first tank
-    // TODO: should we try to find a valid fuel tank? might be a bit confusing if they have multiple tanks in the structure before melting
-    // however, a valid tank is a lot more effort to find
+    // fetch the primary fuel handler, the tank we last pulled fuel from
+    // Y of big negative is how the UI syncs null, meaning we have not yet consumed fuel
+    // Re-resolve from the (self-healing) handler map each call rather than caching it once, so the display recovers
+    // if the handler was missing/stale on an earlier query (e.g. right after a world reload).
+    Map<BlockPos,IFluidHandler> handlers = getTankHandlers();
+    fluidHandler = lastPos.getY() != NULL_POS.getY() ? handlers.get(lastPos) : null;
 
-    // Y of big negative is how the UI syncs null
-    BlockPos mainTank = lastPos;
-    if (mainTank.getY() == NULL_POS.getY()) {
-      // No consumption has synced a fuel-tank position yet (freshly built or freshly (re)opened menu). Rather than
-      // blindly showing the first structural tank (often an empty output tank -> blank gauge), pick the first tank that
-      // actually holds a valid fuel fluid so the gauge is correct on open. This also sidesteps a stale/blank lastPos.
-      mainTank = null;
-      for (Entry<BlockPos,IFluidHandler> entry : getTankHandlers().entrySet()) {
-        FluidStack fluid = entry.getValue().getFluidInTank(0);
+    // two cases leave us with no tank to show despite the structure holding fuel: we never consumed fuel so we have no handler,
+    // and the tank we did consume from was drained dry while we are still burning the fuel we took out of it
+    // in both cases promote the first tank containing fuel. The port searches for a valid fuel fluid rather than any fluid,
+    // so a freshly (re)opened menu does not show an output tank holding a non-fuel.
+    if (fluidHandler == null || fluidHandler.getFluidInTank(0).isEmpty()) {
+      for (IFluidHandler handler : handlers.values()) {
+        FluidStack fluid = handler.getFluidInTank(0);
         if (!fluid.isEmpty() && findRecipe(fluid.getFluid()) != null) {
-          mainTank = entry.getKey();
+          fluidHandler = handler;
           break;
         }
       }
-      if (mainTank == null) {
-        // no tank currently holds fuel: fall back to the first structural tank (may be empty)
+      // no tank currently holds fuel and we never consumed any: fall back to the first structural tank (may be empty)
+      // as the search runs every frame, the gauge recovers as soon as fuel returns
+      if (fluidHandler == null) {
         List<BlockPos> positions = tankSupplier.get();
         if (positions.isEmpty()) {
           return FuelInfo.EMPTY;
         }
-        mainTank = positions.get(0);
+        fluidHandler = handlers.get(positions.get(0));
       }
     }
-
-    // fetch primary fuel handler. Re-resolve from the (self-healing) handler map each call rather than caching it once,
-    // so the display recovers if the handler was missing/stale on an earlier query (e.g. right after a world reload).
-    fluidHandler = getTankHandlers().get(mainTank);
 
     // determine what fluid we have and hpw many other fluids we have
     FuelInfo info = super.getFuelInfo();
@@ -262,9 +259,9 @@ public class MultitankFuelModule extends FuelModule implements IFluidHandler {
     if (!info.isEmpty()) {
       // add display info from each handler
       FluidStack currentFuel = info.getFluid();
-      for (Entry<BlockPos,IFluidHandler> entry : getTankHandlers().entrySet()) {
-        if (!mainTank.equals(entry.getKey())) {
-          IFluidHandler handler = entry.getValue();
+      for (IFluidHandler handler : handlers.values()) {
+        // skip the main tank, the info above is already its contents
+        if (handler != fluidHandler) {
           // sum if empty (more capacity) or the same fluid (more amount and capacity)
           FluidStack fluid = handler.getFluidInTank(0);
           if (fluid.isEmpty()) {

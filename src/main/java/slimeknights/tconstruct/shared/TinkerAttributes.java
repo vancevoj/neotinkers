@@ -42,13 +42,15 @@ public class TinkerAttributes {
   /** If true, the entity will bounce. Used to implement slime boots */
   public static final DeferredHolder<Attribute, Attribute> BOUNCY = registerPercent("generic.bouncy", 0f, true);
 
-  // stat replacements
+  // stats
   /** Changes the speed debuff percentage when the player moves while using an item */
   public static final DeferredHolder<Attribute, Attribute> USE_ITEM_SPEED = registerPercent("player.use_item_speed", 0.2f, true);
   /** Changes the speed debuff when the player moves while using an item */
   public static final DeferredHolder<Attribute, Attribute> PROTECTION_CAP = register("generic.protection_cap", 0.8, 0, 0.95f, true);
   /** Percentage boost to critical hits for any airborne attacker, used for {@link slimeknights.tconstruct.tools.data.ModifierIds#dragonborn} */
   public static final DeferredHolder<Attribute, Attribute> CRITICAL_DAMAGE = register("player.critical_damage", 1.5f, 0, 100, false);
+  /** Loot bonus for {@link slimeknights.tconstruct.tools.data.ModifierIds#chrysophilite} */
+  public static final DeferredHolder<Attribute, Attribute> CHRYSOPHILITE = register("generic.chrysophilite", 0, 0, 100, false);
 
   // stat bonuses
   /** Bonus jump height in blocks */
@@ -85,6 +87,7 @@ public class TinkerAttributes {
     // general attributes
     addToAll(event, BOUNCY);
     addToAll(event, PROTECTION_CAP);
+    addToAll(event, CHRYSOPHILITE);
     addToAll(event, JUMP_BOOST);
     addToAll(event, SAFE_FALL_DISTANCE);
     addToAll(event, CROUCH_DAMAGE_MULTIPLIER);

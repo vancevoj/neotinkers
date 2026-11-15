@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableSet;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
@@ -16,8 +17,8 @@ import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParam;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import slimeknights.tconstruct.shared.TinkerAttributes;
 import slimeknights.tconstruct.tools.TinkerModifiers;
-import slimeknights.tconstruct.tools.modifiers.traits.skull.ChrysophiliteModifier;
 
 import java.util.List;
 import java.util.Set;
@@ -65,12 +66,14 @@ public class ChrysophiliteBonusFunction extends LootItemConditionalFunction {
 
   @Override
   protected ItemStack run(ItemStack stack, LootContext context) {
-    int level = ChrysophiliteModifier.getTotalGold(context.getParamOrNull(LootContextParams.THIS_ENTITY));
-    if (!includeBase) {
-      level--;
-    }
-    if (level > 0) {
-      stack.setCount(formula.calculateNewCount(context.getRandom(), stack.getCount(), level));
+    if (context.getParamOrNull(LootContextParams.THIS_ENTITY) instanceof LivingEntity entity) {
+      int level = (int) entity.getAttributeValue(TinkerAttributes.CHRYSOPHILITE);
+      if (!includeBase) {
+        level--;
+      }
+      if (level > 0) {
+        stack.setCount(formula.calculateNewCount(context.getRandom(), stack.getCount(), level));
+      }
     }
     return stack;
   }

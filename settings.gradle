@@ -5,6 +5,7 @@ pluginManagement {
         maven { url = 'https://maven.neoforged.net/releases' }
         // Parchment mappings
         maven { url = 'https://maven.parchmentmc.org' }
+        maven { url = 'https://maven.neoforged.net/releases' }
     }
 }
 

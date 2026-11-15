@@ -5,7 +5,7 @@ import net.minecraft.world.item.DyeColor;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import slimeknights.tconstruct.library.client.data.material.AbstractMaterialRenderInfoProvider;
 import slimeknights.tconstruct.library.client.data.material.AbstractMaterialSpriteProvider;
-import slimeknights.tconstruct.library.materials.definition.IMaterial;
+import slimeknights.tconstruct.library.materials.definition.MaterialId;
 import slimeknights.tconstruct.library.materials.definition.MaterialVariantId;
 import slimeknights.tconstruct.library.tools.helper.ToolBuildHandler;
 import slimeknights.tconstruct.shared.block.SlimeType;
@@ -18,7 +18,7 @@ public class MaterialRenderInfoProvider extends AbstractMaterialRenderInfoProvid
   @Override
   protected void addMaterialRenderInfo() {
     // fallback
-    buildRenderInfo(IMaterial.UNKNOWN_ID);
+    buildRenderInfo(MaterialId.UNKNOWN);
 
     // tier 1
     buildRenderInfo(MaterialIds.flint).color(0x3D3C3C).fallbacks("crystal", "rock", "stick");
@@ -26,7 +26,7 @@ public class MaterialRenderInfoProvider extends AbstractMaterialRenderInfoProvid
     buildRenderInfo(MaterialIds.chorus);
     buildRenderInfo(MaterialIds.string).color(0xFFFFFF);
     buildRenderInfo(MaterialIds.leather).color(0xC65C35);
-    buildRenderInfo(MaterialIds.vine).color(0x48B518).fallbacks("vine");
+    buildRenderInfo(MaterialIds.vine).color(0x48B518);
     buildRenderInfo(MaterialIds.ice).color(0x74ABFE);
     buildRenderInfo(MaterialIds.cactus).color(0x649832);
     // tier 1 - ammo
@@ -66,7 +66,8 @@ public class MaterialRenderInfoProvider extends AbstractMaterialRenderInfoProvid
     buildRenderInfo(MaterialIds.necroticBone).color(0x2A2A2A).fallbacks("bone", "rock");
     buildRenderInfo(MaterialIds.endstone);
     redirect(MaterialIds.whitestone, MaterialIds.endstone);
-    buildRenderInfo(MaterialIds.skyslimeVine).color(0x00F4DA).fallbacks("vine");
+    // vine
+    buildRenderInfo(MaterialIds.skyslimeVine).color(0x00F4DA);
     buildRenderInfo(MaterialIds.weepingVine);
     buildRenderInfo(MaterialIds.twistingVine);
     // slimewood
@@ -76,6 +77,7 @@ public class MaterialRenderInfoProvider extends AbstractMaterialRenderInfoProvid
     buildRenderInfo(MaterialIds.bloodshroom);
     buildRenderInfo(MaterialIds.enderbark);
     buildRenderInfo(MaterialIds.slimeskin);
+    buildRenderInfo(MaterialIds.skyslimeskin);
     // slimeball
     redirect(MaterialIds.slimeball, MaterialIds.earthslime);
     redirect(MaterialVariantId.create(MaterialIds.slimeball, "sky"),   MaterialIds.skyslime);
@@ -107,7 +109,8 @@ public class MaterialRenderInfoProvider extends AbstractMaterialRenderInfoProvid
     buildRenderInfo(MaterialIds.jeweledHide);
     buildRenderInfo(MaterialIds.ancientHide);
     buildRenderInfo(MaterialIds.ancient);
-    buildRenderInfo(MaterialIds.enderslimeVine).color(0xa92dff).fallbacks("vine");
+    buildRenderInfo(MaterialIds.enderslimeskin);
+    buildRenderInfo(MaterialIds.enderslimeVine).color(0xa92dff);
 
     // tier 2 compat
     buildRenderInfo(MaterialIds.osmium).color(0xC1E6F4).fallbacks("metal");
@@ -152,6 +155,7 @@ public class MaterialRenderInfoProvider extends AbstractMaterialRenderInfoProvid
     buildRenderInfo(MaterialIds.gunpowder);
     buildRenderInfo(MaterialIds.redstone);
     buildRenderInfo(MaterialIds.turtle);
+    buildRenderInfo(MaterialIds.nautilus).color(0xFFD4CCC3);
     buildRenderInfo(MaterialIds.dragonScale);
     buildRenderInfo(MaterialIds.endRod);
     redirect(MaterialIds.magnetite, MaterialIds.steel);
@@ -166,7 +170,10 @@ public class MaterialRenderInfoProvider extends AbstractMaterialRenderInfoProvid
     buildRenderInfo(MaterialIds.blood);
     buildRenderInfo(MaterialIds.clay);
     buildRenderInfo(MaterialIds.honey);
+    buildRenderInfo(MaterialIds.venom);
     buildRenderInfo(MaterialIds.phantom);
+    buildRenderInfo(MaterialIds.horn);
+    buildRenderInfo(MaterialIds.cheese);
 
     // UI internal
     redirect(ToolBuildHandler.getRenderMaterial(0), MaterialIds.iron);

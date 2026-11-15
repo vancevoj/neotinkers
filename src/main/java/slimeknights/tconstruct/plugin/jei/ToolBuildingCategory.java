@@ -2,53 +2,59 @@ package slimeknights.tconstruct.plugin.jei;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import lombok.Getter;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
+import mezz.jei.api.gui.ingredient.IRecipeSlotDrawable;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
+import mezz.jei.api.gui.widgets.IRecipeExtrasBuilder;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
-import mezz.jei.api.recipe.RecipeType;
-import mezz.jei.api.recipe.category.IRecipeCategory;
+import mezz.jei.api.recipe.category.AbstractRecipeCategory;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import slimeknights.tconstruct.TConstruct;
-import slimeknights.tconstruct.library.client.GuiUtil;
+import slimeknights.tconstruct.library.materials.definition.MaterialVariantId;
+import slimeknights.tconstruct.library.modifiers.hook.build.CraftCountModifierHook;
 import slimeknights.tconstruct.library.recipe.tinkerstation.building.ToolBuildingRecipe;
 import slimeknights.tconstruct.library.tools.item.IModifiableDisplay;
 import slimeknights.tconstruct.library.tools.layout.LayoutSlot;
+import slimeknights.tconstruct.library.tools.nbt.MaterialIdNBT;
+import slimeknights.tconstruct.library.tools.nbt.ToolStack;
+import slimeknights.tconstruct.library.tools.part.IMaterialItem;
+import slimeknights.tconstruct.library.tools.part.IToolPart;
+import slimeknights.tconstruct.plugin.jei.util.CategoryUtil;
 import slimeknights.tconstruct.tools.TinkerTools;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static slimeknights.tconstruct.library.recipe.tinkerstation.building.ToolBuildingRecipe.SLOT_SIZE;
 import static slimeknights.tconstruct.library.recipe.tinkerstation.building.ToolBuildingRecipe.X_OFFSET;
 import static slimeknights.tconstruct.library.recipe.tinkerstation.building.ToolBuildingRecipe.Y_OFFSET;
 
-public class ToolBuildingCategory implements IRecipeCategory<ToolBuildingRecipe> {
+public class ToolBuildingCategory extends AbstractRecipeCategory<ToolBuildingRecipe> {
   private static final ResourceLocation BACKGROUND_LOC = TConstruct.getResource("textures/gui/jei/tinker_station.png");
   private static final Component TITLE = TConstruct.makeTranslation("jei", "tinkering.tool_building");
-  @Getter
-  private final IDrawable icon;
-  @Getter
-  private final IDrawable background;
+  private static final Component ANVIL = TConstruct.makeTranslation("jei", "tinkering.tool_building.anvil");
   private final IDrawable anvil, slotBg, slotBorder;
   private final IDrawable itemCover;
   private static final int WIDTH = 134;
   private static final int HEIGHT = 66;
   private static final int ITEM_SIZE = 16;
+  /** Name for the slot containing the tool to help us find it in {@link #onDisplayedIngredientsUpdate(ToolBuildingRecipe, List, IFocusGroup)} */
+  private static final String RESULT_SLOT = "result";
+  /** Prefix for the slots containing the tool parts to help us find it in {@link #onDisplayedIngredientsUpdate(ToolBuildingRecipe, List, IFocusGroup)} */
+  private static final String PART_SLOT_PREFIX = "tool_part_";
 
   public ToolBuildingCategory(IGuiHelper guiHelper) {
-    this.icon = guiHelper.createDrawableItemStack(TinkerTools.pickaxe.get().getRenderTool());
-    this.background = guiHelper.createDrawable(BACKGROUND_LOC, 122, 77, WIDTH, HEIGHT);
+    super(TConstructJEIConstants.TOOL_BUILDING, TITLE, guiHelper.createDrawableItemStack(TinkerTools.pickaxe.get().getRenderTool()), WIDTH, HEIGHT);
     this.slotBg = guiHelper.createDrawable(BACKGROUND_LOC, 144, 59, SLOT_SIZE, SLOT_SIZE);
     this.slotBorder = guiHelper.createDrawable(BACKGROUND_LOC, 162, 59, SLOT_SIZE, SLOT_SIZE);
     this.anvil = guiHelper.createDrawable(BACKGROUND_LOC, 128, 61, ITEM_SIZE, ITEM_SIZE);
@@ -56,11 +62,41 @@ public class ToolBuildingCategory implements IRecipeCategory<ToolBuildingRecipe>
   }
 
   @Override
-  public void setRecipe(IRecipeLayoutBuilder builder, ToolBuildingRecipe recipe, IFocusGroup focuses) {
-    List<List<ItemStack>> partsAndExtras = Stream.concat(recipe.getAllToolParts().stream(),
-      recipe.getExtraRequirements().stream().map(ingredient -> Arrays.asList(ingredient.getItems()))).toList();
-    List<LayoutSlot> layoutSlots = recipe.getLayoutSlots();
+  public void createRecipeExtras(IRecipeExtrasBuilder builder, ToolBuildingRecipe recipe, IFocusGroup focuses) {
+    builder.addRecipeArrowWidget().setPosition(74, 22);
+    if (recipe.requiresAnvil()) {
+      builder.addDrawableWidget(anvil).setPosition(76, 44).setTooltip(ANVIL);
+    }
+  }
 
+  @Override
+  public void setRecipe(IRecipeLayoutBuilder builder, ToolBuildingRecipe recipe, IFocusGroup focuses) {
+    List<List<ItemStack>> toolParts = recipe.getAllToolParts();
+    List<List<ItemStack>> partsAndExtras = Stream.concat(
+      toolParts.stream(),
+      recipe.getExtraRequirements().stream().map(ingredient -> Arrays.asList(ingredient.getItems()))
+    ).collect(Collectors.toList()); // using collectors.toList to ensure we can mutate the list
+
+    // if we have parts, and there is a focus, use that to override the materials on the parts
+    int partCount = toolParts.size();
+    if (partCount > 0) {
+      ItemStack focus = CategoryUtil.getResultItemFocus(focuses);
+      // if we have an output focus, set the input slots to match
+      if (!focus.isEmpty()) {
+        List<IToolPart> parts = recipe.getToolParts();
+        MaterialIdNBT materials = MaterialIdNBT.from(focus);
+        for (int i = 0; i < partCount; i++) {
+          IMaterialItem part = parts.get(i);
+          MaterialVariantId material = materials.getMaterial(i);
+          if (part.canUseMaterial(material.getId())) {
+            partsAndExtras.set(i, List.of(part.withMaterialForDisplay(material)));
+          }
+        }
+      }
+    }
+
+    // start building the layout
+    List<LayoutSlot> layoutSlots = recipe.getLayoutSlots();
     int missingSlots = partsAndExtras.size() - layoutSlots.size();
 
     if (missingSlots < 0) {
@@ -73,8 +109,11 @@ public class ToolBuildingCategory implements IRecipeCategory<ToolBuildingRecipe>
 
     IRecipeSlotBuilder firstSlot = null;
     for (int i = 0; i < layoutSlots.size(); i++) {
-      IRecipeSlotBuilder slot = builder.addSlot(RecipeIngredientRole.INPUT, layoutSlots.get(i).getX() + X_OFFSET, layoutSlots.get(i).getY() + Y_OFFSET)
-             .addItemStacks(partsAndExtras.get(i));
+      IRecipeSlotBuilder slot = builder.addInputSlot(layoutSlots.get(i).getX() + X_OFFSET, layoutSlots.get(i).getY() + Y_OFFSET)
+        .addItemStacks(partsAndExtras.get(i));
+      if (i < partCount) {
+        slot.setSlotName(PART_SLOT_PREFIX + i);
+      }
       if (i == 0) {
         firstSlot = slot;
       }
@@ -82,8 +121,9 @@ public class ToolBuildingCategory implements IRecipeCategory<ToolBuildingRecipe>
 
     // create a focus link between result and first slot if same size
     List<ItemStack> result = recipe.getDisplayOutput();
-    IRecipeSlotBuilder resultSlot = builder.addSlot(RecipeIngredientRole.OUTPUT, WIDTH - 26, 23).addItemStacks(result);
-    if (result.size() > 1 && partsAndExtras.get(0).size() == result.size()) {
+    IRecipeSlotBuilder resultSlot = builder.addOutputSlot(WIDTH - 26, 23)
+      .addItemStacks(result).setSlotName(RESULT_SLOT).setOutputSlotBackground();
+    if (partCount == 0 && result.size() > 1 && partsAndExtras.get(0).size() == result.size()) {
       builder.createFocusLink(resultSlot, firstSlot);
     }
 
@@ -91,6 +131,29 @@ public class ToolBuildingCategory implements IRecipeCategory<ToolBuildingRecipe>
     List<ItemStack> hiddenInputs = recipe.getHiddenInputs();
     if (!hiddenInputs.isEmpty()) {
       builder.addInvisibleIngredients(RecipeIngredientRole.INPUT).addItemStacks(hiddenInputs);
+    }
+  }
+
+  @Override
+  public void onDisplayedIngredientsUpdate(ToolBuildingRecipe recipe, List<IRecipeSlotDrawable> recipeSlots, IFocusGroup focuses) {
+    // no input slots means we may be using a focus link instead, either way no work to do
+    IRecipeSlotDrawable resultSlot = CategoryUtil.findSlot(recipeSlots, RESULT_SLOT);
+    List<IRecipeSlotDrawable> inputSlots = CategoryUtil.filterSlots(recipeSlots, PART_SLOT_PREFIX);
+    if (resultSlot != null && !inputSlots.isEmpty()) {
+      List<IToolPart> parts = recipe.getToolParts();
+      List<MaterialVariantId> variants = new ArrayList<>(parts.size());
+      for (int i = 0; i < parts.size(); i++) {
+        variants.add(parts.get(i).getMaterial(inputSlots.get(i).getDisplayedItemStack().orElse(ItemStack.EMPTY)));
+      }
+      variants.addAll(recipe.getExtraMaterials());
+      ItemStack stack = new MaterialIdNBT(variants).updateStack(new ItemStack(recipe.getOutput()));
+      if (stack.getMaxStackSize() > 1) {
+        ToolStack tool = ToolStack.from(stack);
+        tool.rebuildStats();
+        stack.setCount(CraftCountModifierHook.maxStackSize(tool, recipe.shrinkToolSlotBy()));
+      }
+
+      resultSlot.createDisplayOverrides().addItemStack(CraftCountModifierHook.copyMaterials(new MaterialIdNBT(variants), recipe.getOutput(), recipe.getOutputCount()));
     }
   }
 
@@ -125,30 +188,6 @@ public class ToolBuildingCategory implements IRecipeCategory<ToolBuildingRecipe>
     }
     RenderSystem.disableBlend();
     RenderSystem.enableDepthTest();
-
-    // draw anvil icon if anvil is required
-    if (recipe.requiresAnvil()) {
-      this.anvil.draw(graphics, 76, 44);
-    }
-  }
-
-  @Override
-  public List<Component> getTooltipStrings(ToolBuildingRecipe recipe, IRecipeSlotsView recipeSlotsView, double mouseX, double mouseY) {
-    return recipe.requiresAnvil() && GuiUtil.isHovered((int) mouseX, (int) mouseY, 76, 44, ITEM_SIZE, ITEM_SIZE) ?
-      List.of(TConstruct.makeTranslation("jei", "tinkering.tool_building.anvil")) :
-      List.of();
-  }
-
-  @Nonnull
-  @Override
-  public Component getTitle() {
-    return TITLE;
-  }
-
-  @Nonnull
-  @Override
-  public RecipeType<ToolBuildingRecipe> getRecipeType() {
-    return TConstructJEIConstants.TOOL_BUILDING;
   }
 
   @Override

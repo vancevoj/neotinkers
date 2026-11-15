@@ -9,9 +9,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import slimeknights.mantle.block.RetexturedBlock;
-import slimeknights.mantle.util.BlockEntityHelper;
 import slimeknights.mantle.util.RetexturedHelper;
 import slimeknights.tconstruct.common.network.TinkerNetwork;
 import slimeknights.tconstruct.smeltery.block.entity.controller.HeatingStructureBlockEntity;
@@ -33,44 +34,77 @@ public abstract class HeatingControllerBlock extends ControllerBlock {
   protected boolean openGui(Player player, Level world, BlockPos pos) {
     super.openGui(player, world, pos);
     // only need to update if holding the proper items
-    if (!world.isClientSide) {
-      BlockEntityHelper.get(HeatingStructureBlockEntity.class, world, pos).ifPresent(te -> {
-        MultiblockResult result = te.getStructureResult();
-        if (!result.isSuccess() && te.showDebugBlockBorder(player)) {
-          TinkerNetwork.getInstance().sendTo(new StructureErrorPositionPacket(pos, result.getPos()), player);
-        }
-      });
+    if (!world.isClientSide && world.getBlockEntity(pos) instanceof HeatingStructureBlockEntity te) {
+      MultiblockResult result = te.getStructureResult();
+      if (!result.isSuccess() && te.showDebugBlockBorder(player)) {
+        TinkerNetwork.getInstance().sendTo(new StructureErrorPositionPacket(pos, result.getPos()), player);
+      }
     }
     return true;
   }
 
   @Override
   protected boolean displayStatus(Player player, Level world, BlockPos pos, BlockState state) {
-    if (!world.isClientSide) {
-      BlockEntityHelper.get(HeatingStructureBlockEntity.class, world, pos).ifPresent(te -> {
-        MultiblockResult result = te.getStructureResult();
-        if (!result.isSuccess()) {
-          player.displayClientMessage(result.getMessage(), true);
-          TinkerNetwork.getInstance().sendTo(new StructureErrorPositionPacket(pos, result.getPos()), player);
-        }
-      });
+    if (!world.isClientSide && world.getBlockEntity(pos) instanceof HeatingStructureBlockEntity te) {
+      MultiblockResult result = te.getStructureResult();
+      if (!result.isSuccess()) {
+        player.displayClientMessage(result.getMessage(), true);
+        TinkerNetwork.getInstance().sendTo(new StructureErrorPositionPacket(pos, result.getPos()), player);
+      }
     }
     return true;
   }
 
   @Override
-  public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag pFlag) {
-    RetexturedHelper.addTooltip(stack, tooltip, pFlag);
+  public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
+    RetexturedHelper.addTooltip(stack, tooltip, flag);
   }
 
   @Override
   public void setPlacedBy(Level world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
     super.setPlacedBy(world, pos, state, placer, stack);
-    RetexturedBlock.updateTextureBlock(world, pos, stack);
+    if (world.getBlockEntity(pos) instanceof HeatingStructureBlockEntity te) {
+      // update controller texture
+      if (!stack.isComponentsPatchEmpty()) {
+        te.updateTexture(RetexturedHelper.getTextureName(stack));
+      }
+      // check structure
+      te.updateStructure();
+    }
+  }
+
+  @Deprecated
+  @Override
+  public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+    if (!newState.is(this) && worldIn.getBlockEntity(pos) instanceof HeatingStructureBlockEntity te) {
+      te.invalidateStructure();
+    }
+    super.onRemove(state, worldIn, pos, newState, isMoving);
   }
 
   @Override
   public ItemStack getCloneItemStack(LevelReader world, BlockPos pos, BlockState state) {
     return RetexturedBlock.getPickBlock(world, pos, state);
+  }
+
+
+  /* No rotation if in a structure  */
+
+  @Deprecated
+  @Override
+  public BlockState rotate(BlockState state, Rotation rotation) {
+    if (state.getValue(IN_STRUCTURE)) {
+      return state;
+    }
+    return super.rotate(state, rotation);
+  }
+
+  @Deprecated
+  @Override
+  public BlockState mirror(BlockState state, Mirror mirror) {
+    if (state.getValue(IN_STRUCTURE)) {
+      return state;
+    }
+    return super.mirror(state, mirror);
   }
 }

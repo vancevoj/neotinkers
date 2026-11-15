@@ -1,16 +1,14 @@
 package slimeknights.tconstruct.smeltery.network;
 
 import lombok.AllArgsConstructor;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
+import slimeknights.mantle.network.packet.BlockEntityPacket;
 import slimeknights.mantle.network.packet.ISimplePacket;
-import slimeknights.mantle.network.packet.IThreadsafePacket;
-import slimeknights.mantle.util.BlockEntityHelper;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.smeltery.block.entity.tank.ISmelteryTankHandler;
 
@@ -18,10 +16,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Packet sent whenever the contents of the smeltery tank change
+ * Packet sent whenever the contents of the smeltery tank change.
+ * TODO 1.21: make record
  */
 @AllArgsConstructor
-public class SmelteryTankUpdatePacket implements IThreadsafePacket {
+public class SmelteryTankUpdatePacket implements BlockEntityPacket<ISmelteryTankHandler> {
   public static final Type<SmelteryTankUpdatePacket> TYPE = new Type<>(TConstruct.getResource("smeltery_tank_update"));
   public static final StreamCodec<RegistryFriendlyByteBuf,SmelteryTankUpdatePacket> STREAM_CODEC = ISimplePacket.codec(SmelteryTankUpdatePacket::new);
 
@@ -52,13 +51,17 @@ public class SmelteryTankUpdatePacket implements IThreadsafePacket {
   }
 
   @Override
-  public void handleThreadsafe(IPayloadContext context) {
-    HandleClient.handle(this);
+  public BlockPos pos() {
+    return pos;
   }
 
-  private static class HandleClient {
-    private static void handle(SmelteryTankUpdatePacket packet) {
-      BlockEntityHelper.get(ISmelteryTankHandler.class, Minecraft.getInstance().level, packet.pos).ifPresent(te -> te.updateFluidsFromPacket(packet.fluids));
-    }
+  @Override
+  public Class<ISmelteryTankHandler> blockEntityType() {
+    return ISmelteryTankHandler.class;
+  }
+
+  @Override
+  public void handleBlockEntity(IPayloadContext context, ISmelteryTankHandler be) {
+    be.updateFluidsFromPacket(fluids);
   }
 }

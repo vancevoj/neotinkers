@@ -36,6 +36,7 @@ public final class MaterialIds {
   public static final MaterialId slimewood = id("slimewood");
   public static final MaterialId venombone = id("venombone");
   public static final MaterialId slimeskin = id("slimeskin");
+  public static final MaterialId skyslimeskin = id("skyslimeskin");
   // tier 2 - nether
   public static final MaterialId scorchedStone = id("scorched_stone");
   public static final MaterialId necroticBone = id("necrotic_bone");
@@ -57,6 +58,7 @@ public final class MaterialIds {
   public static final MaterialId redstone = id("redstone");
   // tier 2 - ammo slimeballs
   public static final MaterialId turtle = id("turtle");
+  public static final MaterialId nautilus = id("nautilus");
   public static final MaterialId slimeball = id("slimeball");
   // tier 3
   public static final MaterialId slimesteel = id("slimesteel");
@@ -95,6 +97,7 @@ public final class MaterialIds {
   public static final MaterialId jeweledHide = id("jeweled_hide");
   public static final MaterialId ancientHide = id("ancient_hide");
   public static final MaterialId enderslimeVine = id("enderslime_vine");
+  public static final MaterialId enderslimeskin = id("enderslimeskin");
   // tier 4 - ammo
   public static final MaterialId shulker = id("shulker");
   public static final MaterialId enderslime = id("enderslime");
@@ -134,10 +137,13 @@ public final class MaterialIds {
   @Deprecated(forRemoval = true)
   public static final MaterialId rottenFlesh = id("rotten_flesh");
   // slimesuit
-  public static final MaterialId phantom = id("phantom");
   public static final MaterialId blood = id("blood");
   public static final MaterialId clay = id("clay");
   public static final MaterialId honey = id("honey");
+  public static final MaterialId venom = id("venom");
+  public static final MaterialId horn = id("horn");
+  public static final MaterialId phantom = id("phantom");
+  public static final MaterialId cheese = id("cheese");
 
   /** List of custom trim materials we support */
   public static final MaterialId[] TRIM_MATERIALS = {
@@ -206,8 +212,12 @@ public final class MaterialIds {
   public static final MaterialVariantId bloodshroom        = create(slimewood, "bloodshroom");
   public static final MaterialVariantId enderbark          = create(slimewood, "enderbark");
   // slime vines
-  public static final MaterialVariantId skySlimeskin = create(skyslimeVine, "slimeskin");
-  public static final MaterialVariantId enderSlimeskin = create(enderslimeVine, "slimeskin");
+  /** @deprecated use {@link #skyslimeskin} */
+  @Deprecated(forRemoval = true)
+  public static final MaterialVariantId skySlimeskin = skyslimeskin;
+  /** @deprecated use {@link #enderslimeskin} */
+  @Deprecated(forRemoval = true)
+  public static final MaterialVariantId enderSlimeskin = enderslimeskin;
   // oxidized
   public static final MaterialVariantId oxidizedIron = create(iron, "oxidized");
   public static final MaterialVariantId oxidizedCopper = create(copper, "oxidized");

@@ -1,15 +1,13 @@
 package slimeknights.tconstruct.smeltery.network;
 
 import lombok.RequiredArgsConstructor;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
+import slimeknights.mantle.network.packet.BlockEntityPacket;
 import slimeknights.mantle.network.packet.ISimplePacket;
-import slimeknights.mantle.network.packet.IThreadsafePacket;
-import slimeknights.mantle.util.BlockEntityHelper;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.smeltery.block.entity.controller.HeatingStructureBlockEntity;
 
@@ -19,7 +17,7 @@ import javax.annotation.Nullable;
  * Packet to tell a multiblock to render a specific position as the cause of the error
  */
 @RequiredArgsConstructor
-public class StructureErrorPositionPacket implements IThreadsafePacket {
+public class StructureErrorPositionPacket implements BlockEntityPacket<HeatingStructureBlockEntity> {
   public static final Type<StructureErrorPositionPacket> TYPE = new Type<>(TConstruct.getResource("structure_error_position"));
   public static final StreamCodec<RegistryFriendlyByteBuf,StructureErrorPositionPacket> STREAM_CODEC = ISimplePacket.codec(StructureErrorPositionPacket::new);
 
@@ -53,14 +51,17 @@ public class StructureErrorPositionPacket implements IThreadsafePacket {
   }
 
   @Override
-  public void handleThreadsafe(IPayloadContext context) {
-    HandleClient.handle(this);
+  public BlockPos pos() {
+    return controllerPos;
   }
 
-  private static class HandleClient {
-    private static void handle(StructureErrorPositionPacket packet) {
-      BlockEntityHelper.get(HeatingStructureBlockEntity.class, Minecraft.getInstance().level, packet.controllerPos)
-                       .ifPresent(te -> te.setErrorPos(packet.errorPos));
-    }
+  @Override
+  public Class<HeatingStructureBlockEntity> blockEntityType() {
+    return HeatingStructureBlockEntity.class;
+  }
+
+  @Override
+  public void handleBlockEntity(IPayloadContext context, HeatingStructureBlockEntity be) {
+    be.setErrorPos(errorPos);
   }
 }

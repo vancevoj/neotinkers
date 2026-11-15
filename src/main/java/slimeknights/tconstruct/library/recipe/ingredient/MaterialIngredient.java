@@ -15,6 +15,7 @@ import slimeknights.tconstruct.library.json.predicate.material.MaterialPredicate
 import slimeknights.tconstruct.library.json.predicate.material.MaterialPredicateField;
 import slimeknights.tconstruct.library.materials.MaterialRegistry;
 import slimeknights.tconstruct.library.materials.definition.IMaterial;
+import slimeknights.tconstruct.library.materials.definition.MaterialId;
 import slimeknights.tconstruct.library.materials.definition.MaterialVariantId;
 import slimeknights.tconstruct.library.recipe.material.MaterialRecipeCache;
 import slimeknights.tconstruct.library.tools.part.IMaterialItem;
@@ -166,7 +167,7 @@ public class MaterialIngredient extends NestedIngredient {
         .flatMap(stack -> MaterialRecipeCache.getAllVariants().stream()
           .filter(material::matches)
           .map(mat -> IMaterialItem.withMaterial(stack, mat))
-          .filter(matStack -> !IMaterialItem.getMaterialFromStack(matStack).equals(IMaterial.UNKNOWN_ID)))
+          .filter(matStack -> !IMaterialItem.getMaterialFromStack(matStack).equals(MaterialId.UNKNOWN)))
         .distinct()
         .toArray(ItemStack[]::new);
     }

@@ -65,7 +65,7 @@ import slimeknights.tconstruct.library.client.modifiers.IBakedModifierModel;
 import slimeknights.tconstruct.library.client.modifiers.ModifierModelMap;
 import slimeknights.tconstruct.library.client.modifiers.ModifierModelMapManager;
 import slimeknights.tconstruct.library.client.modifiers.model.ModifierModel;
-import slimeknights.tconstruct.library.materials.definition.IMaterial;
+import slimeknights.tconstruct.library.materials.definition.MaterialId;
 import slimeknights.tconstruct.library.materials.definition.MaterialVariantId;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierId;
@@ -157,8 +157,8 @@ public class ToolModel implements IUnbakedGeometry<ToolModel> {
             }
           }
         }
-        // iterate the constant models in order for simplicity, you can just reverse the order yourself I guess
-        for (ModifierModel model : overrides.modifierModels.constant().values()) {
+        // iterate the constant in order of key (already reverse alphabetical)
+        for (ModifierModel model : overrides.modifierModels.sortedConstant()) {
           int modelIndexes = model.getTintIndexes();
           if (index < modelIndexes) {
             return model.getTint(tool, ModifierEntry.EMPTY, index);
@@ -265,6 +265,7 @@ public class ToolModel implements IUnbakedGeometry<ToolModel> {
   @Deprecated
   private final List<ResourceLocation> largeModifierRoots;
   /** Modifiers that show first on tools, bypassing normal sort order */
+  @Deprecated
   private final List<FirstModifier> firstModifiers;
   /** Location in tool NBT to find the ammo */
   @Nullable
@@ -332,8 +333,8 @@ public class ToolModel implements IUnbakedGeometry<ToolModel> {
           }
         }
       }
-      // iterate the constant models in order for simplicity, you can just reverse the order yourself I guess
-      for (ModifierModel model : modifierModels.constant().values()) {
+      // iterate the constant in order of key (already reverse alphabetical)
+      for (ModifierModel model : modifierModels.sortedConstant()) {
         model.addQuads(tool, ModifierEntry.EMPTY, spriteGetter, transforms, isLarge, modelIndex, quadConsumer, pixels);
         modelIndex += model.getTintIndexes();
       }
@@ -344,7 +345,7 @@ public class ToolModel implements IUnbakedGeometry<ToolModel> {
   private record FirstModifier(ModifierId id, boolean forced) {
     private static final Loadable<List<FirstModifier>> LOADABLE = CompactLoadable.of(
       RecordLoadable.create(ModifierId.PARSER.requiredField("name", FirstModifier::id), BooleanLoadable.INSTANCE.defaultField("forced", false, false, FirstModifier::forced), FirstModifier::new),
-      ModifierId.PARSER.flatXmap(id -> new FirstModifier(id, false), FirstModifier::id),
+      ModifierId.PARSER.map(id -> new FirstModifier(id, false), FirstModifier::id),
       f -> !f.forced).list(0);
 
     /** Gets the index of a modifier in the list */
@@ -412,7 +413,7 @@ public class ToolModel implements IUnbakedGeometry<ToolModel> {
       if (part.hasMaterials()) {
         // start by fetching the material we are rendering at this position, should only be null on invalid tools or during the initial bake
         int index = part.index();
-        MaterialVariantId material = index < materials.size() ? materials.get(index) : IMaterial.UNKNOWN_ID;
+        MaterialVariantId material = index < materials.size() ? materials.get(index) : MaterialId.UNKNOWN;
         TintedSprite materialSprite = MaterialModel.getMaterialSprite(spriteGetter, owner.getMaterial(part.getName(false)), material);
         particle = materialSprite.sprite();
 
@@ -511,13 +512,10 @@ public class ToolModel implements IUnbakedGeometry<ToolModel> {
   public BakedModel bake(IGeometryBakingContext owner, ModelBaker baker, Function<Material,TextureAtlasSprite> spriteGetter, ModelState modelTransform, ItemOverrides overrides) {
     // warn on deprecated keys
     if (showTraits) {
-      TConstruct.LOG.warn("Using deprecated key 'show_traits' in tool model {}, use 'constant' in modifier model maps with TraitModel instead", BAKE_LOCATION);
+      TConstruct.LOG.warn("Using deprecated key 'show_traits' in tool model {}, use 'constant' in modifier model maps with 'tconstruct:trait' instead", BAKE_LOCATION);
     }
-    for (FirstModifier modifier : firstModifiers) {
-      if (modifier.forced) {
-        TConstruct.LOG.warn("Using 'forced' in 'first_modifiers' is deprecated in tool model {}, use 'constant' in modifier model maps instead", BAKE_LOCATION);
-        break;
-      }
+    if (!firstModifiers.isEmpty()) {
+      TConstruct.LOG.warn("Using deprecated key 'first_modifiers' in tool model {}, use 'constant' in modifier model maps with 'tconstruct:crafted' and an early ID instead", BAKE_LOCATION);
     }
 
     // default is just a single part named tool, no material
@@ -766,9 +764,10 @@ public class ToolModel implements IUnbakedGeometry<ToolModel> {
       IToolStackView tool = ToolStack.from(stack);
 
       // if nothing unique, render original
+      // TODO 1.21: with how forced modifiers work, this will probably be true way more often
       ModifierNBT modifiers = showTraits ? tool.getModifiers() : tool.getUpgrades();
       skip:
-      if (materialIds.isEmpty() && modifiers.isEmpty()) {
+      if (materialIds.isEmpty() && modifiers.isEmpty() && modifierModels.sortedConstant().isEmpty()) {
         for (FirstModifier modifier : firstModifiers) {
           if (modifier.forced) {
             break skip;

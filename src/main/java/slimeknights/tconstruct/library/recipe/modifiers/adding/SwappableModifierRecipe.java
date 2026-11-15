@@ -18,13 +18,14 @@ import slimeknights.tconstruct.library.client.materials.MaterialTooltipCache;
 import slimeknights.tconstruct.library.json.IntRange;
 import slimeknights.tconstruct.library.json.field.MergingField;
 import slimeknights.tconstruct.library.json.field.MergingField.MissingMode;
-import slimeknights.tconstruct.library.materials.definition.IMaterial;
+import slimeknights.tconstruct.library.materials.definition.MaterialId;
 import slimeknights.tconstruct.library.materials.definition.MaterialVariantId;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierId;
 import slimeknights.tconstruct.library.recipe.RecipeResult;
 import slimeknights.tconstruct.library.recipe.tinkerstation.ITinkerStationContainer;
 import slimeknights.tconstruct.library.tools.SlotType.SlotCount;
+import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.LazyToolStack;
 import slimeknights.tconstruct.library.tools.nbt.ToolDataNBT;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
@@ -81,9 +82,10 @@ public class SwappableModifierRecipe extends ModifierRecipe {
     int level = tool.getUpgrades().getLevel(modifier);
     if (level == 0) {
       needsModifier = true;
-      Component commonError = validatePrerequisites(tool);
-      if (commonError != null) {
-        return RecipeResult.failure(commonError);
+      // no need to check level as we know the level is 0 and we are making it 1
+      Component slotError = checkSlots(tool, getSlots());
+      if (slotError != null) {
+        return RecipeResult.failure(slotError);
       }
     } else {
       needsModifier = false;
@@ -149,6 +151,31 @@ public class SwappableModifierRecipe extends ModifierRecipe {
     return resultSlots;
   }
 
+  @Nullable
+  @Override
+  public Component canApply(IToolStackView tool) {
+    ModifierId result = this.result.getId();
+    // only check slots if we lack the modifier
+    if (tool.getUpgrades().getLevel(result) == 0) {
+      return checkSlots(tool, getSlots());
+    }
+    // if we already have it, ensure the variant is changing
+    if (tool.getPersistentData().getString(result).equals(value)) {
+      return Component.translatable(ALREADY_PRESENT, this.result.get().getDisplayName(), variant);
+    }
+    return null;
+  }
+
+  @Override
+  public void applyModifier(ToolStack tool) {
+    ModifierId result = this.result.getId();
+    // only add the modifier if we lack it
+    if (tool.getUpgrades().getLevel(result) == 0) {
+      super.applyModifier(tool);
+    }
+    // apply the variant
+    tool.getPersistentData().putString(result, value);
+  }
 
   /** Methods of formatting the variant string */
   @FunctionalInterface
@@ -163,7 +190,7 @@ public class SwappableModifierRecipe extends ModifierRecipe {
     /** Formats using the modifier ID as a base translation key */
     VariantFormatter DEFAULT = LOADER.register(getResource("default"), (modifier, variant) -> Component.translatable(Util.makeTranslationKey("modifier", modifier) + "." + variant));
     /** Formats using the material translation key */
-    VariantFormatter MATERIAL = LOADER.register(getResource("material"), (modifier, variant) -> MaterialTooltipCache.getDisplayName(Objects.requireNonNullElse(MaterialVariantId.tryParse(variant), IMaterial.UNKNOWN_ID)));
+    VariantFormatter MATERIAL = LOADER.register(getResource("material"), (modifier, variant) -> MaterialTooltipCache.getDisplayName(Objects.requireNonNullElse(MaterialVariantId.tryParse(variant), MaterialId.UNKNOWN)));
     /** Formats using the modifier ID as the base with the variant as a parameter */
     VariantFormatter PARAMETER = LOADER.register(getResource("parameter"), (modifier, variant) -> Component.translatable(Util.makeTranslationKey("modifier", modifier) + ".variant", variant));
   }

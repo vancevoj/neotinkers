@@ -10,9 +10,11 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import slimeknights.mantle.data.loadable.Loadables;
+import slimeknights.mantle.data.predicate.IJsonPredicate;
 import slimeknights.mantle.recipe.data.AbstractRecipeBuilder;
 import slimeknights.mantle.recipe.ingredient.SizedIngredient;
-import slimeknights.tconstruct.library.materials.definition.IMaterial;
+import slimeknights.tconstruct.library.json.predicate.material.MaterialPredicate;
+import slimeknights.tconstruct.library.materials.definition.MaterialId;
 import slimeknights.tconstruct.library.materials.definition.MaterialVariantId;
 import slimeknights.tconstruct.library.tools.part.IToolPart;
 
@@ -20,7 +22,7 @@ import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;
 
-/** Builder for {@link FixedMaterialSwappingRecipe} and {@link PartSwappingOverrideRecipe}. */
+/** Builder for {@link FixedMaterialSwappingRecipe}, {@link PartSwappingOverrideRecipe}, and {@link MaterialValueSwappingRecipe} */
 @Accessors(fluent = true)
 @RequiredArgsConstructor(staticName = "tools")
 public class MaterialSwappingRecipeBuilder extends AbstractRecipeBuilder<MaterialSwappingRecipeBuilder> {
@@ -40,10 +42,13 @@ public class MaterialSwappingRecipeBuilder extends AbstractRecipeBuilder<Materia
   /** Ingredient for the input part, used by fixed */
   private SizedIngredient ingredient = SizedIngredient.EMPTY;
   /** Material to swap to, used by fixed */
-  private MaterialVariantId material = IMaterial.UNKNOWN_ID;
-  /** Repair value on swapping, used by fixed */
+  private MaterialVariantId material = MaterialId.UNKNOWN;
+  /** Repair value on swapping, used by fixed and material value */
   @Setter
   private int repairValue = 0;
+
+  /** Material predicate, used by material value */
+  private IJsonPredicate<MaterialVariantId> materials = MaterialPredicate.ANY;
 
   /** Creates a builder for the given tool */
   public static MaterialSwappingRecipeBuilder tool(ItemLike tool) {
@@ -71,6 +76,13 @@ public class MaterialSwappingRecipeBuilder extends AbstractRecipeBuilder<Materia
   /** Sets the material for this builder */
   public MaterialSwappingRecipeBuilder material(MaterialVariantId material, ItemLike item) {
     return material(material, SizedIngredient.fromItems(item));
+  }
+
+  /** Sets the materials for this builder */
+  public MaterialSwappingRecipeBuilder materials(IJsonPredicate<MaterialVariantId> materials, int cost) {
+    this.materials = materials;
+    this.repairValue = cost;
+    return this;
   }
 
   /** Adds an extra ingredient requirement */
@@ -105,8 +117,10 @@ public class MaterialSwappingRecipeBuilder extends AbstractRecipeBuilder<Materia
         throw new IllegalStateException("Cannot set both part and ingredient");
       }
       consumer.accept(id, new PartSwappingOverrideRecipe(id, tools, maxStackSize, part, indices, extraRequirements), null);
-    } else {
+    } else if (material != MaterialId.UNKNOWN) {
       consumer.accept(id, new FixedMaterialSwappingRecipe(id, tools, maxStackSize, ingredient, material, indices, repairValue, extraRequirements), null);
+    } else if (repairValue > 0) {
+      consumer.accept(id, new MaterialValueSwappingRecipe(id, tools, maxStackSize, materials, repairValue, indices, extraRequirements), null);
     }
   }
 }

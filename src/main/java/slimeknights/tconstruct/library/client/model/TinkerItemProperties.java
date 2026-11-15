@@ -2,14 +2,12 @@ package slimeknights.tconstruct.library.client.model;
 
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.client.renderer.item.ItemPropertyFunction;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.ItemLike;
 import net.neoforged.neoforge.common.ItemAbilities;
@@ -23,6 +21,7 @@ import slimeknights.tconstruct.library.tools.nbt.ToolDataComponents;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 
 /** Properties for tinker tools */
+@SuppressWarnings("deprecation")
 public class TinkerItemProperties {
   /** ID for broken property */
   private static final ResourceLocation BROKEN_ID = TConstruct.getResource("broken");
@@ -33,6 +32,8 @@ public class TinkerItemProperties {
 
   /** ID for ammo property */
   private static final ResourceLocation AMMO_ID = TConstruct.getResource("ammo");
+  /** ID of fireworks rocket for NBT check */
+  private static final String FIREWORKS_ID = "minecraft:firework_rocket";
   /** Int declaring ammo type */
   private static final ItemPropertyFunction AMMO = (stack, level, entity, seed) -> {
     // tools store their NBT in the tconstruct:tool_data component, NOT minecraft:custom_data; reading the latter
@@ -43,7 +44,7 @@ public class TinkerItemProperties {
       CompoundTag ammo = persistentData.getCompound(ModifiableCrossbowItem.KEY_CROSSBOW_AMMO.toString());
       if (!ammo.isEmpty()) {
         // no sense having two keys for ammo, just set 1 for arrow, 2 for fireworks
-        return ammo.getString("id").equals(BuiltInRegistries.ITEM.getKey(Items.FIREWORK_ROCKET).toString()) ? 2 : 1;
+        return FIREWORKS_ID.equals(ammo.getString("id")) ? 2 : 1;
       }
     }
     return 0;

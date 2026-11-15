@@ -2,6 +2,7 @@ package slimeknights.tconstruct.gadgets;
 
 import net.minecraft.data.DataGenerator;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.item.CreativeModeTab.ItemDisplayParameters;
 import net.minecraft.world.item.CreativeModeTab.Output;
@@ -17,6 +18,7 @@ import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import slimeknights.mantle.registration.object.EnumObject;
 import slimeknights.mantle.registration.object.ItemObject;
@@ -27,13 +29,17 @@ import slimeknights.tconstruct.gadgets.block.InvertedCakeBlock;
 import slimeknights.tconstruct.gadgets.block.PunjiBlock;
 import slimeknights.tconstruct.gadgets.capability.PiggybackCapability;
 import slimeknights.tconstruct.gadgets.data.GadgetRecipeProvider;
+import slimeknights.tconstruct.gadgets.entity.DispenseFancyArmorStand;
 import slimeknights.tconstruct.gadgets.entity.EFLNEntity;
+import slimeknights.tconstruct.gadgets.entity.FancyArmorStandEntity;
+import slimeknights.tconstruct.gadgets.entity.FancyArmorStandEntity.StandType;
 import slimeknights.tconstruct.gadgets.entity.FancyItemFrameEntity;
 import slimeknights.tconstruct.gadgets.entity.FrameType;
 import slimeknights.tconstruct.gadgets.entity.GlowballEntity;
 import slimeknights.tconstruct.gadgets.entity.shuriken.FlintShurikenEntity;
 import slimeknights.tconstruct.gadgets.entity.shuriken.QuartzShurikenEntity;
 import slimeknights.tconstruct.gadgets.item.EFLNItem;
+import slimeknights.tconstruct.gadgets.item.FancyArmorStandItem;
 import slimeknights.tconstruct.gadgets.item.FancyItemFrameItem;
 import slimeknights.tconstruct.gadgets.item.GlowBallItem;
 import slimeknights.tconstruct.gadgets.item.PiggyBackPackItem;
@@ -61,6 +67,7 @@ public final class TinkerGadgets extends TinkerModule {
    */
   public static final ItemObject<PiggyBackPackItem> piggyBackpack = ITEMS.register("piggy_backpack", () -> new PiggyBackPackItem(new Properties().stacksTo(16)));
   public static final EnumObject<FrameType,FancyItemFrameItem> itemFrame = ITEMS.registerEnum(FrameType.values(), "item_frame", (type) -> new FancyItemFrameItem(ITEM_PROPS, (world, pos, dir) -> new FancyItemFrameEntity(world, pos, dir, type)));
+  public static final EnumObject<StandType,FancyArmorStandItem> armorStand = ITEMS.registerEnum(StandType.values(), "armor_stand", type -> new FancyArmorStandItem(new Item.Properties().stacksTo(16), type));
 
   // throwballs
   @Deprecated
@@ -75,7 +82,6 @@ public final class TinkerGadgets extends TinkerModule {
     efln = ITEMS.register("efln_ball", () -> new EFLNItem(THROWABLE_PROPS));
     quartzShuriken = ITEMS.register("quartz_shuriken", () -> new ShurikenItem(THROWABLE_PROPS, QuartzShurikenEntity::new));
     flintShuriken = ITEMS.register("flint_shuriken", () -> new ShurikenItem(THROWABLE_PROPS, FlintShurikenEntity::new));
-
   }
 
   // foods
@@ -105,6 +111,9 @@ public final class TinkerGadgets extends TinkerModule {
       .setUpdateInterval(Integer.MAX_VALUE)
       .setShouldReceiveVelocityUpdates(false)
   );
+  public static final DeferredHolder<? super EntityType<FancyArmorStandEntity>, EntityType<FancyArmorStandEntity>> armorStandEntity = ENTITIES.register("armor_stand", () ->
+    EntityType.Builder.<FancyArmorStandEntity>of(FancyArmorStandEntity::new, MobCategory.MISC).sized(0.5F, 1.975F).clientTrackingRange(10));
+
   @Deprecated
   public static final DeferredHolder<? super EntityType<GlowballEntity>, EntityType<GlowballEntity>> glowBallEntity = ENTITIES.register("glow_ball", () ->
     EntityType.Builder.<GlowballEntity>of(GlowballEntity::new, MobCategory.MISC)
@@ -166,6 +175,7 @@ public final class TinkerGadgets extends TinkerModule {
       DispenserBlock.registerBehavior(efln, new ShootProjectileDispenserBehavior(eflnEntity.get()));
       DispenserBlock.registerBehavior(flintShuriken, new ShootProjectileDispenserBehavior(flintShurikenEntity.get()));
       DispenserBlock.registerBehavior(quartzShuriken, new ShootProjectileDispenserBehavior(quartzShurikenEntity.get()));
+      armorStand.forEach((type, item) -> DispenserBlock.registerBehavior(item, new DispenseFancyArmorStand(type)));
     });
   }
 
@@ -175,12 +185,36 @@ public final class TinkerGadgets extends TinkerModule {
     generator.addProvider(event.includeServer(), new GadgetRecipeProvider(generator.getPackOutput()));
   }
 
+  @SubscribeEvent
+  void entityAttributes(EntityAttributeCreationEvent event) {
+    event.put(armorStandEntity.get(), LivingEntity.createLivingAttributes().build());
+  }
+
   /** Adds all relevant items to the creative tab, called by general tab */
   public static void addTabItems(ItemDisplayParameters itemDisplayParameters, Output output) {
     output.accept(punji);
-    accept(output, itemFrame);
+    acceptStand(output, StandType.BAMBOO);
+    acceptFrame(output, FrameType.CLEAR);
+    acceptStand(output, StandType.CLEAR);
+    acceptStand(output, StandType.BONE);
+    acceptStand(output, StandType.NECROTIC_BONE);
+    acceptFrame(output, FrameType.GOLD);
+    acceptFrame(output, FrameType.REVERSED_GOLD);
+    acceptFrame(output, FrameType.DIAMOND);
+    acceptFrame(output, FrameType.MANYULLYN);
+    acceptFrame(output, FrameType.NETHERITE);
     output.accept(piggyBackpack);
     accept(output, cake);
     output.accept(magmaCake);
+  }
+
+  /** Adds the given frame */
+  private static void acceptFrame(Output output, FrameType frameType) {
+    output.accept(itemFrame.get(frameType));
+  }
+
+  /** Adds the given armor stand */
+  private static void acceptStand(Output output, StandType standType) {
+    output.accept(armorStand.get(standType));
   }
 }

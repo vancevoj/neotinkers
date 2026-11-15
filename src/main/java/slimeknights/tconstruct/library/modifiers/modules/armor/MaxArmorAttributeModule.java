@@ -62,7 +62,7 @@ public record MaxArmorAttributeModule(String unique, Attribute attribute, Operat
   public MaxArmorAttributeModule {}
 
   private MaxArmorAttributeModule(String unique, Attribute attribute, Operation operation, LevelingValue amount, boolean allowBroken, @Nullable TagKey<Item> heldTag, TooltipStyle tooltipStyle, ModifierCondition<IToolStackView> condition) {
-    this(unique, attribute, operation, amount, ResourceLocation.fromNamespaceAndPath(TConstruct.MOD_ID, unique), MaxArmorLevelModule.createKey(BuiltInRegistries.ATTRIBUTE.getKey(attribute)), allowBroken, heldTag, tooltipStyle, condition);
+    this(unique, attribute, operation, amount, ResourceLocation.fromNamespaceAndPath(TConstruct.MOD_ID, unique), MaxArmorLevelModule.createKey(Loadables.ATTRIBUTE.getKey(attribute)), allowBroken, heldTag, tooltipStyle, condition);
   }
 
   @Override

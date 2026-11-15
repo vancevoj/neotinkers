@@ -14,7 +14,7 @@ import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.recipe.ICustomOutputRecipe;
 import slimeknights.mantle.recipe.helper.ItemOutput;
 import slimeknights.mantle.recipe.helper.LoadableRecipeSerializer;
-import slimeknights.tconstruct.library.materials.definition.IMaterial;
+import slimeknights.tconstruct.library.materials.definition.MaterialId;
 import slimeknights.tconstruct.library.materials.definition.MaterialVariant;
 import slimeknights.tconstruct.library.materials.definition.MaterialVariantId;
 import slimeknights.tconstruct.library.recipe.TinkerRecipeTypes;
@@ -22,15 +22,14 @@ import slimeknights.tconstruct.tables.TinkerTables;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Recipe to get the material from an ingredient
  */
-public class MaterialRecipe implements ICustomOutputRecipe<IMaterialRecipeContainer>, IMaterialValue {
+public class MaterialRecipe implements ICustomOutputRecipe<IMaterialRecipeContainer>, IMaterialValue, IDisplayMaterialRecipe {
   /** Empty material instance for the cache */
   @SuppressWarnings("removal")
-  public static final MaterialRecipe EMPTY = new MaterialRecipe(ResourceLocation.parse("missingno"), "", Ingredient.EMPTY, 0, 0, IMaterial.UNKNOWN_ID, ItemOutput.EMPTY);
+  public static final MaterialRecipe EMPTY = new MaterialRecipe(ResourceLocation.parse("missingno"), "", Ingredient.EMPTY, 0, 0, MaterialId.UNKNOWN, ItemOutput.EMPTY);
   public static final RecordLoadable<MaterialRecipe> LOADER = RecordLoadable.create(
     ContextKey.ID.requiredField(),
     LoadableRecipeSerializer.RECIPE_GROUP,
@@ -104,6 +103,7 @@ public class MaterialRecipe implements ICustomOutputRecipe<IMaterialRecipeContai
 
   @Override
   public ItemStack getLeftover() {
+    // TODO: would be nice to not copy for the recipe display
     return this.leftover.get().copy();
   }
 
@@ -123,14 +123,13 @@ public class MaterialRecipe implements ICustomOutputRecipe<IMaterialRecipeContai
   private List<ItemStack> displayItems = null;
 
   /** Gets a list of stacks for display in the recipe */
+  @Override
   public List<ItemStack> getDisplayItems() {
     if (displayItems == null) {
       if (needed > 1) {
-        displayItems = Arrays.stream(ingredient.getItems())
-                             .map(stack -> stack.copyWithCount(needed))
-                             .collect(Collectors.toList());
+        displayItems = Arrays.stream(ingredient.getItems()).map(stack -> stack.copyWithCount(needed)).toList();
       } else {
-        displayItems = Arrays.asList(ingredient.getItems());
+        displayItems = List.of(ingredient.getItems());
       }
     }
     return displayItems;
@@ -144,5 +143,19 @@ public class MaterialRecipe implements ICustomOutputRecipe<IMaterialRecipeContai
   public float scaleRepair(float amount) {
     // not cached as it may vary per stat type
     return this.getValue() * amount / INGOTS_PER_REPAIR / this.getNeeded();
+  }
+
+  /** Checks that all materials in this recipe are known */
+  @Override
+  public boolean isVisible() {
+    return !material.isUnknown() && !material.get().isHidden();
+  }
+
+
+  /* JEI */
+
+  @Override
+  public ResourceLocation getRecipeId() {
+    return getId();
   }
 }

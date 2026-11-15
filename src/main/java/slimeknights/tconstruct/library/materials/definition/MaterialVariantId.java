@@ -22,13 +22,13 @@ import javax.annotation.Nullable;
 
 /** Represents a material that possibly has a variant. Variants are simply a different texture with the same material properties */
 public sealed interface MaterialVariantId permits MaterialId, MaterialVariantIdImpl {
-  Loadable<MaterialVariantId> LOADABLE = StringLoadable.DEFAULT.comapFlatMap((text, error) -> {
+  Loadable<MaterialVariantId> LOADABLE = StringLoadable.DEFAULT.mapChecked((text, error) -> {
     MaterialVariantId location = tryParse(text);
     if (location == null) {
       throw error.create("Expected a material variant ID, was '" + text + "'");
     }
     return location;
-  }, MaterialVariantId::toString);
+  }, (id, error) -> id.toString());
   ContextKey<MaterialVariantId> CONTEXT_KEY = new ContextKey<>("material_variant");
   /** Stream codec for syncing a material variant ID over the network */
   StreamCodec<RegistryFriendlyByteBuf,MaterialVariantId> STREAM_CODEC = StreamCodec.of((buffer, material) -> material.toNetwork(buffer), MaterialVariantId::fromNetwork);
@@ -45,6 +45,19 @@ public sealed interface MaterialVariantId permits MaterialId, MaterialVariantIdI
 
   /** Returns true if this ID has a variant */
   boolean hasVariant();
+
+  /** Checks if this is the default variant */
+  default boolean isDefaultVariant() {
+    return DEFAULT_VARIANT.equals(getVariant());
+  }
+
+  /** Replaces the default variant with the ID by itself */
+  default MaterialVariantId normalizeVariant() {
+    if (isDefaultVariant()) {
+      return getId();
+    }
+    return this;
+  }
 
   /**
    * Gets the path for this material
@@ -73,8 +86,13 @@ public sealed interface MaterialVariantId permits MaterialId, MaterialVariantIdI
   }
 
   /** Checks if two material variants match */
+  default boolean sameId(MaterialVariantId other) {
+    return this.getId().equals(other.getId());
+  }
+
+  /** Checks if two material variants match */
   default boolean sameVariant(MaterialVariantId other) {
-    return this.getId().equals(other.getId()) && this.getVariant().equals(other.getVariant());
+    return this.sameId(other) && this.getVariant().equals(other.getVariant());
   }
 
   /* Constructors */

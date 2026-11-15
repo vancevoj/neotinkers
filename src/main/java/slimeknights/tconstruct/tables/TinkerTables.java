@@ -34,13 +34,14 @@ import slimeknights.tconstruct.library.recipe.partbuilder.ItemPartRecipe;
 import slimeknights.tconstruct.library.recipe.partbuilder.PartRecipe;
 import slimeknights.tconstruct.library.recipe.partbuilder.recycle.PartBuilderRecycle;
 import slimeknights.tconstruct.library.recipe.tinkerstation.building.FixedMaterialSwappingRecipe;
+import slimeknights.tconstruct.library.recipe.tinkerstation.building.MaterialValueSwappingRecipe;
 import slimeknights.tconstruct.library.recipe.tinkerstation.building.PartSwappingOverrideRecipe;
 import slimeknights.tconstruct.library.recipe.tinkerstation.building.ToolBuildingRecipe;
 import slimeknights.tconstruct.library.recipe.tinkerstation.building.ToolMaterialSwappingRecipe;
 import slimeknights.tconstruct.library.tools.layout.StationSlotLayoutLoader;
 import slimeknights.tconstruct.library.tools.part.IMaterialItem;
-import slimeknights.tconstruct.shared.TinkerCommons;
 import slimeknights.tconstruct.shared.block.TableBlock;
+import slimeknights.tconstruct.smeltery.TinkerSmeltery;
 import slimeknights.tconstruct.tables.block.ChestBlock;
 import slimeknights.tconstruct.tables.block.CraftingStationBlock;
 import slimeknights.tconstruct.tables.block.GenericTableBlock;
@@ -69,6 +70,7 @@ import slimeknights.tconstruct.tables.recipe.TinkerStationDamagingRecipe;
 import slimeknights.tconstruct.tables.recipe.TinkerStationPartSwapping;
 import slimeknights.tconstruct.tables.recipe.TinkerStationRepairRecipe;
 import slimeknights.tconstruct.tools.TinkerToolParts;
+import slimeknights.tconstruct.world.TinkerWorld;
 
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -82,10 +84,11 @@ public final class TinkerTables extends TinkerModule {
   /** Creative tab for general items, or those that lack another tab */
   public static final DeferredHolder<? super CreativeModeTab, CreativeModeTab> tabTables = CREATIVE_TABS.register(
     "tables", () -> CreativeModeTab.builder().title(TConstruct.makeTranslation("itemGroup", "tables"))
-                                   .icon(() -> new ItemStack(TinkerTables.craftingStation))
-                                   .displayItems(TinkerTables::addTabItems)
-                                   .withTabsBefore(TinkerCommons.tabGeneral.getId())
-                                   .build());
+      .icon(() -> new ItemStack(TinkerTables.tinkersAnvil))
+      .displayItems(TinkerTables::addTableVariants)
+      .withTabsBefore(TinkerWorld.tabWorld.getId())
+      .withSearchBar()
+      .build());
   /*
    * Blocks
    */
@@ -148,6 +151,7 @@ public final class TinkerTables extends TinkerModule {
   public static final DeferredHolder<? super RecipeSerializer<TinkerStationPartSwapping>, RecipeSerializer<TinkerStationPartSwapping>> tinkerStationPartSwappingSerializer = RECIPE_SERIALIZERS.register("tinker_station_part_swapping", () -> LoadableRecipeSerializer.of(TinkerStationPartSwapping.LOADER));
   public static final DeferredHolder<? super RecipeSerializer<TinkerStationDamagingRecipe>, RecipeSerializer<TinkerStationDamagingRecipe>> tinkerStationDamagingSerializer = RECIPE_SERIALIZERS.register("tinker_station_damaging", () -> LoadableRecipeSerializer.of(TinkerStationDamagingRecipe.LOADER));
   public static final DeferredHolder<? super RecipeSerializer<FixedMaterialSwappingRecipe>, RecipeSerializer<FixedMaterialSwappingRecipe>> fixedMaterialSwapping = RECIPE_SERIALIZERS.register("fixed_material_swapping", () -> LoadableRecipeSerializer.of(FixedMaterialSwappingRecipe.LOADER));
+  public static final DeferredHolder<? super RecipeSerializer<MaterialValueSwappingRecipe>, RecipeSerializer<MaterialValueSwappingRecipe>> materialValueSwapping = RECIPE_SERIALIZERS.register("material_value_swapping", () -> LoadableRecipeSerializer.of(MaterialValueSwappingRecipe.LOADER));
   public static final DeferredHolder<? super RecipeSerializer<PartSwappingOverrideRecipe>, RecipeSerializer<PartSwappingOverrideRecipe>> partSwappingOverride = RECIPE_SERIALIZERS.register("part_swapping_override", () -> LoadableRecipeSerializer.of(PartSwappingOverrideRecipe.LOADER));
   public static final DeferredHolder<? super RecipeSerializer<ToolMaterialSwappingRecipe>, RecipeSerializer<ToolMaterialSwappingRecipe>> toolMaterialSwapping = RECIPE_SERIALIZERS.register("tool_material_swapping", () -> LoadableRecipeSerializer.of(ToolMaterialSwappingRecipe.LOADER));
   @Deprecated
@@ -180,14 +184,11 @@ public final class TinkerTables extends TinkerModule {
   }
 
   /** Adds all relevant items to the creative tab, called in the general tab */
-  private static void addTabItems(ItemDisplayParameters itemDisplayParameters, CreativeModeTab.Output output) {
-    output.accept(pattern);
-
+  public static void addTabItems(ItemDisplayParameters itemDisplayParameters, CreativeModeTab.Output output) {
     // add one of each standard table
     output.accept(craftingStation);
     output.accept(partBuilder);
     output.accept(tinkerStation);
-    // if showing all anvil variants, skip them in search at this first stage
     output.accept(tinkersAnvil);
     output.accept(scorchedAnvil);
     output.accept(modifierWorktable);
@@ -197,21 +198,29 @@ public final class TinkerTables extends TinkerModule {
     output.accept(partChest);
     output.accept(castChest);
 
+    // pattern last, so its below the nice row of 9
+    output.accept(pattern);
+  }
+
+  /** Adds all relevant items to the variants creative tab. */
+  private static void addTableVariants(ItemDisplayParameters itemDisplayParameters, CreativeModeTab.Output output) {
+    // put anvil variants first as they are not in another tab and have the least variants
+    Consumer<ItemStack> consumer = output::accept;
+    ((IMaterialItem) tinkersAnvil.asItem()).addVariants(consumer, "");
+    ((IMaterialItem) scorchedAnvil.asItem()).addVariants(consumer, "");
+
     // table variants at the end as there may be a lot
     Predicate<ItemStack> variants = stack -> {
       output.accept(stack);
       return false;
     };
-    // crafting tables
-    // add crafting station with the default variant, its nice
+    // wooden tables
     RetexturedHelper.addTagVariants(variants, craftingStation, ItemTags.LOGS);
-    // rest the default variant is the same as oak
     RetexturedHelper.addTagVariants(variants, partBuilder, ItemTags.PLANKS);
     RetexturedHelper.addTagVariants(variants, tinkerStation, ItemTags.PLANKS);
-    // anvil variants use their own config prop as the variants are less obvious
-    Consumer<ItemStack> consumer = output::accept;
-    ((IMaterialItem) tinkersAnvil.asItem()).addVariants(consumer, "");
-    ((IMaterialItem) scorchedAnvil.asItem()).addVariants(consumer, "");
+    // stone tables
     RetexturedHelper.addTagVariants(variants, modifierWorktable, TinkerTags.Items.WORKSTATION_ROCK);
+    // end with smeltery controller and drain variants
+    TinkerSmeltery.addTableVariants(itemDisplayParameters, output);
   }
 }

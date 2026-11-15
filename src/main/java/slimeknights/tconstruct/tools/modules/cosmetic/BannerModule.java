@@ -94,24 +94,27 @@ public enum BannerModule implements ModifierModule, DisplayNameModifierHook, Too
   }
 
   /** Copies the given list of patterns from banner format to the tool's NBT */
-  public static void copyPatterns(ModDataNBT data, ModifierId id, DyeColor dye, ListTag banner) {
-    int baseColor = Util.getColor(dye);
+  public static void copyPatterns(ModDataNBT data, ModifierId id, @Nullable DyeColor dye, ListTag banner) {
     ListTag patterns = new ListTag();
 
-    // add in the base pattern, it only exists on shields and we copy from banners
-    // TODO(neoport): BuiltInRegistries.BANNER_PATTERN removed; BannerPattern is now data-driven.
-    // BannerPatterns.BASE is ResourceKey<BannerPattern>; getHashname() gone.
-    // Store the base pattern key as its ResourceLocation path ("base") until NBT format migrated to RL keys.
-    {
+    // need a cache key, but it's just going to get hashed anyway, so store its hash
+    int hashCode = 0;
+
+    // passing in null for dye allows skipping the base pattern, doing some sort of clear banner
+    if (dye != null) {
+      int baseColor = Util.getColor(dye);
+      hashCode = baseColor;
+
+      // add in the base pattern, it only exists on shield NBT, but the recipe comes from banners
+      // TODO(neoport): BuiltInRegistries.BANNER_PATTERN removed; BannerPattern is now data-driven.
+      // BannerPatterns.BASE is ResourceKey<BannerPattern>; getHashname() gone.
+      // Store the base pattern key as its ResourceLocation path ("base") until NBT format migrated to RL keys.
       CompoundTag basePattern = new CompoundTag();
       basePattern.putString(KEY_PATTERN, BannerPatterns.BASE.location().getPath());
       basePattern.putInt(KEY_DYE, dye.getId());
       basePattern.putInt(KEY_COLOR, baseColor);
       patterns.add(basePattern);
     }
-
-    // need a cache key, but it's just going to get hashed anyway, so store its hash
-    int hashCode = baseColor;
 
     // add in all other patterns
     for (int i = 0; i < banner.size(); i++) {

@@ -60,7 +60,7 @@ public class ToolStack implements IToolStackView {
 
   // volatile NBT
   /** Tag for calculated stats */
-  protected static final String TAG_STATS = "tic_stats";
+  public static final String TAG_STATS = "tic_stats";
   /** Tag for tool stat global multipliers */
   protected static final String TAG_MULTIPLIERS = "tic_multipliers";
   /** Tag for arbitrary modifier data rebuilt on stat rebuild */
@@ -69,7 +69,7 @@ public class ToolStack implements IToolStackView {
   public static final String TAG_MODIFIERS = "tic_modifiers";
 
   // vanilla tags
-  protected static final String TAG_DAMAGE = "Damage";
+  public static final String TAG_DAMAGE = "Damage";
   private static final String TAG_UNBREAKABLE = "Unbreakable";
   private static final String TAG_HIDE_FLAGS = "HideFlags";
 
@@ -348,7 +348,6 @@ public class ToolStack implements IToolStackView {
       throw new IllegalArgumentException("Wrong item in stack");
     }
     // store the tool data onto the component to avoid going through verifyTagAfterLoad and rebuilding stats again
-    // TODO: is there any reason we copy NBT here? might be worth never copying
     CompoundTag tag = copyNBT ? nbt.copy() : nbt;
     // ensure the damage value is set on the stack for the sake of stacking, since bypassing the vanilla setter skips that
     if (!tag.contains(TAG_DAMAGE, Tag.TAG_ANY_NUMERIC) && stack.getItem().isDamageable(stack)) {

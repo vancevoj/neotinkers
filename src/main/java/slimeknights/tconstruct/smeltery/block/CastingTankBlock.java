@@ -27,7 +27,6 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import slimeknights.mantle.block.InventoryBlock;
-import slimeknights.mantle.util.BlockEntityHelper;
 import slimeknights.tconstruct.library.utils.NBTTags;
 import slimeknights.tconstruct.smeltery.block.component.SearedTankBlock;
 import slimeknights.tconstruct.smeltery.block.entity.CastingTankBlockEntity;
@@ -139,13 +138,9 @@ public class CastingTankBlock extends InventoryBlock implements ITankBlock, Enti
     return ITankBlockEntity.getComparatorInputOverride(worldIn, pos);
   }
 
-
-
   @Override
   public ItemStack getCloneItemStack(LevelReader world, BlockPos pos, BlockState state) {
-    ItemStack stack = new ItemStack(this);
-    BlockEntityHelper.get(CastingTankBlockEntity.class, world, pos).ifPresent(te -> te.setTankTag(stack));
-    return stack;
+    return ITankBlockEntity.getCloneItemStack(new ItemStack(this), world, pos);
   }
 
   @Override

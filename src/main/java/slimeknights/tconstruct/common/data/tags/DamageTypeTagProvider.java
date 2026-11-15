@@ -25,16 +25,21 @@ import static net.minecraft.tags.DamageTypeTags.IS_FREEZING;
 import static net.minecraft.tags.DamageTypeTags.IS_LIGHTNING;
 import static net.minecraft.tags.DamageTypeTags.IS_PROJECTILE;
 import static net.minecraft.tags.DamageTypeTags.WITCH_RESISTANT_TO;
+import static net.minecraft.world.damagesource.DamageTypes.CACTUS;
 import static net.minecraft.world.damagesource.DamageTypes.CRAMMING;
 import static net.minecraft.world.damagesource.DamageTypes.DRAGON_BREATH;
 import static net.minecraft.world.damagesource.DamageTypes.FALLING_ANVIL;
 import static net.minecraft.world.damagesource.DamageTypes.FALLING_BLOCK;
 import static net.minecraft.world.damagesource.DamageTypes.FALLING_STALACTITE;
 import static net.minecraft.world.damagesource.DamageTypes.FLY_INTO_WALL;
+import static net.minecraft.world.damagesource.DamageTypes.HOT_FLOOR;
 import static net.minecraft.world.damagesource.DamageTypes.MOB_ATTACK;
 import static net.minecraft.world.damagesource.DamageTypes.MOB_ATTACK_NO_AGGRO;
 import static net.minecraft.world.damagesource.DamageTypes.PLAYER_ATTACK;
+import static net.minecraft.world.damagesource.DamageTypes.STALAGMITE;
 import static net.minecraft.world.damagesource.DamageTypes.STING;
+import static net.minecraft.world.damagesource.DamageTypes.SWEET_BERRY_BUSH;
+import static net.minecraft.world.damagesource.DamageTypes.THORNS;
 import static net.minecraft.world.damagesource.DamageTypes.WITHER;
 import static net.minecraft.world.damagesource.DamageTypes.WITHER_SKULL;
 import static slimeknights.tconstruct.common.TinkerDamageTypes.BLEEDING;
@@ -46,6 +51,7 @@ import static slimeknights.tconstruct.common.TinkerDamageTypes.FLUID_FIRE;
 import static slimeknights.tconstruct.common.TinkerDamageTypes.FLUID_IMPACT;
 import static slimeknights.tconstruct.common.TinkerDamageTypes.FLUID_MAGIC;
 import static slimeknights.tconstruct.common.TinkerDamageTypes.FLUID_SPIKE;
+import static slimeknights.tconstruct.common.TinkerDamageTypes.KNIGHTMETAL;
 import static slimeknights.tconstruct.common.TinkerDamageTypes.MOB_EXPLOSION;
 import static slimeknights.tconstruct.common.TinkerDamageTypes.PIERCING;
 import static slimeknights.tconstruct.common.TinkerDamageTypes.SELF_DESTRUCT;
@@ -59,10 +65,14 @@ import static slimeknights.tconstruct.common.TinkerDamageTypes.WATER;
 import static slimeknights.tconstruct.common.TinkerTags.DamageTypes.BLAST_PROTECTION;
 import static slimeknights.tconstruct.common.TinkerTags.DamageTypes.FALL_PROTECTION;
 import static slimeknights.tconstruct.common.TinkerTags.DamageTypes.FIRE_PROTECTION;
+import static slimeknights.tconstruct.common.TinkerTags.DamageTypes.IS_MELEE;
+import static slimeknights.tconstruct.common.TinkerTags.DamageTypes.LOOT_MODIFIER_WHITELIST;
 import static slimeknights.tconstruct.common.TinkerTags.DamageTypes.MAGIC_PROTECTION;
 import static slimeknights.tconstruct.common.TinkerTags.DamageTypes.MELEE_PROTECTION;
 import static slimeknights.tconstruct.common.TinkerTags.DamageTypes.MODIFIER_WHITELIST;
 import static slimeknights.tconstruct.common.TinkerTags.DamageTypes.PROJECTILE_PROTECTION;
+import static slimeknights.tconstruct.common.TinkerTags.DamageTypes.RUGGED_ATTACKS;
+import static slimeknights.tconstruct.common.TinkerTags.DamageTypes.RUGGED_TERRAIN;
 
 @SuppressWarnings("removal")
 public class DamageTypeTagProvider extends DamageTypeTagsProvider {
@@ -85,11 +95,22 @@ public class DamageTypeTagProvider extends DamageTypeTagsProvider {
     // whole reason these are a pair is so we can tag one as projectile
     tag(IS_PROJECTILE).add(THROWN_TOOL, FISHING_HOOK, FLUID_IMPACT.ranged(), FLUID_FIRE.ranged(), FLUID_COLD.ranged(), FLUID_MAGIC.ranged(), WATER.ranged(), FLUID_SPIKE.ranged(), EXPLOSION.ranged(), MOB_EXPLOSION.ranged());
 
+    // damage caused by a melee attack, shared by the melee protection modifier and the loot modifier whitelist
+    tag(IS_MELEE).add(PLAYER_ATTACK, MOB_ATTACK, MOB_ATTACK_NO_AGGRO, STING, FLUID_IMPACT.melee(), FLUID_SPIKE.melee());
+
+    // damage blocked by comfy
+    tag(RUGGED_TERRAIN).add(HOT_FLOOR, CACTUS, SWEET_BERRY_BUSH, STALAGMITE, KNIGHTMETAL);
+    tag(RUGGED_ATTACKS).add(CRAMMING, STING, THORNS);
+
     // modifiers
     tag(MODIFIER_WHITELIST).add(MOB_ATTACK, MOB_ATTACK_NO_AGGRO);
+    // loot modifiers come from the held tool, so limit them to melee damage the tool is responsible for
+    // projectiles are not needed here, they use the modifiers stored on the projectile instead
+    tag(LOOT_MODIFIER_WHITELIST).addTag(IS_MELEE).add(PIERCING, FLUID_FIRE.melee(), FLUID_COLD.melee(), FLUID_MAGIC.melee(), WATER.melee(), EXPLOSION.melee(), MOB_EXPLOSION.melee());
 
     // protection modifier tags
-    tag(MELEE_PROTECTION).add(PLAYER_ATTACK, MOB_ATTACK, MOB_ATTACK_NO_AGGRO, CRAMMING, STING, FLUID_IMPACT.melee(), FLUID_SPIKE.melee());
+    // cramming is not an attack, so it gets protection without making the held tool responsible for the kill
+    tag(MELEE_PROTECTION).addTag(IS_MELEE).add(CRAMMING);
     tag(PROJECTILE_PROTECTION).addTag(IS_PROJECTILE).add(FALLING_ANVIL, FALLING_BLOCK, FALLING_STALACTITE);
     tag(FIRE_PROTECTION).addTags(IS_FIRE, IS_LIGHTNING).add(SHOCK);
     tag(BLAST_PROTECTION).addTag(IS_EXPLOSION);
@@ -99,7 +120,10 @@ public class DamageTypeTagProvider extends DamageTypeTagsProvider {
     // TF support
     String tf = "twilightforest";
     addOptional(MODIFIER_WHITELIST, tf, "axing", "slam", "ant");
-    addOptional(MELEE_PROTECTION, tf, "ghast_tear", "hydra_bite", "squish", "axing", "slam", "yeeted", "ant", "clamped", "spiked");
+    addOptional(RUGGED_TERRAIN, tf, "knightmetal", "fiery");
+    addOptional(RUGGED_ATTACKS, tf, "thorns");
+    // all of these are attacks made by a TF mob, and mobs can use looting, so they belong on the shared melee tag
+    addOptional(IS_MELEE, tf, "ghast_tear", "hydra_bite", "squish", "axing", "slam", "yeeted", "ant", "clamped", "spiked");
     addOptional(MAGIC_PROTECTION, tf, "haunt", "ominous_fire", "twilight_scepter");
     addOptional(PROJECTILE_PROTECTION, tf, "falling_ice");
     // anything "magic" is good against lich shields, so tag our magic fluids

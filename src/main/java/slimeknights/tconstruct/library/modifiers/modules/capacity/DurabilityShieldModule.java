@@ -84,13 +84,14 @@ public record DurabilityShieldModule(LevelingInt cost, int color, IJsonPredicate
     return amount;
   }
 
+  @Deprecated
   @Override
   public int onDamageTool(IToolStackView tool, ModifierEntry modifier, int amount, @Nullable LivingEntity holder) {
     return onDamageTool(modifier.getHook(ModifierHooks.CAPACITY_BAR), tool, modifier, amount, cost.compute(modifier));
   }
 
   @Override
-  public int onDamageTool(IToolStackView tool, ModifierEntry modifier, int amount, @Nullable LivingEntity holder, @Nullable ItemStack stack, ModifierId cause) {
+  public int beforeDamageTool(IToolStackView tool, ModifierEntry modifier, int amount, @Nullable LivingEntity holder, @Nullable ItemStack stack, ModifierId cause) {
     if (this.cause.matches(cause)) {
       return onDamageTool(modifier.getHook(ModifierHooks.CAPACITY_BAR), tool, modifier, amount, cost.compute(modifier));
     }

@@ -4,7 +4,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
 import slimeknights.tconstruct.common.TinkerTags;
-import slimeknights.tconstruct.library.materials.definition.IMaterial;
+import slimeknights.tconstruct.library.materials.definition.MaterialId;
 import slimeknights.tconstruct.library.materials.definition.MaterialVariantId;
 import slimeknights.tconstruct.library.recipe.TinkerRecipeTypes;
 import slimeknights.tconstruct.library.recipe.casting.material.MaterialCastingLookup;
@@ -62,7 +62,7 @@ public class PartBuilderContainerWrapper implements IPartBuilderContainer {
       } else if (stack.is(TinkerTags.Items.TOOL_PARTS)) {
         MaterialVariantId material = IMaterialItem.getMaterialFromStack(stack);
         int cost = MaterialCastingLookup.getItemCost(stack.getItem());
-        if (cost == 0 || IMaterial.UNKNOWN_ID.matchesVariant(material)) {
+        if (cost == 0 || MaterialId.UNKNOWN.matchesVariant(material)) {
           this.material = null;
         } else {
           this.material = new MaterialValue(material, cost);

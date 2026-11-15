@@ -1,6 +1,5 @@
 package slimeknights.tconstruct.tables.network;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -10,17 +9,17 @@ import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
+import slimeknights.mantle.network.packet.BlockEntityPacket;
 import slimeknights.mantle.network.packet.ISimplePacket;
-import slimeknights.mantle.network.packet.IThreadsafePacket;
 import slimeknights.mantle.recipe.helper.RecipeHelper;
-import slimeknights.mantle.util.BlockEntityHelper;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.tables.block.entity.table.CraftingStationBlockEntity;
 
 /**
- * Packet to send the current crafting recipe to a player who opens the crafting station
+ * Packet to send the current crafting recipe to a player who opens the crafting station.
+ * TODO 1.21: make record.
  */
-public class UpdateCraftingRecipePacket implements IThreadsafePacket {
+public class UpdateCraftingRecipePacket implements BlockEntityPacket<CraftingStationBlockEntity> {
   public static final Type<UpdateCraftingRecipePacket> TYPE = new Type<>(TConstruct.getResource("update_crafting_recipe"));
   public static final StreamCodec<RegistryFriendlyByteBuf,UpdateCraftingRecipePacket> STREAM_CODEC = ISimplePacket.codec(UpdateCraftingRecipePacket::new);
 
@@ -48,19 +47,24 @@ public class UpdateCraftingRecipePacket implements IThreadsafePacket {
   }
 
   @Override
-  public void handleThreadsafe(IPayloadContext context) {
-    HandleClient.handle(this);
+  public BlockPos pos() {
+    return pos;
   }
 
-  /** Safely runs client side only code in a method only called on client */
-  private static class HandleClient {
-    private static void handle(UpdateCraftingRecipePacket packet) {
-      Level world = Minecraft.getInstance().level;
-      if (world != null) {
-        BlockEntityHelper.get(CraftingStationBlockEntity.class, world, packet.pos).ifPresent(te ->
-          RecipeHelper.getRecipe(world.getRecipeManager(), packet.recipe, CraftingRecipe.class)
-            .ifPresent(recipe -> te.updateRecipe(new RecipeHolder<>(packet.recipe, recipe))));
-      }
+  @Override
+  public Class<CraftingStationBlockEntity> blockEntityType() {
+    return CraftingStationBlockEntity.class;
+  }
+
+  @Override
+  public void handleBlockEntity(IPayloadContext context, CraftingStationBlockEntity be) {
+    Level level = be.getLevel();
+    assert level != null;
+    CraftingRecipe recipe = RecipeHelper.getRecipe(level.getRecipeManager(), this.recipe, CraftingRecipe.class).orElse(null);
+    if (recipe != null) {
+      be.updateRecipe(new RecipeHolder<>(this.recipe, recipe));
+    } else {
+      TConstruct.LOG.error("Failed to update Crafting Station Recipe at {}: unknown recipe {}", pos, this.recipe);
     }
   }
 }

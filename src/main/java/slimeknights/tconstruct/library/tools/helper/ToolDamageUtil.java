@@ -6,7 +6,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
 import slimeknights.tconstruct.common.TinkerTags;
@@ -71,7 +70,7 @@ public class ToolDamageUtil {
    * @return  True if the tool is broken now
    */
   public static boolean directDamage(IToolStackView tool, int amount, @Nullable LivingEntity entity, @Nullable ItemStack stack) {
-    if (entity instanceof Player player && player.isCreative()) {
+    if (!ModifierUtil.consumesResources(entity)) {
       return false;
     }
 
@@ -88,7 +87,7 @@ public class ToolDamageUtil {
           stack = ItemStack.EMPTY;
           for (EquipmentSlot slot : EquipmentSlot.values()) {
             ItemStack slotStack = player.getItemBySlot(slot);
-            if (tool.isSameStack(slotStack)) {
+            if (!stack.isEmpty() && tool.isSameStack(slotStack)) {
               stack = slotStack;
             }
           }
@@ -97,9 +96,17 @@ public class ToolDamageUtil {
         if (!stack.isEmpty()) {
           CriteriaTriggers.ITEM_DURABILITY_CHANGED.trigger(player, stack, newDamage);
         }
+      } else if (stack == null) {
+        stack = ItemStack.EMPTY;
       }
 
+      // update durability
       tool.setDamage(newDamage);
+      // alert tools of the change
+      for (ModifierEntry modifier : tool.getModifiers()) {
+        modifier.getHook(ModifierHooks.DURABILITY_CHANGED).afterDamageTool(tool, modifier, amount, entity, stack);
+      }
+      // return true if now broken
       return newDamage >= durability;
     }
     return false;
@@ -120,7 +127,7 @@ public class ToolDamageUtil {
 
     // try each modifier
     for (ModifierEntry entry : tool.getModifierList()) {
-      amount = entry.getHook(ModifierHooks.TOOL_DAMAGE).onDamageTool(tool, entry, amount, entity, stack, cause);
+      amount = entry.getHook(ModifierHooks.TOOL_DAMAGE).beforeDamageTool(tool, entry, amount, entity, stack, cause);
       // if no more damage, done
       if (amount <= 0) {
         return false;
@@ -213,7 +220,7 @@ public class ToolDamageUtil {
     if (entity != null) {
       for (EquipmentSlot slot : EquipmentSlot.values()) {
         ItemStack stack = entity.getItemBySlot(slot);
-        if (tool.isSameStack(stack)) {
+        if (!stack.isEmpty() && tool.isSameStack(stack)) {
           if (damage(tool, amount, entity, stack, cause)) {
             entity.onEquippedItemBroken(tool.getItem(), slot);
             return true;
@@ -223,7 +230,7 @@ public class ToolDamageUtil {
       }
     }
     // did not find in any of the slots? just skip the animation/stack
-    return damage(tool, amount, entity, ItemStack.EMPTY);
+    return damage(tool, amount, entity, ItemStack.EMPTY, cause);
   }
 
   /**
@@ -278,10 +285,18 @@ public class ToolDamageUtil {
       return;
     }
 
-    // note modifiers are run in the recipe instead
+    // repair factor hook is run in the recipe directly
 
     // ensure we never repair more than max durability
-    int newDamage = damage - Math.min(amount, damage);
+    amount = Math.min(amount, damage);
+    int newDamage = damage - amount;
+
+    // update the damage
     tool.setDamage(newDamage);
+
+    // alert tools of the change
+    for (ModifierEntry modifier : tool.getModifiers()) {
+      modifier.getHook(ModifierHooks.DURABILITY_CHANGED).afterRepairTool(tool, modifier, amount);
+    }
   }
 }

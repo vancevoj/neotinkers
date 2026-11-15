@@ -27,6 +27,7 @@ public class BlockContainerOpenedTrigger extends SimpleCriterionTrigger<BlockCon
     return ID;
   }
 
+  @SuppressWarnings("removal")
   @Override
   public Codec<Instance> codec() {
     return Instance.CODEC;

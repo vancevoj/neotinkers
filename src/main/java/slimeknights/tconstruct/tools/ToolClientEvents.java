@@ -112,6 +112,7 @@ public class ToolClientEvents extends ClientEventBase {
     ModifierManager.INSTANCE.getAllValues().forEach(modifier -> modifier.clearCache(PackType.CLIENT_RESOURCES));
   };
 
+  @SuppressWarnings("deprecation")
   @SubscribeEvent
   static void addResourceListener(RegisterClientReloadListenersEvent manager) {
     ModifierModelManager.init(manager);

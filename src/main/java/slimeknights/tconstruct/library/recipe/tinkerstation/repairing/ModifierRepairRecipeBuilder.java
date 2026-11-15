@@ -9,7 +9,10 @@ import slimeknights.mantle.recipe.data.AbstractRecipeBuilder;
 import slimeknights.tconstruct.library.modifiers.ModifierId;
 import slimeknights.tconstruct.library.modifiers.util.LazyModifier;
 
-/** Builds a recipe to repair a tool using a modifier */
+/**
+ * Builds a recipe to repair a tool using a modifier
+ * Builder for {@link ModifierRepairTinkerStationRecipe} and {@link ModifierRepairCraftingRecipe}
+ */
 @RequiredArgsConstructor(staticName = "repair")
 public class ModifierRepairRecipeBuilder extends AbstractRecipeBuilder<ModifierRepairRecipeBuilder> {
   private final ModifierId modifier;

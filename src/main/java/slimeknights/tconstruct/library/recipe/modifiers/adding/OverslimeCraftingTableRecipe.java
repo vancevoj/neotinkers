@@ -25,6 +25,7 @@ import javax.annotation.Nullable;
 import java.util.function.Predicate;
 
 /** Recipe for applying overslime in the crafting table */
+@Getter
 public class OverslimeCraftingTableRecipe extends CustomRecipe {
   public static final RecordLoadable<OverslimeCraftingTableRecipe> LOADER = RecordLoadable.create(
     ContextKey.ID.requiredField(),

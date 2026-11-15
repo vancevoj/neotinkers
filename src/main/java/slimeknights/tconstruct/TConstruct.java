@@ -32,16 +32,19 @@ import slimeknights.tconstruct.common.config.Config;
 import slimeknights.tconstruct.common.data.AdvancementsProvider;
 import slimeknights.tconstruct.common.data.ConfigurationDataProvider;
 import slimeknights.tconstruct.common.data.DamageTypeProvider;
+import slimeknights.tconstruct.common.data.advancement.FunctionProvider;
 import slimeknights.tconstruct.common.data.loot.GlobalLootModifiersProvider;
 import slimeknights.tconstruct.common.data.loot.LootTableInjectionProvider;
 import slimeknights.tconstruct.common.data.loot.TConstructLootTableProvider;
 import slimeknights.tconstruct.common.data.tags.BiomeTagProvider;
 import slimeknights.tconstruct.common.data.tags.BlockEntityTypeTagProvider;
 import slimeknights.tconstruct.common.data.tags.BlockTagProvider;
+import slimeknights.tconstruct.common.data.tags.CreativeTabTagProvider;
 import slimeknights.tconstruct.common.data.tags.DamageTypeTagProvider;
 import slimeknights.tconstruct.common.data.tags.EnchantmentTagProvider;
 import slimeknights.tconstruct.common.data.tags.EntityTypeTagProvider;
 import slimeknights.tconstruct.common.data.tags.FluidTagProvider;
+import slimeknights.tconstruct.common.data.tags.InstrumentTagProvider;
 import slimeknights.tconstruct.common.data.tags.ItemTagProvider;
 import slimeknights.tconstruct.common.data.tags.MenuTypeTagProvider;
 import slimeknights.tconstruct.common.data.tags.PotionTagProvider;
@@ -173,6 +176,8 @@ public class TConstruct {
     generator.addProvider(server, new EnchantmentTagProvider(packOutput, lookupProvider, existingFileHelper));
     generator.addProvider(server, new MenuTypeTagProvider(packOutput, lookupProvider, existingFileHelper));
     generator.addProvider(server, new PotionTagProvider(packOutput, lookupProvider, existingFileHelper));
+    generator.addProvider(server, new CreativeTabTagProvider(packOutput, lookupProvider, existingFileHelper));
+    generator.addProvider(server, new InstrumentTagProvider(packOutput, lookupProvider, existingFileHelper));
     generator.addProvider(server, new DamageTypeTagProvider(packOutput, datapackRegistryProvider.getRegistryProvider(), existingFileHelper));
 
     // other datagen
@@ -182,6 +187,7 @@ public class TConstruct {
     generator.addProvider(server, new GlobalLootModifiersProvider(packOutput));
     generator.addProvider(server, new LootTableInjectionProvider(packOutput));
     generator.addProvider(server, new ConfigurationDataProvider(packOutput));
+    generator.addProvider(server, new FunctionProvider(packOutput));
   }
 
   /**
@@ -257,7 +263,7 @@ public class TConstruct {
    * resource locations.
    */
   public static String resourceString(String res) {
-    return String.format("%s:%s", MOD_ID, res);
+    return MOD_ID + ':' + res;
   }
 
   /**

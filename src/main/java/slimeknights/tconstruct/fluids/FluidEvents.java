@@ -11,10 +11,10 @@ import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.EventBusSubscriber.Bus;
 import slimeknights.tconstruct.TConstruct;
-import slimeknights.tconstruct.fluids.item.ContainerFoodItem.FluidContainerFoodItem;
+import slimeknights.mantle.item.ContainerFoodItem.FluidContainerFoodItem;
 import slimeknights.tconstruct.fluids.item.MagmaBottleItem;
 import slimeknights.tconstruct.fluids.item.PotionBucketItem;
-import slimeknights.tconstruct.fluids.util.ConstantFluidContainerWrapper;
+import slimeknights.mantle.item.ConstantFluidContainerWrapper;
 import slimeknights.tconstruct.smeltery.TinkerSmeltery;
 import slimeknights.tconstruct.smeltery.item.CopperCanFluidHandler;
 

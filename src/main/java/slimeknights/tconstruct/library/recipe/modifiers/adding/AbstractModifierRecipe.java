@@ -1,6 +1,7 @@
 package slimeknights.tconstruct.library.recipe.modifiers.adding;
 
 import lombok.Getter;
+import lombok.experimental.Accessors;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -13,7 +14,6 @@ import slimeknights.mantle.data.loadable.common.IngredientLoadable;
 import slimeknights.mantle.data.loadable.field.LoadableField;
 import slimeknights.mantle.data.loadable.primitive.BooleanLoadable;
 import slimeknights.mantle.data.loadable.primitive.IntLoadable;
-import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.json.IntRange;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
@@ -25,9 +25,12 @@ import slimeknights.tconstruct.library.recipe.tinkerstation.ITinkerStationContai
 import slimeknights.tconstruct.library.recipe.tinkerstation.ITinkerStationRecipe;
 import slimeknights.tconstruct.library.tools.SlotType;
 import slimeknights.tconstruct.library.tools.SlotType.SlotCount;
+import slimeknights.tconstruct.library.tools.definition.module.build.ToolTraitHook;
+import slimeknights.tconstruct.library.tools.item.IModifiable;
 import slimeknights.tconstruct.library.tools.nbt.DummyToolStack;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.LazyToolStack;
+import slimeknights.tconstruct.library.tools.nbt.MaterialNBT;
 import slimeknights.tconstruct.library.tools.nbt.ModDataNBT;
 import slimeknights.tconstruct.library.tools.nbt.ModifierNBT;
 import slimeknights.tconstruct.library.tools.nbt.ToolDataNBT;
@@ -40,6 +43,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static slimeknights.tconstruct.library.recipe.modifiers.adding.IDisplayModifierRecipe.modifiersForResult;
 import static slimeknights.tconstruct.library.recipe.modifiers.adding.IDisplayModifierRecipe.withModifiers;
@@ -47,15 +51,15 @@ import static slimeknights.tconstruct.library.recipe.modifiers.adding.IDisplayMo
 /** Shared logic between modifier and incremental modifier recipes */
 public abstract class AbstractModifierRecipe implements ITinkerStationRecipe, IDisplayModifierRecipe {
   /** Error for when the tool has does not have enough existing levels of this modifier, has a single parameter, modifier with level */
-  protected static final String KEY_MIN_LEVEL = TConstruct.makeTranslationKey("recipe", "modifier.min_level");
-  protected static final String KEY_MIN_LEVEL_TRAITS = KEY_MIN_LEVEL + ".traits";
+  protected static final String KEY_MIN_LEVEL = IDisplayModifierRecipe.KEY_MIN_LEVEL;
+  protected static final String KEY_MIN_LEVEL_TRAITS = IDisplayModifierRecipe.KEY_MIN_LEVEL_TRAITS;
   /** Error for when the tool is at the max modifier level */
-  protected static final String KEY_MAX_LEVEL = TConstruct.makeTranslationKey("recipe", "modifier.max_level");
-  protected static final String KEY_MAX_LEVEL_TRAITS = KEY_MAX_LEVEL + ".traits";
+  protected static final String KEY_MAX_LEVEL = IDisplayModifierRecipe.KEY_MAX_LEVEL;
+  protected static final String KEY_MAX_LEVEL_TRAITS = IDisplayModifierRecipe.KEY_MAX_LEVEL_TRAITS;
   /** Error for when the tool has too few upgrade slots */
-  protected static final String KEY_NOT_ENOUGH_SLOTS = TConstruct.makeTranslationKey("recipe", "modifier.not_enough_slots");
+  protected static final String KEY_NOT_ENOUGH_SLOTS = IDisplayModifierRecipe.KEY_NOT_ENOUGH_SLOTS;
   /** Error for when the tool has too few upgrade slots from a single slot */
-  protected static final String KEY_NOT_ENOUGH_SLOT = TConstruct.makeTranslationKey("recipe", "modifier.not_enough_slot");
+  protected static final String KEY_NOT_ENOUGH_SLOT = IDisplayModifierRecipe.KEY_NOT_ENOUGH_SLOT;
 
   /* Fields */
   protected static final LoadableField<Ingredient,AbstractModifierRecipe> TOOLS_FIELD = IngredientLoadable.DISALLOW_EMPTY.requiredField("tools", r -> r.toolRequirement);
@@ -72,6 +76,7 @@ public abstract class AbstractModifierRecipe implements ITinkerStationRecipe, ID
   /** Ingredient representing the required tool, typically a tag */
   protected final Ingredient toolRequirement;
   /** Max size of the tool for this modifier. If the tool size is smaller, the stack will reduce by less */
+  @Getter
   protected final int maxToolSize;
   /** Modifier this recipe is adding */
   protected final LazyModifier result;
@@ -85,6 +90,7 @@ public abstract class AbstractModifierRecipe implements ITinkerStationRecipe, ID
   /** If true, this recipe can be applied using modifier crystals */
   protected final boolean allowCrystal;
   /** If true, validates the level against the trait level. False validates against recipe modifiers only. */
+  @Getter @Accessors(fluent = true)
   protected final boolean checkTraitLevel;
 
   protected AbstractModifierRecipe(ResourceLocation id, Ingredient toolRequirement, int maxToolSize,
@@ -108,6 +114,7 @@ public abstract class AbstractModifierRecipe implements ITinkerStationRecipe, ID
     return maxToolSize;
   }
 
+
   /* JEI display */
   /** Cache of input items shared between result and input */
   @Nullable
@@ -124,7 +131,19 @@ public abstract class AbstractModifierRecipe implements ITinkerStationRecipe, ID
   /** Gets or builds the list of tool inputs */
   protected List<ItemStack> getToolInputs() {
     if (toolInputs == null) {
-      toolInputs = Arrays.stream(this.toolRequirement.getItems()).map(MAP_TOOL_STACK_FOR_RENDERING).collect(Collectors.toList());
+      Stream<ItemStack> stream = Arrays.stream(this.toolRequirement.getItems());
+      // if we check the trait level, then filter out any tools that would never be able to use this recipe
+      if (checkTraitLevel) {
+        ModifierId result = this.result.getId();
+        int max = this.level.max();
+        stream = stream.filter(stack -> {
+          if (stack.getItem() instanceof IModifiable modifiable) {
+            return ToolTraitHook.getTraits(modifiable.getToolDefinition(), MaterialNBT.EMPTY).getLevel(result) < max;
+          }
+          return false;
+        });
+      }
+      toolInputs = stream.map(MAP_TOOL_STACK_FOR_RENDERING).collect(Collectors.toList());
     }
     return toolInputs;
   }
@@ -145,6 +164,11 @@ public abstract class AbstractModifierRecipe implements ITinkerStationRecipe, ID
       displayResult = new ModifierEntry(result, this.level.min());
     }
     return displayResult;
+  }
+
+  @Override
+  public boolean isTool(ItemStack check) {
+    return toolRequirement.test(check);
   }
 
   @Override
@@ -236,14 +260,7 @@ public abstract class AbstractModifierRecipe implements ITinkerStationRecipe, ID
   /** Validates that the given level is a valid result */
   @Nullable
   protected Component validateLevel(int resultLevel) {
-    if (resultLevel < this.level.min()) {
-      return Component.translatable(checkTraitLevel ? KEY_MIN_LEVEL_TRAITS : KEY_MIN_LEVEL, result.get().getDisplayName(this.level.min() - 1));
-    }
-    // max level of modifier
-    if (resultLevel > this.level.max()) {
-      return Component.translatable(checkTraitLevel ? KEY_MAX_LEVEL_TRAITS : KEY_MAX_LEVEL, result.get().getDisplayName(), this.level.max());
-    }
-    return null;
+    return IDisplayModifierRecipe.checkLevel(result, level, resultLevel, checkTraitLevel);
   }
 
   /**
@@ -254,17 +271,7 @@ public abstract class AbstractModifierRecipe implements ITinkerStationRecipe, ID
    */
   @Nullable
   protected static Component checkSlots(IToolStackView tool, @Nullable SlotCount slots) {
-    if (slots != null) {
-      int count = slots.count();
-      if (tool.getFreeSlots(slots.type()) < count) {
-        if (count == 1) {
-          return Component.translatable(KEY_NOT_ENOUGH_SLOT, slots.type().getDisplayName());
-        } else {
-          return Component.translatable(KEY_NOT_ENOUGH_SLOTS, count, slots.type().getDisplayName());
-        }
-      }
-    }
-    return null;
+    return IDisplayModifierRecipe.checkSlots(tool, slots);
   }
 
   /**

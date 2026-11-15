@@ -78,6 +78,7 @@ public class ItemCastingRecipe extends AbstractCastingRecipe implements IDisplay
     return Arrays.asList(getCast().getItems());
   }
 
+  @Deprecated
   @Override
   public ItemStack getOutput() {
     return this.result.get();

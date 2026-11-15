@@ -3,6 +3,7 @@ package slimeknights.tconstruct.library.recipe.tinkerstation.repairing;
 import lombok.Getter;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
@@ -18,16 +19,25 @@ import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.ModifierId;
+import slimeknights.tconstruct.library.recipe.display.VanillaFilteredRecipe;
 import slimeknights.tconstruct.library.recipe.modifiers.adding.OverslimeCraftingTableRecipe;
 import slimeknights.tconstruct.library.recipe.modifiers.adding.OverslimeCraftingTableRecipe.ToolFound;
+import slimeknights.tconstruct.library.recipe.tinkerstation.IDisplayCraftingTinkering;
 import slimeknights.tconstruct.library.tools.helper.ToolDamageUtil;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.tools.TinkerModifiers;
 
+import java.util.List;
 import java.util.function.Predicate;
 
-public class ModifierRepairCraftingRecipe extends CustomRecipe implements IModifierRepairRecipe {
+/**
+ * Recipe for repairing a tool in the crafting table provided it has the given modifier.
+ * @see ModifierRepairRecipeBuilder
+ * @see ModifierRepairTinkerStationRecipe
+ * @see slimeknights.tconstruct.library.modifiers.modules.behavior.MaterialRepairModule
+ */
+public class ModifierRepairCraftingRecipe extends CustomRecipe implements IModifierRepairRecipe, VanillaFilteredRecipe<IDisplayCraftingTinkering> {
   public static final RecordLoadable<ModifierRepairCraftingRecipe> LOADER = RecordLoadable.create(ContextKey.ID.requiredField(), MODIFIER_FIELD, INGREDIENT_FIELD, REPAIR_AMOUNT_FIELD, ModifierRepairCraftingRecipe::new);
   private static final Predicate<ItemStack> TOOLS = stack -> stack.is(TinkerTags.Items.DURABILITY);
 
@@ -85,7 +95,6 @@ public class ModifierRepairCraftingRecipe extends CustomRecipe implements IModif
 
   @Override
   public NonNullList<ItemStack> getRemainingItems(CraftingInput inv) {
-    NonNullList<ItemStack> list = NonNullList.withSize(inv.size(), ItemStack.EMPTY);
     // step 1: find out how much we need to repair
     ToolFound inputs = OverslimeCraftingTableRecipe.findTool(inv, TOOLS, ingredient);
     int repairPerItem = 0;
@@ -117,5 +126,17 @@ public class ModifierRepairCraftingRecipe extends CustomRecipe implements IModif
   @Override
   public RecipeSerializer<?> getSerializer() {
     return TinkerModifiers.craftingModifierRepair.get();
+  }
+
+
+  /* JEI */
+  private List<IDisplayCraftingTinkering> displayRecipes;
+
+  @Override
+  public List<IDisplayCraftingTinkering> getFilteredRecipes(RegistryAccess access) {
+    if (displayRecipes == null) {
+      displayRecipes = List.of(new ModifierRepairTinkerStationRecipe.DisplayRecipe(getId(), this, true));
+    }
+    return displayRecipes;
   }
 }

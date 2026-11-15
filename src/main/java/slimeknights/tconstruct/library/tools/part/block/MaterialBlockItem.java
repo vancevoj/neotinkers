@@ -6,9 +6,12 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.block.Block;
+import slimeknights.tconstruct.common.TinkerTags;
+import slimeknights.tconstruct.library.materials.MaterialRegistry;
 import slimeknights.tconstruct.library.materials.definition.MaterialVariantId;
 import slimeknights.tconstruct.library.tools.part.IMaterialItem;
 import slimeknights.tconstruct.library.tools.part.MaterialItem;
@@ -30,7 +33,23 @@ public class MaterialBlockItem extends BlockItem implements IMaterialItem {
 
   @Override
   public Component getName(ItemStack stack) {
-    return MaterialItem.getName(this, stack);
+    Component name = MaterialItem.getName(this, stack);
+    // 1.21: Item#getRarity(ItemStack) was removed in favor of the static rarity component, so style the name with the material rarity directly
+    Rarity rarity = getRarity(stack);
+    if (rarity != Rarity.COMMON) {
+      return name.copy().withStyle(rarity.getStyleModifier());
+    }
+    return name;
+  }
+
+  /** Gets the rarity of the material on this stack */
+  public Rarity getRarity(ItemStack stack) {
+    return MaterialRegistry.getMaterial(getMaterial(stack).getId()).getRarity();
+  }
+
+  @Override
+  public boolean isFoil(ItemStack stack) {
+    return MaterialRegistry.getInstance().isInTag(getMaterial(stack).getId(), TinkerTags.Materials.SHINY);
   }
 
   @Override

@@ -67,7 +67,7 @@ public class ToolStackItemPredicate implements ItemSubPredicate {
 
   @Override
   public boolean matches(ItemStack stack) {
-    // tag check is important to prevent accidently modifying the NBT of non-tools
+    // tag check is important to prevent accidentally modifying the NBT of non-tools
     return stack.is(Items.MODIFIABLE) && predicate.matches(ToolStack.from(stack));
   }
 }

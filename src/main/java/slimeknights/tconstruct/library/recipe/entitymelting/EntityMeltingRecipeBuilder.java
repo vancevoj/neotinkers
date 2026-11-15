@@ -2,10 +2,10 @@ package slimeknights.tconstruct.library.recipe.entitymelting;
 
 import lombok.RequiredArgsConstructor;
 import net.minecraft.advancements.AdvancementHolder;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.fluids.FluidStack;
+import slimeknights.mantle.data.loadable.Loadables;
 import slimeknights.mantle.recipe.data.AbstractRecipeBuilder;
 import slimeknights.mantle.recipe.helper.FluidOutput;
 import slimeknights.mantle.recipe.ingredient.EntityIngredient;
@@ -34,7 +34,7 @@ public class EntityMeltingRecipeBuilder extends AbstractRecipeBuilder<EntityMelt
 
   @Override
   public void save(RecipeOutput consumer) {
-    save(consumer, BuiltInRegistries.FLUID.getKey(output.get().getFluid()));
+    save(consumer, Loadables.FLUID.getKey(output.get().getFluid()));
   }
 
   @Override

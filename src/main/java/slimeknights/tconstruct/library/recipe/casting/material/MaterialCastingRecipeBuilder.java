@@ -4,13 +4,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import net.minecraft.advancements.AdvancementHolder;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
+import slimeknights.mantle.data.loadable.Loadables;
 import slimeknights.mantle.data.predicate.IJsonPredicate;
 import slimeknights.mantle.recipe.data.AbstractRecipeBuilder;
 import slimeknights.mantle.recipe.helper.TypeAwareRecipeSerializer;
@@ -41,6 +41,12 @@ public class MaterialCastingRecipeBuilder extends AbstractRecipeBuilder<Material
   private int itemCost = 0;
   private CastPurpose castPurpose = CastPurpose.CATALYST;
   private boolean switchSlots = false;
+  /**
+   * If true, tool swapping recipes (from {@link #basinRecipe(IModifiable)} or {@link #tableRecipe(IModifiable)}) will not generate a part swapping recipe.
+   * Can use {@link PartSwapCastingRecipeBuilder} to manually create one as a separate JSON.
+   */
+  @Setter
+  private boolean fluidSwapping = true;
   @Setter
   private IJsonPredicate<MaterialVariantId> allowedMaterials = MaterialPredicate.ANY;
   /** Extra materials for tool casting. Has no impact on part casting. */
@@ -100,6 +106,7 @@ public class MaterialCastingRecipeBuilder extends AbstractRecipeBuilder<Material
    * @param consumed  If true, cast is consumed. For tool casting, see {@link #setCast(Ingredient, CastPurpose)}.
    * @return  Builder instance
    */
+  @SuppressWarnings("deprecation")
   public MaterialCastingRecipeBuilder setCast(Ingredient cast, boolean consumed) {
     // TODO 1.21: switch MAYBE_MATERIAL to CONSUMED
     return setCast(cast, consumed ? CastPurpose.MAYBE_MATERIAL : CastPurpose.CATALYST);
@@ -162,7 +169,7 @@ public class MaterialCastingRecipeBuilder extends AbstractRecipeBuilder<Material
 
   @Override
   public void save(RecipeOutput output) {
-    this.save(output, BuiltInRegistries.ITEM.getKey(Objects.requireNonNull(this.result).asItem()));
+    this.save(output, Loadables.ITEM.getKey(Objects.requireNonNull(this.result).asItem()));
   }
 
   @Override
@@ -174,7 +181,7 @@ public class MaterialCastingRecipeBuilder extends AbstractRecipeBuilder<Material
     if (result != null) {
       output.accept(id, new MaterialCastingRecipe(recipeSerializer, id, group, cast, itemCost, result, allowedMaterials, castPurpose != CastPurpose.CATALYST, switchSlots), advancement);
     } else if (resultTool != null) {
-      output.accept(id, new ToolCastingRecipe(recipeSerializer, id, group, cast, itemCost, castPurpose, resultTool, allowedMaterials, extraMaterials), advancement);
+      output.accept(id, new ToolCastingRecipe(recipeSerializer, id, group, cast, itemCost, castPurpose, resultTool, allowedMaterials, extraMaterials, fluidSwapping), advancement);
     } else {
       throw new IllegalArgumentException("Must have either result or result tool");
     }

@@ -27,6 +27,7 @@ public class ArmorModelProvider extends AbstractArmorModelProvider {
     addModel(ArmorDefinitions.TRAVELERS, name -> new ArmorTextureSupplier[] {
       FixedArmorTextureSupplier.builder(name, "/base_").build(),
       new FirstArmorTextureSupplier(
+        new MaterialHasFallbackTextureSupplier(1, new DyedArmorTextureSupplier(name.withSuffix("/cuirass_"), "_tconstruct_wool_white", dyed, null, 0), "wool"),
         new DyedArmorTextureSupplier(name, "/cuirass_", dyed, null),
         new MaterialArmorTextureSupplier.Material(name, "/cuirass_", 1)
       ),
@@ -44,7 +45,12 @@ public class ArmorModelProvider extends AbstractArmorModelProvider {
     });
     ResourceLocation slime = ArmorDefinitions.SLIMESUIT.getId();
     addModel(slime,
-      new MaterialArmorTextureSupplier.Material(slime, "/", 1),
+      new MaterialArmorTextureSupplier.Material(slime, "/", 1), // TODO 1.21: rename to prefix with slime?
+      new FirstArmorTextureSupplier(
+        new MaterialHasFallbackTextureSupplier(0, new DyedArmorTextureSupplier(slime.withSuffix("/overlay_"), "_bone", dyed, null, 0), "bone"),
+        new DyedArmorTextureSupplier(slime.withSuffix("/overlay_"), "", dyed, null, 0),
+        new MaterialArmorTextureSupplier.Material(slime, "/overlay_", 0)
+      ),
       TrimArmorTextureSupplier.INSTANCE
     );
     addModel(SlimeskullItem.MODEL_LOCATION,
@@ -52,7 +58,10 @@ public class ArmorModelProvider extends AbstractArmorModelProvider {
       TrimArmorTextureSupplier.INSTANCE
     );
     addModel(TinkerTools.slimeWings,
-      new MaterialArmorTextureSupplier.Material(slime, "/", 0),
+      new FirstArmorTextureSupplier(
+        new DyedArmorTextureSupplier(slime.withSuffix("/dyed_"), "", dyed, null, 0),
+        new MaterialArmorTextureSupplier.Material(slime, "/", 0)
+      ),
       TrimArmorTextureSupplier.INSTANCE
     );
   }

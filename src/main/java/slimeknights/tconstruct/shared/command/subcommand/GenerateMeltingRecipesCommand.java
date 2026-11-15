@@ -96,7 +96,7 @@ public class GenerateMeltingRecipesCommand {
   }
 
   /** Runs the command */
-  @SuppressWarnings("unchecked")  // not like we are using the generics at all
+  @SuppressWarnings({"unchecked", "removal"})  // not like we are using the generics at all
   private static <I extends net.minecraft.world.item.crafting.RecipeInput, T extends Recipe<I>> int run(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
     long startTime = System.nanoTime();
     Holder<RecipeType<?>> recipeType = ResourceArgument.getResource(context, "recipe_type", Registries.RECIPE_TYPE);

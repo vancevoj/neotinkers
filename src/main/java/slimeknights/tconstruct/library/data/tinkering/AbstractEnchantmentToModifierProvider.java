@@ -13,7 +13,6 @@ import slimeknights.mantle.data.GenericDataProvider;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.modifiers.ModifierId;
 
-import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 /** Data generator for mappings from enchantments to modifiers */
@@ -49,7 +48,7 @@ public abstract class AbstractEnchantmentToModifierProvider extends GenericDataP
 
   /** Adds the given enchantment, allowing making the modifier optional */
   protected void add(ResourceKey<Enchantment> enchantment, ModifierId modifierId, boolean optionalModifier) {
-    String key = Objects.requireNonNull(enchantment.location()).toString();
+    String key = enchantment.location().toString();
     if (enchantmentMap.has(key) || enchantmentMap.has(key + '?')) {
       throw new IllegalArgumentException("Duplicate enchantment " + key);
     }

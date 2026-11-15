@@ -1,31 +1,31 @@
 package slimeknights.tconstruct.smeltery.network;
 
-import net.minecraft.client.Minecraft;
+import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
+import slimeknights.mantle.network.packet.BlockEntityPacket;
 import slimeknights.mantle.network.packet.ISimplePacket;
-import slimeknights.mantle.network.packet.IThreadsafePacket;
-import slimeknights.mantle.util.BlockEntityHelper;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.smeltery.block.entity.ChannelBlockEntity;
 
-/** Packet for when the flowing state changes on a channel side */
-public class ChannelFlowPacket implements IThreadsafePacket {
+/**
+ * Packet for when the flowing state changes on a channel side.
+ * TODO 1.21: make a record.
+ */
+@RequiredArgsConstructor
+@ToString
+public class ChannelFlowPacket implements BlockEntityPacket<ChannelBlockEntity> {
 	public static final Type<ChannelFlowPacket> TYPE = new Type<>(TConstruct.getResource("channel_flow"));
 	public static final StreamCodec<RegistryFriendlyByteBuf,ChannelFlowPacket> STREAM_CODEC = ISimplePacket.codec(ChannelFlowPacket::new);
 
 	private final BlockPos pos;
 	private final Direction side;
 	private final boolean flow;
-	public ChannelFlowPacket(BlockPos pos, Direction side, boolean flow) {
-		this.pos = pos;
-		this.side = side;
-		this.flow = flow;
-	}
 
 	public ChannelFlowPacket(FriendlyByteBuf buffer) {
 		pos = buffer.readBlockPos();
@@ -45,14 +45,18 @@ public class ChannelFlowPacket implements IThreadsafePacket {
 		return TYPE;
 	}
 
-	@Override
-	public void handleThreadsafe(IPayloadContext context) {
-		HandleClient.handle(this);
-	}
+  @Override
+  public BlockPos pos() {
+    return pos;
+  }
 
-	private static class HandleClient {
-		private static void handle(ChannelFlowPacket packet) {
-			BlockEntityHelper.get(ChannelBlockEntity.class, Minecraft.getInstance().level, packet.pos).ifPresent(te -> te.setFlow(packet.side, packet.flow));
-		}
-	}
+  @Override
+  public Class<ChannelBlockEntity> blockEntityType() {
+    return ChannelBlockEntity.class;
+  }
+
+  @Override
+  public void handleBlockEntity(IPayloadContext context, ChannelBlockEntity be) {
+    be.setFlow(side, flow);
+  }
 }

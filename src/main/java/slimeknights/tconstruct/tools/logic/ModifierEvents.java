@@ -14,11 +14,13 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.player.Inventory;
@@ -29,6 +31,7 @@ import net.minecraft.world.entity.projectile.AbstractHurtingProjectile;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
@@ -42,6 +45,7 @@ import net.neoforged.neoforge.common.util.FakePlayer;
 import net.neoforged.neoforge.event.entity.EntityTeleportEvent;
 import net.neoforged.neoforge.event.entity.ProjectileImpactEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
+import net.neoforged.neoforge.event.entity.living.LivingDropsEvent;
 import net.neoforged.neoforge.event.entity.living.LivingEvent.LivingJumpEvent;
 import net.neoforged.neoforge.event.entity.living.LivingExperienceDropEvent;
 import net.neoforged.neoforge.event.entity.living.LivingFallEvent;
@@ -160,6 +164,37 @@ public class ModifierEvents {
         }
       }
     };
+  }
+
+  /** Causes more gold armor to drop */
+  @SubscribeEvent
+  static void onLivingDrops(LivingDropsEvent event) {
+    DamageSource source = event.getSource();
+    // 1.21: read the attribute from the killer, matching the pre-attribute behavior (upstream reads the dying entity)
+    if (source != null && source.getEntity() instanceof LivingEntity attacker) {
+      float gold = (float) attacker.getAttributeValue(TinkerAttributes.CHRYSOPHILITE);
+      if (gold > 0) {
+        float extraChance = 0.04f * gold;
+        LivingEntity target = event.getEntity();
+        // check each slot for gold
+        for (EquipmentSlot slot : EquipmentSlot.values()) {
+          ItemStack stack = target.getItemBySlot(slot);
+          RandomSource random = target.getRandom();
+          // if the stack is gold, and it drops, we get it
+          // don't have to worry about checking if it already dropped, the stacks are removed on drop
+          // 1.21: vanishing curse check is now the prevent-equipment-drop enchantment component
+          if (!stack.isEmpty() && !EnchantmentHelper.has(stack, EnchantmentEffectComponents.PREVENT_EQUIPMENT_DROP) && stack.makesPiglinsNeutral(target) && random.nextFloat() < extraChance) {
+            // mobs damage items on drop, its kinda weird
+            if (stack.isDamageableItem()) {
+              stack.setDamageValue(stack.getMaxDamage() - random.nextInt(1 + random.nextInt(Math.max(stack.getMaxDamage() - 3, 1))));
+            }
+            // remove stack to prevent further drops
+            event.getDrops().add(target.spawnAtLocation(stack));
+            target.setItemSlot(slot, ItemStack.EMPTY);
+          }
+        }
+      }
+    }
   }
 
   /** Called when the player dies to store the item in the original inventory */
@@ -298,7 +333,8 @@ public class ModifierEvents {
   static void bounceOnFall(LivingFallEvent event) {
     LivingEntity living = event.getEntity();
     // using fall distance as the event distance could be reduced by jump boost
-    if (living == null || (living.getDeltaMovement().y > -0.3 && living.fallDistance < 3)) {
+    // 1.21: step height is the vanilla attribute (base 0.6), so forge's 0.5 + step height addition becomes step height - 0.1
+    if (living == null || (living.fallDistance < 3 && living.getDeltaMovement().y > -0.3) || living.fallDistance <= living.getAttributeValue(Attributes.STEP_HEIGHT) - 0.1f) {
       return;
     }
     // can the entity bounce?
@@ -445,14 +481,15 @@ public class ModifierEvents {
       EntityType<?> projectileType = projectile.getType();
       if (TinkerEffects.needsEnderferenceOverride(target) && !projectileType.is(TinkerTags.EntityTypes.ENDERFERENCE_ARROW_BLACKLIST) && projectile instanceof AbstractArrow arrow) {
         // first, give up if we reached pierce capacity, and ensure list are created
-        if (arrow.getPierceLevel() > 0) {
+        int pierce = arrow.getPierceLevel();
+        if (pierce > 0) {
           if (arrow.piercingIgnoreEntityIds == null) {
             arrow.piercingIgnoreEntityIds = new IntOpenHashSet(5);
           }
           if (arrow.piercedAndKilledEntities == null) {
             arrow.piercedAndKilledEntities = Lists.newArrayListWithCapacity(5);
           }
-          if (arrow.piercingIgnoreEntityIds.size() >= arrow.getPierceLevel() + 1) {
+          if (arrow.piercingIgnoreEntityIds.size() >= pierce + 1) {
             ReusableProjectile.discard(projectile);
             event.setCanceled(true);
             return;
@@ -482,7 +519,7 @@ public class ModifierEvents {
 
         // hurt the enderman
         if (target.hurt(damageSource, (float) damage)) {
-          if (!level.isClientSide && arrow.getPierceLevel() <= 0) {
+          if (!level.isClientSide && pierce <= 0) {
             target.setArrowCount(target.getArrowCount() + 1);
           }
 
@@ -510,7 +547,7 @@ public class ModifierEvents {
           }
 
           arrow.playSound(arrow.soundEvent, 1.0F, 1.2F / (target.getRandom().nextFloat() * 0.2F + 0.9F));
-          if (arrow.getPierceLevel() <= 0) {
+          if (pierce <= 0) {
             ReusableProjectile.discard(projectile);
           }
         } else {

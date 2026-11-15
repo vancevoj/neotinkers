@@ -209,6 +209,8 @@ public class ItemTagProvider extends ItemTagsProvider {
     this.copy(Tags.Blocks.STORAGE_BLOCKS, Tags.Items.STORAGE_BLOCKS);
 
     // glass
+    copy(Tags.Blocks.GLASS_BLOCKS, Tags.Items.GLASS_BLOCKS);
+    copy(Tags.Blocks.GLASS_PANES, Tags.Items.GLASS_PANES);
     copy(GLASS_SILICA_BLOCK, GLASS_SILICA_ITEM);
     copy(GLASS_TINTED_BLOCK, GLASS_TINTED_ITEM);
     copy(TinkerTags.Blocks.GLASS_PANES_SILICA, TinkerTags.Items.GLASS_PANES_SILICA);
@@ -268,7 +270,7 @@ public class ItemTagProvider extends ItemTagsProvider {
       // internal item for modifiers
       TinkerTools.crystalshotItem.asItem(),
       // unused future fluids
-      TinkerFluids.moltenSoulsteel.asItem(), TinkerFluids.moltenKnightslime.asItem()
+      TinkerFluids.moltenSoulsteel.asItem()
     );
     // unused future material items
     TinkerMaterials.soulsteel.forEach(item -> hidden.add(item.asItem()));
@@ -381,15 +383,22 @@ public class ItemTagProvider extends ItemTagsProvider {
     optionalToolTags(TinkerTools.minotaurAxe, MULTIPART_TOOL, DURABILITY, ANCIENT_TOOLS, HARVEST_PRIMARY, MELEE_PRIMARY, INTERACTABLE_RIGHT, AOE, BONUS_SLOTS, ItemTags.AXES);
 
     // armor
-    addArmorTags(TinkerTools.travelersGear, SINGLEPART_TOOL, DURABILITY, BONUS_SLOTS, DYEABLE, TRIM, ItemTags.FREEZE_IMMUNE_WEARABLES);
+    addArmorTags(TinkerTools.travelersGear, MULTIPART_TOOL, DURABILITY, BONUS_SLOTS, DYEABLE, TRIM, UNRECYCLABLE, ItemTags.FREEZE_IMMUNE_WEARABLES);
     addArmorTags(TinkerTools.plateArmor,    MULTIPART_TOOL, DURABILITY, BONUS_SLOTS, DYEABLE, TRIM);
-    addArmorTags(TinkerTools.slimesuit,     DURABILITY, BONUS_SLOTS, TRIM, SINGLEPART_TOOL, UNRECYCLABLE);
-    addToolTags(TinkerTools.slimeWings, DURABILITY, BONUS_SLOTS, TRIM, SINGLEPART_TOOL, CHESTPLATES, ItemTags.CHEST_ARMOR);
-    addToolTags(TinkerTools.slimesuit.get(ArmorItem.Type.HELMET), SWAPPABLE_SKULLS);
+    addArmorTags(TinkerTools.slimesuit,     DURABILITY, BONUS_SLOTS, DYEABLE, TRIM, UNRECYCLABLE);
+    IntrinsicTagAppender<Item> multipart = tag(MULTIPART_TOOL);
+    // iterate the object rather than ArmorItem.Type.values(), 1.21 added a BODY type that slimesuit does not have
+    TinkerTools.slimesuit.forEach((type, item) -> {
+      if (type != ArmorItem.Type.HELMET) {
+        multipart.add(item);
+      }
+    });
+    addToolTags(TinkerTools.slimeWings, DURABILITY, BONUS_SLOTS, DYEABLE, TRIM, UNRECYCLABLE, MULTIPART_TOOL, CHESTPLATES, ItemTags.CHEST_ARMOR);
+    addToolTags(TinkerTools.slimesuit.get(ArmorItem.Type.HELMET), MULTIPART_TOOL, SWAPPABLE_SKULLS);
 
     // shields
-    addToolTags(TinkerTools.travelersShield, DURABILITY, BONUS_SLOTS, SHIELDS, INTERACTABLE_LEFT, Tags.Items.TOOLS_SHIELD, SINGLEPART_TOOL, UNRECYCLABLE, DYEABLE);
-    addToolTags(TinkerTools.plateShield,     DURABILITY, BONUS_SLOTS, SHIELDS, INTERACTABLE_LEFT, Tags.Items.TOOLS_SHIELD, SINGLEPART_TOOL, UNRECYCLABLE, BANNER);
+    addToolTags(TinkerTools.travelersShield, DURABILITY, BONUS_SLOTS, SHIELDS, INTERACTABLE_LEFT, Tags.Items.TOOLS_SHIELD, MULTIPART_TOOL, UNRECYCLABLE, BANNER, DYEABLE);
+    addToolTags(TinkerTools.plateShield,     DURABILITY, BONUS_SLOTS, SHIELDS, INTERACTABLE_LEFT, Tags.Items.TOOLS_SHIELD, MULTIPART_TOOL, UNRECYCLABLE, BANNER);
 
     // care about order for armor in the book
     tag(BASIC_ARMOR);
@@ -454,7 +463,7 @@ public class ItemTagProvider extends ItemTagsProvider {
     this.tag(ItemTags.create(ResourceLocation.fromNamespaceAndPath("headlight", "headlight_helmets"))).addTag(HELMETS);
 
     // general
-    this.tag(MULTIPART_TOOL).addTag(SINGLEPART_TOOL);
+    this.tag(MULTIPART_TOOL).addOptionalTag(SINGLEPART_TOOL);
     this.tag(MODIFIABLE).addTags(MULTIPART_TOOL, DURABILITY, MELEE, HARVEST, RANGED, AMMO, AOE, HELD, BONUS_SLOTS);
     // disable parry mod on our items, we have our own modifier for that
     this.tag(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("parry", "excluded_shields"))).addTag(HELD);
@@ -536,7 +545,7 @@ public class ItemTagProvider extends ItemTagsProvider {
 
     // part builder
     this.tag(TinkerTags.Items.DEFAULT_PATTERNS).add(TinkerTables.pattern.get());
-    this.tag(TinkerTags.Items.REUSABLE_PATTERNS).addTag(TinkerTags.Items.GOLD_CASTS);
+    this.tag(TinkerTags.Items.REUSABLE_PATTERNS).addTag(TinkerTags.Items.GOLD_CASTS).add(Items.ELYTRA);
     this.tag(TinkerTags.Items.PATTERNS)
         .addTags(TinkerTags.Items.DEFAULT_PATTERNS, TinkerTags.Items.REUSABLE_PATTERNS, TinkerTags.Items.SAND_CASTS, TinkerTags.Items.RED_SAND_CASTS)
         .add(Items.SAND, Items.RED_SAND, TinkerFluids.venomBottle.get());
@@ -668,6 +677,7 @@ public class ItemTagProvider extends ItemTagsProvider {
     this.tag(TinkerTags.Items.BASIN_EMPTY_CASTS).add(TinkerCommons.goldPlatform.asItem());
 
     this.tag(TinkerTags.Items.DUCT_CONTAINERS).add(Items.BUCKET, TinkerSmeltery.copperCan.get(), TinkerSmeltery.searedLantern.asItem(), TinkerSmeltery.scorchedLantern.asItem());
+    this.tag(TinkerTags.Items.FUEL_EXAMPLES).add(Items.COAL, Items.CHARCOAL, Items.COAL_BLOCK, Items.OAK_LOG, Items.OAK_PLANKS, Items.BLAZE_ROD);
 
     // tank tag
     this.copy(TinkerTags.Blocks.SEARED_TANKS, TinkerTags.Items.SEARED_TANKS);

@@ -1,15 +1,13 @@
 package slimeknights.tconstruct.smeltery.network;
 
 import lombok.AllArgsConstructor;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
+import slimeknights.mantle.network.packet.BlockEntityPacket;
 import slimeknights.mantle.network.packet.ISimplePacket;
-import slimeknights.mantle.network.packet.IThreadsafePacket;
-import slimeknights.mantle.util.BlockEntityHelper;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.smeltery.block.entity.controller.HeatingStructureBlockEntity;
 
@@ -20,7 +18,7 @@ import java.util.List;
  * Packet sent when the smeltery or foundry structure changes
  */
 @AllArgsConstructor
-public class StructureUpdatePacket implements IThreadsafePacket {
+public class StructureUpdatePacket implements BlockEntityPacket<HeatingStructureBlockEntity> {
   public static final Type<StructureUpdatePacket> TYPE = new Type<>(TConstruct.getResource("structure_update"));
   public static final StreamCodec<RegistryFriendlyByteBuf,StructureUpdatePacket> STREAM_CODEC = ISimplePacket.codec(StructureUpdatePacket::new);
 
@@ -57,14 +55,17 @@ public class StructureUpdatePacket implements IThreadsafePacket {
   }
 
   @Override
-  public void handleThreadsafe(IPayloadContext context) {
-    HandleClient.handle(this);
+  public BlockPos pos() {
+    return pos;
   }
 
-  private static class HandleClient {
-    private static void handle(StructureUpdatePacket packet) {
-      BlockEntityHelper.get(HeatingStructureBlockEntity.class, Minecraft.getInstance().level, packet.pos)
-                       .ifPresent(te -> te.setStructureSize(packet.minPos, packet.maxPos, packet.tanks));
-    }
+  @Override
+  public Class<HeatingStructureBlockEntity> blockEntityType() {
+    return HeatingStructureBlockEntity.class;
+  }
+
+  @Override
+  public void handleBlockEntity(IPayloadContext context, HeatingStructureBlockEntity be) {
+    be.setStructureSize(minPos, maxPos, tanks);
   }
 }

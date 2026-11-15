@@ -22,6 +22,11 @@ public class LazyMaterial implements Supplier<IMaterial> {
     this.material = material;
   }
 
+  protected LazyMaterial(LazyMaterial material) {
+    this.id = material.getId();
+    this.material = material.material;
+  }
+
   /** Creates a new lazy material instance */
   public static LazyMaterial of(MaterialId id) {
     return new LazyMaterial(id);
@@ -45,11 +50,12 @@ public class LazyMaterial implements Supplier<IMaterial> {
 
   /** If true, this material is intentionally the unknown ID. Unlike {@link #isUnknown()} this will not match if the material is a valid ID but is not found */
   public boolean isEmpty() {
-    return id.equals(IMaterial.UNKNOWN_ID);
+    return id.equals(MaterialId.UNKNOWN);
   }
 
   /** If true, this material was not found in the registry. Can use to immediately resolve a material */
   public boolean isUnknown() {
+    // TODO 1.21: rename to isBound to minimize confusion and match LazyModifier
     return get() == IMaterial.UNKNOWN;
   }
 

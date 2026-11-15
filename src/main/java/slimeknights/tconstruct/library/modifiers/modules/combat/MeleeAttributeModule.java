@@ -73,7 +73,7 @@ public record MeleeAttributeModule(String unique, Attribute attribute, ResourceL
   public float beforeMeleeHit(IToolStackView tool, ModifierEntry modifier, ToolAttackContext context, float damage, float baseKnockback, float knockback) {
     if (condition.matches(tool, modifier)) {
       LivingEntity target = context.getLivingTarget();
-      if (target != null) {
+      if (target != null && this.target.matches(target)) {
         AttributeInstance instance = target.getAttribute(BuiltInRegistries.ATTRIBUTE.wrapAsHolder(attribute));
         if (instance != null) {
           // ensure we don't already have the modifier from someone misusing melee hooks or simultaneous attacks

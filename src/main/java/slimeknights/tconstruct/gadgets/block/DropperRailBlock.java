@@ -17,8 +17,9 @@ import slimeknights.mantle.inventory.EmptyItemHandler;
 
 import javax.annotation.Nullable;
 
+/** @deprecated tinkers no longer does rails. If you need this reimplement it */
+@Deprecated(forRemoval = true)
 public class DropperRailBlock extends RailBlock {
-
   public DropperRailBlock(Properties properties) {
     super(properties);
   }

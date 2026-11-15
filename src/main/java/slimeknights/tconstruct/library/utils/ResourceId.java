@@ -30,10 +30,12 @@ public abstract class ResourceId extends ResourceLocation {
     super(location.getNamespace(), location.getPath());
   }
 
+  @SuppressWarnings("removal")
   public ResourceId(String namespace, String path) {
     super(namespace, path);
   }
 
+  @SuppressWarnings("removal")
   public ResourceId(String location) {
     this(parse(location));
   }

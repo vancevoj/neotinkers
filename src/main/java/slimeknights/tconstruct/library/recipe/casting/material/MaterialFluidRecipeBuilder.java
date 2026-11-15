@@ -11,6 +11,7 @@ import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.fluids.FluidStack;
 import slimeknights.mantle.recipe.data.AbstractRecipeBuilder;
 import slimeknights.mantle.recipe.ingredient.FluidIngredient;
+import slimeknights.mantle.registration.object.FluidObject;
 import slimeknights.tconstruct.library.materials.definition.MaterialVariantId;
 
 import javax.annotation.Nullable;
@@ -34,6 +35,23 @@ public class MaterialFluidRecipeBuilder extends AbstractRecipeBuilder<MaterialFl
   /** Material base for composite */
   @Setter @Nullable
   private MaterialVariantId inputId;
+  /** If true, this recipe will not show in book pages. */
+  @Setter
+  private boolean hideInBook = false;
+
+  /**
+   * Sets the fluid for this recipe, and cooling time if unset.
+   * @param fluid   Fluid object
+   * @param amount  Fluid amount
+   * @return  Builder instance
+   */
+  public MaterialFluidRecipeBuilder setFluidAndTemp(FluidObject<?> fluid, int amount) {
+    this.fluid = fluid.ingredient(amount);
+    if (this.temperature == -1) {
+      this.temperature = getTemperature(fluid);
+    }
+    return this;
+  }
 
   /**
    * Sets the fluid for this recipe, and cooling time if unset.
@@ -72,6 +90,6 @@ public class MaterialFluidRecipeBuilder extends AbstractRecipeBuilder<MaterialFl
       throw new IllegalStateException("Temperature is too low, must be at least 0");
     }
     AdvancementHolder advancement = this.buildOptionalAdvancement(id, "materials");
-    output.accept(id, new MaterialFluidRecipe(id, fluid, temperature, inputId, outputId), advancement);
+    output.accept(id, new MaterialFluidRecipe(id, fluid, temperature, inputId, outputId, hideInBook), advancement);
   }
 }

@@ -23,7 +23,7 @@ public record SyncProjectileModifiersPacket(int entityId, ModifierNBT modifiers,
   public static final Type<SyncProjectileModifiersPacket> TYPE = new Type<>(TConstruct.getResource("sync_projectile_modifiers"));
   public static final StreamCodec<RegistryFriendlyByteBuf,SyncProjectileModifiersPacket> STREAM_CODEC = ISimplePacket.codec(SyncProjectileModifiersPacket::new);
 
-  private static final Streamable<ModifierNBT> MODIFIER_LIST = ModifierEntry.LOADABLE.list(0).flatXmap(ModifierNBT::new, ModifierNBT::getModifiers);
+  private static final Streamable<ModifierNBT> MODIFIER_LIST = ModifierEntry.LOADABLE.list(0).map(ModifierNBT::new, ModifierNBT::getModifiers);
 
   public SyncProjectileModifiersPacket(Entity entity) {
     this(entity.getId(), EntityModifierCapability.getOrEmpty(entity), PersistentDataCapability.getOrWarn(entity).getCopy());
