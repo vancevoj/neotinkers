@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.With;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.TagKey;
 import slimeknights.mantle.data.loadable.primitive.BooleanLoadable;
@@ -16,6 +15,7 @@ import slimeknights.tconstruct.library.modifiers.util.OptionalModifier;
 import slimeknights.tconstruct.library.module.ModuleHook;
 
 import javax.annotation.Nullable;
+import java.util.Optional;
 
 /**
  * Data class holding a modifier with a level
@@ -203,12 +203,13 @@ public class ModifierEntry implements Comparable<ModifierEntry> {
 
   /** Reads a modifier entry from NBT */
   public static ModifierEntry readFromNBT(CompoundTag tag) {
-    if (tag.contains(TAG_MODIFIER, Tag.TAG_STRING)) {
-      ModifierId id = ModifierId.tryParse(tag.getString(TAG_MODIFIER));
-      int level = tag.getInt(TAG_LEVEL);
+    Optional<String> name = tag.getString(TAG_MODIFIER);
+    if (name.isPresent()) {
+      ModifierId id = ModifierId.tryParse(name.get());
+      int level = tag.getIntOr(TAG_LEVEL, 0);
       if (id != null && level > 0) {
         // incremental just has more tags, if they are missing they will just 0 and of will give us the base class
-        return IncrementalModifierEntry.of(id, level, tag.getInt(TAG_AMOUNT), tag.getInt(TAG_NEEDED));
+        return IncrementalModifierEntry.of(id, level, tag.getIntOr(TAG_AMOUNT, 0), tag.getIntOr(TAG_NEEDED, 0));
       }
     }
     return EMPTY;

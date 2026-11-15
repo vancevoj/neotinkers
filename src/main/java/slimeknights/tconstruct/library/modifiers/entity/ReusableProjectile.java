@@ -11,7 +11,7 @@ public interface ReusableProjectile {
   /** Checks if the given projectile is reusable, either by tag or interface. */
   static boolean isSingleUse(Projectile projectile) {
     // if in the tag, its reusable
-    if (projectile.getType().is(TinkerTags.EntityTypes.REUSABLE_AMMO)) {
+    if (projectile.is(TinkerTags.EntityTypes.REUSABLE_AMMO)) {
       return false;
     }
     // if implementing the interface, conditionally

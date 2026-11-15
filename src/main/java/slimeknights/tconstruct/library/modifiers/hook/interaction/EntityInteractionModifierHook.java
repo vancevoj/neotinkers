@@ -103,7 +103,7 @@ public interface EntityInteractionModifierHook {
     ToolStack tool = ToolStack.from(stack);
     boolean noMelee = meleeDisabled(tool);
     if (stack.is(TinkerTags.Items.INTERACTABLE_LEFT)) {
-      if (!player.getCooldowns().isOnCooldown(stack.getItem())) {
+      if (!player.getCooldowns().isOnCooldown(stack)) {
         List<ModifierEntry> modifiers = tool.getModifierList();
         // TODO: should this be in the event?
         for (ModifierEntry entry : modifiers) {

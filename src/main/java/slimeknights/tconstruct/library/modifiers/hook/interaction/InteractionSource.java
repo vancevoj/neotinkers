@@ -61,8 +61,8 @@ public enum InteractionSource {
    */
   public static InteractionSource fromEquipmentSlot(EquipmentSlot slot) {
     return switch (slot.getType()) {
-      // 1.21: EquipmentSlot.Type.ARMOR split into HUMANOID_ARMOR and ANIMAL_ARMOR
-      case HUMANOID_ARMOR, ANIMAL_ARMOR -> ARMOR;
+      // 1.21: EquipmentSlot.Type.ARMOR split into HUMANOID_ARMOR and ANIMAL_ARMOR, 1.21.5 added SADDLE
+      case HUMANOID_ARMOR, ANIMAL_ARMOR, SADDLE -> ARMOR;
       case HAND -> RIGHT_CLICK;
     };
   }

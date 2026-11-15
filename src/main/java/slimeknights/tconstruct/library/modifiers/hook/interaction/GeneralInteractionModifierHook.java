@@ -1,5 +1,6 @@
 package slimeknights.tconstruct.library.modifiers.hook.interaction;
 
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.InteractionHand;
@@ -120,7 +121,8 @@ public interface GeneralInteractionModifierHook {
 
   /** Causes cooldown on the given tool based on its draw speed stat. */
   static void addCooldown(IToolStackView tool, Player player, float speedFactor) {
-    player.getCooldowns().addCooldown(tool.getItem(), getDrawtime(tool, player, speedFactor));
+    // cooldown group of a tinker tool is its item ID, matching ItemCooldowns#getCooldownGroup(ItemStack) without a use cooldown component
+    player.getCooldowns().addCooldown(BuiltInRegistries.ITEM.getKey(tool.getItem()), getDrawtime(tool, player, speedFactor));
   }
 
   /**

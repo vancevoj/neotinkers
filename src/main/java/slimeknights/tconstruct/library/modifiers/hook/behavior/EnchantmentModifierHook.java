@@ -2,7 +2,10 @@ package slimeknights.tconstruct.library.modifiers.hook.behavior;
 
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.item.ItemInstance;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
@@ -71,6 +74,23 @@ public interface EnchantmentModifierHook {
     }
     // we allow hooks to return negative, such as to cancel out an enchantment
     return Math.max(level, 0);
+  }
+
+  /**
+   * Gets the enchantment level for the given item instance, for {@link net.neoforged.neoforge.common.extensions.IItemExtension#getEnchantmentLevel(ItemInstance, Holder)} which takes an {@link ItemInstance} since 26.1.
+   * @param instance     Item stack or template
+   * @param enchantment  Enchantment to query
+   * @return  Enchantment level
+   */
+  static int getEnchantmentLevel(ItemInstance instance, Holder<Enchantment> enchantment) {
+    if (instance instanceof ItemStack stack) {
+      return getEnchantmentLevel(stack, enchantment);
+    }
+    if (instance instanceof ItemStackTemplate template) {
+      return getEnchantmentLevel(template.create(), enchantment);
+    }
+    // unknown instance type, no tool data to read so just use the component
+    return instance.getOrDefault(DataComponents.ENCHANTMENTS, ItemEnchantments.EMPTY).getLevel(enchantment);
   }
 
   /**

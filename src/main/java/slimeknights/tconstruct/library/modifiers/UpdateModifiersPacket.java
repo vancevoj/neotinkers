@@ -5,6 +5,7 @@ import com.google.common.collect.ImmutableMap;
 import io.netty.handler.codec.DecoderException;
 import lombok.RequiredArgsConstructor;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
@@ -20,6 +21,7 @@ import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.modifiers.impl.ComposableModifier;
 import slimeknights.tconstruct.library.utils.GenericTagUtil;
 
+import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -44,6 +46,9 @@ public class UpdateModifiersPacket implements IThreadsafePacket {
   private final Map<Holder<Enchantment>,Modifier> enchantmentMap;
   /** Collection of all enchantment tag mappings */
   private final Map<TagKey<Enchantment>, Modifier> enchantmentTagMappings;
+  /** Registries the packet was decoded against, used client side to resolve enchantment tags. Null when constructed on the server */
+  @Nullable
+  private HolderLookup.Provider registries = null;
 
   /** Ensures both the modifiers and redirects lists are calculated, allows one packet to be used multiple times without redundant work */
   private void ensureCalculated() {
@@ -108,6 +113,7 @@ public class UpdateModifiersPacket implements IThreadsafePacket {
 
     // read in enchantment to modifier mapping. enchantments are a datapack registry in 1.21, so resolve holders from the buffer's registry access
     RegistryAccess registryAccess = ((RegistryFriendlyByteBuf)buffer).registryAccess();
+    this.registries = registryAccess;
     var enchantmentRegistry = registryAccess.lookupOrThrow(Registries.ENCHANTMENT);
     ImmutableMap.Builder<Holder<Enchantment>,Modifier> enchantmentBuilder = ImmutableMap.builder();
     size = buffer.readVarInt();
@@ -172,6 +178,6 @@ public class UpdateModifiersPacket implements IThreadsafePacket {
 
   @Override
   public void handleThreadsafe(IPayloadContext context) {
-    ModifierManager.INSTANCE.updateModifiersFromServer(allModifiers, tags, enchantmentMap, enchantmentTagMappings);
+    ModifierManager.INSTANCE.updateModifiersFromServer(allModifiers, tags, enchantmentMap, enchantmentTagMappings, registries != null ? registries : context.player().registryAccess());
   }
 }

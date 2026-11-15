@@ -28,7 +28,8 @@ public interface ProjectileWithPower {
       return withPower.getDamage();
     }
     if (projectile instanceof AbstractArrow arrow) {
-      return velocityScale(projectile, arrow.getBaseDamage());
+      // 1.21.5 removed AbstractArrow#getBaseDamage, field is made public by the access transformer
+      return velocityScale(projectile, arrow.baseDamage);
     }
     return 0;
   }
