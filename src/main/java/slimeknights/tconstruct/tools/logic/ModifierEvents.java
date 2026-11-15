@@ -315,8 +315,8 @@ public class ModifierEvents {
   @SubscribeEvent
   static void onPotionStart(MobEffectEvent.Added event) {
     MobEffectInstance newEffect = event.getEffectInstance();
-    // 1.21: curative items were removed, so we only gate on the duration being finite
-    if (!newEffect.isInfiniteDuration()) {
+    // effects with no cures (the 1.20 empty curative items) are internal effects, so their duration is left alone
+    if (!newEffect.isInfiniteDuration() && !newEffect.getCures().isEmpty()) {
       // use two different stats based on whether the effect is beneficial
       boolean beneficial = newEffect.getEffect().value().isBeneficial();
       LivingEntity entity = event.getEntity();

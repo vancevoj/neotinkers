@@ -1,9 +1,9 @@
 package slimeknights.tconstruct.library.modifiers.fluid.entity;
 
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
-import net.neoforged.neoforge.common.EffectCure;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction;
 import slimeknights.mantle.data.loadable.common.ItemStackLoadable;
@@ -29,15 +29,14 @@ public record CureEffectsFluidEffect(ItemStack stack) implements FluidEffect<Flu
   public float apply(FluidStack fluid, EffectLevel level, Entity context, FluidAction action) {
     LivingEntity target = context.getLivingTarget();
     if (target != null && level.isFull()) {
-      // 1.21: item-based curing maps to a NeoForge EffectCure token keyed off the configured cure item, so a
-      // non-milk cure stack (e.g. honey) cures its own effects rather than always behaving like milk.
-      EffectCure cure = TinkerEffectCures.itemCure(stack.getItem());
+      // 1.21: item based curing maps to NeoForge EffectCure tokens keyed off the configured cure item, plus the milk cure for milk
+      Item item = stack.getItem();
       // when simulating, search the effects list directly for curative effects
       // may still be wrong if the event cancels things though, no way to safely simulate it
       if (action.simulate()) {
-        return target.getActiveEffects().stream().anyMatch(effect -> effect.getCures().contains(cure)) ? 1 : 0;
+        return target.getActiveEffects().stream().anyMatch(effect -> TinkerEffectCures.isCuredBy(effect, item)) ? 1 : 0;
       }
-      return target.removeEffectsCuredBy(cure) ? 1 : 0;
+      return TinkerEffectCures.cure(target, item) ? 1 : 0;
     }
     return 0;
   }

@@ -3,8 +3,11 @@ package slimeknights.tconstruct.library.utils;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.neoforged.neoforge.common.EffectCure;
+import net.neoforged.neoforge.common.EffectCures;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -34,6 +37,33 @@ public final class TinkerEffectCures {
   public static EffectCure itemCure(Item item) {
     ResourceLocation id = BuiltInRegistries.ITEM.getKey(item);
     return EffectCure.get(ITEM_CURE_PREFIX + id);
+  }
+
+  /**
+   * Checks if the effect is cured by the given item, mirroring the legacy {@code isCurativeItem}. Milk buckets were the default
+   * curative item, so for milk this also matches effects that NeoForge lets milk cure.
+   * @param instance  Effect instance
+   * @param item      Item curing the effect
+   * @return  True if the item cures the effect
+   */
+  public static boolean isCuredBy(MobEffectInstance instance, Item item) {
+    Set<EffectCure> cures = instance.getCures();
+    return cures.contains(itemCure(item)) || (item == Items.MILK_BUCKET && cures.contains(EffectCures.MILK));
+  }
+
+  /**
+   * Cures all effects on the entity cured by the given item, mirroring the legacy {@code curePotionEffects(ItemStack)}.
+   * @param entity  Entity to cure
+   * @param item    Item curing the effects
+   * @return  True if any effect was removed
+   * @see #isCuredBy(MobEffectInstance, Item)
+   */
+  public static boolean cure(LivingEntity entity, Item item) {
+    boolean cured = entity.removeEffectsCuredBy(itemCure(item));
+    if (item == Items.MILK_BUCKET) {
+      cured |= entity.removeEffectsCuredBy(EffectCures.MILK);
+    }
+    return cured;
   }
 
   /**

@@ -27,7 +27,10 @@ public class MobEffectLiquidBlock extends LiquidBlock {
   @Override
   public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
     if (entity.getFluidTypeHeight(this.fluid.getFluidType()) > 0 && entity instanceof LivingEntity living) {
-      living.addEffect(this.effect.get());
+      MobEffectInstance effect = this.effect.get();
+      // standing in the fluid reapplies the effect, so milk should not cure it
+      effect.getCures().clear();
+      living.addEffect(effect);
     }
   }
 

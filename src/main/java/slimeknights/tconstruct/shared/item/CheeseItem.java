@@ -8,9 +8,11 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import slimeknights.tconstruct.TConstruct;
+import slimeknights.tconstruct.library.utils.TinkerEffectCures;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
@@ -27,8 +29,8 @@ public class CheeseItem extends Item {
     if (!living.level().isClientSide) {
       Collection<MobEffectInstance> effects = living.getActiveEffects();
       if (!effects.isEmpty()) {
-        // 1.21 removed Forge curative items; cheese acts like milk and removes any active effect at random
-        List<Holder<MobEffect>> removable = effects.stream().map(MobEffectInstance::getEffect).toList();
+        // don't remove effects that are not milk removable
+        List<Holder<MobEffect>> removable = effects.stream().filter(effect -> TinkerEffectCures.isCuredBy(effect, Items.MILK_BUCKET)).map(MobEffectInstance::getEffect).toList();
         if (!removable.isEmpty()) {
           living.removeEffect(removable.get(living.getRandom().nextInt(removable.size())));
         }

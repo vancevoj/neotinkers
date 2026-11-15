@@ -47,8 +47,8 @@ public record ReduceEffectOnUnequipModule(MobEffectCategory category, LevelingVa
       if (percent != 0) {
         // iterate all matching effects, updating the duration
         for (MobEffectInstance instance : entity.getActiveEffects()) {
-          // getCurativeItems() removed in 1.21; all non-infinite effects are considered reducible
-          if (!instance.isInfiniteDuration() && instance.getEffect().value().getCategory() == this.category) {
+          // effects with no cures (the 1.20 empty curative items) are internal effects, so they are not reduced
+          if (!instance.isInfiniteDuration() && instance.getEffect().value().getCategory() == this.category && !instance.getCures().isEmpty()) {
             instance.duration = Math.max(1, (int) (instance.duration * (1 - percent)));
           }
         }

@@ -14,12 +14,14 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.client.extensions.common.IClientMobEffectExtensions;
+import net.neoforged.neoforge.common.EffectCure;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.modifiers.hook.interaction.GeneralInteractionModifierHook;
 import slimeknights.tconstruct.library.tools.helper.ModifierUtil;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.tools.TinkerModifiers;
 
+import java.util.Set;
 import java.util.function.Consumer;
 
 /** Effect for rendering the charge up when you start using a helmet */
@@ -28,7 +30,10 @@ public class HelmetChargingEffect extends MobEffect {
     super(MobEffectCategory.NEUTRAL, -1);
   }
 
-  // TODO(neoport): no-cure behavior now handled via MobEffectInstance cure tags, getCurativeItems override removed
+  @Override
+  public void fillEffectCures(Set<EffectCure> cures, MobEffectInstance effectInstance) {
+    // no cures, the effect only tracks the charge
+  }
 
   @Override
   public void initializeClient(Consumer<IClientMobEffectExtensions> consumer) {
