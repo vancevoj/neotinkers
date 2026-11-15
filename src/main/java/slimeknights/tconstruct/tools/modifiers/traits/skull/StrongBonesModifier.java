@@ -21,7 +21,10 @@ import slimeknights.tconstruct.library.modifiers.modules.technical.CureOnRemoval
 import slimeknights.tconstruct.library.module.ModuleHookMap.Builder;
 import slimeknights.tconstruct.library.tools.capability.TinkerDataCapability.TinkerDataKey;
 import slimeknights.tconstruct.library.tools.helper.ModifierUtil;
+import slimeknights.tconstruct.library.utils.TinkerEffectCures;
 import slimeknights.tconstruct.tools.TinkerModifiers;
+
+import java.util.List;
 
 // TODO: make JSON?
 public class StrongBonesModifier extends SingleLevelModifier {
@@ -49,9 +52,8 @@ public class StrongBonesModifier extends SingleLevelModifier {
     int level = ModifierUtil.getModifierLevel(helmet, TinkerModifiers.strongBones.getId());
     if (level > 0) {
       MobEffectInstance effect = new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, flat + eachLevel * level);
-      // TODO(neoport): per-instance curative items removed in 1.21; MobEffectInstance now uses NeoForge EffectCure tokens (no public per-stack cure list). Restoring "cure only via this helmet" needs the cross-package cure subsystem (see CureOnRemovalModule, still on legacy curePotionEffects).
-      // effect.getCurativeItems().clear();
-      // effect.getCurativeItems().add(new ItemStack(helmet.getItem()));
+      // only cured by removing the helmet, see CureOnRemovalModule
+      TinkerEffectCures.setCures(effect, List.of(helmet.getItem()));
       // on simulate, don't apply the effect, just ask if we can apply
       didSomething = action.execute() ? living.addEffect(effect) : living.canBeAffected(effect);
       // quick exit on simulate: no more information needed
