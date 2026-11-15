@@ -4,6 +4,8 @@ import com.google.common.collect.ImmutableSet;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.Holder;
+import net.minecraft.util.context.ContextKey;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -13,14 +15,11 @@ import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount.Formula;
 import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount.OreDrops;
 import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount.UniformBonusCount;
 import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
-import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParam;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import slimeknights.tconstruct.shared.TinkerAttributes;
-import slimeknights.tconstruct.tools.TinkerModifiers;
 
-import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 /** Loot modifier to boost drops based on teh chrysophilite amount */
@@ -38,15 +37,15 @@ public class ChrysophiliteBonusFunction extends LootItemConditionalFunction {
   private final Formula formula;
   /** If true, the includes the helmet in the level, if false level is just gold pieces */
   private final boolean includeBase;
-  protected ChrysophiliteBonusFunction(List<LootItemCondition> conditions, Formula formula, boolean includeBase) {
-    super(conditions);
+  protected ChrysophiliteBonusFunction(Optional<Holder<LootItemCondition>> condition, Formula formula, boolean includeBase) {
+    super(condition);
     this.formula = formula;
     this.includeBase = includeBase;
   }
 
   /** Creates a generic builder */
   public static Builder<?> builder(Formula formula, boolean includeBase) {
-    return simpleBuilder(conditions -> new ChrysophiliteBonusFunction(conditions, formula, includeBase));
+    return simpleBuilder(condition -> new ChrysophiliteBonusFunction(condition, formula, includeBase));
   }
 
   /** Creates a builder for the binomial with bonus formula */
@@ -56,7 +55,7 @@ public class ChrysophiliteBonusFunction extends LootItemConditionalFunction {
 
   /** Creates a builder for the ore drops formula */
   public static Builder<?> oreDrops(boolean includeBase) {
-    return builder(new OreDrops(), includeBase);
+    return builder(OreDrops.INSTANCE, includeBase);
   }
 
   /** Creates a builder for the uniform bonus count */
@@ -79,12 +78,12 @@ public class ChrysophiliteBonusFunction extends LootItemConditionalFunction {
   }
 
   @Override
-  public Set<LootContextParam<?>> getReferencedContextParams() {
+  public Set<ContextKey<?>> getReferencedContextParams() {
     return ImmutableSet.of(LootContextParams.THIS_ENTITY);
   }
 
   @Override
-  public LootItemFunctionType<ChrysophiliteBonusFunction> getType() {
-    return TinkerModifiers.chrysophiliteBonusFunction.get();
+  public MapCodec<ChrysophiliteBonusFunction> codec() {
+    return CODEC;
   }
 }

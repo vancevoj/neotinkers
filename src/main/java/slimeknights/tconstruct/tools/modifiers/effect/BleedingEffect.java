@@ -25,20 +25,18 @@ public class BleedingEffect extends NoMilkEffect {
   }
 
   @Override
-  public boolean applyEffectTick(LivingEntity target, int level) {
+  public boolean applyEffectTick(ServerLevel serverLevel, LivingEntity target, int level) {
     // attribute to player kill
     LivingEntity lastAttacker = target.getLastHurtMob();
     DamageSource source = TinkerDamageTypes.source(target.level().registryAccess(), TinkerDamageTypes.BLEEDING, lastAttacker);
 
     // perform damage
-    int hurtResistantTime = target.invulnerableTime;
+    int hurtResistantTime = target.getInvulnerableTime();
     ToolAttackUtil.attackEntitySecondary(source, 1, target, target, true);
-    target.invulnerableTime = hurtResistantTime;
+    target.setInvulnerableTime(hurtResistantTime);
 
-    // damage particles
-    if (target.level() instanceof ServerLevel serverLevel) {
-      serverLevel.sendParticles(ParticleTypes.DAMAGE_INDICATOR, target.getX(), target.getY(0.5), target.getZ(), 1, 0.1, 0, 0.1, 0.2);
-    }
+    // damage particles, effect ticks only run server side now
+    serverLevel.sendParticles(ParticleTypes.DAMAGE_INDICATOR, target.getX(), target.getY(0.5), target.getZ(), 1, 0.1, 0, 0.1, 0.2);
     return true;
   }
 }

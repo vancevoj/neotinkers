@@ -1,5 +1,7 @@
 package slimeknights.tconstruct.tools.modifiers.ability.tool;
 
+import slimeknights.tconstruct.library.tools.helper.ModifierUtil;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -7,7 +9,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemUseAnimation;
 import net.neoforged.neoforge.common.ItemAbility;
-import net.neoforged.neoforge.common.ItemAbilities;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.hook.behavior.ToolActionModifierHook;
@@ -57,7 +58,8 @@ public class ParryingModifier extends OffhandAttackModifier implements ToolActio
   @Override
   public void onFinishUsing(IToolStackView tool, ModifierEntry modifier, LivingEntity entity) {
     if (entity instanceof Player player) {
-      player.getCooldowns().addCooldown(tool.getItem(), (int)(20 / tool.getStats().get(ToolStats.ATTACK_SPEED)));
+      // cooldown group of a tinker tool is its item ID, matching ItemCooldowns#getCooldownGroup(ItemStack) without a use cooldown component
+      player.getCooldowns().addCooldown(BuiltInRegistries.ITEM.getKey(tool.getItem()), (int)(20 / tool.getStats().get(ToolStats.ATTACK_SPEED)));
     }
   }
 
@@ -73,6 +75,7 @@ public class ParryingModifier extends OffhandAttackModifier implements ToolActio
 
   @Override
   public boolean canPerformAction(IToolStackView tool, ModifierEntry modifier, ItemAbility toolAction) {
-    return toolAction == ItemAbilities.SHIELD_BLOCK;
+    // NeoForge removed ItemAbilities.SHIELD_BLOCK in 26.3, the blocking component is added based on this ability
+    return toolAction == ModifierUtil.SHIELD_BLOCK;
   }
 }

@@ -46,7 +46,7 @@ public class DoubleJumpHandler {
    */
   public static boolean extraJump(Player entity) {
     // validate preconditions, no using when swimming, elytra, or on the ground
-    if (!entity.onGround() && !entity.onClimbable() && !entity.isInWaterOrBubble()) {
+    if (!entity.onGround() && !entity.onClimbable() && !entity.isInWater()) {
       // determine max jumps
       int extraJumps = Mth.floor(entity.getAttributeValue(TinkerAttributes.JUMP_COUNT)) - 1;
       if (extraJumps > 0) {

@@ -2,6 +2,7 @@ package slimeknights.tconstruct.tools.modifiers.slotless;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.FloatTag;
 import net.minecraft.nbt.NumericTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
@@ -94,7 +95,7 @@ public class StatOverrideModifier extends NoLevelsModifier implements ToolStatsM
     processStats(persistentData, KEY_BONUS, (stat, tag) -> update(builder, stat, tag));
     processStats(persistentData, KEY_MULTIPLY, (stat, tag) -> {
       if (stat instanceof INumericToolStat<?> numeric && TagUtil.isNumeric(tag)) {
-        numeric.multiply(builder, ((NumericTag)tag).getAsFloat());
+        numeric.multiply(builder, ((NumericTag)tag).floatValue());
       }
     });
   }
@@ -125,7 +126,7 @@ public class StatOverrideModifier extends NoLevelsModifier implements ToolStatsM
             }
             // add stat
             if (stat instanceof INumericToolStat<?>) {
-              consumer.accept(Component.literal("* ").append(stat.getPrefix()).append(format.format(stats.getFloat(key))));
+              consumer.accept(Component.literal("* ").append(stat.getPrefix()).append(format.format(stats.getFloatOr(key, 0))));
             } else {
               Component formatted = format(stat, Objects.requireNonNull(stats.get(key)));
               if (formatted != null) {
@@ -198,8 +199,8 @@ public class StatOverrideModifier extends NoLevelsModifier implements ToolStatsM
     if (data.contains(groupKey, Tag.TAG_COMPOUND)) {
       CompoundTag nbt = data.getCompound(groupKey);
       String name = stat.getName().toString();
-      if (nbt.contains(name, Tag.TAG_FLOAT)) {
-        return nbt.getFloat(name);
+      if (nbt.get(name) instanceof FloatTag floatTag) {
+        return floatTag.value();
       }
     }
     return defaultValue;

@@ -3,8 +3,7 @@ package slimeknights.tconstruct.tools.stats;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.Tier;
-import net.minecraft.world.item.Tiers;
+import net.minecraft.world.item.ToolMaterial;
 import slimeknights.mantle.data.loadable.primitive.FloatLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.tconstruct.TConstruct;
@@ -18,12 +17,12 @@ import slimeknights.tconstruct.library.tools.stat.ToolStats;
 import java.util.List;
 
 /** Stats for melee/harvest head stats */
-public record HeadMaterialStats(int durability, float miningSpeed, Tier tier, float attack) implements IRepairableMaterialStats.ScaledTooltip {
+public record HeadMaterialStats(int durability, float miningSpeed, ToolMaterial tier, float attack) implements IRepairableMaterialStats.ScaledTooltip {
   public static final MaterialStatsId ID = new MaterialStatsId(TConstruct.getResource("head"));
-  public static final MaterialStatType<HeadMaterialStats> TYPE = new MaterialStatType<>(ID, new HeadMaterialStats(1, 1f, Tiers.WOOD, 1f), RecordLoadable.create(
+  public static final MaterialStatType<HeadMaterialStats> TYPE = new MaterialStatType<>(ID, new HeadMaterialStats(1, 1f, ToolMaterial.WOOD, 1f), RecordLoadable.create(
     IRepairableMaterialStats.DURABILITY_FIELD,
     FloatLoadable.FROM_ZERO.defaultField("mining_speed", 1f, true, HeadMaterialStats::miningSpeed),
-    TinkerLoadables.TIER.defaultField("mining_tier", Tiers.WOOD, true, HeadMaterialStats::tier),
+    TinkerLoadables.TIER.defaultField("mining_tier", ToolMaterial.WOOD, true, HeadMaterialStats::tier),
     FloatLoadable.FROM_ZERO.defaultField("melee_attack", 1f, true, HeadMaterialStats::attack),
     HeadMaterialStats::new));
 

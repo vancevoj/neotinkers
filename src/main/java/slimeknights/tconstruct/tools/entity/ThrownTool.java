@@ -3,14 +3,14 @@ package slimeknights.tconstruct.tools.entity;
 import lombok.Setter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
@@ -23,6 +23,8 @@ import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
 import net.minecraft.world.entity.projectile.arrow.ThrownTrident;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
@@ -260,7 +262,7 @@ public class ThrownTool extends ThrownTrident implements ToolProjectile {
       if (!level().isClientSide()) {
         // play sound
         if (tool.getModifiers().getLevel(ModifierIds.channeling) == 0) {
-          this.playSound(tool.isBroken() ? SoundEvents.ITEM_BREAK : SoundEvents.TRIDENT_HIT, 1.0f, 1.0f);
+          this.playSound(tool.isBroken() ? SoundEvents.ITEM_BREAK.value() : SoundEvents.TRIDENT_HIT, 1.0f, 1.0f);
         }
         // update the stack so visual changes to the tool render (e.g. broken or fluid)
         // need to force since its the same instance, just NBT changes
@@ -397,38 +399,37 @@ public class ThrownTool extends ThrownTrident implements ToolProjectile {
   private static final String KEY_TASKS = "tasks";
 
   @Override
-  public void addAdditionalSaveData(CompoundTag tag) {
-    super.addAdditionalSaveData(tag);
-    tag.putFloat(KEY_CHARGE, this.charge);
-    tag.putFloat(KEY_MULTIPLIER, this.multiplier);
-    tag.putFloat(KEY_WATER_INERTIA, this.entityData.get(WATER_INERTIA));
-    tag.putBoolean(KEY_HIT_BLOCK, hitBlock);
+  protected void addAdditionalSaveData(ValueOutput output) {
+    super.addAdditionalSaveData(output);
+    output.putFloat(KEY_CHARGE, this.charge);
+    output.putFloat(KEY_MULTIPLIER, this.multiplier);
+    output.putFloat(KEY_WATER_INERTIA, this.entityData.get(WATER_INERTIA));
+    output.putBoolean(KEY_HIT_BLOCK, hitBlock);
     if (this.originalSlot != -1) {
-      tag.putInt(KEY_ORIGINAL_SLOT, this.originalSlot);
+      output.putInt(KEY_ORIGINAL_SLOT, this.originalSlot);
     }
     if (!this.tasks.isEmpty()) {
-      tag.put(KEY_TASKS, this.tasks.serialize());
+      output.store(KEY_TASKS, ExtraCodecs.NBT, this.tasks.serialize());
     }
   }
 
   @Override
-  public void readAdditionalSaveData(CompoundTag tag) {
-    super.readAdditionalSaveData(tag);
+  protected void readAdditionalSaveData(ValueInput input) {
+    super.readAdditionalSaveData(input);
     // update the tool to sync to client, if its set
-    if (tag.contains("Trident", CompoundTag.TAG_COMPOUND)) {
+    // the stack is saved by AbstractArrow under "item" (the 1.20 key was "Trident"), without it the pickup stack is the default trident
+    if (input.read("item", ItemStack.CODEC).isPresent()) {
       updateFromStack();
     }
-    this.charge = tag.getFloat(KEY_CHARGE);
-    this.multiplier = tag.getFloat(KEY_MULTIPLIER);
-    this.entityData.set(WATER_INERTIA, tag.getFloat(KEY_WATER_INERTIA));
-    this.hitBlock = tag.getBoolean(KEY_HIT_BLOCK);
-    if (tag.contains(KEY_ORIGINAL_SLOT, Tag.TAG_ANY_NUMERIC)) {
-      this.originalSlot = tag.getInt(KEY_ORIGINAL_SLOT);
-    } else {
-      this.originalSlot = -1;
-    }
-    if (tag.contains(KEY_TASKS, CompoundTag.TAG_LIST)) {
-      this.tasks = Schedule.deserialize(tag.getList(KEY_TASKS, CompoundTag.TAG_COMPOUND));
-    }
+    this.charge = input.getFloatOr(KEY_CHARGE, 0);
+    this.multiplier = input.getFloatOr(KEY_MULTIPLIER, 0);
+    this.entityData.set(WATER_INERTIA, input.getFloatOr(KEY_WATER_INERTIA, 0));
+    this.hitBlock = input.getBooleanOr(KEY_HIT_BLOCK, false);
+    this.originalSlot = input.getIntOr(KEY_ORIGINAL_SLOT, -1);
+    input.read(KEY_TASKS, ExtraCodecs.NBT).ifPresent(tasks -> {
+      if (tasks instanceof ListTag list) {
+        this.tasks = Schedule.deserialize(list);
+      }
+    });
   }
 }

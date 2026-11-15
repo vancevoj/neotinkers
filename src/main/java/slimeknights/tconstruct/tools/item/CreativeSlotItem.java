@@ -13,6 +13,7 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.item.component.CustomData;
 import slimeknights.mantle.command.MantleCommand;
 import slimeknights.mantle.fluid.FluidTransferHelper;
@@ -29,7 +30,6 @@ import slimeknights.tconstruct.tools.modifiers.slotless.CreativeSlotModifier;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
-import java.util.List;
 import java.util.function.Consumer;
 
 public class CreativeSlotItem extends Item {
@@ -48,9 +48,7 @@ public class CreativeSlotItem extends Item {
     CustomData data = stack.get(DataComponents.CUSTOM_DATA);
     if (data != null) {
       CompoundTag nbt = data.copyTag();
-      if (nbt.contains(NBT_KEY, Tag.TAG_STRING)) {
-        return SlotType.getIfPresent(nbt.getString(NBT_KEY));
-      }
+      return nbt.getString(NBT_KEY).map(SlotType::getIfPresent).orElse(null);
     }
     return null;
   }
@@ -61,8 +59,8 @@ public class CreativeSlotItem extends Item {
     return stack;
   }
 
-  @Override
-  public String getDescriptionId(ItemStack stack) {
+  /** Gets the translation key for the given stack, using the slot specific key if present */
+  private String getDescriptionId(ItemStack stack) {
     SlotType slot = getSlot(stack);
     String originalKey = getDescriptionId();
     if (slot != null) {
@@ -75,12 +73,22 @@ public class CreativeSlotItem extends Item {
   }
 
   @Override
-  public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
+  public Component getName(ItemStack stack) {
+    // getDescriptionId(ItemStack) is no longer an item hook, the name comes from getName
+    String key = getDescriptionId(stack);
+    if (!key.equals(getDescriptionId())) {
+      return Component.translatable(key);
+    }
+    return super.getName(stack);
+  }
+
+  @Override
+  public void appendHoverText(ItemStack stack, Item.TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
     SlotType slot = getSlot(stack);
     if (slot != null) {
-      tooltip.add(Component.translatable(TOOLTIP, slot.getDisplayName()).withStyle(ChatFormatting.GRAY));
+      tooltip.accept(Component.translatable(TOOLTIP, slot.getDisplayName()).withStyle(ChatFormatting.GRAY));
     } else {
-      tooltip.add(TOOLTIP_MISSING);
+      tooltip.accept(TOOLTIP_MISSING);
     }
   }
 
@@ -98,7 +106,7 @@ public class CreativeSlotItem extends Item {
 
   /** Checks if the given player may apply this item */
   public static boolean canApply(Player player) {
-    return player.isCreative() || (Config.COMMON.quickApplyToolModifiersSurvival.get() && player.hasPermissions(MantleCommand.PERMISSION_GAME_COMMANDS));
+    return player.isCreative() || (Config.COMMON.quickApplyToolModifiersSurvival.get() && MantleCommand.PERMISSION_GAME_COMMANDS.check(player.permissions()));
   }
 
   /** Common logic between two stack methods */
@@ -125,7 +133,7 @@ public class CreativeSlotItem extends Item {
 
           // add the slot
           String name = slotType.getName();
-          int updated = slots.getInt(name) + amount;
+          int updated = slots.getIntOr(name, 0) + amount;
           if (updated == 0) {
             slots.remove(name);
           } else {
@@ -152,7 +160,7 @@ public class CreativeSlotItem extends Item {
             FluidTransferHelper.playUISound(player, SoundEvents.GRINDSTONE_USE);
           }
         } else if (!player.isCreative()) {
-          player.displayClientMessage(CREATIVE_ONLY, false);
+          player.sendSystemMessage(CREATIVE_ONLY);
         }
       }
       return true;

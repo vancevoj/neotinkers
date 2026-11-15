@@ -19,10 +19,10 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
-import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.equipment.Equippable;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BeehiveBlock;
 import net.minecraft.world.level.block.Block;
@@ -209,9 +209,9 @@ public class ToolEvents {
         pos.getZ() + 0.5D + facing.getStepZ() * 0.65D,
         new ItemStack(Items.PUMPKIN_SEEDS, 4));
       itemEntity.setDeltaMovement(
-        0.05D * facing.getStepX() + world.random.nextDouble() * 0.02D,
+        0.05D * facing.getStepX() + world.getRandom().nextDouble() * 0.02D,
         0.05D,
-        0.05D * facing.getStepZ() + world.random.nextDouble() * 0.02D);
+        0.05D * facing.getStepZ() + world.getRandom().nextDouble() * 0.02D);
       world.addFreshEntity(itemEntity);
       event.setResult(TinkerToolEvent.Result.ALLOW);
     }
@@ -249,7 +249,7 @@ public class ToolEvents {
     }
     // I cannot think of a reason to run when invulnerable
     DamageSource source = event.getSource();
-    if (entity.isInvulnerableTo(source)) {
+    if (entity.isInvulnerableTo((ServerLevel) entity.level(), source)) {
       return;
     }
 
@@ -328,7 +328,7 @@ public class ToolEvents {
     Entity attacker = source.getEntity();
     if (attacker instanceof LivingEntity living) {
       // boost damage based on monster's melee weapon
-      if (Config.COMMON.allowMonsterMeleeModifiers.get() && source.is(TinkerTags.DamageTypes.MODIFIER_WHITELIST) && !living.getType().is(TinkerTags.EntityTypes.DAMAGE_MODIFIER_BLACKLIST)) {
+      if (Config.COMMON.allowMonsterMeleeModifiers.get() && source.is(TinkerTags.DamageTypes.MODIFIER_WHITELIST) && !living.is(TinkerTags.EntityTypes.DAMAGE_MODIFIER_BLACKLIST)) {
         ItemStack weapon = living.getMainHandItem();
         if (!weapon.isEmpty()) {
             if (weapon.is(TinkerTags.Items.MELEE_WEAPON)) {
@@ -412,10 +412,10 @@ public class ToolEvents {
       }
 
       // give slimes a 4x armor boost
-      if (entity.getType().is(TinkerTags.EntityTypes.SMALL_ARMOR)) {
+      if (entity.is(TinkerTags.EntityTypes.SMALL_ARMOR)) {
         modifierValue *= 4;
       }
-    } else if (DamageSourcePredicate.CAN_PROTECT.matches(source) && entity.getType().is(TinkerTags.EntityTypes.SMALL_ARMOR)) {
+    } else if (DamageSourcePredicate.CAN_PROTECT.matches(source) && entity.is(TinkerTags.EntityTypes.SMALL_ARMOR)) {
       vanillaModifier = (int) EnchantmentHelper.getDamageProtection(serverLevel, entity, source);
       modifierValue = vanillaModifier * 4;
     }
@@ -453,8 +453,10 @@ public class ToolEvents {
               ToolDamageUtil.damageAnimated(tool, damageMissed, entity, slotType, ARMOR_DAMAGE);
             } else {
               // if not our armor, damage using vanilla like logic
+              // ArmorItem is gone, vanilla now damages equipment that has an equippable component that takes damage on hurt
               ItemStack armorStack = entity.getItemBySlot(slotType);
-              if (!armorStack.isEmpty() && (!source.is(DamageTypeTags.IS_FIRE) || !armorStack.has(DataComponents.FIRE_RESISTANT)) && armorStack.getItem() instanceof ArmorItem) {
+              Equippable equippable = armorStack.get(DataComponents.EQUIPPABLE);
+              if (!armorStack.isEmpty() && (!source.is(DamageTypeTags.IS_FIRE) || !armorStack.has(DataComponents.FIRE_RESISTANT)) && equippable != null && equippable.damageOnHurt()) {
                 // 1.21: hurtAndBreak(int, LivingEntity, EquipmentSlot) handles the break animation internally (broadcastBreakEvent removed)
                 armorStack.hurtAndBreak(damageMissed, entity, slotType);
               }
@@ -485,7 +487,7 @@ public class ToolEvents {
     // apply post hit modifier effects. Done regardless of damage dealt - don't care if absorption took it all
     if (Config.COMMON.allowMonsterMeleeModifiers.get() && source.is(TinkerTags.DamageTypes.MODIFIER_WHITELIST)) {
       Entity attacker = event.getSource().getEntity();
-      if (attacker != null && !attacker.getType().is(TinkerTags.EntityTypes.DAMAGE_MODIFIER_BLACKLIST) && attacker instanceof LivingEntity living) {
+      if (attacker != null && !attacker.is(TinkerTags.EntityTypes.DAMAGE_MODIFIER_BLACKLIST) && attacker instanceof LivingEntity living) {
         ItemStack weapon = living.getMainHandItem();
         if (!weapon.isEmpty()) {
           if (weapon.is(TinkerTags.Items.MELEE_WEAPON)) {
@@ -515,7 +517,7 @@ public class ToolEvents {
     if (amount >= 2 && Config.COMMON.dropDragonScales.get() && entity.getType() == EntityTypes.ENDER_DRAGON
         && source.is(DamageTypeTags.IS_EXPLOSION) && source.getEntity() != null && source.getEntity().getType() == EntityTypes.PLAYER) {
       // drops up to 1 scale per heart lost, capping at 5 scales
-      ModifierUtil.dropItem(entity, new ItemStack(TinkerModifiers.dragonScale, 1 + entity.level().random.nextInt(Math.min(5, (int)(amount / 2)))));
+      ModifierUtil.dropItem(entity, new ItemStack(TinkerModifiers.dragonScale, 1 + entity.level().getRandom().nextInt(Math.min(5, (int)(amount / 2)))));
     }
   }
 

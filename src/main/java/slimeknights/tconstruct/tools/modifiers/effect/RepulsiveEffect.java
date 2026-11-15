@@ -1,5 +1,6 @@
 package slimeknights.tconstruct.tools.modifiers.effect;
 
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
 import slimeknights.tconstruct.common.TinkerEffect;
@@ -16,7 +17,7 @@ public class RepulsiveEffect extends TinkerEffect {
   }
 
   @Override
-  public boolean applyEffectTick(LivingEntity entity, int amplifier) {
+  public boolean applyEffectTick(ServerLevel level, LivingEntity entity, int amplifier) {
     MagneticEffect.applyVelocity(entity, amplifier, LivingEntity.class, 2, -0.1f, 10);
     return true;
   }

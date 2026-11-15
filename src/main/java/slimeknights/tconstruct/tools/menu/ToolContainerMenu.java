@@ -3,6 +3,8 @@ package slimeknights.tconstruct.tools.menu;
 import lombok.Getter;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Prediction;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -17,11 +19,10 @@ import net.minecraft.world.inventory.TransientCraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
-import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.items.IItemHandler;
-import net.neoforged.neoforge.items.IItemHandlerModifiable;
-import net.neoforged.neoforge.items.ItemStackHandler;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.item.ItemResource;
+import net.neoforged.neoforge.transfer.item.ItemStacksResourceHandler;
 import slimeknights.mantle.fluid.FluidTransferHelper;
 import slimeknights.mantle.fluid.transfer.IFluidContainerTransfer.TransferDirection;
 import slimeknights.mantle.fluid.transfer.IFluidContainerTransfer.TransferResult;
@@ -35,7 +36,6 @@ import slimeknights.tconstruct.library.tools.capability.fluid.ToolTankHelper;
 import slimeknights.tconstruct.library.tools.capability.inventory.ToolInventoryCapability;
 import slimeknights.tconstruct.library.tools.capability.inventory.ToolInventoryCapability.CraftingType;
 import slimeknights.tconstruct.library.tools.helper.ModifierUtil;
-import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.ToolDataComponents;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.tools.TinkerTools;
@@ -58,12 +58,15 @@ public class ToolContainerMenu extends AbstractContainerMenu {
   /** Stack containing the tool being rendered */
   @Getter
   private final ItemStack stack;
-  /** Tool hosting this tank */
+  /**
+   * Tool hosting this tank. The inventory handler commits into the same stack, so call {@link ToolStack#refreshFromStack()}
+   * before using this view, otherwise a stale copy of the tool data could be written back
+   */
   @Getter
-  private final IToolStackView tool;
+  private final ToolStack tool;
   /** Item handler being rendered */
   @Getter
-  private final IItemHandler itemHandler;
+  private final ResourceHandler<ItemResource> itemHandler;
   /** Tank in the tool */
   @Getter
   private final SimpleFluidTank tank;
@@ -84,12 +87,12 @@ public class ToolContainerMenu extends AbstractContainerMenu {
   @Getter
   private final int playerInventoryStart;
 
-  public ToolContainerMenu(int id, Inventory playerInventory, ItemStack stack, IItemHandler itemHandler, int slotIndex) {
+  public ToolContainerMenu(int id, Inventory playerInventory, ItemStack stack, ResourceHandler<ItemResource> itemHandler, int slotIndex) {
     this(TinkerTools.toolContainer.get(), id, playerInventory, stack, itemHandler, slotIndex);
   }
 
   // TODO 1.21: probably ditch this constructor
-  protected ToolContainerMenu(@Nullable MenuType<?> type, int id, Inventory playerInventory, ItemStack stack, IItemHandler handler, int slotIndex) {
+  protected ToolContainerMenu(@Nullable MenuType<?> type, int id, Inventory playerInventory, ItemStack stack, ResourceHandler<ItemResource> handler, int slotIndex) {
     this(type, id, playerInventory, stack, handler, slotIndex, CraftingType.fromStack(stack), ModifierUtil.checkVolatileFlag(stack, ToolInventoryCapability.INCLUDE_OFFHAND));
   }
 
@@ -120,22 +123,23 @@ public class ToolContainerMenu extends AbstractContainerMenu {
       includeOffhand = ModifierUtil.checkVolatileFlag(stack, ToolInventoryCapability.INCLUDE_OFFHAND);
     }
     // if the stack looks like it could be our tool, fetch the handler from it
-    IItemHandler handler;
+    ResourceHandler<ItemResource> handler;
     if (stack.has(ToolDataComponents.TOOL_DATA.get()) && stack.is(TinkerTags.Items.MODIFIABLE)) {
-      IItemHandler cap = stack.getCapability(Capabilities.Item.ITEM);
-      handler = cap instanceof IItemHandlerModifiable ? cap : EmptyItemHandler.INSTANCE;
+      // item capabilities need an item access, tool inventories only change the components of the stack in place
+      ResourceHandler<ItemResource> cap = ToolInventoryCapability.getHandler(stack);
+      handler = cap != null ? cap : EmptyItemHandler.INSTANCE;
       // wrong number of slots means something went wrong, use a dummy
-      if (handler.getSlots() != size) {
-        handler = new ItemStackHandler(size);
+      if (handler.size() != size) {
+        handler = new ItemStacksResourceHandler(size);
       }
     } else {
       // stack doesn't look right? use a dummy
-      handler = new ItemStackHandler(size);
+      handler = new ItemStacksResourceHandler(size);
     }
     return new ToolContainerMenu(TinkerTools.toolContainer.get(), id, inventory, stack, handler, slotIndex, craftingType, includeOffhand);
   }
 
-  protected ToolContainerMenu(@Nullable MenuType<?> type, int id, Inventory playerInventory, ItemStack stack, IItemHandler handler, int slotIndex, CraftingType craftingType, boolean includeOffhand) {
+  protected ToolContainerMenu(@Nullable MenuType<?> type, int id, Inventory playerInventory, ItemStack stack, ResourceHandler<ItemResource> handler, int slotIndex, CraftingType craftingType, boolean includeOffhand) {
     super(type, id);
     this.stack = stack;
     this.tool = ToolStack.from(stack);
@@ -145,7 +149,7 @@ public class ToolContainerMenu extends AbstractContainerMenu {
     this.slotIndex = slotIndex;
 
     // if requested, add 3x3 crafting area
-    int slots = itemHandler.getSlots();
+    int slots = itemHandler.size();
     int craftingOffset = (slots == 0 ? REPEAT_BACKGROUND_START : UI_START) + 1;
     if (craftingType == CraftingType.FULL) {
       this.craftingContainer = new TransientCraftingContainer(this, 3, 3);
@@ -266,7 +270,7 @@ public class ToolContainerMenu extends AbstractContainerMenu {
       // drop the crafted result if it didn't entirely move
       slot.onTake(player, slotStack);
       if (toolInventoryStart > 0 && index == 0) {
-        player.drop(slotStack, false);
+        player.drop(slotStack, false, Prediction.PREDICTED);
       }
 
     }
@@ -276,8 +280,9 @@ public class ToolContainerMenu extends AbstractContainerMenu {
   @Override
   public void slotsChanged(Container pContainer) {
     super.slotsChanged(pContainer);
-    if (craftingContainer != null && resultContainer != null) {
-      CraftingMenu.slotChangedCraftingGrid(this, player.level(), player, craftingContainer, resultContainer, (RecipeHolder<CraftingRecipe>) null);
+    // crafting results are only computed server side, the server syncs the result slot
+    if (craftingContainer != null && resultContainer != null && player.level() instanceof ServerLevel serverLevel) {
+      CraftingMenu.slotChangedCraftingGrid(this, serverLevel, player, craftingContainer, resultContainer, (RecipeHolder<CraftingRecipe>) null);
     }
   }
 
@@ -305,57 +310,60 @@ public class ToolContainerMenu extends AbstractContainerMenu {
     return false;
   }
 
+  /**
+   * Slot for the tool inventory.
+   * Setting the stack goes through the handler's index modifier (see {@link SmartItemHandlerSlot}), and the resource handler slot base
+   * already writes the cached stack back on {@link #setChanged()}, so only pickup needs to differ.
+   */
   private static class ToolContainerSlot extends SmartItemHandlerSlot {
-    private final int index;
-
-    public ToolContainerSlot(IItemHandler itemHandler, int index, int xPosition, int yPosition) {
+    public ToolContainerSlot(ResourceHandler<ItemResource> itemHandler, int index, int xPosition, int yPosition) {
       super(itemHandler, index, xPosition, yPosition);
-      this.index = index;
     }
 
     @Override
     public boolean mayPickup(Player playerIn) {
       return true;
     }
-
-    @Override
-    public void set(@Nonnull ItemStack stack) {
-      // using set as an indicator it changed, so no need to call setChanged anymore here
-      ((IItemHandlerModifiable) this.getItemHandler()).setStackInSlot(index, stack);
-    }
-
-    @Override
-    public void setChanged() {
-      // no proper setChanged method on item handler, so just set the existing stack
-      set(getItem());
-    }
   }
 
   /** Logic handling the fluid tank in the UI */
-  private record ToolFluidHandler(IToolStackView tool, @Nullable Player player) implements SimpleFluidTank {
+  private static class ToolFluidHandler extends SimpleFluidTank {
+    private final ToolStack tool;
+    @Nullable
+    private final Player player;
+
+    private ToolFluidHandler(ToolStack tool, @Nullable Player player) {
+      this.tool = tool;
+      this.player = player;
+    }
+
     @Nonnull
     @Override
     public FluidStack getFluid() {
+      // the inventory may have changed the stack since we last read it, as tool data is a component each view holds a copy
+      tool.refreshFromStack();
       return ToolTankHelper.TANK_HELPER.getFluid(tool);
     }
 
     @Override
     public void setFluid(FluidStack fluid) {
+      // refresh first so we do not write back stale inventory data
+      tool.refreshFromStack();
       ToolTankHelper.TANK_HELPER.setFluid(tool, fluid);
     }
 
     @Override
     public void updateFluid(FluidStack updated, int change) {
-      if (change != 0) {
-        setFluid(updated);
-        if (player != null) {
-          TinkerNetwork.getInstance().sendTo(new ToolContainerFluidUpdatePacket(updated), player);
-        }
+      // only called once per committed transaction when the fluid actually changed, change may be 0 if the fluid was swapped
+      setFluid(updated);
+      if (player != null) {
+        TinkerNetwork.getInstance().sendTo(new ToolContainerFluidUpdatePacket(updated), player);
       }
     }
 
     @Override
     public int getCapacity() {
+      tool.refreshFromStack();
       return ToolTankHelper.TANK_HELPER.getCapacity(tool);
     }
   }

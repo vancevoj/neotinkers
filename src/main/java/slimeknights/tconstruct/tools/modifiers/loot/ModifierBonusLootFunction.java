@@ -4,6 +4,8 @@ import com.google.common.collect.ImmutableSet;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.Holder;
+import net.minecraft.util.context.ContextKey;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -12,15 +14,12 @@ import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount.Formula;
 import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount.OreDrops;
 import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount.UniformBonusCount;
 import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
-import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParam;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import slimeknights.tconstruct.library.modifiers.ModifierId;
 import slimeknights.tconstruct.library.tools.helper.ModifierUtil;
-import slimeknights.tconstruct.tools.TinkerModifiers;
 
-import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 /** Boosts drop rates based on modifier level */
@@ -42,8 +41,8 @@ public class ModifierBonusLootFunction extends LootItemConditionalFunction {
   /** If true, considers level 1 as bonus, if false considers level 1 as no bonus */
   private final boolean includeBase;
 
-  protected ModifierBonusLootFunction(List<LootItemCondition> conditions, ModifierId modifier, Formula formula, boolean includeBase) {
-    super(conditions);
+  protected ModifierBonusLootFunction(Optional<Holder<LootItemCondition>> condition, ModifierId modifier, Formula formula, boolean includeBase) {
+    super(condition);
     this.modifier = modifier;
     this.formula = formula;
     this.includeBase = includeBase;
@@ -51,7 +50,7 @@ public class ModifierBonusLootFunction extends LootItemConditionalFunction {
 
   /** Creates a generic builder */
   public static Builder<?> builder(ModifierId modifier, Formula formula, boolean includeBase) {
-    return simpleBuilder(conditions -> new ModifierBonusLootFunction(conditions, modifier, formula, includeBase));
+    return simpleBuilder(condition -> new ModifierBonusLootFunction(condition, modifier, formula, includeBase));
   }
 
   /** Creates a builder for the binomial with bonus formula */
@@ -61,7 +60,7 @@ public class ModifierBonusLootFunction extends LootItemConditionalFunction {
 
   /** Creates a builder for the ore drops formula */
   public static Builder<?> oreDrops(ModifierId modifier, boolean includeBase) {
-    return builder(modifier, new OreDrops(), includeBase);
+    return builder(modifier, OreDrops.INSTANCE, includeBase);
   }
 
   /** Creates a builder for the uniform bonus count */
@@ -70,18 +69,19 @@ public class ModifierBonusLootFunction extends LootItemConditionalFunction {
   }
 
   @Override
-  public LootItemFunctionType<ModifierBonusLootFunction> getType() {
-    return TinkerModifiers.modifierBonusFunction.get();
+  public MapCodec<ModifierBonusLootFunction> codec() {
+    return CODEC;
   }
 
   @Override
-  public Set<LootContextParam<?>> getReferencedContextParams() {
+  public Set<ContextKey<?>> getReferencedContextParams() {
     return ImmutableSet.of(LootContextParams.TOOL);
   }
 
   @Override
   protected ItemStack run(ItemStack stack, LootContext context) {
-    int level = ModifierUtil.getModifierLevel(context.getParam(LootContextParams.TOOL), modifier);
+    // the tool parameter is an item instance now, which may not be a stack
+    int level = context.getOptional(LootContextParams.TOOL) instanceof ItemStack tool ? ModifierUtil.getModifierLevel(tool, modifier) : 0;
     if (!includeBase) {
       level--;
     }

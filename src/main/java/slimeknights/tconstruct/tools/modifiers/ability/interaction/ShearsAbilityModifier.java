@@ -1,5 +1,6 @@
 package slimeknights.tconstruct.tools.modifiers.ability.interaction;
 
+import slimeknights.mantle.util.CombatHelper;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.minecraft.core.RegistryAccess;
@@ -59,8 +60,9 @@ public class ShearsAbilityModifier extends NoLevelsModifier implements EntityInt
    */
   @Deprecated(forRemoval = true)
   protected void swingTool(Player player, InteractionHand hand) {
-    player.swing(hand);
-    player.sweepAttack();
+    player.swing(hand, player.getItemInHand(hand).getInteractAnimation(), false);
+    // Player#sweepAttack was removed, Mantle has a copy of the particle logic
+    CombatHelper.sweepParticles(player);
   }
 
   @Override

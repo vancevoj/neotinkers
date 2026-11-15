@@ -1,5 +1,6 @@
 package slimeknights.tconstruct.tools.modifiers.traits.general;
 
+import java.util.Objects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -45,10 +46,11 @@ public class TastyModifier extends Modifier implements ProcessLootModifierHook {
 
     // must have an entity
     Entity entity = context.getOptional(LootContextParams.THIS_ENTITY);
-    if (entity instanceof LivingEntity living && entity.getType().is(TinkerTags.EntityTypes.BACON_PRODUCER)) {
+    if (entity instanceof LivingEntity living && entity.is(TinkerTags.EntityTypes.BACON_PRODUCER)) {
       // at tasty 1, 2, 3, and 4 its a 2%, 4.15%, 6.25%, 8% per level
       // 1.21 dropped LootContext#getLootingModifier; recompute looting from the kill via the tinker looting handler
-      int looting = ModifierLootingHandler.getLootingLevel(context.getParam(LootContextParams.DAMAGE_SOURCE), living, 0);
+      // presence of the damage source is checked above
+      int looting = ModifierLootingHandler.getLootingLevel(Objects.requireNonNull(context.getOptional(LootContextParams.DAMAGE_SOURCE)), living, 0);
       if (RANDOM.nextInt(48 / modifier.intEffectiveLevel()) <= looting) {
         // bacon
         generatedLoot.add(new ItemStack(TinkerCommons.bacon));

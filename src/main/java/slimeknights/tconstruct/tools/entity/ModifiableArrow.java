@@ -1,11 +1,12 @@
 package slimeknights.tconstruct.tools.entity;
 
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -13,6 +14,8 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
@@ -33,6 +36,8 @@ import slimeknights.tconstruct.library.utils.Schedule;
 import slimeknights.tconstruct.tools.TinkerTools;
 
 import javax.annotation.Nullable;
+import java.util.Collection;
+import java.util.List;
 
 /** Arrow with material variants */
 public class ModifiableArrow extends AbstractArrow implements ToolProjectile, ReusableProjectile, ProjectileWithKnockback {
@@ -221,9 +226,9 @@ public class ModifiableArrow extends AbstractArrow implements ToolProjectile, Re
   }
 
   @Override
-  @Nullable
-  protected EntityHitResult findHitEntity(Vec3 pStartVec, Vec3 pEndVec) {
-    return this.dealtDamage ? null : super.findHitEntity(pStartVec, pEndVec);
+  protected Collection<EntityHitResult> findHitEntities(Vec3 pStartVec, Vec3 pEndVec) {
+    // since 1.21.11 the arrow tick only calls findHitEntities, findHitEntity is no longer used
+    return this.dealtDamage ? List.of() : super.findHitEntities(pStartVec, pEndVec);
   }
 
 
@@ -255,28 +260,28 @@ public class ModifiableArrow extends AbstractArrow implements ToolProjectile, Re
   private static final String KEY_TASKS = "tasks";
 
   @Override
-  public void addAdditionalSaveData(CompoundTag tag) {
-    super.addAdditionalSaveData(tag);
-    tag.put(KEY_STACK, this.stack.saveOptional(this.registryAccess()));
-    tag.putFloat(KEY_WATER_INERTIA, this.entityData.get(WATER_INERTIA));
-    tag.putBoolean(KEY_DEALT_DAMAGE, dealtDamage);
-    tag.putFloat(KEY_KNOCKBACK, knockback);
+  protected void addAdditionalSaveData(ValueOutput output) {
+    super.addAdditionalSaveData(output);
+    output.store(KEY_STACK, ItemStack.OPTIONAL_CODEC, this.stack);
+    output.putFloat(KEY_WATER_INERTIA, this.entityData.get(WATER_INERTIA));
+    output.putBoolean(KEY_DEALT_DAMAGE, dealtDamage);
+    output.putFloat(KEY_KNOCKBACK, knockback);
     if (!this.tasks.isEmpty()) {
-      tag.put(KEY_TASKS, this.tasks.serialize());
+      output.store(KEY_TASKS, ExtraCodecs.NBT, this.tasks.serialize());
     }
   }
 
   @Override
-  public void readAdditionalSaveData(CompoundTag tag) {
-    super.readAdditionalSaveData(tag);
-    if (tag.contains(KEY_STACK, CompoundTag.TAG_COMPOUND)) {
-      setStack(ItemStack.parseOptional(this.registryAccess(), tag.getCompound(KEY_STACK)));
-    }
-    this.entityData.set(WATER_INERTIA, tag.getFloat(KEY_WATER_INERTIA));
-    this.dealtDamage = tag.getBoolean(KEY_DEALT_DAMAGE);
-    this.knockback = tag.getFloat(KEY_KNOCKBACK);
-    if (tag.contains(KEY_TASKS, CompoundTag.TAG_LIST)) {
-      this.tasks = Schedule.deserialize(tag.getList(KEY_TASKS, CompoundTag.TAG_COMPOUND));
-    }
+  protected void readAdditionalSaveData(ValueInput input) {
+    super.readAdditionalSaveData(input);
+    input.read(KEY_STACK, ItemStack.OPTIONAL_CODEC).ifPresent(this::setStack);
+    this.entityData.set(WATER_INERTIA, input.getFloatOr(KEY_WATER_INERTIA, 0));
+    this.dealtDamage = input.getBooleanOr(KEY_DEALT_DAMAGE, false);
+    this.knockback = input.getFloatOr(KEY_KNOCKBACK, 0);
+    input.read(KEY_TASKS, ExtraCodecs.NBT).ifPresent(tasks -> {
+      if (tasks instanceof ListTag list) {
+        this.tasks = Schedule.deserialize(list);
+      }
+    });
   }
 }

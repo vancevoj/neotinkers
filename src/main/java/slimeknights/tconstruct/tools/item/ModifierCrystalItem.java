@@ -1,6 +1,7 @@
 package slimeknights.tconstruct.tools.item;
 
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -12,6 +13,7 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.item.component.CustomData;
 import slimeknights.mantle.command.MantleCommand;
 import slimeknights.mantle.fluid.FluidTransferHelper;
@@ -30,7 +32,6 @@ import slimeknights.tconstruct.library.utils.Util;
 import slimeknights.tconstruct.tools.TinkerModifiers;
 
 import javax.annotation.Nullable;
-import java.util.List;
 import java.util.function.Consumer;
 
 /** Dynamic item holding a modifier */
@@ -59,30 +60,30 @@ public class ModifierCrystalItem extends Item {
       } else {
         modifierName = Component.translatable(Util.makeTranslationKey("modifier", id));
       }
-      return Component.translatable(getDescriptionId(stack) + ".format", modifierName).setStyle(modifierName.getStyle());
+      return Component.translatable(getDescriptionId() + ".format", modifierName).setStyle(modifierName.getStyle());
     }
     return super.getName(stack);
   }
 
   @Override
-  public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag advanced) {
+  public void appendHoverText(ItemStack stack, Item.TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag advanced) {
     ModifierId id = getModifier(stack);
     if (id != null) {
       if (ModifierManager.INSTANCE.contains(id)) {
-        tooltip.addAll(ModifierManager.INSTANCE.get(id).getDescriptionList());
+        ModifierManager.INSTANCE.get(id).getDescriptionList().forEach(tooltip);
       }
-      tooltip.add(TOOLTIP_APPLY);
+      tooltip.accept(TOOLTIP_APPLY);
       if (advanced.isAdvanced()) {
-        tooltip.add((Component.translatable(MODIFIER_KEY, id.toString())).withStyle(ChatFormatting.DARK_GRAY));
+        tooltip.accept((Component.translatable(MODIFIER_KEY, id.toString())).withStyle(ChatFormatting.DARK_GRAY));
       }
     } else {
-      tooltip.add(TOOLTIP_MISSING);
+      tooltip.accept(TOOLTIP_MISSING);
     }
   }
 
   @Nullable
   @Override
-  public String getCreatorModId(ItemStack stack) {
+  public String getCreatorModId(HolderLookup.Provider registries, ItemStack stack) {
     ModifierId modifier = getModifier(stack);
     if (modifier != null) {
       return modifier.getNamespace();
@@ -111,7 +112,7 @@ public class ModifierCrystalItem extends Item {
           // ensure no modifier problems after adding
           Component toolValidation = tool.tryValidate();
           if (toolValidation != null) {
-            player.displayClientMessage(toolValidation, false);
+            player.sendSystemMessage(toolValidation);
           } else {
             tool.updateStack(toolItem);
             FluidTransferHelper.playUISound(player, SoundEvents.ENCHANTMENT_TABLE_USE);
@@ -131,7 +132,7 @@ public class ModifierCrystalItem extends Item {
     // see also - modifier removal command
 
     // must be op or in creative, right-clicking onto a modifiable slot with a tool
-    if (action == ClickAction.SECONDARY && slot.allowModification(player) && !toolItem.isEmpty() && toolItem.is(TinkerTags.Items.MODIFIABLE) && (player.isCreative() || player.hasPermissions(MantleCommand.PERMISSION_GAME_COMMANDS))) {
+    if (action == ClickAction.SECONDARY && slot.allowModification(player) && !toolItem.isEmpty() && toolItem.is(TinkerTags.Items.MODIFIABLE) && (player.isCreative() || MantleCommand.PERMISSION_GAME_COMMANDS.check(player.permissions()))) {
       // NBT must be valid
       ModifierId modifier = getModifier(stack);
       if (modifier != null) {
@@ -154,14 +155,14 @@ public class ModifierCrystalItem extends Item {
           // ensure no modifier problems after adding
           Component toolValidation = tool.tryValidate();
           if (toolValidation != null) {
-            player.displayClientMessage(toolValidation, false);
+            player.sendSystemMessage(toolValidation);
             return true;
           }
 
           // ask modifiers if it's okay to remove them
           toolValidation = ModifierRemovalHook.onRemoved(original, tool);
           if (toolValidation != null) {
-            player.displayClientMessage(toolValidation, false);
+            player.sendSystemMessage(toolValidation);
             return true;
           }
 
@@ -196,7 +197,7 @@ public class ModifierCrystalItem extends Item {
   public static ModifierId getModifier(ItemStack stack) {
     CustomData data = stack.get(DataComponents.CUSTOM_DATA);
     if (data != null) {
-      return ModifierId.tryParse(data.copyTag().getString(TAG_MODIFIER));
+      return ModifierId.tryParse(data.copyTag().getStringOr(TAG_MODIFIER, ""));
     }
     return null;
   }

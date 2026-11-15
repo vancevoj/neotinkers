@@ -20,7 +20,6 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -91,6 +90,7 @@ import slimeknights.tconstruct.library.tools.nbt.ModifierNBT;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
 import slimeknights.tconstruct.library.utils.SlimeBounceHandler;
+import slimeknights.tconstruct.library.utils.TinkerEffectCures;
 import slimeknights.tconstruct.shared.TinkerAttributes;
 import slimeknights.tconstruct.shared.TinkerEffects;
 import slimeknights.tconstruct.tools.data.ModifierIds;
@@ -137,7 +137,7 @@ public class ModifierEvents {
     LivingEntity entity = event.getEntity();
     double boost = entity.getAttributeValue(TinkerAttributes.SAFE_FALL_DISTANCE) + ArmorStatModule.getStat(entity, TinkerDataKeys.JUMP_BOOST);
     if (boost != 0) {
-      event.setDistance((float) Math.max(event.getDistance() - boost, 0));
+      event.setDistance(Math.max(event.getDistance() - boost, 0));
     }
   }
 
@@ -191,7 +191,9 @@ public class ModifierEvents {
               stack.setDamageValue(stack.getMaxDamage() - random.nextInt(1 + random.nextInt(Math.max(stack.getMaxDamage() - 3, 1))));
             }
             // remove stack to prevent further drops
-            event.getDrops().add(target.spawnAtLocation(stack));
+            if (target.level() instanceof ServerLevel serverLevel) {
+              event.getDrops().add(target.spawnAtLocation(serverLevel, stack));
+            }
             target.setItemSlot(slot, ItemStack.EMPTY);
           }
         }
@@ -216,7 +218,8 @@ public class ModifierEvents {
     }
     // this is the latest we can add slot markers to the items so we can return them to slots
     LivingEntity entity = event.getEntity();
-    if (!entity.level().getGameRules().get(GameRules.KEEP_INVENTORY) && entity instanceof Player player && !(player instanceof FakePlayer)) {
+    // game rules only exist server side, which is the only side running death logic
+    if (entity.level() instanceof ServerLevel serverLevel && !serverLevel.getGameRules().get(GameRules.KEEP_INVENTORY) && entity instanceof Player player && !(player instanceof FakePlayer)) {
       // start with the hotbar, must be soulbound or soul belt
       boolean soulBelt = ArmorLevelModule.getLevel(player, TinkerDataKeys.SOUL_BELT) > 0;
       Inventory inventory = player.getInventory();
@@ -317,7 +320,8 @@ public class ModifierEvents {
   static void onPotionStart(MobEffectEvent.Added event) {
     MobEffectInstance newEffect = event.getEffectInstance();
     // effects with no cures (the 1.20 empty curative items) are internal effects, so their duration is left alone
-    if (!newEffect.isInfiniteDuration() && !newEffect.getCures().isEmpty()) {
+    // NeoForge removed effect cures in 26.3, Tinkers tracks them itself (no milk effects get empty cures when added, see NoMilkEffect)
+    if (!newEffect.isInfiniteDuration() && !TinkerEffectCures.getCures(newEffect).isEmpty()) {
       // use two different stats based on whether the effect is beneficial
       boolean beneficial = newEffect.getEffect().value().isBeneficial();
       LivingEntity entity = event.getEntity();
@@ -372,7 +376,7 @@ public class ModifierEvents {
       SlimeBounceHandler.addBounceHandler(living, living.getDeltaMovement());
     }
     // update airborn status
-    event.setDistance(0.0F);
+    event.setDistance(0);
     if (!living.level().isClientSide()) {
       living.needsSync = true;
       event.setCanceled(true);
@@ -462,13 +466,13 @@ public class ModifierEvents {
                 if (target.getType() == EntityTypes.PLAYER) {
                   TinkerNetwork.getInstance().sendVanillaPacket(new ClientboundSetEntityMotionPacket(projectile), target);
                 }
-                level.playSound(null, target.blockPosition(), SoundEvents.SHIELD_BLOCK, SoundSource.PLAYERS, 1.0F, 1.5F + level.random.nextFloat() * 0.4F);
+                level.playSound(null, target.blockPosition(), SoundEvents.SHIELD_BLOCK.value(), SoundSource.PLAYERS, 1.0F, 1.5F + level.getRandom().nextFloat() * 0.4F);
                 // 1.21: ImpactResult is gone; cancel the impact so the projectile skips the entity hit
                 event.setCanceled(true);
                 // damage the shield, and stop using it if needed
                 if (ToolDamageUtil.damageAnimated(tool, 3, target, target.getUsedItemHand())) {
                   target.stopUsingItem();
-                  projectile.playSound(SoundEvents.SHIELD_BREAK, 0.8F, 0.8F + projectile.level().random.nextFloat() * 0.4F);
+                  projectile.playSound(SoundEvents.SHIELD_BREAK.value(), 0.8F, 0.8F + projectile.level().getRandom().nextFloat() * 0.4F);
                 }
               }
             }
@@ -480,8 +484,7 @@ public class ModifierEvents {
       // TODO: this is a lot of code to make enderference work. A mixin would likely be better and provide better compatability
       // endermen are hardcoded to not take arrow damage, so disagree by reimplementing arrow damage right here
       // blacklist lets us not run on tridents or thrown tools. Former does not work with enderference, latter does so internally
-      EntityType<?> projectileType = projectile.getType();
-      if (TinkerEffects.needsEnderferenceOverride(target) && !projectileType.is(TinkerTags.EntityTypes.ENDERFERENCE_ARROW_BLACKLIST) && projectile instanceof AbstractArrow arrow) {
+      if (TinkerEffects.needsEnderferenceOverride(target) && !projectile.is(TinkerTags.EntityTypes.ENDERFERENCE_ARROW_BLACKLIST) && projectile instanceof AbstractArrow arrow) {
         // first, give up if we reached pierce capacity, and ensure list are created
         int pierce = arrow.getPierceLevel();
         if (pierce > 0) {
@@ -500,7 +503,8 @@ public class ModifierEvents {
         }
 
         // calculate damage, bonus on crit
-        int damage = Mth.ceil(Mth.clamp(arrow.getDeltaMovement().length() * arrow.getBaseDamage(), 0.0D, Integer.MAX_VALUE));
+        // getBaseDamage() was removed, the field is made public by the access transformer
+        int damage = Mth.ceil(Mth.clamp(arrow.getDeltaMovement().length() * arrow.baseDamage, 0.0D, Integer.MAX_VALUE));
         if (arrow.isCritArrow()) {
           damage = (int) Math.min(target.getRandom().nextInt(damage / 2 + 2) + (long) damage, Integer.MAX_VALUE);
         }
@@ -519,8 +523,8 @@ public class ModifierEvents {
           target.igniteForSeconds(5);
         }
 
-        // hurt the enderman
-        if (target.hurt(damageSource, (float) damage)) {
+        // hurt the enderman, client side this just simulates the hit like the vanilla arrow
+        if (target.hurtOrSimulate(damageSource, (float) damage)) {
           if (!level.isClientSide() && pierce <= 0) {
             target.setArrowCount(target.getArrowCount() + 1);
           }
@@ -540,11 +544,12 @@ public class ModifierEvents {
             arrow.piercedAndKilledEntities.add(target);
           }
 
-          if (!level.isClientSide() && arrow.shotFromCrossbow() && owner instanceof ServerPlayer player) {
+          // the crossbow trigger became the arrow trigger, which filters on the weapon that fired the arrow
+          if (!level.isClientSide() && owner instanceof ServerPlayer player) {
             if (arrow.piercedAndKilledEntities != null) {
-              CriteriaTriggers.KILLED_BY_CROSSBOW.trigger(player, arrow.piercedAndKilledEntities);
+              CriteriaTriggers.KILLED_BY_ARROW.trigger(player, arrow.piercedAndKilledEntities, arrow.getWeaponItem());
             } else if (!target.isAlive()) {
-              CriteriaTriggers.KILLED_BY_CROSSBOW.trigger(player, List.of(target));
+              CriteriaTriggers.KILLED_BY_ARROW.trigger(player, List.of(target), arrow.getWeaponItem());
             }
           }
 
@@ -558,9 +563,9 @@ public class ModifierEvents {
           arrow.setDeltaMovement(arrow.getDeltaMovement().scale(-0.1D));
           arrow.setYRot(arrow.getYRot() + 180.0F);
           arrow.yRotO += 180.0F;
-          if (!level.isClientSide() && arrow.getDeltaMovement().lengthSqr() < 1.0E-7D) {
+          if (level instanceof ServerLevel serverLevel && arrow.getDeltaMovement().lengthSqr() < 1.0E-7D) {
             if (arrow.pickup == AbstractArrow.Pickup.ALLOWED) {
-              arrow.spawnAtLocation(arrow.getPickupItem(), 0.1F);
+              arrow.spawnAtLocation(serverLevel, arrow.getPickupItem(), 0.1F);
             }
 
             ReusableProjectile.discard(projectile);

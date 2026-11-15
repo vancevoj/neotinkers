@@ -3,7 +3,6 @@ package slimeknights.tconstruct.tools.entity;
 import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -26,6 +25,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
@@ -82,7 +83,7 @@ public class CombatFishingHook extends FishingHook implements ProjectileWithKnoc
     float dz = Mth.cos(yAngle);
     float dx = Mth.sin(yAngle);
     // position
-    this.moveTo(
+    this.snapTo(
       player.getX() - dx * 0.3,
       player.getEyeY(),
       player.getZ() - dz * 0.3,
@@ -200,7 +201,7 @@ public class CombatFishingHook extends FishingHook implements ProjectileWithKnoc
 
   @Override
   protected boolean canHitEntity(Entity target) {
-    return super.canHitEntity(target) || (target.isAlive() && isCollecting() && (target.getType().is(TinkerTags.EntityTypes.COLLECTABLES) || target instanceof AbstractArrow));
+    return super.canHitEntity(target) || (target.isAlive() && isCollecting() && (target.is(TinkerTags.EntityTypes.COLLECTABLES) || target instanceof AbstractArrow));
   }
 
   @Override
@@ -209,7 +210,7 @@ public class CombatFishingHook extends FishingHook implements ProjectileWithKnoc
     if (owner != null) {
       // if requested, collect the targeted item
       // include arrows directly for modded arrow compat
-      boolean collectable = target.getType().is(TinkerTags.EntityTypes.COLLECTABLES) || target instanceof ItemEntity || target instanceof AbstractArrow;
+      boolean collectable = target.is(TinkerTags.EntityTypes.COLLECTABLES) || target instanceof ItemEntity || target instanceof AbstractArrow;
       if (collectable && isCollecting()) {
         if (owner instanceof Player player) {
           target.playerTouch(player);
@@ -217,7 +218,7 @@ public class CombatFishingHook extends FishingHook implements ProjectileWithKnoc
           if (target.isRemoved()) {
             return;
             // if not removed but it's on the list to discard on failed pickup, discard and als be done
-          } else if (target.getType().is(TinkerTags.EntityTypes.DISCARDABLE_COLLECTABLES)) {
+          } else if (target.is(TinkerTags.EntityTypes.DISCARDABLE_COLLECTABLES)) {
             target.discard();
             return;
           }
@@ -237,8 +238,9 @@ public class CombatFishingHook extends FishingHook implements ProjectileWithKnoc
         AttributeInstance knockback = ToolAttackUtil.disableKnockback(targetLiving);
         // actually hurt the entity
         float oldHealth = targetLiving != null ? targetLiving.getHealth() : 0;
-        if (target.hurt(source, damage)) {
-          if (this.level() instanceof ServerLevel serverLevel && owner instanceof LivingEntity ownerLiving) {
+        // hurt only does anything server side
+        if (this.level() instanceof ServerLevel serverLevel && target.hurtServer(serverLevel, source, damage)) {
+          if (owner instanceof LivingEntity ownerLiving) {
             if (targetLiving != null) {
               EnchantmentHelper.doPostAttackEffects(serverLevel, targetLiving, source);
             }
@@ -301,7 +303,7 @@ public class CombatFishingHook extends FishingHook implements ProjectileWithKnoc
       player.startAutoSpinAttack(20, 8.0F, player.getMainHandItem());
     }
     if (owner instanceof ServerPlayer player) {
-      player.connection.send(new ClientboundSetEntityMotionPacket(player.getId(), player.getDeltaMovement()));
+      player.connection.send(new ClientboundSetEntityMotionPacket(player));
     }
   }
 
@@ -393,16 +395,14 @@ public class CombatFishingHook extends FishingHook implements ProjectileWithKnoc
   private static final String TAG_MATERIAL = "material";
 
   @Override
-  public void addAdditionalSaveData(CompoundTag tag) {
-    super.addAdditionalSaveData(tag);
-    tag.putString(TAG_MATERIAL, getMaterial().toString());
+  protected void addAdditionalSaveData(ValueOutput output) {
+    super.addAdditionalSaveData(output);
+    output.putString(TAG_MATERIAL, getMaterial().toString());
   }
 
   @Override
-  public void readAdditionalSaveData(CompoundTag tag) {
-    super.readAdditionalSaveData(tag);
-    if (tag.contains(TAG_MATERIAL)) {
-      setMaterial(Objects.requireNonNullElse(MaterialVariantId.tryParse(tag.getString(TAG_MATERIAL)), MaterialId.UNKNOWN));
-    }
+  protected void readAdditionalSaveData(ValueInput input) {
+    super.readAdditionalSaveData(input);
+    input.getString(TAG_MATERIAL).ifPresent(material -> setMaterial(Objects.requireNonNullElse(MaterialVariantId.tryParse(material), MaterialId.UNKNOWN)));
   }
 }

@@ -6,8 +6,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -20,8 +18,11 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.LlamaSpit;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -29,12 +30,14 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.event.EventHooks;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction;
-import net.neoforged.neoforge.items.IItemHandler;
-import net.neoforged.neoforge.items.IItemHandlerModifiable;
+import net.neoforged.neoforge.transfer.IndexModifier;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.item.ItemResource;
+import net.neoforged.neoforge.transfer.item.ItemUtil;
 import slimeknights.tconstruct.fluids.TinkerFluids;
 import slimeknights.tconstruct.library.modifiers.entity.ProjectileWithKnockback;
 import slimeknights.tconstruct.library.modifiers.entity.ProjectileWithPower;
+import slimeknights.tconstruct.library.modifiers.fluid.FluidAction;
 import slimeknights.tconstruct.library.modifiers.fluid.FluidEffectContext;
 import slimeknights.tconstruct.library.modifiers.fluid.FluidEffectManager;
 import slimeknights.tconstruct.library.modifiers.fluid.FluidEffects;
@@ -133,16 +136,17 @@ public class FluidEffectProjectile extends Projectile implements ProjectileWithK
 
   @Override
   protected Component getTypeName() {
-    return getFluid().getDisplayName();
+    return getFluid().getHoverName();
   }
 
-  /** Gets the cannon tank */
+  /** Gets the cannon tank, must support directly setting the slot (was {@code IItemHandlerModifiable}) */
   @Nullable
-  private IItemHandlerModifiable getCannonInventory() {
+  private ResourceHandler<ItemResource> getCannonInventory() {
     Level level = level();
     if (this.cannon != null && level.isLoaded(this.cannon)) {
-      if (level.getCapability(Capabilities.Item.BLOCK, this.cannon, null) instanceof IItemHandlerModifiable modifiable) {
-        return modifiable;
+      ResourceHandler<ItemResource> handler = level.getCapability(Capabilities.Item.BLOCK, this.cannon, null);
+      if (handler instanceof IndexModifier<?> && handler.size() > 0) {
+        return handler;
       }
     }
     return null;
@@ -157,9 +161,9 @@ public class FluidEffectProjectile extends Projectile implements ProjectileWithK
       builder.user(owner);
     }
     if (this.cannon != null) {
-      IItemHandler handler = getCannonInventory();
+      ResourceHandler<ItemResource> handler = getCannonInventory();
       if (handler != null) {
-        builder.stack(handler.getStackInSlot(0).copy());
+        builder.stack(ItemUtil.getStack(handler, 0));
       }
     }
     return builder;
@@ -168,9 +172,12 @@ public class FluidEffectProjectile extends Projectile implements ProjectileWithK
   /** Updates the stack for the fluid cannon */
   private void updateCannonStack(FluidEffectContext context) {
     if (cannon != null) {
-      IItemHandlerModifiable handler = getCannonInventory();
-      if (handler != null) {
-        handler.setStackInSlot(0, context.getStack());
+      ResourceHandler<ItemResource> handler = getCannonInventory();
+      if (handler instanceof IndexModifier<?> modifier) {
+        ItemStack stack = context.getStack();
+        @SuppressWarnings("unchecked")
+        IndexModifier<ItemResource> itemModifier = (IndexModifier<ItemResource>) modifier;
+        itemModifier.set(0, ItemResource.of(stack), stack.getCount());
       }
     }
   }
@@ -211,7 +218,7 @@ public class FluidEffectProjectile extends Projectile implements ProjectileWithK
     }
     // if the projectile moves above the world, delete it
     // only likely to happen for lighter than air fluids
-    if (getY() > level().getMaxBuildHeight() + 64) {
+    if (getY() > level().getMaxY() + 1 + 64) {
       this.discard();
     }
   }
@@ -322,9 +329,10 @@ public class FluidEffectProjectile extends Projectile implements ProjectileWithK
   public void recreateFromPacket(ClientboundAddEntityPacket packet) {
     // copied from llama spit
     super.recreateFromPacket(packet);
-    double x = packet.getXa();
-    double y = packet.getYa();
-    double z = packet.getZa();
+    Vec3 movement = packet.getMovement();
+    double x = movement.x;
+    double y = movement.y;
+    double z = movement.z;
     for(int i = 0; i < 7; i++) {
       double offset = 0.4D + 0.1D * i;
       this.level().addParticle(ParticleTypes.SPIT, this.getX(), this.getY(), this.getZ(), x * offset, y, z * offset);
@@ -333,31 +341,27 @@ public class FluidEffectProjectile extends Projectile implements ProjectileWithK
   }
 
   @Override
-  protected void addAdditionalSaveData(CompoundTag nbt) {
-    super.addAdditionalSaveData(nbt);
-    nbt.putFloat(KEY_POWER, power);
-    nbt.putFloat(KEY_KNOCKBACK, knockback);
-    nbt.putFloat(KEY_WATER_INERTIA, this.entityData.get(WATER_INERTIA));
+  protected void addAdditionalSaveData(ValueOutput output) {
+    super.addAdditionalSaveData(output);
+    output.putFloat(KEY_POWER, power);
+    output.putFloat(KEY_KNOCKBACK, knockback);
+    output.putFloat(KEY_WATER_INERTIA, this.entityData.get(WATER_INERTIA));
     if (cannon != null) {
-      nbt.put(KEY_CANNON, NbtUtils.writeBlockPos(cannon));
+      output.store(KEY_CANNON, BlockPos.CODEC, cannon);
     }
     FluidStack fluid = getFluid();
     if (!fluid.isEmpty()) {
-      nbt.put(KEY_FLUID, fluid.save(this.registryAccess()));
+      output.store(KEY_FLUID, FluidStack.CODEC, fluid);
     }
   }
 
   @Override
-  protected void readAdditionalSaveData(CompoundTag nbt) {
-    super.readAdditionalSaveData(nbt);
-    this.power = nbt.getFloat(KEY_POWER);
-    this.knockback = nbt.getFloat(KEY_KNOCKBACK);
-    this.entityData.set(WATER_INERTIA, nbt.getFloat(KEY_WATER_INERTIA));
-    if (nbt.contains(KEY_CANNON)) {
-      this.cannon = NbtUtils.readBlockPos(nbt, KEY_CANNON).orElse(null);
-    } else {
-      this.cannon = null;
-    }
-    setFluid(FluidStack.parseOptional(this.registryAccess(), nbt.getCompound(KEY_FLUID)));
+  protected void readAdditionalSaveData(ValueInput input) {
+    super.readAdditionalSaveData(input);
+    this.power = input.getFloatOr(KEY_POWER, 0);
+    this.knockback = input.getFloatOr(KEY_KNOCKBACK, 0);
+    this.entityData.set(WATER_INERTIA, input.getFloatOr(KEY_WATER_INERTIA, 0));
+    this.cannon = input.read(KEY_CANNON, BlockPos.CODEC).orElse(null);
+    setFluid(input.read(KEY_FLUID, FluidStack.OPTIONAL_CODEC).orElse(FluidStack.EMPTY));
   }
 }

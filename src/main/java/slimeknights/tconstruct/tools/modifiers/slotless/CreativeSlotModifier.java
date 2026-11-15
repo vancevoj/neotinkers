@@ -46,7 +46,7 @@ public class CreativeSlotModifier extends NoLevelsModifier implements VolatileDa
       for (String key : slots.keySet()) {
         SlotType slotType = SlotType.getIfPresent(key);
         if (slotType != null) {
-          volatileData.addSlots(slotType, slots.getInt(key));
+          volatileData.addSlots(slotType, slots.getIntOr(key, 0));
         }
       }
     }
@@ -76,7 +76,7 @@ public class CreativeSlotModifier extends NoLevelsModifier implements VolatileDa
             tooltip = new ArrayList<>(tooltip);
             first = false;
           }
-          tooltip.add(formatCount(slotType, slots.getInt(key)));
+          tooltip.add(formatCount(slotType, slots.getIntOr(key, 0)));
         }
       }
     }

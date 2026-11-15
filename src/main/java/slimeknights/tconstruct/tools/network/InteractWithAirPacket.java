@@ -58,16 +58,16 @@ public enum InteractWithAirPacket implements IThreadsafePacket {
         ItemStack held = player.getItemInHand(hand);
         if (held.is(TinkerTags.Items.INTERACTABLE_LEFT)) {
           InteractionResult result = InteractionHandler.onLeftClickInteraction(player, held, hand);
-          if (result.shouldSwing()) {
-            player.swing(hand, true);
+          if (result instanceof InteractionResult.Success success && success.shouldSwing()) {
+            player.swing(hand, held.getAttackAnimation(), true);
           }
         }
       } else {
         ItemStack chestplate = player.getItemBySlot(EquipmentSlot.CHEST);
         if (chestplate.is(TinkerTags.Items.INTERACTABLE_ARMOR) && player.getItemInHand(hand).isEmpty()) {
           InteractionResult result = InteractionHandler.onChestplateUse(player, chestplate, hand);
-          if (result.shouldSwing()) {
-            player.swing(hand, true);
+          if (result instanceof InteractionResult.Success success && success.shouldSwing()) {
+            player.swing(hand, player.getItemInHand(hand).getInteractAnimation(), true);
           }
         }
       }

@@ -1,7 +1,8 @@
 package slimeknights.tconstruct.tools.modifiers.traits.ranged;
 
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.nbt.NumericTag;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -79,14 +80,14 @@ public class OlympicModifier extends Modifier implements ProjectileLaunchModifie
     // 10% chance per level
     Entity targetEntity = hit.getEntity();
     Level level = projectile.level();
-    if (notBlocked && !level.isClientSide() && targetEntity.getType().getCategory() == MobCategory.MONSTER && RANDOM.nextInt(20) < modifier.getLevel()) {
+    if (notBlocked && level instanceof ServerLevel serverLevel && targetEntity.getType().getCategory() == MobCategory.MONSTER && RANDOM.nextInt(20) < modifier.getLevel()) {
       CompoundTag startCompound = persistentData.getCompound(OLYMPIC_START);
-      if (!startCompound.isEmpty() && startCompound.contains("X", Tag.TAG_ANY_NUMERIC) && startCompound.contains("Y", Tag.TAG_ANY_NUMERIC) && startCompound.contains("Z", Tag.TAG_ANY_NUMERIC)) {
+      if (!startCompound.isEmpty() && startCompound.get("X") instanceof NumericTag && startCompound.get("Y") instanceof NumericTag && startCompound.get("Z") instanceof NumericTag) {
         // nugget type based on distance
-        Item nugget = getNugget(targetEntity.distanceToSqr(startCompound.getDouble("X"), startCompound.getDouble("Y"), startCompound.getDouble("Z")));
+        Item nugget = getNugget(targetEntity.distanceToSqr(startCompound.getDoubleOr("X", 0), startCompound.getDoubleOr("Y", 0), startCompound.getDoubleOr("Z", 0)));
         if (nugget != Items.AIR) {
           // spawn and play sound
-          targetEntity.spawnAtLocation(nugget);
+          targetEntity.spawnAtLocation(serverLevel, nugget);
           if (attacker != null) {
             level.playSound(null, attacker.getX(), attacker.getY(), attacker.getZ(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 1.0f, 1.0f);
           }

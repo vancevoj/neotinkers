@@ -2,7 +2,6 @@ package slimeknights.tconstruct.tools.item;
 
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -15,6 +14,8 @@ import net.minecraft.world.item.ArrowItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.Nullable;
 import slimeknights.tconstruct.common.Sounds;
 import slimeknights.tconstruct.tools.TinkerTools;
@@ -48,9 +49,7 @@ public class CrystalshotItem extends ArrowItem {
     CustomData data = pStack.get(DataComponents.CUSTOM_DATA);
     if (data != null) {
       CompoundTag tag = data.copyTag();
-      if (tag.contains(TAG_VARIANT, Tag.TAG_STRING)) {
-        variant = tag.getString(TAG_VARIANT);
-      }
+      variant = tag.getStringOr(TAG_VARIANT, variant);
     }
     if ("random".equals(variant)) {
       variant = RANDOM_VARIANTS.get(pShooter.getRandom().nextInt(RANDOM_VARIANTS.size()));
@@ -71,12 +70,16 @@ public class CrystalshotItem extends ArrowItem {
 
     public CrystalshotEntity(EntityType<? extends CrystalshotEntity> type, Level level) {
       super(type, level);
-      soundEvent = Sounds.CRYSTALSHOT.getSound();
     }
 
     public CrystalshotEntity(Level level, LivingEntity shooter) {
       super(TinkerTools.crystalshotEntity.get(), shooter, level, ItemStack.EMPTY, null);
-      soundEvent = Sounds.CRYSTALSHOT.getSound();
+    }
+
+    @Override
+    protected SoundEvent getDefaultHitGroundSoundEvent() {
+      // sound event field is private, but it defaults to this value and the setter filters out the vanilla overrides
+      return Sounds.CRYSTALSHOT.getSound();
     }
 
     @Override
@@ -117,15 +120,15 @@ public class CrystalshotItem extends ArrowItem {
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundTag tag) {
-      super.addAdditionalSaveData(tag);
-      tag.putString(TAG_VARIANT, getVariant());
+    protected void addAdditionalSaveData(ValueOutput output) {
+      super.addAdditionalSaveData(output);
+      output.putString(TAG_VARIANT, getVariant());
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundTag tag) {
-      super.readAdditionalSaveData(tag);
-      setVariant(tag.getString(TAG_VARIANT));
+    protected void readAdditionalSaveData(ValueInput input) {
+      super.readAdditionalSaveData(input);
+      setVariant(input.getStringOr(TAG_VARIANT, ""));
     }
   }
 }

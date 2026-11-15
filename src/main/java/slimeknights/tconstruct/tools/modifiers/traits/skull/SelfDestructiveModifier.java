@@ -1,5 +1,6 @@
 package slimeknights.tconstruct.tools.modifiers.traits.skull;
 
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.sounds.SoundEvents;
@@ -73,14 +74,11 @@ public class SelfDestructiveModifier extends SingleLevelModifier implements Keyb
     }
 
     @Override
-    public boolean applyEffectTick(LivingEntity living, int amplifier) {
-      // effect level is the explosion radius
-      Level level = living.level();
-      if (!level.isClientSide()) {
-        // TODO: is firing mob grief event with a player okay?
-        level.explode(living, living.getX(), living.getY(), living.getZ(), amplifier + 1, ExplosionInteraction.MOB);
-        living.hurt(TinkerDamageTypes.source(level.registryAccess(), TinkerDamageTypes.SELF_DESTRUCT), 99999);
-      }
+    public boolean applyEffectTick(ServerLevel level, LivingEntity living, int amplifier) {
+      // effect level is the explosion radius, effect ticks only run server side now
+      // TODO: is firing mob grief event with a player okay?
+      level.explode(living, living.getX(), living.getY(), living.getZ(), amplifier + 1, ExplosionInteraction.MOB);
+      living.hurtServer(level, TinkerDamageTypes.source(level.registryAccess(), TinkerDamageTypes.SELF_DESTRUCT), 99999);
       return true;
     }
   }

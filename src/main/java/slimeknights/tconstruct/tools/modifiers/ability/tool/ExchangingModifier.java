@@ -120,7 +120,7 @@ public class ExchangingModifier extends NoLevelsModifier implements RemoveBlockM
       if (!context.isAOE() && player != null) {
         TinkerNetwork.getInstance().sendTo(new UpdateNeighborsPacket(state, pos), player);
       }
-      context.getLiving().swing(InteractionHand.OFF_HAND, false);
+      context.getLiving().swing(InteractionHand.OFF_HAND, context.getLiving().getOffhandItem().getInteractAnimation(), false);
       return true;
     } else if (placedBlock) {
       // notify that the fluid was placed properly, as it was suppressed earlier, and placing again will fail to hit it

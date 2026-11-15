@@ -1,5 +1,6 @@
 package slimeknights.tconstruct.tools.modifiers.traits.skull;
 
+import java.util.List;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -32,9 +33,8 @@ public class RevengeModifier extends NoLevelsModifier implements EquipmentChange
     LivingEntity living = context.getEntity();
     if (trueSource != null && trueSource != living) { // no making yourself mad with slurping or self-destruct or alike
       MobEffectInstance effect = new MobEffectInstance(MobEffects.STRENGTH, 300);
-      // 1.21: per-stack curative items became EffectCure tokens. Clear default cures (so milk won't help) and only allow the worn helmet to cure it.
-      effect.getCures().clear();
-      effect.getCures().add(TinkerEffectCures.itemCure(living.getItemBySlot(slotType).getItem()));
+      // 26.3 removed effect cures, Tinkers tracks them per instance. Replace the default cures (so milk won't help) and only allow the worn helmet to cure it.
+      TinkerEffectCures.setCures(effect, List.of(living.getItemBySlot(slotType).getItem()));
       living.addEffect(effect);
     }
   }
@@ -45,7 +45,7 @@ public class RevengeModifier extends NoLevelsModifier implements EquipmentChange
       IToolStackView replacement = context.getReplacementTool();
       if (replacement == null || replacement.getModifierLevel(this) == 0) {
         // cure effects using the helmet
-        context.getEntity().removeEffectsCuredBy(TinkerEffectCures.itemCure(tool.getItem()));
+        TinkerEffectCures.cure(context.getEntity(), tool.getItem());
       }
     }
   }

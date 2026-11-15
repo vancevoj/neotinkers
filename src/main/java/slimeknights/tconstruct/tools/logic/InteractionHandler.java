@@ -9,7 +9,6 @@ import net.minecraft.stats.Stats;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -85,7 +84,7 @@ public class InteractionHandler {
         return;
       }
     }
-    if (!player.getCooldowns().isOnCooldown(stack.getItem())) {
+    if (!player.getCooldowns().isOnCooldown(stack)) {
       // actual interaction hook
       ToolStack tool = ToolStack.from(stack);
       Entity target = event.getTarget();
@@ -107,7 +106,7 @@ public class InteractionHandler {
     Player player = event.getEntity();
     if (event.getItemStack().isEmpty() && !player.isSpectator()) {
       ItemStack chestplate = player.getItemBySlot(EquipmentSlot.CHEST);
-      if (chestplate.is(TinkerTags.Items.INTERACTABLE_ARMOR) && !player.getCooldowns().isOnCooldown(chestplate.getItem())) {
+      if (chestplate.is(TinkerTags.Items.INTERACTABLE_ARMOR) && !player.getCooldowns().isOnCooldown(chestplate)) {
         // from this point on, we are taking over interaction logic, to ensure chestplate hooks run in the right order
         event.setCanceled(true);
 
@@ -116,7 +115,7 @@ public class InteractionHandler {
         InteractionHand hand = event.getHand();
 
         // initial entity interaction
-        InteractionResult result = target.interact(player, hand);
+        InteractionResult result = target.interact(player, hand, event.getLocation());
         if (result.consumesAction()) {
           event.setCancellationResult(result);
           return;
@@ -174,7 +173,7 @@ public class InteractionHandler {
       // item must be a chestplate
       // TODO 1.21: add a modifier tag so we only perform the cancellation if a modifier needs it
       ItemStack chestplate = player.getItemBySlot(EquipmentSlot.CHEST);
-      if (chestplate.is(TinkerTags.Items.INTERACTABLE_ARMOR) && !player.getCooldowns().isOnCooldown(chestplate.getItem())) {
+      if (chestplate.is(TinkerTags.Items.INTERACTABLE_ARMOR) && !player.getCooldowns().isOnCooldown(chestplate)) {
         // no turning back, from this point we are fully in charge of interaction logic (since we need to ensure order of the hooks)
 
         // begin interaction
@@ -205,12 +204,9 @@ public class InteractionHandler {
           // or blocks that keep their right-click logic there (Farmer's Delight cutting board, Etched table) never respond
           // and we cancel the event over them, so nothing happens (#27).
           BlockState state = level.getBlockState(pos);
-          ItemInteractionResult itemResult = state.useItemOn(event.getItemStack(), level, player, hand, trace);
-          InteractionResult result;
-          if (itemResult == ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION) {
+          InteractionResult result = state.useItemOn(event.getItemStack(), level, player, hand, trace);
+          if (result instanceof InteractionResult.TryEmptyHandInteraction) {
             result = state.useWithoutItem(level, player, trace);
-          } else {
-            result = itemResult.result();
           }
           if (result.consumesAction()) {
             if (player instanceof ServerPlayer serverPlayer) {
@@ -225,7 +221,7 @@ public class InteractionHandler {
         // regular item interaction: must not be deny, and either be allow or not have a cooldown
         TriState useItem = event.getUseItem();
         event.setCancellationResult(InteractionResult.PASS);
-        if (useItem != TriState.FALSE && (useItem == TriState.TRUE || !player.getCooldowns().isOnCooldown(chestplate.getItem()))) {
+        if (useItem != TriState.FALSE && (useItem == TriState.TRUE || !player.getCooldowns().isOnCooldown(chestplate))) {
           // finally, after block use (in forge, onItemUse)
           InteractionResult result = onBlockUse(context, tool, chestplate, entry -> entry.getHook(ModifierHooks.BLOCK_INTERACT).afterBlockUse(tool, entry, context, InteractionSource.ARMOR));
           if (result.consumesAction()) {
@@ -249,7 +245,7 @@ public class InteractionHandler {
 
   /** Implements {@link GeneralInteractionModifierHook#onToolUse(IToolStackView, ModifierEntry, Player, InteractionHand, InteractionSource)}, called differently on client and server */
   public static InteractionResult onChestplateUse(Player player, ItemStack chestplate, InteractionHand hand) {
-    if (player.getCooldowns().isOnCooldown(chestplate.getItem())) {
+    if (player.getCooldowns().isOnCooldown(chestplate)) {
       return InteractionResult.PASS;
     }
 
@@ -366,7 +362,7 @@ public class InteractionHandler {
 
   /** Runs the left click interaction for left click */
   public static InteractionResult onLeftClickInteraction(Player player, ItemStack held, InteractionHand hand) {
-    if (player.getCooldowns().isOnCooldown(held.getItem())) {
+    if (player.getCooldowns().isOnCooldown(held)) {
       return InteractionResult.PASS;
     }
     return onLeftClickInteraction(ToolStack.from(held), player, hand);
@@ -376,8 +372,8 @@ public class InteractionHandler {
   private static void setLeftClickEventResult(LeftClickBlock event, InteractionResult result) {
     if (result.consumesAction()) {
       // success means swing hand
-      if (result == InteractionResult.SUCCESS) {
-        event.getEntity().swing(event.getHand());
+      if (result instanceof InteractionResult.Success success && success.shouldSwing()) {
+        event.getEntity().swing(event.getHand(), event.getItemStack().getAttackAnimation(), false);
       }
       // 1.21 dropped PlayerInteractEvent#setCancellationResult; the consumed result is conveyed by canceling the event
       // don't cancel the result in survival as it does not actually prevent breaking the block, just causes really weird desyncs
@@ -421,7 +417,7 @@ public class InteractionHandler {
     }
     // must support interaction
     ItemStack stack = event.getItemStack();
-    if (!stack.is(TinkerTags.Items.INTERACTABLE_LEFT) || player.getCooldowns().isOnCooldown(stack.getItem())) {
+    if (!stack.is(TinkerTags.Items.INTERACTABLE_LEFT) || player.getCooldowns().isOnCooldown(stack)) {
       return;
     }
 
@@ -505,11 +501,8 @@ public class InteractionHandler {
         // handle damaging the shield ourselves to fix a couple of shield related bugs
         if (entity instanceof Player player) {
           // setShieldTakesDamage(false) -> setShieldDamage(0); we damage the shield ourselves below
+          // 26.3 BlocksAttacks#hurtBlockingItem still awards the item used stat with 0 shield damage, so no need to award it here
           event.setShieldDamage(0);
-          // this code is based on code from Player#hurtCurrentlyUsedShield
-          if (!entity.level().isClientSide()) {
-            player.awardStat(Stats.ITEM_USED.get(tool.getItem()));
-          }
 
           float damage = event.getBlockedDamage();
           if (damage >= 3) {
@@ -517,7 +510,7 @@ public class InteractionHandler {
             if (ToolDamageUtil.damageAnimated(tool, 1 + Mth.floor(damage), entity, usingHand)) {
               EventHooks.onPlayerDestroyItem(player, activeStack, usingHand);
               entity.stopUsingItem();
-              entity.playSound(SoundEvents.SHIELD_BREAK, 0.8F, 0.8F + entity.level().random.nextFloat() * 0.4F);
+              entity.playSound(SoundEvents.SHIELD_BREAK.value(), 0.8F, 0.8F + entity.level().getRandom().nextFloat() * 0.4F);
             }
           }
         }

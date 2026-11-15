@@ -2,11 +2,13 @@ package slimeknights.tconstruct.tools.entity;
 
 import lombok.Getter;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -16,6 +18,8 @@ import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -163,7 +167,7 @@ public class ThrownShuriken extends Projectile implements ToolProjectile, Projec
     }
 
     // update position
-    this.checkInsideBlocks();
+    this.applyEffectsFromBlocks();
     Vec3 movement = this.getDeltaMovement();
     double x = this.getX() + movement.x;
     double y = this.getY() + movement.y;
@@ -206,7 +210,8 @@ public class ThrownShuriken extends Projectile implements ToolProjectile, Projec
     } else {
       source = damageSources().thrown(this, this.getOwner());
     }
-    boolean hit = target.hurt(source, power);
+    // client side this just simulates the hit, same as the old hurt
+    boolean hit = target.hurtOrSimulate(source, power);
 
     if (hit && knockback > 0 && target instanceof LivingEntity living) {
       // knockback logic based on arrows
@@ -218,9 +223,9 @@ public class ThrownShuriken extends Projectile implements ToolProjectile, Projec
     }
 
     Level level = level();
-    if (!level.isClientSide()) {
+    if (level instanceof ServerLevel serverLevel) {
       if ((!hit || reclaim) && !this.isRemoved()) {
-        this.spawnAtLocation(stack.copy());
+        this.spawnAtLocation(serverLevel, stack.copy());
       } else {
         level.broadcastEntityEvent(this, (byte) 3); // TODO: find the proper constant for this event ID
       }
@@ -234,7 +239,9 @@ public class ThrownShuriken extends Projectile implements ToolProjectile, Projec
 
     // TODO: can we stick in the block like an arrow instead?
     if (!this.isRemoved()) {
-      this.spawnAtLocation(stack.copy());
+      if (level() instanceof ServerLevel serverLevel) {
+        this.spawnAtLocation(serverLevel, stack.copy());
+      }
       this.discard();
     }
   }
@@ -289,24 +296,24 @@ public class ThrownShuriken extends Projectile implements ToolProjectile, Projec
   private static final String KEY_TASKS = "tasks";
 
   @Override
-  public void addAdditionalSaveData(CompoundTag tag) {
-    super.addAdditionalSaveData(tag);
-    tag.put(KEY_STACK, this.stack.saveOptional(this.registryAccess()));
-    tag.putFloat(KEY_WATER_INERTIA, this.entityData.get(WATER_INERTIA));
+  protected void addAdditionalSaveData(ValueOutput output) {
+    super.addAdditionalSaveData(output);
+    output.store(KEY_STACK, ItemStack.OPTIONAL_CODEC, this.stack);
+    output.putFloat(KEY_WATER_INERTIA, this.entityData.get(WATER_INERTIA));
     if (!this.tasks.isEmpty()) {
-      tag.put(KEY_TASKS, this.tasks.serialize());
+      output.store(KEY_TASKS, ExtraCodecs.NBT, this.tasks.serialize());
     }
   }
 
   @Override
-  public void readAdditionalSaveData(CompoundTag tag) {
-    super.readAdditionalSaveData(tag);
-    if (tag.contains(KEY_STACK, CompoundTag.TAG_COMPOUND)) {
-      setStack(ItemStack.parseOptional(this.registryAccess(), tag.getCompound(KEY_STACK)));
-    }
-    this.entityData.set(WATER_INERTIA, tag.getFloat(KEY_WATER_INERTIA));
-    if (tag.contains(KEY_TASKS, CompoundTag.TAG_LIST)) {
-      this.tasks = Schedule.deserialize(tag.getList(KEY_TASKS, CompoundTag.TAG_COMPOUND));
-    }
+  protected void readAdditionalSaveData(ValueInput input) {
+    super.readAdditionalSaveData(input);
+    input.read(KEY_STACK, ItemStack.OPTIONAL_CODEC).ifPresent(this::setStack);
+    this.entityData.set(WATER_INERTIA, input.getFloatOr(KEY_WATER_INERTIA, 0));
+    input.read(KEY_TASKS, ExtraCodecs.NBT).ifPresent(tasks -> {
+      if (tasks instanceof ListTag list) {
+        this.tasks = Schedule.deserialize(list);
+      }
+    });
   }
 }

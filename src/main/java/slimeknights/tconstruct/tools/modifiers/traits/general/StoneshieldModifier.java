@@ -1,6 +1,6 @@
 package slimeknights.tconstruct.tools.modifiers.traits.general;
 
-import net.minecraft.world.item.crafting.Ingredient;
+import slimeknights.mantle.recipe.helper.IngredientHelper;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.json.LevelingInt;
 import slimeknights.tconstruct.library.modifiers.Modifier;
@@ -19,7 +19,7 @@ public class StoneshieldModifier extends Modifier {
     hookBuilder.addModule(new CapacityBarModule(LevelingInt.eachLevel(100), ToolStats.DURABILITY));
     hookBuilder.addModule(new DurabilityShieldModule(0x7F7F7F));
     // amount(int) is the Lombok fluent setter (1-arg), distinct from the terminal amount(float,float); restores 3 shield per consumed stone
-    hookBuilder.addModule(LootToCapacityModule.consume(Ingredient.of(TinkerTags.Items.STONESHIELDS)).amount(3).eachLevel(0.2f));
+    hookBuilder.addModule(LootToCapacityModule.consume(IngredientHelper.tag(TinkerTags.Items.STONESHIELDS)).amount(3).eachLevel(0.2f));
   }
 
   @Override

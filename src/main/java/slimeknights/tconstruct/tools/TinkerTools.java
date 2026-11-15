@@ -1,12 +1,14 @@
 package slimeknights.tconstruct.tools;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.world.item.equipment.ArmorType;
 import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.DataGenerator;
-import net.minecraft.data.PackOutput;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.packs.PackType;
+import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.player.Player;
@@ -16,11 +18,12 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTab.ItemDisplayParameters;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.BlocksAttacks;
 import net.minecraft.world.level.block.DispenserBlock;
-import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
+import net.neoforged.neoforge.data.event.GatherDataRegistryEntriesEvent;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.ModLoadingContext;
@@ -194,77 +197,76 @@ public final class TinkerTools extends TinkerModule {
       .build());
 
   /** Loot function type for tool add data */
-  public static final DeferredHolder<? super LootItemFunctionType<?>, LootItemFunctionType<AddToolDataFunction>> lootAddToolData = LOOT_FUNCTIONS.register("add_tool_data", () -> new LootItemFunctionType<>(AddToolDataFunction.CODEC));
+  public static final DeferredHolder<MapCodec<? extends LootItemFunction>, MapCodec<AddToolDataFunction>> lootAddToolData = LOOT_FUNCTIONS.register("add_tool_data", () -> AddToolDataFunction.CODEC);
 
   /*
    * Items
    */
-  public static final ItemObject<ModifiableItem> pickaxe = ITEMS.register("pickaxe", () -> new ModifiableItem(UNSTACKABLE_PROPS, ToolDefinitions.PICKAXE));
-  public static final ItemObject<ModifiableItem> sledgeHammer = ITEMS.register("sledge_hammer", () -> new ModifiableItem(UNSTACKABLE_PROPS, ToolDefinitions.SLEDGE_HAMMER));
-  public static final ItemObject<ModifiableItem> veinHammer = ITEMS.register("vein_hammer", () -> new ModifiableItem(UNSTACKABLE_PROPS, ToolDefinitions.VEIN_HAMMER));
+  public static final ItemObject<ModifiableItem> pickaxe = ITEMS.register("pickaxe", p -> new ModifiableItem(p, ToolDefinitions.PICKAXE), UNSTACKABLE_PROPS);
+  public static final ItemObject<ModifiableItem> sledgeHammer = ITEMS.register("sledge_hammer", p -> new ModifiableItem(p, ToolDefinitions.SLEDGE_HAMMER), UNSTACKABLE_PROPS);
+  public static final ItemObject<ModifiableItem> veinHammer = ITEMS.register("vein_hammer", p -> new ModifiableItem(p, ToolDefinitions.VEIN_HAMMER), UNSTACKABLE_PROPS);
 
-  public static final ItemObject<ModifiableItem> mattock = ITEMS.register("mattock", () -> new ModifiableItem(UNSTACKABLE_PROPS, ToolDefinitions.MATTOCK));
-  public static final ItemObject<ModifiableItem> pickadze = ITEMS.register("pickadze", () -> new ModifiableItem(UNSTACKABLE_PROPS, ToolDefinitions.PICKADZE));
-  public static final ItemObject<ModifiableItem> excavator = ITEMS.register("excavator", () -> new ModifiableItem(UNSTACKABLE_PROPS, ToolDefinitions.EXCAVATOR));
+  public static final ItemObject<ModifiableItem> mattock = ITEMS.register("mattock", p -> new ModifiableItem(p, ToolDefinitions.MATTOCK), UNSTACKABLE_PROPS);
+  public static final ItemObject<ModifiableItem> pickadze = ITEMS.register("pickadze", p -> new ModifiableItem(p, ToolDefinitions.PICKADZE), UNSTACKABLE_PROPS);
+  public static final ItemObject<ModifiableItem> excavator = ITEMS.register("excavator", p -> new ModifiableItem(p, ToolDefinitions.EXCAVATOR), UNSTACKABLE_PROPS);
 
-  public static final ItemObject<ModifiableItem> handAxe = ITEMS.register("hand_axe", () -> new ModifiableItem(UNSTACKABLE_PROPS, ToolDefinitions.HAND_AXE));
-  public static final ItemObject<ModifiableItem> broadAxe = ITEMS.register("broad_axe", () -> new ModifiableItem(UNSTACKABLE_PROPS, ToolDefinitions.BROAD_AXE));
+  public static final ItemObject<ModifiableItem> handAxe = ITEMS.register("hand_axe", p -> new ModifiableItem(p, ToolDefinitions.HAND_AXE), UNSTACKABLE_PROPS);
+  public static final ItemObject<ModifiableItem> broadAxe = ITEMS.register("broad_axe", p -> new ModifiableItem(p, ToolDefinitions.BROAD_AXE), UNSTACKABLE_PROPS);
 
-  public static final ItemObject<ModifiableItem> kama = ITEMS.register("kama", () -> new ModifiableItem(UNSTACKABLE_PROPS, ToolDefinitions.KAMA));
-  public static final ItemObject<ModifiableItem> scythe = ITEMS.register("scythe", () -> new ModifiableItem(UNSTACKABLE_PROPS, ToolDefinitions.SCYTHE));
+  public static final ItemObject<ModifiableItem> kama = ITEMS.register("kama", p -> new ModifiableItem(p, ToolDefinitions.KAMA), UNSTACKABLE_PROPS);
+  public static final ItemObject<ModifiableItem> scythe = ITEMS.register("scythe", p -> new ModifiableItem(p, ToolDefinitions.SCYTHE), UNSTACKABLE_PROPS);
 
-  // setting durability to -1 makes sure its not 0 for the defaultDurability call in the TieredItem constructor, but is still less than 0 for the stacksTo call to work
-  // problem is setting the durability sets the max stack size, and we don't want that. And we need TieredItem to work with piglins
-  public static final ItemObject<ModifiableItem> dagger = ITEMS.register("dagger", () -> new ModifiableSwordItem(new Item.Properties().durability(-1).stacksTo(2), ToolDefinitions.DAGGER, 2));
-  public static final ItemObject<ModifiableItem> sword = ITEMS.register("sword", () -> new ModifiableSwordItem(UNSTACKABLE_PROPS, ToolDefinitions.SWORD));
-  public static final ItemObject<ModifiableItem> cleaver = ITEMS.register("cleaver", () -> new ModifiableSwordItem(UNSTACKABLE_PROPS, ToolDefinitions.CLEAVER));
+  // TieredItem is gone so no durability workaround is needed any more, just allow stacking 2 daggers (ModifiableItem limits damaged daggers to 1)
+  public static final ItemObject<ModifiableItem> dagger = ITEMS.register("dagger", p -> new ModifiableSwordItem(p, ToolDefinitions.DAGGER, 2), p -> p.stacksTo(2));
+  public static final ItemObject<ModifiableItem> sword = ITEMS.register("sword", p -> new ModifiableSwordItem(p, ToolDefinitions.SWORD), UNSTACKABLE_PROPS);
+  public static final ItemObject<ModifiableItem> cleaver = ITEMS.register("cleaver", p -> new ModifiableSwordItem(p, ToolDefinitions.CLEAVER), UNSTACKABLE_PROPS);
 
-  public static final ItemObject<ModifiableCrossbowItem> crossbow = ITEMS.register("crossbow", () -> new ModifiableCrossbowItem(UNSTACKABLE_PROPS, ToolDefinitions.CROSSBOW));
-  public static final ItemObject<ModifiableBowItem> longbow = ITEMS.register("longbow", () -> new ModifiableBowItem(UNSTACKABLE_PROPS, ToolDefinitions.LONGBOW, true));
-  public static final ItemObject<ModifiableItem> fishingRod = ITEMS.register("fishing_rod", () -> new ModifiableItem(UNSTACKABLE_PROPS, ToolDefinitions.FISHING_ROD));
-  public static final ItemObject<ModifiableItem> javelin = ITEMS.register("javelin", () -> new ModifiableItem(UNSTACKABLE_PROPS, ToolDefinitions.JAVELIN));
-  public static final ItemObject<ModifiableArrowItem> arrow = ITEMS.register("arrow", () -> new ModifiableArrowItem(ITEM_PROPS, ToolDefinitions.ARROW));
-  public static final ItemObject<ModifiableShurikenItem> shuriken = ITEMS.register("shuriken", () -> new ModifiableShurikenItem(new Item.Properties().stacksTo(16), ToolDefinitions.SHURIKEN));
-  public static final ItemObject<ModifiableShurikenItem> throwingAxe = ITEMS.register("throwing_axe", () -> new ModifiableShurikenItem(new Item.Properties().stacksTo(16), ToolDefinitions.THROWING_AXE));
+  public static final ItemObject<ModifiableCrossbowItem> crossbow = ITEMS.register("crossbow", p -> new ModifiableCrossbowItem(p, ToolDefinitions.CROSSBOW), UNSTACKABLE_PROPS);
+  public static final ItemObject<ModifiableBowItem> longbow = ITEMS.register("longbow", p -> new ModifiableBowItem(p, ToolDefinitions.LONGBOW, true), UNSTACKABLE_PROPS);
+  public static final ItemObject<ModifiableItem> fishingRod = ITEMS.register("fishing_rod", p -> new ModifiableItem(p, ToolDefinitions.FISHING_ROD), UNSTACKABLE_PROPS);
+  public static final ItemObject<ModifiableItem> javelin = ITEMS.register("javelin", p -> new ModifiableItem(p, ToolDefinitions.JAVELIN), UNSTACKABLE_PROPS);
+  public static final ItemObject<ModifiableArrowItem> arrow = ITEMS.register("arrow", p -> new ModifiableArrowItem(p, ToolDefinitions.ARROW), ITEM_PROPS);
+  public static final ItemObject<ModifiableShurikenItem> shuriken = ITEMS.register("shuriken", p -> new ModifiableShurikenItem(p, ToolDefinitions.SHURIKEN), p -> p.stacksTo(16));
+  public static final ItemObject<ModifiableShurikenItem> throwingAxe = ITEMS.register("throwing_axe", p -> new ModifiableShurikenItem(p, ToolDefinitions.THROWING_AXE), p -> p.stacksTo(16));
 
-  public static final ItemObject<ModifiableItem> flintAndBrick = ITEMS.register("flint_and_brick", () -> new ModifiableItem(UNSTACKABLE_PROPS, ToolDefinitions.FLINT_AND_BRICK));
-  public static final ItemObject<ModifiableItem> skyStaff = ITEMS.register("sky_staff", () -> new ModifiableItem(UNSTACKABLE_PROPS, ToolDefinitions.SKY_STAFF));
-  public static final ItemObject<ModifiableItem> earthStaff = ITEMS.register("earth_staff", () -> new ModifiableItem(UNSTACKABLE_PROPS, ToolDefinitions.EARTH_STAFF));
-  public static final ItemObject<ModifiableItem> ichorStaff = ITEMS.register("ichor_staff", () -> new ModifiableItem(UNSTACKABLE_PROPS, ToolDefinitions.ICHOR_STAFF));
-  public static final ItemObject<ModifiableItem> enderStaff = ITEMS.register("ender_staff", () -> new ModifiableItem(UNSTACKABLE_PROPS, ToolDefinitions.ENDER_STAFF));
+  public static final ItemObject<ModifiableItem> flintAndBrick = ITEMS.register("flint_and_brick", p -> new ModifiableItem(p, ToolDefinitions.FLINT_AND_BRICK), UNSTACKABLE_PROPS);
+  public static final ItemObject<ModifiableItem> skyStaff = ITEMS.register("sky_staff", p -> new ModifiableItem(p, ToolDefinitions.SKY_STAFF), UNSTACKABLE_PROPS);
+  public static final ItemObject<ModifiableItem> earthStaff = ITEMS.register("earth_staff", p -> new ModifiableItem(p, ToolDefinitions.EARTH_STAFF), UNSTACKABLE_PROPS);
+  public static final ItemObject<ModifiableItem> ichorStaff = ITEMS.register("ichor_staff", p -> new ModifiableItem(p, ToolDefinitions.ICHOR_STAFF), UNSTACKABLE_PROPS);
+  public static final ItemObject<ModifiableItem> enderStaff = ITEMS.register("ender_staff", p -> new ModifiableItem(p, ToolDefinitions.ENDER_STAFF), UNSTACKABLE_PROPS);
 
   // ancient
-  public static final ItemObject<ModifiableItem> meltingPan = ITEMS.register("melting_pan", () -> new ModifiableItem(UNSTACKABLE_PROPS, ToolDefinitions.MELTING_PAN));
-  public static final ItemObject<ModifiableCrossbowItem> warPick = ITEMS.register("war_pick", () -> new ModifiableCrossbowItem(UNSTACKABLE_PROPS, ToolDefinitions.WAR_PICK));
-  public static final ItemObject<ModifiableItem> battlesign = ITEMS.register("battlesign", () -> new ModifiableItem(UNSTACKABLE_PROPS, ToolDefinitions.BATTLESIGN));
-  public static final ItemObject<ModifiableItem> swasher = ITEMS.register("swasher", () -> new ModifiableItem(UNSTACKABLE_PROPS, ToolDefinitions.SWASHER));
+  public static final ItemObject<ModifiableItem> meltingPan = ITEMS.register("melting_pan", p -> new ModifiableItem(p, ToolDefinitions.MELTING_PAN), UNSTACKABLE_PROPS);
+  public static final ItemObject<ModifiableCrossbowItem> warPick = ITEMS.register("war_pick", p -> new ModifiableCrossbowItem(p, ToolDefinitions.WAR_PICK), UNSTACKABLE_PROPS);
+  public static final ItemObject<ModifiableItem> battlesign = ITEMS.register("battlesign", p -> new ModifiableItem(p, ToolDefinitions.BATTLESIGN), UNSTACKABLE_PROPS);
+  public static final ItemObject<ModifiableItem> swasher = ITEMS.register("swasher", p -> new ModifiableItem(p, ToolDefinitions.SWASHER), UNSTACKABLE_PROPS);
   public static final ItemObject<ModifiableItem> minotaurAxe;
   static {
     // conditionally register minotaur axe as it's the easiest way to keep it out of JEI display
     if (ModList.get().isLoaded("twilightforest")) {
-      minotaurAxe = ITEMS.register("minotaur_axe", () -> new ModifiableItem(UNSTACKABLE_PROPS, ToolDefinitions.MINOTAUR_AXE));
+      minotaurAxe = ITEMS.register("minotaur_axe", p -> new ModifiableItem(p, ToolDefinitions.MINOTAUR_AXE), UNSTACKABLE_PROPS);
     } else {
       minotaurAxe = new ItemObject<>(DeferredHolder.<Item, ModifiableItem>create(Registries.ITEM, getResource("minotaur_axe")));
     }
   }
 
   // armor
-  public static final EnumObject<ArmorType,ModifiableArmorItem> travelersGear = ITEMS.registerEnum("travelers", ModifiableArmorMaterial.ARMOR_TYPES, type -> new MultilayerArmorItem(ArmorDefinitions.TRAVELERS, type, UNSTACKABLE_PROPS));
-  public static final EnumObject<ArmorType,ModifiableArmorItem> plateArmor = ITEMS.registerEnum("plate", ModifiableArmorMaterial.ARMOR_TYPES, type -> new MultilayerArmorItem(ArmorDefinitions.PLATE, type, UNSTACKABLE_PROPS));
+  public static final EnumObject<ArmorType,ModifiableArmorItem> travelersGear = ITEMS.registerEnum("travelers", ModifiableArmorMaterial.ARMOR_TYPES, (type, p) -> new MultilayerArmorItem(ArmorDefinitions.TRAVELERS, type, p), UNSTACKABLE_PROPS);
+  public static final EnumObject<ArmorType,ModifiableArmorItem> plateArmor = ITEMS.registerEnum("plate", ModifiableArmorMaterial.ARMOR_TYPES, (type, p) -> new MultilayerArmorItem(ArmorDefinitions.PLATE, type, p), UNSTACKABLE_PROPS);
   public static final EnumObject<ArmorType,ModifiableArmorItem> slimesuit = new EnumObject.Builder<ArmorType,ModifiableArmorItem>(ArmorType.class)
-    .put(ArmorType.HELMET, ITEMS.register("slime_helmet", () -> new SlimeskullItem(ArmorDefinitions.SLIMESUIT, SlimeskullItem.MODEL_LOCATION, UNSTACKABLE_PROPS)))
+    .put(ArmorType.HELMET, ITEMS.register("slime_helmet", p -> new SlimeskullItem(ArmorDefinitions.SLIMESUIT, SlimeskullItem.MODEL_LOCATION, p), UNSTACKABLE_PROPS))
     // TODO 1.21: rename to slime chestplate as we no longer need the migration
-    .put(ArmorType.CHESTPLATE, ITEMS.register("slimy_chestplate", () -> new MultilayerArmorItem(ArmorDefinitions.SLIMESUIT, ArmorType.CHESTPLATE, UNSTACKABLE_PROPS)))
-    .putAll(ITEMS.registerEnum("slime", new ArmorType[] {ArmorType.LEGGINGS, ArmorType.BOOTS}, type -> new MultilayerArmorItem(ArmorDefinitions.SLIMESUIT, type, UNSTACKABLE_PROPS)))
+    .put(ArmorType.CHESTPLATE, ITEMS.register("slimy_chestplate", p -> new MultilayerArmorItem(ArmorDefinitions.SLIMESUIT, ArmorType.CHESTPLATE, p), UNSTACKABLE_PROPS))
+    .putAll(ITEMS.registerEnum("slime", new ArmorType[] {ArmorType.LEGGINGS, ArmorType.BOOTS}, (type, p) -> new MultilayerArmorItem(ArmorDefinitions.SLIMESUIT, type, p), UNSTACKABLE_PROPS))
     .build();
-  public static final ItemObject<MultilayerArmorItem> slimeWings = ITEMS.register("slime_wings", () -> new MultilayerArmorItem(ArmorDefinitions.SLIMESUIT, ArmorType.CHESTPLATE, UNSTACKABLE_PROPS, ArmorDefinitions.SLIME_WINGS, TinkerTools.slimeWings.getId()));
+  public static final ItemObject<MultilayerArmorItem> slimeWings = ITEMS.register("slime_wings", p -> new MultilayerArmorItem(ArmorDefinitions.SLIMESUIT, ArmorType.CHESTPLATE, p, ArmorDefinitions.SLIME_WINGS, TinkerTools.slimeWings.getId()), UNSTACKABLE_PROPS);
 
   // shields
-  public static final ItemObject<ModifiableItem> travelersShield = ITEMS.register("travelers_shield", () -> new ModifiableItem(UNSTACKABLE_PROPS, ArmorDefinitions.TRAVELERS_SHIELD));
-  public static final ItemObject<ModifiableItem> plateShield = ITEMS.register("plate_shield", () -> new ModifiableItem(UNSTACKABLE_PROPS, ArmorDefinitions.PLATE_SHIELD));
+  public static final ItemObject<ModifiableItem> travelersShield = ITEMS.register("travelers_shield", p -> new ModifiableItem(p, ArmorDefinitions.TRAVELERS_SHIELD), UNSTACKABLE_PROPS);
+  public static final ItemObject<ModifiableItem> plateShield = ITEMS.register("plate_shield", p -> new ModifiableItem(p, ArmorDefinitions.PLATE_SHIELD), UNSTACKABLE_PROPS);
 
   // arrows
-  public static final ItemObject<ArrowItem> crystalshotItem = ITEMS.register("crystalshot", () -> new CrystalshotItem(ITEM_PROPS));
+  public static final ItemObject<ArrowItem> crystalshotItem = ITEMS.register("crystalshot", CrystalshotItem::new, ITEM_PROPS);
 
   /* Particles */
   public static final DeferredHolder<? super SimpleParticleType, SimpleParticleType> hammerAttackParticle = PARTICLE_TYPES.register("hammer_attack", () -> new SimpleParticleType(true));
@@ -313,8 +315,15 @@ public final class TinkerTools extends TinkerModule {
       DispenserBlock.registerBehavior(TinkerTools.shuriken.get(), ModifiableShurikenDispenserBehavior.INSTANCE);
       DispenserBlock.registerBehavior(TinkerTools.throwingAxe.get(), ModifiableShurikenDispenserBehavior.INSTANCE);
       ModifierUtil.registerShieldDisabler(entity -> {
-        if (entity instanceof Player player && player.isBlocking()) {
-          player.disableShield();
+        // Player#disableShield is gone, the blocking item component now handles disabling (5 seconds matches the old 100 tick cooldown)
+        if (entity instanceof Player player && player.level() instanceof ServerLevel level) {
+          ItemStack blockingWith = player.getItemBlockingWith();
+          if (blockingWith != null) {
+            BlocksAttacks blocksAttacks = blockingWith.get(DataComponents.BLOCKS_ATTACKS);
+            if (blocksAttacks != null) {
+              blocksAttacks.disable(level, player, 5.0f, blockingWith);
+            }
+          }
         }
       }, EntityTypes.PLAYER);
     });
@@ -424,32 +433,38 @@ public final class TinkerTools extends TinkerModule {
     }
   }
 
+  /** Recipes are a registry generated from bootstraps since 26.3 */
   @SubscribeEvent
-  void gatherData(final GatherDataEvent event) {
-    DataGenerator generator = event.getGenerator();
-    PackOutput packOutput = generator.getPackOutput();
-    ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
-    boolean server = event.includeServer();
-    boolean client = event.includeClient();
-    generator.addProvider(server, new ToolsRecipeProvider(packOutput));
-    generator.addProvider(server, new MaterialRecipeProvider(packOutput));
-    MaterialDataProvider materials = new MaterialDataProvider(packOutput);
-    generator.addProvider(server, materials);
-    generator.addProvider(server, new MaterialStatsDataProvider(packOutput, materials));
-    generator.addProvider(server, new MaterialTraitsDataProvider(packOutput, materials));
-    generator.addProvider(server, new ToolDefinitionDataProvider(packOutput));
-    generator.addProvider(server, new StationSlotLayoutProvider(packOutput));
-    generator.addProvider(server, new MaterialTagProvider(packOutput, existingFileHelper));
-    generator.addProvider(client, new ToolItemModelProvider(packOutput, existingFileHelper));
+  void gatherRegistries(final GatherDataRegistryEntriesEvent event) {
+    event.recipe(ToolsRecipeProvider::new);
+    event.recipe(MaterialRecipeProvider::new);
+  }
+
+  @SubscribeEvent
+  void gatherServerData(final GatherDataEvent.Server event) {
+    // ExistingFileHelper is gone, providers that validated files read the resources directly
+    ResourceManager serverResources = event.getResourceManager(PackType.SERVER_DATA);
+    MaterialDataProvider materials = event.createProvider(MaterialDataProvider::new);
+    event.createProvider(output -> new MaterialStatsDataProvider(output, materials));
+    event.createProvider(output -> new MaterialTraitsDataProvider(output, materials));
+    event.createProvider(ToolDefinitionDataProvider::new);
+    event.createProvider(StationSlotLayoutProvider::new);
+    event.createProvider(output -> new MaterialTagProvider(output, serverResources));
+  }
+
+  @SubscribeEvent
+  void gatherClientData(final GatherDataEvent.Client event) {
+    ResourceManager clientResources = event.getResourceManager(PackType.CLIENT_RESOURCES);
+    event.createProvider(output -> new ToolItemModelProvider(output, clientResources));
     TinkerMaterialSpriteProvider materialSprites = new TinkerMaterialSpriteProvider();
     TinkerPartSpriteProvider partSprites = new TinkerPartSpriteProvider();
-    generator.addProvider(client, new MaterialRenderInfoProvider(packOutput, materialSprites, existingFileHelper));
-    generator.addProvider(client, new GeneratorPartTextureJsonGenerator(packOutput, TConstruct.MOD_ID, partSprites));
-    generator.addProvider(client, new MaterialPartTextureGenerator(packOutput, existingFileHelper, partSprites, materialSprites));
-    generator.addProvider(client, new MaterialPaletteDebugGenerator(packOutput, TConstruct.MOD_ID, materialSprites));
-    generator.addProvider(client, new ArmorModelProvider(packOutput));
-    generator.addProvider(client, new TinkerTrimMaterialPaletteGenerator(packOutput, existingFileHelper, materialSprites));
-    generator.addProvider(client, new ModifierModelMapProvider(packOutput));
+    event.createProvider(output -> new MaterialRenderInfoProvider(output, materialSprites, clientResources));
+    event.createProvider(output -> new GeneratorPartTextureJsonGenerator(output, TConstruct.MOD_ID, partSprites));
+    event.createProvider(output -> new MaterialPartTextureGenerator(output, clientResources, partSprites, materialSprites));
+    event.createProvider(output -> new MaterialPaletteDebugGenerator(output, TConstruct.MOD_ID, materialSprites));
+    event.createProvider(ArmorModelProvider::new);
+    event.createProvider(output -> new TinkerTrimMaterialPaletteGenerator(output, clientResources, materialSprites));
+    event.createProvider(ModifierModelMapProvider::new);
   }
 
   /** Adds all relevant items to the creative tab */
