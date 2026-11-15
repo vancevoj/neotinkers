@@ -59,7 +59,7 @@ public record RemappingMaterialsModule(List<RandomMaterial> materials, List<Map<
     for (int i = 0; i < max; i++) {
       Map<MaterialId,MaterialVariantId> remap = this.remap.get(i);
       if (!remap.isEmpty()) {
-        MaterialVariantId material = MaterialVariantId.tryParse(materials.getString(i));
+        MaterialVariantId material = MaterialVariantId.tryParse(materials.getStringOr(i, ""));
         if (material != null && remap.containsKey(material.getId())) {
           return true;
         }

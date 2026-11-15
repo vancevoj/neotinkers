@@ -3,17 +3,19 @@ package slimeknights.tconstruct.library.tools.definition;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonElement;
 import lombok.extern.log4j.Log4j2;
+import net.minecraft.resources.FileToIdConverter;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.common.conditions.ICondition.IContext;
-import net.neoforged.neoforge.event.AddReloadListenerEvent;
+import net.neoforged.neoforge.event.AddServerReloadListenersEvent;
 import net.neoforged.neoforge.event.OnDatapackSyncEvent;
 import slimeknights.mantle.data.loadable.field.ContextKey;
-import slimeknights.mantle.util.JsonHelper;
 import slimeknights.mantle.util.typed.TypedMapBuilder;
+import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.network.TinkerNetwork;
 
 import java.util.Collection;
@@ -24,8 +26,10 @@ import java.util.Map.Entry;
 
 /** JSON loader that loads tool definitions from JSON */
 @Log4j2
-public class ToolDefinitionLoader extends SimpleJsonResourceReloadListener {
+public class ToolDefinitionLoader extends SimpleJsonResourceReloadListener<JsonElement> {
   public static final String FOLDER = "tinkering/tool_definitions";
+  /** ID of this loader in the server reload listener event */
+  public static final Identifier LISTENER_ID = TConstruct.getResource("tool_definitions");
   private static final ToolDefinitionLoader INSTANCE = new ToolDefinitionLoader();
 
   /** Map of loaded tool definition data */
@@ -38,7 +42,7 @@ public class ToolDefinitionLoader extends SimpleJsonResourceReloadListener {
   private IContext conditionContext = IContext.EMPTY;
 
   private ToolDefinitionLoader() {
-    super(JsonHelper.DEFAULT_GSON, FOLDER);
+    super(ExtraCodecs.JSON, FileToIdConverter.json(FOLDER));
   }
 
   /** Gets the instance of the definition loader */
@@ -115,8 +119,8 @@ public class ToolDefinitionLoader extends SimpleJsonResourceReloadListener {
   }
 
   /** Adds the managers as datapack listeners */
-  private void addDataPackListeners(final AddReloadListenerEvent event) {
-    event.addListener(this);
+  private void addDataPackListeners(final AddServerReloadListenersEvent event) {
+    event.addListener(LISTENER_ID, this);
     conditionContext = event.getConditionContext();
   }
 

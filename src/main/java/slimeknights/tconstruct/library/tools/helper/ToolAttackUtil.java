@@ -257,7 +257,8 @@ public class ToolAttackUtil {
     ItemEnchantments originalEnchants = targetLiving == null ? null : ModifierLootingHandler.applyLooting(attackerLiving, mainHand, damageSource, targetLiving);
     boolean didHit;
     try {
-      didHit = targetEntity.hurt(damageSource, damage);
+      // 1.21.2 made Entity#hurt return nothing; attacks only run server side (see isAttackable), hurtOrSimulate returns the server result there
+      didHit = targetEntity.hurtOrSimulate(damageSource, damage);
     } finally {
       // must always restore, a leaked looting enchantment would be permanent
       if (originalEnchants != null) {
@@ -306,7 +307,8 @@ public class ToolAttackUtil {
     // apply knockback
     if (knockback > 0) {
       if (targetLiving != null) {
-        targetLiving.knockback(knockback, Mth.sin(attackerLiving.getYRot() * DEGREE_TO_RADIANS), -Mth.cos(attackerLiving.getYRot() * DEGREE_TO_RADIANS));
+        // 26.2 knockback takes the damage source and damage, extra attack knockback counts as from an effect like vanilla Player#causeExtraKnockback
+        targetLiving.knockback(knockback, Mth.sin(attackerLiving.getYRot() * DEGREE_TO_RADIANS), -Mth.cos(attackerLiving.getYRot() * DEGREE_TO_RADIANS), damageSource, damageDealt, true);
       } else {
         targetEntity.push(-Mth.sin(attackerLiving.getYRot() * DEGREE_TO_RADIANS) * knockback, 0.1d, Mth.cos(attackerLiving.getYRot() * DEGREE_TO_RADIANS) * knockback);
       }
@@ -358,8 +360,9 @@ public class ToolAttackUtil {
     // hurt resistance adjustment for high speed weapons
     float speed = tool.getStats().get(ToolStats.ATTACK_SPEED);
     int time = Math.round(20f / speed);
-    if (time < targetEntity.invulnerableTime) {
-      targetEntity.invulnerableTime = (targetEntity.invulnerableTime + time) / 2;
+    int invulnerableTime = targetEntity.getInvulnerableTime();
+    if (time < invulnerableTime) {
+      targetEntity.setInvulnerableTime((invulnerableTime + time) / 2);
     }
 
     // final attack hooks
@@ -368,7 +371,9 @@ public class ToolAttackUtil {
         if (!level.isClientSide() && !isExtraAttack) {
           ItemStack held = attackerLiving.getItemBySlot(sourceSlot);
           if (!held.isEmpty()) {
-            held.hurtEnemy(targetLiving, attackerPlayer);
+            // call the item directly: since 1.21.5 ItemStack#hurtEnemy awards the item used stat for any stack with the weapon component,
+            // which shield disabling tools now have, and we award that stat below already
+            held.getItem().hurtEnemy(held, targetLiving, attackerPlayer);
           }
         }
         attackerPlayer.awardStat(Stats.DAMAGE_DEALT, Math.round(damageDealt * 10.0F));
@@ -455,11 +460,12 @@ public class ToolAttackUtil {
     float oldLastDamage = living == null ? 0 : living.lastHurt;
 
     // set hurt resistance time to 0 because we always want to deal damage in traits
-    int lastInvulnerableTime = target.invulnerableTime;
-    target.invulnerableTime = 0;
-    boolean hit = target.hurt(source, damage);
+    int lastInvulnerableTime = target.getInvulnerableTime();
+    target.setInvulnerableTime(0);
+    // 1.21.2 made Entity#hurt return nothing; damage is only dealt server side, client side reports false like living entities did before
+    boolean hit = target.level() instanceof ServerLevel server && target.hurtServer(server, source, damage);
     // reset to the old time so bows work right
-    target.invulnerableTime = lastInvulnerableTime;
+    target.setInvulnerableTime(lastInvulnerableTime);
     // set total received damage, important for AI and stuff
     if (living != null) {
       living.lastHurt += oldLastDamage;
@@ -561,10 +567,13 @@ public class ToolAttackUtil {
   /** @deprecated use {@link ToolAttackContext#makeDamageSource()} */
   @Deprecated(forRemoval = true)
   public static boolean dealDefaultDamage(LivingEntity attacker, Entity target, float damage) {
-    if (attacker instanceof Player player) {
-      return target.hurt(attacker.damageSources().playerAttack(player), damage);
+    if (!(target.level() instanceof ServerLevel server)) {
+      return false;
     }
-    return target.hurt(attacker.damageSources().mobAttack(attacker), damage);
+    if (attacker instanceof Player player) {
+      return target.hurtServer(server, attacker.damageSources().playerAttack(player), damage);
+    }
+    return target.hurtServer(server, attacker.damageSources().mobAttack(attacker), damage);
   }
 
   /** @deprecated use {@link #performAttack(IToolStackView, ToolAttackContext)} */

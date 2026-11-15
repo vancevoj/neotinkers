@@ -77,10 +77,12 @@ public class ToolHarvestLogic {
   /**
    * Actually removes a block from the world. Cloned from {@link net.minecraft.server.level.ServerPlayerGameMode}
    * @param tool     Tool used in breaking
+   * @param stack    Tool stack before it is damaged, passed to the block removal hook
+   * @param player   Player breaking the block
    * @param context  Harvest context
    * @return  True if the block was removed
    */
-  private static boolean removeBlock(IToolStackView tool, ToolHarvestContext context) {
+  private static boolean removeBlock(IToolStackView tool, ItemStack stack, ServerPlayer player, ToolHarvestContext context) {
     Boolean removed = null;
     if (!tool.isBroken()) {
       for (ModifierEntry entry : tool.getModifierList()) {
@@ -95,7 +97,12 @@ public class ToolHarvestLogic {
     ServerLevel world = context.getWorld();
     BlockPos pos = context.getPos();
     if (removed == null) {
-      removed = state.onDestroyedByPlayer(world, pos, context.getPlayer(), context.canHarvest(), world.getFluidState(pos));
+      // since 1.21 NeoForge no longer calls playerWillDestroy from onDestroyedByPlayer, ServerPlayerGameMode calls it before removing.
+      // call it here so blocks broken by tools still spawn particles for others, anger piglins, emit the destroy game event and break their other half,
+      // as in 1.20.1 where onDestroyedByPlayer called it
+      state = state.getBlock().playerWillDestroy(world, pos, state, player);
+      // 1.21.2 added the tool stack before damage to the removal hook
+      removed = state.onDestroyedByPlayer(world, pos, player, stack, context.canHarvest(), world.getFluidState(pos));
     }
     // if removed by anything, finally destroy it
     if (removed) {
@@ -121,7 +128,7 @@ public class ToolHarvestLogic {
    * @param tool      Tool instance
    * @param stack     Stack instance for vanilla functions
    * @param context   Harvest context
-   * @param useLastXP If true, the break event already fired for this block, so it is not fired again. Prevents firing {@link net.neoforged.neoforge.event.level.BreakBlockEvent} twice.
+   * @param useLastXP If true, the break event already fired for this block, so it is not fired again. Prevents firing {@link BreakBlockEvent} twice.
    * @return  True if broken
    */
   protected static boolean breakBlock(IToolStackView tool, ItemStack stack, ToolHarvestContext context, boolean useLastXP) {
@@ -148,7 +155,7 @@ public class ToolHarvestLogic {
 
     // creative just removes the block
     if (player.isCreative()) {
-      removeBlock(tool, context);
+      removeBlock(tool, stack.copy(), player, context);
       return true;
     }
 
@@ -158,7 +165,7 @@ public class ToolHarvestLogic {
     // remove the block
     boolean canHarvest = context.canHarvest();
     BlockEntity te = canHarvest ? world.getBlockEntity(pos) : null; // ensures tile entity is fetched so it's around for afterBlockBreak
-    boolean removed = removeBlock(tool, context);
+    boolean removed = removeBlock(tool, stack.copy(), player, context);
 
     // harvest drops
     Block block = state.getBlock();
@@ -221,7 +228,7 @@ public class ToolHarvestLogic {
 
   /**
    * Call on block break to break a block.
-   * Used in {@link net.neoforged.neoforge.common.extensions.IForgeItem#onBlockStartBreak(ItemStack, BlockPos, Player)}.
+   * Used by the {@link BreakBlockEvent} handler in ToolEvents, replacing the removed {@code onBlockStartBreak} item hook.
    * See also {@link net.minecraft.client.multiplayer.MultiPlayerGameMode#destroyBlock(BlockPos)} (client)
    * and {@link net.minecraft.server.level.ServerPlayerGameMode#destroyBlock(BlockPos)} (server)
    * @param stack   Stack instance

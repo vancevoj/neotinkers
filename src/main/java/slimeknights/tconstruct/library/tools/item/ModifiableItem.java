@@ -6,9 +6,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup.RegistryLookup;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -21,11 +21,12 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemInstance;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TieredItem;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
@@ -65,9 +66,9 @@ import slimeknights.tconstruct.library.tools.nbt.IModDataView;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.library.tools.part.MaterialItem;
-import slimeknights.tconstruct.tools.TinkerToolActions;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -75,7 +76,7 @@ import java.util.function.Consumer;
  * A standard modifiable item which implements melee hooks
  * This class handles how all the modifier hooks and display data for items made out of different materials
  */
-public class ModifiableItem extends TieredItem implements IModifiableDisplay {
+public class ModifiableItem extends Item implements IModifiableDisplay, IClientExtensionItem {
   /** Tool definition for the given tool */
   @Getter
   private final ToolDefinition toolDefinition;
@@ -91,7 +92,8 @@ public class ModifiableItem extends TieredItem implements IModifiableDisplay {
   }
 
   public ModifiableItem(Properties properties, ToolDefinition toolDefinition, int maxStackSize) {
-    super(TinkerTier.INSTANCE, properties);
+    // 1.21.2 removed Tier and TieredItem; piglins and mobs now compare tools by tags and attributes, so no dummy tier is needed
+    super(TooltipUtil.hideVanillaEnchantments(properties));
     this.toolDefinition = toolDefinition;
     this.maxStackSize = maxStackSize;
   }
@@ -118,19 +120,17 @@ public class ModifiableItem extends TieredItem implements IModifiableDisplay {
   }
 
   /* Enchanting */
+  // 1.21.2 removed Item#isEnchantable: without the ENCHANTABLE component the tool cannot be enchanted in the enchanting table
 
+  /** Replaces the removed {@code isBookEnchantable}, NeoForge now asks this method for enchanted books in the anvil */
   @Override
-  public boolean isEnchantable(ItemStack stack) {
+  public boolean supportsEnchantment(ItemStack stack, Holder<Enchantment> enchantment) {
     return false;
   }
 
-  @Override
-  public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
-    return false;
-  }
   /** Reports the tool's virtual modifier enchantments to gameplay logic, they are never stored in NBT */
   @Override
-  public int getEnchantmentLevel(ItemStack stack, Holder<Enchantment> enchantment) {
+  public int getEnchantmentLevel(ItemInstance stack, Holder<Enchantment> enchantment) {
     return EnchantmentModifierHook.getEnchantmentLevel(stack, enchantment);
   }
 
@@ -144,7 +144,7 @@ public class ModifiableItem extends TieredItem implements IModifiableDisplay {
   /* Loading */
 
   @Override
-  public void onCraftedBy(ItemStack stack, Level worldIn, Player playerIn) {
+  public void onCraftedBy(ItemStack stack, Player playerIn) {
     ToolStack.ensureInitialized(stack, getToolDefinition());
   }
 
@@ -173,21 +173,22 @@ public class ModifiableItem extends TieredItem implements IModifiableDisplay {
   }
 
   @Override
+  public boolean canBeHurtBy(ItemStack stack, DamageSource source) {
+    return IndestructibleItemEntity.canBeHurtBy(stack, source);
+  }
+
+  @Override
   public void onDestroyed(ItemEntity entity, DamageSource damageSource) {
     ToolInventoryCapability.onDestroyed(entity);
   }
 
 
   /* Damage/Durability */
+  // 1.21.2 removed isRepairable and isValidRepairItem: without the REPAIRABLE component the anvil cannot repair the tool, repair is handled in the tinker station
 
+  /** Replaces the removed {@code isRepairable} for crafting grid and grindstone combining */
   @Override
-  public boolean isRepairable(ItemStack stack) {
-    // handle in the tinker station
-    return false;
-  }
-
-  @Override
-  public boolean isValidRepairItem(ItemStack pToRepair, ItemStack pRepair) {
+  public boolean isCombineRepairable(ItemStack stack) {
     return false;
   }
 
@@ -207,10 +208,12 @@ public class ModifiableItem extends TieredItem implements IModifiableDisplay {
   }
 
   @Override
-  public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T damager, Consumer<Item> onBroken) {
+  public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, @Nullable T damager, Consumer<ItemStack> onBroken) {
     // emulate ItemStack.hurtAndBreak; we always return 0 to skip vanilla's handling so tools use our damage logic
+    // since 1.21.2 hurtAndBreak calls this before checking isDamageableItem, so check it here to keep the old behavior
     if (stack.isDamageableItem() && ToolDamageUtil.damage(ToolStack.from(stack), amount, damager, stack)) {
-      onBroken.accept(stack.getItem());
+      // the tool is not consumed when broken, so pass the stack itself (vanilla passes a copy of the stack it just shrank)
+      onBroken.accept(stack);
     }
     return 0;
   }
@@ -251,10 +254,7 @@ public class ModifiableItem extends TieredItem implements IModifiableDisplay {
     return buildAttributeModifiers(stack, EquipmentSlot.MAINHAND, EquipmentSlot.OFFHAND);
   }
 
-  @Override
-  public boolean canDisableShield(ItemStack stack, ItemStack shield, LivingEntity entity, LivingEntity attacker) {
-    return canPerformAction(stack, TinkerToolActions.SHIELD_DISABLE);
-  }
+  // NeoForge 26.3 removed canDisableShield; shield disabling reads the WEAPON component, see ModifierUtil#updateCombatComponents
 
 
   /* Harvest logic */
@@ -280,8 +280,22 @@ public class ModifiableItem extends TieredItem implements IModifiableDisplay {
   /* Modifier interactions */
 
   @Override
-  public void inventoryTick(ItemStack stack, Level worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-    InventoryTickModifierHook.heldInventoryTick(stack, worldIn, entityIn, itemSlot, isSelected);
+  public void inventoryTick(ItemStack stack, ServerLevel level, Entity entity, @Nullable EquipmentSlot slot) {
+    // vanilla reads blocking and shield disabling from components since 1.21.5, so keep them in sync with the tool actions
+    // runs for mobs too, so mobs holding tools can block and disable shields like in 1.21.1
+    ModifierUtil.updateCombatComponents(stack, ToolStack.from(stack), level.registryAccess());
+    // 1.21.1 only ticked player inventories, since 1.21.5 the equipment of every living entity ticks; keep modifier hooks player only
+    if (entity instanceof Player) {
+      InventoryTickModifierHook.heldInventoryTick(stack, level, entity, slot);
+    }
+  }
+
+  /** Since 1.21.5 vanilla only ticks items server side, modifier hooks ran on both sides before so tick them on the client too */
+  @Override
+  public void clientInventoryTick(ItemStack stack, Level level, Entity entity, @Nullable EquipmentSlot slot) {
+    if (entity instanceof Player) {
+      InventoryTickModifierHook.heldInventoryTick(stack, level, entity, slot);
+    }
   }
 
   @Override
@@ -361,21 +375,21 @@ public class ModifiableItem extends TieredItem implements IModifiableDisplay {
   }
 
   @Override
-  public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand hand) {
+  public InteractionResult use(Level worldIn, Player playerIn, InteractionHand hand) {
     ItemStack stack = playerIn.getItemInHand(hand);
     if (stack.getCount() > 1) {
-      return InteractionResultHolder.pass(stack);
+      return InteractionResult.PASS;
     }
     ToolStack tool = ToolStack.from(stack);
     if (shouldInteract(playerIn, tool, hand)) {
       for (ModifierEntry entry : tool.getModifierList()) {
         InteractionResult result = entry.getHook(ModifierHooks.GENERAL_INTERACT).onToolUse(tool, entry, playerIn, hand, InteractionSource.RIGHT_CLICK);
         if (result.consumesAction()) {
-          return new InteractionResultHolder<>(result, stack);
+          return result;
         }
       }
     }
-    return InteractionResultHolder.pass(stack);
+    return InteractionResult.PASS;
   }
 
   @Override
@@ -416,7 +430,7 @@ public class ModifiableItem extends TieredItem implements IModifiableDisplay {
   }
 
   @Override
-  public void releaseUsing(ItemStack stack, Level worldIn, LivingEntity entityLiving, int timeLeft) {
+  public boolean releaseUsing(ItemStack stack, Level worldIn, LivingEntity entityLiving, int timeLeft) {
     ToolStack tool = ToolStack.from(stack);
     ModifierEntry activeModifier = GeneralInteractionModifierHook.getActiveModifier(tool);
     GeneralInteractionModifierHook hook = activeModifier.getHook(ModifierHooks.GENERAL_INTERACT);
@@ -425,6 +439,7 @@ public class ModifiableItem extends TieredItem implements IModifiableDisplay {
       entry.getHook(ModifierHooks.TOOL_USING).beforeReleaseUsing(tool, entry, entityLiving, duration, timeLeft, activeModifier);
     }
     hook.onStoppedUsing(tool, activeModifier, entityLiving, timeLeft);
+    return true;
   }
 
   @Override
@@ -456,8 +471,9 @@ public class ModifiableItem extends TieredItem implements IModifiableDisplay {
   }
 
   @Override
-  public boolean canPerformAction(ItemStack stack, ItemAbility itemAbility) {
-    return stack.getCount() == 1 && ModifierUtil.canPerformAction(ToolStack.from(stack), itemAbility);
+  public boolean canPerformAction(ItemInstance stack, ItemAbility itemAbility) {
+    // since 26.1 the stack may be an item stack template, which has no tool data
+    return stack instanceof ItemStack itemStack && itemStack.getCount() == 1 && ModifierUtil.canPerformAction(ToolStack.from(itemStack), itemAbility);
   }
 
 
@@ -470,11 +486,13 @@ public class ModifiableItem extends TieredItem implements IModifiableDisplay {
   }
 
   @Override
-  public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-    TooltipUtil.addInformation(this, stack, context.level(), tooltip, SafeClientAccess.getTooltipKey(), flag);
+  public void appendHoverText(ItemStack stack, Item.TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
+    List<Component> lines = new ArrayList<>();
+    TooltipUtil.addInformation(this, stack, context.level(), lines, SafeClientAccess.getTooltipKey(), flag);
+    lines.forEach(tooltip);
   }
-  // TODO(neoport): getDefaultTooltipHideFlags removed in 1.21; tooltip visibility is now per-component (showInTooltip).
-  //  Hiding vanilla modifier/attribute tooltip lines must move to the component layer when the tool is built.
+  // getDefaultTooltipHideFlags is gone: vanilla enchantments are hidden by the TOOLTIP_DISPLAY component (TooltipUtil#hideVanillaEnchantments),
+  // attributes are hidden when holding shift or control through TooltipUtil#hidesAttributeTooltip
 
 
   /* Display */

@@ -2,11 +2,14 @@ package slimeknights.tconstruct.library.tools.item;
 
 import lombok.Getter;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.SlotAccess;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
@@ -14,6 +17,7 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.level.Level;
 import slimeknights.mantle.client.SafeClientAccess;
 import slimeknights.mantle.client.TooltipKey;
@@ -35,7 +39,9 @@ import slimeknights.tconstruct.library.tools.stat.ToolStats;
 import slimeknights.tconstruct.tools.entity.ThrownShuriken;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 /** Modifiable item that is thrown as a disposable projectile */
 public class ModifiableShurikenItem extends Item implements IModifiableDisplay {
@@ -46,7 +52,7 @@ public class ModifiableShurikenItem extends Item implements IModifiableDisplay {
   private ItemStack toolForRendering;
 
   public ModifiableShurikenItem(Properties props, ToolDefinition toolDefinition) {
-    super(props);
+    super(TooltipUtil.hideVanillaEnchantments(props));
     this.toolDefinition = toolDefinition;
   }
 
@@ -54,10 +60,10 @@ public class ModifiableShurikenItem extends Item implements IModifiableDisplay {
   /* Shurikening */
 
   @Override
-  public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+  public InteractionResult use(Level level, Player player, InteractionHand hand) {
     ItemStack stack = player.getItemInHand(hand);
     level.playSound(null, player.getX(), player.getY(), player.getZ(), Sounds.SHURIKEN_THROW.getSound(), SoundSource.NEUTRAL, 0.5F, 0.4F / (level.getRandom().nextFloat() * 0.4F + 0.8F));
-    player.getCooldowns().addCooldown(stack.getItem(), 10);
+    player.getCooldowns().addCooldown(stack, 10);
     if (!level.isClientSide()) {
       ThrownShuriken shuriken = new ThrownShuriken(level, player);
       IToolStackView tool = shuriken.onCreate(stack, player);
@@ -71,14 +77,14 @@ public class ModifiableShurikenItem extends Item implements IModifiableDisplay {
       stack.shrink(1);
     }
 
-    return InteractionResultHolder.sidedSuccess(stack, level.isClientSide());
+    return InteractionResult.SUCCESS;
   }
 
 
   /* Loading */
 
   @Override
-  public void onCraftedBy(ItemStack stack, Level worldIn, Player playerIn) {
+  public void onCraftedBy(ItemStack stack, Player playerIn) {
     ToolStack.ensureInitialized(stack, getToolDefinition());
   }
 
@@ -106,12 +112,28 @@ public class ModifiableShurikenItem extends Item implements IModifiableDisplay {
     return IndestructibleItemEntity.createFrom(world, original, stack);
   }
 
+  @Override
+  public boolean canBeHurtBy(ItemStack stack, DamageSource source) {
+    return IndestructibleItemEntity.canBeHurtBy(stack, source);
+  }
+
 
   /* Modifier interactions */
 
   @Override
-  public void inventoryTick(ItemStack stack, Level worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-    InventoryTickModifierHook.heldInventoryTick(stack, worldIn, entityIn, itemSlot, isSelected);
+  public void inventoryTick(ItemStack stack, ServerLevel level, Entity entity, @Nullable EquipmentSlot slot) {
+    // 1.21.1 only ticked player inventories, since 1.21.5 the equipment of every living entity ticks; keep modifier hooks player only
+    if (entity instanceof Player) {
+      InventoryTickModifierHook.heldInventoryTick(stack, level, entity, slot);
+    }
+  }
+
+  /** Since 1.21.5 vanilla only ticks items server side, modifier hooks ran on both sides before so tick them on the client too */
+  @Override
+  public void clientInventoryTick(ItemStack stack, Level level, Entity entity, @Nullable EquipmentSlot slot) {
+    if (entity instanceof Player) {
+      InventoryTickModifierHook.heldInventoryTick(stack, level, entity, slot);
+    }
   }
 
   @Override
@@ -134,10 +156,12 @@ public class ModifiableShurikenItem extends Item implements IModifiableDisplay {
   }
 
   @Override
-  public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-    TooltipUtil.addInformation(this, stack, context.level(), tooltip, SafeClientAccess.getTooltipKey(), flag);
+  public void appendHoverText(ItemStack stack, Item.TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
+    List<Component> lines = new ArrayList<>();
+    TooltipUtil.addInformation(this, stack, context.level(), lines, SafeClientAccess.getTooltipKey(), flag);
+    lines.forEach(tooltip);
   }
-  // TODO(neoport): getDefaultTooltipHideFlags removed in 1.21; tooltip visibility is now per-component (showInTooltip).
+  // getDefaultTooltipHideFlags is gone: vanilla enchantments are hidden by the TOOLTIP_DISPLAY component (TooltipUtil#hideVanillaEnchantments)
 
   @Override
   public List<Component> getStatInformation(IToolStackView tool, @Nullable Player player, List<Component> tooltips, TooltipKey key, TooltipFlag tooltipFlag) {

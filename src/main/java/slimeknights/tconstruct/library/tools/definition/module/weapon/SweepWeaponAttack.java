@@ -1,6 +1,7 @@
 package slimeknights.tconstruct.library.tools.definition.module.weapon;
 
 import net.minecraft.resources.Identifier;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
@@ -10,6 +11,7 @@ import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
+import slimeknights.mantle.util.CombatHelper;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.json.LevelingValue;
 import slimeknights.tconstruct.library.module.HookProvider;
@@ -67,7 +69,9 @@ public record SweepWeaponAttack(LevelingValue ranges) implements MeleeHitToolHoo
     // sweep code from Player#attack(Entity)
     // basically: no crit, no sprinting and has to stand on the ground for sweep. Also has to move regularly slowly
     LivingEntity attacker = context.getAttacker();
-    if (context.isFullyCharged() && !attacker.isSprinting() && !context.isCritical() && !context.isProjectile() && attacker.onGround() && (attacker.walkDist - attacker.walkDistO) < attacker.getSpeed()) {
+    // walkDist is gone in 26.3, use the known movement like vanilla Player#isSweepAttack
+    if (context.isFullyCharged() && !attacker.isSprinting() && !context.isCritical() && !context.isProjectile() && attacker.onGround()
+        && attacker.getKnownMovement().horizontalDistanceSqr() < Mth.square(attacker.getSpeed() * 2.5)) {
       // loop through all nearby entities
       double range = this.ranges.compute(tool.getVolatileData().getInt(IModifiable.EXPANDED));
       double rangeSq = (2 + range); // TODO: why do we add 2 here? should that not be defined in the datagen?
@@ -81,14 +85,17 @@ public record SweepWeaponAttack(LevelingValue ranges) implements MeleeHitToolHoo
         if (aoeTarget != attacker && aoeTarget != target && !attacker.isAlliedTo(aoeTarget)
             && !(aoeTarget instanceof ArmorStand armorStand && armorStand.isMarker()) && attacker.distanceToSqr(aoeTarget) < rangeSq) {
           float angle = attacker.getYRot() * ((float) Math.PI / 180F);
-          aoeTarget.knockback(0.4F, Mth.sin(angle), -Mth.cos(angle));
-          aoeTarget.hurt(source, sweepDamage);
+          aoeTarget.knockback(0.4F, Mth.sin(angle), -Mth.cos(angle), source, sweepDamage);
+          if (level instanceof ServerLevel server) {
+            aoeTarget.hurtServer(server, source, sweepDamage);
+          }
         }
       }
 
       level.playSound(null, attacker.getX(), attacker.getY(), attacker.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, attacker.getSoundSource(), 1.0F, 1.0F);
       if (attacker instanceof Player player) {
-        player.sweepAttack();
+        // Player#sweepAttack was removed in 1.21.11
+        CombatHelper.sweepParticles(player);
       }
     }
   }

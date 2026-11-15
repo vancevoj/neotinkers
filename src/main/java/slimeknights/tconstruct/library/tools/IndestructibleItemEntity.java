@@ -50,10 +50,14 @@ public class IndestructibleItemEntity extends ItemEntity {
     return true;
   }
 
+  /**
+   * Since 1.21.2 the damage entry point {@link ItemEntity#hurtServer} is final and the overridable {@code isInvulnerableTo} is gone.
+   * Being permanently invulnerable blocks all damage besides out of world in {@link #isInvulnerableToBase(DamageSource)},
+   * except damage from creative players, which {@link #canBeHurtBy(ItemStack, DamageSource)} blocks through the item.
+   */
   @Override
-  public boolean isInvulnerableTo(DamageSource pSource) {
-    // prevent any damage besides out of world
-    return !pSource.is(DamageTypeTags.BYPASSES_INVULNERABILITY);
+  public boolean isPermanentlyInvulnerable() {
+    return true;
   }
 
   /** Checks if the given stack has a custom entity */
@@ -62,7 +66,18 @@ public class IndestructibleItemEntity extends ItemEntity {
   }
 
   /**
-   * Creates an indestructible item entity from the given item stack (if needed). Intended to be called in {@link net.neoforged.neoforge.common.extensions.IForgeItem#createEntity(Level, Entity, ItemStack)}
+   * Implementation of {@link net.neoforged.neoforge.common.extensions.IItemExtension#canBeHurtBy(ItemStack, DamageSource)} for modifiable items.
+   * Prevents any damage besides out of world for stacks that spawn an indestructible entity, matching the old {@code isInvulnerableTo} on this entity.
+   * @param stack   Stack in the item entity
+   * @param source  Damage source
+   * @return  True if the item entity can be damaged
+   */
+  public static boolean canBeHurtBy(ItemStack stack, DamageSource source) {
+    return !hasCustomEntity(stack) || source.is(DamageTypeTags.BYPASSES_INVULNERABILITY);
+  }
+
+  /**
+   * Creates an indestructible item entity from the given item stack (if needed). Intended to be called in {@link net.neoforged.neoforge.common.extensions.IItemExtension#createEntity(Level, Entity, ItemStack)}
    * @param world     World instance
    * @param original  Original entity
    * @param stack     Stack to drop

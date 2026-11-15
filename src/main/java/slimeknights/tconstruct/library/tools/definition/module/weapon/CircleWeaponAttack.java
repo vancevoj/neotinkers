@@ -8,6 +8,7 @@ import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
+import slimeknights.mantle.util.CombatHelper;
 import slimeknights.tconstruct.library.json.LevelingValue;
 import slimeknights.tconstruct.library.module.HookProvider;
 import slimeknights.tconstruct.library.module.ModuleHook;
@@ -65,7 +66,8 @@ public record CircleWeaponAttack(LevelingValue diameters) implements MeleeHitToo
         if (aoeTarget != attacker && aoeTarget != target && !attacker.isAlliedTo(aoeTarget) && ToolAttackUtil.isAttackable(attacker, aoeTarget)
             && !(aoeTarget instanceof ArmorStand stand && stand.isMarker()) && target.distanceToSqr(aoeTarget) < rangeSq) {
           float angle = attacker.getYRot() * ((float)Math.PI / 180F);
-          aoeTarget.knockback(0.4F, Mth.sin(angle), -Mth.cos(angle));
+          // 26.2 knockback takes the damage source and damage, the target attack has not happened yet so pass the primary attack
+          aoeTarget.knockback(0.4F, Mth.sin(angle), -Mth.cos(angle), context.makeDamageSource(), damage);
           // TODO: do we want to bring back the behavior where circle returns success if any AOE target is hit?
           ToolAttackUtil.performAttack(tool, context.withAOETarget(aoeTarget));
         }
@@ -74,7 +76,8 @@ public record CircleWeaponAttack(LevelingValue diameters) implements MeleeHitToo
       level.playSound(null, attacker.getX(), attacker.getY(), attacker.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, attacker.getSoundSource(), 1.0F, 1.0F);
       Player player = context.getPlayerAttacker();
       if (!context.isProjectile() && player != null) {
-        player.sweepAttack();
+        // Player#sweepAttack was removed in 1.21.11
+        CombatHelper.sweepParticles(player);
       }
     }
   }

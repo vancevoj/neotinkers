@@ -7,7 +7,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -20,10 +20,10 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.common.ItemAbilities;
 import slimeknights.mantle.client.SafeClientAccess;
 import slimeknights.mantle.client.TooltipKey;
 import slimeknights.tconstruct.TConstruct;
@@ -79,8 +79,8 @@ public class TooltipUtil {
 
   // 1.21: the vanilla item hide-flags (ItemStack.TooltipPart) were replaced by per-component tooltip display data, so these
   // masks are no longer applied by vanilla. The bits are kept for API stability (consumers still receive an int).
-  // TODO(neoport): hiding enchantment/modifier tooltips now requires the DataComponents.TOOLTIP_DISPLAY/showInTooltip mechanism
-  // in the consuming item classes; these flags no longer suppress anything on their own.
+  // Vanilla enchantments are hidden through the TOOLTIP_DISPLAY default component, see hideVanillaEnchantments(Item.Properties).
+  // Attribute lines are hidden when holding shift or control through hidesAttributeTooltip(ToolDefinition).
   /** Bit flag matching the legacy enchantments tooltip part */
   private static final int HIDE_ENCHANTMENTS = 1;
   /** Bit flag matching the legacy attribute modifiers tooltip part */
@@ -110,7 +110,17 @@ public class TooltipUtil {
    */
   public static boolean isDisplay(ItemStack stack) {
     CompoundTag nbt = ToolDataComponents.getTag(stack);
-    return nbt != null && nbt.getBoolean(KEY_DISPLAY);
+    return nbt != null && nbt.getBooleanOr(KEY_DISPLAY, false);
+  }
+
+  /**
+   * Hides the vanilla enchantment tooltip on the given item properties, as tool tooltips list enchantments alongside modifiers.
+   * Replaces the enchantments part of the removed item tooltip hide flags. Called by modifiable item constructors.
+   * @param properties  Item properties
+   * @return  Item properties
+   */
+  public static Item.Properties hideVanillaEnchantments(Item.Properties properties) {
+    return properties.component(DataComponents.TOOLTIP_DISPLAY, TooltipDisplay.DEFAULT.withHidden(DataComponents.ENCHANTMENTS, true));
   }
 
   /** Sets the tool name in a way that will not be italic */
@@ -131,7 +141,7 @@ public class TooltipUtil {
   public static String getDisplayName(ItemStack tool) {
     CompoundTag tag = ToolDataComponents.getTag(tool);
     if (tag != null) {
-      return tag.getString(KEY_NAME);
+      return tag.getStringOr(KEY_NAME, "");
     }
     return "";
   }
@@ -184,7 +194,7 @@ public class TooltipUtil {
       tooltip.add(UNINITIALIZED);
       if (definition.hasMaterials()) {
         CompoundTag nbt = ToolDataComponents.getTag(stack);
-        if (nbt == null || !nbt.contains(ToolStack.TAG_MATERIALS, Tag.TAG_LIST)) {
+        if (nbt == null || !(nbt.get(ToolStack.TAG_MATERIALS) instanceof ListTag)) {
           tooltip.add(RANDOM_MATERIALS);
         }
       }
@@ -305,7 +315,7 @@ public class TooltipUtil {
       builder.addOptional(ToolStats.ARMOR_TOUGHNESS);
       builder.addOptional(ToolStats.KNOCKBACK_RESISTANCE, 10f);
     }
-    if (ModifierUtil.canPerformAction(tool, ItemAbilities.SHIELD_BLOCK)) {
+    if (ModifierUtil.canPerformAction(tool, ModifierUtil.SHIELD_BLOCK)) {
       builder.add(ToolStats.BLOCK_AMOUNT);
       builder.add(ToolStats.BLOCK_ANGLE);
     }
@@ -499,6 +509,17 @@ public class TooltipUtil {
       tooltip.add((Component.translatable("attribute.modifier.take." + operation.id(), ItemAttributeModifiers.ATTRIBUTE_MODIFIER_FORMAT.format(displayValue), name))
                     .withStyle(ChatFormatting.RED));
     }
+  }
+
+  /**
+   * Checks if the vanilla attribute lines should be hidden from the tooltip for the current ctrl+shift combination.
+   * Replaces the modifiers part of the removed item tooltip hide flags, as the shift stats view (and the control view of material tools) shows its own attributes.
+   * Used by the client {@code GatherSkippedAttributeTooltipsEvent} listener for modifiable items.
+   * @param definition  Tool definition
+   * @return  True if the attribute lines should be hidden
+   */
+  public static boolean hidesAttributeTooltip(ToolDefinition definition) {
+    return (getModifierHideFlags(definition) & HIDE_MODIFIERS) != 0;
   }
 
   /** Gets the tooltip flags for the current ctrl+shift combination, used to hide enchantments and modifiers from the tooltip as needed */

@@ -2,10 +2,15 @@ package slimeknights.tconstruct.library.tools.helper;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
+import net.minecraft.nbt.NumericTag;
 import net.minecraft.resources.Identifier;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
@@ -17,6 +22,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUseAnimation;
+import net.minecraft.world.item.component.BlocksAttacks;
+import net.minecraft.world.item.component.Weapon;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.ItemAbilities;
@@ -33,6 +40,7 @@ import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.ToolDataComponents;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
+import slimeknights.tconstruct.tools.TinkerToolActions;
 import slimeknights.tconstruct.tools.TinkerTools;
 
 import javax.annotation.Nonnull;
@@ -40,17 +48,27 @@ import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Consumer;
 
 /** Generic modifier hooks that don't quite fit elsewhere */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ModifierUtil {
+  /**
+   * Tool action for blocking with a tool. NeoForge removed {@code ItemAbilities.SHIELD_BLOCK} in 26.3, abilities are interned by name
+   * so this matches every other use of {@code ItemAbility.get("shield_block")}. Vanilla no longer queries it, blocking requires the
+   * {@link DataComponents#BLOCKS_ATTACKS} component which {@link #updateCombatComponents(ItemStack, IToolStackView, HolderLookup.Provider)} adds.
+   */
+  public static final ItemAbility SHIELD_BLOCK = ItemAbility.get("shield_block");
+  /** Seconds a shield is disabled by a tool with {@link TinkerToolActions#SHIELD_DISABLE}, matching the 100 tick shield cooldown from before 1.21.2 */
+  private static final float SHIELD_DISABLE_SECONDS = 5.0f;
+
   /** Drops an item at the given position */
   public static void dropItem(Level level, double x, double y, double z, ItemStack stack) {
     if (!stack.isEmpty() && !level.isClientSide()) {
       ItemEntity ent = new ItemEntity(level, x, y, z, stack);
       ent.setDefaultPickUpDelay();
-      RandomSource rand = level.random;
+      RandomSource rand = level.getRandom();
       ent.setDeltaMovement(ent.getDeltaMovement().add((rand.nextFloat() - rand.nextFloat()) * 0.1F,
                                                       rand.nextFloat() * 0.05F,
                                                       (rand.nextFloat() - rand.nextFloat()) * 0.1F));
@@ -115,15 +133,14 @@ public final class ModifierUtil {
   public static int getModifierLevel(ItemStack stack, ModifierId modifier) {
     if (!stack.isEmpty() && stack.is(TinkerTags.Items.MODIFIABLE)) {
       CompoundTag nbt = ToolDataComponents.getTag(stack);
-      if (nbt != null && nbt.contains(ToolStack.TAG_MODIFIERS, Tag.TAG_LIST)) {
-        ListTag list = nbt.getList(ToolStack.TAG_MODIFIERS, Tag.TAG_COMPOUND);
+      if (nbt != null && nbt.get(ToolStack.TAG_MODIFIERS) instanceof ListTag list) {
         int size = list.size();
         if (size > 0) {
           String key = modifier.toString();
           for (int i = 0; i < size; i++) {
-            CompoundTag entry = list.getCompound(i);
-            if (key.equals(entry.getString(ModifierEntry.TAG_MODIFIER))) {
-              return entry.getInt(ModifierEntry.TAG_LEVEL);
+            CompoundTag entry = list.getCompoundOrEmpty(i);
+            if (key.equals(entry.getStringOr(ModifierEntry.TAG_MODIFIER, ""))) {
+              return entry.getIntOr(ModifierEntry.TAG_LEVEL, 0);
             }
           }
         }
@@ -136,7 +153,7 @@ public final class ModifierUtil {
   public static boolean hasUpgrades(ItemStack stack) {
     if (!stack.isEmpty() && stack.is(TinkerTags.Items.MODIFIABLE)) {
       CompoundTag nbt = ToolDataComponents.getTag(stack);
-      return nbt != null && !nbt.getList(ToolStack.TAG_UPGRADES, Tag.TAG_COMPOUND).isEmpty();
+      return nbt != null && !nbt.getListOrEmpty(ToolStack.TAG_UPGRADES).isEmpty();
     }
     return false;
   }
@@ -154,8 +171,8 @@ public final class ModifierUtil {
   /** Shortcut to get a volatile flag when the tool stack is not needed otherwise */
   public static boolean checkVolatileFlag(ItemStack stack, Identifier flag) {
     CompoundTag nbt = ToolDataComponents.getTag(stack);
-    if (nbt != null && nbt.contains(ToolStack.TAG_VOLATILE_MOD_DATA, Tag.TAG_COMPOUND)) {
-      return nbt.getCompound(ToolStack.TAG_VOLATILE_MOD_DATA).getBoolean(flag.toString());
+    if (nbt != null && nbt.get(ToolStack.TAG_VOLATILE_MOD_DATA) instanceof CompoundTag volatileData) {
+      return volatileData.getBooleanOr(flag.toString(), false);
     }
     return false;
   }
@@ -163,8 +180,8 @@ public final class ModifierUtil {
   /** Shortcut to get a persistent flag when the tool stack is not needed otherwise */
   public static boolean checkPersistentPresent(ItemStack stack, Identifier key) {
     CompoundTag nbt = ToolDataComponents.getTag(stack);
-    if (nbt != null && nbt.contains(ToolStack.TAG_PERSISTENT_MOD_DATA, Tag.TAG_COMPOUND)) {
-      return nbt.getCompound(ToolStack.TAG_PERSISTENT_MOD_DATA).contains(key.toString());
+    if (nbt != null && nbt.get(ToolStack.TAG_PERSISTENT_MOD_DATA) instanceof CompoundTag persistent) {
+      return persistent.contains(key.toString());
     }
     return false;
   }
@@ -172,8 +189,8 @@ public final class ModifierUtil {
   /** Shortcut to get a volatile int value when the tool stack is not needed otherwise */
   public static int getVolatileInt(ItemStack stack, Identifier flag) {
     CompoundTag nbt = ToolDataComponents.getTag(stack);
-    if (nbt != null && nbt.contains(ToolStack.TAG_VOLATILE_MOD_DATA, Tag.TAG_COMPOUND)) {
-      return nbt.getCompound(ToolStack.TAG_VOLATILE_MOD_DATA).getInt(flag.toString());
+    if (nbt != null && nbt.get(ToolStack.TAG_VOLATILE_MOD_DATA) instanceof CompoundTag volatileData) {
+      return volatileData.getIntOr(flag.toString(), 0);
     }
     return 0;
   }
@@ -181,11 +198,10 @@ public final class ModifierUtil {
   /** Shortcut to get a volatile int value when the tool stack is not needed otherwise */
   public static int getPersistentInt(ItemStack stack, Identifier flag, int defealtValue) {
     CompoundTag nbt = ToolDataComponents.getTag(stack);
-    if (nbt != null && nbt.contains(ToolStack.TAG_PERSISTENT_MOD_DATA, Tag.TAG_COMPOUND)) {
-      CompoundTag persistent = nbt.getCompound(ToolStack.TAG_PERSISTENT_MOD_DATA);
-      String flagString = flag.toString();
-      if (persistent.contains(flagString, Tag.TAG_INT)) {
-        return persistent.getInt(flagString);
+    if (nbt != null && nbt.get(ToolStack.TAG_PERSISTENT_MOD_DATA) instanceof CompoundTag persistent) {
+      // old check was contains(key, TAG_INT), which also matched any other numeric tag type
+      if (persistent.get(flag.toString()) instanceof NumericTag numeric) {
+        return numeric.intValue();
       }
     }
     return defealtValue;
@@ -194,8 +210,8 @@ public final class ModifierUtil {
   /** Shortcut to get a persistent string value when the tool stack is not needed otherwise */
   public static String getPersistentString(ItemStack stack, Identifier flag) {
     CompoundTag nbt = ToolDataComponents.getTag(stack);
-    if (nbt != null && nbt.contains(ToolStack.TAG_PERSISTENT_MOD_DATA, Tag.TAG_COMPOUND)) {
-      return nbt.getCompound(ToolStack.TAG_PERSISTENT_MOD_DATA).getString(flag.toString());
+    if (nbt != null && nbt.get(ToolStack.TAG_PERSISTENT_MOD_DATA) instanceof CompoundTag persistent) {
+      return persistent.getStringOr(flag.toString(), "");
     }
     return "";
   }
@@ -221,7 +237,60 @@ public final class ModifierUtil {
    * Allows your tool to block while charging up.
    */
   public static ItemUseAnimation blockWhileCharging(IToolStackView tool, ItemUseAnimation fallback) {
-    return canPerformAction(tool, ItemAbilities.SHIELD_BLOCK) ? ItemUseAnimation.BLOCK : fallback;
+    return canPerformAction(tool, SHIELD_BLOCK) ? ItemUseAnimation.BLOCK : fallback;
+  }
+
+  /**
+   * Creates the blocking component given to tools that can block. Matches the vanilla shield, which replicates the blocking
+   * behavior before 1.21.5: 5 tick block delay, full block in front of the holder, 1 + damage durability lost when blocking 3 or more damage.
+   * Tinkers' block amount and block angle stats are applied on top by the shield block event handler.
+   * @param registries  Registry access, needed for the damage type tag
+   * @return  Blocking component
+   */
+  public static BlocksAttacks createBlockingComponent(HolderLookup.Provider registries) {
+    return new BlocksAttacks(
+      0.25f, 1.0f,
+      List.of(new BlocksAttacks.DamageReduction(90.0f, Optional.empty(), 0.0f, 1.0f)),
+      new BlocksAttacks.ItemDamageFunction(3.0f, 1.0f, 1.0f),
+      Optional.of(registries.lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(DamageTypeTags.BYPASSES_SHIELD)),
+      Optional.of(SoundEvents.SHIELD_BLOCK), Optional.of(SoundEvents.SHIELD_BREAK));
+  }
+
+  /**
+   * Updates the vanilla combat components on a modifiable stack based on the tool actions of the tool.
+   * Since 1.21.5 vanilla reads shield blocking and shield disabling from per stack components instead of asking the item:
+   * <ul>
+   *   <li>{@link DataComponents#BLOCKS_ATTACKS} replaces {@code canPerformAction(SHIELD_BLOCK)}, added when the tool can perform {@link #SHIELD_BLOCK}.</li>
+   *   <li>{@link DataComponents#WEAPON} replaces {@code IItemExtension#canDisableShield}, added when the tool can perform {@link TinkerToolActions#SHIELD_DISABLE}.
+   *       It deals no item damage per attack as tool damage is handled by Tinkers attack logic.</li>
+   * </ul>
+   * Called from the inventory tick of modifiable items, so the components follow modifier changes. Only changes the stack when the state changed.
+   * @param stack       Stack to update
+   * @param tool        Tool instance for the stack
+   * @param registries  Registry access
+   */
+  public static void updateCombatComponents(ItemStack stack, IToolStackView tool, HolderLookup.Provider registries) {
+    // matches the old canPerformAction overrides, which rejected stacked tools
+    boolean single = stack.getCount() == 1;
+    // blocking
+    boolean canBlock = single && canPerformAction(tool, SHIELD_BLOCK);
+    if (canBlock != stack.has(DataComponents.BLOCKS_ATTACKS)) {
+      if (canBlock) {
+        stack.set(DataComponents.BLOCKS_ATTACKS, createBlockingComponent(registries));
+      } else {
+        stack.remove(DataComponents.BLOCKS_ATTACKS);
+      }
+    }
+    // shield disabling
+    boolean canDisable = single && canPerformAction(tool, TinkerToolActions.SHIELD_DISABLE);
+    Weapon weapon = stack.get(DataComponents.WEAPON);
+    if (canDisable) {
+      if (weapon == null || weapon.disableBlockingForSeconds() != SHIELD_DISABLE_SECONDS) {
+        stack.set(DataComponents.WEAPON, new Weapon(0, SHIELD_DISABLE_SECONDS));
+      }
+    } else if (weapon != null) {
+      stack.remove(DataComponents.WEAPON);
+    }
   }
 
   /** Calculates inaccuracy from the conditional tool stat. */

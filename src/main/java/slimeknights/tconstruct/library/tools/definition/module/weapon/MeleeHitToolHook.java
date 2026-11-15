@@ -1,5 +1,7 @@
 package slimeknights.tconstruct.library.tools.definition.module.weapon;
 
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
 import slimeknights.tconstruct.library.tools.context.ToolAttackContext;
 import slimeknights.tconstruct.library.tools.definition.module.ToolHooks;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
@@ -18,7 +20,9 @@ public interface MeleeHitToolHook {
 
   /** Deals damage using the given tool, applying any post damage effects */
   static boolean dealDamage(IToolStackView tool, ToolAttackContext context, float damage) {
-    boolean hit = context.getTarget().hurt(context.makeDamageSource(), damage);
+    // 1.21.2 made Entity#hurt return nothing, attacks are server side so use the server damage method
+    Entity target = context.getTarget();
+    boolean hit = target.level() instanceof ServerLevel server && target.hurtServer(server, context.makeDamageSource(), damage);
     if (hit) {
       tool.getHook(ToolHooks.MELEE_HIT).afterMeleeHit(tool, context, damage);
     }

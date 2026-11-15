@@ -8,6 +8,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup.RegistryLookup;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
@@ -23,11 +24,13 @@ import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.inventory.ClickAction;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemInstance;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ProjectileWeaponItem;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.level.Level;
@@ -58,22 +61,23 @@ import slimeknights.tconstruct.library.tools.helper.ToolBuildHandler;
 import slimeknights.tconstruct.library.tools.helper.ToolDamageUtil;
 import slimeknights.tconstruct.library.tools.helper.ToolHarvestLogic;
 import slimeknights.tconstruct.library.tools.helper.TooltipUtil;
+import slimeknights.tconstruct.library.tools.item.IClientExtensionItem;
 import slimeknights.tconstruct.library.tools.item.IModifiableDisplay;
 import slimeknights.tconstruct.library.tools.item.ModifiableItem;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.ModDataNBT;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.library.tools.part.MaterialItem;
-import slimeknights.tconstruct.tools.TinkerToolActions;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
 import static slimeknights.tconstruct.library.modifiers.hook.interaction.GeneralInteractionModifierHook.KEY_DRAWTIME;
 
 /** Base class for any items that launch projectiles */
-public abstract class ModifiableLauncherItem extends ProjectileWeaponItem implements IModifiableDisplay {
+public abstract class ModifiableLauncherItem extends ProjectileWeaponItem implements IModifiableDisplay, IClientExtensionItem {
   /** Persistent data key for the ammo being used on drawing back the bow. */
   public static final Identifier KEY_DRAWBACK_AMMO = TConstruct.getResource("drawback_ammo");
 
@@ -85,7 +89,7 @@ public abstract class ModifiableLauncherItem extends ProjectileWeaponItem implem
   private ItemStack toolForRendering;
 
   public ModifiableLauncherItem(Properties properties, ToolDefinition toolDefinition) {
-    super(properties);
+    super(TooltipUtil.hideVanillaEnchantments(properties));
     this.toolDefinition = toolDefinition;
   }
 
@@ -104,24 +108,17 @@ public abstract class ModifiableLauncherItem extends ProjectileWeaponItem implem
 
 
   /* Enchanting */
+  // 1.21.2 removed Item#isEnchantable and getEnchantmentValue: without the ENCHANTABLE component the tool cannot be enchanted in the enchanting table
 
+  /** Replaces the removed {@code isBookEnchantable}, NeoForge now asks this method for enchanted books in the anvil */
   @Override
-  public boolean isEnchantable(ItemStack stack) {
+  public boolean supportsEnchantment(ItemStack stack, Holder<Enchantment> enchantment) {
     return false;
   }
 
-  @Override
-  public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
-    return false;
-  }
-
-  @Override
-  public int getEnchantmentValue(ItemStack stack) {
-    return 0;
-  }
   /** Reports the tool's virtual modifier enchantments to gameplay logic, they are never stored in NBT */
   @Override
-  public int getEnchantmentLevel(ItemStack stack, Holder<Enchantment> enchantment) {
+  public int getEnchantmentLevel(ItemInstance stack, Holder<Enchantment> enchantment) {
     return EnchantmentModifierHook.getEnchantmentLevel(stack, enchantment);
   }
 
@@ -135,7 +132,7 @@ public abstract class ModifiableLauncherItem extends ProjectileWeaponItem implem
   /* Loading */
 
   @Override
-  public void onCraftedBy(ItemStack stack, Level worldIn, Player playerIn) {
+  public void onCraftedBy(ItemStack stack, Player playerIn) {
     ToolStack.ensureInitialized(stack, getToolDefinition());
   }
 
@@ -164,16 +161,22 @@ public abstract class ModifiableLauncherItem extends ProjectileWeaponItem implem
   }
 
   @Override
+  public boolean canBeHurtBy(ItemStack stack, DamageSource source) {
+    return IndestructibleItemEntity.canBeHurtBy(stack, source);
+  }
+
+  @Override
   public void onDestroyed(ItemEntity entity, DamageSource damageSource) {
     ToolInventoryCapability.onDestroyed(entity);
   }
 
 
   /* Damage/Durability */
+  // 1.21.2 removed isRepairable and isValidRepairItem: without the REPAIRABLE component the anvil cannot repair the tool, repair is handled in the tinker station
 
+  /** Replaces the removed {@code isRepairable} for crafting grid and grindstone combining */
   @Override
-  public boolean isRepairable(ItemStack stack) {
-    // handle in the tinker station
+  public boolean isCombineRepairable(ItemStack stack) {
     return false;
   }
 
@@ -193,10 +196,12 @@ public abstract class ModifiableLauncherItem extends ProjectileWeaponItem implem
   }
 
   @Override
-  public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T damager, Consumer<Item> onBroken) {
+  public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, @Nullable T damager, Consumer<ItemStack> onBroken) {
     // emulate ItemStack.hurtAndBreak; we always return 0 to skip vanilla's handling so tools use our damage logic
+    // since 1.21.2 hurtAndBreak calls this before checking isDamageableItem, so check it here to keep the old behavior
     if (stack.isDamageableItem() && ToolDamageUtil.damage(ToolStack.from(stack), amount, damager, stack)) {
-      onBroken.accept(stack.getItem());
+      // the tool is not consumed when broken, so pass the stack itself (vanilla passes a copy of the stack it just shrank)
+      onBroken.accept(stack);
     }
     return 0;
   }
@@ -223,8 +228,22 @@ public abstract class ModifiableLauncherItem extends ProjectileWeaponItem implem
   /* Modifier interactions */
 
   @Override
-  public void inventoryTick(ItemStack stack, Level worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-    InventoryTickModifierHook.heldInventoryTick(stack, worldIn, entityIn, itemSlot, isSelected);
+  public void inventoryTick(ItemStack stack, ServerLevel level, Entity entity, @Nullable EquipmentSlot slot) {
+    // vanilla reads blocking and shield disabling from components since 1.21.5, so keep them in sync with the tool actions
+    // runs for mobs too, so mobs holding tools can block and disable shields like in 1.21.1
+    ModifierUtil.updateCombatComponents(stack, ToolStack.from(stack), level.registryAccess());
+    // 1.21.1 only ticked player inventories, since 1.21.5 the equipment of every living entity ticks; keep modifier hooks player only
+    if (entity instanceof Player) {
+      InventoryTickModifierHook.heldInventoryTick(stack, level, entity, slot);
+    }
+  }
+
+  /** Since 1.21.5 vanilla only ticks items server side, modifier hooks ran on both sides before so tick them on the client too */
+  @Override
+  public void clientInventoryTick(ItemStack stack, Level level, Entity entity, @Nullable EquipmentSlot slot) {
+    if (entity instanceof Player) {
+      InventoryTickModifierHook.heldInventoryTick(stack, level, entity, slot);
+    }
   }
 
   @Override
@@ -246,8 +265,9 @@ public abstract class ModifiableLauncherItem extends ProjectileWeaponItem implem
   }
 
   @Override
-  public boolean canPerformAction(ItemStack stack, ItemAbility itemAbility) {
-    return ModifierUtil.canPerformAction(ToolStack.from(stack), itemAbility);
+  public boolean canPerformAction(ItemInstance stack, ItemAbility itemAbility) {
+    // since 26.1 the stack may be an item stack template, which has no tool data
+    return stack instanceof ItemStack itemStack && ModifierUtil.canPerformAction(ToolStack.from(itemStack), itemAbility);
   }
 
   @Override
@@ -260,10 +280,7 @@ public abstract class ModifiableLauncherItem extends ProjectileWeaponItem implem
     return buildAttributeModifiers(stack, EquipmentSlot.MAINHAND, EquipmentSlot.OFFHAND);
   }
 
-  @Override
-  public boolean canDisableShield(ItemStack stack, ItemStack shield, LivingEntity entity, LivingEntity attacker) {
-    return canPerformAction(stack, TinkerToolActions.SHIELD_DISABLE);
-  }
+  // NeoForge 26.3 removed canDisableShield; shield disabling reads the WEAPON component, see ModifierUtil#updateCombatComponents
 
   /**
    * Vanilla's mob-firing entry point. Tinkers' launchers fire entirely through {@link #use}/{@link #releaseUsing}, so
@@ -331,10 +348,13 @@ public abstract class ModifiableLauncherItem extends ProjectileWeaponItem implem
   }
 
   @Override
-  public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-    TooltipUtil.addInformation(this, stack, context.level(), tooltip, SafeClientAccess.getTooltipKey(), flag);
+  public void appendHoverText(ItemStack stack, Item.TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
+    List<Component> lines = new ArrayList<>();
+    TooltipUtil.addInformation(this, stack, context.level(), lines, SafeClientAccess.getTooltipKey(), flag);
+    lines.forEach(tooltip);
   }
-  // TODO(neoport): getDefaultTooltipHideFlags removed in 1.21; tooltip visibility is now per-component (showInTooltip).
+  // getDefaultTooltipHideFlags is gone: vanilla enchantments are hidden by the TOOLTIP_DISPLAY component (TooltipUtil#hideVanillaEnchantments),
+  // attributes are hidden when holding shift or control through TooltipUtil#hidesAttributeTooltip
 
 
   /* Display */
@@ -347,6 +367,7 @@ public abstract class ModifiableLauncherItem extends ProjectileWeaponItem implem
     return toolForRendering;
   }
 
+  /** Registered from the client extensions event, NeoForge 26.3 no longer calls this automatically */
   @Override
   public void initializeClient(Consumer<IClientItemExtensions> consumer) {
     consumer.accept(ModifiableItemClientExtension.INSTANCE);
