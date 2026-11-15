@@ -199,7 +199,7 @@ public class TConstruct {
    * absent, the registry resolves it through the alias chain to the target id. We register the aliases during
    * {@link RegisterEvent}, after the target entries have been added but before the registry freezes.
    * <p>
-   * This is a 1:1 port of the old {@code TConstruct.missingMappings} handler.
+   * This ports the old {@code TConstruct.missingMappings} handler, plus aliases for the composite slimeskull heads that upstream removed without a remap.
    */
   @SubscribeEvent
   static void registerAliases(final RegisterEvent event) {
@@ -210,6 +210,14 @@ public class TConstruct {
       // piglin heads are vanilla
       registry.addAlias(getResource("piglin_head"), BuiltInRegistries.BLOCK.getKey(Blocks.PIGLIN_HEAD));
       registry.addAlias(getResource("piglin_wall_head"), BuiltInRegistries.BLOCK.getKey(Blocks.PIGLIN_WALL_HEAD));
+      // composite slimeskull heads were removed upstream without a remap, fall back to the vanilla skull of the same mob
+      // the placed heads used the vanilla skull block entity, so it carries over to the vanilla block
+      registry.addAlias(getResource("venombone_head"), BuiltInRegistries.BLOCK.getKey(Blocks.SKELETON_SKULL));
+      registry.addAlias(getResource("venombone_wall_head"), BuiltInRegistries.BLOCK.getKey(Blocks.SKELETON_WALL_SKULL));
+      registry.addAlias(getResource("blazing_bone_head"), BuiltInRegistries.BLOCK.getKey(Blocks.WITHER_SKELETON_SKULL));
+      registry.addAlias(getResource("blazing_bone_wall_head"), BuiltInRegistries.BLOCK.getKey(Blocks.WITHER_SKELETON_WALL_SKULL));
+      registry.addAlias(getResource("necronium_head"), BuiltInRegistries.BLOCK.getKey(Blocks.WITHER_SKELETON_SKULL));
+      registry.addAlias(getResource("necronium_wall_head"), BuiltInRegistries.BLOCK.getKey(Blocks.WITHER_SKELETON_WALL_SKULL));
     } else if (event.getRegistryKey().equals(Registries.ITEM)) {
       net.minecraft.core.Registry<net.minecraft.world.item.Item> registry = event.getRegistry(Registries.ITEM);
       // silky jewel removal
@@ -217,6 +225,10 @@ public class TConstruct {
       registry.addAlias(getResource("silky_jewel_block"), BuiltInRegistries.ITEM.getKey(Items.EMERALD_BLOCK));
       // piglin heads are vanilla
       registry.addAlias(getResource("piglin_head"), BuiltInRegistries.ITEM.getKey(Items.PIGLIN_HEAD));
+      // composite slimeskull heads are vanilla skulls
+      registry.addAlias(getResource("venombone_head"), BuiltInRegistries.ITEM.getKey(Items.SKELETON_SKULL));
+      registry.addAlias(getResource("blazing_bone_head"), BuiltInRegistries.ITEM.getKey(Items.WITHER_SKELETON_SKULL));
+      registry.addAlias(getResource("necronium_head"), BuiltInRegistries.ITEM.getKey(Items.WITHER_SKELETON_SKULL));
       // round plate rename -> adze head
       registry.addAlias(getResource("round_plate"), BuiltInRegistries.ITEM.getKey(TinkerToolParts.adzeHead.get()));
       registry.addAlias(getResource("round_plate_cast"), BuiltInRegistries.ITEM.getKey(TinkerSmeltery.adzeHeadCast.get()));
