@@ -82,7 +82,7 @@ public class MaterialRecipeCache {
 
   /** Registers a recipe with the cache */
   public static void registerRecipe(MaterialRecipe recipe) {
-    if (recipe.getValue() > 0) {
+    if (recipe.getValue() > 0 && !RecipeCacheInvalidator.skipRegistration()) {
       // ensure c ache does not need to be cleared
       LISTENER.checkClear();
       // add recipe for item lookup; too early to resolve ingredient
@@ -176,6 +176,9 @@ public class MaterialRecipeCache {
 
   /** Registers a material variant for the lookups. */
   public static void addKnownVariant(MaterialVariantId variant) {
+    if (RecipeCacheInvalidator.skipRegistration()) {
+      return;
+    }
     LISTENER.checkClear();
     KNOWN_VARIANTS.put(variant.getId(), variant);
     // null cache of sorted variants as its outdated now

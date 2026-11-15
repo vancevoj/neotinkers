@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.neoforged.neoforge.event.AddReloadListenerEvent;
+import net.neoforged.neoforge.server.ServerLifecycleHooks;
+import slimeknights.mantle.recipe.helper.RecipeHelper;
 import slimeknights.mantle.data.listener.IEarlySafeManagerReloadListener;
 
 import java.util.ArrayList;
@@ -36,6 +38,17 @@ public class RecipeCacheInvalidator implements IEarlySafeManagerReloadListener {
     DuelSidedListener listener = new DuelSidedListener(runnable);
     addReloadListener(listener);
     return listener;
+  }
+
+  /**
+   * Checks if a recipe registering itself into a static cache from its constructor should skip it. In singleplayer and on a LAN host, the
+   * integrated client decodes its own copy of every recipe the server already registered (the in memory connection encodes packets since
+   * 1.20.5), which would register everything twice and mutate the caches from the netty thread while the server reads them.
+   * Dedicated clients have no server in the JVM, so they still register the recipes they decode.
+   * @return  True if the recipe should not register
+   */
+  public static boolean skipRegistration() {
+    return RecipeHelper.isNetworkDecode() && ServerLifecycleHooks.getCurrentServer() != null;
   }
 
   /**

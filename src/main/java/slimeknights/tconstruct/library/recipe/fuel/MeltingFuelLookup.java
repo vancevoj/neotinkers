@@ -46,8 +46,8 @@ public class MeltingFuelLookup {
    * @param fuel   Fuel
    */
   public static void addFuel(MeltingFuel fuel) {
-    // skip empty fuel
-    if (fuel.getRate() == 0) {
+    // skip empty fuel, and the integrated client copy
+    if (fuel.getRate() == 0 || RecipeCacheInvalidator.skipRegistration()) {
       return;
     }
     LISTENER.checkClear();

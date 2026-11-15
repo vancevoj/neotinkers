@@ -42,12 +42,18 @@ public class CastingRecipeLookup {
 
   /** Marks the given item as castable */
   public static void registerCastable(ItemLike item) {
+    if (RecipeCacheInvalidator.skipRegistration()) {
+      return;
+    }
     INVALIDATOR.checkClear();
     CASTABLE_ITEMS.put(item.asItem(), true);
   }
 
   /** Marks the given tag as castable */
   public static void registerCastable(TagKey<Item> tag) {
+    if (RecipeCacheInvalidator.skipRegistration()) {
+      return;
+    }
     INVALIDATOR.checkClear();
     CASTABLE_TAGS.add(tag);
   }

@@ -119,6 +119,9 @@ public class MaterialCastingLookup {
 
   /** Shared logic to register parts */
   public static void registerItemCost(IMaterialItem item, int cost) {
+    if (RecipeCacheInvalidator.skipRegistration()) {
+      return;
+    }
     LISTENER.checkClear();
     // if it already exists
     if (ITEM_COST_LOOKUP.containsKey(item)) {
@@ -137,6 +140,9 @@ public class MaterialCastingLookup {
    * @param recipe  Recipe to add
    */
   public static void registerFluid(MaterialFluidRecipe recipe) {
+    if (RecipeCacheInvalidator.skipRegistration()) {
+      return;
+    }
     LISTENER.checkClear();
     if (recipe.getInput() == null) {
       CASTING_FLUIDS.add(recipe);

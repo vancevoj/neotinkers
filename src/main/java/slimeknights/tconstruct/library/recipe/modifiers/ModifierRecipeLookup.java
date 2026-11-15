@@ -46,6 +46,9 @@ public class ModifierRecipeLookup {
    * @param salvage  Salvage recipe
    */
   public static void addSalvage(ModifierSalvage salvage) {
+    if (RecipeCacheInvalidator.skipRegistration()) {
+      return;
+    }
     LISTENER.checkClear();
     SALVAGE.put(salvage.getModifier(), salvage);
   }
@@ -76,6 +79,9 @@ public class ModifierRecipeLookup {
    * @param modifier  Modifier in that slot
    */
   public static void addRecipeModifier(@Nullable SlotType slotType, LazyModifier modifier) {
+    if (RecipeCacheInvalidator.skipRegistration()) {
+      return;
+    }
     LISTENER.checkClear();
     RECIPE_MODIFIERS.put(slotType, modifier);
     RECIPE_MODIFIER_IDS.put(slotType, modifier.getId());

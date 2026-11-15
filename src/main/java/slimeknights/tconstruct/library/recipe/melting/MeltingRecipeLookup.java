@@ -58,7 +58,7 @@ public class MeltingRecipeLookup {
 
   /** Adds a fluid to the lookup */
   public static void addMeltingFluid(Ingredient ingredient, FluidOutput result, int temperature) {
-    if (meltingFrozen) {
+    if (meltingFrozen || RecipeCacheInvalidator.skipRegistration()) {
       return;
     }
     CACHE.checkClear();
