@@ -1,6 +1,5 @@
 package slimeknights.tconstruct.library.client.modifiers.model;
 
-import com.google.common.collect.Interner;
 import com.google.common.collect.Interners;
 import com.mojang.math.Transformation;
 import net.minecraft.client.renderer.block.dispatch.BlockModelRotation;
@@ -125,8 +124,8 @@ public record FluidModifierModel(@Nullable Material small, @Nullable Material la
   private enum MaskQuadBaker implements ModelBaker {
     INSTANCE;
 
-    private final Interner<Vector3fc> vectors = Interners.newWeakInterner();
-    private final Interner<BakedQuad.MaterialInfo> materialInfos = Interners.newWeakInterner();
+    private final com.google.common.collect.Interner<Vector3fc> vectors = Interners.newWeakInterner();
+    private final com.google.common.collect.Interner<BakedQuad.MaterialInfo> materialInfos = Interners.newWeakInterner();
     private final ModelBaker.Interner interner = new ModelBaker.Interner() {
       @Override
       public Vector3fc vector(Vector3fc vector) {
