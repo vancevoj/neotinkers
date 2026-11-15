@@ -2,8 +2,8 @@ package slimeknights.tconstruct.gadgets;
 
 import net.minecraft.data.DataGenerator;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.item.CreativeModeTab.ItemDisplayParameters;
 import net.minecraft.world.item.CreativeModeTab.Output;
 import net.minecraft.world.item.Item;
@@ -187,7 +187,8 @@ public final class TinkerGadgets extends TinkerModule {
 
   @SubscribeEvent
   void entityAttributes(EntityAttributeCreationEvent event) {
-    event.put(armorStandEntity.get(), LivingEntity.createLivingAttributes().build());
+    // 1.21 armor stands also set step height to 0, use the vanilla attributes so fancy stands match
+    event.put(armorStandEntity.get(), ArmorStand.createAttributes().build());
   }
 
   /** Adds all relevant items to the creative tab, called by general tab */
