@@ -1,5 +1,3 @@
-modLoader="javafml"
-loaderVersion="${loader_range}"
 issueTrackerURL="https://github.com/vancevoj/NeoTinkersConstruct/issues"
 logoFile="logo.png"
 license="MIT"
@@ -11,7 +9,7 @@ license="MIT"
     enumExtensions="META-INF/enumextensions.json"
     authors="Slime Knights, vancevoj"
     description='''
-A little of this, a little of that, a lot of tinkering, and a lot of tools. Neo Tinkers is vancevoj's NeoForge 1.21.1 port of Slime Knights' Tinkers' Construct ${mod_version}; it was inspired by their work and nearly all of the design and programming belong to them.
+A little of this, a little of that, a lot of tinkering, and a lot of tools. Neo Tinkers is vancevoj's NeoForge 26.3 port of Slime Knights' Tinkers' Construct ${mod_version}; it was inspired by their work and nearly all of the design and programming belong to them.
     '''
     displayURL="https://github.com/vancevoj/NeoTinkersConstruct"
 
@@ -43,9 +41,3 @@ A little of this, a little of that, a lot of tinkering, and a lot of tools. Neo 
     ordering="NONE"
     side="BOTH"
 
-[[dependencies.tconstruct]]
-    modId="jsonthings"
-    type="optional"
-    versionRange="${json_things_range}"
-    ordering="NONE"
-    side="BOTH"
