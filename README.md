@@ -1,6 +1,6 @@
 # Neo Tinkers
 
-An unofficial **Minecraft NeoForge** port of **Tinkers Construct**. This port is an actively maintained project to keep Tinkers' Construct up-to-date with the latest Minecraft versions!
+An unofficial **Minecraft NeoForge** port of **Tinkers' Construct**. This port is an actively maintained project to keep Tinkers' Construct up-to-date with the latest Minecraft versions!
 
 Full credit for the mod goes to SlimeKnights. I take no credit for any of the original work. This project is **not official** and is in no way endorsed by or affiliated with SlimeKnights. Use it at your own discretion.
 
