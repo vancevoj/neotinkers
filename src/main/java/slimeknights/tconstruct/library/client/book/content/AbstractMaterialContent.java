@@ -366,7 +366,7 @@ public abstract class AbstractMaterialContent extends PageContent {
           ItemElement elementItem = new TinkerItemElement(0, 0, 1, filtered.stream().map(fluid -> new ItemStack(fluid.getFluid().getBucket())).toList());
           elementItem.tooltip = List.of(
             CASTABLE,
-            Component.translatable(CAST_FROM, filtered.get(0).getDisplayName()).withStyle(ChatFormatting.GRAY)
+            Component.translatable(CAST_FROM, filtered.get(0).getHoverName()).withStyle(ChatFormatting.GRAY)
           );
           displayTools.add(elementItem);
         }
@@ -389,7 +389,7 @@ public abstract class AbstractMaterialContent extends PageContent {
             FluidStack firstFluid = composite.getFluids().stream().findFirst().orElse(FluidStack.EMPTY);
             elementItem.tooltip = List.of(
               COMPOSITE,
-              Component.translatable(COMPOSITE_FROM, firstFluid.getDisplayName(), MaterialTooltipCache.getDisplayName(inputId)).withStyle(ChatFormatting.GRAY)
+              Component.translatable(COMPOSITE_FROM, firstFluid.getHoverName(), MaterialTooltipCache.getDisplayName(inputId)).withStyle(ChatFormatting.GRAY)
             );
             displayTools.add(elementItem);
           }

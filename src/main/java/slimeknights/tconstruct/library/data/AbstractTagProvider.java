@@ -154,7 +154,7 @@ public abstract class AbstractTagProvider<T> extends GenericDataProvider {
 
     /** Sets the tag to replace */
     public TagAppender<T> replace(boolean value) {
-      internalBuilder.replace(value);
+      internalBuilder.setReplace(value);
       return this;
     }
 

@@ -2,8 +2,8 @@ package slimeknights.tconstruct.tools.modifiers.ability.ranged;
 
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.ItemStack;
 import slimeknights.mantle.client.ResourceColorManager;
+import slimeknights.mantle.recipe.helper.ItemOutput;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.impl.NoLevelsModifier;
 import slimeknights.tconstruct.library.modifiers.modules.behavior.InfinityModule;
@@ -19,7 +19,7 @@ import javax.annotation.Nullable;
 public class CrystalshotModifier extends NoLevelsModifier {
   @Override
   protected void registerHooks(Builder hookBuilder) {
-    hookBuilder.addModule(new InfinityModule(new ItemStack(TinkerTools.crystalshotItem), CrystalshotItem.TAG_VARIANT,4, false));
+    hookBuilder.addModule(new InfinityModule(ItemOutput.fromItem(TinkerTools.crystalshotItem), CrystalshotItem.TAG_VARIANT,4, false));
   }
 
   @Override

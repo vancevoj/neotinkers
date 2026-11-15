@@ -46,13 +46,10 @@ public class SlimeskullItem extends ModifiableArmorItem {
         return name;
       }
 
-      /** The skull under the helmet is submitted by the slimeskull render layer, the helmet is resized to fit around it */
+      /** Submits the skull under the helmet, then the helmet resized to fit around it */
       @Override
       public <S extends HumanoidRenderState> void submitArmor(PoseStack matrices, SubmitNodeCollector collector, int packedLight, S state, ItemStack stack, EquipmentSlot slot, HumanoidModel<S> armorModel) {
-        matrices.pushPose();
-        SlimeskullArmorModel.applyHelmetTransform(matrices, state.isBaby);
-        super.submitArmor(matrices, collector, packedLight, state, stack, slot, armorModel);
-        matrices.popPose();
+        SlimeskullArmorModel.INSTANCE.submit(matrices, collector, packedLight, state, stack, armorModel, getModel(stack));
       }
     });
   }

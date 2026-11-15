@@ -448,7 +448,7 @@ public class ToolEvents {
           for (EquipmentSlot slotType : ModifiableArmorMaterial.ARMOR_SLOTS) {
             // for our own armor, saves effort to damage directly with our utility
             IToolStackView tool = context.getToolInSlot(slotType);
-            if (tool != null && (!source.is(DamageTypeTags.IS_FIRE) || !entity.getItemBySlot(slotType).has(DataComponents.FIRE_RESISTANT))) {
+            if (tool != null && entity.getItemBySlot(slotType).canBeHurtBy(source)) {
               // mark this as protection (any valid modifier really would do) so tanned can reduce it to not count it as separate damage
               ToolDamageUtil.damageAnimated(tool, damageMissed, entity, slotType, ARMOR_DAMAGE);
             } else {
@@ -456,7 +456,7 @@ public class ToolEvents {
               // ArmorItem is gone, vanilla now damages equipment that has an equippable component that takes damage on hurt
               ItemStack armorStack = entity.getItemBySlot(slotType);
               Equippable equippable = armorStack.get(DataComponents.EQUIPPABLE);
-              if (!armorStack.isEmpty() && (!source.is(DamageTypeTags.IS_FIRE) || !armorStack.has(DataComponents.FIRE_RESISTANT)) && equippable != null && equippable.damageOnHurt()) {
+              if (!armorStack.isEmpty() && armorStack.canBeHurtBy(source) && equippable != null && equippable.damageOnHurt()) {
                 // 1.21: hurtAndBreak(int, LivingEntity, EquipmentSlot) handles the break animation internally (broadcastBreakEvent removed)
                 armorStack.hurtAndBreak(damageMissed, entity, slotType);
               }

@@ -4,30 +4,29 @@ import net.minecraft.core.HolderLookup.Provider;
 import net.minecraft.core.Registry;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.TagAppender;
+import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagBuilder;
 import net.minecraft.tags.TagEntry;
 import net.minecraft.tags.TagKey;
-import slimeknights.mantle.data.BuiltinRegistryTagProvider;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 
 /**
  * Tag provider for built in registries which restores the value based tag appender removed from vanilla.
- * Extends Mantle's {@link BuiltinRegistryTagProvider} with an appender that keeps returning itself after the NeoForge extension methods
- * ({@code addTags}, {@code addOptionalTags}, {@code replace()}, varargs {@code remove}) and accepts IDs for optional entries, so chains such as
- * {@code tag(x).addTags(a, b).add(block)} keep working.
- * <p>
- * The nested {@link IntrinsicTagAppender} intentionally hides Mantle's class of the same name for subclasses.
+ * Same idea as Mantle's {@link slimeknights.mantle.data.BuiltinRegistryTagProvider}, but with an appender that keeps returning itself after every
+ * builder method, including the value varargs ({@code add(T...)}, {@code remove(T...)}, final in Mantle so they cannot be overridden for the return type)
+ * and the NeoForge extension methods ({@code addTags}, {@code addOptionalTags}, {@code replace()}, varargs {@code remove}), and accepts IDs for
+ * optional entries, so chains such as {@code tag(x).add(a, b).addTags(c).addOptional(id)} keep working.
  * @param <T>  Registry type
  */
-public abstract class IntrinsicTagsProvider<T> extends BuiltinRegistryTagProvider<T> {
+public abstract class IntrinsicTagsProvider<T> extends TagsProvider<T> {
   private final Function<T,ResourceKey<T>> keyExtractor;
 
   public IntrinsicTagsProvider(PackOutput packOutput, Registry<T> registry, CompletableFuture<Provider> lookupProvider, String modId) {
-    super(packOutput, registry, lookupProvider, modId);
+    super(packOutput, registry.key(), lookupProvider, modId);
     this.keyExtractor = value -> registry.getResourceKey(value).orElseThrow(() -> new IllegalArgumentException("Value " + value + " is not registered in " + registry.key().identifier()));
   }
 
@@ -50,11 +49,14 @@ public abstract class IntrinsicTagsProvider<T> extends BuiltinRegistryTagProvide
 
   /** Tag appender supporting registry values, keys, and IDs, which returns itself from all builder methods */
   @SuppressWarnings({"UnusedReturnValue", "unused"})  // API
-  public static class IntrinsicTagAppender<T> extends BuiltinRegistryTagProvider.IntrinsicTagAppender<T> {
+  public static class IntrinsicTagAppender<T> implements TagAppender<T> {
+    private final TagAppender<T> parent;
+    private final Function<T,ResourceKey<T>> keyExtractor;
     private final ResourceKey<? extends Registry<T>> registryKey;
 
     protected IntrinsicTagAppender(TagAppender<T> parent, Function<T,ResourceKey<T>> keyExtractor, ResourceKey<? extends Registry<T>> registryKey) {
-      super(parent, keyExtractor);
+      this.parent = parent;
+      this.keyExtractor = keyExtractor;
       this.registryKey = registryKey;
     }
 
@@ -70,15 +72,33 @@ public abstract class IntrinsicTagsProvider<T> extends BuiltinRegistryTagProvide
 
     /* Value methods */
 
-    @Override
+    /** Adds a value to the tag */
     public IntrinsicTagAppender<T> add(T value) {
-      super.add(value);
+      parent.add(keyExtractor.apply(value));
       return this;
     }
 
-    @Override
+    /** Adds the given values to the tag */
+    @SafeVarargs
+    public final IntrinsicTagAppender<T> add(T... values) {
+      for (T value : values) {
+        add(value);
+      }
+      return this;
+    }
+
+    /** Removes a value from the tag */
     public IntrinsicTagAppender<T> remove(T value) {
-      super.remove(value);
+      parent.remove(keyExtractor.apply(value));
+      return this;
+    }
+
+    /** Removes the given values from the tag */
+    @SafeVarargs
+    public final IntrinsicTagAppender<T> remove(T... values) {
+      for (T value : values) {
+        remove(value);
+      }
       return this;
     }
 
@@ -117,7 +137,7 @@ public abstract class IntrinsicTagsProvider<T> extends BuiltinRegistryTagProvide
 
     @Override
     public IntrinsicTagAppender<T> add(ResourceKey<T> element) {
-      super.add(element);
+      parent.add(element);
       return this;
     }
 
@@ -132,43 +152,43 @@ public abstract class IntrinsicTagsProvider<T> extends BuiltinRegistryTagProvide
 
     @Override
     public IntrinsicTagAppender<T> addOptional(ResourceKey<T> element) {
-      super.addOptional(element);
+      parent.addOptional(element);
       return this;
     }
 
     @Override
     public IntrinsicTagAppender<T> addTag(TagKey<T> tag) {
-      super.addTag(tag);
+      parent.addTag(tag);
       return this;
     }
 
     @Override
     public IntrinsicTagAppender<T> addOptionalTag(TagKey<T> tag) {
-      super.addOptionalTag(tag);
+      parent.addOptionalTag(tag);
       return this;
     }
 
     @Override
     public IntrinsicTagAppender<T> add(TagEntry entry) {
-      super.add(entry);
+      parent.add(entry);
       return this;
     }
 
     @Override
     public IntrinsicTagAppender<T> replace(boolean value) {
-      super.replace(value);
+      parent.replace(value);
       return this;
     }
 
     @Override
     public IntrinsicTagAppender<T> remove(ResourceKey<T> element) {
-      super.remove(element);
+      parent.remove(element);
       return this;
     }
 
     @Override
     public IntrinsicTagAppender<T> remove(TagKey<T> tag) {
-      super.remove(tag);
+      parent.remove(tag);
       return this;
     }
 

@@ -142,7 +142,7 @@ public class FluidEffectContent extends PageContent {
     if (!fluids.isEmpty()) {
       HtmlGroup fluidTooltip = HtmlGroup.indent();
       FluidStack fluid = this.fluids.get(0);
-      fluidTooltip.add(HtmlElement.span().add(HTMLUtils.toHtml(fluid.getDisplayName())));
+      fluidTooltip.add(HtmlElement.span().add(HTMLUtils.toHtml(fluid.getHoverName())));
       List<Component> tooltip = new ArrayList<>();
       FluidTooltipHandler.appendMaterialNoShift(fluid.getFluid(), fluid.getAmount(), tooltip);
       tooltip.add(FluidTooltipHandler.formatModName(Loadables.FLUID.getKey(fluid.getFluid())));

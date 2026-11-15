@@ -1,13 +1,15 @@
 package slimeknights.tconstruct.library.modifiers.modules.behavior;
 
+import com.google.gson.JsonElement;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import slimeknights.mantle.data.loadable.ErrorFactory;
 import slimeknights.mantle.data.loadable.Loadables;
-import slimeknights.mantle.data.loadable.common.ItemStackLoadable;
 import slimeknights.mantle.data.loadable.primitive.IntLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
+import slimeknights.mantle.recipe.helper.ItemOutput;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.modules.ModifierModule;
@@ -23,23 +25,33 @@ import java.util.List;
 /**
  * A module that uses {@link slimeknights.tconstruct.library.tools.capability.BlockItemProviderCapability BlockItemProviderCapability} via {@link BlockItemProviderModifierHook} to provide BlockItems to modifiers like exchanging at the cost of durability.
  * Note this does not let the tool place blocks, it only exposes this capability. See {@link slimeknights.tconstruct.tools.modules.interaction.PlaceGlowModule PlaceGlowModule} for an example of a custom module that lets the tool place blocks.
- * @param item The BlockItem to provide, wrapped in an ItemStack
+ * @param item The BlockItem to provide, wrapped in an ItemOutput as stacks cannot be created while data loads. The stack is cached by the output, so it is the same instance each call.
  * @param damage The amount of damage it takes to provide one block (can be 0)
  * @param condition Other conditions that you might want to condition the providing on, such as only happening on certain tool types.
  */
-public record BlockItemProviderModule(ItemStack item, int damage, ModifierCondition<IToolStackView> condition) implements ModifierModule, BlockItemProviderModifierHook, ModifierCondition.ConditionalModule<IToolStackView> {
+public record BlockItemProviderModule(ItemOutput item, int damage, ModifierCondition<IToolStackView> condition) implements ModifierModule, BlockItemProviderModifierHook, ModifierCondition.ConditionalModule<IToolStackView> {
     private static final List<ModuleHook<?>> DEFAULT_HOOKS = List.of(ModifierHooks.BLOCK_ITEM_PROVIDER);
     public static final RecordLoadable<BlockItemProviderModule> LOADER = RecordLoadable.create(
-      ItemStackLoadable.REQUIRED_ITEM_NBT.validate((stack, error) -> {
-        Item item = stack.getItem();
-        if (item instanceof BlockItem) {
-          return stack;
-        }
-        throw error.create(String.format("Expected item %s to be instance of BlockItem, but was %s instead", Loadables.ITEM.getKey(item), item.getClass().getName()));
-      }).requiredField("item", BlockItemProviderModule::item),
+      ItemOutput.Loadable.REQUIRED_ITEM.validate(BlockItemProviderModule::validateBlockItem).requiredField("item", BlockItemProviderModule::item),
       IntLoadable.FROM_ZERO.defaultField("tool_damage", 1, BlockItemProviderModule::damage),
       ModifierCondition.TOOL_FIELD,
       BlockItemProviderModule::new);
+
+    /**
+     * Ensures the output is a block item. The stack cannot be created while data loads, so the item is read from the serialized output instead.
+     * Tag outputs are rejected as they were never supported here and the tag contents are unknown until tags load.
+     */
+    private static ItemOutput validateBlockItem(ItemOutput output, ErrorFactory error) {
+        if (output.getTag() != null) {
+            throw error.create("Expected an item, but got tag " + output.getTag().location());
+        }
+        JsonElement json = output.serialize(false);
+        Item item = Loadables.ITEM.convert(json.isJsonObject() ? json.getAsJsonObject().get("item") : json, "item");
+        if (item instanceof BlockItem) {
+            return output;
+        }
+        throw error.create(String.format("Expected item %s to be instance of BlockItem, but was %s instead", Loadables.ITEM.getKey(item), item.getClass().getName()));
+    }
 
     @Override
     public RecordLoadable<BlockItemProviderModule> getLoader() {
@@ -53,13 +65,13 @@ public record BlockItemProviderModule(ItemStack item, int damage, ModifierCondit
 
     @Override
     public ItemStack getBlockItemStack(IToolStackView tool, ModifierEntry modifier, @Nullable LivingEntity entity) {
-        return !tool.isBroken() && condition.matches(tool, modifier) ? item : ItemStack.EMPTY;
+        return !tool.isBroken() && condition.matches(tool, modifier) ? item.get() : ItemStack.EMPTY;
     }
 
     @Override
     public boolean consumeBlockItem(IToolStackView tool, ModifierEntry modifier, ItemStack backingStack, @Nullable LivingEntity entity) {
         // if this is not our item, then we did not provide it so we should avoid consuming
-        if (item != backingStack) return false;
+        if (item.get() != backingStack) return false;
 
         // we did provide it, so damage and show animation if possible
         if (damage > 0) {

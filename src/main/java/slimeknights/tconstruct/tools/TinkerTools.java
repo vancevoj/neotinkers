@@ -351,9 +351,9 @@ public final class TinkerTools extends TinkerModule {
       // the FileRepository fails to deserialize and the book breaks ("Unknown registry key ... tag_not_empty").
       event.register(NeoForgeRegistries.Keys.CONDITION_CODECS, TagNotEmptyCondition.NAME, () -> TagNotEmptyCondition.CODEC);
     }
-    // 1.21: tool item sub-predicate type, used by tool advancements to match Tinker tools (replaces legacy ItemPredicate.register)
-    if (event.getRegistryKey() == Registries.ITEM_SUB_PREDICATE_TYPE) {
-      event.register(Registries.ITEM_SUB_PREDICATE_TYPE, ToolStackItemPredicate.ID, () -> ToolStackItemPredicate.TYPE);
+    // tool item component predicate type, used by tool advancements to match Tinker tools (item sub predicates became component predicates in 1.21.5)
+    if (event.getRegistryKey() == Registries.DATA_COMPONENT_PREDICATE_TYPE) {
+      event.register(Registries.DATA_COMPONENT_PREDICATE_TYPE, ToolStackItemPredicate.ID, () -> ToolStackItemPredicate.TYPE);
     }
   }
 
