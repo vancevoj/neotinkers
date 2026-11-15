@@ -68,6 +68,8 @@ public class BlockTagProvider extends IntrinsicTagsProvider<Block> {
 
   /* Common glass tags removed from NeoForge in 1.21; recreated here under their original {@code c:} IDs to preserve behavior */
   private static final TagKey<Block> GLASS_COLORLESS = BlockTags.create(commonResource("glass/colorless"));
+  static final TagKey<Block> STORAGE_BLOCKS_QUARTZ = BlockTags.create(commonResource("storage_blocks/quartz"));
+  static final TagKey<Block> STORAGE_BLOCKS_AMETHYST = BlockTags.create(commonResource("storage_blocks/amethyst"));
   private static final TagKey<Block> GLASS_TINTED = BlockTags.create(commonResource("glass/tinted"));
   private static final TagKey<Block> GLASS_SILICA = BlockTags.create(commonResource("glass/silica"));
   private static final TagKey<Block> STAINED_GLASS = BlockTags.create(commonResource("stained_glass"));
@@ -98,6 +100,9 @@ public class BlockTagProvider extends IntrinsicTagsProvider<Block> {
     addMetalTags(TinkerMaterials.manyullyn, true);
     addMetalTags(TinkerMaterials.hepatizon, true);
     addMetalTags(TinkerMaterials.soulsteel, true);
+    // vanilla storage blocks the smeltery melts and casts; Forge had these tags, NeoForge does not, and 26.3 ingredients reject missing tags
+    this.tag(STORAGE_BLOCKS_QUARTZ).add(Blocks.QUARTZ_BLOCK);
+    this.tag(STORAGE_BLOCKS_AMETHYST).add(Blocks.AMETHYST_BLOCK);
     // tier 5
     addMetalTags(TinkerMaterials.knightmetal, true);
     addMetalTags(TinkerMaterials.knightslime, true);

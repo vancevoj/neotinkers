@@ -242,6 +242,8 @@ public class ItemTagProvider extends IntrinsicTagsProvider<Item> {
     addMetalTags(TinkerMaterials.knightmetal);
     addMetalTags(TinkerMaterials.knightslime);
     this.copy(Tags.Blocks.STORAGE_BLOCKS, Tags.Items.STORAGE_BLOCKS);
+    this.copy(BlockTagProvider.STORAGE_BLOCKS_QUARTZ, ItemTags.create(commonResource("storage_blocks/quartz")));
+    this.copy(BlockTagProvider.STORAGE_BLOCKS_AMETHYST, ItemTags.create(commonResource("storage_blocks/amethyst")));
 
     // glass
     copy(Tags.Blocks.GLASS_BLOCKS, Tags.Items.GLASS_BLOCKS);
