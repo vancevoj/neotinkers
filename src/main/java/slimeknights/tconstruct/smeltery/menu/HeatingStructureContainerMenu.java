@@ -1,6 +1,7 @@
 package slimeknights.tconstruct.smeltery.menu;
 
 import lombok.Getter;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
@@ -69,7 +70,36 @@ public class HeatingStructureContainerMenu extends TriggeringMultiModuleContaine
   }
 
   public HeatingStructureContainerMenu(int id, Inventory inv, FriendlyByteBuf buf) {
-    this(id, inv, getTileEntityFromBuf(buf, HeatingStructureBlockEntity.class));
+    this(id, inv, readStructure(buf));
+  }
+
+  /**
+   * Writes the menu open data: the controller position, then the number of melting slots in the server menu.
+   * @see slimeknights.tconstruct.smeltery.block.controller.HeatingControllerBlock#openGui
+   */
+  public static void writeOpenData(FriendlyByteBuf buffer, BlockPos pos, HeatingStructureBlockEntity structure) {
+    buffer.writeBlockPos(pos);
+    buffer.writeVarInt(structure.getMeltingInventory().getSlots());
+  }
+
+  /**
+   * Reads the structure from the menu open data. The client menu builds its slots from the client copy of the melting inventory,
+   * so resize that to the server menu's slot count first. If the two differ, the server sends more slots than the client has,
+   * which disconnects the player with an index out of bounds.
+   */
+  @Nullable
+  private static HeatingStructureBlockEntity readStructure(@Nullable FriendlyByteBuf buf) {
+    HeatingStructureBlockEntity structure = getTileEntityFromBuf(buf, HeatingStructureBlockEntity.class);
+    // slot count is missing if something opened the menu with just the position
+    if (structure != null && buf.isReadable()) {
+      int slots = buf.readVarInt();
+      MeltingModuleInventory inventory = structure.getMeltingInventory();
+      if (inventory.getSlots() != slots) {
+        // client side, nothing to drop as the server owns the items
+        inventory.resize(slots, stack -> {});
+      }
+    }
+    return structure;
   }
 
   @Override
