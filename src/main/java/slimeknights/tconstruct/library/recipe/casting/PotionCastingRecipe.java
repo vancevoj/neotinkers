@@ -27,7 +27,6 @@ import slimeknights.mantle.recipe.IMultiRecipe;
 import slimeknights.mantle.recipe.helper.LoadableRecipeSerializer;
 import slimeknights.mantle.recipe.helper.TypeAwareRecipeSerializer;
 import slimeknights.mantle.recipe.ingredient.FluidIngredient;
-import slimeknights.tconstruct.fluids.fluids.PotionFluidType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -110,9 +109,10 @@ public class PotionCastingRecipe implements ICastingRecipe, IMultiRecipe<IDispla
   @Override
   public ItemStack assemble(ICastingContainer inv, HolderLookup.Provider access) {
     ItemStack result = new ItemStack(this.result);
-    Holder<Potion> potion = PotionFluidType.getPotion(inv.getFluidStack());
-    if (potion != null) {
-      result.set(DataComponents.POTION_CONTENTS, new PotionContents(potion));
+    // copy the full contents, not just the potion, so custom effects and colors carry over as the fluid NBT did on 1.20
+    PotionContents contents = inv.getFluidStack().get(DataComponents.POTION_CONTENTS);
+    if (contents != null) {
+      result.set(DataComponents.POTION_CONTENTS, contents);
     }
     return result;
   }
