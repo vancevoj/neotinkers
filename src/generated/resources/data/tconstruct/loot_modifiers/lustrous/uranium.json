@@ -1,4 +1,10 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "mantle:tag_filled",
+      "tag": "c:ores/uranium"
+    }
+  ],
   "type": "mantle:add_entry",
   "condition": {
     "type": "minecraft:all_of",
