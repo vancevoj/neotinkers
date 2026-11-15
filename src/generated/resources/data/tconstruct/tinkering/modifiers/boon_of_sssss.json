@@ -4,7 +4,8 @@
     {
       "type": "tconstruct:attribute",
       "attribute": "tconstruct:generic.good_effect_duration_multiplier",
-      "each_level": 0.25,
+      "each_level": 0.1,
+      "flat": 0.15,
       "operation": "add_multiplied_base",
       "slots": [
         "mainhand",
@@ -23,6 +24,5 @@
         "each_level": 0.2
       }
     }
-  ],
-  "tooltip_display": "always"
+  ]
 }

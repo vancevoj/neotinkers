@@ -134,6 +134,5 @@
       "seared_ingot_tank",
       "seared_ingot_gauge"
     ]
-  ],
-  "sends_telemetry_event": true
+  ]
 }

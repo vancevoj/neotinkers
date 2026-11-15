@@ -9,13 +9,13 @@
     "tconstruct:laces": [
       {
         "level": 1,
-        "name": "tconstruct:snow_boots"
+        "name": "tconstruct:rugged"
       }
     ],
     "tconstruct:skull": [
       {
-        "level": 2,
-        "name": "tconstruct:consecrated"
+        "level": 1,
+        "name": "tconstruct:consecrated_skull"
       },
       {
         "level": 1,

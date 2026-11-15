@@ -10,12 +10,22 @@
       {
         "level": 1,
         "name": "tconstruct:projectile_protection"
+      },
+      {
+        "level": 1,
+        "name": "tconstruct:iron_armor"
+      }
+    ],
+    "tconstruct:maille": [
+      {
+        "level": 1,
+        "name": "tconstruct:projectile_protection"
       }
     ],
     "tconstruct:skull": [
       {
         "level": 1,
-        "name": "tconstruct:plague"
+        "name": "tconstruct:rebuff"
       },
       {
         "level": 1,

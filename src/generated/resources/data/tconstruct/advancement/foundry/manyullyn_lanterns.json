@@ -76,6 +76,5 @@
       "seared_lantern",
       "scorched_lantern"
     ]
-  ],
-  "sends_telemetry_event": true
+  ]
 }

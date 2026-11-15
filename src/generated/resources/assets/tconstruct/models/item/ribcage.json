@@ -1,10 +1,6 @@
 {
   "parent": "neoforge:item/default",
   "loader": "tconstruct:material",
-  "offset": [
-    0,
-    3
-  ],
   "textures": {
     "texture": "tconstruct:item/tool/armor/slime/chestplate/ribcage"
   }

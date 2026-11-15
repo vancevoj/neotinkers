@@ -1,4 +1,10 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "mantle:tag_filled",
+      "tag": "tconstruct:modifiable/embellishment/slime"
+    }
+  ],
   "type": "tconstruct:swappable_modifier",
   "allow_crystal": false,
   "inputs": [

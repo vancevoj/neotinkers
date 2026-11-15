@@ -1,4 +1,10 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "mantle:tag_filled",
+      "tag": "c:raw_nuggets/steel"
+    }
+  ],
   "type": "tconstruct:melting",
   "ingredient": {
     "tag": "c:raw_nuggets/steel"

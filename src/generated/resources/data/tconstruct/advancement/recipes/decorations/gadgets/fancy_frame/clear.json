@@ -5,7 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": "#c:glass_panes/colorless"
+            "items": "tconstruct:clear_glass_pane"
           }
         ]
       },

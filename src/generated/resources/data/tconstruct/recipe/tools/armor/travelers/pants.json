@@ -1,9 +1,6 @@
 {
   "type": "tconstruct:crafting_shaped_materials",
   "category": "equipment",
-  "extra_materials": [
-    "tconstruct:leather"
-  ],
   "key": {
     "c": [
       {
@@ -37,8 +34,16 @@
         }
       }
     ],
+    "f": {
+      "item": "minecraft:flint"
+    },
     "l": {
-      "tag": "c:leathers"
+      "type": "tconstruct:material_value",
+      "material": {
+        "type": "tconstruct:stat_type",
+        "stat_type": "tconstruct:cuirass"
+      },
+      "value": 1
     }
   },
   "parts": [
@@ -73,10 +78,18 @@
           "stat_type": "tconstruct:plating_leggings"
         }
       }
-    ]
+    ],
+    {
+      "type": "tconstruct:material_value",
+      "material": {
+        "type": "tconstruct:stat_type",
+        "stat_type": "tconstruct:cuirass"
+      },
+      "value": 1
+    }
   ],
   "pattern": [
-    "lll",
+    "lfl",
     "c c",
     "l l"
   ],

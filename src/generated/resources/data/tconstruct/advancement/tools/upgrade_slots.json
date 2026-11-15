@@ -77,6 +77,5 @@
     [
       "has_modified"
     ]
-  ],
-  "sends_telemetry_event": true
+  ]
 }

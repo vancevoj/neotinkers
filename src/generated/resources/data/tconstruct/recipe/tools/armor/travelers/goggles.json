@@ -1,9 +1,6 @@
 {
   "type": "tconstruct:crafting_shaped_materials",
   "category": "equipment",
-  "extra_materials": [
-    "tconstruct:leather"
-  ],
   "key": {
     "c": [
       {
@@ -41,7 +38,12 @@
       "tag": "c:glass_panes/colorless"
     },
     "l": {
-      "tag": "c:leathers"
+      "type": "tconstruct:material_value",
+      "material": {
+        "type": "tconstruct:stat_type",
+        "stat_type": "tconstruct:cuirass"
+      },
+      "value": 1
     }
   },
   "parts": [
@@ -76,7 +78,15 @@
           "stat_type": "tconstruct:plating_helmet"
         }
       }
-    ]
+    ],
+    {
+      "type": "tconstruct:material_value",
+      "material": {
+        "type": "tconstruct:stat_type",
+        "stat_type": "tconstruct:cuirass"
+      },
+      "value": 1
+    }
   ],
   "pattern": [
     "l l",

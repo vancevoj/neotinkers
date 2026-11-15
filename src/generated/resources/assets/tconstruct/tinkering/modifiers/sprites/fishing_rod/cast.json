@@ -1,0 +1,17 @@
+{
+  "constant": {
+    "__tipped": []
+  },
+  "modifiers": {
+    "tconstruct:bounce": [],
+    "tconstruct:collecting": [],
+    "tconstruct:fiery": [],
+    "tconstruct:freezing": [],
+    "tconstruct:grapple": [],
+    "tconstruct:lure": [],
+    "tconstruct:netherite": "tconstruct:item/tool/fishing_rod/modifiers/tconstruct_netherite_broken",
+    "tconstruct:quick_charge": [],
+    "tconstruct:trueshot": [],
+    "tconstruct:unbreakable": []
+  }
+}

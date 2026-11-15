@@ -19,6 +19,22 @@
     },
     {
       "type": "tconstruct:attribute",
+      "attribute": "tconstruct:player.use_item_speed",
+      "each_level": 0.1,
+      "operation": "add_value",
+      "slots": [
+        "mainhand",
+        "offhand",
+        "feet",
+        "legs",
+        "chest",
+        "head",
+        "body"
+      ],
+      "tooltip_style": "percent"
+    },
+    {
+      "type": "tconstruct:attribute",
       "attribute": "tconstruct:player.mining_speed_multiplier",
       "each_level": 0.15,
       "operation": "add_multiplied_total",
@@ -33,6 +49,5 @@
       ],
       "tooltip_style": "percent"
     }
-  ],
-  "tooltip_display": "always"
+  ]
 }

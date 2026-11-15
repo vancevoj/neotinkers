@@ -4,7 +4,8 @@
     "amount": 50,
     "tag": "tconstruct:venom"
   },
-  "input": "tconstruct:skyslime_vine#slimeskin",
+  "hide_in_book": true,
+  "input": "tconstruct:skyslimeskin",
   "output": "tconstruct:leather",
   "temperature": 10
 }

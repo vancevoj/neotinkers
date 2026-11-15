@@ -124,6 +124,5 @@
       "scorched_ingot_tank",
       "scorched_ingot_gauge"
     ]
-  ],
-  "sends_telemetry_event": true
+  ]
 }

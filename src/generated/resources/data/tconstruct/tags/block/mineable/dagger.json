@@ -1,6 +1,12 @@
 {
   "values": [
     "#minecraft:mineable/hoe",
-    "#c:mineable/sword"
+    "#c:mineable/sword",
+    "#c:glass_blocks",
+    "#c:glass_panes",
+    "minecraft:glowstone",
+    "minecraft:redstone_lamp",
+    "minecraft:sea_lantern",
+    "minecraft:beacon"
   ]
 }

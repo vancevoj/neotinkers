@@ -25,6 +25,5 @@
     [
       "open_smeltery"
     ]
-  ],
-  "sends_telemetry_event": true
+  ]
 }
