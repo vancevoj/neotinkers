@@ -16,6 +16,7 @@ import slimeknights.mantle.data.loadable.Loadables;
 import slimeknights.mantle.data.loadable.field.ContextKey;
 import slimeknights.mantle.data.loadable.field.LoadableField;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
+import slimeknights.mantle.recipe.helper.IngredientHelper;
 import slimeknights.mantle.recipe.helper.LoadableRecipeSerializer;
 import slimeknights.mantle.recipe.helper.TypeAwareRecipeSerializer;
 import slimeknights.mantle.recipe.ingredient.FluidIngredient;
@@ -25,7 +26,6 @@ import slimeknights.tconstruct.library.tools.helper.ModifierUtil;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -94,7 +94,7 @@ public class TippingCastingRecipe extends ModifierPotionCastingRecipe {
 
       // finally, create 1 recipe per input tool
       int basePotionCount = basePotions.size();
-      displayRecipes = Arrays.stream(bottle.getItems()).map(stack -> {
+      displayRecipes = IngredientHelper.getStacks(bottle).stream().map(stack -> {
         // start with just the tool with the modifier
         ItemStack withModifier = addModifier(stack);
         // next, add the potion to the tools

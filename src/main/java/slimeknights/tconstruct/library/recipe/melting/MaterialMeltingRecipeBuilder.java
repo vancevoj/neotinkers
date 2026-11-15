@@ -81,7 +81,7 @@ public class MaterialMeltingRecipeBuilder extends AbstractRecipeBuilder<Material
 
   @Override
   public void save(RecipeOutput consumer, Identifier id) {
-    AdvancementHolder advancement = this.buildOptionalAdvancement(id, "melting");
-    consumer.accept(id, new MaterialMeltingRecipe(id, inputId, temperature, result, byproducts), advancement);
+    AdvancementHolder advancement = this.buildOptionalAdvancement(consumer, id, "melting");
+    consumer.accept(recipeKey(id), new MaterialMeltingRecipe(id, inputId, temperature, result, byproducts), advancement);
   }
 }

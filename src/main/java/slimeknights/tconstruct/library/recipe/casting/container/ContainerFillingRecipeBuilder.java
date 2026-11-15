@@ -5,21 +5,23 @@ import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.ItemLike;
 import slimeknights.mantle.data.loadable.Loadables;
 import slimeknights.mantle.recipe.data.AbstractRecipeBuilder;
-import slimeknights.mantle.recipe.helper.TypeAwareRecipeSerializer;
+import slimeknights.tconstruct.common.recipe.LoadableFinishedRecipe;
 import slimeknights.tconstruct.smeltery.TinkerSmeltery;
 
 /**
- * Builder for a container filling recipe. Takes an arbitrary fluid for a specific amount to fill a Forge {@link net.neoforged.neoforge.fluids.capability.IFluidHandlerItem}
+ * Builder for a container filling recipe. Takes an arbitrary fluid for a specific amount to fill an item with a {@link net.neoforged.neoforge.capabilities.Capabilities.Fluid#ITEM} handler
  */
 @AllArgsConstructor(staticName = "castingRecipe")
 @SuppressWarnings({"WeakerAccess", "unused"})
 public class ContainerFillingRecipeBuilder extends AbstractRecipeBuilder<ContainerFillingRecipeBuilder> {
   private final Identifier result;
   private final int fluidAmount;
-  private final TypeAwareRecipeSerializer<? extends ContainerFillingRecipe> recipeSerializer;
+  /** Registered serializer, must be type aware. Since 26.1 serializers are records, see {@link LoadableFinishedRecipe#typeAware(RecipeSerializer)} */
+  private final RecipeSerializer<? extends ContainerFillingRecipe> recipeSerializer;
 
   /**
    * Creates a new builder instance using the given result, amount, and serializer
@@ -28,7 +30,7 @@ public class ContainerFillingRecipeBuilder extends AbstractRecipeBuilder<Contain
    * @param recipeSerializer  Serializer
    * @return  Builder instance
    */
-  public static ContainerFillingRecipeBuilder castingRecipe(ItemLike result, int fluidAmount, TypeAwareRecipeSerializer<? extends ContainerFillingRecipe> recipeSerializer) {
+  public static ContainerFillingRecipeBuilder castingRecipe(ItemLike result, int fluidAmount, RecipeSerializer<? extends ContainerFillingRecipe> recipeSerializer) {
     return new ContainerFillingRecipeBuilder(Loadables.ITEM.getKey(result.asItem()), fluidAmount, recipeSerializer);
   }
 
@@ -79,7 +81,7 @@ public class ContainerFillingRecipeBuilder extends AbstractRecipeBuilder<Contain
 
   @Override
   public void save(RecipeOutput output, Identifier id) {
-    AdvancementHolder advancement = this.buildOptionalAdvancement(id, "casting");
-    output.accept(id, new ContainerFillingRecipe(recipeSerializer, id, group, fluidAmount, BuiltInRegistries.ITEM.getValue(result)), advancement);
+    AdvancementHolder advancement = this.buildOptionalAdvancement(output, id, "casting");
+    output.accept(recipeKey(id), new ContainerFillingRecipe(LoadableFinishedRecipe.typeAware(recipeSerializer), id, group, fluidAmount, BuiltInRegistries.ITEM.getValue(result)), advancement);
   }
 }

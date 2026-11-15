@@ -1,25 +1,26 @@
 package slimeknights.tconstruct.library.recipe.melting;
 
 import lombok.Getter;
-import net.minecraft.core.NonNullList;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
+import net.neoforged.neoforge.transfer.transaction.TransactionContext;
 import slimeknights.mantle.data.loadable.common.IngredientLoadable;
 import slimeknights.mantle.data.loadable.field.ContextKey;
 import slimeknights.mantle.data.loadable.field.LoadableField;
 import slimeknights.mantle.data.loadable.primitive.IntLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.recipe.helper.FluidOutput;
+import slimeknights.mantle.recipe.helper.IngredientHelper;
 import slimeknights.mantle.recipe.helper.LoadableRecipeSerializer;
 import slimeknights.tconstruct.smeltery.TinkerSmeltery;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -95,20 +96,15 @@ public class MeltingRecipe implements IMeltingRecipe, IDisplayableMeltingRecipe 
   }
 
   @Override
-  public NonNullList<Ingredient> getIngredients() {
-    return NonNullList.of(Ingredient.EMPTY, input);
-  }
-
-  @Override
-  public RecipeSerializer<?> getSerializer() {
+  public RecipeSerializer<? extends Recipe<IMeltingContainer>> getSerializer() {
     return TinkerSmeltery.meltingSerializer.get();
   }
 
   @Override
-  public void handleByproducts(IMeltingContainer inv, IFluidHandler handler) {
+  public void handleByproducts(IMeltingContainer inv, ResourceHandler<FluidResource> handler, TransactionContext transaction) {
     // fill byproducts until we run out of space or byproducts
     for (FluidOutput fluid : byproducts) {
-      handler.fill(fluid.copy(), FluidAction.EXECUTE);
+      IMeltingRecipe.fill(handler, fluid.copy(), transaction);
     }
   }
 
@@ -122,7 +118,7 @@ public class MeltingRecipe implements IMeltingRecipe, IDisplayableMeltingRecipe 
 
   @Override
   public List<ItemStack> getInputs() {
-    return Arrays.asList(input.getItems());
+    return IngredientHelper.getStacks(input);
   }
 
   @Override

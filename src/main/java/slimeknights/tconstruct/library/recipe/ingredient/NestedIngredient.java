@@ -1,11 +1,13 @@
 package slimeknights.tconstruct.library.recipe.ingredient;
 
+import net.minecraft.core.Holder;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.display.SlotDisplay;
 import net.neoforged.neoforge.common.crafting.ICustomIngredient;
 
 import javax.annotation.Nullable;
-import java.util.Arrays;
 import java.util.stream.Stream;
 
 /** Ingredient that contains another ingredient nested inside */
@@ -24,9 +26,16 @@ public abstract class NestedIngredient implements ICustomIngredient {
     return nested.test(stack);
   }
 
+  @SuppressWarnings("deprecation")
   @Override
-  public Stream<ItemStack> getItems() {
-    return Arrays.stream(nested.getItems());
+  public Stream<Holder<Item>> items() {
+    return nested.items();
+  }
+
+  /** Uses the nested display, so components on the nested display stacks are kept */
+  @Override
+  public SlotDisplay display() {
+    return nested.display();
   }
 
   @Override

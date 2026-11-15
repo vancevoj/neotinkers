@@ -9,10 +9,13 @@ import net.minecraft.world.level.ItemLike;
 import net.neoforged.neoforge.common.crafting.IngredientType;
 import slimeknights.mantle.data.loadable.common.IngredientLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
+import slimeknights.mantle.recipe.helper.IngredientHelper;
 import slimeknights.mantle.recipe.helper.LoadableIngredientSerializer;
 import slimeknights.tconstruct.TConstruct;
 
 import javax.annotation.Nullable;
+import java.util.Arrays;
+import java.util.Objects;
 
 /** Ingredient matching an item with no container item, used to ensure NBT fluid items are empty */
 public class NoContainerIngredient extends NestedIngredient {
@@ -21,8 +24,7 @@ public class NoContainerIngredient extends NestedIngredient {
   public static final RecordLoadable<NoContainerIngredient> LOADABLE = RecordLoadable.create(
     IngredientLoadable.DISALLOW_EMPTY.requiredField("match", i -> i.nested),
     NoContainerIngredient::new);
-  /** Ingredient type instance */
-  // TODO(neoport): register this IngredientType on NeoForgeRegistries.Keys.INGREDIENT_TYPES under id tconstruct:no_container
+  /** Ingredient type instance, registered under {@link #ID} in {@link slimeknights.tconstruct.tools.TinkerTools} */
   public static final IngredientType<NoContainerIngredient> TYPE = new LoadableIngredientSerializer<>(LOADABLE).type();
 
   protected NoContainerIngredient(Ingredient nested) {
@@ -31,7 +33,8 @@ public class NoContainerIngredient extends NestedIngredient {
 
   @Override
   public boolean test(@Nullable ItemStack stack) {
-    return stack != null && super.test(stack) && !stack.hasCraftingRemainingItem();
+    // 1.21.2: crafting remainders are nullable item stack templates
+    return stack != null && super.test(stack) && stack.getCraftingRemainder() == null;
   }
 
   @Override
@@ -42,6 +45,16 @@ public class NoContainerIngredient extends NestedIngredient {
   @Override
   public IngredientType<?> getType() {
     return TYPE;
+  }
+
+  @Override
+  public boolean equals(Object other) {
+    return this == other || other instanceof NoContainerIngredient ingredient && this.nested.equals(ingredient.nested);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(NoContainerIngredient.class, nested);
   }
 
 
@@ -57,13 +70,13 @@ public class NoContainerIngredient extends NestedIngredient {
     return of(Ingredient.of(items));
   }
 
-  /** Creates an instance from the given stacks */
+  /** Creates an instance from the given stacks. Since 1.21.2 ingredients only hold items, so stack data is ignored as before. */
   public static NoContainerIngredient of(ItemStack... stacks) {
-    return of(Ingredient.of(stacks));
+    return of(Ingredient.of(Arrays.stream(stacks).map(ItemStack::getItem)));
   }
 
   /** Creates an instance from the given tag */
   public static NoContainerIngredient of(TagKey<Item> tag) {
-    return of(Ingredient.of(tag));
+    return of(IngredientHelper.tag(tag));
   }
 }

@@ -11,6 +11,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.neoforged.neoforge.fluids.FluidStack;
 import slimeknights.mantle.recipe.helper.FluidOutput;
+import slimeknights.mantle.recipe.helper.IngredientHelper;
 import slimeknights.tconstruct.common.config.Config;
 import slimeknights.tconstruct.library.recipe.melting.IMeltingContainer.OreRateType;
 
@@ -62,7 +63,7 @@ public class DisplayMeltingRecipe implements IDisplayableMeltingRecipe {
 
     /** Sets the input to an ingredient. */
     public Builder input(Ingredient ingredient) {
-      return inputs(List.of(ingredient.getItems()));
+      return inputs(IngredientHelper.getStacks(ingredient));
     }
 
     /** Sets the input to a single item. */

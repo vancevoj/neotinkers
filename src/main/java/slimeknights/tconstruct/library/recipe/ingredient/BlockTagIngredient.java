@@ -1,5 +1,6 @@
 package slimeknights.tconstruct.library.recipe.ingredient;
 
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -16,6 +17,7 @@ import slimeknights.tconstruct.TConstruct;
 
 import javax.annotation.Nullable;
 import java.util.LinkedHashSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -27,8 +29,7 @@ public class BlockTagIngredient implements ICustomIngredient {
   public static final RecordLoadable<BlockTagIngredient> LOADABLE = RecordLoadable.create(
     Loadables.BLOCK_TAG.requiredField("tag", i -> i.tag),
     BlockTagIngredient::new);
-  /** Ingredient type instance */
-  // TODO(neoport): register this IngredientType on NeoForgeRegistries.Keys.INGREDIENT_TYPES under id tconstruct:block_tag
+  /** Ingredient type instance, registered under {@link #ID} in {@link slimeknights.tconstruct.tools.TinkerTools} */
   public static final IngredientType<BlockTagIngredient> TYPE = new LoadableIngredientSerializer<>(LOADABLE).type();
 
   private final TagKey<Block> tag;
@@ -61,14 +62,24 @@ public class BlockTagIngredient implements ICustomIngredient {
     return matchingItems;
   }
 
+  @SuppressWarnings("deprecation")
   @Override
-  public Stream<ItemStack> getItems() {
-    return getMatchingItems().stream().map(ItemStack::new);
+  public Stream<Holder<Item>> items() {
+    return getMatchingItems().stream().map(Item::builtInRegistryHolder);
   }
 
-  @SuppressWarnings("deprecation")
   @Override
   public IngredientType<?> getType() {
     return TYPE;
+  }
+
+  @Override
+  public boolean equals(Object other) {
+    return this == other || other instanceof BlockTagIngredient ingredient && this.tag.equals(ingredient.tag);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(BlockTagIngredient.class, tag);
   }
 }

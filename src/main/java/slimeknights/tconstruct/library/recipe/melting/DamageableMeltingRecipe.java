@@ -3,10 +3,12 @@ package slimeknights.tconstruct.library.recipe.melting;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
+import net.neoforged.neoforge.transfer.transaction.TransactionContext;
 import slimeknights.mantle.data.loadable.field.ContextKey;
 import slimeknights.mantle.data.loadable.primitive.IntLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
@@ -68,23 +70,23 @@ public class DamageableMeltingRecipe extends MeltingRecipe {
   }
 
   @Override
-  public void handleByproducts(IMeltingContainer inv, IFluidHandler handler) {
+  public void handleByproducts(IMeltingContainer inv, ResourceHandler<FluidResource> handler, TransactionContext transaction) {
     ItemStack input = inv.getStack();
     int maxDamage = input.getMaxDamage();
     if (maxDamage <= 0) {
-      super.handleByproducts(inv, handler);
+      super.handleByproducts(inv, handler, transaction);
     } else {
       // fill byproducts until we run out of space or byproducts
       int itemDamage = input.getDamageValue();
       for (int i = 0; i < byproducts.size(); i++) {
         FluidOutput fluidStack = byproducts.get(i);
-        handler.fill(scaleOutput(fluidStack.get(), itemDamage, maxDamage, i < byproductSizes.size() ? byproductSizes.get(i) : unitSize), FluidAction.EXECUTE);
+        IMeltingRecipe.fill(handler, scaleOutput(fluidStack.get(), itemDamage, maxDamage, i < byproductSizes.size() ? byproductSizes.get(i) : unitSize), transaction);
       }
     }
   }
 
   @Override
-  public RecipeSerializer<?> getSerializer() {
+  public RecipeSerializer<? extends Recipe<IMeltingContainer>> getSerializer() {
     return TinkerSmeltery.damagableMeltingSerializer.get();
   }
 }

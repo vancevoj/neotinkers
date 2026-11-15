@@ -9,11 +9,15 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.ItemLike;
 import slimeknights.mantle.data.loadable.Loadables;
 import slimeknights.mantle.data.predicate.IJsonPredicate;
 import slimeknights.mantle.recipe.data.AbstractRecipeBuilder;
+import slimeknights.mantle.recipe.helper.IngredientHelper;
 import slimeknights.mantle.recipe.helper.TypeAwareRecipeSerializer;
+import slimeknights.mantle.recipe.ingredient.EmptyIngredient;
+import slimeknights.tconstruct.common.recipe.LoadableFinishedRecipe;
 import slimeknights.tconstruct.library.json.predicate.material.MaterialPredicate;
 import slimeknights.tconstruct.library.materials.definition.MaterialVariantId;
 import slimeknights.tconstruct.library.recipe.casting.material.ToolCastingRecipe.CastPurpose;
@@ -35,8 +39,9 @@ public class MaterialCastingRecipeBuilder extends AbstractRecipeBuilder<Material
   private final IMaterialItem result;
   @Nullable
   private final IModifiable resultTool;
-  private final TypeAwareRecipeSerializer<? extends AbstractMaterialCastingRecipe> recipeSerializer;
-  private Ingredient cast = Ingredient.EMPTY;
+  /** Registered serializer, must be type aware. Since 26.1 serializers are records, see {@link LoadableFinishedRecipe#typeAware(RecipeSerializer)} */
+  private final RecipeSerializer<? extends AbstractMaterialCastingRecipe> recipeSerializer;
+  private Ingredient cast = EmptyIngredient.VANILLA;
   @Setter
   private int itemCost = 0;
   private CastPurpose castPurpose = CastPurpose.CATALYST;
@@ -139,7 +144,7 @@ public class MaterialCastingRecipeBuilder extends AbstractRecipeBuilder<Material
    * @return  Builder instance
    */
   public MaterialCastingRecipeBuilder setCast(TagKey<Item> tag, boolean consumed) {
-    return this.setCast(Ingredient.of(tag), consumed);
+    return this.setCast(IngredientHelper.tag(tag), consumed);
   }
 
   /**
@@ -177,11 +182,12 @@ public class MaterialCastingRecipeBuilder extends AbstractRecipeBuilder<Material
     if (this.itemCost <= 0) {
       throw new IllegalStateException("Material casting recipes require a positive amount of fluid");
     }
-    AdvancementHolder advancement = this.buildOptionalAdvancement(id, "casting");
+    AdvancementHolder advancement = this.buildOptionalAdvancement(output, id, "casting");
+    TypeAwareRecipeSerializer<? extends AbstractMaterialCastingRecipe> serializer = LoadableFinishedRecipe.typeAware(recipeSerializer);
     if (result != null) {
-      output.accept(id, new MaterialCastingRecipe(recipeSerializer, id, group, cast, itemCost, result, allowedMaterials, castPurpose != CastPurpose.CATALYST, switchSlots), advancement);
+      output.accept(recipeKey(id), new MaterialCastingRecipe(serializer, id, group, cast, itemCost, result, allowedMaterials, castPurpose != CastPurpose.CATALYST, switchSlots), advancement);
     } else if (resultTool != null) {
-      output.accept(id, new ToolCastingRecipe(recipeSerializer, id, group, cast, itemCost, castPurpose, resultTool, allowedMaterials, extraMaterials, fluidSwapping), advancement);
+      output.accept(recipeKey(id), new ToolCastingRecipe(serializer, id, group, cast, itemCost, castPurpose, resultTool, allowedMaterials, extraMaterials, fluidSwapping), advancement);
     } else {
       throw new IllegalArgumentException("Must have either result or result tool");
     }

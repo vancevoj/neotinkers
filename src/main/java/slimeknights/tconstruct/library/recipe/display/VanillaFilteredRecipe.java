@@ -5,6 +5,7 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeInput;
 import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.item.crafting.RecipeMap;
 import net.minecraft.world.item.crafting.RecipeType;
 
 import java.util.List;
@@ -21,11 +22,22 @@ public interface VanillaFilteredRecipe<T extends FilteredRecipe> {
   List<T> getFilteredRecipes(RegistryAccess access);
 
 
-  /** Gets a  modifiable list of filtered recipes matching the given recipe type. */
-  static <T extends FilteredRecipe, I extends RecipeInput, R extends Recipe<I>> List<T> getRecipes(RegistryAccess access, RecipeManager manager, RecipeType<R> type, Class<T> recipeClass) {
-    // 1.21: RecipeManager#byType is private, getAllRecipesFor returns the recipe holders
-    return manager.getAllRecipesFor(type).stream().map(RecipeHolder::value)
+  /**
+   * Gets a modifiable list of filtered recipes matching the given recipe type.
+   * @param access   Registry access
+   * @param recipes  Recipe map. On the client, use {@link slimeknights.mantle.recipe.helper.RecipeHelper#recipes(net.minecraft.world.level.Level)}, which only contains synced recipe types.
+   * @param type     Recipe type
+   * @param recipeClass  Filtered recipe class
+   * @return  List of filtered recipes
+   */
+  static <T extends FilteredRecipe, I extends RecipeInput, R extends Recipe<I>> List<T> getRecipes(RegistryAccess access, RecipeMap recipes, RecipeType<R> type, Class<T> recipeClass) {
+    return recipes.byType(type).stream().map(RecipeHolder::value)
       .flatMap(recipe -> recipe instanceof VanillaFilteredRecipe<?> filtered ? filtered.getFilteredRecipes(access).stream() : Stream.empty())
       .filter(recipeClass::isInstance).map(recipeClass::cast).collect(Collectors.toList());
+  }
+
+  /** Gets a modifiable list of filtered recipes matching the given recipe type from the server recipe manager, see {@link #getRecipes(RegistryAccess, RecipeMap, RecipeType, Class)} */
+  static <T extends FilteredRecipe, I extends RecipeInput, R extends Recipe<I>> List<T> getRecipes(RegistryAccess access, RecipeManager manager, RecipeType<R> type, Class<T> recipeClass) {
+    return getRecipes(access, manager.recipeMap(), type, recipeClass);
   }
 }

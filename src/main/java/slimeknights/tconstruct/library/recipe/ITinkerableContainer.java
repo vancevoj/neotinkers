@@ -1,6 +1,7 @@
 package slimeknights.tconstruct.library.recipe;
 
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.RecipeInput;
 import slimeknights.mantle.recipe.container.IRecipeContainer;
@@ -128,7 +129,9 @@ public interface ITinkerableContainer extends IRecipeContainer, RecipeInput {
     default void shrinkInput(int slot, int amount) {
       ItemStack stack = getInput(slot);
       if (!stack.isEmpty()) {
-        ItemStack container = stack.getCraftingRemainingItem();
+        // 1.21.2: crafting remainders are item stack templates, null meaning no remainder
+        ItemStackTemplate remainder = stack.getCraftingRemainder();
+        ItemStack container = remainder == null ? ItemStack.EMPTY : remainder.create();
         if (container.isEmpty() && stack.getItem() == Items.POTION) {
           container = new ItemStack(Items.GLASS_BOTTLE);
         }

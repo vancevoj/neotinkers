@@ -16,6 +16,7 @@ import slimeknights.mantle.data.loadable.primitive.EnumLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.data.predicate.IJsonPredicate;
 import slimeknights.mantle.recipe.IMultiRecipe;
+import slimeknights.mantle.recipe.helper.IngredientHelper;
 import slimeknights.mantle.recipe.helper.LoadableRecipeSerializer;
 import slimeknights.mantle.recipe.helper.TypeAwareRecipeSerializer;
 import slimeknights.tconstruct.TConstruct;
@@ -225,7 +226,7 @@ public class ToolCastingRecipe extends PartSwapCastingRecipe implements IMultiRe
           IDisplayableCastingRecipe castSwap = makeRecipe(tool, fluidRecipes, false, maxCoolingTime);
 
           // if we have a second material, create the dynamic display recipe
-          List<ItemStack> casts = List.of(getCast().getItems());
+          List<ItemStack> casts = IngredientHelper.getStacks(getCast());
           if (castPurpose == CastPurpose.FIRST_MATERIAL || castPurpose == CastPurpose.SECOND_MATERIAL
             || castPurpose == CastPurpose.MAYBE_MATERIAL && requirements.size() > 1) {
             displayRecipes.add(new DisplayRecipe(fluidIndex, casts, castSwap.getFluids(), maxCoolingTime));

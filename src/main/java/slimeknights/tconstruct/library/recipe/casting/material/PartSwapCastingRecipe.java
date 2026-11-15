@@ -16,6 +16,7 @@ import slimeknights.mantle.data.loadable.primitive.IntLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.data.predicate.IJsonPredicate;
 import slimeknights.mantle.recipe.IMultiRecipe;
+import slimeknights.mantle.recipe.helper.IngredientHelper;
 import slimeknights.mantle.recipe.helper.LoadableRecipeSerializer;
 import slimeknights.mantle.recipe.helper.TypeAwareRecipeSerializer;
 import slimeknights.tconstruct.library.json.predicate.material.MaterialPredicate;
@@ -149,7 +150,8 @@ public class PartSwapCastingRecipe extends AbstractMaterialCastingRecipe impleme
 
   @Override
   public ItemStack getResultItem(HolderLookup.Provider registryAccess) {
-    return getCast().getItems()[0].copy();
+    List<ItemStack> tools = IngredientHelper.getStacks(getCast());
+    return tools.isEmpty() ? ItemStack.EMPTY : tools.get(0).copy();
   }
 
   @Override
@@ -331,7 +333,7 @@ public class PartSwapCastingRecipe extends AbstractMaterialCastingRecipe impleme
   @Override
   public List<IDisplayableCastingRecipe> getRecipes(RegistryAccess access) {
     if (multiRecipes == null) {
-      List<ToolRequirement> tools = getTools(getCast().getItems());
+      List<ToolRequirement> tools = getTools(IngredientHelper.getStacks(getCast()).toArray(ItemStack[]::new));
       if (tools.isEmpty()) {
         multiRecipes = List.of();
       } else {

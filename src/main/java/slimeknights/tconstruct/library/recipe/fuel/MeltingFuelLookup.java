@@ -11,20 +11,21 @@ import slimeknights.tconstruct.common.recipe.RecipeCacheInvalidator.DuelSidedLis
 import slimeknights.tconstruct.library.utils.SimpleCache;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
- * Class handling a recipe cache for fuel recipes, since any given entity type has one recipe
+ * Class handling a recipe cache for fuel recipes, since any given entity type has one recipe.
+ * Filled by recipe constructors; since 26.3 the server parses recipes in parallel, so registration is synchronized and the collections are thread safe.
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MeltingFuelLookup {
   /** Dummy fuel instance sine caches don't support caching null */
   private static final MeltingFuel EMPTY = new MeltingFuel(Identifier.parse("missingno"), FluidIngredient.EMPTY, 0, 0, 0);
   /** Temperature for solid fuels in the heater */
-  private static MeltingFuel SOLID = EMPTY;
+  private static volatile MeltingFuel SOLID = EMPTY;
   /** List of all recipes */
-  private static final List<MeltingFuel> RECIPES = new ArrayList<>();
+  private static final List<MeltingFuel> RECIPES = new CopyOnWriteArrayList<>();
   /** Mapping from fluid to fuel */
   private static final SimpleCache<Fluid,MeltingFuel> CACHE = new SimpleCache<>(fluid -> {
     for (MeltingFuel recipe : RECIPES) {
@@ -45,7 +46,7 @@ public class MeltingFuelLookup {
    * Adds a melting fuel to the lookup
    * @param fuel   Fuel
    */
-  public static void addFuel(MeltingFuel fuel) {
+  public static synchronized void addFuel(MeltingFuel fuel) {
     // skip empty fuel, and the integrated client copy
     if (fuel.getRate() == 0 || RecipeCacheInvalidator.skipRegistration()) {
       return;

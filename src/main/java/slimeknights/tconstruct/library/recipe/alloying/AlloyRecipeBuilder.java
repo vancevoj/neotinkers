@@ -120,6 +120,6 @@ public class AlloyRecipeBuilder extends AbstractRecipeBuilder<AlloyRecipeBuilder
     if (inputs.size() < 2) {
       throw new IllegalStateException("Invalid alloying recipe " + id + ", must have at least two inputs");
     }
-    consumer.accept(id, new AlloyRecipe(id, inputs, output, temperature), this.buildOptionalAdvancement(id, "alloys"));
+    consumer.accept(recipeKey(id), new AlloyRecipe(id, inputs, output, temperature), this.buildOptionalAdvancement(consumer, id, "alloys"));
   }
 }

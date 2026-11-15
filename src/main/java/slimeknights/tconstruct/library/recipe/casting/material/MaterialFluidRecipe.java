@@ -2,6 +2,7 @@ package slimeknights.tconstruct.library.recipe.casting.material;
 
 import lombok.Getter;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
@@ -97,13 +98,15 @@ public class MaterialFluidRecipe implements ICustomOutputRecipe<ICastingContaine
   }
 
   @Override
-  public RecipeSerializer<?> getSerializer() {
+  public RecipeSerializer<? extends Recipe<ICastingContainer>> getSerializer() {
     return TinkerSmeltery.materialFluidRecipe.get();
   }
 
+  /** The data recipe type holds recipes of any input, so it needs a cast to the input bound vanilla requires since 1.21.2 */
+  @SuppressWarnings("unchecked")
   @Override
-  public RecipeType<?> getType() {
-    return TinkerRecipeTypes.DATA.get();
+  public RecipeType<? extends Recipe<ICastingContainer>> getType() {
+    return (RecipeType<? extends Recipe<ICastingContainer>>)(RecipeType<?>)TinkerRecipeTypes.DATA.get();
   }
 
   @Override

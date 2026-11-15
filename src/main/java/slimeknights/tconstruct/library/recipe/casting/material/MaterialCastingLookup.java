@@ -2,6 +2,7 @@ package slimeknights.tconstruct.library.recipe.casting.material;
 
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap.Entry;
+import it.unimi.dsi.fastutil.objects.Object2IntMaps;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -20,30 +21,31 @@ import slimeknights.tconstruct.library.recipe.material.MaterialRecipeCache;
 import slimeknights.tconstruct.library.tools.part.IMaterialItem;
 import slimeknights.tconstruct.library.utils.SimpleCache;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
  * Class serving as a lookup to get part costs for any material item.
+ * Filled by recipe constructors; since 26.3 the server parses recipes in parallel, so registration is synchronized and the collections are thread safe.
  * TODO 1.21: consider merging with {@link MaterialRecipeCache}.
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MaterialCastingLookup {
   /** Map containing a lookup from a material item to the cost in mb */
-  private static final Object2IntMap<IMaterialItem> ITEM_COST_LOOKUP = new Object2IntOpenHashMap<>(50);
+  private static final Object2IntMap<IMaterialItem> ITEM_COST_LOOKUP = Object2IntMaps.synchronize(new Object2IntOpenHashMap<>(50));
 
   /** Fluids that cast into materials */
-  private static final List<MaterialFluidRecipe> CASTING_FLUIDS = new ArrayList<>();
+  private static final List<MaterialFluidRecipe> CASTING_FLUIDS = new CopyOnWriteArrayList<>();
   /** Fluids that composite into materials */
-  private static final List<MaterialFluidRecipe> COMPOSITE_FLUIDS = new ArrayList<>();
+  private static final List<MaterialFluidRecipe> COMPOSITE_FLUIDS = new CopyOnWriteArrayList<>();
   /** Fluids that cast into materials */
-  private static List<MaterialFluidRecipe> SORTED_CASTING = null;
+  private static volatile List<MaterialFluidRecipe> SORTED_CASTING = null;
   /** Fluids that composite into materials */
-  private static List<MaterialFluidRecipe> SORTED_COMPOSITE = null;
+  private static volatile List<MaterialFluidRecipe> SORTED_COMPOSITE = null;
 
   /** Predicate for sorted recipe lists, ensuring they are visible */
   private static final Predicate<MaterialFluidRecipe> RECIPE_FILTER = MaterialFluidRecipe::isVisible;
@@ -118,7 +120,7 @@ public class MaterialCastingLookup {
   });
 
   /** Shared logic to register parts */
-  public static void registerItemCost(IMaterialItem item, int cost) {
+  public static synchronized void registerItemCost(IMaterialItem item, int cost) {
     if (RecipeCacheInvalidator.skipRegistration()) {
       return;
     }
@@ -139,7 +141,7 @@ public class MaterialCastingLookup {
    * Registers a fluid recipe to be detected
    * @param recipe  Recipe to add
    */
-  public static void registerFluid(MaterialFluidRecipe recipe) {
+  public static synchronized void registerFluid(MaterialFluidRecipe recipe) {
     if (RecipeCacheInvalidator.skipRegistration()) {
       return;
     }

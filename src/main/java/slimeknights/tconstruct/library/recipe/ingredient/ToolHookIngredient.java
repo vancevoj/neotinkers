@@ -8,7 +8,10 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.item.ItemStackTemplate;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.display.SlotDisplay;
 import net.neoforged.neoforge.common.crafting.ICustomIngredient;
 import net.neoforged.neoforge.common.crafting.IngredientType;
 import slimeknights.mantle.data.loadable.Loadables;
@@ -21,6 +24,9 @@ import slimeknights.tconstruct.library.tools.definition.module.ToolHooks;
 import slimeknights.tconstruct.library.tools.item.IModifiable;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 /** Ingredient that only matches tools with a specific hook */
@@ -31,8 +37,7 @@ public class ToolHookIngredient implements ICustomIngredient {
     Loadables.ITEM_TAG.defaultField("tag", TinkerTags.Items.MODIFIABLE, i -> i.tag),
     ToolHooks.LOADER.requiredField("hook", i -> i.hook),
     ToolHookIngredient::new);
-  /** Ingredient type instance */
-  // TODO(neoport): register this IngredientType on NeoForgeRegistries.Keys.INGREDIENT_TYPES under id tconstruct:tool_hook
+  /** Ingredient type instance, registered under {@link #ID} in {@link slimeknights.tconstruct.tools.TinkerTools} */
   public static final IngredientType<ToolHookIngredient> TYPE = new LoadableIngredientSerializer<>(LOADABLE).type();
 
   private final TagKey<Item> tag;
@@ -61,27 +66,53 @@ public class ToolHookIngredient implements ICustomIngredient {
     return true;
   }
 
-  @Override
-  public Stream<ItemStack> getItems() {
-    Stream.Builder<ItemStack> builder = Stream.builder();
+  /** Gets all tools in the tag with the hook */
+  private List<Holder<Item>> getMatchingItems() {
     // filtered version of tag values
-    boolean empty = true;
+    List<Holder<Item>> items = new ArrayList<>();
     for (Holder<Item> holder : BuiltInRegistries.ITEM.getTagOrEmpty(tag)) {
       if (holder.value() instanceof IModifiable modifiable && modifiable.getToolDefinition().getData().getHooks().hasHook(hook)) {
-        builder.add(new ItemStack(modifiable));
-        empty = false;
+        items.add(holder);
       }
     }
-    if (empty) {
-      ItemStack barrier = new ItemStack(Blocks.BARRIER);
-      barrier.set(DataComponents.CUSTOM_NAME, Component.literal("Empty Tag: " + tag.location()));
-      builder.add(barrier);
+    return items;
+  }
+
+  /** Lists the matching tools. If there are none, lists a barrier so the ingredient is not considered empty, as before 1.21.2. */
+  @SuppressWarnings("deprecation")
+  @Override
+  public Stream<Holder<Item>> items() {
+    List<Holder<Item>> items = getMatchingItems();
+    if (items.isEmpty()) {
+      return Stream.of(Items.BARRIER.builtInRegistryHolder());
     }
-    return builder.build();
+    return items.stream();
+  }
+
+  /** Displays the matching tools, or a barrier named after the tag if there are none */
+  @Override
+  public SlotDisplay display() {
+    List<Holder<Item>> items = getMatchingItems();
+    if (items.isEmpty()) {
+      ItemStack barrier = new ItemStack(Items.BARRIER);
+      barrier.set(DataComponents.CUSTOM_NAME, Component.literal("Empty Tag: " + tag.location()));
+      return new SlotDisplay.ItemStackSlotDisplay(ItemStackTemplate.fromNonEmptyStack(barrier));
+    }
+    return new SlotDisplay.Composite(items.stream().map(Ingredient::displayForSingleItem).toList());
   }
 
   @Override
   public IngredientType<?> getType() {
     return TYPE;
+  }
+
+  @Override
+  public boolean equals(Object other) {
+    return this == other || other instanceof ToolHookIngredient ingredient && this.tag.equals(ingredient.tag) && this.hook.equals(ingredient.hook);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(ToolHookIngredient.class, tag, hook);
   }
 }

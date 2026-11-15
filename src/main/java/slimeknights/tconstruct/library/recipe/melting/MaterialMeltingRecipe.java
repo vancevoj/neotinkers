@@ -5,11 +5,13 @@ import lombok.Getter;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
+import net.neoforged.neoforge.transfer.transaction.TransactionContext;
 import slimeknights.mantle.data.loadable.Loadables;
 import slimeknights.mantle.data.loadable.field.ContextKey;
 import slimeknights.mantle.data.loadable.primitive.IntLoadable;
@@ -89,17 +91,17 @@ public class MaterialMeltingRecipe implements IMeltingRecipe, IMultiRecipe<IDisp
   }
 
   @Override
-  public void handleByproducts(IMeltingContainer inv, IFluidHandler handler) {
+  public void handleByproducts(IMeltingContainer inv, ResourceHandler<FluidResource> handler, TransactionContext transaction) {
     if (!byproducts.isEmpty()) {
       int cost = MaterialCastingLookup.getItemCost(inv.getStack().getItem());
       for (FluidOutput byproduct : byproducts) {
-        handler.fill(byproduct.get().copyWithAmount(byproduct.getAmount() * cost), FluidAction.EXECUTE);
+        IMeltingRecipe.fill(handler, byproduct.get().copyWithAmount(byproduct.getAmount() * cost), transaction);
       }
     }
   }
 
   @Override
-  public RecipeSerializer<?> getSerializer() {
+  public RecipeSerializer<? extends Recipe<IMeltingContainer>> getSerializer() {
     return TinkerSmeltery.materialMeltingSerializer.get();
   }
 

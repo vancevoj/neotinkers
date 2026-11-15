@@ -1,22 +1,25 @@
 package slimeknights.tconstruct.library.recipe.casting;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.fluids.FluidStack;
 import slimeknights.mantle.data.loadable.field.ContextKey;
 import slimeknights.mantle.data.loadable.field.LoadableField;
 import slimeknights.mantle.data.loadable.primitive.IntLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
+import slimeknights.mantle.recipe.helper.IngredientHelper;
 import slimeknights.mantle.recipe.helper.ItemOutput;
 import slimeknights.mantle.recipe.helper.LoadableRecipeSerializer;
 import slimeknights.mantle.recipe.helper.TypeAwareRecipeSerializer;
 import slimeknights.mantle.recipe.ingredient.FluidIngredient;
 
-import java.util.Arrays;
 import java.util.List;
 
 /** Casting recipe that takes a fluid and optional cast and outputs an item. */
@@ -32,6 +35,8 @@ public class ItemCastingRecipe extends AbstractCastingRecipe implements IDisplay
     LoadableRecipeSerializer.RECIPE_GROUP, CAST_FIELD, FLUID_FIELD, RESULT_FIELD, COOLING_TIME_FIELD, CAST_CONSUMED_FIELD, SWITCH_SLOTS_FIELD,
     ItemCastingRecipe::new);
 
+  /** Since 26.1 the type aware serializer is not a serializer, so it gets no getter, see {@link #getSerializer()} */
+  @Getter(AccessLevel.NONE)
   private final TypeAwareRecipeSerializer<?> serializer;
   protected final FluidIngredient fluid;
   protected final ItemOutput result;
@@ -43,6 +48,11 @@ public class ItemCastingRecipe extends AbstractCastingRecipe implements IDisplay
     this.result = result;
     this.coolingTime = coolingTime;
     CastingRecipeLookup.registerCastable(result);
+  }
+
+  @Override
+  public RecipeSerializer<? extends Recipe<ICastingContainer>> getSerializer() {
+    return ICastingRecipe.castingSerializer(serializer);
   }
 
   @Override
@@ -70,12 +80,12 @@ public class ItemCastingRecipe extends AbstractCastingRecipe implements IDisplay
 
   @Override
   public boolean hasCast() {
-    return getCast() != Ingredient.EMPTY;
+    return hasCastIngredient();
   }
 
   @Override
   public List<ItemStack> getCastItems() {
-    return Arrays.asList(getCast().getItems());
+    return IngredientHelper.getStacks(getCast());
   }
 
   @Deprecated

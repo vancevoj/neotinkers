@@ -3,7 +3,6 @@ package slimeknights.tconstruct.library.recipe.casting;
 import lombok.Getter;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -14,6 +13,8 @@ import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.fluids.FluidStack;
@@ -49,7 +50,7 @@ public class PotionCastingRecipe implements ICastingRecipe, IMultiRecipe<IDispla
   /** Tag key written by the molten potion fluid, see {@code PotionFluidType}. TODO(neoport): migrate potion fluid storage to the {@code PotionContents} data component. */
   protected static final String TAG_POTION = "Potion";
 
-  @Getter
+  /** Since 26.1 the type aware serializer is not a serializer, see {@link #getSerializer()} */
   protected final TypeAwareRecipeSerializer<?> serializer;
   /** Recipe ID, retained for JEI display purposes (vanilla 1.21 recipes no longer expose their own ID). */
   @Getter
@@ -77,8 +78,13 @@ public class PotionCastingRecipe implements ICastingRecipe, IMultiRecipe<IDispla
   }
 
   @Override
-  public RecipeType<?> getType() {
-    return serializer.getType();
+  public RecipeType<? extends Recipe<ICastingContainer>> getType() {
+    return ICastingRecipe.castingType(serializer);
+  }
+
+  @Override
+  public RecipeSerializer<? extends Recipe<ICastingContainer>> getSerializer() {
+    return ICastingRecipe.castingSerializer(serializer);
   }
 
   @Override
@@ -161,11 +167,6 @@ public class PotionCastingRecipe implements ICastingRecipe, IMultiRecipe<IDispla
 
 
   /* Recipe interface methods */
-
-  @Override
-  public NonNullList<Ingredient> getIngredients() {
-    return NonNullList.of(Ingredient.EMPTY, bottle);
-  }
 
   @Override
   public ItemStack getResultItem(HolderLookup.Provider access) {

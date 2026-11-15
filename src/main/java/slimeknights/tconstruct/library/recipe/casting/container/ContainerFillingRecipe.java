@@ -6,17 +6,23 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.Container;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.FluidUtil;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction;
-import net.neoforged.neoforge.fluids.capability.IFluidHandlerItem;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.access.ItemAccess;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
+import net.neoforged.neoforge.transfer.item.ItemResource;
+import net.neoforged.neoforge.transfer.item.ItemStacksResourceHandler;
+import net.neoforged.neoforge.transfer.item.ItemUtil;
+import net.neoforged.neoforge.transfer.transaction.Transaction;
+import net.neoforged.neoforge.transfer.transaction.TransactionContext;
 import slimeknights.mantle.data.loadable.Loadables;
 import slimeknights.mantle.data.loadable.field.ContextKey;
 import slimeknights.mantle.data.loadable.primitive.IntLoadable;
@@ -43,7 +49,7 @@ public class ContainerFillingRecipe implements ICastingRecipe, IMultiRecipe<IDis
     Loadables.ITEM.requiredField("container", r -> r.container),
     ContainerFillingRecipe::new);
 
-  @Getter
+  /** Since 26.1 the type aware serializer is not a serializer, see {@link #getSerializer()} */
   private final TypeAwareRecipeSerializer<?> serializer;
   @Getter
   private final Identifier id;
@@ -53,8 +59,13 @@ public class ContainerFillingRecipe implements ICastingRecipe, IMultiRecipe<IDis
   private final Item container;
 
   @Override
-  public RecipeType<?> getType() {
-    return serializer.getType();
+  public RecipeType<? extends Recipe<ICastingContainer>> getType() {
+    return ICastingRecipe.castingType(serializer);
+  }
+
+  @Override
+  public RecipeSerializer<? extends Recipe<ICastingContainer>> getSerializer() {
+    return ICastingRecipe.castingSerializer(serializer);
   }
 
   /** Gets the fluid to fill into the container. 1.21: copies the full stack so data components (e.g. potion contents) are kept, the 1.20 equivalent of the fluid tag */
@@ -66,13 +77,43 @@ public class ContainerFillingRecipe implements ICastingRecipe, IMultiRecipe<IDis
     return fluid.copyWithAmount(this.fluidAmount);
   }
 
+  /** Result of filling a copy of a container, see {@link #fill(ItemStack, FluidStack)} */
+  private record FillResult(int filled, ItemStack container) {}
+
+  /**
+   * Fills a copy of the given container with the given fluid, replacing the old fluid handler simulate and execute actions.
+   * The copy lives in a private single slot handler, so the container is free to change item when filled (e.g. bucket to filled bucket).
+   * The transaction is never committed, as the result is read before it closes; it is nested in the current transaction if one is open, as opening a root would throw.
+   * @param stack  Container stack, not modified
+   * @param fluid  Fluid to fill
+   * @return  Amount filled and the resulting container. If the stack is not a fluid container, fills nothing and returns a copy of the stack.
+   */
+  private static FillResult fill(ItemStack stack, FluidStack fluid) {
+    if (stack.isEmpty()) {
+      return new FillResult(0, ItemStack.EMPTY);
+    }
+    ItemStacksResourceHandler slot = new ItemStacksResourceHandler(1);
+    slot.set(0, ItemResource.of(stack), stack.getCount());
+    ResourceHandler<FluidResource> handler = ItemAccess.forHandlerIndexStrict(slot, 0).getCapability(Capabilities.Fluid.ITEM);
+    if (handler == null || fluid.isEmpty()) {
+      return new FillResult(0, stack.copy());
+    }
+    Transaction.Lifecycle lifecycle = Transaction.getLifecycle();
+    if (lifecycle != Transaction.Lifecycle.NONE && lifecycle != Transaction.Lifecycle.OPEN) {
+      // a transaction is closing on this thread, so we cannot open one to fill the container
+      return new FillResult(0, stack.copy());
+    }
+    @SuppressWarnings("deprecation")
+    TransactionContext parent = lifecycle == Transaction.Lifecycle.OPEN ? Transaction.getCurrentOpenedTransaction() : null;
+    try (Transaction transaction = Transaction.open(parent)) {
+      int filled = handler.insert(FluidResource.of(fluid), fluid.getAmount(), transaction);
+      return new FillResult(filled, ItemUtil.getStack(slot, 0));
+    }
+  }
+
   @Override
   public int getFluidAmount(ICastingContainer inv) {
-    IFluidHandlerItem handler = inv.getStack().getCapability(Capabilities.Fluid.ITEM);
-    if (handler == null) {
-      return 0;
-    }
-    return handler.fill(getFillFluid(inv), FluidAction.SIMULATE);
+    return fill(inv.getStack(), getFillFluid(inv)).filled();
   }
 
   @Override
@@ -96,11 +137,10 @@ public class ContainerFillingRecipe implements ICastingRecipe, IMultiRecipe<IDis
     if (stack.getItem() != this.container.asItem()) {
       return false;
     }
-    IFluidHandlerItem handler = stack.getCapability(Capabilities.Fluid.ITEM);
-    return handler != null && handler.fill(getFillFluid(inv), FluidAction.SIMULATE) > 0;
+    return fill(stack, getFillFluid(inv)).filled() > 0;
   }
 
-  /** @deprecated use {@link ICastingRecipe#assemble(Container, HolderLookup.Provider)} */
+  /** @deprecated use {@link ICastingRecipe#assemble(net.minecraft.world.item.crafting.RecipeInput, HolderLookup.Provider)} */
   @Override
   @Deprecated
   public ItemStack getResultItem(HolderLookup.Provider access) {
@@ -109,13 +149,7 @@ public class ContainerFillingRecipe implements ICastingRecipe, IMultiRecipe<IDis
 
   @Override
   public ItemStack assemble(ICastingContainer inv, HolderLookup.Provider access) {
-    ItemStack stack = inv.getStack().copy();
-    IFluidHandlerItem handler = stack.getCapability(Capabilities.Fluid.ITEM);
-    if (handler == null) {
-      return stack;
-    }
-    handler.fill(getFillFluid(inv), FluidAction.EXECUTE);
-    return handler.getContainer();
+    return fill(inv.getStack(), getFillFluid(inv)).container();
   }
 
   /* Display */
@@ -143,13 +177,8 @@ public class ContainerFillingRecipe implements ICastingRecipe, IMultiRecipe<IDis
         .map(fluid -> new FluidStack(fluid, fluidAmount))
         .toList();
       // fill the container with each fluid stack
-      List<ItemStack> results = fluids.stream().map(fluid -> {
-        ItemStack stack = new ItemStack(container);
-        return FluidUtil.getFluidHandler(stack).map(handler -> {
-          handler.fill(fluid, FluidAction.EXECUTE);
-          return handler.getContainer();
-        }).orElse(stack);
-      }).toList();
+      ItemStack empty = new ItemStack(container);
+      List<ItemStack> results = fluids.stream().map(fluid -> fill(empty, fluid).container()).toList();
       displayRecipes = List.of(DisplayCastingRecipe.from(this)
         // cast is just an empty container, which is "consumed"
         .cast(new ItemStack(container)).consumed()

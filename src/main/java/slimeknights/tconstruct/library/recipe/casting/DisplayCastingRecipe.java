@@ -10,6 +10,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.neoforged.neoforge.fluids.FluidStack;
+import slimeknights.mantle.recipe.helper.IngredientHelper;
 import slimeknights.tconstruct.library.recipe.casting.material.MaterialCastingLookup;
 import slimeknights.tconstruct.library.recipe.display.ItemVisible;
 
@@ -122,7 +123,7 @@ public final class DisplayCastingRecipe implements IDisplayableCastingRecipe {
 
     /** Sets the given ingredient as the cast */
     public Builder cast(Ingredient cast) {
-      return casts(List.of(cast.getItems()));
+      return casts(IngredientHelper.getStacks(cast));
     }
 
     /** Sets the given cast to the builder */

@@ -3,6 +3,7 @@ package slimeknights.tconstruct.library.recipe.casting.material;
 import lombok.Getter;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.neoforged.neoforge.fluids.FluidStack;
 import slimeknights.mantle.data.loadable.field.LoadableField;
@@ -24,14 +25,15 @@ public abstract class AbstractMaterialCastingRecipe extends AbstractCastingRecip
   protected static final LoadableField<Integer,AbstractMaterialCastingRecipe> ITEM_COST_FIELD = IntLoadable.FROM_ONE.requiredField("item_cost", r -> r.itemCost);
   protected static final LoadableField<IJsonPredicate<MaterialVariantId>,AbstractMaterialCastingRecipe> MATERIALS_FIELD = MaterialPredicate.LOADER.defaultField("allowed_materials", r -> r.materials);
 
+  /** Registered serializer from the type aware serializer, since 26.1 the type aware serializer is no longer a serializer */
   @Getter
-  private final RecipeSerializer<?> serializer;
+  private final RecipeSerializer<? extends Recipe<ICastingContainer>> serializer;
   protected final int itemCost;
   protected final IJsonPredicate<MaterialVariantId> materials;
 
   public AbstractMaterialCastingRecipe(TypeAwareRecipeSerializer<?> serializer, Identifier id, String group, Ingredient cast, int itemCost, boolean consumed, boolean switchSlots, IJsonPredicate<MaterialVariantId> materials) {
     super(serializer.getType(), id, group, cast, consumed, switchSlots);
-    this.serializer = serializer;
+    this.serializer = ICastingRecipe.castingSerializer(serializer);
     this.itemCost = itemCost;
     this.materials = materials;
   }

@@ -7,20 +7,24 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.ItemLike;
-import slimeknights.mantle.data.loadable.Loadables;
+import slimeknights.mantle.data.loadable.common.IngredientLoadable;
 import slimeknights.mantle.recipe.data.AbstractRecipeBuilder;
+import slimeknights.mantle.recipe.helper.IngredientHelper;
 import slimeknights.mantle.recipe.helper.ItemOutput;
-import slimeknights.mantle.recipe.helper.TypeAwareRecipeSerializer;
+import slimeknights.mantle.recipe.ingredient.EmptyIngredient;
+import slimeknights.tconstruct.common.recipe.LoadableFinishedRecipe;
 import slimeknights.tconstruct.smeltery.TinkerSmeltery;
 
 @SuppressWarnings("unused")
 @RequiredArgsConstructor(staticName = "molding")
 public class MoldingRecipeBuilder extends AbstractRecipeBuilder<MoldingRecipeBuilder> {
   private final ItemOutput output;
-  private final TypeAwareRecipeSerializer<MoldingRecipe> serializer;
-  private Ingredient material = Ingredient.EMPTY;
-  private Ingredient pattern = Ingredient.EMPTY;
+  /** Registered serializer, must be type aware. Since 26.1 serializers are records, see {@link LoadableFinishedRecipe#typeAware(RecipeSerializer)} */
+  private final RecipeSerializer<MoldingRecipe> serializer;
+  private Ingredient material = EmptyIngredient.VANILLA;
+  private Ingredient pattern = EmptyIngredient.VANILLA;
   private boolean patternConsumed = false;
 
   /**
@@ -56,7 +60,7 @@ public class MoldingRecipeBuilder extends AbstractRecipeBuilder<MoldingRecipeBui
 
   /** Sets the material item, on the table */
   public MoldingRecipeBuilder setMaterial(TagKey<Item> tag) {
-    return setMaterial(Ingredient.of(tag));
+    return setMaterial(IngredientHelper.tag(tag));
   }
 
   /** Sets the mold item, in the players hand */
@@ -73,7 +77,7 @@ public class MoldingRecipeBuilder extends AbstractRecipeBuilder<MoldingRecipeBui
 
   /** Sets the mold item, in the players hand */
   public MoldingRecipeBuilder setPattern(TagKey<Item> tag, boolean consumed) {
-    return setPattern(Ingredient.of(tag), consumed);
+    return setPattern(IngredientHelper.tag(tag), consumed);
   }
 
 
@@ -81,15 +85,15 @@ public class MoldingRecipeBuilder extends AbstractRecipeBuilder<MoldingRecipeBui
 
   @Override
   public void save(RecipeOutput output) {
-    save(output, Loadables.ITEM.getKey(this.output.get().getItem()));
+    save(output, LoadableFinishedRecipe.getItemId(this.output));
   }
 
   @Override
   public void save(RecipeOutput recipeOutput, Identifier id) {
-    if (material == Ingredient.EMPTY) {
+    if (IngredientLoadable.isEmpty(material)) {
       throw new IllegalStateException("Missing material for molding recipe");
     }
-    AdvancementHolder advancement = buildOptionalAdvancement(id, "molding");
-    recipeOutput.accept(id, new MoldingRecipe(serializer, id, material, pattern, patternConsumed, output), advancement);
+    AdvancementHolder advancement = buildOptionalAdvancement(recipeOutput, id, "molding");
+    recipeOutput.accept(recipeKey(id), new MoldingRecipe(LoadableFinishedRecipe.typeAware(serializer), id, material, pattern, patternConsumed, output), advancement);
   }
 }

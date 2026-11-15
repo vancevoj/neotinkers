@@ -9,6 +9,7 @@ import slimeknights.mantle.data.loadable.common.IngredientLoadable;
 import slimeknights.mantle.data.loadable.field.ContextKey;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.recipe.IMultiRecipe;
+import slimeknights.mantle.recipe.helper.IngredientHelper;
 import slimeknights.mantle.recipe.helper.ItemOutput;
 import slimeknights.mantle.recipe.helper.LoadableRecipeSerializer;
 import slimeknights.mantle.recipe.helper.TypeAwareRecipeSerializer;
@@ -36,8 +37,8 @@ public class CastDuplicationRecipe extends ItemCastingRecipe implements IMultiRe
 
   @Override
   public ItemStack getResultItem(HolderLookup.Provider access) {
-    ItemStack[] items = getCast().getItems();
-    return items.length == 0 ? ItemStack.EMPTY : items[0];
+    List<ItemStack> items = IngredientHelper.getStacks(getCast());
+    return items.isEmpty() ? ItemStack.EMPTY : items.get(0);
   }
 
   /* JEI */
@@ -46,7 +47,7 @@ public class CastDuplicationRecipe extends ItemCastingRecipe implements IMultiRe
   @Override
   public List<IDisplayableCastingRecipe> getRecipes(RegistryAccess access) {
     if (displayRecipes == null) {
-      List<ItemStack> casts = List.of(getCast().getItems());
+      List<ItemStack> casts = IngredientHelper.getStacks(getCast());
       displayRecipes = List.of(DisplayCastingRecipe.from(this)
         .casts(casts).results(casts).linkCastToOutput()
         .fluids(fluid.getFluids())

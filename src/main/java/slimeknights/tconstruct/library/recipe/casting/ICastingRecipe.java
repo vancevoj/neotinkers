@@ -1,12 +1,13 @@
 package slimeknights.tconstruct.library.recipe.casting;
 
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.neoforged.neoforge.fluids.FluidStack;
 import slimeknights.mantle.recipe.ICommonRecipe;
-import slimeknights.tconstruct.library.recipe.TinkerRecipeTypes;
+import slimeknights.mantle.recipe.helper.TypeAwareRecipeSerializer;
 import slimeknights.tconstruct.library.recipe.melting.IMeltingRecipe;
-import slimeknights.tconstruct.smeltery.TinkerSmeltery;
 
 import static slimeknights.tconstruct.library.recipe.melting.IMeltingRecipe.getTemperature;
 
@@ -16,11 +17,6 @@ import static slimeknights.tconstruct.library.recipe.melting.IMeltingRecipe.getT
 public interface ICastingRecipe extends ICommonRecipe<ICastingContainer> {
   /** Gets the ID of this recipe. 1.21: recipes no longer know their own ID, so casting recipes keep it for display recipes */
   Identifier getId();
-
-  @Override
-  default ItemStack getToastSymbol() {
-    return new ItemStack(getType() == TinkerRecipeTypes.CASTING_TABLE.get() ? TinkerSmeltery.searedTable : TinkerSmeltery.searedBasin);
-  }
 
   /**
    * Gets the amount of fluid required for this recipe
@@ -68,5 +64,30 @@ public interface ICastingRecipe extends ICommonRecipe<ICastingContainer> {
    */
   static int calcCoolingTime(FluidStack fluid) {
     return calcCoolingTime(getTemperature(fluid), fluid.getAmount());
+  }
+
+
+  /* Type aware helpers */
+
+  /**
+   * Gets the recipe type from a type aware serializer for use in {@link Recipe#getType()}.
+   * Since 1.21.2 the return type is bound by the recipe input, which the type aware serializer cannot express.
+   * @param serializer  Type aware serializer from the recipe loadable
+   * @return  Recipe type
+   */
+  @SuppressWarnings("unchecked")
+  static RecipeType<? extends Recipe<ICastingContainer>> castingType(TypeAwareRecipeSerializer<?> serializer) {
+    return (RecipeType<? extends Recipe<ICastingContainer>>)serializer.getType();
+  }
+
+  /**
+   * Gets the registered serializer from a type aware serializer for use in {@link Recipe#getSerializer()}.
+   * Since 26.1 a type aware serializer is no longer a {@link RecipeSerializer}, the recipe must return the registered serializer record.
+   * @param serializer  Type aware serializer from the recipe loadable
+   * @return  Registered recipe serializer
+   */
+  @SuppressWarnings("unchecked")
+  static RecipeSerializer<? extends Recipe<ICastingContainer>> castingSerializer(TypeAwareRecipeSerializer<?> serializer) {
+    return (RecipeSerializer<? extends Recipe<ICastingContainer>>)(RecipeSerializer<?>)serializer.getSerializer();
   }
 }

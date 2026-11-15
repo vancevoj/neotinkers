@@ -2,9 +2,13 @@ package slimeknights.tconstruct.library.recipe.ingredient;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import net.minecraft.core.Holder;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.util.GsonHelper;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.display.SlotDisplay;
 import net.neoforged.neoforge.common.crafting.ICustomIngredient;
 import net.neoforged.neoforge.common.crafting.IngredientType;
 import slimeknights.mantle.data.loadable.field.LoadableField;
@@ -20,7 +24,9 @@ import slimeknights.tconstruct.library.recipe.material.MaterialRecipe;
 import slimeknights.tconstruct.library.recipe.material.MaterialRecipeCache;
 
 import javax.annotation.Nullable;
-import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 /**
  * Ingredient matching material items with the given value. Typically, matches ingots or blocks
@@ -33,15 +39,15 @@ public class MaterialValueIngredient implements ICustomIngredient {
     MATERIAL_FIELD,
     ValueField.INSTANCE,
     (material, value) -> new MaterialValueIngredient(material, value[0], value[1]));
-  /** Ingredient type instance */
-  // TODO(neoport): register this IngredientType on NeoForgeRegistries.Keys.INGREDIENT_TYPES under id tconstruct:material_value
+  /** Ingredient type instance, registered as {@code tconstruct:material_value} in {@link slimeknights.tconstruct.tools.TinkerTools} */
   public static final IngredientType<MaterialValueIngredient> TYPE = new LoadableIngredientSerializer<>(LOADABLE).type();
 
   private final IJsonPredicate<MaterialVariantId> material;
   private final float minValue;
   private final float maxValue;
+  /** Ingredients of all matching material recipes, in material order */
   @Nullable
-  private ItemStack[] items;
+  private List<Ingredient> ingredients;
 
   public MaterialValueIngredient(IJsonPredicate<MaterialVariantId> material, float minValue, float maxValue) {
     this.material = material;
@@ -89,15 +95,27 @@ public class MaterialValueIngredient implements ICustomIngredient {
     return recipe != MaterialRecipe.EMPTY && test(recipe);
   }
 
-  @Override
-  public java.util.stream.Stream<ItemStack> getItems() {
-    if (items == null) {
-      items = MaterialRecipeCache.getSortedRecipes().stream()
+  /** Gets the ingredients of all matching material recipes */
+  private List<Ingredient> getMatchingIngredients() {
+    if (ingredients == null) {
+      ingredients = MaterialRecipeCache.getSortedRecipes().stream()
         .filter(this::test)
-        .flatMap(material -> Arrays.stream(material.getIngredient().getItems()))
-        .toArray(ItemStack[]::new);
+        .map(MaterialRecipe::getIngredient)
+        .toList();
     }
-    return Arrays.stream(items);
+    return ingredients;
+  }
+
+  @SuppressWarnings("deprecation")
+  @Override
+  public Stream<Holder<Item>> items() {
+    return getMatchingIngredients().stream().flatMap(Ingredient::items);
+  }
+
+  /** Displays the matching material recipe ingredients, keeping any components their display stacks have */
+  @Override
+  public SlotDisplay display() {
+    return new SlotDisplay.Composite(getMatchingIngredients().stream().map(Ingredient::display).toList());
   }
 
   @Override
@@ -108,6 +126,16 @@ public class MaterialValueIngredient implements ICustomIngredient {
   @Override
   public IngredientType<?> getType() {
     return TYPE;
+  }
+
+  @Override
+  public boolean equals(Object other) {
+    return this == other || other instanceof MaterialValueIngredient ingredient && this.minValue == ingredient.minValue && this.maxValue == ingredient.maxValue && this.material.equals(ingredient.material);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(MaterialValueIngredient.class, material, minValue, maxValue);
   }
 
 

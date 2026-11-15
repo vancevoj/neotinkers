@@ -8,9 +8,10 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 import slimeknights.mantle.data.predicate.IJsonPredicate;
 import slimeknights.mantle.recipe.data.AbstractRecipeBuilder;
-import slimeknights.mantle.recipe.helper.TypeAwareRecipeSerializer;
+import slimeknights.tconstruct.common.recipe.LoadableFinishedRecipe;
 import slimeknights.tconstruct.library.json.predicate.material.MaterialPredicate;
 import slimeknights.tconstruct.library.materials.definition.MaterialVariantId;
 import slimeknights.tconstruct.smeltery.TinkerSmeltery;
@@ -21,7 +22,8 @@ import slimeknights.tconstruct.smeltery.TinkerSmeltery;
 public class PartSwapCastingRecipeBuilder extends AbstractRecipeBuilder<PartSwapCastingRecipeBuilder> {
   private final Ingredient tools;
   private final int itemCost;
-  private final TypeAwareRecipeSerializer<PartSwapCastingRecipe> recipeSerializer;
+  /** Registered serializer, must be type aware. Since 26.1 serializers are records, see {@link LoadableFinishedRecipe#typeAware(RecipeSerializer)} */
+  private final RecipeSerializer<PartSwapCastingRecipe> recipeSerializer;
   @Setter
   @Accessors(fluent = true)
   private int index = 0;
@@ -50,12 +52,13 @@ public class PartSwapCastingRecipeBuilder extends AbstractRecipeBuilder<PartSwap
   @SuppressWarnings("deprecation")
   @Override
   public void save(RecipeOutput output) {
-    save(output, BuiltInRegistries.ITEM.getKey(tools.getItems()[0].getItem()));
+    // 1.21.2: ingredients expose item holders instead of stacks
+    save(output, BuiltInRegistries.ITEM.getKey(tools.items().findFirst().orElseThrow(() -> new IllegalStateException("Part swapping recipe has no tools")).value()));
   }
 
   @Override
   public void save(RecipeOutput output, Identifier id) {
-    AdvancementHolder advancement = this.buildOptionalAdvancement(id, "materials");
-    output.accept(id, new PartSwapCastingRecipe(recipeSerializer, id, group, tools, itemCost, index, allowedMaterials), advancement);
+    AdvancementHolder advancement = this.buildOptionalAdvancement(output, id, "materials");
+    output.accept(recipeKey(id), new PartSwapCastingRecipe(LoadableFinishedRecipe.typeAware(recipeSerializer), id, group, tools, itemCost, index, allowedMaterials), advancement);
   }
 }

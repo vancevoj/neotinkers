@@ -3,13 +3,16 @@ package slimeknights.tconstruct.library.recipe.ingredient;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.display.SlotDisplay;
 import net.minecraft.world.level.ItemLike;
 import net.neoforged.neoforge.common.crafting.IngredientType;
 import slimeknights.mantle.data.loadable.common.IngredientLoadable;
 import slimeknights.mantle.data.loadable.field.LoadableField;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.data.predicate.IJsonPredicate;
+import slimeknights.mantle.recipe.helper.IngredientHelper;
 import slimeknights.mantle.recipe.helper.LoadableIngredientSerializer;
 import slimeknights.tconstruct.library.json.predicate.material.MaterialPredicate;
 import slimeknights.tconstruct.library.json.predicate.material.MaterialPredicateField;
@@ -21,8 +24,8 @@ import slimeknights.tconstruct.library.recipe.material.MaterialRecipeCache;
 import slimeknights.tconstruct.library.tools.part.IMaterialItem;
 
 import javax.annotation.Nullable;
-import java.util.Arrays;
-import java.util.stream.Stream;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * Extension of the vanilla ingredient to display materials on items and support matching by materials
@@ -35,13 +38,13 @@ public class MaterialIngredient extends NestedIngredient {
     IngredientLoadable.DISALLOW_EMPTY.requiredField("match", i -> i.nested),
     MATERIAL_FIELD,
     MaterialIngredient::new);
-  /** Ingredient type instance */
-  // TODO(neoport): register this IngredientType on NeoForgeRegistries.Keys.INGREDIENT_TYPES under id tconstruct:material
+  /** Ingredient type instance, registered as {@code tconstruct:material} in {@link slimeknights.tconstruct.tools.TinkerTools} */
   public static final IngredientType<MaterialIngredient> TYPE = new LoadableIngredientSerializer<>(LOADABLE).type();
 
   private final IJsonPredicate<MaterialVariantId> material;
+  /** Display for all material variants of the nested items, built once materials load */
   @Nullable
-  private ItemStack[] materialStacks;
+  private SlotDisplay materialDisplay;
   protected MaterialIngredient(Ingredient nested, IJsonPredicate<MaterialVariantId> material) {
     super(nested);
     this.material = material;
@@ -129,7 +132,7 @@ public class MaterialIngredient extends NestedIngredient {
    * @return  Material with tag
    */
   public static MaterialIngredient of(TagKey<Item> tag, MaterialVariantId material) {
-    return of(Ingredient.of(tag), material);
+    return of(IngredientHelper.tag(tag), material);
   }
 
   /**
@@ -138,7 +141,7 @@ public class MaterialIngredient extends NestedIngredient {
    * @return  Material with tag
    */
   public static MaterialIngredient of(TagKey<Item> tag) {
-    return of(Ingredient.of(tag));
+    return of(IngredientHelper.tag(tag));
   }
 
   @Override
@@ -154,24 +157,30 @@ public class MaterialIngredient extends NestedIngredient {
     return true;
   }
 
+  /**
+   * Gets the display for this ingredient, the nested items with each matching material.
+   * Since 1.21.2 {@link #items()} only lists item holders (inherited from the nested ingredient), so the material stacks moved here.
+   */
   @Override
-  public Stream<ItemStack> getItems() {
-    // until materials load, just defer to the nested stacks; do not cache as the cache would be incomplete
+  public SlotDisplay display() {
+    // until materials load, just defer to the nested display; do not cache as the cache would be incomplete
     if (!MaterialRegistry.isFullyLoaded()) {
-      return Arrays.stream(nested.getItems());
+      return nested.display();
     }
-    if (materialStacks == null) {
+    if (materialDisplay == null) {
       // no material? apply all materials for variants
       // find all materials matching the filter; note this only shows craftable material variants
-      materialStacks = Arrays.stream(nested.getItems())
+      List<SlotDisplay> displays = IngredientHelper.getStacks(nested).stream()
         .flatMap(stack -> MaterialRecipeCache.getAllVariants().stream()
           .filter(material::matches)
           .map(mat -> IMaterialItem.withMaterial(stack, mat))
           .filter(matStack -> !IMaterialItem.getMaterialFromStack(matStack).equals(MaterialId.UNKNOWN)))
         .distinct()
-        .toArray(ItemStack[]::new);
+        .<SlotDisplay>map(stack -> new SlotDisplay.ItemStackSlotDisplay(ItemStackTemplate.fromNonEmptyStack(stack)))
+        .toList();
+      materialDisplay = new SlotDisplay.Composite(displays);
     }
-    return Arrays.stream(materialStacks);
+    return materialDisplay;
   }
 
   @Override
@@ -182,5 +191,15 @@ public class MaterialIngredient extends NestedIngredient {
   @Override
   public IngredientType<?> getType() {
     return TYPE;
+  }
+
+  @Override
+  public boolean equals(Object other) {
+    return this == other || other instanceof MaterialIngredient ingredient && this.nested.equals(ingredient.nested) && this.material.equals(ingredient.material);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(MaterialIngredient.class, nested, material);
   }
 }

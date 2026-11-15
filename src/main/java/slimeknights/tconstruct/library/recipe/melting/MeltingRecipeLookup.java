@@ -8,16 +8,18 @@ import net.minecraft.world.level.ItemLike;
 import net.neoforged.neoforge.fluids.FluidStack;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import slimeknights.mantle.recipe.helper.FluidOutput;
+import slimeknights.mantle.recipe.ingredient.EmptyIngredient;
 import slimeknights.tconstruct.common.recipe.RecipeCacheInvalidator;
 import slimeknights.tconstruct.common.recipe.RecipeCacheInvalidator.DuelSidedListener;
 import slimeknights.tconstruct.library.utils.SimpleCache;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Lookup for melting recipe, used for a few modifiers.
  * Notably does not contain information on dynamic melting recipes such as tool parts.
+ * Filled by recipe constructors; since 26.3 the server parses recipes in parallel, so registration is synchronized and the collections are thread safe.
  */
 public class MeltingRecipeLookup {
   private MeltingRecipeLookup() {}
@@ -25,7 +27,7 @@ public class MeltingRecipeLookup {
   /** Record holding data from the melting recipe */
   public record MeltingFluid(Ingredient ingredient, FluidOutput result, int temperature) {
     /** Empty instance, used to cache missing results */
-    public static final MeltingFluid EMPTY = new MeltingFluid(Ingredient.EMPTY, FluidOutput.EMPTY, 0);
+    public static final MeltingFluid EMPTY = new MeltingFluid(EmptyIngredient.VANILLA, FluidOutput.EMPTY, 0);
 
     /** Checks if this result is present */
     public boolean isEmpty() {
@@ -34,9 +36,9 @@ public class MeltingRecipeLookup {
   }
 
   /** If true, cache is currently frozen and will now allow changing {@link #FLUIDS} */
-  private static boolean meltingFrozen = false;
+  private static volatile boolean meltingFrozen = false;
   /** List of fluid recipes stored from melting recipe constructors */
-  private static final List<MeltingFluid> FLUIDS = new ArrayList<>();
+  private static final List<MeltingFluid> FLUIDS = new CopyOnWriteArrayList<>();
   /** Cache of lookup by item, assumes no recipes vary by NBT. We mostly use this for blocks anyways */
   private static final SimpleCache<Item,MeltingFluid> LOOKUP = new SimpleCache<>(item -> {
     if (item != Items.AIR) {
@@ -57,7 +59,7 @@ public class MeltingRecipeLookup {
   });
 
   /** Adds a fluid to the lookup */
-  public static void addMeltingFluid(Ingredient ingredient, FluidOutput result, int temperature) {
+  public static synchronized void addMeltingFluid(Ingredient ingredient, FluidOutput result, int temperature) {
     if (meltingFrozen || RecipeCacheInvalidator.skipRegistration()) {
       return;
     }

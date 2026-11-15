@@ -1,8 +1,8 @@
 package slimeknights.tconstruct.library.recipe.ingredient;
 
 import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
@@ -10,12 +10,16 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Instrument;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
+import net.minecraft.world.item.component.InstrumentComponent;
+import net.minecraft.world.item.crafting.display.SlotDisplay;
 import net.minecraft.world.level.ItemLike;
 import net.neoforged.neoforge.common.crafting.ICustomIngredient;
 import net.neoforged.neoforge.common.crafting.IngredientType;
 import slimeknights.mantle.data.loadable.Loadables;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.recipe.helper.LoadableIngredientSerializer;
+import slimeknights.mantle.recipe.helper.RecipeHelper;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.json.TinkerLoadables;
 
@@ -73,9 +77,10 @@ public class InstrumentIngredient implements ICustomIngredient {
     if (stack == null || !stack.is(item)) {
       return false;
     }
-    // 1.21: instrument lives on the instrument data component rather than a string NBT tag
-    Holder<Instrument> instrument = stack.get(DataComponents.INSTRUMENT);
-    if (instrument != null) {
+    // 1.21: instrument lives on the instrument data component rather than a string NBT tag, wrapped in an instrument component since 1.21.5
+    InstrumentComponent component = stack.get(DataComponents.INSTRUMENT);
+    if (component != null) {
+      Holder<Instrument> instrument = component.instrument();
       // if we just want the instrument to match, can just compare by key
       if (this.instrument != null) {
         return instrument.is(this.instrument);
@@ -88,14 +93,22 @@ public class InstrumentIngredient implements ICustomIngredient {
     return this.instrument == null;
   }
 
+  @SuppressWarnings("deprecation")
   @Override
-  public Stream<ItemStack> getItems() {
-    ItemStack stack = new ItemStack(item);
-    // set the instrument on the stack
+  public Stream<Holder<Item>> items() {
+    return Stream.of(item.builtInRegistryHolder());
+  }
+
+  /** Displays the item with the instrument set. Since 1.21.2 instruments are a datapack registry, so the instrument is resolved from the current registries. */
+  @Override
+  public SlotDisplay display() {
     if (instrument != null) {
-      BuiltInRegistries.INSTRUMENT.get(instrument).ifPresent(holder -> stack.set(DataComponents.INSTRUMENT, holder));
+      Holder<Instrument> holder = RecipeHelper.registryAccess().lookup(Registries.INSTRUMENT).flatMap(registry -> registry.get(instrument)).orElse(null);
+      if (holder != null) {
+        return new SlotDisplay.ItemStackSlotDisplay(new ItemStackTemplate(item, DataComponentPatch.builder().set(DataComponents.INSTRUMENT, new InstrumentComponent(holder)).build()));
+      }
     }
-    return Stream.of(stack);
+    return new SlotDisplay.ItemSlotDisplay(item);
   }
 
   @Override

@@ -3,6 +3,7 @@ package slimeknights.tconstruct.library.recipe.alloying;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
@@ -194,12 +195,12 @@ public class AlloyRecipe implements ICustomOutputRecipe<IAlloyTank> {
   }
 
   @Override
-  public RecipeType<?> getType() {
+  public RecipeType<? extends Recipe<IAlloyTank>> getType() {
     return TinkerRecipeTypes.ALLOYING.get();
   }
 
   @Override
-  public RecipeSerializer<?> getSerializer() {
+  public RecipeSerializer<? extends Recipe<IAlloyTank>> getSerializer() {
     return TinkerSmeltery.alloyingSerializer.get();
   }
 

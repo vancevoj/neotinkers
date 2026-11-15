@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
@@ -72,12 +73,12 @@ public class EntityMeltingRecipe implements ICustomOutputRecipe<IEntityMeltingCo
   }
 
   @Override
-  public RecipeSerializer<?> getSerializer() {
+  public RecipeSerializer<? extends Recipe<IEntityMeltingContainer>> getSerializer() {
     return TinkerSmeltery.entityMeltingSerializer.get();
   }
 
   @Override
-  public RecipeType<?> getType() {
+  public RecipeType<? extends Recipe<IEntityMeltingContainer>> getType() {
     return TinkerRecipeTypes.ENTITY_MELTING.get();
   }
 

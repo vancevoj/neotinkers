@@ -10,6 +10,7 @@ import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.fluids.FluidStack;
 import slimeknights.mantle.data.loadable.field.ContextKey;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
+import slimeknights.mantle.recipe.helper.IngredientHelper;
 import slimeknights.mantle.recipe.helper.LoadableRecipeSerializer;
 import slimeknights.mantle.recipe.helper.TypeAwareRecipeSerializer;
 import slimeknights.mantle.recipe.ingredient.FluidIngredient;
@@ -18,7 +19,6 @@ import slimeknights.tconstruct.library.recipe.casting.potion.ModifierPotionCasti
 import slimeknights.tconstruct.library.tools.helper.ModifierUtil;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -56,7 +56,7 @@ public class TipClearingCastingRecipe extends ModifierPotionCastingRecipe {
       List<String> potions = getPotionIds();
 
       // create a recipe per tool
-      displayRecipes = Arrays.stream(bottle.getItems()).map(stack -> {
+      displayRecipes = IngredientHelper.getStacks(bottle).stream().map(stack -> {
         // start with just the tool with the modifier
         ItemStack withModifier = addModifier(stack);
         return DisplayCastingRecipe.from(this)

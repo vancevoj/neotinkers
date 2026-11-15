@@ -6,10 +6,11 @@ import lombok.experimental.Accessors;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 import slimeknights.mantle.data.loadable.Loadables;
 import slimeknights.mantle.data.predicate.IJsonPredicate;
 import slimeknights.mantle.recipe.data.AbstractRecipeBuilder;
-import slimeknights.mantle.recipe.helper.TypeAwareRecipeSerializer;
+import slimeknights.tconstruct.common.recipe.LoadableFinishedRecipe;
 import slimeknights.tconstruct.library.json.predicate.material.MaterialPredicate;
 import slimeknights.tconstruct.library.materials.definition.MaterialVariantId;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
@@ -26,7 +27,8 @@ public class CompositeCastingRecipeBuilder extends AbstractRecipeBuilder<Composi
   private final int itemCost;
   @Setter @Nullable
   private MaterialStatsId castingStatConflict = null;
-  private final TypeAwareRecipeSerializer<? extends CompositeCastingRecipe> serializer;
+  /** Registered serializer, must be type aware. Since 26.1 serializers are records, see {@link LoadableFinishedRecipe#typeAware(RecipeSerializer)} */
+  private final RecipeSerializer<? extends CompositeCastingRecipe> serializer;
   @Setter
   private IJsonPredicate<MaterialVariantId> allowedMaterials = MaterialPredicate.ANY;
 
@@ -45,7 +47,7 @@ public class CompositeCastingRecipeBuilder extends AbstractRecipeBuilder<Composi
 
   @Override
   public void save(RecipeOutput output, Identifier id) {
-    AdvancementHolder advancement = this.buildOptionalAdvancement(id, "casting");
-    output.accept(id, new CompositeCastingRecipe(serializer, id, group, itemCost, result, allowedMaterials, castingStatConflict), advancement);
+    AdvancementHolder advancement = this.buildOptionalAdvancement(output, id, "casting");
+    output.accept(recipeKey(id), new CompositeCastingRecipe(LoadableFinishedRecipe.typeAware(serializer), id, group, itemCost, result, allowedMaterials, castingStatConflict), advancement);
   }
 }

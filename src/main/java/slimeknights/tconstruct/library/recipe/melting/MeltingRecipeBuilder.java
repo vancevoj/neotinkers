@@ -185,14 +185,14 @@ public class MeltingRecipeBuilder extends AbstractRecipeBuilder<MeltingRecipeBui
       throw new IllegalStateException("Builder cannot be both ore and damagable");
     }
     // only build JSON if needed
-    AdvancementHolder advancement = this.buildOptionalAdvancement(id, "melting");
+    AdvancementHolder advancement = this.buildOptionalAdvancement(consumer, id, "melting");
     // based on properties, choose which recipe to build
     if (oreRate != null) {
-      consumer.accept(id, new OreMeltingRecipe(id, group, input, output, temperature, time, byproducts, oreRate, byproductRates), advancement);
+      consumer.accept(recipeKey(id), new OreMeltingRecipe(id, group, input, output, temperature, time, byproducts, oreRate, byproductRates), advancement);
     } else if (unitSizes != null) {
-      consumer.accept(id, new DamageableMeltingRecipe(id, group, input, output, temperature, time, byproducts, unitSizes[0], List.of(Arrays.stream(unitSizes, 1, unitSizes.length).boxed().toArray(Integer[]::new))), advancement);
+      consumer.accept(recipeKey(id), new DamageableMeltingRecipe(id, group, input, output, temperature, time, byproducts, unitSizes[0], List.of(Arrays.stream(unitSizes, 1, unitSizes.length).boxed().toArray(Integer[]::new))), advancement);
     } else {
-      consumer.accept(id, new MeltingRecipe(id, group, input, output, temperature, time, byproducts), advancement);
+      consumer.accept(recipeKey(id), new MeltingRecipe(id, group, input, output, temperature, time, byproducts), advancement);
     }
   }
 }
