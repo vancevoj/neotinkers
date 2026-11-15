@@ -4,14 +4,15 @@ import lombok.Getter;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
-import slimeknights.mantle.data.loadable.common.ItemStackLoadable;
 import slimeknights.mantle.data.loadable.field.ContextKey;
 import slimeknights.mantle.data.loadable.field.LoadableField;
 import slimeknights.mantle.data.loadable.primitive.StringLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.data.predicate.IJsonPredicate;
+import slimeknights.mantle.recipe.helper.ItemOutput;
 import slimeknights.mantle.recipe.ingredient.SizedIngredient;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.json.predicate.modifier.ModifierPredicate;
@@ -44,7 +45,8 @@ public class ModifierRemovalRecipe extends AbstractWorktableRecipe {
 
   protected static final LoadableField<String,ModifierRemovalRecipe> NAME_FIELD = StringLoadable.DEFAULT.defaultField("name", "modifiers", true, r -> r.name);
   protected static final LoadableField<SizedIngredient,ModifierRemovalRecipe> TOOLS_FIELD = SizedIngredient.LOADABLE.defaultField("tools", DEFAULT_TOOLS, true, r -> r.sizedTool);
-  protected static final LoadableField<List<ItemStack>,ModifierRemovalRecipe> LEFTOVERS_FIELD = ItemStackLoadable.REQUIRED_STACK_NBT.list(0).defaultField("leftovers", List.of(), r -> r.leftovers);
+  /** Leftovers are read as lazy outputs, as since 26.1 item stacks cannot be created while recipes parse */
+  protected static final LoadableField<List<ItemOutput>,ModifierRemovalRecipe> LEFTOVERS_FIELD = ItemOutput.Loadable.REQUIRED_STACK.list(0).defaultField("leftovers", List.of(), r -> r.leftovers);
   protected static final LoadableField<IJsonPredicate<ModifierId>,ModifierRemovalRecipe> MODIFIER_PREDICATE_FIELD = ModifierPredicate.LOADER.defaultField("modifier_predicate", false, r -> r.modifierPredicate);
 
   /** Recipe loadable */
@@ -54,13 +56,13 @@ public class ModifierRemovalRecipe extends AbstractWorktableRecipe {
   @Getter
   private final Component title;
   private final SizedIngredient sizedTool;
-  private final List<ItemStack> leftovers;
+  private final List<ItemOutput> leftovers;
   private final IJsonPredicate<ModifierId> modifierPredicate;
 
   protected final Predicate<ModifierEntry> entryPredicate;
   private List<ModifierEntry> displayModifiers;
 
-  public ModifierRemovalRecipe(Identifier id, String name, SizedIngredient toolRequirement, List<SizedIngredient> inputs, List<ItemStack> leftovers, IJsonPredicate<ModifierId> modifierPredicate) {
+  public ModifierRemovalRecipe(Identifier id, String name, SizedIngredient toolRequirement, List<SizedIngredient> inputs, List<ItemOutput> leftovers, IJsonPredicate<ModifierId> modifierPredicate) {
     super(id, toolRequirement.getIngredient(), inputs);
     this.name = name;
     this.title = Component.translatable(getBaseKey() + "." + name);
@@ -152,14 +154,14 @@ public class ModifierRemovalRecipe extends AbstractWorktableRecipe {
   public void updateInputs(LazyToolStack result, ITinkerableContainer.Mutable inv, ModifierEntry selected, boolean isServer) {
     super.updateInputs(result, inv, selected, isServer);
     if (isServer) {
-      for (ItemStack stack : leftovers) {
-        inv.giveItem(stack.copy());
+      for (ItemOutput leftover : leftovers) {
+        inv.giveItem(leftover.copy());
       }
     }
   }
 
   @Override
-  public RecipeSerializer<?> getSerializer() {
+  public RecipeSerializer<? extends Recipe<ITinkerableContainer>> getSerializer() {
     return TinkerModifiers.removeModifierSerializer.get();
   }
 

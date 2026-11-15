@@ -4,6 +4,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import slimeknights.mantle.recipe.ICommonRecipe;
@@ -23,7 +24,7 @@ public interface ITinkerStationRecipe extends ICommonRecipe<ITinkerStationContai
   /* Recipe data */
 
   @Override
-  default RecipeType<?> getType() {
+  default RecipeType<? extends Recipe<ITinkerStationContainer>> getType() {
     return TinkerRecipeTypes.TINKER_STATION.get();
   }
 
@@ -77,8 +78,7 @@ public interface ITinkerStationRecipe extends ICommonRecipe<ITinkerStationContai
     return getResultItem(access).copy();
   }
 
-  /** @deprecated use {@link #updateInputs(LazyToolStack, IMutableTinkerStationContainer, boolean)} */
-  @Override
+  /** @deprecated use {@link #updateInputs(LazyToolStack, IMutableTinkerStationContainer, boolean)}. No longer part of {@link Recipe} since 1.21.2. */
   @Deprecated
   default NonNullList<ItemStack> getRemainingItems(ITinkerStationContainer inv) {
     return NonNullList.of(ItemStack.EMPTY);

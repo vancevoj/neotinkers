@@ -1,7 +1,6 @@
 package slimeknights.tconstruct.library.recipe.tinkerstation.repairing;
 
 import lombok.Getter;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.Identifier;
@@ -50,11 +49,15 @@ public class ModifierRepairCraftingRecipe extends CustomRecipe implements IModif
   @Getter
   private final int repairAmount;
   public ModifierRepairCraftingRecipe(Identifier idIn, ModifierId modifier, Ingredient ingredient, int repairAmount) {
-    super(CraftingBookCategory.EQUIPMENT);
     this.id = idIn;
     this.modifier = modifier;
     this.ingredient = ingredient;
     this.repairAmount = repairAmount;
+  }
+
+  @Override
+  public CraftingBookCategory category() {
+    return CraftingBookCategory.EQUIPMENT;
   }
 
   @Override
@@ -69,7 +72,7 @@ public class ModifierRepairCraftingRecipe extends CustomRecipe implements IModif
   }
 
   @Override
-  public ItemStack assemble(CraftingInput inv, HolderLookup.Provider access) {
+  public ItemStack assemble(CraftingInput inv) {
     ToolFound inputs = OverslimeCraftingTableRecipe.findTool(inv, TOOLS, ingredient);
     if (inputs == null) {
       TConstruct.LOG.error("Recipe repair on {} failed to find items after matching", id);
@@ -119,12 +122,7 @@ public class ModifierRepairCraftingRecipe extends CustomRecipe implements IModif
   }
 
   @Override
-  public boolean canCraftInDimensions(int width, int height) {
-    return (width * height) >= 2;
-  }
-
-  @Override
-  public RecipeSerializer<?> getSerializer() {
+  public RecipeSerializer<? extends CustomRecipe> getSerializer() {
     return TinkerModifiers.craftingModifierRepair.get();
   }
 

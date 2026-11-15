@@ -6,6 +6,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.ApiStatus.Internal;
@@ -13,6 +14,7 @@ import slimeknights.mantle.data.loadable.common.IngredientLoadable;
 import slimeknights.mantle.data.loadable.field.ContextKey;
 import slimeknights.mantle.data.loadable.primitive.IntLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
+import slimeknights.mantle.recipe.helper.IngredientHelper;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
@@ -29,7 +31,6 @@ import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.tools.TinkerModifiers;
 
 import javax.annotation.Nullable;
-import java.util.Arrays;
 import java.util.List;
 
 import static slimeknights.tconstruct.library.recipe.modifiers.adding.IDisplayModifierRecipe.withModifiers;
@@ -42,7 +43,7 @@ public class OverslimeModifierRecipe implements ITinkerStationRecipe, IDisplayMo
   private static final String KEY_AMOUNT = TConstruct.makeTranslationKey("recipe", "modifier.amount");
   public static final RecordLoadable<OverslimeModifierRecipe> LOADER = RecordLoadable.create(
     ContextKey.ID.requiredField(),
-    IngredientLoadable.DISALLOW_EMPTY.defaultField("tools", Ingredient.of(TinkerTags.Items.DURABILITY), true, r -> r.tools),
+    IngredientLoadable.DISALLOW_EMPTY.defaultField("tools", IngredientHelper.tag(TinkerTags.Items.DURABILITY), true, r -> r.tools),
     IngredientLoadable.DISALLOW_EMPTY.requiredField("ingredient", r -> r.ingredient),
     IntLoadable.FROM_ONE.requiredField("restore_amount", r -> r.restoreAmount),
     OverslimeModifierRecipe::new);
@@ -68,7 +69,7 @@ public class OverslimeModifierRecipe implements ITinkerStationRecipe, IDisplayMo
   /** @deprecated use {@link #OverslimeModifierRecipe(Identifier, Ingredient, Ingredient, int)} */
   @Deprecated(forRemoval = true)
   public OverslimeModifierRecipe(Identifier id, Ingredient ingredient, int restoreAmount) {
-    this(id, Ingredient.of(TinkerTags.Items.DURABILITY), ingredient, restoreAmount);
+    this(id, IngredientHelper.tag(TinkerTags.Items.DURABILITY), ingredient, restoreAmount);
   }
 
   @Override
@@ -118,7 +119,7 @@ public class OverslimeModifierRecipe implements ITinkerStationRecipe, IDisplayMo
   }
 
   @Override
-  public RecipeSerializer<?> getSerializer() {
+  public RecipeSerializer<? extends Recipe<ITinkerStationContainer>> getSerializer() {
     return TinkerModifiers.overslimeSerializer.get();
   }
 
@@ -143,7 +144,7 @@ public class OverslimeModifierRecipe implements ITinkerStationRecipe, IDisplayMo
   @Override
   public List<ItemStack> getDisplayItems(int slot) {
     if (slot == 0) {
-      return List.of(ingredient.getItems());
+      return IngredientHelper.getStacks(ingredient);
     }
     return List.of();
   }
@@ -158,7 +159,7 @@ public class OverslimeModifierRecipe implements ITinkerStationRecipe, IDisplayMo
     if (toolWithoutModifier == null) {
       // ensure tools are the proper stack size for without
       int maxSize = shrinkToolSlotBy();
-      toolWithoutModifier = Arrays.stream(this.tools.getItems()).map(MAP_TOOL_STACK_FOR_RENDERING).map(stack -> {
+      toolWithoutModifier = IngredientHelper.getStacks(this.tools).stream().map(MAP_TOOL_STACK_FOR_RENDERING).map(stack -> {
         // only copy if something changes
         int stackMax = stack.getMaxStackSize();
         if (stackMax > 1) {

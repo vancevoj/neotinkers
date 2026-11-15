@@ -1,7 +1,6 @@
 package slimeknights.tconstruct.tables.recipe;
 
 import lombok.Getter;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
@@ -35,8 +34,12 @@ public class CraftingTableRepairKitRecipe extends CustomRecipe {
   @Getter
   private final Identifier id;
   public CraftingTableRepairKitRecipe(Identifier id) {
-    super(CraftingBookCategory.EQUIPMENT);
     this.id = id;
+  }
+
+  @Override
+  public CraftingBookCategory category() {
+    return CraftingBookCategory.EQUIPMENT;
   }
 
   /**
@@ -111,7 +114,7 @@ public class CraftingTableRepairKitRecipe extends CustomRecipe {
   }
 
   @Override
-  public ItemStack assemble(CraftingInput inv, HolderLookup.Provider access) {
+  public ItemStack assemble(CraftingInput inv) {
     ToolRepair inputs = getRelevantInputs(inv);
     if (inputs == null) {
       TConstruct.LOG.error("Recipe repair on {} failed to find items after matching", getId());
@@ -146,12 +149,7 @@ public class CraftingTableRepairKitRecipe extends CustomRecipe {
   }
 
   @Override
-  public boolean canCraftInDimensions(int width, int height) {
-    return width * height >= 2;
-  }
-
-  @Override
-  public RecipeSerializer<?> getSerializer() {
+  public RecipeSerializer<? extends CustomRecipe> getSerializer() {
     return TinkerTables.craftingTableRepairSerializer.get();
   }
 }

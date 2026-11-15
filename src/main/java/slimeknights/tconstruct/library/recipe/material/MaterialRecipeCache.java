@@ -2,8 +2,10 @@ package slimeknights.tconstruct.library.recipe.material;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
+import com.google.common.collect.Multimaps;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import slimeknights.mantle.recipe.helper.IngredientHelper;
 import slimeknights.tconstruct.common.recipe.RecipeCacheInvalidator;
 import slimeknights.tconstruct.common.recipe.RecipeCacheInvalidator.DuelSidedListener;
 import slimeknights.tconstruct.library.materials.IMaterialRegistry;
@@ -15,25 +17,27 @@ import slimeknights.tconstruct.library.tools.part.IMaterialItem;
 import slimeknights.tconstruct.library.utils.SimpleCache;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-/** Cache of details related to materials */
+/**
+ * Cache of details related to materials.
+ * Filled by recipe constructors; since 26.3 the server parses recipes in parallel, so registration is synchronized and the collections are thread safe.
+ * Iterating a synchronized multimap view requires its lock, so readers copy the values under the lock.
+ */
 public class MaterialRecipeCache {
   /** Full list of recipes in the cache */
-  private static final List<MaterialRecipe> RECIPES = new ArrayList<>();
+  private static final List<MaterialRecipe> RECIPES = new CopyOnWriteArrayList<>();
   /** Predicate for sorted recipe lists, ensuring they are visible */
   private static final Predicate<MaterialRecipe> RECIPE_FILTER = MaterialRecipe::isVisible;
   /** Full list of recipes in the cache */
-  private static List<MaterialRecipe> SORTED_RECIPES = null;
+  private static volatile List<MaterialRecipe> SORTED_RECIPES = null;
   /** Comparator used to create {@link #SORTED_RECIPES} */
   private static final Comparator<MaterialRecipe> RECIPE_COMPARATOR = Comparator
     .comparing(MaterialRecipe::getMaterial)
@@ -42,14 +46,14 @@ public class MaterialRecipeCache {
   /** Lookup from item ID to recipe */
   private static final Map<Item, MaterialRecipe> RECIPE_BY_ITEM = new ConcurrentHashMap<>();
   /** Lookup from material variant ID to recipe */
-  private static final Multimap<MaterialVariantId, MaterialRecipe> RECIPES_BY_MATERIAL = HashMultimap.create();
+  private static final Multimap<MaterialVariantId, MaterialRecipe> RECIPES_BY_MATERIAL = Multimaps.synchronizedSetMultimap(HashMultimap.create());
   /** Gets the list of recipes per material in sorted order */
   private static final SimpleCache<MaterialVariantId, List<MaterialRecipe>> SORTED_RECIPES_BY_MATERIAL = new SimpleCache<>(id ->
-    RECIPES_BY_MATERIAL.get(id).stream().filter(RECIPE_FILTER).sorted(RECIPE_COMPARATOR).toList());
+    getAllRecipes(id).stream().filter(RECIPE_FILTER).sorted(RECIPE_COMPARATOR).toList());
   /** Map from material variant ID to item stack list for display */
   private static final SimpleCache<MaterialVariantId, List<ItemStack>> ITEMS_BY_MATERIAL = new SimpleCache<>(variant ->
     getRecipes(variant).stream().flatMap(r -> {
-      Stream<ItemStack> stacks = Arrays.stream(r.getIngredient().getItems());
+      Stream<ItemStack> stacks = IngredientHelper.getStacks(r.getIngredient()).stream();
       // if we need multiple, increase the stack size of the display stacks
       if (r.needed > r.value) {
         int size = (r.needed + r.value - 1) / r.value;
@@ -59,13 +63,13 @@ public class MaterialRecipeCache {
     }).toList());
 
   /** Mapping from material ID to all variants for the material */
-  private static final Multimap<MaterialId, MaterialVariantId> KNOWN_VARIANTS = HashMultimap.create();
+  private static final Multimap<MaterialId, MaterialVariantId> KNOWN_VARIANTS = Multimaps.synchronizedSetMultimap(HashMultimap.create());
   /** List of all material variants in sorted order. See also {@link IMaterialRegistry#getVisibleMaterials()} */
   @Nullable
-  private static List<MaterialVariantId> SORTED_VARIANTS = null;
+  private static volatile List<MaterialVariantId> SORTED_VARIANTS = null;
   /** List of all hidden material variants in sorted order. See also {@link IMaterialRegistry#getVisibleMaterials()} */
   @Nullable
-  private static List<MaterialVariantId> HIDDEN_VARIANTS = null;
+  private static volatile List<MaterialVariantId> HIDDEN_VARIANTS = null;
 
   /** Listener for clearing the cache */
   private static final DuelSidedListener LISTENER = RecipeCacheInvalidator.addDuelSidedListener(() -> {
@@ -81,7 +85,7 @@ public class MaterialRecipeCache {
   });
 
   /** Registers a recipe with the cache */
-  public static void registerRecipe(MaterialRecipe recipe) {
+  public static synchronized void registerRecipe(MaterialRecipe recipe) {
     if (recipe.getValue() > 0 && !RecipeCacheInvalidator.skipRegistration()) {
       // ensure c ache does not need to be cleared
       LISTENER.checkClear();
@@ -134,15 +138,26 @@ public class MaterialRecipeCache {
 
   /** Gets a list of all non-hidden material recipes, sorted by tier, sort key, and value. */
   public static Collection<MaterialRecipe> getSortedRecipes() {
-    if (SORTED_RECIPES == null) {
-      SORTED_RECIPES = RECIPES.stream().filter(RECIPE_FILTER).sorted(RECIPE_COMPARATOR).toList();
+    List<MaterialRecipe> sorted = SORTED_RECIPES;
+    if (sorted == null) {
+      sorted = RECIPES.stream().filter(RECIPE_FILTER).sorted(RECIPE_COMPARATOR).toList();
+      SORTED_RECIPES = sorted;
     }
-    return SORTED_RECIPES;
+    return sorted;
   }
 
   /** Gets all unsorted recipes for the given material variant */
   public static Collection<MaterialRecipe> getAllRecipes(MaterialVariantId variant) {
-    return RECIPES_BY_MATERIAL.get(variant);
+    synchronized (RECIPES_BY_MATERIAL) {
+      return List.copyOf(RECIPES_BY_MATERIAL.get(variant));
+    }
+  }
+
+  /** Gets the known variants for the given material, copied under the map lock */
+  private static Collection<MaterialVariantId> getKnownVariants(MaterialId materialId) {
+    synchronized (KNOWN_VARIANTS) {
+      return List.copyOf(KNOWN_VARIANTS.get(materialId));
+    }
   }
 
   /** Gets sorted recipes for the given material variant */
@@ -159,9 +174,9 @@ public class MaterialRecipeCache {
   public static void addItems(MaterialVariantId variant, int cost, List<ItemStack> items) {
     for (MaterialRecipe recipe : getRecipes(variant)) {
       int count = recipe.getItemsUsed(cost);
-      ItemStack[] stacks = recipe.getIngredient().getItems();
+      List<ItemStack> stacks = IngredientHelper.getStacks(recipe.getIngredient());
       if (count == 1) {
-        Collections.addAll(items, stacks);
+        items.addAll(stacks);
       } else {
         for (ItemStack stack : stacks) {
           stack = stack.copyWithCount(count);
@@ -175,7 +190,7 @@ public class MaterialRecipeCache {
   /* Material variants */
 
   /** Registers a material variant for the lookups. */
-  public static void addKnownVariant(MaterialVariantId variant) {
+  public static synchronized void addKnownVariant(MaterialVariantId variant) {
     if (RecipeCacheInvalidator.skipRegistration()) {
       return;
     }
@@ -188,47 +203,51 @@ public class MaterialRecipeCache {
 
   /** Gets a list of known material variants for the given material ID */
   public static Collection<MaterialVariantId> getVariants(MaterialId materialId) {
-    Collection<MaterialVariantId> variants = KNOWN_VARIANTS.get(materialId);
+    Collection<MaterialVariantId> variants = getKnownVariants(materialId);
     if (variants.isEmpty()) {
       return List.of(materialId);
     }
-    return Collections.unmodifiableCollection(variants);
+    return variants;
   }
 
   /** Gets a sorted list of all known non-hidden material variants */
   public static List<MaterialVariantId> getAllVariants() {
-    if (SORTED_VARIANTS == null) {
+    List<MaterialVariantId> sorted = SORTED_VARIANTS;
+    if (sorted == null) {
       Comparator<MaterialVariantId> variantSorter = Comparator.comparing(MaterialVariantId::getVariant);
-      SORTED_VARIANTS = MaterialRegistry.getInstance().getVisibleMaterials().stream()
+      sorted = MaterialRegistry.getInstance().getVisibleMaterials().stream()
         .flatMap(material -> {
           // if no variants are registered, just list the material itself; useful for uncraftable materials
           MaterialId id = material.getIdentifier();
-          Collection<MaterialVariantId> variants = KNOWN_VARIANTS.get(id);
+          Collection<MaterialVariantId> variants = getKnownVariants(id);
           if (variants.isEmpty()) {
             return Stream.of(id);
           }
           return variants.stream().sorted(variantSorter);
         }).toList();
+      SORTED_VARIANTS = sorted;
     }
-    return SORTED_VARIANTS;
+    return sorted;
   }
 
   /** Gets a sorted list of all known hidden material variants. Should not be directly displayed in recipes, rather added as a hidden input. */
   public static List<MaterialVariantId> getHiddenVariants() {
-    if (HIDDEN_VARIANTS == null) {
+    List<MaterialVariantId> hidden = HIDDEN_VARIANTS;
+    if (hidden == null) {
       Comparator<MaterialVariantId> variantSorter = Comparator.comparing(MaterialVariantId::getVariant);
-      HIDDEN_VARIANTS = MaterialRegistry.getInstance().getAllMaterials().stream()
+      hidden = MaterialRegistry.getInstance().getAllMaterials().stream()
         .filter(IMaterial::isHidden).sorted()
         .flatMap(material -> {
           // if no variants are registered, just list the material itself; useful for uncraftable materials
           MaterialId id = material.getIdentifier();
-          Collection<MaterialVariantId> variants = KNOWN_VARIANTS.get(id);
+          Collection<MaterialVariantId> variants = getKnownVariants(id);
           if (variants.isEmpty()) {
             return Stream.of(id);
           }
           return variants.stream().sorted(variantSorter);
         }).toList();
+      HIDDEN_VARIANTS = hidden;
     }
-    return HIDDEN_VARIANTS;
+    return hidden;
   }
 }

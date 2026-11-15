@@ -8,12 +8,15 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
+import slimeknights.mantle.data.loadable.common.IngredientLoadable;
+import slimeknights.mantle.recipe.helper.IngredientHelper;
 import slimeknights.mantle.recipe.helper.ItemOutput;
+import slimeknights.mantle.recipe.ingredient.EmptyIngredient;
 import slimeknights.tconstruct.library.modifiers.ModifierId;
 
 /** Builder for {@link MultilevelIncrementalModifierRecipe} */
 public class MultilevelIncrementalModifierRecipeBuilder extends AbstractMultilevelModifierRecipeBuilder<MultilevelIncrementalModifierRecipeBuilder> {
-  private Ingredient input = Ingredient.EMPTY;
+  private Ingredient input = EmptyIngredient.VANILLA;
   private int amountPerItem;
   private int neededPerLevel;
   private ItemOutput leftover = ItemOutput.EMPTY;
@@ -69,7 +72,7 @@ public class MultilevelIncrementalModifierRecipeBuilder extends AbstractMultilev
    * @return  Builder instance
    */
   public MultilevelIncrementalModifierRecipeBuilder setInput(TagKey<Item> tag, int amountPerItem, int neededPerLevel) {
-    return setInput(Ingredient.of(tag), amountPerItem, neededPerLevel);
+    return setInput(IngredientHelper.tag(tag), amountPerItem, neededPerLevel);
   }
 
 
@@ -96,13 +99,13 @@ public class MultilevelIncrementalModifierRecipeBuilder extends AbstractMultilev
 
   @Override
   public void save(RecipeOutput consumer, Identifier id) {
-    if (input == Ingredient.EMPTY) {
+    if (IngredientLoadable.isEmpty(input)) {
       throw new IllegalStateException("Must set input");
     }
     if (levels.isEmpty()) {
       throw new IllegalStateException("Must have at least 1 level");
     }
-    AdvancementHolder advancement = buildOptionalAdvancement(id, "modifiers");
-    consumer.accept(id, new MultilevelIncrementalModifierRecipe(id, input, amountPerItem, neededPerLevel, tools, maxToolSize, result, leftover, allowCrystal, levels, checkTraitLevel), advancement);
+    AdvancementHolder advancement = buildOptionalAdvancement(consumer, id, "modifiers");
+    consumer.accept(recipeKey(id), new MultilevelIncrementalModifierRecipe(id, input, amountPerItem, neededPerLevel, tools, maxToolSize, result, leftover, allowCrystal, levels, checkTraitLevel), advancement);
   }
 }

@@ -65,7 +65,7 @@ public class PartRecipeBuilder extends AbstractRecipeBuilder<PartRecipeBuilder> 
     if (this.pattern == null) {
       throw new IllegalStateException("recipe " + id + " has no pattern associated with it");
     }
-    AdvancementHolder advancementId = this.buildOptionalAdvancement(id, "parts");
-    consumerIn.accept(id, new PartRecipe(id, group, pattern, patternItem, cost, allowUncraftable, output, outputAmount), advancementId);
+    AdvancementHolder advancementId = this.buildOptionalAdvancement(consumerIn, id, "parts");
+    consumerIn.accept(recipeKey(id), new PartRecipe(id, group, pattern, patternItem, cost, allowUncraftable, output, outputAmount), advancementId);
   }
 }

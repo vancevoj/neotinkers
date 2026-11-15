@@ -10,6 +10,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import slimeknights.mantle.data.loadable.Loadables;
 import slimeknights.mantle.recipe.data.AbstractRecipeBuilder;
 import slimeknights.mantle.recipe.helper.ItemOutput;
+import slimeknights.tconstruct.common.recipe.LoadableFinishedRecipe;
 import slimeknights.tconstruct.library.materials.definition.MaterialId;
 
 /** Builder for {@link ItemPartRecipe} */
@@ -39,12 +40,12 @@ public class ItemPartRecipeBuilder extends AbstractRecipeBuilder<ItemPartRecipeB
 
   @Override
   public void save(RecipeOutput consumer) {
-    save(consumer, Loadables.ITEM.getKey(result.get().getItem()));
+    save(consumer, LoadableFinishedRecipe.getItemId(result));
   }
 
   @Override
   public void save(RecipeOutput consumer, Identifier id) {
-    AdvancementHolder advancementId = buildOptionalAdvancement(id, "parts");
-    consumer.accept(id, new ItemPartRecipe(id, materialId, pattern, patternItem, cost, result, titleKey), advancementId);
+    AdvancementHolder advancementId = buildOptionalAdvancement(consumer, id, "parts");
+    consumer.accept(recipeKey(id), new ItemPartRecipe(id, materialId, pattern, patternItem, cost, result, titleKey), advancementId);
   }
 }

@@ -2,11 +2,12 @@ package slimeknights.tconstruct.tools.recipe;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import slimeknights.mantle.data.loadable.field.ContextKey;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.data.predicate.IJsonPredicate;
+import slimeknights.mantle.recipe.helper.ItemOutput;
 import slimeknights.mantle.recipe.ingredient.SizedIngredient;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
@@ -30,7 +31,7 @@ public class ExtractModifierRecipe extends ModifierRemovalRecipe {
   /** Recipe loadable */
   public static final RecordLoadable<ExtractModifierRecipe> LOADER = RecordLoadable.create(ContextKey.ID.requiredField(), NAME_FIELD, TOOLS_FIELD, INPUTS_FIELD, LEFTOVERS_FIELD, MODIFIER_PREDICATE_FIELD, ExtractModifierRecipe::new);
 
-  public ExtractModifierRecipe(Identifier id, String name, SizedIngredient toolRequirements, List<SizedIngredient> inputs, List<ItemStack> leftovers, IJsonPredicate<ModifierId> modifierPredicate) {
+  public ExtractModifierRecipe(Identifier id, String name, SizedIngredient toolRequirements, List<SizedIngredient> inputs, List<ItemOutput> leftovers, IJsonPredicate<ModifierId> modifierPredicate) {
     super(id, name, toolRequirements, inputs, leftovers, modifierPredicate);
   }
 
@@ -75,7 +76,7 @@ public class ExtractModifierRecipe extends ModifierRemovalRecipe {
   }
 
   @Override
-  public RecipeSerializer<?> getSerializer() {
+  public RecipeSerializer<? extends Recipe<ITinkerableContainer>> getSerializer() {
     return TinkerModifiers.extractModifierSerializer.get();
   }
 }

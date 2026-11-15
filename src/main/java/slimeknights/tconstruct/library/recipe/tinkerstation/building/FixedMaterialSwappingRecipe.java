@@ -6,6 +6,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 import slimeknights.mantle.data.loadable.array.ArrayLoadable;
@@ -14,6 +15,7 @@ import slimeknights.mantle.data.loadable.field.ContextKey;
 import slimeknights.mantle.data.loadable.primitive.IntLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.recipe.IMultiRecipe;
+import slimeknights.mantle.recipe.helper.IngredientHelper;
 import slimeknights.mantle.recipe.ingredient.SizedIngredient;
 import slimeknights.tconstruct.library.client.materials.MaterialTooltipCache;
 import slimeknights.tconstruct.library.materials.MaterialRegistry;
@@ -138,7 +140,7 @@ public class FixedMaterialSwappingRecipe extends MaterialSwappingRecipe implemen
   }
 
   @Override
-  public RecipeSerializer<?> getSerializer() {
+  public RecipeSerializer<? extends Recipe<ITinkerStationContainer>> getSerializer() {
     return TinkerTables.fixedMaterialSwapping.get();
   }
 
@@ -150,15 +152,15 @@ public class FixedMaterialSwappingRecipe extends MaterialSwappingRecipe implemen
   @Override
   public List<IDisplayToolTinkering> getRecipes(RegistryAccess access) {
     if (multiRecipes == null) {
-      ItemStack[] tools = this.tools.getItems();
+      List<ItemStack> tools = IngredientHelper.getStacks(this.tools);
       MaterialVariant material = MaterialVariant.of(this.material);
       List<ItemStack> inputs = ingredient.getMatchingStacks();
       Component variantText = MaterialTooltipCache.getDisplayName(this.material);
       // need 1 recipe per index we can swap into
       multiRecipes = Arrays.stream(indices).filter(VALID_SLOT).<IDisplayToolTinkering>mapToObj(i -> {
         // for each index, use first as the material on input, desired material on output
-        List<ItemStack> withoutMaterial = Arrays.stream(tools).map(stack -> withMaterial(stack.copy(), i, MaterialVariant.of(ToolBuildHandler.getRenderMaterial(i)))).toList();
-        List<ItemStack> withMaterial = Arrays.stream(tools).map(stack -> withMaterial(stack.copy(), i, material)).toList();
+        List<ItemStack> withoutMaterial = tools.stream().map(stack -> withMaterial(stack.copy(), i, MaterialVariant.of(ToolBuildHandler.getRenderMaterial(i)))).toList();
+        List<ItemStack> withMaterial = tools.stream().map(stack -> withMaterial(stack.copy(), i, material)).toList();
         return new DisplayRecipe(variantText, i, inputs, withoutMaterial, withMaterial);
       }).toList();
     }

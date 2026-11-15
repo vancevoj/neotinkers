@@ -7,6 +7,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CraftingRecipe;
+import net.minecraft.world.item.crafting.PlacementInfo;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 
@@ -46,9 +47,24 @@ public interface IDisplayCraftingTinkering extends IDisplayToolTinkering, Crafti
     return true;
   }
 
-  @Override
+  /** Checks if this recipe fits in a crafting grid of the given size. Was part of {@link net.minecraft.world.item.crafting.Recipe} before 1.21.2. */
   default boolean canCraftInDimensions(int width, int height) {
     return getInputCount() + 1 < width * height;
+  }
+
+  @Override
+  default boolean showNotification() {
+    return false;
+  }
+
+  @Override
+  default String group() {
+    return "";
+  }
+
+  @Override
+  default PlacementInfo placementInfo() {
+    return PlacementInfo.NOT_PLACEABLE;
   }
 
 
@@ -64,18 +80,18 @@ public interface IDisplayCraftingTinkering extends IDisplayToolTinkering, Crafti
     return false;
   }
 
-  @Override
+  /** Gets the result of this recipe for display. Was part of {@link net.minecraft.world.item.crafting.Recipe} before 1.21.2. */
   default ItemStack getResultItem(HolderLookup.Provider access) {
     return ItemStack.EMPTY;
   }
 
   @Override
-  default ItemStack assemble(CraftingInput container, HolderLookup.Provider access) {
+  default ItemStack assemble(CraftingInput container) {
     return ItemStack.EMPTY;
   }
 
   @Override
-  default RecipeSerializer<?> getSerializer() {
+  default RecipeSerializer<? extends CraftingRecipe> getSerializer() {
     throw new UnsupportedOperationException();
   }
 }

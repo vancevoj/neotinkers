@@ -3,6 +3,7 @@ package slimeknights.tconstruct.library.recipe.worktable;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import slimeknights.mantle.recipe.ICommonRecipe;
@@ -21,7 +22,7 @@ import java.util.List;
  */
 public interface IModifierWorktableRecipe extends ICommonRecipe<ITinkerableContainer> {
   @Override
-  default RecipeType<?> getType() {
+  default RecipeType<? extends Recipe<ITinkerableContainer>> getType() {
     return TinkerRecipeTypes.MODIFIER_WORKTABLE.get();
   }
 

@@ -40,7 +40,7 @@ public class EnchantmentConvertingRecipeBuilder extends AbstractSizedIngredientR
     if (inputs.isEmpty()) {
       throw new IllegalStateException("Must have at least one input");
     }
-    AdvancementHolder advancement = buildOptionalAdvancement(id, "modifiers");
-    output.accept(id, new EnchantmentConvertingRecipe(id, name, inputs, matchBook, returnInput, modifierPredicate), advancement);
+    AdvancementHolder advancement = buildOptionalAdvancement(output, id, "modifiers");
+    output.accept(recipeKey(id), new EnchantmentConvertingRecipe(id, name, inputs, matchBook, returnInput, modifierPredicate), advancement);
   }
 }

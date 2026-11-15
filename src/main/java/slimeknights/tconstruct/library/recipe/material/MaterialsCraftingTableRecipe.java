@@ -1,5 +1,6 @@
 package slimeknights.tconstruct.library.recipe.material;
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import slimeknights.tconstruct.library.materials.definition.MaterialVariantId;
@@ -19,4 +20,16 @@ public interface MaterialsCraftingTableRecipe {
 
   /** Sets the output material for a single output recipe. */
   void setMaterial(ItemStack stack, MaterialVariantId material);
+
+  /** Gets the result of this recipe before materials are applied, for display. */
+  ItemStack getResultItem();
+
+  /**
+   * Gets the result of this recipe before materials are applied, for display.
+   * @deprecated use {@link #getResultItem()}, registries are no longer needed. Kept as the vanilla method was removed from recipes in 1.21.2.
+   */
+  @Deprecated
+  default ItemStack getResultItem(HolderLookup.Provider registries) {
+    return getResultItem();
+  }
 }

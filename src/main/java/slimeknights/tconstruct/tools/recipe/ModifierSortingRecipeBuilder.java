@@ -13,7 +13,7 @@ public class ModifierSortingRecipeBuilder extends AbstractSizedIngredientRecipeB
 
   @Override
   public void save(RecipeOutput output) {
-    save(output, BuiltInRegistries.ITEM.getKey((inputs.get(0).getMatchingStacks().get(0).getItem())));
+    save(output, BuiltInRegistries.ITEM.getKey(inputs.get(0).getIngredient().items().findFirst().orElseThrow().value()));
   }
 
   @Override
@@ -21,7 +21,7 @@ public class ModifierSortingRecipeBuilder extends AbstractSizedIngredientRecipeB
     if (inputs.isEmpty()) {
       throw new IllegalStateException("Must have at least one ingredient");
     }
-    AdvancementHolder advancement = buildOptionalAdvancement(id, "modifiers");
-    output.accept(id, new ModifierSortingRecipe(id, inputs), advancement);
+    AdvancementHolder advancement = buildOptionalAdvancement(output, id, "modifiers");
+    output.accept(recipeKey(id), new ModifierSortingRecipe(id, inputs), advancement);
   }
 }

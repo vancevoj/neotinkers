@@ -108,7 +108,7 @@ public class ModifierRecipeBuilder extends AbstractModifierRecipeBuilder<Modifie
     if (inputs.isEmpty() && !allowCrystal) {
       throw new IllegalStateException("Must have at least 1 input");
     }
-    AdvancementHolder advancement = buildOptionalAdvancement(id, "modifiers");
-    consumer.accept(id, new ModifierRecipe(id, inputs, tools, maxToolSize, result, ModifierEntry.VALID_LEVEL.range(minLevel, maxLevel), slots, allowCrystal, checkTraitLevel), advancement);
+    AdvancementHolder advancement = buildOptionalAdvancement(consumer, id, "modifiers");
+    consumer.accept(recipeKey(id), new ModifierRecipe(id, inputs, tools, maxToolSize, result, ModifierEntry.VALID_LEVEL.range(minLevel, maxLevel), slots, allowCrystal, checkTraitLevel), advancement);
   }
 }

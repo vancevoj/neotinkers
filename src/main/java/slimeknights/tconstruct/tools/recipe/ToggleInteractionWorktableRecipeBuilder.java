@@ -20,7 +20,7 @@ public class ToggleInteractionWorktableRecipeBuilder extends AbstractSizedIngred
 
   @Override
   public void save(RecipeOutput output) {
-    save(output, Loadables.ITEM.getKey(tools.getItems()[0].getItem()));
+    save(output, Loadables.ITEM.getKey(tools.items().findFirst().orElseThrow().value()));
   }
 
   @Override
@@ -28,7 +28,7 @@ public class ToggleInteractionWorktableRecipeBuilder extends AbstractSizedIngred
     if (inputs.isEmpty()) {
       throw new IllegalStateException("Must have at least one ingredient");
     }
-    AdvancementHolder advancement = buildOptionalAdvancement(id, "modifiers");
-    output.accept(id, new ToggleInteractionWorktableRecipe(id, tools, inputs), advancement);
+    AdvancementHolder advancement = buildOptionalAdvancement(output, id, "modifiers");
+    output.accept(recipeKey(id), new ToggleInteractionWorktableRecipe(id, tools, inputs), advancement);
   }
 }

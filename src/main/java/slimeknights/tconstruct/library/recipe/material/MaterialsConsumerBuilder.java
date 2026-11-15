@@ -4,8 +4,12 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementHolder;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderGetter;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.Registry;
 import net.minecraft.data.recipes.RecipeOutput;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraft.world.item.crafting.ShapelessRecipe;
@@ -17,6 +21,8 @@ import slimeknights.tconstruct.library.materials.definition.MaterialVariantId;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 /**
  * Special variant of {@link ConsumerWrapperBuilder} for {@link ShapedMaterialsRecipe} and {@link ShapelessMaterialsRecipe}.
@@ -64,7 +70,24 @@ public class MaterialsConsumerBuilder {
     }
 
     @Override
-    public void accept(Identifier id, Recipe<?> recipe, @Nullable AdvancementHolder advancement, ICondition... conditions) {
+    public <S> HolderGetter<S> lookup(ResourceKey<? extends Registry<? extends S>> key) {
+      return original.lookup(key);
+    }
+
+    @SuppressWarnings("deprecation")
+    @Deprecated
+    @Override
+    public <S> Stream<Holder.Reference<S>> listContextElements(ResourceKey<? extends Registry<? extends S>> key) {
+      return original.listContextElements(key);
+    }
+
+    @Override
+    public <S> Optional<HolderLookup<S>> holderLookup(ResourceKey<? extends Registry<? extends S>> registry) {
+      return original.holderLookup(registry);
+    }
+
+    @Override
+    public void accept(ResourceKey<Recipe<?>> id, Recipe<?> recipe, @Nullable AdvancementHolder advancement, ICondition... conditions) {
       Recipe<?> wrapped;
       if (partCount > 0) {
         // shapeless: wrap the vanilla shapeless recipe, the first partCount ingredients are the parts
@@ -85,9 +108,9 @@ public class MaterialsConsumerBuilder {
     }
 
     /** Logs a useful error before failing the conversion */
-    private static IllegalStateException error(Identifier id, Recipe<?> recipe, String type) {
-      TConstruct.LOG.error("Material consumer builder for {} expected a {} recipe but got {}", id, type, recipe.getClass().getName());
-      return new IllegalStateException("Material consumer builder for " + id + " expected a " + type + " recipe");
+    private static IllegalStateException error(ResourceKey<Recipe<?>> id, Recipe<?> recipe, String type) {
+      TConstruct.LOG.error("Material consumer builder for {} expected a {} recipe but got {}", id.identifier(), type, recipe.getClass().getName());
+      return new IllegalStateException("Material consumer builder for " + id.identifier() + " expected a " + type + " recipe");
     }
   }
 }

@@ -78,7 +78,7 @@ public class ToolBuildingRecipeBuilder extends AbstractRecipeBuilder<ToolBuildin
 
   @Override
   public void save(RecipeOutput consumerIn, Identifier id) {
-    AdvancementHolder advancementId = this.buildOptionalAdvancement(id, "parts");
+    AdvancementHolder advancementId = this.buildOptionalAdvancement(consumerIn, id, "parts");
     if (tippedModifier != null) {
       if (extraMaterials.isEmpty()) {
         throw new IllegalArgumentException("Must have at least 1 material for modifier transform");
@@ -86,9 +86,9 @@ public class ToolBuildingRecipeBuilder extends AbstractRecipeBuilder<ToolBuildin
       if (extraRequirements.size() != 1) {
         throw new IllegalArgumentException("Must have exactly one ingredient for modifier transform");
       }
-      consumerIn.accept(id, new TippedToolTransformRecipe(id, group, output, layoutSlot, extraRequirements.get(0), extraMaterials, tippedModifier), advancementId);
+      consumerIn.accept(recipeKey(id), new TippedToolTransformRecipe(id, group, output, layoutSlot, extraRequirements.get(0), extraMaterials, tippedModifier), advancementId);
     } else {
-      consumerIn.accept(id, new ToolBuildingRecipe(id, group, output, outputSize, layoutSlot, extraRequirements, partsOverride, extraMaterials), advancementId);
+      consumerIn.accept(recipeKey(id), new ToolBuildingRecipe(id, group, output, outputSize, layoutSlot, extraRequirements, partsOverride, extraMaterials), advancementId);
     }
   }
 }

@@ -50,7 +50,7 @@ public class SwappableModifierRecipeBuilder extends ModifierRecipeBuilder {
     if (inputs.isEmpty()) {
       throw new IllegalStateException("Must have at least 1 input");
     }
-    AdvancementHolder advancement = buildOptionalAdvancement(id, "modifiers");
-    consumer.accept(id, new SwappableModifierRecipe(id, inputs, tools, maxToolSize, result, value, variantFormatter, slots, allowCrystal), advancement);
+    AdvancementHolder advancement = buildOptionalAdvancement(consumer, id, "modifiers");
+    consumer.accept(recipeKey(id), new SwappableModifierRecipe(id, inputs, tools, maxToolSize, result, value, variantFormatter, slots, allowCrystal), advancement);
   }
 }

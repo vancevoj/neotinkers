@@ -5,6 +5,7 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
@@ -12,15 +13,16 @@ import slimeknights.mantle.data.loadable.common.IngredientLoadable;
 import slimeknights.mantle.data.loadable.field.ContextKey;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.recipe.ICustomOutputRecipe;
+import slimeknights.mantle.recipe.helper.IngredientHelper;
 import slimeknights.mantle.recipe.helper.ItemOutput;
 import slimeknights.mantle.recipe.helper.LoadableRecipeSerializer;
+import slimeknights.mantle.recipe.ingredient.EmptyIngredient;
 import slimeknights.tconstruct.library.materials.definition.MaterialId;
 import slimeknights.tconstruct.library.materials.definition.MaterialVariant;
 import slimeknights.tconstruct.library.materials.definition.MaterialVariantId;
 import slimeknights.tconstruct.library.recipe.TinkerRecipeTypes;
 import slimeknights.tconstruct.tables.TinkerTables;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -29,7 +31,7 @@ import java.util.List;
 public class MaterialRecipe implements ICustomOutputRecipe<IMaterialRecipeContainer>, IMaterialValue, IDisplayMaterialRecipe {
   /** Empty material instance for the cache */
   @SuppressWarnings("removal")
-  public static final MaterialRecipe EMPTY = new MaterialRecipe(Identifier.parse("missingno"), "", Ingredient.EMPTY, 0, 0, MaterialId.UNKNOWN, ItemOutput.EMPTY);
+  public static final MaterialRecipe EMPTY = new MaterialRecipe(Identifier.parse("missingno"), "", EmptyIngredient.VANILLA, 0, 0, MaterialId.UNKNOWN, ItemOutput.EMPTY);
   public static final RecordLoadable<MaterialRecipe> LOADER = RecordLoadable.create(
     ContextKey.ID.requiredField(),
     LoadableRecipeSerializer.RECIPE_GROUP,
@@ -82,17 +84,12 @@ public class MaterialRecipe implements ICustomOutputRecipe<IMaterialRecipeContai
   /* Basic */
 
   @Override
-  public RecipeType<?> getType() {
+  public RecipeType<? extends Recipe<IMaterialRecipeContainer>> getType() {
     return TinkerRecipeTypes.MATERIAL.get();
   }
 
   @Override
-  public ItemStack getToastSymbol() {
-    return new ItemStack(TinkerTables.partBuilder);
-  }
-
-  @Override
-  public RecipeSerializer<?> getSerializer() {
+  public RecipeSerializer<? extends Recipe<IMaterialRecipeContainer>> getSerializer() {
     return TinkerTables.materialRecipeSerializer.get();
   }
 
@@ -114,9 +111,9 @@ public class MaterialRecipe implements ICustomOutputRecipe<IMaterialRecipeContai
     return !material.isUnknown() && this.ingredient.test(inv.getStack());
   }
 
-  @Override
+  /** Gets the list of ingredients in this recipe. Was part of {@link Recipe} before 1.21.2. */
   public NonNullList<Ingredient> getIngredients() {
-    return NonNullList.of(Ingredient.EMPTY, ingredient);
+    return NonNullList.of(EmptyIngredient.VANILLA, ingredient);
   }
 
   /** Cache of the display items list */
@@ -127,9 +124,9 @@ public class MaterialRecipe implements ICustomOutputRecipe<IMaterialRecipeContai
   public List<ItemStack> getDisplayItems() {
     if (displayItems == null) {
       if (needed > 1) {
-        displayItems = Arrays.stream(ingredient.getItems()).map(stack -> stack.copyWithCount(needed)).toList();
+        displayItems = IngredientHelper.getStacks(ingredient).stream().map(stack -> stack.copyWithCount(needed)).toList();
       } else {
-        displayItems = List.of(ingredient.getItems());
+        displayItems = List.copyOf(IngredientHelper.getStacks(ingredient));
       }
     }
     return displayItems;

@@ -100,7 +100,7 @@ public class MultilevelModifierRecipeBuilder extends AbstractMultilevelModifierR
     if (levels.isEmpty()) {
       throw new IllegalStateException("Must have at least 1 level");
     }
-    AdvancementHolder advancement = buildOptionalAdvancement(id, "modifiers");
-    consumer.accept(id, new MultilevelModifierRecipe(id, inputs, tools, maxToolSize, result, allowCrystal, levels, checkTraitLevel), advancement);
+    AdvancementHolder advancement = buildOptionalAdvancement(consumer, id, "modifiers");
+    consumer.accept(recipeKey(id), new MultilevelModifierRecipe(id, inputs, tools, maxToolSize, result, allowCrystal, levels, checkTraitLevel), advancement);
   }
 }

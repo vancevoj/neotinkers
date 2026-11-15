@@ -5,6 +5,7 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 import slimeknights.mantle.client.SafeClientAccess;
@@ -155,7 +156,7 @@ public interface IDisplayPartBuilderRecipe extends IPartBuilderRecipe {
 
     @Override
     @Deprecated(forRemoval = true)
-    default RecipeSerializer<?> getSerializer() {
+    default RecipeSerializer<? extends Recipe<IPartBuilderContainer>> getSerializer() {
       throw new UnsupportedOperationException();
     }
   }

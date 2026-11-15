@@ -9,6 +9,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import slimeknights.mantle.recipe.helper.IngredientHelper;
 import slimeknights.tconstruct.library.materials.definition.MaterialVariant;
 import slimeknights.tconstruct.library.materials.definition.MaterialVariantId;
 
@@ -111,7 +112,7 @@ public class DisplayPartRecipe implements IDisplayPartBuilderRecipe.DisplayOnly 
 
     /** Sets the pattern items to the given ingredient */
     public Builder patternItem(Ingredient ingredient) {
-      return patternItems(List.of(ingredient.getItems()));
+      return patternItems(IngredientHelper.getStacks(ingredient));
     }
 
     /** Sets the material item to a single item */

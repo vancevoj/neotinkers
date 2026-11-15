@@ -13,6 +13,7 @@ import slimeknights.mantle.recipe.helper.ItemOutput;
 import slimeknights.mantle.recipe.ingredient.EntityIngredient;
 
 import javax.annotation.Nullable;
+import slimeknights.tconstruct.common.recipe.LoadableFinishedRecipe;
 
 /** Builder for entity melting recipes */
 @Setter
@@ -48,16 +49,16 @@ public class SeveringRecipeBuilder extends AbstractRecipeBuilder<SeveringRecipeB
 
   @Override
   public void save(RecipeOutput consumer) {
-    save(consumer, Loadables.ITEM.getKey(output.get().getItem()));
+    save(consumer, LoadableFinishedRecipe.getItemId(output));
   }
 
   @Override
   public void save(RecipeOutput consumer, Identifier id) {
-    AdvancementHolder advancement = this.buildOptionalAdvancement(id, "severing");
+    AdvancementHolder advancement = this.buildOptionalAdvancement(consumer, id, "severing");
     if (childOutput != null) {
-      consumer.accept(id, new AgeableSeveringRecipe(id, ingredient, output, childOutput, baseChance, lootingBonus), advancement);
+      consumer.accept(recipeKey(id), new AgeableSeveringRecipe(id, ingredient, output, childOutput, baseChance, lootingBonus), advancement);
     } else {
-      consumer.accept(id, new SeveringRecipe(id, ingredient, output, baseChance, lootingBonus), advancement);
+      consumer.accept(recipeKey(id), new SeveringRecipe(id, ingredient, output, baseChance, lootingBonus), advancement);
     }
   }
 }

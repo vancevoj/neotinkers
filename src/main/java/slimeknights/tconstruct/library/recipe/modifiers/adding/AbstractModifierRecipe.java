@@ -14,6 +14,7 @@ import slimeknights.mantle.data.loadable.common.IngredientLoadable;
 import slimeknights.mantle.data.loadable.field.LoadableField;
 import slimeknights.mantle.data.loadable.primitive.BooleanLoadable;
 import slimeknights.mantle.data.loadable.primitive.IntLoadable;
+import slimeknights.mantle.recipe.helper.IngredientHelper;
 import slimeknights.tconstruct.library.json.IntRange;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
@@ -39,7 +40,6 @@ import slimeknights.tconstruct.tools.TinkerModifiers;
 import slimeknights.tconstruct.tools.item.ModifierCrystalItem;
 
 import javax.annotation.Nullable;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -131,7 +131,7 @@ public abstract class AbstractModifierRecipe implements ITinkerStationRecipe, ID
   /** Gets or builds the list of tool inputs */
   protected List<ItemStack> getToolInputs() {
     if (toolInputs == null) {
-      Stream<ItemStack> stream = Arrays.stream(this.toolRequirement.getItems());
+      Stream<ItemStack> stream = IngredientHelper.getStacks(this.toolRequirement).stream();
       // if we check the trait level, then filter out any tools that would never be able to use this recipe
       if (checkTraitLevel) {
         ModifierId result = this.result.getId();
@@ -221,8 +221,8 @@ public abstract class AbstractModifierRecipe implements ITinkerStationRecipe, ID
     if (resultSlots == null) {
       // we need to decide a tool for the dummy stack. Could just use air, but might as well use a tool that shows up
       // on the odd chance the behavior differs per tool this might be wrong, but practically that just affects ancient tools on input right now
-      ItemStack[] tools = toolRequirement.getItems();
-      resultSlots = getResultSlots(getDisplayResult(), tools.length > 0 ? tools[0].getItem() : Items.AIR, "");
+      List<ItemStack> tools = IngredientHelper.getStacks(toolRequirement);
+      resultSlots = getResultSlots(getDisplayResult(), !tools.isEmpty() ? tools.getFirst().getItem() : Items.AIR, "");
     }
     return resultSlots;
   }

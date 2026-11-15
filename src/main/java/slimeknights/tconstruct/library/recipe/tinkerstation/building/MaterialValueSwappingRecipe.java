@@ -5,12 +5,14 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import slimeknights.mantle.data.loadable.field.ContextKey;
 import slimeknights.mantle.data.loadable.primitive.IntLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.data.predicate.IJsonPredicate;
 import slimeknights.mantle.recipe.IMultiRecipe;
+import slimeknights.mantle.recipe.helper.IngredientHelper;
 import slimeknights.mantle.recipe.ingredient.SizedIngredient;
 import slimeknights.tconstruct.library.json.predicate.material.MaterialPredicate;
 import slimeknights.tconstruct.library.materials.definition.MaterialVariant;
@@ -20,6 +22,7 @@ import slimeknights.tconstruct.library.recipe.material.MaterialRecipe;
 import slimeknights.tconstruct.library.recipe.material.MaterialRecipeCache;
 import slimeknights.tconstruct.library.recipe.tinkerstation.IDisplayToolTinkering;
 import slimeknights.tconstruct.library.recipe.tinkerstation.IMutableTinkerStationContainer;
+import slimeknights.tconstruct.library.recipe.tinkerstation.ITinkerStationContainer;
 import slimeknights.tconstruct.library.tools.definition.module.material.ToolMaterialHook;
 import slimeknights.tconstruct.library.tools.helper.ToolBuildHandler;
 import slimeknights.tconstruct.library.tools.item.IModifiable;
@@ -69,7 +72,7 @@ public class MaterialValueSwappingRecipe extends MaterialIndexSwappingRecipe imp
   }
 
   @Override
-  public RecipeSerializer<?> getSerializer() {
+  public RecipeSerializer<? extends Recipe<ITinkerStationContainer>> getSerializer() {
     return TinkerTables.materialValueSwapping.get();
   }
 
@@ -102,14 +105,14 @@ public class MaterialValueSwappingRecipe extends MaterialIndexSwappingRecipe imp
       for (MaterialVariantId material : MaterialRecipeCache.getAllVariants()) {
         if (this.material.matches(material)) {
           List<ItemStack> newStacks = MaterialRecipeCache.getRecipes(material).stream()
-            .flatMap(recipe -> Arrays.stream(recipe.getIngredient().getItems())
+            .flatMap(recipe -> IngredientHelper.getStacks(recipe.getIngredient()).stream()
               .map(stack -> stack.copyWithCount(recipe.getItemsUsed(cost)))).toList();
           materialStacks.add(new MaterialStacks(MaterialVariant.of(material), newStacks));
         }
       }
       // final recipes: 1 per tool and 1 per part in the tool
       // for most usages, this will be just 1 recipe
-      multiRecipes = Arrays.stream(tools.getItems()).<IDisplayToolTinkering>flatMap(tool -> {
+      multiRecipes = IngredientHelper.getStacks(tools).stream().<IDisplayToolTinkering>flatMap(tool -> {
         List<MaterialStatsId> statTypes = ToolMaterialHook.stats(IModifiable.getToolDefinition(tool.getItem()));
         return Arrays.stream(indices).filter(VALID_SLOT).filter(i -> i < statTypes.size()).mapToObj(i -> {
           MaterialStatsId statType = statTypes.get(i);

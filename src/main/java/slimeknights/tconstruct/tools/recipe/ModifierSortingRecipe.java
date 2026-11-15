@@ -3,6 +3,7 @@ package slimeknights.tconstruct.tools.recipe;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 import slimeknights.mantle.data.loadable.ErrorFactory;
@@ -135,7 +136,7 @@ public class ModifierSortingRecipe extends AbstractWorktableRecipe {
   }
 
   @Override
-  public RecipeSerializer<?> getSerializer() {
+  public RecipeSerializer<? extends Recipe<ITinkerableContainer>> getSerializer() {
     return TinkerModifiers.modifierSortingSerializer.get();
   }
 }

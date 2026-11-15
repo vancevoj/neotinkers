@@ -7,6 +7,8 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.golem.SnowGolem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeInput;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.block.Blocks;
 import slimeknights.mantle.data.loadable.field.ContextKey;
@@ -25,7 +27,7 @@ public class SnowGolemBeheadingRecipe extends SeveringRecipe {
   }
 
   @Override
-  public RecipeSerializer<?> getSerializer() {
+  public RecipeSerializer<? extends Recipe<RecipeInput>> getSerializer() {
     return TinkerModifiers.snowGolemBeheadingSerializer.get();
   }
 

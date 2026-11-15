@@ -10,6 +10,8 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
 import slimeknights.mantle.recipe.data.AbstractRecipeBuilder;
+import slimeknights.mantle.recipe.helper.IngredientHelper;
+import slimeknights.mantle.recipe.ingredient.EmptyIngredient;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierId;
 import slimeknights.tconstruct.library.recipe.modifiers.ModifierSalvage;
@@ -27,7 +29,7 @@ public abstract class AbstractMultilevelModifierRecipeBuilder<T extends Abstract
   protected final ModifierId result;
   protected final List<LevelEntry> levels = new ArrayList<>();
   protected boolean allowCrystal = true;
-  protected Ingredient tools = Ingredient.EMPTY;
+  protected Ingredient tools = EmptyIngredient.VANILLA;
   protected int maxToolSize = ITinkerStationRecipe.DEFAULT_TOOL_STACK_SIZE;
   protected boolean checkTraitLevel = false;
 
@@ -61,7 +63,7 @@ public abstract class AbstractMultilevelModifierRecipeBuilder<T extends Abstract
    * @return  Builder instance
    */
   public T setTools(TagKey<Item> tag) {
-    return this.setTools(Ingredient.of(tag));
+    return this.setTools(IngredientHelper.tag(tag));
   }
 
 
@@ -150,7 +152,7 @@ public abstract class AbstractMultilevelModifierRecipeBuilder<T extends Abstract
     for (LevelEntry levelEntry : levels) {
       if (levelEntry.slots() != null) {
         Identifier salvageId = id.withSuffix("_level_" + levelEntry.level().min());
-        consumer.accept(salvageId, new ModifierSalvage(
+        consumer.accept(recipeKey(salvageId), new ModifierSalvage(
           salvageId,
           tools, maxToolSize, result, levelEntry.level(), levelEntry.slots()), (AdvancementHolder) null);
       }

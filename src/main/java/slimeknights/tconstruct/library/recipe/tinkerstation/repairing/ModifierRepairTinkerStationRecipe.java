@@ -12,11 +12,13 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 import slimeknights.mantle.data.loadable.field.ContextKey;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.recipe.IMultiRecipe;
+import slimeknights.mantle.recipe.helper.IngredientHelper;
 import slimeknights.mantle.util.RegistryHelper;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.TinkerTags;
@@ -129,7 +131,7 @@ public class ModifierRepairTinkerStationRecipe implements ITinkerStationRecipe, 
   }
 
   @Override
-  public RecipeSerializer<?> getSerializer() {
+  public RecipeSerializer<? extends Recipe<ITinkerStationContainer>> getSerializer() {
     return TinkerModifiers.modifierRepair.get();
   }
 
@@ -166,7 +168,7 @@ public class ModifierRepairTinkerStationRecipe implements ITinkerStationRecipe, 
       }
       this.tooltip = tooltip;
       this.variant = Component.translatable(KEY_AMOUNT, repairAmount);
-      this.inputs = List.of(recipe.getIngredient().getItems());
+      this.inputs = List.copyOf(IngredientHelper.getStacks(recipe.getIngredient()));
 
       // set durability on each tool to 250, covers most instances
       CompoundTag stats = StatsNBT.builder().set(ToolStats.DURABILITY, 250).build().serializeToNBT();

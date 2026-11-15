@@ -4,11 +4,13 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 import slimeknights.mantle.data.loadable.field.ContextKey;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.recipe.IMultiRecipe;
+import slimeknights.mantle.recipe.helper.IngredientHelper;
 import slimeknights.mantle.recipe.ingredient.SizedIngredient;
 import slimeknights.tconstruct.library.materials.IMaterialRegistry;
 import slimeknights.tconstruct.library.materials.MaterialRegistry;
@@ -31,7 +33,6 @@ import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.library.tools.part.IToolPart;
 import slimeknights.tconstruct.tables.TinkerTables;
 
-import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Collection;
 import java.util.List;
@@ -136,7 +137,7 @@ public class TinkerStationPartSwapping extends MaterialSwappingRecipe implements
   }
 
   @Override
-  public RecipeSerializer<?> getSerializer() {
+  public RecipeSerializer<? extends Recipe<ITinkerStationContainer>> getSerializer() {
     return TinkerTables.tinkerStationPartSwappingSerializer.get();
   }
 
@@ -149,7 +150,7 @@ public class TinkerStationPartSwapping extends MaterialSwappingRecipe implements
     if (multiRecipes == null) {
       IMaterialRegistry registry = MaterialRegistry.getInstance();
       Collection<IMaterial> materials = registry.getVisibleMaterials();
-      multiRecipes = Arrays.stream(tools.getItems()).flatMap(stack -> {
+      multiRecipes = IngredientHelper.getStacks(tools).stream().flatMap(stack -> {
         ToolStack tool = ToolStack.from(stack);
         List<IToolPart> parts = ToolPartsHook.parts(tool.getDefinition());
         // JEI only shows up to 5 slots

@@ -10,6 +10,8 @@ import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeInput;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import slimeknights.mantle.recipe.data.AbstractRecipeBuilder;
 import slimeknights.mantle.recipe.helper.ItemOutput;
@@ -47,8 +49,8 @@ public class SpecialSeveringRecipeBuilder extends AbstractRecipeBuilder<SpecialS
 
   @Override
   public void save(RecipeOutput output, Identifier id) {
-    AdvancementHolder advancement = buildOptionalAdvancement(id, "modifier");
-    output.accept(id, new Finished(id, baseChance, lootingBonus), advancement);
+    AdvancementHolder advancement = buildOptionalAdvancement(output, id, "modifier");
+    output.accept(recipeKey(id), new Finished(id, baseChance, lootingBonus), advancement);
   }
 
   /**
@@ -62,7 +64,7 @@ public class SpecialSeveringRecipeBuilder extends AbstractRecipeBuilder<SpecialS
     }
 
     @Override
-    public RecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<? extends Recipe<RecipeInput>> getSerializer() {
       return serializer;
     }
   }

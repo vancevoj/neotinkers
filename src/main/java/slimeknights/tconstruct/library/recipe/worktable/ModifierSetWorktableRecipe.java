@@ -8,6 +8,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import slimeknights.mantle.data.loadable.Loadables;
 import slimeknights.mantle.data.loadable.field.ContextKey;
@@ -44,7 +45,11 @@ public class ModifierSetWorktableRecipe extends AbstractWorktableRecipe {
   /** Message to display if there are no matching modifiers on the tool */
   public static final Component NO_MATCHES = TConstruct.makeTranslation("recipe", "modifier_set_worktable.empty");
   /** Logic to fetch a list of strings from the persistent data */
-  public static final BiFunction<CompoundTag, String, ListTag> LIST_GETTER = (tag, name) -> tag.getList(name, Tag.TAG_STRING);
+  public static final BiFunction<CompoundTag, String, ListTag> LIST_GETTER = (tag, name) -> {
+    // lists may be heterogeneous since 1.21.5, treat a list that does not contain strings as missing like before
+    ListTag list = tag.getListOrEmpty(name);
+    return list.isEmpty() || list.get(0) instanceof StringTag ? list : new ListTag();
+  };
   /** Loader instance */
   public static final RecordLoadable<ModifierSetWorktableRecipe> LOADER = RecordLoadable.create(
     ContextKey.ID.requiredField(),
@@ -140,13 +145,13 @@ public class ModifierSetWorktableRecipe extends AbstractWorktableRecipe {
   }
 
   @Override
-  public RecipeSerializer<?> getSerializer() {
+  public RecipeSerializer<? extends Recipe<ITinkerableContainer>> getSerializer() {
     return TinkerModifiers.modifierSetWorktableSerializer.get();
   }
 
   /** Gets the set of modifiers in persistent data at the given key */
   public static Set<ModifierId> getModifierSet(IModDataView modData, Identifier key) {
-    return modData.get(key, LIST_GETTER).stream().map(tag -> ModifierId.tryParse(tag.getAsString())).filter(Objects::nonNull).collect(Collectors.toSet());
+    return modData.get(key, LIST_GETTER).stream().map(tag -> tag.asString().map(ModifierId::tryParse).orElse(null)).filter(Objects::nonNull).collect(Collectors.toSet());
   }
 
   /** Checks if the given modifier is in the set. Faster to use {@link #getModifierSet(IModDataView, Identifier)} for multiple consecutive queries */
@@ -162,7 +167,7 @@ public class ModifierSetWorktableRecipe extends AbstractWorktableRecipe {
     String modifierStr = modifier.toString();
     Iterator<Tag> iterator = list.iterator();
     while (iterator.hasNext()) {
-      if (modifierStr.equals(iterator.next().getAsString())) {
+      if (modifierStr.equals(iterator.next().asString().orElse(null))) {
         if (remove) {
           iterator.remove();
         }

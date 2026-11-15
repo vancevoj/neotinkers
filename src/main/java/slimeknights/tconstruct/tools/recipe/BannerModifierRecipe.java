@@ -16,6 +16,7 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BannerPattern;
@@ -25,6 +26,8 @@ import slimeknights.mantle.data.loadable.common.IngredientLoadable;
 import slimeknights.mantle.data.loadable.field.ContextKey;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.recipe.IMultiRecipe;
+import slimeknights.mantle.recipe.helper.IngredientHelper;
+import slimeknights.mantle.recipe.ingredient.EmptyIngredient;
 import slimeknights.mantle.util.RegistryHelper;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.TinkerTags;
@@ -54,7 +57,7 @@ public class BannerModifierRecipe implements ITinkerStationRecipe, IMultiRecipe<
   private static final RecipeResult<LazyToolStack> NO_PATTERNS = RecipeResult.failure(TConstruct.makeTranslationKey("recipe", "banner.clear.no_patterns"));
   public static final RecordLoadable<BannerModifierRecipe> LOADER = RecordLoadable.create(
     ContextKey.ID.requiredField(),
-    IngredientLoadable.ALLOW_EMPTY.defaultField("clear_input", Ingredient.EMPTY, false, r -> r.clearInput),
+    IngredientLoadable.ALLOW_EMPTY.defaultField("clear_input", EmptyIngredient.VANILLA, false, r -> r.clearInput),
     BannerModifierRecipe::new);
 
   @Getter
@@ -69,7 +72,7 @@ public class BannerModifierRecipe implements ITinkerStationRecipe, IMultiRecipe<
 
   @Deprecated(forRemoval = true)
   public BannerModifierRecipe(Identifier id) {
-    this(id, Ingredient.EMPTY);
+    this(id, EmptyIngredient.VANILLA);
   }
 
   @Override
@@ -132,7 +135,7 @@ public class BannerModifierRecipe implements ITinkerStationRecipe, IMultiRecipe<
       return RecipeResult.pass();
     }
     // remove the dye if clear
-    if (clearInput != Ingredient.EMPTY) {
+    if (!IngredientLoadable.isEmpty(clearInput)) {
       for (int i = 0; i < inv.getInputCount(); i++) {
         ItemStack stack = inv.getInput(i);
         if (!stack.isEmpty() && clearInput.test(stack)) {
@@ -169,7 +172,7 @@ public class BannerModifierRecipe implements ITinkerStationRecipe, IMultiRecipe<
       for (BannerPatternLayers.Layer layer : layers.layers()) {
         CompoundTag tag = new CompoundTag();
         // store the pattern as its registry path, matching the convention used for the base pattern in BannerModule
-        tag.putString("Pattern", layer.pattern().unwrapKey().map(key -> key.location().getPath()).orElse(""));
+        tag.putString("Pattern", layer.pattern().unwrapKey().map(key -> key.identifier().getPath()).orElse(""));
         tag.putInt("Color", layer.color().getId());
         patterns.add(tag);
       }
@@ -178,7 +181,7 @@ public class BannerModifierRecipe implements ITinkerStationRecipe, IMultiRecipe<
   }
 
   @Override
-  public RecipeSerializer<?> getSerializer() {
+  public RecipeSerializer<? extends Recipe<ITinkerStationContainer>> getSerializer() {
     return TinkerModifiers.bannerModifierSerializer.get();
   }
 
@@ -217,16 +220,16 @@ public class BannerModifierRecipe implements ITinkerStationRecipe, IMultiRecipe<
         displayRecipes = List.of();
       } else {
         Identifier id = getId();
-        List<IDisplayModifierRecipe> recipes = new ArrayList<>(clearInput != Ingredient.EMPTY ? 2 : 1);
+        List<IDisplayModifierRecipe> recipes = new ArrayList<>(!IngredientLoadable.isEmpty(clearInput) ? 2 : 1);
         // create standard recipe
         recipes.add(new DisplayRecipe(id, toolInputs, banners, List.of()));
         // if we have an ingredient that makes it clear, add the clear recipe
-        if (clearInput != Ingredient.EMPTY) {
+        if (!IngredientLoadable.isEmpty(clearInput)) {
           // we want a pattern on it to make it more clear what it does
           // but put a white pattern on the black banner for visibility
           // 1.21: banner patterns are a data driven registry, so look up the cross through the registry access
           BannerPatternLayers patterns, patternsBlack;
-          Holder<BannerPattern> cross = access.lookupOrThrow(Registries.BANNER_PATTERN).getHolder(BannerPatterns.CROSS).orElse(null);
+          Holder<BannerPattern> cross = access.lookupOrThrow(Registries.BANNER_PATTERN).get(BannerPatterns.CROSS).orElse(null);
           if (cross != null) {
             patterns = createDisplayPatterns(cross, DyeColor.BLACK);
             patternsBlack = createDisplayPatterns(cross, DyeColor.WHITE);
@@ -243,7 +246,7 @@ public class BannerModifierRecipe implements ITinkerStationRecipe, IMultiRecipe<
             }
             return stack;
           }).toList();
-          recipes.add(new DisplayRecipe(id, toolInputs, bannersWithPattern, List.of(clearInput.getItems())));
+          recipes.add(new DisplayRecipe(id, toolInputs, bannersWithPattern, IngredientHelper.getStacks(clearInput)));
         }
         displayRecipes = List.copyOf(recipes);
       }

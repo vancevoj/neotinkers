@@ -5,12 +5,14 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import slimeknights.mantle.data.loadable.field.ContextKey;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.recipe.IMultiRecipe;
+import slimeknights.mantle.recipe.helper.IngredientHelper;
 import slimeknights.mantle.recipe.ingredient.SizedIngredient;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.materials.IMaterialRegistry;
@@ -38,7 +40,6 @@ import slimeknights.tconstruct.library.tools.stat.ToolStats;
 import slimeknights.tconstruct.tables.TinkerTables;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Collection;
 import java.util.List;
@@ -137,7 +138,7 @@ public class ToolMaterialSwappingRecipe extends MaterialSwappingRecipe implement
   }
 
   @Override
-  public RecipeSerializer<?> getSerializer() {
+  public RecipeSerializer<? extends Recipe<ITinkerStationContainer>> getSerializer() {
     return TinkerTables.toolMaterialSwapping.get();
   }
 
@@ -150,7 +151,7 @@ public class ToolMaterialSwappingRecipe extends MaterialSwappingRecipe implement
     if (multiRecipes == null) {
       IMaterialRegistry registry = MaterialRegistry.getInstance();
       Collection<IMaterial> materials = registry.getVisibleMaterials();
-      multiRecipes = Arrays.stream(tools.getItems()).flatMap(stack -> {
+      multiRecipes = IngredientHelper.getStacks(tools).stream().flatMap(stack -> {
         ToolStack tool = ToolStack.from(stack);
         List<MaterialStatsId> stats = ToolMaterialHook.stats(tool.getDefinition());
         if (stats.size() > MAX_SLOTS) {

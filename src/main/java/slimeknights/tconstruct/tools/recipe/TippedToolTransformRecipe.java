@@ -8,11 +8,13 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import slimeknights.mantle.data.loadable.Loadables;
 import slimeknights.mantle.data.loadable.common.IngredientLoadable;
 import slimeknights.mantle.data.loadable.field.ContextKey;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
+import slimeknights.mantle.recipe.helper.IngredientHelper;
 import slimeknights.mantle.recipe.helper.LoadableRecipeSerializer;
 import slimeknights.tconstruct.library.materials.definition.MaterialVariantId;
 import slimeknights.tconstruct.library.modifiers.ModifierId;
@@ -26,7 +28,6 @@ import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.tools.TinkerModifiers;
 
 import javax.annotation.Nullable;
-import java.util.Arrays;
 import java.util.List;
 
 /** Recipe for transforming tipped arrows into a tool */
@@ -47,7 +48,7 @@ public class TippedToolTransformRecipe extends ToolBuildingRecipe {
   }
 
   @Override
-  public RecipeSerializer<?> getSerializer() {
+  public RecipeSerializer<? extends Recipe<ITinkerStationContainer>> getSerializer() {
     return TinkerModifiers.tippedToolTransformRecipeSerializer.get();
   }
 
@@ -82,7 +83,7 @@ public class TippedToolTransformRecipe extends ToolBuildingRecipe {
   public List<ItemStack> getDisplayOutput() {
     if (displayOutput == null) {
       ItemStack result = super.getDisplayOutput().get(0);
-      displayOutput = Arrays.stream(ingredients.get(0).getItems())
+      displayOutput = IngredientHelper.getStacks(ingredients.get(0)).stream()
         .map(stack -> {
           String potion = getPotionId(stack);
           if (potion != null) {

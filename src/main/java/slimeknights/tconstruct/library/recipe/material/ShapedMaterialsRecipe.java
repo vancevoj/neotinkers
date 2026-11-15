@@ -4,15 +4,16 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import lombok.Getter;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.core.NonNullList;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CraftingInput;
+import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraft.world.item.crafting.ShapedRecipePattern;
@@ -34,6 +35,25 @@ import java.util.Map;
  * {@link slimeknights.tconstruct.library.recipe.ingredient.MaterialValueIngredient} to set the materials of the result.
  */
 public class ShapedMaterialsRecipe extends ShapedRecipe implements MaterialsCraftingTableRecipe {
+  /** Map codec for the recipe, JSON matches vanilla shaped recipes with the added parts and extra materials */
+  public static final MapCodec<ShapedMaterialsRecipe> MAP_CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
+    Recipe.CommonInfo.MAP_CODEC.forGetter(r -> r.commonInfo),
+    CraftingRecipe.CraftingBookInfo.MAP_CODEC.forGetter(r -> r.bookInfo),
+    ShapedRecipePattern.MAP_CODEC.forGetter(r -> r.pattern),
+    ItemStackTemplate.CODEC.fieldOf("result").forGetter(r -> r.result),
+    Ingredient.CODEC.listOf().fieldOf("parts").forGetter(r -> r.parts),
+    Serializer.EXTRA_MATERIALS.optionalFieldOf(Serializer.EXTRA_MATERIALS_KEY, List.of()).forGetter(r -> r.extraMaterials)
+  ).apply(inst, ShapedMaterialsRecipe::new));
+  /** Stream codec for the recipe */
+  public static final StreamCodec<RegistryFriendlyByteBuf,ShapedMaterialsRecipe> STREAM_CODEC = StreamCodec.composite(
+    Recipe.CommonInfo.STREAM_CODEC, r -> r.commonInfo,
+    CraftingRecipe.CraftingBookInfo.STREAM_CODEC, r -> r.bookInfo,
+    ShapedRecipePattern.STREAM_CODEC, r -> r.pattern,
+    ItemStackTemplate.STREAM_CODEC, r -> r.result,
+    Ingredient.CONTENTS_STREAM_CODEC.apply(ByteBufCodecs.list()), r -> r.parts,
+    Serializer.EXTRA_MATERIALS_STREAM, r -> r.extraMaterials,
+    ShapedMaterialsRecipe::new);
+
   /** List of tool parts to search for in the final recipe */
   @Getter
   private final List<Ingredient> parts;
@@ -45,11 +65,20 @@ public class ShapedMaterialsRecipe extends ShapedRecipe implements MaterialsCraf
   /** List of additional materials to add beyond the parts */
   @Getter
   private final List<MaterialVariantId> extraMaterials;
-  public ShapedMaterialsRecipe(String group, CraftingBookCategory category, ShapedRecipePattern pattern, ItemStack result, boolean showNotification, List<Ingredient> parts, List<MaterialVariantId> extraMaterials) {
-    super(group, category, pattern, result, showNotification);
+  /** Copy of the result, as the vanilla field is private */
+  private final ItemStackTemplate result;
+
+  public ShapedMaterialsRecipe(Recipe.CommonInfo commonInfo, CraftingRecipe.CraftingBookInfo bookInfo, ShapedRecipePattern pattern, ItemStackTemplate result, List<Ingredient> parts, List<MaterialVariantId> extraMaterials) {
+    super(commonInfo, bookInfo, pattern, result);
+    this.result = result;
     this.parts = parts;
     this.checkRepeats = parts.stream().unordered().distinct().count() == parts.size();
     this.extraMaterials = extraMaterials;
+  }
+
+  /** Creates a new recipe, adapter for the pre 26.1 parameter list */
+  public ShapedMaterialsRecipe(String group, CraftingBookCategory category, ShapedRecipePattern pattern, ItemStack result, boolean showNotification, List<Ingredient> parts, List<MaterialVariantId> extraMaterials) {
+    this(new Recipe.CommonInfo(showNotification), new CraftingRecipe.CraftingBookInfo(category, group), pattern, ItemStackTemplate.fromNonEmptyStack(result), parts, extraMaterials);
   }
 
   /**
@@ -60,7 +89,22 @@ public class ShapedMaterialsRecipe extends ShapedRecipe implements MaterialsCraf
    * @param extraMaterials  Extra materials to add beyond the parts
    */
   public ShapedMaterialsRecipe(ShapedRecipe recipe, String partPattern, List<MaterialVariantId> extraMaterials) {
-    this(recipe.group(), recipe.category(), recipe.pattern, recipe.result, recipe.showNotification(), resolveParts(recipe.pattern, partPattern), extraMaterials);
+    this(new Recipe.CommonInfo(recipe.showNotification()), new CraftingRecipe.CraftingBookInfo(recipe.category(), recipe.group()), recipe.pattern, resultTemplate(recipe), resolveParts(recipe.pattern, partPattern), extraMaterials);
+  }
+
+  /**
+   * Gets the result template of a shaped recipe. The vanilla field is widened by the access transformer, which avoids building
+   * displays or stacks, as neither is safe during datagen.
+   * @param recipe  Shaped recipe
+   * @return  Result template
+   */
+  static ItemStackTemplate resultTemplate(ShapedRecipe recipe) {
+    return recipe.result;
+  }
+
+  @Override
+  public ItemStack getResultItem() {
+    return result.create();
   }
 
   /** Resolves the part pattern symbols into ingredients using the pattern's key map */
@@ -176,15 +220,17 @@ public class ShapedMaterialsRecipe extends ShapedRecipe implements MaterialsCraf
   }
 
   @Override
-  public ItemStack assemble(CraftingInput inventory, HolderLookup.Provider registryAccess) {
-    return assemble(super.assemble(inventory, registryAccess), inventory, parts, parts.size(), checkRepeats, extraMaterials);
+  public ItemStack assemble(CraftingInput inventory) {
+    return assemble(super.assemble(inventory), inventory, parts, parts.size(), checkRepeats, extraMaterials);
   }
 
+  @SuppressWarnings({"unchecked", "rawtypes"})  // vanilla types the serializer as the parent class
   @Override
-  public RecipeSerializer<?> getSerializer() {
-    return TinkerTables.shapedMaterialsRecipeSerializer.get();
+  public RecipeSerializer<ShapedRecipe> getSerializer() {
+    return (RecipeSerializer) TinkerTables.shapedMaterialsRecipeSerializer.get();
   }
 
+  /** Serializer logic, register {@link #toSerializer()} */
   public static class Serializer implements LoggingRecipeSerializer<ShapedMaterialsRecipe> {
     /** Vanilla codec for a single material variant ID, bridging the Mantle loadable string form */
     static final Codec<MaterialVariantId> MATERIAL = Codec.STRING.xmap(MaterialVariantId::parse, MaterialVariantId::toString);
@@ -194,42 +240,19 @@ public class ShapedMaterialsRecipe extends ShapedRecipe implements MaterialsCraf
     static final String EXTRA_MATERIALS_KEY = "extra_materials";
     static final StreamCodec<RegistryFriendlyByteBuf,List<MaterialVariantId>> EXTRA_MATERIALS_STREAM = MaterialVariantId.STREAM_CODEC.apply(ByteBufCodecs.list());
 
-    private static final MapCodec<ShapedMaterialsRecipe> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
-      Codec.STRING.optionalFieldOf("group", "").forGetter(ShapedRecipe::getGroup),
-      CraftingBookCategory.CODEC.fieldOf("category").orElse(CraftingBookCategory.MISC).forGetter(ShapedRecipe::category),
-      ShapedRecipePattern.MAP_CODEC.forGetter(r -> r.pattern),
-      ItemStack.STRICT_CODEC.fieldOf("result").forGetter(r -> r.result),
-      Codec.BOOL.optionalFieldOf("show_notification", true).forGetter(ShapedRecipe::showNotification),
-      Ingredient.CODEC.listOf().fieldOf("parts").forGetter(r -> r.parts),
-      EXTRA_MATERIALS.optionalFieldOf(EXTRA_MATERIALS_KEY, List.of()).forGetter(r -> r.extraMaterials)
-    ).apply(inst, ShapedMaterialsRecipe::new));
-
     @Override
     public MapCodec<ShapedMaterialsRecipe> codec() {
-      return CODEC;
+      return MAP_CODEC;
     }
 
     @Override
     public ShapedMaterialsRecipe fromNetworkSafe(RegistryFriendlyByteBuf buffer) {
-      String group = buffer.readUtf();
-      CraftingBookCategory category = buffer.readEnum(CraftingBookCategory.class);
-      ShapedRecipePattern pattern = ShapedRecipePattern.STREAM_CODEC.decode(buffer);
-      ItemStack result = ItemStack.STREAM_CODEC.decode(buffer);
-      boolean showNotification = buffer.readBoolean();
-      List<Ingredient> parts = Ingredient.CONTENTS_STREAM_CODEC.apply(ByteBufCodecs.list()).decode(buffer);
-      List<MaterialVariantId> extraMaterials = EXTRA_MATERIALS_STREAM.decode(buffer);
-      return new ShapedMaterialsRecipe(group, category, pattern, result, showNotification, parts, extraMaterials);
+      return STREAM_CODEC.decode(buffer);
     }
 
     @Override
     public void toNetworkSafe(RegistryFriendlyByteBuf buffer, ShapedMaterialsRecipe recipe) {
-      buffer.writeUtf(recipe.group());
-      buffer.writeEnum(recipe.category());
-      ShapedRecipePattern.STREAM_CODEC.encode(buffer, recipe.pattern);
-      ItemStack.STREAM_CODEC.encode(buffer, recipe.result);
-      buffer.writeBoolean(recipe.showNotification());
-      Ingredient.CONTENTS_STREAM_CODEC.apply(ByteBufCodecs.list()).encode(buffer, recipe.parts);
-      EXTRA_MATERIALS_STREAM.encode(buffer, recipe.extraMaterials);
+      STREAM_CODEC.encode(buffer, recipe);
     }
   }
 }

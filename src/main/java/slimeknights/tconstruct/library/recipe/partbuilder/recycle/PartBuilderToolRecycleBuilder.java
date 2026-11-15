@@ -51,12 +51,12 @@ public class PartBuilderToolRecycleBuilder extends AbstractRecipeBuilder<PartBui
   @SuppressWarnings("deprecation")
   @Override
   public void save(RecipeOutput consumer) {
-    save(consumer, BuiltInRegistries.ITEM.getKey(tools.getMatchingStacks().get(0).getItem()));
+    save(consumer, BuiltInRegistries.ITEM.getKey(tools.getIngredient().items().findFirst().orElseThrow().value()));
   }
 
   @Override
   public void save(RecipeOutput consumer, Identifier id) {
-    AdvancementHolder advancementId = buildOptionalAdvancement(id, "parts");
-    consumer.accept(id, new PartBuilderToolRecycle(id, tools, pattern, parts), advancementId);
+    AdvancementHolder advancementId = buildOptionalAdvancement(consumer, id, "parts");
+    consumer.accept(recipeKey(id), new PartBuilderToolRecycle(id, tools, pattern, parts), advancementId);
   }
 }

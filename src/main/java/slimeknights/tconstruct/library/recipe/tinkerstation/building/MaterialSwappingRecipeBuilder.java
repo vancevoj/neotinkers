@@ -12,6 +12,7 @@ import net.minecraft.world.level.ItemLike;
 import slimeknights.mantle.data.loadable.Loadables;
 import slimeknights.mantle.data.predicate.IJsonPredicate;
 import slimeknights.mantle.recipe.data.AbstractRecipeBuilder;
+import slimeknights.mantle.recipe.helper.IngredientHelper;
 import slimeknights.mantle.recipe.ingredient.SizedIngredient;
 import slimeknights.tconstruct.library.json.predicate.material.MaterialPredicate;
 import slimeknights.tconstruct.library.materials.definition.MaterialId;
@@ -57,7 +58,7 @@ public class MaterialSwappingRecipeBuilder extends AbstractRecipeBuilder<Materia
 
   /** Creates a builder for the given tool */
   public static MaterialSwappingRecipeBuilder tools(TagKey<Item> tag) {
-    return tools(Ingredient.of(tag));
+    return tools(IngredientHelper.tag(tag));
   }
 
   /** Adds the given index to the recipe */
@@ -103,7 +104,7 @@ public class MaterialSwappingRecipeBuilder extends AbstractRecipeBuilder<Materia
 
   @Override
   public void save(RecipeOutput consumer) {
-    save(consumer, Loadables.ITEM.getKey(tools.getItems()[0].getItem()));
+    save(consumer, Loadables.ITEM.getKey(tools.items().findFirst().orElseThrow().value()));
   }
 
   @Override
@@ -116,11 +117,11 @@ public class MaterialSwappingRecipeBuilder extends AbstractRecipeBuilder<Materia
       if (ingredient != SizedIngredient.EMPTY) {
         throw new IllegalStateException("Cannot set both part and ingredient");
       }
-      consumer.accept(id, new PartSwappingOverrideRecipe(id, tools, maxStackSize, part, indices, extraRequirements), null);
+      consumer.accept(recipeKey(id), new PartSwappingOverrideRecipe(id, tools, maxStackSize, part, indices, extraRequirements), null);
     } else if (material != MaterialId.UNKNOWN) {
-      consumer.accept(id, new FixedMaterialSwappingRecipe(id, tools, maxStackSize, ingredient, material, indices, repairValue, extraRequirements), null);
+      consumer.accept(recipeKey(id), new FixedMaterialSwappingRecipe(id, tools, maxStackSize, ingredient, material, indices, repairValue, extraRequirements), null);
     } else if (repairValue > 0) {
-      consumer.accept(id, new MaterialValueSwappingRecipe(id, tools, maxStackSize, materials, repairValue, indices, extraRequirements), null);
+      consumer.accept(recipeKey(id), new MaterialValueSwappingRecipe(id, tools, maxStackSize, materials, repairValue, indices, extraRequirements), null);
     }
   }
 }

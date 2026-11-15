@@ -30,14 +30,14 @@ public class ModifierRepairRecipeBuilder extends AbstractRecipeBuilder<ModifierR
 
   /** Builds the recipe for the crafting table using a repair kit */
   public ModifierRepairRecipeBuilder buildCraftingTable(RecipeOutput consumer, Identifier id) {
-    AdvancementHolder advancementId = buildOptionalAdvancement(id, "tinker_station");
-    consumer.accept(id, new ModifierRepairCraftingRecipe(id, modifier, ingredient, repairAmount), advancementId);
+    AdvancementHolder advancementId = buildOptionalAdvancement(consumer, id, "tinker_station");
+    consumer.accept(recipeKey(id), new ModifierRepairCraftingRecipe(id, modifier, ingredient, repairAmount), advancementId);
     return this;
   }
 
   @Override
   public void save(RecipeOutput consumer, Identifier id) {
-    AdvancementHolder advancementId = buildOptionalAdvancement(id, "tinker_station");
-    consumer.accept(id, new ModifierRepairTinkerStationRecipe(id, modifier, ingredient, repairAmount), advancementId);
+    AdvancementHolder advancementId = buildOptionalAdvancement(consumer, id, "tinker_station");
+    consumer.accept(recipeKey(id), new ModifierRepairTinkerStationRecipe(id, modifier, ingredient, repairAmount), advancementId);
   }
 }

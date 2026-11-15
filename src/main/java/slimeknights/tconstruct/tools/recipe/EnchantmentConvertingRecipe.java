@@ -6,11 +6,12 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.item.EnchantedBookItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.EnchantmentInstance;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.level.Level;
@@ -120,9 +121,9 @@ public class EnchantmentConvertingRecipe extends AbstractWorktableRecipe {
       if (!tool.is(Items.ENCHANTED_BOOK)) {
         return false;
       }
-      // call the method directly on item as the method on itemstack conisiders if its current enchanted
+      // check the enchantable component directly as the method on itemstack conisiders if its current enchanted
       // we want to match even unenchanted items, better error
-    } else if (!tool.getItem().isEnchantable(tool)) {
+    } else if (!tool.has(DataComponents.ENCHANTABLE)) {
       return false;
     }
     return ModifierRecipe.checkMatch(inv, inputs);
@@ -239,7 +240,7 @@ public class EnchantmentConvertingRecipe extends AbstractWorktableRecipe {
   }
 
   @Override
-  public RecipeSerializer<?> getSerializer() {
+  public RecipeSerializer<? extends Recipe<ITinkerableContainer>> getSerializer() {
     return TinkerModifiers.enchantmentConvertingSerializer.get();
   }
 
@@ -273,7 +274,7 @@ public class EnchantmentConvertingRecipe extends AbstractWorktableRecipe {
       Set<ModifierId> modifiers = getMatchingModifiers().stream().map(ModifierEntry::getId).collect(Collectors.toSet());
       tools = ModifierManager.INSTANCE.getEquivalentEnchantments(modifiers::contains)
         .flatMap(enchantment -> IntStream.rangeClosed(1, enchantment.value().getMaxLevel())
-          .mapToObj(level -> EnchantedBookItem.createForEnchantment(new EnchantmentInstance(enchantment, level))))
+          .mapToObj(level -> EnchantmentHelper.createBook(new EnchantmentInstance(enchantment, level))))
         .toList();
     }
     return tools;
