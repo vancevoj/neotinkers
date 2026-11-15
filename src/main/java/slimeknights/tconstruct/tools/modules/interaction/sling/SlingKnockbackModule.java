@@ -1,5 +1,6 @@
 package slimeknights.tconstruct.tools.modules.interaction.sling;
 
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
@@ -121,7 +122,7 @@ public record SlingKnockbackModule(LevelingValue forceMultiplier, float drawtime
         Vec3 direction = start.add(look.x * RANGE, look.y * RANGE, look.z * RANGE);
         AABB bb = player.getBoundingBox().expandTowards(look.x * RANGE, look.y * RANGE, look.z * RANGE).expandTowards(1, 1, 1);
 
-        EntityHitResult hit = ProjectileUtil.getEntityHitResult(level, player, start, direction, bb, e -> e instanceof LivingEntity);
+        EntityHitResult hit = ProjectileUtil.getEntityHitResult(level, player, start, direction, bb, e -> e instanceof LivingEntity, ProjectileUtil.DEFAULT_ENTITY_HIT_RESULT_MARGIN);
         if (hit != null) {
           LivingEntity target = (LivingEntity)hit.getEntity();
           if (this.target.matches(target)) {
@@ -160,7 +161,8 @@ public record SlingKnockbackModule(LevelingValue forceMultiplier, float drawtime
                   0,
                   (-look.z + random.nextGaussian() * inaccuracy)
                 ));
-                target.knockback(force, angle.x, angle.z);
+                // 26.2 knockback needs a damage source, the sling deals no damage of its own
+                target.knockback(force, angle.x, angle.z, player.damageSources().playerAttack(player), 0);
                 if (target instanceof ServerPlayer playerMP) {
                   TinkerNetwork.getInstance().sendVanillaPacket(new ClientboundSetEntityMotionPacket(target), playerMP);
                 }
@@ -178,7 +180,7 @@ public record SlingKnockbackModule(LevelingValue forceMultiplier, float drawtime
                 // cooldowns and stuff
                 level.playSound(null, player.getX(), player.getY(), player.getZ(), Sounds.BONK.getSound(), player.getSoundSource(), 1, 0.5f);
                 player.causeFoodExhaustion(0.2F);
-                player.getCooldowns().addCooldown(tool.getItem(), 3);
+                player.getCooldowns().addCooldown(BuiltInRegistries.ITEM.getKey(tool.getItem()), 3);
                 ToolDamageUtil.damageAnimated(tool, 1, entity, entity.getUsedItemHand(), modifier.getId());
                 return;
               }

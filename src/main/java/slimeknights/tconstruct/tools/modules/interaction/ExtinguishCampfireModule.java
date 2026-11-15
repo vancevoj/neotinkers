@@ -56,7 +56,7 @@ public record ExtinguishCampfireModule(ModifierCondition<IToolStackView> conditi
         if (playSound) {
           level.playSound(null, pos, SoundEvents.GENERIC_EXTINGUISH_FIRE, SoundSource.BLOCKS, 1.0F, 1.0F);
         }
-        CampfireBlock.dowse(context.getPlayer(), level, pos, original);
+        CampfireBlock.douse(context.getPlayer(), level, pos, original);
       }
       level.setBlock(pos, original.setValue(CampfireBlock.LIT, false), Block.UPDATE_ALL_IMMEDIATE);
       return true;

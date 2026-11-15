@@ -11,8 +11,11 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.ResourceHandlerUtil;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
+import net.neoforged.neoforge.transfer.resource.ResourceStack;
+import net.neoforged.neoforge.transfer.transaction.Transaction;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.fluid.FluidTransferHelper;
 import slimeknights.tconstruct.library.json.TinkerLoadables;
@@ -61,7 +64,7 @@ public record TankInteractionModule(@Nullable InteractionSource source) implemen
       return InteractionResult.PASS;
     }
     Direction face = context.getClickedFace();
-    IFluidHandler cap = world.getCapability(Capabilities.Fluid.BLOCK, target, face);
+    ResourceHandler<FluidResource> cap = world.getCapability(Capabilities.Fluid.BLOCK, target, face);
     if (cap == null) {
       return InteractionResult.PASS;
     }
@@ -76,7 +79,11 @@ public record TankInteractionModule(@Nullable InteractionSource source) implemen
       if (sneaking) {
         // must have something to fill
         if (!fluidStack.isEmpty()) {
-          int added = cap.fill(fluidStack, FluidAction.EXECUTE);
+          int added;
+          try (Transaction transaction = Transaction.openRoot()) {
+            added = cap.insert(FluidResource.of(fluidStack), fluidStack.getAmount(), transaction);
+            transaction.commit();
+          }
           if (added > 0) {
             sound = FluidTransferHelper.getEmptySound(fluidStack);
             fluidStack.shrink(added);
@@ -85,16 +92,31 @@ public record TankInteractionModule(@Nullable InteractionSource source) implemen
         }
         // if nothing currently, will drain whatever
       } else if (fluidStack.isEmpty()) {
-        FluidStack drained = cap.drain(TANK_HELPER.getCapacity(tool), FluidAction.EXECUTE);
+        // drain the first fluid the handler offers, same as the old drain(int, EXECUTE)
+        FluidStack drained = FluidStack.EMPTY;
+        try (Transaction transaction = Transaction.openRoot()) {
+          ResourceStack<FluidResource> extracted = ResourceHandlerUtil.extractFirst(cap, resource -> true, TANK_HELPER.getCapacity(tool), transaction);
+          if (extracted != null && !extracted.isEmpty()) {
+            drained = extracted.resource().toStack(extracted.amount());
+            transaction.commit();
+          }
+        }
         if (!drained.isEmpty()) {
           TANK_HELPER.setFluid(tool, drained);
           sound = FluidTransferHelper.getFillSound(fluidStack);
         }
       } else {
         // filter drained to be the same as the current fluid
-        FluidStack drained = cap.drain(fluidStack.copyWithAmount(TANK_HELPER.getCapacity(tool) - fluidStack.getAmount()), FluidAction.EXECUTE);
-        if (!drained.isEmpty() && FluidStack.isSameFluidSameComponents(drained, fluidStack)) {
-          fluidStack.grow(drained.getAmount());
+        int space = TANK_HELPER.getCapacity(tool) - fluidStack.getAmount();
+        int drained = 0;
+        if (space > 0) {
+          try (Transaction transaction = Transaction.openRoot()) {
+            drained = cap.extract(FluidResource.of(fluidStack), space, transaction);
+            transaction.commit();
+          }
+        }
+        if (drained > 0) {
+          fluidStack.grow(drained);
           TANK_HELPER.setFluid(tool, fluidStack);
           sound = FluidTransferHelper.getFillSound(fluidStack);
         }
@@ -103,6 +125,6 @@ public record TankInteractionModule(@Nullable InteractionSource source) implemen
         world.playSound(null, target, sound, SoundSource.BLOCKS, 1.0F, 1.0F);
       }
     }
-    return InteractionResult.sidedSuccess(world.isClientSide());
+    return InteractionResult.SUCCESS;
   }
 }

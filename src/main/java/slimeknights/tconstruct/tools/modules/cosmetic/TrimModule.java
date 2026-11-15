@@ -63,9 +63,9 @@ public class TrimModule implements ModifierModule, DisplayNameModifierHook, Modi
         return original;
       }
       formatted = original;
-      TrimMaterial material = access.lookupOrThrow(Registries.TRIM_MATERIAL).get(Identifier.tryParse(trimMaterial));
+      TrimMaterial material = access.lookupOrThrow(Registries.TRIM_MATERIAL).getValue(Identifier.tryParse(trimMaterial));
       // if pattern is not passed, use the modifier name directly. Lets us trim items without patterns
-      TrimPattern pattern = trimPattern.isEmpty() ? null : access.lookupOrThrow(Registries.TRIM_PATTERN).get(Identifier.tryParse(trimPattern));
+      TrimPattern pattern = trimPattern.isEmpty() ? null : access.lookupOrThrow(Registries.TRIM_PATTERN).getValue(Identifier.tryParse(trimPattern));
       Component patternComponent = pattern != null ? pattern.description() : Component.translatable(entry.getModifier().getTranslationKey());
       if (material != null) {
           // format is "___ Armor Trim (___ Material)"

@@ -7,7 +7,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.ItemStack;
@@ -105,7 +104,8 @@ public enum MinimapModule implements ModifierModule, EquipmentChangeModifierHook
           // hack: map logic requires the map to be in the selected slot to tick properly, so put it in the invnetory temporarily
           ItemStack held = holder.getOffhandItem();
           holder.setItemInHand(InteractionHand.OFF_HAND, map);
-          map.inventoryTick(world, holder, Inventory.SLOT_OFFHAND, true);
+          // 26.3 maps only explore when ticked in a hand slot
+          map.inventoryTick(world, holder, EquipmentSlot.OFFHAND);
           holder.setItemInHand(InteractionHand.OFF_HAND, held);
           if (holder instanceof ServerPlayer player) {
             MapItemSavedData mapData = MapItem.getSavedData(map, world);
@@ -124,13 +124,13 @@ public enum MinimapModule implements ModifierModule, EquipmentChangeModifierHook
 
   @Override
   public void onDisableSelection(IToolStackView tool, ModifierEntry modifier, Player player) {
-    player.displayClientMessage(DISABLED, true);
+    player.sendOverlayMessage(DISABLED);
   }
 
   @Override
   public void onInventorySelect(IToolStackView tool, ModifierEntry modifier, Player player, int newIndex, ItemStack stack) {
     MapId mapId = stack.get(DataComponents.MAP_ID);
-    player.displayClientMessage(Component.translatable(SELECTED, stack.getHoverName(), mapId != null ? mapId.id() : -1, newIndex + 1), true);
+    player.sendOverlayMessage(Component.translatable(SELECTED, stack.getHoverName(), mapId != null ? mapId.id() : -1, newIndex + 1));
   }
 
   @Override

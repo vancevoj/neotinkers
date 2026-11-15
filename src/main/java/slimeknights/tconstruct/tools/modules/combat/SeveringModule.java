@@ -1,8 +1,8 @@
 package slimeknights.tconstruct.tools.modules.combat;
 
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.tags.ItemTags;
@@ -52,21 +52,22 @@ public enum SeveringModule implements ModifierModule, ProcessLootModifierHook {
       // ensure no head so far
       if (generatedLoot.stream().noneMatch(stack -> stack.is(ItemTags.SKULLS))) {
         // find proper recipe
-        Level world = context.getLevel();
-        List<SeveringRecipe> recipes = SeveringRecipeCache.findRecipe(world.getRecipeManager(), entity.getType());
+        ServerLevel world = context.getLevel();
+        List<SeveringRecipe> recipes = SeveringRecipeCache.findRecipe(world.recipeAccess(), entity.getType());
         if (!recipes.isEmpty()) {
           float level = modifier.getEffectiveLevel();
           // getLootingModifier() removed in 1.21.1; looting enchant level is now a loot param
-          float looting = context.hasParameter(LootContextParams.ENCHANTMENT_LEVEL) ? context.getParam(LootContextParams.ENCHANTMENT_LEVEL) : 0;
+          Integer enchantmentLevel = context.getOptional(LootContextParams.ENCHANTMENT_LEVEL);
+          float looting = enchantmentLevel != null ? enchantmentLevel : 0;
           // deprecated method of doubling chances
-          float chanceMultiplier = entity.getType().is(TinkerTags.EntityTypes.RARE_MOBS) ? 2 : 1;
+          float chanceMultiplier = entity.is(TinkerTags.EntityTypes.RARE_MOBS) ? 2 : 1;
           for (SeveringRecipe recipe : recipes) {
-            if (world.random.nextFloat() < recipe.getChance(level, looting) * chanceMultiplier) {
+            if (world.getRandom().nextFloat() < recipe.getChance(level, looting) * chanceMultiplier) {
               ItemStack result = recipe.getOutput(entity);
               if (!result.isEmpty()) {
                 // if count is not 1, it's a random range from 1 to count
                 if (result.getCount() > 1) {
-                  result.setCount(world.random.nextInt(result.getCount()) + 1);
+                  result.setCount(world.getRandom().nextInt(result.getCount()) + 1);
                 }
                 generatedLoot.add(result);
               }

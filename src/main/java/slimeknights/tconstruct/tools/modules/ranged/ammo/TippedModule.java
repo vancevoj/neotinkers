@@ -6,6 +6,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
@@ -41,7 +42,6 @@ import slimeknights.tconstruct.library.utils.RomanNumeralHelper;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Optional;
 
 /** Module allowing arrows to be tipped, applying their effect to the target */
 public enum TippedModule implements ModifierModule, ProjectileLaunchModifierHook.NoShooter, ProjectileHitModifierHook, ModifierRemovalHook, DisplayNameModifierHook, TooltipModifierHook {
@@ -91,13 +91,14 @@ public enum TippedModule implements ModifierModule, ProjectileLaunchModifierHook
   @Override
   public boolean onProjectileHitEntity(ModifierNBT modifiers, ModDataNBT persistentData, ModifierEntry modifier, Projectile projectile, EntityHitResult hit, @Nullable LivingEntity attacker, @Nullable LivingEntity target) {
     Identifier key = modifier.getId();
-    if (target != null && persistentData.contains(key, Tag.TAG_STRING)) {
+    // instant effects need the server level since 1.21.2
+    if (target != null && target.level() instanceof ServerLevel level && persistentData.contains(key, Tag.TAG_STRING)) {
       Identifier id = Identifier.tryParse(persistentData.getString(key));
       if (id != null) {
         Entity source = projectile.getEffectSource();
         int divisor = getDivisor(modifier);
-        int oldHurtTime = target.invulnerableTime;
-        target.invulnerableTime = 0;
+        int oldHurtTime = target.getInvulnerableTime();
+        target.setInvulnerableTime(0);
         // not a problem if the ID is invalid, will just do nothing
         Potion potion = BuiltInRegistries.POTION.getValue(id);
         if (potion == null) return false;
@@ -105,12 +106,12 @@ public enum TippedModule implements ModifierModule, ProjectileLaunchModifierHook
           Holder<MobEffect> effectHolder = instance.getEffect();
           MobEffect effect = effectHolder.value();
           if (effect.isInstantaneous()) {
-            effect.applyInstantaneousEffect(projectile, projectile.getOwner(), target, instance.getAmplifier(), 1f / (divisor * 0.75f));
+            effect.applyInstantaneousEffect(level, projectile, projectile.getOwner(), target, instance.getAmplifier(), 1f / (divisor * 0.75f));
           } else {
             target.addEffect(new MobEffectInstance(instance.getEffect(), Math.max(instance.mapDuration(i -> i / divisor), 1), instance.getAmplifier(), instance.isAmbient(), instance.isVisible()), source);
           }
         }
-        target.invulnerableTime = oldHurtTime;
+        target.setInvulnerableTime(oldHurtTime);
       }
     }
     return false;
@@ -143,13 +144,13 @@ public enum TippedModule implements ModifierModule, ProjectileLaunchModifierHook
       if (id != null) {
         Potion potion = BuiltInRegistries.POTION.getValue(id);
         if (potion != null && !potion.getEffects().isEmpty()) {
-          // wrap as Holder so Potion.getName and PotionContents.getColor can accept it
-          Holder<Potion> potionHolder = BuiltInRegistries.POTION.wrapAsHolder(potion);
+          // wrap as potion contents for the name and color, Potion.getName and PotionContents.getColor(Holder) are gone in 26.3
+          PotionContents contents = new PotionContents(BuiltInRegistries.POTION.wrapAsHolder(potion));
           // formats as Tipped <level> (<potion>)
           return Component.translatable(FORMAT,
             RomanNumeralHelper.getNumeral(entry.intEffectiveLevel()),
-            Component.translatable(Potion.getName(Optional.of(potionHolder), "item.minecraft.potion.effect."))
-          ).withStyle(style -> style.withColor(PotionContents.getColor(potionHolder)));
+            contents.getName("item.minecraft.potion.effect.")
+          ).withStyle(style -> style.withColor(contents.getColor()));
         }
       }
     }

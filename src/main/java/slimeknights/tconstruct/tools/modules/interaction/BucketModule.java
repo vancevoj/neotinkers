@@ -8,6 +8,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.attribute.EnvironmentAttributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.ItemStack;
@@ -124,8 +125,8 @@ public record BucketModule(IJsonPredicate<Fluid> fluids) implements ModifierModu
       fluidType.onVaporize(player, world, target, fluidStack);
       placed = true;
       // next, try vanilla vaporizing
-    } else if (world.dimensionType().ultraWarm() && fluid.is(FluidTags.WATER)) {
-      world.playSound(player, target, SoundEvents.FIRE_EXTINGUISH, SoundSource.BLOCKS, 0.5F, 2.6F + (world.random.nextFloat() - world.random.nextFloat()) * 0.8F);
+    } else if (world.environmentAttributes().getValue(EnvironmentAttributes.WATER_EVAPORATES, target) && fluid.is(FluidTags.WATER)) {
+      world.playSound(player, target, SoundEvents.FIRE_EXTINGUISH, SoundSource.BLOCKS, 0.5F, 2.6F + (world.getRandom().nextFloat() - world.getRandom().nextFloat()) * 0.8F);
       for(int l = 0; l < 8; ++l) {
         world.addParticle(ParticleTypes.LARGE_SMOKE, target.getX() + Math.random(), target.getY() + Math.random(), target.getZ() + Math.random(), 0.0D, 0.0D, 0.0D);
       }

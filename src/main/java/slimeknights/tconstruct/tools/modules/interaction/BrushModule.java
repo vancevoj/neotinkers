@@ -1,6 +1,7 @@
 package slimeknights.tconstruct.tools.modules.interaction;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -11,6 +12,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.BrushItem;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.item.context.UseOnContext;
@@ -104,7 +106,7 @@ public enum BrushModule implements ModifierModule, GeneralInteractionModifierHoo
   }
 
   /** Brushes a single block */
-  private static boolean brushBlock(Player player, BlockHitResult blockHit, BlockState state, HumanoidArm arm) {
+  private static boolean brushBlock(Player player, BlockHitResult blockHit, BlockState state, HumanoidArm arm, ItemStack brush) {
     // only play sound and particle if its a brushable block, reduces noice on AOE
     Level level = player.level();
     if (state.getBlock() instanceof BrushableBlock brushable) {
@@ -115,8 +117,8 @@ public enum BrushModule implements ModifierModule, GeneralInteractionModifierHoo
     }
 
     // brush the block
-    if (!level.isClientSide()) {
-      return level.getBlockEntity(blockHit.getBlockPos()) instanceof BrushableBlockEntity brushable && brushable.brush(level.getGameTime(), player, blockHit.getDirection());
+    if (level instanceof ServerLevel serverLevel) {
+      return level.getBlockEntity(blockHit.getBlockPos()) instanceof BrushableBlockEntity brushable && brushable.brush(level.getGameTime(), serverLevel, player, blockHit.getDirection(), brush);
     }
     return false;
   }
@@ -137,15 +139,16 @@ public enum BrushModule implements ModifierModule, GeneralInteractionModifierHoo
           HumanoidArm arm = hand == InteractionHand.MAIN_HAND ? entity.getMainArm() : entity.getMainArm().getOpposite();
 
           // brush main block
+          ItemStack brush = player.getItemInHand(hand);
           int damage = 0;
-          if (brushBlock(player, blockHit, state, arm)) {
+          if (brushBlock(player, blockHit, state, arm, brush)) {
             damage += 1;
           }
 
           // brush AOE blocks
-          UseOnContext context = new UseOnContext(level, player, hand, player.getItemInHand(hand), blockHit);
+          UseOnContext context = new UseOnContext(level, player, hand, brush, blockHit);
           for (BlockPos extraPos : tool.getDefinition().getHook(ToolHooks.AOE_ITERATOR).getBlocks(tool, context, state, AOEMatchType.TRANSFORM)) {
-            if (brushBlock(player, Util.offset(blockHit, extraPos), level.getBlockState(extraPos), arm)) {
+            if (brushBlock(player, Util.offset(blockHit, extraPos), level.getBlockState(extraPos), arm, brush)) {
               damage += 1;
             }
           }

@@ -81,7 +81,7 @@ public record LifestealModule(LevelingValue percent, LevelingInt durabilityUsage
   public void onMonsterMeleeHit(IToolStackView tool, ModifierEntry modifier, ToolAttackContext context, float damage) {
     LivingEntity attacker = context.getAttacker();
     Entity target = context.getTarget();
-    if (damage > 0 && this.modifierLevel.test(modifier.getLevel()) && !context.getTarget().getType().is(TinkerTags.EntityTypes.NECROTIC_BLACKLIST) && this.attacker.matches(attacker) && TinkerPredicate.matches(this.target, target)) {
+    if (damage > 0 && this.modifierLevel.test(modifier.getLevel()) && !context.getTarget().is(TinkerTags.EntityTypes.NECROTIC_BLACKLIST) && this.attacker.matches(attacker) && TinkerPredicate.matches(this.target, target)) {
       // heals a percentage of damage dealt
       float level = modifier.getEffectiveLevel();
       float percent = this.percent.compute(modifier.getEffectiveLevel());
@@ -117,7 +117,7 @@ public record LifestealModule(LevelingValue percent, LevelingInt durabilityUsage
 
   @Override
   public boolean onProjectileHitEntity(ModifierNBT modifiers, ModDataNBT persistentData, ModifierEntry modifier, Projectile projectile, EntityHitResult hit, @Nullable LivingEntity attacker, @Nullable LivingEntity target, boolean notBlocked) {
-    if (notBlocked && target != null && attacker != null && !target.getType().is(TinkerTags.EntityTypes.NECROTIC_BLACKLIST) && this.attacker.matches(attacker) && this.target.matches(target)) {
+    if (notBlocked && target != null && attacker != null && !target.is(TinkerTags.EntityTypes.NECROTIC_BLACKLIST) && this.attacker.matches(attacker) && this.target.matches(target)) {
       float level = modifier.getEffectiveLevel();
       float percent = this.percent.compute(modifier.getEffectiveLevel());
       if (percent > 0) {

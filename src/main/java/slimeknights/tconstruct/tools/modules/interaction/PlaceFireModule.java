@@ -80,29 +80,28 @@ public enum PlaceFireModule implements ModifierModule, EntityInteractionModifier
   public InteractionResult afterEntityUse(IToolStackView tool, ModifierEntry modifier, Player player, LivingEntity target, InteractionHand hand, InteractionSource source) {
     if (tool.getHook(ToolHooks.INTERACTION).canInteract(tool, modifier.getId(), source) && target instanceof Creeper creeper) {
       Level level = player.level();
-      level.playSound(player, creeper.getX(), creeper.getY(), creeper.getZ(), SoundEvents.FLINTANDSTEEL_USE, creeper.getSoundSource(), 1.0F, level.random.nextFloat() * 0.4F + 0.8F);
+      level.playSound(player, creeper.getX(), creeper.getY(), creeper.getZ(), SoundEvents.FLINTANDSTEEL_USE, creeper.getSoundSource(), 1.0F, level.getRandom().nextFloat() * 0.4F + 0.8F);
       if (!level.isClientSide()) {
         creeper.ignite();
         ToolDamageUtil.damageAnimated(tool, 1, player, source.getSlot(hand), modifier.getId());
       }
-      return InteractionResult.sidedSuccess(level.isClientSide());
+      return InteractionResult.SUCCESS;
     }
     return InteractionResult.PASS;
   }
 
   /** Ignites the given block */
-  private static boolean ignite(Level world, BlockPos pos, BlockState state, Direction sideHit, Direction horizontalFacing, @Nullable Player player) {
+  private static boolean ignite(Level world, BlockPos pos, BlockState state, Direction sideHit, Direction horizontalFacing, @Nullable Player player, ItemStack stack) {
     // campfires first
     if (CampfireBlock.canLight(state) || CandleBlock.canLight(state) || CandleCakeBlock.canLight(state)) {
-      world.playSound(player, pos, SoundEvents.FLINTANDSTEEL_USE, SoundSource.BLOCKS, 1.0F, world.random.nextFloat() * 0.4F + 0.8F);
+      world.playSound(player, pos, SoundEvents.FLINTANDSTEEL_USE, SoundSource.BLOCKS, 1.0F, world.getRandom().nextFloat() * 0.4F + 0.8F);
       world.setBlock(pos, state.setValue(BlockStateProperties.LIT, true), 11);
       world.gameEvent(player, GameEvent.BLOCK_PLACE, pos);
       return true;
     }
 
-    // ignite the TNT
-    if (state.getBlock() instanceof TntBlock tnt) {
-      tnt.onCaughtFire(state, world, pos, sideHit, player);
+    // ignite the TNT, 26.3 priming can fail (TNT disabled by game rule), in which case we light fire like vanilla flint and steel
+    if (state.getBlock() instanceof TntBlock tnt && tnt.onCaughtFire(state, world, pos, sideHit, player, stack)) {
       world.setBlock(pos, Blocks.AIR.defaultBlockState(), 11);
       return true;
     }
@@ -110,7 +109,7 @@ public enum PlaceFireModule implements ModifierModule, EntityInteractionModifier
     // fire starting
     BlockPos offset = pos.relative(sideHit);
     if (BaseFireBlock.canBePlacedAt(world, offset, horizontalFacing)) {
-      world.playSound(player, offset, SoundEvents.FLINTANDSTEEL_USE, SoundSource.BLOCKS, 1.0F, world.random.nextFloat() * 0.4F + 0.8F);
+      world.playSound(player, offset, SoundEvents.FLINTANDSTEEL_USE, SoundSource.BLOCKS, 1.0F, world.getRandom().nextFloat() * 0.4F + 0.8F);
       world.setBlock(offset, BaseFireBlock.getState(world, offset), 11);
       return true;
     }
@@ -162,15 +161,15 @@ public enum PlaceFireModule implements ModifierModule, EntityInteractionModifier
     ItemStack stack = context.getItemInHand();
     EquipmentSlot slotType = source.getSlot(context.getHand());
     if (!targetingFire) {
-      didIgnite = ignite(world, pos, state, sideHit, horizontalFacing, player);
+      didIgnite = ignite(world, pos, state, sideHit, horizontalFacing, player, stack);
       if (didIgnite && ToolDamageUtil.damage(tool, 1, player, stack, modifier.getId())) {
         // broadcastBreakEvent removed in 1.21; item break animation handled internally by hurtAndBreak
-        return InteractionResult.sidedSuccess(world.isClientSide());
+        return InteractionResult.SUCCESS;
       }
     }
     // ignite the edges, if any worked return success
     for (BlockPos target : targets) {
-      if (ignite(world, target, world.getBlockState(target), sideHit, horizontalFacing, player)) {
+      if (ignite(world, target, world.getBlockState(target), sideHit, horizontalFacing, player, stack)) {
         didIgnite = true;
         if (ToolDamageUtil.damage(tool, 1, player, stack, modifier.getId())) {
           // broadcastBreakEvent removed in 1.21; item break animation handled internally by hurtAndBreak
@@ -179,7 +178,7 @@ public enum PlaceFireModule implements ModifierModule, EntityInteractionModifier
       }
     }
     // when targeting fire, return true so left click interact does not continue to run
-    return didIgnite || targetingFire ? InteractionResult.sidedSuccess(world.isClientSide()) : InteractionResult.PASS;
+    return didIgnite || targetingFire ? InteractionResult.SUCCESS : InteractionResult.PASS;
   }
 
   @Nullable

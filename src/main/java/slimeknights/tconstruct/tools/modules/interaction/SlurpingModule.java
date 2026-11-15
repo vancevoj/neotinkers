@@ -13,7 +13,6 @@ import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction;
 import slimeknights.mantle.client.TooltipKey;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.tconstruct.common.TinkerTags;
@@ -21,6 +20,7 @@ import slimeknights.tconstruct.library.json.LevelingInt;
 import slimeknights.tconstruct.library.json.LevelingValue;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
+import slimeknights.tconstruct.library.modifiers.fluid.FluidAction;
 import slimeknights.tconstruct.library.modifiers.fluid.FluidEffectContext;
 import slimeknights.tconstruct.library.modifiers.fluid.FluidEffectManager;
 import slimeknights.tconstruct.library.modifiers.fluid.FluidEffects;
@@ -82,7 +82,7 @@ public record SlurpingModule(LevelingValue strength, LevelingInt duration) imple
     if (!fluid.isEmpty()) {
       // sound and particles
       if (playSound) {
-        entity.playSound(SoundEvents.GENERIC_DRINK, 0.5F, entity.getRandom().nextFloat() * 0.1f + 0.9f);
+        entity.playSound(SoundEvents.GENERIC_DRINK.value(), 0.5F, entity.getRandom().nextFloat() * 0.1f + 0.9f);
       }
       addFluidParticles(entity, fluid, 16);
       // apply effect
@@ -167,7 +167,7 @@ public record SlurpingModule(LevelingValue strength, LevelingInt duration) imple
         addFluidParticles(entity, fluid, 5);
         // add drinking sounds if blocking or using another modifier
         if (notActive) {
-          entity.playSound(SoundEvents.GENERIC_DRINK, 0.5F, entity.getRandom().nextFloat() * 0.1f + 0.9f);
+          entity.playSound(SoundEvents.GENERIC_DRINK.value(), 0.5F, entity.getRandom().nextFloat() * 0.1f + 0.9f);
         }
       }
     }
@@ -227,7 +227,7 @@ public record SlurpingModule(LevelingValue strength, LevelingInt duration) imple
         }
         // sound is only every 4 ticks
         else if (timeLeft % 4 == 0) {
-          holder.playSound(SoundEvents.GENERIC_DRINK, 0.5F, holder.getRandom().nextFloat() * 0.1f + 0.9f);
+          holder.playSound(SoundEvents.GENERIC_DRINK.value(), 0.5F, holder.getRandom().nextFloat() * 0.1f + 0.9f);
           addFluidParticles(holder, TANK_HELPER.getFluid(tool), 5);
         }
       }

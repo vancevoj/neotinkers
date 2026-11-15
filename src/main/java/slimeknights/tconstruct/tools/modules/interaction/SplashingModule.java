@@ -15,11 +15,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.tconstruct.library.json.LevelingValue;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
+import slimeknights.tconstruct.library.modifiers.fluid.FluidAction;
 import slimeknights.tconstruct.library.modifiers.fluid.FluidEffectContext;
 import slimeknights.tconstruct.library.modifiers.fluid.FluidEffectManager;
 import slimeknights.tconstruct.library.modifiers.fluid.FluidEffects;
@@ -83,7 +83,7 @@ public record SplashingModule(LevelingValue strength) implements ModifierModule,
 
           // cooldown based on attack speed/draw speed. both are on the same scale and default to 1, we don't care which one the tool uses
           // applied before we do the effect to block recursive calls, notably ender might cause that
-          player.getCooldowns().addCooldown(tool.getItem(), (int)(20 / ConditionalStatModifierHook.getModifiedStat(tool, player, ToolStats.DRAW_SPEED)));
+          player.getCooldowns().addCooldown(player.getItemBySlot(source.getSlot(hand)), (int)(20 / ConditionalStatModifierHook.getModifiedStat(tool, player, ToolStats.DRAW_SPEED)));
 
           if (!world.isClientSide()) {
             // for the main target, consume fluids
@@ -155,7 +155,7 @@ public record SplashingModule(LevelingValue strength) implements ModifierModule,
           // cooldown based on draw speed, works similarly enough to attack speed
           // applied before we do the effect to block recursive calls, notably ender might cause that
           if (player != null) {
-            player.getCooldowns().addCooldown(tool.getItem(), (int)(20 / ConditionalStatModifierHook.getModifiedStat(tool, player, ToolStats.DRAW_SPEED)));
+            player.getCooldowns().addCooldown(context.getItemInHand(), (int)(20 / ConditionalStatModifierHook.getModifiedStat(tool, player, ToolStats.DRAW_SPEED)));
           }
 
           if (!world.isClientSide()) {
@@ -196,7 +196,7 @@ public record SplashingModule(LevelingValue strength) implements ModifierModule,
               // damage the tool, we charge for the multiplier and for the number of targets hit
               ItemStack stack = context.getItemInHand();
               if (ToolDamageUtil.damage(tool, Mth.ceil(numTargets * level), player, stack, modifier.getId()) && player != null) {
-                player.onEquippedItemBroken(tool.getItem(), source.getSlot(context.getHand()));
+                player.onEquippedItemBroken(context.getItemInHand(), source.getSlot(context.getHand()));
               }
             }
           }

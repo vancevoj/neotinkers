@@ -57,7 +57,7 @@ public record MeltingFluidEffectiveModule(IJsonPredicate<BlockState> predicate, 
           FluidStack meltingResult = MeltingRecipeLookup.findResult(state.getBlock(), temperature);
           return (!meltingResult.isEmpty() && (currentFluid.isEmpty() || FluidStack.isSameFluidSameComponents(currentFluid, meltingResult)))
                  // tier must also match; TierSortingRegistry removed in 1.21, use vanilla tier tag check
-                 && (ignoreTier || !state.is(MiningTierToolHook.getTier(tool).getIncorrectBlocksForDrops()));
+                 && (ignoreTier || !state.is(MiningTierToolHook.getTier(tool).incorrectBlocksForDrops()));
         }
       }
     }

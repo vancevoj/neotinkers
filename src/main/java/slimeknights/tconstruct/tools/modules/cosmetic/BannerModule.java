@@ -60,7 +60,7 @@ public enum BannerModule implements ModifierModule, DisplayNameModifierHook, Too
     // color the tooltip the color of the first pattern
     ListTag patterns = tool.getPersistentData().getList(patternKey(entry.getId()), ListTag.TAG_COMPOUND);
     if (!patterns.isEmpty()) {
-      return name.copy().withStyle(name.getStyle().withColor(DyeColor.byId(patterns.getCompound(0).getInt(KEY_DYE)).getTextColor()));
+      return name.copy().withStyle(name.getStyle().withColor(DyeColor.byId(patterns.getCompoundOrEmpty(0).getIntOr(KEY_DYE, 0)).getTextColor()));
     }
     return name;
   }
@@ -75,7 +75,7 @@ public enum BannerModule implements ModifierModule, DisplayNameModifierHook, Too
           // TODO(neoport): BannerPattern.byHash() removed in 1.21.1; BannerPattern is now a data-driven registry.
           // KEY_PATTERN stores old 1.20 hash strings. Need to migrate storage to Identifier keys
           // and look up via RegistryAccess. Until then tooltip pattern lines are suppressed.
-          @SuppressWarnings("unused") CompoundTag tag = patterns.getCompound(i);
+          @SuppressWarnings("unused") CompoundTag tag = patterns.getCompoundOrEmpty(i);
         }
       } else {
         tooltip.add(HOLD_SHIFT);
@@ -110,7 +110,7 @@ public enum BannerModule implements ModifierModule, DisplayNameModifierHook, Too
       // BannerPatterns.BASE is ResourceKey<BannerPattern>; getHashname() gone.
       // Store the base pattern key as its Identifier path ("base") until NBT format migrated to RL keys.
       CompoundTag basePattern = new CompoundTag();
-      basePattern.putString(KEY_PATTERN, BannerPatterns.BASE.location().getPath());
+      basePattern.putString(KEY_PATTERN, BannerPatterns.BASE.identifier().getPath());
       basePattern.putInt(KEY_DYE, dye.getId());
       basePattern.putInt(KEY_COLOR, baseColor);
       patterns.add(basePattern);
@@ -118,13 +118,13 @@ public enum BannerModule implements ModifierModule, DisplayNameModifierHook, Too
 
     // add in all other patterns
     for (int i = 0; i < banner.size(); i++) {
-      CompoundTag original = banner.getCompound(i);
+      CompoundTag original = banner.getCompoundOrEmpty(i);
       CompoundTag copy = new CompoundTag();
       // copy the pattern as is
-      String pattern = original.getString("Pattern");
+      String pattern = original.getStringOr("Pattern", "");
       copy.putString(KEY_PATTERN, pattern);
       // convert the color from a dye color to an integer
-      dye = DyeColor.byId(original.getInt("Color"));
+      dye = DyeColor.byId(original.getIntOr("Color", 0));
       int color = Util.getColor(dye);
       copy.putInt(KEY_DYE, dye.getId()); // dye for the tooltip
       copy.putInt(KEY_COLOR, color); // color for the model

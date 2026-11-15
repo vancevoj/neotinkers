@@ -22,7 +22,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction;
+import net.neoforged.neoforge.transfer.transaction.TransactionContext;
 import slimeknights.mantle.client.TooltipKey;
 import slimeknights.mantle.data.loadable.Loadables;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
@@ -32,6 +32,7 @@ import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
+import slimeknights.tconstruct.library.modifiers.fluid.FluidAction;
 import slimeknights.tconstruct.library.modifiers.fluid.FluidEffectContext;
 import slimeknights.tconstruct.library.modifiers.fluid.FluidEffectManager;
 import slimeknights.tconstruct.library.modifiers.fluid.FluidEffects;
@@ -164,9 +165,10 @@ public enum SmashingModule implements ModifierModule, FluidModifierHook, Project
   }
 
   /* Tank filling/draining */
+  // the tool is a private copy written back by the capability when the transaction commits, so changes are always applied
 
   @Override
-  public int fill(IToolStackView tool, ModifierEntry modifier, FluidStack resource, FluidAction action) {
+  public int fill(IToolStackView tool, ModifierEntry modifier, FluidStack resource, TransactionContext transaction) {
     if (resource.isEmpty()) {
       return 0;
     }
@@ -181,18 +183,16 @@ public enum SmashingModule implements ModifierModule, FluidModifierHook, Project
       return 0;
     }
     // success! we can fill
-    if (action.execute()) {
-      // we don't actually store the amount, its up to the modifier to determine that
-      data.putString(KEY_FLUID, Loadables.FLUID.getString(resource.getFluid()));
-      // we want to store a fixed size, but its possible part swapping changes our capacity, so keep track of our capacity at the time of storing
-      data.putFloat(KEY_VALIDATE, getValidationAmount(tool, modifier));
-      setFluidComponents(data, resource);
-    }
+    // we don't actually store the amount, its up to the modifier to determine that
+    data.putString(KEY_FLUID, Loadables.FLUID.getString(resource.getFluid()));
+    // we want to store a fixed size, but its possible part swapping changes our capacity, so keep track of our capacity at the time of storing
+    data.putFloat(KEY_VALIDATE, getValidationAmount(tool, modifier));
+    setFluidComponents(data, resource);
     return amount;
   }
 
   @Override
-  public FluidStack drain(IToolStackView tool, ModifierEntry modifier, int maxDrain, FluidAction action) {
+  public FluidStack drain(IToolStackView tool, ModifierEntry modifier, int maxDrain, TransactionContext transaction) {
     if (maxDrain > 0) {
       ModDataNBT data = tool.getPersistentData();
       Fluid fluid = getFluid(data);
@@ -204,9 +204,7 @@ public enum SmashingModule implements ModifierModule, FluidModifierHook, Project
           // ensure we requested enough
         } else if (amount <= maxDrain) {
           FluidStack result = createFluid(fluid, amount, data);
-          if (action.execute()) {
-            clearFluid(data);
-          }
+          clearFluid(data);
           return result;
         }
       }
@@ -215,7 +213,7 @@ public enum SmashingModule implements ModifierModule, FluidModifierHook, Project
   }
 
   @Override
-  public FluidStack drain(IToolStackView tool, ModifierEntry modifier, FluidStack resource, FluidAction action) {
+  public FluidStack drain(IToolStackView tool, ModifierEntry modifier, FluidStack resource, TransactionContext transaction) {
     if (!resource.isEmpty()) {
       ModDataNBT data = tool.getPersistentData();
       Fluid fluid = getFluid(data);
@@ -230,9 +228,7 @@ public enum SmashingModule implements ModifierModule, FluidModifierHook, Project
           // ensure the components match
           FluidStack result = createFluid(fluid, amount, data);
           if (FluidStack.isSameFluidSameComponents(result, resource)) {
-            if (action.execute()) {
-              clearFluid(data);
-            }
+            clearFluid(data);
             return result;
           }
         }

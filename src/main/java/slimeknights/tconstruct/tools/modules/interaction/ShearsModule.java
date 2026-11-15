@@ -17,6 +17,7 @@ import net.neoforged.neoforge.common.ItemAbilities;
 import slimeknights.tconstruct.library.events.TinkerToolEvent.Result;
 import slimeknights.mantle.data.loadable.primitive.FloatLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
+import slimeknights.mantle.util.CombatHelper;
 import slimeknights.tconstruct.library.events.TinkerToolEvent.ToolShearEvent;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
@@ -119,13 +120,14 @@ public record ShearsModule(float flatBonus, float perLevelBonus, float expandedB
     // modifier can always use tags or the nullable parameter to distinguish if needed
     LootingContext context = new LootingContext(player, target, null, Util.getSlotType(hand));
     int looting = LootingModifierHook.getLooting(tool, context, EnchantmentHelper.getItemEnchantmentLevel(
-      player.level().registryAccess().holderOrThrow(Enchantments.LOOTING), player.getItemInHand(hand)));
+      player.level().registryAccess().getOrThrow(Enchantments.LOOTING), player.getItemInHand(hand)));
     looting = ArmorLootingModifierHook.getLooting(tool, context, looting);
     Level world = player.level();
     if (shearEntity(stack, tool, world, player, target, looting)) {
       boolean broken = ToolDamageUtil.damageAnimated(tool, 1, player, slotType, modifier.getId());
-      player.swing(hand);
-      player.sweepAttack();
+      // 26.3 swing takes the animation, 1.21 swing(hand) did not sync to the swinging player
+      player.swing(hand, stack.getInteractAnimation(), false);
+      CombatHelper.sweepParticles(player);
       runShearHook(tool, player, target, true);
 
       // AOE shearing

@@ -5,7 +5,6 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.neoforged.neoforge.common.ItemAbilities;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import slimeknights.mantle.data.loadable.field.ContextKey;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
@@ -91,7 +90,7 @@ public record KnockbackCounterModule(TinkerDataKey<SlotInCharge> slotInCharge, L
         EquipmentSlot checkSlot = Util.getSlotType(defender.getUsedItemHand());
         IToolStackView blockingTool = context.getValidTool(checkSlot);
         // TODO: CounterModule.isBlocking?
-        if (blockingTool != null && ModifierUtil.canPerformAction(blockingTool, ItemAbilities.SHIELD_BLOCK) && defender.getItemBySlot(checkSlot).getUseDuration(defender) - defender.getUseItemRemainingTicks() >= 5) {
+        if (blockingTool != null && ModifierUtil.canPerformAction(blockingTool, ModifierUtil.SHIELD_BLOCK) && defender.getItemBySlot(checkSlot).getUseDuration(defender) - defender.getUseItemRemainingTicks() >= 5) {
           blockingSlot = checkSlot;
         }
       }
@@ -120,7 +119,8 @@ public record KnockbackCounterModule(TinkerDataKey<SlotInCharge> slotInCharge, L
       // did we end up with any bonus?
       if (bestBonus > 0) {
         float angle = attacker.getYRot() * (float)Math.PI / 180F;
-        attacker.knockback(bestBonus, -Mth.sin(angle), Mth.cos(angle));
+        // 26.2 knockback takes the damage source and amount, pass the attack that triggered the counter
+        attacker.knockback(bestBonus, -Mth.sin(angle), Mth.cos(angle), source, damageDealt);
       }
     }
   }

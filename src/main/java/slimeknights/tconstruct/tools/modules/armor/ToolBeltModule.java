@@ -56,7 +56,7 @@ public record ToolBeltModule(Set<TooltipKey> keys) implements ModifierModule, Ke
       // swap non-blacklisted items
       InventoryModifierHook belt = modifier.getHook(ToolInventoryCapability.HOOK);
       Inventory inventory = player.getInventory();
-      int slots = Math.min(inventory.items.size(), belt.getSlots(tool, modifier));
+      int slots = Math.min(inventory.getNonEquipmentItems().size(), belt.getSlots(tool, modifier));
       boolean didChange = false;
       for (int slot = 0; slot < slots; slot++) {
         ItemStack original = inventory.getItem(slot);

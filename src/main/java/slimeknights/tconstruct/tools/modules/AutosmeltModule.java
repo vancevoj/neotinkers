@@ -17,6 +17,7 @@ import slimeknights.mantle.data.loadable.Loadables;
 import slimeknights.mantle.data.loadable.array.ArrayLoadable;
 import slimeknights.mantle.data.loadable.primitive.FloatLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
+import slimeknights.mantle.recipe.helper.RecipeHelper;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
@@ -90,7 +91,7 @@ public class AutosmeltModule implements ModifierModule, ProcessLootModifierHook 
     // try each recipe type to see if we have a recipe for any of them
     Optional<? extends AbstractCookingRecipe> recipe = Optional.empty();
     for (RecipeType<? extends AbstractCookingRecipe> recipeType : recipeTypes) {
-      recipe = world.getRecipeManager().getRecipeFor(recipeType, new SingleRecipeInput(INVENTORY.getStack()), world).map(RecipeHolder::value);
+      recipe = RecipeHelper.getRecipeFor(world, recipeType, new SingleRecipeInput(INVENTORY.getStack())).map(RecipeHolder::value);
       if (recipe.isPresent()) {
         break;
       }
@@ -133,7 +134,7 @@ public class AutosmeltModule implements ModifierModule, ProcessLootModifierHook 
     if (recipe != null) {
       // fetch recipe result, may be input sensitive
       INVENTORY.setStack(stack);
-      ItemStack output = recipe.assemble(new SingleRecipeInput(INVENTORY.getStack()), world.registryAccess());
+      ItemStack output = recipe.assemble(new SingleRecipeInput(INVENTORY.getStack()));
       INVENTORY.setStack(ItemStack.EMPTY);
       // scale the stack size based on the input size
       if (stack.getCount() > 1) {

@@ -13,6 +13,7 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.neoforged.neoforge.fluids.FluidStack;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
+import slimeknights.mantle.recipe.helper.RecipeHelper;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.json.LevelingInt;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
@@ -122,7 +123,7 @@ public record MeltingModule(LevelingInt temperature, LevelingInt nuggetsPerMetal
     // first, update inventory
     IMeltingRecipe recipe = lastRecipe;
     if (recipe == null || !recipe.matches(this, world)) {
-      recipe = world.getRecipeManager().getRecipeFor(TinkerRecipeTypes.MELTING.get(), this, world).map(RecipeHolder::value).orElse(null);
+      recipe = RecipeHelper.getRecipeFor(world, TinkerRecipeTypes.MELTING.get(), this).map(RecipeHolder::value).orElse(null);
       if (recipe == null) {
         MeltingModule.stack = ItemStack.EMPTY;
         return FluidStack.EMPTY;
@@ -153,9 +154,11 @@ public record MeltingModule(LevelingInt temperature, LevelingInt nuggetsPerMetal
     // allow tools to decide that we *must* melt the drops
     // for harvestable blocsk though, ignore that flag if the block was not effective (so we don't delete
     boolean forceMelt = tool.getVolatileData().getBoolean(FORCE_MELTING);
-    if (forceMelt && context.hasParameter(LootContextParams.BLOCK_STATE)) {
-      BlockState state = context.getParam(LootContextParams.BLOCK_STATE);
-      forceMelt = tool.getHook(ToolHooks.IS_EFFECTIVE).isToolEffective(tool, state);
+    if (forceMelt) {
+      BlockState state = context.getOptional(LootContextParams.BLOCK_STATE);
+      if (state != null) {
+        forceMelt = tool.getHook(ToolHooks.IS_EFFECTIVE).isToolEffective(tool, state);
+      }
     }
 
     // try melting each item dropped
@@ -210,7 +213,8 @@ public record MeltingModule(LevelingInt temperature, LevelingInt nuggetsPerMetal
     if (damageDealt > 0 && condition.matches(tool, modifier)) {
       // first, find the proper recipe
       if (target != null) {
-        EntityMeltingRecipe recipe = EntityMeltingRecipeCache.findRecipe(target.level().getRecipeManager(), target.getType());
+        // 26.3: the level overload uses the server recipes, or the synced recipes on the client
+        EntityMeltingRecipe recipe = EntityMeltingRecipeCache.findRecipe(target.level(), target.getType());
         FluidStack output;
         int damagePerOutput;
         if (recipe != null) {

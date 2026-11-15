@@ -28,6 +28,8 @@ import slimeknights.mantle.data.loadable.array.ArrayLoadable;
 import slimeknights.mantle.data.loadable.common.IngredientLoadable;
 import slimeknights.mantle.data.loadable.primitive.FloatLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
+import slimeknights.mantle.recipe.helper.IngredientHelper;
+import slimeknights.mantle.recipe.ingredient.EmptyIngredient;
 import slimeknights.tconstruct.common.TinkerDamageTypes;
 import slimeknights.tconstruct.library.json.LevelingInt;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
@@ -98,7 +100,7 @@ public record FireballModule(List<FireballType> options, DamageTypePair damageTy
       ModifierEntry.LOADABLE.list(0).defaultField("ammo_modifiers", List.of(), false, FireballType::ammoModifiers),
       FireballType::new);
     /** Empty instance to make cache easier */
-    public static final FireballType EMPTY = new FireballType(Ingredient.EMPTY, null, 1f, List.of());
+    public static final FireballType EMPTY = new FireballType(EmptyIngredient.VANILLA, null, 1f, List.of());
 
     /** Gets the damage type with the given fallback */
     public DamageTypePair damageType(DamageTypePair fallback) {
@@ -193,7 +195,7 @@ public record FireballModule(List<FireballType> options, DamageTypePair damageTy
           ToolDamageUtil.damageAnimated(tool, durability.compute(modifier), entity, slot, modifier.getId());
         }
       }
-      entity.playSound(sound, 2.0F, (level.random.nextFloat() - level.random.nextFloat()) * 0.2F + 1.0F);
+      entity.playSound(sound, 2.0F, (level.getRandom().nextFloat() - level.getRandom().nextFloat()) * 0.2F + 1.0F);
       return true;
     }
     return false;
@@ -204,7 +206,7 @@ public record FireballModule(List<FireballType> options, DamageTypePair damageTy
     if (condition.matches(tool, modifier) && !tool.isBroken() && tool.getHook(ToolHooks.INTERACTION).canInteract(tool, modifier.getId(), source)) {
       if (shoot(tool, modifier, player, player, Util.getSlotType(hand))) {
         GeneralInteractionModifierHook.addCooldown(tool, player, 1);
-        return InteractionResult.sidedSuccess(player.level().isClientSide());
+        return InteractionResult.SUCCESS;
       }
     }
     return InteractionResult.PASS;
@@ -261,7 +263,7 @@ public record FireballModule(List<FireballType> options, DamageTypePair damageTy
 
     /** Creates a new fireball option */
     public Fireball fireball(TagKey<Item> tag) {
-      return fireball(Ingredient.of(tag));
+      return fireball(IngredientHelper.tag(tag));
     }
 
     /** Creates a new fireball option */

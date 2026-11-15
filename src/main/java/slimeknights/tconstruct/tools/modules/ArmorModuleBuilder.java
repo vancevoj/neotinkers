@@ -9,7 +9,7 @@ import net.minecraft.world.item.equipment.ArmorType;
 public interface ArmorModuleBuilder<T> {
   /**
    * Array of the durability multiplier for use in durability factor creation, in order helmet, chestplate, leggings, boot.
-   * This is identical values to those used in {@link net.minecraft.world.item.ArmorMaterials}{@code #HEALTH_FUNCTION_FOR_TYPE},
+   * This is identical values to the unit durability of each {@link ArmorType} ({@link ArmorType#getDurability(int)}),
    * though as a public array (using ordinals from {@link ArmorType} as the indices.
    */
   int[] MAX_DAMAGE_ARRAY = {11, 16, 15, 13};

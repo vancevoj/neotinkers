@@ -5,6 +5,7 @@ import com.google.gson.JsonParseException;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.Identifier;
@@ -34,6 +35,7 @@ import slimeknights.mantle.data.loadable.field.LoadableField;
 import slimeknights.mantle.data.loadable.primitive.FloatLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.data.predicate.item.ItemPredicate;
+import slimeknights.mantle.recipe.helper.RecipeHelper;
 import slimeknights.mantle.util.JsonHelper;
 import slimeknights.mantle.util.typed.TypedMap;
 import slimeknights.tconstruct.TConstruct;
@@ -133,7 +135,7 @@ public record SmeltingModule(RecipeType<? extends AbstractCookingRecipe> recipeT
         return lastRecipe;
       }
       // if that failed, do a recipe lookup
-      AbstractCookingRecipe recipe = level.getRecipeManager().getRecipeFor(recipeType, new SingleRecipeInput(CONTAINER.getStack()), level).map(RecipeHolder::value).orElse(null);
+      AbstractCookingRecipe recipe = RecipeHelper.getRecipeFor(level, recipeType, new SingleRecipeInput(CONTAINER.getStack())).map(RecipeHolder::value).orElse(null);
       if (recipe != null) {
         lastRecipe = recipe;
       }
@@ -145,6 +147,16 @@ public record SmeltingModule(RecipeType<? extends AbstractCookingRecipe> recipeT
     } finally {
       CONTAINER.setStack(ItemStack.EMPTY);
     }
+  }
+
+  /** Reads the stack from an inventory list entry, the slot and time keys are ignored by the codec */
+  private static ItemStack readStack(Level level, CompoundTag entry) {
+    if (entry.isEmpty()) {
+      return ItemStack.EMPTY;
+    }
+    return ItemStack.OPTIONAL_CODEC.parse(level.registryAccess().createSerializationContext(NbtOps.INSTANCE), entry)
+                                   .resultOrPartial(error -> TConstruct.LOG.error("Tried to load invalid item: '{}'", error))
+                                   .orElse(ItemStack.EMPTY);
   }
 
   /** Redirect to {@link #cookItems(IToolStackView, ModifierEntry, Level, LivingEntity, float)} that fetches level from an entity. */
@@ -170,12 +182,13 @@ public record SmeltingModule(RecipeType<? extends AbstractCookingRecipe> recipeT
         AbstractCookingRecipe recipe = null;
         ItemStack stack = null;
 
-        CompoundTag entry = list.getCompound(i);
-        int time = entry.getInt(TAG_TIME);
+        // list entries are compounds, getCompoundOrEmpty returns the live entry so edits apply to the list
+        CompoundTag entry = list.getCompoundOrEmpty(i);
+        int time = entry.getIntOr(TAG_TIME, 0);
         // 0 means no recipe, time for a lookup
         if (time == 0) {
           time = NO_RECIPE;
-          stack = ItemStack.parseOptional(level.registryAccess(), entry);
+          stack = readStack(level, entry);
           recipe = findRecipe(recipeType, stack, level, modifier.getId());
           if (recipe != null) {
             time = recipe.cookingTime();
@@ -190,7 +203,7 @@ public record SmeltingModule(RecipeType<? extends AbstractCookingRecipe> recipeT
             entry.putInt(TAG_TIME, time);
           } else {
             // locate the result and see if we might fit
-            int slot = entry.getInt(TAG_SLOT);
+            int slot = entry.getIntOr(TAG_SLOT, 0);
             ItemStack currentResult = output.getStack(tool, modifier, slot);
             int maxStackSize = 0;
             if (!currentResult.isEmpty()) {
@@ -204,7 +217,7 @@ public record SmeltingModule(RecipeType<? extends AbstractCookingRecipe> recipeT
 
             // use the recipe we fetched earlier if present
             if (recipe == null) {
-              stack = ItemStack.parseOptional(level.registryAccess(), entry);
+              stack = readStack(level, entry);
               if (!stack.isEmpty()) {
                 recipe = findRecipe(recipeType, stack, level, modifier.getId());
               }
@@ -214,7 +227,7 @@ public record SmeltingModule(RecipeType<? extends AbstractCookingRecipe> recipeT
               // attempt to assemble the recipe, use a try/catch in case their assemble logic is bad
               CONTAINER.setStack(stack);
               try {
-                ItemStack result = recipe.assemble(new SingleRecipeInput(CONTAINER.getStack()), level.registryAccess());
+                ItemStack result = recipe.assemble(new SingleRecipeInput(CONTAINER.getStack()));
 
                 // check again if we have space for the result now that we know its size
                 if (!result.isEmpty()) {
@@ -306,7 +319,7 @@ public record SmeltingModule(RecipeType<? extends AbstractCookingRecipe> recipeT
     // arrow launch cook by arrow power
     float amount;
     if (arrow != null) {
-      amount = (float) arrow.getBaseDamage();
+      amount = (float) arrow.baseDamage;
     } else if (projectile instanceof ProjectileWithPower withPower) {
       amount = withPower.getPower();
     } else {

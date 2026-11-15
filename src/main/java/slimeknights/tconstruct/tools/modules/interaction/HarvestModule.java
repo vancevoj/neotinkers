@@ -18,6 +18,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import slimeknights.tconstruct.library.events.TinkerToolEvent.Result;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.data.loadable.record.SingletonLoader;
+import slimeknights.mantle.util.CombatHelper;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.events.TinkerToolEvent.ToolHarvestEvent;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
@@ -126,10 +127,15 @@ public enum HarvestModule implements ModifierModule, BlockInteractionModifierHoo
         }
       }
       // must have an age property, and be at max age
-      if (age == null || state.getValue(age) < age.max) {
+      if (age == null) {
         return false;
       }
-      replant = state.setValue(age, age.min);
+      // 26.3: min and max are private, the possible values are the sorted range from min to max
+      List<Integer> ages = age.getPossibleValues();
+      if (state.getValue(age) < ages.getLast()) {
+        return false;
+      }
+      replant = state.setValue(age, ages.getFirst());
     }
 
     // crop is fully grown, get block drops
@@ -259,7 +265,7 @@ public enum HarvestModule implements ModifierModule, BlockInteractionModifierHoo
         // animations
         if (player != null) {
           if (didHarvest) {
-            player.sweepAttack();
+            CombatHelper.sweepParticles(player);
           }
           // broadcastBreakEvent removed in 1.21; item break animation handled internally by hurtAndBreak
         }

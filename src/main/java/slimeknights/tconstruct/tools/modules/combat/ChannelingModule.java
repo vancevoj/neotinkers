@@ -7,6 +7,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LightningBolt;
 import net.minecraft.world.entity.LivingEntity;
@@ -53,7 +54,7 @@ public record ChannelingModule(float clearChance, float rainChance, float thunde
 
   /** Attempts to summon lightning at the target */
   private void tryStrike(Level level, @Nullable LivingEntity attacker, BlockPos target) {
-    if (level instanceof ServerLevel && level.canSeeSky(target)) {
+    if (level instanceof ServerLevel server && level.canSeeSky(target)) {
       // select chance based on weather
       float chance;
       if (level.isThundering()) {
@@ -64,10 +65,10 @@ public record ChannelingModule(float clearChance, float rainChance, float thunde
         chance = clearChance;
       }
       // if the chance passes, spawn lightning
-      if (chance >= 1 || level.random.nextFloat() < chance) {
-        LightningBolt lightning = EntityTypes.LIGHTNING_BOLT.create(level);
+      if (chance >= 1 || level.getRandom().nextFloat() < chance) {
+        LightningBolt lightning = EntityTypes.LIGHTNING_BOLT.create(server, EntitySpawnReason.TRIGGERED);
         if (lightning != null) {
-          lightning.moveTo(Vec3.atBottomCenterOf(target));
+          lightning.snapTo(Vec3.atBottomCenterOf(target));
           if (attacker instanceof ServerPlayer player) {
             lightning.setCause(player);
           }

@@ -68,12 +68,12 @@ public enum TrickQuiverModule implements ModifierModule, BowAmmoModifierHook, Ge
 
   @Override
   public void onDisableSelection(IToolStackView tool, ModifierEntry modifier, Player player) {
-    player.displayClientMessage(Component.translatable(DISABLED, modifier.getModifier().getDisplayName()), true);
+    player.sendOverlayMessage(Component.translatable(DISABLED, modifier.getModifier().getDisplayName()));
   }
 
   @Override
   public void onInventorySelect(IToolStackView tool, ModifierEntry modifier, Player player, int newIndex, ItemStack stack) {
-    player.displayClientMessage(Component.translatable(SELECTED, modifier.getModifier().getDisplayName(), stack.getHoverName(), newIndex + 1), true);
+    player.sendOverlayMessage(Component.translatable(SELECTED, modifier.getModifier().getDisplayName(), stack.getHoverName(), newIndex + 1));
   }
 
   @Override

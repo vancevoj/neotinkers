@@ -16,6 +16,7 @@ import slimeknights.tconstruct.library.module.HookProvider;
 import slimeknights.tconstruct.library.module.ModuleHook;
 import slimeknights.tconstruct.library.tools.context.EquipmentChangeContext;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
+import slimeknights.tconstruct.library.utils.TinkerEffectCures;
 
 import java.util.List;
 
@@ -48,7 +49,8 @@ public record ReduceEffectOnUnequipModule(MobEffectCategory category, LevelingVa
         // iterate all matching effects, updating the duration
         for (MobEffectInstance instance : entity.getActiveEffects()) {
           // effects with no cures (the 1.20 empty curative items) are internal effects, so they are not reduced
-          if (!instance.isInfiniteDuration() && instance.getEffect().value().getCategory() == this.category && !instance.getCures().isEmpty()) {
+          // 26.3: NeoForge removed effect cures, Tinkers tracks them itself in TinkerEffectCures
+          if (!instance.isInfiniteDuration() && instance.getEffect().value().getCategory() == this.category && !TinkerEffectCures.getCures(instance).isEmpty()) {
             instance.duration = Math.max(1, (int) (instance.duration * (1 - percent)));
           }
         }

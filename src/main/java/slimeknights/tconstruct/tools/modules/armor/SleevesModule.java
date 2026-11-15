@@ -4,7 +4,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
@@ -50,12 +49,12 @@ public enum SleevesModule implements ModifierModule, GeneralInteractionModifierH
 
   @Override
   public void onInventorySelect(IToolStackView tool, ModifierEntry modifier, Player player, int newIndex, ItemStack stack) {
-    player.displayClientMessage(Component.translatable(SELECTED, stack.getHoverName(), newIndex + 1), true);
+    player.sendOverlayMessage(Component.translatable(SELECTED, stack.getHoverName(), newIndex + 1));
   }
 
   @Override
   public void onDisableSelection(IToolStackView tool, ModifierEntry modifier, Player player) {
-    player.displayClientMessage(DISABLED, true);
+    player.sendOverlayMessage(DISABLED);
   }
 
   @Override
@@ -67,12 +66,22 @@ public enum SleevesModule implements ModifierModule, GeneralInteractionModifierH
         ItemStack ammo = inventory.getStack(tool, modifier, selected);
         // if we have nothing, fallback to the slot toggle
         if (!ammo.isEmpty()) {
-          if (!player.getCooldowns().isOnCooldown(ammo.getItem())) {
+          if (!player.getCooldowns().isOnCooldown(ammo)) {
             // to use the item, we need it in the hand, but something else might be there, so temporarily swap
             ItemStack held = player.getItemInHand(hand);
             player.setItemInHand(hand, ammo);
             // use the item
-            InteractionResultHolder<ItemStack> result = ammo.use(player.level(), player, hand);
+            InteractionResult result = ammo.use(player.level(), player, hand);
+            // 26.3: the resulting stack is either the transformed stack or whatever is left in the hand, same as ServerPlayerGameMode#useItem
+            ItemStack resultStack = null;
+            if (result instanceof InteractionResult.Success success) {
+              resultStack = success.heldItemTransformedTo();
+              // strip the transformed stack from the result, else the caller would replace the tool in the hand with the ammo
+              result = new InteractionResult.Success(success.swingSource(), InteractionResult.ItemContext.DEFAULT);
+            }
+            if (resultStack == null) {
+              resultStack = player.getItemInHand(hand);
+            }
             // restore original hand item
             player.setItemInHand(hand, held);
             // ensure the use action did not start us using items
@@ -80,8 +89,8 @@ public enum SleevesModule implements ModifierModule, GeneralInteractionModifierH
               player.stopUsingItem();
             }
             // handle result
-            inventory.setStack(tool, modifier, selected, result.getObject());
-            return result.getResult();
+            inventory.setStack(tool, modifier, selected, resultStack);
+            return result;
           } else {
             // toggle if we just were unable to use the item
             return InteractionResult.PASS;
