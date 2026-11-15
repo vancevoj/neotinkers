@@ -1,8 +1,8 @@
 package slimeknights.tconstruct.library.tools.definition.module.material;
 
+import net.minecraft.world.item.equipment.ArmorType;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import net.minecraft.world.item.ArmorItem;
 import slimeknights.mantle.data.loadable.primitive.IntLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.tconstruct.library.materials.definition.MaterialId;
@@ -67,7 +67,7 @@ public record StatlessPartRepairModule(int partIndex, int repairAmount) implemen
 
     /** Sets the durability for the piece based on the given factor */
     public ArmorBuilder durabilityFactor(float maxDamageFactor) {
-      for (ArmorItem.Type slotType : ArmorItem.Type.values()) {
+      for (ArmorType slotType : ArmorType.values()) {
         int index = slotType.ordinal();
         if (index >= durability.length) { // skip 1.21's BODY armor type
           continue;
@@ -78,7 +78,7 @@ public record StatlessPartRepairModule(int partIndex, int repairAmount) implemen
     }
 
     @Override
-    public StatlessPartRepairModule build(ArmorItem.Type slot) {
+    public StatlessPartRepairModule build(ArmorType slot) {
       return new StatlessPartRepairModule(partIndex, durability[slot.ordinal()]);
     }
   }

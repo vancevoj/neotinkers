@@ -4,7 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import mezz.jei.api.gui.builder.ITooltipBuilder;
 import mezz.jei.api.ingredients.IIngredientRenderer;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -28,12 +28,12 @@ public enum MaterialIconIngredientRenderer implements IIngredientRenderer<Materi
   private final Function<MaterialVariantId, ItemStack> stackGetter = id -> TinkerToolParts.repairKit.get().withMaterialForDisplay(id);
 
   @Override
-  public void render(GuiGraphics guiGraphics, MaterialVariant material) {
+  public void render(GuiGraphicsExtractor guiGraphics, MaterialVariant material) {
     render(guiGraphics, material, 0, 0);
   }
 
   @Override
-  public void render(GuiGraphics graphics, MaterialVariant material, int posX, int posY) {
+  public void render(GuiGraphicsExtractor graphics, MaterialVariant material, int posX, int posY) {
     RenderSystem.enableDepthTest();
     graphics.renderFakeItem(stackCache.computeIfAbsent(material.getVariant(), stackGetter), posX, posY);
     RenderSystem.disableBlend();

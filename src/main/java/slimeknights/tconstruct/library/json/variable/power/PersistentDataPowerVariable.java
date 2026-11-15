@@ -1,6 +1,6 @@
 package slimeknights.tconstruct.library.json.variable.power;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.phys.EntityHitResult;
@@ -14,7 +14,7 @@ import slimeknights.tconstruct.library.tools.nbt.ModifierNBT;
 import javax.annotation.Nullable;
 
 /** Variable that fetches a number from projectile persistent data data */
-public record PersistentDataPowerVariable(ResourceLocation key, float fallback) implements PowerVariable {
+public record PersistentDataPowerVariable(Identifier key, float fallback) implements PowerVariable {
   public static final RecordLoadable<PersistentDataPowerVariable> LOADER = RecordLoadable.create(
     Loadables.RESOURCE_LOCATION.requiredField("key", PersistentDataPowerVariable::key),
     FloatLoadable.ANY.requiredField("fallback", PersistentDataPowerVariable::fallback),

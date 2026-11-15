@@ -1,11 +1,11 @@
 package slimeknights.tconstruct.smeltery.client.screen;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Inventory;
 import slimeknights.mantle.client.screen.ElementScreen;
@@ -27,7 +27,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 public class HeatingStructureScreen extends MultiModuleScreen<HeatingStructureContainerMenu> implements IScreenWithFluidTank {
-  public static final ResourceLocation BACKGROUND = TConstruct.getResource("textures/gui/heating_structure.png");
+  public static final Identifier BACKGROUND = TConstruct.getResource("textures/gui/heating_structure.png");
   private static final ElementScreen SCALA = new ElementScreen(BACKGROUND, 176, 0, 80, 106, 256, 256);
   // slot modes
   private static final ElementScreen MODE_AUTO = SCALA.move(176, 186, 16, 16);
@@ -90,7 +90,7 @@ public class HeatingStructureScreen extends MultiModuleScreen<HeatingStructureCo
     }
   }
   @Override
-  protected void renderBg(GuiGraphics graphics, float partialTicks, int mouseX, int mouseY) {
+  protected void renderBg(GuiGraphicsExtractor graphics, float partialTicks, int mouseX, int mouseY) {
     // draw stuff with background
     GuiUtil.drawBackground(graphics, this, BACKGROUND);
     // fuel
@@ -101,7 +101,7 @@ public class HeatingStructureScreen extends MultiModuleScreen<HeatingStructureCo
     // draw other components
     super.renderBg(graphics, partialTicks, mouseX, mouseY);
 
-    // render fluids (GuiGraphics-native now, no immediate-mode batching issues)
+    // render fluids (GuiGraphicsExtractor-native now, no immediate-mode batching issues)
     if (tank != null) tank.renderFluids(graphics);
   }
 
@@ -111,8 +111,8 @@ public class HeatingStructureScreen extends MultiModuleScreen<HeatingStructureCo
   }
 
   @Override
-  protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
-    super.renderLabels(graphics, mouseX, mouseY);
+  protected void extractLabels(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
+    super.extractLabels(graphics, mouseX, mouseY);
 
     SCALA.draw(graphics, 8, 16, 110);
 
@@ -143,12 +143,12 @@ public class HeatingStructureScreen extends MultiModuleScreen<HeatingStructureCo
   }
 
   @Override
-  protected void renderTooltip(GuiGraphics graphics, int mouseX, int mouseY) {
+  protected void renderTooltip(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
     super.renderTooltip(graphics, mouseX, mouseY);
 
     // add the hover text giving info on the button
     if (bucketButtonHovered(mouseX - leftPos, mouseY - topPos)) {
-      graphics.renderTooltip(font, switch (menu.getTransferDirection()) {
+      graphics.setTooltipForNextFrame(font, switch (menu.getTransferDirection()) {
         default -> TOOLTIP_AUTO;
         case EMPTY_ITEM -> TOOLTIP_EMPTY;
         case FILL_ITEM -> TOOLTIP_FILL;

@@ -1,6 +1,6 @@
 package slimeknights.tconstruct.tools.modules.ranged;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import slimeknights.mantle.data.loadable.primitive.BooleanLoadable;
@@ -28,7 +28,7 @@ public record BulkQuiverModule(boolean checkStandardArrows) implements ModifierM
     BooleanLoadable.INSTANCE.defaultField("check_standard_arrows", true, BulkQuiverModule::checkStandardArrows),
     BulkQuiverModule::new);
   private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<BulkQuiverModule>defaultHooks(ModifierHooks.BOW_AMMO);
-  private static final ResourceLocation LAST_SLOT = TConstruct.getResource("quiver_last_selected");
+  private static final Identifier LAST_SLOT = TConstruct.getResource("quiver_last_selected");
   /** @deprecated use {@link #BulkQuiverModule(boolean)} */
   @Deprecated(forRemoval = true)
   public static final BulkQuiverModule INSTANCE = new BulkQuiverModule(true);

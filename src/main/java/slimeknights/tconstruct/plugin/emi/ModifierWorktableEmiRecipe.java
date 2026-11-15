@@ -8,7 +8,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import slimeknights.tconstruct.TConstruct;
@@ -24,7 +24,7 @@ import java.util.List;
  */
 public class ModifierWorktableEmiRecipe extends BasicEmiRecipe {
   /** Background texture, matches the JEI background (textures/gui/jei/tinker_station.png, 121x35 at 0,166). */
-  private static final ResourceLocation BACKGROUND_LOC = TConstruct.getResource("textures/gui/jei/tinker_station.png");
+  private static final Identifier BACKGROUND_LOC = TConstruct.getResource("textures/gui/jei/tinker_station.png");
 
   private final IModifierWorktableRecipe recipe;
 
@@ -86,7 +86,7 @@ public class ModifierWorktableEmiRecipe extends BasicEmiRecipe {
       widgets.addDrawable(82, 16, 36, 16, (graphics, mouseX, mouseY, delta) -> {
         Font font = Minecraft.getInstance().font;
         Component name = modifiers.get(0).getDisplayName();
-        graphics.drawString(font, name, 0, 4, -1, true);
+        graphics.text(font, name, 0, 4, -1, true);
       });
       List<Component> tooltip = new ArrayList<>();
       for (ModifierEntry entry : modifiers) {

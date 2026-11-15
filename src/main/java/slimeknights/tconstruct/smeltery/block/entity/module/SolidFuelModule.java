@@ -52,12 +52,12 @@ public class SolidFuelModule extends FuelModule {
     Level level = getLevel();
     if (level instanceof ServerLevel serverLevel) {
       if (itemHandlerCache == null) {
-        itemHandlerCache = BlockCapabilityCache.create(Capabilities.ItemHandler.BLOCK, serverLevel, fuelPos, null);
+        itemHandlerCache = BlockCapabilityCache.create(Capabilities.Item.BLOCK, serverLevel, fuelPos, null);
       }
       return itemHandlerCache.getCapability();
     }
     // client: always re-query so a transiently-missing capability recovers after reload
-    return level.getCapability(Capabilities.ItemHandler.BLOCK, fuelPos, null);
+    return level.getCapability(Capabilities.Item.BLOCK, fuelPos, null);
   }
 
 

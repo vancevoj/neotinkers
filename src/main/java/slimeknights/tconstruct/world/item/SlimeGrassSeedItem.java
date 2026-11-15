@@ -80,7 +80,7 @@ public class SlimeGrassSeedItem extends TooltipItem {
     }
 
     // will have a state at this point
-    if (!world.isClientSide) {
+    if (!world.isClientSide()) {
       world.setBlockAndUpdate(pos, newState);
       world.playSound(null, pos, newState.getSoundType(world, pos, context.getPlayer()).getPlaceSound(), SoundSource.BLOCKS, 1.0f, 1.0f);
       Player player = context.getPlayer();

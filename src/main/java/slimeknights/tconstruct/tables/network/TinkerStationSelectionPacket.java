@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
@@ -19,14 +19,14 @@ public class TinkerStationSelectionPacket implements IThreadsafePacket {
   public static final Type<TinkerStationSelectionPacket> TYPE = new Type<>(TConstruct.getResource("tinker_station_selection"));
   public static final StreamCodec<RegistryFriendlyByteBuf,TinkerStationSelectionPacket> STREAM_CODEC = ISimplePacket.codec(TinkerStationSelectionPacket::new);
 
-  private final ResourceLocation layoutName;
+  private final Identifier layoutName;
   public TinkerStationSelectionPacket(FriendlyByteBuf buffer) {
-    this.layoutName = buffer.readResourceLocation();
+    this.layoutName = buffer.readIdentifier();
   }
 
   @Override
   public void encode(FriendlyByteBuf buffer) {
-    buffer.writeResourceLocation(this.layoutName);
+    buffer.writeIdentifier(this.layoutName);
   }
 
   @Override

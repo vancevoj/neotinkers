@@ -1,6 +1,6 @@
 package slimeknights.tconstruct.library.client.book.content.material;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.materials.definition.MaterialVariantId;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
@@ -8,14 +8,14 @@ import slimeknights.tconstruct.tools.stats.SlimeStats;
 
 /** Content page for slimesuit slime, showing stats and traits. */
 public class SlimeMaterialContent extends SingleMaterialStatContent {
-  public static final ResourceLocation ID = TConstruct.getResource("slime_material");
+  public static final Identifier ID = TConstruct.getResource("slime_material");
 
   public SlimeMaterialContent(MaterialVariantId materialVariant, boolean detailed) {
     super(materialVariant, detailed);
   }
 
   @Override
-  public ResourceLocation getId() {
+  public Identifier getId() {
     return ID;
   }
 

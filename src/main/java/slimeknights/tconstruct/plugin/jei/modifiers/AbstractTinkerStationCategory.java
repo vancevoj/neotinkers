@@ -14,7 +14,7 @@ import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.AbstractRecipeCategory;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.ApiStatus.Internal;
@@ -41,7 +41,7 @@ import java.util.stream.Stream;
 
 /** Common logic between {@link ModifierRecipeCategory} and {@link ToolTinkeringCategory} */
 public abstract class AbstractTinkerStationCategory<T extends IDisplayTinkerStationRecipe> extends AbstractRecipeCategory<T> {
-  protected static final ResourceLocation BACKGROUND_LOC = TConstruct.getResource("textures/gui/jei/tinker_station.png");
+  protected static final Identifier BACKGROUND_LOC = TConstruct.getResource("textures/gui/jei/tinker_station.png");
   protected static final String TOOL_SLOT = "tool_with";
   protected static final String RESULT_TOOL_SLOT = "tool_without";
 
@@ -67,7 +67,7 @@ public abstract class AbstractTinkerStationCategory<T extends IDisplayTinkerStat
 
   @Nullable
   @Override
-  public ResourceLocation getRegistryName(T recipe) {
+  public Identifier getRegistryName(T recipe) {
     return recipe.getRecipeId();
   }
 

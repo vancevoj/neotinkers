@@ -4,7 +4,7 @@ import com.google.gson.JsonObject;
 import com.mojang.blaze3d.platform.NativeImage;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import slimeknights.tconstruct.library.client.data.GenericTextureGenerator;
@@ -83,8 +83,8 @@ public class MaterialPartTextureGenerator extends GenericTextureGenerator {
 
     // for each material list, generate sprites
     List<CompletableFuture<?>> tasks = new ArrayList<>();
-    BiConsumer<ResourceLocation, NativeImage> saver = (path, image) -> tasks.add(saveImage(cache, path, image));
-    BiConsumer<ResourceLocation, JsonObject> metaSaver = (path, meta) -> tasks.add(saveMetadata(cache, path, meta));
+    BiConsumer<Identifier, NativeImage> saver = (path, image) -> tasks.add(saveImage(cache, path, image));
+    BiConsumer<Identifier, JsonObject> metaSaver = (path, meta) -> tasks.add(saveMetadata(cache, path, meta));
     for (AbstractMaterialSpriteProvider materialProvider : materialProviders) {
       Collection<MaterialSpriteInfo> materials = materialProvider.getMaterials().values();
       if (materials.isEmpty()) {
@@ -98,7 +98,7 @@ public class MaterialPartTextureGenerator extends GenericTextureGenerator {
             // if any stat type matches, generate it
             for (MaterialStatsId statType : part.getStatTypes()) {
               if (material.supportStatType(statType) || overrides.hasOverride(statType, material.getTexture())) {
-                ResourceLocation spritePath = outputPath(part, material);
+                Identifier spritePath = outputPath(part, material);
                 if (!spriteReader.exists(spritePath)) {
                   generateSprite(spriteReader, material, part, spritePath, saver, metaSaver);
                 }
@@ -117,9 +117,9 @@ public class MaterialPartTextureGenerator extends GenericTextureGenerator {
   }
 
   /** Gets the output path for a given sprite */
-  public static ResourceLocation outputPath(PartSpriteInfo part, MaterialSpriteInfo material) {
+  public static Identifier outputPath(PartSpriteInfo part, MaterialSpriteInfo material) {
     // path format: pNamespace:pPath_mNamespace_mPath
-    ResourceLocation materialTexture = material.getTexture();
+    Identifier materialTexture = material.getTexture();
     return part.getPath().withSuffix("_" + materialTexture.getNamespace() + "_" + materialTexture.getPath());
   }
 
@@ -131,7 +131,7 @@ public class MaterialPartTextureGenerator extends GenericTextureGenerator {
    * @param saver           Function to save the images
    * @param metaSaver       Function to save the animation metadata
    */
-  public static void generateSprite(AbstractSpriteReader spriteReader, MaterialSpriteInfo material, PartSpriteInfo part, ResourceLocation spritePath, BiConsumer<ResourceLocation, NativeImage> saver, BiConsumer<ResourceLocation,JsonObject> metaSaver) {
+  public static void generateSprite(AbstractSpriteReader spriteReader, MaterialSpriteInfo material, PartSpriteInfo part, Identifier spritePath, BiConsumer<Identifier, NativeImage> saver, BiConsumer<Identifier,JsonObject> metaSaver) {
     // image does not exist? first step is to find a base image
     NativeImage base = null;
     for (String fallback : material.getFallbacks()) {

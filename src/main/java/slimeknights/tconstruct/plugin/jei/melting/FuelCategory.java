@@ -15,7 +15,7 @@ import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.category.AbstractRecipeCategory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.navigation.ScreenPosition;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
@@ -100,12 +100,12 @@ public class FuelCategory extends AbstractRecipeCategory<MeltingFuel> {
     private static final String KEY_DURATION = TConstruct.makeTranslationKey("jei", "fuel.duration.liquid");
 
     @Override
-    public void drawWidget(GuiGraphics graphics, double mouseX, double mouseY) {
+    public void drawWidget(GuiGraphicsExtractor graphics, double mouseX, double mouseY) {
       FluidStack fluid = fuel.getDisplayedIngredient(NeoForgeTypes.FLUID_STACK).orElse(FluidStack.EMPTY);
       if (!fluid.isEmpty()) {
-        graphics.drawString(font, LASTS, 0, 0, Color.GRAY.getRGB(), false);
+        graphics.text(font, LASTS, 0, 0, Color.GRAY.getRGB(), false);
         Component string = Component.translatable(KEY_DURATION, duration, fluid.getAmount());
-        graphics.drawString(font, string, width - font.width(string), 0, Color.GRAY.getRGB(), false);
+        graphics.text(font, string, width - font.width(string), 0, Color.GRAY.getRGB(), false);
       }
     }
   }
@@ -134,12 +134,12 @@ public class FuelCategory extends AbstractRecipeCategory<MeltingFuel> {
     }
 
     @Override
-    public void drawWidget(GuiGraphics graphics, double mouseX, double mouseY) {
+    public void drawWidget(GuiGraphicsExtractor graphics, double mouseX, double mouseY) {
       ItemStack stack = fuel.getDisplayedItemStack().orElse(ItemStack.EMPTY);
       if (!stack.isEmpty()) {
-        graphics.drawString(font, LASTS, 0, 0, Color.GRAY.getRGB(), false);
+        graphics.text(font, LASTS, 0, 0, Color.GRAY.getRGB(), false);
         Component string = Component.translatable(KEY_DURATION, getBurnTime(stack));
-        graphics.drawString(font, string, width - font.width(string), 0, Color.GRAY.getRGB(), false);
+        graphics.text(font, string, width - font.width(string), 0, Color.GRAY.getRGB(), false);
       }
     }
   }

@@ -9,7 +9,7 @@ import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import lombok.NoArgsConstructor;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.module.ModuleHook;
@@ -27,7 +27,7 @@ public class ModifierHookArgument implements ArgumentType<ModuleHook<?>> {
 
   @Override
   public ModuleHook<?> parse(StringReader reader) throws CommandSyntaxException {
-    ResourceLocation loc = IdParser.read(TConstruct.MOD_ID, reader);
+    Identifier loc = IdParser.read(TConstruct.MOD_ID, reader);
     ModuleHook<?> hook = ModifierHooks.LOADER.getValue(loc);
     if (hook == null) {
       throw HOOK_NOT_FOUND.create(loc);

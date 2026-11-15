@@ -1,6 +1,6 @@
 package slimeknights.tconstruct.library.tools.item;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.ItemLike;
@@ -14,18 +14,18 @@ import slimeknights.tconstruct.library.tools.nbt.ModDataNBT;
 public interface IModifiable extends ItemLike {
   /** @deprecated use {@link IndestructibleItemEntity#INDESTRUCTIBLE_ENTITY} */
   @Deprecated(forRemoval = true)
-  ResourceLocation INDESTRUCTIBLE_ENTITY = IndestructibleItemEntity.INDESTRUCTIBLE_ENTITY;
+  Identifier INDESTRUCTIBLE_ENTITY = IndestructibleItemEntity.INDESTRUCTIBLE_ENTITY;
   /** Volatile boolean key to make a tool spawn an indestructable entity */
-  ResourceLocation SHINY = TConstruct.getResource("shiny");
+  Identifier SHINY = TConstruct.getResource("shiny");
   /** Volatile int key to increase a tool's range */
-  ResourceLocation EXPANDED = TConstruct.getResource("expanded");
+  Identifier EXPANDED = TConstruct.getResource("expanded");
   /** @deprecated use {@link RarityModule#RARITY} */
   @Deprecated(forRemoval = true)
-  ResourceLocation RARITY = RarityModule.RARITY;
+  Identifier RARITY = RarityModule.RARITY;
   /** Modifier key to defer tool interaction to the offhand if present */
-  ResourceLocation DEFER_OFFHAND = TConstruct.getResource("defer_offhand");
+  Identifier DEFER_OFFHAND = TConstruct.getResource("defer_offhand");
   /** Modifier key to entirely disable tool interaction */
-  ResourceLocation NO_INTERACTION = TConstruct.getResource("no_interaction");
+  Identifier NO_INTERACTION = TConstruct.getResource("no_interaction");
 
   /** Gets the definition of this tool for building and applying modifiers */
   ToolDefinition getToolDefinition();

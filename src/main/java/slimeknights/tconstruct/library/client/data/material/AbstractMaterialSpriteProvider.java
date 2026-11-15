@@ -8,7 +8,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import slimeknights.tconstruct.library.client.data.spritetransformer.IColorMapping;
 import slimeknights.tconstruct.library.client.data.spritetransformer.ISpriteTransformer;
 import slimeknights.tconstruct.library.client.data.spritetransformer.RecolorSpriteTransformer;
@@ -42,9 +42,9 @@ import java.util.stream.Collectors;
  */
 public abstract class AbstractMaterialSpriteProvider {
   /** All materials to generate */
-  private final Map<ResourceLocation, MaterialSpriteInfoBuilder> materialBuilders = new HashMap<>();
+  private final Map<Identifier, MaterialSpriteInfoBuilder> materialBuilders = new HashMap<>();
   /** List of built materials */
-  private Map<ResourceLocation, MaterialSpriteInfo> builtMaterials = null;
+  private Map<Identifier, MaterialSpriteInfo> builtMaterials = null;
 
   /** Gets the name of this material list */
   public abstract String getName();
@@ -53,7 +53,7 @@ public abstract class AbstractMaterialSpriteProvider {
   protected abstract void addAllMaterials();
 
   /** Gets a list of all materials for this provider */
-  public Map<ResourceLocation, MaterialSpriteInfo> getMaterials() {
+  public Map<Identifier, MaterialSpriteInfo> getMaterials() {
     if (builtMaterials == null) {
       addAllMaterials();
       builtMaterials = materialBuilders.values().stream().map(MaterialSpriteInfoBuilder::build).collect(Collectors.toMap(MaterialSpriteInfo::getTexture, Function.identity()));
@@ -64,12 +64,12 @@ public abstract class AbstractMaterialSpriteProvider {
 
   /** Gets the info for the given material */
   @Nullable
-  public MaterialSpriteInfo getMaterialInfo(ResourceLocation name) {
+  public MaterialSpriteInfo getMaterialInfo(Identifier name) {
     return getMaterials().get(name);
   }
 
   /** Adds a new texture to the data generator */
-  protected MaterialSpriteInfoBuilder buildMaterial(ResourceLocation name) {
+  protected MaterialSpriteInfoBuilder buildMaterial(Identifier name) {
     if (builtMaterials != null) {
       throw new IllegalStateException("Attempted to add a material when materials already built");
     }
@@ -78,7 +78,7 @@ public abstract class AbstractMaterialSpriteProvider {
 
   /** Adds a new material to the data generator */
   protected MaterialSpriteInfoBuilder buildMaterial(MaterialId name) {
-    return buildMaterial((ResourceLocation)name);
+    return buildMaterial((Identifier)name);
   }
 
   /** Adds a new material variant to the data generator */
@@ -90,18 +90,18 @@ public abstract class AbstractMaterialSpriteProvider {
   public static class MaterialSpriteInfo extends MaterialGeneratorInfo {
     /** Material texture name for the material */
     @Getter
-    private transient final ResourceLocation texture;
+    private transient final Identifier texture;
     /** List of fallbacks, first present one will be the base for building. If none exist, uses the default base */
     @Getter
     private transient final String[] fallbacks;
 
-    public MaterialSpriteInfo(ResourceLocation texture, String[] fallbacks, MaterialGeneratorInfo generatorJson) {
+    public MaterialSpriteInfo(Identifier texture, String[] fallbacks, MaterialGeneratorInfo generatorJson) {
       super(generatorJson);
       this.texture = texture;
       this.fallbacks = fallbacks;
     }
 
-    public MaterialSpriteInfo(ResourceLocation texture, String[] fallbacks, ISpriteTransformer transformer, Set<MaterialStatsId> supportedStats, boolean variant) {
+    public MaterialSpriteInfo(Identifier texture, String[] fallbacks, ISpriteTransformer transformer, Set<MaterialStatsId> supportedStats, boolean variant) {
       super(transformer, supportedStats, false, variant);
       this.texture = texture;
       this.fallbacks = fallbacks;
@@ -126,7 +126,7 @@ public abstract class AbstractMaterialSpriteProvider {
   @Accessors(fluent = true)
   protected static class MaterialSpriteInfoBuilder {
     private static final String[] EMPTY_STRING_ARRAY = new String[0];
-    private final ResourceLocation texture;
+    private final Identifier texture;
     private String[] fallbacks = EMPTY_STRING_ARRAY;
     private final ImmutableSet.Builder<MaterialStatsId> statTypes = ImmutableSet.builder();
 

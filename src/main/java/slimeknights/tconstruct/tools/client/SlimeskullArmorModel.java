@@ -1,18 +1,19 @@
 package slimeknights.tconstruct.tools.client;
 
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import com.google.common.collect.ImmutableMap;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.Model;
-import net.minecraft.client.model.SkullModel;
-import net.minecraft.client.model.SkullModelBase;
+import net.minecraft.client.model.object.skull.SkullModel;
+import net.minecraft.client.model.object.skull.SkullModelBase;
 import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.model.geom.ModelLayerLocation;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.entity.ItemRenderer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.WalkAnimationState;
@@ -57,7 +58,7 @@ public class SlimeskullArmorModel extends MultilayerArmorModel {
 
   /** Head to render under the helmet */
   @Nullable
-  private ResourceLocation headTexture;
+  private Identifier headTexture;
   /** Tint color for the head */
   private int headColor = -1;
   /** Texture for the head */
@@ -74,7 +75,7 @@ public class SlimeskullArmorModel extends MultilayerArmorModel {
     MaterialId materialId = MaterialIdNBT.from(stack).getMaterial(0).getId();
     if (!materialId.equals(MaterialId.UNKNOWN)) {
       SkullModelBase skull = getHeadModel(materialId);
-      ResourceLocation texture = HEAD_TEXTURES.get(materialId);
+      Identifier texture = HEAD_TEXTURES.get(materialId);
       if (skull != null && texture != null) {
         headModel = skull;
         headTexture = texture;
@@ -114,7 +115,7 @@ public class SlimeskullArmorModel extends MultilayerArmorModel {
       float green = (color >> 8 & 0xFF) / 255.0F;
       float blue = (color & 0xFF) / 255.0F;
       if (headModel != null && headTexture != null) {
-        VertexConsumer heaadBuffer = ItemRenderer.getArmorFoilBuffer(buffer, RenderType.entityCutoutNoCullZOffset(headTexture), hasGlint);
+        VertexConsumer heaadBuffer = ItemRenderer.getArmorFoilBuffer(buffer, RenderTypes.entityCutoutZOffset(headTexture), hasGlint);
         matrixStackIn.pushPose();
         if (base.crouching) {
           matrixStackIn.translate(0, base.head.y / 16.0F, 0);
@@ -127,7 +128,7 @@ public class SlimeskullArmorModel extends MultilayerArmorModel {
         }
         // handle head rotation directly as it fixes issues with dragon heads
         // could fix it directly, but saves us some math to handle here
-        matrixStackIn.mulPose((new Quaternionf()).rotationZYX(0, base.head.yRot, base.head.xRot));
+        matrixStackIn.rotate((new Quaternionf()).rotationZYX(0, base.head.yRot, base.head.xRot));
         headModel.setupAnim(walkAnimation, 0, 0);
         renderColored(headModel, matrixStackIn, heaadBuffer, packedLightIn, packedOverlayIn, headColor, red, green, blue, alpha);
         matrixStackIn.popPose();
@@ -150,15 +151,15 @@ public class SlimeskullArmorModel extends MultilayerArmorModel {
   /** Map of all skull factories */
   private static final Map<MaterialId,Function<EntityModelSet,? extends SkullModelBase>> HEAD_MODEL_FACTORIES = new HashMap<>();
   /** Map of texture for the skull textures */
-  private static final Map<MaterialId,ResourceLocation> HEAD_TEXTURES = new HashMap<>();
+  private static final Map<MaterialId,Identifier> HEAD_TEXTURES = new HashMap<>();
 
   /** Registers a head model and texture, using the default skull model */
-  public static void registerHeadModel(MaterialId materialId, ModelLayerLocation headModel, ResourceLocation texture) {
+  public static void registerHeadModel(MaterialId materialId, ModelLayerLocation headModel, Identifier texture) {
     registerHeadModel(materialId, modelSet -> new SkullModel(modelSet.bakeLayer(headModel)), texture);
   }
 
   /** Registers a head model and texture, using the piglin skull model */
-  public static void registerPiglinHeadModel(MaterialId materialId, ModelLayerLocation headModel, ResourceLocation texture) {
+  public static void registerPiglinHeadModel(MaterialId materialId, ModelLayerLocation headModel, Identifier texture) {
     registerHeadModel(materialId, modelSet -> new PiglinSkullModel(modelSet.bakeLayer(headModel)), texture);
   }
 
@@ -168,7 +169,7 @@ public class SlimeskullArmorModel extends MultilayerArmorModel {
   }
 
   /** Registers a head model and texture, using a custom skull model */
-  public static void registerHeadModel(MaterialId materialId, Function<EntityModelSet,? extends SkullModelBase> headFunction, ResourceLocation texture) {
+  public static void registerHeadModel(MaterialId materialId, Function<EntityModelSet,? extends SkullModelBase> headFunction, Identifier texture) {
     if (HEAD_MODEL_FACTORIES.containsKey(materialId)) {
       throw new IllegalArgumentException("Duplicate head model " + materialId);
     }

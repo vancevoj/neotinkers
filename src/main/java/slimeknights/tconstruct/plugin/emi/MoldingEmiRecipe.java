@@ -6,7 +6,7 @@ import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.WidgetHolder;
 import net.minecraft.client.Minecraft;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeHolder;
@@ -23,7 +23,7 @@ import slimeknights.tconstruct.library.recipe.molding.MoldingRecipe;
  */
 public class MoldingEmiRecipe extends BasicEmiRecipe {
   /** Shared JEI background texture, reused for the block icons and arrows */
-  private static final ResourceLocation BACKGROUND_LOC = TConstruct.getResource("textures/gui/jei/casting.png");
+  private static final Identifier BACKGROUND_LOC = TConstruct.getResource("textures/gui/jei/casting.png");
 
   /** True if this recipe uses the casting basin block rather than the casting table */
   private final boolean basin;

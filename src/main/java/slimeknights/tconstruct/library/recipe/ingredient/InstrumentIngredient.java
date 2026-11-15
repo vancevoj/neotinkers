@@ -5,7 +5,7 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Instrument;
 import net.minecraft.world.item.Item;
@@ -25,7 +25,7 @@ import java.util.stream.Stream;
 
 /** Ingredient matching an {@link net.minecraft.world.item.InstrumentItem} with a particular instrument. */
 public class InstrumentIngredient implements ICustomIngredient {
-  public static final ResourceLocation ID = TConstruct.getResource("instrument");
+  public static final Identifier ID = TConstruct.getResource("instrument");
   /** Loadable for parsing and serializing this ingredient */
   public static final RecordLoadable<InstrumentIngredient> LOADABLE = RecordLoadable.create(
     Loadables.ITEM.requiredField("item", i -> i.item),
@@ -93,7 +93,7 @@ public class InstrumentIngredient implements ICustomIngredient {
     ItemStack stack = new ItemStack(item);
     // set the instrument on the stack
     if (instrument != null) {
-      BuiltInRegistries.INSTRUMENT.getHolder(instrument).ifPresent(holder -> stack.set(DataComponents.INSTRUMENT, holder));
+      BuiltInRegistries.INSTRUMENT.get(instrument).ifPresent(holder -> stack.set(DataComponents.INSTRUMENT, holder));
     }
     return Stream.of(stack);
   }

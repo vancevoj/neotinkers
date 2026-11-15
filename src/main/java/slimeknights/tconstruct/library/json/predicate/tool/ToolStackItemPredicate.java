@@ -6,7 +6,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DynamicOps;
 import lombok.RequiredArgsConstructor;
 import net.minecraft.advancements.critereon.ItemSubPredicate;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import slimeknights.mantle.data.JsonCodec;
 import slimeknights.mantle.data.predicate.IJsonPredicate;
@@ -25,7 +25,7 @@ import slimeknights.tconstruct.library.tools.nbt.ToolStack;
  */
 @RequiredArgsConstructor(staticName = "ofTool")
 public class ToolStackItemPredicate implements ItemSubPredicate {
-  public static final ResourceLocation ID = TConstruct.getResource("tool_stack");
+  public static final Identifier ID = TConstruct.getResource("tool_stack");
 
   /**
    * Codec bridging this predicate to/from JSON via the mantle {@link ToolStackPredicate#LOADER} (a JSON loadable, not a Codec).

@@ -8,7 +8,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.PackOutput.Target;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Rarity;
 import net.neoforged.neoforge.common.conditions.AndCondition;
 import net.neoforged.neoforge.common.conditions.ICondition;
@@ -204,7 +204,7 @@ public abstract class AbstractMaterialDataProvider extends GenericDataProvider {
 
   /* Redirect helpers */
 
-  /** @deprecated use {@link MaterialBuilder#redirect(ResourceLocation, ICondition...)} */
+  /** @deprecated use {@link MaterialBuilder#redirect(Identifier, ICondition...)} */
   @Deprecated
   protected void addRedirect(MaterialId id, @Nullable ICondition condition, JsonRedirect... redirect) {
     MaterialBuilder builder = material(id);
@@ -216,19 +216,19 @@ public abstract class AbstractMaterialDataProvider extends GenericDataProvider {
     }
   }
 
-  /** @deprecated use {@link MaterialBuilder#redirect(ResourceLocation, ICondition...)} */
+  /** @deprecated use {@link MaterialBuilder#redirect(Identifier, ICondition...)} */
   @Deprecated
   protected void addRedirect(MaterialId id, JsonRedirect... redirect) {
     addRedirect(id, null, redirect);
   }
 
-  /** @deprecated use {@link MaterialBuilder#redirect(ResourceLocation, ICondition...)} */
+  /** @deprecated use {@link MaterialBuilder#redirect(Identifier, ICondition...)} */
   @Deprecated
   protected JsonRedirect conditionalRedirect(MaterialId id, @Nullable ICondition condition) {
     return new JsonRedirect(id, condition);
   }
 
-  /** @deprecated use {@link MaterialBuilder#redirect(ResourceLocation, ICondition...)} */
+  /** @deprecated use {@link MaterialBuilder#redirect(Identifier, ICondition...)} */
   @Deprecated
   protected JsonRedirect redirect(MaterialId id) {
     return conditionalRedirect(id, null);
@@ -341,7 +341,7 @@ public abstract class AbstractMaterialDataProvider extends GenericDataProvider {
     }
 
     /** Adds a redirect to the builder */
-    public MaterialBuilder redirect(ResourceLocation id, ICondition... conditions) {
+    public MaterialBuilder redirect(Identifier id, ICondition... conditions) {
       ICondition combined = null;
       if (conditions.length == 1) {
         combined = conditions[0];

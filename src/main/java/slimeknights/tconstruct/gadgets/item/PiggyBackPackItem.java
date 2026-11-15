@@ -2,11 +2,11 @@ package slimeknights.tconstruct.gadgets.item;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.protocol.game.ClientboundSetPassengersPacket;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -88,7 +88,7 @@ public class PiggyBackPackItem extends TooltipItem {
   }
 
   private static boolean pickupEntity(Player player, Entity target) {
-    if (player.getCommandSenderWorld().isClientSide || target.getType().is(TinkerTags.EntityTypes.PIGGYBACKPACK_BLACKLIST)) {
+    if (player.level().isClientSide() || target.getType().is(TinkerTags.EntityTypes.PIGGYBACKPACK_BLACKLIST)) {
       return false;
     }
     // silly players, clicking on entities they're already carrying or riding
@@ -155,7 +155,7 @@ public class PiggyBackPackItem extends TooltipItem {
 
   public static class CarryPotionEffect extends TinkerEffect {
     /** Identifier for the movement speed modifier applied by this effect */
-    static final ResourceLocation MODIFIER_ID = TConstruct.getResource("piggyback");
+    static final Identifier MODIFIER_ID = TConstruct.getResource("piggyback");
 
     public CarryPotionEffect() {
       super(MobEffectCategory.NEUTRAL, true);
@@ -175,7 +175,7 @@ public class PiggyBackPackItem extends TooltipItem {
         TinkerGadgets.piggyBackpack.get().matchCarriedEntitiesToCount(livingEntityIn, 0);
       } else {
         TinkerGadgets.piggyBackpack.get().matchCarriedEntitiesToCount(livingEntityIn, chestArmor.getCount());
-        if (!livingEntityIn.getCommandSenderWorld().isClientSide && livingEntityIn instanceof Player player) {
+        if (!livingEntityIn.level().isClientSide() && livingEntityIn instanceof Player player) {
           PiggybackCapability.get(player).updatePassengers(player);
         }
       }
@@ -186,14 +186,14 @@ public class PiggyBackPackItem extends TooltipItem {
     public void initializeClient(Consumer<IClientMobEffectExtensions> consumer) {
       consumer.accept(new IClientMobEffectExtensions() {
         private final Minecraft mc = Minecraft.getInstance();
-        private static final ResourceLocation[] ICONS = {
+        private static final Identifier[] ICONS = {
           TConstruct.getResource("carry"),
           TConstruct.getResource("carry_2"),
           TConstruct.getResource("carry_3")
         };
 
         /** Common logic to render the icon */
-        private void renderIcon(MobEffectInstance effect, GuiGraphics graphics, int x, int y) {
+        private void renderIcon(MobEffectInstance effect, GuiGraphicsExtractor graphics, int x, int y) {
           int amplifier = effect.getAmplifier();
           if (amplifier > 2) {
             amplifier = 2;
@@ -202,13 +202,13 @@ public class PiggyBackPackItem extends TooltipItem {
         }
 
         @Override
-        public boolean renderInventoryIcon(MobEffectInstance effect, EffectRenderingInventoryScreen<?> gui, GuiGraphics graphics, int x, int y, int z) {
+        public boolean renderInventoryIcon(MobEffectInstance effect, EffectRenderingInventoryScreen<?> gui, GuiGraphicsExtractor graphics, int x, int y, int z) {
           renderIcon(effect, graphics, x, y + 7);
           return true;
         }
 
         @Override
-        public boolean renderGuiIcon(MobEffectInstance effect, Gui gui, GuiGraphics graphics, int x, int y, float z, float alpha) {
+        public boolean renderGuiIcon(MobEffectInstance effect, Gui gui, GuiGraphicsExtractor graphics, int x, int y, float z, float alpha) {
           renderIcon(effect, graphics, x + 3, y + 3);
           return true;
         }

@@ -72,7 +72,7 @@ public class CraftingStationBlockEntity extends RetexturedTableBlockEntity imple
     // assume empty unless we learn otherwise
     ItemStack result = ItemStack.EMPTY;
     CraftingInput input = this.craftingInventory.asCraftInput();
-    if (!this.level.isClientSide && this.level.getServer() != null) {
+    if (!this.level.isClientSide() && this.level.getServer() != null) {
       RecipeManager manager = this.level.getServer().getRecipeManager();
 
       // first, try the cached recipe
@@ -124,7 +124,7 @@ public class CraftingStationBlockEntity extends RetexturedTableBlockEntity imple
     // Disabled because this is an absolute mess of logic, and the gain is rather small, treating this like a furnace instead
     // note the gamerule is client side only anyways, so you would have to sync it, such as in the container
     // if you want limited crafting, disable the crafting station, the design of the station is incompatible with the game rule and vanilla syncing
-//    if (!recipe.isDynamic() && world.getGameRules().getBoolean(GameRules.DO_LIMITED_CRAFTING)) {
+//    if (!recipe.isDynamic() && world.getGameRules().get(GameRules.DO_LIMITED_CRAFTING)) {
 //      // mojang, why can't PlayerEntity just have a RecipeBook getter, why must I go through the sided classes? grr
 //      boolean locked;
 //      if (!world.isRemote) {
@@ -208,7 +208,7 @@ public class CraftingStationBlockEntity extends RetexturedTableBlockEntity imple
   public void notifyUncraftable(Player player) {
     // if empty, send a message so the player is more aware of why they cannot craft it, sent to chat as status bar is not visible
     // TODO: consider moving into the UI somewhere
-    if (level != null && !level.isClientSide) {
+    if (level != null && !level.isClientSide()) {
       player.displayClientMessage(CraftingStationBlockEntity.UNCRAFTABLE, false);
     }
   }
@@ -237,7 +237,7 @@ public class CraftingStationBlockEntity extends RetexturedTableBlockEntity imple
    */
   public void syncRecipe(Player player) {
     // must have a last recipe and a server world
-    if (this.lastRecipe != null && this.level != null && !this.level.isClientSide && player instanceof ServerPlayer) {
+    if (this.lastRecipe != null && this.level != null && !this.level.isClientSide() && player instanceof ServerPlayer) {
       TinkerNetwork.getInstance().sendTo(new UpdateCraftingRecipePacket(this.worldPosition, this.lastRecipe), (ServerPlayer) player);
     }
   }

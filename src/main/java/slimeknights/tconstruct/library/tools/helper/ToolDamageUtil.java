@@ -1,6 +1,6 @@
 package slimeknights.tconstruct.library.tools.helper;
 
-import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.advancements.triggers.CriteriaTriggers;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -188,7 +188,7 @@ public class ToolDamageUtil {
    */
   public static boolean damageAnimated(IToolStackView tool, int amount, LivingEntity entity, InteractionHand hand, ModifierId cause) {
     if (damage(tool, amount, entity, entity.getItemInHand(hand), cause)) {
-      entity.onEquippedItemBroken(tool.getItem(), LivingEntity.getSlotForHand(hand));
+      entity.onEquippedItemBroken(tool.getItem(), hand.asEquipmentSlot());
       // TODO: why don't we fire EventHooks.onPlayerDestroyItem here?
       return true;
     }

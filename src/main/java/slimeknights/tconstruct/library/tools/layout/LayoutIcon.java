@@ -68,7 +68,7 @@ public abstract class LayoutIcon {
         return new ItemStackIcon(stack);
       }
       case PATTERN: {
-        Pattern pattern = new Pattern(buffer.readResourceLocation());
+        Pattern pattern = new Pattern(buffer.readIdentifier());
         return new PatternIcon(pattern);
       }
     }
@@ -127,7 +127,7 @@ public abstract class LayoutIcon {
     @Override
     public void write(RegistryFriendlyByteBuf buffer) {
       buffer.writeEnum(Type.PATTERN);
-      buffer.writeResourceLocation(pattern);
+      buffer.writeIdentifier(pattern);
     }
 
     @Override

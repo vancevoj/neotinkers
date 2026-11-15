@@ -1,6 +1,6 @@
 package slimeknights.tconstruct.library.recipe.ingredient;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -16,7 +16,7 @@ import javax.annotation.Nullable;
 
 /** Ingredient matching an item with no container item, used to ensure NBT fluid items are empty */
 public class NoContainerIngredient extends NestedIngredient {
-  public static final ResourceLocation ID = TConstruct.getResource("no_container");
+  public static final Identifier ID = TConstruct.getResource("no_container");
   /** Loadable for parsing and serializing this ingredient */
   public static final RecordLoadable<NoContainerIngredient> LOADABLE = RecordLoadable.create(
     IngredientLoadable.DISALLOW_EMPTY.requiredField("match", i -> i.nested),

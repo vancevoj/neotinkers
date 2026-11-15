@@ -2,7 +2,7 @@ package slimeknights.tconstruct.library.recipe.entitymelting;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -33,7 +33,7 @@ public class EntityMeltingRecipe implements ICustomOutputRecipe<IEntityMeltingCo
     EntityMeltingRecipe::new);
 
   @Getter
-  private final ResourceLocation id;
+  private final Identifier id;
   @Getter
   private final EntityIngredient ingredient;
   private final FluidOutput output;

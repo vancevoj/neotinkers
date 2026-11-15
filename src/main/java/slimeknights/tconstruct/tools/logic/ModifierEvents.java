@@ -1,14 +1,15 @@
 package slimeknights.tconstruct.tools.logic;
 
+import net.minecraft.world.entity.EntityTypes;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multiset;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
-import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.advancements.triggers.CriteriaTriggers;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -25,15 +26,15 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.AbstractArrow;
-import net.minecraft.world.entity.projectile.AbstractArrow.Pickup;
-import net.minecraft.world.entity.projectile.AbstractHurtingProjectile;
+import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
+import net.minecraft.world.entity.projectile.arrow.AbstractArrow.Pickup;
+import net.minecraft.world.entity.projectile.hurtingprojectile.AbstractHurtingProjectile;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -105,11 +106,11 @@ public class ModifierEvents {
   private static final TinkerDataKey<Float> PROJECTILE_EXPERIENCE = TConstruct.createKey("projectile_experience");
   // TODO: move following to TinkerDataKeys?
   /** Volatile data float for amount of experience granted per level. Used by both projectiles and held tools. */
-  public static final ResourceLocation EXPERIENCE = TConstruct.getResource("experience");
+  public static final Identifier EXPERIENCE = TConstruct.getResource("experience");
   /** Volatile data flag making a modifier grant the tool soulbound */
-  public static final ResourceLocation SOULBOUND = TConstruct.getResource("soulbound");
+  public static final Identifier SOULBOUND = TConstruct.getResource("soulbound");
   /** Volatile data int for making a modifier on a shield grant reflecting */
-  public static final ResourceLocation REFLECTING = TConstruct.getResource("reflecting");
+  public static final Identifier REFLECTING = TConstruct.getResource("reflecting");
 
   @SubscribeEvent
   static void onKnockback(LivingKnockBackEvent event) {
@@ -215,7 +216,7 @@ public class ModifierEvents {
     }
     // this is the latest we can add slot markers to the items so we can return them to slots
     LivingEntity entity = event.getEntity();
-    if (!entity.level().getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY) && entity instanceof Player player && !(player instanceof FakePlayer)) {
+    if (!entity.level().getGameRules().get(GameRules.KEEP_INVENTORY) && entity instanceof Player player && !(player instanceof FakePlayer)) {
       // start with the hotbar, must be soulbound or soul belt
       boolean soulBelt = ArmorLevelModule.getLevel(player, TinkerDataKeys.SOUL_BELT) > 0;
       Inventory inventory = player.getInventory();
@@ -246,7 +247,7 @@ public class ModifierEvents {
 
   @SubscribeEvent
   static void beforeBlockBreak(BlockDropsEvent event) {
-    // 1.21: block break experience moved from BlockEvent.BreakEvent to BlockDropsEvent
+    // 1.21: block break experience moved from BreakBlockEvent to BlockDropsEvent
     if (!(event.getBreaker() instanceof Player player)) {
       return;
     }
@@ -359,7 +360,7 @@ public class ModifierEvents {
       double time = Math.sqrt(living.fallDistance / gravity);
       double velocity = gravity * time;
       living.setDeltaMovement(motion.x / 0.975f, velocity, motion.z / 0.975f);
-      living.hurtMarked = true;
+      living.syncVelocity = true;
 
       // preserve momentum
       SlimeBounceHandler.addBounceHandler(living);
@@ -372,8 +373,8 @@ public class ModifierEvents {
     }
     // update airborn status
     event.setDistance(0.0F);
-    if (!living.level().isClientSide) {
-      living.hasImpulse = true;
+    if (!living.level().isClientSide()) {
+      living.needsSync = true;
       event.setCanceled(true);
       living.setOnGround(false); // need to be on ground for server to process this event
     }
@@ -419,7 +420,7 @@ public class ModifierEvents {
     if (hit.getType() == Type.ENTITY && ((EntityHitResult) hit).getEntity() instanceof LivingEntity target) {
       // reflecting //
       // handle blacklist for projectiles
-      if (!level.isClientSide && !RegistryHelper.contains(TinkerTags.EntityTypes.REFLECTING_BLACKLIST, projectile.getType()) && target != projectile.getOwner() && target.isUsingItem()) {
+      if (!level.isClientSide() && !RegistryHelper.contains(TinkerTags.EntityTypes.REFLECTING_BLACKLIST, projectile.getType()) && target != projectile.getOwner() && target.isUsingItem()) {
         ItemStack stack = target.getUseItem();
         // living entity must be using one of our shields
         if (stack.is(TinkerTags.Items.SHIELDS)) {
@@ -432,7 +433,7 @@ public class ModifierEvents {
               GeneralInteractionModifierHook hook = activeModifier.getHook(ModifierHooks.GENERAL_INTERACT);
               int time = hook.getUseDuration(tool, activeModifier) - target.getUseItemRemainingTicks();
               // must be blocking, started blocking within the last 2*level seconds, and be within the block angle
-              if (hook.getUseAction(tool, activeModifier) == UseAnim.BLOCK
+              if (hook.getUseAction(tool, activeModifier) == ItemUseAnimation.BLOCK
                 && (time >= 5 && time < reflectingTime)
                 && InteractionHandler.canBlock(target, projectile.position(), tool)) {
 
@@ -458,7 +459,7 @@ public class ModifierEvents {
                   // 1.21: xPower/yPower/zPower collapsed into a single accelerationPower scalar; direction comes from the shoot() call above
                   hurting.accelerationPower = 0.1;
                 }
-                if (target.getType() == EntityType.PLAYER) {
+                if (target.getType() == EntityTypes.PLAYER) {
                   TinkerNetwork.getInstance().sendVanillaPacket(new ClientboundSetEntityMotionPacket(projectile), target);
                 }
                 level.playSound(null, target.blockPosition(), SoundEvents.SHIELD_BLOCK, SoundSource.PLAYERS, 1.0F, 1.5F + level.random.nextFloat() * 0.4F);
@@ -520,7 +521,7 @@ public class ModifierEvents {
 
         // hurt the enderman
         if (target.hurt(damageSource, (float) damage)) {
-          if (!level.isClientSide && pierce <= 0) {
+          if (!level.isClientSide() && pierce <= 0) {
             target.setArrowCount(target.getArrowCount() + 1);
           }
 
@@ -539,7 +540,7 @@ public class ModifierEvents {
             arrow.piercedAndKilledEntities.add(target);
           }
 
-          if (!level.isClientSide && arrow.shotFromCrossbow() && owner instanceof ServerPlayer player) {
+          if (!level.isClientSide() && arrow.shotFromCrossbow() && owner instanceof ServerPlayer player) {
             if (arrow.piercedAndKilledEntities != null) {
               CriteriaTriggers.KILLED_BY_CROSSBOW.trigger(player, arrow.piercedAndKilledEntities);
             } else if (!target.isAlive()) {
@@ -557,7 +558,7 @@ public class ModifierEvents {
           arrow.setDeltaMovement(arrow.getDeltaMovement().scale(-0.1D));
           arrow.setYRot(arrow.getYRot() + 180.0F);
           arrow.yRotO += 180.0F;
-          if (!level.isClientSide && arrow.getDeltaMovement().lengthSqr() < 1.0E-7D) {
+          if (!level.isClientSide() && arrow.getDeltaMovement().lengthSqr() < 1.0E-7D) {
             if (arrow.pickup == AbstractArrow.Pickup.ALLOWED) {
               arrow.spawnAtLocation(arrow.getPickupItem(), 0.1F);
             }

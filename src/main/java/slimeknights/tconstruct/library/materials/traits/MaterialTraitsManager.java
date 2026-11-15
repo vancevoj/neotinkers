@@ -7,7 +7,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonSyntaxException;
 import lombok.extern.log4j.Log4j2;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.ResourceManager;
 import slimeknights.mantle.data.listener.MergingJsonDataLoader;
 import slimeknights.tconstruct.library.exception.TinkerAPIMaterialException;
@@ -45,7 +45,7 @@ import java.util.stream.Collectors;
 public class MaterialTraitsManager extends MergingJsonDataLoader<MaterialTraits.Builder> {
   public static final String FOLDER = "tinkering/materials/traits";
   public static final Gson GSON = (new GsonBuilder())
-    .registerTypeAdapter(ResourceLocation.class, new ResourceLocation.Serializer())
+    .registerTypeAdapter(Identifier.class, new Identifier.Serializer())
     .registerTypeAdapter(ModifierEntry.class, ModifierEntry.OPTIONAL_LOADABLE)
     .setPrettyPrinting()
     .disableHtmlEscaping()
@@ -132,7 +132,7 @@ public class MaterialTraitsManager extends MergingJsonDataLoader<MaterialTraits.
   }
 
   @Override
-  protected void parse(MaterialTraits.Builder builder, ResourceLocation id, JsonElement element) throws JsonSyntaxException {
+  protected void parse(MaterialTraits.Builder builder, Identifier id, JsonElement element) throws JsonSyntaxException {
     MaterialTraitsJson json = GSON.fromJson(element, MaterialTraitsJson.class);
     builder.setDefaultTraits(json.getDefaultTraits());
     for (Entry<MaterialStatsId,List<ModifierEntry>> entry : json.getPerStat().entrySet()) {
@@ -141,7 +141,7 @@ public class MaterialTraitsManager extends MergingJsonDataLoader<MaterialTraits.
   }
 
   @Override
-  protected void finishLoad(Map<ResourceLocation,MaterialTraits.Builder> map, ResourceManager manager) {
+  protected void finishLoad(Map<Identifier,MaterialTraits.Builder> map, ResourceManager manager) {
     ImmutableMap.Builder<MaterialId,MaterialTraits> builder = ImmutableMap.builder();
     map.entrySet().stream().sorted(Entry.comparingByKey()).forEach(entry -> {
       MaterialTraits traits = entry.getValue().build(statTypeFallbacks);

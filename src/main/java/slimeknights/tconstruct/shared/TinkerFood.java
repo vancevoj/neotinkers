@@ -28,7 +28,7 @@ public final class TinkerFood {
   public static final FoodProperties CHEESE = (new FoodProperties.Builder()).nutrition(3).saturationModifier(0.4F).build();
 
   /** For the modifier */
-  public static final FoodProperties JEWELED_APPLE = (new FoodProperties.Builder()).nutrition(4).saturationModifier(1.2F).effect(() -> new MobEffectInstance(MobEffects.DIG_SPEED, 1200, 0), 1.0F).effect(() -> new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 2400, 0), 1.0F).alwaysEdible().build();
+  public static final FoodProperties JEWELED_APPLE = (new FoodProperties.Builder()).nutrition(4).saturationModifier(1.2F).effect(() -> new MobEffectInstance(MobEffects.HASTE, 1200, 0), 1.0F).effect(() -> new MobEffectInstance(MobEffects.RESISTANCE, 2400, 0), 1.0F).alwaysEdible().build();
 
   /* Cake block is set up to take food as a parameter */
   public static final FoodProperties EARTH_CAKE = new FoodProperties.Builder().nutrition(1).saturationModifier(0.3f).alwaysEdible().effect(() -> new MobEffectInstance(holder(TinkerEffects.bouncy),      30 * 20, 0), 1.0f).build();
@@ -39,12 +39,12 @@ public final class TinkerFood {
   // regen is 50 ticks per half heart, so this heals 3 per slice
   public static final FoodProperties BLOOD_CAKE = new FoodProperties.Builder().nutrition(2).saturationModifier(0.2f).alwaysEdible().effect(() -> new MobEffectInstance(MobEffects.REGENERATION, 3 * 50, 0), 1.0f).build();
 
-  public static final FoodProperties EARTH_BOTTLE = new FoodProperties.Builder().alwaysEdible().effect(() -> new MobEffectInstance(holder(TinkerEffects.experienced),  120 * 20), 1.0f).effect(() -> new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 120 * 20, 1), 1.0f).build();
-  public static final FoodProperties SKY_BOTTLE   = new FoodProperties.Builder().alwaysEdible().effect(() -> new MobEffectInstance(holder(TinkerEffects.ricochet),     120 * 20), 1.0f).effect(() -> new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 120 * 20, 1), 1.0f).build();
-  public static final FoodProperties ICHOR_BOTTLE = new FoodProperties.Builder().alwaysEdible().effect(() -> new MobEffectInstance(MobEffects.LEVITATION,             10 * 20), 1.0f).effect(() -> new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN,  10 * 20, 1), 1.0f).build();
-  public static final FoodProperties ENDER_BOTTLE = new FoodProperties.Builder().alwaysEdible().effect(() -> new MobEffectInstance(holder(TinkerEffects.enderference),  60 * 20), 1.0f).effect(() -> new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN,  60 * 20, 1), 1.0f).build();
+  public static final FoodProperties EARTH_BOTTLE = new FoodProperties.Builder().alwaysEdible().effect(() -> new MobEffectInstance(holder(TinkerEffects.experienced),  120 * 20), 1.0f).effect(() -> new MobEffectInstance(MobEffects.SLOWNESS, 120 * 20, 1), 1.0f).build();
+  public static final FoodProperties SKY_BOTTLE   = new FoodProperties.Builder().alwaysEdible().effect(() -> new MobEffectInstance(holder(TinkerEffects.ricochet),     120 * 20), 1.0f).effect(() -> new MobEffectInstance(MobEffects.SLOWNESS, 120 * 20, 1), 1.0f).build();
+  public static final FoodProperties ICHOR_BOTTLE = new FoodProperties.Builder().alwaysEdible().effect(() -> new MobEffectInstance(MobEffects.LEVITATION,             10 * 20), 1.0f).effect(() -> new MobEffectInstance(MobEffects.SLOWNESS,  10 * 20, 1), 1.0f).build();
+  public static final FoodProperties ENDER_BOTTLE = new FoodProperties.Builder().alwaysEdible().effect(() -> new MobEffectInstance(holder(TinkerEffects.enderference),  60 * 20), 1.0f).effect(() -> new MobEffectInstance(MobEffects.SLOWNESS,  60 * 20, 1), 1.0f).build();
   // 250 is 10 poison damage
-  public static final FoodProperties VENOM_BOTTLE = new FoodProperties.Builder().alwaysEdible().effect(() -> new MobEffectInstance(MobEffects.DAMAGE_BOOST, 30 * 20), 1.0f).effect(() -> new MobEffectInstance(MobEffects.POISON, 250), 1.0f).build();
+  public static final FoodProperties VENOM_BOTTLE = new FoodProperties.Builder().alwaysEdible().effect(() -> new MobEffectInstance(MobEffects.STRENGTH, 30 * 20), 1.0f).effect(() -> new MobEffectInstance(MobEffects.POISON, 250), 1.0f).build();
   /** @deprecated no longer used */
   @Deprecated(forRemoval = true)
   public static final FoodProperties MAGMA_BOTTLE = new FoodProperties.Builder().alwaysEdible().build();

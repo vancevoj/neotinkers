@@ -20,7 +20,7 @@ public class SafeClient {
    * @param newAmount   New fluid amount
    */
   public static void updateFluidModel(BlockEntity be, FluidTank tank, int oldAmount, int newAmount) {
-    if (FMLEnvironment.dist == Dist.CLIENT) {
+    if (FMLEnvironment.getDist() == Dist.CLIENT) {
       ClientOnly.updateFluidModel(be, tank, oldAmount, newAmount);
     }
   }
@@ -30,7 +30,7 @@ public class SafeClient {
     /** @see SafeClient#updateFluidModel(BlockEntity, FluidTank, int, int)  */
     public static void updateFluidModel(BlockEntity be, FluidTank tank, int oldAmount, int newAmount) {
       Level level = be.getLevel();
-      if (level != null && level.isClientSide) {
+      if (level != null && level.isClientSide()) {
         // if the amount change is bigger than a single increment, or we changed whether we have a fluid, update the world renderer
         BlockState state = be.getBlockState();
         if (oldAmount != newAmount) {

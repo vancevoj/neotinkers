@@ -1,6 +1,6 @@
 package slimeknights.tconstruct.tools.data.sprite;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.DyeColor;
 import slimeknights.tconstruct.library.client.data.material.AbstractMaterialSpriteProvider;
 import slimeknights.tconstruct.library.client.data.spritetransformer.FramesSpriteTransformer;
@@ -95,9 +95,9 @@ public class TinkerMaterialSpriteProvider extends AbstractMaterialSpriteProvider
     buildMaterial(MaterialIds.ice)
       .shieldCore().arrowHead()
       .transformer(GreyToSpriteTransformer.builderFromBlack()
-        .addTexture(63, ResourceLocation.parse("block/blue_ice"))
-        .addTexture(102, ResourceLocation.parse("block/packed_ice"))
-        .addTexture(140, ResourceLocation.parse("block/ice"))
+        .addTexture(63, Identifier.parse("block/blue_ice"))
+        .addTexture(102, Identifier.parse("block/packed_ice"))
+        .addTexture(140, Identifier.parse("block/ice"))
         .build());
     buildMaterial(MaterialIds.cactus)
       .ranged().arrowShaft().shieldCore().statType(WOOD)
@@ -299,9 +299,9 @@ public class TinkerMaterialSpriteProvider extends AbstractMaterialSpriteProvider
       .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF009529).addARGB(102, 0xFF00AA2C).addARGB(140, 0xFF17DD62).addARGB(178, 0xFF41F384).addARGB(216, 0xFF82F6AD).addARGB(255, 0xFFDBFFEB).build());
 
     // tier 4
-    ResourceLocation baseTexture = getResource("generator/queens_slime");
-    ResourceLocation highlightTexture = getResource("generator/queens_slime_highlight");
-    ResourceLocation borderTexture = getResource("generator/queens_slime_border");
+    Identifier baseTexture = getResource("generator/queens_slime");
+    Identifier highlightTexture = getResource("generator/queens_slime_highlight");
+    Identifier borderTexture = getResource("generator/queens_slime_border");
     buildMaterial(MaterialIds.queensSlime)
       .meleeHarvest().ranged().armor()
       .fallbacks("slime_metal", "metal")
@@ -326,12 +326,12 @@ public class TinkerMaterialSpriteProvider extends AbstractMaterialSpriteProvider
       .meleeHarvest().ranged().armor().arrowHead().shell()
       .fallbacks("slime_metal", "metal")
       .colorMapper(GreyToColorMapping.builderFromBlack().addARGB(63, 0xFF333232).addARGB(102, 0xFF4D4C4B).addARGB(140, 0xFF808C72).addARGB(178, 0xFFA3B391).addARGB(216, 0xFFC4D6AE).addARGB(255, 0xFFE7FCCD).build());
-    ResourceLocation knightslime = getResource("generator/knightslime");
+    Identifier knightslime = getResource("generator/knightslime");
     buildMaterial(MaterialIds.knightslime)
       .meleeHarvest().ranged().armor()
       .fallbacks("metal_contrast", "contrast", "slime_metal", "metal")
       .transformer(GreyToSpriteTransformer.builderFromBlack().addARGB(25, 0xFF191919).addTexture(26, knightslime).addTexture(102, knightslime).addARGB(140, 0xFF02040C).addARGB(178, 0xFF152237).addARGB(216, 0xFF243366).addARGB(255, 0xFF2C3E7B).build());
-    ResourceLocation fiery = getResource("generator/fiery");
+    Identifier fiery = getResource("generator/fiery");
     buildMaterial(MaterialIds.fiery)
       .meleeHarvest().ranged().armor().statType(INGOT)
       .fallbacks("metal_contrast", "contrast", "metal")
@@ -408,7 +408,7 @@ public class TinkerMaterialSpriteProvider extends AbstractMaterialSpriteProvider
     for (DyeColor color : DyeColor.values()) {
       String name = color.getName();
       MaterialSpriteInfoBuilder builder = buildMaterial(MaterialVariantId.create(MaterialIds.wool, name));
-      builder.fallbacks("wool").arrowHead().cuirass().transformer(transformerFromSprite(ResourceLocation.parse("block/" + name + "_wool"), 0, 0));
+      builder.fallbacks("wool").arrowHead().cuirass().transformer(transformerFromSprite(Identifier.parse("block/" + name + "_wool"), 0, 0));
       if (color == DyeColor.WHITE) {
         builder.fletching();
       } else {
@@ -470,7 +470,7 @@ public class TinkerMaterialSpriteProvider extends AbstractMaterialSpriteProvider
   }
 
   /** Creates a palette for a sprite that tints it for borders */
-  public static ISpriteTransformer transformerFromSprite(ResourceLocation texture, int frames, int highlightColor) {
+  public static ISpriteTransformer transformerFromSprite(Identifier texture, int frames, int highlightColor) {
     GreyToSpriteTransformer.Builder builder = GreyToSpriteTransformer.builderFromBlack();
     builder.addTexture( 63, texture, 0xFF404040)
            .addTexture(102, texture, 0xFF808080)

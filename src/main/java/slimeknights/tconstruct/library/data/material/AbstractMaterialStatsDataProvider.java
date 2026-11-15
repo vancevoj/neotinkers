@@ -1,12 +1,12 @@
 package slimeknights.tconstruct.library.data.material;
 
+import net.minecraft.world.item.equipment.ArmorType;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.PackOutput.Target;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ArmorItem;
+import net.minecraft.resources.Identifier;
 import slimeknights.mantle.data.GenericDataProvider;
 import slimeknights.tconstruct.library.materials.definition.MaterialId;
 import slimeknights.tconstruct.library.materials.json.MaterialStatJson;
@@ -90,9 +90,9 @@ public abstract class AbstractMaterialStatsDataProvider extends GenericDataProvi
    */
   protected void addArmorStats(MaterialId location, ArmorModuleBuilder<? extends IMaterialStats> statBuilder, IMaterialStats... otherStats) {
     IMaterialStats[] stats = new IMaterialStats[4];
-    for (ArmorItem.Type slotType : ArmorItem.Type.values()) {
+    for (ArmorType slotType : ArmorType.values()) {
       int index = slotType.ordinal();
-      // 1.21 added ArmorItem.Type.BODY (ordinal 4); Tinkers only has the 4 humanoid armor slots
+      // 1.21 added ArmorType.BODY (ordinal 4); Tinkers only has the 4 humanoid armor slots
       if (index >= stats.length) {
         continue;
       }
@@ -129,7 +129,7 @@ public abstract class AbstractMaterialStatsDataProvider extends GenericDataProvi
 
     /** Serializes this to JSON */
     public MaterialStatJson serialize() {
-      Map<ResourceLocation,JsonElement> map = new HashMap<>();
+      Map<Identifier,JsonElement> map = new HashMap<>();
       for (IMaterialStats stat : required) {
         map.put(stat.getIdentifier(), encodeStats(stat, stat.getType()));
       }

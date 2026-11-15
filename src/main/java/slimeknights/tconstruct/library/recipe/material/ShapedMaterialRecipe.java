@@ -37,7 +37,7 @@ public class ShapedMaterialRecipe extends ShapedRecipe {
   }
 
   public ShapedMaterialRecipe(ShapedRecipe recipe, List<MaterialVariantId> extraMaterials) {
-    this(recipe.getGroup(), recipe.category(), recipe.pattern, recipe.result, recipe.showNotification(), extraMaterials);
+    this(recipe.group(), recipe.category(), recipe.pattern, recipe.result, recipe.showNotification(), extraMaterials);
   }
 
   /** @deprecated use {@link #ShapedMaterialRecipe(ShapedRecipe,List)} */
@@ -167,7 +167,7 @@ public class ShapedMaterialRecipe extends ShapedRecipe {
 
     @Override
     public void toNetworkSafe(RegistryFriendlyByteBuf buffer, ShapedMaterialRecipe recipe) {
-      buffer.writeUtf(recipe.getGroup());
+      buffer.writeUtf(recipe.group());
       buffer.writeEnum(recipe.category());
       ShapedRecipePattern.STREAM_CODEC.encode(buffer, recipe.pattern);
       ItemStack.STREAM_CODEC.encode(buffer, recipe.result);

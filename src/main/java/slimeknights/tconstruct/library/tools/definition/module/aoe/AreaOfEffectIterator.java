@@ -1,7 +1,7 @@
 package slimeknights.tconstruct.library.tools.definition.module.aoe;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -53,7 +53,7 @@ public interface AreaOfEffectIterator {
   GenericLoaderRegistry<Loadable> LOADER = new DefaultingLoaderRegistry<>("AOE Iterator", EMPTY, false);
 
   /** Registers a loader with both tool modules and area of effect (latter used for fallback loader) */
-  static void register(ResourceLocation name, RecordLoadable<? extends Loadable> loader) {
+  static void register(Identifier name, RecordLoadable<? extends Loadable> loader) {
     ToolModule.LOADER.register(name, loader);
     LOADER.register(name, loader);
   }

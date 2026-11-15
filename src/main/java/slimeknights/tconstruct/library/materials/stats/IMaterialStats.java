@@ -2,7 +2,7 @@ package slimeknights.tconstruct.library.materials.stats;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.ApiStatus.NonExtendable;
 import slimeknights.tconstruct.library.tools.stat.ModifierStatsBuilder;
 import slimeknights.tconstruct.library.utils.Util;
@@ -20,7 +20,7 @@ public interface IMaterialStats {
   MaterialStatType<?> getType();
 
   /**
-   * Returns a unique ResourceLocation to identify the type of stats the material has.
+   * Returns a unique Identifier to identify the type of stats the material has.
    */
   @NonExtendable
   default MaterialStatsId getIdentifier() {
@@ -80,7 +80,7 @@ public interface IMaterialStats {
    * @param name  name
    * @return  Text component
    */
-  static String makeTooltipKey(ResourceLocation name) {
+  static String makeTooltipKey(Identifier name) {
     return Util.makeTranslationKey("tool_stat", name);
   }
 
@@ -89,7 +89,7 @@ public interface IMaterialStats {
    * @param name  name
    * @return  Text component
    */
-  static Component makeTooltip(ResourceLocation name) {
+  static Component makeTooltip(Identifier name) {
     return Component.translatable(makeTooltipKey(name));
   }
 

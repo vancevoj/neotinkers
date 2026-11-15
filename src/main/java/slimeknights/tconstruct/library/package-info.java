@@ -6,9 +6,7 @@
  * for that class to be moved. Use classes outside of library at your own risk.
  */
 @ParametersAreNonnullByDefault
-@MethodsReturnNonnullByDefault
 package slimeknights.tconstruct.library;
 
-import net.minecraft.MethodsReturnNonnullByDefault;
 
 import javax.annotation.ParametersAreNonnullByDefault;

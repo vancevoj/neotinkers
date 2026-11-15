@@ -1,7 +1,7 @@
 package slimeknights.tconstruct.library.tools.capability;
 
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
@@ -25,7 +25,7 @@ import javax.annotation.Nullable;
 public interface BlockItemProviderCapability {
 
   /** Capability ID */
-  ResourceLocation ID = TConstruct.getResource("block_provider");
+  Identifier ID = TConstruct.getResource("block_provider");
   /** Capability type */
   ItemCapability<BlockItemProviderCapability, Void> CAPABILITY = ItemCapability.createVoid(ID, BlockItemProviderCapability.class);
 

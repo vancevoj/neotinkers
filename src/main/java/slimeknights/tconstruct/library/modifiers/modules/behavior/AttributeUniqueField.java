@@ -3,7 +3,7 @@ package slimeknights.tconstruct.library.modifiers.modules.behavior;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.GsonHelper;
 import slimeknights.mantle.data.loadable.field.ContextKey;
 import slimeknights.mantle.data.loadable.field.LoadableField;
@@ -22,7 +22,7 @@ public record AttributeUniqueField<P>(String key, Function<P,String> getter) imp
     if (json.has(key)) {
       return GsonHelper.getAsString(json, key);
     }
-    ResourceLocation id = context.get(ContextKey.ID);
+    Identifier id = context.get(ContextKey.ID);
     if (id == null) {
       throw new JsonParseException("Missing modifier ID in context, cannot default " + key);
     }

@@ -2,7 +2,7 @@ package slimeknights.tconstruct.tools.modules.cosmetic;
 
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.data.loadable.record.SingletonLoader;
 import slimeknights.tconstruct.library.client.materials.MaterialTooltipCache;
@@ -55,7 +55,7 @@ public enum EmbellishmentModule implements ModifierModule, DisplayNameModifierHo
   public void addRawData(IToolStackView tool, ModifierEntry modifier, RestrictedCompoundTag tag) {
     // on build, migrate material redirects
     ModDataNBT data = tool.getPersistentData();
-    ResourceLocation key = modifier.getId();
+    Identifier key = modifier.getId();
     MaterialVariantId materialVariant = MaterialVariantId.tryParse(data.getString(key));
     if (materialVariant != null) {
       MaterialId original = materialVariant.getId();

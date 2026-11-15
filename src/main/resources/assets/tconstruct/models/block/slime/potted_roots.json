@@ -1,5 +1,4 @@
 {
-  "render_type": "minecraft:cutout",
   "parent": "minecraft:block/tinted_flower_pot_cross",
   "textures": {
     "plant": "tconstruct:block/slime/foliage/roots_potted"

@@ -4,7 +4,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potion;
@@ -38,7 +38,7 @@ public class TippingCastingRecipe extends ModifierPotionCastingRecipe {
     LoadableRecipeSerializer.TYPED_SERIALIZER.requiredField(), ContextKey.ID.requiredField(), LoadableRecipeSerializer.RECIPE_GROUP,
     TOOL_FIELD, FLUID_FIELD, COOLING_TIME_FIELD, MODIFIER_FIELD, TippingCastingRecipe::new);
 
-  public TippingCastingRecipe(TypeAwareRecipeSerializer<?> serializer, ResourceLocation id, String group, Ingredient tool, FluidIngredient fluid, int coolingTime, ModifierId modifier) {
+  public TippingCastingRecipe(TypeAwareRecipeSerializer<?> serializer, Identifier id, String group, Ingredient tool, FluidIngredient fluid, int coolingTime, ModifierId modifier) {
     super(serializer, id, group, tool, fluid, Items.AIR, coolingTime, modifier);
   }
 
@@ -79,7 +79,7 @@ public class TippingCastingRecipe extends ModifierPotionCastingRecipe {
     if (displayRecipes == null) {
       // first, get a list of potions and their IDs, the IDs are what we store in tool persistent data
       List<Holder.Reference<Potion>> potionHolders = getPotions();
-      List<String> potions = potionHolders.stream().map(holder -> holder.key().location().toString()).toList();
+      List<String> potions = potionHolders.stream().map(holder -> holder.key().identifier().toString()).toList();
 
       // next, make 1 copy of the potion fluid with potion contents per potion fluid
       // 1.21: potion data lives on the fluid's POTION_CONTENTS component rather than fluid NBT

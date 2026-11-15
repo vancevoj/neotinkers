@@ -1,5 +1,6 @@
 package slimeknights.tconstruct.library.data;
 
+import net.minecraft.world.item.equipment.ArmorType;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.google.gson.JsonObject;
 import lombok.Setter;
@@ -7,8 +8,7 @@ import net.minecraft.client.resources.model.Material;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.PackOutput.Target;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ArmorItem;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import org.jetbrains.annotations.Contract;
 import slimeknights.mantle.data.GenericDataProvider;
@@ -44,7 +44,7 @@ import java.util.concurrent.CompletableFuture;
 
 /** Data provider for modifier model maps */
 public abstract class AbstractModifierModelMapProvider extends GenericDataProvider {
-  private final Map<ResourceLocation, Builder> models = new HashMap<>();
+  private final Map<Identifier, Builder> models = new HashMap<>();
 
   private final String modId;
   public AbstractModifierModelMapProvider(PackOutput output, String modId) {
@@ -58,32 +58,32 @@ public abstract class AbstractModifierModelMapProvider extends GenericDataProvid
   /** Creates a new material for the given texture */
   @Contract("!null->!null")
   @Nullable
-  protected static Material material(@Nullable ResourceLocation texture) {
+  protected static Material material(@Nullable Identifier texture) {
     return texture == null ? null : ModifierModel.blockAtlas(texture);
   }
 
   /** Creates a new material for the given texture */
   @SuppressWarnings("removal")
   protected Material material(String texture) {
-    return ModifierModel.blockAtlas(ResourceLocation.fromNamespaceAndPath(modId, texture));
+    return ModifierModel.blockAtlas(Identifier.fromNamespaceAndPath(modId, texture));
   }
 
   /** Creates a tool texture path from the given path */
   @Nullable
-  protected static ResourceLocation toolPath(@Nullable ResourceLocation path) {
+  protected static Identifier toolPath(@Nullable Identifier path) {
     return  path == null ? null : path.withPrefix("item/tool/");
   }
 
   /** Creates a tool texture path from the given path */
   @SuppressWarnings("removal")
   @Nullable
-  protected ResourceLocation toolPath(String path) {
-    return ResourceLocation.fromNamespaceAndPath(modId, "item/tool/" + path);
+  protected Identifier toolPath(String path) {
+    return Identifier.fromNamespaceAndPath(modId, "item/tool/" + path);
   }
 
   /** Creates a tool material from the given path */
   @Nullable
-  protected static Material toolMaterial(@Nullable ResourceLocation path) {
+  protected static Material toolMaterial(@Nullable Identifier path) {
     return  path == null ? null : ModifierModel.blockAtlas(path.withPrefix("item/tool/"));
   }
 
@@ -115,23 +115,23 @@ public abstract class AbstractModifierModelMapProvider extends GenericDataProvid
   /* Builder */
 
   /** Gets the builder for the given tool */
-  protected Builder tool(ResourceLocation tool, ResourceLocation base) {
+  protected Builder tool(Identifier tool, Identifier base) {
     return this.models.computeIfAbsent(tool, id -> new Builder(base));
   }
 
   /** Gets the builder for the given tool */
-  protected Builder tool(ResourceLocation tool) {
+  protected Builder tool(Identifier tool) {
     return tool(tool, tool);
   }
 
   /** Gets the builder for the given tool */
   @SuppressWarnings("removal")
   protected Builder tool(String tool) {
-    return tool(ResourceLocation.fromNamespaceAndPath(modId, tool));
+    return tool(Identifier.fromNamespaceAndPath(modId, tool));
   }
 
   /** Adds the given model to the tool variant */
-  protected Builder tool(ResourceLocation tool, String variant) {
+  protected Builder tool(Identifier tool, String variant) {
     return tool(tool.withSuffix(variant), tool);
   }
 
@@ -176,16 +176,16 @@ public abstract class AbstractModifierModelMapProvider extends GenericDataProvid
     private final Map<String, ModifierModel> constant = new LinkedHashMap<>();
     private final Map<ModifierId, ModifierModel> modifiers = new LinkedHashMap<>();
     /** Root path making up other paths */
-    private ResourceLocation root;
+    private Identifier root;
     /** Path to small modifiers */
     @Nullable
-    private ResourceLocation smallFolder;
+    private Identifier smallFolder;
     /** Path to large modifiers */
     @Nullable
     @Setter
-    private ResourceLocation largeFolder = null;
+    private Identifier largeFolder = null;
 
-    private Builder(ResourceLocation id) {
+    private Builder(Identifier id) {
       this.root = id;
       this.smallFolder = id.withSuffix("/modifiers/");
     }
@@ -210,7 +210,7 @@ public abstract class AbstractModifierModelMapProvider extends GenericDataProvid
     }
 
     /** Sets the root path for small modiifers */
-    public Builder smallFolder(@Nullable ResourceLocation path) {
+    public Builder smallFolder(@Nullable Identifier path) {
       this.smallFolder = path;
       return this;
     }
@@ -227,7 +227,7 @@ public abstract class AbstractModifierModelMapProvider extends GenericDataProvid
     }
 
     /** Sets the root path for small modiifers */
-    public Builder largeFolder(@Nullable ResourceLocation path) {
+    public Builder largeFolder(@Nullable Identifier path) {
       this.largeFolder = path;
       return this;
     }
@@ -249,7 +249,7 @@ public abstract class AbstractModifierModelMapProvider extends GenericDataProvid
     }
 
     /** Updates both folders at once, used commonly to relocate a batch of modifiers */
-    public Builder folder(@Nullable ResourceLocation small, @Nullable ResourceLocation large) {
+    public Builder folder(@Nullable Identifier small, @Nullable Identifier large) {
       return smallFolder(small).largeFolder(large);
     }
 
@@ -319,14 +319,14 @@ public abstract class AbstractModifierModelMapProvider extends GenericDataProvid
     /** Creates a path from the given folder and suffix */
     @Contract("!null, _ -> !null")
     @Nullable
-    private static ResourceLocation toPath(@Nullable ResourceLocation folder, String suffix) {
+    private static Identifier toPath(@Nullable Identifier folder, String suffix) {
       return folder == null ? null : folder.withSuffix(suffix);
     }
 
     /** Creates a path from the given folder and suffix */
     @Contract("!null, _ -> !null")
     @Nullable
-    private static Material toMaterial(@Nullable ResourceLocation folder, String suffix) {
+    private static Material toMaterial(@Nullable Identifier folder, String suffix) {
       if (folder == null) {
         return null;
       }
@@ -336,12 +336,12 @@ public abstract class AbstractModifierModelMapProvider extends GenericDataProvid
     /** Converts the path to a folder, using null if empty */
     @Contract("!null->!null")
     @Nullable
-    private ResourceLocation localize(@Nullable String path) {
+    private Identifier localize(@Nullable String path) {
       return path == null ? null : root.withPath(path);
     }
 
     /** Creates a modifier with a specific path. */
-    public Builder luminosity(int light, ModifierId modifier, @Nullable ResourceLocation smallPath, @Nullable ResourceLocation largePath) {
+    public Builder luminosity(int light, ModifierId modifier, @Nullable Identifier smallPath, @Nullable Identifier largePath) {
       return modifier(modifier, new NormalModifierModel(toolMaterial(smallPath), toolMaterial(largePath), -1, light));
     }
 
@@ -429,7 +429,7 @@ public abstract class AbstractModifierModelMapProvider extends GenericDataProvid
     /* Fluid */
 
     /** Creates a model for a constant tank following standard folder vs path rules */
-    public Builder constantFluid(@Nullable ResourceLocation smallPath, @Nullable ResourceLocation largePath) {
+    public Builder constantFluid(@Nullable Identifier smallPath, @Nullable Identifier largePath) {
       String partial = "_partial";
       String full = "_full";
       return constant("fluid", new TankModifierModel(
@@ -455,7 +455,7 @@ public abstract class AbstractModifierModelMapProvider extends GenericDataProvid
     /* Specific fluid modifiers */
 
     /** Adds models for a fluid, with a constant texture and a fluid texture */
-    public Builder fluid(ModifierId modifier, @Nullable ResourceLocation smallPath, @Nullable ResourceLocation largePath) {
+    public Builder fluid(ModifierId modifier, @Nullable Identifier smallPath, @Nullable Identifier largePath) {
       return modifier(modifier,
         new FluidModifierModel(toMaterial(smallPath, "_full"), toMaterial(largePath, "_full")),
         new NormalModifierModel(toolMaterial(smallPath), toolMaterial(largePath))
@@ -480,7 +480,7 @@ public abstract class AbstractModifierModelMapProvider extends GenericDataProvid
     /* Tanks - add in a partial texture */
 
     /** Adds models for a tank, with a partial and full state */
-    public Builder tank(ModifierId modifier, @Nullable ResourceLocation smallPath, @Nullable ResourceLocation largePath) {
+    public Builder tank(ModifierId modifier, @Nullable Identifier smallPath, @Nullable Identifier largePath) {
       String partial = "_partial";
       String full = "_full";
       return modifier(modifier,
@@ -510,7 +510,7 @@ public abstract class AbstractModifierModelMapProvider extends GenericDataProvid
     /* Standard tank */
 
     /** Adds models for the standard tank */
-    public Builder tank(@Nullable ResourceLocation smallPath, @Nullable ResourceLocation largePath) {
+    public Builder tank(@Nullable Identifier smallPath, @Nullable Identifier largePath) {
       return tank(ModifierIds.tank, smallPath, largePath);
     }
 
@@ -533,7 +533,7 @@ public abstract class AbstractModifierModelMapProvider extends GenericDataProvid
     /* Ammo */
 
     /** Creates a model for smashing on a small tool. */
-    public Builder smashing(ResourceLocation path) {
+    public Builder smashing(Identifier path) {
       return trait(ModifierIds.smashing, new FluidModifierModel(toolMaterial(path), null, SmashingModule.TANK_HELPER));
     }
 
@@ -544,7 +544,7 @@ public abstract class AbstractModifierModelMapProvider extends GenericDataProvid
     }
 
     /** Creates a model for tipping a small tool */
-    public Builder tipped(@Nullable ResourceLocation smallPath, @Nullable ResourceLocation largePath) {
+    public Builder tipped(@Nullable Identifier smallPath, @Nullable Identifier largePath) {
       return trait("__tipped", ModifierIds.tipped, new PotionModifierModel(toolMaterial(smallPath), toolMaterial(largePath)));
     }
 
@@ -574,7 +574,7 @@ public abstract class AbstractModifierModelMapProvider extends GenericDataProvid
     }
 
     /** Adds a model for dyed */
-    public Builder dyed(@Nullable ResourceLocation smallPath, @Nullable ResourceLocation largePath) {
+    public Builder dyed(@Nullable Identifier smallPath, @Nullable Identifier largePath) {
       return dyed(new DyedModifierModel(toolMaterial(smallPath), toolMaterial(largePath)));
     }
 
@@ -593,12 +593,12 @@ public abstract class AbstractModifierModelMapProvider extends GenericDataProvid
     /* Trim */
 
     /** Adds the trim model to the tool */
-    public Builder trim(ArmorItem.Type type) {
+    public Builder trim(ArmorType type) {
       return first(TinkerModifiers.trim.getId(), TrimModifierModel.Armor.values()[type.ordinal()]);
     }
 
     /** Creates a custom trim in the given folder, using the given name for the large variant. */
-    public Builder customTrim(ResourceLocation smallPath, @Nullable ResourceLocation largePath) {
+    public Builder customTrim(Identifier smallPath, @Nullable Identifier largePath) {
       return first(TinkerModifiers.trim.getId(), new TrimModifierModel.Custom(toolPath(smallPath), toolPath(largePath)));
     }
 
@@ -611,7 +611,7 @@ public abstract class AbstractModifierModelMapProvider extends GenericDataProvid
     /* Embellishment */
 
     /** Adds the embellishment model to the tool using the given textures */
-    public Builder embellishment(@Nullable ResourceLocation smallPath, @Nullable ResourceLocation largePath) {
+    public Builder embellishment(@Nullable Identifier smallPath, @Nullable Identifier largePath) {
       ModifierId embellishment = TinkerModifiers.embellishment.getId();
       // whatever is embellish is basically a part so want extra early
       return first("__embellishment", embellishment, new MaterialModifierModel.PersistentData(toolMaterial(smallPath), toolMaterial(largePath)))
@@ -634,7 +634,7 @@ public abstract class AbstractModifierModelMapProvider extends GenericDataProvid
     /* Banner */
 
     /** Adds the banner model to the tool */
-    public Builder banner(@Nullable ResourceLocation smallPrefix, @Nullable ResourceLocation largePrefix) {
+    public Builder banner(@Nullable Identifier smallPrefix, @Nullable Identifier largePrefix) {
       return first(TinkerModifiers.banner.getId(), new BannerModifierModel(toolPath(smallPrefix), toolPath(largePrefix)));
     }
 

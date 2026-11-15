@@ -1,7 +1,7 @@
 package slimeknights.tconstruct.library.modifiers.entity;
 
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
 
 /** Interface for a projectile with a power getter and setter, used by {@link slimeknights.tconstruct.library.modifiers.modules.combat.ConditionalPowerModule} */

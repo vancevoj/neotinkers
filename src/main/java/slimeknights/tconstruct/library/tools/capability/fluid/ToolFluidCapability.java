@@ -2,7 +2,7 @@ package slimeknights.tconstruct.library.tools.capability.fluid;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.ItemCapability;
@@ -29,7 +29,7 @@ import java.util.function.Supplier;
 @RequiredArgsConstructor
 public class ToolFluidCapability extends FluidModifierHookIterator<ModifierEntry> implements IFluidHandlerItem {
   /** Boolean key to set in volatile mod data to enable the fluid capability */
-  public static final ResourceLocation TOTAL_TANKS = TConstruct.getResource("total_tanks");
+  public static final Identifier TOTAL_TANKS = TConstruct.getResource("total_tanks");
 
   /** Modifier hook instance to make an inventory modifier */
   public static final ModuleHook<FluidModifierHook> HOOK = ModifierHooks.register(TConstruct.getResource("fluid"), FluidModifierHook.class, FluidModifierHookMerger::new, new FluidModifierHook() {
@@ -326,7 +326,7 @@ public class ToolFluidCapability extends FluidModifierHookIterator<ModifierEntry
     @Nullable
     @Override
     public <T> T getCapability(IToolStackView tool, ItemCapability<T, ?> cap) {
-      if (cap == Capabilities.FluidHandler.ITEM && tool.getVolatileData().getInt(TOTAL_TANKS) > 0) {
+      if (cap == Capabilities.Fluid.ITEM && tool.getVolatileData().getInt(TOTAL_TANKS) > 0) {
         return (T) fluidCap;
       }
       return null;

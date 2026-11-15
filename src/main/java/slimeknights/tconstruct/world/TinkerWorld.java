@@ -1,5 +1,7 @@
 package slimeknights.tconstruct.world;
 
+import net.minecraft.world.entity.EntityTypes;
+import net.minecraft.world.level.block.entity.BlockEntityTypes;
 import com.google.common.collect.ImmutableSet;
 import net.minecraft.core.Direction;
 import net.minecraft.core.dispenser.BlockSource;
@@ -214,7 +216,7 @@ public final class TinkerWorld extends TinkerModule {
       } else {
         properties.sound(SoundType.GRASS).offsetType(OffsetType.XYZ);
       }
-      return properties.replaceable().instabreak().noCollission().pushReaction(PushReaction.DESTROY);
+      return properties.replaceable().instabreak().noCollision().pushReaction(PushReaction.POPPED);
     };
     slimeFern = BLOCKS.registerEnum(FoliageType.values(), "slime_fern", type -> new SlimeTallGrassBlock(props.apply(type), type), BLOCK_ITEM);
     slimeTallGrass = BLOCKS.registerEnum(FoliageType.values(), "slime_tall_grass", type -> new SlimeTallGrassBlock(props.apply(type), type), BLOCK_ITEM);
@@ -223,7 +225,7 @@ public final class TinkerWorld extends TinkerModule {
 
   // trees
   public static final EnumObject<FoliageType, Block> slimeSapling = Util.make(() -> {
-    Function<FoliageType,BlockBehaviour.Properties> props = type -> builder(type.getMapColor(), type.isNether() ? SoundType.FUNGUS : SoundType.GRASS).instabreak().noCollission().pushReaction(PushReaction.DESTROY);
+    Function<FoliageType,BlockBehaviour.Properties> props = type -> builder(type.getMapColor(), type.isNether() ? SoundType.FUNGUS : SoundType.GRASS).instabreak().noCollision().pushReaction(PushReaction.POPPED);
     return new EnumObject.Builder<FoliageType,Block>(FoliageType.class)
       .putAll(BLOCKS.registerEnum(FoliageType.OVERWORLD, "slime_sapling", (type) -> new SlimeSaplingBlock(SlimeTree.create(type), type, props.apply(type).randomTicks()), TOOLTIP_BLOCK_ITEM))
       .put(FoliageType.BLOOD, BLOCKS.register("blood_slime_sapling", () -> new SlimeFungusBlock(props.apply(FoliageType.BLOOD), TinkerStructures.bloodSlimeFungus), TOOLTIP_BLOCK_ITEM))
@@ -233,15 +235,15 @@ public final class TinkerWorld extends TinkerModule {
   });
   public static final EnumObject<FoliageType,FlowerPotBlock> pottedSlimeSapling = BLOCKS.registerPottedEnum(FoliageType.values(), "slime_sapling", slimeSapling);
   public static final EnumObject<FoliageType, Block> slimeLeaves = new EnumObject.Builder<FoliageType, Block>(FoliageType.class)
-    .putAll(BLOCKS.registerEnum(FoliageType.OVERWORLD, "slime_leaves", type -> new SlimeLeavesBlock(builder(type.getMapColor(), SoundType.GRASS).strength(1.0f).randomTicks().noOcclusion().isValidSpawn(Blocks::never).isSuffocating((s, w, p) -> false).isViewBlocking((s, w, p) -> false).pushReaction(PushReaction.DESTROY).isRedstoneConductor((s, w, p) -> false), type), BLOCK_ITEM))
+    .putAll(BLOCKS.registerEnum(FoliageType.OVERWORLD, "slime_leaves", type -> new SlimeLeavesBlock(builder(type.getMapColor(), SoundType.GRASS).strength(1.0f).randomTicks().noOcclusion().isValidSpawn(Blocks::never).isSuffocating((s, w, p) -> false).isViewBlocking((s, w, p) -> false).pushReaction(PushReaction.POPPED).isRedstoneConductor((s, w, p) -> false), type), BLOCK_ITEM))
     .putAll(BLOCKS.registerEnum(FoliageType.NETHER, "slime_leaves", type -> new Block(builder(type.getMapColor(), SoundType.WART_BLOCK).strength(1.5F).isValidSpawn((s, w, p, e) -> false)), BLOCK_ITEM))
-    .put(FoliageType.ENDER, BLOCKS.register("ender_slime_leaves", () -> new SlimePropaguleLeavesBlock(builder(FoliageType.ENDER.getMapColor(), SoundType.GRASS).strength(1.0f).randomTicks().noOcclusion().isValidSpawn(Blocks::never).isSuffocating((s, w, p) -> false).isViewBlocking((s, w, p) -> false).pushReaction(PushReaction.DESTROY).isRedstoneConductor((s, w, p) -> false), FoliageType.ENDER), BLOCK_ITEM))
+    .put(FoliageType.ENDER, BLOCKS.register("ender_slime_leaves", () -> new SlimePropaguleLeavesBlock(builder(FoliageType.ENDER.getMapColor(), SoundType.GRASS).strength(1.0f).randomTicks().noOcclusion().isValidSpawn(Blocks::never).isSuffocating((s, w, p) -> false).isViewBlocking((s, w, p) -> false).pushReaction(PushReaction.POPPED).isRedstoneConductor((s, w, p) -> false), FoliageType.ENDER), BLOCK_ITEM))
     .build();
 
   // slime vines
   public static final ItemObject<SlimeVineBlock> skySlimeVine, enderSlimeVine;
   static {
-    Function<SlimeType,BlockBehaviour.Properties> props = type -> builder(type.getMapColor(), SoundType.GRASS).replaceable().strength(0.75F).noCollission().randomTicks().pushReaction(PushReaction.DESTROY);
+    Function<SlimeType,BlockBehaviour.Properties> props = type -> builder(type.getMapColor(), SoundType.GRASS).replaceable().strength(0.75F).noCollision().randomTicks().pushReaction(PushReaction.POPPED);
     skySlimeVine = BLOCKS.register("sky_slime_vine", () -> new SlimeVineBlock(props.apply(SlimeType.SKY), SlimeType.SKY), BLOCK_ITEM);
     enderSlimeVine = BLOCKS.register("ender_slime_vine", () -> new SlimeVineBlock(props.apply(SlimeType.ENDER), SlimeType.ENDER), BLOCK_ITEM);
   }
@@ -345,7 +347,7 @@ public final class TinkerWorld extends TinkerModule {
 
   @SubscribeEvent
   void registerSpawnPlacement(RegisterSpawnPlacementsEvent event) {
-    event.register(EntityType.SLIME, new SlimePlacementPredicate<>(TinkerTags.Blocks.EARTH_SLIME_SPAWN), Operation.OR);
+    event.register(EntityTypes.SLIME, new SlimePlacementPredicate<>(TinkerTags.Blocks.EARTH_SLIME_SPAWN), Operation.OR);
     event.register(skySlimeEntity.get(),   SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, new SlimePlacementPredicate<>(TinkerTags.Blocks.SKY_SLIME_SPAWN), Operation.OR);
     event.register(enderSlimeEntity.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, new SlimePlacementPredicate<>(TinkerTags.Blocks.ENDER_SLIME_SPAWN), Operation.OR);
     event.register(terracubeEntity.get(),  SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, TerracubeEntity::canSpawnHere, Operation.OR);
@@ -379,10 +381,10 @@ public final class TinkerWorld extends TinkerModule {
       // inject heads into the tile entity type
       event.enqueueWork(() -> {
         ImmutableSet.Builder<Block> builder = ImmutableSet.builder();
-        builder.addAll(BlockEntityType.SKULL.validBlocks);
+        builder.addAll(BlockEntityTypes.SKULL.validBlocks);
         TinkerWorld.heads.forEach(head -> builder.add(head));
         TinkerWorld.wallHeads.forEach(head -> builder.add(head));
-        BlockEntityType.SKULL.validBlocks = builder.build();
+        BlockEntityTypes.SKULL.validBlocks = builder.build();
       });
     });
 
@@ -501,7 +503,7 @@ public final class TinkerWorld extends TinkerModule {
   /** Creates a skull block for the given head type */
   private static SkullBlock makeHead(TinkerHeadType type) {
     // TODO: find a way for Forge to give me new instruments
-    BlockBehaviour.Properties props = BlockBehaviour.Properties.of().strength(1.0F).pushReaction(PushReaction.DESTROY);
+    BlockBehaviour.Properties props = BlockBehaviour.Properties.of().strength(1.0F).pushReaction(PushReaction.POPPED);
     if (type.isPiglin()) {
       return new PiglinHeadBlock(type, props);
     }
@@ -528,6 +530,6 @@ public final class TinkerWorld extends TinkerModule {
 
   /** Properties for a cluster of shards. */
   private static Properties clusterProps() {
-    return BlockBehaviour.Properties.of().forceSolidOn().noOcclusion().randomTicks().strength(2.5f).requiresCorrectToolForDrops().pushReaction(PushReaction.DESTROY);
+    return BlockBehaviour.Properties.of().forceSolidOn().noOcclusion().randomTicks().strength(2.5f).requiresCorrectToolForDrops().pushReaction(PushReaction.POPPED);
   }
 }

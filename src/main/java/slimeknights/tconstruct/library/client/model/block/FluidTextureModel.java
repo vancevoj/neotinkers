@@ -5,20 +5,20 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import lombok.AllArgsConstructor;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.BlockElement;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.resources.model.geometry.BakedQuad;
+import net.minecraft.client.resources.model.cuboid.CuboidModelElement;
 import net.minecraft.client.renderer.block.model.ItemOverrides;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.Material;
 import net.minecraft.client.resources.model.ModelBaker;
-import net.minecraft.client.resources.model.ModelState;
+import net.minecraft.client.renderer.block.dispatch.ModelState;
 import net.minecraft.client.resources.model.SimpleBakedModel;
 import net.minecraft.client.resources.model.UnbakedModel;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
@@ -28,7 +28,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.neoforged.neoforge.client.model.IQuadTransformer;
-import net.neoforged.neoforge.client.model.data.ModelData;
+import net.neoforged.neoforge.model.data.ModelData;
 import net.neoforged.neoforge.client.model.geometry.IGeometryBakingContext;
 import net.neoforged.neoforge.client.model.geometry.IGeometryLoader;
 import net.neoforged.neoforge.client.model.geometry.IUnbakedGeometry;
@@ -69,7 +69,7 @@ public class FluidTextureModel implements IUnbakedGeometry<FluidTextureModel> {
   private final Set<String> retextured;
 
   @Override
-  public void resolveParents(Function<ResourceLocation, UnbakedModel> modelGetter, IGeometryBakingContext context) {
+  public void resolveParents(Function<Identifier, UnbakedModel> modelGetter, IGeometryBakingContext context) {
     model.resolveParents(modelGetter, context);
   }
 
@@ -88,12 +88,12 @@ public class FluidTextureModel implements IUnbakedGeometry<FluidTextureModel> {
 
     // determine which block parts are fluids
     Set<String> fluidTextures = this.fluids.isEmpty() ? Collections.emptySet() : RetexturedModel.getAllRetextured(owner, model, this.fluids);
-    List<BlockElement> elements = model.getElements();
+    List<CuboidModelElement> elements = model.getElements();
     int size = elements.size();
     BitSet fluidParts = new BitSet(size);
     if (!fluidTextures.isEmpty()) {
       for (int i = 0; i < size; i++) {
-        BlockElement part = elements.get(i);
+        CuboidModelElement part = elements.get(i);
         long fluidFaces = part.faces.values().stream()
                                     .filter(face -> fluidTextures.contains(trimTextureName(face.texture())))
                                     .count();
@@ -111,12 +111,12 @@ public class FluidTextureModel implements IUnbakedGeometry<FluidTextureModel> {
     return new Baked(baked, elements, model.getColorData(), owner, transform, fluidTextures, fluidParts, retextured);
   }
 
-  private record BakedCacheKey(FluidStack fluid, @Nullable ResourceLocation texture) {}
+  private record BakedCacheKey(FluidStack fluid, @Nullable Identifier texture) {}
 
   /** Baked wrapper class */
   private static class Baked extends DynamicBakedWrapper<BakedModel> {
     private final Map<BakedCacheKey,BakedModel> cache = new ConcurrentHashMap<>();
-    private final List<BlockElement> elements;
+    private final List<CuboidModelElement> elements;
     private final List<ColorData> colorData;
     private final IGeometryBakingContext owner;
     private final ModelState transform;
@@ -125,7 +125,7 @@ public class FluidTextureModel implements IUnbakedGeometry<FluidTextureModel> {
     private final Set<String> retextured;
     private final ItemOverrides overrides = new RetexturedOverride();
 
-    protected Baked(BakedModel originalModel, List<BlockElement> elements, List<ColorData> colorData, IGeometryBakingContext owner, ModelState transform, Set<String> fluids, BitSet fluidParts, Set<String> retextured) {
+    protected Baked(BakedModel originalModel, List<CuboidModelElement> elements, List<ColorData> colorData, IGeometryBakingContext owner, ModelState transform, Set<String> fluids, BitSet fluidParts, Set<String> retextured) {
       super(originalModel);
       this.elements = elements;
       this.colorData = colorData;
@@ -170,7 +170,7 @@ public class FluidTextureModel implements IUnbakedGeometry<FluidTextureModel> {
       boolean defaultUvLock = transform.isUvLocked();
       int size = elements.size();
       for (int i = 0; i < size; i++) {
-        BlockElement element = elements.get(i);
+        CuboidModelElement element = elements.get(i);
         ColorData colors = LogicHelper.getOrDefault(colorData, i, ColorData.DEFAULT);
         if (fluidParts.get(i)) {
           ColoredBlockModel.bakePart(builder, textured, element, luminosity, spriteGetter, transform.getRotation(), fluidTransformer, colors.isUvLock(defaultUvLock), TankModel.BAKE_LOCATION);

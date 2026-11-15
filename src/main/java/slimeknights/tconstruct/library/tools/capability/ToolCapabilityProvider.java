@@ -65,7 +65,7 @@ public class ToolCapabilityProvider {
    * Registers the given capability for the passed items, dispatching to the modular tool capability providers.
    * Call from {@link RegisterCapabilitiesEvent} on the mod bus for each modifiable item.
    * @param event  Capability registration event
-   * @param cap    Capability to register (e.g. {@code Capabilities.FluidHandler.ITEM})
+   * @param cap    Capability to register (e.g. {@code Capabilities.Fluid.ITEM})
    * @param items  Items to register the capability for
    * @param <T>    Capability type
    */
@@ -81,9 +81,9 @@ public class ToolCapabilityProvider {
    * @param items  Modifiable tool items
    */
   public static void registerToolCaps(RegisterCapabilitiesEvent event, Item... items) {
-    register(event, Capabilities.FluidHandler.ITEM, items);
-    register(event, Capabilities.ItemHandler.ITEM, items);
-    register(event, Capabilities.EnergyStorage.ITEM, items);
+    register(event, Capabilities.Fluid.ITEM, items);
+    register(event, Capabilities.Item.ITEM, items);
+    register(event, Capabilities.Energy.ITEM, items);
     register(event, BlockItemProviderCapability.CAPABILITY, items);
   }
 

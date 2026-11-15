@@ -5,7 +5,7 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.data.recipes.RecipeOutput;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import slimeknights.mantle.data.loadable.Loadables;
@@ -40,7 +40,7 @@ public class PartRecipeBuilder extends AbstractRecipeBuilder<PartRecipeBuilder> 
   }
 
   /** Sets the pattern in the builder */
-  public PartRecipeBuilder setPattern(ResourceLocation pattern) {
+  public PartRecipeBuilder setPattern(Identifier pattern) {
     return setPattern(new Pattern(pattern));
   }
 
@@ -55,7 +55,7 @@ public class PartRecipeBuilder extends AbstractRecipeBuilder<PartRecipeBuilder> 
   }
 
   @Override
-  public void save(RecipeOutput consumerIn, ResourceLocation id) {
+  public void save(RecipeOutput consumerIn, Identifier id) {
     if (this.outputAmount <= 0) {
       throw new IllegalStateException("recipe " + id + " must output at least 1");
     }

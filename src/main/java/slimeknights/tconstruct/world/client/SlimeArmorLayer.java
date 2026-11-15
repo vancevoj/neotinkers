@@ -1,15 +1,17 @@
 package slimeknights.tconstruct.world.client;
 
+import net.minecraft.world.item.equipment.ArmorType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.Model;
-import net.minecraft.client.model.SkullModelBase;
+import net.minecraft.client.model.object.skull.SkullModelBase;
 import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.blockentity.SkullBlockRenderer;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
@@ -18,10 +20,10 @@ import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.monster.Slime;
+import net.minecraft.world.entity.monster.cubemob.Slime;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.BlockItem;
@@ -68,7 +70,7 @@ public class SlimeArmorLayer<T extends Slime, M extends HierarchicalModel<T>, A 
 
       Item item = helmet.getItem();
       // helmet renderer, based on humanoid armor layer
-      if (item instanceof ArmorItem armor && armor.getType() == ArmorItem.Type.HELMET) {
+      if (item instanceof ArmorItem armor && armor.getType() == ArmorType.HELMET) {
         this.getParentModel().copyPropertiesTo(armorModel);
         armorModel.setAllVisible(false);
         armorModel.head.visible = true;
@@ -111,21 +113,21 @@ public class SlimeArmorLayer<T extends Slime, M extends HierarchicalModel<T>, A 
     }
   }
 
-  private static void renderModel(PoseStack matrices, MultiBufferSource buffer, int packedLight, boolean enchanted, Model model, int color, ResourceLocation texture) {
-    VertexConsumer vertexconsumer = ItemRenderer.getArmorFoilBuffer(buffer, RenderType.armorCutoutNoCull(texture), enchanted);
+  private static void renderModel(PoseStack matrices, MultiBufferSource buffer, int packedLight, boolean enchanted, Model model, int color, Identifier texture) {
+    VertexConsumer vertexconsumer = ItemRenderer.getArmorFoilBuffer(buffer, RenderTypes.armorCutoutNoCull(texture), enchanted);
     model.renderToBuffer(matrices, vertexconsumer, packedLight, OverlayTexture.NO_OVERLAY, color);
   }
 
   /**
    * Gets the armor texture for the given material layer.
    * @param layer Armor material layer
-   * @return ResourceLocation pointing at the armor's texture
+   * @return Identifier pointing at the armor's texture
    */
-  public static ResourceLocation getArmorResource(ArmorMaterial.Layer layer) {
+  public static Identifier getArmorResource(ArmorMaterial.Layer layer) {
     String path = layer.texture(false).toString();
-    ResourceLocation location = HumanoidArmorLayer.ARMOR_LOCATION_CACHE.get(path);
+    Identifier location = HumanoidArmorLayer.ARMOR_LOCATION_CACHE.get(path);
     if (location == null) {
-      location = ResourceLocation.parse(path);
+      location = Identifier.parse(path);
       HumanoidArmorLayer.ARMOR_LOCATION_CACHE.put(path, location);
     }
     return location;

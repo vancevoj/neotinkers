@@ -1,8 +1,9 @@
 package slimeknights.tconstruct.tools.data;
 
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.RecipeOutput;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
@@ -1801,7 +1802,7 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                                 .save(consumer, location(worktableFolder + "modifier_sorting"));
 
     // invisible ink
-    ResourceLocation hiddenModifiers = TConstruct.getResource("invisible_modifiers");
+    Identifier hiddenModifiers = TConstruct.getResource("invisible_modifiers");
     IJsonPredicate<ModifierId> blacklist = ModifierPredicate.tag(TinkerTags.Modifiers.INVISIBLE_INK_BLACKLIST).inverted();
     ModifierSetWorktableRecipeBuilder.setAdding(hiddenModifiers)
                                      .modifierPredicate(blacklist)
@@ -1851,7 +1852,7 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
 
     // compatability
     String theOneProbe = "theoneprobe";
-    ResourceLocation probe = ResourceLocation.fromNamespaceAndPath(theOneProbe, "probe");
+    Identifier probe = Identifier.fromNamespaceAndPath(theOneProbe, "probe");
     RecipeOutput topConsumer = withCondition(consumer, modLoaded(theOneProbe));
     ModifierRecipeBuilder.modifier(ModifierIds.theOneProbe)
                          .setTools(ingredientFromTags(TinkerTags.Items.HELMETS, TinkerTags.Items.HELD))
@@ -1915,11 +1916,11 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
       .save(withCondition(consumer, new TagFilledCondition<>(ironwood)), wrap(TinkerModifiers.embellishment, folder, "/wood/ironwood"));
 
     // cosmetics //
-    ResourceLocation dyeingId = location(folder + "dyeing");
+    Identifier dyeingId = location(folder + "dyeing");
     consumer.accept(dyeingId, new ArmorDyeingRecipe(dyeingId), null);
-    ResourceLocation trimId = location(folder + "trim");
+    Identifier trimId = location(folder + "trim");
     consumer.accept(trimId, new ArmorTrimRecipe(trimId), null);
-    ResourceLocation bannerId = location(folder + "banner");
+    Identifier bannerId = location(folder + "banner");
     consumer.accept(bannerId, new BannerModifierRecipe(bannerId, Ingredient.of(TinkerFluids.slimeBottle.get(SlimeType.SKY))), null);
 
     // slimesuit //
@@ -1955,23 +1956,23 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
   private void addHeadRecipes(RecipeOutput consumer) {
     String folder = "tools/severing/";
     // first, beheading
-    SeveringRecipeBuilder.severing(EntityIngredient.of(EntityType.ZOMBIE), Items.ZOMBIE_HEAD)
+    SeveringRecipeBuilder.severing(EntityIngredient.of(EntityTypes.ZOMBIE), Items.ZOMBIE_HEAD)
 												 .save(consumer, location(folder + "zombie_head"));
-    SeveringRecipeBuilder.severing(EntityIngredient.of(EntityType.SKELETON), Items.SKELETON_SKULL)
+    SeveringRecipeBuilder.severing(EntityIngredient.of(EntityTypes.SKELETON), Items.SKELETON_SKULL)
 												 .save(consumer, location(folder + "skeleton_skull"));
-    SeveringRecipeBuilder.severing(EntityIngredient.of(EntityType.WITHER_SKELETON), Items.WITHER_SKELETON_SKULL)
+    SeveringRecipeBuilder.severing(EntityIngredient.of(EntityTypes.WITHER_SKELETON), Items.WITHER_SKELETON_SKULL)
       .save(consumer, location(folder + "wither_skeleton_skull"));
-    SeveringRecipeBuilder.severing(EntityIngredient.of(EntityType.WITHER), Items.WITHER_SKELETON_SKULL).rareMob()
+    SeveringRecipeBuilder.severing(EntityIngredient.of(EntityTypes.WITHER), Items.WITHER_SKELETON_SKULL).rareMob()
       .save(consumer, location(folder + "wither_salvage"));
-    SeveringRecipeBuilder.severing(EntityIngredient.of(EntityType.CREEPER), Items.CREEPER_HEAD)
+    SeveringRecipeBuilder.severing(EntityIngredient.of(EntityTypes.CREEPER), Items.CREEPER_HEAD)
 												 .save(consumer, location(folder + "creeper_head"));
-    SeveringRecipeBuilder.severing(EntityIngredient.of(EntityType.PIGLIN), Items.PIGLIN_HEAD)
+    SeveringRecipeBuilder.severing(EntityIngredient.of(EntityTypes.PIGLIN), Items.PIGLIN_HEAD)
                          .save(consumer, location(folder + "piglin_head"));
     SpecialSeveringRecipeBuilder.serializer(TinkerModifiers.playerBeheadingSerializer).rareMob().save(consumer, location(folder + "player_head"));
     SpecialSeveringRecipeBuilder.serializer(TinkerModifiers.snowGolemBeheadingSerializer).save(consumer, location(folder + "snow_golem_head"));
-    SeveringRecipeBuilder.severing(EntityIngredient.of(EntityType.IRON_GOLEM), Blocks.CARVED_PUMPKIN)
+    SeveringRecipeBuilder.severing(EntityIngredient.of(EntityTypes.IRON_GOLEM), Blocks.CARVED_PUMPKIN)
                          .save(consumer, location(folder + "iron_golem_head"));
-    SeveringRecipeBuilder.severing(EntityIngredient.of(EntityType.ENDER_DRAGON), Items.DRAGON_HEAD).rareMob()
+    SeveringRecipeBuilder.severing(EntityIngredient.of(EntityTypes.ENDER_DRAGON), Items.DRAGON_HEAD).rareMob()
                          .save(consumer, location(folder + "ender_dragon_head"));
     TinkerWorld.headItems.forEach((type, head) ->
       SeveringRecipeBuilder.severing(EntityIngredient.of(type.getType()), head)
@@ -1980,29 +1981,29 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
     // other body parts
     // hostile
     // beeyeing
-    SeveringRecipeBuilder.severing(EntityIngredient.of(EntityType.SPIDER, EntityType.CAVE_SPIDER), Items.SPIDER_EYE)
+    SeveringRecipeBuilder.severing(EntityIngredient.of(EntityTypes.SPIDER, EntityTypes.CAVE_SPIDER), Items.SPIDER_EYE)
                          .save(consumer, location(folder + "spider_eye"));
     // besilking
-    SeveringRecipeBuilder.severing(EntityIngredient.of(EntityType.SPIDER, EntityType.CAVE_SPIDER), Items.COBWEB)
+    SeveringRecipeBuilder.severing(EntityIngredient.of(EntityTypes.SPIDER, EntityTypes.CAVE_SPIDER), Items.COBWEB)
                          .save(consumer, location(folder + "cobweb"));
     // be-internal-combustion-device
-    SeveringRecipeBuilder.severing(EntityIngredient.of(EntityType.CREEPER), Blocks.TNT)
+    SeveringRecipeBuilder.severing(EntityIngredient.of(EntityTypes.CREEPER), Blocks.TNT)
                          .save(consumer, location(folder + "creeper_tnt"));
     // bemembraning?
-    SeveringRecipeBuilder.severing(EntityIngredient.of(EntityType.PHANTOM), Items.PHANTOM_MEMBRANE)
+    SeveringRecipeBuilder.severing(EntityIngredient.of(EntityTypes.PHANTOM), Items.PHANTOM_MEMBRANE)
                          .save(consumer, location(folder + "phantom_membrane"));
     // beshelling
-    SeveringRecipeBuilder.severing(EntityIngredient.of(EntityType.SHULKER), Items.SHULKER_SHELL)
+    SeveringRecipeBuilder.severing(EntityIngredient.of(EntityTypes.SHULKER), Items.SHULKER_SHELL)
                          .save(consumer, location(folder + "shulker_shell"));
     // deboning
-    SeveringRecipeBuilder.severing(EntityIngredient.of(EntityType.SKELETON, EntityType.SKELETON_HORSE, EntityType.STRAY), ItemOutput.fromItem(Items.BONE, 2))
+    SeveringRecipeBuilder.severing(EntityIngredient.of(EntityTypes.SKELETON, EntityTypes.SKELETON_HORSE, EntityTypes.STRAY), ItemOutput.fromItem(Items.BONE, 2))
                          .save(consumer, location(folder + "skeleton_bone"));
-    SeveringRecipeBuilder.severing(EntityIngredient.of(EntityType.WITHER_SKELETON), ItemOutput.fromItem(TinkerMaterials.necroticBone, 2))
+    SeveringRecipeBuilder.severing(EntityIngredient.of(EntityTypes.WITHER_SKELETON), ItemOutput.fromItem(TinkerMaterials.necroticBone, 2))
                          .save(consumer, location(folder + "wither_skeleton_bone"));
-    SeveringRecipeBuilder.severing(EntityIngredient.of(EntityType.BLAZE), ItemOutput.fromItem(Items.BLAZE_ROD, 2))
+    SeveringRecipeBuilder.severing(EntityIngredient.of(EntityTypes.BLAZE), ItemOutput.fromItem(Items.BLAZE_ROD, 2))
                          .save(consumer, location(folder + "blaze_rod"));
     // desliming (you cut off a chunk of slime)
-    SeveringRecipeBuilder.severing(EntityIngredient.of(EntityType.SLIME), Items.SLIME_BALL)
+    SeveringRecipeBuilder.severing(EntityIngredient.of(EntityTypes.SLIME), Items.SLIME_BALL)
                          .save(consumer, location(folder + "earthslime_ball"));
     SeveringRecipeBuilder.severing(EntityIngredient.of(TinkerWorld.skySlimeEntity.get()), TinkerCommons.slimeball.get(SlimeType.SKY))
                          .save(consumer, location(folder + "skyslime_ball"));
@@ -2010,25 +2011,25 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
                          .save(consumer, location(folder + "enderslime_ball"));
     SeveringRecipeBuilder.severing(EntityIngredient.of(TinkerWorld.terracubeEntity.get()), Items.CLAY_BALL)
                          .save(consumer, location(folder + "terracube_clay"));
-    SeveringRecipeBuilder.severing(EntityIngredient.of(EntityType.MAGMA_CUBE), Items.MAGMA_CREAM)
+    SeveringRecipeBuilder.severing(EntityIngredient.of(EntityTypes.MAGMA_CUBE), Items.MAGMA_CREAM)
                          .save(consumer, location(folder + "magma_cream"));
     // descaling? I don't know what to call those
-    SeveringRecipeBuilder.severing(EntityIngredient.of(EntityType.GUARDIAN, EntityType.ELDER_GUARDIAN), ItemOutput.fromItem(Items.PRISMARINE_SHARD, 2))
+    SeveringRecipeBuilder.severing(EntityIngredient.of(EntityTypes.GUARDIAN, EntityTypes.ELDER_GUARDIAN), ItemOutput.fromItem(Items.PRISMARINE_SHARD, 2))
                          .save(consumer, location(folder + "guardian_shard"));
 
     // passive
     // befeating
-    SeveringRecipeBuilder.severing(EntityIngredient.of(EntityType.RABBIT), Items.RABBIT_FOOT)
+    SeveringRecipeBuilder.severing(EntityIngredient.of(EntityTypes.RABBIT), Items.RABBIT_FOOT)
                          .noChildOutput()
 												 .save(consumer, location(folder + "rabbit_foot"));
     // befeathering
-    SeveringRecipeBuilder.severing(EntityIngredient.of(EntityType.CHICKEN), ItemOutput.fromItem(Items.FEATHER, 2))
+    SeveringRecipeBuilder.severing(EntityIngredient.of(EntityTypes.CHICKEN), ItemOutput.fromItem(Items.FEATHER, 2))
                          .noChildOutput()
                          .save(consumer, location(folder + "chicken_feather"));
     // beshrooming
     SpecialSeveringRecipeBuilder.serializer(TinkerModifiers.mooshroomDemushroomingSerializer).save(consumer, location(folder + "mooshroom_shroom"));
     // beshelling
-    SeveringRecipeBuilder.severing(EntityIngredient.of(EntityType.TURTLE), Items.TURTLE_HELMET)
+    SeveringRecipeBuilder.severing(EntityIngredient.of(EntityTypes.TURTLE), Items.TURTLE_HELMET)
                          .setChildOutput(ItemOutput.fromItem(Items.TURTLE_SCUTE))
                          .save(consumer, location(folder + "turtle_shell"));
     // befleecing
@@ -2089,12 +2090,12 @@ public class ModifierRecipeProvider extends BaseRecipeProvider {
   }
 
   /** Prefixes the modifier ID with the given prefix */
-  public ResourceLocation prefix(LazyModifier modifier, String prefix) {
+  public Identifier prefix(LazyModifier modifier, String prefix) {
     return prefix(modifier.getId(), prefix);
   }
 
   /** Prefixes the modifier ID with the given prefix and suffix */
-  public ResourceLocation wrap(LazyModifier modifier, String prefix, String suffix) {
+  public Identifier wrap(LazyModifier modifier, String prefix, String suffix) {
     return wrap(modifier.getId(), prefix, suffix);
   }
 

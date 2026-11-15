@@ -1,10 +1,10 @@
 package slimeknights.tconstruct.library.client.modifiers;
 
 import com.mojang.math.Transformation;
-import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.resources.model.geometry.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.Material;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ArmorItem;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.data.loadable.record.SingletonLoader;
@@ -30,7 +30,7 @@ public enum TrimModifierModel implements IBakedModifierModel {
 
   /** @deprecated use {@link Armor#getRoot()} */
   @Deprecated(forRemoval = true)
-  public static final ResourceLocation[] TRIM_TEXTURES = new ResourceLocation[4];
+  public static final Identifier[] TRIM_TEXTURES = new Identifier[4];
   static {
     for (Armor type : Armor.values()) {
       TRIM_TEXTURES[type.ordinal()] = type.getRoot(false);

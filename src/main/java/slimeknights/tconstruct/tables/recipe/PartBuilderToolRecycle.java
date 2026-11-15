@@ -11,7 +11,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -80,14 +80,14 @@ public class PartBuilderToolRecycle implements IPartBuilderRecipe, IMultiRecipe<
     PartBuilderToolRecycle::new);
 
   @Getter
-  private final ResourceLocation id;
+  private final Identifier id;
   private final SizedIngredient toolRequirement;
   private final Ingredient pattern;
   private final List<IMaterialItem> parts;
 
   /** @deprecated use {@link slimeknights.tconstruct.library.recipe.partbuilder.recycle.PartBuilderToolRecycleBuilder} */
   @Deprecated(forRemoval = true)
-  public PartBuilderToolRecycle(ResourceLocation id, SizedIngredient toolRequirement, Ingredient pattern) {
+  public PartBuilderToolRecycle(Identifier id, SizedIngredient toolRequirement, Ingredient pattern) {
     this(id, toolRequirement, pattern, List.of());
   }
 
@@ -302,7 +302,7 @@ public class PartBuilderToolRecycle implements IPartBuilderRecipe, IMultiRecipe<
     }
 
     /** Recipe ID, not an override in 1.21 as recipes no longer expose their ID */
-    public ResourceLocation getId() {
+    public Identifier getId() {
       return id;
     }
 

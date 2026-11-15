@@ -1,15 +1,15 @@
 package slimeknights.tconstruct.shared.data;
 
-import net.minecraft.advancements.Criterion;
-import net.minecraft.advancements.critereon.InventoryChangeTrigger;
-import net.minecraft.advancements.critereon.ItemPredicate;
+import net.minecraft.advancements.triggers.Criterion;
+import net.minecraft.advancements.triggers.InventoryChangeTrigger;
+import net.minecraft.advancements.predicates.ItemPredicate;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.data.recipes.SimpleCookingRecipeBuilder;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -173,7 +173,7 @@ public class CommonRecipeProvider extends BaseRecipeProvider implements ICommonR
                          .unlockedBy("has_clear_glass", has(TinkerCommons.clearGlass))
                          .save(consumer, prefix(id(block), folder));
       Block pane = TinkerCommons.clearStainedGlassPane.get(color);
-      ResourceLocation paneId = id(pane);
+      Identifier paneId = id(pane);
       ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, pane, 16)
                          .define('#', block)
                          .pattern("###")

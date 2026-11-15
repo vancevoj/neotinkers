@@ -1,12 +1,12 @@
 package slimeknights.tconstruct.library.client;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import slimeknights.mantle.client.screen.ElementScreen;
 import slimeknights.tconstruct.TConstruct;
 
 /** TODO: consider using {@link slimeknights.tconstruct.library.recipe.partbuilder.Pattern} instead. */
 public interface Icons {
-  ResourceLocation ICONS = TConstruct.getResource("textures/gui/icons.png");
+  Identifier ICONS = TConstruct.getResource("textures/gui/icons.png");
 
   //ElementScreen ANVIL = new ElementScreen(18 * 3, 0, 18, 18, 256, 256);
   ElementScreen PATTERN = new ElementScreen(ICONS, 0, 18 * 12, 18, 18, 256, 256);

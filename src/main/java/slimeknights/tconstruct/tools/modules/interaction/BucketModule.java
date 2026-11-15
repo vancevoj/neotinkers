@@ -137,7 +137,7 @@ public record BucketModule(IJsonPredicate<Fluid> fluids) implements ModifierModu
       placed = true;
       // finally, just replace the existing block with the fluid
     } else if (existing.canBeReplaced(fluid)) {
-      if (!world.isClientSide && !existing.liquid()) {
+      if (!world.isClientSide() && !existing.liquid()) {
         world.destroyBlock(target, true);
       }
       if (world.setBlockAndUpdate(target, fluid.defaultFluidState().createLegacyBlock()) || existing.getFluidState().isSource()) {
@@ -197,7 +197,7 @@ public record BucketModule(IJsonPredicate<Fluid> fluids) implements ModifierModu
         if (pickedUpFluid != Fluids.EMPTY) {
           player.playSound(Objects.requireNonNullElse(pickedUpFluid.getFluidType().getSound(SoundActions.BUCKET_FILL), SoundEvents.BUCKET_FILL), 1.0F, 1.0F);
           // set the fluid if empty, increase the fluid if filled
-          if (!world.isClientSide) {
+          if (!world.isClientSide()) {
             if (fluidStack.isEmpty()) {
               TANK_HELPER.setFluid(tool, new FluidStack(pickedUpFluid, FluidType.BUCKET_VOLUME));
             } else if (pickedUpFluid == currentFluid) {

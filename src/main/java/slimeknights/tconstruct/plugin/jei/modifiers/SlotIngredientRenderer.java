@@ -4,7 +4,7 @@ import mezz.jei.api.ingredients.IIngredientRenderer;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
@@ -100,16 +100,16 @@ public enum SlotIngredientRenderer implements IIngredientRenderer<SlotCount> {
   }
 
   @Override
-  public void render(GuiGraphics graphics, @Nullable SlotCount slots) {
+  public void render(GuiGraphicsExtractor graphics, @Nullable SlotCount slots) {
     render(graphics, slots, 0, 0);
   }
 
   @Override
-  public void render(GuiGraphics graphics, @Nullable SlotCount slots, int posX, int posY) {
+  public void render(GuiGraphicsExtractor graphics, @Nullable SlotCount slots, int posX, int posY) {
     if (this != INGREDIENT && slots != null && slots.count() > 0) {
       String text = Integer.toString(slots.count());
       Font fontRenderer = Minecraft.getInstance().font;
-      graphics.drawString(fontRenderer, text, posX + 9 - fontRenderer.width(text), posY + 5, Color.GRAY.getRGB(), false);
+      graphics.text(fontRenderer, text, posX + 9 - fontRenderer.width(text), posY + 5, Color.GRAY.getRGB(), false);
     }
     graphics.blit(this == INGREDIENT ? posX : posX + 8, posY, 0, 16, 16, SLOT_SPRITES.computeIfAbsent(SlotCount.type(slots), SLOT_LOOKUP));
   }

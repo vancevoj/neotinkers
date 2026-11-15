@@ -20,7 +20,7 @@ import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
 import net.minecraft.world.entity.projectile.FishingHook;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
@@ -172,7 +172,7 @@ public class CombatFishingHook extends FishingHook implements ProjectileWithKnoc
   /** Damages the rod if locatable */
   private void damageRod() {
     // we damage on both cast and release to prevent some cheese with some modifiers and swapping items post cast
-    if (!level().isClientSide && getOwner() instanceof LivingEntity living) {
+    if (!level().isClientSide() && getOwner() instanceof LivingEntity living) {
       ItemStack stack = living.getMainHandItem();
       InteractionHand hand = InteractionHand.MAIN_HAND;
       // must be able to cast
@@ -377,7 +377,7 @@ public class CombatFishingHook extends FishingHook implements ProjectileWithKnoc
     // if in the wall, continue ticking life
     int oldLife = this.life;
     super.tick();
-    if (this.wallState != null && !level().isClientSide) {
+    if (this.wallState != null && !level().isClientSide()) {
       this.life = oldLife + 1;
       if (this.life >= 1200) {
         this.discard();

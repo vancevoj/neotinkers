@@ -3,7 +3,7 @@ package slimeknights.tconstruct.gadgets.entity;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
+import net.minecraft.world.entity.projectile.throwableitemprojectile.ThrowableItemProjectile;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Explosion.BlockInteraction;
@@ -35,7 +35,7 @@ public class EFLNEntity extends ThrowableItemProjectile implements IEntityWithCo
   @Override
   protected void onHit(HitResult result) {
     Level level = level();
-    if (!level.isClientSide) {
+    if (!level.isClientSide()) {
       new EFLNExplosion(level, position(), 4f, this, 8f, null, 1, false, BlockInteraction.DESTROY).handleServer();
       this.discard();
     }

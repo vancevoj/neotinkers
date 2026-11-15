@@ -5,13 +5,13 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSyntaxException;
 import io.netty.handler.codec.DecoderException;
-import net.minecraft.Util;
+import net.minecraft.util.Util;
 import net.minecraft.core.IdMap;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.stats.Stat;
 import net.minecraft.stats.StatType;
 import net.minecraft.stats.Stats;
@@ -56,14 +56,14 @@ public enum StatLoadable implements Loadable<Stat<?>> {
   /** Parses the stat as the given type */
   private static <T> Stat<T> parseStat(StatType<T> statType, JsonElement element, String key, TypedMap context) {
     Registry<T> registry = statType.getRegistry();
-    ResourceLocation name = Loadables.RESOURCE_LOCATION.convert(element, key, context);
+    Identifier name = Loadables.RESOURCE_LOCATION.convert(element, key, context);
     if (registry.containsKey(name)) {
       T value = registry.get(name);
       if (value != null) {
         return statType.get(value);
       }
     }
-    throw new JsonSyntaxException("Unable to parse " + key + " as registry " + registry.key().location() + " does not contain ID " + name);
+    throw new JsonSyntaxException("Unable to parse " + key + " as registry " + registry.key().identifier() + " does not contain ID " + name);
   }
 
   @Override
@@ -81,9 +81,9 @@ public enum StatLoadable implements Loadable<Stat<?>> {
     StatType<T> type = stat.getType();
     Registry<T> registry = type.getRegistry();
     T value = stat.getValue();
-    ResourceLocation location = registry.getKey(value);
+    Identifier location = registry.getKey(value);
     if (location == null) {
-      throw new RuntimeException("Registry " + registry.key().location() + " does not contain object " + value);
+      throw new RuntimeException("Registry " + registry.key().identifier() + " does not contain object " + value);
     }
     JsonArray array = new JsonArray();
     array.add(TinkerLoadables.STAT_TYPE.serialize(type));
@@ -101,7 +101,7 @@ public enum StatLoadable implements Loadable<Stat<?>> {
     if (value != null) {
       return value;
     }
-    throw new DecoderException("Unknown " + registry.key().location() + " id " + id);
+    throw new DecoderException("Unknown " + registry.key().identifier() + " id " + id);
   }
 
   @SuppressWarnings("deprecation")
@@ -144,7 +144,7 @@ public enum StatLoadable implements Loadable<Stat<?>> {
     Object value = stat.getValue();
     // custom stats format using the ID as the translation key
     if (type == Stats.CUSTOM) {
-      return Component.translatable(Util.makeDescriptionId("stat", (ResourceLocation) value));
+      return Component.translatable(Util.makeDescriptionId("stat", (Identifier) value));
     }
     // killed and killed by have weird translations at their "stat_type." key
     if (type == Stats.ENTITY_KILLED) {
@@ -181,7 +181,7 @@ public enum StatLoadable implements Loadable<Stat<?>> {
   /** Gets the registry key for the given stat's value */
   private static <T> String getKey(Stat<T> stat) {
     Registry<T> registry = stat.getType().getRegistry();
-    ResourceLocation key = registry.getKey(stat.getValue());
+    Identifier key = registry.getKey(stat.getValue());
     if (key != null) {
       return key.toString();
     }

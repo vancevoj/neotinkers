@@ -31,7 +31,7 @@ public class AttackParticle extends TextureSheetParticle {
   }
 
   @Override
-  public int getLightColor(float partialTicks) {
+  public int getLightCoords(float partialTicks) {
     return 0xF000F0;
   }
 

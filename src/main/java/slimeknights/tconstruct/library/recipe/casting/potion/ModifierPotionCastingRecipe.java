@@ -1,6 +1,6 @@
 package slimeknights.tconstruct.library.recipe.casting.potion;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -26,7 +26,7 @@ public abstract class ModifierPotionCastingRecipe extends PotionCastingRecipe {
   protected static final LoadableField<ModifierId, ModifierPotionCastingRecipe> MODIFIER_FIELD = ModifierId.PARSER.requiredField("modifier", r -> r.modifier);
 
   protected final ModifierId modifier;
-  public ModifierPotionCastingRecipe(TypeAwareRecipeSerializer<?> serializer, ResourceLocation id, String group, Ingredient bottle, FluidIngredient fluid, Item result, int coolingTime, ModifierId modifier) {
+  public ModifierPotionCastingRecipe(TypeAwareRecipeSerializer<?> serializer, Identifier id, String group, Ingredient bottle, FluidIngredient fluid, Item result, int coolingTime, ModifierId modifier) {
     super(serializer, id, group, bottle, fluid, result, coolingTime);
     this.modifier = modifier;
   }

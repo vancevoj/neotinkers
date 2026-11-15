@@ -4,7 +4,7 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.data.loadable.record.SingletonLoader;
 import slimeknights.tconstruct.library.modifiers.Modifier;
@@ -41,7 +41,7 @@ public enum DyeModule implements ModifierModule, DisplayNameModifierHook, Modifi
   @Override
   public Component getDisplayName(IToolStackView tool, ModifierEntry entry, Component name, @Nullable RegistryAccess access) {
     IModDataView persistentData = tool.getPersistentData();
-    ResourceLocation key = entry.getId();
+    Identifier key = entry.getId();
     if (persistentData.contains(key, Tag.TAG_INT)) {
       int color = persistentData.getInt(key);
       Modifier modifier = entry.getModifier();

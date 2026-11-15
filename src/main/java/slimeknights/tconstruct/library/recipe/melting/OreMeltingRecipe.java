@@ -2,7 +2,7 @@ package slimeknights.tconstruct.library.recipe.melting;
 
 import com.google.common.collect.Streams;
 import lombok.Getter;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.neoforged.neoforge.fluids.FluidStack;
@@ -35,7 +35,7 @@ public class OreMeltingRecipe extends MeltingRecipe {
   @Getter
   private final OreRateType oreType;
   private final List<OreRateType> byproductTypes;
-  protected OreMeltingRecipe(ResourceLocation id, String group, Ingredient input, FluidOutput output, int temperature, int time, List<FluidOutput> byproducts, OreRateType oreType, List<OreRateType> byproductTypes) {
+  protected OreMeltingRecipe(Identifier id, String group, Ingredient input, FluidOutput output, int temperature, int time, List<FluidOutput> byproducts, OreRateType oreType, List<OreRateType> byproductTypes) {
     super(id, group, input, output, temperature, time, byproducts);
     this.oreType = oreType;
     this.byproductTypes = byproductTypes;

@@ -2,7 +2,7 @@ package slimeknights.tconstruct.library.modifiers.util;
 
 import com.google.gson.JsonObject;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import slimeknights.mantle.data.loadable.Loadables;
 import slimeknights.mantle.data.loadable.field.LoadableField;
 import slimeknights.mantle.util.JsonHelper;
@@ -16,11 +16,11 @@ import javax.annotation.Nullable;
  */
 public interface ModuleWithKey {
   /** Field for building loadables */ // TODO 1.21: rename to key field
-  LoadableField<ResourceLocation,ModuleWithKey> FIELD = Loadables.RESOURCE_LOCATION.nullableField("key", ModuleWithKey::key);
+  LoadableField<Identifier,ModuleWithKey> FIELD = Loadables.RESOURCE_LOCATION.nullableField("key", ModuleWithKey::key);
 
   /** Gets the key for the module */
-  default ResourceLocation getKey(Modifier modifier) {
-    ResourceLocation key = key();
+  default Identifier getKey(Modifier modifier) {
+    Identifier key = key();
     if (key != null) {
       return key;
     }
@@ -28,8 +28,8 @@ public interface ModuleWithKey {
   }
 
   /** Gets the key for the module */
-  default ResourceLocation getKey(ModifierEntry modifier) {
-    ResourceLocation key = key();
+  default Identifier getKey(ModifierEntry modifier) {
+    Identifier key = key();
     if (key != null) {
       return key;
     }
@@ -38,7 +38,7 @@ public interface ModuleWithKey {
 
   /** Gets the key field from the record */
   @Nullable
-  ResourceLocation key();
+  Identifier key();
 
   /**
    * Parses the key from JSON
@@ -46,7 +46,7 @@ public interface ModuleWithKey {
    * @return  Key, or null if not present
    */
   @Nullable
-  static ResourceLocation parseKey(JsonObject json) {
+  static Identifier parseKey(JsonObject json) {
     if (json.has("key")) {
       return JsonHelper.getResourceLocation(json, "key");
     }
@@ -55,18 +55,18 @@ public interface ModuleWithKey {
 
   /** Reads the key from the network */
   @Nullable
-  static ResourceLocation fromNetwork(FriendlyByteBuf buffer) {
+  static Identifier fromNetwork(FriendlyByteBuf buffer) {
     if (buffer.readBoolean()) {
-      return buffer.readResourceLocation();
+      return buffer.readIdentifier();
     }
     return null;
   }
 
   /** Writes the key to the network */
-  static void toNetwork(@Nullable ResourceLocation key, FriendlyByteBuf buffer) {
+  static void toNetwork(@Nullable Identifier key, FriendlyByteBuf buffer) {
     if (key != null) {
       buffer.writeBoolean(true);
-      buffer.writeResourceLocation(key);
+      buffer.writeIdentifier(key);
     } else {
       buffer.writeBoolean(false);
     }

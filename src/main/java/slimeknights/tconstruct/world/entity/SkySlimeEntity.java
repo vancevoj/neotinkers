@@ -44,7 +44,7 @@ public class SkySlimeEntity extends TravelersPlateSlimeEntity {
       setDeltaMovement(motion.x / 0.95f, motion.y * -0.9, motion.z / 0.95f);
       bounceAmount = getDeltaMovement().y;
       fallDistance = 0f;
-      hasImpulse = true;
+      needsSync = true;
       setOnGround(false);
       playSound(Sounds.SLIMY_BOUNCE.getSound(), 1f, 1f);
     }

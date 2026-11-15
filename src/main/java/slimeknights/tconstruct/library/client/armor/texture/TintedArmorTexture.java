@@ -1,5 +1,6 @@
 package slimeknights.tconstruct.library.client.armor.texture;
 
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import lombok.AllArgsConstructor;
@@ -10,9 +11,9 @@ import lombok.experimental.Accessors;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.entity.ItemRenderer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import slimeknights.tconstruct.library.client.armor.AbstractArmorModel;
 import slimeknights.tconstruct.library.client.armor.texture.ArmorTextureSupplier.ArmorTexture;
 
@@ -24,13 +25,13 @@ import slimeknights.tconstruct.library.client.armor.texture.ArmorTextureSupplier
 public class TintedArmorTexture implements ArmorTexture {
   private static final int MAX_LIGHT = LightTexture.pack(15, 15);
 
-  private final ResourceLocation texture;
+  private final Identifier texture;
   @Getter
   private int color = -1;
   @Getter
   private int luminosity = 0;
 
-  public TintedArmorTexture(ResourceLocation texture, int color) {
+  public TintedArmorTexture(Identifier texture, int color) {
     this(texture, color, 0);
   }
 
@@ -47,7 +48,7 @@ public class TintedArmorTexture implements ArmorTexture {
 
   @Override
   public void renderTexture(Model model, PoseStack matrices, MultiBufferSource bufferSource, int packedLight, int packedOverlay, float red, float green, float blue, float alpha, boolean hasGlint) {
-    VertexConsumer buffer = ItemRenderer.getArmorFoilBuffer(bufferSource, RenderType.armorCutoutNoCull(texture), hasGlint);
+    VertexConsumer buffer = ItemRenderer.getArmorFoilBuffer(bufferSource, RenderTypes.armorCutoutNoCull(texture), hasGlint);
     if (luminosity > 0) {
       packedLight = applyLuminosity(packedLight, luminosity);
     }

@@ -51,7 +51,7 @@ public record DamageOnUnequipModule(float damage, ResourceKey<DamageType> damage
   public void onUnequip(IToolStackView tool, ModifierEntry modifier, EquipmentChangeContext context) {
     if (condition.matches(tool, modifier)) {
       Level level = context.getLevel();
-      if (!level.isClientSide && EquipmentChangeModifierHook.didUnequip(tool, context)) {
+      if (!level.isClientSide() && EquipmentChangeModifierHook.didUnequip(tool, context)) {
         context.getEntity().hurt(TinkerDamageTypes.source(level.registryAccess(), damageType), damage * modifier.getEffectiveLevel()); // TODO(neoport): context.getEntity() cascade from EquipmentContext port
       }
     }

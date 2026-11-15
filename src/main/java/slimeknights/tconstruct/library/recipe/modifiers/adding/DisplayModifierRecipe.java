@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import slimeknights.mantle.recipe.ingredient.SizedIngredient;
 import slimeknights.tconstruct.library.json.IntRange;
@@ -23,7 +23,7 @@ import java.util.function.Predicate;
 public class DisplayModifierRecipe implements IDisplayModifierRecipe {
   @Getter
   @Nullable
-  private final ResourceLocation recipeId;
+  private final Identifier recipeId;
   private final List<List<ItemStack>> inputs;
   @Getter
   private final List<ItemStack> toolWithoutModifier;
@@ -49,7 +49,7 @@ public class DisplayModifierRecipe implements IDisplayModifierRecipe {
 
   /** @deprecated use {@link #builder()} */
   @Deprecated(forRemoval = true)
-  public DisplayModifierRecipe(@Nullable ResourceLocation id, List<SizedIngredient> inputs, List<ItemStack> toolWithoutModifier, List<ItemStack> toolWithModifier, ModifierEntry displayResult, IntRange level, @Nullable SlotCount slots, List<SlotCount> resultSlots) {
+  public DisplayModifierRecipe(@Nullable Identifier id, List<SizedIngredient> inputs, List<ItemStack> toolWithoutModifier, List<ItemStack> toolWithModifier, ModifierEntry displayResult, IntRange level, @Nullable SlotCount slots, List<SlotCount> resultSlots) {
     this(id, resolve(inputs), toolWithoutModifier, toolWithModifier, ITinkerStationRecipe.DEFAULT_TOOL_STACK_SIZE, null, displayResult, level, slots, resultSlots, false, false);
   }
 
@@ -103,7 +103,7 @@ public class DisplayModifierRecipe implements IDisplayModifierRecipe {
   public static class Builder {
     private ModifierEntry result = ModifierEntry.EMPTY;
     @Nullable
-    private ResourceLocation id = null;
+    private Identifier id = null;
     private List<List<ItemStack>> inputs = List.of();
     /** Predicate to check if the focus is a valid tool for this recipe. If unset, uses {@link #toolWithoutModifier} */
     private Predicate<ItemStack> isTool;

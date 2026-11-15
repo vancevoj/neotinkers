@@ -1,6 +1,6 @@
 package slimeknights.tconstruct.tables.client.inventory.module;
 
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -174,7 +174,7 @@ public class DynamicContainerScreen<P extends MultiModuleScreen<?>, C extends Ab
   }
 
   @Override
-  protected void renderBg(GuiGraphics graphics, float partialTicks, int mouseX, int mouseY) {
+  protected void renderBg(GuiGraphicsExtractor graphics, float partialTicks, int mouseX, int mouseY) {
     if (!this.slider.isHidden()) {
       this.slider.draw(graphics);
 

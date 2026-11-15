@@ -1,8 +1,8 @@
 package slimeknights.tconstruct.library.client.modifiers.model;
 
 import com.mojang.math.Transformation;
-import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.BlockElement;
+import net.minecraft.client.resources.model.geometry.BakedQuad;
+import net.minecraft.client.resources.model.cuboid.CuboidModelElement;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.Material;
 import net.minecraft.world.inventory.InventoryMenu;
@@ -36,7 +36,7 @@ public record FluidModifierModel(@Nullable Material small, @Nullable Material la
     FluidModifierModel::new);
 
   /**
-   * The vanilla model bakery uses an orgin of 0.5,0.5,0.5, and forges dynamic fluid code uses the vanilla model bakery. (see{@link net.minecraft.client.renderer.block.model.FaceBakery} {@code #rotateVertexBy()} for vanilla bakery)
+   * The vanilla model bakery uses an orgin of 0.5,0.5,0.5, and forges dynamic fluid code uses the vanilla model bakery. (see{@link net.minecraft.client.resources.model.cuboid.FaceBakery} {@code #rotateVertexBy()} for vanilla bakery)
    * However, item layer wants an origin of 0,0,0, which is what we expect in our tool models. So cancel out the origin.
    */
   private static final Vector3f ORIGIN = new Vector3f(-0.5f, -0.5f, -0.5f);
@@ -87,7 +87,7 @@ public record FluidModifierModel(@Nullable Material small, @Nullable Material la
 
     // build fluid like the forge dynamic container model
     // 1.21: createUnbakedItemMaskElements now takes the sprite directly (not SpriteContents)
-    List<BlockElement> unbaked = UnbakedGeometryHelper.createUnbakedItemMaskElements(-1, spriteGetter.apply(template)); // Use template as mask
+    List<CuboidModelElement> unbaked = UnbakedGeometryHelper.createUnbakedItemMaskElements(-1, spriteGetter.apply(template)); // Use template as mask
     // TODO: is there anything that can be done about the fluid? to prevent weird offsets?
     // 1.21: bakeElements(List, spriteGetter, ModelState) returns the quads directly (no trailing location)
     List<BakedQuad> fluidQuads = UnbakedGeometryHelper.bakeElements(unbaked, mat -> fluidSprite, new SimpleModelState(transforms.applyOrigin(ORIGIN).compose(FluidContainerModel.FLUID_TRANSFORM), false)); // Bake with fluid texture

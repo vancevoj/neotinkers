@@ -1,7 +1,7 @@
 package slimeknights.tconstruct.library.recipe.tinkerstation.building;
 
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
@@ -32,7 +32,7 @@ public abstract class MaterialIndexSwappingRecipe extends MaterialSwappingRecipe
   /** Options of indexes to set the material */
   protected final int[] indices;
 
-  protected MaterialIndexSwappingRecipe(ResourceLocation id, Ingredient tools, int maxStackSize, int[] indices, List<SizedIngredient> extraRequirements) {
+  protected MaterialIndexSwappingRecipe(Identifier id, Ingredient tools, int maxStackSize, int[] indices, List<SizedIngredient> extraRequirements) {
     super(id, tools, maxStackSize, extraRequirements);
     this.indices = indices;
   }

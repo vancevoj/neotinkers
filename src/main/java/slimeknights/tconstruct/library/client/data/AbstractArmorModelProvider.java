@@ -3,7 +3,7 @@ package slimeknights.tconstruct.library.client.data;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.PackOutput.Target;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import slimeknights.mantle.data.GenericDataProvider;
 import slimeknights.mantle.registration.object.IdAwareObject;
 import slimeknights.tconstruct.library.client.armor.ArmorModelManager;
@@ -18,7 +18,7 @@ import java.util.function.Function;
 
 /** Data provider for armor models */
 public abstract class AbstractArmorModelProvider extends GenericDataProvider {
-  private final Map<ResourceLocation,ArmorModel> models = new HashMap<>();
+  private final Map<Identifier,ArmorModel> models = new HashMap<>();
 
   public AbstractArmorModelProvider(PackOutput packOutput) {
     super(packOutput, Target.RESOURCE_PACK, ArmorModelManager.FOLDER);
@@ -34,7 +34,7 @@ public abstract class AbstractArmorModelProvider extends GenericDataProvider {
   }
 
   /** Adds a model to the generator */
-  protected void addModel(ResourceLocation name, ArmorTextureSupplier... layers) {
+  protected void addModel(Identifier name, ArmorTextureSupplier... layers) {
     ArmorModel existing = this.models.putIfAbsent(name, new ArmorModel(List.of(layers)));
     if (existing != null) {
       throw new IllegalArgumentException("Duplicate armor model at " + name + ", previous value " + existing);
@@ -43,7 +43,7 @@ public abstract class AbstractArmorModelProvider extends GenericDataProvider {
 
   /** Adds a model to the generator */
   @SuppressWarnings("SameParameterValue") // API
-  protected void addModel(ResourceLocation name, Function<ResourceLocation,ArmorTextureSupplier[]> layers) {
+  protected void addModel(Identifier name, Function<Identifier,ArmorTextureSupplier[]> layers) {
     addModel(name, layers.apply(name));
   }
 
@@ -53,7 +53,7 @@ public abstract class AbstractArmorModelProvider extends GenericDataProvider {
   }
 
   /** Adds a model to the generator */
-  protected void addModel(IdAwareObject name, Function<ResourceLocation,ArmorTextureSupplier[]> layers) {
+  protected void addModel(IdAwareObject name, Function<Identifier,ArmorTextureSupplier[]> layers) {
     addModel(name.getId(), layers.apply(name.getId()));
   }
 }

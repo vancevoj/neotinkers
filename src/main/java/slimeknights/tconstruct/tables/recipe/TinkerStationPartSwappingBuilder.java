@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import net.minecraft.data.recipes.RecipeOutput;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import slimeknights.mantle.data.loadable.Loadables;
@@ -54,7 +54,7 @@ public class TinkerStationPartSwappingBuilder extends AbstractRecipeBuilder<Tink
   }
 
   @Override
-  public void save(RecipeOutput output, ResourceLocation id) {
+  public void save(RecipeOutput output, Identifier id) {
     if (fromTool) {
       output.accept(id, new ToolMaterialSwappingRecipe(id, tools, extraRequirements), null);
     } else {

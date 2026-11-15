@@ -4,7 +4,7 @@ import lombok.Getter;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CraftingInput;
@@ -42,14 +42,14 @@ public class ModifierRepairCraftingRecipe extends CustomRecipe implements IModif
   private static final Predicate<ItemStack> TOOLS = stack -> stack.is(TinkerTags.Items.DURABILITY);
 
   @Getter
-  private final ResourceLocation id;
+  private final Identifier id;
   @Getter
   private final ModifierId modifier;
   @Getter
   private final Ingredient ingredient;
   @Getter
   private final int repairAmount;
-  public ModifierRepairCraftingRecipe(ResourceLocation idIn, ModifierId modifier, Ingredient ingredient, int repairAmount) {
+  public ModifierRepairCraftingRecipe(Identifier idIn, ModifierId modifier, Ingredient ingredient, int repairAmount) {
     super(CraftingBookCategory.EQUIPMENT);
     this.id = idIn;
     this.modifier = modifier;

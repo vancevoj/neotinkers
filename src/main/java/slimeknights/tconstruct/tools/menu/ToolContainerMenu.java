@@ -122,7 +122,7 @@ public class ToolContainerMenu extends AbstractContainerMenu {
     // if the stack looks like it could be our tool, fetch the handler from it
     IItemHandler handler;
     if (stack.has(ToolDataComponents.TOOL_DATA.get()) && stack.is(TinkerTags.Items.MODIFIABLE)) {
-      IItemHandler cap = stack.getCapability(Capabilities.ItemHandler.ITEM);
+      IItemHandler cap = stack.getCapability(Capabilities.Item.ITEM);
       handler = cap instanceof IItemHandlerModifiable ? cap : EmptyItemHandler.INSTANCE;
       // wrong number of slots means something went wrong, use a dummy
       if (handler.getSlots() != size) {
@@ -141,7 +141,7 @@ public class ToolContainerMenu extends AbstractContainerMenu {
     this.tool = ToolStack.from(stack);
     this.itemHandler = handler;
     this.player = playerInventory.player;
-    this.tank = new ToolFluidHandler(tool, player.level().isClientSide ? null : player);
+    this.tank = new ToolFluidHandler(tool, player.level().isClientSide() ? null : player);
     this.slotIndex = slotIndex;
 
     // if requested, add 3x3 crafting area
@@ -296,7 +296,7 @@ public class ToolContainerMenu extends AbstractContainerMenu {
   public boolean clickMenuButton(Player player, int id) {
     ItemStack held = getCarried();
     if ((id == 0 || id == 1) && !held.isEmpty() && !player.isSpectator()) {
-      if (!player.level().isClientSide) {
+      if (!player.level().isClientSide()) {
         TransferResult result = FluidTransferHelper.interactWithStack(tank, held, id == 0 ? TransferDirection.FILL_ITEM : TransferDirection.EMPTY_ITEM);
         setCarried(FluidTransferHelper.handleUIResult(player, held, result));
       }

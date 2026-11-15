@@ -8,7 +8,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import slimeknights.tconstruct.TConstruct;
@@ -29,7 +29,7 @@ import java.util.List;
 public class PartBuilderEmiRecipe extends BasicEmiRecipe {
   private static final String KEY_COST = TConstruct.makeTranslationKey("jei", "part_builder.cost");
   /** Background panel, matches the JEI part builder background (textures/gui/jei/tinker_station.png, 121x46 at 0,117). */
-  private static final ResourceLocation BACKGROUND_LOC = TConstruct.getResource("textures/gui/jei/tinker_station.png");
+  private static final Identifier BACKGROUND_LOC = TConstruct.getResource("textures/gui/jei/tinker_station.png");
 
   private final IDisplayPartBuilderRecipe recipe;
   /** Material variant for the title text, may be empty */

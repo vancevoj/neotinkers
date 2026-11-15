@@ -3,7 +3,7 @@ package slimeknights.tconstruct.library.recipe.molding;
 import lombok.Getter;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -34,7 +34,7 @@ public class MoldingRecipe implements ICommonRecipe<IMoldingContainer> {
   @Getter
   private final RecipeSerializer<?> serializer;
   @Getter
-  private final ResourceLocation id;
+  private final Identifier id;
   @Getter
   private final Ingredient material;
   @Getter
@@ -43,7 +43,7 @@ public class MoldingRecipe implements ICommonRecipe<IMoldingContainer> {
   private final boolean patternConsumed;
   private final ItemOutput recipeOutput;
 
-  public MoldingRecipe(TypeAwareRecipeSerializer<?> serializer, ResourceLocation id, Ingredient material, Ingredient pattern, boolean patternConsumed, ItemOutput recipeOutput) {
+  public MoldingRecipe(TypeAwareRecipeSerializer<?> serializer, Identifier id, Ingredient material, Ingredient pattern, boolean patternConsumed, ItemOutput recipeOutput) {
     this.type = serializer.getType();
     this.serializer = serializer;
     this.id = id;

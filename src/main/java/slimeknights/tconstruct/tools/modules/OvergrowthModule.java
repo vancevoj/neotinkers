@@ -68,7 +68,7 @@ public class OvergrowthModule implements ModifierModule, InventoryTickModifierHo
   @Override
   public void onInventoryTick(IToolStackView tool, ModifierEntry modifier, Level world, LivingEntity holder, int itemSlot, boolean isSelected, boolean isCorrectSlot, ItemStack stack) {
     // update 1 times a second, but skip when active (messes with pulling bow back)
-    if (!world.isClientSide && holder.tickCount % 20 == 0 && holder.getUseItem() != stack && condition.matches(tool, modifier)) {
+    if (!world.isClientSide() && holder.tickCount % 20 == 0 && holder.getUseItem() != stack && condition.matches(tool, modifier)) {
       // has a chance of restoring each second per level
       CapacityBarHook bar = getBar(modifier);
       if (bar.getAmount(tool) < bar.getCapacity(tool, modifier) && Modifier.RANDOM.nextFloat() < chance.compute(modifier.getEffectiveLevel())) {

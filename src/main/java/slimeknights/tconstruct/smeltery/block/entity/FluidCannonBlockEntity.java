@@ -68,7 +68,7 @@ public class FluidCannonBlockEntity extends TankBlockEntity implements ITankInve
   /** Called when a player interacts with the fluid cannon */
   public void interact(Player player, InteractionHand hand, boolean clickedTank) {
     // skip client side, and skip if the recipe already started
-    if (level == null || level.isClientSide) {
+    if (level == null || level.isClientSide()) {
       return;
     }
     // transfer fluid if clicked tank
@@ -203,7 +203,7 @@ public class FluidCannonBlockEntity extends TankBlockEntity implements ITankInve
     @Override
     public void setStack(ItemStack newStack) {
       Level world = parent.getLevel();
-      boolean hasChange = world != null && !world.isClientSide && !ItemStack.matches(getStack(), newStack);
+      boolean hasChange = world != null && !world.isClientSide() && !ItemStack.matches(getStack(), newStack);
       super.setStack(newStack);
       if (hasChange) {
         BlockPos pos = parent.getBlockPos();

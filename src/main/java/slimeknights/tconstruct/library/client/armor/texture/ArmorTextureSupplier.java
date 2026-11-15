@@ -4,7 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import slimeknights.mantle.data.listener.ResourceValidator;
@@ -59,7 +59,7 @@ public interface ArmorTextureSupplier extends IHaveLoader {
   /**
    * Gets a texture using the named format
    */
-  static ResourceLocation getTexturePath(ResourceLocation name) {
+  static Identifier getTexturePath(Identifier name) {
     return name.withPath(FOLDER + '/' + name.getPath() + ".png");
   }
 }

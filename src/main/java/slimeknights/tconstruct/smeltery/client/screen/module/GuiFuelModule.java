@@ -1,11 +1,11 @@
 package slimeknights.tconstruct.smeltery.client.screen.module;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.neoforged.neoforge.fluids.FluidStack;
 import slimeknights.mantle.client.screen.ScalableElementScreen;
@@ -47,7 +47,7 @@ public class GuiFuelModule implements IScreenWithFluidTank, ClickableTankModule 
 
   private FuelInfo fuelInfo = FuelInfo.EMPTY;
 
-  public GuiFuelModule(AbstractContainerScreen<?> screen, FuelModule fuelModule, int x, int y, int width, int height, int fireX, int fireY, boolean hasFuelSlot, ResourceLocation background) {
+  public GuiFuelModule(AbstractContainerScreen<?> screen, FuelModule fuelModule, int x, int y, int width, int height, int fireX, int fireY, boolean hasFuelSlot, Identifier background) {
     this.screen = screen;
     this.fuelModule = fuelModule;
     this.x = x;
@@ -90,7 +90,7 @@ public class GuiFuelModule implements IScreenWithFluidTank, ClickableTankModule 
    * Draws the fuel at the correct location
    * @param graphics  Matrix stack instance
    */
-  public void draw(GuiGraphics graphics) {
+  public void draw(GuiGraphicsExtractor graphics) {
     // draw fire
     int fuel = fuelModule.getFuel();
     int fuelQuality = fuelModule.getFuelQuality();
@@ -110,11 +110,11 @@ public class GuiFuelModule implements IScreenWithFluidTank, ClickableTankModule 
 
   /**
    * Highlights the hovered fuel
-   * @param graphics  GuiGraphics instance
+   * @param graphics  GuiGraphicsExtractor instance
    * @param checkX    Top corner relative mouse X
    * @param checkY    Top corner relative mouse Y
    */
-  public void renderHighlight(GuiGraphics graphics, int checkX, int checkY) {
+  public void renderHighlight(GuiGraphicsExtractor graphics, int checkX, int checkY) {
     if (isHovered(checkX, checkY)) {
       // if there is a fuel slot, render highlight lower
       if (hasFuelSlot) {
@@ -130,11 +130,11 @@ public class GuiFuelModule implements IScreenWithFluidTank, ClickableTankModule 
 
   /**
    * Adds the tooltip for the fuel
-   * @param graphics  GuiGraphics instance
+   * @param graphics  GuiGraphicsExtractor instance
    * @param mouseX    Mouse X position
    * @param mouseY    Mouse Y position
    */
-  public void addTooltip(GuiGraphics graphics, int mouseX, int mouseY, boolean hasTank) {
+  public void addTooltip(GuiGraphicsExtractor graphics, int mouseX, int mouseY, boolean hasTank) {
     int checkX = mouseX - screen.leftPos;
     int checkY = mouseY - screen.topPos;
 
@@ -171,7 +171,7 @@ public class GuiFuelModule implements IScreenWithFluidTank, ClickableTankModule 
         tooltip = hasTank ? TOOLTIP_NO_FUEL : TOOLTIP_NO_TANK;
       }
 
-      graphics.renderComponentTooltip(screen.font, tooltip, mouseX, mouseY);
+      graphics.setComponentTooltipForNextFrame(screen.font, tooltip, mouseX, mouseY);
     }
   }
 
@@ -185,7 +185,7 @@ public class GuiFuelModule implements IScreenWithFluidTank, ClickableTankModule 
   }
 
   /** Creates the fire element from the standard location */
-  public static ScalableElementScreen makeFire(ResourceLocation background) {
+  public static ScalableElementScreen makeFire(Identifier background) {
     return new ScalableElementScreen(background, 176, 136, 14, 14, 256, 256);
   }
 }

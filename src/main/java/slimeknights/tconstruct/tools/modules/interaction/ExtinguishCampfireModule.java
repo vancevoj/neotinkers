@@ -52,7 +52,7 @@ public record ExtinguishCampfireModule(ModifierCondition<IToolStackView> conditi
     if (original.getBlock() instanceof CampfireBlock && original.getValue(CampfireBlock.LIT)) {
       Level level = context.getLevel();
       BlockPos pos = context.getClickedPos();
-      if (!level.isClientSide) {
+      if (!level.isClientSide()) {
         if (playSound) {
           level.playSound(null, pos, SoundEvents.GENERIC_EXTINGUISH_FIRE, SoundSource.BLOCKS, 1.0F, 1.0F);
         }

@@ -29,7 +29,7 @@ public class SolarPoweredModifier extends NoLevelsModifier implements ToolDamage
   @Override
   public int onDamageTool(IToolStackView tool, ModifierEntry modifier, int amount, @Nullable LivingEntity holder) {
     if (holder != null) {
-      Level world = holder.getCommandSenderWorld();
+      Level world = holder.level();
       // note this may go negative, that is not a problem
       int skylight = world.getBrightness(LightLayer.SKY, holder.blockPosition()) - world.getSkyDarken();
       if (skylight > 0) {

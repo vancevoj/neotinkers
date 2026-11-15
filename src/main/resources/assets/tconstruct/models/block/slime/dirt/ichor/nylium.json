@@ -1,5 +1,4 @@
 {
-    "render_type": "minecraft:cutout_mipped",
     "parent": "block/grass_block",
     "textures": {
         "top":      "tconstruct:block/slime/dirt/nylium_top",

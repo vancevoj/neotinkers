@@ -14,9 +14,9 @@ import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvi
 public class SlimeTreeConfig implements FeatureConfiguration {
 
   public static final Codec<SlimeTreeConfig> CODEC = RecordCodecBuilder.create((treeConfig) -> treeConfig.group(
-    BlockStateProvider.CODEC.fieldOf("trunk_provider").forGetter(instance -> instance.trunkProvider),
-    BlockStateProvider.CODEC.fieldOf("leaves_provider").forGetter(instance -> instance.leavesProvider),
-    BlockStateProvider.CODEC.fieldOf("vines_provider").forGetter(instance -> instance.vinesProvider),
+    BlockStateProvider.TYPED_CODEC.fieldOf("trunk_provider").forGetter(instance -> instance.trunkProvider),
+    BlockStateProvider.TYPED_CODEC.fieldOf("leaves_provider").forGetter(instance -> instance.leavesProvider),
+    BlockStateProvider.TYPED_CODEC.fieldOf("vines_provider").forGetter(instance -> instance.vinesProvider),
     Codec.INT.fieldOf("base_height").orElse(0).forGetter(instance -> instance.baseHeight),
     Codec.INT.fieldOf("random_height").orElse(0).forGetter(instance -> instance.randomHeight),
     Codec.BOOL.fieldOf("can_double_height").orElse(false).forGetter(instance -> instance.canDoubleHeight),
@@ -47,7 +47,7 @@ public class SlimeTreeConfig implements FeatureConfiguration {
   @NoArgsConstructor
   @Accessors(fluent = true)
   public static class Builder {
-    private static final BlockStateProvider AIR_PROVIDER = BlockStateProvider.simple(Blocks.AIR);
+    private static final BlockStateProvider AIR_PROVIDER = BlockStateProvider.of(Blocks.AIR);
 
     @Setter
     private BlockStateProvider trunkProvider = AIR_PROVIDER;
@@ -70,12 +70,12 @@ public class SlimeTreeConfig implements FeatureConfiguration {
 
     /** Sets the trunk */
     public Builder trunk(Block block) {
-      return trunkProvider(BlockStateProvider.simple(block));
+      return trunkProvider(BlockStateProvider.of(block));
     }
 
     /** Sets the leaves */
     public Builder leaves(Block block) {
-      return leavesProvider(BlockStateProvider.simple(block));
+      return leavesProvider(BlockStateProvider.of(block));
     }
 
     /** Sets the vines */
@@ -87,7 +87,7 @@ public class SlimeTreeConfig implements FeatureConfiguration {
 
     /** Sets the vines */
     public Builder vines(BlockState block) {
-      return vinesProvider(BlockStateProvider.simple(block));
+      return vinesProvider(BlockStateProvider.of(block));
     }
 
     /** Sets the tree as a planted tree */

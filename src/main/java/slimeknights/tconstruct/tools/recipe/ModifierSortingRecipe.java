@@ -2,7 +2,7 @@ package slimeknights.tconstruct.tools.recipe;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 import slimeknights.mantle.data.loadable.ErrorFactory;
@@ -51,7 +51,7 @@ public class ModifierSortingRecipe extends AbstractWorktableRecipe {
     }).requiredField("inputs", r -> r.inputs),
     ModifierSortingRecipe::new);
 
-  public ModifierSortingRecipe(ResourceLocation id, List<SizedIngredient> inputs) {
+  public ModifierSortingRecipe(Identifier id, List<SizedIngredient> inputs) {
     super(id, inputs);
   }
 

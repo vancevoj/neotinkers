@@ -8,21 +8,21 @@ import com.mojang.math.Transformation;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.BlockElement;
-import net.minecraft.client.renderer.block.model.BlockElementFace;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.resources.model.geometry.BakedQuad;
+import net.minecraft.client.resources.model.cuboid.CuboidModelElement;
+import net.minecraft.client.resources.model.cuboid.CuboidFace;
 import net.minecraft.client.renderer.block.model.ItemOverrides;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.Material;
 import net.minecraft.client.resources.model.ModelBaker;
-import net.minecraft.client.resources.model.ModelState;
+import net.minecraft.client.renderer.block.dispatch.ModelState;
 import net.minecraft.client.resources.model.SimpleBakedModel;
 import net.minecraft.client.resources.model.UnbakedModel;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -30,8 +30,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.model.IQuadTransformer;
-import net.neoforged.neoforge.client.model.data.ModelData;
-import net.neoforged.neoforge.client.model.data.ModelProperty;
+import net.neoforged.neoforge.model.data.ModelData;
+import net.neoforged.neoforge.model.data.ModelProperty;
 import net.neoforged.neoforge.client.model.geometry.IGeometryBakingContext;
 import net.neoforged.neoforge.client.model.geometry.IGeometryLoader;
 import net.neoforged.neoforge.client.model.geometry.IUnbakedGeometry;
@@ -78,7 +78,7 @@ import java.util.function.Function;
 @RequiredArgsConstructor
 public class MaterialBlockModel implements IUnbakedGeometry<MaterialBlockModel> {
   /** Location for dynamic baking */
-  private static final ResourceLocation BAKE_LOCATION = Mantle.getResource("material_block_dynamic");
+  private static final Identifier BAKE_LOCATION = Mantle.getResource("material_block_dynamic");
   /** Loadable for the list of material textures */
   private static final Loadable<Set<String>> MATERIAL = StringLoadable.DEFAULT.set(ArrayLoadable.COMPACT);
   /** Loadable for the list of parts, each a list of material textures */
@@ -112,7 +112,7 @@ public class MaterialBlockModel implements IUnbakedGeometry<MaterialBlockModel> 
   }
 
   @Override
-  public void resolveParents(Function<ResourceLocation, UnbakedModel> modelGetter, IGeometryBakingContext context) {
+  public void resolveParents(Function<Identifier, UnbakedModel> modelGetter, IGeometryBakingContext context) {
     model.resolveParents(modelGetter, context);
   }
 
@@ -212,17 +212,17 @@ public class MaterialBlockModel implements IUnbakedGeometry<MaterialBlockModel> 
       // need to tint or apply light to some textures
       TextureAtlasSprite particle = spriteGetter.apply(owner.getMaterial("particle"));
       SimpleBakedModel.Builder builder = SimpleBlockModel.bakedBuilder(owner, originalModel.getOverrides()).particle(particle);
-      List<BlockElement> elements = model.getElements();
+      List<CuboidModelElement> elements = model.getElements();
       int size = elements.size();
       IQuadTransformer quadTransformer = SimpleBlockModel.applyTransform(transform, owner.getRootTransform());
       Transformation transformation = transform.getRotation();
       boolean uvlock = transform.isUvLocked();
       for (int i = 0; i < size; i++) {
-        BlockElement part = elements.get(i);
+        CuboidModelElement part = elements.get(i);
         // determine if any of the faces needs a tint
         // for simplicity, assume the whole part is tinted if so. Build your model to separate distinct material faces if needed
         TintedSprite tint = null;
-        for (BlockElementFace face : part.faces.values()) {
+        for (CuboidFace face : part.faces.values()) {
           TintedSprite faceTint = tints.get(face.texture());
           if (faceTint != null) {
             tint = faceTint;
@@ -399,8 +399,8 @@ public class MaterialBlockModel implements IUnbakedGeometry<MaterialBlockModel> 
 
   /** Model that supports both block and material textures. */
   private static class BakedAnvil extends BakedSingleMaterial<MaterialVariantId> {
-    private final Map<ResourceLocation, BakedModel> blockCache = new ConcurrentHashMap<>();
-    private final Function<ResourceLocation, BakedModel> blockBaker = this::bakeWithBlock;
+    private final Map<Identifier, BakedModel> blockCache = new ConcurrentHashMap<>();
+    private final Function<Identifier, BakedModel> blockBaker = this::bakeWithBlock;
     @Getter
     private final MaterialBlockOverrides overrides;
     private BakedAnvil(BakedModel original, IGeometryBakingContext owner, SimpleBlockModel model, ModelState transform, Set<String> retexture) {
@@ -409,7 +409,7 @@ public class MaterialBlockModel implements IUnbakedGeometry<MaterialBlockModel> 
     }
 
     /** Rebakes the model with a specific texture. See also {@link RetexturedModel} */
-    private BakedModel bakeWithBlock(ResourceLocation texture) {
+    private BakedModel bakeWithBlock(Identifier texture) {
       return this.model.bakeDynamic(new RetexturedContext(this.owner, this.retexture, texture), this.transform);
     }
 

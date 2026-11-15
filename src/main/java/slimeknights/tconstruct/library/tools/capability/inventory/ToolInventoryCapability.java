@@ -2,7 +2,7 @@ package slimeknights.tconstruct.library.tools.capability.inventory;
 
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import lombok.RequiredArgsConstructor;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.SimpleMenuProvider;
@@ -46,13 +46,13 @@ import java.util.stream.IntStream;
 @RequiredArgsConstructor
 public class ToolInventoryCapability extends InventoryModifierHookIterator<ModifierEntry> implements IItemHandlerModifiable {
   /** Boolean key to set in volatile mod data for the total slot count across all modifiers */
-  public static final ResourceLocation TOTAL_SLOTS = TConstruct.getResource("total_item_slots");
+  public static final Identifier TOTAL_SLOTS = TConstruct.getResource("total_item_slots");
   /** Boolean key to set in volatile mod data to show the offand in the inventory menu */
-  public static final ResourceLocation INCLUDE_OFFHAND = TConstruct.getResource("inventory_show_offhand");
+  public static final Identifier INCLUDE_OFFHAND = TConstruct.getResource("inventory_show_offhand");
   /** Boolean key to set to enable the 3x3 crafting table in the tool inventory */
-  public static final ResourceLocation CRAFTING_TABLE = TConstruct.getResource("crafting_table");
+  public static final Identifier CRAFTING_TABLE = TConstruct.getResource("crafting_table");
   /** Boolean key to set to enable the 2x2 crafting table in the tool inventory */
-  public static final ResourceLocation INVENTORY_CRAFTING = TConstruct.getResource("inventory_crafting");
+  public static final Identifier INVENTORY_CRAFTING = TConstruct.getResource("inventory_crafting");
 
   /** Modifier hook instance to make an inventory modifier */
   public static final ModuleHook<InventoryModifierHook> HOOK = ModifierHooks.register(TConstruct.getResource("inventory"), InventoryModifierHook.class, InventoryModifierHookMerger::new, new InventoryModifierHook() {
@@ -123,7 +123,7 @@ public class ToolInventoryCapability extends InventoryModifierHookIterator<Modif
 
   /** If true, the given stack is blacklisted from being stored in a tool */
   public static boolean isBlacklisted(ItemStack stack) {
-    return !stack.getItem().canFitInsideContainerItems() || stack.is(TinkerTags.Items.TOOL_INVENTORY_BLACKLIST) || stack.getCapability(Capabilities.ItemHandler.ITEM) != null;
+    return !stack.getItem().canFitInsideContainerItems() || stack.is(TinkerTags.Items.TOOL_INVENTORY_BLACKLIST) || stack.getCapability(Capabilities.Item.ITEM) != null;
   }
 
   @Override
@@ -499,7 +499,7 @@ public class ToolInventoryCapability extends InventoryModifierHookIterator<Modif
     @Nullable
     @Override
     public <T> T getCapability(IToolStackView tool, ItemCapability<T, ?> cap) {
-      if (cap == Capabilities.ItemHandler.ITEM && tool.getVolatileData().getInt(TOTAL_SLOTS) > 0) {
+      if (cap == Capabilities.Item.ITEM && tool.getVolatileData().getInt(TOTAL_SLOTS) > 0) {
         return (T) handler;
       }
       return null;
@@ -529,7 +529,7 @@ public class ToolInventoryCapability extends InventoryModifierHookIterator<Modif
   public static InteractionResult tryOpenContainer(ItemStack stack, @Nullable IToolStackView tool, ToolDefinition definition, Player player, EquipmentSlot slotType) {
     return tryOpenContainer(stack, tool, definition, player, switch (slotType) {
       // mainhand is the hotbar selected slot
-      case MAINHAND -> player.getInventory().selected;
+      case MAINHAND -> player.getInventory().getSelectedSlot();
       // offhand is its own slot
       case OFFHAND -> Inventory.SLOT_OFFHAND;
       // armor starts from the end of inventory
@@ -539,7 +539,7 @@ public class ToolInventoryCapability extends InventoryModifierHookIterator<Modif
 
   /** Opens the tool inventory container if an inventory is present on the given tool */
   public static InteractionResult tryOpenContainer(ItemStack stack, @Nullable IToolStackView tool, ToolDefinition definition, Player player, int slotIndex) {
-    IItemHandler rawHandler = stack.getCapability(Capabilities.ItemHandler.ITEM);
+    IItemHandler rawHandler = stack.getCapability(Capabilities.Item.ITEM);
     IItemHandler handler = rawHandler instanceof IItemHandlerModifiable ? rawHandler : EmptyItemHandler.INSTANCE;
     // open if we have any slots or we have a crafting table
     if (handler.getSlots() > 0 || ModifierUtil.checkVolatileFlag(stack, CRAFTING_TABLE) || ModifierUtil.checkVolatileFlag(stack, INVENTORY_CRAFTING)) {
@@ -560,15 +560,15 @@ public class ToolInventoryCapability extends InventoryModifierHookIterator<Modif
           }
         });
       }
-      return InteractionResult.sidedSuccess(player.level().isClientSide);
+      return InteractionResult.sidedSuccess(player.level().isClientSide());
     }
     return InteractionResult.PASS;
   }
 
   /** Called when a tool item entity is destroyed to drop its inventory items. */
   public static void onDestroyed(ItemEntity entity) {
-    if (!entity.level().isClientSide) {
-      IItemHandler handler = entity.getItem().getCapability(Capabilities.ItemHandler.ITEM);
+    if (!entity.level().isClientSide()) {
+      IItemHandler handler = entity.getItem().getCapability(Capabilities.Item.ITEM);
       if (handler != null && handler.getSlots() > 0) {
         ItemUtils.onContainerDestroyed(entity, IntStream.range(0, handler.getSlots()).mapToObj(handler::getStackInSlot).filter(stack -> !stack.isEmpty()).toList());
       }

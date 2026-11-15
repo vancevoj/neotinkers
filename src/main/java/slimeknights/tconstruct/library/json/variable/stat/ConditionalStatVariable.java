@@ -1,7 +1,7 @@
 package slimeknights.tconstruct.library.json.variable.stat;
 
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent.BreakSpeed;
@@ -43,7 +43,7 @@ public interface ConditionalStatVariable extends IHaveLoader, MiningSpeedVariabl
 
 
   /** Registers a variable with conditional stat and mining speed */
-  static void register(ResourceLocation name, RecordLoadable<? extends ConditionalStatVariable> loader) {
+  static void register(Identifier name, RecordLoadable<? extends ConditionalStatVariable> loader) {
     LOADER.register(name, loader);
     MiningSpeedVariable.LOADER.register(name, loader);
   }

@@ -1,7 +1,7 @@
 package slimeknights.tconstruct.tools.data;
 
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import slimeknights.tconstruct.library.client.armor.texture.ArmorTextureSupplier;
 import slimeknights.tconstruct.library.client.armor.texture.DyedArmorTextureSupplier;
 import slimeknights.tconstruct.library.client.armor.texture.FirstArmorTextureSupplier;
@@ -43,7 +43,7 @@ public class ArmorModelProvider extends AbstractArmorModelProvider {
       ),
       TrimArmorTextureSupplier.INSTANCE
     });
-    ResourceLocation slime = ArmorDefinitions.SLIMESUIT.getId();
+    Identifier slime = ArmorDefinitions.SLIMESUIT.getId();
     addModel(slime,
       new MaterialArmorTextureSupplier.Material(slime, "/", 1), // TODO 1.21: rename to prefix with slime?
       new FirstArmorTextureSupplier(

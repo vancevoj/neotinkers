@@ -27,7 +27,7 @@ public class UpdateMaterialTraitsPacket implements IThreadsafePacket {
     int materialCount = buffer.readInt();
     materialToTraits = new HashMap<>(materialCount);
     for (int i = 0; i < materialCount; i++) {
-      MaterialId id = new MaterialId(buffer.readResourceLocation());
+      MaterialId id = new MaterialId(buffer.readIdentifier());
       MaterialTraits traits = MaterialTraits.read(buffer);
       materialToTraits.put(id, traits);
     }
@@ -37,7 +37,7 @@ public class UpdateMaterialTraitsPacket implements IThreadsafePacket {
   public void encode(FriendlyByteBuf buffer) {
     buffer.writeInt(materialToTraits.size());
     materialToTraits.forEach((materialId, traits) -> {
-      buffer.writeResourceLocation(materialId);
+      buffer.writeIdentifier(materialId);
       traits.write(buffer);
     });
   }

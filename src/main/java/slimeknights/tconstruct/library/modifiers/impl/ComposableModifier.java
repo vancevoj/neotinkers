@@ -5,7 +5,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import slimeknights.mantle.data.loadable.ErrorFactory;
 import slimeknights.mantle.data.loadable.primitive.IntLoadable;
 import slimeknights.mantle.data.loadable.primitive.StringLoadable;
@@ -152,7 +152,7 @@ public class ComposableModifier extends BasicModifier {
     }
 
     /** Overrides the description key prefix using the given modifier. */
-    public Builder translationKey(ResourceLocation modifier) {
+    public Builder translationKey(Identifier modifier) {
       return translationKey("modifier." + modifier.toLanguageKey());
     }
 

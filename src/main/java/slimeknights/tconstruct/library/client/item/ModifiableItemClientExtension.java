@@ -7,7 +7,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.ItemUseAnimation;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import slimeknights.tconstruct.library.modifiers.hook.interaction.GeneralInteractionModifierHook;
 import slimeknights.tconstruct.library.tools.helper.ModifierUtil;
@@ -33,7 +33,7 @@ public class ModifiableItemClientExtension implements IClientItemExtensions {
     // to avoid redundant operations, we copied even methods that are unmodified, changes are noted below
     int sideOffset = arm == HumanoidArm.RIGHT ? 1 : -1;
     if (player.isUsingItem() && player.getUseItemRemainingTicks() > 0 && player.getUsedItemHand() == hand) {
-      UseAnim anim = stack.getUseAnimation();
+      ItemUseAnimation anim = stack.getUseAnimation();
       switch (anim) {
         // merged BLOCK and NONE - same code
         case NONE, BLOCK:
@@ -52,9 +52,9 @@ public class ModifiableItemClientExtension implements IClientItemExtensions {
           float speed = 1 - (float)Math.pow(percentage, 27);
           int sideOffset1 = arm == HumanoidArm.RIGHT ? 1 : -1;
           poseStack.translate(speed * 0.6F * (float) sideOffset1, speed * -0.5f, speed * 0);
-          poseStack.mulPose(Axis.YP.rotationDegrees(sideOffset1 * speed * 90));
-          poseStack.mulPose(Axis.XP.rotationDegrees(speed * 10));
-          poseStack.mulPose(Axis.ZP.rotationDegrees(sideOffset1 * speed * 30));
+          poseStack.rotate(Axis.YP.rotationDegrees(sideOffset1 * speed * 90));
+          poseStack.rotate(Axis.XP.rotationDegrees(speed * 10));
+          poseStack.rotate(Axis.ZP.rotationDegrees(sideOffset1 * speed * 30));
           // end: applyEatTransform
           applyItemArmTransform(poseStack, equipProgress, sideOffset);
           break;
@@ -62,19 +62,19 @@ public class ModifiableItemClientExtension implements IClientItemExtensions {
         // crossbow is moved from the vanilla special case to a general animation
         case BOW:
         case CROSSBOW: {
-          boolean isBow = anim == UseAnim.BOW;
+          boolean isBow = anim == ItemUseAnimation.BOW;
           applyItemArmTransform(poseStack, equipProgress, sideOffset);
           // change: merged in crossbow
           if (isBow) {
             poseStack.translate(sideOffset * -0.2785682f, 0.18344387f, 0.15731531f);
-            poseStack.mulPose(Axis.XP.rotationDegrees(-13.935f));
-            poseStack.mulPose(Axis.YP.rotationDegrees(sideOffset * 35.3f));
+            poseStack.rotate(Axis.XP.rotationDegrees(-13.935f));
+            poseStack.rotate(Axis.YP.rotationDegrees(sideOffset * 35.3f));
           } else {
             poseStack.translate(sideOffset * -0.4785682f, -0.094387f, 0.05731531f);
-            poseStack.mulPose(Axis.XP.rotationDegrees(-11.935f));
-            poseStack.mulPose(Axis.YP.rotationDegrees(sideOffset * 65.3f));
+            poseStack.rotate(Axis.XP.rotationDegrees(-11.935f));
+            poseStack.rotate(Axis.YP.rotationDegrees(sideOffset * 65.3f));
           }
-          poseStack.mulPose(Axis.ZP.rotationDegrees(sideOffset * -9.785f));
+          poseStack.rotate(Axis.ZP.rotationDegrees(sideOffset * -9.785f));
 
           float remainingTime = (float) stack.getUseDuration(player) - ((float) player.getUseItemRemainingTicks() - partialTicks + 1);
           // change: scale charge by drawtime instead of a flat 20f or the crossbow enchantment
@@ -94,7 +94,7 @@ public class ModifiableItemClientExtension implements IClientItemExtensions {
           // change: replaced (value * 0) with 0
           poseStack.translate(0, 0, charge * 0.04f);
           poseStack.scale(1, 1, 1 + charge * 0.2f);
-          poseStack.mulPose(Axis.YN.rotationDegrees(sideOffset * 45));
+          poseStack.rotate(Axis.YN.rotationDegrees(sideOffset * 45));
           break;
         }
 
@@ -102,9 +102,9 @@ public class ModifiableItemClientExtension implements IClientItemExtensions {
           applyItemArmTransform(poseStack, equipProgress, sideOffset);
           poseStack.translate(sideOffset * -0.5f, 0.7f, 0.1f);
           // change: added 45 degrees to take into account tools being diagonal
-          poseStack.mulPose(Axis.XP.rotationDegrees(-90));
-          poseStack.mulPose(Axis.YP.rotationDegrees(sideOffset * 35.3f));
-          poseStack.mulPose(Axis.ZP.rotationDegrees(sideOffset * -9.785f));
+          poseStack.rotate(Axis.XP.rotationDegrees(-90));
+          poseStack.rotate(Axis.YP.rotationDegrees(sideOffset * 35.3f));
+          poseStack.rotate(Axis.ZP.rotationDegrees(sideOffset * -9.785f));
           float sRemainingTime = stack.getUseDuration(player) - (player.getUseItemRemainingTicks() - partialTicks + 1);
           // change: scale charge by drawtime instead of a flat 10f, tridents have 2.0 drawspeed I decided
           float sCharge = sRemainingTime / ModifierUtil.getPersistentInt(stack, GeneralInteractionModifierHook.KEY_DRAWTIME, 20);
@@ -118,7 +118,7 @@ public class ModifiableItemClientExtension implements IClientItemExtensions {
           }
           poseStack.translate(0, 0, sCharge * 0.2f);
           poseStack.scale(1, 1, 1 + sCharge * 0.2f);
-          poseStack.mulPose(Axis.YN.rotationDegrees(sideOffset * 45));
+          poseStack.rotate(Axis.YN.rotationDegrees(sideOffset * 45));
           break;
 
         case BRUSH:
@@ -127,24 +127,24 @@ public class ModifiableItemClientExtension implements IClientItemExtensions {
           float xRot = -15 + 75 * Mth.cos((1 - ((float) (player.getUseItemRemainingTicks() % 10) - partialTicks + 1) / 10) * 2 * PI);
           if (arm != HumanoidArm.RIGHT) {
             poseStack.translate(0.1, 0.83, 0.35);
-            poseStack.mulPose(Axis.XP.rotationDegrees(-80));
-            poseStack.mulPose(Axis.YP.rotationDegrees(-90));
-            poseStack.mulPose(Axis.XP.rotationDegrees(xRot));
+            poseStack.rotate(Axis.XP.rotationDegrees(-80));
+            poseStack.rotate(Axis.YP.rotationDegrees(-90));
+            poseStack.rotate(Axis.XP.rotationDegrees(xRot));
             poseStack.translate(-0.3, 0.22, 0.35);
           } else {
             poseStack.translate(-0.25, 0.22, 0.35);
-            poseStack.mulPose(Axis.XP.rotationDegrees(-80));
-            poseStack.mulPose(Axis.YP.rotationDegrees(90));
-            poseStack.mulPose(Axis.ZP.rotationDegrees(0));
-            poseStack.mulPose(Axis.XP.rotationDegrees(xRot));
+            poseStack.rotate(Axis.XP.rotationDegrees(-80));
+            poseStack.rotate(Axis.YP.rotationDegrees(90));
+            poseStack.rotate(Axis.ZP.rotationDegrees(0));
+            poseStack.rotate(Axis.XP.rotationDegrees(xRot));
           }
           // end: applyBrushTransform
       }
     } else if (player.isAutoSpinAttack()) {
       applyItemArmTransform(poseStack, equipProgress, sideOffset);
       poseStack.translate(sideOffset * -0.4f, 0.8f, 0.3f);
-      poseStack.mulPose(Axis.YP.rotationDegrees(sideOffset * 105));
-      poseStack.mulPose(Axis.ZP.rotationDegrees(sideOffset * -85));
+      poseStack.rotate(Axis.YP.rotationDegrees(sideOffset * 105));
+      poseStack.rotate(Axis.ZP.rotationDegrees(sideOffset * -85));
     } else {
       poseStack.translate(
         sideOffset * -0.4f * Mth.sin(Mth.sqrt(swingProgress) * PI),
@@ -152,11 +152,11 @@ public class ModifiableItemClientExtension implements IClientItemExtensions {
         -0.2f * Mth.sin(swingProgress * PI));
       applyItemArmTransform(poseStack, equipProgress, sideOffset);
       // begin: applyItemArmAttackTransform
-      poseStack.mulPose(Axis.YP.rotationDegrees(sideOffset * (45 + Mth.sin(swingProgress * swingProgress * (float)Math.PI) * -20)));
+      poseStack.rotate(Axis.YP.rotationDegrees(sideOffset * (45 + Mth.sin(swingProgress * swingProgress * (float)Math.PI) * -20)));
       float rotation = Mth.sin(Mth.sqrt(swingProgress) * PI);
-      poseStack.mulPose(Axis.ZP.rotationDegrees(sideOffset * rotation * -20));
-      poseStack.mulPose(Axis.XP.rotationDegrees(rotation * -80));
-      poseStack.mulPose(Axis.YP.rotationDegrees(sideOffset * -45));
+      poseStack.rotate(Axis.ZP.rotationDegrees(sideOffset * rotation * -20));
+      poseStack.rotate(Axis.XP.rotationDegrees(rotation * -80));
+      poseStack.rotate(Axis.YP.rotationDegrees(sideOffset * -45));
       // end: applyItemArmAttackTransform
     }
     return true;

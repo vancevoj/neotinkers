@@ -8,7 +8,7 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
@@ -26,11 +26,11 @@ import static java.util.Objects.requireNonNullElse;
  */
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public class StationSlotLayout {
-  private static final ResourceLocation EMPTY_NAME = TConstruct.getResource("empty");
+  private static final Identifier EMPTY_NAME = TConstruct.getResource("empty");
   public static final StationSlotLayout EMPTY = new StationSlotLayout("", LayoutIcon.EMPTY, null, LayoutSlot.EMPTY, Collections.emptyList());
 
   @Getter @Setter(AccessLevel.PROTECTED)
-  private transient ResourceLocation name = EMPTY_NAME;
+  private transient Identifier name = EMPTY_NAME;
   private final String translation_key;
   private final LayoutIcon icon;
   @Nullable
@@ -92,7 +92,7 @@ public class StationSlotLayout {
 
   /** Reads a slot from the packet buffer */
   public static StationSlotLayout read(RegistryFriendlyByteBuf buffer) {
-    ResourceLocation name = buffer.readResourceLocation();
+    Identifier name = buffer.readIdentifier();
     String translationKey = buffer.readUtf(Short.MAX_VALUE);
     LayoutIcon icon = LayoutIcon.read(buffer);
     Integer sortIndex = null;
@@ -112,7 +112,7 @@ public class StationSlotLayout {
 
   /** Writes a slot to the packet buffer */
   public void write(RegistryFriendlyByteBuf buffer) {
-    buffer.writeResourceLocation(name);
+    buffer.writeIdentifier(name);
     buffer.writeUtf(getTranslationKey());
     icon.write(buffer);
     if (sortIndex != null) {

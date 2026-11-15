@@ -3,7 +3,7 @@ package slimeknights.tconstruct.shared.command.argument;
 import com.mojang.brigadier.Message;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
@@ -24,10 +24,10 @@ public interface TinkerSuggestionProvider {
    * @param resultConsumer  Consumer handling results
    * @param <T>  Resource type
    */
-  static <T> void filterResources(String defaultDomain, Iterable<T> resources, String input, Function<T, ResourceLocation> idGetter, Consumer<T> resultConsumer) {
+  static <T> void filterResources(String defaultDomain, Iterable<T> resources, String input, Function<T, Identifier> idGetter, Consumer<T> resultConsumer) {
     boolean hasNamespace = input.indexOf(':') > -1;
     for(T resource : resources) {
-      ResourceLocation location = idGetter.apply(resource);
+      Identifier location = idGetter.apply(resource);
       // if we have a namespace, do a complete match
       if (hasNamespace) {
         String locationStr = location.toString();
@@ -47,7 +47,7 @@ public interface TinkerSuggestionProvider {
    * @param resources       List of resources to filter
    * @param builder         Builder for suggestion options
    */
-  static CompletableFuture<Suggestions> suggestResource(String defaultDomain, Iterable<ResourceLocation> resources, SuggestionsBuilder builder) {
+  static CompletableFuture<Suggestions> suggestResource(String defaultDomain, Iterable<Identifier> resources, SuggestionsBuilder builder) {
     String remaining = builder.getRemaining().toLowerCase(Locale.ROOT);
     filterResources(defaultDomain, resources, remaining, loc -> loc, loc -> builder.suggest(loc.toString()));
     return builder.buildFuture();
@@ -59,7 +59,7 @@ public interface TinkerSuggestionProvider {
    * @param resources       List of resources to filter
    * @param builder         Builder for suggestion options
    */
-  static CompletableFuture<Suggestions> suggestResource(String defaultDomain, Stream<ResourceLocation> resources, SuggestionsBuilder builder) {
+  static CompletableFuture<Suggestions> suggestResource(String defaultDomain, Stream<Identifier> resources, SuggestionsBuilder builder) {
     return suggestResource(defaultDomain, resources::iterator, builder);
   }
 
@@ -71,7 +71,7 @@ public interface TinkerSuggestionProvider {
    * @param idGetter        Function mapping the resource to its ID
    * @param tooltip         Function mapping elements to their tooltip
    */
-  static <T> CompletableFuture<Suggestions> suggestResource(String defaultDomain, Iterable<T> resources, SuggestionsBuilder builder, Function<T, ResourceLocation> idGetter, Function<T,Message> tooltip) {
+  static <T> CompletableFuture<Suggestions> suggestResource(String defaultDomain, Iterable<T> resources, SuggestionsBuilder builder, Function<T, Identifier> idGetter, Function<T,Message> tooltip) {
     String remaining = builder.getRemaining().toLowerCase(Locale.ROOT);
     filterResources(defaultDomain, resources, remaining, idGetter, (resource) -> builder.suggest(idGetter.apply(resource).toString(), tooltip.apply(resource)));
     return builder.buildFuture();
@@ -85,7 +85,7 @@ public interface TinkerSuggestionProvider {
    * @param idGetter        Function mapping the resource to its ID
    * @param tooltip         Function mapping elements to their tooltip
    */
-  static <T> CompletableFuture<Suggestions> suggestResource(String defaultDomain, Stream<T> resources, SuggestionsBuilder builder, Function<T, ResourceLocation> idGetter, Function<T, Message> tooltip) {
+  static <T> CompletableFuture<Suggestions> suggestResource(String defaultDomain, Stream<T> resources, SuggestionsBuilder builder, Function<T, Identifier> idGetter, Function<T, Message> tooltip) {
     return suggestResource(defaultDomain, resources::iterator, builder, idGetter, tooltip);
   }
 }

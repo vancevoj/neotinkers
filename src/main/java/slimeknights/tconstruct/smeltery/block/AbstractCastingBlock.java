@@ -62,7 +62,7 @@ public abstract class AbstractCastingBlock extends TableBlock {
   @Deprecated
   @Override
   public void neighborChanged(BlockState state, Level world, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
-    if (!world.isClientSide && world.getBlockEntity(pos) instanceof CastingBlockEntity casting) {
+    if (!world.isClientSide() && world.getBlockEntity(pos) instanceof CastingBlockEntity casting) {
       casting.handleRedstone(world.hasNeighborSignal(pos));
     }
   }

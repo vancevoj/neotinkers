@@ -3,7 +3,7 @@ package slimeknights.tconstruct.library.materials.json;
 import com.google.gson.annotations.SerializedName;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 
@@ -21,7 +21,7 @@ public class MaterialTraitsJson {
   @Nullable
   private final List<ModifierEntry> defaultTraits;
   @Nullable
-  private final Map<ResourceLocation, List<ModifierEntry>> perStat;
+  private final Map<Identifier, List<ModifierEntry>> perStat;
 
   public Map<MaterialStatsId,List<ModifierEntry>> getPerStat() {
     if (perStat == null) {

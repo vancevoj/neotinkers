@@ -2,7 +2,7 @@ package slimeknights.tconstruct.library.modifiers.impl;
 
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import slimeknights.tconstruct.library.modifiers.IncrementalModifierEntry;
 import slimeknights.tconstruct.library.modifiers.Modifier;
@@ -57,7 +57,7 @@ public abstract class DurabilityShieldModifier extends Modifier implements Capac
   /* Helpers */
 
   /** Gets the key to use for teh shield */
-  protected ResourceLocation getShieldKey() {
+  protected Identifier getShieldKey() {
     return getId();
   }
 

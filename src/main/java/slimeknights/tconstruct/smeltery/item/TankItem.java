@@ -6,7 +6,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.SlotAccess;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -101,7 +101,7 @@ public class TankItem extends BlockTooltipItem {
 
   /** Checks if the given stack has fluid transfer */
   public static boolean mayHaveFluid(ItemStack stack) {
-    return FluidContainerTransferManager.INSTANCE.mayHaveTransfer(stack) || stack.getCapability(Capabilities.FluidHandler.ITEM) != null;
+    return FluidContainerTransferManager.INSTANCE.mayHaveTransfer(stack) || stack.getCapability(Capabilities.Fluid.ITEM) != null;
   }
 
   @Override
@@ -119,7 +119,7 @@ public class TankItem extends BlockTooltipItem {
           // update held tank and slot item if something changed
           if (result != null) {
             // play sound
-            if (player.level().isClientSide) {
+            if (player.level().isClientSide()) {
               player.playSound(result.getSound());
             }
             // update stack
@@ -187,7 +187,7 @@ public class TankItem extends BlockTooltipItem {
         TransferResult result = FluidTransferHelper.interactWithStack(tank, held, TransferDirection.AUTO);
         if (result != null) {
           // play sound
-          if (player.level().isClientSide) {
+          if (player.level().isClientSide()) {
             player.playSound(result.getSound());
           }
           // update tank
@@ -248,9 +248,9 @@ public class TankItem extends BlockTooltipItem {
   }
 
   /** Creates a stack with the given fluid and amount, not validated. */
-  private static ItemStack setTank(ItemLike item, ResourceLocation fluid, int amount) {
+  private static ItemStack setTank(ItemLike item, Identifier fluid, int amount) {
     ItemStack stack = new ItemStack(item);
-    Fluid value = BuiltInRegistries.FLUID.get(fluid);
+    Fluid value = BuiltInRegistries.FLUID.getValue(fluid);
     return setTank(stack, new FluidStack(value, amount));
   }
 
@@ -304,7 +304,7 @@ public class TankItem extends BlockTooltipItem {
   /** Adds filled variants of all standard tank items to the given consumer */
   @SuppressWarnings("deprecation")
   public static void addFilledVariants(Consumer<ItemStack> output) {
-    BuiltInRegistries.FLUID.holders().filter(holder -> {
+    BuiltInRegistries.FLUID.listElements().filter(holder -> {
       Fluid fluid = holder.value();
       return fluid.isSource(fluid.defaultFluidState()) && !holder.is(TinkerTags.Fluids.HIDE_IN_CREATIVE_TANKS);
     }).forEachOrdered(holder -> {
@@ -317,7 +317,7 @@ public class TankItem extends BlockTooltipItem {
         tank = TankType.FUEL_TANK;
         gauge = TankType.FUEL_GAUGE;
       }
-      ResourceLocation fluidName = holder.key().location();
+      Identifier fluidName = holder.key().identifier();
       output.accept(setTank(TinkerSmeltery.searedLantern, fluidName, FluidValues.LANTERN_CAPACITY));
       output.accept(fillTank(TinkerSmeltery.searedTank, tank, fluidName));
       output.accept(fillTank(TinkerSmeltery.searedTank, gauge, fluidName));
@@ -333,7 +333,7 @@ public class TankItem extends BlockTooltipItem {
   }
 
   /** Fills a tank stack with the given fluid */
-  public static ItemStack fillTank(EnumObject<TankType,? extends ItemLike> tank, TankType type, ResourceLocation fluid) {
+  public static ItemStack fillTank(EnumObject<TankType,? extends ItemLike> tank, TankType type, Identifier fluid) {
     return setTank(tank.get(type), fluid, type.getCapacity());
   }
 }

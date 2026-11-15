@@ -4,7 +4,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.mojang.blaze3d.platform.NativeImage;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.FastColor;
 import slimeknights.mantle.data.loadable.primitive.IntLoadable;
 import slimeknights.mantle.util.JsonHelper;
@@ -18,15 +18,15 @@ import java.util.List;
  * Supports including sprites as "part of the palette" which can produce animated textures.
  */
 public class AnimatedGreyToSpriteTransformer extends GreyToSpriteTransformer {
-  public static final ResourceLocation NAME = TConstruct.getResource("animated_sprite");
+  public static final Identifier NAME = TConstruct.getResource("animated_sprite");
   /** Serializer instance */
   public static Deserializer<AnimatedGreyToSpriteTransformer> DESERIALIZER = new Deserializer<>((builder, json) ->
     builder.animated(JsonHelper.getResourceLocation(json, "meta"), IntLoadable.FROM_ONE.getIfPresent(json, "frames")));
 
-  private final ResourceLocation metaPath;
+  private final Identifier metaPath;
   private final int frames;
   private JsonObject meta;
-  protected AnimatedGreyToSpriteTransformer(List<SpriteMapping> sprites, ResourceLocation metaPath, int frames) {
+  protected AnimatedGreyToSpriteTransformer(List<SpriteMapping> sprites, Identifier metaPath, int frames) {
     super(sprites);
     this.metaPath = metaPath;
     this.frames = frames;
@@ -104,7 +104,7 @@ public class AnimatedGreyToSpriteTransformer extends GreyToSpriteTransformer {
 
   /** Serializes the palette as an array instead of a compact object */
   static class PaletteArray extends AnimatedGreyToSpriteTransformer {
-    protected PaletteArray(List<SpriteMapping> sprites, ResourceLocation metaPath, int frames) {
+    protected PaletteArray(List<SpriteMapping> sprites, Identifier metaPath, int frames) {
       super(sprites, metaPath, frames);
     }
 

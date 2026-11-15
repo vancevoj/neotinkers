@@ -9,7 +9,7 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.category.AbstractRecipeCategory;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
@@ -20,7 +20,7 @@ import slimeknights.tconstruct.tables.TinkerTables;
 import java.util.List;
 
 public class ModifierWorktableCategory extends AbstractRecipeCategory<IModifierWorktableRecipe> {
-  private static final ResourceLocation BACKGROUND_LOC = TConstruct.getResource("textures/gui/jei/tinker_station.png");
+  private static final Identifier BACKGROUND_LOC = TConstruct.getResource("textures/gui/jei/tinker_station.png");
   private static final Component TITLE = TConstruct.makeTranslation("jei", "modifier_worktable.title");
 
   private final IDrawable toolIcon;
@@ -75,7 +75,7 @@ public class ModifierWorktableCategory extends AbstractRecipeCategory<IModifierW
   }
 
   @Override
-  public ResourceLocation getRegistryName(IModifierWorktableRecipe recipe) {
+  public Identifier getRegistryName(IModifierWorktableRecipe recipe) {
     // recipes no longer expose their id in 1.21 (it lives on RecipeHolder, which JEI does not pass here), and the
     // display interface has no id accessor; returning null lets JEI fall back to its own identity for these recipes
     return null;

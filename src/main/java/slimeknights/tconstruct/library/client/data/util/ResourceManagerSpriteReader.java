@@ -3,7 +3,7 @@ package slimeknights.tconstruct.library.client.data.util;
 import com.google.gson.JsonObject;
 import com.mojang.blaze3d.platform.NativeImage;
 import lombok.RequiredArgsConstructor;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.GsonHelper;
@@ -21,27 +21,27 @@ public class ResourceManagerSpriteReader extends AbstractSpriteReader {
   private final String folder;
 
   /** Gets a location with the given extension */
-  private ResourceLocation getLocation(ResourceLocation base, String extension) {
+  private Identifier getLocation(Identifier base, String extension) {
     return base.withPath(folder + '/' + base.getPath() + extension);
   }
 
   /** Gets a location for .png */
-  private ResourceLocation getLocation(ResourceLocation base) {
+  private Identifier getLocation(Identifier base) {
     return getLocation(base, ".png");
   }
 
   @Override
-  public boolean exists(ResourceLocation path) {
+  public boolean exists(Identifier path) {
     return manager.getResource(getLocation(path)).isPresent();
   }
 
   @Override
-  public boolean metadataExists(ResourceLocation path) {
+  public boolean metadataExists(Identifier path) {
     return manager.getResource(getLocation(path, ".png.mcmeta")).isPresent();
   }
 
   @Override
-  public NativeImage read(ResourceLocation path) throws IOException {
+  public NativeImage read(Identifier path) throws IOException {
     Resource resource = manager.getResource(getLocation(path)).orElseThrow(FileNotFoundException::new);
     NativeImage image = NativeImage.read(resource.open());
     openedImages.add(image);
@@ -50,7 +50,7 @@ public class ResourceManagerSpriteReader extends AbstractSpriteReader {
 
   @Nullable
   @Override
-  public NativeImage readIfExists(ResourceLocation path) {
+  public NativeImage readIfExists(Identifier path) {
     Optional<Resource> resource = manager.getResource(getLocation(path));
     if (resource.isPresent()) {
       try {
@@ -65,7 +65,7 @@ public class ResourceManagerSpriteReader extends AbstractSpriteReader {
   }
 
   @Override
-  public JsonObject readMetadata(ResourceLocation path) throws IOException {
+  public JsonObject readMetadata(Identifier path) throws IOException {
     try (BufferedReader reader = manager.getResource(getLocation(path, ".png.mcmeta")).orElseThrow(FileNotFoundException::new).openAsReader()) {
       return GsonHelper.parse(reader);
     }

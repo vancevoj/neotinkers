@@ -5,7 +5,7 @@ import mezz.jei.api.ingredients.IIngredientRenderer;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.TooltipFlag;
 import slimeknights.tconstruct.library.client.materials.MaterialTooltipCache;
@@ -26,15 +26,15 @@ public record MaterialTitleIngredientRenderer(int width, int height) implements 
   }
 
   @Override
-  public void render(GuiGraphics graphics, MaterialVariant ingredient) {
+  public void render(GuiGraphicsExtractor graphics, MaterialVariant ingredient) {
     render(graphics, ingredient, 0, 0);
   }
 
   @Override
-  public void render(GuiGraphics graphics, MaterialVariant material, int posX, int posY) {
+  public void render(GuiGraphicsExtractor graphics, MaterialVariant material, int posX, int posY) {
     Component name = MaterialTooltipCache.getColoredDisplayName(material.getVariant());
     Font font = getFontRenderer(Minecraft.getInstance(), material);
-    graphics.drawString(font, name, posX, posY + 1, -1, true);
+    graphics.text(font, name, posX, posY + 1, -1, true);
   }
 
   @SuppressWarnings("removal")

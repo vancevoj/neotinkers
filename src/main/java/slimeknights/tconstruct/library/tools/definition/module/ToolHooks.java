@@ -1,6 +1,6 @@
 package slimeknights.tconstruct.library.tools.definition.module;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.RandomSource;
 import slimeknights.mantle.data.registry.IdAwareComponentRegistry;
 import slimeknights.tconstruct.TConstruct;
@@ -137,12 +137,12 @@ public class ToolHooks {
   /* Registration */
 
   /** Registers a new tool hook that merges */
-  public static <T> ModuleHook<T> register(ResourceLocation name, Class<T> filter, @Nullable Function<Collection<T>,T> merger, T defaultInstance) {
+  public static <T> ModuleHook<T> register(Identifier name, Class<T> filter, @Nullable Function<Collection<T>,T> merger, T defaultInstance) {
     return LOADER.register(new ModuleHook<>(name, filter, merger, defaultInstance));
   }
 
   /** Registers a new tool hook that does not merge */
-  public static <T> ModuleHook<T> register(ResourceLocation name, Class<T> filter, T defaultInstance) {
+  public static <T> ModuleHook<T> register(Identifier name, Class<T> filter, T defaultInstance) {
     return register(name, filter, null, defaultInstance);
   }
 

@@ -20,7 +20,7 @@ public record EntityLightVariable(@Nullable LightLayer lightLayer) implements En
   /** Gets the skylight level, adjust for time of day. Clientside logic is based on {@link Level#updateSkyBrightness()} */
   private static int getSkyLight(Level level, BlockPos pos) {
     int light = level.getBrightness(LightLayer.SKY, pos);
-    if (level.isClientSide && light > 0) { // optimization: no need to do float math if light is already 0
+    if (level.isClientSide() && light > 0) { // optimization: no need to do float math if light is already 0
       // TODO 26.1: should no longer be needed
       float rain = 1 - (level.getRainLevel(1) * 5) / 16;
       float thunder = 1 - (level.getThunderLevel(1) * 5) / 16;

@@ -4,12 +4,12 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import com.mojang.brigadier.StringReader;
-import net.minecraft.ResourceLocationException;
+import net.minecraft.IdentifierException;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.syncher.EntityDataSerializer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.ItemStack;
 import slimeknights.mantle.data.loadable.Loadable;
@@ -64,7 +64,7 @@ public sealed interface MaterialVariantId permits MaterialId, MaterialVariantIdI
    * @param separator  Variant separator
    * @return  Resource location path
    */
-  ResourceLocation getLocation(char separator);
+  Identifier getLocation(char separator);
 
   /** Gets the texture suffix for this material */
   String getSuffix();
@@ -107,8 +107,8 @@ public sealed interface MaterialVariantId permits MaterialId, MaterialVariantIdI
     if (variant.isEmpty()) {
       return id;
     }
-    if (!ResourceLocation.isValidPath(variant)) {
-      throw new ResourceLocationException("Non [a-z0-9/._-] character in variant of material variant ID: " + id + "#" + variant);
+    if (!Identifier.isValidPath(variant)) {
+      throw new IdentifierException("Non [a-z0-9/._-] character in variant of material variant ID: " + id + "#" + variant);
     }
     return new MaterialVariantIdImpl(id, variant);
   }
@@ -125,7 +125,7 @@ public sealed interface MaterialVariantId permits MaterialId, MaterialVariantIdI
     String variant = "";
     if (index >= 0) {
       variant = string.substring(index + 1);
-      if (!ResourceLocation.isValidPath(variant)) {
+      if (!Identifier.isValidPath(variant)) {
         return null;
       }
       string = string.substring(0, index);
@@ -150,7 +150,7 @@ public sealed interface MaterialVariantId permits MaterialId, MaterialVariantIdI
 
   /** Checks if the given character is valid */
   private static boolean isAllowed(char ch) {
-    return ch == '#' || ResourceLocation.isAllowedInResourceLocation(ch);
+    return ch == '#' || Identifier.isAllowedInIdentifier(ch);
   }
 
   /**

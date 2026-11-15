@@ -34,7 +34,7 @@ public abstract class HeatingControllerBlock extends ControllerBlock {
 
   @Override
   protected boolean openGui(Player player, Level world, BlockPos pos) {
-    if (!world.isClientSide && world.getBlockEntity(pos) instanceof HeatingStructureBlockEntity te) {
+    if (!world.isClientSide() && world.getBlockEntity(pos) instanceof HeatingStructureBlockEntity te) {
       BlockState state = world.getBlockState(pos);
       if (state.is(this) && canOpenGui(state) && player instanceof ServerPlayer serverPlayer) {
         // same as InventoryBlock#openGui, but the open data also carries the melting slot count so the client menu gets as many slots as the server menu
@@ -55,7 +55,7 @@ public abstract class HeatingControllerBlock extends ControllerBlock {
 
   @Override
   protected boolean displayStatus(Player player, Level world, BlockPos pos, BlockState state) {
-    if (!world.isClientSide && world.getBlockEntity(pos) instanceof HeatingStructureBlockEntity te) {
+    if (!world.isClientSide() && world.getBlockEntity(pos) instanceof HeatingStructureBlockEntity te) {
       MultiblockResult result = te.getStructureResult();
       if (!result.isSuccess()) {
         player.displayClientMessage(result.getMessage(), true);

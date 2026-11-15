@@ -7,7 +7,7 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.alchemy.Potion;
@@ -53,7 +53,7 @@ public class PotionCastingRecipe implements ICastingRecipe, IMultiRecipe<IDispla
   protected final TypeAwareRecipeSerializer<?> serializer;
   /** Recipe ID, retained for JEI display purposes (vanilla 1.21 recipes no longer expose their own ID). */
   @Getter
-  protected final ResourceLocation id;
+  protected final Identifier id;
   @Getter
   protected final String group;
   /** Input on the casting table, always consumed */
@@ -65,7 +65,7 @@ public class PotionCastingRecipe implements ICastingRecipe, IMultiRecipe<IDispla
   /** Cooling time for this recipe, used for tipped arrows */
   protected final int coolingTime;
 
-  public PotionCastingRecipe(TypeAwareRecipeSerializer<?> serializer, ResourceLocation id, String group, Ingredient bottle, FluidIngredient fluid, Item result, int coolingTime) {
+  public PotionCastingRecipe(TypeAwareRecipeSerializer<?> serializer, Identifier id, String group, Ingredient bottle, FluidIngredient fluid, Item result, int coolingTime) {
     this.serializer = serializer;
     this.id = id;
     this.group = group;
@@ -177,7 +177,7 @@ public class PotionCastingRecipe implements ICastingRecipe, IMultiRecipe<IDispla
 
   /** Gets a list of all potions to display. 1.21 has no empty potion, so water is skipped as the default potion instead. */
   public static List<Holder.Reference<Potion>> getPotions() {
-    return BuiltInRegistries.POTION.holders()
+    return BuiltInRegistries.POTION.listElements()
       .filter(holder -> !holder.is(Potions.WATER))
       .toList();
   }
@@ -185,7 +185,7 @@ public class PotionCastingRecipe implements ICastingRecipe, IMultiRecipe<IDispla
   /** Gets a list of all potion IDs ready for usage in building tool persistent data */
   public static List<String> getPotionIds() {
     return getPotions().stream()
-      .map(holder -> holder.key().location().toString())
+      .map(holder -> holder.key().identifier().toString())
       .toList();
   }
 }

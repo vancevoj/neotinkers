@@ -1,7 +1,7 @@
 package slimeknights.tconstruct.tools.modules.ranged;
 
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
@@ -37,7 +37,7 @@ public enum TrickQuiverModule implements ModifierModule, BowAmmoModifierHook, Ge
   public static final SingletonLoader<TrickQuiverModule> LOADER = new SingletonLoader<>(INSTANCE);
   private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<TrickQuiverModule>defaultHooks(ModifierHooks.BOW_AMMO, ModifierHooks.GENERAL_INTERACT, ModifierHooks.REMOVE);
   /** Key for the currently selected arrow */
-  private static final ResourceLocation SELECTED_SLOT = TConstruct.getResource("trick_quiver_selected");
+  private static final Identifier SELECTED_SLOT = TConstruct.getResource("trick_quiver_selected");
   /** Message when disabling the trick quiver */
   private static final String DISABLED = TConstruct.makeTranslationKey("modifier", "trick_quiver.disabled");
   /** Message to display selected slot */

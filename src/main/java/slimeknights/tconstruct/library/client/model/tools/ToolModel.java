@@ -18,18 +18,18 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.color.item.ItemColor;
 import net.minecraft.client.color.item.ItemColors;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.resources.model.geometry.BakedQuad;
 import net.minecraft.client.renderer.block.model.ItemOverrides;
 import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.Material;
 import net.minecraft.client.resources.model.ModelBaker;
-import net.minecraft.client.resources.model.ModelState;
+import net.minecraft.client.renderer.block.dispatch.ModelState;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
@@ -41,7 +41,7 @@ import net.neoforged.neoforge.client.model.BakedModelWrapper;
 import net.neoforged.neoforge.client.model.IModelBuilder;
 import net.neoforged.neoforge.client.model.IQuadTransformer;
 import net.neoforged.neoforge.client.model.QuadTransformers;
-import net.neoforged.neoforge.client.model.data.ModelData;
+import net.neoforged.neoforge.model.data.ModelData;
 import net.neoforged.neoforge.client.model.geometry.IGeometryBakingContext;
 import net.neoforged.neoforge.client.model.geometry.IGeometryLoader;
 import net.neoforged.neoforge.client.model.geometry.IUnbakedGeometry;
@@ -96,7 +96,7 @@ import java.util.function.Supplier;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class ToolModel implements IUnbakedGeometry<ToolModel> {
   /** Location used for baking dynamic models, name does not matter so just using a constant */
-  private static final ResourceLocation BAKE_LOCATION = TConstruct.getResource("dynamic_model_baking");
+  private static final Identifier BAKE_LOCATION = TConstruct.getResource("dynamic_model_baking");
   /** Shared loader instance */
   public static final IGeometryLoader<ToolModel> LOADER = ToolModel::deserialize;
   /** Set of transform types that make tools render small */
@@ -198,12 +198,12 @@ public class ToolModel implements IUnbakedGeometry<ToolModel> {
     boolean showTraits = GsonHelper.getAsBoolean(json, "show_traits", false);
     Vec2 offset = getOffset(json, "large_offset");
     // modifier root fetching
-    List<ResourceLocation> modifierModels = List.of();
+    List<Identifier> modifierModels = List.of();
     if (json.has("modifier_maps")) {
       modifierModels = JsonHelper.parseList(json, "modifier_maps", Loadables.RESOURCE_LOCATION);
     }
-    List<ResourceLocation> smallModifierRoots = List.of();
-    List<ResourceLocation> largeModifierRoots = List.of();
+    List<Identifier> smallModifierRoots = List.of();
+    List<Identifier> largeModifierRoots = List.of();
     if (json.has("modifier_roots")) {
       // large model requires an object
       if (isLarge) {
@@ -216,7 +216,7 @@ public class ToolModel implements IUnbakedGeometry<ToolModel> {
       }
     }
     // fetch data related to ammo display
-    ResourceLocation ammoKey = null;
+    Identifier ammoKey = null;
     Vec2 smallAmmoOffset = Vec2.ZERO;
     Vec2 largeAmmoOffset = Vec2.ZERO;
     boolean flipAmmo = false;
@@ -251,25 +251,25 @@ public class ToolModel implements IUnbakedGeometry<ToolModel> {
   /** Transform matrix to apply to child parts */
   private final Vec2 offset;
   /** List of modifier models to read for this tool. Separate from the tool model for the sake of reuse. */
-  private final List<ResourceLocation> modifierModels;
+  private final List<Identifier> modifierModels;
   /**
    * Location to fetch modifier textures for small variant.
    * @deprecated use {@link #modifierModels}
    */
   @Deprecated
-  private final List<ResourceLocation> smallModifierRoots;
+  private final List<Identifier> smallModifierRoots;
   /**
    * Location to fetch modifier textures for large variant
    * @deprecated use {@link #modifierModels}
    */
   @Deprecated
-  private final List<ResourceLocation> largeModifierRoots;
+  private final List<Identifier> largeModifierRoots;
   /** Modifiers that show first on tools, bypassing normal sort order */
   @Deprecated
   private final List<FirstModifier> firstModifiers;
   /** Location in tool NBT to find the ammo */
   @Nullable
-  private final ResourceLocation ammoKey;
+  private final Identifier ammoKey;
   /** If true, flips the ammo horizontally, as most bows have opposite orientation from ammo */
   private final boolean flipAmmo;
   /** If true, left handed models should have the ammo shifted to the left */
@@ -385,7 +385,7 @@ public class ToolModel implements IUnbakedGeometry<ToolModel> {
                                          List<ToolPart> parts, ModifierModelMap modifierModels, List<FirstModifier> firstModifiers, boolean showTraits,
                                          List<MaterialVariantId> materials, @Nullable IToolStackView tool, ItemOverrides overrides,
                                          Collection<BakedQuad> smallExtraQuads, Collection<BakedQuad> largeExtraQuads, Collection<BakedQuad> leftExtraQuads) {
-    Transformation smallTransforms = Transformation.identity();
+    Transformation smallTransforms = Transformation.IDENTITY;
 
     // TODO: would be nice to support render types per material/per modifier
     // small model is used in GUIs (though that will be filtered to just front faces) and in small tool contexts like casting blocks
@@ -665,7 +665,7 @@ public class ToolModel implements IUnbakedGeometry<ToolModel> {
     private final Transformation largeTransforms;
     private final ModifierModelMap modifierModels;
     @Nullable
-    private final ResourceLocation ammoKey;
+    private final Identifier ammoKey;
     private final boolean flipAmmo;
     @Nullable
     private final Transformation smallAmmoTransforms;
@@ -674,7 +674,7 @@ public class ToolModel implements IUnbakedGeometry<ToolModel> {
     @Nullable
     private final Transformation leftAmmoTransforms;
 
-    private MaterialOverrideHandler(IGeometryBakingContext owner, List<ToolPart> toolParts, List<FirstModifier> firstModifiers, boolean showTraits, @Nullable Transformation largeTransforms, ModifierModelMap modifierModels, ItemOverrides nested, @Nullable ResourceLocation ammoKey, boolean flipAmmo, @Nullable Transformation smallAmmoTransforms, @Nullable Transformation largeAmmoTransforms, @Nullable Transformation leftAmmoTransforms) {
+    private MaterialOverrideHandler(IGeometryBakingContext owner, List<ToolPart> toolParts, List<FirstModifier> firstModifiers, boolean showTraits, @Nullable Transformation largeTransforms, ModifierModelMap modifierModels, ItemOverrides nested, @Nullable Identifier ammoKey, boolean flipAmmo, @Nullable Transformation smallAmmoTransforms, @Nullable Transformation largeAmmoTransforms, @Nullable Transformation leftAmmoTransforms) {
       super(nested);
       this.owner = owner;
       this.toolParts = toolParts;

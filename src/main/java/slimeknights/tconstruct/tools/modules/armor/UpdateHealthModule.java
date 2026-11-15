@@ -72,7 +72,7 @@ public record UpdateHealthModule(LevelingValue bonus, Set<EquipmentSlot> slots, 
   public void onEquip(IToolStackView tool, ModifierEntry modifier, EquipmentChangeContext context) {
     if (condition.matches(tool, modifier) && slots.contains(context.getChangedSlot())) {
       Level level = context.getLevel();
-      if (!level.isClientSide && EquipmentChangeModifierHook.didEquip(tool, context)) {
+      if (!level.isClientSide() && EquipmentChangeModifierHook.didEquip(tool, context)) {
         updateHealth(context.getEntity(), bonus.compute(modifier));
       }
     }
@@ -82,7 +82,7 @@ public record UpdateHealthModule(LevelingValue bonus, Set<EquipmentSlot> slots, 
   public void onUnequip(IToolStackView tool, ModifierEntry modifier, EquipmentChangeContext context) {
     if (condition.matches(tool, modifier) && slots.contains(context.getChangedSlot())) {
       Level level = context.getLevel();
-      if (!level.isClientSide && EquipmentChangeModifierHook.didUnequip(tool, context)) {
+      if (!level.isClientSide() && EquipmentChangeModifierHook.didUnequip(tool, context)) {
         updateHealth(context.getEntity(), -bonus.compute(modifier));
       }
     }

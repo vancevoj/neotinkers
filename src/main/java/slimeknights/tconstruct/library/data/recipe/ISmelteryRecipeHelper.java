@@ -1,7 +1,7 @@
 package slimeknights.tconstruct.library.data.recipe;
 
 import net.minecraft.data.recipes.RecipeOutput;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.material.Fluid;
@@ -103,7 +103,7 @@ public interface ISmelteryRecipeHelper extends ICastCreationHelper {
     metalMelting(builder, hasOre, hasDust);
   }
 
-  /** @deprecated use {@link SmelteryRecipeBuilder} via {@link SmelteryRecipeBuilder#fluid(RecipeOutput, ResourceLocation, Fluid)} */
+  /** @deprecated use {@link SmelteryRecipeBuilder} via {@link SmelteryRecipeBuilder#fluid(RecipeOutput, Identifier, Fluid)} */
   @Deprecated(forRemoval = true)
   default void metalMelting(RecipeOutput consumer, Fluid fluid, String name, boolean hasOre, boolean hasDust, String folder, boolean isOptional, IByproduct... byproducts) {
     SmelteryRecipeBuilder builder = SmelteryRecipeBuilder.fluid(consumer, location(name), fluid).meltingFolder(folder).optional(isOptional);
@@ -136,7 +136,7 @@ public interface ISmelteryRecipeHelper extends ICastCreationHelper {
     gemMelting(builder, hasOre, blockSize);
   }
 
-  /** @deprecated use {@link SmelteryRecipeBuilder} via {@link SmelteryRecipeBuilder#fluid(RecipeOutput, ResourceLocation, Fluid)} */
+  /** @deprecated use {@link SmelteryRecipeBuilder} via {@link SmelteryRecipeBuilder#fluid(RecipeOutput, Identifier, Fluid)} */
   @Deprecated(forRemoval = true)
   default void gemMelting(RecipeOutput consumer, Fluid fluid, String name, boolean hasOre, int blockSize, String folder, boolean isOptional, IByproduct... byproducts) {
     SmelteryRecipeBuilder builder = SmelteryRecipeBuilder.fluid(consumer, location(name), fluid).meltingFolder(folder).optional(isOptional);

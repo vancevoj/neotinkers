@@ -9,7 +9,7 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -68,7 +68,7 @@ public class TinkerStationRepairRecipe implements ITinkerStationRecipe, IMultiRe
   private static final IntConsumer NO_ACTION = i -> {};
 
   @Getter
-  private final ResourceLocation id;
+  private final Identifier id;
 
   /**
    * Gets the material for the given slot
@@ -323,7 +323,7 @@ public class TinkerStationRepairRecipe implements ITinkerStationRecipe, IMultiRe
 
   /** Used in JEI to override the crafting table ID for the display recipes. */
   @Internal
-  public static void setCraftingId(List<IDisplayCraftingTinkering> recipes, ResourceLocation id) {
+  public static void setCraftingId(List<IDisplayCraftingTinkering> recipes, Identifier id) {
     for (IDisplayCraftingTinkering recipe : recipes) {
       if (recipe instanceof DisplayRecipe display) {
         display.setId(id);
@@ -336,11 +336,11 @@ public class TinkerStationRepairRecipe implements ITinkerStationRecipe, IMultiRe
   private static abstract class DisplayRecipe implements IDisplayCraftingTinkering {
     /** ID for crafting table tab */
     @Setter
-    private ResourceLocation id;
-    private final ResourceLocation recipeId;
+    private Identifier id;
+    private final Identifier recipeId;
     private final List<ItemStack> toolWithoutModifier;
 
-    private DisplayRecipe(ResourceLocation id, List<ItemStack> toolWithoutModifier) {
+    private DisplayRecipe(Identifier id, List<ItemStack> toolWithoutModifier) {
       this.id = id;
       this.recipeId = id;
       this.toolWithoutModifier = toolWithoutModifier;
@@ -441,7 +441,7 @@ public class TinkerStationRepairRecipe implements ITinkerStationRecipe, IMultiRe
   private static class FixedDisplayRecipe extends DisplayRecipe {
     private final Item tool;
     private final List<ItemStack> inputs;
-    public FixedDisplayRecipe(ResourceLocation id, Item tool, List<ItemStack> inputs, List<ItemStack> toolWithoutModifier) {
+    public FixedDisplayRecipe(Identifier id, Item tool, List<ItemStack> inputs, List<ItemStack> toolWithoutModifier) {
       super(id, toolWithoutModifier);
       this.tool = tool;
       this.inputs = inputs;
@@ -462,7 +462,7 @@ public class TinkerStationRepairRecipe implements ITinkerStationRecipe, IMultiRe
   private static class DynamicDisplayRecipe extends DisplayRecipe {
     private final Set<Item> tools;
 
-    public DynamicDisplayRecipe(ResourceLocation id, Set<Item> tools, List<ItemStack> toolWithoutModifier) {
+    public DynamicDisplayRecipe(Identifier id, Set<Item> tools, List<ItemStack> toolWithoutModifier) {
       super(id, toolWithoutModifier);
       this.tools = tools;
     }

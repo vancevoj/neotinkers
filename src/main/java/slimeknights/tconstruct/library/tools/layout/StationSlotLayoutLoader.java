@@ -12,7 +12,7 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.util.GsonHelper;
@@ -54,9 +54,9 @@ public class StationSlotLayoutLoader extends SimpleJsonResourceReloadListener {
   private static final StationSlotLayoutLoader INSTANCE = new StationSlotLayoutLoader();
 
   /** Map of name to slot layout */
-  private Map<ResourceLocation, StationSlotLayout> layoutMap = Collections.emptyMap();
+  private Map<Identifier, StationSlotLayout> layoutMap = Collections.emptyMap();
   /** List of layouts that must be loaded for the game to work properly */
-  private final List<ResourceLocation> requiredLayouts = new ArrayList<>();
+  private final List<Identifier> requiredLayouts = new ArrayList<>();
 
   /** List of all slots in order */
   @Getter
@@ -75,7 +75,7 @@ public class StationSlotLayoutLoader extends SimpleJsonResourceReloadListener {
   }
 
   /** Updates the slot layouts */
-  private void setSlots(Map<ResourceLocation, StationSlotLayout> map) {
+  private void setSlots(Map<Identifier, StationSlotLayout> map) {
     this.layoutMap = map;
     this.sortedSlots = map.values().stream()
                           .filter(layout -> !layout.isMain())
@@ -104,11 +104,11 @@ public class StationSlotLayoutLoader extends SimpleJsonResourceReloadListener {
   }
 
   @Override
-  protected void apply(Map<ResourceLocation,JsonElement> splashList, ResourceManager resourceManager, ProfilerFiller profiler) {
+  protected void apply(Map<Identifier,JsonElement> splashList, ResourceManager resourceManager, ProfilerFiller profiler) {
     long time = System.nanoTime();
-    ImmutableMap.Builder<ResourceLocation, StationSlotLayout> builder = ImmutableMap.builder();
-    for (Entry<ResourceLocation,JsonElement> entry : splashList.entrySet()) {
-      ResourceLocation key = entry.getKey();
+    ImmutableMap.Builder<Identifier, StationSlotLayout> builder = ImmutableMap.builder();
+    for (Entry<Identifier,JsonElement> entry : splashList.entrySet()) {
+      Identifier key = entry.getKey();
       JsonElement value = entry.getValue();
       try {
         // skip empty objects, allows disabling a slot at a lower datapack
@@ -129,20 +129,20 @@ public class StationSlotLayoutLoader extends SimpleJsonResourceReloadListener {
     }
     setSlots(builder.build());
     log.info("Loaded {} station slot layouts in {} ms", layoutMap.size(), (System.nanoTime() - time) / 1000000f);
-    List<String> missing = requiredLayouts.stream().filter(name -> !layoutMap.containsKey(name)).map(ResourceLocation::toString).collect(Collectors.toList());
+    List<String> missing = requiredLayouts.stream().filter(name -> !layoutMap.containsKey(name)).map(Identifier::toString).collect(Collectors.toList());
     if (!missing.isEmpty()) {
       log.error("Failed to load the following required layouts: {}", String.join(", ", missing));
     }
   }
 
   /** Gets a layout by name */
-  public StationSlotLayout get(ResourceLocation name) {
+  public StationSlotLayout get(Identifier name) {
     return layoutMap.getOrDefault(name, StationSlotLayout.EMPTY);
   }
 
 
   /** Registers the name of a layout that should be loaded, if its missing that causes an error */
-  public void registerRequiredLayout(ResourceLocation name) {
+  public void registerRequiredLayout(Identifier name) {
     requiredLayouts.add(name);
   }
 

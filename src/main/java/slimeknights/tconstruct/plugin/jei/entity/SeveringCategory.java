@@ -9,7 +9,7 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.category.AbstractRecipeCategory;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import slimeknights.mantle.plugin.jei.MantleJEIConstants;
 import slimeknights.mantle.plugin.jei.entity.EntityIngredientRenderer;
@@ -22,7 +22,7 @@ import slimeknights.tconstruct.tools.TinkerTools;
 import java.util.List;
 
 public class SeveringCategory extends AbstractRecipeCategory<SeveringRecipe> {
-  public static final ResourceLocation BACKGROUND_LOC = TConstruct.getResource("textures/gui/jei/tinker_station.png");
+  public static final Identifier BACKGROUND_LOC = TConstruct.getResource("textures/gui/jei/tinker_station.png");
   private static final Component TITLE = TConstruct.makeTranslation("jei", "severing.title");
 
   /** Renderer instance to use in this category */
@@ -53,7 +53,7 @@ public class SeveringCategory extends AbstractRecipeCategory<SeveringRecipe> {
   }
 
   @Override
-  public ResourceLocation getRegistryName(SeveringRecipe recipe) {
+  public Identifier getRegistryName(SeveringRecipe recipe) {
     return recipe.getId();
   }
 }

@@ -2,8 +2,8 @@ package slimeknights.tconstruct.library.client.model.block;
 
 import com.google.gson.JsonObject;
 import lombok.Getter;
-import net.minecraft.client.renderer.block.model.BlockElement;
-import net.minecraft.client.renderer.block.model.BlockElementFace;
+import net.minecraft.client.resources.model.cuboid.CuboidModelElement;
+import net.minecraft.client.resources.model.cuboid.CuboidFace;
 import net.minecraft.client.renderer.block.model.BlockFaceUV;
 import net.minecraft.core.Direction;
 import net.minecraft.util.GsonHelper;
@@ -31,7 +31,7 @@ public class IncrementalFluidCuboid extends FluidCuboid {
    * @return  Fluid part
    */
   @SuppressWarnings("WeakerAccess")
-  public BlockElement getPart(int amount, boolean gas) {
+  public CuboidModelElement getPart(int amount, boolean gas) {
     // set cube height based on stack amount
     Vector3f from = getFrom();
     Vector3f to = getTo();
@@ -47,20 +47,20 @@ public class IncrementalFluidCuboid extends FluidCuboid {
     }
 
     // create faces based on face data
-    Map<Direction,BlockElementFace> faces = new EnumMap<>(Direction.class);
+    Map<Direction,CuboidFace> faces = new EnumMap<>(Direction.class);
     for (Entry<Direction, FluidFace> entry : this.getFaces().entrySet()) {
       // only add the face if requested
       Direction dir = entry.getKey();
       FluidFace face = entry.getValue();
       // calculate in flowing and rotations
       boolean isFlowing = face.isFlowing();
-      faces.put(dir, new BlockElementFace(
+      faces.put(dir, new CuboidFace(
         null, 0, isFlowing ? "flowing_fluid" : "fluid",
         getFaceUvs(from ,to, dir, face.rotation(), isFlowing ? 0.5f : 1f)));
     }
 
     // create the part with the fluid
-    return new BlockElement(from, to, faces, null, false);
+    return new CuboidModelElement(from, to, faces, null, false);
   }
 
   /**

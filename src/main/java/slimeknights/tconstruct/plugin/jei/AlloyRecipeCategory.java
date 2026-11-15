@@ -13,9 +13,9 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.category.AbstractRecipeCategory;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.fluids.FluidStack;
 import slimeknights.mantle.fluid.tooltip.FluidTooltipHandler;
 import slimeknights.tconstruct.TConstruct;
@@ -35,7 +35,7 @@ import java.util.function.Function;
  * Alloy recipe category for JEI display
  */
 public class AlloyRecipeCategory extends AbstractRecipeCategory<AlloyRecipe> {
-  private static final ResourceLocation BACKGROUND_LOC = TConstruct.getResource("textures/gui/jei/alloy.png");
+  private static final Identifier BACKGROUND_LOC = TConstruct.getResource("textures/gui/jei/alloy.png");
   private static final Component TITLE = TConstruct.makeTranslation("jei", "alloy.title");
   private static final Component CATALYST = TConstruct.makeTranslation("jei", "alloy.catalyst").withStyle(ChatFormatting.ITALIC);
   private static final String KEY_TEMPERATURE = TConstruct.makeTranslationKey("jei", "temperature");
@@ -75,7 +75,7 @@ public class AlloyRecipeCategory extends AbstractRecipeCategory<AlloyRecipe> {
   }
 
   @Override
-  public void draw(AlloyRecipe recipe, IRecipeSlotsView slots, GuiGraphics graphics, double mouseX, double mouseY) {
+  public void draw(AlloyRecipe recipe, IRecipeSlotsView slots, GuiGraphicsExtractor graphics, double mouseX, double mouseY) {
     background.draw(graphics);
   }
 
@@ -124,7 +124,7 @@ public class AlloyRecipeCategory extends AbstractRecipeCategory<AlloyRecipe> {
   }
 
   @Override
-  public ResourceLocation getRegistryName(AlloyRecipe recipe) {
+  public Identifier getRegistryName(AlloyRecipe recipe) {
     return recipe.getId();
   }
 }

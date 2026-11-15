@@ -9,7 +9,7 @@ import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.tags.TagKey;
@@ -62,7 +62,7 @@ public class MaterialManager extends SimpleJsonResourceReloadListener {
 
   /** GSON for loading materials */
   public static final Gson GSON = (new GsonBuilder())
-    .registerTypeAdapter(ResourceLocation.class, new ResourceLocation.Serializer())
+    .registerTypeAdapter(Identifier.class, new Identifier.Serializer())
     .registerTypeHierarchyAdapter(ICondition.class, ConditionSerializer.INSTANCE)
     .setPrettyPrinting()
     .disableHtmlEscaping()
@@ -133,7 +133,7 @@ public class MaterialManager extends SimpleJsonResourceReloadListener {
   /* Tags */
 
   /** Creates a tag key for a material */
-  public static TagKey<IMaterial> getTag(ResourceLocation id) {
+  public static TagKey<IMaterial> getTag(Identifier id) {
     return TagKey.create(REGISTRY_KEY, id);
   }
 
@@ -197,7 +197,7 @@ public class MaterialManager extends SimpleJsonResourceReloadListener {
   }
 
   @Override
-  protected void apply(Map<ResourceLocation, JsonElement> splashList, ResourceManager resourceManagerIn, ProfilerFiller profilerIn) {
+  protected void apply(Map<Identifier, JsonElement> splashList, ResourceManager resourceManagerIn, ProfilerFiller profilerIn) {
     long time = System.nanoTime();
     Map<MaterialId, MaterialId> redirects = new HashMap<>();
     this.materials = splashList.entrySet().stream()
@@ -244,7 +244,7 @@ public class MaterialManager extends SimpleJsonResourceReloadListener {
   }
 
   @Nullable
-  private IMaterial loadMaterial(ResourceLocation materialId, JsonObject jsonObject, Map<MaterialId, MaterialId> redirects) {
+  private IMaterial loadMaterial(Identifier materialId, JsonObject jsonObject, Map<MaterialId, MaterialId> redirects) {
     try {
       MaterialJson materialJson = GSON.fromJson(jsonObject, MaterialJson.class);
 

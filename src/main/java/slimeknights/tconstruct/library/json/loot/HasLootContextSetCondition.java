@@ -33,7 +33,7 @@ public record HasLootContextSetCondition(LootContextParamSet set) implements Loo
   @Override
   public boolean test(LootContext context) {
     for (LootContextParam<?> param : set.getRequired()) {
-      if (!context.hasParam(param)) {
+      if (!context.hasParameter(param)) {
         return false;
       }
     }

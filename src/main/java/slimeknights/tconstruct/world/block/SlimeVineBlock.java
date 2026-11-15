@@ -46,7 +46,7 @@ public class SlimeVineBlock extends VineBlock {
 
   @Override
   public void randomTick(BlockState state, ServerLevel worldIn, BlockPos pos, RandomSource random) {
-    if (worldIn.isClientSide) {
+    if (worldIn.isClientSide()) {
       return;
     }
 

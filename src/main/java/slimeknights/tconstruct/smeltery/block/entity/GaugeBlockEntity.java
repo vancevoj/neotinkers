@@ -34,7 +34,7 @@ public class GaugeBlockEntity extends BlockEntity {
     // if we have not fetched the neighbor, fetch it
     if (!fetchedNeighbor) {
       Direction side = getBlockState().getValue(BlockStateProperties.FACING);
-      neighbor = level.getCapability(Capabilities.FluidHandler.BLOCK, getBlockPos().relative(side.getOpposite()), side);
+      neighbor = level.getCapability(Capabilities.Fluid.BLOCK, getBlockPos().relative(side.getOpposite()), side);
       fetchedNeighbor = true;
     }
     // return tank or empty tank

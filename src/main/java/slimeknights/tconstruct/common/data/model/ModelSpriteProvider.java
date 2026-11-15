@@ -5,7 +5,7 @@ import com.google.gson.JsonObject;
 import com.mojang.blaze3d.platform.NativeImage;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.FastColor;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import slimeknights.tconstruct.TConstruct;
@@ -38,13 +38,13 @@ public class ModelSpriteProvider extends GenericTextureGenerator {
 
   @Override
   public CompletableFuture<?> run(CachedOutput cache) {
-    ResourceLocation rootsSide = getResource("block/wood/enderbark/roots");
-    ResourceLocation rootsTop = getResource("block/wood/enderbark/roots_top");
+    Identifier rootsSide = getResource("block/wood/enderbark/roots");
+    Identifier rootsTop = getResource("block/wood/enderbark/roots_top");
 
     // generate slimy root textures
     for (SlimeType slime : SlimeType.values()) {
       String name = slime.getSerializedName();
-      ResourceLocation congealed = getResource("block/slime/storage/congealed_" + name);
+      Identifier congealed = getResource("block/slime/storage/congealed_" + name);
       stackSprites(cache, getResource("block/wood/enderbark/roots/" + name), rootsSide, congealed);
       stackSprites(cache, getResource("block/wood/enderbark/roots/" + name + "_top"), rootsTop, congealed);
     }
@@ -71,7 +71,7 @@ public class ModelSpriteProvider extends GenericTextureGenerator {
    * @param input         Input location
    * @param transformer   Transformer instance
    */
-  protected void transformSprite(CachedOutput cache, ResourceLocation output, ResourceLocation input, ISpriteTransformer transformer) {
+  protected void transformSprite(CachedOutput cache, Identifier output, Identifier input, ISpriteTransformer transformer) {
     try {
       NativeImage original = spriteReader.read(input);
       NativeImage generated = transformer.transformCopy(original, true);
@@ -92,7 +92,7 @@ public class ModelSpriteProvider extends GenericTextureGenerator {
    * @param output   Output path
    * @param inputs   List of inputs, will iterate from 0 to the end and grab the first non-transparent pixel
    */
-  protected void stackSprites(CachedOutput cache, ResourceLocation output, ResourceLocation... inputs) {
+  protected void stackSprites(CachedOutput cache, Identifier output, Identifier... inputs) {
     List<NativeImage> sprites = Arrays.stream(inputs).map(path -> {
       try {
         return spriteReader.read(path);
@@ -105,12 +105,12 @@ public class ModelSpriteProvider extends GenericTextureGenerator {
     // TODO: we could just use LCM to generate an image that merges all
     int width = 1;
     int height = 1;
-    ResourceLocation metaLocation = null;
+    Identifier metaLocation = null;
     for (int i = 0; i < sprites.size(); i++) {
       NativeImage sprite = sprites.get(i);
       width = lcm(width, sprite.getWidth());
       height = lcm(height, sprite.getHeight());
-      ResourceLocation location = inputs[i];
+      Identifier location = inputs[i];
       // TODO: metadata may be wrong if we have multiple sprites with different frame counts
       if (spriteReader.metadataExists(location)) {
         if (metaLocation == null) {

@@ -7,7 +7,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
@@ -88,17 +88,17 @@ public abstract class CastingBlockEntity extends TableBlockEntity implements Wor
   private ICastingRecipe currentRecipe;
   /** ID of the current recipe, tracked separately since 1.21 recipes no longer carry their own ID */
   @Nullable
-  private ResourceLocation currentRecipeId;
+  private Identifier currentRecipeId;
   /** Name of the current recipe, fetched from Tag. Used since Tag is read before recipe manager access */
-  private ResourceLocation recipeName;
+  private Identifier recipeName;
   /** Cache recipe to reduce time during recipe lookups. Not saved to Tag */
   private ICastingRecipe lastCastingRecipe;
   /** ID matching {@link #lastCastingRecipe}, since 1.21 recipes no longer carry their own ID */
   @Nullable
-  private ResourceLocation lastCastingRecipeId;
+  private Identifier lastCastingRecipeId;
   /** ID of the recipe returned by the most recent {@link #findCastingRecipe()} call */
   @Nullable
-  private ResourceLocation foundRecipeId;
+  private Identifier foundRecipeId;
   /** Last recipe output for client side display */
   private ItemStack lastOutput = null;
   /** If true, this block is allowed to cast without a cast */
@@ -136,7 +136,7 @@ public abstract class CastingBlockEntity extends TableBlockEntity implements Wor
    */
   public void interact(Player player, InteractionHand hand) {
     // skip client side, and skip if the recipe already started
-    if (level == null || level.isClientSide || (coolingTime >= 0 && timer > 0)) {
+    if (level == null || level.isClientSide() || (coolingTime >= 0 && timer > 0)) {
       return;
     }
     // first try interacting with the table as a tank. If that fails, run normal item swap logic
@@ -181,7 +181,7 @@ public abstract class CastingBlockEntity extends TableBlockEntity implements Wor
         recipe = findMoldingRecipe();
         if (recipe != null) {
           setItem(INPUT, ItemStack.EMPTY);
-          ItemHandlerHelper.giveItemToPlayer(player, recipe.assemble(moldingInventory, level.registryAccess()), player.getInventory().selected);
+          ItemHandlerHelper.giveItemToPlayer(player, recipe.assemble(moldingInventory, level.registryAccess()), player.getInventory().getSelectedSlot());
           return;
         }
       }
@@ -206,7 +206,7 @@ public abstract class CastingBlockEntity extends TableBlockEntity implements Wor
       // can have ItemStacks with stacksize > 1 as output
       // we therefore spill the whole contents on extraction.
       ItemStack stack = getItem(slot);
-      ItemHandlerHelper.giveItemToPlayer(player, stack, player.getInventory().selected);
+      ItemHandlerHelper.giveItemToPlayer(player, stack, player.getInventory().getSelectedSlot());
       setItem(slot, ItemStack.EMPTY);
 
       // send a block update for the comparator, needs to be done after the stack is removed
@@ -225,7 +225,7 @@ public abstract class CastingBlockEntity extends TableBlockEntity implements Wor
       updateAnalogSignal();
     }
     // update the block property for having an item
-    if (level != null && !level.isClientSide) {
+    if (level != null && !level.isClientSide()) {
       BlockState state = getBlockState();
       // Push a full block-entity update so the in-world renderer receives the changed item. The
       // targeted InventorySlotSyncPacket is unreliable for the casting table's sided inventory
@@ -474,7 +474,7 @@ public abstract class CastingBlockEntity extends TableBlockEntity implements Wor
     updateAnalogSignal();
     // update client
     Level world = getLevel();
-    if (world != null && !world.isClientSide) {
+    if (world != null && !world.isClientSide()) {
       BlockPos pos = getBlockPos();
       TinkerNetwork.getInstance().sendToClientsAround(new FluidUpdatePacket(pos, fluidStack), world, pos);
     }
@@ -521,7 +521,7 @@ public abstract class CastingBlockEntity extends TableBlockEntity implements Wor
 
   /** Updates the comparator strength if needed */
   private void updateAnalogSignal() {
-    if (level == null || !level.isClientSide) {
+    if (level == null || !level.isClientSide()) {
       int newStrength = getAnalogSignal();
       if (newStrength != lastAnalogSignal) {
         lastAnalogSignal = newStrength;
@@ -562,7 +562,7 @@ public abstract class CastingBlockEntity extends TableBlockEntity implements Wor
    * @param level  Nonnull level instance
    * @param name   Recipe name to load
    */
-  private void loadRecipe(Level level, ResourceLocation name) {
+  private void loadRecipe(Level level, Identifier name) {
     // if the tank is empty, ignore old recipe
     FluidStack fluid = tank.getFluid();
     if(!fluid.isEmpty()) {
@@ -623,7 +623,7 @@ public abstract class CastingBlockEntity extends TableBlockEntity implements Wor
     tank.readFromTag(registries, tags.getCompound(TAG_TANK));
     timer = tags.getInt(TAG_TIMER);
     if (tags.contains(TAG_RECIPE, CompoundTag.TAG_STRING)) {
-      ResourceLocation name = ResourceLocation.parse(tags.getString(TAG_RECIPE));
+      Identifier name = Identifier.parse(tags.getString(TAG_RECIPE));
       // if we have a level, fetch the recipe
       if (level != null) {
         loadRecipe(level, name);
@@ -653,6 +653,6 @@ public abstract class CastingBlockEntity extends TableBlockEntity implements Wor
   /** Gets the ticker for a casting entity */
   @Nullable
   public static <CAST extends CastingBlockEntity, RET extends BlockEntity> BlockEntityTicker<RET> getTicker(Level level, BlockEntityType<RET> check, BlockEntityType<CAST> casting) {
-    return BlockEntityHelper.castTicker(check, casting, level.isClientSide ? CLIENT_TICKER : SERVER_TICKER);
+    return BlockEntityHelper.castTicker(check, casting, level.isClientSide() ? CLIENT_TICKER : SERVER_TICKER);
   }
 }

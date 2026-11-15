@@ -2,7 +2,7 @@ package slimeknights.tconstruct.library.recipe.melting;
 
 import lombok.Getter;
 import net.minecraft.core.NonNullList;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -38,7 +38,7 @@ public class MeltingRecipe implements IMeltingRecipe, IDisplayableMeltingRecipe 
   public static final RecordLoadable<MeltingRecipe> LOADER = RecordLoadable.create(ContextKey.ID.requiredField(), LoadableRecipeSerializer.RECIPE_GROUP, INPUT, OUTPUT, TEMPERATURE, TIME, BYPRODUCTS, MeltingRecipe::new);
 
   @Getter
-  private final ResourceLocation id;
+  private final Identifier id;
   @Getter
   protected final String group;
   @Getter
@@ -52,7 +52,7 @@ public class MeltingRecipe implements IMeltingRecipe, IDisplayableMeltingRecipe 
   protected final List<FluidOutput> byproducts;
   protected List<List<FluidStack>> outputWithByproducts;
 
-  public MeltingRecipe(ResourceLocation id, String group, Ingredient input, FluidOutput output, int temperature, int time, List<FluidOutput> byproducts) {
+  public MeltingRecipe(Identifier id, String group, Ingredient input, FluidOutput output, int temperature, int time, List<FluidOutput> byproducts) {
     this(id, group, input, output, temperature, time, byproducts, true);
   }
 
@@ -61,7 +61,7 @@ public class MeltingRecipe implements IMeltingRecipe, IDisplayableMeltingRecipe 
    * @deprecated use {@link DisplayMeltingRecipe}
    */
   @Deprecated
-  public MeltingRecipe(ResourceLocation id, String group, Ingredient input, FluidOutput output, int temperature, int time, List<FluidOutput> byproducts, boolean addLookup) {
+  public MeltingRecipe(Identifier id, String group, Ingredient input, FluidOutput output, int temperature, int time, List<FluidOutput> byproducts, boolean addLookup) {
     this.id = id;
     this.group = group;
     this.input = input;
@@ -116,7 +116,7 @@ public class MeltingRecipe implements IMeltingRecipe, IDisplayableMeltingRecipe 
   /* JEI */
 
   @Override
-  public ResourceLocation getRecipeId() {
+  public Identifier getRecipeId() {
     return getId();
   }
 

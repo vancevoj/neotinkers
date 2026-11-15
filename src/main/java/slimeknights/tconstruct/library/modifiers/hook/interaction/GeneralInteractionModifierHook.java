@@ -1,12 +1,12 @@
 package slimeknights.tconstruct.library.modifiers.hook.interaction;
 
 import net.minecraft.nbt.Tag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.level.Level;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
@@ -89,17 +89,17 @@ public interface GeneralInteractionModifierHook {
    * @param modifier   Modifier instance
    * @return  Use action to be performed
    */
-  default UseAnim getUseAction(IToolStackView tool, ModifierEntry modifier) {
-    return UseAnim.NONE;
+  default ItemUseAnimation getUseAction(IToolStackView tool, ModifierEntry modifier) {
+    return ItemUseAnimation.NONE;
   }
 
 
   /* Helpers */
 
   /** Persistent key storing the actively running modifier for use in several hooks */
-  ResourceLocation KEY_ACTIVE_MODIFIER = TConstruct.getResource("active_modifier");
+  Identifier KEY_ACTIVE_MODIFIER = TConstruct.getResource("active_modifier");
   /** Persistent data key storing the drawtime needed for using the tool. Generally is set when tool usage starts */
-  ResourceLocation KEY_DRAWTIME = TConstruct.getResource("drawtime");
+  Identifier KEY_DRAWTIME = TConstruct.getResource("drawtime");
 
   /**
    * Use in {@link #onToolUse(IToolStackView, ModifierEntry, Player, InteractionHand, InteractionSource)} to start using an item, ensuring later hooks are properly called.
@@ -238,14 +238,14 @@ public interface GeneralInteractionModifierHook {
     }
 
     @Override
-    public UseAnim getUseAction(IToolStackView tool, ModifierEntry modifier) {
+    public ItemUseAnimation getUseAction(IToolStackView tool, ModifierEntry modifier) {
       for (GeneralInteractionModifierHook module : modules) {
-        UseAnim anim = module.getUseAction(tool, modifier);
-        if (anim != UseAnim.NONE) {
+        ItemUseAnimation anim = module.getUseAction(tool, modifier);
+        if (anim != ItemUseAnimation.NONE) {
           return anim;
         }
       }
-      return UseAnim.NONE;
+      return ItemUseAnimation.NONE;
     }
   }
 }

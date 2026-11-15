@@ -10,7 +10,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
@@ -108,22 +108,22 @@ public class UpdateModifiersPacket implements IThreadsafePacket {
 
     // read in enchantment to modifier mapping. enchantments are a datapack registry in 1.21, so resolve holders from the buffer's registry access
     RegistryAccess registryAccess = ((RegistryFriendlyByteBuf)buffer).registryAccess();
-    var enchantmentRegistry = registryAccess.registryOrThrow(Registries.ENCHANTMENT);
+    var enchantmentRegistry = registryAccess.lookupOrThrow(Registries.ENCHANTMENT);
     ImmutableMap.Builder<Holder<Enchantment>,Modifier> enchantmentBuilder = ImmutableMap.builder();
     size = buffer.readVarInt();
     for (int i = 0; i < size; i++) {
-      ResourceLocation enchantmentId = buffer.readResourceLocation();
-      Holder<Enchantment> holder = enchantmentRegistry.getHolder(enchantmentId)
+      Identifier enchantmentId = buffer.readIdentifier();
+      Holder<Enchantment> holder = enchantmentRegistry.get(enchantmentId)
         .orElseThrow(() -> new DecoderException("Unknown enchantment " + enchantmentId));
-      enchantmentBuilder.put(holder, getModifier(modifiers, new ModifierId(buffer.readResourceLocation())));
+      enchantmentBuilder.put(holder, getModifier(modifiers, new ModifierId(buffer.readIdentifier())));
     }
     enchantmentMap = enchantmentBuilder.build();
     ImmutableMap.Builder<TagKey<Enchantment>, Modifier> enchantmentTagBuilder = ImmutableMap.builder();
     size = buffer.readVarInt();
     for (int i = 0; i < size; i++) {
       enchantmentTagBuilder.put(
-        TagKey.create(Registries.ENCHANTMENT, buffer.readResourceLocation()),
-        getModifier(modifiers, new ModifierId(buffer.readResourceLocation())));
+        TagKey.create(Registries.ENCHANTMENT, buffer.readIdentifier()),
+        getModifier(modifiers, new ModifierId(buffer.readIdentifier())));
     }
     enchantmentTagMappings = enchantmentTagBuilder.build();
   }
@@ -134,8 +134,8 @@ public class UpdateModifiersPacket implements IThreadsafePacket {
     // write modifiers
     buffer.writeVarInt(modifiers.size());
     for (ComposableModifier modifier : modifiers) {
-      ResourceLocation id = modifier.getId();
-      buffer.writeResourceLocation(id);
+      Identifier id = modifier.getId();
+      buffer.writeIdentifier(id);
       try {
         ComposableModifier.LOADER.encode(buffer, modifier);
       } catch (RuntimeException e) {
@@ -147,21 +147,21 @@ public class UpdateModifiersPacket implements IThreadsafePacket {
     // write redirects
     buffer.writeVarInt(redirects.size());
     for (Entry<ModifierId,ModifierId> entry : redirects.entrySet()) {
-      buffer.writeResourceLocation(entry.getKey());
-      buffer.writeResourceLocation(entry.getValue());
+      buffer.writeIdentifier(entry.getKey());
+      buffer.writeIdentifier(entry.getValue());
     }
     GenericTagUtil.encodeTags(buffer, Modifier::getId, this.tags);
 
     // enchantment mapping. write the enchantment key, resolved back to a holder on the receiving end
     buffer.writeVarInt(enchantmentMap.size());
     for (Entry<Holder<Enchantment>,Modifier> entry : enchantmentMap.entrySet()) {
-      buffer.writeResourceLocation(entry.getKey().unwrapKey().orElseThrow().location());
-      buffer.writeResourceLocation(entry.getValue().getId());
+      buffer.writeIdentifier(entry.getKey().unwrapKey().orElseThrow().identifier());
+      buffer.writeIdentifier(entry.getValue().getId());
     }
     buffer.writeVarInt(enchantmentTagMappings.size());
     for (Entry<TagKey<Enchantment>, Modifier> entry : enchantmentTagMappings.entrySet()) {
-      buffer.writeResourceLocation(entry.getKey().location());
-      buffer.writeResourceLocation(entry.getValue().getId());
+      buffer.writeIdentifier(entry.getKey().location());
+      buffer.writeIdentifier(entry.getValue().getId());
     }
   }
 

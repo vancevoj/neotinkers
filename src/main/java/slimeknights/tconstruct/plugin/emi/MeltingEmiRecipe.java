@@ -9,7 +9,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.neoforged.neoforge.fluids.FluidStack;
@@ -32,7 +32,7 @@ import java.util.List;
  */
 public class MeltingEmiRecipe extends BasicEmiRecipe {
   /** JEI melting GUI texture, reused as the EMI backdrop */
-  private static final ResourceLocation BACKGROUND_LOC = TConstruct.getResource("textures/gui/jei/melting.png");
+  private static final Identifier BACKGROUND_LOC = TConstruct.getResource("textures/gui/jei/melting.png");
   private static final String KEY_TEMPERATURE = TConstruct.makeTranslationKey("jei", "temperature");
   private static final String KEY_MULTIPLIER = TConstruct.makeTranslationKey("jei", "melting.multiplier");
   private static final String KEY_COOLING_TIME = TConstruct.makeTranslationKey("jei", "melting.time");

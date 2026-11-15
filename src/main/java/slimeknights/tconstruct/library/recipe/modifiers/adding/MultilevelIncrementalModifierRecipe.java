@@ -3,7 +3,7 @@ package slimeknights.tconstruct.library.recipe.modifiers.adding;
 import com.google.common.collect.Streams;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import slimeknights.mantle.data.loadable.field.ContextKey;
@@ -33,7 +33,7 @@ public class MultilevelIncrementalModifierRecipe extends IncrementalModifierReci
     MultilevelIncrementalModifierRecipe::new);
 
   private final List<LevelEntry> levels;
-  protected MultilevelIncrementalModifierRecipe(ResourceLocation id, Ingredient input, int amountPerInput, int neededPerLevel, Ingredient toolRequirement, int maxToolSize, ModifierId result, ItemOutput leftover, boolean allowCrystal, List<LevelEntry> levels, boolean checkTraitLevel) {
+  protected MultilevelIncrementalModifierRecipe(Identifier id, Ingredient input, int amountPerInput, int neededPerLevel, Ingredient toolRequirement, int maxToolSize, ModifierId result, ItemOutput leftover, boolean allowCrystal, List<LevelEntry> levels, boolean checkTraitLevel) {
     super(id, input, amountPerInput, neededPerLevel, toolRequirement, maxToolSize, result, levels.get(0).level(), levels.get(0).slots(), leftover, allowCrystal, checkTraitLevel);
     this.levels = levels;
   }

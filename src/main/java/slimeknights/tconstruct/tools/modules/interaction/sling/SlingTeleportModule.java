@@ -39,7 +39,7 @@ public record SlingTeleportModule(LevelingValue forceMultiplier, float drawtimeM
   @Override
   public void sling(IToolStackView tool, ModifierEntry modifier, LivingEntity entity, int chargeTime, ModifierEntry activeModifier) {
     Level level = entity.level();
-    if (!level.isClientSide && entity instanceof ServerPlayer player) {
+    if (!level.isClientSide() && entity instanceof ServerPlayer player) {
       // must have enough charge and force must not be zeroed by a modifier
       // don't care about multiplier here as no knockback to change it
       float charge = GeneralInteractionModifierHook.getToolCharge(tool, chargeTime);

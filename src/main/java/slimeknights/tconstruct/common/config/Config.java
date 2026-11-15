@@ -424,7 +424,7 @@ public class Config {
    *                   {@code ModLoadingContext.get().registerConfig})
    */
   public static void init(ModContainer container) {
-    container.registerConfig(ModConfig.Type.COMMON, Config.commonSpec);
+    container.registerConfig(ModConfig.Type.LOCAL, Config.commonSpec);
     container.registerConfig(ModConfig.Type.CLIENT, Config.clientSpec);
   }
 

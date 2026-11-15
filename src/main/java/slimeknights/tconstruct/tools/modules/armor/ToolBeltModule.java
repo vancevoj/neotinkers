@@ -49,7 +49,7 @@ public record ToolBeltModule(Set<TooltipKey> keys) implements ModifierModule, Ke
   public boolean startInteract(IToolStackView tool, ModifierEntry modifier, Player player, EquipmentSlot equipmentSlot, TooltipKey keyModifier) {
     if (keys.contains(keyModifier)) {
       Level level = player.level();
-      if (level.isClientSide) {
+      if (level.isClientSide()) {
         return true;
       }
 

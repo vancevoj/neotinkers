@@ -5,7 +5,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
+import net.minecraft.world.entity.projectile.throwableitemprojectile.ThrowableItemProjectile;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -40,7 +40,7 @@ public class GlowballEntity extends ThrowableItemProjectile implements IEntityWi
   @Override
   protected void onHit(HitResult result) {
     Level level = level();
-    if (!level.isClientSide) {
+    if (!level.isClientSide()) {
       BlockPos position = null;
       Direction direction = Direction.DOWN;
 
@@ -59,7 +59,7 @@ public class GlowballEntity extends ThrowableItemProjectile implements IEntityWi
       }
     }
 
-    if (!level.isClientSide) {
+    if (!level.isClientSide()) {
       level.broadcastEntityEvent(this, (byte) 3);
       this.discard();
     }

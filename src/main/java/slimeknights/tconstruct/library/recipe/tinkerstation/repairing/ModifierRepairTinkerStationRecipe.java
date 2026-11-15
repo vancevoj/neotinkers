@@ -9,7 +9,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -57,7 +57,7 @@ public class ModifierRepairTinkerStationRecipe implements ITinkerStationRecipe, 
   public static final RecordLoadable<ModifierRepairTinkerStationRecipe> LOADER = RecordLoadable.create(ContextKey.ID.requiredField(), MODIFIER_FIELD, INGREDIENT_FIELD, REPAIR_AMOUNT_FIELD, ModifierRepairTinkerStationRecipe::new);
 
   @Getter
-  private final ResourceLocation id;
+  private final Identifier id;
   @Getter
   private final ModifierId modifier;
   @Getter
@@ -147,7 +147,7 @@ public class ModifierRepairTinkerStationRecipe implements ITinkerStationRecipe, 
 
   @Getter
   static class DisplayRecipe implements IDisplayCraftingTinkering {
-    private final ResourceLocation id;
+    private final Identifier id;
     private final ModifierId modifier;
     private final int repairAmount;
     private final Component tooltip;
@@ -156,7 +156,7 @@ public class ModifierRepairTinkerStationRecipe implements ITinkerStationRecipe, 
     private final List<ItemStack> toolWithoutModifier;
     private final List<ItemStack> toolWithModifier;
 
-    public DisplayRecipe(ResourceLocation id, IModifierRepairRecipe recipe, boolean isCrafting) {
+    public DisplayRecipe(Identifier id, IModifierRepairRecipe recipe, boolean isCrafting) {
       this.id = id;
       this.modifier = recipe.getModifier();
       this.repairAmount = recipe.getRepairAmount();

@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
@@ -22,7 +22,7 @@ import java.util.List;
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class DisplayMeltingRecipe implements IDisplayableMeltingRecipe {
-  private final ResourceLocation recipeId;
+  private final Identifier recipeId;
   private final List<ItemStack> inputs;
   private final List<FluidStack> outputs;
   private final List<List<FluidStack>> outputWithByproducts;
@@ -41,7 +41,7 @@ public class DisplayMeltingRecipe implements IDisplayableMeltingRecipe {
   /* Builder */
 
   /** Creates a new builder instance */
-  public static Builder id(ResourceLocation id) {
+  public static Builder id(Identifier id) {
     return new Builder(id);
   }
 
@@ -49,7 +49,7 @@ public class DisplayMeltingRecipe implements IDisplayableMeltingRecipe {
   @Accessors(fluent = true)
   @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
   public static class Builder {
-    private final ResourceLocation id;
+    private final Identifier id;
     private List<ItemStack> inputs;
     /** List of output options. Size should match {@link #inputs(List)} for focus linking. */
     private List<FluidStack> outputs;

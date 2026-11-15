@@ -81,11 +81,11 @@ public enum PlaceFireModule implements ModifierModule, EntityInteractionModifier
     if (tool.getHook(ToolHooks.INTERACTION).canInteract(tool, modifier.getId(), source) && target instanceof Creeper creeper) {
       Level level = player.level();
       level.playSound(player, creeper.getX(), creeper.getY(), creeper.getZ(), SoundEvents.FLINTANDSTEEL_USE, creeper.getSoundSource(), 1.0F, level.random.nextFloat() * 0.4F + 0.8F);
-      if (!level.isClientSide) {
+      if (!level.isClientSide()) {
         creeper.ignite();
         ToolDamageUtil.damageAnimated(tool, 1, player, source.getSlot(hand), modifier.getId());
       }
-      return InteractionResult.sidedSuccess(level.isClientSide);
+      return InteractionResult.sidedSuccess(level.isClientSide());
     }
     return InteractionResult.PASS;
   }
@@ -165,7 +165,7 @@ public enum PlaceFireModule implements ModifierModule, EntityInteractionModifier
       didIgnite = ignite(world, pos, state, sideHit, horizontalFacing, player);
       if (didIgnite && ToolDamageUtil.damage(tool, 1, player, stack, modifier.getId())) {
         // broadcastBreakEvent removed in 1.21; item break animation handled internally by hurtAndBreak
-        return InteractionResult.sidedSuccess(world.isClientSide);
+        return InteractionResult.sidedSuccess(world.isClientSide());
       }
     }
     // ignite the edges, if any worked return success
@@ -179,7 +179,7 @@ public enum PlaceFireModule implements ModifierModule, EntityInteractionModifier
       }
     }
     // when targeting fire, return true so left click interact does not continue to run
-    return didIgnite || targetingFire ? InteractionResult.sidedSuccess(world.isClientSide) : InteractionResult.PASS;
+    return didIgnite || targetingFire ? InteractionResult.sidedSuccess(world.isClientSide()) : InteractionResult.PASS;
   }
 
   @Nullable

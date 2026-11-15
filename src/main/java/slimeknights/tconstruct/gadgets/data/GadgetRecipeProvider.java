@@ -1,14 +1,14 @@
 package slimeknights.tconstruct.gadgets.data;
 
-import net.minecraft.advancements.Criterion;
-import net.minecraft.advancements.critereon.InventoryChangeTrigger;
+import net.minecraft.advancements.triggers.Criterion;
+import net.minecraft.advancements.triggers.InventoryChangeTrigger;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.data.recipes.SimpleCookingRecipeBuilder;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
@@ -178,7 +178,7 @@ public class GadgetRecipeProvider extends BaseRecipeProvider {
                               .unlockedBy("has_item", has(input))
                               .save(consumer, wrap(id(output), folder, "_campfire"));
     // furnace is 200 ticks
-    ResourceLocation outputId = id(output);
+    Identifier outputId = id(output);
     Criterion<InventoryChangeTrigger.TriggerInstance> criteria = has(input);
     SimpleCookingRecipeBuilder.smelting(Ingredient.of(input), RecipeCategory.FOOD, output, experience, 200)
                               .unlockedBy("has_item", criteria)

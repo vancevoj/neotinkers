@@ -5,7 +5,7 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.TooltipFlag;
@@ -40,7 +40,7 @@ public enum BannerModule implements ModifierModule, DisplayNameModifierHook, Too
   public static final String KEY_DYE = "dye";
   /** Key for a pattern color, as a 24 bit integer */
   public static final String KEY_COLOR = "color";
-  /** Key for a pattern identifier; stored as old 1.20 hash string, TODO(neoport): migrate to ResourceLocation path */
+  /** Key for a pattern identifier; stored as old 1.20 hash string, TODO(neoport): migrate to Identifier path */
   public static final String KEY_PATTERN = "pattern";
   /** Tooltip key saying hold shift for patterns */
   private static final Component HOLD_SHIFT = TConstruct.makeTranslation("modifier", "banner.hold_shift").withStyle(ChatFormatting.GRAY);
@@ -73,7 +73,7 @@ public enum BannerModule implements ModifierModule, DisplayNameModifierHook, Too
         ListTag patterns = tool.getPersistentData().getList(patternKey(modifier.getId()), ListTag.TAG_COMPOUND);
         for (int i = 0; i < patterns.size(); i++) {
           // TODO(neoport): BannerPattern.byHash() removed in 1.21.1; BannerPattern is now a data-driven registry.
-          // KEY_PATTERN stores old 1.20 hash strings. Need to migrate storage to ResourceLocation keys
+          // KEY_PATTERN stores old 1.20 hash strings. Need to migrate storage to Identifier keys
           // and look up via RegistryAccess. Until then tooltip pattern lines are suppressed.
           @SuppressWarnings("unused") CompoundTag tag = patterns.getCompound(i);
         }
@@ -84,12 +84,12 @@ public enum BannerModule implements ModifierModule, DisplayNameModifierHook, Too
   }
 
   /** Gets the key for the cache used in the model */
-  public static ResourceLocation cacheKey(ModifierId modifier) {
+  public static Identifier cacheKey(ModifierId modifier) {
     return modifier.withSuffix("_cache");
   }
 
   /** Gets the key for the pattern list in NBT */
-  public static ResourceLocation patternKey(ModifierId modifier) {
+  public static Identifier patternKey(ModifierId modifier) {
     return modifier.withSuffix("_patterns");
   }
 
@@ -108,7 +108,7 @@ public enum BannerModule implements ModifierModule, DisplayNameModifierHook, Too
       // add in the base pattern, it only exists on shield NBT, but the recipe comes from banners
       // TODO(neoport): BuiltInRegistries.BANNER_PATTERN removed; BannerPattern is now data-driven.
       // BannerPatterns.BASE is ResourceKey<BannerPattern>; getHashname() gone.
-      // Store the base pattern key as its ResourceLocation path ("base") until NBT format migrated to RL keys.
+      // Store the base pattern key as its Identifier path ("base") until NBT format migrated to RL keys.
       CompoundTag basePattern = new CompoundTag();
       basePattern.putString(KEY_PATTERN, BannerPatterns.BASE.location().getPath());
       basePattern.putInt(KEY_DYE, dye.getId());

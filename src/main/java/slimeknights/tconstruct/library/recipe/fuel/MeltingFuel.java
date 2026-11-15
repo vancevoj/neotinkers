@@ -1,7 +1,7 @@
 package slimeknights.tconstruct.library.recipe.fuel;
 
 import lombok.Getter;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -38,13 +38,13 @@ public class MeltingFuel implements ICustomOutputRecipe<IFluidContainer> {
       return fuel;
     });
 
-  private final ResourceLocation id;
+  private final Identifier id;
   private final FluidIngredient input;
   private final int duration;
   private final int temperature;
   private final int rate;
 
-  public MeltingFuel(ResourceLocation id, FluidIngredient input, int duration, int temperature, int rate) {
+  public MeltingFuel(Identifier id, FluidIngredient input, int duration, int temperature, int rate) {
     this.id = id;
     this.input = input;
     this.duration = duration;

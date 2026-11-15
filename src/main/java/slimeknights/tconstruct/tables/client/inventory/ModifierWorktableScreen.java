@@ -1,10 +1,10 @@
 package slimeknights.tconstruct.tables.client.inventory;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
@@ -32,7 +32,7 @@ public class ModifierWorktableScreen extends ToolTableScreen<ModifierWorktableBl
   protected static final Component TITLE = TConstruct.makeTranslation("gui", "modifier_worktable.title");
   protected static final Component TABLE_INFO = TConstruct.makeTranslation("gui", "modifier_worktable.info");
   private static final Component MODIFIERS = TConstruct.makeTranslation("gui", "tinker_station.modifiers");
-  private static final ResourceLocation BACKGROUND = TConstruct.getResource("textures/gui/worktable.png");
+  private static final Identifier BACKGROUND = TConstruct.getResource("textures/gui/worktable.png");
   private static final Pattern[] INPUT_PATTERNS = {
     new Pattern(TConstruct.MOD_ID, "pickaxe"),
     new Pattern(TConstruct.MOD_ID, "ingot"),
@@ -112,7 +112,7 @@ public class ModifierWorktableScreen extends ToolTableScreen<ModifierWorktableBl
   }
 
   @Override
-  protected void renderBg(GuiGraphics graphics, float partialTicks, int mouseX, int mouseY) {
+  protected void renderBg(GuiGraphicsExtractor graphics, float partialTicks, int mouseX, int mouseY) {
     this.drawBackground(graphics, BACKGROUND);
 
     // draw scrollbar
@@ -160,7 +160,7 @@ public class ModifierWorktableScreen extends ToolTableScreen<ModifierWorktableBl
   }
 
   @Override
-  protected void renderTooltip(GuiGraphics graphics, int mouseX, int mouseY) {
+  protected void renderTooltip(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
     super.renderTooltip(graphics, mouseX, mouseY);
 
     // determime which button we are hovering
@@ -169,14 +169,14 @@ public class ModifierWorktableScreen extends ToolTableScreen<ModifierWorktableBl
       if (!buttons.isEmpty()) {
         int index = getButtonAt(mouseX, mouseY);
         if (index >= 0) {
-          graphics.renderTooltip(this.font, buttons.get(index).getDisplayName(), mouseX, mouseY);
+          graphics.setTooltipForNextFrame(this.font, buttons.get(index).getDisplayName(), mouseX, mouseY);
         }
       }
     }
   }
 
   /** Draw backgrounds for all modifiers */
-  private void drawModifierBackgrounds(GuiGraphics graphics, int mouseX, int mouseY, int left, int top) {
+  private void drawModifierBackgrounds(GuiGraphicsExtractor graphics, int mouseX, int mouseY, int left, int top) {
     if (tile != null) {
       int selectedIndex = this.tile.getSelectedIndex();
       int max = Math.min(this.modifierIndexOffset + MAX_MODIFIER, this.getModifierCount());
@@ -196,7 +196,7 @@ public class ModifierWorktableScreen extends ToolTableScreen<ModifierWorktableBl
   }
 
   /** Draw slot icons for all patterns */
-  private void drawModifierIcons(GuiGraphics graphics, int left, int top) {
+  private void drawModifierIcons(GuiGraphicsExtractor graphics, int left, int top) {
     // use block texture list
     if (tile != null) {
       assert this.minecraft != null;

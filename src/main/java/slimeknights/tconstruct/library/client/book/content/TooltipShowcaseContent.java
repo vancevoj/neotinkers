@@ -1,7 +1,7 @@
 package slimeknights.tconstruct.library.client.book.content;
 
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import slimeknights.mantle.client.book.data.BookData;
 import slimeknights.mantle.client.book.data.content.ContentShowcase;
 import slimeknights.mantle.client.screen.book.BookScreen;
@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TooltipShowcaseContent extends ContentShowcase {
-  public static final transient ResourceLocation ID = TConstruct.getResource("showcase");
+  public static final transient Identifier ID = TConstruct.getResource("showcase");
 
   public List<Component> tooltip = null;
 

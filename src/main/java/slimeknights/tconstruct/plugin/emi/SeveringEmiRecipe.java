@@ -5,7 +5,7 @@ import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.WidgetHolder;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import slimeknights.mantle.recipe.ingredient.EntityIngredient;
@@ -23,7 +23,7 @@ import java.util.List;
  */
 public class SeveringEmiRecipe extends BasicEmiRecipe {
   /** JEI tinker station GUI texture; the severing layout lives at sheet (0,78) size 100x38 */
-  private static final ResourceLocation BACKGROUND_LOC = TConstruct.getResource("textures/gui/jei/tinker_station.png");
+  private static final Identifier BACKGROUND_LOC = TConstruct.getResource("textures/gui/jei/tinker_station.png");
 
   public SeveringEmiRecipe(EmiRecipeCategory category, RecipeHolder<SeveringRecipe> holder) {
     super(category, holder.id(), 100, 38);

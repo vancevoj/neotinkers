@@ -2,13 +2,13 @@ package slimeknights.tconstruct.library.data;
 
 import com.google.common.hash.Hashing;
 import lombok.RequiredArgsConstructor;
-import net.minecraft.Util;
+import net.minecraft.util.Util;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.PackOutput.Target;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import slimeknights.mantle.util.JsonHelper;
 import slimeknights.tconstruct.TConstruct;
 
@@ -37,12 +37,12 @@ public abstract class GenericStringProvider implements DataProvider {
   }
 
   /** Localizes the given resource to the folder */
-  public ResourceLocation localize(ResourceLocation name) {
+  public Identifier localize(Identifier name) {
     return JsonHelper.localize(name, folder, '.' + extension);
   }
 
   /** Saves the given string to the given location */
-  protected CompletableFuture<?> saveString(CachedOutput cache, ResourceLocation location, String data) {
+  protected CompletableFuture<?> saveString(CachedOutput cache, Identifier location, String data) {
     return CompletableFuture.runAsync(() -> {
       try {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();

@@ -1,5 +1,4 @@
 {
-  "render_type": "minecraft:cutout",
   "loader": "tconstruct:fluid_texture",
   "parent": "block/block",
   "textures": {

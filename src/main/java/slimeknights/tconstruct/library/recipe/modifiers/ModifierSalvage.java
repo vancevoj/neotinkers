@@ -1,7 +1,7 @@
 package slimeknights.tconstruct.library.recipe.modifiers;
 
 import lombok.Getter;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeInput;
@@ -38,7 +38,7 @@ public class ModifierSalvage implements ICustomOutputRecipe<RecipeInput> {
     ModifierSalvage::new);
 
   @Getter
-  protected final ResourceLocation id;
+  protected final Identifier id;
   /** Ingredient determining tools matched by this */
   protected final Ingredient toolIngredient;
   /** Max size of the tool for this modifier. If the tool size is smaller, the salvage bonus will be reduced */
@@ -52,7 +52,7 @@ public class ModifierSalvage implements ICustomOutputRecipe<RecipeInput> {
   /** Slots restored by this recipe, if null no slots are restored */
   protected final SlotCount slots;
 
-  public ModifierSalvage(ResourceLocation id, Ingredient toolIngredient, int maxToolSize, ModifierId modifier, IntRange level, SlotCount slots) {
+  public ModifierSalvage(Identifier id, Ingredient toolIngredient, int maxToolSize, ModifierId modifier, IntRange level, SlotCount slots) {
     this.id = id;
     this.toolIngredient = toolIngredient;
     this.maxToolSize = maxToolSize;

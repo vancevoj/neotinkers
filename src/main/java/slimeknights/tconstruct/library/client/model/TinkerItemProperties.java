@@ -4,11 +4,11 @@ import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.client.renderer.item.ItemPropertyFunction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.level.ItemLike;
 import net.neoforged.neoforge.common.ItemAbilities;
 import slimeknights.tconstruct.TConstruct;
@@ -24,14 +24,14 @@ import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 @SuppressWarnings("deprecation")
 public class TinkerItemProperties {
   /** ID for broken property */
-  private static final ResourceLocation BROKEN_ID = TConstruct.getResource("broken");
+  private static final Identifier BROKEN_ID = TConstruct.getResource("broken");
   /** Property declaring broken */
   private static final ItemPropertyFunction BROKEN = (stack, level, entity, seed) -> {
     return ToolDamageUtil.isBroken(stack) ? 1 : 0;
   };
 
   /** ID for ammo property */
-  private static final ResourceLocation AMMO_ID = TConstruct.getResource("ammo");
+  private static final Identifier AMMO_ID = TConstruct.getResource("ammo");
   /** ID of fireworks rocket for NBT check */
   private static final String FIREWORKS_ID = "minecraft:firework_rocket";
   /** Int declaring ammo type */
@@ -51,27 +51,27 @@ public class TinkerItemProperties {
   };
 
   /** ID for the pulling property */
-  private static final ResourceLocation CHARGING_ID = TConstruct.getResource("charging");
+  private static final Identifier CHARGING_ID = TConstruct.getResource("charging");
   /** Boolean indicating the bow is pulling */
   private static final ItemPropertyFunction CHARGING = (stack, level, holder, seed) -> {
     if (holder != null && holder.isUsingItem() && holder.getUseItem() == stack) {
-      UseAnim anim = stack.getUseAnimation();
-      if (anim == UseAnim.BLOCK) {
+      ItemUseAnimation anim = stack.getUseAnimation();
+      if (anim == ItemUseAnimation.BLOCK) {
         return ModifierUtil.checkPersistentPresent(stack, ModifiableLauncherItem.KEY_DRAWBACK_AMMO) ? 2.5f : 2;
       }
       // TODO 1.21: space this out a bit more
-      if (anim == UseAnim.SPEAR) {
+      if (anim == ItemUseAnimation.TRIDENT) {
         // shouldn't need to worry about arrows on spearing, everything supporting arrows uses just bow or block
         return 1.75f;
       }
-      if (anim != UseAnim.EAT && anim != UseAnim.DRINK) {
+      if (anim != ItemUseAnimation.EAT && anim != ItemUseAnimation.DRINK) {
         return ModifierUtil.checkPersistentPresent(stack, ModifiableLauncherItem.KEY_DRAWBACK_AMMO) ? 1.5f : 1;
       }
     }
     return 0;
   };
   /** ID for the pull property */
-  private static final ResourceLocation CHARGE_ID = TConstruct.getResource("charge");
+  private static final Identifier CHARGE_ID = TConstruct.getResource("charge");
   /** Property for bow pull amount */
   private static final ItemPropertyFunction CHARGE = (stack, level, holder, seed) -> {
     if (holder == null || holder.getUseItem() != stack) {
@@ -81,7 +81,7 @@ public class TinkerItemProperties {
     return drawtime == -1 ? 0 : (float)(stack.getUseDuration(holder) - holder.getUseItemRemainingTicks()) / drawtime;
   };
   /** ID for the cast fishing rods */
-  private static final ResourceLocation CAST_ID = TConstruct.getResource("cast");
+  private static final Identifier CAST_ID = TConstruct.getResource("cast");
   /** Property for casting a fishing rod */
   private static final ItemPropertyFunction CAST = (stack, level, holder, seed) -> {
     // must be a fishing rod, and the player must be fishing

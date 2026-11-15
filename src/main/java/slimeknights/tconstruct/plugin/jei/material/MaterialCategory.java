@@ -17,12 +17,12 @@ import mezz.jei.api.recipe.category.AbstractRecipeCategory;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.navigation.ScreenPosition;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
@@ -65,7 +65,7 @@ public class MaterialCategory extends AbstractRecipeCategory<IDisplayMaterialRec
   /** Tooltip for the fluid value */
   private static final Component AMOUNT_TOOLTIP = TConstruct.makeTranslation("jei", "materials.amount.tooltip");
   /** Texture for drawables */
-  protected static final ResourceLocation BACKGROUND_LOC = AbstractMeltingCategory.BACKGROUND_LOC;
+  protected static final Identifier BACKGROUND_LOC = AbstractMeltingCategory.BACKGROUND_LOC;
   /** Name of the fluid slot to find for the amount string */
   private static final String FLUID_SLOT = "fluid";
 
@@ -114,12 +114,12 @@ public class MaterialCategory extends AbstractRecipeCategory<IDisplayMaterialRec
       .toList());
 
   @Override
-  public ResourceLocation getRegistryName(IDisplayMaterialRecipe recipe) {
+  public Identifier getRegistryName(IDisplayMaterialRecipe recipe) {
     return recipe.getRecipeId();
   }
 
   @Override
-  public void draw(IDisplayMaterialRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics graphics, double mouseX, double mouseY) {
+  public void draw(IDisplayMaterialRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphicsExtractor graphics, double mouseX, double mouseY) {
     if (!recipe.getFluids().isEmpty()) {
       fluidBar.draw(graphics, 3, 1);
     }
@@ -211,11 +211,11 @@ public class MaterialCategory extends AbstractRecipeCategory<IDisplayMaterialRec
     }
 
     @Override
-    public void drawWidget(GuiGraphics graphics, double mouseX, double mouseY) {
+    public void drawWidget(GuiGraphicsExtractor graphics, double mouseX, double mouseY) {
       FluidStack fluid = fluidSlot.getDisplayedIngredient(NeoForgeTypes.FLUID_STACK).orElse(FluidStack.EMPTY);
       if (!fluid.isEmpty()) {
         Component string = Component.translatable(KEY_AMOUNT, fluid.getAmount());
-        graphics.drawString(font, string, 0, 0, Color.GRAY.getRGB(), false);
+        graphics.text(font, string, 0, 0, Color.GRAY.getRGB(), false);
       }
     }
 

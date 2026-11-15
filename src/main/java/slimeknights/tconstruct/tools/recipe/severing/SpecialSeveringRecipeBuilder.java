@@ -1,12 +1,13 @@
 package slimeknights.tconstruct.tools.recipe.severing;
 
+import net.minecraft.world.entity.EntityTypes;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.recipes.RecipeOutput;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -45,7 +46,7 @@ public class SpecialSeveringRecipeBuilder extends AbstractRecipeBuilder<SpecialS
   }
 
   @Override
-  public void save(RecipeOutput output, ResourceLocation id) {
+  public void save(RecipeOutput output, Identifier id) {
     AdvancementHolder advancement = buildOptionalAdvancement(id, "modifier");
     output.accept(id, new Finished(id, baseChance, lootingBonus), advancement);
   }
@@ -56,8 +57,8 @@ public class SpecialSeveringRecipeBuilder extends AbstractRecipeBuilder<SpecialS
    * overridden so the loadable serializer wired by the builder is used to encode the recipe.
    */
   private class Finished extends SeveringRecipe {
-    public Finished(ResourceLocation id, float baseChance, float lootingBonus) {
-      super(id, EntityIngredient.of(EntityType.PLAYER), ItemOutput.fromItem(Items.AIR), baseChance, lootingBonus);
+    public Finished(Identifier id, float baseChance, float lootingBonus) {
+      super(id, EntityIngredient.of(EntityTypes.PLAYER), ItemOutput.fromItem(Items.AIR), baseChance, lootingBonus);
     }
 
     @Override

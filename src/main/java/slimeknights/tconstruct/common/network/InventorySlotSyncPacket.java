@@ -71,7 +71,7 @@ public class InventorySlotSyncPacket implements IThreadsafePacket {
             container.setItem(packet.slot, packet.itemStack);
             updated = true;
           }
-        } else if (te != null && world.getCapability(Capabilities.ItemHandler.BLOCK, packet.pos, null) instanceof IItemHandlerModifiable modifiable) {
+        } else if (te != null && world.getCapability(Capabilities.Item.BLOCK, packet.pos, null) instanceof IItemHandlerModifiable modifiable) {
           if (packet.slot >= 0 && packet.slot < modifiable.getSlots()) {
             modifiable.setStackInSlot(packet.slot, packet.itemStack);
             updated = true;

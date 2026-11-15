@@ -3,9 +3,9 @@ package slimeknights.tconstruct.tools.modules.cosmetic;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.armortrim.TrimMaterial;
-import net.minecraft.world.item.armortrim.TrimPattern;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.equipment.trim.TrimMaterial;
+import net.minecraft.world.item.equipment.trim.TrimPattern;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.json.NoFieldRecordLoadable;
@@ -63,9 +63,9 @@ public class TrimModule implements ModifierModule, DisplayNameModifierHook, Modi
         return original;
       }
       formatted = original;
-      TrimMaterial material = access.registryOrThrow(Registries.TRIM_MATERIAL).get(ResourceLocation.tryParse(trimMaterial));
+      TrimMaterial material = access.lookupOrThrow(Registries.TRIM_MATERIAL).get(Identifier.tryParse(trimMaterial));
       // if pattern is not passed, use the modifier name directly. Lets us trim items without patterns
-      TrimPattern pattern = trimPattern.isEmpty() ? null : access.registryOrThrow(Registries.TRIM_PATTERN).get(ResourceLocation.tryParse(trimPattern));
+      TrimPattern pattern = trimPattern.isEmpty() ? null : access.lookupOrThrow(Registries.TRIM_PATTERN).get(Identifier.tryParse(trimPattern));
       Component patternComponent = pattern != null ? pattern.description() : Component.translatable(entry.getModifier().getTranslationKey());
       if (material != null) {
           // format is "___ Armor Trim (___ Material)"
@@ -89,12 +89,12 @@ public class TrimModule implements ModifierModule, DisplayNameModifierHook, Modi
   /* Helpers */
 
   /** Gets the pattern key for the given modifier ID */
-  public static ResourceLocation patternKey(ModifierId modifier) {
+  public static Identifier patternKey(ModifierId modifier) {
     return modifier.withSuffix("_pattern");
   }
 
   /** Gets the material key for the given modifier ID */
-  public static ResourceLocation materialKey(ModifierId modifier) {
+  public static Identifier materialKey(ModifierId modifier) {
     return modifier.withSuffix("_material");
   }
 }

@@ -1,6 +1,6 @@
 package slimeknights.tconstruct.library.tools.definition.module.weapon;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
@@ -27,7 +27,7 @@ public record SweepWeaponAttack(LevelingValue ranges) implements MeleeHitToolHoo
   public static final RecordLoadable<SweepWeaponAttack> LOADER = RecordLoadable.create(LevelingValue.ADD_TO_LEVEL.defaultField("range", LevelingValue.LEVEL, true, SweepWeaponAttack::ranges), SweepWeaponAttack::new);
   private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<SweepWeaponAttack>defaultHooks(ToolHooks.MELEE_HIT);
   /** Volatile data float for the percentage of sweep damage to deal */
-  public static final ResourceLocation SWEEP_PERCENT = TConstruct.getResource("sweep_percent");
+  public static final Identifier SWEEP_PERCENT = TConstruct.getResource("sweep_percent");
 
   public SweepWeaponAttack(float range) {
     this(new LevelingValue(range, 1));

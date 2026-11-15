@@ -1,6 +1,6 @@
 package slimeknights.tconstruct.world.client;
 
-import net.minecraft.Util;
+import net.minecraft.util.Util;
 import net.minecraft.core.BlockPos;
 import slimeknights.tconstruct.world.block.FoliageType;
 

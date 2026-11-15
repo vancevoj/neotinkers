@@ -1,6 +1,5 @@
 {
   "parent": "block/block",
-  "render_type": "minecraft:cutout",
   "textures": {
     "particle": "tconstruct:block/foundry/casting/basin_side",
     "side":     "tconstruct:block/foundry/casting/basin_side",

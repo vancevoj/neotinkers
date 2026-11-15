@@ -1,6 +1,6 @@
 package slimeknights.tconstruct.library.materials;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import slimeknights.mantle.data.loadable.Loadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
@@ -110,7 +110,7 @@ public interface IMaterialRegistry {
   Loadable<MaterialStatType<?>> getStatTypeLoader();
 
   /** Gets a lit of all material stat IDs */
-  default Collection<ResourceLocation> getAllStatTypeIds() {
+  default Collection<Identifier> getAllStatTypeIds() {
     return Collections.emptyList();
   }
 

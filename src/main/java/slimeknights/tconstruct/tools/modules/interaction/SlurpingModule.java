@@ -9,7 +9,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.fluids.FluidStack;
@@ -86,7 +86,7 @@ public record SlurpingModule(LevelingValue strength, LevelingInt duration) imple
       }
       addFluidParticles(entity, fluid, 16);
       // apply effect
-      if (!entity.level().isClientSide) {
+      if (!entity.level().isClientSide()) {
         Player player = asPlayer(entity);
         int consumed = slurp(fluid, modifier, entity, player, FluidAction.EXECUTE);
         if (consumed > 0 && consumesResources(player)) {
@@ -138,8 +138,8 @@ public record SlurpingModule(LevelingValue strength, LevelingInt duration) imple
   }
 
   @Override
-  public UseAnim getUseAction(IToolStackView tool, ModifierEntry modifier) {
-    return UseAnim.DRINK;
+  public ItemUseAnimation getUseAction(IToolStackView tool, ModifierEntry modifier) {
+    return ItemUseAnimation.DRINK;
   }
 
   @Override
@@ -205,7 +205,7 @@ public record SlurpingModule(LevelingValue strength, LevelingInt duration) imple
     IToolStackView replacement = context.getReplacementTool();
     // modifier list changing is a good heuristic for tool changing, avoids deleting during the slurp
     Level level = context.getLevel();
-    if (!level.isClientSide && (replacement == null || replacement.getItem() != tool.getItem() || !replacement.getModifiers().equals(tool.getModifiers()))) {
+    if (!level.isClientSide() && (replacement == null || replacement.getItem() != tool.getItem() || !replacement.getModifiers().equals(tool.getModifiers()))) {
       tool.getPersistentData().remove(modifier.getId());
     }
   }

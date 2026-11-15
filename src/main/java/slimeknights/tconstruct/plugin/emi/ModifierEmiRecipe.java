@@ -8,7 +8,7 @@ import dev.emi.emi.api.widget.WidgetHolder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.crafting.RecipeHolder;
@@ -29,7 +29,7 @@ import java.util.List;
  */
 public class ModifierEmiRecipe extends BasicEmiRecipe {
   /** Background texture, matches the JEI background (textures/gui/jei/tinker_station.png, 128x77 at 0,0). */
-  private static final ResourceLocation BACKGROUND_LOC = TConstruct.getResource("textures/gui/jei/tinker_station.png");
+  private static final Identifier BACKGROUND_LOC = TConstruct.getResource("textures/gui/jei/tinker_station.png");
 
   // translation keys (mirror JEI)
   private static final Component TEXT_INCREMENTAL = TConstruct.makeTranslation("jei", "modifiers.incremental");
@@ -104,7 +104,7 @@ public class ModifierEmiRecipe extends BasicEmiRecipe {
       widgets.addDrawable(3, 3, 124, 10, (graphics, mouseX, mouseY, delta) -> {
         Font font = Minecraft.getInstance().font;
         int x = (124 - font.width(name)) / 2;
-        graphics.drawString(font, name, x, 1, -1, true);
+        graphics.text(font, name, x, 1, -1, true);
       });
     }
 
@@ -127,7 +127,7 @@ public class ModifierEmiRecipe extends BasicEmiRecipe {
       Component text = levelText;
       widgets.addDrawable(0, 0, 128, 77, (graphics, mouseX, mouseY, delta) -> {
         Font font = Minecraft.getInstance().font;
-        graphics.drawString(font, text, 86 - font.width(text) / 2, 16, Color.GRAY.getRGB(), false);
+        graphics.text(font, text, 86 - font.width(text) / 2, 16, Color.GRAY.getRGB(), false);
       });
     }
 

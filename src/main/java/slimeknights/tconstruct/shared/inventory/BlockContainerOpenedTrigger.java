@@ -2,12 +2,12 @@ package slimeknights.tconstruct.shared.inventory;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.advancements.Criterion;
+import net.minecraft.advancements.triggers.Criterion;
 import net.minecraft.advancements.critereon.ContextAwarePredicate;
-import net.minecraft.advancements.critereon.EntityPredicate;
-import net.minecraft.advancements.critereon.SimpleCriterionTrigger;
+import net.minecraft.advancements.predicates.entity.EntityPredicate;
+import net.minecraft.advancements.triggers.SimpleCriterionTrigger;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -20,10 +20,10 @@ import java.util.Optional;
 
 /** Criteria that triggers when a container is opened */
 public class BlockContainerOpenedTrigger extends SimpleCriterionTrigger<BlockContainerOpenedTrigger.Instance> {
-  private static final ResourceLocation ID = TConstruct.getResource("block_container_opened");
+  private static final Identifier ID = TConstruct.getResource("block_container_opened");
 
   /** Gets the registry ID for this trigger, used during registration */
-  public ResourceLocation getId() {
+  public Identifier getId() {
     return ID;
   }
 

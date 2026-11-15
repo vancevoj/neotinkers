@@ -8,7 +8,7 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import slimeknights.mantle.util.JsonHelper;
 import slimeknights.tconstruct.TConstruct;
 
@@ -17,7 +17,7 @@ import java.lang.reflect.Type;
 /** Sprite transformer that applies the given color mapping to recolor each pixel */
 @RequiredArgsConstructor
 public class RecolorSpriteTransformer implements IRecolorSpriteTransformer {
-  public static final ResourceLocation NAME = TConstruct.getResource("recolor_sprite");
+  public static final Identifier NAME = TConstruct.getResource("recolor_sprite");
   public static final Deserializer DESERIALIZER = new Deserializer();
 
   /** Color mapping to apply */

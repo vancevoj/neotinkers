@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableSet;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount.BinomialWithBonusCount;
@@ -26,7 +26,7 @@ import java.util.Set;
 /** Boosts drop rates based on modifier level */
 public class ModifierBonusLootFunction extends LootItemConditionalFunction {
   /** Codec for the modifier ID field, stored as a resource location to match the legacy JSON */
-  private static final Codec<ModifierId> MODIFIER_CODEC = ResourceLocation.CODEC.xmap(ModifierId::new, id -> id);
+  private static final Codec<ModifierId> MODIFIER_CODEC = Identifier.CODEC.xmap(ModifierId::new, id -> id);
 
   /** Codec for this function */
   public static final MapCodec<ModifierBonusLootFunction> CODEC = RecordCodecBuilder.mapCodec(inst -> commonFields(inst).and(inst.group(

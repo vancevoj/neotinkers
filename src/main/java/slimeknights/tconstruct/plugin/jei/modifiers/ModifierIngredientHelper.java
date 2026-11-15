@@ -3,7 +3,7 @@ package slimeknights.tconstruct.plugin.jei.modifiers;
 import mezz.jei.api.ingredients.IIngredientHelper;
 import mezz.jei.api.ingredients.IIngredientType;
 import mezz.jei.api.ingredients.subtypes.UidContext;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.ItemStack;
 import slimeknights.tconstruct.common.TinkerTags;
@@ -43,7 +43,7 @@ public class ModifierIngredientHelper implements IIngredientHelper<ModifierEntry
   }
 
   @Override
-  public ResourceLocation getResourceLocation(ModifierEntry entry) {
+  public Identifier getResourceLocation(ModifierEntry entry) {
     return entry.getId();
   }
 
@@ -98,7 +98,7 @@ public class ModifierIngredientHelper implements IIngredientHelper<ModifierEntry
   /* Tags */
 
   @Override
-  public Stream<ResourceLocation> getTagStream(ModifierEntry entry) {
+  public Stream<Identifier> getTagStream(ModifierEntry entry) {
     return ModifierManager.getTagKeys(entry.getId()).map(TagKey::location);
   }
 

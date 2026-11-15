@@ -1,5 +1,6 @@
 package slimeknights.tconstruct.gadgets.item;
 
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -12,7 +13,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.HumanoidArm;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -54,7 +55,7 @@ public class FancyArmorStandItem extends Item {
     Level level = context.getLevel();
     BlockPos pos = new BlockPlaceContext(context).getClickedPos();
     Vec3 center = Vec3.atBottomCenterOf(pos);
-    AABB bounds = EntityType.ARMOR_STAND.getDimensions().makeBoundingBox(center.x(), center.y(), center.z());
+    AABB bounds = EntityTypes.ARMOR_STAND.getDimensions().makeBoundingBox(center.x(), center.y(), center.z());
     if (!level.noCollision(null, bounds) || !level.getEntities(null, bounds).isEmpty()) {
       return InteractionResult.FAIL;
     }
@@ -63,7 +64,7 @@ public class FancyArmorStandItem extends Item {
     if (level instanceof ServerLevel server) {
       Player player = context.getPlayer();
       Consumer<FancyArmorStandEntity> consumer = EntityType.createDefaultStackConfig(server, stack, player);
-      FancyArmorStandEntity stand = TinkerGadgets.armorStandEntity.get().create(server, consumer, pos, MobSpawnType.SPAWN_EGG, true, true);
+      FancyArmorStandEntity stand = TinkerGadgets.armorStandEntity.get().create(server, consumer, pos, EntitySpawnReason.SPAWN_EGG, true, true);
       if (stand == null) {
         return InteractionResult.FAIL;
       }
@@ -81,6 +82,6 @@ public class FancyArmorStandItem extends Item {
     }
 
     stack.shrink(1);
-    return InteractionResult.sidedSuccess(level.isClientSide);
+    return InteractionResult.sidedSuccess(level.isClientSide());
   }
 }

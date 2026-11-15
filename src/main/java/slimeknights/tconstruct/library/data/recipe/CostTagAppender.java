@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.tags.IntrinsicHolderTagsProvider.IntrinsicTagAppender;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import slimeknights.mantle.Mantle;
@@ -22,21 +22,21 @@ import java.util.function.Function;
 @CanIgnoreReturnValue
 public class CostTagAppender {
   private final String metal;
-  private final ResourceLocation prefix;
+  private final Identifier prefix;
   private final String suffix;
-  private final Function<ResourceLocation,IntrinsicTagAppender<Item>> tag;
+  private final Function<Identifier,IntrinsicTagAppender<Item>> tag;
   private final Map<Integer, IntrinsicTagAppender<Item>> tags = new HashMap<>();
 
   /** Creates a builder for a molten gear */
-  public static CostTagAppender moltenToolMelting(FluidObject<?> fluid, Function<ResourceLocation,IntrinsicTagAppender<Item>> tag) {
-    ResourceLocation id = fluid.getId();
+  public static CostTagAppender moltenToolMelting(FluidObject<?> fluid, Function<Identifier,IntrinsicTagAppender<Item>> tag) {
+    Identifier id = fluid.getId();
     String metal = id.getPath().substring("molten_".length());
     return moltenToolMelting(id.getNamespace(), metal, tag);
   }
 
   /** Creates a builder for a molten gear */
-  public static CostTagAppender moltenToolMelting(String domain, String metal, Function<ResourceLocation,IntrinsicTagAppender<Item>> tag) {
-    return new CostTagAppender(metal, ResourceLocation.fromNamespaceAndPath(domain, "melting/" + metal + "/tools_costing_"), "", tag);
+  public static CostTagAppender moltenToolMelting(String domain, String metal, Function<Identifier,IntrinsicTagAppender<Item>> tag) {
+    return new CostTagAppender(metal, Identifier.fromNamespaceAndPath(domain, "melting/" + metal + "/tools_costing_"), "", tag);
   }
 
   /** Creates a tag for the given cost */
@@ -57,7 +57,7 @@ public class CostTagAppender {
   }
 
   /** Adds the passed items to the tag. */
-  public CostTagAppender add(int cost, boolean optional, ResourceLocation prefix, String... suffixes) {
+  public CostTagAppender add(int cost, boolean optional, Identifier prefix, String... suffixes) {
     IntrinsicTagAppender<Item> tag = tag(cost);
     if (optional) {
       if (suffixes.length == 0) {
@@ -77,14 +77,14 @@ public class CostTagAppender {
 
   /** Adds the passed items by ID with the metal as the prefix */
   public CostTagAppender optionalMetal(int cost, String domain, String... suffixes) {
-    return add(cost, true, ResourceLocation.fromNamespaceAndPath(domain, metal), suffixes);
+    return add(cost, true, Identifier.fromNamespaceAndPath(domain, metal), suffixes);
   }
 
   /** Adds the given optional tag to the builder with the given prefix using our metal */
   public CostTagAppender metalTag(int cost, String prefix, String... names) {
     IntrinsicTagAppender<Item> tag = tag(cost);
     for (String name : names) {
-      tag.addOptionalTag(ResourceLocation.fromNamespaceAndPath(Mantle.COMMON, prefix + name + '/' + metal));
+      tag.addOptionalTag(Identifier.fromNamespaceAndPath(Mantle.COMMON, prefix + name + '/' + metal));
     }
     return this;
   }
@@ -105,7 +105,7 @@ public class CostTagAppender {
   /** Adds common gear items from tags */
   @Internal // we cover everything from the base game that makes sense to melt, you probably want something more specialized if you wish to do stone/wood
   public CostTagAppender minecraft(String metal) {
-    ResourceLocation prefix = ResourceLocation.parse(metal);
+    Identifier prefix = Identifier.parse(metal);
     // we use costs 1 and 3 for compat with tools complement
     // cost 2 isn't needed for any compat for vanilla, but we wish for a combined tag for non-vanilla so we do it for simplicity
     add(1, false, prefix, "shovel");

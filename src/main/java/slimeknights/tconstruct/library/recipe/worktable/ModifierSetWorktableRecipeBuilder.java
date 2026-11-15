@@ -7,7 +7,7 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.data.recipes.RecipeOutput;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -19,7 +19,7 @@ import slimeknights.tconstruct.library.modifiers.ModifierId;
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class ModifierSetWorktableRecipeBuilder extends AbstractSizedIngredientRecipeBuilder<ModifierSetWorktableRecipeBuilder> {
-  private final ResourceLocation dataKey;
+  private final Identifier dataKey;
   @Setter @Accessors(fluent = true)
   private IJsonPredicate<ModifierId> modifierPredicate = ModifierPredicate.ANY;
   private final boolean addToSet;
@@ -27,12 +27,12 @@ public class ModifierSetWorktableRecipeBuilder extends AbstractSizedIngredientRe
   private boolean allowTraits = false;
 
   /** Creates a new recipe for adding to a set */
-  public static ModifierSetWorktableRecipeBuilder setAdding(ResourceLocation dataKey) {
+  public static ModifierSetWorktableRecipeBuilder setAdding(Identifier dataKey) {
     return new ModifierSetWorktableRecipeBuilder(dataKey, true);
   }
 
   /** Creates a new recipe for removing from a set */
-  public static ModifierSetWorktableRecipeBuilder setRemoving(ResourceLocation dataKey) {
+  public static ModifierSetWorktableRecipeBuilder setRemoving(Identifier dataKey) {
     return new ModifierSetWorktableRecipeBuilder(dataKey, false);
   }
 
@@ -59,7 +59,7 @@ public class ModifierSetWorktableRecipeBuilder extends AbstractSizedIngredientRe
   }
 
   @Override
-  public void save(RecipeOutput consumer, ResourceLocation id) {
+  public void save(RecipeOutput consumer, Identifier id) {
     if (inputs.isEmpty()) {
       throw new IllegalStateException("Must have at least one ingredient");
     }

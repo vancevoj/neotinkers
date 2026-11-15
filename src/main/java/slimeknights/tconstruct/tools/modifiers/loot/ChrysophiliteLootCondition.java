@@ -23,7 +23,7 @@ public class ChrysophiliteLootCondition implements LootItemCondition {
 
   @Override
   public boolean test(LootContext context) {
-    return context.getParamOrNull(LootContextParams.THIS_ENTITY) instanceof LivingEntity living && living.getAttributeValue(TinkerAttributes.CHRYSOPHILITE) >= 1;
+    return context.getOptional(LootContextParams.THIS_ENTITY) instanceof LivingEntity living && living.getAttributeValue(TinkerAttributes.CHRYSOPHILITE) >= 1;
   }
 
   @Override

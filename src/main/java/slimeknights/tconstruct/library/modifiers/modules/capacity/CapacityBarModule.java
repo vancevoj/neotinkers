@@ -1,6 +1,6 @@
 package slimeknights.tconstruct.library.modifiers.modules.capacity;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import slimeknights.mantle.data.loadable.field.ContextKey;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.tconstruct.library.json.LevelingInt;
@@ -25,7 +25,7 @@ public class CapacityBarModule extends CapacityBarHook.PersistentDataCapacityBar
   private final LevelingInt capacity;
   @Nullable
   private final INumericToolStat<?> multiplier;
-  public CapacityBarModule(ResourceLocation key, LevelingInt capacity, @Nullable INumericToolStat<?> multiplier) {
+  public CapacityBarModule(Identifier key, LevelingInt capacity, @Nullable INumericToolStat<?> multiplier) {
     super(key);
     this.capacity = capacity;
     this.multiplier = multiplier;

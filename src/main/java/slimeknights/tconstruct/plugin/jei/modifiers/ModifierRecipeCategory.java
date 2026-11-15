@@ -6,9 +6,9 @@ import mezz.jei.api.gui.widgets.IRecipeExtrasBuilder;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import slimeknights.tconstruct.TConstruct;
@@ -26,7 +26,7 @@ import javax.annotation.Nullable;
 
 /** Category for display recipes for crafting {@link ModifierEntry}. */
 public class ModifierRecipeCategory extends AbstractTinkerStationCategory<IDisplayModifierRecipe> {
-  protected static final ResourceLocation BACKGROUND_LOC = AbstractTinkerStationCategory.BACKGROUND_LOC;
+  protected static final Identifier BACKGROUND_LOC = AbstractTinkerStationCategory.BACKGROUND_LOC;
   private static final Component TITLE = TConstruct.makeTranslation("jei", "modifiers.title");
 
   // translation
@@ -49,7 +49,7 @@ public class ModifierRecipeCategory extends AbstractTinkerStationCategory<IDispl
     }
 
     @Override
-    public void draw(GuiGraphics graphics, int xOffset, int yOffset) {
+    public void draw(GuiGraphicsExtractor graphics, int xOffset, int yOffset) {
       SlotIngredientRenderer.INPUT.render(graphics, null, xOffset, yOffset);
     }
   };

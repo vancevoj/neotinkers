@@ -1,7 +1,7 @@
 package slimeknights.tconstruct.library.utils;
 
 import com.google.gson.JsonObject;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.event.OnDatapackSyncEvent;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.VisibleForTesting;
@@ -20,14 +20,14 @@ public class JsonUtils {
   }
 
   /** Creates a JSON object with the given key set to a resource location */
-  public static JsonObject withLocation(String key, ResourceLocation value) {
+  public static JsonObject withLocation(String key, Identifier value) {
     JsonObject json = new JsonObject();
     json.addProperty(key, value.toString());
     return json;
   }
 
   /** Creates a JSON object with the given type set, makes using {@link slimeknights.mantle.data.gson.GenericRegisteredSerializer} easier */
-  public static JsonObject withType(ResourceLocation type) {
+  public static JsonObject withType(Identifier type) {
     return withLocation("type", type);
   }
 

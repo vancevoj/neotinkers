@@ -5,7 +5,7 @@ import com.google.gson.JsonObject;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.PackOutput.Target;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
@@ -28,7 +28,7 @@ import java.util.concurrent.CompletableFuture;
 
 /** Data generator for someone-off JSON files used for command configuration */
 public class ConfigurationDataProvider extends GenericDataProvider {
-  private final Map<ResourceLocation, JsonObject> configuration = new LinkedHashMap<>();
+  private final Map<Identifier, JsonObject> configuration = new LinkedHashMap<>();
   public ConfigurationDataProvider(PackOutput output) {
     super(output, Target.DATA_PACK, "");
   }
@@ -106,7 +106,7 @@ public class ConfigurationDataProvider extends GenericDataProvider {
   }
 
   /** Gets or creates a config object */
-  private JsonObject config(ResourceLocation location) {
+  private JsonObject config(Identifier location) {
     String path = location.getPath();
     return configuration.computeIfAbsent(location.withPath(path.substring(0, path.length() - ".json".length())), p -> new JsonObject());
   }

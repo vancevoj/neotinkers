@@ -33,7 +33,7 @@ public class ProxyItemTank<T extends MantleBlockEntity & IFluidTankUpdater> exte
     Item craftRemainingItem = stack.getItem().getCraftingRemainingItem();
     return !stack.is(TinkerTags.Items.PROXY_TANK_BLACKLIST)
       && (craftRemainingItem == null || !RegistryHelper.contains(TinkerTags.Items.PROXY_TANK_BLACKLIST, craftRemainingItem))
-      && (stack.getCapability(Capabilities.FluidHandler.ITEM) != null);
+      && (stack.getCapability(Capabilities.Fluid.ITEM) != null);
   }
 
   /** Used by the fluid handler logic to sync changes as we directly mutate the internal stack */
@@ -49,7 +49,7 @@ public class ProxyItemTank<T extends MantleBlockEntity & IFluidTankUpdater> exte
 
     // server side may need to sync
     Level world = parent.getLevel();
-    boolean needsUpdate = world != null && !world.isClientSide;
+    boolean needsUpdate = world != null && !world.isClientSide();
     if (oldStack != newStack) {
       // if the stack instance changed, discard cached cap and sync
       itemTank = null;
@@ -77,7 +77,7 @@ public class ProxyItemTank<T extends MantleBlockEntity & IFluidTankUpdater> exte
   private IFluidHandlerItem getItemTank() {
     if (itemTank == null) {
       ItemStack stack = getStack();
-      IFluidHandlerItem handler = stack.getCapability(Capabilities.FluidHandler.ITEM);
+      IFluidHandlerItem handler = stack.getCapability(Capabilities.Fluid.ITEM);
       itemTank = handler != null ? handler : new EmptyFluidHandlerItem(stack);
     }
     return itemTank;

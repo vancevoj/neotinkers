@@ -6,7 +6,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.neoforged.neoforge.common.conditions.ICondition;
 import slimeknights.tconstruct.TConstruct;
@@ -21,7 +21,7 @@ import java.util.List;
  */
 @Deprecated(forRemoval = true)
 public class TagIntersectionPresentCondition<T> implements ICondition {
-  public static final ResourceLocation NAME = TConstruct.getResource("tag_intersection_present");
+  public static final Identifier NAME = TConstruct.getResource("tag_intersection_present");
 
   private final List<TagKey<T>> names;
 
@@ -39,7 +39,7 @@ public class TagIntersectionPresentCondition<T> implements ICondition {
   }
 
   /** Creates a condition from a registry and a set of names */
-  public static <T> TagIntersectionPresentCondition<T> ofNames(ResourceKey<? extends Registry<T>> registry, ResourceLocation... names) {
+  public static <T> TagIntersectionPresentCondition<T> ofNames(ResourceKey<? extends Registry<T>> registry, Identifier... names) {
     return new TagIntersectionPresentCondition<>(Arrays.stream(names).map(name -> TagKey.create(registry, name)).toList());
   }
 
@@ -47,12 +47,12 @@ public class TagIntersectionPresentCondition<T> implements ICondition {
   public static final MapCodec<TagIntersectionPresentCondition<?>> CODEC = RecordCodecBuilder.mapCodec(builder -> builder
     .group(
       // save some space in JSON by not setting registry if item (most common)
-      ResourceLocation.CODEC.optionalFieldOf("registry", Registries.ITEM.location()).forGetter(c -> c.names.get(0).registry().location()),
-      ResourceLocation.CODEC.listOf().fieldOf("tags").forGetter(c -> c.names.stream().map(TagKey::location).toList()))
+      Identifier.CODEC.optionalFieldOf("registry", Registries.ITEM.identifier()).forGetter(c -> c.names.get(0).registry().identifier()),
+      Identifier.CODEC.listOf().fieldOf("tags").forGetter(c -> c.names.stream().map(TagKey::location).toList()))
     .apply(builder, TagIntersectionPresentCondition::create));
 
   /** Builds a condition from the codec primitives */
-  private static TagIntersectionPresentCondition<?> create(ResourceLocation registryName, List<ResourceLocation> names) {
+  private static TagIntersectionPresentCondition<?> create(Identifier registryName, List<Identifier> names) {
     ResourceKey<Registry<Object>> registry = ResourceKey.createRegistryKey(registryName);
     return new TagIntersectionPresentCondition<>(names.stream().map(name -> TagKey.create(registry, name)).toList());
   }

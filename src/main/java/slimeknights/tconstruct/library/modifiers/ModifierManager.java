@@ -16,7 +16,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
@@ -74,7 +74,7 @@ public class ModifierManager extends SimpleJsonResourceReloadListener {
   /** Location of modifier tags */
   public static final String TAG_FOLDER = "tinkering/tags/modifiers";
 
-  public static final ResourceLocation ENCHANTMENT_MAP = TConstruct.getResource("tinkering/enchantments_to_modifiers.json");
+  public static final Identifier ENCHANTMENT_MAP = TConstruct.getResource("tinkering/enchantments_to_modifiers.json");
   /** Registry key to make tag keys */
   public static final ResourceKey<? extends Registry<Modifier>> REGISTRY_KEY = ResourceKey.createRegistryKey(TConstruct.getResource("modifiers"));
 
@@ -150,7 +150,7 @@ public class ModifierManager extends SimpleJsonResourceReloadListener {
 
   @SuppressWarnings({"removal", "deprecation"})
   @Override
-  protected void apply(Map<ResourceLocation,JsonElement> splashList, ResourceManager pResourceManager, ProfilerFiller pProfiler) {
+  protected void apply(Map<Identifier,JsonElement> splashList, ResourceManager pResourceManager, ProfilerFiller pProfiler) {
     long time = System.nanoTime();
 
     // load modifiers from JSON
@@ -182,7 +182,7 @@ public class ModifierManager extends SimpleJsonResourceReloadListener {
     }
     for (ModifierId id : staticModifiers.keySet()) {
       if (dynamicModifiers.containsKey(id)) {
-        if (FMLLoader.isProduction()) {
+        if (FMLEnvironment.isProduction()) {
           log.warn("Dynamic modifier {} is replacing static modifier with the same ID. The ability to do this may be removed in a future version, so if this is intentional please open an issue report with reasoning..", id);
         } else {
           log.error("Dynamic modifier {} is replacing static modifier with the same ID. This is likely a bug with your mod, but on the chance its intentional this error does become just a warning at runtime.", id);
@@ -214,7 +214,7 @@ public class ModifierManager extends SimpleJsonResourceReloadListener {
     // enchantments are a datapack registry in 1.21, so look them up via the registry access captured from the reload event
     Map<Holder<Enchantment>,Modifier> enchantmentMap = new HashMap<>();
     this.enchantmentTagMap = new LinkedHashMap<>();
-    Registry<Enchantment> enchantmentRegistry = registryAccess.registryOrThrow(Registries.ENCHANTMENT);
+    Registry<Enchantment> enchantmentRegistry = registryAccess.lookupOrThrow(Registries.ENCHANTMENT);
     for (Resource resource : pResourceManager.getResourceStack(ENCHANTMENT_MAP)) {
       JsonObject enchantmentJson = JsonHelper.getJson(resource, ENCHANTMENT_MAP);
       if (enchantmentJson != null) {
@@ -243,7 +243,7 @@ public class ModifierManager extends SimpleJsonResourceReloadListener {
 
             // if it starts with #, it's a tag
             if (key.charAt(0) == '#') {
-              ResourceLocation tagId = ResourceLocation.tryParse(key.substring(1));
+              Identifier tagId = Identifier.tryParse(key.substring(1));
               if (tagId == null) {
                 throw new JsonSyntaxException("Invalid enchantment tag ID " + key.substring(1));
               }
@@ -254,7 +254,7 @@ public class ModifierManager extends SimpleJsonResourceReloadListener {
               if (optional) {
                 key = key.substring(0, key.length() - 1);
               }
-              Optional<Holder.Reference<Enchantment>> enchantment = enchantmentRegistry.getHolder(ResourceLocation.parse(key));
+              Optional<Holder.Reference<Enchantment>> enchantment = enchantmentRegistry.get(Identifier.parse(key));
               if (enchantment.isEmpty()) {
                 if (optional) {
                   TConstruct.LOG.debug("Skipping modifier " + modifierId + " due to unknown optional enchantment " + key);
@@ -277,19 +277,19 @@ public class ModifierManager extends SimpleJsonResourceReloadListener {
   }
 
   /** Creates context for modifier parsing */
-  public static TypedMapBuilder contextBuilder(ResourceLocation modifier) {
+  public static TypedMapBuilder contextBuilder(Identifier modifier) {
     return TypedMapBuilder.builder().put(ContextKey.ID, modifier).put(ContextKey.DEBUG, "Modifier " + modifier);
   }
 
-  /** @deprecated use {@link #contextBuilder(ResourceLocation)} */
+  /** @deprecated use {@link #contextBuilder(Identifier)} */
   @Deprecated(forRemoval = true)
-  public static TypedMap createContext(ResourceLocation modifier) {
+  public static TypedMap createContext(Identifier modifier) {
     return contextBuilder(modifier).build();
   }
 
   /** Loads a modifier from JSON */
   @Nullable
-  private Modifier loadModifier(ResourceLocation key, JsonElement element, Map<ModifierId, ModifierId> redirects) {
+  private Modifier loadModifier(Identifier key, JsonElement element, Map<ModifierId, ModifierId> redirects) {
     try {
       JsonObject json = GsonHelper.convertToJsonObject(element, "modifier");
 
@@ -390,15 +390,15 @@ public class ModifierManager extends SimpleJsonResourceReloadListener {
   public Stream<Holder<Enchantment>> getEquivalentEnchantments(Predicate<ModifierId> modifiers) {
     Predicate<Entry<?,Modifier>> predicate = entry -> modifiers.test(entry.getValue().getId());
     // enchantments are a datapack registry in 1.21, so resolve tag contents via the captured registry access
-    Registry<Enchantment> enchantmentRegistry = registryAccess.registryOrThrow(Registries.ENCHANTMENT);
+    Registry<Enchantment> enchantmentRegistry = registryAccess.lookupOrThrow(Registries.ENCHANTMENT);
     return Stream.concat(
       enchantmentMap.entrySet().stream().filter(predicate).map(Entry::getKey),
       enchantmentTagMap.entrySet().stream().filter(predicate).flatMap(entry -> RegistryHelper.getTagStream(enchantmentRegistry, entry.getKey()))
-    ).distinct().sorted(Comparator.comparing(enchantment -> Objects.requireNonNull(enchantment.unwrapKey().orElseThrow().location())));
+    ).distinct().sorted(Comparator.comparing(enchantment -> Objects.requireNonNull(enchantment.unwrapKey().orElseThrow().identifier())));
   }
 
   /** Gets a list of all modifier IDs */
-  public Stream<ResourceLocation> getAllLocations() {
+  public Stream<Identifier> getAllLocations() {
     // filter out redirects (redirects are any modifiers where the ID does not match the key
     return Stream.concat(staticModifiers.entrySet().stream(), dynamicModifiers.entrySet().stream())
                  .filter(entry -> entry.getKey().equals(entry.getValue().getId()))
@@ -422,7 +422,7 @@ public class ModifierManager extends SimpleJsonResourceReloadListener {
   /* Tags */
 
   /** Creates a tag key for a modifier */
-  public static TagKey<Modifier> getTag(ResourceLocation id) {
+  public static TagKey<Modifier> getTag(Identifier id) {
     return TagKey.create(REGISTRY_KEY, id);
   }
 
@@ -473,7 +473,7 @@ public class ModifierManager extends SimpleJsonResourceReloadListener {
     private final ModContainer container;
 
     /** Validates the namespace of the container registering */
-    private void checkModNamespace(ResourceLocation name) {
+    private void checkModNamespace(Identifier name) {
       // check mod container, should be the active mod
       // don't want mods registering stuff in Tinkers namespace, or Minecraft
       String activeMod = container.getNamespace();

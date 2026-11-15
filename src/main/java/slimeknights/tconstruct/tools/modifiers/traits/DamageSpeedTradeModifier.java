@@ -2,7 +2,7 @@ package slimeknights.tconstruct.tools.modifiers.traits;
 
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -39,9 +39,9 @@ public class DamageSpeedTradeModifier extends Modifier implements AttributesModi
   private static final Component MINING_SPEED = TConstruct.makeTranslation("armor_stat", "mining_speed");
   private final float multiplier;
   /** Stable id for the attack damage modifier; replaces the 1.20 UUID + name pair */
-  private final Lazy<ResourceLocation> attributeId = Lazy.of(() -> {
-    ResourceLocation id = getId();
-    return ResourceLocation.fromNamespaceAndPath(id.getNamespace(), id.getPath() + ".attack_damage");
+  private final Lazy<Identifier> attributeId = Lazy.of(() -> {
+    Identifier id = getId();
+    return Identifier.fromNamespaceAndPath(id.getNamespace(), id.getPath() + ".attack_damage");
   });
 
   @Override

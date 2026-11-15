@@ -7,7 +7,7 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.LevelAccessor;
@@ -15,7 +15,7 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.BushBlock;
+import net.minecraft.world.level.block.VegetationBlock;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
@@ -40,7 +40,7 @@ public class IslandPiece extends TemplateStructurePiece {
   private int numberOfTreesPlaced;
   private ChunkGenerator chunkGenerator;
 
-  public IslandPiece(StructureTemplateManager manager, IslandStructure structure, ResourceLocation templateName, BlockPos templatePos, @Nullable ConfiguredFeature<?,?> tree, Rotation rotation, Mirror mirror) {
+  public IslandPiece(StructureTemplateManager manager, IslandStructure structure, Identifier templateName, BlockPos templatePos, @Nullable ConfiguredFeature<?,?> tree, Rotation rotation, Mirror mirror) {
     super(TinkerStructures.islandPiece.get(), 0, manager, templateName, templateName.toString(), makeSettings(rotation, mirror), templatePos);
     this.structure = structure;
     this.numberOfTreesPlaced = 0;
@@ -50,12 +50,12 @@ public class IslandPiece extends TemplateStructurePiece {
   public IslandPiece(StructurePieceSerializationContext context, CompoundTag nbt) {
     super(TinkerStructures.islandPiece.get(), nbt, context.structureTemplateManager(), id -> makeSettings(Rotation.valueOf(nbt.getString("Rot")), Mirror.valueOf(nbt.getString("Mi"))));
     RegistryAccess access = context.registryAccess();
-    if (find(access.registryOrThrow(Registries.STRUCTURE), nbt.getString("Structure")) instanceof IslandStructure island) {
+    if (find(access.lookupOrThrow(Registries.STRUCTURE), nbt.getString("Structure")) instanceof IslandStructure island) {
       this.structure = island;
     } else  {
       this.structure = null;
     }
-    this.tree = find(access.registryOrThrow(Registries.CONFIGURED_FEATURE), nbt.getString("Tree"));
+    this.tree = find(access.lookupOrThrow(Registries.CONFIGURED_FEATURE), nbt.getString("Tree"));
     this.numberOfTreesPlaced = nbt.getInt("NumberOfTreesPlaced");
   }
 
@@ -67,7 +67,7 @@ public class IslandPiece extends TemplateStructurePiece {
   protected void addAdditionalSaveData(StructurePieceSerializationContext context, CompoundTag tag) {
     super.addAdditionalSaveData(context, tag);
     RegistryAccess access = context.registryAccess();
-    ResourceLocation structure = access.registryOrThrow(Registries.STRUCTURE).getKey(this.structure);
+    Identifier structure = access.lookupOrThrow(Registries.STRUCTURE).getKey(this.structure);
     if (structure != null) {
       tag.putString("Structure", structure.toString());
     }
@@ -75,7 +75,7 @@ public class IslandPiece extends TemplateStructurePiece {
     tag.putString("Mi", this.placeSettings.getMirror().name());
     tag.putInt("NumberOfTreesPlaced", this.numberOfTreesPlaced);
     if (tree != null) {
-      ResourceLocation key = access.registryOrThrow(Registries.CONFIGURED_FEATURE).getKey(tree);
+      Identifier key = access.lookupOrThrow(Registries.CONFIGURED_FEATURE).getKey(tree);
       if (key != null) {
         tag.putString("Tree", key.toString());
       }
@@ -107,7 +107,7 @@ public class IslandPiece extends TemplateStructurePiece {
           if (plant.isPresent()) {
             Block block = plant.get();
             BlockState state = block.defaultBlockState();
-            if (block instanceof BushBlock && state.canSurvive(level, pos)) {
+            if (block instanceof VegetationBlock && state.canSurvive(level, pos)) {
               level.setBlock(pos, state, 2);
             }
           }
@@ -152,7 +152,7 @@ public class IslandPiece extends TemplateStructurePiece {
 
   /** Gets a registry, or falls back to builtin */
   private static <T> Registry<T> getRegistry(ResourceKey<? extends Registry<T>> registryKey, Registry<T> builtIn, StructurePieceSerializationContext context) {
-    Optional<? extends Registry<T>> registry = context.registryAccess().registry(registryKey);
+    Optional<? extends Registry<T>> registry = context.registryAccess().lookup(registryKey);
     if (registry.isPresent()) {
       return registry.get();
     } else {
@@ -163,7 +163,7 @@ public class IslandPiece extends TemplateStructurePiece {
   /** Finds a registry object */
   @Nullable
   private static <T> T find(Registry<T> registry, String key) {
-    ResourceLocation id = ResourceLocation.tryParse(key);
+    Identifier id = Identifier.tryParse(key);
     if (id != null) {
       return registry.get(id);
     }

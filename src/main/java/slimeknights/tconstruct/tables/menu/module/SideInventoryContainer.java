@@ -35,7 +35,7 @@ public class SideInventoryContainer<TILE extends BlockEntity> extends BaseContai
     if (tile != null) {
       Level level = tile.getLevel();
       if (level != null) {
-        handler = level.getCapability(Capabilities.ItemHandler.BLOCK, tile.getBlockPos(), inventoryDirection);
+        handler = level.getCapability(Capabilities.Item.BLOCK, tile.getBlockPos(), inventoryDirection);
       }
     }
     if (handler == null) {

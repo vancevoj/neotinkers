@@ -6,7 +6,7 @@ import net.minecraft.data.CachedOutput;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.PackOutput.Target;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.enchantment.Enchantment;
 import slimeknights.mantle.data.GenericDataProvider;
@@ -37,7 +37,7 @@ public abstract class AbstractEnchantmentToModifierProvider extends GenericDataP
   /* Helpers */
 
   /** Helper to append the ? for optional modifiers */
-  private static String optionalId(ResourceLocation modifierId, boolean optional) {
+  private static String optionalId(Identifier modifierId, boolean optional) {
     return optional ? modifierId.toString() + '?' : modifierId.toString();
   }
 
@@ -56,7 +56,7 @@ public abstract class AbstractEnchantmentToModifierProvider extends GenericDataP
   }
 
   /** Adds the given optional enchantment, ignoring errors if missing */
-  protected void addOptional(ResourceLocation enchantment, ModifierId modifierId, boolean optionalModifier) {
+  protected void addOptional(Identifier enchantment, ModifierId modifierId, boolean optionalModifier) {
     String key = enchantment.toString();
     if (enchantmentMap.has(key) || enchantmentMap.has(key + '?')) {
       throw new IllegalArgumentException("Duplicate enchantment " + key);
@@ -79,12 +79,12 @@ public abstract class AbstractEnchantmentToModifierProvider extends GenericDataP
   }
 
   /** Adds the given enchantment tag */
-  protected void add(ResourceLocation tag, ModifierId modifierId) {
+  protected void add(Identifier tag, ModifierId modifierId) {
     add(tag, modifierId, false);
   }
 
   /** Adds the given enchantment tag, allowing making the modifier optional */
-  protected void add(ResourceLocation tag, ModifierId modifierId, boolean optionalModifier) {
+  protected void add(Identifier tag, ModifierId modifierId, boolean optionalModifier) {
     add(TagKey.create(Registries.ENCHANTMENT, tag), modifierId, optionalModifier);
   }
 }

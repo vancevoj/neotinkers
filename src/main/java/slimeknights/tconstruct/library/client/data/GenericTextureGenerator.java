@@ -3,12 +3,12 @@ package slimeknights.tconstruct.library.client.data;
 import com.google.common.hash.Hashing;
 import com.google.gson.JsonObject;
 import com.mojang.blaze3d.platform.NativeImage;
-import net.minecraft.Util;
+import net.minecraft.util.Util;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.PackOutput.Target;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.PackType;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import slimeknights.mantle.data.GenericDataProvider;
@@ -44,7 +44,7 @@ public abstract class GenericTextureGenerator extends GenericDataProvider {
   }
 
   /** Saves the given image to the given location */
-  protected CompletableFuture<?> saveImage(CachedOutput cache, ResourceLocation location, NativeImage image) {
+  protected CompletableFuture<?> saveImage(CachedOutput cache, Identifier location, NativeImage image) {
     if (existingFileHelper != null && resourceType != null) {
       existingFileHelper.trackGenerated(location, resourceType);
     }
@@ -61,7 +61,7 @@ public abstract class GenericTextureGenerator extends GenericDataProvider {
   }
 
   /** Saves metadata for the given image */
-  protected CompletableFuture<?> saveMetadata(CachedOutput cache, ResourceLocation location, JsonObject metadata) {
+  protected CompletableFuture<?> saveMetadata(CachedOutput cache, Identifier location, JsonObject metadata) {
     return DataProvider.saveStable(cache, metadata, this.pathProvider.file(location, "png.mcmeta"));
   }
 }

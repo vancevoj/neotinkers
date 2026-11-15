@@ -1,5 +1,4 @@
 {
-  "render_type": "minecraft:cutout",
   "loader": "tconstruct:tank",
   "parent": "block/block",
   "textures": {
@@ -36,7 +35,7 @@
     },
     { "from": [ 11.01, 6, 11.01 ],
       "to": [ 4.99, 1, 4.99 ],
-      "shade": false,
+      "shade_direction_override": "up",
       "faces": {
         "down":  { "uv": [ 0, 9, 6, 15 ], "texture": "#lantern" },
         "up":    { "uv": [ 0, 9, 6, 15 ], "texture": "#lantern" },
@@ -61,7 +60,7 @@
     { "from": [ 6.5, 9, 8 ],
       "to": [ 9.5, 11, 8 ],
       "rotation": { "origin": [ 8, 8, 8 ], "axis": "y", "angle": 45 },
-      "shade": false,
+      "shade_direction_override": "up",
       "faces": {
         "north": { "uv": [ 11, 1, 14, 3 ], "texture": "#lantern" },
         "south": { "uv": [ 11, 1, 14, 3 ], "texture": "#lantern" }
@@ -70,7 +69,7 @@
     { "from": [ 8, 9, 6.5 ],
       "to": [ 8, 11, 9.5 ],
       "rotation": { "origin": [ 8, 8, 8 ], "axis": "y", "angle": 45 },
-      "shade": false,
+      "shade_direction_override": "up",
       "faces": {
         "west": { "uv": [ 11, 10, 14, 12 ], "texture": "#lantern" },
         "east": { "uv": [ 11, 10, 14, 12 ], "texture": "#lantern" }

@@ -57,7 +57,7 @@ public class LayoutSlot {
   public static LayoutSlot read(RegistryFriendlyByteBuf buffer) {
     Pattern pattern = null;
     if (buffer.readBoolean()) {
-      pattern = new Pattern(buffer.readResourceLocation());
+      pattern = new Pattern(buffer.readIdentifier());
     }
     String name = buffer.readUtf(Short.MAX_VALUE);
     int x = buffer.readVarInt();
@@ -73,7 +73,7 @@ public class LayoutSlot {
   public void write(RegistryFriendlyByteBuf buffer) {
     if (icon != null) {
       buffer.writeBoolean(true);
-      buffer.writeResourceLocation(icon);
+      buffer.writeIdentifier(icon);
     } else {
       buffer.writeBoolean(false);
     }

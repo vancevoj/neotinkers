@@ -1,11 +1,11 @@
 package slimeknights.tconstruct.library.exception;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 // TODO 1.19: reevaluate whether this is actually needed
 public class TinkerJSONException extends TinkerAPIException {
 
-  public static TinkerJSONException materialJsonWithoutCraftingInformation(ResourceLocation materialId) {
+  public static TinkerJSONException materialJsonWithoutCraftingInformation(Identifier materialId) {
     return new TinkerJSONException("Malformed JSON for the material '" + materialId + "'. Missing craftable information.");
   }
 
@@ -13,7 +13,7 @@ public class TinkerJSONException extends TinkerAPIException {
     return new TinkerJSONException("Malformed JSON for the stats. Missing material id which the stats belong to.");
   }
 
-  public static TinkerJSONException materialTraitsJsonWithoutMaterial(ResourceLocation file) {
+  public static TinkerJSONException materialTraitsJsonWithoutMaterial(Identifier file) {
     return new TinkerJSONException("Malformed JSON for traits in file " + file + ". Missing material id which the traits belong to.");
   }
 

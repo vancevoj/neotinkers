@@ -50,7 +50,7 @@ public class EquipmentChangeWatcher {
     NeoForge.EVENT_BUS.addListener(EquipmentChangeWatcher::onEquipmentChange);
 
     // only need to poll equipment via the player tick on the client (server gets the change event directly)
-    if (FMLEnvironment.dist == Dist.CLIENT) {
+    if (FMLEnvironment.getDist() == Dist.CLIENT) {
       NeoForge.EVENT_BUS.addListener(EquipmentChangeWatcher::onPlayerTick);
     }
   }
@@ -67,7 +67,7 @@ public class EquipmentChangeWatcher {
   private static void onPlayerTick(PlayerTickEvent.Post event) {
     // only run for client side players
     Player player = event.getEntity();
-    if (player.level().isClientSide) {
+    if (player.level().isClientSide()) {
       player.getData(LAST_EQUIPMENT).update(player);
     }
   }

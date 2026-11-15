@@ -42,12 +42,12 @@ public enum SeveringModule implements ModifierModule, ProcessLootModifierHook {
   public void processLoot(IToolStackView tool, ModifierEntry modifier, List<ItemStack> generatedLoot, LootContext context) {
     // if no damage source, probably not a mob
     // otherwise blocks breaking (where THIS_ENTITY is the player) start dropping player heads
-    if (!context.hasParam(LootContextParams.DAMAGE_SOURCE)) {
+    if (!context.hasParameter(LootContextParams.DAMAGE_SOURCE)) {
       return;
     }
 
     // must have an entity
-    Entity entity = context.getParamOrNull(LootContextParams.THIS_ENTITY);
+    Entity entity = context.getOptional(LootContextParams.THIS_ENTITY);
     if (entity != null) {
       // ensure no head so far
       if (generatedLoot.stream().noneMatch(stack -> stack.is(ItemTags.SKULLS))) {
@@ -57,7 +57,7 @@ public enum SeveringModule implements ModifierModule, ProcessLootModifierHook {
         if (!recipes.isEmpty()) {
           float level = modifier.getEffectiveLevel();
           // getLootingModifier() removed in 1.21.1; looting enchant level is now a loot param
-          float looting = context.hasParam(LootContextParams.ENCHANTMENT_LEVEL) ? context.getParam(LootContextParams.ENCHANTMENT_LEVEL) : 0;
+          float looting = context.hasParameter(LootContextParams.ENCHANTMENT_LEVEL) ? context.getParam(LootContextParams.ENCHANTMENT_LEVEL) : 0;
           // deprecated method of doubling chances
           float chanceMultiplier = entity.getType().is(TinkerTags.EntityTypes.RARE_MOBS) ? 2 : 1;
           for (SeveringRecipe recipe : recipes) {

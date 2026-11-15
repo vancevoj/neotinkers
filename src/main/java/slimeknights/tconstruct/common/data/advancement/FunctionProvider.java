@@ -3,7 +3,7 @@ package slimeknights.tconstruct.common.data.advancement;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.PackOutput.Target;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import slimeknights.mantle.data.GenericDataProvider;
 import slimeknights.tconstruct.library.data.GenericStringProvider;
 
@@ -13,7 +13,7 @@ import java.util.concurrent.CompletableFuture;
 
 /** Provides functions for advancements */
 public class FunctionProvider extends GenericStringProvider {
-  private final Map<ResourceLocation,String> functions = new HashMap<>();
+  private final Map<Identifier,String> functions = new HashMap<>();
 
   public FunctionProvider(PackOutput output) {
     super(output, Target.DATA_PACK, "function", "mcfunction");
@@ -38,12 +38,12 @@ public class FunctionProvider extends GenericStringProvider {
   }
 
   /** Grants the given advancement */
-  private void grant(ResourceLocation advancement) {
+  private void grant(Identifier advancement) {
     functions.put(AdvancementIds.function(advancement), "advancement grant @s only " + advancement + '\n');
   }
 
   /** Grants the given advancement criteria */
-  private void grant(ResourceLocation advancement, String criteria) {
+  private void grant(Identifier advancement, String criteria) {
     functions.put(AdvancementIds.function(advancement, criteria), "advancement grant @s only " + advancement + ' ' + criteria + '\n');
   }
 

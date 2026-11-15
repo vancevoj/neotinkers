@@ -1,7 +1,7 @@
 package slimeknights.tconstruct.shared.block;
 
 import lombok.Getter;
-import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.advancements.triggers.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -99,7 +99,7 @@ public class WeatheringPlatformBlock extends PlatformBlock implements Weathering
       }
       level.setBlock(pos, TinkerCommons.waxedCopperPlatform.get(age).withPropertiesOf(state), 11);
       level.levelEvent(player, LevelEvent.PARTICLES_AND_SOUND_WAX_ON, pos, 0);
-      return ItemInteractionResult.sidedSuccess(level.isClientSide);
+      return ItemInteractionResult.sidedSuccess(level.isClientSide());
     }
     return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
   }

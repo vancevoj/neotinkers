@@ -7,14 +7,14 @@ import com.google.gson.JsonParseException;
 import com.mojang.math.Transformation;
 import lombok.AllArgsConstructor;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.resources.model.geometry.BakedQuad;
 import net.minecraft.client.renderer.block.model.ItemOverrides;
 import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.Material;
 import net.minecraft.client.resources.model.ModelBaker;
-import net.minecraft.client.resources.model.ModelState;
+import net.minecraft.client.renderer.block.dispatch.ModelState;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -138,7 +138,7 @@ public class MaterialModel implements IUnbakedGeometry<MaterialModel> {
     // TODO: figure out forge transforms, can I use them here?
     Transformation transforms;
     if (Vec2.ZERO.equals(offset)) {
-      transforms = Transformation.identity();
+      transforms = Transformation.IDENTITY;
     } else {
       // divide by 16 to convert from pixels to base values
       // negate Y as positive is up for transforms but down for pixels

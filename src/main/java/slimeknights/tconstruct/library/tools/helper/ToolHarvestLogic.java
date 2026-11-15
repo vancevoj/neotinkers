@@ -1,5 +1,6 @@
 package slimeknights.tconstruct.library.tools.helper;
 
+import net.neoforged.neoforge.event.level.block.BreakBlockEvent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.protocol.game.ClientboundBlockUpdatePacket;
@@ -22,7 +23,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.common.CommonHooks;
 import net.neoforged.neoforge.common.ItemAbilities;
-import net.neoforged.neoforge.event.level.BlockEvent;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.common.network.TinkerNetwork;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
@@ -121,7 +121,7 @@ public class ToolHarvestLogic {
    * @param tool      Tool instance
    * @param stack     Stack instance for vanilla functions
    * @param context   Harvest context
-   * @param useLastXP If true, the break event already fired for this block, so it is not fired again. Prevents firing {@link net.neoforged.neoforge.event.level.BlockEvent.BreakEvent} twice.
+   * @param useLastXP If true, the break event already fired for this block, so it is not fired again. Prevents firing {@link net.neoforged.neoforge.event.level.BreakBlockEvent} twice.
    * @return  True if broken
    */
   protected static boolean breakBlock(IToolStackView tool, ItemStack stack, ToolHarvestContext context, boolean useLastXP) {
@@ -131,12 +131,12 @@ public class ToolHarvestLogic {
     BlockPos pos = context.getPos();
     GameType type = player.gameMode.getGameModeForPlayer();
     BlockState state = context.getState();
-    // 1.21: BlockEvent.BreakEvent no longer carries the experience to drop (ForgeHooks.onBlockBreakEvent is gone), so we
+    // 1.21: BreakBlockEvent no longer carries the experience to drop (ForgeHooks.onBlockBreakEvent is gone), so we
     // fire it only for its veto. useLastXP means the event already fired for this block (see ToolEvents.onBlockBreak),
     // so we must not fire it a second time. Experience is dropped by playerDestroy below: NeoForge pops it from
     // CommonHooks.handleBlockDrops after BlockDropsEvent, where ModifierEvents#beforeBlockBreak applies the experienced bonus.
     if (!useLastXP) {
-      BlockEvent.BreakEvent breakEvent = CommonHooks.fireBlockBreak(world, type, player, pos, state);
+      BreakBlockEvent breakEvent = CommonHooks.fireBlockBreak(world, type, player, pos, state);
       if (breakEvent.isCanceled()) {
         return false;
       }
@@ -246,14 +246,14 @@ public class ToolHarvestLogic {
     }*/
 
     // client can run normal block breaking
-    if (player.level().isClientSide || !(player instanceof ServerPlayer serverPlayer)) {
+    if (player.level().isClientSide() || !(player instanceof ServerPlayer serverPlayer)) {
       return false;
     }
 
     // if broken, clear the item stack temporarily then break
     ToolStack tool = ToolStack.from(stack);
     Direction sideHit = BlockSideHitListener.getSideHit(player);
-    ServerLevel world = serverPlayer.serverLevel();
+    ServerLevel world = serverPlayer.level();
     BlockState state = world.getBlockState(pos);
     if (tool.isBroken()) {
       // no harvest context
@@ -280,7 +280,7 @@ public class ToolHarvestLogic {
    */
   public static int runBlockBreak(ItemStack stack, IToolStackView tool, BlockState state, BlockPos pos, Direction sideHit, ServerPlayer player, @Nullable Projectile projectile) {
     // create contexts
-    ServerLevel world = player.serverLevel();
+    ServerLevel world = player.level();
 
     // add in harvest info
     // must not be broken, and the tool definition must be effective
@@ -335,7 +335,7 @@ public class ToolHarvestLogic {
       return false;
     }
 
-    if (!worldIn.isClientSide && worldIn instanceof ServerLevel) {
+    if (!worldIn.isClientSide() && worldIn instanceof ServerLevel) {
       // must not be broken, and the tool definition must be effective
       boolean isEffective = IsEffectiveToolHook.isEffective(tool, state);
       ToolHarvestContext context = new ToolHarvestContext((ServerLevel) worldIn, entityLiving, state, pos, Direction.UP, true, isEffective);

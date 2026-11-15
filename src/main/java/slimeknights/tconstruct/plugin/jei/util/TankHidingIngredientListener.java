@@ -30,7 +30,7 @@ public record TankHidingIngredientListener(IIngredientManager manager, List<Item
         for (Item item : tanks) {
           ItemStack tank = new ItemStack(item);
           // 1.21: item capabilities return null instead of an empty LazyOptional
-          IFluidHandlerItem handler = Objects.requireNonNullElse(tank.getCapability(Capabilities.FluidHandler.ITEM), EmptyFluidHandlerItem.INSTANCE);
+          IFluidHandlerItem handler = Objects.requireNonNullElse(tank.getCapability(Capabilities.Fluid.ITEM), EmptyFluidHandlerItem.INSTANCE);
           if (handler.getTanks() > 0 && handler.fill(fluid, FluidAction.EXECUTE) > 0) {
             list.add(handler.getContainer());
           }

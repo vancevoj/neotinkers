@@ -2,7 +2,7 @@ package slimeknights.tconstruct.library.modifiers.modules.build;
 
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import slimeknights.mantle.data.loadable.primitive.IntLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.tconstruct.TConstruct;
@@ -32,7 +32,7 @@ import java.util.List;
  *                        Presently, changing this makes it incompatible with the swappable modifier recipe, this is added for future proofing.
  * @param slotCount       Number of slots to grant
  */
-public record SwappableSlotModule(@Nullable ResourceLocation key, int slotCount, ModifierCondition<IToolContext> condition) implements VolatileDataModifierHook, DisplayNameModifierHook, ModifierRemovalHook, ModifierModule, ModuleWithKey, ConditionalModule<IToolContext> {
+public record SwappableSlotModule(@Nullable Identifier key, int slotCount, ModifierCondition<IToolContext> condition) implements VolatileDataModifierHook, DisplayNameModifierHook, ModifierRemovalHook, ModifierModule, ModuleWithKey, ConditionalModule<IToolContext> {
   private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<SwappableSlotModule>defaultHooks(ModifierHooks.VOLATILE_DATA, ModifierHooks.DISPLAY_NAME, ModifierHooks.REMOVE);
   /** Format key for swappable variant */
   public static final String FORMAT = TConstruct.makeTranslationKey("modifier", "extra_modifier.type_format");
@@ -42,7 +42,7 @@ public record SwappableSlotModule(@Nullable ResourceLocation key, int slotCount,
     ModifierCondition.CONTEXT_FIELD,
     SwappableSlotModule::new);
 
-  public SwappableSlotModule(@Nullable ResourceLocation key, int slotCount) {
+  public SwappableSlotModule(@Nullable Identifier key, int slotCount) {
     this(key, slotCount, ModifierCondition.ANY_CONTEXT);
   }
 
@@ -99,7 +99,7 @@ public record SwappableSlotModule(@Nullable ResourceLocation key, int slotCount,
   }
 
   /** Module to add (or remove) additional slots based on the given swappable slot type */
-  public record BonusSlot(@Nullable ResourceLocation key, SlotType match, SlotType bonus, int slotCount, ModifierCondition<IToolContext> condition) implements VolatileDataModifierHook, ModifierModule, ModuleWithKey, ConditionalModule<IToolContext> {
+  public record BonusSlot(@Nullable Identifier key, SlotType match, SlotType bonus, int slotCount, ModifierCondition<IToolContext> condition) implements VolatileDataModifierHook, ModifierModule, ModuleWithKey, ConditionalModule<IToolContext> {
     private static final List<ModuleHook<?>> DEFAULT_HOOKS = List.of(ModifierHooks.VOLATILE_DATA);
     public static final RecordLoadable<BonusSlot> LOADER = RecordLoadable.create(
       ModuleWithKey.FIELD,
@@ -109,7 +109,7 @@ public record SwappableSlotModule(@Nullable ResourceLocation key, int slotCount,
       ModifierCondition.CONTEXT_FIELD,
       BonusSlot::new);
 
-    public BonusSlot(@Nullable ResourceLocation key, SlotType match, SlotType bonus, int slotCount) {
+    public BonusSlot(@Nullable Identifier key, SlotType match, SlotType bonus, int slotCount) {
       this(key, match, bonus, slotCount, ModifierCondition.ANY_CONTEXT);
     }
 

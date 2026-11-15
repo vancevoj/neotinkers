@@ -2,7 +2,7 @@ package slimeknights.tconstruct.library.recipe.tinkerstation.repairing;
 
 import lombok.Getter;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
@@ -36,7 +36,7 @@ public class ModifierMaterialRepairRecipe extends TinkerStationRepairRecipe impl
   /** Stat type used for repairing, null means it will be fetched as the first available stat type */
   @Getter
   private final MaterialStatsId statType;
-  public ModifierMaterialRepairRecipe(ResourceLocation id, ModifierId modifier, MaterialId repairMaterialID, MaterialStatsId statType) {
+  public ModifierMaterialRepairRecipe(Identifier id, ModifierId modifier, MaterialId repairMaterialID, MaterialStatsId statType) {
     super(id);
     this.modifier = modifier;
     this.repairMaterial = LazyMaterial.of(repairMaterialID);

@@ -6,7 +6,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.client.gui.components.Button;
 import slimeknights.mantle.client.screen.MultiModuleScreen;
 import lombok.Getter;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 
 /**
  * A side buttons widget with pagination
@@ -155,7 +155,7 @@ public class SideButtonsWidgetPaged<T extends Button> extends SideButtonsWidget<
     }
 
     @Override
-    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+    public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTicks) {
         int button_num = this.buttons.size();
         if (button_num > columns * MAX_ROWS) {
             this.previousPageButton.render(graphics, mouseX, mouseY, partialTicks);

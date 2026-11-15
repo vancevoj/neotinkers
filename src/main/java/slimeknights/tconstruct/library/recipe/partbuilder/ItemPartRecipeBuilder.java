@@ -5,7 +5,7 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.data.recipes.RecipeOutput;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.crafting.Ingredient;
 import slimeknights.mantle.data.loadable.Loadables;
 import slimeknights.mantle.recipe.data.AbstractRecipeBuilder;
@@ -23,10 +23,10 @@ public class ItemPartRecipeBuilder extends AbstractRecipeBuilder<ItemPartRecipeB
   private MaterialId materialId = MaterialId.UNKNOWN;
   private int cost = 0;
   @Setter
-  private ResourceLocation titleKey = null;
+  private Identifier titleKey = null;
 
   /** Creates a builder for the given pattern ID */
-  public static ItemPartRecipeBuilder item(ResourceLocation pattern, ItemOutput result) {
+  public static ItemPartRecipeBuilder item(Identifier pattern, ItemOutput result) {
     return item(new Pattern(pattern), result);
   }
 
@@ -43,7 +43,7 @@ public class ItemPartRecipeBuilder extends AbstractRecipeBuilder<ItemPartRecipeB
   }
 
   @Override
-  public void save(RecipeOutput consumer, ResourceLocation id) {
+  public void save(RecipeOutput consumer, Identifier id) {
     AdvancementHolder advancementId = buildOptionalAdvancement(id, "parts");
     consumer.accept(id, new ItemPartRecipe(id, materialId, pattern, patternItem, cost, result, titleKey), advancementId);
   }

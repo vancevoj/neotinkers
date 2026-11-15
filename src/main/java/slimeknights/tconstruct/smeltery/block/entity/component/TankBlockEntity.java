@@ -14,7 +14,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.client.model.data.ModelData;
+import net.neoforged.neoforge.model.data.ModelData;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.fluids.IFluidTank;
@@ -106,7 +106,7 @@ public class TankBlockEntity extends SmelteryComponentBlockEntity implements ITa
   /** Updates the light for this tank using {@link SearedTankBlock#LIGHT} */
   public static void updateLight(BlockEntity be, IFluidTank tank) {
     Level level = be.getLevel();
-    if (level != null && !level.isClientSide) {
+    if (level != null && !level.isClientSide()) {
       FluidStack fluid = tank.getFluid();
       int light = fluid.isEmpty() ? 0 : fluid.getFluid().getFluidType().getLightLevel(fluid);
       BlockState state = be.getBlockState();
@@ -128,7 +128,7 @@ public class TankBlockEntity extends SmelteryComponentBlockEntity implements ITa
   @Override
   public void onLoad() {
     super.onLoad();
-    if (level != null && !level.isClientSide) {
+    if (level != null && !level.isClientSide()) {
       BlockPos masterPos = getMasterPos();
       if (masterPos != null && level.getBlockEntity(masterPos) instanceof IMasterLogic master) {
         master.onServantLoad(this);

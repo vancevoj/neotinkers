@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -45,7 +45,7 @@ import java.util.function.Supplier;
  * @param amount     Amount of the attribute to apply
  * @param condition  Standard modifier conditions
  */
-public record MeleeAttributeModule(String unique, Attribute attribute, ResourceLocation id, Operation operation, LevelingValue amount, IJsonPredicate<LivingEntity> target, ModifierCondition<IToolStackView> condition) implements ModifierModule, MeleeHitModifierHook, ConditionalModule<IToolStackView> {
+public record MeleeAttributeModule(String unique, Attribute attribute, Identifier id, Operation operation, LevelingValue amount, IJsonPredicate<LivingEntity> target, ModifierCondition<IToolStackView> condition) implements ModifierModule, MeleeHitModifierHook, ConditionalModule<IToolStackView> {
   private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<MeleeAttributeModule>defaultHooks(ModifierHooks.MELEE_HIT);
   public static final RecordLoadable<MeleeAttributeModule> LOADER = RecordLoadable.create(
     new AttributeUniqueField<>(MeleeAttributeModule::unique),
@@ -61,7 +61,7 @@ public record MeleeAttributeModule(String unique, Attribute attribute, ResourceL
   public MeleeAttributeModule {}
 
   private MeleeAttributeModule(String unique, Attribute attribute, Operation operation, LevelingValue amount, IJsonPredicate<LivingEntity> target, ModifierCondition<IToolStackView> condition) {
-    this(unique, attribute, ResourceLocation.fromNamespaceAndPath(TConstruct.MOD_ID, unique), operation, amount, target, condition);
+    this(unique, attribute, Identifier.fromNamespaceAndPath(TConstruct.MOD_ID, unique), operation, amount, target, condition);
   }
 
   @Override
@@ -131,7 +131,7 @@ public record MeleeAttributeModule(String unique, Attribute attribute, ResourceL
     /**
      * Sets the unique string using a resource location
      */
-    public Builder uniqueFrom(ResourceLocation id) {
+    public Builder uniqueFrom(Identifier id) {
       return unique(id.getNamespace() + ".modifier." + id.getPath());
     }
 

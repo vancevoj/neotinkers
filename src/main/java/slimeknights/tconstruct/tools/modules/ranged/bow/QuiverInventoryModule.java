@@ -1,6 +1,6 @@
 package slimeknights.tconstruct.tools.modules.ranged.bow;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -27,7 +27,7 @@ public class QuiverInventoryModule extends InventoryModule {
   public static final RecordLoadable<QuiverInventoryModule> LOADER = RecordLoadable.create(KEY_FIELD, SLOTS_FIELD, LIMIT_FIELD, PATTERN_FIELD, ModifierCondition.CONTEXT_FIELD, VALIDATION_FIELD, QuiverInventoryModule::new);
 
   // TODO(neoport): super ctor unavailable until InventoryModule.java compiles; @RequiredArgsConstructor not generated due to InventoryModule errors
-  private QuiverInventoryModule(@Nullable ResourceLocation key, LevelingInt slots, LevelingInt slotLimit, @Nullable Pattern pattern, ModifierCondition<IToolContext> condition, IntRange validationLevel) {
+  private QuiverInventoryModule(@Nullable Identifier key, LevelingInt slots, LevelingInt slotLimit, @Nullable Pattern pattern, ModifierCondition<IToolContext> condition, IntRange validationLevel) {
     super(key, slots, slotLimit, ItemPredicate.ANY, pattern, condition, validationLevel);
   }
 

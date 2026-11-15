@@ -1,6 +1,6 @@
 package slimeknights.tconstruct.library.recipe.melting;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -33,7 +33,7 @@ public class DamageableMeltingRecipe extends MeltingRecipe {
   private final int unitSize;
   /** Sizes of byproducts */
   private final List<Integer> byproductSizes;
-  public DamageableMeltingRecipe(ResourceLocation id, String group, Ingredient input, FluidOutput output, int temperature, int time, List<FluidOutput> byproducts, int unitSize, List<Integer> byproductSizes) {
+  public DamageableMeltingRecipe(Identifier id, String group, Ingredient input, FluidOutput output, int temperature, int time, List<FluidOutput> byproducts, int unitSize, List<Integer> byproductSizes) {
     super(id, group, input, output, temperature, time, byproducts);
     this.unitSize = unitSize;
     this.byproductSizes = byproductSizes;

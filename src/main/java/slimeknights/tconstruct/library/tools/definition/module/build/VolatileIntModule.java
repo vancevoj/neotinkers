@@ -1,6 +1,6 @@
 package slimeknights.tconstruct.library.tools.definition.module.build;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import slimeknights.mantle.data.loadable.Loadables;
 import slimeknights.mantle.data.loadable.primitive.IntLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
@@ -18,7 +18,7 @@ import java.util.List;
  * @see VolatileFlagModule
  * @see slimeknights.tconstruct.library.modifiers.modules.build.VolatileIntModule
  */
-public record VolatileIntModule(ResourceLocation flag, int value) implements ToolModule, VolatileDataToolHook {
+public record VolatileIntModule(Identifier flag, int value) implements ToolModule, VolatileDataToolHook {
   private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<VolatileIntModule>defaultHooks(ToolHooks.VOLATILE_DATA);
   public static final RecordLoadable<VolatileIntModule> LOADER = RecordLoadable.create(
     Loadables.RESOURCE_LOCATION.requiredField("flag", VolatileIntModule::flag),

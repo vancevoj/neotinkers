@@ -1,6 +1,5 @@
 {
-  "render_type": "minecraft:cutout",
-	"textures": {
+  "textures": {
 		"particle": "#top"
 	},
 	"elements": [

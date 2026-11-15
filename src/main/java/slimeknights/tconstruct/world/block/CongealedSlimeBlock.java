@@ -87,7 +87,7 @@ public class CongealedSlimeBlock extends Block {
           // but don't bounce past the halfway point in the block, to avoid bouncing twice
           if (absZ < 0.495) {
             entityIn.setDeltaMovement(new Vec3(velocity * Math.signum(direction.x()), motion.y(), motion.z()));
-            entityIn.hurtMarked = true;
+            entityIn.syncVelocity = true;
             if (velocity > 0.1) {
               worldIn.playSound(null, pos, getSoundType(state, worldIn, pos, entityIn).getStepSound(), SoundSource.BLOCKS, 1.0f, 1.0f);
             }
@@ -95,7 +95,7 @@ public class CongealedSlimeBlock extends Block {
         } else {
           if (absX < 0.495) {
             entityIn.setDeltaMovement(new Vec3(motion.x(), motion.y(), velocity * Math.signum(direction.z())));
-            entityIn.hurtMarked = true;
+            entityIn.syncVelocity = true;
             if (velocity > 0.1) {
               worldIn.playSound(null, pos, getSoundType(state, worldIn, pos, entityIn).getStepSound(), SoundSource.BLOCKS, 1.0f, 1.0f);
             }

@@ -1,6 +1,6 @@
 package slimeknights.tconstruct.library.client.book.content;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import slimeknights.mantle.client.book.data.BookData;
 import slimeknights.mantle.client.screen.book.element.ItemElement;
@@ -24,14 +24,14 @@ import java.util.List;
  */
 public class AmmoMaterialContent extends AbstractMaterialContent {
   /** Page ID for using this index directly */
-  public static final ResourceLocation ID = TConstruct.getResource("ammo_material");
+  public static final Identifier ID = TConstruct.getResource("ammo_material");
 
   public AmmoMaterialContent(MaterialVariantId materialVariant, boolean detailed) {
     super(materialVariant, detailed);
   }
 
   @Override
-  public ResourceLocation getId() {
+  public Identifier getId() {
     return ID;
   }
 

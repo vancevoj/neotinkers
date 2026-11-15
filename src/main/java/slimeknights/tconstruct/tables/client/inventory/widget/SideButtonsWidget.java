@@ -1,7 +1,7 @@
 package slimeknights.tconstruct.tables.client.inventory.widget;
 
 import lombok.Getter;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.components.events.GuiEventListener;
@@ -90,7 +90,7 @@ public class SideButtonsWidget<T extends Button> implements Renderable, GuiEvent
   }
 
   @Override
-  public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+  public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTicks) {
     for (T button : this.buttons) {
       button.render(graphics, mouseX, mouseY, partialTicks);
     }

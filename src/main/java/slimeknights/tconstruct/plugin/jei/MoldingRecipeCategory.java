@@ -11,7 +11,7 @@ import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.category.AbstractRecipeCategory;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.crafting.Ingredient;
 import slimeknights.mantle.client.SafeClientAccess;
 import slimeknights.tconstruct.TConstruct;
@@ -21,7 +21,7 @@ import slimeknights.tconstruct.smeltery.TinkerSmeltery;
 
 /** Recipe category for molding casts */
 public class MoldingRecipeCategory extends AbstractRecipeCategory<MoldingRecipe> {
-  private static final ResourceLocation BACKGROUND_LOC = TConstruct.getResource("textures/gui/jei/casting.png");
+  private static final Identifier BACKGROUND_LOC = TConstruct.getResource("textures/gui/jei/casting.png");
   private static final Component TITLE = TConstruct.makeTranslation("jei", "molding.title");
   private static final Component TOOLTIP_PATTERN_CONSUMED = Component.translatable(TConstruct.makeTranslationKey("jei", "molding.pattern_consumed"));
   private static final IRecipeSlotRichTooltipCallback PATTERN_CONSUMED_TOOLTIP = (slot, tooltip) -> tooltip.add(TOOLTIP_PATTERN_CONSUMED);
@@ -73,7 +73,7 @@ public class MoldingRecipeCategory extends AbstractRecipeCategory<MoldingRecipe>
   }
 
   @Override
-  public ResourceLocation getRegistryName(MoldingRecipe recipe) {
+  public Identifier getRegistryName(MoldingRecipe recipe) {
     return recipe.getId();
   }
 }

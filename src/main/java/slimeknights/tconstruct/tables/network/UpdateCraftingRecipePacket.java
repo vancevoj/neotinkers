@@ -4,7 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
@@ -24,7 +24,7 @@ public class UpdateCraftingRecipePacket implements BlockEntityPacket<CraftingSta
   public static final StreamCodec<RegistryFriendlyByteBuf,UpdateCraftingRecipePacket> STREAM_CODEC = ISimplePacket.codec(UpdateCraftingRecipePacket::new);
 
   private final BlockPos pos;
-  private final ResourceLocation recipe;
+  private final Identifier recipe;
   public UpdateCraftingRecipePacket(BlockPos pos, RecipeHolder<CraftingRecipe> recipe) {
     this.pos = pos;
     this.recipe = recipe.id();
@@ -32,13 +32,13 @@ public class UpdateCraftingRecipePacket implements BlockEntityPacket<CraftingSta
 
   public UpdateCraftingRecipePacket(FriendlyByteBuf buffer) {
     this.pos = buffer.readBlockPos();
-    this.recipe = buffer.readResourceLocation();
+    this.recipe = buffer.readIdentifier();
   }
 
   @Override
   public void encode(FriendlyByteBuf buffer) {
     buffer.writeBlockPos(pos);
-    buffer.writeResourceLocation(recipe);
+    buffer.writeIdentifier(recipe);
   }
 
   @Override

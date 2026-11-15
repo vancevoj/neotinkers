@@ -36,7 +36,7 @@ public class UpdateMaterialsPacket implements IThreadsafePacket {
     ImmutableMap.Builder<MaterialId,IMaterial> materials = ImmutableMap.builder();
 
     for (int i = 0; i < materialCount; i++) {
-      MaterialId id = new MaterialId(buffer.readResourceLocation());
+      MaterialId id = new MaterialId(buffer.readIdentifier());
       int tier = buffer.readVarInt();
       int sortOrder = buffer.readVarInt();
       Rarity rarity = buffer.readEnum(Rarity.class);
@@ -62,7 +62,7 @@ public class UpdateMaterialsPacket implements IThreadsafePacket {
   public void encode(FriendlyByteBuf buffer) {
     buffer.writeInt(this.materials.size());
     for (IMaterial material : this.materials.values()) {
-      buffer.writeResourceLocation(material.getIdentifier());
+      buffer.writeIdentifier(material.getIdentifier());
       buffer.writeVarInt(material.getTier());
       buffer.writeVarInt(material.getSortOrder());
       buffer.writeEnum(material.getRarity());

@@ -5,7 +5,7 @@ import com.google.errorprone.annotations.CheckReturnValue;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.PackOutput.Target;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import slimeknights.mantle.data.GenericDataProvider;
 import slimeknights.tconstruct.library.materials.definition.MaterialId;
 import slimeknights.tconstruct.library.materials.json.MaterialTraitsJson;
@@ -138,7 +138,7 @@ public abstract class AbstractMaterialTraitDataProvider extends GenericDataProvi
   @CanIgnoreReturnValue
   public static class MaterialTraitsBuilder {
     private final List<ModifierEntry> defaultTraits = new ArrayList<>();
-    private final Map<ResourceLocation,List<ModifierEntry>> perStats = new HashMap<>();
+    private final Map<Identifier,List<ModifierEntry>> perStats = new HashMap<>();
 
     /** Adds the given traits to the list */
     private static void addAll(List<ModifierEntry> list, LazyModifier[] traits) {

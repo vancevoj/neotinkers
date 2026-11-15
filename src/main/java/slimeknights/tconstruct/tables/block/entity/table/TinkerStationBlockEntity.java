@@ -12,12 +12,12 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.client.model.data.ModelData;
+import net.neoforged.neoforge.model.data.ModelData;
 import net.neoforged.neoforge.event.EventHooks;
 import org.apache.commons.lang3.StringUtils;
 import slimeknights.mantle.util.RetexturedHelper;
@@ -60,7 +60,7 @@ public class TinkerStationBlockEntity extends RetexturedTableBlockEntity impleme
   private ITinkerStationRecipe lastRecipe;
   /** ID of the last crafted recipe, used for syncing to clients (1.21: recipes no longer carry their own ID) */
   @Nullable
-  private ResourceLocation lastRecipeId;
+  private Identifier lastRecipeId;
   /** Result inventory, lazy loads results */
   @Getter
   private final LazyResultContainer craftingResult;
@@ -156,12 +156,12 @@ public class TinkerStationBlockEntity extends RetexturedTableBlockEntity impleme
     result = null;
     this.currentError = null;
 
-    if (!this.level.isClientSide && this.level.getServer() != null) {
+    if (!this.level.isClientSide() && this.level.getServer() != null) {
       RecipeManager manager = this.level.getServer().getRecipeManager();
 
       // first, try the cached recipe
       ITinkerStationRecipe recipe = lastRecipe;
-      ResourceLocation recipeId = lastRecipeId;
+      Identifier recipeId = lastRecipeId;
       // if it does not match, find a new recipe
       if (recipe == null || !recipe.matches(this.inventoryWrapper, this.level)) {
         RecipeHolder<ITinkerStationRecipe> holder = manager.getRecipeFor(TinkerRecipeTypes.TINKER_STATION.get(), this.inventoryWrapper, this.level).orElse(null);
@@ -235,7 +235,7 @@ public class TinkerStationBlockEntity extends RetexturedTableBlockEntity impleme
     // run the recipe, will shrink inputs
     // run both sides for the sake of shift clicking
     this.inventoryWrapper.setPlayer(player);
-    this.lastRecipe.updateInputs(result, inventoryWrapper, !level.isClientSide);
+    this.lastRecipe.updateInputs(result, inventoryWrapper, !level.isClientSide());
     this.inventoryWrapper.setPlayer(null);
 
     // remove the center slot item, just clear it entirely (if you want shrinking you should use the outer slots or ask nicely for a shrink amount hook)
@@ -300,7 +300,7 @@ public class TinkerStationBlockEntity extends RetexturedTableBlockEntity impleme
    */
   public void syncRecipe(Player player) {
     // must have a last recipe and a server level
-    if (this.lastRecipe != null && this.lastRecipeId != null && this.level != null && !this.level.isClientSide && player instanceof ServerPlayer server) {
+    if (this.lastRecipe != null && this.lastRecipeId != null && this.level != null && !this.level.isClientSide() && player instanceof ServerPlayer server) {
       TinkerNetwork.getInstance().sendTo(new UpdateTinkerStationRecipePacket(this.worldPosition, this.lastRecipeId), server);
     }
   }
@@ -310,7 +310,7 @@ public class TinkerStationBlockEntity extends RetexturedTableBlockEntity impleme
    * @param id      ID of the new recipe
    * @param recipe  New recipe
    */
-  public void updateRecipe(ResourceLocation id, ITinkerStationRecipe recipe) {
+  public void updateRecipe(Identifier id, ITinkerStationRecipe recipe) {
     this.lastRecipe = recipe;
     this.lastRecipeId = id;
     this.craftingResult.clearContent();

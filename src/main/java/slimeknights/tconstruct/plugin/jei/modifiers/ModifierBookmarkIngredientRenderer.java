@@ -3,7 +3,7 @@ package slimeknights.tconstruct.plugin.jei.modifiers;
 import mezz.jei.api.gui.builder.ITooltipBuilder;
 import mezz.jei.api.ingredients.IIngredientRenderer;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.TooltipFlag;
 import slimeknights.tconstruct.library.client.modifiers.ModifierIconManager;
@@ -20,12 +20,12 @@ public enum ModifierBookmarkIngredientRenderer implements IIngredientRenderer<Mo
   private static final String WRAPPER_KEY = "jei.tconstruct.modifier_ingredient";
 
   @Override
-  public void render(GuiGraphics graphics, @Nullable ModifierEntry entry) {
+  public void render(GuiGraphicsExtractor graphics, @Nullable ModifierEntry entry) {
     render(graphics, entry, 0, 0);
   }
 
   @Override
-  public void render(GuiGraphics graphics, @Nullable ModifierEntry entry, int posX, int posY) {
+  public void render(GuiGraphicsExtractor graphics, @Nullable ModifierEntry entry, int posX, int posY) {
     if (entry != null) {
       ModifierIconManager.renderIcon(graphics, entry.getModifier(), posX, posY, 100, 16);
     }

@@ -1,7 +1,7 @@
 package slimeknights.tconstruct.library.recipe.partbuilder;
 
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.ItemLike;
 import slimeknights.mantle.data.loadable.Loadables;
 import slimeknights.tconstruct.library.utils.IdParser;
@@ -24,7 +24,7 @@ public class Pattern extends ResourceId {
     super(namespaceIn, pathIn);
   }
 
-  public Pattern(ResourceLocation location) {
+  public Pattern(Identifier location) {
     super(location);
   }
 
@@ -52,7 +52,7 @@ public class Pattern extends ResourceId {
    * Gets the texture for this pattern for rendering
    * @return  Pattern texture
    */
-  public ResourceLocation getTexture() {
+  public Identifier getTexture() {
     return withPrefix("gui/tinker_pattern/");
   }
 

@@ -77,7 +77,7 @@ public record MoveBlocksFluidEffect(boolean push, SoundEvent sound) implements F
         return 0;
       }
       // if the first block breaks on push, just break it and return
-      if (originalState.getPistonPushReaction() == PushReaction.DESTROY) {
+      if (originalState.getPistonPushReaction() == PushReaction.POPPED) {
         if (originalState.getBlock() instanceof LiquidBlock) {
           return 0;
         }
@@ -122,7 +122,7 @@ public record MoveBlocksFluidEffect(boolean push, SoundEvent sound) implements F
           return 0;
         }
         // if we see destroy, we also found our destination
-      } while (!state.isAir() && state.getPistonPushReaction() != PushReaction.DESTROY);
+      } while (!state.isAir() && state.getPistonPushReaction() != PushReaction.POPPED);
 
       // if execute, we actually get to move the blocks
       if (action.execute()) {

@@ -18,7 +18,7 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.resources.Resource;
@@ -75,13 +75,13 @@ import java.util.function.Function;
 /** Generates melting recipes based on crafting recipes */
 public class GenerateMeltingRecipesCommand {
   /** Location of the config JSON file */
-  public static final ResourceLocation MELTING_CONFIGURATION = TConstruct.getResource("command/generate_melting_recipes.json");
+  public static final Identifier MELTING_CONFIGURATION = TConstruct.getResource("command/generate_melting_recipes.json");
   /** KEY for successfully running command */
   private static final String KEY_SUCCESS = TConstruct.makeTranslationKey("command", "generate.melting_recipes");
   /** Error on invalid config JSON */
   private static final SimpleCommandExceptionType CONFIG_INVALID = new SimpleCommandExceptionType(TConstruct.makeTranslation("command", "generate.melting_recipes.invalid_config"));
   /** Recipes to skip when considering melting */
-  private static final Loadable<List<ResourceLocation>> SKIP_RECIPES = Loadables.RESOURCE_LOCATION.list(0);
+  private static final Loadable<List<Identifier>> SKIP_RECIPES = Loadables.RESOURCE_LOCATION.list(0);
 
   /**
    * Registers this sub command with the root command
@@ -111,7 +111,7 @@ public class GenerateMeltingRecipesCommand {
     IJsonPredicate<Item> melt;
     IJsonPredicate<Item> inputs;
     IJsonPredicate<Item> ignore;
-    List<ResourceLocation> skipRecipes;
+    List<Identifier> skipRecipes;
     Optional<Resource> resource = level.getServer().getResourceManager().getResource(MELTING_CONFIGURATION);
     config: {
       if (resource.isPresent()) {
@@ -133,15 +133,15 @@ public class GenerateMeltingRecipesCommand {
 
     // iterate all recipes for the type storing recipes that craft the tag
     RegistryAccess access = level.registryAccess();
-    Comparator<MeltingResult> nameComparator = Comparator.<MeltingResult,ResourceLocation>comparing(r -> Loadables.FLUID.getKey(r.fluid.getFluid())).reversed();
+    Comparator<MeltingResult> nameComparator = Comparator.<MeltingResult,Identifier>comparing(r -> Loadables.FLUID.getKey(r.fluid.getFluid())).reversed();
     MutableInt successes = new MutableInt(0);
     Path data = pack.resolve(PackType.SERVER_DATA.getDirectory());
     RecipeOutput consumer = new RecipeOutput() {
       @Override
-      public void accept(ResourceLocation id, Recipe<?> recipe, @Nullable AdvancementHolder advancement, net.neoforged.neoforge.common.conditions.ICondition... conditions) {
+      public void accept(Identifier id, Recipe<?> recipe, @Nullable AdvancementHolder advancement, net.neoforged.neoforge.common.conditions.ICondition... conditions) {
         Path path = data.resolve(id.getNamespace() + "/recipes/" + id.getPath() + ".json");
         // serialize the recipe via its codec to a generated datapack JSON
-        if (GeneratePackHelper.saveJson(Recipe.CODEC.encodeStart(access.createSerializationContext(JsonOps.INSTANCE), recipe).getOrThrow(JsonParseException::new), path)) {
+        if (GeneratePackHelper.saveJson(Recipe.DIRECT_CODEC.encodeStart(access.createSerializationContext(JsonOps.INSTANCE), recipe).getOrThrow(JsonParseException::new), path)) {
           successes.increment();
         }
       }
@@ -282,8 +282,8 @@ public class GenerateMeltingRecipesCommand {
           // we don't know the proper unit size, but 10mb is pretty likely
           builder.setDamagable(10);
         }
-        ResourceLocation id = Loadables.ITEM.getKey(result);
-        builder.save(consumer, ResourceLocation.fromNamespaceAndPath("tinkers_generated", "melting/" + id.getNamespace() + '/' + id.getPath()));
+        Identifier id = Loadables.ITEM.getKey(result);
+        builder.save(consumer, Identifier.fromNamespaceAndPath("tinkers_generated", "melting/" + id.getNamespace() + '/' + id.getPath()));
       }
     }
 
@@ -352,7 +352,7 @@ public class GenerateMeltingRecipesCommand {
         return first.tag.equals(second.tag);
       }
       // if either lack a tag, do exact fluid
-      return first.fluid.isFluidEqual(second.fluid);
+      return FluidStack.isSameFluidSameComponents(first.fluid, second.fluid);
     }
 
     /** Combines two results into a larger result. Precondition is {@link #matches(MeltingResult, MeltingResult)} is true. */
@@ -450,7 +450,7 @@ public class GenerateMeltingRecipesCommand {
       }
       // fluid capability check
       try {
-        IFluidHandlerItem capability = stack.getCapability(Capabilities.FluidHandler.ITEM);
+        IFluidHandlerItem capability = stack.getCapability(Capabilities.Fluid.ITEM);
         if (capability != null) {
           FluidStack contained = capability.getFluidInTank(0);
           if (!contained.isEmpty()) {

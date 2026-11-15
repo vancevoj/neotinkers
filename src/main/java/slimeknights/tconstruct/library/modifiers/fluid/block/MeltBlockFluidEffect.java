@@ -65,7 +65,7 @@ public record MeltBlockFluidEffect(IJsonPredicate<BlockState> validBlocks, int m
     }
 
     // from this point on the block will melt, just a question of whether it leaves fluid behind or air
-    if (action.execute() && !world.isClientSide) {
+    if (action.execute() && !world.isClientSide()) {
       // if we don't have enough and its not flowing, nothing much to do
       BlockState toPlace = Blocks.AIR.defaultBlockState();
       // have enough? place full block

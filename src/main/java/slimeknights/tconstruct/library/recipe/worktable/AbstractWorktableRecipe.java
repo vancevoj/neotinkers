@@ -2,7 +2,7 @@ package slimeknights.tconstruct.library.recipe.worktable;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
@@ -31,7 +31,7 @@ public abstract class AbstractWorktableRecipe implements IModifierWorktableRecip
   protected static final LoadableField<List<SizedIngredient>,AbstractWorktableRecipe> INPUTS_FIELD = SizedIngredient.LOADABLE.list(1).requiredField("inputs", r -> r.inputs);
 
   @Getter
-  private final ResourceLocation id;
+  private final Identifier id;
   protected final Ingredient toolRequirement;
   protected final List<SizedIngredient> inputs;
 
@@ -39,7 +39,7 @@ public abstract class AbstractWorktableRecipe implements IModifierWorktableRecip
   @Nullable
   protected List<ItemStack> tools;
 
-  public AbstractWorktableRecipe(ResourceLocation id, List<SizedIngredient> inputs) {
+  public AbstractWorktableRecipe(Identifier id, List<SizedIngredient> inputs) {
     this(id, Ingredient.of(TinkerTags.Items.MODIFIABLE), inputs);
   }
 

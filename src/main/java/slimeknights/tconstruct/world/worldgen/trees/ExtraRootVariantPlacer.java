@@ -9,7 +9,7 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderSet;
-import net.minecraft.core.RegistryCodecs;
+import net.minecraft.core.registries.codec.RegistryCodecs;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.TagKey;
@@ -67,8 +67,8 @@ public class ExtraRootVariantPlacer extends MangroveRootPlacer {
   /** Variant of roots to replace in the tree */
   public record RootVariant(HolderSet<Block> holder, BlockStateProvider state) implements Predicate<BlockState> {
     public static final Codec<RootVariant> CODEC = RecordCodecBuilder.create(inst -> inst.group(
-      RegistryCodecs.homogeneousList(Registries.BLOCK).fieldOf("matches").forGetter(RootVariant::holder),
-      BlockStateProvider.CODEC.fieldOf("state_provider").forGetter(RootVariant::state)).apply(inst, RootVariant::new));
+      RegistryCodecs.holderSet(Registries.BLOCK).fieldOf("matches").forGetter(RootVariant::holder),
+      BlockStateProvider.TYPED_CODEC.fieldOf("state_provider").forGetter(RootVariant::state)).apply(inst, RootVariant::new));
 
     @Override
     public boolean test(BlockState state) {
@@ -101,7 +101,7 @@ public class ExtraRootVariantPlacer extends MangroveRootPlacer {
     /** Sets the root to a block */
     @CanIgnoreReturnValue
     public Builder rootBlock(Block block) {
-      return roots(BlockStateProvider.simple(block));
+      return roots(BlockStateProvider.of(block));
     }
 
     /**
@@ -125,7 +125,7 @@ public class ExtraRootVariantPlacer extends MangroveRootPlacer {
     @SuppressWarnings("deprecation")  // no idea why mojang deprecates the one API for that thing
     @CanIgnoreReturnValue
     public Builder rootVariant(Block rootVariant, Block... replace) {
-      return rootVariant(HolderSet.direct(Block::builtInRegistryHolder, replace), BlockStateProvider.simple(rootVariant));
+      return rootVariant(HolderSet.direct(Block::builtInRegistryHolder, replace), BlockStateProvider.of(rootVariant));
     }
 
     /**

@@ -4,7 +4,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import net.minecraft.core.Holder;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.tags.TagKey;
@@ -60,15 +60,15 @@ public class MobEquipmentManager extends SimpleJsonResourceReloadListener {
   }
 
   @Override
-  protected void apply(Map<ResourceLocation, JsonElement> jsons, ResourceManager manager, ProfilerFiller profiler) {
+  protected void apply(Map<Identifier, JsonElement> jsons, ResourceManager manager, ProfilerFiller profiler) {
     long time = System.nanoTime();
     int loaded = 0;
 
     // location of the objects only matters for debug, just parse each one
     Map<EntityType<?>, List<MobEquipment>> parsed = new HashMap<>();
     Function<EntityType<?>, List<MobEquipment>> ifAbsent = type -> new ArrayList<>();
-    for (Entry<ResourceLocation,JsonElement> entry : jsons.entrySet()) {
-      ResourceLocation key = entry.getKey();
+    for (Entry<Identifier,JsonElement> entry : jsons.entrySet()) {
+      Identifier key = entry.getKey();
       try {
         JsonObject json = GsonHelper.convertToJsonObject(entry.getValue(), key.toString());
         // skip if conditions fail

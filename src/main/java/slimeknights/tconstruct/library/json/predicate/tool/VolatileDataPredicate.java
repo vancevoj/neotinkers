@@ -1,12 +1,12 @@
 package slimeknights.tconstruct.library.json.predicate.tool;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import slimeknights.mantle.data.loadable.Loadables;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 
 /** Predicate that checks if a key is present in volatile data */
-public record VolatileDataPredicate(ResourceLocation key) implements ToolStackPredicate {
+public record VolatileDataPredicate(Identifier key) implements ToolStackPredicate {
   public static final RecordLoadable<VolatileDataPredicate> LOADER = RecordLoadable.create(Loadables.RESOURCE_LOCATION.requiredField("key", VolatileDataPredicate::key), VolatileDataPredicate::new);
 
   @Override

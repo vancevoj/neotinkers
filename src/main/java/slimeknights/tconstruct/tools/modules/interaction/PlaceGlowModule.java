@@ -48,7 +48,7 @@ public record PlaceGlowModule(int damage) implements ModifierModule, BlockIntera
   public InteractionResult afterBlockUse(IToolStackView tool, ModifierEntry modifier, UseOnContext context, InteractionSource source) {
     if (!tool.isBroken() && tool.getHook(ToolHooks.INTERACTION).canInteract(tool, modifier.getId(), source)) {
       Player player = context.getPlayer();
-      if (!context.getLevel().isClientSide) {
+      if (!context.getLevel().isClientSide()) {
         Level world = context.getLevel();
         Direction face = context.getClickedFace();
         BlockPos pos = context.getClickedPos().relative(face);
@@ -60,7 +60,7 @@ public record PlaceGlowModule(int damage) implements ModifierModule, BlockIntera
           world.playSound(null, pos, world.getBlockState(pos).getSoundType(world, pos, player).getPlaceSound(), SoundSource.BLOCKS, 1.0f, 1.0f);
         }
       }
-      return InteractionResult.sidedSuccess(context.getLevel().isClientSide);
+      return InteractionResult.sidedSuccess(context.getLevel().isClientSide());
     }
     return InteractionResult.PASS;
   }

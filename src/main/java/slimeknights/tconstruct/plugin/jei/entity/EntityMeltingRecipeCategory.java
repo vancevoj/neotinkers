@@ -15,9 +15,9 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.category.AbstractRecipeCategory;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.fluids.FluidStack;
 import slimeknights.mantle.fluid.tooltip.FluidTooltipHandler;
@@ -38,7 +38,7 @@ import java.util.List;
  * Entity melting display in JEI
  */
 public class EntityMeltingRecipeCategory extends AbstractRecipeCategory<EntityMeltingRecipe> {
-  public static final ResourceLocation BACKGROUND_LOC = TConstruct.getResource("textures/gui/jei/melting.png");
+  public static final Identifier BACKGROUND_LOC = TConstruct.getResource("textures/gui/jei/melting.png");
   private static final Component TITLE = TConstruct.makeTranslation("jei", "entity_melting.title");
   private static final String KEY_PER_HEARTS = TConstruct.makeTranslationKey("jei", "entity_melting.per_hearts");
   private static final Component TOOLTIP_PER_HEART = Component.translatable(TConstruct.makeTranslationKey("jei", "entity_melting.per_heart")).withStyle(ChatFormatting.GRAY);
@@ -67,7 +67,7 @@ public class EntityMeltingRecipeCategory extends AbstractRecipeCategory<EntityMe
   }
 
   @Override
-  public void draw(EntityMeltingRecipe recipe, IRecipeSlotsView slot, GuiGraphics graphics, double mouseX, double mouseY) {
+  public void draw(EntityMeltingRecipe recipe, IRecipeSlotsView slot, GuiGraphicsExtractor graphics, double mouseX, double mouseY) {
     background.draw(graphics);
   }
 
@@ -99,7 +99,7 @@ public class EntityMeltingRecipeCategory extends AbstractRecipeCategory<EntityMe
   }
 
   @Override
-  public ResourceLocation getRegistryName(EntityMeltingRecipe recipe) {
+  public Identifier getRegistryName(EntityMeltingRecipe recipe) {
     return recipe.getId();
   }
 

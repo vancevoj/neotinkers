@@ -1,7 +1,7 @@
 package slimeknights.tconstruct.world.item;
 
 import net.minecraft.core.Direction;
-import net.minecraft.world.entity.monster.EnderMan;
+import net.minecraft.world.entity.monster.Enderman;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.StandingAndWallBlockItem;
@@ -14,7 +14,7 @@ public class EndermanHeadItem extends StandingAndWallBlockItem {
   }
 
   @Override
-  public boolean isEnderMask(ItemStack stack, Player player, EnderMan endermanEntity) {
+  public boolean isEnderMask(ItemStack stack, Player player, Enderman endermanEntity) {
     return true;
   }
 }

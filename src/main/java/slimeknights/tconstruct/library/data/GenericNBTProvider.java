@@ -2,7 +2,7 @@ package slimeknights.tconstruct.library.data;
 
 import com.google.common.hash.Hashing;
 import lombok.RequiredArgsConstructor;
-import net.minecraft.Util;
+import net.minecraft.util.Util;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
@@ -10,7 +10,7 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.data.PackOutput.Target;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtIo;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import slimeknights.mantle.util.JsonHelper;
 import slimeknights.tconstruct.TConstruct;
 
@@ -35,12 +35,12 @@ public abstract class GenericNBTProvider implements DataProvider {
   }
 
   /** Localizes the given resource to the folder */
-  public ResourceLocation localize(ResourceLocation name) {
+  public Identifier localize(Identifier name) {
     return JsonHelper.localize(name, folder, ".nbt");
   }
 
   /** Saves the given NBT to the given location */
-  protected CompletableFuture<?> saveNBT(CachedOutput cache, ResourceLocation location, CompoundTag data) {
+  protected CompletableFuture<?> saveNBT(CachedOutput cache, Identifier location, CompoundTag data) {
     return CompletableFuture.runAsync(() -> {
       try {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();

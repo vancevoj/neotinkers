@@ -18,7 +18,7 @@ import java.util.Locale;
 import java.util.Map;
 
 /** All sounds registered by Tinkers, should be used instead of vanilla events when subtitles need to be distinguished */
-@EventBusSubscriber(modid = TConstruct.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = TConstruct.MOD_ID)
 public enum Sounds {
   // blocks
   SAW("little_saw"),

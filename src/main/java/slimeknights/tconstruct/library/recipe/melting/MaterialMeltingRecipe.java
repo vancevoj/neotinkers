@@ -3,7 +3,7 @@ package slimeknights.tconstruct.library.recipe.melting;
 import it.unimi.dsi.fastutil.objects.Object2IntMap.Entry;
 import lombok.Getter;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
@@ -39,13 +39,13 @@ public class MaterialMeltingRecipe implements IMeltingRecipe, IMultiRecipe<IDisp
     MaterialMeltingRecipe::new);
 
   @Getter
-  private final ResourceLocation id;
+  private final Identifier id;
   private final MaterialVariant input;
   private final int temperature;
   private final FluidOutput result;
   private final List<FluidOutput> byproducts;
 
-  public MaterialMeltingRecipe(ResourceLocation id, MaterialVariantId input, int temperature, FluidOutput result, List<FluidOutput> byproducts) {
+  public MaterialMeltingRecipe(Identifier id, MaterialVariantId input, int temperature, FluidOutput result, List<FluidOutput> byproducts) {
     this.id = id;
     this.input = MaterialVariant.of(input);
     this.temperature = temperature;
@@ -53,9 +53,9 @@ public class MaterialMeltingRecipe implements IMeltingRecipe, IMultiRecipe<IDisp
     this.byproducts = byproducts;
   }
 
-  /** @deprecated use {@link #MaterialMeltingRecipe(ResourceLocation,MaterialVariantId,int,FluidOutput,List)} */
+  /** @deprecated use {@link #MaterialMeltingRecipe(Identifier,MaterialVariantId,int,FluidOutput,List)} */
   @Deprecated(forRemoval = true)
-  public MaterialMeltingRecipe(ResourceLocation id, MaterialVariantId input, int temperature, FluidOutput result) {
+  public MaterialMeltingRecipe(Identifier id, MaterialVariantId input, int temperature, FluidOutput result) {
     this(id, input, temperature, result, List.of());
   }
 

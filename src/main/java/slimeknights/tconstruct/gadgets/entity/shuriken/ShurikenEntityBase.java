@@ -4,7 +4,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
+import net.minecraft.world.entity.projectile.throwableitemprojectile.ThrowableItemProjectile;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
@@ -51,7 +51,7 @@ public abstract class ShurikenEntityBase extends ThrowableItemProjectile impleme
     super.onHit(result);
 
     Level level = level();
-    if (!level.isClientSide) {
+    if (!level.isClientSide()) {
       level.broadcastEntityEvent(this, (byte) 3); // TODO: find the proper constant for this event ID
       this.discard();
     }

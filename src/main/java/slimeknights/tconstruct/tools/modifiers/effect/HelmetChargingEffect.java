@@ -2,11 +2,11 @@ package slimeknights.tconstruct.tools.modifiers.effect;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.MobEffectTextureManager;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -38,7 +38,7 @@ public class HelmetChargingEffect extends MobEffect {
   @Override
   public void initializeClient(Consumer<IClientMobEffectExtensions> consumer) {
     consumer.accept(new IClientMobEffectExtensions() {
-      private static final ResourceLocation BAR_KEY = TConstruct.getResource("helmet_charging_bar");
+      private static final Identifier BAR_KEY = TConstruct.getResource("helmet_charging_bar");
       private final Minecraft mc = Minecraft.getInstance();
 
       @Override
@@ -47,7 +47,7 @@ public class HelmetChargingEffect extends MobEffect {
       }
 
       @Override
-      public boolean renderGuiIcon(MobEffectInstance instance, Gui gui, GuiGraphics graphics, int x, int y, float z, float alpha) {
+      public boolean renderGuiIcon(MobEffectInstance instance, Gui gui, GuiGraphicsExtractor graphics, int x, int y, float z, float alpha) {
         // start by drawing the original texture, skip alpha
         MobEffectTextureManager textures = mc.getMobEffectTextures();
         TextureAtlasSprite sprite = textures.get(instance.getEffect());

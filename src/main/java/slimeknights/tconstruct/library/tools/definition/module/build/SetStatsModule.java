@@ -1,6 +1,6 @@
 package slimeknights.tconstruct.library.tools.definition.module.build;
 
-import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.equipment.ArmorType;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.tconstruct.library.module.HookProvider;
 import slimeknights.tconstruct.library.module.ModuleHook;
@@ -44,24 +44,24 @@ public record SetStatsModule(StatsNBT stats) implements ToolStatsHook, ToolModul
 
 
   /** Creates a builder instance */
-  public static ArmorBuilder armor(List<ArmorItem.Type> slots) {
+  public static ArmorBuilder armor(List<ArmorType> slots) {
     return new ArmorBuilder(slots);
   }
 
   public static class ArmorBuilder implements ArmorModuleBuilder<SetStatsModule> {
 
-    private final List<ArmorItem.Type> slotTypes;
+    private final List<ArmorType> slotTypes;
     private final StatsNBT.Builder[] builders = new StatsNBT.Builder[4];
 
-    private ArmorBuilder(List<ArmorItem.Type> slotTypes) {
+    private ArmorBuilder(List<ArmorType> slotTypes) {
       this.slotTypes = slotTypes;
-      for (ArmorItem.Type slotType : slotTypes) {
+      for (ArmorType slotType : slotTypes) {
         builders[slotType.ordinal()] = StatsNBT.builder();
       }
     }
 
     /** Gets the builder for the given slot */
-    protected StatsNBT.Builder getBuilder(ArmorItem.Type slotType) {
+    protected StatsNBT.Builder getBuilder(ArmorType slotType) {
       StatsNBT.Builder builder = builders[slotType.ordinal()];
       if (builder == null) {
         throw new IllegalArgumentException("Unsupported slot type " + slotType);
@@ -70,19 +70,19 @@ public record SetStatsModule(StatsNBT stats) implements ToolStatsHook, ToolModul
     }
 
     /** Adds a bonus to the builder */
-    public <T> ArmorBuilder set(ArmorItem.Type slotType, IToolStat<T> stat, T value) {
+    public <T> ArmorBuilder set(ArmorType slotType, IToolStat<T> stat, T value) {
       getBuilder(slotType).set(stat, value);
       return this;
     }
 
     /** Adds a bonus to the builder */
-    public ArmorBuilder set(ArmorItem.Type slotType, IToolStat<Float> stat, float value) {
+    public ArmorBuilder set(ArmorType slotType, IToolStat<Float> stat, float value) {
       return set(slotType, stat, (Float) value);
     }
 
     /** Sets the same bonus on all pieces */
     public <T> ArmorBuilder setAll(IToolStat<T> stat, T value) {
-      for (ArmorItem.Type slotType : slotTypes) {
+      for (ArmorType slotType : slotTypes) {
         set(slotType, stat, value);
       }
       return this;
@@ -113,7 +113,7 @@ public record SetStatsModule(StatsNBT stats) implements ToolStatsHook, ToolModul
      * @return  Builder
      */
     public ArmorBuilder durabilityFactor(float maxDamageFactor) {
-      for (ArmorItem.Type slotType : slotTypes) {
+      for (ArmorType slotType : slotTypes) {
         set(slotType, ToolStats.DURABILITY, ArmorModuleBuilder.MAX_DAMAGE_ARRAY[slotType.ordinal()] * maxDamageFactor);
       }
       return this;
@@ -121,7 +121,7 @@ public record SetStatsModule(StatsNBT stats) implements ToolStatsHook, ToolModul
 
     /** Builds the final module */
     @Override
-    public SetStatsModule build(ArmorItem.Type slot) {
+    public SetStatsModule build(ArmorType slot) {
       return new SetStatsModule(getBuilder(slot).build());
     }
   }

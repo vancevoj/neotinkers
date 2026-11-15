@@ -112,7 +112,7 @@ public class StatsNBT {
 
     // simply try each key as a tool stat
     CompoundTag nbt = (CompoundTag)inbt;
-    for (String key : nbt.getAllKeys()) {
+    for (String key : nbt.keySet()) {
       Tag tag = nbt.get(key);
       if (tag != null) {
         IToolStat<?> stat = readStatIdFromNBT(key);

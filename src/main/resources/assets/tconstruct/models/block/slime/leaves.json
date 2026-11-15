@@ -1,5 +1,4 @@
 {
-    "render_type": "minecraft:cutout_mipped",
     "parent": "block/leaves",
     "textures": {
         "all": "tconstruct:block/slime/foliage/leaves"

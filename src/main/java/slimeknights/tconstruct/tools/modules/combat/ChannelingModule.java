@@ -1,5 +1,6 @@
 package slimeknights.tconstruct.tools.modules.combat;
 
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -64,7 +65,7 @@ public record ChannelingModule(float clearChance, float rainChance, float thunde
       }
       // if the chance passes, spawn lightning
       if (chance >= 1 || level.random.nextFloat() < chance) {
-        LightningBolt lightning = EntityType.LIGHTNING_BOLT.create(level);
+        LightningBolt lightning = EntityTypes.LIGHTNING_BOLT.create(level);
         if (lightning != null) {
           lightning.moveTo(Vec3.atBottomCenterOf(target));
           if (attacker instanceof ServerPlayer player) {

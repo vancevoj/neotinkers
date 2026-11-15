@@ -1,7 +1,7 @@
 package slimeknights.tconstruct.library.recipe.casting.material;
 
 import lombok.Getter;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
@@ -39,7 +39,7 @@ public class MaterialFluidRecipe implements ICustomOutputRecipe<ICastingContaine
   public static final MaterialFluidRecipe EMPTY = new MaterialFluidRecipe(TConstruct.getResource("missingno"), FluidIngredient.EMPTY, 0, null, MaterialId.UNKNOWN);
 
   @Getter
-  private final ResourceLocation id;
+  private final Identifier id;
   private final FluidIngredient fluid;
   @Getter
   private final int temperature;
@@ -52,13 +52,13 @@ public class MaterialFluidRecipe implements ICustomOutputRecipe<ICastingContaine
   @Getter
   private final boolean hideInBook;
 
-  /** @deprecated use {@link #MaterialFluidRecipe(ResourceLocation, FluidIngredient, int, MaterialVariantId, MaterialVariantId, boolean)} */
+  /** @deprecated use {@link #MaterialFluidRecipe(Identifier, FluidIngredient, int, MaterialVariantId, MaterialVariantId, boolean)} */
   @Deprecated(forRemoval = true)
-  public MaterialFluidRecipe(ResourceLocation id, FluidIngredient fluid, int temperature, @Nullable MaterialVariantId inputId, MaterialVariantId outputId) {
+  public MaterialFluidRecipe(Identifier id, FluidIngredient fluid, int temperature, @Nullable MaterialVariantId inputId, MaterialVariantId outputId) {
     this(id, fluid, temperature, inputId, outputId, false);
   }
 
-  protected MaterialFluidRecipe(ResourceLocation id, FluidIngredient fluid, int temperature, @Nullable MaterialVariantId inputId, MaterialVariantId outputId, boolean hideInBook) {
+  protected MaterialFluidRecipe(Identifier id, FluidIngredient fluid, int temperature, @Nullable MaterialVariantId inputId, MaterialVariantId outputId, boolean hideInBook) {
     this.id = id;
     this.fluid = fluid;
     this.temperature = temperature;
@@ -116,7 +116,7 @@ public class MaterialFluidRecipe implements ICustomOutputRecipe<ICastingContaine
   /* JEI */
 
   @Override
-  public ResourceLocation getRecipeId() {
+  public Identifier getRecipeId() {
     return getId();
   }
 

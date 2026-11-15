@@ -1,6 +1,6 @@
 package slimeknights.tconstruct.library.recipe.casting;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.fluids.FluidStack;
 import slimeknights.mantle.recipe.ICommonRecipe;
@@ -15,7 +15,7 @@ import static slimeknights.tconstruct.library.recipe.melting.IMeltingRecipe.getT
  */
 public interface ICastingRecipe extends ICommonRecipe<ICastingContainer> {
   /** Gets the ID of this recipe. 1.21: recipes no longer know their own ID, so casting recipes keep it for display recipes */
-  ResourceLocation getId();
+  Identifier getId();
 
   @Override
   default ItemStack getToastSymbol() {

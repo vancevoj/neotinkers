@@ -2,7 +2,7 @@ package slimeknights.tconstruct.library.modifiers.fluid.entity;
 
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.stats.Stat;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.entity.player.Player;
@@ -27,7 +27,7 @@ public record AwardStatFluidEffect(Stat<?> stat, int amount) implements FluidEff
     IntLoadable.ANY_SHORT.requiredField("amount", AwardStatFluidEffect::amount),
     AwardStatFluidEffect::new);
 
-  public AwardStatFluidEffect(ResourceLocation stat, int amount) {
+  public AwardStatFluidEffect(Identifier stat, int amount) {
     this(Stats.CUSTOM.get(stat), amount);
   }
 

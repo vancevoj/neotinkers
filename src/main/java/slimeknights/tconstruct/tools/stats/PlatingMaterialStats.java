@@ -1,9 +1,9 @@
 package slimeknights.tconstruct.tools.stats;
 
+import net.minecraft.world.item.equipment.ArmorType;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.ArmorItem;
 import slimeknights.mantle.data.loadable.field.LoadableField;
 import slimeknights.mantle.data.loadable.primitive.FloatLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
@@ -98,9 +98,9 @@ public record PlatingMaterialStats(MaterialStatType<?> getType, int durability, 
 
     /** Sets the durability for the piece based on the given factor */
     public Builder durabilityFactor(float maxDamageFactor) {
-      for (ArmorItem.Type slotType : ArmorItem.Type.values()) {
+      for (ArmorType slotType : ArmorType.values()) {
         int index = slotType.ordinal();
-        // 1.21 added ArmorItem.Type.BODY (ordinal 4); Tinkers only plates the 4 humanoid slots, so skip out-of-range indices
+        // 1.21 added ArmorType.BODY (ordinal 4); Tinkers only plates the 4 humanoid slots, so skip out-of-range indices
         if (index >= durability.length) {
           continue;
         }
@@ -114,15 +114,15 @@ public record PlatingMaterialStats(MaterialStatType<?> getType, int durability, 
 
     /** Sets the armor value for each piece */
     public Builder armor(float boots, float leggings, float chestplate, float helmet) {
-      armor[ArmorItem.Type.BOOTS.ordinal()] = boots;
-      armor[ArmorItem.Type.LEGGINGS.ordinal()] = leggings;
-      armor[ArmorItem.Type.CHESTPLATE.ordinal()] = chestplate;
-      armor[ArmorItem.Type.HELMET.ordinal()] = helmet;
+      armor[ArmorType.BOOTS.ordinal()] = boots;
+      armor[ArmorType.LEGGINGS.ordinal()] = leggings;
+      armor[ArmorType.CHESTPLATE.ordinal()] = chestplate;
+      armor[ArmorType.HELMET.ordinal()] = helmet;
       return this;
     }
 
     @Override
-    public PlatingMaterialStats build(ArmorItem.Type slot) {
+    public PlatingMaterialStats build(ArmorType slot) {
       int index = slot.ordinal();
       return new PlatingMaterialStats(TYPES.get(index), durability[index], armor[index], toughness, knockbackResistance);
     }

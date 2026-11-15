@@ -1,10 +1,10 @@
 package slimeknights.tconstruct.library.tools.item.armor;
 
+import net.minecraft.world.item.equipment.ArmorType;
 import lombok.Getter;
 import net.minecraft.core.Holder;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.crafting.Ingredient;
 import slimeknights.mantle.registration.object.IdAwareObject;
@@ -24,20 +24,20 @@ import java.util.Map;
 @Getter
 public class DummyArmorMaterial implements IdAwareObject {
   /** Map of zeroed defense values, used by the dummy material */
-  private static final Map<ArmorItem.Type,Integer> NO_DEFENSE;
+  private static final Map<ArmorType,Integer> NO_DEFENSE;
   static {
-    NO_DEFENSE = new EnumMap<>(ArmorItem.Type.class);
-    for (ArmorItem.Type type : ArmorItem.Type.values()) {
+    NO_DEFENSE = new EnumMap<>(ArmorType.class);
+    for (ArmorType type : ArmorType.values()) {
       NO_DEFENSE.put(type, 0);
     }
   }
 
-  private final ResourceLocation id;
+  private final Identifier id;
   private final SoundEvent equipSound;
   /** Holder wrapping a zeroed armor material, lazily passed to the {@link ArmorItem} super constructor */
   private final Holder<ArmorMaterial> armorMaterial;
 
-  public DummyArmorMaterial(ResourceLocation id, SoundEvent equipSound) {
+  public DummyArmorMaterial(Identifier id, SoundEvent equipSound) {
     this.id = id;
     this.equipSound = equipSound;
     // 1.21: NeoForge only invokes the custom armor model (getGenericArmorModel) INSIDE the per-layer

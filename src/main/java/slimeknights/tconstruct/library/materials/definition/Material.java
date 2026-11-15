@@ -2,7 +2,7 @@ package slimeknights.tconstruct.library.materials.definition;
 
 import lombok.Getter;
 import net.minecraft.network.chat.TextColor;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Rarity;
 import org.jetbrains.annotations.ApiStatus.Internal;
 
@@ -31,7 +31,7 @@ public class Material implements IMaterial {
    * They're synced over the network and other classes might lead to unexpected behaviour.
    */
   @Internal
-  public Material(ResourceLocation identifier, int tier, int order, Rarity rarity, boolean craftable, boolean hidden) {
+  public Material(Identifier identifier, int tier, int order, Rarity rarity, boolean craftable, boolean hidden) {
     this.identifier = new MaterialId(identifier);
     this.tier = tier;
     this.sortOrder = order;
@@ -40,13 +40,13 @@ public class Material implements IMaterial {
     this.hidden = hidden;
   }
 
-  /** @deprecated use {@link #Material(ResourceLocation, int, int, Rarity, boolean, boolean)} */
+  /** @deprecated use {@link #Material(Identifier, int, int, Rarity, boolean, boolean)} */
   @Deprecated(forRemoval = true)
-  public Material(ResourceLocation identifier, int tier, int order, boolean craftable, boolean hidden) {
+  public Material(Identifier identifier, int tier, int order, boolean craftable, boolean hidden) {
     this(identifier, tier, order, IMaterial.computeRarity(tier), craftable, hidden);
   }
 
-  protected Material(ResourceLocation identifier, boolean craftable, boolean hidden) {
+  protected Material(Identifier identifier, boolean craftable, boolean hidden) {
     this(identifier, 0, -1, Rarity.COMMON, craftable, hidden);
   }
 

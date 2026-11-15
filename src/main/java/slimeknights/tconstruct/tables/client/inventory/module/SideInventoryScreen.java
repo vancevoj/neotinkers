@@ -1,9 +1,9 @@
 package slimeknights.tconstruct.tables.client.inventory.module;
 
 import lombok.Getter;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
@@ -37,7 +37,7 @@ public class SideInventoryScreen<P extends MultiModuleScreen<?>, C extends Abstr
   protected ElementScreen sliderBottom = GenericScreen.sliderBottom;
   protected ScalableElementScreen sliderBackground = GenericScreen.sliderBackground;
 
-  protected static final ResourceLocation GENERIC_INVENTORY = TConstruct.getResource("textures/gui/generic.png");
+  protected static final Identifier GENERIC_INVENTORY = TConstruct.getResource("textures/gui/generic.png");
 
   protected BorderWidget border = new BorderWidget();
 
@@ -246,14 +246,14 @@ public class SideInventoryScreen<P extends MultiModuleScreen<?>, C extends Abstr
   }
 
   @Override
-  public void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
+  public void extractLabels(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
     if (this.shouldDrawName()) {
-      graphics.drawString(this.font, this.getTitle().getString(), this.border.w, this.border.h - 1, 0x404040, false);
+      graphics.text(this.font, this.getTitle().getString(), this.border.w, this.border.h - 1, 0x404040, false);
     }
   }
 
   @Override
-  protected void renderBg(GuiGraphics graphics, float partialTicks, int mouseX, int mouseY) {
+  protected void renderBg(GuiGraphicsExtractor graphics, float partialTicks, int mouseX, int mouseY) {
     this.leftPos += this.border.w;
     this.topPos += this.border.h;
 
@@ -283,7 +283,7 @@ public class SideInventoryScreen<P extends MultiModuleScreen<?>, C extends Abstr
     this.topPos -= this.border.h;
   }
 
-  protected int drawSlots(GuiGraphics graphics, int xPos, int yPos) {
+  protected int drawSlots(GuiGraphicsExtractor graphics, int xPos, int yPos) {
     int width = this.columns * this.slot.w;
     int height = this.imageHeight - this.border.h * 2;
     int fullRows = (this.lastSlotId - this.firstSlotId) / this.columns;

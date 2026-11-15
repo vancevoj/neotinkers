@@ -102,7 +102,7 @@ public class SlimeBounceHandler {
           double boost = Math.sqrt(info.lastMagSq / motionSq) * 0.975f;
           if (boost > 1) {
             entity.setDeltaMovement(motion.x * boost, motion.y, motion.z * boost);
-            entity.hasImpulse = true;
+            entity.needsSync = true;
             info.lastMagSq = info.lastMagSq * 0.975f * 0.975f;
             // play sound if we had a big angle change
             double newAngle = Mth.atan2(motion.z, motion.x);

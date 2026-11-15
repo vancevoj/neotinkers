@@ -3,7 +3,7 @@ package slimeknights.tconstruct.plugin.jei;
 import mezz.jei.api.ingredients.IIngredientType;
 import mezz.jei.api.ingredients.IIngredientTypeWithSubtypes;
 import mezz.jei.api.recipe.RecipeType;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.materials.definition.LazyMaterial;
 import slimeknights.tconstruct.library.materials.definition.MaterialVariant;
@@ -27,7 +27,7 @@ import slimeknights.tconstruct.library.tools.SlotType;
 import slimeknights.tconstruct.library.tools.SlotType.SlotCount;
 
 public class TConstructJEIConstants {
-  public static final ResourceLocation PLUGIN = TConstruct.getResource("jei_plugin");
+  public static final Identifier PLUGIN = TConstruct.getResource("jei_plugin");
 
   // ingredient types
   public static final IIngredientTypeWithSubtypes<Modifier,ModifierEntry> MODIFIER_TYPE = new IIngredientTypeWithSubtypes<>() {

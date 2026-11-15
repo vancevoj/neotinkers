@@ -8,7 +8,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.fluids.FluidStack;
@@ -70,8 +70,8 @@ public record SpittingModule(LevelingInt shots) implements ModifierModule, Gener
   }
 
   @Override
-  public UseAnim getUseAction(IToolStackView tool, ModifierEntry modifier) {
-    return ModifierUtil.blockWhileCharging(tool, UseAnim.BOW);
+  public ItemUseAnimation getUseAction(IToolStackView tool, ModifierEntry modifier) {
+    return ModifierUtil.blockWhileCharging(tool, ItemUseAnimation.BOW);
   }
 
   /** Performs the actual spitting */
@@ -158,7 +158,7 @@ public record SpittingModule(LevelingInt shots) implements ModifierModule, Gener
 
   @Override
   public void onStoppedUsing(IToolStackView tool, ModifierEntry modifier, LivingEntity entity, int timeLeft) {
-    if (!entity.level().isClientSide) {
+    if (!entity.level().isClientSide()) {
       int chargeTime = getUseDuration(tool, modifier) - timeLeft;
       if (chargeTime > 0) {
         spit(tool, modifier, entity, chargeTime);
@@ -187,7 +187,7 @@ public record SpittingModule(LevelingInt shots) implements ModifierModule, Gener
   @Override
   public void stopInteract(IToolStackView tool, ModifierEntry modifier, Player player, EquipmentSlot slot, int chargeTime, ModifierEntry activeModifier) {
     if (modifier == activeModifier) {
-      if (chargeTime > 0 && !player.level().isClientSide) {
+      if (chargeTime > 0 && !player.level().isClientSide()) {
         spit(tool, modifier, player, chargeTime);
       }
       tool.getPersistentData().remove(modifier.getId());

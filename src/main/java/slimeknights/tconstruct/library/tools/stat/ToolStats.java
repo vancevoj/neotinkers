@@ -2,7 +2,7 @@ package slimeknights.tconstruct.library.tools.stat;
 
 import com.google.gson.JsonSyntaxException;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import slimeknights.mantle.data.loadable.ErrorFactory;
 import slimeknights.mantle.data.loadable.primitive.StringLoadable;
 import slimeknights.tconstruct.TConstruct;
@@ -52,7 +52,7 @@ public class ToolStats {
   /** Logs an error message for unsupported stats */
   private static void logUnsupportedConditional(INumericToolStat<?> stat) {
     // TODO 1.21: make this error instead of log
-    ResourceLocation id = stat.getName();
+    Identifier id = stat.getName();
     if (TConstruct.MOD_ID.equals(id.getNamespace())) {
       TConstruct.LOG.error("Tool stat {} does not support conditional stats but is used in a conditional stat loader.", id);
     } else {
@@ -139,7 +139,7 @@ public class ToolStats {
   /** @deprecated use {@link #LOADER} with {@link StringLoadable#parseString(String, String)} */
   @Deprecated(forRemoval = true)
   public static IToolStat<?> fromJson(String key) {
-    ResourceLocation location = ResourceLocation.tryParse(key);
+    Identifier location = Identifier.tryParse(key);
     if (location != null) {
       IToolStat<?> stat = ToolStats.getToolStat(new ToolStatId(location));
       if (stat != null) {

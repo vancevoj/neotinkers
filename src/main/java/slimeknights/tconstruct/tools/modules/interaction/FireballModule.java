@@ -144,7 +144,7 @@ public record FireballModule(List<FireballType> options, DamageTypePair damageTy
     ItemStack fireball = BowAmmoModifierHook.consumeAmmo(tool, ItemStack.EMPTY, entity, player, this, 1);
     if (!fireball.isEmpty()) {
       // if we found a fireball, fire it
-      if (!level.isClientSide) {
+      if (!level.isClientSide()) {
         // fetch stats
         float power = ConditionalStatModifierHook.getModifiedStat(tool, entity, ToolStats.PROJECTILE_DAMAGE);
         float velocity = ConditionalStatModifierHook.getModifiedStat(tool, entity, ToolStats.VELOCITY);
@@ -204,7 +204,7 @@ public record FireballModule(List<FireballType> options, DamageTypePair damageTy
     if (condition.matches(tool, modifier) && !tool.isBroken() && tool.getHook(ToolHooks.INTERACTION).canInteract(tool, modifier.getId(), source)) {
       if (shoot(tool, modifier, player, player, Util.getSlotType(hand))) {
         GeneralInteractionModifierHook.addCooldown(tool, player, 1);
-        return InteractionResult.sidedSuccess(player.level().isClientSide);
+        return InteractionResult.sidedSuccess(player.level().isClientSide());
       }
     }
     return InteractionResult.PASS;
@@ -214,7 +214,7 @@ public record FireballModule(List<FireballType> options, DamageTypePair damageTy
   public boolean startInteract(IToolStackView tool, ModifierEntry modifier, Player player, EquipmentSlot slot, TooltipKey keyModifier) {
     if (keyModifier == TooltipKey.NORMAL && condition.matches(tool, modifier) && !tool.isBroken() && !player.hasEffect(BuiltInRegistries.MOB_EFFECT.wrapAsHolder(TinkerModifiers.fireballCooldownEffect.value()))) {
       if (shoot(tool, modifier, player, player, slot)) {
-        if (!player.level().isClientSide) {
+        if (!player.level().isClientSide()) {
           player.addEffect(new MobEffectInstance(BuiltInRegistries.MOB_EFFECT.wrapAsHolder(TinkerModifiers.fireballCooldownEffect.value()), GeneralInteractionModifierHook.getDrawtime(tool, player, 1)));
         }
         return true;

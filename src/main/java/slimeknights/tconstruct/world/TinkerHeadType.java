@@ -1,5 +1,6 @@
 package slimeknights.tconstruct.world;
 
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.SkullBlock.Type;
@@ -10,18 +11,18 @@ import java.util.function.Supplier;
 
 /** Enum representing all heads provided by Tinkers */
 public enum TinkerHeadType implements Type, StringRepresentable {
-  BLAZE(() -> EntityType.BLAZE),
-  ENDERMAN(() -> EntityType.ENDERMAN),
-  STRAY(() -> EntityType.STRAY),
+  BLAZE(() -> EntityTypes.BLAZE),
+  ENDERMAN(() -> EntityTypes.ENDERMAN),
+  STRAY(() -> EntityTypes.STRAY),
   // zombies
-  HUSK(() -> EntityType.HUSK),
-  DROWNED(() -> EntityType.DROWNED),
+  HUSK(() -> EntityTypes.HUSK),
+  DROWNED(() -> EntityTypes.DROWNED),
   // spider
-  SPIDER(() -> EntityType.SPIDER),
-  CAVE_SPIDER(() -> EntityType.CAVE_SPIDER),
+  SPIDER(() -> EntityTypes.SPIDER),
+  CAVE_SPIDER(() -> EntityTypes.CAVE_SPIDER),
   // piglin
-  PIGLIN_BRUTE(() -> EntityType.PIGLIN_BRUTE),
-  ZOMBIFIED_PIGLIN(() -> EntityType.ZOMBIFIED_PIGLIN);
+  PIGLIN_BRUTE(() -> EntityTypes.PIGLIN_BRUTE),
+  ZOMBIFIED_PIGLIN(() -> EntityTypes.ZOMBIFIED_PIGLIN);
 
   private final Supplier<EntityType<?>> type;
 

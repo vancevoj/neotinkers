@@ -2,7 +2,7 @@ package slimeknights.tconstruct.tables.recipe;
 
 import lombok.Getter;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CraftingInput;
@@ -33,8 +33,8 @@ import javax.annotation.Nullable;
  */
 public class CraftingTableRepairKitRecipe extends CustomRecipe {
   @Getter
-  private final ResourceLocation id;
-  public CraftingTableRepairKitRecipe(ResourceLocation id) {
+  private final Identifier id;
+  public CraftingTableRepairKitRecipe(Identifier id) {
     super(CraftingBookCategory.EQUIPMENT);
     this.id = id;
   }

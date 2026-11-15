@@ -1,6 +1,6 @@
 package slimeknights.tconstruct.library.client.book.content;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import slimeknights.mantle.client.book.data.BookData;
 import slimeknights.mantle.client.screen.book.element.ItemElement;
 import slimeknights.mantle.util.html.HtmlElement;
@@ -26,14 +26,14 @@ import static slimeknights.tconstruct.TConstruct.getResource;
  */
 public class MeleeHarvestMaterialContent extends AbstractMaterialContent {
   /** Page ID for using this index directly */
-  public static final ResourceLocation ID = getResource("melee_harvest_material");
+  public static final Identifier ID = getResource("melee_harvest_material");
 
   public MeleeHarvestMaterialContent(MaterialVariantId materialVariant, boolean detailed) {
     super(materialVariant, detailed);
   }
 
   @Override
-  public ResourceLocation getId() {
+  public Identifier getId() {
     return ID;
   }
 

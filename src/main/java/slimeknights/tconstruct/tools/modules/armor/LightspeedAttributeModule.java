@@ -3,7 +3,7 @@ package slimeknights.tconstruct.tools.modules.armor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -41,7 +41,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 /** Module implementing the movement speed side of lightspeed */
-public record LightspeedAttributeModule(String unique, ResourceLocation id, Attribute attribute, Operation operation, @Nullable LightLayer lightLayer, int minLight, float amount, float damageChance) implements ModifierModule, ArmorWalkModifierHook, EquipmentChangeModifierHook, TooltipModifierHook {
+public record LightspeedAttributeModule(String unique, Identifier id, Attribute attribute, Operation operation, @Nullable LightLayer lightLayer, int minLight, float amount, float damageChance) implements ModifierModule, ArmorWalkModifierHook, EquipmentChangeModifierHook, TooltipModifierHook {
   private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<LightspeedAttributeModule>defaultHooks(ModifierHooks.BOOT_WALK, ModifierHooks.EQUIPMENT_CHANGE, ModifierHooks.TOOLTIP);
   public static final RecordLoadable<LightspeedAttributeModule> LOADER = RecordLoadable.create(
     new AttributeUniqueField<>(LightspeedAttributeModule::unique),
@@ -53,19 +53,19 @@ public record LightspeedAttributeModule(String unique, ResourceLocation id, Attr
     FloatLoadable.FROM_ZERO.requiredField("damage_chance", LightspeedAttributeModule::damageChance),
     (unique, attribute, operation, lightLayer, minLight, amount, damageChance) -> new LightspeedAttributeModule(unique, attribute, operation, lightLayer, minLight, amount, damageChance));
 
-  /** Convenience constructor: derives the ResourceLocation id from the unique string (e.g. "tconstruct.modifier.lightspeed" -> "tconstruct:modifier/lightspeed") */
+  /** Convenience constructor: derives the Identifier id from the unique string (e.g. "tconstruct.modifier.lightspeed" -> "tconstruct:modifier/lightspeed") */
   public LightspeedAttributeModule(String unique, Attribute attribute, Operation operation, LightLayer lightLayer, int minLight, float amount, float damageChance) {
-    // The unique string is formatted as "namespace.modifier.path"; convert to a valid ResourceLocation.
+    // The unique string is formatted as "namespace.modifier.path"; convert to a valid Identifier.
     // In a record's non-canonical constructor the first statement must be a this(...) delegation, so derive the id inline.
     this(unique, deriveId(unique), attribute, operation, lightLayer, minLight, amount, damageChance);
   }
 
-  /** Derives a ResourceLocation id from a unique string formatted as "namespace.modifier.path" */
-  private static ResourceLocation deriveId(String unique) {
+  /** Derives a Identifier id from a unique string formatted as "namespace.modifier.path" */
+  private static Identifier deriveId(String unique) {
     int dot = unique.indexOf('.');
     return dot > 0
-      ? ResourceLocation.fromNamespaceAndPath(unique.substring(0, dot), unique.substring(dot + 1).replace('.', '/'))
-      : ResourceLocation.withDefaultNamespace(unique);
+      ? Identifier.fromNamespaceAndPath(unique.substring(0, dot), unique.substring(dot + 1).replace('.', '/'))
+      : Identifier.withDefaultNamespace(unique);
   }
 
   @Override
@@ -87,7 +87,7 @@ public record LightspeedAttributeModule(String unique, ResourceLocation id, Attr
   public void onWalk(IToolStackView tool, ModifierEntry modifier, LivingEntity living, BlockPos prevPos, BlockPos newPos) {
     // no point trying if not on the ground
     Level level = living.level();
-    if (tool.isBroken() || !living.onGround() || level.isClientSide) {
+    if (tool.isBroken() || !living.onGround() || level.isClientSide()) {
       return;
     }
     // must have speed

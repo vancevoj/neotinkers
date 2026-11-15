@@ -11,7 +11,7 @@ import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Tier;
 import slimeknights.mantle.util.JsonHelper;
@@ -64,7 +64,7 @@ public class ToolTierStat implements IToolStat<Tier> {
   @Override
   public Tier read(Tag tag) {
     if (tag.getId() == Tag.TAG_STRING) {
-      ResourceLocation tierId = ResourceLocation.tryParse(tag.getAsString());
+      Identifier tierId = Identifier.tryParse(tag.getAsString());
       if (tierId != null) {
         return HarvestTiers.byName(tierId);
       }
@@ -74,7 +74,7 @@ public class ToolTierStat implements IToolStat<Tier> {
 
   @Override
   public Tag write(Tier value) {
-    ResourceLocation id = HarvestTiers.getId(value);
+    Identifier id = HarvestTiers.getId(value);
     if (id != null) {
       return StringTag.valueOf(id.toString());
     }
@@ -83,7 +83,7 @@ public class ToolTierStat implements IToolStat<Tier> {
 
   @Override
   public Tier deserialize(JsonElement json) {
-    ResourceLocation id = JsonHelper.convertToResourceLocation(json, getName().toString());
+    Identifier id = JsonHelper.convertToResourceLocation(json, getName().toString());
     Tier tier = HarvestTiers.byName(id);
     if (tier != null) {
       return tier;
@@ -98,7 +98,7 @@ public class ToolTierStat implements IToolStat<Tier> {
 
   @Override
   public Tier fromNetwork(FriendlyByteBuf buffer) {
-    ResourceLocation id = buffer.readResourceLocation();
+    Identifier id = buffer.readIdentifier();
     Tier tier = HarvestTiers.byName(id);
     if (tier != null) {
       return tier;
@@ -108,7 +108,7 @@ public class ToolTierStat implements IToolStat<Tier> {
 
   @Override
   public void toNetwork(FriendlyByteBuf buffer, Tier value) {
-    buffer.writeResourceLocation(Objects.requireNonNull(HarvestTiers.getId(value)));
+    buffer.writeIdentifier(Objects.requireNonNull(HarvestTiers.getId(value)));
   }
 
   @Override

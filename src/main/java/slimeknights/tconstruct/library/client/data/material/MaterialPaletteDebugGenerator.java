@@ -3,7 +3,7 @@ package slimeknights.tconstruct.library.client.data.material;
 import com.mojang.blaze3d.platform.NativeImage;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import slimeknights.tconstruct.library.client.data.GenericTextureGenerator;
 import slimeknights.tconstruct.library.client.data.material.AbstractMaterialSpriteProvider.MaterialSpriteInfo;
 import slimeknights.tconstruct.library.client.data.spritetransformer.IColorMapping;
@@ -28,7 +28,7 @@ public class MaterialPaletteDebugGenerator extends GenericTextureGenerator {
   public CompletableFuture<?> run(CachedOutput cache) {
     List<CompletableFuture<?>> tasks = new ArrayList<>();
     for (AbstractMaterialSpriteProvider materialProvider : materialProviders) {
-      for (Entry<ResourceLocation,MaterialSpriteInfo> entry : materialProvider.getMaterials().entrySet()) {
+      for (Entry<Identifier,MaterialSpriteInfo> entry : materialProvider.getMaterials().entrySet()) {
         if (entry.getValue().getTransformer() instanceof RecolorSpriteTransformer recolor) {
           IColorMapping colorMapping = recolor.getColorMapping();
           NativeImage palette = new NativeImage(256, 16, true);

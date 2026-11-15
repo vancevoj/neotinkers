@@ -1,5 +1,6 @@
 package slimeknights.tconstruct.world.data;
 
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderOwner;
@@ -189,9 +190,9 @@ public class WorldgenProvider {
 
     // mangrove style
     register(context, enderSlimeTree, Feature.TREE,
-             new TreeConfigurationBuilder(BlockStateProvider.simple(TinkerWorld.enderbark.getLog()),
+             new TreeConfigurationBuilder(BlockStateProvider.of(TinkerWorld.enderbark.getLog()),
                                           new UpwardsBranchingTrunkPlacer(2, 1, 4, UniformInt.of(1, 4), 0.5F, UniformInt.of(0, 1), context.lookup(Registries.BLOCK).getOrThrow(TinkerTags.Blocks.ENDERBARK_LOGS_CAN_GROW_THROUGH)),
-                                          BlockStateProvider.simple(TinkerWorld.slimeLeaves.get(FoliageType.ENDER)),
+                                          BlockStateProvider.of(TinkerWorld.slimeLeaves.get(FoliageType.ENDER)),
                                           new RandomSpreadFoliagePlacer(ConstantInt.of(3), ConstantInt.of(0), ConstantInt.of(2), 70),
                                           ExtraRootVariantPlacer.builder()
                                                                 .trunkOffset(UniformInt.of(1, 3))
@@ -200,13 +201,13 @@ public class WorldgenProvider {
                                                                 .slimyRoots(TinkerWorld.slimyEnderbarkRoots)
                                                                 .buildOptional(),
                                           new TwoLayersFeatureSize(2, 0, 2))
-               .decorators(List.of(new LeaveVineDecorator(TinkerWorld.enderSlimeVine.get(), 0.125F), new AttachedToLeavesDecorator(0.14F, 1, 0, new RandomizedIntStateProvider(BlockStateProvider.simple(TinkerWorld.slimeSapling.get(FoliageType.ENDER).defaultBlockState().setValue(BlockStateProperties.HANGING, true)), MangrovePropaguleBlock.AGE, UniformInt.of(0, 4)), 2, List.of(Direction.DOWN))))
+               .decorators(List.of(new LeaveVineDecorator(TinkerWorld.enderSlimeVine.get(), 0.125F), new AttachedToLeavesDecorator(0.14F, 1, 0, new RandomizedIntStateProvider(BlockStateProvider.of(TinkerWorld.slimeSapling.get(FoliageType.ENDER).defaultBlockState().setValue(BlockStateProperties.HANGING, true)), MangrovePropaguleBlock.AGE, UniformInt.of(0, 4)), 2, List.of(Direction.DOWN))))
                .ignoreVines()
                .build());
     register(context, enderSlimeTreeTall, Feature.TREE,
-             new TreeConfigurationBuilder(BlockStateProvider.simple(TinkerWorld.enderbark.getLog()),
+             new TreeConfigurationBuilder(BlockStateProvider.of(TinkerWorld.enderbark.getLog()),
                                           new UpwardsBranchingTrunkPlacer(4, 1, 9, UniformInt.of(1, 6), 0.5F, UniformInt.of(0, 1), context.lookup(Registries.BLOCK).getOrThrow(TinkerTags.Blocks.ENDERBARK_LOGS_CAN_GROW_THROUGH)),
-                                          BlockStateProvider.simple(TinkerWorld.slimeLeaves.get(FoliageType.ENDER)),
+                                          BlockStateProvider.of(TinkerWorld.slimeLeaves.get(FoliageType.ENDER)),
                                           new RandomSpreadFoliagePlacer(ConstantInt.of(3), ConstantInt.of(0), ConstantInt.of(2), 70),
                                           ExtraRootVariantPlacer.builder()
                                                                 .trunkOffset(UniformInt.of(3, 7))
@@ -215,7 +216,7 @@ public class WorldgenProvider {
                                                                 .slimyRoots(TinkerWorld.slimyEnderbarkRoots)
                                                                 .buildOptional(),
                                           new TwoLayersFeatureSize(3, 0, 2))
-               .decorators(List.of(new LeaveVineDecorator(TinkerWorld.enderSlimeVine.get(), 0.125F), new AttachedToLeavesDecorator(0.14F, 1, 0, new RandomizedIntStateProvider(BlockStateProvider.simple(TinkerWorld.slimeSapling.get(FoliageType.ENDER).defaultBlockState().setValue(BlockStateProperties.HANGING, true)), MangrovePropaguleBlock.AGE, UniformInt.of(0, 4)), 2, List.of(Direction.DOWN))))
+               .decorators(List.of(new LeaveVineDecorator(TinkerWorld.enderSlimeVine.get(), 0.125F), new AttachedToLeavesDecorator(0.14F, 1, 0, new RandomizedIntStateProvider(BlockStateProvider.of(TinkerWorld.slimeSapling.get(FoliageType.ENDER).defaultBlockState().setValue(BlockStateProperties.HANGING, true)), MangrovePropaguleBlock.AGE, UniformInt.of(0, 4)), 2, List.of(Direction.DOWN))))
                .ignoreVines()
                .build());
 
@@ -253,13 +254,13 @@ public class WorldgenProvider {
     register(context, configuredLargeCobaltOre, Feature.ORE, new OreConfiguration(netherrack, cobaltOre, 6));
 
     // geodes
-    configureGeode(context, configuredEarthGeode, earthGeode, BlockStateProvider.simple(Blocks.CALCITE), BlockStateProvider.simple(Blocks.CLAY), TinkerWorld.steelCluster,
+    configureGeode(context, configuredEarthGeode, earthGeode, BlockStateProvider.of(Blocks.CALCITE), BlockStateProvider.of(Blocks.CLAY), TinkerWorld.steelCluster,
                    new GeodeLayerSettings(1.7D, 2.2D, 3.2D, 5.2D), new GeodeCrackSettings(0.95D, 2.0D, 2), UniformInt.of(6, 9), UniformInt.of(3, 4), UniformInt.of(1, 2), 16, 1);
-    configureGeode(context, configuredSkyGeode, skyGeode, BlockStateProvider.simple(Blocks.CALCITE), BlockStateProvider.simple(Blocks.MOSSY_COBBLESTONE), TinkerWorld.steelCluster,
+    configureGeode(context, configuredSkyGeode, skyGeode, BlockStateProvider.of(Blocks.CALCITE), BlockStateProvider.of(Blocks.MOSSY_COBBLESTONE), TinkerWorld.steelCluster,
                    new GeodeLayerSettings(1.7D, 2.2D, 3.2D, 4.2D), new GeodeCrackSettings(0.95D, 2.0D, 2), UniformInt.of(4, 7), UniformInt.of(3, 4), UniformInt.of(1, 2), 16, 1);
-    configureGeode(context, configuredIchorGeode, ichorGeode, BlockStateProvider.simple(Blocks.CALCITE), BlockStateProvider.simple(Blocks.NETHERRACK), TinkerWorld.cobaltCluster,
+    configureGeode(context, configuredIchorGeode, ichorGeode, BlockStateProvider.of(Blocks.CALCITE), BlockStateProvider.of(Blocks.NETHERRACK), TinkerWorld.cobaltCluster,
                    new GeodeLayerSettings(1.7D, 2.2D, 3.2D, 4.2D), new GeodeCrackSettings(0.75D, 2.0D, 2), UniformInt.of(4, 6), UniformInt.of(3, 4), UniformInt.of(1, 2), 24, 2);
-    configureGeode(context, configuredEnderGeode, enderGeode, BlockStateProvider.simple(Blocks.CALCITE), BlockStateProvider.simple(Blocks.END_STONE), TinkerWorld.knightmetalCluster,
+    configureGeode(context, configuredEnderGeode, enderGeode, BlockStateProvider.of(Blocks.CALCITE), BlockStateProvider.of(Blocks.END_STONE), TinkerWorld.knightmetalCluster,
                    new GeodeLayerSettings(1.7D, 2.2D, 3.2D, 5.2D), new GeodeCrackSettings(0.45, 1.0D, 2), UniformInt.of(4, 10), UniformInt.of(3, 4), UniformInt.of(1, 2), 16, 10000);
   }
 
@@ -286,7 +287,7 @@ public class WorldgenProvider {
       .addTree(configured.getOrThrow(earthSlimeIslandTree), 1)
       .addTree(configured.getOrThrow(skySlimeIslandTree), 1)
       .addSlimyGrass(FoliageType.EARTH)
-      .build(new StructureSettings(biomes.getOrThrow(TinkerTags.Biomes.EARTHSLIME_ISLANDS), monsterOverride(EntityType.SLIME, 4, 4), Decoration.SURFACE_STRUCTURES, TerrainAdjustment.NONE)));
+      .build(new StructureSettings(biomes.getOrThrow(TinkerTags.Biomes.EARTHSLIME_ISLANDS), monsterOverride(EntityTypes.SLIME, 4, 4), Decoration.SURFACE_STRUCTURES, TerrainAdjustment.NONE)));
     // skyslime island
     context.register(skySlimeIsland, IslandStructure.skyBuilder()
       .addDefaultTemplates(getResource("islands/sky/"))
@@ -316,7 +317,7 @@ public class WorldgenProvider {
     context.register(bloodIsland, IslandStructure.seaBuilder().addDefaultTemplates(getResource("islands/blood/"))
       .addTree(configured.getOrThrow(bloodSlimeIslandFungus), 1)
       .addSlimyGrass(FoliageType.BLOOD)
-      .build(new StructureSettings(biomes.getOrThrow(TinkerTags.Biomes.BLOOD_ISLANDS), monsterOverride(EntityType.MAGMA_CUBE, 4, 6), Decoration.UNDERGROUND_DECORATION, TerrainAdjustment.NONE)));
+      .build(new StructureSettings(biomes.getOrThrow(TinkerTags.Biomes.BLOOD_ISLANDS), monsterOverride(EntityTypes.MAGMA_CUBE, 4, 6), Decoration.UNDERGROUND_DECORATION, TerrainAdjustment.NONE)));
     // enderslime
     context.register(endSlimeIsland, IslandStructure.skyBuilder().addDefaultTemplates(getResource("islands/ender/"))
       .addTree(configured.getOrThrow(enderSlimeTree), 3)
@@ -410,9 +411,9 @@ public class WorldgenProvider {
       buds = Stream.concat(buds, Stream.of(extraCluster.get().defaultBlockState()));
     }
     register(context, key, Feature.GEODE, new GeodeConfiguration(
-      new GeodeBlockSettings(BlockStateProvider.simple(Blocks.AIR),
-                             BlockStateProvider.simple(geode.getBlock()),
-                             BlockStateProvider.simple(geode.getBudding()),
+      new GeodeBlockSettings(BlockStateProvider.of(Blocks.AIR),
+                             BlockStateProvider.of(geode.getBlock()),
+                             BlockStateProvider.of(geode.getBudding()),
                              middleLayer, outerLayer,
                              buds.toList(),
                              BlockTags.FEATURES_CANNOT_REPLACE, BlockTags.GEODE_INVALID_BLOCKS),

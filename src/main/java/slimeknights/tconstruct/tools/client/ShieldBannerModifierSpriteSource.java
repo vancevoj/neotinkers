@@ -14,7 +14,7 @@ import net.minecraft.client.renderer.texture.atlas.SpriteSourceType;
 import net.minecraft.client.renderer.texture.atlas.sources.LazyLoadedImage;
 import net.minecraft.client.resources.metadata.animation.FrameSize;
 import net.minecraft.client.resources.model.Material;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceMetadata;
@@ -30,7 +30,7 @@ import java.util.Map.Entry;
 import java.util.Optional;
 
 /** Sprite source creating modifier textures for banners using shield banner textures */
-public record ShieldBannerModifierSpriteSource(int cropX, int cropY, int cropWidth, int cropHeight, ResourceLocation destinationPrefix, int offsetX, int offsetY, int outSize) implements SpriteSource {
+public record ShieldBannerModifierSpriteSource(int cropX, int cropY, int cropWidth, int cropHeight, Identifier destinationPrefix, int offsetX, int offsetY, int outSize) implements SpriteSource {
   private static final Codec<Integer> NON_NEGATIVE = ExtraCodecs.intRange(0, Integer.MAX_VALUE);
   private static final Codec<Integer> SHIELD_SIZE = ExtraCodecs.intRange(0, 64);
   public static final MapCodec<ShieldBannerModifierSpriteSource> CODEC = RecordCodecBuilder.<ShieldBannerModifierSpriteSource>mapCodec(inst -> inst.group(
@@ -38,7 +38,7 @@ public record ShieldBannerModifierSpriteSource(int cropX, int cropY, int cropWid
     SHIELD_SIZE.fieldOf("crop_y").forGetter(ShieldBannerModifierSpriteSource::cropY),
     SHIELD_SIZE.fieldOf("crop_width").forGetter(ShieldBannerModifierSpriteSource::cropWidth),
     SHIELD_SIZE.fieldOf("crop_height").forGetter(ShieldBannerModifierSpriteSource::cropHeight),
-    ResourceLocation.CODEC.fieldOf("destination_prefix").forGetter(ShieldBannerModifierSpriteSource::destinationPrefix),
+    Identifier.CODEC.fieldOf("destination_prefix").forGetter(ShieldBannerModifierSpriteSource::destinationPrefix),
     NON_NEGATIVE.fieldOf("offset_x").forGetter(ShieldBannerModifierSpriteSource::offsetX),
     NON_NEGATIVE.fieldOf("offset_y").forGetter(ShieldBannerModifierSpriteSource::offsetY),
     NON_NEGATIVE.fieldOf("output_size").forGetter(ShieldBannerModifierSpriteSource::outSize)
@@ -79,14 +79,14 @@ public record ShieldBannerModifierSpriteSource(int cropX, int cropY, int cropWid
   @Override
   public void run(ResourceManager manager, Output output) {
     // TODO 1.21: will have to copy textures over using a folder search since these are datapack controlled
-    for (Entry<ResourceLocation, Material> entry : Sheets.SHIELD_MATERIALS.entrySet()) {
-      ResourceLocation input = TEXTURE_ID_CONVERTER.idToFile(entry.getValue().texture());
+    for (Entry<Identifier, Material> entry : Sheets.SHIELD_MATERIALS.entrySet()) {
+      Identifier input = TEXTURE_ID_CONVERTER.idToFile(entry.getValue().texture());
       Optional<Resource> resource = manager.getResource(input);
       if (resource.isEmpty()) {
         TConstruct.LOG.warn("Unable to find shield texture {} to create modifier sprite", input);
       } else {
         LazyLoadedImage image = new LazyLoadedImage(input, resource.get(), 1);
-        ResourceLocation destination = destinationPrefix.withSuffix(MaterialRenderInfo.getSuffix(entry.getKey()));
+        Identifier destination = destinationPrefix.withSuffix(MaterialRenderInfo.getSuffix(entry.getKey()));
         output.add(destination, new BannerModifierSpriteSupplier(image, input, destination));
       }
     }
@@ -101,7 +101,7 @@ public record ShieldBannerModifierSpriteSource(int cropX, int cropY, int cropWid
   @RequiredArgsConstructor
   private class BannerModifierSpriteSupplier implements SpriteSupplier {
     private final LazyLoadedImage original;
-    private final ResourceLocation input, output;
+    private final Identifier input, output;
 
     @Nullable
     @Override

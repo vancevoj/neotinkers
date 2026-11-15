@@ -1,13 +1,13 @@
 package slimeknights.tconstruct.library.tools.stat;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import slimeknights.tconstruct.library.utils.IdParser;
 import slimeknights.tconstruct.library.utils.ResourceId;
 
 import javax.annotation.Nullable;
 
 /**
- * This is just a copy of ResourceLocation for type safety in tool stat JSON.
+ * This is just a copy of Identifier for type safety in tool stat JSON.
  */
 public class ToolStatId extends ResourceId {
   public static final IdParser<ToolStatId> PARSER = new IdParser<>(ToolStatId::new, "Tool Stat");
@@ -16,7 +16,7 @@ public class ToolStatId extends ResourceId {
     super(namespaceIn, pathIn);
   }
 
-  public ToolStatId(ResourceLocation location) {
+  public ToolStatId(Identifier location) {
     super(location);
   }
 

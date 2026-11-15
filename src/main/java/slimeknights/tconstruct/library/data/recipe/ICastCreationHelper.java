@@ -1,7 +1,7 @@
 package slimeknights.tconstruct.library.data.recipe;
 
 import net.minecraft.data.recipes.RecipeOutput;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -21,7 +21,7 @@ import slimeknights.tconstruct.library.recipe.partbuilder.ItemPartRecipeBuilder;
  * Shared methods between {@link ISmelteryRecipeHelper} and {@link IToolRecipeHelper}
  */
 public interface ICastCreationHelper extends IRecipeHelper {
-  ResourceLocation SAND_CAST_KEY = TConstruct.getResource("sand_cast");
+  Identifier SAND_CAST_KEY = TConstruct.getResource("sand_cast");
 
   /* Cast creation */
 
@@ -60,7 +60,7 @@ public interface ICastCreationHelper extends IRecipeHelper {
       .setPattern(input, false)
       .save(consumer, location(folder + "red_sand/molding/" + name));
     // make sand casts in the part builder
-    ResourceLocation pattern = cast.getName();
+    Identifier pattern = cast.getName();
     ItemPartRecipeBuilder.item(pattern, ItemOutput.fromItem(cast.getSand()))
       .setTitleKey(SAND_CAST_KEY)
       .setPatternItem(Ingredient.of(TinkerTags.Items.SAND_CASTS))

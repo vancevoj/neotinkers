@@ -1,6 +1,6 @@
 package slimeknights.tconstruct.library.recipe.modifiers.severing;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -21,14 +21,14 @@ public class AgeableSeveringRecipe extends SeveringRecipe {
     AgeableSeveringRecipe::new);
 
   private final ItemOutput childOutput;
-  public AgeableSeveringRecipe(ResourceLocation id, EntityIngredient ingredient, ItemOutput adultOutput, ItemOutput childOutput, float baseChance, float lootingBonus) {
+  public AgeableSeveringRecipe(Identifier id, EntityIngredient ingredient, ItemOutput adultOutput, ItemOutput childOutput, float baseChance, float lootingBonus) {
     super(id, ingredient, adultOutput, baseChance, lootingBonus);
     this.childOutput = childOutput;
   }
 
-  /** @deprecated use {@link #AgeableSeveringRecipe(ResourceLocation, EntityIngredient, ItemOutput, ItemOutput, float, float)} */
+  /** @deprecated use {@link #AgeableSeveringRecipe(Identifier, EntityIngredient, ItemOutput, ItemOutput, float, float)} */
   @Deprecated(forRemoval = true)
-  public AgeableSeveringRecipe(ResourceLocation id, EntityIngredient ingredient, ItemOutput adultOutput, ItemOutput childOutput) {
+  public AgeableSeveringRecipe(Identifier id, EntityIngredient ingredient, ItemOutput adultOutput, ItemOutput childOutput) {
     this(id, ingredient, adultOutput, childOutput, 0.05f, 0.01f);
   }
 

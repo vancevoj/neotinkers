@@ -6,8 +6,8 @@ import dev.emi.emi.api.recipe.BasicEmiRecipe;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.WidgetHolder;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeHolder;
@@ -30,7 +30,7 @@ import static slimeknights.tconstruct.library.recipe.tinkerstation.building.Tool
  * Mirrors {@link slimeknights.tconstruct.plugin.jei.ToolBuildingCategory} (background 134x66).
  */
 public class ToolBuildingEmiRecipe extends BasicEmiRecipe {
-  private static final ResourceLocation BACKGROUND_LOC = TConstruct.getResource("textures/gui/jei/tinker_station.png");
+  private static final Identifier BACKGROUND_LOC = TConstruct.getResource("textures/gui/jei/tinker_station.png");
   private static final int WIDTH = 134;
   private static final int HEIGHT = 66;
   private static final int ITEM_SIZE = 16;
@@ -110,7 +110,7 @@ public class ToolBuildingEmiRecipe extends BasicEmiRecipe {
       pose.pushPose();
       pose.translate(5, 6.5, 0);
       pose.scale(3.7f, 3.7f, 1.0f);
-      graphics.renderItem(this.previewStack, 0, 0);
+      graphics.item(this.previewStack, 0, 0);
       pose.popPose();
 
       // overlay a transparent grey to make the preview appear faded

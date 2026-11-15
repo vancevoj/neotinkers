@@ -51,7 +51,7 @@ public class StrongBonesModifier extends SingleLevelModifier {
     boolean didSomething = false;
     int level = ModifierUtil.getModifierLevel(helmet, TinkerModifiers.strongBones.getId());
     if (level > 0) {
-      MobEffectInstance effect = new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, flat + eachLevel * level);
+      MobEffectInstance effect = new MobEffectInstance(MobEffects.RESISTANCE, flat + eachLevel * level);
       // only cured by removing the helmet, see CureOnRemovalModule
       TinkerEffectCures.setCures(effect, List.of(helmet.getItem()));
       // on simulate, don't apply the effect, just ask if we can apply

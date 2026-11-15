@@ -1,13 +1,13 @@
 package slimeknights.tconstruct.library.modifiers.data;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /** Tinker data key that stores a float that can be multiplied by many sources */
 public class FloatMultiplier {
-  private final Map<ResourceLocation,Float> values = new HashMap<>();
+  private final Map<Identifier,Float> values = new HashMap<>();
   private float calculatedValue = 1.0f;
 
   /** Recalculates the modifier from the map, called as a last resort */
@@ -20,7 +20,7 @@ public class FloatMultiplier {
   }
 
   /** Sets the modifier for a key to the given value */
-  public void set(ResourceLocation key, float value) {
+  public void set(Identifier key, float value) {
     if (value == 1.0f) {
       remove(key);
       return;
@@ -40,7 +40,7 @@ public class FloatMultiplier {
   }
 
   /** Removes the modifier associated with the given key */
-  public void remove(ResourceLocation key) {
+  public void remove(Identifier key) {
     Float value = values.remove(key);
     if (value != null) {
       if (value == 0) {

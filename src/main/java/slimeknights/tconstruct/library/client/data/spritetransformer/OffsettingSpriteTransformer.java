@@ -5,7 +5,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSyntaxException;
 import com.mojang.blaze3d.platform.NativeImage;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.GsonHelper;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.utils.JsonUtils;
@@ -19,7 +19,7 @@ import javax.annotation.Nullable;
  * @param yOffset  Amount to shift the sprite in the Y direction, positive means down.
  */
 public record OffsettingSpriteTransformer(@Nullable ISpriteTransformer base, int xOffset, int yOffset) implements ISpriteTransformer {
-  public static final ResourceLocation NAME = TConstruct.getResource("offsetting");
+  public static final Identifier NAME = TConstruct.getResource("offsetting");
 
   @Override
   public int getFallbackColor() {

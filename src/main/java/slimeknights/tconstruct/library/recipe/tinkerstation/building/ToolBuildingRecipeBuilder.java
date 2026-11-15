@@ -5,7 +5,7 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.data.recipes.RecipeOutput;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.crafting.Ingredient;
 import slimeknights.mantle.data.loadable.Loadables;
 import slimeknights.mantle.recipe.data.AbstractRecipeBuilder;
@@ -30,7 +30,7 @@ public class ToolBuildingRecipeBuilder extends AbstractRecipeBuilder<ToolBuildin
   @Setter
   private int outputSize = 1;
   @Nullable @Setter
-  private ResourceLocation layoutSlot = null;
+  private Identifier layoutSlot = null;
   private final List<Ingredient> extraRequirements = new ArrayList<>();
   private List<IToolPart> partsOverride = null;
   private final List<MaterialVariantId> extraMaterials = new ArrayList<>();
@@ -77,7 +77,7 @@ public class ToolBuildingRecipeBuilder extends AbstractRecipeBuilder<ToolBuildin
   }
 
   @Override
-  public void save(RecipeOutput consumerIn, ResourceLocation id) {
+  public void save(RecipeOutput consumerIn, Identifier id) {
     AdvancementHolder advancementId = this.buildOptionalAdvancement(id, "parts");
     if (tippedModifier != null) {
       if (extraMaterials.isEmpty()) {

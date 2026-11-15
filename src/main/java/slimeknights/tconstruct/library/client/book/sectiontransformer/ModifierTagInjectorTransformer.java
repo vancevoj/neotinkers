@@ -1,6 +1,6 @@
 package slimeknights.tconstruct.library.client.book.sectiontransformer;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import slimeknights.mantle.client.book.data.content.PageContent;
 import slimeknights.tconstruct.TConstruct;
@@ -24,7 +24,7 @@ public class ModifierTagInjectorTransformer extends AbstractTagInjectingTransfor
   }
 
   @Override
-  protected ResourceLocation getId(Modifier modifier) {
+  protected Identifier getId(Modifier modifier) {
     return modifier.getId();
   }
 

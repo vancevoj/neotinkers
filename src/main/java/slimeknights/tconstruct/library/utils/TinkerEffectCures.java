@@ -1,7 +1,7 @@
 package slimeknights.tconstruct.library.utils;
 
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
@@ -35,7 +35,7 @@ public final class TinkerEffectCures {
    * @return  Stable cure token for the item
    */
   public static EffectCure itemCure(Item item) {
-    ResourceLocation id = BuiltInRegistries.ITEM.getKey(item);
+    Identifier id = BuiltInRegistries.ITEM.getKey(item);
     return EffectCure.get(ITEM_CURE_PREFIX + id);
   }
 

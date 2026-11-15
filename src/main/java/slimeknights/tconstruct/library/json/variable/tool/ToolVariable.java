@@ -1,6 +1,6 @@
 package slimeknights.tconstruct.library.json.variable.tool;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -76,7 +76,7 @@ public interface ToolVariable extends IHaveLoader, MeleeVariable, ConditionalSta
 
 
   /** Registers a variable with tools, melee, conditional stat, and mining speed */
-  static void register(ResourceLocation name, RecordLoadable<? extends ToolVariable> loader) {
+  static void register(Identifier name, RecordLoadable<? extends ToolVariable> loader) {
     LOADER.register(name, loader);
     MeleeVariable.LOADER.register(name, loader);
     ConditionalStatVariable.register(name, loader);

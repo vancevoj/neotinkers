@@ -1,10 +1,10 @@
 package slimeknights.tconstruct.tools.modules.ranged.common;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.EntityHitResult;
@@ -33,7 +33,7 @@ import java.util.List;
 public record PunchModule(LevelingValue amount, ModifierCondition<IToolStackView> condition) implements ModifierModule, ProjectileLaunchModifierHook.NoShooter, ProjectileHitModifierHook, ConditionalModule<IToolStackView> {
   private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<PunchModule>defaultHooks(ModifierHooks.PROJECTILE_LAUNCH, ModifierHooks.PROJECTILE_SHOT, ModifierHooks.PROJECTILE_HIT);
   /** Persistent data key storing punch knockback for arrows that are not {@link ProjectileWithKnockback} (e.g. vanilla arrows fired from a Tinkers' bow). Applied on hit, replicating {@code AbstractArrow#doKnockback}. */
-  private static final ResourceLocation KNOCKBACK_KEY = TConstruct.getResource("punch_knockback");
+  private static final Identifier KNOCKBACK_KEY = TConstruct.getResource("punch_knockback");
   public static final RecordLoadable<PunchModule> LOADER = RecordLoadable.create(LevelingValue.LOADABLE.directField(PunchModule::amount), ModifierCondition.TOOL_FIELD, PunchModule::new);
 
   @Override

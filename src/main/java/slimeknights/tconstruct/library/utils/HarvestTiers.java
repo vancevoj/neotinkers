@@ -4,7 +4,7 @@ import com.google.common.collect.Maps;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.TextColor;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.Tiers;
 import net.minecraft.world.level.block.state.BlockState;
@@ -33,9 +33,9 @@ public class HarvestTiers {
    * TODO(neoport): TierSortingRegistry was removed in 1.21 along with its name registry. Vanilla tiers are mapped to a
    * minecraft namespaced ID by their enum name; any other tier falls back to a generic ID so a translation key still resolves.
    */
-  private static ResourceLocation tierId(Tier tier) {
+  private static Identifier tierId(Tier tier) {
     if (tier instanceof Tiers vanilla) {
-      return ResourceLocation.fromNamespaceAndPath("minecraft", vanilla.name().toLowerCase(Locale.ROOT));
+      return Identifier.fromNamespaceAndPath("minecraft", vanilla.name().toLowerCase(Locale.ROOT));
     }
     return TConstruct.getResource("unknown");
   }
@@ -46,9 +46,9 @@ public class HarvestTiers {
    * TODO(neoport): TierSortingRegistry removed in 1.21; only vanilla tiers have a stable ID. Returns null for unknown tiers.
    */
   @Nullable
-  public static ResourceLocation getId(Tier tier) {
+  public static Identifier getId(Tier tier) {
     if (tier instanceof Tiers vanilla) {
-      return ResourceLocation.fromNamespaceAndPath("minecraft", vanilla.name().toLowerCase(Locale.ROOT));
+      return Identifier.fromNamespaceAndPath("minecraft", vanilla.name().toLowerCase(Locale.ROOT));
     }
     return null;
   }
@@ -59,7 +59,7 @@ public class HarvestTiers {
    * TODO(neoport): TierSortingRegistry removed in 1.21; only vanilla tiers are resolvable by ID. Returns null otherwise.
    */
   @Nullable
-  public static Tier byName(ResourceLocation id) {
+  public static Tier byName(Identifier id) {
     if ("minecraft".equals(id.getNamespace())) {
       for (Tiers vanilla : Tiers.values()) {
         if (vanilla.name().toLowerCase(Locale.ROOT).equals(id.getPath())) {

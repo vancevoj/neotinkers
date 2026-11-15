@@ -6,13 +6,13 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.armortrim.TrimMaterial;
-import net.minecraft.world.item.armortrim.TrimMaterials;
-import net.minecraft.world.item.armortrim.TrimPattern;
-import net.minecraft.world.item.armortrim.TrimPatterns;
+import net.minecraft.world.item.equipment.trim.TrimMaterial;
+import net.minecraft.world.item.equipment.trim.TrimMaterials;
+import net.minecraft.world.item.equipment.trim.TrimPattern;
+import net.minecraft.world.item.equipment.trim.TrimPatterns;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 import slimeknights.mantle.recipe.IMultiRecipe;
@@ -45,9 +45,9 @@ public class ArmorTrimRecipe implements ITinkerStationRecipe, IMultiRecipe<IDisp
 
 
   @Getter
-  private final ResourceLocation id;
+  private final Identifier id;
 
-  public ArmorTrimRecipe(ResourceLocation id) {
+  public ArmorTrimRecipe(Identifier id) {
     this.id = id;
     ModifierRecipeLookup.addRecipeModifier(null, TinkerModifiers.trim);
   }
@@ -121,9 +121,9 @@ public class ArmorTrimRecipe implements ITinkerStationRecipe, IMultiRecipe<IDisp
     ToolStack tool = inv.getTinkerable().copy();
     ModDataNBT persistentData = tool.getPersistentData();
     ModifierId modifier = TinkerModifiers.trim.getId();
-    persistentData.putString(TrimModule.materialKey(modifier), material.key().location().toString());
+    persistentData.putString(TrimModule.materialKey(modifier), material.key().identifier().toString());
     if (pattern != null) {
-      persistentData.putString(TrimModule.patternKey(modifier), pattern.key().location().toString());
+      persistentData.putString(TrimModule.patternKey(modifier), pattern.key().identifier().toString());
     }
 
     // add the modifier if missing
@@ -152,10 +152,10 @@ public class ArmorTrimRecipe implements ITinkerStationRecipe, IMultiRecipe<IDisp
       List<ItemStack> toolInputs = RegistryHelper.getTagValueStream(BuiltInRegistries.ITEM, TinkerTags.Items.TRIM)
                                                  .map(IModifiableDisplay::getDisplayStack).toList();
       if (!trims.isEmpty() && !toolInputs.isEmpty()) {
-        ResourceLocation id = getId();
+        Identifier id = getId();
         // one recipe per material
         // TODO: worth using just a single material? focus link material to output tool?
-        displayRecipes = access.registryOrThrow(Registries.TRIM_MATERIAL).holders()
+        displayRecipes = access.lookupOrThrow(Registries.TRIM_MATERIAL).listElements()
           .map(material -> new DisplayRecipe(id, toolInputs, trims, material))
           .collect(Collectors.toList());
       } else {
@@ -170,7 +170,7 @@ public class ArmorTrimRecipe implements ITinkerStationRecipe, IMultiRecipe<IDisp
     private final ModifierEntry RESULT = new ModifierEntry(TinkerModifiers.trim, 1);
 
     @Getter
-    private final ResourceLocation recipeId;
+    private final Identifier recipeId;
     @Getter
     private final List<ItemStack> toolWithoutModifier;
     @Getter
@@ -181,7 +181,7 @@ public class ArmorTrimRecipe implements ITinkerStationRecipe, IMultiRecipe<IDisp
     @Getter
     private final Component variant;
 
-    public DisplayRecipe(ResourceLocation id, List<ItemStack> tools, List<ItemStack> trim, Reference<TrimMaterial> holder) {
+    public DisplayRecipe(Identifier id, List<ItemStack> tools, List<ItemStack> trim, Reference<TrimMaterial> holder) {
       this.recipeId = id;
       this.material = holder;
       toolWithoutModifier = tools;
@@ -190,9 +190,9 @@ public class ArmorTrimRecipe implements ITinkerStationRecipe, IMultiRecipe<IDisp
       this.materialItem = List.of(new ItemStack(material.ingredient().value()));
       this.variant = material.description().plainCopy();
 
-      String materialName = holder.key().location().toString();
+      String materialName = holder.key().identifier().toString();
       List<ModifierEntry> results = List.of(RESULT);
-      ResourceLocation key = TrimModule.materialKey(TinkerModifiers.trim.getId());
+      Identifier key = TrimModule.materialKey(TinkerModifiers.trim.getId());
       toolWithModifier = tools.stream().map(stack -> IDisplayModifierRecipe.withModifiers(stack, results, data -> data.putString(key, materialName))).toList();
 
     }
@@ -241,7 +241,7 @@ public class ArmorTrimRecipe implements ITinkerStationRecipe, IMultiRecipe<IDisp
       // store into tool NBT
       ModDataNBT persistentData = tool.getPersistentData();
       ModifierId modifier = TinkerModifiers.trim.getId();
-      persistentData.putString(TrimModule.materialKey(modifier), material.key().location().toString());
+      persistentData.putString(TrimModule.materialKey(modifier), material.key().identifier().toString());
       // skip pattern, it doesn't show on the item, and it saves us a lookup
 
       // add the modifier if missing

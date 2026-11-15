@@ -5,7 +5,7 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -47,12 +47,12 @@ public class TinkerStationDamagingRecipe implements ITinkerStationRecipe, IDispl
   private static final String KEY_AMOUNT = TConstruct.makeTranslationKey("recipe", "modifier.amount");
 
   @Getter
-  private final ResourceLocation id;
+  private final Identifier id;
   private final Ingredient ingredient;
   private final int damageAmount;
   private final Component amountText;
 
-  public TinkerStationDamagingRecipe(ResourceLocation id, Ingredient ingredient, int damageAmount) {
+  public TinkerStationDamagingRecipe(Identifier id, Ingredient ingredient, int damageAmount) {
     this.id = id;
     this.ingredient = ingredient;
     this.damageAmount = damageAmount;
@@ -106,7 +106,7 @@ public class TinkerStationDamagingRecipe implements ITinkerStationRecipe, IDispl
   private List<ItemStack> toolWithoutModifier, toolWithModifier;
 
   @Override
-  public ResourceLocation getRecipeId() {
+  public Identifier getRecipeId() {
     return getId();
   }
 

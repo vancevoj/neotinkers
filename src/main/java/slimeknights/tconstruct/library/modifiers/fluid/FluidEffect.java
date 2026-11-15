@@ -3,7 +3,7 @@ package slimeknights.tconstruct.library.modifiers.fluid;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
@@ -36,7 +36,7 @@ public interface FluidEffect<C extends FluidEffectContext> extends IHaveLoader, 
   GenericLoaderRegistry<FluidEffect<? super FluidEffectContext.Entity>> ENTITY_EFFECTS = new GenericLoaderRegistry<>("Fluid entity effect", EMPTY, false);
 
   /** Registers an effect to both blocks and entities */
-  static void registerGeneral(ResourceLocation id, RecordLoadable<? extends FluidEffect<FluidEffectContext>> loader) {
+  static void registerGeneral(Identifier id, RecordLoadable<? extends FluidEffect<FluidEffectContext>> loader) {
     BLOCK_EFFECTS.register(id, loader);
     ENTITY_EFFECTS.register(id, loader);
   }
@@ -89,7 +89,7 @@ public interface FluidEffect<C extends FluidEffectContext> extends IHaveLoader, 
       BlockState original = world.getBlockState(pos);
       BlockState replacement = world.getFluidState(pos).createLegacyBlock();
       if (original != replacement) {
-        if (action.execute() && !world.isClientSide) {
+        if (action.execute() && !world.isClientSide()) {
           if (world.setBlockAndUpdate(pos, replacement)) {
             world.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, pos, Block.getId(original));
           }
@@ -136,8 +136,8 @@ public interface FluidEffect<C extends FluidEffectContext> extends IHaveLoader, 
 
   /** Gets the registry name for the given loader */
   @SuppressWarnings({"unchecked", "removal"})
-  static ResourceLocation getLoaderName(RecordLoadable<? extends FluidEffect<?>> loader) {
-    ResourceLocation loaderId = ENTITY_EFFECTS.getName((RecordLoadable<? extends FluidEffect<? super FluidEffectContext.Entity>>)loader);
+  static Identifier getLoaderName(RecordLoadable<? extends FluidEffect<?>> loader) {
+    Identifier loaderId = ENTITY_EFFECTS.getName((RecordLoadable<? extends FluidEffect<? super FluidEffectContext.Entity>>)loader);
     if (loaderId != null) {
       return loaderId;
     }
@@ -146,7 +146,7 @@ public interface FluidEffect<C extends FluidEffectContext> extends IHaveLoader, 
       return loaderId;
     }
     Mantle.logger.error("Failed to get default description for unregistered fluid effect loader {}", loader);
-    return ResourceLocation.parse("missingno");
+    return Identifier.parse("missingno");
   }
 
   /** Gets the string key for the given loader */

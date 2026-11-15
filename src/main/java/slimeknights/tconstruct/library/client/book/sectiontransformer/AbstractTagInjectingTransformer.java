@@ -7,7 +7,7 @@ import com.google.gson.JsonParseException;
 import lombok.RequiredArgsConstructor;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.GsonHelper;
 import slimeknights.mantle.client.book.data.BookData;
@@ -31,8 +31,8 @@ public abstract class AbstractTagInjectingTransformer<T> extends BookTransformer
   private static final Comparator<PageData> COMPARATOR = Comparator.comparing(PageData::getTitle);
 
   private final ResourceKey<? extends Registry<T>> registry;
-  private final ResourceLocation key;
-  private final ResourceLocation pageType;
+  private final Identifier key;
+  private final Identifier pageType;
 
   /** Gets values in the tag */
   protected Iterator<T> getTagEntries(TagKey<T> tag) {
@@ -40,7 +40,7 @@ public abstract class AbstractTagInjectingTransformer<T> extends BookTransformer
   }
 
   /** Gets the name to use for a page given its value */
-  protected abstract ResourceLocation getId(T value);
+  protected abstract Identifier getId(T value);
 
   /** Creates a fallback page for when data does not exist */
   protected abstract PageContent createFallback(T value);
@@ -71,7 +71,7 @@ public abstract class AbstractTagInjectingTransformer<T> extends BookTransformer
 
         // the name and path are created from the ID directly
         // use the book domain as the folder, the object domain as page name
-        ResourceLocation id = getId(value);
+        Identifier id = getId(value);
         newPage.name = prefix + id.getNamespace() + "." + id.getPath();
         String data = path + "/" + id.getNamespace() + "_" + id.getPath() + ".json";
         // if the path exists load the page, otherwise use a fallback option
@@ -103,7 +103,7 @@ public abstract class AbstractTagInjectingTransformer<T> extends BookTransformer
    * @param index      Index to start inserting pages
    * @return  Number of pages added
    */
-  protected int addPages(SectionData section, Map<ResourceLocation, JsonElement> extraData, int index) {
+  protected int addPages(SectionData section, Map<Identifier, JsonElement> extraData, int index) {
     JsonElement element = extraData.get(key);
     if (element != null) {
       String key = this.key.toString();

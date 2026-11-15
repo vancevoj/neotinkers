@@ -1,6 +1,6 @@
 package slimeknights.tconstruct.library.modifiers.hook.ranged;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Inventory;
@@ -19,9 +19,9 @@ import java.util.function.Predicate;
 /** Hook to find ammo on a bow.*/
 public interface BowAmmoModifierHook {
   /** Volatile data int for extra shots to fire. */
-  ResourceLocation MULTISHOT = TConstruct.getResource("multishot");
+  Identifier MULTISHOT = TConstruct.getResource("multishot");
   /** Volatile data key telling the tool to not fetch ammo from the inventory. */
-  ResourceLocation SKIP_INVENTORY_AMMO = TConstruct.getResource("skip_inventory_ammo");
+  Identifier SKIP_INVENTORY_AMMO = TConstruct.getResource("skip_inventory_ammo");
 
   /** Default instance */
   BowAmmoModifierHook EMPTY = (tool, modifier, shooter, standardAmmo, ammoPredicate) -> ItemStack.EMPTY;
@@ -161,7 +161,7 @@ public interface BowAmmoModifierHook {
   static ItemStack consumeAmmo(IToolStackView tool, ItemStack bow, LivingEntity living, @Nullable Player player, @Nullable Predicate<ItemStack> predicate, int projectilesDesired) {
     // treat client side as creative, no need to shrink the stacks clientside
     Level level = living.level();
-    boolean creative = (player != null && player.getAbilities().instabuild) || level.isClientSide;
+    boolean creative = (player != null && player.getAbilities().instabuild) || level.isClientSide();
 
     // first search, find what ammo type we want
     boolean skipInventoryAmmo = tool.getVolatileData().getBoolean(SKIP_INVENTORY_AMMO);
@@ -216,7 +216,7 @@ public interface BowAmmoModifierHook {
     // if we made it this far, we found ammo and are not in creative
     // we may be done already, saves making a predicate
     // can also return if on client side, they don't need the full stack
-    if (resultStack.getCount() >= projectilesDesired || level.isClientSide) {
+    if (resultStack.getCount() >= projectilesDesired || level.isClientSide()) {
       return resultStack;
     }
 

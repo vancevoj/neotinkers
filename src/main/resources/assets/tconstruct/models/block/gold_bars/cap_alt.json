@@ -1,5 +1,4 @@
 {
-    "render_type": "minecraft:cutout",
     "parent": "block/iron_bars_cap_alt",
     "textures": {
         "particle": "tconstruct:block/gold_bars",

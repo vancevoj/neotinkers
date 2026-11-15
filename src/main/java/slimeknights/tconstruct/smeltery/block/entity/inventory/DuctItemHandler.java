@@ -54,7 +54,7 @@ public class DuctItemHandler extends SingleItemHandler<DuctBlockEntity> {
     if (hasChange) {
       updateFluid();
       if (world != null) {
-        if (!world.isClientSide) {
+        if (!world.isClientSide()) {
           BlockPos pos = parent.getBlockPos();
           TinkerNetwork.getInstance().sendToClientsAround(new InventorySlotSyncPacket(newStack, 0, pos), world, pos);
         } else {
@@ -74,7 +74,7 @@ public class DuctItemHandler extends SingleItemHandler<DuctBlockEntity> {
       }
     }
     // the item must contain fluid (no empty cans or buckets)
-    IFluidHandlerItem cap = stack.getCapability(Capabilities.FluidHandler.ITEM);
+    IFluidHandlerItem cap = stack.getCapability(Capabilities.Fluid.ITEM);
     return cap != null && !cap.getFluidInTank(0).isEmpty();
   }
 

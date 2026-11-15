@@ -98,7 +98,7 @@ public record ShearsModule(float flatBonus, float perLevelBonus, float expandedB
     }
     // fallback to forge shearable
     if (entity instanceof IShearable target && target.isShearable(player, itemStack, world, entity.blockPosition())) {
-      if (!world.isClientSide) {
+      if (!world.isClientSide()) {
         target.onSheared(player, itemStack, world, entity.blockPosition())
           .forEach(stack -> ModifierUtil.dropItem(entity, stack));
       }
@@ -121,7 +121,7 @@ public record ShearsModule(float flatBonus, float perLevelBonus, float expandedB
     int looting = LootingModifierHook.getLooting(tool, context, EnchantmentHelper.getItemEnchantmentLevel(
       player.level().registryAccess().holderOrThrow(Enchantments.LOOTING), player.getItemInHand(hand)));
     looting = ArmorLootingModifierHook.getLooting(tool, context, looting);
-    Level world = player.getCommandSenderWorld();
+    Level world = player.level();
     if (shearEntity(stack, tool, world, player, target, looting)) {
       boolean broken = ToolDamageUtil.damageAnimated(tool, 1, player, slotType, modifier.getId());
       player.swing(hand);
@@ -133,7 +133,7 @@ public record ShearsModule(float flatBonus, float perLevelBonus, float expandedB
         // includes a flat bonus (legacy AOE), a level bonus (subtract 1 so it starts at level 2), and expanded
         float expanded = flatBonus + perLevelBonus * (modifier.getEffectiveLevel() - 1) + expandedBonus * tool.getVolatileData().getInt(IModifiable.EXPANDED);
         if (expanded > 0) {
-          for (LivingEntity aoeTarget : player.getCommandSenderWorld().getEntitiesOfClass(LivingEntity.class, target.getBoundingBox().inflate(expanded, 0.25D, expanded))) {
+          for (LivingEntity aoeTarget : player.level().getEntitiesOfClass(LivingEntity.class, target.getBoundingBox().inflate(expanded, 0.25D, expanded))) {
             if (aoeTarget != player && aoeTarget != target && (!(aoeTarget instanceof ArmorStand) || !((ArmorStand)aoeTarget).isMarker())) {
               if (shearEntity(stack, tool, world, player, aoeTarget, looting)) {
                 broken = ToolDamageUtil.damageAnimated(tool, 1, player, slotType, modifier.getId());

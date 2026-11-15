@@ -25,7 +25,7 @@ public class BuddingCrystalBlock extends CrystalBlock {
 
   @Override
   public PushReaction getPistonPushReaction(BlockState pState) {
-    return PushReaction.DESTROY;
+    return PushReaction.POPPED;
   }
 
   @Override

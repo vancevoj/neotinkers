@@ -6,7 +6,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.neoforged.neoforge.common.conditions.ICondition;
 import slimeknights.tconstruct.TConstruct;
@@ -21,7 +21,7 @@ import java.util.List;
  */
 @Deprecated(forRemoval = true)
 public class TagDifferencePresentCondition<T> implements ICondition {
-  public static final ResourceLocation NAME = TConstruct.getResource("tag_difference_present");
+  public static final Identifier NAME = TConstruct.getResource("tag_difference_present");
 
   private final TagKey<T> base;
   private final List<TagKey<T>> subtracted;
@@ -41,7 +41,7 @@ public class TagDifferencePresentCondition<T> implements ICondition {
   }
 
   /** Creates a condition from a registry and a set of names */
-  public static <T> TagDifferencePresentCondition<T> ofNames(ResourceKey<? extends Registry<T>> registry, ResourceLocation base, ResourceLocation... subtracted) {
+  public static <T> TagDifferencePresentCondition<T> ofNames(ResourceKey<? extends Registry<T>> registry, Identifier base, Identifier... subtracted) {
     TagKey<T> baseKey = TagKey.create(registry, base);
     return new TagDifferencePresentCondition<>(baseKey, Arrays.stream(subtracted).map(name -> TagKey.create(registry, name)).toList());
   }
@@ -50,13 +50,13 @@ public class TagDifferencePresentCondition<T> implements ICondition {
   public static final MapCodec<TagDifferencePresentCondition<?>> CODEC = RecordCodecBuilder.mapCodec(builder -> builder
     .group(
       // save some space in JSON by not setting registry if item (most common)
-      ResourceLocation.CODEC.optionalFieldOf("registry", Registries.ITEM.location()).forGetter(c -> c.base.registry().location()),
-      ResourceLocation.CODEC.fieldOf("base").forGetter(c -> c.base.location()),
-      ResourceLocation.CODEC.listOf().fieldOf("subtracted").forGetter(c -> c.subtracted.stream().map(TagKey::location).toList()))
+      Identifier.CODEC.optionalFieldOf("registry", Registries.ITEM.identifier()).forGetter(c -> c.base.registry().identifier()),
+      Identifier.CODEC.fieldOf("base").forGetter(c -> c.base.location()),
+      Identifier.CODEC.listOf().fieldOf("subtracted").forGetter(c -> c.subtracted.stream().map(TagKey::location).toList()))
     .apply(builder, TagDifferencePresentCondition::create));
 
   /** Builds a condition from the codec primitives */
-  private static TagDifferencePresentCondition<?> create(ResourceLocation registryName, ResourceLocation base, List<ResourceLocation> subtracted) {
+  private static TagDifferencePresentCondition<?> create(Identifier registryName, Identifier base, List<Identifier> subtracted) {
     ResourceKey<Registry<Object>> registry = ResourceKey.createRegistryKey(registryName);
     return new TagDifferencePresentCondition<>(
       TagKey.create(registry, base),

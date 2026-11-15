@@ -2,7 +2,7 @@ package slimeknights.tconstruct.tools.modules.armor;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -47,7 +47,7 @@ public enum MinimapModule implements ModifierModule, EquipmentChangeModifierHook
   /** Data key for the active map on the player */
   public static final TinkerDataKey<ItemStack> MAP = TConstruct.createKey("current_map");
   /** Key for the currently selected map */
-  private static final ResourceLocation SELECTED_SLOT = TConstruct.getResource("minimap_selected");
+  private static final Identifier SELECTED_SLOT = TConstruct.getResource("minimap_selected");
   /** Message when disabling the minimap */
   private static final Component DISABLED = TConstruct.makeTranslation("modifier", "minimap.disabled");
   /** Message to display selected slot */
@@ -96,7 +96,7 @@ public enum MinimapModule implements ModifierModule, EquipmentChangeModifierHook
 
   @Override
   public void onInventoryTick(IToolStackView tool, ModifierEntry modifier, Level world, LivingEntity holder, int itemSlot, boolean isSelected, boolean isCorrectSlot, ItemStack stack) {
-    if (isCorrectSlot && !world.isClientSide) {
+    if (isCorrectSlot && !world.isClientSide()) {
       TinkerDataCapability.Holder data = TinkerDataCapability.getData(holder);
       if (data != null) {
         ItemStack map = data.get(MAP, ItemStack.EMPTY);

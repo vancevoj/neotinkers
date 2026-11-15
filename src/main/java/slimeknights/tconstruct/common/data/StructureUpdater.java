@@ -9,7 +9,7 @@ import net.minecraft.data.PackOutput.Target;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtAccounter;
 import net.minecraft.nbt.NbtIo;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.MultiPackResourceManager;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.util.datafix.DataFixTypes;
@@ -60,7 +60,7 @@ public class StructureUpdater extends GenericNBTProvider {
 
   /** Updates the given structure */
   @Nullable
-  private CompletableFuture<?> process(ResourceLocation location, Resource resource, CachedOutput cache) {
+  private CompletableFuture<?> process(Identifier location, Resource resource, CachedOutput cache) {
     try {
       CompoundTag inputNBT = NbtIo.readCompressed(resource.open(), NbtAccounter.unlimitedHeap());
       CompoundTag converted = updateNBT(inputNBT);

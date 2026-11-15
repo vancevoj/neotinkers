@@ -89,13 +89,13 @@ public record SlingLeapModule(LevelingValue forceMultiplier, boolean leaveGround
         SlimeBounceHandler.addBounceHandler(entity);
         SlingLaunchModifierHook.afterSlingLaunch(tool, entity, entity, modifier, force, multiplier, angle);
 
-        if (!level.isClientSide) {
+        if (!level.isClientSide()) {
           level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), Sounds.SLIME_SLING.getSound(), entity.getSoundSource(), 1, 1);
           ToolDamageUtil.damageAnimated(tool, 1, entity, entity.getUsedItemHand(), modifier.getId());
         }
         // only need player for exhaustion, cooldowns, and drill attack
         if (entity instanceof Player player) {
-          if (!level.isClientSide) {
+          if (!level.isClientSide()) {
             player.causeFoodExhaustion(0.2F);
             player.getCooldowns().addCooldown(tool.getItem(), 3);
           }
@@ -108,7 +108,7 @@ public record SlingLeapModule(LevelingValue forceMultiplier, boolean leaveGround
       }
     }
     // play failure sound
-    if (!level.isClientSide && ModifierUtil.isActiveModifier(tool, modifier, activeModifier)) {
+    if (!level.isClientSide() && ModifierUtil.isActiveModifier(tool, modifier, activeModifier)) {
       level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), Sounds.SLIME_SLING.getSound(), entity.getSoundSource(), 1, 0.5f);
     }
   }

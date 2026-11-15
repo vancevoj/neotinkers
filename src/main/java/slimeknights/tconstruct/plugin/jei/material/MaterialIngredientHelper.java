@@ -3,7 +3,7 @@ package slimeknights.tconstruct.plugin.jei.material;
 import mezz.jei.api.ingredients.IIngredientHelper;
 import mezz.jei.api.ingredients.IIngredientType;
 import mezz.jei.api.ingredients.subtypes.UidContext;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
@@ -94,7 +94,7 @@ public class MaterialIngredientHelper implements IIngredientHelper<MaterialVaria
   }
 
   @Override
-  public ResourceLocation getResourceLocation(MaterialVariant material) {
+  public Identifier getResourceLocation(MaterialVariant material) {
     return material.getId();
   }
 
@@ -107,7 +107,7 @@ public class MaterialIngredientHelper implements IIngredientHelper<MaterialVaria
   /* Tags */
 
   @Override
-  public Stream<ResourceLocation> getTagStream(MaterialVariant material) {
+  public Stream<Identifier> getTagStream(MaterialVariant material) {
     return MaterialRegistry.getInstance().getTags(material.getId()).map(TagKey::location);
   }
 

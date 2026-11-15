@@ -4,7 +4,7 @@ import lombok.extern.log4j.Log4j2;
 import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.Material;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.inventory.InventoryMenu;
@@ -62,7 +62,7 @@ public class DynamicTextureLoader extends ResourceValidator {
       return mat -> {
         // to suppress logging, need to load from our own list. We just load it for `textures/item` on the block atlas
         if (InventoryMenu.BLOCK_ATLAS.equals(mat.atlasLocation())) {
-          ResourceLocation texture = mat.texture();
+          Identifier texture = mat.texture();
           if (texture.getPath().startsWith("item/")) {
             return INSTANCE.test(mat.texture());
           }

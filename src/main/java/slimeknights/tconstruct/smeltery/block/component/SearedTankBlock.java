@@ -54,7 +54,7 @@ public class SearedTankBlock extends SearedBlock implements ITankBlock, EntityBl
   }
 
   public SearedTankBlock(Properties properties, int capacity) {
-    this(properties, capacity, PushReaction.BLOCK);
+    this(properties, capacity, PushReaction.IMMOVEABLE);
   }
 
   @Override

@@ -1,6 +1,6 @@
 package slimeknights.tconstruct.library.recipe.melting;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.fluids.FluidStack;
 import slimeknights.tconstruct.library.recipe.melting.IMeltingContainer.OreRateType;
@@ -11,7 +11,7 @@ import java.util.List;
 /** Interface for melting recipes that are displayable in JEI */
 public interface IDisplayableMeltingRecipe {
   /** Gets the ID of this recipe, usually just the ID from {@link net.minecraft.world.item.crafting.RecipeHolder#id()} */
-  ResourceLocation getRecipeId();
+  Identifier getRecipeId();
 
   /** List of input items to melt. Will be focus linked to  */
   List<ItemStack> getInputs();

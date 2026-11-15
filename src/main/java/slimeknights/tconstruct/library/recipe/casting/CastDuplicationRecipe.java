@@ -2,7 +2,7 @@ package slimeknights.tconstruct.library.recipe.casting;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import slimeknights.mantle.data.loadable.common.IngredientLoadable;
@@ -25,7 +25,7 @@ public class CastDuplicationRecipe extends ItemCastingRecipe implements IMultiRe
     FLUID_FIELD, COOLING_TIME_FIELD,
     CastDuplicationRecipe::new);
 
-  public CastDuplicationRecipe(TypeAwareRecipeSerializer<?> serializer, ResourceLocation id, String group, Ingredient cast, FluidIngredient fluid, int coolingTime) {
+  public CastDuplicationRecipe(TypeAwareRecipeSerializer<?> serializer, Identifier id, String group, Ingredient cast, FluidIngredient fluid, int coolingTime) {
     super(serializer, id, group, cast, fluid, ItemOutput.EMPTY, coolingTime, false, false);
   }
 

@@ -33,7 +33,7 @@ public record SlotInChargeModule(TinkerDataKey<SlotInCharge> key, @Nullable TagK
 
   /** Checks if the given tool cares about this modifier */
   private boolean toolValid(IToolStackView tool, EquipmentSlot slot, EquipmentChangeContext context) {
-    return !tool.isBroken() && !context.getEntity().level().isClientSide && ArmorLevelModule.validSlot(tool, slot, heldTag);
+    return !tool.isBroken() && !context.getEntity().level().isClientSide() && ArmorLevelModule.validSlot(tool, slot, heldTag);
   }
 
   @Override
@@ -98,7 +98,7 @@ public record SlotInChargeModule(TinkerDataKey<SlotInCharge> key, @Nullable TagK
 
     /** Adds the given slot to the tracker */
     private void addSlot(EquipmentSlot slotType, int level) {
-      int index = slotType.getFilterFlag();
+      int index = slotType.getId();
       totalLevel += level - levels[index];
       levels[index] = level;
       // prefer armor in charge as hand only runs when blocking, prefer mainhand over offhand
@@ -109,19 +109,19 @@ public record SlotInChargeModule(TinkerDataKey<SlotInCharge> key, @Nullable TagK
 
     /** Removes the given slot from the tracker */
     private void removeSlot(EquipmentSlot slotType) {
-      int index = slotType.getFilterFlag();
+      int index = slotType.getId();
       totalLevel -= levels[index];
       levels[index] = 0;
       // prioritize armor slots
       for (EquipmentSlot armorSlot : ModifiableArmorMaterial.ARMOR_SLOTS) {
-        if (levels[armorSlot.getFilterFlag()] > 0) {
+        if (levels[armorSlot.getId()] > 0) {
           inCharge = armorSlot;
           return;
         }
       }
       // if none, find a hand slot
       for (EquipmentSlot hand : InteractionHandler.HAND_SLOTS) {
-        if (levels[hand.getFilterFlag()] > 0) {
+        if (levels[hand.getId()] > 0) {
           inCharge = hand;
           return;
         }

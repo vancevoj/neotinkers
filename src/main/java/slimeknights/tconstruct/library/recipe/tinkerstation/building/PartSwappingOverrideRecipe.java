@@ -1,7 +1,7 @@
 package slimeknights.tconstruct.library.recipe.tinkerstation.building;
 
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -39,7 +39,7 @@ public class PartSwappingOverrideRecipe extends MaterialIndexSwappingRecipe impl
   /** Part to match allowing the swap */
   private final IToolPart part;
 
-  protected PartSwappingOverrideRecipe(ResourceLocation id, Ingredient tools, int maxStackSize, IToolPart part, int[] indices, List<SizedIngredient> extraRequirements) {
+  protected PartSwappingOverrideRecipe(Identifier id, Ingredient tools, int maxStackSize, IToolPart part, int[] indices, List<SizedIngredient> extraRequirements) {
     super(id, tools, maxStackSize, indices, extraRequirements);
     this.part = part;
   }

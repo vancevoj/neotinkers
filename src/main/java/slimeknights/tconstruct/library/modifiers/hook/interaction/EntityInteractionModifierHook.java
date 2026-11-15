@@ -1,6 +1,6 @@
 package slimeknights.tconstruct.library.modifiers.hook.interaction;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -24,7 +24,7 @@ import java.util.List;
  */
 public interface EntityInteractionModifierHook {
   /** Modifier volatile data key to disable melee attacks against monsters */
-  ResourceLocation NO_MELEE = TConstruct.getResource("no_melee");
+  Identifier NO_MELEE = TConstruct.getResource("no_melee");
 
   /**
 	 * Called when interacting with an entity before standard entity interaction.

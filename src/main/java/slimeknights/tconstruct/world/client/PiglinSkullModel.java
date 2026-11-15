@@ -2,7 +2,7 @@ package slimeknights.tconstruct.world.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.model.PiglinHeadModel;
+import net.minecraft.client.model.object.skull.PiglinHeadModel;
 import net.minecraft.client.model.geom.ModelPart;
 
 /** Extension of {@link PiglinHeadModel} to adjust scale for slimeskulls */

@@ -24,7 +24,7 @@ public class ToolDataComponents {
   private ToolDataComponents() {}
 
   /** Deferred register for data components */
-  private static final DeferredRegister.DataComponents COMPONENTS = DeferredRegister.createDataComponents(TConstruct.MOD_ID);
+  private static final DeferredRegister.DataComponents COMPONENTS = DeferredRegister.createDataComponents(Registries.DATA_COMPONENT_TYPE, TConstruct.MOD_ID);
 
   /**
    * Component holding the full tool NBT compound. Replaces the legacy item NBT tag {@link ToolStack} used to read.

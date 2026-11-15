@@ -4,7 +4,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -25,7 +25,7 @@ import java.util.stream.Stream;
 
 /** Ingredient that only matches tools with a specific hook */
 public class ToolHookIngredient implements ICustomIngredient {
-  public static final ResourceLocation ID = TConstruct.getResource("tool_hook");
+  public static final Identifier ID = TConstruct.getResource("tool_hook");
   /** Loadable for parsing and serializing this ingredient */
   public static final RecordLoadable<ToolHookIngredient> LOADABLE = RecordLoadable.create(
     Loadables.ITEM_TAG.defaultField("tag", TinkerTags.Items.MODIFIABLE, i -> i.tag),

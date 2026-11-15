@@ -13,7 +13,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.GsonHelper;
 import slimeknights.mantle.data.loadable.common.ColorLoadable;
 import slimeknights.mantle.data.loadable.primitive.IntLoadable;
@@ -37,7 +37,7 @@ import static net.minecraft.util.FastColor.ABGR32.red;
 /** Color mcom.mojang.blaze3d.platform.NativeImager each value */
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public class GreyToColorMapping implements IColorMapping {
-  public static final ResourceLocation NAME = TConstruct.getResource("grey_to_color");
+  public static final Identifier NAME = TConstruct.getResource("grey_to_color");
   public static final Deserializer DESERIALIZER = new Deserializer();
   /** Loadable for parsing the grey values */
   public static final IntLoadable GREY_LOADABLE = IntLoadable.range(0, 255);

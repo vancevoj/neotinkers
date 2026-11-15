@@ -2,24 +2,24 @@ package slimeknights.tconstruct.world.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.client.model.LavaSlimeModel;
+import net.minecraft.client.model.monster.slime.MagmaCubeModel;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.monster.Slime;
+import net.minecraft.world.entity.monster.cubemob.Slime;
 import slimeknights.tconstruct.TConstruct;
 
-public class TerracubeRenderer extends MobRenderer<Slime,LavaSlimeModel<Slime>> {
-  private static final ResourceLocation TEXTURE = TConstruct.getResource("textures/entity/terracube.png");
+public class TerracubeRenderer extends MobRenderer<Slime,MagmaCubeModel<Slime>> {
+  private static final Identifier TEXTURE = TConstruct.getResource("textures/entity/terracube.png");
   public TerracubeRenderer(EntityRendererProvider.Context context) {
-    super(context, new LavaSlimeModel<>(context.bakeLayer(ModelLayers.MAGMA_CUBE)), 0.25F);
+    super(context, new MagmaCubeModel<>(context.bakeLayer(ModelLayers.MAGMA_CUBE)), 0.25F);
     addLayer(new SlimeArmorLayer<>(this, new HumanoidModel<>(context.bakeLayer(ModelLayers.PLAYER_OUTER_ARMOR)), context.getModelSet(), true));
   }
 
   @Override
-  public ResourceLocation getTextureLocation(Slime entity) {
+  public Identifier getTextureLocation(Slime entity) {
     return TEXTURE;
   }
 

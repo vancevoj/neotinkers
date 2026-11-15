@@ -7,7 +7,7 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Items;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.block.Blocks;
@@ -90,7 +90,7 @@ import java.util.function.Supplier;
  */
 
 @Mod(TConstruct.MOD_ID)
-@EventBusSubscriber(modid = TConstruct.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = TConstruct.MOD_ID)
 public class TConstruct {
 
   public static final String MOD_ID = "tconstruct";
@@ -138,7 +138,7 @@ public class TConstruct {
     bus.addListener(TinkerNetwork::registerPackets);
     TinkerTags.init();
     // init client logic (lazy class-load: TinkerClient only loaded on the client branch)
-    if (FMLEnvironment.dist == Dist.CLIENT) {
+    if (FMLEnvironment.getDist() == Dist.CLIENT) {
       TinkerClient.onConstruct();
     }
   }
@@ -194,7 +194,7 @@ public class TConstruct {
    * Handles legacy id remapping for worlds saved on 1.20.1 (Forge).
    * <p>
    * NeoForge removed Forge's {@code MissingMappingsEvent}; the 1.21 equivalent is registry aliasing via
-   * {@link net.neoforged.neoforge.registries.IRegistryExtension#addAlias(ResourceLocation, ResourceLocation)}
+   * {@link net.neoforged.neoforge.registries.IRegistryExtension#addAlias(Identifier, Identifier)}
    * (implemented by every {@link net.minecraft.core.Registry}). When an old, now-removed id is looked up and is
    * absent, the registry resolves it through the alias chain to the target id. We register the aliases during
    * {@link RegisterEvent}, after the target entries have been added but before the registry freezes.
@@ -247,8 +247,8 @@ public class TConstruct {
    * @return  Location for tinkers
    */
   @SuppressWarnings("removal")
-  public static ResourceLocation getResource(String name) {
-    return ResourceLocation.fromNamespaceAndPath(MOD_ID, name);
+  public static Identifier getResource(String name) {
+    return Identifier.fromNamespaceAndPath(MOD_ID, name);
   }
 
   /**

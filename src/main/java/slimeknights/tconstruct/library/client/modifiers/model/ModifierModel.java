@@ -1,10 +1,10 @@
 package slimeknights.tconstruct.library.client.modifiers.model;
 
 import com.mojang.math.Transformation;
-import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.resources.model.geometry.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.Material;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.inventory.InventoryMenu;
 import slimeknights.mantle.data.loadable.Loadables;
 import slimeknights.mantle.data.loadable.primitive.StringLoadable;
@@ -57,7 +57,7 @@ public interface ModifierModel extends IBakedModifierModel, IHaveLoader {
   /** Validates that all textures in this model exist. */
   void validate(Function<Material, TextureAtlasSprite> spriteGetter);
 
-  static Material blockAtlas(ResourceLocation path) {
+  static Material blockAtlas(Identifier path) {
     return new Material(InventoryMenu.BLOCK_ATLAS, path);
   }
 }

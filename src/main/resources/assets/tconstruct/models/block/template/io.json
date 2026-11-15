@@ -1,5 +1,4 @@
 {
-  "render_type": "minecraft:cutout",
   "loader": "mantle:retextured",
   "parent": "block/block",
   "textures": {

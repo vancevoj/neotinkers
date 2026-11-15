@@ -8,9 +8,9 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.level.Level;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.data.loadable.record.SingletonLoader;
@@ -61,8 +61,8 @@ public enum ThrowingModule implements ModifierModule, GeneralInteractionModifier
   }
 
   @Override
-  public UseAnim getUseAction(IToolStackView tool, ModifierEntry modifier) {
-    return ModifierUtil.blockWhileCharging(tool, UseAnim.SPEAR);
+  public ItemUseAnimation getUseAction(IToolStackView tool, ModifierEntry modifier) {
+    return ModifierUtil.blockWhileCharging(tool, ItemUseAnimation.TRIDENT);
   }
 
   @Override
@@ -97,7 +97,7 @@ public enum ThrowingModule implements ModifierModule, GeneralInteractionModifier
         if (player.getUsedItemHand() == InteractionHand.OFF_HAND) {
           thrown.setOriginalSlot(Inventory.SLOT_OFFHAND);
         } else {
-          thrown.setOriginalSlot(player.getInventory().selected);
+          thrown.setOriginalSlot(player.getInventory().getSelectedSlot());
         }
         thrown.shootFromRotation(player, player.getXRot(), player.getYRot(), 0, charge * velocity * 2, ModifierUtil.getInaccuracy(tool, entity));
         if (player.getAbilities().instabuild) {

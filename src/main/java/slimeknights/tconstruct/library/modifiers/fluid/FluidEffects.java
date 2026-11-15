@@ -1,6 +1,6 @@
 package slimeknights.tconstruct.library.modifiers.fluid;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction;
@@ -115,7 +115,7 @@ public record FluidEffects(FluidIngredient ingredient, List<FluidEffect<? super 
   }
 
   /** Entry for storage in the manager */
-  public record Entry(ResourceLocation name, FluidEffects effects) {
+  public record Entry(Identifier name, FluidEffects effects) {
     public static final RecordLoadable<Entry> LOADABLE = RecordLoadable.create(
       Loadables.RESOURCE_LOCATION.requiredField("name", Entry::name),
       FluidEffects.LOADABLE.requiredField("effects", Entry::effects),

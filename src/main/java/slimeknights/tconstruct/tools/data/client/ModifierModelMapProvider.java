@@ -1,7 +1,7 @@
 package slimeknights.tconstruct.tools.data.client;
 
+import net.minecraft.world.item.equipment.ArmorType;
 import net.minecraft.data.PackOutput;
-import net.minecraft.world.item.ArmorItem;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.client.modifiers.DyedModifierModel;
 import slimeknights.tconstruct.library.client.modifiers.model.MaterialHasFallbackModifierModel;
@@ -372,7 +372,7 @@ public class ModifierModelMapProvider extends AbstractModifierModelMapProvider {
       .luminosity(2, ModifierIds.unbreakable);
 
     // shared armor
-    for (ArmorItem.Type type : new ArmorItem.Type[]{ArmorItem.Type.HELMET, ArmorItem.Type.CHESTPLATE, ArmorItem.Type.LEGGINGS, ArmorItem.Type.BOOTS}) { // 1.21 BODY type unused by Tinkers armor
+    for (ArmorType type : new ArmorType[]{ArmorType.HELMET, ArmorType.CHESTPLATE, ArmorType.LEGGINGS, ArmorType.BOOTS}) { // 1.21 BODY type unused by Tinkers armor
       String name = type.getName();
       tool("armor/" + name).smallFolder("armor/modifiers/" + name + '/').basic(
           ModifierIds.emerald, ModifierIds.thorns)
@@ -397,7 +397,7 @@ public class ModifierModelMapProvider extends AbstractModifierModelMapProvider {
       .basic(ModifierIds.featherFall, "tconstruct_feather_falling");
 
     // plate armor
-    for (ArmorItem.Type type : new ArmorItem.Type[]{ArmorItem.Type.HELMET, ArmorItem.Type.CHESTPLATE, ArmorItem.Type.LEGGINGS, ArmorItem.Type.BOOTS}) { // 1.21 BODY type unused by Tinkers armor
+    for (ArmorType type : new ArmorType[]{ArmorType.HELMET, ArmorType.CHESTPLATE, ArmorType.LEGGINGS, ArmorType.BOOTS}) { // 1.21 BODY type unused by Tinkers armor
       String item = "plate/" + type.getName();
       String root = "armor/" + item + "/maille";
       tool(item).armor()
@@ -411,7 +411,7 @@ public class ModifierModelMapProvider extends AbstractModifierModelMapProvider {
         new DyedModifierModel(toolMaterial(root), null),
         "metal"
       ));
-      if (type == ArmorItem.Type.BOOTS) {
+      if (type == ArmorType.BOOTS) {
         tool(item + "_broken").dyed(root + "_broken", null);
       } else {
         tool(item + "_broken").dyed(new MaterialHasFallbackModifierModel(1,
@@ -438,7 +438,7 @@ public class ModifierModelMapProvider extends AbstractModifierModelMapProvider {
     tool("travelers/shield").banner("armor/travelers/shield/banner/", null);
 
     // slimesuit
-    for (ArmorItem.Type type : new ArmorItem.Type[]{ArmorItem.Type.HELMET, ArmorItem.Type.CHESTPLATE, ArmorItem.Type.LEGGINGS, ArmorItem.Type.BOOTS}) { // 1.21 BODY type unused by Tinkers armor
+    for (ArmorType type : new ArmorType[]{ArmorType.HELMET, ArmorType.CHESTPLATE, ArmorType.LEGGINGS, ArmorType.BOOTS}) { // 1.21 BODY type unused by Tinkers armor
       tool("slime/" + type.getName());
     }
     tool("slime/wings")

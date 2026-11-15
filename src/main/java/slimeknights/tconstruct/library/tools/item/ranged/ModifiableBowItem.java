@@ -1,6 +1,6 @@
 package slimeknights.tconstruct.library.tools.item.ranged;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -11,12 +11,12 @@ import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
 import net.minecraft.world.item.ArrowItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.ProjectileWeaponItem;
-import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.event.EventHooks;
 import slimeknights.tconstruct.TConstruct;
@@ -48,7 +48,7 @@ public class ModifiableBowItem extends ModifiableLauncherItem {
   private static final Predicate<ItemStack> ARROWS_OR_BALLISTA = stack -> stack.is(ItemTags.ARROWS) || stack.is(TinkerTags.Items.BALLISTA_AMMO);
 
   /** Volatile flag activating the ballista functionality, and persistent int for bow actively firing a ballista */
-  public static final ResourceLocation KEY_BALLISTA = TConstruct.getResource("ballista");
+  public static final Identifier KEY_BALLISTA = TConstruct.getResource("ballista");
   /** Value for {@link #KEY_BALLISTA} when the ballista was found in the mainhand or offhand. Used to ensure inventory minimally messes with firing stack */
   public static final int FLAG_BALLISTA_HELD = 1;
   /** Value for {@link #KEY_BALLISTA} when the ballista was found in a modifier hook, such as quiver. Important this value is larger than {@link #FLAG_BALLISTA_HELD}. */
@@ -87,8 +87,8 @@ public class ModifiableBowItem extends ModifiableLauncherItem {
   }
 
   @Override
-  public UseAnim getUseAnimation(ItemStack stack) {
-    return ModifierUtil.blockWhileCharging(ToolStack.from(stack), UseAnim.BOW);
+  public ItemUseAnimation getUseAnimation(ItemStack stack) {
+    return ModifierUtil.blockWhileCharging(ToolStack.from(stack), ItemUseAnimation.BOW);
   }
 
 
@@ -147,7 +147,7 @@ public class ModifiableBowItem extends ModifiableLauncherItem {
       }
     }
     player.startUsingItem(hand);
-    if (!level.isClientSide) {
+    if (!level.isClientSide()) {
       level.playSound(null, player.getX(), player.getY(), player.getZ(), Sounds.LONGBOW_CHARGE.getSound(), SoundSource.PLAYERS, 0.75F, 1.0F);
     }
     return InteractionResultHolder.consume(bow);
@@ -201,7 +201,7 @@ public class ModifiableBowItem extends ModifiableLauncherItem {
     }
 
     // launch the arrow
-    if (!level.isClientSide) {
+    if (!level.isClientSide()) {
       int originalSlot = -1;
       int desiredProjectiles = 1;
       // if it's a ballista shot, locate the original slot so we can store it on the entity

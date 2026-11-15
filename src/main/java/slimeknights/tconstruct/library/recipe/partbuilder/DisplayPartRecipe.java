@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import slimeknights.tconstruct.library.materials.definition.MaterialVariant;
@@ -20,7 +20,7 @@ import java.util.List;
 @Getter
 public class DisplayPartRecipe implements IDisplayPartBuilderRecipe.DisplayOnly {
   /** ID of recipe; should generally match a real recipe JSON */
-  private final ResourceLocation id;
+  private final Identifier id;
   /** Material variant for name display */
   private final List<MaterialVariant> materials;
   /** Display title override. */
@@ -39,9 +39,9 @@ public class DisplayPartRecipe implements IDisplayPartBuilderRecipe.DisplayOnly 
   /** List of items to display for the result */
   private final List<ItemStack> resultItems;
 
-  /** @deprecated use {@link #id(ResourceLocation)} */
+  /** @deprecated use {@link #id(Identifier)} */
   @Deprecated(forRemoval = true)
-  public DisplayPartRecipe(ResourceLocation id, MaterialVariant material, Pattern pattern, List<ItemStack> patternItems, int cost, List<ItemStack> materialItems, List<ItemStack> resultItems) {
+  public DisplayPartRecipe(Identifier id, MaterialVariant material, Pattern pattern, List<ItemStack> patternItems, int cost, List<ItemStack> materialItems, List<ItemStack> resultItems) {
     this(id, List.of(material), null, List.of(), List.of(pattern), patternItems, cost, materialItems, resultItems);
   }
 
@@ -62,7 +62,7 @@ public class DisplayPartRecipe implements IDisplayPartBuilderRecipe.DisplayOnly 
   /* Builder */
 
   /** Creates a new builder for the given recipe ID */
-  public static Builder id(ResourceLocation id) {
+  public static Builder id(Identifier id) {
     return new Builder(id);
   }
 
@@ -71,7 +71,7 @@ public class DisplayPartRecipe implements IDisplayPartBuilderRecipe.DisplayOnly 
   @RequiredArgsConstructor
   public static class Builder {
     /** ID of recipe; should generally match a real recipe JSON */
-    private final ResourceLocation id;
+    private final Identifier id;
     /** Material variant for name display */
     private List<MaterialVariant> materials = List.of();
     /** Title to display in JEI */

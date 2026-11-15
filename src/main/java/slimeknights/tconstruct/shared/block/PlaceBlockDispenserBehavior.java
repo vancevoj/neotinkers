@@ -26,7 +26,7 @@ public class PlaceBlockDispenserBehavior extends OptionalDispenseItemBehavior {
     Level level = source.level();
     BlockPos target = source.pos().relative(source.state().getValue(DispenserBlock.FACING));
     if (level.isEmptyBlock(target) && stack.getItem() instanceof BlockItem blockItem) {
-      if (!level.isClientSide) {
+      if (!level.isClientSide()) {
         Block block = blockItem.getBlock();
         // could use getPlacementState, but that requires a context, not worth creating
         BlockState state = block.defaultBlockState();

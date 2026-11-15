@@ -1,12 +1,13 @@
 package slimeknights.tconstruct.library.tools.item.armor;
 
+import net.minecraft.world.item.equipment.ArmorType;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import lombok.Getter;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup.RegistryLookup;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -19,7 +20,7 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.monster.EnderMan;
+import net.minecraft.world.entity.monster.Enderman;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
 import net.minecraft.world.inventory.Slot;
@@ -66,24 +67,24 @@ import java.util.function.Consumer;
 
 public class ModifiableArmorItem extends ArmorItem implements IModifiableDisplay {
   /** Volatile modifier tag to make piglins neutal when worn */
-  public static final ResourceLocation PIGLIN_NEUTRAL = TConstruct.getResource("piglin_neutral");
+  public static final Identifier PIGLIN_NEUTRAL = TConstruct.getResource("piglin_neutral");
   /** Volatile modifier tag to make this item an elytra */
-  public static final ResourceLocation ELYTRA = TConstruct.getResource("elyta");
+  public static final Identifier ELYTRA = TConstruct.getResource("elyta");
   /** Volatile flag for a boot item to walk on powdered snow. Cold immunity is handled through a tag */
-  public static final ResourceLocation SNOW_BOOTS = TConstruct.getResource("snow_boots");
+  public static final Identifier SNOW_BOOTS = TConstruct.getResource("snow_boots");
   /** Volatile flag for an item to act as an enderman mask, stopping them from getting angry. */
-  public static final ResourceLocation ENDERMASK = TConstruct.getResource("endermask");
+  public static final Identifier ENDERMASK = TConstruct.getResource("endermask");
 
   @Getter
   private final ToolDefinition toolDefinition;
   /** Cache of the tool built for rendering */
   private ItemStack toolForRendering = null;
-  public ModifiableArmorItem(DummyArmorMaterial materialIn, ArmorItem.Type type, Properties builderIn, ToolDefinition toolDefinition) {
+  public ModifiableArmorItem(DummyArmorMaterial materialIn, ArmorType type, Properties builderIn, ToolDefinition toolDefinition) {
     super(materialIn.getArmorMaterial(), type, builderIn);
     this.toolDefinition = toolDefinition;
   }
 
-  public ModifiableArmorItem(ModifiableArmorMaterial material, ArmorItem.Type type, Properties properties) {
+  public ModifiableArmorItem(ModifiableArmorMaterial material, ArmorType type, Properties properties) {
     this(material, type, properties, Objects.requireNonNull(material.getArmorDefinition(type), "Missing tool definition for " + type.getName()));
   }
 
@@ -105,7 +106,7 @@ public class ModifiableArmorItem extends ArmorItem implements IModifiableDisplay
   }
 
   @Override
-  public boolean isEnderMask(ItemStack stack, Player player, EnderMan endermanEntity) {
+  public boolean isEnderMask(ItemStack stack, Player player, Enderman endermanEntity) {
     return type == Type.HELMET && ModifierUtil.checkVolatileFlag(stack, ENDERMASK);
   }
 
@@ -255,7 +256,7 @@ public class ModifiableArmorItem extends ArmorItem implements IModifiableDisplay
 
 
   /** Base resource location for the armor stat attribute modifier IDs, suffixed with the slot and stat */
-  private static final ResourceLocation ARMOR_MODIFIER = TConstruct.getResource("armor");
+  private static final Identifier ARMOR_MODIFIER = TConstruct.getResource("armor");
 
   @Override
   public Multimap<Attribute,AttributeModifier> getAttributeModifiers(IToolStackView tool, EquipmentSlot slot) {
@@ -265,7 +266,7 @@ public class ModifiableArmorItem extends ArmorItem implements IModifiableDisplay
 
     ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
     if (!tool.isBroken()) {
-      // base stats; in 1.21 attribute modifiers are keyed by a stable ResourceLocation (was UUID+name) and use ADD_VALUE
+      // base stats; in 1.21 attribute modifiers are keyed by a stable Identifier (was UUID+name) and use ADD_VALUE
       StatsNBT statsNBT = tool.getStats();
       String slotName = slot.getName();
       float armor = statsNBT.get(ToolStats.ARMOR);
@@ -315,7 +316,7 @@ public class ModifiableArmorItem extends ArmorItem implements IModifiableDisplay
           }
         }
         // damage the tool and keep flying
-        if (!entity.level().isClientSide && (flightTicks + 1) % 20 == 0) {
+        if (!entity.level().isClientSide() && (flightTicks + 1) % 20 == 0) {
           ToolDamageUtil.damageAnimated(tool, 1, entity, EquipmentSlot.CHEST);
         }
         return true;
@@ -332,7 +333,7 @@ public class ModifiableArmorItem extends ArmorItem implements IModifiableDisplay
     // don't care about non-living, they skip most tool context
     if (entityIn instanceof LivingEntity living) {
       ToolStack tool = ToolStack.from(stack);
-      if (!levelIn.isClientSide) {
+      if (!levelIn.isClientSide()) {
         tool.ensureHasData();
       }
       List<ModifierEntry> modifiers = tool.getModifierList();

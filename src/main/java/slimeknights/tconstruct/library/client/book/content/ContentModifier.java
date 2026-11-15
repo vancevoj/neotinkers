@@ -6,7 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.locale.Language;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -43,9 +43,9 @@ import java.util.Collections;
 import java.util.List;
 
 public class ContentModifier extends PageContent {
-  public static final ResourceLocation ID = TConstruct.getResource("modifier");
+  public static final Identifier ID = TConstruct.getResource("modifier");
   public static final int TEX_SIZE = 256;
-  public static final ResourceLocation BOOK_MODIFY = TConstruct.getResource("textures/gui/book/modify.png");
+  public static final Identifier BOOK_MODIFY = TConstruct.getResource("textures/gui/book/modify.png");
   private static final String KEY_EFFECTS = TConstruct.makeTranslationKey("book", "modifiers.effect");
 
   public static final ImageData IMG_SLOT_1 = new ImageData(BOOK_MODIFY, 0, 75, 22, 22, TEX_SIZE, TEX_SIZE);
@@ -82,7 +82,7 @@ public class ContentModifier extends PageContent {
   public String modifierID;
   /** Tag filter to limit tools that display on a page */
   @SerializedName("tool_filter")
-  public ResourceLocation toolFilter = null;
+  public Identifier toolFilter = null;
 
   /** Default constructor for page loader */
   public ContentModifier() {}

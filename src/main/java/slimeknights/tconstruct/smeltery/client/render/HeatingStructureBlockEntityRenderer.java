@@ -1,12 +1,13 @@
 package slimeknights.tconstruct.smeltery.client.render;
 
+import net.minecraft.util.LightCoordsUtil;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider.Context;
 import net.minecraft.client.renderer.entity.ItemRenderer;
@@ -19,7 +20,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.Shapes;
-import net.neoforged.neoforge.client.model.data.ModelData;
+import net.neoforged.neoforge.model.data.ModelData;
 import org.joml.Quaternionf;
 import slimeknights.tconstruct.common.config.Config;
 import slimeknights.tconstruct.library.client.TinkerRenderTypes;
@@ -80,7 +81,7 @@ public class HeatingStructureBlockEntityRenderer implements BlockEntityRenderer<
     matrices.pushPose();
     matrices.translate(minPos.getX() - pos.getX(), minPos.getY() - pos.getY(), minPos.getZ() - pos.getZ());
     // render tank fluids, use minPos for brightness
-    SmelteryTankRenderer.renderFluids(matrices, buffer, smeltery.getTank(), minPos, maxPos, LevelRenderer.getLightColor(world, minPos));
+    SmelteryTankRenderer.renderFluids(matrices, buffer, smeltery.getTank(), minPos, maxPos, LightCoordsUtil.getLightCoords(world, minPos));
 
     // render items
     int xd = 1 + maxPos.getX() - minPos.getX();
@@ -107,10 +108,10 @@ public class HeatingStructureBlockEntityRenderer implements BlockEntityRenderer<
           // offset to the slot position in the structure, scale, and rotate the item
           matrices.pushPose();
           matrices.translate(offsetX + 0.5f, height + 0.5f, offsetZ + 0.5f);
-          matrices.mulPose(itemRotation);
+          matrices.rotate(itemRotation);
           matrices.scale(ITEM_SCALE, ITEM_SCALE, ITEM_SCALE);
           BakedModel model = itemRenderer.getModel(stack, world, null, 0);
-          itemRenderer.render(stack, TinkerItemDisplays.MELTER, false, matrices, buffer, LevelRenderer.getLightColor(world, itemPos), OverlayTexture.NO_OVERLAY, model);
+          itemRenderer.render(stack, TinkerItemDisplays.MELTER, false, matrices, buffer, LightCoordsUtil.getLightCoords(world, itemPos), OverlayTexture.NO_OVERLAY, model);
           matrices.popPose();
 
           // done as quads rather than items as its not that expensive to draw blocks, items are the problem

@@ -10,7 +10,7 @@ import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -81,7 +81,7 @@ public class CopperCanItem extends Item {
   }
 
   /** Sets the fluid on the given stack whether or not its valiid */
-  private static void setFluidInternal(ItemStack stack, ResourceLocation fluid, @Nullable CompoundTag fluidTag) {
+  private static void setFluidInternal(ItemStack stack, Identifier fluid, @Nullable CompoundTag fluidTag) {
     CustomData.update(DataComponents.CUSTOM_DATA, stack, nbt -> {
       nbt.putString(TAG_FLUID, fluid.toString());
       if (fluidTag != null) {
@@ -95,7 +95,7 @@ public class CopperCanItem extends Item {
 
   /** Sets the fluid on the given stack */
   @SuppressWarnings("deprecation")
-  public static ItemStack setFluid(ItemStack stack, ResourceLocation fluid, @Nullable CompoundTag fluidTag) {
+  public static ItemStack setFluid(ItemStack stack, Identifier fluid, @Nullable CompoundTag fluidTag) {
     // if empty, try to remove the NBT, helps with recipes
     if (fluid.equals(BuiltInRegistries.FLUID.getDefaultKey())) {
       removeFluid(stack);
@@ -159,9 +159,9 @@ public class CopperCanItem extends Item {
     if (data != null) {
       CompoundTag nbt = data.copyTag();
       if (nbt.contains(TAG_FLUID, Tag.TAG_STRING)) {
-        ResourceLocation location = ResourceLocation.tryParse(nbt.getString(TAG_FLUID));
+        Identifier location = Identifier.tryParse(nbt.getString(TAG_FLUID));
         if (location != null && BuiltInRegistries.FLUID.containsKey(location)) {
-          Fluid fluid = BuiltInRegistries.FLUID.get(location);
+          Fluid fluid = BuiltInRegistries.FLUID.getValue(location);
           if (fluid != null) {
             return fluid;
           }
@@ -174,11 +174,11 @@ public class CopperCanItem extends Item {
   /** Adds filled variants of the copper can to the given consumer */
   @SuppressWarnings("deprecation")
   public static void addFilledVariants(Consumer<ItemStack> output) {
-    BuiltInRegistries.FLUID.holders().filter(holder -> {
+    BuiltInRegistries.FLUID.listElements().filter(holder -> {
       Fluid fluid = holder.value();
       return fluid.isSource(fluid.defaultFluidState()) && !holder.is(TinkerTags.Fluids.HIDE_IN_CREATIVE_TANKS);
     }).forEachOrdered(holder -> {
-      output.accept(CopperCanItem.setFluid(new ItemStack(TinkerSmeltery.copperCan), holder.key().location(), null));
+      output.accept(CopperCanItem.setFluid(new ItemStack(TinkerSmeltery.copperCan), holder.key().identifier(), null));
     });
   }
 

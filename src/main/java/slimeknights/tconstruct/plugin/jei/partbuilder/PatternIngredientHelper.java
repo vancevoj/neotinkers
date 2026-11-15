@@ -3,7 +3,7 @@ package slimeknights.tconstruct.plugin.jei.partbuilder;
 import mezz.jei.api.ingredients.IIngredientHelper;
 import mezz.jei.api.ingredients.IIngredientType;
 import mezz.jei.api.ingredients.subtypes.UidContext;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import slimeknights.tconstruct.library.recipe.partbuilder.Pattern;
 import slimeknights.tconstruct.plugin.jei.TConstructJEIConstants;
 
@@ -34,7 +34,7 @@ public class PatternIngredientHelper implements IIngredientHelper<Pattern> {
   }
 
   @Override
-  public ResourceLocation getResourceLocation(Pattern pattern) {
+  public Identifier getResourceLocation(Pattern pattern) {
     return pattern;
   }
 

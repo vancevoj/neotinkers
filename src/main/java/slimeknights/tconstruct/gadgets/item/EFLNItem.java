@@ -41,7 +41,7 @@ public class EFLNItem extends SnowballItem {
     }
 
     playerIn.awardStat(Stats.ITEM_USED.get(this));
-    return InteractionResultHolder.sidedSuccess(stack, level.isClientSide);
+    return InteractionResultHolder.sidedSuccess(stack, level.isClientSide());
   }
 
   @Override

@@ -2,7 +2,7 @@ package slimeknights.tconstruct.library.recipe.tinkerstation;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CraftingInput;
@@ -23,12 +23,12 @@ public interface IDisplayCraftingTinkering extends IDisplayToolTinkering, Crafti
    * Gets the ID for the crafting table tab.
    * In 1.21 recipes no longer carry their ID, so this is used to wrap the display recipe in a {@link net.minecraft.world.item.crafting.RecipeHolder} for JEI.
    */
-  ResourceLocation getId();
+  Identifier getId();
 
   /** Gets the ID for the tinker station tab. */
   @Nullable
   @Override
-  default ResourceLocation getRecipeId() {
+  default Identifier getRecipeId() {
     return getId();
   }
 

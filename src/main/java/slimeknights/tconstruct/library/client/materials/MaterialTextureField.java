@@ -3,7 +3,7 @@ package slimeknights.tconstruct.library.client.materials;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.GsonHelper;
 import slimeknights.mantle.data.loadable.field.RecordField;
 import slimeknights.mantle.util.JsonHelper;
@@ -15,12 +15,12 @@ import javax.annotation.Nullable;
 import java.util.Objects;
 
 /** Field handling the three state material texture */
-enum MaterialTextureField implements RecordField<ResourceLocation, MaterialRenderInfo> {
+enum MaterialTextureField implements RecordField<Identifier, MaterialRenderInfo> {
   INSTANCE;
 
   @Nullable
   @Override
-  public ResourceLocation get(JsonObject json, TypedMap context) {
+  public Identifier get(JsonObject json, TypedMap context) {
     // if we have a texture, use that
     if (json.has("texture")) {
       return JsonHelper.getResourceLocation(json, "texture", null);
@@ -36,7 +36,7 @@ enum MaterialTextureField implements RecordField<ResourceLocation, MaterialRende
 
   @Override
   public void serialize(MaterialRenderInfo parent, JsonObject json) {
-    ResourceLocation texture = parent.texture();
+    Identifier texture = parent.texture();
     if (texture == null) {
       json.add("texture", JsonNull.INSTANCE);
     } else if (!texture.equals(parent.id().getLocation('_'))) {
@@ -56,17 +56,17 @@ enum MaterialTextureField implements RecordField<ResourceLocation, MaterialRende
 
   @Nullable
   @Override
-  public ResourceLocation decode(FriendlyByteBuf buffer, TypedMap context) {
+  public Identifier decode(FriendlyByteBuf buffer, TypedMap context) {
     return switch (buffer.readEnum(TextureType.class)) {
       case NONE -> null;
       case DEFAULT -> Objects.requireNonNull(context.get(MaterialVariantId.CONTEXT_KEY)).getLocation('_');
-      case NAME -> buffer.readResourceLocation();
+      case NAME -> buffer.readIdentifier();
     };
   }
 
   @Override
   public void encode(FriendlyByteBuf buffer, MaterialRenderInfo parent) {
-    ResourceLocation texture = parent.texture();
+    Identifier texture = parent.texture();
     // save some network traffic if the texture is the ID, since we already need an extra byte to specify null
     if (texture == null) {
       buffer.writeEnum(TextureType.NONE);
@@ -74,7 +74,7 @@ enum MaterialTextureField implements RecordField<ResourceLocation, MaterialRende
       buffer.writeEnum(TextureType.DEFAULT);
     } else {
       buffer.writeEnum(TextureType.NAME);
-      buffer.writeResourceLocation(texture);
+      buffer.writeIdentifier(texture);
     }
   }
 }

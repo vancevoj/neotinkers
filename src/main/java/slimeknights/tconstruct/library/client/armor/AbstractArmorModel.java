@@ -1,16 +1,16 @@
 package slimeknights.tconstruct.library.client.armor;
 
+import net.minecraft.util.ARGB;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.ElytraModel;
+import net.minecraft.client.model.object.equipment.ElytraModel;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.util.FastColor;
+import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -66,7 +66,7 @@ public abstract class AbstractArmorModel extends Model {
       blue *= (float)(color & 255) / 255.0F;
     }
     // 1.21: renderToBuffer takes a packed ARGB color rather than float channels
-    model.renderToBuffer(matrices, buffer, packedLightIn, packedOverlayIn, FastColor.ARGB32.colorFromFloat(alpha, red, green, blue));
+    model.renderToBuffer(matrices, buffer, packedLightIn, packedOverlayIn, ARGB.colorFromFloat(alpha, red, green, blue));
   }
 
   /** Renders the wings layer */

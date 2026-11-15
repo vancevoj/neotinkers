@@ -6,7 +6,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import net.minecraft.client.resources.model.Material;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.GsonHelper;
 import slimeknights.mantle.data.loadable.Loadable;
 import slimeknights.mantle.util.typed.TypedMap;
@@ -43,7 +43,7 @@ public enum ModifierModelLoadable implements Loadable<ModifierModel> {
       }
       // primitive? load as the texture for normal
       if (element.isJsonPrimitive()) {
-        return new NormalModifierModel(ModifierModel.blockAtlas(ResourceLocation.parse(element.getAsString())), null);
+        return new NormalModifierModel(ModifierModel.blockAtlas(Identifier.parse(element.getAsString())), null);
       }
     }
     // if the object has no type, default to normal

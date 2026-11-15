@@ -21,7 +21,7 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.client.event.RenderItemInFrameEvent;
 import net.neoforged.neoforge.client.event.RenderNameTagEvent;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.common.util.TriState;
+import net.minecraft.util.TriState;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.gadgets.entity.FancyItemFrameEntity;
 import slimeknights.tconstruct.gadgets.entity.FrameType;
@@ -68,8 +68,8 @@ public class FancyItemFrameRenderer<T extends FancyItemFrameEntity> extends Item
     Direction facing = frame.getDirection();
     Vec3 offset = this.getRenderOffset(frame, partialTicks);
     matrices.translate(facing.getStepX() * 0.46875D - offset.x(), facing.getStepY() * 0.46875D - offset.y(), facing.getStepZ() * 0.46875D - offset.z());
-    matrices.mulPose(Axis.XP.rotationDegrees(frame.getXRot()));
-    matrices.mulPose(Axis.YP.rotationDegrees(180.0F - frame.getYRot()));
+    matrices.rotate(Axis.XP.rotationDegrees(frame.getXRot()));
+    matrices.rotate(Axis.YP.rotationDegrees(180.0F - frame.getYRot()));
 
     // render the frame
     ItemStack stack = frame.getItem();
@@ -100,10 +100,10 @@ public class FancyItemFrameRenderer<T extends FancyItemFrameEntity> extends Item
       // for diamond, render the timer as a partial rotation
       if (frameType.hasMoreRotations()) {
         int rotation = mapdata != null ? (frameRotation + 2) % 4 * 4 : frameRotation;
-        matrices.mulPose(Axis.ZP.rotationDegrees(rotation * 360f / 16f));
+        matrices.rotate(Axis.ZP.rotationDegrees(rotation * 360f / 16f));
       } else {
         int rotation = mapdata != null ? (frameRotation + 2) % 4 * 2 : frameRotation;
-        matrices.mulPose(Axis.ZP.rotationDegrees(rotation * 360f / 8f));
+        matrices.rotate(Axis.ZP.rotationDegrees(rotation * 360f / 8f));
       }
       if (!NeoForge.EVENT_BUS.post(new RenderItemInFrameEvent(frame, this, matrices, bufferIn, packedLight)).isCanceled()) {
         if (mapdata != null) {

@@ -6,9 +6,9 @@ import net.minecraft.client.renderer.texture.atlas.sources.SingleFile;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.registries.VanillaRegistries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.armortrim.TrimMaterial;
-import net.minecraft.world.item.armortrim.TrimMaterials;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.equipment.trim.TrimMaterial;
+import net.minecraft.world.item.equipment.trim.TrimMaterials;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.common.data.SpriteSourceProvider;
 import slimeknights.tconstruct.TConstruct;
@@ -45,10 +45,10 @@ public class TinkerSpriteSourceProvider extends SpriteSourceProvider {
   @SuppressWarnings("removal")
   @Override
   protected void gather() {
-    ResourceLocation trimPalette = ResourceLocation.parse(PALETTE_FOLDER + "trim_palette");
+    Identifier trimPalette = Identifier.parse(PALETTE_FOLDER + "trim_palette");
     // map of material suffix to material paeltte for trims
-    Map<String,ResourceLocation> tinkerMaterials = Arrays.stream(MaterialIds.TRIM_MATERIALS).collect(Collectors.toMap(id -> id.getNamespace() + "_" + id.getPath(), id -> id.withPrefix(PALETTE_FOLDER)));
-    Map<String,ResourceLocation> vanillaMaterials = new HashMap<>();
+    Map<String,Identifier> tinkerMaterials = Arrays.stream(MaterialIds.TRIM_MATERIALS).collect(Collectors.toMap(id -> id.getNamespace() + "_" + id.getPath(), id -> id.withPrefix(PALETTE_FOLDER)));
+    Map<String,Identifier> vanillaMaterials = new HashMap<>();
     addVanilla(vanillaMaterials, TrimMaterials.QUARTZ);
     addVanilla(vanillaMaterials, TrimMaterials.IRON);
     addVanilla(vanillaMaterials, TrimMaterials.NETHERITE);
@@ -60,7 +60,7 @@ public class TinkerSpriteSourceProvider extends SpriteSourceProvider {
     addVanilla(vanillaMaterials, TrimMaterials.LAPIS);
     addVanilla(vanillaMaterials, TrimMaterials.AMETHYST);
     // custom armor "modifier" textures that use the trim materials
-    List<ResourceLocation> customItemTrims = Stream.of("item/tool/armor/travelers/goggles/trim", "item/tool/armor/slime/wings/trim").map(TConstruct::getResource).toList();
+    List<Identifier> customItemTrims = Stream.of("item/tool/armor/travelers/goggles/trim", "item/tool/armor/slime/wings/trim").map(TConstruct::getResource).toList();
 
     SourceList blocks = atlas(BLOCKS_ATLAS)
       // we typically use this directory for modifier icons that are not items nor blocks
@@ -80,9 +80,9 @@ public class TinkerSpriteSourceProvider extends SpriteSourceProvider {
       blocks.addSource(new SingleFile(armor.getRoot(), Optional.empty()));
     }
     // add armor trims in our materials
-    atlas(ResourceLocation.parse("armor_trims"))
+    atlas(Identifier.parse("armor_trims"))
       .addSource(new PalettedPermutations(
-        Arrays.stream(TRIMS).flatMap(name -> Stream.of(ResourceLocation.parse(TRIM_FOLDER + name), ResourceLocation.parse(TRIM_FOLDER + name + "_leggings"))).toList(),
+        Arrays.stream(TRIMS).flatMap(name -> Stream.of(Identifier.parse(TRIM_FOLDER + name), Identifier.parse(TRIM_FOLDER + name + "_leggings"))).toList(),
         trimPalette, tinkerMaterials));
   }
 
@@ -92,8 +92,8 @@ public class TinkerSpriteSourceProvider extends SpriteSourceProvider {
   }
 
   /** Adds a vanilla material to the map */
-  private static void addVanilla(Map<String,ResourceLocation> map, ResourceKey<TrimMaterial> material) {
-    ResourceLocation path = material.location();
+  private static void addVanilla(Map<String,Identifier> map, ResourceKey<TrimMaterial> material) {
+    Identifier path = material.location();
     map.put(path.getPath(), path.withPrefix(PALETTE_FOLDER));
   }
 }

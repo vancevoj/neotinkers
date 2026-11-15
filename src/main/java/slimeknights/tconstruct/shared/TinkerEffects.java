@@ -1,8 +1,9 @@
 package slimeknights.tconstruct.shared;
 
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -47,7 +48,7 @@ public class TinkerEffects extends TinkerModule {
   public static final DeferredHolder<? super TinkerEffect, TinkerEffect> ricochet = MOB_EFFECTS.register("ricochet", () -> new TinkerEffect(MobEffectCategory.NEUTRAL, 0x01cbcd, true).addAttributeModifier(TinkerAttributes.KNOCKBACK_MULTIPLIER, TConstruct.getResource("effect.ricochet"), 0.5f, Operation.ADD_MULTIPLIED_BASE));
   public static final DeferredHolder<? super TinkerEffect, TinkerEffect> enderference = MOB_EFFECTS.register("enderference", () -> new TinkerEffect(MobEffectCategory.HARMFUL, 0xD37CFF, true));
   /** Projectile persistent data key to allow ranged modifiers to hit endermen. */
-  public static final ResourceLocation ENDERFERENCE_KEY = enderference.getId();
+  public static final Identifier ENDERFERENCE_KEY = enderference.getId();
 
   // slimy cakes
   public static final DeferredHolder<? super TinkerEffect, TinkerEffect> bouncy = MOB_EFFECTS.register("bouncy", () -> new TinkerEffect(MobEffectCategory.BENEFICIAL, 0x71AC63, true).addAttributeModifier(TinkerAttributes.BOUNCY, TConstruct.getResource("effect.bouncy"), 1, Operation.ADD_VALUE));
@@ -112,16 +113,16 @@ public class TinkerEffects extends TinkerModule {
 
   /** Checks if the given entity can be hit considering enderman enderference */
   public static boolean canHitWithProjectile(@Nullable LivingEntity living) {
-    return living == null || living.getType() != EntityType.ENDERMAN || living.hasEffect(enderferenceHolder());
+    return living == null || living.getType() != EntityTypes.ENDERMAN || living.hasEffect(enderferenceHolder());
   }
 
   /** Checks if the given entity needs special casing for enderference */
   public static boolean needsEnderferenceOverride(@Nullable Entity entity) {
-    return entity != null && entity.getType() == EntityType.ENDERMAN && entity instanceof LivingEntity living && living.hasEffect(enderferenceHolder());
+    return entity != null && entity.getType() == EntityTypes.ENDERMAN && entity instanceof LivingEntity living && living.hasEffect(enderferenceHolder());
   }
 
   /** Checks if the given entity needs special casing for enderference */
   public static boolean needsEnderferenceOverride(@Nullable LivingEntity living) {
-    return living != null && living.getType() == EntityType.ENDERMAN && living.hasEffect(enderferenceHolder());
+    return living != null && living.getType() == EntityTypes.ENDERMAN && living.hasEffect(enderferenceHolder());
   }
 }

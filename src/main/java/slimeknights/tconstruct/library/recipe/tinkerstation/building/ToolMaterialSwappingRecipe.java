@@ -2,7 +2,7 @@ package slimeknights.tconstruct.library.recipe.tinkerstation.building;
 
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -52,7 +52,7 @@ public class ToolMaterialSwappingRecipe extends MaterialSwappingRecipe implement
 
   /** @apiNote Internal usage. To create see {@link slimeknights.tconstruct.tables.recipe.TinkerStationPartSwappingBuilder} */
   @Internal
-  public ToolMaterialSwappingRecipe(ResourceLocation id, Ingredient tools, List<SizedIngredient> extraRequirements) {
+  public ToolMaterialSwappingRecipe(Identifier id, Ingredient tools, List<SizedIngredient> extraRequirements) {
     super(id, tools, 1, extraRequirements);
   }
 

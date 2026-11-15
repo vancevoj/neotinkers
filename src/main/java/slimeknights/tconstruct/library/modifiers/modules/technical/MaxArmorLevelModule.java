@@ -1,6 +1,6 @@
 package slimeknights.tconstruct.library.modifiers.modules.technical;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -27,7 +27,7 @@ public interface MaxArmorLevelModule extends HookProvider, EquipmentChangeModifi
 
   /**
    * Max level key
-   * @see #createKey(ResourceLocation)
+   * @see #createKey(Identifier)
    */
   ComputableDataKey<ModifierMaxLevel> maxLevel();
 
@@ -90,9 +90,9 @@ public interface MaxArmorLevelModule extends HookProvider, EquipmentChangeModifi
 
   /** Creates a new max level key for the given ID. Key should be unique instance per usage */
   @SuppressWarnings("removal")
-  static ComputableDataKey<ModifierMaxLevel> createKey(@Nullable ResourceLocation id) {
+  static ComputableDataKey<ModifierMaxLevel> createKey(@Nullable Identifier id) {
     if (id == null) {
-      id = ResourceLocation.parse("missingno");
+      id = Identifier.parse("missingno");
     }
     return ComputableDataKey.of(id.withSuffix("_data"), ModifierMaxLevel::new);
   }

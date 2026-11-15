@@ -3,7 +3,7 @@ package slimeknights.tconstruct.library.client.book.sectiontransformer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.fluids.FluidStack;
@@ -31,7 +31,7 @@ import java.util.Map;
 /** Transformer adding fluid effect pages */
 public class FluidEffectInjectingTransformer extends BookTransformer {
   public static final FluidEffectInjectingTransformer INSTANCE = new FluidEffectInjectingTransformer();
-  private static final ResourceLocation KEY = TConstruct.getResource("fluid_effects");
+  private static final Identifier KEY = TConstruct.getResource("fluid_effects");
 
   private FluidEffectInjectingTransformer() {}
 
@@ -52,7 +52,7 @@ public class FluidEffectInjectingTransformer extends BookTransformer {
       }
 
       // sort the fluid effects
-      Map<ResourceLocation, PageWithIcon> newPages = new HashMap<>();
+      Map<Identifier, PageWithIcon> newPages = new HashMap<>();
       for (FluidEffects.Entry entry : effects) {
         FluidEffects effect = entry.effects();
         // skip hidden effects
@@ -66,7 +66,7 @@ public class FluidEffectInjectingTransformer extends BookTransformer {
         }
 
         // start building the page
-        ResourceLocation name = entry.name();
+        Identifier name = entry.name();
         PageData newPage = new PageData(true);
         newPage.parent = section;
         newPage.source = section.source;
@@ -105,10 +105,10 @@ public class FluidEffectInjectingTransformer extends BookTransformer {
       for (String name : presorted) {
         // since this feature is just for us, automatically prefix IDs
         // though for the sake of pack makers we allow other domains if they contain :
-        ResourceLocation id = null;
+        Identifier id = null;
         if (name.contains(":")) {
-          id = ResourceLocation.tryParse(name);
-        } else if (ResourceLocation.isValidPath(name)) {
+          id = Identifier.tryParse(name);
+        } else if (Identifier.isValidPath(name)) {
           id = TConstruct.getResource(name);
         }
         if (id == null) {

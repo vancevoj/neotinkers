@@ -1,12 +1,12 @@
 package slimeknights.tconstruct.tools.item;
 
+import net.minecraft.world.item.equipment.ArmorType;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.Model;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
@@ -24,12 +24,12 @@ import java.util.function.Consumer;
 /** This item is mainly to return the proper model for a slimeskull */
 public class SlimeskullItem extends ModifiableArmorItem {
   /** Model ID for our slimeskull. You may want your own for a custom slimeskull */
-  public static final ResourceLocation MODEL_LOCATION = TConstruct.getResource("slimeskull");
+  public static final Identifier MODEL_LOCATION = TConstruct.getResource("slimeskull");
 
-  private final ResourceLocation name;
+  private final Identifier name;
 
-  public SlimeskullItem(ModifiableArmorMaterial material, ResourceLocation name, Properties properties) {
-    super(material, ArmorItem.Type.HELMET, properties);
+  public SlimeskullItem(ModifiableArmorMaterial material, Identifier name, Properties properties) {
+    super(material, ArmorType.HELMET, properties);
     this.name = name;
   }
 
@@ -39,15 +39,15 @@ public class SlimeskullItem extends ModifiableArmorItem {
 
   @Nullable
   @Override
-  public ResourceLocation getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, ArmorMaterial.Layer layer, boolean innerModel) {
-    return ResourceLocation.parse(ArmorUtil.getDummyArmorTexture(slot));
+  public Identifier getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, ArmorMaterial.Layer layer, boolean innerModel) {
+    return Identifier.parse(ArmorUtil.getDummyArmorTexture(slot));
   }
 
   @Override
   public void initializeClient(Consumer<IClientItemExtensions> consumer) {
     consumer.accept(new ArmorModelDispatcher() {
       @Override
-      protected ResourceLocation getName() {
+      protected Identifier getName() {
         return name;
       }
 

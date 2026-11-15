@@ -1,7 +1,7 @@
 package slimeknights.tconstruct.tables.client.inventory.widget;
 
 import lombok.Getter;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import slimeknights.mantle.client.screen.ElementScreen;
 import slimeknights.tconstruct.library.client.Icons;
@@ -40,7 +40,7 @@ public class SlotButtonItem extends Button {
   }
 
   @Override
-  public void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+  public void renderWidget(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTicks) {
       int x = getX();
       int y = getY();
       if (this.pressed) {

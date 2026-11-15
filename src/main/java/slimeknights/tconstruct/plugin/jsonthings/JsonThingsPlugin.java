@@ -10,7 +10,7 @@ public class JsonThingsPlugin {
     FlexBlockTypes.init();
     FlexItemTypes.init();
 
-    if (FMLEnvironment.dist == Dist.CLIENT) {
+    if (FMLEnvironment.getDist() == Dist.CLIENT) {
       PluginClient.init();
     }
   }

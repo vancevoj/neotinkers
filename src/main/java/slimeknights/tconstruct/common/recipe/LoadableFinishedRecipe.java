@@ -1,7 +1,7 @@
 package slimeknights.tconstruct.common.recipe;
 
 import net.minecraft.data.recipes.RecipeOutput;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.crafting.Recipe;
 
 /**
@@ -14,7 +14,7 @@ public final class LoadableFinishedRecipe {
   private LoadableFinishedRecipe() {}
 
   /** One-liner to accept a new recipe with no advancement */
-  public static <T extends Recipe<?>> void save(RecipeOutput consumer, ResourceLocation id, T recipe) {
+  public static <T extends Recipe<?>> void save(RecipeOutput consumer, Identifier id, T recipe) {
     consumer.accept(id, recipe, null);
   }
 }

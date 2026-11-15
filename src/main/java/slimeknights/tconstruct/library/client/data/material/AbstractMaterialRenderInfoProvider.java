@@ -8,7 +8,7 @@ import lombok.experimental.Accessors;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.PackOutput.Target;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import slimeknights.mantle.data.GenericDataProvider;
 import slimeknights.tconstruct.library.client.data.material.AbstractMaterialSpriteProvider.MaterialSpriteInfo;
@@ -64,7 +64,7 @@ public abstract class AbstractMaterialRenderInfoProvider extends GenericDataProv
   /* Helpers */
 
   /** Initializes a builder for the given material */
-  private RenderInfoBuilder getBuilder(@Nullable ResourceLocation texture) {
+  private RenderInfoBuilder getBuilder(@Nullable Identifier texture) {
     RenderInfoBuilder builder = new RenderInfoBuilder().texture(texture);
     if (materialSprites != null && texture != null) {
       MaterialSpriteInfo spriteInfo = materialSprites.getMaterialInfo(texture);
@@ -90,7 +90,7 @@ public abstract class AbstractMaterialRenderInfoProvider extends GenericDataProv
    * Starts a builder for a general render info with an overridden texture.
    * Use {@link #buildRenderInfo(MaterialVariantId)} if you plan to override the texture without copying the datagen settings
    */
-  protected RenderInfoBuilder buildRenderInfo(MaterialVariantId materialId, @Nullable ResourceLocation texture) {
+  protected RenderInfoBuilder buildRenderInfo(MaterialVariantId materialId, @Nullable Identifier texture) {
     return allRenderInfo.computeIfAbsent(materialId, id -> getBuilder(texture));
   }
 
@@ -105,10 +105,10 @@ public abstract class AbstractMaterialRenderInfoProvider extends GenericDataProv
   protected static class RenderInfoBuilder {
     @Setter
     @Nullable
-    private ResourceLocation texture = null;
+    private Identifier texture = null;
     @Setter
     @Nullable
-    private ResourceLocation parent = null;
+    private Identifier parent = null;
     private String[] fallbacks = new String[0];
     private int color = -1;
     @Setter

@@ -1,10 +1,10 @@
 package slimeknights.tconstruct.tools.modules.ranged;
 
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
@@ -31,7 +31,7 @@ import java.util.List;
 public enum RestrictAngleModule implements ModifierModule, ProjectileLaunchModifierHook.NoShooter, SlingAngleModifierHook {
   INSTANCE;
 
-  private static final ResourceLocation TOTAL_LEVEL = TConstruct.getResource("restrict_angle_level");
+  private static final Identifier TOTAL_LEVEL = TConstruct.getResource("restrict_angle_level");
   private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<RestrictAngleModule>defaultHooks(ModifierHooks.PROJECTILE_LAUNCH, ModifierHooks.PROJECTILE_SHOT, ModifierHooks.PROJECTILE_THROWN, ModifierHooks.SLING_ANGLE);
   public static final SingletonLoader<RestrictAngleModule> LOADER = new SingletonLoader<>(INSTANCE);
 

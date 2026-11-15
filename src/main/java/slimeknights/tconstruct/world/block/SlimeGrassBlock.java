@@ -13,7 +13,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.SnowLayerBlock;
-import net.minecraft.world.level.block.SnowyDirtBlock;
+import net.minecraft.world.level.block.SnowyBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.lighting.LightEngine;
 import slimeknights.tconstruct.common.TinkerTags;
@@ -21,7 +21,7 @@ import slimeknights.tconstruct.world.TinkerWorld;
 
 import javax.annotation.Nullable;
 
-public class SlimeGrassBlock extends SnowyDirtBlock implements BonemealableBlock {
+public class SlimeGrassBlock extends SnowyBlock implements BonemealableBlock {
   @Getter
   private final FoliageType foliageType;
   public SlimeGrassBlock(Properties properties, FoliageType foliageType) {

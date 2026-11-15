@@ -1,8 +1,9 @@
 package slimeknights.tconstruct.tools.recipe.severing;
 
+import net.minecraft.world.entity.EntityTypes;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
@@ -19,8 +20,8 @@ import slimeknights.tconstruct.tools.TinkerModifiers;
 /** Beheading recipe that sets player skin */
 public class PlayerBeheadingRecipe extends SeveringRecipe {
   public static final RecordLoadable<PlayerBeheadingRecipe> LOADER = RecordLoadable.create(ContextKey.ID.requiredField(), BASE_CHANCE_FIELD, LOOTING_BONUS_FIELD, PlayerBeheadingRecipe::new);
-  public PlayerBeheadingRecipe(ResourceLocation id, float baseChance, float lootingBonus) {
-    super(id, EntityIngredient.of(EntityType.PLAYER), ItemOutput.fromItem(Items.PLAYER_HEAD), baseChance, lootingBonus);
+  public PlayerBeheadingRecipe(Identifier id, float baseChance, float lootingBonus) {
+    super(id, EntityIngredient.of(EntityTypes.PLAYER), ItemOutput.fromItem(Items.PLAYER_HEAD), baseChance, lootingBonus);
   }
 
   @Override

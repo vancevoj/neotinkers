@@ -1,6 +1,6 @@
 package slimeknights.tconstruct.tools.modifiers.ability.tool;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -26,7 +26,7 @@ import slimeknights.tconstruct.library.tools.nbt.ToolDataNBT;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
 
 public class OffhandAttackModifier extends NoLevelsModifier implements EntityInteractionModifierHook, GeneralInteractionModifierHook, VolatileDataModifierHook {
-  public static final ResourceLocation DUEL_WIELDING = TConstruct.getResource("duel_wielding");
+  public static final Identifier DUEL_WIELDING = TConstruct.getResource("duel_wielding");
 
   @Override
   protected void registerHooks(Builder hookBuilder) {

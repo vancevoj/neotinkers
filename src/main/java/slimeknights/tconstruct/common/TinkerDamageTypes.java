@@ -87,7 +87,7 @@ public class TinkerDamageTypes {
 
   /** Creates a new damage source using a custom type */
   public static DamageSource source(RegistryAccess access, ResourceKey<DamageType> type, @Nullable Entity direct, @Nullable Entity causing) {
-    return new DamageSource(access.registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(type), direct, causing);
+    return new DamageSource(access.lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(type), direct, causing);
   }
 
   /** Creates a new damage source using a custom typ with a single entity */

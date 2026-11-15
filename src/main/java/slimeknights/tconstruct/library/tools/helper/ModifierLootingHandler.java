@@ -160,7 +160,7 @@ public class ModifierLootingHandler {
       return null;
     }
     // holder must come from the registry, the enchantment hooks key their maps on registry holder identity
-    Holder<Enchantment> looting = attacker.level().registryAccess().registryOrThrow(Registries.ENCHANTMENT).getHolderOrThrow(Enchantments.LOOTING);
+    Holder<Enchantment> looting = attacker.level().registryAccess().lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.LOOTING);
     // base is whatever vanilla would have used without us, the hooks may raise or cancel it
     int base = EnchantmentHelper.getItemEnchantmentLevel(looting, mainHand);
     int level = getLootingLevel(damageSource, target, base);

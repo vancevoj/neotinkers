@@ -2,7 +2,7 @@ package slimeknights.tconstruct.common;
 
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -29,7 +29,7 @@ public class TinkerEffect extends MobEffect {
 
   // override to change return type
   @Override
-  public TinkerEffect addAttributeModifier(Holder<Attribute> pAttribute, ResourceLocation pId, double pAmount, Operation pOperation) {
+  public TinkerEffect addAttributeModifier(Holder<Attribute> pAttribute, Identifier pId, double pAmount, Operation pOperation) {
     super.addAttributeModifier(pAttribute, pId, pAmount, pOperation);
     return this;
   }

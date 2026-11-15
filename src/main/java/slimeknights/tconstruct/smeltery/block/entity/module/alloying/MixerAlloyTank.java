@@ -140,7 +140,7 @@ public class MixerAlloyTank implements IMutableAlloyTank {
           // limit by blocks as that gives the modpack more control, say they want to allow only scorched tanks
           if (world.getBlockState(target).is(TinkerTags.Blocks.ALLOYER_TANKS)) {
             // if we found a tank, increment the number of tanks
-            IFluidHandler capability = world.getCapability(Capabilities.FluidHandler.BLOCK, target, direction.getOpposite());
+            IFluidHandler capability = world.getCapability(Capabilities.Fluid.BLOCK, target, direction.getOpposite());
             checked.add(direction);
             if (capability != null) {
               inputs.put(direction, capability);

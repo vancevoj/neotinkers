@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -46,7 +46,7 @@ public class ContainerFillingRecipe implements ICastingRecipe, IMultiRecipe<IDis
   @Getter
   private final TypeAwareRecipeSerializer<?> serializer;
   @Getter
-  private final ResourceLocation id;
+  private final Identifier id;
   @Getter
   private final String group;
   private final int fluidAmount;
@@ -68,7 +68,7 @@ public class ContainerFillingRecipe implements ICastingRecipe, IMultiRecipe<IDis
 
   @Override
   public int getFluidAmount(ICastingContainer inv) {
-    IFluidHandlerItem handler = inv.getStack().getCapability(Capabilities.FluidHandler.ITEM);
+    IFluidHandlerItem handler = inv.getStack().getCapability(Capabilities.Fluid.ITEM);
     if (handler == null) {
       return 0;
     }
@@ -96,7 +96,7 @@ public class ContainerFillingRecipe implements ICastingRecipe, IMultiRecipe<IDis
     if (stack.getItem() != this.container.asItem()) {
       return false;
     }
-    IFluidHandlerItem handler = stack.getCapability(Capabilities.FluidHandler.ITEM);
+    IFluidHandlerItem handler = stack.getCapability(Capabilities.Fluid.ITEM);
     return handler != null && handler.fill(getFillFluid(inv), FluidAction.SIMULATE) > 0;
   }
 
@@ -110,7 +110,7 @@ public class ContainerFillingRecipe implements ICastingRecipe, IMultiRecipe<IDis
   @Override
   public ItemStack assemble(ICastingContainer inv, HolderLookup.Provider access) {
     ItemStack stack = inv.getStack().copy();
-    IFluidHandlerItem handler = stack.getCapability(Capabilities.FluidHandler.ITEM);
+    IFluidHandlerItem handler = stack.getCapability(Capabilities.Fluid.ITEM);
     if (handler == null) {
       return stack;
     }

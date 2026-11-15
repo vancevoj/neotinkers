@@ -14,6 +14,6 @@ public class SoundUtils {
    * @param pitch the pitch of the sound
    */
   public static void playSoundForAll(Entity entity, SoundEvent sound, float volume, float pitch) {
-    entity.getCommandSenderWorld().playSound(null, entity.blockPosition(), sound, entity.getSoundSource(), volume, pitch);
+    entity.level().playSound(null, entity.blockPosition(), sound, entity.getSoundSource(), volume, pitch);
   }
 }

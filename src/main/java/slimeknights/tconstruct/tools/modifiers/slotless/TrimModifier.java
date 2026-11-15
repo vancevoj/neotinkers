@@ -2,7 +2,7 @@ package slimeknights.tconstruct.tools.modifiers.slotless;
 
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierId;
@@ -19,10 +19,10 @@ public class TrimModifier extends NoLevelsModifier {
   private static final TrimModule TRIM = new TrimModule();
   /** @deprecated use {@link TrimModule#patternKey(ModifierId)} */
   @Deprecated(forRemoval = true)
-  public static final ResourceLocation TRIM_PATTERN = TConstruct.getResource("trim_pattern");
+  public static final Identifier TRIM_PATTERN = TConstruct.getResource("trim_pattern");
   /** @deprecated use {@link TrimModule#materialKey(ModifierId)} */
   @Deprecated(forRemoval = true)
-  public static final ResourceLocation TRIM_MATERIAL = TConstruct.getResource("trim_material");
+  public static final Identifier TRIM_MATERIAL = TConstruct.getResource("trim_material");
 
   @Override
   protected void registerHooks(Builder hookBuilder) {

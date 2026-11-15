@@ -59,8 +59,8 @@ public class FluidParticle extends TextureSheetParticle {
   }
 
   @Override
-  public int getLightColor(float partialTick) {
-    return FluidRenderer.withBlockLight(super.getLightColor(partialTick), fluid.getFluid().getFluidType().getLightLevel(fluid));
+  public int getLightCoords(float partialTick) {
+    return FluidRenderer.withBlockLight(super.getLightCoords(partialTick), fluid.getFluid().getFluidType().getLightLevel(fluid));
   }
 
   /** Factory to create a fluid particle */

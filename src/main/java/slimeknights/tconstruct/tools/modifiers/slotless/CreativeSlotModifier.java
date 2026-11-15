@@ -3,7 +3,7 @@ package slimeknights.tconstruct.tools.modifiers.slotless;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
@@ -24,7 +24,7 @@ import java.util.List;
 /** Modifier that adds a variable number of slots to a tool. Could easily be done via Tag editing, but this makes it easier */
 public class CreativeSlotModifier extends NoLevelsModifier implements VolatileDataModifierHook, ModifierRemovalHook {
   /** Key representing the slots object in the modifier */
-  public static final ResourceLocation KEY_SLOTS = TConstruct.getResource("creative");
+  public static final Identifier KEY_SLOTS = TConstruct.getResource("creative");
 
   @Override
   protected void registerHooks(Builder hookBuilder) {
@@ -43,7 +43,7 @@ public class CreativeSlotModifier extends NoLevelsModifier implements VolatileDa
     IModDataView persistentData = context.getPersistentData();
     if (persistentData.contains(KEY_SLOTS, Tag.TAG_COMPOUND)) {
       CompoundTag slots = persistentData.getCompound(KEY_SLOTS);
-      for (String key : slots.getAllKeys()) {
+      for (String key : slots.keySet()) {
         SlotType slotType = SlotType.getIfPresent(key);
         if (slotType != null) {
           volatileData.addSlots(slotType, slots.getInt(key));
@@ -68,7 +68,7 @@ public class CreativeSlotModifier extends NoLevelsModifier implements VolatileDa
 
       // first one found has special behavior
       boolean first = true;
-      for (String key : slots.getAllKeys()) {
+      for (String key : slots.keySet()) {
         SlotType slotType = SlotType.getIfPresent(key);
         if (slotType != null) {
           if (first) {

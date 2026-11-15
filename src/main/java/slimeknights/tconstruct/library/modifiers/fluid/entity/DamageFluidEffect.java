@@ -70,7 +70,7 @@ public record DamageFluidEffect(float damage, @Nullable DamageTypePair damageTyp
   public Component getDescription(RegistryAccess registryAccess) {
     String translationKey = FluidEffect.getTranslationKey(getLoader());
     if (this.damageType != null) {
-      DamageType damageType = registryAccess.registryOrThrow(Registries.DAMAGE_TYPE).get(this.damageType.melee);
+      DamageType damageType = registryAccess.lookupOrThrow(Registries.DAMAGE_TYPE).get(this.damageType.melee);
       if (damageType != null) {
         translationKey += '.' + damageType.msgId();
       }

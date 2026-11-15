@@ -21,7 +21,7 @@ public class SingleItemContainerMenu extends TriggeringBaseContainerMenu<BlockEn
     if (te != null) {
       Level world = te.getLevel();
       if (world != null) {
-        IItemHandler handler = world.getCapability(Capabilities.ItemHandler.BLOCK, te.getBlockPos(), null);
+        IItemHandler handler = world.getCapability(Capabilities.Item.BLOCK, te.getBlockPos(), null);
         if (handler != null) {
           this.addSlot(new SmartItemHandlerSlot(handler, 0, 80, 20));
         }

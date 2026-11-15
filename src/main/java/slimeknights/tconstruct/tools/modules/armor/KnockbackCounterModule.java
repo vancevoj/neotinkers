@@ -84,7 +84,7 @@ public record KnockbackCounterModule(TinkerDataKey<SlotInCharge> slotInCharge, L
     // direct damage on the server against a living entity
     // only run once across all pieces, as we want a max effect and knockback doesn't naturally max
     LivingEntity defender = context.getEntity();
-    if (isDirectDamage && !defender.level().isClientSide && condition.matches(tool, modifier) && this.defender.matches(defender) && source.getEntity() instanceof LivingEntity attacker && this.attacker.matches(attacker) && SlotInChargeModule.isInCharge(context.getTinkerData(), slotInCharge, slotType)) {
+    if (isDirectDamage && !defender.level().isClientSide() && condition.matches(tool, modifier) && this.defender.matches(defender) && source.getEntity() instanceof LivingEntity attacker && this.attacker.matches(attacker) && SlotInChargeModule.isInCharge(context.getTinkerData(), slotInCharge, slotType)) {
       // figure out which slot is blocking, it gets its effect doubled
       EquipmentSlot blockingSlot = null;
       if (defender.isUsingItem()) {

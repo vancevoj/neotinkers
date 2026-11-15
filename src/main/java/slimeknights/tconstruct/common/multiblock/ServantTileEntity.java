@@ -7,7 +7,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -115,9 +115,9 @@ public class ServantTileEntity extends MantleBlockEntity implements IServantLogi
     Block masterBlock = null;
     // if the master position is valid, get the master block
     if (masterPos != null && tags.contains(TAG_MASTER_BLOCK, Tag.TAG_STRING)) {
-      ResourceLocation masterBlockName = ResourceLocation.tryParse(tags.getString(TAG_MASTER_BLOCK));
+      Identifier masterBlockName = Identifier.tryParse(tags.getString(TAG_MASTER_BLOCK));
       if (masterBlockName != null && BuiltInRegistries.BLOCK.containsKey(masterBlockName)) {
-        masterBlock = BuiltInRegistries.BLOCK.get(masterBlockName);
+        masterBlock = BuiltInRegistries.BLOCK.getValue(masterBlockName);
       }
     }
     // if both valid, set

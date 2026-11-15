@@ -1,5 +1,4 @@
 {
-    "render_type": "minecraft:cutout_mipped",
     "parent": "tconstruct:block/cube_overlay_side",
     "textures": {
         "overlay": "tconstruct:block/slime/dirt/grass_snowy",

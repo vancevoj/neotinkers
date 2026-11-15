@@ -1,6 +1,6 @@
 package slimeknights.tconstruct.tools.logic;
 
-import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.advancements.triggers.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
@@ -22,7 +22,7 @@ import net.minecraft.world.level.block.state.pattern.BlockInWorld;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.event.EventHooks;
-import net.neoforged.neoforge.common.util.TriState;
+import net.minecraft.util.TriState;
 import net.neoforged.neoforge.event.entity.living.LivingShieldBlockEvent;
 import net.neoforged.neoforge.event.entity.player.AttackEntityEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
@@ -507,7 +507,7 @@ public class InteractionHandler {
           // setShieldTakesDamage(false) -> setShieldDamage(0); we damage the shield ourselves below
           event.setShieldDamage(0);
           // this code is based on code from Player#hurtCurrentlyUsedShield
-          if (!entity.level().isClientSide) {
+          if (!entity.level().isClientSide()) {
             player.awardStat(Stats.ITEM_USED.get(tool.getItem()));
           }
 

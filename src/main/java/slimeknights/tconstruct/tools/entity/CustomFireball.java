@@ -6,7 +6,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
@@ -14,7 +14,7 @@ import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.projectile.Fireball;
+import net.minecraft.world.entity.projectile.hurtingprojectile.Fireball;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
@@ -110,7 +110,7 @@ public class CustomFireball extends Fireball implements ProjectileWithPower {
   @Override
   protected void onHit(HitResult pResult) {
     super.onHit(pResult);
-    if (!this.level().isClientSide) {
+    if (!this.level().isClientSide()) {
       this.discard();
     }
   }
@@ -132,7 +132,7 @@ public class CustomFireball extends Fireball implements ProjectileWithPower {
     // despawn if going too high or low, otherwise projectile may live forever going into the sky
     double y = getY();
     Level level = level();
-    if (y < (level.getMinBuildHeight() - 64) || y > level.getMaxBuildHeight() + 64) {
+    if (y < (level.getMinY() - 64) || y > level.getMaxBuildHeight() + 64) {
       onBelowWorld();
     }
   }
@@ -156,7 +156,7 @@ public class CustomFireball extends Fireball implements ProjectileWithPower {
   /** Parses the given damage type */
   private static ResourceKey<DamageType> parseDamageType(String damageStr, ResourceKey<DamageType> fallback) {
     if (!damageStr.isEmpty()) {
-      ResourceLocation damageLoc = ResourceLocation.tryParse(damageStr);
+      Identifier damageLoc = Identifier.tryParse(damageStr);
       if (damageLoc != null) {
         return ResourceKey.create(Registries.DAMAGE_TYPE, damageLoc);
       }

@@ -31,7 +31,7 @@ public class RevengeModifier extends NoLevelsModifier implements EquipmentChange
     Entity trueSource = source.getEntity();
     LivingEntity living = context.getEntity();
     if (trueSource != null && trueSource != living) { // no making yourself mad with slurping or self-destruct or alike
-      MobEffectInstance effect = new MobEffectInstance(MobEffects.DAMAGE_BOOST, 300);
+      MobEffectInstance effect = new MobEffectInstance(MobEffects.STRENGTH, 300);
       // 1.21: per-stack curative items became EffectCure tokens. Clear default cures (so milk won't help) and only allow the worn helmet to cure it.
       effect.getCures().clear();
       effect.getCures().add(TinkerEffectCures.itemCure(living.getItemBySlot(slotType).getItem()));

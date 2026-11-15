@@ -1,16 +1,17 @@
 package slimeknights.tconstruct.tools.client.material;
 
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
 import net.minecraft.client.renderer.entity.FishingHookRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.player.Player;
@@ -33,14 +34,14 @@ import java.util.Optional;
 /** Renderer for {@link CombatFishingHookRenderer}. Mostly a recreation of {@link net.minecraft.client.renderer.entity.FishingHookRenderer} */
 public class CombatFishingHookRenderer extends EntityRenderer<CombatFishingHook> {
   /** Texture under the local folder */
-  private static final ResourceLocation LOCAL = TConstruct.getResource("fishing_hook/material");
+  private static final Identifier LOCAL = TConstruct.getResource("fishing_hook/material");
   /** Easier to append material variants without root */
-  private static final ResourceLocation BASE = ArmorTextureSupplier.getTexturePath(LOCAL);
+  private static final Identifier BASE = ArmorTextureSupplier.getTexturePath(LOCAL);
 
   /** Checks if the given texture is valid */
   @Nullable
-  private static ResourceLocation tryTexture(String material) {
-    ResourceLocation texture = LOCAL.withSuffix(material);
+  private static Identifier tryTexture(String material) {
+    Identifier texture = LOCAL.withSuffix(material);
     if (ArmorTextureSupplier.TEXTURE_VALIDATOR.test(texture)) {
       return ArmorTextureSupplier.getTexturePath(texture);
     }
@@ -56,10 +57,10 @@ public class CombatFishingHookRenderer extends EntityRenderer<CombatFishingHook>
       if (infoOptional.isPresent()) {
         MaterialRenderInfo info = infoOptional.get();
         // first try untinted
-        ResourceLocation untinted = info.texture();
+        Identifier untinted = info.texture();
         luminosity = info.luminosity();
         if (untinted != null) {
-          ResourceLocation texture = tryTexture('_' + untinted.getNamespace() + '_' + untinted.getPath());
+          Identifier texture = tryTexture('_' + untinted.getNamespace() + '_' + untinted.getPath());
           if (texture != null) {
             return new MaterialTexture(texture, -1, luminosity);
           }
@@ -67,7 +68,7 @@ public class CombatFishingHookRenderer extends EntityRenderer<CombatFishingHook>
         // fallback to tinted
         color = info.vertexColor();
         for (String fallback : info.fallbacks()) {
-          ResourceLocation texture = tryTexture('_' + fallback);
+          Identifier texture = tryTexture('_' + fallback);
           if (texture != null) {
             return new MaterialTexture(texture, color, luminosity);
           }
@@ -96,8 +97,8 @@ public class CombatFishingHookRenderer extends EntityRenderer<CombatFishingHook>
       poseStack.pushPose();
       poseStack.pushPose();
       poseStack.scale(0.5F, 0.5F, 0.5F);
-      poseStack.mulPose(this.entityRenderDispatcher.cameraOrientation());
-      poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
+      poseStack.rotate(this.entityRenderDispatcher.cameraOrientation());
+      poseStack.rotate(Axis.YP.rotationDegrees(180.0F));
 
       // select material
       MaterialTexture texture = TEXTURE_CACHE.apply(hook.getMaterial());
@@ -160,15 +161,15 @@ public class CombatFishingHookRenderer extends EntityRenderer<CombatFishingHook>
   }
 
   @Override
-  public ResourceLocation getTextureLocation(CombatFishingHook pEntity) {
+  public Identifier getTextureLocation(CombatFishingHook pEntity) {
     return BASE;
   }
 
   private record MaterialTexture(RenderType texture, int luminosity, int alpha, int red, int green, int blue) {
     public static final MaterialTexture EMPTY = new MaterialTexture(BASE, -1, 0);
 
-    public MaterialTexture(ResourceLocation texture, int color, int luminosity) {
-      this(RenderType.entityCutout(texture), luminosity,
+    public MaterialTexture(Identifier texture, int color, int luminosity) {
+      this(RenderTypes.entityCutoutCull(texture), luminosity,
         color >> 24 & 255,
         color >> 16 & 255,
         color >> 8 & 255,

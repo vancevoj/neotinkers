@@ -6,7 +6,7 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionContents;
@@ -71,7 +71,7 @@ public class PotionFluidType extends FluidType {
   }
 
   /** Creates the legacy potion tag, used for datagen serialization of potion fluid outputs */
-  private static CompoundTag potionTag(ResourceLocation location) {
+  private static CompoundTag potionTag(Identifier location) {
     CompoundTag tag = new CompoundTag();
     tag.putString("Potion", location.toString());
     return tag;
@@ -84,7 +84,7 @@ public class PotionFluidType extends FluidType {
 
   /** Creates a fluid stack for the given potion */
   public static FluidStack potionFluid(ResourceKey<Potion> potion, int size) {
-    return potionFluid(BuiltInRegistries.POTION.getHolderOrThrow(potion), size);
+    return potionFluid(BuiltInRegistries.POTION.getOrThrow(potion), size);
   }
 
   /** Creates a fluid stack for the given potion */
@@ -100,7 +100,7 @@ public class PotionFluidType extends FluidType {
 
   /** Creates a potion bucket for the given potion */
   public static ItemStack potionBucket(ResourceKey<Potion> potion) {
-    return potionBucket(BuiltInRegistries.POTION.getHolderOrThrow(potion));
+    return potionBucket(BuiltInRegistries.POTION.getOrThrow(potion));
   }
 
   /** Creates a potion bucket for the given potion */

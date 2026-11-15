@@ -4,7 +4,7 @@ import lombok.NoArgsConstructor;
 import mezz.jei.api.gui.builder.ITooltipBuilder;
 import mezz.jei.api.ingredients.IIngredientRenderer;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.TooltipFlag;
 import slimeknights.tconstruct.library.client.GuiUtil;
@@ -20,12 +20,12 @@ public class PatternIngredientRenderer implements IIngredientRenderer<Pattern> {
   public static final PatternIngredientRenderer INSTANCE = new PatternIngredientRenderer();
 
   @Override
-  public void render(GuiGraphics graphics, Pattern ingredient) {
+  public void render(GuiGraphicsExtractor graphics, Pattern ingredient) {
     render(graphics, ingredient, 0, 0);
   }
 
   @Override
-  public void render(GuiGraphics graphics, @Nullable Pattern pattern, int posX, int posY) {
+  public void render(GuiGraphicsExtractor graphics, @Nullable Pattern pattern, int posX, int posY) {
     if (pattern != null) {
       GuiUtil.renderPattern(graphics, pattern, posX, posY);
     }

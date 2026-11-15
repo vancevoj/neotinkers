@@ -1,7 +1,7 @@
 package slimeknights.tconstruct.library.recipe.tinkerstation;
 
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import slimeknights.tconstruct.library.recipe.RecipeResult;
@@ -18,7 +18,7 @@ public interface IDisplayTinkerStationRecipe {
 
   /** Gets the ID of this recipe. If this is a generated display recipe, uses the parent recipe ID */
   @Nullable
-  ResourceLocation getRecipeId();
+  Identifier getRecipeId();
 
   /**
    * Gets the variant for this recipe. Mutually exclusive with level for recipe display.

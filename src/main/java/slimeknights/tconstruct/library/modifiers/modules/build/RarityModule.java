@@ -1,6 +1,6 @@
 package slimeknights.tconstruct.library.modifiers.modules.build;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
@@ -27,7 +27,7 @@ import java.util.List;
  */
 public record RarityModule(Rarity rarity) implements VolatileDataModifierHook, ModifierModule {
   /** Volatile data key storing rarity */
-  public static final ResourceLocation RARITY = TConstruct.getResource("rarity");
+  public static final Identifier RARITY = TConstruct.getResource("rarity");
 
   private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<RarityModule>defaultHooks(ModifierHooks.VOLATILE_DATA);
   public static final RecordLoadable<RarityModule> LOADER = RecordLoadable.create(new EnumLoadable<>(Rarity.class).requiredField("rarity", RarityModule::rarity), RarityModule::new);

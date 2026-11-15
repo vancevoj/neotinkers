@@ -1,6 +1,6 @@
 package slimeknights.tconstruct.tools.modules;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import slimeknights.mantle.data.loadable.primitive.EnumLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.tconstruct.library.json.LevelingValue;
@@ -36,7 +36,7 @@ public record FovModule(LevelingValue value, FovAction action) implements Modifi
   }
 
   /** Gets the key for the given context */
-  private static ResourceLocation getKey(ModifierEntry modifier, EquipmentChangeContext context) {
+  private static Identifier getKey(ModifierEntry modifier, EquipmentChangeContext context) {
     return modifier.getId().withSuffix('_' + context.getChangedSlot().getName()); // TODO(neoport): context.getChangedSlot() cascade from EquipmentChangeContext port
   }
 

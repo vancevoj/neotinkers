@@ -74,7 +74,7 @@ public class MultiplierNBT {
     // simply try each key as a tool stat
     Builder builder = builder();
     CompoundTag nbt = (CompoundTag)inbt;
-    for (String key : nbt.getAllKeys()) {
+    for (String key : nbt.keySet()) {
       if (nbt.contains(key, Tag.TAG_ANY_NUMERIC) && StatsNBT.readStatIdFromNBT(key) instanceof INumericToolStat<?> stat) {
         builder.set(stat, nbt.getFloat(key));
       }

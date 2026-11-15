@@ -1,12 +1,12 @@
 package slimeknights.tconstruct.tools.client;
 
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.inventory.ContainerInput;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.inventory.Slot;
 import slimeknights.mantle.client.screen.ElementScreen;
@@ -33,8 +33,8 @@ import static slimeknights.tconstruct.tools.menu.ToolContainerMenu.UI_START;
 
 /** Screen for a tool inventory */
 public class ToolContainerScreen extends AbstractContainerScreen<ToolContainerMenu> implements IScreenWithFluidTank {
-  /** The ResourceLocation containing the chest GUI texture. */
-  private static final ResourceLocation TEXTURE = TConstruct.getResource("textures/gui/tool_inventory.png");
+  /** The Identifier containing the chest GUI texture. */
+  private static final Identifier TEXTURE = TConstruct.getResource("textures/gui/tool_inventory.png");
 
   /** Slot background for 3x3 crafting grid */
   private static final ElementScreen CRAFTING_SLOTS = new ElementScreen(TEXTURE, 176, 74, 54, 54, 256, 256);
@@ -97,23 +97,23 @@ public class ToolContainerScreen extends AbstractContainerScreen<ToolContainerMe
   }
 
   @Override
-  protected void slotClicked(Slot slot, int slotId, int index, ClickType type) {
+  protected void slotClicked(Slot slot, int slotId, int index, ContainerInput type) {
     // disallow swapping the tool slot
-    if (type == ClickType.SWAP && slot.container == menu.getPlayer().getInventory() && slot.getSlotIndex() == menu.getSlotIndex()) {
+    if (type == ContainerInput.SWAP && slot.container == menu.getPlayer().getInventory() && slot.getSlotIndex() == menu.getSlotIndex()) {
       return;
     }
     super.slotClicked(slot, slotId, index, type);
   }
 
   @Override
-  public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+  public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTicks) {
     // 1.21: super.render() already calls renderBackground (dim overlay + renderBg). Manual call here double-dimmed.
-    super.render(graphics, mouseX, mouseY, partialTicks);
+    super.extractRenderState(graphics, mouseX, mouseY, partialTicks);
     this.renderTooltip(graphics, mouseX, mouseY);
   }
 
   @Override
-  protected void renderBg(GuiGraphics graphics, float partialTicks, int x, int y) {
+  protected void renderBg(GuiGraphicsExtractor graphics, float partialTicks, int x, int y) {
     int xStart = (this.width - this.imageWidth) / 2;
     int yStart = (this.height - this.imageHeight) / 2;
 
@@ -188,7 +188,7 @@ public class ToolContainerScreen extends AbstractContainerScreen<ToolContainerMe
 
     // prepare pattern drawing
     assert this.minecraft != null;
-    Function<ResourceLocation,TextureAtlasSprite> spriteGetter = this.minecraft.getTextureAtlas(InventoryMenu.BLOCK_ATLAS);
+    Function<Identifier,TextureAtlasSprite> spriteGetter = this.minecraft.getTextureAtlas(InventoryMenu.BLOCK_ATLAS);
 
     // draw slot patterns for all empty slots
     int start = menu.getToolInventoryStart();
@@ -230,15 +230,15 @@ public class ToolContainerScreen extends AbstractContainerScreen<ToolContainerMe
   }
 
   @Override
-  protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
-    super.renderLabels(graphics, mouseX, mouseY);
+  protected void extractLabels(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
+    super.extractLabels(graphics, mouseX, mouseY);
     if (tank != null) {
       tank.highlightHoveredFluid(graphics, mouseX - this.leftPos, mouseY - this.topPos);
     }
   }
 
   @Override
-  protected void renderTooltip(GuiGraphics graphics, int mouseX, int mouseY) {
+  protected void renderTooltip(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
     super.renderTooltip(graphics, mouseX, mouseY);
 
     if (tank != null) {

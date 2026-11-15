@@ -1,8 +1,6 @@
 /** TODO 1.21: merge with to {@link slimeknights.tconstruct.tools.data.client} */
 @ParametersAreNonnullByDefault
-@MethodsReturnNonnullByDefault
 package slimeknights.tconstruct.tools.data.sprite;
 
-import net.minecraft.MethodsReturnNonnullByDefault;
 
 import javax.annotation.ParametersAreNonnullByDefault;

@@ -38,10 +38,10 @@ public class CommonsEvents {
 
     // check if we jumped from a slime block
     BlockPos pos = BlockPos.containing(event.getEntity().position());
-    if (event.getEntity().getCommandSenderWorld().isEmptyBlock(pos)) {
+    if (event.getEntity().level().isEmptyBlock(pos)) {
       pos = pos.below();
     }
-    BlockState state = event.getEntity().getCommandSenderWorld().getBlockState(pos);
+    BlockState state = event.getEntity().level().getBlockState(pos);
     Block block = state.getBlock();
 
     if (TinkerWorld.congealedSlime.contains(block)) {

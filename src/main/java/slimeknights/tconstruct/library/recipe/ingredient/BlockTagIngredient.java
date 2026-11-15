@@ -22,7 +22,7 @@ import java.util.stream.Stream;
 
 /** Item ingredient matching items with a block form in the given tag */
 public class BlockTagIngredient implements ICustomIngredient {
-  public static final net.minecraft.resources.ResourceLocation ID = TConstruct.getResource("block_tag");
+  public static final net.minecraft.resources.Identifier ID = TConstruct.getResource("block_tag");
   /** Loadable for parsing and serializing this ingredient */
   public static final RecordLoadable<BlockTagIngredient> LOADABLE = RecordLoadable.create(
     Loadables.BLOCK_TAG.requiredField("tag", i -> i.tag),

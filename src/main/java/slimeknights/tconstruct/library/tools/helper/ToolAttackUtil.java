@@ -4,7 +4,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -56,8 +56,8 @@ import java.util.function.DoubleSupplier;
 
 public class ToolAttackUtil {
   private static final float DEGREE_TO_RADIANS = (float)Math.PI / 180F;
-  /** ID for the anti knockback attribute modifier (1.21: AttributeModifiers are keyed by ResourceLocation) */
-  private static final ResourceLocation ANTI_KNOCKBACK_ID = TConstruct.getResource("anti_knockback");
+  /** ID for the anti knockback attribute modifier (1.21: AttributeModifiers are keyed by Identifier) */
+  private static final Identifier ANTI_KNOCKBACK_ID = TConstruct.getResource("anti_knockback");
   private static final AttributeModifier ANTI_KNOCKBACK_MODIFIER = new AttributeModifier(ANTI_KNOCKBACK_ID, 1f, Operation.ADD_VALUE);
   /** @deprecated new default for {@link ToolAttackContext.Builder} */
   @Deprecated(forRemoval = true)
@@ -168,7 +168,7 @@ public class ToolAttackUtil {
 
   /** Checks if this tool can be used to attack */
   public static boolean isAttackable(LivingEntity attacker, Entity target) {
-    return !attacker.level().isClientSide && target.isAttackable() && !target.skipAttackInteraction(attacker);
+    return !attacker.level().isClientSide() && target.isAttackable() && !target.skipAttackInteraction(attacker);
   }
 
   /**
@@ -317,9 +317,9 @@ public class ToolAttackUtil {
     // removed: sword sweep attack, handled above
 
     // apply velocity change to players if needed
-    if (targetEntity.hurtMarked && targetEntity instanceof ServerPlayer serverPlayer) {
+    if (targetEntity.syncVelocity && targetEntity instanceof ServerPlayer serverPlayer) {
       serverPlayer.connection.send(new ClientboundSetEntityMotionPacket(targetEntity));
-      targetEntity.hurtMarked = false;
+      targetEntity.syncVelocity = false;
       // TODO: why was this needed before? targetEntity.setDeltaMovement(originalTargetMotion);
     }
 
@@ -365,7 +365,7 @@ public class ToolAttackUtil {
     // final attack hooks
     if (attackerPlayer != null) {
       if (targetLiving != null) {
-        if (!level.isClientSide && !isExtraAttack) {
+        if (!level.isClientSide() && !isExtraAttack) {
           ItemStack held = attackerLiving.getItemBySlot(sourceSlot);
           if (!held.isEmpty()) {
             held.hurtEnemy(targetLiving, attackerPlayer);
@@ -551,7 +551,7 @@ public class ToolAttackUtil {
    */
   @Deprecated(forRemoval = true)
   public static float getAttributeAttackDamage(IToolStackView tool, LivingEntity holder, EquipmentSlot slotType) {
-    if (holder.level().isClientSide) {
+    if (holder.level().isClientSide()) {
       return (float) holder.getAttributeValue(Attributes.ATTACK_DAMAGE);
     }
     // TODO 1.21: consider inlining this method as its only used once

@@ -7,7 +7,7 @@ import net.minecraft.world.entity.EquipmentSlot.Type;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.TinkerTags;
@@ -27,7 +27,7 @@ import java.util.function.BiConsumer;
  */
 public interface AttributesModifierHook {
   /** IDs for armor attributes on held tools, indexed by hand slot */
-  ResourceLocation[] HELD_ARMOR_ID = new ResourceLocation[]{TConstruct.getResource("held_armor.main_hand"), TConstruct.getResource("held_armor.off_hand")};
+  Identifier[] HELD_ARMOR_ID = new Identifier[]{TConstruct.getResource("held_armor.main_hand"), TConstruct.getResource("held_armor.off_hand")};
 
   /**
    * Adds attributes from this modifier's effect. Called whenever the item stack refreshes attributes, typically on equipping and unequipping.
@@ -64,7 +64,7 @@ public interface AttributesModifierHook {
       if (slot.getType() == Type.HAND) {
         // shields and slimestaffs can get armor
         if (tool.hasTag(TinkerTags.Items.ARMOR)) {
-          ResourceLocation id = HELD_ARMOR_ID[slot.getIndex()];
+          Identifier id = HELD_ARMOR_ID[slot.getIndex()];
           double value = statsNBT.get(ToolStats.ARMOR);
           if (value != 0) {
             builder.put(Attributes.ARMOR.value(), new AttributeModifier(id.withSuffix(".armor"), value, AttributeModifier.Operation.ADD_VALUE));

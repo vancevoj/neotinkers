@@ -84,7 +84,7 @@ public class ChestBlock extends TabbedTableBlock {
   protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
     BlockEntity te = worldIn.getBlockEntity(pos);
     Inventory playerInventory = player.getInventory();
-    ItemStack heldItem = playerInventory.getSelected();
+    ItemStack heldItem = playerInventory.getSelectedItem();
 
     if (!heldItem.isEmpty() && te instanceof AbstractChestBlockEntity chest && chest.canInsert(player, heldItem)) {
       IItemHandlerModifiable itemHandler = chest.getItemHandler();

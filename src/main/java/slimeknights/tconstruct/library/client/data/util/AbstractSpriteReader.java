@@ -3,7 +3,7 @@ package slimeknights.tconstruct.library.client.data.util;
 import com.google.gson.JsonObject;
 import com.mojang.blaze3d.platform.NativeImage;
 import lombok.RequiredArgsConstructor;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
@@ -16,10 +16,10 @@ public abstract class AbstractSpriteReader {
   protected final List<NativeImage> openedImages = new ArrayList<>();
 
   /** Checks if an image exists in the given location */
-  public abstract boolean exists(ResourceLocation path);
+  public abstract boolean exists(Identifier path);
 
   /** Checks if metadata exists at the given location */
-  public abstract boolean metadataExists(ResourceLocation path);
+  public abstract boolean metadataExists(Identifier path);
 
   /**
    * Reads an image at the given path, relative to the folder
@@ -27,11 +27,11 @@ public abstract class AbstractSpriteReader {
    * @return  Loaded image
    * @throws IOException  If the image failed to load
    */
-  public abstract NativeImage read(ResourceLocation path) throws IOException;
+  public abstract NativeImage read(Identifier path) throws IOException;
 
   /** Reads the file if it exists */
   @Nullable
-  public NativeImage readIfExists(ResourceLocation path) {
+  public NativeImage readIfExists(Identifier path) {
     if (exists(path)) {
       try {
         return read(path);
@@ -43,7 +43,7 @@ public abstract class AbstractSpriteReader {
   }
 
   /** Reads metadata from the given path */
-  public abstract JsonObject readMetadata(ResourceLocation path) throws IOException;
+  public abstract JsonObject readMetadata(Identifier path) throws IOException;
 
   /** Creates a new image with the given dimensions */
   public NativeImage create(int width, int height) {

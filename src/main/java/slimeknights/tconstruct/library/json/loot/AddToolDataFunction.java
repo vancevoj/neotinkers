@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import lombok.experimental.Accessors;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
@@ -27,7 +27,7 @@ import java.util.List;
 
 /** Loot function to add data to a tool. */
 public class AddToolDataFunction extends LootItemConditionalFunction {
-  public static final ResourceLocation ID = TConstruct.getResource("add_tool_data");
+  public static final Identifier ID = TConstruct.getResource("add_tool_data");
 
   /** Codec for this function */
   public static final MapCodec<AddToolDataFunction> CODEC = RecordCodecBuilder.mapCodec(inst -> commonFields(inst).and(inst.group(

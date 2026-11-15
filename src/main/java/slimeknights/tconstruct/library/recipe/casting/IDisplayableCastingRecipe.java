@@ -1,6 +1,6 @@
 package slimeknights.tconstruct.library.recipe.casting;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.fluids.FluidStack;
 import slimeknights.tconstruct.library.recipe.display.FilteredFluidRecipe;
@@ -17,7 +17,7 @@ import static slimeknights.tconstruct.library.recipe.display.FilteredRecipe.matc
 public interface IDisplayableCastingRecipe extends FilteredItemRecipe, FilteredFluidRecipe {
   /** Gets the ID of this recipe. If this is a generated display recipe, uses the parent recipe ID */
   @Nullable
-  default ResourceLocation getRecipeId() {
+  default Identifier getRecipeId() {
     return null;
   }
 

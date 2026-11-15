@@ -1,6 +1,6 @@
 package slimeknights.tconstruct.fluids.item;
 
-import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.advancements.triggers.CriteriaTriggers;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
@@ -80,11 +80,11 @@ public class PotionBucketItem extends PotionItem {
     }
 
     // effects are 2x duration
-    if (!level.isClientSide) {
+    if (!level.isClientSide()) {
       for (MobEffectInstance effect : getContents(stack).getAllEffects()) {
         Holder<MobEffect> mobEffect = effect.getEffect();
-        if (mobEffect.value().isInstantenous()) {
-          mobEffect.value().applyInstantenousEffect(player, player, living, effect.getAmplifier(), 2.5D);
+        if (mobEffect.value().isInstantaneous()) {
+          mobEffect.value().applyInstantaneousEffect(player, player, living, effect.getAmplifier(), 2.5D);
         } else {
           MobEffectInstance newEffect = new MobEffectInstance(effect);
           newEffect.duration = newEffect.duration * 5 / 2;

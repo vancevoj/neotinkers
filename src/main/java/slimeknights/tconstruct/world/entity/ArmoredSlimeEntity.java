@@ -6,7 +6,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
@@ -14,14 +14,14 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.monster.Slime;
+import net.minecraft.world.entity.monster.cubemob.Slime;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
@@ -40,7 +40,7 @@ public abstract class ArmoredSlimeEntity extends Slime {
   public static final String TAG_METAL = "metal";
   public ArmoredSlimeEntity(EntityType<? extends ArmoredSlimeEntity> type, Level world) {
     super(type, world);
-    if (!world.isClientSide) {
+    if (!world.isClientSide()) {
       tryAddAttribute(Attributes.ARMOR, new AttributeModifier(TConstruct.getResource("small_armor_bonus"), 3, Operation.ADD_MULTIPLIED_TOTAL));
       tryAddAttribute(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(TConstruct.getResource("small_toughness_bonus"), 3, Operation.ADD_MULTIPLIED_TOTAL));
       tryAddAttribute(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(TConstruct.getResource("small_resistence_bonus"), 3, Operation.ADD_MULTIPLIED_TOTAL));
@@ -93,7 +93,7 @@ public abstract class ArmoredSlimeEntity extends Slime {
 
   @Nullable
   @Override
-  public SpawnGroupData finalizeSpawn(ServerLevelAccessor pLevel, DifficultyInstance difficulty, MobSpawnType pReason, @Nullable SpawnGroupData pSpawnData) {
+  public SpawnGroupData finalizeSpawn(ServerLevelAccessor pLevel, DifficultyInstance difficulty, EntitySpawnReason pReason, @Nullable SpawnGroupData pSpawnData) {
     SpawnGroupData spawnData = super.finalizeSpawn(pLevel, difficulty, pReason, pSpawnData);
     this.setCanPickUpLoot(this.random.nextFloat() < (0.55f * difficulty.getSpecialMultiplier()));
 
@@ -158,7 +158,7 @@ public abstract class ArmoredSlimeEntity extends Slime {
     // on death, split into multiple slimes, and let them inherit armor if it did not drop
     int size = this.getSize();
     Level level = level();
-    if (!level.isClientSide && size > 1 && this.isDeadOrDying()) {
+    if (!level.isClientSide() && size > 1 && this.isDeadOrDying()) {
       Component name = this.getCustomName();
       boolean noAi = this.isNoAi();
       boolean invulnerable = this.isInvulnerable();
@@ -185,7 +185,7 @@ public abstract class ArmoredSlimeEntity extends Slime {
         }
         slime.setCustomName(name);
         slime.setNoAi(noAi);
-        slime.setInvulnerable(invulnerable);
+        slime.setPermanentlyInvulnerable(invulnerable);
         slime.setSize(newSize, true);
         if (metal) {
           slime.setMetal(metal);

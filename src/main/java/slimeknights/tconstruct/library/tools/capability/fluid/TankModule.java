@@ -123,7 +123,7 @@ public class TankModule implements HookProvider, FluidModifierHook, VolatileData
         return Math.min(resource.getAmount(), capacity);
       }
       // if the fluid matches and we have space, update
-      if (current.getAmount() < capacity && current.isFluidEqual(resource)) {
+      if (current.getAmount() < capacity && FluidStack.isSameFluidSameComponents(current, resource)) {
         int filled = Math.min(resource.getAmount(), capacity - current.getAmount());
         if (filled > 0 && action.execute()) {
           current.grow(filled);
@@ -141,7 +141,7 @@ public class TankModule implements HookProvider, FluidModifierHook, VolatileData
     if (!resource.isEmpty()) {
       // ensure we have something and it matches the request
       FluidStack current = helper.getFluid(tool);
-      if (!current.isEmpty() && current.isFluidEqual(resource)) {
+      if (!current.isEmpty() && FluidStack.isSameFluidSameComponents(current, resource)) {
         // create the drained stack
         FluidStack drained = current.copyWithAmount(Math.min(current.getAmount(), resource.getAmount()));
         // if executing, removing it
@@ -204,7 +204,7 @@ public class TankModule implements HookProvider, FluidModifierHook, VolatileData
         TransferResult result = FluidTransferHelper.interactWithStack(tank, slotStack, TransferDirection.REVERSE);
         // update held tank and slot item if something changed (either we have a result or the stack in the slot was shrunk)
         if (result != null) {
-          if (player.level().isClientSide) {
+          if (player.level().isClientSide()) {
             player.playSound(result.getSound());
           }
           helper.setFluid(heldTool, tank.getFluid());
@@ -224,7 +224,7 @@ public class TankModule implements HookProvider, FluidModifierHook, VolatileData
       TransferResult result = FluidTransferHelper.interactWithStack(tank, held, TransferDirection.AUTO);
       // update tank if something happened
       if (result != null) {
-        if (player.level().isClientSide) {
+        if (player.level().isClientSide()) {
           player.playSound(result.getSound());
         }
         helper.setFluid(slotTool, tank.getFluid());

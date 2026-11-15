@@ -61,13 +61,13 @@ public record TankInteractionModule(@Nullable InteractionSource source) implemen
       return InteractionResult.PASS;
     }
     Direction face = context.getClickedFace();
-    IFluidHandler cap = world.getCapability(Capabilities.FluidHandler.BLOCK, target, face);
+    IFluidHandler cap = world.getCapability(Capabilities.Fluid.BLOCK, target, face);
     if (cap == null) {
       return InteractionResult.PASS;
     }
 
     // only the server needs to deal with actually handling stuff
-    if (!world.isClientSide) {
+    if (!world.isClientSide()) {
       Player player = context.getPlayer();
       boolean sneaking = player != null && player.isShiftKeyDown();
       FluidStack fluidStack = TANK_HELPER.getFluid(tool);
@@ -103,6 +103,6 @@ public record TankInteractionModule(@Nullable InteractionSource source) implemen
         world.playSound(null, target, sound, SoundSource.BLOCKS, 1.0F, 1.0F);
       }
     }
-    return InteractionResult.sidedSuccess(world.isClientSide);
+    return InteractionResult.sidedSuccess(world.isClientSide());
   }
 }

@@ -46,7 +46,7 @@ public class HeatingStructureContainerMenu extends TriggeringMultiModuleContaine
     bucketContainer = new SimpleContainer(2);
     if (inv != null && structure != null) {
       // slots for emptying/filling buckets - do first but filtered
-      if (!inv.player.level().isClientSide) {
+      if (!inv.player.level().isClientSide()) {
         IFluidHandler tank = structure.getTank();
         addSlot(new BucketInputSlot(bucketContainer, 125, 46, tank, this, inv.player));
         bucketResultSlot = addSlot(new BucketResultSlot(bucketContainer, 125, 104, tank, this, inv.player));
@@ -131,7 +131,7 @@ public class HeatingStructureContainerMenu extends TriggeringMultiModuleContaine
   /** Updates the bucket inventory */
   private void updateBucket(Player player) {
     // changing mode means we might have an update
-    if (!player.level().isClientSide && tile != null) {
+    if (!player.level().isClientSide() && tile != null) {
       ItemStack bucket = bucketContainer.getItem(0);
       if (!bucket.isEmpty() && bucketContainer.getItem(1).isEmpty()) {
         TransferResult result = FluidTransferHelper.interactWithStack(tile.getTank(), bucket, transferDirection);
@@ -165,7 +165,7 @@ public class HeatingStructureContainerMenu extends TriggeringMultiModuleContaine
         return false;
       }
       // transfer the fluid
-      if (!player.level().isClientSide && tile != null) {
+      if (!player.level().isClientSide() && tile != null) {
         TransferResult result;
         if (id == 1) {
           // drain fuel into item
@@ -186,7 +186,7 @@ public class HeatingStructureContainerMenu extends TriggeringMultiModuleContaine
       SmelteryTank<?> tank = tile.getTank();
       FluidStack fluid = tank.getFluidInTank(index);
       if (!fluid.isEmpty()) {
-        if (!player.level().isClientSide) {
+        if (!player.level().isClientSide()) {
           ItemStack held = getCarried();
           if (!held.isEmpty()) {
             // if holding an item, fill it from the fluid
@@ -209,7 +209,7 @@ public class HeatingStructureContainerMenu extends TriggeringMultiModuleContaine
   @Override
   public void removed(Player player) {
     super.removed(player);
-    if (!player.level().isClientSide) {
+    if (!player.level().isClientSide()) {
       this.clearContainer(player, bucketContainer);
     }
   }
@@ -237,7 +237,7 @@ public class HeatingStructureContainerMenu extends TriggeringMultiModuleContaine
 
     @Override
     public boolean mayPlace(ItemStack stack) {
-      return FluidContainerTransferManager.INSTANCE.mayHaveTransfer(stack) || stack.getCapability(Capabilities.FluidHandler.ITEM) != null;
+      return FluidContainerTransferManager.INSTANCE.mayHaveTransfer(stack) || stack.getCapability(Capabilities.Fluid.ITEM) != null;
     }
   }
 

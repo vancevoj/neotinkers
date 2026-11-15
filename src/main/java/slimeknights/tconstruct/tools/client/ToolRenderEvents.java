@@ -1,5 +1,6 @@
 package slimeknights.tconstruct.tools.client;
 
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.SheetedDecalTextureGenerator;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -9,7 +10,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.MultiPlayerGameMode;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.core.BlockPos;
@@ -42,7 +43,7 @@ import slimeknights.tconstruct.library.utils.BlockSideHitListener;
 
 import java.util.Iterator;
 
-@EventBusSubscriber(modid = TConstruct.MOD_ID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.GAME)
+@EventBusSubscriber(modid = TConstruct.MOD_ID, value = Dist.CLIENT)
 public class ToolRenderEvents {
   /** Maximum number of blocks from the iterator to render */
   private static final int MAX_BLOCKS = 60;
@@ -94,11 +95,11 @@ public class ToolRenderEvents {
     LevelRenderer worldRender = event.getLevelRenderer();
     PoseStack matrices = event.getPoseStack();
     MultiBufferSource.BufferSource buffers = worldRender.renderBuffers.bufferSource();
-    VertexConsumer vertexBuilder = buffers.getBuffer(RenderType.lines());
+    VertexConsumer vertexBuilder = buffers.getBuffer(RenderTypes.lines());
     matrices.pushPose();
 
     // start drawing
-    Camera renderInfo = Minecraft.getInstance().gameRenderer.getMainCamera();
+    Camera renderInfo = Minecraft.getInstance().gameRenderer.mainCamera();
     Entity viewEntity = renderInfo.getEntity();
     Vec3 vector3d = renderInfo.getPosition();
     double x = vector3d.x();
@@ -181,7 +182,7 @@ public class ToolRenderEvents {
     VertexConsumer vertexBuilder = vertices.getBuffer(ModelBakery.DESTROY_TYPES.get(progress.getProgress()));
 
     // finally, render the blocks
-    Camera renderInfo = Minecraft.getInstance().gameRenderer.getMainCamera();
+    Camera renderInfo = Minecraft.getInstance().gameRenderer.mainCamera();
     double x = renderInfo.getPosition().x;
     double y = renderInfo.getPosition().y;
     double z = renderInfo.getPosition().z;

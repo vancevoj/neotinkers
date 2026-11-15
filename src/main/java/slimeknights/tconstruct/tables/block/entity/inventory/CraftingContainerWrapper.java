@@ -3,7 +3,7 @@ package slimeknights.tconstruct.tables.block.entity.inventory;
 import com.google.common.base.Preconditions;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.player.StackedContents;
+import net.minecraft.world.entity.player.StackedItemContents;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 
@@ -83,7 +83,7 @@ public class CraftingContainerWrapper implements CraftingContainer {
   }
 
   @Override
-  public void fillStackedContents(StackedContents helper) {
+  public void fillStackedContents(StackedItemContents helper) {
     for (int i = 0; i < crafter.getContainerSize(); i++) {
       helper.accountSimpleStack(crafter.getItem(i));
     }

@@ -198,7 +198,7 @@ public class CustomExplosion extends Explosion {
   /** Runs the logic on the server, syncing to the client. Based on {@link ServerLevel#explode(Entity, DamageSource, ExplosionDamageCalculator, double, double, double, float, boolean, ExplosionInteraction)}*/
   public void handleServer() {
     // based on ServerLevel#explode
-    if (!level.isClientSide) {
+    if (!level.isClientSide()) {
       if (!EventHooks.onExplosionStart(level, this)) {
         explode();
         finalizeExplosion(false);
@@ -217,7 +217,7 @@ public class CustomExplosion extends Explosion {
 
   /** Syncs this explosion to the client */
   public void syncToClient() {
-    if (!level.isClientSide && level instanceof ServerLevel server) {
+    if (!level.isClientSide() && level instanceof ServerLevel server) {
       // skip position sync if there are no blocks to be removed
       List<BlockPos> toBlow = interactsWithBlocks() ? getToBlow() : List.of();
       Vec3 position = center();

@@ -8,7 +8,7 @@ import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -287,9 +287,9 @@ public class TableRecipeProvider extends BaseRecipeProvider {
       .save(consumer, location(folder + "throwing_axe_part_swapping"));
 
     // tool repair recipe
-    ResourceLocation tinkerStationRepairId = location(folder + "tinker_station_repair");
+    Identifier tinkerStationRepairId = location(folder + "tinker_station_repair");
     consumer.accept(tinkerStationRepairId, new TinkerStationRepairRecipe(tinkerStationRepairId), null);
-    ResourceLocation craftingTableRepairId = location(folder + "crafting_table_repair");
+    Identifier craftingTableRepairId = location(folder + "crafting_table_repair");
     consumer.accept(craftingTableRepairId, new CraftingTableRepairKitRecipe(craftingTableRepairId), null);
   }
 
@@ -382,10 +382,10 @@ public class TableRecipeProvider extends BaseRecipeProvider {
 
     // twilight forest
     String tfId = "twilightforest";
-    Function<String,ResourceLocation> tf = name -> ResourceLocation.fromNamespaceAndPath(tfId, name);
+    Function<String,Identifier> tf = name -> Identifier.fromNamespaceAndPath(tfId, name);
     RecipeOutput tfConsumer = withCondition(consumer, new ModLoadedCondition(tfId));
     // naga scale armor
-    ResourceLocation nagaScale = tf.apply("naga_scale");
+    Identifier nagaScale = tf.apply("naga_scale");
     PartBuilderRecycleBuilder.tool(ItemNameIngredient.from(tf.apply("naga_chestplate")).toVanilla())
       .result(scale, ItemNameOutput.fromName(nagaScale, 8))
       .save(tfConsumer, location(folder + "twilightforest/naga_chestplate"));
@@ -416,7 +416,7 @@ public class TableRecipeProvider extends BaseRecipeProvider {
       .result(ingot, ironwoodIngot, 4)
       .save(tfConsumer, location(folder + "twilightforest/ironwood_boots"));
     // arctic
-    ResourceLocation arcticFur = tf.apply("arctic_fur");
+    Identifier arcticFur = tf.apply("arctic_fur");
     PartBuilderRecycleBuilder.tool(ItemNameIngredient.from(tf.apply("arctic_helmet")).toVanilla())
       .result(leather, ItemNameOutput.fromName(arcticFur, 5))
       .save(tfConsumer, location(folder + "twilightforest/arctic_helmet"));
@@ -430,7 +430,7 @@ public class TableRecipeProvider extends BaseRecipeProvider {
       .result(leather, ItemNameOutput.fromName(arcticFur, 4))
       .save(tfConsumer, location(folder + "twilightforest/arctic_boots"));
     // arctic
-    ResourceLocation alphaYetiFur = tf.apply("alpha_yeti_fur");
+    Identifier alphaYetiFur = tf.apply("alpha_yeti_fur");
     PartBuilderRecycleBuilder.tool(ItemNameIngredient.from(tf.apply("yeti_helmet")).toVanilla())
       .result(leather, ItemNameOutput.fromName(alphaYetiFur, 5))
       .save(tfConsumer, location(folder + "twilightforest/yeti_helmet"));

@@ -12,7 +12,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.BrushItem;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BrushableBlock;
@@ -80,8 +80,8 @@ public enum BrushModule implements ModifierModule, GeneralInteractionModifierHoo
   }
 
   @Override
-  public UseAnim getUseAction(IToolStackView tool, ModifierEntry modifier) {
-    return ModifierUtil.blockWhileCharging(tool, UseAnim.BRUSH);
+  public ItemUseAnimation getUseAction(IToolStackView tool, ModifierEntry modifier) {
+    return ModifierUtil.blockWhileCharging(tool, ItemUseAnimation.BRUSH);
   }
 
   @Override
@@ -109,13 +109,13 @@ public enum BrushModule implements ModifierModule, GeneralInteractionModifierHoo
     Level level = player.level();
     if (state.getBlock() instanceof BrushableBlock brushable) {
       brushEffects(player, blockHit, state, arm, brushable.getBrushSound());
-      if (level.isClientSide) {
+      if (level.isClientSide()) {
         return true;
       }
     }
 
     // brush the block
-    if (!level.isClientSide) {
+    if (!level.isClientSide()) {
       return level.getBlockEntity(blockHit.getBlockPos()) instanceof BrushableBlockEntity brushable && brushable.brush(level.getGameTime(), player, blockHit.getDirection());
     }
     return false;
@@ -151,12 +151,12 @@ public enum BrushModule implements ModifierModule, GeneralInteractionModifierHoo
           }
 
           // if nothing was brushed clientside, play the effect for the center block
-          if (damage == 0 && level.isClientSide) {
+          if (damage == 0 && level.isClientSide()) {
             brushEffects(player, blockHit, state, arm, SoundEvents.BRUSH_GENERIC);
           }
 
           // apply all tool damage, and stop using if needed
-          if (damage > 0 && !level.isClientSide && ToolDamageUtil.damageAnimated(tool, damage, entity, hand, modifier.getId())) {
+          if (damage > 0 && !level.isClientSide() && ToolDamageUtil.damageAnimated(tool, damage, entity, hand, modifier.getId())) {
             entity.stopUsingItem();
           }
         }

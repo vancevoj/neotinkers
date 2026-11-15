@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import net.minecraft.core.Holder;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -117,7 +117,7 @@ public interface EnchantmentModule extends ModifierModule, LevelingIntModule, Co
      * @param key  Key to use for checking conditions, needs to be unique. Recommend suffixing the modifier ID (using the modifier ID will conflict with incremental)
      * @return  Module instance
      */
-    public MainHandHarvest mainHandHarvest(ResourceLocation key) {
+    public MainHandHarvest mainHandHarvest(Identifier key) {
       return new MainHandHarvest(enchantment, level, condition, key, block, holder);
     }
 
@@ -236,17 +236,17 @@ public interface EnchantmentModule extends ModifierModule, LevelingIntModule, Co
    * Enchantment module that can condition on the block mined or the entity mining.
    * Exists as {@link HarvestEnchantmentsModifierHook} does not currently run on the main hand. TODO 1.21: update it to run on mainhand.
    */
-  record MainHandHarvest(Holder<Enchantment> enchantment, LevelingInt level, ModifierCondition<IToolStackView> condition, ResourceLocation conditionFlag, IJsonPredicate<BlockState> block, IJsonPredicate<LivingEntity> holder) implements EnchantmentModule, EnchantmentModifierHook, BlockHarvestModifierHook {
+  record MainHandHarvest(Holder<Enchantment> enchantment, LevelingInt level, ModifierCondition<IToolStackView> condition, Identifier conditionFlag, IJsonPredicate<BlockState> block, IJsonPredicate<LivingEntity> holder) implements EnchantmentModule, EnchantmentModifierHook, BlockHarvestModifierHook {
     private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<MainHandHarvest>defaultHooks(ModifierHooks.ENCHANTMENTS, ModifierHooks.BLOCK_HARVEST);
     public static final RecordLoadable<MainHandHarvest> LOADER = RecordLoadable.create(ENCHANTMENT, LevelingIntModule.FIELD, ModifierCondition.TOOL_FIELD, Loadables.RESOURCE_LOCATION.requiredField("condition_flag", MainHandHarvest::conditionFlag), BLOCK, HOLDER, MainHandHarvest::new);
 
-    /** @apiNote use {@link Builder#mainHandHarvest(ResourceLocation)} */
+    /** @apiNote use {@link Builder#mainHandHarvest(Identifier)} */
     @Internal
     public MainHandHarvest {}
 
-    /** @deprecated use {@link Builder#mainHandHarvest(ResourceLocation)} */
+    /** @deprecated use {@link Builder#mainHandHarvest(Identifier)} */
     @Deprecated(forRemoval = true)
-    public MainHandHarvest(Holder<Enchantment> enchantment, int level, ModifierCondition<IToolStackView> condition, ResourceLocation conditionFlag, IJsonPredicate<BlockState> block, IJsonPredicate<LivingEntity> holder) {
+    public MainHandHarvest(Holder<Enchantment> enchantment, int level, ModifierCondition<IToolStackView> condition, Identifier conditionFlag, IJsonPredicate<BlockState> block, IJsonPredicate<LivingEntity> holder) {
       this(enchantment, LevelingInt.eachLevel(level), condition, conditionFlag, block, holder);
     }
 

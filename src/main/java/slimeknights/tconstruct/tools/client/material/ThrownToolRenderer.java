@@ -7,9 +7,9 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
 import net.minecraft.world.inventory.InventoryMenu;
 import slimeknights.tconstruct.library.TinkerItemDisplays;
 import slimeknights.tconstruct.tools.entity.ThrownTool;
@@ -26,8 +26,8 @@ public class ThrownToolRenderer<T extends AbstractArrow & ToolProjectile> extend
   @Override
   public void render(T entity, float yaw, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
     poseStack.pushPose();
-    poseStack.mulPose(Axis.YP.rotationDegrees(Mth.lerp(partialTicks, entity.yRotO, entity.getYRot()) - 90));
-    poseStack.mulPose(Axis.ZP.rotationDegrees(Mth.lerp(partialTicks, entity.xRotO, entity.getXRot()) + 225));
+    poseStack.rotate(Axis.YP.rotationDegrees(Mth.lerp(partialTicks, entity.yRotO, entity.getYRot()) - 90));
+    poseStack.rotate(Axis.ZP.rotationDegrees(Mth.lerp(partialTicks, entity.xRotO, entity.getXRot()) + 225));
     poseStack.translate(0.2, -0.2, 0);
     this.itemRenderer.renderStatic(entity.getDisplayTool(), TinkerItemDisplays.THROWN, packedLight, OverlayTexture.NO_OVERLAY, poseStack, buffer, entity.level(), entity.getId());
     poseStack.popPose();
@@ -35,7 +35,7 @@ public class ThrownToolRenderer<T extends AbstractArrow & ToolProjectile> extend
   }
 
   @Override
-  public ResourceLocation getTextureLocation(T entity) {
+  public Identifier getTextureLocation(T entity) {
     return InventoryMenu.BLOCK_ATLAS;
   }
 }

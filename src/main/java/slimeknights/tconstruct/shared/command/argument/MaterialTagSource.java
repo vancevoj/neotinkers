@@ -2,7 +2,7 @@ package slimeknights.tconstruct.shared.command.argument;
 
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import slimeknights.mantle.command.argument.TagSource;
 import slimeknights.tconstruct.library.materials.definition.IMaterial;
@@ -53,7 +53,7 @@ public record MaterialTagSource(MaterialManager manager) implements TagSource<IM
 
   @Nullable
   @Override
-  public List<ResourceLocation> keysInTag(TagKey<IMaterial> tag) {
+  public List<Identifier> keysInTag(TagKey<IMaterial> tag) {
     List<IMaterial> entries = manager.getTagOrNull(tag);
     if (entries == null) {
       return null;
@@ -66,7 +66,7 @@ public record MaterialTagSource(MaterialManager manager) implements TagSource<IM
 
   @Nullable
   @Override
-  public IMaterial getValue(ResourceLocation key) {
+  public IMaterial getValue(Identifier key) {
     return manager.getMaterial(new MaterialId(key)).orElse(null);
   }
 
@@ -76,7 +76,7 @@ public record MaterialTagSource(MaterialManager manager) implements TagSource<IM
   }
 
   @Override
-  public Stream<ResourceLocation> valueKeys() {
+  public Stream<Identifier> valueKeys() {
     return manager.getAllMaterials().stream().map(IMaterial::getIdentifier);
   }
 }

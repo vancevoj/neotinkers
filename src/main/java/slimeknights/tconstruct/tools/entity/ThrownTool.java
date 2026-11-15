@@ -9,7 +9,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
@@ -19,8 +19,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.AbstractArrow;
-import net.minecraft.world.entity.projectile.ThrownTrident;
+import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
+import net.minecraft.world.entity.projectile.arrow.ThrownTrident;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -57,16 +57,16 @@ import slimeknights.tconstruct.tools.modifiers.effect.MagneticEffect;
 
 import javax.annotation.Nullable;
 
-/** Based on {@link net.minecraft.world.entity.projectile.ThrownTrident} for throwing a modifiable weapon. */
+/** Based on {@link net.minecraft.world.entity.projectile.arrow.ThrownTrident} for throwing a modifiable weapon. */
 public class ThrownTool extends ThrownTrident implements ToolProjectile {
   /** Key to sync the stack to the client */
   protected static final EntityDataAccessor<ItemStack> STACK = SynchedEntityData.defineId(ThrownTool.class, EntityDataSerializers.ITEM_STACK);
   /** Movement speed in water */
   protected static final EntityDataAccessor<Float> WATER_INERTIA = SynchedEntityData.defineId(ThrownTool.class, EntityDataSerializers.FLOAT);
   /** Volatile integer key for the loyalty level */
-  public static final ResourceLocation LOYALTY = TConstruct.getResource("loyalty");
+  public static final Identifier LOYALTY = TConstruct.getResource("loyalty");
   /** Volatile integer key for the magnet level */
-  public static final ResourceLocation MAGNET = TConstruct.getResource("magnet");
+  public static final Identifier MAGNET = TConstruct.getResource("magnet");
 
   @Nullable
   private IToolStackView tool = null;
@@ -107,7 +107,7 @@ public class ThrownTool extends ThrownTrident implements ToolProjectile {
     this.entityData.set(ID_LOYALTY, (byte) ModifierUtil.getVolatileInt(getPickupItemStackOrigin(), LOYALTY));
     this.entityData.set(ID_FOIL, ModifierUtil.checkVolatileFlag(getPickupItemStackOrigin(), ModifiableItem.SHINY));
     this.noDespawn = ModifierUtil.checkVolatileFlag(getPickupItemStackOrigin(), IndestructibleItemEntity.INDESTRUCTIBLE_ENTITY);
-    if (!level().isClientSide) {
+    if (!level().isClientSide()) {
       this.magnet = ModifierUtil.getVolatileInt(getPickupItemStackOrigin(), MAGNET);
     }
   }
@@ -192,7 +192,7 @@ public class ThrownTool extends ThrownTrident implements ToolProjectile {
     // TODO: consider expiry time for loyalty
     if (!dealtDamage && inGroundTime > 4) {
       // we don't damage the tool on throw, so instead damage it when it hits a block or an entity
-      if (!getPickupItemStackOrigin().isEmpty() && !level().isClientSide) {
+      if (!getPickupItemStackOrigin().isEmpty() && !level().isClientSide()) {
         ToolDamageUtil.damage(getTool(), 1, getOwner() instanceof LivingEntity l ? l : null, getPickupItemStackOrigin());
         // update the stack so visual changes to the tool render (e.g. broken or fluid)
         // need to force since its the same instance, just NBT changes
@@ -257,7 +257,7 @@ public class ThrownTool extends ThrownTrident implements ToolProjectile {
 
       // back off from the target
       this.setDeltaMovement(this.getDeltaMovement().multiply(-0.01, -0.1, -0.01));
-      if (!level().isClientSide) {
+      if (!level().isClientSide()) {
         // play sound
         if (tool.getModifiers().getLevel(ModifierIds.channeling) == 0) {
           this.playSound(tool.isBroken() ? SoundEvents.ITEM_BREAK : SoundEvents.TRIDENT_HIT, 1.0f, 1.0f);
@@ -327,7 +327,7 @@ public class ThrownTool extends ThrownTrident implements ToolProjectile {
                 this.setDeltaMovement(this.getDeltaMovement().multiply(-0.01, -0.1, -0.01));
                 // update the stack so visual changes to the tool render (e.g. broken or fluid)
                 // need to force since its the same instance, just NBT changes
-                if (!level.isClientSide) {
+                if (!level.isClientSide()) {
                   this.entityData.set(STACK, getPickupItemStackOrigin(), true);
                 }
                 return;

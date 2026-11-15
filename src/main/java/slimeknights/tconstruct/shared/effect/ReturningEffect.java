@@ -4,7 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
 import net.neoforged.neoforge.common.NeoForge;
@@ -17,7 +17,7 @@ import slimeknights.tconstruct.library.tools.nbt.ModDataNBT;
 import slimeknights.tconstruct.library.utils.TeleportHelper;
 
 public class ReturningEffect extends TinkerEffect {
-  private static final ResourceLocation KEY = TConstruct.getResource("returning");
+  private static final Identifier KEY = TConstruct.getResource("returning");
   public ReturningEffect() {
     super(MobEffectCategory.NEUTRAL, 0xa92dff, true);
     NeoForge.EVENT_BUS.addListener(MobEffectEvent.Added.class, this::onEffectAdded);
@@ -31,7 +31,7 @@ public class ReturningEffect extends TinkerEffect {
       ModDataNBT data = PersistentDataCapability.getOrWarn(entity);
       CompoundTag pos = new CompoundTag();
       pos.put("pos", NbtUtils.writeBlockPos(entity.blockPosition()));
-      pos.putString("dimension", entity.level().dimension().location().toString());
+      pos.putString("dimension", entity.level().dimension().identifier().toString());
       data.put(KEY, pos);
     }
   }
@@ -46,10 +46,10 @@ public class ReturningEffect extends TinkerEffect {
     ModDataNBT data = PersistentDataCapability.getOrWarn(living);
     if (data.contains(KEY, Tag.TAG_COMPOUND)) {
       CompoundTag tag = data.getCompound(KEY);
-      ResourceLocation dimension = ResourceLocation.tryParse(tag.getString("dimension"));
+      Identifier dimension = Identifier.tryParse(tag.getString("dimension"));
       // no teleporting if you switched dimensions
       // TODO: look into cross dimensional teleport, its doable with entity#teleportTo
-      if (dimension != null && dimension.equals(living.level().dimension().location())) {
+      if (dimension != null && dimension.equals(living.level().dimension().identifier())) {
         NbtUtils.readBlockPos(tag, "pos").ifPresent(pos ->
           TeleportHelper.tryTeleport(new ReturningTeleportEvent(living, pos.getX(), pos.getY(), pos.getZ())));
       }

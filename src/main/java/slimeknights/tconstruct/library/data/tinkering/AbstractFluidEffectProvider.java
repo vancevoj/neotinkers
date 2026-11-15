@@ -8,7 +8,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.PackOutput.Target;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.ItemTags;
@@ -57,7 +57,7 @@ import static slimeknights.mantle.Mantle.commonResource;
 @SuppressWarnings("deprecation")  // fluid registry is ours to use, not yours forge
 public abstract class AbstractFluidEffectProvider extends GenericDataProvider {
   private final String modId;
-  private final Map<ResourceLocation,Builder> entries = new HashMap<>();
+  private final Map<Identifier,Builder> entries = new HashMap<>();
 
   public AbstractFluidEffectProvider(PackOutput packOutput, String modId) {
     super(packOutput, Target.DATA_PACK, FluidEffectManager.FOLDER);
@@ -76,7 +76,7 @@ public abstract class AbstractFluidEffectProvider extends GenericDataProvider {
   /* Helpers */
 
   /** Creates a new fluid builder for the given location */
-  protected Builder addFluid(ResourceLocation id, FluidIngredient fluid) {
+  protected Builder addFluid(Identifier id, FluidIngredient fluid) {
     Builder newBuilder = new Builder(fluid);
     Builder original = entries.put(id, newBuilder);
     if (original != null) {
@@ -88,7 +88,7 @@ public abstract class AbstractFluidEffectProvider extends GenericDataProvider {
   /** Creates a new fluid builder for the given mod ID */
   @SuppressWarnings("removal")
   protected Builder addFluid(String name, FluidIngredient fluid) {
-    return addFluid(ResourceLocation.fromNamespaceAndPath(modId, name), fluid);
+    return addFluid(Identifier.fromNamespaceAndPath(modId, name), fluid);
   }
 
   /** Creates a builder for a fluid stack */
@@ -333,7 +333,7 @@ public abstract class AbstractFluidEffectProvider extends GenericDataProvider {
 
     /** Builds the instance */
     @CheckReturnValue
-    private JsonObject build(ResourceLocation id) {
+    private JsonObject build(Identifier id) {
       JsonObject json = new JsonObject();
       if (!conditions.isEmpty()) {
         json.add("conditions", ICondition.LIST_CODEC.encodeStart(JsonOps.INSTANCE, conditions).getOrThrow());

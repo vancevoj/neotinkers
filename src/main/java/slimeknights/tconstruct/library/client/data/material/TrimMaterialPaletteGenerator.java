@@ -4,7 +4,7 @@ import com.google.gson.JsonObject;
 import com.mojang.blaze3d.platform.NativeImage;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import slimeknights.tconstruct.library.client.data.GenericTextureGenerator;
 import slimeknights.tconstruct.library.client.data.spritetransformer.ISpriteTransformer;
@@ -51,9 +51,9 @@ public class TrimMaterialPaletteGenerator extends GenericTextureGenerator {
       }
       trimmedJson.add("pairs", values);
 
-      NativeImage original = spriteReader.read(ResourceLocation.parse("trim_palette"));
+      NativeImage original = spriteReader.read(Identifier.parse("trim_palette"));
       return allOf(Stream.concat(
-        Stream.of(saveJson(cache, ResourceLocation.fromNamespaceAndPath("trimmed", "maps/unchecked/custom_trim_material_permutations"), trimmedJson)),
+        Stream.of(saveJson(cache, Identifier.fromNamespaceAndPath("trimmed", "maps/unchecked/custom_trim_material_permutations"), trimmedJson)),
         Arrays.stream(materials).map(
         material -> saveImage(cache, material.withPrefix(PALETTE_TEXTURES + '/'), getTransformer(material).transformCopy(original, false)))))
         .thenRunAsync(spriteReader::closeAll);

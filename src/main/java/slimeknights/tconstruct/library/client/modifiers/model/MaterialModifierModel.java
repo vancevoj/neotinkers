@@ -1,12 +1,12 @@
 package slimeknights.tconstruct.library.client.modifiers.model;
 
+import net.minecraft.util.ARGB;
 import com.mojang.math.Transformation;
-import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.resources.model.geometry.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.Material;
 import net.minecraft.nbt.Tag;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.FastColor;
+import net.minecraft.resources.Identifier;
 import slimeknights.mantle.client.model.util.MantleItemLayerModel;
 import slimeknights.mantle.data.loadable.field.RecordField;
 import slimeknights.mantle.data.loadable.primitive.BooleanLoadable;
@@ -96,7 +96,7 @@ public interface MaterialModifierModel extends SimpleModifierModel {
   }
 
   /** Fetches the material from persistent data on the tool under the specified key, or the modifier ID. */
-  record PersistentData(@Nullable Material small, @Nullable Material large, @Nullable ResourceLocation key) implements MaterialModifierModel, ModuleWithKey {
+  record PersistentData(@Nullable Material small, @Nullable Material large, @Nullable Identifier key) implements MaterialModifierModel, ModuleWithKey {
     public static final RecordLoadable<PersistentData> LOADER = RecordLoadable.create(TEXTURE_FIELD, LARGE_TEXTURE_FIELD, FIELD, PersistentData::new);
 
     /** Creates a model using the modifier's ID as the key. */
@@ -130,7 +130,7 @@ public interface MaterialModifierModel extends SimpleModifierModel {
   }
 
   /** Module using a material index, but applying a custom dye color to it. */
-  record Dyed(@Nullable Material small, @Nullable Material large, int index, boolean useMaterialColor, @Nullable ResourceLocation key) implements MaterialModifierModel.WithIndex, ModuleWithKey {
+  record Dyed(@Nullable Material small, @Nullable Material large, int index, boolean useMaterialColor, @Nullable Identifier key) implements MaterialModifierModel.WithIndex, ModuleWithKey {
     public static final RecordLoadable<Dyed> LOADER = RecordLoadable.create(
       TEXTURE_FIELD, LARGE_TEXTURE_FIELD, INDEX_FIELD,
       BooleanLoadable.INSTANCE.defaultField("use_material_color", true, Dyed::useMaterialColor),
@@ -150,7 +150,7 @@ public interface MaterialModifierModel extends SimpleModifierModel {
       int color = useMaterialColor ? sprite.color() : -1;
       // fetch the dye color
       IModDataView data = tool.getPersistentData();
-      ResourceLocation key = getKey(modifier);
+      Identifier key = getKey(modifier);
       if (data.contains(key, Tag.TAG_INT)) {
         // if we have a dye color, need to mix the two
         int dyed = 0xFF000000 | data.getInt(key);
@@ -159,7 +159,7 @@ public interface MaterialModifierModel extends SimpleModifierModel {
           color = dyed;
         } else if (dyed != -1) {
           // otherwise, let Minecraft figure it out
-          color = FastColor.ARGB32.multiply(color, dyed);
+          color = ARGB.multiply(color, dyed);
         }
       }
       return color;
@@ -167,7 +167,7 @@ public interface MaterialModifierModel extends SimpleModifierModel {
 
     @Override
     public Object getCacheKey(IToolStackView tool, ModifierEntry modifier) {
-      ResourceLocation key = getKey(modifier);
+      Identifier key = getKey(modifier);
       IModDataView data = tool.getPersistentData();
       int color = -1;
       if (data.contains(key, Tag.TAG_INT)) {

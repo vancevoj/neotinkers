@@ -1,11 +1,11 @@
 package slimeknights.tconstruct.common.data.model;
 
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.ButtonBlock;
@@ -76,7 +76,7 @@ public class TinkerBlockStateProvider extends BlockStateProvider {
 
     // clear glass
     glassBlock(TinkerCommons.clearGlass.get(), TinkerCommons.clearGlassPane.get(), "clear_glass/", getResource("block/clear_glass"), -1, true, null);
-    ResourceLocation clearStainedGlass = getResource("block/clear_stained_glass");
+    Identifier clearStainedGlass = getResource("block/clear_stained_glass");
     RenderType translucent = RenderType.translucent();
     for (GlassColor color : GlassColor.values()) {
       glassBlock(TinkerCommons.clearStainedGlass.get(color), TinkerCommons.clearStainedGlassPane.get(color), "clear_glass/" + color.getSerializedName() + "/", clearStainedGlass, 0xFF000000 | color.getColor(), false, translucent);
@@ -90,7 +90,7 @@ public class TinkerBlockStateProvider extends BlockStateProvider {
     glassBlock(TinkerSmeltery.scorchedSoulGlass.get(), TinkerSmeltery.scorchedSoulGlassPane.get(), "foundry/soul_glass/",
                getResource("block/foundry/soul_glass"), getResource("block/foundry/glass_top"), -1, true, translucent);
     // obsidian pane
-    ResourceLocation obsidian = ResourceLocation.parse("block/obsidian");
+    Identifier obsidian = Identifier.parse("block/obsidian");
     paneBlock(TinkerCommons.obsidianPane.get(), "obsidian_pane/", obsidian, obsidian, false, -1, false, RenderType.solid());
 
     // shards
@@ -109,7 +109,7 @@ public class TinkerBlockStateProvider extends BlockStateProvider {
     basicBlock(TinkerSmeltery.scorchedLamp.get(), "block/foundry/scorched/lamp", blockTexture("foundry/scorched/lamp"));
 
     // heads
-    ModelFile skull = models().getExistingFile(ResourceLocation.parse("block/skull"));
+    ModelFile skull = models().getExistingFile(Identifier.parse("block/skull"));
     TinkerWorld.heads.forEach(head -> simpleBlock(head, skull));
     TinkerWorld.wallHeads.forEach(head -> simpleBlock(head, skull));
   }
@@ -118,24 +118,24 @@ public class TinkerBlockStateProvider extends BlockStateProvider {
   /* Helpers */
 
   /** Creates a texture in the block folder */
-  protected ResourceLocation blockTexture(String path) {
+  protected Identifier blockTexture(String path) {
     return getResource(BLOCK_FOLDER + "/" + path);
   }
 
   /** Creates a texture in the block folder */
-  protected ResourceLocation itemTexture(String path) {
+  protected Identifier itemTexture(String path) {
     return getResource(ModelProvider.ITEM_FOLDER + "/" + path);
   }
 
   /** Creates all models for a building block object */
-  protected void addBuildingBlock(BuildingBlockObject block, String folder, String name, ResourceLocation texture) {
+  protected void addBuildingBlock(BuildingBlockObject block, String folder, String name, Identifier texture) {
     ModelFile blockModel = basicBlock(block.get(), folder + name, texture);
     slab(block.getSlab(), folder + "slab", blockModel, texture, texture, texture);
     stairs(block.getStairs(), folder + "stairs", texture, texture, texture);
   }
 
   /** Creates all models for a building block object */
-  protected void addFenceBuildingBlock(FenceBuildingBlockObject block, String folder, String name, ResourceLocation texture) {
+  protected void addFenceBuildingBlock(FenceBuildingBlockObject block, String folder, String name, Identifier texture) {
     addBuildingBlock(block, folder, name, texture);
     fence(block.getFence(), folder + "fence/", texture);
   }
@@ -146,10 +146,10 @@ public class TinkerBlockStateProvider extends BlockStateProvider {
     String name = plankPath.substring(0, plankPath.length() - "_planks".length());
     String folder = "block/wood/" + name + "/"; // forge model providers do not prefix with block if you have / in the path
     // helper to get textures for wood, since we put them in a nice folder
-    Function<String,ResourceLocation> texture = suffix -> blockTexture("wood/" + name + "/" + suffix);
-    ResourceLocation planks = texture.apply("planks");
-    ResourceLocation log = texture.apply("log");
-    ResourceLocation stripped = texture.apply("stripped_log");
+    Function<String,Identifier> texture = suffix -> blockTexture("wood/" + name + "/" + suffix);
+    Identifier planks = texture.apply("planks");
+    Identifier log = texture.apply("log");
+    Identifier stripped = texture.apply("stripped_log");
 
     // planks and fences
     addFenceBuildingBlock(wood, folder, "planks", planks);
@@ -180,7 +180,7 @@ public class TinkerBlockStateProvider extends BlockStateProvider {
 
   /** Gets the resource location key for a block */
   @SuppressWarnings("deprecation")
-  private ResourceLocation key(Block block) {
+  private Identifier key(Block block) {
     return BuiltInRegistries.BLOCK.getKey(block);
   }
 
@@ -191,7 +191,7 @@ public class TinkerBlockStateProvider extends BlockStateProvider {
 
   /** Gets the resource location key for a block */
   @SuppressWarnings("deprecation")
-  private ResourceLocation itemKey(ItemLike item) {
+  private Identifier itemKey(ItemLike item) {
     return BuiltInRegistries.ITEM.getKey(item.asItem());
   }
 
@@ -206,12 +206,12 @@ public class TinkerBlockStateProvider extends BlockStateProvider {
   }
 
   /** Creates a model for a generated item with 1 layer */
-  protected ItemModelBuilder basicItem(ResourceLocation item, String texturePrefix) {
+  protected ItemModelBuilder basicItem(Identifier item, String texturePrefix) {
     return generated(item, itemTexture(texturePrefix + item.getPath()));
   }
 
   /** Creates a model for a generated item with 1 layer */
-  protected ItemModelBuilder generated(ResourceLocation item, ResourceLocation texture) {
+  protected ItemModelBuilder generated(Identifier item, Identifier texture) {
     return itemModels().getBuilder(item.toString()).parent(GENERATED).texture("layer0", texture);
   }
 
@@ -234,7 +234,7 @@ public class TinkerBlockStateProvider extends BlockStateProvider {
    * @param texture   Texture for all sides
    * @return model file for the basic block
    */
-  public ModelFile basicBlock(Block block, String location, ResourceLocation texture) {
+  public ModelFile basicBlock(Block block, String location, Identifier texture) {
     return basicBlock(block, models().cubeAll(location, texture));
   }
 
@@ -246,7 +246,7 @@ public class TinkerBlockStateProvider extends BlockStateProvider {
    * @param top       Texture for top
    * @return model file for the basic block
    */
-  public ModelFile cubeColumn(Block block, String location, ResourceLocation side, ResourceLocation top) {
+  public ModelFile cubeColumn(Block block, String location, Identifier side, Identifier top) {
     return basicBlock(block, models().cubeColumn(location, side, top));
   }
 
@@ -258,8 +258,8 @@ public class TinkerBlockStateProvider extends BlockStateProvider {
    * @param horizontal   If true, makes a top texture by suffixing the side texture and includes a horizontal model.
    *                     If false, uses the side for the top
    */
-  public void axisBlock(Block block, String location, ResourceLocation texture, boolean horizontal) {
-    ResourceLocation endTexture = horizontal ? texture.withSuffix("_top") : texture;
+  public void axisBlock(Block block, String location, Identifier texture, boolean horizontal) {
+    Identifier endTexture = horizontal ? texture.withSuffix("_top") : texture;
     ModelFile model = models().cubeColumn(TConstruct.resourceString(location), texture, endTexture);
     axisBlock((RotatedPillarBlock)block, model,
               horizontal ? models().cubeColumnHorizontal(TConstruct.resourceString(location + "_horizontal"), texture, endTexture) : model);
@@ -275,7 +275,7 @@ public class TinkerBlockStateProvider extends BlockStateProvider {
    * @param bottomTexture   Bottom texture
    * @param topTexture      Top texture
    */
-  public void slab(SlabBlock block, String location, ModelFile doubleModel, ResourceLocation sideTexture, ResourceLocation bottomTexture, ResourceLocation topTexture) {
+  public void slab(SlabBlock block, String location, ModelFile doubleModel, Identifier sideTexture, Identifier bottomTexture, Identifier topTexture) {
     ModelFile slab = models().slab(location, sideTexture, bottomTexture, topTexture);
     slabBlock(
       block, slab,
@@ -292,7 +292,7 @@ public class TinkerBlockStateProvider extends BlockStateProvider {
    * @param bottomTexture   Bottom texture
    * @param topTexture      Top texture
    */
-  public void stairs(StairBlock block, String location, ResourceLocation sideTexture, ResourceLocation bottomTexture, ResourceLocation topTexture) {
+  public void stairs(StairBlock block, String location, Identifier sideTexture, Identifier bottomTexture, Identifier topTexture) {
     ModelFile stairs = models().stairs(location, sideTexture, bottomTexture, topTexture);
     stairsBlock(
       block, stairs,
@@ -306,7 +306,7 @@ public class TinkerBlockStateProvider extends BlockStateProvider {
    * @param prefix   Prefix for block files
    * @param texture  Fence texture
    */
-  public void fence(FenceBlock block, String prefix, ResourceLocation texture) {
+  public void fence(FenceBlock block, String prefix, Identifier texture) {
     fourWayBlock(
       block,
       models().fencePost(prefix + "post", texture),
@@ -314,7 +314,7 @@ public class TinkerBlockStateProvider extends BlockStateProvider {
     itemModels().withExistingParent(itemName(block), "minecraft:block/fence_inventory").texture("texture", texture);
   }
 
-  public void fenceGate(FenceGateBlock block, String baseName, ResourceLocation texture) {
+  public void fenceGate(FenceGateBlock block, String baseName, Identifier texture) {
     ModelFile model = models().fenceGate(baseName, texture);
     fenceGateBlock(
       block, model,
@@ -332,7 +332,7 @@ public class TinkerBlockStateProvider extends BlockStateProvider {
    * @param bottomTexture   Bottom door texture
    * @param topTexture      Top door texture
    */
-  public void door(DoorBlock block, String prefix, RenderType doorRenderType, ResourceLocation bottomTexture, ResourceLocation topTexture) {
+  public void door(DoorBlock block, String prefix, RenderType doorRenderType, Identifier bottomTexture, Identifier topTexture) {
     doorBlock(
       block,
       models().doorBottomLeft(     prefix + "door/bottom_left",       bottomTexture, topTexture)
@@ -361,7 +361,7 @@ public class TinkerBlockStateProvider extends BlockStateProvider {
    * @param texture  Trapdoor texture
    * @param orientable  If true, it's an oriented model.
    */
-  public void trapdoor(TrapDoorBlock block, String prefix, ResourceLocation texture, boolean orientable) {
+  public void trapdoor(TrapDoorBlock block, String prefix, Identifier texture, boolean orientable) {
     ModelFile bottom, top, open;
 
     if (orientable) {
@@ -384,7 +384,7 @@ public class TinkerBlockStateProvider extends BlockStateProvider {
    * @param location  Location for the model, pressed will be the location suffixed with down
    * @param texture   Texture for the plate
    */
-  public void pressurePlate(PressurePlateBlock block, String location, ResourceLocation texture) {
+  public void pressurePlate(PressurePlateBlock block, String location, Identifier texture) {
     ModelFile pressurePlate = models().pressurePlate(location, texture);
     pressurePlateBlock(block, pressurePlate, models().pressurePlateDown(location + "_down", texture));
     simpleBlockItem(block, pressurePlate);
@@ -396,7 +396,7 @@ public class TinkerBlockStateProvider extends BlockStateProvider {
    * @param location  Location for the model, pressed will be the location suffixed with down
    * @param texture   Texture for the button
    */
-  public void button(ButtonBlock block, String location, ResourceLocation texture) {
+  public void button(ButtonBlock block, String location, Identifier texture) {
     ModelFile button = models().button(location, texture);
     buttonBlock(block, button, models().buttonPressed(location + "_pressed", texture));
     itemModels().withExistingParent(itemName(block), "minecraft:block/button_inventory").texture("texture", texture);
@@ -406,7 +406,7 @@ public class TinkerBlockStateProvider extends BlockStateProvider {
   /* Geode */
 
   /** Adds a model with rotations for a bud block */
-  public void bud(Block block, String location, ResourceLocation texture) {
+  public void bud(Block block, String location, Identifier texture) {
     ModelFile bud = models().cross(location, texture).renderType(RenderType.cutout().name);
     getVariantBuilder(block)
       .partialState().with(FACING, Direction.UP   ).modelForState().modelFile(bud).addModel()
@@ -426,7 +426,7 @@ public class TinkerBlockStateProvider extends BlockStateProvider {
         name += "_bud";
       }
       Block bud = geode.getBud(size);
-      ResourceLocation texture = blockTexture("geode/" + type + '/' + name);
+      Identifier texture = blockTexture("geode/" + type + '/' + name);
       bud(bud, "block/geode/" + type + '/' + name, texture);
       itemModels().withExistingParent(itemName(bud), getResource("item/base/geode/" + name)).texture("layer0", texture);
     }
@@ -438,7 +438,7 @@ public class TinkerBlockStateProvider extends BlockStateProvider {
   /* Panes and glass */
 
   /** Creates a pane model using the TConstruct templates */
-  private BlockModelBuilder paneModel(String baseName, String variant, ResourceLocation pane, @Nullable ResourceLocation edge, @Nullable RenderType renderType, boolean connected, int tint) {
+  private BlockModelBuilder paneModel(String baseName, String variant, Identifier pane, @Nullable Identifier edge, @Nullable RenderType renderType, boolean connected, int tint) {
     BlockModelBuilder builder = models().withExistingParent(BLOCK_FOLDER + "/" + baseName + variant, getResource("block/template/pane/" + variant));
     builder.texture("pane", pane);
     if (edge != null) {
@@ -479,7 +479,7 @@ public class TinkerBlockStateProvider extends BlockStateProvider {
   }
 
   /** Creates a new pane block with all relevant models */
-  public void paneBlock(IronBarsBlock block, String baseName, ResourceLocation pane, ResourceLocation edge, boolean connected, int tint, boolean solidEdge, @Nullable RenderType renderType) {
+  public void paneBlock(IronBarsBlock block, String baseName, Identifier pane, Identifier edge, boolean connected, int tint, boolean solidEdge, @Nullable RenderType renderType) {
     // build block models
     ModelFile post      = paneModel(baseName, "post",       pane, edge, renderType, connected, tint);
     ModelFile side      = paneModel(baseName, "side",       pane, edge, renderType, connected, tint);
@@ -503,12 +503,12 @@ public class TinkerBlockStateProvider extends BlockStateProvider {
   }
 
   /** Adds models for a glass block with a glass pane */
-  public void glassBlock(Block glass, IronBarsBlock pane, String baseName, ResourceLocation front, int tint, boolean solidEdge, @Nullable RenderType renderType) {
+  public void glassBlock(Block glass, IronBarsBlock pane, String baseName, Identifier front, int tint, boolean solidEdge, @Nullable RenderType renderType) {
     glassBlock(glass, pane, baseName, front, front.withSuffix("_top"), tint, solidEdge, renderType);
   }
 
   /** Adds models for a glass block with a glass pane */
-  public void glassBlock(Block glass, IronBarsBlock pane, String baseName, ResourceLocation front, ResourceLocation edge, int tint, boolean solidEdge, @Nullable RenderType renderType) {
+  public void glassBlock(Block glass, IronBarsBlock pane, String baseName, Identifier front, Identifier edge, int tint, boolean solidEdge, @Nullable RenderType renderType) {
     // make block model
     BlockModelBuilder block = models().cubeAll(BLOCK_FOLDER + "/" + baseName + "block", front);
     ConnectedModelBuilder<BlockModelBuilder> cBuilder = block.customLoader(ConnectedModelBuilder::new);

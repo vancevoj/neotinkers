@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.FluidType;
@@ -22,7 +22,7 @@ public final class RenderUtils {
    * Binds a texture for rendering
    * @param texture  Texture
    */
-  public static void bindTexture(ResourceLocation texture) {
+  public static void bindTexture(Identifier texture) {
     RenderSystem.setShader(GameRenderer::getPositionTexShader);
     RenderSystem.setShaderTexture(0, texture);
   }
@@ -35,7 +35,7 @@ public final class RenderUtils {
    * @param blue     Blue tint
    * @param alpha    Alpha tint
    */
-  public static void setup(ResourceLocation texture, float red, float green, float blue, float alpha) {
+  public static void setup(Identifier texture, float red, float green, float blue, float alpha) {
     bindTexture(texture);
     RenderSystem.setShaderColor(red, green, blue, alpha);
   }
@@ -44,7 +44,7 @@ public final class RenderUtils {
    * Sets up the shader for rendering.
    * @param texture  Texture
    */
-  public static void setup(ResourceLocation texture) {
+  public static void setup(Identifier texture) {
     setup(texture, 1.0f, 1.0f, 1.0f, 1.0f);
   }
 

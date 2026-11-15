@@ -165,7 +165,7 @@ public class ChannelBlock extends Block implements EntityBlock {
 	 * @return  True if its a fluid handler
 	 */
 	private static boolean isFluidHandler(LevelAccessor world, Direction side, BlockPos pos) {
-		return world instanceof Level level && level.getCapability(Capabilities.FluidHandler.BLOCK, pos, side) != null;
+		return world instanceof Level level && level.getCapability(Capabilities.Fluid.BLOCK, pos, side) != null;
 	}
 
 	/**
@@ -334,7 +334,7 @@ public class ChannelBlock extends Block implements EntityBlock {
 
 		// if we have changes, apply them and return success
 		if (newState != null) {
-			if (!world.isClientSide && world.getBlockEntity(pos) instanceof ChannelBlockEntity te) {
+			if (!world.isClientSide() && world.getBlockEntity(pos) instanceof ChannelBlockEntity te) {
 				te.refreshNeighbor(newState, side);
 			}
 			world.setBlockAndUpdate(pos, newState);
@@ -349,7 +349,7 @@ public class ChannelBlock extends Block implements EntityBlock {
 	@Deprecated
 	public void neighborChanged(BlockState state, Level world, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving) {
     super.neighborChanged(state, world, pos, blockIn, fromPos, isMoving);
-    if (!world.isClientSide) {
+    if (!world.isClientSide()) {
       boolean isPowered = world.hasNeighborSignal(pos);
       if (isPowered != state.getValue(POWERED)) {
         state = state.setValue(POWERED, isPowered).setValue(DOWN, isPowered && canConnect(world, pos, Direction.DOWN));
@@ -376,7 +376,7 @@ public class ChannelBlock extends Block implements EntityBlock {
   @Nullable
   @Override
   public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> givenType) {
-    return pLevel.isClientSide ? null : BlockEntityHelper.castTicker(givenType, TinkerSmeltery.channel.get(), ChannelBlockEntity.SERVER_TICKER);
+    return pLevel.isClientSide() ? null : BlockEntityHelper.castTicker(givenType, TinkerSmeltery.channel.get(), ChannelBlockEntity.SERVER_TICKER);
   }
 
   public enum ChannelConnection implements StringRepresentable {

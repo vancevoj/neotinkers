@@ -6,7 +6,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.PackOutput.Target;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.ItemLike;
 import net.neoforged.neoforge.common.conditions.ICondition;
 import slimeknights.mantle.data.GenericDataProvider;
@@ -41,7 +41,7 @@ public abstract class AbstractStationSlotLayoutProvider extends GenericDataProvi
   /** Index for armor */
   protected static final int SORT_ARMOR = 15;
 
-  private final Map<ResourceLocation,SerializeLayout> allLayouts = new HashMap<>();
+  private final Map<Identifier,SerializeLayout> allLayouts = new HashMap<>();
 
   public AbstractStationSlotLayoutProvider(PackOutput packOutput) {
     super(packOutput, Target.DATA_PACK, StationSlotLayoutLoader.FOLDER, StationSlotLayoutLoader.GSON);
@@ -53,12 +53,12 @@ public abstract class AbstractStationSlotLayoutProvider extends GenericDataProvi
   protected abstract void addLayouts();
 
   /** Defines the given ID as a general layout */
-  protected StationSlotLayout.Builder define(ResourceLocation id) {
+  protected StationSlotLayout.Builder define(Identifier id) {
     return allLayouts.computeIfAbsent(id, i -> new SerializeLayout()).builder;
   }
 
   /** Defines the given ID as a general layout with conditions. */
-  protected StationSlotLayout.Builder define(ResourceLocation id, ICondition... conditions) {
+  protected StationSlotLayout.Builder define(Identifier id, ICondition... conditions) {
     SerializeLayout layout = allLayouts.computeIfAbsent(id, i -> new SerializeLayout());
     Collections.addAll(layout.conditions, conditions);
     return layout.builder;

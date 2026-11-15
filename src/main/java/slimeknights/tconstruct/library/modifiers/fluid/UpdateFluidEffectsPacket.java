@@ -3,7 +3,7 @@ package slimeknights.tconstruct.library.modifiers.fluid;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import slimeknights.mantle.network.packet.ISimplePacket;
@@ -23,7 +23,7 @@ public record UpdateFluidEffectsPacket(List<FluidEffects.Entry> fluids) implemen
     int size = buffer.readVarInt();
     List<FluidEffects.Entry> entries = new ArrayList<>(size);
     for (int i = 0; i < size; i++) {
-      ResourceLocation key = buffer.readResourceLocation();
+      Identifier key = buffer.readIdentifier();
       try {
         FluidEffects effects = FluidEffects.LOADABLE.decode(buffer, FluidEffectManager.contextBuilder(key).build());
         entries.add(new FluidEffects.Entry(key, effects));
@@ -40,8 +40,8 @@ public record UpdateFluidEffectsPacket(List<FluidEffects.Entry> fluids) implemen
   public void encode(FriendlyByteBuf buffer) {
     buffer.writeVarInt(fluids.size());
     for (FluidEffects.Entry entry : fluids) {
-      ResourceLocation key = entry.name();
-      buffer.writeResourceLocation(key);
+      Identifier key = entry.name();
+      buffer.writeIdentifier(key);
       try {
         FluidEffects.LOADABLE.encode(buffer, entry.effects());
       } catch (RuntimeException e) {

@@ -11,7 +11,7 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.category.extensions.vanilla.crafting.ICraftingCategoryExtension;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import org.jetbrains.annotations.ApiStatus.Internal;
@@ -49,7 +49,7 @@ public class ToolTinkeringExtension implements ICraftingCategoryExtension<IDispl
   }
 
   @Override
-  public Optional<ResourceLocation> getRegistryName(RecipeHolder<IDisplayCraftingTinkering> holder) {
+  public Optional<Identifier> getRegistryName(RecipeHolder<IDisplayCraftingTinkering> holder) {
     return Optional.of(holder.id());
   }
 

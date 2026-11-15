@@ -1,7 +1,7 @@
 package slimeknights.tconstruct.library.recipe.tinkerstation.repairing;
 
 import lombok.Getter;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -34,7 +34,7 @@ public class ModifierMaterialRepairKitRecipe extends CraftingTableRepairKitRecip
   /** Stat type used for repairing, null means it will be fetched as the first available stat type */
   @Getter
   private final MaterialStatsId statType;
-  public ModifierMaterialRepairKitRecipe(ResourceLocation id, ModifierId modifier, MaterialId repairMaterial, MaterialStatsId statType) {
+  public ModifierMaterialRepairKitRecipe(Identifier id, ModifierId modifier, MaterialId repairMaterial, MaterialStatsId statType) {
     super(id);
     this.modifier = modifier;
     this.repairMaterial = repairMaterial;

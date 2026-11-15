@@ -6,7 +6,7 @@ import lombok.experimental.Accessors;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.recipes.RecipeOutput;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import slimeknights.mantle.recipe.data.AbstractRecipeBuilder;
@@ -55,7 +55,7 @@ public class PartBuilderToolRecycleBuilder extends AbstractRecipeBuilder<PartBui
   }
 
   @Override
-  public void save(RecipeOutput consumer, ResourceLocation id) {
+  public void save(RecipeOutput consumer, Identifier id) {
     AdvancementHolder advancementId = buildOptionalAdvancement(id, "parts");
     consumer.accept(id, new PartBuilderToolRecycle(id, tools, pattern, parts), advancementId);
   }

@@ -3,7 +3,7 @@ package slimeknights.tconstruct.library.recipe.modifiers.adding;
 import lombok.Getter;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -48,7 +48,7 @@ public class OverslimeModifierRecipe implements ITinkerStationRecipe, IDisplayMo
     OverslimeModifierRecipe::new);
 
   @Getter
-  private final ResourceLocation id;
+  private final Identifier id;
   private final Ingredient tools;
   private final Ingredient ingredient;
   private final int restoreAmount;
@@ -56,7 +56,7 @@ public class OverslimeModifierRecipe implements ITinkerStationRecipe, IDisplayMo
   private final Component variant;
 
   @Internal
-  protected OverslimeModifierRecipe(ResourceLocation id, Ingredient tools, Ingredient ingredient, int restoreAmount) {
+  protected OverslimeModifierRecipe(Identifier id, Ingredient tools, Ingredient ingredient, int restoreAmount) {
     this.id = id;
     this.tools = tools;
     this.ingredient = ingredient;
@@ -65,9 +65,9 @@ public class OverslimeModifierRecipe implements ITinkerStationRecipe, IDisplayMo
     ModifierRecipeLookup.addRecipeModifier(null, TinkerModifiers.overslime);
   }
 
-  /** @deprecated use {@link #OverslimeModifierRecipe(ResourceLocation, Ingredient, Ingredient, int)} */
+  /** @deprecated use {@link #OverslimeModifierRecipe(Identifier, Ingredient, Ingredient, int)} */
   @Deprecated(forRemoval = true)
-  public OverslimeModifierRecipe(ResourceLocation id, Ingredient ingredient, int restoreAmount) {
+  public OverslimeModifierRecipe(Identifier id, Ingredient ingredient, int restoreAmount) {
     this(id, Ingredient.of(TinkerTags.Items.DURABILITY), ingredient, restoreAmount);
   }
 
@@ -131,7 +131,7 @@ public class OverslimeModifierRecipe implements ITinkerStationRecipe, IDisplayMo
 
   @Nullable
   @Override
-  public ResourceLocation getRecipeId() {
+  public Identifier getRecipeId() {
     return getId();
   }
 

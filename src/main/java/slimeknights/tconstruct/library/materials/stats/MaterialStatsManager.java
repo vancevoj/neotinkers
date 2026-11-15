@@ -6,7 +6,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.GsonHelper;
 import org.apache.logging.log4j.Level;
@@ -43,7 +43,7 @@ import java.util.stream.Collectors;
  * So if the material's mod name is "foobar", the location for your material's stats is "data/foobar/materials/stats".
  */
 @Log4j2
-public class MaterialStatsManager extends MergingJsonDataLoader<Map<ResourceLocation,JsonObject>> {
+public class MaterialStatsManager extends MergingJsonDataLoader<Map<Identifier,JsonObject>> {
   public static final String FOLDER = "tinkering/materials/stats";
 
   /** Runnable to run after loading material stats */
@@ -74,7 +74,7 @@ public class MaterialStatsManager extends MergingJsonDataLoader<Map<ResourceLoca
   }
 
   /** Gets a lit of all material stat IDs */
-  public Collection<ResourceLocation> getAllStatTypeIds() {
+  public Collection<Identifier> getAllStatTypeIds() {
     return statTypes.getKeys();
   }
 
@@ -160,11 +160,11 @@ public class MaterialStatsManager extends MergingJsonDataLoader<Map<ResourceLoca
   }
 
   @Override
-  protected void parse(Map<ResourceLocation, JsonObject> builder, ResourceLocation id, JsonElement element) throws JsonSyntaxException {
+  protected void parse(Map<Identifier, JsonObject> builder, Identifier id, JsonElement element) throws JsonSyntaxException {
     MaterialStatJson json = JsonHelper.DEFAULT_GSON.fromJson(element, MaterialStatJson.class);
     // instead of simply replacing the whole JSON object, merge the two together
-    for (Entry<ResourceLocation,JsonElement> entry : json.getStats().entrySet()) {
-      ResourceLocation key = entry.getKey();
+    for (Entry<Identifier,JsonElement> entry : json.getStats().entrySet()) {
+      Identifier key = entry.getKey();
       JsonElement valueElement = entry.getValue();
       if (valueElement.isJsonNull()) {
         builder.remove(key);
@@ -183,7 +183,7 @@ public class MaterialStatsManager extends MergingJsonDataLoader<Map<ResourceLoca
   }
 
   @Override
-  protected void finishLoad(Map<ResourceLocation,Map<ResourceLocation, JsonObject>> map, ResourceManager manager) {
+  protected void finishLoad(Map<Identifier,Map<Identifier, JsonObject>> map, ResourceManager manager) {
     // Take the final structure and actually load the different material stats. This drops all invalid stats
     materialToStatsPerType = map.entrySet().stream()
                                 .collect(Collectors.toMap(
@@ -229,9 +229,9 @@ public class MaterialStatsManager extends MergingJsonDataLoader<Map<ResourceLoca
    * @param contentsMap Contents of the JSON
    * @return Stats map
    */
-  private Map<MaterialStatsId, IMaterialStats> deserializeMaterialStatsFromContent(ResourceLocation id, Map<ResourceLocation, JsonObject> contentsMap) {
+  private Map<MaterialStatsId, IMaterialStats> deserializeMaterialStatsFromContent(Identifier id, Map<Identifier, JsonObject> contentsMap) {
     ImmutableMap.Builder<MaterialStatsId, IMaterialStats> builder = ImmutableMap.builder();
-    for (Entry<ResourceLocation, JsonObject> entry : contentsMap.entrySet()) {
+    for (Entry<Identifier, JsonObject> entry : contentsMap.entrySet()) {
       try {
         MaterialStatsId statType = new MaterialStatsId(entry.getKey());
         JsonObject json = entry.getValue();

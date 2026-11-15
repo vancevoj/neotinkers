@@ -2,7 +2,7 @@ package slimeknights.tconstruct.library.recipe.modifiers.severing;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
@@ -36,16 +36,16 @@ public class SeveringRecipe implements ICustomOutputRecipe<RecipeInput> {
     SeveringRecipe::new);
 
   @Getter
-  private final ResourceLocation id;
+  private final Identifier id;
   @Getter
   protected final EntityIngredient ingredient;
   protected final ItemOutput output;
   protected final float baseChance;
   protected final float lootingBonus;
 
-  /** @deprecated use {@link #SeveringRecipe(ResourceLocation, EntityIngredient, ItemOutput, float, float)} */
+  /** @deprecated use {@link #SeveringRecipe(Identifier, EntityIngredient, ItemOutput, float, float)} */
   @Deprecated(forRemoval = true)
-  public SeveringRecipe(ResourceLocation id, EntityIngredient ingredient, ItemOutput output) {
+  public SeveringRecipe(Identifier id, EntityIngredient ingredient, ItemOutput output) {
     this(id, ingredient, output, 0.05f, 0.01f);
   }
 

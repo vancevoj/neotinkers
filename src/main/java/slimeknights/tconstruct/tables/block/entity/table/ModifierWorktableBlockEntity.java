@@ -116,7 +116,7 @@ public class ModifierWorktableBlockEntity extends RetexturedTableBlockEntity imp
     recipeValid = true;
     currentMessage = lastRecipe.getDescription(inventoryWrapper);
     buttons = recipe.getModifierOptions(inventoryWrapper);
-    //        if (!level.isClientSide) {
+    //        if (!level.isClientSide()) {
     //          syncToRelevantPlayers(this::syncScreen);
     //        }
 
@@ -214,7 +214,7 @@ public class ModifierWorktableBlockEntity extends RetexturedTableBlockEntity imp
     // run the recipe, will shrink inputs
     // run both sides for the sake of shift clicking
     this.inventoryWrapper.setPlayer(player);
-    this.lastRecipe.updateInputs(result, inventoryWrapper, getCurrentButtons().get(selectedModifierIndex), !level.isClientSide);
+    this.lastRecipe.updateInputs(result, inventoryWrapper, getCurrentButtons().get(selectedModifierIndex), !level.isClientSide());
     this.inventoryWrapper.setPlayer(null);
 
     ItemStack tinkerable = this.getItem(TINKER_SLOT);

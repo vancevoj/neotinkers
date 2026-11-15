@@ -12,9 +12,9 @@ import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.category.AbstractRecipeCategory;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.materials.definition.MaterialVariantId;
@@ -40,7 +40,7 @@ import static slimeknights.tconstruct.library.recipe.tinkerstation.building.Tool
 import static slimeknights.tconstruct.library.recipe.tinkerstation.building.ToolBuildingRecipe.Y_OFFSET;
 
 public class ToolBuildingCategory extends AbstractRecipeCategory<ToolBuildingRecipe> {
-  private static final ResourceLocation BACKGROUND_LOC = TConstruct.getResource("textures/gui/jei/tinker_station.png");
+  private static final Identifier BACKGROUND_LOC = TConstruct.getResource("textures/gui/jei/tinker_station.png");
   private static final Component TITLE = TConstruct.makeTranslation("jei", "tinkering.tool_building");
   private static final Component ANVIL = TConstruct.makeTranslation("jei", "tinkering.tool_building.anvil");
   private final IDrawable anvil, slotBg, slotBorder;
@@ -158,14 +158,14 @@ public class ToolBuildingCategory extends AbstractRecipeCategory<ToolBuildingRec
   }
 
   @Override
-  public void draw(ToolBuildingRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics graphics, double mouseX, double mouseY) {
+  public void draw(ToolBuildingRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphicsExtractor graphics, double mouseX, double mouseY) {
     // first, draw the item background
     ItemStack outputStack = recipe.getOutput() instanceof IModifiableDisplay modifiable ? modifiable.getRenderTool() : recipe.getOutput().asItem().getDefaultInstance();
     PoseStack renderPose = graphics.pose();
     renderPose.pushPose();
     renderPose.translate(5, 6.5, 0);
     renderPose.scale(3.7f, 3.7f, 1.0f);
-    graphics.renderItem(outputStack, 0, 0);
+    graphics.item(outputStack, 0, 0);
     renderPose.popPose();
 
     // next, overlay the item with transparent grey, makes it appear transparent
@@ -191,7 +191,7 @@ public class ToolBuildingCategory extends AbstractRecipeCategory<ToolBuildingRec
   }
 
   @Override
-  public ResourceLocation getRegistryName(ToolBuildingRecipe recipe) {
+  public Identifier getRegistryName(ToolBuildingRecipe recipe) {
     return recipe.getId();
   }
 }

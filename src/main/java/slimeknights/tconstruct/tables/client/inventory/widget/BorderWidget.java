@@ -1,6 +1,6 @@
 package slimeknights.tconstruct.tables.client.inventory.widget;
 
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import slimeknights.mantle.client.screen.ElementScreen;
 import slimeknights.mantle.client.screen.ModuleScreen;
 import slimeknights.mantle.client.screen.ScalableElementScreen;
@@ -52,7 +52,7 @@ public class BorderWidget extends Widget {
   }
 
   @Override
-  public void draw(GuiGraphics graphics) {
+  public void draw(GuiGraphicsExtractor graphics) {
     int x = this.xPos;
     int y = this.yPos;
     int midW = this.width - this.borderLeft.w - this.borderRight.w;
@@ -79,7 +79,7 @@ public class BorderWidget extends Widget {
   }
 
   /** Draws an element ans returns its width */
-  private int drawX(ElementScreen element, GuiGraphics graphics, int x, int y) {
+  private int drawX(ElementScreen element, GuiGraphicsExtractor graphics, int x, int y) {
     element.draw(graphics, x, y);
     return element.w;
   }

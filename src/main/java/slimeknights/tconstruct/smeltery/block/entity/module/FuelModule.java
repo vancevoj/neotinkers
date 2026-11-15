@@ -98,10 +98,10 @@ public abstract class FuelModule implements ContainerData {
     if (level instanceof ServerLevel serverLevel) {
       // immutable copy as the cache holds the reference long-term
       BlockPos key = pos.immutable();
-      return serverHandlerCaches.computeIfAbsent(key, p -> BlockCapabilityCache.create(Capabilities.FluidHandler.BLOCK, serverLevel, p, null)).getCapability();
+      return serverHandlerCaches.computeIfAbsent(key, p -> BlockCapabilityCache.create(Capabilities.Fluid.BLOCK, serverLevel, p, null)).getCapability();
     }
     // client: always re-query so a transiently-missing capability (e.g. right after a reload) recovers on a later tick
-    return level.getCapability(Capabilities.FluidHandler.BLOCK, pos, null);
+    return level.getCapability(Capabilities.Fluid.BLOCK, pos, null);
   }
 
   /** Clears any server-side capability caches; called when the set of relevant positions may have changed */

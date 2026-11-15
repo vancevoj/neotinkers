@@ -6,7 +6,7 @@ import com.mojang.serialization.JsonOps;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.PackOutput.Target;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.neoforged.neoforge.common.conditions.ICondition;
@@ -39,7 +39,7 @@ public abstract class AbstractMobEquipmentProvider extends GenericDataProvider {
   @Override
   public CompletableFuture<?> run(CachedOutput cache) {
     addEquipment();
-    return allOf(equipment.entrySet().stream().map(entry -> saveJson(cache, ResourceLocation.fromNamespaceAndPath(modId, entry.getKey()), entry.getValue().serialize())));
+    return allOf(equipment.entrySet().stream().map(entry -> saveJson(cache, Identifier.fromNamespaceAndPath(modId, entry.getKey()), entry.getValue().serialize())));
   }
 
   /** Creates a builder for the given entity */
@@ -66,12 +66,12 @@ public abstract class AbstractMobEquipmentProvider extends GenericDataProvider {
   /* Compat entity */
 
   /** Creates a builder for the given entity ID, used for optional compat */
-  public MobEquipment.Builder equip(String name, ResourceLocation entity, ICondition... conditions) {
+  public MobEquipment.Builder equip(String name, Identifier entity, ICondition... conditions) {
     return equip(name, conditions, entity.toString());
   }
 
   /** Creates a builder for the given entity ID with an automtic mod ID condition */
-  public MobEquipment.Builder equip(ResourceLocation entity) {
+  public MobEquipment.Builder equip(Identifier entity) {
     return equip(entity.getNamespace() + '_' + entity.getPath(), entity, new ModLoadedCondition(entity.getNamespace()));
   }
 

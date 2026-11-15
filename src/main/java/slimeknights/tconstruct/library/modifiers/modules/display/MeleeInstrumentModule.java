@@ -6,7 +6,7 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageSource;
@@ -81,9 +81,9 @@ public record MeleeInstrumentModule(@Nullable MaterialId material, TagKey<Instru
               builder.setCharAt(index, ':');
               variant = builder.toString();
             }
-            ResourceLocation key = ResourceLocation.tryParse(variant);
+            Identifier key = Identifier.tryParse(variant);
             if (key != null) {
-              instrument = BuiltInRegistries.INSTRUMENT.get(key);
+              instrument = BuiltInRegistries.INSTRUMENT.getValue(key);
             }
             break;
           }

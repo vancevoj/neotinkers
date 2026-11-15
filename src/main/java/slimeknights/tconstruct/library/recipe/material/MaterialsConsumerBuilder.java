@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.data.recipes.RecipeOutput;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraft.world.item.crafting.ShapelessRecipe;
@@ -64,7 +64,7 @@ public class MaterialsConsumerBuilder {
     }
 
     @Override
-    public void accept(ResourceLocation id, Recipe<?> recipe, @Nullable AdvancementHolder advancement, ICondition... conditions) {
+    public void accept(Identifier id, Recipe<?> recipe, @Nullable AdvancementHolder advancement, ICondition... conditions) {
       Recipe<?> wrapped;
       if (partCount > 0) {
         // shapeless: wrap the vanilla shapeless recipe, the first partCount ingredients are the parts
@@ -85,7 +85,7 @@ public class MaterialsConsumerBuilder {
     }
 
     /** Logs a useful error before failing the conversion */
-    private static IllegalStateException error(ResourceLocation id, Recipe<?> recipe, String type) {
+    private static IllegalStateException error(Identifier id, Recipe<?> recipe, String type) {
       TConstruct.LOG.error("Material consumer builder for {} expected a {} recipe but got {}", id, type, recipe.getClass().getName());
       return new IllegalStateException("Material consumer builder for " + id + " expected a " + type + " recipe");
     }

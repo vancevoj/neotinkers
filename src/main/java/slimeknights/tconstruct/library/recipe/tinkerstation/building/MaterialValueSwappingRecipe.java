@@ -2,7 +2,7 @@ package slimeknights.tconstruct.library.recipe.tinkerstation.building;
 
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -46,7 +46,7 @@ public class MaterialValueSwappingRecipe extends MaterialIndexSwappingRecipe imp
   /** Amount of material needed to swap the part */
   private final int cost;
 
-  protected MaterialValueSwappingRecipe(ResourceLocation id, Ingredient tools, int maxStackSize, IJsonPredicate<MaterialVariantId> material, int cost, int[] indices, List<SizedIngredient> extraRequirements) {
+  protected MaterialValueSwappingRecipe(Identifier id, Ingredient tools, int maxStackSize, IJsonPredicate<MaterialVariantId> material, int cost, int[] indices, List<SizedIngredient> extraRequirements) {
     super(id, tools, maxStackSize, indices, extraRequirements);
     this.material = material;
     this.cost = cost;

@@ -7,7 +7,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSyntaxException;
 import com.mojang.blaze3d.platform.NativeImage;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.GsonHelper;
 import slimeknights.mantle.util.JsonHelper;
 import slimeknights.tconstruct.TConstruct;
@@ -20,17 +20,17 @@ import java.util.List;
 
 /** Sprite transformer that uses a different transformer for each frame */
 public class FramesSpriteTransformer implements IRecolorSpriteTransformer {
-  public static final ResourceLocation NAME = TConstruct.getResource("frames");
+  public static final Identifier NAME = TConstruct.getResource("frames");
   private final List<IRecolorSpriteTransformer> frames;
-  private final ResourceLocation metaPath;
+  private final Identifier metaPath;
   private JsonObject meta;
 
-  public FramesSpriteTransformer(List<IRecolorSpriteTransformer> frames, ResourceLocation metaPath) {
+  public FramesSpriteTransformer(List<IRecolorSpriteTransformer> frames, Identifier metaPath) {
     this.frames = frames;
     this.metaPath = metaPath;
   }
 
-  public FramesSpriteTransformer(ResourceLocation metaPath, IRecolorSpriteTransformer... frames) {
+  public FramesSpriteTransformer(Identifier metaPath, IRecolorSpriteTransformer... frames) {
     this(List.of(frames), metaPath);
   }
 

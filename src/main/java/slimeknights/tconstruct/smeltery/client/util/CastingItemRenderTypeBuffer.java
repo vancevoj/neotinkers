@@ -1,11 +1,12 @@
 package slimeknights.tconstruct.smeltery.client.util;
 
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import com.google.common.collect.ImmutableSet;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderStateShard.TextureStateShard;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.inventory.InventoryMenu;
 
@@ -42,8 +43,8 @@ public class CastingItemRenderTypeBuffer implements MultiBufferSource {
   @Override
   public VertexConsumer getBuffer(RenderType type) {
     if (alpha < 255 && MAKE_TRANSPARENT.contains(type.name) && type instanceof RenderType.CompositeRenderType composite && composite.state.textureState instanceof TextureStateShard textureState) {
-      ResourceLocation texture = textureState.texture.orElse(InventoryMenu.BLOCK_ATLAS);
-      type = RenderType.entityTranslucentCull(texture);
+      Identifier texture = textureState.texture.orElse(InventoryMenu.BLOCK_ATLAS);
+      type = RenderTypes.entityTranslucentCull(texture);
     }
 
     return new TintedVertexBuilder(inner.getBuffer(type), red, green, blue, alpha);

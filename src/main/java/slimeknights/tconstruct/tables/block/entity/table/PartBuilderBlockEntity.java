@@ -292,7 +292,7 @@ public class PartBuilderBlockEntity extends RetexturedTableBlockEntity implement
     this.playCraftSound(player);
 
     // give the player any leftovers
-    if (level != null && !level.isClientSide) {
+    if (level != null && !level.isClientSide()) {
       ItemStack leftover = recipe.getLeftover(inventoryWrapper, selectedPattern);
       if (!leftover.isEmpty()) {
         ItemHandlerHelper.giveItemToPlayer(player, leftover);

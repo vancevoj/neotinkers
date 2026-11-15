@@ -10,10 +10,10 @@ import com.mojang.blaze3d.vertex.VertexFormat.Mode;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.neoforged.neoforge.fluids.FluidStack;
@@ -29,7 +29,7 @@ public final class GuiUtil {
    * @param screen      Parent screen
    * @param background  Background location
    */
-  public static void drawBackground(GuiGraphics graphics, AbstractContainerScreen<?> screen, ResourceLocation background) {
+  public static void drawBackground(GuiGraphicsExtractor graphics, AbstractContainerScreen<?> screen, Identifier background) {
     // reset the shader color before drawing the opaque background; the 7-arg blit uses the colorless
     // position_tex shader, so a stale RenderSystem shader color (e.g. a fluid tint alpha < 1 left over
     // from immediate-mode fluid/highlight rendering) would otherwise make the GUI background transparent,
@@ -86,7 +86,7 @@ public final class GuiUtil {
    * @param height    Tank height
    * @param depth     Tank depth
    */
-  public static void renderFluidTank(GuiGraphics graphics, AbstractContainerScreen<?> screen, FluidStack stack, int capacity, int x, int y, int width, int height, int depth) {
+  public static void renderFluidTank(GuiGraphicsExtractor graphics, AbstractContainerScreen<?> screen, FluidStack stack, int capacity, int x, int y, int width, int height, int depth) {
     renderFluidTank(graphics, screen, stack, stack.getAmount(), capacity, x, y, width, height, depth);
   }
 
@@ -102,7 +102,7 @@ public final class GuiUtil {
    * @param height    Tank height
    * @param depth     Tank depth
    */
-  public static void renderFluidTank(GuiGraphics graphics, AbstractContainerScreen<?> screen, FluidStack stack, int amount, int capacity, int x, int y, int width, int height, int depth) {
+  public static void renderFluidTank(GuiGraphicsExtractor graphics, AbstractContainerScreen<?> screen, FluidStack stack, int amount, int capacity, int x, int y, int width, int height, int depth) {
     if(!stack.isEmpty() && capacity > 0) {
       int maxY = y + height;
       int fluidHeight = Math.min(height * amount / capacity, height);
@@ -112,7 +112,7 @@ public final class GuiUtil {
 
   /**
    * Colors and renders a fluid sprite tiled over the given area.
-   * 1.21 rewrite: draws through GuiGraphics (the old immediate-mode Tesselator/BufferUploader path
+   * 1.21 rewrite: draws through GuiGraphicsExtractor (the old immediate-mode Tesselator/BufferUploader path
    * rendered at the wrong position/scale under 1.21's batched GUI rendering, producing a duplicated
    * fluid band and a misplaced fuel bar). x/y are relative to the screen's leftPos/topPos.
    * @param graphics  Graphics context
@@ -124,7 +124,7 @@ public final class GuiUtil {
    * @param height    Fluid height
    * @param depth     Fluid depth (blit z offset)
    */
-  public static void renderTiledFluid(GuiGraphics graphics, AbstractContainerScreen<?> screen, FluidStack stack, int x, int y, int width, int height, int depth) {
+  public static void renderTiledFluid(GuiGraphicsExtractor graphics, AbstractContainerScreen<?> screen, FluidStack stack, int x, int y, int width, int height, int depth) {
     if (stack.isEmpty() || width <= 0 || height <= 0) {
       return;
     }
@@ -238,7 +238,7 @@ public final class GuiUtil {
    * @param y         Y position to start
    * @param progress  Progress between 0 and 1
    */
-  public static void drawProgressUp(GuiGraphics graphics, ElementScreen element, int x, int y, float progress) {
+  public static void drawProgressUp(GuiGraphicsExtractor graphics, ElementScreen element, int x, int y, float progress) {
     int height;
     if (progress > 1) {
       height = element.h;
@@ -261,7 +261,7 @@ public final class GuiUtil {
    * @param width     Element width
    * @param height    Element height
    */
-  public static void renderHighlight(GuiGraphics graphics, int x, int y, int width, int height) {
+  public static void renderHighlight(GuiGraphicsExtractor graphics, int x, int y, int width, int height) {
       RenderSystem.disableDepthTest();
       RenderSystem.colorMask(true, true, true, false);
       graphics.fill(x, y, x + width, y + height, 100, 0x80FFFFFF);
@@ -270,7 +270,7 @@ public final class GuiUtil {
   }
 
   /** Renders a pattern at the given location */
-  public static void renderPattern(GuiGraphics graphics, Pattern pattern, int x, int y) {
+  public static void renderPattern(GuiGraphicsExtractor graphics, Pattern pattern, int x, int y) {
     TextureAtlasSprite sprite = Minecraft.getInstance().getModelManager().getAtlas(InventoryMenu.BLOCK_ATLAS).getSprite(pattern.getTexture());
     graphics.blit(x, y, 100, 16, 16, sprite);
   }

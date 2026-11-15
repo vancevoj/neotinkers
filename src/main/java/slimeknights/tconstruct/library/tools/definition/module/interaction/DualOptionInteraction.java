@@ -1,7 +1,7 @@
 package slimeknights.tconstruct.library.tools.definition.module.interaction;
 
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import slimeknights.mantle.data.loadable.record.SingletonLoader;
 import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierId;
@@ -25,7 +25,7 @@ public enum DualOptionInteraction implements InteractionToolModule, ToolModule {
   public static final SingletonLoader<DualOptionInteraction> LOADER = new SingletonLoader<>(INSTANCE);
   /** @deprecated use {@link InteractionSource#getKey()} */
   @Deprecated(forRemoval = true)
-  public static final ResourceLocation KEY = InteractionSource.LEFT_CLICK.getKey();
+  public static final Identifier KEY = InteractionSource.LEFT_CLICK.getKey();
 
   @Override
   public List<ModuleHook<?>> getDefaultHooks() {

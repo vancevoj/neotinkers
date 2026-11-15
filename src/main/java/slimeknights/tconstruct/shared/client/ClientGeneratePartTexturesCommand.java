@@ -10,7 +10,7 @@ import lombok.extern.log4j.Log4j2;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -108,8 +108,8 @@ public class ClientGeneratePartTexturesCommand {
 
       // prepare the output directory
       Path path = Minecraft.getInstance().getResourcePackDirectory().resolve(PACK_NAME);
-      BiConsumer<ResourceLocation, NativeImage> saver = (outputPath, image) -> saveImage(path, outputPath, image);
-      BiConsumer<ResourceLocation, JsonObject> metaSaver = (outputPath, image) -> saveMetadata(path, outputPath, image);
+      BiConsumer<Identifier, NativeImage> saver = (outputPath, image) -> saveImage(path, outputPath, image);
+      BiConsumer<Identifier, JsonObject> metaSaver = (outputPath, image) -> saveMetadata(path, outputPath, image);
 
       // create a pack.mcmeta so its a valid resource pack
       GeneratePackHelper.saveMcmeta(path, PackType.CLIENT_RESOURCES, "Generated Resources from the Tinkers' Construct Part Texture Generator");
@@ -117,7 +117,7 @@ public class ClientGeneratePartTexturesCommand {
       // predicate for whether we should generate the texture
       AbstractSpriteReader spriteReader = new ResourceManagerSpriteReader(manager, MaterialPartTextureGenerator.FOLDER);
       MutableInt generated = new MutableInt(0); // keep track of how many generated
-      Predicate<ResourceLocation> shouldGenerate;
+      Predicate<Identifier> shouldGenerate;
       if (operation == Operation.ALL) {
         shouldGenerate = exists -> {
           generated.add(1);
@@ -140,7 +140,7 @@ public class ClientGeneratePartTexturesCommand {
           if (!material.isVariant() || !part.isSkipVariants()) {
             for (MaterialStatsId statType : part.getStatTypes()) {
               if (material.supportStatType(statType) || generatorConfig.statOverrides.hasOverride(statType, material.getTexture())) {
-                ResourceLocation spritePath = MaterialPartTextureGenerator.outputPath(part, material);
+                Identifier spritePath = MaterialPartTextureGenerator.outputPath(part, material);
                 if (shouldGenerate.test(spritePath)) {
                   MaterialPartTextureGenerator.generateSprite(spriteReader, material, part, spritePath, saver, metaSaver);
                 }
@@ -170,7 +170,7 @@ public class ClientGeneratePartTexturesCommand {
   }
 
   /** Saves an image to the output folder */
-  private static void saveImage(Path folder, ResourceLocation location, NativeImage image) {
+  private static void saveImage(Path folder, Identifier location, NativeImage image) {
     Path path = folder.resolve(Paths.get(PackType.CLIENT_RESOURCES.getDirectory(),
                 location.getNamespace(), MaterialPartTextureGenerator.FOLDER, location.getPath() + ".png"));
     try {
@@ -182,7 +182,7 @@ public class ClientGeneratePartTexturesCommand {
   }
 
   /** Saves metadata to the output folder */
-  private static void saveMetadata(Path folder, ResourceLocation location, JsonObject meta) {
+  private static void saveMetadata(Path folder, Identifier location, JsonObject meta) {
     Path path = folder.resolve(Paths.get(PackType.CLIENT_RESOURCES.getDirectory(),
                                          location.getNamespace(), MaterialPartTextureGenerator.FOLDER, location.getPath() + ".png.mcmeta"));
     try {
@@ -202,12 +202,12 @@ public class ClientGeneratePartTexturesCommand {
   /** Loads all part sprites file */
   @SuppressWarnings("removal")
   private static GeneratorConfiguration loadGeneratorConfig(ResourceManager manager) {
-    Map<ResourceLocation,PartSpriteInfo> builder = new HashMap<>();
+    Map<Identifier,PartSpriteInfo> builder = new HashMap<>();
     StatOverride.Builder stats = new StatOverride.Builder();
 
     // each namespace loads separately
     for (String namespace : manager.getNamespaces()) {
-      ResourceLocation location = ResourceLocation.fromNamespaceAndPath(namespace, GENERATOR_PART_TEXTURES);
+      Identifier location = Identifier.fromNamespaceAndPath(namespace, GENERATOR_PART_TEXTURES);
       List<Resource> resources = manager.getResourceStack(location);
       if (!resources.isEmpty()) {
         // if the namespace has the file, we will start building
@@ -271,7 +271,7 @@ public class ClientGeneratePartTexturesCommand {
     MaterialGeneratorInfo.LOADABLE.requiredField("generator", Function.identity()),
     ErrorFactory.FIELD,
     (render, generator, error) -> {
-      ResourceLocation texture = render.texture();
+      Identifier texture = render.texture();
       if (texture == null) {
         throw error.create("Unable to create generator for material " + render.id() + " as it has no texture despite having a generator");
       }
@@ -286,14 +286,14 @@ public class ClientGeneratePartTexturesCommand {
    */
   private static List<MaterialSpriteInfo> loadMaterialRenderInfoGenerators(ResourceManager manager, Predicate<MaterialVariantId> validMaterialId) {
     // first, we need to fetch all relevant JSON files
-    Map<ResourceLocation,JsonElement> jsons = new HashMap<>();
+    Map<Identifier,JsonElement> jsons = new HashMap<>();
     SimpleJsonResourceReloadListener.scanDirectory(manager, MaterialRenderInfoLoader.FOLDER, JsonHelper.DEFAULT_GSON, jsons);
     // final results map from texture name to sprite info
-    Map<ResourceLocation,MaterialSpriteInfo> builder = new HashMap<>();
+    Map<Identifier,MaterialSpriteInfo> builder = new HashMap<>();
 
-    for(Entry<ResourceLocation, JsonElement> entry : jsons.entrySet()) {
+    for(Entry<Identifier, JsonElement> entry : jsons.entrySet()) {
       // clean up ID by trimming off the extension
-      ResourceLocation location = entry.getKey();
+      Identifier location = entry.getKey();
       MaterialVariantId id = MaterialRenderInfoLoader.variant(location);
 
       // ensure its a material we care about

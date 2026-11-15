@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import slimeknights.mantle.network.packet.ISimplePacket;
 import slimeknights.mantle.network.packet.IThreadsafePacket;
@@ -23,13 +23,13 @@ public class UpdateToolDefinitionDataPacket implements IThreadsafePacket {
   public static final StreamCodec<RegistryFriendlyByteBuf,UpdateToolDefinitionDataPacket> STREAM_CODEC = ISimplePacket.codec(UpdateToolDefinitionDataPacket::new);
 
   @Getter(AccessLevel.PROTECTED)
-  private final Map<ResourceLocation, ToolDefinitionData> dataMap;
+  private final Map<Identifier, ToolDefinitionData> dataMap;
 
   public UpdateToolDefinitionDataPacket(FriendlyByteBuf buffer) {
     int size = buffer.readVarInt();
-    ImmutableMap.Builder<ResourceLocation, ToolDefinitionData> builder = ImmutableMap.builder();
+    ImmutableMap.Builder<Identifier, ToolDefinitionData> builder = ImmutableMap.builder();
     for (int i = 0; i < size; i++) {
-      ResourceLocation name = buffer.readResourceLocation();
+      Identifier name = buffer.readIdentifier();
       try {
         ToolDefinitionData data = ToolDefinitionData.LOADABLE.decode(buffer, ToolDefinitionLoader.contextBuilder(name).build());
         builder.put(name, data);
@@ -44,9 +44,9 @@ public class UpdateToolDefinitionDataPacket implements IThreadsafePacket {
   @Override
   public void encode(FriendlyByteBuf buffer) {
     buffer.writeVarInt(dataMap.size());
-    for (Entry<ResourceLocation, ToolDefinitionData> entry : dataMap.entrySet()) {
-      ResourceLocation name = entry.getKey();
-      buffer.writeResourceLocation(name);
+    for (Entry<Identifier, ToolDefinitionData> entry : dataMap.entrySet()) {
+      Identifier name = entry.getKey();
+      buffer.writeIdentifier(name);
       try {
         ToolDefinitionData.LOADABLE.encode(buffer, entry.getValue());
       } catch (RuntimeException e) {

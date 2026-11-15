@@ -1,5 +1,7 @@
 package slimeknights.tconstruct.tools.logic;
 
+import net.neoforged.neoforge.event.level.block.BreakBlockEvent;
+import net.minecraft.world.entity.EntityTypes;
 import com.google.common.collect.Multiset;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -15,7 +17,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
@@ -45,7 +47,6 @@ import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.neoforged.neoforge.event.level.BlockEvent;
 import slimeknights.mantle.data.predicate.damage.DamageSourcePredicate;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.TinkerEffect;
@@ -99,8 +100,8 @@ import java.util.Objects;
 @EventBusSubscriber(modid = TConstruct.MOD_ID)
 public class ToolEvents {
   /**
-   * Re-entrancy guard for {@link #onBlockBreak(BlockEvent.BreakEvent)}. Tinkers' own AOE breaking fires
-   * {@link BlockEvent.BreakEvent} again for every extra block (via {@link ToolHarvestLogic#breakExtraBlock}),
+   * Re-entrancy guard for {@link #onBlockBreak(BreakBlockEvent)}. Tinkers' own AOE breaking fires
+   * {@link BreakBlockEvent} again for every extra block (via {@link ToolHarvestLogic#breakExtraBlock}),
    * which would otherwise re-enter this handler and recurse. Block breaking runs on the server thread, so a
    * ThreadLocal flag both prevents recursion and avoids interference between players/dimensions.
    */
@@ -108,12 +109,12 @@ public class ToolEvents {
 
   /**
    * NeoForge 1.21 removed {@code IForgeItem#onBlockStartBreak}, the hook Tinkers used to trigger AOE/expanded
-   * block breaking (hammer, broad axe, vein miner, etc.). {@link BlockEvent.BreakEvent} is the game-bus
+   * block breaking (hammer, broad axe, vein miner, etc.). {@link BreakBlockEvent} is the game-bus
    * replacement: it fires server-side just before the block is removed and can be canceled to take over breaking.
    * This re-wires the orphaned {@link ToolHarvestLogic#handleBlockBreak}, restoring all AOE mining tools.
    */
   @SubscribeEvent
-  static void onBlockBreak(BlockEvent.BreakEvent event) {
+  static void onBlockBreak(BreakBlockEvent event) {
     // server only (handleBlockBreak also guards this, but skip the work entirely on the client)
     if (!(event.getPlayer() instanceof ServerPlayer player) || player.level().isClientSide()) {
       return;
@@ -511,8 +512,8 @@ public class ToolEvents {
     }
 
     // when damaging ender dragons, may drop scales - must be player caused explosion, end crystals and TNT are examples
-    if (amount >= 2 && Config.COMMON.dropDragonScales.get() && entity.getType() == EntityType.ENDER_DRAGON
-        && source.is(DamageTypeTags.IS_EXPLOSION) && source.getEntity() != null && source.getEntity().getType() == EntityType.PLAYER) {
+    if (amount >= 2 && Config.COMMON.dropDragonScales.get() && entity.getType() == EntityTypes.ENDER_DRAGON
+        && source.is(DamageTypeTags.IS_EXPLOSION) && source.getEntity() != null && source.getEntity().getType() == EntityTypes.PLAYER) {
       // drops up to 1 scale per heart lost, capping at 5 scales
       ModifierUtil.dropItem(entity, new ItemStack(TinkerModifiers.dragonScale, 1 + entity.level().random.nextInt(Math.min(5, (int)(amount / 2)))));
     }
@@ -582,7 +583,7 @@ public class ToolEvents {
       HitResult.Type type = hit.getType();
       // extract a firing entity as that is a common need
       LivingEntity attacker = projectile.getOwner() instanceof LivingEntity l ? l : null;
-      ModuleHook<ProjectileHitModifierHook> hook = projectile.level().isClientSide ? ModifierHooks.PROJECTILE_HIT_CLIENT : ModifierHooks.PROJECTILE_HIT;
+      ModuleHook<ProjectileHitModifierHook> hook = projectile.level().isClientSide() ? ModifierHooks.PROJECTILE_HIT_CLIENT : ModifierHooks.PROJECTILE_HIT;
       switch(type) {
         case ENTITY -> {
           EntityHitResult entityHit = (EntityHitResult)hit;

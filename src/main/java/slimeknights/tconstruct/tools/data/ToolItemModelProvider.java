@@ -2,7 +2,7 @@ package slimeknights.tconstruct.tools.data;
 
 import com.google.gson.JsonObject;
 import net.minecraft.data.PackOutput;
-import net.minecraft.world.item.ArmorItem.Type;
+import net.minecraft.world.item.ArmorType;
 import net.minecraft.world.phys.Vec2;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import slimeknights.tconstruct.TConstruct;

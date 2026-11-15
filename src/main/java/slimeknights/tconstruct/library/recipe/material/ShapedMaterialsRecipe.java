@@ -60,7 +60,7 @@ public class ShapedMaterialsRecipe extends ShapedRecipe implements MaterialsCraf
    * @param extraMaterials  Extra materials to add beyond the parts
    */
   public ShapedMaterialsRecipe(ShapedRecipe recipe, String partPattern, List<MaterialVariantId> extraMaterials) {
-    this(recipe.getGroup(), recipe.category(), recipe.pattern, recipe.result, recipe.showNotification(), resolveParts(recipe.pattern, partPattern), extraMaterials);
+    this(recipe.group(), recipe.category(), recipe.pattern, recipe.result, recipe.showNotification(), resolveParts(recipe.pattern, partPattern), extraMaterials);
   }
 
   /** Resolves the part pattern symbols into ingredients using the pattern's key map */
@@ -223,7 +223,7 @@ public class ShapedMaterialsRecipe extends ShapedRecipe implements MaterialsCraf
 
     @Override
     public void toNetworkSafe(RegistryFriendlyByteBuf buffer, ShapedMaterialsRecipe recipe) {
-      buffer.writeUtf(recipe.getGroup());
+      buffer.writeUtf(recipe.group());
       buffer.writeEnum(recipe.category());
       ShapedRecipePattern.STREAM_CODEC.encode(buffer, recipe.pattern);
       ItemStack.STREAM_CODEC.encode(buffer, recipe.result);

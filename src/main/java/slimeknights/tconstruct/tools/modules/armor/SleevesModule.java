@@ -1,7 +1,7 @@
 package slimeknights.tconstruct.tools.modules.armor;
 
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -32,7 +32,7 @@ public enum SleevesModule implements ModifierModule, GeneralInteractionModifierH
   private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<SleevesModule>defaultHooks(ModifierHooks.GENERAL_INTERACT);
   public static final RecordLoadable<SleevesModule> LOADER = new SingletonLoader<>(INSTANCE);
   /** Key for the currently selected item */
-  public static final ResourceLocation SELECTED_SLOT = TConstruct.getResource("sleeves_selected");
+  public static final Identifier SELECTED_SLOT = TConstruct.getResource("sleeves_selected");
   /** Message when disabling the trick quiver */
   private static final Component DISABLED = TConstruct.makeTranslation("modifier", "sleeves.disabled");
   /** Message to display selected slot */

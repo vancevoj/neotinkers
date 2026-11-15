@@ -46,7 +46,7 @@ public class ShapelessMaterialsRecipe extends ShapelessRecipe implements Materia
    * @param extraMaterials  Extra materials to add beyond the parts
    */
   public ShapelessMaterialsRecipe(ShapelessRecipe recipe, int partCount, List<MaterialVariantId> extraMaterials) {
-    this(recipe.getGroup(), recipe.category(), recipe.result, recipe.getIngredients(), partCount, extraMaterials);
+    this(recipe.group(), recipe.category(), recipe.result, recipe.getIngredients(), partCount, extraMaterials);
   }
 
   @Override
@@ -78,7 +78,7 @@ public class ShapelessMaterialsRecipe extends ShapelessRecipe implements Materia
       Codec.STRING.optionalFieldOf("group", "").forGetter(ShapelessRecipe::getGroup),
       CraftingBookCategory.CODEC.fieldOf("category").orElse(CraftingBookCategory.MISC).forGetter(ShapelessRecipe::category),
       ItemStack.STRICT_CODEC.fieldOf("result").forGetter(r -> r.result),
-      Ingredient.CODEC_NONEMPTY.listOf().fieldOf("ingredients").xmap(
+      Ingredient.CODEC.listOf().fieldOf("ingredients").xmap(
         ingredients -> {
           NonNullList<Ingredient> list = NonNullList.create();
           list.addAll(ingredients);
@@ -110,7 +110,7 @@ public class ShapelessMaterialsRecipe extends ShapelessRecipe implements Materia
 
     @Override
     public void toNetworkSafe(RegistryFriendlyByteBuf buffer, ShapelessMaterialsRecipe recipe) {
-      buffer.writeUtf(recipe.getGroup());
+      buffer.writeUtf(recipe.group());
       buffer.writeEnum(recipe.category());
       ItemStack.STREAM_CODEC.encode(buffer, recipe.result);
       INGREDIENTS_STREAM.encode(buffer, recipe.getIngredients());

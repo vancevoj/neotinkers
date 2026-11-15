@@ -1,9 +1,9 @@
 package slimeknights.tconstruct.smeltery.client.screen.module;
 
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
 import slimeknights.mantle.client.screen.ElementScreen;
@@ -37,14 +37,14 @@ public class GuiMeltingModule {
     this.progressBars = progressBars;
   }
 
-  public GuiMeltingModule(AbstractContainerScreen<?> screen, MeltingModuleInventory inventory, int indexOffset, IntSupplier temperature, Predicate<Slot> slotPredicate, ResourceLocation background) {
+  public GuiMeltingModule(AbstractContainerScreen<?> screen, MeltingModuleInventory inventory, int indexOffset, IntSupplier temperature, Predicate<Slot> slotPredicate, Identifier background) {
     this(screen, inventory, indexOffset, temperature, slotPredicate, makeProgressBars(background));
   }
 
   /**
    * Draws the heat bars on each slot
    */
-  public void drawHeatBars(GuiGraphics graphics) {
+  public void drawHeatBars(GuiGraphicsExtractor graphics) {
     int temperature = this.temperature.getAsInt();
     AbstractContainerMenu menu = screen.getMenu();
     for (int i = 0; i < inventory.getSlots(); i++) {
@@ -85,7 +85,7 @@ public class GuiMeltingModule {
    * @param mouseX  Mouse X position
    * @param mouseY  Mouse Y position
    */
-  public void drawHeatTooltips(GuiGraphics graphics, int mouseX, int mouseY) {
+  public void drawHeatTooltips(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
     int checkX = mouseX - screen.leftPos;
     int checkY = mouseY - screen.topPos;
     int temperature = this.temperature.getAsInt();
@@ -114,7 +114,7 @@ public class GuiMeltingModule {
 
           // draw tooltip if relevant
           if (tooltip != null) {
-            graphics.renderTooltip(screen.font, tooltip, mouseX, mouseY);
+            graphics.setTooltipForNextFrame(screen.font, tooltip, mouseX, mouseY);
           }
 
           // cannot hover two slots, so done
@@ -149,7 +149,7 @@ public class GuiMeltingModule {
   }
 
   /** Creates all 4 progress bars at the common location */
-  public static ProgressBars makeProgressBars(ResourceLocation background) {
+  public static ProgressBars makeProgressBars(Identifier background) {
     return new ProgressBars(
       new ScalableElementScreen(background, 176, 150, 3, 16, 256, 256),
       new ScalableElementScreen(background, 179, 150, 3, 16, 256, 256),

@@ -33,7 +33,7 @@ public class FrosttouchModifier extends NoLevelsModifier implements DamageDealtM
       // calcifiedEffect is a DeferredHolder with a wildcard registry type, so wrap the effect as a Holder<MobEffect>
       boolean isCalcified = context.getEntity().hasEffect(BuiltInRegistries.MOB_EFFECT.wrapAsHolder(TinkerModifiers.calcifiedEffect.value()));
       if (isCalcified || source.is(DamageTypeTags.IS_PROJECTILE)) {
-        target.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 300, isCalcified ? 1 : 0), context.getEntity());
+        target.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 300, isCalcified ? 1 : 0), context.getEntity());
       }
     }
   }

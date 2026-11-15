@@ -4,7 +4,7 @@ import com.google.common.collect.Maps;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.PackOutput.Target;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagBuilder;
 import net.minecraft.tags.TagEntry;
 import net.minecraft.tags.TagFile;
@@ -29,17 +29,17 @@ public abstract class AbstractTagProvider<T> extends GenericDataProvider {
   /** Mod ID for the tags */
   private final String modId;
   /** Predicate to validate non-optional values. If the contents only exist in datapacks, they should be defined as optional */
-  private final Predicate<ResourceLocation> staticValuePredicate;
+  private final Predicate<Identifier> staticValuePredicate;
   /** Function to get a key from a value */
-  private final Function<T,ResourceLocation> keyGetter;
+  private final Function<T,Identifier> keyGetter;
   /** Checks for tags in other datapacks */
   protected final ExistingFileHelper existingFileHelper;
   /** Resource type for the existing file helper */
   private final ExistingFileHelper.IResourceType resourceType;
 
-  protected final Map<ResourceLocation, TagBuilder> builders = Maps.newLinkedHashMap();
+  protected final Map<Identifier, TagBuilder> builders = Maps.newLinkedHashMap();
 
-  protected AbstractTagProvider(PackOutput packOutput, String modId, String folder, Function<T,ResourceLocation> keyGetter, Predicate<ResourceLocation> staticValuePredicate, ExistingFileHelper existingFileHelper) {
+  protected AbstractTagProvider(PackOutput packOutput, String modId, String folder, Function<T,Identifier> keyGetter, Predicate<Identifier> staticValuePredicate, ExistingFileHelper existingFileHelper) {
     super(packOutput, Target.DATA_PACK, folder);
     this.modId = modId;
     this.keyGetter = keyGetter;
@@ -61,7 +61,7 @@ public abstract class AbstractTagProvider<T> extends GenericDataProvider {
                                                 .filter((value) -> !value.verifyIfPresent(staticValuePredicate, this.builders::containsKey))
                                                 .filter(this::missing)
                                                 .toList();
-      ResourceLocation id = entry.getKey();
+      Identifier id = entry.getKey();
       if (!invalidEntries.isEmpty()) {
         return CompletableFuture.failedFuture(new IllegalArgumentException(String.format("Couldn't define tag %s as it is missing following references: %s", id, invalidEntries.stream().map(Objects::toString).collect(Collectors.joining(",")))));
       } else {
@@ -97,7 +97,7 @@ public abstract class AbstractTagProvider<T> extends GenericDataProvider {
 
   /** Vanillas tag appender does not let us easily replace the key getter, so replace it */
   @SuppressWarnings({"UnusedReturnValue", "unused"})  // API
-  public record TagAppender<T>(String modID, TagBuilder internalBuilder, Function<T,ResourceLocation> keyGetter) {
+  public record TagAppender<T>(String modID, TagBuilder internalBuilder, Function<T,Identifier> keyGetter) {
     /** Adds a value to the tag */
     public TagAppender<T> add(T value) {
       this.internalBuilder.addElement(keyGetter.apply(value));
@@ -112,16 +112,16 @@ public abstract class AbstractTagProvider<T> extends GenericDataProvider {
     }
 
     /** Adds a resource location to the tag */
-    public TagAppender<T> add(ResourceLocation... ids) {
-      for (ResourceLocation id : ids) {
+    public TagAppender<T> add(Identifier... ids) {
+      for (Identifier id : ids) {
         this.internalBuilder.addElement(id);
       }
       return this;
     }
 
     /** Adds an optional ID to the tag */
-    public TagAppender<T> addOptional(ResourceLocation... ids) {
-      for (ResourceLocation id : ids) {
+    public TagAppender<T> addOptional(Identifier... ids) {
+      for (Identifier id : ids) {
         this.internalBuilder.addOptionalElement(id);
       }
       return this;
@@ -137,8 +137,8 @@ public abstract class AbstractTagProvider<T> extends GenericDataProvider {
     }
 
     /** Adds an optional tag to the tag */
-    public TagAppender<T> addOptionalTag(ResourceLocation... tags) {
-      for (ResourceLocation tag : tags) {
+    public TagAppender<T> addOptionalTag(Identifier... tags) {
+      for (Identifier tag : tags) {
         this.internalBuilder.addOptionalTag(tag);
       }
       return this;
@@ -186,7 +186,7 @@ public abstract class AbstractTagProvider<T> extends GenericDataProvider {
      * @param location The ID of the element to remove
      * @return The builder for chaining
      */
-    public TagAppender<T> remove(ResourceLocation location) {
+    public TagAppender<T> remove(Identifier location) {
       internalBuilder.removeElement(location, modID);
       return this;
     }
@@ -196,9 +196,9 @@ public abstract class AbstractTagProvider<T> extends GenericDataProvider {
      * @param locations The IDs of the elements to remove
      * @return The builder for chaining
      */
-    public TagAppender<T> remove(ResourceLocation first, ResourceLocation... locations) {
+    public TagAppender<T> remove(Identifier first, Identifier... locations) {
       this.remove(first);
-      for (ResourceLocation location : locations) {
+      for (Identifier location : locations) {
         this.remove(location);
       }
       return this;

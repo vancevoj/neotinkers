@@ -4,7 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import lombok.RequiredArgsConstructor;
-import net.minecraft.client.model.SkullModelBase;
+import net.minecraft.client.model.object.skull.SkullModelBase;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.world.item.ItemDisplayContext;
@@ -41,7 +41,7 @@ public class BlockModelSkullRenderer extends SkullModelBase {
 
     // from CustomHeadLayer#translateToHead, with final scale adjusted
     poseStack.translate(0.0F, -0.25F, 0.0F);
-    poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
+    poseStack.rotate(Axis.YP.rotationDegrees(180.0F));
     poseStack.scale(0.5F, -0.5F, -0.5F);
 
     // simplified from ItemRender#render
@@ -49,7 +49,7 @@ public class BlockModelSkullRenderer extends SkullModelBase {
     poseStack.translate(-0.5F, -0.5F, -0.5F);
     // we don't really use rotation, but just in case
     if (yRot != 0 || xRot != 0) {
-      poseStack.mulPose((new Quaternionf()).rotationZYX(0, yRot, xRot));
+      poseStack.rotate((new Quaternionf()).rotationZYX(0, yRot, xRot));
     }
     // applying tint is a pain with these, so hope we don't need it
     // 1.21: color is a packed ARGB int

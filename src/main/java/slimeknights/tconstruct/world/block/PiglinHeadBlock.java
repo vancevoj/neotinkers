@@ -1,5 +1,6 @@
 package slimeknights.tconstruct.world.block;
 
+import net.minecraft.world.level.block.entity.BlockEntityTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -29,8 +30,8 @@ public class PiglinHeadBlock extends SkullBlock {
   @Override
   @Nullable
   public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
-    if (pLevel.isClientSide) {
-      return createTickerHelper(pBlockEntityType, BlockEntityType.SKULL, SkullBlockEntity::animation);
+    if (pLevel.isClientSide()) {
+      return createTickerHelper(pBlockEntityType, BlockEntityTypes.SKULL, SkullBlockEntity::animation);
     }
     return null;
   }

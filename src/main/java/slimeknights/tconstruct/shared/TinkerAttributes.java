@@ -1,5 +1,6 @@
 package slimeknights.tconstruct.shared;
 
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -79,11 +80,11 @@ public class TinkerAttributes {
   @SubscribeEvent
   void addAttributes(EntityAttributeModificationEvent event) {
     // player attributes
-    event.add(EntityType.PLAYER, USE_ITEM_SPEED);
-    event.add(EntityType.PLAYER, CRITICAL_DAMAGE);
-    event.add(EntityType.PLAYER, MINING_SPEED_MULTIPLIER);
-    event.add(EntityType.PLAYER, EXPERIENCE_MULTIPLIER);
-    event.add(EntityType.PLAYER, JUMP_COUNT);
+    event.add(EntityTypes.PLAYER, USE_ITEM_SPEED);
+    event.add(EntityTypes.PLAYER, CRITICAL_DAMAGE);
+    event.add(EntityTypes.PLAYER, MINING_SPEED_MULTIPLIER);
+    event.add(EntityTypes.PLAYER, EXPERIENCE_MULTIPLIER);
+    event.add(EntityTypes.PLAYER, JUMP_COUNT);
     // general attributes
     addToAll(event, BOUNCY);
     addToAll(event, PROTECTION_CAP);

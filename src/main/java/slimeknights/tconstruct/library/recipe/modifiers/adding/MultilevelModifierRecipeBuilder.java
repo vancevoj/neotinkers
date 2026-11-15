@@ -2,7 +2,7 @@ package slimeknights.tconstruct.library.recipe.modifiers.adding;
 
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.data.recipes.RecipeOutput;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -93,7 +93,7 @@ public class MultilevelModifierRecipeBuilder extends AbstractMultilevelModifierR
   /* Saving */
 
   @Override
-  public void save(RecipeOutput consumer, ResourceLocation id) {
+  public void save(RecipeOutput consumer, Identifier id) {
     if (inputs.isEmpty() && !allowCrystal) {
       throw new IllegalStateException("Must either have at least 1 input or allow crystal");
     }

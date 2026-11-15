@@ -2,7 +2,7 @@ package slimeknights.tconstruct.tools.client;
 
 import net.minecraft.client.resources.model.Material;
 import net.minecraft.nbt.Tag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import slimeknights.mantle.data.loadable.primitive.IntLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.tconstruct.library.client.materials.MaterialRenderInfo.TintedSprite;
@@ -46,7 +46,7 @@ public record SlimeskullModifierModel(Material small, int skullIndex, int slimeI
   @Override
   public int getColor(IToolStackView tool, ModifierEntry entry, TintedSprite sprite) {
     IModDataView data = tool.getPersistentData();
-    ResourceLocation dyed = TinkerModifiers.dyed.getId();
+    Identifier dyed = TinkerModifiers.dyed.getId();
     if (data.contains(dyed, Tag.TAG_INT)) {
       return 0xFF000000 | data.getInt(dyed);
     } else {
@@ -59,7 +59,7 @@ public record SlimeskullModifierModel(Material small, int skullIndex, int slimeI
   public Object getCacheKey(IToolStackView tool, ModifierEntry modifier) {
     IModDataView data = tool.getPersistentData();
     // only need to cache colors from dyed, if its from the slime we will get it from the material in cache
-    ResourceLocation dyed = TinkerModifiers.dyed.getId();
+    Identifier dyed = TinkerModifiers.dyed.getId();
     if (data.contains(dyed, Tag.TAG_INT)) {
       return data.getInt(dyed);
     }

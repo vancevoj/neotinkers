@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import slimeknights.mantle.data.loadable.Loadables;
 import slimeknights.mantle.data.loadable.common.ColorLoadable;
@@ -30,7 +30,7 @@ public class FixedArmorTextureSupplier implements ArmorTextureSupplier {
     ModifierId.PARSER.nullableField("modifier", s -> s.modifier),
     FixedArmorTextureSupplier::new);
 
-  private final ResourceLocation prefix;
+  private final Identifier prefix;
   private final String suffix;
   private final int color;
   private final int luminosity;
@@ -38,13 +38,13 @@ public class FixedArmorTextureSupplier implements ArmorTextureSupplier {
   private final ModifierId modifier;
   private final TintedArmorTexture[] textures;
 
-  /** @deprecated use {@link #FixedArmorTextureSupplier(ResourceLocation,String,int,int,ModifierId)} */
+  /** @deprecated use {@link #FixedArmorTextureSupplier(Identifier,String,int,int,ModifierId)} */
   @Deprecated(forRemoval = true)
-  public FixedArmorTextureSupplier(ResourceLocation prefix, String suffix, int color, @Nullable ModifierId modifier) {
+  public FixedArmorTextureSupplier(Identifier prefix, String suffix, int color, @Nullable ModifierId modifier) {
     this(prefix, suffix, color, 0, modifier);
   }
 
-  public FixedArmorTextureSupplier(ResourceLocation prefix, String suffix, int color, int luminosity, @Nullable ModifierId modifier) {
+  public FixedArmorTextureSupplier(Identifier prefix, String suffix, int color, int luminosity, @Nullable ModifierId modifier) {
     this.prefix = prefix;
     this.suffix = suffix;
     this.color = color;
@@ -58,17 +58,17 @@ public class FixedArmorTextureSupplier implements ArmorTextureSupplier {
     };
   }
 
-  /** @deprecated use {@link #getTexture(ResourceLocation, String, int, int)} */
+  /** @deprecated use {@link #getTexture(Identifier, String, int, int)} */
   @Nullable
   @Deprecated(forRemoval = true)
-  public static TintedArmorTexture getTexture(ResourceLocation base, String suffix, int color) {
+  public static TintedArmorTexture getTexture(Identifier base, String suffix, int color) {
     return getTexture(base, suffix, color, 0);
   }
 
   /** Gets the texture for the given name */
   @Nullable
-  public static TintedArmorTexture getTexture(ResourceLocation base, String suffix, int color, int luminosity) {
-    ResourceLocation name = base.withSuffix(suffix);
+  public static TintedArmorTexture getTexture(Identifier base, String suffix, int color, int luminosity) {
+    Identifier name = base.withSuffix(suffix);
     if (TEXTURE_VALIDATOR.test(name)) {
       return new TintedArmorTexture(ArmorTextureSupplier.getTexturePath(name), color, luminosity);
     }
@@ -94,7 +94,7 @@ public class FixedArmorTextureSupplier implements ArmorTextureSupplier {
   /* Builder */
 
   /** Creates a new builder instance */
-  public static Builder builder(ResourceLocation base, String variant) {
+  public static Builder builder(Identifier base, String variant) {
     return new Builder(base.withSuffix(variant));
   }
 
@@ -102,7 +102,7 @@ public class FixedArmorTextureSupplier implements ArmorTextureSupplier {
   @Setter
   @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
   public static class Builder {
-    private final ResourceLocation name;
+    private final Identifier name;
     @Nullable
     private ModifierId modifier;
     private int color = -1;

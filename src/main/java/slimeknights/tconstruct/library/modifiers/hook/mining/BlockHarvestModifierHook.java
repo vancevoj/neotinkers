@@ -1,6 +1,6 @@
 package slimeknights.tconstruct.library.modifiers.hook.mining;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.tools.context.ToolHarvestContext;
@@ -59,7 +59,7 @@ public interface BlockHarvestModifierHook {
    */
   interface MarkHarvesting extends BlockHarvestModifierHook {
     /** Flag marking we are currently harvesting. Will be shared by all usages of this hook as its not a problem if its set/removed multiple times. */
-    ResourceLocation HARVESTING_FLAG = TConstruct.getResource("is_harvesting");
+    Identifier HARVESTING_FLAG = TConstruct.getResource("is_harvesting");
 
     @Override
     default void startHarvest(IToolStackView tool, ModifierEntry modifier, ToolHarvestContext context) {

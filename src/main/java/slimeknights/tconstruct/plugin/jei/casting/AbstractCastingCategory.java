@@ -17,9 +17,9 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.AbstractRecipeCategory;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.fluids.FluidStack;
@@ -40,7 +40,7 @@ public abstract class AbstractCastingCategory extends AbstractRecipeCategory<IDi
   private static final String KEY_COOLING_TIME = TConstruct.makeTranslationKey("jei", "casting.time");
   private static final Component CAST_KEPT = TConstruct.makeTranslation("jei", "casting.cast_kept");
   private static final Component CAST_CONSUMED = TConstruct.makeTranslation("jei", "casting.cast_consumed");
-  protected static final ResourceLocation BACKGROUND_LOC = TConstruct.getResource("textures/gui/jei/casting.png");
+  protected static final Identifier BACKGROUND_LOC = TConstruct.getResource("textures/gui/jei/casting.png");
   private static final String CAST_SLOT = "cast";
   private static final String RESULT_SLOT = "result";
   private static final String FLUID_SLOT = "fluid";
@@ -90,7 +90,7 @@ public abstract class AbstractCastingCategory extends AbstractRecipeCategory<IDi
   }
 
   @Override
-  public void draw(IDisplayableCastingRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics graphics, double mouseX, double mouseY) {
+  public void draw(IDisplayableCastingRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphicsExtractor graphics, double mouseX, double mouseY) {
     background.draw(graphics);
   }
 
@@ -186,7 +186,7 @@ public abstract class AbstractCastingCategory extends AbstractRecipeCategory<IDi
 
   @Nullable
   @Override
-  public ResourceLocation getRegistryName(IDisplayableCastingRecipe recipe) {
+  public Identifier getRegistryName(IDisplayableCastingRecipe recipe) {
     return recipe.getRecipeId();
   }
 

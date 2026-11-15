@@ -3,7 +3,7 @@ package slimeknights.tconstruct.tools.recipe;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import slimeknights.mantle.data.loadable.field.ContextKey;
@@ -46,7 +46,7 @@ public class ToggleInteractionWorktableRecipe extends AbstractWorktableRecipe {
   /** Cached list of modifiers shown in JEI */
   private List<ModifierEntry> filteredModifiers = null;
 
-  public ToggleInteractionWorktableRecipe(ResourceLocation id, Ingredient toolRequirement, List<SizedIngredient> inputs) {
+  public ToggleInteractionWorktableRecipe(Identifier id, Ingredient toolRequirement, List<SizedIngredient> inputs) {
     super(id, toolRequirement, inputs);
   }
 
