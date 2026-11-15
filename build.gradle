@@ -54,6 +54,10 @@ neoForge {
         }
         client {
             client()
+            // headless smoke tests: -PquickPlay=<world> opens that existing singleplayer world from run/saves
+            if (project.hasProperty('quickPlay')) {
+                programArguments.addAll('--quickPlaySingleplayer', project.property('quickPlay').toString())
+            }
         }
         server {
             server()

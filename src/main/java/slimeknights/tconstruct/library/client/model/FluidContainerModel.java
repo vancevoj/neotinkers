@@ -57,6 +57,7 @@ import net.minecraft.world.entity.ItemOwner;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.client.model.AbstractUnbakedModel;
 import net.neoforged.neoforge.client.model.ComposedModelState;
 import net.neoforged.neoforge.client.model.ExtendedUnbakedGeometry;
@@ -99,12 +100,12 @@ public class FluidContainerModel extends AbstractUnbakedModel {
   /** Transformation flipping the model for gases */
   private static final Transformation FLIP_TRANSFORM = new Transformation(null, new Quaternionf(0, 0, 1, 0), null, null);
 
-  /** Fluid to display, if empty uses the contained fluid */
-  private final FluidStack fluid;
+  /** Fluid to display, if empty uses the contained fluid. Stored as a fluid as stacks cannot be created before components are bound */
+  private final Fluid fluid;
   /** If true, lighter than air fluids flip the model */
   private final boolean flipGas;
 
-  public FluidContainerModel(StandardModelParameters parameters, FluidStack fluid, boolean flipGas) {
+  public FluidContainerModel(StandardModelParameters parameters, Fluid fluid, boolean flipGas) {
     super(parameters);
     this.fluid = fluid;
     this.flipGas = flipGas;
@@ -112,11 +113,10 @@ public class FluidContainerModel extends AbstractUnbakedModel {
 
   /** Deserializes this model from JSON */
   public static FluidContainerModel deserialize(JsonObject json, JsonDeserializationContext context) {
-    FluidStack fluidStack = FluidStack.EMPTY;
+    Fluid fluid = Fluids.EMPTY;
     // parse the fluid
     if (json.has("fluid")) {
       JsonElement fluidElement = json.get("fluid");
-      Fluid fluid;
       if (fluidElement.isJsonObject()) {
         JsonObject fluidObject = fluidElement.getAsJsonObject();
         fluid = Loadables.FLUID.getIfPresent(fluidObject, "name");
@@ -124,10 +124,9 @@ public class FluidContainerModel extends AbstractUnbakedModel {
       } else {
         fluid = Loadables.FLUID.convert(fluidElement, "fluid");
       }
-      fluidStack = new FluidStack(fluid, FluidType.BUCKET_VOLUME);
     }
     boolean flipGas = GsonHelper.getAsBoolean(json, "flip_gas", true);
-    return new FluidContainerModel(StandardModelParameters.parse(json, context), fluidStack, flipGas);
+    return new FluidContainerModel(StandardModelParameters.parse(json, context), fluid, flipGas);
   }
 
   /** Gets the given material, or null if the texture is not present in the model */
@@ -200,7 +199,7 @@ public class FluidContainerModel extends AbstractUnbakedModel {
 
       // fetch the fluid settings
       FluidContainerModel containerModel = SimpleBlockModel.findModel(resolved, FluidContainerModel.class);
-      FluidStack fluid = FluidStack.EMPTY;
+      Fluid fluid = Fluids.EMPTY;
       boolean flipGas = true;
       if (containerModel != null) {
         fluid = containerModel.fluid;
@@ -238,7 +237,11 @@ public class FluidContainerModel extends AbstractUnbakedModel {
     private final ModelBaker baker;
     private final Matrix4fc transformation;
     private final ItemTransforms itemTransforms;
-    private final FluidStack fluid;
+    /** Fixed fluid from the model, {@link Fluids#EMPTY} to use the contained fluid */
+    private final Fluid fluid;
+    /** Stack for {@link #fluid}, created on first render as components are not bound while models bake */
+    @Nullable
+    private FluidStack fixedStack;
     private final boolean flipGas;
     @Nullable
     private final Material.Baked base;
@@ -249,7 +252,7 @@ public class FluidContainerModel extends AbstractUnbakedModel {
     /** Model to use when no fluid is present */
     private final ItemModel empty;
 
-    private Baked(ModelBaker baker, Matrix4fc transformation, ItemTransforms itemTransforms, FluidStack fluid, boolean flipGas,
+    private Baked(ModelBaker baker, Matrix4fc transformation, ItemTransforms itemTransforms, Fluid fluid, boolean flipGas,
                   @Nullable Material.Baked base, @Nullable Material.Baked fluidMask, @Nullable Material.Baked particle) {
       this.baker = baker;
       this.transformation = transformation;
@@ -330,9 +333,14 @@ public class FluidContainerModel extends AbstractUnbakedModel {
     @Override
     public void update(ItemStackRenderState output, ItemStack stack, ItemModelResolver resolver, ItemDisplayContext displayContext, @Nullable ClientLevel level, @Nullable ItemOwner owner, int seed) {
       // only do contained fluid if we did not set the fluid in the model properties
-      FluidStack fluid = this.fluid;
-      if (fluid.isEmpty()) {
+      FluidStack fluid;
+      if (this.fluid == Fluids.EMPTY) {
         fluid = FluidUtil.getFirstStackContained(stack);
+      } else {
+        if (fixedStack == null) {
+          fixedStack = new FluidStack(this.fluid, FluidType.BUCKET_VOLUME);
+        }
+        fluid = fixedStack;
       }
       ItemModel model = empty;
       if (!fluid.isEmpty()) {
