@@ -25,6 +25,7 @@ import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.modifiers.hook.build.ConditionalStatModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.interaction.InventoryTickModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.interaction.SlotStackModifierHook;
+import slimeknights.tconstruct.library.modifiers.modules.build.RarityModule;
 import slimeknights.tconstruct.library.tools.IndestructibleItemEntity;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinition;
 import slimeknights.tconstruct.library.tools.definition.module.display.ToolNameHook;
@@ -33,6 +34,7 @@ import slimeknights.tconstruct.library.tools.helper.ToolBuildHandler;
 import slimeknights.tconstruct.library.tools.helper.TooltipUtil;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
+import slimeknights.tconstruct.library.tools.part.MaterialItem;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
 import slimeknights.tconstruct.tools.entity.ModifiableArrow;
 
@@ -112,8 +114,6 @@ public class ModifiableArrowItem extends ArrowItem implements IModifiableDisplay
     // however, if a modifier wants to glow let them
     return ModifierUtil.checkVolatileFlag(stack, SHINY);
   }
-  // TODO(neoport): dynamic rarity (RarityModule.getRarity) now lives in the RARITY data component (getRarity override
-  //  removed in 1.21); applied at tool build time. Owned by the build pipeline.
 
 
   /* Indestructible items */
@@ -152,7 +152,8 @@ public class ModifiableArrowItem extends ArrowItem implements IModifiableDisplay
 
   @Override
   public Component getName(ItemStack stack) {
-    return ToolNameHook.getName(getToolDefinition(), stack);
+    // 1.21 removed Item#getRarity(ItemStack), so style the name with the tool rarity directly
+    return MaterialItem.withRarity(ToolNameHook.getName(getToolDefinition(), stack), RarityModule.getRarity(stack));
   }
 
   @Override
