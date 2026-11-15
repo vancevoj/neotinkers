@@ -25,6 +25,8 @@ import slimeknights.tconstruct.library.modifiers.ModifierId;
 import slimeknights.tconstruct.library.modifiers.ModifierManager;
 import slimeknights.tconstruct.library.modifiers.hook.build.ModifierTraitHook.TraitBuilder;
 import slimeknights.tconstruct.library.tools.SlotType;
+import slimeknights.tconstruct.library.tools.capability.inventory.ToolInventoryCapability;
+import slimeknights.tconstruct.library.tools.capability.inventory.ToolInventoryCapability.InventoryModifierHook;
 import slimeknights.tconstruct.library.tools.context.ToolRebuildContext;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinition;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinitionData;
@@ -67,6 +69,19 @@ public class ToolStack implements IToolStackView {
   public static final String TAG_VOLATILE_MOD_DATA = "tic_volatile_data"; // TODO: consider dropping "_data" from the key for consistency
   /** Tag for merged modifiers of upgrades and traits */
   public static final String TAG_MODIFIERS = "tic_modifiers";
+  /** Tag for the {@link #DATA_VERSION} the tool was last rebuilt with */
+  public static final String TAG_DATA_VERSION = "tic_data_version";
+
+  /**
+   * Version of the data tools are rebuilt with. Before data components, tools rebuilt every time they loaded from NBT, which picked up
+   * material, modifier and tool definition changes from updates. Components have no load hook (verifyComponentsAfterLoad also runs on
+   * every copy), so instead tools that were last rebuilt with an older version get rebuilt once by {@link #ensureHasData()}.
+   * Bump this when an update changes tool data in a way existing tools need to be rebuilt for.
+   * <ul>
+   *   <li>1: Tinkers' Construct 3.12 data, the first versioned data</li>
+   * </ul>
+   */
+  public static final int DATA_VERSION = 1;
 
   // vanilla tags
   public static final String TAG_DAMAGE = "Damage";
@@ -74,7 +89,7 @@ public class ToolStack implements IToolStackView {
   private static final String TAG_HIDE_FLAGS = "HideFlags";
 
   /** List of tags to disallow editing for the relevant modifier hooks, disallows all tags we touch. Ignores unbreakable as we only look at that tag for vanilla compat */
-  private static final Set<String> RESTRICTED_TAGS = ImmutableSet.of(TAG_MATERIALS, TAG_STATS, TAG_MULTIPLIERS, TAG_PERSISTENT_MOD_DATA, TAG_VOLATILE_MOD_DATA, TAG_UPGRADES, TAG_MODIFIERS, TAG_BROKEN, TAG_DAMAGE, TAG_HIDE_FLAGS);
+  private static final Set<String> RESTRICTED_TAGS = ImmutableSet.of(TAG_MATERIALS, TAG_STATS, TAG_MULTIPLIERS, TAG_PERSISTENT_MOD_DATA, TAG_VOLATILE_MOD_DATA, TAG_UPGRADES, TAG_MODIFIERS, TAG_BROKEN, TAG_DAMAGE, TAG_HIDE_FLAGS, TAG_DATA_VERSION);
 
   /** Item representing this tool */
   @Getter
@@ -757,20 +772,59 @@ public class ToolStack implements IToolStackView {
     return null;
   }
 
-  /** Called on inventory tick to ensure the tool has all required data including materials and starting slots, prevents tools with no stats from existing */
+  /**
+   * Called on inventory tick to ensure the tool has all required data including materials and starting slots, prevents tools with no stats from existing.
+   * Also rebuilds tools last built with an older {@link #DATA_VERSION} once, see {@link #isOutdated(CompoundTag)}.
+   */
   public void ensureHasData() {
     // if we try initializing before datapacks load we will get garbage data
     if (definition.isDataLoaded()) {
+      // tools saved by an older version still have the traits, stats and materials of the data they were built with
+      boolean outdated = isOutdated(nbt);
+      if (outdated) {
+        resolveMaterialRedirects();
+      }
       // check if missing materials; either means we have none or too few
       MissingMaterialsToolHook missingMaterials = definition.getHook(ToolHooks.MISSING_MATERIALS);
       boolean needsMaterials = definition.hasMaterials() && (!nbt.contains(TAG_MATERIALS, Tag.TAG_LIST) || missingMaterials.needsMaterials(definition, nbt.getList(TAG_MATERIALS, Tag.TAG_STRING).size()));
-      // build data if we either lack data (signified by no stats) or we lack materials but expect them
-      if (needsMaterials || !isInitialized(nbt)) {
+      // build data if we either lack data (signified by no stats), we lack materials but expect them, or the data is outdated
+      if (needsMaterials || outdated || !isInitialized(nbt)) {
         // randomize materials if missing
         if (needsMaterials) {
           setMaterialsRaw(missingMaterials.fillMaterials(definition, getMaterials(), RandomSource.create()));
         }
         rebuildStats();
+        // tools stored inside this tool never tick, so update them along with this tool. Skipped if the rebuild did not happen
+        if (outdated && !isOutdated(nbt)) {
+          updateStoredTools();
+        }
+      }
+    }
+  }
+
+  /** Replaces any materials on this tool that redirect to another material, as tools did on load before data components */
+  private void resolveMaterialRedirects() {
+    if (MaterialRegistry.isFullyLoaded() && nbt.contains(TAG_MATERIALS, Tag.TAG_LIST)) {
+      MaterialIdNBT stored = MaterialIdNBT.readFromNBT(nbt.getList(TAG_MATERIALS, Tag.TAG_STRING));
+      MaterialIdNBT resolved = stored.resolveRedirects();
+      if (resolved != stored) {
+        resolved.updateNBT(nbt);
+        materials = null;
+        syncToStack();
+      }
+    }
+  }
+
+  /** Rebuilds outdated tools stored in this tool's inventories, such as ammo in a quiver */
+  private void updateStoredTools() {
+    for (ModifierEntry entry : getModifierList()) {
+      InventoryModifierHook inventory = entry.getHook(ToolInventoryCapability.HOOK);
+      int slots = inventory.getSlots(this, entry);
+      for (int i = 0; i < slots; i++) {
+        ItemStack stored = inventory.getStack(this, entry, i);
+        if (updateDataVersion(stored)) {
+          inventory.setStack(this, entry, i, stored);
+        }
       }
     }
   }
@@ -843,6 +897,8 @@ public class ToolStack implements IToolStackView {
     for (ModifierEntry entry : modifierList) {
       entry.getHook(ModifierHooks.RAW_DATA).addRawData(this, entry, getRestrictedNBT());
     }
+    // mark the tool as built with the current data so ensureHasData does not rebuild it again
+    nbt.putInt(TAG_DATA_VERSION, DATA_VERSION);
     // flush any raw data mutations (which write directly to nbt via the restricted tag) back to the backing stack
     syncToStack();
   }
@@ -867,6 +923,34 @@ public class ToolStack implements IToolStackView {
    */
   public static boolean isInitialized(CompoundTag tag) {
     return tag.contains(TAG_STATS, Tag.TAG_COMPOUND);
+  }
+
+  /**
+   * Checks if the given tool data was last rebuilt with an older {@link #DATA_VERSION} and needs a one time rebuild.
+   * Uninitialized tools are handled by {@link #ensureHasData()} as before, and display tools (e.g. in JEI) are never rebuilt.
+   * @param tag  Tool data
+   * @return  True if the tool needs a rebuild
+   */
+  public static boolean isOutdated(CompoundTag tag) {
+    return tag.getInt(TAG_DATA_VERSION) < DATA_VERSION && isInitialized(tag) && !tag.getBoolean(TooltipUtil.KEY_DISPLAY);
+  }
+
+  /**
+   * Rebuilds the tool in the given stack if it was last built with an older {@link #DATA_VERSION}. Use for tools that load without
+   * ticking in an inventory, such as tools in chests. Cheap for current tools and non-tools, so safe to call on any loaded stack.
+   * @param stack  Stack to update, modified in place
+   * @return  True if the tool was outdated and got rebuilt
+   */
+  public static boolean updateDataVersion(ItemStack stack) {
+    if (stack.getItem() instanceof IModifiable) {
+      CompoundTag tag = ToolDataComponents.getTag(stack);
+      if (tag != null && isOutdated(tag)) {
+        ToolStack tool = ToolStack.from(stack);
+        tool.ensureHasData();
+        return !isOutdated(tool.nbt);
+      }
+    }
+    return false;
   }
 
   /**

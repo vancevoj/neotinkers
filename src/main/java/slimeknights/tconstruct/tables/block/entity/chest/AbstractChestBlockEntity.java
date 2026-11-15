@@ -15,6 +15,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import slimeknights.mantle.block.entity.NameableBlockEntity;
 import slimeknights.tconstruct.TConstruct;
+import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.tables.block.entity.inventory.IChestItemHandler;
 import slimeknights.tconstruct.tables.menu.TinkerChestContainerMenu;
 
@@ -74,7 +75,11 @@ public abstract class AbstractChestBlockEntity extends NameableBlockEntity {
         continue;
       }
       try {
-        ItemStack.parse(registries, itemTags).ifPresent(stack -> itemHandler.setStackInSlot(slot, stack));
+        ItemStack.parse(registries, itemTags).ifPresent(stack -> {
+          itemHandler.setStackInSlot(slot, stack);
+          // tools in chests never tick, so rebuild tools saved by an older version as they load
+          ToolStack.updateDataVersion(stack);
+        });
       } catch (Exception e) {
         TConstruct.LOG.error("Skipping unloadable item in Tinkers' chest at {} slot {}: {}", getBlockPos(), slot, e.toString());
       }

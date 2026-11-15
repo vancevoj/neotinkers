@@ -47,6 +47,7 @@ import slimeknights.tconstruct.library.tools.nbt.IToolContext;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.ModDataNBT;
 import slimeknights.tconstruct.library.tools.nbt.ToolDataNBT;
+import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 
 import javax.annotation.Nullable;
 import java.util.BitSet;
@@ -158,6 +159,9 @@ public class InventoryModule implements ModifierModule, InventoryModifierHook, V
   @Override
   public void setStack(IToolStackView tool, ModifierEntry modifier, int slot, ItemStack stack) {
     if (slot < getSlots(tool, modifier)) {
+      // stored tools never tick, so ensure a tool saved by an older version (e.g. placed straight from the cursor) is rebuilt before storing
+      // tools already stored when this tool was saved by an older version are updated when this tool rebuilds
+      ToolStack.updateDataVersion(stack);
       ListTag list;
       ModDataNBT modData = tool.getPersistentData();
       // if the tag exists, fetch it
