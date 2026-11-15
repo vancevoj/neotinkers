@@ -40,7 +40,6 @@ import net.neoforged.neoforge.common.crafting.CompoundIngredient;
 import net.neoforged.neoforge.common.crafting.DifferenceIngredient;
 import net.neoforged.neoforge.common.conditions.ICondition;
 import net.neoforged.neoforge.common.conditions.ModLoadedCondition;
-import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.FluidType;
 import slimeknights.mantle.datagen.MantleTags;
 import slimeknights.mantle.recipe.condition.TagFilledCondition;
@@ -49,6 +48,7 @@ import slimeknights.mantle.recipe.data.ConsumerWrapperBuilder;
 import slimeknights.mantle.recipe.data.ICommonRecipeHelper;
 import slimeknights.mantle.recipe.data.ItemNameIngredient;
 import slimeknights.mantle.recipe.data.ItemNameOutput;
+import slimeknights.mantle.recipe.helper.FluidOutput;
 import slimeknights.mantle.recipe.helper.ItemOutput;
 import slimeknights.mantle.recipe.ingredient.EntityIngredient;
 import slimeknights.mantle.recipe.ingredient.FluidIngredient;
@@ -1194,7 +1194,7 @@ public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelt
     // water
     String waterFolder = folder + "water/";
     ItemCastingRecipeBuilder.basinRecipe(Blocks.MUD)
-                            .setFluidAndTime(new FluidStack(Fluids.WATER, FluidValues.BOTTLE))
+                            .setFluidAndTime(Fluids.WATER, FluidValues.BOTTLE)
                             .setCast(new BlockTagIngredient(BlockTags.CONVERTIBLE_TO_MUD).toVanilla(), true)
                             .save(consumer, location(waterFolder + "mud"));
     ItemCastingRecipeBuilder.tableRecipe(ItemOutput.fromTemplate(waterPotion(Items.POTION)))
@@ -1221,7 +1221,7 @@ public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelt
     // casting concrete
     BiConsumer<Block,Block> concreteCasting = (powder, block) ->
       ItemCastingRecipeBuilder.basinRecipe(block)
-                              .setFluidAndTime(new FluidStack(Fluids.WATER, FluidType.BUCKET_VOLUME / 10))
+                              .setFluidAndTime(Fluids.WATER, FluidType.BUCKET_VOLUME / 10)
                               .setCast(powder, true)
                               .save(consumer, prefix(id(block), waterFolder));
     concreteCasting.accept(Blocks.CONCRETE_POWDER.white(),      Blocks.CONCRETE.white());
@@ -1850,9 +1850,9 @@ public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelt
     // fuels
     MeltingFuelBuilder.solid(800)
                       .save(consumer, location(folder + "fuel/solid"));
-    MeltingFuelBuilder.fuel(new FluidStack(Fluids.LAVA, 50), 100)
+    MeltingFuelBuilder.fuel(Fluids.LAVA, 50, 100)
                       .save(consumer, location(folder + "fuel/lava"));
-    MeltingFuelBuilder.fuel(new FluidStack(TinkerFluids.blazingBlood.get(), 50), 150)
+    MeltingFuelBuilder.fuel(TinkerFluids.blazingBlood.get(), 50, 150)
                       .save(consumer, location(folder + "fuel/blaze"));
   }
 
@@ -2150,7 +2150,7 @@ public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelt
                               .save(consumer, location(folder + "strength"));
 
     // melt skeletons to get the milk out
-    EntityMeltingRecipeBuilder.melting(EntityIngredient.of(TinkerTags.EntityTypes.MELTABLE_SKELETON), new FluidStack(NeoForgeMod.MILK.get(), FluidType.BUCKET_VOLUME / 10))
+    EntityMeltingRecipeBuilder.melting(EntityIngredient.of(TinkerTags.EntityTypes.MELTABLE_SKELETON), FluidOutput.fromFluid(NeoForgeMod.MILK.get(), FluidType.BUCKET_VOLUME / 10))
                               .save(consumer, location(folder + "skeletons"));
     MeltingRecipeBuilder.melting(Ingredient.of(Items.SKELETON_SKULL, Items.WITHER_SKELETON_SKULL, TinkerWorld.heads.get(TinkerHeadType.STRAY)), NeoForgeMod.MILK.get(), FluidType.BUCKET_VOLUME / 4)
                         .save(consumer, location(headFolder + "skeleton"));
@@ -2173,7 +2173,7 @@ public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelt
     // 4 * 9 gives 36, which is larger
     EntityMeltingRecipeBuilder.melting(EntityIngredient.of(EntityTypes.IRON_GOLEM), TinkerFluids.moltenIron.result(FluidValues.NUGGET), 4)
                               .save(consumer, location(folder + "iron_golem"));
-    EntityMeltingRecipeBuilder.melting(EntityIngredient.of(EntityTypes.SNOW_GOLEM), new FluidStack(Fluids.WATER, FluidType.BUCKET_VOLUME / 10))
+    EntityMeltingRecipeBuilder.melting(EntityIngredient.of(EntityTypes.SNOW_GOLEM), FluidOutput.fromFluid(Fluids.WATER, FluidType.BUCKET_VOLUME / 10))
                               .save(consumer, location(folder + "snow_golem"));
 
     // "melt" blazes to get fuel
@@ -2435,12 +2435,12 @@ public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelt
 
     // lava bricks, lava byproduct
     MeltingRecipeBuilder.melting(ceramicsItem.apply("lava_bricks_slab"), TinkerFluids.moltenClay, FluidValues.BRICK * 2, 1.33f)
-      .addByproduct(new FluidStack(Fluids.LAVA, lavaPerBlock / 2))
+      .addByproduct(FluidOutput.fromFluid(Fluids.LAVA, lavaPerBlock / 2))
       .save(ceramicsConsumer, location(clayFolder + "lava_bricks_slab"));
     MeltingRecipeBuilder.melting(ItemNameIngredient.from(
       ceramicsId.apply("lava_bricks"), ceramicsId.apply("lava_bricks_stairs"), ceramicsId.apply("lava_bricks_wall")
     ).toVanilla(), TinkerFluids.moltenClay, FluidValues.BRICK_BLOCK, 2f)
-      .addByproduct(new FluidStack(Fluids.LAVA, lavaPerBlock))
+      .addByproduct(FluidOutput.fromFluid(Fluids.LAVA, lavaPerBlock))
       .save(ceramicsConsumer, location(clayFolder + "lava_bricks_block"));
 
     // gauge, partially glass
@@ -2524,19 +2524,19 @@ public class SmelteryRecipeProvider extends BaseRecipeProvider implements ISmelt
     // lava bricks
     ItemCastingRecipeBuilder.basinRecipe(ceramicsOutput.apply("lava_bricks"))
       .setCast(Blocks.BRICKS, true)
-      .setFluidAndTime(new FluidStack(Fluids.LAVA, lavaPerBlock))
+      .setFluidAndTime(Fluids.LAVA, lavaPerBlock)
       .save(ceramicsConsumer, location(castingFolder + "lava_bricks"));
     ItemCastingRecipeBuilder.basinRecipe(ceramicsOutput.apply("lava_bricks_slab"))
       .setCast(Blocks.BRICK_SLAB, true)
-      .setFluidAndTime(new FluidStack(Fluids.LAVA, lavaPerBlock / 2))
+      .setFluidAndTime(Fluids.LAVA, lavaPerBlock / 2)
       .save(ceramicsConsumer, location(castingFolder + "lava_bricks_slab"));
     ItemCastingRecipeBuilder.basinRecipe(ceramicsOutput.apply("lava_bricks_stairs"))
       .setCast(Blocks.BRICK_STAIRS, true)
-      .setFluidAndTime(new FluidStack(Fluids.LAVA, lavaPerBlock))
+      .setFluidAndTime(Fluids.LAVA, lavaPerBlock)
       .save(ceramicsConsumer, location(castingFolder + "lava_bricks_stairs"));
     ItemCastingRecipeBuilder.basinRecipe(ceramicsOutput.apply("lava_bricks_wall"))
       .setCast(Blocks.BRICK_WALL, true)
-      .setFluidAndTime(new FluidStack(Fluids.LAVA, lavaPerBlock))
+      .setFluidAndTime(Fluids.LAVA, lavaPerBlock)
       .save(ceramicsConsumer, location(castingFolder + "lava_bricks_wall"));
 
     // golden bricks

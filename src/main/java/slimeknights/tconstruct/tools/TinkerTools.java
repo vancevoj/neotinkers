@@ -40,6 +40,7 @@ import slimeknights.tconstruct.common.data.tags.MaterialTagProvider;
 import slimeknights.tconstruct.library.client.data.material.GeneratorPartTextureJsonGenerator;
 import slimeknights.tconstruct.library.client.data.material.MaterialPaletteDebugGenerator;
 import slimeknights.tconstruct.library.client.data.material.MaterialPartTextureGenerator;
+import slimeknights.tconstruct.library.client.model.data.TinkerClientItemProvider;
 import slimeknights.tconstruct.library.json.loot.AddToolDataFunction;
 import slimeknights.tconstruct.library.json.predicate.tool.HasMaterialPredicate;
 import slimeknights.tconstruct.library.json.predicate.tool.HasModifierPredicate;
@@ -440,8 +441,10 @@ public final class TinkerTools extends TinkerModule {
     event.recipe(MaterialRecipeProvider::new);
   }
 
+  /** The single client data run generates both assets and data in 26.3, so server data providers also go on the client event */
   @SubscribeEvent
-  void gatherServerData(final GatherDataEvent.Server event) {
+  void gatherData(final GatherDataEvent.Client event) {
+    // server data
     // ExistingFileHelper is gone, providers that validated files read the resources directly
     ResourceManager serverResources = event.getResourceManager(PackType.SERVER_DATA);
     MaterialDataProvider materials = event.createProvider(MaterialDataProvider::new);
@@ -450,12 +453,12 @@ public final class TinkerTools extends TinkerModule {
     event.createProvider(ToolDefinitionDataProvider::new);
     event.createProvider(StationSlotLayoutProvider::new);
     event.createProvider(output -> new MaterialTagProvider(output, serverResources));
-  }
 
-  @SubscribeEvent
-  void gatherClientData(final GatherDataEvent.Client event) {
+    // assets
     ResourceManager clientResources = event.getResourceManager(PackType.CLIENT_RESOURCES);
     event.createProvider(output -> new ToolItemModelProvider(output, clientResources));
+    // client item definitions (assets/tconstruct/items), for every Tinkers item
+    event.createProvider(output -> new TinkerClientItemProvider(output, clientResources));
     TinkerMaterialSpriteProvider materialSprites = new TinkerMaterialSpriteProvider();
     TinkerPartSpriteProvider partSprites = new TinkerPartSpriteProvider();
     event.createProvider(output -> new MaterialRenderInfoProvider(output, materialSprites, clientResources));

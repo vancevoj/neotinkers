@@ -79,6 +79,9 @@ public class TinkerClientItemProvider extends GenericDataProvider {
     "terracube_spawn_egg", new int[] {0xFFAFB9D6, 0xFFA1A7B1}
   );
 
+  /** Items only registered when another mod is loaded, such as the minotaur axe with Twilight Forest. Datagen runs without those mods, but the client item is still needed */
+  private static final List<Identifier> CONDITIONAL_ITEMS = List.of(TConstruct.getResource("minotaur_axe"));
+
   private final ResourceManager resourceManager;
   private final String modId;
 
@@ -101,6 +104,15 @@ public class TinkerClientItemProvider extends GenericDataProvider {
       if (id.getNamespace().equals(modId)) {
         try {
           futures.add(saveJson(cache, id, definition(id, entry.getValue(), blockTinted)));
+        } catch (IOException e) {
+          return CompletableFuture.failedFuture(e);
+        }
+      }
+    }
+    for (Identifier id : CONDITIONAL_ITEMS) {
+      if (id.getNamespace().equals(modId) && !BuiltInRegistries.ITEM.containsKey(id)) {
+        try {
+          futures.add(saveJson(cache, id, definition(id, null, blockTinted)));
         } catch (IOException e) {
           return CompletableFuture.failedFuture(e);
         }
@@ -232,8 +244,8 @@ public class TinkerClientItemProvider extends GenericDataProvider {
     return item != null ? getFallbackType(item) : null;
   }
 
-  /** Creates the definition for the given item */
-  private JsonObject definition(Identifier id, Item item, Set<Item> blockTinted) throws IOException {
+  /** Creates the definition for the given item, item is null for {@link #CONDITIONAL_ITEMS} that are not registered */
+  private JsonObject definition(Identifier id, @Nullable Item item, Set<Item> blockTinted) throws IOException {
     Identifier model = id.withPrefix("item/");
     ModelInfo info = getModelInfo(model);
     String type = getType(model, item);

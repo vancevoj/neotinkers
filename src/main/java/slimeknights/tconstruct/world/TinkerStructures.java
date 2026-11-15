@@ -107,11 +107,12 @@ public final class TinkerStructures extends TinkerModule {
   public static final ResourceKey<StructureSet> endSkyIsland = key(Registries.STRUCTURE_SET, "end_sky_island");
 
 
+  /** The single client data run generates both assets and data in 26.3, so server data providers also go on the client event */
   @SubscribeEvent
-  void gatherData(final GatherDataEvent.Server event) {
+  void gatherData(final GatherDataEvent.Client event) {
     // structure templates are read from the mod data pack
     event.createProvider(packOutput -> new StructureRepalleter(packOutput, event.getResourceManager(PackType.SERVER_DATA)));
 //    event.createProvider(packOutput -> new StructureUpdater(packOutput, event.getResourceManager(PackType.SERVER_DATA), TConstruct.MOD_ID, Target.DATA_PACK, "structures"));
-//    client run: event.createProvider(packOutput -> new StructureUpdater(packOutput, event.getResourceManager(PackType.CLIENT_RESOURCES), TConstruct.MOD_ID, Target.RESOURCE_PACK, "book/structures"));
+//    event.createProvider(packOutput -> new StructureUpdater(packOutput, event.getResourceManager(PackType.CLIENT_RESOURCES), TConstruct.MOD_ID, Target.RESOURCE_PACK, "book/structures"));
   }
 }

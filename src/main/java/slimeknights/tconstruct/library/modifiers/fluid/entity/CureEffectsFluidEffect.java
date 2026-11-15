@@ -2,11 +2,10 @@ package slimeknights.tconstruct.library.modifiers.fluid.entity;
 
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 import net.neoforged.neoforge.fluids.FluidStack;
-import slimeknights.mantle.data.loadable.common.ItemStackLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
+import slimeknights.mantle.recipe.helper.ItemOutput;
 import slimeknights.tconstruct.library.modifiers.fluid.FluidAction;
 import slimeknights.tconstruct.library.utils.TinkerEffectCures;
 import slimeknights.tconstruct.library.modifiers.fluid.EffectLevel;
@@ -16,13 +15,13 @@ import slimeknights.tconstruct.library.modifiers.fluid.FluidEffectContext.Entity
 
 /**
  * Effect to clear all effects using the given stack
- * @param stack  Stack used for curing, standard is milk bucket
+ * @param stack  Stack used for curing, standard is milk bucket. Wrapped in an output as stacks cannot be created while data loads.
  */
-public record CureEffectsFluidEffect(ItemStack stack) implements FluidEffect<FluidEffectContext.Entity> {
-  public static final RecordLoadable<CureEffectsFluidEffect> LOADER = RecordLoadable.create(ItemStackLoadable.REQUIRED_ITEM.requiredField("item", e -> e.stack), CureEffectsFluidEffect::new);
+public record CureEffectsFluidEffect(ItemOutput stack) implements FluidEffect<FluidEffectContext.Entity> {
+  public static final RecordLoadable<CureEffectsFluidEffect> LOADER = RecordLoadable.create(ItemOutput.Loadable.REQUIRED_ITEM.requiredField("item", e -> e.stack), CureEffectsFluidEffect::new);
 
   public CureEffectsFluidEffect(ItemLike item) {
-    this(new ItemStack(item));
+    this(ItemOutput.fromItem(item));
   }
 
   @Override
@@ -30,7 +29,7 @@ public record CureEffectsFluidEffect(ItemStack stack) implements FluidEffect<Flu
     LivingEntity target = context.getLivingTarget();
     if (target != null && level.isFull()) {
       // 26.3: NeoForge EffectCure tokens are gone, TinkerEffectCures tracks which items cure an effect (milk also cures effects with default cures)
-      Item item = stack.getItem();
+      Item item = stack.get().getItem();
       // when simulating, search the effects list directly for curative effects
       // may still be wrong if the event cancels things though, no way to safely simulate it
       if (action.simulate()) {

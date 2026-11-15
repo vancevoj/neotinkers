@@ -39,8 +39,8 @@ public final class ToolActionTransformHelper {
   public static final ItemAbility AXE_WAX_OFF = ItemAbility.get("axe_wax_off");
   /** Legacy ability to make a path, handled by the {@link BlockTransformers#SHOVEL} transformer */
   public static final ItemAbility SHOVEL_FLATTEN = ItemAbility.get("shovel_flatten");
-  /** Legacy ability to till farmland, handled by the {@link BlockTransformers#HOE} transformer */
-  public static final ItemAbility HOE_TILL = ItemAbility.get("hoe_till");
+  /** Legacy ability to till farmland, handled by the {@link BlockTransformers#HOE} transformer. The NeoForge 1.21.1 id was "till", existing datapacks use it */
+  public static final ItemAbility HOE_TILL = ItemAbility.get("till");
 
   /**
    * Result of a block transform

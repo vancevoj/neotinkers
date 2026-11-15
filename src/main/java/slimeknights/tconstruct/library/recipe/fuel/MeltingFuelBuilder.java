@@ -7,6 +7,7 @@ import lombok.experimental.Accessors;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.fluids.FluidStack;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import slimeknights.mantle.data.loadable.Loadables;
@@ -45,6 +46,17 @@ public class MeltingFuelBuilder extends AbstractRecipeBuilder<MeltingFuelBuilder
    */
   public static MeltingFuelBuilder fuel(FluidStack fluid, int duration) {
     return fuel(FluidIngredient.of(fluid), duration, getTemperature(fluid));
+  }
+
+  /**
+   * Creates a new builder instance with automatic temperature. Unlike {@link #fuel(FluidStack, int)}, safe to use in datagen as no stack is created.
+   * @param fluid     Fuel fluid
+   * @param amount    Fluid amount consumed
+   * @param duration  Fluid duration
+   * @return  Builder instance
+   */
+  public static MeltingFuelBuilder fuel(Fluid fluid, int amount, int duration) {
+    return fuel(FluidIngredient.of(fluid, amount), duration, getTemperature(fluid));
   }
 
   /** Setups the builder for solid fuel */

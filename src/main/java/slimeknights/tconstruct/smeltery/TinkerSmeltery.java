@@ -484,9 +484,10 @@ public final class TinkerSmeltery extends TinkerModule {
     event.recipe(SmelteryRecipeProvider::new);
   }
 
+  /** The single client data run generates both assets and data in 26.3, so server data providers also go on the client event */
   @SubscribeEvent
-  void gatherData(final GatherDataEvent.Server event) {
-    event.createProvider(output -> new FluidContainerTransferProvider(output));
+  void gatherData(final GatherDataEvent.Client event) {
+    event.createProvider(FluidContainerTransferProvider::new);
   }
 
   /** Adds all relevant items to the creative tab */

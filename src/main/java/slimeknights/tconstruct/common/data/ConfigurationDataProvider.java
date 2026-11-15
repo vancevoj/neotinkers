@@ -3,6 +3,7 @@ package slimeknights.tconstruct.common.data;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import net.minecraft.data.CachedOutput;
+import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.PackOutput.Target;
 import net.minecraft.resources.Identifier;
@@ -21,6 +22,7 @@ import slimeknights.tconstruct.library.json.predicate.TinkerPredicate;
 import slimeknights.tconstruct.shared.command.subcommand.GenerateMeltingRecipesCommand;
 import slimeknights.tconstruct.smeltery.TinkerSmeltery;
 
+import java.nio.file.Path;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,8 +31,11 @@ import java.util.concurrent.CompletableFuture;
 /** Data generator for someone-off JSON files used for command configuration */
 public class ConfigurationDataProvider extends GenericDataProvider {
   private final Map<Identifier, JsonObject> configuration = new LinkedHashMap<>();
+  /** Data pack root, files are saved relative to it as their folders differ and 26.3 path providers reject an empty folder */
+  private final Path root;
   public ConfigurationDataProvider(PackOutput output) {
     super(output, Target.DATA_PACK, "");
+    this.root = output.getOutputFolder(Target.DATA_PACK);
   }
 
   @Override
@@ -97,7 +102,7 @@ public class ConfigurationDataProvider extends GenericDataProvider {
     recipeType(removeNetheriteSmithing, RecipeType.SMITHING);
 
     // save all JSON
-    return allOf(configuration.entrySet().stream().map(entry -> saveJson(output, entry.getKey(), entry.getValue())));
+    return allOf(configuration.entrySet().stream().map(entry -> DataProvider.saveStable(output, entry.getValue(), entry.getKey().withSuffix(".json").resolveAgainst(root))));
   }
 
   @Override

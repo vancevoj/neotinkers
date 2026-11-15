@@ -71,6 +71,7 @@ import slimeknights.tconstruct.library.json.predicate.tool.ToolStackPredicate;
 import slimeknights.tconstruct.library.json.predicate.tool.VolatileDataPredicate;
 import slimeknights.tconstruct.library.materials.definition.MaterialId;
 import slimeknights.tconstruct.library.modifiers.ModifierId;
+import slimeknights.tconstruct.library.modifiers.modules.util.ToolActionTransformHelper;
 import slimeknights.tconstruct.library.modifiers.util.LazyModifier;
 import slimeknights.tconstruct.library.tools.helper.ToolBuildHandler;
 import slimeknights.tconstruct.library.tools.helper.TooltipUtil;
@@ -591,7 +592,7 @@ public class AdvancementsProvider extends AdvancementSubProvider {
   /** Item ability for digging with a pickaxe, removed from NeoForge in 26.3 but still used by Tinkers tool definitions */
   private static final ItemAbility PICKAXE_DIG = ItemAbility.get("pickaxe_dig");
   /** Item ability for tilling, removed from NeoForge in 26.3 but still used by the tilling modifier */
-  private static final ItemAbility HOE_TILL = ItemAbility.get("till");
+  private static final ItemAbility HOE_TILL = ToolActionTransformHelper.HOE_TILL;
   /** Registered tool component predicate type (registered in {@code Registries.DATA_COMPONENT_PREDICATE_TYPE} by TinkerTools). */
   private static final DataComponentPredicate.Type<ToolStackItemPredicate> TOOL_PREDICATE_TYPE = ToolStackItemPredicate.TYPE;
 

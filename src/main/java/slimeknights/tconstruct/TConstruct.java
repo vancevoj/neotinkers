@@ -26,6 +26,7 @@ import slimeknights.tconstruct.common.config.Config;
 import slimeknights.tconstruct.common.data.AdvancementsProvider;
 import slimeknights.tconstruct.common.data.ConfigurationDataProvider;
 import slimeknights.tconstruct.common.data.DamageTypeProvider;
+import slimeknights.tconstruct.common.data.TransformableDataMapProvider;
 import slimeknights.tconstruct.common.data.advancement.FunctionProvider;
 import slimeknights.tconstruct.common.data.loot.GlobalLootModifiersProvider;
 import slimeknights.tconstruct.common.data.loot.LootTableInjectionProvider;
@@ -157,9 +158,13 @@ public class TConstruct {
     event.advancement(AdvancementsProvider::new);
   }
 
-  /** Server datagen. Providers taking a lookup receive the reloadable lookup, which includes the registry entries from {@link #gatherRegistries(GatherDataRegistryEntriesEvent)} */
+  /**
+   * Data and asset datagen. The build runs a single client data run, which in 26.3 fires only {@link GatherDataEvent.Client} and generates
+   * both assets and server data, so all providers are registered here and in the module {@code gatherData} methods.
+   * Providers taking a lookup receive the reloadable lookup, which includes the registry entries from {@link #gatherRegistries(GatherDataRegistryEntriesEvent)}
+   */
   @SubscribeEvent
-  static void gatherData(final GatherDataEvent.Server event) {
+  static void gatherData(final GatherDataEvent.Client event) {
     // tags
     event.createBlockAndItemTags(BlockTagProvider::new, ItemTagProvider::new);
     event.createProvider(FluidTagProvider::new);
@@ -178,6 +183,8 @@ public class TConstruct {
     event.createProvider(LootTableInjectionProvider::new);
     event.createProvider(ConfigurationDataProvider::new);
     event.createProvider(FunctionProvider::new);
+    // neoforge:transformables data map, covers slimewood logs and wood (TinkerWorld) and copper platforms (TinkerCommons)
+    event.createProvider(TransformableDataMapProvider::new);
   }
 
   /**
@@ -309,7 +316,9 @@ public class TConstruct {
    * @return  Translation key
    */
   public static MutableComponent makeTranslation(String base, String name, Object... arguments) {
-    return Component.translatable(makeTranslationKey(base, name), arguments);
+    // 26.3 dev throws on arguments that are not a component, string, number or boolean, escape turns others (ids, enums) into strings like they displayed before
+    // copied as escaping replaces the arguments in the array
+    return Component.translatableEscape(makeTranslationKey(base, name), arguments.clone());
   }
 
   /**

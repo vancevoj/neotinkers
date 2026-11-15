@@ -79,6 +79,7 @@ import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.Sounds;
 import slimeknights.tconstruct.common.TinkerModule;
 import slimeknights.tconstruct.common.TinkerTags;
+import slimeknights.tconstruct.common.data.tags.VillagerTradeTagProvider;
 import slimeknights.tconstruct.common.registration.GeodeItemObject;
 import slimeknights.tconstruct.common.registration.GeodeItemObject.BudSize;
 import slimeknights.tconstruct.library.json.loot.equipment.MobEquipmentManager;
@@ -442,9 +443,12 @@ public final class TinkerWorld extends TinkerModule {
          .add(Registries.VILLAGER_TRADE, AncientToolItemListing::bootstrap);
   }
 
+  /** The single client data run generates both assets and data in 26.3, so server data providers also go on the client event */
   @SubscribeEvent
-  void gatherData(final GatherDataEvent.Server event) {
+  void gatherData(final GatherDataEvent.Client event) {
     event.createProvider(MobEquipmentProvider::new);
+    // tags the generated ancient tool trades into the wandering trader trade pool
+    event.createProvider(VillagerTradeTagProvider::new);
   }
 
   /** Adds all relevant items to the creative tab */

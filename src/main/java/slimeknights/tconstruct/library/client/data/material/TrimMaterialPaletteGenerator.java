@@ -3,7 +3,9 @@ package slimeknights.tconstruct.library.client.data.material;
 import com.google.gson.JsonObject;
 import com.mojang.blaze3d.platform.NativeImage;
 import net.minecraft.data.CachedOutput;
+import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
+import net.minecraft.data.PackOutput.Target;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.ResourceManager;
 import slimeknights.tconstruct.library.client.data.GenericTextureGenerator;
@@ -35,8 +37,11 @@ public class TrimMaterialPaletteGenerator extends GenericTextureGenerator {
   private final String name;
   private final MaterialId[] materials;
   private final AbstractMaterialSpriteProvider materialProvider;
+  /** Path provider for the trimmed compat JSON, as 26.3 rejects the empty folder the palettes used to share with it */
+  private final PackOutput.PathProvider trimmedPathProvider;
   public TrimMaterialPaletteGenerator(PackOutput packOutput, String name, ResourceManager resourceManager, AbstractMaterialSpriteProvider materialProvider, MaterialId... materials) {
-    super(packOutput, resourceManager, "");
+    super(packOutput, resourceManager, PALETTE_TEXTURES + '/' + PALETTE_FOLDER);
+    this.trimmedPathProvider = packOutput.createPathProvider(Target.RESOURCE_PACK, "maps");
     this.name = name;
     this.materialProvider = materialProvider;
     this.materials = materials;
@@ -63,9 +68,9 @@ public class TrimMaterialPaletteGenerator extends GenericTextureGenerator {
 
       NativeImage original = spriteReader.read(BASE_PALETTE);
       return allOf(Stream.concat(
-        Stream.of(saveJson(cache, Identifier.fromNamespaceAndPath("trimmed", "maps/unchecked/custom_trim_material_permutations"), trimmedJson)),
+        Stream.of(DataProvider.saveStable(cache, trimmedJson, trimmedPathProvider.json(Identifier.fromNamespaceAndPath("trimmed", "unchecked/custom_trim_material_permutations")))),
         Arrays.stream(materials).map(
-        material -> saveImage(cache, material.withPrefix(PALETTE_TEXTURES + '/' + PALETTE_FOLDER + '/'), getTransformer(material).transformCopy(original, false)))))
+        material -> saveImage(cache, material, getTransformer(material).transformCopy(original, false)))))
         .thenRunAsync(spriteReader::closeAll);
     } catch (IOException ex) {
       return CompletableFuture.failedFuture(ex);

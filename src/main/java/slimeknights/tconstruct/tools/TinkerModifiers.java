@@ -1128,8 +1128,9 @@ public final class TinkerModifiers extends TinkerModule {
     event.recipe(ModifierRecipeProvider::new);
   }
 
+  /** The single client data run generates both assets and data in 26.3, so server data providers also go on the client event */
   @SubscribeEvent
-  void gatherData(final GatherDataEvent.Server event) {
+  void gatherData(final GatherDataEvent.Client event) {
     // ExistingFileHelper is gone, the tag provider validates against the data resources directly
     ResourceManager serverResources = event.getResourceManager(PackType.SERVER_DATA);
     event.createProvider(ModifierProvider::new);

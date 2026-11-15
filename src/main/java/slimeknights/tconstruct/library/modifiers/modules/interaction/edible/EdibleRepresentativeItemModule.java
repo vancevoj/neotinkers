@@ -7,8 +7,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
-import slimeknights.mantle.data.loadable.common.ItemStackLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
+import slimeknights.mantle.recipe.helper.ItemOutput;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.hook.interaction.EdibleEffectHook;
@@ -25,16 +25,16 @@ import java.util.List;
 
 /**
  * Module adding a representative item to tool eating. Affects the particles shown and the foods reported to Diet.
- * @param representativeItem  Stack used for mods like Diet to know what we ate.
+ * @param representativeItem  Stack used for mods like Diet to know what we ate. Wrapped in an output as stacks cannot be created while data loads, the stack is created on first use.
  */
-public record EdibleRepresentativeItemModule(ItemStack representativeItem, ModifierCondition<IToolStackView> condition) implements ModifierModule, UsingToolModifierHook, EdibleEffectHook, ConditionalModule<IToolStackView> {
+public record EdibleRepresentativeItemModule(ItemOutput representativeItem, ModifierCondition<IToolStackView> condition) implements ModifierModule, UsingToolModifierHook, EdibleEffectHook, ConditionalModule<IToolStackView> {
   private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<EdibleRepresentativeItemModule>defaultHooks(ModifierHooks.TOOL_USING, ModifierHooks.EDIBLE_EFFECT);
   public static final RecordLoadable<EdibleRepresentativeItemModule> LOADER = RecordLoadable.create(
-    ItemStackLoadable.REQUIRED_ITEM_NBT.requiredField("representative_item", EdibleRepresentativeItemModule::representativeItem),
+    ItemOutput.Loadable.REQUIRED_ITEM.requiredField("representative_item", EdibleRepresentativeItemModule::representativeItem),
     ModifierCondition.TOOL_FIELD, EdibleRepresentativeItemModule::new);
 
   public EdibleRepresentativeItemModule(ItemLike representativeItem) {
-    this(new ItemStack(representativeItem), ModifierCondition.ANY_TOOL);
+    this(ItemOutput.fromItem(representativeItem), ModifierCondition.ANY_TOOL);
   }
 
   @Override
@@ -50,7 +50,7 @@ public record EdibleRepresentativeItemModule(ItemStack representativeItem, Modif
   @Override
   public void onToolEaten(IToolStackView tool, ModifierEntry modifier, Player player, EquipmentSlot eatenSlot, int hunger, float saturation, List<ItemStack> representativeItems) {
     if (!tool.isBroken() && condition.matches(tool, modifier)) {
-      representativeItems.add(representativeItem);
+      representativeItems.add(representativeItem.get());
     }
   }
 
@@ -72,12 +72,12 @@ public record EdibleRepresentativeItemModule(ItemStack representativeItem, Modif
         int duration = stats.getInt(EdibleModule.EAT_DURATION);
         if (useTime == duration) {
           if (entity instanceof Player player && player.canEat(false)) {
-            eatEffects(entity, representativeItem, 16);
+            eatEffects(entity, representativeItem.get(), 16);
           }
         }
         // if we have not finished drinking, and we can drink, play effects
         else if (useTime < duration && useTime % 4 == 0 && entity instanceof Player player && player.canEat(false)) {
-          eatEffects(entity, representativeItem, 5);
+          eatEffects(entity, representativeItem.get(), 5);
         }
       }
     }
@@ -88,7 +88,7 @@ public record EdibleRepresentativeItemModule(ItemStack representativeItem, Modif
     if (!tool.isBroken() && condition.matches(tool, modifier) && entity instanceof Player player && player.canEat(false)) {
       StatsNBT stats = tool.getStats();
       if (stats.getInt(EdibleModule.HUNGER) > 0 && useDuration - timeLeft == stats.getInt(EdibleModule.EAT_DURATION)) {
-        eatEffects(entity, representativeItem, 5);
+        eatEffects(entity, representativeItem.get(), 5);
       }
     }
   }
