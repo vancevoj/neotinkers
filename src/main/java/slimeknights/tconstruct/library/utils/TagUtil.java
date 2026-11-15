@@ -23,7 +23,8 @@ public final class TagUtil {
    */
   @Nullable
   public static BlockPos readOptionalPos(CompoundTag parent, String key, BlockPos offset) {
-    if (parent.contains(key, Tag.TAG_COMPOUND)) {
+    // NbtUtils.writeBlockPos writes an int array in 1.21 (a compound before), so accept any tag type and let readBlockPos decide
+    if (parent.contains(key)) {
       // readBlockPos now takes the key directly and returns an Optional, so read from the parent and offset if present
       return NbtUtils.readBlockPos(parent, key).map(pos -> pos.offset(offset)).orElse(null);
     }
