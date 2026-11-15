@@ -1,6 +1,7 @@
 package slimeknights.tconstruct.world.entity;
 
 import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -27,8 +28,8 @@ public class EnderSlimeEntity extends TravelersPlateSlimeEntity {
   }
 
   @Override
-  public boolean doHurtTarget(Entity target) {
-    boolean result = super.doHurtTarget(target);
+  public boolean doHurtTarget(ServerLevel level, Entity target) {
+    boolean result = super.doHurtTarget(level, target);
     if (result && target instanceof LivingEntity living) {
       TeleportHelper.randomNearbyTeleport(living, teleportPredicate);
     }
@@ -36,9 +37,9 @@ public class EnderSlimeEntity extends TravelersPlateSlimeEntity {
   }
 
   @Override
-  protected void actuallyHurt(DamageSource damageSrc, float damageAmount) {
+  protected void actuallyHurt(ServerLevel level, DamageSource damageSrc, float damageAmount) {
     float oldHealth = getHealth();
-    super.actuallyHurt(damageSrc, damageAmount);
+    super.actuallyHurt(level, damageSrc, damageAmount);
     if (isAlive() && getHealth() < oldHealth) {
       TeleportHelper.randomNearbyTeleport(this, teleportPredicate);
     }

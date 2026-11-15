@@ -1,6 +1,8 @@
 package slimeknights.tconstruct.gadgets.entity.shuriken;
 
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -23,12 +25,12 @@ public abstract class ShurikenEntityBase extends ThrowableItemProjectile impleme
     super(type, worldIn);
   }
 
-  public ShurikenEntityBase(EntityType<? extends ShurikenEntityBase> type, double x, double y, double z, Level worldIn) {
-    super(type, x, y, z, worldIn);
+  public ShurikenEntityBase(EntityType<? extends ShurikenEntityBase> type, double x, double y, double z, Level worldIn, ItemStack stack) {
+    super(type, x, y, z, worldIn, stack);
   }
 
-  public ShurikenEntityBase(EntityType<? extends ShurikenEntityBase> type, LivingEntity livingEntityIn, Level worldIn) {
-    super(type, livingEntityIn, worldIn);
+  public ShurikenEntityBase(EntityType<? extends ShurikenEntityBase> type, LivingEntity livingEntityIn, Level worldIn, ItemStack stack) {
+    super(type, livingEntityIn, worldIn, stack);
   }
 
     /**
@@ -61,17 +63,22 @@ public abstract class ShurikenEntityBase extends ThrowableItemProjectile impleme
   protected void onHitBlock(BlockHitResult result) {
     super.onHitBlock(result);
 
-    this.spawnAtLocation(getDefaultItem());
+    if (level() instanceof ServerLevel server) {
+      this.spawnAtLocation(server, getDefaultItem());
+    }
   }
 
   @Override
   protected void onHitEntity(EntityHitResult result) {
     Entity entity = result.getEntity();
-    entity.hurt(damageSources().thrown(this, this.getOwner()), this.getDamage());
+    if (level() instanceof ServerLevel server) {
+      DamageSource source = damageSources().thrown(this, this.getOwner());
+      entity.hurtServer(server, source, this.getDamage());
 
-    if (!level().isClientSide() && entity instanceof LivingEntity) {
-      Vec3 motion = this.getDeltaMovement().normalize();
-      ((LivingEntity) entity).knockback(this.getKnockback(), -motion.x, -motion.z);
+      if (entity instanceof LivingEntity living) {
+        Vec3 motion = this.getDeltaMovement().normalize();
+        living.knockback(this.getKnockback(), -motion.x, -motion.z, source, this.getDamage());
+      }
     }
   }
 

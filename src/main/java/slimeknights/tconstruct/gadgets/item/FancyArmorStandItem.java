@@ -14,10 +14,12 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.world.entity.PostSpawnProcessor;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
@@ -28,7 +30,6 @@ import slimeknights.tconstruct.gadgets.TinkerGadgets;
 import slimeknights.tconstruct.gadgets.entity.FancyArmorStandEntity;
 import slimeknights.tconstruct.gadgets.entity.FancyArmorStandEntity.StandType;
 
-import java.util.List;
 import java.util.function.Consumer;
 
 /** Item to place {@link FancyArmorStandEntity} */
@@ -40,8 +41,9 @@ public class FancyArmorStandItem extends Item {
   }
 
   @Override
-  public void appendHoverText(ItemStack pStack, TooltipContext context, List<Component> tooltip, TooltipFlag pIsAdvanced) {
-    tooltip.add(Component.translatable(getDescriptionId() + ".tooltip").withStyle(ChatFormatting.GRAY));
+  @SuppressWarnings("deprecation")
+  public void appendHoverText(ItemStack pStack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag pIsAdvanced) {
+    tooltip.accept(Component.translatable(getDescriptionId() + ".tooltip").withStyle(ChatFormatting.GRAY));
   }
 
   /** Based on {@link net.minecraft.world.item.ArmorStandItem#useOn(UseOnContext)} */
@@ -63,8 +65,8 @@ public class FancyArmorStandItem extends Item {
     ItemStack stack = context.getItemInHand();
     if (level instanceof ServerLevel server) {
       Player player = context.getPlayer();
-      Consumer<FancyArmorStandEntity> consumer = EntityType.createDefaultStackConfig(server, stack, player);
-      FancyArmorStandEntity stand = TinkerGadgets.armorStandEntity.get().create(server, consumer, pos, EntitySpawnReason.SPAWN_EGG, true, true);
+      PostSpawnProcessor<FancyArmorStandEntity> consumer = EntityType.createDefaultStackConfig(server, stack, player);
+      FancyArmorStandEntity stand = TinkerGadgets.armorStandEntity.get().create(server, consumer, pos, EntitySpawnReason.SPAWN_ITEM_USE, true, true);
       if (stand == null) {
         return InteractionResult.FAIL;
       }
@@ -75,13 +77,13 @@ public class FancyArmorStandItem extends Item {
       }
 
       float rot = Mth.floor((Mth.wrapDegrees(context.getRotation() - 180f) + 22.5f) / 45f) * 45f;
-      stand.moveTo(stand.getX(), stand.getY(), stand.getZ(), rot, 0.0F);
+      stand.snapTo(stand.getX(), stand.getY(), stand.getZ(), rot, 0.0F);
       server.addFreshEntityWithPassengers(stand);
       level.playSound(null, stand.getX(), stand.getY(), stand.getZ(), SoundEvents.ARMOR_STAND_PLACE, SoundSource.BLOCKS, 0.75F, 0.8F);
       stand.gameEvent(GameEvent.ENTITY_PLACE, context.getPlayer());
     }
 
     stack.shrink(1);
-    return InteractionResult.sidedSuccess(level.isClientSide());
+    return InteractionResult.SUCCESS;
   }
 }

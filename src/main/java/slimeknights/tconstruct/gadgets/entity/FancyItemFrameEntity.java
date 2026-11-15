@@ -2,7 +2,6 @@ package slimeknights.tconstruct.gadgets.entity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -19,7 +18,9 @@ import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.entity.IEntityWithComplexSpawn;
 import slimeknights.tconstruct.common.Sounds;
 import slimeknights.tconstruct.gadgets.TinkerGadgets;
@@ -37,9 +38,7 @@ public class FancyItemFrameEntity extends ItemFrame implements IEntityWithComple
   }
 
   public FancyItemFrameEntity(Level levelIn, BlockPos blockPos, Direction face, FrameType variant) {
-    super(TinkerGadgets.itemFrameEntity.get(), levelIn);
-    this.pos = blockPos;
-    this.setDirection(face);
+    super(TinkerGadgets.itemFrameEntity.get(), levelIn, blockPos, face);
     this.entityData.set(VARIANT, variant.getId());
   }
 
@@ -54,8 +53,9 @@ public class FancyItemFrameEntity extends ItemFrame implements IEntityWithComple
   }
 
   @Override
-  public InteractionResult interact(Player player, InteractionHand hand) {
+  public InteractionResult interact(Player player, InteractionHand hand, Vec3 location) {
     if (!player.isShiftKeyDown() && getFrameId() == FrameType.CLEAR.getId() && !getItem().isEmpty()) {
+      Direction direction = getDirection();
       BlockPos behind = blockPosition().relative(direction.getOpposite());
       Level level = level();
       BlockState state = level.getBlockState(behind);
@@ -66,7 +66,7 @@ public class FancyItemFrameEntity extends ItemFrame implements IEntityWithComple
         }
       }
     }
-    return super.interact(player, hand);
+    return super.interact(player, hand, location);
   }
 
   @Override
@@ -179,7 +179,7 @@ public class FancyItemFrameEntity extends ItemFrame implements IEntityWithComple
   }
 
   @Override
-  public ItemStack getPickedResult(HitResult target) {
+  public ItemStack getPickResult() {
     ItemStack held = this.getItem();
     if (held.isEmpty()) {
       return new ItemStack(getFrameItem());
@@ -213,22 +213,22 @@ public class FancyItemFrameEntity extends ItemFrame implements IEntityWithComple
 
 
   @Override
-  public void addAdditionalSaveData(CompoundTag compound) {
-    super.addAdditionalSaveData(compound);
+  protected void addAdditionalSaveData(ValueOutput output) {
+    super.addAdditionalSaveData(output);
     int frameId = this.getFrameId();
-    compound.putInt(TAG_VARIANT, frameId);
+    output.putInt(TAG_VARIANT, frameId);
     if (doesRotate(frameId)) {
-      compound.putInt(TAG_ROTATION_TIMER, rotationTimer);
+      output.putInt(TAG_ROTATION_TIMER, rotationTimer);
     }
   }
 
   @Override
-  public void readAdditionalSaveData(CompoundTag compound) {
-    super.readAdditionalSaveData(compound);
-    int frameId = compound.getInt(TAG_VARIANT);
+  protected void readAdditionalSaveData(ValueInput input) {
+    super.readAdditionalSaveData(input);
+    int frameId = input.getIntOr(TAG_VARIANT, 0);
     this.entityData.set(VARIANT, frameId);
     if (doesRotate(frameId)) {
-      rotationTimer = compound.getInt(TAG_ROTATION_TIMER);
+      rotationTimer = input.getIntOr(TAG_ROTATION_TIMER, 0);
     }
   }
 
@@ -236,7 +236,7 @@ public class FancyItemFrameEntity extends ItemFrame implements IEntityWithComple
   public void writeSpawnData(RegistryFriendlyByteBuf buffer) {
     buffer.writeVarInt(this.getFrameId());
     buffer.writeBlockPos(this.pos);
-    buffer.writeVarInt(this.direction.get3DDataValue());
+    buffer.writeVarInt(this.getDirection().get3DDataValue());
   }
 
   @Override

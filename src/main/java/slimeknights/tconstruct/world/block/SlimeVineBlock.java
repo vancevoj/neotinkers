@@ -11,6 +11,7 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.VineBlock;
@@ -45,7 +46,7 @@ public class SlimeVineBlock extends VineBlock {
   }
 
   @Override
-  public void randomTick(BlockState state, ServerLevel worldIn, BlockPos pos, RandomSource random) {
+  protected void randomTick(BlockState state, ServerLevel worldIn, BlockPos pos, RandomSource random) {
     if (worldIn.isClientSide()) {
       return;
     }
@@ -108,7 +109,7 @@ public class SlimeVineBlock extends VineBlock {
   }
 
   @Override
-  public boolean canSurvive(BlockState state, LevelReader worldIn, BlockPos pos) {
+  protected boolean canSurvive(BlockState state, LevelReader worldIn, BlockPos pos) {
     return hasSides(updateConnections(state, worldIn, pos));
   }
 
@@ -119,9 +120,9 @@ public class SlimeVineBlock extends VineBlock {
    * Note that this method should ideally consider only the specific face passed in.
    */
   @Override
-  public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, LevelAccessor worldIn, BlockPos currentPos, BlockPos facingPos) {
+  protected BlockState updateShape(BlockState stateIn, LevelReader worldIn, ScheduledTickAccess ticks, BlockPos currentPos, Direction facing, BlockPos facingPos, BlockState facingState, RandomSource random) {
     if (facing == Direction.DOWN) {
-      return super.updateShape(stateIn, facing, facingState, worldIn, currentPos, facingPos);
+      return super.updateShape(stateIn, worldIn, ticks, currentPos, facing, facingPos, facingState, random);
     }
     BlockState updated = updateConnections(stateIn, worldIn, currentPos);
     return !hasSides(updated) ? Blocks.AIR.defaultBlockState() : updated;

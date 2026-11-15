@@ -2,7 +2,6 @@ package slimeknights.tconstruct.gadgets.entity;
 
 import lombok.Getter;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -18,7 +17,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import slimeknights.tconstruct.gadgets.TinkerGadgets;
 
 /** Extension of {@link ArmorStand} with extra features */
@@ -43,18 +43,18 @@ public class FancyArmorStandEntity extends ArmorStand {
   }
 
   @Override
-  public void addAdditionalSaveData(CompoundTag compound) {
-    super.addAdditionalSaveData(compound);
+  protected void addAdditionalSaveData(ValueOutput output) {
+    super.addAdditionalSaveData(output);
     int frameId = this.getStandId();
-    compound.putInt(TAG_VARIANT, frameId);
-    compound.putBoolean(TAG_LEFT, isLeft());
+    output.putInt(TAG_VARIANT, frameId);
+    output.putBoolean(TAG_LEFT, isLeft());
   }
 
   @Override
-  public void readAdditionalSaveData(CompoundTag compound) {
-    super.readAdditionalSaveData(compound);
-    this.entityData.set(VARIANT, compound.getInt(TAG_VARIANT));
-    this.entityData.set(LEFT_HANDED, compound.getBoolean(TAG_LEFT));
+  protected void readAdditionalSaveData(ValueInput input) {
+    super.readAdditionalSaveData(input);
+    this.entityData.set(VARIANT, input.getIntOr(TAG_VARIANT, 0));
+    this.entityData.set(LEFT_HANDED, input.getBooleanOr(TAG_LEFT, false));
   }
 
 
@@ -132,7 +132,7 @@ public class FancyArmorStandEntity extends ArmorStand {
   }
 
   @Override
-  public ItemStack getPickedResult(HitResult target) {
+  public ItemStack getPickResult() {
     return new ItemStack(getStandItem());
   }
 

@@ -1,11 +1,9 @@
 package slimeknights.tconstruct.world;
 
-import net.minecraft.core.registries.BuiltInRegistries;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.DataGenerator;
-import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraft.server.packs.PackType;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.rootplacers.RootPlacerType;
 import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecoratorType;
@@ -13,7 +11,6 @@ import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
 import net.minecraft.world.level.levelgen.structure.StructureType;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -29,8 +26,6 @@ import slimeknights.tconstruct.world.worldgen.islands.IslandPiece;
 import slimeknights.tconstruct.world.worldgen.islands.IslandStructure;
 import slimeknights.tconstruct.world.worldgen.trees.ExtraRootVariantPlacer;
 import slimeknights.tconstruct.world.worldgen.trees.LeaveVineDecorator;
-import slimeknights.tconstruct.world.worldgen.trees.config.SlimeFungusConfig;
-import slimeknights.tconstruct.world.worldgen.trees.config.SlimeTreeConfig;
 import slimeknights.tconstruct.world.worldgen.trees.feature.SlimeFungusFeature;
 import slimeknights.tconstruct.world.worldgen.trees.feature.SlimeTreeFeature;
 
@@ -40,7 +35,8 @@ import slimeknights.tconstruct.world.worldgen.trees.feature.SlimeTreeFeature;
 @SuppressWarnings("unused")
 public final class TinkerStructures extends TinkerModule {
   static final Logger log = Util.getLogger("tinker_structures");
-  private static final DeferredRegister<Feature<?>> FEATURES = DeferredRegister.create(BuiltInRegistries.FEATURE, TConstruct.MOD_ID);
+  /** Features are data driven records, so the registry holds the codecs */
+  private static final DeferredRegister<MapCodec<? extends Feature>> FEATURES = DeferredRegister.create(Registries.FEATURE_TYPE, TConstruct.MOD_ID);
   private static final DeferredRegister<StructureType<?>> STRUCTURE_TYPE = DeferredRegister.create(Registries.STRUCTURE_TYPE, TConstruct.MOD_ID);
   private static final DeferredRegister<StructurePieceType> STRUCTURE_PIECE = DeferredRegister.create(Registries.STRUCTURE_PIECE, TConstruct.MOD_ID);
   private static final DeferredRegister<TreeDecoratorType<?>> TREE_DECORATORS = DeferredRegister.create(Registries.TREE_DECORATOR_TYPE, TConstruct.MOD_ID);
@@ -66,28 +62,28 @@ public final class TinkerStructures extends TinkerModule {
   /*
    * Features
    */
-  /** Overworld variant of slimy trees */
-  public static final DeferredHolder<Feature<?>, SlimeTreeFeature> slimeTree = FEATURES.register("slime_tree", () -> new SlimeTreeFeature(SlimeTreeConfig.CODEC));
-  /** Nether variant of slimy trees */
-  public static final DeferredHolder<Feature<?>, SlimeFungusFeature> slimeFungus = FEATURES.register("slime_fungus", () -> new SlimeFungusFeature(SlimeFungusConfig.CODEC));
+  /** Overworld variant of slimy trees, build with {@code new SlimeTreeFeature(config)} */
+  public static final DeferredHolder<MapCodec<? extends Feature>, MapCodec<SlimeTreeFeature>> slimeTree = FEATURES.register("slime_tree", () -> SlimeTreeFeature.CODEC);
+  /** Nether variant of slimy trees, build with {@code new SlimeFungusFeature(config)} */
+  public static final DeferredHolder<MapCodec<? extends Feature>, MapCodec<SlimeFungusFeature>> slimeFungus = FEATURES.register("slime_fungus", () -> SlimeFungusFeature.CODEC);
 
   /* Greenheart trees */
-  public static final ResourceKey<ConfiguredFeature<?,?>> earthSlimeTree = key(Registries.CONFIGURED_FEATURE, "earth_slime_tree");
-  public static final ResourceKey<ConfiguredFeature<?,?>> earthSlimeIslandTree = key(Registries.CONFIGURED_FEATURE, "earth_slime_island_tree");
+  public static final ResourceKey<Feature> earthSlimeTree = key(Registries.FEATURE, "earth_slime_tree");
+  public static final ResourceKey<Feature> earthSlimeIslandTree = key(Registries.FEATURE, "earth_slime_island_tree");
   /* Skyroot trees */
-  public static final ResourceKey<ConfiguredFeature<?,?>> skySlimeTree = key(Registries.CONFIGURED_FEATURE, "sky_slime_tree");
-  public static final ResourceKey<ConfiguredFeature<?,?>> skySlimeIslandTree = key(Registries.CONFIGURED_FEATURE, "sky_slime_island_tree");
+  public static final ResourceKey<Feature> skySlimeTree = key(Registries.FEATURE, "sky_slime_tree");
+  public static final ResourceKey<Feature> skySlimeIslandTree = key(Registries.FEATURE, "sky_slime_island_tree");
 
   /* Enderslime trees */
-  public static final ResourceKey<ConfiguredFeature<?,?>> enderSlimeTree = key(Registries.CONFIGURED_FEATURE, "ender_slime_tree");
-  public static final ResourceKey<ConfiguredFeature<?,?>> enderSlimeTreeTall = key(Registries.CONFIGURED_FEATURE, "ender_slime_tree_tall");
+  public static final ResourceKey<Feature> enderSlimeTree = key(Registries.FEATURE, "ender_slime_tree");
+  public static final ResourceKey<Feature> enderSlimeTreeTall = key(Registries.FEATURE, "ender_slime_tree_tall");
 
   /* Bloodshroom trees */
-  public static final ResourceKey<ConfiguredFeature<?,?>> bloodSlimeFungus = key(Registries.CONFIGURED_FEATURE, "blood_slime_fungus");
-  public static final ResourceKey<ConfiguredFeature<?,?>> bloodSlimeIslandFungus = key(Registries.CONFIGURED_FEATURE, "blood_slime_island_fungus");
+  public static final ResourceKey<Feature> bloodSlimeFungus = key(Registries.FEATURE, "blood_slime_fungus");
+  public static final ResourceKey<Feature> bloodSlimeIslandFungus = key(Registries.FEATURE, "blood_slime_island_fungus");
 
   /* Deprecated ichor tree */
-  public static final ResourceKey<ConfiguredFeature<?,?>> ichorSlimeFungus = key(Registries.CONFIGURED_FEATURE, "ichor_slime_fungus");
+  public static final ResourceKey<Feature> ichorSlimeFungus = key(Registries.FEATURE, "ichor_slime_fungus");
 
   /*
    * Structures
@@ -112,13 +108,10 @@ public final class TinkerStructures extends TinkerModule {
 
 
   @SubscribeEvent
-  void gatherData(final GatherDataEvent event) {
-    DataGenerator generator = event.getGenerator();
-    PackOutput packOutput = generator.getPackOutput();
-    ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
-    boolean server = event.includeServer();
-    generator.addProvider(server, new StructureRepalleter(packOutput, existingFileHelper));
-//    generator.addProvider(server, new StructureUpdater(packOutput, existingFileHelper, TConstruct.MOD_ID, Target.DATA_PACK, "structures"));
-//    generator.addProvider(event.includeClient(), new StructureUpdater(packOutput, existingFileHelper, TConstruct.MOD_ID, Target.RESOURCE_PACK, "book/structures"));
+  void gatherData(final GatherDataEvent.Server event) {
+    // structure templates are read from the mod data pack
+    event.createProvider(packOutput -> new StructureRepalleter(packOutput, event.getResourceManager(PackType.SERVER_DATA)));
+//    event.createProvider(packOutput -> new StructureUpdater(packOutput, event.getResourceManager(PackType.SERVER_DATA), TConstruct.MOD_ID, Target.DATA_PACK, "structures"));
+//    client run: event.createProvider(packOutput -> new StructureUpdater(packOutput, event.getResourceManager(PackType.CLIENT_RESOURCES), TConstruct.MOD_ID, Target.RESOURCE_PACK, "book/structures"));
   }
 }

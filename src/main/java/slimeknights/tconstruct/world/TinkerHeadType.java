@@ -28,6 +28,8 @@ public enum TinkerHeadType implements Type, StringRepresentable {
 
   TinkerHeadType(Supplier<EntityType<?>> type) {
     this.type = type;
+    // register the type so skull item models (minecraft:head special model "kind") can resolve it
+    Type.TYPES.put(getSerializedName(), this);
   }
 
   /** Gets the associated entity type */

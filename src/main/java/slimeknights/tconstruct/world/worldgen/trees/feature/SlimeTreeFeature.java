@@ -2,13 +2,12 @@ package slimeknights.tconstruct.world.worldgen.trees.feature;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.LevelSimulatedRW;
 import net.minecraft.world.level.LevelSimulatedReader;
 import net.minecraft.world.level.LevelWriter;
 import net.minecraft.world.level.WorldGenLevel;
@@ -17,8 +16,8 @@ import net.minecraft.world.level.block.VineBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.phys.shapes.BitSetDiscreteVoxelShape;
@@ -29,22 +28,27 @@ import slimeknights.tconstruct.world.worldgen.trees.config.SlimeTreeConfig;
 import java.util.List;
 import java.util.Set;
 
-public class SlimeTreeFeature extends Feature<SlimeTreeConfig> {
+/**
+ * Slime tree feature. Features are data driven records since configured features were merged into features,
+ * so the record holds the tree config and serializes its fields inline.
+ */
+public record SlimeTreeFeature(SlimeTreeConfig config) implements Feature {
+  public static final MapCodec<SlimeTreeFeature> CODEC = SlimeTreeConfig.CODEC.xmap(SlimeTreeFeature::new, SlimeTreeFeature::config);
 
-  public SlimeTreeFeature(Codec<SlimeTreeConfig> codec) {
-    super(codec);
+  @Override
+  public MapCodec<SlimeTreeFeature> codec() {
+    return CODEC;
   }
 
   @Override
-  public boolean place(FeaturePlaceContext<SlimeTreeConfig> context) {
+  public boolean place(WorldGenLevel level, ChunkGenerator chunkGenerator, RandomSource random, BlockPos origin) {
     Set<BlockPos> trunkPos = Sets.newHashSet();
     Set<BlockPos> foliagePos = Sets.newHashSet();
     Set<BlockPos> leavesPos = Sets.newHashSet();
 
     BoundingBox boundingBox = BoundingBox.infinite();
-    WorldGenLevel level = context.level();
 
-    boolean placed = this.place(level, context.random(), context.origin(), trunkPos, foliagePos, boundingBox, context.config());
+    boolean placed = this.place(level, random, origin, trunkPos, foliagePos, boundingBox, config);
     if (boundingBox.minX() <= boundingBox.maxX() && placed && !trunkPos.isEmpty()) {
       DiscreteVoxelShape voxelshapepart = this.updateLeaves(level, boundingBox, trunkPos, leavesPos);
       StructureTemplate.updateShapeAtEdge(level, 3, voxelshapepart, boundingBox.minX(), boundingBox.minY(), boundingBox.minZ());
@@ -70,7 +74,7 @@ public class SlimeTreeFeature extends Feature<SlimeTreeConfig> {
 //      blockpos = positionIn;
 //    }
 
-    if (positionIn.getY() >= level.getMinY() + 1 && positionIn.getY() + height + 1 <= level.getMaxBuildHeight() && isSlimySoilAt(level, positionIn.below())) {
+    if (positionIn.getY() >= level.getMinY() + 1 && positionIn.getY() + height + 1 <= level.getMaxY() + 1 && isSlimySoilAt(level, positionIn.below())) {
       this.setDirtAt(level, positionIn.below(), positionIn);
       this.placeTrunk(level, rand, height, positionIn, trunkBlockPosSet, boundingBoxIn, configIn);
       this.placeCanopy(level, rand, height, positionIn, trunkBlockPosSet, boundingBoxIn, configIn);
@@ -86,7 +90,7 @@ public class SlimeTreeFeature extends Feature<SlimeTreeConfig> {
     }
   }
 
-  protected void placeTrunk(LevelSimulatedRW worldIn, RandomSource randomIn, int treeHeight, BlockPos blockPos, Set<BlockPos> blockPosSet, BoundingBox mutableBoundingBoxIn, SlimeTreeConfig treeFeatureConfigIn) {
+  protected void placeTrunk(WorldGenLevel worldIn, RandomSource randomIn, int treeHeight, BlockPos blockPos, Set<BlockPos> blockPosSet, BoundingBox mutableBoundingBoxIn, SlimeTreeConfig treeFeatureConfigIn) {
     while (treeHeight > 0) {
       this.setLog(worldIn, randomIn, blockPos, blockPosSet, mutableBoundingBoxIn, treeFeatureConfigIn);
 
@@ -95,7 +99,7 @@ public class SlimeTreeFeature extends Feature<SlimeTreeConfig> {
     }
   }
 
-  protected void placeCanopy(LevelSimulatedRW worldIn, RandomSource randomIn, int treeHeight, BlockPos blockPos, Set<BlockPos> blockPosSet, BoundingBox mutableBoundingBoxIn, SlimeTreeConfig treeFeatureConfigIn) {
+  protected void placeCanopy(WorldGenLevel worldIn, RandomSource randomIn, int treeHeight, BlockPos blockPos, Set<BlockPos> blockPosSet, BoundingBox mutableBoundingBoxIn, SlimeTreeConfig treeFeatureConfigIn) {
     blockPos = blockPos.above(treeHeight);
     for (int i = 0; i < 4; i++) {
       this.placeDiamondLayer(worldIn, randomIn, i + 1, blockPos.below(i), blockPosSet, mutableBoundingBoxIn, treeFeatureConfigIn);
@@ -133,36 +137,36 @@ public class SlimeTreeFeature extends Feature<SlimeTreeConfig> {
     if (treeFeatureConfigIn.hasVines) {
       blockPos = blockPos.below();
       this.placeVine(worldIn, randomIn, blockPos.offset(+3, 0, 0), blockPosSet, mutableBoundingBoxIn,
-        this.getRandomizedVine(randomIn, blockPos, treeFeatureConfigIn).setValue(VineBlock.UP, true));
+        this.getRandomizedVine(worldIn, randomIn, blockPos, treeFeatureConfigIn).setValue(VineBlock.UP, true));
 
       this.placeVine(worldIn, randomIn, blockPos.offset(-3, 0, 0), blockPosSet, mutableBoundingBoxIn,
-        this.getRandomizedVine(randomIn, blockPos, treeFeatureConfigIn).setValue(VineBlock.UP, true));
+        this.getRandomizedVine(worldIn, randomIn, blockPos, treeFeatureConfigIn).setValue(VineBlock.UP, true));
 
       this.placeVine(worldIn, randomIn, blockPos.offset(0, 0, -3), blockPosSet, mutableBoundingBoxIn,
-        this.getRandomizedVine(randomIn, blockPos, treeFeatureConfigIn).setValue(VineBlock.UP, true));
+        this.getRandomizedVine(worldIn, randomIn, blockPos, treeFeatureConfigIn).setValue(VineBlock.UP, true));
 
       this.placeVine(worldIn, randomIn, blockPos.offset(0, 0, +3), blockPosSet, mutableBoundingBoxIn,
-        this.getRandomizedVine(randomIn, blockPos, treeFeatureConfigIn).setValue(VineBlock.UP, true));
+        this.getRandomizedVine(worldIn, randomIn, blockPos, treeFeatureConfigIn).setValue(VineBlock.UP, true));
 
-      BlockState randomVine = this.getRandomizedVine(randomIn, blockPos, treeFeatureConfigIn);
+      BlockState randomVine = this.getRandomizedVine(worldIn, randomIn, blockPos, treeFeatureConfigIn);
       this.placeVine(worldIn, randomIn, blockPos.offset(+2, 1, +2), blockPosSet, mutableBoundingBoxIn,
         randomVine.setValue(VineBlock.UP, true));
       this.placeVine(worldIn, randomIn, blockPos.offset(+2, 0, +2), blockPosSet, mutableBoundingBoxIn,
         randomVine);
 
-      randomVine = this.getRandomizedVine(randomIn, blockPos, treeFeatureConfigIn);
+      randomVine = this.getRandomizedVine(worldIn, randomIn, blockPos, treeFeatureConfigIn);
       this.placeVine(worldIn, randomIn, blockPos.offset(+2, 1, -2), blockPosSet, mutableBoundingBoxIn,
         randomVine.setValue(VineBlock.UP, true));
       this.placeVine(worldIn, randomIn, blockPos.offset(+2, 0, -2), blockPosSet, mutableBoundingBoxIn,
         randomVine);
 
-      randomVine = this.getRandomizedVine(randomIn, blockPos, treeFeatureConfigIn);
+      randomVine = this.getRandomizedVine(worldIn, randomIn, blockPos, treeFeatureConfigIn);
       this.placeVine(worldIn, randomIn, blockPos.offset(-2, 1, +2), blockPosSet, mutableBoundingBoxIn,
         randomVine.setValue(VineBlock.UP, true));
       this.placeVine(worldIn, randomIn, blockPos.offset(-2, 0, +2), blockPosSet, mutableBoundingBoxIn,
         randomVine);
 
-      randomVine = this.getRandomizedVine(randomIn, blockPos, treeFeatureConfigIn);
+      randomVine = this.getRandomizedVine(worldIn, randomIn, blockPos, treeFeatureConfigIn);
       this.placeVine(worldIn, randomIn, blockPos.offset(-2, 1, -2), blockPosSet, mutableBoundingBoxIn,
         randomVine.setValue(VineBlock.UP, true));
       this.placeVine(worldIn, randomIn, blockPos.offset(-2, 0, -2), blockPosSet, mutableBoundingBoxIn,
@@ -170,7 +174,7 @@ public class SlimeTreeFeature extends Feature<SlimeTreeConfig> {
     }
   }
 
-  private void placeDiamondLayer(LevelSimulatedRW worldIn, RandomSource randomIn, int range, BlockPos blockPos, Set<BlockPos> blockPosSet, BoundingBox mutableBoundingBoxIn, SlimeTreeConfig treeFeatureConfigIn) {
+  private void placeDiamondLayer(WorldGenLevel worldIn, RandomSource randomIn, int range, BlockPos blockPos, Set<BlockPos> blockPosSet, BoundingBox mutableBoundingBoxIn, SlimeTreeConfig treeFeatureConfigIn) {
     for (int x = -range; x <= range; x++) {
       for (int z = -range; z <= range; z++) {
         if (Math.abs(x) + Math.abs(z) <= range) {
@@ -181,19 +185,19 @@ public class SlimeTreeFeature extends Feature<SlimeTreeConfig> {
     }
   }
 
-  protected boolean setLog(LevelSimulatedRW worldIn, RandomSource randomIn, BlockPos blockPos, Set<BlockPos> blockPosSet, BoundingBox mutableBoundingBoxIn, SlimeTreeConfig treeFeatureConfigIn) {
+  protected boolean setLog(WorldGenLevel worldIn, RandomSource randomIn, BlockPos blockPos, Set<BlockPos> blockPosSet, BoundingBox mutableBoundingBoxIn, SlimeTreeConfig treeFeatureConfigIn) {
     if (!isAirOrLeavesAt(worldIn, blockPos)) {
       return false;
     }
     else {
-      this.setBlock(worldIn, blockPos, treeFeatureConfigIn.trunkProvider.getState(randomIn, blockPos));
+      this.setBlock(worldIn, blockPos, treeFeatureConfigIn.trunkProvider.getState(worldIn, randomIn, blockPos));
       //TODO mutableBoundingBoxIn.expand(new BoundingBox(blockPos, blockPos));
       blockPosSet.add(blockPos.immutable());
       return true;
     }
   }
 
-  protected boolean placeAir(LevelSimulatedRW worldIn, RandomSource random, BlockPos blockPos, Set<BlockPos> blockPosSet, BoundingBox mutableBoundingBoxIn) {
+  protected boolean placeAir(WorldGenLevel worldIn, RandomSource random, BlockPos blockPos, Set<BlockPos> blockPosSet, BoundingBox mutableBoundingBoxIn) {
     if (!isAirOrLeavesAt(worldIn, blockPos)) {
       return false;
     }
@@ -205,19 +209,19 @@ public class SlimeTreeFeature extends Feature<SlimeTreeConfig> {
     }
   }
 
-  protected boolean setLeaf(LevelSimulatedRW worldIn, RandomSource random, BlockPos blockPos, Set<BlockPos> blockPosSet, BoundingBox mutableBoundingBoxIn, SlimeTreeConfig treeFeatureConfigIn) {
+  protected boolean setLeaf(WorldGenLevel worldIn, RandomSource random, BlockPos blockPos, Set<BlockPos> blockPosSet, BoundingBox mutableBoundingBoxIn, SlimeTreeConfig treeFeatureConfigIn) {
     if (!isAirOrLeavesAt(worldIn, blockPos)) {
       return false;
     }
     else {
-      this.setBlock(worldIn, blockPos, treeFeatureConfigIn.leavesProvider.getState(random, blockPos));
+      this.setBlock(worldIn, blockPos, treeFeatureConfigIn.leavesProvider.getState(worldIn, random, blockPos));
       //TODO mutableBoundingBoxIn.expand(new BoundingBox(blockPos, blockPos));
       blockPosSet.add(blockPos.immutable());
       return true;
     }
   }
 
-  protected boolean placeVine(LevelSimulatedRW worldIn, RandomSource random, BlockPos blockPos, Set<BlockPos> blockPosSet, BoundingBox mutableBoundingBoxIn, BlockState vineState) {
+  protected boolean placeVine(WorldGenLevel worldIn, RandomSource random, BlockPos blockPos, Set<BlockPos> blockPosSet, BoundingBox mutableBoundingBoxIn, BlockState vineState) {
     if (!isAirOrLeavesAt(worldIn, blockPos)) {
       return false;
     }
@@ -229,8 +233,8 @@ public class SlimeTreeFeature extends Feature<SlimeTreeConfig> {
     }
   }
 
-  private BlockState getRandomizedVine(RandomSource random, BlockPos blockPos, SlimeTreeConfig config) {
-    BlockState state = config.vinesProvider.getState(random, blockPos);
+  private BlockState getRandomizedVine(WorldGenLevel worldIn, RandomSource random, BlockPos blockPos, SlimeTreeConfig config) {
+    BlockState state = config.vinesProvider.getState(worldIn, random, blockPos);
 
     BooleanProperty[] sides = new BooleanProperty[] { VineBlock.NORTH, VineBlock.EAST, VineBlock.SOUTH, VineBlock.WEST };
 

@@ -1,5 +1,6 @@
 package slimeknights.tconstruct.gadgets.block;
 
+import lombok.Getter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.stats.Stats;
@@ -7,40 +8,50 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodProperties;
-import net.minecraft.world.food.FoodProperties.PossibleEffect;
-import net.minecraft.world.item.Item.TooltipContext;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.Consumable;
+import net.minecraft.world.item.consume_effects.ApplyStatusEffectsConsumeEffect;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.CakeBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import slimeknights.tconstruct.fluids.item.ContainerFoodItem;
+import slimeknights.mantle.item.ContainerFoodItem;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
- * Extension of cake that utilizes a food instance for properties
+ * Extension of cake that utilizes a food instance for properties.
+ * Food effects moved from the food properties to the consumable component, so the cake takes both.
  */
 public class FoodCakeBlock extends CakeBlock {
   private final FoodProperties food;
+  /** Consumable holding the effects of a slice, only the status effects are used */
+  @Getter
+  private final Consumable consumable;
+  /** Status effects applied when eating a slice */
+  private final List<ApplyStatusEffectsConsumeEffect> effects;
   private final EffectCombination combination;
 
-  public FoodCakeBlock(Properties properties, FoodProperties food, EffectCombination combination) {
+  public FoodCakeBlock(Properties properties, FoodProperties food, Consumable consumable, EffectCombination combination) {
     super(properties);
     this.food = food;
+    this.consumable = consumable;
+    this.effects = consumable.onConsumeEffects().stream()
+      .filter(effect -> effect instanceof ApplyStatusEffectsConsumeEffect)
+      .map(effect -> (ApplyStatusEffectsConsumeEffect) effect)
+      .toList();
     this.combination = combination;
   }
 
   @Deprecated(forRemoval = true)
-  public FoodCakeBlock(Properties properties, FoodProperties food) {
-    this(properties, food, EffectCombination.BLOCK);
+  public FoodCakeBlock(Properties properties, FoodProperties food, Consumable consumable) {
+    this(properties, food, consumable, EffectCombination.BLOCK);
   }
 
-  @Override
-  public void appendHoverText(ItemStack pStack, TooltipContext pContext, List<Component> tooltip, TooltipFlag pFlag) {
-    ContainerFoodItem.addEffectTooltip(food, tooltip);
+  /** Adds the effects of a slice to the tooltip. Blocks no longer have tooltips, so this is called by the cake item */
+  public void appendHoverText(Consumer<Component> tooltip) {
+    ContainerFoodItem.addEffectTooltip(consumable, tooltip);
   }
 
   @Override
@@ -57,9 +68,8 @@ public class FoodCakeBlock extends CakeBlock {
 
   /** Checks if the given player has all potion effects from the food */
   private boolean hasAllEffects(Player player) {
-    for (PossibleEffect pair : food.effects()) {
-      MobEffectInstance effect = pair.effect();
-      if (effect != null) {
+    for (ApplyStatusEffectsConsumeEffect group : effects) {
+      for (MobEffectInstance effect : group.effects()) {
         MobEffectInstance current = player.getEffect(effect.getEffect());
         if (current == null || current.getDuration() < 100) {
           return false;
@@ -81,17 +91,21 @@ public class FoodCakeBlock extends CakeBlock {
     player.awardStat(Stats.EAT_CAKE_SLICE);
     // apply food stats
     player.getFoodData().eat(food);
-    for (PossibleEffect pair : food.effects()) {
-      if (!world.isClientSide() && pair.effect() != null && world.getRandom().nextFloat() < pair.probability()) {
-        MobEffectInstance effect = new MobEffectInstance(pair.effect());
-        // if adding, increase duration by current duration, provided its an exact level match
-        if (combination == EffectCombination.ADD) {
-          MobEffectInstance current = player.getEffect(effect.getEffect());
-          if (current != null && current.getAmplifier() == effect.getAmplifier()) {
-            effect.duration += current.getDuration();
+    if (!world.isClientSide()) {
+      for (ApplyStatusEffectsConsumeEffect group : effects) {
+        if (world.getRandom().nextFloat() < group.probability()) {
+          for (MobEffectInstance groupEffect : group.effects()) {
+            MobEffectInstance effect = new MobEffectInstance(groupEffect);
+            // if adding, increase duration by current duration, provided its an exact level match
+            if (combination == EffectCombination.ADD) {
+              MobEffectInstance current = player.getEffect(effect.getEffect());
+              if (current != null && current.getAmplifier() == effect.getAmplifier()) {
+                effect.duration += current.getDuration();
+              }
+            }
+            player.addEffect(effect);
           }
         }
-        player.addEffect(effect);
       }
     }
     // remove one bite from the cake

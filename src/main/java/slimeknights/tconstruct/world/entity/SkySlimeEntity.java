@@ -7,6 +7,7 @@ import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.CommonHooks;
+import net.neoforged.neoforge.event.entity.living.LivingFallEvent;
 import slimeknights.tconstruct.common.Sounds;
 import slimeknights.tconstruct.library.materials.definition.MaterialId;
 import slimeknights.tconstruct.tools.data.material.MaterialIds;
@@ -29,21 +30,21 @@ public class SkySlimeEntity extends TravelersPlateSlimeEntity {
   }
 
   @Override
-  public boolean causeFallDamage(float distance, float damageMultiplier, DamageSource source) {
+  public boolean causeFallDamage(double distance, float damageMultiplier, DamageSource source) {
     if (isSuppressingBounce()) {
       return super.causeFallDamage(distance, damageMultiplier * 0.2f, source);
     }
-    float[] ret = CommonHooks.onLivingFall(this, distance, damageMultiplier);
-    if (ret == null) {
+    LivingFallEvent event = CommonHooks.onLivingFall(this, distance, damageMultiplier);
+    if (event.isCanceled()) {
       return false;
     }
-    distance = ret[0];
+    distance = event.getDistance();
     if (distance > 2) {
       // invert Y motion, boost X and Z slightly
       Vec3 motion = getDeltaMovement();
       setDeltaMovement(motion.x / 0.95f, motion.y * -0.9, motion.z / 0.95f);
       bounceAmount = getDeltaMovement().y;
-      fallDistance = 0f;
+      fallDistance = 0;
       needsSync = true;
       setOnGround(false);
       playSound(Sounds.SLIMY_BOUNCE.getSound(), 1f, 1f);

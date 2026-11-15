@@ -20,7 +20,7 @@ import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkGenerator;
-import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.TemplateStructurePiece;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
@@ -35,12 +35,12 @@ import java.util.Optional;
 
 public class IslandPiece extends TemplateStructurePiece {
   @Nullable
-  private final ConfiguredFeature<?,?> tree;
+  private final Feature tree;
   private final IslandStructure structure;
   private int numberOfTreesPlaced;
   private ChunkGenerator chunkGenerator;
 
-  public IslandPiece(StructureTemplateManager manager, IslandStructure structure, Identifier templateName, BlockPos templatePos, @Nullable ConfiguredFeature<?,?> tree, Rotation rotation, Mirror mirror) {
+  public IslandPiece(StructureTemplateManager manager, IslandStructure structure, Identifier templateName, BlockPos templatePos, @Nullable Feature tree, Rotation rotation, Mirror mirror) {
     super(TinkerStructures.islandPiece.get(), 0, manager, templateName, templateName.toString(), makeSettings(rotation, mirror), templatePos);
     this.structure = structure;
     this.numberOfTreesPlaced = 0;
@@ -48,15 +48,15 @@ public class IslandPiece extends TemplateStructurePiece {
   }
 
   public IslandPiece(StructurePieceSerializationContext context, CompoundTag nbt) {
-    super(TinkerStructures.islandPiece.get(), nbt, context.structureTemplateManager(), id -> makeSettings(Rotation.valueOf(nbt.getString("Rot")), Mirror.valueOf(nbt.getString("Mi"))));
+    super(TinkerStructures.islandPiece.get(), nbt, context.structureTemplateManager(), id -> makeSettings(Rotation.valueOf(nbt.getStringOr("Rot", "")), Mirror.valueOf(nbt.getStringOr("Mi", ""))));
     RegistryAccess access = context.registryAccess();
-    if (find(access.lookupOrThrow(Registries.STRUCTURE), nbt.getString("Structure")) instanceof IslandStructure island) {
+    if (find(access.lookupOrThrow(Registries.STRUCTURE), nbt.getStringOr("Structure", "")) instanceof IslandStructure island) {
       this.structure = island;
     } else  {
       this.structure = null;
     }
-    this.tree = find(access.lookupOrThrow(Registries.CONFIGURED_FEATURE), nbt.getString("Tree"));
-    this.numberOfTreesPlaced = nbt.getInt("NumberOfTreesPlaced");
+    this.tree = find(access.lookupOrThrow(Registries.FEATURE), nbt.getStringOr("Tree", ""));
+    this.numberOfTreesPlaced = nbt.getIntOr("NumberOfTreesPlaced", 0);
   }
 
   private static StructurePlaceSettings makeSettings(Rotation rotation, Mirror mirror) {
@@ -75,7 +75,7 @@ public class IslandPiece extends TemplateStructurePiece {
     tag.putString("Mi", this.placeSettings.getMirror().name());
     tag.putInt("NumberOfTreesPlaced", this.numberOfTreesPlaced);
     if (tree != null) {
-      Identifier key = access.lookupOrThrow(Registries.CONFIGURED_FEATURE).getKey(tree);
+      Identifier key = access.lookupOrThrow(Registries.FEATURE).getKey(tree);
       if (key != null) {
         tag.putString("Tree", key.toString());
       }
@@ -103,7 +103,7 @@ public class IslandPiece extends TemplateStructurePiece {
       }
       case "tconstruct:slime_tall_grass" -> {
         if (this.structure != null && rand.nextBoolean()) {
-          Optional<Block> plant = this.structure.getGrasses().getRandomValue(rand);
+          Optional<Block> plant = this.structure.getGrasses().getRandom(rand);
           if (plant.isPresent()) {
             Block block = plant.get();
             BlockState state = block.defaultBlockState();
@@ -165,7 +165,7 @@ public class IslandPiece extends TemplateStructurePiece {
   private static <T> T find(Registry<T> registry, String key) {
     Identifier id = Identifier.tryParse(key);
     if (id != null) {
-      return registry.get(id);
+      return registry.getValue(id);
     }
     return null;
   }

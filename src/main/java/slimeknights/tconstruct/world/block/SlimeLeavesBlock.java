@@ -7,7 +7,10 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.LeavesBlock;
+import net.minecraft.world.level.block.sounds.AmbientLeavesBlockSoundPlayer;
 import net.minecraft.world.level.block.state.BlockState;
 import slimeknights.tconstruct.common.TinkerTags;
 
@@ -15,22 +18,23 @@ public class SlimeLeavesBlock extends LeavesBlock {
   @Getter
   private final FoliageType foliageType;
   public SlimeLeavesBlock(Properties properties, FoliageType foliageType) {
-    super(properties);
+    // slime leaves have no ambient sounds and no falling leaf particles, matching the leaves they were based on
+    super(AmbientLeavesBlockSoundPlayer.noAmbientSound(), properties);
     this.foliageType = foliageType;
   }
 
   @Override
-  public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, LevelAccessor worldIn, BlockPos currentPos, BlockPos facingPos) {
+  protected BlockState updateShape(BlockState stateIn, LevelReader worldIn, ScheduledTickAccess ticks, BlockPos currentPos, Direction facing, BlockPos facingPos, BlockState facingState, RandomSource random) {
     int i = getDistance(facingState) + 1;
     if (i != 1 || stateIn.getValue(DISTANCE) != i) {
-      worldIn.scheduleTick(currentPos, this, 1);
+      ticks.scheduleTick(currentPos, this, 1);
     }
 
     return stateIn;
   }
 
   @Override
-  public void tick(BlockState state, ServerLevel worldIn, BlockPos pos, RandomSource random) {
+  protected void tick(BlockState state, ServerLevel worldIn, BlockPos pos, RandomSource random) {
     worldIn.setBlock(pos, updateDistance(state, worldIn, pos), 3);
   }
 

@@ -12,12 +12,12 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.RandomSource;
-import net.minecraft.util.random.SimpleWeightedRandomList;
+import net.minecraft.util.random.WeightedList;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.levelgen.Heightmap.Types;
-import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureType;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilder;
@@ -34,21 +34,21 @@ public class IslandStructure extends Structure {
   public static final MapCodec<IslandStructure> CODEC = RecordCodecBuilder.mapCodec(inst ->
     inst.group(settingsCodec(inst)).and(inst.group(
           IslandPlacement.CODEC.fieldOf("placement").forGetter(s -> s.placement),
-          SimpleWeightedRandomList.wrappedCodec(Identifier.CODEC).fieldOf("templates").forGetter(s -> s.templates),
-          SimpleWeightedRandomList.wrappedCodec(ConfiguredFeature.CODEC).fieldOf("trees").forGetter(s -> s.trees),
+          WeightedList.codec(Identifier.CODEC).fieldOf("templates").forGetter(s -> s.templates),
+          WeightedList.codec(Feature.CODEC).fieldOf("trees").forGetter(s -> s.trees),
           BuiltInRegistries.BLOCK.byNameCodec().optionalFieldOf("vines").forGetter(s -> s.vines),
-          SimpleWeightedRandomList.wrappedCodec(BuiltInRegistries.BLOCK.byNameCodec()).fieldOf("grasses").forGetter(s -> s.grasses)))
+          WeightedList.codec(BuiltInRegistries.BLOCK.byNameCodec()).fieldOf("grasses").forGetter(s -> s.grasses)))
         .apply(inst, IslandStructure::new));
 
   @Getter
   private final IslandPlacement placement;
-  private final SimpleWeightedRandomList<Identifier> templates;
-  private final SimpleWeightedRandomList<Holder<ConfiguredFeature<?,?>>> trees;
+  private final WeightedList<Identifier> templates;
+  private final WeightedList<Holder<Feature>> trees;
   private final Optional<Block> vines;
   @Getter
-  private final SimpleWeightedRandomList<Block> grasses;
+  private final WeightedList<Block> grasses;
 
-  public IslandStructure(StructureSettings settings, IslandPlacement placement, SimpleWeightedRandomList<Identifier> templates, SimpleWeightedRandomList<Holder<ConfiguredFeature<?,?>>> trees, Optional<Block> vines, SimpleWeightedRandomList<Block> grasses) {
+  public IslandStructure(StructureSettings settings, IslandPlacement placement, WeightedList<Identifier> templates, WeightedList<Holder<Feature>> trees, Optional<Block> vines, WeightedList<Block> grasses) {
     super(settings);
     this.placement = placement;
     this.templates = templates;
@@ -69,7 +69,7 @@ public class IslandStructure extends Structure {
   }
 
   @Override
-  public Optional<GenerationStub> findGenerationPoint(GenerationContext context) {
+  protected Optional<GenerationStub> findGenerationPoint(GenerationContext context) {
     // get height
     // biome check
 //    BlockPos targetPos = context.chunkPos().getMiddleBlockPosition(height);
@@ -78,18 +78,19 @@ public class IslandStructure extends Structure {
 //    }
 
     // find variant
-    return onTopOfChunkCenter(context, Types.WORLD_SURFACE, builder -> this.generatePieces(builder, context));
+    // islands sit at custom heights, so skip the newer on top of chunk center biome check (biome is still validated at the start position)
+    return onTopOfChunkCenterWithoutBiomeCheck(context, Types.WORLD_SURFACE, builder -> this.generatePieces(builder, context));
   }
 
   private void generatePieces(StructurePiecesBuilder builder, Structure.GenerationContext context) {
     RandomSource random = context.random();
-    Optional<Identifier> template = templates.getRandomValue(random);
+    Optional<Identifier> template = templates.getRandom(random);
     if (template.isPresent()) {
       Rotation rotation = Rotation.getRandom(random);
       int height = placement.getHeight(context.chunkPos(), context.chunkGenerator(), context.heightAccessor(), rotation, random, context.randomState());
       BlockPos targetPos = context.chunkPos().getMiddleBlockPosition(height);
       Mirror mirror = Util.getRandom(Mirror.values(), random);
-      builder.addPiece(new IslandPiece(context.structureTemplateManager(), this, template.get(), targetPos, trees.getRandomValue(random).map(Holder::value).orElse(null), rotation, mirror));
+      builder.addPiece(new IslandPiece(context.structureTemplateManager(), this, template.get(), targetPos, trees.getRandom(random).map(Holder::value).orElse(null), rotation, mirror));
     }
   }
 
@@ -112,9 +113,9 @@ public class IslandStructure extends Structure {
     private static final String[] SIZES = new String[] { "0x1x0", "2x2x4", "4x1x6", "8x1x11", "11x1x11" };
 
     private final IslandPlacement placement;
-    private final SimpleWeightedRandomList.Builder<Identifier> templates = SimpleWeightedRandomList.builder();
-    private final SimpleWeightedRandomList.Builder<Holder<ConfiguredFeature<?,?>>> trees = SimpleWeightedRandomList.builder();
-    private final SimpleWeightedRandomList.Builder<Block> grasses = SimpleWeightedRandomList.builder();
+    private final WeightedList.Builder<Identifier> templates = WeightedList.builder();
+    private final WeightedList.Builder<Holder<Feature>> trees = WeightedList.builder();
+    private final WeightedList.Builder<Block> grasses = WeightedList.builder();
     @Nullable
     @Accessors(fluent = true)
     private Block vines;
@@ -134,7 +135,7 @@ public class IslandStructure extends Structure {
     }
 
     /** Adds a new tree to the builder with the given weight */
-    public Builder addTree(Holder<ConfiguredFeature<?,?>> tree, int weight) {
+    public Builder addTree(Holder<Feature> tree, int weight) {
       trees.add(tree, weight);
       return this;
     }

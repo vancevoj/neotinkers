@@ -1,10 +1,10 @@
 package slimeknights.tconstruct.gadgets.entity;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.Vec3;
@@ -20,13 +20,13 @@ import java.util.Set;
  * A normal explosion does a bunch of ray casts from the center, and those ray casts can be interrupted by blocks with high enough resistance (such as water).
  */
 public class EFLNExplosion extends CustomExplosion {
-  public EFLNExplosion(Level world, Vec3 location, float size, @Nullable Entity entity, float damage, @Nullable DamageSource source, float knockback, boolean causesFire, BlockInteraction mode) {
+  public EFLNExplosion(ServerLevel world, Vec3 location, float size, @Nullable Entity entity, float damage, @Nullable DamageSource source, float knockback, boolean causesFire, BlockInteraction mode) {
     super(world, location, size, entity, null, damage, source, knockback, null, causesFire, mode);
   }
 
-  /** @deprecated use {@link #EFLNExplosion(Level, Vec3, float, Entity, float, DamageSource, float, boolean, BlockInteraction)} */
+  /** @deprecated use {@link #EFLNExplosion(ServerLevel, Vec3, float, Entity, float, DamageSource, float, boolean, BlockInteraction)} */
   @Deprecated(forRemoval = true)
-  public EFLNExplosion(Level world, Vec3 location, float size, @Nullable Entity entity, float damage, @Nullable DamageSource source, boolean causesFire, BlockInteraction mode) {
+  public EFLNExplosion(ServerLevel world, Vec3 location, float size, @Nullable Entity entity, float damage, @Nullable DamageSource source, boolean causesFire, BlockInteraction mode) {
     this(world, location, size, entity, damage, source, 1, causesFire, mode);
   }
 

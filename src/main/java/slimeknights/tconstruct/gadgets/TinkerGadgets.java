@@ -1,20 +1,20 @@
 package slimeknights.tconstruct.gadgets;
 
-import net.minecraft.data.DataGenerator;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.decoration.ArmorStand;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab.ItemDisplayParameters;
 import net.minecraft.world.item.CreativeModeTab.Output;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Item.Properties;
-import net.minecraft.world.level.block.ComposterBlock;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
-import net.neoforged.neoforge.data.event.GatherDataEvent;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders;
+import net.neoforged.neoforge.data.event.GatherDataRegistryEntriesEvent;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -41,6 +41,7 @@ import slimeknights.tconstruct.gadgets.entity.shuriken.QuartzShurikenEntity;
 import slimeknights.tconstruct.gadgets.item.EFLNItem;
 import slimeknights.tconstruct.gadgets.item.FancyArmorStandItem;
 import slimeknights.tconstruct.gadgets.item.FancyItemFrameItem;
+import slimeknights.tconstruct.gadgets.item.FoodCakeItem;
 import slimeknights.tconstruct.gadgets.item.GlowBallItem;
 import slimeknights.tconstruct.gadgets.item.PiggyBackPackItem;
 import slimeknights.tconstruct.gadgets.item.PiggyBackPackItem.CarryPotionEffect;
@@ -48,6 +49,9 @@ import slimeknights.tconstruct.gadgets.item.ShootProjectileDispenserBehavior;
 import slimeknights.tconstruct.gadgets.item.ShurikenItem;
 import slimeknights.tconstruct.shared.TinkerFood;
 import slimeknights.tconstruct.world.block.FoliageType;
+
+import java.util.function.BiFunction;
+import java.util.function.UnaryOperator;
 
 /**
  * Contains any special tools unrelated to the base tools.
@@ -60,14 +64,14 @@ public final class TinkerGadgets extends TinkerModule {
   /*
    * Blocks
    */
-  public static final ItemObject<PunjiBlock> punji = BLOCKS.register("punji", () -> new PunjiBlock(builder(MapColor.PLANT, SoundType.GRASS).strength(3.0F).speedFactor(0.4F).noOcclusion().pushReaction(PushReaction.POPPED)), TOOLTIP_BLOCK_ITEM);
+  public static final ItemObject<PunjiBlock> punji = BLOCKS.register("punji", PunjiBlock::new, () -> builder(MapColor.PLANT, SoundType.GRASS).strength(3.0F).speedFactor(0.4F).noOcclusion().pushReaction(PushReaction.POPPED), TOOLTIP_BLOCK_ITEM);
 
   /*
    * Items
    */
-  public static final ItemObject<PiggyBackPackItem> piggyBackpack = ITEMS.register("piggy_backpack", () -> new PiggyBackPackItem(new Properties().stacksTo(16)));
-  public static final EnumObject<FrameType,FancyItemFrameItem> itemFrame = ITEMS.registerEnum(FrameType.values(), "item_frame", (type) -> new FancyItemFrameItem(ITEM_PROPS, (world, pos, dir) -> new FancyItemFrameEntity(world, pos, dir, type)));
-  public static final EnumObject<StandType,FancyArmorStandItem> armorStand = ITEMS.registerEnum(StandType.values(), "armor_stand", type -> new FancyArmorStandItem(new Item.Properties().stacksTo(16), type));
+  public static final ItemObject<PiggyBackPackItem> piggyBackpack = ITEMS.register("piggy_backpack", PiggyBackPackItem::new, props -> props.stacksTo(16));
+  public static final EnumObject<FrameType,FancyItemFrameItem> itemFrame = ITEMS.registerEnum(FrameType.values(), "item_frame", (type, props) -> new FancyItemFrameItem(props, (world, pos, dir) -> new FancyItemFrameEntity(world, pos, dir, type)), ITEM_PROPS);
+  public static final EnumObject<StandType,FancyArmorStandItem> armorStand = ITEMS.registerEnum(StandType.values(), "armor_stand", (type, props) -> new FancyArmorStandItem(props, type), props -> props.stacksTo(16));
 
   // throwballs
   @Deprecated
@@ -77,25 +81,26 @@ public final class TinkerGadgets extends TinkerModule {
   @Deprecated
   public static final ItemObject<ShurikenItem> quartzShuriken, flintShuriken;
   static {
-    Item.Properties THROWABLE_PROPS = new Item.Properties().stacksTo(16);
-    glowBall = ITEMS.register("glow_ball", () -> new GlowBallItem(THROWABLE_PROPS));
-    efln = ITEMS.register("efln_ball", () -> new EFLNItem(THROWABLE_PROPS));
-    quartzShuriken = ITEMS.register("quartz_shuriken", () -> new ShurikenItem(THROWABLE_PROPS, QuartzShurikenEntity::new));
-    flintShuriken = ITEMS.register("flint_shuriken", () -> new ShurikenItem(THROWABLE_PROPS, FlintShurikenEntity::new));
+    UnaryOperator<Item.Properties> THROWABLE_PROPS = props -> props.stacksTo(16);
+    glowBall = ITEMS.register("glow_ball", GlowBallItem::new, THROWABLE_PROPS);
+    efln = ITEMS.register("efln_ball", EFLNItem::new, THROWABLE_PROPS);
+    quartzShuriken = ITEMS.register("quartz_shuriken", props -> new ShurikenItem(props, QuartzShurikenEntity::new), THROWABLE_PROPS);
+    flintShuriken = ITEMS.register("flint_shuriken", props -> new ShurikenItem(props, FlintShurikenEntity::new), THROWABLE_PROPS);
   }
 
   // foods
   public static final EnumObject<FoliageType,FoodCakeBlock> cake;
   public static final ItemObject<FoodCakeBlock> magmaCake;
   static {
-    BlockBehaviour.Properties CAKE = builder(SoundType.WOOL).forceSolidOn().strength(0.5F).sound(SoundType.WOOL).pushReaction(PushReaction.POPPED);
-    cake = BLOCKS.registerEnum(FoliageType.values(), "cake", type -> {
+    // cakes always add a compost layer, and show the slice effects on the item as blocks lost their tooltip hook
+    BiFunction<Block, Item.Properties, BlockItem> cakeItem = (block, props) -> new FoodCakeItem(block, props.stacksTo(1).compostable(ContextIntProviders.COMPOSTABLE_ALWAYS_ADD_ONE));
+    cake = BLOCKS.registerEnum(FoliageType.values(), "cake", (type, props) -> {
       if (type == FoliageType.ICHOR) {
-        return new InvertedCakeBlock(CAKE, TinkerFood.ICHOR_CAKE, EffectCombination.BLOCK);
+        return new InvertedCakeBlock(props, TinkerFood.ICHOR_CAKE, TinkerFood.ICHOR_CAKE_USE, EffectCombination.BLOCK);
       }
-      return new FoodCakeBlock(CAKE, TinkerFood.getCake(type), type == FoliageType.ENDER ? EffectCombination.ADD : EffectCombination.BLOCK);
-    }, UNSTACKABLE_BLOCK_ITEM);
-    magmaCake = BLOCKS.register("magma_cake", () -> new FoodCakeBlock(CAKE, TinkerFood.MAGMA_CAKE, EffectCombination.BLOCK), UNSTACKABLE_BLOCK_ITEM);
+      return new FoodCakeBlock(props, TinkerFood.getCake(type), TinkerFood.getCakeUse(type), type == FoliageType.ENDER ? EffectCombination.ADD : EffectCombination.BLOCK);
+    }, type -> cakeProps(), cakeItem);
+    magmaCake = BLOCKS.register("magma_cake", props -> new FoodCakeBlock(props, TinkerFood.MAGMA_CAKE, TinkerFood.MAGMA_CAKE_USE, EffectCombination.BLOCK), TinkerGadgets::cakeProps, cakeItem);
   }
 
   // Shurikens
@@ -155,11 +160,16 @@ public final class TinkerGadgets extends TinkerModule {
 
   /**
    * Constructor wiring the mod bus, used to register the data attachments owned by this module.
-   * TODO(neoport): TConstruct should construct gadgets via {@code new TinkerGadgets(modBus)} so the piggyback attachment register hooks the mod bus during construction (attachment DeferredRegisters cannot be registered from {@code commonSetup}).
+   * TConstruct constructs gadgets via {@code new TinkerGadgets(modBus)} so the piggyback attachment register hooks the mod bus during construction (attachment DeferredRegisters cannot be registered from {@code commonSetup}).
    * @param modBus  Mod event bus
    */
   public TinkerGadgets(IEventBus modBus) {
     PiggybackCapability.register(modBus);
+  }
+
+  /** Properties for all cakes, must be a new instance each call */
+  private static BlockBehaviour.Properties cakeProps() {
+    return builder(SoundType.WOOL).forceSolidOn().strength(0.5F).sound(SoundType.WOOL).pushReaction(PushReaction.POPPED);
   }
 
   /*
@@ -168,9 +178,7 @@ public final class TinkerGadgets extends TinkerModule {
   @SubscribeEvent
   void commonSetup(final FMLCommonSetupEvent event) {
     event.enqueueWork(() -> {
-      cake.forEach(block -> ComposterBlock.add(1.0f, block));
-      ComposterBlock.add(1.0f, magmaCake.get());
-
+      // cake composting is the compostable item component now, see the cake item above
       DispenserBlock.registerBehavior(glowBall, new ShootProjectileDispenserBehavior(glowBallEntity.get()));
       DispenserBlock.registerBehavior(efln, new ShootProjectileDispenserBehavior(eflnEntity.get()));
       DispenserBlock.registerBehavior(flintShuriken, new ShootProjectileDispenserBehavior(flintShurikenEntity.get()));
@@ -180,9 +188,8 @@ public final class TinkerGadgets extends TinkerModule {
   }
 
   @SubscribeEvent
-  void gatherData(final GatherDataEvent event) {
-    DataGenerator generator = event.getGenerator();
-    generator.addProvider(event.includeServer(), new GadgetRecipeProvider(generator.getPackOutput()));
+  void gatherRegistries(final GatherDataRegistryEntriesEvent event) {
+    event.recipe(GadgetRecipeProvider::new);
   }
 
   @SubscribeEvent

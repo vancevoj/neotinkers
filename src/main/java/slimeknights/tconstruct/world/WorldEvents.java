@@ -4,22 +4,21 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.SkullBlock;
+import net.neoforged.neoforge.event.entity.living.EndermanAngerEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDropsEvent;
 import net.neoforged.neoforge.event.entity.living.LivingEvent.LivingVisibilityEvent;
-import net.neoforged.neoforge.event.village.WandererTradesEvent;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.config.Config;
-import slimeknights.tconstruct.world.logic.AncientToolItemListing;
-
-import java.util.Collections;
+import slimeknights.tconstruct.world.item.EndermanHeadItem;
 
 @SuppressWarnings("unused")
 @EventBusSubscriber(modid = TConstruct.MOD_ID)
@@ -41,30 +40,31 @@ public class WorldEvents {
     }
   }
 
+  /** Enderman heads act like a carved pumpkin, replaces the removed ender mask item hook */
+  @SubscribeEvent
+  static void endermanAnger(EndermanAngerEvent event) {
+    if (EndermanHeadItem.isEnderMask(event.getPlayer())) {
+      event.setCanceled(true);
+    }
+  }
+
   @SubscribeEvent
   static void creeperKill(LivingDropsEvent event) {
     DamageSource source = event.getSource();
     if (source != null) {
       Entity entity = source.getEntity();
-      if (entity instanceof Creeper creeper) {
-        if (creeper.canDropMobsSkull()) {
-          LivingEntity dying = event.getEntity();
-          TinkerHeadType headType = TinkerHeadType.fromEntityType(dying.getType());
-          if (headType != null && Config.COMMON.headDrops.get(headType).get()) {
-            creeper.increaseDroppedSkulls();
-            event.getDrops().add(dying.spawnAtLocation(TinkerWorld.heads.get(headType)));
-          }
+      // charged creepers drop one skull per explosion. Vanilla skulls come from the charged creeper loot table, which runs before this event
+      if (entity instanceof Creeper creeper && creeper.isPowered() && !creeper.droppedSkulls) {
+        LivingEntity dying = event.getEntity();
+        TinkerHeadType headType = TinkerHeadType.fromEntityType(dying.getType());
+        if (headType != null && Config.COMMON.headDrops.get(headType).get()) {
+          creeper.droppedSkulls = true;
+          // drops in the event are added to the world after the event, so just create the item entity
+          ItemEntity drop = new ItemEntity(dying.level(), dying.getX(), dying.getY(), dying.getZ(), new ItemStack(TinkerWorld.heads.get(headType)));
+          drop.setDefaultPickUpDelay();
+          event.getDrops().add(drop);
         }
       }
-    }
-  }
-
-  @SubscribeEvent
-  static void wanderingTrades(WandererTradesEvent event) {
-    // add ancient tools to the wandering trader table
-    int weight = Config.COMMON.wandererAncientToolWeight.get();
-    if (weight > 0) {
-      event.getRareTrades().addAll(Collections.nCopies(weight, AncientToolItemListing.INSTANCE));
     }
   }
 }

@@ -4,21 +4,24 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.core.Direction.AxisDirection;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.InsideBlockEffectApplier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.pathfinder.PathType;
@@ -32,7 +35,7 @@ import java.util.Map;
 
 public class PunjiBlock extends Block {
 
-  public static final DirectionProperty FACING = BlockStateProperties.FACING;
+  public static final EnumProperty<Direction> FACING = BlockStateProperties.FACING;
 
   private static final BooleanProperty NORTH = BlockStateProperties.NORTH;
   private static final BooleanProperty EAST = BlockStateProperties.EAST;
@@ -54,15 +57,13 @@ public class PunjiBlock extends Block {
   @Nullable
   @Override
   public PathType getBlockPathType(BlockState state, BlockGetter level, BlockPos pos, @Nullable Mob mob) {
-    return PathType.DAMAGE_OTHER;
+    return PathType.DAMAGING;
   }
 
-  @SuppressWarnings("deprecation")
-  @Deprecated
   @Override
-  public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor world, BlockPos pos, BlockPos facingPos) {
+  protected BlockState updateShape(BlockState state, LevelReader world, ScheduledTickAccess ticks, BlockPos pos, Direction facing, BlockPos facingPos, BlockState facingState, RandomSource random) {
     if (state.getValue(WATERLOGGED)) {
-      world.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(world));
+      ticks.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(world));
     }
 
     // break if now invalid
@@ -164,20 +165,16 @@ public class PunjiBlock extends Block {
     return facing.getClockWise();
   }
 
-  @SuppressWarnings("deprecation")
-  @Deprecated
   @Override
-  public boolean canSurvive(BlockState state, LevelReader world, BlockPos pos) {
+  protected boolean canSurvive(BlockState state, LevelReader world, BlockPos pos) {
     Direction direction = state.getValue(FACING);
     BlockPos target = pos.relative(direction);
     return world.getBlockState(target).isFaceSturdy(world, target, direction.getOpposite());
   }
 
-  @SuppressWarnings("deprecation")
   @Override
-  @Deprecated
-  public void entityInside(BlockState state, Level worldIn, BlockPos pos, Entity entityIn) {
-    if (entityIn instanceof LivingEntity) {
+  protected void entityInside(BlockState state, Level worldIn, BlockPos pos, Entity entityIn, InsideBlockEffectApplier effectApplier, boolean isPrecise) {
+    if (entityIn instanceof LivingEntity && worldIn instanceof ServerLevel serverLevel) {
       Direction side = state.getValue(FACING);
       Axis axis = side.getAxis();
       // only take damage if in the same half as the punji sticks
@@ -195,7 +192,7 @@ public class PunjiBlock extends Block {
       if (entityIn.fallDistance > 0) {
         damage += entityIn.fallDistance + 1;
       }
-      entityIn.hurt(entityIn.damageSources().cactus(), damage);
+      entityIn.hurtServer(serverLevel, entityIn.damageSources().cactus(), damage);
     }
   }
 
@@ -211,17 +208,13 @@ public class PunjiBlock extends Block {
     BOUNDS.put(Direction.WEST, Shapes.box(0, 0.1875, 0.1875, 0.375, 0.8125, 0.8125));
   }
 
-  @SuppressWarnings("deprecation")
-  @Deprecated
   @Override
-  public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
+  protected VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
     return BOUNDS.get(state.getValue(FACING));
   }
 
-  @SuppressWarnings("deprecation")
-  @Deprecated
   @Override
-  public FluidState getFluidState(BlockState state) {
+  protected FluidState getFluidState(BlockState state) {
     return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
   }
 }

@@ -1,6 +1,7 @@
 package slimeknights.tconstruct.gadgets.entity;
 
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.throwableitemprojectile.ThrowableItemProjectile;
@@ -19,12 +20,16 @@ public class EFLNEntity extends ThrowableItemProjectile implements IEntityWithCo
     super(type, level);
   }
 
+  public EFLNEntity(Level level, LivingEntity thrower, ItemStack stack) {
+    super(TinkerGadgets.eflnEntity.get(), thrower, level, stack);
+  }
+
   public EFLNEntity(Level level, LivingEntity thrower) {
-    super(TinkerGadgets.eflnEntity.get(), thrower, level);
+    this(level, thrower, new ItemStack(TinkerGadgets.efln.get()));
   }
 
   public EFLNEntity(Level worldIn, double x, double y, double z) {
-    super(TinkerGadgets.eflnEntity.get(), x, y, z, worldIn);
+    super(TinkerGadgets.eflnEntity.get(), x, y, z, worldIn, new ItemStack(TinkerGadgets.efln.get()));
   }
 
   @Override
@@ -34,8 +39,7 @@ public class EFLNEntity extends ThrowableItemProjectile implements IEntityWithCo
 
   @Override
   protected void onHit(HitResult result) {
-    Level level = level();
-    if (!level.isClientSide()) {
+    if (level() instanceof ServerLevel level) {
       new EFLNExplosion(level, position(), 4f, this, 8f, null, 1, false, BlockInteraction.DESTROY).handleServer();
       this.discard();
     }

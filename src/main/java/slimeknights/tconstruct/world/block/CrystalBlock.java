@@ -20,8 +20,8 @@ public class CrystalBlock extends Block {
   public void onProjectileHit(Level level, BlockState state, BlockHitResult hit, Projectile projectile) {
     if (!level.isClientSide()) {
       BlockPos pos = hit.getBlockPos();
-      level.playSound(null, pos, getSoundType(state, level, pos, projectile).getHitSound(), SoundSource.BLOCKS, 1.0F, 0.5F + level.random.nextFloat() * 1.2F);
-      level.playSound(null, pos, chimeSound, SoundSource.BLOCKS, 1.0F, 0.5F + level.random.nextFloat() * 1.2F);
+      level.playSound(null, pos, getSoundType(state, level, pos, projectile).getHitSound(), SoundSource.BLOCKS, 1.0F, 0.5F + level.getRandom().nextFloat() * 1.2F);
+      level.playSound(null, pos, chimeSound, SoundSource.BLOCKS, 1.0F, 0.5F + level.getRandom().nextFloat() * 1.2F);
     }
   }
 }

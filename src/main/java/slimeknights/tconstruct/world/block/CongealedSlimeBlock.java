@@ -6,6 +6,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.InsideBlockEffectApplier;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -27,12 +28,12 @@ public class CongealedSlimeBlock extends Block {
 
   @Deprecated
   @Override
-  public VoxelShape getCollisionShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
+  protected VoxelShape getCollisionShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
     return SHAPE;
   }
 
   @Override
-  public boolean isPathfindable(BlockState state, PathComputationType type) {
+  protected boolean isPathfindable(BlockState state, PathComputationType type) {
     return false;
   }
 
@@ -43,35 +44,33 @@ public class CongealedSlimeBlock extends Block {
   }
 
   @Override
-  public void updateEntityAfterFallOn(BlockGetter worldIn, Entity entity) {
-    if (entity.isSuppressingBounce() || !(entity instanceof LivingEntity) && !(entity instanceof ItemEntity)) {
-      super.updateEntityAfterFallOn(worldIn, entity);
-      // this is mostly needed to prevent XP orbs from bouncing. which completely breaks the game.
-      return;
+  public float getBounceRestitution(Level level, BlockPos pos, BlockState state, Entity entity) {
+    // only living entities and items bounce, this is mostly needed to prevent XP orbs from bouncing. which completely breaks the game.
+    // non-living entities have the bounce reduced by 20% automatically, matching the old 0.8 item bounce
+    if (entity instanceof LivingEntity || entity instanceof ItemEntity) {
+      return 1.0f;
     }
+    return 0.0f;
+  }
 
-    Vec3 vec3d = entity.getDeltaMovement();
-
-    if (vec3d.y < 0) {
-      double speed = entity instanceof LivingEntity ? 1.0D : 0.8D;
-      entity.setDeltaMovement(vec3d.x, -vec3d.y * speed, vec3d.z);
+  @Override
+  public void bounceOn(Level level, BlockState state, BlockPos pos, Entity entity, double fallDistance) {
+    if (entity instanceof LivingEntity || entity instanceof ItemEntity) {
       entity.fallDistance = 0;
       if (entity instanceof ItemEntity) {
         entity.setOnGround(false);
       }
-    } else {
-      super.updateEntityAfterFallOn(worldIn, entity);
     }
   }
 
   @Override
-  public void fallOn(Level worldIn, BlockState state, BlockPos pos, Entity entityIn, float fallDistance) {
+  public void fallOn(Level worldIn, BlockState state, BlockPos pos, Entity entityIn, double fallDistance) {
     // no fall damage on congealed slime
     entityIn.causeFallDamage(fallDistance, 0.0F, worldIn.damageSources().fall());
   }
 
   @Override
-  public void entityInside(BlockState state, Level worldIn, BlockPos pos, Entity entityIn) {
+  protected void entityInside(BlockState state, Level worldIn, BlockPos pos, Entity entityIn, InsideBlockEffectApplier effectApplier, boolean isPrecise) {
     if (!worldIn.isClientSide() && !entityIn.isSuppressingBounce()) {
       Vec3 entityPosition = entityIn.position();
       Vec3 direction = entityPosition.subtract(pos.getX() + 0.5f, pos.getY(), pos.getZ() + 0.5f);

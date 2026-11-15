@@ -3,16 +3,17 @@ package slimeknights.tconstruct.gadgets.block;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.InsideBlockEffectApplier;
 import net.minecraft.world.entity.vehicle.minecart.AbstractMinecart;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.RailBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.Hopper;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.capabilities.Capabilities;
-import net.neoforged.neoforge.items.IItemHandler;
-import net.neoforged.neoforge.items.ItemHandlerHelper;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.item.ItemResource;
+import net.neoforged.neoforge.transfer.transaction.Transaction;
 import slimeknights.mantle.inventory.EmptyItemHandler;
 
 import javax.annotation.Nullable;
@@ -26,8 +27,8 @@ public class DropperRailBlock extends RailBlock {
 
   @SuppressWarnings("deprecation")
   @Override
-  protected void entityInside(BlockState state, Level world, BlockPos pos, Entity entity) {
-    super.entityInside(state, world, pos, entity);
+  protected void entityInside(BlockState state, Level world, BlockPos pos, Entity entity, InsideBlockEffectApplier effectApplier, boolean isPrecise) {
+    super.entityInside(state, world, pos, entity, effectApplier, isPrecise);
     if (!(entity instanceof AbstractMinecart cart) || !(cart instanceof Hopper)) {
       return;
     }
@@ -40,24 +41,26 @@ public class DropperRailBlock extends RailBlock {
       return;
     }
 
-    IItemHandler itemHandlerCart = orEmpty(Capabilities.Item.ENTITY.getCapability(cart, null));
-    IItemHandler itemHandlerTE = orEmpty(world.getCapability(Capabilities.Item.BLOCK, pos.below(), Direction.UP));
+    ResourceHandler<ItemResource> itemHandlerCart = orEmpty(Capabilities.Item.ENTITY.getCapability(cart, null));
+    ResourceHandler<ItemResource> itemHandlerTE = orEmpty(world.getCapability(Capabilities.Item.BLOCK, pos.below(), Direction.UP));
 
-    for (int i = 0; i < itemHandlerCart.getSlots(); i++) {
-      ItemStack itemStack = itemHandlerCart.extractItem(i, 1, true);
-      if (itemStack.isEmpty()) {
+    // move a single item from the cart into the block below
+    for (int i = 0; i < itemHandlerCart.size(); i++) {
+      ItemResource resource = itemHandlerCart.getResource(i);
+      if (resource.isEmpty()) {
         continue;
       }
-      if (ItemHandlerHelper.insertItem(itemHandlerTE, itemStack, true).isEmpty()) {
-        itemStack = itemHandlerCart.extractItem(i, 1, false);
-        ItemHandlerHelper.insertItem(itemHandlerTE, itemStack, false);
-        break;
+      try (Transaction transaction = Transaction.openRoot()) {
+        if (itemHandlerCart.extract(i, resource, 1, transaction) == 1 && itemHandlerTE.insert(resource, 1, transaction) == 1) {
+          transaction.commit();
+          break;
+        }
       }
     }
   }
 
   /** Returns the given handler, or the empty handler if null */
-  private static IItemHandler orEmpty(@Nullable IItemHandler handler) {
+  private static ResourceHandler<ItemResource> orEmpty(@Nullable ResourceHandler<ItemResource> handler) {
     return handler == null ? EmptyItemHandler.INSTANCE : handler;
   }
 

@@ -1,13 +1,15 @@
 package slimeknights.tconstruct.gadgets.item;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
-import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
+import net.minecraft.client.gui.Hud;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.protocol.game.ClientboundSetPassengersPacket;
 import net.minecraft.resources.Identifier;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.Prediction;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.effect.MobEffectCategory;
@@ -19,9 +21,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.client.extensions.common.IClientMobEffectExtensions;
-import net.neoforged.neoforge.items.ItemHandlerHelper;
 import slimeknights.mantle.item.TooltipItem;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.TinkerEffect;
@@ -31,6 +31,7 @@ import slimeknights.tconstruct.gadgets.TinkerGadgets;
 import slimeknights.tconstruct.gadgets.capability.PiggybackCapability;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.function.Consumer;
 
 public class PiggyBackPackItem extends TooltipItem {
@@ -54,7 +55,7 @@ public class PiggyBackPackItem extends TooltipItem {
     if (pickupEntity(playerIn, target)) {
       // unequip old armor
       if (chestArmor.getItem() != this) {
-        ItemHandlerHelper.giveItemToPlayer(playerIn, chestArmor);
+        playerIn.getInventory().placeItemBackInInventory(chestArmor, Prediction.SERVER_ONLY);
         chestArmor = ItemStack.EMPTY;
       }
 
@@ -88,7 +89,7 @@ public class PiggyBackPackItem extends TooltipItem {
   }
 
   private static boolean pickupEntity(Player player, Entity target) {
-    if (player.level().isClientSide() || target.getType().is(TinkerTags.EntityTypes.PIGGYBACKPACK_BLACKLIST)) {
+    if (player.level().isClientSide() || target.is(TinkerTags.EntityTypes.PIGGYBACKPACK_BLACKLIST)) {
       return false;
     }
     // silly players, clicking on entities they're already carrying or riding
@@ -110,7 +111,7 @@ public class PiggyBackPackItem extends TooltipItem {
     // can only ride one entity each
     if (!toRide.isVehicle() && count < MAX_ENTITY_STACK) {
       // todo: possibly throw off all passengers of the target
-      if (target.startRiding(toRide, true)) {
+      if (target.startRiding(toRide, true, true)) {
         if (player instanceof ServerPlayer) {
           TinkerNetwork.getInstance().sendVanillaPacket(player, new ClientboundSetPassengersPacket(player));
         }
@@ -146,7 +147,7 @@ public class PiggyBackPackItem extends TooltipItem {
   }
 
   @Override
-  public void inventoryTick(ItemStack stack, Level worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+  public void inventoryTick(ItemStack stack, ServerLevel worldIn, Entity entityIn, @Nullable EquipmentSlot slot) {
     if (entityIn instanceof LivingEntity livingEntity && livingEntity.getItemBySlot(EquipmentSlot.CHEST) == stack && entityIn.isVehicle()) {
       int amplifier = this.getEntitiesCarriedCount(livingEntity) - 1;
       livingEntity.addEffect(new MobEffectInstance(BuiltInRegistries.MOB_EFFECT.wrapAsHolder(TinkerGadgets.carryEffect.get()), 2, amplifier, true, false, true));
@@ -169,13 +170,13 @@ public class PiggyBackPackItem extends TooltipItem {
     }
 
     @Override
-    public boolean applyEffectTick(@Nonnull LivingEntity livingEntityIn, int p_76394_2_) {
+    public boolean applyEffectTick(ServerLevel level, @Nonnull LivingEntity livingEntityIn, int p_76394_2_) {
       ItemStack chestArmor = livingEntityIn.getItemBySlot(EquipmentSlot.CHEST);
       if (chestArmor.isEmpty() || chestArmor.getItem() != TinkerGadgets.piggyBackpack.get()) {
         TinkerGadgets.piggyBackpack.get().matchCarriedEntitiesToCount(livingEntityIn, 0);
       } else {
         TinkerGadgets.piggyBackpack.get().matchCarriedEntitiesToCount(livingEntityIn, chestArmor.getCount());
-        if (!livingEntityIn.level().isClientSide() && livingEntityIn instanceof Player player) {
+        if (livingEntityIn instanceof Player player) {
           PiggybackCapability.get(player).updatePassengers(player);
         }
       }
@@ -185,31 +186,32 @@ public class PiggyBackPackItem extends TooltipItem {
     @Override
     public void initializeClient(Consumer<IClientMobEffectExtensions> consumer) {
       consumer.accept(new IClientMobEffectExtensions() {
-        private final Minecraft mc = Minecraft.getInstance();
+        /** Mob effect textures are GUI sprites now, textures/mob_effect/carry.png is the sprite tconstruct:mob_effect/carry */
         private static final Identifier[] ICONS = {
-          TConstruct.getResource("carry"),
-          TConstruct.getResource("carry_2"),
-          TConstruct.getResource("carry_3")
+          TConstruct.getResource("mob_effect/carry"),
+          TConstruct.getResource("mob_effect/carry_2"),
+          TConstruct.getResource("mob_effect/carry_3")
         };
 
         /** Common logic to render the icon */
-        private void renderIcon(MobEffectInstance effect, GuiGraphicsExtractor graphics, int x, int y) {
+        private void renderIcon(MobEffectInstance effect, GuiGraphicsExtractor graphics, int x, int y, int width, int height, int color) {
           int amplifier = effect.getAmplifier();
           if (amplifier > 2) {
             amplifier = 2;
           }
-          graphics.blit(x, y, 0, 18, 18, mc.getMobEffectTextures().getSprite(ICONS[amplifier]));
+          graphics.blitSprite(RenderPipelines.GUI_TEXTURED, ICONS[amplifier], x, y, width, height, color);
         }
 
+        // positions are already aligned to the icon by NeoForge, unlike the old render hooks
         @Override
-        public boolean renderInventoryIcon(MobEffectInstance effect, EffectRenderingInventoryScreen<?> gui, GuiGraphicsExtractor graphics, int x, int y, int z) {
-          renderIcon(effect, graphics, x, y + 7);
+        public boolean extractInventoryIcon(MobEffectInstance effect, AbstractContainerScreen<?> screen, GuiGraphicsExtractor graphics, int x, int y, int width, int height, int color) {
+          renderIcon(effect, graphics, x, y, width, height, color);
           return true;
         }
 
         @Override
-        public boolean renderGuiIcon(MobEffectInstance effect, Gui gui, GuiGraphicsExtractor graphics, int x, int y, float z, float alpha) {
-          renderIcon(effect, graphics, x + 3, y + 3);
+        public boolean extractHudIcon(MobEffectInstance effect, Hud hud, GuiGraphicsExtractor graphics, int x, int y, int width, int height, int color) {
+          renderIcon(effect, graphics, x, y, width, height, color);
           return true;
         }
       });

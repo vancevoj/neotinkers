@@ -4,18 +4,21 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Item.TooltipContext;
 import net.minecraft.world.item.SnowballItem;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.level.Level;
 import slimeknights.mantle.util.TranslationHelper;
 import slimeknights.tconstruct.common.Sounds;
 import slimeknights.tconstruct.gadgets.entity.GlowballEntity;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 /** @deprecated use {@link slimeknights.tconstruct.library.tools.item.ModifiableShurikenItem} with {@link slimeknights.tconstruct.tools.modules.ranged.common.ProjectilePlaceGlowModule} */
 @Deprecated
@@ -26,7 +29,7 @@ public class GlowBallItem extends SnowballItem {
   }
 
   @Override
-  public InteractionResultHolder<ItemStack> use(Level level, Player playerIn, InteractionHand handIn) {
+  public InteractionResult use(Level level, Player playerIn, InteractionHand handIn) {
     ItemStack itemstack = playerIn.getItemInHand(handIn);
     if (!playerIn.getAbilities().instabuild) {
       itemstack.shrink(1);
@@ -41,12 +44,15 @@ public class GlowBallItem extends SnowballItem {
     }
 
     playerIn.awardStat(Stats.ITEM_USED.get(this));
-    return InteractionResultHolder.sidedSuccess(itemstack, level.isClientSide());
+    return InteractionResult.SUCCESS;
   }
 
+  @SuppressWarnings("deprecation")
   @Override
-  public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-    TranslationHelper.addOptionalTooltip(stack, tooltip);
-    super.appendHoverText(stack, context, tooltip, flag);
+  public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
+    List<Component> lines = new ArrayList<>();
+    TranslationHelper.addOptionalTooltip(stack, lines);
+    lines.forEach(tooltip);
+    super.appendHoverText(stack, context, display, tooltip, flag);
   }
 }

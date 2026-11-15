@@ -22,10 +22,8 @@ public class SlimeSaplingBlock extends SaplingBlock {
     return TinkerWorld.slimeDirt.contains(block) || TinkerWorld.vanillaSlimeGrass.contains(block) || TinkerWorld.earthSlimeGrass.contains(block) || TinkerWorld.skySlimeGrass.contains(block) || TinkerWorld.enderSlimeGrass.contains(block) || TinkerWorld.ichorSlimeGrass.contains(block);
   }
 
-  @SuppressWarnings("deprecation")
   @Override
-  @Deprecated
-  public boolean canBeReplaced(BlockState state, BlockPlaceContext useContext) {
+  protected boolean canBeReplaced(BlockState state, BlockPlaceContext useContext) {
     return false;
   }
 }

@@ -7,6 +7,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.BonemealSource;
 import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.lighting.LightEngine;
@@ -25,30 +26,29 @@ public class SlimeNyliumBlock extends Block implements BonemealableBlock {
   private static boolean isDarkEnough(BlockState state, LevelReader reader, BlockPos pos) {
     BlockPos blockpos = pos.above();
     BlockState blockstate = reader.getBlockState(blockpos);
-    int i = LightEngine.getLightBlockInto(reader, state, pos, blockstate, blockpos, Direction.UP, blockstate.getLightBlock(reader, blockpos));
-    return i < reader.getMaxLightLevel();
+    int i = LightEngine.getLightDampeningInto(state, blockstate, Direction.UP, blockstate.getLightDampening());
+    return i < LightEngine.MAX_LEVEL;
   }
 
-  @SuppressWarnings("deprecation")
   @Override
-  public void randomTick(BlockState state, ServerLevel worldIn, BlockPos pos, RandomSource random) {
+  protected void randomTick(BlockState state, ServerLevel worldIn, BlockPos pos, RandomSource random) {
     if (!isDarkEnough(state, worldIn, pos)) {
       worldIn.setBlockAndUpdate(pos, SlimeGrassBlock.getDirtState(state));
     }
   }
 
   @Override
-  public boolean isValidBonemealTarget(LevelReader worldIn, BlockPos pos, BlockState state) {
+  public boolean isValidBonemealTarget(LevelReader worldIn, BlockPos pos, BlockState state, BonemealSource source) {
     return worldIn.getBlockState(pos.above()).isAir();
   }
 
   @Override
-  public boolean isBonemealSuccess(Level worldIn, RandomSource rand, BlockPos pos, BlockState state) {
+  public boolean isBonemealSuccess(Level worldIn, RandomSource rand, BlockPos pos, BlockState state, BonemealSource source) {
     return true;
   }
 
   @Override
-  public void performBonemeal(ServerLevel world, RandomSource rand, BlockPos pos, BlockState state) {
+  public void performBonemeal(ServerLevel world, RandomSource rand, BlockPos pos, BlockState state, BonemealSource source) {
     SlimeGrassBlock.growGrass(world, rand, pos, TinkerTags.Blocks.SLIMY_NYLIUM, foliageType, true, true);
   }
 }

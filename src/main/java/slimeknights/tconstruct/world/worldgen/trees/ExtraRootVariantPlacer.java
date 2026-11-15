@@ -8,17 +8,18 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.codec.RegistryCodecs;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.valueproviders.IntProvider;
-import net.minecraft.world.level.LevelSimulatedReader;
+import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration;
+import net.minecraft.world.level.levelgen.feature.TreeFeature;
 import net.minecraft.world.level.levelgen.feature.rootplacers.AboveRootPlacement;
 import net.minecraft.world.level.levelgen.feature.rootplacers.MangroveRootPlacement;
 import net.minecraft.world.level.levelgen.feature.rootplacers.MangroveRootPlacer;
@@ -39,12 +40,15 @@ import java.util.function.Predicate;
 /** Extension of {@link MangroveRootPlacer} to allow more root variants */
 public class ExtraRootVariantPlacer extends MangroveRootPlacer {
   public static final MapCodec<ExtraRootVariantPlacer> CODEC = RecordCodecBuilder.mapCodec(inst -> rootPlacerParts(inst).and(inst.group(
-    MangroveRootPlacement.CODEC.fieldOf("mangrove_root_placement").forGetter(p -> p.mangroveRootPlacement),
+    MangroveRootPlacement.CODEC.fieldOf("mangrove_root_placement").forGetter(p -> p.placement),
     RootVariant.CODEC.listOf().fieldOf("root_variants").forGetter(p -> p.rootVariants))).apply(inst, ExtraRootVariantPlacer::new));
 
+  /** Copy of the mangrove placement for serializing, the parent field is private */
+  private final MangroveRootPlacement placement;
   private final List<RootVariant> rootVariants;
-  public ExtraRootVariantPlacer(IntProvider pTrunkOffset, BlockStateProvider pRootProvider, Optional<AboveRootPlacement> pAboveRootPlacement, MangroveRootPlacement mangrovePlacement, List<RootVariant> rootVariants) {
+  public ExtraRootVariantPlacer(IntProvider pTrunkOffset, Holder<BlockStateProvider> pRootProvider, Optional<AboveRootPlacement> pAboveRootPlacement, MangroveRootPlacement mangrovePlacement, List<RootVariant> rootVariants) {
     super(pTrunkOffset, pRootProvider, pAboveRootPlacement, mangrovePlacement);
+    this.placement = mangrovePlacement;
     this.rootVariants = rootVariants;
   }
 
@@ -54,10 +58,10 @@ public class ExtraRootVariantPlacer extends MangroveRootPlacer {
   }
 
   @Override
-  protected void placeRoot(LevelSimulatedReader level, BiConsumer<BlockPos,BlockState> placer, RandomSource pRandom, BlockPos pos, TreeConfiguration pTreeConfig) {
+  protected void placeRoot(WorldGenLevel level, BiConsumer<BlockPos,BlockState> placer, RandomSource pRandom, BlockPos pos, TreeFeature pTreeConfig) {
     for (RootVariant variant : rootVariants) {
       if (level.isStateAtPosition(pos, variant)) {
-        placer.accept(pos, this.getPotentiallyWaterloggedState(level, pos, variant.state.getState(pRandom, pos)));
+        placer.accept(pos, this.getPotentiallyWaterloggedState(level, pos, variant.state.getState(level, pRandom, pos)));
         return;
       }
     }
@@ -139,11 +143,16 @@ public class ExtraRootVariantPlacer extends MangroveRootPlacer {
       return this;
     }
 
-    /** Sets the blocks that the roots can grow though */
-    @SuppressWarnings("deprecation")
+    /**
+     * Sets the blocks that the roots can grow though.
+     * Tags are not bound during datagen, so the tag is fetched from the bootstrap lookup ({@code context.lookup(Registries.BLOCK)}).
+     * @param blocks  Block lookup
+     * @param tag     Tag of blocks the roots can grow through
+     * @return  Builder instance
+     */
     @CanIgnoreReturnValue
-    public Builder canGrowThroughTag(TagKey<Block> tag) {
-      return canGrowThrough(BuiltInRegistries.BLOCK.getOrCreateTag(tag));
+    public Builder canGrowThroughTag(HolderGetter<Block> blocks, TagKey<Block> tag) {
+      return canGrowThrough(blocks.getOrThrow(tag));
     }
 
     /** Builds the final placer */
@@ -154,11 +163,12 @@ public class ExtraRootVariantPlacer extends MangroveRootPlacer {
       List<RootVariant> rootVariants = this.rootVariants.build();
       if (rootVariants.isEmpty()) throw new IllegalStateException("Must have at least one root variant");
       RootVariant first = rootVariants.get(0);
-      MangroveRootPlacement mangrovePlacement = new MangroveRootPlacement(canGrowThrough, first.holder, first.state, maxRootWidth, maxRootLength, randomSkewChance);
+      MangroveRootPlacement mangrovePlacement = new MangroveRootPlacement(canGrowThrough, first.holder, Holder.direct(first.state), maxRootWidth, maxRootLength, randomSkewChance);
+      Holder<BlockStateProvider> rootProvider = Holder.direct(roots);
       if (rootVariants.size() == 1) {
-        return new MangroveRootPlacer(trunkOffset, roots, Optional.ofNullable(aboveRootPlacement), mangrovePlacement);
+        return new MangroveRootPlacer(trunkOffset, rootProvider, Optional.ofNullable(aboveRootPlacement), mangrovePlacement);
       }
-      return new ExtraRootVariantPlacer(trunkOffset, roots, Optional.ofNullable(aboveRootPlacement), mangrovePlacement, rootVariants.stream().skip(1).toList());
+      return new ExtraRootVariantPlacer(trunkOffset, rootProvider, Optional.ofNullable(aboveRootPlacement), mangrovePlacement, rootVariants.stream().skip(1).toList());
     }
 
     /** Builds the placer into an optional */

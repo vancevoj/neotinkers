@@ -60,7 +60,7 @@ public class TerracubeEntity extends ArmoredSlimeEntity {
   }
 
   @Override
-  protected int calculateFallDamage(float distance, float damageMultiplier) {
+  protected int calculateFallDamage(double distance, float damageMultiplier) {
     return 0;
   }
 

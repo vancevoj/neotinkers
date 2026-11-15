@@ -1,11 +1,8 @@
 package slimeknights.tconstruct.world.block;
 
 import com.google.common.collect.Lists;
-import com.mojang.serialization.MapCodec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
 import lombok.Getter;
 import net.minecraft.core.BlockPos;
-import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
@@ -23,11 +20,6 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 public class SlimeTallGrassBlock extends VegetationBlock implements IShearable {
-  public static final MapCodec<SlimeTallGrassBlock> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
-    propertiesCodec(),
-    StringRepresentable.fromEnum(FoliageType::values).fieldOf("foliage").forGetter(SlimeTallGrassBlock::getFoliageType)
-  ).apply(inst, SlimeTallGrassBlock::new));
-
   private static final VoxelShape SHAPE = Block.box(2.0D, 0.0D, 2.0D, 14.0D, 13.0D, 14.0D);
 
   @Getter
@@ -38,13 +30,7 @@ public class SlimeTallGrassBlock extends VegetationBlock implements IShearable {
   }
 
   @Override
-  protected MapCodec<? extends VegetationBlock> codec() {
-    return CODEC;
-  }
-
-  @Deprecated
-  @Override
-  public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
+  protected VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
     return SHAPE;
   }
 

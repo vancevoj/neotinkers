@@ -1,6 +1,7 @@
 package slimeknights.tconstruct.world.worldgen.trees.config;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -8,12 +9,15 @@ import lombok.experimental.Accessors;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 
-public class SlimeTreeConfig implements FeatureConfiguration {
+/**
+ * Settings for {@link slimeknights.tconstruct.world.worldgen.trees.feature.SlimeTreeFeature}.
+ * Feature configurations no longer exist, the feature record holds this config and serializes its fields inline.
+ */
+public class SlimeTreeConfig {
 
-  public static final Codec<SlimeTreeConfig> CODEC = RecordCodecBuilder.create((treeConfig) -> treeConfig.group(
+  public static final MapCodec<SlimeTreeConfig> CODEC = RecordCodecBuilder.mapCodec((treeConfig) -> treeConfig.group(
     BlockStateProvider.TYPED_CODEC.fieldOf("trunk_provider").forGetter(instance -> instance.trunkProvider),
     BlockStateProvider.TYPED_CODEC.fieldOf("leaves_provider").forGetter(instance -> instance.leavesProvider),
     BlockStateProvider.TYPED_CODEC.fieldOf("vines_provider").forGetter(instance -> instance.vinesProvider),

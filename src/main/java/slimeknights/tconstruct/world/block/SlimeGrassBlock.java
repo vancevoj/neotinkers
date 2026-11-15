@@ -11,6 +11,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.BonemealSource;
 import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.SnowLayerBlock;
 import net.minecraft.world.level.block.SnowyBlock;
@@ -32,12 +33,12 @@ public class SlimeGrassBlock extends SnowyBlock implements BonemealableBlock {
   /* Bonemeal interactions */
 
   @Override
-  public boolean isValidBonemealTarget(LevelReader world, BlockPos pos, BlockState state) {
+  public boolean isValidBonemealTarget(LevelReader world, BlockPos pos, BlockState state, BonemealSource source) {
     return world.getBlockState(pos.above()).isAir();
   }
 
   @Override
-  public boolean isBonemealSuccess(Level worldIn, RandomSource rand, BlockPos pos, BlockState state) {
+  public boolean isBonemealSuccess(Level worldIn, RandomSource rand, BlockPos pos, BlockState state, BonemealSource source) {
     return true;
   }
 
@@ -98,16 +99,14 @@ public class SlimeGrassBlock extends SnowyBlock implements BonemealableBlock {
   }
 
   @Override
-  public void performBonemeal(ServerLevel world, RandomSource rand, BlockPos pos, BlockState state) {
+  public void performBonemeal(ServerLevel world, RandomSource rand, BlockPos pos, BlockState state, BonemealSource source) {
     growGrass(world, rand, pos, TinkerTags.Blocks.SLIMY_GRASS, foliageType, false, false);
   }
 
   /* Spreading */
 
-  @SuppressWarnings("deprecation")
-  @Deprecated
   @Override
-  public void randomTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
+  protected void randomTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
     // based on vanilla logic, reimplemented to remove dirt hardcode
     // prevent loading unloaded chunks
     if (!world.isAreaLoaded(pos, 3)) return;
@@ -121,7 +120,7 @@ public class SlimeGrassBlock extends SnowyBlock implements BonemealableBlock {
         BlockPos newGrass = pos.offset(random.nextInt(3) - 1, random.nextInt(5) - 3, random.nextInt(3) - 1);
         BlockState newState = getStateFromDirt(world.getBlockState(newGrass), foliageType);
         if (newState != null && canSpread(newState, world, newGrass)) {
-          world.setBlockAndUpdate(newGrass, newState.setValue(SNOWY, world.getBlockState(newGrass.above()).is(Blocks.SNOW)));
+          world.setBlockAndUpdate(newGrass, newState.setValue(SNOWY, isSnowySetting(world.getBlockState(newGrass.above()))));
         }
       }
     }
@@ -140,7 +139,7 @@ public class SlimeGrassBlock extends SnowyBlock implements BonemealableBlock {
       return false;
     }
     // fallback to light level check
-    return LightEngine.getLightBlockInto(world, targetState, pos, aboveState, above, Direction.UP, aboveState.getLightBlock(world, above)) < world.getMaxLightLevel();
+    return LightEngine.getLightDampeningInto(targetState, aboveState, Direction.UP, aboveState.getLightDampening()) < LightEngine.MAX_LEVEL;
   }
 
   /** Checks if the grass at the given position can spread */
