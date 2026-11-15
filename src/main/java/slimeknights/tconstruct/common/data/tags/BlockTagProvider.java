@@ -122,7 +122,8 @@ public class BlockTagProvider extends BlockTagsProvider {
     impermeable.add(TinkerCommons.clearGlass.get(), TinkerCommons.soulGlass.get(), TinkerCommons.clearTintedGlass.get(),
                     TinkerSmeltery.searedGlass.get(), TinkerSmeltery.searedSoulGlass.get(), TinkerSmeltery.searedTintedGlass.get(),
                     TinkerSmeltery.scorchedGlass.get(), TinkerSmeltery.scorchedSoulGlass.get(), TinkerSmeltery.scorchedTintedGlass.get());
-    silicaGlass.add(TinkerCommons.clearGlass.get());
+    // forge:glass/silica held vanilla glass and stained glass on 1.20; on 1.21 those are c:glass_blocks/cheap
+    silicaGlass.addTag(Tags.Blocks.GLASS_BLOCKS_CHEAP).add(TinkerCommons.clearGlass.get());
     TinkerCommons.clearStainedGlass.values().forEach(impermeable::add);
     TinkerCommons.clearStainedGlass.values().forEach(silicaGlass::add);
     tag(GLASS_TINTED).add(TinkerCommons.clearTintedGlass.get());
