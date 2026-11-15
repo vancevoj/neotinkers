@@ -1,12 +1,14 @@
 package slimeknights.tconstruct.library.fluid;
 
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 import slimeknights.mantle.block.entity.MantleBlockEntity;
 import slimeknights.tconstruct.common.network.TinkerNetwork;
 import slimeknights.tconstruct.smeltery.network.FluidUpdatePacket;
 
+/**
+ * Fluid tank owned by a block entity, syncs its contents to the client on change.
+ * Changes through the transfer API apply on commit of the root transaction, so {@link #onContentsChanged()} never runs for simulations.
+ */
 public class FluidTankBase<T extends MantleBlockEntity> extends FluidTank {
 
   protected T parent;
@@ -16,45 +18,8 @@ public class FluidTankBase<T extends MantleBlockEntity> extends FluidTank {
     this.parent = parent;
   }
 
-  // override to fix bug with onContentsChanged during fill
-  @Override
-  public int fill(FluidStack resource, FluidAction action) {
-    if (resource.isEmpty() || !isFluidValid(resource)) {
-      return 0;
-    }
-    if (action.simulate()) {
-      if (fluid.isEmpty()) {
-        return Math.min(capacity, resource.getAmount());
-      }
-      if (!FluidStack.isSameFluidSameComponents(fluid, resource)) {
-        return 0;
-      }
-      return Math.min(capacity - fluid.getAmount(), resource.getAmount());
-    }
-    if (fluid.isEmpty()) {
-      // FIX: the Forge implementation returns fluid.getAmount() here, which may be wrong if the fluid gets changed during onContentsChanged()
-      // we instead use a local variable for the amount filled to guarantee its accurate
-      int filled = Math.min(capacity, resource.getAmount());
-      fluid = resource.copyWithAmount(filled);
-      onContentsChanged();
-      return filled;
-    }
-    if (!FluidStack.isSameFluidSameComponents(fluid, resource)) {
-      return 0;
-    }
-    int filled = capacity - fluid.getAmount();
-
-    if (resource.getAmount() < filled) {
-      fluid.grow(resource.getAmount());
-      filled = resource.getAmount();
-    } else {
-      fluid.setAmount(capacity);
-    }
-    if (filled > 0) {
-      onContentsChanged();
-    }
-    return filled;
-  }
+  // the old fill override fixing onContentsChanged during fill is no longer needed:
+  // insert computes the filled amount locally and onContentsChanged only runs after the transaction commits
 
   @Override
   public void onContentsChanged() {

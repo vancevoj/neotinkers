@@ -5,9 +5,10 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
 import slimeknights.tconstruct.TConstruct;
 
-import java.util.List;
+import java.util.function.Consumer;
 
 /** Item for creating casts that looks like a tool part */
 public class DummyMaterialItem extends Item {
@@ -17,7 +18,7 @@ public class DummyMaterialItem extends Item {
   }
 
   @Override
-  public void appendHoverText(ItemStack pStack, Item.TooltipContext pContext, List<Component> tooltip, TooltipFlag pIsAdvanced) {
-    tooltip.add(DUMMY_TOOL_PART);
+  public void appendHoverText(ItemStack pStack, Item.TooltipContext pContext, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag pIsAdvanced) {
+    tooltip.accept(DUMMY_TOOL_PART);
   }
 }

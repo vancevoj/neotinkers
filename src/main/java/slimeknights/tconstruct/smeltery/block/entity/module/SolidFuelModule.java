@@ -4,16 +4,19 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.neoforge.capabilities.BlockCapabilityCache;
 import net.neoforged.neoforge.capabilities.Capabilities;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
-import net.neoforged.neoforge.fluids.capability.templates.EmptyFluidHandler;
-import net.neoforged.neoforge.items.IItemHandler;
-import net.neoforged.neoforge.items.ItemHandlerHelper;
+import net.neoforged.neoforge.transfer.EmptyResourceHandler;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
+import net.neoforged.neoforge.transfer.item.ItemResource;
+import net.neoforged.neoforge.transfer.item.ItemUtil;
+import net.neoforged.neoforge.transfer.transaction.Transaction;
 import slimeknights.mantle.block.entity.MantleBlockEntity;
 import slimeknights.tconstruct.TConstruct;
-import slimeknights.tconstruct.library.recipe.TinkerRecipeTypes;
 import slimeknights.tconstruct.library.recipe.fuel.MeltingFuel;
 import slimeknights.tconstruct.library.recipe.fuel.MeltingFuelLookup;
 
@@ -29,7 +32,7 @@ public class SolidFuelModule extends FuelModule {
    * on a {@link ServerLevel}.
    */
   @Nullable
-  private BlockCapabilityCache<IItemHandler,?> itemHandlerCache;
+  private BlockCapabilityCache<ResourceHandler<ItemResource>,?> itemHandlerCache;
 
   public SolidFuelModule(MantleBlockEntity parent, BlockPos fuelPos) {
     super(parent);
@@ -41,14 +44,14 @@ public class SolidFuelModule extends FuelModule {
 
   /** Resolves the fluid handler at the fuel position, self-healing on the server and re-querying on the client */
   @Nullable
-  private IFluidHandler getFluidHandler() {
+  private ResourceHandler<FluidResource> getFluidHandler() {
     fluidHandler = getHandlerAt(fuelPos);
     return fluidHandler;
   }
 
   /** Resolves the item handler at the fuel position, self-healing on the server and re-querying on the client */
   @Nullable
-  private IItemHandler getItemHandler() {
+  private ResourceHandler<ItemResource> getItemHandler() {
     Level level = getLevel();
     if (level instanceof ServerLevel serverLevel) {
       if (itemHandlerCache == null) {
@@ -64,18 +67,43 @@ public class SolidFuelModule extends FuelModule {
   /* Fuel updating */
 
   /**
+   * Gets the burn time of the given solid fuel. The burn time component can only be resolved on the server,
+   * so the client only knows if the item is a fuel (fuel is only consumed on the server).
+   * @param stack  Fuel stack
+   * @return  Burn time, or a positive placeholder client side if the stack is a fuel
+   */
+  private int getSolidBurnTime(ItemStack stack) {
+    Level level = getLevel();
+    if (level instanceof ServerLevel serverLevel) {
+      // prefer the block entity holding the fuel for the loot context
+      BlockEntity holder = level.getBlockEntity(fuelPos);
+      return getBurnTime(stack, serverLevel, holder != null ? holder : parent);
+    }
+    return isSolidFuel(stack) ? 4 : 0;
+  }
+
+  /**
    * Tries to consume fuel from the given fluid handler
    * @param handler  Handler to consume fuel from
    * @return   Temperature of the consumed fuel, 0 if none found
    */
-  private int trySolidFuel(IItemHandler handler, boolean consume) {
-    for (int i = 0; i < handler.getSlots(); i++) {
-      ItemStack stack = handler.getStackInSlot(i);
-      int time = stack.getBurnTime(TinkerRecipeTypes.FUEL.get()) / 4;
+  private int trySolidFuel(ResourceHandler<ItemResource> handler, boolean consume) {
+    for (int i = 0; i < handler.size(); i++) {
+      ItemResource resource = handler.getResource(i);
+      if (resource.isEmpty()) {
+        continue;
+      }
+      ItemStack stack = resource.toStack(handler.getAmountAsInt(i));
+      int time = getSolidBurnTime(stack) / 4;
       if (time > 0) {
         MeltingFuel solid = MeltingFuelLookup.getSolid();
         if (consume) {
-          ItemStack extracted = handler.extractItem(i, 1, false);
+          int extractedCount;
+          try (Transaction transaction = Transaction.openRoot()) {
+            extractedCount = handler.extract(i, resource, 1, transaction);
+            transaction.commit();
+          }
+          ItemStack extracted = extractedCount > 0 ? resource.toStack(extractedCount) : ItemStack.EMPTY;
           if (ItemStack.isSameItem(extracted, stack)) {
             fuel += time;
             fuelQuality = time;
@@ -83,16 +111,17 @@ public class SolidFuelModule extends FuelModule {
             rate = solid.getRate();
             parent.setChangedFast();
             // return the container
-            ItemStack container = extracted.getCraftingRemainingItem();
+            ItemStackTemplate remainder = extracted.getCraftingRemainder();
+            ItemStack container = remainder != null ? remainder.create() : ItemStack.EMPTY;
             if (!container.isEmpty()) {
               // if we cannot insert the container back, spit it on the ground
-              ItemStack notInserted = ItemHandlerHelper.insertItem(handler, container, false);
+              ItemStack notInserted = ItemUtil.insertItemReturnRemaining(handler, container, false, null);
               if (!notInserted.isEmpty()) {
                 Level world = getLevel();
-                double x = (world.random.nextFloat() * 0.5F) + 0.25D;
-                double y = (world.random.nextFloat() * 0.5F) + 0.25D;
-                double z = (world.random.nextFloat() * 0.5F) + 0.25D;
-                ItemEntity itementity = new ItemEntity(world, fuelPos.getX() + x, fuelPos.getY() + y, fuelPos.getZ() + z, container);
+                double x = (world.getRandom().nextFloat() * 0.5F) + 0.25D;
+                double y = (world.getRandom().nextFloat() * 0.5F) + 0.25D;
+                double z = (world.getRandom().nextFloat() * 0.5F) + 0.25D;
+                ItemEntity itementity = new ItemEntity(world, fuelPos.getX() + x, fuelPos.getY() + y, fuelPos.getZ() + z, notInserted);
                 itementity.setDefaultPickUpDelay();
                 world.addFreshEntity(itementity);
               }
@@ -111,13 +140,13 @@ public class SolidFuelModule extends FuelModule {
   public int findFuel(boolean consume) {
     // prioritize liquid fuel - it usually goes hotter
     int temperature = 0;
-    IFluidHandler fluidHandler = getFluidHandler();
+    ResourceHandler<FluidResource> fluidHandler = getFluidHandler();
     if (fluidHandler != null) {
       temperature = tryLiquidFuel(fluidHandler, consume);
     }
     // next, try solid fuel
     if (temperature == 0) {
-      IItemHandler itemHandler = getItemHandler();
+      ResourceHandler<ItemResource> itemHandler = getItemHandler();
       if (itemHandler != null) {
         temperature = trySolidFuel(itemHandler, consume);
       }
@@ -149,11 +178,11 @@ public class SolidFuelModule extends FuelModule {
   /* Fluid handler */
 
   /** Gets the fluid handler for proxy */
-  public IFluidHandler getTank() {
-    IFluidHandler fluidHandler = getFluidHandler();
+  public ResourceHandler<FluidResource> getTank() {
+    ResourceHandler<FluidResource> fluidHandler = getFluidHandler();
     if (fluidHandler != null) {
       return fluidHandler;
     }
-    return EmptyFluidHandler.INSTANCE;
+    return EmptyResourceHandler.instance();
   }
 }

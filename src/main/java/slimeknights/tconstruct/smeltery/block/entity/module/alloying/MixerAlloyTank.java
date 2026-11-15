@@ -9,9 +9,11 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction;
-import net.neoforged.neoforge.fluids.capability.templates.EmptyFluidHandler;
+import net.neoforged.neoforge.transfer.EmptyResourceHandler;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
+import net.neoforged.neoforge.transfer.fluid.FluidUtil;
+import net.neoforged.neoforge.transfer.transaction.Transaction;
 import slimeknights.mantle.block.entity.MantleBlockEntity;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.recipe.alloying.IMutableAlloyTank;
@@ -31,7 +33,7 @@ public class MixerAlloyTank implements IMutableAlloyTank {
   /** Handler parent */
   private final MantleBlockEntity parent;
   /** Tank for outputs */
-  private final IFluidHandler outputTank;
+  private final ResourceHandler<FluidResource> outputTank;
 
   /** Current temperature. Provided as a getter and setter as there are a few contexts with different source for temperature */
   @Getter
@@ -40,12 +42,12 @@ public class MixerAlloyTank implements IMutableAlloyTank {
 
   // side tank cache
   /** Cache of present fluid handlers for each of the sides; absent key with present {@link #checked} entry means no handler */
-  private final Map<Direction,IFluidHandler> inputs = new EnumMap<>(Direction.class);
+  private final Map<Direction,ResourceHandler<FluidResource>> inputs = new EnumMap<>(Direction.class);
   /** Set of sides already queried since the last refresh, so we can distinguish "no handler" from "not yet fetched" */
   private final Set<Direction> checked = EnumSet.noneOf(Direction.class);
   /** Map of tank index to tank on the side */
   @Nullable
-  private IFluidHandler[] indexedList = null;
+  private ResourceHandler<FluidResource>[] indexedList = null;
 
   // state
   /** If true, tanks are marked for refresh later */
@@ -60,15 +62,16 @@ public class MixerAlloyTank implements IMutableAlloyTank {
   }
 
   /** Gets the map of index to direction */
-  private IFluidHandler[] indexTanks() {
+  @SuppressWarnings("unchecked")
+  private ResourceHandler<FluidResource>[] indexTanks() {
     // convert map into indexed list of fluid handlers, will be cleared next time a side updates
     if (indexedList == null) {
-      indexedList = new IFluidHandler[currentTanks];
+      indexedList = (ResourceHandler<FluidResource>[]) new ResourceHandler[currentTanks];
       if (currentTanks > 0) {
         int nextTank = 0;
         for (Direction direction : Direction.values()) {
           if (direction != Direction.DOWN) {
-            IFluidHandler handler = inputs.get(direction);
+            ResourceHandler<FluidResource> handler = inputs.get(direction);
             if (handler != null) {
               indexedList[nextTank] = handler;
               nextTank++;
@@ -80,12 +83,12 @@ public class MixerAlloyTank implements IMutableAlloyTank {
     return indexedList;
   }
 
-  /** Gets the fluid handler for the given tank index */
-  public IFluidHandler getFluidHandler(int tank) {
+  /** Gets the fluid handler for the given tank index, a handler with no tanks if the index is invalid */
+  public ResourceHandler<FluidResource> getFluidHandler(int tank) {
     checkTanks();
     // invalid index, nothing
     if (tank >= currentTanks || tank < 0) {
-      return EmptyFluidHandler.INSTANCE;
+      return EmptyResourceHandler.instance();
     }
     return indexTanks()[tank];
   }
@@ -98,7 +101,8 @@ public class MixerAlloyTank implements IMutableAlloyTank {
       return FluidStack.EMPTY;
     }
     // get the first fluid from the proper tank, we do not support multiple fluids on a side
-    return indexTanks()[tank].getFluidInTank(0);
+    ResourceHandler<FluidResource> handler = indexTanks()[tank];
+    return handler.size() > 0 ? FluidUtil.getStack(handler, 0) : FluidStack.EMPTY;
   }
 
   @Override
@@ -108,18 +112,38 @@ public class MixerAlloyTank implements IMutableAlloyTank {
     if (tank >= currentTanks || tank < 0) {
       return FluidStack.EMPTY;
     }
-    return indexTanks()[tank].drain(fluidStack, FluidAction.EXECUTE);
+    if (fluidStack.isEmpty()) {
+      return FluidStack.EMPTY;
+    }
+    FluidResource resource = FluidResource.of(fluidStack);
+    try (Transaction transaction = Transaction.openRoot()) {
+      int drained = indexTanks()[tank].extract(resource, fluidStack.getAmount(), transaction);
+      transaction.commit();
+      return drained > 0 ? resource.toStack(drained) : FluidStack.EMPTY;
+    }
   }
 
   @Override
   public boolean canFit(FluidStack fluid, int removed) {
     checkTanks();
-    return outputTank.fill(fluid, FluidAction.SIMULATE) == fluid.getAmount();
+    if (fluid.isEmpty()) {
+      return true;
+    }
+    try (Transaction simulate = Transaction.openRoot()) {
+      return outputTank.insert(FluidResource.of(fluid), fluid.getAmount(), simulate) == fluid.getAmount();
+    }
   }
 
   @Override
   public int fill(FluidStack fluidStack) {
-    return outputTank.fill(fluidStack, FluidAction.EXECUTE);
+    if (fluidStack.isEmpty()) {
+      return 0;
+    }
+    try (Transaction transaction = Transaction.openRoot()) {
+      int filled = outputTank.insert(FluidResource.of(fluidStack), fluidStack.getAmount(), transaction);
+      transaction.commit();
+      return filled;
+    }
   }
 
   /**
@@ -140,7 +164,7 @@ public class MixerAlloyTank implements IMutableAlloyTank {
           // limit by blocks as that gives the modpack more control, say they want to allow only scorched tanks
           if (world.getBlockState(target).is(TinkerTags.Blocks.ALLOYER_TANKS)) {
             // if we found a tank, increment the number of tanks
-            IFluidHandler capability = world.getCapability(Capabilities.Fluid.BLOCK, target, direction.getOpposite());
+            ResourceHandler<FluidResource> capability = world.getCapability(Capabilities.Fluid.BLOCK, target, direction.getOpposite());
             checked.add(direction);
             if (capability != null) {
               inputs.put(direction, capability);

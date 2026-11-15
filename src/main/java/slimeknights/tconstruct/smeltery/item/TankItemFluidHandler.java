@@ -1,89 +1,58 @@
 package slimeknights.tconstruct.smeltery.item;
 
-import lombok.RequiredArgsConstructor;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandlerItem;
-import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
+import net.neoforged.neoforge.transfer.ItemAccessResourceHandler;
+import net.neoforged.neoforge.transfer.access.ItemAccess;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
+import net.neoforged.neoforge.transfer.item.ItemResource;
 import slimeknights.tconstruct.smeltery.block.entity.component.TankBlockEntity;
 
-import javax.annotation.Nonnull;
+import java.util.Objects;
 
 /**
- * Handler that works with a tank item to adjust its tank in NBT
+ * Handler that works with a tank item to adjust its tank in NBT.
+ * Amounts scale with the number of items in the access, every tank in the stack is filled or drained by the same amount (same as the old scaled tank).
+ * The updated item is written through the {@link ItemAccess} in the transaction.
  */
-@RequiredArgsConstructor
-public class TankItemFluidHandler implements IFluidHandlerItem {
+public class TankItemFluidHandler extends ItemAccessResourceHandler<FluidResource> {
   private final TankItem tankItem;
-  private final ItemStack container;
 
-  @Override
-  public ItemStack getContainer() {
-    return container;
-  }
-
-  /** Gets the tank on the stack */
-  private FluidTank getTank() {
-    // TODO: can we directly use the nested tank as our fluid handler instead of doing this wrapper?
-    // might be more efficient, though it may require validating the stack size/NBT did not change externally
-    return tankItem.getTank(container);
-  }
-
-  /** Updates the container from the given tank */
-  private void updateContainer(FluidTank tank) {
-    TankItem.setTank(container, tank);
+  public TankItemFluidHandler(TankItem tankItem, ItemAccess access) {
+    super(access, 1);
+    this.tankItem = tankItem;
   }
 
   @Override
-  public int getTanks() {
-    return 1;
-  }
-
-  @Nonnull
-  @Override
-  public FluidStack getFluidInTank(int tank) {
-    return getTank().getFluidInTank(tank);
+  protected FluidResource getResourceFrom(ItemResource accessResource, int index) {
+    Objects.checkIndex(index, size());
+    return FluidResource.of(TankItem.getFluid(accessResource.toStack()));
   }
 
   @Override
-  public int getTankCapacity(int tank) {
-    return TankBlockEntity.getCapacity(container.getItem()) * container.getCount();
+  protected int getAmountFrom(ItemResource accessResource, int index) {
+    Objects.checkIndex(index, size());
+    return TankItem.getFluid(accessResource.toStack()).getAmount();
   }
 
   @Override
-  public boolean isFluidValid(int tank, FluidStack stack) {
-    return true;
+  protected ItemResource update(ItemResource accessResource, int index, FluidResource newResource, int newAmount) {
+    Objects.checkIndex(index, size());
+    ItemStack stack = accessResource.toStack();
+    TankItem.setTank(stack, newAmount <= 0 || newResource.isEmpty() ? FluidStack.EMPTY : newResource.toStack(newAmount));
+    return ItemResource.of(stack);
   }
 
   @Override
-  public int fill(FluidStack resource, FluidAction action) {
-    FluidTank tank = getTank();
-    int didFill = tank.fill(resource, action);
-    if (didFill > 0 && action.execute()) {
-      updateContainer(tank);
-    }
-    return didFill;
+  public boolean isValid(int index, FluidResource resource) {
+    Objects.checkIndex(index, size());
+    // disallow filling if the current size is larger than 16
+    return tankItem.canFill(itemAccess.getAmount());
   }
 
-  @Nonnull
   @Override
-  public FluidStack drain(FluidStack resource, FluidAction action) {
-    FluidTank tank = getTank();
-    FluidStack didDrain = tank.drain(resource, action);
-    if (!didDrain.isEmpty() && action.execute()) {
-      updateContainer(tank);
-    }
-    return didDrain;
-  }
-
-  @Nonnull
-  @Override
-  public FluidStack drain(int maxDrain, FluidAction action) {
-    FluidTank tank = getTank();
-    FluidStack didDrain = tank.drain(maxDrain, action);
-    if (!didDrain.isEmpty() && action.execute()) {
-      updateContainer(tank);
-    }
-    return didDrain;
+  protected int getCapacity(int index, FluidResource resource) {
+    Objects.checkIndex(index, size());
+    return TankBlockEntity.getCapacity(itemAccess.getResource().getItem());
   }
 }

@@ -7,8 +7,9 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.neoforged.neoforge.capabilities.Capabilities;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
-import net.neoforged.neoforge.fluids.capability.templates.EmptyFluidHandler;
+import net.neoforged.neoforge.transfer.EmptyResourceHandler;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
 import slimeknights.tconstruct.smeltery.TinkerSmeltery;
 
 import javax.annotation.Nullable;
@@ -16,7 +17,7 @@ import javax.annotation.Nullable;
 /** This class exists simply to allow us to have a block entity renderer for obsidian gauges. Though it is useful as a cache for the capability to render. */
 public class GaugeBlockEntity extends BlockEntity {
   @Nullable
-  private IFluidHandler neighbor;
+  private ResourceHandler<FluidResource> neighbor;
   private boolean fetchedNeighbor = false;
   public GaugeBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
     super(type, pos, state);
@@ -26,10 +27,10 @@ public class GaugeBlockEntity extends BlockEntity {
     this(TinkerSmeltery.gauge.get(), pos, state);
   }
 
-  /** Gets the neighbor fluid handler. Used mainly for rendering client side */
-  public IFluidHandler getTank() {
+  /** Gets the neighbor fluid handler, or an empty handler with no tanks if missing. Used mainly for rendering client side */
+  public ResourceHandler<FluidResource> getTank() {
     if (level == null) {
-      return EmptyFluidHandler.INSTANCE;
+      return EmptyResourceHandler.instance();
     }
     // if we have not fetched the neighbor, fetch it
     if (!fetchedNeighbor) {
@@ -38,6 +39,6 @@ public class GaugeBlockEntity extends BlockEntity {
       fetchedNeighbor = true;
     }
     // return tank or empty tank
-    return neighbor != null ? neighbor : EmptyFluidHandler.INSTANCE;
+    return neighbor != null ? neighbor : EmptyResourceHandler.instance();
   }
 }

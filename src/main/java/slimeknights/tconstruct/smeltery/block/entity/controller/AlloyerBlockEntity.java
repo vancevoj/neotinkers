@@ -4,8 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -14,6 +12,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import slimeknights.mantle.block.entity.NameableBlockEntity;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.TinkerTags;
@@ -154,21 +154,21 @@ public class AlloyerBlockEntity extends NameableBlockEntity implements ITankBloc
   }
 
   @Override
-  public void saveSynced(CompoundTag tag, HolderLookup.Provider registries) {
-    super.saveSynced(tag, registries);
-    tag.put(NBTTags.TANK, tank.writeToNBT(registries, new CompoundTag()));
+  public void saveSynced(ValueOutput output) {
+    super.saveSynced(output);
+    tank.writeToNBT(output.child(NBTTags.TANK));
   }
 
   @Override
-  public void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-    super.saveAdditional(tag, registries);
-    fuelModule.writeToTag(tag);
+  protected void saveAdditional(ValueOutput output) {
+    super.saveAdditional(output);
+    fuelModule.writeToTag(output);
   }
 
   @Override
-  public void loadAdditional(CompoundTag nbt, HolderLookup.Provider registries) {
-    super.loadAdditional(nbt, registries);
-    tank.readFromNBT(registries, nbt.getCompound(NBTTags.TANK));
-    fuelModule.readFromTag(nbt);
+  protected void loadAdditional(ValueInput input) {
+    super.loadAdditional(input);
+    tank.readFromNBT(input.childOrEmpty(NBTTags.TANK));
+    fuelModule.readFromTag(input);
   }
 }

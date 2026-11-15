@@ -2,19 +2,24 @@ package slimeknights.tconstruct.smeltery.item;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
+import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemInstance;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.CustomData;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.fluids.FluidStack;
@@ -24,7 +29,6 @@ import slimeknights.tconstruct.library.recipe.FluidValues;
 import slimeknights.tconstruct.smeltery.TinkerSmeltery;
 
 import javax.annotation.Nullable;
-import java.util.List;
 import java.util.function.Consumer;
 
 /**
@@ -38,30 +42,26 @@ public class CopperCanItem extends Item {
     super(properties);
   }
 
+  @Nullable
   @Override
-  public boolean hasCraftingRemainingItem(ItemStack stack) {
-    return getFluid(stack) != Fluids.EMPTY;
-  }
-
-  @Override
-  public ItemStack getCraftingRemainingItem(ItemStack stack) {
-    if (hasCraftingRemainingItem(stack)) {
-      return new ItemStack(this);
+  public ItemStackTemplate getCraftingRemainder(ItemInstance instance) {
+    if (getFluid(instance) != Fluids.EMPTY) {
+      return new ItemStackTemplate(this);
     }
-    return ItemStack.EMPTY;
+    return null;
   }
 
   @Override
-  public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
+  public void appendHoverText(ItemStack stack, Item.TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
     Fluid fluid = getFluid(stack);
     if (fluid != Fluids.EMPTY) {
-      MutableComponent text = getFluidStack(stack, FluidValues.INGOT).getDisplayName().plainCopy();
-      tooltip.add(Component.translatable(this.getDescriptionId() + ".contents", text).withStyle(ChatFormatting.GRAY));
+      MutableComponent text = getFluidStack(stack, FluidValues.INGOT).getHoverName().plainCopy();
+      tooltip.accept(Component.translatable(this.getDescriptionId() + ".contents", text).withStyle(ChatFormatting.GRAY));
       if (flag.isAdvanced()) {
-        tooltip.add(Component.translatable(TankItem.FLUID_ID, Loadables.FLUID.getKey(fluid)).withStyle(ChatFormatting.DARK_GRAY));
+        tooltip.accept(Component.translatable(TankItem.FLUID_ID, Loadables.FLUID.getKey(fluid)).withStyle(ChatFormatting.DARK_GRAY));
       }
     } else {
-      tooltip.add(Component.translatable(this.getDescriptionId() + ".tooltip").withStyle(ChatFormatting.GRAY));
+      tooltip.accept(Component.translatable(this.getDescriptionId() + ".tooltip").withStyle(ChatFormatting.GRAY));
     }
   }
 
@@ -155,11 +155,16 @@ public class CopperCanItem extends Item {
 
   /** Gets the fluid from the given stack */
   public static Fluid getFluid(ItemStack stack) {
+    return getFluid((DataComponentGetter) stack);
+  }
+
+  /** Gets the fluid from the given item components */
+  private static Fluid getFluid(DataComponentGetter stack) {
     CustomData data = stack.get(DataComponents.CUSTOM_DATA);
     if (data != null) {
       CompoundTag nbt = data.copyTag();
-      if (nbt.contains(TAG_FLUID, Tag.TAG_STRING)) {
-        Identifier location = Identifier.tryParse(nbt.getString(TAG_FLUID));
+      if (nbt.get(TAG_FLUID) instanceof StringTag(String fluidName)) {
+        Identifier location = Identifier.tryParse(fluidName);
         if (location != null && BuiltInRegistries.FLUID.containsKey(location)) {
           Fluid fluid = BuiltInRegistries.FLUID.getValue(location);
           if (fluid != null) {
@@ -188,8 +193,8 @@ public class CopperCanItem extends Item {
     CustomData data = stack.get(DataComponents.CUSTOM_DATA);
     if (data != null) {
       CompoundTag nbt = data.copyTag();
-      if (nbt.contains(TAG_FLUID_TAG, Tag.TAG_COMPOUND)) {
-        return nbt.getCompound(TAG_FLUID_TAG);
+      if (nbt.get(TAG_FLUID_TAG) instanceof CompoundTag fluidTag) {
+        return fluidTag;
       }
     }
     return null;
@@ -203,7 +208,7 @@ public class CopperCanItem extends Item {
   public static String getSubtype(ItemStack stack) {
     CustomData data = stack.get(DataComponents.CUSTOM_DATA);
     if (data != null) {
-      return data.copyTag().getString(TAG_FLUID);
+      return data.copyTag().getStringOr(TAG_FLUID, "");
     }
     return "";
   }

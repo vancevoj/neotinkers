@@ -21,6 +21,16 @@ public class SmelteryComponentBlockEntity extends ServantTileEntity {
     super(type, pos, state);
   }
 
+  @Override
+  public void preRemoveSideEffects(BlockPos pos, BlockState state) {
+    if (level != null) {
+      // block changed, tell the master. Was in the block removal hooks (seared blocks, slabs, stairs and ducts) before 1.21.5
+      notifyMasterOfChange(pos, level.getBlockState(pos));
+    }
+    // Mantle drops the inventory of inventory blocks (ducts)
+    super.preRemoveSideEffects(pos, state);
+  }
+
   /**
    * Block method to update neighbors of a smeltery component when a new one is placed
    * @param world  World instance

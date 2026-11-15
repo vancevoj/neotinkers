@@ -1,18 +1,15 @@
 package slimeknights.tconstruct.smeltery.block.entity;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import lombok.Getter;
-import net.neoforged.neoforge.items.IItemHandler;
 import slimeknights.mantle.block.entity.NameableBlockEntity;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.smeltery.TinkerSmeltery;
@@ -48,16 +45,15 @@ public class HeaterBlockEntity extends NameableBlockEntity {
   /* NBT */
 
   @Override
-  public void loadAdditional(CompoundTag tags, HolderLookup.Provider registries) {
-    super.loadAdditional(tags, registries);
-    if (tags.contains(TAG_ITEM, Tag.TAG_COMPOUND)) {
-      itemHandler.readFromNBT(tags.getCompound(TAG_ITEM), registries);
-    }
+  protected void loadAdditional(ValueInput input) {
+    super.loadAdditional(input);
+    // empty heaters store an empty tag, skip those so the item codec does not report them
+    input.child(TAG_ITEM).filter(child -> child.getString("id").isPresent()).ifPresent(itemHandler::readFromNBT);
   }
 
   @Override
-  public void saveAdditional(CompoundTag tags, HolderLookup.Provider registries) {
-    super.saveAdditional(tags, registries);
-    tags.put(TAG_ITEM, itemHandler.writeToNBT(registries));
+  protected void saveAdditional(ValueOutput output) {
+    super.saveAdditional(output);
+    itemHandler.writeToNBT(output.child(TAG_ITEM));
   }
 }

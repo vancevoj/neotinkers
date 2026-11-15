@@ -2,11 +2,14 @@ package slimeknights.tconstruct.smeltery.block.entity.tank;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
+import net.neoforged.neoforge.transfer.transaction.SnapshotJournal;
+import net.neoforged.neoforge.transfer.transaction.TransactionContext;
+import slimeknights.tconstruct.library.fluid.FluidTank;
 import slimeknights.tconstruct.smeltery.block.entity.ChannelBlockEntity;
-
-import javax.annotation.Nonnull;
 
 /** Tank for channel contents */
 public class ChannelTank extends FluidTank {
@@ -18,6 +21,18 @@ public class ChannelTank extends FluidTank {
 	 * if draining and filling at the same time
 	 */
 	private int locked;
+	/** Journal to revert changes to {@link #locked} for aborted transactions */
+	private final SnapshotJournal<Integer> lockedJournal = new SnapshotJournal<>() {
+		@Override
+		protected Integer createSnapshot() {
+			return locked;
+		}
+
+		@Override
+		protected void revertToSnapshot(Integer snapshot) {
+			locked = snapshot;
+		}
+	};
 
 	/** Tank owner */
 	private final ChannelBlockEntity parent;
@@ -39,38 +54,31 @@ public class ChannelTank extends FluidTank {
 	 * @return  Max fluid that can be pulled
 	 */
 	public int getMaxUsable() {
-		return Math.max(fluid.getAmount() - locked, 0);
+		return Math.max(getFluidAmount() - locked, 0);
 	}
 
 	@Override
-	public int fill(FluidStack resource, FluidAction action) {
-		boolean wasEmpty = isEmpty();
-		int amount = super.fill(resource, action);
-		if(action.execute()) {
-			locked += amount;
-			// if we added something, sync to client
-			if (wasEmpty && !isEmpty()) {
-				parent.sendFluidUpdate();
-			}
+	public int insert(int index, FluidResource resource, int amount, TransactionContext transaction) {
+		int filled = super.insert(index, resource, amount, transaction);
+		if (filled > 0) {
+			lockedJournal.updateSnapshots(transaction);
+			locked += filled;
 		}
-		return amount;
+		return filled;
 	}
 
-	@Nonnull
 	@Override
-	public FluidStack drain(int maxDrain, FluidAction action) {
-		boolean wasEmpty = isEmpty();
-		FluidStack stack = super.drain(maxDrain, action);
-		// if we removed something, sync to client
-		if (action.execute() && !wasEmpty && isEmpty()) {
+	protected void onContentsChanged(int index, FluidStack previousContents) {
+		super.onContentsChanged(index, previousContents);
+		// if we added something to an empty tank or removed everything, sync to client
+		if (previousContents.isEmpty() != isEmpty()) {
 			parent.sendFluidUpdate();
 		}
-		return stack;
 	}
 
 	@Override
 	public FluidTank readFromNBT(HolderLookup.Provider lookupProvider, CompoundTag nbt) {
-		this.locked = nbt.getInt(TAG_LOCKED);
+		this.locked = nbt.getIntOr(TAG_LOCKED, 0);
 		super.readFromNBT(lookupProvider, nbt);
 		return this;
 	}
@@ -80,5 +88,18 @@ public class ChannelTank extends FluidTank {
 		nbt = super.writeToNBT(lookupProvider, nbt);
 		nbt.putInt(TAG_LOCKED, locked);
 		return nbt;
+	}
+
+	@Override
+	public FluidTank readFromNBT(ValueInput input) {
+		this.locked = input.getIntOr(TAG_LOCKED, 0);
+		super.readFromNBT(input);
+		return this;
+	}
+
+	@Override
+	public void writeToNBT(ValueOutput output) {
+		super.writeToNBT(output);
+		output.putInt(TAG_LOCKED, locked);
 	}
 }

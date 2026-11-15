@@ -5,17 +5,32 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
+import net.minecraft.nbt.NumericTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CookingFuel;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ResolvableInt;
+import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.common.loot.NeoForgeLootContextParams;
 import net.neoforged.neoforge.capabilities.BlockCapabilityCache;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
+import net.neoforged.neoforge.transfer.fluid.FluidUtil;
+import net.neoforged.neoforge.transfer.transaction.Transaction;
 import slimeknights.mantle.block.entity.MantleBlockEntity;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.recipe.fuel.MeltingFuel;
@@ -25,6 +40,7 @@ import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * Module handling fuel consumption for the melter and smeltery
@@ -40,10 +56,10 @@ public abstract class FuelModule implements ContainerData {
   /**
    * Last fluid handler where fluid was extracted.
    * In NeoForge capabilities are nullable rather than {@code LazyOptional}; this caches the most recent block
-   * capability and is reset via {@link #resetHandler(IFluidHandler)} on structure/neighbor changes.
+   * capability and is reset via {@link #resetHandler(ResourceHandler)} on structure/neighbor changes.
    */
   @Nullable
-  protected IFluidHandler fluidHandler;
+  protected ResourceHandler<FluidResource> fluidHandler;
 
   /** Current amount of fluid in the TE */
   @Getter
@@ -69,10 +85,10 @@ public abstract class FuelModule implements ContainerData {
    * behavior upstream had with {@code LazyOptional} invalidation listeners. Only valid on a {@link ServerLevel};
    * the client uses a fresh {@link Level#getCapability} query each call (see {@link #getHandlerAt}).
    */
-  private final Map<BlockPos,BlockCapabilityCache<IFluidHandler,?>> serverHandlerCaches = new HashMap<>();
+  private final Map<BlockPos,BlockCapabilityCache<ResourceHandler<FluidResource>,?>> serverHandlerCaches = new HashMap<>();
 
   /** Called when the capability invalidates to reset any cached handlers */
-  protected void resetHandler(@Nullable IFluidHandler source) {
+  protected void resetHandler(@Nullable ResourceHandler<FluidResource> source) {
     if (source == null || source == fluidHandler) {
       fluidHandler = null;
     }
@@ -93,7 +109,7 @@ public abstract class FuelModule implements ContainerData {
    * @return  Fluid handler, or null if none present
    */
   @Nullable
-  protected IFluidHandler getHandlerAt(BlockPos pos) {
+  protected ResourceHandler<FluidResource> getHandlerAt(BlockPos pos) {
     Level level = getLevel();
     if (level instanceof ServerLevel serverLevel) {
       // immutable copy as the cache holds the reference long-term
@@ -128,6 +144,42 @@ public abstract class FuelModule implements ContainerData {
   }
 
 
+  /* Solid fuel */
+
+  /**
+   * Checks if the given stack is a solid fuel. Safe to call on both sides, but cannot tell how long the fuel lasts.
+   * @param stack  Stack to check
+   * @return  True if the stack has a fuel burn time
+   */
+  public static boolean isSolidFuel(ItemStack stack) {
+    return !stack.isEmpty() && stack.has(DataComponents.COOKING_FUEL);
+  }
+
+  /**
+   * Gets the furnace burn time of the given solid fuel. Replacement for the removed burn time hook, resolves the cooking fuel component
+   * using a container loot context like the vanilla furnace.
+   * @param stack        Fuel stack
+   * @param level        Server level
+   * @param blockEntity  Block entity holding the fuel, used for the loot context
+   * @return  Burn time in ticks, 0 if not a fuel
+   */
+  public static int getBurnTime(ItemStack stack, ServerLevel level, BlockEntity blockEntity) {
+    if (!isSolidFuel(stack)) {
+      return 0;
+    }
+    LootContext context = new LootContext.Builder(
+      new LootParams.Builder(level)
+        .withParameter(LootContextParams.BLOCK_STATE, blockEntity.getBlockState())
+        .withParameter(LootContextParams.BLOCK_ENTITY, blockEntity)
+        .withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(blockEntity.getBlockPos()))
+        .withParameter(LootContextParams.CONTAINER, slot -> null)
+        .withOptionalParameter(NeoForgeLootContextParams.QUERIED_STACK, stack)
+        .create(LootContextParamSets.CONTAINER_PROCESS)
+    ).create(Optional.empty());
+    return ResolvableInt.getFromItem(stack, DataComponents.COOKING_FUEL, CookingFuel::burnTime, context, 0);
+  }
+
+
   /* Fuel attributes */
 
   /**
@@ -151,19 +203,46 @@ public abstract class FuelModule implements ContainerData {
   /* Fuel updating */
 
   /**
+   * Gets the fluid in the first tank of the given handler
+   * @param handler  Handler to check
+   * @return  Fluid in the first tank, or empty if the handler has no tanks
+   */
+  protected static FluidStack getFirstFluid(ResourceHandler<FluidResource> handler) {
+    return handler.size() > 0 ? FluidUtil.getStack(handler, 0) : FluidStack.EMPTY;
+  }
+
+  /**
+   * Gets the capacity of the first tank of the given handler
+   * @param handler  Handler to check
+   * @return  Capacity of the first tank, or 0 if the handler has no tanks
+   */
+  protected static int getFirstCapacity(ResourceHandler<FluidResource> handler) {
+    return handler.size() > 0 ? handler.getCapacityAsInt(0, FluidResource.EMPTY) : 0;
+  }
+
+  /**
    * Trys to consume fuel from the given fluid handler
    * @param handler  Handler to consume fuel from
    * @return   Temperature of the consumed fuel, 0 if none found
    */
-  protected int tryLiquidFuel(IFluidHandler handler, boolean consume) {
-    FluidStack fluid = handler.getFluidInTank(0);
+  protected int tryLiquidFuel(ResourceHandler<FluidResource> handler, boolean consume) {
+    FluidStack fluid = getFirstFluid(handler);
+    if (fluid.isEmpty()) {
+      return 0;
+    }
     MeltingFuel recipe = findRecipe(fluid.getFluid());
     if (recipe != null) {
       int amount = recipe.getAmount(fluid.getFluid());
       if (fluid.getAmount() >= amount) {
         if (consume) {
-          FluidStack drained = handler.drain(fluid.copyWithAmount(amount), FluidAction.EXECUTE);
-          if (drained.getAmount() != amount) {
+          int drained = 0;
+          if (amount > 0) {
+            try (Transaction transaction = Transaction.openRoot()) {
+              drained = handler.extract(FluidResource.of(fluid), amount, transaction);
+              transaction.commit();
+            }
+          }
+          if (drained != amount) {
             TConstruct.LOG.error("Invalid amount of fuel drained from tank");
           }
           fuel += recipe.getDuration();
@@ -196,13 +275,25 @@ public abstract class FuelModule implements ContainerData {
    * @param nbt  Tag to read from
    */
   public void readFromTag(CompoundTag nbt) {
-    if (nbt.contains(TAG_FUEL, Tag.TAG_ANY_NUMERIC)) {
-      fuel = nbt.getInt(TAG_FUEL);
+    if (nbt.get(TAG_FUEL) instanceof NumericTag fuelTag) {
+      fuel = fuelTag.intValue();
     }
-    if (nbt.contains(TAG_TEMPERATURE, Tag.TAG_ANY_NUMERIC)) {
-      temperature = nbt.getInt(TAG_TEMPERATURE);
-      rate = nbt.getInt(TAG_RATE);
+    if (nbt.get(TAG_TEMPERATURE) instanceof NumericTag temperatureTag) {
+      temperature = temperatureTag.intValue();
+      rate = nbt.getIntOr(TAG_RATE, 0);
     }
+  }
+
+  /**
+   * Reads the fuel from the given input, same keys as {@link #readFromTag(CompoundTag)}
+   * @param input  Input to read from
+   */
+  public void readFromTag(ValueInput input) {
+    input.getInt(TAG_FUEL).ifPresent(value -> fuel = value);
+    input.getInt(TAG_TEMPERATURE).ifPresent(value -> {
+      temperature = value;
+      rate = input.getIntOr(TAG_RATE, 0);
+    });
   }
 
   /**
@@ -215,6 +306,16 @@ public abstract class FuelModule implements ContainerData {
     nbt.putInt(TAG_TEMPERATURE, temperature);
     nbt.putInt(TAG_RATE, rate);
     return nbt;
+  }
+
+  /**
+   * Writes the fuel to the given output, same keys as {@link #writeToTag(CompoundTag)}
+   * @param output  Output to write to
+   */
+  public void writeToTag(ValueOutput output) {
+    output.putInt(TAG_FUEL, fuel);
+    output.putInt(TAG_TEMPERATURE, temperature);
+    output.putInt(TAG_RATE, rate);
   }
 
 
@@ -257,11 +358,11 @@ public abstract class FuelModule implements ContainerData {
    * @return  Fuel info
    */
   public FuelInfo getFuelInfo() {
-    IFluidHandler handler = fluidHandler;
+    ResourceHandler<FluidResource> handler = fluidHandler;
     if (handler == null) {
       return FuelInfo.EMPTY;
     }
-    FluidStack fluid = handler.getFluidInTank(0);
+    FluidStack fluid = getFirstFluid(handler);
     int temperature = 0;
     if (!fluid.isEmpty()) {
       MeltingFuel fuel = findRecipe(fluid.getFluid());
@@ -270,7 +371,7 @@ public abstract class FuelModule implements ContainerData {
       }
     }
     // if no liquid, fallback to either item or empty
-    return FuelInfo.of(fluid, handler.getTankCapacity(0), temperature);
+    return FuelInfo.of(fluid, getFirstCapacity(handler), temperature);
   }
 
   /** Data class to hold information about the current fuel */

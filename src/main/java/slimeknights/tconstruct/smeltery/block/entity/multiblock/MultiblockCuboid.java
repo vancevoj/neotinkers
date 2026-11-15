@@ -12,7 +12,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Plane;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.Level;
@@ -439,7 +438,7 @@ public abstract class MultiblockCuboid<T extends MultiblockStructureData> {
    * @return  Set of positions
    */
   protected static Collection<BlockPos> readPosList(CompoundTag rootTag, String key, BlockPos offset) {
-    // NbtUtils.writeBlockPos now produces an int-array tag rather than a compound, but 1.20.1 worlds still hold compounds
+    // positions are written as an int-array tag rather than a compound, but 1.20.1 worlds still hold compounds
     // so read the raw list and let TagUtil.readPos handle either element type
     if (!(rootTag.get(key) instanceof ListTag list)) {
       return Collections.emptyList();

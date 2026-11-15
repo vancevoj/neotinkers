@@ -1,18 +1,22 @@
 package slimeknights.tconstruct.smeltery;
 
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.world.item.Item;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import slimeknights.tconstruct.TConstruct;
+import slimeknights.tconstruct.smeltery.item.TankItem;
+import slimeknights.tconstruct.smeltery.item.TankItemFluidHandler;
 import slimeknights.tconstruct.tables.TinkerTables;
 
 /**
- * Central mod-bus handler that registers the block-side {@code FluidHandler.BLOCK} and {@code ItemHandler.BLOCK}
+ * Central mod-bus handler that registers the block-side {@code Capabilities.Fluid.BLOCK} and {@code Capabilities.Item.BLOCK}
  * capabilities for every block entity that exposed {@code ForgeCapabilities.FLUID_HANDLER} or
- * {@code ForgeCapabilities.ITEM_HANDLER} in the original 1.20.1 Forge build.
+ * {@code ForgeCapabilities.ITEM_HANDLER} in the original 1.20.1 Forge build, plus the tank item fluid capability.
  * <p>
- * In NeoForge 1.21.1 a block capability is only visible to buckets, hoppers, and pipes if it is registered here via
+ * A block capability is only visible to buckets, hoppers, and pipes if it is registered here via
  * {@link RegisterCapabilitiesEvent#registerBlockEntity}; the block entities only provide the getter methods.
  * <p>
  * Each provider lambda receives {@code (blockEntity, Direction side)}; {@code side} may be null. Getters that ignore the
@@ -25,7 +29,7 @@ public final class SmelteryCapabilities {
 
   @SubscribeEvent
   static void registerCapabilities(RegisterCapabilitiesEvent event) {
-    /* Fluid handlers (FluidHandler.BLOCK) */
+    /* Fluid handlers (Fluid.BLOCK) */
 
     // basic tank component
     event.registerBlockEntity(Capabilities.Fluid.BLOCK, TinkerSmeltery.tank.get(),
@@ -54,12 +58,12 @@ public final class SmelteryCapabilities {
       (be, side) -> be.getHandler(side));
     event.registerBlockEntity(Capabilities.Fluid.BLOCK, TinkerSmeltery.duct.get(),
       (be, side) -> be.getHandler(side));
-    // proxy tank exposes the proxied item tank, which is also an IFluidHandler
+    // proxy tank exposes the fluid handler of the proxied item tank
     event.registerBlockEntity(Capabilities.Fluid.BLOCK, TinkerSmeltery.proxyTank.get(),
-      (be, side) -> be.getItemTank());
+      (be, side) -> be.getItemTank().getFluidHandler());
 
 
-    /* Item handlers (ItemHandler.BLOCK) */
+    /* Item handlers (Item.BLOCK) */
 
     // heater single-item inventory
     event.registerBlockEntity(Capabilities.Item.BLOCK, TinkerSmeltery.heater.get(),
@@ -80,7 +84,7 @@ public final class SmelteryCapabilities {
     // fluid cannon item slot
     event.registerBlockEntity(Capabilities.Item.BLOCK, TinkerSmeltery.fluidCannon.get(),
       (be, side) -> be.getItemHandler());
-    // proxy tank exposes the proxied item tank, which is also an IItemHandler
+    // proxy tank exposes the proxied item tank as an item handler
     event.registerBlockEntity(Capabilities.Item.BLOCK, TinkerSmeltery.proxyTank.get(),
       (be, side) -> be.getItemTank());
     // casting basin, table, and casting tank expose their (sided) inventory wrapper
@@ -107,5 +111,16 @@ public final class SmelteryCapabilities {
       (be, side) -> be.getItemHandler());
     event.registerBlockEntity(Capabilities.Item.BLOCK, TinkerTables.castChestTile.get(),
       (be, side) -> be.getItemHandler());
+
+
+    /* Item fluid handlers (Fluid.ITEM) */
+
+    // tanks, lanterns, casting tanks and fluid cannons store their fluid in the item, fill and drain the whole stack together
+    // the copper can is registered in FluidEvents
+    for (Item item : BuiltInRegistries.ITEM) {
+      if (item instanceof TankItem tankItem) {
+        event.registerItem(Capabilities.Fluid.ITEM, (stack, access) -> new TankItemFluidHandler(tankItem, access), item);
+      }
+    }
   }
 }

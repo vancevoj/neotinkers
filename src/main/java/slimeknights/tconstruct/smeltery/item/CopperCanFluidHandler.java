@@ -2,124 +2,121 @@ package slimeknights.tconstruct.smeltery.item;
 
 import lombok.AllArgsConstructor;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.material.Fluid;
-import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandlerItem;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.TransferPreconditions;
+import net.neoforged.neoforge.transfer.access.ItemAccess;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
+import net.neoforged.neoforge.transfer.item.ItemResource;
+import net.neoforged.neoforge.transfer.transaction.Transaction;
+import net.neoforged.neoforge.transfer.transaction.TransactionContext;
 import slimeknights.tconstruct.library.recipe.FluidValues;
 
-import javax.annotation.Nonnull;
+import java.util.Objects;
 
-/** Capability handler instance for the copper can item */
+/**
+ * Capability handler instance for the copper can item. Fills and drains exactly one ingot per can, all cans in the access at once.
+ * The filled or emptied can is exchanged through the {@link ItemAccess}, so it requires an access that can modify the item.
+ */
 @AllArgsConstructor
-public class CopperCanFluidHandler implements IFluidHandlerItem {
-  private final ItemStack container;
-
-  @Override
-  public ItemStack getContainer() {
-    return container;
-  }
+public class CopperCanFluidHandler implements ResourceHandler<FluidResource> {
+  private final ItemAccess access;
 
 
   /* Tank properties */
 
   @Override
-  public int getTanks() {
+  public int size() {
     return 1;
   }
 
   @Override
-  public boolean isFluidValid(int tank, FluidStack stack) {
+  public boolean isValid(int index, FluidResource resource) {
+    Objects.checkIndex(index, size());
     return true;
   }
 
   /** Gets the stack size sensitive capacity of the container */
   private int getCapacity() {
     // scale up by the stack size to prevent dupes with people trying to fill a stack of containers
-    return FluidValues.INGOT * container.getCount();
+    return FluidValues.INGOT * access.getAmount();
   }
 
   @Override
-  public int getTankCapacity(int tank) {
+  public long getCapacityAsLong(int index, FluidResource resource) {
+    Objects.checkIndex(index, size());
     return getCapacity();
   }
 
-  /** Gets the contained fluid */
-  private Fluid getFluid() {
-    return CopperCanItem.getFluid(container);
-  }
-
-  @Nonnull
-  @Override
-  public FluidStack getFluidInTank(int tank) {
-    Fluid fluid = getFluid();
-    if (fluid == Fluids.EMPTY) {
+  /** Gets the contained fluid with the given amount */
+  private FluidStack getFluid(int amount) {
+    ItemResource resource = access.getResource();
+    if (resource.isEmpty()) {
       return FluidStack.EMPTY;
     }
-    return CopperCanItem.getFluidStack(container, getCapacity());
+    return CopperCanItem.getFluidStack(resource.toStack(), amount);
+  }
+
+  @Override
+  public FluidResource getResource(int index) {
+    Objects.checkIndex(index, size());
+    return FluidResource.of(getFluid(FluidValues.INGOT));
+  }
+
+  @Override
+  public long getAmountAsLong(int index) {
+    Objects.checkIndex(index, size());
+    return getFluid(FluidValues.INGOT).isEmpty() ? 0 : getCapacity();
   }
 
 
   /* Interaction */
 
+  /** Exchanges every can in the access for the given can, all or nothing */
+  private boolean exchange(ItemStack newCan, TransactionContext transaction) {
+    int count = access.getAmount();
+    try (Transaction exchange = Transaction.open(transaction)) {
+      if (access.exchange(ItemResource.of(newCan), count, exchange) == count) {
+        exchange.commit();
+        return true;
+      }
+    }
+    return false;
+  }
+
   @Override
-  public int fill(FluidStack resource, FluidAction action) {
+  public int insert(int index, FluidResource resource, int amount, TransactionContext transaction) {
+    Objects.checkIndex(index, size());
+    TransferPreconditions.checkNonEmptyNonNegative(resource, amount);
     // must not be filled, must have enough
     int capacity = getCapacity();
-    if (getFluid() != Fluids.EMPTY || resource.getAmount() < capacity) {
+    if (capacity <= 0 || !getFluid(FluidValues.INGOT).isEmpty() || amount < capacity) {
       return 0;
     }
     // update fluid and return
-    if (action.execute()) {
-      // this is not size sensitive so no need to shrink resource for stack size
-      CopperCanItem.setFluid(container, resource);
-    }
-    return capacity;
+    // this is not size sensitive so no need to shrink resource for stack size
+    ItemStack filled = access.getResource().toStack();
+    CopperCanItem.setFluid(filled, resource.toStack(FluidValues.INGOT));
+    return exchange(filled, transaction) ? capacity : 0;
   }
 
-  @Nonnull
   @Override
-  public FluidStack drain(FluidStack resource, FluidAction action) {
+  public int extract(int index, FluidResource resource, int amount, TransactionContext transaction) {
+    Objects.checkIndex(index, size());
+    TransferPreconditions.checkNonEmptyNonNegative(resource, amount);
     // must be draining at least an ingot
     int capacity = getCapacity();
-    if (resource.isEmpty() || resource.getAmount() < capacity) {
-      return FluidStack.EMPTY;
+    if (capacity <= 0 || amount < capacity) {
+      return 0;
     }
-    // must have a fluid, must match what they are draining
-    Fluid fluid = getFluid();
-    if (fluid == Fluids.EMPTY || fluid != resource.getFluid()) {
-      return FluidStack.EMPTY;
-    }
-    // make sure components match the requested components
-    FluidStack output = CopperCanItem.getFluidStack(container, capacity);
-    if (!FluidStack.isSameFluidSameComponents(resource, output)) {
-      return FluidStack.EMPTY;
+    // must have a fluid, must match what they are draining including components
+    FluidStack output = getFluid(capacity);
+    if (output.isEmpty() || !resource.matches(output)) {
+      return 0;
     }
     // output 1 ingot times stack size
-    if (action.execute()) {
-      CopperCanItem.setFluid(container, FluidStack.EMPTY);
-    }
-    return output;
-  }
-
-  @Nonnull
-  @Override
-  public FluidStack drain(int maxDrain, FluidAction action) {
-    // must be draining at least an ingot
-    int capacity = getCapacity();
-    if (maxDrain < capacity) {
-      return FluidStack.EMPTY;
-    }
-    // must have a fluid
-    Fluid fluid = getFluid();
-    if (fluid == Fluids.EMPTY) {
-      return FluidStack.EMPTY;
-    }
-    // output 1 ingot
-    FluidStack output = CopperCanItem.getFluidStack(container, capacity);
-    if (action.execute()) {
-      CopperCanItem.setFluid(container, FluidStack.EMPTY);
-    }
-    return output;
+    ItemStack emptied = access.getResource().toStack();
+    CopperCanItem.setFluid(emptied, FluidStack.EMPTY);
+    return exchange(emptied, transaction) ? capacity : 0;
   }
 }

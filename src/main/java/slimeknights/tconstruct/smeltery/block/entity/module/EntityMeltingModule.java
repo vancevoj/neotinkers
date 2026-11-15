@@ -1,6 +1,7 @@
 package slimeknights.tconstruct.smeltery.block.entity.module;
 
 import lombok.RequiredArgsConstructor;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -12,8 +13,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
+import net.neoforged.neoforge.transfer.transaction.Transaction;
 import slimeknights.mantle.block.entity.MantleBlockEntity;
 import slimeknights.tconstruct.common.TinkerDamageTypes;
 import slimeknights.tconstruct.common.TinkerTags.EntityTypes;
@@ -35,7 +37,7 @@ import java.util.function.Supplier;
 public class EntityMeltingModule {
   // TODO: migrate to whatever mojang is doing
   private final MantleBlockEntity parent;
-  private final IFluidHandler tank;
+  private final ResourceHandler<FluidResource> tank;
   /** Supplier that returns true if the tank has space */
   private final BooleanSupplier canMeltEntities;
   /** Function that tries to insert an item into the inventory */
@@ -86,7 +88,7 @@ public class EntityMeltingModule {
       return lastRecipe;
     }
     // find a new recipe if the last recipe does not match
-    EntityMeltingRecipe recipe = EntityMeltingRecipeCache.findRecipe(getLevel().getRecipeManager(), type);
+    EntityMeltingRecipe recipe = EntityMeltingRecipeCache.findRecipe(getLevel(), type);
     if (recipe != null) {
       lastRecipe = recipe;
     }
@@ -107,9 +109,9 @@ public class EntityMeltingModule {
    * @param entity  Entity to check
    * @return  True if they can be melted
    */
-  private boolean canMeltEntity(LivingEntity entity) {
+  private boolean canMeltEntity(ServerLevel level, LivingEntity entity) {
     // fire based mobs are absorbed instead of damaged
-    return !entity.isInvulnerableTo(entity.fireImmune() ? smelteryMagic() : smelteryHeat())
+    return !entity.isInvulnerableTo(level, entity.fireImmune() ? smelteryMagic() : smelteryHeat())
            // have to special case players because for some dumb reason creative players do not return true to invulnerable to
            && !(entity instanceof Player player && player.getAbilities().invulnerable)
            // also have to special case fire resistance, so a blaze with fire resistance is immune to the smeltery
@@ -122,19 +124,19 @@ public class EntityMeltingModule {
    */
   public boolean interactWithEntities() {
     AABB boundingBox = bounds.get();
-    if (boundingBox == null) {
+    // entities are only damaged on the server
+    if (boundingBox == null || !(getLevel() instanceof ServerLevel level)) {
       return false;
     }
 
     Boolean canMelt = null;
     boolean melted = false;
-    for (Entity entity : getLevel().getEntitiesOfClass(Entity.class, boundingBox)) {
+    for (Entity entity : level.getEntitiesOfClass(Entity.class, boundingBox)) {
       if (!entity.isAlive()) {
         continue;
       }
 
       // items are placed inside the smeltery
-      EntityType<?> type = entity.getType();
       if (entity instanceof ItemEntity itemEntity) {
         ItemStack stack = insertFunction.apply(itemEntity.getItem());
         // picked up whole stack
@@ -148,7 +150,7 @@ public class EntityMeltingModule {
       // only can melt living, ensure its not immune to our damage
       // if canMelt is already found as false, skip instance checks, we only care about items now
       // if its blacklisted, skip as well
-      else if (canMelt != Boolean.FALSE && !type.is(EntityTypes.MELTING_BLACKLIST) && entity instanceof LivingEntity living && canMeltEntity(living)) {
+      else if (canMelt != Boolean.FALSE && !entity.is(EntityTypes.MELTING_BLACKLIST) && entity instanceof LivingEntity living && canMeltEntity(level, living)) {
         // only fetch boolean once, its not the fastest as it tries to consume fuel
         if (canMelt == null) canMelt = canMeltEntities.getAsBoolean();
 
@@ -167,9 +169,14 @@ public class EntityMeltingModule {
           }
 
           // if the entity is successfully damaged, fill the tank with fluid
-          if (entity.hurt(entity.fireImmune() ? smelteryMagic() : smelteryHeat(), damage)) {
+          if (entity.hurtServer(level, entity.fireImmune() ? smelteryMagic() : smelteryHeat(), damage)) {
             // its fine if we don't fill it all, leftover fluid is just lost
-            tank.fill(fluid, FluidAction.EXECUTE);
+            if (!fluid.isEmpty()) {
+              try (Transaction transaction = Transaction.openRoot()) {
+                tank.insert(FluidResource.of(fluid), fluid.getAmount(), transaction);
+                transaction.commit();
+              }
+            }
             melted = true;
           }
         }

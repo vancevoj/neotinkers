@@ -20,13 +20,14 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.model.data.ModelData;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.FluidType;
-import net.neoforged.neoforge.items.ItemHandlerHelper;
-import net.neoforged.neoforge.items.wrapper.SidedInvWrapper;
+import net.neoforged.neoforge.transfer.access.ItemAccess;
 import slimeknights.mantle.fluid.FluidTransferHelper;
 import slimeknights.mantle.fluid.transfer.FluidContainerTransferManager;
 import slimeknights.mantle.fluid.transfer.IFluidContainerTransfer;
@@ -41,6 +42,8 @@ import slimeknights.tconstruct.smeltery.TinkerSmeltery;
 import slimeknights.tconstruct.smeltery.block.CastingTankBlock;
 import slimeknights.tconstruct.smeltery.block.entity.component.TankBlockEntity;
 import slimeknights.tconstruct.smeltery.block.entity.component.TankBlockEntity.ITankBlock;
+import slimeknights.tconstruct.smeltery.block.entity.inventory.PlayerItemHelper;
+import slimeknights.tconstruct.smeltery.block.entity.inventory.SidedContainerItemHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -96,7 +99,7 @@ public class CastingTankBlockEntity extends TableBlockEntity implements ITankBlo
   protected CastingTankBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state, ITankBlock block) {
     super(type, pos, state, NAME, 2, 1);
     tank = new FluidTankAnimated(block.getCapacity(), this);
-    itemHandler = new SidedInvWrapper(this, Direction.DOWN);
+    itemHandler = new SidedContainerItemHandler(this, Direction.DOWN);
   }
 
   /**
@@ -122,11 +125,11 @@ public class CastingTankBlockEntity extends TableBlockEntity implements ITankBlo
       // if there is an item in the output slot, take it
       if (!output.isEmpty()) {
         setItem(OUTPUT, ItemStack.EMPTY);
-        ItemHandlerHelper.giveItemToPlayer(player, output, player.getInventory().getSelectedSlot());
+        PlayerItemHelper.giveItemToPlayer(player, output, player.getInventory().getSelectedSlot());
         // next try to take the item from the input slot
       } else if (!input.isEmpty()) {
         setItem(INPUT, ItemStack.EMPTY);
-        ItemHandlerHelper.giveItemToPlayer(player, input, player.getInventory().getSelectedSlot());
+        PlayerItemHelper.giveItemToPlayer(player, input, player.getInventory().getSelectedSlot());
         // if no item in the tank, try to place a held item in the input
       } else if (!held.isEmpty() && canPlaceItem(INPUT, held)) {
         setItem(INPUT, held.split(1));
@@ -154,7 +157,7 @@ public class CastingTankBlockEntity extends TableBlockEntity implements ITankBlo
       return getItem(INPUT).isEmpty() && getItem(OUTPUT).isEmpty() && !pStack.isEmpty() && (
         // check the various options for some sort of fluid-containing stack
         FluidContainerTransferManager.INSTANCE.mayHaveTransfer(pStack)
-          || pStack.getCapability(Capabilities.Fluid.ITEM) != null
+          || ItemAccess.forStack(pStack).getCapability(Capabilities.Fluid.ITEM) != null
       );
     }
     return false;
@@ -277,25 +280,32 @@ public class CastingTankBlockEntity extends TableBlockEntity implements ITankBlo
   }
 
   @Override
-  public void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+  protected void loadAdditional(ValueInput input) {
     tank.setCapacity(getCapacity(getBlockState().getBlock()));
-    updateTank(registries, tag.getCompound(NBTTags.TANK));
-    lastRedstone = tag.getBoolean(TAG_REDSTONE);
-    super.loadAdditional(tag, registries);
+    // tank is stored in a compound, missing means empty
+    ValueInput tankInput = input.child(NBTTags.TANK).orElse(null);
+    if (tankInput == null) {
+      tank.setFluid(FluidStack.EMPTY);
+    } else {
+      tank.readFromNBT(tankInput);
+      TankBlockEntity.updateLight(this, tank);
+    }
+    lastRedstone = input.getBooleanOr(TAG_REDSTONE, false);
+    super.loadAdditional(input);
   }
 
   @Override
-  public void saveAdditional(CompoundTag tags, HolderLookup.Provider registries) {
-    super.saveAdditional(tags, registries);
-    tags.putBoolean(TAG_REDSTONE, lastRedstone);
+  protected void saveAdditional(ValueOutput output) {
+    super.saveAdditional(output);
+    output.putBoolean(TAG_REDSTONE, lastRedstone);
   }
 
   @Override
-  public void saveSynced(CompoundTag tag, HolderLookup.Provider registries) {
-    super.saveSynced(tag, registries);
+  public void saveSynced(ValueOutput output) {
+    super.saveSynced(output);
     // want tank on the client on world load
     if (!tank.isEmpty()) {
-      tag.put(NBTTags.TANK, tank.writeToNBT(registries, new CompoundTag()));
+      tank.writeToNBT(output.child(NBTTags.TANK));
     }
   }
 

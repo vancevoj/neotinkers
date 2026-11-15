@@ -2,18 +2,19 @@ package slimeknights.tconstruct.smeltery.block.entity.component;
 
 import lombok.Getter;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.model.data.ModelData;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
 import slimeknights.mantle.util.RetexturedHelper;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.client.model.ModelProperties;
@@ -62,7 +63,7 @@ public class DuctBlockEntity extends SmelteryFluidIO implements MenuProvider {
   /* Capability */
 
   @Override
-  protected IFluidHandler makeWrapper(IFluidHandler capability) {
+  protected ResourceHandler<FluidResource> makeWrapper(ResourceHandler<FluidResource> capability) {
     return new DuctTankWrapper(capability, itemHandler);
   }
 
@@ -89,24 +90,29 @@ public class DuctBlockEntity extends SmelteryFluidIO implements MenuProvider {
   }
 
   @Override
-  public void loadAdditional(CompoundTag tags, HolderLookup.Provider registries) {
-    super.loadAdditional(tags, registries);
-    if (tags.contains(TAG_ITEM, Tag.TAG_COMPOUND)) {
-      itemHandler.readFromNBT(tags.getCompound(TAG_ITEM), registries);
-    }
+  protected void loadAdditional(ValueInput input) {
+    super.loadAdditional(input);
+    input.child(TAG_ITEM).ifPresent(item -> {
+      // empty ducts store an empty tag, skip reading those so the item codec does not report them
+      if (item.getString("id").isPresent()) {
+        itemHandler.readFromNBT(item);
+      } else if (!itemHandler.getStack().isEmpty()) {
+        itemHandler.setStack(ItemStack.EMPTY);
+      }
+    });
   }
 
   @Override
-  public void handleUpdateTag(CompoundTag tag, HolderLookup.Provider registries) {
-    super.handleUpdateTag(tag, registries);
+  public void handleUpdateTag(ValueInput input) {
+    super.handleUpdateTag(input);
     if (level != null && level.isClientSide()) {
       updateFluid();
     }
   }
 
   @Override
-  public void saveSynced(CompoundTag tags, HolderLookup.Provider registries) {
-    super.saveSynced(tags, registries);
-    tags.put(TAG_ITEM, itemHandler.writeToNBT(registries));
+  protected void saveSynced(ValueOutput output) {
+    super.saveSynced(output);
+    itemHandler.writeToNBT(output.child(TAG_ITEM));
   }
 }

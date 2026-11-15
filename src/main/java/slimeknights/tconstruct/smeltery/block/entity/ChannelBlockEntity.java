@@ -4,19 +4,21 @@ import net.minecraft.util.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Plane;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
+import com.mojang.serialization.Codec;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.capabilities.BlockCapabilityCache;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction;
-import net.neoforged.neoforge.fluids.capability.templates.EmptyFluidHandler;
+import net.neoforged.neoforge.transfer.EmptyResourceHandler;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
+import net.neoforged.neoforge.transfer.transaction.Transaction;
 import net.minecraft.server.level.ServerLevel;
 import slimeknights.mantle.block.entity.MantleBlockEntity;
 import slimeknights.tconstruct.common.network.TinkerNetwork;
@@ -31,6 +33,7 @@ import slimeknights.tconstruct.smeltery.network.FluidUpdatePacket;
 import slimeknights.tconstruct.smeltery.network.FluidUpdatePacket.IFluidPacketReceiver;
 
 import javax.annotation.Nullable;
+import java.nio.ByteBuffer;
 import java.util.EnumMap;
 import java.util.Map;
 
@@ -41,16 +44,16 @@ public class ChannelBlockEntity extends MantleBlockEntity implements IFluidPacke
 	/** Channel internal tank */
 	private final ChannelTank tank = new ChannelTank(FaucetBlockEntity.MB_PER_TICK * 4, this);
 	/** Handler to return from channel top */
-	private final IFluidHandler topHandler = new FillOnlyFluidHandler(tank);
+	private final ResourceHandler<FluidResource> topHandler = new FillOnlyFluidHandler(tank);
 	/** Tanks for inserting on each side */
-	private final Map<Direction,IFluidHandler> sideTanks = Util.make(new EnumMap<>(Direction.class), map -> {
+	private final Map<Direction,ResourceHandler<FluidResource>> sideTanks = Util.make(new EnumMap<>(Direction.class), map -> {
 		for (Direction direction : Plane.HORIZONTAL) {
 			map.put(direction, new ChannelSideTank(this, tank, direction));
 		}
 	});
 
 	/** Cache of fluid handlers on all neighboring sides */
-	private final Map<Direction,BlockCapabilityCache<IFluidHandler,Direction>> neighborTanks = new EnumMap<>(Direction.class);
+	private final Map<Direction,BlockCapabilityCache<ResourceHandler<FluidResource>,Direction>> neighborTanks = new EnumMap<>(Direction.class);
 
   /** Ticker instance for this TE, serverside only */
   public static final BlockEntityTicker<ChannelBlockEntity> SERVER_TICKER = (level, pos, state, self) -> self.tick(state);
@@ -79,7 +82,7 @@ public class ChannelBlockEntity extends MantleBlockEntity implements IFluidPacke
 
 	/** Gets the fluid handler for the given side, used by {@code RegisterCapabilitiesEvent} */
 	@Nullable
-	public IFluidHandler getFluidHandler(@Nullable Direction side) {
+	public ResourceHandler<FluidResource> getFluidHandler(@Nullable Direction side) {
 		// top side gets the insert direct
 		if (side == null || side == Direction.UP) {
 			return topHandler;
@@ -92,7 +95,7 @@ public class ChannelBlockEntity extends MantleBlockEntity implements IFluidPacke
 			}
 			// for out, return an empty fluid handler so the block we are pouring into knows we support fluids, even though we disallow any interaction
 			if (connection == ChannelConnection.OUT) {
-				return EmptyFluidHandler.INSTANCE;
+				return EmptyResourceHandler.instance();
 			}
 		}
 		return null;
@@ -104,12 +107,12 @@ public class ChannelBlockEntity extends MantleBlockEntity implements IFluidPacke
 	 * @return  Fluid handler, or null
 	 */
 	@Nullable
-	protected IFluidHandler getNeighborHandler(Direction side) {
+	protected ResourceHandler<FluidResource> getNeighborHandler(Direction side) {
 		assert level != null;
 		if (level.isClientSide()) {
 			return null;
 		}
-		BlockCapabilityCache<IFluidHandler,Direction> cache = neighborTanks.computeIfAbsent(side, s ->
+		BlockCapabilityCache<ResourceHandler<FluidResource>,Direction> cache = neighborTanks.computeIfAbsent(side, s ->
 			BlockCapabilityCache.create(Capabilities.Fluid.BLOCK, (ServerLevel) level, worldPosition.relative(s), s.getOpposite()));
 		return cache.getCapability();
 	}
@@ -292,7 +295,7 @@ public class ChannelBlockEntity extends MantleBlockEntity implements IFluidPacke
 		}
 
 		// get the handler on the side, try filling
-		IFluidHandler handler = getNeighborHandler(side);
+		ResourceHandler<FluidResource> handler = getNeighborHandler(side);
 		return handler != null && fill(side, handler, flowRate);
 	}
 
@@ -303,18 +306,29 @@ public class ChannelBlockEntity extends MantleBlockEntity implements IFluidPacke
 	 * @param amount   Amount to fill
 	 * @return  True if the side successfully filled something
 	 */
-	protected boolean fill(Direction side, IFluidHandler handler, int amount) {
+	protected boolean fill(Direction side, ResourceHandler<FluidResource> handler, int amount) {
 		// make sure we do not allow more than the fluid allows, should not happen but just in case
 		int usable = Math.min(tank.getMaxUsable(), amount);
-		if (usable > 0) {
-			// see how much works
-			FluidStack fluid = tank.drain(usable, FluidAction.SIMULATE);
-			int filled = handler.fill(fluid, FluidAction.SIMULATE);
-			if (filled > 0) {
-				// drain the amount that worked
-				fluid = tank.drain(filled, FluidAction.EXECUTE);
-				handler.fill(fluid, FluidAction.EXECUTE);
-
+		FluidStack current = tank.getFluid();
+		if (usable > 0 && !current.isEmpty()) {
+			FluidResource resource = FluidResource.of(current);
+			boolean filled = false;
+			try (Transaction transaction = Transaction.openRoot()) {
+				// see how much works
+				int simulated;
+				try (Transaction simulate = Transaction.open(transaction)) {
+					simulated = handler.insert(resource, Math.min(usable, current.getAmount()), simulate);
+				}
+				if (simulated > 0) {
+					// drain the amount that worked
+					int drained = tank.extract(0, resource, simulated, transaction);
+					if (drained > 0 && handler.insert(resource, drained, transaction) > 0) {
+						transaction.commit();
+						filled = true;
+					}
+				}
+			}
+			if (filled) {
 				// mark that the side is flowing
 				setFlow(side, true);
 				return true;
@@ -351,22 +365,21 @@ public class ChannelBlockEntity extends MantleBlockEntity implements IFluidPacke
   }
 
   @Override
-  protected void saveSynced(CompoundTag nbt, HolderLookup.Provider registries) {
-    super.saveSynced(nbt, registries);
-    nbt.putByteArray(TAG_IS_FLOWING, isFlowing);
-    nbt.put(TAG_TANK, tank.writeToNBT(registries, new CompoundTag()));
+  protected void saveSynced(ValueOutput output) {
+    super.saveSynced(output);
+    output.store(TAG_IS_FLOWING, Codec.BYTE_BUFFER, ByteBuffer.wrap(isFlowing.clone()));
+    tank.writeToNBT(output.child(TAG_TANK));
   }
 
 	@Override
-	public void loadAdditional(CompoundTag nbt, HolderLookup.Provider registries) {
-		super.loadAdditional(nbt, registries);
+	protected void loadAdditional(ValueInput input) {
+		super.loadAdditional(input);
 
 		// isFlowing
-		if (nbt.contains(TAG_IS_FLOWING)) {
-			byte[] nbtFlowing = nbt.getByteArray(TAG_IS_FLOWING);
-			int max = Math.min(5, nbtFlowing.length);
+		input.read(TAG_IS_FLOWING, Codec.BYTE_BUFFER).ifPresent(nbtFlowing -> {
+			int max = Math.min(5, nbtFlowing.remaining());
 			for (int i = 0; i < max; i++) {
-				byte b = nbtFlowing[i];
+				byte b = nbtFlowing.get(nbtFlowing.position() + i);
 				if (b > 2) {
 					isFlowing[i] = 2;
 				} else if (b < 0) {
@@ -375,10 +388,9 @@ public class ChannelBlockEntity extends MantleBlockEntity implements IFluidPacke
 					isFlowing[i] = b;
 				}
 			}
-		}
+		});
 
 		// tank
-		CompoundTag tankTag = nbt.getCompound(TAG_TANK);
-		tank.readFromNBT(registries, tankTag);
+		tank.readFromNBT(input.childOrEmpty(TAG_TANK));
 	}
 }

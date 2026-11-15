@@ -3,8 +3,8 @@ package slimeknights.tconstruct.smeltery.block.entity.inventory;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.IFluidTank;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction;
+import net.neoforged.neoforge.transfer.transaction.Transaction;
+import slimeknights.tconstruct.library.fluid.FluidTank;
 import slimeknights.tconstruct.library.recipe.fuel.IFluidContainer;
 import slimeknights.tconstruct.library.recipe.fuel.MeltingFuel;
 
@@ -15,9 +15,9 @@ import java.util.Optional;
  * Fluid tank wrapper that weakly references a tank from a neighbor
  */
 public class MelterFuelWrapper implements IFluidContainer {
-  private final WeakReference<IFluidTank> tank;
+  private final WeakReference<FluidTank> tank;
 
-  public MelterFuelWrapper(IFluidTank tank) {
+  public MelterFuelWrapper(FluidTank tank) {
     this.tank = new WeakReference<>(tank);
   }
 
@@ -32,7 +32,7 @@ public class MelterFuelWrapper implements IFluidContainer {
   @Override
   public Fluid getFluid() {
     return Optional.ofNullable(tank.get())
-                   .map(IFluidTank::getFluid)
+                   .map(FluidTank::getFluid)
                    .map(FluidStack::getFluid)
                    .orElse(Fluids.EMPTY);
   }
@@ -45,7 +45,7 @@ public class MelterFuelWrapper implements IFluidContainer {
    */
   public FluidStack getFluidStack() {
     return Optional.ofNullable(tank.get())
-                   .map(IFluidTank::getFluid)
+                   .map(FluidTank::getFluid)
                    .orElse(FluidStack.EMPTY);
   }
 
@@ -55,7 +55,7 @@ public class MelterFuelWrapper implements IFluidContainer {
    */
   public int getCapacity() {
     return Optional.ofNullable(tank.get())
-                   .map(IFluidTank::getCapacity)
+                   .map(FluidTank::getCapacity)
                    .orElse(0);
   }
 
@@ -65,12 +65,16 @@ public class MelterFuelWrapper implements IFluidContainer {
    * @return  Ticks of fuel units
    */
   public int consumeFuel(MeltingFuel fuel) {
-    IFluidTank tank = this.tank.get();
+    FluidTank tank = this.tank.get();
     if (tank != null) {
       int amount = fuel.getAmount(this);
       if (amount > 0) {
         // TODO: assert drained valid?
-        int drained = tank.drain(amount, FluidAction.EXECUTE).getAmount();
+        int drained;
+        try (Transaction transaction = Transaction.openRoot()) {
+          drained = tank.drain(amount, transaction).getAmount();
+          transaction.commit();
+        }
         int duration = fuel.getDuration();
         if (drained < amount) {
           return duration * drained / amount;

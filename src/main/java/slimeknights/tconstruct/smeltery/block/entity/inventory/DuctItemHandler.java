@@ -2,11 +2,14 @@ package slimeknights.tconstruct.smeltery.block.entity.inventory;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.FluidUtil;
-import net.neoforged.neoforge.fluids.capability.IFluidHandlerItem;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.access.ItemAccess;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
+import net.neoforged.neoforge.transfer.fluid.FluidUtil;
 import slimeknights.mantle.inventory.SingleItemHandler;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.common.network.InventorySlotSyncPacket;
@@ -68,14 +71,22 @@ public class DuctItemHandler extends SingleItemHandler<DuctBlockEntity> {
   protected boolean isItemValid(ItemStack stack) {
     // the item or its container must be in the tag
     if (!stack.is(TinkerTags.Items.DUCT_CONTAINERS)) {
-      ItemStack container = stack.getCraftingRemainingItem();
-      if (container.isEmpty() || !container.is(TinkerTags.Items.DUCT_CONTAINERS)) {
+      ItemStackTemplate container = stack.getCraftingRemainder();
+      if (container == null || !container.is(TinkerTags.Items.DUCT_CONTAINERS)) {
         return false;
       }
     }
     // the item must contain fluid (no empty cans or buckets)
-    IFluidHandlerItem cap = stack.getCapability(Capabilities.Fluid.ITEM);
-    return cap != null && !cap.getFluidInTank(0).isEmpty();
+    return !getFirstFluid(stack).isEmpty();
+  }
+
+  /** Gets the fluid in the first tank of the given item */
+  private static FluidStack getFirstFluid(ItemStack stack) {
+    if (stack.isEmpty()) {
+      return FluidStack.EMPTY;
+    }
+    ResourceHandler<FluidResource> cap = ItemAccess.forStack(stack).getCapability(Capabilities.Fluid.ITEM);
+    return cap != null && cap.size() > 0 ? FluidUtil.getStack(cap, 0) : FluidStack.EMPTY;
   }
 
   /**
@@ -84,14 +95,7 @@ public class DuctItemHandler extends SingleItemHandler<DuctBlockEntity> {
    */
   public FluidStack getFluid() {
     if (fluid == null) {
-      ItemStack stack = getStack();
-      if (stack.isEmpty()) {
-        fluid = FluidStack.EMPTY;
-      } else {
-        fluid = FluidUtil.getFluidHandler(stack)
-          .map(handler -> handler.getFluidInTank(0))
-          .orElse(FluidStack.EMPTY);
-      }
+      fluid = getFirstFluid(getStack());
     }
     return fluid;
   }

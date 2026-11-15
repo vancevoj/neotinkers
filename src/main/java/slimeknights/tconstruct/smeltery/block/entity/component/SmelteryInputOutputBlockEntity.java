@@ -2,21 +2,21 @@ package slimeknights.tconstruct.smeltery.block.entity.component;
 
 import lombok.Getter;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.capabilities.BlockCapability;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.model.data.ModelData;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
-import net.neoforged.neoforge.fluids.capability.templates.EmptyFluidHandler;
-import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.transfer.EmptyResourceHandler;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
+import net.neoforged.neoforge.transfer.item.ItemResource;
 import slimeknights.mantle.block.entity.IRetexturedBlockEntity;
 import slimeknights.mantle.inventory.EmptyItemHandler;
 import slimeknights.mantle.util.RetexturedHelper;
@@ -161,40 +161,40 @@ public abstract class SmelteryInputOutputBlockEntity<T> extends SmelteryComponen
   }
 
   @Override
-  protected void saveSynced(CompoundTag tags, HolderLookup.Provider registries) {
-    super.saveSynced(tags, registries);
+  protected void saveSynced(ValueOutput output) {
+    super.saveSynced(output);
     if (texture != Blocks.AIR) {
-      tags.putString(TAG_TEXTURE, getTextureName());
+      output.putString(TAG_TEXTURE, getTextureName());
     }
   }
 
   @Override
-  public void loadAdditional(CompoundTag tags, HolderLookup.Provider registries) {
-    super.loadAdditional(tags, registries);
-    if (tags.contains(TAG_TEXTURE, Tag.TAG_STRING)) {
-      texture = RetexturedHelper.getBlock(tags.getString(TAG_TEXTURE));
+  protected void loadAdditional(ValueInput input) {
+    super.loadAdditional(input);
+    input.getString(TAG_TEXTURE).ifPresent(name -> {
+      texture = RetexturedHelper.getBlock(name);
       RetexturedHelper.onTextureUpdated(this);
-    }
+    });
   }
 
 
   /** Fluid implementation of smeltery IO */
-  public static abstract class SmelteryFluidIO extends SmelteryInputOutputBlockEntity<IFluidHandler> {
+  public static abstract class SmelteryFluidIO extends SmelteryInputOutputBlockEntity<ResourceHandler<FluidResource>> {
     protected SmelteryFluidIO(BlockEntityType<?> type, BlockPos pos, BlockState state) {
-      super(type, pos, state, Capabilities.Fluid.BLOCK, EmptyFluidHandler.INSTANCE);
+      super(type, pos, state, Capabilities.Fluid.BLOCK, EmptyResourceHandler.instance());
     }
 
     /** Wraps the given capability */
-    protected IFluidHandler makeWrapper(IFluidHandler capability) {
+    protected ResourceHandler<FluidResource> makeWrapper(ResourceHandler<FluidResource> capability) {
       return capability;
     }
 
     @Nullable
     @Override
-    protected IFluidHandler getCapability(BlockEntity parent) {
+    protected ResourceHandler<FluidResource> getCapability(BlockEntity parent) {
       // fluid capability is not exposed directly in the smeltery
       if (parent instanceof ISmelteryTankHandler tankHandler) {
-        IFluidHandler capability = tankHandler.getFluidCapability();
+        ResourceHandler<FluidResource> capability = tankHandler.getFluidCapability();
         if (capability != null) {
           return makeWrapper(capability);
         }
@@ -204,7 +204,7 @@ public abstract class SmelteryInputOutputBlockEntity<T> extends SmelteryComponen
   }
 
   /** Item implementation of smeltery IO */
-  public static class ChuteBlockEntity extends SmelteryInputOutputBlockEntity<IItemHandler> {
+  public static class ChuteBlockEntity extends SmelteryInputOutputBlockEntity<ResourceHandler<ItemResource>> {
     public ChuteBlockEntity(BlockPos pos, BlockState state) {
       this(TinkerSmeltery.chute.get(), pos, state);
     }

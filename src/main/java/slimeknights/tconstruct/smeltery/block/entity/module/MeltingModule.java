@@ -2,13 +2,14 @@ package slimeknights.tconstruct.smeltery.block.entity.module;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import slimeknights.mantle.block.entity.MantleBlockEntity;
+import slimeknights.mantle.recipe.helper.RecipeHelper;
 import slimeknights.tconstruct.common.network.InventorySlotSyncPacket;
 import slimeknights.tconstruct.common.network.TinkerNetwork;
 import slimeknights.tconstruct.library.recipe.TinkerRecipeTypes;
@@ -177,7 +178,7 @@ public class MeltingModule implements IMeltingContainer, ContainerData {
       return last;
     }
     // if that fails, try to find a new recipe
-    Optional<IMeltingRecipe> newRecipe = world.getRecipeManager().getRecipeFor(TinkerRecipeTypes.MELTING.get(), this, world).map(RecipeHolder::value);
+    Optional<IMeltingRecipe> newRecipe = RecipeHelper.getRecipeFor(world, TinkerRecipeTypes.MELTING.get(), this).map(RecipeHolder::value);
     if (newRecipe.isPresent()) {
       lastRecipe = newRecipe.get();
       return lastRecipe;
@@ -206,36 +207,30 @@ public class MeltingModule implements IMeltingContainer, ContainerData {
   }
 
   /**
-   * Writes this module to NBT
-   * @return  Module in NBT
+   * Writes this module to the given output, typically a list child. The stack fields are stored directly in the output, alongside the progress
+   * @param output  Output
    */
-  public CompoundTag writeToTag(HolderLookup.Provider registries) {
-    CompoundTag nbt = new CompoundTag();
+  public void writeToTag(ValueOutput output) {
     if (!stack.isEmpty()) {
-      // 1.21: ItemStack.save RETURNS the encoded tag (merged with the prefix) and must be used; the old
-      // code discarded the return, so the slot item was lost on world save. Put our extra keys first so
-      // they merge into the returned tag.
-      nbt.putInt(TAG_CURRENT_TIME, currentTime);
-      nbt.putInt(TAG_REQUIRED_TIME, requiredTime);
-      nbt.putInt(TAG_REQUIRED_TEMP, requiredTemp);
-      return (CompoundTag) stack.save(registries, nbt);
+      output.putInt(TAG_CURRENT_TIME, currentTime);
+      output.putInt(TAG_REQUIRED_TIME, requiredTime);
+      output.putInt(TAG_REQUIRED_TEMP, requiredTemp);
+      output.store(ItemStack.MAP_CODEC, stack);
     }
-    return nbt;
   }
 
   /**
-   * Reads this module from NBT
-   * @param nbt  NBT
+   * Reads this module from the given input
+   * @param input  Input
    */
-  public void readFromTag(HolderLookup.Provider registries, CompoundTag nbt) {
-    // 1.21: the module tag also carries slot/temp/time fields, so a non-empty compound without an
-    // item "id" would make the strict ItemStack codec throw ("No key id in MapLike"). Only parse an
-    // item when one is actually present (spammed 83 errors on world load otherwise).
-    stack = nbt.contains("id") ? ItemStack.parseOptional(registries, nbt) : ItemStack.EMPTY;
+  public void readFromTag(ValueInput input) {
+    // the module tag also carries slot/temp/time fields, so only parse an item when one is actually present,
+    // otherwise the stack codec reports an error for every empty slot on world load
+    stack = input.getString("id").isPresent() ? input.read(ItemStack.MAP_CODEC).orElse(ItemStack.EMPTY) : ItemStack.EMPTY;
     if (!stack.isEmpty()) {
-      currentTime = nbt.getInt(TAG_CURRENT_TIME);
-      requiredTime = nbt.getInt(TAG_REQUIRED_TIME);
-      requiredTemp = nbt.getInt(TAG_REQUIRED_TEMP);
+      currentTime = input.getIntOr(TAG_CURRENT_TIME, 0);
+      requiredTime = input.getIntOr(TAG_REQUIRED_TIME, 0);
+      requiredTemp = input.getIntOr(TAG_REQUIRED_TEMP, 0);
     }
   }
 

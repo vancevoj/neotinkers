@@ -14,13 +14,16 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.model.data.ModelData;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.FluidType;
-import net.neoforged.neoforge.fluids.IFluidTank;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
 import slimeknights.tconstruct.common.multiblock.IMasterLogic;
 import slimeknights.tconstruct.library.client.model.ModelProperties;
+import slimeknights.tconstruct.library.fluid.FluidTank;
 import slimeknights.tconstruct.library.fluid.FluidTankAnimated;
 import slimeknights.tconstruct.library.utils.NBTTags;
 import slimeknights.tconstruct.smeltery.TinkerSmeltery;
@@ -91,7 +94,7 @@ public class TankBlockEntity extends SmelteryComponentBlockEntity implements ITa
 
   /** Gets the fluid handler for the given side, used by {@code RegisterCapabilitiesEvent} */
   @Nullable
-  public IFluidHandler getFluidHandler(@Nullable Direction side) {
+  public ResourceHandler<FluidResource> getFluidHandler(@Nullable Direction side) {
     return tank;
   }
 
@@ -104,7 +107,7 @@ public class TankBlockEntity extends SmelteryComponentBlockEntity implements ITa
   }
 
   /** Updates the light for this tank using {@link SearedTankBlock#LIGHT} */
-  public static void updateLight(BlockEntity be, IFluidTank tank) {
+  public static void updateLight(BlockEntity be, FluidTank tank) {
     Level level = be.getLevel();
     if (level != null && !level.isClientSide()) {
       FluidStack fluid = tank.getFluid();
@@ -168,18 +171,25 @@ public class TankBlockEntity extends SmelteryComponentBlockEntity implements ITa
   }
 
   @Override
-  public void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+  protected void loadAdditional(ValueInput input) {
     tank.setCapacity(getCapacity(getBlockState().getBlock()));
-    updateTank(registries, tag.getCompound(NBTTags.TANK));
-    super.loadAdditional(tag, registries);
+    // tank is stored in a compound, missing means empty
+    ValueInput tankInput = input.child(NBTTags.TANK).orElse(null);
+    if (tankInput == null) {
+      tank.setFluid(FluidStack.EMPTY);
+    } else {
+      tank.readFromNBT(tankInput);
+      updateLight(this, tank);
+    }
+    super.loadAdditional(input);
   }
 
   @Override
-  public void saveSynced(CompoundTag tag, HolderLookup.Provider registries) {
-    super.saveSynced(tag, registries);
+  protected void saveSynced(ValueOutput output) {
+    super.saveSynced(output);
     // want tank on the client on world load
     if (!tank.isEmpty()) {
-      tag.put(NBTTags.TANK, tank.writeToNBT(registries, new CompoundTag()));
+      tank.writeToNBT(output.child(NBTTags.TANK));
     }
   }
 

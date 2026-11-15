@@ -2,10 +2,13 @@ package slimeknights.tconstruct.smeltery.item;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
-
-import javax.annotation.Nonnull;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
+import net.neoforged.neoforge.transfer.transaction.TransactionContext;
+import slimeknights.tconstruct.library.fluid.FluidTank;
 
 /**
  * Fluid tank representing a stack of multiple fluid tanks. All operations must affect every tack in the stack at the same time, so must in increments of the scale.
@@ -65,43 +68,58 @@ public class ScaledFluidTank extends FluidTank {
   }
 
   @Override
-  public int fill(FluidStack resource, FluidAction action) {
-    return super.fill(enforceScale(resource, true), action);
+  public int insert(int index, FluidResource resource, int amount, TransactionContext transaction) {
+    return super.insert(index, resource, enforceScale(amount), transaction);
   }
 
-  @Nonnull
   @Override
-  public FluidStack drain(int maxDrain, FluidAction action) {
-    return super.drain(enforceScale(maxDrain), action);
-  }
-
-  @Nonnull
-  @Override
-  public FluidStack drain(FluidStack resource, FluidAction action) {
-    return super.drain(enforceScale(resource, true), action);
+  public int extract(int index, FluidResource resource, int amount, TransactionContext transaction) {
+    return super.extract(index, resource, enforceScale(amount), transaction);
   }
 
 
   /* NBT */
 
-  @Override
-  public FluidTank readFromNBT(HolderLookup.Provider lookupProvider, CompoundTag nbt) {
-    // scale the fluid on reading from NBT; as each instance should store the fluid relative to stack size 1
-    FluidStack fluid = FluidStack.parseOptional(lookupProvider, nbt.getCompound("Fluid"));
+  /** Scales the fluid on reading from NBT, as each instance should store the fluid relative to stack size 1 */
+  private void setScaledFluid(FluidStack fluid) {
     if (!fluid.isEmpty()) {
       fluid.setAmount(fluid.getAmount() * scale);
     }
     setFluid(fluid);
+  }
+
+  /** Scales the fluid on writing to NBT, as each instance should store the fluid relative to stack size 1 */
+  private FluidStack getScaledFluid() {
+    FluidStack fluid = getFluid();
+    return fluid.isEmpty() ? FluidStack.EMPTY : fluid.copyWithAmount(fluid.getAmount() / scale);
+  }
+
+  @Override
+  public FluidTank readFromNBT(HolderLookup.Provider lookupProvider, CompoundTag nbt) {
+    setScaledFluid(nbt.read(TAG_FLUID, FluidStack.OPTIONAL_CODEC, lookupProvider.createSerializationContext(NbtOps.INSTANCE)).orElse(FluidStack.EMPTY));
     return this;
   }
 
   @Override
   public CompoundTag writeToNBT(HolderLookup.Provider lookupProvider, CompoundTag nbt) {
-    // scale the fluid on writing to NBT; as each instance should store the fluid relative to stack size 1
-    if (!this.fluid.isEmpty()) {
-      FluidStack fluid = this.fluid.copyWithAmount(this.fluid.getAmount() / scale);
-      nbt.put("Fluid", fluid.save(lookupProvider));
+    FluidStack fluid = getScaledFluid();
+    if (!fluid.isEmpty()) {
+      nbt.store(TAG_FLUID, FluidStack.CODEC, lookupProvider.createSerializationContext(NbtOps.INSTANCE), fluid);
     }
     return nbt;
+  }
+
+  @Override
+  public FluidTank readFromNBT(ValueInput input) {
+    setScaledFluid(input.read(TAG_FLUID, FluidStack.OPTIONAL_CODEC).orElse(FluidStack.EMPTY));
+    return this;
+  }
+
+  @Override
+  public void writeToNBT(ValueOutput output) {
+    FluidStack fluid = getScaledFluid();
+    if (!fluid.isEmpty()) {
+      output.store(TAG_FLUID, FluidStack.CODEC, fluid);
+    }
   }
 }

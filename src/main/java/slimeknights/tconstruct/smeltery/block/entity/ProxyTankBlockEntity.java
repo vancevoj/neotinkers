@@ -2,15 +2,15 @@ package slimeknights.tconstruct.smeltery.block.entity;
 
 import lombok.Getter;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
+import net.neoforged.neoforge.transfer.item.ItemResource;
+import slimeknights.mantle.block.InventoryBlock;
 import slimeknights.mantle.block.entity.MantleBlockEntity;
 import slimeknights.mantle.fluid.FluidTransferHelper;
 import slimeknights.tconstruct.library.fluid.IFluidTankUpdater;
@@ -69,6 +69,17 @@ public class ProxyTankBlockEntity extends MantleBlockEntity implements IFluidTan
     }
   }
 
+  /* Removal */
+
+  @Override
+  public void preRemoveSideEffects(BlockPos pos, BlockState state) {
+    // drop the item tank, was in the block removal hook before 1.21.5
+    if (level != null) {
+      InventoryBlock.dropInventoryItems(level, pos, itemTank);
+    }
+    super.preRemoveSideEffects(pos, state);
+  }
+
   /* Interaction */
 
   /** Called when a player interacts with the fluid cannon */
@@ -84,8 +95,8 @@ public class ProxyTankBlockEntity extends MantleBlockEntity implements IFluidTan
     // if we have an active tank, try interacting
     if (!inventory.isEmpty()) {
       // must have a held item to interact
-      if (!held.isEmpty() && FluidTransferHelper.interactWithContainer(level, worldPosition, itemTank, player, hand).didTransfer()
-        || FluidTransferHelper.interactWithFilledBucket(level, worldPosition, itemTank, player, hand, getBlockState().getValue(HORIZONTAL_FACING)).didTransfer()) {
+      if (!held.isEmpty() && FluidTransferHelper.interactWithContainer(level, worldPosition, itemTank.getFluidHandler(), player, hand).didTransfer()
+        || FluidTransferHelper.interactWithFilledBucket(level, worldPosition, itemTank.getFluidHandler(), player, hand, getBlockState().getValue(HORIZONTAL_FACING)).didTransfer()) {
         return;
       }
       // if we clicked the tank, don't try and swap items unless we have no tank
@@ -97,9 +108,9 @@ public class ProxyTankBlockEntity extends MantleBlockEntity implements IFluidTan
     // no fluid transfer? swap items around
     // inventory is empty means place item inside
     if (inventory.isEmpty()) {
-      if (!held.isEmpty() && itemTank.isItemValid(0, held)) {
+      if (!held.isEmpty() && itemTank.isValid(0, ItemResource.of(held))) {
         // split the stack to place into inventory
-        ItemStack stack = held.split(itemTank.getSlotLimit(0));
+        ItemStack stack = held.split(itemTank.getCapacityAsInt(0, ItemResource.of(held)));
         player.setItemInHand(hand, held.isEmpty() ? ItemStack.EMPTY : held);
         itemTank.setStack(stack);
       }
@@ -124,16 +135,27 @@ public class ProxyTankBlockEntity extends MantleBlockEntity implements IFluidTan
   }
 
   @Override
-  public void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-    super.loadAdditional(tag, registries);
-    if (tag.contains(TAG_ITEM, Tag.TAG_COMPOUND)) {
-      itemTank.readFromNBT(tag.getCompound(TAG_ITEM), registries);
+  protected void loadAdditional(ValueInput input) {
+    super.loadAdditional(input);
+    readItem(input);
+  }
+
+  /** Reads the item from the input, used for both saving and syncing */
+  private void readItem(ValueInput input) {
+    ValueInput item = input.child(TAG_ITEM).orElse(null);
+    if (item != null) {
+      // empty tanks store an empty tag, skip reading those so the item codec does not report them
+      if (item.getString("id").isPresent()) {
+        itemTank.readFromNBT(item);
+      } else if (!itemTank.getStack().isEmpty()) {
+        itemTank.setStack(ItemStack.EMPTY);
+      }
     }
   }
 
   @Override
-  protected void saveSynced(CompoundTag tag, HolderLookup.Provider registries) {
-    super.saveSynced(tag, registries);
-    tag.put(TAG_ITEM, itemTank.writeToNBT(registries));
+  protected void saveSynced(ValueOutput output) {
+    super.saveSynced(output);
+    itemTank.writeToNBT(output.child(TAG_ITEM));
   }
 }

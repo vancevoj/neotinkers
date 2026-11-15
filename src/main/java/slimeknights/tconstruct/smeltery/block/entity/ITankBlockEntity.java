@@ -9,7 +9,8 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.item.ItemResource;
 import slimeknights.tconstruct.common.config.Config;
 import slimeknights.tconstruct.library.client.SafeClient;
 import slimeknights.tconstruct.library.fluid.FluidTankAnimated;
@@ -128,7 +129,7 @@ public interface ITankBlockEntity extends IFluidTankUpdater, FluidUpdatePacket.I
     return 0;
   }
 
-  /** Helper to implement {@link net.minecraft.world.level.block.Block#getCloneItemStack(LevelReader, BlockPos, BlockState)} */
+  /** Helper to implement {@link net.minecraft.world.level.block.Block#getCloneItemStack(LevelReader, BlockPos, BlockState, boolean)} */
   static ItemStack getCloneItemStack(ItemStack stack, BlockGetter world, BlockPos pos) {
     if (world.getBlockEntity(pos) instanceof ITankBlockEntity tank) {
       tank.setTankTag(stack);
@@ -139,6 +140,6 @@ public interface ITankBlockEntity extends IFluidTankUpdater, FluidUpdatePacket.I
   /** Represents a  tank block entity with an inventory */
   interface ITankInventoryBlockEntity extends ITankBlockEntity {
     /** Gets the associated item handler for this tank with an inventory */
-    IItemHandler getItemHandler();
+    ResourceHandler<ItemResource> getItemHandler();
   }
 }

@@ -1,27 +1,31 @@
 package slimeknights.tconstruct.smeltery.item;
 
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
+import net.minecraft.util.Prediction;
 import net.minecraft.world.entity.SlotAccess;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ClickAction;
 import net.minecraft.world.inventory.Slot;
-import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemInstance;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.CustomData;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
+import net.neoforged.neoforge.transfer.access.ItemAccess;
 import slimeknights.mantle.data.loadable.Loadables;
 import slimeknights.mantle.fluid.FluidTransferHelper;
 import slimeknights.mantle.fluid.tooltip.FluidTooltipHandler;
@@ -32,6 +36,7 @@ import slimeknights.mantle.item.BlockTooltipItem;
 import slimeknights.mantle.registration.object.EnumObject;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.TinkerTags;
+import slimeknights.tconstruct.library.fluid.FluidTank;
 import slimeknights.tconstruct.library.recipe.FluidValues;
 import slimeknights.tconstruct.library.utils.NBTTags;
 import slimeknights.tconstruct.library.utils.TagUtil;
@@ -40,6 +45,7 @@ import slimeknights.tconstruct.smeltery.block.component.SearedTankBlock.TankType
 import slimeknights.tconstruct.smeltery.block.entity.component.TankBlockEntity;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -48,7 +54,7 @@ public class TankItem extends BlockTooltipItem {
   public static final String FLUID_ID = TConstruct.makeTranslationKey("item", "tank.fluid_id");
   private static final Predicate<FluidStack> NO_FILL = FluidStack::isEmpty;
   /** Sub-key used by {@link FluidTank} to store the fluid stack within the tank compound */
-  private static final String TAG_FLUID = "Fluid";
+  private static final String TAG_FLUID = FluidTank.TAG_FLUID;
 
   private final boolean limitStackSize;
   public TankItem(Block blockIn, Properties builder, boolean limitStackSize) {
@@ -57,20 +63,21 @@ public class TankItem extends BlockTooltipItem {
   }
 
   /** Checks if the tank item is filled */
-  private static boolean isFilled(ItemStack stack) {
+  private static boolean isFilled(DataComponentGetter stack) {
     // has a container if not empty
     CustomData data = stack.get(DataComponents.CUSTOM_DATA);
-    return data != null && data.copyTag().contains(NBTTags.TANK, Tag.TAG_COMPOUND);
+    return data != null && data.copyTag().get(NBTTags.TANK) instanceof CompoundTag;
   }
 
-  @Override
-  public boolean hasCraftingRemainingItem(ItemStack stack) {
-    return isFilled(stack);
+  /** Checks if the given number of tanks may be filled together, large stacks of limited tanks may not be filled */
+  boolean canFill(int count) {
+    return !limitStackSize || count <= 16;
   }
 
+  @Nullable
   @Override
-  public ItemStack getCraftingRemainingItem(ItemStack stack) {
-    return isFilled(stack) ? new ItemStack(this) : ItemStack.EMPTY;
+  public ItemStackTemplate getCraftingRemainder(ItemInstance instance) {
+    return isFilled(instance) ? new ItemStackTemplate(this) : null;
   }
 
   @Override
@@ -82,26 +89,29 @@ public class TankItem extends BlockTooltipItem {
   }
 
   @Override
-  public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
+  public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
     if (stack.has(DataComponents.CUSTOM_DATA)) {
       FluidTank tank = getTank(stack, 1);
       if (tank.getFluidAmount() > 0) {
         FluidStack fluid = tank.getFluid();
-        tooltip.add(fluid.getDisplayName().plainCopy().withStyle(ChatFormatting.GRAY));
+        tooltip.accept(fluid.getHoverName().plainCopy().withStyle(ChatFormatting.GRAY));
         if (flag.isAdvanced()) {
-          tooltip.add(Component.translatable(FLUID_ID, Loadables.FLUID.getKey(fluid.getFluid())).withStyle(ChatFormatting.DARK_GRAY));
+          tooltip.accept(Component.translatable(FLUID_ID, Loadables.FLUID.getKey(fluid.getFluid())).withStyle(ChatFormatting.DARK_GRAY));
         }
-        FluidTooltipHandler.appendMaterial(fluid, tooltip);
+        List<Component> material = new ArrayList<>();
+        FluidTooltipHandler.appendMaterial(fluid, material);
+        material.forEach(tooltip);
       }
     }
     else {
-      super.appendHoverText(stack, context, tooltip, flag);
+      super.appendHoverText(stack, context, display, tooltip, flag);
     }
   }
 
   /** Checks if the given stack has fluid transfer */
   public static boolean mayHaveFluid(ItemStack stack) {
-    return FluidContainerTransferManager.INSTANCE.mayHaveTransfer(stack) || stack.getCapability(Capabilities.Fluid.ITEM) != null;
+    return FluidContainerTransferManager.INSTANCE.mayHaveTransfer(stack)
+      || (!stack.isEmpty() && ItemAccess.forStack(stack).getCapability(Capabilities.Fluid.ITEM) != null);
   }
 
   @Override
@@ -132,7 +142,7 @@ public class TankItem extends BlockTooltipItem {
               ItemStack split = held.split(1);
               setTank(split, tank);
               if (!player.getInventory().add(split)) {
-                player.drop(split, false);
+                player.drop(split, false, Prediction.PREDICTED);
               }
             }
           }
@@ -167,7 +177,7 @@ public class TankItem extends BlockTooltipItem {
     if (player.containerMenu.getCarried() == held) {
       player.containerMenu.setCarried(FluidTransferHelper.getOrTransferFilled(player, held, result));
     } else if (!player.getInventory().add(result)) {
-      player.drop(result, false);
+      player.drop(result, false, Prediction.PREDICTED);
     }
   }
 
@@ -241,7 +251,7 @@ public class TankItem extends BlockTooltipItem {
       removeTank(stack);
     } else {
       CompoundTag tag = new CompoundTag();
-      tag.put(TAG_FLUID, fluid.save(TagUtil.registryAccess()));
+      tag.store(TAG_FLUID, FluidStack.CODEC, TagUtil.registryAccess().createSerializationContext(NbtOps.INSTANCE), fluid);
       CustomData.update(DataComponents.CUSTOM_DATA, stack, nbt -> nbt.put(NBTTags.TANK, tag));
     }
     return stack;
@@ -263,7 +273,7 @@ public class TankItem extends BlockTooltipItem {
     int count = stack.getCount();
     FluidTank tank = getTank(stack, count);
     // disallow filling if the current size is larger than 16
-    if (limitStackSize && count > 16) {
+    if (!canFill(count)) {
       tank.setValidator(NO_FILL);
     }
     return tank;
@@ -279,9 +289,22 @@ public class TankItem extends BlockTooltipItem {
     FluidTank tank = ScaledFluidTank.create(TankBlockEntity.getCapacity(stack.getItem()), scale);
     CustomData data = stack.get(DataComponents.CUSTOM_DATA);
     if (data != null) {
-      tank.readFromNBT(TagUtil.registryAccess(), data.copyTag().getCompound(NBTTags.TANK));
+      tank.readFromNBT(TagUtil.registryAccess(), data.copyTag().getCompoundOrEmpty(NBTTags.TANK));
     }
     return tank;
+  }
+
+  /**
+   * Gets the fluid stored in a single tank of the given stack, ignoring the stack size
+   * @param stack  Tank stack
+   * @return  Fluid in the tank
+   */
+  public static FluidStack getFluid(ItemStack stack) {
+    CustomData data = stack.get(DataComponents.CUSTOM_DATA);
+    if (data != null) {
+      return data.copyTag().getCompoundOrEmpty(NBTTags.TANK).read(TAG_FLUID, FluidStack.OPTIONAL_CODEC, TagUtil.registryAccess().createSerializationContext(NbtOps.INSTANCE)).orElse(FluidStack.EMPTY);
+    }
+    return FluidStack.EMPTY;
   }
 
   /**
@@ -293,9 +316,9 @@ public class TankItem extends BlockTooltipItem {
     CustomData data = stack.get(DataComponents.CUSTOM_DATA);
     if (data != null) {
       CompoundTag nbt = data.copyTag();
-      if (nbt.contains(NBTTags.TANK, Tag.TAG_COMPOUND)) {
+      if (nbt.get(NBTTags.TANK) instanceof CompoundTag tank) {
         // fluid is stored under the "Fluid" sub-key with the fluid ID in "id" (FluidStack codec format)
-        return nbt.getCompound(NBTTags.TANK).getCompound(TAG_FLUID).getString("id");
+        return tank.getCompoundOrEmpty(TAG_FLUID).getStringOr("id", "");
       }
     }
     return "";

@@ -3,6 +3,7 @@ package slimeknights.tconstruct.smeltery.block.entity.module.alloying;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
 import slimeknights.mantle.block.entity.MantleBlockEntity;
+import slimeknights.mantle.recipe.helper.RecipeHelper;
 import slimeknights.tconstruct.library.recipe.TinkerRecipeTypes;
 import slimeknights.tconstruct.library.recipe.alloying.AlloyRecipe;
 import slimeknights.tconstruct.library.recipe.alloying.IAlloyTank;
@@ -50,8 +51,8 @@ public class MultiAlloyingModule implements IAlloyingModule {
    */
   private List<AlloyRecipe> getRecipes() {
     if (lastRecipes == null) {
-      lastRecipes = getLevel().getRecipeManager().getRecipesFor(TinkerRecipeTypes.ALLOYING.get(), alloyTank, getLevel())
-                              .stream().map(RecipeHolder::value).collect(Collectors.toCollection(ArrayList::new));
+      lastRecipes = RecipeHelper.recipes(getLevel()).getRecipesFor(TinkerRecipeTypes.ALLOYING.get(), alloyTank, getLevel())
+                                .map(RecipeHolder::value).collect(Collectors.toCollection(ArrayList::new));
     }
     return lastRecipes;
   }

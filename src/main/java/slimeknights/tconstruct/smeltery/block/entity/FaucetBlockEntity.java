@@ -3,18 +3,20 @@ package slimeknights.tconstruct.smeltery.block.entity;
 import lombok.Getter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.capabilities.BlockCapabilityCache;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.ResourceHandlerUtil;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
+import net.neoforged.neoforge.transfer.resource.ResourceStack;
+import net.neoforged.neoforge.transfer.transaction.Transaction;
 import slimeknights.mantle.block.entity.MantleBlockEntity;
 import slimeknights.tconstruct.common.network.TinkerNetwork;
 
@@ -53,10 +55,10 @@ public class FaucetBlockEntity extends MantleBlockEntity {
 
   /** Cached fluid handler of the input to the faucet */
   @Nullable
-  private BlockCapabilityCache<IFluidHandler,Direction> inputHandler;
+  private BlockCapabilityCache<ResourceHandler<FluidResource>,Direction> inputHandler;
   /** Cached fluid handler of the output from the faucet */
   @Nullable
-  private BlockCapabilityCache<IFluidHandler,Direction> outputHandler;
+  private BlockCapabilityCache<ResourceHandler<FluidResource>,Direction> outputHandler;
 
   public FaucetBlockEntity(BlockPos pos, BlockState state) {
     this(TinkerSmeltery.faucet.get(), pos, state);
@@ -75,7 +77,7 @@ public class FaucetBlockEntity extends MantleBlockEntity {
    * @param side  Side to check
    * @return  Capability cache
    */
-  private BlockCapabilityCache<IFluidHandler,Direction> createCache(Direction side) {
+  private BlockCapabilityCache<ResourceHandler<FluidResource>,Direction> createCache(Direction side) {
     assert level instanceof ServerLevel;
     return BlockCapabilityCache.create(Capabilities.Fluid.BLOCK, (ServerLevel) level, worldPosition.relative(side), side.getOpposite());
   }
@@ -85,7 +87,7 @@ public class FaucetBlockEntity extends MantleBlockEntity {
    * @return  Input fluid handler, or null if absent
    */
   @Nullable
-  private IFluidHandler getInputHandler() {
+  private ResourceHandler<FluidResource> getInputHandler() {
     if (inputHandler == null) {
       inputHandler = createCache(getBlockState().getValue(FACING).getOpposite());
     }
@@ -97,7 +99,7 @@ public class FaucetBlockEntity extends MantleBlockEntity {
    * @return  Output fluid handler, or null if absent
    */
   @Nullable
-  private IFluidHandler getOutputHandler() {
+  private ResourceHandler<FluidResource> getOutputHandler() {
     if (outputHandler == null) {
       outputHandler = createCache(Direction.DOWN);
     }
@@ -205,35 +207,57 @@ public class FaucetBlockEntity extends MantleBlockEntity {
    */
   private boolean doTransfer(boolean execute) {
     // still got content left
-    IFluidHandler input = getInputHandler();
-    IFluidHandler output = getOutputHandler();
+    ResourceHandler<FluidResource> input = getInputHandler();
+    ResourceHandler<FluidResource> output = getOutputHandler();
     if (input != null && output != null) {
-      // can we drain?
-      FluidStack drained = input.drain(PACKET_SIZE, FluidAction.SIMULATE);
-      if (!drained.isEmpty()) {
-        // can we fill
-        int filled = output.fill(drained, FluidAction.SIMULATE);
-        if (filled > 0) {
-          // ensure we can actually fill in our min increment, deals with handlers like copper cans
-          // can skip this step if we already received a small enough number
-          drained.setAmount(MB_PER_TICK); // done using this fluid stack's original size, so save some memory and reuse
-          if (filled <= MB_PER_TICK || output.fill(drained, FluidAction.SIMULATE) > 0) {
-            // execute if requested
-            if (execute) {
-              // drain the liquid and transfer it, buffer the amount for delay
-              this.drained = input.drain(filled, FluidAction.EXECUTE);
-
-              // sync to clients if we have changes
-              if (faucetState == FaucetState.OFF || !FluidStack.isSameFluidSameComponents(renderFluid, drained)) {
-                syncToClient(this.drained, true);
+      // simulate the whole check, nothing here is committed
+      FluidResource resource = null;
+      int filled = 0;
+      boolean canPour = false;
+      try (Transaction simulate = Transaction.openRoot()) {
+        // can we drain? drains the bottom fluid for the smeltery
+        ResourceStack<FluidResource> drained = ResourceHandlerUtil.extractFirst(input, fluid -> true, PACKET_SIZE, simulate);
+        if (drained != null) {
+          resource = drained.resource();
+          // can we fill
+          try (Transaction fill = Transaction.open(simulate)) {
+            filled = output.insert(resource, drained.amount(), fill);
+          }
+          if (filled > 0) {
+            // ensure we can actually fill in our min increment, deals with handlers like copper cans
+            // can skip this step if we already received a small enough number
+            if (filled <= MB_PER_TICK) {
+              canPour = true;
+            } else {
+              try (Transaction fill = Transaction.open(simulate)) {
+                canPour = output.insert(resource, MB_PER_TICK, fill) > 0;
               }
-              faucetState = FaucetState.POURING;
-              // pour after initial packet, in case we end up resetting later
-              pour();
             }
-            return true;
           }
         }
+      }
+      if (canPour) {
+        // execute if requested
+        if (execute) {
+          // drain the liquid and transfer it, buffer the amount for delay
+          this.drained = FluidStack.EMPTY;
+          try (Transaction transaction = Transaction.openRoot()) {
+            int amount = input.extract(resource, filled, transaction);
+            if (amount > 0) {
+              transaction.commit();
+              this.drained = resource.toStack(amount);
+            }
+          }
+
+          // sync to clients if we have changes
+          if (faucetState == FaucetState.OFF || !FluidStack.isSameFluidSameComponents(renderFluid, drained)) {
+            syncToClient(this.drained, true);
+          }
+          faucetState = FaucetState.POURING;
+          // pour after initial packet, in case we end up resetting later
+          pour();
+        }
+        return true;
       }
 
       // if powered, keep faucet running
@@ -262,13 +286,16 @@ public class FaucetBlockEntity extends MantleBlockEntity {
     }
 
     // ensure we have an output
-    IFluidHandler output = getOutputHandler();
+    ResourceHandler<FluidResource> output = getOutputHandler();
     if (output != null) {
-      FluidStack fillStack = drained.copy();
-      fillStack.setAmount(Math.min(drained.getAmount(), MB_PER_TICK));
+      FluidResource resource = FluidResource.of(drained);
+      int fillAmount = Math.min(drained.getAmount(), MB_PER_TICK);
 
       // can we fill?
-      int filled = output.fill(fillStack, IFluidHandler.FluidAction.SIMULATE);
+      int filled;
+      try (Transaction simulate = Transaction.openRoot()) {
+        filled = output.insert(resource, fillAmount, simulate);
+      }
       if (filled > 0) {
         // update client if they do not think we have fluid
         if (!FluidStack.isSameFluidSameComponents(renderFluid, drained)) {
@@ -277,8 +304,10 @@ public class FaucetBlockEntity extends MantleBlockEntity {
 
         // transfer it
         this.drained.shrink(filled);
-        fillStack.setAmount(filled);
-        output.fill(fillStack, IFluidHandler.FluidAction.EXECUTE);
+        try (Transaction transaction = Transaction.openRoot()) {
+          output.insert(resource, filled, transaction);
+          transaction.commit();
+        }
       }
     }
     else {
@@ -330,42 +359,34 @@ public class FaucetBlockEntity extends MantleBlockEntity {
   }
 
   @Override
-  protected void saveSynced(CompoundTag compound, HolderLookup.Provider registries) {
-    super.saveSynced(compound, registries);
-    compound.putByte(TAG_STATE, (byte)faucetState.ordinal());
+  protected void saveSynced(ValueOutput output) {
+    super.saveSynced(output);
+    output.putByte(TAG_STATE, (byte)faucetState.ordinal());
     if (!renderFluid.isEmpty()) {
-      compound.put(TAG_RENDER_FLUID, renderFluid.save(registries, new CompoundTag()));
+      output.store(TAG_RENDER_FLUID, FluidStack.CODEC, renderFluid);
     }
   }
 
   @Override
-  public void saveAdditional(CompoundTag compound, HolderLookup.Provider registries) {
-    super.saveAdditional(compound, registries);
-    compound.putBoolean(TAG_STOP, stopPouring);
-    compound.putBoolean(TAG_LAST_REDSTONE, lastRedstoneState);
+  protected void saveAdditional(ValueOutput output) {
+    super.saveAdditional(output);
+    output.putBoolean(TAG_STOP, stopPouring);
+    output.putBoolean(TAG_LAST_REDSTONE, lastRedstoneState);
     if (!drained.isEmpty()) {
-      compound.put(TAG_DRAINED, drained.save(registries, new CompoundTag()));
+      output.store(TAG_DRAINED, FluidStack.CODEC, drained);
     }
   }
 
   @Override
-  public void loadAdditional(CompoundTag compound, HolderLookup.Provider registries) {
-    super.loadAdditional(compound, registries);
+  protected void loadAdditional(ValueInput input) {
+    super.loadAdditional(input);
 
-    faucetState = FaucetState.fromIndex(compound.getByte(TAG_STATE));
-    stopPouring = compound.getBoolean(TAG_STOP);
-    lastRedstoneState = compound.getBoolean(TAG_LAST_REDSTONE);
+    faucetState = FaucetState.fromIndex(input.getByteOr(TAG_STATE, (byte)0));
+    stopPouring = input.getBooleanOr(TAG_STOP, false);
+    lastRedstoneState = input.getBooleanOr(TAG_LAST_REDSTONE, false);
     // fluids
-    if (compound.contains(TAG_DRAINED, Tag.TAG_COMPOUND)) {
-      drained = FluidStack.parseOptional(registries, compound.getCompound(TAG_DRAINED));
-    } else {
-      drained = FluidStack.EMPTY;
-    }
-    if (compound.contains(TAG_RENDER_FLUID, Tag.TAG_COMPOUND)) {
-      renderFluid = FluidStack.parseOptional(registries, compound.getCompound(TAG_RENDER_FLUID));
-    } else {
-      renderFluid = FluidStack.EMPTY;
-    }
+    drained = input.read(TAG_DRAINED, FluidStack.OPTIONAL_CODEC).orElse(FluidStack.EMPTY);
+    renderFluid = input.read(TAG_RENDER_FLUID, FluidStack.OPTIONAL_CODEC).orElse(FluidStack.EMPTY);
   }
 
   private enum FaucetState {

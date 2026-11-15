@@ -2,11 +2,11 @@ package slimeknights.tconstruct.smeltery.block.entity.tank;
 
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
-import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
+import net.neoforged.neoforge.transfer.transaction.RootCommitJournal;
+import net.neoforged.neoforge.transfer.transaction.TransactionContext;
 import slimeknights.tconstruct.library.fluid.FillOnlyFluidHandler;
 import slimeknights.tconstruct.smeltery.block.entity.ChannelBlockEntity;
-
-import net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction;
 
 /** Tank for each side connection, for the sake of rendering */
 public class ChannelSideTank extends FillOnlyFluidHandler {
@@ -21,12 +21,21 @@ public class ChannelSideTank extends FillOnlyFluidHandler {
 		this.side = side;
 	}
 
-	@Override
-	public int fill(FluidStack resource, FluidAction action) {
-		int filled = super.fill(resource, action);
-		if (action.execute() && filled > 0) {
-			channel.setFlow(side, true);
+	/** Marks the side as flowing once the transaction commits */
+	private int markFlowing(int filled, TransactionContext transaction) {
+		if (filled > 0) {
+			new RootCommitJournal(() -> channel.setFlow(side, true)).updateSnapshots(transaction);
 		}
 		return filled;
+	}
+
+	@Override
+	public int insert(FluidResource resource, int amount, TransactionContext transaction) {
+		return markFlowing(super.insert(resource, amount, transaction), transaction);
+	}
+
+	@Override
+	public int insert(int index, FluidResource resource, int amount, TransactionContext transaction) {
+		return markFlowing(super.insert(index, resource, amount, transaction), transaction);
 	}
 }
