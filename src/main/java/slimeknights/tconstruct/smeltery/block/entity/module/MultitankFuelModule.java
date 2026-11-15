@@ -10,6 +10,7 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.EmptyFluidHandler;
 import slimeknights.mantle.block.entity.MantleBlockEntity;
+import slimeknights.tconstruct.library.utils.TagUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -171,10 +172,10 @@ public class MultitankFuelModule extends FuelModule implements IFluidHandler {
   @Override
   public void readFromTag(CompoundTag nbt) {
     super.readFromTag(nbt);
-    // readBlockPos now takes the key directly and returns an Optional, reading the int array written by writeBlockPos
-    BlockPos pos = NbtUtils.readBlockPos(nbt, TAG_LAST_FUEL).orElse(null);
+    // reads the int array written by writeBlockPos, or the compound saved by 1.20.1 worlds
+    BlockPos pos = TagUtil.readOptionalPos(nbt, TAG_LAST_FUEL, parent.getBlockPos());
     if (pos != null) {
-      lastPos = pos.offset(parent.getBlockPos());
+      lastPos = pos;
     }
   }
 
