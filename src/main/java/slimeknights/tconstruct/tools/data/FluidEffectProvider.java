@@ -2,9 +2,13 @@ package slimeknights.tconstruct.tools.data;
 
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
+import net.minecraft.data.registries.VanillaRegistries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.stats.Stats;
 import net.minecraft.tags.BlockTags;
@@ -13,6 +17,8 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.Tiers;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -81,6 +87,14 @@ import slimeknights.tconstruct.world.block.DirtType;
 import java.util.function.Function;
 
 public class FluidEffectProvider extends AbstractFluidEffectProvider {
+  /** Vanilla registry lookup, used to resolve data driven enchantments to holders for serializing */
+  private static final HolderLookup.Provider VANILLA_REGISTRIES = VanillaRegistries.createLookup();
+
+  /** Resolves a vanilla enchantment key to its registry holder (effects store the holder so they serialize by key) */
+  private static Holder<Enchantment> enchantment(ResourceKey<Enchantment> key) {
+    return VANILLA_REGISTRIES.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(key);
+  }
+
   public FluidEffectProvider(PackOutput packOutput) {
     super(packOutput, TConstruct.MOD_ID);
   }
@@ -201,9 +215,8 @@ public class FluidEffectProvider extends AbstractFluidEffectProvider {
     // gems - direct damage and mining //
     addGem(TinkerFluids.moltenAmethyst).addBlockEffect(new HarvestTierPredicate(Tiers.STONE),     new BreakBlockFluidEffect(3));
     addGem(TinkerFluids.moltenQuartz  ).addBlockEffect(new HarvestTierPredicate(Tiers.IRON),      new BreakBlockFluidEffect(5));
-    // TODO(neoport): silk touch / fortune enchant variants dropped. BreakBlockFluidEffect stores Map<Enchantment,Integer>, but enchantments are datapack-driven in 1.21 (no static Enchantment instance from Enchantments.SILK_TOUCH/FORTUNE, which are now ResourceKey<Enchantment>). Cross-package: BreakBlockFluidEffect must accept ResourceKey<Enchantment> for the enchanted break to serialize.
-    addGem(TinkerFluids.moltenEmerald ).addBlockEffect(new HarvestTierPredicate(Tiers.IRON),      new BreakBlockFluidEffect(10));
-    addGem(TinkerFluids.moltenDiamond ).addBlockEffect(new HarvestTierPredicate(Tiers.DIAMOND),   new BreakBlockFluidEffect(10));
+    addGem(TinkerFluids.moltenEmerald ).addBlockEffect(new HarvestTierPredicate(Tiers.IRON),      new BreakBlockFluidEffect(10, enchantment(Enchantments.SILK_TOUCH), 1));
+    addGem(TinkerFluids.moltenDiamond ).addBlockEffect(new HarvestTierPredicate(Tiers.DIAMOND),   new BreakBlockFluidEffect(10, enchantment(Enchantments.FORTUNE), 3));
     addMetal(TinkerFluids.moltenDebris).addBlockEffect(new HarvestTierPredicate(Tiers.NETHERITE), new BreakBlockFluidEffect(50));
 
     // foods - setup to give equivalent saturation on a full bowl/bottle to their food counterparts, though hunger may be slightly different
