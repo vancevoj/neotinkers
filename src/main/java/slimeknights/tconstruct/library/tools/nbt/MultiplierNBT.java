@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NumericTag;
 import net.minecraft.nbt.Tag;
 import slimeknights.mantle.data.loadable.Loadable;
 import slimeknights.mantle.data.loadable.primitive.FloatLoadable;
@@ -75,8 +76,8 @@ public class MultiplierNBT {
     Builder builder = builder();
     CompoundTag nbt = (CompoundTag)inbt;
     for (String key : nbt.keySet()) {
-      if (nbt.contains(key, Tag.TAG_ANY_NUMERIC) && StatsNBT.readStatIdFromNBT(key) instanceof INumericToolStat<?> stat) {
-        builder.set(stat, nbt.getFloat(key));
+      if (nbt.get(key) instanceof NumericTag numeric && StatsNBT.readStatIdFromNBT(key) instanceof INumericToolStat<?> stat) {
+        builder.set(stat, numeric.floatValue());
       }
     }
     return builder.build();

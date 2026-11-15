@@ -5,6 +5,7 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.ItemCapability;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
+import net.neoforged.neoforge.transfer.access.ItemAccess;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 
@@ -21,7 +22,12 @@ import java.util.function.Supplier;
  * item per capability type in {@link RegisterCapabilitiesEvent}. This class keeps the modular {@link IToolCapabilityProvider}
  * registry from the Forge version: modifiers register a provider constructor through {@link #register(BiFunction)}, and
  * {@link #register(RegisterCapabilitiesEvent, ItemCapability, Item...)} wires those providers up to a concrete capability for a
- * set of items. The handler is built fresh per query and {@link ToolStack#refreshTag(ItemStack)} keeps it in sync with the stack.
+ * set of items. The handler is built fresh per query.
+ * <p>
+ * In 26.3 the item fluid, item and energy capabilities have an {@link ItemAccess} context, passed to
+ * {@link IToolCapabilityProvider#getCapability(IToolStackView, ItemCapability, Object)}. Those handlers must read and write the tool
+ * through the access (see {@link ToolItemAccess}), the stack passed to the provider constructor is only a copy for them.
+ * Capabilities without a context (such as {@link BlockItemProviderCapability}) still get a tool backed by the queried stack.
  */
 public class ToolCapabilityProvider {
   private ToolCapabilityProvider() {}
@@ -36,23 +42,32 @@ public class ToolCapabilityProvider {
 
   /**
    * Resolves the given capability for a tool stack by dispatching through the registered providers.
-   * @param stack  Tool stack
-   * @param cap    Capability to resolve
-   * @param <T>    Capability type
+   * @param stack    Tool stack
+   * @param cap      Capability to resolve
+   * @param context  Capability context, an {@link ItemAccess} for the item fluid, item and energy capabilities
+   * @param <T>      Capability type
+   * @param <C>      Context type
    * @return  Capability instance, or null if no provider returned one
    */
   @Nullable
-  private static <T> T resolve(ItemStack stack, ItemCapability<T, ?> cap) {
-    ToolStack tool = ToolStack.from(stack);
-    // clear the tool cache, as it may have changed since the last time a cap was fetched
-    tool.refreshTag(stack);
+  private static <T, C> T resolve(ItemStack stack, ItemCapability<T, C> cap, @Nullable C context) {
+    ToolStack tool;
+    if (context instanceof ItemAccess) {
+      // item access handlers read and write through the access, this tool is just used to check if the capability applies
+      // copy so querying a capability never writes to the stack
+      tool = ToolStack.copyFrom(stack);
+    } else {
+      tool = ToolStack.from(stack);
+      // clear the tool cache, as it may have changed since the last time a cap was fetched
+      tool.refreshTag(stack);
+    }
     Supplier<ToolStack> supplier = () -> tool;
     // build the providers for this stack and return the first successful one
     for (BiFunction<ItemStack,Supplier<? extends IToolStackView>,IToolCapabilityProvider> constructor : PROVIDER_CONSTRUCTORS) {
       IToolCapabilityProvider provider = constructor.apply(stack, supplier);
       if (provider != null) {
         provider.clearCache();
-        T result = provider.getCapability(tool, cap);
+        T result = provider.getCapability(tool, cap, context);
         if (result != null) {
           return result;
         }
@@ -68,9 +83,10 @@ public class ToolCapabilityProvider {
    * @param cap    Capability to register (e.g. {@code Capabilities.Fluid.ITEM})
    * @param items  Items to register the capability for
    * @param <T>    Capability type
+   * @param <C>    Capability context type
    */
-  public static <T> void register(RegisterCapabilitiesEvent event, ItemCapability<T, Void> cap, Item... items) {
-    event.registerItem(cap, (stack, ctx) -> resolve(stack, cap), items);
+  public static <T, C> void register(RegisterCapabilitiesEvent event, ItemCapability<T, C> cap, Item... items) {
+    event.registerItem(cap, (stack, context) -> resolve(stack, cap, context), items);
   }
 
   /**
@@ -93,6 +109,20 @@ public class ToolCapabilityProvider {
     /** Gets a capability on the given tool, or null if this provider does not supply the given capability. */
     @Nullable
     <T> T getCapability(IToolStackView tool, ItemCapability<T, ?> cap);
+
+    /**
+     * Gets a capability on the given tool with the query context, or null if this provider does not supply the given capability.
+     * Item access capabilities ({@link Capabilities.Fluid#ITEM}, {@link Capabilities.Item#ITEM}, {@link Capabilities.Energy#ITEM}) receive their
+     * {@link ItemAccess} here and must read and write the tool through it, for example using {@link ToolItemAccess}.
+     * Defaults to {@link #getCapability(IToolStackView, ItemCapability)}.
+     * @param tool     Tool view used to check if the capability applies, do not write to it for item access capabilities
+     * @param cap      Capability being queried
+     * @param context  Capability context
+     */
+    @Nullable
+    default <T, C> T getCapability(IToolStackView tool, ItemCapability<T, C> cap, @Nullable C context) {
+      return getCapability(tool, cap);
+    }
 
     /** Called to clear the cache of the provider */
     default void clearCache() {}

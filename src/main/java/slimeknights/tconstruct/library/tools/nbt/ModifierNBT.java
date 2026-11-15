@@ -224,18 +224,15 @@ public class ModifierNBT implements Iterable<ModifierEntry> {
 
   /** Re-adds the modifier list from NBT */
   public static ModifierNBT readFromNBT(@Nullable Tag inbt) {
-    if (inbt == null || inbt.getId() != Tag.TAG_LIST) {
+    // lists no longer have an element type, an empty list used to have no element type so it was rejected here
+    if (!NbtTypeHelper.isNonEmptyListOf(inbt, Tag.TAG_COMPOUND)) {
       return EMPTY;
     }
 
     ListTag listNBT = (ListTag)inbt;
-    if (listNBT.getElementType() != Tag.TAG_COMPOUND) {
-      return EMPTY;
-    }
-
     ImmutableList.Builder<ModifierEntry> builder = ImmutableList.builder();
     for (int i = 0; i < listNBT.size(); i++) {
-      ModifierEntry entry = ModifierEntry.readFromNBT(listNBT.getCompound(i));
+      ModifierEntry entry = ModifierEntry.readFromNBT(listNBT.getCompoundOrEmpty(i));
       if (entry != ModifierEntry.EMPTY) {
         builder.add(entry);
       }

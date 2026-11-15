@@ -1,5 +1,6 @@
 package slimeknights.tconstruct.library.tools.capability;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -32,11 +33,12 @@ public class PersistentDataCapability {
   /**
    * Attachment storing the persistent mod data on an entity. Serialized via {@link CompoundTag} mapped through {@link ModDataNBT}.
    * Copy on death is handled manually in {@link #playerClone} so it can merge non-empty data without overwriting.
+   * Attachments serialize through a map codec now; reading the whole attachment compound as the data keeps the 1.21.1 save layout.
    */
   public static final DeferredHolder<AttachmentType<?>, AttachmentType<ModDataNBT>> ATTACHMENT =
     ATTACHMENTS.register("persistent_data", () -> AttachmentType
       .builder(holder -> new ModDataNBT())
-      .serialize(CompoundTag.CODEC.xmap(ModDataNBT::readFromNBT, ModDataNBT::getCopy))
+      .serialize(MapCodec.assumeMapUnsafe(CompoundTag.CODEC).xmap(ModDataNBT::readFromNBT, ModDataNBT::getCopy))
       .build());
 
   /**

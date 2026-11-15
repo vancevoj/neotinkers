@@ -10,6 +10,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import slimeknights.tconstruct.TConstruct;
@@ -182,13 +183,33 @@ public class StationSlotLayout {
     /** Sets the given item as both the name and icon */
     public Builder item(ItemStack stack) {
       icon(stack);
-      translationKey = stack.getDescriptionId();
+      // 26.3: ItemStack#getDescriptionId is gone, the item description ID is not stack sensitive anymore
+      translationKey = stack.getItem().getDescriptionId();
+      return this;
+    }
+
+    /** Sets the given item as both the name and icon, without creating a stack. Safe to use before item components are bound, such as in datagen */
+    public Builder item(ItemLike item) {
+      icon(item);
+      translationKey = item.asItem().getDescriptionId();
       return this;
     }
 
     /** Sets the icon of this layout to a stack */
     public Builder icon(ItemStack stack) {
       icon = LayoutIcon.ofItem(stack);
+      return this;
+    }
+
+    /** Sets the icon of this layout to an item, without creating a stack. Safe to use before item components are bound, such as in datagen */
+    public Builder icon(ItemStackTemplate template) {
+      icon = LayoutIcon.ofItem(template);
+      return this;
+    }
+
+    /** Sets the icon of this layout to an item, without creating a stack. Safe to use before item components are bound, such as in datagen */
+    public Builder icon(ItemLike item) {
+      icon = LayoutIcon.ofItem(item);
       return this;
     }
 

@@ -5,10 +5,11 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.recipe.casting.material.MaterialCastingLookup;
 
-import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 /** Item which shows the cast cost in the tooltip */
@@ -22,10 +23,10 @@ public class PartCastItem extends Item {
   }
 
   @Override
-  public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
+  public void appendHoverText(ItemStack stack, Item.TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
     int cost = MaterialCastingLookup.getItemCost(part.get());
     if (cost > 0) {
-      tooltip.add(Component.translatable(COST_KEY, cost).withStyle(ChatFormatting.GRAY));
+      tooltip.accept(Component.translatable(COST_KEY, cost).withStyle(ChatFormatting.GRAY));
     }
   }
 }

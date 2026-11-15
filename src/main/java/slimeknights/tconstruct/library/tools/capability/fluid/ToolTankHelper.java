@@ -3,7 +3,10 @@ package slimeknights.tconstruct.library.tools.capability.fluid;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.nbt.Tag;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.RegistryOps;
 import net.neoforged.neoforge.fluids.FluidStack;
 import slimeknights.mantle.Mantle;
 import slimeknights.mantle.data.registry.NamedComponentRegistry;
@@ -24,8 +27,8 @@ import java.util.function.BiFunction;
 @Getter
 @RequiredArgsConstructor
 public class ToolTankHelper {
-  /** Helper function to parse a fluid from NBT */
-  public static final BiFunction<CompoundTag, String, FluidStack> PARSE_FLUID = (nbt, key) -> FluidStack.parseOptional(TagUtil.registryAccess(), nbt.getCompound(key));
+  /** Helper function to parse a fluid from NBT, returns empty if missing or invalid */
+  public static final BiFunction<CompoundTag, String, FluidStack> PARSE_FLUID = (nbt, key) -> nbt.read(key, FluidStack.OPTIONAL_CODEC, registryOps()).orElse(FluidStack.EMPTY);
 
   /** Format key for the stat */
   public static final String MB_FORMAT = Mantle.makeDescriptionId("gui", "fluid.millibucket");
@@ -69,10 +72,15 @@ public class ToolTankHelper {
     if (fluid.getAmount() > capacity) {
       fluid.setAmount(capacity);
     }
-    // 1.21: FluidStack.save RETURNS the encoded tag and must be used; discarding it lost the tool tank
-    // fluid on save (tank modifier emptied on reload).
-    CompoundTag saved = (CompoundTag) fluid.save(TagUtil.registryAccess(), new CompoundTag());
+    // 1.21: the encoded tag is a new tag and must be stored; discarding it lost the tool tank fluid on save (tank modifier emptied on reload).
+    // 26.3: FluidStack#save is gone, encode through the codec with registry access for the fluid components
+    Tag saved = FluidStack.CODEC.encodeStart(registryOps(), fluid).getOrThrow();
     tool.getPersistentData().put(fluidKey, saved);
     return fluid;
+  }
+
+  /** Gets registry aware NBT ops for encoding fluids in tool data */
+  private static RegistryOps<Tag> registryOps() {
+    return TagUtil.registryAccess().createSerializationContext(NbtOps.INSTANCE);
   }
 }

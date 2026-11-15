@@ -124,16 +124,14 @@ public class MaterialIdNBT {
    * @return  MaterialNBT instance
    */
   public static MaterialIdNBT readFromNBT(@Nullable Tag nbt) {
-    if (nbt == null || nbt.getId() != Tag.TAG_LIST) {
+    // lists no longer have an element type, an empty list used to have no element type so it was rejected here
+    if (!NbtTypeHelper.isNonEmptyListOf(nbt, Tag.TAG_STRING)) {
       return EMPTY;
     }
     ListTag list = (ListTag) nbt;
-    if (list.getElementType() != Tag.TAG_STRING) {
-      return EMPTY;
-    }
     List<MaterialVariantId> materials = new ArrayList<>(list.size());
     for (int i = 0; i < list.size(); i++) {
-      materials.add(tryParse(list.getString(i)));
+      materials.add(tryParse(list.getStringOr(i, "")));
     }
     return new MaterialIdNBT(materials);
   }
@@ -158,7 +156,7 @@ public class MaterialIdNBT {
   public static MaterialIdNBT from(ItemStack stack) {
     CompoundTag nbt = ToolDataComponents.getTag(stack);
     if (nbt != null) {
-      return readFromNBT(nbt.getList(ToolStack.TAG_MATERIALS, Tag.TAG_STRING));
+      return readFromNBT(NbtTypeHelper.getList(nbt, ToolStack.TAG_MATERIALS, Tag.TAG_STRING));
     }
     return EMPTY;
   }
@@ -167,9 +165,9 @@ public class MaterialIdNBT {
   public static MaterialVariantId getMaterial(ItemStack stack, int index) {
     CompoundTag nbt = ToolDataComponents.getTag(stack);
     if (nbt != null) {
-      ListTag list = nbt.getList(ToolStack.TAG_MATERIALS, Tag.TAG_STRING);
-      if (index < list.size()) {
-        return tryParse(list.getString(index));
+      ListTag list = NbtTypeHelper.getList(nbt, ToolStack.TAG_MATERIALS, Tag.TAG_STRING);
+      if (index >= 0 && index < list.size()) {
+        return tryParse(list.getStringOr(index, ""));
       }
     }
     return MaterialId.UNKNOWN;

@@ -15,7 +15,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.item.Item;
 import slimeknights.mantle.data.predicate.IJsonPredicate;
 import slimeknights.mantle.data.predicate.item.ItemPredicate;
-import slimeknights.tconstruct.library.utils.TagUtil;
 
 import javax.annotation.Nullable;
 
@@ -114,8 +113,8 @@ public class FloatToolStat implements INumericToolStat<Float> {
   @Nullable
   @Override
   public Float read(Tag tag) {
-    if (TagUtil.isNumeric(tag)) {
-      return ((NumericTag) tag).getAsFloat();
+    if (tag instanceof NumericTag numeric) {
+      return numeric.floatValue();
     }
     return null;
   }

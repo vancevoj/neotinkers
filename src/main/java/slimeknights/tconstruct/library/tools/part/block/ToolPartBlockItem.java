@@ -5,12 +5,13 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.level.block.Block;
 import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
 import slimeknights.tconstruct.library.tools.part.IToolPart;
 import slimeknights.tconstruct.library.tools.part.ToolPartItem;
 
-import java.util.List;
+import java.util.function.Consumer;
 
 /** Implementation of {@link ToolPartItem} for {@link net.minecraft.world.item.BlockItem}. */
 public class ToolPartBlockItem extends MaterialBlockItem implements IToolPart {
@@ -22,7 +23,7 @@ public class ToolPartBlockItem extends MaterialBlockItem implements IToolPart {
   }
 
   @Override
-  public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
+  public void appendHoverText(ItemStack stack, Item.TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
     ToolPartItem.appendHoverText(this, stack, tooltip, flag);
   }
 }

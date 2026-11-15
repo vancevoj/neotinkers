@@ -2,11 +2,10 @@ package slimeknights.tconstruct.library.tools.part.block;
 
 import lombok.Getter;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.model.data.ModelData;
 import slimeknights.mantle.block.entity.MantleBlockEntity;
 import slimeknights.mantle.util.RetexturedHelper;
@@ -58,19 +57,19 @@ public class MaterialBlockEntity extends MantleBlockEntity {
   }
 
   @Override
-  protected void saveSynced(CompoundTag tags, HolderLookup.Provider registries) {
-    super.saveSynced(tags, registries);
+  protected void saveSynced(ValueOutput output) {
+    super.saveSynced(output);
     if (material != MaterialId.UNKNOWN) {
-      tags.putString(MATERIAL_TAG, material.toString());
+      output.putString(MATERIAL_TAG, material.toString());
     }
   }
 
   @Override
-  public void loadAdditional(CompoundTag tags, HolderLookup.Provider registries) {
-    super.loadAdditional(tags, registries);
-    if (tags.contains(MATERIAL_TAG, Tag.TAG_STRING)) {
-      material = Objects.requireNonNullElse(MaterialVariantId.tryParse(tags.getString(MATERIAL_TAG)), MaterialId.UNKNOWN);
+  public void loadAdditional(ValueInput input) {
+    super.loadAdditional(input);
+    input.getString(MATERIAL_TAG).ifPresent(id -> {
+      material = Objects.requireNonNullElse(MaterialVariantId.tryParse(id), MaterialId.UNKNOWN);
       RetexturedHelper.onTextureUpdated(this);
-    }
+    });
   }
 }

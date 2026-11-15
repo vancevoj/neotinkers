@@ -43,9 +43,9 @@ public class MaterialBlock extends Block implements EntityBlock {
     }
   }
 
-  @Deprecated
   @Override
-  public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state) {
+  protected ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state, boolean includeData) {
+    // NeoForge's player sensitive clone method defaults to this one
     ItemStack stack = new ItemStack(state.getBlock());
     if (level.getBlockEntity(pos) instanceof MaterialBlockEntity be) {
       stack = IMaterialItem.withMaterial(stack, be.getMaterial());

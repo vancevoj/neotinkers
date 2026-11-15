@@ -5,13 +5,13 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NumericTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.TinkerTags;
@@ -74,8 +74,8 @@ public class ToolStack implements IToolStackView {
 
   /**
    * Version of the data tools are rebuilt with. Before data components, tools rebuilt every time they loaded from NBT, which picked up
-   * material, modifier and tool definition changes from updates. Components have no load hook (verifyComponentsAfterLoad also runs on
-   * every copy), so instead tools that were last rebuilt with an older version get rebuilt once by {@link #ensureHasData()}.
+   * material, modifier and tool definition changes from updates. Components have no load hook (1.21.1 verifyComponentsAfterLoad also ran on
+   * every copy, and 26.3 removed it), so instead tools that were last rebuilt with an older version get rebuilt once by {@link #ensureHasData()}.
    * Bump this when an update changes tool data in a way existing tools need to be rebuilt for.
    * <ul>
    *   <li>1: Tinkers' Construct 3.12 data, the first versioned data</li>
@@ -159,8 +159,11 @@ public class ToolStack implements IToolStackView {
   /** Writes the current NBT back to the backing item stack's data component, if a backing stack is present */
   private void syncToStack() {
     if (stack != null) {
-      ToolDataComponents.setTag(stack, nbt);
-      syncedTag = nbt;
+      // component values must never change after they are set, as stack copies, item resources and transaction snapshots all share them.
+      // we keep mutating our own compound, so store a copy. Every mutation of nbt calls this method, so the stack always has the latest data
+      CompoundTag copy = nbt.copy();
+      ToolDataComponents.setTag(stack, copy);
+      syncedTag = copy;
     }
   }
 
@@ -196,10 +199,11 @@ public class ToolStack implements IToolStackView {
       if (!copyNbt) {
         // only a wrongly made tool will have an empty definition. check preferred to a tag check as tags may not be loaded when this is first called
         if (definition != ToolDefinition.EMPTY) {
-          // store the empty compound onto the component so the tool stack and item stack stay in sync
+          // store an empty compound onto the component so the tool stack and item stack stay in sync
           // both damage and tag verification are done later, doing so now causes us to recursively call this method (though not infinite)
-          ToolDataComponents.setTag(stack, nbt);
-          stored = nbt;
+          // a separate instance as component values must not change after being set, and we mutate nbt
+          stored = new CompoundTag();
+          ToolDataComponents.setTag(stack, stored);
           // no need to set the damage value, if the tool wanted it set the stack would have had a tag already
         } else {
           switch (Config.COMMON.logInvalidToolStack.get()) {
@@ -296,9 +300,10 @@ public class ToolStack implements IToolStackView {
     // read the tool data from the component; copy it out so mutations stay local and write back on change
     CompoundTag stored = ToolDataComponents.getTag(stack);
     if (stored == null) {
+      // separate instances, as component values must not change after being set and we mutate nbt
       stored = new CompoundTag();
       ToolDataComponents.setTag(stack, stored);
-      this.nbt = stored;
+      this.nbt = new CompoundTag();
     } else {
       this.nbt = stored.copy();
     }
@@ -365,7 +370,7 @@ public class ToolStack implements IToolStackView {
     // store the tool data onto the component to avoid going through verifyTagAfterLoad and rebuilding stats again
     CompoundTag tag = copyNBT ? nbt.copy() : nbt;
     // ensure the damage value is set on the stack for the sake of stacking, since bypassing the vanilla setter skips that
-    if (!tag.contains(TAG_DAMAGE, Tag.TAG_ANY_NUMERIC) && stack.getItem().isDamageable(stack)) {
+    if (!(tag.get(TAG_DAMAGE) instanceof NumericTag) && stack.getItem().isDamageable(stack)) {
       tag.putInt(TAG_DAMAGE, 0);
     }
     ToolDataComponents.setTag(stack, tag);
@@ -410,7 +415,7 @@ public class ToolStack implements IToolStackView {
   @Override
   public boolean isBroken() {
     if (broken == null) {
-      broken = nbt.getBoolean(TAG_BROKEN);
+      broken = nbt.getBooleanOr(TAG_BROKEN, false);
     }
     return broken;
   }
@@ -445,7 +450,7 @@ public class ToolStack implements IToolStackView {
    */
   protected int getDamageRaw() {
     if (damage == -1) {
-      damage = nbt.getInt(TAG_DAMAGE);
+      damage = nbt.getIntOr(TAG_DAMAGE, 0);
     }
     return damage;
   }
@@ -700,9 +705,9 @@ public class ToolStack implements IToolStackView {
   public ToolDataNBT getPersistentData() {
     if (persistentModData == null) {
       // parse if the tag already exists
-      if (nbt.contains(TAG_PERSISTENT_MOD_DATA, Tag.TAG_COMPOUND)) {
-        // the returned compound is a live child of nbt, so mutations land on nbt; the dirty callback flushes to the component
-        persistentModData = ToolDataNBT.readFromNBT(nbt.getCompound(TAG_PERSISTENT_MOD_DATA), this::syncToStack);
+      if (nbt.get(TAG_PERSISTENT_MOD_DATA) instanceof CompoundTag persistent) {
+        // the compound is a live child of nbt, so mutations land on nbt; the dirty callback flushes to the component
+        persistentModData = ToolDataNBT.readFromNBT(persistent, this::syncToStack);
       } else {
         // if no tag exists, create it
         CompoundTag tag = new CompoundTag();
@@ -717,8 +722,8 @@ public class ToolStack implements IToolStackView {
   public IModDataView getVolatileData() {
     if (volatileModData == null) {
       // parse if the tag already exists
-      if (nbt.contains(TAG_VOLATILE_MOD_DATA, Tag.TAG_COMPOUND)) {
-        volatileModData = ToolDataNBT.readFromNBT(nbt.getCompound(TAG_VOLATILE_MOD_DATA));
+      if (nbt.get(TAG_VOLATILE_MOD_DATA) instanceof CompoundTag volatileData) {
+        volatileModData = ToolDataNBT.readFromNBT(volatileData);
       } else {
         // if no tag exists, return empty
         volatileModData = IModDataView.EMPTY;
@@ -786,7 +791,7 @@ public class ToolStack implements IToolStackView {
       }
       // check if missing materials; either means we have none, too few, or some that the tool definition remaps
       MissingMaterialsToolHook missingMaterials = definition.getHook(ToolHooks.MISSING_MATERIALS);
-      boolean needsMaterials = definition.hasMaterials() && (!nbt.contains(TAG_MATERIALS, Tag.TAG_LIST) || missingMaterials.needsMaterials(definition, nbt.getList(TAG_MATERIALS, Tag.TAG_STRING)));
+      boolean needsMaterials = definition.hasMaterials() && (!NbtTypeHelper.contains(nbt, TAG_MATERIALS, Tag.TAG_LIST) || missingMaterials.needsMaterials(definition, NbtTypeHelper.getList(nbt, TAG_MATERIALS, Tag.TAG_STRING)));
       // build data if we either lack data (signified by no stats), we lack materials but expect them, or the data is outdated
       if (needsMaterials || outdated || !isInitialized(nbt)) {
         // randomize materials if missing
@@ -804,8 +809,8 @@ public class ToolStack implements IToolStackView {
 
   /** Replaces any materials on this tool that redirect to another material, as tools did on load before data components */
   private void resolveMaterialRedirects() {
-    if (MaterialRegistry.isFullyLoaded() && nbt.contains(TAG_MATERIALS, Tag.TAG_LIST)) {
-      MaterialIdNBT stored = MaterialIdNBT.readFromNBT(nbt.getList(TAG_MATERIALS, Tag.TAG_STRING));
+    if (MaterialRegistry.isFullyLoaded() && NbtTypeHelper.contains(nbt, TAG_MATERIALS, Tag.TAG_LIST)) {
+      MaterialIdNBT stored = MaterialIdNBT.readFromNBT(NbtTypeHelper.getList(nbt, TAG_MATERIALS, Tag.TAG_STRING));
       MaterialIdNBT resolved = stored.resolveRedirects();
       if (resolved != stored) {
         resolved.updateNBT(nbt);
@@ -922,7 +927,7 @@ public class ToolStack implements IToolStackView {
    * @return  True if initialized
    */
   public static boolean isInitialized(CompoundTag tag) {
-    return tag.contains(TAG_STATS, Tag.TAG_COMPOUND);
+    return tag.get(TAG_STATS) instanceof CompoundTag;
   }
 
   /**
@@ -932,7 +937,7 @@ public class ToolStack implements IToolStackView {
    * @return  True if the tool needs a rebuild
    */
   public static boolean isOutdated(CompoundTag tag) {
-    return tag.getInt(TAG_DATA_VERSION) < DATA_VERSION && isInitialized(tag) && !tag.getBoolean(TooltipUtil.KEY_DISPLAY);
+    return tag.getIntOr(TAG_DATA_VERSION, 0) < DATA_VERSION && isInitialized(tag) && !tag.getBooleanOr(TooltipUtil.KEY_DISPLAY, false);
   }
 
   /**
@@ -964,7 +969,7 @@ public class ToolStack implements IToolStackView {
   }
 
   /**
-   * Ensures the given item stack is initialized. Intended to be called in {@link Item#onCraftedBy(ItemStack, Level, Player)}
+   * Ensures the given item stack is initialized. Intended to be called in {@link Item#onCraftedBy(ItemStack, Player)}
    * @param stack           ItemStack to initialize
    * @param toolDefinition  Tool definition
    */
@@ -991,14 +996,14 @@ public class ToolStack implements IToolStackView {
    */
   public static void verifyTag(Item item, CompoundTag tag, ToolDefinition definition) {
     // this function is sometimes called before datapack contents load, do nothing then
-    if (tag.getBoolean(TooltipUtil.KEY_DISPLAY)) {
+    if (tag.getBooleanOr(TooltipUtil.KEY_DISPLAY, false)) {
       return;
     }
 
     // resolve all material redirects
-    boolean hasMaterials = MaterialRegistry.isFullyLoaded() && tag.contains(ToolStack.TAG_MATERIALS, Tag.TAG_LIST);
+    boolean hasMaterials = MaterialRegistry.isFullyLoaded() && NbtTypeHelper.contains(tag, ToolStack.TAG_MATERIALS, Tag.TAG_LIST);
     if (hasMaterials) {
-      MaterialIdNBT stored = MaterialIdNBT.readFromNBT(tag.getList(ToolStack.TAG_MATERIALS, Tag.TAG_STRING));
+      MaterialIdNBT stored = MaterialIdNBT.readFromNBT(NbtTypeHelper.getList(tag, ToolStack.TAG_MATERIALS, Tag.TAG_STRING));
       MaterialIdNBT resolved = stored.resolveRedirects();
       if (resolved != stored) {
         resolved.updateNBT(tag);

@@ -1,6 +1,8 @@
 package slimeknights.tconstruct.library.tools.nbt;
 
+import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.world.item.ItemStack;
@@ -53,6 +55,17 @@ public class ToolDataComponents {
   @Nullable
   public static CompoundTag getTag(ItemStack stack) {
     return stack.get(TOOL_DATA.get());
+  }
+
+  /**
+   * Gets the tool data compound stored on any component holder, such as an {@link net.neoforged.neoforge.transfer.item.ItemResource}, or null if absent.
+   * The returned tag is the stored component value and must be treated as read-only.
+   * @param holder  Component holder to read
+   * @return  Tool data compound, or null if the component is absent
+   */
+  @Nullable
+  public static CompoundTag getTag(DataComponentGetter holder) {
+    return holder.get(TOOL_DATA.get());
   }
 
   /**

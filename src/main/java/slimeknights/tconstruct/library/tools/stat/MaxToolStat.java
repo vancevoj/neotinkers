@@ -14,7 +14,6 @@ import net.minecraft.util.GsonHelper;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.Item;
 import slimeknights.mantle.util.RegistryHelper;
-import slimeknights.tconstruct.library.utils.TagUtil;
 import slimeknights.tconstruct.library.utils.Util;
 
 import javax.annotation.Nullable;
@@ -74,8 +73,8 @@ public class MaxToolStat implements IToolStat<Integer> {
   @Nullable
   @Override
   public Integer read(Tag tag) {
-    if (TagUtil.isNumeric(tag)) {
-      return ((NumericTag)tag).getAsInt();
+    if (tag instanceof NumericTag numeric) {
+      return numeric.intValue();
     }
     return null;
   }

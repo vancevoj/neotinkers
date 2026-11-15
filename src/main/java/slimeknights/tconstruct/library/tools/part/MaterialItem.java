@@ -1,6 +1,7 @@
 package slimeknights.tconstruct.library.tools.part;
 
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
@@ -11,6 +12,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.CustomData;
+import net.minecraft.world.item.component.TooltipDisplay;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.client.materials.MaterialTooltipCache;
@@ -24,6 +26,7 @@ import slimeknights.tconstruct.library.utils.Util;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * Represents an item that has a Material associated with it. The NBT of the itemstack identifies which material the
@@ -39,7 +42,7 @@ public class MaterialItem extends Item implements IMaterialItem {
   /** Gets the material ID for the given NBT compound */
   public static MaterialVariantId getMaterialId(@Nullable CompoundTag nbt) {
     if (nbt != null) {
-      String str = nbt.getString(MATERIAL_TAG);
+      String str = nbt.getStringOr(MATERIAL_TAG, "");
       if (!str.isEmpty()) {
         MaterialVariantId id = MaterialVariantId.tryParse(str);
         if (id != null) {
@@ -50,11 +53,31 @@ public class MaterialItem extends Item implements IMaterialItem {
     return MaterialId.UNKNOWN;
   }
 
-  @Override
-  public MaterialVariantId getMaterial(ItemStack stack) {
+  /**
+   * Resolves material redirects on the given material.
+   * Items used to update their stored material when loaded, but 26.3 has no load hook for item components, so redirects are resolved when read instead.
+   */
+  public static MaterialVariantId resolveRedirects(MaterialVariantId material) {
+    if (!material.equals(MaterialId.UNKNOWN) && MaterialRegistry.isFullyLoaded()) {
+      MaterialId original = material.getId();
+      MaterialId resolved = MaterialRegistry.getInstance().resolve(original);
+      if (original != resolved) {
+        return MaterialVariantId.create(resolved, material.getVariant());
+      }
+    }
+    return material;
+  }
+
+  /** Gets the material stored in the custom data of the given stack, with redirects resolved. Used by {@link #getMaterial(ItemStack)} and {@link slimeknights.tconstruct.library.tools.part.block.MaterialBlockItem} */
+  public static MaterialVariantId getMaterialFromCustomData(ItemStack stack) {
     // 1.21: read the material string from the CUSTOM_DATA component compound instead of item NBT
     CustomData data = stack.get(DataComponents.CUSTOM_DATA);
-    return getMaterialId(data == null ? null : data.copyTag());
+    return resolveRedirects(getMaterialId(data == null ? null : data.copyTag()));
+  }
+
+  @Override
+  public MaterialVariantId getMaterial(ItemStack stack) {
+    return getMaterialFromCustomData(stack);
   }
 
   @Nullable
@@ -82,7 +105,8 @@ public class MaterialItem extends Item implements IMaterialItem {
   public static Component getName(IMaterialItem self, ItemStack stack) {
     // if no material, return part name directly
     MaterialVariantId material = self.getMaterial(stack);
-    String key = self.asItem().getDescriptionId(stack);
+    // 26.3: the stack sensitive description ID is gone, the item's description ID is final
+    String key = self.asItem().getDescriptionId();
     if (material.equals(MaterialId.UNKNOWN)) {
       return Component.translatable(key);
     }
@@ -126,17 +150,22 @@ public class MaterialItem extends Item implements IMaterialItem {
   }
 
   /** Helper to append the material ID to the tool part. */
-  public static void appendHoverText(IMaterialItem self, ItemStack stack, List<Component> tooltip, TooltipFlag flag) {
+  public static void appendHoverText(IMaterialItem self, ItemStack stack, Consumer<Component> tooltip, TooltipFlag flag) {
     if (flag.isAdvanced() && !TooltipUtil.isDisplay(stack)) {
       MaterialVariantId materialVariant = self.getMaterial(stack);
       if (!materialVariant.equals(MaterialId.UNKNOWN)) {
-        tooltip.add((Component.translatable(ToolPartItem.MATERIAL_KEY, materialVariant.toString())).withStyle(ChatFormatting.DARK_GRAY));
+        tooltip.accept((Component.translatable(ToolPartItem.MATERIAL_KEY, materialVariant.toString())).withStyle(ChatFormatting.DARK_GRAY));
       }
     }
   }
 
+  /** Helper to append the material ID to the tool part. */
+  public static void appendHoverText(IMaterialItem self, ItemStack stack, List<Component> tooltip, TooltipFlag flag) {
+    appendHoverText(self, stack, (Consumer<Component>) tooltip::add, flag);
+  }
+
   @Override
-  public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
+  public void appendHoverText(ItemStack stack, Item.TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
     appendHoverText(this, stack, tooltip, flag);
   }
 
@@ -155,7 +184,7 @@ public class MaterialItem extends Item implements IMaterialItem {
   }
 
   @Override
-  public String getCreatorModId(ItemStack stack) {
+  public String getCreatorModId(HolderLookup.Provider registries, ItemStack stack) {
     return getCreatorModId(this, stack);
   }
 
@@ -173,6 +202,7 @@ public class MaterialItem extends Item implements IMaterialItem {
     }
   }
 
+  /** Updates material redirects in the given custom data compound */
   public static void verifyTag(CompoundTag nbt) {
     // if the material exists and was changed, update it
     MaterialVariantId id = getMaterialId(nbt);
@@ -185,15 +215,5 @@ public class MaterialItem extends Item implements IMaterialItem {
     }
   }
 
-  // 1.21: Item#verifyTagAfterLoad was replaced by verifyComponentsAfterLoad(ItemStack). Remap renamed materials
-  // on load by validating the CUSTOM_DATA tag.
-  @Override
-  public void verifyComponentsAfterLoad(ItemStack stack) {
-    CustomData data = stack.get(DataComponents.CUSTOM_DATA);
-    if (data != null) {
-      CompoundTag nbt = data.copyTag();
-      verifyTag(nbt);
-      stack.set(DataComponents.CUSTOM_DATA, CustomData.of(nbt));
-    }
-  }
+  // 26.3: Item#verifyComponentsAfterLoad is gone, so renamed materials are remapped when read in getMaterial, see resolveRedirects
 }

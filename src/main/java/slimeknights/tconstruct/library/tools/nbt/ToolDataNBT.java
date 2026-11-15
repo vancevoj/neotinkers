@@ -36,7 +36,7 @@ public class ToolDataNBT extends ModDataNBT {
 
   @Override
   public int getSlots(SlotType type) {
-    return getData().getInt(type.getName());
+    return getData().getIntOr(type.getName(), 0);
   }
 
   /**

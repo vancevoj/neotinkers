@@ -11,19 +11,39 @@ import com.google.gson.JsonSerializer;
 import com.google.gson.JsonSyntaxException;
 import io.netty.handler.codec.DecoderException;
 import lombok.RequiredArgsConstructor;
+import net.minecraft.core.component.DataComponentPatch;
+import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.util.GsonHelper;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.CustomData;
+import net.minecraft.world.level.ItemLike;
+import slimeknights.mantle.data.loadable.Loadables;
 import slimeknights.mantle.data.loadable.common.ItemStackLoadable;
+import slimeknights.mantle.data.loadable.common.NBTLoadable;
 import slimeknights.mantle.util.JsonHelper;
+import slimeknights.mantle.util.typed.TypedMap;
 import slimeknights.tconstruct.library.recipe.partbuilder.Pattern;
 
 import javax.annotation.Nullable;
 
-/** Data holder for a button icon, currently supports item stack icons and pattern icons */
+/**
+ * Data holder for a button icon, currently supports item stack icons and pattern icons.
+ * Item icons store an {@link ItemStackTemplate} and create the stack on first use, as item stacks cannot be created while data loads
+ * (layouts are parsed in a reload listener, before item components are bound) or during datagen.
+ */
 public abstract class LayoutIcon {
   /** JSON serializer for a layout button icon */
   public static final Serializer SERIALIZER = new Serializer();
+  /** JSON keys for item icons, matching Mantle's item stack loadable */
+  private static final String KEY_ITEM = "item";
+  private static final String KEY_NBT = "nbt";
+  private static final String KEY_COMPONENTS = "components";
 
   /** Empty icon, used primarily as a fallback */
   public static final LayoutIcon EMPTY = new LayoutIcon() {
@@ -46,7 +66,24 @@ public abstract class LayoutIcon {
 
   /** Creates a stack icon */
   public static LayoutIcon ofItem(ItemStack stack) {
-    return new ItemStackIcon(stack);
+    if (stack.isEmpty()) {
+      return EMPTY;
+    }
+    // the stack already exists, so keep it as the value
+    return new ItemStackIcon(ItemStackTemplate.fromNonEmptyStack(stack), stack);
+  }
+
+  /** Creates a stack icon without creating a stack, safe to use before item components are bound */
+  public static LayoutIcon ofItem(ItemStackTemplate template) {
+    return new ItemStackIcon(template);
+  }
+
+  /** Creates a stack icon without creating a stack, safe to use before item components are bound */
+  public static LayoutIcon ofItem(ItemLike item) {
+    if (item.asItem() == Items.AIR) {
+      return EMPTY;
+    }
+    return new ItemStackIcon(new ItemStackTemplate(item.asItem()));
   }
 
   /** Creates an icon from a pattern */
@@ -64,8 +101,8 @@ public abstract class LayoutIcon {
     switch (type) {
       case EMPTY: return EMPTY;
       case ITEM: {
-        ItemStack stack = ItemStack.OPTIONAL_STREAM_CODEC.decode(buffer);
-        return new ItemStackIcon(stack);
+        // templates so the stack is created on first use
+        return new ItemStackIcon(ItemStackTemplate.STREAM_CODEC.decode(buffer));
       }
       case PATTERN: {
         Pattern pattern = new Pattern(buffer.readIdentifier());
@@ -82,15 +119,34 @@ public abstract class LayoutIcon {
   public abstract JsonObject toJson();
 
   /** Icon drawing an item stack */
-  @RequiredArgsConstructor @VisibleForTesting
+  @VisibleForTesting
   protected static class ItemStackIcon extends LayoutIcon {
-    private final ItemStack stack;
+    private final ItemStackTemplate template;
+    /** Stack created from the template on first use */
+    @Nullable
+    private ItemStack stack;
+
+    protected ItemStackIcon(ItemStackTemplate template, @Nullable ItemStack stack) {
+      this.template = template;
+      this.stack = stack;
+    }
+
+    protected ItemStackIcon(ItemStackTemplate template) {
+      this(template, null);
+    }
 
     @SuppressWarnings("unchecked")
     @Override
     public <T> T getValue(Class<T> clazz) {
       if (clazz == ItemStack.class) {
+        // created lazily, by the time anything draws the icon item components are bound
+        if (stack == null) {
+          stack = template.create();
+        }
         return (T) stack;
+      }
+      if (clazz == ItemStackTemplate.class) {
+        return (T) template;
       }
       return null;
     }
@@ -98,14 +154,25 @@ public abstract class LayoutIcon {
     @Override
     public void write(RegistryFriendlyByteBuf buffer) {
       buffer.writeEnum(Type.ITEM);
-      ItemStack.OPTIONAL_STREAM_CODEC.encode(buffer, stack);
+      ItemStackTemplate.STREAM_CODEC.encode(buffer, template);
     }
 
     @Override
     public JsonObject toJson() {
-      // 1.21: item NBT is gone, serialize via Mantle's item-stack loadable which stores extra data in the custom data component
+      // same format as Mantle's ItemStackLoadable.OPTIONAL_ITEM_NBT (item, nbt from custom data, other components), without creating a stack
       JsonObject json = new JsonObject();
-      ItemStackLoadable.OPTIONAL_ITEM_NBT.serialize(stack, json);
+      json.add(KEY_ITEM, Loadables.ITEM.serialize(template.item().value()));
+      DataComponentPatch components = template.components();
+      if (components.isPatched(DataComponents.CUSTOM_DATA)) {
+        CustomData data = components.getPatch(DataComponents.CUSTOM_DATA);
+        if (data != null && !data.isEmpty()) {
+          json.add(KEY_NBT, NBTLoadable.ALLOW_STRING.serialize(data.copyTag()));
+        }
+        components = components.forget(type -> type == DataComponents.CUSTOM_DATA);
+      }
+      if (!components.isEmpty()) {
+        json.add(KEY_COMPONENTS, ItemStackLoadable.serializeComponents(components));
+      }
       return json;
     }
   }
@@ -147,6 +214,33 @@ public abstract class LayoutIcon {
 
   /** Serializer class */
   protected static class Serializer implements JsonSerializer<LayoutIcon>, JsonDeserializer<LayoutIcon> {
+    /**
+     * Parses an item icon in the format of Mantle's ItemStackLoadable.OPTIONAL_ITEM_NBT into a template.
+     * Layouts load in a reload listener where stacks cannot be created yet, so this does not use the stack loadable.
+     */
+    private static LayoutIcon parseItem(JsonObject object) {
+      Item item = Loadables.ITEM.convert(object.get(KEY_ITEM), KEY_ITEM);
+      if (item == Items.AIR) {
+        return EMPTY;
+      }
+      // apply NBT before components, as the stack loadable does
+      DataComponentPatch.Builder builder = DataComponentPatch.builder();
+      if (object.has(KEY_NBT)) {
+        CompoundTag nbt = NBTLoadable.ALLOW_STRING.convert(object.get(KEY_NBT), KEY_NBT);
+        if (!nbt.isEmpty()) {
+          builder.set(DataComponents.CUSTOM_DATA, CustomData.of(nbt));
+        }
+      }
+      if (object.has(KEY_COMPONENTS)) {
+        DataComponentPatch.SplitResult components = ItemStackLoadable.parseComponents(object.get(KEY_COMPONENTS), TypedMap.EMPTY).split();
+        builder.set(components.added());
+        for (DataComponentType<?> removed : components.removed()) {
+          builder.remove(removed);
+        }
+      }
+      return new ItemStackIcon(new ItemStackTemplate(item, builder.build()));
+    }
+
     @Override
     public LayoutIcon deserialize(JsonElement json, java.lang.reflect.Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
       JsonObject object = GsonHelper.convertToJsonObject(json, "button_icon");
@@ -154,9 +248,8 @@ public abstract class LayoutIcon {
         Pattern pattern = new Pattern(JsonHelper.getResourceLocation(object, "pattern"));
         return new PatternIcon(pattern);
       }
-      if (object.has("item")) {
-        ItemStack stack = ItemStackLoadable.OPTIONAL_ITEM_NBT.deserialize(object);
-        return new ItemStackIcon(stack);
+      if (object.has(KEY_ITEM)) {
+        return parseItem(object);
       }
       // not sure why this would be needed, but might as well
       if (object.entrySet().isEmpty()) {

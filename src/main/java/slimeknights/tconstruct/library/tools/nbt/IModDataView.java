@@ -6,12 +6,16 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.resources.Identifier;
 import slimeknights.tconstruct.library.tools.SlotType;
 
+import javax.annotation.Nullable;
 import java.util.function.BiFunction;
 
 /**
  * Read only view of {@link ModDataNBT}
  */
 public interface IModDataView {
+  /** Tag type for {@link #contains(Identifier, int)} matching any numeric tag, replacement for the removed {@code Tag.TAG_ANY_NUMERIC} */
+  int TAG_ANY_NUMERIC = NbtTypeHelper.TAG_ANY_NUMERIC;
+
   /** Empty variant of tool data */
   IModDataView EMPTY = new IModDataView() {
     @Override
@@ -50,7 +54,7 @@ public interface IModDataView {
   /**
    * Checks if the data contains the given tag
    * @param name  Namespaced key
-   * @param type  Tag type, see {@link Tag} for values
+   * @param type  Tag type, see {@link Tag} for values, or {@link #TAG_ANY_NUMERIC}
    * @return  True if the tag is contained
    */
   boolean contains(Identifier name, int type);
@@ -70,8 +74,9 @@ public interface IModDataView {
   /**
    * Reads an generic NBT value from the mod data
    * @param name  Name
-   * @return  Integer value
+   * @return  Tag value, or null if missing
    */
+  @Nullable
   default Tag get(Identifier name) {
     return get(name, CompoundTag::get);
   }
@@ -82,7 +87,7 @@ public interface IModDataView {
    * @return  Integer value
    */
   default int getInt(Identifier name) {
-    return get(name, CompoundTag::getInt);
+    return get(name, (tag, key) -> tag.getIntOr(key, 0));
   }
 
   /**
@@ -91,7 +96,7 @@ public interface IModDataView {
    * @return  Boolean value
    */
   default boolean getBoolean(Identifier name) {
-    return get(name, CompoundTag::getBoolean);
+    return get(name, (tag, key) -> tag.getBooleanOr(key, false));
   }
 
   /**
@@ -100,7 +105,7 @@ public interface IModDataView {
    * @return  Float value
    */
   default float getFloat(Identifier name) {
-    return get(name, CompoundTag::getFloat);
+    return get(name, (tag, key) -> tag.getFloatOr(key, 0));
   }
 
   /**
@@ -109,7 +114,7 @@ public interface IModDataView {
    * @return  String value
    */
   default String getString(Identifier name) {
-    return get(name, CompoundTag::getString);
+    return get(name, (tag, key) -> tag.getStringOr(key, ""));
   }
 
   /**
@@ -118,7 +123,7 @@ public interface IModDataView {
    * @return  Compound value
    */
   default CompoundTag getCompound(Identifier name) {
-    return get(name, CompoundTag::getCompound);
+    return get(name, CompoundTag::getCompoundOrEmpty);
   }
 
   /**
@@ -128,6 +133,6 @@ public interface IModDataView {
    * @return  List value
    */
   default ListTag getList(Identifier name, int type) {
-    return get(name, (tag, key) -> tag.getList(key, type));
+    return get(name, (tag, key) -> NbtTypeHelper.getList(tag, key, type));
   }
 }

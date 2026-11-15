@@ -2,12 +2,13 @@ package slimeknights.tconstruct.library.tools.capability;
 
 import lombok.Getter;
 import lombok.Setter;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.ListTag;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.attachment.AttachmentType;
-import net.neoforged.neoforge.common.util.INBTSerializable;
+import net.neoforged.neoforge.common.util.ValueIOSerializable;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
@@ -87,19 +88,25 @@ public class EntityModifierCapability {
     ATTACHMENTS.register(bus);
   }
 
-  /** Mutable storage backing the attachment, serialized via the modifier NBT list. */
-  public static class Storage implements INBTSerializable<ListTag>, EntityModifiers {
+  /**
+   * Mutable storage backing the attachment, serialized via the modifier NBT list.
+   * Attachments now serialize through a {@link ValueOutput}, which cannot have a list as its root, so the list is stored under {@link #TAG_MODIFIERS}.
+   */
+  public static class Storage implements ValueIOSerializable, EntityModifiers {
+    /** Key holding the modifier list in the attachment data */
+    private static final String TAG_MODIFIERS = "modifiers";
+
     @Getter @Setter
     private ModifierNBT modifiers = ModifierNBT.EMPTY;
 
     @Override
-    public ListTag serializeNBT(HolderLookup.Provider provider) {
-      return modifiers.serializeToNBT();
+    public void serialize(ValueOutput output) {
+      output.store(TAG_MODIFIERS, ExtraCodecs.NBT, modifiers.serializeToNBT());
     }
 
     @Override
-    public void deserializeNBT(HolderLookup.Provider provider, ListTag nbt) {
-      modifiers = ModifierNBT.readFromNBT(nbt);
+    public void deserialize(ValueInput input) {
+      modifiers = input.read(TAG_MODIFIERS, ExtraCodecs.NBT).map(ModifierNBT::readFromNBT).orElse(ModifierNBT.EMPTY);
     }
   }
 
