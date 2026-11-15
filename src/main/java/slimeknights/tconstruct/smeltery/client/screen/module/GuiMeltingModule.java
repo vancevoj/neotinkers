@@ -47,7 +47,7 @@ public class GuiMeltingModule {
   public void drawHeatBars(GuiGraphicsExtractor graphics) {
     int temperature = this.temperature.getAsInt();
     AbstractContainerMenu menu = screen.getMenu();
-    for (int i = 0; i < inventory.getSlots(); i++) {
+    for (int i = 0; i < inventory.size(); i++) {
       Slot slot = menu.slots.get(i + indexOffset);
       if (slot.hasItem() && slotPredicate.test(slot)) {
         // determine the bar to draw and the progress
@@ -86,11 +86,11 @@ public class GuiMeltingModule {
    * @param mouseY  Mouse Y position
    */
   public void drawHeatTooltips(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
-    int checkX = mouseX - screen.leftPos;
-    int checkY = mouseY - screen.topPos;
+    int checkX = mouseX - screen.getLeftPos();
+    int checkY = mouseY - screen.getTopPos();
     int temperature = this.temperature.getAsInt();
     AbstractContainerMenu menu = screen.getMenu();
-    for (int i = 0; i < inventory.getSlots(); i++) {
+    for (int i = 0; i < inventory.size(); i++) {
       Slot slot = menu.slots.get(i + indexOffset);
       // must have a stack
       if (slot.hasItem() && slotPredicate.test(slot)) {
@@ -114,7 +114,7 @@ public class GuiMeltingModule {
 
           // draw tooltip if relevant
           if (tooltip != null) {
-            graphics.setTooltipForNextFrame(screen.font, tooltip, mouseX, mouseY);
+            graphics.setTooltipForNextFrame(screen.getFont(), tooltip, mouseX, mouseY);
           }
 
           // cannot hover two slots, so done

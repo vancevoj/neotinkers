@@ -40,7 +40,7 @@ public class SlotButtonItem extends Button {
   }
 
   @Override
-  public void renderWidget(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTicks) {
+  protected void extractContents(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTicks) {
       int x = getX();
       int y = getY();
       if (this.pressed) {

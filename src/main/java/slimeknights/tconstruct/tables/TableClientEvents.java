@@ -1,7 +1,11 @@
 package slimeknights.tconstruct.tables;
 
+import net.minecraft.client.color.block.BlockTintSource;
+import net.minecraft.client.renderer.block.BlockAndTintGetter;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
-import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.ARGB;
+import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
@@ -13,19 +17,38 @@ import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.ClientEventBase;
 import slimeknights.tconstruct.shared.block.entity.TableBlockEntity;
 import slimeknights.tconstruct.tables.block.entity.chest.TinkersChestBlockEntity;
-import slimeknights.tconstruct.tables.item.TinkersChestBlockItem;
 import slimeknights.tconstruct.tables.client.inventory.CraftingStationScreen;
 import slimeknights.tconstruct.tables.client.inventory.ModifierWorktableScreen;
 import slimeknights.tconstruct.tables.client.inventory.PartBuilderScreen;
 import slimeknights.tconstruct.tables.client.inventory.TinkerChestScreen;
 import slimeknights.tconstruct.tables.client.inventory.TinkerStationScreen;
 
+import java.util.List;
+
 @SuppressWarnings("unused")
 @EventBusSubscriber(modid=TConstruct.MOD_ID, value=Dist.CLIENT)
 public class TableClientEvents extends ClientEventBase {
+  /** Tints the tinkers chest with the color stored in its block entity */
+  private static final BlockTintSource CHEST_TINT = new BlockTintSource() {
+    @Override
+    public int color(BlockState state) {
+      // no position, so no block entity to read the color from
+      return -1;
+    }
+
+    @Override
+    public int colorInWorld(BlockState state, BlockAndTintGetter world, BlockPos pos) {
+      if (world.getBlockEntity(pos) instanceof TinkersChestBlockEntity te) {
+        // 26.3 multiplies the vertex color by the full ARGB tint, while the chest color is RGB
+        return ARGB.opaque(te.getColor());
+      }
+      return -1;
+    }
+  };
+
   @SubscribeEvent
   static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
-    BlockEntityRendererProvider<TableBlockEntity> tableRenderer = InventoryBlockEntityRenderer::new;
+    BlockEntityRendererProvider<TableBlockEntity, InventoryBlockEntityRenderer.State> tableRenderer = InventoryBlockEntityRenderer::new;
     event.registerBlockEntityRenderer(TinkerTables.craftingStationTile.get(), tableRenderer);
     event.registerBlockEntityRenderer(TinkerTables.tinkerStationTile.get(), tableRenderer);
     event.registerBlockEntityRenderer(TinkerTables.modifierWorktableTile.get(), tableRenderer);
@@ -42,20 +65,10 @@ public class TableClientEvents extends ClientEventBase {
   }
 
   @SubscribeEvent
-  static void registerBlockColors(final RegisterColorHandlersEvent.Block event) {
-    event.register((state, world, pos, index) -> {
-      if (world != null && pos != null) {
-        BlockEntity te = world.getBlockEntity(pos);
-        if (te instanceof TinkersChestBlockEntity) {
-          return ((TinkersChestBlockEntity)te).getColor();
-        }
-      }
-      return -1;
-    }, TinkerTables.tinkersChest.get());
+  static void registerBlockColors(final RegisterColorHandlersEvent.BlockTintSources event) {
+    event.register(List.of(CHEST_TINT), TinkerTables.tinkersChest.get());
   }
 
-  @SubscribeEvent
-  static void registerItemColors(final RegisterColorHandlersEvent.Item event) {
-    event.register((stack, index) -> TinkersChestBlockItem.getColor(stack), TinkerTables.tinkersChest.asItem());
-  }
+  // 26.3: item colors are data driven. The tinkers chest item uses the vanilla minecraft:dye tint source with the default chest color
+  // in its client item JSON (datagen), which reads the same dyed color component as TinkersChestBlockItem#getColor.
 }

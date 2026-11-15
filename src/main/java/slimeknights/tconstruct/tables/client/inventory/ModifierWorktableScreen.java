@@ -1,14 +1,15 @@
 package slimeknights.tconstruct.tables.client.inventory;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.input.KeyEvent;
+import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.inventory.Slot;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.TinkerTags;
@@ -116,13 +117,12 @@ public class ModifierWorktableScreen extends ToolTableScreen<ModifierWorktableBl
     this.drawBackground(graphics, BACKGROUND);
 
     // draw scrollbar
-    graphics.blit(BACKGROUND, this.cornerX + SLIDER_LEFT, this.cornerY + SLIDER_TOP + (int) (SROLLABLE_AREA * this.sliderProgress), canScroll() ? HANDLE_U : HANDLE_U_DISABLE, 0, SLIDER_WIDTH, HANDLE_HEIGHT);
+    graphics.blit(RenderPipelines.GUI_TEXTURED, BACKGROUND, this.cornerX + SLIDER_LEFT, this.cornerY + SLIDER_TOP + (int) (SROLLABLE_AREA * this.sliderProgress), canScroll() ? HANDLE_U : HANDLE_U_DISABLE, 0, SLIDER_WIDTH, HANDLE_HEIGHT, 256, 256);
     this.drawModifierBackgrounds(graphics, mouseX, mouseY, this.cornerX + MODIFIER_LEFT, this.cornerY + MODIFIER_TOP);
 
     // draw slot icons
     List<Slot> slots = this.getMenu().getInputSlots();
     int max = Math.min(slots.size(), INPUT_PATTERNS.length);
-    RenderSystem.setShaderTexture(0, InventoryMenu.BLOCK_ATLAS);
     for (int i = 0; i < max; i++) {
       this.drawIconEmpty(graphics, slots.get(i), INPUT_PATTERNS[i]);
     }
@@ -160,8 +160,8 @@ public class ModifierWorktableScreen extends ToolTableScreen<ModifierWorktableBl
   }
 
   @Override
-  protected void renderTooltip(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
-    super.renderTooltip(graphics, mouseX, mouseY);
+  protected void extractTooltip(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
+    super.extractTooltip(graphics, mouseX, mouseY);
 
     // determime which button we are hovering
     if (tile != null) {
@@ -190,7 +190,7 @@ public class ModifierWorktableScreen extends ToolTableScreen<ModifierWorktableBl
         } else if (mouseX >= x && mouseY >= y && mouseX < x + MODIFIER_SIZE && mouseY < y + MODIFIER_SIZE) {
           v += 2 * MODIFIER_SIZE;
         }
-        graphics.blit(BACKGROUND, x, y, MODIFIER_U, v, MODIFIER_SIZE, MODIFIER_SIZE);
+        graphics.blit(RenderPipelines.GUI_TEXTURED, BACKGROUND, x, y, MODIFIER_U, v, MODIFIER_SIZE, MODIFIER_SIZE, 256, 256);
       }
     }
   }
@@ -200,7 +200,6 @@ public class ModifierWorktableScreen extends ToolTableScreen<ModifierWorktableBl
     // use block texture list
     if (tile != null) {
       assert this.minecraft != null;
-      RenderSystem.setShaderTexture(0, InventoryMenu.BLOCK_ATLAS);
       // iterate all recipes
       List<ModifierEntry> list = this.tile.getCurrentButtons();
       int max = Math.min(this.modifierIndexOffset + MAX_MODIFIER, this.getModifierCount());
@@ -271,7 +270,11 @@ public class ModifierWorktableScreen extends ToolTableScreen<ModifierWorktableBl
   /* Scrollbar logic */
 
   @Override
-  public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
+  public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
+    // module hooks take the 26.3 button numbering, see InputConstants.MOUSE_BUTTON_LEFT
+    double mouseX = event.x();
+    double mouseY = event.y();
+    int mouseButton = event.button();
     this.clickedOnScrollBar = false;
 
     if (this.tinkerInfo.handleMouseClicked(mouseX, mouseY, mouseButton)
@@ -298,13 +301,16 @@ public class ModifierWorktableScreen extends ToolTableScreen<ModifierWorktableBl
       }
     }
 
-    return super.mouseClicked(mouseX, mouseY, mouseButton);
+    return super.mouseClicked(event, doubleClick);
   }
 
   @Override
-  public boolean mouseDragged(double mouseX, double mouseY, int clickedMouseButton, double timeSinceLastClick, double unknown) {
-    if (this.tinkerInfo.handleMouseClickMove(mouseX, mouseY, clickedMouseButton, timeSinceLastClick)
-        || this.modifierInfo.handleMouseClickMove(mouseX, mouseY, clickedMouseButton, timeSinceLastClick)) {
+  public boolean mouseDragged(MouseButtonEvent event, double dragX, double dragY) {
+    double mouseX = event.x();
+    double mouseY = event.y();
+    int clickedMouseButton = event.button();
+    if (this.tinkerInfo.handleMouseClickMove(mouseX, mouseY, clickedMouseButton, dragX)
+        || this.modifierInfo.handleMouseClickMove(mouseX, mouseY, clickedMouseButton, dragX)) {
       return false;
     }
 
@@ -317,7 +323,7 @@ public class ModifierWorktableScreen extends ToolTableScreen<ModifierWorktableBl
       return true;
     }
 
-    return super.mouseDragged(mouseX, mouseY, clickedMouseButton, timeSinceLastClick, unknown);
+    return super.mouseDragged(event, dragX, dragY);
   }
 
   @Override
@@ -340,12 +346,15 @@ public class ModifierWorktableScreen extends ToolTableScreen<ModifierWorktableBl
   }
 
   @Override
-  public boolean mouseReleased(double mouseX, double mouseY, int state) {
+  public boolean mouseReleased(MouseButtonEvent event) {
+    double mouseX = event.x();
+    double mouseY = event.y();
+    int state = event.button();
     if (this.tinkerInfo.handleMouseReleased(mouseX, mouseY, state)
         || this.modifierInfo.handleMouseReleased(mouseX, mouseY, state)) {
       return false;
     }
-    return super.mouseReleased(mouseX, mouseY, state);
+    return super.mouseReleased(event);
   }
 
 
@@ -386,19 +395,19 @@ public class ModifierWorktableScreen extends ToolTableScreen<ModifierWorktableBl
   }
 
   @Override
-  public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-    if (TinkerStationScreen.needsDisplayUpdate(keyCode)) {
+  public boolean keyPressed(KeyEvent event) {
+    if (TinkerStationScreen.needsDisplayUpdate(event.key())) {
       updateDisplay();
     }
-    return super.keyPressed(keyCode, scanCode, modifiers);
+    return super.keyPressed(event);
   }
 
   @Override
-  public boolean keyReleased(int keyCode, int scanCode, int modifiers) {
-    if (TinkerStationScreen.needsDisplayUpdate(keyCode)) {
+  public boolean keyReleased(KeyEvent event) {
+    if (TinkerStationScreen.needsDisplayUpdate(event.key())) {
       updateDisplay();
     }
-    return super.keyReleased(keyCode, scanCode, modifiers);
+    return super.keyReleased(event);
   }
 
 

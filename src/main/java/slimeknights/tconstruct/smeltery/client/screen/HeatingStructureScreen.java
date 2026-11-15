@@ -2,6 +2,7 @@ package slimeknights.tconstruct.smeltery.client.screen;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
@@ -15,6 +16,7 @@ import slimeknights.tconstruct.library.client.GuiUtil;
 import slimeknights.tconstruct.smeltery.block.controller.ControllerBlock;
 import slimeknights.tconstruct.smeltery.block.entity.controller.HeatingStructureBlockEntity;
 import slimeknights.tconstruct.smeltery.block.entity.module.FuelModule;
+import slimeknights.tconstruct.smeltery.client.screen.module.ClickableTankModule;
 import slimeknights.tconstruct.smeltery.client.screen.module.GuiFuelModule;
 import slimeknights.tconstruct.smeltery.client.screen.module.GuiMeltingModule;
 import slimeknights.tconstruct.smeltery.client.screen.module.GuiSmelteryTank;
@@ -63,7 +65,7 @@ public class HeatingStructureScreen extends MultiModuleScreen<HeatingStructureCo
     if (te != null) {
       this.te = te;
       this.tank = new GuiSmelteryTank(this, te.getTank(), 8, 16, 106, 106, Objects.requireNonNull(BuiltInRegistries.BLOCK_ENTITY_TYPE.getKey(te.getType())));
-      int slots = te.getMeltingInventory().getSlots();
+      int slots = te.getMeltingInventory().size();
       this.sideInventory = new HeatingStructureSideInventoryScreen(this, container.getSideInventory(), playerInventory, slots, HeatingStructureContainerMenu.calcColumns(slots));
       addModule(sideInventory);
       FuelModule fuelModule = te.getFuelModule();
@@ -85,7 +87,7 @@ public class HeatingStructureScreen extends MultiModuleScreen<HeatingStructureCo
     super.containerTick();
     // if the smeltery becomes invalid or the slot size changes, kill the UI
     if (te == null || !te.getBlockState().getValue(ControllerBlock.IN_STRUCTURE)
-        || te.getMeltingInventory().getSlots() != sideInventory.getSlotCount()) {
+        || te.getMeltingInventory().size() != sideInventory.getSlotCount()) {
       this.onClose();
     }
   }
@@ -114,7 +116,8 @@ public class HeatingStructureScreen extends MultiModuleScreen<HeatingStructureCo
   protected void extractLabels(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
     super.extractLabels(graphics, mouseX, mouseY);
 
-    SCALA.draw(graphics, 8, 16, 110);
+    // scala, drawn after the fluids so it renders above them
+    SCALA.draw(graphics, 8, 16);
 
     // draw the bucket icon if nothing is in the bucket slot
     if (menu.getBucketContainer().getItem(0).isEmpty()) {
@@ -143,8 +146,8 @@ public class HeatingStructureScreen extends MultiModuleScreen<HeatingStructureCo
   }
 
   @Override
-  protected void renderTooltip(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
-    super.renderTooltip(graphics, mouseX, mouseY);
+  protected void extractTooltip(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
+    super.extractTooltip(graphics, mouseX, mouseY);
 
     // add the hover text giving info on the button
     if (bucketButtonHovered(mouseX - leftPos, mouseY - topPos)) {
@@ -167,11 +170,13 @@ public class HeatingStructureScreen extends MultiModuleScreen<HeatingStructureCo
   }
 
   @Override
-  public boolean mouseClicked(double mouseX, double mouseY, int button) {
+  public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
     assert minecraft != null && minecraft.player != null && minecraft.gameMode != null;
     if (!minecraft.player.isSpectator()) {
-      int checkX = (int)mouseX - cornerX;
-      int checkY = (int)mouseY - cornerY;
+      int checkX = (int)event.x() - cornerX;
+      int checkY = (int)event.y() - cornerY;
+      // 26.3 mouse buttons are 1 (left) and 3 (right), the menu button IDs below use 0 for left and 1 for right
+      int button = ClickableTankModule.getMenuButton(event.button());
       // clicking the bucket button toggles its mode
       if (button == 0 && bucketButtonHovered(checkX, checkY) && this.menu.clickMenuButton(minecraft.player, 0)) {
         minecraft.gameMode.handleInventoryButtonClick(this.menu.containerId, 0);
@@ -180,13 +185,13 @@ public class HeatingStructureScreen extends MultiModuleScreen<HeatingStructureCo
       }
 
       // then try fuel, uses index 1 to indicate fill item and index 2 to indicate drain item
-      if ((button == 0 || button == 1) && fuel != null && fuel.tryClick(checkX, checkY, button, 1)) {
+      if (button >= 0 && fuel != null && fuel.tryClick(checkX, checkY, button, 1)) {
         return true;
       }
 
       // index 3 means empty spot on smeltery tank
       // index 4+ means smeltery fluids, change order or dump
-      if (tank != null && (button == 0 || button == 1)) {
+      if (tank != null && button >= 0) {
         int index;
         if (button == 1 && tank.withinTank(checkX, checkY)) {
           // right click always dumps
@@ -203,7 +208,7 @@ public class HeatingStructureScreen extends MultiModuleScreen<HeatingStructureCo
         }
       }
     }
-    return super.mouseClicked(mouseX, mouseY, button);
+    return super.mouseClicked(event, doubleClick);
   }
 
   @Nullable

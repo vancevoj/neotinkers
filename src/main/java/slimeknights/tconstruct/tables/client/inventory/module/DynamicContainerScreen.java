@@ -1,5 +1,6 @@
 package slimeknights.tconstruct.tables.client.inventory.module;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
@@ -97,7 +98,7 @@ public class DynamicContainerScreen<P extends MultiModuleScreen<?>, C extends Ab
       return false;
     }
 
-    if (mouseButton == 0) {
+    if (mouseButton == InputConstants.MOUSE_BUTTON_LEFT) {
       if (mouseX >= this.slider.xPos && mouseY >= this.slider.yPos && mouseX <= this.slider.xPos + this.slider.width && mouseY <= this.slider.yPos + this.slider.height) {
         this.slider.handleMouseClicked((int) mouseX, (int) mouseY, mouseButton);
         return true;

@@ -1,6 +1,5 @@
 package slimeknights.tconstruct.tables.client.inventory;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.network.chat.Component;
@@ -13,7 +12,6 @@ import slimeknights.mantle.client.screen.ElementScreen;
 import slimeknights.mantle.client.screen.MultiModuleScreen;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.client.GuiUtil;
-import slimeknights.tconstruct.library.client.Icons;
 import slimeknights.tconstruct.library.recipe.partbuilder.Pattern;
 import slimeknights.tconstruct.tables.client.inventory.module.SideInventoryScreen;
 import slimeknights.tconstruct.tables.client.inventory.widget.TinkerTabsWidget;
@@ -53,7 +51,7 @@ public class BaseTabbedScreen<TILE extends BlockEntity, CONTAINER extends Tabbed
   }
 
   protected void drawIcon(GuiGraphicsExtractor graphics, Slot slot, ElementScreen element) {
-    RenderSystem.setShaderTexture(0, Icons.ICONS);
+    // the element carries its own texture, no need to bind the icons texture
     element.draw(graphics, slot.x + this.cornerX - 1, slot.y + this.cornerY - 1);
   }
 
@@ -109,8 +107,8 @@ public class BaseTabbedScreen<TILE extends BlockEntity, CONTAINER extends Tabbed
   }
 
   @Override
-  protected boolean hasClickedOutside(double mouseX, double mouseY, int guiLeft, int guiTop, int mouseButton) {
-    return super.hasClickedOutside(mouseX, mouseY, guiLeft, guiTop, mouseButton)
+  protected boolean hasClickedOutside(double mouseX, double mouseY, int guiLeft, int guiTop) {
+    return super.hasClickedOutside(mouseX, mouseY, guiLeft, guiTop)
       && !tabsScreen.isMouseOver(mouseX, mouseY);
   }
 }

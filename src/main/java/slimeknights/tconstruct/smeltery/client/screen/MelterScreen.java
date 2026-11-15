@@ -2,6 +2,7 @@ package slimeknights.tconstruct.smeltery.client.screen;
 
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
@@ -10,6 +11,7 @@ import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.client.GuiUtil;
 import slimeknights.tconstruct.smeltery.block.entity.controller.MelterBlockEntity;
 import slimeknights.tconstruct.smeltery.block.entity.module.FuelModule;
+import slimeknights.tconstruct.smeltery.client.screen.module.ClickableTankModule;
 import slimeknights.tconstruct.smeltery.client.screen.module.GuiFuelModule;
 import slimeknights.tconstruct.smeltery.client.screen.module.GuiMeltingModule;
 import slimeknights.tconstruct.smeltery.client.screen.module.GuiTankModule;
@@ -39,16 +41,14 @@ public class MelterScreen extends AbstractContainerScreen<MelterContainerMenu> i
     }
   }
 
-  @Override
-  public void extractRenderState(GuiGraphicsExtractor graphics, int x, int y, float partialTicks) {
-    // 1.21: super.render() already calls renderBackground (dim overlay + renderBg/our tank fluids).
-    // Calling it manually too double-rendered both (dark background panel + duplicated fluid band).
-    super.extractRenderState(graphics, x, y, partialTicks);
-    this.renderTooltip(graphics, x, y);
-  }
+  // 26.3: no extractRenderState override. The base method already draws the tooltip, and vanilla draws the background
+  // (dim overlay + extractBackground with our tank fluids) once before it. Drawing either again double-rendered them
+  // (dark background panel + duplicated fluid band, fixed in the 1.21 port).
 
   @Override
-  protected void renderBg(GuiGraphicsExtractor graphics, float partialTicks, int mouseX, int mouseY) {
+  public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTicks) {
+    // dims the world behind the screen
+    super.extractBackground(graphics, mouseX, mouseY, partialTicks);
     GuiUtil.drawBackground(graphics, this, BACKGROUND);
 
     // fuel
@@ -77,8 +77,8 @@ public class MelterScreen extends AbstractContainerScreen<MelterContainerMenu> i
     // highlight hovered fuel
     if (fuel != null) fuel.renderHighlight(graphics, checkX, checkY);
 
-    // scala
-    SCALA.draw(graphics, 90, 16, 100);
+    // scala, drawn after the fluids and highlights so it renders above them
+    SCALA.draw(graphics, 90, 16);
 
     // heat bars
     if (melting != null) {
@@ -87,8 +87,8 @@ public class MelterScreen extends AbstractContainerScreen<MelterContainerMenu> i
   }
 
   @Override
-  protected void renderTooltip(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
-    super.renderTooltip(graphics, mouseX, mouseY);
+  protected void extractTooltip(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
+    super.extractTooltip(graphics, mouseX, mouseY);
 
     // tank tooltip
     if (tank != null) tank.renderTooltip(graphics, mouseX, mouseY);
@@ -101,11 +101,13 @@ public class MelterScreen extends AbstractContainerScreen<MelterContainerMenu> i
   }
 
   @Override
-  public boolean mouseClicked(double mouseX, double mouseY, int button) {
+  public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
     assert minecraft != null && minecraft.player != null && minecraft.gameMode != null;
-    if (!minecraft.player.isSpectator() && (button == 0 || button == 1) && !menu.getCarried().isEmpty()) {
-      int checkX = (int)mouseX - leftPos;
-      int checkY = (int)mouseY - topPos;
+    // 26.3 mouse buttons are 1 (left) and 3 (right), the menu button IDs below use 0 and 1
+    int button = ClickableTankModule.getMenuButton(event.button());
+    if (!minecraft.player.isSpectator() && button >= 0 && !menu.getCarried().isEmpty()) {
+      int checkX = (int)event.x() - leftPos;
+      int checkY = (int)event.y() - topPos;
       // left-clicking the fluid puts it in the held item (button 0/2)
       // right-clicking or left clicking the empty spot dumps the item (button 1/3)
 
@@ -118,7 +120,7 @@ public class MelterScreen extends AbstractContainerScreen<MelterContainerMenu> i
         return true;
       }
     }
-    return super.mouseClicked(mouseX, mouseY, button);
+    return super.mouseClicked(event, doubleClick);
   }
 
   @Override

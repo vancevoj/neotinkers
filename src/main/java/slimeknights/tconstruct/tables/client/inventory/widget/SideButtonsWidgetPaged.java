@@ -3,7 +3,9 @@ package slimeknights.tconstruct.tables.client.inventory.widget;
 
 import net.minecraft.network.chat.Component;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.input.MouseButtonEvent;
 import slimeknights.mantle.client.screen.MultiModuleScreen;
 import lombok.Getter;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -86,14 +88,15 @@ public class SideButtonsWidgetPaged<T extends Button> extends SideButtonsWidget<
 
     @Override
     public boolean handleMouseClicked(double mouseX, double mouseY, int mouseButton) {
-        if (mouseButton == 0) {
+        if (mouseButton == InputConstants.MOUSE_BUTTON_LEFT) {
             int button_num = this.buttons.size();
             if (button_num > columns * MAX_ROWS) { // Page button shows
-                if (this.previousPageButton.mouseClicked(mouseX, mouseY, mouseButton)) {
+                MouseButtonEvent event = toEvent(mouseX, mouseY, mouseButton);
+                if (this.previousPageButton.mouseClicked(event, false)) {
                     this.clickedButtonIndex = 1;
                     return true;
                 }
-                if (this.nextPageButton.mouseClicked(mouseX, mouseY, mouseButton)) {
+                if (this.nextPageButton.mouseClicked(event, false)) {
                     this.clickedButtonIndex = 2;
                     return true;
                 }
@@ -105,12 +108,12 @@ public class SideButtonsWidgetPaged<T extends Button> extends SideButtonsWidget<
     @Override
     public boolean handleMouseReleased(double mouseX, double mouseY, int state) {
         if (this.clickedButtonIndex == 1) {
-            this.previousPageButton.mouseReleased(mouseX, mouseY, state);
+            this.previousPageButton.mouseReleased(toEvent(mouseX, mouseY, state));
             this.clickedButtonIndex = 0;
             return true;
         }
         if (this.clickedButtonIndex == 2) {
-            this.nextPageButton.mouseReleased(mouseX, mouseY, state);
+            this.nextPageButton.mouseReleased(toEvent(mouseX, mouseY, state));
             this.clickedButtonIndex = 0;
             return true;
         }
@@ -158,14 +161,14 @@ public class SideButtonsWidgetPaged<T extends Button> extends SideButtonsWidget<
     public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTicks) {
         int button_num = this.buttons.size();
         if (button_num > columns * MAX_ROWS) {
-            this.previousPageButton.render(graphics, mouseX, mouseY, partialTicks);
-            this.nextPageButton.render(graphics, mouseX, mouseY, partialTicks);
+            this.previousPageButton.extractRenderState(graphics, mouseX, mouseY, partialTicks);
+            this.nextPageButton.extractRenderState(graphics, mouseX, mouseY, partialTicks);
         }
         int startIndex = page * columns * MAX_ROWS;
         int endIndex = Math.min(startIndex + columns * MAX_ROWS, button_num);
         for (int i = startIndex; i < endIndex; i++) { //only render buttons in the current page
             T button = this.buttons.get(i);
-            button.render(graphics, mouseX, mouseY, partialTicks);
+            button.extractRenderState(graphics, mouseX, mouseY, partialTicks);
         }
     }
 }

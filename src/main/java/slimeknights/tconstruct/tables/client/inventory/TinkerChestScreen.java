@@ -1,6 +1,7 @@
 package slimeknights.tconstruct.tables.client.inventory;
 
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import slimeknights.tconstruct.tables.block.entity.chest.AbstractChestBlockEntity;
@@ -38,29 +39,30 @@ public class TinkerChestScreen extends BaseTabbedScreen<AbstractChestBlockEntity
   }
 
   @Override
-  public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
+  public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
     if (this.scalingChestScreen == null) {
       return false;
     }
 
-    if (this.scalingChestScreen.handleMouseClicked(mouseX, mouseY, mouseButton)) {
+    // module hooks take the 26.3 button numbering, see InputConstants.MOUSE_BUTTON_LEFT
+    if (this.scalingChestScreen.handleMouseClicked(event.x(), event.y(), event.button())) {
       return false;
     }
 
-    return super.mouseClicked(mouseX, mouseY, mouseButton);
+    return super.mouseClicked(event, doubleClick);
   }
 
   @Override
-  public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY) {
+  public boolean mouseDragged(MouseButtonEvent event, double dragX, double dragY) {
     if (this.scalingChestScreen == null) {
       return false;
     }
 
-    if (this.scalingChestScreen.handleMouseClickMove(mouseX, mouseY, button, dragX)) {
+    if (this.scalingChestScreen.handleMouseClickMove(event.x(), event.y(), event.button(), dragX)) {
       return false;
     }
 
-    return super.mouseDragged(mouseX, mouseY, button, dragX, dragY);
+    return super.mouseDragged(event, dragX, dragY);
   }
 
   @Override
@@ -77,15 +79,15 @@ public class TinkerChestScreen extends BaseTabbedScreen<AbstractChestBlockEntity
   }
 
   @Override
-  public boolean mouseReleased(double mouseX, double mouseY, int state) {
+  public boolean mouseReleased(MouseButtonEvent event) {
     if (this.scalingChestScreen == null) {
       return false;
     }
 
-    if (this.scalingChestScreen.handleMouseReleased(mouseX, mouseY, state)) {
+    if (this.scalingChestScreen.handleMouseReleased(event.x(), event.y(), event.button())) {
       return false;
     }
 
-    return super.mouseReleased(mouseX, mouseY, state);
+    return super.mouseReleased(event);
   }
 }

@@ -1,13 +1,13 @@
 package slimeknights.tconstruct.tables.client.inventory.widget;
 
 import com.google.common.collect.Lists;
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.core.BlockPos;
@@ -80,7 +80,8 @@ public class TinkerTabsWidget implements Renderable, GuiEventListener, Narratabl
       for (Pair<BlockPos, BlockState> pair : menu.stationBlocks) {
         BlockState state = pair.getRight();
         BlockPos blockPos = pair.getLeft();
-        ItemStack stack = state.getBlock().getCloneItemStack(level, blockPos, state);
+        // vanilla pick block stack without block entity data, same as the 1.21 3 argument getCloneItemStack
+        ItemStack stack = state.getCloneItemStack(level, blockPos, false);
         tabs.add(Pair.of(stack, blockPos));
       }
     }
@@ -126,9 +127,10 @@ public class TinkerTabsWidget implements Renderable, GuiEventListener, Narratabl
   }
 
   @Override
-  public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
-    if (isMouseOver(mouseX, mouseY)) {
-      this.tabs.handleMouseClicked((int) mouseX, (int) mouseY, mouseButton);
+  public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
+    if (isMouseOver(event.x(), event.y())) {
+      // Mantle widgets take the 26.3 button numbering, see InputConstants.MOUSE_BUTTON_LEFT
+      this.tabs.handleMouseClicked((int) event.x(), (int) event.y(), event.button());
       return true;
     }
 
@@ -136,7 +138,7 @@ public class TinkerTabsWidget implements Renderable, GuiEventListener, Narratabl
   }
 
   @Override
-  public boolean mouseReleased(double mouseX, double mouseY, int mouseButton) {
+  public boolean mouseReleased(MouseButtonEvent event) {
     this.tabs.handleMouseReleased();
 
     return true;
@@ -156,7 +158,6 @@ public class TinkerTabsWidget implements Renderable, GuiEventListener, Narratabl
 
   @Override
   public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
-    RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
     int sel = this.tabs.selected;
     this.tabs.update(mouseX, mouseY);
     this.tabs.draw(graphics);
@@ -184,7 +185,7 @@ public class TinkerTabsWidget implements Renderable, GuiEventListener, Narratabl
       }
 
       // TODO: renderComponentTooltip->renderTooltip
-      graphics.setComponentTooltipForNextFrame(parent.font, Lists.newArrayList(title), mouseX, mouseY);
+      graphics.setComponentTooltipForNextFrame(parent.getFont(), Lists.newArrayList(title), mouseX, mouseY);
     }
   }
 

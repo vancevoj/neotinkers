@@ -1,9 +1,7 @@
 package slimeknights.tconstruct.smeltery.client.screen.module;
 
 import net.minecraft.client.Minecraft;
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.network.chat.Component;
@@ -63,6 +61,19 @@ public class GuiSmelteryTank implements IScreenWithFluidTank {
   }
 
   /**
+   * Gets the fluid at the given index, or empty if the index is out of bounds. Replaces {@code IFluidHandler#getFluidInTank}.
+   * @param index  Fluid index
+   * @return  Fluid at the index
+   */
+  private FluidStack getFluid(int index) {
+    List<FluidStack> fluids = tank.getFluids();
+    if (index < 0 || index >= fluids.size()) {
+      return FluidStack.EMPTY;
+    }
+    return fluids.get(index);
+  }
+
+  /**
    * Checks if a position is within the tank
    * @param checkX  X position to check
    * @param checkY  Y position to check
@@ -74,7 +85,7 @@ public class GuiSmelteryTank implements IScreenWithFluidTank {
 
   /**
    * Renders the smeltery tank
-   * @param matrices  Matrix stack instance
+   * @param graphics  Graphics instance
    */
   public void renderFluids(GuiGraphicsExtractor graphics) {
     // draw liquids
@@ -127,8 +138,8 @@ public class GuiSmelteryTank implements IScreenWithFluidTank {
    * @param mouseY    Mouse Y
    */
   public void renderHighlight(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
-    int checkX = mouseX - parent.leftPos;
-    int checkY = mouseY - parent.topPos;
+    int checkX = mouseX - parent.getLeftPos();
+    int checkY = mouseY - parent.getTopPos();
     if (withinTank(checkX, checkY)) {
       if (tank.getContained() == 0) {
         GuiUtil.renderHighlight(graphics, x, y, width, height);
@@ -155,8 +166,8 @@ public class GuiSmelteryTank implements IScreenWithFluidTank {
    */
   public void drawTooltip(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
     // Liquids
-    int checkX = mouseX - parent.leftPos;
-    int checkY = mouseY - parent.topPos;
+    int checkX = mouseX - parent.getLeftPos();
+    int checkY = mouseY - parent.getTopPos();
     if (withinTank(checkX, checkY)) {
       int hovered = tank.getContained() == 0 ? -1 : getFluidFromMouse(calcLiquidHeights(false), checkY);
       List<Component> tooltip;
@@ -180,9 +191,9 @@ public class GuiSmelteryTank implements IScreenWithFluidTank {
         FluidTooltipHandler.appendShift(tooltip);
       }
       else {
-        tooltip = FluidTooltipHandler.getFluidTooltip(tank.getFluidInTank(hovered));
+        tooltip = FluidTooltipHandler.getFluidTooltip(getFluid(hovered));
       }
-      graphics.setComponentTooltipForNextFrame(parent.font, tooltip, mouseX, mouseY);
+      graphics.setComponentTooltipForNextFrame(parent.getFont(), tooltip, mouseX, mouseY);
     }
   }
 
@@ -221,7 +232,7 @@ public class GuiSmelteryTank implements IScreenWithFluidTank {
       for (int i = 0; i < heights.length; i++) {
         y -= heights[i];
         if (y < checkY) {
-          return new FluidLocation(tank.getFluidInTank(i), new Rect2i(x, y, width, heights[i]));
+          return new FluidLocation(getFluid(i), new Rect2i(x, y, width, heights[i]));
         }
       }
     }

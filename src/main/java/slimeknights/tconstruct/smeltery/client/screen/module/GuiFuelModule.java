@@ -88,14 +88,14 @@ public class GuiFuelModule implements IScreenWithFluidTank, ClickableTankModule 
 
   /**
    * Draws the fuel at the correct location
-   * @param graphics  Matrix stack instance
+   * @param graphics  Graphics instance
    */
   public void draw(GuiGraphicsExtractor graphics) {
     // draw fire
     int fuel = fuelModule.getFuel();
     int fuelQuality = fuelModule.getFuelQuality();
     if (fuel > 0 && fuelQuality > 0) {
-      fire.drawScaledYUp(graphics, fireX + screen.leftPos, fireY + screen.topPos, 14 * fuel / fuelQuality);
+      fire.drawScaledYUp(graphics, fireX + screen.getLeftPos(), fireY + screen.getTopPos(), 14 * fuel / fuelQuality);
     }
 
     // draw tank second, it changes the image
@@ -135,8 +135,8 @@ public class GuiFuelModule implements IScreenWithFluidTank, ClickableTankModule 
    * @param mouseY    Mouse Y position
    */
   public void addTooltip(GuiGraphicsExtractor graphics, int mouseX, int mouseY, boolean hasTank) {
-    int checkX = mouseX - screen.leftPos;
-    int checkY = mouseY - screen.topPos;
+    int checkX = mouseX - screen.getLeftPos();
+    int checkY = mouseY - screen.getTopPos();
 
     if (isHovered(checkX, checkY)) {
       List<Component> tooltip;
@@ -171,7 +171,7 @@ public class GuiFuelModule implements IScreenWithFluidTank, ClickableTankModule 
         tooltip = hasTank ? TOOLTIP_NO_FUEL : TOOLTIP_NO_TANK;
       }
 
-      graphics.setComponentTooltipForNextFrame(screen.font, tooltip, mouseX, mouseY);
+      graphics.setComponentTooltipForNextFrame(screen.getFont(), tooltip, mouseX, mouseY);
     }
   }
 

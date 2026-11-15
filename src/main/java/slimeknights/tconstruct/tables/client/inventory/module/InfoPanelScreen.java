@@ -1,9 +1,10 @@
 package slimeknights.tconstruct.tables.client.inventory.module;
 
 import com.google.common.collect.Lists;
-import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.platform.InputConstants;
 import lombok.Setter;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
@@ -11,6 +12,7 @@ import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import org.joml.Matrix3x2fStack;
 import slimeknights.mantle.client.screen.ElementScreen;
 import slimeknights.mantle.client.screen.ModuleScreen;
 import slimeknights.mantle.client.screen.MultiModuleScreen;
@@ -245,8 +247,8 @@ public class InfoPanelScreen<P extends MultiModuleScreen<?>, C extends AbstractC
   }
 
   @Override
-  protected void renderTooltip(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
-    super.renderTooltip(graphics, mouseX, mouseY);
+  protected void extractTooltip(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
+    super.extractTooltip(graphics, mouseX, mouseY);
 
     if (this.tooltips == null) {
       return;
@@ -315,6 +317,25 @@ public class InfoPanelScreen<P extends MultiModuleScreen<?>, C extends AbstractC
   }
 
   /**
+   * Draws text at a fractional position. 26.3 removed the float position overloads of the text methods,
+   * so this translates the pose instead, keeping the exact position the scaled panel text relied on.
+   * @param graphics  Graphics instance
+   * @param font      Font to draw with
+   * @param text      Text to draw
+   * @param x         Text X position
+   * @param y         Text Y position
+   * @param color     Text color in ARGB, alpha is required
+   * @param shadow    If true, draws a drop shadow
+   */
+  protected static void drawText(GuiGraphicsExtractor graphics, Font font, FormattedCharSequence text, float x, float y, int color, boolean shadow) {
+    Matrix3x2fStack pose = graphics.pose();
+    pose.pushMatrix();
+    pose.translate(x, y);
+    graphics.text(font, text, 0, 0, color, shadow);
+    pose.popMatrix();
+  }
+
+  /**
    * Gets the location of the first tooltip for info tooltips
    */
   protected float getTooltipStart(float y) {
@@ -335,7 +356,7 @@ public class InfoPanelScreen<P extends MultiModuleScreen<?>, C extends AbstractC
 
     // info ? in the top right corner
     if (this.hasTooltips()) {
-      graphics.text(this.font, "?", guiRight() - this.border.w - this.font.width("?") / 2f, this.topPos + 5, 0xff5f5f5f, false);
+      drawText(graphics, this.font, Component.literal("?").getVisualOrderText(), guiRight() - this.border.w - this.font.width("?") / 2f, this.topPos + 5, 0xff5f5f5f, false);
     }
 
     // draw caption
@@ -344,7 +365,7 @@ public class InfoPanelScreen<P extends MultiModuleScreen<?>, C extends AbstractC
       int x2 = this.imageWidth / 2;
       x2 -= this.font.width(this.caption) / 2;
 
-      graphics.text(this.font, this.caption.getVisualOrderText(), (float) this.leftPos + x2, y, color, true);
+      drawText(graphics, this.font, this.caption.getVisualOrderText(), (float) this.leftPos + x2, y, color, true);
       y += scaledFontHeight + 3;
     }
 
@@ -355,9 +376,9 @@ public class InfoPanelScreen<P extends MultiModuleScreen<?>, C extends AbstractC
 
     float textHeight = font.lineHeight + 0.5f;
     float lowerBound = (this.topPos + this.imageHeight - 5) / this.textScale;
-    PoseStack matrices = graphics.pose();
-    matrices.pushPose();
-    matrices.scale(this.textScale, this.textScale, 1.0f);
+    Matrix3x2fStack matrices = graphics.pose();
+    matrices.pushMatrix();
+    matrices.scale(this.textScale, this.textScale);
     //RenderSystem.scalef(this.textScale, this.textScale, 1.0f);
     x /= this.textScale;
     y /= this.textScale;
@@ -370,11 +391,11 @@ public class InfoPanelScreen<P extends MultiModuleScreen<?>, C extends AbstractC
       }
 
       FormattedCharSequence line = iter.next();
-      graphics.text(this.font, line, x, y, color, true);
+      drawText(graphics, this.font, line, x, y, color, true);
       y += textHeight;
     }
 
-    matrices.popPose();
+    matrices.popMatrix();
     //RenderSystem.scalef(1f / textScale, 1f / textScale, 1.0f);
 
     //RenderSystem.setShaderTexture(0, BACKGROUND_IMAGE);
@@ -388,7 +409,7 @@ public class InfoPanelScreen<P extends MultiModuleScreen<?>, C extends AbstractC
       return false;
     }
 
-    if (mouseButton == 0) {
+    if (mouseButton == InputConstants.MOUSE_BUTTON_LEFT) {
       if (mouseX >= this.slider.xPos && mouseY >= this.slider.yPos && mouseX <= this.slider.xPos + this.slider.width && mouseY <= this.slider.yPos + this.slider.height) {
         this.slider.handleMouseClicked((int) mouseX, (int) mouseY, mouseButton);
         return true;

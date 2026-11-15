@@ -1,12 +1,15 @@
 package slimeknights.tconstruct.tables.client.inventory.widget;
 
+import com.google.common.collect.Lists;
+import com.mojang.blaze3d.platform.InputConstants;
 import lombok.Getter;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.components.events.GuiEventListener;
+import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.client.input.MouseButtonInfo;
 import net.minecraft.client.renderer.Rect2i;
-import org.apache.commons.compress.utils.Lists;
 import slimeknights.mantle.client.screen.MultiModuleScreen;
 
 import java.util.List;
@@ -66,10 +69,28 @@ public class SideButtonsWidget<T extends Button> implements Renderable, GuiEvent
     return this.leftPos <= mouseX && mouseX < this.guiRight() && this.topPos <= mouseY && mouseY < this.guiBottom();
   }
 
+  /**
+   * Creates a mouse event to pass to vanilla widgets from a module style click
+   * @param mouseX       Mouse X
+   * @param mouseY       Mouse Y
+   * @param mouseButton  Mouse button using the 26.3 numbering ({@link InputConstants#MOUSE_BUTTON_LEFT} is 1)
+   * @return  Mouse event
+   */
+  protected static MouseButtonEvent toEvent(double mouseX, double mouseY, int mouseButton) {
+    // modifiers are not used by buttons
+    return new MouseButtonEvent(mouseX, mouseY, new MouseButtonInfo(mouseButton, 0));
+  }
+
+  /**
+   * Handles a mouse click on the buttons
+   * @param mouseButton  Mouse button using the 26.3 numbering ({@link InputConstants#MOUSE_BUTTON_LEFT} is 1)
+   * @return  True if a button was clicked
+   */
   public boolean handleMouseClicked(double mouseX, double mouseY, int mouseButton) {
-    if (mouseButton == 0) {
+    if (mouseButton == InputConstants.MOUSE_BUTTON_LEFT) {
+      MouseButtonEvent event = toEvent(mouseX, mouseY, mouseButton);
       for (T button : this.buttons) {
-        if (button.mouseClicked(mouseX, mouseY, mouseButton)) {
+        if (button.mouseClicked(event, false)) {
           this.clickedButton = button;
           return true;
         }
@@ -79,9 +100,14 @@ public class SideButtonsWidget<T extends Button> implements Renderable, GuiEvent
     return false;
   }
 
+  /**
+   * Handles a mouse release on the buttons
+   * @param state  Mouse button using the 26.3 numbering ({@link InputConstants#MOUSE_BUTTON_LEFT} is 1)
+   * @return  True if a button was released
+   */
   public boolean handleMouseReleased(double mouseX, double mouseY, int state) {
     if (clickedButton != null) {
-      clickedButton.mouseReleased(mouseX, mouseY, state);
+      clickedButton.mouseReleased(toEvent(mouseX, mouseY, state));
       clickedButton = null;
       return true;
     }
@@ -92,7 +118,7 @@ public class SideButtonsWidget<T extends Button> implements Renderable, GuiEvent
   @Override
   public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTicks) {
     for (T button : this.buttons) {
-      button.render(graphics, mouseX, mouseY, partialTicks);
+      button.extractRenderState(graphics, mouseX, mouseY, partialTicks);
     }
   }
 

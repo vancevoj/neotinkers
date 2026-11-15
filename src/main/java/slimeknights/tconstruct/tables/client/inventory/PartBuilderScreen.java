@@ -3,7 +3,10 @@ package slimeknights.tconstruct.tables.client.inventory;
 import com.google.common.collect.Lists;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.client.renderer.texture.TextureAtlas;
+import net.minecraft.client.resources.model.sprite.SpriteId;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -11,7 +14,6 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.inventory.InventoryMenu;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.client.Icons;
 import slimeknights.tconstruct.library.client.materials.MaterialTooltipCache;
@@ -33,7 +35,6 @@ import slimeknights.tconstruct.tools.stats.StatlessMaterialStats;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.function.Function;
 
 public class PartBuilderScreen extends BaseTabbedScreen<PartBuilderBlockEntity,PartBuilderContainerMenu> {
   private static final Component INFO_TEXT = TConstruct.makeTranslation("gui", "part_builder.info");
@@ -106,7 +107,7 @@ public class PartBuilderScreen extends BaseTabbedScreen<PartBuilderBlockEntity,P
     this.drawBackground(graphics, BACKGROUND);
 
     // draw scrollbar
-    graphics.blit(BACKGROUND, this.cornerX + SLIDER_LEFT, this.cornerY + SLIDER_TOP + (int) (SROLLABLE_AREA * this.sliderProgress), canScroll() ? HANDLE_U : HANDLE_U_DISABLE, 0, SLIDER_WIDTH, HANDLE_HEIGHT);
+    graphics.blit(RenderPipelines.GUI_TEXTURED, BACKGROUND, this.cornerX + SLIDER_LEFT, this.cornerY + SLIDER_TOP + (int) (SROLLABLE_AREA * this.sliderProgress), canScroll() ? HANDLE_U : HANDLE_U_DISABLE, 0, SLIDER_WIDTH, HANDLE_HEIGHT, 256, 256);
     this.drawRecipesBackground(graphics, mouseX, mouseY, this.cornerX + PATTERN_LEFT, this.cornerY + PATTERN_TOP);
 
     // draw slot icons
@@ -144,8 +145,8 @@ public class PartBuilderScreen extends BaseTabbedScreen<PartBuilderBlockEntity,P
   }
 
   @Override
-  protected void renderTooltip(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
-    super.renderTooltip(graphics, mouseX, mouseY);
+  protected void extractTooltip(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
+    super.extractTooltip(graphics, mouseX, mouseY);
 
     // determime which button we are hovering
     if (tile != null) {
@@ -175,7 +176,7 @@ public class PartBuilderScreen extends BaseTabbedScreen<PartBuilderBlockEntity,P
       } else if (mouseX >= x && mouseY >= y && mouseX < x + PATTERN_SIZE && mouseY < y + PATTERN_SIZE) {
         v += 2 * PATTERN_SIZE;
       }
-      graphics.blit(BACKGROUND, x, y, PATTERN_U, v, PATTERN_SIZE, PATTERN_SIZE);
+      graphics.blit(RenderPipelines.GUI_TEXTURED, BACKGROUND, x, y, PATTERN_U, v, PATTERN_SIZE, PATTERN_SIZE, 256, 256);
     }
   }
 
@@ -184,7 +185,6 @@ public class PartBuilderScreen extends BaseTabbedScreen<PartBuilderBlockEntity,P
     // use block texture list
     assert this.minecraft != null;
     assert this.tile != null;
-    Function<Identifier, TextureAtlasSprite> spriteGetter = this.minecraft.getTextureAtlas(InventoryMenu.BLOCK_ATLAS);
     // iterate all recipes
     List<Pattern> list = this.tile.getSortedButtons();
     int max = Math.min(this.recipeIndexOffset + MAX_PATTERN, this.getPartRecipeCount());
@@ -192,9 +192,9 @@ public class PartBuilderScreen extends BaseTabbedScreen<PartBuilderBlockEntity,P
       int relative = i - this.recipeIndexOffset;
       int x = left + relative % 4 * PATTERN_SIZE + 1;
       int y = top + (relative / 4) * PATTERN_SIZE + 1;
-      // get the sprite for the pattern and draw
+      // get the sprite for the pattern from the block atlas and draw
       Pattern pattern = list.get(i);
-      graphics.blit(x, y, 100, 16, 16, spriteGetter.apply(pattern.getTexture()));
+      graphics.blitSprite(RenderPipelines.GUI_TEXTURED, graphics.getSprite(new SpriteId(TextureAtlas.LOCATION_BLOCKS, pattern.getTexture())), x, y, 16, 16);
     }
   }
 
@@ -328,7 +328,11 @@ public class PartBuilderScreen extends BaseTabbedScreen<PartBuilderBlockEntity,P
   /* Scrollbar logic */
 
   @Override
-  public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
+  public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
+    // module hooks take the 26.3 button numbering, see InputConstants.MOUSE_BUTTON_LEFT
+    double mouseX = event.x();
+    double mouseY = event.y();
+    int mouseButton = event.button();
     this.clickedOnScrollBar = false;
 
     if (this.infoPanelScreen.handleMouseClicked(mouseX, mouseY, mouseButton) || this.tile == null) {
@@ -355,12 +359,13 @@ public class PartBuilderScreen extends BaseTabbedScreen<PartBuilderBlockEntity,P
       }
     }
 
-    return super.mouseClicked(mouseX, mouseY, mouseButton);
+    return super.mouseClicked(event, doubleClick);
   }
 
   @Override
-  public boolean mouseDragged(double mouseX, double mouseY, int clickedMouseButton, double timeSinceLastClick, double unknown) {
-    if (this.infoPanelScreen.handleMouseClickMove(mouseX, mouseY, clickedMouseButton, timeSinceLastClick)) {
+  public boolean mouseDragged(MouseButtonEvent event, double dragX, double dragY) {
+    double mouseY = event.y();
+    if (this.infoPanelScreen.handleMouseClickMove(event.x(), mouseY, event.button(), dragX)) {
       return false;
     }
 
@@ -371,7 +376,7 @@ public class PartBuilderScreen extends BaseTabbedScreen<PartBuilderBlockEntity,P
       this.recipeIndexOffset = Math.round(this.sliderProgress * this.getHiddenRows()) * 4;
       return true;
     } else {
-      return super.mouseDragged(mouseX, mouseY, clickedMouseButton, timeSinceLastClick, unknown);
+      return super.mouseDragged(event, dragX, dragY);
     }
   }
 
@@ -394,12 +399,12 @@ public class PartBuilderScreen extends BaseTabbedScreen<PartBuilderBlockEntity,P
   }
 
   @Override
-  public boolean mouseReleased(double mouseX, double mouseY, int state) {
-    if (this.infoPanelScreen.handleMouseReleased(mouseX, mouseY, state)) {
+  public boolean mouseReleased(MouseButtonEvent event) {
+    if (this.infoPanelScreen.handleMouseReleased(event.x(), event.y(), event.button())) {
       return false;
     }
 
-    return super.mouseReleased(mouseX, mouseY, state);
+    return super.mouseReleased(event);
   }
 
 

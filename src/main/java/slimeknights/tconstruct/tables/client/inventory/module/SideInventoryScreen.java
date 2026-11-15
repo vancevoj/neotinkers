@@ -1,5 +1,6 @@
 package slimeknights.tconstruct.tables.client.inventory.module;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import lombok.Getter;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
@@ -248,7 +249,7 @@ public class SideInventoryScreen<P extends MultiModuleScreen<?>, C extends Abstr
   @Override
   public void extractLabels(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
     if (this.shouldDrawName()) {
-      graphics.text(this.font, this.getTitle().getString(), this.border.w, this.border.h - 1, 0x404040, false);
+      graphics.text(this.font, this.getTitle().getString(), this.border.w, this.border.h - 1, 0xFF404040, false);
     }
   }
 
@@ -307,7 +308,7 @@ public class SideInventoryScreen<P extends MultiModuleScreen<?>, C extends Abstr
 
   @Override
   public boolean handleMouseClicked(double mouseX, double mouseY, int mouseButton) {
-    if (mouseButton == 0 && this.slider.isEnabled()) {
+    if (mouseButton == InputConstants.MOUSE_BUTTON_LEFT && this.slider.isEnabled()) {
       this.slider.handleMouseClicked((int) mouseX, (int) mouseY, mouseButton);
     }
 

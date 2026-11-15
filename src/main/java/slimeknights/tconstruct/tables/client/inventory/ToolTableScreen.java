@@ -2,21 +2,26 @@ package slimeknights.tconstruct.tables.client.inventory;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
-import net.minecraft.client.gui.screens.inventory.InventoryScreen;
+import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.client.renderer.entity.state.EntityRenderState;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag.Default;
+import net.minecraft.world.item.component.TooltipDisplay;
+import net.minecraft.world.item.equipment.Equippable;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
+import org.joml.Vector3fc;
 import slimeknights.mantle.client.SafeClientAccess;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.client.GuiUtil;
@@ -89,21 +94,35 @@ public abstract class ToolTableScreen<T extends BlockEntity, C extends TabbedCon
     }
   }
 
+  /** Base armor stand orientation, matching vanilla {@code SmithingScreen.ARMOR_STAND_ANGLE} (private in 1.21) */
+  private static final Quaternionf ARMOR_STAND_ANGLE = new Quaternionf().rotationXYZ(0.43633232f, 0.0f, 3.1415927f);
+  /**
+   * Translation from the center of the entity preview area to the feet of the armor stand, in blocks (scaled by the stand size).
+   * The preview area below is centered one block above the feet, same as vanilla {@code SmithingScreen.ARMOR_STAND_TRANSLATION}.
+   */
+  private static final Vector3fc ARMOR_STAND_TRANSLATION = new Vector3f(0.0f, 1.0f, 0.0f);
+
   /**
    * Renders the armor stand
    * @param graphics  Graphics instance
    */
-  /** Base armor stand orientation, matching vanilla {@code SmithingScreen.ARMOR_STAND_ANGLE} (private in 1.21) */
-  private static final Quaternionf ARMOR_STAND_ANGLE = new Quaternionf().rotationXYZ(0.43633232f, 0.0f, 3.1415927f);
-  /** Base armor stand translation, matching vanilla {@code SmithingScreen.ARMOR_STAND_TRANSLATION} (private in 1.21) */
-  private static final Vector3f ARMOR_STAND_TRANSLATION = new Vector3f();
-
   protected void renderArmorStand(GuiGraphicsExtractor graphics) {
     if (this.armorStandPreview != null) {
-      Quaternionf pose = new Quaternionf(ARMOR_STAND_ANGLE).rotateY(this.armorStandAngle);
-      InventoryScreen.renderEntityInInventory(graphics, this.armorStandX, this.armorStandY, this.armorStandScale, ARMOR_STAND_TRANSLATION, pose, null, this.armorStandPreview);
+      // 26.3: drawn first as entities are drawn into a separate texture layered by draw order. Before, the entity used depth
+      // to render in front of the platform icon drawn after it.
+      graphics.blit(RenderPipelines.GUI_TEXTURED, ICON_TEXTURE, armorStandX - 16, armorStandY - 16, 0, 184, 32, 32, 256, 256);
 
-      graphics.blit(ICON_TEXTURE, armorStandX - 16, armorStandY - 16, 0, 184, 32, 32);
+      // 26.3: entities render as picture in picture, centered in the given area instead of at a point.
+      // The area is centered one block above the feet (offset by the translation), and is large enough to hold the stand
+      // and held items in any rotation (1.5 blocks to each side, 2.5 blocks above the feet and half a block below).
+      Quaternionf pose = new Quaternionf(ARMOR_STAND_ANGLE).rotateY(this.armorStandAngle);
+      EntityRenderState renderState = this.minecraft.getEntityRenderDispatcher().getRenderer(this.armorStandPreview).createRenderState(this.armorStandPreview, 1.0F);
+      renderState.shadowPieces.clear();
+      renderState.outlineColor = 0;
+      int scale = this.armorStandScale;
+      graphics.entity(renderState, scale, ARMOR_STAND_TRANSLATION, pose, null,
+                      this.armorStandX - scale * 3 / 2, this.armorStandY - scale * 5 / 2,
+                      this.armorStandX + scale * 3 / 2, this.armorStandY + scale / 2);
     }
   }
 
@@ -128,9 +147,10 @@ public abstract class ToolTableScreen<T extends BlockEntity, C extends TabbedCon
 
       if (!stack.isEmpty()) {
         ItemStack copy = stack.copy();
-        Item item = stack.getItem();
-        if (item instanceof ArmorItem armor) {
-          this.armorStandPreview.setItemSlot(armor.getEquipmentSlot(), copy);
+        // 1.21.5 removed ArmorItem, armor is any item equippable in a humanoid armor slot
+        Equippable equippable = stack.get(DataComponents.EQUIPPABLE);
+        if (equippable != null && equippable.slot().getType() == EquipmentSlot.Type.HUMANOID_ARMOR) {
+          this.armorStandPreview.setItemSlot(equippable.slot(), copy);
         } else {
           this.armorStandPreview.setItemSlot(EquipmentSlot.OFFHAND, copy);
         }
@@ -150,7 +170,7 @@ public abstract class ToolTableScreen<T extends BlockEntity, C extends TabbedCon
       ItemStack result = lazyToolStack.getStack();
       tinkerInfo.setCaption(result.getHoverName());
       List<Component> list = new ArrayList<>();
-      result.getItem().appendHoverText(result, Item.TooltipContext.of(Minecraft.getInstance().level), list, Default.NORMAL);
+      result.getItem().appendHoverText(result, Item.TooltipContext.of(Minecraft.getInstance().level), result.getOrDefault(DataComponents.TOOLTIP_DISPLAY, TooltipDisplay.DEFAULT), list::add, Default.NORMAL);
       tinkerInfo.setText(list);
     }
   }
@@ -162,7 +182,7 @@ public abstract class ToolTableScreen<T extends BlockEntity, C extends TabbedCon
     List<Component> modifierTooltip = new ArrayList<>();
     Component title;
     // control displays just traits, bit trickier to do
-    if (hasControlDown()) {
+    if (this.minecraft.hasControlDown()) {
       title = TRAITS_TEXT;
       Map<Modifier,Integer> upgrades = tool.getUpgrades().getModifiers().stream()
                                            .collect(Collectors.toMap(ModifierEntry::getModifier, ModifierEntry::getLevel, Integer::sum));
@@ -180,7 +200,7 @@ public abstract class ToolTableScreen<T extends BlockEntity, C extends TabbedCon
     } else {
       // shift is just upgrades/abilities, otherwise all
       List<ModifierEntry> modifiers;
-      if (hasShiftDown()) {
+      if (this.minecraft.hasShiftDown()) {
         modifiers = tool.getUpgrades().getModifiers();
         title = UPGRADES_TEXT;
       } else {
@@ -201,31 +221,32 @@ public abstract class ToolTableScreen<T extends BlockEntity, C extends TabbedCon
   }
 
   @Override
-  public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
+  public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
     int armorStandBoxW = this.armorStandScale + 30;
     int armorStandBoxH = this.armorStandScale * 2;
     int armorStandBoxX = this.armorStandX - armorStandBoxW / 2;
     int armorStandBoxY = this.armorStandY - armorStandBoxH + 5;
-    this.clickedOnArmorStand = this.enableArmorStandPreview && GuiUtil.isHovered((int) mouseX, (int) mouseY, armorStandBoxX, armorStandBoxY, armorStandBoxW, armorStandBoxH);
+    this.clickedOnArmorStand = this.enableArmorStandPreview && GuiUtil.isHovered((int) event.x(), (int) event.y(), armorStandBoxX, armorStandBoxY, armorStandBoxW, armorStandBoxH);
 
-    return super.mouseClicked(mouseX, mouseY, mouseButton);
+    return super.mouseClicked(event, doubleClick);
   }
 
   @Override
-  public boolean mouseReleased(double mouseX, double mouseY, int state) {
+  public boolean mouseReleased(MouseButtonEvent event) {
     this.clickedOnArmorStand = false;
     this.armorStandLastMouseX = -1;
 
-    return super.mouseReleased(mouseX, mouseY, state);
+    return super.mouseReleased(event);
   }
 
   @Override
-  public boolean mouseDragged(double mouseX, double mouseY, int clickedMouseButton, double timeSinceLastClick, double unkowwn) {
+  public boolean mouseDragged(MouseButtonEvent event, double dragX, double dragY) {
+    double mouseX = event.x();
     if (this.enableArmorStandPreview && this.clickedOnArmorStand && this.armorStandLastMouseX != -1) {
       this.armorStandAngle += (float) (mouseX - this.armorStandLastMouseX) / 10f;
     }
     this.armorStandLastMouseX = mouseX;
 
-    return super.mouseDragged(mouseX, mouseY, clickedMouseButton, timeSinceLastClick, unkowwn);
+    return super.mouseDragged(event, dragX, dragY);
   }
 }
