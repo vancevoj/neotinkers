@@ -17,15 +17,13 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.ResourceManager;
-import net.minecraft.util.FastColor;
-import net.minecraft.util.FastColor.ABGR32;
 import net.minecraft.util.GsonHelper;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import slimeknights.mantle.data.loadable.common.ColorLoadable;
 import slimeknights.mantle.util.JsonHelper;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.client.data.material.MaterialPartTextureGenerator;
 import slimeknights.tconstruct.library.client.data.spritetransformer.GreyToColorMapping.Interpolate;
+import slimeknights.tconstruct.library.client.data.util.ABGR32;
 import slimeknights.tconstruct.library.client.data.util.AbstractSpriteReader;
 import slimeknights.tconstruct.library.client.data.util.DataGenSpriteReader;
 import slimeknights.tconstruct.library.client.data.util.ResourceManagerSpriteReader;
@@ -84,7 +82,7 @@ public class GreyToSpriteTransformer implements IRecolorSpriteTransformer {
   public int getNewColor(int color, int x, int y, int f) {
     // if fully transparent, just return fully transparent
     // we do not do 0 alpha RGB values to save effort
-    if (FastColor.ABGR32.alpha(color) == 0) {
+    if (ABGR32.alpha(color) == 0) {
       return 0x00000000;
     }
     int grey = GreyToColorMapping.getGrey(color);
@@ -353,13 +351,13 @@ public class GreyToSpriteTransformer implements IRecolorSpriteTransformer {
           int spriteColor;
           // -1 means we are not doing frames, treat the whole image as one thing. This notably does not require it to be square
           if (frame == -1) {
-            spriteColor = image.getPixelRGBA(x % image.getWidth(), y % image.getHeight());
+            spriteColor = ABGR32.getPixel(image, x % image.getWidth(), y % image.getHeight());
           } else {
             // assume the frames of this are square, otherwise we have to store the ratio somewhere
             int width = image.getWidth();
             // ensure the x and y coordinates are within the individual frame by wrapping, needed notably for large tool sprites
             // then offset the y value, and ensure the offset is within the final height
-            spriteColor = image.getPixelRGBA(x % width, (y % width + frame * width) % image.getHeight());
+            spriteColor = ABGR32.getPixel(image, x % width, (y % width + frame * width) % image.getHeight());
           }
           // if we have a color set, treat it as a tint
           if (color != -1) {
@@ -382,7 +380,7 @@ public class GreyToSpriteTransformer implements IRecolorSpriteTransformer {
           int alpha = 0;
           for (int x = 0; x < image.getWidth(); x++) {
             for (int y = 0; y < image.getHeight(); y++) {
-              int color = image.getPixelRGBA(x, y);
+              int color = ABGR32.getPixel(image, x, y);
               red   += ABGR32.red(color);
               green += ABGR32.green(color);
               blue  += ABGR32.blue(color);
@@ -467,15 +465,15 @@ public class GreyToSpriteTransformer implements IRecolorSpriteTransformer {
   }
 
   /** Called before generating to set up the reader */
-  private static void textureCallback(@Nullable ExistingFileHelper existingFileHelper, @Nullable ResourceManager manager) {
+  private static void textureCallback(@Nullable ResourceManager datagenManager, @Nullable ResourceManager manager) {
     if (READER != null) {
       MAPPINGS_TO_CLEAR.forEach(mapping -> mapping.image = null);
       MAPPINGS_TO_CLEAR.clear();
       READER.closeAll();
       READER = null;
     }
-    if (existingFileHelper != null) {
-      READER = new DataGenSpriteReader(existingFileHelper, TEXTURE_FOLDER);
+    if (datagenManager != null) {
+      READER = new DataGenSpriteReader(datagenManager, TEXTURE_FOLDER);
     } else if (manager != null) {
       READER = new ResourceManagerSpriteReader(manager, TEXTURE_FOLDER);
     }

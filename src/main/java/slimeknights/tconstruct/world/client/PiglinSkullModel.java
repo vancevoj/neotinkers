@@ -1,9 +1,8 @@
 package slimeknights.tconstruct.world.client;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.model.object.skull.PiglinHeadModel;
 import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.object.skull.PiglinHeadModel;
+import net.minecraft.client.model.object.skull.SkullModelBase;
 
 /** Extension of {@link PiglinHeadModel} to adjust scale for slimeskulls */
 public class PiglinSkullModel extends PiglinHeadModel {
@@ -12,10 +11,11 @@ public class PiglinSkullModel extends PiglinHeadModel {
   }
 
   @Override
-  public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int light, int overlay, int color) {
-    poseStack.pushPose();
-    poseStack.scale(0.97f, 0.97f, 0.97f);
-    super.renderToBuffer(poseStack, buffer, light, overlay, color);
-    poseStack.popPose();
+  public void setupAnim(SkullModelBase.State state) {
+    super.setupAnim(state);
+    // renderToBuffer is final since 26.x, so scale through the root pose instead of the pose stack
+    this.root.xScale = 0.97f;
+    this.root.yScale = 0.97f;
+    this.root.zScale = 0.97f;
   }
 }

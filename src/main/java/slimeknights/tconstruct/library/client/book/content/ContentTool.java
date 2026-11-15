@@ -6,19 +6,23 @@ import com.google.gson.annotations.SerializedName;
 import lombok.Getter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.language.I18n;
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
+import net.minecraft.util.context.ContextMap;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.locale.Language;
-import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.RecipeMap;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.item.crafting.ShapedRecipe;
+import net.minecraft.world.item.crafting.display.RecipeDisplay;
+import net.minecraft.world.item.crafting.display.ShapedCraftingRecipeDisplay;
+import net.minecraft.world.item.crafting.display.ShapelessCraftingRecipeDisplay;
+import net.minecraft.world.item.crafting.display.SlotDisplay;
+import net.minecraft.world.item.crafting.display.SlotDisplayContext;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import slimeknights.mantle.client.book.HTMLUtils;
@@ -31,6 +35,8 @@ import slimeknights.mantle.client.screen.book.element.BookElement;
 import slimeknights.mantle.client.screen.book.element.ImageElement;
 import slimeknights.mantle.client.screen.book.element.TextElement;
 import slimeknights.mantle.data.loadable.Loadables;
+import slimeknights.mantle.recipe.helper.IngredientHelper;
+import slimeknights.mantle.recipe.helper.RecipeHelper;
 import slimeknights.mantle.util.ItemStackList;
 import slimeknights.mantle.util.html.HtmlElement;
 import slimeknights.mantle.util.html.HtmlGroup;
@@ -157,26 +163,30 @@ public class ContentTool extends PageContent {
       IModifiableDisplay tool = getTool();
       Level level = Minecraft.getInstance().level;
       assert level != null;
-      RegistryAccess access = level.registryAccess();
+      // the client only has recipes the server synced, crafting is synced by Mantle, tinker station by Tinkers
+      RecipeMap recipes = RecipeHelper.recipes(level);
+      ContextMap context = SlotDisplayContext.fromLevel(level);
 
       // get the stacks for the first crafting table recipe, prefer this option over parts as it may not be craftable with said parts
-      CraftingRecipe craftingRecipe = level.getRecipeManager().getAllRecipesFor(RecipeType.CRAFTING).stream()
-        .map(RecipeHolder::value)
-        .filter(r -> r.getResultItem(access).getItem() == tool.asItem())
+      // recipes no longer expose results or ingredients, so read them from the crafting grid display
+      RecipeDisplay craftingDisplay = recipes.byType(RecipeType.CRAFTING).stream()
+        .flatMap(holder -> holder.value().display().stream())
+        .filter(display -> (display instanceof ShapedCraftingRecipeDisplay || display instanceof ShapelessCraftingRecipeDisplay) && display.result().resolveForFirstStack(context).getItem() == tool.asItem())
         .findFirst().orElse(null);
-      if (craftingRecipe != null) {
+      if (craftingDisplay != null) {
         // parts is just the items in the recipe
-        this.parts = craftingRecipe.getIngredients().stream().map(ingredient -> ItemStackList.of(ingredient.getItems())).collect(Collectors.toList());
+        List<SlotDisplay> ingredients = craftingDisplay instanceof ShapedCraftingRecipeDisplay shaped ? shaped.ingredients() : ((ShapelessCraftingRecipeDisplay) craftingDisplay).ingredients();
+        this.parts = ingredients.stream().map(ingredient -> ItemStackList.of(ingredient.resolveForStacks(context))).collect(Collectors.toList());
 
         // if we have a shaped recipe, display slots in order
-        if (craftingRecipe instanceof ShapedRecipe shaped) {
-          int width = Mth.clamp(shaped.getWidth() - 1, 0, 2);
-          this.imgSlots = IMG_SLOTS_SHAPED[Mth.clamp(shaped.getHeight() - 1, 0, 2)][width];
+        if (craftingDisplay instanceof ShapedCraftingRecipeDisplay shaped) {
+          int width = Mth.clamp(shaped.width() - 1, 0, 2);
+          this.imgSlots = IMG_SLOTS_SHAPED[Mth.clamp(shaped.height() - 1, 0, 2)][width];
           this.slotPos = SLOTS_WIDTH[width];
         }
       } else {
         // fetch the tool building recipe for extra ingredients
-        ToolBuildingRecipe toolBuilding = level.getRecipeManager().getAllRecipesFor(TinkerRecipeTypes.TINKER_STATION.get()).stream()
+        ToolBuildingRecipe toolBuilding = recipes.byType(TinkerRecipeTypes.TINKER_STATION.get()).stream()
           .map(RecipeHolder::value)
           // only fetch recipes with the correct tool and that have the same number of parts - fixes issues with tools having multiple recipes
           .filter(r -> r instanceof ToolBuildingRecipe toolRecipe && toolRecipe.getOutput() == tool)
@@ -193,7 +203,7 @@ public class ContentTool extends PageContent {
         // add extra requirements
         if (toolBuilding != null) {
           for (Ingredient ingredient : toolBuilding.getExtraRequirements()) {
-            partBuilder.add(ItemStackList.of(ingredient.getItems()));
+            partBuilder.add(ItemStackList.of(IngredientHelper.getStacks(ingredient)));
           }
         }
         this.parts = partBuilder.build();

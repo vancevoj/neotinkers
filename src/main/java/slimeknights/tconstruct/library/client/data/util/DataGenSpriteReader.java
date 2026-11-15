@@ -5,39 +5,49 @@ import com.mojang.blaze3d.platform.NativeImage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import net.minecraft.resources.Identifier;
-import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.resources.Resource;
+import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.GsonHelper;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.NoSuchElementException;
 
 /**
- * Logic to read sprites from existing images and return native images which can later be modified
+ * Logic to read sprites from existing images and return native images which can later be modified.
+ * Reads through the datagen client resource manager ({@code GatherDataEvent#getResourceManager(PackType.CLIENT_RESOURCES)}), as {@code ExistingFileHelper} was removed.
  */
 @Log4j2
 @RequiredArgsConstructor
 public class DataGenSpriteReader extends AbstractSpriteReader {
-  private final ExistingFileHelper existingFileHelper;
+  private final ResourceManager manager;
   private final String folder;
+
+  /** Gets a location with the given extension */
+  private Identifier getLocation(Identifier base, String extension) {
+    return base.withPath(folder + '/' + base.getPath() + extension);
+  }
 
   @Override
   public boolean exists(Identifier path) {
-    return existingFileHelper.exists(path, PackType.CLIENT_RESOURCES, ".png", folder);
+    return manager.getResource(getLocation(path, ".png")).isPresent();
   }
 
   @Override
   public boolean metadataExists(Identifier path) {
-    return existingFileHelper.exists(path, PackType.CLIENT_RESOURCES, ".png.mcmeta", folder);
+    return manager.getResource(getLocation(path, ".png.mcmeta")).isPresent();
   }
 
   @Override
   public NativeImage read(Identifier path) throws IOException {
     try {
-      Resource resource = existingFileHelper.getResource(path, PackType.CLIENT_RESOURCES, ".png", folder);
-      NativeImage image = NativeImage.read(resource.open());
+      Resource resource = manager.getResource(getLocation(path, ".png")).orElseThrow(FileNotFoundException::new);
+      NativeImage image;
+      try (InputStream stream = resource.open()) {
+        image = NativeImage.read(stream);
+      }
       openedImages.add(image);
       return image;
     } catch (IOException|NoSuchElementException e) {
@@ -48,7 +58,7 @@ public class DataGenSpriteReader extends AbstractSpriteReader {
 
   @Override
   public JsonObject readMetadata(Identifier path) throws IOException {
-    try (BufferedReader reader = existingFileHelper.getResource(path, PackType.CLIENT_RESOURCES, ".png.mcmeta", folder).openAsReader()) {
+    try (BufferedReader reader = manager.getResource(getLocation(path, ".png.mcmeta")).orElseThrow(FileNotFoundException::new).openAsReader()) {
       return GsonHelper.parse(reader);
     }
   }

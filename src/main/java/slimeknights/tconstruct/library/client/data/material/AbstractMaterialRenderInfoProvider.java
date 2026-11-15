@@ -9,7 +9,7 @@ import net.minecraft.data.CachedOutput;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.PackOutput.Target;
 import net.minecraft.resources.Identifier;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.minecraft.server.packs.resources.ResourceManager;
 import slimeknights.mantle.data.GenericDataProvider;
 import slimeknights.tconstruct.library.client.data.material.AbstractMaterialSpriteProvider.MaterialSpriteInfo;
 import slimeknights.tconstruct.library.client.materials.MaterialGeneratorInfo;
@@ -29,13 +29,14 @@ public abstract class AbstractMaterialRenderInfoProvider extends GenericDataProv
   private final Map<MaterialVariantId,RenderInfoBuilder> allRenderInfo = new HashMap<>();
   @Nullable
   private final AbstractMaterialSpriteProvider materialSprites;
+  /** Client resource manager from the datagen event, replaces the removed {@code ExistingFileHelper} */
   @Nullable
-  private final ExistingFileHelper existingFileHelper;
+  private final ResourceManager resourceManager;
 
-  public AbstractMaterialRenderInfoProvider(PackOutput packOutput, @Nullable AbstractMaterialSpriteProvider materialSprites, @Nullable ExistingFileHelper existingFileHelper) {
+  public AbstractMaterialRenderInfoProvider(PackOutput packOutput, @Nullable AbstractMaterialSpriteProvider materialSprites, @Nullable ResourceManager resourceManager) {
     super(packOutput, Target.RESOURCE_PACK, MaterialRenderInfoLoader.FOLDER);
     this.materialSprites = materialSprites;
-    this.existingFileHelper = existingFileHelper;
+    this.resourceManager = resourceManager;
   }
 
   public AbstractMaterialRenderInfoProvider(PackOutput packOutput) {
@@ -47,14 +48,14 @@ public abstract class AbstractMaterialRenderInfoProvider extends GenericDataProv
 
   @Override
   public CompletableFuture<?> run(CachedOutput cache) {
-    if (existingFileHelper != null) {
-      MaterialPartTextureGenerator.runCallbacks(existingFileHelper, null);
+    if (resourceManager != null) {
+      MaterialPartTextureGenerator.runCallbacks(resourceManager, null);
     }
     addMaterialRenderInfo();
     // generate
     return allOf(allRenderInfo.entrySet().stream().map((entry) -> saveJson(cache, entry.getKey().getLocation('/'), entry.getValue().build(entry.getKey()))))
       .thenRunAsync(() -> {
-        if (existingFileHelper != null) {
+        if (resourceManager != null) {
           MaterialPartTextureGenerator.runCallbacks(null, null);
         }
     });

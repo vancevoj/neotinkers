@@ -5,7 +5,7 @@ import com.mojang.blaze3d.platform.NativeImage;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.Identifier;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.minecraft.server.packs.resources.ResourceManager;
 import slimeknights.tconstruct.library.client.data.GenericTextureGenerator;
 import slimeknights.tconstruct.library.client.data.spritetransformer.ISpriteTransformer;
 import slimeknights.tconstruct.library.client.data.util.DataGenSpriteReader;
@@ -17,16 +17,26 @@ import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Stream;
 
-/** Generator transforming the trim palette using our material generators */
+/**
+ * Generator transforming the trim palette using our material generators.
+ * Since 26.3 trim palettes live in {@code textures/palettes}: the base palette is {@code minecraft:trim_base} and material
+ * palettes are referenced by {@link net.minecraft.world.item.equipment.trim.TrimMaterial#paletteId()}, so a material
+ * {@code ns:path} generates the palette {@code ns:trim/path} at {@code assets/ns/textures/palettes/trim/path.png}.
+ */
 public class TrimMaterialPaletteGenerator extends GenericTextureGenerator {
-  private static final String PALETTE_FOLDER = "trims/color_palettes";
-  private static final String PALETTE_TEXTURES = "textures/" + PALETTE_FOLDER;
+  /** Folder containing all palettes, relative to textures */
+  private static final String PALETTES = "palettes";
+  /** Folder containing trim material palettes, relative to {@link #PALETTES} */
+  public static final String PALETTE_FOLDER = "trim";
+  private static final String PALETTE_TEXTURES = "textures/" + PALETTES;
+  /** Vanilla base palette */
+  private static final Identifier BASE_PALETTE = Identifier.withDefaultNamespace("trim_base");
 
   private final String name;
   private final MaterialId[] materials;
   private final AbstractMaterialSpriteProvider materialProvider;
-  public TrimMaterialPaletteGenerator(PackOutput packOutput, String name, ExistingFileHelper existingFileHelper, AbstractMaterialSpriteProvider materialProvider, MaterialId... materials) {
-    super(packOutput, existingFileHelper, "");
+  public TrimMaterialPaletteGenerator(PackOutput packOutput, String name, ResourceManager resourceManager, AbstractMaterialSpriteProvider materialProvider, MaterialId... materials) {
+    super(packOutput, resourceManager, "");
     this.name = name;
     this.materialProvider = materialProvider;
     this.materials = materials;
@@ -40,22 +50,22 @@ public class TrimMaterialPaletteGenerator extends GenericTextureGenerator {
   @SuppressWarnings("removal")
   @Override
   public CompletableFuture<?> run(CachedOutput cache) {
-    assert existingFileHelper != null;
-    DataGenSpriteReader spriteReader = new DataGenSpriteReader(existingFileHelper, PALETTE_TEXTURES);
+    assert resourceManager != null;
+    DataGenSpriteReader spriteReader = new DataGenSpriteReader(resourceManager, PALETTE_TEXTURES);
     try {
       // create JSON of all materials for compat with trimmed
       JsonObject trimmedJson = new JsonObject();
       JsonObject values = new JsonObject();
       for (MaterialId material : materials) {
-        values.addProperty(material.withPrefix(PALETTE_FOLDER + '/').toString(), material.getSuffix());
+        values.addProperty(material.withPrefix(PALETTES + '/' + PALETTE_FOLDER + '/').toString(), material.getSuffix());
       }
       trimmedJson.add("pairs", values);
 
-      NativeImage original = spriteReader.read(Identifier.parse("trim_palette"));
+      NativeImage original = spriteReader.read(BASE_PALETTE);
       return allOf(Stream.concat(
         Stream.of(saveJson(cache, Identifier.fromNamespaceAndPath("trimmed", "maps/unchecked/custom_trim_material_permutations"), trimmedJson)),
         Arrays.stream(materials).map(
-        material -> saveImage(cache, material.withPrefix(PALETTE_TEXTURES + '/'), getTransformer(material).transformCopy(original, false)))))
+        material -> saveImage(cache, material.withPrefix(PALETTE_TEXTURES + '/' + PALETTE_FOLDER + '/'), getTransformer(material).transformCopy(original, false)))))
         .thenRunAsync(spriteReader::closeAll);
     } catch (IOException ex) {
       return CompletableFuture.failedFuture(ex);

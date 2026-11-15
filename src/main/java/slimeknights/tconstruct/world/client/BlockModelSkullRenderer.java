@@ -1,66 +1,71 @@
 package slimeknights.tconstruct.world.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import lombok.RequiredArgsConstructor;
-import net.minecraft.client.model.object.skull.SkullModelBase;
-import net.minecraft.client.renderer.entity.ItemRenderer;
-import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.SubmitNodeCollector;
+import net.minecraft.client.renderer.item.ItemStackRenderState;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.client.ClientHooks;
 import org.joml.Quaternionf;
-import slimeknights.tconstruct.smeltery.client.util.TintedVertexBuilder;
+
+import java.util.function.Supplier;
 
 /**
- * Skull model instance for the sake of making a Slimeskull with a block item
- * Requires {@link net.minecraft.world.inventory.InventoryMenu#BLOCK_ATLAS} as the texture for the skull.
+ * Renders an item model in place of a skull, for the sake of making a Slimeskull with a block item.
+ * <p>
+ * 26.3: this can no longer be a {@link net.minecraft.client.model.object.skull.SkullModelBase}, as models are drawn later with a
+ * single render type and cannot draw item quads. Instead, call {@link #submit} where the skull model would be submitted, using the
+ * same pose as a skull model.
  **/
-@RequiredArgsConstructor
-public class BlockModelSkullRenderer extends SkullModelBase {
-  private final ItemRenderer itemRenderer;
-  private final BakedModel model;
-  private final ItemStack stack;
-  private float yRot = 0;
-  private float xRot = 0;
+public class BlockModelSkullRenderer {
+  /** Stack to render, resolved lazily as item stacks cannot be created before components are bound */
+  private final Supplier<ItemStack> stack;
+  /** Render state for the item, reused as submitting copies everything it needs */
+  private final ItemStackRenderState renderState = new ItemStackRenderState();
 
-  public BlockModelSkullRenderer(ItemRenderer itemRenderer, ItemStack stack) {
-    this(itemRenderer, itemRenderer.getModel(stack, null, null, 0), stack);
+  public BlockModelSkullRenderer(Supplier<ItemStack> stack) {
+    this.stack = stack;
   }
 
-  @Override
-  public void setupAnim(float pMouthAnimation, float yRot, float xRot) {
-    this.yRot = yRot * ((float)Math.PI / 180F);
-    this.xRot = xRot * ((float)Math.PI / 180F);
+  public BlockModelSkullRenderer(ItemStack stack) {
+    this(() -> stack);
   }
 
-  @Override
-  public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int light, int overlay, int color) {
+  /** Gets the stack rendered by this skull */
+  public ItemStack getStack() {
+    return stack.get();
+  }
+
+  /**
+   * Submits the item at the skull location
+   * @param poseStack     Pose stack, positioned like a skull model
+   * @param collector     Collector to submit to
+   * @param light         Light coordinates
+   * @param overlay       Overlay coordinates
+   * @param outlineColor  Entity outline color, 0 for none
+   * @param yRot          Head Y rotation in degrees, as {@link net.minecraft.client.model.object.skull.SkullModelBase.State#yRot}
+   * @param xRot          Head X rotation in degrees, as {@link net.minecraft.client.model.object.skull.SkullModelBase.State#xRot}
+   */
+  public void submit(PoseStack poseStack, SubmitNodeCollector collector, int light, int overlay, int outlineColor, float yRot, float xRot) {
+    Minecraft minecraft = Minecraft.getInstance();
+    // display transform for the head context is applied by the render state
+    minecraft.getItemModelResolver().updateForTopItem(renderState, stack.get(), ItemDisplayContext.HEAD, minecraft.level, null, 0);
+    if (renderState.isEmpty()) {
+      return;
+    }
     poseStack.pushPose();
 
     // from CustomHeadLayer#translateToHead, with final scale adjusted
     poseStack.translate(0.0F, -0.25F, 0.0F);
-    poseStack.rotate(Axis.YP.rotationDegrees(180.0F));
+    poseStack.rotateDegrees(Axis.YP, 180.0F);
     poseStack.scale(0.5F, -0.5F, -0.5F);
 
-    // simplified from ItemRender#render
-    BakedModel model = ClientHooks.handleCameraTransforms(poseStack, this.model, ItemDisplayContext.HEAD, false);
-    poseStack.translate(-0.5F, -0.5F, -0.5F);
     // we don't really use rotation, but just in case
     if (yRot != 0 || xRot != 0) {
-      poseStack.rotate((new Quaternionf()).rotationZYX(0, yRot, xRot));
+      poseStack.rotate((new Quaternionf()).rotationZYX(0, yRot * ((float)Math.PI / 180F), xRot * ((float)Math.PI / 180F)));
     }
-    // applying tint is a pain with these, so hope we don't need it
-    // 1.21: color is a packed ARGB int
-    if (color != 0xFFFFFFFF) {
-      int alpha = color >> 24 & 255;
-      int red = color >> 16 & 255;
-      int green = color >> 8 & 255;
-      int blue = color & 255;
-      buffer = new TintedVertexBuilder(buffer, red, green, blue, alpha);
-    }
-    itemRenderer.renderModelLists(model, stack, light, overlay, poseStack, buffer);
+    renderState.submit(poseStack, collector, light, overlay, outlineColor);
 
     poseStack.popPose();
   }

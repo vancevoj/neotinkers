@@ -9,8 +9,7 @@ import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.PackOutput.Target;
 import net.minecraft.resources.Identifier;
-import net.minecraft.server.packs.PackType;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.minecraft.server.packs.resources.ResourceManager;
 import slimeknights.mantle.data.GenericDataProvider;
 import slimeknights.tconstruct.TConstruct;
 
@@ -22,36 +21,28 @@ import java.util.concurrent.CompletionException;
 
 /** Data generator to create png image files */
 public abstract class GenericTextureGenerator extends GenericDataProvider {
+  /** Client resource manager for reading existing textures, from {@code GatherDataEvent#getResourceManager(PackType.CLIENT_RESOURCES)}. Null if this generator never reads textures. */
   @Nullable
-  protected final ExistingFileHelper existingFileHelper;
-  @Nullable
-  private final ExistingFileHelper.ResourceType resourceType;
+  protected final ResourceManager resourceManager;
 
-  /** Constructor which marks files as existing */
-  public GenericTextureGenerator(PackOutput packOutput, @Nullable ExistingFileHelper existingFileHelper, String folder) {
+  /** Constructor for a generator reading existing textures */
+  public GenericTextureGenerator(PackOutput packOutput, @Nullable ResourceManager resourceManager, String folder) {
     super(packOutput, Target.RESOURCE_PACK, folder);
-    this.existingFileHelper = existingFileHelper;
-    if (existingFileHelper != null) {
-      this.resourceType = new ExistingFileHelper.ResourceType(PackType.CLIENT_RESOURCES, ".png", folder);
-    } else {
-      this.resourceType = null;
-    }
+    this.resourceManager = resourceManager;
   }
 
-  /** Constructor which does not mark files as existing */
+  /** Constructor for a generator that does not read existing textures */
   public GenericTextureGenerator(PackOutput packOutput, String folder) {
     this(packOutput, null, folder);
   }
 
   /** Saves the given image to the given location */
   protected CompletableFuture<?> saveImage(CachedOutput cache, Identifier location, NativeImage image) {
-    if (existingFileHelper != null && resourceType != null) {
-      existingFileHelper.trackGenerated(location, resourceType);
-    }
     return CompletableFuture.runAsync(() -> {
       try {
         Path path = this.pathProvider.file(location, "png");
-        byte[] bytes = image.asByteArray();
+        // NativeImage#asByteArray was removed, Mantle has an equivalent STB based encoder
+        byte[] bytes = slimeknights.mantle.data.client.GenericTextureGenerator.toPngBytes(image);
         cache.writeIfNeeded(path, bytes, Hashing.sha1().hashBytes(bytes));
       } catch (IOException e) {
         TConstruct.LOG.error("Couldn't write image for {}", location, e);

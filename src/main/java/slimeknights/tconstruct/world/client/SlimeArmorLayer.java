@@ -1,64 +1,75 @@
 package slimeknights.tconstruct.world.client;
 
-import net.minecraft.world.item.equipment.ArmorType;
-import net.minecraft.client.renderer.rendertype.RenderTypes;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.HierarchicalModel;
+import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.client.model.Model;
-import net.minecraft.client.model.object.skull.SkullModelBase;
 import net.minecraft.client.model.geom.EntityModelSet;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.model.geom.ModelLayers;
+import net.minecraft.client.model.object.skull.SkullModelBase;
+import net.minecraft.client.renderer.PlayerSkinRenderCache;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.blockentity.SkullBlockRenderer;
-import net.minecraft.client.renderer.entity.ItemRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.CustomHeadLayer;
+import net.minecraft.client.renderer.entity.layers.EquipmentLayerRenderer;
 import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
+import net.minecraft.client.renderer.entity.state.HumanoidRenderState;
+import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.client.resources.model.EquipmentClientInfo;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.resources.Identifier;
-import net.minecraft.util.Mth;
+import net.minecraft.util.Util;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.monster.cubemob.Slime;
-import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.ArmorMaterial;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.component.DyedItemColor;
 import net.minecraft.world.item.component.ResolvableProfile;
-import net.minecraft.world.level.block.AbstractSkullBlock;
+import net.minecraft.world.item.equipment.Equippable;
 import net.minecraft.world.level.block.SkullBlock;
-import net.minecraft.world.level.block.SkullBlock.Type;
-import net.neoforged.neoforge.client.ClientHooks;
+import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
+import slimeknights.tconstruct.library.client.armor.ArmorModelManager.ArmorModelDispatcher;
 
-import java.util.List;
-import java.util.Map;
+import javax.annotation.Nullable;
+import java.util.function.Function;
 
-/** Generics do not match to use the vanilla armor layer, so this is a reimplementation of some of {@link HumanoidArmorLayer} */
-public class SlimeArmorLayer<T extends Slime, M extends HierarchicalModel<T>, A extends HumanoidModel<T>> extends RenderLayer<T,M> {
-  private final A armorModel;
-  public final Map<Type,SkullModelBase> skullModels;
+/**
+ * Generics do not match to use the vanilla armor layer, so this is a reimplementation of some of {@link HumanoidArmorLayer} and {@link CustomHeadLayer}.
+ * Requires the renderer to fill {@link ArmoredSlimeRenderState} using {@link #extractHelmet(Slime, ArmoredSlimeRenderState)}.
+ */
+public class SlimeArmorLayer<S extends ArmoredSlimeRenderState, M extends EntityModel<? super S>> extends RenderLayer<S,M> {
+  /** Armor model for the head slot, posed by {@link ArmoredSlimeRenderState#armorState} */
+  private final HumanoidModel<HumanoidRenderState> armorModel;
+  private final EquipmentLayerRenderer equipmentRenderer;
+  private final Function<SkullBlock.Type,SkullModelBase> skullModels;
+  private final PlayerSkinRenderCache playerSkinRenderCache;
   private final boolean lavaSlime;
-  public SlimeArmorLayer(RenderLayerParent<T,M> pRenderer, A armorModel, EntityModelSet modelSet, boolean lavaSlime) {
+  public SlimeArmorLayer(RenderLayerParent<S,M> pRenderer, EntityRendererProvider.Context context, boolean lavaSlime) {
     super(pRenderer);
-    this.armorModel = armorModel;
-    this.skullModels = SkullBlockRenderer.createSkullRenderers(modelSet);
+    this.armorModel = new HumanoidModel<>(context.bakeLayer(ModelLayers.PLAYER_ARMOR.head()));
+    this.equipmentRenderer = context.getEquipmentRenderer();
+    EntityModelSet modelSet = context.getModelSet();
+    this.skullModels = Util.memoize(type -> SkullBlockRenderer.createModel(modelSet, type));
+    this.playerSkinRenderCache = context.getPlayerSkinRenderCache();
     this.lavaSlime = lavaSlime;
   }
 
-  @Override
-  public void render(PoseStack matrices, MultiBufferSource buffer, int packedLight, T entity, float pLimbSwing, float swing, float partialTicks, float age, float headYaw, float headPitch) {
+  /**
+   * Extracts the helmet for rendering. Skulls and other head items are already extracted by the living entity renderer
+   * ({@code wornHeadType}, {@code headItem}).
+   */
+  public static void extractHelmet(Slime entity, ArmoredSlimeRenderState state) {
     ItemStack helmet = entity.getItemBySlot(EquipmentSlot.HEAD);
+    state.helmet = helmet.isEmpty() ? ItemStack.EMPTY : helmet.copy();
+  }
+
+  @Override
+  public void submit(PoseStack matrices, SubmitNodeCollector collector, int packedLight, S state, float yRot, float xRot) {
+    ItemStack helmet = state.helmet;
     if (!helmet.isEmpty()) {
       matrices.pushPose();
       if (lavaSlime) {
-        float squish = Mth.lerp(partialTicks, entity.oSquish, entity.squish);
+        float squish = state.squish;
         if (squish < 0) {
           squish = 0;
         }
@@ -68,68 +79,38 @@ public class SlimeArmorLayer<T extends Slime, M extends HierarchicalModel<T>, A 
       }
       matrices.scale(0.9f, 0.9f, 0.9f);
 
-      Item item = helmet.getItem();
       // helmet renderer, based on humanoid armor layer
-      if (item instanceof ArmorItem armor && armor.getType() == ArmorType.HELMET) {
-        this.getParentModel().copyPropertiesTo(armorModel);
-        armorModel.setAllVisible(false);
-        armorModel.head.visible = true;
-        armorModel.hat.visible = true;
-        //noinspection UnstableApiUsage  I am reimplementing vanilla stuff, I will call vanilla hooks
-        Model model = ClientHooks.getArmorModel(entity, helmet, EquipmentSlot.HEAD, armorModel);
-        boolean enchanted = helmet.hasFoil();
-        List<ArmorMaterial.Layer> layers = armor.getMaterial().value().layers();
-        boolean first = true;
-        for (ArmorMaterial.Layer layer : layers) {
-          int color;
-          // 1.21: dye is a data component; the dyeable layer is the first one
-          if (first && helmet.has(DataComponents.DYED_COLOR)) {
-            color = DyedItemColor.getOrDefault(helmet, 0xFFFFFFFF) | 0xFF000000;
-          } else {
-            color = 0xFFFFFFFF;
-          }
-          renderModel(matrices, buffer, packedLight, enchanted, model, color, getArmorResource(layer));
-          first = false;
-        }
-      } else {
+      Equippable equippable = helmet.get(DataComponents.EQUIPPABLE);
+      boolean isHelmet = equippable != null && equippable.slot() == EquipmentSlot.HEAD;
+      if (isHelmet && IClientItemExtensions.of(helmet) instanceof ArmorModelDispatcher dispatcher) {
+        // tinkers armor renders itself, formerly through the armor model hook
+        state.armorState.outlineColor = state.outlineColor;
+        dispatcher.submitArmor(matrices, collector, packedLight, state.armorState, helmet, EquipmentSlot.HEAD, armorModel);
+      } else if (isHelmet && equippable.assetId().isPresent()) {
+        // equipment layers handle the dyed layer, glint and trims
+        equipmentRenderer.renderLayers(EquipmentClientInfo.LayerType.HUMANOID, equippable.assetId().get(), armorModel, state.armorState, helmet, matrices, collector, packedLight, state.outlineColor);
+      } else if (state.wornHeadType != null) {
         // block model renderer, based on custom head layer
-
-        // skull block rendering
-        if (item instanceof BlockItem block && block.getBlock() instanceof AbstractSkullBlock skullBlock) {
-          matrices.scale(1.1875F, -1.1875F, -1.1875F);
-          ResolvableProfile profile = helmet.get(DataComponents.PROFILE);
-          matrices.translate(-0.5, 0.0, -0.5);
-          SkullBlock.Type type = skullBlock.getType();
-          SkullModelBase skullModel = this.skullModels.get(type);
-          RenderType renderType = SkullBlockRenderer.getRenderType(type, profile);
-          SkullBlockRenderer.renderSkull(null, 180.0F, pLimbSwing, matrices, buffer, packedLight, skullModel, renderType);
-        } else {
-          // standard rendering
-          CustomHeadLayer.translateToHead(matrices, false);
-          Minecraft.getInstance().getEntityRenderDispatcher().getItemInHandRenderer().renderItem(entity, helmet, ItemDisplayContext.HEAD, false, matrices, buffer, packedLight);
+        // skull block rendering, the old rotation and flips cancel out to a plain scale
+        SkullModelBase skullModel = this.skullModels.apply(state.wornHeadType);
+        if (skullModel != null) {
+          matrices.scale(1.1875F, 1.1875F, 1.1875F);
+          SkullBlockRenderer.submitSkull(state.wornHeadAnimationPos, matrices, collector, packedLight, skullModel, getSkullRenderType(state.wornHeadType, state.wornHeadProfile), state.outlineColor, null);
         }
+      } else if (!state.headItem.isEmpty()) {
+        // standard rendering
+        CustomHeadLayer.translateToHead(matrices, CustomHeadLayer.Transforms.DEFAULT);
+        state.headItem.submit(matrices, collector, packedLight, OverlayTexture.NO_OVERLAY, state.outlineColor);
       }
       matrices.popPose();
     }
   }
 
-  private static void renderModel(PoseStack matrices, MultiBufferSource buffer, int packedLight, boolean enchanted, Model model, int color, Identifier texture) {
-    VertexConsumer vertexconsumer = ItemRenderer.getArmorFoilBuffer(buffer, RenderTypes.armorCutoutNoCull(texture), enchanted);
-    model.renderToBuffer(matrices, vertexconsumer, packedLight, OverlayTexture.NO_OVERLAY, color);
-  }
-
-  /**
-   * Gets the armor texture for the given material layer.
-   * @param layer Armor material layer
-   * @return Identifier pointing at the armor's texture
-   */
-  public static Identifier getArmorResource(ArmorMaterial.Layer layer) {
-    String path = layer.texture(false).toString();
-    Identifier location = HumanoidArmorLayer.ARMOR_LOCATION_CACHE.get(path);
-    if (location == null) {
-      location = Identifier.parse(path);
-      HumanoidArmorLayer.ARMOR_LOCATION_CACHE.put(path, location);
+  /** Gets the render type for the given skull, using the player skin for player heads */
+  private RenderType getSkullRenderType(SkullBlock.Type type, @Nullable ResolvableProfile profile) {
+    if (type == SkullBlock.Types.PLAYER && profile != null) {
+      return playerSkinRenderCache.getOrDefault(profile).renderType();
     }
-    return location;
+    return SkullBlockRenderer.getSkullRenderType(type, null);
   }
 }

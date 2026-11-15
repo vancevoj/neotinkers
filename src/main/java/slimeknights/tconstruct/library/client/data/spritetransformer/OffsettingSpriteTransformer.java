@@ -8,6 +8,7 @@ import com.mojang.blaze3d.platform.NativeImage;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.GsonHelper;
 import slimeknights.tconstruct.TConstruct;
+import slimeknights.tconstruct.library.client.data.util.ABGR32;
 import slimeknights.tconstruct.library.utils.JsonUtils;
 
 import javax.annotation.Nullable;
@@ -58,9 +59,9 @@ public record OffsettingSpriteTransformer(@Nullable ISpriteTransformer base, int
           int getX = localX - xOffset;
           int getY = localY - yOffset;
           if (0 <= getX && getX < width && 0 <= getY && getY < height) {
-            image.setPixelRGBA(localX, localY + frameOffset, image.getPixelRGBA(getX, getY));
+            ABGR32.setPixel(image, localX, localY + frameOffset, ABGR32.getPixel(image, getX, getY));
           } else {
-            image.setPixelRGBA(localX, localY + frameOffset, 0);
+            ABGR32.setPixel(image, localX, localY + frameOffset, 0);
           }
         }
       }

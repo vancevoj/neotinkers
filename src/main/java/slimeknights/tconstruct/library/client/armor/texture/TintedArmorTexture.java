@@ -1,20 +1,18 @@
 package slimeknights.tconstruct.library.client.armor.texture;
 
-import net.minecraft.client.renderer.rendertype.RenderTypes;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import net.minecraft.client.model.Model;
-import net.minecraft.client.renderer.LightTexture;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.OrderedSubmitNodeCollector;
 import net.minecraft.client.renderer.rendertype.RenderType;
-import net.minecraft.client.renderer.entity.ItemRenderer;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.resources.Identifier;
-import slimeknights.tconstruct.library.client.armor.AbstractArmorModel;
+import net.minecraft.util.ARGB;
+import net.minecraft.util.LightCoordsUtil;
 import slimeknights.tconstruct.library.client.armor.texture.ArmorTextureSupplier.ArmorTexture;
 
 /** Armor texture which tints the texture */
@@ -23,7 +21,7 @@ import slimeknights.tconstruct.library.client.armor.texture.ArmorTextureSupplier
 @RequiredArgsConstructor
 @Setter
 public class TintedArmorTexture implements ArmorTexture {
-  private static final int MAX_LIGHT = LightTexture.pack(15, 15);
+  private static final int MAX_LIGHT = LightCoordsUtil.pack(15, 15);
 
   private final Identifier texture;
   @Getter
@@ -41,17 +39,19 @@ public class TintedArmorTexture implements ArmorTexture {
     if (luminosity >= 15) {
       return TintedArmorTexture.MAX_LIGHT;
     }
-    // inlined version of methods from LightTexture
+    // inlined version of methods from LightCoordsUtil
     return Math.max(luminosity, (packedLight & 0xFFFF) >> 4) << 4
       | Math.max(luminosity, packedLight >> 20 & 0xFFFF) << 20;
   }
 
   @Override
-  public void renderTexture(Model model, PoseStack matrices, MultiBufferSource bufferSource, int packedLight, int packedOverlay, float red, float green, float blue, float alpha, boolean hasGlint) {
-    VertexConsumer buffer = ItemRenderer.getArmorFoilBuffer(bufferSource, RenderTypes.armorCutoutNoCull(texture), hasGlint);
+  public <S> void submit(Model<? super S> model, S state, PoseStack matrices, OrderedSubmitNodeCollector collector, int packedLight, int packedOverlay, int color, boolean hasGlint, int outlineColor) {
+    // glint is part of the render type now instead of a separate foil buffer
+    RenderType renderType = hasGlint ? RenderTypes.armorCutoutNoCullGlint(texture) : RenderTypes.armorCutoutNoCull(texture);
     if (luminosity > 0) {
       packedLight = applyLuminosity(packedLight, luminosity);
     }
-    AbstractArmorModel.renderColored(model, matrices, buffer, packedLight, packedOverlay, color, red, green, blue, alpha);
+    // the tint is read here, so suppliers updating the color of a shared instance (dyed) stay correct after submitting
+    collector.submitModel(model, state, matrices, renderType, packedLight, packedOverlay, ARGB.multiply(color, this.color), null, outlineColor);
   }
 }

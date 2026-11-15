@@ -6,7 +6,6 @@ import net.minecraft.data.CachedOutput;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.ResourceManager;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import slimeknights.tconstruct.library.client.data.GenericTextureGenerator;
 import slimeknights.tconstruct.library.client.data.material.AbstractMaterialSpriteProvider.MaterialSpriteInfo;
 import slimeknights.tconstruct.library.client.data.material.AbstractPartSpriteProvider.PartSpriteInfo;
@@ -37,21 +36,26 @@ public class MaterialPartTextureGenerator extends GenericTextureGenerator {
   /** Path to textures outputted by this generator */
   public static final String FOLDER = "textures";
   private final DataGenSpriteReader spriteReader;
-  private final ExistingFileHelper existingFileHelper;
   /** Sprite provider */
   private final AbstractPartSpriteProvider partProvider;
   /** Materials to provide */
   private final AbstractMaterialSpriteProvider[] materialProviders;
   private final StatOverride overrides;
 
-  public MaterialPartTextureGenerator(PackOutput packOutput, ExistingFileHelper existingFileHelper, AbstractPartSpriteProvider spriteProvider, AbstractMaterialSpriteProvider... materialProviders) {
-    this(packOutput, existingFileHelper, spriteProvider, StatOverride.EMPTY, materialProviders);
+  /**
+   * Creates a new generator
+   * @param packOutput         Pack output
+   * @param resourceManager    Client resource manager for reading existing textures, from {@code GatherDataEvent#getResourceManager(PackType.CLIENT_RESOURCES)}
+   * @param spriteProvider     Part sprites to generate
+   * @param materialProviders  Materials to generate
+   */
+  public MaterialPartTextureGenerator(PackOutput packOutput, ResourceManager resourceManager, AbstractPartSpriteProvider spriteProvider, AbstractMaterialSpriteProvider... materialProviders) {
+    this(packOutput, resourceManager, spriteProvider, StatOverride.EMPTY, materialProviders);
   }
 
-  public MaterialPartTextureGenerator(PackOutput packOutput, ExistingFileHelper existingFileHelper, AbstractPartSpriteProvider spriteProvider, StatOverride overrides, AbstractMaterialSpriteProvider... materialProviders) {
-    super(packOutput, FOLDER);
-    this.spriteReader = new DataGenSpriteReader(existingFileHelper, FOLDER);
-    this.existingFileHelper = existingFileHelper;
+  public MaterialPartTextureGenerator(PackOutput packOutput, ResourceManager resourceManager, AbstractPartSpriteProvider spriteProvider, StatOverride overrides, AbstractMaterialSpriteProvider... materialProviders) {
+    super(packOutput, resourceManager, FOLDER);
+    this.spriteReader = new DataGenSpriteReader(resourceManager, FOLDER);
     this.partProvider = spriteProvider;
     this.overrides = overrides;
     this.materialProviders = materialProviders;
@@ -73,7 +77,7 @@ public class MaterialPartTextureGenerator extends GenericTextureGenerator {
 
   @Override
   public CompletableFuture<?> run(CachedOutput cache) {
-    runCallbacks(existingFileHelper, null);
+    runCallbacks(resourceManager, null);
     
     // ensure we have parts
     List<PartSpriteInfo> parts = partProvider.getSprites();
@@ -172,18 +176,18 @@ public class MaterialPartTextureGenerator extends GenericTextureGenerator {
   }
 
   /** Runs all callbacks */
-  public static void runCallbacks(@Nullable ExistingFileHelper existingFileHelper, @Nullable ResourceManager manager) {
+  public static void runCallbacks(@Nullable ResourceManager datagenManager, @Nullable ResourceManager manager) {
     for (IPartTextureCallback callback : TEXTURE_CALLBACKS) {
-      callback.accept(existingFileHelper, manager);
+      callback.accept(datagenManager, manager);
     }
   }
 
   public interface IPartTextureCallback {
     /**
      * Tells the given callback that texture generating is either starting or ending. Both parameters being null means texture generating is ending
-     * @param existingFileHelper  If nonnull, datagenerators are starting
-     * @param manager             If nonnull, command is starting
+     * @param datagenManager  If nonnull, datagenerators are starting. Client resource manager from the datagen event, replaces the removed {@code ExistingFileHelper}
+     * @param manager         If nonnull, command is starting
      */
-    void accept(@Nullable ExistingFileHelper existingFileHelper, @Nullable ResourceManager manager);
+    void accept(@Nullable ResourceManager datagenManager, @Nullable ResourceManager manager);
   }
 }

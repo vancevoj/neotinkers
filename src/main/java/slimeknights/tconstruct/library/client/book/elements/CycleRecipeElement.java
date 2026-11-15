@@ -26,7 +26,7 @@ public class CycleRecipeElement extends ArrowElement {
   public void mouseClicked(double mouseX, double mouseY, int mouseButton) {
     if (this.button != null && this.isHovered(mouseX, mouseY)) {
       this.playDownSound(Minecraft.getInstance().getSoundManager());
-      this.button.onPress();
+      this.button.onPress(LEFT_CLICK);
     }
   }
 

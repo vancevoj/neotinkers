@@ -1,65 +1,78 @@
 package slimeknights.tconstruct.library.client.armor;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.client.model.Model;
+import net.minecraft.client.renderer.SubmitNodeCollector;
+import net.minecraft.client.renderer.entity.state.HumanoidRenderState;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import slimeknights.tconstruct.library.client.armor.ArmorModelManager.ArmorModel;
 import slimeknights.tconstruct.library.client.armor.texture.ArmorTextureSupplier;
 import slimeknights.tconstruct.library.client.armor.texture.ArmorTextureSupplier.ArmorTexture;
 import slimeknights.tconstruct.library.client.armor.texture.ArmorTextureSupplier.TextureType;
+import slimeknights.tconstruct.library.tools.helper.ModifierUtil;
+import slimeknights.tconstruct.library.tools.item.armor.ModifiableArmorItem;
 
 /** Armor model that just applies the list of textures */
 public class MultilayerArmorModel extends AbstractArmorModel {
   public static final MultilayerArmorModel INSTANCE = new MultilayerArmorModel();
-
-  protected ItemStack armorStack = ItemStack.EMPTY;
-  protected ArmorModel model = ArmorModel.EMPTY;
-  protected RegistryAccess registryAccess = RegistryAccess.EMPTY;
+  /** First submit order used for armor layers, matching vanilla equipment layers. Order 0 is the entity itself */
+  public static final int FIRST_ORDER = 1;
 
   protected MultilayerArmorModel() {}
 
-  /** Prepares this model */
-  public Model setup(LivingEntity living, ItemStack stack, EquipmentSlot slot, HumanoidModel<?> base, ArmorModel model) {
-    this.model = model;
-    this.registryAccess = living.level().registryAccess();
-    if (!model.layers().isEmpty()) {
-      setup(living, stack, slot, base);
-      this.armorStack = stack;
-    } else {
-      this.armorStack = ItemStack.EMPTY;
-    }
-    return this;
+  /**
+   * Submits all texture layers of the armor model.
+   * @param matrices      Pose stack, positioned like the entity model
+   * @param collector     Collector to submit to
+   * @param packedLight   Light coordinates
+   * @param state         Entity render state, poses the armor model when it is drawn
+   * @param stack         Armor stack
+   * @param slot          Slot the armor is worn in
+   * @param armorModel    Vanilla armor model for the slot (from the renderer's armor model set), drawn once per texture layer
+   * @param model         Armor model to render
+   * @return  Next free submit order after the submitted layers, for subclasses rendering more on top
+   */
+  public <S extends HumanoidRenderState> int submit(PoseStack matrices, SubmitNodeCollector collector, int packedLight, S state, ItemStack stack, EquipmentSlot slot, HumanoidModel<S> armorModel, ArmorModel model) {
+    return submit(matrices, collector, packedLight, state, stack, slot, armorModel, model, -1, FIRST_ORDER);
   }
 
-  @Override
-  public void renderToBuffer(PoseStack matrices, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, int color) {
-    // 1.21: vanilla now passes a packed ARGB color instead of separate float channels; unpack for our float-based texture pipeline
-    float alpha = (color >> 24 & 0xFF) / 255.0F;
-    float red = (color >> 16 & 0xFF) / 255.0F;
-    float green = (color >> 8 & 0xFF) / 255.0F;
-    float blue = (color & 0xFF) / 255.0F;
-    if (this.base != null && buffer != null) {
-      boolean armorGlint = hasGlint;
-      boolean wingGlint = hasGlint;
-      for (ArmorTextureSupplier textureSupplier : model.layers()) {
-        ArmorTexture texture = textureSupplier.getArmorTexture(armorStack, textureType, registryAccess);
+  /**
+   * Submits all texture layers of the armor model.
+   * @param color       ARGB color multiplier for all layers, -1 for none
+   * @param firstOrder  Submit order of the first layer. Each layer gets its own order as layers share the same geometry
+   * @return  Next free submit order after the submitted layers
+   * @see #submit(PoseStack, SubmitNodeCollector, int, HumanoidRenderState, ItemStack, EquipmentSlot, HumanoidModel, ArmorModel)
+   */
+  protected <S extends HumanoidRenderState> int submit(PoseStack matrices, SubmitNodeCollector collector, int packedLight, S state, ItemStack stack, EquipmentSlot slot, HumanoidModel<S> armorModel, ArmorModel model, int color, int firstOrder) {
+    if (model.layers().isEmpty()) {
+      return firstOrder;
+    }
+    RegistryAccess registryAccess = getRegistryAccess();
+    TextureType textureType = TextureType.fromSlot(slot);
+    boolean hasGlint = stack.hasFoil();
+    boolean hasWings = slot == EquipmentSlot.CHEST && ModifierUtil.checkVolatileFlag(stack, ModifiableArmorItem.ELYTRA);
+    int packedOverlay = OverlayTexture.NO_OVERLAY;
+    boolean armorGlint = hasGlint;
+    boolean wingGlint = hasGlint;
+    int armorOrder = firstOrder;
+    int wingOrder = firstOrder;
+    for (ArmorTextureSupplier textureSupplier : model.layers()) {
+      ArmorTexture texture = textureSupplier.getArmorTexture(stack, textureType, registryAccess);
+      if (texture != ArmorTexture.EMPTY) {
+        texture.submit(armorModel, state, matrices, collector.order(armorOrder++), packedLight, packedOverlay, color, armorGlint, state.outlineColor);
+        armorGlint = false;
+      }
+      if (hasWings) {
+        texture = textureSupplier.getArmorTexture(stack, TextureType.WINGS, registryAccess);
         if (texture != ArmorTexture.EMPTY) {
-          texture.renderTexture(base, matrices, buffer, packedLightIn, packedOverlayIn, red, green, blue, alpha, armorGlint);
-          armorGlint = false;
-        }
-        if (hasWings) {
-          texture = textureSupplier.getArmorTexture(armorStack, TextureType.WINGS, registryAccess);
-          if (texture != ArmorTexture.EMPTY) {
-            renderWings(matrices, packedLightIn, packedOverlayIn, texture, red, green, blue, alpha, wingGlint);
-            wingGlint = false;
-          }
+          submitWings(matrices, collector.order(wingOrder++), state, packedLight, packedOverlay, texture, color, wingGlint);
+          wingGlint = false;
         }
       }
     }
+    return Math.max(armorOrder, wingOrder);
   }
 }

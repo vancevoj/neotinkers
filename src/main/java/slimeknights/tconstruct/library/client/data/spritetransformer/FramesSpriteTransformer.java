@@ -11,6 +11,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.util.GsonHelper;
 import slimeknights.mantle.util.JsonHelper;
 import slimeknights.tconstruct.TConstruct;
+import slimeknights.tconstruct.library.client.data.util.ABGR32;
 import slimeknights.tconstruct.library.utils.JsonUtils;
 
 import javax.annotation.Nullable;
@@ -65,7 +66,7 @@ public class FramesSpriteTransformer implements IRecolorSpriteTransformer {
       for (int x = 0; x < width; x++) {
         for (int y = 0; y < height; y++) {
           // use first frame data to determine result, then save it to the proper frame location
-          image.setPixelRGBA(x, y + f * height, transformer.getNewColor(image.getPixelRGBA(x, y), x, y, f % maxFrame));
+          ABGR32.setPixel(image, x, y + f * height, transformer.getNewColor(ABGR32.getPixel(image, x, y), x, y, f % maxFrame));
         }
       }
     }

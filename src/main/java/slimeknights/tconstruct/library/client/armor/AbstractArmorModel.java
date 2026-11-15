@@ -1,112 +1,84 @@
 package slimeknights.tconstruct.library.client.armor;
 
-import net.minecraft.util.ARGB;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.object.equipment.ElytraModel;
-import net.minecraft.client.model.EntityModel;
-import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.client.model.Model;
 import net.minecraft.client.model.geom.ModelLayers;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.rendertype.RenderType;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.client.event.RenderLivingEvent;
-import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.bus.api.EventPriority;
+import net.minecraft.client.model.object.equipment.ElytraModel;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.renderer.OrderedSubmitNodeCollector;
+import net.minecraft.client.renderer.entity.state.HumanoidRenderState;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.util.ARGB;
 import slimeknights.tconstruct.library.client.armor.texture.ArmorTextureSupplier.ArmorTexture;
-import slimeknights.tconstruct.library.client.armor.texture.ArmorTextureSupplier.TextureType;
-import slimeknights.tconstruct.library.tools.helper.ModifierUtil;
-import slimeknights.tconstruct.library.tools.item.armor.ModifiableArmorItem;
 
 import javax.annotation.Nullable;
 
-/** Common shared logic for material armor models */
-public abstract class AbstractArmorModel extends Model {
-  /** Base model instance for rendering */
+/**
+ * Common shared logic for material armor models.
+ * <p>
+ * 26.3: this is no longer a {@link net.minecraft.client.model.Model}. Models can no longer draw several textures themselves
+ * ({@code Model#renderToBuffer} is final and models are drawn later from a render state), so armor is submitted by
+ * {@link TinkerArmorLayer} through {@link ArmorModelManager.ArmorModelDispatcher#submitArmor}, which submits the vanilla armor
+ * model once per texture layer.
+ */
+public abstract class AbstractArmorModel {
+  /** Wings model to render */
   @Nullable
-  protected HumanoidModel<?> base;
-  /** If true, applies the enchantment glint to extra layers */
-  protected boolean hasGlint = false;
-  /** If true, uses the legs texture */
-  protected TextureType textureType = TextureType.ARMOR;
+  private static ElytraModel wingsModel;
+  /** Wings model to render on babies */
+  @Nullable
+  private static ElytraModel babyWingsModel;
 
-  protected boolean hasWings = false;
-
-  protected AbstractArmorModel() {
-    super(RenderType::entityCutoutNoCull);
+  /** Combines the given ARGB colors, -1 meaning no tint for either. Replaces the old float channel multiplication in {@code renderColored} */
+  public static int multiplyColor(int color, int tint) {
+    return ARGB.multiply(color, tint);
   }
 
-  /** Sets up the model given the passed arguments */
-  protected void setup(LivingEntity living, ItemStack stack, EquipmentSlot slot, HumanoidModel<?> base) {
-    this.base = base;
-    this.hasGlint = stack.hasFoil();
-    this.textureType = TextureType.fromSlot(slot);
-    if (slot == EquipmentSlot.CHEST) {
-      this.hasWings = ModifierUtil.checkVolatileFlag(stack, ModifiableArmorItem.ELYTRA);
-      if (hasWings) {
-        ElytraModel<LivingEntity> wings = getWings();
-        wings.setupAnim(living, 0, 0, 0, 0, 0);
-        copyProperties(base, wings);
-      }
-    } else {
-      hasWings = false;
-    }
+  /** Gets the registry access for texture suppliers, as the armor hooks no longer receive the entity */
+  public static RegistryAccess getRegistryAccess() {
+    ClientLevel level = Minecraft.getInstance().level;
+    return level != null ? level.registryAccess() : RegistryAccess.EMPTY;
   }
 
-  /** Renders a colored model */
-  public static void renderColored(Model model, PoseStack matrices, VertexConsumer buffer, int packedLightIn, int packedOverlayIn, int color, float red, float green, float blue, float alpha) {
-    if (color != -1) {
-      alpha *= (float)(color >> 24 & 255) / 255.0F;
-      red *= (float)(color >> 16 & 255) / 255.0F;
-      green *= (float)(color >> 8 & 255) / 255.0F;
-      blue *= (float)(color & 255) / 255.0F;
-    }
-    // 1.21: renderToBuffer takes a packed ARGB color rather than float channels
-    model.renderToBuffer(matrices, buffer, packedLightIn, packedOverlayIn, ARGB.colorFromFloat(alpha, red, green, blue));
-  }
-
-  /** Renders the wings layer */
-  protected void renderWings(PoseStack matrices, int packedLightIn, int packedOverlayIn, ArmorTexture texture, float red, float green, float blue, float alpha, boolean hasGlint) {
+  /**
+   * Submits the wings layer
+   * @param matrices       Pose stack
+   * @param collector      Ordered collector for this layer
+   * @param state          Entity state, poses the wings
+   * @param packedLight    Light coordinates
+   * @param packedOverlay  Overlay coordinates
+   * @param texture        Texture to submit
+   * @param color          ARGB color multiplier
+   * @param hasGlint       If true, draws the enchantment glint
+   */
+  protected static void submitWings(PoseStack matrices, OrderedSubmitNodeCollector collector, HumanoidRenderState state, int packedLight, int packedOverlay, ArmorTexture texture, int color, boolean hasGlint) {
     matrices.pushPose();
     matrices.translate(0.0D, 0.0D, 0.125D);
-    assert buffer != null;
-    texture.renderTexture(getWings(), matrices, buffer, packedLightIn, packedOverlayIn, red, green, blue, alpha, hasGlint);
+    texture.submit(getWings(state.isBaby), state, matrices, collector, packedLight, packedOverlay, color, hasGlint, state.outlineColor);
     matrices.popPose();
   }
 
 
   /* Helpers */
 
-  /** Buffer from the render living event, stored as we lose access to it later */
-  @Nullable
-  public static MultiBufferSource buffer;
-
-  /** Initializes the wrapper */
-  public static void init() {
-    // register listeners to set and clear the buffer
-    NeoForge.EVENT_BUS.addListener(EventPriority.LOWEST, false, RenderLivingEvent.Pre.class, event -> buffer = event.getMultiBufferSource());
-    NeoForge.EVENT_BUS.addListener(EventPriority.LOWEST, false, RenderLivingEvent.Post.class, event -> buffer = null);
-  }
-
-  /** Wings model to render */
-  @Nullable
-  private static ElytraModel<LivingEntity> wingsModel;
+  /**
+   * Formerly registered listeners to capture the buffer from the render living event.
+   * @deprecated Buffers no longer exist in 26.3, all drawing goes through the collector passed to {@link TinkerArmorLayer}. Does nothing.
+   */
+  @Deprecated(forRemoval = true)
+  public static void init() {}
 
   /** Gets or creates the elytra model */
-  private ElytraModel<LivingEntity> getWings() {
+  private static ElytraModel getWings(boolean baby) {
+    if (baby) {
+      if (babyWingsModel == null) {
+        babyWingsModel = new ElytraModel(Minecraft.getInstance().getEntityModels().bakeLayer(ModelLayers.ELYTRA_BABY));
+      }
+      return babyWingsModel;
+    }
     if (wingsModel == null) {
-      wingsModel = new ElytraModel<>(Minecraft.getInstance().getEntityModels().bakeLayer(ModelLayers.ELYTRA));
+      wingsModel = new ElytraModel(Minecraft.getInstance().getEntityModels().bakeLayer(ModelLayers.ELYTRA));
     }
     return wingsModel;
-  }
-
-  /** Handles the unchecked cast to copy entity model properties */
-  @SuppressWarnings("unchecked")
-  public static <T extends LivingEntity> void copyProperties(EntityModel<T> base, EntityModel<?> other) {
-    base.copyPropertiesTo((EntityModel<T>)other);
   }
 }

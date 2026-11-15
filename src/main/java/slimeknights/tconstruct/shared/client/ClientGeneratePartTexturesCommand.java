@@ -6,15 +6,18 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import com.mojang.blaze3d.platform.NativeImage;
+import com.mojang.serialization.JsonOps;
 import lombok.extern.log4j.Log4j2;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.FileToIdConverter;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.entity.player.Player;
 import org.apache.commons.lang3.mutable.MutableInt;
@@ -88,7 +91,7 @@ public class ClientGeneratePartTexturesCommand {
       GeneratorConfiguration generatorConfig = loadGeneratorConfig(manager);
       if (generatorConfig.sprites.isEmpty()) {
         if (player != null) {
-          player.displayClientMessage(NO_PARTS, false);
+          player.sendSystemMessage(NO_PARTS);
         }
         return;
       }
@@ -101,7 +104,7 @@ public class ClientGeneratePartTexturesCommand {
       List<MaterialSpriteInfo> materialSprites = loadMaterialRenderInfoGenerators(manager, validMaterialId);
       if (materialSprites.isEmpty()) {
         if (player != null) {
-          player.displayClientMessage(NO_MATERIALS, false);
+          player.sendSystemMessage(NO_MATERIALS);
         }
         return;
       }
@@ -158,13 +161,13 @@ public class ClientGeneratePartTexturesCommand {
       MaterialPartTextureGenerator.runCallbacks(null, null);
       log.info("Finished generating {} textures in {} ms", count, deltaTime / 1000000f);
       if (Minecraft.getInstance().player != null) {
-        Minecraft.getInstance().player.displayClientMessage(Component.translatable(SUCCESS_KEY, count, (deltaTime / 1000000) / 1000f, GeneratePackHelper.getOutputComponent(path.toFile())), false);
+        Minecraft.getInstance().player.sendSystemMessage(Component.translatable(SUCCESS_KEY, count, (deltaTime / 1000000) / 1000f, GeneratePackHelper.getOutputComponent(path.toFile())));
       }
     } catch (Exception e) {
       long deltaTime = System.nanoTime() - time;
       log.error("Failed to generate part textures after {} ms", deltaTime / 1000000f, e);
       if (Minecraft.getInstance().player != null) {
-        Minecraft.getInstance().player.displayClientMessage(Component.translatable(FAILURE_KEY, (deltaTime / 1000000) / 1000f, e.getMessage()).withStyle(ChatFormatting.RED), false);
+        Minecraft.getInstance().player.sendSystemMessage(Component.translatable(FAILURE_KEY, (deltaTime / 1000000) / 1000f, e.getMessage()).withStyle(ChatFormatting.RED));
       }
     }
   }
@@ -287,7 +290,7 @@ public class ClientGeneratePartTexturesCommand {
   private static List<MaterialSpriteInfo> loadMaterialRenderInfoGenerators(ResourceManager manager, Predicate<MaterialVariantId> validMaterialId) {
     // first, we need to fetch all relevant JSON files
     Map<Identifier,JsonElement> jsons = new HashMap<>();
-    SimpleJsonResourceReloadListener.scanDirectory(manager, MaterialRenderInfoLoader.FOLDER, JsonHelper.DEFAULT_GSON, jsons);
+    SimpleJsonResourceReloadListener.scanDirectory(manager, FileToIdConverter.json(MaterialRenderInfoLoader.FOLDER), JsonOps.INSTANCE, ExtraCodecs.JSON, jsons);
     // final results map from texture name to sprite info
     Map<Identifier,MaterialSpriteInfo> builder = new HashMap<>();
 

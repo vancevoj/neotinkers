@@ -1,7 +1,6 @@
 package slimeknights.tconstruct.library.client.book.elements;
 
 import com.google.common.collect.ImmutableList;
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
@@ -42,7 +41,6 @@ public class PageIconLinkElement extends SizedBookElement {
       graphics.fill(this.x, this.y, this.x + this.width, this.y + this.height, this.parent.book.appearance.hoverColor | (0x77 << 24));
     }
 
-    RenderSystem.setShaderColor(1F, 1F, 1F, 1F);
     this.displayElement.draw(graphics, mouseX, mouseY, partialTicks, fontRenderer);
   }
 

@@ -1,10 +1,13 @@
 package slimeknights.tconstruct.library.client.book;
 
 import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonParseException;
+import com.mojang.serialization.JsonOps;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.resources.Identifier;
 import slimeknights.mantle.client.book.BookLoader;
 import slimeknights.mantle.client.book.data.BookData;
@@ -72,12 +75,15 @@ public class TinkerBook extends BookData {
    * Initializes the books
    */
   public static void initBook() {
-    // 1.21: Component.Serializer is no longer instantiable; deserialize via the level's registry access (or empty access if unavailable)
+    // Component.Serializer is gone; deserialize through the component codec with the level's registry access (or empty access if unavailable)
     BookLoader.registerGsonTypeAdapter(Component.class, (JsonDeserializer<Component>) (json, type, context) -> {
+      if (json == null || json.isJsonNull()) {
+        return null;
+      }
       HolderLookup.Provider provider = Minecraft.getInstance().level != null
         ? Minecraft.getInstance().level.registryAccess()
         : RegistryAccess.EMPTY;
-      return Component.Serializer.fromJson(json, provider);
+      return ComponentSerialization.CODEC.parse(provider.createSerializationContext(JsonOps.INSTANCE), json).getOrThrow(JsonParseException::new);
     });
 
     // register page types

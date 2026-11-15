@@ -2,7 +2,7 @@ package slimeknights.tconstruct.library.client.armor.texture;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.model.Model;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.OrderedSubmitNodeCollector;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -40,10 +40,24 @@ public interface ArmorTextureSupplier extends IHaveLoader {
   /** Pair of texture and color */
   interface ArmorTexture {
     /** Empty instance since caches don't support caching null. */
-    ArmorTexture EMPTY = (model, matrices, bufferSource, packedLight, packedOverlay, red, green, blue, alpha, hasGlint) -> {};
+    ArmorTexture EMPTY = new ArmorTexture() {
+      @Override
+      public <S> void submit(Model<? super S> model, S state, PoseStack matrices, OrderedSubmitNodeCollector collector, int packedLight, int packedOverlay, int color, boolean hasGlint, int outlineColor) {}
+    };
 
-    /** Renders this texture to the given model */
-    void renderTexture(Model model, PoseStack matrices, MultiBufferSource bufferSource, int packedLight, int packedOverlay, float red, float green, float blue, float alpha, boolean hasGlint);
+    /**
+     * Submits this texture on the given model. Since 26.3 nothing renders immediately, the model is drawn later using the passed state.
+     * @param model          Model to render, posed by the submit node collector using {@code state}
+     * @param state          Render state for the model
+     * @param matrices       Pose stack, captured at submit time
+     * @param collector      Collector to submit to, already ordered by the caller so stacked layers draw in order
+     * @param packedLight    Light coordinates
+     * @param packedOverlay  Overlay coordinates
+     * @param color          ARGB color multiplier for the whole model, -1 for no tint (formerly the red, green, blue and alpha floats)
+     * @param hasGlint       If true, this layer should draw the enchantment glint
+     * @param outlineColor   Entity outline color, 0 for none
+     */
+    <S> void submit(Model<? super S> model, S state, PoseStack matrices, OrderedSubmitNodeCollector collector, int packedLight, int packedOverlay, int color, boolean hasGlint, int outlineColor);
   }
 
   /** Texture variants, armor is used for helmet, chestplate, and boots, while leggings is leggings and wings is on chest for elytra */

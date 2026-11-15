@@ -8,6 +8,7 @@ import slimeknights.tconstruct.library.client.data.GenericTextureGenerator;
 import slimeknights.tconstruct.library.client.data.material.AbstractMaterialSpriteProvider.MaterialSpriteInfo;
 import slimeknights.tconstruct.library.client.data.spritetransformer.IColorMapping;
 import slimeknights.tconstruct.library.client.data.spritetransformer.RecolorSpriteTransformer;
+import slimeknights.tconstruct.library.client.data.util.ABGR32;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +37,7 @@ public class MaterialPaletteDebugGenerator extends GenericTextureGenerator {
             // set the grey value to RGB, leave alpha as 255
             int color = colorMapping.mapColor(grey | (grey << 8) | (grey << 16) | 0xFF000000);
             for (int height = 0; height < 16; height++) {
-              palette.setPixelRGBA(grey, height, color);
+              ABGR32.setPixel(palette, grey, height, color);
             }
           }
           tasks.add(saveImage(cache, entry.getKey(), palette).thenRunAsync(palette::close));

@@ -24,6 +24,7 @@ import slimeknights.mantle.client.screen.book.element.BookElement;
 import slimeknights.mantle.client.screen.book.element.ItemElement;
 import slimeknights.mantle.client.screen.book.element.TextComponentElement;
 import slimeknights.mantle.client.screen.book.element.TextElement;
+import slimeknights.mantle.recipe.helper.IngredientHelper;
 import slimeknights.mantle.util.RegistryHelper;
 import slimeknights.mantle.util.html.HtmlElement;
 import slimeknights.mantle.util.html.HtmlGroup;
@@ -60,7 +61,6 @@ import slimeknights.tconstruct.tools.TinkerToolParts;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map.Entry;
@@ -172,7 +172,7 @@ public abstract class AbstractMaterialContent extends PageContent {
       // not using #getItems or #addItems as we want to keep count of 1
       repairStacks = MaterialRecipeCache.getRecipes(materialVariant)
         .stream()
-        .flatMap(recipe -> Arrays.stream(recipe.getIngredient().getItems()))
+        .flatMap(recipe -> IngredientHelper.getStacks(recipe.getIngredient()).stream())
         .toList();
       // no repair items? use the fallbacks
       if (repairStacks.isEmpty()) {

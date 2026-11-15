@@ -1,7 +1,7 @@
 package slimeknights.tconstruct.tools.data.sprite;
 
 import net.minecraft.data.PackOutput;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.minecraft.server.packs.resources.ResourceManager;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.client.data.material.AbstractMaterialSpriteProvider;
 import slimeknights.tconstruct.library.client.data.material.TrimMaterialPaletteGenerator;
@@ -12,8 +12,8 @@ import slimeknights.tconstruct.library.materials.definition.MaterialId;
 import slimeknights.tconstruct.tools.data.material.MaterialIds;
 
 public class TinkerTrimMaterialPaletteGenerator extends TrimMaterialPaletteGenerator {
-  public TinkerTrimMaterialPaletteGenerator(PackOutput packOutput, ExistingFileHelper existingFileHelper, AbstractMaterialSpriteProvider materialProvider) {
-    super(packOutput, TConstruct.MOD_ID, existingFileHelper, materialProvider, MaterialIds.TRIM_MATERIALS);
+  public TinkerTrimMaterialPaletteGenerator(PackOutput packOutput, ResourceManager resourceManager, AbstractMaterialSpriteProvider materialProvider) {
+    super(packOutput, TConstruct.MOD_ID, resourceManager, materialProvider, MaterialIds.TRIM_MATERIALS);
   }
 
   @Override
