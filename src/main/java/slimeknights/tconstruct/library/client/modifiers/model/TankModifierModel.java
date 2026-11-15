@@ -4,7 +4,8 @@ import com.mojang.math.Transformation;
 import lombok.RequiredArgsConstructor;
 import net.minecraft.client.resources.model.geometry.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.model.Material;
+import net.minecraft.client.resources.model.sprite.Material;
+import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.fluids.FluidStack;
 import slimeknights.mantle.data.loadable.primitive.IntLoadable;
@@ -57,7 +58,7 @@ public class TankModifierModel implements ModifierModel {
     if (largeFull != null) spriteGetter.apply(largeFull);
   }
 
-  private record CacheKey(Fluid fluid, boolean partial) {}
+  private record CacheKey(Fluid fluid, DataComponentPatch components, boolean partial) {}
 
   @Nullable
   @Override
@@ -66,7 +67,7 @@ public class TankModifierModel implements ModifierModel {
     FluidStack fluid = helper.getFluid(tool);
     if (!fluid.isEmpty()) {
       // 1.21: FluidStack is component-backed and no longer exposes a tag; key on the fluid only
-      return new CacheKey(fluid.getFluid(), fluid.getAmount() + tolerance < helper.getCapacity(tool));
+      return new CacheKey(fluid.getFluid(), fluid.getComponentsPatch(), fluid.getAmount() + tolerance < helper.getCapacity(tool));
     }
     return null;
   }

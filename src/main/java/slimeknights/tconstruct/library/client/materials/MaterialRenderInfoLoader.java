@@ -5,21 +5,23 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import lombok.extern.log4j.Log4j2;
-import net.minecraft.client.Minecraft;
+import com.mojang.serialization.JsonOps;
+import net.minecraft.resources.FileToIdConverter;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.GsonHelper;
-import net.neoforged.neoforge.client.event.ModelEvent;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.fml.ModLoader;
 import net.neoforged.fml.ModLoadingContext;
+import net.neoforged.neoforge.client.event.AddClientReloadListenersEvent;
 import slimeknights.mantle.data.datamap.RegistryDataMapLoader;
 import slimeknights.mantle.data.listener.IEarlySafeManagerReloadListener;
 import slimeknights.mantle.data.loadable.field.ContextKey;
-import slimeknights.mantle.util.JsonHelper;
 import slimeknights.mantle.util.typed.TypedMap;
 import slimeknights.mantle.util.typed.TypedMapBuilder;
+import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.materials.definition.MaterialVariantId;
 import slimeknights.tconstruct.library.utils.JsonUtils;
 import slimeknights.tconstruct.library.utils.Util;
@@ -31,6 +33,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
 
 /**
  * Loads the material render info from resource packs. Loaded independently of materials loaded in data packs, so a resource needs to exist in both lists to be used.
@@ -46,18 +50,16 @@ public class MaterialRenderInfoLoader implements IEarlySafeManagerReloadListener
   /** Folder to scan for material render info JSONS */
   public static final String FOLDER = "tinkering/materials";
 
+  /** ID of the reload listener */
+  public static final Identifier ID = TConstruct.getResource("material_render_info");
+
   /**
    * Called on mod construct to register the resource listener
    */
   public static void init()  {
-    // bit of a hack: instead of registering our resource listener to the list as we should, we use the additional model registration event
-    // we do this as we need to guarantee we run before models are baked, which happens in the first stage of listeners in the bakery constructor
-    // the other option would be to wait until the atlas stitch event, though that would make it more difficult to know which sprites we need
-    ModLoadingContext.get().getActiveContainer().getEventBus().addListener(EventPriority.NORMAL, false, ModelEvent.RegisterAdditional.class, event -> {
-      if(!ModLoader.hasErrors()) {
-        INSTANCE.onReloadSafe(Minecraft.getInstance().getResourceManager());
-      }
-    });
+    // we need to guarantee we run before models are baked, which happens in the preparation stage of the model manager
+    // the render info is loaded in prepareSharedState, which runs for all listeners before any listener starts reloading
+    ModLoadingContext.get().getActiveContainer().getEventBus().addListener(EventPriority.NORMAL, false, AddClientReloadListenersEvent.class, event -> event.addListener(ID, INSTANCE));
   }
 
   /** Map of all loaded materials */
@@ -110,10 +112,24 @@ public class MaterialRenderInfoLoader implements IEarlySafeManagerReloadListener
   }
 
   @Override
+  public void prepareSharedState(SharedState state) {
+    // load before any listener reloads, models need the render info while baking
+    if (!ModLoader.hasErrors()) {
+      onReloadSafe(state.resourceManager());
+    }
+  }
+
+  @Override
+  public CompletableFuture<Void> reload(SharedState state, Executor backgroundExecutor, PreparationBarrier barrier, Executor gameExecutor) {
+    // already loaded in prepareSharedState
+    return barrier.wait(null);
+  }
+
+  @Override
   public void onReloadSafe(ResourceManager manager) {
     // first, we need to fetch all relevant JSON files
     Map<Identifier,JsonElement> jsons = new HashMap<>();
-    SimpleJsonResourceReloadListener.scanDirectory(manager, FOLDER, JsonHelper.DEFAULT_GSON, jsons);
+    SimpleJsonResourceReloadListener.scanDirectory(manager, FileToIdConverter.json(FOLDER), JsonOps.INSTANCE, ExtraCodecs.JSON, jsons);
     // final result map
     Map<MaterialVariantId,MaterialRenderInfo> map = new HashMap<>();
 

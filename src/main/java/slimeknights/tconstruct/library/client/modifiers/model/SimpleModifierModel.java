@@ -1,7 +1,7 @@
 package slimeknights.tconstruct.library.client.modifiers.model;
 
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.model.Material;
+import net.minecraft.client.resources.model.sprite.Material;
 import slimeknights.mantle.data.loadable.field.LoadableField;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 

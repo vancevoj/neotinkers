@@ -3,7 +3,7 @@ package slimeknights.tconstruct.library.client.modifiers.model;
 import com.mojang.math.Transformation;
 import net.minecraft.client.resources.model.geometry.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.model.Material;
+import net.minecraft.client.resources.model.sprite.Material;
 import net.neoforged.neoforge.common.conditions.ICondition;
 import slimeknights.mantle.data.loadable.mapping.ConditionalLoadable.ConditionalObject;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;

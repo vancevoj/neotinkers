@@ -3,8 +3,9 @@ package slimeknights.tconstruct.library.client.modifiers;
 import com.mojang.math.Transformation;
 import net.minecraft.client.resources.model.geometry.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.model.Material;
+import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.resources.Identifier;
+import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.fluids.FluidStack;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
@@ -59,7 +60,7 @@ public class FluidModifierModel extends NormalModifierModel {
     FluidStack fluid = helper.getFluid(tool);
     if (!fluid.isEmpty()) {
       // cache by modifier and fluid
-      return new FluidModifierCacheKey(entry.getModifier(), fluid.getFluid());
+      return new FluidModifierCacheKey(entry.getModifier(), fluid.getFluid(), fluid.getComponentsPatch());
     }
     return entry != ModifierEntry.EMPTY ? entry.getId() : null;
   }
@@ -87,7 +88,7 @@ public class FluidModifierModel extends NormalModifierModel {
   }
 
   /** Cache key for the model */
-  private record FluidModifierCacheKey(Modifier modifier, Fluid fluid) {}
+  private record FluidModifierCacheKey(Modifier modifier, Fluid fluid, DataComponentPatch components) {}
 
   public record Unbaked(ToolTankHelper helper) implements IUnbakedModifierModel {
     @Nullable

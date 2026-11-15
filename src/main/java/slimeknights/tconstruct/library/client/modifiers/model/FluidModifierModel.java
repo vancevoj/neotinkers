@@ -1,19 +1,28 @@
 package slimeknights.tconstruct.library.client.modifiers.model;
 
+import com.google.common.collect.Interner;
+import com.google.common.collect.Interners;
 import com.mojang.math.Transformation;
-import net.minecraft.client.resources.model.geometry.BakedQuad;
-import net.minecraft.client.resources.model.cuboid.CuboidModelElement;
+import net.minecraft.client.renderer.block.dispatch.BlockModelRotation;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModelPart;
+import net.minecraft.client.renderer.block.dispatch.ModelState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.model.Material;
-import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.client.resources.model.ModelBaker;
+import net.minecraft.client.resources.model.ResolvedModel;
+import net.minecraft.client.resources.model.geometry.BakedQuad;
+import net.minecraft.client.resources.model.sprite.Material;
+import net.minecraft.client.resources.model.sprite.MaterialBaker;
+import net.minecraft.resources.Identifier;
+import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.world.level.material.Fluid;
-import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
-import net.neoforged.neoforge.client.model.QuadTransformers;
-import net.neoforged.neoforge.client.model.SimpleModelState;
-import net.neoforged.neoforge.client.model.geometry.UnbakedGeometryHelper;
+import net.neoforged.neoforge.client.model.ComposedModelState;
+import net.neoforged.neoforge.client.model.UnbakedElementsHelper;
+import net.neoforged.neoforge.client.model.quad.MutableQuad;
 import net.neoforged.neoforge.fluids.FluidStack;
 import org.joml.Vector3f;
-import slimeknights.mantle.client.model.util.ColoredBlockModel;
+import org.joml.Vector3fc;
+import slimeknights.mantle.client.render.FluidRenderer;
+import slimeknights.mantle.client.render.FluidSprites;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.util.ItemLayerPixels;
 import slimeknights.tconstruct.library.client.model.FluidContainerModel;
@@ -22,6 +31,7 @@ import slimeknights.tconstruct.library.tools.capability.fluid.ToolTankHelper;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Consumer;
@@ -47,15 +57,15 @@ public record FluidModifierModel(@Nullable Material small, @Nullable Material la
   }
 
   /** Cache key for {@link #getCacheKey(IToolStackView, ModifierEntry)} */
-  private record CacheKey(Fluid fluid) {}
+  private record CacheKey(Fluid fluid, DataComponentPatch components) {}
 
   @Nullable
   @Override
   public Object getCacheKey(IToolStackView tool, ModifierEntry modifier) {
     FluidStack fluid = tankHelper().getFluid(tool);
     if (!fluid.isEmpty()) {
-      // 1.21: FluidStack is component-backed and no longer exposes a tag; key on the fluid only
-      return new CacheKey(fluid.getFluid());
+      // components may change the fluid tint (such as potions), so they are part of the key
+      return new CacheKey(fluid.getFluid(), fluid.getComponentsPatch());
     }
     return null;
   }
@@ -81,26 +91,77 @@ public record FluidModifierModel(@Nullable Material small, @Nullable Material la
   /** Adds quads for the given fluid */
   public static void addQuads(FluidStack fluid, Material template, Function<Material,TextureAtlasSprite> spriteGetter, Transformation transforms, Consumer<Collection<BakedQuad>> quadConsumer) {
     // must have texture for the proper state
-    // fluid properties
-    IClientFluidTypeExtensions attributes = IClientFluidTypeExtensions.of(fluid.getFluid());
-    TextureAtlasSprite fluidSprite = spriteGetter.apply(new Material(InventoryMenu.BLOCK_ATLAS, attributes.getStillTexture(fluid)));
+    // fluid properties, 26.3 moved fluid textures and tints to the fluid model
+    FluidSprites sprites = FluidRenderer.getFluidSprites(fluid);
+    Material.Baked fluidSprite = new Material.Baked(sprites.still(), false);
 
     // build fluid like the forge dynamic container model
-    // 1.21: createUnbakedItemMaskElements now takes the sprite directly (not SpriteContents)
-    List<CuboidModelElement> unbaked = UnbakedGeometryHelper.createUnbakedItemMaskElements(-1, spriteGetter.apply(template)); // Use template as mask
     // TODO: is there anything that can be done about the fluid? to prevent weird offsets?
-    // 1.21: bakeElements(List, spriteGetter, ModelState) returns the quads directly (no trailing location)
-    List<BakedQuad> fluidQuads = UnbakedGeometryHelper.bakeElements(unbaked, mat -> fluidSprite, new SimpleModelState(transforms.applyOrigin(ORIGIN).compose(FluidContainerModel.FLUID_TRANSFORM), false)); // Bake with fluid texture
+    ModelState state = new ComposedModelState(BlockModelRotation.IDENTITY, transforms.applyOrigin(ORIGIN).compose(FluidContainerModel.FLUID_TRANSFORM));
+    List<BakedQuad> maskQuads = UnbakedElementsHelper.bakeItemMaskQuads(MaskQuadBaker.INSTANCE, -1, new Material.Baked(spriteGetter.apply(template), false), fluidSprite, state).getAll(); // Use template as mask
 
-    // apply brightness and color
+    // apply fluid sprite, brightness and color. The side faces use the mask sprite in 26.3, while they used the fluid in 1.21.1
     int luminosity = fluid.getFluid().getFluidType().getLightLevel(fluid);
-    if (luminosity > 0) {
-      QuadTransformers.settingEmissivity(luminosity).processInPlace(fluidQuads);
-    }
-    int color = attributes.getTintColor(fluid);
-    if (color != -1) {
-      ColoredBlockModel.applyColorQuadTransformer(color).processInPlace(fluidQuads);
+    int color = sprites.color();
+    MutableQuad mutable = new MutableQuad();
+    List<BakedQuad> fluidQuads = new ArrayList<>(maskQuads.size());
+    for (BakedQuad quad : maskQuads) {
+      mutable.setFrom(quad);
+      if (quad.materialInfo().sprite() != fluidSprite.sprite()) {
+        mutable.setSpriteAndMoveUv(fluidSprite);
+      }
+      if (luminosity > 0) {
+        mutable.setLightEmission(luminosity);
+      }
+      if (color != -1) {
+        mutable.setColor(color);
+      }
+      fluidQuads.add(mutable.toBakedQuad());
     }
     quadConsumer.accept(fluidQuads);
+  }
+
+  /** Minimal model baker for baking item mask quads after model loading. Only supports interning quad data, used by {@link UnbakedElementsHelper#bakeItemMaskQuads(ModelBaker, int, Material.Baked, Material.Baked, ModelState)} */
+  private enum MaskQuadBaker implements ModelBaker {
+    INSTANCE;
+
+    private final Interner<Vector3fc> vectors = Interners.newWeakInterner();
+    private final Interner<BakedQuad.MaterialInfo> materialInfos = Interners.newWeakInterner();
+    private final ModelBaker.Interner interner = new ModelBaker.Interner() {
+      @Override
+      public Vector3fc vector(Vector3fc vector) {
+        return vectors.intern(vector);
+      }
+
+      @Override
+      public BakedQuad.MaterialInfo materialInfo(BakedQuad.MaterialInfo material) {
+        return materialInfos.intern(material);
+      }
+    };
+
+    @Override
+    public ResolvedModel getModel(Identifier location) {
+      throw new UnsupportedOperationException("Cannot resolve models when baking fluid quads");
+    }
+
+    @Override
+    public BlockStateModelPart missingBlockModelPart() {
+      throw new UnsupportedOperationException("Cannot fetch block model parts when baking fluid quads");
+    }
+
+    @Override
+    public MaterialBaker materials() {
+      throw new UnsupportedOperationException("Cannot bake materials when baking fluid quads");
+    }
+
+    @Override
+    public ModelBaker.Interner interner() {
+      return interner;
+    }
+
+    @Override
+    public <T> T compute(SharedOperationKey<T> key) {
+      return key.compute(this);
+    }
   }
 }

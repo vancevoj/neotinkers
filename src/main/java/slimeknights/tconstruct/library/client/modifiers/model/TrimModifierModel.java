@@ -7,11 +7,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.model.geometry.BakedQuad;
 import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.model.Material;
+import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.equipment.trim.TrimMaterial;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.ApiStatus.Internal;
@@ -23,6 +22,7 @@ import slimeknights.mantle.data.loadable.primitive.EnumLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.util.ItemLayerPixels;
 import slimeknights.tconstruct.TConstruct;
+import slimeknights.tconstruct.library.client.materials.MaterialRenderInfo;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.tools.modules.cosmetic.TrimModule;
@@ -53,6 +53,18 @@ public interface TrimModifierModel extends ModifierModel {
     return key;
   }
 
+  /**
+   * Gets the texture suffix for the given trim material. 26.3 trim materials no longer have an asset name, so this matches the permutation keys of the
+   * paletted permutation sprite sources: vanilla materials use the palette name, other namespaces are prefixed like {@link MaterialRenderInfo#getSuffix(Identifier)}.
+   * @param material  Trim material
+   * @return  Texture suffix
+   */
+  static String getMaterialSuffix(TrimMaterial material) {
+    Identifier palette = material.paletteId();
+    String path = palette.getPath();
+    return MaterialRenderInfo.getSuffix(palette.withPath(path.substring(path.lastIndexOf('/') + 1)));
+  }
+
   /** Gets the cache for the given tool */
   @Nullable
   Map<String, TrimTexture> getCache(boolean isLarge);
@@ -78,12 +90,12 @@ public interface TrimModifierModel extends ModifierModel {
           Level level = Minecraft.getInstance().level;
           if (level != null) {
             // find the material, if missing we use the base texture
-            TrimMaterial material = level.registryAccess().lookupOrThrow(Registries.TRIM_MATERIAL).get(Identifier.tryParse(materialId));
+            TrimMaterial material = level.registryAccess().lookupOrThrow(Registries.TRIM_MATERIAL).getValue(Identifier.tryParse(materialId));
             if (material != null) {
               // base location is based on the armor type
               Identifier root = getRoot(isLarge);
               // specific location based on the material
-              Identifier path = root.withSuffix("_" + material.assetName());
+              Identifier path = root.withSuffix("_" + getMaterialSuffix(material));
 
               // ensure the material sprite exists, if not we will tint the base sprite
               TextureAtlasSprite sprite = spriteGetter.apply(ModifierModel.blockAtlas(path));
@@ -91,7 +103,7 @@ public interface TrimModifierModel extends ModifierModel {
               if (MissingTextureAtlasSprite.getLocation().equals(sprite.contents().name())) {
                 // if the sprite doesn't exist, will tint the base sprite, assuming we have a component color
                 // helps for mods that don't properly provide all sprites
-                sprite = spriteGetter.apply(new Material(InventoryMenu.BLOCK_ATLAS, root));
+                sprite = spriteGetter.apply(new Material(root));
                 TextColor textColor = material.description().getStyle().getColor();
                 if (textColor != null) {
                   color = textColor.getValue() | 0xFF000000;

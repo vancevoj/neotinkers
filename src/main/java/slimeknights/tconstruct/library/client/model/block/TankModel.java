@@ -2,234 +2,434 @@ package slimeknights.tconstruct.library.client.model.block;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
-import lombok.AllArgsConstructor;
+import com.mojang.math.Transformation;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.renderer.rendertype.RenderType;
-import net.minecraft.client.resources.model.geometry.BakedQuad;
-import net.minecraft.client.resources.model.cuboid.CuboidModelElement;
-import net.minecraft.client.renderer.block.model.ItemOverrides;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.client.resources.model.Material;
-import net.minecraft.client.resources.model.ModelBaker;
+import net.minecraft.client.renderer.block.dispatch.BlockModelRotation;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModelPart;
 import net.minecraft.client.renderer.block.dispatch.ModelState;
-import net.minecraft.client.resources.model.SimpleBakedModel;
-import net.minecraft.client.resources.model.UnbakedModel;
+import net.minecraft.client.renderer.block.dispatch.SingleVariant;
+import net.minecraft.client.renderer.block.dispatch.Variant;
+import net.minecraft.client.renderer.item.CuboidItemModelWrapper;
+import net.minecraft.client.renderer.item.ItemModel;
+import net.minecraft.client.renderer.item.ItemModelResolver;
+import net.minecraft.client.renderer.item.ItemStackRenderState;
+import net.minecraft.client.renderer.item.ModelRenderProperties;
+import net.minecraft.client.resources.model.ModelBaker;
+import net.minecraft.client.resources.model.ModelDebugName;
+import net.minecraft.client.resources.model.ResolvableModel;
+import net.minecraft.client.resources.model.ResolvedModel;
+import net.minecraft.client.resources.model.SimpleModelWrapper;
+import net.minecraft.client.resources.model.cuboid.CuboidModelElement;
+import net.minecraft.client.resources.model.geometry.BakedQuad;
+import net.minecraft.client.resources.model.geometry.QuadCollection;
+import net.minecraft.client.resources.model.sprite.Material;
+import net.minecraft.client.resources.model.sprite.TextureSlots;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.world.entity.ItemOwner;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
-import net.neoforged.neoforge.client.model.IQuadTransformer;
-import net.neoforged.neoforge.model.data.ModelData;
-import net.neoforged.neoforge.client.model.geometry.IGeometryBakingContext;
-import net.neoforged.neoforge.client.model.geometry.IGeometryLoader;
-import net.neoforged.neoforge.client.model.geometry.IUnbakedGeometry;
+import net.minecraft.world.level.material.Fluid;
+import net.neoforged.neoforge.client.model.DynamicBlockStateModel;
+import net.neoforged.neoforge.client.model.UnbakedModelLoader;
+import net.neoforged.neoforge.client.model.block.CustomUnbakedBlockStateModel;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.FluidType;
-import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
+import net.neoforged.neoforge.model.data.ModelData;
+import org.joml.Matrix4fc;
+import slimeknights.mantle.client.model.RetexturedModel.RetexturedContext;
 import slimeknights.mantle.client.model.util.ColoredBlockModel;
-import slimeknights.mantle.client.model.util.ExtraTextureContext;
+import slimeknights.mantle.client.model.util.ColoredBlockModel.ColorData;
+import slimeknights.mantle.client.model.util.GeometryContextWrapper;
+import slimeknights.mantle.client.model.util.ModelHelper;
+import slimeknights.mantle.client.model.util.ModelTextureIteratable;
 import slimeknights.mantle.client.model.util.SimpleBlockModel;
+import slimeknights.mantle.client.render.FluidSprites;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.config.Config;
 import slimeknights.tconstruct.library.client.model.ModelProperties;
 import slimeknights.tconstruct.library.client.model.UniqueGuiModel;
+import slimeknights.tconstruct.smeltery.block.entity.component.TankBlockEntity;
 import slimeknights.tconstruct.smeltery.item.TankItem;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
-import java.util.function.Function;
 
 /**
- * This model contains a single scalable fluid that can either be statically rendered or rendered in the TESR. It also supports rendering fluids in the item model
+ * This model contains a single scalable fluid that can either be statically rendered or rendered in the TESR. It also supports rendering fluids in the item model.
+ * The model JSON uses the loader {@code tconstruct:tank}. To display the fluid in the block model, the blockstate needs the type {@code tconstruct:tank} ({@link #BLOCK_STATE_MODEL}),
+ * and to display it on items the client item JSON needs the type {@code tconstruct:tank_fluid} ({@link #ITEM_MODEL}). Without them the model renders statically.
  */
-@AllArgsConstructor
-public class TankModel implements IUnbakedGeometry<TankModel> {
-  protected static final Identifier BAKE_LOCATION = TConstruct.getResource("dynamic_model_baking");
-
+public class TankModel extends SimpleBlockModel {
   /** Shared loader instance */
-  public static final IGeometryLoader<TankModel> LOADER = TankModel::deserialize;
+  public static final UnbakedModelLoader<TankModel> LOADER = TankModel::deserialize;
+  /** ID of the block state model type */
+  public static final Identifier BLOCK_STATE_ID = TConstruct.getResource("tank");
+  /** ID of the item model type */
+  public static final Identifier ITEM_ID = TConstruct.getResource("tank_fluid");
 
-  protected final SimpleBlockModel model;
   @Nullable
   protected final SimpleBlockModel gui;
   protected final IncrementalFluidCuboid fluid;
   protected final boolean forceModelFluid;
 
-  @Override
-  public void resolveParents(Function<Identifier,UnbakedModel> modelGetter, IGeometryBakingContext context) {
-    model.resolveParents(modelGetter, context);
-    if (gui != null) {
-      gui.resolveParents(modelGetter, context);
-    }
+  public TankModel(SimpleBlockModel model, @Nullable SimpleBlockModel gui, IncrementalFluidCuboid fluid, boolean forceModelFluid) {
+    super(model);
+    this.gui = gui;
+    this.fluid = fluid;
+    this.forceModelFluid = forceModelFluid;
   }
 
   @Override
-  public BakedModel bake(IGeometryBakingContext owner, ModelBaker baker, Function<Material,TextureAtlasSprite> spriteGetter, ModelState transform, ItemOverrides overrides) {
-    BakedModel baked = model.bake(owner, baker, spriteGetter, transform, overrides);
-    // bake the GUI model if present
-    BakedModel bakedGui = baked;
+  public void resolveDependencies(ResolvableModel.Resolver resolver) {
+    super.resolveDependencies(resolver);
+    // the nested model is not part of the parent chain, so its parent needs to be marked
     if (gui != null) {
-      bakedGui = gui.bake(owner, baker, spriteGetter, transform, overrides);
+      Identifier guiParent = gui.parent();
+      if (guiParent != null) {
+        resolver.markDependency(guiParent);
+      }
+      gui.resolveDependencies(resolver);
     }
-    return new Baked(owner, transform, baked, bakedGui, this);
+  }
+
+  /** Finds the tank model in the given chain */
+  @Nullable
+  public static TankModel find(@Nullable ResolvedModel model) {
+    return SimpleBlockModel.findModel(model, TankModel.class);
   }
 
   /**
-   * Baked variant to load in the custom overrides
+   * Creates the logic to bake this model with fluids
+   * @param baker     Model baker
+   * @param resolved  Resolved model containing this model
+   * @param state     Model state without the root transform
+   * @param useGui    If true, bakes the GUI model elements instead of the main elements
+   * @return  Fluid baker
    */
-  private static class Baked extends UniqueGuiModel.Baked {
-    private final IGeometryBakingContext owner;
-    private final ModelState originalTransforms;
-    @SuppressWarnings("WeakerAccess")
-    protected final TankModel original;
-    private final FluidPartOverride overrides = new FluidPartOverride();
-    private final Cache<CacheKey,BakedModel> cache = CacheBuilder
-      .newBuilder()
-      .maximumSize(64)
-      .build();
-
-    /** Cache key since fluids don't do equality over amount */
-    private record CacheKey(FluidStack fluid, int increments) {}
-
-    @SuppressWarnings("WeakerAccess")
-    protected Baked(IGeometryBakingContext owner, ModelState transforms, BakedModel baked, BakedModel gui, TankModel original) {
-      super(baked, gui);
-      this.owner = owner;
-      this.originalTransforms = transforms;
-      this.original = original;
+  private FluidBaker createBaker(ModelBaker baker, ResolvedModel resolved, ModelState state, boolean useGui) {
+    ModelBaker dynamicBaker = ModelHelper.dynamicBaker(baker);
+    String debugName = resolved.debugName();
+    List<CuboidModelElement> elements;
+    TextureSlots slots;
+    if (useGui && gui != null) {
+      // gui textures fall back to the main model textures, matching the shared geometry context of the old model
+      ModelDebugName guiName = () -> debugName + "#gui";
+      ResolvedModel guiModel = baker.resolveInlineModel(gui, guiName);
+      TextureSlots.Resolver resolver = new TextureSlots.Resolver();
+      for (TextureSlots.Data data : ModelTextureIteratable.of(guiModel)) {
+        resolver.addLast(data);
+      }
+      for (TextureSlots.Data data : ModelTextureIteratable.of(resolved)) {
+        resolver.addLast(data);
+      }
+      slots = resolver.resolve(guiName);
+      elements = gui.getElements(guiModel);
+    } else {
+      slots = resolved.getTopTextureSlots();
+      elements = getElements(resolved);
     }
+    return new FluidBaker(dynamicBaker, elements, new GeometryContextWrapper(dynamicBaker, slots, () -> debugName),
+                          ModelHelper.applyRootTransform(state, resolved.getTopAdditionalProperties()), fluid, resolved.getTopAmbientOcclusion());
+  }
 
-    @Override
-    public ItemOverrides getOverrides() {
-      return overrides;
+  /** Cache key since fluids don't do equality over amount */
+  private record CacheKey(Fluid fluid, DataComponentPatch components, int increments) {}
+
+  /** Gets the cache key for the given fluid */
+  private static CacheKey cacheKey(IncrementalFluidCuboid cuboid, FluidStack fluid, int capacity) {
+    int increments = cuboid.getIncrements();
+    return new CacheKey(fluid.getFluid(), fluid.getComponentsPatch(), Mth.clamp(fluid.getAmount() * increments / capacity, 1, increments));
+  }
+
+  /** Logic to bake the model with a fluid element */
+  private record FluidBaker(ModelBaker baker, List<CuboidModelElement> elements, GeometryContextWrapper materials, ModelState transform, IncrementalFluidCuboid cuboid, boolean ambientOcclusion) {
+    /** Bakes just the model elements without a fluid */
+    private BlockStateModelPart bakeElements() {
+      QuadCollection.Builder builder = new QuadCollection.Builder();
+      for (CuboidModelElement element : elements) {
+        SimpleBlockModel.bakePart(builder, baker, element, materials, transform);
+      }
+      return new SimpleModelWrapper(builder.build(), ambientOcclusion, materials.getMaterial("particle"));
     }
 
     /**
      * Bakes the model with the given fluid element
-     * @param owner        Owner for baking, should include the fluid texture
-     * @param baseModel    Base model for original elements
-     * @param fluid        Fluid element for baking
-     * @param color        Color for the fluid part
-     * @param luminosity   Luminosity for the fluid part
+     * @param stack       Fluid to display
+     * @param increments  Scaled fluid amount
+     * @param useLight    If true, applies the fluid light level to the fluid. Disabled in the GUI model
      * @return  Baked model
      */
-    private BakedModel bakeWithFluid(IGeometryBakingContext owner, SimpleBlockModel baseModel, CuboidModelElement fluid, int color, int luminosity) {
-      // setup for baking, using dynamic location and sprite getter
-      Function<Material,TextureAtlasSprite> spriteGetter = Material::sprite;
-      TextureAtlasSprite particle = spriteGetter.apply(owner.getMaterial("particle"));
-      SimpleBakedModel.Builder builder = SimpleBlockModel.bakedBuilder(owner, ItemOverrides.EMPTY).particle(particle);
-      IQuadTransformer quadTransformer = SimpleBlockModel.applyTransform(originalTransforms, owner.getRootTransform());
+    private BlockStateModelPart bake(FluidStack stack, int increments, boolean useLight) {
+      // fetch fluid data
+      FluidSprites sprites = FluidSprites.of(stack);
+      FluidType type = stack.getFluid().getFluidType();
+      int luminosity = useLight ? type.getLightLevel(stack) : 0;
+      GeometryContextWrapper textured = new RetexturedContext(new RetexturedContext(materials, Set.of("fluid"), new Material.Baked(sprites.still(), false)),
+                                                              Set.of("flowing_fluid"), new Material.Baked(sprites.flowing(), false));
+
+      QuadCollection.Builder builder = new QuadCollection.Builder();
       // first, add all regular elements
-      for (CuboidModelElement element : baseModel.getElements()) {
-        SimpleBlockModel.bakePart(builder, owner, element, spriteGetter, originalTransforms, quadTransformer, BAKE_LOCATION);
+      for (CuboidModelElement element : elements) {
+        SimpleBlockModel.bakePart(builder, baker, element, materials, transform);
       }
       // next, add in the fluid
-      IQuadTransformer fluidTransformer = color == -1 ? quadTransformer : quadTransformer.andThen(ColoredBlockModel.applyColorQuadTransformer(color));
-      ColoredBlockModel.bakePart(builder, owner, fluid, luminosity, spriteGetter, originalTransforms.getRotation(), fluidTransformer, originalTransforms.isUvLocked(), BAKE_LOCATION);
-      return builder.build(SimpleBlockModel.getRenderTypeGroup(owner));
+      CuboidModelElement fluid = cuboid.getPart(increments, type.isLighterThanAir());
+      ColoredBlockModel.bakePart(builder, baker, fluid, new ColorData(sprites.color(), luminosity, null), textured, transform);
+      return new SimpleModelWrapper(builder.build(), ambientOcclusion, materials.getMaterial("particle"));
+    }
+  }
+
+  /** Gets all quads from the part as unculled quads, for item models */
+  private static QuadCollection toItemQuads(BlockStateModelPart part) {
+    QuadCollection.Builder builder = new QuadCollection.Builder();
+    for (BakedQuad quad : part.getQuads(null)) {
+      builder.addUnculledFace(quad);
+    }
+    for (Direction direction : Direction.values()) {
+      for (BakedQuad quad : part.getQuads(direction)) {
+        builder.addUnculledFace(quad);
+      }
+    }
+    return builder.build();
+  }
+
+
+  /* Block state model */
+
+  /** Block state model adding the fluid part from model data */
+  private static class Baked implements DynamicBlockStateModel {
+    private final Cache<CacheKey,BlockStateModelPart> cache = CacheBuilder
+      .newBuilder()
+      .maximumSize(64)
+      .build();
+    private final BlockStateModelPart base;
+    private final FluidBaker baker;
+    private final boolean forceModelFluid;
+
+    private Baked(BlockStateModelPart base, FluidBaker baker, boolean forceModelFluid) {
+      this.base = base;
+      this.baker = baker;
+      this.forceModelFluid = forceModelFluid;
     }
 
-    /**
-     * Gets the model with the fluid part added
-     * @param key  Cache key containing fluid and increments
-     * @return  Model with the fluid part
-     */
-    private BakedModel getModel(CacheKey key) {
-      // fetch fluid data
-      FluidStack stack = key.fluid();
-      IClientFluidTypeExtensions attributes = IClientFluidTypeExtensions.of(stack.getFluid());
-      FluidType type = stack.getFluid().getFluidType();
-      int color = attributes.getTintColor(stack);
-      int luminosity = type.getLightLevel(stack);
-      Map<String,Material> textures = ImmutableMap.of(
-        "fluid", new Material(InventoryMenu.BLOCK_ATLAS, attributes.getStillTexture(stack)),
-        "flowing_fluid", new Material(InventoryMenu.BLOCK_ATLAS, attributes.getFlowingTexture(stack)));
-      IGeometryBakingContext textured = new ExtraTextureContext(owner, textures);
-
-      // add fluid part
-      CuboidModelElement fluid = original.fluid.getPart(key.increments, type.isLighterThanAir());
-      // bake the model
-      BakedModel baked = bakeWithFluid(textured, original.model, fluid, color, luminosity);
-
-      // if we have GUI, bake a GUI variant
-      if (original.gui != null) {
-        baked = new UniqueGuiModel.Baked(baked, bakeWithFluid(textured, original.gui, fluid, color, 0));
+    /** Gets the fluid to render from model data, or empty if no fluid should render */
+    private FluidStack getFluid(ModelData data) {
+      if (forceModelFluid || Config.CLIENT.tankFluidModel.get()) {
+        FluidStack fluid = data.get(ModelProperties.FLUID_STACK);
+        if (fluid != null && !fluid.isEmpty()) {
+          return fluid;
+        }
       }
+      return FluidStack.EMPTY;
+    }
 
-      // return what we ended up with
+    /** Gets the part to render for the given position */
+    private BlockStateModelPart getPart(BlockAndTintGetter level, BlockPos pos) {
+      ModelData data = level.getModelData(pos);
+      FluidStack fluid = getFluid(data);
+      if (!fluid.isEmpty()) {
+        int capacity = Objects.requireNonNullElse(data.get(ModelProperties.TANK_CAPACITY), fluid.getAmount());
+        CacheKey key = cacheKey(baker.cuboid, fluid, capacity);
+        try {
+          return cache.get(key, () -> baker.bake(fluid, key.increments, true));
+        } catch (ExecutionException e) {
+          TConstruct.LOG.error(e);
+        }
+      }
+      return base;
+    }
+
+    @Override
+    public Object createGeometryKey(BlockAndTintGetter level, BlockPos pos, BlockState state, RandomSource random) {
+      ModelData data = level.getModelData(pos);
+      FluidStack fluid = getFluid(data);
+      if (fluid.isEmpty()) {
+        return new GeometryKey(this, null);
+      }
+      int capacity = Objects.requireNonNullElse(data.get(ModelProperties.TANK_CAPACITY), fluid.getAmount());
+      return new GeometryKey(this, cacheKey(baker.cuboid, fluid, capacity));
+    }
+
+    @Override
+    public void collectParts(BlockAndTintGetter level, BlockPos pos, BlockState state, RandomSource random, List<BlockStateModelPart> parts) {
+      parts.add(getPart(level, pos));
+    }
+
+    @Override
+    public Material.Baked particleMaterial() {
+      return base.particleMaterial();
+    }
+
+    @Override
+    @BakedQuad.MaterialFlags
+    public int materialFlags() {
+      return base.materialFlags();
+    }
+
+    @Override
+    @BakedQuad.MaterialFlags
+    public int materialFlags(BlockAndTintGetter level, BlockPos pos, BlockState state) {
+      return getPart(level, pos).materialFlags();
+    }
+  }
+
+  /** Key for geometry caching */
+  private record GeometryKey(Baked model, @Nullable CacheKey fluid) {}
+
+  /** Unbaked block state model, parsed from blockstate JSON as a variant with {@code "type": "tconstruct:tank"} */
+  public record BlockStateUnbaked(Variant variant) implements CustomUnbakedBlockStateModel {
+    public static final MapCodec<BlockStateUnbaked> CODEC = Variant.MAP_CODEC.xmap(BlockStateUnbaked::new, BlockStateUnbaked::variant);
+
+    @Override
+    public MapCodec<BlockStateUnbaked> codec() {
+      return CODEC;
+    }
+
+    @Override
+    public void resolveDependencies(ResolvableModel.Resolver resolver) {
+      variant.resolveDependencies(resolver);
+    }
+
+    @Override
+    public BlockStateModel bake(ModelBaker baker) {
+      ResolvedModel resolved = baker.getModel(variant.modelLocation());
+      ModelState state = variant.modelState().asModelState();
+      BlockStateModelPart base = SimpleModelWrapper.bake(baker, resolved, state);
+      TankModel model = find(resolved);
+      if (model == null) {
+        TConstruct.LOG.warn("Model {} used with blockstate type {} does not use the tank loader, fluids will not display", variant.modelLocation(), BLOCK_STATE_ID);
+        return new SingleVariant(base);
+      }
+      // model was rejected by vanilla, no sense adding fluids to the missing model
+      if (base == baker.missingBlockModelPart()) {
+        return new SingleVariant(base);
+      }
+      return new Baked(base, model.createBaker(baker, resolved, state, false), model.forceModelFluid);
+    }
+  }
+  /** Codec for the block state model type */
+  public static final MapCodec<? extends CustomUnbakedBlockStateModel> BLOCK_STATE_MODEL = BlockStateUnbaked.CODEC;
+
+
+  /* Item model */
+
+  /**
+   * Unbaked item model adding the fluid from the tank item, used as {@code {"type": "tconstruct:tank_fluid", "model": "tconstruct:block/smeltery/seared/fuel_tank"}}.
+   * Also swaps to the GUI model in the GUI if the tank model defines one.
+   * @param model           Model location
+   * @param transformation  Extra transformation
+   */
+  public record ItemUnbaked(Identifier model, Optional<Transformation> transformation) implements ItemModel.Unbaked {
+    public static final MapCodec<ItemUnbaked> MAP_CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
+      Identifier.CODEC.fieldOf("model").forGetter(ItemUnbaked::model),
+      Transformation.EXTENDED_CODEC.optionalFieldOf("transformation").forGetter(ItemUnbaked::transformation)
+    ).apply(inst, ItemUnbaked::new));
+
+    @Override
+    public MapCodec<ItemUnbaked> type() {
+      return MAP_CODEC;
+    }
+
+    @Override
+    public void resolveDependencies(ResolvableModel.Resolver resolver) {
+      resolver.markDependency(model);
+    }
+
+    @Override
+    public ItemModel bake(ItemModel.BakingContext context, Matrix4fc transformation) {
+      ModelBaker baker = context.blockModelBaker();
+      ResolvedModel resolved = baker.getModel(model);
+      TextureSlots textureSlots = resolved.getTopTextureSlots();
+      ModelRenderProperties properties = ModelRenderProperties.fromResolvedModel(baker, resolved, textureSlots);
+      Matrix4fc modelTransform = Transformation.compose(transformation, this.transformation);
+      ItemModel base = new CuboidItemModelWrapper(List.of(), resolved.bakeTopGeometry(textureSlots, baker, BlockModelRotation.IDENTITY), properties, modelTransform);
+      TankModel tankModel = find(resolved);
+      if (tankModel == null) {
+        TConstruct.LOG.warn("Model {} used with item model type {} does not use the tank loader, fluids will not display", model, ITEM_ID);
+        return base;
+      }
+      // bake the GUI model if present
+      ItemModel gui = base;
+      FluidBaker guiBaker = null;
+      if (tankModel.gui != null) {
+        guiBaker = tankModel.createBaker(baker, resolved, BlockModelRotation.IDENTITY, true);
+        gui = new CuboidItemModelWrapper(List.of(), toItemQuads(guiBaker.bakeElements()), properties, modelTransform);
+      }
+      return new TankItemModel(base, gui, tankModel.createBaker(baker, resolved, BlockModelRotation.IDENTITY, false), guiBaker, properties, modelTransform);
+    }
+  }
+  /** Codec for the item model type */
+  public static final MapCodec<? extends ItemModel.Unbaked> ITEM_MODEL = ItemUnbaked.MAP_CODEC;
+
+  /** Item model adding the fluid part to the item model */
+  private static class TankItemModel implements ItemModel {
+    private final Cache<CacheKey,ItemModel> cache = CacheBuilder
+      .newBuilder()
+      .maximumSize(64)
+      .build();
+    private final ItemModel base;
+    private final ItemModel gui;
+    private final FluidBaker baker;
+    @Nullable
+    private final FluidBaker guiBaker;
+    private final ModelRenderProperties properties;
+    private final Matrix4fc transformation;
+
+    private TankItemModel(ItemModel base, ItemModel gui, FluidBaker baker, @Nullable FluidBaker guiBaker, ModelRenderProperties properties, Matrix4fc transformation) {
+      this.base = base;
+      this.gui = gui;
+      this.baker = baker;
+      this.guiBaker = guiBaker;
+      this.properties = properties;
+      this.transformation = transformation;
+    }
+
+    /** Creates an item model for the given part */
+    private ItemModel toItemModel(BlockStateModelPart part) {
+      return new CuboidItemModelWrapper(List.of(), toItemQuads(part), properties, transformation);
+    }
+
+    /** Gets the model with the fluid part added */
+    private ItemModel getModel(FluidStack fluid, CacheKey key) {
+      ItemModel baked = toItemModel(baker.bake(fluid, key.increments, true));
+      // if we have GUI, bake a GUI variant
+      if (guiBaker != null) {
+        baked = new UniqueGuiModel.Baked(baked, toItemModel(guiBaker.bake(fluid, key.increments, false)));
+      }
       return baked;
     }
 
-    /**
-     * Gets a cached model with the fluid part added
-     * @param fluid  Scaled contained fluid
-     * @return  Cached model
-     */
-    private BakedModel getCachedModel(CacheKey fluid) {
-      try {
-        return cache.get(fluid, () -> getModel(fluid));
-      }
-      catch(ExecutionException e) {
-        TConstruct.LOG.error(e);
-        return this;
-      }
-    }
-
-    /**
-     * Gets a cached model with the fluid part added
-     * @param fluid     Fluid contained
-     * @param capacity  Tank capacity
-     * @return  Cached model
-     */
-    private BakedModel getCachedModel(FluidStack fluid, int capacity) {
-      int increments = original.fluid.getIncrements();
-      return getCachedModel(new CacheKey(fluid.copy(), Mth.clamp(fluid.getAmount() * increments / capacity, 1, increments)));
-    }
-
-    @Nonnull
     @Override
-    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, RandomSource rand, ModelData data, @Nullable RenderType renderType) {
-      if ((original.forceModelFluid || Config.CLIENT.tankFluidModel.get()) && data.has(ModelProperties.FLUID_STACK)) {
-        FluidStack fluid = data.get(ModelProperties.FLUID_STACK);
-        if (fluid != null && !fluid.isEmpty()) {
-          int capacity = Objects.requireNonNullElse(data.get(ModelProperties.TANK_CAPACITY), fluid.getAmount());
-          return getCachedModel(fluid, capacity).getQuads(state, side, rand, ModelData.EMPTY, renderType);
+    public void update(ItemStackRenderState output, ItemStack stack, ItemModelResolver resolver, ItemDisplayContext displayContext, @Nullable ClientLevel level, @Nullable ItemOwner owner, int seed) {
+      ItemModel model = displayContext == ItemDisplayContext.GUI ? gui : base;
+      // determine fluid
+      FluidStack fluid = TankItem.getFluid(stack);
+      if (!fluid.isEmpty()) {
+        CacheKey key = cacheKey(baker.cuboid, fluid, TankBlockEntity.getCapacity(stack.getItem()));
+        try {
+          model = cache.get(key, () -> getModel(fluid, key));
+        } catch (ExecutionException e) {
+          TConstruct.LOG.error(e);
         }
       }
-      return originalModel.getQuads(state, side, rand, data, renderType);
-    }
-
-    /** Override to add the fluid part to the item model */
-    private class FluidPartOverride extends ItemOverrides {
-      @Override
-      public BakedModel resolve(BakedModel model, ItemStack stack, @Nullable ClientLevel world, @Nullable LivingEntity entity, int seed) {
-        // ensure we have a fluid
-        if (stack.isEmpty() || !stack.has(DataComponents.CUSTOM_DATA)) {
-          return model;
-        }
-        // determine fluid
-        FluidTank tank = TankItem.getTank(stack, 1);
-        if (tank.isEmpty()) {
-          return model;
-        }
-        // always baked model as this override is only used in our model
-        return getCachedModel(tank.getFluid(), tank.getCapacity());
-      }
+      model.update(output, stack, resolver, displayContext, level, owner, seed);
     }
   }
 

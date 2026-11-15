@@ -2,11 +2,10 @@ package slimeknights.tconstruct.library.client.modifiers.model;
 
 import com.mojang.math.Transformation;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.resources.model.geometry.BakedQuad;
 import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.model.Material;
+import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
@@ -48,9 +47,13 @@ public record BannerModifierModel(@Nullable Identifier smallPrefix, @Nullable Id
   public void validate(Function<Material, TextureAtlasSprite> spriteGetter) {
     // since these are dynamically loaded, condition based on the config option
     if (Config.CLIENT.logMissingModifierTextures.get()) {
-      // 1.21: Sheets.SHIELD_MATERIALS is keyed by Identifier rather than ResourceKey<BannerPattern>
-      for (Identifier key : Sheets.SHIELD_MATERIALS.keySet()) {
-        String suffix = MaterialRenderInfo.getSuffix(key);
+      // 26.3: Sheets.SHIELD_MATERIALS is gone, banner patterns are only known through the registry, so validation needs a loaded level
+      Level level = Minecraft.getInstance().level;
+      if (level == null) {
+        return;
+      }
+      for (BannerPattern pattern : level.registryAccess().lookupOrThrow(Registries.BANNER_PATTERN)) {
+        String suffix = MaterialRenderInfo.getSuffix(pattern.assetId());
         if (smallPrefix != null) {
           spriteGetter.apply(ModifierModel.blockAtlas(smallPrefix.withSuffix(suffix)));
         }
@@ -84,9 +87,9 @@ public record BannerModifierModel(@Nullable Identifier smallPrefix, @Nullable Id
         if (registry != null) {
           for (int i = 0; i < list.size(); i++) {
             // map the stored registry-key path back to the pattern, then use its texture asset id
-            CompoundTag tag = list.getCompound(i);
-            int color = tag.getInt(BannerModule.KEY_COLOR);
-            BannerPattern pattern = registry.get(Identifier.withDefaultNamespace(tag.getString(BannerModule.KEY_PATTERN)));
+            CompoundTag tag = list.getCompoundOrEmpty(i);
+            int color = tag.getIntOr(BannerModule.KEY_COLOR, 0);
+            BannerPattern pattern = registry.getValue(Identifier.withDefaultNamespace(tag.getStringOr(BannerModule.KEY_PATTERN, "")));
             if (pattern != null) {
               Identifier patternLocation = pattern.assetId();
               TextureAtlasSprite sprite = spriteGetter.apply(ModifierModel.blockAtlas(prefix.withSuffix(MaterialRenderInfo.getSuffix(patternLocation))));

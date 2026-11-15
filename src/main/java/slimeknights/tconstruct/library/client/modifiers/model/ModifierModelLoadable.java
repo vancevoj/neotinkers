@@ -4,7 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
-import net.minecraft.client.resources.model.Material;
+import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.GsonHelper;
@@ -75,7 +75,7 @@ public enum ModifierModelLoadable implements Loadable<ModifierModel> {
         // if everything is default, we can serialize as string
         Material small = normal.small();
         if (small != null && normal.large() == null && normal.luminosity() == 0 && normal.color() == -1) {
-          return new JsonPrimitive(small.texture().toString());
+          return new JsonPrimitive(small.sprite().toString());
         }
       }
       return NormalModifierModel.LOADER.serialize(normal);

@@ -4,7 +4,7 @@ import net.minecraft.util.ARGB;
 import com.mojang.math.Transformation;
 import net.minecraft.client.resources.model.geometry.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.model.Material;
+import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.Identifier;
 import slimeknights.mantle.client.model.util.MantleItemLayerModel;

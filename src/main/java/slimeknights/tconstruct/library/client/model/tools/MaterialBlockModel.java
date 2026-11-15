@@ -5,43 +5,53 @@ import com.google.common.cache.CacheBuilder;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.mojang.math.Transformation;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.renderer.rendertype.RenderType;
-import net.minecraft.client.resources.model.geometry.BakedQuad;
-import net.minecraft.client.resources.model.cuboid.CuboidModelElement;
-import net.minecraft.client.resources.model.cuboid.CuboidFace;
-import net.minecraft.client.renderer.block.model.ItemOverrides;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.client.resources.model.Material;
-import net.minecraft.client.resources.model.ModelBaker;
+import net.minecraft.client.renderer.block.dispatch.BlockModelRotation;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModelPart;
 import net.minecraft.client.renderer.block.dispatch.ModelState;
-import net.minecraft.client.resources.model.SimpleBakedModel;
-import net.minecraft.client.resources.model.UnbakedModel;
+import net.minecraft.client.renderer.block.dispatch.SingleVariant;
+import net.minecraft.client.renderer.block.dispatch.Variant;
+import net.minecraft.client.renderer.item.CuboidItemModelWrapper;
+import net.minecraft.client.renderer.item.ItemModel;
+import net.minecraft.client.renderer.item.ItemModelResolver;
+import net.minecraft.client.renderer.item.ItemStackRenderState;
+import net.minecraft.client.renderer.item.ModelRenderProperties;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.model.ModelBaker;
+import net.minecraft.client.resources.model.ResolvableModel;
+import net.minecraft.client.resources.model.ResolvedModel;
+import net.minecraft.client.resources.model.SimpleModelWrapper;
+import net.minecraft.client.resources.model.cuboid.CuboidFace;
+import net.minecraft.client.resources.model.cuboid.CuboidModelElement;
+import net.minecraft.client.resources.model.geometry.BakedQuad;
+import net.minecraft.client.resources.model.geometry.QuadCollection;
+import net.minecraft.client.resources.model.sprite.Material;
+import net.minecraft.client.resources.model.sprite.MaterialBaker;
+import net.minecraft.client.resources.model.sprite.TextureSlots;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ItemOwner;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.client.model.IQuadTransformer;
+import net.neoforged.neoforge.client.model.DynamicBlockStateModel;
+import net.neoforged.neoforge.client.model.UnbakedModelLoader;
+import net.neoforged.neoforge.client.model.block.CustomUnbakedBlockStateModel;
 import net.neoforged.neoforge.model.data.ModelData;
-import net.neoforged.neoforge.model.data.ModelProperty;
-import net.neoforged.neoforge.client.model.geometry.IGeometryBakingContext;
-import net.neoforged.neoforge.client.model.geometry.IGeometryLoader;
-import net.neoforged.neoforge.client.model.geometry.IUnbakedGeometry;
-import org.jetbrains.annotations.NotNull;
-import slimeknights.mantle.Mantle;
+import org.joml.Matrix4fc;
 import slimeknights.mantle.client.model.RetexturedModel;
 import slimeknights.mantle.client.model.RetexturedModel.RetexturedContext;
 import slimeknights.mantle.client.model.util.ColoredBlockModel;
-import slimeknights.mantle.client.model.util.DynamicBakedWrapper;
-import slimeknights.mantle.client.model.util.ExtraTextureContext;
+import slimeknights.mantle.client.model.util.ColoredBlockModel.ColorData;
+import slimeknights.mantle.client.model.util.GeometryContextWrapper;
 import slimeknights.mantle.client.model.util.ModelHelper;
 import slimeknights.mantle.client.model.util.SimpleBlockModel;
 import slimeknights.mantle.data.loadable.Loadable;
@@ -58,7 +68,6 @@ import slimeknights.tconstruct.library.materials.definition.MaterialVariantId;
 import slimeknights.tconstruct.library.tools.nbt.MaterialIdNBT;
 import slimeknights.tconstruct.library.tools.part.IMaterialItem;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.List;
@@ -72,388 +81,418 @@ import java.util.function.Function;
 /**
  * Model that handles dynamic materials using the block model elements style.
  * When used for tools, notably does not handle modifier models, just materials are considered.
+ * The model JSON uses the loader {@code tconstruct:material_block}, the blockstate needs the type {@code tconstruct:material_block} ({@link #BLOCK_STATE_MODEL}) and the
+ * client item JSON the type {@code tconstruct:material_block} ({@link #ITEM_MODEL}) to swap in materials. Without them the model renders statically.
  * @see MaterialModel
  * @see ToolModel
  */
-@RequiredArgsConstructor
-public class MaterialBlockModel implements IUnbakedGeometry<MaterialBlockModel> {
-  /** Location for dynamic baking */
-  private static final Identifier BAKE_LOCATION = Mantle.getResource("material_block_dynamic");
+public class MaterialBlockModel extends SimpleBlockModel {
+  /** ID of the blockstate and item model types */
+  public static final Identifier ID = TConstruct.getResource("material_block");
   /** Loadable for the list of material textures */
   private static final Loadable<Set<String>> MATERIAL = StringLoadable.DEFAULT.set(ArrayLoadable.COMPACT);
   /** Loadable for the list of parts, each a list of material textures */
   private static final Loadable<List<Set<String>>> PARTS = StringLoadable.DEFAULT.set(ArrayLoadable.COMPACT_OR_EMPTY).list(1);
   /** Shared loader instance */
-  public static final IGeometryLoader<MaterialBlockModel> LOADER = MaterialBlockModel::deserialize;
+  public static final UnbakedModelLoader<MaterialBlockModel> LOADER = MaterialBlockModel::deserialize;
 
   public enum ModelType { TOOL, PART, ANVIL }
 
-  /** Block model to retexture. Expected each element is a single material or not a material, no multiple or mixed. */
-  private final SimpleBlockModel model;
   /** List of parts, each is a set of materials to retexture */
   private final List<Set<String>> parts;
   /** Type of model to create. */
   private final ModelType type;
 
+  /**
+   * Creates a new model
+   * @param model  Block model to retexture. Expected each element is a single material or not a material, no multiple or mixed.
+   * @param parts  List of parts, each is a set of materials to retexture
+   * @param type   Type of model to create
+   */
+  public MaterialBlockModel(SimpleBlockModel model, List<Set<String>> parts, ModelType type) {
+    super(model);
+    this.parts = parts;
+    this.type = type;
+  }
+
   /** Loads a material block model from JSON */
   public static MaterialBlockModel deserialize(JsonObject json, JsonDeserializationContext context) {
     SimpleBlockModel model = SimpleBlockModel.deserialize(json, context);
 
-    // if retextured is set, using the anvil style model
     if (json.has("retextured")) {
       return new MaterialBlockModel(model, List.of(MATERIAL.getIfPresent(json, "retextured")), ModelType.ANVIL);
     }
-    // if material is set, using the parts model
     if (json.has("material")) {
       return new MaterialBlockModel(model, List.of(MATERIAL.getIfPresent(json, "material")), ModelType.PART);
     }
-    // otherwise, using the tool model
     return new MaterialBlockModel(model, PARTS.getIfPresent(json, "parts"), ModelType.TOOL);
   }
 
-  @Override
-  public void resolveParents(Function<Identifier, UnbakedModel> modelGetter, IGeometryBakingContext context) {
-    model.resolveParents(modelGetter, context);
+  /** Finds the model in the given chain */
+  @Nullable
+  public static MaterialBlockModel find(@Nullable ResolvedModel model) {
+    return SimpleBlockModel.findModel(model, MaterialBlockModel.class);
   }
 
-  @Override
-  public BakedModel bake(IGeometryBakingContext owner, ModelBaker baker, Function<Material, TextureAtlasSprite> spriteGetter, ModelState transform, ItemOverrides overrides) {
-    BakedModel baked = model.bake(owner, baker, spriteGetter, transform, overrides);
-    List<Set<String>> parts = this.parts.stream().map(part -> RetexturedModel.getAllRetextured(owner, model, part)).toList();
-
-    // part model - fetches material from NBT field
-    if (type == ModelType.PART) {
-      return new BakedPart(baked, owner, model, transform, parts.get(0));
-    }
-    // anvil model - fetches material from NBT field, but can also choose block texture
-    if (type == ModelType.ANVIL) {
-      return new BakedAnvil(baked, owner, model, transform, parts.get(0));
-    }
-    // for tools with just one material, use simpler tool model
-    if (parts.size() == 1) {
-      return new SimpleBakedTool(baked, owner, model, transform, parts.get(0));
-    }
-    // standard tool with multiple materials
+  /**
+   * Creates the logic to rebake this model
+   * @param baker     Model baker
+   * @param resolved  Resolved model containing this model
+   * @param state     Model state without the root transform
+   * @param base      Model with no materials
+   * @return  Rebake logic
+   */
+  private Rebaker createRebaker(ModelBaker baker, ResolvedModel resolved, ModelState state, BlockStateModelPart base) {
+    ModelBaker dynamicBaker = ModelHelper.dynamicBaker(baker);
+    String debugName = resolved.debugName();
+    TextureSlots slots = resolved.getTopTextureSlots();
+    List<Set<String>> parts = this.parts.stream().map(part -> RetexturedModel.getAllRetextured(resolved, part)).toList();
     boolean particleRetextured = parts.stream().anyMatch(set -> set.contains("particle"));
-    return new BakedTool(baked, owner, model, transform, parts, particleRetextured);
+    return new Rebaker(dynamicBaker, getElements(resolved), slots, new GeometryContextWrapper(dynamicBaker, slots, () -> debugName), () -> debugName,
+                       ModelHelper.applyRootTransform(state, resolved.getTopAdditionalProperties()), parts, particleRetextured, resolved.getTopAmbientOcclusion(), base);
   }
 
-  /** Common logic between all variants of baking */
-  private static abstract class AbstractBaked<T,P> extends DynamicBakedWrapper<BakedModel> {
-    protected final IGeometryBakingContext owner;
-    protected final SimpleBlockModel model;
-    protected final ModelState transform;
-    protected final boolean particleRetextured;
-    protected final ModelProperty<P> property;
-
-    private AbstractBaked(BakedModel original, IGeometryBakingContext owner, SimpleBlockModel model, ModelState transform, boolean particleRetextured, ModelProperty<P> property) {
-      super(original);
-      this.owner = owner;
-      this.model = model;
-      this.transform = transform;
-      this.particleRetextured = particleRetextured;
-      this.property = property;
-    }
-
-    /** Fetches textures from the materials for baking */
-    protected abstract void fetchMaterials(T materials, Function<Material, TextureAtlasSprite> spriteGetter, Map<String, Material> replacements, Map<String, TintedSprite> tints);
-
-    /** Fetches a single material. For use in {@link #fetchMaterials(Object, Function, Map, Map)} */
-    protected void fetchMaterial(MaterialVariantId material, Set<String> retextured, Function<Material, TextureAtlasSprite> spriteGetter, Map<String, Material> replacements, Map<String, TintedSprite> tints) {
-      // fetch render info
+  /** Logic to rebake the model with materials */
+  private record Rebaker(ModelBaker baker, List<CuboidModelElement> elements, TextureSlots slots, GeometryContextWrapper materials, net.minecraft.client.resources.model.ModelDebugName name,
+                         ModelState transform, List<Set<String>> parts, boolean particleRetextured, boolean ambientOcclusion, BlockStateModelPart base) {
+    /** Fetches a single material */
+    private void fetchMaterial(MaterialVariantId material, Set<String> retextured, Function<Material,TextureAtlasSprite> spriteGetter, Map<String,Material.Baked> replacements, Map<String,TintedSprite> tints) {
       Optional<MaterialRenderInfo> optional = MaterialRenderInfoLoader.INSTANCE.getRenderInfo(material);
       if (optional.isPresent()) {
         MaterialRenderInfo info = optional.get();
 
-        // may have multiple names going to the same texture
-        Map<Material, TintedSprite> seen = new HashMap<>();
+        Map<Material,TintedSprite> seen = new HashMap<>();
         for (String name : retextured) {
-          Material texture = owner.getMaterial(name);
+          Material texture = slots.getMaterial(name);
+          if (texture == null) {
+            continue;
+          }
           TintedSprite tinted = seen.get(texture);
           if (tinted == null) {
             tinted = info.getSprite(texture, spriteGetter);
             seen.put(texture, tinted);
           }
-          TextureAtlasSprite sprite = tinted.sprite();
-          // bit annoying that we have to unwrap the sprite, but its needed to be fetched to check if its present
-          replacements.put(name, new Material(sprite.atlasLocation(), sprite.contents().name()));
-          // if we have a transform, save that with the name too
+          replacements.put(name, new Material.Baked(tinted.sprite(), texture.forceTranslucent()));
           if (tinted.color() != -1 || tinted.emissivity() > 0) {
-            tints.put('#' + name, tinted);
+            tints.put(name, tinted);
           }
         }
       }
     }
 
-    /** Retextures with the given materials list */
-    protected BakedModel bakeWith(T materials) {
-      // map of name to replacement texture
-      Map<String,Material> replacements = new HashMap<>();
-      // map of name to transformation to apply, will likely be smaller than replacement textures
+    /**
+     * Retextures with the given materials list
+     * @param materials  Material for each part, missing materials skip the part
+     * @return  Baked part
+     */
+    private BlockStateModelPart bakeWith(List<MaterialVariantId> materials) {
+      Map<String,Material.Baked> replacements = new HashMap<>();
       Map<String,TintedSprite> tints = new HashMap<>();
+      MaterialBaker materialBaker = baker.materials();
+      Function<Material,TextureAtlasSprite> spriteGetter = mat -> materialBaker.get(mat, name).sprite();
+      for (int i = 0; i < parts.size() && i < materials.size(); i++) {
+        fetchMaterial(materials.get(i), parts.get(i), spriteGetter, replacements, tints);
+      }
 
-      // delegate material fetching
-      Function<Material,TextureAtlasSprite> spriteGetter = Material::sprite;
-      fetchMaterials(materials, spriteGetter, replacements, tints);
-
-      // quick exit in case we found nothing, should never happen
       if (replacements.isEmpty()) {
-        return originalModel;
+        return base;
       }
 
-      // create context to swap the textures
-      IGeometryBakingContext retextureContext = new ExtraTextureContext(owner, replacements);
-
-      // if no parts need colors, we can just use standard baking
+      GeometryContextWrapper context = new GeometryContextWrapper(texture -> {
+        Material.Baked replacement = replacements.get(texture);
+        return replacement != null ? replacement : this.materials.getMaterial(texture);
+      }, texture -> replacements.containsKey(texture) || this.materials.hasMaterial(texture));
+      QuadCollection quads;
       if (tints.isEmpty()) {
-        return model.bakeDynamic(retextureContext, transform);
-      }
-
-      // need to tint or apply light to some textures
-      TextureAtlasSprite particle = spriteGetter.apply(owner.getMaterial("particle"));
-      SimpleBakedModel.Builder builder = SimpleBlockModel.bakedBuilder(owner, originalModel.getOverrides()).particle(particle);
-      List<CuboidModelElement> elements = model.getElements();
-      int size = elements.size();
-      IQuadTransformer quadTransformer = SimpleBlockModel.applyTransform(transform, owner.getRootTransform());
-      Transformation transformation = transform.getRotation();
-      boolean uvlock = transform.isUvLocked();
-      for (int i = 0; i < size; i++) {
-        CuboidModelElement part = elements.get(i);
-        // determine if any of the faces needs a tint
-        // for simplicity, assume the whole part is tinted if so. Build your model to separate distinct material faces if needed
-        TintedSprite tint = null;
-        for (CuboidFace face : part.faces.values()) {
-          TintedSprite faceTint = tints.get(face.texture());
-          if (faceTint != null) {
-            tint = faceTint;
-            break;
+        quads = SimpleBlockModel.bakeModel(baker, elements, context, transform);
+      } else {
+        QuadCollection.Builder builder = new QuadCollection.Builder();
+        for (CuboidModelElement part : elements) {
+          TintedSprite tint = null;
+          for (CuboidFace face : part.faces().values()) {
+            TintedSprite faceTint = tints.get(ModelHelper.stripReference(face.texture()));
+            if (faceTint != null) {
+              tint = faceTint;
+              break;
+            }
+          }
+          if (tint != null) {
+            ColoredBlockModel.bakePart(builder, baker, part, new ColorData(tint.color(), tint.emissivity(), null), context, transform);
+          } else {
+            SimpleBlockModel.bakePart(builder, baker, part, context, transform);
           }
         }
-        // apply color if we have it
-        if (tint != null) {
-          IQuadTransformer partTransformer = tint.color() == -1 ? quadTransformer : quadTransformer.andThen(ColoredBlockModel.applyColorQuadTransformer(tint.color()));
-          ColoredBlockModel.bakePart(builder, retextureContext, part, tint.emissivity(), spriteGetter, transformation, partTransformer, uvlock, BAKE_LOCATION);
-        } else {
-          SimpleBlockModel.bakePart(builder, retextureContext, part, spriteGetter, transform, quadTransformer, BAKE_LOCATION);
-        }
+        quads = builder.build();
       }
-      return builder.build(SimpleBlockModel.getRenderTypeGroup(owner));
+      return new SimpleModelWrapper(quads, ambientOcclusion, context.getMaterial("particle"));
     }
 
-    /** Gets the cached model for the given materials. */
-    protected abstract BakedModel getCachedModel(P materials);
-
-    @Override
-    public TextureAtlasSprite getParticleIcon(@NotNull ModelData data) {
-      if (particleRetextured) {
-        P materials = data.get(property);
-        if (materials != null) {
-          return getCachedModel(materials).getParticleIcon(data);
-        }
-      }
-      return originalModel.getParticleIcon(data);
-    }
-
-    @Nonnull
-    @Override
-    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, RandomSource rand, ModelData extraData, @Nullable RenderType renderType) {
-      P materials = extraData.get(property);
-      if (materials != null) {
-        return getCachedModel(materials).getQuads(state, side, rand, extraData, renderType);
-      }
-      return originalModel.getQuads(state, side, rand, extraData, renderType);
+    /** Rebakes the model with a specific texture. See also {@link RetexturedModel} */
+    private BlockStateModelPart bakeWithBlock(Material.Baked texture) {
+      RetexturedContext context = new RetexturedContext(materials, parts.getFirst(), texture);
+      return new SimpleModelWrapper(SimpleBlockModel.bakeModel(baker, elements, context, transform), ambientOcclusion, context.getMaterial("particle"));
     }
   }
 
-  /** Custom overrides logic to sub in materials from NBT. */
-  private static class MaterialsOverrides extends NestedOverrides {
-    private final AbstractBaked<?, MaterialIdNBT> baked;
-    public MaterialsOverrides(AbstractBaked<?,MaterialIdNBT> baked, ItemOverrides nested) {
-      super(nested);
-      this.baked = baked;
-    }
-
-    @Nullable
-    @Override
-    public BakedModel resolve(BakedModel originalModel, ItemStack stack, @Nullable ClientLevel world, @Nullable LivingEntity entity, int seed) {
-      BakedModel resolved = super.resolve(originalModel, stack, world, entity, seed);
-      if (resolved != originalModel) {
-        return resolved;
-      }
-      if (stack.isEmpty() || !stack.has(DataComponents.CUSTOM_DATA)) {
-        return originalModel;
-      }
-      return baked.getCachedModel(MaterialIdNBT.from(stack));
-    }
-  }
-
-  /** Baked model for tools with multiple materials. */
-  private static class BakedTool extends AbstractBaked<MaterialIdNBT,MaterialIdNBT> {
-    /** Cache of texture name to baked model */
-    private final Cache<MaterialIdNBT, BakedModel> cache = CacheBuilder
+  /** Caches for the various model types, shared between block and item models */
+  private static class ModelCache {
+    /** Cache of materials to baked model */
+    private final Cache<MaterialIdNBT,BlockStateModelPart> toolCache = CacheBuilder
       .newBuilder()
-      // ensure we can display every single tool that shows in JEI, plus a couple extra
-      .maximumSize(MaterialRenderInfoLoader.INSTANCE.getAllRenderInfos().size() * 3L / 2)
+      .maximumSize(Math.max(MaterialRenderInfoLoader.INSTANCE.getAllRenderInfos().size() * 3L / 2, 64))
       .build();
+    /** Cache of material to baked model */
+    private final Map<MaterialVariantId,BlockStateModelPart> materialCache = new ConcurrentHashMap<>();
+    /** Cache of block texture to baked model */
+    private final Map<Material.Baked,BlockStateModelPart> blockCache = new ConcurrentHashMap<>();
+    private final Rebaker rebaker;
+    private final ModelType type;
 
-    private final List<Set<String>> parts;
-    @Getter
-    private final ItemOverrides overrides;
-    private BakedTool(BakedModel original, IGeometryBakingContext owner, SimpleBlockModel model, ModelState transform, List<Set<String>> parts, boolean particleRetextured) {
-      super(original, owner, model, transform, particleRetextured, ModelProperties.MATERIALS);
-      this.parts = parts;
-      this.overrides = new MaterialsOverrides(this, original.getOverrides());
+    private ModelCache(Rebaker rebaker, ModelType type) {
+      this.rebaker = rebaker;
+      this.type = type;
     }
 
-    @Override
-    protected void fetchMaterials(MaterialIdNBT materials, Function<Material, TextureAtlasSprite> spriteGetter, Map<String, Material> replacements, Map<String, TintedSprite> tints) {
-      for (int i = 0; i < parts.size(); i++) {
-        fetchMaterial(materials.getMaterial(i), parts.get(i), spriteGetter, replacements, tints);
+    /** Gets the model for the given material */
+    public BlockStateModelPart getCachedModel(MaterialVariantId material) {
+      if (MaterialId.UNKNOWN.equals(material)) {
+        return rebaker.base;
       }
+      return materialCache.computeIfAbsent(material, mat -> rebaker.bakeWith(List.of(mat)));
     }
 
-    @Override
-    protected BakedModel getCachedModel(MaterialIdNBT materials) {
+    /** Gets the model for the given materials */
+    public BlockStateModelPart getCachedModel(MaterialIdNBT materials) {
+      // tools with a single part use the single material cache
+      if (rebaker.parts.size() == 1) {
+        return getCachedModel(materials.getMaterial(0));
+      }
       if (!materials.getMaterials().isEmpty()) {
         try {
-          return cache.get(materials, () -> bakeWith(materials));
+          return toolCache.get(materials, () -> rebaker.bakeWith(materials.getMaterials()));
         } catch (ExecutionException e) {
           TConstruct.LOG.error("Failed to get tool model from cache", e);
         }
       }
-      return originalModel;
-    }
-  }
-
-  /** Common logic between tool parts and tools with just 1 material. */
-  private static abstract class BakedSingleMaterial<P> extends AbstractBaked<MaterialVariantId,P> {
-    /** Cache of texture name to baked model */
-    private final Map<MaterialVariantId, BakedModel> cache = new ConcurrentHashMap<>();
-
-    protected final Set<String> retexture;
-    private final Function<MaterialVariantId, BakedModel> baker = this::bakeWith;
-
-    private BakedSingleMaterial(BakedModel original, IGeometryBakingContext owner, SimpleBlockModel model, ModelState transform, Set<String> retexture, ModelProperty<P> property) {
-      super(original, owner, model, transform, retexture.contains("particle"), property);
-      this.retexture = retexture;
-    }
-
-    /** Gets the model for the given material */
-    public BakedModel getCachedModel(MaterialVariantId material) {
-      if (MaterialId.UNKNOWN.equals(material)) {
-        return originalModel;
-      }
-      return cache.computeIfAbsent(material, baker);
-    }
-
-    @Override
-    protected void fetchMaterials(MaterialVariantId materials, Function<Material, TextureAtlasSprite> spriteGetter, Map<String, Material> replacements, Map<String, TintedSprite> tints) {
-      fetchMaterial(materials, retexture, spriteGetter, replacements, tints);
-    }
-  }
-
-  /** Baked model for tools with just 1 material. */
-  private static class SimpleBakedTool extends BakedSingleMaterial<MaterialIdNBT> {
-    @Getter
-    private final ItemOverrides overrides;
-    private SimpleBakedTool(BakedModel original, IGeometryBakingContext owner, SimpleBlockModel model, ModelState transform, Set<String> retexture) {
-      super(original, owner, model, transform, retexture, ModelProperties.MATERIALS);
-      this.overrides = new MaterialsOverrides(this, original.getOverrides());
-    }
-
-    @Override
-    protected BakedModel getCachedModel(MaterialIdNBT materials) {
-      return getCachedModel(materials.getMaterial(0));
-    }
-  }
-
-  /** Baked model for tool parts. */
-  private static class BakedPart extends BakedSingleMaterial<MaterialVariantId> {
-    @Getter
-    private final ItemOverrides overrides;
-    private BakedPart(BakedModel original, IGeometryBakingContext owner, SimpleBlockModel model, ModelState transform, Set<String> retexture) {
-      super(original, owner, model, transform, retexture, ModelProperties.MATERIAL);
-      this.overrides = new MaterialOverrides(original.getOverrides());
-    }
-
-    /** Custom overrides logic to sub in materials from NBT. */
-    private class MaterialOverrides extends NestedOverrides {
-      public MaterialOverrides(ItemOverrides nested) {
-        super(nested);
-      }
-
-      @Nullable
-      @Override
-      public BakedModel resolve(BakedModel originalModel, ItemStack stack, @Nullable ClientLevel world, @Nullable LivingEntity entity, int seed) {
-        BakedModel resolved = super.resolve(originalModel, stack, world, entity, seed);
-        if (resolved != originalModel) {
-          return resolved;
-        }
-        if (stack.isEmpty() || !stack.has(DataComponents.CUSTOM_DATA)) {
-          return originalModel;
-        }
-        return getCachedModel(IMaterialItem.getMaterialFromStack(stack));
-      }
-    }
-  }
-
-  /** Model that supports both block and material textures. */
-  private static class BakedAnvil extends BakedSingleMaterial<MaterialVariantId> {
-    private final Map<Identifier, BakedModel> blockCache = new ConcurrentHashMap<>();
-    private final Function<Identifier, BakedModel> blockBaker = this::bakeWithBlock;
-    @Getter
-    private final MaterialBlockOverrides overrides;
-    private BakedAnvil(BakedModel original, IGeometryBakingContext owner, SimpleBlockModel model, ModelState transform, Set<String> retexture) {
-      super(original, owner, model, transform, retexture, ModelProperties.MATERIAL);
-      this.overrides = new MaterialBlockOverrides();
-    }
-
-    /** Rebakes the model with a specific texture. See also {@link RetexturedModel} */
-    private BakedModel bakeWithBlock(Identifier texture) {
-      return this.model.bakeDynamic(new RetexturedContext(this.owner, this.retexture, texture), this.transform);
+      return rebaker.base;
     }
 
     /** Gets the cached model for the given block. */
-    private BakedModel getCachedModel(Block block) {
-      return this.blockCache.computeIfAbsent(ModelHelper.getParticleTexture(block), blockBaker);
+    public BlockStateModelPart getCachedModel(Block block) {
+      return blockCache.computeIfAbsent(ModelHelper.getParticleMaterial(block), rebaker::bakeWithBlock);
+    }
+  }
+
+
+  /* Block state model */
+
+  /** Block state model swapping in the materials from model data */
+  private static class Baked implements DynamicBlockStateModel {
+    private final BlockStateModelPart base;
+    private final ModelCache cache;
+
+    private Baked(BlockStateModelPart base, ModelCache cache) {
+      this.base = base;
+      this.cache = cache;
     }
 
-    @Override
-    public TextureAtlasSprite getParticleIcon(ModelData data) {
-      // block takes priority if present
-      if (particleRetextured) {
+    /** Gets the key object from model data, which is the block, material, or materials depending on the type */
+    @Nullable
+    private Object getKey(ModelData data) {
+      if (cache.type == ModelType.ANVIL) {
         Block block = data.get(RetexturedHelper.BLOCK_PROPERTY);
         if (block != null) {
-          return getCachedModel(block).getParticleIcon(data);
+          return block;
         }
       }
-      return super.getParticleIcon(data);
+      if (cache.type == ModelType.TOOL) {
+        return data.get(ModelProperties.MATERIALS);
+      }
+      return data.get(ModelProperties.MATERIAL);
     }
 
-    @Nonnull
+    /** Gets the part for the given key */
+    private BlockStateModelPart getPart(@Nullable Object key) {
+      return switch (key) {
+        case Block block -> cache.getCachedModel(block);
+        case MaterialIdNBT materials -> cache.getCachedModel(materials);
+        case MaterialVariantId material -> cache.getCachedModel(material);
+        case null, default -> base;
+      };
+    }
+
     @Override
-    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, RandomSource rand, ModelData extraData, @Nullable RenderType renderType) {
-      Block block = extraData.get(RetexturedHelper.BLOCK_PROPERTY);
-      if (block != null) {
-        return getCachedModel(block).getQuads(state, side, rand, extraData, renderType);
-      }
-      return super.getQuads(state, side, rand, extraData, renderType);
+    public Object createGeometryKey(BlockAndTintGetter level, BlockPos pos, BlockState state, RandomSource random) {
+      return new GeometryKey(this, getKey(level.getModelData(pos)));
     }
 
-    /** Custom overrides logic to sub in materials from NBT. */
-    private class MaterialBlockOverrides extends ItemOverrides {
-      @Nullable
-      @Override
-      public BakedModel resolve(BakedModel originalModel, ItemStack stack, @Nullable ClientLevel world, @Nullable LivingEntity entity, int seed) {
-        if (stack.isEmpty() || !stack.has(DataComponents.CUSTOM_DATA)) {
-          return originalModel;
-        }
+    @Override
+    public void collectParts(BlockAndTintGetter level, BlockPos pos, BlockState state, RandomSource random, List<BlockStateModelPart> parts) {
+      parts.add(getPart(getKey(level.getModelData(pos))));
+    }
+
+    @Override
+    public Material.Baked particleMaterial() {
+      return base.particleMaterial();
+    }
+
+    @Override
+    public Material.Baked particleMaterial(BlockAndTintGetter level, BlockPos pos, BlockState state) {
+      if (cache.rebaker.particleRetextured) {
+        return getPart(getKey(level.getModelData(pos))).particleMaterial();
+      }
+      return base.particleMaterial();
+    }
+
+    @Override
+    @BakedQuad.MaterialFlags
+    public int materialFlags() {
+      return base.materialFlags();
+    }
+
+    @Override
+    @BakedQuad.MaterialFlags
+    public int materialFlags(BlockAndTintGetter level, BlockPos pos, BlockState state) {
+      return getPart(getKey(level.getModelData(pos))).materialFlags();
+    }
+  }
+
+  /** Key for geometry caching */
+  private record GeometryKey(Baked model, @Nullable Object key) {}
+
+  /** Unbaked block state model, parsed from blockstate JSON as a variant with {@code "type": "tconstruct:material_block"} */
+  public record BlockStateUnbaked(Variant variant) implements CustomUnbakedBlockStateModel {
+    public static final MapCodec<BlockStateUnbaked> CODEC = Variant.MAP_CODEC.xmap(BlockStateUnbaked::new, BlockStateUnbaked::variant);
+
+    @Override
+    public MapCodec<BlockStateUnbaked> codec() {
+      return CODEC;
+    }
+
+    @Override
+    public void resolveDependencies(ResolvableModel.Resolver resolver) {
+      variant.resolveDependencies(resolver);
+    }
+
+    @Override
+    public BlockStateModel bake(ModelBaker baker) {
+      ResolvedModel resolved = baker.getModel(variant.modelLocation());
+      ModelState state = variant.modelState().asModelState();
+      BlockStateModelPart base = SimpleModelWrapper.bake(baker, resolved, state);
+      MaterialBlockModel model = find(resolved);
+      if (model == null) {
+        TConstruct.LOG.warn("Model {} used with blockstate type {} does not use the material block loader, materials will not display", variant.modelLocation(), ID);
+        return new SingleVariant(base);
+      }
+      // model was rejected by vanilla, no sense retexturing the missing model
+      if (base == baker.missingBlockModelPart()) {
+        return new SingleVariant(base);
+      }
+      return new Baked(base, new ModelCache(model.createRebaker(baker, resolved, state, base), model.type));
+    }
+  }
+  /** Codec for the block state model type */
+  public static final MapCodec<? extends CustomUnbakedBlockStateModel> BLOCK_STATE_MODEL = BlockStateUnbaked.CODEC;
+
+
+  /* Item model */
+
+  /** Gets all quads from the part as unculled quads, for item models */
+  private static QuadCollection toItemQuads(BlockStateModelPart part) {
+    QuadCollection.Builder builder = new QuadCollection.Builder();
+    for (BakedQuad quad : part.getQuads(null)) {
+      builder.addUnculledFace(quad);
+    }
+    for (Direction direction : Direction.values()) {
+      for (BakedQuad quad : part.getQuads(direction)) {
+        builder.addUnculledFace(quad);
+      }
+    }
+    return builder.build();
+  }
+
+  /**
+   * Unbaked item model swapping in materials from the stack, used as {@code {"type": "tconstruct:material_block", "model": "tconstruct:block/table/tinkers_anvil"}}
+   * @param model           Model location
+   * @param transformation  Extra transformation
+   */
+  public record ItemUnbaked(Identifier model, Optional<Transformation> transformation) implements ItemModel.Unbaked {
+    public static final MapCodec<ItemUnbaked> MAP_CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
+      Identifier.CODEC.fieldOf("model").forGetter(ItemUnbaked::model),
+      Transformation.EXTENDED_CODEC.optionalFieldOf("transformation").forGetter(ItemUnbaked::transformation)
+    ).apply(inst, ItemUnbaked::new));
+
+    @Override
+    public MapCodec<ItemUnbaked> type() {
+      return MAP_CODEC;
+    }
+
+    @Override
+    public void resolveDependencies(ResolvableModel.Resolver resolver) {
+      resolver.markDependency(model);
+    }
+
+    @Override
+    public ItemModel bake(ItemModel.BakingContext context, Matrix4fc transformation) {
+      ModelBaker baker = context.blockModelBaker();
+      ResolvedModel resolved = baker.getModel(model);
+      TextureSlots textureSlots = resolved.getTopTextureSlots();
+      ModelRenderProperties properties = ModelRenderProperties.fromResolvedModel(baker, resolved, textureSlots);
+      Matrix4fc modelTransform = Transformation.compose(transformation, this.transformation);
+      ItemModel base = new CuboidItemModelWrapper(List.of(), resolved.bakeTopGeometry(textureSlots, baker, BlockModelRotation.IDENTITY), properties, modelTransform);
+      MaterialBlockModel materialModel = find(resolved);
+      if (materialModel == null) {
+        TConstruct.LOG.warn("Model {} used with item model type {} does not use the material block loader, materials will not display", model, ID);
+        return base;
+      }
+      BlockStateModelPart basePart = SimpleModelWrapper.bake(baker, resolved, BlockModelRotation.IDENTITY);
+      return new MaterialItem(base, basePart, new ModelCache(materialModel.createRebaker(baker, resolved, BlockModelRotation.IDENTITY, basePart), materialModel.type), properties, modelTransform);
+    }
+  }
+  /** Codec for the item model type */
+  public static final MapCodec<? extends ItemModel.Unbaked> ITEM_MODEL = ItemUnbaked.MAP_CODEC;
+
+  /** Item model swapping in materials from the stack */
+  private static class MaterialItem implements ItemModel {
+    private final Map<BlockStateModelPart,ItemModel> itemCache = new ConcurrentHashMap<>();
+    private final ItemModel base;
+    private final BlockStateModelPart basePart;
+    private final ModelCache cache;
+    private final ModelRenderProperties properties;
+    private final Matrix4fc transformation;
+
+    private MaterialItem(ItemModel base, BlockStateModelPart basePart, ModelCache cache, ModelRenderProperties properties, Matrix4fc transformation) {
+      this.base = base;
+      this.basePart = basePart;
+      this.cache = cache;
+      this.properties = properties;
+      this.transformation = transformation;
+    }
+
+    /** Gets the part for the given stack */
+    private BlockStateModelPart getPart(ItemStack stack) {
+      if (cache.type == ModelType.ANVIL) {
         Block block = RetexturedHelper.getTexture(stack);
         if (block != Blocks.AIR) {
-          return getCachedModel(block);
+          return cache.getCachedModel(block);
         }
-        return getCachedModel(IMaterialItem.getMaterialFromStack(stack));
       }
+      if (cache.type == ModelType.TOOL) {
+        return cache.getCachedModel(MaterialIdNBT.from(stack));
+      }
+      return cache.getCachedModel(IMaterialItem.getMaterialFromStack(stack));
+    }
+
+    /** Converts a part into an item model */
+    private ItemModel toItemModel(BlockStateModelPart part) {
+      return new CuboidItemModelWrapper(List.of(), toItemQuads(part), new ModelRenderProperties(properties.usesBlockLight(), part.particleMaterial(), properties.transforms()), transformation);
+    }
+
+    @Override
+    public void update(ItemStackRenderState output, ItemStack stack, ItemModelResolver resolver, ItemDisplayContext displayContext, @Nullable ClientLevel level, @Nullable ItemOwner owner, int seed) {
+      BlockStateModelPart part = getPart(stack);
+      ItemModel model = part == basePart ? base : itemCache.computeIfAbsent(part, this::toItemModel);
+      model.update(output, stack, resolver, displayContext, level, owner, seed);
     }
   }
 }

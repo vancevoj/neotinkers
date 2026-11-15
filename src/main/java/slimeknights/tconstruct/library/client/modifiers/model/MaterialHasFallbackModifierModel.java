@@ -5,7 +5,7 @@ import com.mojang.math.Transformation;
 import lombok.RequiredArgsConstructor;
 import net.minecraft.client.resources.model.geometry.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.model.Material;
+import net.minecraft.client.resources.model.sprite.Material;
 import slimeknights.mantle.data.loadable.array.ArrayLoadable;
 import slimeknights.mantle.data.loadable.primitive.IntLoadable;
 import slimeknights.mantle.data.loadable.primitive.StringLoadable;

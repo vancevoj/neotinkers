@@ -3,13 +3,14 @@ package slimeknights.tconstruct.library.client.model;
 import lombok.extern.log4j.Log4j2;
 import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.model.Material;
+import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.ResourceManager;
-import net.minecraft.util.profiling.ProfilerFiller;
-import net.minecraft.world.inventory.InventoryMenu;
-import net.neoforged.neoforge.client.event.RegisterClientReloadListenersEvent;
+import net.minecraft.util.Unit;
+import net.neoforged.fml.ModLoader;
+import net.neoforged.neoforge.client.event.AddClientReloadListenersEvent;
 import slimeknights.mantle.data.listener.ResourceValidator;
+import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.config.Config;
 
 import java.util.concurrent.CompletableFuture;
@@ -24,6 +25,8 @@ import java.util.function.Predicate;
 public class DynamicTextureLoader extends ResourceValidator {
   /** Instance to register with the loader */
   private static final DynamicTextureLoader INSTANCE = new DynamicTextureLoader();
+  /** ID of the reload listener */
+  public static final Identifier ID = TConstruct.getResource("dynamic_texture_loader");
 
   private DynamicTextureLoader() {
     super("textures/item", "textures", ".png");
@@ -38,13 +41,22 @@ public class DynamicTextureLoader extends ResourceValidator {
   }
 
   @Override
-  public CompletableFuture<Void> reload(PreparationBarrier stage, ResourceManager resourceManager, ProfilerFiller preparationsProfiler, ProfilerFiller reloadProfiler, Executor backgroundExecutor, Executor gameExecutor) {
-    return super.reload(stage, resourceManager, preparationsProfiler, reloadProfiler, backgroundExecutor, gameExecutor).thenRunAsync(this::clear);
+  public void prepareSharedState(SharedState state) {
+    // load before any listener reloads, ensures the list is ready before models bake
+    if (!ModLoader.hasErrors()) {
+      onReloadSafe(state.resourceManager());
+    }
+  }
+
+  @Override
+  public CompletableFuture<Void> reload(SharedState state, Executor backgroundExecutor, PreparationBarrier barrier, Executor gameExecutor) {
+    // already loaded in shared state, clear once models finished baking to save memory
+    return barrier.wait(Unit.INSTANCE).thenRunAsync(this::clear, gameExecutor);
   }
 
   /** Registers this manager */
-  public static void init(RegisterClientReloadListenersEvent event) {
-    event.registerReloadListener(INSTANCE);
+  public static void init(AddClientReloadListenersEvent event) {
+    event.addListener(ID, INSTANCE);
   }
 
   /**
@@ -60,12 +72,10 @@ public class DynamicTextureLoader extends ResourceValidator {
       return mat -> !MissingTextureAtlasSprite.getLocation().equals(spriteGetter.apply(mat).contents().name());
     } else {
       return mat -> {
-        // to suppress logging, need to load from our own list. We just load it for `textures/item` on the block atlas
-        if (InventoryMenu.BLOCK_ATLAS.equals(mat.atlasLocation())) {
-          Identifier texture = mat.texture();
-          if (texture.getPath().startsWith("item/")) {
-            return INSTANCE.test(mat.texture());
-          }
+        // to suppress logging, need to load from our own list. We just load it for `textures/item`, the material baker picks the atlas
+        Identifier texture = mat.sprite();
+        if (texture.getPath().startsWith("item/")) {
+          return INSTANCE.test(texture);
         }
         // failed preconditions? can't stop logging even if the boolean says to
         return !MissingTextureAtlasSprite.getLocation().equals(spriteGetter.apply(mat).contents().name());

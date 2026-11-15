@@ -7,19 +7,18 @@ import com.google.gson.JsonSyntaxException;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.texture.TextureAtlas;
+import net.minecraft.client.resources.model.sprite.SpriteId;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.ResourceManager;
-import net.minecraft.world.inventory.InventoryMenu;
-import net.neoforged.neoforge.client.event.RegisterClientReloadListenersEvent;
+import net.neoforged.neoforge.client.event.AddClientReloadListenersEvent;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModLoadingContext;
 import slimeknights.mantle.data.listener.IEarlySafeManagerReloadListener;
 import slimeknights.mantle.util.JsonHelper;
 import slimeknights.tconstruct.TConstruct;
-import slimeknights.tconstruct.library.client.RenderUtils;
 import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierId;
 
@@ -56,8 +55,8 @@ public class ModifierIconManager implements IEarlySafeManagerReloadListener {
   }
 
   /** Called on resource manager build to add the manager */
-  private static void onResourceManagerRegister(RegisterClientReloadListenersEvent manager) {
-    manager.registerReloadListener(INSTANCE);
+  private static void onResourceManagerRegister(AddClientReloadListenersEvent manager) {
+    manager.addListener(TConstruct.getResource("modifier_icons"), INSTANCE);
   }
 
   @Override
@@ -115,22 +114,27 @@ public class ModifierIconManager implements IEarlySafeManagerReloadListener {
    * @param modifier  Modifier to draw
    * @param x         X offset
    * @param y         Y offset
-   * @param z         Render depth offset, typically 100 is good
+   * @param z         Render depth offset, unused since 26.3 as GUI elements draw in submission order
    * @param size      Size to render, 16 is default
    */
   public static void renderIcon(GuiGraphicsExtractor graphics, Modifier modifier, int x, int y, int z, int size) {
-    TextureAtlas atlas = Minecraft.getInstance().getModelManager().getAtlas(InventoryMenu.BLOCK_ATLAS);
-
     List<Identifier> icons = modifierIcons.getOrDefault(modifier.getId(), Collections.emptyList());
     if (!icons.isEmpty()) {
       for (Identifier icon : icons) {
-        graphics.blit(x, y, z, size, size, atlas.getSprite(icon));
+        graphics.blitSprite(RenderPipelines.GUI_TEXTURED, graphics.getSprite(getSprite(icon)), x, y, size, size);
       }
     } else {
-      graphics.blit(x, y, z, size, size, atlas.getSprite(DEFAULT_PAGES));
-      RenderUtils.setColorRGBA(0xFF000000 | modifier.getColor());
-      graphics.blit(x, y, z, size, size, atlas.getSprite(DEFAULT_COVER));
-      RenderUtils.setColorRGBA(-1);
+      graphics.blitSprite(RenderPipelines.GUI_TEXTURED, graphics.getSprite(getSprite(DEFAULT_PAGES)), x, y, size, size);
+      graphics.blitSprite(RenderPipelines.GUI_TEXTURED, graphics.getSprite(getSprite(DEFAULT_COVER)), x, y, size, size, 0xFF000000 | modifier.getColor());
     }
+  }
+
+  /**
+   * Gets the sprite for the given icon. Item textures moved to the item atlas in 26.3, while modifier icons stay on the block atlas.
+   * @param icon  Icon texture
+   * @return  Sprite ID on the proper atlas
+   */
+  private static SpriteId getSprite(Identifier icon) {
+    return new SpriteId(icon.getPath().startsWith("item/") ? TextureAtlas.LOCATION_ITEMS : TextureAtlas.LOCATION_BLOCKS, icon);
   }
 }

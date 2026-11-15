@@ -3,9 +3,10 @@ package slimeknights.tconstruct.library.client.modifiers;
 import com.mojang.math.Transformation;
 import net.minecraft.client.resources.model.geometry.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.model.Material;
+import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.item.ArmorItem;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.item.equipment.Equippable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.data.loadable.record.SingletonLoader;
 import slimeknights.mantle.util.ItemLayerPixels;
@@ -56,10 +57,17 @@ public enum TrimModifierModel implements IBakedModifierModel {
 
   @Override
   public void addQuads(IToolStackView tool, ModifierEntry modifier, Function<Material,TextureAtlasSprite> spriteGetter, Transformation transforms, boolean isLarge, int startTintIndex, Consumer<Collection<BakedQuad>> quadConsumer, @Nullable ItemLayerPixels pixels) {
-    if (!isLarge && tool.getItem() instanceof ArmorItem armor) {
-      int ordinal = armor.getType().ordinal();
-      if (ordinal < 4) {
-        Armor model = Armor.values()[ordinal];
+    // armor item classes are gone in 26.3, the armor slot comes from the equippable component
+    Equippable equippable = tool.getItem().components().get(DataComponents.EQUIPPABLE);
+    if (!isLarge && equippable != null) {
+      Armor model = switch (equippable.slot()) {
+        case HEAD -> Armor.HELMET;
+        case CHEST -> Armor.CHESTPLATE;
+        case LEGS -> Armor.LEGGINGS;
+        case FEET -> Armor.BOOTS;
+        default -> null;
+      };
+      if (model != null) {
         model.addQuads(tool, modifier, spriteGetter, transforms, isLarge, startTintIndex, quadConsumer, pixels);
       }
     }

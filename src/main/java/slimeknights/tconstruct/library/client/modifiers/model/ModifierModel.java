@@ -3,9 +3,8 @@ package slimeknights.tconstruct.library.client.modifiers.model;
 import com.mojang.math.Transformation;
 import net.minecraft.client.resources.model.geometry.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.model.Material;
+import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.inventory.InventoryMenu;
 import slimeknights.mantle.data.loadable.Loadables;
 import slimeknights.mantle.data.loadable.primitive.StringLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
@@ -49,7 +48,7 @@ public interface ModifierModel extends IBakedModifierModel, IHaveLoader {
    */
   GenericLoaderRegistry<ModifierModel> LOADER = new GenericLoaderRegistry<>("Modifier Model", EMPTY, false);
   /** Loadable for reading materials, a common feature of modifier models */
-  StringLoadable<Material> MATERIAL_LOADABLE = Loadables.RESOURCE_LOCATION.map(ModifierModel::blockAtlas, Material::texture);
+  StringLoadable<Material> MATERIAL_LOADABLE = Loadables.RESOURCE_LOCATION.map(ModifierModel::blockAtlas, Material::sprite);
 
   @Override
   RecordLoadable<? extends ModifierModel> getLoader();
@@ -57,7 +56,12 @@ public interface ModifierModel extends IBakedModifierModel, IHaveLoader {
   /** Validates that all textures in this model exist. */
   void validate(Function<Material, TextureAtlasSprite> spriteGetter);
 
+  /**
+   * Creates a material for the given texture. Name kept for compatibility, 26.3 materials no longer name an atlas, the material baker finds the texture in the item or block atlas.
+   * @param path  Texture path
+   * @return  Material
+   */
   static Material blockAtlas(Identifier path) {
-    return new Material(InventoryMenu.BLOCK_ATLAS, path);
+    return new Material(path);
   }
 }

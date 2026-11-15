@@ -2,9 +2,8 @@ package slimeknights.tconstruct.library.client.materials;
 
 import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.model.Material;
+import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.inventory.InventoryMenu;
 import slimeknights.mantle.data.loadable.common.ColorLoadable;
 import slimeknights.mantle.data.loadable.primitive.IntLoadable;
 import slimeknights.mantle.data.loadable.primitive.StringLoadable;
@@ -36,7 +35,7 @@ public record MaterialRenderInfo(MaterialVariantId id, @Nullable Identifier text
    */
   @Nullable
   private TextureAtlasSprite trySprite(Material base, String suffix, Function<Material,TextureAtlasSprite> spriteGetter) {
-    Material materialTexture = getMaterial(base.texture(), suffix);
+    Material materialTexture = getMaterial(base.sprite(), suffix);
     TextureAtlasSprite sprite = spriteGetter.apply(materialTexture);
     if (!MissingTextureAtlasSprite.getLocation().equals(sprite.contents().name())) {
       return sprite;
@@ -82,17 +81,20 @@ public record MaterialRenderInfo(MaterialVariantId id, @Nullable Identifier text
   }
 
   /**
-   * Gets a material for the given resource locations
+   * Gets a material for the given resource locations. The atlas is chosen by the material baker based on where the texture was stitched.
    * @param texture   Texture path
    * @param suffix    Material or fallback suffix name
    * @return  Material instance
    */
   private static Material getMaterial(Identifier texture, String suffix) {
-    return new Material(InventoryMenu.BLOCK_ATLAS, texture.withSuffix('_' + suffix));
+    return new Material(texture.withSuffix('_' + suffix));
   }
 
   /**
    * Data class for a sprite that may be tinted
+   * @param sprite      Sprite to display
+   * @param color       ARGB color to apply to the sprite, -1 for no tint
+   * @param emissivity  Light emission from 0 to 15
    */
   public record TintedSprite(TextureAtlasSprite sprite, int color, int emissivity) {}
 }

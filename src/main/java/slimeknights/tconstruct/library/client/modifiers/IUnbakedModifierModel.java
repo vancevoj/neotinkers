@@ -1,7 +1,7 @@
 package slimeknights.tconstruct.library.client.modifiers;
 
 import com.google.gson.JsonObject;
-import net.minecraft.client.resources.model.Material;
+import net.minecraft.client.resources.model.sprite.Material;
 import slimeknights.tconstruct.library.client.modifiers.model.ModifierModel;
 
 import javax.annotation.Nullable;

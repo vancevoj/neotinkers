@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import net.minecraft.client.resources.model.geometry.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.model.Material;
+import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.Identifier;
@@ -76,7 +76,7 @@ public class PotionModifierModel implements SimpleModifierModel {
         if (id != null) {
           // 1.21: potion color now comes from PotionContents using the potion holder
           BuiltInRegistries.POTION.get(id).ifPresent(potion ->
-            quadConsumer.accept(MantleItemLayerModel.getQuadsForSprite(0xFF000000 | PotionContents.getColor(potion), -1, spriteGetter.apply(texture), transforms, 0, pixels)));
+            quadConsumer.accept(MantleItemLayerModel.getQuadsForSprite(0xFF000000 | new PotionContents(potion).getColor(), -1, spriteGetter.apply(texture), transforms, 0, pixels)));
         }
       }
     }

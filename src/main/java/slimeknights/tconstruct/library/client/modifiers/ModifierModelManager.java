@@ -7,17 +7,17 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.model.Material;
+import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.GsonHelper;
-import net.minecraft.world.inventory.InventoryMenu;
-import net.neoforged.neoforge.client.event.RegisterClientReloadListenersEvent;
+import net.neoforged.neoforge.client.event.AddClientReloadListenersEvent;
 import net.neoforged.bus.api.Event;
 import net.neoforged.fml.ModLoader;
 import net.neoforged.fml.event.IModBusEvent;
 import slimeknights.mantle.data.listener.IEarlySafeManagerReloadListener;
 import slimeknights.mantle.util.JsonHelper;
+import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.config.Config;
 import slimeknights.tconstruct.library.client.model.DynamicTextureLoader;
 import slimeknights.tconstruct.library.modifiers.ModifierId;
@@ -30,6 +30,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -59,8 +61,22 @@ public class ModifierModelManager implements IEarlySafeManagerReloadListener {
    * Initializes this manager, registering it with the resource manager
    * @param manager  Manager
    */
-  public static void init(RegisterClientReloadListenersEvent manager) {
-    manager.registerReloadListener(INSTANCE);
+  public static void init(AddClientReloadListenersEvent manager) {
+    manager.addListener(TConstruct.getResource("modifier_models"), INSTANCE);
+  }
+
+  @Override
+  public void prepareSharedState(SharedState state) {
+    // load before any listener reloads, tool models read the modifier models while baking
+    if (!ModLoader.hasErrors()) {
+      onReloadSafe(state.resourceManager());
+    }
+  }
+
+  @Override
+  public CompletableFuture<Void> reload(SharedState state, Executor backgroundExecutor, PreparationBarrier barrier, Executor gameExecutor) {
+    // already loaded in prepareSharedState
+    return barrier.wait(null);
   }
 
   /**
@@ -150,7 +166,7 @@ public class ModifierModelManager implements IEarlySafeManagerReloadListener {
    */
   @SuppressWarnings("removal")
   private static Material getModifierTexture(Identifier modifierRoot, Identifier modifierId, String suffix) {
-    return new Material(InventoryMenu.BLOCK_ATLAS, Identifier.fromNamespaceAndPath(modifierRoot.getNamespace(), modifierRoot.getPath() + modifierId.getNamespace() + "_" + modifierId.getPath() + suffix));
+    return new Material(Identifier.fromNamespaceAndPath(modifierRoot.getNamespace(), modifierRoot.getPath() + modifierId.getNamespace() + "_" + modifierId.getPath() + suffix));
   }
 
   /**

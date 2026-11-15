@@ -5,11 +5,10 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import net.minecraft.IdentifierException;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.model.Material;
+import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.GsonHelper;
-import net.minecraft.util.profiling.ProfilerFiller;
 import net.neoforged.fml.ModLoader;
 import slimeknights.mantle.data.listener.MergingJsonDataLoader;
 import slimeknights.mantle.data.loadable.field.ContextKey;
@@ -53,13 +52,17 @@ public class ModifierModelMapManager extends MergingJsonDataLoader<Builder> {
   }
 
   @Override
-  public CompletableFuture<Void> reload(PreparationBarrier stage, ResourceManager resourceManager, ProfilerFiller preparationsProfiler, ProfilerFiller reloadProfiler, Executor backgroundExecutor, Executor gameExecutor) {
-    // run in the first stage instead of the second stage
-    return CompletableFuture.runAsync(() -> {
-      if (!ModLoader.hasErrors()) {
-        this.onResourceManagerReload(resourceManager);
-      }
-    }, backgroundExecutor).thenCompose(stage::wait);
+  public void prepareSharedState(SharedState state) {
+    // run before any listener reloads instead of the second stage, tool models need the maps while baking
+    if (!ModLoader.hasErrors()) {
+      this.onResourceManagerReload(state.resourceManager());
+    }
+  }
+
+  @Override
+  public CompletableFuture<Void> reload(SharedState state, Executor backgroundExecutor, PreparationBarrier barrier, Executor gameExecutor) {
+    // already loaded in prepareSharedState
+    return barrier.wait(null);
   }
 
   /** Builder for a given tool model */

@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import net.minecraft.client.resources.model.geometry.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.model.Material;
+import net.minecraft.client.resources.model.sprite.Material;
 import slimeknights.mantle.client.model.util.MantleItemLayerModel;
 import slimeknights.mantle.data.loadable.common.ColorLoadable;
 import slimeknights.mantle.data.loadable.field.LoadableField;

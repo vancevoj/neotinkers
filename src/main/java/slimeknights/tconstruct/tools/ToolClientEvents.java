@@ -1,38 +1,46 @@
 package slimeknights.tconstruct.tools;
 
-import net.minecraft.client.particle.ParticleResources;
 import com.mojang.blaze3d.platform.InputConstants;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.color.item.ItemColors;
-import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
-import net.minecraft.client.player.Input;
+import net.minecraft.client.color.item.ItemTintSource;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.particle.ParticleResources;
+import net.minecraft.client.player.ClientInput;
 import net.minecraft.client.renderer.entity.ItemEntityRenderer;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.client.event.AddClientReloadListenersEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
-import net.neoforged.neoforge.client.event.ModelEvent.RegisterGeometryLoaders;
+import net.neoforged.neoforge.client.event.ModelEvent;
 import net.neoforged.neoforge.client.event.MovementInputUpdateEvent;
-import net.neoforged.neoforge.client.event.RegisterClientReloadListenersEvent;
+import net.neoforged.neoforge.client.event.RegisterBlockStateModels;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
+import net.neoforged.neoforge.client.event.RegisterConditionalItemModelPropertyEvent;
+import net.neoforged.neoforge.client.event.RegisterItemModelsEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
+import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
-import net.neoforged.neoforge.client.event.RegisterSpriteSourceTypesEvent;
+import net.neoforged.neoforge.client.event.RegisterRangeSelectItemModelPropertyEvent;
+import net.neoforged.neoforge.client.event.RegisterSpriteSourcesEvent;
+import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.neoforged.neoforge.client.settings.KeyConflictContext;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.LogicalSide;
-import net.neoforged.fml.ModList;
-import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import slimeknights.mantle.client.ResourceColorManager;
 import slimeknights.mantle.client.SafeClientAccess;
 import slimeknights.mantle.client.TooltipKey;
@@ -48,6 +56,9 @@ import slimeknights.tconstruct.library.client.book.content.AbstractMaterialConte
 import slimeknights.tconstruct.library.client.materials.MaterialTooltipCache;
 import slimeknights.tconstruct.library.client.model.DynamicTextureLoader;
 import slimeknights.tconstruct.library.client.model.TinkerItemProperties;
+import slimeknights.tconstruct.library.client.model.UniqueGuiModel;
+import slimeknights.tconstruct.library.client.model.block.FluidTextureModel;
+import slimeknights.tconstruct.library.client.model.block.TankModel;
 import slimeknights.tconstruct.library.client.model.tools.MaterialBlockModel;
 import slimeknights.tconstruct.library.client.model.tools.MaterialModel;
 import slimeknights.tconstruct.library.client.model.tools.ToolModel;
@@ -66,6 +77,7 @@ import slimeknights.tconstruct.library.modifiers.ModifierId;
 import slimeknights.tconstruct.library.modifiers.ModifierManager;
 import slimeknights.tconstruct.library.modifiers.modules.technical.ArmorStatModule;
 import slimeknights.tconstruct.library.tools.capability.TinkerDataKeys;
+import slimeknights.tconstruct.library.tools.item.IClientExtensionItem;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
 import slimeknights.tconstruct.library.utils.HarvestTiers;
@@ -87,14 +99,15 @@ import slimeknights.tconstruct.tools.logic.InteractionHandler;
 import slimeknights.tconstruct.tools.modules.ranged.ammo.SmashingModule;
 import slimeknights.tconstruct.tools.network.TinkerControlPacket;
 
-import java.util.function.Consumer;
+import javax.annotation.Nullable;
 
 import static slimeknights.tconstruct.TConstruct.getResource;
-import static slimeknights.tconstruct.library.client.model.tools.ToolModel.registerItemColors;
 
 @SuppressWarnings("unused")
 @EventBusSubscriber(modid = TConstruct.MOD_ID, value = Dist.CLIENT)
 public class ToolClientEvents extends ClientEventBase {
+  /** Key mapping category for Tinkers, translated using {@code key.category.tconstruct.tconstruct} */
+  private static final KeyMapping.Category CATEGORY = new KeyMapping.Category(getResource("tconstruct"));
   /**
    * Keybinding for interacting using a helmet. Constructed lazily inside {@link #registerKeyBinding} rather than in a
    * static initializer: building a KeyMapping touches {@code KeyMapping}/{@code InputConstants}, so doing it at field
@@ -111,30 +124,72 @@ public class ToolClientEvents extends ClientEventBase {
     ModifierManager.INSTANCE.getAllValues().forEach(modifier -> modifier.clearCache(PackType.CLIENT_RESOURCES));
   };
 
-  @SuppressWarnings("deprecation")
   @SubscribeEvent
-  static void addResourceListener(RegisterClientReloadListenersEvent manager) {
+  static void addResourceListener(AddClientReloadListenersEvent manager) {
     ModifierModelManager.init(manager);
-    manager.registerReloadListener(ModifierModelMapManager.INSTANCE);
+    manager.addListener(getResource("modifier_model_maps"), ModifierModelMapManager.INSTANCE);
     MaterialTooltipCache.init(manager);
     DynamicTextureLoader.init(manager);
-    manager.registerReloadListener(MODIFIER_RELOAD_LISTENER);
-    manager.registerReloadListener(SlimeskullArmorModel.RELOAD_LISTENER);
-    manager.registerReloadListener(HarvestTiers.RELOAD_LISTENER);
+    manager.addListener(getResource("modifier_cache"), MODIFIER_RELOAD_LISTENER);
+    manager.addListener(getResource("slimeskull_armor_models"), SlimeskullArmorModel.RELOAD_LISTENER);
+    manager.addListener(getResource("harvest_tiers"), HarvestTiers.RELOAD_LISTENER);
     ArmorModelManager.init(manager);
-    manager.registerReloadListener(TrimArmorTextureSupplier.CACHE_INVALIDATOR);
+    manager.addListener(getResource("trim_armor_texture_cache"), TrimArmorTextureSupplier.CACHE_INVALIDATOR);
   }
 
   @SubscribeEvent
-  static void registerSpriteSources(RegisterSpriteSourceTypesEvent event) {
+  static void registerSpriteSources(RegisterSpriteSourcesEvent event) {
     ShieldBannerModifierSpriteSource.register(event);
   }
 
   @SubscribeEvent
-  static void registerModelLoaders(RegisterGeometryLoaders event) {
+  static void registerModelLoaders(ModelEvent.RegisterLoaders event) {
     event.register(getResource("material"), MaterialModel.LOADER);
     event.register(getResource("tool"), ToolModel.LOADER);
     event.register(getResource("material_block"), MaterialBlockModel.LOADER);
+  }
+
+  @SubscribeEvent
+  static void registerItemModels(RegisterItemModelsEvent event) {
+    // tconstruct:fluid_container is registered by FluidClientEvents
+    event.register(ToolModel.Unbaked.ID, ToolModel.Unbaked.MAP_CODEC);
+    event.register(MaterialModel.Unbaked.ID, MaterialModel.Unbaked.MAP_CODEC);
+    event.register(MaterialBlockModel.ID, MaterialBlockModel.ITEM_MODEL);
+    event.register(TankModel.ITEM_ID, TankModel.ITEM_MODEL);
+    event.register(FluidTextureModel.ID, FluidTextureModel.ITEM_MODEL);
+    event.register(UniqueGuiModel.Unbaked.ID, UniqueGuiModel.Unbaked.MAP_CODEC);
+  }
+
+  @SubscribeEvent
+  static void registerBlockStateModels(RegisterBlockStateModels event) {
+    event.registerModel(MaterialBlockModel.ID, MaterialBlockModel.BLOCK_STATE_MODEL);
+    event.registerModel(TankModel.BLOCK_STATE_ID, TankModel.BLOCK_STATE_MODEL);
+    event.registerModel(FluidTextureModel.ID, FluidTextureModel.BLOCK_STATE_MODEL);
+  }
+
+  @SubscribeEvent
+  static void registerConditionalProperties(RegisterConditionalItemModelPropertyEvent event) {
+    TinkerItemProperties.registerConditionalProperties(event);
+  }
+
+  @SubscribeEvent
+  static void registerRangeProperties(RegisterRangeSelectItemModelPropertyEvent event) {
+    TinkerItemProperties.registerRangeProperties(event);
+  }
+
+  @SubscribeEvent
+  static void registerTintSources(RegisterColorHandlersEvent.ItemTintSources event) {
+    event.register(ModifierCrystalTint.ID, ModifierCrystalTint.MAP_CODEC);
+  }
+
+  @SubscribeEvent
+  static void registerClientExtensions(RegisterClientExtensionsEvent event) {
+    // Item#initializeClient is gone, so every item opting into client extensions is registered here (hand transforms, crossbow poses, armor models)
+    for (Item item : BuiltInRegistries.ITEM) {
+      if (item instanceof IClientExtensionItem extensionItem) {
+        extensionItem.initializeClient(extensions -> event.registerItem(extensions, item));
+      }
+    }
   }
 
   @SubscribeEvent
@@ -168,8 +223,9 @@ public class ToolClientEvents extends ClientEventBase {
   @SubscribeEvent
   static void registerKeyBinding(RegisterKeyMappingsEvent event) {
     // construct the keybinds here (not in static fields) so class-loading this subscriber never forces KeyMapping init
-    HELMET_INTERACT = new KeyMapping(TConstruct.makeTranslationKey("key", "helmet_interact"), KeyConflictContext.IN_GAME, InputConstants.getKey("key.keyboard.z"), "key.categories.tconstruct");
-    LEGGINGS_INTERACT = new KeyMapping(TConstruct.makeTranslationKey("key", "leggings_interact"), KeyConflictContext.IN_GAME, InputConstants.getKey("key.keyboard.i"), "key.categories.tconstruct");
+    HELMET_INTERACT = new KeyMapping(TConstruct.makeTranslationKey("key", "helmet_interact"), KeyConflictContext.IN_GAME, InputConstants.getKey("key.keyboard.z"), CATEGORY);
+    LEGGINGS_INTERACT = new KeyMapping(TConstruct.makeTranslationKey("key", "leggings_interact"), KeyConflictContext.IN_GAME, InputConstants.getKey("key.keyboard.i"), CATEGORY);
+    event.registerCategory(CATEGORY);
     event.register(HELMET_INTERACT);
     event.register(LEGGINGS_INTERACT);
   }
@@ -185,58 +241,11 @@ public class ToolClientEvents extends ClientEventBase {
     NeoForge.EVENT_BUS.addListener(ToolClientEvents::handleInput);
     AbstractArmorModel.init();
 
-    // keybinds
     event.enqueueWork(() -> {
       // fake ingot showing in the book is a little nicer than the repair kits
       AbstractMaterialContent.registerFallbackPart(TinkerToolParts.fakeIngot);
       AbstractMaterialContent.registerFallbackPart(TinkerToolParts.fakeStorageBlockItem);
-
-      // properties
-      // stone
-      TinkerItemProperties.registerToolProperties(TinkerTools.pickaxe);
-      TinkerItemProperties.registerToolProperties(TinkerTools.sledgeHammer);
-      TinkerItemProperties.registerToolProperties(TinkerTools.veinHammer);
-      // dirt
-      TinkerItemProperties.registerToolProperties(TinkerTools.mattock);
-      TinkerItemProperties.registerToolProperties(TinkerTools.pickadze);
-      TinkerItemProperties.registerToolProperties(TinkerTools.excavator);
-      // axe
-      TinkerItemProperties.registerToolProperties(TinkerTools.handAxe);
-      TinkerItemProperties.registerToolProperties(TinkerTools.broadAxe);
-      // leaves
-      TinkerItemProperties.registerToolProperties(TinkerTools.kama);
-      TinkerItemProperties.registerToolProperties(TinkerTools.scythe);
-      // sword
-      TinkerItemProperties.registerToolProperties(TinkerTools.dagger);
-      TinkerItemProperties.registerToolProperties(TinkerTools.sword);
-      TinkerItemProperties.registerToolProperties(TinkerTools.cleaver);
-      // bow
-      TinkerItemProperties.registerCrossbowProperties(TinkerTools.crossbow);
-      TinkerItemProperties.registerToolProperties(TinkerTools.longbow);
-      TinkerItemProperties.registerToolProperties(TinkerTools.fishingRod);
-      TinkerItemProperties.registerToolProperties(TinkerTools.javelin);
-      // misc
-      TinkerItemProperties.registerToolProperties(TinkerTools.flintAndBrick);
-      TinkerItemProperties.registerToolProperties(TinkerTools.skyStaff);
-      TinkerItemProperties.registerToolProperties(TinkerTools.earthStaff);
-      TinkerItemProperties.registerToolProperties(TinkerTools.ichorStaff);
-      TinkerItemProperties.registerToolProperties(TinkerTools.enderStaff);
-      // ancient
-      TinkerItemProperties.registerToolProperties(TinkerTools.meltingPan);
-      TinkerItemProperties.registerCrossbowProperties(TinkerTools.warPick);
-      TinkerItemProperties.registerToolProperties(TinkerTools.battlesign);
-      TinkerItemProperties.registerToolProperties(TinkerTools.swasher);
-      if (ModList.get().isLoaded("twilightforest")) {
-        TinkerItemProperties.registerToolProperties(TinkerTools.minotaurAxe);
-      }
-      // armor
-      TinkerItemProperties.registerToolProperties(TinkerTools.travelersShield);
-      TinkerItemProperties.registerToolProperties(TinkerTools.plateShield);
-      Consumer<Item> brokenConsumer = TinkerItemProperties::registerBrokenProperty;
-      TinkerTools.travelersGear.forEach(brokenConsumer);
-      TinkerTools.plateArmor.forEach(brokenConsumer);
-      TinkerTools.slimesuit.forEach(brokenConsumer);
-      TinkerItemProperties.registerToolProperties(TinkerTools.slimeWings);
+      // item properties are registered by ID in registerConditionalProperties and registerRangeProperties, the client item JSON selects them per item
     });
   }
 
@@ -248,64 +257,30 @@ public class ToolClientEvents extends ClientEventBase {
     event.registerSpriteSet(TinkerTools.bonkAttackParticle.get(), factory);
   }
 
-  @SubscribeEvent
-  static void itemColors(RegisterColorHandlersEvent.Item event) {
-    final ItemColors colors = event.getItemColors();
+  /**
+   * Tint source for the modifier crystal, using the modifier color. Used in client item JSON as {@code {"type": "tconstruct:modifier_crystal"}}.
+   * Tool and armor tints are handled inside {@link ToolModel}, as their tints depend on the modifier models.
+   */
+  public record ModifierCrystalTint() implements ItemTintSource {
+    public static final Identifier ID = getResource("modifier_crystal");
+    public static final ModifierCrystalTint INSTANCE = new ModifierCrystalTint();
+    public static final MapCodec<ModifierCrystalTint> MAP_CODEC = MapCodec.unit(INSTANCE);
 
-    // tint modifiers
-    // rock
-    registerItemColors(colors, TinkerTools.pickaxe);
-    registerItemColors(colors, TinkerTools.sledgeHammer);
-    registerItemColors(colors, TinkerTools.veinHammer);
-    // dirt
-    registerItemColors(colors, TinkerTools.mattock);
-    registerItemColors(colors, TinkerTools.pickadze);
-    registerItemColors(colors, TinkerTools.excavator);
-    // wood
-    registerItemColors(colors, TinkerTools.handAxe);
-    registerItemColors(colors, TinkerTools.broadAxe);
-    // scythe
-    registerItemColors(colors, TinkerTools.kama);
-    registerItemColors(colors, TinkerTools.scythe);
-    // weapon
-    registerItemColors(colors, TinkerTools.dagger);
-    registerItemColors(colors, TinkerTools.sword);
-    registerItemColors(colors, TinkerTools.cleaver);
-    // bow
-    registerItemColors(colors, TinkerTools.crossbow);
-    registerItemColors(colors, TinkerTools.longbow);
-    registerItemColors(colors, TinkerTools.fishingRod);
-    registerItemColors(colors, TinkerTools.javelin);
-    registerItemColors(colors, TinkerTools.arrow);
-    registerItemColors(colors, TinkerTools.shuriken);
-    registerItemColors(colors, TinkerTools.throwingAxe);
-    // ancient
-    registerItemColors(colors, TinkerTools.meltingPan);
-    registerItemColors(colors, TinkerTools.warPick);
-    registerItemColors(colors, TinkerTools.battlesign);
-    registerItemColors(colors, TinkerTools.swasher);
-    if (ModList.get().isLoaded("twilightforest")) {
-      registerItemColors(colors, TinkerTools.minotaurAxe);
-    }
-    // armor
-    registerItemColors(colors, TinkerTools.travelersShield);
-    registerItemColors(colors, TinkerTools.plateShield);
-    Consumer<Item> brokenConsumer = item -> event.register(ToolModel.COLOR_HANDLER, item);
-    TinkerTools.travelersGear.forEach(brokenConsumer);
-    TinkerTools.plateArmor.forEach(brokenConsumer);
-    TinkerTools.slimesuit.forEach(brokenConsumer);
-    registerItemColors(colors, TinkerTools.slimeWings);
-
-    // modifier crystal
-    event.register((stack, index) -> {
+    @Override
+    public int calculate(ItemStack stack, @Nullable ClientLevel level, @Nullable LivingEntity owner) {
       ModifierId modifier = ModifierCrystalItem.getModifier(stack);
       if (modifier != null) {
-        // 1.21 item colors honor the alpha byte; ResourceColorManager returns 0xRRGGBB (alpha 0),
+        // item colors honor the alpha byte; ResourceColorManager returns 0xRRGGBB (alpha 0),
         // which renders the tinted layer0 fully transparent (the crystal looked invisible). Force opaque.
         return 0xFF000000 | ResourceColorManager.getColor(Util.makeTranslationKey("modifier", modifier));
       }
       return -1;
-    }, TinkerModifiers.modifierCrystal);
+    }
+
+    @Override
+    public MapCodec<ModifierCrystalTint> type() {
+      return MAP_CODEC;
+    }
   }
 
   // values to check if a key was being pressed last tick, safe as a static value as we only care about a single player client side
@@ -382,10 +357,9 @@ public class ToolClientEvents extends ClientEventBase {
       // next, add in deprecated key bonus
       speed = Mth.clamp(speed + ArmorStatModule.getStat(player, TinkerDataKeys.USE_ITEM_SPEED), 0, 1);
       // update speed, note if the armor stat is 0 and the held tool is not tinkers this is a no-op effectively
-      Input input = event.getInput();
-      // multiply by 5 to cancel out the vanilla 20%
-      input.leftImpulse *= (float) (speed * 5);
-      input.forwardImpulse *= (float) (speed * 5);
+      // multiply by 5 to cancel out the vanilla 20% (the default use effects speed multiplier, applied by the player after this event)
+      ClientInput input = event.getInput();
+      input.moveVector = input.getMoveVector().scale((float) (speed * 5));
     }
   }
 }

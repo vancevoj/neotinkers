@@ -1,6 +1,7 @@
 package slimeknights.tconstruct.library.client.modifiers;
 
-import net.minecraft.client.resources.model.Material;
+import net.minecraft.client.resources.model.sprite.Material;
+import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.fluids.FluidStack;
 import slimeknights.tconstruct.library.modifiers.Modifier;
@@ -39,7 +40,7 @@ public class TankModifierModel extends FluidModifierModel {
     FluidStack fluid = helper.getFluid(tool);
     if (!fluid.isEmpty()) {
       // cache by modifier, fluid, and not being full
-      return new TankModifierCacheKey(entry.getModifier(), fluid.getFluid(), fluid.getAmount() < helper.getCapacity(tool));
+      return new TankModifierCacheKey(entry.getModifier(), fluid.getFluid(), fluid.getComponentsPatch(), fluid.getAmount() < helper.getCapacity(tool));
     }
     return entry != ModifierEntry.EMPTY ? entry.getId() : null;
   }
@@ -54,7 +55,7 @@ public class TankModifierModel extends FluidModifierModel {
   /**
    * Cache key for the model
    */
-  private record TankModifierCacheKey(Modifier modifier, Fluid fluid, boolean isPartial) {}
+  private record TankModifierCacheKey(Modifier modifier, Fluid fluid, DataComponentPatch components, boolean isPartial) {}
 
   public record Unbaked(ToolTankHelper helper) implements IUnbakedModifierModel {
     @Nullable

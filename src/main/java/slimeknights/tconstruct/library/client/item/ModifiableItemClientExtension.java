@@ -2,7 +2,9 @@ package slimeknights.tconstruct.library.client.item;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.renderer.state.level.PlayerRenderState;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.HumanoidArm;
@@ -26,7 +28,12 @@ public class ModifiableItemClientExtension implements IClientItemExtensions {
   }
 
   @Override
-  public boolean applyForgeHandTransform(PoseStack poseStack, LocalPlayer player, HumanoidArm arm, ItemStack stack, float partialTicks, float equipProgress, float swingProgress) {
+  public boolean applyForgeHandTransform(PoseStack poseStack, PlayerRenderState playerState, HumanoidArm arm, ItemStack stack, float partialTicks, float equipProgress, float swingProgress) {
+    // the render state is always for the main client player, and the logic below needs the live use item state
+    LocalPlayer player = Minecraft.getInstance().player;
+    if (player == null) {
+      return false;
+    }
     // forge: why don't you give me the arm that is used on the next line???
     InteractionHand hand = arm == player.getMainArm() ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND;
     // this code is copied from ItemInHandRenderer#renderArmWithItem with changes made for Tinker tools
@@ -98,7 +105,8 @@ public class ModifiableItemClientExtension implements IClientItemExtensions {
           break;
         }
 
-        case SPEAR:
+        // vanilla renamed the old spear animation to trident, the new spear animation is unrelated
+        case TRIDENT:
           applyItemArmTransform(poseStack, equipProgress, sideOffset);
           poseStack.translate(sideOffset * -0.5f, 0.7f, 0.1f);
           // change: added 45 degrees to take into account tools being diagonal

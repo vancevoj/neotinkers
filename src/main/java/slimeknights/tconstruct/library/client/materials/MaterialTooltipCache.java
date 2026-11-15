@@ -3,9 +3,10 @@ package slimeknights.tconstruct.library.client.materials;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.TextColor;
-import net.neoforged.neoforge.client.event.RegisterClientReloadListenersEvent;
+import net.neoforged.neoforge.client.event.AddClientReloadListenersEvent;
 import slimeknights.mantle.client.ResourceColorManager;
 import slimeknights.mantle.data.listener.ISafeManagerReloadListener;
+import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.materials.definition.MaterialVariantId;
 import slimeknights.tconstruct.library.utils.Util;
 
@@ -35,8 +36,8 @@ public class MaterialTooltipCache {
   private MaterialTooltipCache() {}
 
   /** Called during the event to initialize the cache invalidators */
-  public static void init(RegisterClientReloadListenersEvent manager)  {
-    manager.registerReloadListener(RELOAD_LISTENER);
+  public static void init(AddClientReloadListenersEvent manager)  {
+    manager.addListener(TConstruct.getResource("material_tooltip_cache"), RELOAD_LISTENER);
   }
 
   /** Logic to convert a material ID to a string */
