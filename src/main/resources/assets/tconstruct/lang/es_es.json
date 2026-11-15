@@ -1617,7 +1617,7 @@
 
   "_comment": "Modificadores",
 
-  "key.categories.tconstruct": "Neo Tinkers",
+  "key.category.tconstruct.tconstruct": "Neo Tinkers",
   "key.tconstruct.helmet_interact": "Interacción de Casco",
   "key.tconstruct.leggings_interact": "Interacción de Pantalones",
 

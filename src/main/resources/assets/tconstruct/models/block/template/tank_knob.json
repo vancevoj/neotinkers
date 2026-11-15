@@ -37,12 +37,12 @@
       "from": [ 15.9, 15.9, 15.9 ],
       "to": [ 0.1, 0.1, 0.1 ],
       "faces": {
-        "north": { "texture": "#side", "shade_direction_override": "up" },
-        "east":  { "texture": "#side", "shade_direction_override": "up" },
-        "south": { "texture": "#side", "shade_direction_override": "up" },
-        "west":  { "texture": "#side", "shade_direction_override": "up" },
-        "up":    { "texture": "#top",  "shade_direction_override": "up" },
-        "down":  { "texture": "#top",  "shade_direction_override": "up" }
+        "north": { "texture": "#side" },
+        "east":  { "texture": "#side" },
+        "south": { "texture": "#side" },
+        "west":  { "texture": "#side" },
+        "up":    { "texture": "#top" },
+        "down":  { "texture": "#top" }
       }
     }
   ],

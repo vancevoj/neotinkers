@@ -1,5 +1,5 @@
 {
     "variants": {
-        "": { "model": "tconstruct:block/clear_tinted_glass" }
+        "": { "type": "mantle:connected", "model": "tconstruct:block/clear_tinted_glass" }
     }
 }

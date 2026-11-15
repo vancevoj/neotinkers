@@ -1,7 +1,7 @@
 {
   "title": "黏液种子",
   "item": {
-    "tag": "tconstruct:slimy_grass_seeds"
+    "ingredient": "#tconstruct:slimy_grass_seeds"
   },
   "text": [
     {

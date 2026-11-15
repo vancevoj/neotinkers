@@ -1,7 +1,7 @@
 {
   "title": "Blocos Carbonizados",
   "item": {
-    "tag": "tconstruct:seared_blocks"
+    "ingredient": "#tconstruct:seared_blocks"
   },
   "text": [
     {

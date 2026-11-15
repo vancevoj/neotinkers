@@ -2428,7 +2428,7 @@
 
   "_comment": "Modifiers",
 
-  "key.categories.tconstruct": "Neo Tinkers",
+  "key.category.tconstruct.tconstruct": "Neo Tinkers",
   "key.tconstruct.helmet_interact": "Взаємодія з шоломом",
   "key.tconstruct.leggings_interact": "Взаємодія з наголінниками",
 

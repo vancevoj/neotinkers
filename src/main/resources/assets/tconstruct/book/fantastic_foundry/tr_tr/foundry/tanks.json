@@ -1,7 +1,7 @@
 {
   "title": "Kavrulmuş Tanklar",
   "item": {
-    "tag": "tconstruct:scorched_tanks"
+    "ingredient": "#tconstruct:scorched_tanks"
   },
   "text": [
      {

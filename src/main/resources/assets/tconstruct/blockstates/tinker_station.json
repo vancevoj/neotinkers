@@ -1,17 +1,21 @@
 {
     "variants": {
         "facing=north": {
+            "type": "mantle:retextured",
             "model": "tconstruct:block/table/tinker_station"
         },
         "facing=south": {
+            "type": "mantle:retextured",
             "model": "tconstruct:block/table/tinker_station",
             "y": 180
         },
         "facing=west": {
+            "type": "mantle:retextured",
             "model": "tconstruct:block/table/tinker_station",
             "y": 270
         },
         "facing=east": {
+            "type": "mantle:retextured",
             "model": "tconstruct:block/table/tinker_station",
             "y": 90
         }

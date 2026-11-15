@@ -1,8 +1,8 @@
 {
   "variants": {
-    "facing=north": { "model": "tconstruct:block/smeltery/tank/casting_tank" },
-    "facing=south": { "model": "tconstruct:block/smeltery/tank/casting_tank", "y": 180 },
-    "facing=west":  { "model": "tconstruct:block/smeltery/tank/casting_tank", "y": 270 },
-    "facing=east":  { "model": "tconstruct:block/smeltery/tank/casting_tank", "y":  90 }
+    "facing=north": { "type": "tconstruct:tank", "model": "tconstruct:block/smeltery/tank/casting_tank" },
+    "facing=south": { "type": "tconstruct:tank", "model": "tconstruct:block/smeltery/tank/casting_tank", "y": 180 },
+    "facing=west":  { "type": "tconstruct:tank", "model": "tconstruct:block/smeltery/tank/casting_tank", "y": 270 },
+    "facing=east":  { "type": "tconstruct:tank", "model": "tconstruct:block/smeltery/tank/casting_tank", "y":  90 }
   }
 }

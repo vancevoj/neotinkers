@@ -1,5 +1,5 @@
 {
   "variants": {
-    "": { "model": "tconstruct:block/foundry/tank/ingot_gauge"}
+    "": { "type": "tconstruct:tank", "model": "tconstruct:block/foundry/tank/ingot_gauge"}
   }
 }

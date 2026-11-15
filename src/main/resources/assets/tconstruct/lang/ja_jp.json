@@ -2303,7 +2303,7 @@
 
   "_comment": "Modifiers",
 
-  "key.categories.tconstruct": "Neo Tinkers",
+  "key.category.tconstruct.tconstruct": "Neo Tinkers",
   "key.tconstruct.helmet_interact": "ヘルメットのアクション",
   "key.tconstruct.leggings_interact": "レギンスのアクション",
 

@@ -1533,7 +1533,7 @@
   "material.tconstruct.plated_slimewood": "金合黏膠木",
   "material.tconstruct.plated_slimewood.flavor": "妙哉！黃銅有質，黏膠有聲！",
   "material.tconstruct.plated_slimewood.encyclopedia": "黏渡之甦皆昇一",
-  "key.categories.tconstruct": "匠築",
+  "key.category.tconstruct.tconstruct": "匠築",
   "key.tconstruct.helmet_interact": "鎧互",
   "key.tconstruct.leggings_interact": "護腿互",
   "modifier.tconstruct.empty": "無效之彊",

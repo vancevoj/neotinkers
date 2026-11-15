@@ -1,7 +1,7 @@
 {
   "title": "焦褐方塊",
   "item": {
-    "tag": "tconstruct:scorched_blocks"
+    "ingredient": "#tconstruct:scorched_blocks"
   },
   "text": [
     {
