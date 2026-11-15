@@ -53,7 +53,8 @@ public class RecipeResult<T> {
    * @return  Validation result with the given message
    */
   public static <T> RecipeResult<T> failure(String translationKey, Object... params) {
-    return failure(Component.translatable(translationKey, params));
+    // 26.3 dev throws on arguments that are not a component, string, number or boolean, escape stringifies others; copied as escaping edits the array
+    return failure(Component.translatableEscape(translationKey, params.clone()));
   }
 
   /** If true, this recipe passed and can be crafted for the given input */

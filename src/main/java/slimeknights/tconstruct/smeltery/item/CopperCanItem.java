@@ -58,7 +58,8 @@ public class CopperCanItem extends Item {
       MutableComponent text = getFluidStack(stack, FluidValues.INGOT).getHoverName().plainCopy();
       tooltip.accept(Component.translatable(this.getDescriptionId() + ".contents", text).withStyle(ChatFormatting.GRAY));
       if (flag.isAdvanced()) {
-        tooltip.accept(Component.translatable(TankItem.FLUID_ID, Loadables.FLUID.getKey(fluid)).withStyle(ChatFormatting.DARK_GRAY));
+        // 26.3 dev rejects identifier translation arguments, so pass the id as a string
+        tooltip.accept(Component.translatable(TankItem.FLUID_ID, String.valueOf(Loadables.FLUID.getKey(fluid))).withStyle(ChatFormatting.DARK_GRAY));
       }
     } else {
       tooltip.accept(Component.translatable(this.getDescriptionId() + ".tooltip").withStyle(ChatFormatting.GRAY));

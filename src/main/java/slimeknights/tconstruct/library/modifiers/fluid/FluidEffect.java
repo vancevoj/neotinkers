@@ -155,6 +155,7 @@ public interface FluidEffect<C extends FluidEffectContext> extends IHaveLoader, 
 
   /** Translates the key for the loader with the given arguments */
   static Component makeTranslation(RecordLoadable<? extends FluidEffect<?>> loader, Object... arguments) {
-    return Component.translatable(getTranslationKey(loader), arguments);
+    // 26.3 dev throws on arguments that are not a component, string, number or boolean, escape stringifies others; copied as escaping edits the array
+    return Component.translatableEscape(getTranslationKey(loader), arguments.clone());
   }
 }

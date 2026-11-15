@@ -11,6 +11,7 @@ import slimeknights.tconstruct.common.recipe.RecipeCacheInvalidator.DuelSidedLis
 import slimeknights.tconstruct.library.utils.SimpleCache;
 
 import javax.annotation.Nullable;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -26,6 +27,8 @@ public class MeltingFuelLookup {
   private static volatile MeltingFuel SOLID = EMPTY;
   /** List of all recipes */
   private static final List<MeltingFuel> RECIPES = new CopyOnWriteArrayList<>();
+  /** Order of {@link #RECIPES} once all recipes registered. The server parses recipes in parallel, which would make the first match vary per reload */
+  private static final Comparator<MeltingFuel> ORDER = Comparator.comparing(MeltingFuel::getId, RecipeCacheInvalidator.RECIPE_ID_ORDER);
   /** Mapping from fluid to fuel */
   private static final SimpleCache<Fluid,MeltingFuel> CACHE = new SimpleCache<>(fluid -> {
     for (MeltingFuel recipe : RECIPES) {
@@ -39,6 +42,9 @@ public class MeltingFuelLookup {
   private static final DuelSidedListener LISTENER = RecipeCacheInvalidator.addDuelSidedListener(() -> {
     SOLID = EMPTY;
     RECIPES.clear();
+    CACHE.clear();
+  }, () -> {
+    RECIPES.sort(ORDER);
     CACHE.clear();
   });
 
@@ -58,6 +64,10 @@ public class MeltingFuelLookup {
       SOLID = fuel;
     } else {
       TConstruct.LOG.warn("Multiple fuel recipes for solid fuel. This usually indicates a datapack error and may cause desyncs. Original {}, latest {}", SOLID.getId(), fuel.getId());
+      // recipes parse in parallel, so keep the first by recipe ID rather than the first registered, matching on every reload and on the client
+      if (ORDER.compare(fuel, SOLID) < 0) {
+        SOLID = fuel;
+      }
     }
   }
 

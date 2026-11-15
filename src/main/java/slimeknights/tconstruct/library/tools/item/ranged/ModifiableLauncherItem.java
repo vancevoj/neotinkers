@@ -199,7 +199,8 @@ public abstract class ModifiableLauncherItem extends ProjectileWeaponItem implem
   public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, @Nullable T damager, Consumer<ItemStack> onBroken) {
     // emulate ItemStack.hurtAndBreak; we always return 0 to skip vanilla's handling so tools use our damage logic
     // since 1.21.2 hurtAndBreak calls this before checking isDamageableItem, so check it here to keep the old behavior
-    if (stack.isDamageableItem() && ToolDamageUtil.damage(ToolStack.from(stack), amount, damager, stack)) {
+    // checks the tool rather than isDamageableItem, matching ModifiableItem; returning 0 means vanilla never damages the components itself
+    if (ToolDamageUtil.isDamageable(stack) && ToolDamageUtil.damage(ToolStack.from(stack), amount, damager, stack)) {
       // the tool is not consumed when broken, so pass the stack itself (vanilla passes a copy of the stack it just shrank)
       onBroken.accept(stack);
     }

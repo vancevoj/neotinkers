@@ -71,7 +71,7 @@ public class MeltingRecipe implements IMeltingRecipe, IDisplayableMeltingRecipe 
     this.time = time;
     this.byproducts = byproducts;
     if (addLookup) {
-      MeltingRecipeLookup.addMeltingFluid(input, output, temperature);
+      MeltingRecipeLookup.addMeltingFluid(id, input, output, temperature);
     }
   }
 

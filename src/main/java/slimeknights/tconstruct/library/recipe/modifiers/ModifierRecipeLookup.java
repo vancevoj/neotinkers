@@ -1,6 +1,7 @@
 package slimeknights.tconstruct.library.recipe.modifiers;
 
 import com.google.common.collect.HashMultimap;
+import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
 import net.minecraft.world.item.ItemStack;
@@ -14,6 +15,7 @@ import slimeknights.tconstruct.library.tools.SlotType;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -25,8 +27,10 @@ import java.util.stream.Stream;
  * Iterating a synchronized multimap view requires its lock, so the getters copy the values under the lock.
  */
 public class ModifierRecipeLookup {
-  /** Map of salvage recipes for each modifier */
-  private static final Multimap<ModifierId,ModifierSalvage> SALVAGE = Multimaps.synchronizedSetMultimap(HashMultimap.create());
+  /** Map of salvage recipes for each modifier. Insertion ordered so {@link #getSalvage(ItemStack, IToolStackView, ModifierId, int)} picks the first by recipe ID */
+  private static final Multimap<ModifierId,ModifierSalvage> SALVAGE = Multimaps.synchronizedSetMultimap(LinkedHashMultimap.create());
+  /** Order of {@link #SALVAGE} once all recipes registered. The server parses recipes in parallel, which would make the first match vary per reload */
+  private static final Comparator<ModifierSalvage> SALVAGE_ORDER = Comparator.comparing(ModifierSalvage::getId, RecipeCacheInvalidator.RECIPE_ID_ORDER);
 
   /** Map of slot type to modifiers added via that slot, better for fetching lists */
   private static final Multimap<SlotType,LazyModifier> RECIPE_MODIFIERS = Multimaps.synchronizedSetMultimap(HashMultimap.create());
@@ -41,6 +45,16 @@ public class ModifierRecipeLookup {
     RECIPE_MODIFIERS.clear();
     RECIPE_MODIFIER_IDS.clear();
     RECIPE_MODIFIER_LIST = null;
+  }, () -> {
+    // recipe list complete, re-add the salvage recipes by recipe ID so the first match is the same every reload
+    synchronized (SALVAGE) {
+      List<ModifierSalvage> salvages = new ArrayList<>(SALVAGE.values());
+      salvages.sort(SALVAGE_ORDER);
+      SALVAGE.clear();
+      for (ModifierSalvage salvage : salvages) {
+        SALVAGE.put(salvage.getModifier(), salvage);
+      }
+    }
   });
 
 

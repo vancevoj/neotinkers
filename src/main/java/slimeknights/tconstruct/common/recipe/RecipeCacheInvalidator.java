@@ -4,6 +4,7 @@ import it.unimi.dsi.fastutil.booleans.BooleanConsumer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.neoforged.neoforge.event.AddServerReloadListenersEvent;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
@@ -11,6 +12,7 @@ import slimeknights.mantle.recipe.helper.RecipeHelper;
 import slimeknights.mantle.data.listener.IEarlySafeManagerReloadListener;
 import slimeknights.tconstruct.TConstruct;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -41,10 +43,29 @@ public class RecipeCacheInvalidator implements IEarlySafeManagerReloadListener {
    * @return  Object that can clear cache as needed
    */
   public static DuelSidedListener addDuelSidedListener(Runnable runnable) {
-    DuelSidedListener listener = new DuelSidedListener(runnable);
+    return addDuelSidedListener(runnable, () -> {});
+  }
+
+  /**
+   * Registers a listener that properly responds to the client side, with a callback once a recipe list finished registering into the cache.
+   * Since 26.3 the server parses recipes in parallel, so caches with "first match" lookups use the callback to put their entries into a deterministic order,
+   * typically {@link #RECIPE_ID_ORDER}, and to drop anything computed from the unordered entries.
+   * @param clearCache   Runnable to clear cache
+   * @param finishCache  Runnable called at the end of each recipe list that registered entries into the cache
+   * @return  Object that can clear cache as needed
+   */
+  public static DuelSidedListener addDuelSidedListener(Runnable clearCache, Runnable finishCache) {
+    DuelSidedListener listener = new DuelSidedListener(clearCache, finishCache);
     addReloadListener(listener);
     return listener;
   }
+
+  /**
+   * Orders recipe IDs for {@link #addDuelSidedListener(Runnable, Runnable)}, IDs from {@code getId()} on Tinkers' recipes, null last.
+   * Those IDs are given by Mantle during decoding (derived from the recipe JSON as the registry key is not visible there) and are sent to the client,
+   * so both sides sort the same way regardless of the order recipes were parsed in.
+   */
+  public static final Comparator<Identifier> RECIPE_ID_ORDER = Comparator.nullsLast(Comparator.<Identifier>naturalOrder());
 
   /**
    * Checks if a recipe registering itself into a static cache from its constructor should skip it. In singleplayer and on a LAN host, the
@@ -93,6 +114,8 @@ public class RecipeCacheInvalidator implements IEarlySafeManagerReloadListener {
   @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
   public static class DuelSidedListener implements BooleanConsumer {
     private final Runnable clearCache;
+    /** Called at the end of a recipe list that registered entries, see {@link #addDuelSidedListener(Runnable, Runnable)} */
+    private final Runnable finishCache;
     /** If true, the cache holds a finished recipe list, so the next registration starts a new one */
     private boolean clearQueued = false;
 
@@ -105,6 +128,9 @@ public class RecipeCacheInvalidator implements IEarlySafeManagerReloadListener {
       // still queued means nothing registered during this recipe load, so the contents are left over from the previous one
       if (clearQueued) {
         clearCache.run();
+      } else {
+        // the cache holds the complete recipe list now, let it sort out the parse order
+        finishCache.run();
       }
       // queue clearing to run at the beginning of the next recipe list
       clearQueued = true;

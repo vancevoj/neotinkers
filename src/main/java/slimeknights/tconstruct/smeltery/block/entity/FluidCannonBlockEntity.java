@@ -177,14 +177,8 @@ public class FluidCannonBlockEntity extends TankBlockEntity implements ITankInve
   protected void loadAdditional(ValueInput input) {
     // tank is read by the parent
     super.loadAdditional(input);
-    input.child(TAG_ITEM).ifPresent(item -> {
-      // empty slots store an empty tag, skip reading those so the item codec does not report them
-      if (item.getString("id").isPresent()) {
-        itemHandler.readFromNBT(item);
-      } else if (!itemHandler.getStack().isEmpty()) {
-        itemHandler.setStack(ItemStack.EMPTY);
-      }
-    });
+    // Mantle's handler reads the empty tag of an empty slot as no item
+    input.child(TAG_ITEM).ifPresent(itemHandler::readFromNBT);
   }
 
   @Override

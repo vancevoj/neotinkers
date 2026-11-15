@@ -47,8 +47,8 @@ public class HeaterBlockEntity extends NameableBlockEntity {
   @Override
   protected void loadAdditional(ValueInput input) {
     super.loadAdditional(input);
-    // empty heaters store an empty tag, skip those so the item codec does not report them
-    input.child(TAG_ITEM).filter(child -> child.getString("id").isPresent()).ifPresent(itemHandler::readFromNBT);
+    // Mantle's handler reads the empty tag of an empty heater as no item
+    input.child(TAG_ITEM).ifPresent(itemHandler::readFromNBT);
   }
 
   @Override

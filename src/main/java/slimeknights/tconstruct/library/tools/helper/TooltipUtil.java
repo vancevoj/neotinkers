@@ -259,8 +259,8 @@ public class TooltipUtil {
    */
   public static void getDefaultInfo(ItemStack stack, IToolStackView tool, @Nullable Player player, List<Component> tooltips, TooltipFlag flag) {
     // shows as broken when broken, hold shift for proper durability
-    // 1.21: Item#canBeDepleted is gone, an item is depletable when it has a default MAX_DAMAGE component
-    if (tool.getItem().components().has(DataComponents.MAX_DAMAGE) && !tool.isUnbreakable() && tool.hasTag(TinkerTags.Items.DURABILITY)) {
+    // Item#canBeDepleted is gone (it was always true for tools), the durability tag decides. Tools have no default MAX_DAMAGE component
+    if (!tool.isUnbreakable() && tool.hasTag(TinkerTags.Items.DURABILITY)) {
       tooltips.add(TooltipBuilder.formatDurability(tool.getCurrentDurability(), tool.getStats().getInt(ToolStats.DURABILITY), true));
     }
     // modifier tooltip

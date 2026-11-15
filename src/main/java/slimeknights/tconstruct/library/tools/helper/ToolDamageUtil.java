@@ -1,6 +1,7 @@
 package slimeknights.tconstruct.library.tools.helper;
 
 import net.minecraft.advancements.triggers.CriteriaTriggers;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -44,12 +45,37 @@ public class ToolDamageUtil {
   }
 
   /**
+   * Checks if the given modifiable stack takes durability damage, replacing {@link ItemStack#isDamageableItem()} for Tinkers' items.
+   * Since 1.21.2 that method only checks the {@link DataComponents#MAX_DAMAGE} and {@link DataComponents#DAMAGE} components. Tinkers mirrors its
+   * durability into those (see {@link ToolStack}), but stackable tools such as the dagger cannot have them, so Tinkers' own logic checks the tool instead.
+   * @param stack  Modifiable stack to check
+   * @return  True if the stack has durability and is not unbreakable
+   */
+  public static boolean isDamageable(ItemStack stack) {
+    return stack.is(TinkerTags.Items.DURABILITY) && !stack.has(DataComponents.UNBREAKABLE);
+  }
+
+  /**
+   * Checks if the given modifiable stack is damaged without building a tool stack, replacing {@link ItemStack#isDamaged()} for Tinkers' items.
+   * @param stack  Modifiable stack to check
+   * @return  True if the tool has damage or is broken
+   */
+  public static boolean isDamaged(ItemStack stack) {
+    if (!isDamageable(stack)) {
+      return false;
+    }
+    CompoundTag nbt = ToolDataComponents.getTag(stack);
+    return nbt != null && (nbt.getIntOr(ToolStack.TAG_DAMAGE, 0) > 0 || nbt.getBooleanOr(ToolStack.TAG_BROKEN, false));
+  }
+
+  /**
    * Gets the max damage for use in {@link net.minecraft.world.item.Item#getMaxDamage(ItemStack)}.
    * Intentionally avoids ever letting the tool's max damage exceed its current.
    * For normal tool usages, see {@link ToolStack#getStats()} with {@link ToolStats#DURABILITY}.
    */
   public static int getFakeMaxDamage(ItemStack stack) {
-    if (!stack.isDamageableItem()) {
+    // not isDamageableItem, stackable tools have no damage components but still report their durability like in 1.21.1
+    if (!isDamageable(stack)) {
       return 0;
     }
     ToolStack tool = ToolStack.from(stack);
@@ -269,7 +295,7 @@ public class ToolDamageUtil {
   public static <T extends LivingEntity> void handleDamageItem(ItemStack stack, int amount, T damager, Consumer<T> onBroken) {
     // We basically emulate Itemstack.damageItem here. We always return 0 to skip the handling in ItemStack.
     // If we don't tools ignore our damage logic
-    if (stack.isDamageableItem() && ToolDamageUtil.damage(ToolStack.from(stack), amount, damager, stack)) {
+    if (isDamageable(stack) && ToolDamageUtil.damage(ToolStack.from(stack), amount, damager, stack)) {
       onBroken.accept(damager);
     }
   }

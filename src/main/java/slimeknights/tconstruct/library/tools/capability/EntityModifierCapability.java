@@ -2,16 +2,19 @@ package slimeknights.tconstruct.library.tools.capability;
 
 import lombok.Getter;
 import lombok.Setter;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.attachment.AttachmentHolder;
 import net.neoforged.neoforge.attachment.AttachmentType;
 import net.neoforged.neoforge.common.util.ValueIOSerializable;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.tools.nbt.ModifierNBT;
 
@@ -89,8 +92,28 @@ public class EntityModifierCapability {
   }
 
   /**
+   * Restores modifiers saved by Neo Tinkers for 1.21.1, which stored this attachment as a bare modifier list. 26.3 attachments read through a
+   * {@link ValueInput} child, which must be a compound, so such an attachment loads empty (see {@link Storage}). This reads the old list from the
+   * entity data instead. Called after an entity finished loading, see {@link slimeknights.tconstruct.mixin.EntityMixin}.
+   * @param entity  Entity that finished loading
+   * @param input   Entity save data, the root holding the attachments
+   */
+  @Internal
+  public static void readLegacyModifiers(Entity entity, ValueInput input) {
+    // the attachment is only present if the entity saved one, so nearly every entity stops here
+    Storage storage = entity.getExistingDataOrNull(ATTACHMENT);
+    if (storage != null && storage.getModifiers().isEmpty()) {
+      input.child(AttachmentHolder.ATTACHMENTS_NBT_KEY)
+        .flatMap(attachments -> attachments.read(ATTACHMENT.getId().toString(), ExtraCodecs.NBT))
+        .filter(tag -> tag instanceof ListTag)
+        .ifPresent(tag -> storage.setModifiers(ModifierNBT.readFromNBT(tag)));
+    }
+  }
+
+  /**
    * Mutable storage backing the attachment, serialized via the modifier NBT list.
    * Attachments now serialize through a {@link ValueOutput}, which cannot have a list as its root, so the list is stored under {@link #TAG_MODIFIERS}.
+   * The 1.21.1 layout (the bare list) is read by {@link #readLegacyModifiers(Entity, ValueInput)}.
    */
   public static class Storage implements ValueIOSerializable, EntityModifiers {
     /** Key holding the modifier list in the attachment data */

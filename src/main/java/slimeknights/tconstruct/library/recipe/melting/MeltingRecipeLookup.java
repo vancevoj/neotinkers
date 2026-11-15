@@ -1,5 +1,6 @@
 package slimeknights.tconstruct.library.recipe.melting;
 
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -13,6 +14,8 @@ import slimeknights.tconstruct.common.recipe.RecipeCacheInvalidator;
 import slimeknights.tconstruct.common.recipe.RecipeCacheInvalidator.DuelSidedListener;
 import slimeknights.tconstruct.library.utils.SimpleCache;
 
+import javax.annotation.Nullable;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -35,15 +38,25 @@ public class MeltingRecipeLookup {
     }
   }
 
+  /**
+   * Fluid registered by a recipe
+   * @param recipeId  ID of the registering recipe for ordering, null if not given
+   * @param fluid     Melting result
+   */
+  private record Registration(@Nullable Identifier recipeId, MeltingFluid fluid) {}
+
   /** If true, cache is currently frozen and will now allow changing {@link #FLUIDS} */
   private static volatile boolean meltingFrozen = false;
   /** List of fluid recipes stored from melting recipe constructors */
-  private static final List<MeltingFluid> FLUIDS = new CopyOnWriteArrayList<>();
+  private static final List<Registration> FLUIDS = new CopyOnWriteArrayList<>();
+  /** Order for {@link #FLUIDS} once all recipes registered. The server parses recipes in parallel, which would make the first match vary per reload */
+  private static final Comparator<Registration> ORDER = Comparator.comparing(Registration::recipeId, RecipeCacheInvalidator.RECIPE_ID_ORDER);
   /** Cache of lookup by item, assumes no recipes vary by NBT. We mostly use this for blocks anyways */
   private static final SimpleCache<Item,MeltingFluid> LOOKUP = new SimpleCache<>(item -> {
     if (item != Items.AIR) {
       ItemStack stack = new ItemStack(item);
-      for (MeltingFluid fluid : FLUIDS) {
+      for (Registration registration : FLUIDS) {
+        MeltingFluid fluid = registration.fluid;
         if (fluid.ingredient.test(stack)) {
           return fluid;
         }
@@ -56,15 +69,29 @@ public class MeltingRecipeLookup {
   private static final DuelSidedListener CACHE = RecipeCacheInvalidator.addDuelSidedListener(() -> {
     FLUIDS.clear();
     LOOKUP.clear();
+  }, () -> {
+    FLUIDS.sort(ORDER);
+    LOOKUP.clear();
   });
 
-  /** Adds a fluid to the lookup */
-  public static synchronized void addMeltingFluid(Ingredient ingredient, FluidOutput result, int temperature) {
+  /** Adds a fluid to the lookup. Prefer {@link #addMeltingFluid(Identifier, Ingredient, FluidOutput, int)}, fluids without a recipe ID match last */
+  public static void addMeltingFluid(Ingredient ingredient, FluidOutput result, int temperature) {
+    addMeltingFluid(null, ingredient, result, temperature);
+  }
+
+  /**
+   * Adds a fluid to the lookup
+   * @param recipeId     ID of the recipe adding the fluid, decides which recipe matches first when several melt the same item
+   * @param ingredient   Melting input
+   * @param result       Melting result
+   * @param temperature  Melting temperature
+   */
+  public static synchronized void addMeltingFluid(@Nullable Identifier recipeId, Ingredient ingredient, FluidOutput result, int temperature) {
     if (meltingFrozen || RecipeCacheInvalidator.skipRegistration()) {
       return;
     }
     CACHE.checkClear();
-    FLUIDS.add(new MeltingFluid(ingredient, result, temperature));
+    FLUIDS.add(new Registration(recipeId, new MeltingFluid(ingredient, result, temperature)));
   }
 
   /** Logic to find a fluid for a given item */

@@ -42,6 +42,7 @@ public final class MultiblockResult {
    * @return  Multiblock result
    */
   public static MultiblockResult error(@Nullable BlockPos pos, String key, Object... params) {
-    return error(pos, Component.translatable(key, params));
+    // 26.3 dev throws on arguments that are not a component, string, number or boolean, escape stringifies others; copied as escaping edits the array
+    return error(pos, Component.translatableEscape(key, params.clone()));
   }
 }

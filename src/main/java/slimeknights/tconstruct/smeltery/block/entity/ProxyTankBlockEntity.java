@@ -142,15 +142,8 @@ public class ProxyTankBlockEntity extends MantleBlockEntity implements IFluidTan
 
   /** Reads the item from the input, used for both saving and syncing */
   private void readItem(ValueInput input) {
-    ValueInput item = input.child(TAG_ITEM).orElse(null);
-    if (item != null) {
-      // empty tanks store an empty tag, skip reading those so the item codec does not report them
-      if (item.getString("id").isPresent()) {
-        itemTank.readFromNBT(item);
-      } else if (!itemTank.getStack().isEmpty()) {
-        itemTank.setStack(ItemStack.EMPTY);
-      }
-    }
+    // Mantle's handler reads the empty tag of an empty tank as no item
+    input.child(TAG_ITEM).ifPresent(itemTank::readFromNBT);
   }
 
   @Override

@@ -17,14 +17,18 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.Consumable;
 import net.minecraft.world.item.consume_effects.ClearAllStatusEffectsConsumeEffect;
+import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
+import net.neoforged.neoforge.event.entity.living.LivingUseTotemEvent;
 import net.neoforged.neoforge.event.entity.living.MobEffectEvent;
 import slimeknights.tconstruct.TConstruct;
 
 import javax.annotation.Nullable;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -39,6 +43,8 @@ import java.util.Set;
  *   <li>Instances without custom cures use the default, curable only by milk.</li>
  *   <li>Custom cures are stored per instance, persisted in the entity persistent data while the effect is active, and restored when the entity loads.</li>
  *   <li>Vanilla milk clears all effects through its consume effect, so removing an effect with custom cures not including milk is canceled while the entity finishes using such an item.</li>
+ *   <li>Totems clear all effects through their death protection. NeoForge 1.21.1 only let them remove effects with the default cures ({@code EffectCures.PROTECTED_BY_TOTEM}),
+ *   so effects with custom cures not including the totem item are kept, see {@link #onUseTotem(LivingUseTotemEvent)}.</li>
  * </ul>
  */
 @EventBusSubscriber(modid = TConstruct.MOD_ID)
@@ -53,6 +59,15 @@ public final class TinkerEffectCures {
   private static final String PERSISTENT_KEY = TConstruct.resourceString("effect_cures");
   /** Set while Tinkers removes effects for a cure, so the milk protection does not cancel it */
   private static final ThreadLocal<Boolean> CURING = ThreadLocal.withInitial(() -> false);
+  /** Effects a totem in use must not clear, by entity. Weak keys so entities are not leaked */
+  private static final Map<LivingEntity, TotemProtection> TOTEM_PROTECTION = new MapMaker().weakKeys().makeMap();
+
+  /**
+   * Effects to keep while a totem clears all effects
+   * @param effects  Effect instances to keep, compared by identity. Each is removed from the set once its removal was canceled
+   * @param time     Game time of the totem use, the protection does not outlive that tick
+   */
+  private record TotemProtection(Set<MobEffectInstance> effects, long time) {}
 
   /**
    * Gets the curative items for the given effect instance
@@ -138,18 +153,57 @@ public final class TinkerEffectCures {
     return consumable != null && consumable.onConsumeEffects().stream().anyMatch(effect -> effect instanceof ClearAllStatusEffectsConsumeEffect);
   }
 
-  /** Prevents milk from curing effects with custom cures that exclude it */
+  /**
+   * Remembers the effects with custom cures before a totem clears all effects. Totems apply their death protection right after this event,
+   * whose clear all effect removes every effect, so the removals are canceled in {@link #onEffectRemove(MobEffectEvent.Remove)}.
+   * Lowest priority so totems canceled by other mods do not protect anything.
+   */
+  @SubscribeEvent(priority = EventPriority.LOWEST)
+  static void onUseTotem(LivingUseTotemEvent event) {
+    LivingEntity entity = event.getEntity();
+    if (entity.level().isClientSide()) {
+      return;
+    }
+    Item totem = event.getTotem().getItem();
+    Set<MobEffectInstance> keep = Collections.newSetFromMap(new IdentityHashMap<>());
+    for (MobEffectInstance instance : entity.getActiveEffects()) {
+      Set<Item> cures = CURES.get(instance);
+      if (cures != null && !cures.contains(totem)) {
+        keep.add(instance);
+      }
+    }
+    if (keep.isEmpty()) {
+      TOTEM_PROTECTION.remove(entity);
+    } else {
+      TOTEM_PROTECTION.put(entity, new TotemProtection(keep, entity.level().getGameTime()));
+    }
+  }
+
+  /** Prevents milk and totems from curing effects with custom cures that exclude them */
   @SubscribeEvent
   static void onEffectRemove(MobEffectEvent.Remove event) {
     MobEffectInstance instance = event.getEffectInstance();
     if (instance == null || CURING.get()) {
       return;
     }
+    LivingEntity entity = event.getEntity();
+    // totem clearing all effects, protection consumed per effect so later removals of the same effect go through
+    TotemProtection totem = TOTEM_PROTECTION.get(entity);
+    if (totem != null) {
+      if (totem.time() != entity.level().getGameTime()) {
+        TOTEM_PROTECTION.remove(entity);
+      } else if (totem.effects().remove(instance)) {
+        if (totem.effects().isEmpty()) {
+          TOTEM_PROTECTION.remove(entity);
+        }
+        event.setCanceled(true);
+        return;
+      }
+    }
     Set<Item> cures = CURES.get(instance);
     if (cures == null || cures.contains(Items.MILK_BUCKET)) {
       return;
     }
-    LivingEntity entity = event.getEntity();
     if (entity.isUsingItem()) {
       ItemStack using = entity.getUseItem();
       if (clearsAllEffects(using) && !cures.contains(using.getItem())) {

@@ -35,6 +35,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.event.AnvilUpdateEvent;
 import net.neoforged.neoforge.event.entity.ProjectileImpactEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingEvent.LivingVisibilityEvent;
@@ -80,6 +81,7 @@ import slimeknights.tconstruct.library.tools.helper.ModifierUtil;
 import slimeknights.tconstruct.library.tools.helper.ToolHarvestLogic;
 import slimeknights.tconstruct.library.tools.helper.ToolAttackUtil;
 import slimeknights.tconstruct.library.tools.helper.ToolDamageUtil;
+import slimeknights.tconstruct.library.tools.item.IModifiable;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.ModDataNBT;
 import slimeknights.tconstruct.library.tools.nbt.ModifierNBT;
@@ -136,6 +138,19 @@ public class ToolEvents {
       }
     } finally {
       BREAKING.set(Boolean.FALSE);
+    }
+  }
+
+  /**
+   * Tools are repaired in the tinker station. Since 26.3 tools carry the vanilla damage components (see {@link ToolStack}), so they count as
+   * damageable for the anvil, which would let it combine the durability of two tools of the same item. Material repair already fails as tools have no
+   * repairable component, and Tinkers' tools reject vanilla enchantments, so combining two tools has no other use.
+   */
+  @SubscribeEvent
+  static void onAnvilUpdate(AnvilUpdateEvent event) {
+    ItemStack left = event.getLeft();
+    if (left.getItem() instanceof IModifiable && left.is(event.getRight().getItem())) {
+      event.setCanceled(true);
     }
   }
 

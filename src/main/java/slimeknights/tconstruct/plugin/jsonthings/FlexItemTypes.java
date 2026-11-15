@@ -71,7 +71,8 @@ public class FlexItemTypes {
       boolean breakBlocksInCreative = GsonHelper.getAsBoolean(data, "break_blocks_in_creative", true);
       int stackSize = GsonHelper.getAsInt(data, "max_stack_size", 1);
       return (IToolItemFactory<ModifiableItem>)(props, builder) -> {
-        props.durability(-1).stacksTo(stackSize);
+        // like the dagger: no default durability, 26.3 rejects default durability on stackable items and ToolStack mirrors the damage components
+        props.stacksTo(stackSize);
         ToolDefinition definition = ToolDefinition.create(builder.getRegistryName());
         return add(TOOL_ITEMS, breakBlocksInCreative ? new ModifiableItem(props, definition, stackSize) : new ModifiableSwordItem(props, definition, stackSize));
       };

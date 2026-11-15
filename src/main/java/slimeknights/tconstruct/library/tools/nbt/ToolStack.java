@@ -3,6 +3,7 @@ package slimeknights.tconstruct.library.tools.nbt;
 import com.google.common.collect.ImmutableSet;
 import lombok.AccessLevel;
 import lombok.Getter;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NumericTag;
@@ -41,6 +42,7 @@ import slimeknights.tconstruct.library.utils.RestrictedCompoundTag;
 import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -79,9 +81,10 @@ public class ToolStack implements IToolStackView {
    * Bump this when an update changes tool data in a way existing tools need to be rebuilt for.
    * <ul>
    *   <li>1: Tinkers' Construct 3.12 data, the first versioned data</li>
+   *   <li>2: Minecraft 26.3, tools mirror their durability into the vanilla damage components, see {@link #updateStackComponents(ItemStack)}</li>
    * </ul>
    */
-  public static final int DATA_VERSION = 1;
+  public static final int DATA_VERSION = 2;
 
   // vanilla tags
   public static final String TAG_DAMAGE = "Damage";
@@ -164,6 +167,55 @@ public class ToolStack implements IToolStackView {
       CompoundTag copy = nbt.copy();
       ToolDataComponents.setTag(stack, copy);
       syncedTag = copy;
+      // damage, broken state and the durability stat all change through here, so keep the vanilla damage components in sync
+      updateStackComponents(stack);
+    }
+  }
+
+  /**
+   * Mirrors the tool durability into the vanilla {@link DataComponents#MAX_DAMAGE} and {@link DataComponents#DAMAGE} components of the stack.
+   * Since 1.21.2 {@link ItemStack#isDamageableItem()} only checks those components (NeoForge no longer asks the item), and it gates armor damage
+   * from attacks, {@link ItemStack#hurtAndBreak(int, net.minecraft.world.entity.LivingEntity, net.minecraft.world.entity.EquipmentSlot)},
+   * enchantment effects, mob drop damage and other vanilla durability logic.
+   * <p>
+   * The tool stats and the damage in the tool data stay the source of truth: Tinkers' items override {@link Item#getMaxDamage(ItemStack)},
+   * {@link Item#getDamage(ItemStack)}, {@link Item#setDamage(ItemStack, int)} and {@link Item#damageItem(ItemStack, int, net.minecraft.world.entity.LivingEntity, java.util.function.Consumer)},
+   * and the latter returns 0, so vanilla never changes the components itself. The components just mirror the values those methods report.
+   * <p>
+   * Stackable tools such as the dagger never get the components: vanilla rejects damageable stacks with a max stack size above 1, which would
+   * make item resources and container contents drop them. Tinkers' own durability logic does not need them, see {@link slimeknights.tconstruct.library.tools.helper.ToolDamageUtil#isDamageable(ItemStack)}.
+   * @param stack  Stack holding this tool
+   */
+  private void updateStackComponents(ItemStack stack) {
+    // the durability tag decides if the tool has durability; before tags load (datagen, client before joining) keep whatever the stack has
+    // the item check also skips empty stacks, which report air
+    if (stack.getItem() != item || !TinkerTags.isTagsLoaded()) {
+      return;
+    }
+    int durability = getStats().getInt(ToolStats.DURABILITY);
+    if (durability > 0 && item.getDefaultMaxStackSize() == 1 && hasTag(TinkerTags.Items.DURABILITY)) {
+      // same values as ToolDamageUtil#getFakeMaxDamage and getDamage: when broken, max damage is one above the damage so vanilla never deletes the tool
+      setComponent(stack, DataComponents.MAX_DAMAGE, isBroken() ? durability + 1 : durability);
+      setComponent(stack, DataComponents.DAMAGE, Math.max(0, getDamage()));
+    } else {
+      // no durability, so not damageable in vanilla either
+      setComponent(stack, DataComponents.MAX_DAMAGE, null);
+      setComponent(stack, DataComponents.DAMAGE, null);
+    }
+  }
+
+  /**
+   * Sets a component on the stack if it changed. Skipping unchanged values avoids copying a component patch shared with stack copies.
+   * @param stack  Stack to update
+   * @param type   Component type
+   * @param value  New value, null resets the component to the item default (removing it from the patch)
+   */
+  private static <T> void setComponent(ItemStack stack, DataComponentType<T> type, @Nullable T value) {
+    if (value == null) {
+      value = stack.getPrototype().get(type);
+    }
+    if (!Objects.equals(stack.get(type), value)) {
+      stack.set(type, value);
     }
   }
 
@@ -339,6 +391,7 @@ public class ToolStack implements IToolStackView {
     ItemStack stack = new ItemStack(item, size);
     // store the tool data onto the component to avoid going through verifyTagAfterLoad and rebuilding stats again
     ToolDataComponents.setTag(stack, nbt);
+    updateStackComponents(stack);
     // damage value is already enforced via the stack creation above
     return stack;
   }
@@ -374,6 +427,7 @@ public class ToolStack implements IToolStackView {
       tag.putInt(TAG_DAMAGE, 0);
     }
     ToolDataComponents.setTag(stack, tag);
+    updateStackComponents(stack);
     return stack;
   }
 

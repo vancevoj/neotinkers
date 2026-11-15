@@ -59,6 +59,8 @@ public class MaterialCastingLookup {
   });
   /** Comparator for composite recipes, used in {@link #getSortedCompositeFluids()} */
   private static final Comparator<MaterialFluidRecipe> COMPOSITE_COMPARATOR = OUTPUT_COMPARATOR.thenComparing(INPUT_COMPARATOR);
+  /** Order of {@link #CASTING_FLUIDS} and {@link #COMPOSITE_FLUIDS} once all recipes registered. The server parses recipes in parallel, which would make the first match vary per reload */
+  private static final Comparator<MaterialFluidRecipe> REGISTRATION_ORDER = Comparator.comparing(MaterialFluidRecipe::getId, RecipeCacheInvalidator.RECIPE_ID_ORDER);
 
   /** Cache for casting recipe for a given fluid */
   private static final SimpleCache<Fluid,MaterialFluidRecipe> CASTING_CACHE = new SimpleCache<>(fluid -> {
@@ -109,15 +111,25 @@ public class MaterialCastingLookup {
   private static final DuelSidedListener LISTENER = RecipeCacheInvalidator.addDuelSidedListener(() -> {
     ITEM_COST_LOOKUP.clear();
     CASTING_FLUIDS.clear();
+    COMPOSITE_FLUIDS.clear();
+    clearDerivedCaches();
+  }, () -> {
+    // recipe list complete, put the first match lookups in a deterministic order
+    CASTING_FLUIDS.sort(REGISTRATION_ORDER);
+    COMPOSITE_FLUIDS.sort(REGISTRATION_ORDER);
+    clearDerivedCaches();
+  });
+
+  /** Clears all caches computed from the recipe lists */
+  private static void clearDerivedCaches() {
     CASTING_CACHE.clear();
     MATERIAL_CASTABLE.clear();
     MATERIAL_COMPOSITE.clear();
-    COMPOSITE_FLUIDS.clear();
     COMPOSITE_CACHE.clear();
     SORTED_CASTING = null;
     SORTED_COMPOSITE = null;
     TEMPERATURE_CACHE.clear();
-  });
+  }
 
   /** Shared logic to register parts */
   public static synchronized void registerItemCost(IMaterialItem item, int cost) {

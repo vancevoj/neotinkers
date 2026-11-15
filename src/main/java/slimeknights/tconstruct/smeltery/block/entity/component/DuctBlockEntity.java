@@ -8,7 +8,6 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
@@ -92,14 +91,8 @@ public class DuctBlockEntity extends SmelteryFluidIO implements MenuProvider {
   @Override
   protected void loadAdditional(ValueInput input) {
     super.loadAdditional(input);
-    input.child(TAG_ITEM).ifPresent(item -> {
-      // empty ducts store an empty tag, skip reading those so the item codec does not report them
-      if (item.getString("id").isPresent()) {
-        itemHandler.readFromNBT(item);
-      } else if (!itemHandler.getStack().isEmpty()) {
-        itemHandler.setStack(ItemStack.EMPTY);
-      }
-    });
+    // Mantle's handler reads the empty tag of an empty duct as no item
+    input.child(TAG_ITEM).ifPresent(itemHandler::readFromNBT);
   }
 
   @Override

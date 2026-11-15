@@ -38,11 +38,14 @@ public class MaterialRecipeCache {
   private static final Predicate<MaterialRecipe> RECIPE_FILTER = MaterialRecipe::isVisible;
   /** Full list of recipes in the cache */
   private static volatile List<MaterialRecipe> SORTED_RECIPES = null;
-  /** Comparator used to create {@link #SORTED_RECIPES} */
+  /** Order of {@link #RECIPES} once all recipes registered. The server parses recipes in parallel, which would make the first match vary per reload */
+  private static final Comparator<MaterialRecipe> REGISTRATION_ORDER = Comparator.comparing(MaterialRecipe::getId, RecipeCacheInvalidator.RECIPE_ID_ORDER);
+  /** Comparator used to create {@link #SORTED_RECIPES}, ties sorted by recipe ID as the per material lists come from a hash multimap */
   private static final Comparator<MaterialRecipe> RECIPE_COMPARATOR = Comparator
     .comparing(MaterialRecipe::getMaterial)
     .thenComparing(MaterialRecipe::getValue)
-    .thenComparing(MaterialRecipe::getNeeded);
+    .thenComparing(MaterialRecipe::getNeeded)
+    .thenComparing(REGISTRATION_ORDER);
   /** Lookup from item ID to recipe */
   private static final Map<Item, MaterialRecipe> RECIPE_BY_ITEM = new ConcurrentHashMap<>();
   /** Lookup from material variant ID to recipe */
@@ -82,6 +85,13 @@ public class MaterialRecipeCache {
     KNOWN_VARIANTS.clear();
     SORTED_VARIANTS = null;
     HIDDEN_VARIANTS = null;
+  }, () -> {
+    // recipe list complete, put the first match lookup in a deterministic order
+    RECIPES.sort(REGISTRATION_ORDER);
+    SORTED_RECIPES = null;
+    RECIPE_BY_ITEM.clear();
+    SORTED_RECIPES_BY_MATERIAL.clear();
+    ITEMS_BY_MATERIAL.clear();
   });
 
   /** Registers a recipe with the cache */

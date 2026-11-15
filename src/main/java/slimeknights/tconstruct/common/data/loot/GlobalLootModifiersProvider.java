@@ -129,10 +129,16 @@ public class GlobalLootModifiersProvider extends GlobalLootModifierProvider {
     if (optional) {
       builder.addCondition(new TagFilledCondition<>(nuggets));
     }
-    add("lustrous/" + name, builder.addCondition(new HasModifierLootCondition(ModifierIds.lustrous))
+    AddEntryLootModifier modifier = builder.addCondition(new HasModifierLootCondition(ModifierIds.lustrous))
       .addFunction(SetItemCountFunction.setCount(ContextIntProviders.between(2, 4)).build())
       .addFunction(ModifierBonusLootFunction.oreDrops(ModifierIds.lustrous, false).build())
       .addFunction(ApplyExplosionDecay.explosionDecay().build())
-      .build());
+      .build();
+    if (optional) {
+      // 26.3 ingredients refuse tags that do not exist, so skip the whole modifier when no mod adds the ore
+      add("lustrous/" + name, modifier, new TagFilledCondition<>(TagKey.create(Registries.ITEM, ores)));
+    } else {
+      add("lustrous/" + name, modifier);
+    }
   }
 }

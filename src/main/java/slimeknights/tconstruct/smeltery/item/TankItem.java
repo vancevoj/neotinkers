@@ -96,7 +96,8 @@ public class TankItem extends BlockTooltipItem {
         FluidStack fluid = tank.getFluid();
         tooltip.accept(fluid.getHoverName().plainCopy().withStyle(ChatFormatting.GRAY));
         if (flag.isAdvanced()) {
-          tooltip.accept(Component.translatable(FLUID_ID, Loadables.FLUID.getKey(fluid.getFluid())).withStyle(ChatFormatting.DARK_GRAY));
+          // 26.3 dev rejects identifier translation arguments, so pass the id as a string
+          tooltip.accept(Component.translatable(FLUID_ID, String.valueOf(Loadables.FLUID.getKey(fluid.getFluid()))).withStyle(ChatFormatting.DARK_GRAY));
         }
         List<Component> material = new ArrayList<>();
         FluidTooltipHandler.appendMaterial(fluid, material);

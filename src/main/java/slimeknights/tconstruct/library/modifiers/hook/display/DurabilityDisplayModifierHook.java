@@ -1,11 +1,10 @@
 package slimeknights.tconstruct.library.modifiers.hook.display;
 
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
-import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
+import slimeknights.tconstruct.library.tools.helper.ToolDamageUtil;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
@@ -47,7 +46,8 @@ public interface DurabilityDisplayModifierHook {
   static boolean showDurabilityBar(ItemStack stack) {
     // don't show durability bar if the tool does not support durability
     // we don't use that feature in the base mod, but Tinkers' Things notably has a tool that uses it
-    if (!stack.isDamageableItem() || !stack.is(TinkerTags.Items.DURABILITY)) {
+    // checks the tool rather than isDamageableItem, as stackable tools have no vanilla damage components
+    if (!ToolDamageUtil.isDamageable(stack)) {
       return false;
     }
 
@@ -59,7 +59,8 @@ public interface DurabilityDisplayModifierHook {
         return show;
       }
     }
-    return tool.getItem().components().has(DataComponents.MAX_DAMAGE) && tool.getDamage() > 0;
+    // ToolDamageUtil#isDamageable replaces the old canBeDepleted check, which was always true for tools
+    return tool.getDamage() > 0;
   }
 
   /**

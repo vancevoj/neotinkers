@@ -289,7 +289,8 @@ public class ModifiableArmorItem extends Item implements IModifiableDisplay, ICl
     // We basically emulate Itemstack.damageItem here. We always return 0 to skip the handling in ItemStack.
     // If we don't tools ignore our damage logic
     // since 1.21.2 hurtAndBreak calls this before checking isDamageableItem (it used to skip us), so check it here to keep the old behavior
-    if (stack.isDamageableItem() && ToolDamageUtil.damage(ToolStack.from(stack), amount, damager, stack)) {
+    // checks the tool rather than isDamageableItem, matching ModifiableItem; returning 0 means vanilla never damages the components itself
+    if (ToolDamageUtil.isDamageable(stack) && ToolDamageUtil.damage(ToolStack.from(stack), amount, damager, stack)) {
       // the armor is not consumed when broken, so pass the stack itself (vanilla passes a copy of the stack it just shrank)
       onBroken.accept(stack);
     }

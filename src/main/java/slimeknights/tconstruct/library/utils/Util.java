@@ -94,7 +94,8 @@ public class Util {
    * @return  Translated component
    */
   public static Component makeTranslation(String base, @Nullable Identifier name, Object... arguments) {
-    return Component.translatable(makeTranslationKey(base, name), arguments);
+    // 26.3 dev throws on arguments that are not a component, string, number or boolean, escape stringifies others; copied as escaping edits the array
+    return Component.translatableEscape(makeTranslationKey(base, name), arguments.clone());
   }
 
   /** Same as {@link net.minecraft.util.Util#make(Supplier)} */
