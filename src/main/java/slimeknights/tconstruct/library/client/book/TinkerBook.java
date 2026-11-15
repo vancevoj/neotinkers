@@ -194,7 +194,7 @@ public class TinkerBook extends BookData {
    */
   @SuppressWarnings("removal")
   private static void addStandardData(BookData book, ResourceLocation id, BookTransformer... extraTransformers) {
-    book.addRepository(new FileRepository(new ResourceLocation(id.getNamespace(), "book/" + id.getPath())));
+    book.addRepository(new FileRepository(ResourceLocation.fromNamespaceAndPath(id.getNamespace(), "book/" + id.getPath())));
     book.addTransformer(BookTransformer.indexTranformer());
     book.addTransformer(TierRangeMaterialSectionTransformer.INSTANCE);
 

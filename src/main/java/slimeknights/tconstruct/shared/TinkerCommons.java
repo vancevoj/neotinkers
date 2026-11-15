@@ -31,7 +31,6 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.registries.RegisterEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
-import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import slimeknights.mantle.data.predicate.block.BlockPredicate;
 import slimeknights.mantle.data.predicate.damage.DamageSourcePredicate;
 import slimeknights.mantle.data.predicate.entity.LivingEntityPredicate;
@@ -63,9 +62,6 @@ import slimeknights.tconstruct.library.json.predicate.EntityVariableRangePredica
 import slimeknights.tconstruct.library.json.predicate.HarvestTierPredicate;
 import slimeknights.tconstruct.library.json.predicate.HasMobEffectPredicate;
 import slimeknights.tconstruct.library.json.predicate.TinkerPredicate;
-import slimeknights.tconstruct.library.recipe.ingredient.BlockTagIngredient;
-import slimeknights.tconstruct.library.recipe.ingredient.InstrumentIngredient;
-import slimeknights.tconstruct.library.recipe.ingredient.NoContainerIngredient;
 import slimeknights.tconstruct.library.utils.SlimeBounceHandler;
 import slimeknights.tconstruct.shared.block.BetterPaneBlock;
 import slimeknights.tconstruct.shared.block.ClearGlassPaneBlock;
@@ -192,17 +188,9 @@ public final class TinkerCommons extends TinkerModule {
 
   @SubscribeEvent
   void registerRecipeSerializers(RegisterEvent event) {
-    // TODO(neoport): in 1.21 ingredient types (NoContainerIngredient, BlockTagIngredient) register on
-    // NeoForgeRegistries.Keys.INGREDIENT_TYPES and ICondition codecs (ConfigEnabledCondition,
-    // TagIntersection/Difference/NotEmpty) register on NeoForgeRegistries.Keys.CONDITION_CODECS via a
-    // DeferredRegister. CraftingHelper.register is gone; those owning classes now expose TYPE/CODEC and must
-    // be wired into a central DeferredRegister (cross-package decision, see NoContainerIngredient TODO).
+    // 1.21: ingredient types and condition codecs are registered in TinkerTools#registerIngredientTypes
     if (event.getRegistryKey() == Registries.TRIGGER_TYPE) {
       CriteriaTriggers.register(CONTAINER_OPENED_TRIGGER.getId().toString(), CONTAINER_OPENED_TRIGGER);
-    }
-    // 1.21: custom ingredients are registered as IngredientType on the NeoForge registry (was CraftingHelper.register)
-    if (event.getRegistryKey() == NeoForgeRegistries.Keys.INGREDIENT_TYPES) {
-      event.register(NeoForgeRegistries.Keys.INGREDIENT_TYPES, InstrumentIngredient.ID, () -> InstrumentIngredient.TYPE);
     }
     if (event.getRegistryKey() == Registries.RECIPE_SERIALIZER) {
       // mantle

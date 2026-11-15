@@ -78,7 +78,7 @@ public abstract class AbstractModifierModelMapProvider extends GenericDataProvid
   @SuppressWarnings("removal")
   @Nullable
   protected ResourceLocation toolPath(String path) {
-    return new ResourceLocation(modId, "item/tool/" + path);
+    return ResourceLocation.fromNamespaceAndPath(modId, "item/tool/" + path);
   }
 
   /** Creates a tool material from the given path */

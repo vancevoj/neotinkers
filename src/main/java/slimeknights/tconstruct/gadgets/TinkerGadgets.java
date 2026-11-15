@@ -112,7 +112,7 @@ public final class TinkerGadgets extends TinkerModule {
       .setShouldReceiveVelocityUpdates(false)
   );
   public static final DeferredHolder<? super EntityType<FancyArmorStandEntity>, EntityType<FancyArmorStandEntity>> armorStandEntity = ENTITIES.register("armor_stand", () ->
-    EntityType.Builder.<FancyArmorStandEntity>of(FancyArmorStandEntity::new, MobCategory.MISC).sized(0.5F, 1.975F).clientTrackingRange(10));
+    EntityType.Builder.<FancyArmorStandEntity>of(FancyArmorStandEntity::new, MobCategory.MISC).sized(0.5F, 1.975F).eyeHeight(1.7775F).clientTrackingRange(10));
 
   @Deprecated
   public static final DeferredHolder<? super EntityType<GlowballEntity>, EntityType<GlowballEntity>> glowBallEntity = ENTITIES.register("glow_ball", () ->

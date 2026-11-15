@@ -47,7 +47,8 @@ public class FancyItemFrameItem extends Item {
 
     Level world = context.getLevel();
     HangingEntity frame = this.entityProvider.apply(world, placeLocation, facing);
-    CustomData customData = stack.get(DataComponents.CUSTOM_DATA);
+    // 1.21: the 1.20 EntityTag compound is the ENTITY_DATA component, matching vanilla HangingEntityItem
+    CustomData customData = stack.get(DataComponents.ENTITY_DATA);
     if (customData != null) {
       EntityType.updateCustomEntityTag(world, player, frame, customData);
     }

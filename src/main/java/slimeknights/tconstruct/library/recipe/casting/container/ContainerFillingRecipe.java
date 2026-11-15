@@ -12,7 +12,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.FluidUtil;
@@ -58,14 +57,22 @@ public class ContainerFillingRecipe implements ICastingRecipe, IMultiRecipe<IDis
     return serializer.getType();
   }
 
+  /** Gets the fluid to fill into the container. 1.21: copies the full stack so data components (e.g. potion contents) are kept, the 1.20 equivalent of the fluid tag */
+  private FluidStack getFillFluid(ICastingContainer inv) {
+    FluidStack fluid = inv.getFluidStack();
+    if (fluid.isEmpty()) {
+      return new FluidStack(inv.getFluid(), this.fluidAmount);
+    }
+    return fluid.copyWithAmount(this.fluidAmount);
+  }
+
   @Override
   public int getFluidAmount(ICastingContainer inv) {
-    Fluid fluid = inv.getFluid();
     IFluidHandlerItem handler = inv.getStack().getCapability(Capabilities.FluidHandler.ITEM);
     if (handler == null) {
       return 0;
     }
-    return handler.fill(new FluidStack(fluid, this.fluidAmount), FluidAction.SIMULATE);
+    return handler.fill(getFillFluid(inv), FluidAction.SIMULATE);
   }
 
   @Override
@@ -86,12 +93,11 @@ public class ContainerFillingRecipe implements ICastingRecipe, IMultiRecipe<IDis
   @Override
   public boolean matches(ICastingContainer inv, Level worldIn) {
     ItemStack stack = inv.getStack();
-    Fluid fluid = inv.getFluid();
     if (stack.getItem() != this.container.asItem()) {
       return false;
     }
     IFluidHandlerItem handler = stack.getCapability(Capabilities.FluidHandler.ITEM);
-    return handler != null && handler.fill(new FluidStack(fluid, this.fluidAmount), FluidAction.SIMULATE) > 0;
+    return handler != null && handler.fill(getFillFluid(inv), FluidAction.SIMULATE) > 0;
   }
 
   /** @deprecated use {@link ICastingRecipe#assemble(Container, HolderLookup.Provider)} */
@@ -108,7 +114,7 @@ public class ContainerFillingRecipe implements ICastingRecipe, IMultiRecipe<IDis
     if (handler == null) {
       return stack;
     }
-    handler.fill(new FluidStack(inv.getFluid(), this.fluidAmount), FluidAction.EXECUTE);
+    handler.fill(getFillFluid(inv), FluidAction.EXECUTE);
     return handler.getContainer();
   }
 

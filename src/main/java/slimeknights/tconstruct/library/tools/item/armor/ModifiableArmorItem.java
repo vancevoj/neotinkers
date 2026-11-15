@@ -11,6 +11,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.SlotAccess;
@@ -186,9 +187,8 @@ public class ModifiableArmorItem extends ArmorItem implements IModifiableDisplay
     return IndestructibleItemEntity.createFrom(level, original, stack);
   }
 
-  @Deprecated
   @Override
-  public void onDestroyed(ItemEntity entity) {
+  public void onDestroyed(ItemEntity entity, DamageSource damageSource) {
     ToolInventoryCapability.onDestroyed(entity);
   }
 

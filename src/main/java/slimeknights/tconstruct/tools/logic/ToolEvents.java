@@ -344,7 +344,8 @@ public class ToolEvents {
           ItemStack unarmed = living.getItemBySlot(EquipmentSlot.CHEST);
           if (!unarmed.isEmpty() && unarmed.is(TinkerTags.Items.UNARMED)) {
             // get the melee damage attribute
-            // read from the attacker, upstream reads the target which throws if the target lacks the attribute (e.g. villagers)
+            // read from the attacker: the damage being replaced is the attacker's melee attribute, and toolAttributes below already requires it
+            // upstream (#5701) reads the target, which throws for targets lacking the attribute (villagers, animals) and mixes in the target's damage
             float damageAttr = (float) living.getAttributeValue(Attributes.ATTACK_DAMAGE);
             IToolStackView tool = ToolStack.from(unarmed);
             // already know the player is null

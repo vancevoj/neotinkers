@@ -63,6 +63,7 @@ import slimeknights.tconstruct.library.json.condition.TagDifferencePresentCondit
 import slimeknights.tconstruct.library.json.condition.TagIntersectionPresentCondition;
 import slimeknights.tconstruct.library.json.condition.TagNotEmptyCondition;
 import slimeknights.tconstruct.library.recipe.ingredient.BlockTagIngredient;
+import slimeknights.tconstruct.library.recipe.ingredient.InstrumentIngredient;
 import slimeknights.tconstruct.library.recipe.ingredient.MaterialIngredient;
 import slimeknights.tconstruct.library.recipe.ingredient.MaterialValueIngredient;
 import slimeknights.tconstruct.library.recipe.ingredient.NoContainerIngredient;
@@ -329,6 +330,7 @@ public final class TinkerTools extends TinkerModule {
       event.register(NeoForgeRegistries.Keys.INGREDIENT_TYPES, getResource("block_tag"), () -> BlockTagIngredient.TYPE);
       event.register(NeoForgeRegistries.Keys.INGREDIENT_TYPES, getResource("material"), () -> MaterialIngredient.TYPE);
       event.register(NeoForgeRegistries.Keys.INGREDIENT_TYPES, getResource("material_value"), () -> MaterialValueIngredient.TYPE);
+      event.register(NeoForgeRegistries.Keys.INGREDIENT_TYPES, InstrumentIngredient.ID, () -> InstrumentIngredient.TYPE);
     }
     // 1.21: custom ICondition codecs register on CONDITION_CODECS (was CraftingHelper.register)
     if (event.getRegistryKey() == NeoForgeRegistries.Keys.CONDITION_CODECS) {

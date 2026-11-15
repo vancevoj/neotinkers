@@ -170,7 +170,8 @@ public class ModifierEvents {
   @SubscribeEvent
   static void onLivingDrops(LivingDropsEvent event) {
     DamageSource source = event.getSource();
-    // 1.21: read the attribute from the killer, matching the pre-attribute behavior (upstream reads the dying entity)
+    // read the attribute from the killer as the pre-attribute logic did (getTotalGold(source.getEntity())), chrysophilite is "gold gain from monsters"
+    // upstream fe7f5b0275 reads event.getEntity() (the dying mob) here, which looks like a slip in the attribute migration
     if (source != null && source.getEntity() instanceof LivingEntity attacker) {
       float gold = (float) attacker.getAttributeValue(TinkerAttributes.CHRYSOPHILITE);
       if (gold > 0) {
