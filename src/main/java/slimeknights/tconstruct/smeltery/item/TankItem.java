@@ -1,8 +1,6 @@
 package slimeknights.tconstruct.smeltery.item;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
@@ -36,6 +34,7 @@ import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.recipe.FluidValues;
 import slimeknights.tconstruct.library.utils.NBTTags;
+import slimeknights.tconstruct.library.utils.TagUtil;
 import slimeknights.tconstruct.smeltery.TinkerSmeltery;
 import slimeknights.tconstruct.smeltery.block.component.SearedTankBlock.TankType;
 import slimeknights.tconstruct.smeltery.block.entity.component.TankBlockEntity;
@@ -50,21 +49,6 @@ public class TankItem extends BlockTooltipItem {
   private static final Predicate<FluidStack> NO_FILL = FluidStack::isEmpty;
   /** Sub-key used by {@link FluidTank} to store the fluid stack within the tank compound */
   private static final String TAG_FLUID = "Fluid";
-
-  /**
-   * Registry lookup used to (de)serialize the stored fluid. Tank items store fluids in the stack NBT without a level
-   * reference, so we serialize against the static built-in registries (which include the fluid registry).
-   * Initialized lazily to ensure the built-in registries are populated.
-   */
-  private static HolderLookup.Provider fluidLookup;
-
-  /** Gets the registry lookup used to serialize tank fluids */
-  private static HolderLookup.Provider fluidLookup() {
-    if (fluidLookup == null) {
-      fluidLookup = RegistryAccess.fromRegistryOfRegistries(BuiltInRegistries.REGISTRY);
-    }
-    return fluidLookup;
-  }
 
   private final boolean limitStackSize;
   public TankItem(Block blockIn, Properties builder, boolean limitStackSize) {
@@ -241,7 +225,7 @@ public class TankItem extends BlockTooltipItem {
     if (tank.isEmpty()) {
       removeTank(stack);
     } else {
-      CustomData.update(DataComponents.CUSTOM_DATA, stack, nbt -> nbt.put(NBTTags.TANK, tank.writeToNBT(fluidLookup(), new CompoundTag())));
+      CustomData.update(DataComponents.CUSTOM_DATA, stack, nbt -> nbt.put(NBTTags.TANK, tank.writeToNBT(TagUtil.registryAccess(), new CompoundTag())));
     }
     return stack;
   }
@@ -257,7 +241,7 @@ public class TankItem extends BlockTooltipItem {
       removeTank(stack);
     } else {
       CompoundTag tag = new CompoundTag();
-      tag.put(TAG_FLUID, fluid.save(fluidLookup()));
+      tag.put(TAG_FLUID, fluid.save(TagUtil.registryAccess()));
       CustomData.update(DataComponents.CUSTOM_DATA, stack, nbt -> nbt.put(NBTTags.TANK, tag));
     }
     return stack;
@@ -295,7 +279,7 @@ public class TankItem extends BlockTooltipItem {
     FluidTank tank = ScaledFluidTank.create(TankBlockEntity.getCapacity(stack.getItem()), scale);
     CustomData data = stack.get(DataComponents.CUSTOM_DATA);
     if (data != null) {
-      tank.readFromNBT(fluidLookup(), data.copyTag().getCompound(NBTTags.TANK));
+      tank.readFromNBT(TagUtil.registryAccess(), data.copyTag().getCompound(NBTTags.TANK));
     }
     return tank;
   }

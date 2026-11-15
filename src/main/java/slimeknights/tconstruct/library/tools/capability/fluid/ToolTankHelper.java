@@ -2,9 +2,6 @@ package slimeknights.tconstruct.library.tools.capability.fluid;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.fluids.FluidStack;
@@ -17,6 +14,7 @@ import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.stat.CapacityStat;
 import slimeknights.tconstruct.library.tools.stat.INumericToolStat;
 import slimeknights.tconstruct.library.tools.stat.ToolStatId;
+import slimeknights.tconstruct.library.utils.TagUtil;
 import slimeknights.tconstruct.tools.TinkerModifiers;
 
 import java.util.function.BiFunction;
@@ -26,23 +24,8 @@ import java.util.function.BiFunction;
 @Getter
 @RequiredArgsConstructor
 public class ToolTankHelper {
-  /**
-   * Registry lookup used to (de)serialize the stored fluid. Tool tanks store plain fluids in the tool's persistent data
-   * compound without a level reference, so we serialize against the static built-in registries (which include the fluid registry).
-   * Initialized lazily to ensure the built-in registries are populated.
-   */
-  private static HolderLookup.Provider fluidLookup;
-
-  /** Gets the registry lookup used to serialize tank fluids */
-  private static HolderLookup.Provider fluidLookup() {
-    if (fluidLookup == null) {
-      fluidLookup = RegistryAccess.fromRegistryOfRegistries(BuiltInRegistries.REGISTRY);
-    }
-    return fluidLookup;
-  }
-
   /** Helper function to parse a fluid from NBT */
-  public static final BiFunction<CompoundTag, String, FluidStack> PARSE_FLUID = (nbt, key) -> FluidStack.parseOptional(fluidLookup(), nbt.getCompound(key));
+  public static final BiFunction<CompoundTag, String, FluidStack> PARSE_FLUID = (nbt, key) -> FluidStack.parseOptional(TagUtil.registryAccess(), nbt.getCompound(key));
 
   /** Format key for the stat */
   public static final String MB_FORMAT = Mantle.makeDescriptionId("gui", "fluid.millibucket");
@@ -88,7 +71,7 @@ public class ToolTankHelper {
     }
     // 1.21: FluidStack.save RETURNS the encoded tag and must be used; discarding it lost the tool tank
     // fluid on save (tank modifier emptied on reload).
-    CompoundTag saved = (CompoundTag) fluid.save(fluidLookup(), new CompoundTag());
+    CompoundTag saved = (CompoundTag) fluid.save(TagUtil.registryAccess(), new CompoundTag());
     tool.getPersistentData().put(fluidKey, saved);
     return fluid;
   }

@@ -3,17 +3,50 @@ package slimeknights.tconstruct.library.utils;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.IntArrayTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
+import net.minecraft.server.MinecraftServer;
+import net.neoforged.neoforge.server.ServerLifecycleHooks;
+import slimeknights.mantle.client.SafeClientAccess;
 
 import javax.annotation.Nullable;
 
 /** Helpers related to Tag */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class TagUtil {
+  /** Lookup of just the built in registries, used when no level is loaded. Initialized lazily to ensure the registries are populated */
+  private static HolderLookup.Provider builtinRegistries;
+
   /* Helper functions */
+
+  /**
+   * Gets the registries for (de)serializing item and fluid stacks stored in NBT without access to a level, such as stacks inside tool data.
+   * Stacks may reference data driven registries (enchantments, banner patterns, armor trims) that the built in registries lack, so this
+   * returns the registries of the server or client level matching the current thread, falling back to the built in registries with no level.
+   * @return  Registry lookup
+   */
+  public static HolderLookup.Provider registryAccess() {
+    MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
+    if (server != null && server.isSameThread()) {
+      return server.registryAccess();
+    }
+    RegistryAccess client = SafeClientAccess.getRegistryAccess();
+    if (client != null) {
+      return client;
+    }
+    if (server != null) {
+      return server.registryAccess();
+    }
+    if (builtinRegistries == null) {
+      builtinRegistries = RegistryAccess.fromRegistryOfRegistries(BuiltInRegistries.REGISTRY);
+    }
+    return builtinRegistries;
+  }
 
   /**
    * Reads a block position from a single tag. Accepts the int array written by {@link NbtUtils#writeBlockPos(BlockPos)} in 1.21,

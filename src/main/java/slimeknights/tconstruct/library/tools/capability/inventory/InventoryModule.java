@@ -5,9 +5,6 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -48,6 +45,7 @@ import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.ModDataNBT;
 import slimeknights.tconstruct.library.tools.nbt.ToolDataNBT;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
+import slimeknights.tconstruct.library.utils.TagUtil;
 
 import javax.annotation.Nullable;
 import java.util.BitSet;
@@ -275,23 +273,9 @@ public class InventoryModule implements ModifierModule, InventoryModifierHook, V
 
   /* Helpers */
 
-  /**
-   * Registry lookup used to (de)serialize stored item stacks. Tool inventories store stacks in the tool's persistent data
-   * compound without a level reference, so we serialize against the static built-in registries. Initialized lazily.
-   */
-  private static HolderLookup.Provider itemLookup;
-
-  /** Gets the registry lookup used to serialize stored stacks */
-  private static HolderLookup.Provider itemLookup() {
-    if (itemLookup == null) {
-      itemLookup = RegistryAccess.fromRegistryOfRegistries(BuiltInRegistries.REGISTRY);
-    }
-    return itemLookup;
-  }
-
   /** Reads a stack from the given compound, the inverse of {@link #writeStack(ItemStack, int, CompoundTag)} */
   static ItemStack readStack(CompoundTag compound) {
-    return ItemStack.parseOptional(itemLookup(), compound);
+    return ItemStack.parseOptional(TagUtil.registryAccess(), compound);
   }
 
   /**
@@ -305,7 +289,7 @@ public class InventoryModule implements ModifierModule, InventoryModifierHook, V
     // 1.21: ItemStack.save returns a new tag (a copy of the prefix with the item merged in) rather than writing into
     // the one passed in. Callers such as setStack and SmeltingModule rewrite an entry that is already in the list, so
     // copy the encoded item into compound to keep writing in place, as 1.20.1 did.
-    CompoundTag saved = (CompoundTag) stack.save(itemLookup());
+    CompoundTag saved = (CompoundTag) stack.save(TagUtil.registryAccess());
     for (String key : saved.getAllKeys()) {
       compound.put(key, saved.get(key));
     }
