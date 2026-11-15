@@ -318,20 +318,34 @@ public class MeltingModuleInventory implements IItemHandlerModifiable {
     for (int i = 0; i < modules.length; i++) {
       if (modules[i] != null && !modules[i].getStack().isEmpty()) {
         CompoundTag moduleTag = modules[i].writeToTag(registries);
-        // int rather than byte, smelteries easily exceed 255 slots
-        moduleTag.putInt(TAG_SLOT, i);
+        writeIndex(moduleTag, TAG_SLOT, i);
         list.add(moduleTag);
       }
     }
     if (!list.isEmpty()) {
       nbt.put(TAG_ITEMS, list);
     }
-    nbt.putInt(TAG_SIZE, modules.length);
+    writeIndex(nbt, TAG_SIZE, modules.length);
     return nbt;
   }
 
   /**
-   * Reads a slot index or size. Older builds wrote these as a byte, which must be read unsigned
+   * Writes a slot index or size. Smelteries easily exceed 255 slots, so large values need an int, but older builds only read a byte.
+   * Writing a byte whenever the value fits keeps smelteries that fit in a byte loading after a downgrade.
+   * @param nbt    Tag compound
+   * @param key    Key to write
+   * @param value  Index or size
+   */
+  private static void writeIndex(CompoundTag nbt, String key, int value) {
+    if (value < 256) {
+      nbt.putByte(key, (byte)value);
+    } else {
+      nbt.putInt(key, value);
+    }
+  }
+
+  /**
+   * Reads a slot index or size, the inverse of {@link #writeIndex(CompoundTag, String, int)}. Bytes must be read unsigned
    * @param nbt  Tag compound
    * @param key  Key to read
    * @return  Index or size
