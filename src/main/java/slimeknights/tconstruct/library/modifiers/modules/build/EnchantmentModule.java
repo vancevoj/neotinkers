@@ -8,12 +8,14 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.Identifier;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.block.state.BlockState;
+import org.apache.commons.lang3.mutable.MutableFloat;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import slimeknights.mantle.data.loadable.Loadables;
 import slimeknights.mantle.data.loadable.field.LoadableField;
@@ -222,10 +224,12 @@ public interface EnchantmentModule extends ModifierModule, LevelingIntModule, Co
       if (condition().matches(tool, modifier)) {
         int subtractLevel = getLevel(modifier);
         Enchantment enchantment = enchantment().value();
-        if (subtractLevel > 0 && !source.is(DamageTypeTags.BYPASSES_ENCHANTMENTS)) {
-          // TODO(neoport): enchantment damage-protection is data-driven in 1.21; needs cross-package redesign with ProtectionModifierHook
-          // Enchantment.slots and Enchantment.getDamageProtection(int, DamageSource) are gone, so we can no longer subtract
-          // the vanilla protection contribution here. Preserve the modifier value unchanged until the redesign lands.
+        LivingEntity entity = context.getEntity();
+        // 1.21 made enchantment protection data driven, so ask the enchantment's damage protection effects how much vanilla added for this level
+        if (subtractLevel > 0 && enchantment.matchingSlot(slotType) && !source.is(DamageTypeTags.BYPASSES_ENCHANTMENTS) && entity.level() instanceof ServerLevel serverLevel) {
+          MutableFloat protection = new MutableFloat(0);
+          enchantment.modifyDamageProtection(serverLevel, subtractLevel, entity.getItemBySlot(slotType), entity, source, protection);
+          modifierValue -= protection.floatValue();
         }
       }
       return modifierValue;

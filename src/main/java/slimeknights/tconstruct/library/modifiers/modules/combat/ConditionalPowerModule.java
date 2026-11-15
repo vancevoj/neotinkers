@@ -2,7 +2,7 @@ package slimeknights.tconstruct.library.modifiers.modules.combat;
 
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import net.minecraft.nbt.Tag;
+import net.minecraft.nbt.NumericTag;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -108,14 +108,16 @@ public record ConditionalPowerModule(IJsonPredicate<LivingEntity> target, IJsonP
       persistentData.putBoolean(key, true);
       if (TinkerPredicate.matches(this.target, target) && TinkerPredicate.matches(this.holder, attacker)) {
         float multiplier = 1;
-        if (persistentData.contains(AMMO_MULTIPLIER, Tag.TAG_ANY_NUMERIC)) {
+        // 1.21.5 removed Tag.TAG_ANY_NUMERIC, check the tag type directly
+        if (persistentData.get(AMMO_MULTIPLIER) instanceof NumericTag) {
           multiplier *= persistentData.getFloat(AMMO_MULTIPLIER);
         }
-        if (persistentData.contains(BOW_MULTIPLIER, Tag.TAG_ANY_NUMERIC)) {
+        if (persistentData.get(BOW_MULTIPLIER) instanceof NumericTag) {
           multiplier *= persistentData.getFloat(BOW_MULTIPLIER);
         }
+        // 1.21.5 removed AbstractArrow#getBaseDamage, the field is made public by our access transformer
         if (projectile instanceof AbstractArrow arrow) {
-          arrow.setBaseDamage(formula.apply(modifiers, persistentData, modifier, projectile, hit, attacker, target, arrow.getBaseDamage(), multiplier));
+          arrow.setBaseDamage(formula.apply(modifiers, persistentData, modifier, projectile, hit, attacker, target, arrow.baseDamage, multiplier));
         } else if (projectile instanceof ProjectileWithPower withPower) {
           withPower.setPower(formula.apply(modifiers, persistentData, modifier, projectile, hit, attacker, target, withPower.getPower(), multiplier));
         }

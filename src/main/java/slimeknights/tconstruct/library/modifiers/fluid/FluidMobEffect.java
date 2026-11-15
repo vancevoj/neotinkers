@@ -9,7 +9,6 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction;
 import slimeknights.mantle.data.loadable.Loadables;
 import slimeknights.mantle.data.loadable.primitive.IntLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
@@ -57,7 +56,7 @@ public record FluidMobEffect(Holder<MobEffect> effect, int time, int level, @Nul
   /** Creates the final effect */
   public MobEffectInstance effectWithTime(int time) {
     MobEffectInstance instance = new MobEffectInstance(effect, time, this.level - 1);
-    // 1.21: per-stack curative items became EffectCure tokens. null keeps the effect's default cures (milk etc.); a list (possibly empty) replaces them with per-item cure tokens.
+    // 26.3: NeoForge EffectCure tokens are gone, curative items are tracked by TinkerEffectCures. null keeps the effect's default cures (milk etc.); a list (possibly empty) replaces them with per-item cures.
     TinkerEffectCures.setCures(instance, curativeItems);
     return instance;
   }

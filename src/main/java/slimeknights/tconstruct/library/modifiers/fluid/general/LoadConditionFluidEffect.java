@@ -2,10 +2,10 @@ package slimeknights.tconstruct.library.modifiers.fluid.general;
 
 import net.neoforged.neoforge.common.conditions.ICondition;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.data.registry.GenericLoaderRegistry;
 import slimeknights.tconstruct.library.modifiers.fluid.EffectLevel;
+import slimeknights.tconstruct.library.modifiers.fluid.FluidAction;
 import slimeknights.tconstruct.library.modifiers.fluid.FluidEffect;
 import slimeknights.tconstruct.library.modifiers.fluid.FluidEffectContext;
 import slimeknights.tconstruct.library.utils.Util;

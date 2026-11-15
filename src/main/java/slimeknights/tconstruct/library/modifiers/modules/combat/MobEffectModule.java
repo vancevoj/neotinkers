@@ -242,7 +242,7 @@ public interface MobEffectModule extends ModifierModule, ConditionalModule<ITool
       float duration = this.time.computeValue(scaledLevel);
       if (duration > 0) {
         MobEffectInstance instance = new MobEffectInstance(effect, (int)duration, level);
-        // 1.21: per-stack curative items became EffectCure tokens. null keeps the effect's default cures; a list (possibly empty) replaces them with per-item cure tokens.
+        // 26.3: NeoForge EffectCure tokens are gone, curative items are tracked by TinkerEffectCures. null keeps the effect's default cures; a list (possibly empty) replaces them with per-item cures.
         TinkerEffectCures.setCures(instance, curativeItems);
         target.addEffect(instance, cause);
       }

@@ -24,6 +24,8 @@ import slimeknights.tconstruct.library.modifiers.hook.special.BlockTransformModi
 import slimeknights.tconstruct.library.modifiers.modules.util.ModifierCondition;
 import slimeknights.tconstruct.library.modifiers.modules.util.ModifierCondition.ConditionalModule;
 import slimeknights.tconstruct.library.modifiers.modules.util.ModuleBuilder;
+import slimeknights.tconstruct.library.modifiers.modules.util.ToolActionTransformHelper;
+import slimeknights.tconstruct.library.modifiers.modules.util.ToolActionTransformHelper.Transform;
 import slimeknights.tconstruct.library.module.HookProvider;
 import slimeknights.tconstruct.library.module.ModuleHook;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
@@ -56,7 +58,7 @@ public record ToolActionTransformModule(ItemAbility action, SoundEvent sound, bo
 
   @Override
   public boolean shouldHighlight(IToolStackView tool, ModifierEntry modifier, UseOnContext context, BlockPos offset, BlockState state) {
-    return condition.matches(tool, modifier) && state.getToolModifiedState(Util.offset(context, offset), action, true) != null;
+    return condition.matches(tool, modifier) && ToolActionTransformHelper.getTransformedState(Util.offset(context, offset), state, action, true) != null;
   }
 
   @Override
@@ -74,9 +76,9 @@ public record ToolActionTransformModule(ItemAbility action, SoundEvent sound, bo
       }
     }
 
-    // normal action transform
+    // normal action transform, 26.3 moved most transforms from the tool action to block transformers
     Player player = context.getPlayer();
-    BlockState transformed = original.getToolModifiedState(context, action, false);
+    Transform transformed = ToolActionTransformHelper.getTransform(context, original, action, false);
     if (transformed != null) {
       if (playSound) {
         level.playSound(player, pos, sound, SoundSource.BLOCKS, 1.0F, 1.0F);
@@ -85,7 +87,8 @@ public record ToolActionTransformModule(ItemAbility action, SoundEvent sound, bo
         }
       }
       if (!level.isClientSide()) {
-        level.setBlock(pos, transformed, Block.UPDATE_ALL_IMMEDIATE);
+        transformed.dropLoot(context, original);
+        level.setBlock(pos, transformed.state(), Block.UPDATE_ALL_IMMEDIATE);
         if (requireGround) {
           level.destroyBlock(above, true);
         }

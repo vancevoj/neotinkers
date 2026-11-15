@@ -10,11 +10,10 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.common.CommonHooks;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction;
 import slimeknights.mantle.data.loadable.record.SingletonLoader;
 import slimeknights.tconstruct.library.modifiers.fluid.EffectLevel;
+import slimeknights.tconstruct.library.modifiers.fluid.FluidAction;
 import slimeknights.tconstruct.library.modifiers.fluid.FluidEffect;
 import slimeknights.tconstruct.library.modifiers.fluid.FluidEffectContext;
 
@@ -50,20 +49,13 @@ public enum EntityInteractFluidEffect implements FluidEffect<FluidEffectContext.
         // unfortunately, our projectiles always are considered hitting the entity's position making this 0
         Vec3 hit = context.getLocation().subtract(target.position());
 
-        // check if forge wants to override
-        InteractionResult result = CommonHooks.onInteractEntityAt(player, target, hit, hand);
+        // 26.1 merged interactAt into interact, so the player interaction handles the NeoForge event, the entity, and the held item
         // skipped: never spectator mode if we made it this far
-        if (result == null) {
-          // no forge override, so find first success from vanilla hooks
-          result = target.interactAt(player, hit, hand);
-          if (!result.consumesAction()) {
-            result = player.interactOn(context.getTarget(), hand);
-          }
-        }
+        InteractionResult result = player.interactOn(target, hand, hit);
         // long range arm swinging
         if (result != InteractionResult.PASS) {
           if (result.consumesAction()) {
-            player.swing(hand, true);
+            player.swing(hand, player.getItemInHand(hand).getInteractAnimation(), true);
             return 1;
           }
           return 0; // failure exits the loop

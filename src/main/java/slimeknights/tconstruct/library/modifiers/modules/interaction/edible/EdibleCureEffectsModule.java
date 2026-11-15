@@ -4,9 +4,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
-import net.neoforged.neoforge.common.EffectCures;
 import slimeknights.mantle.data.loadable.common.ItemStackLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.mantle.data.predicate.IJsonPredicate;
@@ -49,11 +47,8 @@ public record EdibleCureEffectsModule(ItemStack curativeItem, IJsonPredicate<Liv
   @Override
   public void onToolEaten(IToolStackView tool, ModifierEntry modifier, Player player, EquipmentSlot eatenSlot, int hunger, float saturation, List<ItemStack> representativeItems) {
     if (condition.matches(tool, modifier) && holder.matches(player)) {
-      // 1.21: per-stack curative items became EffectCure tokens. Cure using the per-item token, and milk also maps to NeoForge's milk cure (the legacy default curative item).
-      player.removeEffectsCuredBy(TinkerEffectCures.itemCure(curativeItem.getItem()));
-      if (curativeItem.is(Items.MILK_BUCKET)) {
-        player.removeEffectsCuredBy(EffectCures.MILK);
-      }
+      // 26.3: NeoForge EffectCure tokens are gone, TinkerEffectCures tracks which items cure an effect (milk also cures effects with default cures, the legacy default curative item)
+      TinkerEffectCures.cure(player, curativeItem.getItem());
     }
   }
 }

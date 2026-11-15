@@ -8,9 +8,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.TriState;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.flag.FeatureFlagSet;
@@ -20,13 +20,12 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.neoforge.common.CommonHooks;
-import net.minecraft.util.TriState;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction;
 import slimeknights.mantle.data.loadable.record.SingletonLoader;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.modifiers.fluid.EffectLevel;
+import slimeknights.tconstruct.library.modifiers.fluid.FluidAction;
 import slimeknights.tconstruct.library.modifiers.fluid.FluidEffect;
 import slimeknights.tconstruct.library.modifiers.fluid.FluidEffectContext;
 
@@ -52,7 +51,7 @@ public enum BlockInteractFluidEffect implements FluidEffect<FluidEffectContext.B
         // but that won't happen, right? will need to consider another workaround in that case.
         stack.shrink(1);
         stack.setDamageValue(0);
-        level.playSound(null, context.getClickedPos(), SoundEvents.ITEM_BREAK, SoundSource.BLOCKS, 1.0F, 1.0F);
+        level.playSound(null, context.getClickedPos(), SoundEvents.ITEM_BREAK.value(), SoundSource.BLOCKS, 1.0F, 1.0F);
       }
     }
   }
@@ -109,7 +108,7 @@ public enum BlockInteractFluidEffect implements FluidEffect<FluidEffectContext.B
           // if successful, swing hand
           if (event.getCancellationResult().consumesAction()) {
             if (entity != null) {
-              entity.swing(hand, true);
+              entity.swing(hand, entity.getItemInHand(hand).getInteractAnimation(), true);
             }
             return 1;
           }
@@ -127,7 +126,7 @@ public enum BlockInteractFluidEffect implements FluidEffect<FluidEffectContext.B
         if (result != InteractionResult.PASS) {
           if (result.consumesAction()) {
             if (entity != null) {
-              entity.swing(hand, true);
+              entity.swing(hand, entity.getItemInHand(hand).getInteractAnimation(), true);
             }
             damageIfNeeded(useContext);
             return 1;
@@ -140,24 +139,21 @@ public enum BlockInteractFluidEffect implements FluidEffect<FluidEffectContext.B
       ItemStack original = heldItem.copy();
       if (player != null && (useBlock == TriState.TRUE || (useItem == TriState.DEFAULT && !skipBlock))) {
         // 1.21 split block use into a held-item interaction and an item-less interaction; run the item one first and fall back
-        ItemInteractionResult itemResult = state.useItemOn(heldItem, world, player, hand, hitResult);
-        InteractionResult result;
-        if (itemResult == ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION) {
+        InteractionResult result = state.useItemOn(heldItem, world, player, hand, hitResult);
+        if (result instanceof InteractionResult.TryEmptyHandInteraction) {
           result = state.useWithoutItem(world, player, hitResult);
-        } else {
-          result = itemResult.result();
         }
         if (result.consumesAction()) {
           if (player instanceof ServerPlayer serverPlayer) {
             CriteriaTriggers.ITEM_USED_ON_BLOCK.trigger(serverPlayer, pos, original);
           }
-          player.swing(hand, true);
+          player.swing(hand, player.getItemInHand(hand).getInteractAnimation(), true);
           return 1;
         }
       }
 
       // post block item usage
-      if (useItem == TriState.TRUE || (useItem == TriState.DEFAULT && !heldItem.isEmpty() && (player == null || !player.getCooldowns().isOnCooldown(heldItem.getItem())))) {
+      if (useItem == TriState.TRUE || (useItem == TriState.DEFAULT && !heldItem.isEmpty() && (player == null || !player.getCooldowns().isOnCooldown(heldItem)))) {
         InteractionResult result;
         if (player != null && player.isCreative()) {
           int oldCount = heldItem.getCount();
@@ -165,6 +161,10 @@ public enum BlockInteractFluidEffect implements FluidEffect<FluidEffectContext.B
           heldItem.setCount(oldCount);
         } else {
           result = heldItem.useOn(useContext);
+          // 1.21.2: items may hand back a replacement stack instead of changing the held one
+          if (entity != null && result instanceof InteractionResult.Success success && success.heldItemTransformedTo() != null && success.heldItemTransformedTo() != heldItem) {
+            entity.setItemInHand(hand, success.heldItemTransformedTo());
+          }
           damageIfNeeded(useContext);
         }
         if (result != InteractionResult.PASS) {
@@ -173,7 +173,7 @@ public enum BlockInteractFluidEffect implements FluidEffect<FluidEffectContext.B
               CriteriaTriggers.ITEM_USED_ON_BLOCK.trigger(serverPlayer, pos, heldItem);
             }
             if (entity != null) {
-              entity.swing(hand, true);
+              entity.swing(hand, entity.getItemInHand(hand).getInteractAnimation(), true);
             }
             return 1;
           }

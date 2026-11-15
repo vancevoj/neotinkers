@@ -3,6 +3,7 @@ package slimeknights.tconstruct.library.modifiers.fluid.entity;
 import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
@@ -11,10 +12,10 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction;
 import slimeknights.mantle.data.loadable.primitive.FloatLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.tconstruct.library.modifiers.fluid.EffectLevel;
+import slimeknights.tconstruct.library.modifiers.fluid.FluidAction;
 import slimeknights.tconstruct.library.modifiers.fluid.FluidEffect;
 import slimeknights.tconstruct.library.modifiers.fluid.FluidEffectContext;
 import slimeknights.tconstruct.library.recipe.TagPredicate;
@@ -49,7 +50,7 @@ public record PotionFluidEffect(float scale, TagPredicate predicate) implements 
       ResourceKey<Potion> key = potion.unwrapKey().orElse(null);
       if (key != null) {
         tag = new CompoundTag();
-        tag.putString("Potion", key.location().toString());
+        tag.putString("Potion", key.identifier().toString());
       }
     }
     return predicate.test(tag);
@@ -67,7 +68,7 @@ public record PotionFluidEffect(float scale, TagPredicate predicate) implements 
         Entity directSource = context.getDirectSource();
         Entity effectSource = context.getEffectSource();
         // prevent effects like instant damage from hitting hurt resistance
-        int oldInvulnerableTime = target.invulnerableTime;
+        int oldInvulnerableTime = target.getInvulnerableTime();
         // report whichever effect used the most
         float used = 0;
         for (MobEffectInstance instance : effects) {
@@ -75,9 +76,10 @@ public record PotionFluidEffect(float scale, TagPredicate predicate) implements 
           if (effect.value().isInstantaneous()) {
             // instant effects just apply full value always
             used = level.value();
-            if (action.execute()) {
-              target.invulnerableTime = 0;
-              effect.value().applyInstantaneousEffect(directSource, attacker, target, instance.getAmplifier(), used * scale);
+            // 1.21.2: instant effects only apply server side
+            if (action.execute() && context.getLevel() instanceof ServerLevel serverLevel) {
+              target.setInvulnerableTime(0);
+              effect.value().applyInstantaneousEffect(serverLevel, directSource, attacker, target, instance.getAmplifier(), used * scale);
             }
           } else {
             // if the potion already exists, we scale up the existing time
@@ -108,7 +110,7 @@ public record PotionFluidEffect(float scale, TagPredicate predicate) implements 
             }
           }
         }
-        target.invulnerableTime = oldInvulnerableTime;
+        target.setInvulnerableTime(oldInvulnerableTime);
         return used;
       }
     }

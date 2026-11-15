@@ -87,7 +87,7 @@ public record InfinityModule(ItemStack ammo, String variantTag, int durabilityUs
     // not an issue if you have multiple types of infinity, they all agree on the goal here
     if (arrow != null && arrow.pickup != Pickup.CREATIVE_ONLY) {
       CustomData data = ammo.get(DataComponents.CUSTOM_DATA);
-      if (data != null && data.copyTag().getBoolean(INFINITY)) {
+      if (data != null && data.copyTag().getBooleanOr(INFINITY, false)) {
         arrow.pickup = Pickup.CREATIVE_ONLY;
       }
     }

@@ -9,6 +9,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import slimeknights.mantle.util.CombatHelper;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.hook.interaction.AreaOfEffectHighlightModifierHook;
@@ -74,7 +75,7 @@ public interface BlockTransformModule extends ModifierModule, BlockInteractionMo
       // if the tool breaks or it was a campfire, we are done
       if (ToolDamageUtil.damage(tool, 1, player, stack, modifier.getId())) {
         if (player != null) {
-          player.onEquippedItemBroken(stack.getItem(), slotType);
+          player.onEquippedItemBroken(stack, slotType);
         }
         return InteractionResult.CONSUME;
       }
@@ -110,7 +111,7 @@ public interface BlockTransformModule extends ModifierModule, BlockInteractionMo
             // stop if the tool broke
             if (ToolDamageUtil.damage(tool, 1, player, stack, modifier.getId())) {
               if (player != null) {
-                player.onEquippedItemBroken(stack.getItem(), source.getSlot(context.getHand()));
+                player.onEquippedItemBroken(stack, source.getSlot(context.getHand()));
               }
               break;
             }
@@ -118,14 +119,15 @@ public interface BlockTransformModule extends ModifierModule, BlockInteractionMo
         } while (aoePos.hasNext());
 
         // sweep attack if we transformed any
+        // 1.21.11 removed Player#sweepAttack, Mantle has the particle logic
         if (totalTransformed > 0 && player != null) {
-          player.sweepAttack();
+          CombatHelper.sweepParticles(player);
         }
       }
     }
 
     // if anything happened, return success
-    return didTransform ? InteractionResult.sidedSuccess(world.isClientSide()) : InteractionResult.PASS;
+    return didTransform ? InteractionResult.SUCCESS : InteractionResult.PASS;
   }
 
   /** Applies this transformation */

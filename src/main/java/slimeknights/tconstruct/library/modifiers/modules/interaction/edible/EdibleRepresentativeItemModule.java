@@ -58,7 +58,7 @@ public record EdibleRepresentativeItemModule(ItemStack representativeItem, Modif
   private static void eatEffects(LivingEntity entity, ItemStack representativeItem, int amount) {
     entity.spawnItemParticles(representativeItem, amount);
     RandomSource random = entity.getRandom();
-    entity.playSound(SoundEvents.GENERIC_EAT, 0.5f + 0.5f * random.nextInt(2), (random.nextFloat() - random.nextFloat()) * 0.2f + 1.0f);
+    entity.playSound(SoundEvents.GENERIC_EAT.value(), 0.5f + 0.5f * random.nextInt(2), (random.nextFloat() - random.nextFloat()) * 0.2f + 1.0f);
   }
 
   @Override

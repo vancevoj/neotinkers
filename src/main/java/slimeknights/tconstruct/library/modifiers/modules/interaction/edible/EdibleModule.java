@@ -108,8 +108,8 @@ public enum EdibleModule implements ModifierModule, GeneralInteractionModifierHo
 
       // sounds
       Level world = player.level();
-      world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.GENERIC_EAT, SoundSource.NEUTRAL, 1.0F, 1.0F + (world.random.nextFloat() - world.random.nextFloat()) * 0.4F);
-      world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_BURP, SoundSource.NEUTRAL, 0.5F, world.random.nextFloat() * 0.1F + 0.9F);
+      world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.GENERIC_EAT, SoundSource.NEUTRAL, 1.0F, 1.0F + (world.getRandom().nextFloat() - world.getRandom().nextFloat()) * 0.4F);
+      world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_BURP, SoundSource.NEUTRAL, 0.5F, world.getRandom().nextFloat() * 0.1F + 0.9F);
 
       // run tool eaten hook
       List<ItemStack> representativeItems = new ArrayList<>();
@@ -153,7 +153,7 @@ public enum EdibleModule implements ModifierModule, GeneralInteractionModifierHo
       StatsNBT stats = tool.getStats();
       if (stats.getInt(HUNGER) > 0) {
         LivingEntity entity = context.getEntity();
-        if (context.getLevel().random.nextFloat() < ConditionalStatModifierHook.getModifiedStat(tool, entity, COUNTER_CHANCE) && entity instanceof Player player && player.canEat(true)) {
+        if (context.getLevel().getRandom().nextFloat() < ConditionalStatModifierHook.getModifiedStat(tool, entity, COUNTER_CHANCE) && entity instanceof Player player && player.canEat(true)) {
           eat(tool, player, slotType);
         }
       }

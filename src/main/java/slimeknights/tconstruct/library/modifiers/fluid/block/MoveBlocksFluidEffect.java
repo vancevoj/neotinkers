@@ -18,13 +18,13 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.PushReaction;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction;
 import slimeknights.mantle.data.loadable.Loadables;
 import slimeknights.mantle.data.loadable.primitive.BooleanLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.tconstruct.common.Sounds;
 import slimeknights.tconstruct.common.network.TinkerNetwork;
 import slimeknights.tconstruct.library.modifiers.fluid.EffectLevel;
+import slimeknights.tconstruct.library.modifiers.fluid.FluidAction;
 import slimeknights.tconstruct.library.modifiers.fluid.FluidEffect;
 import slimeknights.tconstruct.library.modifiers.fluid.FluidEffectContext;
 import slimeknights.tconstruct.tools.network.PushBlockRowPacket;
@@ -128,7 +128,7 @@ public record MoveBlocksFluidEffect(boolean push, SoundEvent sound) implements F
       if (action.execute()) {
         moveBlocks(world, pos, originalState, facing, direction, moving);
         TinkerNetwork.getInstance().sendToClientsAround(new PushBlockRowPacket(pos, direction, push, moving), world, pos);
-        world.playSound(null, pos, Sounds.SLIME_SLING.getSound(), SoundSource.BLOCKS, 0.5F, world.random.nextFloat() * (push ? 0.25F : 0.15f) + 0.6F);
+        world.playSound(null, pos, Sounds.SLIME_SLING.getSound(), SoundSource.BLOCKS, 0.5F, world.getRandom().nextFloat() * (push ? 0.25F : 0.15f) + 0.6F);
       }
       return 1;
     }

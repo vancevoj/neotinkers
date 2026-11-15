@@ -8,14 +8,13 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Explosion.BlockInteraction;
-import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import slimeknights.mantle.data.loadable.primitive.BooleanLoadable;
 import slimeknights.mantle.data.loadable.primitive.EnumLoadable;
@@ -23,6 +22,7 @@ import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.tconstruct.common.TinkerDamageTypes;
 import slimeknights.tconstruct.library.json.LevelingValue;
 import slimeknights.tconstruct.library.modifiers.fluid.EffectLevel;
+import slimeknights.tconstruct.library.modifiers.fluid.FluidAction;
 import slimeknights.tconstruct.library.modifiers.fluid.FluidEffect;
 import slimeknights.tconstruct.library.modifiers.fluid.FluidEffectContext;
 import slimeknights.tconstruct.library.modifiers.fluid.entity.DamageFluidEffect.DamageTypePair;
@@ -65,9 +65,9 @@ public record ExplosionFluidEffect(LevelingValue radius, LevelingValue damage, L
       return 0;
     }
 
-    if (action.execute()) {
+    // 1.21.2: explosions are server only (ServerExplosion), the client receives the explosion packet
+    if (action.execute() && context.getLevel() instanceof ServerLevel world) {
       // select the damage source based on the entities and whether we want difficulty scaling
-      Level world = context.getLevel();
       Entity cause = context.getEntity();
       DamageTypePair damageType = (cause != null ? TinkerDamageTypes.MOB_EXPLOSION : TinkerDamageTypes.EXPLOSION);
       Projectile projectile = context.getProjectile();

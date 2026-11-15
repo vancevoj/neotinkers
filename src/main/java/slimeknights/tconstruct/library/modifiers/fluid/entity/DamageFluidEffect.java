@@ -9,12 +9,12 @@ import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction;
 import slimeknights.mantle.data.loadable.Loadables;
 import slimeknights.mantle.data.loadable.primitive.FloatLoadable;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.tconstruct.common.TinkerDamageTypes;
 import slimeknights.tconstruct.library.modifiers.fluid.EffectLevel;
+import slimeknights.tconstruct.library.modifiers.fluid.FluidAction;
 import slimeknights.tconstruct.library.modifiers.fluid.FluidEffect;
 import slimeknights.tconstruct.library.modifiers.fluid.FluidEffectContext;
 import slimeknights.tconstruct.library.modifiers.fluid.FluidEffectContext.Entity;
@@ -70,7 +70,7 @@ public record DamageFluidEffect(float damage, @Nullable DamageTypePair damageTyp
   public Component getDescription(RegistryAccess registryAccess) {
     String translationKey = FluidEffect.getTranslationKey(getLoader());
     if (this.damageType != null) {
-      DamageType damageType = registryAccess.lookupOrThrow(Registries.DAMAGE_TYPE).get(this.damageType.melee);
+      DamageType damageType = registryAccess.lookupOrThrow(Registries.DAMAGE_TYPE).getValue(this.damageType.melee);
       if (damageType != null) {
         translationKey += '.' + damageType.msgId();
       }

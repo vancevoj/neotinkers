@@ -26,6 +26,8 @@ import slimeknights.tconstruct.library.modifiers.modules.ModifierModule;
 import slimeknights.tconstruct.library.modifiers.modules.util.ModifierCondition;
 import slimeknights.tconstruct.library.modifiers.modules.util.ModifierCondition.ConditionalModule;
 import slimeknights.tconstruct.library.modifiers.modules.util.ModuleBuilder;
+import slimeknights.tconstruct.library.modifiers.modules.util.ToolActionTransformHelper;
+import slimeknights.tconstruct.library.modifiers.modules.util.ToolActionTransformHelper.Transform;
 import slimeknights.tconstruct.library.module.HookProvider;
 import slimeknights.tconstruct.library.module.ModuleHook;
 import slimeknights.tconstruct.library.tools.helper.ToolDamageUtil;
@@ -91,9 +93,11 @@ public record ToolActionWalkerTransformModule(ItemAbility action, SoundEvent sou
       context.setOffsetPos(mutable);
       // transform the block
       BlockState original = world.getBlockState(mutable);
-      BlockState transformed = original.getToolModifiedState(context, action, false);
+      // 26.3 moved most transforms from the tool action to block transformers
+      Transform transformed = ToolActionTransformHelper.getTransform(context, original, action, false);
       if (transformed != null) {
-        world.setBlock(mutable, transformed, Block.UPDATE_ALL_IMMEDIATE);
+        transformed.dropLoot(context, original);
+        world.setBlock(mutable, transformed.state(), Block.UPDATE_ALL_IMMEDIATE);
         world.destroyBlock(target, true);
         world.playSound(null, mutable, sound, SoundSource.BLOCKS, 1.0F, 1.0F);
         ToolDamageUtil.damageAnimated(tool, 1, living, EquipmentSlot.FEET, entry.getId());

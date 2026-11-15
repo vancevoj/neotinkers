@@ -5,7 +5,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import net.minecraft.core.Holder;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagKey;
@@ -68,7 +69,8 @@ public record MeleeInstrumentModule(@Nullable MaterialId material, TagKey<Instru
   /** Plays the sound for this attack */
   private void playSound(IToolStackView tool, LivingEntity attacker, @Nullable Player player, Entity target) {
     if (this.attacker.matches(attacker)) {
-      // find the instrument to play
+      // find the instrument to play, instruments are a datapack registry since 1.21.2
+      Registry<Instrument> instruments = attacker.level().registryAccess().lookupOrThrow(Registries.INSTRUMENT);
       Instrument instrument = null;
       if (this.material != null) {
         for (MaterialVariant material : tool.getMaterials()) {
@@ -83,7 +85,7 @@ public record MeleeInstrumentModule(@Nullable MaterialId material, TagKey<Instru
             }
             Identifier key = Identifier.tryParse(variant);
             if (key != null) {
-              instrument = BuiltInRegistries.INSTRUMENT.getValue(key);
+              instrument = instruments.getValue(key);
             }
             break;
           }
@@ -91,7 +93,7 @@ public record MeleeInstrumentModule(@Nullable MaterialId material, TagKey<Instru
       }
       // if we lacked a matching material, fetch a random instrument from the tag
       if (instrument == null) {
-        instrument = BuiltInRegistries.INSTRUMENT.getTag(tag).flatMap(tag -> tag.getRandomElement(attacker.getRandom())).map(Holder::value).orElse(null);
+        instrument = instruments.getRandomElementOf(tag, attacker.getRandom()).map(Holder::value).orElse(null);
       }
       // may still have no instrument if the tag was empty
       if (instrument != null) {

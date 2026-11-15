@@ -49,7 +49,7 @@ public record EdibleConsumeDurabilityModule(LevelingInt durabilityUsage, IJsonPr
       int damage = this.durabilityUsage.compute(modifier.getEffectiveLevel());
       ItemStack stack = player.getItemBySlot(eatenSlot);
       if (damage > 0 && ToolDamageUtil.directDamage(tool, damage, player, stack)) {
-        player.onEquippedItemBroken(stack.getItem(), eatenSlot);
+        player.onEquippedItemBroken(stack, eatenSlot);
       }
     }
   }
