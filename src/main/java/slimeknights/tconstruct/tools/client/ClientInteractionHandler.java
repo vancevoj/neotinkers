@@ -1,6 +1,7 @@
 package slimeknights.tconstruct.tools.client;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -42,10 +43,11 @@ public class ClientInteractionHandler {
       TinkerNetwork.getInstance().sendToServer(InteractWithAirPacket.fromChestplate(hand));
       InteractionResult result = InteractionHandler.onChestplateUse(player, chestplate, hand);
       if (result.consumesAction()) {
-        if (result.shouldSwing()) {
-          player.swing(hand);
+        // 26.3: like vanilla, the client swings for predicted successes
+        if (result instanceof InteractionResult.Success success && success.swingSource() == InteractionResult.SwingSource.PREDICTED) {
+          player.swing(hand, player.getItemInHand(hand).getInteractAnimation(), false);
         }
-        Minecraft.getInstance().gameRenderer.itemInHandRenderer.itemUsed(hand);
+        itemUsed(hand);
         if (hand == InteractionHand.MAIN_HAND) {
           cancelNextOffhand = true;
         }
@@ -77,11 +79,20 @@ public class ClientInteractionHandler {
       TinkerNetwork.getInstance().sendToServer(InteractWithAirPacket.LEFT_CLICK);
       InteractionResult result = InteractionHandler.onLeftClickInteraction(player, tool, hand);
       if (result.consumesAction()) {
-        if (result.shouldSwing()) {
-          player.swing(hand);
+        // 26.3: like vanilla, the client swings for predicted successes
+        if (result instanceof InteractionResult.Success success && success.swingSource() == InteractionResult.SwingSource.PREDICTED) {
+          player.swing(hand, tool.getAttackAnimation(), false);
         }
-        Minecraft.getInstance().gameRenderer.itemInHandRenderer.itemUsed(hand);
+        itemUsed(hand);
       }
+    }
+  }
+
+  /** Resets the first person equip animation of the hand, the item in hand renderer moved to the local player in 26.3 */
+  private static void itemUsed(InteractionHand hand) {
+    LocalPlayer player = Minecraft.getInstance().player;
+    if (player != null) {
+      player.itemUsed(hand);
     }
   }
 }

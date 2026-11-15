@@ -2,20 +2,22 @@ package slimeknights.tconstruct.tools.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
-import net.minecraft.resources.Identifier;
-import net.minecraft.util.Mth;
-import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.client.renderer.entity.state.EntityRenderState;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
+import net.neoforged.neoforge.fluids.FluidStack;
 import slimeknights.mantle.client.render.FluidCuboid;
 import slimeknights.mantle.client.render.FluidRenderer;
+import slimeknights.mantle.client.render.FluidSprites;
 import slimeknights.mantle.client.render.MantleRenderTypes;
 import slimeknights.tconstruct.tools.entity.FluidEffectProjectile;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
-public class FluidEffectProjectileRenderer extends EntityRenderer<FluidEffectProjectile> {
+public class FluidEffectProjectileRenderer extends EntityRenderer<FluidEffectProjectile, FluidEffectProjectileRenderer.State> {
   private final List<FluidCuboid> fluids;
   public FluidEffectProjectileRenderer(Context context) {
     super(context);
@@ -29,18 +31,48 @@ public class FluidEffectProjectileRenderer extends EntityRenderer<FluidEffectPro
   }
 
   @Override
-  public void render(FluidEffectProjectile pEntity, float pEntityYaw, float pPartialTicks, PoseStack pMatrixStack, MultiBufferSource pBuffer, int pPackedLight) {
-    pMatrixStack.pushPose();
-    pMatrixStack.translate(0.0D, 0.15F, 0.0D);
-    pMatrixStack.rotate(Axis.YP.rotationDegrees(Mth.lerp(pPartialTicks, pEntity.yRotO, pEntity.getYRot()) - 90.0F));
-    pMatrixStack.rotate(Axis.ZP.rotationDegrees(Mth.lerp(pPartialTicks, pEntity.xRotO, pEntity.getXRot())));
-    FluidRenderer.renderCuboids(pMatrixStack, pBuffer.getBuffer(MantleRenderTypes.FLUID), fluids, pEntity.getFluid(), pPackedLight);
-    pMatrixStack.popPose();
-    super.render(pEntity, pEntityYaw, pPartialTicks, pMatrixStack, pBuffer, pPackedLight);
+  public State createRenderState() {
+    return new State();
   }
 
   @Override
-  public Identifier getTextureLocation(FluidEffectProjectile pEntity) {
-    return InventoryMenu.BLOCK_ATLAS;
+  public void extractRenderState(FluidEffectProjectile entity, State state, float partialTicks) {
+    super.extractRenderState(entity, state, partialTicks);
+    state.yRot = entity.getYRot(partialTicks);
+    state.xRot = entity.getXRot(partialTicks);
+    FluidStack fluid = entity.getFluid();
+    if (fluid.isEmpty()) {
+      state.sprites = null;
+    } else {
+      state.sprites = FluidSprites.of(fluid);
+      state.fluidLight = FluidRenderer.getFluidLight(state.lightCoords, fluid);
+    }
+  }
+
+  @Override
+  public void submit(State state, PoseStack poseStack, SubmitNodeCollector collector, CameraRenderState camera) {
+    FluidSprites sprites = state.sprites;
+    if (sprites != null) {
+      poseStack.pushPose();
+      poseStack.translate(0.0D, 0.15F, 0.0D);
+      poseStack.rotate(Axis.YP.rotationDegrees(state.yRot - 90.0F));
+      poseStack.rotate(Axis.ZP.rotationDegrees(state.xRot));
+      List<FluidCuboid> fluids = this.fluids;
+      int light = state.fluidLight;
+      collector.submitCustomGeometry(poseStack, MantleRenderTypes.FLUID, (pose, buffer) -> FluidRenderer.renderCuboids(pose, buffer, fluids, sprites, light));
+      poseStack.popPose();
+    }
+    super.submit(state, poseStack, collector, camera);
+  }
+
+  /** Render state for fluid projectiles */
+  public static class State extends EntityRenderState {
+    /** Interpolated rotation */
+    public float xRot, yRot;
+    /** Fluid sprites and color, null if no fluid */
+    @Nullable
+    public FluidSprites sprites;
+    /** Light including the fluid light */
+    public int fluidLight;
   }
 }

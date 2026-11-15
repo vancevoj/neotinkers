@@ -5,7 +5,7 @@ import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.world.entity.projectile.throwableitemprojectile.ThrowableItemProjectile;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
-import net.neoforged.neoforge.client.event.ModelEvent.RegisterAdditional;
+import net.neoforged.neoforge.client.event.ModelEvent.RegisterStandalone;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import slimeknights.tconstruct.TConstruct;
@@ -19,9 +19,9 @@ import slimeknights.tconstruct.tools.client.material.ThrownShurikenRenderer;
 @EventBusSubscriber(modid=TConstruct.MOD_ID, value=Dist.CLIENT)
 public class GadgetClientEvents extends ClientEventBase {
   @SubscribeEvent
-  static void registerModels(RegisterAdditional event) {
-    FancyItemFrameRenderer.LOCATIONS_MODEL.values().forEach(event::register);
-    FancyItemFrameRenderer.LOCATIONS_MODEL_MAP.values().forEach(event::register);
+  static void registerModels(RegisterStandalone event) {
+    // 26.3: models are only loaded when referenced, so the frame models are standalone models
+    FancyItemFrameRenderer.registerModels(event);
   }
 
   @SubscribeEvent

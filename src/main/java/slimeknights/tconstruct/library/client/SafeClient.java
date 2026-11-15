@@ -3,10 +3,9 @@ package slimeknights.tconstruct.library.client;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.api.distmarker.Dist;
-import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 import net.neoforged.fml.loading.FMLEnvironment;
+import slimeknights.tconstruct.library.fluid.FluidTank;
 
 /**
  * This class contains various methods that are safe to call on both sides, which internally call client only code.
@@ -32,10 +31,10 @@ public class SafeClient {
       Level level = be.getLevel();
       if (level != null && level.isClientSide()) {
         // if the amount change is bigger than a single increment, or we changed whether we have a fluid, update the world renderer
-        BlockState state = be.getBlockState();
         if (oldAmount != newAmount) {
           be.requestModelDataUpdate();
-          Minecraft.getInstance().levelRenderer.blockChanged(level, be.getBlockPos(), state, state, 3);
+          // 26.3: section rebuilds moved from the level renderer to the level extractor, flag 3 matches the old call
+          Minecraft.getInstance().levelExtractor.blockChanged(be.getBlockPos(), 3);
         }
       }
     }

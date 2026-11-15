@@ -1,15 +1,15 @@
 package slimeknights.tconstruct.tools.client;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.multiplayer.MultiPlayerGameMode;
-import net.minecraft.client.renderer.ItemInHandRenderer;
-import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.client.renderer.state.MapRenderState;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.network.chat.contents.TranslatableContents;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -30,10 +30,11 @@ import net.neoforged.neoforge.client.event.RenderGuiLayerEvent;
 import net.neoforged.neoforge.client.event.RenderHandEvent;
 import net.neoforged.neoforge.client.extensions.common.IClientMobEffectExtensions;
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
+import net.neoforged.neoforge.event.GatherSkippedAttributeTooltipsEvent;
 import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import org.joml.Matrix4f;
+import org.joml.Matrix3x2fStack;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.common.config.Config;
@@ -47,6 +48,8 @@ import slimeknights.tconstruct.library.tools.capability.TinkerDataKeys;
 import slimeknights.tconstruct.library.tools.capability.inventory.ToolInventoryCapability;
 import slimeknights.tconstruct.library.tools.context.EquipmentChangeContext;
 import slimeknights.tconstruct.library.tools.helper.ModifierUtil;
+import slimeknights.tconstruct.library.tools.helper.TooltipUtil;
+import slimeknights.tconstruct.library.tools.item.IModifiable;
 import slimeknights.tconstruct.library.tools.item.IModifiableDisplay;
 import slimeknights.tconstruct.library.tools.item.ranged.ModifiableBowItem;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
@@ -75,6 +78,17 @@ public class ModifierClientEvents {
         }
         return false;
       });
+    }
+  }
+
+  /**
+   * Hides the vanilla attribute tooltip lines for tools that show their own attributes in the current tooltip view.
+   * 26.3 replacement for the old modifiers hide flag on the stack.
+   */
+  @SubscribeEvent
+  static void skipAttributeTooltips(GatherSkippedAttributeTooltipsEvent event) {
+    if (event.getStack().getItem() instanceof IModifiable modifiable && TooltipUtil.hidesAttributeTooltip(modifiable.getToolDefinition())) {
+      event.setSkipAll(true);
     }
   }
 
@@ -114,7 +128,8 @@ public class ModifierClientEvents {
       if (hand == InteractionHand.OFF_HAND) {
         side = side.getOpposite();
       }
-      Minecraft.getInstance().getEntityRenderDispatcher().getItemInHandRenderer().renderPlayerArm(matrices, event.getMultiBufferSource(), event.getPackedLight(), event.getEquipProgress(), event.getSwingProgress(), side);
+      // 26.3: the first person renderer moved to the game renderer, renderPlayerArm is made public by the access transformer
+      Minecraft.getInstance().gameRenderer.firstPersonHandsAndItemsRenderer.renderPlayerArm(matrices, event.getSubmitNodeCollector(), event.getPackedLight(), event.getEquipProgress(), event.getSwingProgress(), side, event.getPlayerState());
       matrices.popPose();
       if (held.isEmpty()) {
         event.setCanceled(true);
@@ -165,6 +180,12 @@ public class ModifierClientEvents {
   private static final int MAP_PADDING = 7;
   /** Total map size */
   private static final int MAP_SIZE = 2 * MAP_PADDING + 128;
+  /** Map background when the map has no data, private in the 26.3 first person renderer */
+  private static final Identifier MAP_BACKGROUND = Identifier.withDefaultNamespace("textures/map/map_background.png");
+  /** Map background behind map data, private in the 26.3 first person renderer */
+  private static final Identifier MAP_BACKGROUND_CHECKERBOARD = Identifier.withDefaultNamespace("textures/map/map_background_checkerboard.png");
+  /** Render state for the minimap, extracted each frame */
+  private static final MapRenderState MAP_RENDER_STATE = new MapRenderState();
 
   @Nonnull
   private static ItemStack nextOffhand = ItemStack.EMPTY;
@@ -250,7 +271,7 @@ public class ModifierClientEvents {
   public static void renderHotbar(RenderGuiLayerEvent.Post event) {
     Minecraft mc = Minecraft.getInstance();
     Player player = mc.player;
-    if (mc.options.hideGui || !event.getName().equals(VanillaGuiLayers.HOTBAR) || player == null || player != mc.getCameraEntity()) {
+    if (mc.gui.hud.isHidden() || !event.getName().equals(VanillaGuiLayers.HOTBAR) || player == null || player != mc.getCameraEntity()) {
       return;
     }
     boolean renderShield = Config.CLIENT.renderShieldSlotItem.get() && !nextOffhand.isEmpty();
@@ -270,9 +291,6 @@ public class ModifierClientEvents {
     }
     MultiPlayerGameMode playerController = mc.gameMode;
     if (playerController != null && playerController.getPlayerMode() != GameType.SPECTATOR) {
-      RenderSystem.enableBlend();
-      RenderSystem.defaultBlendFunc();
-
       int scaledWidth = mc.getWindow().getGuiScaledWidth();
       int scaledHeight = mc.getWindow().getGuiScaledHeight();
       GuiGraphicsExtractor graphics = event.getGuiGraphics();
@@ -284,15 +302,15 @@ public class ModifierClientEvents {
       if (renderShield) {
         int x = scaledWidth / 2 + (rightHanded ? -117 : 101);
         int y = scaledHeight - 38;
-        graphics.blit(Icons.ICONS, x - 3, y - 3, emptyOffhand ? 211 : 189, 0, SLOT_BACKGROUND_SIZE, SLOT_BACKGROUND_SIZE, 256, 256);
-        mc.gui.renderSlot(graphics, x, y, partialTicks, player, nextOffhand, 11);
+        graphics.blit(RenderPipelines.GUI_TEXTURED, Icons.ICONS, x - 3, y - 3, emptyOffhand ? 211 : 189, 0, SLOT_BACKGROUND_SIZE, SLOT_BACKGROUND_SIZE, 256, 256);
+        mc.gui.hud.extractSlot(graphics, x, y, partialTicks, player, nextOffhand, 11);
       }
       // want to the side above the normal offhand item
       if (renderSleeves) {
         int x = scaledWidth / 2 + (rightHanded ? -136 : 120);
         int y = scaledHeight - 19;
-        graphics.blit(Icons.ICONS, x - 3, y - 3, emptyOffhand ? 211 : rightHanded ? 145 : 123, 0, SLOT_BACKGROUND_SIZE, SLOT_BACKGROUND_SIZE, 256, 256);
-        mc.gui.renderSlot(graphics, x, y, partialTicks, player, currentSleeve, 11);
+        graphics.blit(RenderPipelines.GUI_TEXTURED, Icons.ICONS, x - 3, y - 3, emptyOffhand ? 211 : rightHanded ? 145 : 123, 0, SLOT_BACKGROUND_SIZE, SLOT_BACKGROUND_SIZE, 256, 256);
+        mc.gui.hud.extractSlot(graphics, x, y, partialTicks, player, currentSleeve, 11);
       }
 
       // TODO: cannot remember why this was needed before. Reconfirm if bug still exists.
@@ -324,27 +342,21 @@ public class ModifierClientEvents {
         }
 
         // setup renderer
-        PoseStack poseStack = graphics.pose();
-        poseStack.pushPose();
+        Matrix3x2fStack poseStack = graphics.pose();
+        poseStack.pushMatrix();
         float padding = MAP_PADDING * mapScale;
-        poseStack.translate(xStart + padding, yStart + padding, 0);
-        poseStack.scale(mapScale, mapScale, -1);
+        poseStack.translate(xStart + padding, yStart + padding);
+        poseStack.scale(mapScale, mapScale);
 
         // draw background
-        int light = 0xF000F0;
-        MultiBufferSource buffer = graphics.bufferSource();
-        VertexConsumer consumer = buffer.getBuffer(data == null ? ItemInHandRenderer.MAP_BACKGROUND : ItemInHandRenderer.MAP_BACKGROUND_CHECKERBOARD);
-        Matrix4f matrix = poseStack.last().pose();
-        consumer.addVertex(matrix,  -7, 135, 0).setColor(255, 255, 255, 255).setUv(0, 1).setLight(light);
-        consumer.addVertex(matrix, 135, 135, 0).setColor(255, 255, 255, 255).setUv(1, 1).setLight(light);
-        consumer.addVertex(matrix, 135,  -7, 0).setColor(255, 255, 255, 255).setUv(1, 0).setLight(light);
-        consumer.addVertex(matrix,  -7,  -7, 0).setColor(255, 255, 255, 255).setUv(0, 0).setLight(light);
+        graphics.blit(data == null ? MAP_BACKGROUND : MAP_BACKGROUND_CHECKERBOARD, -7, -7, 135, 135, 0, 1, 0, 1);
 
         // draw map if present
         if (data != null && index != null) {
-          Minecraft.getInstance().gameRenderer.getMapRenderer().render(poseStack, buffer, index, data, false, light);
+          mc.getMapRenderer().extractRenderState(index, data, MAP_RENDER_STATE);
+          drawMap(graphics, MAP_RENDER_STATE);
         }
-        poseStack.popPose();
+        poseStack.popMatrix();
       }
 
       if (renderItemFrame) {
@@ -385,13 +397,13 @@ public class ModifierClientEvents {
         int lastRow = rows - 1;
         for (int r = 0; r < lastRow; r++) {
           for (int c = 0; c < columns; c++) {
-            graphics.blit(Icons.ICONS, xStart + c * SLOT_BACKGROUND_SIZE, yStart + r * SLOT_BACKGROUND_SIZE, 167, 0, SLOT_BACKGROUND_SIZE, SLOT_BACKGROUND_SIZE, 256, 256);
+            graphics.blit(RenderPipelines.GUI_TEXTURED, Icons.ICONS, xStart + c * SLOT_BACKGROUND_SIZE, yStart + r * SLOT_BACKGROUND_SIZE, 167, 0, SLOT_BACKGROUND_SIZE, SLOT_BACKGROUND_SIZE, 256, 256);
           }
         }
         // last row will be aligned in the direction of x orientation (center, left, or right)
         int lastRowOffset = xOrientation.align((columns - inLastRow) * 2) * SLOT_BACKGROUND_SIZE / 2;
         for (int c = 0; c < inLastRow; c++) {
-          graphics.blit(Icons.ICONS, xStart + c * SLOT_BACKGROUND_SIZE + lastRowOffset, yStart + lastRow * SLOT_BACKGROUND_SIZE, 167, 0, SLOT_BACKGROUND_SIZE, SLOT_BACKGROUND_SIZE, 256, 256);
+          graphics.blit(RenderPipelines.GUI_TEXTURED, Icons.ICONS, xStart + c * SLOT_BACKGROUND_SIZE + lastRowOffset, yStart + lastRow * SLOT_BACKGROUND_SIZE, 167, 0, SLOT_BACKGROUND_SIZE, SLOT_BACKGROUND_SIZE, 256, 256);
         }
 
         // draw items
@@ -399,14 +411,51 @@ public class ModifierClientEvents {
         xStart += 3; yStart += 3; // offset from item start instead of frame start
         for (int r = 0; r < lastRow; r++) {
           for (int c = 0; c < columns; c++) {
-            mc.gui.renderSlot(graphics, xStart + c * SLOT_BACKGROUND_SIZE, yStart + r * SLOT_BACKGROUND_SIZE, partialTicks, player, itemFrames.get(i), i);
+            mc.gui.hud.extractSlot(graphics, xStart + c * SLOT_BACKGROUND_SIZE, yStart + r * SLOT_BACKGROUND_SIZE, partialTicks, player, itemFrames.get(i), i);
             i++;
           }
         }
         // align last row
         for (int c = 0; c < inLastRow; c++) {
-          mc.gui.renderSlot(graphics, xStart + c * SLOT_BACKGROUND_SIZE + lastRowOffset, yStart + lastRow * SLOT_BACKGROUND_SIZE, partialTicks, player, itemFrames.get(i), i);
+          mc.gui.hud.extractSlot(graphics, xStart + c * SLOT_BACKGROUND_SIZE + lastRowOffset, yStart + lastRow * SLOT_BACKGROUND_SIZE, partialTicks, player, itemFrames.get(i), i);
           i++;
+        }
+      }
+    }
+  }
+
+  /**
+   * Draws a map on the HUD. Same as {@link GuiGraphicsExtractor#map(MapRenderState)}, but also draws decorations hidden in item
+   * frames such as the player marker, like the old map rendering outside of frames did.
+   * @param graphics  Graphics instance, pose at the top left of the 128 by 128 map
+   * @param state     Map render state
+   */
+  private static void drawMap(GuiGraphicsExtractor graphics, MapRenderState state) {
+    // draws the map texture and decorations shown in frames
+    graphics.map(state);
+    // draw decorations that only show outside frames
+    Matrix3x2fStack pose = graphics.pose();
+    Minecraft mc = Minecraft.getInstance();
+    for (MapRenderState.MapDecorationRenderState decoration : state.decorations) {
+      if (!decoration.renderOnFrame) {
+        pose.pushMatrix();
+        pose.translate(decoration.x / 2.0F + 64.0F, decoration.y / 2.0F + 64.0F);
+        pose.rotate((float) (Math.PI / 180.0) * decoration.rot * 360.0F / 16.0F);
+        pose.scale(4.0F, 4.0F);
+        pose.translate(-0.125F, 0.125F);
+        TextureAtlasSprite sprite = decoration.atlasSprite;
+        if (sprite != null) {
+          graphics.blit(sprite.atlasLocation(), -1, -1, 1, 1, sprite.getU0(), sprite.getU1(), sprite.getV1(), sprite.getV0());
+        }
+        pose.popMatrix();
+        if (decoration.name != null) {
+          float width = mc.font.width(decoration.name);
+          float scale = Mth.clamp(25.0F / width, 0.0F, 6.0F / 9.0F);
+          pose.pushMatrix();
+          pose.translate(decoration.x / 2.0F + 64.0F - width * scale / 2.0F, decoration.y / 2.0F + 64.0F + 4.0F);
+          pose.scale(scale, scale);
+          graphics.text(mc.font, decoration.name, 0, 0, 0xFFFFFFFF, false);
+          pose.popMatrix();
         }
       }
     }

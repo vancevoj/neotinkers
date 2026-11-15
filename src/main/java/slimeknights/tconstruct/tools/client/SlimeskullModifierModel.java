@@ -1,6 +1,6 @@
 package slimeknights.tconstruct.tools.client;
 
-import net.minecraft.client.resources.model.Material;
+import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.Identifier;
 import slimeknights.mantle.data.loadable.primitive.IntLoadable;
