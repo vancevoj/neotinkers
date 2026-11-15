@@ -2,8 +2,6 @@ package slimeknights.tconstruct.library.modifiers.hook.behavior;
 
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.core.Holder;
-import net.minecraft.core.component.DataComponents;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
@@ -13,7 +11,6 @@ import slimeknights.tconstruct.library.modifiers.hook.mining.BlockHarvestModifie
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 
-import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -123,36 +120,6 @@ public interface EnchantmentModifierHook {
       mutable.set(entry.getKey(), entry.getValue());
     }
     return mutable.toImmutable();
-  }
-
-  /**
-   * Writes the main-hand tool's full enchantment set ({@link #getAllEnchantments(ItemStack)}, including virtual modifier
-   * enchantments such as fortune/silk touch that are never stored in NBT) onto the stack's
-   * {@link DataComponents#ENCHANTMENTS} component, so vanilla block-drop loot actually sees them. Restore with
-   * {@link slimeknights.tconstruct.library.modifiers.hook.mining.HarvestEnchantmentsModifierHook#restoreEnchantments}.
-   * <p>
-   * Block loot reads enchantments off the stack's component rather than through {@code ItemStack#getAllEnchantments}, so
-   * unlike gameplay lookups it cannot see virtual modifier enchantments. The {@code HarvestEnchantmentsModifierHook} path
-   * only injects OFFHAND/armor enchantments (it skips the main hand), so without this the main hand's own fortune/silk
-   * touch (issue #11) never reached block drops.
-   * @param stack   Main hand tool stack
-   * @param player  Player breaking the block, may be null (e.g. projectile harvest)
-   * @return  Original enchantments component to restore afterwards, or null if nothing changed (so no restore needed)
-   */
-  @Nullable
-  static ItemEnchantments updateToolEnchantments(ItemStack stack, @Nullable Player player) {
-    // creative players don't generate block loot, matching HarvestEnchantmentsModifierHook's guard
-    if (player != null && player.isCreative()) {
-      return null;
-    }
-    ItemEnchantments original = stack.getTagEnchantments();
-    ItemEnchantments updated = toComponent(original, getAllEnchantments(stack));
-    // nothing to do if the tool has no virtual enchantments beyond what is already in the component
-    if (updated.equals(original)) {
-      return null;
-    }
-    stack.set(DataComponents.ENCHANTMENTS, updated);
-    return original;
   }
 
   /** Merger that combines all modules together */

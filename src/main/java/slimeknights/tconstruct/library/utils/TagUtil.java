@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.IntArrayTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 
@@ -15,6 +16,26 @@ public final class TagUtil {
   /* Helper functions */
 
   /**
+   * Reads a block position from a single tag. Accepts the int array written by {@link NbtUtils#writeBlockPos(BlockPos)} in 1.21,
+   * and the X/Y/Z compound it wrote before 1.20.5 so positions saved by 1.20.1 worlds still load.
+   * @param tag  Tag to read
+   * @return  Block position, or null if the tag is not a valid position
+   */
+  @Nullable
+  public static BlockPos readPos(@Nullable Tag tag) {
+    if (tag instanceof IntArrayTag array) {
+      int[] coords = array.getAsIntArray();
+      if (coords.length == 3) {
+        return new BlockPos(coords[0], coords[1], coords[2]);
+      }
+    } else if (tag instanceof CompoundTag compound
+               && compound.contains("X", Tag.TAG_ANY_NUMERIC) && compound.contains("Y", Tag.TAG_ANY_NUMERIC) && compound.contains("Z", Tag.TAG_ANY_NUMERIC)) {
+      return new BlockPos(compound.getInt("X"), compound.getInt("Y"), compound.getInt("Z"));
+    }
+    return null;
+  }
+
+  /**
    * Reads a block position from Tag
    * @param parent  Parent tag
    * @param key     Position key
@@ -23,11 +44,9 @@ public final class TagUtil {
    */
   @Nullable
   public static BlockPos readOptionalPos(CompoundTag parent, String key, BlockPos offset) {
-    if (parent.contains(key, Tag.TAG_COMPOUND)) {
-      // readBlockPos now takes the key directly and returns an Optional, so read from the parent and offset if present
-      return NbtUtils.readBlockPos(parent, key).map(pos -> pos.offset(offset)).orElse(null);
-    }
-    return null;
+    // NbtUtils.writeBlockPos writes an int array in 1.21 (a compound before), readPos accepts both
+    BlockPos pos = readPos(parent.get(key));
+    return pos != null ? pos.offset(offset) : null;
   }
 
   /**
