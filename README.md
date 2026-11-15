@@ -12,7 +12,7 @@ Full credit for the mod goes to SlimeKnights. I take no credit for any of the or
 - [Neo Mantle (required) - latest release](https://github.com/vancevoj/neo_mantle/releases/latest)
 
 
-## Optional Download - Neo Planner
+## Optional Download - Neo Planner (sporadically maintained)
 
 Neo Planner is another **unofficial** port of the Tinkers Construct Planner addon-mod. This port is functional for 1.21.1 NeoForge, and again - is in no way endorsed by any persons aside myself. Download & use the following at your own discretion.
 
