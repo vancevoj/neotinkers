@@ -92,7 +92,8 @@ public class MeltingModuleInventory implements IItemHandlerModifiable {
 
   @Override
   public boolean isItemValid(int slot, ItemStack stack) {
-    return true;
+    // a menu opened before the structure shrank still has slots past the end, setStackInSlot ignores those so placing there deletes the item
+    return validSlot(slot);
   }
 
   /** Returns true if a slot is defined in the array */
