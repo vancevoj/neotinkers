@@ -35,8 +35,8 @@ public class FluidBucketModelProvider extends GenericDataProvider {
   public CompletableFuture<?> run(CachedOutput cache) {
     return allOf(
       BuiltInRegistries.ITEM.entrySet().stream()
-        .filter(entry -> entry.getKey().location().getNamespace().equals(modId) && entry.getValue() instanceof BucketItem)
-        .map(entry -> saveJson(cache, entry.getKey().location(), makeJson((BucketItem)entry.getValue()))));
+        .filter(entry -> entry.getKey().identifier().getNamespace().equals(modId) && entry.getValue() instanceof BucketItem)
+        .map(entry -> saveJson(cache, entry.getKey().identifier(), makeJson((BucketItem)entry.getValue()))));
   }
 
   @Override

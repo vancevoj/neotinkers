@@ -2,10 +2,12 @@ package slimeknights.tconstruct.common.data;
 
 import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.core.registries.SingleRegistryBootstrap;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.world.damagesource.DamageEffects;
 import net.minecraft.world.damagesource.DamageScaling;
 import net.minecraft.world.damagesource.DamageType;
+import net.neoforged.neoforge.data.event.DatapackRegistryGatherer;
 import slimeknights.tconstruct.library.modifiers.fluid.entity.DamageFluidEffect.DamageTypePair;
 
 import static slimeknights.tconstruct.TConstruct.prefix;
@@ -35,12 +37,22 @@ import static slimeknights.tconstruct.common.TinkerDamageTypes.UPDATE_HEALTH;
 import static slimeknights.tconstruct.common.TinkerDamageTypes.WATER;
 
 /** Datagen for damage types */
-public class DamageTypeProvider implements RegistrySetBuilder.RegistryBootstrap<DamageType> {
+public class DamageTypeProvider implements SingleRegistryBootstrap<DamageType> {
   private DamageTypeProvider() {}
 
   /** Registers this provider with the registry set builder */
   public static void register(RegistrySetBuilder builder) {
     builder.add(Registries.DAMAGE_TYPE, new DamageTypeProvider());
+  }
+
+  /** Registers this provider with the datagen registry gatherer, from {@link net.neoforged.neoforge.data.event.GatherDataRegistryEntriesEvent} */
+  public static void register(DatapackRegistryGatherer gatherer) {
+    gatherer.add(Registries.DAMAGE_TYPE, DamageTypeProvider::bootstrap);
+  }
+
+  /** Bootstraps all damage types */
+  public static void bootstrap(BootstrapContext<DamageType> context) {
+    new DamageTypeProvider().run(context);
   }
 
   @Override

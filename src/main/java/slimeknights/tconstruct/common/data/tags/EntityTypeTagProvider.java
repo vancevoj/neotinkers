@@ -1,15 +1,15 @@
 package slimeknights.tconstruct.common.data.tags;
 
-import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.core.HolderLookup.Provider;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
-import net.minecraft.data.tags.EntityTypeTagsProvider;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.world.entity.EntityType;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.minecraft.world.entity.EntityTypes;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.TinkerTags;
+import slimeknights.tconstruct.library.data.IntrinsicTagsProvider;
 import slimeknights.tconstruct.tools.TinkerTools;
 import slimeknights.tconstruct.world.TinkerWorld;
 
@@ -24,13 +24,12 @@ import static slimeknights.tconstruct.common.TinkerTags.EntityTypes.REFLECTING_P
 import static slimeknights.tconstruct.common.TinkerTags.EntityTypes.TRIDENTS;
 
 @SuppressWarnings("unchecked")
-public class EntityTypeTagProvider extends EntityTypeTagsProvider {
+public class EntityTypeTagProvider extends IntrinsicTagsProvider<EntityType<?>> {
 
-  public EntityTypeTagProvider(PackOutput packOutput, CompletableFuture<Provider> lookupProvider, ExistingFileHelper existingFileHelper) {
-    super(packOutput, lookupProvider, TConstruct.MOD_ID, existingFileHelper);
+  public EntityTypeTagProvider(PackOutput packOutput, CompletableFuture<Provider> lookupProvider) {
+    super(packOutput, BuiltInRegistries.ENTITY_TYPE, lookupProvider, TConstruct.MOD_ID);
   }
 
-  @SuppressWarnings("removal")
   @Override
   protected void addTags(Provider provider) {
     // mob classes

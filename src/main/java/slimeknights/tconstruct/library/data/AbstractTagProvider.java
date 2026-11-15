@@ -5,13 +5,14 @@ import net.minecraft.data.CachedOutput;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.PackOutput.Target;
 import net.minecraft.resources.Identifier;
+import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.tags.TagBuilder;
 import net.minecraft.tags.TagEntry;
 import net.minecraft.tags.TagFile;
 import net.minecraft.tags.TagKey;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import slimeknights.mantle.data.GenericDataProvider;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -32,20 +33,21 @@ public abstract class AbstractTagProvider<T> extends GenericDataProvider {
   private final Predicate<Identifier> staticValuePredicate;
   /** Function to get a key from a value */
   private final Function<T,Identifier> keyGetter;
-  /** Checks for tags in other datapacks */
-  protected final ExistingFileHelper existingFileHelper;
-  /** Resource type for the existing file helper */
-  private final ExistingFileHelper.IResourceType resourceType;
+  /** Checks for tags in other datapacks, from {@link net.neoforged.neoforge.data.event.GatherDataEvent#getResourceManager(net.minecraft.server.packs.PackType)} with {@code SERVER_DATA}. If null, required references to other datapacks are considered missing. */
+  @Nullable
+  protected final ResourceManager resourceManager;
+  /** Folder containing the tags, used to find tags in other datapacks */
+  private final String folder;
 
   protected final Map<Identifier, TagBuilder> builders = Maps.newLinkedHashMap();
 
-  protected AbstractTagProvider(PackOutput packOutput, String modId, String folder, Function<T,Identifier> keyGetter, Predicate<Identifier> staticValuePredicate, ExistingFileHelper existingFileHelper) {
+  protected AbstractTagProvider(PackOutput packOutput, String modId, String folder, Function<T,Identifier> keyGetter, Predicate<Identifier> staticValuePredicate, @Nullable ResourceManager resourceManager) {
     super(packOutput, Target.DATA_PACK, folder);
     this.modId = modId;
     this.keyGetter = keyGetter;
     this.staticValuePredicate = staticValuePredicate;
-    this.existingFileHelper = existingFileHelper;
-    this.resourceType = new ExistingFileHelper.ResourceType(net.minecraft.server.packs.PackType.SERVER_DATA, ".json", folder);
+    this.resourceManager = resourceManager;
+    this.folder = folder;
   }
 
   /** Creates all tag instances */
@@ -65,7 +67,8 @@ public abstract class AbstractTagProvider<T> extends GenericDataProvider {
       if (!invalidEntries.isEmpty()) {
         return CompletableFuture.failedFuture(new IllegalArgumentException(String.format("Couldn't define tag %s as it is missing following references: %s", id, invalidEntries.stream().map(Objects::toString).collect(Collectors.joining(",")))));
       } else {
-        return saveJson(cache, id, TagFile.CODEC, new TagFile(tagEntries, entry.getValue().isReplace()));
+        TagBuilder builder = entry.getValue();
+        return saveJson(cache, id, TagFile.CODEC, new TagFile(tagEntries, builder.shouldReplace(), builder.getRemoveEntries().toList()));
       }
     }));
   }
@@ -74,7 +77,7 @@ public abstract class AbstractTagProvider<T> extends GenericDataProvider {
   private boolean missing(TagEntry reference) {
     if (reference.isRequired()) {
       // forge has a separate element resource type here to allow generating tags to non-static values. We don't currently handle non-static tag value validation but its worth considering
-      return existingFileHelper == null || !existingFileHelper.exists(reference.getId(), resourceType);
+      return resourceManager == null || resourceManager.getResource(reference.getId().withPath(path -> folder + '/' + path + ".json")).isEmpty();
     }
     return false;
   }
@@ -89,10 +92,7 @@ public abstract class AbstractTagProvider<T> extends GenericDataProvider {
 
   /** Raw method to make a builder */
   protected TagBuilder getOrCreateRawBuilder(TagKey<T> pTag) {
-    return this.builders.computeIfAbsent(pTag.location(), location -> {
-      existingFileHelper.trackGenerated(location, resourceType);
-      return TagBuilder.create();
-    });
+    return this.builders.computeIfAbsent(pTag.location(), location -> TagBuilder.create());
   }
 
   /** Vanillas tag appender does not let us easily replace the key getter, so replace it */
@@ -187,7 +187,7 @@ public abstract class AbstractTagProvider<T> extends GenericDataProvider {
      * @return The builder for chaining
      */
     public TagAppender<T> remove(Identifier location) {
-      internalBuilder.removeElement(location, modID);
+      internalBuilder.removeElement(location);
       return this;
     }
 
@@ -210,7 +210,7 @@ public abstract class AbstractTagProvider<T> extends GenericDataProvider {
      * @return The builder for chaining
      */
     public TagAppender<T> remove(TagKey<T> tag) {
-      internalBuilder.removeTag(tag.location(), modID);
+      internalBuilder.removeTag(tag.location());
       return this;
     }
 

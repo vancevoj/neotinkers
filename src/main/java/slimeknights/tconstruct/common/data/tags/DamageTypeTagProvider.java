@@ -4,11 +4,11 @@ import net.minecraft.core.HolderLookup.Provider;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.DamageTypeTagsProvider;
+import net.minecraft.data.tags.TagAppender;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageType;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
-import org.jetbrains.annotations.Nullable;
 import slimeknights.tconstruct.TConstruct;
 
 import java.util.concurrent.CompletableFuture;
@@ -74,10 +74,10 @@ import static slimeknights.tconstruct.common.TinkerTags.DamageTypes.PROJECTILE_P
 import static slimeknights.tconstruct.common.TinkerTags.DamageTypes.RUGGED_ATTACKS;
 import static slimeknights.tconstruct.common.TinkerTags.DamageTypes.RUGGED_TERRAIN;
 
-@SuppressWarnings("removal")
 public class DamageTypeTagProvider extends DamageTypeTagsProvider {
-  public DamageTypeTagProvider(PackOutput packOutput, CompletableFuture<Provider> lookup, @Nullable ExistingFileHelper existingFileHelper) {
-    super(packOutput, lookup, TConstruct.MOD_ID, existingFileHelper);
+  /** The lookup must contain our damage types, use the default reloadable lookup from {@code GatherDataEvent#createProvider} */
+  public DamageTypeTagProvider(PackOutput packOutput, CompletableFuture<Provider> lookup) {
+    super(packOutput, lookup, TConstruct.MOD_ID);
   }
 
   @SuppressWarnings("unchecked")
@@ -134,7 +134,7 @@ public class DamageTypeTagProvider extends DamageTypeTagsProvider {
   private void addOptional(TagKey<DamageType> tag, String domain, String... names) {
     TagAppender<DamageType> appender = tag(tag);
     for (String name : names) {
-      appender.addOptional(Identifier.fromNamespaceAndPath(domain, name));
+      appender.addOptional(ResourceKey.create(Registries.DAMAGE_TYPE, Identifier.fromNamespaceAndPath(domain, name)));
     }
   }
 }

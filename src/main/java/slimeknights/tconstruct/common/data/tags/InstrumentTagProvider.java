@@ -4,16 +4,14 @@ import net.minecraft.core.HolderLookup.Provider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.InstrumentTagsProvider;
 import net.minecraft.world.item.Instruments;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
-import org.jetbrains.annotations.Nullable;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.TinkerTags;
 
 import java.util.concurrent.CompletableFuture;
 
 public class InstrumentTagProvider extends InstrumentTagsProvider {
-  public InstrumentTagProvider(PackOutput output, CompletableFuture<Provider> provider, @Nullable ExistingFileHelper existingFileHelper) {
-    super(output, provider, TConstruct.MOD_ID, existingFileHelper);
+  public InstrumentTagProvider(PackOutput output, CompletableFuture<Provider> provider) {
+    super(output, provider, TConstruct.MOD_ID);
   }
 
   @Override

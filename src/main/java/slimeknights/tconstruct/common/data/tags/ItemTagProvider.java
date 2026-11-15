@@ -1,22 +1,22 @@
 package slimeknights.tconstruct.common.data.tags;
 
-import net.minecraft.world.item.equipment.ArmorType;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.HolderLookup.Provider;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
-import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.TagBuilder;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.equipment.ArmorType;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.common.Tags;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import slimeknights.mantle.datagen.MantleTags;
 import slimeknights.mantle.registration.object.EnumObject;
 import slimeknights.mantle.registration.object.FluidObject;
@@ -29,6 +29,7 @@ import slimeknights.tconstruct.common.registration.CastItemObject;
 import slimeknights.tconstruct.fluids.TinkerFluids;
 import slimeknights.tconstruct.gadgets.TinkerGadgets;
 import slimeknights.tconstruct.gadgets.entity.FrameType;
+import slimeknights.tconstruct.library.data.IntrinsicTagsProvider;
 import slimeknights.tconstruct.library.data.recipe.CostTagAppender;
 import slimeknights.tconstruct.shared.TinkerCommons;
 import slimeknights.tconstruct.shared.TinkerMaterials;
@@ -43,6 +44,8 @@ import slimeknights.tconstruct.world.TinkerWorld;
 import slimeknights.tconstruct.world.block.DirtType;
 import slimeknights.tconstruct.world.block.FoliageType;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -125,7 +128,7 @@ import static slimeknights.tconstruct.common.TinkerTags.Items.UNSWAPPABLE_TOOLS;
 import static slimeknights.tconstruct.common.TinkerTags.Items.WORN_ARMOR;
 
 @SuppressWarnings({"unchecked", "removal"})
-public class ItemTagProvider extends ItemTagsProvider {
+public class ItemTagProvider extends IntrinsicTagsProvider<Item> {
   /** Twlight forest uncrafting table blacklist */
   private static final TagKey<Item> BANNED_UNCRAFTABLE = ItemTags.create(Identifier.fromNamespaceAndPath("twilightforest", "banned_uncraftables"));
 
@@ -140,14 +143,45 @@ public class ItemTagProvider extends ItemTagsProvider {
   private static final TagKey<Item> STAINED_GLASS_ITEM = ItemTags.create(commonResource("stained_glass"));
   private static final TagKey<Block> STAINED_GLASS_PANES_BLOCK = BlockTags.create(commonResource("stained_glass_panes"));
   private static final TagKey<Item> STAINED_GLASS_PANES_ITEM = ItemTags.create(commonResource("stained_glass_panes"));
+  /** Common spear tag removed from NeoForge in 26.3; recreated here under its original {@code c:} ID to preserve behavior */
+  private static final TagKey<Item> TOOLS_SPEAR = ItemTags.create(commonResource("tools/spear"));
   private final Function<Identifier,IntrinsicTagAppender<Item>> MAKE_TAG = tag -> tag(ItemTags.create(tag));
 
-  public ItemTagProvider(PackOutput output, CompletableFuture<Provider> lookupProvider, CompletableFuture<TagLookup<Block>> blockTagProvider, ExistingFileHelper existingFileHelper) {
-    super(output, lookupProvider, blockTagProvider, TConstruct.MOD_ID, existingFileHelper);
+  /** Block tags to copy into item tags */
+  private final CompletableFuture<TagLookup<Block>> blockTags;
+  /** Map of block tags to copy into item tags, filled in {@link #addTags(Provider)} */
+  private final Map<TagKey<Block>,TagKey<Item>> tagsToCopy = new LinkedHashMap<>();
+
+  /** Create using {@code GatherDataEvent#createBlockAndItemTags(BlockTagProvider::new, ItemTagProvider::new)} so the block tags are available */
+  public ItemTagProvider(PackOutput output, CompletableFuture<Provider> lookupProvider, CompletableFuture<TagLookup<Block>> blockTagProvider) {
+    super(output, BuiltInRegistries.ITEM, lookupProvider, TConstruct.MOD_ID);
+    this.blockTags = blockTagProvider;
+  }
+
+  /**
+   * Copies the contents of the given block tag into the given item tag.
+   * Replacement for the vanilla copy method, which 26.3 only keeps on NeoForge's key based item tag provider.
+   */
+  protected void copy(TagKey<Block> blockTag, TagKey<Item> itemTag) {
+    this.tagsToCopy.put(blockTag, itemTag);
+  }
+
+  @Override
+  protected CompletableFuture<HolderLookup.Provider> createContentsProvider() {
+    return super.createContentsProvider().thenCombine(this.blockTags, (provider, blockTags) -> {
+      this.tagsToCopy.forEach((blockTag, itemTag) -> {
+        TagBuilder itemBuilder = this.getOrCreateRawBuilder(itemTag);
+        TagBuilder blockBuilder = blockTags.apply(blockTag).orElseThrow(() -> new IllegalStateException("Missing block tag " + blockTag.location()));
+        blockBuilder.build().forEach(itemBuilder::add);
+        blockBuilder.getRemoveEntries().forEach(itemBuilder::remove);
+      });
+      return provider;
+    });
   }
 
   @Override
   protected void addTags(HolderLookup.Provider lookupProvider) {
+    this.tagsToCopy.clear();
     this.addCommon();
     this.addWorld();
     this.addSmeltery();
@@ -165,8 +199,9 @@ public class ItemTagProvider extends ItemTagsProvider {
     this.tag(TinkerTags.Items.GUIDEBOOKS).addTag(TinkerTags.Items.TINKERS_GUIDES);
     this.tag(TinkerTags.Items.BOOKS).addTag(TinkerTags.Items.GUIDEBOOKS);
 
-    TagAppender<Item> slimeballs = this.tag(Tags.Items.SLIMEBALLS);
-    TagAppender<Item> slimeballAmmo = this.tag(TinkerTags.Items.SLIMEBALL_AMMO);
+    // 26.3: NeoForge renamed c:slimeballs to c:slime_balls
+    IntrinsicTagAppender<Item> slimeballs = this.tag(Tags.Items.SLIME_BALLS);
+    IntrinsicTagAppender<Item> slimeballAmmo = this.tag(TinkerTags.Items.SLIMEBALL_AMMO);
     for (SlimeType type : SlimeType.values()) {
       slimeballs.addTag(type.getSlimeballTag());
       slimeballAmmo.addTag(type.getSlimeballTag());
@@ -365,7 +400,7 @@ public class ItemTagProvider extends ItemTagsProvider {
     addToolTags(TinkerTools.crossbow,   MULTIPART_TOOL, DURABILITY, MELEE_WEAPON, CROSSBOWS,    INTERACTABLE_LEFT,  SMALL_RANGED, BONUS_SLOTS, Tags.Items.TOOLS_CROSSBOW);
     addToolTags(TinkerTools.longbow,    MULTIPART_TOOL, DURABILITY, MELEE_WEAPON, LONGBOWS,     INTERACTABLE_LEFT,  BROAD_RANGED, BONUS_SLOTS, Tags.Items.TOOLS_BOW, BALLISTAS);
     addToolTags(TinkerTools.fishingRod, MULTIPART_TOOL, DURABILITY, MELEE_WEAPON, FISHING_RODS, INTERACTABLE_DUAL,  SMALL_RANGED, BONUS_SLOTS, Tags.Items.TOOLS_FISHING_ROD);
-    addToolTags(TinkerTools.javelin,    MULTIPART_TOOL, DURABILITY, MELEE_PRIMARY, RANGED,      INTERACTABLE_RIGHT, BROAD_RANGED, BONUS_SLOTS, Tags.Items.TOOLS_SPEAR);
+    addToolTags(TinkerTools.javelin,    MULTIPART_TOOL, DURABILITY, MELEE_PRIMARY, RANGED,      INTERACTABLE_RIGHT, BROAD_RANGED, BONUS_SLOTS, TOOLS_SPEAR);
     addToolTags(TinkerTools.arrow,       MULTIPART_TOOL, AMMO,        UNSALVAGABLE, UNSWAPPABLE, SINGLE_USE, DYEABLE, ItemTags.ARROWS);
     addToolTags(TinkerTools.shuriken,    MULTIPART_TOOL, THROWN_AMMO, UNSALVAGABLE, UNSWAPPABLE, SINGLE_USE);
     addToolTags(TinkerTools.throwingAxe, MULTIPART_TOOL, THROWN_AMMO, UNSALVAGABLE, UNSWAPPABLE, SINGLE_USE);

@@ -1,12 +1,13 @@
 package slimeknights.tconstruct.common.data.loot;
 
+import com.google.gson.JsonPrimitive;
+import com.mojang.serialization.JsonOps;
 import net.minecraft.advancements.predicates.ItemPredicate;
 import net.minecraft.advancements.predicates.StatePropertiesPredicate;
 import net.minecraft.core.Holder;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.data.loot.BlockLootSubProvider;
+import net.minecraft.data.loot.LootTableSubProvider;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -15,6 +16,7 @@ import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.MangrovePropaguleBlock;
+import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
@@ -25,13 +27,14 @@ import net.minecraft.world.level.storage.loot.functions.CopyCustomDataFunction;
 import net.minecraft.world.level.storage.loot.functions.CopyNameFunction;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
+import net.minecraft.world.level.storage.loot.predicates.AnyOfCondition;
 import net.minecraft.world.level.storage.loot.predicates.BonusLevelTableCondition;
-import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraft.world.level.storage.loot.predicates.MatchBlock;
 import net.minecraft.world.level.storage.loot.predicates.MatchTool;
 import net.minecraft.world.level.storage.loot.providers.nbt.ContextNbtProvider;
-import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
-import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
+import net.minecraft.world.level.storage.loot.providers.nbt.NbtProvider;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders;
 import net.neoforged.neoforge.common.ItemAbilities;
 import net.neoforged.neoforge.common.loot.CanItemPerformAbility;
 import slimeknights.mantle.loot.function.RetexturedLootFunction;
@@ -62,13 +65,18 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class BlockLootTableProvider extends BlockLootSubProvider {
-  protected BlockLootTableProvider(HolderLookup.Provider registries) {
-    super(Set.of(), FeatureFlags.REGISTRY.allFlags(), registries);
+  /** Copy of the private {@code BlockLootSubProvider#NORMAL_LEAVES_STICK_CHANCES} */
+  private static final float[] NORMAL_LEAVES_STICK_CHANCES = new float[]{0.02F, 0.022222223F, 0.025F, 0.033333335F, 0.1F};
+  /** Block entity NBT source. Since 26.1 {@link ContextNbtProvider} has no public block entity constant, so decode the same JSON vanilla reads */
+  private static final NbtProvider BLOCK_ENTITY_NBT = ContextNbtProvider.INLINE_CODEC.parse(JsonOps.INSTANCE, new JsonPrimitive(LootContext.BlockEntityTarget.BLOCK_ENTITY.getSerializedName())).getOrThrow();
+
+  protected BlockLootTableProvider(LootTableSubProvider.Context context) {
+    super(Set.of(), FeatureFlags.REGISTRY.allFlags(), context);
   }
 
   /** Gets the fortune enchantment holder for bonus drop conditions */
   private Holder<Enchantment> fortune() {
-    return this.registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.FORTUNE);
+    return this.enchantments.getOrThrow(Enchantments.FORTUNE);
   }
 
   @SuppressWarnings("deprecation")  // the vanilla registry is perfectly fine for our uses, will make migration away from forge registries easier
@@ -138,14 +146,14 @@ public class BlockLootTableProvider extends BlockLootSubProvider {
     // chests
     // tinker chest - name and color
     this.add(TinkerTables.tinkersChest.get(), block -> droppingWithFunctions(block, builder ->
-      builder.apply(COPY_NAME).apply(CopyCustomDataFunction.copyData(ContextNbtProvider.BLOCK_ENTITY).copy(TinkersChestBlockEntity.TAG_CHEST_COLOR, "display.color"))));
+      builder.apply(COPY_NAME).apply(CopyCustomDataFunction.copyData(BLOCK_ENTITY_NBT).copy(TinkersChestBlockEntity.TAG_CHEST_COLOR, "display.color"))));
     // part chest - just name
     this.add(TinkerTables.partChest.get(), block ->
       droppingWithFunctions(block, builder ->
         builder.apply(COPY_NAME)));
     // cast chest - name and inventory
     this.add(TinkerTables.castChest.get(), block -> droppingWithFunctions(block, builder ->
-      builder.apply(COPY_NAME).apply(CopyCustomDataFunction.copyData(ContextNbtProvider.BLOCK_ENTITY).copy("Items", "TinkerData.Items"))));
+      builder.apply(COPY_NAME).apply(CopyCustomDataFunction.copyData(BLOCK_ENTITY_NBT).copy("Items", "TinkerData.Items"))));
 
     // tables with legs
     this.dropTable(TinkerTables.craftingStation.get());
@@ -169,7 +177,7 @@ public class BlockLootTableProvider extends BlockLootSubProvider {
         this.dropSelf(block);
       }
     });
-    TinkerWorld.congealedSlime.forEach((slime, block) -> this.add(block, createSingleItemTableWithSilkTouch(block, TinkerCommons.slimeball.get(slime), ConstantValue.exactly(4))));
+    TinkerWorld.congealedSlime.forEach((slime, block) -> this.add(block, createSingleItemTableWithSilkTouch(block, TinkerCommons.slimeball.get(slime), ContextIntProviders.exactly(4))));
 
     // slime dirt and grass
     TinkerWorld.slimeDirt.forEach(this::dropSelf);
@@ -187,7 +195,7 @@ public class BlockLootTableProvider extends BlockLootSubProvider {
     });
     this.add(TinkerWorld.slimeSapling.get(FoliageType.ENDER), sapling -> applyExplosionDecay(
       sapling, LootTable.lootTable().withPool(LootPool.lootPool()
-                                                           .when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(sapling).setProperties(StatePropertiesPredicate.Builder.properties().hasProperty(MangrovePropaguleBlock.AGE, 4)))
+                                                           .when(MatchBlock.blockMatches(this.blocks, sapling, StatePropertiesPredicate.Builder.properties().hasProperty(MangrovePropaguleBlock.AGE, 4)))
                                                            .add(LootItem.lootTableItem(sapling)))));
     TinkerWorld.pottedSlimeSapling.forEach(this::dropPottedContents);
     TinkerWorld.pottedSlimeFern.forEach(this::dropPottedContents);
@@ -206,7 +214,7 @@ public class BlockLootTableProvider extends BlockLootSubProvider {
     }
     // mangrove leaves do not drop saplings, they just drop sticks. We do slimeballs instead
     this.add(TinkerWorld.slimeLeaves.get(FoliageType.ENDER), leaves -> droppingSilkOrShears(leaves,
-      applyExplosionDecay(leaves, LootItem.lootTableItem(TinkerCommons.slimeball.get(SlimeType.ENDER)).apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 2.0F))))
+      applyExplosionDecay(leaves, LootItem.lootTableItem(TinkerCommons.slimeball.get(SlimeType.ENDER)).apply(SetItemCountFunction.setCount(ContextIntProviders.between(1, 2))))
         .when(BonusLevelTableCondition.bonusLevelFlatChance(this.fortune(), NORMAL_LEAVES_STICK_CHANCES))));
     this.add(TinkerWorld.slimeFern.get(FoliageType.ENDER), BlockLootTableProvider::onlyShears);
 
@@ -268,7 +276,7 @@ public class BlockLootTableProvider extends BlockLootSubProvider {
     this.dropTable(TinkerSmeltery.searedDuct.get());
 
     Function<Block, LootTable.Builder> dropTank = block -> droppingWithFunctions(block, builder ->
-      builder.apply(COPY_NAME).apply(CopyCustomDataFunction.copyData(ContextNbtProvider.BLOCK_ENTITY).copy(NBTTags.TANK, NBTTags.TANK)));
+      builder.apply(COPY_NAME).apply(CopyCustomDataFunction.copyData(BLOCK_ENTITY_NBT).copy(NBTTags.TANK, NBTTags.TANK)));
     TinkerSmeltery.searedTank.forEach(block -> this.add(block, dropTank));
     this.add(TinkerSmeltery.searedFluidCannon.get(), dropTank);
     this.add(TinkerSmeltery.scorchedFluidCannon.get(), dropTank);
@@ -314,7 +322,7 @@ public class BlockLootTableProvider extends BlockLootSubProvider {
 
     Function<Block, LootTable.Builder> dropTank = block -> droppingWithFunctions(block, builder ->
       builder.apply(COPY_NAME)
-             .apply(CopyCustomDataFunction.copyData(ContextNbtProvider.BLOCK_ENTITY).copy(NBTTags.TANK, NBTTags.TANK)));
+             .apply(CopyCustomDataFunction.copyData(BLOCK_ENTITY_NBT).copy(NBTTags.TANK, NBTTags.TANK)));
     TinkerSmeltery.scorchedTank.forEach(block -> this.add(block, dropTank));
     this.add(TinkerSmeltery.scorchedLantern.get(), dropTank);
 
@@ -336,23 +344,23 @@ public class BlockLootTableProvider extends BlockLootSubProvider {
   /** Condition matching a shears-like tool via the dig ability (1.21 replacement for the shears item match) */
   private static final LootItemCondition.Builder SHEARS = CanItemPerformAbility.canItemPerformAbility(ItemAbilities.SHEARS_DIG);
 
-  /** Builds the silk touch condition using the registry-backed enchantment lookup from the parent provider */
-  private LootItemCondition.Builder silkTouch() {
+  /** Builds the silk touch condition, a reference to the vanilla registered predicate since 26.3 */
+  private Holder<LootItemCondition> silkTouch() {
     return this.hasSilkTouch();
   }
 
   /** Condition matching either silk touch or shears */
   private LootItemCondition.Builder silkTouchOrShears() {
-    return SHEARS.or(this.silkTouch());
+    return new AnyOfCondition.Builder(SHEARS).or(this.silkTouch());
   }
 
   protected static LootTable.Builder onlyShears(ItemLike item) {
-    return LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1)).when(SHEARS).add(LootItem.lootTableItem(item)));
+    return LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ContextIntProviders.exactly(1)).when(SHEARS).add(LootItem.lootTableItem(item)));
   }
 
   /** Recreation of {@link #createShearsDispatchTable(Block, Builder)} using the tool action instead of the shears item */
   private LootTable.Builder droppingSilkOrShears(Block block, LootPoolEntryContainer.Builder<?> alternativeLootEntry) {
-    return createSelfDropDispatchTable(block, this.silkTouchOrShears(), alternativeLootEntry);
+    return createSelfDropDispatchTable(block, Holder.direct(this.silkTouchOrShears().build()), alternativeLootEntry);
   }
 
   /** Reimplementation of {@link #createLeavesDrops(Block, Block, float...)} dropping the sticks from the loot table */
@@ -366,7 +374,7 @@ public class BlockLootTableProvider extends BlockLootSubProvider {
     SlimeType slime = foliageType.asSlime();
     if (slime != null) {
       return builder.withPool(
-        LootPool.lootPool().setRolls(ConstantValue.exactly(1))
+        LootPool.lootPool().setRolls(ContextIntProviders.exactly(1))
                 .when(this.silkTouchOrShears().invert())
                 .add(applyExplosionCondition(leaves, LootItem.lootTableItem(TinkerCommons.slimeball.get(slime)))
                        .when(BonusLevelTableCondition.bonusLevelFlatChance(this.fortune(), 1 / 50f, 1 / 45f, 1 / 40f, 1 / 30f, 1 / 20f))));
@@ -375,7 +383,7 @@ public class BlockLootTableProvider extends BlockLootSubProvider {
   }
 
   private LootTable.Builder droppingWithFunctions(Block block, Function<LootItem.Builder<?>,LootItem.Builder<?>> mapping) {
-    return LootTable.lootTable().withPool(applyExplosionCondition(block, LootPool.lootPool().setRolls(ConstantValue.exactly(1)).add(mapping.apply(LootItem.lootTableItem(block)))));
+    return LootTable.lootTable().withPool(applyExplosionCondition(block, LootPool.lootPool().setRolls(ContextIntProviders.exactly(1)).add(mapping.apply(LootItem.lootTableItem(block)))));
   }
 
   /**
@@ -427,9 +435,9 @@ public class BlockLootTableProvider extends BlockLootSubProvider {
   }
 
   /** Copies a material block texture */
-  private final LootItemFunction.Builder COPY_NAME = CopyNameFunction.copyName(CopyNameFunction.NameSource.BLOCK_ENTITY);
+  private final LootItemFunction.Builder COPY_NAME = CopyNameFunction.copyName(LootContext.BlockEntityTarget.BLOCK_ENTITY);
   /** Copies a material block texture */
-  private final LootItemFunction.Builder COPY_MATERIAL = CopyCustomDataFunction.copyData(ContextNbtProvider.BLOCK_ENTITY).copy(IMaterialItem.MATERIAL_TAG, IMaterialItem.MATERIAL_TAG);
+  private final LootItemFunction.Builder COPY_MATERIAL = CopyCustomDataFunction.copyData(BLOCK_ENTITY_NBT).copy(IMaterialItem.MATERIAL_TAG, IMaterialItem.MATERIAL_TAG);
   /** Properties for a standard table */
   private final Function<Block, LootTable.Builder> ADD_TABLE = block -> droppingWithFunctions(block, (builder) ->
     builder.apply(COPY_NAME).apply(RetexturedLootFunction::new));
@@ -451,10 +459,10 @@ public class BlockLootTableProvider extends BlockLootSubProvider {
   private void registerCluster(Block cluster, ItemLike drop) {
     this.add(cluster, block -> createSilkTouchDispatchTable(
       block, LootItem.lootTableItem(drop)
-        .apply(SetItemCountFunction.setCount(ConstantValue.exactly(4.0F)))
+        .apply(SetItemCountFunction.setCount(ContextIntProviders.exactly(4)))
         .apply(ApplyBonusCount.addOreBonusCount(this.fortune()))
-        .when(MatchTool.toolMatches(ItemPredicate.Builder.item().of(ItemTags.CLUSTER_MAX_HARVESTABLES)))
-        .otherwise(applyExplosionDecay(block, LootItem.lootTableItem(drop).apply(SetItemCountFunction.setCount(ConstantValue.exactly(2.0F)))))));
+        .when(MatchTool.toolMatches(ItemPredicate.Builder.item().of(this.items, ItemTags.CLUSTER_MAX_HARVESTABLES)))
+        .otherwise(applyExplosionDecay(block, LootItem.lootTableItem(drop).apply(SetItemCountFunction.setCount(ContextIntProviders.exactly(2)))))));
   }
 
   /** Adds all loot tables relevant to the given geode block set */

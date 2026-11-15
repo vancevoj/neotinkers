@@ -2,18 +2,25 @@ package slimeknights.tconstruct.library.data.tinkering;
 
 import com.google.gson.JsonObject;
 import com.mojang.serialization.JsonOps;
+import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.PackOutput.Target;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.level.ItemLike;
 import net.neoforged.neoforge.common.conditions.ICondition;
 import slimeknights.mantle.data.GenericDataProvider;
 import slimeknights.tconstruct.library.recipe.partbuilder.Pattern;
+import slimeknights.tconstruct.library.tools.helper.ToolBuildHandler;
+import slimeknights.tconstruct.library.tools.helper.TooltipUtil;
 import slimeknights.tconstruct.library.tools.item.IModifiableDisplay;
 import slimeknights.tconstruct.library.tools.layout.StationSlotLayout;
 import slimeknights.tconstruct.library.tools.layout.StationSlotLayoutLoader;
+import slimeknights.tconstruct.library.tools.nbt.MaterialIdNBT;
+import slimeknights.tconstruct.library.tools.nbt.ToolDataComponents;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
+import java.util.stream.IntStream;
 
 /** Base data generator to generate station slot layouts */
 @SuppressWarnings("deprecation")  // just let me get item keys forge
@@ -78,7 +86,18 @@ public abstract class AbstractStationSlotLayoutProvider extends GenericDataProvi
   protected StationSlotLayout.Builder defineModifiable(IModifiableDisplay item) {
     return define(BuiltInRegistries.ITEM.getKey(item.asItem()))
       .translationKey(item.asItem().getDescriptionId())
-      .icon(item.getRenderTool());
+      .icon(renderTool(item));
+  }
+
+  /**
+   * Recreation of {@link IModifiableDisplay#getRenderTool()} as a template.
+   * Item components are not bound during datagen, so the render tool stack cannot be created here.
+   * Matches {@link ToolBuildHandler#buildToolForRendering}, which always adds the render materials during datagen.
+   */
+  protected static ItemStackTemplate renderTool(ItemLike item) {
+    CompoundTag toolData = new MaterialIdNBT(IntStream.range(0, 5).mapToObj(ToolBuildHandler::getRenderMaterial).toList()).updateNBT(new CompoundTag());
+    toolData.putBoolean(TooltipUtil.KEY_DISPLAY, true);
+    return new ItemStackTemplate(item.asItem(), DataComponentPatch.builder().set(ToolDataComponents.TOOL_DATA.get(), toolData).build());
   }
 
   /** Defines the given ID as a tool layout, sets icon and name */

@@ -1,7 +1,7 @@
 package slimeknights.tconstruct.common.data.tags;
 
 import net.minecraft.data.PackOutput;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.minecraft.server.packs.resources.ResourceManager;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.data.tinkering.AbstractModifierTagProvider;
 import slimeknights.tconstruct.tools.TinkerModifiers;
@@ -68,8 +68,8 @@ import static slimeknights.tconstruct.common.TinkerTags.Modifiers.TARGET_KNOCKBA
 import static slimeknights.tconstruct.common.TinkerTags.Modifiers.UPGRADES;
 
 public class ModifierTagProvider extends AbstractModifierTagProvider {
-  public ModifierTagProvider(PackOutput packOutput, ExistingFileHelper existingFileHelper) {
-    super(packOutput, TConstruct.MOD_ID, existingFileHelper);
+  public ModifierTagProvider(PackOutput packOutput, ResourceManager resourceManager) {
+    super(packOutput, TConstruct.MOD_ID, resourceManager);
   }
 
   @Override

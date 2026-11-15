@@ -2,19 +2,21 @@ package slimeknights.tconstruct.common.data.model;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import net.neoforged.neoforge.client.model.generators.CustomLoaderBuilder;
-import net.neoforged.neoforge.client.model.generators.ModelBuilder;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.client.model.generators.template.CustomLoaderBuilder;
 import slimeknights.tconstruct.TConstruct;
 
-public class MaterialModelBuilder<T extends ModelBuilder<T>> extends CustomLoaderBuilder<T> {
+/**
+ * Builder for the {@code tconstruct:material} model loader.
+ * Use with {@link net.neoforged.neoforge.client.model.generators.template.ExtendedModelTemplateBuilder#customLoader(java.util.function.Supplier, java.util.function.Consumer)}.
+ */
+public class MaterialModelBuilder extends CustomLoaderBuilder {
   private JsonArray offset = null;
-  public MaterialModelBuilder(T parent, ExistingFileHelper existingFileHelper) {
-    super(TConstruct.getResource("material"), parent, existingFileHelper, false);
+  public MaterialModelBuilder() {
+    super(TConstruct.getResource("material"), false);
   }
 
   /** Sets the offset */
-  public MaterialModelBuilder<T> offset(int x, int y) {
+  public MaterialModelBuilder offset(int x, int y) {
     this.offset = new JsonArray(2);
     this.offset.add(x);
     this.offset.add(y);
@@ -22,10 +24,17 @@ public class MaterialModelBuilder<T extends ModelBuilder<T>> extends CustomLoade
   }
 
   @Override
+  protected CustomLoaderBuilder copyInternal() {
+    MaterialModelBuilder builder = new MaterialModelBuilder();
+    builder.offset = this.offset == null ? null : this.offset.deepCopy();
+    return builder;
+  }
+
+  @Override
   public JsonObject toJson(JsonObject json) {
     super.toJson(json);
     if (offset != null) {
-      json.add("offset", offset);
+      json.add("offset", offset.deepCopy());
     }
     return json;
   }

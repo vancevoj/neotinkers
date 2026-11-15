@@ -10,19 +10,17 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtAccounter;
 import net.minecraft.nbt.NbtIo;
 import net.minecraft.resources.Identifier;
-import net.minecraft.server.packs.resources.MultiPackResourceManager;
 import net.minecraft.server.packs.resources.Resource;
+import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.datafix.DataFixTypes;
 import net.minecraft.util.datafix.DataFixers;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import slimeknights.mantle.data.GenericDataProvider;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.data.GenericNBTProvider;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
@@ -34,19 +32,22 @@ import java.util.concurrent.CompletableFuture;
 public class StructureUpdater extends GenericNBTProvider {
   private final String basePath;
   private final String modId;
-  private final MultiPackResourceManager resources;
+  private final ResourceManager resources;
 
-  public StructureUpdater(PackOutput output, ExistingFileHelper helper, String modId, Target packType, String basePath) {
+  /**
+   * Creates a new structure updater
+   * @param output     Pack output
+   * @param resources  Resource manager matching the pack type, from {@link net.neoforged.neoforge.data.event.GatherDataEvent#getResourceManager(net.minecraft.server.packs.PackType)}
+   *                   ({@code SERVER_DATA} for {@link Target#DATA_PACK}, {@code CLIENT_RESOURCES} for {@link Target#RESOURCE_PACK})
+   * @param modId      Mod ID to update
+   * @param packType   Output pack type
+   * @param basePath   Folder containing the structures
+   */
+  public StructureUpdater(PackOutput output, ResourceManager resources, String modId, Target packType, String basePath) {
     super(output, packType, basePath);
     this.modId = modId;
     this.basePath = basePath;
-    try {
-      Field resourceManager = ExistingFileHelper.class.getDeclaredField(packType == Target.DATA_PACK ? "serverData" : "clientResources");
-      resourceManager.setAccessible(true);
-      resources = (MultiPackResourceManager)resourceManager.get(helper);
-    } catch (NoSuchFieldException|IllegalAccessException e) {
-      throw new RuntimeException(e);
-    }
+    this.resources = resources;
   }
 
   @Override
@@ -80,9 +81,9 @@ public class StructureUpdater extends GenericNBTProvider {
 
   @SuppressWarnings("deprecation")  // I'd like to see Forge try this
   private static CompoundTag updateNBT(CompoundTag nbt) {
-    final CompoundTag updatedNBT = DataFixTypes.STRUCTURE.updateToCurrentVersion(DataFixers.getDataFixer(), nbt, nbt.getInt("DataVersion"));
+    final CompoundTag updatedNBT = DataFixTypes.STRUCTURE.updateToCurrentVersion(DataFixers.getDataFixer(), nbt, nbt.getIntOr("DataVersion", 0));
     StructureTemplate template = new StructureTemplate();
-    template.load(BuiltInRegistries.BLOCK.asLookup(), updatedNBT);
+    template.load(BuiltInRegistries.BLOCK, updatedNBT);
     return template.save(new CompoundTag());
   }
 

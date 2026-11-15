@@ -1,30 +1,22 @@
 package slimeknights.tconstruct.common.data.tags;
 
-import net.minecraft.world.level.block.entity.BlockEntityTypes;
 import net.minecraft.core.HolderLookup.Provider;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
-import net.minecraft.data.tags.IntrinsicHolderTagsProvider;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.minecraft.world.level.block.entity.BlockEntityTypes;
 import slimeknights.mantle.datagen.MantleTags;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.TinkerTags;
+import slimeknights.tconstruct.library.data.IntrinsicTagsProvider;
 import slimeknights.tconstruct.smeltery.TinkerSmeltery;
 
-import javax.annotation.Nullable;
 import java.util.concurrent.CompletableFuture;
 
-@SuppressWarnings("removal")
-public class BlockEntityTypeTagProvider extends IntrinsicHolderTagsProvider<BlockEntityType<?>> {
-  @SuppressWarnings("deprecation")
-  public BlockEntityTypeTagProvider(PackOutput packOutput, CompletableFuture<Provider> lookupProvider, @Nullable ExistingFileHelper existingFileHelper) {
-    super(packOutput, Registries.BLOCK_ENTITY_TYPE, lookupProvider,
-          // not sure why fetching the resource key from the object is such a pain
-          type -> BuiltInRegistries.BLOCK_ENTITY_TYPE.get(BuiltInRegistries.BLOCK_ENTITY_TYPE.getId(type)).orElseThrow().key(),
-          TConstruct.MOD_ID, existingFileHelper);
+public class BlockEntityTypeTagProvider extends IntrinsicTagsProvider<BlockEntityType<?>> {
+  public BlockEntityTypeTagProvider(PackOutput packOutput, CompletableFuture<Provider> lookupProvider) {
+    super(packOutput, BuiltInRegistries.BLOCK_ENTITY_TYPE, lookupProvider, TConstruct.MOD_ID);
   }
 
   /** Creates a RL for iron chests */

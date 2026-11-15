@@ -32,8 +32,8 @@ public class FluidBlockstateModelProvider extends GenericDataProvider {
     // loop over all liquid blocks, adding a blockstate for them
     return allOf(
       BuiltInRegistries.BLOCK.entrySet().stream()
-                             .filter(entry -> entry.getKey().location().getNamespace().equals(modId) && entry.getValue() instanceof LiquidBlock)
-                             .map(entry -> saveJson(cache, entry.getKey().location(), blockstate)));
+                             .filter(entry -> entry.getKey().identifier().getNamespace().equals(modId) && entry.getValue() instanceof LiquidBlock)
+                             .map(entry -> saveJson(cache, entry.getKey().identifier(), blockstate)));
   }
 
   @Override

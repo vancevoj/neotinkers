@@ -11,13 +11,12 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.data.PackOutput.Target;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtAccounter;
 import net.minecraft.nbt.NbtIo;
-import net.minecraft.nbt.Tag;
 import net.minecraft.resources.Identifier;
-import net.minecraft.server.packs.PackType;
+import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import slimeknights.mantle.data.GenericDataProvider;
 import slimeknights.tconstruct.TConstruct;
 
@@ -37,12 +36,13 @@ import java.util.concurrent.CompletableFuture;
 public abstract class AbstractStructureRepalleter extends GenericNBTProvider {
   private final Multimap<Identifier,RepaletteTask> structures = HashMultimap.create();
 
-  private final ExistingFileHelper existingFileHelper;
+  /** Server data resource manager from {@link net.neoforged.neoforge.data.event.GatherDataEvent#getResourceManager(net.minecraft.server.packs.PackType)}, used to read the original structures */
+  private final ResourceManager resourceManager;
   private final String modId;
-  public AbstractStructureRepalleter(PackOutput packOutput, ExistingFileHelper existingFileHelper, String modId) {
+  public AbstractStructureRepalleter(PackOutput packOutput, ResourceManager resourceManager, String modId) {
     // 1.21: StructureTemplateManager reads the singular "structure" datapack folder; "structures" is silently ignored
     super(packOutput, Target.DATA_PACK, "structure");
-    this.existingFileHelper = existingFileHelper;
+    this.resourceManager = resourceManager;
     this.modId = modId;
   }
 
@@ -52,8 +52,8 @@ public abstract class AbstractStructureRepalleter extends GenericNBTProvider {
   private ListTag repaletteNBT(ListTag palette, Map<String,String> repalette) {
     // simply iterate the palette list and make adjustments
     for (int i = 0; i < palette.size(); i++) {
-      CompoundTag block = palette.getCompound(i);
-      String newName = repalette.get(block.getString("Name"));
+      CompoundTag block = palette.getCompoundOrEmpty(i);
+      String newName = repalette.get(block.getStringOr("Name", ""));
       if (newName != null) {
         block.putString("Name", newName);
       }
@@ -61,7 +61,6 @@ public abstract class AbstractStructureRepalleter extends GenericNBTProvider {
     return palette;
   }
 
-  @SuppressWarnings("removal")
   @Override
   public CompletableFuture<?> run(CachedOutput cache) {
     addStructures();
@@ -69,12 +68,12 @@ public abstract class AbstractStructureRepalleter extends GenericNBTProvider {
     for (Entry<Identifier,Collection<RepaletteTask>> entry : structures.asMap().entrySet()) {
       Identifier original = entry.getKey();
 
-      try (InputStream io = existingFileHelper.getResource(original, PackType.SERVER_DATA, ".nbt", "structure").open()) {
-        CompoundTag inputNBT = NbtIo.readCompressed(io, net.minecraft.nbt.NbtAccounter.unlimitedHeap());
+      try (InputStream io = resourceManager.open(original.withPath(path -> "structure/" + path + ".nbt"))) {
+        CompoundTag inputNBT = NbtIo.readCompressed(io, NbtAccounter.unlimitedHeap());
         for (RepaletteTask task : entry.getValue()) {
           // start by fetching the palette, we assume its not randomized
           CompoundTag newStructure = inputNBT.copy();
-          ListTag palette = newStructure.getList("palette", Tag.TAG_COMPOUND);
+          ListTag palette = newStructure.getListOrEmpty("palette");
 
           // if we have a single palette, modify directly
           if (task.replacements.length == 1) {
@@ -91,7 +90,7 @@ public abstract class AbstractStructureRepalleter extends GenericNBTProvider {
           // if requested, run it through the structure template to cleanup NBT (e.g. compact palettes)
           if (task.reprocess) {
             StructureTemplate template = new StructureTemplate();
-            template.load(BuiltInRegistries.BLOCK.asLookup(), newStructure);
+            template.load(BuiltInRegistries.BLOCK, newStructure);
             newStructure = template.save(new CompoundTag());
           }
           tasks.add(saveNBT(cache, Identifier.fromNamespaceAndPath(modId, task.location), newStructure));

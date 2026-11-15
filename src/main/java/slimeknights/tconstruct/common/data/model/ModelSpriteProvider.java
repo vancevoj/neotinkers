@@ -6,8 +6,8 @@ import com.mojang.blaze3d.platform.NativeImage;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.Identifier;
-import net.minecraft.util.FastColor;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.util.ARGB;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.client.data.GenericTextureGenerator;
 import slimeknights.tconstruct.library.client.data.spritetransformer.GreyToColorMapping;
@@ -31,9 +31,10 @@ import static slimeknights.tconstruct.TConstruct.getResource;
 public class ModelSpriteProvider extends GenericTextureGenerator {
   private final List<CompletableFuture<?>> tasks = new ArrayList<>();
   private final DataGenSpriteReader spriteReader;
-  public ModelSpriteProvider(PackOutput packOutput, ExistingFileHelper existingFileHelper) {
-    super(packOutput, existingFileHelper, "textures");
-    spriteReader = new DataGenSpriteReader(existingFileHelper, "textures");
+  /** @param resourceManager  Client resource manager from {@code GatherDataEvent#getResourceManager(PackType.CLIENT_RESOURCES)} */
+  public ModelSpriteProvider(PackOutput packOutput, ResourceManager resourceManager) {
+    super(packOutput, resourceManager, "textures");
+    spriteReader = new DataGenSpriteReader(resourceManager, "textures");
   }
 
   @Override
@@ -128,14 +129,14 @@ public class ModelSpriteProvider extends GenericTextureGenerator {
         // locate the first sprite with a non-zero alpha value and copy the color
         for (NativeImage sprite : sprites) {
           // tile the sprite if its smaller than the output, lets you merge multiple animations
-          int spriteColor = sprite.getPixelRGBA(x % sprite.getHeight(), y % sprite.getHeight());
-          if (FastColor.ABGR32.alpha(spriteColor) != 0) {
+          int spriteColor = sprite.getPixel(x % sprite.getHeight(), y % sprite.getHeight());
+          if (ARGB.alpha(spriteColor) != 0) {
             // TODO: this does not merge alpha, though will we ever need that?
             color = spriteColor;
             break;
           }
         }
-        generated.setPixelRGBA(x, y, color);
+        generated.setPixel(x, y, color);
       }
     }
     tasks.add(saveImage(cache, output, generated));

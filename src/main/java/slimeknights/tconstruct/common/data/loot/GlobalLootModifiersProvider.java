@@ -2,10 +2,13 @@ package slimeknights.tconstruct.common.data.loot;
 
 import net.minecraft.advancements.predicates.entity.EntityPredicate;
 import net.minecraft.advancements.predicates.entity.EntityTypePredicate;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.HolderSet;
+import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
-import net.minecraft.data.registries.VanillaRegistries;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
@@ -17,7 +20,8 @@ import net.minecraft.world.level.storage.loot.functions.EnchantedCountIncreaseFu
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.predicates.LootItemEntityPropertyCondition;
-import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
+import net.minecraft.world.level.storage.loot.providers.number.floats.ContextFloatProviders;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders;
 import net.neoforged.neoforge.common.data.GlobalLootModifierProvider;
 import net.neoforged.neoforge.common.loot.LootTableIdCondition;
 import slimeknights.mantle.loot.AddEntryLootModifier;
@@ -26,6 +30,7 @@ import slimeknights.mantle.loot.condition.BlockTagLootCondition;
 import slimeknights.mantle.loot.condition.ContainsItemModifierLootCondition;
 import slimeknights.mantle.loot.entry.TagPreferenceLootEntry;
 import slimeknights.mantle.recipe.condition.TagFilledCondition;
+import slimeknights.mantle.recipe.helper.IngredientHelper;
 import slimeknights.mantle.recipe.helper.ItemOutput;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.TinkerTags;
@@ -43,13 +48,28 @@ import slimeknights.tconstruct.tools.modifiers.loot.ChrysophiliteLootCondition;
 import slimeknights.tconstruct.tools.modifiers.loot.HasModifierLootCondition;
 import slimeknights.tconstruct.tools.modifiers.loot.ModifierBonusLootFunction;
 
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 import static slimeknights.mantle.Mantle.commonResource;
 
 public class GlobalLootModifiersProvider extends GlobalLootModifierProvider {
-  public GlobalLootModifiersProvider(PackOutput output) {
-    super(output, CompletableFuture.completedFuture(VanillaRegistries.createLookup()), TConstruct.MOD_ID);
+  public GlobalLootModifiersProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+    super(output, registries, TConstruct.MOD_ID);
+  }
+
+  /** Gets a holder set for the given tag, falling back to an unbound set if the datagen lookup has no tags */
+  private <T> HolderSet<T> tag(ResourceKey<? extends Registry<? extends T>> registry, TagKey<T> tag) {
+    HolderLookup.RegistryLookup<T> lookup = this.registries.lookupOrThrow(registry);
+    try {
+      Optional<HolderSet.Named<T>> named = lookup.get(tag);
+      if (named.isPresent()) {
+        return named.get();
+      }
+    } catch (IllegalStateException e) {
+      // tags are not bound during datagen, fall through to the unbound set
+    }
+    return HolderSet.emptyNamed(lookup, tag);
   }
 
   @SuppressWarnings("removal")
@@ -68,20 +88,20 @@ public class GlobalLootModifiersProvider extends GlobalLootModifierProvider {
     add("tasty_bacon", AddEntryLootModifier.builder(LootItem.lootTableItem(TinkerCommons.bacon))
       // this target must be a bacon producer
       .addCondition(new HasLootContextSetCondition(LootContextParamSets.ENTITY))
-      .addCondition(LootItemEntityPropertyCondition.hasProperties(EntityTarget.THIS, EntityPredicate.Builder.entity().entityType(EntityTypePredicate.of(TinkerTags.EntityTypes.BACON_PRODUCER))).build())
+      .addCondition(LootItemEntityPropertyCondition.hasProperties(EntityTarget.THIS, EntityPredicate.Builder.entity().entityType(new EntityTypePredicate(tag(Registries.ENTITY_TYPE, TinkerTags.EntityTypes.BACON_PRODUCER)))).build())
       .addCondition(new HasModifierLootCondition(ModifierIds.tasty))
       // 25% chance to drop
-      .addFunction(SetItemCountFunction.setCount(UniformGenerator.between(-2, 1)).build())
+      .addFunction(SetItemCountFunction.setCount(ContextIntProviders.between(-2, 1)).build())
       // each looting adds a chance of +1
-      .addFunction(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0, 1)).build())
+      .addFunction(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries.lookupOrThrow(Registries.ENCHANTMENT), ContextFloatProviders.between(0, 1)).build())
       .build());
 
     // chrysophilite modifier hook
     add("chrysophilite_modifier", AddEntryLootModifier.builder(LootItem.lootTableItem(Items.GOLD_NUGGET))
       .addCondition(new BlockTagLootCondition(TinkerTags.Blocks.CHRYSOPHILITE_ORES))
-      .addCondition(new ContainsItemModifierLootCondition(Ingredient.of(TinkerTags.Items.CHRYSOPHILITE_ORES)).inverted())
+      .addCondition(new ContainsItemModifierLootCondition(IngredientHelper.tag(TinkerTags.Items.CHRYSOPHILITE_ORES)).inverted())
       .addCondition(ChrysophiliteLootCondition.INSTANCE)
-      .addFunction(SetItemCountFunction.setCount(UniformGenerator.between(2, 6)).build())
+      .addFunction(SetItemCountFunction.setCount(ContextIntProviders.between(2, 6)).build())
       .addFunction(ChrysophiliteBonusFunction.oreDrops(false).build())
       .addFunction(ApplyExplosionDecay.explosionDecay().build())
       .build());
@@ -105,12 +125,12 @@ public class GlobalLootModifiersProvider extends GlobalLootModifierProvider {
     Identifier ores = commonResource("ores/" + name);
     AddEntryLootModifier.Builder builder = AddEntryLootModifier.builder(TagPreferenceLootEntry.tagPreference(nuggets));
     builder.addCondition(new BlockTagLootCondition(TagKey.create(Registries.BLOCK, ores)))
-           .addCondition(new ContainsItemModifierLootCondition(Ingredient.of(TagKey.create(Registries.ITEM, ores))).inverted());
+           .addCondition(new ContainsItemModifierLootCondition(IngredientHelper.tag(TagKey.create(Registries.ITEM, ores))).inverted());
     if (optional) {
       builder.addCondition(new TagFilledCondition<>(nuggets));
     }
     add("lustrous/" + name, builder.addCondition(new HasModifierLootCondition(ModifierIds.lustrous))
-      .addFunction(SetItemCountFunction.setCount(UniformGenerator.between(2, 4)).build())
+      .addFunction(SetItemCountFunction.setCount(ContextIntProviders.between(2, 4)).build())
       .addFunction(ModifierBonusLootFunction.oreDrops(ModifierIds.lustrous, false).build())
       .addFunction(ApplyExplosionDecay.explosionDecay().build())
       .build());

@@ -1,5 +1,6 @@
 package slimeknights.tconstruct.library.data.recipe;
 
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
@@ -7,6 +8,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.neoforged.neoforge.common.Tags;
 import slimeknights.mantle.recipe.data.IRecipeHelper;
+import slimeknights.mantle.recipe.helper.IngredientHelper;
 import slimeknights.mantle.recipe.helper.ItemOutput;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.TinkerTags;
@@ -33,7 +35,7 @@ public interface ICastCreationHelper extends IRecipeHelper {
    * @param folder    Output folder
    */
   default void castCreation(RecipeOutput consumer, TagKey<Item> input, CastItemObject cast, String folder) {
-    castCreation(consumer, Ingredient.of(input), cast, folder, input.location().getPath());
+    castCreation(consumer, IngredientHelper.tag(consumer.lookup(Registries.ITEM), input), cast, folder, input.location().getPath());
   }
 
   /**
@@ -63,19 +65,19 @@ public interface ICastCreationHelper extends IRecipeHelper {
     Identifier pattern = cast.getName();
     ItemPartRecipeBuilder.item(pattern, ItemOutput.fromItem(cast.getSand()))
       .setTitleKey(SAND_CAST_KEY)
-      .setPatternItem(Ingredient.of(TinkerTags.Items.SAND_CASTS))
+      .setPatternItem(IngredientHelper.tag(consumer.lookup(Registries.ITEM), TinkerTags.Items.SAND_CASTS))
       .save(consumer, location(folder + "sand/builder_cast/" + name));
     ItemPartRecipeBuilder.item(pattern, ItemOutput.fromItem(cast.getRedSand()))
       .setTitleKey(SAND_CAST_KEY)
-      .setPatternItem(Ingredient.of(TinkerTags.Items.RED_SAND_CASTS))
+      .setPatternItem(IngredientHelper.tag(consumer.lookup(Registries.ITEM), TinkerTags.Items.RED_SAND_CASTS))
       .save(consumer, location(folder + "red_sand/builder_cast/" + name));
     ItemPartRecipeBuilder.item(pattern, ItemOutput.fromItem(cast.getSand(), 4))
       .setTitleKey(SAND_CAST_KEY)
-      .setPatternItem(Ingredient.of(Tags.Items.SANDS_COLORLESS))
+      .setPatternItem(IngredientHelper.tag(consumer.lookup(Registries.ITEM), Tags.Items.SANDS_COLORLESS))
       .save(consumer, location(folder + "sand/builder_block/" + name));
     ItemPartRecipeBuilder.item(pattern, ItemOutput.fromItem(cast.getRedSand(), 4))
       .setTitleKey(SAND_CAST_KEY)
-      .setPatternItem(Ingredient.of(Tags.Items.SANDS_RED))
+      .setPatternItem(IngredientHelper.tag(consumer.lookup(Registries.ITEM), Tags.Items.SANDS_RED))
       .save(consumer, location(folder + "red_sand/builder_block/" + name));
   }
 }

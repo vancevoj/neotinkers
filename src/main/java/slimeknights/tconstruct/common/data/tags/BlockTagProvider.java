@@ -2,17 +2,16 @@ package slimeknights.tconstruct.common.data.tags;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.HolderLookup.Provider;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
-import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.resources.Identifier;
+import net.minecraft.tags.BlockItemTags;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.item.Tiers;
+import net.minecraft.world.item.ToolMaterial;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.Tags;
-import net.neoforged.neoforge.common.data.BlockTagsProvider;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import slimeknights.mantle.datagen.MantleTags;
 import slimeknights.mantle.registration.object.BuildingBlockObject;
 import slimeknights.mantle.registration.object.EnumObject;
@@ -24,6 +23,7 @@ import slimeknights.tconstruct.common.registration.GeodeItemObject;
 import slimeknights.tconstruct.common.registration.GeodeItemObject.BudSize;
 import slimeknights.tconstruct.fluids.TinkerFluids;
 import slimeknights.tconstruct.gadgets.TinkerGadgets;
+import slimeknights.tconstruct.library.data.IntrinsicTagsProvider;
 import slimeknights.tconstruct.shared.TinkerCommons;
 import slimeknights.tconstruct.shared.TinkerMaterials;
 import slimeknights.tconstruct.shared.block.ClearStainedGlassBlock.GlassColor;
@@ -38,6 +38,8 @@ import slimeknights.tconstruct.world.TinkerWorld;
 import slimeknights.tconstruct.world.block.DirtType;
 import slimeknights.tconstruct.world.block.FoliageType;
 
+import javax.annotation.Nullable;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
@@ -58,10 +60,10 @@ import static slimeknights.tconstruct.common.TinkerTags.Blocks.MINEABLE_MELTING_
 import static slimeknights.tconstruct.common.TinkerTags.Blocks.UNREPLACABLE_BY_LIQUID;
 
 @SuppressWarnings({"unchecked", "SameParameterValue", "removal"})
-public class BlockTagProvider extends BlockTagsProvider {
+public class BlockTagProvider extends IntrinsicTagsProvider<Block> {
 
-  public BlockTagProvider(PackOutput output, CompletableFuture<Provider> lookupProvider, ExistingFileHelper existingFileHelper) {
-    super(output, lookupProvider, TConstruct.MOD_ID, existingFileHelper);
+  public BlockTagProvider(PackOutput output, CompletableFuture<Provider> lookupProvider) {
+    super(output, BuiltInRegistries.BLOCK, lookupProvider, TConstruct.MOD_ID);
   }
 
   /* Common glass tags removed from NeoForge in 1.21; recreated here under their original {@code c:} IDs to preserve behavior */
@@ -148,7 +150,7 @@ public class BlockTagProvider extends BlockTagsProvider {
       .addOptional(quarkId.apply("jasper")).addOptional(quarkId.apply("limestone")).addOptional(quarkId.apply("permafrost"))
       .addOptional(quarkId.apply("shale")).addOptional(quarkId.apply("myalite"));
 
-    TagsProvider.TagAppender<Block> builder = this.tag(TinkerTags.Blocks.ANVIL_METAL)
+    IntrinsicTagAppender<Block> builder = this.tag(TinkerTags.Blocks.ANVIL_METAL)
         // tier 3
         .addTag(TinkerMaterials.slimesteel.getBlockTag())
         .addTag(TinkerMaterials.amethystBronze.getBlockTag())
@@ -266,9 +268,9 @@ public class BlockTagProvider extends BlockTagsProvider {
     this.tag(BlockTags.LEAVES).addTag(TinkerTags.Blocks.SLIMY_LEAVES);
     this.tag(BlockTags.SAPLINGS).addTag(TinkerTags.Blocks.SLIMY_SAPLINGS);
 
-    TagAppender<Block> slimyGrass = this.tag(TinkerTags.Blocks.SLIMY_GRASS);
-    TagAppender<Block> slimyNylium = this.tag(TinkerTags.Blocks.SLIMY_NYLIUM);
-    TagAppender<Block> slimySoil = this.tag(TinkerTags.Blocks.SLIMY_SOIL);
+    IntrinsicTagAppender<Block> slimyGrass = this.tag(TinkerTags.Blocks.SLIMY_GRASS);
+    IntrinsicTagAppender<Block> slimyNylium = this.tag(TinkerTags.Blocks.SLIMY_NYLIUM);
+    IntrinsicTagAppender<Block> slimySoil = this.tag(TinkerTags.Blocks.SLIMY_SOIL);
     for (FoliageType type : FoliageType.values()) {
       (type.isNether() ? slimyNylium : slimyGrass).addTag(type.getGrassBlockTag());
     }
@@ -286,6 +288,9 @@ public class BlockTagProvider extends BlockTagsProvider {
       enderBarkRoots.add(block);
     });
     endermanHoldable.addTag(TinkerTags.Blocks.SLIMY_SOIL);
+    // 26.1 moved vanilla plant survival to tags; slime dirt sustains vanilla plants (SlimeDirtBlock#canSustainPlant), so tag it for tag based checks.
+    // slime grass and nylium never sustained vanilla plants, so they stay out to keep vanilla flowers off them
+    tagBlocks(BlockTags.SUPPORTS_VEGETATION, TinkerWorld.slimeDirt);
     tagBlocks(BlockTags.SWORD_EFFICIENT, TinkerWorld.slimeTallGrass, TinkerWorld.slimeFern);
     tagBlocks(BlockTags.REPLACEABLE, TinkerWorld.slimeTallGrass, TinkerWorld.slimeFern);
     tagBlocks(BlockTags.REPLACEABLE_BY_TREES, TinkerWorld.slimeTallGrass, TinkerWorld.slimeFern);
@@ -456,19 +461,19 @@ public class BlockTagProvider extends BlockTagsProvider {
     // slime
     tagBlocks(MINEABLE_WITH_SHOVEL, TinkerWorld.congealedSlime, TinkerWorld.slimeDirt, TinkerWorld.vanillaSlimeGrass, TinkerWorld.earthSlimeGrass, TinkerWorld.skySlimeGrass, TinkerWorld.enderSlimeGrass, TinkerWorld.ichorSlimeGrass);
     // harvest tiers on shovel blocks
-    TinkerWorld.slimeDirt.forEach((type, block) -> this.tag(Objects.requireNonNull(type.getHarvestTier().getTag())).add(block));
+    TinkerWorld.slimeDirt.forEach((type, block) -> this.tag(Objects.requireNonNull(needsToolTag(type.getHarvestTier()))).add(block));
     for (DirtType dirt : DirtType.values()) {
       for (FoliageType grass : FoliageType.values()) {
-        Tiers dirtTier = dirt.getHarvestTier();
-        Tiers grassTier = grass.getHarvestTier();
+        ToolMaterial dirtTier = dirt.getHarvestTier();
+        ToolMaterial grassTier = grass.getHarvestTier();
         // cannot use tier sorting registry as it's not init during datagen, stuck comparing levels and falling back to ordinal for gold
-        Tiers tier;
+        ToolMaterial tier;
         if (harvestLevel(dirtTier) == harvestLevel(grassTier)) {
-          tier = dirtTier.ordinal() > grassTier.ordinal() ? dirtTier : grassTier;
+          tier = tierOrdinal(dirtTier) > tierOrdinal(grassTier) ? dirtTier : grassTier;
         } else {
           tier = harvestLevel(dirtTier) > harvestLevel(grassTier) ? dirtTier : grassTier;
         }
-        this.tag(Objects.requireNonNull(tier.getTag())).add(TinkerWorld.slimeGrass.get(dirt).get(grass));
+        this.tag(Objects.requireNonNull(needsToolTag(tier))).add(TinkerWorld.slimeGrass.get(dirt).get(grass));
       }
     }
 
@@ -634,7 +639,7 @@ public class BlockTagProvider extends BlockTagsProvider {
         block.getSign(), block.getWallSign(), block.getHangingSign(), block.getWallHangingSign()
       };
       if (remove) {
-        tag(tag).remove(block.get(), update);
+        tag(tag).remove(block.get()).remove(update);
       } else {
         tag(tag).add(block.get()).add(update);
       }
@@ -661,15 +666,55 @@ public class BlockTagProvider extends BlockTagsProvider {
   /**
    * Reproduces the pre-1.21 {@code Tiers#getLevel()} harvest level mapping, which 1.21 removed when tiers became
    * data driven. Gold shares wood's level (0) and netherite continues above diamond.
+   * Since 1.21.2 tiers are {@link ToolMaterial} records, so this compares against the vanilla constants.
    */
-  private static int harvestLevel(Tiers tier) {
-    return switch (tier) {
-      case WOOD, GOLD -> 0;
-      case STONE -> 1;
-      case IRON -> 2;
-      case DIAMOND -> 3;
-      case NETHERITE -> 4;
-    };
+  private static int harvestLevel(ToolMaterial tier) {
+    if (tier == ToolMaterial.STONE || tier == ToolMaterial.COPPER) {
+      return 1;
+    }
+    if (tier == ToolMaterial.IRON) {
+      return 2;
+    }
+    if (tier == ToolMaterial.DIAMOND) {
+      return 3;
+    }
+    if (tier == ToolMaterial.NETHERITE) {
+      return 4;
+    }
+    // wood, gold, and anything unknown
+    return 0;
+  }
+
+  /** Order of the former {@code Tiers} enum, used to break ties between equal harvest levels (gold wins over wood) */
+  private static final List<ToolMaterial> TIER_ORDER = List.of(ToolMaterial.WOOD, ToolMaterial.STONE, ToolMaterial.IRON, ToolMaterial.DIAMOND, ToolMaterial.GOLD, ToolMaterial.NETHERITE);
+
+  /** Gets the ordinal of the given tier in the former {@code Tiers} enum */
+  private static int tierOrdinal(ToolMaterial tier) {
+    return TIER_ORDER.indexOf(tier);
+  }
+
+  /** Replacement for the removed NeoForge {@code Tier#getTag()}, mapping vanilla tiers to their needs tool tag */
+  @Nullable
+  private static TagKey<Block> needsToolTag(ToolMaterial tier) {
+    if (tier == ToolMaterial.WOOD) {
+      return Tags.Blocks.NEEDS_WOOD_TOOL;
+    }
+    if (tier == ToolMaterial.GOLD) {
+      return NEEDS_GOLD_TOOL;
+    }
+    if (tier == ToolMaterial.STONE) {
+      return NEEDS_STONE_TOOL;
+    }
+    if (tier == ToolMaterial.IRON) {
+      return NEEDS_IRON_TOOL;
+    }
+    if (tier == ToolMaterial.DIAMOND) {
+      return NEEDS_DIAMOND_TOOL;
+    }
+    if (tier == ToolMaterial.NETHERITE) {
+      return NEEDS_NETHERITE_TOOL;
+    }
+    return null;
   }
 
   /** Adds tags for a glass item object */
@@ -702,7 +747,7 @@ public class BlockTagProvider extends BlockTagsProvider {
 
     if (doesBurn) {
       // regular logs is handled by slimy logs tag
-      this.tag(BlockTags.LOGS_THAT_BURN).addTag(object.getLogBlockTag());
+      this.tag(BlockItemTags.LOGS_THAT_BURN.block()).addTag(object.getLogBlockTag());
     }
 
     // signs

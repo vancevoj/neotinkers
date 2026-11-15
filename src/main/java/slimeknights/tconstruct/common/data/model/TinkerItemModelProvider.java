@@ -1,15 +1,23 @@
 package slimeknights.tconstruct.common.data.model;
 
-import net.minecraft.world.item.equipment.ArmorType;
+import net.minecraft.client.data.models.BlockModelGenerators;
+import net.minecraft.client.data.models.ItemModelGenerators;
+import net.minecraft.client.data.models.ModelProvider;
+import net.minecraft.client.data.models.model.ModelInstance;
+import net.minecraft.client.data.models.model.ModelTemplate;
+import net.minecraft.client.data.models.model.ModelTemplates;
+import net.minecraft.client.data.models.model.TextureMapping;
+import net.minecraft.client.data.models.model.TextureSlot;
+import net.minecraft.client.resources.model.sprite.Material;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.equipment.ArmorType;
 import net.minecraft.world.level.ItemLike;
-import net.neoforged.neoforge.client.model.generators.ItemModelBuilder;
-import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
-import net.neoforged.neoforge.client.model.generators.ModelFile.UncheckedModelFile;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.minecraft.world.level.block.Block;
+import net.neoforged.neoforge.client.model.generators.template.ExtendedModelTemplateBuilder;
 import slimeknights.mantle.registration.object.ItemObject;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.registration.CastItemObject;
@@ -19,18 +27,58 @@ import slimeknights.tconstruct.smeltery.TinkerSmeltery;
 import slimeknights.tconstruct.tools.TinkerToolParts;
 import slimeknights.tconstruct.world.TinkerWorld;
 
+import javax.annotation.Nullable;
 import java.util.Locale;
+import java.util.Optional;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 import static slimeknights.tconstruct.TConstruct.getResource;
 
+/**
+ * Generates item model files under {@code models/item}. Since 1.21.4 NeoForge's item model provider is gone, so this uses the vanilla model templates.
+ * Client item definitions ({@code items/*.json}) are not generated here, those come from the client item provider.
+ */
 @SuppressWarnings("UnusedReturnValue")
-public class TinkerItemModelProvider extends ItemModelProvider {
-  private final UncheckedModelFile GENERATED = new UncheckedModelFile("item/generated");
-  public TinkerItemModelProvider(PackOutput output, ExistingFileHelper existingFileHelper) {
-    super(output, TConstruct.MOD_ID, existingFileHelper);
+public class TinkerItemModelProvider extends ModelProvider {
+  /** Template for generated items */
+  private static final ModelTemplate GENERATED = ModelTemplates.FLAT_ITEM;
+  /** Texture slot for material parts */
+  private static final TextureSlot TEXTURE = TextureSlot.TEXTURE;
+
+  /** Model output, set while generating */
+  private BiConsumer<Identifier, ModelInstance> modelOutput;
+
+  public TinkerItemModelProvider(PackOutput output) {
+    super(output, TConstruct.MOD_ID);
   }
 
   @Override
+  public String getName() {
+    return "Neo Tinkers Item Models";
+  }
+
+  /* Client items come from another provider, so skip the vanilla validation */
+
+  @Override
+  protected Stream<? extends Holder<Block>> getKnownBlocks() {
+    return Stream.empty();
+  }
+
+  @Override
+  protected Stream<? extends Holder<Item>> getKnownItems() {
+    return Stream.empty();
+  }
+
+  @Override
+  protected void registerModels(BlockModelGenerators blockModels, ItemModelGenerators itemModels) {
+    this.modelOutput = itemModels.modelOutput;
+    registerModels();
+    savePendingPart();
+  }
+
+  /** Registers all item models */
   protected void registerModels() {
     // tool parts //
     // rock
@@ -61,7 +109,7 @@ public class TinkerItemModelProvider extends ItemModelProvider {
     part(TinkerToolParts.fakeIngot, "parts/ingot");
     // armor
     TinkerToolParts.plating.forEach((slot, item) -> {
-      MaterialModelBuilder<ItemModelBuilder> b = this.part(item, "armor/plate/" + slot.getName() + "/plating");
+      PartModel b = this.part(item, "armor/plate/" + slot.getName() + "/plating");
       if (slot == ArmorType.HELMET) {
         b.offset(0, 2);
       } else if (slot == ArmorType.LEGGINGS) {
@@ -131,7 +179,7 @@ public class TinkerItemModelProvider extends ItemModelProvider {
     generated(TinkerWorld.cobaltCluster, "block/geode/cobalt_cluster");
     generated(TinkerWorld.knightmetalCluster, "block/geode/knightmetal_cluster");
     // heads
-    TinkerWorld.headItems.forEach(head -> withExistingParent(id(head).getPath(), "item/template_skull"));
+    TinkerWorld.headItems.forEach(head -> new ModelTemplate(Optional.of(Identifier.withDefaultNamespace("item/template_skull")), Optional.empty()).create(id(head).withPrefix("item/"), new TextureMapping(), modelOutput));
     // armor stands
     TinkerGadgets.armorStand.forEach((type, item) -> basicItem(item, "gadgets/" + type.name().toLowerCase(Locale.ROOT) + "_armor_stand"));
   }
@@ -142,48 +190,95 @@ public class TinkerItemModelProvider extends ItemModelProvider {
   }
 
   /** Generated item with a texture */
-  private ItemModelBuilder generated(Identifier item, Identifier texture) {
-    return getBuilder(item.toString()).parent(GENERATED).texture("layer0", texture);
+  private Identifier generated(Identifier item, Identifier texture) {
+    return GENERATED.create(item.withPrefix("item/"), TextureMapping.layer0(new Material(texture)), modelOutput);
   }
 
   /** Generated item with a texture */
-  @SuppressWarnings("removal")
-  private ItemModelBuilder generated(Identifier item, String texture) {
+  private Identifier generated(Identifier item, String texture) {
     return generated(item, Identifier.fromNamespaceAndPath(item.getNamespace(), texture));
   }
 
   /** Generated item with a texture */
-  private ItemModelBuilder generated(ItemLike item, String texture) {
+  private Identifier generated(ItemLike item, String texture) {
     return generated(id(item), texture);
   }
 
   /** Generated item with a texture */
-  private ItemModelBuilder basicItem(Identifier item, String texture) {
+  private Identifier basicItem(Identifier item, String texture) {
     return generated(item, "item/" + texture);
   }
 
   /** Generated item with a texture */
-  private ItemModelBuilder basicItem(ItemLike item, String texture) {
+  private Identifier basicItem(ItemLike item, String texture) {
     return basicItem(id(item), texture);
   }
 
 
   /* Parts */
 
+  /**
+   * Material part model, written when the next part starts or when generation finishes so the offset can still be set after creation.
+   * Replacement for the 1.21.1 model builder return value.
+   */
+  private class PartModel {
+    private final Identifier part;
+    private final Identifier texture;
+    private int offsetX = 0;
+    private int offsetY = 0;
+    private boolean hasOffset = false;
+
+    private PartModel(Identifier part, Identifier texture) {
+      this.part = part;
+      this.texture = texture;
+    }
+
+    /** Sets the offset */
+    public PartModel offset(int x, int y) {
+      this.offsetX = x;
+      this.offsetY = y;
+      this.hasOffset = true;
+      return this;
+    }
+
+    /** Writes the model */
+    private void save() {
+      Consumer<MaterialModelBuilder> loader = hasOffset ? builder -> builder.offset(offsetX, offsetY) : builder -> {};
+      ExtendedModelTemplateBuilder.builder()
+        .parent(Identifier.fromNamespaceAndPath("neoforge", "item/default"))
+        .requiredTextureSlot(TEXTURE)
+        .customLoader(MaterialModelBuilder::new, loader)
+        .build()
+        .create(part.withPrefix("item/"), TextureMapping.defaultTexture(new Material(texture)), modelOutput);
+    }
+  }
+
+  /** Part model waiting to be saved */
+  @Nullable
+  private PartModel pendingPart = null;
+
+  /** Saves the pending part model, if any */
+  private void savePendingPart() {
+    if (pendingPart != null) {
+      pendingPart.save();
+      pendingPart = null;
+    }
+  }
+
   /** Creates a part model with the given texture */
-  private MaterialModelBuilder<ItemModelBuilder> part(Identifier part, String texture) {
-    return withExistingParent(part.getPath(), "neoforge:item/default")
-      .texture("texture", getResource("item/tool/" + texture))
-      .customLoader(MaterialModelBuilder::new);
+  private PartModel part(Identifier part, String texture) {
+    savePendingPart();
+    pendingPart = new PartModel(part, getResource("item/tool/" + texture));
+    return pendingPart;
   }
 
   /** Creates a part model in the parts folder */
-  private MaterialModelBuilder<ItemModelBuilder> part(Item item, String texture) {
+  private PartModel part(Item item, String texture) {
     return part(id(item), texture);
   }
 
   /** Creates a part model with the given texture */
-  private MaterialModelBuilder<ItemModelBuilder> part(ItemObject<? extends MaterialItem> part, String texture) {
+  private PartModel part(ItemObject<? extends MaterialItem> part, String texture) {
     return part(part.getId(), texture);
   }
 

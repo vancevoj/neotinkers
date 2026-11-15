@@ -1,28 +1,30 @@
 package slimeknights.tconstruct.world.data;
 
-import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderOwner;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.core.Vec3i;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.data.worldgen.BlockStateProviders;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.data.worldgen.features.TreeFeatures;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.util.random.WeightedRandomList;
+import net.minecraft.util.random.Weighted;
+import net.minecraft.util.random.WeightedList;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
-import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.biome.MobSpawnSettings.SpawnerData;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -35,12 +37,10 @@ import net.minecraft.world.level.levelgen.GeodeCrackSettings;
 import net.minecraft.world.level.levelgen.GeodeLayerSettings;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
-import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
-import net.minecraft.world.level.levelgen.feature.configurations.GeodeConfiguration;
-import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
-import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration.TreeConfigurationBuilder;
+import net.minecraft.world.level.levelgen.feature.GeodeFeature;
+import net.minecraft.world.level.levelgen.feature.OreFeature;
+import net.minecraft.world.level.levelgen.feature.TreeFeature;
 import net.minecraft.world.level.levelgen.feature.featuresize.TwoLayersFeatureSize;
 import net.minecraft.world.level.levelgen.feature.foliageplacers.RandomSpreadFoliagePlacer;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
@@ -61,14 +61,15 @@ import net.minecraft.world.level.levelgen.structure.StructureSet.StructureSelect
 import net.minecraft.world.level.levelgen.structure.StructureSpawnOverride;
 import net.minecraft.world.level.levelgen.structure.StructureSpawnOverride.BoundingBoxType;
 import net.minecraft.world.level.levelgen.structure.TerrainAdjustment;
+import net.minecraft.world.level.levelgen.structure.placement.AbstractSpreadingStructurePlacement.FrequencyReductionMethod;
 import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement;
 import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType;
-import net.minecraft.world.level.levelgen.structure.placement.StructurePlacement.FrequencyReductionMethod;
 import net.minecraft.world.level.levelgen.structure.templatesystem.BlockMatchTest;
 import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
 import net.neoforged.neoforge.common.world.BiomeModifier;
 import net.neoforged.neoforge.common.world.BiomeModifiers.AddFeaturesBiomeModifier;
 import net.neoforged.neoforge.common.world.BiomeModifiers.AddSpawnsBiomeModifier;
+import net.neoforged.neoforge.data.event.DatapackRegistryGatherer;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import net.neoforged.neoforge.registries.holdersets.AndHolderSet;
 import net.neoforged.neoforge.registries.holdersets.NotHolderSet;
@@ -86,6 +87,8 @@ import slimeknights.tconstruct.world.worldgen.trees.ExtraRootVariantPlacer;
 import slimeknights.tconstruct.world.worldgen.trees.LeaveVineDecorator;
 import slimeknights.tconstruct.world.worldgen.trees.config.SlimeFungusConfig;
 import slimeknights.tconstruct.world.worldgen.trees.config.SlimeTreeConfig;
+import slimeknights.tconstruct.world.worldgen.trees.feature.SlimeFungusFeature;
+import slimeknights.tconstruct.world.worldgen.trees.feature.SlimeTreeFeature;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
@@ -116,8 +119,6 @@ import static slimeknights.tconstruct.world.TinkerStructures.overworldSkyIsland;
 import static slimeknights.tconstruct.world.TinkerStructures.skySlimeIsland;
 import static slimeknights.tconstruct.world.TinkerStructures.skySlimeIslandTree;
 import static slimeknights.tconstruct.world.TinkerStructures.skySlimeTree;
-import static slimeknights.tconstruct.world.TinkerStructures.slimeFungus;
-import static slimeknights.tconstruct.world.TinkerStructures.slimeTree;
 import static slimeknights.tconstruct.world.TinkerWorld.configuredEarthGeode;
 import static slimeknights.tconstruct.world.TinkerWorld.configuredEnderGeode;
 import static slimeknights.tconstruct.world.TinkerWorld.configuredIchorGeode;
@@ -147,120 +148,133 @@ import static slimeknights.tconstruct.world.TinkerWorld.spawnTerracube;
 public class WorldgenProvider {
   private WorldgenProvider() {}
 
-  /** Registers this provider with the data generator */
+  /** Registers this provider with the registry set builder */
   public static void register(RegistrySetBuilder builder) {
-    builder.add(Registries.CONFIGURED_FEATURE, WorldgenProvider::registerConfiguredFeatures);
+    builder.add(Registries.FEATURE, WorldgenProvider::registerFeatures);
     builder.add(Registries.PLACED_FEATURE, WorldgenProvider::registerPlacedFeatures);
     builder.add(Registries.STRUCTURE, WorldgenProvider::registerStructures);
     builder.add(Registries.STRUCTURE_SET, WorldgenProvider::registerStructureSets);
     builder.add(NeoForgeRegistries.Keys.BIOME_MODIFIERS, WorldgenProvider::registerBiomeModifiers);
   }
 
-  /** Registers all configured features */
-  @SuppressWarnings("deprecation")
-  private static void registerConfiguredFeatures(BootstrapContext<ConfiguredFeature<?,?>> context) {
+  /** Registers this provider with the datagen registry gatherer, from {@link net.neoforged.neoforge.data.event.GatherDataRegistryEntriesEvent} */
+  public static void register(DatapackRegistryGatherer gatherer) {
+    gatherer.add(Registries.FEATURE, WorldgenProvider::registerFeatures)
+            .add(Registries.PLACED_FEATURE, WorldgenProvider::registerPlacedFeatures)
+            .add(Registries.STRUCTURE, WorldgenProvider::registerStructures)
+            .add(Registries.STRUCTURE_SET, WorldgenProvider::registerStructureSets)
+            .add(NeoForgeRegistries.Keys.BIOME_MODIFIERS, WorldgenProvider::registerBiomeModifiers);
+  }
+
+  /** Registers all features. Since 26.3 configured features are merged into the feature records */
+  private static void registerFeatures(BootstrapContext<Feature> context) {
+    HolderGetter<Block> blocks = context.lookup(Registries.BLOCK);
+    // since 26.1 trees need a provider for the block below the trunk, 1.21.1 trees placed dirt unless the block cannot be replaced
+    Holder<BlockStateProvider> belowTrunk = context.lookup(Registries.BLOCK_STATE_PROVIDER).getOrThrow(BlockStateProviders.SOIL_BENEATH_TREE);
     // sapling trees
-    register(context, earthSlimeTree, slimeTree,
+    context.register(earthSlimeTree, new SlimeTreeFeature(
              new SlimeTreeConfig.Builder()
                .planted()
                .trunk(TinkerWorld.greenheart.getLog())
                .leaves(TinkerWorld.slimeLeaves.get(FoliageType.EARTH))
                .baseHeight(4).randomHeight(3)
-               .build());
-    register(context, skySlimeTree, slimeTree,
+               .build()));
+    context.register(skySlimeTree, new SlimeTreeFeature(
              new SlimeTreeConfig.Builder()
                .planted().canDoubleHeight()
                .trunk(TinkerWorld.skyroot.getLog())
                .leaves(TinkerWorld.slimeLeaves.get(FoliageType.SKY))
-               .build());
+               .build()));
     // island trees
-    register(context, earthSlimeIslandTree, slimeTree,
+    context.register(earthSlimeIslandTree, new SlimeTreeFeature(
              new SlimeTreeConfig.Builder()
                .trunk(TinkerWorld.greenheart.getLog())
                .leaves(TinkerWorld.slimeLeaves.get(FoliageType.EARTH))
                .baseHeight(4).randomHeight(3)
-               .build());
-    register(context, skySlimeIslandTree, slimeTree,
+               .build()));
+    context.register(skySlimeIslandTree, new SlimeTreeFeature(
              new SlimeTreeConfig.Builder()
                .canDoubleHeight()
                .trunk(TinkerWorld.skyroot.getLog())
                .leaves(TinkerWorld.slimeLeaves.get(FoliageType.SKY))
                .vines(TinkerWorld.skySlimeVine.get().defaultBlockState().setValue(SlimeVineBlock.STAGE, VineStage.MIDDLE))
-               .build());
+               .build()));
 
     // mangrove style
-    register(context, enderSlimeTree, Feature.TREE,
-             new TreeConfigurationBuilder(BlockStateProvider.of(TinkerWorld.enderbark.getLog()),
-                                          new UpwardsBranchingTrunkPlacer(2, 1, 4, UniformInt.of(1, 4), 0.5F, UniformInt.of(0, 1), context.lookup(Registries.BLOCK).getOrThrow(TinkerTags.Blocks.ENDERBARK_LOGS_CAN_GROW_THROUGH)),
+    context.register(enderSlimeTree,
+             new TreeFeature.Builder(BlockStateProvider.of(TinkerWorld.enderbark.getLog()),
+                                          new UpwardsBranchingTrunkPlacer(2, 1, 4, UniformInt.of(1, 4), 0.5F, UniformInt.of(0, 1), blocks.getOrThrow(TinkerTags.Blocks.ENDERBARK_LOGS_CAN_GROW_THROUGH)),
                                           BlockStateProvider.of(TinkerWorld.slimeLeaves.get(FoliageType.ENDER)),
                                           new RandomSpreadFoliagePlacer(ConstantInt.of(3), ConstantInt.of(0), ConstantInt.of(2), 70),
                                           ExtraRootVariantPlacer.builder()
                                                                 .trunkOffset(UniformInt.of(1, 3))
                                                                 .rootBlock(TinkerWorld.enderbarkRoots.get())
-                                                                .canGrowThroughTag(TinkerTags.Blocks.ENDERBARK_ROOTS_CAN_GROW_THROUGH)
+                                                                .canGrowThroughTag(blocks, TinkerTags.Blocks.ENDERBARK_ROOTS_CAN_GROW_THROUGH)
                                                                 .slimyRoots(TinkerWorld.slimyEnderbarkRoots)
                                                                 .buildOptional(),
-                                          new TwoLayersFeatureSize(2, 0, 2))
-               .decorators(List.of(new LeaveVineDecorator(TinkerWorld.enderSlimeVine.get(), 0.125F), new AttachedToLeavesDecorator(0.14F, 1, 0, new RandomizedIntStateProvider(BlockStateProvider.of(TinkerWorld.slimeSapling.get(FoliageType.ENDER).defaultBlockState().setValue(BlockStateProperties.HANGING, true)), MangrovePropaguleBlock.AGE, UniformInt.of(0, 4)), 2, List.of(Direction.DOWN))))
+                                          new TwoLayersFeatureSize(2, 0, 2),
+                                          belowTrunk)
+               .decorators(List.of(new LeaveVineDecorator(TinkerWorld.enderSlimeVine.get(), 0.125F), new AttachedToLeavesDecorator(0.14F, 1, 0, Holder.direct(new RandomizedIntStateProvider(BlockStateProvider.of(TinkerWorld.slimeSapling.get(FoliageType.ENDER).defaultBlockState().setValue(BlockStateProperties.HANGING, true)), MangrovePropaguleBlock.AGE, UniformInt.of(0, 4))), 2, List.of(Direction.DOWN))))
                .ignoreVines()
                .build());
-    register(context, enderSlimeTreeTall, Feature.TREE,
-             new TreeConfigurationBuilder(BlockStateProvider.of(TinkerWorld.enderbark.getLog()),
-                                          new UpwardsBranchingTrunkPlacer(4, 1, 9, UniformInt.of(1, 6), 0.5F, UniformInt.of(0, 1), context.lookup(Registries.BLOCK).getOrThrow(TinkerTags.Blocks.ENDERBARK_LOGS_CAN_GROW_THROUGH)),
+    context.register(enderSlimeTreeTall,
+             new TreeFeature.Builder(BlockStateProvider.of(TinkerWorld.enderbark.getLog()),
+                                          new UpwardsBranchingTrunkPlacer(4, 1, 9, UniformInt.of(1, 6), 0.5F, UniformInt.of(0, 1), blocks.getOrThrow(TinkerTags.Blocks.ENDERBARK_LOGS_CAN_GROW_THROUGH)),
                                           BlockStateProvider.of(TinkerWorld.slimeLeaves.get(FoliageType.ENDER)),
                                           new RandomSpreadFoliagePlacer(ConstantInt.of(3), ConstantInt.of(0), ConstantInt.of(2), 70),
                                           ExtraRootVariantPlacer.builder()
                                                                 .trunkOffset(UniformInt.of(3, 7))
                                                                 .rootBlock(TinkerWorld.enderbarkRoots.get())
-                                                                .canGrowThroughTag(TinkerTags.Blocks.ENDERBARK_ROOTS_CAN_GROW_THROUGH)
+                                                                .canGrowThroughTag(blocks, TinkerTags.Blocks.ENDERBARK_ROOTS_CAN_GROW_THROUGH)
                                                                 .slimyRoots(TinkerWorld.slimyEnderbarkRoots)
                                                                 .buildOptional(),
-                                          new TwoLayersFeatureSize(3, 0, 2))
-               .decorators(List.of(new LeaveVineDecorator(TinkerWorld.enderSlimeVine.get(), 0.125F), new AttachedToLeavesDecorator(0.14F, 1, 0, new RandomizedIntStateProvider(BlockStateProvider.of(TinkerWorld.slimeSapling.get(FoliageType.ENDER).defaultBlockState().setValue(BlockStateProperties.HANGING, true)), MangrovePropaguleBlock.AGE, UniformInt.of(0, 4)), 2, List.of(Direction.DOWN))))
+                                          new TwoLayersFeatureSize(3, 0, 2),
+                                          belowTrunk)
+               .decorators(List.of(new LeaveVineDecorator(TinkerWorld.enderSlimeVine.get(), 0.125F), new AttachedToLeavesDecorator(0.14F, 1, 0, Holder.direct(new RandomizedIntStateProvider(BlockStateProvider.of(TinkerWorld.slimeSapling.get(FoliageType.ENDER).defaultBlockState().setValue(BlockStateProperties.HANGING, true)), MangrovePropaguleBlock.AGE, UniformInt.of(0, 4))), 2, List.of(Direction.DOWN))))
                .ignoreVines()
                .build());
 
     // fungus style
     BlockPredicate slimyFungusGrowThrough = BlockPredicate.matchesTag(TinkerTags.Blocks.SLIMY_FUNGUS_CAN_GROW_THROUGH);
-    register(context, bloodSlimeFungus, slimeFungus,
+    context.register(bloodSlimeFungus, new SlimeFungusFeature(
              new SlimeFungusConfig(
                TinkerTags.Blocks.SLIMY_SOIL,
                TinkerWorld.bloodshroom.getLog().defaultBlockState(),
                TinkerWorld.slimeLeaves.get(FoliageType.BLOOD).defaultBlockState(),
                TinkerWorld.congealedSlime.get(SlimeType.ICHOR).defaultBlockState(),
                slimyFungusGrowThrough,
-               true));
-    register(context, bloodSlimeIslandFungus, slimeFungus,
+               true)));
+    context.register(bloodSlimeIslandFungus, new SlimeFungusFeature(
              new SlimeFungusConfig(
                TinkerTags.Blocks.SLIMY_NYLIUM,
                TinkerWorld.bloodshroom.getLog().defaultBlockState(),
                TinkerWorld.slimeLeaves.get(FoliageType.BLOOD).defaultBlockState(),
                TinkerWorld.congealedSlime.get(SlimeType.ICHOR).defaultBlockState(),
                slimyFungusGrowThrough,
-               false));
-    register(context, ichorSlimeFungus, slimeFungus,
+               false)));
+    context.register(ichorSlimeFungus, new SlimeFungusFeature(
              new SlimeFungusConfig(
                TinkerTags.Blocks.SLIMY_SOIL,
                TinkerWorld.bloodshroom.getLog().defaultBlockState(),
                TinkerWorld.slimeLeaves.get(FoliageType.ICHOR).defaultBlockState(),
                TinkerWorld.congealedSlime.get(SlimeType.ICHOR).defaultBlockState(),
                slimyFungusGrowThrough,
-               false));
+               false)));
 
     // ores
     RuleTest netherrack = new BlockMatchTest(Blocks.NETHERRACK);
     BlockState cobaltOre = TinkerWorld.cobaltOre.get().defaultBlockState();
-    register(context, configuredSmallCobaltOre, Feature.ORE, new OreConfiguration(netherrack, cobaltOre, 4));
-    register(context, configuredLargeCobaltOre, Feature.ORE, new OreConfiguration(netherrack, cobaltOre, 6));
+    context.register(configuredSmallCobaltOre, new OreFeature(netherrack, cobaltOre, 4));
+    context.register(configuredLargeCobaltOre, new OreFeature(netherrack, cobaltOre, 6));
 
     // geodes
-    configureGeode(context, configuredEarthGeode, earthGeode, BlockStateProvider.of(Blocks.CALCITE), BlockStateProvider.of(Blocks.CLAY), TinkerWorld.steelCluster,
+    configureGeode(context, configuredEarthGeode, earthGeode, BlockStateProvider.holderOf(Blocks.CALCITE), BlockStateProvider.holderOf(Blocks.CLAY), TinkerWorld.steelCluster,
                    new GeodeLayerSettings(1.7D, 2.2D, 3.2D, 5.2D), new GeodeCrackSettings(0.95D, 2.0D, 2), UniformInt.of(6, 9), UniformInt.of(3, 4), UniformInt.of(1, 2), 16, 1);
-    configureGeode(context, configuredSkyGeode, skyGeode, BlockStateProvider.of(Blocks.CALCITE), BlockStateProvider.of(Blocks.MOSSY_COBBLESTONE), TinkerWorld.steelCluster,
+    configureGeode(context, configuredSkyGeode, skyGeode, BlockStateProvider.holderOf(Blocks.CALCITE), BlockStateProvider.holderOf(Blocks.MOSSY_COBBLESTONE), TinkerWorld.steelCluster,
                    new GeodeLayerSettings(1.7D, 2.2D, 3.2D, 4.2D), new GeodeCrackSettings(0.95D, 2.0D, 2), UniformInt.of(4, 7), UniformInt.of(3, 4), UniformInt.of(1, 2), 16, 1);
-    configureGeode(context, configuredIchorGeode, ichorGeode, BlockStateProvider.of(Blocks.CALCITE), BlockStateProvider.of(Blocks.NETHERRACK), TinkerWorld.cobaltCluster,
+    configureGeode(context, configuredIchorGeode, ichorGeode, BlockStateProvider.holderOf(Blocks.CALCITE), BlockStateProvider.holderOf(Blocks.NETHERRACK), TinkerWorld.cobaltCluster,
                    new GeodeLayerSettings(1.7D, 2.2D, 3.2D, 4.2D), new GeodeCrackSettings(0.75D, 2.0D, 2), UniformInt.of(4, 6), UniformInt.of(3, 4), UniformInt.of(1, 2), 24, 2);
-    configureGeode(context, configuredEnderGeode, enderGeode, BlockStateProvider.of(Blocks.CALCITE), BlockStateProvider.of(Blocks.END_STONE), TinkerWorld.knightmetalCluster,
+    configureGeode(context, configuredEnderGeode, enderGeode, BlockStateProvider.holderOf(Blocks.CALCITE), BlockStateProvider.holderOf(Blocks.END_STONE), TinkerWorld.knightmetalCluster,
                    new GeodeLayerSettings(1.7D, 2.2D, 3.2D, 5.2D), new GeodeCrackSettings(0.45, 1.0D, 2), UniformInt.of(4, 10), UniformInt.of(3, 4), UniformInt.of(1, 2), 16, 10000);
   }
 
@@ -280,7 +294,7 @@ public class WorldgenProvider {
   /** Registers all structures */
   private static void registerStructures(BootstrapContext<Structure> context) {
     HolderGetter<Biome> biomes = context.lookup(Registries.BIOME);
-    HolderGetter<ConfiguredFeature<?,?>> configured = context.lookup(Registries.CONFIGURED_FEATURE);
+    HolderGetter<Feature> configured = context.lookup(Registries.FEATURE);
     // earthslime island
     context.register(earthSlimeIsland, IslandStructure.seaBuilder()
       .addDefaultTemplates(getResource("islands/earth/"))
@@ -351,9 +365,9 @@ public class WorldgenProvider {
     context.register(spawnIchorGeode, new AddFeaturesBiomeModifier(nether, direct(placed.getOrThrow(TinkerWorld.placedIchorGeode)), Decoration.LOCAL_MODIFICATIONS));
     context.register(spawnEnderGeode, new AddFeaturesBiomeModifier(and(end, not(direct(biomes.getOrThrow(Biomes.THE_END)))), direct(placed.getOrThrow(TinkerWorld.placedEnderGeode)), Decoration.LOCAL_MODIFICATIONS));
     // spawns
-    context.register(spawnOverworldSlime, new AddSpawnsBiomeModifier(overworld, List.of(new SpawnerData(TinkerWorld.skySlimeEntity.get(), 100, 2, 4))));
-    context.register(spawnTerracube,      new AddSpawnsBiomeModifier(and(overworld, not(biomes.getOrThrow(TinkerTags.Biomes.NO_DEFAULT_MONSTERS))), List.of(new SpawnerData(TinkerWorld.terracubeEntity.get(), 10, 2, 4))));
-    context.register(spawnEndSlime,       new AddSpawnsBiomeModifier(end,       List.of(new SpawnerData(TinkerWorld.enderSlimeEntity.get(), 10, 2, 4))));
+    context.register(spawnOverworldSlime, AddSpawnsBiomeModifier.singleSpawn(overworld, spawner(TinkerWorld.skySlimeEntity.get(), 100, 2, 4)));
+    context.register(spawnTerracube,      AddSpawnsBiomeModifier.singleSpawn(and(overworld, not(biomes.getOrThrow(TinkerTags.Biomes.NO_DEFAULT_MONSTERS))), spawner(TinkerWorld.terracubeEntity.get(), 10, 2, 4)));
+    context.register(spawnEndSlime,       AddSpawnsBiomeModifier.singleSpawn(end,       spawner(TinkerWorld.enderSlimeEntity.get(), 10, 2, 4)));
   }
 
 
@@ -389,34 +403,25 @@ public class WorldgenProvider {
   }
 
 
-  /* Configured features */
-
-  /** Registers a configured feature */
-  private static <FC extends FeatureConfiguration, F extends Feature<FC>> void register(BootstrapContext<ConfiguredFeature<?,?>> context, ResourceKey<ConfiguredFeature<?,?>> key, F feature, FC config) {
-    context.register(key, new ConfiguredFeature<>(feature, config));
-  }
-
-  /** Registers a configured feature */
-  private static <FC extends FeatureConfiguration, F extends Feature<FC>> void register(BootstrapContext<ConfiguredFeature<?,?>> context, ResourceKey<ConfiguredFeature<?,?>> key, Supplier<F> feature, FC config) {
-    register(context, key, feature.get(), config);
-  }
+  /* Features */
 
   /** Configures a geode feature */
-  private static void configureGeode(BootstrapContext<ConfiguredFeature<?,?>> context, ResourceKey<ConfiguredFeature<?,?>> key, GeodeItemObject geode,
-                                     BlockStateProvider middleLayer, BlockStateProvider outerLayer, @Nullable Supplier<? extends Block> extraCluster, GeodeLayerSettings layerSettings, GeodeCrackSettings crackSettings,
+  private static void configureGeode(BootstrapContext<Feature> context, ResourceKey<Feature> key, GeodeItemObject geode,
+                                     Holder<BlockStateProvider> middleLayer, Holder<BlockStateProvider> outerLayer, @Nullable Supplier<? extends Block> extraCluster, GeodeLayerSettings layerSettings, GeodeCrackSettings crackSettings,
                                      IntProvider outerWall, IntProvider distributionPoints, IntProvider pointOffset, int genOffset, int invalidBlocks) {
     // allow adding in an extra cluster type to the geode
     Stream<BlockState> buds = Arrays.stream(BudSize.values()).map(type -> geode.getBud(type).defaultBlockState());
     if (extraCluster != null) {
       buds = Stream.concat(buds, Stream.of(extraCluster.get().defaultBlockState()));
     }
-    register(context, key, Feature.GEODE, new GeodeConfiguration(
-      new GeodeBlockSettings(BlockStateProvider.of(Blocks.AIR),
-                             BlockStateProvider.of(geode.getBlock()),
-                             BlockStateProvider.of(geode.getBudding()),
+    HolderGetter<Block> blocks = context.lookup(Registries.BLOCK);
+    context.register(key, new GeodeFeature(
+      new GeodeBlockSettings(BlockStateProvider.holderOf(Blocks.AIR),
+                             BlockStateProvider.holderOf(geode.getBlock()),
+                             BlockStateProvider.holderOf(geode.getBudding()),
                              middleLayer, outerLayer,
                              buds.toList(),
-                             BlockTags.FEATURES_CANNOT_REPLACE, BlockTags.GEODE_INVALID_BLOCKS),
+                             blocks.getOrThrow(BlockTags.FEATURES_CANNOT_REPLACE), blocks.getOrThrow(BlockTags.GEODE_INVALID_BLOCKS)),
       layerSettings, crackSettings, 0.335, 0.083, true, outerWall, distributionPoints, pointOffset, -genOffset, genOffset, 0.05D, invalidBlocks)
     );
   }
@@ -425,12 +430,12 @@ public class WorldgenProvider {
   /* Placed features */
 
   /** Registers a placed feature */
-  private static void register(BootstrapContext<PlacedFeature> context, ResourceKey<PlacedFeature> key, ResourceKey<ConfiguredFeature<?,?>> configured, PlacementModifier... placement) {
-    context.register(key, new PlacedFeature(context.lookup(Registries.CONFIGURED_FEATURE).getOrThrow(configured), List.of(placement)));
+  private static void register(BootstrapContext<PlacedFeature> context, ResourceKey<PlacedFeature> key, ResourceKey<Feature> configured, PlacementModifier... placement) {
+    context.register(key, new PlacedFeature(context.lookup(Registries.FEATURE).getOrThrow(configured), List.of(placement)));
   }
 
   /** Registers a placed feature */
-  private static void placeGeode(BootstrapContext<PlacedFeature> context, ResourceKey<PlacedFeature> key, ResourceKey<ConfiguredFeature<?,?>> configured, RarityFilter rarity, HeightRangePlacement height) {
+  private static void placeGeode(BootstrapContext<PlacedFeature> context, ResourceKey<PlacedFeature> key, ResourceKey<Feature> configured, RarityFilter rarity, HeightRangePlacement height) {
     register(context, key, configured, rarity, InSquarePlacement.spread(), height, BiomeFilter.biome());
   }
 
@@ -449,8 +454,13 @@ public class WorldgenProvider {
 
   /* Biome modifiers */
 
+  /** Creates a weighted spawner for the given mob, since 1.21.5 the weight is no longer part of the spawner data */
+  private static Weighted<SpawnerData> spawner(EntityType<?> entity, int weight, int min, int max) {
+    return new Weighted<>(new SpawnerData(entity, UniformInt.of(min, max)), weight);
+  }
+
   /** Creates a spawn override for a single mob */
   private static Map<MobCategory,StructureSpawnOverride> monsterOverride(EntityType<?> entity, int min, int max) {
-    return Map.of(MobCategory.MONSTER, new StructureSpawnOverride(BoundingBoxType.STRUCTURE, WeightedRandomList.create(new MobSpawnSettings.SpawnerData(entity, 1, min, max))));
+    return Map.of(MobCategory.MONSTER, new StructureSpawnOverride(BoundingBoxType.STRUCTURE, WeightedList.<SpawnerData>of(spawner(entity, 1, min, max))));
   }
 }

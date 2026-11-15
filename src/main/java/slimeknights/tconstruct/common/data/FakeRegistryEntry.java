@@ -3,7 +3,9 @@ package slimeknights.tconstruct.common.data;
 import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.Entity;
@@ -21,11 +23,11 @@ public class FakeRegistryEntry {
   /** Creates a dummy registry entry */
   private static <T> T getOrCreate(Registry<T> registry, Identifier id, Supplier<T> constructor) {
     if (registry.containsKey(id)) {
-      return registry.get(id);
+      return registry.getValue(id);
     }
     // 1.21: no IForgeRegistry; unfreeze the underlying MappedRegistry, register, then refreeze
     MappedRegistry<T> mapped = (MappedRegistry<T>)registry;
-    mapped.unfreeze();
+    mapped.unfreeze(false);
     T value = Registry.register(registry, id, constructor.get());
     mapped.freeze();
     return value;
@@ -33,12 +35,12 @@ public class FakeRegistryEntry {
 
   /** Gets or creates a fake block with the given ID */
   public static Block block(Identifier id) {
-    return getOrCreate(BuiltInRegistries.BLOCK, id, () -> new Block(BlockBehaviour.Properties.of()));
+    return getOrCreate(BuiltInRegistries.BLOCK, id, () -> new Block(BlockBehaviour.Properties.of().setId(ResourceKey.create(Registries.BLOCK, id))));
   }
 
   /** Gets or creates a fake item with the given ID */
   public static Item item(Identifier id) {
-    return getOrCreate(BuiltInRegistries.ITEM, id, () -> new Item(new Item.Properties()));
+    return getOrCreate(BuiltInRegistries.ITEM, id, () -> new Item(new Item.Properties().setId(ResourceKey.create(Registries.ITEM, id))));
   }
 
   /** Gets or creates a fake mob effect with the given ID */
@@ -51,6 +53,6 @@ public class FakeRegistryEntry {
     return getOrCreate(BuiltInRegistries.ENTITY_TYPE, id, () ->
       EntityType.Builder.of((type, level) -> {
         throw new UnsupportedOperationException("Cannot create instance of fake entity");
-      }, MobCategory.MISC).build(id.toString()));
+      }, MobCategory.MISC).build(ResourceKey.create(Registries.ENTITY_TYPE, id)));
   }
 }

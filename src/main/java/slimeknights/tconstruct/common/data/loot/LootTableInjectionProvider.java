@@ -1,15 +1,16 @@
 package slimeknights.tconstruct.common.data.loot;
 
-import net.minecraft.world.item.equipment.ArmorType;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.equipment.ArmorType;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.functions.SetItemDamageFunction;
-import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
+import net.minecraft.world.level.storage.loot.providers.number.floats.ContextFloatProviders;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders;
 import net.neoforged.neoforge.common.conditions.ICondition;
 import net.neoforged.neoforge.common.conditions.ModLoadedCondition;
 import net.neoforged.neoforge.fluids.FluidStack;
@@ -64,7 +65,7 @@ public class LootTableInjectionProvider extends AbstractLootTableInjectionProvid
     injectGameplay("piglin_bartering")
       .addToPool("main", LootItem.lootTableItem(TinkerSmeltery.scorchedLantern).setWeight(20)
                                  .apply(SetFluidLootFunction.builder(new FluidStack(TinkerFluids.blazingBlood.get(), FluidValues.LANTERN_CAPACITY)))
-                                 .apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4)))
+                                 .apply(SetItemCountFunction.setCount(ContextIntProviders.between(1, 4)))
                                  .build())
       .addToPool("main", LootItem.lootTableItem(TinkerTools.battlesign.get())
                                  .setWeight(5)
@@ -152,7 +153,7 @@ public class LootTableInjectionProvider extends AbstractLootTableInjectionProvid
       .addToPool("pool1", LootItem.lootTableItem(TinkerTools.battlesign.get())
                                  .setWeight(3) // bit more common than an iron sword
                                  .apply(ancientToolData2)
-                                 .apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.1f, 0.9f)))
+                                 .apply(SetItemDamageFunction.setDamage(ContextFloatProviders.between(0.1f, 0.9f)))
                                  .build());
     // diamond armor shows in bastions, add in some plate with similar weight to enchanted version
     RandomMaterial randomHighTier = RandomMaterial.random().allowHidden().tier(3, 4).material(includeInLoot).build();
@@ -213,7 +214,7 @@ public class LootTableInjectionProvider extends AbstractLootTableInjectionProvid
   /** Makes a seed injection loot entry */
   private static LootPoolEntryContainer makeSeed(FoliageType type, int weight) {
     return LootItem.lootTableItem(TinkerWorld.slimeGrassSeeds.get(type)).setWeight(weight)
-                   .apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 4))).build();
+                   .apply(SetItemCountFunction.setCount(ContextIntProviders.between(2, 4))).build();
   }
 
   /** Makes a sapling injection loot entry */

@@ -1,6 +1,5 @@
 package slimeknights.tconstruct.library.data;
 
-import net.minecraft.world.item.equipment.ArmorType;
 import com.google.common.collect.Streams;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -9,11 +8,11 @@ import net.minecraft.data.CachedOutput;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.PackOutput.Target;
 import net.minecraft.resources.Identifier;
-import net.minecraft.server.packs.PackType;
+import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.equipment.ArmorType;
 import net.minecraft.world.phys.Vec2;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.ApiStatus.NonExtendable;
 import slimeknights.mantle.data.GenericDataProvider;
 import slimeknights.mantle.data.loadable.Loadables;
@@ -35,11 +34,12 @@ import java.util.stream.Stream;
 /** Helper for generating tool item models */
 public abstract class AbstractToolItemModelProvider extends GenericDataProvider {
   protected final Map<String,JsonObject> models = new HashMap<>();
-  protected final ExistingFileHelper existingFileHelper;
+  /** Client resource manager from {@link net.neoforged.neoforge.data.event.GatherDataEvent#getResourceManager(net.minecraft.server.packs.PackType)}, used to read the base tool models */
+  protected final ResourceManager resourceManager;
   protected final String modId;
-  public AbstractToolItemModelProvider(PackOutput packOutput, ExistingFileHelper existingFileHelper, String modId) {
+  public AbstractToolItemModelProvider(PackOutput packOutput, ResourceManager resourceManager, String modId) {
     super(packOutput, Target.RESOURCE_PACK, "models/item");
-    this.existingFileHelper = existingFileHelper;
+    this.resourceManager = resourceManager;
     this.modId = modId;
   }
 
@@ -287,13 +287,12 @@ public abstract class AbstractToolItemModelProvider extends GenericDataProvider 
 
   /** Reads a JSON file */
   protected JsonObject readJson(Identifier path) throws IOException {
-    try (BufferedReader reader = existingFileHelper.getResource(path, PackType.CLIENT_RESOURCES, ".json", "models/item").openAsReader()) {
+    try (BufferedReader reader = resourceManager.openAsReader(path.withPath(name -> "models/item/" + name + ".json"))) {
       return GsonHelper.parse(reader);
     }
   }
 
   /** Creates a resource location under this mod */
-  @SuppressWarnings("removal")
   protected Identifier resource(String name) {
     return Identifier.fromNamespaceAndPath(modId, name);
   }

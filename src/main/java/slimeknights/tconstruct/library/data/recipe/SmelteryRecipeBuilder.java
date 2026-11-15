@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.ItemTags;
@@ -19,13 +20,14 @@ import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.crafting.DifferenceIngredient;
 import net.neoforged.neoforge.common.crafting.IntersectionIngredient;
 import net.neoforged.neoforge.common.conditions.ICondition;
-import net.neoforged.neoforge.common.conditions.ItemExistsCondition;
+import net.neoforged.neoforge.common.conditions.NeoForgeConditions;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import slimeknights.mantle.recipe.condition.TagCombinationCondition;
 import slimeknights.mantle.recipe.condition.TagFilledCondition;
 import slimeknights.mantle.recipe.data.ConsumerWrapperBuilder;
 import slimeknights.mantle.recipe.data.ItemNameIngredient;
 import slimeknights.mantle.recipe.helper.FluidOutput;
+import slimeknights.mantle.recipe.helper.IngredientHelper;
 import slimeknights.mantle.recipe.helper.ItemOutput;
 import slimeknights.mantle.recipe.ingredient.FluidIngredient;
 import slimeknights.mantle.registration.object.FluidObject;
@@ -223,6 +225,12 @@ public class SmelteryRecipeBuilder {
     return ItemTags.create(commonResource(name));
   }
 
+  /** Creates a tag ingredient, since 1.21.2 tag ingredients need the item lookup from the recipe output */
+  @CheckReturnValue
+  private Ingredient tagIngredient(TagKey<Item> tag) {
+    return IngredientHelper.tag(consumer.lookup(Registries.ITEM), tag);
+  }
+
   /** Creates a location under the given domain with the passed prefix  */
   @CheckReturnValue
   private Identifier location(String folder, String variant) {
@@ -263,7 +271,7 @@ public class SmelteryRecipeBuilder {
     for (IByproduct byproduct : unitByproducts) {
       builder.addByproduct(byproduct.getFluid(scale));
     }
-    builder.save(withCondition(new ItemExistsCondition(itemName)), location(meltingFolder, output));
+    builder.save(withCondition(NeoForgeConditions.itemRegistered(itemName)), location(meltingFolder, output));
   }
 
   /** Adds a recipe for melting an item from a tag */
@@ -274,7 +282,7 @@ public class SmelteryRecipeBuilder {
   /** Adds a recipe for melting an item from a tag */
   private void tagMelting(float scale, String output, float factor, Identifier tagName, boolean damagable, boolean forceOptional) {
     RecipeOutput wrapped = optional || forceOptional ? withCondition(tagCondition(tagName)) : consumer;
-    MeltingRecipeBuilder builder = MeltingRecipeBuilder.melting(Ingredient.of(ItemTags.create(tagName)), result((int) (baseUnit * scale)), temperature, factor);
+    MeltingRecipeBuilder builder = MeltingRecipeBuilder.melting(tagIngredient(ItemTags.create(tagName)), result((int) (baseUnit * scale)), temperature, factor);
     if (damagable) {
       builder.setDamagable(damageUnits());
     }
@@ -293,15 +301,15 @@ public class SmelteryRecipeBuilder {
     assert baseUnit != 0;
     String tagName = tagPrefix + this.name.getPath();
     RecipeOutput wrapped;
-    Ingredient baseIngredient = Ingredient.of(itemTag(tagName));
+    Ingredient baseIngredient = tagIngredient(itemTag(tagName));
     Ingredient ingredient;
     // not everyone sets size, so treat singular as the fallback, means we want anything in the tag that is not sparse or dense
     if (size == Tags.Items.ORE_RATES_SINGULAR) {
-      ingredient = DifferenceIngredient.of(baseIngredient, Ingredient.of(TinkerTags.Items.NON_SINGULAR_ORE_RATES));
+      ingredient = DifferenceIngredient.of(baseIngredient, tagIngredient(TinkerTags.Items.NON_SINGULAR_ORE_RATES));
       wrapped = withCondition(TagCombinationCondition.difference(itemTag(tagName), TinkerTags.Items.NON_SINGULAR_ORE_RATES));
       // size tag means we want an intersection between the tag and that size
     } else if (size != null) {
-      ingredient = IntersectionIngredient.of(baseIngredient, Ingredient.of(size));
+      ingredient = IntersectionIngredient.of(baseIngredient, tagIngredient(size));
       wrapped = withCondition(TagCombinationCondition.intersection(itemTag(tagName), size));
       // default only need it to be in the tag
     } else {
@@ -423,7 +431,7 @@ public class SmelteryRecipeBuilder {
 
   /** Adds melting and casting recipes for the given object */
   public SmelteryRecipeBuilder meltingCasting(float scale, String tagPrefix, String castMaterial, float factor, boolean forceOptional) {
-    return meltingCasting(scale, tagPrefix, Ingredient.of(itemTag(tagPrefix + "s/" + castMaterial)), factor, forceOptional);
+    return meltingCasting(scale, tagPrefix, tagIngredient(itemTag(tagPrefix + "s/" + castMaterial)), factor, forceOptional);
   }
 
 

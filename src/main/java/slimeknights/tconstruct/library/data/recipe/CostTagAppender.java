@@ -4,20 +4,19 @@ import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.google.errorprone.annotations.CheckReturnValue;
 import lombok.RequiredArgsConstructor;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.tags.IntrinsicHolderTagsProvider.IntrinsicTagAppender;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import slimeknights.mantle.Mantle;
 import slimeknights.mantle.registration.object.FluidObject;
+import slimeknights.tconstruct.library.data.IntrinsicTagsProvider.IntrinsicTagAppender;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
 /** Helper to generate tags for cost variants of items, typically used for melting */
-@SuppressWarnings("removal")
 @RequiredArgsConstructor
 @CanIgnoreReturnValue
 public class CostTagAppender {

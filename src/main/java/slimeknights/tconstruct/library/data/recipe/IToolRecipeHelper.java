@@ -1,10 +1,12 @@
 package slimeknights.tconstruct.library.data.recipe;
 
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.neoforged.neoforge.common.crafting.CompoundIngredient;
+import slimeknights.mantle.recipe.helper.IngredientHelper;
 import slimeknights.mantle.recipe.helper.ItemOutput;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.common.registration.CastItemObject;
@@ -112,7 +114,7 @@ public interface IToolRecipeHelper extends ICastCreationHelper {
     Identifier id = id(part);
     PartRecipeBuilder.partRecipe(part)
                      .setPattern(id)
-                     .setPatternItem(Ingredient.of(TinkerTags.Items.DEFAULT_PATTERNS))
+                     .setPatternItem(IngredientHelper.tag(consumer.lookup(Registries.ITEM), TinkerTags.Items.DEFAULT_PATTERNS))
                      .setCost(cost)
                      .save(consumer, location(partFolder + "builder/" + id.getPath()));
     CompositeCastingRecipeBuilder.table(part, cost)
@@ -138,7 +140,7 @@ public interface IToolRecipeHelper extends ICastCreationHelper {
     // dummy part builder recipe
     ItemPartRecipeBuilder.item(cast.getName(), ItemOutput.fromItem(dummyPart))
                          .material(MaterialIds.rock, cost)
-                         .setPatternItem(CompoundIngredient.of(Ingredient.of(TinkerTags.Items.DEFAULT_PATTERNS), Ingredient.of(cast.get())))
+                         .setPatternItem(CompoundIngredient.of(IngredientHelper.tag(consumer.lookup(Registries.ITEM), TinkerTags.Items.DEFAULT_PATTERNS), Ingredient.of(cast.get())))
                          .save(consumer, location(partFolder + "builder/" + cast.getName().getPath()));
   }
 
@@ -155,7 +157,7 @@ public interface IToolRecipeHelper extends ICastCreationHelper {
     // Part Builder
     PartRecipeBuilder.partRecipe(part)
                      .setPattern(id)
-                     .setPatternItem(CompoundIngredient.of(Ingredient.of(TinkerTags.Items.DEFAULT_PATTERNS), Ingredient.of(cast.get())))
+                     .setPatternItem(CompoundIngredient.of(IngredientHelper.tag(consumer.lookup(Registries.ITEM), TinkerTags.Items.DEFAULT_PATTERNS), Ingredient.of(cast.get())))
                      .setCost(cost)
                      .save(consumer, location(partFolder + "builder/" + id.getPath()));
     // casting

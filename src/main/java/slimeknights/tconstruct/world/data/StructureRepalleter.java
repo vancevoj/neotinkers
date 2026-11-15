@@ -1,8 +1,8 @@
 package slimeknights.tconstruct.world.data;
 
 import net.minecraft.data.PackOutput;
+import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.world.level.block.Blocks;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.fluids.TinkerFluids;
 import slimeknights.tconstruct.library.data.AbstractStructureRepalleter;
@@ -14,8 +14,8 @@ import slimeknights.tconstruct.world.block.FoliageType;
 import java.util.Objects;
 
 public class StructureRepalleter extends AbstractStructureRepalleter {
-  public StructureRepalleter(PackOutput packOutput, ExistingFileHelper existingFileHelper) {
-    super(packOutput, existingFileHelper, TConstruct.MOD_ID);
+  public StructureRepalleter(PackOutput packOutput, ResourceManager resourceManager) {
+    super(packOutput, resourceManager, TConstruct.MOD_ID);
   }
 
   @Override

@@ -1,21 +1,16 @@
 package slimeknights.tconstruct.shared.data;
 
-import net.minecraft.advancements.triggers.Criterion;
-import net.minecraft.advancements.triggers.InventoryChangeTrigger;
-import net.minecraft.advancements.predicates.ItemPredicate;
-import net.minecraft.data.PackOutput;
+import net.minecraft.advancements.Advancement;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeOutput;
-import net.minecraft.data.recipes.ShapedRecipeBuilder;
-import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.data.recipes.SimpleCookingRecipeBuilder;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.tags.TagKey;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.item.crafting.CookingBookCategory;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.WeatheringCopper.WeatherState;
@@ -39,8 +34,8 @@ import slimeknights.tconstruct.world.TinkerWorld;
 import java.util.Locale;
 
 public class CommonRecipeProvider extends BaseRecipeProvider implements ICommonRecipeHelper {
-  public CommonRecipeProvider(PackOutput output) {
-    super(output);
+  public CommonRecipeProvider(BootstrapContext<Recipe<?>> recipes, BootstrapContext<Advancement> advancements) {
+    super(recipes, advancements);
   }
 
   @Override
@@ -58,96 +53,96 @@ public class CommonRecipeProvider extends BaseRecipeProvider implements ICommonR
     // firewood and lavawood
     String folder = "common/firewood/";
     slabStairsCrafting(consumer, TinkerMaterials.blazewood, folder, false);
-    ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, TinkerMaterials.blazewood.getFence(), 6)
+    shaped(RecipeCategory.DECORATIONS, TinkerMaterials.blazewood.getFence(), 6)
                        .pattern("WWW").pattern("WWW")
                        .define('W', TinkerMaterials.blazewood)
                        .unlockedBy("has_planks", has(TinkerMaterials.blazewood))
-                       .save(consumer, location(folder + "blazewood_fence"));
+                       .save(consumer, recipeKey(location(folder + "blazewood_fence")));
 
     // nahuatl
     slabStairsCrafting(consumer, TinkerMaterials.nahuatl, folder, false);
-    ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, TinkerMaterials.nahuatl.getFence(), 6)
+    shaped(RecipeCategory.DECORATIONS, TinkerMaterials.nahuatl.getFence(), 6)
                        .pattern("WWW").pattern("WWW")
                        .define('W', TinkerMaterials.nahuatl)
                        .unlockedBy("has_planks", has(TinkerMaterials.nahuatl))
-                       .save(consumer, location(folder + "nahuatl_fence"));
+                       .save(consumer, recipeKey(location(folder + "nahuatl_fence")));
 
     // gold
-    ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, TinkerCommons.goldBars, 16)
+    shaped(RecipeCategory.DECORATIONS, TinkerCommons.goldBars, 16)
                        .define('#', Tags.Items.INGOTS_GOLD)
                        .pattern("###")
                        .pattern("###")
                        .unlockedBy("has_ingot", has(Tags.Items.INGOTS_GOLD))
-                       .save(consumer, location("common/gold_bars"));
-    ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, TinkerCommons.goldPlatform, 4)
+                       .save(consumer, recipeKey(location("common/gold_bars")));
+    shaped(RecipeCategory.DECORATIONS, TinkerCommons.goldPlatform, 4)
                        .define('#', Tags.Items.INGOTS_GOLD)
                        .define('.', Tags.Items.NUGGETS_GOLD)
                        .pattern("#.#")
                        .pattern(". .")
                        .pattern("#.#")
                        .unlockedBy("has_gold", has(Tags.Items.INGOTS_GOLD))
-                       .save(consumer, location("common/gold_platform"));
-    ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, TinkerCommons.ironPlatform, 4)
+                       .save(consumer, recipeKey(location("common/gold_platform")));
+    shaped(RecipeCategory.DECORATIONS, TinkerCommons.ironPlatform, 4)
                        .define('#', Tags.Items.INGOTS_IRON)
                        .define('.', Tags.Items.NUGGETS_IRON)
                        .pattern("#.#")
                        .pattern(". .")
                        .pattern("#.#")
                        .unlockedBy("has_bars", has(Tags.Items.INGOTS_IRON))
-                       .save(consumer, location("common/iron_platform"));
-    ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, TinkerCommons.copperPlatform.get(WeatherState.UNAFFECTED), 4)
+                       .save(consumer, recipeKey(location("common/iron_platform")));
+    shaped(RecipeCategory.DECORATIONS, TinkerCommons.copperPlatform.get(WeatherState.UNAFFECTED), 4)
                        .define('#', Tags.Items.INGOTS_COPPER)
                        .define('.', TinkerTags.Items.NUGGETS_COPPER)
                        .pattern("#.#")
                        .pattern(". .")
                        .pattern("#.#")
                        .unlockedBy("has_bars", has(Tags.Items.INGOTS_COPPER))
-                       .save(consumer, location("common/copper_platform"));
-    ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, TinkerCommons.cobaltPlatform, 4)
+                       .save(consumer, recipeKey(location("common/copper_platform")));
+    shaped(RecipeCategory.DECORATIONS, TinkerCommons.cobaltPlatform, 4)
                        .define('#', TinkerMaterials.cobalt.getIngotTag())
                        .define('.', TinkerMaterials.cobalt.getNuggetTag())
                        .pattern("#.#")
                        .pattern(". .")
                        .pattern("#.#")
                        .unlockedBy("has_bars", has(TinkerMaterials.cobalt.getIngotTag()))
-                       .save(consumer, location("common/cobalt_platform"));
+                       .save(consumer, recipeKey(location("common/cobalt_platform")));
     TinkerCommons.waxedCopperPlatform.forEach((age, block) -> {
       Block unwaxed = TinkerCommons.copperPlatform.get(age);
-      ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, block)
+      shapeless(RecipeCategory.DECORATIONS, block)
                             .requires(unwaxed)
                             .requires(Items.HONEYCOMB)
                             .group("tconstruct:wax_copper_platform")
                             .unlockedBy("has_block", has(unwaxed))
-                            .save(consumer, location("common/copper_platform_waxing_" + age.toString().toLowerCase(Locale.ROOT)));
+                            .save(consumer, recipeKey(location("common/copper_platform_waxing_" + age.toString().toLowerCase(Locale.ROOT))));
     });
 
 
 
     // book
-    ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, TinkerCommons.materialsAndYou)
+    shapeless(RecipeCategory.MISC, TinkerCommons.materialsAndYou)
                           .requires(Items.BOOK)
                           .requires(TinkerTables.pattern)
                           .unlockedBy("has_item", has(TinkerTables.pattern))
-                          .save(consumer, prefix(TinkerCommons.materialsAndYou, "common/"));
-    ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, TinkerCommons.tinkersGadgetry)
+                          .save(consumer, recipeKey(prefix(TinkerCommons.materialsAndYou, "common/")));
+    shapeless(RecipeCategory.MISC, TinkerCommons.tinkersGadgetry)
                           .requires(Items.BOOK)
                           .requires(SlimeType.SKY.getSlimeballTag())
                           .unlockedBy("has_item", has(SlimeType.SKY.getSlimeballTag()))
-                          .save(consumer, prefix(TinkerCommons.tinkersGadgetry, "common/"));
-    ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, TinkerCommons.punySmelting)
+                          .save(consumer, recipeKey(prefix(TinkerCommons.tinkersGadgetry, "common/")));
+    shapeless(RecipeCategory.MISC, TinkerCommons.punySmelting)
                           .requires(Items.BOOK)
                           .requires(TinkerSmeltery.grout)
                           .unlockedBy("has_item", has(TinkerSmeltery.grout))
-                          .save(consumer, prefix(TinkerCommons.punySmelting, "common/"));
+                          .save(consumer, recipeKey(prefix(TinkerCommons.punySmelting, "common/")));
     ItemCastingRecipeBuilder.tableRecipe(TinkerCommons.mightySmelting)
                             .setFluidAndTime(TinkerFluids.searedStone, FluidValues.BRICK)
                             .setCast(Items.BOOK, true)
                             .save(consumer, prefix(TinkerCommons.mightySmelting, "common/"));
-    ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, TinkerCommons.fantasticFoundry)
+    shapeless(RecipeCategory.MISC, TinkerCommons.fantasticFoundry)
                           .requires(Items.BOOK)
                           .requires(TinkerSmeltery.netherGrout)
                           .unlockedBy("has_item", has(TinkerSmeltery.netherGrout))
-                          .save(consumer, prefix(TinkerCommons.fantasticFoundry, "common/"));
+                          .save(consumer, recipeKey(prefix(TinkerCommons.fantasticFoundry, "common/")));
     ItemCastingRecipeBuilder.tableRecipe(TinkerCommons.encyclopedia)
                             .setFluidAndTime(TinkerFluids.moltenGold, FluidValues.INGOT)
                             .setCast(Items.BOOK, true)
@@ -155,15 +150,15 @@ public class CommonRecipeProvider extends BaseRecipeProvider implements ICommonR
 
     // glass
     folder = "common/glass/";
-    ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, TinkerCommons.clearGlassPane, 16)
+    shaped(RecipeCategory.DECORATIONS, TinkerCommons.clearGlassPane, 16)
                        .define('#', TinkerCommons.clearGlass)
                        .pattern("###")
                        .pattern("###")
                        .unlockedBy("has_block", has(TinkerCommons.clearGlass))
-                       .save(consumer, prefix(TinkerCommons.clearGlassPane, folder));
+                       .save(consumer, recipeKey(prefix(TinkerCommons.clearGlassPane, folder)));
     for (GlassColor color : GlassColor.values()) {
       Block block = TinkerCommons.clearStainedGlass.get(color);
-      ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, block, 8)
+      shaped(RecipeCategory.BUILDING_BLOCKS, block, 8)
                          .define('#', TinkerCommons.clearGlass)
                          .define('X', color.getDye().getTag())
                          .pattern("###")
@@ -171,17 +166,17 @@ public class CommonRecipeProvider extends BaseRecipeProvider implements ICommonR
                          .pattern("###")
                          .group(prefix("stained_clear_glass"))
                          .unlockedBy("has_clear_glass", has(TinkerCommons.clearGlass))
-                         .save(consumer, prefix(id(block), folder));
+                         .save(consumer, recipeKey(prefix(id(block), folder)));
       Block pane = TinkerCommons.clearStainedGlassPane.get(color);
       Identifier paneId = id(pane);
-      ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, pane, 16)
+      shaped(RecipeCategory.DECORATIONS, pane, 16)
                          .define('#', block)
                          .pattern("###")
                          .pattern("###")
                          .group(prefix("stained_clear_glass_pane"))
                          .unlockedBy("has_block", has(block))
-                         .save(consumer, prefix(paneId, folder));
-      ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, pane, 8)
+                         .save(consumer, recipeKey(prefix(paneId, folder)));
+      shaped(RecipeCategory.DECORATIONS, pane, 8)
                          .define('#', TinkerCommons.clearGlassPane)
                          .define('X', color.getDye().getTag())
                          .pattern("###")
@@ -189,12 +184,12 @@ public class CommonRecipeProvider extends BaseRecipeProvider implements ICommonR
                          .pattern("###")
                          .group(prefix("stained_clear_glass_pane"))
                          .unlockedBy("has_clear_glass", has(TinkerCommons.clearGlassPane))
-                         .save(consumer, wrap(paneId, folder, "_from_panes"));
+                         .save(consumer, recipeKey(wrap(paneId, folder, "_from_panes")));
     }
     // fix vanilla recipes not using tinkers glass
     String glassVanillaFolder = folder + "vanilla/";
     RecipeOutput vanillaGlassConsumer = withCondition(consumer, ConfigEnabledCondition.GLASS_RECIPE_FIX);
-    ShapedRecipeBuilder.shaped(RecipeCategory.MISC, Blocks.BEACON)
+    shaped(RecipeCategory.MISC, Blocks.BEACON)
                        .define('S', Items.NETHER_STAR)
                        .define('G', Tags.Items.GLASS_BLOCKS_COLORLESS)
                        .define('O', Blocks.OBSIDIAN)
@@ -202,8 +197,8 @@ public class CommonRecipeProvider extends BaseRecipeProvider implements ICommonR
                        .pattern("GSG")
                        .pattern("OOO")
                        .unlockedBy("has_nether_star", has(Items.NETHER_STAR))
-                       .save(vanillaGlassConsumer, prefix(id(Blocks.BEACON), glassVanillaFolder));
-    ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, Blocks.DAYLIGHT_DETECTOR)
+                       .save(vanillaGlassConsumer, recipeKey(prefix(id(Blocks.BEACON), glassVanillaFolder)));
+    shaped(RecipeCategory.REDSTONE, Blocks.DAYLIGHT_DETECTOR)
                        .define('Q', Items.QUARTZ)
                        .define('G', Tags.Items.GLASS_BLOCKS_COLORLESS)
                        .define('W', ItemTags.WOODEN_SLABS)
@@ -211,8 +206,8 @@ public class CommonRecipeProvider extends BaseRecipeProvider implements ICommonR
                        .pattern("QQQ")
                        .pattern("WWW")
                        .unlockedBy("has_quartz", has(Items.QUARTZ))
-                       .save(vanillaGlassConsumer, prefix(id(Blocks.DAYLIGHT_DETECTOR), glassVanillaFolder));
-    ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, Items.END_CRYSTAL)
+                       .save(vanillaGlassConsumer, recipeKey(prefix(id(Blocks.DAYLIGHT_DETECTOR), glassVanillaFolder)));
+    shaped(RecipeCategory.DECORATIONS, Items.END_CRYSTAL)
                        .define('T', Items.GHAST_TEAR)
                        .define('E', Items.ENDER_EYE)
                        .define('G', Tags.Items.GLASS_BLOCKS_COLORLESS)
@@ -220,17 +215,17 @@ public class CommonRecipeProvider extends BaseRecipeProvider implements ICommonR
                        .pattern("GEG")
                        .pattern("GTG")
                        .unlockedBy("has_ender_eye", has(Items.ENDER_EYE))
-                       .save(vanillaGlassConsumer, prefix(id(Items.END_CRYSTAL), glassVanillaFolder));
-    ShapedRecipeBuilder.shaped(RecipeCategory.BREWING, Items.GLASS_BOTTLE, 3)
+                       .save(vanillaGlassConsumer, recipeKey(prefix(id(Items.END_CRYSTAL), glassVanillaFolder)));
+    shaped(RecipeCategory.BREWING, Items.GLASS_BOTTLE, 3)
                        .define('#', Tags.Items.GLASS_BLOCKS_COLORLESS)
                        .pattern("# #")
                        .pattern(" # ")
                        .unlockedBy("has_glass", has(Tags.Items.GLASS_BLOCKS_COLORLESS))
-                       .save(vanillaGlassConsumer, prefix(id(Items.GLASS_BOTTLE), glassVanillaFolder));
+                       .save(vanillaGlassConsumer, recipeKey(prefix(id(Items.GLASS_BOTTLE), glassVanillaFolder)));
 
 
     // vanilla recipes
-    ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, Items.FLINT)
+    shapeless(RecipeCategory.MISC, Items.FLINT)
                           .requires(Blocks.GRAVEL)
                           .requires(Blocks.GRAVEL)
                           .requires(Blocks.GRAVEL)
@@ -239,10 +234,10 @@ public class CommonRecipeProvider extends BaseRecipeProvider implements ICommonR
                             ConsumerWrapperBuilder.wrap()
                                                   .addCondition(ConfigEnabledCondition.GRAVEL_TO_FLINT)
                                                   .build(consumer),
-                            location("common/flint"));
+                            recipeKey(location("common/flint")));
 
     // allow crafting the blast furnace in the nether
-    ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, Blocks.BLAST_FURNACE)
+    shaped(RecipeCategory.BUILDING_BLOCKS, Blocks.BLAST_FURNACE)
                        .define('#', Blocks.SMOOTH_BASALT)
                        .define('X', Blocks.FURNACE)
                        .define('I', Items.IRON_INGOT)
@@ -250,18 +245,18 @@ public class CommonRecipeProvider extends BaseRecipeProvider implements ICommonR
                        .pattern("IXI")
                        .pattern("###")
                        .unlockedBy("has_smooth_stone", has(Blocks.SMOOTH_BASALT))
-                       .save(consumer, location("common/basalt_blast_furnace"));
+                       .save(consumer, recipeKey(location("common/basalt_blast_furnace")));
 
     // cheese
-    ShapedRecipeBuilder.shaped(RecipeCategory.FOOD, TinkerCommons.cheeseBlock)
+    shaped(RecipeCategory.FOOD, TinkerCommons.cheeseBlock)
                        .define('#', TinkerCommons.cheeseIngot)
                        .pattern("##").pattern("##")
                        .unlockedBy("has_cheese", has(TinkerCommons.cheeseIngot))
-                       .save(consumer, location("common/cheese_block_from_ingot"));
-    ShapelessRecipeBuilder.shapeless(RecipeCategory.FOOD, TinkerCommons.cheeseIngot, 4)
+                       .save(consumer, recipeKey(location("common/cheese_block_from_ingot")));
+    shapeless(RecipeCategory.FOOD, TinkerCommons.cheeseIngot, 4)
                           .requires(TinkerCommons.cheeseBlock)
                           .unlockedBy("has_cheese", has(TinkerCommons.cheeseBlock))
-                          .save(consumer, location("common/cheese_ingot_from_block"));
+                          .save(consumer, recipeKey(location("common/cheese_ingot_from_block")));
   }
 
   private void addMaterialRecipes(RecipeOutput consumer) {
@@ -288,26 +283,26 @@ public class CommonRecipeProvider extends BaseRecipeProvider implements ICommonR
     packingRecipe(consumer, RecipeCategory.MISC, "ingot", Items.NETHERITE_INGOT, "nugget", TinkerMaterials.netheriteNugget, TinkerTags.Items.NUGGETS_NETHERITE, folder);
 
     // smelt ore into ingots, must use a blast furnace for nether ores
-    SimpleCookingRecipeBuilder.blasting(Ingredient.of(TinkerWorld.rawCobalt, TinkerWorld.cobaltOre), RecipeCategory.MISC, TinkerMaterials.cobalt.getIngot(), 1.5f, 200)
+    SimpleCookingRecipeBuilder.blasting(Ingredient.of(TinkerWorld.rawCobalt, TinkerWorld.cobaltOre), RecipeCategory.MISC, CookingBookCategory.MISC, TinkerMaterials.cobalt.getIngot(), 1.5f, 200)
       .unlockedBy("has_item", has(TinkerWorld.rawCobalt))
-      .save(consumer, location(folder + "cobalt_ingot_blasting"));
-    SimpleCookingRecipeBuilder.blasting(Ingredient.of(TinkerWorld.cobaltShard), RecipeCategory.MISC, TinkerMaterials.cobalt.getNugget(), 0.2f, 50)
+      .save(consumer, recipeKey(location(folder + "cobalt_ingot_blasting")));
+    SimpleCookingRecipeBuilder.blasting(Ingredient.of(TinkerWorld.cobaltShard), RecipeCategory.MISC, CookingBookCategory.MISC, TinkerMaterials.cobalt.getNugget(), 0.2f, 50)
       .unlockedBy("has_item", has(TinkerWorld.cobaltShard))
-      .save(consumer, location(folder + "cobalt_nugget_blasting"));
+      .save(consumer, recipeKey(location(folder + "cobalt_nugget_blasting")));
     // steel can use either furnace
-    SimpleCookingRecipeBuilder.smelting(Ingredient.of(TinkerWorld.steelShard), RecipeCategory.MISC, TinkerMaterials.steel.getNugget(), 0.2f, 50)
+    SimpleCookingRecipeBuilder.smelting(Ingredient.of(TinkerWorld.steelShard), RecipeCategory.MISC, CookingBookCategory.MISC, TinkerMaterials.steel.getNugget(), 0.2f, 50)
       .unlockedBy("has_item", has(TinkerWorld.steelShard))
-      .save(consumer, location(folder + "steel_nugget_smelting"));
-    SimpleCookingRecipeBuilder.blasting(Ingredient.of(TinkerWorld.steelShard), RecipeCategory.MISC, TinkerMaterials.steel.getNugget(), 0.2f, 25)
+      .save(consumer, recipeKey(location(folder + "steel_nugget_smelting")));
+    SimpleCookingRecipeBuilder.blasting(Ingredient.of(TinkerWorld.steelShard), RecipeCategory.MISC, CookingBookCategory.MISC, TinkerMaterials.steel.getNugget(), 0.2f, 25)
       .unlockedBy("has_item", has(TinkerWorld.steelShard))
-      .save(consumer, location(folder + "steel_nugget_blasting"));
+      .save(consumer, recipeKey(location(folder + "steel_nugget_blasting")));
     // knightmetal - normally would not use the tag, but we know TF does not provide nuggets for armor shards
-    SimpleCookingRecipeBuilder.smelting(Ingredient.of(TinkerTags.Items.KNIGHTMETAL_SHARD), RecipeCategory.MISC, TinkerMaterials.knightmetal.getNugget(), 0.2f, 50)
+    SimpleCookingRecipeBuilder.smelting(tag(TinkerTags.Items.KNIGHTMETAL_SHARD), RecipeCategory.MISC, CookingBookCategory.MISC, TinkerMaterials.knightmetal.getNugget(), 0.2f, 50)
       .unlockedBy("has_item", has(TinkerWorld.knightmetalShard))
-      .save(consumer, location(folder + "knightmetal_nugget_smelting"));
-    SimpleCookingRecipeBuilder.blasting(Ingredient.of(TinkerTags.Items.KNIGHTMETAL_SHARD), RecipeCategory.MISC, TinkerMaterials.knightmetal.getNugget(), 0.2f, 25)
+      .save(consumer, recipeKey(location(folder + "knightmetal_nugget_smelting")));
+    SimpleCookingRecipeBuilder.blasting(tag(TinkerTags.Items.KNIGHTMETAL_SHARD), RecipeCategory.MISC, CookingBookCategory.MISC, TinkerMaterials.knightmetal.getNugget(), 0.2f, 25)
       .unlockedBy("has_item", has(TinkerWorld.knightmetalShard))
-      .save(consumer, location(folder + "knightmetal_nugget_blasting"));
+      .save(consumer, recipeKey(location(folder + "knightmetal_nugget_blasting")));
 
     // pack raw cobalt
     packingRecipe(consumer, RecipeCategory.MISC, "raw_block", TinkerWorld.rawCobaltBlock, "raw", TinkerWorld.rawCobalt, TinkerTags.Items.RAW_COBALT, folder);

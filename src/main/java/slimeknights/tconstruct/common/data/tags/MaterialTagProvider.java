@@ -1,15 +1,15 @@
 package slimeknights.tconstruct.common.data.tags;
 
 import net.minecraft.data.PackOutput;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.minecraft.server.packs.resources.ResourceManager;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.data.tinkering.AbstractMaterialTagProvider;
 import slimeknights.tconstruct.tools.data.material.MaterialIds;
 
 public class MaterialTagProvider extends AbstractMaterialTagProvider {
-  public MaterialTagProvider(PackOutput packOutput, ExistingFileHelper existingFileHelper) {
-    super(packOutput, TConstruct.MOD_ID, existingFileHelper);
+  public MaterialTagProvider(PackOutput packOutput, ResourceManager resourceManager) {
+    super(packOutput, TConstruct.MOD_ID, resourceManager);
   }
 
   @Override
