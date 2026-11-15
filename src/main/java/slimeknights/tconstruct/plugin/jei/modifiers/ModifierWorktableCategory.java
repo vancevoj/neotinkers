@@ -17,6 +17,7 @@ import slimeknights.tconstruct.library.recipe.worktable.IModifierWorktableRecipe
 import slimeknights.tconstruct.plugin.jei.TConstructJEIConstants;
 import slimeknights.tconstruct.tables.TinkerTables;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 public class ModifierWorktableCategory extends AbstractRecipeCategory<IModifierWorktableRecipe> {
@@ -41,7 +42,7 @@ public class ModifierWorktableCategory extends AbstractRecipeCategory<IModifierW
   public void createRecipeExtras(IRecipeExtrasBuilder builder, IModifierWorktableRecipe recipe, IFocusGroup focuses) {
     builder.addText(recipe.getTitle(), 115, 9)
       .setPosition(3, 2)
-      .setColor(0x404040);
+      .setColor(0xFF404040);
     builder.addTooltipArea(0, 2, 121, 11).setTooltip(recipe.getDescription(null));
   }
 
@@ -49,7 +50,7 @@ public class ModifierWorktableCategory extends AbstractRecipeCategory<IModifierW
   public void setRecipe(IRecipeLayoutBuilder builder, IModifierWorktableRecipe recipe, IFocusGroup focuses) {
     // tools
     List<ItemStack> tools = recipe.getInputTools();
-    IRecipeSlotBuilder toolSlot = builder.addSlot(recipe.isToolInput() ? RecipeIngredientRole.INPUT : RecipeIngredientRole.CATALYST, 23, 16)
+    IRecipeSlotBuilder toolSlot = builder.addSlot(recipe.isToolInput() ? RecipeIngredientRole.INPUT : RecipeIngredientRole.CRAFTING_STATION, 23, 16)
       .addItemStacks(tools).setStandardSlotBackground();
     if (tools.isEmpty()) {
       toolSlot.setOverlay(toolIcon, 0, 0);
@@ -66,7 +67,7 @@ public class ModifierWorktableCategory extends AbstractRecipeCategory<IModifierW
     }
     // modifier input
     List<ModifierEntry> modifiers = recipe.getModifierOptions(null);
-    IRecipeSlotBuilder modifierSlot = builder.addSlot(recipe.isModifierOutput() ? RecipeIngredientRole.OUTPUT : RecipeIngredientRole.CATALYST, 82, 16)
+    IRecipeSlotBuilder modifierSlot = builder.addSlot(recipe.isModifierOutput() ? RecipeIngredientRole.OUTPUT : RecipeIngredientRole.CRAFTING_STATION, 82, 16)
       .addIngredients(TConstructJEIConstants.MODIFIER_TYPE, modifiers)
       .setBackground(modifierButton, -1, -1);
     if (recipe.linkToolsModifiers() && tools.size() == modifiers.size()) {
@@ -74,8 +75,9 @@ public class ModifierWorktableCategory extends AbstractRecipeCategory<IModifierW
     }
   }
 
+  @Nullable
   @Override
-  public Identifier getRegistryName(IModifierWorktableRecipe recipe) {
+  public Identifier getIdentifier(IModifierWorktableRecipe recipe) {
     // recipes no longer expose their id in 1.21 (it lives on RecipeHolder, which JEI does not pass here), and the
     // display interface has no id accessor; returning null lets JEI fall back to its own identity for these recipes
     return null;

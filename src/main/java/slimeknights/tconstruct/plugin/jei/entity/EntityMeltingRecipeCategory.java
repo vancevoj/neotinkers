@@ -88,10 +88,10 @@ public class EntityMeltingRecipeCategory extends AbstractRecipeCategory<EntityMe
     builder.addOutputSlot(115, 11)
            .setFluidRenderer(FluidValues.INGOT * 2, false, 16, 32)
            .addRichTooltipCallback(new FluidTooltip(recipe.getDamage()))
-           .addIngredient(NeoForgeTypes.FLUID_STACK, recipe.getOutput());
+           .add(NeoForgeTypes.FLUID_STACK, recipe.getOutput());
 
     // show fuels that are valid for this recipe
-    builder.addSlot(RecipeIngredientRole.CATALYST, 75, 43)
+    builder.addSlot(RecipeIngredientRole.CRAFTING_STATION, 75, 43)
            .setFluidRenderer(1, false, 16, 16)
            .setOverlay(tank, 0, 0)
            .addRichTooltipCallback(FluidTooltipCallback.NO_AMOUNT)
@@ -99,7 +99,7 @@ public class EntityMeltingRecipeCategory extends AbstractRecipeCategory<EntityMe
   }
 
   @Override
-  public Identifier getRegistryName(EntityMeltingRecipe recipe) {
+  public Identifier getIdentifier(EntityMeltingRecipe recipe) {
     return recipe.getId();
   }
 

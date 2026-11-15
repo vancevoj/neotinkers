@@ -11,9 +11,9 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.category.extensions.vanilla.crafting.ICraftingCategoryExtension;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.display.SlotDisplay;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.Nullable;
 import slimeknights.tconstruct.library.recipe.tinkerstation.IDisplayCraftingTinkering;
@@ -26,7 +26,6 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Stream;
 
 import static slimeknights.mantle.plugin.jei.MantleJEIConstants.getCraftingIndex;
@@ -49,8 +48,16 @@ public class ToolTinkeringExtension implements ICraftingCategoryExtension<IDispl
   }
 
   @Override
-  public Optional<Identifier> getRegistryName(RecipeHolder<IDisplayCraftingTinkering> holder) {
-    return Optional.of(holder.id());
+  public List<SlotDisplay> getIngredients(RecipeHolder<IDisplayCraftingTinkering> holder) {
+    // tool at index 0, other inputs at 1+, matching the layout in setRecipe
+    IDisplayCraftingTinkering recipe = holder.value();
+    int inputCount = recipe.getInputCount();
+    List<SlotDisplay> displays = new ArrayList<>(inputCount + 1);
+    displays.add(CategoryUtil.displayOf(recipe.getToolWithoutModifier()));
+    for (int i = 0; i < inputCount; i++) {
+      displays.add(CategoryUtil.displayOf(recipe.getDisplayItems(i)));
+    }
+    return displays;
   }
 
   @Override

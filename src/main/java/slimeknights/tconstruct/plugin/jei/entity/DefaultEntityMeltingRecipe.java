@@ -1,5 +1,6 @@
 package slimeknights.tconstruct.plugin.jei.entity;
 
+import net.minecraft.core.Holder;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.neoforged.neoforge.common.util.Lazy;
@@ -29,8 +30,10 @@ public class DefaultEntityMeltingRecipe extends EntityMeltingRecipe {
     typeLoop:
     for (EntityType<?> type : BuiltInRegistries.ENTITY_TYPE) {
       // use tag overrides for default recipe
-      if (type.is(TinkerTags.EntityTypes.MELTING_HIDE)) continue;
-      if (type.getCategory() == MobCategory.MISC && !type.is(TinkerTags.EntityTypes.MELTING_SHOW)) continue;
+      // 26.3: entity types no longer have is(TagKey), go through the registry holder
+      Holder<EntityType<?>> holder = type.builtInRegistryHolder();
+      if (holder.is(TinkerTags.EntityTypes.MELTING_HIDE)) continue;
+      if (type.getCategory() == MobCategory.MISC && !holder.is(TinkerTags.EntityTypes.MELTING_SHOW)) continue;
       for (EntityMeltingRecipe recipe : recipes) {
         if (recipe.matches(type)) {
           continue typeLoop;

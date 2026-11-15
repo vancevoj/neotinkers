@@ -1,7 +1,5 @@
 package slimeknights.tconstruct.plugin.jei;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -13,9 +11,13 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.category.AbstractRecipeCategory;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
+import net.minecraft.util.ARGB;
 import net.minecraft.world.item.ItemStack;
+import org.joml.Matrix3x2fStack;
+import slimeknights.mantle.recipe.helper.IngredientHelper;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.materials.definition.MaterialVariantId;
 import slimeknights.tconstruct.library.modifiers.hook.build.CraftCountModifierHook;
@@ -30,7 +32,6 @@ import slimeknights.tconstruct.plugin.jei.util.CategoryUtil;
 import slimeknights.tconstruct.tools.TinkerTools;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -43,8 +44,7 @@ public class ToolBuildingCategory extends AbstractRecipeCategory<ToolBuildingRec
   private static final Identifier BACKGROUND_LOC = TConstruct.getResource("textures/gui/jei/tinker_station.png");
   private static final Component TITLE = TConstruct.makeTranslation("jei", "tinkering.tool_building");
   private static final Component ANVIL = TConstruct.makeTranslation("jei", "tinkering.tool_building.anvil");
-  private final IDrawable anvil, slotBg, slotBorder;
-  private final IDrawable itemCover;
+  private final IDrawable anvil;
   private static final int WIDTH = 134;
   private static final int HEIGHT = 66;
   private static final int ITEM_SIZE = 16;
@@ -52,13 +52,16 @@ public class ToolBuildingCategory extends AbstractRecipeCategory<ToolBuildingRec
   private static final String RESULT_SLOT = "result";
   /** Prefix for the slots containing the tool parts to help us find it in {@link #onDisplayedIngredientsUpdate(ToolBuildingRecipe, List, IFocusGroup)} */
   private static final String PART_SLOT_PREFIX = "tool_part_";
+  /** Texture size of {@link #BACKGROUND_LOC}, the translucent parts are blit directly as JEI drawables cannot be tinted */
+  private static final int TEXTURE_SIZE = 256;
+  /** Color for the item cover, makes the tool appear transparent */
+  private static final int ITEM_COVER_COLOR = ARGB.white(0.82f);
+  /** Color for the slot backgrounds, very transparent */
+  private static final int SLOT_BACKGROUND_COLOR = ARGB.white(0.28f);
 
   public ToolBuildingCategory(IGuiHelper guiHelper) {
     super(TConstructJEIConstants.TOOL_BUILDING, TITLE, guiHelper.createDrawableItemStack(TinkerTools.pickaxe.get().getRenderTool()), WIDTH, HEIGHT);
-    this.slotBg = guiHelper.createDrawable(BACKGROUND_LOC, 144, 59, SLOT_SIZE, SLOT_SIZE);
-    this.slotBorder = guiHelper.createDrawable(BACKGROUND_LOC, 162, 59, SLOT_SIZE, SLOT_SIZE);
     this.anvil = guiHelper.createDrawable(BACKGROUND_LOC, 128, 61, ITEM_SIZE, ITEM_SIZE);
-    this.itemCover = guiHelper.createDrawable(BACKGROUND_LOC, 122, 77, 70, 60);
   }
 
   @Override
@@ -74,7 +77,7 @@ public class ToolBuildingCategory extends AbstractRecipeCategory<ToolBuildingRec
     List<List<ItemStack>> toolParts = recipe.getAllToolParts();
     List<List<ItemStack>> partsAndExtras = Stream.concat(
       toolParts.stream(),
-      recipe.getExtraRequirements().stream().map(ingredient -> Arrays.asList(ingredient.getItems()))
+      recipe.getExtraRequirements().stream().map(IngredientHelper::getStacks)
     ).collect(Collectors.toList()); // using collectors.toList to ensure we can mutate the list
 
     // if we have parts, and there is a focus, use that to override the materials on the parts
@@ -153,7 +156,7 @@ public class ToolBuildingCategory extends AbstractRecipeCategory<ToolBuildingRec
         stack.setCount(CraftCountModifierHook.maxStackSize(tool, recipe.shrinkToolSlotBy()));
       }
 
-      resultSlot.createDisplayOverrides().addItemStack(CraftCountModifierHook.copyMaterials(new MaterialIdNBT(variants), recipe.getOutput(), recipe.getOutputCount()));
+      resultSlot.createDisplayOverrides().add(CraftCountModifierHook.copyMaterials(new MaterialIdNBT(variants), recipe.getOutput(), recipe.getOutputCount()));
     }
   }
 
@@ -161,37 +164,31 @@ public class ToolBuildingCategory extends AbstractRecipeCategory<ToolBuildingRec
   public void draw(ToolBuildingRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphicsExtractor graphics, double mouseX, double mouseY) {
     // first, draw the item background
     ItemStack outputStack = recipe.getOutput() instanceof IModifiableDisplay modifiable ? modifiable.getRenderTool() : recipe.getOutput().asItem().getDefaultInstance();
-    PoseStack renderPose = graphics.pose();
-    renderPose.pushPose();
-    renderPose.translate(5, 6.5, 0);
-    renderPose.scale(3.7f, 3.7f, 1.0f);
+    Matrix3x2fStack renderPose = graphics.pose();
+    renderPose.pushMatrix();
+    renderPose.translate(5, 6.5f);
+    renderPose.scale(3.7f, 3.7f);
     graphics.item(outputStack, 0, 0);
-    renderPose.popPose();
+    renderPose.popMatrix();
 
     // next, overlay the item with transparent grey, makes it appear transparent
-    RenderSystem.enableBlend();
-    RenderSystem.disableDepthTest();
-    RenderSystem.setShaderColor(1, 1, 1, 0.82f);
-    itemCover.draw(graphics, 5, 6);
+    // no depth in the 26.3 GUI, later draws are on top of the item
+    graphics.blit(RenderPipelines.GUI_TEXTURED, BACKGROUND_LOC, 5, 6, 122, 77, 70, 60, TEXTURE_SIZE, TEXTURE_SIZE, ITEM_COVER_COLOR);
 
     // next, draw slot backgrounds very transparent
-    RenderSystem.setShaderColor(1, 1, 1, 0.28f);
     for (LayoutSlot layoutSlot : recipe.getLayoutSlots()) {
       // need to offset by 1 because the inventory slot icons are 18x18
-      this.slotBg.draw(graphics, layoutSlot.getX() + X_OFFSET - 1, layoutSlot.getY() + Y_OFFSET - 1);
+      graphics.blit(RenderPipelines.GUI_TEXTURED, BACKGROUND_LOC, layoutSlot.getX() + X_OFFSET - 1, layoutSlot.getY() + Y_OFFSET - 1, 144, 59, SLOT_SIZE, SLOT_SIZE, TEXTURE_SIZE, TEXTURE_SIZE, SLOT_BACKGROUND_COLOR);
     }
     // finally, draw slot borders opaque
-    RenderSystem.setShaderColor(1, 1, 1, 1);
     for (LayoutSlot layoutSlot : recipe.getLayoutSlots()) {
       // need to offset by 1 because the inventory slot icons are 18x18
-      this.slotBorder.draw(graphics, layoutSlot.getX() + X_OFFSET - 1, layoutSlot.getY() + Y_OFFSET - 1);
+      graphics.blit(RenderPipelines.GUI_TEXTURED, BACKGROUND_LOC, layoutSlot.getX() + X_OFFSET - 1, layoutSlot.getY() + Y_OFFSET - 1, 162, 59, SLOT_SIZE, SLOT_SIZE, TEXTURE_SIZE, TEXTURE_SIZE);
     }
-    RenderSystem.disableBlend();
-    RenderSystem.enableDepthTest();
   }
 
   @Override
-  public Identifier getRegistryName(ToolBuildingRecipe recipe) {
+  public Identifier getIdentifier(ToolBuildingRecipe recipe) {
     return recipe.getId();
   }
 }

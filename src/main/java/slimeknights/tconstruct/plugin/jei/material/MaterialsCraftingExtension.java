@@ -12,8 +12,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeHolder;
-import slimeknights.mantle.client.SafeClientAccess;
+import net.minecraft.world.item.crafting.ShapedRecipe;
+import net.minecraft.world.item.crafting.display.SlotDisplay;
 import slimeknights.mantle.plugin.jei.MantleJEIConstants;
+import slimeknights.mantle.recipe.helper.IngredientHelper;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.materials.definition.MaterialVariantId;
 import slimeknights.tconstruct.library.recipe.material.MaterialRecipeCache;
@@ -27,7 +29,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -40,7 +42,7 @@ public class MaterialsCraftingExtension<T extends CraftingRecipe & MaterialsCraf
     // if we have just the one part, set the output to match its material
     if (recipe.getPartCount() == 1) {
       Ingredient firstPart = recipe.getParts().get(0);
-      return Arrays.stream(firstPart.getItems()).map(variant -> {
+      return IngredientHelper.getStacks(firstPart).stream().map(variant -> {
         ItemStack stack = plainResult.copy();
         recipe.setMaterial(stack, MaterialRecipeCache.getMaterial(variant));
         return stack;
@@ -69,7 +71,7 @@ public class MaterialsCraftingExtension<T extends CraftingRecipe & MaterialsCraf
     return recipe.getParts().stream().limit(recipe.getPartCount()).map(part -> getMaterialSlots(recipe, part)).toList();
   }
 
-  /** Gets the material slots for the given recipe from {@link CraftingRecipe#getIngredients()} */
+  /** Gets the material slots for the given recipe from {@link #getIngredients(CraftingRecipe)} */
   protected int[] getMaterialSlots(T recipe, Ingredient part) {
     return new int[] {0};
   }
@@ -83,17 +85,39 @@ public class MaterialsCraftingExtension<T extends CraftingRecipe & MaterialsCraf
   protected boolean isValid(T recipe) {
     List<Ingredient> parts = recipe.getParts();
     for (int i = 0; i < recipe.getPartCount(); i++) {
-      if (parts.get(i).getItems().length == 0) {
+      if (IngredientHelper.getStacks(parts.get(i)).isEmpty()) {
         return false;
       }
     }
     return true;
   }
 
+  /**
+   * Gets the inputs of a crafting recipe in grid order. Was {@code Recipe#getIngredients()} before 1.21.2.
+   * Shaped recipes keep empty slots as an empty optional, shapeless recipes list every ingredient.
+   * @param recipe  Recipe
+   * @return  List of ingredients, empty optionals for blank shaped slots
+   */
+  protected static List<Optional<Ingredient>> getIngredients(CraftingRecipe recipe) {
+    if (recipe instanceof ShapedRecipe shaped) {
+      return shaped.getIngredients();
+    }
+    if (recipe instanceof ShapelessMaterialsRecipe shapeless) {
+      return shapeless.getIngredients().stream().map(Optional::of).toList();
+    }
+    // other recipes (such as vanilla shapeless) expose their ingredients through the placement info
+    return recipe.placementInfo().ingredients().stream().map(Optional::of).toList();
+  }
+
   /** Gets a modifiable list of inputs to the given recipe */
   private static List<List<ItemStack>> getInputs(CraftingRecipe recipe) {
     // using Collectors.toList to ensure we can mutate the list
-    return recipe.getIngredients().stream().map(ingredient -> List.of(ingredient.getItems())).collect(Collectors.toList());
+    return getIngredients(recipe).stream().map(ingredient -> ingredient.map(IngredientHelper::getStacks).orElse(List.of())).collect(Collectors.toList());
+  }
+
+  @Override
+  public List<SlotDisplay> getIngredients(RecipeHolder<T> holder) {
+    return getIngredients(holder.value()).stream().map(Ingredient::optionalIngredientToDisplay).toList();
   }
 
   @Override
@@ -102,7 +126,7 @@ public class MaterialsCraftingExtension<T extends CraftingRecipe & MaterialsCraf
     if (!isValid(recipe)) {
       return;
     }
-    ItemStack plainResult = recipe.getResultItem(Objects.requireNonNull(SafeClientAccess.getRegistryAccess()));
+    ItemStack plainResult = recipe.getResultItem();
     List<List<ItemStack>> inputs = getInputs(recipe);
 
     // if we have a focused tool, use it to filter the inputs to match
@@ -117,7 +141,7 @@ public class MaterialsCraftingExtension<T extends CraftingRecipe & MaterialsCraf
       for (int i = 0; i < partCount; i++) {
         // find all inputs matching the material
         MaterialVariantId material = materials.getMaterial(i);
-        List<ItemStack> matchingStacks = Arrays.stream(recipe.getParts().get(i).getItems())
+        List<ItemStack> matchingStacks = IngredientHelper.getStacks(recipe.getParts().get(i)).stream()
           .filter(stack -> material.matchesVariant(MaterialRecipeCache.getMaterial(stack)))
           .toList();
         // if filtered to empty, just display the original stacks
@@ -142,7 +166,7 @@ public class MaterialsCraftingExtension<T extends CraftingRecipe & MaterialsCraf
         int width = getWidth(holder);
         int height = getHeight(holder);
         if (width <= 0 || height <= 0) {
-          width = height = CategoryUtil.getShapelessSize(recipe.getIngredients().size());
+          width = height = CategoryUtil.getShapelessSize(getIngredients(recipe).size());
         }
         // find input materials and use to set the output
         List<int[]> partSlots = getPartSlots(recipe);
@@ -152,8 +176,8 @@ public class MaterialsCraftingExtension<T extends CraftingRecipe & MaterialsCraf
           variants.add(MaterialRecipeCache.getMaterial(stack));
         }
         variants.addAll(recipe.getExtraMaterials());
-        ItemStack plainResult = recipe.getResultItem(Objects.requireNonNull(SafeClientAccess.getRegistryAccess()));
-        resultSlot.createDisplayOverrides().addItemStack(new MaterialIdNBT(variants).updateStack(plainResult.copy()));
+        ItemStack plainResult = recipe.getResultItem();
+        resultSlot.createDisplayOverrides().add(new MaterialIdNBT(variants).updateStack(plainResult.copy()));
       }
     }
   }
@@ -180,7 +204,7 @@ public class MaterialsCraftingExtension<T extends CraftingRecipe & MaterialsCraf
    * @param materialSlots       Recipe input indices to focus link with the result
    */
   public static void setRecipe(int width, int height, IRecipeLayoutBuilder builder, ICraftingGridHelper craftingGridHelper, Object id, List<List<ItemStack>> inputStacks, List<ItemStack> result, ItemStack plainResult, @Nullable int[] materialSlots) {
-    builder.addInvisibleIngredients(RecipeIngredientRole.OUTPUT).addItemStack(plainResult);
+    builder.addInvisibleIngredients(RecipeIngredientRole.OUTPUT).add(plainResult);
 
     // shapeless needs its width and height set, but we also want to recover those sizes, so calculate it locally
     if (width <= 0 || height <= 0) {

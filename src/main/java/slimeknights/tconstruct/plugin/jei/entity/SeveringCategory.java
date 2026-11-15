@@ -49,11 +49,11 @@ public class SeveringCategory extends AbstractRecipeCategory<SeveringRecipe> {
     builder.createFocusLink(entities, eggs);
 
     // output
-    builder.addOutputSlot(76, 11).addItemStack(recipe.getOutput()).setOutputSlotBackground();
+    builder.addOutputSlot(76, 11).add(recipe.getOutput()).setOutputSlotBackground();
   }
 
   @Override
-  public Identifier getRegistryName(SeveringRecipe recipe) {
+  public Identifier getIdentifier(SeveringRecipe recipe) {
     return recipe.getId();
   }
 }

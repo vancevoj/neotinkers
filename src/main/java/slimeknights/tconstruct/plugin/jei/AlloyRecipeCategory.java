@@ -94,17 +94,16 @@ public class AlloyRecipeCategory extends AbstractRecipeCategory<AlloyRecipe> {
    * @param <T> Object type
    * @return Max amount based on fluids
    */
-  @SuppressWarnings("removal")
   @Deprecated(forRemoval = true)
-  public static <T> int drawVariableFluids(IRecipeLayoutBuilder builder, RecipeIngredientRole role, int x, int y, int totalWidth, int height, List<T> fluids, int minAmount, Function<T,List<FluidStack>> mapper, Function<T,mezz.jei.api.gui.ingredient.IRecipeSlotTooltipCallback> tooltip) {
-    Function<T,IRecipeSlotRichTooltipCallback> richTooltip = (ingredient) -> tooltip.apply(ingredient)::onRichTooltip;
-    return CategoryUtil.drawMultipleFluids(builder, i -> role, x, y, totalWidth, height, fluids, minAmount, mapper, richTooltip);
+  public static <T> int drawVariableFluids(IRecipeLayoutBuilder builder, RecipeIngredientRole role, int x, int y, int totalWidth, int height, List<T> fluids, int minAmount, Function<T,List<FluidStack>> mapper, Function<T,IRecipeSlotRichTooltipCallback> tooltip) {
+    // JEI 31 removed the list based tooltip callback, so this takes rich callbacks now
+    return CategoryUtil.drawMultipleFluids(builder, i -> role, x, y, totalWidth, height, fluids, minAmount, mapper, tooltip);
   }
 
   @Override
   public void setRecipe(IRecipeLayoutBuilder builder, AlloyRecipe recipe, IFocusGroup focuses) {
     // inputs
-    int maxAmount = CategoryUtil.drawMultipleFluids(builder, ingredient -> ingredient.catalyst() ? RecipeIngredientRole.CATALYST : RecipeIngredientRole.INPUT,
+    int maxAmount = CategoryUtil.drawMultipleFluids(builder, ingredient -> ingredient.catalyst() ? RecipeIngredientRole.CRAFTING_STATION : RecipeIngredientRole.INPUT,
                                        19, 11, 48, 32, recipe.getInputs(), recipe.getOutput().getAmount(),
                                        ingredient -> ingredient.fluid().getFluids(),
                                        ingredient -> ingredient.catalyst() ? CATALYST_TOOLTIP : FluidTooltipCallback.UNITS);
@@ -113,7 +112,7 @@ public class AlloyRecipeCategory extends AbstractRecipeCategory<AlloyRecipe> {
     builder.addOutputSlot(137, 11)
            .addRichTooltipCallback(FluidTooltipCallback.UNITS)
            .setFluidRenderer(maxAmount, false, 16, 32)
-           .addIngredient(NeoForgeTypes.FLUID_STACK, recipe.getOutput());
+           .add(NeoForgeTypes.FLUID_STACK, recipe.getOutput());
 
     // fuel
     builder.addSlot(RecipeIngredientRole.RENDER_ONLY, 94, 43)
@@ -124,7 +123,7 @@ public class AlloyRecipeCategory extends AbstractRecipeCategory<AlloyRecipe> {
   }
 
   @Override
-  public Identifier getRegistryName(AlloyRecipe recipe) {
+  public Identifier getIdentifier(AlloyRecipe recipe) {
     return recipe.getId();
   }
 }

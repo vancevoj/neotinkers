@@ -5,15 +5,19 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.client.resources.model.Material;
-import net.minecraft.client.resources.model.ModelManager;
+import net.minecraft.client.resources.model.sprite.Material;
+import net.minecraft.client.resources.model.sprite.SpriteId;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.TooltipFlag;
-import slimeknights.mantle.client.model.NBTKeyModel;
+import slimeknights.mantle.client.model.NBTKeyItemModel;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.tools.SlotType;
 import slimeknights.tconstruct.library.tools.SlotType.SlotCount;
@@ -82,16 +86,21 @@ public enum SlotIngredientRenderer implements IIngredientRenderer<SlotCount> {
   /** Lookup for sprite for a slot type */
   private static final Function<SlotType,TextureAtlasSprite> SLOT_LOOKUP = slotType -> {
     Minecraft minecraft = Minecraft.getInstance();
-    ModelManager modelManager = minecraft.getModelManager();
-    // gets the model for the item, its a sepcial one that gives us texture info
-    BakedModel model = minecraft.getItemRenderer().getItemModelShaper().getItemModel(TinkerModifiers.creativeSlotItem.get());
-    if (model != null && model.getOverrides() instanceof NBTKeyModel.Overrides overrides) {
-      Material material = overrides.getTexture(slotType == null ? "slotless" : slotType.getName());
-      return modelManager.getAtlas(material.atlasLocation()).getSprite(material.texture());
-    } else {
-      // failed to use the model, use missing texture
-      return modelManager.getAtlas(InventoryMenu.BLOCK_ATLAS).getSprite(MissingTextureAtlasSprite.getLocation());
+    // gets the item model for the item, its a special one that gives us texture info
+    // 26.3: item models are looked up by the item model component, which defaults to the item ID
+    Item item = TinkerModifiers.creativeSlotItem.get();
+    Identifier modelId = item.components().get(DataComponents.ITEM_MODEL);
+    if (modelId == null) {
+      modelId = BuiltInRegistries.ITEM.getKey(item);
     }
+    if (minecraft.getModelManager().getItemModel(modelId) instanceof NBTKeyItemModel model) {
+      Material.Baked material = model.getTexture(slotType == null ? "slotless" : slotType.getName());
+      if (material != null) {
+        return material.sprite();
+      }
+    }
+    // failed to use the model, use missing texture
+    return minecraft.getAtlasManager().get(new SpriteId(TextureAtlas.LOCATION_BLOCKS, MissingTextureAtlasSprite.getLocation()));
   };
 
   @Override
@@ -111,7 +120,7 @@ public enum SlotIngredientRenderer implements IIngredientRenderer<SlotCount> {
       Font fontRenderer = Minecraft.getInstance().font;
       graphics.text(fontRenderer, text, posX + 9 - fontRenderer.width(text), posY + 5, Color.GRAY.getRGB(), false);
     }
-    graphics.blit(this == INGREDIENT ? posX : posX + 8, posY, 0, 16, 16, SLOT_SPRITES.computeIfAbsent(SlotCount.type(slots), SLOT_LOOKUP));
+    graphics.blitSprite(RenderPipelines.GUI_TEXTURED, SLOT_SPRITES.computeIfAbsent(SlotCount.type(slots), SLOT_LOOKUP), this == INGREDIENT ? posX : posX + 8, posY, 16, 16);
   }
 
   /** Appends the ID in advanced tooltip */

@@ -41,6 +41,7 @@ public class PatternIngredientRenderer implements IIngredientRenderer<Pattern> {
     }
   }
 
+  @SuppressWarnings("removal")
   @Override
   public void getTooltip(ITooltipBuilder tooltip, Pattern pattern, TooltipFlag flag) {
     tooltip.add(pattern.getDisplayName());

@@ -15,8 +15,8 @@ import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocus;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
-import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.AbstractRecipeCategory;
+import mezz.jei.api.recipe.types.IRecipeType;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
@@ -53,7 +53,7 @@ public abstract class AbstractCastingCategory extends AbstractRecipeCategory<IDi
   private final IDrawable block;
   private final IGuiHelper guiHelper;
 
-  protected AbstractCastingCategory(IGuiHelper guiHelper, RecipeType<IDisplayableCastingRecipe> recipeType, Component title, Block icon, IDrawable block) {
+  protected AbstractCastingCategory(IGuiHelper guiHelper, IRecipeType<IDisplayableCastingRecipe> recipeType, Component title, Block icon, IDrawable block) {
     super(recipeType, title, guiHelper.createDrawableItemLike(icon), 117, 54);
     this.background = guiHelper.createDrawable(BACKGROUND_LOC, 0, 0, 117, 54);
     this.tankOverlay = guiHelper.createDrawable(BACKGROUND_LOC, 133, 0, 32, 32);
@@ -116,7 +116,7 @@ public abstract class AbstractCastingCategory extends AbstractRecipeCategory<IDi
     // items
     List<ItemStack> casts = recipe.getCastItems(focusStack, focusOutput);
     if (!casts.isEmpty()) {
-      IRecipeSlotBuilder cast = builder.addSlot(recipe.isConsumed() ? RecipeIngredientRole.INPUT : RecipeIngredientRole.CATALYST, 38, 19).addItemStacks(casts).setSlotName(CAST_SLOT);
+      IRecipeSlotBuilder cast = builder.addSlot(recipe.isConsumed() ? RecipeIngredientRole.INPUT : RecipeIngredientRole.CRAFTING_STATION, 38, 19).addItemStacks(casts).setSlotName(CAST_SLOT);
       // if the same size, tie a focus link to the output and cast; means we have material variants on both
       if (recipe.linkCastToOutput() && !linked.isEmpty() && casts.size() == outputSize) {
         linked.add(cast);
@@ -186,7 +186,7 @@ public abstract class AbstractCastingCategory extends AbstractRecipeCategory<IDi
 
   @Nullable
   @Override
-  public Identifier getRegistryName(IDisplayableCastingRecipe recipe) {
+  public Identifier getIdentifier(IDisplayableCastingRecipe recipe) {
     return recipe.getRecipeId();
   }
 

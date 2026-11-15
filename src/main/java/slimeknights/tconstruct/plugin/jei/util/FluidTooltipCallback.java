@@ -16,10 +16,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
-/** Helper for working with fluid tooltips */
-@SuppressWarnings("removal")
+/**
+ * Helper for working with fluid tooltips.
+ * JEI 31 removed the legacy list based slot tooltip callback, so this only implements the rich callback, replacing JEI's amount line in place.
+ */
 @FunctionalInterface
-public interface FluidTooltipCallback extends mezz.jei.api.gui.ingredient.IRecipeSlotTooltipCallback, IRecipeSlotRichTooltipCallback {
+public interface FluidTooltipCallback extends IRecipeSlotRichTooltipCallback {
   String AMOUNT_KEY = "jei.tooltip.liquid.amount";
 
   /** Default instance, simply replaces mb units with our unit handler. */
@@ -29,25 +31,6 @@ public interface FluidTooltipCallback extends mezz.jei.api.gui.ingredient.IRecip
   FluidTooltipCallback NO_AMOUNT = (fluid, recipeSlotView, tooltip) -> {};
 
   @Override
-  default void onTooltip(IRecipeSlotView recipeSlotView, List<Component> tooltip) {
-    ListIterator<Component> listIterator = tooltip.listIterator();
-    while (listIterator.hasNext()) {
-      Component component = listIterator.next();
-      if (component.getContents() instanceof TranslatableContents translatable && AMOUNT_KEY.equals(translatable.getKey())) {
-        listIterator.remove();
-        FluidStack fluid = recipeSlotView.getDisplayedIngredient(NeoForgeTypes.FLUID_STACK).orElse(FluidStack.EMPTY);
-        List<Component> newTooltip = new ArrayList<>();
-        onFluidTooltip(fluid, recipeSlotView, newTooltip);
-        tooltip.addAll(listIterator.nextIndex(), newTooltip);
-        return;
-      }
-    }
-    // failed to find the tooltip to replace, so just append our stuff at the end
-    FluidStack fluid = recipeSlotView.getDisplayedIngredient(NeoForgeTypes.FLUID_STACK).orElse(FluidStack.EMPTY);
-    onFluidTooltip(fluid, recipeSlotView, tooltip);
-  }
-
-  @Override
   default void onRichTooltip(IRecipeSlotView recipeSlotView, ITooltipBuilder tooltip) {
     ListIterator<Either<FormattedText,TooltipComponent>> listIterator = tooltip.getLines().listIterator();
     while (listIterator.hasNext()) {
@@ -55,7 +38,12 @@ public interface FluidTooltipCallback extends mezz.jei.api.gui.ingredient.IRecip
       if (line instanceof Component component && component.getContents() instanceof TranslatableContents translatable && AMOUNT_KEY.equals(translatable.getKey())) {
         listIterator.remove();
         FluidStack fluid = recipeSlotView.getDisplayedIngredient(NeoForgeTypes.FLUID_STACK).orElse(FluidStack.EMPTY);
-        onFluidTooltip(fluid, recipeSlotView, tooltip);
+        // insert our lines where the amount was, so they stay above the mod name
+        List<Component> newTooltip = new ArrayList<>();
+        onFluidTooltip(fluid, recipeSlotView, newTooltip);
+        for (Component newLine : newTooltip) {
+          listIterator.add(Either.left(newLine));
+        }
         return;
       }
     }

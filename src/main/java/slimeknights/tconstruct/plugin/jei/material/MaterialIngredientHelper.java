@@ -7,6 +7,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
+import slimeknights.mantle.recipe.helper.IngredientHelper;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.client.materials.MaterialTooltipCache;
 import slimeknights.tconstruct.library.materials.MaterialRegistry;
@@ -55,9 +56,9 @@ public class MaterialIngredientHelper implements IIngredientHelper<MaterialVaria
     MaterialVariantId variant = material.getVariant();
     MaterialRecipe recipe = MaterialRecipeCache.getRecipes(variant).stream().min(COMPARATOR).orElse(null);
     if (recipe != null) {
-      ItemStack[] items = recipe.getIngredient().getItems();
-      if (items.length > 0) {
-        return items[0].copy();
+      List<ItemStack> items = IngredientHelper.getStacks(recipe.getIngredient());
+      if (!items.isEmpty()) {
+        return items.getFirst().copy();
       }
     }
     // nothing? try repair kit
@@ -73,14 +74,6 @@ public class MaterialIngredientHelper implements IIngredientHelper<MaterialVaria
   /* IDs */
 
   @Override
-  public String getUniqueId(MaterialVariant material, UidContext context) {
-    if (context == UidContext.Recipe) {
-      return material.getId().toString();
-    }
-    return material.getVariant().toString();
-  }
-
-  @Override
   public Object getUid(MaterialVariant material, UidContext context) {
     if (context == UidContext.Recipe) {
       return material.getId();
@@ -89,12 +82,7 @@ public class MaterialIngredientHelper implements IIngredientHelper<MaterialVaria
   }
 
   @Override
-  public String getWildcardId(MaterialVariant material) {
-    return material.getId().toString();
-  }
-
-  @Override
-  public Identifier getResourceLocation(MaterialVariant material) {
+  public Identifier getIdentifier(MaterialVariant material) {
     return material.getId();
   }
 

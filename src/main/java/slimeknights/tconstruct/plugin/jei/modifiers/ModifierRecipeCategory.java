@@ -120,14 +120,14 @@ public class ModifierRecipeCategory extends AbstractTinkerStationCategory<IDispl
     // modifiers
     builder.addOutputSlot(3, 3)
       .setCustomRenderer(TConstructJEIConstants.MODIFIER_TYPE, modifierRenderer)
-      .addIngredient(TConstructJEIConstants.MODIFIER_TYPE, recipe.getDisplayResult());
+      .add(TConstructJEIConstants.MODIFIER_TYPE, recipe.getDisplayResult());
 
     // modifier slots
     SlotCount slots = recipe.getSlots();
     if (slots != null) {
       builder.addInputSlot(102, 58)
         .setCustomRenderer(TConstructJEIConstants.SLOT_TYPE, SlotIngredientRenderer.INPUT)
-        .addIngredient(TConstructJEIConstants.SLOT_TYPE, recipe.getSlots());
+        .add(TConstructJEIConstants.SLOT_TYPE, slots);
     }
 
     // result slots is determined based on the volatile data hook. Its a bit of a heuristic, but is good enough for our usecases

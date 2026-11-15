@@ -1,6 +1,5 @@
 package slimeknights.tconstruct.plugin.jei.material;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import mezz.jei.api.gui.builder.ITooltipBuilder;
 import mezz.jei.api.ingredients.IIngredientRenderer;
 import net.minecraft.ChatFormatting;
@@ -34,9 +33,8 @@ public enum MaterialIconIngredientRenderer implements IIngredientRenderer<Materi
 
   @Override
   public void render(GuiGraphicsExtractor graphics, MaterialVariant material, int posX, int posY) {
-    RenderSystem.enableDepthTest();
-    graphics.renderFakeItem(stackCache.computeIfAbsent(material.getVariant(), stackGetter), posX, posY);
-    RenderSystem.disableBlend();
+    // 26.3: GUI items no longer need depth or blend state
+    graphics.fakeItem(stackCache.computeIfAbsent(material.getVariant(), stackGetter), posX, posY);
   }
 
   @SuppressWarnings("removal")

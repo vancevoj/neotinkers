@@ -12,6 +12,8 @@ import mezz.jei.api.recipe.IFocus;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
+import net.minecraft.world.item.crafting.display.SlotDisplay;
 import net.neoforged.neoforge.fluids.FluidStack;
 
 import javax.annotation.Nullable;
@@ -100,6 +102,24 @@ public final class CategoryUtil {
       return focus.getTypedValue().getIngredient();
     }
     return ItemStack.EMPTY;
+  }
+
+  /**
+   * Creates a slot display for a list of display stacks, used for {@link mezz.jei.api.recipe.category.extensions.vanilla.crafting.ICraftingCategoryExtension#getIngredients(net.minecraft.world.item.crafting.RecipeHolder)}
+   * on recipes that compute their display stacks.
+   * @param stacks  Stacks to display, may be empty
+   * @return  Slot display for the stacks
+   */
+  public static SlotDisplay displayOf(List<ItemStack> stacks) {
+    List<SlotDisplay> displays = stacks.stream()
+      .filter(stack -> !stack.isEmpty())
+      .<SlotDisplay>map(stack -> new SlotDisplay.ItemStackSlotDisplay(ItemStackTemplate.fromNonEmptyStack(stack)))
+      .toList();
+    return switch (displays.size()) {
+      case 0 -> SlotDisplay.Empty.INSTANCE;
+      case 1 -> displays.getFirst();
+      default -> new SlotDisplay.Composite(displays);
+    };
   }
 
   /** Gets the width and height of the grid for a shapeless recipe in a {@link mezz.jei.api.recipe.category.extensions.vanilla.crafting.ICraftingCategoryExtension} */

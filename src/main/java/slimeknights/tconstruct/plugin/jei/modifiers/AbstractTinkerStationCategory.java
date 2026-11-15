@@ -11,8 +11,8 @@ import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocus;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
-import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.AbstractRecipeCategory;
+import mezz.jei.api.recipe.types.IRecipeType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
@@ -55,7 +55,7 @@ public abstract class AbstractTinkerStationCategory<T extends IDisplayTinkerStat
    * @param title       Category title
    * @param icon        Category icon
    */
-  public AbstractTinkerStationCategory(IGuiHelper helper, RecipeType<T> recipeType, Component title, IDrawable icon) {
+  public AbstractTinkerStationCategory(IGuiHelper helper, IRecipeType<T> recipeType, Component title, IDrawable icon) {
     super(recipeType, title, icon, 128, 77);
     this.slotIcons = new IDrawable[6];
     for (int i = 0; i < 6; i++) {
@@ -67,7 +67,7 @@ public abstract class AbstractTinkerStationCategory<T extends IDisplayTinkerStat
 
   @Nullable
   @Override
-  public Identifier getRegistryName(T recipe) {
+  public Identifier getIdentifier(T recipe) {
     return recipe.getRecipeId();
   }
 
@@ -210,7 +210,7 @@ public abstract class AbstractTinkerStationCategory<T extends IDisplayTinkerStat
 
     // hack: if a single part tool is in the recipe, add variants of it as invisible ingredients
     boolean isCatalyst = isToolCatalyst(recipe);
-    RecipeIngredientRole withoutModifierRole = isCatalyst ? RecipeIngredientRole.CATALYST : RecipeIngredientRole.INPUT;
+    RecipeIngredientRole withoutModifierRole = isCatalyst ? RecipeIngredientRole.CRAFTING_STATION : RecipeIngredientRole.INPUT;
     layout.handleSinglepart(builder, withoutModifierRole);
 
     // add tool slots

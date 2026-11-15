@@ -15,8 +15,8 @@ import mezz.jei.api.gui.widgets.IRecipeWidget;
 import mezz.jei.api.gui.widgets.IRecipeWidgetTooltipCallback;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
-import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.AbstractRecipeCategory;
+import mezz.jei.api.recipe.types.IRecipeType;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -59,7 +59,7 @@ public abstract class AbstractMeltingCategory extends AbstractRecipeCategory<IDi
   protected final IDrawableStatic tankOverlay;
   protected final IDrawableStatic plus;
 
-  public AbstractMeltingCategory(IGuiHelper helper, RecipeType<IDisplayableMeltingRecipe> recipeType, Component title, IDrawable icon) {
+  public AbstractMeltingCategory(IGuiHelper helper, IRecipeType<IDisplayableMeltingRecipe> recipeType, Component title, IDrawable icon) {
     super(recipeType, title, icon, 132, 40);
     this.background = helper.createDrawable(BACKGROUND_LOC, 0, 0, 132, 40);
     this.tankOverlay = helper.createDrawable(BACKGROUND_LOC, 132, 0, 32, 32);
@@ -130,7 +130,7 @@ public abstract class AbstractMeltingCategory extends AbstractRecipeCategory<IDi
   }
 
   @Override
-  public Identifier getRegistryName(IDisplayableMeltingRecipe recipe) {
+  public Identifier getIdentifier(IDisplayableMeltingRecipe recipe) {
     return recipe.getRecipeId();
   }
 

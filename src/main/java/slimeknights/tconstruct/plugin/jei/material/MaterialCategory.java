@@ -114,7 +114,7 @@ public class MaterialCategory extends AbstractRecipeCategory<IDisplayMaterialRec
       .toList());
 
   @Override
-  public Identifier getRegistryName(IDisplayMaterialRecipe recipe) {
+  public Identifier getIdentifier(IDisplayMaterialRecipe recipe) {
     return recipe.getRecipeId();
   }
 
@@ -143,7 +143,7 @@ public class MaterialCategory extends AbstractRecipeCategory<IDisplayMaterialRec
       itemSlot.addItemStacks(items);
       ItemStack leftover = recipe.getLeftover();
       if (!leftover.isEmpty()) {
-        builder.addOutputSlot(39, 20).addItemStack(leftover).addRichTooltipCallback(LEFTOVER_TOOLTIP);
+        builder.addOutputSlot(39, 20).add(leftover).addRichTooltipCallback(LEFTOVER_TOOLTIP);
       }
     }
     // draw fluids
@@ -158,7 +158,7 @@ public class MaterialCategory extends AbstractRecipeCategory<IDisplayMaterialRec
     MaterialVariant material = recipe.getMaterial();
     builder.addOutputSlot(21, 0)
       .setCustomRenderer(TConstructJEIConstants.MATERIAL_TYPE, materialTitleRenderer)
-      .addIngredient(TConstructJEIConstants.MATERIAL_TYPE, material);
+      .add(TConstructJEIConstants.MATERIAL_TYPE, material);
     // composite base
     MaterialVariant input = recipe.getInput();
     if (input != null) {
@@ -167,7 +167,7 @@ public class MaterialCategory extends AbstractRecipeCategory<IDisplayMaterialRec
       // while it shouldn't happen, offset if we also have a leftover
       builder.addInputSlot(x, 20)
         .addRichTooltipCallback(COMPOSITE_TOOLTIP)
-        .addIngredient(TConstructJEIConstants.MATERIAL_TYPE, input);
+        .add(TConstructJEIConstants.MATERIAL_TYPE, input);
     }
 
     // display tools and parts

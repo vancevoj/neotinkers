@@ -28,7 +28,7 @@ public record RecipeSlotsWrapper<T>(List<IRecipeSlotDrawable> slots, IIngredient
   @Override
   public void set(int index, T ingredient) {
     if (index >= 0 && index < slots.size()) {
-      slots.get(index).createDisplayOverrides().addIngredient(type, ingredient);
+      slots.get(index).createDisplayOverrides().add(type, ingredient);
     }
   }
 

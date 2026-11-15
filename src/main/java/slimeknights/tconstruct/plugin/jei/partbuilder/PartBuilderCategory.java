@@ -27,6 +27,7 @@ import slimeknights.tconstruct.plugin.jei.TConstructJEIConstants;
 import slimeknights.tconstruct.plugin.jei.material.MaterialTitleIngredientRenderer;
 import slimeknights.tconstruct.tables.TinkerTables;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,7 +76,7 @@ public class PartBuilderCategory extends AbstractRecipeCategory<IDisplayPartBuil
     boolean focusOutput = false;
     IFocus<ItemStack> itemFocus = focuses.getItemStackFocuses().findFirst().orElse(null);
     if (itemFocus != null) {
-      focusStack = itemFocus.getTypedValue().getIngredient();;
+      focusStack = itemFocus.getTypedValue().getIngredient();
       focusOutput = itemFocus.getRole() == RecipeIngredientRole.OUTPUT;
     }
     IFocus<MaterialVariant> materialFocus = focuses.getFocuses(TConstructJEIConstants.MATERIAL_TYPE, RecipeIngredientRole.INPUT).findFirst().orElse(null);
@@ -92,7 +93,7 @@ public class PartBuilderCategory extends AbstractRecipeCategory<IDisplayPartBuil
     }
     List<ItemStack> patternItems = recipe.getPatternItems();
     boolean reusablePattern = !patternItems.isEmpty() && patternItems.stream().allMatch(stack -> stack.is(TinkerTags.Items.REUSABLE_PATTERNS));
-    builder.addSlot(reusablePattern ? RecipeIngredientRole.CATALYST : RecipeIngredientRole.INPUT, 4, 16)
+    builder.addSlot(reusablePattern ? RecipeIngredientRole.CRAFTING_STATION : RecipeIngredientRole.INPUT, 4, 16)
       .addItemStacks(patternItems).setStandardSlotBackground().addRichTooltipCallback(patternTooltip);
     // patterns
     List<Pattern> patterns = recipe.getPatterns();
@@ -136,8 +137,9 @@ public class PartBuilderCategory extends AbstractRecipeCategory<IDisplayPartBuil
     }
   }
 
+  @Nullable
   @Override
-  public Identifier getRegistryName(IDisplayPartBuilderRecipe recipe) {
+  public Identifier getIdentifier(IDisplayPartBuilderRecipe recipe) {
     // recipes no longer expose their id in 1.21 (it lives on RecipeHolder, which JEI does not pass here), and the
     // display interface has no id accessor; returning null lets JEI fall back to its own identity for these recipes
     return null;

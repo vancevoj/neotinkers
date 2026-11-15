@@ -34,9 +34,9 @@ public record RecipeSlotWrapper<T>(IRecipeSlotDrawable slot, IIngredientType<T> 
 
   @Override
   public void set(T ingredient) {
-    slot.createDisplayOverrides().addIngredient(type, ingredient);
+    slot.createDisplayOverrides().add(type, ingredient);
     for (IRecipeSlotDrawable mirror : mirrors) {
-      mirror.createDisplayOverrides().addIngredient(type, ingredient);
+      mirror.createDisplayOverrides().add(type, ingredient);
     }
   }
 

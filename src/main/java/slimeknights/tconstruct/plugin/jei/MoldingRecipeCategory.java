@@ -12,12 +12,17 @@ import mezz.jei.api.recipe.category.AbstractRecipeCategory;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import slimeknights.mantle.client.SafeClientAccess;
+import slimeknights.mantle.data.loadable.common.IngredientLoadable;
+import slimeknights.mantle.recipe.helper.IngredientHelper;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.recipe.TinkerRecipeTypes;
 import slimeknights.tconstruct.library.recipe.molding.MoldingRecipe;
 import slimeknights.tconstruct.smeltery.TinkerSmeltery;
+
+import java.util.List;
 
 /** Recipe category for molding casts */
 public class MoldingRecipeCategory extends AbstractRecipeCategory<MoldingRecipe> {
@@ -38,12 +43,14 @@ public class MoldingRecipeCategory extends AbstractRecipeCategory<MoldingRecipe>
   @Override
   public void createRecipeExtras(IRecipeExtrasBuilder builder, MoldingRecipe recipe, IFocusGroup focuses) {
     builder.addRecipeArrowWidget().setPosition(24, 23);
-    builder.addDrawableWidget(recipe.getPattern().isEmpty() ? upArrow : downArrow).setPosition(8, 17);
+    // the pattern defaults to Mantle's empty ingredient, as vanilla ingredients cannot be empty
+    boolean hasPattern = !IngredientLoadable.isEmpty(recipe.getPattern());
+    builder.addDrawableWidget(hasPattern ? downArrow : upArrow).setPosition(8, 17);
     IDrawable block = recipe.getType() == TinkerRecipeTypes.MOLDING_BASIN.get() ? basin : table;
     builder.addDrawableWidget(block).setPosition(3, 40);
 
     // if no mold, we "pickup" the item, so draw no table
-    if (!recipe.getPattern().isEmpty()) {
+    if (hasPattern) {
       builder.addDrawableWidget(block).setPosition(51, 40);
     }
   }
@@ -51,29 +58,30 @@ public class MoldingRecipeCategory extends AbstractRecipeCategory<MoldingRecipe>
   @Override
   public void setRecipe(IRecipeLayoutBuilder builder, MoldingRecipe recipe, IFocusGroup focuses) {
     // basic input output
-    builder.addInputSlot(3, 24).addIngredients(recipe.getMaterial());
+    builder.addInputSlot(3, 24).addItemStacks(IngredientHelper.getStacks(recipe.getMaterial()));
     RegistryAccess access = SafeClientAccess.getRegistryAccess();
     if (access != null) {
-      builder.addOutputSlot(51, 24).addItemStack(recipe.getResultItem(access));
+      builder.addOutputSlot(51, 24).add(recipe.getResultItem(access));
     }
 
     // if we have a mold, we are pressing into the table, so draw pressed item on input and output
     Ingredient pattern = recipe.getPattern();
-    if (!pattern.isEmpty()) {
+    if (!IngredientLoadable.isEmpty(pattern)) {
       boolean patternConsumed = recipe.isPatternConsumed();
-      IRecipeSlotBuilder inputSlot = builder.addSlot(patternConsumed ? RecipeIngredientRole.INPUT : RecipeIngredientRole.CATALYST, 3, 1)
-        .addIngredients(pattern);
+      List<ItemStack> patternStacks = IngredientHelper.getStacks(pattern);
+      IRecipeSlotBuilder inputSlot = builder.addSlot(patternConsumed ? RecipeIngredientRole.INPUT : RecipeIngredientRole.CRAFTING_STATION, 3, 1)
+        .addItemStacks(patternStacks);
       if (patternConsumed) {
         inputSlot.addRichTooltipCallback(PATTERN_CONSUMED_TOOLTIP);
       } else {
-        IRecipeSlotBuilder preservedSlot = builder.addSlot(RecipeIngredientRole.RENDER_ONLY, 51, 8).addIngredients(pattern);
+        IRecipeSlotBuilder preservedSlot = builder.addSlot(RecipeIngredientRole.RENDER_ONLY, 51, 8).addItemStacks(patternStacks);
         builder.createFocusLink(inputSlot, preservedSlot);
       }
     }
   }
 
   @Override
-  public Identifier getRegistryName(MoldingRecipe recipe) {
+  public Identifier getIdentifier(MoldingRecipe recipe) {
     return recipe.getId();
   }
 }

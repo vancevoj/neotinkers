@@ -12,7 +12,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.display.SlotDisplay;
 import slimeknights.mantle.plugin.jei.MantleJEIConstants;
+import slimeknights.mantle.recipe.helper.IngredientHelper;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
@@ -22,10 +24,10 @@ import slimeknights.tconstruct.library.recipe.modifiers.adding.OverslimeCrafting
 import slimeknights.tconstruct.library.recipe.modifiers.adding.OverslimeModifierRecipe;
 import slimeknights.tconstruct.library.tools.helper.ModifierUtil;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
+import slimeknights.tconstruct.plugin.jei.util.CategoryUtil;
 import slimeknights.tconstruct.tools.TinkerModifiers;
 
 import java.awt.Color;
-import java.util.Arrays;
 import java.util.List;
 
 import static slimeknights.tconstruct.library.recipe.modifiers.adding.IDisplayModifierRecipe.withModifiers;
@@ -39,11 +41,18 @@ public class OverslimeRecipeExtension implements ICraftingCategoryExtension<Over
   private static final String KEY_TOOLTIP = TConstruct.makeTranslationKey("recipe", "overslime.tooltip");
 
   @Override
+  public List<SlotDisplay> getIngredients(RecipeHolder<OverslimeCraftingTableRecipe> holder) {
+    // resolve through the display stacks, as the default tools ingredient is a tag created before tags bind
+    OverslimeCraftingTableRecipe recipe = holder.value();
+    return List.of(CategoryUtil.displayOf(IngredientHelper.getStacks(recipe.getTools())), CategoryUtil.displayOf(IngredientHelper.getStacks(recipe.getIngredient())));
+  }
+
+  @Override
   public void setRecipe(RecipeHolder<OverslimeCraftingTableRecipe> holder, IRecipeLayoutBuilder builder, ICraftingGridHelper craftingGridHelper, IFocusGroup focuses) {
     OverslimeCraftingTableRecipe recipe = holder.value();
     builder.setShapeless();
     // the ingredient that applies overslime, used on focusing
-    List<ItemStack> ingredient = List.of(recipe.getIngredient().getItems());
+    List<ItemStack> ingredient = IngredientHelper.getStacks(recipe.getIngredient());
     List<List<ItemStack>> inputStacks = null;
     List<ItemStack> resultStacks = null;
 
@@ -64,12 +73,12 @@ public class OverslimeRecipeExtension implements ICraftingCategoryExtension<Over
       List<ModifierEntry> result = List.of(OverslimeModifierRecipe.RESULT);
       Ingredient tools = recipe.getTools();
       // this recipe requires inputs to have overslime
-      List<ItemStack> toolsWithoutOverslime = Arrays.stream(tools.getItems()).map(IDisplayModifierRecipe.MAP_TOOL_STACK_FOR_RENDERING)
+      List<ItemStack> toolsWithoutOverslime = IngredientHelper.getStacks(tools).stream().map(IDisplayModifierRecipe.MAP_TOOL_STACK_FOR_RENDERING)
         .map(stack -> withModifiers(stack, 1, result))
         .toList();
       // result is the same but with overslime
       int restoreAmount = recipe.getRestoreAmount();
-      List<ItemStack> toolsWithOverslime = Arrays.stream(tools.getItems()).map(IDisplayModifierRecipe.MAP_TOOL_STACK_FOR_RENDERING)
+      List<ItemStack> toolsWithOverslime = IngredientHelper.getStacks(tools).stream().map(IDisplayModifierRecipe.MAP_TOOL_STACK_FOR_RENDERING)
         .map(stack -> withModifiers(stack, 1, result, data -> OverslimeModule.INSTANCE.setAmountRaw(data, restoreAmount)))
         .toList();
       inputStacks = List.of(toolsWithoutOverslime, ingredient);

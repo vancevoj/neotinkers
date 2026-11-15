@@ -24,17 +24,12 @@ public class PatternIngredientHelper implements IIngredientHelper<Pattern> {
   }
 
   @Override
-  public String getUniqueId(Pattern pattern, UidContext context) {
-    return pattern.toString();
-  }
-
-  @Override
   public Object getUid(Pattern pattern, UidContext context) {
     return pattern;
   }
 
   @Override
-  public Identifier getResourceLocation(Pattern pattern) {
+  public Identifier getIdentifier(Pattern pattern) {
     return pattern;
   }
 

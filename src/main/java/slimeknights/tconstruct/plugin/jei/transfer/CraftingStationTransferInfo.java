@@ -1,8 +1,8 @@
 package slimeknights.tconstruct.plugin.jei.transfer;
 
 import mezz.jei.api.constants.RecipeTypes;
-import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.transfer.IRecipeTransferInfo;
+import mezz.jei.api.recipe.types.IRecipeType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
@@ -32,7 +32,7 @@ public class CraftingStationTransferInfo implements IRecipeTransferInfo<Crafting
   }
 
   @Override
-  public RecipeType<RecipeHolder<CraftingRecipe>> getRecipeType() {
+  public IRecipeType<RecipeHolder<CraftingRecipe>> getRecipeType() {
     return RecipeTypes.CRAFTING;
   }
 
@@ -77,10 +77,11 @@ public class CraftingStationTransferInfo implements IRecipeTransferInfo<Crafting
   public boolean canHandle(CraftingStationContainerMenu container, RecipeHolder<CraftingRecipe> holder) {
     // NeoForge 1.21.1 removed IShapedRecipe; vanilla ShapedRecipe exposes width/height directly. Non-shaped
     // (shapeless / modded) recipes fall through and are accepted if they fit the 3x3 grid by ingredient count.
+    // 1.21.2: recipes no longer list ingredients, the placement info has them (empty for recipes that cannot be placed, as getIngredients was)
     CraftingRecipe recipe = holder.value();
     if (recipe instanceof ShapedRecipe shaped) {
       return shaped.getWidth() <= 3 && shaped.getHeight() <= 3;
     }
-    return recipe.getIngredients().size() <= 9;
+    return recipe.placementInfo().ingredients().size() <= 9;
   }
 }

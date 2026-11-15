@@ -10,14 +10,14 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction;
-import net.neoforged.neoforge.fluids.capability.IFluidHandlerItem;
-import slimeknights.tconstruct.library.fluid.EmptyFluidHandlerItem;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.access.ItemAccess;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
+import net.neoforged.neoforge.transfer.transaction.Transaction;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
 
 /** Handler to remove tanks when their fluid is removed from JEI. */
 public record TankHidingIngredientListener(IIngredientManager manager, List<Item> tanks) implements IIngredientListener {
@@ -27,12 +27,18 @@ public record TankHidingIngredientListener(IIngredientManager manager, List<Item
     for (ITypedIngredient<?> ingredient : ingredients) {
       FluidStack fluid = ingredient.getIngredient(NeoForgeTypes.FLUID_STACK).orElse(FluidStack.EMPTY);
       if (!fluid.isEmpty()) {
+        FluidResource resource = FluidResource.of(fluid);
         for (Item item : tanks) {
           ItemStack tank = new ItemStack(item);
-          // 1.21: item capabilities return null instead of an empty LazyOptional
-          IFluidHandlerItem handler = Objects.requireNonNullElse(tank.getCapability(Capabilities.Fluid.ITEM), EmptyFluidHandlerItem.INSTANCE);
-          if (handler.getTanks() > 0 && handler.fill(fluid, FluidAction.EXECUTE) > 0) {
-            list.add(handler.getContainer());
+          // the item access fills the stack in place, tanks only change components so the item never changes
+          ResourceHandler<FluidResource> handler = ItemAccess.forStack(tank).getCapability(Capabilities.Fluid.ITEM);
+          if (handler != null && handler.size() > 0) {
+            try (Transaction transaction = Transaction.openRoot()) {
+              if (handler.insert(resource, fluid.getAmount(), transaction) > 0) {
+                transaction.commit();
+                list.add(tank);
+              }
+            }
           }
         }
       }
