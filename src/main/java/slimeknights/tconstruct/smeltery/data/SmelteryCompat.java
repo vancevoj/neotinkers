@@ -127,9 +127,14 @@ public enum SmelteryCompat {
   }
 
   /** Checks if the given tag exists */
-  @SuppressWarnings("deprecation")
   private static boolean ingotPresent(String name) {
-    Optional<Named<Item>> tag = BuiltInRegistries.ITEM.getTag(ItemTags.create(commonResource("ingots/" + name)));
+    Optional<Named<Item>> tag;
+    try {
+      tag = BuiltInRegistries.ITEM.get(ItemTags.create(commonResource("ingots/" + name)));
+    } catch (IllegalStateException e) {
+      // 26.3 throws while tags are unbound, before it just reported the tag as missing
+      return false;
+    }
     return tag.isPresent() && tag.get().size() > 0;
   }
 }

@@ -4,6 +4,7 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
+import slimeknights.mantle.recipe.helper.IngredientHelper;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.data.tinkering.AbstractStationSlotLayoutProvider;
@@ -22,7 +23,7 @@ public class StationSlotLayoutProvider extends AbstractStationSlotLayoutProvider
   @Override
   protected void addLayouts() {
     // stations
-    Ingredient modifiable = Ingredient.of(TinkerTags.Items.MODIFIABLE);
+    Ingredient modifiable = IngredientHelper.tag(TinkerTags.Items.MODIFIABLE);
     define(TinkerTables.tinkerStation)
       .translationKey(TConstruct.makeTranslationKey("gui", "tinker_station.repair_limited"))
       .icon(Patterns.REPAIR)

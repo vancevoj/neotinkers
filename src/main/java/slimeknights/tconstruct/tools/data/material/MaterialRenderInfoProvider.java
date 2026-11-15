@@ -1,8 +1,8 @@
 package slimeknights.tconstruct.tools.data.material;
 
 import net.minecraft.data.PackOutput;
+import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.world.item.DyeColor;
-import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import slimeknights.tconstruct.library.client.data.material.AbstractMaterialRenderInfoProvider;
 import slimeknights.tconstruct.library.client.data.material.AbstractMaterialSpriteProvider;
 import slimeknights.tconstruct.library.materials.definition.MaterialId;
@@ -10,9 +10,11 @@ import slimeknights.tconstruct.library.materials.definition.MaterialVariantId;
 import slimeknights.tconstruct.library.tools.helper.ToolBuildHandler;
 import slimeknights.tconstruct.shared.block.SlimeType;
 
+import javax.annotation.Nullable;
+
 public class MaterialRenderInfoProvider extends AbstractMaterialRenderInfoProvider {
-  public MaterialRenderInfoProvider(PackOutput packOutput, AbstractMaterialSpriteProvider spriteProvider, ExistingFileHelper existingFileHelper) {
-    super(packOutput, spriteProvider, existingFileHelper);
+  public MaterialRenderInfoProvider(PackOutput packOutput, AbstractMaterialSpriteProvider spriteProvider, @Nullable ResourceManager resourceManager) {
+    super(packOutput, spriteProvider, resourceManager);
   }
 
   @Override

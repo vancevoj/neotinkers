@@ -1,9 +1,10 @@
 package slimeknights.tconstruct.tools.data.material;
 
-import net.minecraft.data.PackOutput;
+import net.minecraft.advancements.Advancement;
 import net.minecraft.data.recipes.RecipeOutput;
-import net.minecraft.resources.ResourceKey;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.InstrumentTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
@@ -12,6 +13,7 @@ import net.minecraft.world.item.Instrument;
 import net.minecraft.world.item.Instruments;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
@@ -50,8 +52,8 @@ import static slimeknights.mantle.Mantle.COMMON;
 import static slimeknights.tconstruct.library.recipe.melting.IMeltingRecipe.getTemperature;
 
 public class MaterialRecipeProvider extends BaseRecipeProvider implements IMaterialRecipeHelper {
-  public MaterialRecipeProvider(PackOutput packOutput) {
-    super(packOutput);
+  public MaterialRecipeProvider(BootstrapContext<Recipe<?>> recipes, BootstrapContext<Advancement> advancements) {
+    super(recipes, advancements);
   }
 
   @Override
@@ -68,60 +70,60 @@ public class MaterialRecipeProvider extends BaseRecipeProvider implements IMater
   private void addMaterialItems(RecipeOutput consumer) {
     String folder = "tools/materials/";
     // tier 1
-    materialRecipe(consumer, MaterialIds.wood,   Ingredient.of(Tags.Items.RODS_WOODEN), 1, 2, folder + "wood/sticks");
+    materialRecipe(consumer, MaterialIds.wood,   tag(Tags.Items.RODS_WOODEN), 1, 2, folder + "wood/sticks");
     // planks
     materialRecipe(consumer, MaterialIds.crimson,  Ingredient.of(Items.CRIMSON_PLANKS),  1, 1, folder + "wood/planks/crimson");
     materialRecipe(consumer, MaterialIds.warped,   Ingredient.of(Items.WARPED_PLANKS),   1, 1, folder + "wood/planks/warped");
     materialRecipe(withCondition(consumer, TagCombinationCondition.difference(ItemTags.PLANKS, TinkerTags.Items.VARIANT_PLANKS)), MaterialIds.wood,
-                   DifferenceIngredient.of(Ingredient.of(ItemTags.PLANKS), Ingredient.of(TinkerTags.Items.VARIANT_PLANKS)), 1, 1, folder + "wood/planks/default");
+                   DifferenceIngredient.of(tag(ItemTags.PLANKS), tag(TinkerTags.Items.VARIANT_PLANKS)), 1, 1, folder + "wood/planks/default");
     // logs
     // standard wood, different recipes just swap the leftovers
-    materialRecipe(consumer, MaterialIds.wood, Ingredient.of(ItemTags.OAK_LOGS),      4, 1, ItemOutput.fromItem(Blocks.OAK_PLANKS),      folder + "wood/logs/oak");
-    materialRecipe(consumer, MaterialIds.wood, Ingredient.of(ItemTags.SPRUCE_LOGS),   4, 1, ItemOutput.fromItem(Blocks.SPRUCE_PLANKS),   folder + "wood/logs/spruce");
-    materialRecipe(consumer, MaterialIds.wood, Ingredient.of(ItemTags.BIRCH_LOGS),    4, 1, ItemOutput.fromItem(Blocks.BIRCH_PLANKS),    folder + "wood/logs/birch");
-    materialRecipe(consumer, MaterialIds.wood, Ingredient.of(ItemTags.JUNGLE_LOGS),   4, 1, ItemOutput.fromItem(Blocks.JUNGLE_PLANKS),   folder + "wood/logs/jungle");
-    materialRecipe(consumer, MaterialIds.wood, Ingredient.of(ItemTags.DARK_OAK_LOGS), 4, 1, ItemOutput.fromItem(Blocks.DARK_OAK_PLANKS), folder + "wood/logs/dark_oak");
-    materialRecipe(consumer, MaterialIds.wood, Ingredient.of(ItemTags.ACACIA_LOGS),   4, 1, ItemOutput.fromItem(Blocks.ACACIA_PLANKS),   folder + "wood/logs/acacia");
-    materialRecipe(consumer, MaterialIds.wood, Ingredient.of(ItemTags.MANGROVE_LOGS), 4, 1, ItemOutput.fromItem(Blocks.MANGROVE_PLANKS), folder + "wood/logs/mangrove");
-    materialRecipe(consumer, MaterialIds.wood, Ingredient.of(ItemTags.CHERRY_LOGS),   4, 1, ItemOutput.fromItem(Blocks.CHERRY_PLANKS),   folder + "wood/logs/cherry");
+    materialRecipe(consumer, MaterialIds.wood, tag(ItemTags.OAK_LOGS),      4, 1, ItemOutput.fromItem(Blocks.OAK_PLANKS),      folder + "wood/logs/oak");
+    materialRecipe(consumer, MaterialIds.wood, tag(ItemTags.SPRUCE_LOGS),   4, 1, ItemOutput.fromItem(Blocks.SPRUCE_PLANKS),   folder + "wood/logs/spruce");
+    materialRecipe(consumer, MaterialIds.wood, tag(ItemTags.BIRCH_LOGS),    4, 1, ItemOutput.fromItem(Blocks.BIRCH_PLANKS),    folder + "wood/logs/birch");
+    materialRecipe(consumer, MaterialIds.wood, tag(ItemTags.JUNGLE_LOGS),   4, 1, ItemOutput.fromItem(Blocks.JUNGLE_PLANKS),   folder + "wood/logs/jungle");
+    materialRecipe(consumer, MaterialIds.wood, tag(ItemTags.DARK_OAK_LOGS), 4, 1, ItemOutput.fromItem(Blocks.DARK_OAK_PLANKS), folder + "wood/logs/dark_oak");
+    materialRecipe(consumer, MaterialIds.wood, tag(ItemTags.ACACIA_LOGS),   4, 1, ItemOutput.fromItem(Blocks.ACACIA_PLANKS),   folder + "wood/logs/acacia");
+    materialRecipe(consumer, MaterialIds.wood, tag(ItemTags.MANGROVE_LOGS), 4, 1, ItemOutput.fromItem(Blocks.MANGROVE_PLANKS), folder + "wood/logs/mangrove");
+    materialRecipe(consumer, MaterialIds.wood, tag(ItemTags.CHERRY_LOGS),   4, 1, ItemOutput.fromItem(Blocks.CHERRY_PLANKS),   folder + "wood/logs/cherry");
     // variant wood, swaps the variant as well
-    materialRecipe(consumer, MaterialIds.crimson,  Ingredient.of(ItemTags.CRIMSON_STEMS), 4, 1, ItemOutput.fromItem(Blocks.CRIMSON_PLANKS),  folder + "wood/logs/crimson");
-    materialRecipe(consumer, MaterialIds.warped,   Ingredient.of(ItemTags.WARPED_STEMS),  4, 1, ItemOutput.fromItem(Blocks.WARPED_PLANKS),   folder + "wood/logs/warped");
+    materialRecipe(consumer, MaterialIds.crimson,  tag(ItemTags.CRIMSON_STEMS), 4, 1, ItemOutput.fromItem(Blocks.CRIMSON_PLANKS),  folder + "wood/logs/crimson");
+    materialRecipe(consumer, MaterialIds.warped,   tag(ItemTags.WARPED_STEMS),  4, 1, ItemOutput.fromItem(Blocks.WARPED_PLANKS),   folder + "wood/logs/warped");
     materialRecipe(withCondition(consumer, TagCombinationCondition.difference(ItemTags.LOGS, TinkerTags.Items.VARIANT_LOGS)), MaterialIds.wood,
-                   DifferenceIngredient.of(Ingredient.of(ItemTags.LOGS), Ingredient.of(TinkerTags.Items.VARIANT_LOGS)), 4, 1,
+                   DifferenceIngredient.of(tag(ItemTags.LOGS), tag(TinkerTags.Items.VARIANT_LOGS)), 4, 1,
                    ItemOutput.fromItem(Items.STICK, 2), folder + "wood/logs/default");
     // bamboo
     materialRecipe(consumer, MaterialIds.bamboo, Ingredient.of(Items.BAMBOO),           1, 9, folder + "wood/bamboo/stick");
-    materialRecipe(consumer, MaterialIds.bamboo, Ingredient.of(ItemTags.BAMBOO_BLOCKS), 1, 1, folder + "wood/bamboo/block");
+    materialRecipe(consumer, MaterialIds.bamboo, tag(ItemTags.BAMBOO_BLOCKS), 1, 1, folder + "wood/bamboo/block");
     materialRecipe(consumer, MaterialIds.bamboo, Ingredient.of(Blocks.BAMBOO_PLANKS),   1, 2, folder + "wood/bamboo/planks");
     // stone
-    materialRecipe(consumer, MaterialIds.stone,      Ingredient.of(TinkerTags.Items.STONE),      1, 1, folder + "rock/stone");
-    materialRecipe(consumer, MaterialIds.andesite,   Ingredient.of(TinkerTags.Items.ANDESITE),   1, 1, folder + "rock/andesite");
-    materialRecipe(consumer, MaterialIds.diorite,    Ingredient.of(TinkerTags.Items.DIORITE),    1, 1, folder + "rock/diorite");
-    materialRecipe(consumer, MaterialIds.granite,    Ingredient.of(TinkerTags.Items.GRANITE),    1, 1, folder + "rock/granite");
-    materialRecipe(consumer, MaterialIds.blackstone, Ingredient.of(TinkerTags.Items.BLACKSTONE), 1, 1, folder + "rock/blackstone");
+    materialRecipe(consumer, MaterialIds.stone,      tag(TinkerTags.Items.STONE),      1, 1, folder + "rock/stone");
+    materialRecipe(consumer, MaterialIds.andesite,   tag(TinkerTags.Items.ANDESITE),   1, 1, folder + "rock/andesite");
+    materialRecipe(consumer, MaterialIds.diorite,    tag(TinkerTags.Items.DIORITE),    1, 1, folder + "rock/diorite");
+    materialRecipe(consumer, MaterialIds.granite,    tag(TinkerTags.Items.GRANITE),    1, 1, folder + "rock/granite");
+    materialRecipe(consumer, MaterialIds.blackstone, tag(TinkerTags.Items.BLACKSTONE), 1, 1, folder + "rock/blackstone");
     materialRecipe(consumer, MaterialIds.calcite,    Ingredient.of(Blocks.CALCITE),              1, 1, folder + "rock/calcite");
     materialRecipe(consumer, MaterialIds.flint,      Ingredient.of(Items.FLINT),                 1, 1, folder + "flint/flint");
-    materialRecipe(consumer, MaterialIds.basalt,     Ingredient.of(TinkerTags.Items.BASALT),     1, 1, folder + "flint/basalt");
-    materialRecipe(consumer, MaterialIds.deepslate,  Ingredient.of(TinkerTags.Items.DEEPSLATE),  1, 1, folder + "flint/deepslate");
+    materialRecipe(consumer, MaterialIds.basalt,     tag(TinkerTags.Items.BASALT),     1, 1, folder + "flint/basalt");
+    materialRecipe(consumer, MaterialIds.deepslate,  tag(TinkerTags.Items.DEEPSLATE),  1, 1, folder + "flint/deepslate");
     // copper - want to include oxidized and waxed
     ItemOutput copperIngot = ItemOutput.fromTag(Tags.Items.INGOTS_COPPER);
-    materialRecipe(consumer, MaterialIds.copper, Ingredient.of(TinkerTags.Items.NUGGETS_COPPER), 1, 9, folder + "copper/nugget");
-    materialRecipe(consumer, MaterialIds.copper, Ingredient.of(Tags.Items.INGOTS_COPPER),        1, 1, folder + "copper/ingot");
-    materialRecipe(consumer, MaterialIds.copper, CompoundIngredient.of(Ingredient.of(Tags.Items.STORAGE_BLOCKS_COPPER), Ingredient.of(Blocks.WAXED_COPPER_BLOCK)), 9, 1, copperIngot, folder + "copper/block");
-    materialRecipe(consumer, MaterialIds.oxidizedCopper, Ingredient.of(Blocks.EXPOSED_COPPER, Blocks.WEATHERED_COPPER, Blocks.OXIDIZED_COPPER, Blocks.WAXED_EXPOSED_COPPER, Blocks.WAXED_WEATHERED_COPPER, Blocks.WAXED_OXIDIZED_COPPER), 9, 1, copperIngot, folder + "copper/oxidized");
+    materialRecipe(consumer, MaterialIds.copper, tag(TinkerTags.Items.NUGGETS_COPPER), 1, 9, folder + "copper/nugget");
+    materialRecipe(consumer, MaterialIds.copper, tag(Tags.Items.INGOTS_COPPER),        1, 1, folder + "copper/ingot");
+    materialRecipe(consumer, MaterialIds.copper, CompoundIngredient.of(tag(Tags.Items.STORAGE_BLOCKS_COPPER), Ingredient.of(Blocks.COPPER_BLOCK.waxed().unaffected())), 9, 1, copperIngot, folder + "copper/block");
+    materialRecipe(consumer, MaterialIds.oxidizedCopper, Ingredient.of(Blocks.COPPER_BLOCK.weathering().exposed(), Blocks.COPPER_BLOCK.weathering().weathered(), Blocks.COPPER_BLOCK.weathering().oxidized(), Blocks.COPPER_BLOCK.waxed().exposed(), Blocks.COPPER_BLOCK.waxed().weathered(), Blocks.COPPER_BLOCK.waxed().oxidized()), 9, 1, copperIngot, folder + "copper/oxidized");
     // other tier 1
-    materialRecipe(consumer, MaterialIds.bone,         Ingredient.of(TinkerTags.Items.BONES),    1, 1, folder + "bone");
+    materialRecipe(consumer, MaterialIds.bone,         tag(TinkerTags.Items.BONES),    1, 1, folder + "bone");
     materialRecipe(consumer, MaterialIds.chorus,       Ingredient.of(Items.POPPED_CHORUS_FRUIT), 1, 1, folder + "chorus_popped");
     // tier 1 binding
-    materialRecipe(consumer, MaterialIds.string,  Ingredient.of(Tags.Items.STRINGS),  1, 4, folder + "string");
-    materialRecipe(consumer, MaterialIds.leather, Ingredient.of(Tags.Items.LEATHERS), 1, 1, folder + "leather");
+    materialRecipe(consumer, MaterialIds.string,  tag(Tags.Items.STRINGS),  1, 4, folder + "string");
+    materialRecipe(consumer, MaterialIds.leather, tag(Tags.Items.LEATHERS), 1, 1, folder + "leather");
     materialRecipe(consumer, MaterialIds.leather, Ingredient.of(Items.RABBIT_HIDE),  1, 2, folder + "rabbit_hide");
     materialRecipe(consumer, MaterialIds.vine,    Ingredient.of(Items.VINE),         1, 1, folder + "vine");
     materialRecipe(consumer, MaterialIds.cactus,  Ingredient.of(Blocks.CACTUS),      1, 1, folder + "cactus");
     materialRecipe(consumer, MaterialIds.feather, Ingredient.of(Items.FEATHER),      1, 1, folder + "feather");
     materialRecipe(consumer, MaterialIds.paper,   Ingredient.of(Items.PAPER),        1, 1, folder + "paper");
-    materialRecipe(consumer, MaterialIds.leaves,  Ingredient.of(ItemTags.LEAVES),    1, 1, folder + "leaves");
+    materialRecipe(consumer, MaterialIds.leaves,  tag(ItemTags.LEAVES),    1, 1, folder + "leaves");
     // tier 1 wool
     for (DyeColor color : DyeColor.values()) {
       String name = color.getName();
@@ -132,24 +134,24 @@ public class MaterialRecipeProvider extends BaseRecipeProvider implements IMater
     metalMaterialRecipe(consumer, MaterialIds.iron, folder, "iron", false);
     metalMaterialRecipe(consumer, MaterialIds.gold, folder, "gold", false);
     materialRecipe(consumer, MaterialIds.searedStone,   Ingredient.of(TinkerSmeltery.searedBrick),       1, 1, folder + "seared_stone/brick");
-    materialRecipe(consumer, MaterialIds.searedStone,   Ingredient.of(TinkerTags.Items.SEARED_BLOCKS),   4, 1, ItemOutput.fromItem(TinkerSmeltery.searedBrick), folder + "seared_stone/block");
+    materialRecipe(consumer, MaterialIds.searedStone,   tag(TinkerTags.Items.SEARED_BLOCKS),   4, 1, ItemOutput.fromItem(TinkerSmeltery.searedBrick), folder + "seared_stone/block");
     materialRecipe(consumer, MaterialIds.scorchedStone, Ingredient.of(TinkerSmeltery.scorchedBrick),     1, 1, folder + "scorched_stone/brick");
-    materialRecipe(consumer, MaterialIds.scorchedStone, Ingredient.of(TinkerTags.Items.SCORCHED_BLOCKS), 4, 1, ItemOutput.fromItem(TinkerSmeltery.scorchedBrick), folder + "scorched_stone/block");
+    materialRecipe(consumer, MaterialIds.scorchedStone, tag(TinkerTags.Items.SCORCHED_BLOCKS), 4, 1, ItemOutput.fromItem(TinkerSmeltery.scorchedBrick), folder + "scorched_stone/block");
     materialRecipe(consumer, MaterialIds.venombone,     Ingredient.of(TinkerMaterials.venombone),        1, 1, folder + "venombone");
     metalMaterialRecipe(consumer, MaterialIds.roseGold, folder, "rose_gold", false);
-    materialRecipe(consumer, MaterialIds.necroticBone, Ingredient.of(TinkerTags.Items.WITHER_BONES), 1, 1, folder + "necrotic_bone");
-    materialRecipe(consumer, MaterialIds.endstone, Ingredient.of(Tags.Items.END_STONES), 1, 1, folder + "endstone");
+    materialRecipe(consumer, MaterialIds.necroticBone, tag(TinkerTags.Items.WITHER_BONES), 1, 1, folder + "necrotic_bone");
+    materialRecipe(consumer, MaterialIds.endstone, tag(Tags.Items.END_STONES), 1, 1, folder + "endstone");
     // ammo
     materialRecipe(consumer, MaterialIds.turtle,     Ingredient.of(Items.TURTLE_SCUTE),          1, 1, folder + "turtle_scute");
     materialRecipe(consumer, MaterialIds.nautilus,   Ingredient.of(Items.NAUTILUS_SHELL),        4, 1, folder + "nautilus_shell");
     materialRecipe(consumer, MaterialIds.earthslime, Ingredient.of(TinkerWorld.earthGeode),      1, 1, folder + "earthslime");
     materialRecipe(consumer, MaterialIds.skyslime,   Ingredient.of(TinkerWorld.skyGeode),        1, 1, folder + "skyslime");
-    materialRecipe(consumer, MaterialIds.blaze,      Ingredient.of(Tags.Items.RODS_BLAZE),       1, 1, folder + "blaze");
-    materialRecipe(consumer, MaterialIds.enderPearl, Ingredient.of(Tags.Items.ENDER_PEARLS),     1, 1, folder + "ender_pearl");
-    materialRecipe(consumer, MaterialIds.amethyst,   Ingredient.of(Tags.Items.GEMS_AMETHYST),    1, 1, folder + "amethyst");
-    materialRecipe(consumer, MaterialIds.prismarine, Ingredient.of(Tags.Items.GEMS_PRISMARINE),  1, 1, folder + "prismarine");
-    materialRecipe(consumer, MaterialIds.glass,      Ingredient.of(Tags.Items.GLASS_BLOCKS),     4, 1, folder + "glass");
-    materialRecipe(consumer, MaterialIds.glass,      Ingredient.of(Tags.Items.GLASS_PANES),      1, 1, folder + "glass_pane");
+    materialRecipe(consumer, MaterialIds.blaze,      tag(Tags.Items.RODS_BLAZE),       1, 1, folder + "blaze");
+    materialRecipe(consumer, MaterialIds.enderPearl, tag(Tags.Items.ENDER_PEARLS),     1, 1, folder + "ender_pearl");
+    materialRecipe(consumer, MaterialIds.amethyst,   tag(Tags.Items.GEMS_AMETHYST),    1, 1, folder + "amethyst");
+    materialRecipe(consumer, MaterialIds.prismarine, tag(Tags.Items.GEMS_PRISMARINE),  1, 1, folder + "prismarine");
+    materialRecipe(consumer, MaterialIds.glass,      tag(Tags.Items.GLASS_BLOCKS),     4, 1, folder + "glass");
+    materialRecipe(consumer, MaterialIds.glass,      tag(Tags.Items.GLASS_PANES),      1, 1, folder + "glass_pane");
 
     materialRecipe(consumer, MaterialIds.skyslimeVine, Ingredient.of(TinkerWorld.skySlimeVine), 1, 1, folder + "skyslime_vine");
     materialRecipe(consumer, MaterialIds.weepingVine,  Ingredient.of(Items.WEEPING_VINES), 1, 1, folder + "weeping_vine");
@@ -159,14 +161,14 @@ public class MaterialRecipeProvider extends BaseRecipeProvider implements IMater
     materialRecipe(consumer, MaterialIds.skyroot,     Ingredient.of(TinkerWorld.skyroot),     1, 1, folder + "slimewood/skyroot_planks");
     materialRecipe(consumer, MaterialIds.bloodshroom, Ingredient.of(TinkerWorld.bloodshroom), 1, 1, folder + "slimewood/bloodshroom_planks");
     materialRecipe(consumer, MaterialIds.enderbark,   Ingredient.of(TinkerWorld.enderbark),   1, 1, folder + "slimewood/enderbark_planks");
-    materialRecipe(consumer, MaterialIds.greenheart,  Ingredient.of(TinkerWorld.greenheart.getLogItemTag()),  4, 1, ItemOutput.fromItem(TinkerWorld.greenheart),  folder + "slimewood/greenheart_logs");
-    materialRecipe(consumer, MaterialIds.skyroot,     Ingredient.of(TinkerWorld.skyroot.getLogItemTag()),     4, 1, ItemOutput.fromItem(TinkerWorld.skyroot),     folder + "slimewood/skyroot_logs");
-    materialRecipe(consumer, MaterialIds.bloodshroom, Ingredient.of(TinkerWorld.bloodshroom.getLogItemTag()), 4, 1, ItemOutput.fromItem(TinkerWorld.bloodshroom), folder + "slimewood/bloodshroom_logs");
-    materialRecipe(consumer, MaterialIds.enderbark,   Ingredient.of(TinkerWorld.enderbark.getLogItemTag()),   4, 1, ItemOutput.fromItem(TinkerWorld.enderbark),   folder + "slimewood/enderbark_logs");
+    materialRecipe(consumer, MaterialIds.greenheart,  tag(TinkerWorld.greenheart.getLogItemTag()),  4, 1, ItemOutput.fromItem(TinkerWorld.greenheart),  folder + "slimewood/greenheart_logs");
+    materialRecipe(consumer, MaterialIds.skyroot,     tag(TinkerWorld.skyroot.getLogItemTag()),     4, 1, ItemOutput.fromItem(TinkerWorld.skyroot),     folder + "slimewood/skyroot_logs");
+    materialRecipe(consumer, MaterialIds.bloodshroom, tag(TinkerWorld.bloodshroom.getLogItemTag()), 4, 1, ItemOutput.fromItem(TinkerWorld.bloodshroom), folder + "slimewood/bloodshroom_logs");
+    materialRecipe(consumer, MaterialIds.enderbark,   tag(TinkerWorld.enderbark.getLogItemTag()),   4, 1, ItemOutput.fromItem(TinkerWorld.enderbark),   folder + "slimewood/enderbark_logs");
     // slimeball
     for (SlimeType type : SlimeType.values()) {
       String name = type.getSerializedName();
-      materialRecipe(consumer, MaterialVariantId.create(MaterialIds.slimeball, name), Ingredient.of(type.getSlimeballTag()), 1, 1, folder + "slimeball/" + name);
+      materialRecipe(consumer, MaterialVariantId.create(MaterialIds.slimeball, name), tag(type.getSlimeballTag()), 1, 1, folder + "slimeball/" + name);
     }
     materialRecipe(consumer, MaterialIds.magma, Ingredient.of(Items.MAGMA_CREAM),1, 1, folder + "magma");
     materialRecipe(consumer, MaterialIds.clay, Ingredient.of(Items.CLAY_BALL),   1, 1, folder + "clay_ball");
@@ -184,15 +186,15 @@ public class MaterialRecipeProvider extends BaseRecipeProvider implements IMater
     materialRecipe(consumer, MaterialIds.ice, Ingredient.of(Blocks.PACKED_ICE), 1, 1, folder + "ice/packed");
     materialRecipe(consumer, MaterialIds.ice, Ingredient.of(Blocks.BLUE_ICE),   9, 1, folder + "ice/blue");
     materialRecipe(consumer, MaterialIds.ichor, Ingredient.of(TinkerWorld.ichorGeode), 1, 1, folder + "ichor");
-    materialRecipe(consumer, MaterialIds.quartz, Ingredient.of(Tags.Items.GEMS_QUARTZ),           1, 1, folder + "quartz/gem");
+    materialRecipe(consumer, MaterialIds.quartz, tag(Tags.Items.GEMS_QUARTZ),           1, 1, folder + "quartz/gem");
     materialRecipe(consumer, MaterialIds.quartz, Ingredient.of(Items.QUARTZ_BLOCK), 4, 1, folder + "quartz/block");
-    materialRecipe(consumer, MaterialIds.glowstone, Ingredient.of(Tags.Items.DUSTS_GLOWSTONE), 1, 4, folder + "glowstone/dust");
+    materialRecipe(consumer, MaterialIds.glowstone, tag(Tags.Items.DUSTS_GLOWSTONE), 1, 4, folder + "glowstone/dust");
     materialRecipe(consumer, MaterialIds.glowstone, Ingredient.of(Blocks.GLOWSTONE), 1, 1, ItemOutput.fromItem(Items.GLOWSTONE_DUST),folder + "glowstone/block");
-    materialRecipe(consumer, MaterialIds.magnetite, Ingredient.of(TinkerTags.Items.STEEL_SHARD), 1, 1, folder + "magnetite");
-    materialRecipe(consumer, MaterialIds.kobold, Ingredient.of(TinkerTags.Items.COBALT_SHARD), 1, 1, folder + "kobold");
-    materialRecipe(consumer, MaterialIds.gunpowder, Ingredient.of(Tags.Items.GUNPOWDERS), 1, 4, folder + "gunpowder");
-    materialRecipe(consumer, MaterialIds.redstone, Ingredient.of(Tags.Items.DUSTS_REDSTONE), 1, 4, folder + "redstone/dust");
-    materialRecipe(consumer, MaterialIds.redstone, Ingredient.of(Tags.Items.STORAGE_BLOCKS_REDSTONE), 9, 4, ItemOutput.fromItem(Items.REDSTONE, 4), folder + "redstone/block");
+    materialRecipe(consumer, MaterialIds.magnetite, tag(TinkerTags.Items.STEEL_SHARD), 1, 1, folder + "magnetite");
+    materialRecipe(consumer, MaterialIds.kobold, tag(TinkerTags.Items.COBALT_SHARD), 1, 1, folder + "kobold");
+    materialRecipe(consumer, MaterialIds.gunpowder, tag(Tags.Items.GUNPOWDERS), 1, 4, folder + "gunpowder");
+    materialRecipe(consumer, MaterialIds.redstone, tag(Tags.Items.DUSTS_REDSTONE), 1, 4, folder + "redstone/dust");
+    materialRecipe(consumer, MaterialIds.redstone, tag(Tags.Items.STORAGE_BLOCKS_REDSTONE), 9, 4, ItemOutput.fromItem(Items.REDSTONE, 4), folder + "redstone/block");
 
     // tier 3 (nether)
     metalMaterialRecipe(consumer, MaterialIds.cobalt, folder, "cobalt", false);
@@ -208,12 +210,12 @@ public class MaterialRecipeProvider extends BaseRecipeProvider implements IMater
     materialRecipe(consumer, MaterialIds.blazingBone, Ingredient.of(TinkerMaterials.blazingBone), 1, 1, folder + "blazing_bone");
     //registerMetalMaterial(consumer, MaterialIds.soulsteel,   "soulsteel",    false);
     // debris has no storage block, just ingots and nuggets
-    materialRecipe(consumer, MaterialIds.ancient, Ingredient.of(TinkerTags.Items.INGOTS_NETHERITE_SCRAP), 1, 1, folder + "ancient/ingot");
-    materialRecipe(consumer, MaterialIds.ancient, Ingredient.of(TinkerTags.Items.NUGGETS_NETHERITE_SCRAP), 1, 9, folder + "ancient/nugget");
+    materialRecipe(consumer, MaterialIds.ancient, tag(TinkerTags.Items.INGOTS_NETHERITE_SCRAP), 1, 1, folder + "ancient/ingot");
+    materialRecipe(consumer, MaterialIds.ancient, tag(TinkerTags.Items.NUGGETS_NETHERITE_SCRAP), 1, 9, folder + "ancient/nugget");
     materialRecipe(consumer, MaterialIds.dragonScale, Ingredient.of(TinkerModifiers.dragonScale), 1, 1, folder + "dragon_scale");
     materialRecipe(consumer, MaterialIds.shulker, Ingredient.of(Items.SHULKER_SHELL), 2, 1, folder + "shulker");
     materialRecipe(consumer, MaterialIds.endRod, Ingredient.of(Items.END_ROD), 1, 1, folder + "end_rod");
-    materialRecipe(consumer, MaterialIds.knightly, Ingredient.of(TinkerTags.Items.KNIGHTMETAL_SHARD), 1, 1, folder + "knightly");
+    materialRecipe(consumer, MaterialIds.knightly, tag(TinkerTags.Items.KNIGHTMETAL_SHARD), 1, 1, folder + "knightly");
 
     // tier 5
     materialRecipe(consumer, MaterialIds.enderslimeVine, Ingredient.of(TinkerWorld.enderSlimeVine), 1, 1, folder + "enderslime_vine");
@@ -224,7 +226,7 @@ public class MaterialRecipeProvider extends BaseRecipeProvider implements IMater
     metalMaterialRecipe(consumer, MaterialIds.silver, folder, "silver", true);
     metalMaterialRecipe(consumer, MaterialIds.lead, folder, "lead", true);
     metalMaterialRecipe(consumer, MaterialIds.aluminum, folder, "aluminum", true);
-    materialRecipe(withCondition(consumer, tagCondition("treated_wood")),  MaterialIds.treatedWood, Ingredient.of(getItemTag(COMMON, "treated_wood")), 1, 1, folder + "treated_wood");
+    materialRecipe(withCondition(consumer, tagCondition("treated_wood")),  MaterialIds.treatedWood, tag(getItemTag(COMMON, "treated_wood")), 1, 1, folder + "treated_wood");
     // no whitestone, use repair kits
     // tier 3 (mod integration)
     metalMaterialRecipe(consumer, MaterialIds.bronze, folder, "bronze", true);
@@ -414,7 +416,7 @@ public class MaterialRecipeProvider extends BaseRecipeProvider implements IMater
 
   /** Adds a recipe for crafting a goat horn material */
   private void hornMaterial(RecipeOutput consumer, ResourceKey<Instrument> instrument, String folder) {
-    Identifier key = instrument.location();
+    Identifier key = instrument.identifier();
     materialRecipe(consumer, MaterialVariantId.create(MaterialIds.horn, key.toLanguageKey()), InstrumentIngredient.of(Items.GOAT_HORN, instrument).toVanilla(), 4, 1, folder + "horn/" + key.getPath());
   }
 }

@@ -1,15 +1,12 @@
 package slimeknights.tconstruct.tools.data;
 
-import net.minecraft.world.item.equipment.ArmorType;
-import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.data.PackOutput;
 import net.minecraft.data.registries.VanillaRegistries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.data.PackOutput;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.InstrumentTags;
@@ -17,28 +14,26 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.Rarity;
-import net.minecraft.world.item.Tiers;
-import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.ToolMaterial;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.item.equipment.ArmorType;
 import net.minecraft.world.level.Explosion.BlockInteraction;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.neoforged.neoforge.common.NeoForgeMod;
-import net.neoforged.neoforge.common.ItemAbilities;
-import net.neoforged.neoforge.common.conditions.IConditionBuilder;
 import net.neoforged.neoforge.fluids.FluidType;
 import slimeknights.mantle.client.TooltipKey;
 import slimeknights.mantle.data.predicate.IJsonPredicate;
@@ -54,6 +49,8 @@ import slimeknights.mantle.data.predicate.entity.MobTypePredicate;
 import slimeknights.mantle.data.predicate.fluid.FluidPredicate;
 import slimeknights.mantle.data.predicate.item.ItemPredicate;
 import slimeknights.mantle.recipe.condition.TagFilledCondition;
+import slimeknights.mantle.recipe.helper.IngredientHelper;
+import slimeknights.mantle.recipe.helper.ItemOutput;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.Sounds;
 import slimeknights.tconstruct.common.TinkerDamageTypes;
@@ -165,6 +162,7 @@ import slimeknights.tconstruct.library.modifiers.modules.technical.ArmorLevelMod
 import slimeknights.tconstruct.library.modifiers.modules.util.BooleanPredicate;
 import slimeknights.tconstruct.library.modifiers.modules.util.ModifierCondition;
 import slimeknights.tconstruct.library.modifiers.modules.util.ProjectilePredicate;
+import slimeknights.tconstruct.library.modifiers.modules.util.ToolActionTransformHelper;
 import slimeknights.tconstruct.library.modifiers.util.ModifierLevelDisplay;
 import slimeknights.tconstruct.library.modifiers.util.ModifierLevelDisplay.UniqueForLevels;
 import slimeknights.tconstruct.library.modifiers.util.ModifierTooltip;
@@ -281,6 +279,7 @@ import slimeknights.tconstruct.tools.modules.ranged.common.ProjectilePlaceGlowMo
 import slimeknights.tconstruct.tools.modules.ranged.common.PunchModule;
 import slimeknights.tconstruct.tools.modules.ranged.common.ReversePunchModule;
 
+import static net.neoforged.neoforge.common.conditions.NeoForgeConditions.modLoaded;
 import static slimeknights.tconstruct.common.TinkerTags.Items.ARMOR;
 import static slimeknights.tconstruct.common.TinkerTags.Items.HARVEST;
 import static slimeknights.tconstruct.common.TinkerTags.Items.MELEE;
@@ -291,9 +290,9 @@ import static slimeknights.tconstruct.library.json.math.ModifierFormula.VALUE;
 import static slimeknights.tconstruct.library.modifiers.modules.behavior.RepairModule.FACTOR;
 import static slimeknights.tconstruct.library.tools.definition.ModifiableArmorMaterial.ARMOR_SLOTS;
 
-public class ModifierProvider extends AbstractModifierProvider implements IConditionBuilder {
+public class ModifierProvider extends AbstractModifierProvider {
   /** Static vanilla registry lookup for resolving data-driven enchantment keys at datagen time */
-  private static final HolderLookup.Provider VANILLA_REGISTRIES = VanillaRegistries.createLookup();
+  private static final HolderLookup.Provider VANILLA_REGISTRIES = VanillaRegistries.createWorldLookup();
 
   /** Resolves a vanilla enchantment key to its registry holder (modules/predicates store the Holder so they serialize by key) */
   private static Holder<Enchantment> enchantment(ResourceKey<Enchantment> key) {
@@ -349,7 +348,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       // melee harvest
       .addModule(StatBoostModule.multiplyConditional(ToolStats.ATTACK_DAMAGE).flat(0.25f))
       .addModule(StatBoostModule.multiplyConditional(ToolStats.MINING_SPEED).flat(0.25f))
-      .addModule(SetStatModule.set(ToolStats.HARVEST_TIER).value(Tiers.IRON))
+      .addModule(SetStatModule.set(ToolStats.HARVEST_TIER).value(ToolMaterial.IRON))
       // ranged
       .addModule(StatBoostModule.add(ToolStats.ACCURACY).flat(0.1f));
     // diamond
@@ -363,7 +362,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       // melee harvest
       .addModule(StatBoostModule.add(ToolStats.ATTACK_DAMAGE).flat(0.5f))
       .addModule(StatBoostModule.add(ToolStats.MINING_SPEED).flat(2))
-      .addModule(SetStatModule.set(ToolStats.HARVEST_TIER).value(Tiers.DIAMOND))
+      .addModule(SetStatModule.set(ToolStats.HARVEST_TIER).value(ToolMaterial.DIAMOND))
       // ranged
       .addModule(StatBoostModule.add(ToolStats.PROJECTILE_DAMAGE).flat(0.5f))
       // achievement
@@ -380,7 +379,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       // melee harvest
       .addModule(StatBoostModule.multiplyBase(ToolStats.ATTACK_DAMAGE).flat(0.2f))
       .addModule(StatBoostModule.multiplyBase(ToolStats.MINING_SPEED).flat(0.25f))
-      .addModule(SetStatModule.set(ToolStats.HARVEST_TIER).value(Tiers.NETHERITE))
+      .addModule(SetStatModule.set(ToolStats.HARVEST_TIER).value(ToolMaterial.NETHERITE))
       // ranged
       .addModule(StatBoostModule.multiplyBase(ToolStats.VELOCITY).flat(0.1f))
       // achievement
@@ -412,7 +411,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .addModule(new GlowWalkerModule(new LevelingValue(2, 1), 3, 5))
       .addModule(new ProjectilePlaceGlowModule(5, true, true))
       .addModule(ShowOffhandModule.DISALLOW_BROKEN).addModule(ShowInteractionSourceModule.INSTANCE)
-      .addModule(new BlockItemProviderModule(new ItemStack(TinkerCommons.glowBlock.asItem()), 5, ModifierCondition.ANY_TOOL.with(ToolStackPredicate.tag(TinkerTags.Items.HELD))));
+      .addModule(new BlockItemProviderModule(ItemOutput.fromItem(TinkerCommons.glowBlock), 5, ModifierCondition.ANY_TOOL.with(ToolStackPredicate.tag(TinkerTags.Items.HELD))));
     buildModifier(ModifierIds.firestarter)
       .levelDisplay(ModifierLevelDisplay.NO_LEVELS)
       .addModule(PlaceFireModule.INSTANCE)
@@ -653,7 +652,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
     buildModifier(ModifierIds.crystalshot).priority(50) // after bulk quiver
       .levelDisplay(ModifierLevelDisplay.NO_LEVELS)
       .addModule(ModifierVariantColorModule.INSTANCE)
-      .addModule(new InfinityModule(new ItemStack(TinkerTools.crystalshotItem), CrystalshotItem.TAG_VARIANT,  4, true));
+      .addModule(new InfinityModule(ItemOutput.fromItem(TinkerTools.crystalshotItem), CrystalshotItem.TAG_VARIANT,  4, true));
     buildModifier(ModifierIds.barebow)
       .levelDisplay(ModifierLevelDisplay.NO_LEVELS)
       .addModule(new VolatileFlagModule(BowAmmoModifierHook.SKIP_INVENTORY_AMMO));
@@ -862,19 +861,19 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
     buildModifier(ModifierIds.pathing)
       .levelDisplay(ModifierLevelDisplay.NO_LEVELS)
       .addModule(ExtinguishCampfireModule.INSTANCE)
-      .addModule(ToolActionTransformModule.builder(ItemAbilities.SHOVEL_FLATTEN, SoundEvents.SHOVEL_FLATTEN).requireGround().build())
-      .addModule(ToolActionWalkerTransformModule.builder(ItemAbilities.SHOVEL_FLATTEN, SoundEvents.SHOVEL_FLATTEN).amount(0.5f, 1))
+      .addModule(ToolActionTransformModule.builder(ToolActionTransformHelper.SHOVEL_FLATTEN, SoundEvents.SHOVEL_FLATTEN.value()).requireGround().build())
+      .addModule(ToolActionWalkerTransformModule.builder(ToolActionTransformHelper.SHOVEL_FLATTEN, SoundEvents.SHOVEL_FLATTEN.value()).amount(0.5f, 1))
       .addModule(ShowOffhandModule.DISALLOW_BROKEN).addModule(ShowInteractionSourceModule.INSTANCE);
     buildModifier(ModifierIds.stripping)
       .levelDisplay(ModifierLevelDisplay.NO_LEVELS)
-      .addModule(ToolActionTransformModule.builder(ItemAbilities.AXE_STRIP, SoundEvents.AXE_STRIP).build())
-      .addModule(ToolActionTransformModule.builder(ItemAbilities.AXE_SCRAPE, SoundEvents.AXE_SCRAPE).eventId(LevelEvent.PARTICLES_SCRAPE).build())
-      .addModule(ToolActionTransformModule.builder(ItemAbilities.AXE_WAX_OFF, SoundEvents.AXE_WAX_OFF).eventId(LevelEvent.PARTICLES_WAX_OFF).build())
+      .addModule(ToolActionTransformModule.builder(ToolActionTransformHelper.AXE_STRIP, SoundEvents.AXE_STRIP.value()).build())
+      .addModule(ToolActionTransformModule.builder(ToolActionTransformHelper.AXE_SCRAPE, SoundEvents.AXE_SCRAPE.value()).eventId(LevelEvent.PARTICLES_SCRAPE).build())
+      .addModule(ToolActionTransformModule.builder(ToolActionTransformHelper.AXE_WAX_OFF, SoundEvents.AXE_WAX_OFF.value()).eventId(LevelEvent.PARTICLES_WAX_OFF).build())
       .addModule(ShowOffhandModule.DISALLOW_BROKEN).addModule(ShowInteractionSourceModule.INSTANCE);
     buildModifier(ModifierIds.tilling)
       .levelDisplay(ModifierLevelDisplay.NO_LEVELS)
-      .addModule(ToolActionTransformModule.builder(ItemAbilities.HOE_TILL, SoundEvents.HOE_TILL).build())
-      .addModule(ToolActionWalkerTransformModule.builder(ItemAbilities.HOE_TILL, SoundEvents.HOE_TILL).amount(0.5f, 1))
+      .addModule(ToolActionTransformModule.builder(ToolActionTransformHelper.HOE_TILL, SoundEvents.HOE_TILL.value()).build())
+      .addModule(ToolActionWalkerTransformModule.builder(ToolActionTransformHelper.HOE_TILL, SoundEvents.HOE_TILL.value()).amount(0.5f, 1))
       .addModule(ShowOffhandModule.DISALLOW_BROKEN).addModule(ShowInteractionSourceModule.INSTANCE);
     buildModifier(ModifierIds.brushing).levelDisplay(ModifierLevelDisplay.NO_LEVELS).addModule(BrushModule.INSTANCE);
     buildModifier(ModifierIds.harvest).levelDisplay(ModifierLevelDisplay.NO_LEVELS)
@@ -1072,7 +1071,7 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
       .priority(175) // higher than overslime, to ensure this is removed first
       .addModule(new CapacityBarModule(LevelingInt.eachLevel(100), ToolStats.DURABILITY))
       .addModule(new DurabilityShieldModule(0x7F7F7F))
-      .addModule(LootToCapacityModule.consume(Ingredient.of(TinkerTags.Items.STONESHIELDS)).amount(3).eachLevel(0.2f));
+      .addModule(LootToCapacityModule.consume(IngredientHelper.tag(TinkerTags.Items.STONESHIELDS)).amount(3).eachLevel(0.2f));
     buildModifier(ModifierIds.barkskin)
       .levelDisplay(ModifierLevelDisplay.NO_LEVELS)
       .priority(200) // higher than all other forms of durability shields

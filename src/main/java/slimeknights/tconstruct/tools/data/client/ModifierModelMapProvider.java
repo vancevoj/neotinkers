@@ -1,7 +1,7 @@
 package slimeknights.tconstruct.tools.data.client;
 
-import net.minecraft.world.item.equipment.ArmorType;
 import net.minecraft.data.PackOutput;
+import net.minecraft.world.item.equipment.ArmorType;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.client.modifiers.DyedModifierModel;
 import slimeknights.tconstruct.library.client.modifiers.model.MaterialHasFallbackModifierModel;
