@@ -1,26 +1,28 @@
 package slimeknights.tconstruct.shared;
 
-import net.minecraft.world.entity.EntityTypes;
+import net.minecraft.advancements.Advancement;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.data.recipes.BrewingRecipeBuilder;
+import net.minecraft.data.recipes.RecipeOutput;
+import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potion;
-import net.minecraft.world.item.alchemy.PotionBrewing;
-import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.neoforged.bus.api.SubscribeEvent;
+import net.minecraft.world.item.crafting.Recipe;
+import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModLoadingContext;
-import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.event.brewing.RegisterBrewingRecipesEvent;
+import net.neoforged.neoforge.data.event.GatherDataRegistryEntriesEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import slimeknights.mantle.registration.deferred.PotionDeferredRegister;
 import slimeknights.mantle.registration.deferred.PotionDeferredRegister.PotionType;
@@ -38,6 +40,8 @@ import slimeknights.tconstruct.tools.modifiers.traits.skull.SelfDestructiveModif
 import slimeknights.tconstruct.world.TinkerWorld;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 
 /** Handles registration for all status effects and potions in the mod */
 public class TinkerEffects extends TinkerModule {
@@ -73,17 +77,15 @@ public class TinkerEffects extends TinkerModule {
   public static final EnumObject<PotionType,Potion> enderferencePotion = POTIONS.registerTypes("enderference", enderference, 90 * 20, 0).withLong().build();
 
   public TinkerEffects() {
-    POTIONS.register(ModLoadingContext.get().getActiveContainer().getEventBus());
-    // RegisterBrewingRecipesEvent fires on the game bus, not the mod bus
-    NeoForge.EVENT_BUS.addListener(this::registerBrewingRecipes);
+    IEventBus bus = ModLoadingContext.get().getActiveContainer().getEventBus();
+    POTIONS.register(bus);
+    // 26.3: brewing is a datapack recipe type, the event registering brewing recipes in code is gone. The recipes are generated instead.
+    bus.addListener(GatherDataRegistryEntriesEvent.class, TinkerEffects::gatherRegistries);
   }
 
-  void registerBrewingRecipes(RegisterBrewingRecipesEvent event) {
-    PotionBrewing.Builder builder = event.getBuilder();
-    brewing(builder, experiencedPotion,  Potions.AWKWARD, Ingredient.of(TinkerWorld.congealedSlime.get(SlimeType.EARTH)));
-    brewing(builder, ricochetPotion,     Potions.AWKWARD, Ingredient.of(TinkerWorld.congealedSlime.get(SlimeType.SKY)));
-    brewing(builder, levitationPotion,   Potions.AWKWARD, Ingredient.of(TinkerWorld.congealedSlime.get(SlimeType.ICHOR)));
-    brewing(builder, enderferencePotion, Potions.AWKWARD, Ingredient.of(TinkerWorld.congealedSlime.get(SlimeType.ENDER)));
+  /** Adds the brewing recipe provider to datagen */
+  private static void gatherRegistries(GatherDataRegistryEntriesEvent event) {
+    event.recipe(BrewingRecipes::new);
   }
 
   /** Wraps a potion in its registry holder */
@@ -91,18 +93,52 @@ public class TinkerEffects extends TinkerModule {
     return BuiltInRegistries.POTION.wrapAsHolder(potion);
   }
 
-  /** Registers recipes for brewing, longer and stronger potions for the given object */
-  private static void brewing(PotionBrewing.Builder builder, EnumObject<PotionType,Potion> potion, Holder<Potion> base, Ingredient ingredient) {
-    Holder<Potion> normal = holder(potion.get(PotionType.NORMAL));
-    // base potion + custom ingredient -> normal potion (custom ingredient requires the generic recipe form)
-    builder.addRecipe(Ingredient.of(PotionContents.createItemStack(Items.POTION, base)), ingredient, PotionContents.createItemStack(Items.POTION, normal));
-    Potion longer = potion.getOrNull(PotionType.LONG);
-    if (longer != null) {
-      builder.addMix(normal, Items.REDSTONE, holder(longer));
+  /** Datagen for the potion brewing recipes, as brewing recipes are data since 26.3 */
+  private static class BrewingRecipes extends RecipeProvider {
+    /** Containers vanilla brews potions in */
+    private static final Item[] CONTAINERS = { Items.POTION, Items.SPLASH_POTION, Items.LINGERING_POTION };
+
+    BrewingRecipes(BootstrapContext<Recipe<?>> recipes, BootstrapContext<Advancement> advancements) {
+      super(recipes, advancements, TConstruct.MOD_ID);
     }
-    Potion strong = potion.getOrNull(PotionType.STRONG);
-    if (strong != null) {
-      builder.addMix(normal, Items.GLOWSTONE_DUST, holder(strong));
+
+    @Override
+    protected void buildRecipes() {
+      brewing(output, experiencedPotion,  Potions.AWKWARD, TinkerWorld.congealedSlime.get(SlimeType.EARTH).asItem());
+      brewing(output, ricochetPotion,     Potions.AWKWARD, TinkerWorld.congealedSlime.get(SlimeType.SKY).asItem());
+      brewing(output, levitationPotion,   Potions.AWKWARD, TinkerWorld.congealedSlime.get(SlimeType.ICHOR).asItem());
+      brewing(output, enderferencePotion, Potions.AWKWARD, TinkerWorld.congealedSlime.get(SlimeType.ENDER).asItem());
+    }
+
+    /** Registers recipes for brewing, longer and stronger potions for the given object */
+    private static void brewing(RecipeOutput output, EnumObject<PotionType,Potion> potion, Holder<Potion> base, Item reagent) {
+      Holder<Potion> normal = holder(potion.get(PotionType.NORMAL));
+      // base potion + custom ingredient -> normal potion, drinkable potions only like the old generic recipe form
+      BrewingRecipeBuilder.brewingMix(Items.POTION, base, reagent, normal).save(output);
+      List<Holder<Potion>> variants = new ArrayList<>();
+      variants.add(normal);
+      // longer and stronger work in all containers, like the old potion mixes
+      Potion longer = potion.getOrNull(PotionType.LONG);
+      if (longer != null) {
+        Holder<Potion> longHolder = holder(longer);
+        variants.add(longHolder);
+        for (Item container : CONTAINERS) {
+          BrewingRecipeBuilder.brewingMix(container, normal, Items.REDSTONE, longHolder).save(output);
+        }
+      }
+      Potion strong = potion.getOrNull(PotionType.STRONG);
+      if (strong != null) {
+        Holder<Potion> strongHolder = holder(strong);
+        variants.add(strongHolder);
+        for (Item container : CONTAINERS) {
+          BrewingRecipeBuilder.brewingMix(container, normal, Items.GLOWSTONE_DUST, strongHolder).save(output);
+        }
+      }
+      // vanilla only generates the splash and lingering transformations for its own potions, before they applied to any potion
+      for (Holder<Potion> variant : variants) {
+        BrewingRecipeBuilder.brewingContainerTransform(Items.POTION, variant, Items.GUNPOWDER, Items.SPLASH_POTION).save(output);
+        BrewingRecipeBuilder.brewingContainerTransform(Items.SPLASH_POTION, variant, Items.DRAGON_BREATH, Items.LINGERING_POTION).save(output);
+      }
     }
   }
 

@@ -10,6 +10,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.event.EventHooks;
+import slimeknights.mantle.recipe.helper.RecipeHelper;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.recipe.RecipeResult;
@@ -137,7 +138,8 @@ public class ModifierWorktableBlockEntity extends RetexturedTableBlockEntity imp
         return updateRecipe(lastRecipe);
       }
       // look for a new recipe, if it matches cache it
-      Optional<IModifierWorktableRecipe> recipe = level.getRecipeManager().getRecipeFor(TinkerRecipeTypes.MODIFIER_WORKTABLE.get(), inventoryWrapper, level).map(RecipeHolder::value);
+      // on the client this uses the synced recipes, see TinkerRecipeTypes#sendRecipesToClient
+      Optional<IModifierWorktableRecipe> recipe = RecipeHelper.getRecipeFor(level, TinkerRecipeTypes.MODIFIER_WORKTABLE.get(), inventoryWrapper).map(RecipeHolder::value);
       if (recipe.isPresent()) {
         return updateRecipe(recipe.get());
       }
@@ -207,7 +209,7 @@ public class ModifierWorktableBlockEntity extends RetexturedTableBlockEntity imp
     }
 
     // we are definitely crafting at this point
-    resultItem.onCraftedBy(this.level, player, amount);
+    resultItem.onCraftedBy(player, amount);
     EventHooks.firePlayerCraftingEvent(player, resultItem, this.inventoryWrapper);
     this.playCraftSound(player);
 

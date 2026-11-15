@@ -1,6 +1,5 @@
 package slimeknights.tconstruct.tables;
 
-import net.minecraft.data.DataGenerator;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
@@ -15,7 +14,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
-import net.neoforged.neoforge.data.event.GatherDataEvent;
+import net.neoforged.neoforge.data.event.GatherDataRegistryEntriesEvent;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -58,6 +57,7 @@ import slimeknights.tconstruct.tables.block.entity.table.PartBuilderBlockEntity;
 import slimeknights.tconstruct.tables.block.entity.table.TinkerStationBlockEntity;
 import slimeknights.tconstruct.tables.data.TableRecipeProvider;
 import slimeknights.tconstruct.tables.item.AnvilBlockItem;
+import slimeknights.tconstruct.tables.item.RetexturedTableBlockItem;
 import slimeknights.tconstruct.tables.item.TinkersChestBlockItem;
 import slimeknights.tconstruct.tables.menu.CraftingStationContainerMenu;
 import slimeknights.tconstruct.tables.menu.ModifierWorktableContainerMenu;
@@ -72,9 +72,10 @@ import slimeknights.tconstruct.tables.recipe.TinkerStationRepairRecipe;
 import slimeknights.tconstruct.tools.TinkerToolParts;
 import slimeknights.tconstruct.world.TinkerWorld;
 
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 /**
  * Handles all the table for tool creation
@@ -93,28 +94,31 @@ public final class TinkerTables extends TinkerModule {
    * Blocks
    */
   public static final ItemObject<TableBlock> craftingStation, tinkerStation, partBuilder, tinkersChest, partChest;
+  /** Block item for retextured tables, adds the texture tooltip as blocks no longer have a tooltip hook */
+  private static final BiFunction<Block, Item.Properties, BlockItem> TABLE_ITEM = RetexturedTableBlockItem::new;
   static {
-    Block.Properties WOOD_TABLE = builder(MapColor.WOOD, SoundType.WOOD).instrument(NoteBlockInstrument.BASS).strength(1.0F, 5.0F).noOcclusion();
-    craftingStation = BLOCKS.register("crafting_station", () -> new CraftingStationBlock(WOOD_TABLE), BLOCK_ITEM);
-    tinkerStation = BLOCKS.register("tinker_station", () -> new TinkerStationBlock(WOOD_TABLE, 4), BLOCK_ITEM);
-    partBuilder = BLOCKS.register("part_builder", () -> new GenericTableBlock(WOOD_TABLE, PartBuilderBlockEntity::new), BLOCK_ITEM);
-    tinkersChest = BLOCKS.register("tinkers_chest", () -> new TinkersChestBlock(WOOD_TABLE, TinkersChestBlockEntity::new, true), block -> new TinkersChestBlockItem(block, ITEM_PROPS));
-    partChest = BLOCKS.register("part_chest", () -> new ChestBlock(WOOD_TABLE, PartChestBlockEntity::new, true), BLOCK_ITEM);
+    // properties need the block ID since 1.21.2, so each table gets a new instance
+    Supplier<Block.Properties> WOOD_TABLE = () -> builder(MapColor.WOOD, SoundType.WOOD).instrument(NoteBlockInstrument.BASS).strength(1.0F, 5.0F).noOcclusion();
+    craftingStation = BLOCKS.register("crafting_station", CraftingStationBlock::new, WOOD_TABLE, TABLE_ITEM);
+    tinkerStation = BLOCKS.register("tinker_station", props -> new TinkerStationBlock(props, 4), WOOD_TABLE, TABLE_ITEM);
+    partBuilder = BLOCKS.register("part_builder", props -> new GenericTableBlock(props, PartBuilderBlockEntity::new), WOOD_TABLE, TABLE_ITEM);
+    tinkersChest = BLOCKS.register("tinkers_chest", props -> new TinkersChestBlock(props, TinkersChestBlockEntity::new, true), WOOD_TABLE, TinkersChestBlockItem::new);
+    partChest = BLOCKS.register("part_chest", props -> new ChestBlock(props, PartChestBlockEntity::new, true), WOOD_TABLE, BLOCK_ITEM);
   }
 
   public static final ItemObject<TableBlock> castChest, modifierWorktable;
   static {
-    Block.Properties STONE_TABLE = builder(MapColor.COLOR_GRAY, SoundType.METAL).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(3.0F, 9.0F).noOcclusion();
-    castChest = BLOCKS.register("cast_chest", () -> new ChestBlock(STONE_TABLE, CastChestBlockEntity::new, false), BLOCK_ITEM);
-    modifierWorktable = BLOCKS.register("modifier_worktable", () -> new GenericTableBlock(STONE_TABLE, ModifierWorktableBlockEntity::new), BLOCK_ITEM);
+    Supplier<Block.Properties> STONE_TABLE = () -> builder(MapColor.COLOR_GRAY, SoundType.METAL).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(3.0F, 9.0F).noOcclusion();
+    castChest = BLOCKS.register("cast_chest", props -> new ChestBlock(props, CastChestBlockEntity::new, false), STONE_TABLE, BLOCK_ITEM);
+    modifierWorktable = BLOCKS.register("modifier_worktable", props -> new GenericTableBlock(props, ModifierWorktableBlockEntity::new), STONE_TABLE, TABLE_ITEM);
   }
 
   public static final ItemObject<TableBlock> tinkersAnvil, scorchedAnvil;
   static {
-    Block.Properties METAL_TABLE = builder(MapColor.COLOR_GRAY, SoundType.ANVIL).pushReaction(PushReaction.IMMOVEABLE).requiresCorrectToolForDrops().strength(5.0F, 1200.0F).noOcclusion();
-    Function<Block, BlockItem> blockItem = block -> new AnvilBlockItem(block, ITEM_PROPS, TinkerToolParts.fakeStorageBlockItem, TinkerTags.Materials.COMPATABILITY_ALLOYS);
-    tinkersAnvil = BLOCKS.register("tinkers_anvil", () -> new TinkersAnvilBlock(METAL_TABLE, 6), blockItem);
-    scorchedAnvil = BLOCKS.register("scorched_anvil", () -> new ScorchedAnvilBlock(METAL_TABLE, 6), blockItem);
+    Supplier<Block.Properties> METAL_TABLE = () -> builder(MapColor.COLOR_GRAY, SoundType.ANVIL).pushReaction(PushReaction.IMMOVEABLE).requiresCorrectToolForDrops().strength(5.0F, 1200.0F).noOcclusion();
+    BiFunction<Block, Item.Properties, BlockItem> blockItem = (block, props) -> new AnvilBlockItem(block, props, TinkerToolParts.fakeStorageBlockItem, TinkerTags.Materials.COMPATABILITY_ALLOYS);
+    tinkersAnvil = BLOCKS.register("tinkers_anvil", props -> new TinkersAnvilBlock(props, 6), METAL_TABLE, blockItem);
+    scorchedAnvil = BLOCKS.register("scorched_anvil", props -> new ScorchedAnvilBlock(props, 6), METAL_TABLE, blockItem);
   }
   /*
    * Items
@@ -146,26 +150,26 @@ public final class TinkerTables extends TinkerModule {
   /*
    * Recipes
    */
-  public static final DeferredHolder<? super RecipeSerializer<MaterialRecipe>, RecipeSerializer<MaterialRecipe>> materialRecipeSerializer = RECIPE_SERIALIZERS.register("material", () -> LoadableRecipeSerializer.of(MaterialRecipe.LOADER));
-  public static final DeferredHolder<? super RecipeSerializer<ToolBuildingRecipe>, RecipeSerializer<ToolBuildingRecipe>> toolBuildingRecipeSerializer = RECIPE_SERIALIZERS.register("tool_building", () -> LoadableRecipeSerializer.of(ToolBuildingRecipe.LOADER));
-  public static final DeferredHolder<? super RecipeSerializer<TinkerStationPartSwapping>, RecipeSerializer<TinkerStationPartSwapping>> tinkerStationPartSwappingSerializer = RECIPE_SERIALIZERS.register("tinker_station_part_swapping", () -> LoadableRecipeSerializer.of(TinkerStationPartSwapping.LOADER));
-  public static final DeferredHolder<? super RecipeSerializer<TinkerStationDamagingRecipe>, RecipeSerializer<TinkerStationDamagingRecipe>> tinkerStationDamagingSerializer = RECIPE_SERIALIZERS.register("tinker_station_damaging", () -> LoadableRecipeSerializer.of(TinkerStationDamagingRecipe.LOADER));
-  public static final DeferredHolder<? super RecipeSerializer<FixedMaterialSwappingRecipe>, RecipeSerializer<FixedMaterialSwappingRecipe>> fixedMaterialSwapping = RECIPE_SERIALIZERS.register("fixed_material_swapping", () -> LoadableRecipeSerializer.of(FixedMaterialSwappingRecipe.LOADER));
-  public static final DeferredHolder<? super RecipeSerializer<MaterialValueSwappingRecipe>, RecipeSerializer<MaterialValueSwappingRecipe>> materialValueSwapping = RECIPE_SERIALIZERS.register("material_value_swapping", () -> LoadableRecipeSerializer.of(MaterialValueSwappingRecipe.LOADER));
-  public static final DeferredHolder<? super RecipeSerializer<PartSwappingOverrideRecipe>, RecipeSerializer<PartSwappingOverrideRecipe>> partSwappingOverride = RECIPE_SERIALIZERS.register("part_swapping_override", () -> LoadableRecipeSerializer.of(PartSwappingOverrideRecipe.LOADER));
-  public static final DeferredHolder<? super RecipeSerializer<ToolMaterialSwappingRecipe>, RecipeSerializer<ToolMaterialSwappingRecipe>> toolMaterialSwapping = RECIPE_SERIALIZERS.register("tool_material_swapping", () -> LoadableRecipeSerializer.of(ToolMaterialSwappingRecipe.LOADER));
+  public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<MaterialRecipe>> materialRecipeSerializer = RECIPE_SERIALIZERS.register("material", () -> LoadableRecipeSerializer.of(MaterialRecipe.LOADER));
+  public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<ToolBuildingRecipe>> toolBuildingRecipeSerializer = RECIPE_SERIALIZERS.register("tool_building", () -> LoadableRecipeSerializer.of(ToolBuildingRecipe.LOADER));
+  public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<TinkerStationPartSwapping>> tinkerStationPartSwappingSerializer = RECIPE_SERIALIZERS.register("tinker_station_part_swapping", () -> LoadableRecipeSerializer.of(TinkerStationPartSwapping.LOADER));
+  public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<TinkerStationDamagingRecipe>> tinkerStationDamagingSerializer = RECIPE_SERIALIZERS.register("tinker_station_damaging", () -> LoadableRecipeSerializer.of(TinkerStationDamagingRecipe.LOADER));
+  public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<FixedMaterialSwappingRecipe>> fixedMaterialSwapping = RECIPE_SERIALIZERS.register("fixed_material_swapping", () -> LoadableRecipeSerializer.of(FixedMaterialSwappingRecipe.LOADER));
+  public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<MaterialValueSwappingRecipe>> materialValueSwapping = RECIPE_SERIALIZERS.register("material_value_swapping", () -> LoadableRecipeSerializer.of(MaterialValueSwappingRecipe.LOADER));
+  public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<PartSwappingOverrideRecipe>> partSwappingOverride = RECIPE_SERIALIZERS.register("part_swapping_override", () -> LoadableRecipeSerializer.of(PartSwappingOverrideRecipe.LOADER));
+  public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<ToolMaterialSwappingRecipe>> toolMaterialSwapping = RECIPE_SERIALIZERS.register("tool_material_swapping", () -> LoadableRecipeSerializer.of(ToolMaterialSwappingRecipe.LOADER));
   @Deprecated
-  public static final DeferredHolder<? super RecipeSerializer<ShapedMaterialRecipe>, RecipeSerializer<ShapedMaterialRecipe>> shapedMaterialRecipeSerializer = RECIPE_SERIALIZERS.register("crafting_shaped_material", ShapedMaterialRecipe.Serializer::new);
-  public static final DeferredHolder<? super RecipeSerializer<ShapedMaterialsRecipe>, RecipeSerializer<ShapedMaterialsRecipe>> shapedMaterialsRecipeSerializer = RECIPE_SERIALIZERS.register("crafting_shaped_materials", ShapedMaterialsRecipe.Serializer::new);
-  public static final DeferredHolder<? super RecipeSerializer<ShapelessMaterialsRecipe>, RecipeSerializer<ShapelessMaterialsRecipe>> shapelessMaterialsRecipeSerializer = RECIPE_SERIALIZERS.register("crafting_shapeless_materials", ShapelessMaterialsRecipe.Serializer::new);
+  public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<ShapedMaterialRecipe>> shapedMaterialRecipeSerializer = RECIPE_SERIALIZERS.register("crafting_shaped_material", () -> new ShapedMaterialRecipe.Serializer().toSerializer());
+  public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<ShapedMaterialsRecipe>> shapedMaterialsRecipeSerializer = RECIPE_SERIALIZERS.register("crafting_shaped_materials", () -> new ShapedMaterialsRecipe.Serializer().toSerializer());
+  public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<ShapelessMaterialsRecipe>> shapelessMaterialsRecipeSerializer = RECIPE_SERIALIZERS.register("crafting_shapeless_materials", () -> new ShapelessMaterialsRecipe.Serializer().toSerializer());
   // part builder
-  public static final DeferredHolder<? super RecipeSerializer<PartRecipe>, RecipeSerializer<PartRecipe>> partRecipeSerializer = RECIPE_SERIALIZERS.register("part_builder", () -> LoadableRecipeSerializer.of(PartRecipe.LOADER));
-  public static final DeferredHolder<? super RecipeSerializer<ItemPartRecipe>, RecipeSerializer<ItemPartRecipe>> itemPartBuilderSerializer = RECIPE_SERIALIZERS.register("item_part_builder", () -> LoadableRecipeSerializer.of(ItemPartRecipe.LOADER));
-  public static final DeferredHolder<? super RecipeSerializer<PartBuilderToolRecycle>, RecipeSerializer<PartBuilderToolRecycle>> partBuilderToolRecycling = RECIPE_SERIALIZERS.register("part_builder_tool_recycling", () -> LoadableRecipeSerializer.of(PartBuilderToolRecycle.LOADER));
-  public static final DeferredHolder<? super RecipeSerializer<PartBuilderRecycle>, RecipeSerializer<PartBuilderRecycle>> partBuilderDamageableRecycling = RECIPE_SERIALIZERS.register("part_builder_recycling", () -> LoadableRecipeSerializer.of(PartBuilderRecycle.LOADER));
+  public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<PartRecipe>> partRecipeSerializer = RECIPE_SERIALIZERS.register("part_builder", () -> LoadableRecipeSerializer.of(PartRecipe.LOADER));
+  public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<ItemPartRecipe>> itemPartBuilderSerializer = RECIPE_SERIALIZERS.register("item_part_builder", () -> LoadableRecipeSerializer.of(ItemPartRecipe.LOADER));
+  public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<PartBuilderToolRecycle>> partBuilderToolRecycling = RECIPE_SERIALIZERS.register("part_builder_tool_recycling", () -> LoadableRecipeSerializer.of(PartBuilderToolRecycle.LOADER));
+  public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<PartBuilderRecycle>> partBuilderDamageableRecycling = RECIPE_SERIALIZERS.register("part_builder_recycling", () -> LoadableRecipeSerializer.of(PartBuilderRecycle.LOADER));
   // repair - standard
-  public static final DeferredHolder<? super SimpleRecipeSerializer<TinkerStationRepairRecipe>, SimpleRecipeSerializer<TinkerStationRepairRecipe>> tinkerStationRepairSerializer = RECIPE_SERIALIZERS.register("tinker_station_repair", () -> new SimpleRecipeSerializer<>(() -> new TinkerStationRepairRecipe(TConstruct.getResource("tinker_station_repair"))));
-  public static final DeferredHolder<? super SimpleRecipeSerializer<CraftingTableRepairKitRecipe>, SimpleRecipeSerializer<CraftingTableRepairKitRecipe>> craftingTableRepairSerializer = RECIPE_SERIALIZERS.register("crafting_table_repair", () -> new SimpleRecipeSerializer<>(() -> new CraftingTableRepairKitRecipe(TConstruct.getResource("crafting_table_repair"))));
+  public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<TinkerStationRepairRecipe>> tinkerStationRepairSerializer = RECIPE_SERIALIZERS.register("tinker_station_repair", () -> SimpleRecipeSerializer.of(() -> new TinkerStationRepairRecipe(TConstruct.getResource("tinker_station_repair"))));
+  public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<CraftingTableRepairKitRecipe>> craftingTableRepairSerializer = RECIPE_SERIALIZERS.register("crafting_table_repair", () -> SimpleRecipeSerializer.of(() -> new CraftingTableRepairKitRecipe(TConstruct.getResource("crafting_table_repair"))));
 
   @SubscribeEvent
   void commonSetup(final FMLCommonSetupEvent event) {
@@ -177,10 +181,10 @@ public final class TinkerTables extends TinkerModule {
     });
   }
 
+  /** Recipes are a registry since 26.3, so recipe providers are registry bootstraps */
   @SubscribeEvent
-  void gatherData(final GatherDataEvent event) {
-    DataGenerator generator = event.getGenerator();
-    generator.addProvider(event.includeServer(), new TableRecipeProvider(generator.getPackOutput()));
+  void gatherRegistries(final GatherDataRegistryEntriesEvent event) {
+    event.recipe(TableRecipeProvider::new);
   }
 
   /** Adds all relevant items to the creative tab, called in the general tab */

@@ -4,9 +4,11 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Plane;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -14,7 +16,7 @@ import net.minecraft.world.level.block.state.StateDefinition.Builder;
 import net.minecraft.world.level.block.state.properties.AttachFace;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.shapes.BooleanOp;
@@ -110,7 +112,7 @@ public class PlatformBlock extends Block implements SimpleWaterloggedBlock {
   }
 
   /** Checks if the block has the given facing property */
-  private static boolean facingConnected(Direction facing, BlockState state, DirectionProperty property) {
+  private static boolean facingConnected(Direction facing, BlockState state, EnumProperty<Direction> property) {
     return !state.hasProperty(property) || state.getValue(property) == facing;
   }
 
@@ -156,9 +158,9 @@ public class PlatformBlock extends Block implements SimpleWaterloggedBlock {
   }
 
   @Override
-  public BlockState updateShape(BlockState state, Direction direction, BlockState neighbor, LevelAccessor level, BlockPos selfPos, BlockPos neighborPos) {
+  public BlockState updateShape(BlockState state, LevelReader level, ScheduledTickAccess ticks, BlockPos selfPos, Direction direction, BlockPos neighborPos, BlockState neighbor, RandomSource random) {
     if (state.getValue(WATERLOGGED)) {
-      level.scheduleTick(selfPos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
+      ticks.scheduleTick(selfPos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
     }
 
     if (direction == Direction.UP) {

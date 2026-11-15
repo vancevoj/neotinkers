@@ -8,7 +8,8 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.neoforge.capabilities.Capabilities;
-import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.item.ItemResource;
 import slimeknights.mantle.inventory.BaseContainerMenu;
 import slimeknights.mantle.inventory.EmptyItemHandler;
 import slimeknights.mantle.inventory.SmartItemHandlerSlot;
@@ -21,7 +22,7 @@ public class SideInventoryContainer<TILE extends BlockEntity> extends BaseContai
   private final int columns;
   @Getter
   private final int slotCount;
-  protected final IItemHandler itemHandler;
+  protected final ResourceHandler<ItemResource> itemHandler;
 
   public SideInventoryContainer(MenuType<?> containerType, int windowId, Inventory inv, @Nullable TILE tile, int x, int y, int columns) {
     this(containerType, windowId, inv, tile, null, x, y, columns);
@@ -31,7 +32,7 @@ public class SideInventoryContainer<TILE extends BlockEntity> extends BaseContai
     super(containerType, windowId, inv, tile);
 
     // must have a TE
-    IItemHandler handler = null;
+    ResourceHandler<ItemResource> handler = null;
     if (tile != null) {
       Level level = tile.getLevel();
       if (level != null) {
@@ -44,7 +45,7 @@ public class SideInventoryContainer<TILE extends BlockEntity> extends BaseContai
     this.itemHandler = handler;
 
     // slot properties
-    this.slotCount = handler.getSlots();
+    this.slotCount = handler.size();
     this.columns = columns;
     int rows = this.slotCount / columns;
     if (this.slotCount % columns != 0) {
@@ -73,7 +74,7 @@ public class SideInventoryContainer<TILE extends BlockEntity> extends BaseContai
    * @param y            Slot Y position
    * @return  Inventory slot
    */
-  protected Slot createSlot(IItemHandler itemHandler, int index, int x, int y) {
+  protected Slot createSlot(ResourceHandler<ItemResource> itemHandler, int index, int x, int y) {
     return new SmartItemHandlerSlot(itemHandler, index, x, y);
   }
 }

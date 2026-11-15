@@ -3,6 +3,7 @@ package slimeknights.tconstruct.tables.block.entity.inventory;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
+import slimeknights.mantle.recipe.helper.RecipeHelper;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.materials.definition.MaterialId;
 import slimeknights.tconstruct.library.materials.definition.MaterialVariantId;
@@ -70,7 +71,8 @@ public class PartBuilderContainerWrapper implements IPartBuilderContainer {
       } else {
         Level world = getWorld();
         IMaterialRecipeContainer inv = () -> stack;
-        this.material = world.getRecipeManager().getRecipeFor(TinkerRecipeTypes.MATERIAL.get(), inv, world).map(RecipeHolder::value).orElse(null);
+        // on the client this uses the synced recipes, see TinkerRecipeTypes#sendRecipesToClient
+        this.material = RecipeHelper.getRecipeFor(world, TinkerRecipeTypes.MATERIAL.get(), inv).map(RecipeHolder::value).orElse(null);
       }
     }
     return this.material;

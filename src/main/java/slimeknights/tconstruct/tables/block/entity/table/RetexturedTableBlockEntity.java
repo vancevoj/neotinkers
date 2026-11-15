@@ -2,14 +2,13 @@ package slimeknights.tconstruct.tables.block.entity.table;
 
 import lombok.Getter;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.model.data.ModelData;
 import slimeknights.mantle.block.entity.IRetexturedBlockEntity;
@@ -18,6 +17,7 @@ import slimeknights.mantle.util.RetexturedHelper;
 import slimeknights.tconstruct.shared.block.entity.TableBlockEntity;
 
 import javax.annotation.Nonnull;
+import java.util.Optional;
 
 public abstract class RetexturedTableBlockEntity extends TableBlockEntity implements IRetexturedBlockEntity, IRenderBoundingBox {
   private static final String TAG_TEXTURE = "texture";
@@ -76,18 +76,19 @@ public abstract class RetexturedTableBlockEntity extends TableBlockEntity implem
   }
 
   @Override
-  public void saveSynced(CompoundTag tags, HolderLookup.Provider registries) {
-    super.saveSynced(tags, registries);
+  public void saveSynced(ValueOutput output) {
+    super.saveSynced(output);
     if (texture != Blocks.AIR) {
-      tags.putString(TAG_TEXTURE, getTextureName());
+      output.putString(TAG_TEXTURE, getTextureName());
     }
   }
 
   @Override
-  public void loadAdditional(CompoundTag tags, HolderLookup.Provider registries) {
-    super.loadAdditional(tags, registries);
-    if (tags.contains(TAG_TEXTURE, Tag.TAG_STRING)) {
-      texture = RetexturedHelper.getBlock(tags.getString(TAG_TEXTURE));
+  protected void loadAdditional(ValueInput input) {
+    super.loadAdditional(input);
+    Optional<String> name = input.getString(TAG_TEXTURE);
+    if (name.isPresent()) {
+      texture = RetexturedHelper.getBlock(name.get());
       textureUpdated();
     }
   }

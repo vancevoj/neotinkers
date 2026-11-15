@@ -14,16 +14,19 @@ import net.minecraft.commands.arguments.ResourceArgument;
 import com.mojang.serialization.JsonOps;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderGetter;
+import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.Container;
+import net.minecraft.util.context.ContextMap;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -31,18 +34,23 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.display.RecipeDisplay;
+import net.minecraft.world.item.crafting.display.SlotDisplayContext;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.FluidType;
-import net.neoforged.neoforge.fluids.capability.IFluidHandlerItem;
-import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.access.ItemAccess;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
+import net.neoforged.neoforge.transfer.fluid.FluidUtil;
 import org.apache.commons.lang3.mutable.MutableInt;
 import slimeknights.mantle.command.GeneratePackHelper;
 import slimeknights.mantle.command.MantleCommand;
 import slimeknights.mantle.data.loadable.Loadable;
 import slimeknights.mantle.data.loadable.Loadables;
+import slimeknights.mantle.data.loadable.common.IngredientLoadable;
 import slimeknights.mantle.data.predicate.IJsonPredicate;
 import slimeknights.mantle.data.predicate.item.ItemPredicate;
 import slimeknights.mantle.fluid.transfer.FluidContainerTransferManager;
@@ -50,9 +58,11 @@ import slimeknights.mantle.fluid.transfer.IFluidContainerTransfer;
 import slimeknights.mantle.fluid.transfer.IFluidContainerTransfer.TransferDirection;
 import slimeknights.mantle.fluid.transfer.IFluidContainerTransfer.TransferResult;
 import slimeknights.mantle.recipe.helper.FluidOutput;
+import slimeknights.mantle.recipe.helper.IngredientHelper;
 import slimeknights.mantle.util.JsonHelper;
 import slimeknights.mantle.util.LogicHelper;
 import slimeknights.tconstruct.TConstruct;
+import slimeknights.tconstruct.library.fluid.FluidTank;
 import slimeknights.tconstruct.library.recipe.melting.MeltingRecipeBuilder;
 import slimeknights.tconstruct.library.recipe.melting.MeltingRecipeLookup;
 import slimeknights.tconstruct.library.recipe.melting.MeltingRecipeLookup.MeltingFluid;
@@ -71,6 +81,7 @@ import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 /** Generates melting recipes based on crafting recipes */
 public class GenerateMeltingRecipesCommand {
@@ -90,7 +101,7 @@ public class GenerateMeltingRecipesCommand {
    * @param context    Context to fetch the recipe type argument
    */
   public static void register(LiteralArgumentBuilder<CommandSourceStack> subCommand, CommandBuildContext context) {
-    subCommand.requires(sender -> sender.hasPermission(MantleCommand.PERMISSION_GAME_COMMANDS))
+    subCommand.requires(Commands.hasPermission(MantleCommand.PERMISSION_GAME_COMMANDS))
       .then(Commands.argument("recipe_type", ResourceArgument.resource(context, Registries.RECIPE_TYPE))
         .executes(GenerateMeltingRecipesCommand::run));
   }
@@ -138,8 +149,10 @@ public class GenerateMeltingRecipesCommand {
     Path data = pack.resolve(PackType.SERVER_DATA.getDirectory());
     RecipeOutput consumer = new RecipeOutput() {
       @Override
-      public void accept(Identifier id, Recipe<?> recipe, @Nullable AdvancementHolder advancement, net.neoforged.neoforge.common.conditions.ICondition... conditions) {
-        Path path = data.resolve(id.getNamespace() + "/recipes/" + id.getPath() + ".json");
+      public void accept(ResourceKey<Recipe<?>> key, Recipe<?> recipe, @Nullable AdvancementHolder advancement, net.neoforged.neoforge.common.conditions.ICondition... conditions) {
+        // recipes live in the recipe folder since 1.21
+        Identifier id = key.identifier();
+        Path path = data.resolve(id.getNamespace() + "/recipe/" + id.getPath() + ".json");
         // serialize the recipe via its codec to a generated datapack JSON
         if (GeneratePackHelper.saveJson(Recipe.DIRECT_CODEC.encodeStart(access.createSerializationContext(JsonOps.INSTANCE), recipe).getOrThrow(JsonParseException::new), path)) {
           successes.increment();
@@ -150,6 +163,16 @@ public class GenerateMeltingRecipesCommand {
       public net.minecraft.advancements.Advancement.Builder advancement() {
         return net.minecraft.advancements.Advancement.Builder.recipeAdvancement().parent(net.minecraft.data.recipes.RecipeBuilder.ROOT_RECIPE_ADVANCEMENT);
       }
+
+      @Override
+      public <S> HolderGetter<S> lookup(ResourceKey<? extends Registry<? extends S>> key) {
+        return access.lookupOrThrow(key);
+      }
+
+      @Override
+      public <S> Stream<Holder.Reference<S>> listContextElements(ResourceKey<? extends Registry<? extends S>> key) {
+        return access.<S>lookupOrThrow(key).listElements();
+      }
     };
 
     // start building a list of melting recipes, but don't save them yet; duplicate recipes means we may need to take an intersection
@@ -158,13 +181,14 @@ public class GenerateMeltingRecipesCommand {
 
     // iterate all recipes and try adding a melting recipe
     MeltingCache cache = new MeltingCache();
-    for (RecipeHolder<T> recipeHolder : level.getRecipeManager().getAllRecipesFor((RecipeType<T>) recipeType.value())) {
+    ContextMap displayContext = SlotDisplayContext.fromLevel(level);
+    for (RecipeHolder<T> recipeHolder : level.recipeAccess().recipeMap().byType((RecipeType<T>) recipeType.value())) {
       Recipe<?> recipe = recipeHolder.value();
       // skip any recipes that are specifically blacklisted
-      if (skipRecipes.contains(recipeHolder.id())) {
+      if (skipRecipes.contains(recipeHolder.id().identifier())) {
         continue;
       }
-      ItemStack resultStack = recipe.getResultItem(access);
+      ItemStack resultStack = getResult(recipe, displayContext);
       // don't bother with results that have NBT unless its a damagable item, in which case we ignore NBT and hope for the best
       // also skip anything already meltable
       Item result = resultStack.getItem();
@@ -175,15 +199,16 @@ public class GenerateMeltingRecipesCommand {
 
       // in order to melt the result, we need to find what it's made of. Iterate all ingredients and turn them into a single result object
       ingredientSearch: {
-        for (Ingredient ingredient : recipe.getIngredients()) {
+        // since 1.21.2 recipes have no generic ingredient list, the placement info used by the recipe book lists them
+        for (Ingredient ingredient : recipe.placementInfo().ingredients()) {
           // skip empty ingredients, just saves some steps really
-          if (ingredient.isEmpty()) {
+          if (IngredientLoadable.isEmpty(ingredient)) {
             continue;
           }
           // for each ingredient, convert it into the smallest fluid. If we have multiple or anything invalid, give up
           MeltingResult ingredientFluid = null;
           boolean didIgnore = false; // if true, we skipped something and are ineligible for a fluid next
-          for (ItemStack stack : ingredient.getItems()) {
+          for (ItemStack stack : IngredientHelper.getStacks(ingredient)) {
             // if the ingredient has NBT, nothing we can do here
             // also skip if the item is disallowed as an input
             if (stack.isEmpty() || !stack.isComponentsPatchEmpty() || !inputs.matches(stack.getItem())) {
@@ -294,6 +319,23 @@ public class GenerateMeltingRecipesCommand {
     float time = (System.nanoTime() - startTime) / 1000000f;
     context.getSource().sendSuccess(() -> Component.translatable(KEY_SUCCESS, successes.intValue(), time, GeneratePackHelper.getOutputComponent(pack)), true);
     return successes.intValue();
+  }
+
+  /**
+   * Gets the result of the recipe. Since 1.21.2 recipes have no generic result getter, so this uses the recipe displays used by the recipe book and JEI.
+   * @param recipe          Recipe to check
+   * @param displayContext  Context for resolving the displays
+   * @return  First result of the recipe, or empty if it has no displayed result
+   */
+  private static ItemStack getResult(Recipe<?> recipe, ContextMap displayContext) {
+    for (RecipeDisplay display : recipe.display()) {
+      for (ItemStack stack : display.result().resolveForStacks(displayContext)) {
+        if (!stack.isEmpty()) {
+          return stack;
+        }
+      }
+    }
+    return ItemStack.EMPTY;
   }
 
   /** Helper to make it easier to keep tags consistent in fluid outputs */
@@ -450,9 +492,9 @@ public class GenerateMeltingRecipesCommand {
       }
       // fluid capability check
       try {
-        IFluidHandlerItem capability = stack.getCapability(Capabilities.Fluid.ITEM);
-        if (capability != null) {
-          FluidStack contained = capability.getFluidInTank(0);
+        ResourceHandler<FluidResource> capability = ItemAccess.forStack(stack).getCapability(Capabilities.Fluid.ITEM);
+        if (capability != null && capability.size() > 0) {
+          FluidStack contained = FluidUtil.getStack(capability, 0);
           if (!contained.isEmpty()) {
             return MeltingResult.from(contained);
           }

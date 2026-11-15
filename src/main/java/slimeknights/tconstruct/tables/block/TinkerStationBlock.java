@@ -55,7 +55,7 @@ public class TinkerStationBlock extends RetexturedTableBlock {
   }
 
   @Override
-  public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state) {
+  protected ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state, boolean includeData) {
     ItemStack stack = new ItemStack(state.getBlock());
     if (level.getBlockEntity(pos) instanceof TinkerStationBlockEntity be) {
       Block block = be.getTexture();

@@ -28,7 +28,7 @@ public class ModifierPriorityCommand {
    * @param subCommand  Command builder
    */
   public static void register(LiteralArgumentBuilder<CommandSourceStack> subCommand) {
-    subCommand.requires(sender -> sender.hasPermission(MantleCommand.PERMISSION_EDIT_SPAWN))
+    subCommand.requires(Commands.hasPermission(MantleCommand.PERMISSION_EDIT_SPAWN))
               // no argument: list all priorities
               .executes(context -> run(context, false))
               // argument: list only priorities of modifiers using that hook

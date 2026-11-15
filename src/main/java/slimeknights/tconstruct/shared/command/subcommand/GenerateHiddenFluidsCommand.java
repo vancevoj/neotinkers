@@ -5,6 +5,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
@@ -29,14 +30,14 @@ import java.util.List;
 
 /** Command generating the relevant tag to hide fluids related to unused materials. */
 public class GenerateHiddenFluidsCommand {
-  private static final DynamicCommandExceptionType ERROR_WRITING_TAG = new DynamicCommandExceptionType(tag -> Component.translatable("command.mantle.modify_tag.write_error", "fluid", tag));
+  private static final DynamicCommandExceptionType ERROR_WRITING_TAG = new DynamicCommandExceptionType(tag -> Component.translatable("command.mantle.modify_tag.write_error", "fluid", String.valueOf(tag)));
 
   /**
    * Registers this sub command with the root command
    * @param subCommand Command builder
    */
   public static void register(LiteralArgumentBuilder<CommandSourceStack> subCommand) {
-    subCommand.requires(sender -> sender.hasPermission(MantleCommand.PERMISSION_GAME_COMMANDS)).executes(GenerateHiddenFluidsCommand::run);
+    subCommand.requires(Commands.hasPermission(MantleCommand.PERMISSION_GAME_COMMANDS)).executes(GenerateHiddenFluidsCommand::run);
   }
 
   /** Runs the command */

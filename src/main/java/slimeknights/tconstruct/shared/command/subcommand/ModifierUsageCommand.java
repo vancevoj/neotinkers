@@ -45,7 +45,7 @@ public class ModifierUsageCommand {
    * @param subCommand  Command builder
    */
   public static void register(LiteralArgumentBuilder<CommandSourceStack> subCommand) {
-    subCommand.requires(sender -> sender.hasPermission(MantleCommand.PERMISSION_EDIT_SPAWN))
+    subCommand.requires(Commands.hasPermission(MantleCommand.PERMISSION_EDIT_SPAWN))
               .executes(context -> runForType(context, ModifierUsages.ALL, null))
               // modifier_usage all
               .then(Commands.literal("all").executes(context -> runForType(context, ModifierUsages.ALL, null)))

@@ -15,7 +15,7 @@ public class TinkersChestBlock extends ChestBlock {
   }
 
   @Override
-  public ItemStack getCloneItemStack(LevelReader world, BlockPos pos, BlockState state) {
+  protected ItemStack getCloneItemStack(LevelReader world, BlockPos pos, BlockState state, boolean includeData) {
     ItemStack stack = new ItemStack(this);
     if (world.getBlockEntity(pos) instanceof TinkersChestBlockEntity te && te.hasColor()) {
       TinkersChestBlockItem.setColor(stack, te.getColor());

@@ -1,10 +1,12 @@
 package slimeknights.tconstruct.tables.block.entity.inventory;
 
 import lombok.Setter;
+import net.minecraft.util.Prediction;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
+import slimeknights.mantle.recipe.helper.RecipeHelper;
 import slimeknights.tconstruct.library.recipe.TinkerRecipeTypes;
 import slimeknights.tconstruct.library.recipe.material.IMaterialRecipeContainer;
 import slimeknights.tconstruct.library.recipe.material.MaterialRecipe;
@@ -63,7 +65,8 @@ public class TinkerStationContainerWrapper implements IMutableTinkerStationConta
       return lastMaterialRecipe;
     }
     // try to find a new recipe
-    Optional<MaterialRecipe> newRecipe = world.getRecipeManager().getRecipeFor(TinkerRecipeTypes.MATERIAL.get(), inv, world).map(RecipeHolder::value);
+    // on the client this uses the synced recipes, see TinkerRecipeTypes#sendRecipesToClient
+    Optional<MaterialRecipe> newRecipe = RecipeHelper.getRecipeFor(world, TinkerRecipeTypes.MATERIAL.get(), inv).map(RecipeHolder::value);
     if (newRecipe.isPresent()) {
       lastMaterialRecipe = newRecipe.get();
       return lastMaterialRecipe;
@@ -148,7 +151,8 @@ public class TinkerStationContainerWrapper implements IMutableTinkerStationConta
   @Override
   public void giveItem(ItemStack stack) {
     if (player != null) {
-      player.getInventory().placeItemBackInInventory(stack);
+      // runs on both sides, so the client predicts the result
+      player.getInventory().placeItemBackInInventory(stack, Prediction.PREDICTED);
     }
   }
 }

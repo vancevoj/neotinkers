@@ -2,10 +2,8 @@ package slimeknights.tconstruct.tables.block.entity.table;
 
 import lombok.Getter;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Inventory;
@@ -14,9 +12,10 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.crafting.RecipeHolder;
-import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.model.data.ModelData;
 import net.neoforged.neoforge.event.EventHooks;
 import org.apache.commons.lang3.StringUtils;
@@ -44,6 +43,7 @@ import slimeknights.tconstruct.tables.network.UpdateTinkerStationRecipePacket;
 
 import javax.annotation.Nullable;
 import java.util.Objects;
+import java.util.Optional;
 
 import static slimeknights.tconstruct.library.tools.part.IMaterialItem.MATERIAL_TAG;
 
@@ -156,17 +156,15 @@ public class TinkerStationBlockEntity extends RetexturedTableBlockEntity impleme
     result = null;
     this.currentError = null;
 
-    if (!this.level.isClientSide() && this.level.getServer() != null) {
-      RecipeManager manager = this.level.getServer().getRecipeManager();
-
+    if (this.level instanceof ServerLevel serverLevel) {
       // first, try the cached recipe
       ITinkerStationRecipe recipe = lastRecipe;
       Identifier recipeId = lastRecipeId;
       // if it does not match, find a new recipe
       if (recipe == null || !recipe.matches(this.inventoryWrapper, this.level)) {
-        RecipeHolder<ITinkerStationRecipe> holder = manager.getRecipeFor(TinkerRecipeTypes.TINKER_STATION.get(), this.inventoryWrapper, this.level).orElse(null);
+        RecipeHolder<ITinkerStationRecipe> holder = serverLevel.recipeAccess().getRecipeFor(TinkerRecipeTypes.TINKER_STATION.get(), this.inventoryWrapper, serverLevel).orElse(null);
         recipe = holder == null ? null : holder.value();
-        recipeId = holder == null ? null : holder.id();
+        recipeId = holder == null ? null : holder.id().identifier();
       }
 
       // if we have a recipe, fetch its result
@@ -224,7 +222,7 @@ public class TinkerStationBlockEntity extends RetexturedTableBlockEntity impleme
     }
 
     // fire crafting events
-    resultItem.onCraftedBy(this.level, player, amount);
+    resultItem.onCraftedBy(player, amount);
     EventHooks.firePlayerCraftingEvent(player, resultItem, this.inventoryWrapper);
     this.playCraftSound(player);
 
@@ -348,18 +346,19 @@ public class TinkerStationBlockEntity extends RetexturedTableBlockEntity impleme
   }
 
   @Override
-  public void saveSynced(CompoundTag tags, HolderLookup.Provider registries) {
-    super.saveSynced(tags, registries);
+  public void saveSynced(ValueOutput output) {
+    super.saveSynced(output);
     if (material != MaterialId.UNKNOWN) {
-      tags.putString(MATERIAL_TAG, material.toString());
+      output.putString(MATERIAL_TAG, material.toString());
     }
   }
 
   @Override
-  public void loadAdditional(CompoundTag tags, HolderLookup.Provider registries) {
-    super.loadAdditional(tags, registries);
-    if (tags.contains(MATERIAL_TAG, Tag.TAG_STRING)) {
-      material = Objects.requireNonNullElse(MaterialVariantId.tryParse(tags.getString(MATERIAL_TAG)), MaterialId.UNKNOWN);
+  protected void loadAdditional(ValueInput input) {
+    super.loadAdditional(input);
+    Optional<String> materialName = input.getString(MATERIAL_TAG);
+    if (materialName.isPresent()) {
+      material = Objects.requireNonNullElse(MaterialVariantId.tryParse(materialName.get()), MaterialId.UNKNOWN);
       RetexturedHelper.onTextureUpdated(this);
     }
   }

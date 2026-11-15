@@ -25,8 +25,9 @@ import java.util.concurrent.CompletableFuture;
 @RequiredArgsConstructor(staticName = "stat")
 public class ToolStatArgument<T extends IToolStat> implements ArgumentType<T> {
   private static final Collection<String> EXAMPLES = Arrays.asList("tconstruct:mining_speed", "tconstruct:durability");
-  private static final DynamicCommandExceptionType NOT_FOUND = new DynamicCommandExceptionType(name -> TConstruct.makeTranslation("command", "stat_type.not_found", name));
-  private static final Dynamic2CommandExceptionType WRONG_TYPE = new Dynamic2CommandExceptionType((name, clazz) -> TConstruct.makeTranslation("command", "stat_type.wrong_type", name, clazz));
+  // 26.3 dev only allows strings, numbers and components as translation arguments
+  private static final DynamicCommandExceptionType NOT_FOUND = new DynamicCommandExceptionType(name -> TConstruct.makeTranslation("command", "stat_type.not_found", String.valueOf(name)));
+  private static final Dynamic2CommandExceptionType WRONG_TYPE = new Dynamic2CommandExceptionType((name, clazz) -> TConstruct.makeTranslation("command", "stat_type.wrong_type", String.valueOf(name), String.valueOf(clazz)));
 
   /** Filter to limit types of tool stats supported */
   private final Class<T> filter;

@@ -3,15 +3,15 @@ package slimeknights.tconstruct.shared.inventory;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.advancements.triggers.Criterion;
-import net.minecraft.advancements.critereon.ContextAwarePredicate;
-import net.minecraft.advancements.predicates.entity.EntityPredicate;
 import net.minecraft.advancements.triggers.SimpleCriterionTrigger;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.shared.TinkerCommons;
 
@@ -41,9 +41,9 @@ public class BlockContainerOpenedTrigger extends SimpleCriterionTrigger<BlockCon
   }
 
   /** Instance of this trigger */
-  public record Instance(Optional<ContextAwarePredicate> player, BlockEntityType<?> type) implements SimpleCriterionTrigger.SimpleInstance {
+  public record Instance(Optional<Holder<LootItemCondition>> player, BlockEntityType<?> type) implements SimpleCriterionTrigger.SimpleInstance {
     public static final Codec<Instance> CODEC = RecordCodecBuilder.create(inst -> inst.group(
-      EntityPredicate.ADVANCEMENT_CODEC.optionalFieldOf("player").forGetter(Instance::player),
+      LootItemCondition.CODEC.optionalFieldOf("player").forGetter(Instance::player),
       BuiltInRegistries.BLOCK_ENTITY_TYPE.byNameCodec().fieldOf("type").forGetter(Instance::type)
     ).apply(inst, Instance::new));
 

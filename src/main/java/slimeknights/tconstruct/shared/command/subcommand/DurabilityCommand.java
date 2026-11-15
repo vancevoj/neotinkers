@@ -33,7 +33,7 @@ public class DurabilityCommand {
    * @param subCommand  Command builder
    */
   public static void register(LiteralArgumentBuilder<CommandSourceStack> subCommand) {
-    subCommand.requires(sender -> sender.hasPermission(MantleCommand.PERMISSION_GAME_COMMANDS))
+    subCommand.requires(Commands.hasPermission(MantleCommand.PERMISSION_GAME_COMMANDS))
       .then(Commands.argument("targets", EntityArgument.entities())
         // durability <target> add <amount>
         .then(Commands.literal("add")

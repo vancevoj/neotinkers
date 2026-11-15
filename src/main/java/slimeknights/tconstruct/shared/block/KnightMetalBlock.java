@@ -2,12 +2,16 @@ package slimeknights.tconstruct.shared.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.InsideBlockEffectApplier;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -53,11 +57,11 @@ public class KnightMetalBlock extends Block implements SimpleWaterloggedBlock {
   @SuppressWarnings("deprecation")
   @Deprecated
   @Override
-  public BlockState updateShape(BlockState state, Direction pDirection, BlockState pNeighborState, LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
+  public BlockState updateShape(BlockState state, LevelReader level, ScheduledTickAccess ticks, BlockPos pos, Direction pDirection, BlockPos neighborPos, BlockState pNeighborState, RandomSource random) {
     if (state.getValue(WATERLOGGED)) {
-      level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
+      ticks.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
     }
-    return super.updateShape(state, pDirection, pNeighborState, level, pos, neighborPos);
+    return super.updateShape(state, level, ticks, pos, pDirection, neighborPos, pNeighborState, random);
   }
 
   @Override
@@ -68,11 +72,15 @@ public class KnightMetalBlock extends Block implements SimpleWaterloggedBlock {
   @Nullable
   @Override
   public PathType getBlockPathType(BlockState state, BlockGetter level, BlockPos pos, @Nullable Mob mob) {
-    return PathType.DAMAGE_OTHER;
+    // DAMAGE_OTHER was renamed in 1.21.2
+    return PathType.DAMAGING;
   }
 
   @Override
-  public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
-    entity.hurt(CombatHelper.damageSource(level, TinkerDamageTypes.KNIGHTMETAL), BLOCK_DAMAGE);
+  public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity, InsideBlockEffectApplier effectApplier, boolean isPrecise) {
+    // damage is server side only since 1.21.2
+    if (level instanceof ServerLevel server) {
+      entity.hurtServer(server, CombatHelper.damageSource(level, TinkerDamageTypes.KNIGHTMETAL), BLOCK_DAMAGE);
+    }
   }
 }

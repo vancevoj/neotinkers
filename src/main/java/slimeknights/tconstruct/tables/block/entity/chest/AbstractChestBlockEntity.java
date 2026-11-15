@@ -5,14 +5,19 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.RegistryOps;
+import net.minecraft.world.ItemStackWithSlot;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import slimeknights.mantle.block.entity.NameableBlockEntity;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
@@ -20,6 +25,8 @@ import slimeknights.tconstruct.tables.block.entity.inventory.IChestItemHandler;
 import slimeknights.tconstruct.tables.menu.TinkerChestContainerMenu;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 
 /** Shared base logic for all Tinkers' chest tile entities */
 public abstract class AbstractChestBlockEntity extends NameableBlockEntity {
@@ -50,12 +57,16 @@ public abstract class AbstractChestBlockEntity extends NameableBlockEntity {
   }
 
   @Override
-  public void saveAdditional(CompoundTag tags, HolderLookup.Provider registries) {
-    super.saveAdditional(tags, registries);
-    // move the items from the serialized result
-    // we don't care about the size and need it here for compat with old worlds
-    CompoundTag handlerNBT = itemHandler.serializeNBT(registries);
-    tags.put(KEY_ITEMS, handlerNBT.getList(KEY_ITEMS, Tag.TAG_COMPOUND));
+  protected void saveAdditional(ValueOutput output) {
+    super.saveAdditional(output);
+    // items are saved in the vanilla slot list format, we don't care about the size and need this format for compat with old worlds
+    ValueOutput.TypedOutputList<ItemStackWithSlot> items = output.list(KEY_ITEMS, ItemStackWithSlot.CODEC);
+    for (int i = 0; i < itemHandler.size(); i++) {
+      ItemStack stack = itemHandler.getStackInSlot(i);
+      if (!stack.isEmpty()) {
+        items.add(new ItemStackWithSlot(i, stack));
+      }
+    }
   }
 
   /**
@@ -66,29 +77,45 @@ public abstract class AbstractChestBlockEntity extends NameableBlockEntity {
    * and skipped, keeping every item that still parses.
    */
   public void readInventory(CompoundTag tags, HolderLookup.Provider registries) {
-    ListTag items = tags.getList(KEY_ITEMS, Tag.TAG_COMPOUND);
-    int slots = itemHandler.getSlots();
+    ListTag items = tags.getListOrEmpty(KEY_ITEMS);
+    List<CompoundTag> list = new ArrayList<>(items.size());
     for (int i = 0; i < items.size(); i++) {
-      CompoundTag itemTags = items.getCompound(i);
-      int slot = itemTags.getInt("Slot");
-      if (slot < 0 || slot >= slots) {
-        continue;
-      }
+      items.getCompound(i).ifPresent(list::add);
+    }
+    readInventory(list, registries);
+  }
+
+  /** Reads the inventory from the block entity data, see {@link #readInventory(CompoundTag, HolderLookup.Provider)} */
+  public void readInventory(ValueInput input) {
+    // read the raw compounds so each stack can be parsed independently below
+    readInventory(input.listOrEmpty(KEY_ITEMS, CompoundTag.CODEC), input.lookup());
+  }
+
+  /** Parses each stack from the list of slot compounds, skipping any slot that fails to parse */
+  private void readInventory(Iterable<CompoundTag> items, HolderLookup.Provider registries) {
+    RegistryOps<Tag> ops = registries.createSerializationContext(NbtOps.INSTANCE);
+    int slots = itemHandler.size();
+    for (CompoundTag itemTags : items) {
       try {
-        ItemStack.parse(registries, itemTags).ifPresent(stack -> {
-          itemHandler.setStackInSlot(slot, stack);
-          // tools in chests never tick, so rebuild tools saved by an older version as they load
-          ToolStack.updateDataVersion(stack);
-        });
+        ItemStackWithSlot.CODEC.parse(ops, itemTags)
+          .resultOrPartial(error -> TConstruct.LOG.error("Skipping unloadable item in Tinkers' chest at {}: {}", getBlockPos(), error))
+          .filter(entry -> entry.isValidInContainer(slots) && !entry.stack().isEmpty())
+          .ifPresent(entry -> {
+            ItemStack stack = entry.stack();
+            // tools in chests never tick, so rebuild tools saved by an older version as they load
+            // done before setting as the handler stores a copy of the stack
+            ToolStack.updateDataVersion(stack);
+            itemHandler.setStackInSlot(entry.slot(), stack);
+          });
       } catch (Exception e) {
-        TConstruct.LOG.error("Skipping unloadable item in Tinkers' chest at {} slot {}: {}", getBlockPos(), slot, e.toString());
+        TConstruct.LOG.error("Skipping unloadable item in Tinkers' chest at {}: {}", getBlockPos(), e.toString());
       }
     }
   }
 
   @Override
-  public void loadAdditional(CompoundTag tags, HolderLookup.Provider registries) {
-    super.loadAdditional(tags, registries);
-    readInventory(tags, registries);
+  protected void loadAdditional(ValueInput input) {
+    super.loadAdditional(input);
+    readInventory(input);
   }
 }

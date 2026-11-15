@@ -23,7 +23,8 @@ import java.util.concurrent.CompletableFuture;
 @NoArgsConstructor(staticName = "modifier")
 public class ModifierArgument implements ArgumentType<Modifier> {
   private static final Collection<String> EXAMPLES = Arrays.asList("tconstruct:haste", "tconstruct:luck");
-  private static final DynamicCommandExceptionType MODIFIER_NOT_FOUND = new DynamicCommandExceptionType(name -> TConstruct.makeTranslation("command", "modifier.not_found", name));
+  // 26.3 dev only allows strings, numbers and components as translation arguments
+  private static final DynamicCommandExceptionType MODIFIER_NOT_FOUND = new DynamicCommandExceptionType(name -> TConstruct.makeTranslation("command", "modifier.not_found", String.valueOf(name)));
 
   @Override
   public Modifier parse(StringReader reader) throws CommandSyntaxException {

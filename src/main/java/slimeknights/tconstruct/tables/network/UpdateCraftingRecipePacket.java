@@ -27,7 +27,7 @@ public class UpdateCraftingRecipePacket implements BlockEntityPacket<CraftingSta
   private final Identifier recipe;
   public UpdateCraftingRecipePacket(BlockPos pos, RecipeHolder<CraftingRecipe> recipe) {
     this.pos = pos;
-    this.recipe = recipe.id();
+    this.recipe = recipe.id().identifier();
   }
 
   public UpdateCraftingRecipePacket(FriendlyByteBuf buffer) {
@@ -57,12 +57,14 @@ public class UpdateCraftingRecipePacket implements BlockEntityPacket<CraftingSta
   }
 
   @Override
+  @SuppressWarnings("unchecked")
   public void handleBlockEntity(IPayloadContext context, CraftingStationBlockEntity be) {
     Level level = be.getLevel();
     assert level != null;
-    CraftingRecipe recipe = RecipeHelper.getRecipe(level.getRecipeManager(), this.recipe, CraftingRecipe.class).orElse(null);
-    if (recipe != null) {
-      be.updateRecipe(new RecipeHolder<>(this.recipe, recipe));
+    // the client only has the recipes synced by the server, crafting recipes are requested by both Mantle and Tinkers
+    RecipeHolder<?> holder = RecipeHelper.recipes(level).byKey(RecipeHelper.key(this.recipe));
+    if (holder != null && holder.value() instanceof CraftingRecipe) {
+      be.updateRecipe((RecipeHolder<CraftingRecipe>) holder);
     } else {
       TConstruct.LOG.error("Failed to update Crafting Station Recipe at {}: unknown recipe {}", pos, this.recipe);
     }

@@ -1,12 +1,16 @@
 package slimeknights.tconstruct.shared.inventory;
 
 import net.minecraft.world.Container;
-import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.items.wrapper.InvWrapper;
+import net.neoforged.neoforge.transfer.TransferPreconditions;
+import net.neoforged.neoforge.transfer.item.ItemResource;
+import net.neoforged.neoforge.transfer.transaction.TransactionContext;
+import slimeknights.mantle.inventory.ContainerItemHandler;
 
-import javax.annotation.Nonnull;
-
-public class ConfigurableInvWrapperCapability extends InvWrapper {
+/**
+ * Item handler over a container that can optionally block insertion or extraction through the handler.
+ * Setting slots directly (such as through menu slots) is always allowed.
+ */
+public class ConfigurableInvWrapperCapability extends ContainerItemHandler {
 
   private final boolean canInsert;
   private final boolean canExtract;
@@ -17,21 +21,21 @@ public class ConfigurableInvWrapperCapability extends InvWrapper {
     this.canExtract = canExtract;
   }
 
-  @Nonnull
   @Override
-  public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
+  public int insert(int index, ItemResource resource, int amount, TransactionContext transaction) {
     if (!this.canInsert) {
-      return stack;
+      TransferPreconditions.checkNonEmptyNonNegative(resource, amount);
+      return 0;
     }
-    return super.insertItem(slot, stack, simulate);
+    return super.insert(index, resource, amount, transaction);
   }
 
-  @Nonnull
   @Override
-  public ItemStack extractItem(int slot, int amount, boolean simulate) {
+  public int extract(int index, ItemResource resource, int amount, TransactionContext transaction) {
     if (!this.canExtract) {
-      return ItemStack.EMPTY;
+      TransferPreconditions.checkNonEmptyNonNegative(resource, amount);
+      return 0;
     }
-    return super.extractItem(slot, amount, simulate);
+    return super.extract(index, resource, amount, transaction);
   }
 }

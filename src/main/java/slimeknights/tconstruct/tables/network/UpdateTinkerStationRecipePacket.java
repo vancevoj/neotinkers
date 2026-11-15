@@ -60,13 +60,14 @@ public class UpdateTinkerStationRecipePacket implements IThreadsafePacket {
       Level world = mc.level;
       if (world != null) {
         // start by fetching the recipe, no further work if it's missing
-        ITinkerStationRecipe recipe = RecipeHelper.getRecipe(world.getRecipeManager(), packet.recipe, ITinkerStationRecipe.class).orElse(null);
+        // the client only has the recipes synced by the server, see TinkerRecipeTypes#sendRecipesToClient
+        ITinkerStationRecipe recipe = RecipeHelper.getRecipe(world, packet.recipe, ITinkerStationRecipe.class).orElse(null);
         if (recipe == null) {
           TConstruct.LOG.error("Failed to update Tinker Station Recipe at {}: unknown recipe {}", packet.pos, packet.recipe);
           return;
         }
         // if the screen is open, use that to get the TE and update the screen as we want to update the screen too
-        if (mc.screen instanceof TinkerStationScreen stationScreen) {
+        if (mc.gui.screen() instanceof TinkerStationScreen stationScreen) {
           TinkerStationBlockEntity te = stationScreen.getTileEntity();
           if (te != null && te.getBlockPos().equals(packet.pos)) {
             te.updateRecipe(packet.recipe, recipe);

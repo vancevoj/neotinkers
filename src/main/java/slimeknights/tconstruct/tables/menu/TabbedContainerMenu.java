@@ -19,8 +19,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.fml.loading.FMLEnvironment;
-import net.neoforged.neoforge.items.IItemHandler;
-import net.neoforged.neoforge.items.IItemHandlerModifiable;
+import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.item.ItemResource;
 import org.apache.commons.lang3.tuple.Pair;
 import slimeknights.mantle.inventory.EmptyItemHandler;
 import slimeknights.mantle.util.RegistryHelper;
@@ -147,8 +147,8 @@ public class TabbedContainerMenu<TILE extends BlockEntity> extends TriggeringMul
 
       // if we found something, add the side inventory
       if (inventoryTE != null) {
-        IItemHandler invHandler = world.getCapability(Capabilities.Item.BLOCK, inventoryTE.getBlockPos(), accessDir);
-        int invSlots = (invHandler != null ? invHandler : EmptyItemHandler.INSTANCE).getSlots();
+        ResourceHandler<ItemResource> invHandler = world.getCapability(Capabilities.Item.BLOCK, inventoryTE.getBlockPos(), accessDir);
+        int invSlots = (invHandler != null ? invHandler : EmptyItemHandler.INSTANCE).size();
         int columns = Mth.clamp((invSlots - 1) / 9 + 1, 3, 6);
         this.addSubContainer(new SideInventoryContainer<>(TinkerTables.craftingStationContainer.get(), containerId, inv, inventoryTE, accessDir, -6 - 18 * 6, 8, columns), false);
       }
@@ -168,15 +168,16 @@ public class TabbedContainerMenu<TILE extends BlockEntity> extends TriggeringMul
   }
 
   /**
-   * Checks to see if the given Tile Entity has an item handler that's compatible with the side inventory
-   * The Tile Entity's item handler must be an instance of IItemHandlerModifiable
+   * Checks to see if the given Tile Entity has an item handler that's compatible with the side inventory.
+   * Before the transfer API this required a modifiable item handler so the slots could set the contents. Side inventory slots now set
+   * contents through {@link slimeknights.mantle.inventory.SmartItemHandlerSlot#getModifier(ResourceHandler)}, which works with any item handler.
    * @param level      Level containing the tile
    * @param tileEntity Tile to check
    * @param direction the given direction
    * @return True if compatible.
    */
   private static boolean hasItemHandler(Level level, BlockEntity tileEntity, @Nullable Direction direction) {
-    return level.getCapability(Capabilities.Item.BLOCK, tileEntity.getBlockPos(), direction) instanceof IItemHandlerModifiable;
+    return level.getCapability(Capabilities.Item.BLOCK, tileEntity.getBlockPos(), direction) != null;
   }
 
 
@@ -246,7 +247,7 @@ public class TabbedContainerMenu<TILE extends BlockEntity> extends TriggeringMul
   private static class ClientOnly {
     /** Updates the client's screen */
     private static void clientScreenUpdate() {
-      Screen screen = Minecraft.getInstance().screen;
+      Screen screen = Minecraft.getInstance().gui.screen();
       if (screen instanceof BaseTabbedScreen) {
         ((BaseTabbedScreen<?,?>) screen).updateDisplay();
       }
@@ -254,7 +255,7 @@ public class TabbedContainerMenu<TILE extends BlockEntity> extends TriggeringMul
 
     /** Sends the error message from the container to the client's screen */
     private static void clientError(MutableComponent errorMessage) {
-      Screen screen = Minecraft.getInstance().screen;
+      Screen screen = Minecraft.getInstance().gui.screen();
       if (screen instanceof BaseTabbedScreen) {
         ((BaseTabbedScreen<?,?>) screen).error(errorMessage);
       }
@@ -262,7 +263,7 @@ public class TabbedContainerMenu<TILE extends BlockEntity> extends TriggeringMul
 
     /** Sends the warning message from the container to the client's screen */
     private static void clientWarning(MutableComponent warningMessage) {
-      Screen screen = Minecraft.getInstance().screen;
+      Screen screen = Minecraft.getInstance().gui.screen();
       if (screen instanceof BaseTabbedScreen) {
         ((BaseTabbedScreen<?,?>) screen).warning(warningMessage);
       }

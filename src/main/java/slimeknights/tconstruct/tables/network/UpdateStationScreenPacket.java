@@ -34,7 +34,7 @@ public class UpdateStationScreenPacket implements IThreadsafePacket {
   /** Safely runs client side only code in a method only called on client */
   private static class HandleClient {
     private static void handle() {
-      Screen screen = Minecraft.getInstance().screen;
+      Screen screen = Minecraft.getInstance().gui.screen();
       if (screen != null) {
         if (screen instanceof BaseTabbedScreen) {
           ((BaseTabbedScreen<?,?>) screen).updateDisplay();

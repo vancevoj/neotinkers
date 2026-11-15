@@ -49,7 +49,7 @@ public class MaterialsCommand {
    * @param subCommand  Command builder
    */
   public static void register(LiteralArgumentBuilder<CommandSourceStack> subCommand) {
-    subCommand.requires(sender -> sender.hasPermission(MantleCommand.PERMISSION_GAME_COMMANDS))
+    subCommand.requires(Commands.hasPermission(MantleCommand.PERMISSION_GAME_COMMANDS))
       // materials set <target> <index> <material>
       .then(Commands.literal("set")
         .then(Commands.argument("targets", EntityArgument.entities())
@@ -147,7 +147,8 @@ public class MaterialsCommand {
       }, true);
       return 1;
     } else {
-      throw INVALID_STATS.create(statType.getId(), MaterialTooltipCache.getDisplayName(material));
+      // 26.3 dev only allows strings, numbers and components as translation arguments
+      throw INVALID_STATS.create(statType.getId().toString(), MaterialTooltipCache.getDisplayName(material));
     }
   }
 

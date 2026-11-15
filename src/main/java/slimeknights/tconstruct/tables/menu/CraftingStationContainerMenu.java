@@ -2,6 +2,7 @@ package slimeknights.tconstruct.tables.menu;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.Container;
+import net.minecraft.util.Prediction;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
@@ -81,7 +82,7 @@ public class CraftingStationContainerMenu extends TabbedContainerMenu<CraftingSt
           // if successfully added to an inventory, update
           if (!nothingDone) {
             if (!result.isEmpty()) {
-              player.drop(result, false);
+              player.drop(result, false, Prediction.PREDICTED);
             }
             tile.getCraftingResult().clearContent();
             return original;

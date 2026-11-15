@@ -5,9 +5,11 @@ import net.minecraft.advancements.triggers.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -18,8 +20,8 @@ import net.minecraft.world.level.block.WeatheringCopper;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.neoforge.common.ItemAbility;
-import net.neoforged.neoforge.common.ItemAbilities;
 import slimeknights.tconstruct.common.TinkerTags;
+import slimeknights.tconstruct.library.modifiers.modules.util.ToolActionTransformHelper;
 import slimeknights.tconstruct.shared.TinkerCommons;
 
 import javax.annotation.Nullable;
@@ -76,10 +78,21 @@ public class WeatheringPlatformBlock extends PlatformBlock implements Weathering
     };
   }
 
+  /** Gets the previous oxidization stage of this platform, used for the {@code neoforge:transformables} data map so vanilla axes can scrape platforms */
+  @Nullable
+  public PlatformBlock getScraped() {
+    WeatherState prev = getPrevious(age);
+    return prev == null ? null : TinkerCommons.copperPlatform.get(prev);
+  }
+
+  /**
+   * NeoForge removed the axe item abilities, vanilla axes use the {@code neoforge:transformables} data map instead.
+   * Tinkers tools still ask for the legacy {@code axe_scrape} ability.
+   */
   @Nullable
   @Override
   public BlockState getToolModifiedState(BlockState state, UseOnContext context, ItemAbility toolAction, boolean simulate) {
-    if (ItemAbilities.AXE_SCRAPE.equals(toolAction)) {
+    if (ToolActionTransformHelper.AXE_SCRAPE.equals(toolAction)) {
       WeatherState prev = getPrevious(age);
       if (prev != null) {
         return TinkerCommons.copperPlatform.get(prev).withPropertiesOf(state);
@@ -89,7 +102,7 @@ public class WeatheringPlatformBlock extends PlatformBlock implements Weathering
   }
 
   @Override
-  protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+  protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
     if (stack.getItem() == Items.HONEYCOMB) {
       if (player instanceof ServerPlayer serverPlayer) {
         CriteriaTriggers.ITEM_USED_ON_BLOCK.trigger(serverPlayer, pos, stack);
@@ -98,9 +111,11 @@ public class WeatheringPlatformBlock extends PlatformBlock implements Weathering
         stack.shrink(1);
       }
       level.setBlock(pos, TinkerCommons.waxedCopperPlatform.get(age).withPropertiesOf(state), 11);
-      level.levelEvent(player, LevelEvent.PARTICLES_AND_SOUND_WAX_ON, pos, 0);
-      return ItemInteractionResult.sidedSuccess(level.isClientSide());
+      // the wax on level event no longer plays the sound since 1.21.2
+      level.levelEvent(player, LevelEvent.PARTICLES_WAX_ON, pos, 0);
+      level.playSound(player, pos, SoundEvents.HONEYCOMB_WAX_ON, SoundSource.BLOCKS, 1.0F, 1.0F);
+      return InteractionResult.SUCCESS;
     }
-    return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+    return InteractionResult.TRY_WITH_EMPTY_HAND;
   }
 }

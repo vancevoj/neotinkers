@@ -4,7 +4,9 @@ import lombok.Getter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.Prediction;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -12,7 +14,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
-import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
@@ -72,21 +73,19 @@ public class CraftingStationBlockEntity extends RetexturedTableBlockEntity imple
     // assume empty unless we learn otherwise
     ItemStack result = ItemStack.EMPTY;
     CraftingInput input = this.craftingInventory.asCraftInput();
-    if (!this.level.isClientSide() && this.level.getServer() != null) {
-      RecipeManager manager = this.level.getServer().getRecipeManager();
-
+    if (this.level instanceof ServerLevel serverLevel) {
       // first, try the cached recipe
       CommonHooks.setCraftingPlayer(player);
       RecipeHolder<CraftingRecipe> recipe = lastRecipe;
       // if it does not match, find a new recipe
       // note we intentionally have no player access during matches, that could lead to an unstable recipe
       if (recipe == null || !recipe.value().matches(input, this.level)) {
-        recipe = manager.getRecipeFor(RecipeType.CRAFTING, input, this.level).orElse(null);
+        recipe = serverLevel.recipeAccess().getRecipeFor(RecipeType.CRAFTING, input, serverLevel).orElse(null);
       }
 
       // if we have a recipe, fetch its result
       if (recipe != null) {
-        result = recipe.value().assemble(input, level.registryAccess());
+        result = recipe.value().assemble(input);
 
         // sync if the recipe is different
         if (recipe != lastRecipe) {
@@ -98,7 +97,7 @@ public class CraftingStationBlockEntity extends RetexturedTableBlockEntity imple
     }
     else if (this.lastRecipe != null && this.lastRecipe.value().matches(input, this.level)) {
       CommonHooks.setCraftingPlayer(player);
-      result = this.lastRecipe.value().assemble(input, level.registryAccess());
+      result = this.lastRecipe.value().assemble(input);
       CommonHooks.setCraftingPlayer(null);
     }
     return result;
@@ -139,7 +138,7 @@ public class CraftingStationBlockEntity extends RetexturedTableBlockEntity imple
 //      }
 //    }
 
-    ItemStack result = recipe.value().assemble(input, level.registryAccess());
+    ItemStack result = recipe.value().assemble(input);
     CommonHooks.setCraftingPlayer(null);
     return result;
   }
@@ -161,7 +160,7 @@ public class CraftingStationBlockEntity extends RetexturedTableBlockEntity imple
       // unlock the recipe if it was not unlocked, so it shows in the recipe book
       player.awardRecipes(Collections.singleton(recipe));
     }
-    result.onCraftedBy(this.level, player, amount);
+    result.onCraftedBy(player, amount);
     // 1.21: asCraftInput() trims empty rows/columns, so the remaining-items list is indexed relative to the
     // trimmed bounding box, NOT the full 3x3 grid. We must map each trimmed index back to its real grid slot
     // using the (left, top) offset; otherwise crafting in any row/column other than the top-left consumes the
@@ -198,7 +197,7 @@ public class CraftingStationBlockEntity extends RetexturedTableBlockEntity imple
         this.setItem(slot, original.copyWithCount(original.getCount() - 1));
         // otherwise, drop the item as the player
         if (!newStack.isEmpty() && !player.getInventory().add(newStack)) {
-          player.drop(newStack, false);
+          player.drop(newStack, false, Prediction.PREDICTED);
         }
       }
     }
@@ -209,7 +208,7 @@ public class CraftingStationBlockEntity extends RetexturedTableBlockEntity imple
     // if empty, send a message so the player is more aware of why they cannot craft it, sent to chat as status bar is not visible
     // TODO: consider moving into the UI somewhere
     if (level != null && !level.isClientSide()) {
-      player.displayClientMessage(CraftingStationBlockEntity.UNCRAFTABLE, false);
+      player.sendSystemMessage(CraftingStationBlockEntity.UNCRAFTABLE);
     }
   }
 

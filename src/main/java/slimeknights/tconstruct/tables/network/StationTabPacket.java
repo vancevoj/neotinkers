@@ -5,7 +5,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
+import net.minecraft.network.protocol.game.ClientboundSetCursorItemPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.item.ItemStack;
@@ -64,7 +64,8 @@ public class StationTabPacket implements IThreadsafePacket {
 
       if (!heldStack.isEmpty()) {
         sender.containerMenu.setCarried(heldStack);
-        TinkerNetwork.getInstance().sendVanillaPacket(sender, new ClientboundContainerSetSlotPacket(-1, -1, -1, heldStack));
+        // 1.21.2 replaced the container -1 slot -1 trick with a dedicated cursor packet
+        TinkerNetwork.getInstance().sendVanillaPacket(sender, new ClientboundSetCursorItemPacket(heldStack));
       }
     }
   }

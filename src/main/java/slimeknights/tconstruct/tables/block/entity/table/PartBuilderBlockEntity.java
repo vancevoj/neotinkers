@@ -3,14 +3,22 @@ package slimeknights.tconstruct.tables.block.entity.table;
 import lombok.Getter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.ItemStackTemplate;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.event.EventHooks;
-import net.neoforged.neoforge.items.ItemHandlerHelper;
+import net.neoforged.neoforge.transfer.ResourceHandlerUtil;
+import net.neoforged.neoforge.transfer.item.ItemResource;
+import net.neoforged.neoforge.transfer.item.PlayerInventoryWrapper;
+import net.neoforged.neoforge.transfer.transaction.Transaction;
+import slimeknights.mantle.recipe.helper.RecipeHelper;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.common.TinkerTags;
 import slimeknights.tconstruct.library.recipe.TinkerRecipeTypes;
@@ -80,9 +88,10 @@ public class PartBuilderBlockEntity extends RetexturedTableBlockEntity implement
       } else {
         record PatternRecipe(Pattern pattern, IPartBuilderRecipe recipe) {}
         // fetch all recipes that can match these inputs, the map ensures the patterns are unique
-        recipes = level.getRecipeManager().getAllRecipesFor(TinkerRecipeTypes.PART_BUILDER.get()).stream()
+        // recipes are synced to the client for the part builder types, see TinkerRecipeTypes#sendRecipesToClient
+        recipes = RecipeHelper.recipes(level).byType(TinkerRecipeTypes.PART_BUILDER.get()).stream()
                        .filter(r -> r.value().partialMatch(inventoryWrapper))
-                       .sorted(Comparator.comparing(RecipeHolder::id))
+                       .sorted(RecipeHelper.ID_COMPARATOR)
                        .flatMap(r -> r.value().getPatterns(inventoryWrapper).map(p -> new PatternRecipe(p, r.value())))
                        .collect(Collectors.toMap(PatternRecipe::pattern, PatternRecipe::recipe, (a, b) -> a));
         sortedButtons = recipes.entrySet()
@@ -262,7 +271,9 @@ public class PartBuilderBlockEntity extends RetexturedTableBlockEntity implement
     }
     ItemStack stack = getItem(slot);
     if (!stack.isEmpty()) {
-      ItemStack container = stack.getCraftingRemainingItem().copy();
+      // 1.21.2: crafting remainders are item stack templates, null meaning no remainder
+      ItemStackTemplate remainder = stack.getCraftingRemainder();
+      ItemStack container = remainder == null ? ItemStack.EMPTY : remainder.create();
       if (amount > 1) {
         container.setCount(container.getCount() * amount);
       }
@@ -270,7 +281,7 @@ public class PartBuilderBlockEntity extends RetexturedTableBlockEntity implement
         setItem(slot, container);
       } else {
         stack.shrink(amount);
-        ItemHandlerHelper.giveItemToPlayer(player, container);
+        giveItemToPlayer(player, container);
       }
     }
   }
@@ -287,7 +298,7 @@ public class PartBuilderBlockEntity extends RetexturedTableBlockEntity implement
     }
 
     // we are definitely crafting at this point
-    result.onCraftedBy(this.level, player, amount);
+    result.onCraftedBy(player, amount);
     EventHooks.firePlayerCraftingEvent(player, result, this.inventoryWrapper);
     this.playCraftSound(player);
 
@@ -295,7 +306,7 @@ public class PartBuilderBlockEntity extends RetexturedTableBlockEntity implement
     if (level != null && !level.isClientSide()) {
       ItemStack leftover = recipe.getLeftover(inventoryWrapper, selectedPattern);
       if (!leftover.isEmpty()) {
-        ItemHandlerHelper.giveItemToPlayer(player, leftover);
+        giveItemToPlayer(player, leftover);
       }
     }
 
@@ -307,5 +318,34 @@ public class PartBuilderBlockEntity extends RetexturedTableBlockEntity implement
 
     // sync display, mainly for the material value
     syncScreenToRelevantPlayers();
+  }
+
+  /**
+   * Gives an item to the player, dropping anything that does not fit. Replacement for the removed NeoForge {@code ItemHandlerHelper#giveItemToPlayer}.
+   * @param player  Player receiving the item
+   * @param stack   Stack to give
+   */
+  private static void giveItemToPlayer(Player player, ItemStack stack) {
+    if (stack.isEmpty()) {
+      return;
+    }
+    Level level = player.level();
+    int count = stack.getCount();
+    int inserted;
+    try (Transaction transaction = Transaction.openRoot()) {
+      inserted = ResourceHandlerUtil.insertStacking(PlayerInventoryWrapper.of(player).getMainSlots(), ItemResource.of(stack), count, transaction);
+      transaction.commit();
+    }
+    // play sound if something got picked up
+    if (inserted > 0) {
+      level.playSound(null, player.getX(), player.getY() + 0.5, player.getZ(), SoundEvents.ITEM_PICKUP, SoundSource.PLAYERS, 0.2F, ((level.getRandom().nextFloat() - level.getRandom().nextFloat()) * 0.7F + 1.0F) * 2.0F);
+    }
+    // drop remaining itemstack into the level
+    if (inserted < count && !level.isClientSide()) {
+      ItemEntity entity = new ItemEntity(level, player.getX(), player.getY() + 0.5, player.getZ(), stack.copyWithCount(count - inserted));
+      entity.setPickUpDelay(40);
+      entity.setDeltaMovement(entity.getDeltaMovement().multiply(0, 1, 0));
+      level.addFreshEntity(entity);
+    }
   }
 }

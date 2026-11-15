@@ -49,7 +49,7 @@ public class StatsCommand {
    * @param subCommand  Command builder
    */
   public static void register(LiteralArgumentBuilder<CommandSourceStack> subCommand) {
-    subCommand.requires(sender -> sender.hasPermission(MantleCommand.PERMISSION_GAME_COMMANDS))
+    subCommand.requires(Commands.hasPermission(MantleCommand.PERMISSION_GAME_COMMANDS))
               .then(Commands.argument("targets", EntityArgument.entities())
                             // stats <target> bonus add|set <stat_type> <value>
                             .then(Commands.literal("bonus")
@@ -115,7 +115,8 @@ public class StatsCommand {
   private static <T> List<LivingEntity> setStat(CommandContext<CommandSourceStack> context, IToolStat<T> stat, Tag tag) throws CommandSyntaxException {
     T value = stat.read(tag);
     if (value == null) {
-      throw FAILED_TO_PARSE.create(stat.getPrefix(), tag);
+      // 26.3 dev only allows strings, numbers and components as translation arguments
+      throw FAILED_TO_PARSE.create(stat.getPrefix(), tag.toString());
     }
     return updateEntities(context, (tool, stats) -> stats.set(tool, stat, value));
   }
@@ -129,7 +130,8 @@ public class StatsCommand {
     if (op == Operation.SET && type == Type.BONUS) {
       Tag tag = NbtTagArgument.getNbtTag(context, "value");
       successes = setStat(context, stat, tag);
-      display = tag;
+      // 26.3 dev only allows strings, numbers and components as translation arguments
+      display = tag.toString();
     } else {
       float value = FloatArgumentType.getFloat(context, "value");
       if (op == Operation.MODIFY) {

@@ -2,9 +2,9 @@ package slimeknights.tconstruct.shared.effect;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.Identifier;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
 import net.neoforged.neoforge.common.NeoForge;
@@ -30,7 +30,8 @@ public class ReturningEffect extends TinkerEffect {
     if (!entity.level().isClientSide() && event.getOldEffectInstance() == null && event.getEffectInstance().getEffect().value() == this) {
       ModDataNBT data = PersistentDataCapability.getOrWarn(entity);
       CompoundTag pos = new CompoundTag();
-      pos.put("pos", NbtUtils.writeBlockPos(entity.blockPosition()));
+      // same int array format as the removed NbtUtils#writeBlockPos
+      pos.store("pos", BlockPos.CODEC, entity.blockPosition());
       pos.putString("dimension", entity.level().dimension().identifier().toString());
       data.put(KEY, pos);
     }
@@ -42,15 +43,15 @@ public class ReturningEffect extends TinkerEffect {
   }
 
   @Override
-  public boolean applyEffectTick(LivingEntity living, int amplifier) {
+  public boolean applyEffectTick(ServerLevel level, LivingEntity living, int amplifier) {
     ModDataNBT data = PersistentDataCapability.getOrWarn(living);
     if (data.contains(KEY, Tag.TAG_COMPOUND)) {
       CompoundTag tag = data.getCompound(KEY);
-      Identifier dimension = Identifier.tryParse(tag.getString("dimension"));
+      Identifier dimension = Identifier.tryParse(tag.getStringOr("dimension", ""));
       // no teleporting if you switched dimensions
       // TODO: look into cross dimensional teleport, its doable with entity#teleportTo
       if (dimension != null && dimension.equals(living.level().dimension().identifier())) {
-        NbtUtils.readBlockPos(tag, "pos").ifPresent(pos ->
+        tag.read("pos", BlockPos.CODEC).ifPresent(pos ->
           TeleportHelper.tryTeleport(new ReturningTeleportEvent(living, pos.getX(), pos.getY(), pos.getZ())));
       }
     }

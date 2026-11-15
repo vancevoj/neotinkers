@@ -8,7 +8,7 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.core.Direction;
@@ -19,7 +19,9 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ScheduledTickAccess;
 import slimeknights.mantle.block.InventoryBlock;
 
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
@@ -29,7 +31,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
  */
 public abstract class TableBlock extends InventoryBlock implements SimpleWaterloggedBlock {
 
-  protected static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
+  protected static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
   private static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
   private static final VoxelShape TABLE_SHAPE = Shapes.or(
@@ -60,11 +62,11 @@ public abstract class TableBlock extends InventoryBlock implements SimpleWaterlo
   @SuppressWarnings("deprecation")
   @Deprecated
   @Override
-  public BlockState updateShape(BlockState state, Direction direction, BlockState neighbor, LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
+  public BlockState updateShape(BlockState state, LevelReader level, ScheduledTickAccess ticks, BlockPos pos, Direction direction, BlockPos neighborPos, BlockState neighbor, RandomSource random) {
     if (state.getValue(WATERLOGGED)) {
-      level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
+      ticks.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
     }
-    return super.updateShape(state, direction, neighbor, level, pos, neighborPos);
+    return super.updateShape(state, level, ticks, pos, direction, neighborPos, neighbor, random);
   }
 
   @Deprecated

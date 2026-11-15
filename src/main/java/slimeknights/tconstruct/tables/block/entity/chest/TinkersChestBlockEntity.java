@@ -4,14 +4,14 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.items.ItemStackHandler;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
+import net.neoforged.neoforge.transfer.item.ItemResource;
+import net.neoforged.neoforge.transfer.item.ItemStacksResourceHandler;
 import slimeknights.mantle.block.entity.MantleBlockEntity;
 import slimeknights.tconstruct.TConstruct;
 import slimeknights.tconstruct.tables.TinkerTables;
@@ -52,41 +52,51 @@ public class TinkersChestBlockEntity extends AbstractChestBlockEntity {
   }
 
   @Override
-  public void saveSynced(CompoundTag tags, HolderLookup.Provider registries) {
-    super.saveSynced(tags, registries);
+  public void saveSynced(ValueOutput output) {
+    super.saveSynced(output);
     if (hasColor) {
-      tags.putInt(TAG_CHEST_COLOR, color);
+      output.putInt(TAG_CHEST_COLOR, color);
     }
   }
 
   @Override
-  public void loadAdditional(CompoundTag tags, HolderLookup.Provider registries) {
-    super.loadAdditional(tags, registries);
-    if (tags.contains(TAG_CHEST_COLOR, Tag.TAG_ANY_NUMERIC)) {
-      setColor(tags.getInt(TAG_CHEST_COLOR));
-    }
+  protected void loadAdditional(ValueInput input) {
+    super.loadAdditional(input);
+    input.getInt(TAG_CHEST_COLOR).ifPresent(this::setColor);
   }
 
   /** Item handler for tinkers chests */
-  public static class TinkersChestItemHandler extends ItemStackHandler implements IChestItemHandler {
+  public static class TinkersChestItemHandler extends ItemStacksResourceHandler implements IChestItemHandler {
     @Setter @Nullable
     private MantleBlockEntity parent;
     public TinkersChestItemHandler() {
       super(64);
     }
 
-    @Override
+    /** Gets the maximum number of items in each slot */
     public int getSlotLimit(int slot) {
       return 16;
     }
 
     @Override
-    public int getVisualSize() {
-      return getSlots();
+    protected int getCapacity(int index, ItemResource resource) {
+      // matches the old item stack handler: slot limit, but never more than the item stacks to
+      int limit = getSlotLimit(index);
+      return resource.isEmpty() ? limit : Math.min(limit, resource.getMaxStackSize());
     }
 
     @Override
-    protected void onContentsChanged(int slot) {
+    public ItemStack getStackInSlot(int slot) {
+      return stacks.get(slot);
+    }
+
+    @Override
+    public int getVisualSize() {
+      return size();
+    }
+
+    @Override
+    protected void onContentsChanged(int slot, ItemStack previous) {
       if (parent != null) {
         parent.setChangedFast();
       }

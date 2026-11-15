@@ -23,7 +23,8 @@ import java.util.concurrent.CompletableFuture;
 @NoArgsConstructor(staticName = "modifierHook")
 public class ModifierHookArgument implements ArgumentType<ModuleHook<?>> {
   private static final Collection<String> EXAMPLES = Arrays.asList("tconstruct:tool_stats", "tconstruct:tooltip");
-  private static final DynamicCommandExceptionType HOOK_NOT_FOUND = new DynamicCommandExceptionType(name -> TConstruct.makeTranslation("command", "modifier_hook.not_found", name));
+  // 26.3 dev only allows strings, numbers and components as translation arguments
+  private static final DynamicCommandExceptionType HOOK_NOT_FOUND = new DynamicCommandExceptionType(name -> TConstruct.makeTranslation("command", "modifier_hook.not_found", String.valueOf(name)));
 
   @Override
   public ModuleHook<?> parse(StringReader reader) throws CommandSyntaxException {

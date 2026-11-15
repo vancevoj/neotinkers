@@ -2,6 +2,7 @@ package slimeknights.tconstruct.tables.block.entity.inventory;
 
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import net.minecraft.util.Prediction;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import slimeknights.tconstruct.library.recipe.ITinkerableContainer;
@@ -64,7 +65,8 @@ public class ModifierWorktableContainerWrapper implements ITinkerableContainer.M
   @Override
   public void giveItem(ItemStack stack) {
     if (player != null) {
-      player.getInventory().placeItemBackInInventory(stack);
+      // runs on both sides, so the client predicts the result
+      player.getInventory().placeItemBackInInventory(stack, Prediction.PREDICTED);
     }
   }
 }

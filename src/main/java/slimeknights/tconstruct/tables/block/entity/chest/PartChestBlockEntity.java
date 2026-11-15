@@ -28,7 +28,7 @@ public class PartChestBlockEntity extends AbstractChestBlockEntity {
     @Override
     public boolean isItemValid(int slot, ItemStack stack) {
       // check if there is no other slot containing that item
-      for (int i = 0; i < this.getSlots(); i++) {
+      for (int i = 0; i < this.size(); i++) {
         // don't compare count
         if (ItemStack.isSameItemSameComponents(stack, this.getStackInSlot(i))) {
           return i == slot; // only allowed in the same slot

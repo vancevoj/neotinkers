@@ -4,6 +4,7 @@ import net.minecraft.world.item.equipment.ArmorType;
 import lombok.Getter;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.util.Prediction;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.InventoryMenu;
@@ -67,7 +68,7 @@ public class TinkerStationContainerMenu extends TabbedContainerMenu<TinkerStatio
       if (slotType == ArmorType.BODY) continue; // players have no BODY (animal armor) slot; skip 1.21's 5th type
       this.addSlot(new ArmorSlot(inv, slotType.getSlot(), 152, 20 + slotType.ordinal() * 18));
     }
-    this.addSlot(new Slot(inv, 40, 132, 74).setBackground(InventoryMenu.BLOCK_ATLAS, InventoryMenu.EMPTY_ARMOR_SLOT_SHIELD));
+    this.addSlot(new Slot(inv, 40, 132, 74).setBackground(InventoryMenu.EMPTY_ARMOR_SLOT_SHIELD));
 
     this.addInventorySlots();
   }
@@ -137,7 +138,7 @@ public class TinkerStationContainerMenu extends TabbedContainerMenu<TinkerStatio
         // if successfully added to an inventory, update
         if (!nothingDone) {
           if (!result.isEmpty()) {
-            player.drop(result, false);
+            player.drop(result, false, Prediction.PREDICTED);
           }
           tile.getCraftingResult().clearContent();
           return original;

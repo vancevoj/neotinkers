@@ -26,7 +26,7 @@ public class ArmorSlot extends Slot {
     super(inv, 36 + slotType.getIndex(), xPosition, yPosition);
     this.player = inv.player;
     this.slotType = slotType;
-    setBackground(InventoryMenu.BLOCK_ATLAS, ARMOR_SLOT_BACKGROUNDS[slotType.getIndex()]);
+    setBackground(ARMOR_SLOT_BACKGROUNDS[slotType.getIndex()]);
   }
 
   @Override
