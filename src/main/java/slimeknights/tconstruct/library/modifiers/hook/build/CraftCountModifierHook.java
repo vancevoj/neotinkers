@@ -46,7 +46,7 @@ public interface CraftCountModifierHook {
   /** Gets the max stack size for the given tool, calling the modifier hook */
   static int maxStackSize(IToolStackView tool, float count) {
     // don't bother running if the tool can't go above count 1. Prevents the trait from being abused on non-ammo
-    int itemMax = tool.getItem().getMaxStackSize();
+    int itemMax = tool.getItem().getDefaultMaxStackSize();
     if (itemMax == 1) return 1;
     for (ModifierEntry entry : tool.getModifiers()) {
       count = entry.getHook(ModifierHooks.CRAFT_COUNT).modifyCraftCount(tool, entry, count);

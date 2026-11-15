@@ -1,5 +1,6 @@
 package slimeknights.tconstruct.library.recipe.partbuilder;
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
@@ -148,7 +149,7 @@ public interface IDisplayPartBuilderRecipe extends IPartBuilderRecipe {
 
     @Override
     @Deprecated(forRemoval = true)
-    default ItemStack getResultItem(RegistryAccess pRegistryAccess) {
+    default ItemStack getResultItem(HolderLookup.Provider registries) {
       throw new UnsupportedOperationException();
     }
 

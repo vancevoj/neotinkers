@@ -165,7 +165,7 @@ public class MaterialIdNBT {
 
   /** Helper to quickly fetch a single material ID from a stack. Use {@link #from(ItemStack)} and {@link #getMaterial(int)} instead if you need to parse multiple. */
   public static MaterialVariantId getMaterial(ItemStack stack, int index) {
-    CompoundTag nbt = stack.getTag();
+    CompoundTag nbt = ToolDataComponents.getTag(stack);
     if (nbt != null) {
       ListTag list = nbt.getList(ToolStack.TAG_MATERIALS, Tag.TAG_STRING);
       if (index < list.size()) {

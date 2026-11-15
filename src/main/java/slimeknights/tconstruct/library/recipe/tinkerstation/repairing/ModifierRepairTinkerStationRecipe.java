@@ -36,6 +36,7 @@ import slimeknights.tconstruct.library.tools.item.IModifiableDisplay;
 import slimeknights.tconstruct.library.tools.nbt.LazyToolStack;
 import slimeknights.tconstruct.library.tools.nbt.ModifierNBT;
 import slimeknights.tconstruct.library.tools.nbt.StatsNBT;
+import slimeknights.tconstruct.library.tools.nbt.ToolDataComponents;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 import slimeknights.tconstruct.library.tools.stat.ToolStats;
 import slimeknights.tconstruct.tables.recipe.TinkerStationRepairRecipe;
@@ -174,21 +175,19 @@ public class ModifierRepairTinkerStationRecipe implements ITinkerStationRecipe, 
         .map(item -> {
           if (item instanceof IModifiableDisplay modifiable) {
             ItemStack stack = modifiable.getRenderTool().copy();
-            CompoundTag tag = stack.getOrCreateTag();
-            tag.put(ToolStack.TAG_STATS, stats);
-            tag.put(ToolStack.TAG_UPGRADES, modifiers);
-            tag.put(ToolStack.TAG_MODIFIERS, modifiers);
-            tag.putInt(ToolStack.TAG_DAMAGE, 200); // mostly broken
-            return stack;
+            return ToolDataComponents.update(stack, tag -> {
+              tag.put(ToolStack.TAG_STATS, stats);
+              tag.put(ToolStack.TAG_UPGRADES, modifiers);
+              tag.put(ToolStack.TAG_MODIFIERS, modifiers);
+              tag.putInt(ToolStack.TAG_DAMAGE, 200); // mostly broken
+            });
           }
           return ItemStack.EMPTY;
         })
         .filter(stack -> !stack.isEmpty())
         .toList();
       toolWithModifier = toolWithoutModifier.stream().map(stack -> {
-        stack = stack.copy();
-        stack.getOrCreateTag().putInt(ToolStack.TAG_DAMAGE, 200 - repairAmount);
-        return stack;
+        return ToolDataComponents.update(stack.copy(), tag -> tag.putInt(ToolStack.TAG_DAMAGE, 200 - repairAmount));
       }).toList();
     }
 

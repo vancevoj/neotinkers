@@ -33,13 +33,7 @@ public class MaterialBlockItem extends BlockItem implements IMaterialItem {
 
   @Override
   public Component getName(ItemStack stack) {
-    Component name = MaterialItem.getName(this, stack);
-    // 1.21: Item#getRarity(ItemStack) was removed in favor of the static rarity component, so style the name with the material rarity directly
-    Rarity rarity = getRarity(stack);
-    if (rarity != Rarity.COMMON) {
-      return name.copy().withStyle(rarity.getStyleModifier());
-    }
-    return name;
+    return MaterialItem.withRarity(MaterialItem.getName(this, stack), getRarity(stack));
   }
 
   /** Gets the rarity of the material on this stack */

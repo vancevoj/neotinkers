@@ -1,7 +1,7 @@
 package slimeknights.tconstruct.plugin.jei.melting;
 
 import lombok.RequiredArgsConstructor;
-import mezz.jei.api.forge.ForgeTypes;
+import mezz.jei.api.neoforge.NeoForgeTypes;
 import mezz.jei.api.gui.builder.ITooltipBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.drawable.IDrawableStatic;
@@ -138,7 +138,7 @@ public abstract class AbstractMeltingCategory extends AbstractRecipeCategory<IDi
   private record MeltingArrowTooltip(IDisplayableMeltingRecipe recipe, IRecipeSlotDrawable fluidSlot) implements IRecipeWidgetTooltipCallback {
     @Override
     public void onTooltip(ITooltipBuilder tooltip) {
-      FluidStack fluid = fluidSlot.getDisplayedIngredient(ForgeTypes.FLUID_STACK).orElse(FluidStack.EMPTY);
+      FluidStack fluid = fluidSlot.getDisplayedIngredient(NeoForgeTypes.FLUID_STACK).orElse(FluidStack.EMPTY);
       tooltip.add(Component.translatable(KEY_COOLING_TIME, recipe.getTime(fluid) / 4));
     }
   }
@@ -147,7 +147,7 @@ public abstract class AbstractMeltingCategory extends AbstractRecipeCategory<IDi
   private record TemperatureWidget(ScreenPosition getPosition, int width, IDisplayableMeltingRecipe recipe, IRecipeSlotDrawable fluidSlot, Font font) implements IRecipeWidget {
     @Override
     public void drawWidget(GuiGraphics graphics, double mouseX, double mouseY) {
-      FluidStack fluid = fluidSlot.getDisplayedIngredient(ForgeTypes.FLUID_STACK).orElse(FluidStack.EMPTY);
+      FluidStack fluid = fluidSlot.getDisplayedIngredient(NeoForgeTypes.FLUID_STACK).orElse(FluidStack.EMPTY);
       Component temperature = Component.translatable(KEY_TEMPERATURE, recipe.getTemperature(fluid));
       graphics.drawString(font, temperature, (width - font.width(temperature)) / 2, 0, Color.GRAY.getRGB(), false);
     }

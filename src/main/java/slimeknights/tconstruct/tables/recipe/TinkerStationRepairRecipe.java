@@ -270,7 +270,7 @@ public class TinkerStationRepairRecipe implements ITinkerStationRecipe, IMultiRe
       Set<Item> dynamicTools = new HashSet<>();
       List<ItemStack> dynamicToolStacks = new ArrayList<>();
       for (Holder<Item> holder : BuiltInRegistries.ITEM.getTagOrEmpty(TinkerTags.Items.DURABILITY)) {
-        if (holder.isBound() && holder.get() instanceof IModifiable modifiable) {
+        if (holder.isBound() && holder.value() instanceof IModifiable modifiable) {
           CompoundTag tag = new CompoundTag();
           ToolStack tool = ToolStack.from(modifiable.asItem(), modifiable.getToolDefinition(), tag);
           // assign display materials if needed
