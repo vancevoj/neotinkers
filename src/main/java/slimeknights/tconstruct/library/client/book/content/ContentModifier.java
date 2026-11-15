@@ -233,6 +233,13 @@ public class ContentModifier extends PageContent {
         demo = demo.stream().filter(stack -> stack.is(filterTag)).toList();
       }
 
+      // tool background, before the tools as 26.3 GUI elements layer in draw order instead of by depth
+      ImageElement image = new ImageElement(imgX + (img.width - 22) / 2, imgY - 27, -1, -1, IMG_SLOT_1, 0xffffff);
+      image.parent = parent;
+
+      this.parts.add(image);
+      list.add(image);
+
       // tool stacks
       if (!demo.isEmpty()) {
         TinkerItemElement demoTools = new TinkerItemElement(imgX + (img.width - 16) / 2, imgY - 24, 1f, getDemoTools(demo));
@@ -241,13 +248,6 @@ public class ContentModifier extends PageContent {
         this.parts.add(demoTools);
         list.add(demoTools);
       }
-
-      // tool background
-      ImageElement image = new ImageElement(imgX + (img.width - 22) / 2, imgY - 27, -1, -1, IMG_SLOT_1, 0xffffff);
-      image.parent = parent;
-
-      this.parts.add(image);
-      list.add(image);
 
       for (int i = 0; i < Math.min(inputs, 5); i++) {
         TinkerItemElement part = new TinkerItemElement(imgX + slotsX[i], imgY + slotsY[i], 1f, recipe.getDisplayItems(i));

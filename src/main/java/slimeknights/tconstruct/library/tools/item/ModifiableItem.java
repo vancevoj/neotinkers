@@ -85,7 +85,7 @@ public class ModifiableItem extends Item implements IModifiableDisplay, IClientE
   private final int maxStackSize;
 
   /** Cached tool for rendering on UIs */
-  private ItemStack toolForRendering;
+  private final RenderToolCache toolForRendering = new RenderToolCache();
 
   public ModifiableItem(Properties properties, ToolDefinition toolDefinition) {
     this(properties, toolDefinition, 1);
@@ -123,11 +123,8 @@ public class ModifiableItem extends Item implements IModifiableDisplay, IClientE
   /* Enchanting */
   // 1.21.2 removed Item#isEnchantable: without the ENCHANTABLE component the tool cannot be enchanted in the enchanting table
 
-  /** Replaces the removed {@code isBookEnchantable}, NeoForge now asks this method for enchanted books in the anvil */
-  @Override
-  public boolean supportsEnchantment(ItemStack stack, Holder<Enchantment> enchantment) {
-    return false;
-  }
+  // the removed isBookEnchantable is replaced by ToolEvents#onAnvilUpdate rejecting enchanted books. supportsEnchantment keeps its default
+  // as it also gates /enchant and enchanting loot functions, which accepted tools in 1.21.1
 
   /** Reports the tool's virtual modifier enchantments to gameplay logic, they are never stored in NBT */
   @Override
@@ -501,10 +498,7 @@ public class ModifiableItem extends Item implements IModifiableDisplay, IClientE
 
   @Override
   public ItemStack getRenderTool() {
-    if (toolForRendering == null) {
-      toolForRendering = ToolBuildHandler.buildToolForRendering(this, this.getToolDefinition());
-    }
-    return toolForRendering;
+    return toolForRendering.get(() -> ToolBuildHandler.buildToolForRendering(this, this.getToolDefinition()));
   }
 
   @Override

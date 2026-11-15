@@ -273,11 +273,12 @@ public class ContentTool extends PageContent {
 
     ItemStack demo = getTool().getRenderTool();
 
+    // 26.3 GUI elements layer in draw order instead of by depth, so the slot goes before the tool drawn on top of it
+    list.add(new ImageElement(imgX + (imgWidth - 22) / 2, imgY - 27, -1, -1, IMG_SLOT_1x1, 0xffffff));
     TinkerItemElement toolItem = new TinkerItemElement(imgX + (imgWidth - 16) / 2, imgY - 24, 1f, demo);
     //toolItem.noTooltip = true;
 
     list.add(toolItem);
-    list.add(new ImageElement(imgX + (imgWidth - 22) / 2, imgY - 27, -1, -1, IMG_SLOT_1x1, 0xffffff));
 
     for (int i = 0; i < partsSize; i++) {
       SlotPos pos = slotPos[i];

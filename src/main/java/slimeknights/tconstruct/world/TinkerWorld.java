@@ -141,7 +141,7 @@ public final class TinkerWorld extends TinkerModule {
   public static final DeferredHolder<CreativeModeTab, CreativeModeTab> tabWorld = CREATIVE_TABS.register(
     "world", () -> CreativeModeTab.builder().title(TConstruct.makeTranslation("itemGroup", "world"))
       .icon(() -> new ItemStack(TinkerWorld.cobaltOre))
-      .displayItems(TinkerWorld::addTabItems)
+      .displayItems(dedupeTab(TinkerWorld::addTabItems))
       .withTabsBefore(TinkerSmeltery.tabSmeltery.getId())
       .build());
 

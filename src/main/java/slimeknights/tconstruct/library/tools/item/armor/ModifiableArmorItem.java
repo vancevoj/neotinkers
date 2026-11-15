@@ -63,6 +63,7 @@ import slimeknights.tconstruct.library.tools.helper.ToolDamageUtil;
 import slimeknights.tconstruct.library.tools.helper.TooltipUtil;
 import slimeknights.tconstruct.library.tools.item.IClientExtensionItem;
 import slimeknights.tconstruct.library.tools.item.IModifiableDisplay;
+import slimeknights.tconstruct.library.tools.item.RenderToolCache;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.StatsNBT;
 import slimeknights.tconstruct.library.tools.nbt.ToolStack;
@@ -97,7 +98,7 @@ public class ModifiableArmorItem extends Item implements IModifiableDisplay, ICl
   @Getter
   protected final ArmorType type;
   /** Cache of the tool built for rendering */
-  private ItemStack toolForRendering = null;
+  private final RenderToolCache toolForRendering = new RenderToolCache();
   /**
    * Creates a new armor item
    * @param materialIn      Armor material, provides the equip sound
@@ -186,11 +187,8 @@ public class ModifiableArmorItem extends Item implements IModifiableDisplay, ICl
   /* Enchantments */
   // 1.21.2 removed Item#isEnchantable: without the ENCHANTABLE component the armor cannot be enchanted in the enchanting table
 
-  /** Replaces the removed {@code isBookEnchantable}, NeoForge now asks this method for enchanted books in the anvil */
-  @Override
-  public boolean supportsEnchantment(ItemStack stack, Holder<Enchantment> enchantment) {
-    return false;
-  }
+  // the removed isBookEnchantable is replaced by ToolEvents#onAnvilUpdate rejecting enchanted books. supportsEnchantment keeps its default
+  // as it also gates /enchant and enchanting loot functions, which accepted tools in 1.21.1
 
   /** Reports the tool's virtual modifier enchantments to gameplay logic, they are never stored in NBT */
   @Override
@@ -510,9 +508,6 @@ public class ModifiableArmorItem extends Item implements IModifiableDisplay, ICl
 
   @Override
   public ItemStack getRenderTool() {
-    if (toolForRendering == null) {
-      toolForRendering = ToolBuildHandler.buildToolForRendering(this, this.getToolDefinition());
-    }
-    return toolForRendering;
+    return toolForRendering.get(() -> ToolBuildHandler.buildToolForRendering(this, this.getToolDefinition()));
   }
 }

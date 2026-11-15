@@ -99,7 +99,7 @@ public final class TinkerFluids extends TinkerModule {
   public static final DeferredHolder<CreativeModeTab, CreativeModeTab> tabFluids = CREATIVE_TABS.register(
     "fluids", () -> CreativeModeTab.builder().title(TConstruct.makeTranslation("itemGroup", "fluids"))
                                    .icon(() -> TankItem.fillTank(TinkerSmeltery.searedTank, TankType.FUEL_GAUGE, TinkerFluids.moltenCobalt.get()))
-                                   .displayItems(TinkerFluids::addFilledContainers)
+                                   .displayItems(dedupeTab(TinkerFluids::addFilledContainers))
                                    .withTabsBefore(TinkerTables.tabTables.getId())
                                    .withSearchBar()
                                    .build());

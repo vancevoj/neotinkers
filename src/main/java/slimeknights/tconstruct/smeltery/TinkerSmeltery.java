@@ -155,7 +155,7 @@ public final class TinkerSmeltery extends TinkerModule {
   public static final DeferredHolder<? super CreativeModeTab, CreativeModeTab> tabSmeltery = CREATIVE_TABS.register(
     "smeltery", () -> CreativeModeTab.builder().title(TConstruct.makeTranslation("itemGroup", "smeltery"))
                                      .icon(() -> new ItemStack(TinkerSmeltery.smelteryController))
-                                     .displayItems(TinkerSmeltery::addTabItems)
+                                     .displayItems(dedupeTab(TinkerSmeltery::addTabItems))
                                      .withTabsBefore(TinkerToolParts.tabToolParts.getId())
                                      .build());
 

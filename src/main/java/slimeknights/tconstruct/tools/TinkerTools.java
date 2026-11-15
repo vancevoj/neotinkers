@@ -192,7 +192,7 @@ public final class TinkerTools extends TinkerModule {
   public static final DeferredHolder<? super CreativeModeTab, CreativeModeTab> tabTools = CREATIVE_TABS.register(
     "tools", () -> CreativeModeTab.builder().title(TConstruct.makeTranslation("itemGroup", "tools"))
       .icon(() -> TinkerTools.pickaxe.get().getRenderTool())
-      .displayItems(TinkerTools::addTabItems)
+      .displayItems(dedupeTab(TinkerTools::addTabItems))
       .withTabsBefore(TinkerCommons.tabGeneral.getId())
       .withSearchBar()
       .build());

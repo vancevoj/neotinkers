@@ -86,7 +86,7 @@ public final class TinkerTables extends TinkerModule {
   public static final DeferredHolder<? super CreativeModeTab, CreativeModeTab> tabTables = CREATIVE_TABS.register(
     "tables", () -> CreativeModeTab.builder().title(TConstruct.makeTranslation("itemGroup", "tables"))
       .icon(() -> new ItemStack(TinkerTables.tinkersAnvil))
-      .displayItems(TinkerTables::addTableVariants)
+      .displayItems(dedupeTab(TinkerTables::addTableVariants))
       .withTabsBefore(TinkerWorld.tabWorld.getId())
       .withSearchBar()
       .build());

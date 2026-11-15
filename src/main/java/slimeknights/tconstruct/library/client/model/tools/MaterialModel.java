@@ -190,6 +190,22 @@ public class MaterialModel extends AbstractUnbakedModel {
     return texture != null ? texture : new Material(MissingTextureAtlasSprite.getLocation());
   }
 
+  /**
+   * Gets the render properties for a material or tool item model. Like in 1.21.1, these models take their particle from their textures and rarely set one,
+   * while {@link ModelRenderProperties#fromResolvedModel(ModelBaker, ResolvedModel, TextureSlots)} reports a missing particle reference.
+   * @param baker     Model baker
+   * @param resolved  Resolved model
+   * @param slots     Texture slots of the model
+   * @param particle  Particle to use when the model has no particle texture
+   * @return  Render properties
+   */
+  static ModelRenderProperties renderProperties(ModelBaker baker, ResolvedModel resolved, TextureSlots slots, Material particle) {
+    if (slots.getMaterial("particle") != null) {
+      return ModelRenderProperties.fromResolvedModel(baker, resolved, slots);
+    }
+    return new ModelRenderProperties(resolved.getTopGuiLight().lightLikeBlock(), baker.materials().get(particle, resolved), resolved.getTopTransforms());
+  }
+
 
   /* Helpers */
 
@@ -286,7 +302,6 @@ public class MaterialModel extends AbstractUnbakedModel {
       ModelBaker baker = context.blockModelBaker();
       ResolvedModel resolved = baker.getModel(model.orElse(DEFAULT_MODEL));
       TextureSlots textureSlots = resolved.getTopTextureSlots();
-      ModelRenderProperties properties = ModelRenderProperties.fromResolvedModel(baker, resolved, textureSlots);
       Matrix4fc modelTransform = Transformation.compose(transformation, this.transformation);
 
       // find model data, defaulting to the overrides
@@ -295,6 +310,8 @@ public class MaterialModel extends AbstractUnbakedModel {
         TConstruct.LOG.warn("Model {} used with item model type {} does not use the material loader, materials will not display", model.get(), ID);
       }
       Material textureMaterial = texture.map(Material::new).orElseGet(() -> getTexture(textureSlots));
+      // the baked model swaps the particle for the material sprite, the base texture covers the model wide properties
+      ModelRenderProperties properties = renderProperties(baker, resolved, textureSlots, textureMaterial);
       int index = this.index.orElse(materialModel != null ? materialModel.index : 0);
       Vec2 modelOffset = materialModel != null ? materialModel.offset : Vec2.ZERO;
       Vec2 offset = new Vec2(offsetX.orElse(modelOffset.x), offsetY.orElse(modelOffset.y));

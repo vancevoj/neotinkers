@@ -13,6 +13,8 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTab.TabVisibility;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackLinkedSet;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
@@ -47,6 +49,7 @@ import slimeknights.tconstruct.library.materials.definition.MaterialId;
 import slimeknights.tconstruct.library.recipe.TinkerRecipeTypes;
 
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
@@ -159,6 +162,27 @@ public abstract class TinkerModule {
 
 
   /* Creative tab helpers */
+
+  /**
+   * Wraps a tab generator so a stack added twice to the parent tab keeps its first position instead of crashing the tab.
+   * NeoForge 1.21.1 merged repeated stacks silently, 26.3 throws, and Tinkers re-adds some stacks on purpose
+   * (the pattern in general, tool variants whose fallback parts equal another material's variant, the arrow cast after every cast set).
+   */
+  protected static CreativeModeTab.DisplayItemsGenerator dedupeTab(CreativeModeTab.DisplayItemsGenerator generator) {
+    return (parameters, output) -> {
+      Set<ItemStack> parentEntries = ItemStackLinkedSet.createTypeAndComponentsSet();
+      generator.accept(parameters, (stack, visibility) -> {
+        // parent entries are kept only the first time, search entries form a set downstream so repeats are harmless
+        boolean parent = visibility != TabVisibility.SEARCH_TAB_ONLY && parentEntries.add(stack);
+        boolean search = visibility != TabVisibility.PARENT_TAB_ONLY;
+        if (parent) {
+          output.accept(stack, search ? TabVisibility.PARENT_AND_SEARCH_TABS : TabVisibility.PARENT_TAB_ONLY);
+        } else if (search) {
+          output.accept(stack, TabVisibility.SEARCH_TAB_ONLY);
+        }
+      });
+    };
+  }
 
   /** Adds an enum object to the given tab */
   protected static void accept(CreativeModeTab.Output output, EnumObject<?,? extends ItemLike> items, TabVisibility visibility) {

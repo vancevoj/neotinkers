@@ -7,7 +7,6 @@ import net.minecraft.network.protocol.game.ClientboundExplodePacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.util.random.WeightedList;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -313,7 +312,7 @@ public class CustomExplosion extends ServerExplosion {
     for (ServerPlayer player : level.players()) {
       if (player.distanceToSqr(position) < 4096.0D) {
         player.connection.send(new ClientboundExplodePacket(position, radius, blockCount, Optional.ofNullable(getHitPlayers().get(player)),
-                                                            isSmall() ? ParticleTypes.EXPLOSION : ParticleTypes.EXPLOSION_EMITTER, SoundEvents.GENERIC_EXPLODE, WeightedList.of(), playSound));
+                                                            isSmall() ? ParticleTypes.EXPLOSION : ParticleTypes.EXPLOSION_EMITTER, SoundEvents.GENERIC_EXPLODE, Level.DEFAULT_EXPLOSION_BLOCK_PARTICLES, playSound));
       }
     }
   }

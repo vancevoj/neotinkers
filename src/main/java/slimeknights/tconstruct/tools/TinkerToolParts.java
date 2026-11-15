@@ -53,7 +53,7 @@ public final class TinkerToolParts extends TinkerModule {
                                          }
                                          return TinkerToolParts.pickHead.get().withMaterialForDisplay(material);
                                        })
-                                       .displayItems(TinkerToolParts::addTabItems)
+                                       .displayItems(dedupeTab(TinkerToolParts::addTabItems))
                                        .withTabsBefore(TinkerTools.tabTools.getId())
                                        .withSearchBar()
                                        .build());

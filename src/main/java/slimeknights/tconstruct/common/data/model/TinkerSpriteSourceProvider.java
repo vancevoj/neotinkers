@@ -53,6 +53,7 @@ public class TinkerSpriteSourceProvider extends SpriteSourceProvider {
     addVanilla(vanillaMaterials, TrimMaterials.Palette.DIAMOND);
     addVanilla(vanillaMaterials, TrimMaterials.Palette.LAPIS);
     addVanilla(vanillaMaterials, TrimMaterials.Palette.AMETHYST);
+    addVanilla(vanillaMaterials, TrimMaterials.Palette.RESIN);
     // custom armor "modifier" textures that use the trim materials
     List<Identifier> customItemTrims = Stream.of("item/tool/armor/travelers/goggles/trim", "item/tool/armor/slime/wings/trim").map(TConstruct::getResource).toList();
 

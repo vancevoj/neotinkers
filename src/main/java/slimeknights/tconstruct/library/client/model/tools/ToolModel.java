@@ -570,13 +570,16 @@ public class ToolModel extends AbstractUnbakedModel {
       ModelBaker baker = context.blockModelBaker();
       ResolvedModel resolved = baker.getModel(model);
       TextureSlots textureSlots = resolved.getTopTextureSlots();
-      ModelRenderProperties properties = ModelRenderProperties.fromResolvedModel(baker, resolved, textureSlots);
       Matrix4fc modelTransform = Transformation.compose(transformation, this.transformation);
       ToolModel toolModel = SimpleBlockModel.findModel(resolved, ToolModel.class);
       if (toolModel == null) {
         TConstruct.LOG.warn("Model {} used with item model type {} does not use the tool loader, tool materials and modifiers will not display", model, ID);
-        return new CuboidItemModelWrapper(List.of(), resolved.bakeTopGeometry(textureSlots, baker, BlockModelRotation.IDENTITY), properties, modelTransform);
+        return new CuboidItemModelWrapper(List.of(), resolved.bakeTopGeometry(textureSlots, baker, BlockModelRotation.IDENTITY), ModelRenderProperties.fromResolvedModel(baker, resolved, textureSlots), modelTransform);
       }
+      // like the baked variants, the particle defaults to the first part
+      List<ToolPart> parts = toolModel.getParts();
+      Material particle = parts.isEmpty() ? new Material(MissingTextureAtlasSprite.getLocation()) : getMaterial(textureSlots, parts.getFirst().getName(false));
+      ModelRenderProperties properties = MaterialModel.renderProperties(baker, resolved, textureSlots, particle);
       return toolModel.bakeItem(baker, resolved, properties, modelTransform);
     }
   }

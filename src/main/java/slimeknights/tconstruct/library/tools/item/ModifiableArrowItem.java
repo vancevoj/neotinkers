@@ -53,7 +53,7 @@ public class ModifiableArrowItem extends ArrowItem implements IModifiableDisplay
   @Getter
   private final ToolDefinition toolDefinition;
   /** Cached tool for rendering on UIs */
-  private ItemStack toolForRendering;
+  private final RenderToolCache toolForRendering = new RenderToolCache();
 
   public ModifiableArrowItem(Properties props, ToolDefinition toolDefinition) {
     super(TooltipUtil.hideVanillaEnchantments(props));
@@ -195,9 +195,6 @@ public class ModifiableArrowItem extends ArrowItem implements IModifiableDisplay
 
   @Override
   public ItemStack getRenderTool() {
-    if (toolForRendering == null) {
-      toolForRendering = ToolBuildHandler.buildToolForRendering(this, this.getToolDefinition());
-    }
-    return toolForRendering;
+    return toolForRendering.get(() -> ToolBuildHandler.buildToolForRendering(this, this.getToolDefinition()));
   }
 }

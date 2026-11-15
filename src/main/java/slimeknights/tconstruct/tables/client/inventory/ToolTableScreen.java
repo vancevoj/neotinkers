@@ -85,6 +85,8 @@ public abstract class ToolTableScreen<T extends BlockEntity, C extends TabbedCon
       assert this.minecraft != null;
       assert this.minecraft.level != null;
       this.armorStandPreview = new ArmorStand(this.minecraft.level, 0.0D, 0.0D, 0.0D);
+      // entities only get an ID when added to a level since 26.3, and the item model resolver seeds from it. Same ID vanilla gives its spawner display entity
+      this.armorStandPreview.setId(-1);
       this.armorStandPreview.setNoBasePlate(true);
       this.armorStandPreview.setShowArms(true);
       this.armorStandPreview.yBodyRot = 210.0F;
