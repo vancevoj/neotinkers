@@ -1760,6 +1760,10 @@ public class ModifierProvider extends AbstractModifierProvider implements ICondi
     addRedirect(id("plowing"), redirect(ModifierIds.tilling));
     addRedirect(id("lightspeed_armor"), redirect(ModifierIds.lightspeed));
     addRedirect(TinkerModifiers.frosttouch.getId(), redirect(ModifierIds.slowBones));
+    // composite slimeskulls were removed, point their traits at the traits of the skulls they are remapped to
+    addRedirect(id("magic_bones"), redirect(ModifierIds.slowBones));
+    addRedirect(id("flaming_bones"), redirect(ModifierIds.fireborn));
+    addRedirect(id("decayed_bones"), redirect(ModifierIds.witheredBones));
   }
 
   /** Creates a modifier that grants 2 levels of another modifier, plus a third on the next level. */

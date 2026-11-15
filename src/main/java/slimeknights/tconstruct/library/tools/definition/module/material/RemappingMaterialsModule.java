@@ -2,6 +2,7 @@ package slimeknights.tconstruct.library.tools.definition.module.material;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.util.RandomSource;
 import slimeknights.mantle.data.loadable.record.RecordLoadable;
 import slimeknights.tconstruct.library.materials.RandomMaterial;
@@ -21,8 +22,7 @@ import java.util.Map;
 
 /**
  * Module that fills in missing materials, remapping existing materials.
- * Note that due to how the missing materials hook works, this will only run if the material size was too small before.
- * This does not currently support remapping without a material size change.
+ * Runs if the material size was too small before, or if any existing material is one of the remapped materials.
  * @param materials  Data to fill in missing materials.
  * @param remap      Data to remap existing materials.
  */
@@ -47,6 +47,25 @@ public record RemappingMaterialsModule(List<RandomMaterial> materials, List<Map<
   @Override
   public MaterialNBT fillMaterials(ToolDefinition definition, RandomSource random) {
     return RandomMaterial.build(ToolMaterialHook.stats(definition), materials, random);
+  }
+
+  @Override
+  public boolean needsMaterials(ToolDefinition definition, ListTag materials) {
+    if (MissingMaterialsToolHook.super.needsMaterials(definition, materials)) {
+      return true;
+    }
+    // remap existing tools with old materials, such as the removed composite slimeskulls
+    int max = Math.min(materials.size(), remap.size());
+    for (int i = 0; i < max; i++) {
+      Map<MaterialId,MaterialVariantId> remap = this.remap.get(i);
+      if (!remap.isEmpty()) {
+        MaterialVariantId material = MaterialVariantId.tryParse(materials.getString(i));
+        if (material != null && remap.containsKey(material.getId())) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 
   @Override

@@ -784,9 +784,9 @@ public class ToolStack implements IToolStackView {
       if (outdated) {
         resolveMaterialRedirects();
       }
-      // check if missing materials; either means we have none or too few
+      // check if missing materials; either means we have none, too few, or some that the tool definition remaps
       MissingMaterialsToolHook missingMaterials = definition.getHook(ToolHooks.MISSING_MATERIALS);
-      boolean needsMaterials = definition.hasMaterials() && (!nbt.contains(TAG_MATERIALS, Tag.TAG_LIST) || missingMaterials.needsMaterials(definition, nbt.getList(TAG_MATERIALS, Tag.TAG_STRING).size()));
+      boolean needsMaterials = definition.hasMaterials() && (!nbt.contains(TAG_MATERIALS, Tag.TAG_LIST) || missingMaterials.needsMaterials(definition, nbt.getList(TAG_MATERIALS, Tag.TAG_STRING)));
       // build data if we either lack data (signified by no stats), we lack materials but expect them, or the data is outdated
       if (needsMaterials || outdated || !isInitialized(nbt)) {
         // randomize materials if missing

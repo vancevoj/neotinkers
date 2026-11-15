@@ -35,6 +35,7 @@
         {
           "tconstruct:blazing_bone": "tconstruct:blaze",
           "tconstruct:glass": "tconstruct:gunpowder",
+          "tconstruct:necronium": "tconstruct:necrotic_bone",
           "tconstruct:venombone": "tconstruct:ice"
         }
       ]

@@ -1,5 +1,6 @@
 package slimeknights.tconstruct.library.tools.definition.module.material;
 
+import net.minecraft.nbt.ListTag;
 import net.minecraft.util.RandomSource;
 import slimeknights.tconstruct.library.materials.definition.MaterialVariant;
 import slimeknights.tconstruct.library.tools.definition.ToolDefinition;
@@ -15,7 +16,7 @@ public interface MissingMaterialsToolHook {
 
   /**
    * Fills the given existing materials with any missing materials.
-   * Will only be called if {@link #needsMaterials(ToolDefinition, int)} returns true.
+   * Will only be called if {@link #needsMaterials(ToolDefinition, ListTag)} returns true.
    */
   default MaterialNBT fillMaterials(ToolDefinition definition, MaterialNBT existing, RandomSource random) {
     MaterialNBT newMaterials = fillMaterials(definition, random);
@@ -39,5 +40,15 @@ public interface MissingMaterialsToolHook {
   /** Checks if we are missing materials */
   default boolean needsMaterials(ToolDefinition definition, int existingSize) {
     return existingSize < ToolMaterialHook.stats(definition).size();
+  }
+
+  /**
+   * Checks if the given stored materials need to be filled or changed by {@link #fillMaterials(ToolDefinition, MaterialNBT, RandomSource)}
+   * @param definition  Tool definition
+   * @param materials   Material IDs stored on the tool
+   * @return  True if the materials need updating, by default if any are missing
+   */
+  default boolean needsMaterials(ToolDefinition definition, ListTag materials) {
+    return needsMaterials(definition, materials.size());
   }
 }
