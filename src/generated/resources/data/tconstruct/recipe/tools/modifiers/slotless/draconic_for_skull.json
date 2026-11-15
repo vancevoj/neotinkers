@@ -3,23 +3,19 @@
   "allow_crystal": true,
   "inputs": [
     {
-      "item": "minecraft:dragon_head"
+      "ingredient": "minecraft:dragon_head"
     },
     {
-      "tag": "c:slimeballs"
+      "ingredient": "#c:slime_balls"
     }
   ],
   "level": 1,
   "result": "tconstruct:draconic",
   "tools": {
-    "type": "neoforge:intersection",
+    "neoforge:ingredient_type": "neoforge:intersection",
     "children": [
-      {
-        "tag": "tconstruct:modifiable/bonus_slots"
-      },
-      {
-        "tag": "tconstruct:modifiable/skulls"
-      }
+      "#tconstruct:modifiable/bonus_slots",
+      "#tconstruct:modifiable/skulls"
     ]
   }
 }

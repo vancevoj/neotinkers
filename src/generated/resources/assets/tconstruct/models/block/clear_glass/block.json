@@ -6,7 +6,6 @@
     }
   },
   "loader": "mantle:connected",
-  "render_type": "minecraft:cutout",
   "textures": {
     "all": "tconstruct:block/clear_glass"
   }

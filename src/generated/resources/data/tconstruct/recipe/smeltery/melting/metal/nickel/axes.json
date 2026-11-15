@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:damagable_melting",
-  "ingredient": {
-    "tag": "tconstruct:melting/nickel/tools_costing_3"
-  },
+  "ingredient": "#tconstruct:melting/nickel/tools_costing_3",
   "result": {
     "amount": 270,
     "tag": "c:molten_nickel",

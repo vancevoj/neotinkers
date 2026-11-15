@@ -2,85 +2,85 @@
   "type": "tconstruct:crafting_shaped_materials",
   "category": "equipment",
   "key": {
-    "c": [
-      {
-        "type": "tconstruct:material_value",
-        "material": {
-          "type": "mantle:and",
-          "predicates": [
-            {
-              "type": "mantle:or",
-              "predicates": [
-                "tconstruct:castable",
-                "tconstruct:composite"
-              ]
-            },
-            {
-              "type": "tconstruct:stat_type",
-              "stat_type": "tconstruct:plating_chestplate"
-            }
-          ]
+    "c": {
+      "neoforge:ingredient_type": "neoforge:compound",
+      "children": [
+        {
+          "neoforge:ingredient_type": "tconstruct:material_value",
+          "material": {
+            "type": "mantle:and",
+            "predicates": [
+              {
+                "type": "mantle:or",
+                "predicates": [
+                  "tconstruct:castable",
+                  "tconstruct:composite"
+                ]
+              },
+              {
+                "type": "tconstruct:stat_type",
+                "stat_type": "tconstruct:plating_chestplate"
+              }
+            ]
+          },
+          "value": 1
         },
-        "value": 1
-      },
-      {
-        "type": "tconstruct:material",
-        "match": {
-          "item": "tconstruct:fake_ingot"
-        },
-        "material": {
-          "type": "tconstruct:stat_type",
-          "stat_type": "tconstruct:plating_chestplate"
+        {
+          "neoforge:ingredient_type": "tconstruct:material",
+          "match": "tconstruct:fake_ingot",
+          "material": {
+            "type": "tconstruct:stat_type",
+            "stat_type": "tconstruct:plating_chestplate"
+          }
         }
-      }
-    ],
+      ]
+    },
     "l": {
-      "type": "tconstruct:material_value",
+      "neoforge:ingredient_type": "tconstruct:material_value",
       "material": {
         "type": "tconstruct:stat_type",
         "stat_type": "tconstruct:cuirass"
       },
       "value": 1
     },
-    "s": {
-      "tag": "c:strings"
-    }
+    "s": "#c:strings"
   },
   "parts": [
-    [
-      {
-        "type": "tconstruct:material_value",
-        "material": {
-          "type": "mantle:and",
-          "predicates": [
-            {
-              "type": "mantle:or",
-              "predicates": [
-                "tconstruct:castable",
-                "tconstruct:composite"
-              ]
-            },
-            {
-              "type": "tconstruct:stat_type",
-              "stat_type": "tconstruct:plating_chestplate"
-            }
-          ]
-        },
-        "value": 1
-      },
-      {
-        "type": "tconstruct:material",
-        "match": {
-          "item": "tconstruct:fake_ingot"
-        },
-        "material": {
-          "type": "tconstruct:stat_type",
-          "stat_type": "tconstruct:plating_chestplate"
-        }
-      }
-    ],
     {
-      "type": "tconstruct:material_value",
+      "neoforge:ingredient_type": "neoforge:compound",
+      "children": [
+        {
+          "neoforge:ingredient_type": "tconstruct:material_value",
+          "material": {
+            "type": "mantle:and",
+            "predicates": [
+              {
+                "type": "mantle:or",
+                "predicates": [
+                  "tconstruct:castable",
+                  "tconstruct:composite"
+                ]
+              },
+              {
+                "type": "tconstruct:stat_type",
+                "stat_type": "tconstruct:plating_chestplate"
+              }
+            ]
+          },
+          "value": 1
+        },
+        {
+          "neoforge:ingredient_type": "tconstruct:material",
+          "match": "tconstruct:fake_ingot",
+          "material": {
+            "type": "tconstruct:stat_type",
+            "stat_type": "tconstruct:plating_chestplate"
+          }
+        }
+      ]
+    },
+    {
+      "neoforge:ingredient_type": "tconstruct:material_value",
       "material": {
         "type": "tconstruct:stat_type",
         "stat_type": "tconstruct:cuirass"
@@ -94,7 +94,6 @@
     "lcl"
   ],
   "result": {
-    "count": 1,
     "id": "tconstruct:travelers_chestplate"
   }
 }

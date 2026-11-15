@@ -1,0 +1,92 @@
+{
+  "model": {
+    "type": "minecraft:condition",
+    "on_false": {
+      "type": "minecraft:range_dispatch",
+      "entries": [
+        {
+          "model": {
+            "type": "minecraft:range_dispatch",
+            "entries": [
+              {
+                "model": {
+                  "type": "tconstruct:tool",
+                  "model": "tconstruct:item/tool/fishing_rod/blocking_cast"
+                },
+                "threshold": 1.0
+              }
+            ],
+            "fallback": {
+              "type": "minecraft:range_dispatch",
+              "entries": [
+                {
+                  "model": {
+                    "type": "tconstruct:tool",
+                    "model": "tconstruct:item/tool/fishing_rod/cast"
+                  },
+                  "threshold": 1.0
+                }
+              ],
+              "fallback": {
+                "type": "minecraft:range_dispatch",
+                "entries": [
+                  {
+                    "model": {
+                      "type": "tconstruct:tool",
+                      "model": "tconstruct:item/tool/fishing_rod/blocking"
+                    },
+                    "threshold": 2.0
+                  }
+                ],
+                "fallback": {
+                  "type": "tconstruct:tool",
+                  "model": "tconstruct:item/fishing_rod"
+                },
+                "property": "tconstruct:charging"
+              },
+              "property": "tconstruct:cast"
+            },
+            "property": "tconstruct:cast"
+          },
+          "threshold": 2.0
+        }
+      ],
+      "fallback": {
+        "type": "minecraft:range_dispatch",
+        "entries": [
+          {
+            "model": {
+              "type": "tconstruct:tool",
+              "model": "tconstruct:item/tool/fishing_rod/cast"
+            },
+            "threshold": 1.0
+          }
+        ],
+        "fallback": {
+          "type": "minecraft:range_dispatch",
+          "entries": [
+            {
+              "model": {
+                "type": "tconstruct:tool",
+                "model": "tconstruct:item/tool/fishing_rod/blocking"
+              },
+              "threshold": 2.0
+            }
+          ],
+          "fallback": {
+            "type": "tconstruct:tool",
+            "model": "tconstruct:item/fishing_rod"
+          },
+          "property": "tconstruct:charging"
+        },
+        "property": "tconstruct:cast"
+      },
+      "property": "tconstruct:charging"
+    },
+    "on_true": {
+      "type": "tconstruct:tool",
+      "model": "tconstruct:item/tool/fishing_rod/broken"
+    },
+    "property": "tconstruct:broken"
+  }
+}

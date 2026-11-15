@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:tools/armor/travelers/pants"
+        "recipes": "tconstruct:tools/armor/travelers/pants"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

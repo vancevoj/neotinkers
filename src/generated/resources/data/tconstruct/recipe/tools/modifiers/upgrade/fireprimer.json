@@ -3,10 +3,10 @@
   "allow_crystal": true,
   "inputs": [
     {
-      "tag": "c:ingots/amethyst_bronze"
+      "ingredient": "#c:ingots/amethyst_bronze"
     },
     {
-      "item": "minecraft:flint"
+      "ingredient": "minecraft:flint"
     }
   ],
   "level": 1,
@@ -14,7 +14,5 @@
   "slots": {
     "upgrades": 1
   },
-  "tools": {
-    "item": "tconstruct:flint_and_brick"
-  }
+  "tools": "tconstruct:flint_and_brick"
 }

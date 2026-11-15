@@ -2,9 +2,7 @@
   "type": "tconstruct:incremental_modifier",
   "allow_crystal": false,
   "amount_per_item": 9,
-  "input": {
-    "item": "minecraft:prismarine_bricks"
-  },
+  "input": "minecraft:prismarine_bricks",
   "leftover": "minecraft:prismarine_shard",
   "level": {
     "max": 5
@@ -14,7 +12,5 @@
   "slots": {
     "upgrades": 1
   },
-  "tools": {
-    "tag": "tconstruct:modifiable/harvest"
-  }
+  "tools": "#tconstruct:modifiable/harvest"
 }

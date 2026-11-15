@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:tables/scorched_forge"
+        "recipes": "tconstruct:tables/scorched_forge"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

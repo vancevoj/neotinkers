@@ -1,16 +1,11 @@
 {
   "type": "minecraft:stonecutting",
   "ingredient": {
-    "type": "neoforge:difference",
-    "base": {
-      "tag": "tconstruct:scorched_blocks"
-    },
-    "subtracted": {
-      "item": "tconstruct:polished_scorched_stone"
-    }
+    "neoforge:ingredient_type": "neoforge:difference",
+    "base": "#tconstruct:scorched_blocks",
+    "subtracted": "tconstruct:polished_scorched_stone"
   },
   "result": {
-    "count": 1,
     "id": "tconstruct:polished_scorched_stone"
   }
 }

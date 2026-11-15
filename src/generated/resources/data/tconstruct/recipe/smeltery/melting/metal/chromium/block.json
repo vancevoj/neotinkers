@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:melting",
-  "ingredient": {
-    "tag": "c:storage_blocks/chromium"
-  },
+  "ingredient": "#c:storage_blocks/chromium",
   "result": {
     "amount": 810,
     "tag": "c:molten_chromium"

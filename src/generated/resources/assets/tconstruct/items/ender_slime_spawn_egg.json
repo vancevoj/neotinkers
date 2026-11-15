@@ -1,0 +1,16 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "tconstruct:item/ender_slime_spawn_egg",
+    "tints": [
+      {
+        "type": "minecraft:constant",
+        "value": -10288976
+      },
+      {
+        "type": "minecraft:constant",
+        "value": -2917121
+      }
+    ]
+  }
+}

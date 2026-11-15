@@ -19,7 +19,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:common/flint"
+        "recipes": "tconstruct:common/flint"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -11,10 +11,8 @@
     }
   ],
   "ingredient": {
-    "type": "tconstruct:no_container",
-    "match": {
-      "item": "tconstruct:scorched_lantern"
-    }
+    "neoforge:ingredient_type": "tconstruct:no_container",
+    "match": "tconstruct:scorched_lantern"
   },
   "result": {
     "amount": 500,

@@ -6,9 +6,7 @@
       "tag": "c:molten_gold"
     }
   ],
-  "ingredient": {
-    "item": "tconstruct:scorched_basin"
-  },
+  "ingredient": "tconstruct:scorched_basin",
   "result": {
     "amount": 1750,
     "fluid": "tconstruct:scorched_stone"

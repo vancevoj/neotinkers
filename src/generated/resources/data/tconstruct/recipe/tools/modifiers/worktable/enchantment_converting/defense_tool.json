@@ -2,10 +2,10 @@
   "type": "tconstruct:enchantment_converting",
   "inputs": [
     {
-      "item": "tconstruct:earth_slime_crystal"
+      "ingredient": "tconstruct:earth_slime_crystal"
     },
     {
-      "tag": "c:ingots/gold"
+      "ingredient": "#c:ingots/gold"
     }
   ],
   "match_book": false,

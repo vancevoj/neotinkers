@@ -6,9 +6,7 @@
       "fluid": "tconstruct:molten_glass"
     }
   ],
-  "ingredient": {
-    "item": "minecraft:end_crystal"
-  },
+  "ingredient": "minecraft:end_crystal",
   "result": {
     "amount": 250,
     "tag": "c:ender"

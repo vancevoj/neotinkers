@@ -12,7 +12,6 @@
     }
   },
   "loader": "mantle:connected",
-  "render_type": "minecraft:translucent",
   "textures": {
     "pane": "tconstruct:block/clear_stained_glass"
   }

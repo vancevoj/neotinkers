@@ -7,7 +7,5 @@
     "stat_type": "tconstruct:shield_core"
   },
   "max_stack_size": 16,
-  "tools": {
-    "item": "tconstruct:travelers_shield"
-  }
+  "tools": "tconstruct:travelers_shield"
 }

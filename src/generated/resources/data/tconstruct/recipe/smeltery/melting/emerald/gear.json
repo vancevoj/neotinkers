@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:melting",
-  "ingredient": {
-    "tag": "c:gears/emerald"
-  },
+  "ingredient": "#c:gears/emerald",
   "result": {
     "amount": 400,
     "fluid": "tconstruct:molten_emerald"

@@ -4,7 +4,7 @@
   "check_trait_level": true,
   "inputs": [
     {
-      "item": "minecraft:hopper"
+      "ingredient": "minecraft:hopper"
     }
   ],
   "level": 1,
@@ -12,7 +12,5 @@
   "slots": {
     "upgrades": 1
   },
-  "tools": {
-    "tag": "tconstruct:modifiable/fishing_rods"
-  }
+  "tools": "#tconstruct:modifiable/fishing_rods"
 }

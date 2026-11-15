@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:melting",
-  "ingredient": {
-    "tag": "c:raw_nuggets/steel"
-  },
+  "ingredient": "#c:raw_nuggets/steel",
   "result": {
     "amount": 10,
     "tag": "c:molten_steel"

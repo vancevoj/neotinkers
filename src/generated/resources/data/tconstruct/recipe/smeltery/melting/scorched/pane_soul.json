@@ -6,9 +6,7 @@
       "fluid": "tconstruct:liquid_soul"
     }
   ],
-  "ingredient": {
-    "item": "tconstruct:scorched_soul_glass_pane"
-  },
+  "ingredient": "tconstruct:scorched_soul_glass_pane",
   "result": {
     "amount": 250,
     "fluid": "tconstruct:scorched_stone"

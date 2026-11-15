@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:world/wood/bloodshroom/stairs"
+        "recipes": "tconstruct:world/wood/bloodshroom/stairs"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

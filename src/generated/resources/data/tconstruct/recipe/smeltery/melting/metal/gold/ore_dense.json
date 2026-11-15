@@ -17,14 +17,10 @@
     }
   ],
   "ingredient": {
-    "type": "neoforge:intersection",
+    "neoforge:ingredient_type": "neoforge:intersection",
     "children": [
-      {
-        "tag": "c:ores/gold"
-      },
-      {
-        "tag": "c:ore_rates/dense"
-      }
+      "#c:ores/gold",
+      "#c:ore_rates/dense"
     ]
   },
   "rate": "metal",

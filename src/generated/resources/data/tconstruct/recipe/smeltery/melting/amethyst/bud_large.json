@@ -6,9 +6,7 @@
       "fluid": "tconstruct:molten_quartz"
     }
   ],
-  "ingredient": {
-    "item": "minecraft:large_amethyst_bud"
-  },
+  "ingredient": "minecraft:large_amethyst_bud",
   "rate": "gem",
   "result": {
     "amount": 300,

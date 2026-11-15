@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:common/materials/copper_ingot_from_nuggets"
+        "recipes": "tconstruct:common/materials/copper_ingot_from_nuggets"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

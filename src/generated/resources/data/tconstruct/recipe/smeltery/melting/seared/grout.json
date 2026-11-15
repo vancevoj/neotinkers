@@ -1,8 +1,6 @@
 {
   "type": "tconstruct:melting",
-  "ingredient": {
-    "item": "tconstruct:grout"
-  },
+  "ingredient": "tconstruct:grout",
   "result": {
     "amount": 500,
     "fluid": "tconstruct:seared_stone"

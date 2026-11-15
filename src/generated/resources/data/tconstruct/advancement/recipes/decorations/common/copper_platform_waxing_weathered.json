@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:common/copper_platform_waxing_weathered"
+        "recipes": "tconstruct:common/copper_platform_waxing_weathered"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

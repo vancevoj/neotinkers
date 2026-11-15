@@ -5,12 +5,11 @@
   "slots": {
     "abilities": 1
   },
-  "tools": [
-    {
-      "tag": "tconstruct:modifiable/melee/weapon"
-    },
-    {
-      "tag": "tconstruct:modifiable/harvest"
-    }
-  ]
+  "tools": {
+    "neoforge:ingredient_type": "neoforge:compound",
+    "children": [
+      "#tconstruct:modifiable/melee/weapon",
+      "#tconstruct:modifiable/harvest"
+    ]
+  }
 }

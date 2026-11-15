@@ -3,7 +3,7 @@
   "modules": [
     {
       "type": "tconstruct:attribute",
-      "attribute": "minecraft:generic.attack_speed",
+      "attribute": "minecraft:attack_speed",
       "each_level": 0.015,
       "flat": 0.01,
       "operation": "add_multiplied_total",
@@ -14,13 +14,14 @@
         "legs",
         "chest",
         "head",
-        "body"
+        "body",
+        "saddle"
       ],
       "tooltip_style": "percent"
     },
     {
       "type": "tconstruct:attribute",
-      "attribute": "minecraft:generic.movement_speed",
+      "attribute": "minecraft:movement_speed",
       "each_level": 0.025,
       "flat": 0.025,
       "operation": "add_multiplied_total",
@@ -31,7 +32,8 @@
         "legs",
         "chest",
         "head",
-        "body"
+        "body",
+        "saddle"
       ],
       "tooltip_style": "percent"
     },
@@ -48,7 +50,8 @@
         "legs",
         "chest",
         "head",
-        "body"
+        "body",
+        "saddle"
       ],
       "tooltip_style": "percent"
     }

@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:common/slime/earth/crystal_smelting"
+        "recipes": "tconstruct:common/slime/earth/crystal_smelting"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

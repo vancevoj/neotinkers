@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:common/firewood/blazewood_stairs"
+        "recipes": "tconstruct:common/firewood/blazewood_stairs"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

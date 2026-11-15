@@ -1,8 +1,6 @@
 {
   "type": "tconstruct:casting_table",
-  "cast": {
-    "item": "minecraft:bowl"
-  },
+  "cast": "minecraft:bowl",
   "cast_consumed": true,
   "cooling_time": 1,
   "fluid": {

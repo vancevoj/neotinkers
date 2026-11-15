@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:damagable_melting",
-  "ingredient": {
-    "tag": "c:armors/helmets/silver"
-  },
+  "ingredient": "#c:armors/helmets/silver",
   "result": {
     "amount": 450,
     "tag": "c:molten_silver",

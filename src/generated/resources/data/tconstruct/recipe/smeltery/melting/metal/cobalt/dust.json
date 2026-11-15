@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:melting",
-  "ingredient": {
-    "tag": "c:dusts/cobalt"
-  },
+  "ingredient": "#c:dusts/cobalt",
   "result": {
     "amount": 90,
     "tag": "c:molten_cobalt"

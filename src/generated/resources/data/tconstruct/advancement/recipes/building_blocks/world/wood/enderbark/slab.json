@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:world/wood/enderbark/slab"
+        "recipes": "tconstruct:world/wood/enderbark/slab"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -1,13 +1,12 @@
 {
   "type": "tconstruct:material",
-  "ingredient": [
-    {
-      "tag": "c:storage_blocks/copper"
-    },
-    {
-      "item": "minecraft:waxed_copper_block"
-    }
-  ],
+  "ingredient": {
+    "neoforge:ingredient_type": "neoforge:compound",
+    "children": [
+      "#c:storage_blocks/copper",
+      "minecraft:waxed_copper_block"
+    ]
+  },
   "leftover": {
     "count": 1,
     "tag": "c:ingots/copper"

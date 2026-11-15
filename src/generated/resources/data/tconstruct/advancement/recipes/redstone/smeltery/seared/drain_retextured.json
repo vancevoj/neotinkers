@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:smeltery/seared/drain_retextured"
+        "recipes": "tconstruct:smeltery/seared/drain_retextured"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -6,9 +6,7 @@
       "fluid": "tconstruct:ichor"
     }
   ],
-  "ingredient": {
-    "item": "tconstruct:ichor_slime_crystal_block"
-  },
+  "ingredient": "tconstruct:ichor_slime_crystal_block",
   "result": {
     "amount": 40,
     "fluid": "tconstruct:blazing_blood"

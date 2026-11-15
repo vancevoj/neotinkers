@@ -4,22 +4,22 @@
   "inputs": [
     {
       "amount_needed": 4,
-      "item": "tconstruct:obsidian_pane"
+      "ingredient": "tconstruct:obsidian_pane"
     },
     {
-      "item": "minecraft:writable_book"
+      "ingredient": "minecraft:writable_book"
     },
     {
       "amount_needed": 4,
-      "item": "tconstruct:obsidian_pane"
+      "ingredient": "tconstruct:obsidian_pane"
     },
     {
       "amount_needed": 2,
-      "item": "tconstruct:ichor_slime_crystal"
+      "ingredient": "tconstruct:ichor_slime_crystal"
     },
     {
       "amount_needed": 2,
-      "item": "tconstruct:ichor_slime_crystal"
+      "ingredient": "tconstruct:ichor_slime_crystal"
     }
   ],
   "level": 1,
@@ -27,7 +27,5 @@
   "slots": {
     "abilities": 1
   },
-  "tools": {
-    "tag": "tconstruct:modifiable/shields"
-  }
+  "tools": "#tconstruct:modifiable/shields"
 }

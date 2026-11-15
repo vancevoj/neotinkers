@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:damagable_melting",
-  "ingredient": {
-    "tag": "c:armors/leggings/silver"
-  },
+  "ingredient": "#c:armors/leggings/silver",
   "result": {
     "amount": 630,
     "tag": "c:molten_silver",

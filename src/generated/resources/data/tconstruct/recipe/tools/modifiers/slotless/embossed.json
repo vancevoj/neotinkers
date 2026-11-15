@@ -9,12 +9,10 @@
   "allow_crystal": true,
   "inputs": [
     {
-      "tag": "tconstruct:boss_trophies"
+      "ingredient": "#tconstruct:boss_trophies"
     }
   ],
   "level": 1,
   "result": "tconstruct:embossed",
-  "tools": {
-    "tag": "tconstruct:modifiable/bonus_slots"
-  }
+  "tools": "#tconstruct:modifiable/bonus_slots"
 }

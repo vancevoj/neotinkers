@@ -1,8 +1,6 @@
 {
   "type": "tconstruct:melting",
-  "ingredient": {
-    "item": "tconstruct:cobalt_platform"
-  },
+  "ingredient": "tconstruct:cobalt_platform",
   "result": {
     "amount": 100,
     "tag": "c:molten_cobalt"

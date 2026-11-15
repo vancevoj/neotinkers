@@ -1,8 +1,6 @@
 {
   "type": "tconstruct:material",
-  "ingredient": {
-    "tag": "c:glass_blocks"
-  },
+  "ingredient": "#c:glass_blocks",
   "material": "tconstruct:glass",
   "needed": 1,
   "value": 4

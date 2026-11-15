@@ -14,7 +14,6 @@
       "translate": "advancements.tconstruct.foundry.structure.description"
     },
     "icon": {
-      "count": 1,
       "id": "tconstruct:foundry_controller"
     },
     "title": {

@@ -1,13 +1,8 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
   "key": {
-    "B": {
-      "item": "tconstruct:clear_glass"
-    },
-    "S": {
-      "item": "tconstruct:clear_glass_pane"
-    }
+    "B": "tconstruct:clear_glass",
+    "S": "tconstruct:clear_glass_pane"
   },
   "pattern": [
     "SSS",
@@ -15,7 +10,6 @@
     "SBS"
   ],
   "result": {
-    "count": 1,
     "id": "tconstruct:clear_armor_stand"
   }
 }

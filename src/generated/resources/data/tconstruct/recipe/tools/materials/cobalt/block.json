@@ -1,8 +1,6 @@
 {
   "type": "tconstruct:material",
-  "ingredient": {
-    "tag": "c:storage_blocks/cobalt"
-  },
+  "ingredient": "#c:storage_blocks/cobalt",
   "leftover": {
     "count": 1,
     "tag": "c:ingots/cobalt"

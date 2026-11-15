@@ -4,15 +4,9 @@
   "inputs": [
     {
       "ingredient": [
-        {
-          "item": "minecraft:anvil"
-        },
-        {
-          "item": "minecraft:chipped_anvil"
-        },
-        {
-          "item": "minecraft:damaged_anvil"
-        }
+        "minecraft:anvil",
+        "minecraft:chipped_anvil",
+        "minecraft:damaged_anvil"
       ]
     }
   ],
@@ -21,7 +15,5 @@
   "slots": {
     "defense": 1
   },
-  "tools": {
-    "tag": "tconstruct:modifiable/armor"
-  }
+  "tools": "#tconstruct:modifiable/armor"
 }

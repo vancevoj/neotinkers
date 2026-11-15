@@ -6,9 +6,7 @@
       "fluid": "tconstruct:seared_stone"
     }
   ],
-  "ingredient": {
-    "item": "tconstruct:seared_duct"
-  },
+  "ingredient": "tconstruct:seared_duct",
   "result": {
     "amount": 180,
     "tag": "c:molten_gold"

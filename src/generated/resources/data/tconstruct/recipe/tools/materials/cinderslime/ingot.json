@@ -1,8 +1,6 @@
 {
   "type": "tconstruct:material",
-  "ingredient": {
-    "tag": "c:ingots/cinderslime"
-  },
+  "ingredient": "#c:ingots/cinderslime",
   "material": "tconstruct:cinderslime",
   "needed": 1,
   "value": 1

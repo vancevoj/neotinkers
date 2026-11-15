@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:tables/crafting_station_from_logs"
+        "recipes": "tconstruct:tables/crafting_station_from_logs"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

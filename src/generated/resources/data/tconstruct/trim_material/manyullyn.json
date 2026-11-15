@@ -1,5 +1,4 @@
 {
-  "asset_name": "tconstruct_manyullyn",
   "description": {
     "color": "#9261CC",
     "translate": "trim_material.tconstruct.format",
@@ -9,6 +8,5 @@
       }
     ]
   },
-  "ingredient": "tconstruct:manyullyn_ingot",
-  "item_model_index": 1.0
+  "palette_id": "tconstruct:trim/manyullyn"
 }

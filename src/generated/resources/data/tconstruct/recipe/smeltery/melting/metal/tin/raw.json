@@ -13,9 +13,7 @@
       "tag": "c:molten_copper"
     }
   ],
-  "ingredient": {
-    "tag": "c:raw_materials/tin"
-  },
+  "ingredient": "#c:raw_materials/tin",
   "rate": "metal",
   "result": {
     "amount": 90,

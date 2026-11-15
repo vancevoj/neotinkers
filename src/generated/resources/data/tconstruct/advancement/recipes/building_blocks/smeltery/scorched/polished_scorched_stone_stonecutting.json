@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:smeltery/scorched/polished_scorched_stone_stonecutting"
+        "recipes": "tconstruct:smeltery/scorched/polished_scorched_stone_stonecutting"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

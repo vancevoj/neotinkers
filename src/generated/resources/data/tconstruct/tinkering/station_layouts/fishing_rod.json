@@ -1,30 +1,36 @@
 {
   "icon": {
+    "components": {
+      "tconstruct:tool_data": {
+        "tic_display": 1,
+        "tic_materials": [
+          "tconstruct:ui_render#head",
+          "tconstruct:ui_render#handle",
+          "tconstruct:ui_render#extra",
+          "tconstruct:ui_render#large",
+          "tconstruct:ui_render#extra_large"
+        ]
+      }
+    },
     "item": "tconstruct:fishing_rod"
   },
   "input_slots": [
     {
-      "filter": {
-        "item": "tconstruct:bow_limb"
-      },
+      "filter": "tconstruct:bow_limb",
       "icon": "tconstruct:bow_limb",
       "translation_key": "item.tconstruct.bow_limb",
       "x": 28,
       "y": 38
     },
     {
-      "filter": {
-        "item": "tconstruct:bowstring"
-      },
+      "filter": "tconstruct:bowstring",
       "icon": "tconstruct:bowstring",
       "translation_key": "item.tconstruct.bowstring",
       "x": 50,
       "y": 38
     },
     {
-      "filter": {
-        "item": "tconstruct:arrow_head"
-      },
+      "filter": "tconstruct:arrow_head",
       "icon": "tconstruct:arrow_head",
       "translation_key": "item.tconstruct.arrow_head",
       "x": 50,

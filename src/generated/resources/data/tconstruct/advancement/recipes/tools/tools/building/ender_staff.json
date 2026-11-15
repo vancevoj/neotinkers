@@ -3,7 +3,7 @@
   "criteria": {
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:tools/building/ender_staff"
+        "recipes": "tconstruct:tools/building/ender_staff"
       },
       "trigger": "minecraft:recipe_unlocked"
     },

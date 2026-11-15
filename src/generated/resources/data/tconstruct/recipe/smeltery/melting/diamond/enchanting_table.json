@@ -6,9 +6,7 @@
       "fluid": "tconstruct:molten_obsidian"
     }
   ],
-  "ingredient": {
-    "item": "minecraft:enchanting_table"
-  },
+  "ingredient": "minecraft:enchanting_table",
   "result": {
     "amount": 200,
     "fluid": "tconstruct:molten_diamond"

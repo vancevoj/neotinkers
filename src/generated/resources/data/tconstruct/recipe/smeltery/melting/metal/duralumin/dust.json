@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:melting",
-  "ingredient": {
-    "tag": "c:dusts/duralumin"
-  },
+  "ingredient": "#c:dusts/duralumin",
   "result": {
     "amount": 90,
     "tag": "c:molten_duralumin"

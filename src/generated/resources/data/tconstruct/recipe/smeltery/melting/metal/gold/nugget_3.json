@@ -1,8 +1,6 @@
 {
   "type": "tconstruct:melting",
-  "ingredient": {
-    "item": "tconstruct:gold_bars"
-  },
+  "ingredient": "tconstruct:gold_bars",
   "result": {
     "amount": 30,
     "tag": "c:molten_gold"

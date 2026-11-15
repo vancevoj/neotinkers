@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:damagable_melting",
-  "ingredient": {
-    "tag": "tconstruct:melting/refined_glowstone/tools_costing_2"
-  },
+  "ingredient": "#tconstruct:melting/refined_glowstone/tools_costing_2",
   "result": {
     "amount": 180,
     "tag": "c:molten_refined_glowstone",

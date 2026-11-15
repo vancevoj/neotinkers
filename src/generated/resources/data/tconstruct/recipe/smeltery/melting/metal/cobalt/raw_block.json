@@ -7,9 +7,7 @@
       "rate": "gem"
     }
   ],
-  "ingredient": {
-    "tag": "c:storage_blocks/raw_cobalt"
-  },
+  "ingredient": "#c:storage_blocks/raw_cobalt",
   "rate": "metal",
   "result": {
     "amount": 810,

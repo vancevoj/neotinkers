@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:tables/scorched_anvil"
+        "recipes": "tconstruct:tables/scorched_anvil"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:melting",
-  "ingredient": {
-    "tag": "c:ingots/brass"
-  },
+  "ingredient": "#c:ingots/brass",
   "result": {
     "amount": 90,
     "tag": "c:molten_brass"

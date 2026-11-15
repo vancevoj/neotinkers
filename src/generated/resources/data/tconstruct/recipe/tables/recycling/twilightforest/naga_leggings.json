@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:part_builder_recycling",
-  "pattern": {
-    "item": "tconstruct:venom_bottle"
-  },
+  "pattern": "tconstruct:venom_bottle",
   "results": {
     "tconstruct:scale": {
       "count": 7,
@@ -16,7 +14,7 @@
     }
   },
   "tool": {
-    "type": "mantle:item_name",
+    "neoforge:ingredient_type": "mantle:item_name",
     "items": [
       "twilightforest:naga_leggings"
     ]

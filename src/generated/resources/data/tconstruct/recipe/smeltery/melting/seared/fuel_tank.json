@@ -7,10 +7,8 @@
     }
   ],
   "ingredient": {
-    "type": "tconstruct:no_container",
-    "match": {
-      "item": "tconstruct:seared_fuel_tank"
-    }
+    "neoforge:ingredient_type": "tconstruct:no_container",
+    "match": "tconstruct:seared_fuel_tank"
   },
   "result": {
     "amount": 2000,

@@ -1,11 +1,8 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
   "group": "tconstruct:stained_clear_glass_pane",
   "key": {
-    "#": {
-      "item": "tconstruct:pink_clear_stained_glass"
-    }
+    "#": "tconstruct:pink_clear_stained_glass"
   },
   "pattern": [
     "###",

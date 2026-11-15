@@ -4,7 +4,5 @@
   "slots": {
     "upgrades": 1
   },
-  "tools": {
-    "tag": "tconstruct:modifiable/ranged/bounce"
-  }
+  "tools": "#tconstruct:modifiable/ranged/bounce"
 }

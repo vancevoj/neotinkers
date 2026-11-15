@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:melting",
-  "ingredient": {
-    "tag": "c:gears/netherite"
-  },
+  "ingredient": "#c:gears/netherite",
   "result": {
     "amount": 360,
     "tag": "c:molten_netherite"

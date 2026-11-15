@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:smeltery/seared/grout"
+        "recipes": "tconstruct:smeltery/seared/grout"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

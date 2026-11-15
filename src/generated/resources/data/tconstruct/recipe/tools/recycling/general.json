@@ -1,15 +1,9 @@
 {
   "type": "tconstruct:part_builder_tool_recycling",
-  "pattern": {
-    "item": "tconstruct:venom_bottle"
-  },
+  "pattern": "tconstruct:venom_bottle",
   "tools": {
-    "type": "neoforge:difference",
-    "base": {
-      "tag": "tconstruct:modifiable/multipart"
-    },
-    "subtracted": {
-      "tag": "tconstruct:modifiable/unrecyclable"
-    }
+    "neoforge:ingredient_type": "neoforge:difference",
+    "base": "#tconstruct:modifiable/multipart",
+    "subtracted": "#tconstruct:modifiable/unrecyclable"
   }
 }

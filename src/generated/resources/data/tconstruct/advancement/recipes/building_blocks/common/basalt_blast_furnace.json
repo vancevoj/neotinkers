@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:common/basalt_blast_furnace"
+        "recipes": "tconstruct:common/basalt_blast_furnace"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

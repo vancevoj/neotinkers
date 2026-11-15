@@ -1,8 +1,6 @@
 {
   "type": "tconstruct:melting",
-  "ingredient": {
-    "tag": "c:storage_blocks/quartz"
-  },
+  "ingredient": "#c:storage_blocks/quartz",
   "result": {
     "amount": 400,
     "fluid": "tconstruct:molten_quartz"

@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:damagable_melting",
-  "ingredient": {
-    "tag": "c:armors/chestplates/constantan"
-  },
+  "ingredient": "#c:armors/chestplates/constantan",
   "result": {
     "amount": 720,
     "tag": "c:molten_constantan",

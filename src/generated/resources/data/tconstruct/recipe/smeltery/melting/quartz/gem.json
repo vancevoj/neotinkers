@@ -1,8 +1,6 @@
 {
   "type": "tconstruct:melting",
-  "ingredient": {
-    "tag": "c:gems/quartz"
-  },
+  "ingredient": "#c:gems/quartz",
   "result": {
     "amount": 100,
     "fluid": "tconstruct:molten_quartz"

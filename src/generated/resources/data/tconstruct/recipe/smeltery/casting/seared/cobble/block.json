@@ -1,13 +1,12 @@
 {
   "type": "tconstruct:casting_basin",
-  "cast": [
-    {
-      "tag": "c:cobblestones"
-    },
-    {
-      "item": "minecraft:gravel"
-    }
-  ],
+  "cast": {
+    "neoforge:ingredient_type": "neoforge:compound",
+    "children": [
+      "#c:cobblestones",
+      "minecraft:gravel"
+    ]
+  },
   "cast_consumed": true,
   "cooling_time": 113,
   "fluid": {

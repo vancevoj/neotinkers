@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:casting_basin",
-  "cast": {
-    "item": "minecraft:andesite"
-  },
+  "cast": "minecraft:andesite",
   "cast_consumed": true,
   "cooling_time": 20,
   "fluid": {

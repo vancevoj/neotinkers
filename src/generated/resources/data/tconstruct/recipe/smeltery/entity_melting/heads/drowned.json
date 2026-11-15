@@ -1,8 +1,6 @@
 {
   "type": "tconstruct:melting",
-  "ingredient": {
-    "item": "tconstruct:drowned_head"
-  },
+  "ingredient": "tconstruct:drowned_head",
   "result": {
     "amount": 90,
     "tag": "c:molten_copper"

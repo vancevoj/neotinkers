@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:smeltery/seared/ingot_tank"
+        "recipes": "tconstruct:smeltery/seared/ingot_tank"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

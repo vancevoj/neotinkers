@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:melting",
-  "ingredient": {
-    "tag": "c:rods/steel"
-  },
+  "ingredient": "#c:rods/steel",
   "result": {
     "amount": 45,
     "tag": "c:molten_steel"

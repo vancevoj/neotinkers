@@ -2,10 +2,10 @@
   "type": "tconstruct:extract_modifier",
   "inputs": [
     {
-      "item": "minecraft:amethyst_shard"
+      "ingredient": "minecraft:amethyst_shard"
     },
     {
-      "item": "minecraft:wet_sponge"
+      "ingredient": "minecraft:wet_sponge"
     }
   ],
   "leftovers": [
@@ -29,12 +29,8 @@
   },
   "name": "slotless",
   "tools": {
-    "type": "neoforge:difference",
-    "base": {
-      "tag": "tconstruct:modifiable"
-    },
-    "subtracted": {
-      "tag": "tconstruct:modifiable/unsalvageable"
-    }
+    "neoforge:ingredient_type": "neoforge:difference",
+    "base": "#tconstruct:modifiable",
+    "subtracted": "#tconstruct:modifiable/unsalvageable"
   }
 }

@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:material",
-  "ingredient": {
-    "tag": "c:nuggets/silver"
-  },
+  "ingredient": "#c:nuggets/silver",
   "material": "tconstruct:silver",
   "needed": 9,
   "value": 1

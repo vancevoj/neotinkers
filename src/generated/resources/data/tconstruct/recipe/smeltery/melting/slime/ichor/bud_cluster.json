@@ -6,9 +6,7 @@
       "fluid": "tconstruct:ichor"
     }
   ],
-  "ingredient": {
-    "item": "tconstruct:ichor_slime_crystal_cluster"
-  },
+  "ingredient": "tconstruct:ichor_slime_crystal_cluster",
   "rate": "gem",
   "result": {
     "amount": 40,

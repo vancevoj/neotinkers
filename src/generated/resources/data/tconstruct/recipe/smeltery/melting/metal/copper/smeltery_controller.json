@@ -6,9 +6,7 @@
       "fluid": "tconstruct:seared_stone"
     }
   ],
-  "ingredient": {
-    "item": "tconstruct:smeltery_controller"
-  },
+  "ingredient": "tconstruct:smeltery_controller",
   "result": {
     "amount": 360,
     "tag": "c:molten_copper"

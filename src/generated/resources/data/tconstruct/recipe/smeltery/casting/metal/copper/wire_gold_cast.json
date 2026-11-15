@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:casting_table",
-  "cast": {
-    "tag": "tconstruct:casts/multi_use/wire"
-  },
+  "cast": "#tconstruct:casts/multi_use/wire",
   "cooling_time": 35,
   "fluid": {
     "amount": 45,

@@ -1,8 +1,6 @@
 {
   "type": "tconstruct:melting",
-  "ingredient": {
-    "item": "minecraft:snow_block"
-  },
+  "ingredient": "minecraft:snow_block",
   "result": {
     "amount": 500,
     "fluid": "minecraft:water"

@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:gadgets/cake/sky"
+        "recipes": "tconstruct:gadgets/cake/sky"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

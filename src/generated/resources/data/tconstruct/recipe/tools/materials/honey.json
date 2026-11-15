@@ -1,8 +1,6 @@
 {
   "type": "tconstruct:material",
-  "ingredient": {
-    "item": "minecraft:honey_bottle"
-  },
+  "ingredient": "minecraft:honey_bottle",
   "material": "tconstruct:honey",
   "needed": 1,
   "value": 1

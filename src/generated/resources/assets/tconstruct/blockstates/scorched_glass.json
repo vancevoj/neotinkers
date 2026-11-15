@@ -1,6 +1,7 @@
 {
   "variants": {
     "": {
+      "type": "mantle:connected",
       "model": "tconstruct:block/foundry/glass/block"
     }
   }

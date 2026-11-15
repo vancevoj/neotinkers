@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:melting",
-  "ingredient": {
-    "tag": "c:sheetmetals/silver"
-  },
+  "ingredient": "#c:sheetmetals/silver",
   "result": {
     "amount": 90,
     "tag": "c:molten_silver"

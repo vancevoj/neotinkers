@@ -1,7 +1,7 @@
 {
   "type": "tconstruct:tipped_tool_transform",
   "input": {
-    "type": "mantle:potion_display",
+    "neoforge:ingredient_type": "mantle:potion_display",
     "item": "minecraft:tipped_arrow"
   },
   "materials": [

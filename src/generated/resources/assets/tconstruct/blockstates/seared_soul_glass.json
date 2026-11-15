@@ -1,6 +1,7 @@
 {
   "variants": {
     "": {
+      "type": "mantle:connected",
       "model": "tconstruct:block/smeltery/soul_glass/block"
     }
   }

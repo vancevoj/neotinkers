@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:melting",
-  "ingredient": {
-    "tag": "c:geore_shards/gold"
-  },
+  "ingredient": "#c:geore_shards/gold",
   "result": {
     "amount": 90,
     "tag": "c:molten_gold"

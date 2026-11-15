@@ -12,9 +12,7 @@
       "tag": "c:molten_gold"
     }
   ],
-  "ingredient": {
-    "tag": "c:ingots/ironwood"
-  },
+  "ingredient": "#c:ingots/ironwood",
   "result": {
     "amount": 90,
     "tag": "c:molten_iron"

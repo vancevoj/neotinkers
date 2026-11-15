@@ -1,8 +1,8 @@
 {
   "neoforge:conditions": [
     {
-      "type": "neoforge:item_exists",
-      "item": "twilightforest:ironwood_boots"
+      "type": "neoforge:registered",
+      "value": "twilightforest:ironwood_boots"
     }
   ],
   "type": "tconstruct:damagable_melting",
@@ -14,7 +14,7 @@
     }
   ],
   "ingredient": {
-    "type": "mantle:item_name",
+    "neoforge:ingredient_type": "mantle:item_name",
     "items": [
       "twilightforest:ironwood_boots"
     ]

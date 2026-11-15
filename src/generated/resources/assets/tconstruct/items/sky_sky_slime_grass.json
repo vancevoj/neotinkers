@@ -1,0 +1,11 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "tconstruct:item/sky_sky_slime_grass",
+    "tints": [
+      {
+        "type": "tconstruct:block_item"
+      }
+    ]
+  }
+}

@@ -3,11 +3,8 @@
   "category": "blocks",
   "cookingtime": 200,
   "experience": 0.1,
-  "ingredient": {
-    "item": "tconstruct:seared_cobble"
-  },
+  "ingredient": "tconstruct:seared_cobble",
   "result": {
-    "count": 1,
     "id": "tconstruct:seared_stone"
   }
 }

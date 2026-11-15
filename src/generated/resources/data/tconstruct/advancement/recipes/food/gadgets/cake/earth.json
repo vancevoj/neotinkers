@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:gadgets/cake/earth"
+        "recipes": "tconstruct:gadgets/cake/earth"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:damagable_melting",
-  "ingredient": {
-    "tag": "c:armors/boots/refined_glowstone"
-  },
+  "ingredient": "#c:armors/boots/refined_glowstone",
   "result": {
     "amount": 360,
     "tag": "c:molten_refined_glowstone",

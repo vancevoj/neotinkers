@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:melting",
-  "ingredient": {
-    "tag": "c:nuggets/bronze"
-  },
+  "ingredient": "#c:nuggets/bronze",
   "result": {
     "amount": 10,
     "tag": "c:molten_bronze"

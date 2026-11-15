@@ -2,9 +2,7 @@
   "type": "tconstruct:incremental_modifier",
   "allow_crystal": true,
   "amount_per_item": 1,
-  "input": {
-    "item": "tconstruct:ichor_slime_crystal"
-  },
+  "input": "tconstruct:ichor_slime_crystal",
   "level": {
     "max": 2
   },
@@ -13,7 +11,5 @@
   "slots": {
     "abilities": 1
   },
-  "tools": {
-    "tag": "tconstruct:modifiable/armor/chestplate"
-  }
+  "tools": "#tconstruct:modifiable/armor/chestplate"
 }

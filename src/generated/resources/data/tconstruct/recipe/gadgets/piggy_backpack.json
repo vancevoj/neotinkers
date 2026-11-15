@@ -1,8 +1,6 @@
 {
   "type": "tconstruct:casting_table",
-  "cast": {
-    "item": "minecraft:saddle"
-  },
+  "cast": "minecraft:saddle",
   "cast_consumed": true,
   "cooling_time": 96,
   "fluid": {

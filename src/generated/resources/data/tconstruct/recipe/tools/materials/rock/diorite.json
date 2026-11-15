@@ -1,8 +1,6 @@
 {
   "type": "tconstruct:material",
-  "ingredient": {
-    "tag": "c:diorite"
-  },
+  "ingredient": "#c:diorite",
   "material": "tconstruct:rock#diorite",
   "needed": 1,
   "value": 1

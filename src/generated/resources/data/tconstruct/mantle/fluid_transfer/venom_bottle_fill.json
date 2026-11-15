@@ -4,8 +4,6 @@
     "amount": 250,
     "tag": "tconstruct:venom"
   },
-  "input": {
-    "item": "minecraft:glass_bottle"
-  },
+  "input": "minecraft:glass_bottle",
   "result": "tconstruct:venom_bottle"
 }

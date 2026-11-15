@@ -3,26 +3,24 @@
   "allow_crystal": true,
   "inputs": [
     {
-      "item": "minecraft:piston"
+      "ingredient": "minecraft:piston"
     },
     {
-      "tag": "c:ingots/amethyst_bronze"
+      "ingredient": "#c:ingots/amethyst_bronze"
     },
     {
-      "item": "minecraft:piston"
+      "ingredient": "minecraft:piston"
     },
     {
-      "tag": "c:slimeball/ichor"
+      "ingredient": "#c:slimeball/ichor"
     },
     {
-      "tag": "c:slimeball/ichor"
+      "ingredient": "#c:slimeball/ichor"
     }
   ],
   "result": "tconstruct:expanded",
   "slots": {
     "abilities": 1
   },
-  "tools": {
-    "tag": "tconstruct:modifiable/aoe"
-  }
+  "tools": "#tconstruct:modifiable/aoe"
 }

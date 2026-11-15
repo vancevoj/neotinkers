@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:melting",
-  "ingredient": {
-    "tag": "c:ingots/nickel"
-  },
+  "ingredient": "#c:ingots/nickel",
   "result": {
     "amount": 90,
     "tag": "c:molten_nickel"

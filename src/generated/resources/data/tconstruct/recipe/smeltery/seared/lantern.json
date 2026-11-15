@@ -1,16 +1,9 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
   "key": {
-    "B": {
-      "item": "tconstruct:seared_brick"
-    },
-    "C": {
-      "tag": "c:ingots/iron"
-    },
-    "P": {
-      "item": "tconstruct:seared_glass_pane"
-    }
+    "B": "tconstruct:seared_brick",
+    "C": "#c:ingots/iron",
+    "P": "tconstruct:seared_glass_pane"
   },
   "pattern": [
     " C ",

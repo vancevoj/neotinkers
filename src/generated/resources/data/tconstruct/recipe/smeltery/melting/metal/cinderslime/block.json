@@ -1,8 +1,6 @@
 {
   "type": "tconstruct:melting",
-  "ingredient": {
-    "tag": "c:storage_blocks/cinderslime"
-  },
+  "ingredient": "#c:storage_blocks/cinderslime",
   "result": {
     "amount": 810,
     "fluid": "tconstruct:molten_cinderslime"

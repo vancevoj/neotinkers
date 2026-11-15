@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:melting",
-  "ingredient": {
-    "tag": "c:sheetmetals/lead"
-  },
+  "ingredient": "#c:sheetmetals/lead",
   "result": {
     "amount": 90,
     "tag": "c:molten_lead"

@@ -3,9 +3,7 @@
   "category": "building",
   "group": "tconstruct:seared_paver_stairs",
   "key": {
-    "B": {
-      "item": "tconstruct:seared_paver"
-    }
+    "B": "tconstruct:seared_paver"
   },
   "pattern": [
     "B  ",

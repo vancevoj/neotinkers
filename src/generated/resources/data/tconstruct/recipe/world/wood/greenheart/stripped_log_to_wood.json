@@ -3,9 +3,7 @@
   "category": "building",
   "group": "bark",
   "key": {
-    "#": {
-      "item": "tconstruct:stripped_greenheart_log"
-    }
+    "#": "tconstruct:stripped_greenheart_log"
   },
   "pattern": [
     "##",

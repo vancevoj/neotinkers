@@ -2,21 +2,14 @@
   "type": "mantle:crafting_shaped_retextured",
   "category": "redstone",
   "key": {
-    "#": {
-      "tag": "tconstruct:foundry_bricks"
-    },
-    "C": {
-      "item": "tconstruct:obsidian_pane"
-    }
+    "#": "#tconstruct:foundry_bricks",
+    "C": "tconstruct:obsidian_pane"
   },
   "pattern": [
     "C#C"
   ],
   "result": {
-    "count": 1,
     "id": "tconstruct:scorched_drain"
   },
-  "texture": {
-    "tag": "tconstruct:foundry_bricks"
-  }
+  "texture": "#tconstruct:foundry_bricks"
 }

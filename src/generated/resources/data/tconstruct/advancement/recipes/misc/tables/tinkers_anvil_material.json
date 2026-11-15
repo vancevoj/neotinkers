@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:tables/tinkers_anvil_material"
+        "recipes": "tconstruct:tables/tinkers_anvil_material"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

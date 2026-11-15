@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:damagable_melting",
-  "ingredient": {
-    "tag": "c:armors/chestplates/electrum"
-  },
+  "ingredient": "#c:armors/chestplates/electrum",
   "result": {
     "amount": 720,
     "tag": "c:molten_electrum",

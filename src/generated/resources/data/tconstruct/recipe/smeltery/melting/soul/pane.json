@@ -1,8 +1,6 @@
 {
   "type": "tconstruct:melting",
-  "ingredient": {
-    "item": "tconstruct:soul_glass_pane"
-  },
+  "ingredient": "tconstruct:soul_glass_pane",
   "result": {
     "amount": 250,
     "fluid": "tconstruct:liquid_soul"

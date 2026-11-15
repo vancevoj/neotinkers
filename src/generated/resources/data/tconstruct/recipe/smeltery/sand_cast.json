@@ -1,10 +1,7 @@
 {
   "type": "minecraft:crafting_shapeless",
-  "category": "misc",
   "ingredients": [
-    {
-      "tag": "c:sands/colorless"
-    }
+    "#c:sands/colorless"
   ],
   "result": {
     "count": 4,

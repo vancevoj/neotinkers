@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:melting",
-  "ingredient": {
-    "tag": "c:storage_blocks/refined_obsidian"
-  },
+  "ingredient": "#c:storage_blocks/refined_obsidian",
   "result": {
     "amount": 810,
     "tag": "c:molten_refined_obsidian"

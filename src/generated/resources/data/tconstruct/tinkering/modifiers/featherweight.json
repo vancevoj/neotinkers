@@ -24,7 +24,7 @@
     },
     {
       "type": "tconstruct:attribute",
-      "attribute": "minecraft:generic.movement_speed",
+      "attribute": "minecraft:movement_speed",
       "each_level": 0.05,
       "operation": "add_multiplied_base",
       "slots": [
@@ -34,7 +34,8 @@
         "legs",
         "chest",
         "head",
-        "body"
+        "body",
+        "saddle"
       ],
       "tool": {
         "type": "mantle:tag",
@@ -53,7 +54,8 @@
         "legs",
         "chest",
         "head",
-        "body"
+        "body",
+        "saddle"
       ],
       "tool": {
         "type": "mantle:tag",

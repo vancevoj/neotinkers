@@ -3,7 +3,7 @@
   "modules": [
     {
       "type": "tconstruct:attribute",
-      "attribute": "minecraft:generic.step_height",
+      "attribute": "minecraft:step_height",
       "each_level": 0.5,
       "operation": "add_value",
       "slots": [

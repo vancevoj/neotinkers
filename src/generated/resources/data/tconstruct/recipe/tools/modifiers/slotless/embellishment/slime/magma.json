@@ -9,21 +9,19 @@
   "allow_crystal": false,
   "inputs": [
     {
-      "item": "minecraft:magma_block"
+      "ingredient": "minecraft:magma_block"
     },
     {
-      "item": "minecraft:magma_cream"
+      "ingredient": "minecraft:magma_cream"
     },
     {
-      "item": "minecraft:magma_block"
+      "ingredient": "minecraft:magma_block"
     }
   ],
   "result": {
     "name": "tconstruct:embellishment",
     "value": "tconstruct:magma"
   },
-  "tools": {
-    "tag": "tconstruct:modifiable/embellishment/slime"
-  },
+  "tools": "#tconstruct:modifiable/embellishment/slime",
   "variant_formatter": "tconstruct:material"
 }

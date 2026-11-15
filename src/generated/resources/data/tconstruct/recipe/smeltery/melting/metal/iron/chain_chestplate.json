@@ -7,9 +7,7 @@
       "unit_size": 10
     }
   ],
-  "ingredient": {
-    "item": "minecraft:chainmail_chestplate"
-  },
+  "ingredient": "minecraft:chainmail_chestplate",
   "result": {
     "amount": 480,
     "tag": "c:molten_iron",

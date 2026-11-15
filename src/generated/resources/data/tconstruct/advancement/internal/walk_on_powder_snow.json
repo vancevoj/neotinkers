@@ -2,31 +2,29 @@
   "criteria": {
     "has_boots": {
       "conditions": {
-        "player": [
-          {
-            "condition": "minecraft:entity_properties",
-            "entity": "this",
-            "predicate": {
-              "equipment": {
-                "feet": {
-                  "predicates": {
-                    "tconstruct:tool_stack": {
-                      "predicate": {
-                        "type": "tconstruct:has_volatile_key",
-                        "key": "tconstruct:snow_boots"
-                      }
+        "player": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:equipment": {
+              "feet": {
+                "predicates": {
+                  "tconstruct:tool_stack": {
+                    "predicate": {
+                      "type": "tconstruct:has_volatile_key",
+                      "key": "tconstruct:snow_boots"
                     }
                   }
                 }
-              },
-              "stepping_on": {
-                "block": {
-                  "blocks": "minecraft:powder_snow"
-                }
+              }
+            },
+            "minecraft:stepping_on": {
+              "block": {
+                "blocks": "minecraft:powder_snow"
               }
             }
           }
-        ]
+        }
       },
       "trigger": "minecraft:location"
     }

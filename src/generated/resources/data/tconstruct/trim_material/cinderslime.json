@@ -1,5 +1,4 @@
 {
-  "asset_name": "tconstruct_cinderslime",
   "description": {
     "color": "#B80000",
     "translate": "trim_material.tconstruct.format",
@@ -9,6 +8,5 @@
       }
     ]
   },
-  "ingredient": "tconstruct:cinderslime_ingot",
-  "item_model_index": 0.4
+  "palette_id": "tconstruct:trim/cinderslime"
 }

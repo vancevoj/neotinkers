@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:material",
-  "ingredient": {
-    "tag": "c:nuggets/lead"
-  },
+  "ingredient": "#c:nuggets/lead",
   "material": "tconstruct:lead",
   "needed": 9,
   "value": 1

@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:damagable_melting",
-  "ingredient": {
-    "tag": "c:armors/leggings/invar"
-  },
+  "ingredient": "#c:armors/leggings/invar",
   "result": {
     "amount": 630,
     "tag": "c:molten_invar",

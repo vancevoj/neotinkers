@@ -1,8 +1,6 @@
 {
   "type": "tconstruct:casting_table_potion",
-  "bottle": {
-    "tag": "c:bottles/splash"
-  },
+  "bottle": "#c:bottles/splash",
   "fluid": {
     "amount": 250,
     "tag": "c:potion"

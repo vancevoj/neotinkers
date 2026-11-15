@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:melting",
-  "ingredient": {
-    "tag": "c:sheetmetals/uranium"
-  },
+  "ingredient": "#c:sheetmetals/uranium",
   "result": {
     "amount": 90,
     "tag": "c:molten_uranium"

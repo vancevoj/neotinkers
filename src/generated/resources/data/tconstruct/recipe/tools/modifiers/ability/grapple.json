@@ -4,13 +4,13 @@
   "check_trait_level": true,
   "inputs": [
     {
-      "item": "minecraft:chain"
+      "ingredient": "minecraft:iron_chain"
     },
     {
-      "item": "minecraft:chain"
+      "ingredient": "minecraft:iron_chain"
     },
     {
-      "tag": "c:ingots/slimesteel"
+      "ingredient": "#c:ingots/slimesteel"
     }
   ],
   "level": 1,
@@ -18,7 +18,5 @@
   "slots": {
     "abilities": 1
   },
-  "tools": {
-    "tag": "tconstruct:modifiable/fishing_rods"
-  }
+  "tools": "#tconstruct:modifiable/fishing_rods"
 }

@@ -6,9 +6,7 @@
     "tconstruct:feather"
   ],
   "extra_requirements": [
-    {
-      "item": "minecraft:arrow"
-    }
+    "minecraft:arrow"
   ],
   "parts_override": [],
   "result": "tconstruct:arrow",

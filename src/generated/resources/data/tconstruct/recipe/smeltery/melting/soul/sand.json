@@ -1,12 +1,8 @@
 {
   "type": "tconstruct:melting",
   "ingredient": [
-    {
-      "item": "minecraft:soul_sand"
-    },
-    {
-      "item": "minecraft:soul_soil"
-    }
+    "minecraft:soul_sand",
+    "minecraft:soul_soil"
   ],
   "result": {
     "amount": 1000,

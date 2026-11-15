@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:casting_table",
-  "cast": {
-    "tag": "tconstruct:casts/multi_use/gear"
-  },
+  "cast": "#tconstruct:casts/multi_use/gear",
   "cooling_time": 78,
   "fluid": {
     "amount": 360,

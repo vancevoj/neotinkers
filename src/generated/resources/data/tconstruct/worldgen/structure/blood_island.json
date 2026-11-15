@@ -18,8 +18,11 @@
       "spawns": [
         {
           "type": "minecraft:magma_cube",
-          "maxCount": 6,
-          "minCount": 4,
+          "count": {
+            "type": "minecraft:uniform",
+            "max_inclusive": 6,
+            "min_inclusive": 4
+          },
           "weight": 1
         }
       ]

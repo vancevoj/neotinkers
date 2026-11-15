@@ -4,7 +4,5 @@
   "slots": {
     "upgrades": 1
   },
-  "tools": {
-    "item": "tconstruct:flint_and_brick"
-  }
+  "tools": "tconstruct:flint_and_brick"
 }

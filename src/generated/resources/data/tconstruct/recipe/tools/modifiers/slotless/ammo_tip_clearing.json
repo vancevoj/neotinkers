@@ -6,7 +6,5 @@
     "tag": "mantle:water"
   },
   "modifier": "tconstruct:tipped",
-  "tools": {
-    "tag": "tconstruct:modifiable/ammo"
-  }
+  "tools": "#tconstruct:modifiable/ammo"
 }

@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:melting",
-  "ingredient": {
-    "tag": "c:gears/bronze"
-  },
+  "ingredient": "#c:gears/bronze",
   "result": {
     "amount": 360,
     "tag": "c:molten_bronze"

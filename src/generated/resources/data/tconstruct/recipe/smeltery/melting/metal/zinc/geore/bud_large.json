@@ -13,9 +13,7 @@
       "tag": "c:molten_copper"
     }
   ],
-  "ingredient": {
-    "tag": "c:geore_large_buds/zinc"
-  },
+  "ingredient": "#c:geore_large_buds/zinc",
   "rate": "metal",
   "result": {
     "amount": 270,

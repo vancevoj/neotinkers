@@ -4,32 +4,24 @@
   "inputs": [
     {
       "ingredient": [
-        {
-          "item": "tconstruct:seared_faucet"
-        },
-        {
-          "item": "tconstruct:scorched_faucet"
-        }
+        "tconstruct:seared_faucet",
+        "tconstruct:scorched_faucet"
       ]
     },
     {
-      "item": "minecraft:bucket"
+      "ingredient": "minecraft:bucket"
     },
     {
       "ingredient": [
-        {
-          "item": "tconstruct:seared_faucet"
-        },
-        {
-          "item": "tconstruct:scorched_faucet"
-        }
+        "tconstruct:seared_faucet",
+        "tconstruct:scorched_faucet"
       ]
     },
     {
-      "tag": "c:ingots/steel"
+      "ingredient": "#c:ingots/steel"
     },
     {
-      "tag": "c:ingots/steel"
+      "ingredient": "#c:ingots/steel"
     }
   ],
   "level": 1,
@@ -37,7 +29,5 @@
   "slots": {
     "abilities": 1
   },
-  "tools": {
-    "tag": "tconstruct:modifiable/interactable"
-  }
+  "tools": "#tconstruct:modifiable/interactable"
 }

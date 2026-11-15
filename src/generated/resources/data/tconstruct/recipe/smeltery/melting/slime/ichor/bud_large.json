@@ -6,9 +6,7 @@
       "fluid": "tconstruct:ichor"
     }
   ],
-  "ingredient": {
-    "item": "tconstruct:large_ichor_slime_crystal_bud"
-  },
+  "ingredient": "tconstruct:large_ichor_slime_crystal_bud",
   "rate": "gem",
   "result": {
     "amount": 30,

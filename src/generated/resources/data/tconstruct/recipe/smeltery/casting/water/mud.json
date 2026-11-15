@@ -1,8 +1,8 @@
 {
   "type": "tconstruct:casting_basin",
   "cast": {
-    "type": "tconstruct:block_tag",
-    "tag": "minecraft:convertable_to_mud"
+    "neoforge:ingredient_type": "tconstruct:block_tag",
+    "tag": "minecraft:convertible_to_mud"
   },
   "cast_consumed": true,
   "cooling_time": 47,

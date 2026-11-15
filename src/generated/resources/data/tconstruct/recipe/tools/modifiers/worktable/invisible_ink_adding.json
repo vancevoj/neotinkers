@@ -5,10 +5,8 @@
   "data_key": "tconstruct:invisible_modifiers",
   "inputs": [
     {
-      "type": "mantle:fluid_container",
-      "display": {
-        "item": "tconstruct:sky_slime_bottle"
-      },
+      "neoforge:ingredient_type": "mantle:fluid_container",
+      "display": "tconstruct:sky_slime_bottle",
       "fluid": {
         "amount": 250,
         "tag": "tconstruct:sky_slime"
@@ -20,7 +18,5 @@
     "inverted_type": "tconstruct:tag",
     "tag": "tconstruct:invisible_ink_blacklist"
   },
-  "tools": {
-    "tag": "tconstruct:modifiable"
-  }
+  "tools": "#tconstruct:modifiable"
 }

@@ -4,10 +4,8 @@
     "tconstruct:shield_core",
     "tconstruct:repair_kit"
   ],
-  "pattern": {
-    "item": "tconstruct:venom_bottle"
-  },
+  "pattern": "tconstruct:venom_bottle",
   "tools": {
-    "item": "tconstruct:plate_shield"
+    "ingredient": "tconstruct:plate_shield"
   }
 }

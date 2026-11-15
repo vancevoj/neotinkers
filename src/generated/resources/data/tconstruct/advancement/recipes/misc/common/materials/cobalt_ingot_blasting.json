@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:common/materials/cobalt_ingot_blasting"
+        "recipes": "tconstruct:common/materials/cobalt_ingot_blasting"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

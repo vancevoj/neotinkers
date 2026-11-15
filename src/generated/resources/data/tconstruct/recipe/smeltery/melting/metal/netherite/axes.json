@@ -7,9 +7,7 @@
       "unit_size": 25
     }
   ],
-  "ingredient": {
-    "tag": "tconstruct:melting/netherite/tools_costing_3"
-  },
+  "ingredient": "#tconstruct:melting/netherite/tools_costing_3",
   "result": {
     "amount": 90,
     "tag": "c:molten_netherite",

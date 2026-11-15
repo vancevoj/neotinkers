@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:world/wood/greenheart/fence"
+        "recipes": "tconstruct:world/wood/greenheart/fence"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

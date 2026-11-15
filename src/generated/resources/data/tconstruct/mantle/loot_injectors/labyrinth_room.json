@@ -11,22 +11,20 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "functions": [
-            {
-              "function": "tconstruct:add_tool_data",
-              "materials": [
-                {
-                  "type": "tconstruct:ancient"
-                },
-                {
-                  "type": "tconstruct:ancient"
-                },
-                {
-                  "type": "tconstruct:ancient"
-                }
-              ]
-            }
-          ],
+          "modifier": {
+            "type": "tconstruct:add_tool_data",
+            "materials": [
+              {
+                "type": "tconstruct:ancient"
+              },
+              {
+                "type": "tconstruct:ancient"
+              },
+              {
+                "type": "tconstruct:ancient"
+              }
+            ]
+          },
           "name": "tconstruct:minotaur_axe"
         }
       ],
@@ -36,22 +34,20 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "functions": [
-            {
-              "function": "tconstruct:add_tool_data",
-              "materials": [
-                {
-                  "type": "tconstruct:ancient"
-                },
-                {
-                  "type": "tconstruct:ancient"
-                },
-                {
-                  "type": "tconstruct:ancient"
-                }
-              ]
-            }
-          ],
+          "modifier": {
+            "type": "tconstruct:add_tool_data",
+            "materials": [
+              {
+                "type": "tconstruct:ancient"
+              },
+              {
+                "type": "tconstruct:ancient"
+              },
+              {
+                "type": "tconstruct:ancient"
+              }
+            ]
+          },
           "name": "tconstruct:minotaur_axe"
         }
       ],

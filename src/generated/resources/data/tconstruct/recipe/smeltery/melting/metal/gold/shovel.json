@@ -1,8 +1,6 @@
 {
   "type": "tconstruct:damagable_melting",
-  "ingredient": {
-    "tag": "tconstruct:melting/gold/tools_costing_1"
-  },
+  "ingredient": "#tconstruct:melting/gold/tools_costing_1",
   "result": {
     "amount": 90,
     "tag": "c:molten_gold",

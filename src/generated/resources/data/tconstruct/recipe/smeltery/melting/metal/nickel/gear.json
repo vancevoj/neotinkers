@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:melting",
-  "ingredient": {
-    "tag": "c:gears/nickel"
-  },
+  "ingredient": "#c:gears/nickel",
   "result": {
     "amount": 360,
     "tag": "c:molten_nickel"

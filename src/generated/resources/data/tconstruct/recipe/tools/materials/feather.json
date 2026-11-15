@@ -1,8 +1,6 @@
 {
   "type": "tconstruct:material",
-  "ingredient": {
-    "item": "minecraft:feather"
-  },
+  "ingredient": "minecraft:feather",
   "material": "tconstruct:feather",
   "needed": 1,
   "value": 1

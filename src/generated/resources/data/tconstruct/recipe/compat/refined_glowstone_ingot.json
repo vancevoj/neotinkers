@@ -10,9 +10,7 @@
     }
   ],
   "type": "tconstruct:casting_table",
-  "cast": {
-    "tag": "c:dusts/glowstone"
-  },
+  "cast": "#c:dusts/glowstone",
   "cast_consumed": true,
   "cooling_time": 66,
   "fluid": {

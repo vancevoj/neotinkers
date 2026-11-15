@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:tables/cast_chest"
+        "recipes": "tconstruct:tables/cast_chest"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -3,17 +3,15 @@
   "criteria": {
     "found_island": {
       "conditions": {
-        "player": [
-          {
-            "condition": "minecraft:entity_properties",
-            "entity": "this",
-            "predicate": {
-              "location": {
-                "structures": "tconstruct:end_slime_island"
-              }
+        "player": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:location": {
+              "structures": "tconstruct:end_slime_island"
             }
           }
-        ]
+        }
       },
       "trigger": "minecraft:location"
     }
@@ -24,7 +22,6 @@
     },
     "frame": "goal",
     "icon": {
-      "count": 1,
       "id": "tconstruct:ender_slime_sapling"
     },
     "title": {

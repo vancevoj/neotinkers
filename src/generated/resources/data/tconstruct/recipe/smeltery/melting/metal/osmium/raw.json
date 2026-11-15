@@ -13,9 +13,7 @@
       "tag": "c:molten_iron"
     }
   ],
-  "ingredient": {
-    "tag": "c:raw_materials/osmium"
-  },
+  "ingredient": "#c:raw_materials/osmium",
   "rate": "metal",
   "result": {
     "amount": 90,

@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:melting",
-  "ingredient": {
-    "tag": "c:dusts/zinc"
-  },
+  "ingredient": "#c:dusts/zinc",
   "result": {
     "amount": 90,
     "tag": "c:molten_zinc"

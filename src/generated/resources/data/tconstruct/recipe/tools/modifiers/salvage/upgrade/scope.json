@@ -4,7 +4,5 @@
   "slots": {
     "upgrades": 1
   },
-  "tools": {
-    "tag": "tconstruct:modifiable/interactable/charge"
-  }
+  "tools": "#tconstruct:modifiable/interactable/charge"
 }

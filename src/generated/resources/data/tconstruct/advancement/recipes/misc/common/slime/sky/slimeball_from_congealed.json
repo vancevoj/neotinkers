@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:common/slime/sky/slimeball_from_congealed"
+        "recipes": "tconstruct:common/slime/sky/slimeball_from_congealed"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

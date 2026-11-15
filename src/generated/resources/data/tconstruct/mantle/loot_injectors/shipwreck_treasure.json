@@ -5,9 +5,9 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "functions": [
+          "modifier": [
             {
-              "function": "tconstruct:add_tool_data",
+              "type": "tconstruct:add_tool_data",
               "materials": [
                 {
                   "type": "tconstruct:ancient"
@@ -21,11 +21,11 @@
               ]
             },
             {
+              "type": "mantle:set_fluid",
               "fluid": {
                 "amount": 1000,
                 "id": "minecraft:lava"
-              },
-              "function": "mantle:set_fluid"
+              }
             }
           ],
           "name": "tconstruct:swasher",

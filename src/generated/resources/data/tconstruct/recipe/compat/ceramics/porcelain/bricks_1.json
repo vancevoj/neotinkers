@@ -7,7 +7,7 @@
   ],
   "type": "tconstruct:melting",
   "ingredient": {
-    "type": "mantle:item_name",
+    "neoforge:ingredient_type": "mantle:item_name",
     "items": [
       "ceramics:porcelain_brick"
     ]

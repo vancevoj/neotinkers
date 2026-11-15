@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:world/wood/enderbark/stairs"
+        "recipes": "tconstruct:world/wood/enderbark/stairs"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

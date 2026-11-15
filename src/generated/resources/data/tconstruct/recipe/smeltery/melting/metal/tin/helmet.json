@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:damagable_melting",
-  "ingredient": {
-    "tag": "c:armors/helmets/tin"
-  },
+  "ingredient": "#c:armors/helmets/tin",
   "result": {
     "amount": 450,
     "tag": "c:molten_tin",

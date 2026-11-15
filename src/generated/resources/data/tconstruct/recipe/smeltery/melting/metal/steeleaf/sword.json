@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:damagable_melting",
-  "ingredient": {
-    "tag": "tconstruct:melting/steeleaf/tools_costing_2"
-  },
+  "ingredient": "#tconstruct:melting/steeleaf/tools_costing_2",
   "result": {
     "amount": 180,
     "fluid": "tconstruct:molten_steeleaf",

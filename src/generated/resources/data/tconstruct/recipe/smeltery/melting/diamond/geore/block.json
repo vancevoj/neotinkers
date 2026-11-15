@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:melting",
-  "ingredient": {
-    "tag": "c:geore_blocks/diamond"
-  },
+  "ingredient": "#c:geore_blocks/diamond",
   "result": {
     "amount": 400,
     "fluid": "tconstruct:molten_diamond"

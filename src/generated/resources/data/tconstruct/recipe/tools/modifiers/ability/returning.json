@@ -4,13 +4,13 @@
   "check_trait_level": true,
   "inputs": [
     {
-      "item": "minecraft:ender_pearl"
+      "ingredient": "minecraft:ender_pearl"
     },
     {
-      "item": "minecraft:clock"
+      "ingredient": "minecraft:clock"
     },
     {
-      "item": "minecraft:ender_pearl"
+      "ingredient": "minecraft:ender_pearl"
     }
   ],
   "levels": [
@@ -31,12 +31,11 @@
     }
   ],
   "result": "tconstruct:returning",
-  "tools": [
-    {
-      "tag": "tconstruct:modifiable/melee/weapon"
-    },
-    {
-      "tag": "tconstruct:modifiable/harvest"
-    }
-  ]
+  "tools": {
+    "neoforge:ingredient_type": "neoforge:compound",
+    "children": [
+      "#tconstruct:modifiable/melee/weapon",
+      "#tconstruct:modifiable/harvest"
+    ]
+  }
 }

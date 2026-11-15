@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:common/slime/earth/crystal_block"
+        "recipes": "tconstruct:common/slime/earth/crystal_block"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:melting",
-  "ingredient": {
-    "tag": "c:dusts/amethyst_bronze"
-  },
+  "ingredient": "#c:dusts/amethyst_bronze",
   "result": {
     "amount": 90,
     "tag": "c:molten_amethyst_bronze"

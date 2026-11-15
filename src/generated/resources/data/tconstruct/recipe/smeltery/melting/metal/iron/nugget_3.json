@@ -1,12 +1,8 @@
 {
   "type": "tconstruct:melting",
   "ingredient": [
-    {
-      "item": "minecraft:iron_bars"
-    },
-    {
-      "item": "minecraft:rail"
-    }
+    "minecraft:iron_bars",
+    "minecraft:rail"
   ],
   "result": {
     "amount": 30,

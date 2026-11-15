@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:smeltery/sand_cast"
+        "recipes": "tconstruct:smeltery/sand_cast"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

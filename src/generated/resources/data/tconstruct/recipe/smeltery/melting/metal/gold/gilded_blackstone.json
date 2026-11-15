@@ -6,9 +6,7 @@
       "tag": "c:molten_copper"
     }
   ],
-  "ingredient": {
-    "item": "minecraft:gilded_blackstone"
-  },
+  "ingredient": "minecraft:gilded_blackstone",
   "rate": "metal",
   "result": {
     "amount": 30,

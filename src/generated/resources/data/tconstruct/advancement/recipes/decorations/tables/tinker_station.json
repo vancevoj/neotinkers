@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:tables/tinker_station"
+        "recipes": "tconstruct:tables/tinker_station"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

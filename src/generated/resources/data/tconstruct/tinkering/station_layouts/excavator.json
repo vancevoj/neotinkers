@@ -1,39 +1,43 @@
 {
   "icon": {
+    "components": {
+      "tconstruct:tool_data": {
+        "tic_display": 1,
+        "tic_materials": [
+          "tconstruct:ui_render#head",
+          "tconstruct:ui_render#handle",
+          "tconstruct:ui_render#extra",
+          "tconstruct:ui_render#large",
+          "tconstruct:ui_render#extra_large"
+        ]
+      }
+    },
     "item": "tconstruct:excavator"
   },
   "input_slots": [
     {
-      "filter": {
-        "item": "tconstruct:large_plate"
-      },
+      "filter": "tconstruct:large_plate",
       "icon": "tconstruct:large_plate",
       "translation_key": "item.tconstruct.large_plate",
       "x": 45,
       "y": 26
     },
     {
-      "filter": {
-        "item": "tconstruct:tough_handle"
-      },
+      "filter": "tconstruct:tough_handle",
       "icon": "tconstruct:tough_handle",
       "translation_key": "item.tconstruct.tough_handle",
       "x": 25,
       "y": 46
     },
     {
-      "filter": {
-        "item": "tconstruct:tough_binding"
-      },
+      "filter": "tconstruct:tough_binding",
       "icon": "tconstruct:tough_binding",
       "translation_key": "item.tconstruct.tough_binding",
       "x": 25,
       "y": 26
     },
     {
-      "filter": {
-        "item": "tconstruct:tough_handle"
-      },
+      "filter": "tconstruct:tough_handle",
       "icon": "tconstruct:tough_handle",
       "translation_key": "item.tconstruct.tough_handle",
       "x": 7,

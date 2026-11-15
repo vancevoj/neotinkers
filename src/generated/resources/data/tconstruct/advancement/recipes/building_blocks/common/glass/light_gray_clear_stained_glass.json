@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:common/glass/light_gray_clear_stained_glass"
+        "recipes": "tconstruct:common/glass/light_gray_clear_stained_glass"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -7,7 +7,6 @@
     }
   },
   "loader": "mantle:connected",
-  "render_type": "minecraft:translucent",
   "textures": {
     "pane": "tconstruct:block/smeltery/soul_glass"
   }

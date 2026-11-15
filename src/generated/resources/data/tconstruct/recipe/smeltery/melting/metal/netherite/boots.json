@@ -7,9 +7,7 @@
       "unit_size": 25
     }
   ],
-  "ingredient": {
-    "item": "minecraft:netherite_boots"
-  },
+  "ingredient": "minecraft:netherite_boots",
   "result": {
     "amount": 90,
     "tag": "c:molten_netherite",

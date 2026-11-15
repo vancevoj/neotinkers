@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:melting",
-  "ingredient": {
-    "tag": "c:gears/invar"
-  },
+  "ingredient": "#c:gears/invar",
   "result": {
     "amount": 360,
     "tag": "c:molten_invar"

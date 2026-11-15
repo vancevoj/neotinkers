@@ -1,10 +1,6 @@
 {
   "type": "tconstruct:molding_table",
-  "material": {
-    "tag": "tconstruct:casts/red_sand"
-  },
-  "pattern": {
-    "tag": "c:nuggets"
-  },
+  "material": "#tconstruct:casts/red_sand",
+  "pattern": "#c:nuggets",
   "result": "tconstruct:nugget_red_sand_cast"
 }

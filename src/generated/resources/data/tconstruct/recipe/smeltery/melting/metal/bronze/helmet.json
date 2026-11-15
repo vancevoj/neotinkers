@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:damagable_melting",
-  "ingredient": {
-    "tag": "c:armors/helmets/bronze"
-  },
+  "ingredient": "#c:armors/helmets/bronze",
   "result": {
     "amount": 450,
     "tag": "c:molten_bronze",

@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "building",
   "key": {
-    "G": {
-      "item": "tconstruct:soul_glass"
-    },
-    "b": {
-      "item": "tconstruct:seared_brick"
-    }
+    "G": "tconstruct:soul_glass",
+    "b": "tconstruct:seared_brick"
   },
   "pattern": [
     " b ",
@@ -15,7 +11,6 @@
     " b "
   ],
   "result": {
-    "count": 1,
     "id": "tconstruct:seared_soul_glass"
   }
 }

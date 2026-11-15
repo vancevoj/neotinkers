@@ -3,10 +3,10 @@
   "allow_crystal": true,
   "inputs": [
     {
-      "item": "minecraft:piston"
+      "ingredient": "minecraft:piston"
     },
     {
-      "item": "tconstruct:ichor_slime"
+      "ingredient": "tconstruct:ichor_slime"
     }
   ],
   "level": {
@@ -16,7 +16,5 @@
   "slots": {
     "upgrades": 1
   },
-  "tools": {
-    "tag": "tconstruct:modifiable/ranged/bounce"
-  }
+  "tools": "#tconstruct:modifiable/ranged/bounce"
 }

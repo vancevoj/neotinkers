@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:material",
-  "ingredient": {
-    "tag": "c:ingots/invar"
-  },
+  "ingredient": "#c:ingots/invar",
   "material": "tconstruct:invar",
   "needed": 1,
   "value": 1

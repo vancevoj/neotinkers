@@ -11,10 +11,8 @@
     }
   ],
   "ingredient": {
-    "type": "tconstruct:no_container",
-    "match": {
-      "item": "tconstruct:seared_lantern"
-    }
+    "neoforge:ingredient_type": "tconstruct:no_container",
+    "match": "tconstruct:seared_lantern"
   },
   "result": {
     "amount": 500,

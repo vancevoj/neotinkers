@@ -4,21 +4,11 @@
   "inputs": [
     {
       "ingredient": [
-        {
-          "item": "tconstruct:reversed_gold_item_frame"
-        },
-        {
-          "item": "tconstruct:diamond_item_frame"
-        },
-        {
-          "item": "tconstruct:manyullyn_item_frame"
-        },
-        {
-          "item": "tconstruct:gold_item_frame"
-        },
-        {
-          "item": "tconstruct:netherite_item_frame"
-        }
+        "tconstruct:reversed_gold_item_frame",
+        "tconstruct:diamond_item_frame",
+        "tconstruct:manyullyn_item_frame",
+        "tconstruct:gold_item_frame",
+        "tconstruct:netherite_item_frame"
       ]
     }
   ],
@@ -26,7 +16,5 @@
   "slots": {
     "upgrades": 1
   },
-  "tools": {
-    "tag": "tconstruct:modifiable/armor/helmets"
-  }
+  "tools": "#tconstruct:modifiable/armor/helmets"
 }

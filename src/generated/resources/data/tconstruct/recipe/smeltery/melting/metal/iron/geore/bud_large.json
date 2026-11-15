@@ -13,9 +13,7 @@
       "tag": "c:molten_steel"
     }
   ],
-  "ingredient": {
-    "tag": "c:geore_large_buds/iron"
-  },
+  "ingredient": "#c:geore_large_buds/iron",
   "rate": "metal",
   "result": {
     "amount": 270,

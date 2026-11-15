@@ -10,7 +10,7 @@
   "check_trait_level": true,
   "inputs": [
     {
-      "type": "mantle:item_name",
+      "neoforge:ingredient_type": "mantle:item_name",
       "items": [
         "theoneprobe:probe"
       ]
@@ -21,12 +21,11 @@
   "slots": {
     "upgrades": 1
   },
-  "tools": [
-    {
-      "tag": "tconstruct:modifiable/armor/helmets"
-    },
-    {
-      "tag": "tconstruct:modifiable/held"
-    }
-  ]
+  "tools": {
+    "neoforge:ingredient_type": "neoforge:compound",
+    "children": [
+      "#tconstruct:modifiable/armor/helmets",
+      "#tconstruct:modifiable/held"
+    ]
+  }
 }

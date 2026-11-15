@@ -2,9 +2,7 @@
   "type": "tconstruct:incremental_modifier",
   "allow_crystal": true,
   "amount_per_item": 1,
-  "input": {
-    "tag": "c:dusts/redstone"
-  },
+  "input": "#c:dusts/redstone",
   "level": {
     "max": 5
   },
@@ -13,12 +11,11 @@
   "slots": {
     "upgrades": 1
   },
-  "tools": [
-    {
-      "tag": "tconstruct:modifiable/harvest"
-    },
-    {
-      "tag": "tconstruct:modifiable/armor/chestplate"
-    }
-  ]
+  "tools": {
+    "neoforge:ingredient_type": "neoforge:compound",
+    "children": [
+      "#tconstruct:modifiable/harvest",
+      "#tconstruct:modifiable/armor/chestplate"
+    ]
+  }
 }

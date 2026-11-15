@@ -1,8 +1,6 @@
 {
   "type": "tconstruct:material",
-  "ingredient": {
-    "tag": "c:rods/wooden"
-  },
+  "ingredient": "#c:rods/wooden",
   "material": "tconstruct:wood",
   "needed": 2,
   "value": 1

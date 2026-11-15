@@ -3,7 +3,7 @@
   "modules": [
     {
       "type": "tconstruct:golden_attribute",
-      "attribute": "minecraft:generic.max_health",
+      "attribute": "minecraft:max_health",
       "each_level": 4.0,
       "flat": 4.0,
       "operation": "add_value"

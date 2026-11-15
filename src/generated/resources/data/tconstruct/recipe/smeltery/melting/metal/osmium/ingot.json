@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:melting",
-  "ingredient": {
-    "tag": "c:ingots/osmium"
-  },
+  "ingredient": "#c:ingots/osmium",
   "result": {
     "amount": 90,
     "tag": "c:molten_osmium"

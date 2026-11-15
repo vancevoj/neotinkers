@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:melting",
-  "ingredient": {
-    "tag": "c:ingots/cadmium"
-  },
+  "ingredient": "#c:ingots/cadmium",
   "result": {
     "amount": 90,
     "tag": "c:molten_cadmium"

@@ -1,8 +1,6 @@
 {
   "type": "tconstruct:melting",
-  "ingredient": {
-    "item": "tconstruct:iron_platform"
-  },
+  "ingredient": "tconstruct:iron_platform",
   "result": {
     "amount": 100,
     "tag": "c:molten_iron"

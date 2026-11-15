@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:damagable_melting",
-  "ingredient": {
-    "tag": "c:armors/leggings/copper"
-  },
+  "ingredient": "#c:armors/leggings/copper",
   "result": {
     "amount": 630,
     "tag": "c:molten_copper",

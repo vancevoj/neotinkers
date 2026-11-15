@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:melting",
-  "ingredient": {
-    "tag": "c:nuggets/brass"
-  },
+  "ingredient": "#c:nuggets/brass",
   "result": {
     "amount": 10,
     "tag": "c:molten_brass"

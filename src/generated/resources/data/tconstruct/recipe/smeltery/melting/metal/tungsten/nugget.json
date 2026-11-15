@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:melting",
-  "ingredient": {
-    "tag": "c:nuggets/tungsten"
-  },
+  "ingredient": "#c:nuggets/tungsten",
   "result": {
     "amount": 10,
     "tag": "c:molten_tungsten"

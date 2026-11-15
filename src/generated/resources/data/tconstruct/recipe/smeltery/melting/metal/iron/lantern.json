@@ -1,12 +1,8 @@
 {
   "type": "tconstruct:melting",
   "ingredient": [
-    {
-      "item": "minecraft:lantern"
-    },
-    {
-      "item": "minecraft:soul_lantern"
-    }
+    "minecraft:lantern",
+    "minecraft:soul_lantern"
   ],
   "result": {
     "amount": 80,

@@ -63,7 +63,7 @@
     },
     {
       "type": "tconstruct:attribute",
-      "attribute": "minecraft:generic.armor_toughness",
+      "attribute": "minecraft:armor_toughness",
       "formula": [
         "$max_durability",
         0.5,
@@ -86,7 +86,8 @@
         "legs",
         "chest",
         "head",
-        "body"
+        "body",
+        "saddle"
       ],
       "tool": {
         "type": "mantle:tag",

@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:common/tinkers_gadgetry"
+        "recipes": "tconstruct:common/tinkers_gadgetry"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -6,9 +6,7 @@
       "fluid": "tconstruct:ichor"
     }
   ],
-  "ingredient": {
-    "item": "tconstruct:ichor_slime"
-  },
+  "ingredient": "tconstruct:ichor_slime",
   "result": {
     "amount": 90,
     "fluid": "tconstruct:blazing_blood"

@@ -19,7 +19,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:common/glass/vanilla/beacon"
+        "recipes": "tconstruct:common/glass/vanilla/beacon"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

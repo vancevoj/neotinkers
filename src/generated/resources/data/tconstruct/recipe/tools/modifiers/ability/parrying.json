@@ -4,13 +4,13 @@
   "check_trait_level": true,
   "inputs": [
     {
-      "tag": "minecraft:planks"
+      "ingredient": "#minecraft:planks"
     },
     {
-      "tag": "c:ingots/steel"
+      "ingredient": "#c:ingots/steel"
     },
     {
-      "tag": "minecraft:planks"
+      "ingredient": "#minecraft:planks"
     }
   ],
   "level": 1,
@@ -18,7 +18,5 @@
   "slots": {
     "abilities": 1
   },
-  "tools": {
-    "tag": "tconstruct:modifiable/melee/parry"
-  }
+  "tools": "#tconstruct:modifiable/melee/parry"
 }

@@ -3,9 +3,7 @@
   "category": "building",
   "group": "planks",
   "ingredients": [
-    {
-      "tag": "tconstruct:skyroot_logs"
-    }
+    "#tconstruct:skyroot_logs"
   ],
   "result": {
     "count": 4,

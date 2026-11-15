@@ -1,8 +1,6 @@
 {
   "type": "tconstruct:casting_basin",
-  "cast": {
-    "tag": "c:stones"
-  },
+  "cast": "#c:stones",
   "cast_consumed": true,
   "cooling_time": 113,
   "fluid": {

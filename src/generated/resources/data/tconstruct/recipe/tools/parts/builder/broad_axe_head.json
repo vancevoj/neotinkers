@@ -2,14 +2,13 @@
   "type": "tconstruct:part_builder",
   "cost": 8,
   "pattern": "tconstruct:broad_axe_head",
-  "pattern_item": [
-    {
-      "tag": "tconstruct:patterns/default"
-    },
-    {
-      "item": "tconstruct:broad_axe_head_cast"
-    }
-  ],
+  "pattern_item": {
+    "neoforge:ingredient_type": "neoforge:compound",
+    "children": [
+      "#tconstruct:patterns/default",
+      "tconstruct:broad_axe_head_cast"
+    ]
+  },
   "result": {
     "item": "tconstruct:broad_axe_head"
   }

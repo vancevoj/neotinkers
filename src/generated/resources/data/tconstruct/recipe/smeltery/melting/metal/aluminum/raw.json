@@ -13,9 +13,7 @@
       "tag": "c:molten_iron"
     }
   ],
-  "ingredient": {
-    "tag": "c:raw_materials/aluminum"
-  },
+  "ingredient": "#c:raw_materials/aluminum",
   "rate": "metal",
   "result": {
     "amount": 90,

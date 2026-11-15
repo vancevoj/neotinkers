@@ -1,8 +1,6 @@
 {
   "type": "tconstruct:melting",
-  "ingredient": {
-    "item": "tconstruct:ender_slime_crystal_block"
-  },
+  "ingredient": "tconstruct:ender_slime_crystal_block",
   "result": {
     "amount": 1000,
     "fluid": "tconstruct:ender_slime"

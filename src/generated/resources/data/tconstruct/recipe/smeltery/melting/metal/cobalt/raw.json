@@ -7,9 +7,7 @@
       "rate": "gem"
     }
   ],
-  "ingredient": {
-    "tag": "c:raw_materials/cobalt"
-  },
+  "ingredient": "#c:raw_materials/cobalt",
   "rate": "metal",
   "result": {
     "amount": 90,

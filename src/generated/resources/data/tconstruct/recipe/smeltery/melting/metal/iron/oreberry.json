@@ -1,13 +1,13 @@
 {
   "neoforge:conditions": [
     {
-      "type": "neoforge:item_exists",
-      "item": "oreberriesreplanted:iron_oreberry"
+      "type": "neoforge:registered",
+      "value": "oreberriesreplanted:iron_oreberry"
     }
   ],
   "type": "tconstruct:melting",
   "ingredient": {
-    "type": "mantle:item_name",
+    "neoforge:ingredient_type": "mantle:item_name",
     "items": [
       "oreberriesreplanted:iron_oreberry"
     ]

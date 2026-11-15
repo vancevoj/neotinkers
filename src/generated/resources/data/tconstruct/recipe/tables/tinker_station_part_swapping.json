@@ -2,12 +2,8 @@
   "type": "tconstruct:tinker_station_part_swapping",
   "max_stack_size": 16,
   "tools": {
-    "type": "neoforge:difference",
-    "base": {
-      "tag": "tconstruct:modifiable/multipart"
-    },
-    "subtracted": {
-      "tag": "tconstruct:modifiable/unswappable/parts"
-    }
+    "neoforge:ingredient_type": "neoforge:difference",
+    "base": "#tconstruct:modifiable/multipart",
+    "subtracted": "#tconstruct:modifiable/unswappable/parts"
   }
 }

@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:melting",
-  "ingredient": {
-    "tag": "c:dusts/invar"
-  },
+  "ingredient": "#c:dusts/invar",
   "result": {
     "amount": 90,
     "tag": "c:molten_invar"

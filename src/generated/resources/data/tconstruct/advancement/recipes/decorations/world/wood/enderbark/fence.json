@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:world/wood/enderbark/fence"
+        "recipes": "tconstruct:world/wood/enderbark/fence"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

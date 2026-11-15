@@ -4,7 +4,5 @@
   "slots": {
     "abilities": 1
   },
-  "tools": {
-    "tag": "tconstruct:modifiable/melee/parry"
-  }
+  "tools": "#tconstruct:modifiable/melee/parry"
 }

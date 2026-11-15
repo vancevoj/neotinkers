@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:gadgets/cake/ender"
+        "recipes": "tconstruct:gadgets/cake/ender"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

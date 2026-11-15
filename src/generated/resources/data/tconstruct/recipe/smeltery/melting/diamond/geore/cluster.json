@@ -13,9 +13,7 @@
       "rate": "metal"
     }
   ],
-  "ingredient": {
-    "tag": "c:geore_clusters/diamond"
-  },
+  "ingredient": "#c:geore_clusters/diamond",
   "rate": "gem",
   "result": {
     "amount": 400,

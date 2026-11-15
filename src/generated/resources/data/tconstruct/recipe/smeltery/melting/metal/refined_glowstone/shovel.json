@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:damagable_melting",
-  "ingredient": {
-    "tag": "c:tools/shovels/refined_glowstone"
-  },
+  "ingredient": "#c:tools/shovels/refined_glowstone",
   "result": {
     "amount": 90,
     "tag": "c:molten_refined_glowstone",

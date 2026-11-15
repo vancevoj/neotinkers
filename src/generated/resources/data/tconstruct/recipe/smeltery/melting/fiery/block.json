@@ -12,9 +12,7 @@
       "tag": "c:molten_iron"
     }
   ],
-  "ingredient": {
-    "tag": "c:storage_blocks/fiery"
-  },
+  "ingredient": "#c:storage_blocks/fiery",
   "result": {
     "amount": 2250,
     "fluid": "tconstruct:fiery_liquid"

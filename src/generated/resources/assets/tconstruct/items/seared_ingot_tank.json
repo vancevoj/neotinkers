@@ -1,0 +1,6 @@
+{
+  "model": {
+    "type": "tconstruct:tank_fluid",
+    "model": "tconstruct:item/seared_ingot_tank"
+  }
+}

@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:melting",
-  "ingredient": {
-    "tag": "c:coins/aluminum"
-  },
+  "ingredient": "#c:coins/aluminum",
   "result": {
     "amount": 30,
     "tag": "c:molten_aluminum"

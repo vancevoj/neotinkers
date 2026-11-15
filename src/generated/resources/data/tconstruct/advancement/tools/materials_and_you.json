@@ -13,12 +13,11 @@
   },
   "display": {
     "announce_to_chat": false,
-    "background": "tconstruct:textures/gui/advancement_background.png",
+    "background": "tconstruct:gui/advancement_background",
     "description": {
       "translate": "advancements.tconstruct.tools.materials_and_you.description"
     },
     "icon": {
-      "count": 1,
       "id": "tconstruct:materials_and_you"
     },
     "title": {

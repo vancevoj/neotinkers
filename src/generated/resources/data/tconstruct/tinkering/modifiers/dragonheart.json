@@ -21,7 +21,7 @@
         "min": 2.0,
         "variable": {
           "type": "tconstruct:attribute",
-          "attribute": "minecraft:generic.max_health"
+          "attribute": "minecraft:max_health"
         }
       },
       "hooks": [
@@ -32,7 +32,7 @@
       "variables": {
         "max_health": {
           "type": "tconstruct:entity",
-          "attribute": "minecraft:generic.max_health",
+          "attribute": "minecraft:max_health",
           "entity_type": "tconstruct:attribute",
           "fallback": 20.0,
           "which": "target"

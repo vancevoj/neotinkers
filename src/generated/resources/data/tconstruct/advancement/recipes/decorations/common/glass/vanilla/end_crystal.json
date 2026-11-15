@@ -19,7 +19,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:common/glass/vanilla/end_crystal"
+        "recipes": "tconstruct:common/glass/vanilla/end_crystal"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

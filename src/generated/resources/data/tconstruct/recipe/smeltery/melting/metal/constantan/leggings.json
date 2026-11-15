@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:damagable_melting",
-  "ingredient": {
-    "tag": "c:armors/leggings/constantan"
-  },
+  "ingredient": "#c:armors/leggings/constantan",
   "result": {
     "amount": 630,
     "tag": "c:molten_constantan",

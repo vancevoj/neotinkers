@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:world/wood/bloodshroom/door"
+        "recipes": "tconstruct:world/wood/bloodshroom/door"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

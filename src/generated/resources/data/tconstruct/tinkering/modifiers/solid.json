@@ -24,7 +24,7 @@
     },
     {
       "type": "tconstruct:attribute",
-      "attribute": "minecraft:generic.movement_speed",
+      "attribute": "minecraft:movement_speed",
       "each_level": -0.1,
       "operation": "add_multiplied_base",
       "slots": [
@@ -34,12 +34,13 @@
         "legs",
         "chest",
         "head",
-        "body"
+        "body",
+        "saddle"
       ]
     },
     {
       "type": "tconstruct:attribute",
-      "attribute": "minecraft:generic.gravity",
+      "attribute": "minecraft:gravity",
       "each_level": 0.05,
       "operation": "add_multiplied_total",
       "slots": [
@@ -49,7 +50,8 @@
         "legs",
         "chest",
         "head",
-        "body"
+        "body",
+        "saddle"
       ],
       "tooltip_style": "percent"
     }

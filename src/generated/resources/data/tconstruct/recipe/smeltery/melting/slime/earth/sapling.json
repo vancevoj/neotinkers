@@ -1,8 +1,6 @@
 {
   "type": "tconstruct:melting",
-  "ingredient": {
-    "item": "tconstruct:earth_slime_sapling"
-  },
+  "ingredient": "tconstruct:earth_slime_sapling",
   "result": {
     "amount": 250,
     "tag": "c:slime"

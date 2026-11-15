@@ -3,9 +3,7 @@
   "category": "redstone",
   "group": "wooden_trapdoor",
   "key": {
-    "#": {
-      "item": "tconstruct:bloodshroom_planks"
-    }
+    "#": "tconstruct:bloodshroom_planks"
   },
   "pattern": [
     "###",

@@ -2,11 +2,13 @@
   "multipart": [
     {
       "apply": {
+        "type": "mantle:connected",
         "model": "tconstruct:block/smeltery/glass/pane_post"
       }
     },
     {
       "apply": {
+        "type": "mantle:connected",
         "model": "tconstruct:block/smeltery/glass/pane_side"
       },
       "when": {
@@ -15,6 +17,7 @@
     },
     {
       "apply": {
+        "type": "mantle:connected",
         "model": "tconstruct:block/smeltery/glass/pane_noside"
       },
       "when": {
@@ -33,6 +36,7 @@
     },
     {
       "apply": {
+        "type": "mantle:connected",
         "model": "tconstruct:block/smeltery/glass/pane_side_alt"
       },
       "when": {
@@ -41,6 +45,7 @@
     },
     {
       "apply": {
+        "type": "mantle:connected",
         "model": "tconstruct:block/smeltery/glass/pane_noside_alt",
         "y": 90
       },
@@ -61,6 +66,7 @@
     },
     {
       "apply": {
+        "type": "mantle:connected",
         "model": "tconstruct:block/smeltery/glass/pane_side_alt",
         "y": 90
       },
@@ -70,6 +76,7 @@
     },
     {
       "apply": {
+        "type": "mantle:connected",
         "model": "tconstruct:block/smeltery/glass/pane_noside",
         "y": 270
       },
@@ -90,6 +97,7 @@
     },
     {
       "apply": {
+        "type": "mantle:connected",
         "model": "tconstruct:block/smeltery/glass/pane_side",
         "y": 90
       },
@@ -99,6 +107,7 @@
     },
     {
       "apply": {
+        "type": "mantle:connected",
         "model": "tconstruct:block/smeltery/glass/pane_noside_alt"
       },
       "when": {

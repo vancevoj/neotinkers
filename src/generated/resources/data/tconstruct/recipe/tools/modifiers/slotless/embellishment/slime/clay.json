@@ -9,21 +9,19 @@
   "allow_crystal": false,
   "inputs": [
     {
-      "item": "minecraft:clay"
+      "ingredient": "minecraft:clay"
     },
     {
-      "item": "minecraft:clay_ball"
+      "ingredient": "minecraft:clay_ball"
     },
     {
-      "item": "minecraft:clay"
+      "ingredient": "minecraft:clay"
     }
   ],
   "result": {
     "name": "tconstruct:embellishment",
     "value": "tconstruct:clay"
   },
-  "tools": {
-    "tag": "tconstruct:modifiable/embellishment/slime"
-  },
+  "tools": "#tconstruct:modifiable/embellishment/slime",
   "variant_formatter": "tconstruct:material"
 }

@@ -1,8 +1,6 @@
 {
   "type": "tconstruct:damagable_melting",
-  "ingredient": {
-    "tag": "tconstruct:melting/diamond/tools_costing_1"
-  },
+  "ingredient": "#tconstruct:melting/diamond/tools_costing_1",
   "result": {
     "amount": 100,
     "fluid": "tconstruct:molten_diamond",

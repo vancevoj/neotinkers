@@ -7,7 +7,5 @@
     "stat_type": "tconstruct:cuirass"
   },
   "max_stack_size": 16,
-  "tools": {
-    "item": "tconstruct:travelers_leggings"
-  }
+  "tools": "tconstruct:travelers_leggings"
 }

@@ -2,9 +2,7 @@
   "type": "tconstruct:incremental_modifier",
   "allow_crystal": true,
   "amount_per_item": 1,
-  "input": {
-    "tag": "c:dusts/glowstone"
-  },
+  "input": "#c:dusts/glowstone",
   "level": {
     "max": 3
   },
@@ -13,7 +11,5 @@
   "slots": {
     "upgrades": 1
   },
-  "tools": {
-    "tag": "tconstruct:modifiable/armor/boots"
-  }
+  "tools": "#tconstruct:modifiable/armor/boots"
 }

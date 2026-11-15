@@ -2,11 +2,13 @@
   "multipart": [
     {
       "apply": {
+        "type": "mantle:connected",
         "model": "tconstruct:block/clear_glass/yellow/pane_post"
       }
     },
     {
       "apply": {
+        "type": "mantle:connected",
         "model": "tconstruct:block/clear_glass/yellow/pane_side"
       },
       "when": {
@@ -15,6 +17,7 @@
     },
     {
       "apply": {
+        "type": "mantle:connected",
         "model": "tconstruct:block/clear_glass/yellow/pane_noside"
       },
       "when": {
@@ -23,6 +26,7 @@
     },
     {
       "apply": {
+        "type": "mantle:connected",
         "model": "tconstruct:block/clear_glass/yellow/pane_side_alt"
       },
       "when": {
@@ -31,6 +35,7 @@
     },
     {
       "apply": {
+        "type": "mantle:connected",
         "model": "tconstruct:block/clear_glass/yellow/pane_noside_alt",
         "y": 90
       },
@@ -40,6 +45,7 @@
     },
     {
       "apply": {
+        "type": "mantle:connected",
         "model": "tconstruct:block/clear_glass/yellow/pane_side_alt",
         "y": 90
       },
@@ -49,6 +55,7 @@
     },
     {
       "apply": {
+        "type": "mantle:connected",
         "model": "tconstruct:block/clear_glass/yellow/pane_noside",
         "y": 270
       },
@@ -58,6 +65,7 @@
     },
     {
       "apply": {
+        "type": "mantle:connected",
         "model": "tconstruct:block/clear_glass/yellow/pane_side",
         "y": 90
       },
@@ -67,6 +75,7 @@
     },
     {
       "apply": {
+        "type": "mantle:connected",
         "model": "tconstruct:block/clear_glass/yellow/pane_noside_alt"
       },
       "when": {

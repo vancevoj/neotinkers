@@ -1,117 +1,43 @@
 {
   "type": "tconstruct:melting",
   "ingredient": [
-    {
-      "item": "minecraft:terracotta"
-    },
-    {
-      "item": "minecraft:bricks"
-    },
-    {
-      "item": "minecraft:brick_wall"
-    },
-    {
-      "item": "minecraft:brick_stairs"
-    },
-    {
-      "item": "minecraft:white_terracotta"
-    },
-    {
-      "item": "minecraft:orange_terracotta"
-    },
-    {
-      "item": "minecraft:magenta_terracotta"
-    },
-    {
-      "item": "minecraft:light_blue_terracotta"
-    },
-    {
-      "item": "minecraft:yellow_terracotta"
-    },
-    {
-      "item": "minecraft:lime_terracotta"
-    },
-    {
-      "item": "minecraft:pink_terracotta"
-    },
-    {
-      "item": "minecraft:gray_terracotta"
-    },
-    {
-      "item": "minecraft:light_gray_terracotta"
-    },
-    {
-      "item": "minecraft:cyan_terracotta"
-    },
-    {
-      "item": "minecraft:purple_terracotta"
-    },
-    {
-      "item": "minecraft:blue_terracotta"
-    },
-    {
-      "item": "minecraft:brown_terracotta"
-    },
-    {
-      "item": "minecraft:green_terracotta"
-    },
-    {
-      "item": "minecraft:red_terracotta"
-    },
-    {
-      "item": "minecraft:black_terracotta"
-    },
-    {
-      "item": "minecraft:white_glazed_terracotta"
-    },
-    {
-      "item": "minecraft:orange_glazed_terracotta"
-    },
-    {
-      "item": "minecraft:magenta_glazed_terracotta"
-    },
-    {
-      "item": "minecraft:light_blue_glazed_terracotta"
-    },
-    {
-      "item": "minecraft:yellow_glazed_terracotta"
-    },
-    {
-      "item": "minecraft:lime_glazed_terracotta"
-    },
-    {
-      "item": "minecraft:pink_glazed_terracotta"
-    },
-    {
-      "item": "minecraft:gray_glazed_terracotta"
-    },
-    {
-      "item": "minecraft:light_gray_glazed_terracotta"
-    },
-    {
-      "item": "minecraft:cyan_glazed_terracotta"
-    },
-    {
-      "item": "minecraft:purple_glazed_terracotta"
-    },
-    {
-      "item": "minecraft:blue_glazed_terracotta"
-    },
-    {
-      "item": "minecraft:brown_glazed_terracotta"
-    },
-    {
-      "item": "minecraft:green_glazed_terracotta"
-    },
-    {
-      "item": "minecraft:red_glazed_terracotta"
-    },
-    {
-      "item": "minecraft:black_glazed_terracotta"
-    },
-    {
-      "item": "minecraft:decorated_pot"
-    }
+    "minecraft:terracotta",
+    "minecraft:bricks",
+    "minecraft:brick_wall",
+    "minecraft:brick_stairs",
+    "minecraft:white_terracotta",
+    "minecraft:orange_terracotta",
+    "minecraft:magenta_terracotta",
+    "minecraft:light_blue_terracotta",
+    "minecraft:yellow_terracotta",
+    "minecraft:lime_terracotta",
+    "minecraft:pink_terracotta",
+    "minecraft:gray_terracotta",
+    "minecraft:light_gray_terracotta",
+    "minecraft:cyan_terracotta",
+    "minecraft:purple_terracotta",
+    "minecraft:blue_terracotta",
+    "minecraft:brown_terracotta",
+    "minecraft:green_terracotta",
+    "minecraft:red_terracotta",
+    "minecraft:black_terracotta",
+    "minecraft:white_glazed_terracotta",
+    "minecraft:orange_glazed_terracotta",
+    "minecraft:magenta_glazed_terracotta",
+    "minecraft:light_blue_glazed_terracotta",
+    "minecraft:yellow_glazed_terracotta",
+    "minecraft:lime_glazed_terracotta",
+    "minecraft:pink_glazed_terracotta",
+    "minecraft:gray_glazed_terracotta",
+    "minecraft:light_gray_glazed_terracotta",
+    "minecraft:cyan_glazed_terracotta",
+    "minecraft:purple_glazed_terracotta",
+    "minecraft:blue_glazed_terracotta",
+    "minecraft:brown_glazed_terracotta",
+    "minecraft:green_glazed_terracotta",
+    "minecraft:red_glazed_terracotta",
+    "minecraft:black_glazed_terracotta",
+    "minecraft:decorated_pot"
   ],
   "result": {
     "amount": 1000,

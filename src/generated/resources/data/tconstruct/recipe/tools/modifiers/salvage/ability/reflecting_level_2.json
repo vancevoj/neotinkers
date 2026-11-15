@@ -8,7 +8,5 @@
   "slots": {
     "upgrades": 1
   },
-  "tools": {
-    "tag": "tconstruct:modifiable/shields"
-  }
+  "tools": "#tconstruct:modifiable/shields"
 }

@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:common/copper_platform_waxing_unaffected"
+        "recipes": "tconstruct:common/copper_platform_waxing_unaffected"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -1,8 +1,6 @@
 {
   "type": "tconstruct:casting_basin",
-  "cast": {
-    "item": "tconstruct:bloodshroom_fence"
-  },
+  "cast": "tconstruct:bloodshroom_fence",
   "cast_consumed": true,
   "cooling_time": 120,
   "fluid": {

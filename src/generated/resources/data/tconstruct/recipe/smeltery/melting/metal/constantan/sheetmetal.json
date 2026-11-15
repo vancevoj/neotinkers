@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:melting",
-  "ingredient": {
-    "tag": "c:sheetmetals/constantan"
-  },
+  "ingredient": "#c:sheetmetals/constantan",
   "result": {
     "amount": 90,
     "tag": "c:molten_constantan"

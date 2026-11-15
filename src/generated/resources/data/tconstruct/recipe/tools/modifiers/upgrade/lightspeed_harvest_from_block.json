@@ -2,9 +2,7 @@
   "type": "tconstruct:incremental_modifier",
   "allow_crystal": false,
   "amount_per_item": 4,
-  "input": {
-    "item": "minecraft:glowstone"
-  },
+  "input": "minecraft:glowstone",
   "leftover": "minecraft:glowstone_dust",
   "level": {
     "max": 5
@@ -14,7 +12,5 @@
   "slots": {
     "upgrades": 1
   },
-  "tools": {
-    "tag": "tconstruct:modifiable/harvest"
-  }
+  "tools": "#tconstruct:modifiable/harvest"
 }

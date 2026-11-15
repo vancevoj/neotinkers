@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:melting",
-  "ingredient": {
-    "tag": "c:sheetmetals/aluminum"
-  },
+  "ingredient": "#c:sheetmetals/aluminum",
   "result": {
     "amount": 90,
     "tag": "c:molten_aluminum"

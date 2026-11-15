@@ -3,21 +3,19 @@
   "allow_crystal": false,
   "inputs": [
     {
-      "item": "tconstruct:skyroot_planks"
+      "ingredient": "tconstruct:skyroot_planks"
     },
     {
-      "item": "tconstruct:pattern"
+      "ingredient": "tconstruct:pattern"
     },
     {
-      "item": "tconstruct:skyroot_planks"
+      "ingredient": "tconstruct:skyroot_planks"
     }
   ],
   "result": {
     "name": "tconstruct:embellishment",
     "value": "tconstruct:slimewood#skyroot"
   },
-  "tools": {
-    "tag": "tconstruct:modifiable/embellishment/wood"
-  },
+  "tools": "#tconstruct:modifiable/embellishment/wood",
   "variant_formatter": "tconstruct:material"
 }

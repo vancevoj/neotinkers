@@ -3,12 +3,8 @@
   "category": "building",
   "group": "tconstruct:stained_clear_glass",
   "key": {
-    "#": {
-      "item": "tconstruct:clear_glass"
-    },
-    "X": {
-      "tag": "c:dyes/pink"
-    }
+    "#": "tconstruct:clear_glass",
+    "X": "#c:dyes/pink"
   },
   "pattern": [
     "###",

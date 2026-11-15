@@ -3,13 +3,13 @@
   "allow_crystal": true,
   "inputs": [
     {
-      "item": "minecraft:pointed_dripstone"
+      "ingredient": "minecraft:pointed_dripstone"
     },
     {
-      "item": "minecraft:pointed_dripstone"
+      "ingredient": "minecraft:pointed_dripstone"
     },
     {
-      "item": "minecraft:pointed_dripstone"
+      "ingredient": "minecraft:pointed_dripstone"
     }
   ],
   "level": {
@@ -19,7 +19,5 @@
   "slots": {
     "upgrades": 1
   },
-  "tools": {
-    "tag": "tconstruct:modifiable/ranged/crossbows"
-  }
+  "tools": "#tconstruct:modifiable/ranged/crossbows"
 }

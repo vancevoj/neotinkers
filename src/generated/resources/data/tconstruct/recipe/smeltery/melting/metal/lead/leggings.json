@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:damagable_melting",
-  "ingredient": {
-    "tag": "c:armors/leggings/lead"
-  },
+  "ingredient": "#c:armors/leggings/lead",
   "result": {
     "amount": 630,
     "tag": "c:molten_lead",

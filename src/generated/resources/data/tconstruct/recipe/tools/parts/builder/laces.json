@@ -2,6 +2,7 @@
   "type": "tconstruct:part_builder",
   "cost": 2,
   "pattern": "tconstruct:laces",
+  "pattern_item": "#tconstruct:patterns/default",
   "result": {
     "item": "tconstruct:laces"
   }

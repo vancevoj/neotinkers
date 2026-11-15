@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:common/cheese_block_from_ingot"
+        "recipes": "tconstruct:common/cheese_block_from_ingot"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

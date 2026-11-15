@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:melting",
-  "ingredient": {
-    "tag": "c:plates/rose_gold"
-  },
+  "ingredient": "#c:plates/rose_gold",
   "result": {
     "amount": 90,
     "tag": "c:molten_rose_gold"

@@ -3,19 +3,19 @@
   "allow_crystal": false,
   "inputs": [
     {
-      "item": "tconstruct:earth_slime_crystal_cluster"
+      "ingredient": "tconstruct:earth_slime_crystal_cluster"
     },
     {
-      "item": "minecraft:blaze_rod"
+      "ingredient": "minecraft:blaze_rod"
     },
     {
-      "item": "tconstruct:earth_slime_crystal_cluster"
+      "ingredient": "tconstruct:earth_slime_crystal_cluster"
     },
     {
-      "tag": "c:ingots/manyullyn"
+      "ingredient": "#c:ingots/manyullyn"
     },
     {
-      "tag": "c:ingots/manyullyn"
+      "ingredient": "#c:ingots/manyullyn"
     }
   ],
   "result": {
@@ -25,7 +25,5 @@
   "slots": {
     "abilities": 1
   },
-  "tools": {
-    "tag": "tconstruct:modifiable/ranged/bows"
-  }
+  "tools": "#tconstruct:modifiable/ranged/bows"
 }

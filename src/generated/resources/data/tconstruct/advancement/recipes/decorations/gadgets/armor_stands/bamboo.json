@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:gadgets/armor_stands/bamboo"
+        "recipes": "tconstruct:gadgets/armor_stands/bamboo"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

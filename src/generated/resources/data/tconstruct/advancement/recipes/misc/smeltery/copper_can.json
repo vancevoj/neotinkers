@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:smeltery/copper_can"
+        "recipes": "tconstruct:smeltery/copper_can"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

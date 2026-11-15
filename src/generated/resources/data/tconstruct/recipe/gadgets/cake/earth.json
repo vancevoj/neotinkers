@@ -1,19 +1,10 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
   "key": {
-    "E": {
-      "item": "minecraft:egg"
-    },
-    "M": {
-      "item": "tconstruct:earth_slime_bucket"
-    },
-    "S": {
-      "item": "minecraft:sugar"
-    },
-    "W": {
-      "item": "tconstruct:earth_slime_tall_grass"
-    }
+    "E": "minecraft:egg",
+    "M": "tconstruct:earth_slime_bucket",
+    "S": "minecraft:sugar",
+    "W": "tconstruct:earth_slime_tall_grass"
   },
   "pattern": [
     "MMM",
@@ -21,7 +12,6 @@
     "WWW"
   ],
   "result": {
-    "count": 1,
     "id": "tconstruct:earth_cake"
   }
 }

@@ -1,13 +1,13 @@
 {
   "neoforge:conditions": [
     {
-      "type": "neoforge:item_exists",
-      "item": "railcraft:steel_spike_maul"
+      "type": "neoforge:registered",
+      "value": "railcraft:steel_spike_maul"
     }
   ],
   "type": "tconstruct:damagable_melting",
   "ingredient": {
-    "type": "mantle:item_name",
+    "neoforge:ingredient_type": "mantle:item_name",
     "items": [
       "railcraft:steel_spike_maul"
     ]

@@ -4,29 +4,23 @@
   "check_trait_level": true,
   "inputs": [
     {
-      "item": "minecraft:blaze_rod"
+      "ingredient": "minecraft:blaze_rod"
     },
     {
       "ingredient": [
-        {
-          "item": "tconstruct:seared_melter"
-        },
-        {
-          "item": "tconstruct:smeltery_controller"
-        },
-        {
-          "item": "tconstruct:foundry_controller"
-        }
+        "tconstruct:seared_melter",
+        "tconstruct:smeltery_controller",
+        "tconstruct:foundry_controller"
       ]
     },
     {
-      "item": "minecraft:blaze_rod"
+      "ingredient": "minecraft:blaze_rod"
     },
     {
-      "item": "minecraft:lava_bucket"
+      "ingredient": "minecraft:lava_bucket"
     },
     {
-      "item": "minecraft:lava_bucket"
+      "ingredient": "minecraft:lava_bucket"
     }
   ],
   "level": 1,
@@ -34,12 +28,11 @@
   "slots": {
     "abilities": 1
   },
-  "tools": [
-    {
-      "tag": "tconstruct:modifiable/melee"
-    },
-    {
-      "tag": "tconstruct:modifiable/harvest"
-    }
-  ]
+  "tools": {
+    "neoforge:ingredient_type": "neoforge:compound",
+    "children": [
+      "#tconstruct:modifiable/melee",
+      "#tconstruct:modifiable/harvest"
+    ]
+  }
 }

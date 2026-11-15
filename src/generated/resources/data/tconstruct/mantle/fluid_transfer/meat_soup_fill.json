@@ -4,8 +4,6 @@
     "amount": 250,
     "tag": "tconstruct:meat_soup"
   },
-  "input": {
-    "item": "minecraft:bowl"
-  },
+  "input": "minecraft:bowl",
   "result": "tconstruct:meat_soup"
 }

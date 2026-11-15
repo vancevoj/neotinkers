@@ -1,8 +1,6 @@
 {
   "type": "tconstruct:melting",
-  "ingredient": {
-    "item": "minecraft:magma_block"
-  },
+  "ingredient": "minecraft:magma_block",
   "result": {
     "amount": 1000,
     "tag": "c:magma"

@@ -1,8 +1,6 @@
 {
   "type": "tconstruct:melting",
-  "ingredient": {
-    "tag": "c:nuggets/slimesteel"
-  },
+  "ingredient": "#c:nuggets/slimesteel",
   "result": {
     "amount": 10,
     "fluid": "tconstruct:molten_slimesteel"

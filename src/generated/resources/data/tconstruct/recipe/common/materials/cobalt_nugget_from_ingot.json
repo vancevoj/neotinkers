@@ -1,11 +1,8 @@
 {
   "type": "minecraft:crafting_shapeless",
-  "category": "misc",
   "group": "tconstruct:cobalt_nugget",
   "ingredients": [
-    {
-      "item": "tconstruct:cobalt_ingot"
-    }
+    "tconstruct:cobalt_ingot"
   ],
   "result": {
     "count": 9,

@@ -4,19 +4,19 @@
   "check_trait_level": true,
   "inputs": [
     {
-      "item": "tconstruct:sky_slime_vine"
+      "ingredient": "tconstruct:sky_slime_vine"
     },
     {
-      "tag": "c:ingots/slimesteel"
+      "ingredient": "#c:ingots/slimesteel"
     },
     {
-      "item": "tconstruct:sky_slime_vine"
+      "ingredient": "tconstruct:sky_slime_vine"
     },
     {
-      "tag": "tconstruct:slimy_logs"
+      "ingredient": "#tconstruct:slimy_logs"
     },
     {
-      "tag": "tconstruct:slimy_logs"
+      "ingredient": "#tconstruct:slimy_logs"
     }
   ],
   "level": 1,
@@ -24,7 +24,5 @@
   "slots": {
     "abilities": 1
   },
-  "tools": {
-    "tag": "tconstruct:modifiable/staffs"
-  }
+  "tools": "#tconstruct:modifiable/staffs"
 }

@@ -19,7 +19,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:common/glass/vanilla/glass_bottle"
+        "recipes": "tconstruct:common/glass/vanilla/glass_bottle"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

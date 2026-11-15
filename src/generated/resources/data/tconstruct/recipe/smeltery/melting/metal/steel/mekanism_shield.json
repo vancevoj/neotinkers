@@ -1,13 +1,13 @@
 {
   "neoforge:conditions": [
     {
-      "type": "neoforge:item_exists",
-      "item": "mekanism:steel_shield"
+      "type": "neoforge:registered",
+      "value": "mekanism:steel_shield"
     }
   ],
   "type": "tconstruct:damagable_melting",
   "ingredient": {
-    "type": "mantle:item_name",
+    "neoforge:ingredient_type": "mantle:item_name",
     "items": [
       "mekanism:steel_shield"
     ]

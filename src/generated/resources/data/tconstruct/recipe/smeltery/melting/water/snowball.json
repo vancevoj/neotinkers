@@ -1,8 +1,6 @@
 {
   "type": "tconstruct:melting",
-  "ingredient": {
-    "item": "minecraft:snowball"
-  },
+  "ingredient": "minecraft:snowball",
   "result": {
     "amount": 125,
     "fluid": "minecraft:water"

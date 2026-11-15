@@ -1,5 +1,4 @@
 {
-  "asset_name": "tconstruct_knightmetal",
   "description": {
     "color": "#C4D6AE",
     "translate": "trim_material.tconstruct.format",
@@ -9,6 +8,5 @@
       }
     ]
   },
-  "ingredient": "tconstruct:knightmetal_ingot",
-  "item_model_index": 0.1
+  "palette_id": "tconstruct:trim/knightmetal"
 }

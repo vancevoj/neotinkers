@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:melting",
-  "ingredient": {
-    "tag": "c:gears/gold"
-  },
+  "ingredient": "#c:gears/gold",
   "result": {
     "amount": 360,
     "tag": "c:molten_gold"

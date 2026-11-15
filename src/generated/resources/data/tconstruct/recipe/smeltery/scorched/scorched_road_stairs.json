@@ -3,9 +3,7 @@
   "category": "building",
   "group": "tconstruct:scorched_road_stairs",
   "key": {
-    "B": {
-      "item": "tconstruct:scorched_road"
-    }
+    "B": "tconstruct:scorched_road"
   },
   "pattern": [
     "B  ",

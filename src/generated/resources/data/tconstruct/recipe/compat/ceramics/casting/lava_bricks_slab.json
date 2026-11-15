@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:casting_basin",
-  "cast": {
-    "item": "minecraft:brick_slab"
-  },
+  "cast": "minecraft:brick_slab",
   "cast_consumed": true,
   "cooling_time": 49,
   "fluid": {

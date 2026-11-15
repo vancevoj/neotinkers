@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:casting_table",
-  "cast": {
-    "tag": "tconstruct:casts/multi_use/coin"
-  },
+  "cast": "#tconstruct:casts/multi_use/coin",
   "cooling_time": 42,
   "fluid": {
     "amount": 30,

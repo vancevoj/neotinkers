@@ -4,19 +4,19 @@
   "check_trait_level": true,
   "inputs": [
     {
-      "item": "tconstruct:sky_slime_vine"
+      "ingredient": "tconstruct:sky_slime_vine"
     },
     {
-      "item": "tconstruct:sky_slime_crystal"
+      "ingredient": "tconstruct:sky_slime_crystal"
     },
     {
-      "item": "tconstruct:sky_slime_vine"
+      "ingredient": "tconstruct:sky_slime_vine"
     },
     {
-      "item": "tconstruct:sky_congealed_slime"
+      "ingredient": "tconstruct:sky_congealed_slime"
     },
     {
-      "item": "tconstruct:sky_congealed_slime"
+      "ingredient": "tconstruct:sky_congealed_slime"
     }
   ],
   "level": 1,
@@ -25,14 +25,10 @@
     "abilities": 1
   },
   "tools": {
-    "type": "neoforge:intersection",
+    "neoforge:ingredient_type": "neoforge:intersection",
     "children": [
-      {
-        "tag": "tconstruct:modifiable/durability"
-      },
-      {
-        "tag": "tconstruct:modifiable/interactable/charge"
-      }
+      "#tconstruct:modifiable/durability",
+      "#tconstruct:modifiable/interactable/charge"
     ]
   }
 }

@@ -4,19 +4,19 @@
   "check_trait_level": true,
   "inputs": [
     {
-      "item": "minecraft:vine"
+      "ingredient": "minecraft:vine"
     },
     {
-      "item": "tconstruct:earth_slime_crystal"
+      "ingredient": "tconstruct:earth_slime_crystal"
     },
     {
-      "item": "minecraft:vine"
+      "ingredient": "minecraft:vine"
     },
     {
-      "item": "tconstruct:earth_congealed_slime"
+      "ingredient": "tconstruct:earth_congealed_slime"
     },
     {
-      "item": "tconstruct:earth_congealed_slime"
+      "ingredient": "tconstruct:earth_congealed_slime"
     }
   ],
   "level": 1,
@@ -25,14 +25,10 @@
     "abilities": 1
   },
   "tools": {
-    "type": "neoforge:intersection",
+    "neoforge:ingredient_type": "neoforge:intersection",
     "children": [
-      {
-        "tag": "tconstruct:modifiable/durability"
-      },
-      {
-        "tag": "tconstruct:modifiable/interactable/charge"
-      }
+      "#tconstruct:modifiable/durability",
+      "#tconstruct:modifiable/interactable/charge"
     ]
   }
 }

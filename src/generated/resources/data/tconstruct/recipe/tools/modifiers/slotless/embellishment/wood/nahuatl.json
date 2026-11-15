@@ -3,21 +3,19 @@
   "allow_crystal": false,
   "inputs": [
     {
-      "item": "tconstruct:nahuatl"
+      "ingredient": "tconstruct:nahuatl"
     },
     {
-      "item": "tconstruct:pattern"
+      "ingredient": "tconstruct:pattern"
     },
     {
-      "item": "tconstruct:nahuatl"
+      "ingredient": "tconstruct:nahuatl"
     }
   ],
   "result": {
     "name": "tconstruct:embellishment",
     "value": "tconstruct:nahuatl"
   },
-  "tools": {
-    "tag": "tconstruct:modifiable/embellishment/wood"
-  },
+  "tools": "#tconstruct:modifiable/embellishment/wood",
   "variant_formatter": "tconstruct:material"
 }

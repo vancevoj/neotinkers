@@ -1,8 +1,6 @@
 {
   "type": "tconstruct:melting",
-  "ingredient": {
-    "tag": "c:raw_nuggets/knightmetal"
-  },
+  "ingredient": "#c:raw_nuggets/knightmetal",
   "result": {
     "amount": 10,
     "fluid": "tconstruct:molten_knightmetal"

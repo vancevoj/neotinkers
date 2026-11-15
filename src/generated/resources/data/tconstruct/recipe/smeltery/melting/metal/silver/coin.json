@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:melting",
-  "ingredient": {
-    "tag": "c:coins/silver"
-  },
+  "ingredient": "#c:coins/silver",
   "result": {
     "amount": 30,
     "tag": "c:molten_silver"

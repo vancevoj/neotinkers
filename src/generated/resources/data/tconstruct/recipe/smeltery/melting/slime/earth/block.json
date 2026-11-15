@@ -1,8 +1,6 @@
 {
   "type": "tconstruct:melting",
-  "ingredient": {
-    "item": "minecraft:slime_block"
-  },
+  "ingredient": "minecraft:slime_block",
   "result": {
     "amount": 2250,
     "tag": "c:slime"

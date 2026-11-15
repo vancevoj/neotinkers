@@ -8,7 +8,7 @@
     },
     {
       "type": "tconstruct:attribute",
-      "attribute": "minecraft:generic.attack_knockback",
+      "attribute": "minecraft:attack_knockback",
       "each_level": 1.0,
       "operation": "add_value",
       "slots": [
@@ -50,7 +50,7 @@
         },
         "knockback_resistance": {
           "type": "tconstruct:entity",
-          "attribute": "minecraft:generic.knockback_resistance",
+          "attribute": "minecraft:knockback_resistance",
           "entity_type": "tconstruct:attribute",
           "fallback": 0.0
         }

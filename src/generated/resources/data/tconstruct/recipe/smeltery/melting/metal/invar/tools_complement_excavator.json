@@ -1,13 +1,13 @@
 {
   "neoforge:conditions": [
     {
-      "type": "neoforge:item_exists",
-      "item": "tools_complement:invar_excavator"
+      "type": "neoforge:registered",
+      "value": "tools_complement:invar_excavator"
     }
   ],
   "type": "tconstruct:damagable_melting",
   "ingredient": {
-    "type": "mantle:item_name",
+    "neoforge:ingredient_type": "mantle:item_name",
     "items": [
       "tools_complement:invar_excavator"
     ]

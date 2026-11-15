@@ -6,9 +6,7 @@
       "fluid": "tconstruct:scorched_stone"
     }
   ],
-  "ingredient": {
-    "item": "tconstruct:scorched_duct"
-  },
+  "ingredient": "tconstruct:scorched_duct",
   "result": {
     "amount": 180,
     "tag": "c:molten_gold"

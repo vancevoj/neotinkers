@@ -1,8 +1,6 @@
 {
   "type": "tconstruct:material",
-  "ingredient": {
-    "item": "tconstruct:venombone"
-  },
+  "ingredient": "tconstruct:venombone",
   "material": "tconstruct:venombone",
   "needed": 1,
   "value": 1

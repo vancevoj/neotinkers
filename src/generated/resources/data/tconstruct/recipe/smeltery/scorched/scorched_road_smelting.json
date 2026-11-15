@@ -3,11 +3,8 @@
   "category": "blocks",
   "cookingtime": 200,
   "experience": 0.1,
-  "ingredient": {
-    "item": "tconstruct:scorched_stone"
-  },
+  "ingredient": "tconstruct:scorched_stone",
   "result": {
-    "count": 1,
     "id": "tconstruct:scorched_road"
   }
 }

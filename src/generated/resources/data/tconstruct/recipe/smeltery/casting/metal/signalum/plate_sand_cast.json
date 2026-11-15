@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:casting_table",
-  "cast": {
-    "tag": "tconstruct:casts/single_use/plate"
-  },
+  "cast": "#tconstruct:casts/single_use/plate",
   "cast_consumed": true,
   "cooling_time": 66,
   "fluid": {

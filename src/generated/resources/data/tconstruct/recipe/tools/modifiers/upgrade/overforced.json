@@ -2,9 +2,7 @@
   "type": "tconstruct:incremental_modifier",
   "allow_crystal": true,
   "amount_per_item": 1,
-  "input": {
-    "item": "tconstruct:slimesteel_reinforcement"
-  },
+  "input": "tconstruct:slimesteel_reinforcement",
   "level": {
     "max": 5
   },
@@ -13,7 +11,5 @@
   "slots": {
     "upgrades": 1
   },
-  "tools": {
-    "tag": "tconstruct:modifiable/durability"
-  }
+  "tools": "#tconstruct:modifiable/durability"
 }

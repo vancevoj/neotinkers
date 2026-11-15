@@ -4,7 +4,5 @@
   "slots": {
     "abilities": 1
   },
-  "tools": {
-    "tag": "tconstruct:modifiable/fishing_rods"
-  }
+  "tools": "#tconstruct:modifiable/fishing_rods"
 }

@@ -3,18 +3,14 @@
   "allow_crystal": true,
   "inputs": [
     {
-      "tag": "c:ingots/netherite_scrap"
+      "ingredient": "#c:ingots/netherite_scrap"
     }
   ],
   "level": 1,
   "result": "tconstruct:worldbound",
   "tools": {
-    "type": "neoforge:difference",
-    "base": {
-      "tag": "tconstruct:modifiable"
-    },
-    "subtracted": {
-      "tag": "tconstruct:modifiable/single_use"
-    }
+    "neoforge:ingredient_type": "neoforge:difference",
+    "base": "#tconstruct:modifiable",
+    "subtracted": "#tconstruct:modifiable/single_use"
   }
 }

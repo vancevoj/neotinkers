@@ -1,8 +1,6 @@
 {
   "type": "tconstruct:casting_table",
-  "cast": {
-    "item": "minecraft:blaze_powder"
-  },
+  "cast": "minecraft:blaze_powder",
   "cast_consumed": true,
   "cooling_time": 82,
   "fluid": {

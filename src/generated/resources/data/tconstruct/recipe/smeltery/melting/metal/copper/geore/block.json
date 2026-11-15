@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:melting",
-  "ingredient": {
-    "tag": "c:geore_blocks/copper"
-  },
+  "ingredient": "#c:geore_blocks/copper",
   "result": {
     "amount": 360,
     "tag": "c:molten_copper"

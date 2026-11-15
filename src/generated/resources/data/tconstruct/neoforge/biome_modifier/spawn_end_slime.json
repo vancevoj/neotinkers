@@ -3,8 +3,11 @@
   "biomes": "#minecraft:is_end",
   "spawners": {
     "type": "tconstruct:ender_slime",
-    "maxCount": 4,
-    "minCount": 2,
+    "count": {
+      "type": "minecraft:uniform",
+      "max_inclusive": 4,
+      "min_inclusive": 2
+    },
     "weight": 10
   }
 }

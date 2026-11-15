@@ -1,13 +1,9 @@
 {
   "type": "tconstruct:molding_table",
-  "material": {
-    "tag": "tconstruct:casts/red_sand"
-  },
+  "material": "#tconstruct:casts/red_sand",
   "pattern": {
-    "type": "tconstruct:material",
-    "match": {
-      "item": "tconstruct:maille"
-    }
+    "neoforge:ingredient_type": "tconstruct:material",
+    "match": "tconstruct:maille"
   },
   "result": "tconstruct:maille_red_sand_cast"
 }

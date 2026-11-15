@@ -1,15 +1,9 @@
 {
   "type": "tconstruct:melting",
   "ingredient": [
-    {
-      "item": "tconstruct:scorched_bricks_slab"
-    },
-    {
-      "item": "tconstruct:scorched_bricks_slab"
-    },
-    {
-      "item": "tconstruct:scorched_road_slab"
-    }
+    "tconstruct:scorched_bricks_slab",
+    "tconstruct:scorched_bricks_slab",
+    "tconstruct:scorched_road_slab"
   ],
   "result": {
     "amount": 500,

@@ -1,14 +1,9 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
   "group": "hanging_sign",
   "key": {
-    "#": {
-      "item": "tconstruct:stripped_greenheart_log"
-    },
-    "X": {
-      "item": "minecraft:chain"
-    }
+    "#": "tconstruct:stripped_greenheart_log",
+    "X": "minecraft:iron_chain"
   },
   "pattern": [
     "X X",

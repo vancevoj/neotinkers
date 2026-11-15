@@ -1,12 +1,8 @@
 {
   "type": "tconstruct:melting",
   "ingredient": [
-    {
-      "item": "minecraft:zombie_head"
-    },
-    {
-      "item": "tconstruct:husk_head"
-    }
+    "minecraft:zombie_head",
+    "tconstruct:husk_head"
   ],
   "result": {
     "amount": 90,

@@ -17,14 +17,10 @@
     }
   ],
   "ingredient": {
-    "type": "neoforge:intersection",
+    "neoforge:ingredient_type": "neoforge:intersection",
     "children": [
-      {
-        "tag": "c:ores/osmium"
-      },
-      {
-        "tag": "c:ore_rates/sparse"
-      }
+      "#c:ores/osmium",
+      "#c:ore_rates/sparse"
     ]
   },
   "rate": "metal",

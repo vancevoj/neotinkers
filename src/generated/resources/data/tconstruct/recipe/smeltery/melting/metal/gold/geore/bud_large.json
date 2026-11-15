@@ -13,9 +13,7 @@
       "tag": "c:molten_cobalt"
     }
   ],
-  "ingredient": {
-    "tag": "c:geore_large_buds/gold"
-  },
+  "ingredient": "#c:geore_large_buds/gold",
   "rate": "metal",
   "result": {
     "amount": 270,

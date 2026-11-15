@@ -1,12 +1,8 @@
 {
   "type": "tconstruct:melting",
   "ingredient": [
-    {
-      "item": "tconstruct:seared_faucet"
-    },
-    {
-      "item": "tconstruct:seared_channel"
-    }
+    "tconstruct:seared_faucet",
+    "tconstruct:seared_channel"
   ],
   "result": {
     "amount": 250,

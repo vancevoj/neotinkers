@@ -13,9 +13,7 @@
       "rate": "metal"
     }
   ],
-  "ingredient": {
-    "tag": "c:geore_small_buds/diamond"
-  },
+  "ingredient": "#c:geore_small_buds/diamond",
   "rate": "gem",
   "result": {
     "amount": 100,

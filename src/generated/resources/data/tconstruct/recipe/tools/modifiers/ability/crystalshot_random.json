@@ -4,39 +4,27 @@
   "inputs": [
     {
       "ingredient": [
-        {
-          "item": "tconstruct:earth_slime_crystal_cluster"
-        },
-        {
-          "item": "tconstruct:sky_slime_crystal_cluster"
-        }
+        "tconstruct:earth_slime_crystal_cluster",
+        "tconstruct:sky_slime_crystal_cluster"
       ]
     },
     {
       "ingredient": [
-        {
-          "item": "minecraft:amethyst_cluster"
-        },
-        {
-          "item": "minecraft:nether_quartz_ore"
-        }
+        "minecraft:amethyst_cluster",
+        "minecraft:nether_quartz_ore"
       ]
     },
     {
       "ingredient": [
-        {
-          "item": "tconstruct:ichor_slime_crystal_cluster"
-        },
-        {
-          "item": "tconstruct:ender_slime_crystal_cluster"
-        }
+        "tconstruct:ichor_slime_crystal_cluster",
+        "tconstruct:ender_slime_crystal_cluster"
       ]
     },
     {
-      "tag": "c:ingots/manyullyn"
+      "ingredient": "#c:ingots/manyullyn"
     },
     {
-      "tag": "c:ingots/manyullyn"
+      "ingredient": "#c:ingots/manyullyn"
     }
   ],
   "result": {
@@ -46,7 +34,5 @@
   "slots": {
     "abilities": 1
   },
-  "tools": {
-    "tag": "tconstruct:modifiable/ranged/bows"
-  }
+  "tools": "#tconstruct:modifiable/ranged/bows"
 }

@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:common/gold_platform"
+        "recipes": "tconstruct:common/gold_platform"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

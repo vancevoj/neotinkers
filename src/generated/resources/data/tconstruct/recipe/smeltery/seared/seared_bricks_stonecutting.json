@@ -1,21 +1,17 @@
 {
   "type": "minecraft:stonecutting",
-  "ingredient": [
-    {
-      "item": "tconstruct:seared_stone"
-    },
-    {
-      "type": "neoforge:difference",
-      "base": {
-        "tag": "tconstruct:seared_bricks"
-      },
-      "subtracted": {
-        "item": "tconstruct:seared_bricks"
+  "ingredient": {
+    "neoforge:ingredient_type": "neoforge:compound",
+    "children": [
+      "tconstruct:seared_stone",
+      {
+        "neoforge:ingredient_type": "neoforge:difference",
+        "base": "#tconstruct:seared_bricks",
+        "subtracted": "tconstruct:seared_bricks"
       }
-    }
-  ],
+    ]
+  },
   "result": {
-    "count": 1,
     "id": "tconstruct:seared_bricks"
   }
 }

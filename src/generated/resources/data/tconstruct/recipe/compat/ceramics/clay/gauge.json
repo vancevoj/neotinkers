@@ -13,7 +13,7 @@
     }
   ],
   "ingredient": {
-    "type": "mantle:item_name",
+    "neoforge:ingredient_type": "mantle:item_name",
     "items": [
       "ceramics:terracotta_gauge"
     ]

@@ -3,7 +3,7 @@
   "modules": [
     {
       "type": "tconstruct:attribute",
-      "attribute": "minecraft:generic.gravity",
+      "attribute": "minecraft:gravity",
       "each_level": -0.1,
       "flat": -0.05,
       "operation": "add_multiplied_total",
@@ -14,7 +14,8 @@
         "legs",
         "chest",
         "head",
-        "body"
+        "body",
+        "saddle"
       ],
       "tooltip_style": "percent"
     },
@@ -30,7 +31,8 @@
         "legs",
         "chest",
         "head",
-        "body"
+        "body",
+        "saddle"
       ]
     }
   ]

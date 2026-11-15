@@ -1,10 +1,8 @@
 {
   "type": "tconstruct:melting",
   "ingredient": {
-    "type": "tconstruct:no_container",
-    "match": {
-      "item": "tconstruct:copper_can"
-    }
+    "neoforge:ingredient_type": "tconstruct:no_container",
+    "match": "tconstruct:copper_can"
   },
   "result": {
     "amount": 90,

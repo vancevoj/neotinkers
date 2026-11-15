@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:material",
-  "ingredient": {
-    "tag": "c:nuggets/nicrosil"
-  },
+  "ingredient": "#c:nuggets/nicrosil",
   "material": "tconstruct:nicrosil",
   "needed": 9,
   "value": 1

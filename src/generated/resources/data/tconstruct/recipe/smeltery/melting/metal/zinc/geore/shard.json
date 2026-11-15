@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:melting",
-  "ingredient": {
-    "tag": "c:geore_shards/zinc"
-  },
+  "ingredient": "#c:geore_shards/zinc",
   "result": {
     "amount": 90,
     "tag": "c:molten_zinc"

@@ -2,9 +2,7 @@
   "type": "tconstruct:incremental_modifier",
   "allow_crystal": true,
   "amount_per_item": 1,
-  "input": {
-    "item": "minecraft:chain"
-  },
+  "input": "minecraft:iron_chain",
   "level": {
     "max": 3
   },
@@ -13,7 +11,5 @@
   "slots": {
     "upgrades": 1
   },
-  "tools": {
-    "tag": "tconstruct:modifiable/melee/sword"
-  }
+  "tools": "#tconstruct:modifiable/melee/sword"
 }

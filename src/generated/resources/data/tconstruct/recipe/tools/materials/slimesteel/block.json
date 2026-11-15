@@ -1,8 +1,6 @@
 {
   "type": "tconstruct:material",
-  "ingredient": {
-    "tag": "c:storage_blocks/slimesteel"
-  },
+  "ingredient": "#c:storage_blocks/slimesteel",
   "leftover": {
     "count": 1,
     "tag": "c:ingots/slimesteel"

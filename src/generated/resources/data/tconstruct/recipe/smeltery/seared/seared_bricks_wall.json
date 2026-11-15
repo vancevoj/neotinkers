@@ -3,9 +3,7 @@
   "category": "building",
   "group": "tconstruct:seared_bricks_wall",
   "key": {
-    "B": {
-      "item": "tconstruct:seared_bricks"
-    }
+    "B": "tconstruct:seared_bricks"
   },
   "pattern": [
     "BBB",

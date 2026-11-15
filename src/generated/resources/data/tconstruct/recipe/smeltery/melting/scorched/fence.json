@@ -1,8 +1,6 @@
 {
   "type": "tconstruct:melting",
-  "ingredient": {
-    "item": "tconstruct:scorched_bricks_fence"
-  },
+  "ingredient": "tconstruct:scorched_bricks_fence",
   "result": {
     "amount": 750,
     "fluid": "tconstruct:scorched_stone"

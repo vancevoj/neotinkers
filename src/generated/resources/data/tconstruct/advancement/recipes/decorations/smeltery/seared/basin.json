@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:smeltery/seared/basin"
+        "recipes": "tconstruct:smeltery/seared/basin"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

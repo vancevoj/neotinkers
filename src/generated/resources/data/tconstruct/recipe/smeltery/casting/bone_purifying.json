@@ -1,8 +1,6 @@
 {
   "type": "tconstruct:casting_table",
-  "cast": {
-    "tag": "c:wither_bones"
-  },
+  "cast": "#c:wither_bones",
   "cast_consumed": true,
   "cooling_time": 50,
   "fluid": {

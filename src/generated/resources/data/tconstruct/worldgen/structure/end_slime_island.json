@@ -18,8 +18,11 @@
       "spawns": [
         {
           "type": "tconstruct:ender_slime",
-          "maxCount": 4,
-          "minCount": 4,
+          "count": {
+            "type": "minecraft:uniform",
+            "max_inclusive": 4,
+            "min_inclusive": 4
+          },
           "weight": 1
         }
       ]

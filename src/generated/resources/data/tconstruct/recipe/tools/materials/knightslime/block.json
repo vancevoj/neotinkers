@@ -1,8 +1,6 @@
 {
   "type": "tconstruct:material",
-  "ingredient": {
-    "tag": "c:storage_blocks/knightslime"
-  },
+  "ingredient": "#c:storage_blocks/knightslime",
   "leftover": {
     "count": 1,
     "tag": "c:ingots/knightslime"

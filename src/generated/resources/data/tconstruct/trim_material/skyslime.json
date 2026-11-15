@@ -1,5 +1,4 @@
 {
-  "asset_name": "tconstruct_skyslime",
   "description": {
     "color": "#01CBCD",
     "translate": "trim_material.tconstruct.format",
@@ -9,6 +8,5 @@
       }
     ]
   },
-  "ingredient": "tconstruct:sky_slime_crystal",
-  "item_model_index": 0.8
+  "palette_id": "tconstruct:trim/skyslime"
 }

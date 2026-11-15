@@ -4,42 +4,30 @@
   "inputs": [
     {
       "ingredient": [
-        {
-          "item": "tconstruct:seared_channel"
-        },
-        {
-          "item": "tconstruct:scorched_channel"
-        }
+        "tconstruct:seared_channel",
+        "tconstruct:scorched_channel"
       ]
     },
     {
-      "type": "tconstruct:no_container",
-      "match": {
-        "tag": "tconstruct:tanks"
-      }
+      "neoforge:ingredient_type": "tconstruct:no_container",
+      "match": "#tconstruct:tanks"
     },
     {
       "ingredient": [
-        {
-          "item": "tconstruct:seared_channel"
-        },
-        {
-          "item": "tconstruct:scorched_channel"
-        }
+        "tconstruct:seared_channel",
+        "tconstruct:scorched_channel"
       ]
     },
     {
-      "tag": "c:ingots/copper"
+      "ingredient": "#c:ingots/copper"
     },
     {
-      "tag": "c:ingots/copper"
+      "ingredient": "#c:ingots/copper"
     }
   ],
   "result": "tconstruct:spilling",
   "slots": {
     "abilities": 1
   },
-  "tools": {
-    "tag": "tconstruct:modifiable/melee"
-  }
+  "tools": "#tconstruct:modifiable/melee"
 }

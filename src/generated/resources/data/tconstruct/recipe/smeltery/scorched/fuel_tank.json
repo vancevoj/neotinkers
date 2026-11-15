@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "redstone",
   "key": {
-    "#": {
-      "item": "tconstruct:scorched_brick"
-    },
-    "B": {
-      "tag": "c:gems/quartz"
-    }
+    "#": "tconstruct:scorched_brick",
+    "B": "#c:gems/quartz"
   },
   "pattern": [
     "###",
@@ -15,7 +11,6 @@
     "###"
   ],
   "result": {
-    "count": 1,
     "id": "tconstruct:scorched_fuel_tank"
   }
 }

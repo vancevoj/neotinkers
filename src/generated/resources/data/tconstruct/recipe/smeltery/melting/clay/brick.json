@@ -1,13 +1,12 @@
 {
   "type": "tconstruct:melting",
-  "ingredient": [
-    {
-      "item": "minecraft:brick"
-    },
-    {
-      "tag": "minecraft:decorated_pot_sherds"
-    }
-  ],
+  "ingredient": {
+    "neoforge:ingredient_type": "neoforge:compound",
+    "children": [
+      "minecraft:brick",
+      "#minecraft:decorated_pot_sherds"
+    ]
+  },
   "result": {
     "amount": 250,
     "fluid": "tconstruct:molten_clay"

@@ -1,12 +1,8 @@
 {
   "type": "tconstruct:melting",
   "ingredient": [
-    {
-      "item": "tconstruct:scorched_faucet"
-    },
-    {
-      "item": "tconstruct:scorched_channel"
-    }
+    "tconstruct:scorched_faucet",
+    "tconstruct:scorched_channel"
   ],
   "result": {
     "amount": 250,

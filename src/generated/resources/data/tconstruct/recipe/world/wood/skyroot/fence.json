@@ -1,14 +1,9 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
   "group": "wooden_fence",
   "key": {
-    "#": {
-      "tag": "c:rods/wooden"
-    },
-    "W": {
-      "item": "tconstruct:skyroot_planks"
-    }
+    "#": "#c:rods/wooden",
+    "W": "tconstruct:skyroot_planks"
   },
   "pattern": [
     "W#W",

@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:melting",
-  "ingredient": {
-    "tag": "c:gears/zinc"
-  },
+  "ingredient": "#c:gears/zinc",
   "result": {
     "amount": 360,
     "tag": "c:molten_zinc"

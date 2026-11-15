@@ -3,11 +3,7 @@
   "index": 1,
   "item_cost": 2,
   "tools": [
-    {
-      "item": "tconstruct:travelers_boots"
-    },
-    {
-      "item": "tconstruct:travelers_shield"
-    }
+    "tconstruct:travelers_boots",
+    "tconstruct:travelers_shield"
   ]
 }

@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:smeltery/seared/seared_cobble_stairs"
+        "recipes": "tconstruct:smeltery/seared/seared_cobble_stairs"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

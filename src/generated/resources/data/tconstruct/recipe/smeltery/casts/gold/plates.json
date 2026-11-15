@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:casting_table",
-  "cast": {
-    "tag": "c:plates"
-  },
+  "cast": "#c:plates",
   "cast_consumed": true,
   "cooling_time": 57,
   "fluid": {

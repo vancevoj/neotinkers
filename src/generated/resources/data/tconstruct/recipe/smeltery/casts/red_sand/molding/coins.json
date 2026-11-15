@@ -6,11 +6,7 @@
     }
   ],
   "type": "tconstruct:molding_table",
-  "material": {
-    "tag": "tconstruct:casts/red_sand"
-  },
-  "pattern": {
-    "tag": "c:coins"
-  },
+  "material": "#tconstruct:casts/red_sand",
+  "pattern": "#c:coins",
   "result": "tconstruct:coin_red_sand_cast"
 }

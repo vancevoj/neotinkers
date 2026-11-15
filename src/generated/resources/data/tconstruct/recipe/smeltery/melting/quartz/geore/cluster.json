@@ -13,9 +13,7 @@
       "tag": "c:molten_iron"
     }
   ],
-  "ingredient": {
-    "tag": "c:geore_clusters/quartz"
-  },
+  "ingredient": "#c:geore_clusters/quartz",
   "rate": "gem",
   "result": {
     "amount": 400,

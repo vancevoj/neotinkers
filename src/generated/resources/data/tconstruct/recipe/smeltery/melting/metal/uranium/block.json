@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:melting",
-  "ingredient": {
-    "tag": "c:storage_blocks/uranium"
-  },
+  "ingredient": "#c:storage_blocks/uranium",
   "result": {
     "amount": 810,
     "tag": "c:molten_uranium"

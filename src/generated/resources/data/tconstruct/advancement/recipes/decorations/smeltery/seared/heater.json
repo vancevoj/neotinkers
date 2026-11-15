@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:smeltery/seared/heater"
+        "recipes": "tconstruct:smeltery/seared/heater"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

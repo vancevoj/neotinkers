@@ -1,8 +1,6 @@
 {
   "type": "tconstruct:melting",
-  "ingredient": {
-    "tag": "c:raw_nuggets/cobalt"
-  },
+  "ingredient": "#c:raw_nuggets/cobalt",
   "result": {
     "amount": 10,
     "tag": "c:molten_cobalt"

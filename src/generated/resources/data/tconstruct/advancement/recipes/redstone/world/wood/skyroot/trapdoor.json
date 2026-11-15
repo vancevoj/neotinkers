@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:world/wood/skyroot/trapdoor"
+        "recipes": "tconstruct:world/wood/skyroot/trapdoor"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

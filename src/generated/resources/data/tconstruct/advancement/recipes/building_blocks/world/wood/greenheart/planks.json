@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:world/wood/greenheart/planks"
+        "recipes": "tconstruct:world/wood/greenheart/planks"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

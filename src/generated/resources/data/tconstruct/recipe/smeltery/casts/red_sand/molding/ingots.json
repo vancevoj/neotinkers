@@ -1,24 +1,19 @@
 {
   "type": "tconstruct:molding_table",
-  "material": {
-    "tag": "tconstruct:casts/red_sand"
-  },
-  "pattern": [
-    {
-      "type": "neoforge:difference",
-      "base": {
-        "tag": "c:ingots"
+  "material": "#tconstruct:casts/red_sand",
+  "pattern": {
+    "neoforge:ingredient_type": "neoforge:compound",
+    "children": [
+      {
+        "neoforge:ingredient_type": "neoforge:difference",
+        "base": "#c:ingots",
+        "subtracted": "tconstruct:fake_ingot"
       },
-      "subtracted": {
-        "item": "tconstruct:fake_ingot"
+      {
+        "neoforge:ingredient_type": "tconstruct:material",
+        "match": "tconstruct:fake_ingot"
       }
-    },
-    {
-      "type": "tconstruct:material",
-      "match": {
-        "item": "tconstruct:fake_ingot"
-      }
-    }
-  ],
+    ]
+  },
   "result": "tconstruct:ingot_red_sand_cast"
 }

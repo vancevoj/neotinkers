@@ -3,21 +3,19 @@
   "allow_crystal": false,
   "inputs": [
     {
-      "item": "minecraft:crimson_planks"
+      "ingredient": "minecraft:crimson_planks"
     },
     {
-      "item": "tconstruct:pattern"
+      "ingredient": "tconstruct:pattern"
     },
     {
-      "item": "minecraft:crimson_planks"
+      "ingredient": "minecraft:crimson_planks"
     }
   ],
   "result": {
     "name": "tconstruct:embellishment",
     "value": "tconstruct:wood#crimson"
   },
-  "tools": {
-    "tag": "tconstruct:modifiable/embellishment/wood"
-  },
+  "tools": "#tconstruct:modifiable/embellishment/wood",
   "variant_formatter": "tconstruct:material"
 }

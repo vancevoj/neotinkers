@@ -2,9 +2,7 @@
   "type": "tconstruct:incremental_modifier",
   "allow_crystal": false,
   "amount_per_item": 4,
-  "input": {
-    "item": "minecraft:quartz_block"
-  },
+  "input": "minecraft:quartz_block",
   "leftover": "minecraft:quartz",
   "level": {
     "max": 5
@@ -14,7 +12,5 @@
   "slots": {
     "upgrades": 1
   },
-  "tools": {
-    "tag": "tconstruct:modifiable/melee"
-  }
+  "tools": "#tconstruct:modifiable/melee"
 }

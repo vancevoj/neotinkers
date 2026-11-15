@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:tables/book_substitute"
+        "recipes": "tconstruct:tables/book_substitute"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

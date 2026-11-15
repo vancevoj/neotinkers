@@ -1,54 +1,22 @@
 {
   "type": "tconstruct:melting",
   "ingredient": [
-    {
-      "item": "minecraft:cut_copper"
-    },
-    {
-      "item": "minecraft:exposed_cut_copper"
-    },
-    {
-      "item": "minecraft:weathered_cut_copper"
-    },
-    {
-      "item": "minecraft:oxidized_cut_copper"
-    },
-    {
-      "item": "minecraft:cut_copper_stairs"
-    },
-    {
-      "item": "minecraft:exposed_cut_copper_stairs"
-    },
-    {
-      "item": "minecraft:weathered_cut_copper_stairs"
-    },
-    {
-      "item": "minecraft:oxidized_cut_copper_stairs"
-    },
-    {
-      "item": "minecraft:waxed_cut_copper"
-    },
-    {
-      "item": "minecraft:waxed_exposed_cut_copper"
-    },
-    {
-      "item": "minecraft:waxed_weathered_cut_copper"
-    },
-    {
-      "item": "minecraft:waxed_oxidized_cut_copper"
-    },
-    {
-      "item": "minecraft:waxed_cut_copper_stairs"
-    },
-    {
-      "item": "minecraft:waxed_exposed_cut_copper_stairs"
-    },
-    {
-      "item": "minecraft:waxed_weathered_cut_copper_stairs"
-    },
-    {
-      "item": "minecraft:waxed_oxidized_cut_copper_stairs"
-    }
+    "minecraft:cut_copper",
+    "minecraft:exposed_cut_copper",
+    "minecraft:weathered_cut_copper",
+    "minecraft:oxidized_cut_copper",
+    "minecraft:cut_copper_stairs",
+    "minecraft:exposed_cut_copper_stairs",
+    "minecraft:weathered_cut_copper_stairs",
+    "minecraft:oxidized_cut_copper_stairs",
+    "minecraft:waxed_cut_copper",
+    "minecraft:waxed_exposed_cut_copper",
+    "minecraft:waxed_weathered_cut_copper",
+    "minecraft:waxed_oxidized_cut_copper",
+    "minecraft:waxed_cut_copper_stairs",
+    "minecraft:waxed_exposed_cut_copper_stairs",
+    "minecraft:waxed_weathered_cut_copper_stairs",
+    "minecraft:waxed_oxidized_cut_copper_stairs"
   ],
   "result": {
     "amount": 200,

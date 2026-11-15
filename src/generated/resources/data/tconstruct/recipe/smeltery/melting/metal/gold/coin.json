@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:melting",
-  "ingredient": {
-    "tag": "c:coins/gold"
-  },
+  "ingredient": "#c:coins/gold",
   "result": {
     "amount": 30,
     "tag": "c:molten_gold"

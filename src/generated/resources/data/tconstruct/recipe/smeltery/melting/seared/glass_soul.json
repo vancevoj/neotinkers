@@ -6,9 +6,7 @@
       "fluid": "tconstruct:liquid_soul"
     }
   ],
-  "ingredient": {
-    "item": "tconstruct:seared_soul_glass"
-  },
+  "ingredient": "tconstruct:seared_soul_glass",
   "result": {
     "amount": 1000,
     "fluid": "tconstruct:seared_stone"

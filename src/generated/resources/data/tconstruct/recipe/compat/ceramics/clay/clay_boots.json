@@ -7,7 +7,7 @@
   ],
   "type": "tconstruct:damagable_melting",
   "ingredient": {
-    "type": "mantle:item_name",
+    "neoforge:ingredient_type": "mantle:item_name",
     "items": [
       "ceramics:clay_boots"
     ]

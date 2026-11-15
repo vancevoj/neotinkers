@@ -1,5 +1,4 @@
 {
-  "asset_name": "tconstruct_cobalt",
   "description": {
     "color": "#2376DD",
     "translate": "trim_material.tconstruct.format",
@@ -9,6 +8,5 @@
       }
     ]
   },
-  "ingredient": "tconstruct:cobalt_ingot",
-  "item_model_index": 0.9
+  "palette_id": "tconstruct:trim/cobalt"
 }

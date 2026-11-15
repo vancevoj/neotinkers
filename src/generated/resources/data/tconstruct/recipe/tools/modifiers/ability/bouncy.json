@@ -5,23 +5,23 @@
   "inputs": [
     {
       "amount_needed": 4,
-      "item": "tconstruct:sky_congealed_slime"
+      "ingredient": "tconstruct:sky_congealed_slime"
     },
     {
       "amount_needed": 4,
-      "item": "tconstruct:ichor_congealed_slime"
+      "ingredient": "tconstruct:ichor_congealed_slime"
     },
     {
       "amount_needed": 4,
-      "item": "tconstruct:sky_congealed_slime"
+      "ingredient": "tconstruct:sky_congealed_slime"
     },
     {
       "amount_needed": 4,
-      "item": "tconstruct:earth_congealed_slime"
+      "ingredient": "tconstruct:earth_congealed_slime"
     },
     {
       "amount_needed": 4,
-      "item": "tconstruct:earth_congealed_slime"
+      "ingredient": "tconstruct:earth_congealed_slime"
     }
   ],
   "level": 1,
@@ -29,7 +29,5 @@
   "slots": {
     "abilities": 1
   },
-  "tools": {
-    "tag": "tconstruct:modifiable/armor/boots"
-  }
+  "tools": "#tconstruct:modifiable/armor/boots"
 }

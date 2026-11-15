@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:common/materials_and_you"
+        "recipes": "tconstruct:common/materials_and_you"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

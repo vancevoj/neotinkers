@@ -7,9 +7,7 @@
       "unit_size": 25
     }
   ],
-  "ingredient": {
-    "item": "minecraft:netherite_chestplate"
-  },
+  "ingredient": "minecraft:netherite_chestplate",
   "result": {
     "amount": 90,
     "tag": "c:molten_netherite",

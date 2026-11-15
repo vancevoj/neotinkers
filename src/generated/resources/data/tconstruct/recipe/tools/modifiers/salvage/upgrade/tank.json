@@ -4,12 +4,11 @@
   "slots": {
     "upgrades": 1
   },
-  "tools": [
-    {
-      "tag": "tconstruct:modifiable/held"
-    },
-    {
-      "tag": "tconstruct:modifiable/armor"
-    }
-  ]
+  "tools": {
+    "neoforge:ingredient_type": "neoforge:compound",
+    "children": [
+      "#tconstruct:modifiable/held",
+      "#tconstruct:modifiable/armor"
+    ]
+  }
 }

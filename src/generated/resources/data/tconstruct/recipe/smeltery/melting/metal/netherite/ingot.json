@@ -1,8 +1,6 @@
 {
   "type": "tconstruct:melting",
-  "ingredient": {
-    "tag": "c:ingots/netherite"
-  },
+  "ingredient": "#c:ingots/netherite",
   "result": {
     "amount": 90,
     "tag": "c:molten_netherite"

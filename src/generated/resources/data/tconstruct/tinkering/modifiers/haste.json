@@ -23,7 +23,8 @@
         "legs",
         "chest",
         "head",
-        "body"
+        "body",
+        "saddle"
       ],
       "tool": {
         "type": "mantle:inverted",

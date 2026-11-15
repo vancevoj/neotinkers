@@ -6,9 +6,7 @@
       "fluid": "tconstruct:molten_obsidian"
     }
   ],
-  "ingredient": {
-    "item": "tconstruct:slimesteel_reinforcement"
-  },
+  "ingredient": "tconstruct:slimesteel_reinforcement",
   "result": {
     "amount": 30,
     "fluid": "tconstruct:molten_slimesteel"

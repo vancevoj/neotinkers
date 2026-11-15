@@ -1,8 +1,6 @@
 {
   "type": "tconstruct:casting_basin",
-  "cast": {
-    "item": "minecraft:cobblestone_wall"
-  },
+  "cast": "minecraft:cobblestone_wall",
   "cast_consumed": true,
   "cooling_time": 113,
   "fluid": {

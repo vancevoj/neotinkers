@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:damagable_melting",
-  "ingredient": {
-    "tag": "c:armors/boots/osmium"
-  },
+  "ingredient": "#c:armors/boots/osmium",
   "result": {
     "amount": 360,
     "tag": "c:molten_osmium",

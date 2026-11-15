@@ -4,7 +4,5 @@
   "slots": {
     "abilities": 1
   },
-  "tools": {
-    "tag": "tconstruct:modifiable/armor/leggings"
-  }
+  "tools": "#tconstruct:modifiable/armor/leggings"
 }

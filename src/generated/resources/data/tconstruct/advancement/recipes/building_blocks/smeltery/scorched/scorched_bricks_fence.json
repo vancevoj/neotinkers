@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:smeltery/scorched/scorched_bricks_fence"
+        "recipes": "tconstruct:smeltery/scorched/scorched_bricks_fence"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

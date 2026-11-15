@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:material",
-  "ingredient": {
-    "tag": "c:nuggets/bronze"
-  },
+  "ingredient": "#c:nuggets/bronze",
   "material": "tconstruct:bronze",
   "needed": 9,
   "value": 1

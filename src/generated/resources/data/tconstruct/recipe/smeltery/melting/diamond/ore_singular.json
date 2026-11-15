@@ -15,13 +15,9 @@
     }
   ],
   "ingredient": {
-    "type": "neoforge:difference",
-    "base": {
-      "tag": "c:ores/diamond"
-    },
-    "subtracted": {
-      "tag": "tconstruct:non_singular_ore_rates"
-    }
+    "neoforge:ingredient_type": "neoforge:difference",
+    "base": "#c:ores/diamond",
+    "subtracted": "#tconstruct:non_singular_ore_rates"
   },
   "rate": "gem",
   "result": {

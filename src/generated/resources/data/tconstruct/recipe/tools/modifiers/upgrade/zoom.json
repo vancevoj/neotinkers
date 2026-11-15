@@ -4,13 +4,13 @@
   "check_trait_level": true,
   "inputs": [
     {
-      "tag": "c:strings"
+      "ingredient": "#c:strings"
     },
     {
-      "item": "minecraft:spyglass"
+      "ingredient": "minecraft:spyglass"
     },
     {
-      "tag": "c:strings"
+      "ingredient": "#c:strings"
     }
   ],
   "level": 1,
@@ -18,12 +18,11 @@
   "slots": {
     "upgrades": 1
   },
-  "tools": [
-    {
-      "tag": "tconstruct:modifiable/armor/helmets"
-    },
-    {
-      "tag": "tconstruct:modifiable/interactable/charge"
-    }
-  ]
+  "tools": {
+    "neoforge:ingredient_type": "neoforge:compound",
+    "children": [
+      "#tconstruct:modifiable/armor/helmets",
+      "#tconstruct:modifiable/interactable/charge"
+    ]
+  }
 }

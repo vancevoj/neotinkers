@@ -3,7 +3,7 @@
   "allow_crystal": true,
   "inputs": [
     {
-      "tag": "c:gems/diamond"
+      "ingredient": "#c:gems/diamond"
     }
   ],
   "level": 1,
@@ -11,7 +11,5 @@
   "slots": {
     "upgrades": 1
   },
-  "tools": {
-    "tag": "tconstruct:modifiable/durability"
-  }
+  "tools": "#tconstruct:modifiable/durability"
 }

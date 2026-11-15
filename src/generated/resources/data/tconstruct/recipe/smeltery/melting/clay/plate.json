@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:melting",
-  "ingredient": {
-    "tag": "c:plates/brick"
-  },
+  "ingredient": "#c:plates/brick",
   "result": {
     "amount": 250,
     "fluid": "tconstruct:molten_clay"

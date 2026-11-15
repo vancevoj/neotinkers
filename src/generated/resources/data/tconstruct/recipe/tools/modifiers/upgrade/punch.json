@@ -3,10 +3,10 @@
   "allow_crystal": true,
   "inputs": [
     {
-      "item": "minecraft:piston"
+      "ingredient": "minecraft:piston"
     },
     {
-      "item": "tconstruct:sky_slime"
+      "ingredient": "tconstruct:sky_slime"
     }
   ],
   "level": {
@@ -16,7 +16,5 @@
   "slots": {
     "upgrades": 1
   },
-  "tools": {
-    "tag": "tconstruct:modifiable/ranged/launcher"
-  }
+  "tools": "#tconstruct:modifiable/ranged/launcher"
 }

@@ -2,30 +2,13 @@
   "type": "minecraft:block",
   "pools": [
     {
-      "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:alternatives",
           "children": [
             {
               "type": "minecraft:item",
-              "conditions": [
-                {
-                  "condition": "minecraft:match_tool",
-                  "predicate": {
-                    "predicates": {
-                      "minecraft:enchantments": [
-                        {
-                          "enchantments": "minecraft:silk_touch",
-                          "levels": {
-                            "min": 1
-                          }
-                        }
-                      ]
-                    }
-                  }
-                }
-              ],
+              "condition": "minecraft:tool/can_silk_touch",
               "name": "tconstruct:ichor_slime_crystal_cluster"
             },
             {
@@ -33,38 +16,34 @@
               "children": [
                 {
                   "type": "minecraft:item",
-                  "conditions": [
-                    {
-                      "condition": "minecraft:match_tool",
-                      "predicate": {
-                        "items": "#minecraft:cluster_max_harvestables"
-                      }
+                  "condition": {
+                    "type": "minecraft:match_tool",
+                    "predicate": {
+                      "items": "#minecraft:cluster_max_harvestables"
                     }
-                  ],
-                  "functions": [
+                  },
+                  "modifier": [
                     {
-                      "add": false,
-                      "count": 4.0,
-                      "function": "minecraft:set_count"
+                      "type": "minecraft:set_count",
+                      "count": 4
                     },
                     {
+                      "type": "minecraft:apply_bonus",
                       "enchantment": "minecraft:fortune",
-                      "formula": "minecraft:ore_drops",
-                      "function": "minecraft:apply_bonus"
+                      "formula": "minecraft:ore_drops"
                     }
                   ],
                   "name": "tconstruct:ichor_slime_crystal"
                 },
                 {
                   "type": "minecraft:item",
-                  "functions": [
+                  "modifier": [
                     {
-                      "add": false,
-                      "count": 2.0,
-                      "function": "minecraft:set_count"
+                      "type": "minecraft:set_count",
+                      "count": 2
                     },
                     {
-                      "function": "minecraft:explosion_decay"
+                      "type": "minecraft:explosion_decay"
                     }
                   ],
                   "name": "tconstruct:ichor_slime_crystal"
@@ -74,7 +53,7 @@
           ]
         }
       ],
-      "rolls": 1.0
+      "rolls": 1
     }
   ],
   "random_sequence": "tconstruct:blocks/ichor_slime_crystal_cluster"

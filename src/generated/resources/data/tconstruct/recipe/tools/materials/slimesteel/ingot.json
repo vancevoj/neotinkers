@@ -1,8 +1,6 @@
 {
   "type": "tconstruct:material",
-  "ingredient": {
-    "tag": "c:ingots/slimesteel"
-  },
+  "ingredient": "#c:ingots/slimesteel",
   "material": "tconstruct:slimesteel",
   "needed": 1,
   "value": 1

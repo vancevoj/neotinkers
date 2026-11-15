@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:melting",
-  "ingredient": {
-    "tag": "c:nuggets/pewter"
-  },
+  "ingredient": "#c:nuggets/pewter",
   "result": {
     "amount": 10,
     "tag": "c:molten_pewter"

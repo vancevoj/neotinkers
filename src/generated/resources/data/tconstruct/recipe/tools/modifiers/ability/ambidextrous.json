@@ -4,19 +4,19 @@
   "check_trait_level": true,
   "inputs": [
     {
-      "item": "minecraft:leather"
+      "ingredient": "minecraft:leather"
     },
     {
-      "tag": "c:gems/diamond"
+      "ingredient": "#c:gems/diamond"
     },
     {
-      "item": "minecraft:leather"
+      "ingredient": "minecraft:leather"
     },
     {
-      "tag": "c:strings"
+      "ingredient": "#c:strings"
     },
     {
-      "tag": "c:strings"
+      "ingredient": "#c:strings"
     }
   ],
   "level": 1,
@@ -24,7 +24,5 @@
   "slots": {
     "abilities": 1
   },
-  "tools": {
-    "tag": "tconstruct:modifiable/melee/unarmed"
-  }
+  "tools": "#tconstruct:modifiable/melee/unarmed"
 }

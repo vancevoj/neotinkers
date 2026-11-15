@@ -3,9 +3,7 @@
   "category": "building",
   "group": "wooden_slab",
   "key": {
-    "#": {
-      "item": "tconstruct:bloodshroom_planks"
-    }
+    "#": "tconstruct:bloodshroom_planks"
   },
   "pattern": [
     "###"

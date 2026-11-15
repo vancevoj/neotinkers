@@ -1,13 +1,18 @@
 {
   "type": "tconstruct:casting_table",
-  "cast": {
-    "tag": "c:bottles/splash"
-  },
+  "cast": "#c:bottles/splash",
   "cast_consumed": true,
   "cooling_time": 1,
   "fluid": {
     "amount": 500,
     "tag": "mantle:water"
   },
-  "result": "minecraft:splash_potion"
+  "result": {
+    "components": {
+      "minecraft:potion_contents": {
+        "potion": "minecraft:water"
+      }
+    },
+    "item": "minecraft:splash_potion"
+  }
 }

@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:common/iron_platform"
+        "recipes": "tconstruct:common/iron_platform"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

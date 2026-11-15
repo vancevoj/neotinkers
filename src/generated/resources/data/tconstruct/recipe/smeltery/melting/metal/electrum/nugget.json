@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:melting",
-  "ingredient": {
-    "tag": "c:nuggets/electrum"
-  },
+  "ingredient": "#c:nuggets/electrum",
   "result": {
     "amount": 10,
     "tag": "c:molten_electrum"

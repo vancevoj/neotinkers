@@ -1,11 +1,8 @@
 {
   "type": "minecraft:crafting_shapeless",
-  "category": "misc",
   "group": "tconstruct:slimesteel_ingot",
   "ingredients": [
-    {
-      "item": "tconstruct:slimesteel_block"
-    }
+    "tconstruct:slimesteel_block"
   ],
   "result": {
     "count": 9,

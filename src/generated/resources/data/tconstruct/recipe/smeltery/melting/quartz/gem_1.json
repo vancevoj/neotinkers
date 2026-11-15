@@ -1,15 +1,9 @@
 {
   "type": "tconstruct:melting",
   "ingredient": [
-    {
-      "item": "minecraft:observer"
-    },
-    {
-      "item": "minecraft:comparator"
-    },
-    {
-      "item": "tconstruct:quartz_shuriken"
-    }
+    "minecraft:observer",
+    "minecraft:comparator",
+    "tconstruct:quartz_shuriken"
   ],
   "result": {
     "amount": 100,

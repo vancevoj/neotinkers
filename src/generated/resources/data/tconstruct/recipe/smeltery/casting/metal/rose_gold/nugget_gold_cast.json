@@ -1,8 +1,6 @@
 {
   "type": "tconstruct:casting_table",
-  "cast": {
-    "tag": "tconstruct:casts/multi_use/nugget"
-  },
+  "cast": "#tconstruct:casts/multi_use/nugget",
   "cooling_time": 17,
   "fluid": {
     "amount": 10,

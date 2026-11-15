@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:common/copper_platform_waxing_oxidized"
+        "recipes": "tconstruct:common/copper_platform_waxing_oxidized"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

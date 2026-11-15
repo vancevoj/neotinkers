@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:common/materials/rose_gold_nugget_from_ingot"
+        "recipes": "tconstruct:common/materials/rose_gold_nugget_from_ingot"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

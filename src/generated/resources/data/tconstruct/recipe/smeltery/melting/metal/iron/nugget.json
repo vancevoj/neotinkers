@@ -1,8 +1,6 @@
 {
   "type": "tconstruct:melting",
-  "ingredient": {
-    "tag": "c:nuggets/iron"
-  },
+  "ingredient": "#c:nuggets/iron",
   "result": {
     "amount": 10,
     "tag": "c:molten_iron"

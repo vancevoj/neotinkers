@@ -1,8 +1,6 @@
 {
   "type": "tconstruct:melting",
-  "ingredient": {
-    "item": "minecraft:bell"
-  },
+  "ingredient": "minecraft:bell",
   "result": {
     "amount": 360,
     "tag": "c:molten_gold"

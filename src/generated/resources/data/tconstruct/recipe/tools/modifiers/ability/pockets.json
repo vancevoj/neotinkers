@@ -3,19 +3,19 @@
   "allow_crystal": true,
   "inputs": [
     {
-      "item": "minecraft:shulker_shell"
+      "ingredient": "minecraft:shulker_shell"
     },
     {
-      "tag": "c:ingots/iron"
+      "ingredient": "#c:ingots/iron"
     },
     {
-      "item": "minecraft:shulker_shell"
+      "ingredient": "minecraft:shulker_shell"
     },
     {
-      "item": "minecraft:leather"
+      "ingredient": "minecraft:leather"
     },
     {
-      "item": "minecraft:leather"
+      "ingredient": "minecraft:leather"
     }
   ],
   "level": {
@@ -25,7 +25,5 @@
   "slots": {
     "abilities": 1
   },
-  "tools": {
-    "tag": "tconstruct:modifiable/armor/leggings"
-  }
+  "tools": "#tconstruct:modifiable/armor/leggings"
 }

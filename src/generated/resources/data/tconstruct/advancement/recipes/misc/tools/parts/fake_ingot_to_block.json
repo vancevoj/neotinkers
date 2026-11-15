@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:tools/parts/fake_ingot_to_block"
+        "recipes": "tconstruct:tools/parts/fake_ingot_to_block"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -2,53 +2,27 @@
   "type": "minecraft:crafting_shapeless",
   "category": "building",
   "ingredients": [
-    {
-      "item": "minecraft:magma_block"
-    },
+    "minecraft:magma_block",
     [
-      {
-        "item": "minecraft:soul_sand"
-      },
-      {
-        "item": "minecraft:soul_soil"
-      }
+      "minecraft:soul_sand",
+      "minecraft:soul_soil"
     ],
     [
-      {
-        "item": "minecraft:soul_sand"
-      },
-      {
-        "item": "minecraft:soul_soil"
-      }
+      "minecraft:soul_sand",
+      "minecraft:soul_soil"
     ],
     [
-      {
-        "item": "minecraft:soul_sand"
-      },
-      {
-        "item": "minecraft:soul_soil"
-      }
+      "minecraft:soul_sand",
+      "minecraft:soul_soil"
     ],
     [
-      {
-        "item": "minecraft:soul_sand"
-      },
-      {
-        "item": "minecraft:soul_soil"
-      }
+      "minecraft:soul_sand",
+      "minecraft:soul_soil"
     ],
-    {
-      "item": "minecraft:gravel"
-    },
-    {
-      "item": "minecraft:gravel"
-    },
-    {
-      "item": "minecraft:gravel"
-    },
-    {
-      "item": "minecraft:gravel"
-    }
+    "minecraft:gravel",
+    "minecraft:gravel",
+    "minecraft:gravel",
+    "minecraft:gravel"
   ],
   "result": {
     "count": 8,

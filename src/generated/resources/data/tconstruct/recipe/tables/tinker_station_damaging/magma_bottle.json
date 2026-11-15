@@ -1,7 +1,5 @@
 {
   "type": "tconstruct:tinker_station_damaging",
   "damage_amount": 20,
-  "ingredient": {
-    "item": "tconstruct:magma_bottle"
-  }
+  "ingredient": "tconstruct:magma_bottle"
 }

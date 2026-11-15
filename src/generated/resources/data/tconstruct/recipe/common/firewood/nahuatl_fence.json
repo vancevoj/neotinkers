@@ -1,10 +1,7 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
   "key": {
-    "W": {
-      "item": "tconstruct:nahuatl"
-    }
+    "W": "tconstruct:nahuatl"
   },
   "pattern": [
     "WWW",

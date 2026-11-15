@@ -6,11 +6,7 @@
     }
   ],
   "type": "tconstruct:molding_table",
-  "material": {
-    "tag": "tconstruct:casts/red_sand"
-  },
-  "pattern": {
-    "tag": "c:gears"
-  },
+  "material": "#tconstruct:casts/red_sand",
+  "pattern": "#c:gears",
   "result": "tconstruct:gear_red_sand_cast"
 }

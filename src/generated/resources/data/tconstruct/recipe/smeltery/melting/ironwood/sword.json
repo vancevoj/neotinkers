@@ -13,9 +13,7 @@
       "unit_size": 10
     }
   ],
-  "ingredient": {
-    "tag": "tconstruct:melting/ironwood/tools_costing_2"
-  },
+  "ingredient": "#tconstruct:melting/ironwood/tools_costing_2",
   "result": {
     "amount": 180,
     "tag": "c:molten_iron",

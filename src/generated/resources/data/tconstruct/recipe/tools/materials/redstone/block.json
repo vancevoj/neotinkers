@@ -1,8 +1,6 @@
 {
   "type": "tconstruct:material",
-  "ingredient": {
-    "tag": "c:storage_blocks/redstone"
-  },
+  "ingredient": "#c:storage_blocks/redstone",
   "leftover": {
     "count": 4,
     "item": "minecraft:redstone"

@@ -1,18 +1,10 @@
 {
   "type": "tconstruct:melting",
   "ingredient": [
-    {
-      "item": "tconstruct:seared_cobble_slab"
-    },
-    {
-      "item": "tconstruct:seared_stone_slab"
-    },
-    {
-      "item": "tconstruct:seared_bricks_slab"
-    },
-    {
-      "item": "tconstruct:seared_paver_slab"
-    }
+    "tconstruct:seared_cobble_slab",
+    "tconstruct:seared_stone_slab",
+    "tconstruct:seared_bricks_slab",
+    "tconstruct:seared_paver_slab"
   ],
   "result": {
     "amount": 500,

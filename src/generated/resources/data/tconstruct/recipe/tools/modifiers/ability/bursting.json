@@ -3,34 +3,31 @@
   "allow_crystal": true,
   "inputs": [
     {
-      "item": "minecraft:cactus"
+      "ingredient": "minecraft:cactus"
     },
     {
-      "type": "tconstruct:no_container",
-      "match": {
-        "tag": "tconstruct:tanks"
-      }
+      "neoforge:ingredient_type": "tconstruct:no_container",
+      "match": "#tconstruct:tanks"
     },
     {
-      "item": "minecraft:cactus"
+      "ingredient": "minecraft:cactus"
     },
     {
-      "tag": "c:ingots/copper"
+      "ingredient": "#c:ingots/copper"
     },
     {
-      "tag": "c:ingots/copper"
+      "ingredient": "#c:ingots/copper"
     }
   ],
   "result": "tconstruct:bursting",
   "slots": {
     "abilities": 1
   },
-  "tools": [
-    {
-      "tag": "tconstruct:modifiable/armor/chestplate"
-    },
-    {
-      "tag": "tconstruct:modifiable/shields"
-    }
-  ]
+  "tools": {
+    "neoforge:ingredient_type": "neoforge:compound",
+    "children": [
+      "#tconstruct:modifiable/armor/chestplate",
+      "#tconstruct:modifiable/shields"
+    ]
+  }
 }

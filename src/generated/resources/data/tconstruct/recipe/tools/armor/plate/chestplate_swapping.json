@@ -2,7 +2,5 @@
   "type": "tconstruct:table_casting_part_swapping",
   "index": 0,
   "item_cost": 6,
-  "tools": {
-    "item": "tconstruct:plate_chestplate"
-  }
+  "tools": "tconstruct:plate_chestplate"
 }

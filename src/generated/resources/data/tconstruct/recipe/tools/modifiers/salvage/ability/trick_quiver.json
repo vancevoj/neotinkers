@@ -4,7 +4,5 @@
   "slots": {
     "abilities": 1
   },
-  "tools": {
-    "tag": "tconstruct:modifiable/ranged/bows"
-  }
+  "tools": "#tconstruct:modifiable/ranged/bows"
 }

@@ -1,10 +1,8 @@
 {
   "type": "tconstruct:casting_table",
   "cast": {
-    "type": "tconstruct:material",
-    "match": {
-      "item": "tconstruct:bow_grip"
-    }
+    "neoforge:ingredient_type": "tconstruct:material",
+    "match": "tconstruct:bow_grip"
   },
   "cast_consumed": true,
   "cooling_time": 57,

@@ -2,9 +2,7 @@
   "type": "tconstruct:incremental_modifier",
   "allow_crystal": true,
   "amount_per_item": 1,
-  "input": {
-    "tag": "c:gems/prismarine"
-  },
+  "input": "#c:gems/prismarine",
   "level": {
     "max": 5
   },
@@ -13,7 +11,5 @@
   "slots": {
     "upgrades": 1
   },
-  "tools": {
-    "tag": "tconstruct:modifiable/harvest"
-  }
+  "tools": "#tconstruct:modifiable/harvest"
 }

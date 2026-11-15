@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:gadgets/cake/magma"
+        "recipes": "tconstruct:gadgets/cake/magma"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

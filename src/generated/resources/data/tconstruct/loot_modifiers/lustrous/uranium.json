@@ -1,41 +1,43 @@
 {
   "type": "mantle:add_entry",
-  "conditions": [
-    {
-      "condition": "mantle:block_tag",
-      "tag": "c:ores/uranium"
-    },
-    {
-      "condition": "mantle:tag_filled",
-      "tag": "c:nuggets/uranium"
-    },
-    {
-      "condition": "tconstruct:has_modifier",
-      "modifier": "tconstruct:lustrous"
-    }
-  ],
+  "condition": {
+    "type": "minecraft:all_of",
+    "terms": [
+      {
+        "type": "mantle:block_tag",
+        "tag": "c:ores/uranium"
+      },
+      {
+        "type": "mantle:tag_filled",
+        "tag": "c:nuggets/uranium"
+      },
+      {
+        "type": "tconstruct:has_modifier",
+        "modifier": "tconstruct:lustrous"
+      }
+    ]
+  },
   "entry": {
     "type": "mantle:tag_preference",
     "tag": "c:nuggets/uranium"
   },
-  "functions": [
+  "modifier": [
     {
-      "add": false,
+      "type": "minecraft:set_count",
       "count": {
         "type": "minecraft:uniform",
-        "max": 4.0,
-        "min": 2.0
-      },
-      "function": "minecraft:set_count"
+        "max": 4,
+        "min": 2
+      }
     },
     {
+      "type": "tconstruct:modifier_bonus",
       "formula": "minecraft:ore_drops",
-      "function": "tconstruct:modifier_bonus",
       "include_base": false,
       "modifier": "tconstruct:lustrous"
     },
     {
-      "function": "minecraft:explosion_decay"
+      "type": "minecraft:explosion_decay"
     }
   ],
   "post_conditions": [
@@ -43,9 +45,7 @@
       "type": "mantle:inverted",
       "condition": {
         "type": "mantle:contains_item",
-        "ingredient": {
-          "tag": "c:ores/uranium"
-        }
+        "ingredient": "#c:ores/uranium"
       }
     }
   ]

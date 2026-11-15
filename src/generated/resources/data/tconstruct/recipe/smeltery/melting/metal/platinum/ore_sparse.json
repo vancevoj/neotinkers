@@ -17,14 +17,10 @@
     }
   ],
   "ingredient": {
-    "type": "neoforge:intersection",
+    "neoforge:ingredient_type": "neoforge:intersection",
     "children": [
-      {
-        "tag": "c:ores/platinum"
-      },
-      {
-        "tag": "c:ore_rates/sparse"
-      }
+      "#c:ores/platinum",
+      "#c:ore_rates/sparse"
     ]
   },
   "rate": "metal",

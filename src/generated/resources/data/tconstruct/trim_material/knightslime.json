@@ -1,5 +1,4 @@
 {
-  "asset_name": "tconstruct_knightslime",
   "description": {
     "color": "#B771FF",
     "translate": "trim_material.tconstruct.format",
@@ -9,6 +8,5 @@
       }
     ]
   },
-  "ingredient": "tconstruct:knightslime_ingot",
-  "item_model_index": 0.3
+  "palette_id": "tconstruct:trim/knightslime"
 }

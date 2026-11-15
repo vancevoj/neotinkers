@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:common/slime/ichor/crystal_smelting"
+        "recipes": "tconstruct:common/slime/ichor/crystal_smelting"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

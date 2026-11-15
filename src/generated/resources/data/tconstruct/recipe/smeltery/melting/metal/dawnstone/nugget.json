@@ -11,9 +11,7 @@
     }
   ],
   "type": "tconstruct:melting",
-  "ingredient": {
-    "tag": "c:nuggets/dawnstone"
-  },
+  "ingredient": "#c:nuggets/dawnstone",
   "result": {
     "amount": 10,
     "tag": "c:molten_dawnstone"

@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:material",
-  "ingredient": {
-    "tag": "c:storage_blocks/silver"
-  },
+  "ingredient": "#c:storage_blocks/silver",
   "leftover": {
     "count": 1,
     "tag": "c:ingots/silver"

@@ -1,13 +1,8 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
   "key": {
-    "B": {
-      "item": "tconstruct:seared_paver_slab"
-    },
-    "S": {
-      "tag": "tconstruct:bones"
-    }
+    "B": "tconstruct:seared_paver_slab",
+    "S": "#tconstruct:bones"
   },
   "pattern": [
     "SSS",
@@ -15,7 +10,6 @@
     "SBS"
   ],
   "result": {
-    "count": 1,
     "id": "tconstruct:bone_armor_stand"
   }
 }

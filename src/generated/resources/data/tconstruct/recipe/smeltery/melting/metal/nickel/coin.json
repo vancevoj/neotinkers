@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:melting",
-  "ingredient": {
-    "tag": "c:coins/nickel"
-  },
+  "ingredient": "#c:coins/nickel",
   "result": {
     "amount": 30,
     "tag": "c:molten_nickel"

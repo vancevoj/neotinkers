@@ -1,12 +1,8 @@
 {
   "type": "tconstruct:melting",
   "ingredient": [
-    {
-      "item": "tconstruct:seared_basin"
-    },
-    {
-      "item": "tconstruct:seared_table"
-    }
+    "tconstruct:seared_basin",
+    "tconstruct:seared_table"
   ],
   "result": {
     "amount": 1750,

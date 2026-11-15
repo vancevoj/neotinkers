@@ -3,15 +3,13 @@
   "criteria": {
     "used_pack": {
       "conditions": {
-        "entity": [
-          {
-            "condition": "minecraft:entity_properties",
-            "entity": "this",
-            "predicate": {
-              "type": "minecraft:pig"
-            }
+        "entity": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:entity_type": "minecraft:pig"
           }
-        ],
+        },
         "item": {
           "items": "tconstruct:piggy_backpack"
         }
@@ -25,7 +23,6 @@
     },
     "frame": "goal",
     "icon": {
-      "count": 1,
       "id": "tconstruct:piggy_backpack"
     },
     "title": {

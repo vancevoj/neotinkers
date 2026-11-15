@@ -1,8 +1,6 @@
 {
   "type": "tconstruct:casting_table",
-  "cast": {
-    "tag": "tconstruct:casts/multi_use/repair_kit"
-  },
+  "cast": "#tconstruct:casts/multi_use/repair_kit",
   "cooling_time": 101,
   "fluid": {
     "amount": 180,

@@ -6,9 +6,7 @@
       "tag": "c:ender"
     }
   ],
-  "ingredient": {
-    "item": "minecraft:ender_chest"
-  },
+  "ingredient": "minecraft:ender_chest",
   "result": {
     "amount": 8000,
     "fluid": "tconstruct:molten_obsidian"

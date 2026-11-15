@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:melting",
-  "ingredient": {
-    "tag": "c:coins/netherite"
-  },
+  "ingredient": "#c:coins/netherite",
   "result": {
     "amount": 30,
     "tag": "c:molten_netherite"

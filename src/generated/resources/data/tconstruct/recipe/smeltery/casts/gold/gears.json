@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:casting_table",
-  "cast": {
-    "tag": "c:gears"
-  },
+  "cast": "#c:gears",
   "cast_consumed": true,
   "cooling_time": 57,
   "fluid": {

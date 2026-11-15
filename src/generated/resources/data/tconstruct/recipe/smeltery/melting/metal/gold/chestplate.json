@@ -1,8 +1,6 @@
 {
   "type": "tconstruct:damagable_melting",
-  "ingredient": {
-    "item": "minecraft:golden_chestplate"
-  },
+  "ingredient": "minecraft:golden_chestplate",
   "result": {
     "amount": 720,
     "tag": "c:molten_gold",

@@ -3,14 +3,13 @@
   "allow_uncraftable": true,
   "cost": 1,
   "pattern": "tconstruct:arrow_shaft",
-  "pattern_item": [
-    {
-      "tag": "tconstruct:patterns/default"
-    },
-    {
-      "item": "tconstruct:arrow_cast"
-    }
-  ],
+  "pattern_item": {
+    "neoforge:ingredient_type": "neoforge:compound",
+    "children": [
+      "#tconstruct:patterns/default",
+      "tconstruct:arrow_cast"
+    ]
+  },
   "result": {
     "item": "tconstruct:arrow_shaft"
   }

@@ -9,21 +9,19 @@
   "allow_crystal": false,
   "inputs": [
     {
-      "item": "tconstruct:bloodshroom_planks"
+      "ingredient": "tconstruct:bloodshroom_planks"
     },
     {
-      "item": "tconstruct:blood_slime_sapling"
+      "ingredient": "tconstruct:blood_slime_sapling"
     },
     {
-      "item": "tconstruct:bloodshroom_planks"
+      "ingredient": "tconstruct:bloodshroom_planks"
     }
   ],
   "result": {
     "name": "tconstruct:embellishment",
     "value": "tconstruct:blood"
   },
-  "tools": {
-    "tag": "tconstruct:modifiable/embellishment/slime"
-  },
+  "tools": "#tconstruct:modifiable/embellishment/slime",
   "variant_formatter": "tconstruct:material"
 }

@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:world/wood/enderbark/log_to_wood"
+        "recipes": "tconstruct:world/wood/enderbark/log_to_wood"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:smeltery/seared/seared_paver_slab"
+        "recipes": "tconstruct:smeltery/seared/seared_paver_slab"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

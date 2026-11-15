@@ -6,7 +6,5 @@
     "tag": "c:potion"
   },
   "modifier": "tconstruct:tipped",
-  "tools": {
-    "tag": "tconstruct:modifiable/fishing_rods"
-  }
+  "tools": "#tconstruct:modifiable/fishing_rods"
 }

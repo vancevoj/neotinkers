@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:melting",
-  "ingredient": {
-    "tag": "c:wires/electrum"
-  },
+  "ingredient": "#c:wires/electrum",
   "result": {
     "amount": 45,
     "tag": "c:molten_electrum"

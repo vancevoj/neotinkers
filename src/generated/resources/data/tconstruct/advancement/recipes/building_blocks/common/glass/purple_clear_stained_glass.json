@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:common/glass/purple_clear_stained_glass"
+        "recipes": "tconstruct:common/glass/purple_clear_stained_glass"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

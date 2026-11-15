@@ -4,23 +4,13 @@
     "tconstruct:repair_kit",
     "tconstruct:repair_kit"
   ],
-  "pattern": {
-    "item": "tconstruct:venom_bottle"
-  },
+  "pattern": "tconstruct:venom_bottle",
   "tools": {
     "ingredient": [
-      {
-        "item": "tconstruct:travelers_helmet"
-      },
-      {
-        "item": "tconstruct:travelers_chestplate"
-      },
-      {
-        "item": "tconstruct:travelers_leggings"
-      },
-      {
-        "item": "tconstruct:travelers_boots"
-      }
+      "tconstruct:travelers_helmet",
+      "tconstruct:travelers_chestplate",
+      "tconstruct:travelers_leggings",
+      "tconstruct:travelers_boots"
     ]
   }
 }

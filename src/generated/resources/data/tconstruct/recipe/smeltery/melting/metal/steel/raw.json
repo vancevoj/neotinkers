@@ -13,9 +13,7 @@
       "tag": "c:molten_iron"
     }
   ],
-  "ingredient": {
-    "tag": "c:raw_materials/steel"
-  },
+  "ingredient": "#c:raw_materials/steel",
   "rate": "metal",
   "result": {
     "amount": 90,

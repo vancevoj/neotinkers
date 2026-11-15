@@ -1,14 +1,9 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
   "group": "tconstruct:stained_clear_glass_pane",
   "key": {
-    "#": {
-      "item": "tconstruct:clear_glass_pane"
-    },
-    "X": {
-      "tag": "c:dyes/green"
-    }
+    "#": "tconstruct:clear_glass_pane",
+    "X": "#c:dyes/green"
   },
   "pattern": [
     "###",

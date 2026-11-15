@@ -13,9 +13,7 @@
       "rate": "gem"
     }
   ],
-  "ingredient": {
-    "tag": "c:geore_large_buds/emerald"
-  },
+  "ingredient": "#c:geore_large_buds/emerald",
   "rate": "gem",
   "result": {
     "amount": 300,

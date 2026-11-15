@@ -1,8 +1,6 @@
 {
   "type": "tconstruct:casting_table",
-  "cast": {
-    "tag": "tconstruct:casts/single_use/ingot"
-  },
+  "cast": "#tconstruct:casts/single_use/ingot",
   "cast_consumed": true,
   "cooling_time": 52,
   "fluid": {

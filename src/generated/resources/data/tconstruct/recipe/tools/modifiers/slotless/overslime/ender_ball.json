@@ -1,10 +1,6 @@
 {
   "type": "tconstruct:overslime_modifier",
-  "ingredient": {
-    "item": "tconstruct:ender_slime_ball"
-  },
+  "ingredient": "tconstruct:ender_slime_ball",
   "restore_amount": 80,
-  "tools": {
-    "tag": "tconstruct:modifiable/durability"
-  }
+  "tools": "#tconstruct:modifiable/durability"
 }

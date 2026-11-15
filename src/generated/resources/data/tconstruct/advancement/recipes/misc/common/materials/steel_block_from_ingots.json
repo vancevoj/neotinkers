@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:common/materials/steel_block_from_ingots"
+        "recipes": "tconstruct:common/materials/steel_block_from_ingots"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

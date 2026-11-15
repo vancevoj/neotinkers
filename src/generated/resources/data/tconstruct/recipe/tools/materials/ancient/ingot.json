@@ -1,8 +1,6 @@
 {
   "type": "tconstruct:material",
-  "ingredient": {
-    "tag": "c:ingots/netherite_scrap"
-  },
+  "ingredient": "#c:ingots/netherite_scrap",
   "material": "tconstruct:ancient",
   "needed": 1,
   "value": 1

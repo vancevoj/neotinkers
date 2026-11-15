@@ -1,21 +1,11 @@
 {
   "type": "tconstruct:melting",
   "ingredient": [
-    {
-      "item": "minecraft:activator_rail"
-    },
-    {
-      "item": "minecraft:detector_rail"
-    },
-    {
-      "item": "minecraft:stonecutter"
-    },
-    {
-      "item": "minecraft:piston"
-    },
-    {
-      "item": "minecraft:sticky_piston"
-    }
+    "minecraft:activator_rail",
+    "minecraft:detector_rail",
+    "minecraft:stonecutter",
+    "minecraft:piston",
+    "minecraft:sticky_piston"
   ],
   "result": {
     "amount": 90,

@@ -1,8 +1,6 @@
 {
   "type": "tconstruct:casting_table",
-  "cast": {
-    "item": "tconstruct:soul_glass_pane"
-  },
+  "cast": "tconstruct:soul_glass_pane",
   "cast_consumed": true,
   "cooling_time": 83,
   "fluid": {

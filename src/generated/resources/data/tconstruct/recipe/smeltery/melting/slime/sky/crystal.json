@@ -1,8 +1,6 @@
 {
   "type": "tconstruct:melting",
-  "ingredient": {
-    "item": "tconstruct:sky_slime_crystal"
-  },
+  "ingredient": "tconstruct:sky_slime_crystal",
   "result": {
     "amount": 250,
     "fluid": "tconstruct:sky_slime"

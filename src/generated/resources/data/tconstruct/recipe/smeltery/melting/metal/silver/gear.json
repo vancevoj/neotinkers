@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:melting",
-  "ingredient": {
-    "tag": "c:gears/silver"
-  },
+  "ingredient": "#c:gears/silver",
   "result": {
     "amount": 360,
     "tag": "c:molten_silver"

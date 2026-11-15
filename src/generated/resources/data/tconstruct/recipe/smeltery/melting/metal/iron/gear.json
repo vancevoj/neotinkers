@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:melting",
-  "ingredient": {
-    "tag": "c:gears/iron"
-  },
+  "ingredient": "#c:gears/iron",
   "result": {
     "amount": 360,
     "tag": "c:molten_iron"

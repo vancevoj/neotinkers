@@ -1,10 +1,7 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
   "key": {
-    "#": {
-      "item": "tconstruct:scorched_soul_glass"
-    }
+    "#": "tconstruct:scorched_soul_glass"
   },
   "pattern": [
     "###",

@@ -1,7 +1,6 @@
 {
   "type": "tconstruct:crafting_overslime_modifier",
-  "ingredient": {
-    "item": "tconstruct:earth_slime_bottle"
-  },
-  "restore_amount": 20
+  "ingredient": "tconstruct:earth_slime_bottle",
+  "restore_amount": 20,
+  "tools": "#tconstruct:modifiable/durability"
 }

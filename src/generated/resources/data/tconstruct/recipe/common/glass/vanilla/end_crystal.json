@@ -6,17 +6,10 @@
     }
   ],
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
   "key": {
-    "E": {
-      "item": "minecraft:ender_eye"
-    },
-    "G": {
-      "tag": "c:glass_blocks/colorless"
-    },
-    "T": {
-      "item": "minecraft:ghast_tear"
-    }
+    "E": "minecraft:ender_eye",
+    "G": "#c:glass_blocks/colorless",
+    "T": "minecraft:ghast_tear"
   },
   "pattern": [
     "GGG",
@@ -24,7 +17,6 @@
     "GTG"
   ],
   "result": {
-    "count": 1,
     "id": "minecraft:end_crystal"
   }
 }

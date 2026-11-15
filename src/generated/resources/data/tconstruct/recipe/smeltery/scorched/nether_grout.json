@@ -2,20 +2,12 @@
   "type": "minecraft:crafting_shapeless",
   "category": "building",
   "ingredients": [
-    {
-      "item": "minecraft:magma_cream"
-    },
+    "minecraft:magma_cream",
     [
-      {
-        "item": "minecraft:soul_sand"
-      },
-      {
-        "item": "minecraft:soul_soil"
-      }
+      "minecraft:soul_sand",
+      "minecraft:soul_soil"
     ],
-    {
-      "item": "minecraft:gravel"
-    }
+    "minecraft:gravel"
   ],
   "result": {
     "count": 2,

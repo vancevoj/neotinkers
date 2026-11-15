@@ -9,21 +9,19 @@
   "allow_crystal": false,
   "inputs": [
     {
-      "tag": "c:treated_wood"
+      "ingredient": "#c:treated_wood"
     },
     {
-      "item": "tconstruct:pattern"
+      "ingredient": "tconstruct:pattern"
     },
     {
-      "tag": "c:treated_wood"
+      "ingredient": "#c:treated_wood"
     }
   ],
   "result": {
     "name": "tconstruct:embellishment",
     "value": "tconstruct:treated_wood"
   },
-  "tools": {
-    "tag": "tconstruct:modifiable/embellishment/wood"
-  },
+  "tools": "#tconstruct:modifiable/embellishment/wood",
   "variant_formatter": "tconstruct:material"
 }

@@ -7,9 +7,7 @@
   ],
   "type": "tconstruct:item_part_builder",
   "pattern": "tconstruct:coin",
-  "pattern_item": {
-    "tag": "c:sands/colorless"
-  },
+  "pattern_item": "#c:sands/colorless",
   "result": {
     "count": 4,
     "item": "tconstruct:coin_sand_cast"

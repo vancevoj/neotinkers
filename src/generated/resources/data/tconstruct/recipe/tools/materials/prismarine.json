@@ -1,8 +1,6 @@
 {
   "type": "tconstruct:material",
-  "ingredient": {
-    "tag": "c:gems/prismarine"
-  },
+  "ingredient": "#c:gems/prismarine",
   "material": "tconstruct:prismarine",
   "needed": 1,
   "value": 1

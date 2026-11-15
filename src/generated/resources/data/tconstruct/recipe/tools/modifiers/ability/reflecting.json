@@ -4,23 +4,23 @@
   "inputs": [
     {
       "amount_needed": 4,
-      "item": "tconstruct:sky_congealed_slime"
+      "ingredient": "tconstruct:sky_congealed_slime"
     },
     {
       "amount_needed": 4,
-      "item": "tconstruct:ichor_congealed_slime"
+      "ingredient": "tconstruct:ichor_congealed_slime"
     },
     {
       "amount_needed": 4,
-      "item": "tconstruct:sky_congealed_slime"
+      "ingredient": "tconstruct:sky_congealed_slime"
     },
     {
       "amount_needed": 4,
-      "item": "tconstruct:earth_congealed_slime"
+      "ingredient": "tconstruct:earth_congealed_slime"
     },
     {
       "amount_needed": 4,
-      "item": "tconstruct:earth_congealed_slime"
+      "ingredient": "tconstruct:earth_congealed_slime"
     }
   ],
   "levels": [
@@ -41,7 +41,5 @@
     }
   ],
   "result": "tconstruct:reflecting",
-  "tools": {
-    "tag": "tconstruct:modifiable/shields"
-  }
+  "tools": "#tconstruct:modifiable/shields"
 }

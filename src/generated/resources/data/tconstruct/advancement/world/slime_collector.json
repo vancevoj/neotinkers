@@ -58,7 +58,6 @@
       "translate": "advancements.tconstruct.world.slime_collector.description"
     },
     "icon": {
-      "count": 1,
       "id": "tconstruct:ichor_slime_ball"
     },
     "title": {

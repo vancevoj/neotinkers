@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:damagable_melting",
-  "ingredient": {
-    "tag": "c:armors/leggings/tin"
-  },
+  "ingredient": "#c:armors/leggings/tin",
   "result": {
     "amount": 630,
     "tag": "c:molten_tin",

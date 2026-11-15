@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:gadgets/armor_stands/bone"
+        "recipes": "tconstruct:gadgets/armor_stands/bone"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

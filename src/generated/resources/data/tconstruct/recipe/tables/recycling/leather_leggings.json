@@ -1,8 +1,6 @@
 {
   "type": "tconstruct:part_builder_recycling",
-  "pattern": {
-    "item": "tconstruct:venom_bottle"
-  },
+  "pattern": "tconstruct:venom_bottle",
   "results": {
     "tconstruct:maille": {
       "count": 7,
@@ -10,11 +8,7 @@
     }
   },
   "tool": [
-    {
-      "item": "minecraft:leather_leggings"
-    },
-    {
-      "item": "minecraft:leather_horse_armor"
-    }
+    "minecraft:leather_leggings",
+    "minecraft:leather_horse_armor"
   ]
 }

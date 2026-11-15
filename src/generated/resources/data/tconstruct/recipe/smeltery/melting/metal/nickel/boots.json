@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:damagable_melting",
-  "ingredient": {
-    "tag": "c:armors/boots/nickel"
-  },
+  "ingredient": "#c:armors/boots/nickel",
   "result": {
     "amount": 360,
     "tag": "c:molten_nickel",

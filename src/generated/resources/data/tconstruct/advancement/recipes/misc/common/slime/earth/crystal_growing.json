@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:common/slime/earth/crystal_growing"
+        "recipes": "tconstruct:common/slime/earth/crystal_growing"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

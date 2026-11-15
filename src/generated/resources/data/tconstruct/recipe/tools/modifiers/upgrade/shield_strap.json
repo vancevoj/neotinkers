@@ -3,20 +3,18 @@
   "allow_crystal": true,
   "inputs": [
     {
-      "item": "tconstruct:sky_slime_vine"
+      "ingredient": "tconstruct:sky_slime_vine"
     },
     {
-      "tag": "c:ingots/slimesteel"
+      "ingredient": "#c:ingots/slimesteel"
     },
     {
-      "item": "tconstruct:sky_slime_vine"
+      "ingredient": "tconstruct:sky_slime_vine"
     }
   ],
   "result": "tconstruct:shield_strap",
   "slots": {
     "upgrades": 1
   },
-  "tools": {
-    "tag": "tconstruct:modifiable/armor/leggings"
-  }
+  "tools": "#tconstruct:modifiable/armor/leggings"
 }

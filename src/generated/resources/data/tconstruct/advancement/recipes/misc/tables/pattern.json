@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:tables/pattern"
+        "recipes": "tconstruct:tables/pattern"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

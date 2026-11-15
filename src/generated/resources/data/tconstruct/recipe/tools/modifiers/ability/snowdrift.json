@@ -3,19 +3,19 @@
   "allow_crystal": true,
   "inputs": [
     {
-      "item": "minecraft:snow_block"
+      "ingredient": "minecraft:snow_block"
     },
     {
-      "item": "minecraft:carved_pumpkin"
+      "ingredient": "minecraft:carved_pumpkin"
     },
     {
-      "item": "minecraft:snow_block"
+      "ingredient": "minecraft:snow_block"
     },
     {
-      "item": "minecraft:snow_block"
+      "ingredient": "minecraft:snow_block"
     },
     {
-      "item": "minecraft:snow_block"
+      "ingredient": "minecraft:snow_block"
     }
   ],
   "level": 1,
@@ -23,7 +23,5 @@
   "slots": {
     "abilities": 1
   },
-  "tools": {
-    "tag": "tconstruct:modifiable/armor/boots"
-  }
+  "tools": "#tconstruct:modifiable/armor/boots"
 }

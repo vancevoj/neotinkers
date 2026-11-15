@@ -2,15 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-    "C": {
-      "item": "tconstruct:ichor_slime_crystal"
-    },
-    "I": {
-      "tag": "c:ingots/queens_slime"
-    },
-    "W": {
-      "tag": "tconstruct:bloodshroom_logs"
-    }
+    "C": "tconstruct:ichor_slime_crystal",
+    "I": "#c:ingots/queens_slime",
+    "W": "#tconstruct:bloodshroom_logs"
   },
   "pattern": [
     "CWC",
@@ -18,10 +12,6 @@
     " W "
   ],
   "result": {
-    "components": {
-      "tconstruct:tool_data": {}
-    },
-    "count": 1,
     "id": "tconstruct:ichor_staff"
   }
 }

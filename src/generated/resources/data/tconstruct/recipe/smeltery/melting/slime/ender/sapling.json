@@ -1,8 +1,6 @@
 {
   "type": "tconstruct:melting",
-  "ingredient": {
-    "item": "tconstruct:ender_slime_sapling"
-  },
+  "ingredient": "tconstruct:ender_slime_sapling",
   "result": {
     "amount": 250,
     "fluid": "tconstruct:ender_slime"

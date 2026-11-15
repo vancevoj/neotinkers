@@ -1,14 +1,9 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
   "group": "tconstruct:queens_slime_block",
   "key": {
-    "#": {
-      "tag": "c:ingots/queens_slime"
-    },
-    "*": {
-      "item": "tconstruct:queens_slime_ingot"
-    }
+    "#": "#c:ingots/queens_slime",
+    "*": "tconstruct:queens_slime_ingot"
   },
   "pattern": [
     "###",
@@ -16,7 +11,6 @@
     "###"
   ],
   "result": {
-    "count": 1,
     "id": "tconstruct:queens_slime_block"
   }
 }

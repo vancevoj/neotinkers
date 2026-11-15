@@ -4,7 +4,5 @@
   "slots": {
     "upgrades": 1
   },
-  "tools": {
-    "tag": "tconstruct:modifiable/melee/sword"
-  }
+  "tools": "#tconstruct:modifiable/melee/sword"
 }

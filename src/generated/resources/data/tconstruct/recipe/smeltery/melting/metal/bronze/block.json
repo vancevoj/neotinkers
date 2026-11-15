@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:melting",
-  "ingredient": {
-    "tag": "c:storage_blocks/bronze"
-  },
+  "ingredient": "#c:storage_blocks/bronze",
   "result": {
     "amount": 810,
     "tag": "c:molten_bronze"

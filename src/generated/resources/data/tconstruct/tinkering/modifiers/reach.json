@@ -3,7 +3,7 @@
   "modules": [
     {
       "type": "tconstruct:attribute",
-      "attribute": "minecraft:player.block_interaction_range",
+      "attribute": "minecraft:block_interaction_range",
       "each_level": 1.0,
       "operation": "add_value",
       "slots": [
@@ -13,12 +13,13 @@
         "legs",
         "chest",
         "head",
-        "body"
+        "body",
+        "saddle"
       ]
     },
     {
       "type": "tconstruct:attribute",
-      "attribute": "minecraft:player.entity_interaction_range",
+      "attribute": "minecraft:entity_interaction_range",
       "each_level": 1.0,
       "operation": "add_value",
       "slots": [
@@ -28,7 +29,8 @@
         "legs",
         "chest",
         "head",
-        "body"
+        "body",
+        "saddle"
       ]
     }
   ]

@@ -2,7 +2,7 @@
   "type": "tconstruct:remove_modifier",
   "inputs": [
     {
-      "item": "minecraft:wet_sponge"
+      "ingredient": "minecraft:wet_sponge"
     }
   ],
   "leftovers": [
@@ -15,6 +15,6 @@
   },
   "name": "modifiers",
   "tools": {
-    "tag": "tconstruct:modifiable"
+    "ingredient": "#tconstruct:modifiable"
   }
 }

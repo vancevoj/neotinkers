@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:melting",
-  "ingredient": {
-    "tag": "c:sheetmetals/steel"
-  },
+  "ingredient": "#c:sheetmetals/steel",
   "result": {
     "amount": 90,
     "tag": "c:molten_steel"

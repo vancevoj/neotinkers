@@ -1,8 +1,6 @@
 {
   "type": "tconstruct:material",
-  "ingredient": {
-    "tag": "c:ingots/knightslime"
-  },
+  "ingredient": "#c:ingots/knightslime",
   "material": "tconstruct:knightslime",
   "needed": 1,
   "value": 1

@@ -1,8 +1,6 @@
 {
   "type": "tconstruct:melting",
-  "ingredient": {
-    "item": "tconstruct:soul_glass"
-  },
+  "ingredient": "tconstruct:soul_glass",
   "result": {
     "amount": 1000,
     "fluid": "tconstruct:liquid_soul"

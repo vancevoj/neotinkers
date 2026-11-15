@@ -4,19 +4,19 @@
   "check_trait_level": true,
   "inputs": [
     {
-      "item": "minecraft:prismarine_bricks"
+      "ingredient": "minecraft:prismarine_bricks"
     },
     {
-      "item": "minecraft:heart_of_the_sea"
+      "ingredient": "minecraft:heart_of_the_sea"
     },
     {
-      "item": "minecraft:prismarine_bricks"
+      "ingredient": "minecraft:prismarine_bricks"
     },
     {
-      "item": "minecraft:dark_prismarine"
+      "ingredient": "minecraft:dark_prismarine"
     },
     {
-      "item": "minecraft:dark_prismarine"
+      "ingredient": "minecraft:dark_prismarine"
     }
   ],
   "level": 1,
@@ -24,7 +24,5 @@
   "slots": {
     "abilities": 1
   },
-  "tools": {
-    "tag": "tconstruct:modifiable/armor/helmets"
-  }
+  "tools": "#tconstruct:modifiable/armor/helmets"
 }

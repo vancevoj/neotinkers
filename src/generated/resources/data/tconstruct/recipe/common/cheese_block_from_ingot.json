@@ -1,17 +1,13 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
   "key": {
-    "#": {
-      "item": "tconstruct:cheese_ingot"
-    }
+    "#": "tconstruct:cheese_ingot"
   },
   "pattern": [
     "##",
     "##"
   ],
   "result": {
-    "count": 1,
     "id": "tconstruct:cheese_block"
   }
 }

@@ -3,9 +3,7 @@
   "category": "building",
   "group": "wooden_stairs",
   "key": {
-    "#": {
-      "item": "tconstruct:greenheart_planks"
-    }
+    "#": "tconstruct:greenheart_planks"
   },
   "pattern": [
     "#  ",

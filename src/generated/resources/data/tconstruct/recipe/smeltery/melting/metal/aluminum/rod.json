@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:melting",
-  "ingredient": {
-    "tag": "c:rods/aluminum"
-  },
+  "ingredient": "#c:rods/aluminum",
   "result": {
     "amount": 45,
     "tag": "c:molten_aluminum"

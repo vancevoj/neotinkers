@@ -1,8 +1,6 @@
 {
   "type": "tconstruct:material",
-  "ingredient": {
-    "item": "minecraft:flint"
-  },
+  "ingredient": "minecraft:flint",
   "material": "tconstruct:flint",
   "needed": 1,
   "value": 1

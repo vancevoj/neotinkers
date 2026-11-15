@@ -1,8 +1,6 @@
 {
   "type": "tconstruct:melting",
-  "ingredient": {
-    "item": "minecraft:chain"
-  },
+  "ingredient": "minecraft:iron_chain",
   "result": {
     "amount": 110,
     "tag": "c:molten_iron"

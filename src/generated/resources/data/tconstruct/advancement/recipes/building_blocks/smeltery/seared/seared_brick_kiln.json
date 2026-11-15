@@ -22,7 +22,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:smeltery/seared/seared_brick_kiln"
+        "recipes": "tconstruct:smeltery/seared/seared_brick_kiln"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

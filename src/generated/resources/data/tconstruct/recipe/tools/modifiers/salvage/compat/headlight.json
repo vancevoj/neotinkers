@@ -10,7 +10,5 @@
   "slots": {
     "upgrades": 1
   },
-  "tools": {
-    "tag": "tconstruct:modifiable/armor/helmets"
-  }
+  "tools": "#tconstruct:modifiable/armor/helmets"
 }

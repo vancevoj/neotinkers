@@ -11,11 +11,9 @@
     "tconstruct:repair_kit",
     "tconstruct:tool_handle"
   ],
-  "pattern": {
-    "item": "tconstruct:venom_bottle"
-  },
+  "pattern": "tconstruct:venom_bottle",
   "tools": {
-    "type": "mantle:item_name",
+    "neoforge:ingredient_type": "mantle:item_name",
     "items": [
       "tconstruct:minotaur_axe"
     ]

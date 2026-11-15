@@ -9,21 +9,19 @@
   "allow_crystal": false,
   "inputs": [
     {
-      "tag": "c:ingots/ironwood"
+      "ingredient": "#c:ingots/ironwood"
     },
     {
-      "item": "tconstruct:pattern"
+      "ingredient": "tconstruct:pattern"
     },
     {
-      "tag": "c:ingots/ironwood"
+      "ingredient": "#c:ingots/ironwood"
     }
   ],
   "result": {
     "name": "tconstruct:embellishment",
     "value": "tconstruct:ironwood"
   },
-  "tools": {
-    "tag": "tconstruct:modifiable/embellishment/wood"
-  },
+  "tools": "#tconstruct:modifiable/embellishment/wood",
   "variant_formatter": "tconstruct:material"
 }

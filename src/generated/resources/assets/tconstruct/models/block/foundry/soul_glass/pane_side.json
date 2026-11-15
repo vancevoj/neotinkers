@@ -7,7 +7,6 @@
     }
   },
   "loader": "mantle:connected",
-  "render_type": "minecraft:translucent",
   "textures": {
     "edge": "tconstruct:block/foundry/glass_top",
     "pane": "tconstruct:block/foundry/soul_glass"

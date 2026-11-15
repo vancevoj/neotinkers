@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:material",
-  "ingredient": {
-    "tag": "c:nuggets/pewter"
-  },
+  "ingredient": "#c:nuggets/pewter",
   "material": "tconstruct:pewter",
   "needed": 9,
   "value": 1

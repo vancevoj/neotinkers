@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:melting",
-  "ingredient": {
-    "tag": "c:nuggets/invar"
-  },
+  "ingredient": "#c:nuggets/invar",
   "result": {
     "amount": 10,
     "tag": "c:molten_invar"

@@ -3,16 +3,13 @@
   "category": "building",
   "group": "tconstruct:congealed_slime",
   "key": {
-    "#": {
-      "tag": "c:slimeball/sky"
-    }
+    "#": "#c:slimeball/sky"
   },
   "pattern": [
     "##",
     "##"
   ],
   "result": {
-    "count": 1,
     "id": "tconstruct:sky_congealed_slime"
   }
 }

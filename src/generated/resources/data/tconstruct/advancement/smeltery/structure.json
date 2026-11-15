@@ -14,7 +14,6 @@
       "translate": "advancements.tconstruct.smeltery.structure.description"
     },
     "icon": {
-      "count": 1,
       "id": "tconstruct:smeltery_controller"
     },
     "title": {

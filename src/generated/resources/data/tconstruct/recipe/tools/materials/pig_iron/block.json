@@ -1,8 +1,6 @@
 {
   "type": "tconstruct:material",
-  "ingredient": {
-    "tag": "c:storage_blocks/pig_iron"
-  },
+  "ingredient": "#c:storage_blocks/pig_iron",
   "leftover": {
     "count": 1,
     "tag": "c:ingots/pig_iron"

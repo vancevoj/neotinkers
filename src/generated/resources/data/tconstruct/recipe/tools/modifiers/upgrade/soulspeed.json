@@ -3,13 +3,13 @@
   "allow_crystal": true,
   "inputs": [
     {
-      "item": "minecraft:magma_block"
+      "ingredient": "minecraft:magma_block"
     },
     {
-      "item": "minecraft:crying_obsidian"
+      "ingredient": "minecraft:crying_obsidian"
     },
     {
-      "item": "minecraft:magma_block"
+      "ingredient": "minecraft:magma_block"
     }
   ],
   "level": {
@@ -19,7 +19,5 @@
   "slots": {
     "upgrades": 1
   },
-  "tools": {
-    "tag": "tconstruct:modifiable/armor/boots"
-  }
+  "tools": "#tconstruct:modifiable/armor/boots"
 }

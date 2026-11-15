@@ -3,9 +3,7 @@
   "category": "building",
   "group": "tconstruct:scorched_bricks_stairs",
   "key": {
-    "B": {
-      "item": "tconstruct:scorched_bricks"
-    }
+    "B": "tconstruct:scorched_bricks"
   },
   "pattern": [
     "B  ",

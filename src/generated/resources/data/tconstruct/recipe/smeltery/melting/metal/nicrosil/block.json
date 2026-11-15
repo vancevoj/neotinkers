@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:melting",
-  "ingredient": {
-    "tag": "c:storage_blocks/nicrosil"
-  },
+  "ingredient": "#c:storage_blocks/nicrosil",
   "result": {
     "amount": 810,
     "tag": "c:molten_nicrosil"

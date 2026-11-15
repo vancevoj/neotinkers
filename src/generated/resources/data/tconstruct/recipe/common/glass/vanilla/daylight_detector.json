@@ -8,15 +8,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "redstone",
   "key": {
-    "G": {
-      "tag": "c:glass_blocks/colorless"
-    },
-    "Q": {
-      "item": "minecraft:quartz"
-    },
-    "W": {
-      "tag": "minecraft:wooden_slabs"
-    }
+    "G": "#c:glass_blocks/colorless",
+    "Q": "minecraft:quartz",
+    "W": "#minecraft:wooden_slabs"
   },
   "pattern": [
     "GGG",
@@ -24,7 +18,6 @@
     "WWW"
   ],
   "result": {
-    "count": 1,
     "id": "minecraft:daylight_detector"
   }
 }

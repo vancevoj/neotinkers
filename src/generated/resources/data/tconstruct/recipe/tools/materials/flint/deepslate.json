@@ -1,8 +1,6 @@
 {
   "type": "tconstruct:material",
-  "ingredient": {
-    "tag": "c:deepslate"
-  },
+  "ingredient": "#c:deepslate",
   "material": "tconstruct:flint#deepslate",
   "needed": 1,
   "value": 1

@@ -3,13 +3,12 @@
   "cost": 3,
   "material": "tconstruct:rock",
   "pattern": "tconstruct:helmet_plating",
-  "pattern_item": [
-    {
-      "tag": "tconstruct:patterns/default"
-    },
-    {
-      "item": "tconstruct:helmet_plating_cast"
-    }
-  ],
+  "pattern_item": {
+    "neoforge:ingredient_type": "neoforge:compound",
+    "children": [
+      "#tconstruct:patterns/default",
+      "tconstruct:helmet_plating_cast"
+    ]
+  },
   "result": "tconstruct:helmet_plating_dummy"
 }

@@ -1,30 +1,36 @@
 {
   "icon": {
+    "components": {
+      "tconstruct:tool_data": {
+        "tic_display": 1,
+        "tic_materials": [
+          "tconstruct:ui_render#head",
+          "tconstruct:ui_render#handle",
+          "tconstruct:ui_render#extra",
+          "tconstruct:ui_render#large",
+          "tconstruct:ui_render#extra_large"
+        ]
+      }
+    },
     "item": "tconstruct:pickaxe"
   },
   "input_slots": [
     {
-      "filter": {
-        "item": "tconstruct:pick_head"
-      },
+      "filter": "tconstruct:pick_head",
       "icon": "tconstruct:pick_head",
       "translation_key": "item.tconstruct.pick_head",
       "x": 53,
       "y": 22
     },
     {
-      "filter": {
-        "item": "tconstruct:tool_handle"
-      },
+      "filter": "tconstruct:tool_handle",
       "icon": "tconstruct:tool_handle",
       "translation_key": "item.tconstruct.tool_handle",
       "x": 15,
       "y": 60
     },
     {
-      "filter": {
-        "item": "tconstruct:tool_binding"
-      },
+      "filter": "tconstruct:tool_binding",
       "icon": "tconstruct:tool_binding",
       "translation_key": "item.tconstruct.tool_binding",
       "x": 33,

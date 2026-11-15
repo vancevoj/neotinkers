@@ -6,9 +6,7 @@
       "tag": "c:molten_netherite"
     }
   ],
-  "ingredient": {
-    "tag": "c:ores/netherite_scrap"
-  },
+  "ingredient": "#c:ores/netherite_scrap",
   "rate": "metal",
   "result": {
     "amount": 90,

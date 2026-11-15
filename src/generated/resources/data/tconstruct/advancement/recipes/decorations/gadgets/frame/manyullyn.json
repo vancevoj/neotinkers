@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:gadgets/frame/manyullyn"
+        "recipes": "tconstruct:gadgets/frame/manyullyn"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

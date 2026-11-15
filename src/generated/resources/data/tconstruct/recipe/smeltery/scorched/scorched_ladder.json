@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "building",
   "key": {
-    "B": {
-      "tag": "tconstruct:scorched_blocks"
-    },
-    "b": {
-      "item": "tconstruct:scorched_brick"
-    }
+    "B": "#tconstruct:scorched_blocks",
+    "b": "tconstruct:scorched_brick"
   },
   "pattern": [
     "b b",

@@ -1,8 +1,6 @@
 {
   "type": "tconstruct:damagable_melting",
-  "ingredient": {
-    "item": "minecraft:diamond_helmet"
-  },
+  "ingredient": "minecraft:diamond_helmet",
   "result": {
     "amount": 500,
     "fluid": "tconstruct:molten_diamond",

@@ -12,9 +12,7 @@
       "tag": "c:molten_iron"
     }
   ],
-  "ingredient": {
-    "tag": "c:ingots/fiery"
-  },
+  "ingredient": "#c:ingots/fiery",
   "result": {
     "amount": 250,
     "fluid": "tconstruct:fiery_liquid"

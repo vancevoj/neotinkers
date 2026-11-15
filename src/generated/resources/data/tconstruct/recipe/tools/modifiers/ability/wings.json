@@ -4,7 +4,7 @@
   "check_trait_level": true,
   "inputs": [
     {
-      "item": "minecraft:elytra"
+      "ingredient": "minecraft:elytra"
     }
   ],
   "level": 1,
@@ -12,7 +12,5 @@
   "slots": {
     "abilities": 2
   },
-  "tools": {
-    "tag": "tconstruct:modifiable/armor/chestplate"
-  }
+  "tools": "#tconstruct:modifiable/armor/chestplate"
 }

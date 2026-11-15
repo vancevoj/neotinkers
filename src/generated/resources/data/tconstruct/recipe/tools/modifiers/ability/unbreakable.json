@@ -4,19 +4,19 @@
   "check_trait_level": true,
   "inputs": [
     {
-      "item": "minecraft:shulker_shell"
+      "ingredient": "minecraft:shulker_shell"
     },
     {
-      "item": "minecraft:dragon_breath"
+      "ingredient": "minecraft:dragon_breath"
     },
     {
-      "item": "minecraft:shulker_shell"
+      "ingredient": "minecraft:shulker_shell"
     },
     {
-      "tag": "c:ingots/netherite"
+      "ingredient": "#c:ingots/netherite"
     },
     {
-      "tag": "c:ingots/netherite"
+      "ingredient": "#c:ingots/netherite"
     }
   ],
   "level": 1,
@@ -24,7 +24,5 @@
   "slots": {
     "abilities": 1
   },
-  "tools": {
-    "tag": "tconstruct:modifiable/durability"
-  }
+  "tools": "#tconstruct:modifiable/durability"
 }

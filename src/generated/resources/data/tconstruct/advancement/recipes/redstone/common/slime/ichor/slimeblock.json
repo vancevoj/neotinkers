@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:common/slime/ichor/slimeblock"
+        "recipes": "tconstruct:common/slime/ichor/slimeblock"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

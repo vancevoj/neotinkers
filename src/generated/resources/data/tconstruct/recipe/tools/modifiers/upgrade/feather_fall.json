@@ -3,9 +3,7 @@
   "allow_crystal": true,
   "amount_per_item": 1,
   "check_trait_level": true,
-  "input": {
-    "item": "minecraft:feather"
-  },
+  "input": "minecraft:feather",
   "levels": [
     {
       "level": 1,
@@ -28,7 +26,5 @@
   ],
   "needed_per_level": 12,
   "result": "tconstruct:feather_fall",
-  "tools": {
-    "tag": "tconstruct:modifiable/armor/boots"
-  }
+  "tools": "#tconstruct:modifiable/armor/boots"
 }

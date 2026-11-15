@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:material",
-  "ingredient": {
-    "tag": "c:nuggets/fiery"
-  },
+  "ingredient": "#c:nuggets/fiery",
   "material": "tconstruct:fiery",
   "needed": 9,
   "value": 1

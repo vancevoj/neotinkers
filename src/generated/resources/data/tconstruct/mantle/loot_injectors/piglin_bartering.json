@@ -5,22 +5,21 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "functions": [
+          "modifier": [
             {
+              "type": "mantle:set_fluid",
               "fluid": {
                 "amount": 50,
                 "id": "tconstruct:blazing_blood"
-              },
-              "function": "mantle:set_fluid"
+              }
             },
             {
-              "add": false,
+              "type": "minecraft:set_count",
               "count": {
                 "type": "minecraft:uniform",
-                "max": 4.0,
-                "min": 1.0
-              },
-              "function": "minecraft:set_count"
+                "max": 4,
+                "min": 1
+              }
             }
           ],
           "name": "tconstruct:scorched_lantern",
@@ -28,19 +27,17 @@
         },
         {
           "type": "minecraft:item",
-          "functions": [
-            {
-              "function": "tconstruct:add_tool_data",
-              "materials": [
-                {
-                  "type": "tconstruct:ancient"
-                },
-                {
-                  "type": "tconstruct:ancient"
-                }
-              ]
-            }
-          ],
+          "modifier": {
+            "type": "tconstruct:add_tool_data",
+            "materials": [
+              {
+                "type": "tconstruct:ancient"
+              },
+              {
+                "type": "tconstruct:ancient"
+              }
+            ]
+          },
           "name": "tconstruct:battlesign",
           "weight": 5
         },

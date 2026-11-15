@@ -1,7 +1,7 @@
 {
   "type": "tconstruct:material",
   "ingredient": {
-    "type": "tconstruct:instrument",
+    "neoforge:ingredient_type": "tconstruct:instrument",
     "instrument": "minecraft:call_goat_horn",
     "item": "minecraft:goat_horn"
   },

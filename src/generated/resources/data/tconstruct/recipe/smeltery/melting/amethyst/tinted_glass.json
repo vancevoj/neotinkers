@@ -7,12 +7,8 @@
     }
   ],
   "ingredient": [
-    {
-      "item": "minecraft:tinted_glass"
-    },
-    {
-      "item": "tconstruct:clear_tinted_glass"
-    }
+    "minecraft:tinted_glass",
+    "tconstruct:clear_tinted_glass"
   ],
   "result": {
     "amount": 200,

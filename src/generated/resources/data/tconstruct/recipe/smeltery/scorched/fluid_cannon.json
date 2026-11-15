@@ -2,21 +2,13 @@
   "type": "minecraft:crafting_shaped",
   "category": "redstone",
   "key": {
-    "C": {
-      "tag": "c:ingots/cobalt"
-    },
-    "R": {
-      "tag": "c:dusts/redstone"
-    },
+    "C": "#c:ingots/cobalt",
+    "R": "#c:dusts/redstone",
     "T": {
-      "type": "tconstruct:no_container",
+      "neoforge:ingredient_type": "tconstruct:no_container",
       "match": [
-        {
-          "item": "tconstruct:scorched_ingot_gauge"
-        },
-        {
-          "item": "tconstruct:scorched_fuel_gauge"
-        }
+        "tconstruct:scorched_ingot_gauge",
+        "tconstruct:scorched_fuel_gauge"
       ]
     }
   },
@@ -26,7 +18,6 @@
     "CCC"
   ],
   "result": {
-    "count": 1,
     "id": "tconstruct:scorched_fluid_cannon"
   }
 }

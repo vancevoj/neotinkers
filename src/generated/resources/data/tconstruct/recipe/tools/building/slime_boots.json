@@ -1,10 +1,8 @@
 {
   "type": "tconstruct:basin_tool_casting",
   "cast": {
-    "type": "tconstruct:material",
-    "match": {
-      "item": "tconstruct:laces"
-    }
+    "neoforge:ingredient_type": "tconstruct:material",
+    "match": "tconstruct:laces"
   },
   "cast_purpose": "first_material",
   "item_cost": 4,

@@ -1,8 +1,6 @@
 {
   "type": "tconstruct:melting",
-  "ingredient": {
-    "item": "tconstruct:gold_platform"
-  },
+  "ingredient": "tconstruct:gold_platform",
   "result": {
     "amount": 100,
     "tag": "c:molten_gold"

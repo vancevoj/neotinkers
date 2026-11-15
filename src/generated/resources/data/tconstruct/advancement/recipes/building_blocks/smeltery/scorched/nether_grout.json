@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:smeltery/scorched/nether_grout"
+        "recipes": "tconstruct:smeltery/scorched/nether_grout"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

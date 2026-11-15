@@ -20,9 +20,7 @@
     }
   ],
   "tool_slot": {
-    "filter": {
-      "tag": "tconstruct:modifiable"
-    },
+    "filter": "#tconstruct:modifiable",
     "icon": "tconstruct:pickaxe",
     "x": 53,
     "y": 41

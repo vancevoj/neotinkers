@@ -1,8 +1,6 @@
 {
   "type": "tconstruct:casting_table",
-  "cast": {
-    "item": "tconstruct:scorched_brick"
-  },
+  "cast": "tconstruct:scorched_brick",
   "cast_consumed": true,
   "cooling_time": 29,
   "fluid": {

@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:common/glass/red_clear_stained_glass_pane"
+        "recipes": "tconstruct:common/glass/red_clear_stained_glass_pane"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

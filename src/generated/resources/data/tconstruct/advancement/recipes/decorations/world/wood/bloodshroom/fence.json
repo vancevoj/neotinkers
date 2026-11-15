@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:world/wood/bloodshroom/fence"
+        "recipes": "tconstruct:world/wood/bloodshroom/fence"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

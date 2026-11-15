@@ -2,10 +2,10 @@
   "type": "tconstruct:extract_modifier",
   "inputs": [
     {
-      "item": "minecraft:amethyst_shard"
+      "ingredient": "minecraft:amethyst_shard"
     },
     {
-      "item": "minecraft:wet_sponge"
+      "ingredient": "minecraft:wet_sponge"
     }
   ],
   "leftovers": [
@@ -30,6 +30,6 @@
   "name": "slotless",
   "tools": {
     "amount_needed": 2,
-    "item": "tconstruct:dagger"
+    "ingredient": "tconstruct:dagger"
   }
 }

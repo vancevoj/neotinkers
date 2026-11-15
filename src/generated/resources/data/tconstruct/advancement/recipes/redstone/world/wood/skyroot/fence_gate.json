@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:world/wood/skyroot/fence_gate"
+        "recipes": "tconstruct:world/wood/skyroot/fence_gate"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

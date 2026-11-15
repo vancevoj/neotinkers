@@ -1,8 +1,6 @@
 {
   "type": "tconstruct:material",
-  "ingredient": {
-    "item": "minecraft:pink_wool"
-  },
+  "ingredient": "minecraft:pink_wool",
   "material": "tconstruct:wool#pink",
   "needed": 1,
   "value": 1

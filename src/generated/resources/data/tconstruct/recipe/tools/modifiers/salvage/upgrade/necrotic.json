@@ -4,15 +4,12 @@
   "slots": {
     "upgrades": 1
   },
-  "tools": [
-    {
-      "tag": "tconstruct:modifiable/melee"
-    },
-    {
-      "tag": "tconstruct:modifiable/ranged/bows"
-    },
-    {
-      "tag": "tconstruct:modifiable/fishing_rods"
-    }
-  ]
+  "tools": {
+    "neoforge:ingredient_type": "neoforge:compound",
+    "children": [
+      "#tconstruct:modifiable/melee",
+      "#tconstruct:modifiable/ranged/bows",
+      "#tconstruct:modifiable/fishing_rods"
+    ]
+  }
 }

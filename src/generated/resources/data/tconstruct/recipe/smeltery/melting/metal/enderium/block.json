@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:melting",
-  "ingredient": {
-    "tag": "c:storage_blocks/enderium"
-  },
+  "ingredient": "#c:storage_blocks/enderium",
   "result": {
     "amount": 810,
     "tag": "c:molten_enderium"

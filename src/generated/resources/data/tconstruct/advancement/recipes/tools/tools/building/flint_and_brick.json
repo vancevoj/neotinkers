@@ -23,7 +23,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:tools/building/flint_and_brick"
+        "recipes": "tconstruct:tools/building/flint_and_brick"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

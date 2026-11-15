@@ -3,19 +3,19 @@
   "allow_crystal": true,
   "inputs": [
     {
-      "item": "minecraft:piston"
+      "ingredient": "minecraft:piston"
     },
     {
-      "tag": "c:ingots/queens_slime"
+      "ingredient": "#c:ingots/queens_slime"
     },
     {
-      "item": "minecraft:piston"
+      "ingredient": "minecraft:piston"
     },
     {
-      "tag": "c:slimeball/ender"
+      "ingredient": "#c:slimeball/ender"
     },
     {
-      "tag": "c:slimeball/ender"
+      "ingredient": "#c:slimeball/ender"
     }
   ],
   "level": {
@@ -25,7 +25,5 @@
   "slots": {
     "abilities": 1
   },
-  "tools": {
-    "tag": "tconstruct:modifiable/armor/chestplate"
-  }
+  "tools": "#tconstruct:modifiable/armor/chestplate"
 }

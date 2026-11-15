@@ -1,8 +1,6 @@
 {
   "type": "tconstruct:melting",
-  "ingredient": {
-    "tag": "c:gems/emerald"
-  },
+  "ingredient": "#c:gems/emerald",
   "result": {
     "amount": 100,
     "fluid": "tconstruct:molten_emerald"

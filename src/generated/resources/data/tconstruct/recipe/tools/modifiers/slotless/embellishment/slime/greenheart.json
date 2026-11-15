@@ -9,21 +9,19 @@
   "allow_crystal": false,
   "inputs": [
     {
-      "item": "tconstruct:greenheart_planks"
+      "ingredient": "tconstruct:greenheart_planks"
     },
     {
-      "item": "tconstruct:earth_slime_sapling"
+      "ingredient": "tconstruct:earth_slime_sapling"
     },
     {
-      "item": "tconstruct:greenheart_planks"
+      "ingredient": "tconstruct:greenheart_planks"
     }
   ],
   "result": {
     "name": "tconstruct:embellishment",
     "value": "tconstruct:earthslime"
   },
-  "tools": {
-    "tag": "tconstruct:modifiable/embellishment/slime"
-  },
+  "tools": "#tconstruct:modifiable/embellishment/slime",
   "variant_formatter": "tconstruct:material"
 }

@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:common/firewood/blazewood_fence"
+        "recipes": "tconstruct:common/firewood/blazewood_fence"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

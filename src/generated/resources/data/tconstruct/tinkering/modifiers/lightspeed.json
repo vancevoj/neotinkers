@@ -30,7 +30,7 @@
     },
     {
       "type": "tconstruct:lightspeed_attribute",
-      "attribute": "minecraft:generic.movement_speed",
+      "attribute": "minecraft:movement_speed",
       "damage_chance": 0.005,
       "light_layer": "block",
       "min_light": 5,

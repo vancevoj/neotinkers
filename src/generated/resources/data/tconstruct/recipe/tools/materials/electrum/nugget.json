@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:material",
-  "ingredient": {
-    "tag": "c:nuggets/electrum"
-  },
+  "ingredient": "#c:nuggets/electrum",
   "material": "tconstruct:electrum",
   "needed": 9,
   "value": 1

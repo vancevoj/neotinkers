@@ -1,16 +1,9 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
   "key": {
-    "B": {
-      "item": "tconstruct:scorched_brick"
-    },
-    "C": {
-      "tag": "c:ingots/iron"
-    },
-    "P": {
-      "item": "tconstruct:scorched_glass_pane"
-    }
+    "B": "tconstruct:scorched_brick",
+    "C": "#c:ingots/iron",
+    "P": "tconstruct:scorched_glass_pane"
   },
   "pattern": [
     " C ",

@@ -16,9 +16,7 @@
       "chance": {
         "each_level": 0.2
       },
-      "consume": {
-        "tag": "tconstruct:stoneshields"
-      }
+      "consume": "#tconstruct:stoneshields"
     }
   ],
   "priority": 175

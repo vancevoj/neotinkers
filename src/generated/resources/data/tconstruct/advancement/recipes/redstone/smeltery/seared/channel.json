@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:smeltery/seared/channel"
+        "recipes": "tconstruct:smeltery/seared/channel"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

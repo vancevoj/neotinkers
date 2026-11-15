@@ -3,16 +3,13 @@
   "category": "building",
   "group": "tconstruct:congealed_slime",
   "key": {
-    "#": {
-      "tag": "c:slimeball/earth"
-    }
+    "#": "#c:slimeball/earth"
   },
   "pattern": [
     "##",
     "##"
   ],
   "result": {
-    "count": 1,
     "id": "tconstruct:earth_congealed_slime"
   }
 }

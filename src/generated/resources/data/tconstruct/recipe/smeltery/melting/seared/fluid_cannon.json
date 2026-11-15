@@ -10,9 +10,7 @@
       "fluid": "tconstruct:molten_glass"
     }
   ],
-  "ingredient": {
-    "item": "tconstruct:seared_fluid_cannon"
-  },
+  "ingredient": "tconstruct:seared_fluid_cannon",
   "result": {
     "amount": 450,
     "tag": "c:molten_copper"

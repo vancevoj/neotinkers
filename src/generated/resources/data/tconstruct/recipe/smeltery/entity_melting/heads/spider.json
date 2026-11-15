@@ -1,12 +1,8 @@
 {
   "type": "tconstruct:melting",
   "ingredient": [
-    {
-      "item": "tconstruct:spider_head"
-    },
-    {
-      "item": "tconstruct:cave_spider_head"
-    }
+    "tconstruct:spider_head",
+    "tconstruct:cave_spider_head"
   ],
   "result": {
     "amount": 500,

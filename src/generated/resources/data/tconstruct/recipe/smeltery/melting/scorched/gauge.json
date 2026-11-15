@@ -7,14 +7,10 @@
     }
   ],
   "ingredient": {
-    "type": "tconstruct:no_container",
+    "neoforge:ingredient_type": "tconstruct:no_container",
     "match": [
-      {
-        "item": "tconstruct:scorched_fuel_gauge"
-      },
-      {
-        "item": "tconstruct:scorched_ingot_gauge"
-      }
+      "tconstruct:scorched_fuel_gauge",
+      "tconstruct:scorched_ingot_gauge"
     ]
   },
   "result": {

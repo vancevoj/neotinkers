@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:melting",
-  "ingredient": {
-    "tag": "c:coins/signalum"
-  },
+  "ingredient": "#c:coins/signalum",
   "result": {
     "amount": 30,
     "tag": "c:molten_signalum"

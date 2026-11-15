@@ -3,19 +3,14 @@
   "category": "redstone",
   "group": "wooden_fence_gate",
   "key": {
-    "#": {
-      "item": "minecraft:stick"
-    },
-    "W": {
-      "item": "tconstruct:enderbark_planks"
-    }
+    "#": "minecraft:stick",
+    "W": "tconstruct:enderbark_planks"
   },
   "pattern": [
     "#W#",
     "#W#"
   ],
   "result": {
-    "count": 1,
     "id": "tconstruct:enderbark_fence_gate"
   }
 }

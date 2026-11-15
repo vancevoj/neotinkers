@@ -3,12 +3,10 @@
   "allow_crystal": true,
   "inputs": [
     {
-      "item": "minecraft:writable_book"
+      "ingredient": "minecraft:writable_book"
     }
   ],
   "level": 1,
   "result": "tconstruct:writable",
-  "tools": {
-    "tag": "tconstruct:modifiable/bonus_slots"
-  }
+  "tools": "#tconstruct:modifiable/bonus_slots"
 }

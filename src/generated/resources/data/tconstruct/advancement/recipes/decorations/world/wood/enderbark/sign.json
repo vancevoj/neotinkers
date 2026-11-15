@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:world/wood/enderbark/sign"
+        "recipes": "tconstruct:world/wood/enderbark/sign"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

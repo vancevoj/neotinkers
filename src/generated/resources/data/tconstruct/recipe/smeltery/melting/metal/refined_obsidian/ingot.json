@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:melting",
-  "ingredient": {
-    "tag": "c:ingots/refined_obsidian"
-  },
+  "ingredient": "#c:ingots/refined_obsidian",
   "result": {
     "amount": 90,
     "tag": "c:molten_refined_obsidian"

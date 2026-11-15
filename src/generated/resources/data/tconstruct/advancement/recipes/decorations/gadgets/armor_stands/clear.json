@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:gadgets/armor_stands/clear"
+        "recipes": "tconstruct:gadgets/armor_stands/clear"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

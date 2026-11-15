@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:material",
-  "ingredient": {
-    "tag": "c:treated_wood"
-  },
+  "ingredient": "#c:treated_wood",
   "material": "tconstruct:treated_wood",
   "needed": 1,
   "value": 1

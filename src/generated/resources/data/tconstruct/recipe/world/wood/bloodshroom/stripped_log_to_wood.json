@@ -3,9 +3,7 @@
   "category": "building",
   "group": "bark",
   "key": {
-    "#": {
-      "item": "tconstruct:stripped_bloodshroom_log"
-    }
+    "#": "tconstruct:stripped_bloodshroom_log"
   },
   "pattern": [
     "##",

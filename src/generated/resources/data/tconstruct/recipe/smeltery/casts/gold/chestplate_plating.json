@@ -1,16 +1,15 @@
 {
   "type": "tconstruct:casting_table",
-  "cast": [
-    {
-      "item": "tconstruct:chestplate_plating_dummy"
-    },
-    {
-      "type": "tconstruct:material",
-      "match": {
-        "item": "tconstruct:chestplate_plating"
+  "cast": {
+    "neoforge:ingredient_type": "neoforge:compound",
+    "children": [
+      "tconstruct:chestplate_plating_dummy",
+      {
+        "neoforge:ingredient_type": "tconstruct:material",
+        "match": "tconstruct:chestplate_plating"
       }
-    }
-  ],
+    ]
+  },
   "cast_consumed": true,
   "cooling_time": 57,
   "fluid": {

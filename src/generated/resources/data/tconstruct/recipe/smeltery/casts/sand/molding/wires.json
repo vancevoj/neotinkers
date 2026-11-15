@@ -6,11 +6,7 @@
     }
   ],
   "type": "tconstruct:molding_table",
-  "material": {
-    "tag": "tconstruct:casts/sand"
-  },
-  "pattern": {
-    "tag": "c:wires"
-  },
+  "material": "#tconstruct:casts/sand",
+  "pattern": "#c:wires",
   "result": "tconstruct:wire_sand_cast"
 }

@@ -1,8 +1,6 @@
 {
   "type": "tconstruct:melting",
-  "ingredient": {
-    "item": "minecraft:golden_horse_armor"
-  },
+  "ingredient": "minecraft:golden_horse_armor",
   "result": {
     "amount": 630,
     "tag": "c:molten_gold"

@@ -1,8 +1,6 @@
 {
   "type": "tconstruct:melting",
-  "ingredient": {
-    "tag": "c:obsidians"
-  },
+  "ingredient": "#c:obsidians",
   "result": {
     "amount": 1000,
     "fluid": "tconstruct:molten_obsidian"

@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:common/materials/steel_nugget_smelting"
+        "recipes": "tconstruct:common/materials/steel_nugget_smelting"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

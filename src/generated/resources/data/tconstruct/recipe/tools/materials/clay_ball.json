@@ -1,8 +1,6 @@
 {
   "type": "tconstruct:material",
-  "ingredient": {
-    "item": "minecraft:clay_ball"
-  },
+  "ingredient": "minecraft:clay_ball",
   "material": "tconstruct:clay",
   "needed": 1,
   "value": 1

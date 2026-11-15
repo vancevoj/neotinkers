@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:melting",
-  "ingredient": {
-    "tag": "ceramics:porcelain_cisterns"
-  },
+  "ingredient": "#ceramics:porcelain_cisterns",
   "result": {
     "amount": 750,
     "fluid": "tconstruct:molten_porcelain"

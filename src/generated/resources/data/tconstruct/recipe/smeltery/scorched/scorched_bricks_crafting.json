@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shaped",
   "category": "building",
   "key": {
-    "b": {
-      "item": "tconstruct:polished_scorched_stone"
-    }
+    "b": "tconstruct:polished_scorched_stone"
   },
   "pattern": [
     "bb",

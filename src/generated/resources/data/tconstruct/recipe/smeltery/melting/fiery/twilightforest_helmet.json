@@ -1,8 +1,8 @@
 {
   "neoforge:conditions": [
     {
-      "type": "neoforge:item_exists",
-      "item": "twilightforest:fiery_helmet"
+      "type": "neoforge:registered",
+      "value": "twilightforest:fiery_helmet"
     }
   ],
   "type": "tconstruct:damagable_melting",
@@ -14,7 +14,7 @@
     }
   ],
   "ingredient": {
-    "type": "mantle:item_name",
+    "neoforge:ingredient_type": "mantle:item_name",
     "items": [
       "twilightforest:fiery_helmet"
     ]

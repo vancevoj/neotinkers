@@ -2,15 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-    "C": {
-      "item": "tconstruct:ender_slime_crystal"
-    },
-    "I": {
-      "tag": "c:ingots/netherite"
-    },
-    "W": {
-      "tag": "tconstruct:enderbark_logs"
-    }
+    "C": "tconstruct:ender_slime_crystal",
+    "I": "#c:ingots/netherite",
+    "W": "#tconstruct:enderbark_logs"
   },
   "pattern": [
     "CWC",
@@ -18,10 +12,6 @@
     " W "
   ],
   "result": {
-    "components": {
-      "tconstruct:tool_data": {}
-    },
-    "count": 1,
     "id": "tconstruct:ender_staff"
   }
 }

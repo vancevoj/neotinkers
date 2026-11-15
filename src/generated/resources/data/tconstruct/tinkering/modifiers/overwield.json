@@ -96,7 +96,7 @@
     },
     {
       "type": "tconstruct:attribute",
-      "attribute": "minecraft:generic.attack_speed",
+      "attribute": "minecraft:attack_speed",
       "formula": [
         "$overslime",
         "$level",

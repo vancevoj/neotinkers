@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:melting",
-  "ingredient": {
-    "tag": "c:plates/silver"
-  },
+  "ingredient": "#c:plates/silver",
   "result": {
     "amount": 90,
     "tag": "c:molten_silver"

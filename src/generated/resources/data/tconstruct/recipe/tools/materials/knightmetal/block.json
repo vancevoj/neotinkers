@@ -1,8 +1,6 @@
 {
   "type": "tconstruct:material",
-  "ingredient": {
-    "tag": "c:storage_blocks/knightmetal"
-  },
+  "ingredient": "#c:storage_blocks/knightmetal",
   "leftover": {
     "count": 1,
     "tag": "c:ingots/knightmetal"

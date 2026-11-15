@@ -1,7 +1,6 @@
 {
   "type": "tconstruct:crafting_overslime_modifier",
-  "ingredient": {
-    "item": "tconstruct:ichor_slime_bottle"
-  },
-  "restore_amount": 60
+  "ingredient": "tconstruct:ichor_slime_bottle",
+  "restore_amount": 60,
+  "tools": "#tconstruct:modifiable/durability"
 }

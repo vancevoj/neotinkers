@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:material",
-  "ingredient": {
-    "tag": "c:ingots/pewter"
-  },
+  "ingredient": "#c:ingots/pewter",
   "material": "tconstruct:pewter",
   "needed": 1,
   "value": 1

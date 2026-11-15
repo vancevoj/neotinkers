@@ -1,39 +1,43 @@
 {
   "icon": {
+    "components": {
+      "tconstruct:tool_data": {
+        "tic_display": 1,
+        "tic_materials": [
+          "tconstruct:ui_render#head",
+          "tconstruct:ui_render#handle",
+          "tconstruct:ui_render#extra",
+          "tconstruct:ui_render#large",
+          "tconstruct:ui_render#extra_large"
+        ]
+      }
+    },
     "item": "tconstruct:broad_axe"
   },
   "input_slots": [
     {
-      "filter": {
-        "item": "tconstruct:broad_axe_head"
-      },
+      "filter": "tconstruct:broad_axe_head",
       "icon": "tconstruct:broad_axe_head",
       "translation_key": "item.tconstruct.broad_axe_head",
       "x": 25,
       "y": 20
     },
     {
-      "filter": {
-        "item": "tconstruct:tough_handle"
-      },
+      "filter": "tconstruct:tough_handle",
       "icon": "tconstruct:tough_handle",
       "translation_key": "item.tconstruct.tough_handle",
       "x": 21,
       "y": 52
     },
     {
-      "filter": {
-        "item": "tconstruct:pick_head"
-      },
+      "filter": "tconstruct:pick_head",
       "icon": "tconstruct:pick_head",
       "translation_key": "item.tconstruct.pick_head",
       "x": 50,
       "y": 48
     },
     {
-      "filter": {
-        "item": "tconstruct:tough_binding"
-      },
+      "filter": "tconstruct:tough_binding",
       "icon": "tconstruct:tough_binding",
       "translation_key": "item.tconstruct.tough_binding",
       "x": 44,

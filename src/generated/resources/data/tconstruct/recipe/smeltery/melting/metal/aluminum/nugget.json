@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:melting",
-  "ingredient": {
-    "tag": "c:nuggets/aluminum"
-  },
+  "ingredient": "#c:nuggets/aluminum",
   "result": {
     "amount": 10,
     "tag": "c:molten_aluminum"

@@ -1,12 +1,8 @@
 {
   "type": "tconstruct:melting",
   "ingredient": [
-    {
-      "item": "minecraft:quartz_slab"
-    },
-    {
-      "item": "minecraft:smooth_quartz_slab"
-    }
+    "minecraft:quartz_slab",
+    "minecraft:smooth_quartz_slab"
   ],
   "result": {
     "amount": 200,

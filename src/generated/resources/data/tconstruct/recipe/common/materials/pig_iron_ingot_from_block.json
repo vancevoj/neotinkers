@@ -1,11 +1,8 @@
 {
   "type": "minecraft:crafting_shapeless",
-  "category": "misc",
   "group": "tconstruct:pig_iron_ingot",
   "ingredients": [
-    {
-      "item": "tconstruct:pig_iron_block"
-    }
+    "tconstruct:pig_iron_block"
   ],
   "result": {
     "count": 9,

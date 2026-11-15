@@ -2,6 +2,7 @@
   "type": "tconstruct:part_builder",
   "cost": 4,
   "pattern": "tconstruct:ribcage",
+  "pattern_item": "#tconstruct:patterns/default",
   "result": {
     "item": "tconstruct:ribcage"
   }

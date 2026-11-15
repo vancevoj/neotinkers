@@ -26,9 +26,7 @@
             }
           ],
           "damage_multiplier": 0.67,
-          "match": {
-            "tag": "c:slimeball/earth"
-          }
+          "match": "#c:slimeball/earth"
         },
         {
           "ammo_modifiers": [
@@ -41,9 +39,7 @@
             "melee": "tconstruct:fluid_cold_melee",
             "ranged": "tconstruct:fluid_cold_ranged"
           },
-          "match": {
-            "tag": "c:slimeball/sky"
-          }
+          "match": "#c:slimeball/sky"
         },
         {
           "ammo_modifiers": [
@@ -56,9 +52,7 @@
             "melee": "tconstruct:fluid_fire_melee",
             "ranged": "tconstruct:fluid_fire_ranged"
           },
-          "match": {
-            "tag": "c:slimeball/ichor"
-          }
+          "match": "#c:slimeball/ichor"
         },
         {
           "ammo_modifiers": [
@@ -71,9 +65,7 @@
             "melee": "tconstruct:fluid_magic_melee",
             "ranged": "tconstruct:fluid_magic_ranged"
           },
-          "match": {
-            "tag": "c:slimeball/ender"
-          }
+          "match": "#c:slimeball/ender"
         },
         {
           "ammo_modifiers": [
@@ -86,9 +78,7 @@
             "melee": "tconstruct:mob_explosion_melee",
             "ranged": "tconstruct:mob_explosion_ranged"
           },
-          "match": {
-            "item": "minecraft:magma_cream"
-          }
+          "match": "minecraft:magma_cream"
         }
       ],
       "sound": "tconstruct:slimy_bounce"

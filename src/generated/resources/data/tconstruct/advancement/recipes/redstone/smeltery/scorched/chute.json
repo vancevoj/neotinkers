@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:smeltery/scorched/chute"
+        "recipes": "tconstruct:smeltery/scorched/chute"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

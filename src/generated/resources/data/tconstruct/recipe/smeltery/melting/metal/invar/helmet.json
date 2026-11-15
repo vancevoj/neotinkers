@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:damagable_melting",
-  "ingredient": {
-    "tag": "c:armors/helmets/invar"
-  },
+  "ingredient": "#c:armors/helmets/invar",
   "result": {
     "amount": 450,
     "tag": "c:molten_invar",

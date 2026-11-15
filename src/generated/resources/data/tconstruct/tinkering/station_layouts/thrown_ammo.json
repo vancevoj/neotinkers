@@ -4,9 +4,7 @@
   },
   "input_slots": [
     {
-      "filter": {
-        "item": "tconstruct:arrow_head"
-      },
+      "filter": "tconstruct:arrow_head",
       "icon": "tconstruct:arrow_head",
       "translation_key": "item.tconstruct.arrow_head",
       "x": 33,
@@ -14,12 +12,8 @@
     },
     {
       "filter": [
-        {
-          "item": "tconstruct:arrow_head"
-        },
-        {
-          "item": "tconstruct:arrow_shaft"
-        }
+        "tconstruct:arrow_head",
+        "tconstruct:arrow_shaft"
       ],
       "icon": "tconstruct:arrow_part",
       "translation_key": "pattern.tconstruct.arrow_part",

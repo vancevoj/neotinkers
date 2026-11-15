@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:melting",
-  "ingredient": {
-    "tag": "c:wires/steel"
-  },
+  "ingredient": "#c:wires/steel",
   "result": {
     "amount": 45,
     "tag": "c:molten_steel"

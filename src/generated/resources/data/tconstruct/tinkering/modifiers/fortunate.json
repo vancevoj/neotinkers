@@ -18,7 +18,7 @@
     },
     {
       "type": "tconstruct:attribute",
-      "attribute": "minecraft:generic.luck",
+      "attribute": "minecraft:luck",
       "flat": 1.0,
       "operation": "add_value",
       "slots": [
@@ -28,7 +28,8 @@
         "legs",
         "chest",
         "head",
-        "body"
+        "body",
+        "saddle"
       ],
       "tool": {
         "type": "mantle:tag",

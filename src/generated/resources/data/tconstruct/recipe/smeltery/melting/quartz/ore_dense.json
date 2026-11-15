@@ -17,14 +17,10 @@
     }
   ],
   "ingredient": {
-    "type": "neoforge:intersection",
+    "neoforge:ingredient_type": "neoforge:intersection",
     "children": [
-      {
-        "tag": "c:ores/quartz"
-      },
-      {
-        "tag": "c:ore_rates/dense"
-      }
+      "#c:ores/quartz",
+      "#c:ore_rates/dense"
     ]
   },
   "rate": "gem",

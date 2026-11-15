@@ -7,9 +7,7 @@
       "tag": "c:molten_gold"
     }
   ],
-  "ingredient": {
-    "tag": "c:storage_blocks/raw_copper"
-  },
+  "ingredient": "#c:storage_blocks/raw_copper",
   "rate": "metal",
   "result": {
     "amount": 810,

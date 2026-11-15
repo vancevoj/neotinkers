@@ -3,9 +3,7 @@
   "category": "building",
   "group": "wooden_stairs",
   "key": {
-    "#": {
-      "item": "tconstruct:skyroot_planks"
-    }
+    "#": "tconstruct:skyroot_planks"
   },
   "pattern": [
     "#  ",

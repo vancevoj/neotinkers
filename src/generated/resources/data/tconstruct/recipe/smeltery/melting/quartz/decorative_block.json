@@ -1,24 +1,12 @@
 {
   "type": "tconstruct:melting",
   "ingredient": [
-    {
-      "item": "minecraft:smooth_quartz"
-    },
-    {
-      "item": "minecraft:quartz_pillar"
-    },
-    {
-      "item": "minecraft:quartz_bricks"
-    },
-    {
-      "item": "minecraft:chiseled_quartz_block"
-    },
-    {
-      "item": "minecraft:quartz_stairs"
-    },
-    {
-      "item": "minecraft:smooth_quartz_stairs"
-    }
+    "minecraft:smooth_quartz",
+    "minecraft:quartz_pillar",
+    "minecraft:quartz_bricks",
+    "minecraft:chiseled_quartz_block",
+    "minecraft:quartz_stairs",
+    "minecraft:smooth_quartz_stairs"
   ],
   "result": {
     "amount": 400,

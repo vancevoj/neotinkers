@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:tables/modifier_worktable"
+        "recipes": "tconstruct:tables/modifier_worktable"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

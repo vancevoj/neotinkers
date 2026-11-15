@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:world/wood/skyroot/hanging_sign"
+        "recipes": "tconstruct:world/wood/skyroot/hanging_sign"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

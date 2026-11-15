@@ -5,10 +5,8 @@
     "tconstruct:tool_handle",
     "tconstruct:bow_grip"
   ],
-  "pattern": {
-    "item": "tconstruct:venom_bottle"
-  },
+  "pattern": "tconstruct:venom_bottle",
   "tools": {
-    "item": "tconstruct:swasher"
+    "ingredient": "tconstruct:swasher"
   }
 }

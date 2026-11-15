@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:gadgets/cake/ichor"
+        "recipes": "tconstruct:gadgets/cake/ichor"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

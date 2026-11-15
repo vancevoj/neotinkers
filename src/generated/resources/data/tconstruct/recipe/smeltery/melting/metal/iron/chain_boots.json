@@ -7,9 +7,7 @@
       "unit_size": 10
     }
   ],
-  "ingredient": {
-    "item": "minecraft:chainmail_boots"
-  },
+  "ingredient": "minecraft:chainmail_boots",
   "result": {
     "amount": 240,
     "tag": "c:molten_iron",

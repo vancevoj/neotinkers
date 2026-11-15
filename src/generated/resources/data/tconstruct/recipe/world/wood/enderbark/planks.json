@@ -3,9 +3,7 @@
   "category": "building",
   "group": "planks",
   "ingredients": [
-    {
-      "tag": "tconstruct:enderbark_logs"
-    }
+    "#tconstruct:enderbark_logs"
   ],
   "result": {
     "count": 4,

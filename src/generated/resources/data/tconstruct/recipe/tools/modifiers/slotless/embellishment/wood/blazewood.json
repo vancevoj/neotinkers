@@ -3,21 +3,19 @@
   "allow_crystal": false,
   "inputs": [
     {
-      "item": "tconstruct:blazewood"
+      "ingredient": "tconstruct:blazewood"
     },
     {
-      "item": "tconstruct:pattern"
+      "ingredient": "tconstruct:pattern"
     },
     {
-      "item": "tconstruct:blazewood"
+      "ingredient": "tconstruct:blazewood"
     }
   ],
   "result": {
     "name": "tconstruct:embellishment",
     "value": "tconstruct:blazewood"
   },
-  "tools": {
-    "tag": "tconstruct:modifiable/embellishment/wood"
-  },
+  "tools": "#tconstruct:modifiable/embellishment/wood",
   "variant_formatter": "tconstruct:material"
 }

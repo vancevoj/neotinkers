@@ -1,8 +1,6 @@
 {
   "type": "tconstruct:casting_basin",
-  "cast": {
-    "item": "tconstruct:enderbark_roots"
-  },
+  "cast": "tconstruct:enderbark_roots",
   "cast_consumed": true,
   "cooling_time": 103,
   "fluid": {

@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:melting",
-  "ingredient": {
-    "tag": "c:coins/lead"
-  },
+  "ingredient": "#c:coins/lead",
   "result": {
     "amount": 30,
     "tag": "c:molten_lead"

@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:melting",
-  "ingredient": {
-    "tag": "c:geore_blocks/gold"
-  },
+  "ingredient": "#c:geore_blocks/gold",
   "result": {
     "amount": 360,
     "tag": "c:molten_gold"

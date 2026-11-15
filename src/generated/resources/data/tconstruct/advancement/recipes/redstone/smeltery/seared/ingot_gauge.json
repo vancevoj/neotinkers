@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:smeltery/seared/ingot_gauge"
+        "recipes": "tconstruct:smeltery/seared/ingot_gauge"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

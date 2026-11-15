@@ -2,15 +2,9 @@
   "type": "minecraft:crafting_shapeless",
   "category": "building",
   "ingredients": [
-    {
-      "item": "minecraft:clay_ball"
-    },
-    {
-      "tag": "minecraft:sand"
-    },
-    {
-      "item": "minecraft:gravel"
-    }
+    "minecraft:clay_ball",
+    "#minecraft:sand",
+    "minecraft:gravel"
   ],
   "result": {
     "count": 2,

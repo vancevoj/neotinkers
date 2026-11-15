@@ -1,8 +1,6 @@
 {
   "type": "tconstruct:melting",
-  "ingredient": {
-    "item": "tconstruct:earth_slime_crystal_block"
-  },
+  "ingredient": "tconstruct:earth_slime_crystal_block",
   "result": {
     "amount": 1000,
     "tag": "c:slime"

@@ -1,13 +1,8 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
   "key": {
-    "#": {
-      "tag": "c:ingots/iron"
-    },
-    ".": {
-      "tag": "c:nuggets/iron"
-    }
+    "#": "#c:ingots/iron",
+    ".": "#c:nuggets/iron"
   },
   "pattern": [
     "#.#",

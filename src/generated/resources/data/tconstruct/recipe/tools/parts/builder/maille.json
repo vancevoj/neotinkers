@@ -2,14 +2,13 @@
   "type": "tconstruct:part_builder",
   "cost": 2,
   "pattern": "tconstruct:maille",
-  "pattern_item": [
-    {
-      "tag": "tconstruct:patterns/default"
-    },
-    {
-      "item": "tconstruct:maille_cast"
-    }
-  ],
+  "pattern_item": {
+    "neoforge:ingredient_type": "neoforge:compound",
+    "children": [
+      "#tconstruct:patterns/default",
+      "tconstruct:maille_cast"
+    ]
+  },
   "result": {
     "item": "tconstruct:maille"
   }

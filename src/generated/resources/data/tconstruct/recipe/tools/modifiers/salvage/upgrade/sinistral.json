@@ -5,14 +5,10 @@
     "upgrades": 1
   },
   "tools": {
-    "type": "neoforge:intersection",
+    "neoforge:ingredient_type": "neoforge:intersection",
     "children": [
-      {
-        "tag": "tconstruct:modifiable/ranged/crossbows"
-      },
-      {
-        "tag": "tconstruct:modifiable/interactable/left"
-      }
+      "#tconstruct:modifiable/ranged/crossbows",
+      "#tconstruct:modifiable/interactable/left"
     ]
   }
 }

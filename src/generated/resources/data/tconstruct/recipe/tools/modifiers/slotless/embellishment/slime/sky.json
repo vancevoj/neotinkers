@@ -9,21 +9,19 @@
   "allow_crystal": false,
   "inputs": [
     {
-      "item": "tconstruct:sky_congealed_slime"
+      "ingredient": "tconstruct:sky_congealed_slime"
     },
     {
-      "item": "tconstruct:sky_slime_ball"
+      "ingredient": "tconstruct:sky_slime_ball"
     },
     {
-      "item": "tconstruct:sky_congealed_slime"
+      "ingredient": "tconstruct:sky_congealed_slime"
     }
   ],
   "result": {
     "name": "tconstruct:embellishment",
     "value": "tconstruct:skyslime"
   },
-  "tools": {
-    "tag": "tconstruct:modifiable/embellishment/slime"
-  },
+  "tools": "#tconstruct:modifiable/embellishment/slime",
   "variant_formatter": "tconstruct:material"
 }

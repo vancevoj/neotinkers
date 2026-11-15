@@ -1,21 +1,29 @@
 {
   "icon": {
+    "components": {
+      "tconstruct:tool_data": {
+        "tic_display": 1,
+        "tic_materials": [
+          "tconstruct:ui_render#head",
+          "tconstruct:ui_render#handle",
+          "tconstruct:ui_render#extra",
+          "tconstruct:ui_render#large",
+          "tconstruct:ui_render#extra_large"
+        ]
+      }
+    },
     "item": "tconstruct:dagger"
   },
   "input_slots": [
     {
-      "filter": {
-        "item": "tconstruct:small_blade"
-      },
+      "filter": "tconstruct:small_blade",
       "icon": "tconstruct:small_blade",
       "translation_key": "item.tconstruct.small_blade",
       "x": 39,
       "y": 35
     },
     {
-      "filter": {
-        "item": "tconstruct:tool_handle"
-      },
+      "filter": "tconstruct:tool_handle",
       "icon": "tconstruct:tool_handle",
       "translation_key": "item.tconstruct.tool_handle",
       "x": 21,

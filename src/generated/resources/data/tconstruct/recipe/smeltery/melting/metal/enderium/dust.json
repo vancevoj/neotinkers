@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:melting",
-  "ingredient": {
-    "tag": "c:dusts/enderium"
-  },
+  "ingredient": "#c:dusts/enderium",
   "result": {
     "amount": 90,
     "tag": "c:molten_enderium"

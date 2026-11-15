@@ -3,19 +3,19 @@
   "allow_crystal": true,
   "inputs": [
     {
-      "item": "minecraft:flint"
+      "ingredient": "minecraft:flint"
     },
     {
-      "tag": "c:ingots/netherite_scrap"
+      "ingredient": "#c:ingots/netherite_scrap"
     },
     {
-      "item": "minecraft:flint"
+      "ingredient": "minecraft:flint"
     },
     {
-      "item": "minecraft:flint"
+      "ingredient": "minecraft:flint"
     },
     {
-      "item": "minecraft:flint"
+      "ingredient": "minecraft:flint"
     }
   ],
   "level": 1,
@@ -24,14 +24,10 @@
     "abilities": 1
   },
   "tools": {
-    "type": "neoforge:intersection",
+    "neoforge:ingredient_type": "neoforge:intersection",
     "children": [
-      {
-        "tag": "tconstruct:modifiable/armor/boots"
-      },
-      {
-        "tag": "tconstruct:modifiable/durability"
-      }
+      "#tconstruct:modifiable/armor/boots",
+      "#tconstruct:modifiable/durability"
     ]
   }
 }

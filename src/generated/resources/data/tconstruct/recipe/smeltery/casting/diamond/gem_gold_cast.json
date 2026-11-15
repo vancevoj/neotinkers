@@ -1,8 +1,6 @@
 {
   "type": "tconstruct:casting_table",
-  "cast": {
-    "tag": "tconstruct:casts/multi_use/gem"
-  },
+  "cast": "#tconstruct:casts/multi_use/gem",
   "cooling_time": 83,
   "fluid": {
     "amount": 100,

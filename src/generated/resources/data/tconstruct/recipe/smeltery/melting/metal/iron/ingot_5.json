@@ -1,15 +1,9 @@
 {
   "type": "tconstruct:melting",
   "ingredient": [
-    {
-      "item": "minecraft:blast_furnace"
-    },
-    {
-      "item": "minecraft:hopper"
-    },
-    {
-      "item": "minecraft:minecart"
-    }
+    "minecraft:blast_furnace",
+    "minecraft:hopper",
+    "minecraft:minecart"
   ],
   "result": {
     "amount": 450,

@@ -4,7 +4,5 @@
   "slots": {
     "abilities": 2
   },
-  "tools": {
-    "tag": "tconstruct:modifiable/armor/chestplate"
-  }
+  "tools": "#tconstruct:modifiable/armor/chestplate"
 }

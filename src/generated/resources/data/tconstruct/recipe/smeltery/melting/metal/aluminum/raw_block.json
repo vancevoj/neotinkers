@@ -13,9 +13,7 @@
       "tag": "c:molten_iron"
     }
   ],
-  "ingredient": {
-    "tag": "c:storage_blocks/raw_aluminum"
-  },
+  "ingredient": "#c:storage_blocks/raw_aluminum",
   "rate": "metal",
   "result": {
     "amount": 810,

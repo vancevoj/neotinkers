@@ -13,9 +13,7 @@
       "rate": "gem"
     }
   ],
-  "ingredient": {
-    "tag": "c:geore_clusters/emerald"
-  },
+  "ingredient": "#c:geore_clusters/emerald",
   "rate": "gem",
   "result": {
     "amount": 400,

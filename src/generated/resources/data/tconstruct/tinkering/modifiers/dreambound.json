@@ -13,12 +13,13 @@
         "legs",
         "chest",
         "head",
-        "body"
+        "body",
+        "saddle"
       ]
     },
     {
       "type": "tconstruct:attribute",
-      "attribute": "minecraft:generic.gravity",
+      "attribute": "minecraft:gravity",
       "flat": 0.15,
       "modifier_level": 1,
       "operation": "add_multiplied_total",
@@ -29,7 +30,8 @@
         "legs",
         "chest",
         "head",
-        "body"
+        "body",
+        "saddle"
       ],
       "tooltip_style": "percent"
     }

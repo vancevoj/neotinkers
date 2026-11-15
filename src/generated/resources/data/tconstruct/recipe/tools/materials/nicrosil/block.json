@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:material",
-  "ingredient": {
-    "tag": "c:storage_blocks/nicrosil"
-  },
+  "ingredient": "#c:storage_blocks/nicrosil",
   "leftover": {
     "count": 1,
     "tag": "c:ingots/nicrosil"

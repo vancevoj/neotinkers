@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:common/materials/raw_cobalt_block_from_raws"
+        "recipes": "tconstruct:common/materials/raw_cobalt_block_from_raws"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

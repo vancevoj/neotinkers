@@ -11,9 +11,7 @@
     }
   ],
   "type": "tconstruct:melting",
-  "ingredient": {
-    "tag": "c:storage_blocks/dawnstone"
-  },
+  "ingredient": "#c:storage_blocks/dawnstone",
   "result": {
     "amount": 810,
     "tag": "c:molten_dawnstone"

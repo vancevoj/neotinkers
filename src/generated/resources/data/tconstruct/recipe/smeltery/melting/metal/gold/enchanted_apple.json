@@ -1,8 +1,6 @@
 {
   "type": "tconstruct:melting",
-  "ingredient": {
-    "item": "minecraft:enchanted_golden_apple"
-  },
+  "ingredient": "minecraft:enchanted_golden_apple",
   "result": {
     "amount": 6480,
     "tag": "c:molten_gold"

@@ -1,8 +1,6 @@
 {
   "type": "tconstruct:melting",
-  "ingredient": {
-    "tag": "c:gems/amethyst"
-  },
+  "ingredient": "#c:gems/amethyst",
   "result": {
     "amount": 100,
     "fluid": "tconstruct:molten_amethyst"

@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:smeltery/seared/lantern"
+        "recipes": "tconstruct:smeltery/seared/lantern"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

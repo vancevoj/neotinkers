@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:material",
-  "ingredient": {
-    "tag": "c:storage_blocks/bronze"
-  },
+  "ingredient": "#c:storage_blocks/bronze",
   "leftover": {
     "count": 1,
     "tag": "c:ingots/bronze"

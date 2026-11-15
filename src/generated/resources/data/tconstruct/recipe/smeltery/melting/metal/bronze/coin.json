@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:melting",
-  "ingredient": {
-    "tag": "c:coins/bronze"
-  },
+  "ingredient": "#c:coins/bronze",
   "result": {
     "amount": 30,
     "tag": "c:molten_bronze"

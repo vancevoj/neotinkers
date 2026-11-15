@@ -1,8 +1,6 @@
 {
   "type": "tconstruct:part_builder_recycling",
-  "pattern": {
-    "item": "tconstruct:venom_bottle"
-  },
+  "pattern": "tconstruct:venom_bottle",
   "results": {
     "tconstruct:block": {
       "count": 2,
@@ -17,7 +15,5 @@
       "tag": "c:ingots/rose_gold"
     }
   },
-  "tool": {
-    "item": "tconstruct:sky_staff"
-  }
+  "tool": "tconstruct:sky_staff"
 }

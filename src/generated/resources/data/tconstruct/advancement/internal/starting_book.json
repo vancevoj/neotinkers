@@ -16,8 +16,6 @@
     ]
   ],
   "rewards": {
-    "loot": [
-      "tconstruct:gameplay/starting_book"
-    ]
+    "loot": "tconstruct:gameplay/starting_book"
   }
 }

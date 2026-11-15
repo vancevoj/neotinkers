@@ -2,14 +2,13 @@
   "type": "tconstruct:part_builder",
   "cost": 4,
   "pattern": "tconstruct:large_plate",
-  "pattern_item": [
-    {
-      "tag": "tconstruct:patterns/default"
-    },
-    {
-      "item": "tconstruct:large_plate_cast"
-    }
-  ],
+  "pattern_item": {
+    "neoforge:ingredient_type": "neoforge:compound",
+    "children": [
+      "#tconstruct:patterns/default",
+      "tconstruct:large_plate_cast"
+    ]
+  },
   "result": {
     "item": "tconstruct:large_plate"
   }

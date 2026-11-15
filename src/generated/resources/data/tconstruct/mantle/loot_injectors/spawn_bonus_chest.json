@@ -5,38 +5,36 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "functions": [
-            {
-              "function": "tconstruct:add_tool_data",
-              "materials": [
-                {
-                  "type": "tconstruct:random",
-                  "material": {
-                    "type": "mantle:inverted",
-                    "inverted_type": "mantle:tag",
-                    "tag": "tconstruct:exclude_from_loot"
-                  },
-                  "tier": {
-                    "max": 1
-                  }
+          "modifier": {
+            "type": "tconstruct:add_tool_data",
+            "materials": [
+              {
+                "type": "tconstruct:random",
+                "material": {
+                  "type": "mantle:inverted",
+                  "inverted_type": "mantle:tag",
+                  "tag": "tconstruct:exclude_from_loot"
                 },
-                {
-                  "type": "tconstruct:first"
-                },
-                {
-                  "type": "tconstruct:random",
-                  "material": {
-                    "type": "mantle:inverted",
-                    "inverted_type": "mantle:tag",
-                    "tag": "tconstruct:exclude_from_loot"
-                  },
-                  "tier": {
-                    "max": 1
-                  }
+                "tier": {
+                  "max": 1
                 }
-              ]
-            }
-          ],
+              },
+              {
+                "type": "tconstruct:first"
+              },
+              {
+                "type": "tconstruct:random",
+                "material": {
+                  "type": "mantle:inverted",
+                  "inverted_type": "mantle:tag",
+                  "tag": "tconstruct:exclude_from_loot"
+                },
+                "tier": {
+                  "max": 1
+                }
+              }
+            ]
+          },
           "name": "tconstruct:hand_axe",
           "weight": 2
         }
@@ -47,38 +45,36 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "functions": [
-            {
-              "function": "tconstruct:add_tool_data",
-              "materials": [
-                {
-                  "type": "tconstruct:random",
-                  "material": {
-                    "type": "mantle:inverted",
-                    "inverted_type": "mantle:tag",
-                    "tag": "tconstruct:exclude_from_loot"
-                  },
-                  "tier": {
-                    "max": 1
-                  }
+          "modifier": {
+            "type": "tconstruct:add_tool_data",
+            "materials": [
+              {
+                "type": "tconstruct:random",
+                "material": {
+                  "type": "mantle:inverted",
+                  "inverted_type": "mantle:tag",
+                  "tag": "tconstruct:exclude_from_loot"
                 },
-                {
-                  "type": "tconstruct:first"
-                },
-                {
-                  "type": "tconstruct:random",
-                  "material": {
-                    "type": "mantle:inverted",
-                    "inverted_type": "mantle:tag",
-                    "tag": "tconstruct:exclude_from_loot"
-                  },
-                  "tier": {
-                    "max": 1
-                  }
+                "tier": {
+                  "max": 1
                 }
-              ]
-            }
-          ],
+              },
+              {
+                "type": "tconstruct:first"
+              },
+              {
+                "type": "tconstruct:random",
+                "material": {
+                  "type": "mantle:inverted",
+                  "inverted_type": "mantle:tag",
+                  "tag": "tconstruct:exclude_from_loot"
+                },
+                "tier": {
+                  "max": 1
+                }
+              }
+            ]
+          },
           "name": "tconstruct:pickaxe",
           "weight": 2
         }

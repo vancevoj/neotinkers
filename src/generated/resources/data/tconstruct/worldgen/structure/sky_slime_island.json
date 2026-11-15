@@ -18,8 +18,11 @@
       "spawns": [
         {
           "type": "tconstruct:sky_slime",
-          "maxCount": 4,
-          "minCount": 3,
+          "count": {
+            "type": "minecraft:uniform",
+            "max_inclusive": 4,
+            "min_inclusive": 3
+          },
           "weight": 1
         }
       ]

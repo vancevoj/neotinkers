@@ -1,20 +1,20 @@
 {
   "pairs": {
-    "tconstruct:trims/color_palettes/amethyst_bronze": "tconstruct_amethyst_bronze",
-    "tconstruct:trims/color_palettes/cinderslime": "tconstruct_cinderslime",
-    "tconstruct:trims/color_palettes/cobalt": "tconstruct_cobalt",
-    "tconstruct:trims/color_palettes/earthslime": "tconstruct_earthslime",
-    "tconstruct:trims/color_palettes/enderslime": "tconstruct_enderslime",
-    "tconstruct:trims/color_palettes/hepatizon": "tconstruct_hepatizon",
-    "tconstruct:trims/color_palettes/ichor": "tconstruct_ichor",
-    "tconstruct:trims/color_palettes/knightmetal": "tconstruct_knightmetal",
-    "tconstruct:trims/color_palettes/knightslime": "tconstruct_knightslime",
-    "tconstruct:trims/color_palettes/manyullyn": "tconstruct_manyullyn",
-    "tconstruct:trims/color_palettes/pig_iron": "tconstruct_pig_iron",
-    "tconstruct:trims/color_palettes/queens_slime": "tconstruct_queens_slime",
-    "tconstruct:trims/color_palettes/rose_gold": "tconstruct_rose_gold",
-    "tconstruct:trims/color_palettes/skyslime": "tconstruct_skyslime",
-    "tconstruct:trims/color_palettes/slimesteel": "tconstruct_slimesteel",
-    "tconstruct:trims/color_palettes/steel": "tconstruct_steel"
+    "tconstruct:palettes/trim/amethyst_bronze": "tconstruct_amethyst_bronze",
+    "tconstruct:palettes/trim/cinderslime": "tconstruct_cinderslime",
+    "tconstruct:palettes/trim/cobalt": "tconstruct_cobalt",
+    "tconstruct:palettes/trim/earthslime": "tconstruct_earthslime",
+    "tconstruct:palettes/trim/enderslime": "tconstruct_enderslime",
+    "tconstruct:palettes/trim/hepatizon": "tconstruct_hepatizon",
+    "tconstruct:palettes/trim/ichor": "tconstruct_ichor",
+    "tconstruct:palettes/trim/knightmetal": "tconstruct_knightmetal",
+    "tconstruct:palettes/trim/knightslime": "tconstruct_knightslime",
+    "tconstruct:palettes/trim/manyullyn": "tconstruct_manyullyn",
+    "tconstruct:palettes/trim/pig_iron": "tconstruct_pig_iron",
+    "tconstruct:palettes/trim/queens_slime": "tconstruct_queens_slime",
+    "tconstruct:palettes/trim/rose_gold": "tconstruct_rose_gold",
+    "tconstruct:palettes/trim/skyslime": "tconstruct_skyslime",
+    "tconstruct:palettes/trim/slimesteel": "tconstruct_slimesteel",
+    "tconstruct:palettes/trim/steel": "tconstruct_steel"
   }
 }

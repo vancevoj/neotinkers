@@ -15,9 +15,7 @@
     }
   ],
   "type": "tconstruct:material",
-  "ingredient": {
-    "item": "tconstruct:necronium_bone"
-  },
+  "ingredient": "tconstruct:necronium_bone",
   "material": "tconstruct:necronium",
   "needed": 1,
   "value": 1

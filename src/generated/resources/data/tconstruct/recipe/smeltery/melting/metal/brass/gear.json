@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:melting",
-  "ingredient": {
-    "tag": "c:gears/brass"
-  },
+  "ingredient": "#c:gears/brass",
   "result": {
     "amount": 360,
     "tag": "c:molten_brass"

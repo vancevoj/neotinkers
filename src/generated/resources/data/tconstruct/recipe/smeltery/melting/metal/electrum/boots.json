@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:damagable_melting",
-  "ingredient": {
-    "tag": "c:armors/boots/electrum"
-  },
+  "ingredient": "#c:armors/boots/electrum",
   "result": {
     "amount": 360,
     "tag": "c:molten_electrum",

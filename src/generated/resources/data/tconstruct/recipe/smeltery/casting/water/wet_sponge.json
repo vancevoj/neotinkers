@@ -1,8 +1,6 @@
 {
   "type": "tconstruct:casting_basin",
-  "cast": {
-    "item": "minecraft:sponge"
-  },
+  "cast": "minecraft:sponge",
   "cast_consumed": true,
   "cooling_time": 1,
   "fluid": {

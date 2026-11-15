@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:damagable_melting",
-  "ingredient": {
-    "tag": "c:armors/helmets/copper"
-  },
+  "ingredient": "#c:armors/helmets/copper",
   "result": {
     "amount": 450,
     "tag": "c:molten_copper",

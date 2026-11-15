@@ -7,9 +7,7 @@
       "tag": "c:molten_gold"
     }
   ],
-  "ingredient": {
-    "tag": "c:raw_materials/copper"
-  },
+  "ingredient": "#c:raw_materials/copper",
   "rate": "metal",
   "result": {
     "amount": 90,

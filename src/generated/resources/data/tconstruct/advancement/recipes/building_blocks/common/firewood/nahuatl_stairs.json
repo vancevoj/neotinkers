@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:common/firewood/nahuatl_stairs"
+        "recipes": "tconstruct:common/firewood/nahuatl_stairs"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

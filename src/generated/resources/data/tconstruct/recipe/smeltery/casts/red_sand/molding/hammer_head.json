@@ -1,13 +1,9 @@
 {
   "type": "tconstruct:molding_table",
-  "material": {
-    "tag": "tconstruct:casts/red_sand"
-  },
+  "material": "#tconstruct:casts/red_sand",
   "pattern": {
-    "type": "tconstruct:material",
-    "match": {
-      "item": "tconstruct:hammer_head"
-    }
+    "neoforge:ingredient_type": "tconstruct:material",
+    "match": "tconstruct:hammer_head"
   },
   "result": "tconstruct:hammer_head_red_sand_cast"
 }

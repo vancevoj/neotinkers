@@ -3,19 +3,19 @@
   "allow_crystal": true,
   "inputs": [
     {
-      "item": "minecraft:piston"
+      "ingredient": "minecraft:piston"
     },
     {
-      "item": "tconstruct:sky_slime"
+      "ingredient": "tconstruct:sky_slime"
     },
     {
-      "item": "minecraft:piston"
+      "ingredient": "minecraft:piston"
     },
     {
-      "item": "minecraft:phantom_membrane"
+      "ingredient": "minecraft:phantom_membrane"
     },
     {
-      "item": "minecraft:phantom_membrane"
+      "ingredient": "minecraft:phantom_membrane"
     }
   ],
   "level": {
@@ -25,7 +25,5 @@
   "slots": {
     "abilities": 1
   },
-  "tools": {
-    "tag": "tconstruct:modifiable/armor/boots"
-  }
+  "tools": "#tconstruct:modifiable/armor/boots"
 }

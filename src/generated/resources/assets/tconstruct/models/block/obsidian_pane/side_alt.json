@@ -1,6 +1,5 @@
 {
   "parent": "tconstruct:block/template/pane/side_alt",
-  "render_type": "minecraft:solid",
   "textures": {
     "edge": "minecraft:block/obsidian",
     "pane": "minecraft:block/obsidian"

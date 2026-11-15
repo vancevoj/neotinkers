@@ -3,21 +3,19 @@
   "allow_crystal": false,
   "inputs": [
     {
-      "item": "minecraft:stick"
+      "ingredient": "minecraft:stick"
     },
     {
-      "item": "tconstruct:pattern"
+      "ingredient": "tconstruct:pattern"
     },
     {
-      "item": "minecraft:stick"
+      "ingredient": "minecraft:stick"
     }
   ],
   "result": {
     "name": "tconstruct:embellishment",
     "value": "tconstruct:wood"
   },
-  "tools": {
-    "tag": "tconstruct:modifiable/embellishment/wood"
-  },
+  "tools": "#tconstruct:modifiable/embellishment/wood",
   "variant_formatter": "tconstruct:material"
 }

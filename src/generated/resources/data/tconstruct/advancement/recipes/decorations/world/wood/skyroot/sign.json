@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:world/wood/skyroot/sign"
+        "recipes": "tconstruct:world/wood/skyroot/sign"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

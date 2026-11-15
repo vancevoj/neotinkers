@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:world/wood/enderbark/planks"
+        "recipes": "tconstruct:world/wood/enderbark/planks"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

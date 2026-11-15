@@ -1,10 +1,8 @@
 {
   "type": "tconstruct:casting_table",
   "cast": {
-    "type": "tconstruct:material",
-    "match": {
-      "item": "tconstruct:maille"
-    }
+    "neoforge:ingredient_type": "tconstruct:material",
+    "match": "tconstruct:maille"
   },
   "cast_consumed": true,
   "cooling_time": 57,

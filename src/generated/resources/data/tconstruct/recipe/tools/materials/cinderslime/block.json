@@ -1,8 +1,6 @@
 {
   "type": "tconstruct:material",
-  "ingredient": {
-    "tag": "c:storage_blocks/cinderslime"
-  },
+  "ingredient": "#c:storage_blocks/cinderslime",
   "leftover": {
     "count": 1,
     "tag": "c:ingots/cinderslime"

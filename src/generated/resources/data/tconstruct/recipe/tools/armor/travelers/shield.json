@@ -3,7 +3,7 @@
   "category": "equipment",
   "key": {
     "c": {
-      "type": "tconstruct:material_value",
+      "neoforge:ingredient_type": "tconstruct:material_value",
       "material": {
         "type": "tconstruct:stat_type",
         "stat_type": "tconstruct:shield_core"
@@ -11,20 +11,18 @@
       "value": 1
     },
     "l": {
-      "type": "tconstruct:material_value",
+      "neoforge:ingredient_type": "tconstruct:material_value",
       "material": {
         "type": "tconstruct:stat_type",
         "stat_type": "tconstruct:cuirass"
       },
       "value": 1
     },
-    "s": {
-      "tag": "c:rods/wooden"
-    }
+    "s": "#c:rods/wooden"
   },
   "parts": [
     {
-      "type": "tconstruct:material_value",
+      "neoforge:ingredient_type": "tconstruct:material_value",
       "material": {
         "type": "tconstruct:stat_type",
         "stat_type": "tconstruct:shield_core"
@@ -32,7 +30,7 @@
       "value": 1
     },
     {
-      "type": "tconstruct:material_value",
+      "neoforge:ingredient_type": "tconstruct:material_value",
       "material": {
         "type": "tconstruct:stat_type",
         "stat_type": "tconstruct:cuirass"
@@ -45,10 +43,6 @@
     "lcl"
   ],
   "result": {
-    "components": {
-      "tconstruct:tool_data": {}
-    },
-    "count": 1,
     "id": "tconstruct:travelers_shield"
   }
 }

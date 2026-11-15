@@ -1,8 +1,6 @@
 {
   "type": "tconstruct:melting",
-  "ingredient": {
-    "item": "tconstruct:cobalt_reinforcement"
-  },
+  "ingredient": "tconstruct:cobalt_reinforcement",
   "result": {
     "amount": 90,
     "tag": "c:molten_cobalt"

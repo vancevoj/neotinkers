@@ -6,11 +6,7 @@
     }
   ],
   "type": "tconstruct:molding_table",
-  "material": {
-    "tag": "tconstruct:casts/red_sand"
-  },
-  "pattern": {
-    "tag": "c:plates"
-  },
+  "material": "#tconstruct:casts/red_sand",
+  "pattern": "#c:plates",
   "result": "tconstruct:plate_red_sand_cast"
 }

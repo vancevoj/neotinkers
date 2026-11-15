@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:smeltery/scorched/scorched_lamp"
+        "recipes": "tconstruct:smeltery/scorched/scorched_lamp"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

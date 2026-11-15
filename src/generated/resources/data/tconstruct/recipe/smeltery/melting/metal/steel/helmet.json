@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:damagable_melting",
-  "ingredient": {
-    "tag": "tconstruct:melting/steel/tools_costing_5"
-  },
+  "ingredient": "#tconstruct:melting/steel/tools_costing_5",
   "result": {
     "amount": 450,
     "tag": "c:molten_steel",

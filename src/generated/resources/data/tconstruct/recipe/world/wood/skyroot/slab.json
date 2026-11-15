@@ -3,9 +3,7 @@
   "category": "building",
   "group": "wooden_slab",
   "key": {
-    "#": {
-      "item": "tconstruct:skyroot_planks"
-    }
+    "#": "tconstruct:skyroot_planks"
   },
   "pattern": [
     "###"

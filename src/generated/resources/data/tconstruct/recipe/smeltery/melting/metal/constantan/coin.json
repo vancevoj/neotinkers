@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:melting",
-  "ingredient": {
-    "tag": "c:coins/constantan"
-  },
+  "ingredient": "#c:coins/constantan",
   "result": {
     "amount": 30,
     "tag": "c:molten_constantan"

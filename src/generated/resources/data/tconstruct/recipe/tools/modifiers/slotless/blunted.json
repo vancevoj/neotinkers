@@ -4,18 +4,16 @@
   "check_trait_level": true,
   "inputs": [
     {
-      "item": "minecraft:honeycomb"
+      "ingredient": "minecraft:honeycomb"
     },
     {
-      "item": "minecraft:feather"
+      "ingredient": "minecraft:feather"
     },
     {
-      "item": "minecraft:honeycomb"
+      "ingredient": "minecraft:honeycomb"
     }
   ],
   "level": 1,
   "result": "tconstruct:blunted",
-  "tools": {
-    "tag": "tconstruct:modifiable/interactable/left"
-  }
+  "tools": "#tconstruct:modifiable/interactable/left"
 }

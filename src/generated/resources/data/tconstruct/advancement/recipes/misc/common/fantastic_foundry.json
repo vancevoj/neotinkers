@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:common/fantastic_foundry"
+        "recipes": "tconstruct:common/fantastic_foundry"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

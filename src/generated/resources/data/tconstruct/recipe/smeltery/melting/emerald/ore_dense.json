@@ -17,14 +17,10 @@
     }
   ],
   "ingredient": {
-    "type": "neoforge:intersection",
+    "neoforge:ingredient_type": "neoforge:intersection",
     "children": [
-      {
-        "tag": "c:ores/emerald"
-      },
-      {
-        "tag": "c:ore_rates/dense"
-      }
+      "#c:ores/emerald",
+      "#c:ore_rates/dense"
     ]
   },
   "rate": "gem",

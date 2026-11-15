@@ -6,9 +6,7 @@
       "fluid": "tconstruct:ichor"
     }
   ],
-  "ingredient": {
-    "tag": "c:slimeball/ichor"
-  },
+  "ingredient": "#c:slimeball/ichor",
   "result": {
     "amount": 10,
     "fluid": "tconstruct:blazing_blood"

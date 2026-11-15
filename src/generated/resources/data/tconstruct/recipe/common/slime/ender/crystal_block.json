@@ -3,16 +3,13 @@
   "category": "building",
   "group": "tconstruct:slime_crystal_block",
   "key": {
-    "#": {
-      "item": "tconstruct:ender_slime_crystal"
-    }
+    "#": "tconstruct:ender_slime_crystal"
   },
   "pattern": [
     "##",
     "##"
   ],
   "result": {
-    "count": 1,
     "id": "tconstruct:ender_slime_crystal_block"
   }
 }

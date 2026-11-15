@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:material",
-  "ingredient": {
-    "tag": "c:nuggets/ironwood"
-  },
+  "ingredient": "#c:nuggets/ironwood",
   "material": "tconstruct:ironwood",
   "needed": 9,
   "value": 1

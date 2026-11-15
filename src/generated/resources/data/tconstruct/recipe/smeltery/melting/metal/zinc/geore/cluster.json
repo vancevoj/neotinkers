@@ -13,9 +13,7 @@
       "tag": "c:molten_copper"
     }
   ],
-  "ingredient": {
-    "tag": "c:geore_clusters/zinc"
-  },
+  "ingredient": "#c:geore_clusters/zinc",
   "rate": "metal",
   "result": {
     "amount": 360,

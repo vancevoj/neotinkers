@@ -1,27 +1,17 @@
 {
   "type": "tconstruct:melting",
-  "ingredient": [
-    {
-      "tag": "tconstruct:scorched_blocks"
-    },
-    {
-      "type": "neoforge:compound",
-      "children": [
-        {
-          "item": "tconstruct:scorched_ladder"
-        },
-        {
-          "item": "tconstruct:scorched_lamp"
-        },
-        {
-          "item": "tconstruct:scorched_bricks_stairs"
-        },
-        {
-          "item": "tconstruct:scorched_road_stairs"
-        }
+  "ingredient": {
+    "neoforge:ingredient_type": "neoforge:compound",
+    "children": [
+      "#tconstruct:scorched_blocks",
+      [
+        "tconstruct:scorched_ladder",
+        "tconstruct:scorched_lamp",
+        "tconstruct:scorched_bricks_stairs",
+        "tconstruct:scorched_road_stairs"
       ]
-    }
-  ],
+    ]
+  },
   "result": {
     "amount": 1000,
     "fluid": "tconstruct:scorched_stone"

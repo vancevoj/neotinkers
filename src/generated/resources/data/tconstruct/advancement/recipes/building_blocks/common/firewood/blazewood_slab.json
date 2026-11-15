@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:common/firewood/blazewood_slab"
+        "recipes": "tconstruct:common/firewood/blazewood_slab"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

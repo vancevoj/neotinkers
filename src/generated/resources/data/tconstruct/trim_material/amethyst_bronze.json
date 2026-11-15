@@ -1,5 +1,4 @@
 {
-  "asset_name": "tconstruct_amethyst_bronze",
   "description": {
     "color": "#C687BD",
     "translate": "trim_material.tconstruct.format",
@@ -9,6 +8,5 @@
       }
     ]
   },
-  "ingredient": "tconstruct:amethyst_bronze_ingot",
-  "item_model_index": 1.0
+  "palette_id": "tconstruct:trim/amethyst_bronze"
 }

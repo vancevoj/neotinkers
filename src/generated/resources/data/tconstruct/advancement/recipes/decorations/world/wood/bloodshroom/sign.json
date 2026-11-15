@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:world/wood/bloodshroom/sign"
+        "recipes": "tconstruct:world/wood/bloodshroom/sign"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

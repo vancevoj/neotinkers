@@ -18,7 +18,6 @@
       "translate": "advancements.tconstruct.smeltery.sand_casting.description"
     },
     "icon": {
-      "count": 1,
       "id": "tconstruct:tool_handle_sand_cast"
     },
     "title": {

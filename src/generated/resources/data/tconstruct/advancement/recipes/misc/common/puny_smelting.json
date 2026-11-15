@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:common/puny_smelting"
+        "recipes": "tconstruct:common/puny_smelting"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -3,9 +3,7 @@
   "category": "building",
   "group": "planks",
   "ingredients": [
-    {
-      "tag": "tconstruct:bloodshroom_logs"
-    }
+    "#tconstruct:bloodshroom_logs"
   ],
   "result": {
     "count": 4,

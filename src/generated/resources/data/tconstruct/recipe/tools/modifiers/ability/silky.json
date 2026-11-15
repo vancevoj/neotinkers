@@ -4,19 +4,19 @@
   "check_trait_level": true,
   "inputs": [
     {
-      "item": "tconstruct:silky_cloth"
+      "ingredient": "tconstruct:silky_cloth"
     },
     {
-      "item": "tconstruct:silky_cloth"
+      "ingredient": "tconstruct:silky_cloth"
     },
     {
-      "item": "tconstruct:silky_cloth"
+      "ingredient": "tconstruct:silky_cloth"
     },
     {
-      "item": "tconstruct:silky_cloth"
+      "ingredient": "tconstruct:silky_cloth"
     },
     {
-      "item": "tconstruct:silky_cloth"
+      "ingredient": "tconstruct:silky_cloth"
     }
   ],
   "level": 1,
@@ -24,7 +24,5 @@
   "slots": {
     "abilities": 1
   },
-  "tools": {
-    "tag": "tconstruct:modifiable/harvest"
-  }
+  "tools": "#tconstruct:modifiable/harvest"
 }

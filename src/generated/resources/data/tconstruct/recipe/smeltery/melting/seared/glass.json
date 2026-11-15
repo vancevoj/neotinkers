@@ -6,9 +6,7 @@
       "fluid": "tconstruct:molten_glass"
     }
   ],
-  "ingredient": {
-    "item": "tconstruct:seared_glass"
-  },
+  "ingredient": "tconstruct:seared_glass",
   "result": {
     "amount": 1000,
     "fluid": "tconstruct:seared_stone"

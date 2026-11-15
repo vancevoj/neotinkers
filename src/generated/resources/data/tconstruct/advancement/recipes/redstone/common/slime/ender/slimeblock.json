@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "tconstruct:common/slime/ender/slimeblock"
+        "recipes": "tconstruct:common/slime/ender/slimeblock"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -7,9 +7,7 @@
       "unit_size": 10
     }
   ],
-  "ingredient": {
-    "item": "minecraft:chainmail_helmet"
-  },
+  "ingredient": "minecraft:chainmail_helmet",
   "result": {
     "amount": 300,
     "tag": "c:molten_iron",

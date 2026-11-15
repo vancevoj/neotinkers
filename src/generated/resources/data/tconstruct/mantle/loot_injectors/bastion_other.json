@@ -5,9 +5,9 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "functions": [
+          "modifier": [
             {
-              "function": "tconstruct:add_tool_data",
+              "type": "tconstruct:add_tool_data",
               "materials": [
                 {
                   "type": "tconstruct:ancient"
@@ -18,13 +18,12 @@
               ]
             },
             {
-              "add": false,
+              "type": "minecraft:set_damage",
               "damage": {
                 "type": "minecraft:uniform",
                 "max": 0.9,
                 "min": 0.1
-              },
-              "function": "minecraft:set_damage"
+              }
             }
           ],
           "name": "tconstruct:battlesign",

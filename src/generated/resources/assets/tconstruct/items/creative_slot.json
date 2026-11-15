@@ -1,0 +1,6 @@
+{
+  "model": {
+    "type": "mantle:nbt_key",
+    "model": "tconstruct:item/creative_slot"
+  }
+}

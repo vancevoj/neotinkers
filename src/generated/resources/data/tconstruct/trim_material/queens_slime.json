@@ -1,5 +1,4 @@
 {
-  "asset_name": "tconstruct_queens_slime",
   "description": {
     "color": "#236C45",
     "translate": "trim_material.tconstruct.format",
@@ -9,6 +8,5 @@
       }
     ]
   },
-  "ingredient": "tconstruct:queens_slime_ingot",
-  "item_model_index": 0.7
+  "palette_id": "tconstruct:trim/queens_slime"
 }

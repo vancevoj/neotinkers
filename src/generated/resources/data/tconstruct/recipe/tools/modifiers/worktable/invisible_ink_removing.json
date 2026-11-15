@@ -5,10 +5,8 @@
   "data_key": "tconstruct:invisible_modifiers",
   "inputs": [
     {
-      "type": "mantle:fluid_container",
-      "display": {
-        "item": "minecraft:milk_bucket"
-      },
+      "neoforge:ingredient_type": "mantle:fluid_container",
+      "display": "minecraft:milk_bucket",
       "fluid": {
         "amount": 1000,
         "tag": "c:milk"
@@ -20,7 +18,5 @@
     "inverted_type": "tconstruct:tag",
     "tag": "tconstruct:invisible_ink_blacklist"
   },
-  "tools": {
-    "tag": "tconstruct:modifiable"
-  }
+  "tools": "#tconstruct:modifiable"
 }

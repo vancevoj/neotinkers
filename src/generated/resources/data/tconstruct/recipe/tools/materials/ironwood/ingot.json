@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:material",
-  "ingredient": {
-    "tag": "c:ingots/ironwood"
-  },
+  "ingredient": "#c:ingots/ironwood",
   "material": "tconstruct:ironwood",
   "needed": 1,
   "value": 1

@@ -2,15 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "building",
   "key": {
-    "#": {
-      "item": "minecraft:smooth_basalt"
-    },
-    "I": {
-      "item": "minecraft:iron_ingot"
-    },
-    "X": {
-      "item": "minecraft:furnace"
-    }
+    "#": "minecraft:smooth_basalt",
+    "I": "minecraft:iron_ingot",
+    "X": "minecraft:furnace"
   },
   "pattern": [
     "III",
@@ -18,7 +12,6 @@
     "###"
   ],
   "result": {
-    "count": 1,
     "id": "minecraft:blast_furnace"
   }
 }

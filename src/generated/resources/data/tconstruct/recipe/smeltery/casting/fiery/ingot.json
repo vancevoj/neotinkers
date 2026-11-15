@@ -6,9 +6,7 @@
     }
   ],
   "type": "tconstruct:casting_table",
-  "cast": {
-    "tag": "c:ingots/iron"
-  },
+  "cast": "#c:ingots/iron",
   "cast_consumed": true,
   "cooling_time": 134,
   "fluid": {

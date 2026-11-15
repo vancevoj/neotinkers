@@ -13,9 +13,7 @@
       "tag": "c:molten_iron"
     }
   ],
-  "ingredient": {
-    "tag": "c:geore_medium_buds/quartz"
-  },
+  "ingredient": "#c:geore_medium_buds/quartz",
   "rate": "gem",
   "result": {
     "amount": 200,
