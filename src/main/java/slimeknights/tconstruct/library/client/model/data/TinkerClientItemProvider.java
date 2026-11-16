@@ -33,6 +33,7 @@ import slimeknights.tconstruct.smeltery.item.TankItem;
 import slimeknights.tconstruct.tables.TinkerTables;
 import slimeknights.tconstruct.tools.TinkerModifiers;
 import slimeknights.tconstruct.tools.ToolClientEvents.ModifierCrystalTint;
+import slimeknights.tconstruct.world.TinkerHeadType;
 import slimeknights.tconstruct.world.TinkerWorld;
 
 import javax.annotation.Nullable;
@@ -247,6 +248,14 @@ public class TinkerClientItemProvider extends GenericDataProvider {
   /** Creates the definition for the given item, item is null for {@link #CONDITIONAL_ITEMS} that are not registered */
   private JsonObject definition(Identifier id, @Nullable Item item, Set<Item> blockTinted) throws IOException {
     Identifier model = id.withPrefix("item/");
+    // heads render through the skull special model since 1.21.4, the item model is just the template with no geometry
+    if (item != null) {
+      for (TinkerHeadType head : TinkerWorld.headItems.keys()) {
+        if (TinkerWorld.headItems.get(head) == item) {
+          return headDefinition(model, head);
+        }
+      }
+    }
     ModelInfo info = getModelInfo(model);
     String type = getType(model, item);
     JsonObject itemModel = itemModel(type, model);
@@ -279,6 +288,35 @@ public class TinkerClientItemProvider extends GenericDataProvider {
     JsonObject definition = new JsonObject();
     definition.add("model", itemModel);
     return definition;
+  }
+
+  /** Creates the definition for a mob head item, matching the vanilla head definitions with the head type as the kind */
+  private static JsonObject headDefinition(Identifier model, TinkerHeadType type) {
+    JsonObject special = new JsonObject();
+    special.addProperty("type", "minecraft:head");
+    special.addProperty("kind", type.getSerializedName());
+    JsonObject transformation = new JsonObject();
+    transformation.add("left_rotation", floats(1, 0, 0, 0));
+    transformation.add("right_rotation", floats(0, 0, 0, 1));
+    transformation.add("scale", floats(1, 1, 1));
+    transformation.add("translation", floats(0.5f, 0, 0.5f));
+    JsonObject itemModel = new JsonObject();
+    itemModel.addProperty("type", "minecraft:special");
+    itemModel.addProperty("base", model.toString());
+    itemModel.add("model", special);
+    itemModel.add("transformation", transformation);
+    JsonObject definition = new JsonObject();
+    definition.add("model", itemModel);
+    return definition;
+  }
+
+  /** Creates a JSON array of floats */
+  private static JsonArray floats(float... values) {
+    JsonArray array = new JsonArray();
+    for (float value : values) {
+      array.add(value);
+    }
+    return array;
   }
 
   /** Wraps the selected model in conditions for every property in the predicate, the fallback is used when any predicate fails */
