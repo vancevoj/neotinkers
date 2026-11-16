@@ -14,13 +14,9 @@
               "source": "block_entity"
             },
             {
-              "type": "minecraft:copy_custom_data",
-              "ops": [
-                {
-                  "op": "replace",
-                  "source": "color",
-                  "target": "display.color"
-                }
+              "type": "minecraft:copy_components",
+              "include": [
+                "minecraft:dyed_color"
               ],
               "source": "block_entity"
             }

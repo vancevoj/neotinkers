@@ -4,9 +4,14 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponentGetter;
+import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
+import net.minecraft.world.item.component.DyedItemColor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
@@ -63,6 +68,38 @@ public class TinkersChestBlockEntity extends AbstractChestBlockEntity {
   protected void loadAdditional(ValueInput input) {
     super.loadAdditional(input);
     input.getInt(TAG_CHEST_COLOR).ifPresent(this::setColor);
+  }
+
+
+  /* Item components, the item stores the color in DYED_COLOR, copied by the loot table and pick block */
+
+  @Override
+  protected void applyImplicitComponents(DataComponentGetter components) {
+    super.applyImplicitComponents(components);
+    DyedItemColor dyed = components.get(DataComponents.DYED_COLOR);
+    if (dyed != null) {
+      setColor(dyed.rgb());
+    } else {
+      // chests broken before the loot table copied the component hold the color in custom data where 1.20 stored it, restore it on placement
+      components.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag().getCompound("display")
+                .flatMap(display -> display.getInt(TAG_CHEST_COLOR))
+                .ifPresent(this::setColor);
+    }
+  }
+
+  @Override
+  protected void collectImplicitComponents(DataComponentMap.Builder builder) {
+    super.collectImplicitComponents(builder);
+    if (hasColor) {
+      builder.set(DataComponents.DYED_COLOR, new DyedItemColor(color));
+    }
+  }
+
+  @SuppressWarnings("deprecation")
+  @Override
+  public void removeComponentsFromTag(ValueOutput output) {
+    super.removeComponentsFromTag(output);
+    output.discard(TAG_CHEST_COLOR);
   }
 
   /** Item handler for tinkers chests */
