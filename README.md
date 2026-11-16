@@ -22,7 +22,6 @@ Needs NeoForge 21.1 and Java 21.
 Release notes: [Neo Tinkers' v1.31](https://github.com/vancevoj/neotinkers/releases/tag/v1.31), [Neo Mantle v1.28](https://github.com/vancevoj/neomantle/releases/tag/v1.28)
 
 <br>
-<br>
 
 ### Minecraft 26.3
 
