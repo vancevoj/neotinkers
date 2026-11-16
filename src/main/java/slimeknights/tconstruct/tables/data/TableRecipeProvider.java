@@ -3,6 +3,7 @@ package slimeknights.tconstruct.tables.data;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.data.recipes.CustomCraftingRecipeBuilder;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.worldgen.BootstrapContext;
@@ -13,6 +14,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.DyeRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.ItemLike;
@@ -158,6 +160,12 @@ public class TableRecipeProvider extends BaseRecipeProvider {
                        .pattern("lwl")
                        .unlockedBy("has_item", has(TinkerTables.pattern))
                        .save(consumer, recipeKey(prefix(TinkerTables.tinkersChest, folder)));
+    // dyeing the modifier chest: vanilla used to dye anything in the dyeable tag, now each dyeable item has its own recipe (RecipeProvider#dyedItem)
+    CustomCraftingRecipeBuilder.customCrafting(RecipeCategory.DECORATIONS, (commonInfo, bookInfo) ->
+        new DyeRecipe(commonInfo, bookInfo, Ingredient.of(TinkerTables.tinkersChest), tag(ItemTags.DYES), new ItemStackTemplate(TinkerTables.tinkersChest.asItem())))
+      .unlockedBy("has_item", has(TinkerTables.tinkersChest))
+      .group(TConstruct.MOD_ID + ":tinkers_chest_dye")
+      .save(consumer, recipeKey(wrap(TinkerTables.tinkersChest, folder, "_dyed")));
     // cast chest
     shaped(RecipeCategory.DECORATIONS, TinkerTables.castChest)
                        .define('c', TinkerTags.Items.GOLD_CASTS)
