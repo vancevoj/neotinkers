@@ -1,4 +1,4 @@
-# Neo Tinkers
+# Neo Tinkers'
 
 An unofficial **Minecraft NeoForge** port of **Tinkers' Construct**. This port is an actively maintained project to keep Tinkers' Construct up-to-date with the latest Minecraft versions!
 
@@ -8,6 +8,6 @@ Full content credit for the mod goes to SlimeKnights. I take no credit for any o
 
 ## Download
 
-- [Neo Tinkers - latest release](https://github.com/vancevoj/neo_tinkersconstruct/releases/latest)
+- [Neo Tinkers' - latest release](https://github.com/vancevoj/neo_tinkersconstruct/releases/latest)
 - [Neo Mantle (required) - latest release](https://github.com/vancevoj/neo_mantle/releases/latest)
 
