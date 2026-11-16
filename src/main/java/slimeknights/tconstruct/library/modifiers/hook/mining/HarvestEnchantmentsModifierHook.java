@@ -104,14 +104,12 @@ public interface HarvestEnchantmentsModifierHook {
   /**
    * Restores the original enchants to the given stack
    * @param stack             Stack to restore enchants on
-   * @param originalEnchants  Original enchantments component. If empty, will remove the component
+   * @param originalEnchants  Original enchantments component
    */
   static void restoreEnchantments(ItemStack stack, ItemEnchantments originalEnchants) {
-    if (originalEnchants.isEmpty()) {
-      stack.remove(DataComponents.ENCHANTMENTS);
-    } else {
-      stack.set(DataComponents.ENCHANTMENTS, originalEnchants);
-    }
+    // set rather than remove: enchantments is a default component on every item, so removing it leaves a removal
+    // marker in the patch, while setting the original value drops the patch entry when it equals the default
+    stack.set(DataComponents.ENCHANTMENTS, originalEnchants);
   }
 
 
