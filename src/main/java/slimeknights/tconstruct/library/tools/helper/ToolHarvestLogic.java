@@ -78,9 +78,10 @@ public class ToolHarvestLogic {
    * Actually removes a block from the world. Cloned from {@link net.minecraft.server.level.ServerPlayerGameMode}
    * @param tool     Tool used in breaking
    * @param context  Harvest context
-   * @return  True if the block was removed
+   * @return  State the block was removed with, which may differ from the context state after {@link Block#playerWillDestroy}. Null if not removed
    */
-  private static boolean removeBlock(IToolStackView tool, ToolHarvestContext context) {
+  @Nullable
+  private static BlockState removeBlock(IToolStackView tool, ToolHarvestContext context) {
     Boolean removed = null;
     if (!tool.isBroken()) {
       for (ModifierEntry entry : tool.getModifierList()) {
@@ -95,13 +96,21 @@ public class ToolHarvestLogic {
     ServerLevel world = context.getWorld();
     BlockPos pos = context.getPos();
     if (removed == null) {
-      removed = state.onDestroyedByPlayer(world, pos, context.getPlayer(), context.canHarvest(), world.getFluidState(pos));
+      // Forge 1.20 called playerWillDestroy from onDestroyedByPlayer, NeoForge 1.21 calls it from ServerPlayerGameMode before removing instead.
+      // we cancel the vanilla break, so call it here or blocks lose their break logic (particles for others, piglin anger, destroy game event,
+      // the other half of beds, doors and tall plants, creative shulker box drops). Same order as ServerPlayerGameMode#destroyBlock
+      ServerPlayer player = context.getPlayer();
+      if (player != null) {
+        state = state.getBlock().playerWillDestroy(world, pos, state, player);
+      }
+      removed = state.onDestroyedByPlayer(world, pos, player, context.canHarvest(), world.getFluidState(pos));
     }
     // if removed by anything, finally destroy it
     if (removed) {
       state.getBlock().destroy(world, pos, state);
+      return state;
     }
-    return removed;
+    return null;
   }
 
   /** @deprecated use {@link #breakBlock(ToolStack, ItemStack, ToolHarvestContext, boolean)}*/
@@ -158,12 +167,13 @@ public class ToolHarvestLogic {
     // remove the block
     boolean canHarvest = context.canHarvest();
     BlockEntity te = canHarvest ? world.getBlockEntity(pos) : null; // ensures tile entity is fetched so it's around for afterBlockBreak
-    boolean removed = removeBlock(tool, context);
+    BlockState removedState = removeBlock(tool, context);
+    boolean removed = removedState != null;
 
-    // harvest drops
+    // harvest drops, using the state from playerWillDestroy like vanilla (e.g. cracked decorated pots)
     Block block = state.getBlock();
     if (removed && canHarvest) {
-      block.playerDestroy(world, player, pos, state, te, stack);
+      block.playerDestroy(world, player, pos, removedState, te, stack);
       // Loot generation runs the PROCESS_LOOT modifier hooks via ModifierLootModifier, which builds its own tool stack
       // view from the held stack; the melting modifier uses that view to fill the tool tank. Our view was read before
       // those edits, so resync it here or the hooks and damage below would flush the older data back and undo them.
