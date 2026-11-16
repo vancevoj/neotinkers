@@ -11,6 +11,7 @@ import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.resources.Identifier;
 import slimeknights.mantle.client.book.BookLoader;
 import slimeknights.mantle.client.book.data.BookData;
+import slimeknights.mantle.client.book.data.element.IngredientData;
 import slimeknights.mantle.client.book.repository.FileRepository;
 import slimeknights.mantle.client.book.transformer.BookTransformer;
 import slimeknights.tconstruct.common.TinkerTags;
@@ -36,6 +37,8 @@ import slimeknights.tconstruct.library.client.book.sectiontransformer.materials.
 import slimeknights.tconstruct.library.materials.IMaterialRegistry;
 import slimeknights.tconstruct.library.materials.MaterialRegistry;
 import slimeknights.tconstruct.library.materials.definition.MaterialId;
+import slimeknights.tconstruct.library.tools.item.IModifiable;
+import slimeknights.tconstruct.library.tools.nbt.ToolDataComponents;
 import slimeknights.tconstruct.shared.item.TinkerBookItem.BookType;
 import slimeknights.tconstruct.tools.stats.GripMaterialStats;
 import slimeknights.tconstruct.tools.stats.HandleMaterialStats;
@@ -84,6 +87,14 @@ public class TinkerBook extends BookData {
         ? Minecraft.getInstance().level.registryAccess()
         : RegistryAccess.EMPTY;
       return ComponentSerialization.CODEC.parse(provider.createSerializationContext(JsonOps.INSTANCE), json).getOrThrow(JsonParseException::new);
+    });
+    // book JSON displays tools through legacy forge:nbt ingredients, tools read that NBT from the tool data component
+    IngredientData.registerLegacyNbtHandler((stack, nbt) -> {
+      if (stack.getItem() instanceof IModifiable) {
+        ToolDataComponents.setTag(stack, nbt);
+        return true;
+      }
+      return false;
     });
 
     // register page types
