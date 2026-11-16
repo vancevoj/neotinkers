@@ -1,7 +1,7 @@
 {
   "title": "타오른 탱크",
   "item": {
-    "ingredient": "#tconstruct:scorched_tanks"
+    "tag": "tconstruct:scorched_tanks"
   },
   "text": [
      {

@@ -1,7 +1,7 @@
 {
   "title": "Выжженные блоки",
   "item": {
-    "ingredient": "#tconstruct:scorched_blocks"
+    "tag": "tconstruct:scorched_blocks"
   },
   "text": [
     {

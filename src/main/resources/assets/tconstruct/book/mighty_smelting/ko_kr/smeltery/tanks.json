@@ -1,7 +1,7 @@
 {
   "title": "그을린 탱크",
   "item": {
-    "ingredient": "#tconstruct:seared_tanks"
+    "tag": "tconstruct:seared_tanks"
   },
   "text": [
     {

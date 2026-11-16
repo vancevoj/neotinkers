@@ -1,7 +1,7 @@
 {
   "title": "그을린 블록",
   "item": {
-    "ingredient": "#tconstruct:seared_blocks"
+    "tag": "tconstruct:seared_blocks"
   },
   "text": [
     {

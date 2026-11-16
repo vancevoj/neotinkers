@@ -1,7 +1,7 @@
 {
   "title": "焦黑方块",
   "item": {
-    "ingredient": "#tconstruct:seared_blocks"
+    "tag": "tconstruct:seared_blocks"
   },
   "text": [
     {

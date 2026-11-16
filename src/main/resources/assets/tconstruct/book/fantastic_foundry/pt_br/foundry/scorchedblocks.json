@@ -1,7 +1,7 @@
 {
   "title": "Blocos Chamuscados",
   "item": {
-    "ingredient": "#tconstruct:scorched_blocks"
+    "tag": "tconstruct:scorched_blocks"
   },
   "text": [
     {

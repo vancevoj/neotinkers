@@ -1,7 +1,7 @@
 {
   "title": "Слизневые семена",
   "item": {
-    "ingredient": "#tconstruct:slimy_grass_seeds"
+    "tag": "tconstruct:slimy_grass_seeds"
   },
   "text": [
     {

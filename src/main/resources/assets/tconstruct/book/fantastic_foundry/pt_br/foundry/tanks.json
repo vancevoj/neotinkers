@@ -1,7 +1,7 @@
 {
   "title": "Tanques Chamuscados",
   "item": {
-    "ingredient": "#tconstruct:scorched_tanks"
+    "tag": "tconstruct:scorched_tanks"
   },
   "text": [
      {
