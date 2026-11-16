@@ -153,10 +153,21 @@ public class FluidContainerModel extends AbstractUnbakedModel {
     return QuadCollection.EMPTY;
   }
 
-  /** Creates the material info for a fluid quad. Uses cutout like the NeoForge model to avoid blending issues between atlases, and light emission without switching to an unlit render type */
+  /**
+   * Creates the material info for a fluid quad, with light emission without switching to an unlit render type.
+   * Translucent fluids use a translucent render type like the 1.21.1 model did, so they blend with the container behind them.
+   * The cutout render type of the NeoForge model draws them at full strength, which washes out in the GUI where items are drawn with premultiplied alpha.
+   */
   private static BakedQuad.MaterialInfo fluidMaterial(TextureAtlasSprite sprite, int light) {
+    boolean translucent = sprite.transparency().hasTranslucent();
     if (sprite.atlasLocation().equals(TextureAtlas.LOCATION_BLOCKS)) {
+      if (translucent) {
+        return new BakedQuad.MaterialInfo(sprite, ChunkSectionLayer.SOLID, Sheets.translucentBlockItemSheet(), Sheets.translucentBlockItemGlintSheet(), Sheets.translucentBlockItemGlintSpecialSheet(), -1, null, light, true);
+      }
       return new BakedQuad.MaterialInfo(sprite, ChunkSectionLayer.SOLID, Sheets.cutoutBlockItemSheet(), Sheets.cutoutBlockItemGlintSheet(), Sheets.cutoutBlockItemGlintSpecialSheet(), -1, null, light, true);
+    }
+    if (translucent) {
+      return new BakedQuad.MaterialInfo(sprite, ChunkSectionLayer.SOLID, Sheets.translucentItemSheet(), Sheets.translucentItemGlintSheet(), Sheets.translucentItemGlintSpecialSheet(), -1, null, light, true);
     }
     return new BakedQuad.MaterialInfo(sprite, ChunkSectionLayer.SOLID, Sheets.cutoutItemSheet(), Sheets.cutoutItemGlintSheet(), Sheets.cutoutItemGlintSpecialSheet(), -1, null, light, true);
   }
