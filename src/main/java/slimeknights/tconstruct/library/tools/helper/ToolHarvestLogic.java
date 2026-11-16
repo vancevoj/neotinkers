@@ -80,9 +80,10 @@ public class ToolHarvestLogic {
    * @param stack    Tool stack before it is damaged, passed to the block removal hook
    * @param player   Player breaking the block
    * @param context  Harvest context
-   * @return  True if the block was removed
+   * @return  State the block was removed with, which may differ from the context state after {@link Block#playerWillDestroy}. Null if not removed
    */
-  private static boolean removeBlock(IToolStackView tool, ItemStack stack, ServerPlayer player, ToolHarvestContext context) {
+  @Nullable
+  private static BlockState removeBlock(IToolStackView tool, ItemStack stack, ServerPlayer player, ToolHarvestContext context) {
     Boolean removed = null;
     if (!tool.isBroken()) {
       for (ModifierEntry entry : tool.getModifierList()) {
@@ -107,8 +108,9 @@ public class ToolHarvestLogic {
     // if removed by anything, finally destroy it
     if (removed) {
       state.getBlock().destroy(world, pos, state);
+      return state;
     }
-    return removed;
+    return null;
   }
 
   /** @deprecated use {@link #breakBlock(ToolStack, ItemStack, ToolHarvestContext, boolean)}*/
@@ -165,12 +167,13 @@ public class ToolHarvestLogic {
     // remove the block
     boolean canHarvest = context.canHarvest();
     BlockEntity te = canHarvest ? world.getBlockEntity(pos) : null; // ensures tile entity is fetched so it's around for afterBlockBreak
-    boolean removed = removeBlock(tool, stack.copy(), player, context);
+    BlockState removedState = removeBlock(tool, stack.copy(), player, context);
+    boolean removed = removedState != null;
 
-    // harvest drops
+    // harvest drops, using the state from playerWillDestroy like vanilla (e.g. cracked decorated pots)
     Block block = state.getBlock();
     if (removed && canHarvest) {
-      block.playerDestroy(world, player, pos, state, te, stack);
+      block.playerDestroy(world, player, pos, removedState, te, stack);
       // Loot generation runs the PROCESS_LOOT modifier hooks via ModifierLootModifier, which builds its own tool stack
       // view from the held stack; the melting modifier uses that view to fill the tool tank. Our view was read before
       // those edits, so resync it here or the hooks and damage below would flush the older data back and undo them.
