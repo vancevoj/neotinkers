@@ -4,9 +4,11 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -97,6 +99,31 @@ public class ChestBlock extends TabbedTableBlock {
 
     // fall through to opening the GUI
     return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+  }
+
+  @Override
+  public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
+    // chests keeping their inventory in the dropped item lose it in creative as no loot is generated
+    // so like a shulker box, drop the same item as the loot table when a creative player breaks a non-empty chest
+    if (!dropsItems && !level.isClientSide && player.isCreative() && level instanceof ServerLevel serverLevel
+        && level.getBlockEntity(pos) instanceof AbstractChestBlockEntity chest && !isEmpty(chest.getItemHandler())) {
+      for (ItemStack stack : Block.getDrops(state, serverLevel, pos, chest)) {
+        ItemEntity itemEntity = new ItemEntity(level, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, stack);
+        itemEntity.setDefaultPickUpDelay();
+        level.addFreshEntity(itemEntity);
+      }
+    }
+    return super.playerWillDestroy(level, pos, state, player);
+  }
+
+  /** Checks if the given inventory has no items */
+  private static boolean isEmpty(IItemHandler inventory) {
+    for (int i = 0; i < inventory.getSlots(); i++) {
+      if (!inventory.getStackInSlot(i).isEmpty()) {
+        return false;
+      }
+    }
+    return true;
   }
 
   @Override
