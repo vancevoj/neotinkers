@@ -549,6 +549,8 @@ public class ItemTagProvider extends ItemTagsProvider {
     this.tag(TinkerTags.Items.PATTERNS)
         .addTags(TinkerTags.Items.DEFAULT_PATTERNS, TinkerTags.Items.REUSABLE_PATTERNS, TinkerTags.Items.SAND_CASTS, TinkerTags.Items.RED_SAND_CASTS)
         .add(Items.SAND, Items.RED_SAND, TinkerFluids.venomBottle.get());
+    // the Tinkers' chest is dyed through the vanilla dye recipe, which on 1.21 only accepts items in this tag
+    this.tag(ItemTags.DYEABLE).add(TinkerTables.tinkersChest.asItem());
 
     // stone
     this.copy(TinkerTags.Blocks.STONE,      TinkerTags.Items.STONE);
